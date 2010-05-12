@@ -1,0 +1,89 @@
+MySQL Connector/C - Build on Unix platforms
+
+INTRODUCTION
+---------------------------------------------------------------
+
+In this document we provide a general explaination of how to 
+build Connector/C library on UNIX platforms. We will be as brief 
+as possible.
+
+NOTE:	This information is fairly generic. You may find other
+	README files with more detailed information for 
+	building for specific flavours of UNIX.
+	
+WHAT YOU NEED
+---------------------------------------------------------------
+
+UNIX
+----
+
+UNIX or some UNIX-like operating system such as;
+
+- Solaris
+- Linux
+- HP-UX
+- AIX
+- OSX
+
+Compiler Tools
+--------------
+
+We try to build using the native compiler tool set for the 
+target platform. This is SunStudio for Solaris and aCC for
+HP-UX for example. But a common compiler across all platforms
+is the GNU tool-chain.
+
+You also need CMake 2.6 or newer, available at
+
+  http://www.cmake.org
+
+Source Code
+-----------
+
+The source code is the main thing. You can get it from the bzr
+source repository if you want the 'bleeding edge' code but most
+people will simply download the zip or tar-ball of the source.
+
+  You will find the source repository on lauchpad
+
+    http://launchpad.net/libmysql
+
+
+BUILD
+---------------------------------------------------------------
+
+GNU AutoTools
+-------------
+
+cd to the Connector/C source directory and do the following.
+
+To generate the makefile do
+
+  $ cmake -G "Unix Makefiles"
+
+or for a Debug build
+
+  $ cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
+
+Then do
+
+ $ make
+
+
+INSTALL
+---------------------------------------------------------------
+
+
+By default make install will install the Connector/C files in 
+/usr/local directory. You can change this behaviour by specifying
+another directory when generating the makefile:
+
+  $cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/mypath
+
+You probably want to be root user to do install as extra 
+privileges will likely be required. Now do the following to 
+install the Connector/C libraries and tools.
+
+# make install
+
+At this point all of the Connector/C files should be in place.

@@ -1,0 +1,113 @@
+sampler2D	g_base_map		: register(s0);
+sampler2D	g_normal_map	: register(s1);
+sampler2D	g_gpi_map  		: register(s2);
+
+samplerCUBE	g_env			: register(s5);
+
+float4  g_exposure			: register(c0);			//x--- global exposure
+													//-y-- diffuse light scale
+float4	g_sh[9]				: register(c1);
+float4  g_normal_params		: register(c10);		//x--- normal map scale
+													//---w incan scale (used to disable)
+													
+float4  g_parallax_params	: register(c11);		//x--- parallax scale
+													//-y-- parallax bias
+													//--z- 
+													
+
+float4  g_specular_params   : register(c12);		//x--- env map scale
+													//-y-- env map bias
+													//--z- env texture lod
+													//---w gloss scale
+
+float4   g_gloss_tint		: register(c13);		//xyz- gloss tint color
+													//---w dirty factor
+
+float4   g_base_tint		: register(c14);		//xyze base tint
+
+float2 ComputeParallaxUV( float2 uv, half parallax, half3 eye_vec)
+{
+  // scale and bias parallax value
+  half offset = g_parallax_params.x * parallax + g_parallax_params.y;
+
+  // normalize eye vector in tangent space
+  half3 eye_vec_nrm = normalize( eye_vec );
+
+  // adjust uv for parallax effect
+  return float2(eye_vec_nrm.xy * offset) + uv;
+}
+
+float4 main
+(
+    in float3 ws_vtangent			: TEXCOORD0,
+    in float3 ws_vbinormal			: TEXCOORD1,
+    in float3 ws_vnormal			: TEXCOORD2,
+    in float2 uv					: TEXCOORD3,
+    in float4 color					: TEXCOORD4,	
+    in float3 ws_view_vec			: TEXCOORD5,
+    in float3 ts_vert_to_eye_vec	: TEXCOORD6
+) : COLOR0
+{
+  half4 para_map = tex2D(g_gpi_map,uv).b;  // GPI ACCESS (PARALLAX=B)
+  
+  // adjust the uv's based on parallax for all the other samplers
+  uv = ComputeParallaxUV(uv,para_map,ts_vert_to_eye_vec);
+
+  // sample the base map with the tint color
+  half4 base = tex2D(g_base_map,uv)*g_base_tint;
+  
+  // get the gpi map again so we get the parallax corrected gloss and incan
+  half4 gpi = tex2D(g_gpi_map,uv);
+  
+  // incan value
+  float4 incan = base*gpi.g*g_normal_params.w;    // GPI ACCESS (INCAN = G)
+
+  // take the tangent space normal back to world space   
+  half4 normal = (tex2D(g_normal_map,uv)*2.0f)-1.0f;
+  normal.xy*=g_normal_params.x;                                      // scale the normal response
+  half3 ws_normal;
+  ws_normal  = normal.x * ws_vtangent;
+  ws_normal += normal.y * ws_vbinormal;
+  ws_normal += normal.z * ws_vnormal;
+  ws_normal  = normalize(ws_normal);
+
+  //return half4((ws_normal+1)/2,1);
+
+  // compute the spherical harmonic lighting
+  half3 norm2 = ws_normal*ws_normal;
+  half3 normd = ws_normal.xzy*ws_normal.zyx;
+  half4 diffuse = g_sh[0];
+  diffuse += g_sh[1] * ws_normal.x;
+  diffuse += g_sh[2] * ws_normal.y;
+  diffuse += g_sh[3] * ws_normal.z;
+  diffuse += g_sh[4] * normd.x;
+  diffuse += g_sh[5] * normd.y;
+  diffuse += g_sh[6] * normd.z;  
+  diffuse += g_sh[7] * norm2.z;
+  diffuse += g_sh[8] * (norm2.x - norm2.y);	
+
+  //return scaled diffuse;
+  diffuse*=g_exposure.y;
+  
+  // compute final diffuse
+  diffuse*=base;
+  diffuse+=incan;
+
+  // compute the reflection vector and the specular from the environment
+  float3 reflect_vec = reflect(ws_view_vec,ws_normal);  
+  float4 tmp = float4(reflect_vec,g_specular_params.z);
+  float3 specular = texCUBElod(g_env,tmp).xyz;
+
+  specular=specular+g_specular_params.y;							// adjust the specular to extract to bright stuff
+  specular = max(specular,0);
+  specular*=g_specular_params.x;  
+    
+  float gloss_scale = g_specular_params.w * gpi.r;		// GPI ACCESS (GLOSS = R)
+  
+  // gloss tint
+  float3 gloss_tint = lerp(g_gloss_tint.rgb, base.rgb, g_gloss_tint.w);
+  specular*=(gloss_tint*gloss_scale);
+
+  return half4((diffuse.rgb+specular)*g_exposure.x,base.w);
+  
+}

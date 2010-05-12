@@ -1,0 +1,1 @@
+/usr/sfw/bin/gcc   -Wall -O3 -DNDEBUG -DDBUG_OFF  -fPIC CMakeFiles/lf-t.dir/lf-t.c.o  -o lf-t  ../mytap/libmytap.a ../../mysys/libmysys.a ../../strings/libstrings.a ../../extlib/dbug/libdbug.a -lthread -lm 

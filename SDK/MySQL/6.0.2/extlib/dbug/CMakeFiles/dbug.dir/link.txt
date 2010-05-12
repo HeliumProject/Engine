@@ -1,0 +1,2 @@
+/usr/ccs/bin/ar cr libdbug.a  CMakeFiles/dbug.dir/dbug.c.o CMakeFiles/dbug.dir/factorial.c.o CMakeFiles/dbug.dir/sanity.c.o
+/usr/ccs/bin/ranlib libdbug.a

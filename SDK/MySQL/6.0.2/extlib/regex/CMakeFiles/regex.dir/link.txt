@@ -1,0 +1,2 @@
+/usr/ccs/bin/ar cr libregex.a  CMakeFiles/regex.dir/debug.c.o CMakeFiles/regex.dir/regcomp.c.o CMakeFiles/regex.dir/regerror.c.o CMakeFiles/regex.dir/regexec.c.o CMakeFiles/regex.dir/regfree.c.o CMakeFiles/regex.dir/reginit.c.o CMakeFiles/regex.dir/split.c.o
+/usr/ccs/bin/ranlib libregex.a

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="Windows"
+	InheritedPropertySheets=".\SDK.vsprops"
+	>
+  <Tool
+		Name="VCCLCompilerTool"
+		PreprocessorDefinitions="_SECURE_SCL=1;_SECURE_SCL_THROWS=1;_CRT_SECURE_NO_DEPRECATE;REQUIRE_IOSTREAM=1;MLIBRARY_DONTUSE_MFC_MANIFEST=1;WXUSINGMONOLITHIC"
+		DisableSpecificWarnings="4996;4251"
+	/>
+	<UserMacro
+		Name="LibConfig"
+		Value="$(ConfiguationName)"
+	/>
+</VisualStudioPropertySheet>

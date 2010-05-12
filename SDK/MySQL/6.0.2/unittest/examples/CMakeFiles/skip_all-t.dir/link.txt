@@ -1,0 +1,1 @@
+/usr/sfw/bin/gcc   -Wall -O3 -DNDEBUG -DDBUG_OFF  -fPIC CMakeFiles/skip_all-t.dir/skip_all-t.c.o  -o skip_all-t  ../mytap/libmytap.a 

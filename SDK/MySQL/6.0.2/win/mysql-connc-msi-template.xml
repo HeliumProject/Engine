@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+  <Product Id="PKG_NEW_GUID" Name="MySQL Connector C" Language="1033" Version="PKG_VERSION" Manufacturer="Sun Microsystems">
+    <Package Id="PKG_NEW_GUID" Keywords="Installer,MSI,Database" Description="MySQL Client C Connector" InstallerVersion="200" Platforms="PKG_PID_PLATFORM" Compressed="yes" SummaryCodepage="1252" />
+    <Media Id="1" Cabinet="Product.cab" EmbedCab="yes" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="PKG_DEFAULT_DEST">
+        <Directory Id="MYSQL" Name="MySQL">
+          <Directory Id="MysqlLibraryDir" Name="MYSQLC.CON" LongName="PKG_PRODUCT_DEST">
+            <Directory Id="INSTALLDIR" Name=".">
+              <!-- *****************************************************************************************
+                   include directory
+                -->
+              <Directory Id="include" Name="include">
+                <Component Id="IncludeFiles" Guid="89D253A8-D429-430E-B1EA-399A17B4080C" DiskId="1">
+                  <File Id="file0001" Name="base64.h" Source=".\include\base64.h" />
+                  <File Id="file0002" Name="CONFGWIN.H" LongName="config-win.h" Source=".\include\config-win.h" />
+                  <File Id="file0003" Name="decimal.h" Source=".\include\decimal.h" />
+                  <File Id="file0004" Name="errmsg.h" Source=".\include\errmsg.h" />
+                  <File Id="file0005" Name="hash.h" Source=".\include\hash.h" />
+                  <File Id="file0006" Name="keycache.h" Source=".\include\keycache.h" />
+                  <File Id="file0007" Name="lf.h" Source=".\include\lf.h" />
+                  <File Id="file0008" Name="m_ctype.h" Source=".\include\m_ctype.h" />
+                  <File Id="file0009" Name="m_string.h" Source=".\include\m_string.h" />
+                  <File Id="file0010" Name="my_aes.h" Source=".\include\my_aes.h" />
+                  <File Id="file0011" Name="my_alarm.h" Source=".\include\my_alarm.h" />
+                  <File Id="file0012" Name="my_alloc.h" Source=".\include\my_alloc.h" />
+                  <File Id="file0013" Name="MYATOMIC.H" LongName="my_atomic.h" Source=".\include\my_atomic.h" />
+                  <File Id="file0014" Name="MY_ATTRI.H" LongName="my_attribute.h"  Source=".\include\my_attribute.h" />
+                  <File Id="file0015" Name="my_base.h" Source=".\include\my_base.h" />
+                  <File Id="file0016" Name="my_bit.h" Source=".\include\my_bit.h" />
+                  <File Id="file0017" Name="MYBITM.H" LongName="my_bitmap.h" Source=".\include\my_bitmap.h" />
+                  <File Id="file0018" Name="MY_CHARS.H" LongName="my_charsets.h"  Source=".\include\my_charsets.h" />
+                  <File Id="file0019" Name="MYCONFIG.H" LongName="my_config.h" Source=".\include\my_config.h" />
+                  <File Id="file0020" Name="my_dbug.h"  Source=".\include\my_dbug.h" />
+                  <File Id="file0021" Name="my_dir.h"  Source=".\include\my_dir.h" />
+                  <File Id="file0022" Name="MY_GETOP.H" LongName="my_getopt.h" Source=".\include\my_getopt.h" />
+                  <File Id="file0023" Name="MY_GLOBL.H" LongName="my_global.h" Source=".\include\my_global.h" />
+                  <File Id="file0024" Name="MYLIBWRP.H" LongName="my_libwrap.h"  Source=".\include\my_libwrap.h" />
+                  <File Id="file0025" Name="my_list.h" Source=".\include\my_list.h" />
+                  <File Id="file0026" Name="my_md5.h" Source=".\include\my_md5.h" />
+                  <File Id="file0027" Name="my_net.h" Source=".\include\my_net.h" />
+                  <File Id="file0028" Name="MY_NO_PT.H" LongName="my_no_pthread.h"  Source=".\include\my_no_pthread.h" />
+                  <File Id="file0029" Name="my_nosys.h"  Source=".\include\my_nosys.h" />
+                  <File Id="file0030" Name="MY_PTHRD.H" LongName="my_pthread.h"  Source=".\include\my_pthread.h" />
+                  <File Id="file0031" Name="MYSTACKT.H" LongName="my_stacktrace.h"  Source=".\include\my_stacktrace.h" />
+                  <File Id="file0032" Name="my_sys.h" Source=".\include\my_sys.h" />
+                  <File Id="file0033" Name="my_time.h" Source=".\include\my_time.h" />
+                  <File Id="file0034" Name="my_tree.h" Source=".\include\my_tree.h" />
+                  <File Id="file0035" Name="my_trie.h" Source=".\include\my_trie.h" />
+                  <File Id="file0036" Name="MYUCTYPE.H" LongName="my_uctype.h" Source=".\include\my_uctype.h" />
+                  <File Id="file0037" Name="my_vle.h" Source=".\include\my_vle.h" />
+                  <File Id="file0038" Name="my_xml.h" Source=".\include\my_xml.h" />
+                  <File Id="file0039" Name="MYISAMPK.H" LongName="myisampack.h" Source=".\include\myisampack.h" />
+                  <File Id="file0040" Name="mysql.h" Source=".\include\mysql.h" />
+                  <File Id="file0041" Name="MYSQL_CM.H" LongName="mysql_com.h" Source=".\include\mysql_com.h" />
+                  <File Id="file0042" Name="MYSQL_TM.H" LongName="mysql_time.h" Source=".\include\mysql_time.h" />
+                  <File Id="file0043" Name="MYSQL_VR.H" LongName="mysql_version.h" Source=".\include\mysql_version.h" />
+                  <File Id="file0044" Name="MYSQLDER.H" LongName="mysqld_error.h" Source=".\include\mysqld_error.h" />
+                  <File Id="file0045" Name="MYSYSERR.H" LongName="mysys_err.h" Source=".\include\mysys_err.h" />
+                  <File Id="file0046" Name="queues.h" Source=".\include\queues.h" />
+                  <File Id="file0047" Name="sha1.h" Source=".\include\sha1.h" />
+                  <File Id="file0048" Name="sha2.h" Source=".\include\sha2.h" />
+                  <File Id="file0049" Name="SQL_COMN.H" LongName="sql_common.h" Source=".\include\sql_common.h" />
+                  <File Id="file0050" Name="SSLOPTCS.H" LongName="sslopt-case.h" Source=".\include\sslopt-case.h" />
+                  <File Id="file0051" Name="SSLOPTVR.H" LongName="sslopt-vars.h" Source=".\include\sslopt-vars.h" />
+                  <File Id="file0052" Name="t_ctype.h" Source=".\include\t_ctype.h" />
+                  <File Id="file0053" Name="THRALARM.H" LongName="thr_alarm.h" Source=".\include\thr_alarm.h" />
+                  <File Id="file0054" Name="thr_lock.h" Source=".\include\thr_lock.h" />
+                  <File Id="file0055" Name="typelib.h" Source=".\include\typelib.h" />
+                  <File Id="file0056" Name="violite.h" Source=".\include\violite.h" />
+                  <File Id="file0057" Name="WTHREADS.H" LongName="waiting_threads.h" Source=".\include\waiting_threads.h" />
+                  <File Id="file0058" Name="wqueue.h" Source=".\include\wqueue.h" />
+                </Component>
+                <Directory Id="include_mysql" Name="mysys">
+                    <Component Id="MysysIncludeFiles" Guid="548E409C-7C79-44e9-BA4E-FFD302A499FD" DiskId="1">
+                        <File Id="file0060" Name="rijndael.h"  Source=".\include\mysys\rijndael.h" />
+                    </Component>
+                </Directory>
+                <Directory Id="include_atomic" Name="atomic">
+                    <Component Id="AtomicIncludeFiles" Guid="4D8D4413-D05F-4011-AC37-60B7AD4A9C2B" DiskId="1">
+                        <File Id="file0061" Name="GCCBUILT.H" LongName="gcc_builtins.h" Source=".\include\atomic\gcc_builtins.h" />
+                        <File Id="file0062" Name="GENERIC.H" LongName="generic-msvc.h" Source=".\include\atomic\generic-msvc.h" />
+                        <File Id="file0063" Name="nolock.h" Source=".\include\atomic\nolock.h" />
+                        <File Id="file0064" Name="rwlock.h" Source=".\include\atomic\rwlock.h" />
+                        <File Id="file0065" Name="x86-gcc.h" Source=".\include\atomic\x86-gcc.h" />
+                    </Component>
+                </Directory>
+              </Directory>
+              <!-- *****************************************************************************************
+                   lib directory
+                -->
+              <Directory Id="lib" Name="lib">
+                <Directory Id="debug" Name="debug">
+                  <Component Id="ClientLibraryDebug" Guid="B9441015-94FC-42d1-BE35-724D41DC263B" DiskId="1">
+                    <File Id="file1000" Name="dbug.lib" Source=".\extlib\dbug\debug\dbug.lib" />
+                    <File Id="file1001" Name="dbug.pdb" Source=".\extlib\dbug\debug\dbug.pdb" />
+                    <File Id="file1002" Name="libmysql.dll" Source=".\libmysql\debug\libmysql.dll" />
+                    <File Id="file1003" Name="libmysql.lib" Source=".\libmysql\debug\libmysql.lib" />
+                    <File Id="file1004" Name="libmysql.pdb" Source=".\libmysql\debug\libmysql.pdb" />
+                    <File Id="file1005" Name="MYSQLCLN.LIB" LongName="mysqlclient.lib" Source=".\libmysql\debug\mysqlclient.lib" />
+                    <File Id="file1006" Name="MYSQLCLD.LIB" LongName="mysqlclient.pdb" Source=".\libmysql\debug\mysqlclient.pdb" />
+                    <File Id="file1007" Name="mysys.lib" Source=".\mysys\debug\mysys.lib" />
+                    <File Id="file1008" Name="mysys.pdb" Source=".\mysys\debug\mysys.pdb" />
+                    <File Id="file1009" Name="regex.lib" Source=".\extlib\regex\debug\regex.lib" />
+                    <File Id="file1010" Name="regex.pdb" Source=".\extlib\regex\debug\regex.pdb" />
+                    <File Id="file1011" Name="strings.lib" Source=".\strings\debug\strings.lib" />
+                    <File Id="file1012" Name="strings.pdb" Source=".\strings\debug\strings.pdb" />
+                    <File Id="file1013" Name="vio.lib" Source=".\vio\debug\vio.lib" />
+                    <File Id="file1014" Name="vio.pdb" Source=".\vio\debug\vio.pdb" />
+                    <File Id="file1015" Name="yassl.lib" Source=".\extlib\yassl\debug\yassl.lib" />
+                    <File Id="file1016" Name="yassl.pdb" Source=".\extlib\yassl\debug\yassl.pdb" />
+                    <File Id="file1017" Name="zlib.lib" Source=".\extlib\zlib\debug\zlib.lib" />
+                    <File Id="file1018" Name="zlib.pdb" Source=".\extlib\zlib\debug\zlib.pdb" />
+                  </Component>
+                </Directory>
+                <Directory Id="opt" Name="opt">
+                  <Component Id="ClientLibraryRelease" Guid="70C45D85-2377-4e86-A389-AF77D0E25953" DiskId="1">
+                    <File Id="file1050" Name="dbug.lib" Source=".\extlib\dbug\relwithdebinfo\dbug.lib" />
+                    <File Id="file1051" Name="dbug.pdb" Source=".\extlib\dbug\relwithdebinfo\dbug.pdb" />
+                    <File Id="file1052" Name="libmysql.dll" Source=".\libmysql\relwithdebinfo\libmysql.dll" />
+                    <File Id="file1053" Name="libmysql.lib" Source=".\libmysql\relwithdebinfo\libmysql.lib" />
+                    <File Id="file1054" Name="libmysql.pdb" Source=".\libmysql\relwithdebinfo\libmysql.pdb" />
+                    <File Id="file1055" Name="MYSQLCLN.LIB" LongName="mysqlclient.lib" Source=".\libmysql\relwithdebinfo\mysqlclient.lib" />
+                    <File Id="file1056" Name="MYSQLCLD.LIB" LongName="mysqlclient.pdb" Source=".\libmysql\relwithdebinfo\mysqlclient.pdb" />
+                    <File Id="file1057" Name="mysys.lib" Source=".\mysys\relwithdebinfo\mysys.lib" />
+                    <File Id="file1058" Name="mysys.pdb" Source=".\mysys\relwithdebinfo\mysys.pdb" />
+                    <File Id="file1059" Name="regex.lib" Source=".\extlib\regex\relwithdebinfo\regex.lib" />
+                    <File Id="file1060" Name="regex.pdb" Source=".\extlib\regex\relwithdebinfo\regex.pdb" />
+                    <File Id="file1061" Name="strings.lib" Source=".\strings\relwithdebinfo\strings.lib" />
+                    <File Id="file1062" Name="strings.pdb" Source=".\strings\relwithdebinfo\strings.pdb" />
+                    <File Id="file1063" Name="vio.lib" Source=".\vio\relwithdebinfo\vio.lib" />
+                    <File Id="file1064" Name="vio.pdb" Source=".\vio\relwithdebinfo\vio.pdb" />
+                    <File Id="file1065" Name="yassl.lib" Source=".\extlib\yassl\relwithdebinfo\yassl.lib" />
+                    <File Id="file1066" Name="yassl.pdb" Source=".\extlib\yassl\relwithdebinfo\yassl.pdb" />
+                    <File Id="file1067" Name="zlib.lib" Source=".\extlib\zlib\relwithdebinfo\zlib.lib" />
+                    <File Id="file1068" Name="zlib.pdb" Source=".\extlib\zlib\relwithdebinfo\zlib.pdb" />
+                  </Component>
+                </Directory>
+              </Directory>
+              <!-- *****************************************************************************************
+                   bin directory
+                -->
+              <Directory Id="bin" Name="bin">
+                <Component Id="ClientLibraryBins" Guid="3AC8ADC0-62BA-466c-AC97-6A017C17828A" DiskId="1">
+                  <File Id="file2000" Name="MYSQLCON.EXE" LongName="mysql_config.exe" Source=".\mysql_config\relwithdebinfo\mysql_config.exe" />
+                  <File Id="file2001" Name="MYSQLCON.PDB" LongName="mysql_config.pdb" Source=".\mysql_config\relwithdebinfo\mysql_config.pdb" />
+                  <File Id="file2002" Name="MYSQLCTE.EXE" LongName="mysql_client_test.exe" Source=".\tests\relwithdebinfo\mysql_client_test.exe" />
+                  <File Id="file2003" Name="MYSQLCTE.PDB" LongName="mysql_client_test.pdb" Source=".\tests\relwithdebinfo\mysql_client_test.pdb" />
+                </Component>
+              </Directory>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Feature Id="Complete" Title="MySQL Connector C" Description="The MySQL Connector C client library." Display="expand" Level="1" ConfigurableDirectory="INSTALLDIR">
+        <Feature Id="ConnectorC" Title="Library" Description="The release library and headers." Level="1" Display="expand">
+          <ComponentRef Id="IncludeFiles" />
+          <ComponentRef Id="MysysIncludeFiles" />
+          <ComponentRef Id="AtomicIncludeFiles" />
+          <ComponentRef Id="ClientLibraryRelease" />
+          <Feature Id="DebugLibraries" Title="Debug Libary" Description="Debug library and symbols." Level="1000">
+            <ComponentRef Id="ClientLibraryDebug" />
+          </Feature>
+        </Feature>
+        <Feature Id="ConnectorCBins" Title="Extra binaries" Description="Extra binaries used for development and testing." Level="1000">
+            <ComponentRef Id="ClientLibraryBins" />
+        </Feature>
+    </Feature>
+    <UIRef Id="WixUI_Mondo" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+  </Product>
+</Wix>

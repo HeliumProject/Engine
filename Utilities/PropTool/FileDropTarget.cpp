@@ -1,0 +1,30 @@
+#include "FileDropTarget.h"
+
+#include "Common/String/Tokenize.h"
+
+FileDropTarget::FileDropTarget(const std::string& extensions, const std::string& delims)
+{
+  Tokenize( extensions, m_FileExtensions, delims );
+}
+
+bool FileDropTarget::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& filenames )
+{
+  if ( filenames.size() != 1 )
+  {
+    return false;
+  }
+
+  FileDroppedArgs args( filenames[ 0 ].c_str() );
+
+  if ( !m_FileExtensions.empty() )
+  {
+    if ( std::find( m_FileExtensions.begin(), m_FileExtensions.end(), args.m_Path.Extension() ) == m_FileExtensions.end() )
+    {
+      return false;
+    }
+  }
+
+  m_DropEvent.Raise( args );
+
+  return true;
+}

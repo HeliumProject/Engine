@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+
+<bakefile-gen xmlns="http://www.bakefile.org/schema/bakefile-gen">
+
+    <!-- this tag tells bakefile_gen that the user bakefile wants to use the 
+         default wxCode settings found in wxCode/build/bakefiles/presets/wxcode.bkgen.
+         Note that this means that such file does exist on your hard-disk at bake-time!
+    -->
+    <include file="../../../build/bakefiles/presets/wxcode.bkgen"/>
+
+    <!-- you probably need to edit only this tag replacing it with the name of
+         your .bkl file:
+    -->
+    <input>propgrid.bkl</input>
+
+    <!--
+        The wxCode's wxcode.bkgen file will enable some default formats.
+        If you don't want a format declared there to be generated for
+        your project, just use:
+
+             <disable-formats>xxx</disable-formats>
+
+        Instead, if you want to generate a format not declared there,
+        use:
+
+        <add-formats>xxx</add-formats>
+    -->
+
+     <add-formats>msvs2008prj</add-formats>
+
+</bakefile-gen>

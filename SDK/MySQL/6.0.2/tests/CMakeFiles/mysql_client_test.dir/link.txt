@@ -1,0 +1,1 @@
+/usr/sfw/bin/gcc   -Wall -O3 -DNDEBUG -DDBUG_OFF  -fPIC CMakeFiles/mysql_client_test.dir/mysql_client_test.c.o CMakeFiles/mysql_client_test.dir/__/mysys/my_memmem.c.o  -o mysql_client_test  ../libmysql/libmysqlclient.a -lthread -lm -lsocket 

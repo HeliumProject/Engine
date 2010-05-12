@@ -1,0 +1,5 @@
+#define wxUSE_NO_MANIFEST 1
+
+ApplicationIcon ICON "../../distro/data/luna/themes/default/Luna.ico"
+
+#include "wx/msw/wx.rc"

@@ -1,0 +1,1 @@
+/usr/sfw/bin/gcc   -Wall -O3 -DNDEBUG -DDBUG_OFF  -fPIC CMakeFiles/simple-t.dir/simple-t.c.o  -o simple-t  ../mytap/libmytap.a 

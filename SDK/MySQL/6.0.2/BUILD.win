@@ -1,0 +1,91 @@
+MySQL Connector/C - Build on Microsoft Windows
+
+WHAT YOU NEED
+---------------------------------------------------------------
+
+Microsoft Windows - supported versions:
+  We don't support older versions of Microsoft windows. 
+  Supported versions are Windows 2000, Windows XP, Windows Vista,
+  Windows Server 2003, or Windows Server 2008. 
+
+
+Compiler Tools
+
+  We regularly build using Microsoft Visual Studio 8 and 9.
+  Express edition of Visual Studio and other compilers may work, 
+  but are untested.
+
+  You also need CMake 2.6 or newer, available at
+
+    http://www.cmake.org
+
+Source Code
+
+  The source code is the main thing. You can get it from the 
+  source repository if you want the 'bleeding edge' code but most
+  people will simply download the zip of the source.
+
+  You will find the source repository on lauchpad
+
+    http://launchpad.net/libmysql
+        
+
+BUILD
+---------------------------------------------------------------
+
+You need to have the environment variables set for the Visual Studio
+toolchain. Visual Studio includes a batch file to set these for you,
+and installs a shortcut into the Start menu to open a command prompt
+with these variables set.
+
+Build Connector/C using the "cmake" command-line tool by doing the
+following from the source root directory (in a command prompt window);
+
+  cmake -G "Visual Studio 9 2008"
+
+This produces a project file that you can open with Visual Studio or
+build from the command line with either of:
+
+  devenv.com libmysql.sln /build Release
+  devenv.com libmysql.sln /build RelWithDebInfo
+
+For other versions of Visual Studio or nmake based build call
+
+  cmake --help
+
+to check the supported generators.
+
+To compile the "Debug" build, you must run set the cmake build type so
+the correct version of external libraries are used:
+
+  cmake -G "Visual Studio 8 2005" -DCMAKE_BUILD_TYPE=Debug
+  devenv.com libmysql.sln /build Debug
+
+
+Installation
+---------------------------------------------------------------
+
+To create a install package you can choose between two variants:
+  - creating a zip package
+  - creating a msi install package
+
+
+Zip package
+  To create a zip package, just run the cpack command from the root of
+  your Connector/C source directory.
+
+MSI Install package
+  Required tools:
+
+    - Windows XML Installer toolset (WIX), available at
+
+      http://sourceforge.net/projects/wix/
+
+  To create the msi install package change to the subdirectory win
+  and generate the makefile
+
+    cmake -G "NMake Makefiles"
+
+  Create the msi install package by calling nmake
+
+    nmake

@@ -1,0 +1,1 @@
+/usr/sfw/bin/gcc   -Wall -O3 -DNDEBUG -DDBUG_OFF  -fPIC CMakeFiles/sp.dir/sp.c.o  -o sp  ../mytap/libmytap.a ../../libmysql/libmysqlclient.a -lthread -lm -lsocket 

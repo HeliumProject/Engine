@@ -1,0 +1,190 @@
+<?xml version="1.0" ?>
+
+<!--
+    =========================================================================
+    How to customize this file for a particular component.
+
+    The wxCode presets are designed to accomodate a component that has:
+        - source and header files that are meant to be compiled into 1 library
+          (as a static lib when WX_SHARED=='0' and as a DLL when WX_SHARED=='1')
+        - one or more sample programs that will make use of the library
+    Nonetheless it can still be used for components with more than one library.
+
+    Step-by-step guide to adapt this bakefile to a component which builds as
+    a library and has one or more samples as described above:
+
+    1.) Replace the contents of the "set-comp-name" tag with the name of your
+        component, eg. wxCode/component/MYCOMPONENT_NAME.
+        Example : for wxCode/components/wxpropgrid use just 'wxpropgrid' with no
+                  quotes.
+
+    2.) Replace the name of the lib to be generated MYCOMPONENT_NAME_lib and
+        MYCOMPONENT_NAME_dll with the actual name of your component,
+        eg. wxpropgrid_lib and wxpropgrid_dll.
+
+    3.) Adjust the MSVC6PRJ_MERGED_TARGETS variable with the same values
+        you've set previously. eg. wxpropgrid=wxpropgrid_lib+wxpropgrid_dll
+
+    4.) Remove or add libs to link the library to. Use <wx-lib>name</wx-lib> for
+        libraries from wxWidgets and they will be appropriately pre and postfixed
+        based on the build settings (eg. debug, unicode, etc.).
+
+        Use <library>libID</library> for other libraries declared into this bakefile
+        (e.g. your component's library: <library>wxpropgrid_lib</library>)
+
+        Finally, use <sys-lib>name</sys-lib> for other libraries coming from 3rd party
+        packages. Note that shared libraries (<dll>) need to link to other libraries, 
+        but static libraries (<lib>) do not.
+
+    5.) Replace the MYSAMPLE_NAME with the name you want the compiled executable
+        to have. Add or remove libraries and include paths as you did for the
+        library.
+
+    6.) Periodically check to see if the wxCode bakefiles have been updated,
+        including the template MYCOMP.bkl that this is derived from
+        and regenerate your build files.
+
+    ==========================================================================
+-->
+
+<makefile>
+
+    <!-- the following line tells Bakefile that this component uses the wxCode presets
+         (internally wxCode presets use in turn the wxWidgets presets)
+    -->
+    <include file="presets/wxcode.bkl"/>
+
+    <!-- sets the name of the folder which contains this component and thus
+         should always be in lowercase, wxCode/component/MYCOMPONENT_NAME 
+    -->
+    <set-comp-name>propgrid</set-comp-name>
+
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Library settings                                                  -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+    <!-- NOTE: you won't need to specify a list of source and headers files
+               for this component: wxcode.bkl (included above) will automatically
+               look into the 'src' and 'include/wx' folders of your component to
+               build such lists and set the COMP_SRC and COMP_HDR variables,
+               which will then be used as sources / headers for the <lib> and <dll>
+               targets below.
+
+               In case however you don't have the sources/headers in those
+               folders, you'll want to 'manually' set the list. E.g. use
+
+                <set var="COMP_SRC">$(fileList('my_src_dir/*.cpp'))</set>
+                <set var="COMP_HDR">$(fileList('my_header_dir/*.h'))</set>
+
+               if you have the sources in wxCode/components/yourcomp/my_src_dir
+               and the headers in wxCode/components/yourcomp/my_header_dir
+
+               This is because the folders you reference are always referred to 
+               the root of your component and must always be relative paths.
+    -->
+    <set var="COMP_HDR">$(fileList('include/wx/propgrid/*.h'))</set>
+    <set var="COMP_SRC">
+      src/advprops.cpp
+      src/editors.cpp
+      src/extras.cpp
+      src/manager.cpp
+      src/odcombo.cpp
+      src/propgrid.cpp
+      src/props.cpp
+    </set>
+
+
+    <!-- NOT YET SUPPORTED!
+    <gettext-catalogs id="locale">
+        <srcdir>$(SRCDIR)/locale</srcdir>
+        <catalog-name>propgrid</catalog-name>
+        <linguas>fi it pl</linguas>
+        <install-to>$(LOCALEDIR)</install-to>
+    </gettext-catalogs>
+    -->
+
+        <set var="SAMPLE_SRC">
+        samples/minimal.cpp
+        samples/propgridsample.cpp
+        samples/sampleprops.cpp
+        samples/tests.cpp
+        src/xh_propgrid.cpp
+        </set>
+    <lib id="propgrid_lib" template="wxcode-lib" cond="WX_SHARED=='0'">
+        <!-- here you can use any standard Bakefile tag. E.g. you may want to
+             use <include> tag to add additional compiler include paths.
+        -->
+    </lib>
+    <dll id="propgrid_dll" template="wxcode-dll" cond="WX_SHARED=='1'">
+        <!-- Remove the libraries which are not required by your project.
+             Note : the linking order may be important for static objects
+                    to be initialized correctly and even more important for
+                    some linkers like GNU's linker. -->
+        <wx-lib>adv</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </dll>
+
+    <!-- This makes the MSVC6 project files much nicer... -->
+    <set var="MSVC6PRJ_MERGED_TARGETS">
+        propgrid=propgrid_lib+propgrid_dll
+    </set>
+
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Sample(s) settings                                                -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+    <!-- For wxCode samples, don't use a simple <exe> tag but rather the more
+         specific <wxcode-sample> tag: -->
+
+    <wxcode-sample id="propgridsample">
+        <!-- Inside a <wxcode-sample> tag you _must_ use the <dir> tag
+             to tell Bakefile in which directory is placed this sample.
+
+             NOTE: the directory you reference must be relative to the root
+                   of your component. In the sample <dir> below we assume
+                   you have placed this sample's files in
+                      yourCompFolder/samples/sample1
+        -->
+        <dir>samples</dir>
+
+        <!-- if you use win32 resources for your sample and you are lazy and
+             don't want to use the <win32-res>myresfile.rc</win32-res> tag,
+             you can just write:
+        -->
+        <win32-res>samples/sample.rc</win32-res>
+
+        <!-- Remove the libraries which are not required by your project.
+             Note : the linking order may by important for static objects
+             to be initialized correctly. -->
+        <library>propgrid_lib</library>
+        <wx-lib>xrc</wx-lib>
+        <wx-lib>html</wx-lib>
+        <wx-lib>xml</wx-lib>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </wxcode-sample>
+
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Additional utilities                                              -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+    <!-- Put here one or more of the following tags if you need them:
+
+            <make-tarball/>    => for adding a "tarball" target on your Unix
+                                  makefiles. Very very useful to make clean tarballs
+                                  of your component at release-time.
+
+            <make-zip>         => for adding a "zip" target on your Win makefiles.
+                                  Very very useful  to make clean zip archives
+                                  of your component at release-time.
+
+            <make-docs>        => for adding a "docs" target on your makefiles
+                                  which runs "doxygen" in yourCompFolder/docs
+    -->
+
+</makefile>

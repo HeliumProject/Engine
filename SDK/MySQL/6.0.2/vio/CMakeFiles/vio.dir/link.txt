@@ -1,0 +1,2 @@
+/usr/ccs/bin/ar cr libvio.a  CMakeFiles/vio.dir/vio.c.o CMakeFiles/vio.dir/viosocket.c.o CMakeFiles/vio.dir/viossl.c.o CMakeFiles/vio.dir/viosslfactories.c.o
+/usr/ccs/bin/ranlib libvio.a

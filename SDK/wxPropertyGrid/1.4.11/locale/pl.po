@@ -1,0 +1,154 @@
+# wxPropertyGrid message catalog.
+# Copyright (C) 2008 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# AmiArt <AmiArt@interia.pl>, 2008.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.4.0\n"
+"Report-Msgid-Bugs-To: jmsalli@users.sourceforge.net\n"
+"POT-Creation-Date: 2008-10-15 17:25+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: AmiArt <AmiArt@interia.pl>\n"
+"Language-Team: PL <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/advprops.cpp:474
+msgid "Point Size"
+msgstr "Rozmiar"
+
+#: src/advprops.cpp:476
+msgid "Family"
+msgstr "Rodzina"
+
+#: src/advprops.cpp:486
+msgid "Face Name"
+msgstr "Nazwa kroju"
+
+#: src/advprops.cpp:493
+msgid "Style"
+msgstr "Styl"
+
+#: src/advprops.cpp:496
+msgid "Weight"
+msgstr "Grubość"
+
+#: src/advprops.cpp:499
+msgid "Underlined"
+msgstr "Podkreślenie"
+
+#: src/advprops.cpp:1705
+msgid "Make a selection:"
+msgstr "Wybierz:"
+
+#: src/manager.cpp:1268
+msgid "Categorized Mode"
+msgstr "Tryb kategorii"
+
+#: src/manager.cpp:1269
+msgid "Alphabetic Mode"
+msgstr "Tryb alfabetyczny"
+
+#: src/propgrid.cpp:575
+msgid "False"
+msgstr "Fałsz"
+
+#: src/propgrid.cpp:576
+msgid "True"
+msgstr "Prawda"
+
+#: src/propgrid.cpp:3133
+msgid "Unspecified"
+msgstr "Nieokreślony"
+
+#: src/propgrid.cpp:4225
+#, c-format
+msgid ""
+"Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
+"\"%s\"."
+msgstr ""
+"Operacja typu \"%s\" nie powiodła się: Właściwość o nazwie \"%s\" jest typu "
+"\"%s\", NIE \"%s\"."
+
+#: src/propgrid.cpp:12302
+#, c-format
+msgid "Error in resource: %s"
+msgstr "Błąd zasobu: %s"
+
+#: src/props.cpp:463 src/props.cpp:477
+#, c-format
+msgid "Value must be %lld or higher"
+msgstr "Wartość musi wynosić %lld lub więcej"
+
+#: src/props.cpp:647
+#, c-format
+msgid "Value must be %llu or higher"
+msgstr "Wartość musi wynosić %llu lub więcej"
+
+#: src/props.cpp:657
+#, c-format
+msgid "Value must be %llu or less"
+msgstr "Wartość musi wynosić %llu lub mniej"
+
+#: src/props.cpp:831
+#, c-format
+msgid "Value must be %f or higher"
+msgstr "Wartość musi wynosić %f lub więcej"
+
+#: src/props.cpp:846
+#, c-format
+msgid "Value must be %f or less"
+msgstr "Wartość musi wynosić %f lub mniej"
+
+#: src/props.cpp:930
+#, c-format
+msgid "Not %s"
+msgstr "Nie %s"
+
+#: src/props.cpp:1729
+msgid "Choose a directory:"
+msgstr "Wybierz katalog:"
+
+#: src/props.cpp:1784
+msgid "Choose a file"
+msgstr "Wybierz plik"
+
+#: src/props.cpp:1787 src/props.cpp:1816
+msgid "All files (*.*)|*.*"
+msgstr "Wszystkie pliki (*.*)|*.*"
+
+#: src/props.cpp:2112 src/props.cpp:2351
+msgid "Ok"
+msgstr "Ok"
+
+#: src/props.cpp:2114 src/props.cpp:2353
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: src/props.cpp:2297
+msgid "Add"
+msgstr "Dodaj"
+
+#: src/props.cpp:2325
+msgid "Update"
+msgstr "Odśwież"
+
+#: src/props.cpp:2328
+msgid "Remove"
+msgstr "Usuń"
+
+#: src/props.cpp:2331
+msgid "Up"
+msgstr "Do góry"
+
+#: src/props.cpp:2334
+msgid "Down"
+msgstr "W dół"
+
+#: src/xh_propgrid.cpp:267
+#, c-format
+msgid "Page %i"
+msgstr "Strona %i"

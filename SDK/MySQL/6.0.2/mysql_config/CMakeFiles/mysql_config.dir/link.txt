@@ -1,0 +1,1 @@
+/usr/sfw/bin/gcc   -Wall -O3 -DNDEBUG -DDBUG_OFF  -fPIC CMakeFiles/mysql_config.dir/mysql_config.c.o  -o mysql_config  ../libmysql/libmysqlclient.a -lthread -lm -lsocket 

@@ -1,0 +1,1 @@
+/usr/sfw/bin/gcc   -Wall -O3 -DNDEBUG -DDBUG_OFF  -fPIC CMakeFiles/waiting_threads-t.dir/waiting_threads-t.c.o  -o waiting_threads-t  ../mytap/libmytap.a ../../mysys/libmysys.a ../../strings/libstrings.a ../../extlib/dbug/libdbug.a -lthread -lm 

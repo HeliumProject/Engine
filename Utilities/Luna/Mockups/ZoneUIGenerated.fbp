@@ -1,0 +1,1110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<wxFormBuilder_Project>
+    <FileVersion major="1" minor="9" />
+    <object class="Project" expanded="1">
+        <property name="bitmaps" />
+        <property name="class_decoration" />
+        <property name="code_generation">C++</property>
+        <property name="encoding">UTF-8</property>
+        <property name="event_generation">connect</property>
+        <property name="file">LScenesPanel</property>
+        <property name="first_id">1000</property>
+        <property name="help_provider">none</property>
+        <property name="icons" />
+        <property name="internationalize">0</property>
+        <property name="name">SceneManager</property>
+        <property name="namespace" />
+        <property name="path" />
+        <property name="precompiled_header">#ifdef WX_PRECOMP&#x0A;&#x0A;#include &quot;wx/wxprec.h&quot;&#x0A;&#x0A;#ifdef __BORLANDC__&#x0A;#pragma hdrstop&#x0A;#endif //__BORLANDC__&#x0A;&#x0A;#else&#x0A;#include &lt;wx/wx.h&gt;&#x0A;#endif //WX_PRECOMP</property>
+        <property name="relative_path">1</property>
+        <property name="use_enum">0</property>
+        <property name="use_microsoft_bom">0</property>
+        <object class="Panel" expanded="1">
+            <property name="bg" />
+            <property name="context_help" />
+            <property name="enabled">1</property>
+            <property name="fg" />
+            <property name="font" />
+            <property name="hidden">0</property>
+            <property name="id">ID_DEFAULT</property>
+            <property name="maximum_size" />
+            <property name="minimum_size" />
+            <property name="name">LScenesPanel</property>
+            <property name="pos" />
+            <property name="size">287,209</property>
+            <property name="subclass" />
+            <property name="tooltip" />
+            <property name="window_extra_style" />
+            <property name="window_style">wxTAB_TRAVERSAL</property>
+            <event name="OnChar" />
+            <event name="OnEnterWindow" />
+            <event name="OnEraseBackground" />
+            <event name="OnInitDialog" />
+            <event name="OnKeyDown" />
+            <event name="OnKeyUp" />
+            <event name="OnKillFocus" />
+            <event name="OnLeaveWindow" />
+            <event name="OnLeftDClick" />
+            <event name="OnLeftDown" />
+            <event name="OnLeftUp" />
+            <event name="OnMiddleDClick" />
+            <event name="OnMiddleDown" />
+            <event name="OnMiddleUp" />
+            <event name="OnMotion" />
+            <event name="OnMouseEvents" />
+            <event name="OnMouseWheel" />
+            <event name="OnPaint" />
+            <event name="OnRightDClick" />
+            <event name="OnRightDown" />
+            <event name="OnRightUp" />
+            <event name="OnSetFocus" />
+            <event name="OnSize" />
+            <event name="OnUpdateUI" />
+            <object class="wxBoxSizer" expanded="1">
+                <property name="minimum_size" />
+                <property name="name">mainSizer</property>
+                <property name="orient">wxVERTICAL</property>
+                <property name="permission">none</property>
+                <object class="sizeritem" expanded="1">
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND</property>
+                    <property name="proportion">0</property>
+                    <object class="wxBoxSizer" expanded="1">
+                        <property name="minimum_size" />
+                        <property name="name">toolbarSizer</property>
+                        <property name="orient">wxHORIZONTAL</property>
+                        <property name="permission">none</property>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxALL</property>
+                            <property name="proportion">0</property>
+                            <object class="wxBitmapButton" expanded="1">
+                                <property name="bg" />
+                                <property name="bitmap">X:\rcf\code\projects\luna\shared\tools\runtime_junction\data\luna\art\addzone_16.png; Load From File</property>
+                                <property name="context_help" />
+                                <property name="enabled">1</property>
+                                <property name="fg" />
+                                <property name="font" />
+                                <property name="hidden">0</property>
+                                <property name="id">ID_DEFAULT</property>
+                                <property name="maximum_size" />
+                                <property name="minimum_size" />
+                                <property name="name">m_ButtonAddZone</property>
+                                <property name="permission">protected</property>
+                                <property name="pos" />
+                                <property name="size" />
+                                <property name="style">wxBU_AUTODRAW</property>
+                                <property name="subclass" />
+                                <property name="tooltip" />
+                                <property name="window_extra_style" />
+                                <property name="window_style" />
+                                <event name="OnButtonClick" />
+                                <event name="OnUpdateUI" />
+                            </object>
+                        </object>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxALL</property>
+                            <property name="proportion">0</property>
+                            <object class="wxBitmapButton" expanded="1">
+                                <property name="bg" />
+                                <property name="bitmap">X:\rcf\code\projects\luna\shared\tools\runtime_junction\data\luna\art\selectzone_16.png; Load From File</property>
+                                <property name="context_help" />
+                                <property name="enabled">1</property>
+                                <property name="fg" />
+                                <property name="font" />
+                                <property name="hidden">0</property>
+                                <property name="id">ID_DEFAULT</property>
+                                <property name="maximum_size" />
+                                <property name="minimum_size" />
+                                <property name="name">m_ButtonMoveSel</property>
+                                <property name="permission">protected</property>
+                                <property name="pos" />
+                                <property name="size" />
+                                <property name="style">wxBU_AUTODRAW</property>
+                                <property name="subclass" />
+                                <property name="tooltip" />
+                                <property name="window_extra_style" />
+                                <property name="window_style" />
+                                <event name="OnButtonClick" />
+                                <event name="OnUpdateUI" />
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem" expanded="1">
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND</property>
+                    <property name="proportion">1</property>
+                    <object class="wxBoxSizer" expanded="0">
+                        <property name="minimum_size" />
+                        <property name="name">sceneListSizer</property>
+                        <property name="orient">wxVERTICAL</property>
+                        <property name="permission">none</property>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxEXPAND | wxALL</property>
+                            <property name="proportion">1</property>
+                            <object class="wxScrolledWindow" expanded="0">
+                                <property name="bg" />
+                                <property name="context_help" />
+                                <property name="enabled">1</property>
+                                <property name="fg" />
+                                <property name="font" />
+                                <property name="hidden">0</property>
+                                <property name="id">ID_DEFAULT</property>
+                                <property name="maximum_size" />
+                                <property name="minimum_size" />
+                                <property name="name">m_ScrollWindow</property>
+                                <property name="permission">protected</property>
+                                <property name="pos" />
+                                <property name="scroll_rate_x">0</property>
+                                <property name="scroll_rate_y">5</property>
+                                <property name="size" />
+                                <property name="subclass" />
+                                <property name="tooltip" />
+                                <property name="window_extra_style" />
+                                <property name="window_style">wxSIMPLE_BORDER|wxVSCROLL</property>
+                                <event name="OnUpdateUI" />
+                                <object class="wxBoxSizer" expanded="0">
+                                    <property name="minimum_size" />
+                                    <property name="name">scrollSizer</property>
+                                    <property name="orient">wxVERTICAL</property>
+                                    <property name="permission">none</property>
+                                    <object class="sizeritem" expanded="1">
+                                        <property name="border">0</property>
+                                        <property name="flag">wxALL|wxEXPAND</property>
+                                        <property name="proportion">0</property>
+                                        <object class="wxPanel" expanded="0">
+                                            <property name="bg">wxSYS_COLOUR_3DDKSHADOW</property>
+                                            <property name="context_help" />
+                                            <property name="enabled">1</property>
+                                            <property name="fg" />
+                                            <property name="font" />
+                                            <property name="hidden">0</property>
+                                            <property name="id">ID_DEFAULT</property>
+                                            <property name="maximum_size" />
+                                            <property name="minimum_size" />
+                                            <property name="name">m_RowPanel</property>
+                                            <property name="permission">protected</property>
+                                            <property name="pos" />
+                                            <property name="size" />
+                                            <property name="subclass" />
+                                            <property name="tooltip" />
+                                            <property name="window_extra_style" />
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
+                                            <event name="OnChar" />
+                                            <event name="OnEnterWindow" />
+                                            <event name="OnEraseBackground" />
+                                            <event name="OnKeyDown" />
+                                            <event name="OnKeyUp" />
+                                            <event name="OnKillFocus" />
+                                            <event name="OnLeaveWindow" />
+                                            <event name="OnLeftDClick" />
+                                            <event name="OnLeftDown" />
+                                            <event name="OnLeftUp" />
+                                            <event name="OnMiddleDClick" />
+                                            <event name="OnMiddleDown" />
+                                            <event name="OnMiddleUp" />
+                                            <event name="OnMotion" />
+                                            <event name="OnMouseEvents" />
+                                            <event name="OnMouseWheel" />
+                                            <event name="OnPaint" />
+                                            <event name="OnRightDClick" />
+                                            <event name="OnRightDown" />
+                                            <event name="OnRightUp" />
+                                            <event name="OnSetFocus" />
+                                            <event name="OnSize" />
+                                            <event name="OnUpdateUI" />
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size" />
+                                                <property name="name">rowSizer</property>
+                                                <property name="orient">wxHORIZONTAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">2</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxRadioButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label" />
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_RadioButton</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size" />
+                                                        <property name="style" />
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="value">0</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnRadioButton" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">1</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxBitmapButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="bitmap">X:\rcf\code\projects\luna\shared\tools\runtime_junction\data\luna\art\save_16.png; Load From File</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ToggleCheckout</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">18,18</property>
+                                                        <property name="style">wxBU_AUTODRAW</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnButtonClick" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">3</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
+                                                    <property name="proportion">1</property>
+                                                    <object class="wxStaticText" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg">wxSYS_COLOUR_HIGHLIGHTTEXT</property>
+                                                        <property name="font">Arial,90,90,8</property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label">X:\rcf\assets\devel\levels\level1311\yggp.irb</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size">20,-1</property>
+                                                        <property name="name">m_Text</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">-1,-1</property>
+                                                        <property name="style">wxALIGN_LEFT|wxST_NO_AUTORESIZE</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <property name="wrap">-1</property>
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">2</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="spacer" expanded="1">
+                                                        <property name="height">0</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="width">40</property>
+                                                    </object>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem" expanded="1">
+                                        <property name="border">0</property>
+                                        <property name="flag">wxEXPAND | wxALL</property>
+                                        <property name="proportion">0</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg" />
+                                            <property name="context_help" />
+                                            <property name="enabled">1</property>
+                                            <property name="fg" />
+                                            <property name="font" />
+                                            <property name="hidden">0</property>
+                                            <property name="id">ID_DEFAULT</property>
+                                            <property name="maximum_size" />
+                                            <property name="minimum_size" />
+                                            <property name="name">m_RowPanel1</property>
+                                            <property name="permission">protected</property>
+                                            <property name="pos" />
+                                            <property name="size" />
+                                            <property name="subclass" />
+                                            <property name="tooltip" />
+                                            <property name="window_extra_style" />
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
+                                            <event name="OnChar" />
+                                            <event name="OnEnterWindow" />
+                                            <event name="OnEraseBackground" />
+                                            <event name="OnKeyDown" />
+                                            <event name="OnKeyUp" />
+                                            <event name="OnKillFocus" />
+                                            <event name="OnLeaveWindow" />
+                                            <event name="OnLeftDClick" />
+                                            <event name="OnLeftDown" />
+                                            <event name="OnLeftUp" />
+                                            <event name="OnMiddleDClick" />
+                                            <event name="OnMiddleDown" />
+                                            <event name="OnMiddleUp" />
+                                            <event name="OnMotion" />
+                                            <event name="OnMouseEvents" />
+                                            <event name="OnMouseWheel" />
+                                            <event name="OnPaint" />
+                                            <event name="OnRightDClick" />
+                                            <event name="OnRightDown" />
+                                            <event name="OnRightUp" />
+                                            <event name="OnSetFocus" />
+                                            <event name="OnSize" />
+                                            <event name="OnUpdateUI" />
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size" />
+                                                <property name="name">rowSizer1</property>
+                                                <property name="orient">wxHORIZONTAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">2</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxRadioButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label" />
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_RadioButton1</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size" />
+                                                        <property name="style" />
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="value">0</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnRadioButton" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">1</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxBitmapButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="bitmap">X:\rcf\code\projects\luna\shared\tools\runtime_junction\data\luna\art\save_16.png; Load From File</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ToggleCheckout1</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">18,18</property>
+                                                        <property name="style">wxBU_AUTODRAW</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnButtonClick" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">3</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
+                                                    <property name="proportion">1</property>
+                                                    <object class="wxStaticText" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font">Arial,90,90,8</property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label">X:\rcf\assets\devel\levels\level1311\yggp.irb</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size">20,-1</property>
+                                                        <property name="name">m_Text1</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">-1,-1</property>
+                                                        <property name="style">wxALIGN_LEFT|wxST_NO_AUTORESIZE</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <property name="wrap">-1</property>
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label" />
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ToggleLoad</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size" />
+                                                        <property name="style" />
+                                                        <property name="subclass" />
+                                                        <property name="tooltip">Load or unload this zone</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnCheckBox" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">1</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxBitmapButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="bitmap">X:\rcf\code\projects\luna\shared\tools\runtime_junction\data\luna\art\delete_16.png; Load From File</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ButtonDelete</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">18,18</property>
+                                                        <property name="style">wxBU_AUTODRAW</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip">Delete this zone</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnButtonClick" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem" expanded="1">
+                                        <property name="border">0</property>
+                                        <property name="flag">wxEXPAND | wxALL</property>
+                                        <property name="proportion">0</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg" />
+                                            <property name="context_help" />
+                                            <property name="enabled">1</property>
+                                            <property name="fg" />
+                                            <property name="font" />
+                                            <property name="hidden">0</property>
+                                            <property name="id">ID_DEFAULT</property>
+                                            <property name="maximum_size" />
+                                            <property name="minimum_size" />
+                                            <property name="name">m_RowPanel2</property>
+                                            <property name="permission">protected</property>
+                                            <property name="pos" />
+                                            <property name="size" />
+                                            <property name="subclass" />
+                                            <property name="tooltip" />
+                                            <property name="window_extra_style" />
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
+                                            <event name="OnChar" />
+                                            <event name="OnEnterWindow" />
+                                            <event name="OnEraseBackground" />
+                                            <event name="OnKeyDown" />
+                                            <event name="OnKeyUp" />
+                                            <event name="OnKillFocus" />
+                                            <event name="OnLeaveWindow" />
+                                            <event name="OnLeftDClick" />
+                                            <event name="OnLeftDown" />
+                                            <event name="OnLeftUp" />
+                                            <event name="OnMiddleDClick" />
+                                            <event name="OnMiddleDown" />
+                                            <event name="OnMiddleUp" />
+                                            <event name="OnMotion" />
+                                            <event name="OnMouseEvents" />
+                                            <event name="OnMouseWheel" />
+                                            <event name="OnPaint" />
+                                            <event name="OnRightDClick" />
+                                            <event name="OnRightDown" />
+                                            <event name="OnRightUp" />
+                                            <event name="OnSetFocus" />
+                                            <event name="OnSize" />
+                                            <event name="OnUpdateUI" />
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size" />
+                                                <property name="name">rowSizer2</property>
+                                                <property name="orient">wxHORIZONTAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">2</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxRadioButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label" />
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_RadioButton12</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size" />
+                                                        <property name="style" />
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="value">0</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnRadioButton" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">1</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxBitmapButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="bitmap">X:\rcf\code\projects\luna\shared\tools\runtime_junction\data\luna\art\save_16.png; Load From File</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ToggleCheckout2</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">18,18</property>
+                                                        <property name="style">wxBU_AUTODRAW</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnButtonClick" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">3</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
+                                                    <property name="proportion">1</property>
+                                                    <object class="wxStaticText" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font">Arial,90,90,8</property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label">X:\rcf\assets\devel\levels\level1311\yggp.irb</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size">20,-1</property>
+                                                        <property name="name">m_Text12</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">-1,-1</property>
+                                                        <property name="style">wxALIGN_LEFT|wxST_NO_AUTORESIZE</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <property name="wrap">-1</property>
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label" />
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ToggleLoad1</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size" />
+                                                        <property name="style" />
+                                                        <property name="subclass" />
+                                                        <property name="tooltip">Load or unload this zone</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnCheckBox" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">1</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxBitmapButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="bitmap">X:\rcf\code\projects\luna\shared\tools\runtime_junction\data\luna\art\delete_16.png; Load From File</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ButtonDelete1</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">18,18</property>
+                                                        <property name="style">wxBU_AUTODRAW</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip">Delete this zone</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnButtonClick" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem" expanded="1">
+                                        <property name="border">0</property>
+                                        <property name="flag">wxEXPAND | wxALL</property>
+                                        <property name="proportion">0</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg" />
+                                            <property name="context_help" />
+                                            <property name="enabled">1</property>
+                                            <property name="fg" />
+                                            <property name="font" />
+                                            <property name="hidden">0</property>
+                                            <property name="id">ID_DEFAULT</property>
+                                            <property name="maximum_size" />
+                                            <property name="minimum_size" />
+                                            <property name="name">m_RowPanel3</property>
+                                            <property name="permission">protected</property>
+                                            <property name="pos" />
+                                            <property name="size" />
+                                            <property name="subclass" />
+                                            <property name="tooltip" />
+                                            <property name="window_extra_style" />
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
+                                            <event name="OnChar" />
+                                            <event name="OnEnterWindow" />
+                                            <event name="OnEraseBackground" />
+                                            <event name="OnKeyDown" />
+                                            <event name="OnKeyUp" />
+                                            <event name="OnKillFocus" />
+                                            <event name="OnLeaveWindow" />
+                                            <event name="OnLeftDClick" />
+                                            <event name="OnLeftDown" />
+                                            <event name="OnLeftUp" />
+                                            <event name="OnMiddleDClick" />
+                                            <event name="OnMiddleDown" />
+                                            <event name="OnMiddleUp" />
+                                            <event name="OnMotion" />
+                                            <event name="OnMouseEvents" />
+                                            <event name="OnMouseWheel" />
+                                            <event name="OnPaint" />
+                                            <event name="OnRightDClick" />
+                                            <event name="OnRightDown" />
+                                            <event name="OnRightUp" />
+                                            <event name="OnSetFocus" />
+                                            <event name="OnSize" />
+                                            <event name="OnUpdateUI" />
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size" />
+                                                <property name="name">rowSizer3</property>
+                                                <property name="orient">wxHORIZONTAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">2</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxRadioButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label" />
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_RadioButton13</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size" />
+                                                        <property name="style" />
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="value">0</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnRadioButton" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">1</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxBitmapButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="bitmap">X:\rcf\code\projects\luna\shared\tools\runtime_junction\data\luna\art\save_16.png; Load From File</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ToggleCheckout3</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">18,18</property>
+                                                        <property name="style">wxBU_AUTODRAW</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnButtonClick" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">3</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
+                                                    <property name="proportion">1</property>
+                                                    <object class="wxStaticText" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font">Arial,90,90,8</property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label">X:\rcf\assets\devel\levels\level1311\yggp.irb</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size">20,-1</property>
+                                                        <property name="name">m_Text13</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">-1,-1</property>
+                                                        <property name="style">wxALIGN_LEFT|wxST_NO_AUTORESIZE</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <property name="wrap">-1</property>
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label" />
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ToggleLoad2</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size" />
+                                                        <property name="style" />
+                                                        <property name="subclass" />
+                                                        <property name="tooltip">Load or unload this zone</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnCheckBox" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">1</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxBitmapButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="bitmap">X:\rcf\code\projects\luna\shared\tools\runtime_junction\data\luna\art\delete_16.png; Load From File</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ButtonDelete2</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">18,18</property>
+                                                        <property name="style">wxBU_AUTODRAW</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip">Delete this zone</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnButtonClick" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem" expanded="1">
+                                        <property name="border">0</property>
+                                        <property name="flag">wxEXPAND | wxALL</property>
+                                        <property name="proportion">0</property>
+                                        <object class="wxPanel" expanded="1">
+                                            <property name="bg" />
+                                            <property name="context_help" />
+                                            <property name="enabled">1</property>
+                                            <property name="fg" />
+                                            <property name="font" />
+                                            <property name="hidden">0</property>
+                                            <property name="id">ID_DEFAULT</property>
+                                            <property name="maximum_size" />
+                                            <property name="minimum_size" />
+                                            <property name="name">m_RowPanel4</property>
+                                            <property name="permission">protected</property>
+                                            <property name="pos" />
+                                            <property name="size" />
+                                            <property name="subclass" />
+                                            <property name="tooltip" />
+                                            <property name="window_extra_style" />
+                                            <property name="window_style">wxTAB_TRAVERSAL</property>
+                                            <event name="OnChar" />
+                                            <event name="OnEnterWindow" />
+                                            <event name="OnEraseBackground" />
+                                            <event name="OnKeyDown" />
+                                            <event name="OnKeyUp" />
+                                            <event name="OnKillFocus" />
+                                            <event name="OnLeaveWindow" />
+                                            <event name="OnLeftDClick" />
+                                            <event name="OnLeftDown" />
+                                            <event name="OnLeftUp" />
+                                            <event name="OnMiddleDClick" />
+                                            <event name="OnMiddleDown" />
+                                            <event name="OnMiddleUp" />
+                                            <event name="OnMotion" />
+                                            <event name="OnMouseEvents" />
+                                            <event name="OnMouseWheel" />
+                                            <event name="OnPaint" />
+                                            <event name="OnRightDClick" />
+                                            <event name="OnRightDown" />
+                                            <event name="OnRightUp" />
+                                            <event name="OnSetFocus" />
+                                            <event name="OnSize" />
+                                            <event name="OnUpdateUI" />
+                                            <object class="wxBoxSizer" expanded="1">
+                                                <property name="minimum_size" />
+                                                <property name="name">rowSizer4</property>
+                                                <property name="orient">wxHORIZONTAL</property>
+                                                <property name="permission">none</property>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">2</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxRadioButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label" />
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_RadioButton14</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size" />
+                                                        <property name="style" />
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="value">0</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnRadioButton" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">1</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxBitmapButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="bitmap">X:\rcf\code\projects\luna\shared\tools\runtime_junction\data\luna\art\save_16.png; Load From File</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ToggleCheckout31</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">18,18</property>
+                                                        <property name="style">wxBU_AUTODRAW</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnButtonClick" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">3</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
+                                                    <property name="proportion">1</property>
+                                                    <object class="wxStaticText" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font">Arial,90,90,8</property>
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label">X:\rcf\assets\devel\levels\level1311\yggp.irb</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size">20,-1</property>
+                                                        <property name="name">m_Text14</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">-1,-1</property>
+                                                        <property name="style">wxALIGN_LEFT|wxST_NO_AUTORESIZE</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip" />
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <property name="wrap">-1</property>
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxCheckBox" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="checked">0</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="label" />
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ToggleLoad3</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size" />
+                                                        <property name="style" />
+                                                        <property name="subclass" />
+                                                        <property name="tooltip">Load or unload this zone</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnCheckBox" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">1</property>
+                                                    <property name="flag">wxALL</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxBitmapButton" expanded="1">
+                                                        <property name="bg" />
+                                                        <property name="bitmap">X:\rcf\code\projects\luna\shared\tools\runtime_junction\data\luna\art\delete_16.png; Load From File</property>
+                                                        <property name="context_help" />
+                                                        <property name="enabled">1</property>
+                                                        <property name="fg" />
+                                                        <property name="font" />
+                                                        <property name="hidden">0</property>
+                                                        <property name="id">ID_DEFAULT</property>
+                                                        <property name="maximum_size" />
+                                                        <property name="minimum_size" />
+                                                        <property name="name">m_ButtonDelete3</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="pos" />
+                                                        <property name="size">18,18</property>
+                                                        <property name="style">wxBU_AUTODRAW</property>
+                                                        <property name="subclass" />
+                                                        <property name="tooltip">Delete this zone</property>
+                                                        <property name="window_extra_style" />
+                                                        <property name="window_style" />
+                                                        <event name="OnButtonClick" />
+                                                        <event name="OnUpdateUI" />
+                                                    </object>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+</wxFormBuilder_Project>

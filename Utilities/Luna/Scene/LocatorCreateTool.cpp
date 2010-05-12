@@ -1,0 +1,112 @@
+#include "Precompile.h"
+#include "LocatorCreateTool.h"
+
+#include "Mesh.h"
+#include "Scene.h"
+#include "Locator.h"
+#include "LocatorType.h"
+
+#include "Pick.h"
+
+using namespace Luna;
+
+Content::LocatorShape LocatorCreateTool::s_Shape = Content::LocatorShapes::Cross;
+
+LUNA_DEFINE_TYPE(Luna::LocatorCreateTool);
+
+void LocatorCreateTool::InitializeType()
+{
+  Reflect::RegisterClass< Luna::LocatorCreateTool >( "Luna::LocatorCreateTool" );
+}
+
+void LocatorCreateTool::CleanupType()
+{
+  Reflect::UnregisterClass< Luna::LocatorCreateTool >();
+}
+
+LocatorCreateTool::LocatorCreateTool(Luna::Scene* scene, Enumerator* enumerator)
+: Luna::CreateTool (scene, enumerator)
+{
+
+}
+
+LocatorCreateTool::~LocatorCreateTool()
+{
+
+}
+
+Luna::TransformPtr LocatorCreateTool::CreateNode()
+{
+#ifdef LUNA_DEBUG_RUNTIME_DATA_SELECTION
+
+  Content::LocatorPtr v = new Content::Locator( s_Shape );
+
+  v->RectifyRuntimeData();
+
+  LLocatorPtr locator = new Luna::Locator( m_Scene, v );
+
+  m_Scene->AddObject( locator );
+
+  {
+    OS_SelectableDumbPtr selection;
+    selection.push_back( locator );
+    m_Scene->GetSelection().SetItems( selection );
+
+    m_Scene->GetSelection().Clear();
+  }
+
+  m_Scene->RemoveObject( locator );
+
+  return locator;
+
+#else
+
+  return new Luna::Locator ( m_Scene, new Content::Locator ( s_Shape ) );
+
+#endif
+}
+
+void LocatorCreateTool::CreateProperties()
+{
+  m_Enumerator->PushPanel("Locator", true);
+  {
+    m_Enumerator->PushContainer();
+    {
+      m_Enumerator->AddLabel("Shape");
+
+      Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::LocatorCreateTool, int>(this, &LocatorCreateTool::GetLocatorShape, &LocatorCreateTool::SetLocatorShape) );
+      choice->SetDropDown( true );
+      Inspect::V_Item items;
+
+      {
+        std::ostringstream str;
+        str << Content::LocatorShapes::Cross;
+        items.push_back( Inspect::Item( "Cross", str.str() ) );
+      }
+
+      {
+        std::ostringstream str;
+        str << Content::LocatorShapes::Cube;
+        items.push_back( Inspect::Item( "Cube", str.str() ) );
+      }
+
+      choice->SetItems( items );
+    }
+    m_Enumerator->Pop();
+
+    __super::CreateProperties();
+  }
+  m_Enumerator->Pop();
+}
+
+int LocatorCreateTool::GetLocatorShape() const
+{
+  return s_Shape;
+}
+
+void LocatorCreateTool::SetLocatorShape(int value)
+{
+  s_Shape = static_cast< Content::LocatorShape > (value);
+
+  Place(Math::Matrix4::Identity);
+}

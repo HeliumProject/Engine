@@ -1,0 +1,1594 @@
+Determining if files execinfo.h exist failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o
+/usr/sfw/bin/gcc   -Wall     -o CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:22: execinfo.h: No such file or directory
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+Source:
+/* */
+#include <execinfo.h>
+
+
+int main(){return 0;}
+
+Determining if files fpu/control.h exist failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o
+/usr/sfw/bin/gcc   -Wall     -o CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:25: fpu/control.h: No such file or directory
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+Source:
+/* */
+#include <fpu/control.h>
+
+
+int main(){return 0;}
+
+Determining if files paths.h exist failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o
+/usr/sfw/bin/gcc   -Wall     -o CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:19: paths.h: No such file or directory
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+Source:
+/* */
+#include <paths.h>
+
+
+int main(){return 0;}
+
+Determining if files select.h exist failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o
+/usr/sfw/bin/gcc   -Wall     -o CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:20: select.h: No such file or directory
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+Source:
+/* */
+#include <select.h>
+
+
+int main(){return 0;}
+
+Determining if files sysent.h exist failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o
+/usr/sfw/bin/gcc   -Wall     -o CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:20: sysent.h: No such file or directory
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+Source:
+/* */
+#include <sysent.h>
+
+
+int main(){return 0;}
+
+Determining if files sys/fpu.h exist failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o
+/usr/sfw/bin/gcc   -Wall     -o CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:21: sys/fpu.h: No such file or directory
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+Source:
+/* */
+#include <sys/fpu.h>
+
+
+int main(){return 0;}
+
+Determining if files sys/prctl.h exist failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o
+/usr/sfw/bin/gcc   -Wall     -o CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckIncludeFiles.c:2:23: sys/prctl.h: No such file or directory
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckIncludeFiles.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+Source:
+/* */
+#include <sys/prctl.h>
+
+
+int main(){return 0;}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=pthread_create  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  -lpthreads 
+ld: fatal: library -lpthreads: not found
+ld: fatal: File processing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function aiowait exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=aiowait   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=aiowait  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+aiowait                             CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function alloca exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=alloca   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+/home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c:3: warning: conflicting types for built-in function 'alloca'
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=alloca  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+alloca                              CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function bfill exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=bfill   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=bfill  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+bfill                               CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function bmove exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=bmove   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=bmove  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+bmove                               CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function clock_gettime exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=clock_gettime   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=clock_gettime  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+clock_gettime                       CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function compress exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=compress   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=compress  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+compress                            CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function fdatasync exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=fdatasync   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=fdatasync  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+fdatasync                           CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function fesetround exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=fesetround   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=fesetround  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+fesetround                          CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function getaddrinfo exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=getaddrinfo   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=getaddrinfo  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+getaddrinfo                         CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function gethostbyaddr_r exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=gethostbyaddr_r   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=gethostbyaddr_r  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+gethostbyaddr_r                     CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function gethostbyname_r exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=gethostbyname_r   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=gethostbyname_r  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+gethostbyname_r                     CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function getnameinfo exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=getnameinfo   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=getnameinfo  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+getnameinfo                         CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function log2 exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=log2   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+/home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c:3: warning: conflicting types for built-in function 'log2'
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=log2  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+log2                                CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function mallinfo exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=mallinfo   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=mallinfo  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+mallinfo                            CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function pthread_attr_create exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=pthread_attr_create   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=pthread_attr_create  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+pthread_attr_create                 CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function pthread_attr_setprio exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=pthread_attr_setprio   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=pthread_attr_setprio  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+pthread_attr_setprio                CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function pthread_condattr_create exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=pthread_condattr_create   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=pthread_condattr_create  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+pthread_condattr_create             CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function pthread_init exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=pthread_init   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=pthread_init  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+pthread_init                        CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function pthread_setprio_np exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=pthread_setprio_np   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=pthread_setprio_np  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+pthread_setprio_np                  CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function pthread_threadmask exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=pthread_threadmask   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=pthread_threadmask  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+pthread_threadmask                  CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function pthread_yield_np exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=pthread_yield_np   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=pthread_yield_np  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+pthread_yield_np                    CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function sched_yield exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=sched_yield   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=sched_yield  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+sched_yield                         CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function setfd exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=setfd   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=setfd  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+setfd                               CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function setfilepointer exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=setfilepointer   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=setfilepointer  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+setfilepointer                      CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function sigthreadmask exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=sigthreadmask   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=sigthreadmask  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+sigthreadmask                       CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function stpcpy exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=stpcpy   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+/home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c:3: warning: conflicting types for built-in function 'stpcpy'
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=stpcpy  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+stpcpy                              CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function strnlen exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=strnlen   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=strnlen  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+strnlen                             CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function strsep exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=strsep   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=strsep  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+strsep                              CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the function vasprintf exists failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+/usr/sfw/bin/gcc   -Wall  -DCHECK_FUNCTION_EXISTS=vasprintf   -o CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o   -c /home/cteam/BuildStepper/bootstrap-dep/inst/share/cmake-2.6/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall  -DCHECK_FUNCTION_EXISTS=vasprintf  -fPIC CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o  -o cmTryCompileExec  
+Undefined			first referenced
+ symbol  			    in file
+vasprintf                           CMakeFiles/cmTryCompileExec.dir/CheckFunctionExists.c.o
+ld: fatal: Symbol referencing errors. No output written to cmTryCompileExec
+collect2: ld returned 1 exit status
+gmake[1]: *** [cmTryCompileExec] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+
+Determining if the sys_errlist exist failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o
+/usr/sfw/bin/gcc   -Wall     -o CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function `main':
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8: error: `sys_errlist' undeclared (first use in this function)
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8: error: (Each undeclared identifier is reported only once
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8: error: for each function it appears in.)
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+File /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <stdio.h>
+
+void cmakeRequireSymbol(int dummy,...){(void)dummy;}
+int main()
+{
+#ifndef sys_errlist
+  cmakeRequireSymbol(0,&sys_errlist);
+#endif
+  return 0;
+}
+
+Determining if the __bss_start exist failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o
+/usr/sfw/bin/gcc   -Wall     -o CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function `main':
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckSymbolExists.c:7: error: `__bss_start' undeclared (first use in this function)
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckSymbolExists.c:7: error: (Each undeclared identifier is reported only once
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckSymbolExists.c:7: error: for each function it appears in.)
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+File /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+
+void cmakeRequireSymbol(int dummy,...){(void)dummy;}
+int main()
+{
+#ifndef __bss_start
+  cmakeRequireSymbol(0,&__bss_start);
+#endif
+  return 0;
+}
+
+Determining if the system is big endian passed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/TestEndianess.c.o
+/usr/sfw/bin/gcc   -Wall     -o CMakeFiles/cmTryCompileExec.dir/TestEndianess.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/TestEndianess.c
+Linking C executable cmTryCompileExec
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec.dir/link.txt --verbose=1
+/usr/sfw/bin/gcc    -Wall    -fPIC CMakeFiles/cmTryCompileExec.dir/TestEndianess.c.o  -o cmTryCompileExec  
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+
+TestEndianess.c:
+/* A 16 bit integer is required. */
+typedef unsigned short cmakeint16;
+
+/* On a little endian machine, these 16bit ints will give "THIS IS LITTLE ENDIAN."
+   On a big endian machine the characters will be exchanged pairwise. */
+const cmakeint16 info_little[] =  {0x4854, 0x5349, 0x4920, 0x2053, 0x494c, 0x5454, 0x454c, 0x4520, 0x444e, 0x4149, 0x2e4e, 0x0000};
+
+/* on a big endian machine, these 16bit ints will give "THIS IS BIG ENDIAN."
+   On a little endian machine the characters will be exchanged pairwise. */
+const cmakeint16 info_big[] =     {0x5448, 0x4953, 0x2049, 0x5320, 0x4249, 0x4720, 0x454e, 0x4449, 0x414e, 0x2e2e, 0x0000};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_little[argc];
+  require += info_big[argc];
+  (void)argv;
+  return require;
+}
+
+
+Determining size of uchar failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o
+/usr/sfw/bin/gcc   -Wall   -DHAVE_SYS_TYPES_H -DHAVE_STDINT_H -DHAVE_STDDEF_H   -o CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c:26: error: `uchar' undeclared here (not in a function)
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+CheckTypeSizeC.c:
+#define CHECK_TYPE_SIZE_TYPE uchar
+#ifdef CHECK_TYPE_SIZE_TYPE
+
+
+#ifdef HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
+
+#ifdef HAVE_STDINT_H
+#  include <stdint.h>
+#endif /* HAVE_STDINT_H */
+
+#ifdef HAVE_STDDEF_H
+#  include <stddef.h>
+#endif /* HAVE_STDDEF_H */
+
+#include "sys/types.h"
+
+
+#ifdef __CLASSIC_C__
+# define const
+#endif
+
+#define SIZE (sizeof(uchar))
+const char info_sizeof[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','o','f','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)), 
+  ']','\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_sizeof[argc];
+  (void)argv;
+  return require;
+}
+
+#else  /* CHECK_TYPE_SIZE_TYPE */
+
+#  error "CHECK_TYPE_SIZE_TYPE has to specify the type"
+
+#endif /* CHECK_TYPE_SIZE_TYPE */
+
+
+Determining size of int8 failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o
+/usr/sfw/bin/gcc   -Wall   -DHAVE_SYS_TYPES_H -DHAVE_STDINT_H -DHAVE_STDDEF_H   -o CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c:26: error: `int8' undeclared here (not in a function)
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+CheckTypeSizeC.c:
+#define CHECK_TYPE_SIZE_TYPE int8
+#ifdef CHECK_TYPE_SIZE_TYPE
+
+
+#ifdef HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
+
+#ifdef HAVE_STDINT_H
+#  include <stdint.h>
+#endif /* HAVE_STDINT_H */
+
+#ifdef HAVE_STDDEF_H
+#  include <stddef.h>
+#endif /* HAVE_STDDEF_H */
+
+#include "sys/types.h"
+
+
+#ifdef __CLASSIC_C__
+# define const
+#endif
+
+#define SIZE (sizeof(int8))
+const char info_sizeof[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','o','f','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)), 
+  ']','\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_sizeof[argc];
+  (void)argv;
+  return require;
+}
+
+#else  /* CHECK_TYPE_SIZE_TYPE */
+
+#  error "CHECK_TYPE_SIZE_TYPE has to specify the type"
+
+#endif /* CHECK_TYPE_SIZE_TYPE */
+
+
+Determining size of uint8 failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o
+/usr/sfw/bin/gcc   -Wall   -DHAVE_SYS_TYPES_H -DHAVE_STDINT_H -DHAVE_STDDEF_H   -o CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c:26: error: `uint8' undeclared here (not in a function)
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+CheckTypeSizeC.c:
+#define CHECK_TYPE_SIZE_TYPE uint8
+#ifdef CHECK_TYPE_SIZE_TYPE
+
+
+#ifdef HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
+
+#ifdef HAVE_STDINT_H
+#  include <stdint.h>
+#endif /* HAVE_STDINT_H */
+
+#ifdef HAVE_STDDEF_H
+#  include <stddef.h>
+#endif /* HAVE_STDDEF_H */
+
+#include "sys/types.h"
+
+
+#ifdef __CLASSIC_C__
+# define const
+#endif
+
+#define SIZE (sizeof(uint8))
+const char info_sizeof[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','o','f','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)), 
+  ']','\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_sizeof[argc];
+  (void)argv;
+  return require;
+}
+
+#else  /* CHECK_TYPE_SIZE_TYPE */
+
+#  error "CHECK_TYPE_SIZE_TYPE has to specify the type"
+
+#endif /* CHECK_TYPE_SIZE_TYPE */
+
+
+Determining size of int16 failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o
+/usr/sfw/bin/gcc   -Wall   -DHAVE_SYS_TYPES_H -DHAVE_STDINT_H -DHAVE_STDDEF_H   -o CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c:26: error: `int16' undeclared here (not in a function)
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+CheckTypeSizeC.c:
+#define CHECK_TYPE_SIZE_TYPE int16
+#ifdef CHECK_TYPE_SIZE_TYPE
+
+
+#ifdef HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
+
+#ifdef HAVE_STDINT_H
+#  include <stdint.h>
+#endif /* HAVE_STDINT_H */
+
+#ifdef HAVE_STDDEF_H
+#  include <stddef.h>
+#endif /* HAVE_STDDEF_H */
+
+#include "sys/types.h"
+
+
+#ifdef __CLASSIC_C__
+# define const
+#endif
+
+#define SIZE (sizeof(int16))
+const char info_sizeof[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','o','f','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)), 
+  ']','\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_sizeof[argc];
+  (void)argv;
+  return require;
+}
+
+#else  /* CHECK_TYPE_SIZE_TYPE */
+
+#  error "CHECK_TYPE_SIZE_TYPE has to specify the type"
+
+#endif /* CHECK_TYPE_SIZE_TYPE */
+
+
+Determining size of uint16 failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o
+/usr/sfw/bin/gcc   -Wall   -DHAVE_SYS_TYPES_H -DHAVE_STDINT_H -DHAVE_STDDEF_H   -o CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c:26: error: `uint16' undeclared here (not in a function)
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+CheckTypeSizeC.c:
+#define CHECK_TYPE_SIZE_TYPE uint16
+#ifdef CHECK_TYPE_SIZE_TYPE
+
+
+#ifdef HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
+
+#ifdef HAVE_STDINT_H
+#  include <stdint.h>
+#endif /* HAVE_STDINT_H */
+
+#ifdef HAVE_STDDEF_H
+#  include <stddef.h>
+#endif /* HAVE_STDDEF_H */
+
+#include "sys/types.h"
+
+
+#ifdef __CLASSIC_C__
+# define const
+#endif
+
+#define SIZE (sizeof(uint16))
+const char info_sizeof[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','o','f','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)), 
+  ']','\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_sizeof[argc];
+  (void)argv;
+  return require;
+}
+
+#else  /* CHECK_TYPE_SIZE_TYPE */
+
+#  error "CHECK_TYPE_SIZE_TYPE has to specify the type"
+
+#endif /* CHECK_TYPE_SIZE_TYPE */
+
+
+Determining size of int32 failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o
+/usr/sfw/bin/gcc   -Wall   -DHAVE_SYS_TYPES_H -DHAVE_STDINT_H -DHAVE_STDDEF_H   -o CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c:26: error: `int32' undeclared here (not in a function)
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o] Error 1
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+CheckTypeSizeC.c:
+#define CHECK_TYPE_SIZE_TYPE int32
+#ifdef CHECK_TYPE_SIZE_TYPE
+
+
+#ifdef HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
+
+#ifdef HAVE_STDINT_H
+#  include <stdint.h>
+#endif /* HAVE_STDINT_H */
+
+#ifdef HAVE_STDDEF_H
+#  include <stddef.h>
+#endif /* HAVE_STDDEF_H */
+
+#include "sys/types.h"
+
+
+#ifdef __CLASSIC_C__
+# define const
+#endif
+
+#define SIZE (sizeof(int32))
+const char info_sizeof[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','o','f','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)), 
+  ']','\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_sizeof[argc];
+  (void)argv;
+  return require;
+}
+
+#else  /* CHECK_TYPE_SIZE_TYPE */
+
+#  error "CHECK_TYPE_SIZE_TYPE has to specify the type"
+
+#endif /* CHECK_TYPE_SIZE_TYPE */
+
+
+Determining size of uint32 failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o
+/usr/sfw/bin/gcc   -Wall   -DHAVE_SYS_TYPES_H -DHAVE_STDINT_H -DHAVE_STDDEF_H   -o CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c:26: error: `uint32' undeclared here (not in a function)
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+CheckTypeSizeC.c:
+#define CHECK_TYPE_SIZE_TYPE uint32
+#ifdef CHECK_TYPE_SIZE_TYPE
+
+
+#ifdef HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
+
+#ifdef HAVE_STDINT_H
+#  include <stdint.h>
+#endif /* HAVE_STDINT_H */
+
+#ifdef HAVE_STDDEF_H
+#  include <stddef.h>
+#endif /* HAVE_STDDEF_H */
+
+#include "sys/types.h"
+
+
+#ifdef __CLASSIC_C__
+# define const
+#endif
+
+#define SIZE (sizeof(uint32))
+const char info_sizeof[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','o','f','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)), 
+  ']','\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_sizeof[argc];
+  (void)argv;
+  return require;
+}
+
+#else  /* CHECK_TYPE_SIZE_TYPE */
+
+#  error "CHECK_TYPE_SIZE_TYPE has to specify the type"
+
+#endif /* CHECK_TYPE_SIZE_TYPE */
+
+
+Determining size of u_int32_t failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o
+/usr/sfw/bin/gcc   -Wall   -DHAVE_SYS_TYPES_H -DHAVE_STDINT_H -DHAVE_STDDEF_H   -o CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c:26: error: `u_int32_t' undeclared here (not in a function)
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o] Error 1
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+CheckTypeSizeC.c:
+#define CHECK_TYPE_SIZE_TYPE u_int32_t
+#ifdef CHECK_TYPE_SIZE_TYPE
+
+
+#ifdef HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
+
+#ifdef HAVE_STDINT_H
+#  include <stdint.h>
+#endif /* HAVE_STDINT_H */
+
+#ifdef HAVE_STDDEF_H
+#  include <stddef.h>
+#endif /* HAVE_STDDEF_H */
+
+#include "sys/types.h"
+
+
+#ifdef __CLASSIC_C__
+# define const
+#endif
+
+#define SIZE (sizeof(u_int32_t))
+const char info_sizeof[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','o','f','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)), 
+  ']','\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_sizeof[argc];
+  (void)argv;
+  return require;
+}
+
+#else  /* CHECK_TYPE_SIZE_TYPE */
+
+#  error "CHECK_TYPE_SIZE_TYPE has to specify the type"
+
+#endif /* CHECK_TYPE_SIZE_TYPE */
+
+
+Determining size of int64 failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o
+/usr/sfw/bin/gcc   -Wall   -DHAVE_SYS_TYPES_H -DHAVE_STDINT_H -DHAVE_STDDEF_H   -o CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c:26: error: `int64' undeclared here (not in a function)
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+CheckTypeSizeC.c:
+#define CHECK_TYPE_SIZE_TYPE int64
+#ifdef CHECK_TYPE_SIZE_TYPE
+
+
+#ifdef HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
+
+#ifdef HAVE_STDINT_H
+#  include <stdint.h>
+#endif /* HAVE_STDINT_H */
+
+#ifdef HAVE_STDDEF_H
+#  include <stddef.h>
+#endif /* HAVE_STDDEF_H */
+
+#include "sys/types.h"
+
+
+#ifdef __CLASSIC_C__
+# define const
+#endif
+
+#define SIZE (sizeof(int64))
+const char info_sizeof[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','o','f','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)), 
+  ']','\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_sizeof[argc];
+  (void)argv;
+  return require;
+}
+
+#else  /* CHECK_TYPE_SIZE_TYPE */
+
+#  error "CHECK_TYPE_SIZE_TYPE has to specify the type"
+
+#endif /* CHECK_TYPE_SIZE_TYPE */
+
+
+Determining size of uint64 failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o
+/usr/sfw/bin/gcc   -Wall   -DHAVE_SYS_TYPES_H -DHAVE_STDINT_H -DHAVE_STDDEF_H   -o CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CheckTypeSizeC.c:26: error: `uint64' undeclared here (not in a function)
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckTypeSizeC.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+CheckTypeSizeC.c:
+#define CHECK_TYPE_SIZE_TYPE uint64
+#ifdef CHECK_TYPE_SIZE_TYPE
+
+
+#ifdef HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
+
+#ifdef HAVE_STDINT_H
+#  include <stdint.h>
+#endif /* HAVE_STDINT_H */
+
+#ifdef HAVE_STDDEF_H
+#  include <stddef.h>
+#endif /* HAVE_STDDEF_H */
+
+#include "sys/types.h"
+
+
+#ifdef __CLASSIC_C__
+# define const
+#endif
+
+#define SIZE (sizeof(uint64))
+const char info_sizeof[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','o','f','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)), 
+  ']','\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_sizeof[argc];
+  (void)argv;
+  return require;
+}
+
+#else  /* CHECK_TYPE_SIZE_TYPE */
+
+#  error "CHECK_TYPE_SIZE_TYPE has to specify the type"
+
+#endif /* CHECK_TYPE_SIZE_TYPE */
+
+
+Performing C SOURCE FILE Test HAVE_TIMESPEC_TS_SEC failed with the following output:
+Change Dir: /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp
+
+Run Build Command:/opt/csw/bin/gmake "cmTryCompileExec/fast"
+/opt/csw/bin/gmake -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
+gmake[1]: Entering directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+/home/cteam/BuildStepper/bootstrap-dep/inst/bin/cmake -E cmake_progress_report /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec.dir/src.c.o
+/usr/sfw/bin/gcc   -Wall  -DHAVE_TIMESPEC_TS_SEC -I/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/pthread.h   -o CMakeFiles/cmTryCompileExec.dir/src.c.o   -c /tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/src.c
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/src.c: In function `main':
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/src.c:7: error: structure has no member named `ts_sec'
+/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp/src.c:8: error: structure has no member named `ts_nsec'
+gmake[1]: *** [CMakeFiles/cmTryCompileExec.dir/src.c.o] Error 1
+gmake[1]: Leaving directory `/tmp/bootstrap-dir.5535/source/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec/fast] Error 2
+
+Source file was:
+
+#include <pthread.h>
+
+int main(int ac, char **av)
+{
+  struct timespec abstime;
+  abstime.ts_sec = time(NULL)+1;
+  abstime.ts_nsec = 0;
+}
+

@@ -1,0 +1,11 @@
+MySQL Connector/C 6.0 Change Log
+
+--------------------------------------------
+03-Aug-2007 (6.0.2)
+--------------------------------------------
+-- Fixed segmentation fault in mysql_config (bug #44698)
+-- Removed libstdc++ dependencies when using YaSSL (bug #45128)
+-- Added support for compressed protocol (bug #46206)
+-- Added SunConnect registration for Windows installer
+-- Adjusted copyright licenses to GPL v2
+-- Fixed version number output in mysql_config

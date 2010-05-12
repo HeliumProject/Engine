@@ -60,7 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="tinyxml.lib libclient.lib librpc.lib libsupp.lib oldnames.lib kernel32.lib wsock32.lib advapi32.lib"
+				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib oldnames.lib kernel32.lib wsock32.lib advapi32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(boost)\stage\lib;;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)"
 				GenerateDebugInformation="true"
@@ -134,7 +134,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="tinyxml.lib libclient.lib librpc.lib libsupp.lib oldnames.lib kernel32.lib wsock32.lib advapi32.lib"
+				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib oldnames.lib kernel32.lib wsock32.lib advapi32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(boost)\stage\lib;;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)"
 				GenerateDebugInformation="true"
@@ -181,6 +181,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 			RelativePathToProject=".\libraries\Common\Common.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{06092F0D-324B-484D-A9ED-397DFF76AE53}"
+			RelativePathToProject=".\SDK\TinyXML\2.6.1\TinyXML.vcproj"
 		/>
 	</References>
 	<Files>

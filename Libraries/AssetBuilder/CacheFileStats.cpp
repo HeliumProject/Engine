@@ -4,7 +4,7 @@
 #include "AppUtils/AppUtils.h"
 #include "Console/Console.h"
 
-#include <mysql/include/mysql.h>
+#include <mysql.h>
 
 #include "Common/Config.h"
 #include "Common/Environment.h"

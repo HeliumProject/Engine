@@ -9,7 +9,6 @@
 
 #include "Content/Zone.h"
 #include "Content/Region.h"
-#include "Content/LightingJob.h"
 
 namespace AssetBuilder
 {
@@ -65,7 +64,6 @@ namespace AssetBuilder
   {
   public:
     Content::ZonePtr        m_Zone;
-    Content::V_LightingJob  m_LightingJobs;
     bool                    m_GameplayOnly; 
 
     REFLECT_DECLARE_CLASS( ZoneBuilderOptions, BuilderOptions );
@@ -161,7 +159,6 @@ namespace AssetBuilder
     std::string             m_RegionName;
     Content::RegionPtr      m_Region; 
     Content::V_Zone         m_Zones;
-    Content::V_LightingJob  m_LightingJobs;
 
     // something of a hack
     LevelBuilderOptionsPtr  m_LevelBuilderOptions;

@@ -42,7 +42,6 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="..\;..\..\..\;$(TinyXML)"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL"
-				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"

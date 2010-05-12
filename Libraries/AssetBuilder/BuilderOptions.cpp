@@ -29,7 +29,6 @@ void ZoneBuilderOptions::EnumerateClass( Reflect::Compositor<ZoneBuilderOptions>
 {
   comp.GetComposite().m_UIName = "Zone Builder Options";
   Reflect::ElementField* elemZone = comp.AddField( &ZoneBuilderOptions::m_Zone, "m_Zone" );
-  Reflect::Field* fieldLightingJobs = comp.AddField( &ZoneBuilderOptions::m_LightingJobs, "m_LightingJobs" );
   Reflect::Field* fieldGameplayOnly = comp.AddField( &ZoneBuilderOptions::m_GameplayOnly, "m_GameplayOnly" );
 }
 
@@ -85,7 +84,6 @@ void RegionBuilderOptions::EnumerateClass( Reflect::Compositor<RegionBuilderOpti
   Reflect::Field* fieldRegionName = comp.AddField( &RegionBuilderOptions::m_RegionName, "m_RegionName" );
   Reflect::ElementField* elemRegion = comp.AddField( &RegionBuilderOptions::m_Region, "m_Region" );
   Reflect::Field* fieldZones = comp.AddField( &RegionBuilderOptions::m_Zones, "m_Zones" );
-  Reflect::Field* fieldLightingJobs = comp.AddField( &RegionBuilderOptions::m_LightingJobs, "m_LightingJobs" );
   Reflect::ElementField* elemLevelBuilderOptions = comp.AddField( &RegionBuilderOptions::m_LevelBuilderOptions, "m_LevelBuilderOptions" );
 }
 

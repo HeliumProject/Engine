@@ -28,7 +28,6 @@
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/DebugSpecs.h"
-#include "igmath/igMath.h"
 
 #include "Windows/Thread.h"
 #include "Windows/Windows.h"
@@ -373,7 +372,7 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
     f32 elapsed = timer.Elapsed();
 
     // do some validation
-    elapsed = IG::IsValidFloat( elapsed ) ? elapsed : 0.f;
+    elapsed = Math::IsValid( elapsed ) ? elapsed : 0.f;
 
     g_BuildTime += elapsed;
 

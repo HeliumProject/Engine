@@ -7,12 +7,20 @@
 	>
 	<UserMacro
 		Name="boost"
-		Value="$(SolutionDir)SDK\boost\1.42"
+		Value="C:\Perforce\andyb_FRANCK-WMD-PC\Lunar\Dev\External\boost_1_43_0"
 	/>
 	<UserMacro
 		Name="Crypto++"
 		Value="$(SolutionDir)SDK\Crypto++\5.6.0"
 	/>
+	<UserMacro
+		Name="DirectX"
+		Value="c:\Program Files (x86)\Microsoft DirectX SDK (February 2010)"
+	/>
+	<UserMacro
+        Name="DirectXBin"
+        Value="C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Utilities\bin\x64"
+    />
 	<UserMacro
 		Name="Expat"
 		Value="$(SolutionDir)SDK\Expat\2.01"
@@ -51,7 +59,7 @@
 	/>
 	<UserMacro
 		Name="wxWidgets"
-		Value="$(SolutionDir)SDK\wxWidgets\2.8.11"
+		Value="C:\Perforce\andyb_FRANCK-WMD-PC\Lunar\Dev\External\wxMSW-2.8.11"
 	/>
 	<UserMacro
 		Name="WXWIN"

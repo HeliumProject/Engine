@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\;..\..\..\;$(TinyXML)"
+				AdditionalIncludeDirectories="..\;..\..\..\;$(TinyXML);$(DirectX)\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;D3D_DEBUG_INFO"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -102,7 +102,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\;..\..\..\;$(TinyXML)"
+				AdditionalIncludeDirectories="..\;..\..\..\;$(TinyXML);$(DirectX)\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;D3D_DEBUG_INFO"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -203,7 +203,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -213,7 +213,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="$(DirectXBin)\fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -227,7 +227,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -237,7 +237,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="$(DirectXBin)\fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -251,7 +251,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -261,7 +261,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="$(DirectXBin)\fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -275,7 +275,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -285,7 +285,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="$(DirectXBin)\fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -299,7 +299,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -309,7 +309,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="$(DirectXBin)\fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -323,7 +323,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -333,7 +333,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="$(DirectXBin)\fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -347,7 +347,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -357,7 +357,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="$(DirectXBin)\fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -371,7 +371,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -381,7 +381,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="$(DirectXBin)\fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -395,7 +395,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -405,7 +405,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Vertex Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="$(DirectXBin)\fxc.exe /E main /T vs_3_0 /Vn g_$(InputName)_vs  /Fh $(InputDir)$(InputName)_vs.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_vs.h"
 						/>
 					</FileConfiguration>
@@ -423,7 +423,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -433,7 +433,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -447,7 +447,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -457,7 +457,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -471,7 +471,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -481,7 +481,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -495,7 +495,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -505,7 +505,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -519,7 +519,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -529,7 +529,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -543,7 +543,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -553,7 +553,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -567,7 +567,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>
@@ -577,7 +577,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Building Pixel Shader $(InputPath)"
-							CommandLine="fxc.exe /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
+							CommandLine="&quot;$(DirectXBin)\fxc.exe&quot; /E main /T ps_3_0 /Vn g_$(InputName)_ps  /Fh $(InputDir)$(InputName)_ps.h /nologo $(InputPath)&#x0D;&#x0A;"
 							Outputs="$(InputDir)$(InputName)_ps.h"
 						/>
 					</FileConfiguration>

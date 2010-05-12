@@ -8,7 +8,6 @@
 #include "DependencyCollection.h"
 #include "SearchQuery.h"
 #include "SearchHistory.h"
-#include "RemoteViewer.h"
 
 #include "Common/Memory/SmartPtr.h"
 #include "Common/Types.h"

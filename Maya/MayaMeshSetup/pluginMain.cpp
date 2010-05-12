@@ -1,8 +1,6 @@
 #include "stdafx.h"
 
 #include "CollisionModeDisplayNode.h"
-#include "MaterialDisplayNode.h"
-#include "MaterialEditorCmd.h"
 
 #include "MayaCore/MayaCore.h"
 #include "MayaUtils/ErrorHelpers.h"
@@ -38,30 +36,13 @@ MStatus initializePlugin( MObject object )
     MPxNode::kLocatorNode );
   MCheckErr( status, "Failed to registerNode CollisionModeDisplayNode" );
 
-  status = plugin.registerNode( MaterialDisplayNode::m_NodeName, MaterialDisplayNode::m_NodeId, 
-    &MaterialDisplayNode::Creator, &MaterialDisplayNode::Initialize,
-    MPxNode::kLocatorNode );
-  MCheckErr( status, "Failed to registerNode MaterialDisplayNode" );
-  
-  status = MaterialDisplayNode::AddCallbacks();
-  MCheckErr( status, "Failed to AddCallbacks MaterialDisplayNode" );
-
   //
   // Commands
   //
 
-  status = plugin.registerCommand( MaterialEditorCmd::m_CommandName,
-    &Maya::MaterialEditorCmd::Creator, &Maya::MaterialEditorCmd::CommandSyntax  );
-  MCheckErr( status, "Failed to registerCommand MaterialEditorCmd" );
-
   //
   // Callbacks
   //
-
-  status = g_CallbackIds.append( 
-    MSceneMessage::addCallback( MSceneMessage::kMayaExiting, 
-    MaterialEditorCmd::MayaExistingCallBack ) );
-  MCheckErr( status, "Failed to add MSceneMessage::kMayaExiting callback MaterialEditorCmd::MayaExistingCallBack" );
 
   g_CallbackIds.append( MSceneMessage::addCallback( MSceneMessage::kMayaExiting, MayaExitingCallback ) );
 
@@ -81,18 +62,9 @@ MStatus uninitializePlugin( MObject object )
   status = plugin.deregisterNode( CollisionModeDisplayNode::m_NodeId );
   MCheckErr( status, "Failed to deregisterNode CollisionModeDisplayNode" );
 
-  status = plugin.deregisterNode( MaterialDisplayNode::m_NodeId );
-  MCheckErr( status, "Failed to deregisterNode MaterialDisplayNode" );
-
-  status = MaterialDisplayNode::RemoveCallbacks();
-  MCheckErr( status, "Failed to remove callbacks MaterialDisplayNode" );
-  
   //
   // Commands
   //
-
-  status = plugin.deregisterCommand( MaterialEditorCmd::m_CommandName );
-  MCheckErr( status, "Failed to deregisterCommand MaterialEditorCmd" );
 
   //
   // Callbacks

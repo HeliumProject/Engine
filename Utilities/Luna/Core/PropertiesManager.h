@@ -4,7 +4,6 @@
 #include "Enumerator.h"
 #include "Inspect/Controls.h"
 #include "Selection.h"
-#include "Symbol/UDTInstance.h"
 #include "Platform/Mutex.h"
 
 namespace Luna

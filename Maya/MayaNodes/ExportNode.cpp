@@ -11,10 +11,6 @@
 #include "MayaUtils/Utils.h"
 #include "Reflect/Registry.h"
 
-#include "Symbol/Enum.h"
-#include "Symbol/Symbols.h"
-#include "Symbol/SymbolBuilder.h"
-
 #include <algorithm>
 #include <boost/regex.hpp>
 #include <string>
@@ -49,8 +45,6 @@ MObject  ExportNode::s_attr_contentNumber;
 
 const MTypeId ExportNode::s_TypeID(IGL_EXPORTNODE_ID);
 const char* ExportNode::s_TypeName = "igExportNode";
-
-Symbol::EnumPtr g_RisingWaterPackageID;
 
 ExportNode::ExportNode()
 {
@@ -162,176 +156,6 @@ void AddGeometrySimulationAttribute( MObject& object, MStatus& status )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Create the enum attribute "contentType"
-//
-void AddRisingWaterDynamicEnumAttrbs( MObject& object, MStatus& status )
-{
-  MFnDependencyNode nodeFn( object, &status );
-
-  ////////////////////////////////////////////
-  // check to see if we are a locked node
-  bool nodeWasLocked = nodeFn.isLocked();
-  if ( nodeWasLocked )
-  {
-    // turn off any node locking so an attribute can be added
-    nodeFn.setLocked( false );
-  }
-
-  ////////////////////////////////////////////
-  // Enum drop down menu attribute
-
-  // set up an enum attribute and populate with packages returned SymbolBuilder
-  g_RisingWaterPackageID = Symbol::SymbolBuilder::GetInstance()->FindEnum( s_RisingWaterPackageIDName );
-  if ( !g_RisingWaterPackageID.ReferencesObject() )
-  {
-    status = MS::kFailure;
-    return;
-  }
-  V_string packageNames;
-  g_RisingWaterPackageID->GetElemNames( packageNames );
-  std::sort( packageNames.begin(), packageNames.end());
-  // iterate over the different package names, adding them to the enum
-  // with an _arbitrary index_.  Why use an enum attribute if we're going
-  // to have the indices mean nothing?  Because maya provides a nicer
-  // UI for enum attributes than anything else that might work here.
-  V_string::const_iterator itr = packageNames.begin();
-  V_string::const_iterator end = packageNames.end();
-
-  MObject attr;
-  MFnEnumAttribute	enumAttr;
-
-  if ( nodeFn.hasAttribute( ExportNode::s_RisingWaterEnumAttrName, &status ) )
-  {
-    attr = nodeFn.attribute( ExportNode::s_RisingWaterEnumAttrName, &status );
-  }
-  else
-  {
-    attr = enumAttr.create( ExportNode::s_RisingWaterEnumAttrName, ExportNode::s_RisingWaterEnumAttrName, 0, &status);
-    status = nodeFn.addAttribute( attr );
-
-    short index = 0;
-    for( ; itr != end && status; ++itr, ++index )
-    {
-      status = enumAttr.addField( (*itr).c_str(), index );
-    }
-  }
-
-  if ( status )
-  {
-    status = enumAttr.setObject( attr );
-    status = enumAttr.setReadable( true );
-    status = enumAttr.setWritable( true );
-    status = enumAttr.setHidden( false );
-  }
-
-
-  ////////////////////////////////////////////
-  // Enum package string name and int id attributes
-
-  // create a typed string attribute in which we'll store the _name_ of
-  // the chosen fx package when the user selects one from the dropdown.
-  // This allows us to link everything back up right when the file is loaded
-  // the next time, even if the list of attributes (and hence their indices)
-  // have changed underneath us.  (See AttributeUpdatedCallback below for the
-  // callback associated with changing the enum attribute, which will set
-  // this attribute.)
-  Maya::SetStringAttribute( object, ExportNode::s_RisingWaterNameAttrName, "" );
-
-  // create an output value that holds the insomniac enum value for the fx package
-  MObject nAttrObj;
-  MFnNumericAttribute	nAttr;
-
-  if ( nodeFn.hasAttribute( ExportNode::s_RisingWaterEnumIDAttrName, &status ) )
-  {
-    nAttrObj = nodeFn.attribute( ExportNode::s_RisingWaterEnumIDAttrName, &status );
-  }
-  else
-  {
-    nAttrObj = nAttr.create( ExportNode::s_RisingWaterEnumIDAttrName, ExportNode::s_RisingWaterEnumIDAttrName, MFnNumericData::kInt, 0.0, &status );
-    status = nodeFn.addAttribute( nAttrObj );
-  }
-
-  if ( status )
-  {
-    status = nAttr.setObject( nAttrObj );
-    status = nAttr.setDefault( -1 );
-    status = nAttr.setReadable( true );
-    status = nAttr.setWritable( false );
-    status = nAttr.setKeyable( false );
-    status = nAttr.setStorable( false );
-  }
-
-
-  ////////////////////////////////////////////
-  // reset to the prior state of wasLocked
-  if ( nodeWasLocked )
-  {
-    nodeFn.setLocked( nodeWasLocked );
-  }
-}
-
-
-void UpdateRisingWaterDynamicEnumAttrbs( MObject& object, MPlug& plug, MStatus& status )
-{
-  MFnDependencyNode nodeFn( object );
-
-  ////////////////////////////////////////////
-  // check to see if we are a locked node
-  bool nodeWasLocked = nodeFn.isLocked();
-  if ( nodeWasLocked )
-  {
-    // turn off any node locking so an attribute can be added
-    nodeFn.setLocked( false );
-  }
-
-  MFnEnumAttribute enumAttr( plug.attribute() );
-  MObject nodeObj = plug.node();
-  MFnDagNode dagNodeFn( nodeObj, &status );
-
-  NOC_ASSERT( status == MStatus::kSuccess );
-
-  int currentPackage = -1;
-  plug.getValue( currentPackage );
-
-  if( currentPackage > 0 )
-  {
-    // update the name attribute
-    MString packageName = enumAttr.fieldName( currentPackage );
-    MPlug packageNamePlug = dagNodeFn.findPlug( ExportNode::s_RisingWaterNameAttrName, &status );
-    if ( status )
-    {
-      packageNamePlug.setLocked( false );
-      packageNamePlug.setValue( packageName );
-      packageNamePlug.setLocked( true );
-    }
-
-    if ( g_RisingWaterPackageID.ReferencesObject() )
-    {
-      // update the enum ID attribute
-      i32 enumID = -1;
-      if ( !g_RisingWaterPackageID->GetElemValue( packageName.asChar(), enumID ) )
-      {
-        enumID = -1;
-      }
-
-      MPlug enumIDPlug = dagNodeFn.findPlug( ExportNode::s_RisingWaterEnumIDAttrName, &status );
-      NOC_ASSERT( status == MStatus::kSuccess );
-
-      enumIDPlug.setLocked( false );
-      enumIDPlug.setValue( enumID );
-      enumIDPlug.setLocked( true );
-    }
-  }
-
-  ////////////////////////////////////////////
-  // reset to the prior state of wasLocked
-  if ( nodeWasLocked )
-  {
-    nodeFn.setLocked( nodeWasLocked );
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 //
 void AddRegionAttr( MObject& object, MString& attributeName, MStatus& status )
 {
@@ -425,45 +249,6 @@ void ConfigSkeletonAttributes( MObject& object, MStatus& status, bool add = true
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Adds or removes rising water attributes
-//
-void ConfigRisingWatterAttributes( MObject& object, MStatus& status, bool add = true )
-{
-  if ( add )
-  {
-    AddRisingWaterDynamicEnumAttrbs( object, status );
-  }
-  else
-  {
-    Maya::RemoveAttribute( object, ExportNode::s_RisingWaterEnumAttrName );
-    Maya::RemoveAttribute( object, ExportNode::s_RisingWaterNameAttrName );
-    Maya::RemoveAttribute( object, ExportNode::s_RisingWaterEnumIDAttrName );
-  }
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Adds or removes wrinkle map attributes
-//
-//void ConfigWrinkleMapAttributes( MObject& object, MStatus& status, bool add = true )
-//{
-//  if ( add )
-//  {
-//    for ( int i = 0; i < Content::MaxCountWrinkleMapRegions; ++i )
-//    {
-//      AddRegionAttr( object, ExportNode::s_WrinkleMapRegionAttrNames[i], status );
-//    }
-//  }
-//  else
-//  {
-//    for ( int i = 0; i < Content::MaxCountWrinkleMapRegions; ++i )
-//    {
-//      status = Maya::RemoveAttribute( object, ExportNode::s_WrinkleMapRegionAttrNames[i] );
-//    }
-//  }
-//}
-
-///////////////////////////////////////////////////////////////////////////////
 // Callback handles operations when some base attributes change
 //
 void ExportNode::AttributeChangedCB(MNodeMessage::AttributeMessage msg, 
@@ -496,8 +281,6 @@ void ExportNode::AttributeChangedCB(MNodeMessage::AttributeMessage msg,
       // add the appropriate attributes depending on the type
       ConfigSkeletonAttributes( nodeThatChanged, status, ( type == Content::ContentTypes::Skeleton ) );
       ConfigBangleAttributes( nodeThatChanged, status, ( type == Content::ContentTypes::Bangle ) );
-      ConfigRisingWatterAttributes( nodeThatChanged, status, ( type == Content::ContentTypes::RisingWater ) );
-      //ConfigWrinkleMapAttributes( nodeThatChanged, status, ( type == Content::ContentTypes::WrinkleMap ) );
 
       // Keep the node type and name synchronized
       boost::regex  autoNamePattern( "^([a-zA-Z]+)(\\d*)$" );
@@ -528,14 +311,6 @@ void ExportNode::AttributeChangedCB(MNodeMessage::AttributeMessage msg,
 
       // next time we come come to this function, this will be the previous node type
       prevContentTypePlug.setValue( currentContentType );
-    }
-    else
-    {
-      MPlug attrPlug = nodeFn.findPlug( ExportNode::s_RisingWaterEnumAttrName, &status );
-      if ( status && plug.attribute() == attrPlug )
-      {
-        UpdateRisingWaterDynamicEnumAttrbs( nodeThatChanged, plug, status );
-      }
     }
   }
 }

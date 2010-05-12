@@ -2,7 +2,6 @@
 
 #include "API.h"
 #include "Common/Compiler.h"
-#include "TargetManager/TargetManager.h"
 
 namespace Luna
 {

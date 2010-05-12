@@ -3,11 +3,9 @@
 #include "MayaContentCmd.h"
 
 #include "ExportMesh.h"
-#include "ExportBlendShader.h"
 
 #include "Common/Container/Insert.h"
 
-#include "MayaMeshSetup/MaterialDisplayNode.h"
 #include "MayaUtils/NodeTypes.h"
 
 #include <maya/mFnDependencyNode.h>
@@ -343,17 +341,8 @@ void ExportMesh::GatherMayaData( V_ExportBase &newExportObjects )
     ExportShaderPtr exportShader;
     MFnDependencyNode surfaceNodeFn( surfaceShader );
 
-#pragma TODO ( "Remove legacy deconstructed TUID support" )
-    if( surfaceNodeFn.hasAttribute( s_LegacyTopShaderIdAttrName ) || surfaceNodeFn.hasAttribute( s_TopShaderAssetIdAttrName ) )
-    {
-      exportShader = new ExportBlendShader( surfaceShader, Maya::GetNodeID( surfaceShader ) );
-      newExportObjects.push_back( exportShader );
-    }
-    else
-    {
-      exportShader = new ExportShader( surfaceShader, Maya::GetNodeID( surfaceShader ) );
-      newExportObjects.push_back( exportShader );
-    }
+    exportShader = new ExportShader( surfaceShader, Maya::GetNodeID( surfaceShader ) );
+    newExportObjects.push_back( exportShader );
 
     m_ExportShaderMap[exportShader->GetContentShader()->m_ID] = exportShader;
     contentMesh->m_ShaderIDs.push_back( exportShader->GetContentShader()->m_ID );
@@ -364,21 +353,6 @@ void ExportMesh::GatherMayaData( V_ExportBase &newExportObjects )
   {
     AddDefaultShader( newExportObjects, contentMesh );
   }  
-
-
-  //
-  // material data
-  //
-
-  NOC_ASSERT( contentMesh->m_Materials.size() == s_DefaultMaterialIndex );
-  Content::MaterialPtr defaultMaterial = new Content::Material();
-  contentMesh->m_Materials.push_back( defaultMaterial );
-
-  if ( meshFn.isBlindDataTypeUsed( MATERIAL_BLIND_DATA_ID, &status ) )
-  {
-    m_HasMaterialData = true;
-  }
-
 
 
   //
@@ -1260,23 +1234,6 @@ void ExportMesh::ProcessTriangle( unsigned int& triangleIndex, unsigned int poly
 
   // only get the material if this is a collision mesh
   u32 materialIndex = s_DefaultMaterialIndex;
-
-  if ( m_HasMaterialData )
-  {
-    MStatus status( MStatus::kSuccess );
-    MFnMesh meshFn( m_MayaObject, &status );
-    Content::MaterialPtr material = Maya::MaterialDisplayNode::GetFaceMaterial( meshFn, polyIndex, &status );
-    if ( material && status == MStatus::kSuccess )
-    {
-      Insert<M_MaterialToIndex>::Result matResult = m_MaterialIndices.insert( M_MaterialToIndex::value_type( material, (u32)contentMesh->m_Materials.size() ) );
-      if ( matResult.second )
-      {
-        contentMesh->m_Materials.push_back( material );
-      }
-
-      materialIndex = matResult.first->second;
-    }
-  }
 
   contentMesh->m_CollisionMaterialIndices[triangleIndex] = materialIndex;
 

@@ -3,7 +3,6 @@
 #include "ZoneCmd.h"
 #include "EntityNode.h"
 #include "EntityAssetNode.h"
-#include "ConstructionTool.h"
 
 #include "Content/Volume.h"
 #include "GameplayCuboid.h"

@@ -8,7 +8,6 @@
 #include "EntityNodeCmd.h"
 #include "EntityNode.h"
 #include "EntityAssetNode.h"
-#include "ConstructionTool.h"
 
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
@@ -136,19 +135,6 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
 
           std::pair< EntityAssetNode*, EntityNode* >result = EntityAssetNode::CreateInstance( instance );
           MFnDependencyNode nodeFn( result.second->thisMObject() );
-
-          if ( Construction::g_ConstructionHost )
-          {
-            RPC::CreateInstanceParam param;
-            {
-              param.m_ID = instance->m_ID;
-              param.m_EntityAsset = id;
-              strncpy( param.m_Name.Characters, nodeFn.name().asChar(), RPC_STRING_MAX);
-              param.m_Name.Characters[ RPC_STRING_MAX-1 ] = 0; 
-              memcpy( &param.m_Transform, &instance->m_GlobalTransform, sizeof(param.m_Transform) );      
-            }
-            Construction::g_ConstructionHost->CreateInstance( &param );
-          }
         }
       }
     }

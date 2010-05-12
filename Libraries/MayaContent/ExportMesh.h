@@ -2,7 +2,6 @@
 
 #include "ExportBase.h"
 
-#include "Content/Material.h"
 #include "Content/Mesh.h"
 #include "Content/Skin.h"
 #include "Content/Shader.h"
@@ -309,18 +308,6 @@ namespace MayaContent
     V_ExportMorphTarget     m_ExportMorphTargets;
     SceneIndicesTracker     m_SceneIndicesTracker;
 
-    struct MaterialComparator
-    {
-      bool operator()( const Content::MaterialPtr& lhs, const Content::MaterialPtr& rhs )
-      {
-        return *lhs < *rhs;
-      }
-    };
-    typedef std::map< Content::MaterialPtr, u32, MaterialComparator > M_MaterialToIndex;
-    M_MaterialToIndex       m_MaterialIndices;
-
-    bool                    m_HasMaterialData;
-
   public:
     ExportMesh( const MObject& mayaMesh, const UniqueID::TUID& id ) 
       : ExportBase( mayaMesh )
@@ -328,7 +315,6 @@ namespace MayaContent
       , m_HasLightMap ( false )
       , m_TriangleCount ( 0 )
       , m_InfluenceCount ( 0 )
-      , m_HasMaterialData( false )
     {
       m_ContentObject = new Content::Mesh( id );
     }

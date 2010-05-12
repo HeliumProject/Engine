@@ -15,9 +15,6 @@
 #include "Asset/AssetClass.h"
 #include "Attribute/AttributeHandle.h"
 #include "Asset/ArtFileAttribute.h"
-#include "Asset/BakedLightingAttribute.h"
-
-#include "ConstructionTool.h"
 
 #include "boost/algorithm/string.hpp"
 #include "Common/String/Tokenize.h"
@@ -26,7 +23,6 @@
 #include <maya/MSyntax.h>
 #include <maya/MArgDatabase.h>
 
-using namespace Construction;
 using namespace Asset;
 using namespace File;
 using namespace Reflect;
@@ -158,14 +154,8 @@ MStatus FragmentCmd::CreateNewFragment()
 
 MStatus FragmentCmd::Fragment()
 {
-  if( Construction::g_ClassID == TUID::Null )
+  if( 1 )
   {
-    return MS::kFailure;
-  }
-
-  if( !Construction::EstablishConnection() )
-  {
-    MGlobal::displayError("Please connect to Luna first! Unable to fragment!" );
     return MS::kFailure;
   }
 
@@ -174,7 +164,7 @@ MStatus FragmentCmd::Fragment()
   MObjectArray fragmentNodes;
   ExportNode::FindExportNodes( fragmentNodes, Content::ContentTypes::FragmentGroup );
 
-  Asset::AssetClassPtr assetClass = Asset::AssetClass::FindAssetClass( Construction::g_ClassID );  
+  Asset::AssetClassPtr assetClass = Asset::AssetClass::FindAssetClass( TUID::Null ); //Construction::g_ClassID );  
   std::string assetClassPath = assetClass->GetFilePath();
   FileSystem::StripLeaf( assetClassPath );
 
@@ -270,25 +260,6 @@ MStatus FragmentCmd::Fragment()
         error += e.what();
         MGlobal::displayError( error );
       }
-    }
-
-    if( Construction::EstablishConnection() )
-    {
-      MGlobal::displayInfo( "\to Sending Fragment to Luna..." );
-
-      UniqueID::TUID id = UniqueID::TUID::Generate();
-
-      RPC::CreateInstanceParam param;
-      {
-        param.m_ID = id;
-        param.m_EntityAsset = fragmentID;
-
-        strncpy( param.m_Name.Characters, nodeFn.name().asChar(), RPC_STRING_MAX);
-        param.m_Name.Characters[ RPC_STRING_MAX - 1] = 0; 
-
-        memcpy( &param.m_Transform, &Math::Matrix4::Identity, sizeof(param.m_Transform) );      
-      }      
-      Construction::g_ConstructionHost->CreateInstance( &param );
     }
   }
 

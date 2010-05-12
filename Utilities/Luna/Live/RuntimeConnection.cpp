@@ -1,6 +1,5 @@
 #include "Precompile.h"
 #include "RuntimeConnection.h"
-#include "TargetManager/TargetManager.h"
 #include "LiveManager.h"
 
 #include "Common/Exception.h"

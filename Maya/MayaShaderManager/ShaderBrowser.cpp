@@ -4,7 +4,7 @@
 
 
 #include "File/Manager.h"
-#include "File/ManagedFileDialog.h"
+#include "FileUI/ManagedFileDialog.h"
 #include "FileSystem/FileSystem.h"
 
 #include "Finder/Finder.h"

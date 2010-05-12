@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "MayaContentCmd.h"
-#include "MentalRayExport/MentalRayExport.h" 
 
 #include "Common/Container/BitArray.h"
 
@@ -21,26 +20,18 @@
 
 #include "MayaNodes/CameraController.h"
 #include "MayaNodes/ExportNodeSet.h"
-#include "igCinematicContext/FXEmitterNode.h"
-#include "igCinematicContext/EffectSpecPlayerNode.h"
 #include "MayaNodes/EntityNode.h"
 
 #include "MayaUtils/Utils.h"
 
-#include "ExportCineScene.h"
 #include "ExportAnimationClip.h"
 #include "ExportCollision.h"
 #include "ExportGameplay.h"
-#include "ExportDestructionGlue.h"
 #include "ExportCurve.h"
 #include "ExportDescriptor.h"
 #include "ExportEffector.h"
 #include "ExportJoint.h"
 #include "ExportMesh.h"
-#include "ExportNavEffector.h"
-#include "ExportNavClue.h"
-#include "ExportPhysicsJoint.h"
-#include "ExportWaterPlane.h"
 
 #include <sstream>
 
@@ -223,17 +214,6 @@ bool MayaContentCmd::DefineExportScene()
 
     exportNodes.clear();
   }
-  else if ( m_Data == MayaContentCmd::kCineScene )
-  {
-    ExportCineScenePtr exportable = new ExportCineScene( m_ObjectsToExport[kCineScene] );
-
-    Content::CineScenePtr cineScene = exportable->CineScene();
-
-    cineScene->m_DefaultName = FileSystem::GetLeaf( m_ContentFileName );
-    FileSystem::StripExtension( cineScene->m_DefaultName );
-
-    m_ExportScene.Add( exportable );
-  }
   else
   {
     //
@@ -270,11 +250,6 @@ void MayaContentCmd::ExportSceneData()
   ExportAnimationBase::SampleMayaAnimationData();
   m_ExportScene.ProcessMayaData();
   m_ExportScene.ExportData();
-
-  if( m_Data == MayaContentCmd::kStaticMesh )
-  {
-    MentalRayExport::WriteObjectManifestData( m_ExportScene.m_ContentScene, m_SourceFileName, m_FragmentName ); 
-  }
 }
 
 //---------------------------------------------------------------------------
@@ -476,15 +451,7 @@ bool MayaContentCmd::ExportObject(MObject object, int percent)
     {
       MFnIkJoint jointFn ( object );
 
-      // if it has the 'GameMode' attribute, it's a physics joint, otherwise it's just a regular joint
-      if ( jointFn.hasAttribute( "GameMode" ) )
-      {
-        m_ExportScene.Add( new ExportPhysicsJoint( object, Maya::GetNodeID( object ) ) );
-      }
-      else
-      {
-        m_ExportScene.Add( new ExportJoint( object, Maya::GetNodeID( object ) ) );
-      }
+      m_ExportScene.Add( new ExportJoint( object, Maya::GetNodeID( object ) ) );
 
       return true;
     }
@@ -535,28 +502,10 @@ bool MayaContentCmd::ExportObject(MObject object, int percent)
         m_ExportScene.Add( new ExportCollision( object, Maya::GetNodeID( object ) ) );
         return true;
 
-      case IGL_DESTRUCTION_GLUE:
-        m_ExportScene.Add( new ExportDestructionGlue( object, Maya::GetNodeID( object ) ) );
-        return true;
-
       case IGL_JOINT_EFFECTOR:
         m_ExportScene.Add( new ExportEffector( object, Maya::GetNodeID( object ) ) );
         return true;
 
-      case IGL_NAV_CLUE_CUBOID_ID:
-        m_ExportScene.Add( new ExportNavClue( object, Maya::GetNodeID( object ) ) );
-        return true;
-
-      case IGL_WATER_PLANE:
-        m_ExportScene.Add( new ExportWaterPlane( object, Maya::GetNodeID( object ) ) );
-        return true;
-        break;
-
-      case IGT_NAV_SPHERE_ID:
-      case IGT_NAV_CYLINDER_ID:
-      case IGT_NAV_CUBOID_ID:
-        m_ExportScene.Add( new ExportNavEffector( object, Maya::GetNodeID( object ) ) );
-        return true;
       }
       break;
     }
@@ -795,8 +744,6 @@ void MayaContentCmd::DetermineExportedTypes( BitArray& types )
   if( m_ObjectsToExport[kCineScene].length() )
   {
     ExportNode::FindExportNodes( m_ObjectsToExport[kCineScene], Content::ContentTypes::MonitorCam, m_Root, 0 );
-    Maya::findNodesOfType( m_ObjectsToExport[kCineScene], FXEmitterNode::typeId, MFn::kInvalid, m_Root );
-    Maya::findNodesOfType( m_ObjectsToExport[kCineScene], EffectSpecPlayerNode::typeId, MFn::kInvalid, m_Root );
     Maya::findNodesOfType( m_ObjectsToExport[kCineScene], MFn::kSpotLight, m_Root );
 
     types[kCineScene] = true;

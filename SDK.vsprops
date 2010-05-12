@@ -25,17 +25,21 @@
 		Name="Expat"
 		Value="$(SolutionDir)SDK\Expat\2.01"
 	/>
+    <UserMacro
+        Name="Maya"
+        Value="C:\Perforce\andyb_FRANCK-WMD-PC\Lunar\Dev\External\Maya2011-x86"
+    />
 	<UserMacro
 		Name="MySQL"
 		Value="$(SolutionDir)SDK\MySQL\6.0.2"
 	/>
 	<UserMacro
-		Name="p4api"
-		Value="$(SolutionDir)SDK\p4api\2009.1.205670"
-	/>
-	<UserMacro
 		Name="nvtt"
 		Value="$(SolutionDir)SDK\nvtt\2.0.7"
+	/>
+	<UserMacro
+		Name="p4api"
+		Value="$(SolutionDir)SDK\p4api\2009.1.205670"
 	/>
 	<UserMacro
 		Name="SQLite"

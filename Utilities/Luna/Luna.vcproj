@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)&quot;;&quot;$(DirectX)\Include&quot;"
+				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)&quot;;&quot;$(DirectX)\Include&quot;"
+				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -861,30 +861,6 @@
 			</File>
 			<File
 				RelativePath=".\Scene\MiscSettings.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\RemoteConstruct.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\RemoteConstruct.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\RemoteScene.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\RemoteScene.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\RemoteView.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\RemoteView.h"
 				>
 			</File>
 			<File
@@ -2426,14 +2402,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Live\RemoteEditor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Live\RemoteEditor.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Live\RuntimeConnection.cpp"
 				>
 			</File>
@@ -2877,14 +2845,6 @@
 				RelativePath=".\CharacterEditor\LooseAttachCollisionDialog.h"
 				>
 			</File>
-			<File
-				RelativePath=".\CharacterEditor\RemoteCharacter.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\RemoteCharacter.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="AnimationEventsEditor"
@@ -3107,14 +3067,6 @@
 			</File>
 			<File
 				RelativePath=".\CinematicEventsEditor\CinematicTimelineSlider.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\RemoteCinematicEvents.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\RemoteCinematicEvents.h"
 				>
 			</File>
 		</Filter>
@@ -3548,14 +3500,6 @@
 			<Filter
 				Name="Live"
 				>
-				<File
-					RelativePath=".\AssetEditor\RemoteAsset.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\AssetEditor\RemoteAsset.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="User Interface"
@@ -3768,14 +3712,6 @@
 		</File>
 		<File
 			RelativePath=".\Precompile.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Browser\RemoteViewer.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Browser\RemoteViewer.h"
 			>
 		</File>
 		<File

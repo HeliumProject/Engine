@@ -2,7 +2,6 @@
 #include "EntityNode.h"
 #include "EntityGroupNode.h"
 #include "EntityAssetNode.h"
-#include "ConstructionTool.h"
 
 #include "Common/Types.h"
 #include "Common/Version.h"
@@ -22,9 +21,7 @@
 #include <maya/MFnStringData.h>
 #include <maya/MObjectHandle.h>
 
-using namespace RPC;
 using namespace Asset;
-using namespace Construction;
 using namespace Attribute;
 
 // enable this to watch all dag changes, just for debugging
@@ -505,34 +502,6 @@ void EntityNode::AttributeChangedCallback( MNodeMessage::AttributeMessage msg, M
 {
   MAYA_START_EXCEPTION_HANDLING();
 
-  // if we don't have a valid ConstructionHost interface, don't bother
-  if( !g_ConstructionHost )
-  {
-    return;
-  }
-
-  if( !( msg & MNodeMessage::kAttributeSet ) )
-  {
-    return;
-  }
-
-  MObject attribute = plug.attribute();
-
-  if ( attribute == MPxTransform::translate  || attribute == MPxTransform::translateX   || attribute == MPxTransform::translateY  || attribute == MPxTransform::translateZ ||
-    attribute == MPxTransform::scale      || attribute == MPxTransform::scaleX       || attribute == MPxTransform::scaleY      || attribute == MPxTransform::scaleZ ||
-    attribute == MPxTransform::rotate     || attribute == MPxTransform::rotateX      || attribute == MPxTransform::rotateY     || attribute == MPxTransform::rotateZ )
-  {
-    MFnDependencyNode nodeFn( plug.node() );
-    EntityNode* entityNode = static_cast<EntityNode*>( nodeFn.userNode() );
-    entityNode->UpdateBackingEntity();
-
-    RPC::TransformInstanceParam param;
-    param.m_ID = entityNode->GetBackingEntity()->m_ID;
-    param.m_Transform = *reinterpret_cast< RPC::Matrix4* >( &entityNode->GetBackingEntity()->m_GlobalTransform );
-
-    g_ConstructionHost->TransformInstance( &param );
-  }
-
   MAYA_FINISH_EXCEPTION_HANDLING();
 }
 
@@ -553,23 +522,6 @@ void EntityNode::AfterDuplicateCallback( void* clientData )
   {
     (*itor)->Show();
     (*itor)->AddAttributeChangedCallback();
-
-    if( Construction::Connected() )
-    {
-      (*itor)->UpdateBackingEntity();
-
-      CreateInstanceParam param;
-      {
-        MFnDependencyNode nodeFn( (*itor)->thisMObject() );
-        tuid id = (*itor)->m_Entity->GetEntityAssetID();
-        param.m_ID = (*itor)->m_Entity->m_ID;
-        param.m_EntityAsset = id;
-        strncpy( param.m_Name.Characters, nodeFn.name().asChar(), RPC_STRING_MAX);
-        param.m_Name.Characters[ RPC_STRING_MAX-1] = 0; 
-        memcpy( &param.m_Transform, &(*itor)->m_Entity->m_GlobalTransform, sizeof(param.m_Transform) );      
-      }      
-      Construction::g_ConstructionHost->CreateInstance( &param );
-    }
   }
 
   s_ShowNodes.clear();

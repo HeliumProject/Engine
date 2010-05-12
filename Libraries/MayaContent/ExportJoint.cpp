@@ -29,7 +29,7 @@ void ExportJoint::GatherMayaData( V_ExportBase &newExportObjects )
   MPlug bspherePlug = jointFn.findPlug("AddsToBSphere", &status);
   if (status)
   {
-    bspherePlug.getValue(joint->m_ContributesTOBSphere);
+//    bspherePlug.getValue(joint->m_ContributesTOBSphere);
   }
 
   //

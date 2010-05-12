@@ -76,7 +76,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
-				AdditionalLibraryDirectories="$(Maya)\lib$(boost)\stage\lib"
+				AdditionalLibraryDirectories="&quot;$(Maya)\lib&quot;;&quot;$(boost)\stage\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -163,7 +163,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
-				AdditionalLibraryDirectories="$(Maya)\lib$(boost)\stage\lib"
+				AdditionalLibraryDirectories="&quot;$(Maya)\lib&quot;;&quot;$(boost)\stage\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -308,14 +308,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\ExportDestructionGlue.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ExportDestructionGlue.h"
-					>
-				</File>
-				<File
 					RelativePath=".\ExportEffector.cpp"
 					>
 				</File>
@@ -329,30 +321,6 @@
 				</File>
 				<File
 					RelativePath=".\ExportGameplay.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ExportNavClue.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ExportNavClue.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ExportNavEffector.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ExportNavEffector.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ExportWaterPlane.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ExportWaterPlane.h"
 					>
 				</File>
 			</Filter>
@@ -375,26 +343,10 @@
 					RelativePath=".\ExportAnimationClip.h"
 					>
 				</File>
-				<File
-					RelativePath=".\ExportCineScene.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ExportCineScene.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Geometry"
 				>
-				<File
-					RelativePath=".\ExportBlendShader.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ExportBlendShader.h"
-					>
-				</File>
 				<File
 					RelativePath=".\ExportCurve.cpp"
 					>
@@ -437,14 +389,6 @@
 				</File>
 				<File
 					RelativePath=".\ExportJoint.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ExportPhysicsJoint.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ExportPhysicsJoint.h"
 					>
 				</File>
 				<File

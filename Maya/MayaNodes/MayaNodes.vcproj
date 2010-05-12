@@ -69,11 +69,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386  /export:initializePlugin /export:uninitializePlugin"
-				AdditionalDependencies="Foundation.lib Image.lib libMocap.lib OpenGL32.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib user32.lib glu32.lib dlibtiff.lib"
+				AdditionalDependencies="Foundation.lib Image.lib libMocap.lib OpenGL32.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib user32.lib glu32.lib wxmsw28d_core.lib wxbase28d.lib comctl32.lib rpcrt4.lib"
 				OutputFile="$(OutDir)/$(ProjectName).mll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(Maya)\lib;..\$(boost)\stage\lib;$(wxWidgets)\lib\vc_lib"
+				AdditionalLibraryDirectories="&quot;$(Maya)\lib&quot;;&quot;$(boost)\stage\lib&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/MayaNodes.pdb"
 				SubSystem="2"
@@ -163,11 +163,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386  /export:initializePlugin /export:uninitializePlugin"
-				AdditionalDependencies="Foundation.lib Image.lib libMocap.lib OpenGL32.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib user32.lib glu32.lib dlibtiff.lib"
+				AdditionalDependencies="Foundation.lib Image.lib libMocap.lib OpenGL32.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib user32.lib glu32.lib wxmsw28_core.lib wxbase28.lib comctl32.lib rpcrt4.lib"
 				OutputFile="$(OutDir)/$(ProjectName).mll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(Maya)\lib;..\$(boost)\stage\lib;$(wxWidgets)\lib\vc_lib"
+				AdditionalLibraryDirectories="&quot;$(Maya)\lib&quot;;&quot;$(boost)\stage\lib&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/MayaNodes.pdb"
 				SubSystem="2"
@@ -285,6 +285,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{0E85A01E-6BFC-4DF8-BE0D-5F6FAB8AF587}"
 			RelativePathToProject=".\Maya\MayaCore\MayaCore.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{4AF12ED6-2980-4C1F-8918-F11846719FB3}"
+			RelativePathToProject=".\Libraries\FileUI\FileUI.vcproj"
 		/>
 	</References>
 	<Files>
@@ -579,22 +583,6 @@
 			<Filter
 				Name="Entities"
 				>
-				<File
-					RelativePath=".\ConstructionCmd.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ConstructionCmd.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ConstructionTool.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ConstructionTool.h"
-					>
-				</File>
 				<File
 					RelativePath=".\EntityAssetNode.cpp"
 					>

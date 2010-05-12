@@ -43,8 +43,6 @@
 #include "EntityNodeCmd.h"
 #include "EntityAssetNode.h"
 #include "EntityGroupNode.h"
-#include "ConstructionTool.h"
-#include "ConstructionCmd.h"
 #include "FragmentCmd.h"
 #include "KeepCmd.h"
 #include "ZoneCmd.h"
@@ -78,8 +76,6 @@ void MayaExitingCallback( void *clientData )
   MSceneMessage::removeCallback( g_MayaExitingCallbackID );
 
   g_InitializerStack.Cleanup();
-
-  Construction::Cleanup();
 }
 
 MStatus initializePlugin( MObject obj )
@@ -171,7 +167,6 @@ MStatus initializePlugin( MObject obj )
 
   REGISTER_TRANSFORM( EntityGroupNode, &MPxTransformationMatrix::creator,  MPxTransformationMatrix::baseTransformationMatrixId );
   REGISTER_COMMAND( EntityNodeCmd );
-  REGISTER_COMMAND( ConstructionCmd );
   REGISTER_COMMAND( FragmentCmd );
   REGISTER_COMMAND( KeepCmd );
   REGISTER_COMMAND( ZoneCmd );
@@ -265,7 +260,6 @@ MStatus uninitializePlugin( MObject obj )
 
   DEREGISTER_TRANSFORM( EntityGroupNode );
   DEREGISTER_COMMAND( EntityNodeCmd );
-  DEREGISTER_COMMAND( ConstructionCmd );
   DEREGISTER_COMMAND( FragmentCmd );
   DEREGISTER_COMMAND( KeepCmd );
   DEREGISTER_COMMAND( ZoneCmd );
@@ -274,7 +268,5 @@ MStatus uninitializePlugin( MObject obj )
 
   g_InitializerStack.Cleanup();
 
-  Construction::Cleanup();
-  
   return MS::kSuccess;
 }

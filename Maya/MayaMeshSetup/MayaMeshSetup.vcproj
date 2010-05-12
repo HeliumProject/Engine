@@ -79,7 +79,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386  /export:initializePlugin /export:uninitializePlugin"
-				AdditionalDependencies="Foundation.lib Image.lib libMocap.lib OpenGL32.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib user32.lib wxmsw28d.lib"
+				AdditionalDependencies="Foundation.lib Image.lib libMocap.lib OpenGL32.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib user32.lib wxmsw28d_core.lib wxbase28d.lib comctl32.lib rpcrt4.lib"
 				OutputFile="$(OutDir)/$(ProjectName).mll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -178,7 +178,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386  /export:initializePlugin /export:uninitializePlugin"
-				AdditionalDependencies="Foundation.lib Image.lib libMocap.lib OpenGL32.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib user32.lib wxmsw28.lib"
+				AdditionalDependencies="Foundation.lib Image.lib libMocap.lib OpenGL32.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib user32.lib wxmsw28_core.lib wxbase28.lib comctl32.lib rpcrt4.lib"
 				OutputFile="$(OutDir)/$(ProjectName).mll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -361,42 +361,6 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
-			</File>
-		</Filter>
-		<Filter
-			Name="Material"
-			>
-			<File
-				RelativePath=".\MaterialDisplayNode.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MaterialDisplayNode.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MaterialEditor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MaterialEditor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MaterialEditorCmd.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MaterialEditorCmd.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MaterialEditorPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MaterialEditorPanel.h"
-				>
 			</File>
 		</Filter>
 		<File

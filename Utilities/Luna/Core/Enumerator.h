@@ -12,8 +12,6 @@
 #include "InspectContent/ParametricKeyData.h"
 #include "InspectContent/ParametricKeyControl.h"
 
-#include "Symbol/UDTInstance.h"
-
 #include "Selection.h"
 
 namespace Luna

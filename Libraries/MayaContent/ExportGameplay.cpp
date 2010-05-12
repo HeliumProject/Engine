@@ -4,8 +4,6 @@
 #include "MayaContentCmd.h"
 #include "ExportPivotTransform.h"
 
-#include "MayaMeshSetup/MaterialDisplayNode.h"
-
 using namespace Content;
 using namespace MayaContent;
 

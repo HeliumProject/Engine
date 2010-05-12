@@ -194,30 +194,6 @@ void AssetManager::GetManagedAssetRelatedFiles( ManagedAsset* managedAsset )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Determine which shaders this asset is currently using
-//
-void AssetManager::GetManagedAssetShaders( const tuid id, S_tuid& shaderIDs )
-{
-  static const char* mayaFileProcessorDLL = "MayaFileProcessor";
-
-  try
-  {    
-    FileProcessor::MayaIProcessor* mayaFileProcessor = (FileProcessor::MayaIProcessor*) FileProcessorInterface::AllocateProcessor( mayaFileProcessorDLL );
-    if ( !mayaFileProcessor->GetShaderIDs( id, shaderIDs ) )
-    {
-      Console::Error( "Unable to retireive associated shaders from asset.\n" );
-    }
-
-    FileProcessorInterface::FreeProcessor( mayaFileProcessorDLL );
-  }
-  catch ( ... )
-  {
-    Console::Error( "Problems occurred while loading/unloading %s.dll.\n", mayaFileProcessorDLL );
-  }
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
 // Determine which maya files this asset is currently using
 //
 void AssetManager::ListMayaFiles( const tuid id )
@@ -339,70 +315,10 @@ void AssetManager::FindMayaFiles( const S_tuid& fileIdSet, bool recurse, File::S
           continue;
         }
 
-        Asset::AnimationSetAssetPtr animationSet = Reflect::ObjectCast< Asset::AnimationSetAsset >( assetClass );
-        if( animationSet.ReferencesObject() )
-        {
-          Asset::V_AnimationClipData clips;
-          animationSet->GetAnimationClips( clips );
-
-          for each ( const Asset::AnimationClipDataPtr& clip in clips )
-          {
-            fileIds.insert( clip->m_ArtFile );
-          }
-        }
-
         Attribute::AttributeViewer< Asset::ArtFileAttribute > model ( assetClass );
         if ( model.Valid() )
         {
           fileIds.insert( model->m_FileID );
-        }
-
-        // if we want to recurse into nested assets
-        if ( recurse )
-        {
-          Attribute::AttributeViewer< Asset::AnimationAttribute > animation( assetClass );
-          if ( animation.Valid() && animation->m_AnimationSetId != TUID::Null )
-            fileIds.insert( animation->m_AnimationSetId );
-
-#pragma TODO("This is pretty harsh and special case, if there were a nicer way to do this, it would be cool..." )
-          if ( assetClass->GetEngineType() == Asset::EngineTypes::Moby )
-          {
-            File::V_ManagedFilePtr cinematicFiles;
-            File::GlobalManager().Find( "*.cinematic.irb", cinematicFiles );
-
-            for each ( const File::ManagedFilePtr& cinematicFile in cinematicFiles )
-            {
-              Asset::AssetClassPtr cinematicAsset = Asset::AssetClass::FindAssetClass( cinematicFile->m_Id );
-
-              if ( !cinematicAsset.ReferencesObject() )
-              {
-                continue;
-              }
-
-              Attribute::AttributeViewer< Asset::ArtFileAttribute > cinematicArtFile( cinematicAsset );
-              if ( !cinematicArtFile.Valid() )
-              {
-                continue;
-              }
-
-              std::string cinematicArtFilePath = File::GlobalManager().GetPath( cinematicArtFile->m_FileID );
-              std::string cinematicAnimationFile = FinderSpecs::Content::ANIMATION_DECORATION.GetExportFile( cinematicArtFilePath );
-
-              if ( !FileSystem::Exists( cinematicAnimationFile ) )
-              {
-                continue;
-              }
-
-              Content::Scene cinematicScene( cinematicAnimationFile );
-              for each ( const Content::AnimationClipPtr& animationClip in cinematicScene.m_AnimationClips )
-              {
-                if ( animationClip->m_OptionalEntityID == assetClass->m_AssetClassID )
-                {
-                  fileIds.insert( cinematicArtFile->m_FileID );
-                }
-              }
-            }
-          }
         }
       }
     }
@@ -722,16 +638,6 @@ void AssetManager::ProcessRenameAsset( ManagedAsset* managedAsset, const File::M
   File::GlobalManager().Move( managedAsset->m_Asset->GetFilePath(), managedAsset->m_NewPath, managerConfig, rename );    
 }
 
-
-/////////////////////////////////////////////////////////////////////////////
-// takes the asset, M_RenameElement and new path; moves the asset, all of the files in the renameElements   
-void AssetManager::UpdateRenameAsset( ManagedAsset* managedAsset, bool rename )
-{
-  UpdateRenameAssetVisitor updateManagedAssetVisitor( managedAsset, rename );
-  managedAsset->m_Asset->Host( updateManagedAssetVisitor );
-}
-
-
 //*************************************************************************//
 //
 // PROCESS COPY
@@ -761,9 +667,6 @@ Asset::AssetClassPtr AssetManager::UpdateDuplicateAsset( ManagedAsset* managedAs
   Asset::AssetClass::InvalidateCache( newAssetClass->m_AssetClassID );
 
   managedAsset->m_Asset = newAssetClass;
-
-  UpdateRenameAssetVisitor updateManagedAssetVisitor( managedAsset, false );
-  managedAsset->m_Asset->Host( updateManagedAssetVisitor );
 
   return newAssetClass;
 }
@@ -819,145 +722,3 @@ void AssetManager::ProcessDeleteAsset( ManagedAsset* managedAsset, const File::M
 
   File::GlobalManager().Delete( assetPath, managerConfig );
 }
-
-
-
-
-//*************************************************************************//
-//
-// Asset Migration to a new project
-//
-//*************************************************************************//
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-// 
-void GetMigrateFiles( const File::ManagedFilePtr& sourceFile, File::S_ManagedFilePtr& sourceFiles, M_string& relatedFiles, bool getShaderUsages )
-{ 
-  RCS::File rcsFile( sourceFile->m_Path );
-  rcsFile.Sync();
-
-  if ( !FileSystem::HasExtension( sourceFile->m_Path, FinderSpecs::Extension::REFLECT_BINARY.GetExtension() ) )
-  {
-    return;
-  }
-
-  Asset::AssetClassPtr assetClass = NULL;
-  try
-  {
-    if ( ( assetClass = Asset::AssetClass::FindAssetClass( sourceFile->m_Id ) ) == NULL )
-    {
-      return;
-    }
-  }
-  catch( const Nocturnal::Exception& )
-  {
-    return;
-  }
-
-  OperationFlag opFlags = AssetManager::OperationFlags::Duplicate;
-  ManagedAsset managedAsset(assetClass, opFlags) ;
-
-  GetManagedAssetVisitor getManagedAssetVisitor( &managedAsset );
-  managedAsset.m_Asset->Host( getManagedAssetVisitor );
-  GetManagedAssetRelatedFiles( &managedAsset );
-
-  if ( getShaderUsages )
-  {
-    std::string unused;
-    Attribute::AttributePtr shaderUsageAttribute = new Asset::ShaderUsagesAttribute();
-
-    if ( assetClass->GetAttribute( shaderUsageAttribute->GetType() ).ReferencesObject()
-      || assetClass->ValidateAttribute( shaderUsageAttribute, unused ) )
-    {
-      S_tuid shaderIDs;
-      GetManagedAssetShaders( assetClass->GetFileID(), shaderIDs );
-
-      for each ( const tuid& shaderID in shaderIDs )
-      {
-        File::ManagedFilePtr shaderFile = File::GlobalManager().GetManagedFile( shaderID );
-
-        RCS::File rcsShaderFile( shaderFile->m_Path );
-        rcsShaderFile.Sync();
-
-        Insert<File::S_ManagedFilePtr>::Result inserted = sourceFiles.insert( shaderFile );
-        if ( inserted.second )
-        {
-          GetMigrateFiles( *inserted.first, sourceFiles, relatedFiles, false );
-        }
-      }
-    }
-  }
-
-  // determine if the tuids returned are asset classes that can be loaded
-  // like animation class
-  M_ManagedAssetFiles::iterator itElem = managedAsset.m_ManagedAssetFiles.begin();
-  M_ManagedAssetFiles::iterator itEndElem = managedAsset.m_ManagedAssetFiles.end();
-  for ( ; itElem != itEndElem ; ++itElem )
-  {
-    ManagedAssetFilePtr& subManagedAssetPtr = itElem->second;
-
-    if( subManagedAssetPtr->m_File->m_Id == TUID::Null )
-    {
-      continue;
-    }
-
-    Insert<File::S_ManagedFilePtr>::Result inserted;
-
-    if ( subManagedAssetPtr->m_File->m_Path.empty() )
-    {
-      inserted = sourceFiles.insert( File::GlobalManager().GetManagedFile( subManagedAssetPtr->m_File->m_Id ));
-    } 
-    else
-    {
-      inserted = sourceFiles.insert( subManagedAssetPtr->m_File );
-    }       
-
-    if ( inserted.second )
-    {  
-      // append the renameFile->m_RelatedFiles
-      relatedFiles.insert( subManagedAssetPtr->m_RelatedFiles.begin(), subManagedAssetPtr->m_RelatedFiles.end() );
-
-      // recurse
-      GetMigrateFiles( *inserted.first, sourceFiles, relatedFiles, getShaderUsages );
-    }
-  }
-}
-
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//  Migrate assets from one project into the current project
-//
-void AssetManager::MigrateFile( const File::ManagedFilePtr& sourceAssetFile, File::Manager* sourceManager, const File::ManagerConfig managerConfig )
-{
-  // Build the list of assets to copy
-  M_string relatedFiles;
-  File::S_ManagedFilePtr sourceFiles;
-  sourceFiles.insert( sourceAssetFile );
-
-  File::SwapGlobalManager( sourceManager );
-  GetMigrateFiles( sourceAssetFile, sourceFiles, relatedFiles, true );
-  File::SwapGlobalManager();
-
-  // Migrate the list of files returned
-  for each ( const File::ManagedFilePtr& sourceFile in sourceFiles )
-  {
-    File::GlobalManager().Migrate( sourceFile, sourceManager, managerConfig );
-  }
-
-  // Migrate the remaining related files
-  File::ManagerConfig relatedManagerConfig = ( managerConfig & ~File::ManagerConfigs::Resolver );
-  M_string::iterator itRelated = relatedFiles.begin();
-  M_string::iterator itEndRelated = relatedFiles.end();
-  for ( ; itRelated != itEndRelated ; ++itRelated )
-  {
-    itRelated->second = itRelated->first;
-    FileSystem::StripPrefix( sourceManager->GetManagedAssetsRoot(), itRelated->second );
-    itRelated->second = Finder::ProjectAssets() + itRelated->second;
-
-    File::GlobalManager().Copy( itRelated->first, itRelated->second, relatedManagerConfig );
-  }
-}
-

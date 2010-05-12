@@ -65,7 +65,7 @@ void RenameAssetWizard::ProcessOperation()
 
 void RenameAssetWizard::PostProcessUpdate()
 {
-  UpdateRenameAsset( GetManagedAsset() ) ;
+  // nothing to post process here
 }
 
 

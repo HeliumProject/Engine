@@ -5,7 +5,7 @@
 #include "AppUtils/AppUtils.h"
 #include "Console/Console.h"
 
-#include <mysql/include/mysql.h>
+#include <mysql.h>
 
 #include "Common/Config.h"
 #include "Common/Environment.h"
@@ -247,7 +247,13 @@ static bool InitializeRowIDs()
 
   /////////////////////////////////////
   // Tools build config
-  if ( !SelectID( s_SelectToolsBuildConfigIDSQL, s_InsertToolsBuildConfigSQL, NOCTURNAL_BUILD_CONFIG_STRING, g_BuildConfigID ) )
+  const char* build;
+#ifdef _DEBUG
+  build = "Debug";
+#else
+  build = "Release";
+#endif
+  if ( !SelectID( s_SelectToolsBuildConfigIDSQL, s_InsertToolsBuildConfigSQL, build, g_BuildConfigID ) )
   {
     return false;
   }

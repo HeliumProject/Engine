@@ -19,7 +19,6 @@ namespace AssetManager
 
   void ASSETMANAGER_API GetManagedAsset( ManagedAsset* managedAsset, bool getRelatedFiles = true );
   void ASSETMANAGER_API GetManagedAssetRelatedFiles( ManagedAsset* managedAsset );
-  void ASSETMANAGER_API GetManagedAssetShaders( const tuid id, S_tuid& shaderIDs );
 
   void ASSETMANAGER_API ListMayaFiles( const tuid id );
   void ASSETMANAGER_API ListStaticContentFiles( const tuid id );
@@ -35,7 +34,6 @@ namespace AssetManager
   // Move/Rename
   //
   void ASSETMANAGER_API ProcessRenameAsset( ManagedAsset* managedAsset, const File::ManagerConfig managerConfig = File::ManagerConfigs::Default, bool rename = true );
-  void ASSETMANAGER_API UpdateRenameAsset( ManagedAsset* managedAsset, bool rename = true );
 
   //
   // Copy/Duplicate
@@ -47,10 +45,4 @@ namespace AssetManager
   // Delete
   //
   void ASSETMANAGER_API ProcessDeleteAsset( ManagedAsset* managedAsset, const File::ManagerConfig managerConfig = File::ManagerConfigs::Default );
-  
-  //
-  // Migrate
-  //
-  void ASSETMANAGER_API MigrateFile( const File::ManagedFilePtr& sourceAssetFile, File::Manager* sourceManager, const File::ManagerConfig managerConfig = File::ManagerConfigs::Default );
-
 } // namespace AssetManager

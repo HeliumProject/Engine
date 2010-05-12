@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\libraries;..\..\..\..\shared;$(MySQL)"
+				AdditionalIncludeDirectories="..\..\libraries;..\..\..\..\shared;$(MySQL)\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ASSETBUILDERDLL_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -64,7 +64,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libmysql.lib"
 				OutputFile="$(OutDir)/$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
@@ -124,7 +123,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\libraries;..\..\..\..\shared;$(MySQL)"
+				AdditionalIncludeDirectories="..\..\libraries;..\..\..\..\shared;$(MySQL)\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ASSETBUILDERDLL_EXPORTS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="0"
@@ -143,7 +142,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libmysql.lib"
 				OutputFile="$(OutDir)/$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
@@ -252,82 +250,62 @@
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 			RelativePathToProject=".\libraries\Common\Common.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"
+			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
+		/>
 	</References>
 	<Files>
-		<Filter
-			Name="Builder API"
-			>
-			<File
-				RelativePath=".\AssetBuilder.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder.h"
-				>
-			</File>
-			<File
-				RelativePath=".\BuilderInterface.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\BuilderInterface.h"
-				>
-			</File>
-			<File
-				RelativePath=".\BuilderOptions.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\BuilderOptions.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Interfaces"
-			>
-			<File
-				RelativePath=".\ISkyBuilder.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ISkyBuilder.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Cache Files"
-			>
-			<File
-				RelativePath=".\CacheFiles.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CacheFiles.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CacheFileStats.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CacheFileStats.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Builder Stats"
-			>
-			<File
-				RelativePath=".\BuilderStats.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\BuilderStats.h"
-				>
-			</File>
-		</Filter>
 		<File
 			RelativePath=".\API.h"
+			>
+		</File>
+		<File
+			RelativePath=".\AssetBuilder.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\AssetBuilder.h"
+			>
+		</File>
+		<File
+			RelativePath=".\BuilderInterface.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\BuilderInterface.h"
+			>
+		</File>
+		<File
+			RelativePath=".\BuilderOptions.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\BuilderOptions.h"
+			>
+		</File>
+		<File
+			RelativePath=".\BuilderStats.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\BuilderStats.h"
+			>
+		</File>
+		<File
+			RelativePath=".\CacheFiles.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CacheFiles.h"
+			>
+		</File>
+		<File
+			RelativePath=".\CacheFileStats.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CacheFileStats.h"
 			>
 		</File>
 		<File

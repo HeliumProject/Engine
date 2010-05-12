@@ -42,7 +42,6 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="..\;..\..\..\;$(TinyXML);$(DirectX)\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;D3D_DEBUG_INFO"
-				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"

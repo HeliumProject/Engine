@@ -7,7 +7,6 @@
 #include "WorldFilePage.h"
 #include "PerforcePage.h"
 #include "CreateAssetFileLocationPage.h"
-#include "CinematicPage.h"
 
 #include "Asset/AssetClass.h"
 #include "Asset/AssetInit.h"

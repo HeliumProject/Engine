@@ -569,7 +569,7 @@ bool igDXRender::D3DManager::SaveTGA(const char* fname)
 #include "texture_a_ps.h"
 #include "sky_ps.h"
 
-static const DWORD* g_compiled_vertex_shaders[igDXRender::__VERTEX_SHADER_LAST__] = 
+static const BYTE* g_compiled_vertex_shaders[igDXRender::__VERTEX_SHADER_LAST__] = 
 {
   g_screenspace_vs,
   g_basicworldspace_vs,
@@ -582,7 +582,7 @@ static const DWORD* g_compiled_vertex_shaders[igDXRender::__VERTEX_SHADER_LAST__
   g_mesh_debug_uv_vs,
 };
 
-static const DWORD* g_compiled_pixel_shaders[igDXRender::__PIXEL_SHADER_LAST__] = 
+static const BYTE* g_compiled_pixel_shaders[igDXRender::__PIXEL_SHADER_LAST__] = 
 {
   g_diffuse_ps,
   g_diffuse_gpi_ps,
@@ -626,7 +626,7 @@ void igDXRender::D3DManager::CreateBaseResources()
 {
   for (u32 vs=0;vs<igDXRender::__VERTEX_SHADER_LAST__;vs++)
   {
-    if (FAILED(m_device->CreateVertexShader(g_compiled_vertex_shaders[vs],&m_vertex_shaders[vs])))
+    if (FAILED(m_device->CreateVertexShader((const DWORD*)g_compiled_vertex_shaders[vs],&m_vertex_shaders[vs])))
     {
       printf("Failed to create vertex shader %d\n",vs);
       m_vertex_shaders[vs]=0;
@@ -635,7 +635,7 @@ void igDXRender::D3DManager::CreateBaseResources()
 
   for (u32 ps=0;ps<__PIXEL_SHADER_LAST__;ps++)
   {
-    if (FAILED(m_device->CreatePixelShader(g_compiled_pixel_shaders[ps],&m_pixel_shaders[ps])))
+    if (FAILED(m_device->CreatePixelShader((const DWORD*)g_compiled_pixel_shaders[ps],&m_pixel_shaders[ps])))
     {
       printf("Failed to create pixel shader %d\n",ps);
       m_pixel_shaders[ps]=0;

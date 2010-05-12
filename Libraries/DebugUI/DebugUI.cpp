@@ -3,7 +3,7 @@
 #include <wx/msw/private.h>
 
 #if ( wxUSE_ON_FATAL_EXCEPTION == 1 || wxUSE_STACKWALKER == 1 || wxUSE_DEBUGREPORT == 1 || wxUSE_EXCEPTIONS == 1 || wxUSE_CRASHREPORT == 1 )
-#error wxWidgets exception handling is enabled!
+#pragma message( "WARNING: wxWidgets exception handling is enabled!" )
 #endif
 
 #include "DebugUI.h"

@@ -10,7 +10,7 @@
 #include "Asset/Entity.h"
 #include "Asset/LevelAsset.h"
 
-#include "rpc/interfaces/rpc_lunaview.h"
+//#include "rpc/interfaces/rpc_lunaview.h"
 
 #include "UIToolKit/WorkerThreadDialog.h"
 

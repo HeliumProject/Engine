@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;$(boost);&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;$(SQLite);$(MySQL)"
+				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)&quot;;&quot;$(DirectX)\Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;$(boost);&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;$(SQLite);$(MySQL)"
+				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)&quot;;&quot;$(DirectX)\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -369,10 +369,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{F6D24E52-7ADD-459E-8E7F-FDD20A0E6CAF}"
 			RelativePathToProject=".\libraries\AssetManager\AssetManager.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{5786B376-3782-41C9-8392-5BC057ED72D4}"
-			RelativePathToProject=".\libraries\ShaderProcess\ShaderProcess.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"

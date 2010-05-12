@@ -5,7 +5,6 @@
 #include "ParametricKeyControl.h"
 #include "ParametricKeyData.h"
 
-#include "Content/ContentFlags.h"
 #include "Content/ParametricKey.h"
 
 using namespace Inspect;

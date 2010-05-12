@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\libraries;..\..\utilities;$(TinyXML);&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;;$(boost)"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;WXUSINGMONOLITHIC;NOCTURNAL_STATIC;D3D_DEBUG_INFO"
+				AdditionalIncludeDirectories="..\..\libraries;..\..\utilities;&quot;$(TinyXML)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(boost)&quot;;&quot;$(DirectX)\Include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;WXUSINGMONOLITHIC;D3D_DEBUG_INFO"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableEnhancedInstructionSet="0"
@@ -62,9 +62,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="tinyxml.lib d3dx9.lib d3d9.lib rpcrt4.lib comctl32.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib"
+				AdditionalDependencies="d3dx9.lib d3d9.lib rpcrt4.lib comctl32.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_lib;$(boost)\stage\lib"
+				AdditionalLibraryDirectories="&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(boost)\stage\lib&quot;;&quot;$(DirectX)\Lib\x86&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
@@ -121,8 +121,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\libraries;..\..\utilities;$(TinyXML);&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;;$(boost)"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;WXUSINGMONOLITHIC;NOCTURNAL_STATIC;D3D_DEBUG_INFO"
+				AdditionalIncludeDirectories="..\..\libraries;..\..\utilities;&quot;$(TinyXML)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(boost)&quot;;&quot;$(DirectX)\Include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;WXUSINGMONOLITHIC;D3D_DEBUG_INFO"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="0"
 				UsePrecompiledHeader="0"
@@ -141,9 +141,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="tinyxml.lib d3dx9.lib d3d9.lib rpcrt4.lib comctl32.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib"
+				AdditionalDependencies="d3dx9.lib d3d9.lib rpcrt4.lib comctl32.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_lib;$(boost)\stage\lib"
+				AdditionalLibraryDirectories="&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(boost)\stage\lib&quot;;&quot;$(DirectX)\Lib\x86&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -186,6 +186,26 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
 			RelativePathToProject=".\libraries\Profile\profile.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{06092F0D-324B-484D-A9ED-397DFF76AE53}"
+			RelativePathToProject=".\SDK\TinyXML\2.6.1\TinyXML.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{EBC5862F-F9EF-4CA6-AB18-F930074011AB}"
+			RelativePathToProject=".\libraries\Math\math.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
+			RelativePathToProject=".\libraries\Common\Common.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}"
+			RelativePathToProject=".\libraries\UIToolKit\UIToolKit.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{122FA330-2209-4BF0-A359-9C0C113369E2}"
+			RelativePathToProject=".\libraries\File\File.vcproj"
 		/>
 	</References>
 	<Files>

@@ -2,7 +2,6 @@
 #include "Instance.h"
 #include "InstanceType.h"
 #include "InstancePanel.h"
-#include "InstanceCodeSet.h"
 
 #include "Scene.h"
 
@@ -32,14 +31,11 @@ void Instance::CleanupType()
 
 Instance::Instance(Luna::Scene* scene, Content::Instance* instance)
 : Luna::PivotTransform ( scene, instance )
-, m_CodeSet (NULL)
 {
-
 }
 
 Instance::~Instance()
 {
-
 }
 
 void Instance::Pack()
@@ -49,8 +45,6 @@ void Instance::Pack()
 
 void Instance::Unpack()
 {
-  CheckSets();
-
   __super::Unpack();
 }
 
@@ -145,24 +139,6 @@ Luna::SceneNodeType* Instance::DeduceNodeType()
 void Instance::CheckNodeType()
 {
   __super::CheckNodeType();
-
-  CheckSets();
-}
-
-std::string Instance::GenerateName() const
-{
-  std::string name = GetRuntimeClassName();
-
-  if ( name.empty() )
-  {
-    name = __super::GenerateName();
-  }
-  else
-  {
-    name += "1";
-  }
-
-  return name;
 }
 
 S_string Instance::GetValidConfiguredTypeNames()
@@ -197,108 +173,6 @@ void Instance::SetConfiguredTypeName( const std::string& type )
   oldType = type;
   CheckNodeType();
   m_Changed.Raise( args );
-}
-
-Luna::InstanceCodeSet* Instance::GetCodeSet()
-{
-  return m_CodeSet;
-}
-
-const Luna::InstanceCodeSet* Instance::GetCodeSet() const
-{
-  return m_CodeSet;
-}
-
-void Instance::SetCodeSet(Luna::InstanceCodeSet* codeClass)
-{
-  m_CodeSet = codeClass;
-}
-
-void Instance::CheckSets()
-{
-  Content::InstancePtr instance = GetPackage< Content::Instance >();
-
-  Luna::InstanceType* type = Reflect::AssertCast<Luna::InstanceType>( m_NodeType );
-  if (type)
-  {
-    // find the set
-    M_InstanceSetSmartPtr::const_iterator found = type->GetSets().find(currentCodeSet);
-    
-    // if we found it, and it contains us, and we are using it
-    if (found != type->GetSets().end() && found->second->ContainsInstance(this) && m_CodeSet == found->second.Ptr())
-    {
-      // we are GTG
-      return;
-    }
-
-    // the set we are entering
-    Luna::InstanceCodeSet* newCodeSet = NULL;
-
-    // create new class object if it does not already exist
-    if (found == type->GetSets().end())
-    {
-      // create
-      newCodeSet = new Luna::InstanceCodeSet (type, currentCodeSet);
-
-      // save
-      type->AddSet( newCodeSet );
-    }
-    else
-    {
-      // existing
-      newCodeSet = Reflect::AssertCast<Luna::InstanceCodeSet>( found->second );
-    }
-
-    // check previous membership
-    if (m_CodeSet)
-    {
-      m_CodeSet->RemoveInstance(this);
-    }
-
-    // add to the new class collection
-    newCodeSet->AddInstance(this);
-  }
-}
-
-void Instance::ReleaseSets()
-{
-  m_CodeSet->RemoveInstance( this );
-}
-
-void Instance::FindSimilar(V_HierarchyNodeDumbPtr& similar) const
-{
-  if (m_CodeSet)
-  {
-    S_InstanceDumbPtr::const_iterator itr = m_CodeSet->GetInstances().begin();
-    S_InstanceDumbPtr::const_iterator end = m_CodeSet->GetInstances().end();
-    for ( ; itr != end; ++itr )
-    {
-      similar.push_back( *itr );
-    }
-  }
-}
-
-bool Instance::IsSimilar(const HierarchyNodePtr& node) const
-{
-  const Luna::Instance* instance = Reflect::ObjectCast<Luna::Instance>( node );
-  if ( instance && ( instance->m_CodeSet == m_CodeSet ) )
-  {
-    return true;
-  }
-
-  return false;
-}
-
-std::string Instance::GetDescription() const
-{
-  if (m_CodeSet)
-  {
-    return m_CodeSet->GetName();
-  }
-  else
-  {
-    return __super::GetDescription();
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -367,37 +241,3 @@ void Instance::SetTransparentOverride( bool b )
   GetPackage< Content::Instance >()->m_TransparentOverride = b;
 }
 
-const bool Instance::GetIsWeatherBlocker() const
-{
-  return GetPackage< Content::Instance >()->GetIsWeatherBlocker();
-}
-
-float Instance::GetBorderSize() const
-{
-  Luna::InstanceType* type = Reflect::AssertCast<Luna::InstanceType>(m_NodeType);
-
-  return GetPackage< Content::Instance >()->m_BorderSize;
-}
-
-void Instance::SetBorderSize( float s )
-{
-  GetPackage< Content::Instance >()->m_BorderSize = s;
-  std::string&                  type   = GetPackage<Content::Instance>()->m_ConfiguredType;
-  InstancePropertiesChangeArgs  args(this, type, type);
-  m_Changed.Raise( args );
-}
-
-bool Instance::GetSkipParticles() const
-{
-  Luna::InstanceType* type = Reflect::AssertCast<Luna::InstanceType>(m_NodeType);
-
-  return GetPackage< Content::Instance >()->m_SkipParticles;
-}
-
-void Instance::SetSkipParticles( bool s )
-{
-  GetPackage< Content::Instance >()->m_SkipParticles = s;
-  std::string&                  type   = GetPackage<Content::Instance>()->m_ConfiguredType;
-  InstancePropertiesChangeArgs  args(this, type, type);
-  m_Changed.Raise( args );
-}

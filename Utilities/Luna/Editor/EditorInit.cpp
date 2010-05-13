@@ -15,7 +15,6 @@
 #include "Common/InitializerStack.h"
 #include "Perforce/Perforce.h"
 #include "Reflect/Registry.h"
-#include "Symbol/SymbolInit.h"
 #include "Finder/Finder.h"
 
 using namespace Luna;
@@ -30,7 +29,6 @@ void Luna::EditorInitialize()
     // initialize core tools libraries before luna tools libraries
     g_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
     g_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-    g_InitializerStack.Push( Symbol::Initialize, Symbol::Cleanup );
     g_InitializerStack.Push( Finder::Initialize, Finder::Cleanup );
 
     // then register reflect stuff

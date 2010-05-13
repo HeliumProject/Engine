@@ -45,9 +45,6 @@ namespace Luna
     virtual void Delete() NOC_OVERRIDE;
 
   public:
-    virtual void AddInstance(SceneNodePtr n) NOC_OVERRIDE;
-    virtual void RemoveInstance(SceneNodePtr n) NOC_OVERRIDE;
-
     virtual void PopulateManifest( Asset::SceneManifest* manifest ) const NOC_OVERRIDE;
   };
 }

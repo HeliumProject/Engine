@@ -3,7 +3,6 @@
 #include "Entity.h"
 #include "EntityType.h"
 #include "EntityAssetSet.h"
-#include "InstanceCodeSet.h"
 #include "Scene.h"
 #include "SceneOutlinerItemData.h"
 #include "UIToolKit/ImageManager.h"

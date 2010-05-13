@@ -13,7 +13,6 @@
 #include "Finder/ExtensionSpecs.h"
 #include "Finder/LunaSpecs.h"
 #include "Inspect/InspectInit.h"
-#include "Live/LiveManager.h"
 #include "Windows/Process.h"
 
 
@@ -557,29 +556,6 @@ EditorTypes::EditorType SessionManager::FindEditorForFile( const std::string& pa
   }
 
   return editorType;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Gives "control" of the viewer to an editor
-//
-void SessionManager::GiveViewerControl( Editor* editor )
-{
-  M_EditorDumbPtr::const_iterator edItr = m_RunningEditors.begin();
-  M_EditorDumbPtr::const_iterator edEnd = m_RunningEditors.end();
-  for ( ; edItr != edEnd; ++edItr )
-  {
-    if ( edItr->second != editor )
-    {
-      edItr->second->ReleaseViewerControl();
-    }
-  }
-
-  if ( editor )
-  {
-    editor->TakeViewerControl();
-  }
-
-  m_ViewerControl.Raise( ViewerControlChangeArgs( editor ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

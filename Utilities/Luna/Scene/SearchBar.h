@@ -26,7 +26,6 @@ namespace Luna
       Name,
       ID,
       EntityAsset,
-      RuntimeClass,
       Count
     };
   }
@@ -47,7 +46,6 @@ namespace Luna
     {
       Name,
       EntityAsset,
-      RuntimeClass,
       Zone,
       Region,
       EngineType,
@@ -193,17 +191,6 @@ namespace Luna
     virtual bool Validate( Luna::HierarchyNode* node );
   };
 
-  class RuntimeClassNameCriteria : public ValueCriteria<std::string>
-  {
-  public:
-    RuntimeClassNameCriteria( std::string runtimeClassName )
-    : ValueCriteria( runtimeClassName )
-    {
-    }
-
-    virtual bool Validate( Luna::HierarchyNode* node );
-  };
-  
   class EngineTypeCriteria : public ValueCriteria<int>
   {
   public:

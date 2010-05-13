@@ -33,7 +33,6 @@ namespace Luna
     std::string m_ApplicationType;
     S_string m_ContainsAttributes;
     S_string m_MissingAttributes;
-    S_string m_RuntimeClasses;
     std::string m_Location;
 
 

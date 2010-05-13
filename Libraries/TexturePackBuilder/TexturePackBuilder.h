@@ -38,7 +38,6 @@ namespace AssetBuilder
     Dependencies::V_DependencyInfo     m_LeafInputFiles;
 
     TextureProcess::Bank         m_Bank;
-    Symbol::EnumPtr              m_Enum;
 
     ///////////////////////////////////////////
     // methods

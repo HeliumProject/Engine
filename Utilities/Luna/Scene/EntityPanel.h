@@ -62,8 +62,6 @@ namespace Luna
 
     typedef std::vector< EntityPtr > V_EntitySmartPtr;
     V_EntitySmartPtr                m_Entities;
-    bool                            m_AllEntitiesSpecialized;
-    bool                            m_EnableSpecializeCheckbox;
     Inspect::ReflectInterpreterPtr  m_CollisionReflectInterpreter;
 
   public:
@@ -86,11 +84,6 @@ namespace Luna
     void CreateChildImportExport();
 
   protected:
-    virtual void CreateRuntimeData();
-    virtual void RectifyRuntimeData();
-    void RefreshSpecializeCheckbox();
-
-  protected:
     // UI callbacks
 
     bool OnEntityAssetChanging( const Inspect::ChangingArgs& args );
@@ -104,8 +97,6 @@ namespace Luna
     void OnEntityAssetDrop( const Inspect::FilteredDropTargetArgs& args );
     void OnCubeMapEditAsset( Inspect::Button* button );
     void OnViewUVs( Inspect::Button* button );
-    void OnSpecializedChanged( const Inspect::ChangeArgs& args );
-    void OnAutoLightingSetup( Inspect::Button* button );
 
     // Internal Callbacks
     void EntityAssetReloaded( const EntityAssetSetChangeArgs& args );

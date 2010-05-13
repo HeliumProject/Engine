@@ -20,6 +20,7 @@
 
 #include "Browser/Browser.h"
 
+#include "Content/Scene.h"
 #include "Content/ContentVersion.h"
 #include "Content/JointTransform.h"
 #include "Content/PivotTransform.h"
@@ -28,19 +29,8 @@
 #include "Content/Skin.h"
 #include "Content/Curve.h"
 #include "Content/Volume.h"
-#include "Content/Clue.h"
 #include "Content/Zone.h"
 #include "Content/Region.h"
-#include "Content/LightingJob.h"
-#include "Content/TypedLinkHandler.h"
-#include "Content/LightingVolume.h"
-#include "Content/WaterPlane.h"
-
-#include "Content/PostProcessingVolume.h"
-#include "PostProcessingVolume.h"
-
-#include "Content/LightScattering.h"
-#include "LightScattering.h"
 
 #include "Inspect/Data.h"
 #include "Inspect/Canvas.h"
@@ -78,25 +68,16 @@
 #include "EntityType.h"
 #include "Volume.h"
 #include "Locator.h"
-#include "Clue.h"
-#include "GameCamera.h"
-#include "Controller.h"
 #include "Zone.h"
 #include "Region.h"
 #include "Light.h"
 #include "SpotLight.h"
 #include "PointLight.h"
 #include "DirectionalLight.h"
-#include "ShadowDirection.h"
 #include "SunLight.h"
 #include "PortalLight.h"
-#include "LightingEnvironment.h"
-#include "LightingJob.h"
-#include "LightingVolume.h"
-#include "CubeMapProbe.h"
 #include "AmbientLight.h"
 #include "AmbientVolumeLight.h"
-#include "WaterPlane.h"
 #include "common/string/utilities.h"
 #include "Math/AngleAxis.h"
 
@@ -476,22 +457,6 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
   {
     createdNode = new Luna::Entity( this, Reflect::DangerousCast< Asset::Entity >( data ) );
   }
-  else if ( data->HasType( Reflect::GetType<Content::Clue>() ) )
-  {
-    createdNode = new Luna::Clue( this, Reflect::DangerousCast< Content::Clue >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::GameCamera>() ) )
-  {
-    createdNode = new Luna::GameCamera( this, Reflect::DangerousCast< Content::GameCamera >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::PostProcessingVolume>() ) )
-  {
-    createdNode = new Luna::PostProcessingVolume( this, Reflect::DangerousCast< Content::PostProcessingVolume >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::LightScattering>() ) )
-  {
-    createdNode = new Luna::LightScattering( this, Reflect::DangerousCast< Content::LightScattering >( data ) );
-  }
   else if ( data->HasType( Reflect::GetType<Content::Volume>() ) )
   {
     createdNode = new Luna::Volume( this, Reflect::DangerousCast< Content::Volume >( data ) );
@@ -500,10 +465,6 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
   {
     createdNode = new Luna::Locator( this, Reflect::DangerousCast< Content::Locator >( data ) );
   }
-  else if ( data->HasType( Reflect::GetType<Content::LightingEnvironment>() ) )
-  {
-    createdNode = new Luna::LightingEnvironment( this, Reflect::DangerousCast< Content::LightingEnvironment >( data ) );
-  }
   else if ( data->HasType( Reflect::GetType<Content::SunLight>() ) )
   {
     createdNode = new SunLight( this, Reflect::DangerousCast< Content::SunLight >( data ) );
@@ -511,10 +472,6 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
   else if ( data->HasType( Reflect::GetType<Content::DirectionalLight>() ) )
   {
     createdNode = new Luna::DirectionalLight( this, Reflect::DangerousCast< Content::DirectionalLight >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::ShadowDirection>() ) )
-  {
-    createdNode = new Luna::ShadowDirection( this, Reflect::DangerousCast< Content::ShadowDirection >( data ) );
   }
   else if ( data->HasType( Reflect::GetType<Content::SpotLight>() ) )
   {
@@ -528,14 +485,6 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
   {
     createdNode = new Luna::PortalLight( this, Reflect::DangerousCast< Content::PortalLight >( data ) );
   }
-  else if ( data->HasType( Reflect::GetType<Content::LightingVolume>() ) )
-  {
-    createdNode = new Luna::LightingVolume( this, Reflect::DangerousCast< Content::LightingVolume >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::CubeMapProbe>() ) )
-  {
-    createdNode = new Luna::CubeMapProbe( this, Reflect::DangerousCast< Content::CubeMapProbe >( data ) );
-  }
   else if ( data->HasType( Reflect::GetType<Content::AmbientLight>() ) )
   {
     createdNode = new Luna::AmbientLight( this, Reflect::DangerousCast< Content::AmbientLight >( data ) );
@@ -543,10 +492,6 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
   else if ( data->HasType( Reflect::GetType<Content::AmbientVolumeLight>() ) )
   {
     createdNode = new AmbientVolumeLight( this, Reflect::DangerousCast< Content::AmbientVolumeLight >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::Controller>() ) )
-  {
-    createdNode = new Luna::Controller( this, Reflect::DangerousCast< Content::Controller >( data ) );
   }
   else if ( data->HasType( Reflect::GetType<Content::Shader>() ) )
   {
@@ -576,10 +521,6 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
   {
     createdNode = new Luna::Curve( this, Reflect::DangerousCast< Content::Curve >( data ) );
   }
-  else if ( data->HasType( Reflect::GetType<Content::WaterPlane>() ) )
-  {
-    createdNode = new Luna::WaterPlane( this, Reflect::DangerousCast< Content::WaterPlane >( data ) );
-  }
   else if ( data->HasType( Reflect::GetType<Content::PivotTransform>() ) )
   {
     createdNode = new Luna::PivotTransform( this, Reflect::DangerousCast< Content::PivotTransform >( data ) );
@@ -595,10 +536,6 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
   else if ( data->HasType( Reflect::GetType<Content::Region>() ) )
   {
     createdNode = new Luna::Region( this, Reflect::DangerousCast< Content::Region >( data ) ); 
-  }
-  else if ( data->HasType( Reflect::GetType<Content::LightingJob>() ) )
-  {
-    createdNode = new Luna::LightingJob( this, Reflect::DangerousCast< Content::LightingJob >( data ) );
   }
   else if ( data->HasType( Reflect::GetType<Content::Point>() ) )
   {
@@ -2007,51 +1944,6 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 
   switch (args.m_Type)
   {
-    //
-    // Unknown links get all nodes
-    //
-
-  case Symbol::CustomDataTypes::kUnknown:
-    {
-      HM_SceneNodeDumbPtr::const_iterator itr = m_Nodes.begin();
-      HM_SceneNodeDumbPtr::const_iterator end = m_Nodes.end();
-      for ( ; itr != end; ++itr )
-      {
-        itr->first.ToString(str);
-        args.m_Items.push_back( Inspect::Item ( itr->second->GetName() + suffix, str ) );
-      }
-      break;
-    }
-
-
-    //
-    // Entity links get sorted by engine type
-    //
-
-  case Content::TypedLinkTypes::kMobyLink:
-    {
-      HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( Reflect::GetType<Luna::Entity>() );
-      if (found != m_NodeTypesByType.end())
-      {
-        S_SceneNodeTypeDumbPtr::const_iterator itr = found->second.begin();
-        S_SceneNodeTypeDumbPtr::const_iterator end = found->second.end();
-        for ( ; itr != end; ++itr )
-        {
-          HM_SceneNodeSmartPtr::const_iterator nodeItr = (*itr)->GetInstances().begin();
-          HM_SceneNodeSmartPtr::const_iterator nodeEnd = (*itr)->GetInstances().end();
-          for ( ; nodeItr != nodeEnd; ++nodeItr )
-          {
-            Luna::Entity* entity = Reflect::AssertCast<Luna::Entity>( nodeItr->second );
-            if ( entity->GetClassSet()->GetEntityAsset() && entity->GetClassSet()->GetEntityAsset()->GetEngineType() == Asset::EngineTypes::Moby )
-            {
-              entity->GetID().ToString(str);
-              args.m_Items.push_back( Inspect::Item (entity->GetName() + suffix, str) );
-            }
-          }
-        }        
-      }
-      break;
-    }
 
     //
     // Everything else is an internal type
@@ -2064,51 +1956,9 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
       //
 
       i32 typeID = -1;
-      bool runtimeData = false;
 
       switch (args.m_Type)
       {
-      case Content::TypedLinkTypes::kControllerLink:
-        {
-          typeID = Reflect::GetType<Luna::Controller>();
-          break;
-        }
-
-      case Content::TypedLinkTypes::kVolumeLink:
-        {
-          typeID = Reflect::GetType<Luna::Volume>();
-          runtimeData = false;
-          break;
-        }
-
-      case Content::TypedLinkTypes::kClueLink:
-        {
-          typeID = Reflect::GetType<Luna::Volume>();
-          runtimeData = true;
-          break;
-        }
-
-      case Content::TypedLinkTypes::kPathLink:
-        {
-          typeID = Reflect::GetType<Luna::Curve>();
-          break;
-        }
-
-      case Content::TypedLinkTypes::kPodLink:
-      case Content::TypedLinkTypes::kAreaLink:
-      case Content::TypedLinkTypes::kScentLink:
-      case Content::TypedLinkTypes::kSquadronLink:
-        {
-          typeID = Reflect::GetType<Luna::Layer>();
-          break;
-        }
-
-      case Content::TypedLinkTypes::kZoneLink:
-        {
-          typeID = Reflect::GetType<Zone>(); 
-          break; 
-        }
-
       default:
         {
           // all the nodes
@@ -2128,17 +1978,6 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
           HM_SceneNodeSmartPtr::const_iterator nodeEnd = (*itr)->GetInstances().end();
           for ( ; nodeItr != nodeEnd; ++nodeItr )
           {
-            if (runtimeData)
-            {
-              Content::Instance* instance = nodeItr->second->GetPackage<Content::Instance>();
-
-              // if we don't support runtime data, or we have no class assigned then keep looking
-              if (!instance->SupportsRuntimeData() || instance->GetRuntimeClass().empty())
-              {
-                continue;
-              }
-            }
-
             nodeItr->second->GetID().ToString(str);
             args.m_Items.push_back( Inspect::Item (nodeItr->second->GetName() + suffix, str) );
           }

@@ -10,8 +10,6 @@
 #include "Asset/StandardDetailMapAttribute.h"
 #include "File/Manager.h"
 #include "igDXContent/ShaderLoader.h"
-#include "ShaderProcess/ShaderProcess.h"
-#include "ShaderProcess/ShaderRegistry.h"
 
 using namespace Luna;
 

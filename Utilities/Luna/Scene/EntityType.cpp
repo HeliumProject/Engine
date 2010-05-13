@@ -2,7 +2,6 @@
 #include "EntityType.h"
 
 #include "EntityAssetSet.h"
-#include "InstanceCodeSet.h"
 #include "Entity.h"
 #include "Scene.h"
 
@@ -75,20 +74,6 @@ void EntityType::Delete()
       set->Delete();
     }
   }
-}
-
-void EntityType::AddInstance(SceneNodePtr n)
-{
-  __super::AddInstance(n);
-
-  Reflect::AssertCast<Luna::Entity>(n)->CheckSets();
-}
-
-void EntityType::RemoveInstance(SceneNodePtr n)
-{
-  Reflect::AssertCast<Luna::Entity>(n)->ReleaseSets();
-
-  __super::RemoveInstance(n);
 }
 
 void EntityType::PopulateManifest(Asset::SceneManifest* manifest) const

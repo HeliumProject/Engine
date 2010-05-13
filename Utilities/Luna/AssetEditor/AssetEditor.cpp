@@ -72,16 +72,7 @@ BEGIN_EVENT_TABLE( AssetEditor, Luna::Editor )
   EVT_MENU( AssetEditorIDs::MoveDown, OnMoveDown )
   EVT_MENU( AssetEditorIDs::Preview, OnPreview )
   EVT_MENU( AssetEditorIDs::Build, OnBuild )
-  EVT_MENU( AssetEditorIDs::View, OnView )
   EVT_MENU( AssetEditorIDs::Export, OnExport )
-  EVT_MENU( AssetEditorIDs::SyncShaders, OnSyncShaders )
-  EVT_MENU( AssetEditorIDs::UpdateSymbols, OnUpdateSymbols )
-  EVT_MENU( AssetEditorIDs::AddAnimationSet, OnAddAnimationSet )
-  EVT_MENU( AssetEditorIDs::AddAnimationGroup, OnAddAnimationGroup )
-  EVT_MENU( AssetEditorIDs::EditAnimationGroup, OnEditAnimationGroup )
-  EVT_MENU( AssetEditorIDs::AddAnimationClip, OnAddAnimationClip )
-  EVT_MENU( AssetEditorIDs::AddAnimationClipToNewChain, OnAddClipToNewChain )
-  EVT_MENU( AssetEditorIDs::AddAnimationClipToExistingChain, OnAddClipToExistingChain )
   EVT_MENU( wxID_HELP_INDEX, OnHelpIndex )
   EVT_MENU( wxID_HELP_SEARCH, OnHelpSearch )
   EVT_MENU( AssetEditorIDs::Checkout, OnCheckout )
@@ -1513,23 +1504,6 @@ void AssetEditor::OnExport( wxCommandEvent& args )
   else
   {
     DoGiveHelp( "Nothing to export", true );
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when the Sync Shaders button is pressed.  Updates the 
-// ShaderUsagesAttribute on all the selected assets.
-// 
-void AssetEditor::OnSyncShaders( wxCommandEvent& args )
-{
-  S_AssetClassDumbPtr assets;
-  if ( m_AssetManager.GetSelectedAssets( assets ) > 0 )
-  {
-    m_AssetManager.GetSelection().Clear();
-    for each ( Luna::AssetClass* asset in assets )
-    {
-      asset->UpdateShaderUsages();
-    }
   }
 }
 

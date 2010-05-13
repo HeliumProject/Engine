@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "EntityPanel.h"
 #include "EntityAssetSet.h"
-#include "InstanceCodeSet.h"
 
 #include "Inspect/Value.h"
 #include "Inspect/Button.h"
@@ -158,8 +157,6 @@ EntityPanel::EntityPanel(Enumerator* enumerator, const OS_SelectableDumbPtr& sel
 , m_BakedShadowAABBExtEnabler( NULL )
 , m_BakedShadowMergeGroupsEnabler( NULL )
 , m_HighResShadowMapEnabler( NULL )
-, m_AllEntitiesSpecialized ( false )
-, m_EnableSpecializeCheckbox ( false )
 {
   m_Expanded = true;
   m_Text = "Entity";
@@ -496,33 +493,8 @@ bool EntityPanel::OnEntityAssetChanging( const Inspect::ChangingArgs& args )
   return result;
 }
 
-void EntityPanel::RefreshSpecializeCheckbox()
-{
-  m_SpecializeCheckbox->SetEnabled(m_EnableSpecializeCheckbox); 
-}
-
-void EntityPanel::OnSpecializedChanged( const Inspect::ChangeArgs& args )
-{
-  RectifyRuntimeData(); 
-
-  RefreshClassPicker(); 
-
-  RefreshInstances(true); 
-
-  RefreshSpecializeCheckbox(); 
-}
-
 void EntityPanel::OnEntityAssetChanged( const Inspect::ChangeArgs& args )
 {
-  // this code should be in a function
-  // 
-  RectifyRuntimeData(); 
-
-  RefreshClassPicker();
-
-  RefreshInstances( true );
-
-  RefreshSpecializeCheckbox();
 }
 
 void EntityPanel::OnEntityAssetRefresh( Inspect::Button* button )

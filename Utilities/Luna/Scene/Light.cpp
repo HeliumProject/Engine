@@ -365,13 +365,6 @@ void Light::CreatePanel( CreatePanelArgs& args )
     args.m_Enumerator->PushPanel( "RealTime" );
     {
       
-      args.m_Enumerator->PushContainer();
-      {
-        args.m_Enumerator->AddLabel("Stencil Texture");
-        args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetUseStencilTexture, &Light::SetUseStencilTexture );
-      }
-      args.m_Enumerator->Pop();
-      
       LightPanel* panel = new LightPanel ( args.m_Enumerator, args.m_Selection );
 
       args.m_Enumerator->Push( panel );

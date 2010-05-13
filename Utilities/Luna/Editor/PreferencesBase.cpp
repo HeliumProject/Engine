@@ -72,7 +72,7 @@ bool PreferencesBase::LoadFromFile( const std::string& path )
       Reflect::VersionPtr version = Reflect::Archive::FromFile< Reflect::Version >( path );
       if ( version && version->IsCurrent() )
       {
-        PreferencesBasePtr fromFile = Reflect::ArchiveBinary::FromFile< PreferencesBase >( path );
+        PreferencesBasePtr fromFile = Reflect::Archive::FromFile< PreferencesBase >( path );
         if ( fromFile.ReferencesObject() && fromFile->m_SavedVersion == GetCurrentVersion() )
         {
           fromFile->CopyTo( this );
@@ -99,7 +99,7 @@ bool PreferencesBase::SaveToFile( const std::string& path, std::string& error, R
 
   try
   {
-    Reflect::ArchiveBinary::ToFile( this, path, version );
+    Reflect::Archive::ToFile( this, path, version );
     result = true;
   }
   catch ( const Reflect::Exception& e )

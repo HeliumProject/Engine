@@ -3,7 +3,6 @@
 #include "Instance.h"
 #include "Volume.h"
 
-#include "Editor/ClassChooserDlg.h"
 #include "Inspect/Choice.h"
 #include "Inspect/Button.h"
 
@@ -31,8 +30,6 @@ void InstancePanel::Create()
   CreateApplicationType();
 
   CreateAppearanceFlags();
-
-  CreateRuntimeData();
 
   Inspect::Panel::Create();
 }
@@ -134,19 +131,12 @@ void InstancePanel::CreateAppearanceFlags()
   }
   m_Enumerator->Pop();
   
-  bool discoveredBlocker = false;
   bool allVolumes = true;
 
   OS_SelectableDumbPtr::Iterator itr = m_Selection.Begin();
   OS_SelectableDumbPtr::Iterator end = m_Selection.End();
   for ( ; itr != end; ++itr )
   {
-    Luna::Instance* instance = Reflect::ObjectCast<Luna::Instance>(*itr);
-    if(instance && instance->GetIsWeatherBlocker())
-    {
-      discoveredBlocker = true;
-    }
-
     Luna::VolumePtr volume = Reflect::ObjectCast< Volume >( *itr );
     if ( !volume )
     {
@@ -163,28 +153,6 @@ void InstancePanel::CreateAppearanceFlags()
     }
     m_Enumerator->Pop();
   }
-
-  if(discoveredBlocker)
-  {
-    m_Enumerator->PushContainer();
-    {
-      m_Enumerator->AddLabel("Skip Particles");
-
-      m_Enumerator->AddCheckBox<Luna::Instance, bool>( m_Selection, &Luna::Instance::GetSkipParticles, &Luna::Instance::SetSkipParticles );
-    }
-    m_Enumerator->Pop();
-
-    m_Enumerator->PushContainer();
-    {
-      m_Enumerator->AddLabel("Border Size");
-
-      Inspect::Slider* slider = m_Enumerator->AddSlider<Luna::Instance, float>(m_Selection, &Luna::Instance::GetBorderSize, &Luna::Instance::SetBorderSize );
-      slider->SetRangeMin( 0.0f );
-      slider->SetRangeMax( 4.0f );
-    }
-    m_Enumerator->Pop();
-  }
-
 }
 
 void InstancePanel::Intersect(S_string& intersection, const S_string& classList)

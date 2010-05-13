@@ -35,8 +35,6 @@ namespace Luna
     //
 
   protected:
-    Luna::InstanceCodeSet* m_CodeSet;
-
 
     //
     // Runtime Type Info
@@ -65,30 +63,11 @@ namespace Luna
     // support for checking class membership when checking type
     virtual void CheckNodeType() NOC_OVERRIDE;
 
-    // generate name
-    virtual std::string GenerateName() const NOC_OVERRIDE;
-
     // find all the valid configured type names
     S_string GetValidConfiguredTypeNames();
 
     std::string GetConfiguredTypeName() const;
     void SetConfiguredTypeName( const std::string& type );
-
-    std::string GetRuntimeClassName() const;
-    void SetRuntimeClassName( const std::string& className );
-
-    Luna::InstanceCodeSet* GetCodeSet();
-    const Luna::InstanceCodeSet* GetCodeSet() const;
-    void SetCodeSet(Luna::InstanceCodeSet* codeClass);
-    virtual void CheckSets();
-    virtual void ReleaseSets();
-
-    // match by code class
-    virtual void FindSimilar(V_HierarchyNodeDumbPtr& similar) const NOC_OVERRIDE;
-    virtual bool IsSimilar(const HierarchyNodePtr& node) const NOC_OVERRIDE;
-
-    // get some useful info
-    virtual std::string GetDescription() const;
 
     virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
     static void CreatePanel( CreatePanelArgs& args );
@@ -102,14 +81,6 @@ namespace Luna
     void SetTransparent( bool b );
     bool GetTransparentOverride() const;
     void SetTransparentOverride( bool b );
-
-    const bool  GetIsWeatherBlocker() const;
-
-    bool        GetSkipParticles() const;
-    void        SetSkipParticles( bool s );
-
-    float       GetBorderSize() const;
-    void        SetBorderSize( float s );
 
     //
     // Events

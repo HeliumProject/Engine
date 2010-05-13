@@ -7,14 +7,13 @@
 
 #include "Console/Console.h"
 #include "FileSystem/FileSystem.h"
-#include "Symbol/Inheritance.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/LunaSpecs.h"
 
 #include "Content/Instance.h"
 #include "Asset/Entity.h"
 
-#include "tinyxml/include/tinyxml.h"
+#include <tinyxml.h>
 
 using namespace Luna;
 
@@ -83,51 +82,6 @@ int TypeConfig::Validate(Luna::SceneNode* node)
       {
         return -1;
       }
-    }
-  }
-
-  if (!m_RuntimeClasses.empty() && node->HasType( Reflect::GetType<Luna::Instance>() ))
-  {
-    Content::Instance* instance = node->GetPackage< Content::Instance >();
-
-    if (instance && instance->SupportsRuntimeData())
-    {
-      std::string classString = instance->GetRuntimeClass();
-
-      int max = 0;
-
-      S_string::const_iterator itr = m_RuntimeClasses.begin();
-      S_string::const_iterator end = m_RuntimeClasses.end();
-      for ( ; itr != end; ++itr )
-      {
-        // do full derived class lookup here
-        if ( classString == *itr || Symbol::Inheritance::IsDerivedClass(classString, *itr) )
-        {
-          int depth = -1;
-          if (Symbol::Inheritance::GetDepth( *itr, depth ))
-          {
-            score += depth;
-          }
-
-          if (depth > max)
-          {
-            max = depth;
-          }
-        }
-      }
-
-      if ( max )
-      {
-        score += max;
-      }
-      else
-      {
-        return -1;
-      }
-    }
-    else
-    {
-      return -1;
     }
   }
 
@@ -332,10 +286,6 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
             else if ( std::string( criterion->Value() ) == "MissingAttribute" )
             {
               t->m_MissingAttributes.insert( criterion->GetText() );
-            }
-            else if ( std::string( criterion->Value() ) == "RuntimeClass" )
-            {
-              t->m_RuntimeClasses.insert( criterion->GetText() );
             }
             else if ( std::string( criterion->Value() ) == "Location" )
             {

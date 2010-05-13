@@ -6,7 +6,6 @@
 #include "Entity.h"
 #include "EntityType.h"
 #include "EntityAssetSet.h"
-#include "InstanceCodeSet.h"
 
 #include "InspectFile/FileDialogButton.h"
 #include "InspectFile/FileBrowserButton.h"

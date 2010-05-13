@@ -6,7 +6,6 @@
 #include "InspectReflect/InspectReflectInit.h"
 #include "InspectContent/InspectContentInit.h"
 #include "InspectFile/InspectFileInit.h"
-#include "InspectSymbol/InspectSymbolInit.h"
 
 #include "Object.h"
 #include "Selectable.h"
@@ -30,7 +29,6 @@ void Luna::CoreInitialize()
     g_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
     g_InitializerStack.Push( InspectContent::Initialize, InspectContent::Cleanup );
     g_InitializerStack.Push( InspectFile::Initialize, InspectFile::Cleanup );
-    g_InitializerStack.Push( InspectSymbol::Initialize, InspectSymbol::Cleanup );
 
     // Types
     g_InitializerStack.Push( Object::InitializeType, Object::CleanupType );

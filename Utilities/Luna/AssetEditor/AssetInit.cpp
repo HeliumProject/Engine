@@ -41,8 +41,6 @@
 #include "UIToolKit/ImageManager.h"
 #include "Finder/LunaSpecs.h"
 
-#include "ShaderProcess/ShaderProcessInit.h"
-
 // Using
 using namespace Luna;
 
@@ -99,8 +97,6 @@ void LunaAsset::InitializeModule()
       FinderSpecs::Luna::GAME_THEME_FOLDER.GetFolder() );
 
     UIToolKit::GlobalImageManager().LoadGuiArt();
-
-    g_InitializerStack.Push( ShaderProcess::Initialize, ShaderProcess::Cleanup );
   }
 }
 

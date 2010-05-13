@@ -17,7 +17,6 @@
 #include "FontSpecs.h"
 #include "LunaSpecs.h"
 #include "ProjectSpecs.h"
-#include "SymbolSpecs.h"
 
 using Nocturnal::Insert; 
 
@@ -138,7 +137,6 @@ void Finder::Initialize()
   FinderSpecs::Extension::Init();
   FinderSpecs::Font::Init();
   FinderSpecs::Luna::Init();
-  FinderSpecs::Symbol::Init();
 }
 
 /////////////////////////////////////////////////////////////////////////////

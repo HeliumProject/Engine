@@ -12,17 +12,6 @@ namespace Luna
   struct PropertiesPanelEditCommandArgs;
   struct EditFilePathArgs;
 
-  struct ViewerControlChangeArgs
-  {
-    Editor* m_Editor;
-
-    ViewerControlChangeArgs( Editor* editor )
-    : m_Editor( editor )
-    {
-    }
-  };
-  typedef Nocturnal::Signature< void, const ViewerControlChangeArgs& > ViewerControlChangeSignature;
-
   /////////////////////////////////////////////////////////////////////////////
   // Singleton class that keeps track of all the Luna Editors and the files that
   // they have open.  The session manager can save and load session files that
@@ -66,30 +55,11 @@ namespace Luna
 
     bool CheckOut( const std::string& file, bool prompt = false );
 
-    // Viewer-related functions
-    void GiveViewerControl( Editor* editor );
-
     bool UseTracker() const { return m_UseTracker; }
     void UseTracker( bool useTracker ) { m_UseTracker = useTracker; }
 
   private:
     EditorTypes::EditorType FindEditorForFile( const std::string& path );
-
-    // 
-    // Listeners
-    // 
-  private:
-    ViewerControlChangeSignature::Event m_ViewerControl;
-  public:
-    void AddViewerControlChangedListener( const ViewerControlChangeSignature::Delegate& listener )
-    {
-      m_ViewerControl.Add( listener );
-    }
-
-    void RemoveViewerControlChangedListener( const ViewerControlChangeSignature::Delegate& listener )
-    {
-      m_ViewerControl.Remove( listener );
-    }
 
   private:
     void PropertiesPanelEdit( const Inspect::EditFilePathArgs& args );

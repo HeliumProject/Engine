@@ -35,7 +35,6 @@ namespace Luna
   class FoldersPanel;
   class CollectionsPanel;
   class HelpPanel;
-  struct ViewerControlChangeArgs;
   struct ResultChangeArgs;
 
   class BrowserSearch;
@@ -108,11 +107,6 @@ namespace Luna
     void OnPaste( wxCommandEvent& args );
     //void OnRename( wxCommandEvent& args );
     void OnDelete( wxCommandEvent& args );
-
-    void RunViewer( Asset::AssetClass* asset, bool showOptions );
-    void OnViewOnTarget( wxCommandEvent& event );
-    void OnViewOnTargetWithOptions( wxCommandEvent& event );
-    void OnViewerControlChanged( const ViewerControlChangeArgs& args );
 
     void OnPreferences( wxCommandEvent& event );
 

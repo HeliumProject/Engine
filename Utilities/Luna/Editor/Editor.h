@@ -65,9 +65,6 @@ namespace Luna
 
     virtual DocumentManager* GetDocumentManager() = 0;
 
-		virtual void TakeViewerControl() {};
-    virtual void ReleaseViewerControl() {};
-
     virtual const std::string& GetPreferencePrefix() const NOC_OVERRIDE;
 
     void RevisionHistory( const std::string& path );

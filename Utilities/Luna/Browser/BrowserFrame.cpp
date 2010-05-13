@@ -116,8 +116,6 @@ EVT_MENU( BrowserMenu::CopyFileIDDecimal, BrowserFrame::OnCopyFileID )
 EVT_MENU( BrowserMenu::ShowInFolders, BrowserFrame::OnShowInFolders )
 EVT_MENU( BrowserMenu::ShowInPerforce, BrowserFrame::OnShowInPerforce )
 EVT_MENU( BrowserMenu::ShowInWindowsExplorer, BrowserFrame::OnShowInWindowsExplorer )
-EVT_MENU( BrowserMenu::ViewOnTarget, BrowserFrame::OnViewOnTarget )
-EVT_MENU( BrowserMenu::ViewOnTargetWithOptions, BrowserFrame::OnViewOnTargetWithOptions )
 EVT_MENU( BrowserMenu::Preferences, BrowserFrame::OnPreferences )
 EVT_MENU( BrowserMenu::NewCollectionFromSelection, BrowserFrame::OnNewCollectionFromSelection )
 EVT_MENU( BrowserMenu::NewDepedencyCollectionFromSelection, BrowserFrame::OnNewCollectionFromSelection )
@@ -394,8 +392,6 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
   m_BrowserSearch->AddResultsAvailableListener( Luna::ResultsAvailableSignature::Delegate( this, &BrowserFrame::OnResultsAvailable ) );
   m_BrowserSearch->AddSearchCompleteListener( Luna::SearchCompleteSignature::Delegate( this, &BrowserFrame::OnSearchComplete ) );
   
-  SessionManager::GetInstance()->AddViewerControlChangedListener( ViewerControlChangeSignature::Delegate( this, &BrowserFrame::OnViewerControlChanged ) );
-
   m_ResultsPanel->AddResultsChangedListener( ResultSignature::Delegate( this, &BrowserFrame::OnResultsPanelUpdated ) );
 
   m_StatusBar->UpdateTrackerStatus( Asset::GlobalTracker()->IsTracking() );
@@ -415,8 +411,6 @@ BrowserFrame::~BrowserFrame()
   wxTreeCtrl* tree = m_FoldersPanel->GetTreeCtrl();
   tree->Disconnect( tree->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( BrowserFrame::OnFolderSelected ), NULL, this );
   tree->Disconnect( tree->GetId(), wxEVT_COMMAND_TREE_ITEM_ACTIVATED, wxTreeEventHandler( BrowserFrame::OnFolderSelected ), NULL, this );
-
-  SessionManager::GetInstance()->RemoveViewerControlChangedListener( ViewerControlChangeSignature::Delegate( this, &BrowserFrame::OnViewerControlChanged ) );
 
   // Disconnect Listeners
   m_BrowserSearch->RemoveRequestSearchListener( Luna::RequestSearchSignature::Delegate( this, &BrowserFrame::OnRequestSearch ) );
@@ -1114,34 +1108,6 @@ void BrowserFrame::OnDelete( wxCommandEvent& args )
         }
       }
     }
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void BrowserFrame::OnViewOnTarget( wxCommandEvent& event )
-{
-  wxBusyCursor busyCursor;
-  Asset::V_AssetFiles files;
-  Asset::V_AssetFolders folders;
-  m_ResultsPanel->GetSelectedFilesAndFolders( files, folders );
-  if ( files.size() == 1 )
-  {
-    Asset::AssetClassPtr asset = Asset::AssetFile::GetAssetClass( files.front() );
-    RunViewer( asset, false );
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void BrowserFrame::OnViewOnTargetWithOptions( wxCommandEvent& event )
-{
-  wxBusyCursor busyCursor;
-  Asset::V_AssetFiles files;
-  Asset::V_AssetFolders folders;
-  m_ResultsPanel->GetSelectedFilesAndFolders( files, folders );
-  if ( files.size() == 1 )
-  {
-    Asset::AssetClassPtr asset = Asset::AssetFile::GetAssetClass( files.front() );
-    RunViewer( asset, true );
   }
 }
 

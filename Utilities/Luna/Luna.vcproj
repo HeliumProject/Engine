@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
+				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -66,9 +66,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw28d.lib ws2_32.lib tinyxml.lib d3d9.lib d3dx9.lib libmysql.lib"
+				AdditionalDependencies="wxmsw28d_core.lib wxbase28d.lib comctl32.lib rpcrt4.lib ws2_32.lib d3d9.lib d3dx9.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(boost)\stage\lib;$(wxWidgets)\lib\vc_lib"
+				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(DirectX)\lib\x86&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
+				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -150,9 +150,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw28.lib ws2_32.lib tinyxml.lib d3d9.lib d3dx9.lib libmysql.lib"
+				AdditionalDependencies="wxmsw28_core.lib wxbase28.lib comctl32.lib rpcrt4.lib ws2_32.lib d3d9.lib d3dx9.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(boost)\stage\lib;$(wxWidgets)\lib\vc_lib"
+				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(DirectX)\lib\x86&quot;"
 				IgnoreDefaultLibraryNames="wxbase28.lib;wxbase28_net.lib;wxbase28_xml.lib;wxmsw28_adv.lib;wxmsw28_core.lib;wxmsw28_html.lib;wxmsw28_xrc.lib;wxmsw28_aui.lib;wxmsw28_richtext.lib;wxmsw28_media.lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -234,14 +234,12 @@
 			RelativePathToProject=".\libraries\InspectReflect\InspectReflect.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{6B4DBE0D-7A9C-495A-9D55-7611D38A1EAE}"
+			ReferencedProjectIdentifier="{4AF12ED6-2980-4C1F-8918-F11846719FB3}"
+			RelativePathToProject=".\Libraries\FileUI\FileUI.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{AA86FEA7-AA10-4870-8C71-C6D5A94D2FE5}"
 			RelativePathToProject=".\libraries\Undo\Undo.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{FA37BB25-D435-4936-9DAA-E186A6DA9B45}"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
@@ -280,9 +278,6 @@
 			RelativePathToProject=".\libraries\Math\math.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{89189BD4-39A9-444A-8ED9-CAB1B35A0DEA}"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{FADD81C4-992F-4492-9750-C1F4B208EBD1}"
 			RelativePathToProject=".\libraries\smartbuffer\smartbuffer.vcproj"
 		/>
@@ -303,35 +298,8 @@
 			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{E81BAEB7-29BF-4025-B46E-F42DCE2DF8C8}"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{122FA330-2209-4BF0-A359-9C0C113369E2}"
 			RelativePathToProject=".\libraries\File\File.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{26C5F73F-63EF-43F8-9D40-6C68957C062D}"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{F37DBFEC-9F66-49BC-9F64-E25C2C3770B4}"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{1C0440DB-3DB9-42C8-B879-36BABE0A309D}"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{280A7391-5DA4-49B9-A48F-E2024F9B3F5B}"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{90EAA558-DE59-4B4D-96B8-CDCD96960AA7}"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{936C830A-4C7B-4F6D-8DBC-BF71C79DDC8B}"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{51EEE036-D40C-47DF-9A1D-0D5B439679B7}"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{3C200B29-A70D-48DE-952D-32AEFFC9530D}"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{A0FF2C19-D29F-4969-A959-E4D8A5C4B44F}"
@@ -340,9 +308,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{D0028BA8-6457-4115-8EB1-924A14B2306F}"
 			RelativePathToProject=".\libraries\FileBrowser\FileBrowser.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{077BBF06-F54E-4662-9FA9-0952CECCED41}"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{9270A244-6F23-48F9-9382-0CCBADBDC0EE}"
@@ -355,12 +320,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D90DA7D-4FA4-4DB0-8CCD-6FE9D470F75A}"
 			RelativePathToProject=".\libraries\Texture\Texture.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{EE9A4541-EC47-4F2D-BBFF-3D1CDEC4B660}"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{5BA9972C-67A7-4E6F-AA56-901453BDE835}"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{15659B3D-2AE6-403D-AA91-7A56C252F454}"
@@ -393,6 +352,14 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{09C23AAB-CEB0-4254-82F5-15547D30AFE9}"
 			RelativePathToProject=".\libraries\DebugUI\DebugUI.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{06092F0D-324B-484D-A9ED-397DFF76AE53}"
+			RelativePathToProject=".\SDK\TinyXML\2.6.1\TinyXML.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"
+			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
 		/>
 	</References>
 	<Files>
@@ -497,14 +464,6 @@
 			</File>
 			<File
 				RelativePath=".\Editor\BuildServer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\ClassChooserDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\ClassChooserDlg.h"
 				>
 			</File>
 			<File
@@ -848,14 +807,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\LiveLinkPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\LiveLinkPanel.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\MiscSettings.cpp"
 				>
 			</File>
@@ -1180,14 +1131,6 @@
 				</File>
 				<File
 					RelativePath=".\Scene\Instance.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\InstanceCodeSet.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\InstanceCodeSet.h"
 					>
 				</File>
 				<File

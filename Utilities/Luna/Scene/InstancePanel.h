@@ -28,28 +28,6 @@ namespace Luna
   protected:
     void CreateApplicationType();
     void CreateAppearanceFlags();
-    virtual void CreateRuntimeData();
-
-    // sets up internal state (booleans like m_AllInstancesHaveRuntimeData...)
-    // does not change any UI
-    //
-    virtual void RectifyRuntimeData(); 
-
-    // evaluate our selection and return the following information
-    // does not change any UI
-    // 
-    virtual void GetSelectableClasses( S_string& classList ); 
-    virtual void GetSelectableBaseClasses( S_string& classList ); 
-    virtual void GetCurrentSelectedClass( std::string& selectedClass ); 
-
-    // event handlers
-    void OnRuntimeClassButton( Inspect::Button* button );
-    void OnRuntimeClassChanged( const Inspect::ChangeArgs& args );
-
-    // refresh the UI after changes..
-    // 
-    void RefreshClassPicker(); 
-    void RefreshInstances( bool layout );
 
     void OnSolidOverride( const Inspect::ChangeArgs& args );
     void OnTransparentOverride( const Inspect::ChangeArgs& args );

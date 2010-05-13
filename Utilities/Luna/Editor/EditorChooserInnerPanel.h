@@ -36,24 +36,15 @@ class EditorChooserInnerPanel : public wxPanel
 	
 	protected:
 		wxScrolledWindow* m_ScrollWindow;
-		wxStaticText* m_TextGetAssets;
 		wxStaticText* m_TextRunGame;
-		wxStaticText* m_TextRunViewer;
 		wxStaticText* m_TextAssetEditor;
 		wxStaticText* m_TextSceneEditor;
 		wxStaticText* m_TextEffectEditor;
-		wxStaticText* m_TextCinematicEditor;
-		wxStaticText* m_TextCharacterEditor;
 	
 	public:
-		wxBitmapButton* m_ButtonGetAssets;
 		wxBitmapButton* m_ButtonRunGame;
-		wxBitmapButton* m_ButtonLive;
 		wxBitmapButton* m_ButtonAssetEditor;
 		wxBitmapButton* m_ButtonSceneEditor;
-		wxBitmapButton* m_ButtonAnimationEventsEditor;
-		wxBitmapButton* m_ButtonCinematicEventsEditor;
-		wxBitmapButton* m_ButtonCharacterEditor;
 		EditorChooserInnerPanel( wxWindow* parent, wxWindowID id = ID_DEFAULT, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 250,440 ), long style = wxTAB_TRAVERSAL );
 		~EditorChooserInnerPanel();
 	

@@ -38,8 +38,6 @@ namespace Luna
   class TypeGrid;
   class NodeTypeOutliner;
   class RegionsPanel; 
-  class RemoteScene;
-  class RuntimeClassOutliner;
   class ScenesPanel;
   class View;
   class Zone;
@@ -57,7 +55,6 @@ namespace Luna
       SceneOutlinerState m_Hierarchy;
       SceneOutlinerState m_Types;
       SceneOutlinerState m_EntityAssetes;
-      SceneOutlinerState m_RuntimeClasses;
     };
 
     typedef std::map< Luna::Scene*, OutlinerStates > M_OutlinerStates;
@@ -106,9 +103,6 @@ namespace Luna
 
     // the outline of all entity nodes by class
     EntityAssetOutliner* m_EntityAssetOutline;
-
-    // the outline of all instance nodes by code class
-    RuntimeClassOutliner* m_RuntimeClassOutline;
 
     wxNotebook* m_LayersNotebook;
 
@@ -159,11 +153,6 @@ namespace Luna
     //context items ordered by name  
     V_HierarchyNodeDumbPtr m_OrderedContextItems;
 
-    // do we currently have viewer control?
-    bool m_HasViewerControl;
-
-    RemoteScene* m_RemoteScene;
-
     TreeMonitor m_TreeMonitor;
     TreeSortTimer m_TreeSortTimer;
 
@@ -190,15 +179,7 @@ namespace Luna
 
     virtual DocumentManager* GetDocumentManager() NOC_OVERRIDE;
 
-    virtual void TakeViewerControl();
-    virtual void ReleaseViewerControl();
-
     void SyncPropertyThread();
-
-    RemoteScene* GetRemoteScene() const
-    {
-      return m_RemoteScene;
-    }
 
     TreeMonitor& GetTreeMonitor()
     {
@@ -335,11 +316,6 @@ namespace Luna
       return &m_SceneManager;
     }
 
-    RemoteScene* GetRemoteScene()
-    {
-      return m_RemoteScene;
-    }
-
     bool Copy( Luna::Scene* scene );
     bool Paste( Luna::Scene* scene );
     void Render( RenderVisitor* render );
@@ -384,7 +360,6 @@ namespace Luna
     void AddDrawer( Drawer* drawer );
     void SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  u32& numMenuItems );
     bool SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* entityMenu, u32& numMenuItems );
-    bool SetupInstanceTypeMenus( const Luna::InstanceType* instance, wxMenu* instanceMenu, u32& numMenuItems );
 
     static bool SortContextItemsByName( Luna::SceneNode* lhs, Luna::SceneNode* rhs ); 
     static bool SortTypeItemsByName( Luna::SceneNodeType* lhs, Luna::SceneNodeType* rhs );

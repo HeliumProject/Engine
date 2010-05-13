@@ -112,7 +112,6 @@ namespace TextureProcess
   class Bank
   {
   private:
-    Symbol::Enum* m_Enum;
 
     DefinitionSignature::Event m_ProcessDefinition;
     PostLoadSignature::Event m_PostLoad;
@@ -166,7 +165,7 @@ namespace TextureProcess
     //  Performs default processing of textures in global texture array
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool Pack( Symbol::Enum* hpEnum = NULL );
+    bool Pack();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //

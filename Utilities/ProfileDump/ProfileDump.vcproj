@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw28d.lib"
+				AdditionalDependencies="wxmsw28d_core.lib wxbase28d.lib comctl32.lib rpcrt4.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_lib"
@@ -143,7 +143,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw28.lib"
+				AdditionalDependencies="wxmsw28_core.lib wxbase28.lib comctl32.lib rpcrt4.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_lib"

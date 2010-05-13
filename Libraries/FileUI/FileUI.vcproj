@@ -200,6 +200,14 @@
 			ReferencedProjectIdentifier="{9270A244-6F23-48F9-9382-0CCBADBDC0EE}"
 			RelativePathToProject=".\libraries\Perforce\perforce.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{122FA330-2209-4BF0-A359-9C0C113369E2}"
+			RelativePathToProject=".\libraries\File\File.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
+			RelativePathToProject=".\SDK\wxPropertyGrid\1.4.11\wxPropertyGrid.vcproj"
+		/>
 	</References>
 	<Files>
 		<File

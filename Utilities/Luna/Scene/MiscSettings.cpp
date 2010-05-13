@@ -7,7 +7,7 @@
 #include "Finder/LunaSpecs.h"
 #include "Math/Utils.h"
 
-#include "tinyxml/include/tinyxml.h"
+#include <tinyxml.h>
 
 using namespace Luna;
 

@@ -21,7 +21,6 @@
 #include "Common/Types.h"
 #include "Console/Console.h"
 #include "Profile/Profile.h"
-#include "Symbol/SymbolBuilder.h"
 
 using namespace Nocturnal;
 using namespace Asset;
@@ -137,39 +136,6 @@ namespace AssetBuilder
         enumToTextures[ definition->m_enum ].push_back( definition->m_texture_file );
       }
     }
-
-    if ( !m_TexturePackAsset->GetEnumName().empty() )
-    {
-      Symbol::SymbolBuilder* symbolBuilder = Symbol::SymbolBuilder::GetInstance();
-      std::string enumerationName = m_TexturePackAsset->GetEnumName();
-      if ( !enumerationName.empty() )
-      {
-        m_Enum = symbolBuilder->FindEnum( enumerationName );
-
-        if ( !m_Enum )
-        {
-          throw Nocturnal::Exception( "Enum '%s' does not exist in the current code branch. Does it need to be integrated from another branch?\n", enumerationName.c_str() );
-        }
-      }
-
-      for each ( const std::map< std::string, V_string >::value_type& val in enumToTextures )
-      {
-        const std::string& enumeration = val.first;
-        const V_string& textures = val.second;
-
-        if ( textures.size() > 1 )
-        {
-          std::stringstream str;
-          str << "Multiple textures use enumeration value '" << enumeration << "':\n";
-          for each ( const std::string& texture in textures )
-          {
-            str << texture << std::endl;
-          }
-
-          throw Nocturnal::Exception( str.str().c_str() );
-        }
-      }
-    }
   }
 
   AssetClass* TexturePack::GetAssetClass()
@@ -205,19 +171,6 @@ namespace AssetBuilder
       m_LeafInputFiles.push_back( new Dependencies::FileInfo( definition->m_texture_file, FinderSpecs::Shader::TEXTURE_FILE, Dependencies::ConfigFlags::LeafInput ) );
     }
 
-    Symbol::SymbolBuilder* symbolBuilder = Symbol::SymbolBuilder::GetInstance();
-
-    if ( m_Enum )
-    {
-      S_string files;
-      symbolBuilder->GatherDependencies( m_Enum, files );
-
-      for each ( const std::string& file in files )
-      {
-        m_LeafInputFiles.push_back( new Dependencies::FileInfo( file, FinderSpecs::Asset::CONTENT_FILE, Dependencies::ConfigFlags::LeafInput ) );
-      }
-    }
-
     Dependencies::Graph().RegisterInputs( m_OutputFiles, m_LeafInputFiles );
   }
 
@@ -232,11 +185,13 @@ namespace AssetBuilder
 
   void TexturePack::ProcessTexturePack()
   {
-    if ( !m_Bank.Pack( m_Enum ) )
+    if ( !m_Bank.Pack() )
     {
       throw Nocturnal::Exception( "Failed to pack textures!" );
     }
 
-    m_Bank.WriteOutputFiles( m_HeaderFilename, m_TexelFilename, m_DebugFilename );
+    // why did WriteOutputFiles go away?
+    NOC_ASSERT( 0 );
+    //m_Bank.WriteOutputFiles( m_HeaderFilename, m_TexelFilename, m_DebugFilename );
   }
 }

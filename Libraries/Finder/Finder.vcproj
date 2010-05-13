@@ -422,14 +422,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SymbolSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SymbolSpecs.h"
-				>
-			</File>
-			<File
 				RelativePath=".\TexturePackSpecs.cpp"
 				>
 			</File>

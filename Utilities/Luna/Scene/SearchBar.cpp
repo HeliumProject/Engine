@@ -52,7 +52,6 @@ SearchBar::SearchBar( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& po
   m_Results->ClearAll();
   m_Results->InsertColumn( ResultColumns::Name, "Name" );
   m_Results->InsertColumn( ResultColumns::EntityAsset, "Entity Class" );
-  m_Results->InsertColumn( ResultColumns::RuntimeClass, "Runtime Class" );
   m_Results->InsertColumn( ResultColumns::Zone, "Zone" );
   m_Results->InsertColumn( ResultColumns::Region, "Region" );
   m_Results->InsertColumn( ResultColumns::EngineType, "Engine Type" );
@@ -237,12 +236,6 @@ void SearchBar::SetupSearchCriteria( SearchBarTraverser& traverser )
         break;
       }
       
-      case SearchOptions::RuntimeClass:
-      {
-        traverser.AddSearchCriteria( new RuntimeClassNameCriteria( WildcardToRegex( searchText ) ) );
-        break;
-      }
-      
       default:
       {
         NOC_ASSERT( false );
@@ -390,8 +383,6 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
     std::string name = (*resultsItr)->GetName();
     std::string entityClassName = "";
     std::string entityClassPath = "";
-    std::string runtimeClassName = "";
-    std::string runtimeClassPath = "";
     std::string zone = "";
     std::string region = "";
     std::string engineType;
@@ -418,9 +409,6 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
           }
         }
       }
-      
-      runtimeClassPath = entity->GetRuntimeClassName();
-      runtimeClassName = runtimeClassPath;
     }
 
     Luna::Scene* scene = (*resultsItr)->GetScene();
@@ -465,12 +453,6 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
     entityClassNameListItem.SetId( id );
     entityClassNameListItem.SetColumn( ResultColumns::EntityAsset );
 
-    wxListItem runtimeClassNameListItem;
-    runtimeClassNameListItem.SetMask( wxLIST_MASK_TEXT );
-    runtimeClassNameListItem.SetText( runtimeClassName );
-    runtimeClassNameListItem.SetId( id );
-    runtimeClassNameListItem.SetColumn( ResultColumns::RuntimeClass );
-
     wxListItem zoneListItem;
     zoneListItem.SetMask( wxLIST_MASK_TEXT );
     zoneListItem.SetText( zone );
@@ -491,7 +473,6 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
     
     m_Results->InsertItem( nameListItem );
     m_Results->SetItem( entityClassNameListItem );
-    m_Results->SetItem( runtimeClassNameListItem );
     m_Results->SetItem( zoneListItem );
     m_Results->SetItem( regionListItem );
     m_Results->SetItem( engineTypeListItem );
@@ -568,18 +549,6 @@ bool EntityAssetIDCriteria::Validate( Luna::HierarchyNode* node )
 
   tuid nodeTuid = classSet->GetEntityAssetID();
   return ( nodeTuid == m_Value );
-}
-
-bool RuntimeClassNameCriteria::Validate( Luna::HierarchyNode* node )
-{
-  Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( node );
-  if ( !entity )
-  {
-    return false;
-  }
-  
-  boost::smatch matchResults;
-  return boost::regex_match( entity->GetRuntimeClassName(), matchResults, boost::regex( m_Value, boost::regex::icase ) );
 }
 
 bool EngineTypeCriteria::Validate( Luna::HierarchyNode* node )

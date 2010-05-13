@@ -11,8 +11,6 @@
 
 #include "Asset/EntityAsset.h"
 #include "Attribute/AttributeHandle.h"
-#include "Asset/UniqueGeometryAttribute.h"
-#include "Asset/CollisionAttribute.h"
 #include "Asset/ArtFileAttribute.h"
 #include "Content/ContentVersion.h"
 #include "File/Manager.h"
@@ -459,15 +457,6 @@ tuid ScenesPanel::PromptCreateZoneUniqueEntity( const std::string& zonePath )
     {
       Asset::EntityAssetPtr entityClass = new Asset::EntityAsset;
       entityClass->m_AssetClassID = File::GlobalManager().Open( entityPath );
-
-      Attribute::AttributeEditor< Asset::CollisionAttribute > col( entityClass );
-      col.Commit();
-
-      Attribute::AttributeEditor< Asset::UniqueGeometryAttribute > unique( entityClass );
-      unique.Commit();
-
-      Attribute::AttributeEditor< Asset::BakedLightingAttribute > baked( entityClass );
-      baked.Commit();
 
       std::string mayaFilePath = entityPath;
       FileSystem::StripExtension( mayaFilePath );

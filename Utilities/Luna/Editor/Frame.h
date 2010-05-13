@@ -31,9 +31,6 @@ namespace Luna
 
     virtual void SaveWindowState() = 0;
 
-    virtual void TakeViewerControl() {};
-    virtual void ReleaseViewerControl() {};
-
     void PostCommand( const Undo::CommandPtr& command );
 
     //

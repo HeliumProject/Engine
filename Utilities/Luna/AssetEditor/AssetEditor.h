@@ -86,8 +86,6 @@ namespace Luna
     Undo::CommandPtr RemoveAttributes( const S_AttributeSmartPtr& attributesToDelete );
 
   private:
-    virtual void TakeViewerControl() NOC_OVERRIDE;
-    virtual void ReleaseViewerControl() NOC_OVERRIDE;
     
     void ExpandSelectedAssets( bool expand );
 
@@ -146,16 +144,7 @@ namespace Luna
     void OnMoveUp( wxCommandEvent& args );
     void OnMoveDown( wxCommandEvent& args );
     void OnBuild( wxCommandEvent& args );
-    void OnView( wxCommandEvent& args );
     void OnExport( wxCommandEvent& args );
-    void OnSyncShaders( wxCommandEvent& args );
-    void OnUpdateSymbols( wxCommandEvent& args ); 
-    void OnAddAnimationSet( wxCommandEvent& args );
-    void OnAddAnimationGroup( wxCommandEvent& args );
-    void OnEditAnimationGroup( wxCommandEvent& args );
-    void OnAddAnimationClip( wxCommandEvent& args );
-    void OnAddClipToNewChain( wxCommandEvent& args );
-    void OnAddClipToExistingChain( wxCommandEvent& args );
     void OnFileOption( wxCommandEvent& args );
     void OnHelpIndex( wxCommandEvent& args );
     void OnHelpSearch( wxCommandEvent& args );

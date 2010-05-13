@@ -247,10 +247,8 @@ bool TextureProcess::Bank::CompressImages()
 //  Performs default processing of textures in global texture array
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool TextureProcess::Bank::Pack( Symbol::Enum* hpEnum )
+bool TextureProcess::Bank::Pack()
 {
-  m_Enum = hpEnum;
-
   // load the images, missing textures are written as default textures but
   // textures ommited for a given level are written as NULL entries in the
   // contents of the pack file.

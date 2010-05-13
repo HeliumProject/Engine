@@ -9,8 +9,6 @@
 #include "ZoneSelectorDialog.h"
 #include "RegionSelectorDialog.h"
 
-#include "Asset/Defaults.h"
-
 #include "Inspect/InspectInit.h"
 #include "InspectReflect/InspectReflectInit.h"
 #include "InspectReflect/ReflectInterpreter.h"
@@ -22,7 +20,6 @@
 #include "Dependencies/Dependencies.h"
 
 #include "Asset/AssetClass.h"
-#include "Asset/CinematicAsset.h"
 #include "Asset/LevelAsset.h"
 #include "Attribute/AttributeHandle.h"
 #include "Asset/WorldFileAttribute.h"
@@ -38,8 +35,6 @@
 #include "Common/InitializerStack.h"
 #include "Console/Console.h"
 #include "Debug/Exception.h"
-
-#include "igCore/igHeaders/DefaultAssets.h"
 
 using namespace AssetBuilder;
 using namespace Luna;

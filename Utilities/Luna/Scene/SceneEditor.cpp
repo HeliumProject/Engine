@@ -1,8 +1,6 @@
 #include "Precompile.h"
 #include "SceneEditor.h"
 
-#include "ClueCreateTool.h"
-#include "ControllerCreateTool.h"
 #include "CurveCreateTool.h"
 #include "CurveEditTool.h"
 #include "Drawer.h"
@@ -13,26 +11,16 @@
 #include "EntityCreateTool.h"
 #include "EntityType.h"
 #include "ExportOptionsDlg.h"
-#include "GameCameraCreateTool.h"
 #include "HierarchyNodeType.h"
 #include "HierarchyOutliner.h"
 #include "ImportOptionsDlg.h"
-#include "InstanceCodeSet.h"
 #include "Layer.h"
-#include "LightCreateTool.h"
-#include "LightingPanel.h"
-#include "LightingTool.h"
-#include "LiveLinkPanel.h"
 #include "LocatorCreateTool.h"
 #include "NavMeshCreateTool.h"
 #include "NodeTypeOutliner.h"
 #include "Point.h"
-#include "PostProcessingVolumeCreateTool.h"
 #include "RegionsPanel.h"
-#include "RemoteConstruct.h"
-#include "RemoteScene.h"
 #include "RotateManipulator.h"
-#include "RuntimeClassOutliner.h"
 #include "ScaleManipulator.h"
 #include "SceneCallbackData.h"
 #include "ScenePreferences.h"
@@ -67,8 +55,6 @@
 #include "Inspect/Control.h"
 #include "Inspect/ClipboardFileList.h"
 #include "Inspect/ClipboardDataObject.h"
-#include "Live/LiveManager.h"
-#include "Symbol/SymbolBuilder.h"
 #include "Task/Build.h"
 #include "UIToolKit/FileDialog.h"
 #include "UIToolKit/ImageManager.h"
@@ -77,22 +63,7 @@
 #include "Windows/Clipboard.h"
 #include "Windows/Process.h"
 
-#include "Content/PostEffectsColorCorrectionAttribute.h"
-#include "Content/PostEffectsLightScatteringAttribute.h"
-#include "Content/PostEffectsCurveControlAttribute.h"
-#include "Content/PostEffectsDepthOfFieldAttribute.h"
-#include "Content/PostEffectsFilmGrainAttribute.h"
-#include "Content/PostEffectsBloomAttribute.h"
-#include "Content/PostEffectsColorAttribute.h"
-#include "Content/PostEffectsFogAttribute.h"
-#include "Content/PostEffectsHDRAttribute.h"
-
-#include "LightScattering.h"
-
 #include "Content/Scene.h"
-
-#include "BuilderUtil/ColorPalette.h"
-#include "BuilderUtil/BuilderUtil.h"
 
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
@@ -331,7 +302,6 @@ SceneEditor::SceneEditor()
 , m_HierarchyOutline( NULL )
 , m_TypeOutline( NULL )
 , m_EntityAssetOutline( NULL )
-, m_RuntimeClassOutline( NULL )
 , m_FileMenu( NULL )
 , m_EditMenu( NULL )
 , m_ViewMenu( NULL )
@@ -352,8 +322,6 @@ SceneEditor::SceneEditor()
 , m_ToolsToolBar( NULL )
 , m_NavToolBar (NULL)
 , m_View( NULL )
-, m_HasViewerControl( false )
-, m_RemoteScene( new RemoteScene( this ) )
 , m_TreeMonitor( &m_SceneManager )
 , m_TreeSortTimer( &m_TreeMonitor )
 {
@@ -541,12 +509,6 @@ SceneEditor::SceneEditor()
       outlinerNotebook->AddPage( entityTree, "Entity Classes" );
       m_TreeMonitor.AddTree( entityTree );
 
-      // Runtime Classes
-      m_RuntimeClassOutline = new RuntimeClassOutliner( &m_SceneManager );
-      UIToolKit::SortTreeCtrl* codeTree = m_RuntimeClassOutline->InitTreeCtrl( outlinerNotebook, wxID_ANY );
-      codeTree->SetImageList( UIToolKit::GlobalImageManager().GetGuiImageList() );
-      outlinerNotebook->AddPage( codeTree, "Runtime Classes" );
-      m_TreeMonitor.AddTree( codeTree );
 #endif
     }
 
@@ -597,24 +559,9 @@ SceneEditor::SceneEditor()
       m_LayersNotebook->AddPage( newGridPtr->GetPanel(), wxT("General"), true);
       m_LayerGrids.push_back(newGridPtr);
     }
-
-    // Lighting layers
-    {
-      LayerGridPtr newGridPtr      = new LightingLayerGrid( m_LayersNotebook, &m_SceneManager);
-      m_LayersNotebook->AddPage( newGridPtr->GetPanel(), wxT("Lighting"), false );
-      m_LayerGrids.push_back(newGridPtr);
-    }
   }
   m_FrameManager.AddPane( m_LayersNotebook, wxAuiPaneInfo().Name(wxT("layers")).Caption(wxT("Layers")).Right().Layer(1).Position(1) );
   
-  // Lighting panel
-  LightingPanel* lightingPanel = new LightingPanel( this );
-  m_FrameManager.AddPane( lightingPanel, wxAuiPaneInfo().Name( "lighting" ).Caption( "Lighting" ).Hide().Float().FloatingPosition( 0, 0 ).FloatingSize( 600, 430 ) );
-
-  // Simulation panel
-  LiveLinkPanel* simulationPanel = new LiveLinkPanel( this );
-  m_FrameManager.AddPane( simulationPanel, wxAuiPaneInfo().Name( "live link" ).Caption( "Live Link" ).Right().Layer(1).Position(1));
-
   // Search bar
   SearchBar* searchBar = new SearchBar( this );
   m_FrameManager.AddPane( searchBar, wxAuiPaneInfo().Name( "search bar" ).Caption( "Search" ).Right().Layer(1).Position(2));
@@ -1003,20 +950,6 @@ SceneEditor::~SceneEditor()
   SceneEditorPreferences()->SavePreferences();
 
   //
-  // Close connections
-  //
-
-  RemoteConstruct::Cleanup();
-
-  if ( m_HasViewerControl )
-  {
-    SessionManager::GetInstance()->GiveViewerControl( NULL );
-  }
-
-  delete m_RemoteScene;
-
-
-  //
   // Detach event handlers
   //
 
@@ -1039,7 +972,6 @@ SceneEditor::~SceneEditor()
   delete m_TypeOutline;
   delete m_HierarchyOutline;
   delete m_EntityAssetOutline;
-  delete m_RuntimeClassOutline;
 
   //Clean up all of our layer grids
   m_LayerGrids.clear();
@@ -1981,7 +1913,6 @@ void SceneEditor::OnExportToObj(wxCommandEvent& event)
 // 
 void SceneEditor::OnClose(wxCommandEvent& event)
 {
-  ReleaseViewerControl();
   m_SceneManager.CloseAll();
 }
 
@@ -2608,13 +2539,6 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
       }
       break;
 
-    case SceneEditorIDs::ID_ToolsClueCreate:
-      {
-        m_SceneManager.GetCurrentScene()->SetTool(new Luna::ClueCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
-        m_Properties->SetSelection(m_ToolPropertyPage);
-      }
-      break;
-
 #if LUNA_GAME_CAMERA
     case SceneEditorIDs::ID_ToolsGameCameraCreate:
       {
@@ -2623,13 +2547,6 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
       }
       break;
 #endif
-
-    case SceneEditorIDs::ID_ToolsControllerCreate:
-      {
-        m_SceneManager.GetCurrentScene()->SetTool(new Luna::ControllerCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
-        m_Properties->SetSelection(m_ToolPropertyPage);
-      }
-      break;
 
     case SceneEditorIDs::ID_ToolsLocatorCreate:
       {
@@ -2658,67 +2575,6 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
         m_SceneManager.GetCurrentScene()->SetTool( curveEditTool );
         curveEditTool->StoreSelectedCurves();
         m_Properties->SetSelection(m_ToolPropertyPage);
-      }
-      break;
-
-    case SceneEditorIDs::ID_ToolsLightCreate:
-      {
-        m_SceneManager.GetCurrentScene()->SetTool(new Luna::LightCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
-        m_Properties->SetSelection(m_ToolPropertyPage);
-      }
-      break;
-
-    case SceneEditorIDs::ID_ToolsLighting:
-      {
-        m_SceneManager.GetCurrentScene()->SetTool(new Luna::LightingTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
-        m_Properties->SetSelection(m_ToolPropertyPage);
-      }
-      break;
-
-    case SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate:
-      {
-        m_SceneManager.GetCurrentScene()->SetTool(new Luna::PostProcessingVolumeCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
-        m_Properties->SetSelection(m_ToolPropertyPage);
-      }
-      break;
-
-    case SceneEditorIDs::ID_ToolsPostProcessingVolumeScript:
-      {
-        GeneratePostProcessingVolumeScript();
-      }
-      break;
-
-    case SceneEditorIDs::ID_ToolsLightingLayerCreate:
-      {
-        wxCommandEvent  event(wxEVT_COMMAND_MENU_SELECTED, LayerGrid::ID_NewLayerFromSelection);
-        LayerGridPtr&   lightingLayerGridPtr  = m_LayerGrids[Content::LayerTypes::LT_Lighting];
-        wxToolBar*      toolBar               = lightingLayerGridPtr->GetToolBar();
-
-        m_LayersNotebook->SetSelection(Content::LayerTypes::LT_Lighting);
-        event.SetEventObject(toolBar);
-        toolBar->GetEventHandler()->ProcessEvent(event);
-       
-        //Update light links on the remote target
-        m_RemoteScene->SendLightingVolumes();
-      }
-      break;
-
-    case SceneEditorIDs::ID_ToolsLightingLayerUnlink:
-      {
-        LayerGridPtr&   lightingLayerGridPtr = m_LayerGrids[Content::LayerTypes::LT_Lighting];
-        m_LayersNotebook->SetSelection(Content::LayerTypes::LT_Lighting);
-        lightingLayerGridPtr->UnlinkSelectedElements();
-        
-        //Update light links on the remote target
-        m_RemoteScene->SendLightingVolumes();
-      }
-      break;
-
-    case SceneEditorIDs::ID_ToolsLightingLayerSelect:
-      {
-        LayerGridPtr&   lightingLayerGridPtr = m_LayerGrids[Content::LayerTypes::LT_Lighting];
-        m_LayersNotebook->SetSelection(Content::LayerTypes::LT_Lighting);
-        lightingLayerGridPtr->SelectLinkedElements();
       }
       break;
 
@@ -3029,89 +2885,9 @@ void SceneEditor::OnUtilitySelected(wxCommandEvent& event)
   {
     switch (event.GetId())
     {
-    case SceneEditorIDs::ID_UtilitiesConstruction:
-      {
-        if ( m_SceneManager.GetCurrentScene()->IsEditable() )
-        {
-          // try to connect if necessary, and if connected try to create the proxy scene.
-          if( RemoteConstruct::EstablishConnection() )
-          {
-            Luna::Scene* scene = GetSceneManager()->GetCurrentScene();
-            if (scene == NULL)
-            {
-              break;
-            }
-
-            RemoteConstruct::g_ConstructionTool->BeginScene();
-
-            OS_SelectableDumbPtr::Iterator itr = scene->GetSelection().GetItems().Begin();
-            OS_SelectableDumbPtr::Iterator end = scene->GetSelection().GetItems().End();
-            S_tuid uniqueUfragArtFiles;
-
-            int ItemToSendCount = (int)scene->GetSelection().GetItems().Size();
-            int SentItemCount = 1;
-
-            wxProgressDialog dialog ("Sending content from Luna...", "Initializing", ItemToSendCount, this, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_APP_MODAL );
-            dialog.Show(true);
-            bool abortSend = false;
-
-            for ( ; itr != end; ++itr )
-            {
-              char displayMessage[100];
-              _snprintf( displayMessage, sizeof(displayMessage), "Sending %d of %d", SentItemCount, ItemToSendCount );
-              displayMessage[ sizeof(displayMessage) - 1] = 0; 
-
-              abortSend = !(dialog.Update( SentItemCount++, displayMessage ));
-
-              if( abortSend )
-              {
-                dialog.Show(false);
-                break;
-              }
-
-              Luna::Entity* entity = Reflect::ObjectCast<Luna::Entity>( *itr );
-
-              if (entity)
-              {
-                bool createProxy = true;
-                if( entity->GetClassSet()->GetEntityAsset()->GetEngineType() == Asset::EngineTypes::Ufrag )
-                {
-                  Attribute::AttributeViewer< Asset::ArtFileAttribute > model( entity->GetClassSet()->GetEntityAsset() );
-                  createProxy = uniqueUfragArtFiles.insert( model->GetFileID() ).second;
-                }
-
-                if( createProxy )
-                {
-                  tuid assetClass = entity->GetClassSet()->GetEntityAssetID();
-                  RPC::CreateInstanceParam param;
-                  {
-                    param.m_ID = entity->GetID();
-                    param.m_EntityAsset = assetClass;
-                    strncpy(param.m_Name.Characters, entity->GetName().c_str(), RPC_STRING_MAX);
-                    param.m_Name.Characters[ RPC_STRING_MAX-1 ] = 0; 
-                    memcpy(&param.m_Transform, &entity->GetGlobalTransform(), sizeof(Math::Matrix4));
-                  }
-                  RemoteConstruct::g_ConstructionTool->CreateProxy(&param);
-                }
-              }
-            }
-            RemoteConstruct::g_ConstructionTool->EndScene();
-          }
-        }
-      }
-      break;
-
     case SceneEditorIDs::ID_UtilitiesMeasureDistance:
       {
         m_SceneManager.GetCurrentScene()->MeasureDistance();
-      }
-      break;
-
-    case SceneEditorIDs::ID_UtilitiesFlushSymbols:
-      {
-        Symbol::SymbolBuilder::GetInstance()->Reset();
-
-        m_SceneManager.GetCurrentScene()->GetSelection().Refresh();
       }
       break;
 
@@ -3145,52 +2921,6 @@ void SceneEditor::OnUtilitySelected(wxCommandEvent& event)
             wxMessageBox( errorString.c_str(), "You must have a zone with NavMesh data", wxOK|wxCENTRE|wxICON_ERROR, this );
             break;
           }
-          S_ZoneDumbPtr::const_iterator zoneItr = zones.begin();
-          S_ZoneDumbPtr::const_iterator zoneEnd = zones.end();
-          for (; zoneItr!=zoneEnd; ++zoneItr)
-          {
-            Zone* zone = *zoneItr;
-            Luna::Scene* zone_scene = m_SceneManager.GetScene( zone->GetPath() );
-            if ( zone_scene )
-            { 
-              // Export the rest of the dependency nodes
-              HM_SceneNodeDumbPtr scene_nodes = zone_scene->GetNodes();
-              HM_SceneNodeDumbPtr::const_iterator itr = scene_nodes.begin();
-              for ( ; itr != scene_nodes.end(); ++itr )
-              {
-                const Luna::Entity* entity = Reflect::ConstObjectCast<Luna::Entity> (itr->second);
-                if (entity)
-                {
-                  const Luna::Scene* nav_scene= entity->GetNestedScene( GeometryModes::Pathfinding, false);
-                  if (nav_scene)
-                  {
-                    HM_SceneNodeDumbPtr nav_scene_nodes = nav_scene->GetNodes();
-                    HM_SceneNodeDumbPtr::const_iterator nav_scene_nodes_itr = nav_scene_nodes.begin();
-                    for ( ; nav_scene_nodes_itr != nav_scene_nodes.end(); ++nav_scene_nodes_itr )
-                    {
-                      const Luna::Mesh* luna_mesh = Reflect::ConstObjectCast<Luna::Mesh>( nav_scene_nodes_itr->second );
-                      if (luna_mesh)
-                      {
-                        const Content::Mesh* content_mesh = luna_mesh->GetPackage< Content::Mesh >();
-                        if (content_mesh)
-                        {
-                          if (content_mesh->GetExportTypeIndex(Content::ContentTypes::Pathfinding) > -1)
-                          {
-                            content_hi_res_nav->CopyLegacyMeshDataForNav(content_mesh, 0.001f);
-                          }
-                          else
-                          {
-                            NOC_ASSERT(content_mesh->GetExportTypeIndex(Content::ContentTypes::LowResPathfinding) > -1);
-                            content_low_res_nav->CopyLegacyMeshDataForNav(content_mesh, 0.001f);
-                          }//f (content_mesh->m_ExportTypeIndex[ Content::ContentTypes::HighResCollision ])
-                        }//if (content_mesh)
-                      }//if (luna_mesh)
-                    }//for ( ; nav_scene_nodes_itr != nav_scene_nodes_end; ++nav_scene_nodes_itr )
-                  }//if (nav_scene)
-                }//if (entity)
-              }//for ( ; itr != end; ++itr )
-            }//if ( scene )
-          }//  for (; zoneItr!=zoneEnd; ++zoneItr)
 
           //now add content_hi_res_nav & content_low_res_nav to luna_nav_zone_ptr
           {
@@ -4033,7 +3763,6 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
   m_HierarchyOutline->SaveState( stateInfo->m_Hierarchy );
   m_TypeOutline->SaveState( stateInfo->m_Types );
   m_EntityAssetOutline->SaveState( stateInfo->m_EntityAssetes );
-  m_RuntimeClassOutline->SaveState( stateInfo->m_RuntimeClasses );
 #endif
 
   // Clear the selection attribute canvas
@@ -4104,7 +3833,6 @@ void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
       m_HierarchyOutline->RestoreState( stateInfo->m_Hierarchy );
       m_TypeOutline->RestoreState( stateInfo->m_Types );
       m_EntityAssetOutline->RestoreState( stateInfo->m_EntityAssetes );
-      m_RuntimeClassOutline->RestoreState( stateInfo->m_RuntimeClasses );
 #endif
     }
 
@@ -4238,20 +3966,6 @@ void SceneEditor::ViewToolChanged( const ToolChangeArgs& args )
     {
       selectedTool = SceneEditorIDs::ID_ToolsVolumeCreate;
     }
-    else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::ClueCreateTool>() )
-    {
-      selectedTool = SceneEditorIDs::ID_ToolsClueCreate;
-    }
-#if LUNA_GAME_CAMERA
-    else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::GameCameraCreateTool>() )
-    {
-      selectedTool = SceneEditorIDs::ID_ToolsGameCameraCreate;
-    }
-#endif
-    else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::ControllerCreateTool>() )
-    {
-      selectedTool = SceneEditorIDs::ID_ToolsControllerCreate;
-    }
     else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::LocatorCreateTool>() )
     {
       selectedTool = SceneEditorIDs::ID_ToolsLocatorCreate;
@@ -4267,18 +3981,6 @@ void SceneEditor::ViewToolChanged( const ToolChangeArgs& args )
     else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::CurveEditTool>() )
     {
       selectedTool = SceneEditorIDs::ID_ToolsCurveEdit;
-    }
-    else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::LightCreateTool>() )
-    {
-      selectedTool = SceneEditorIDs::ID_ToolsLightCreate;
-    }
-    else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::LightingTool>() )
-    {
-      selectedTool = SceneEditorIDs::ID_ToolsLighting;
-    }
-    else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::PostProcessingVolumeCreateTool>() )
-    {
-      selectedTool = SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate;
     }
     else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
     {
@@ -4575,12 +4277,6 @@ void SceneEditor::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sce
             }
           }
         }
-
-        if (instance)
-        {
-          // set up for entity types
-          SetupInstanceTypeMenus( instance, subMenu, numMenuItems );
-        }
       }
       contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, type->GetName().c_str(), subMenu );
       ++numMenuItems;
@@ -4639,51 +4335,6 @@ bool SceneEditor::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* 
   return false;
 }
 
-bool SceneEditor::SetupInstanceTypeMenus( const Luna::InstanceType* instance, wxMenu* subMenu, u32& numMenuItems )
-{
-  const M_InstanceSetSmartPtr& sets = instance->GetSets();
-
-  if( !sets.empty() )
-  {
-    bool added = false;
-
-    wxMenu* menu = new wxMenu;
-
-    M_InstanceSetSmartPtr::const_iterator itr = sets.begin();
-    M_InstanceSetSmartPtr::const_iterator end = sets.end();
-    for( ; itr != end; ++itr )
-    {
-      const Luna::InstanceCodeSet* code = Reflect::ObjectCast<Luna::InstanceCodeSet>( itr->second );
-      if (code && !code->GetName().empty())
-      {
-        ContextCallbackData* data = new ContextCallbackData;
-        data->m_ContextCallbackType = ContextCallbackTypes::Instance;
-        data->m_InstanceSet = code;
-
-        GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::OnTypeContextMenu ), data, this );
-        menu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, code->GetName().c_str() );
-        ++numMenuItems;
-        added = true;
-      }
-    }
-
-    if (added)
-    {
-      subMenu->AppendSeparator();
-      subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, "Select All With Code Class", menu );
-      ++numMenuItems;
-    }
-    else
-    {
-      delete menu;
-    }
-
-    return added;
-  }
-
-  return false;
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // Static function used to sort context items by name
 bool SceneEditor::SortContextItemsByName( Luna::SceneNode* lhs, Luna::SceneNode* rhs )
@@ -4715,23 +4366,6 @@ DocumentManager* SceneEditor::GetDocumentManager()
   return &m_SceneManager;
 }
 
-void SceneEditor::TakeViewerControl()
-{
-  m_HasViewerControl = true;
-
-  m_RemoteScene->Enable( true );
-  m_RemoteScene->ResetScene();
-
-  Manager::GetInstance()->PerformAutoStart();
-}
-
-void SceneEditor::ReleaseViewerControl()
-{
-  m_HasViewerControl = false;
-
-  m_RemoteScene->Enable( false );
-}
-
 void SceneEditor::SyncPropertyThread()
 {
   while ( m_SelectionPropertiesManager->ThreadsActive() )
@@ -4742,15 +4376,6 @@ void SceneEditor::SyncPropertyThread()
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //
-LightingLayerGrid*  SceneEditor::GetLightingLayerGrid()
-{
-  if(m_LayerGrids.size() > Content::LayerTypes::LT_Lighting)
-  {
-    return (LightingLayerGrid*)m_LayerGrids[Content::LayerTypes::LT_Lighting].Ptr();
-  }
-
-  return NULL;
-}
 
 LayerGrid*          SceneEditor::GetLayerGridByType(Content::LayerType lType)
 {
@@ -4772,359 +4397,4 @@ Content::LayerType  SceneEditor::GetCurrentLayerGridType()
   }
 
   return (Content::LayerType)index;
-}
-
-void  SceneEditor::GeneratePostProcessingVolumeScript()
-{
-  Luna::Scene*  currentScene = m_SceneManager.GetCurrentScene();
-  std::string   scriptVolume;
-  std::string   scriptString = "--Empty--";
-  std::string   scriptError;
-
-  if(currentScene != NULL)
-  {
-    OS_SelectableDumbPtr            selectionSet  = currentScene->GetSelection().GetItems();
-    OS_SelectableDumbPtr::Iterator  selectionItr  = selectionSet.Begin();
-    OS_SelectableDumbPtr::Iterator  selectionEnd  = selectionSet.End();
-    std::stringstream               script;
-
-    const u32                       c_entriesPerRow = 16;
-    const u32                       c_rowCount      = 512/c_entriesPerRow;
-    u32                             palette[512];
-
-    for ( ; selectionItr != selectionEnd; ++selectionItr )
-    {
-      Selectable*                 selectable  = (*selectionItr);
-      Luna::PostProcessingVolume* volume      = Reflect::ObjectCast< Luna::PostProcessingVolume >( selectable );
-      if(volume  != NULL)
-      {
-        Content::PostProcessingVolume*  contentPostProcVol = volume->GetPackage<Content::PostProcessingVolume>();
-
-        scriptVolume  = volume->GetName();
-
-        script <<      "--///////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
-        script <<      "function post_processing_volume_script( transition_time ) prt( \"post_processing_volume_script\" )" << std::endl;
-        script <<      "	-- Script Volume Source: " <<    scriptVolume <<  "             --" << std::endl;
-        script << std::endl;
-
-        script <<      "	local post_effect_node                       =  pfx_create_node()  " << std::endl;
-        script <<      "	local post_effect_attack_timer               =  transition_time    " << std::endl;
-        script <<      "	local post_effect_sustain_timer              = 10.0                " << std::endl;
-        script <<      "	local post_effect_permanent_on_sustain_timer = true                " << std::endl;
-        script <<      "	local post_effect_decay_timer                =  2.0                " << std::endl; 
-        script <<      "	pfx_set_node_lifetime             (post_effect_node, post_effect_attack_timer, post_effect_sustain_timer, post_effect_decay_timer) " << std::endl;
-        script <<      "	pfx_set_node_permanent_on_sustain (post_effect_node, post_effect_permanent_on_sustain_timer)                                       " << std::endl;
-        script << std::endl;
-        script << std::endl;
-
-        //Color Correction palette
-        {
-          Attribute::AttributeViewer< Content::PostEffectsColorCorrectionAttribute > ccAttr( contentPostProcVol );
-   
-          if(ccAttr.Valid())
-          {
-            size_t weightsSize = ccAttr->m_DepthEffectWeight.size();
-            size_t colorSize   = ccAttr->m_DepthEffectColor.size();
-
-            //Check if we have any keyed values
-            if(weightsSize || colorSize)
-            {
-              script <<      "	-- Color Correction                                   --" << std::endl;
-
-              //We have a valid palette
-              ColorPalette::Palette::GeneratePalette(ccAttr->m_DepthEffectWeight, ccAttr->m_DepthEffectColor, ccAttr->m_CustomPalette, palette);
-
-              for(u32 rowIndex = 0, currentCCEntry = 0; rowIndex < c_rowCount; ++rowIndex)
-              {
-                if(rowIndex == 0)
-                {
-                  script <<      "	local varCCPaletteStr = string.char(";
-                }            
-                else
-                {
-                  script <<      "	varCCPaletteStr = varCCPaletteStr .. string.char(";
-                }  
-
-                for(u32 rowEntry = 0; rowEntry < c_entriesPerRow; ++rowEntry, ++currentCCEntry)
-                {         
-                  const u32  a  = (palette[currentCCEntry] >> 24) & 0xFF;
-                  const u32  r  = (palette[currentCCEntry] >> 16) & 0xFF;
-                  const u32  g  = (palette[currentCCEntry] >>  8) & 0xFF;
-                  const u32  b  = (palette[currentCCEntry] >>  0) & 0xFF;
-
-                  script << a << ", " <<  r << ", " <<  g << ", " << b;
-
-                  if(rowEntry != c_entriesPerRow - 1)
-                  {
-                    script << ", "; 
-                  }
-                }
-                script << ")" << std::endl;
-              }
-              script << std::endl;
-              script << std::endl;
-              script <<      "	pfx_set_node_color_correction_palette (post_effect_node, varCCPaletteStr)                                             " << std::endl;
-              script << std::endl;
-            }
-          }
-        }
-
-        //Fog palette
-        {
-          Attribute::AttributeViewer< Content::PostEffectsFogAttribute > fogAttr( contentPostProcVol );
-   
-          if(fogAttr.Valid())
-          {
-            size_t weightsSize = fogAttr->m_Weight.size();
-            size_t colorSize   = fogAttr->m_Color.size();
-
-            //Check if we have any keyed values
-            if(weightsSize || colorSize)
-            {
-              script <<      "	-- Fog                                   --" << std::endl;
-
-              //We have a valid palette
-              ColorPalette::Palette::GeneratePalette(fogAttr->m_Weight, fogAttr->m_Color, fogAttr->m_CustomPalette, palette);
-
-              for(u32 rowIndex = 0, currentFogEntry = 0; rowIndex < c_rowCount; ++rowIndex)
-              {
-                if(rowIndex == 0)
-                {
-                  script <<      "	local varFogPaletteStr = string.char(";
-                }
-                else
-                {
-                  script <<      "	varFogPaletteStr = varFogPaletteStr .. string.char(";
-                }
-
-                for(u32 rowEntry = 0; rowEntry < c_entriesPerRow; ++rowEntry, ++currentFogEntry)
-                {         
-                  const u32  a  = (palette[currentFogEntry] >> 24) & 0xFF;
-                  const u32  r  = (palette[currentFogEntry] >> 16) & 0xFF;
-                  const u32  g  = (palette[currentFogEntry] >>  8) & 0xFF;
-                  const u32  b  = (palette[currentFogEntry] >>  0) & 0xFF;
-
-                  script << a << ", " <<  r << ", " <<  g << ", " << b;
-
-                  if(rowEntry != c_entriesPerRow - 1)
-                  {
-                    script << ", "; 
-                  }
-                }
-                script << ")" << std::endl;
-              }
-              script << std::endl;
-              script << std::endl;
-              script <<      "	pfx_set_node_fog_palette          (post_effect_node, varFogPaletteStr)                                              " << std::endl;
-              script << std::endl;
-            }
-          }
-        }
-
-        {
-          //Curve Control
-          Attribute::AttributeViewer< Content::PostEffectsCurveControlAttribute > ccAttr( contentPostProcVol );
-
-          if(ccAttr.Valid())
-          {
-            //Try generating a palette
-            bool result = BuilderUtil::GenerateACVPalette(ccAttr->m_CurveId, ccAttr->m_CurveId_CRT, palette);
-
-            // Verify the palette
-            if(result == true)
-            {
-              script <<      "	-- Curve Control                                   --" << std::endl;
-
-              for(u32 rowIndex = 0, currentCurveControlEntry = 0; rowIndex < c_rowCount; ++rowIndex)
-              {
-                if(rowIndex == 0)
-                {
-                  script <<      "	local varCurveControlPaletteStr = string.char(";
-                }
-                else
-                {
-                  script <<      "	varCurveControlPaletteStr = varCurveControlPaletteStr .. string.char(";
-                }
-
-                const u32  a  =                                             0xFF;
-
-                for(u32 rowEntry = 0; rowEntry < c_entriesPerRow; ++rowEntry, ++currentCurveControlEntry)
-                {         
-                  const u32  r  = (palette[currentCurveControlEntry] >> 16) & 0xFF;
-                  const u32  g  = (palette[currentCurveControlEntry] >>  8) & 0xFF;
-                  const u32  b  = (palette[currentCurveControlEntry] >>  0) & 0xFF;
-
-                  script << a << ", " <<  r << ", " <<  g << ", " << b;
-
-                  if(rowEntry != c_entriesPerRow - 1)
-                  {
-                    script << ", "; 
-                  }
-                }
-                script << ")" << std::endl;
-              }
-              script << std::endl;
-              script << std::endl;
-              script <<      "	pfx_set_node_curve_control_palette          (post_effect_node, varCurveControlPaletteStr)                                              " << std::endl;
-              script << std::endl;
-            }            
-          }
-        }
-
-        {
-          //Depth of field
-          Attribute::AttributeViewer< Content::PostEffectsDepthOfFieldAttribute > dofAttr( contentPostProcVol );
-
-          if(dofAttr.Valid())
-          {
-            script << std::endl;
-            script <<      "	--Depth Of Field                                   --" << std::endl;
-   
-            script <<      "	local dof_near_start_dist            =  0.0                                                                      " << std::endl;
-            script <<      "	local dof_near_end_dist              =  0.0                                                                      " << std::endl;
-            script <<      "	local dof_near_max_blur              =  0.0                                                                      " << std::endl;
-
-            script <<      "	local dof_far_start_dist             =  " <<   dofAttr->m_FarStartDistance                                           << std::endl;
-            script <<      "	local dof_far_end_dist               =  " <<   dofAttr->m_FarEndDistance                                             << std::endl;
-            script <<      "	local dof_far_max_blur               =  " <<   dofAttr->m_FarMaxBlur                                                 << std::endl;
-            script <<      "	pfx_set_node_depth_of_field       (post_effect_node, dof_near_start_dist, dof_near_end_dist, dof_near_max_blur, dof_far_start_dist, dof_far_end_dist, dof_far_max_blur)" << std::endl;
-          }
-        }
-
-        {
-          //Bloom
-          Attribute::AttributeViewer< Content::PostEffectsBloomAttribute > bloomAttr( contentPostProcVol );
-
-          if(bloomAttr.Valid())
-          {
-            script << std::endl;
-            script <<      "	--Bloom                                   --" << std::endl;
-            script <<      "	local bloom_prescale                   =  " <<   bloomAttr->m_Prescale                                                << std::endl;
-            script <<      "	local bloom_exponent                   =  " <<   bloomAttr->m_Exponent                                                << std::endl;
-            script <<      "	local bloom_distribution               =  " <<   bloomAttr->m_Distribution                                            << std::endl;
-            script <<      "	local bloom_persistance                =  " <<   bloomAttr->m_Persistance                                             << std::endl;
-            script <<      "	local bloom_comp_weight                =  " <<   bloomAttr->m_CompositeWeight                                         << std::endl;
-            script <<      "	pfx_set_node_bloom                (post_effect_node, bloom_prescale, bloom_exponent, bloom_distribution, bloom_persistance, bloom_comp_weight)" << std::endl;
-          }
-        }
-
-        {
-          //Tint
-          Attribute::AttributeViewer< Content::PostEffectsColorAttribute > tintAttr( contentPostProcVol );
-
-          if(tintAttr.Valid())
-          {
-            f32 r, g, b;
-            tintAttr->m_Tint.Get(r, g, b);
-
-            script << std::endl;
-            script <<      "	--Tint/Brightness/Saturation                                   --" << std::endl;
-            script <<      "	local tint_red                        =  " <<   SrgbToLinear(r)                                                << std::endl;
-            script <<      "	local tint_green                      =  " <<   SrgbToLinear(g)                                                << std::endl;
-            script <<      "	local tint_blue                       =  " <<   SrgbToLinear(b)                                                << std::endl;
-            script <<      "	local tint_saturation                 =  " <<   tintAttr->m_Saturation                                         << std::endl;
-            script <<      "	local tint_brightness                 =  " <<   tintAttr->m_Brightness                                         << std::endl;
-
-            script <<      "	pfx_set_node_tint                 (post_effect_node, tint_red, tint_green, tint_blue)                         " << std::endl;
-            script <<      "	pfx_set_node_brightness           (post_effect_node, tint_brightness)                                         " << std::endl;
-            script <<      "	pfx_set_node_saturation           (post_effect_node, tint_saturation)                                         " << std::endl;
-          }
-        }
-
-        {
-          //Film grain
-          Attribute::AttributeViewer< Content::PostEffectsFilmGrainAttribute > grainAttr( contentPostProcVol );
-
-          if(grainAttr.Valid())
-          {
-            script << std::endl;
-            script <<      "	--Film Grain                                   --" << std::endl;
-            script <<      "	local grain_intensity                  =  " <<   grainAttr->m_Intensity                               << std::endl;
-            script <<      "	local grain_size                       =  " <<   grainAttr->m_Size                                    << std::endl;
-
-            script <<      "	pfx_set_node_film_grain           (post_effect_node, grain_intensity, grain_size)                   " << std::endl;
-          }
-        }
-
-        {
-          //Light Scattering
-          Attribute::AttributeViewer< Content::PostEffectsLightScatteringAttribute > lightScatteringAttr( contentPostProcVol );
-
-          if(lightScatteringAttr.Valid())
-          {
-            f32 r, g, b;
-            lightScatteringAttr->m_Color.Get(r, g, b);
-
-            script << std::endl;
-            script <<      "	--Light Scattering                                --" << std::endl;
-            script <<      "	local lightScattering_dir_x                      =  0.0 -- dir_xyz set to zeros will use global sun direction"            << std::endl;
-            script <<      "	local lightScattering_dir_y                      =  0.0 -- dir_xyz set to zeros will use global sun direction"            << std::endl;
-            script <<      "	local lightScattering_dir_z                      =  0.0 -- dir_xyz set to zeros will use global sun direction"            << std::endl;
-            script <<      "	local lightScattering_red                        =  " <<   SrgbToLinear(r)                                                << std::endl;
-            script <<      "	local lightScattering_green                      =  " <<   SrgbToLinear(g)                                                << std::endl;
-            script <<      "	local lightScattering_blue                       =  " <<   SrgbToLinear(b)                                                << std::endl;
-            script <<      "	local lightScattering_intensity                  =  " <<   lightScatteringAttr->m_Intensity                               << std::endl;
-            script <<      "	local lightScattering_mieDir                     =  " <<   lightScatteringAttr->m_MieDirectional                          << std::endl;
-            script <<      "	local lightScattering_mieCoef                    =  " <<   lightScatteringAttr->m_MieCoefficient                          << std::endl;
-
-            script <<      "	pfx_set_node_light_scattering     (post_effect_node, lightScattering_dir_x, lightScattering_dir_y, lightScattering_dir_z, lightScattering_red, lightScattering_green, lightScattering_blue, lightScattering_intensity, lightScattering_mieDir, lightScattering_mieCoef)" << std::endl;
-          }
-          else
-          {
-            //Check for the new light scattering attribute
-            const Luna::LightScattering*  lightScatteringInst = volume->GetLightScatteringInstance();
-
-            if((lightScatteringInst != NULL) && lightScatteringInst->GetIsEnabled())
-            {
-              Math::Vector3   direction;
-              f32             r, g, b;
-
-              lightScatteringInst->GetColor().Get(r, g, b);
-              lightScatteringInst->GetDirection(direction);
-
-              script << std::endl;
-              script <<      "	--Light Scattering                                   --" << std::endl;
-              script <<      "	local lightScattering_dir_x                      =  " <<   direction.x << " -- setting dir_xyz to zeros will use global sun direction"  << std::endl;
-              script <<      "	local lightScattering_dir_y                      =  " <<   direction.y << " -- setting dir_xyz to zeros will use global sun direction"  << std::endl;
-              script <<      "	local lightScattering_dir_z                      =  " <<   direction.z << " -- setting dir_xyz to zeros will use global sun direction"  << std::endl;
-              script <<      "	local lightScattering_red                        =  " <<   SrgbToLinear(r)                                                              << std::endl;
-              script <<      "	local lightScattering_green                      =  " <<   SrgbToLinear(g)                                                              << std::endl;
-              script <<      "	local lightScattering_blue                       =  " <<   SrgbToLinear(b)                                                              << std::endl;
-              script <<      "	local lightScattering_intensity                  =  " <<   lightScatteringInst->GetIntensity()                                          << std::endl;
-              script <<      "	local lightScattering_mieDir                     =  " <<   lightScatteringInst->GetMieCoefficient()                                     << std::endl;
-              script <<      "	local lightScattering_mieCoef                    =  " <<   lightScatteringInst->GetMieDirectional()                                     << std::endl;
-
-              script <<      "	pfx_set_node_light_scattering     (post_effect_node, lightScattering_dir_x, lightScattering_dir_y, lightScattering_dir_z, lightScattering_red, lightScattering_green, lightScattering_blue, lightScattering_intensity, lightScattering_mieDir, lightScattering_mieCoef)" << std::endl;
-            }
-          }
-        }
-
-        {
-          //HDR
-          Attribute::AttributeViewer< Content::PostEffectsHDRAttribute > hdrAttr( contentPostProcVol );
-
-          if(hdrAttr.Valid())
-          {
-            script << std::endl;
-            script <<      "	--HDR                                   --" << std::endl;
-            script <<      "	local hdr_exposure                   =  " <<   hdrAttr->m_Exposure                                            << std::endl;
-            script <<      "	pfx_set_node_hdr                  (post_effect_node, hdr_exposure)"                                                   << std::endl;
-          }
-        }
-
-        script <<      "end"                                                                                               << std::endl;
-        script <<      "--///////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
-
-        scriptString  = script.str();
-        break;
-      }
-    }
-  }
-
-  if(scriptVolume.empty() == true)
-  {
-    Console::Warning("Failed to generate script: No Post-Processing volume was detected in the current selection set!\n");
-  }
-  
-  Windows::CopyToClipboard(GetHwnd(), scriptString, scriptError);
 }

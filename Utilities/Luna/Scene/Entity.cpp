@@ -3,7 +3,6 @@
 #include "EntityType.h"
 #include "EntityPanel.h"
 #include "EntityAssetSet.h"
-#include "InstanceCodeSet.h"
 
 #include "Scene.h"
 #include "SceneManager.h"
@@ -243,142 +242,6 @@ const Luna::EntityAssetSet* Entity::GetClassSet() const
 void Entity::SetClassSet(Luna::EntityAssetSet* classSet)
 {
   m_ClassSet = classSet;
-}
-
-void Entity::CheckSets()
-{
-  Asset::EntityPtr entity = GetPackage< Asset::Entity >();
-
-  Asset::EntityAssetPtr entityClass;
-  
-  try
-  {
-    entityClass = entity->GetEntityAsset();
-  }
-  catch ( const Nocturnal::Exception& ex )
-  {
-    Console::Warning( "%s\n", ex.what() );
-  }
-
-  if ( !entityClass && entity->GetEntityAssetID() != TUID::Null )
-  {
-    std::string path;
-
-    if ( !File::GlobalManager().GetPath( entity->GetEntityAssetID(), path ) )
-    {
-      std::stringstream str;
-      str << "Failed to load entity class for entity " << entity->GetName() << "." << std::endl;
-      str << "The entity class '" << TUID::HexFormat << entity->GetEntityAssetID() << "' has never existed.";
-      Console::Error( str.str().c_str() );
-    }
-    else
-    {
-      std::stringstream str;
-      str << "Failed to load entity class for entity " << entity->GetName() << "." << std::endl;
-      str << "The entity class '" << path.c_str() << "' has moved or been deleted." << std::endl;
-      Console::Error( str.str().c_str() );
-    }
-  }
-
-  std::ostringstream str;
-  str << TUID::HexFormat << entity->GetEntityAssetID();
-  std::string currentClassSet = entityClass.ReferencesObject() ? entityClass->GetFullName() : str.str();
-
-  Luna::EntityType* type = Reflect::AssertCast<Luna::EntityType>( m_NodeType );
-  if (type)
-  {
-    // find the set
-    M_InstanceSetSmartPtr::const_iterator found = type->GetSets().find(currentClassSet);
-
-    // if we found it, and it contains us, and we are using it
-    if (found != type->GetSets().end() && found->second->ContainsInstance(this) && m_ClassSet == found->second.Ptr())
-    {
-      // we are GTG
-      return;
-    }
-
-    // the set we are entering
-    Luna::EntityAssetSet* newClassSet = NULL;
-
-    // create new class object if it does not already exist
-    if (found == type->GetSets().end())
-    {
-      // create
-      newClassSet = new Luna::EntityAssetSet (type, entity->GetEntityAssetID());
-
-      // save
-      type->AddSet( newClassSet );
-    }
-    else
-    {
-      // existing
-      newClassSet = Reflect::AssertCast<Luna::EntityAssetSet>( found->second );
-    }
-
-    // check previous membership
-    if (m_ClassSet)
-    {
-      m_ClassSet->RemoveInstance(this);
-    }
-
-    // add to the new class collection
-    newClassSet->AddInstance(this);
-  }
-
-  // check code too
-  __super::CheckSets();
-}
-
-void Entity::ReleaseSets()
-{
-  m_ClassSet->RemoveInstance( this );
-
-  __super::ReleaseSets();
-}
-
-void Entity::FindSimilar(V_HierarchyNodeDumbPtr& similar) const
-{
-  if (m_ClassSet)
-  {
-    S_InstanceDumbPtr::const_iterator itr = m_ClassSet->GetInstances().begin();
-    S_InstanceDumbPtr::const_iterator end = m_ClassSet->GetInstances().end();
-    for ( ; itr != end; ++itr )
-    {
-      similar.push_back( *itr );
-    }
-  }
-}
-
-bool Entity::IsSimilar(const HierarchyNodePtr& node) const
-{
-  const Luna::Entity* entity = Reflect::ObjectCast<Luna::Entity>( node );
-  if ( entity && ( entity->m_ClassSet == m_ClassSet ) )
-  {
-    return true;
-  }
-
-  return false;
-}
-
-std::string Entity::GetDescription() const
-{
-  if (m_ClassSet)
-  {
-    std::string str = __super::GetDescription();
-
-    if (str.empty())
-    {
-      return m_ClassSet->GetName();
-    }
-    else
-    {
-      return m_ClassSet->GetName() + " (" + str + ")";
-    }
-  }
-  else
-  {
-    return __super::GetDescription();
-  }
 }
 
 void Entity::PopulateManifest( Asset::SceneManifest* manifest ) const
@@ -742,9 +605,5 @@ void Entity::OnAttributeAdded( const Attribute::AttributeCollectionChanged& args
 }
 
 void Entity::OnAttributeRemoved( const Attribute::AttributeCollectionChanged& args )
-{
-}
-
-void Entity::OnShaderGroupAttributeModified( const Reflect::ElementChangeArgs& args )
 {
 }

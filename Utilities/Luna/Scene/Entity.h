@@ -122,15 +122,6 @@ namespace Luna
     Luna::EntityAssetSet* GetClassSet();
     const Luna::EntityAssetSet* GetClassSet() const;
     void SetClassSet(Luna::EntityAssetSet* artClass);
-    virtual void CheckSets() NOC_OVERRIDE;
-    virtual void ReleaseSets() NOC_OVERRIDE;
-
-    // match by entity class
-    virtual void FindSimilar(V_HierarchyNodeDumbPtr& similar) const NOC_OVERRIDE;
-    virtual bool IsSimilar(const HierarchyNodePtr& node) const NOC_OVERRIDE;
-
-    // get some useful info
-    virtual std::string GetDescription() const;
 
     // gather some manifest data
     virtual void PopulateManifest( Asset::SceneManifest* manifest ) const NOC_OVERRIDE;
@@ -166,59 +157,7 @@ namespace Luna
     std::string GetEngineTypeName() const;
     void SetEngineTypeName( const std::string& type );
 
-
-    //
-    // Lighting UI
-    //
-
   public:
-    bool GetIndirectLightingEnabled() const;
-    void SetIndirectLightingEnabled( bool enabled );
-
-    i32 GetLightmapSetting() const;
-    void SetLightmapSetting( i32 setting );
-
-    float GetMaxIndirectDistance() const;
-    void  SetMaxIndirectDistance( float distance );
-
-    float GetIndirectMultiplier() const;
-    void  SetIndirectMultiplier( float multiplier );
-
-    Math::Color3 GetShadowColor() const;
-    void SetShadowColor( Math::Color3 color );
-
-    u32   GetRuntimeLM1Format() const;
-    void  SetRuntimeLM1Format( u32 format );
-
-    u32   GetRuntimeLM1Size() const;
-    void  SetRuntimeLM1Size( u32 size );
-
-    u32   GetRuntimeLM2Format() const;
-    void  SetRuntimeLM2Format( u32 format );
-
-    u32   GetRuntimeLM2Size() const;
-    void  SetRuntimeLM2Size( u32 size );
-
-    std::string GetCubeMapPath() const;
-    void SetCubeMapPath( const std::string& cubeMap );
-
-    f32 GetCubeMapIntensity() const;
-    void  SetCubeMapIntensity( f32 intensity );
-
-    bool IsSpecialized() const; 
-    void SetSpecialized(bool specialized ); 
-
-    f32 GetTexelsPerMeter() const;
-
-    //have to do this instead of use a default param, because of the Inspect template interfaces
-    void SetTexelsPerMeter( f32 tpm );
-    void SetTexelsPerMeterAndRuntime( f32 tpm, bool setRuntimeLM  );
-
-    bool GetSetRuntimeLightmap() const;
-    void SetSetRuntimeLightmap( bool set );
-
-    bool GetBiasNormals() const;
-    void SetBiasNormals( bool enabled );
 
     //
     // Callbacks
@@ -227,38 +166,10 @@ namespace Luna
     void OnInstanceCollisionAttributeModified( const Reflect::ElementChangeArgs& args );
     void OnAttributeAdded( const Attribute::AttributeCollectionChanged& args );
     void OnAttributeRemoved( const Attribute::AttributeCollectionChanged& args );
-    void OnShaderGroupAttributeModified( const Reflect::ElementChangeArgs& args );
-    void TweakShaderGroup();
 
     //
     // Events
     //
-  protected:
-    LightmapTweakSignature::Event m_LightmapTweaked;
-  public:
-    void AddLightmapTweakedListener( const LightmapTweakSignature::Delegate& listener )
-    {
-      m_LightmapTweaked.Add( listener );
-    }
-
-    void RemoveLightmapTweakedListener( const LightmapTweakSignature::Delegate& listener )
-    {
-      m_LightmapTweaked.Remove( listener );
-    }
-
-  protected:
-    CubemapTweakSignature::Event m_CubemapTweaked;
-  public:
-    void AddCubemapTweakedListener( const CubemapTweakSignature::Delegate& listener )
-    {
-      m_CubemapTweaked.Add( listener );
-    }
-
-    void RemoveCubemapTweakedListener( const CubemapTweakSignature::Delegate& listener )
-    {
-      m_CubemapTweaked.Remove( listener );
-    }
-
   protected:
     EntityAssetChangeSignature::Event m_ClassChanging;
   public:

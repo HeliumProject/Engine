@@ -202,10 +202,6 @@ namespace Luna
     bool GetSelectionHelperPhysicalLight() const;
     void SetSelectionHelperPhysicalLight( bool b );
 
-    bool GetUseStencilTexture() const;
-    void SetUseStencilTexture( bool b );
-    
-
     ///////////////////////////////////////////////////////////////////////////
     // Returns true if the attribute specified by the template parameter is in
     // this collection.

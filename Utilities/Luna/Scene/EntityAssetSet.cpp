@@ -5,7 +5,6 @@
 #include "SceneEditor.h"
 #include "Entity.h"
 #include "EntityType.h"
-#include "InstanceCodeSet.h"
 
 #include "Editor/SharedFileManager.h"
 #include "PrimitiveCube.h"

@@ -65,10 +65,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw28d.lib"
+				AdditionalDependencies="wxmsw28d_core.lib wxbase28d.lib comctl32.lib rpcrt4.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_lib"
+				AdditionalLibraryDirectories="&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(boost)\stage\lib&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/ProfileView.pdb"
@@ -147,10 +147,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw28.lib"
+				AdditionalDependencies="wxmsw28_core.lib wxbase28.lib comctl32.lib rpcrt4.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_lib"
+				AdditionalLibraryDirectories="&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(boost)\stage\lib&quot;"
 				IgnoreDefaultLibraryNames="wxbase28.lib;wxbase28_net.lib;wxbase28_xml.lib;wxmsw28_adv.lib;wxmsw28_core.lib;wxmsw28_html.lib;wxmsw28_xrc.lib;wxmsw28_aui.lib;wxmsw28_richtext.lib;wxmsw28_media.lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"

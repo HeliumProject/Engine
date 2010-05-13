@@ -31,15 +31,12 @@
 #include "AssetBuilder/AssetBuilder.h"
 #include "Asset/AssetInit.h"
 #include "Asset/AssetClass.h"
-#include "Asset/Defaults.h"
 
 #include "Worker/Client.h"
 #include "Worker/Process.h"
 #include "AppUtils/AppUtils.h"
 #include "Common/InitializerStack.h"
 #include "Content/ContentInit.h"
-
-#include "igCore/igHeaders/DefaultAssets.h"
 
 using namespace Asset;
 
@@ -209,7 +206,7 @@ void Except( const Nocturnal::Exception& ex, const Asset::AssetClassPtr& assetCl
     std::ostringstream subject;
     subject << project << " Error Report: " << Nocturnal::GetCmdLine();
     
-    Windows::SendMail( subject.str(), message.str() );
+//    Windows::SendMail( subject.str(), message.str() );
   }
 }
 
@@ -568,15 +565,6 @@ bool RunAsBuildWorker()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool BuildDefaultAssets(const V_string& options)
-{ 
-  S_tuid assetIds;
-  DefaultAssets::GetDefaultAssets( assetIds );
-
-  return Build( assetIds, options, false );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 int Main (int argc, const char** argv)
 {
   bool success = true;
@@ -618,7 +606,7 @@ int Main (int argc, const char** argv)
   if (g_Defaults)
   {
     Console::Bullet bullet ("Building default assets...\n");
-    success = BuildDefaultAssets(options);
+//    success = BuildDefaultAssets(options);
     return success ? 0 : 1;
   }
 

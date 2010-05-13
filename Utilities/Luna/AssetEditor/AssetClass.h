@@ -83,7 +83,6 @@ namespace Luna
     void UnregisterAssetReferenceNode( Luna::AssetReferenceNode* node );
     const S_AssetReferenceNodeDumbPtr& GetAssetReferenceNodes() const;
     void ManageShaderGroups( const ContextMenuArgsPtr& args );
-    void UpdateShaderUsages();
     Undo::CommandPtr AddAnimationSet( std::string& msg );
     virtual void Changed( Inspect::Control* control );
     virtual bool CanHandleClipboardData( const Inspect::ReflectClipboardDataPtr& data ) NOC_OVERRIDE;

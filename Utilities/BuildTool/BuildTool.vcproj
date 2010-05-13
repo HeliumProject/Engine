@@ -194,22 +194,6 @@
 			RelativePathToProject=".\libraries\Console\Console.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{843E1722-8716-4B10-987D-CA4EA2B89568}"
-			UseInBuild="false"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{4DD2B35A-C5A7-4A9A-B98F-090D0BB9EAF5}"
-			UseInBuild="false"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{9C640B5C-5432-46C0-8C7B-1003214293ED}"
-			UseInBuild="false"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{A141767E-CDB2-41A4-9489-A7F5030C70DE}"
-			UseInBuild="false"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
 			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
 		/>
@@ -218,28 +202,8 @@
 			RelativePathToProject=".\libraries\FileSystem\FileSystem.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{3EDB9930-BD25-4D88-A24D-4900A2299BD9}"
-			UseInBuild="false"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
 			RelativePathToProject=".\libraries\Profile\profile.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{EC9B88AA-51B0-4101-A5C5-F8FA31093FBD}"
-			UseInBuild="false"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{76EEFAA4-CE39-463F-B849-2DAB96898DC9}"
-			UseInBuild="false"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{ABFA7C3D-9826-4E60-9E0A-2AADE55C6FF2}"
-			UseInBuild="false"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{2295A9F9-93A2-41BC-8AC4-1A922F3C17F3}"
-			UseInBuild="false"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{51249970-F796-4344-B558-4147F3225C30}"
@@ -254,23 +218,8 @@
 			RelativePathToProject=".\libraries\TUID\TUID.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{8DD99293-7815-41D0-9081-CAEB32CE77F0}"
-			UseInBuild="false"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{7BC4441D-AE6C-4D3A-9C65-BF0DFD6BA13A}"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{072476F0-F19F-44E9-ABBD-4299805961D1}"
 			RelativePathToProject=".\libraries\IPC\ipc.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{69588D7E-1C35-41EE-8BB5-86E3CFB984BE}"
-			UseInBuild="false"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{564DF1E9-B020-4211-A22F-7E7176CBB545}"
-			UseInBuild="false"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
@@ -289,17 +238,9 @@
 			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{782EFAD6-C600-430B-B3F6-F0857E38BB57}"
-			UseInBuild="false"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{C60F64C2-876E-465B-8DCC-786C3A79B76A}"
 			UseInBuild="false"
 			RelativePathToProject=".\libraries\TexturePackBuilder\TexturePackBuilder.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{EB84BA1D-FA22-41F1-B8E6-7A981AA3EE43}"
-			UseInBuild="false"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"

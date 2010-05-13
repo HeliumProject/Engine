@@ -9,7 +9,6 @@
 #include "UIToolKit/ImageManager.h"
 
 #include "Console/Console.h"
-#include "Symbol/Inheritance.h"
 #include "Finder/ContentSpecs.h"
 #include "File/Manager.h"
 
@@ -50,16 +49,6 @@ void Instance::Pack()
 
 void Instance::Unpack()
 {
-  Content::InstancePtr instance = GetPackage<Content::Instance>(); 
-
-  if( instance )
-  {
-    // do not convert the runtime data, but do set up the runtime
-    // class name and internal object state 
-    // 
-    instance->RectifyRuntimeData(false); 
-  }
-
   CheckSets();
 
   __super::Unpack();
@@ -210,32 +199,6 @@ void Instance::SetConfiguredTypeName( const std::string& type )
   m_Changed.Raise( args );
 }
 
-std::string Instance::GetRuntimeClassName() const
-{
-  Content::InstancePtr instance = GetPackage< Content::Instance >();
-
-  if(instance)
-  {
-    return instance->GetRuntimeClass(); 
-  }
-  
-  return std::string ();
-}
-
-void Instance::SetRuntimeClassName( const std::string& className )
-{
-  Content::InstancePtr instance = GetPackage< Content::Instance >();
-
-  if(instance)
-  {
-    instance->SetRuntimeClass(className); 
-
-    // since our class name is criteria used for deducing object type,
-    // ensure we are a member of the correct type
-    CheckNodeType();
-  }
-}
-
 Luna::InstanceCodeSet* Instance::GetCodeSet()
 {
   return m_CodeSet;
@@ -254,8 +217,6 @@ void Instance::SetCodeSet(Luna::InstanceCodeSet* codeClass)
 void Instance::CheckSets()
 {
   Content::InstancePtr instance = GetPackage< Content::Instance >();
-
-  const std::string& currentCodeSet = instance->GetRuntimeClass();
 
   Luna::InstanceType* type = Reflect::AssertCast<Luna::InstanceType>( m_NodeType );
   if (type)

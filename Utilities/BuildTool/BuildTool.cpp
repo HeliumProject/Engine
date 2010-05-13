@@ -18,7 +18,6 @@
 #include "Console/Console.h"
 #include "Windows/Console.h"
 #include "Windows/Process.h"
-#include "Windows/Mail.h"
 
 #include "File/Manager.h"
 #include "File/ManagedFile.h"

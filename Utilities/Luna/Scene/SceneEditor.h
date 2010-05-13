@@ -2,6 +2,7 @@
 
 #include "API.h"
 
+#include "LayerGrid.h"
 #include "Scene.h"
 #include "SceneDocument.h"
 #include "SceneEditorIDs.h"
@@ -21,7 +22,6 @@
 #include "UIToolKit/MenuMRU.h"
 
 #include "Content/LayerTypes.h"
-#include "Scene/LightingLayerGrid.h"
 #include <wx/dnd.h>
 
 namespace Luna
@@ -313,7 +313,6 @@ namespace Luna
     }
 
     Content::LayerType  GetCurrentLayerGridType();
-    LightingLayerGrid*  GetLightingLayerGrid();
     LayerGrid*          GetLayerGridByType(Content::LayerType lType);
 
     TypeGrid* GetObjectGrid()

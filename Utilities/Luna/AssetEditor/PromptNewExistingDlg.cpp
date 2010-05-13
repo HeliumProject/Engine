@@ -4,7 +4,7 @@
 #include "AssetEditorGenerated.h"
 
 #include "File/Manager.h"
-#include "File/ManagedFileDialog.h"
+#include "FileUI/ManagedFileDialog.h"
 #include "FileBrowser/FileBrowser.h"
 #include "FileSystem/FileSystem.h"
 #include "UIToolKit/ImageManager.h"

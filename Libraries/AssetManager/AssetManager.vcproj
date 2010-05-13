@@ -216,6 +216,10 @@
 			ReferencedProjectIdentifier="{51249970-F796-4344-B558-4147F3225C30}"
 			RelativePathToProject=".\libraries\Content\Content.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
+			RelativePathToProject=".\SDK\wxPropertyGrid\1.4.11\wxPropertyGrid.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter

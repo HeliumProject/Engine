@@ -2,7 +2,6 @@
 #include "PropertiesManager.h"
 
 #include "InspectReflect/ReflectInterpreter.h"
-#include "InspectSymbol/SymbolInterpreter.h"
 #include "Platform/Platform.h"
 #include "Platform/Thread.h"
 
@@ -38,36 +37,18 @@ PropertyThreadArgs::PropertyThreadArgs( const OS_SelectableDumbPtr& selection,
 
 EnumerateElementArgs::EnumerateElementArgs( M_ElementByType& currentElements,
                                             M_ElementsByType& commonElements,
-                                            M_InterpretersByType& commonElementInterpreters,
-                                            M_UDTInstanceBySymbol& currentUDTInstances,
-                                            M_UDTInstancesBySymbol& commonUDTInstances,
-                                            M_InterpretersBySymbol& commonUDTInstanceInterpreters )
+                                            M_InterpretersByType& commonElementInterpreters )
 : m_CurrentElements (currentElements)
 , m_CommonElements (commonElements)
 , m_CommonElementInterpreters (commonElementInterpreters)
-, m_CurrentUDTInstances (currentUDTInstances)
-, m_CommonUDTInstances (commonUDTInstances)
-, m_CommonUDTInstanceInterpreters (commonUDTInstanceInterpreters)
 {
 
 }
 
 void EnumerateElementArgs::EnumerateElement(Reflect::Element* element, i32 includeFlags, i32 excludeFlags)
 {
-  Symbol::UDTInstance* udtInstance = Reflect::ObjectCast<Symbol::UDTInstance>(element);
-
-  if (udtInstance)
-  {
     // this will insert an empty map at the slot for the type of "element", or just make "b" false and return the iter at the existing one
-    Nocturnal::Insert<M_UDTInstanceBySymbol>::Result inserted = 
-      m_CurrentUDTInstances.insert( M_UDTInstanceBySymbol::value_type (udtInstance->GetUDT()->GetSymbolName(), udtInstance) );
-  }
-  else
-  {
-    // this will insert an empty map at the slot for the type of "element", or just make "b" false and return the iter at the existing one
-    Nocturnal::Insert<M_ElementByType>::Result inserted = 
-      m_CurrentElements.insert( M_ElementByType::value_type (ElementTypeFlags ( element->GetType(), includeFlags, excludeFlags ), element) );
-  }
+    Nocturnal::Insert<M_ElementByType>::Result inserted = m_CurrentElements.insert( M_ElementByType::value_type (ElementTypeFlags ( element->GetType(), includeFlags, excludeFlags ), element) );
 }
 
 PropertiesManager::PropertiesManager( Enumerator* enumerator )
@@ -174,10 +155,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
   M_ElementByType currentElements;
   M_ElementsByType commonElements;
   M_InterpretersByType commonElementInterpreters;
-  M_UDTInstanceBySymbol currentUDTInstances;
-  M_UDTInstancesBySymbol commonUDTInstances;
-  M_InterpretersBySymbol commonUDTInstanceInterpreters;
-  EnumerateElementArgs enumerateElementArgs( currentElements, commonElements, commonElementInterpreters, currentUDTInstances, commonUDTInstances, commonUDTInstanceInterpreters );
+  EnumerateElementArgs enumerateElementArgs( currentElements, commonElements, commonElementInterpreters );
   OS_SelectableDumbPtr selection;
   
   for ( OS_SelectablePtr::Iterator itr = args.m_Selection.Begin(), end = args.m_Selection.End(); itr != end; ++itr )
@@ -213,7 +191,6 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
       }
 
       currentElements.clear();
-      currentUDTInstances.clear();
 
       {
         LUNA_CORE_SCOPE_TIMER( ("Object Property Enumeration") );
@@ -343,65 +320,8 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
         commonElements = newCommonElements;
       }
 
-      {
-        LUNA_CORE_SCOPE_TIMER( ("Object Unique Symbol Property Culling") );
-
-        M_UDTInstancesBySymbol newCommonUDTInstances;
-
-        if (index == 0)
-        {
-          M_UDTInstanceBySymbol::const_iterator currentItr = currentUDTInstances.begin();
-          M_UDTInstanceBySymbol::const_iterator currentEnd = currentUDTInstances.end();
-          for ( ; currentItr != currentEnd; ++currentItr )
-          {
-            if ( *args.m_CurrentSelectionId != args.m_SelectionId )
-            {
-              return;
-            }
-
-            // copy the shared list into the new shared map
-            Nocturnal::Insert<M_UDTInstancesBySymbol>::Result inserted = 
-                       newCommonUDTInstances.insert(M_UDTInstancesBySymbol::value_type( currentItr->first, std::vector<Symbol::UDTInstance*> () ));
-
-            // add this current element's instance to the new shared list
-            inserted.first->second.push_back(currentItr->second);
-          }
-        }
-        else
-        {
-          M_UDTInstancesBySymbol::const_iterator sharedItr = commonUDTInstances.begin();
-          M_UDTInstancesBySymbol::const_iterator sharedEnd = commonUDTInstances.end();
-          for ( ; sharedItr != sharedEnd; ++sharedItr )
-          {
-            if ( *args.m_CurrentSelectionId != args.m_SelectionId )
-            {
-              return;
-            }
-
-            M_UDTInstanceBySymbol::const_iterator found = currentUDTInstances.find(sharedItr->first);
-
-            // if we found a current element entry for this shared element
-            if (found != currentUDTInstances.end())
-            {
-              // copy the shared list into the new shared map
-              Nocturnal::Insert<M_UDTInstancesBySymbol>::Result inserted = 
-                newCommonUDTInstances.insert(M_UDTInstancesBySymbol::value_type( sharedItr->first, sharedItr->second ));
-
-              // add this current element's instance to the new shared list
-              inserted.first->second.push_back(found->second);
-            }
-            else
-            {
-              // there is NO instance of this element in the current instance, let it be culled from the shared list
-            }
-          }
-        }
-
-        commonUDTInstances = newCommonUDTInstances;
-      }
-
       // we have eliminated all the shared types, abort
-      if (intersectingPanels.empty() && commonElements.empty() && commonUDTInstances.empty())
+      if (intersectingPanels.empty() && commonElements.empty() )
       {
         break;
       }
@@ -490,27 +410,6 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
     }
   }
 
-  {
-    LUNA_CORE_SCOPE_TIMER( ("Symbol Interpret") );
-
-    M_UDTInstancesBySymbol::const_iterator itr = commonUDTInstances.begin();
-    M_UDTInstancesBySymbol::const_iterator end = commonUDTInstances.end();
-    for ( ; itr != end; ++itr )
-    {
-      if ( *args.m_CurrentSelectionId != args.m_SelectionId )
-      {
-        return;
-      }
-
-      Inspect::SymbolInterpreterPtr interpreter = m_Enumerator->CreateInterpreter<Inspect::SymbolInterpreter>( args.m_Container );
-
-      interpreter->Interpret((const std::vector<Symbol::VarInstance*>&)itr->second);
-
-      Nocturnal::Insert<M_InterpretersBySymbol>::Result inserted = 
-        commonUDTInstanceInterpreters.insert( M_InterpretersBySymbol::value_type(itr->first, interpreter) );
-    }
-  }
-  
   PropertiesCreatedArgs propertiesCreatedArgs( this, args.m_SelectionId, args.m_Container->GetControls() );
   m_PropertiesCreated.Raise( propertiesCreatedArgs );
 }

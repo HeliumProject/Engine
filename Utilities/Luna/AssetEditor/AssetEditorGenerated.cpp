@@ -7,7 +7,6 @@
 
 #include "Precompile.h"
 
-#include "ShaderGroupPropGrid.h"
 #include "UIToolKit/AutoCompleteComboBox.h"
 
 #include "AssetEditorGenerated.h"
@@ -607,9 +606,6 @@ SwapShadersPanel::SwapShadersPanel( wxWindow* parent, wxWindowID id, const wxPoi
 	
 	wxBoxSizer* gridSizer;
 	gridSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_PropertyGrid = new Luna::ShaderGroupPropGrid(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxPGMAN_DEFAULT_STYLE|wxPG_TOOLBAR);
-	gridSizer->Add( m_PropertyGrid, 1, wxEXPAND | wxALL, 5 );
 	
 	mainSizer->Add( gridSizer, 1, wxEXPAND, 5 );
 	

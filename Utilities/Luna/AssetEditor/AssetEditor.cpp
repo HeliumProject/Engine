@@ -1,8 +1,6 @@
 #include "Precompile.h"
 #include "AssetEditor.h"
 
-#include "AnimationHelper.h"
-#include "AnimationSetAsset.h"
 #include "AssetDocument.h"
 #include "AssetEditorIDs.h"
 #include "AssetOutliner.h"
@@ -11,31 +9,23 @@
 #include "AttributeChooserDlg.h"
 #include "AttributeExistenceCommand.h"
 #include "ElementArrayNode.h"
-#include "MultiAnimPanel.h"
 #include "PersistentNode.h"
-#include "RemoteAsset.h"
 #include "AssetPreviewWindow.h"
-#include "RuntimeDataNode.h"
 #include "AssetEditorGenerated.h"
 #include "Browser/BrowserToolBar.h"
 
-#include "Asset/AnimationAttribute.h"
-#include "Asset/AnimationChain.h"
-#include "Asset/AnimationClip.h"
-#include "Asset/AnimationGroup.h"
 #include "Asset/ArtFileAttribute.h"
 #include "Asset/AssetClass.h"
 #include "Asset/AssetInit.h"
 #include "Attribute/AttributeHandle.h"
 #include "Asset/EntityAsset.h"
 #include "Asset/StandardShaderAsset.h"
-#include "Asset/UpdateClassAttribute.h"
 
 #include "AssetManager/AssetManager.h"
 #include "AssetManager/CreateAssetWizard.h"
 
 #include "File/Manager.h"
-#include "File/ManagedFileDialog.h"
+#include "FileUI/ManagedFileDialog.h"
 #include "FileBrowser/FileBrowser.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
@@ -52,7 +42,6 @@
 #include "Task/Export.h"
 #include "Inspect/Canvas.h"
 #include "RCS/RCS.h"
-#include "Symbol/SymbolBuilder.h"
 #include "UIToolKit/FileDialog.h"
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/ListDialog.h"
@@ -135,10 +124,8 @@ void AssetEditor::CleanupEditor()
 AssetEditor::AssetEditor()
 : Luna::Editor( EditorTypes::Asset, NULL, wxID_ANY, wxT( s_EditorTitle ), wxDefaultPosition, wxSize( 800, 600 ), wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER )
 , m_AssetManager( this )
-, m_RemoteAsset( new RemoteAsset( this ) )
 , m_MRU( new UIToolKit::MenuMRU( 30, this ) )
 , m_Outliner( new AssetOutliner( this ) )
-, m_MultiAnimPanel( new MultiAnimPanel( this ) )
 , m_MenuPanels( new wxMenu() )
 , m_MenuFile( new wxMenu() )
 , m_MenuEdit( new wxMenu() )
@@ -217,22 +204,6 @@ AssetEditor::AssetEditor()
   m_FrameManager.AddPane( m_AssetPreviewWindow, wxAuiPaneInfo().Name( wxT( "preview" ) ).DestroyOnClose( false ).Caption( wxT( "Preview" ) ).Right().Layer( 2 ).Position( 2 ) );
 
   
-  // add the multianim control to the frame manager
-  {
-    wxAuiPaneInfo info; 
-    info.Hide();
-    info.Name( wxT("Animation Control") ); 
-    info.DestroyOnClose( false ); 
-    info.Caption( wxT("Animation Control") ); 
-    info.Right(); 
-    info.Layer(2); 
-    info.Position(2); 
-
-    m_FrameManager.AddPane( m_MultiAnimPanel, info ); 
-  }
-
-
-
   // Menus
   wxMenuBar* menuBar = new wxMenuBar();
 
@@ -477,10 +448,8 @@ AssetEditor::~AssetEditor()
   m_MRU->RemoveItemSelectedListener( UIToolKit::MRUSignature::Delegate( this, &AssetEditor::MRUOpen ) );
 
   delete m_Outliner;
-  delete m_RemoteAsset;
 
   m_Outliner = NULL; 
-  m_RemoteAsset = NULL; 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -489,14 +458,6 @@ AssetEditor::~AssetEditor()
 Luna::AssetManager* AssetEditor::GetAssetManager()
 {
   return &m_AssetManager;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the interface for real-time udpate calls.
-// 
-RemoteAsset* AssetEditor::GetRemoteInterface()
-{
-  return m_RemoteAsset;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -928,10 +889,6 @@ void AssetEditor::UpdateUIElements()
   bool exportable = true;
   bool canSyncShaders = true;
   bool isEntity = true;
-  bool isAnimSet = true;
-  bool isAnimGroup = m_AssetManager.GetSelection().GetItems().Size() > 0;
-  bool isAnimChain = isAnimGroup;
-  bool hasUpdateClassAttribute = false; 
   bool canSaveSelection = false;
 
   const OS_SelectableDumbPtr selectionItems = m_AssetManager.GetSelection().GetItems();
@@ -960,17 +917,6 @@ void AssetEditor::UpdateUIElements()
   {
     Luna::AssetNode* node = Reflect::AssertCast< Luna::AssetNode >( *selItr );
 
-    if ( node->HasType( Reflect::GetType< Luna::PersistentNode >() ) )
-    {
-      Luna::PersistentNode* persistentNode = Reflect::DangerousCast< Luna::PersistentNode >( node );
-      isAnimGroup &= persistentNode->GetPersistentData< Luna::PersistentData >()->GetPackage< Reflect::Element >()->HasType( Reflect::GetType< Asset::AnimationGroup >() );
-      isAnimChain &= persistentNode->GetPersistentData< Luna::PersistentData >()->GetPackage< Reflect::Element >()->HasType( Reflect::GetType< Asset::AnimationChain >() );
-    }
-    else
-    {
-      isAnimGroup = isAnimChain = false;
-    }
-
     Luna::AssetClass* asset = node->GetAssetClass();
     if ( asset )
     {
@@ -980,16 +926,11 @@ void AssetEditor::UpdateUIElements()
         buildable &= asset->IsBuildable();
         viewable &= asset->IsViewable();
         exportable &= asset->IsExportable();
-        isAnimSet &= asset->HasType( Reflect::GetType< Luna::AnimationSetAsset >() );
         isEntity &= asset->GetPackage< Asset::AssetClass >()->HasType( Reflect::GetType< Asset::EntityAsset >() );
 
         Attribute::AttributeViewer< Asset::ArtFileAttribute > model ( asset->GetPackage< Asset::AssetClass >() );
         canSyncShaders &= model.Valid();
         canSyncShaders &= isEntity;
-
-
-        Attribute::AttributeViewer< Asset::UpdateClassAttribute > updateAttr (asset->GetPackage< Asset::AssetClass >() ); 
-        hasUpdateClassAttribute |= updateAttr.Valid(); 
 
         // Check to see if the selected item needs to be saved (until we find one that does)
         if ( !canSaveSelection && m_AssetManager.FindAssetDocument( asset )->IsModified() )
@@ -1035,21 +976,7 @@ void AssetEditor::UpdateUIElements()
   m_MainToolBar->EnableTool( AssetEditorIDs::View, enableView );
   m_MainToolBar->EnableTool( AssetEditorIDs::Export, enableExport );
   m_MainToolBar->EnableTool( AssetEditorIDs::SyncShaders, enableSyncShaders );
-  m_MainToolBar->EnableTool( AssetEditorIDs::UpdateSymbols, hasUpdateClassAttribute ); 
 
-  // Animation Toolbar
-  bool enableAnimSet = isEntity && assets.size() > 0;
-  bool enableAnimGroup = isAnimSet && assets.size() > 0;
-  bool enableEditAnimGroup = isAnimGroup && selectionItems.Size() == 1;
-  bool enableAnimClip = assets.size() > 0 && ( isAnimGroup || isAnimChain );
-  m_MainToolBar->EnableTool( AssetEditorIDs::AddAnimationSet, enableAnimSet );
-  m_MainToolBar->EnableTool( AssetEditorIDs::AddAnimationGroup, enableAnimGroup );
-  m_MainToolBar->EnableTool( AssetEditorIDs::EditAnimationGroup, enableEditAnimGroup );
-  m_MainToolBar->EnableTool( AssetEditorIDs::AddAnimationClip, enableAnimClip );
-
-  // Animation Clip menu
-  m_MenuAddAnimClip.Enable( AssetEditorIDs::AddAnimationClipToNewChain, isAnimGroup );
-  m_MenuAddAnimClip.Enable( AssetEditorIDs::AddAnimationClipToExistingChain, isAnimChain );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1545,30 +1472,6 @@ void AssetEditor::OnBuild( wxCommandEvent& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Callback for when the View button is pressed.  Builds and views the selected
-// asset.  Note that this only works on a single asset.  If more than one asset
-// is selected, the first one in the selection list is viewed.
-// 
-void AssetEditor::OnView( wxCommandEvent& args )
-{
-  Luna::AssetNode* node = Reflect::ObjectCast< Luna::AssetNode >( m_AssetManager.GetSelection().GetItems().Front() );
-  if ( node )
-  {
-    Luna::AssetClass* asset = node->GetAssetClass();
-    if ( asset )
-    {
-      bool showOptions = wxIsShiftDown();
-      SessionManager::GetInstance()->GiveViewerControl( this );
-      SessionManager::GetInstance()->SaveAllOpenDocuments( this, m_PromptModifiedFiles );
-
-      Asset::AssetClass* assetClass = asset->GetPackage<Asset::AssetClass>(); 
-      m_RemoteAsset->TriggerAssetView(assetClass, showOptions); 
-
-    }
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Callback for when the Preview button is pressed.  Displays the currently
 // selected entity in the AssetPreviewWindow using Renderlib
 // 
@@ -1589,47 +1492,7 @@ void AssetEditor::OnExport( wxCommandEvent& args )
   for ( ; selItr != selEnd; ++selItr )
   {
     Luna::AssetNode* node = Reflect::AssertCast< Luna::AssetNode >( *selItr );
-    Luna::PersistentNode* persistentNode = Reflect::ObjectCast< Luna::PersistentNode >( node );
-    if ( persistentNode )
-    {
-      // Yuck... special case for Animation Groups, Chains, and Clips...
-      Asset::V_AnimationClipData clips;
-      Luna::PersistentData* persistentData = persistentNode->GetPersistentData< Luna::PersistentData >();
-      if ( persistentData->GetPackage< Reflect::Element >()->HasType( Reflect::GetType< Asset::AnimationGroup >() ) )
-      {
-        Asset::AnimationGroup* animGroup = persistentData->GetPackage< Asset::AnimationGroup >();
-        animGroup->GetAnimationClips( clips );
-      }
-      else if ( persistentData->GetPackage< Reflect::Element >()->HasType( Reflect::GetType< Asset::AnimationChain >() ) )
-      {
-        Asset::AnimationChain* animChain = persistentData->GetPackage< Asset::AnimationChain >();
-        animChain->GetAnimationClips( clips );
-      }
-      else if ( persistentData->GetPackage< Reflect::Element >()->HasType( Reflect::GetType< Asset::AnimationClipData >() ) )
-      {
-        Asset::AnimationClipData* animClip = persistentData->GetPackage< Asset::AnimationClipData >();
-        clips.push_back( animClip );
-      }
-
-      if ( clips.size() > 0 )
-      {
-        for each ( const Asset::AnimationClipDataPtr& clip in clips )
-        {
-          if ( clip->m_ArtFile != TUID::Null )
-          {
-            fileIDs.insert( clip->m_ArtFile );
-          }
-        }
-      }
-      else
-      {
-        node->GetExportFiles( fileIDs );
-      }
-    }
-    else
-    {
-      node->GetExportFiles( fileIDs );
-    }
+    node->GetExportFiles( fileIDs );
   }
 
   if ( fileIDs.size() > 0 )
@@ -1671,118 +1534,6 @@ void AssetEditor::OnSyncShaders( wxCommandEvent& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Callback for when the Update Symbols button is pressed
-// Resets the symbol builder, which raises events that update the UI
-// 
-// see LUpdateClassAttribute... 
-// 
-void AssetEditor::OnUpdateSymbols( wxCommandEvent& args )
-{
-  // so we're going to take any LRuntimeDataNodes OUT of the selection
-  // because 1) we could be replacing their symbol instances and
-  //         2) in the future, if we remove tree nodes, this needs to happen as well
-  //            right now, we don't remove tree nodes, we just keep the stale data
-  // 
-  const OS_SelectableDumbPtr& items = m_AssetManager.GetSelection().GetItems(); 
-  OS_SelectableDumbPtr keep; 
-
-  for(OS_SelectableDumbPtr::Iterator itr = items.Begin(); itr != items.End(); ++itr )
-  {
-    Selectable*      selectable = *itr; 
-    Luna::RuntimeDataNode* runtimeData = Reflect::ObjectCast<Luna::RuntimeDataNode>(selectable); 
-
-    if(runtimeData)
-    {
-      keep.Append( runtimeData->GetParent() ); 
-    }
-    else
-    {
-      keep.Append( selectable ); 
-    }
-  }
-
-  m_AssetManager.GetSelection().Clear(); 
-  Symbol::SymbolBuilder::GetInstance()->Reset(); 
-  m_AssetManager.GetSelection().SetItems(keep); 
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when the Add Animation Set button is pressed.
-// 
-void AssetEditor::OnAddAnimationSet( wxCommandEvent& args )
-{
-  S_AssetClassDumbPtr assets;
-  if ( m_AssetManager.GetSelectedAssets( assets ) > 0 )
-  {
-    V_string msgs;
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand();
-    for each ( Luna::AssetClass* asset in assets )
-    {
-      if ( m_AssetManager.IsEditable( asset ) )
-      {
-        std::string msg;
-        batch->Push( asset->AddAnimationSet( msg ) );
-        if ( !msg.empty() )
-        {
-          msgs.push_back( msg );
-        }
-      }
-    }
-
-    if ( !batch->IsEmpty() )
-    {
-      m_AssetManager.Push( batch );
-    }
-
-    if ( !msgs.empty() )
-    {
-      UIToolKit::ListDialog dlg( this, "Add Animation Set", "Summary of operations for adding an Animation Set:", msgs );
-      dlg.ShowModal();
-    }
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback when the Add Animation Group button is pressed.
-// 
-void AssetEditor::OnAddAnimationGroup( wxCommandEvent& args )
-{
-  AnimationHelper::AddNewAnimationGroup( this );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback when the Edit Animation Group operation is chosen by the user.
-//
-void AssetEditor::OnEditAnimationGroup( wxCommandEvent& args )
-{
-  AnimationHelper::EditAnimationGroup( this );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback when the Add Animation Clip button is pressed.
-// 
-void AssetEditor::OnAddAnimationClip( wxCommandEvent& args )
-{
-  PopupMenu( &m_MenuAddAnimClip );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when the Add Clip to New Chain option is chosen.
-// 
-void AssetEditor::OnAddClipToNewChain( wxCommandEvent& args )
-{
-  AnimationHelper::AddClipToNewChain( this );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when the Add Clip to Existing Chain option is chosen.
-// 
-void AssetEditor::OnAddClipToExistingChain( wxCommandEvent& args )
-{
-  AnimationHelper::AddClipToExistingChain( this );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Callback for when the "Options->File Path" menu item is updated.  Changes
 // how file paths are displayed in the outliner.
 // 
@@ -1819,22 +1570,6 @@ void AssetEditor::OnHelpSearch( wxCommandEvent& args )
 void AssetEditor::OnCheckout( wxCommandEvent& args )
 {
   m_AssetManager.CheckOutSelected();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Called by SessionManager when control of the viewer is given to this editor
-// 
-void AssetEditor::TakeViewerControl()
-{
-  m_RemoteAsset->Enable( true );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Called by SessionManager when control of the viewer is taken away from this editor
-// 
-void AssetEditor::ReleaseViewerControl()
-{
-  m_RemoteAsset->Enable( false );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

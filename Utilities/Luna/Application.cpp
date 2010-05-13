@@ -1,13 +1,10 @@
 #include "Precompile.h"
 #include "Application.h"
 
-#include "AnimationEventsEditor/AnimationEventsInit.h"
 #include "AppUtils/AppUtils.h"
 #include "AssetEditor/AssetInit.h"
 #include "Asset/Tracker.h"
 #include "Browser/Browser.h"
-#include "CharacterEditor/CharacterInit.h"
-#include "CinematicEventsEditor/CinematicEventsInit.h"
 #include "Common/InitializerStack.h"
 #include "Console/Console.h"
 #include "Core/CoreInit.h"
@@ -27,13 +24,10 @@
 #include "Finder/ExtensionSpecs.h"
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
-#include "Live/LiveInit.h"  
 #include "Math/Utils.h"
 #include "PerforceUI/PerforceUI.h"
 #include "Scene/SceneEditor.h"
 #include "Scene/SceneInit.h"
-#include "Symbol/Inheritance.h"
-#include "Symbol/SymbolBuilder.h"
 #include "Task/TaskInit.h"
 #include "UIToolKit/ImageManager.h"
 #include "Windows/Process.h"
@@ -146,21 +140,6 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
       }
 
       {
-        Console::Bullet bullet ("Symbol System...\n");
-        m_InitializerStack.Push( Symbol::Initialize, Symbol::Cleanup );
-      }
-
-      {
-        Console::Bullet bullet ("Symbol Builder...\n");
-        Symbol::SymbolBuilder::GetInstance()->Load();
-      }
-
-      {
-        Console::Bullet bullet ("Symbol Inheritance Hierarchy...\n");
-        Symbol::Inheritance::InitializeInheritance();
-      }
-
-      {
         Console::Bullet vault ("Asset Tracker...\n");
         m_InitializerStack.Push( Asset::Tracker::Initialize, Asset::Tracker::Cleanup );
         SessionManager::GetInstance()->UseTracker( !parser.Found( "disable_tracker" ) );
@@ -173,11 +152,6 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
       {
         Console::Bullet bullet ("Core...\n");
         m_InitializerStack.Push( CoreInitialize, CoreCleanup );
-      }
-
-      {
-        Console::Bullet bullet ("Live...\n");
-        m_InitializerStack.Push( LiveInitialize, LiveCleanup );
       }
 
       {
@@ -201,23 +175,8 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
       }
 
       {
-        Console::Bullet bullet ("Animation Events Editor...\n");
-        m_InitializerStack.Push( LunaAnimationEvents::InitializeModule, LunaAnimationEvents::CleanupModule );
-      }
-
-      {
-        Console::Bullet bullet ("Cinematic Events Editor...\n");
-        m_InitializerStack.Push( LunaCinematicEvents::InitializeModule, LunaCinematicEvents::CleanupModule );
-      }
-
-      {
         Console::Bullet bullet ("Scene Editor...\n");
         m_InitializerStack.Push( SceneInitialize, SceneCleanup );
-      }
-
-      {
-        Console::Bullet bullet ("Character Editor...\n"); 
-        m_InitializerStack.Push( LunaCharacter::InitializeModule, LunaCharacter::CleanupModule );
       }
     }
   }

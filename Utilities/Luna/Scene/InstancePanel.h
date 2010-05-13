@@ -3,7 +3,6 @@
 #include "API.h"
 #include "SceneNodePanel.h"
 #include "Core/Selectable.h"
-#include "InspectSymbol/SymbolInterpreter.h"
 
 namespace Luna
 {
@@ -12,16 +11,11 @@ namespace Luna
   protected:
     Enumerator* m_Enumerator;
     OS_SelectableDumbPtr m_Selection;
-    Inspect::SymbolInterpreterPtr m_SymbolInterpreter;
-    Inspect::Action* m_RuntimeClassesButton;
-    Inspect::Choice* m_RuntimeClassesChoice;
-    Inspect::Panel* m_RuntimeDataPanel;
     Inspect::CheckBox* m_Solid;
     Inspect::CheckBox* m_SolidOverride;
     Inspect::CheckBox* m_Transparent;
     Inspect::CheckBox* m_TransparentOverride;
 
-    bool                   m_AllInstancesHaveRuntimeData; 
     bool                   m_EnableClassPicker; 
     bool                   m_EnableClassBrowser; 
     bool                   m_EnableSymbolInterpreter; 

@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "AssetClass.h"
 
-#include "AnimationAttribute.h"
 #include "AssetEditor.h"
 #include "AssetDocument.h"
 #include "AssetManager.h"
@@ -11,14 +10,10 @@
 #include "ContextMenuCallbacks.h"
 #include "FieldFactory.h"
 #include "PersistentDataFactory.h"
-#include "ShaderGroupDlg.h"
 
-#include "Asset/AnimationSetAsset.h"
 #include "Asset/ArtFileAttribute.h"
 #include "Attribute/AttributeHandle.h"
 #include "Asset/Exceptions.h"
-#include "Asset/ShaderGroupAttribute.h"
-#include "Asset/ShaderUsagesAttribute.h"
 #include "Asset/StandardShaderAsset.h"
 #include "AssetManager/AssetManager.h"
 #include "Common/CommandLine.h"
@@ -41,18 +36,6 @@ using namespace Luna;
 // Definition
 LUNA_DEFINE_TYPE( Luna::AssetClass );
 
-
-///////////////////////////////////////////////////////////////////////////////
-// Sorting algorithm for shader usages.  Does a string comparison on the title
-// of each shader usage.
-// 
-struct SortShaderUsages
-{
-  bool operator()( const Asset::ShaderUsagePtr& lhs, const Asset::ShaderUsagePtr& rhs )
-  {
-    return strinatcmp( lhs->GetTitle().c_str(), rhs->GetTitle().c_str() ) < 0;
-  }
-};
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static initialization for all Luna::AssetClass types.
@@ -175,7 +158,7 @@ bool AssetClass::Save( std::string& error )
   bool saved = false;
   try
   {
-    Reflect::ArchiveBinary::ToFile( assetClass, path, new Asset::AssetVersion(), NULL );
+    Reflect::Archive::ToFile( assetClass, path, new Asset::AssetVersion(), NULL );
     Asset::AssetClass::InvalidateCache( assetClass->m_AssetClassID );
     saved = true;
   }
@@ -315,7 +298,6 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
   Luna::ObjectPtr clientData = new Luna::AssetManagerClientData( m_AssetManager );
 
   const size_t numSelected = m_AssetManager->GetSelection().GetItems().Size();
-  const bool isAnimationSet = assetPkg->HasType( Reflect::GetType< Asset::AnimationSetAsset >() );
   const bool isShader = assetPkg->HasType( Reflect::GetType< Asset::ShaderAsset >() );
   const bool isLevel = assetPkg->GetEngineType() == Asset::EngineTypes::Level;
 
@@ -345,7 +327,7 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
     ? "Preview the asset in the preview panel."
     : "This asset cannot be previewed in the preview panel.";
 
-  const bool canDuplicate = ( numSelected == 1 ) && ( isUserAssetAdmin || ( !areAssetsLocked && ( isShader || isAnimationSet ) ) );
+  const bool canDuplicate = ( numSelected == 1 ) && ( isUserAssetAdmin || ( !areAssetsLocked && ( isShader ) ) );
   std::string duplicateToolTip = canDuplicate 
     ? "Create a copy of this asset using the Asset Manager wizard."
     : "Duplicating assets is not allowed or not available at this time.";
@@ -409,26 +391,6 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
   menuItem->AddCallback( ContextMenuSignature::Delegate( &Luna::OnCloseSelectedAssets ), clientData );
   menu.AppendItem( menuItem );
 
-  std::string unused;
-  if (
-    assetPkg->GetAttribute( Reflect::GetType< Asset::ShaderGroupAttribute >() ).ReferencesObject() ||
-    assetPkg->ValidateAttribute( Reflect::AssertCast< Attribute::AttributeBase >( Reflect::Registry::GetInstance()->CreateInstance( Reflect::GetType< Asset::ShaderGroupAttribute >() ) ), unused )
-    )
-  {
-    bool enable = false;
-    S_AssetClassDumbPtr selection;
-    if ( m_AssetManager->GetSelectedAssets( selection ) == 1 )
-    {
-      enable = *( selection.begin() ) == this;
-    }
-
-    menu.AppendSeparator();
-    menuItem = new ContextMenuItem( "Manage Shader Groups" );
-    menuItem->Enable( enable );
-    menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetClass::ManageShaderGroups ) );
-    menu.AppendItem( menuItem );
-  }
-
   menu.AppendSeparator();
   menuItem = new ContextMenuItem( "Expand" );
   menuItem->AddCallback( ContextMenuSignature::Delegate( m_AssetManager->GetAssetEditor(), &AssetEditor::OnExpandSelectedAssets ) );
@@ -465,279 +427,6 @@ void AssetClass::UnregisterAssetReferenceNode( Luna::AssetReferenceNode* node )
 const S_AssetReferenceNodeDumbPtr& AssetClass::GetAssetReferenceNodes() const
 {
   return m_References;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Displays a dialog for editing the shader groups of the first selected asset.
-// 
-void AssetClass::ManageShaderGroups( const ContextMenuArgsPtr& args )
-{
-  if ( m_AssetManager->IsEditable( this ) )
-  {
-    UpdateShaderUsages();
-
-    ShaderGroupDlg dlg( m_AssetManager->GetAssetEditor(), this );
-    if ( dlg.ShowModal() == wxID_OK )
-    {
-      Asset::ShaderGroupAttributePtr swapShadersAttrib = dlg.GetShaderGroupAttribute();
-
-      Luna::AttributeWrapper* oldAttribute = FindAttribute( Reflect::GetType< Asset::ShaderGroupAttribute >() );
-      if ( oldAttribute )
-      {
-        args->GetBatch()->Push( new AttributeExistenceCommand( Undo::ExistenceActions::Remove, this, oldAttribute ) );
-      }
-
-      if ( swapShadersAttrib->m_ShaderGroups.size() != 0 )
-      {
-        Luna::AttributeWrapperPtr newAttribute = PersistentDataFactory::GetInstance()->CreateTyped< Luna::AttributeWrapper >( swapShadersAttrib, m_AssetManager );
-
-        args->GetBatch()->Push( new AttributeExistenceCommand( Undo::ExistenceActions::Add, this, newAttribute ) );
-      }
-    }
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Updates the shader usages for this asset (assuming this asset can have a shader
-// usages attribute).
-// 
-void AssetClass::UpdateShaderUsages()
-{
-  // Determine which shaders this asset is currently using
-  typedef std::map< tuid, std::string > M_TuidToStr;
-  M_TuidToStr currentShaderIds; // maps shader ID to name of the shader group it belongs to (if any)
-
-  Attribute::AttributeViewer< Asset::ArtFileAttribute > model ( GetPackage< Asset::AssetClass >() );
-  if ( model.Valid() && m_AssetManager->IsEditable( this ) )
-  {
-    std::string artFile;
-    try
-    {
-      artFile = model->GetFilePath();
-    }
-    catch( const Nocturnal::Exception& )
-    {
-    }
-
-    if (!artFile.empty())
-    {
-      std::string assetManifestFile = FinderSpecs::Content::MANIFEST_DECORATION.GetExportFile( artFile, model->m_FragmentNode );
-
-      if (FileSystem::Exists(assetManifestFile))
-      {
-        Asset::EntityManifestPtr manifest;
-        try
-        {
-          manifest = Reflect::Archive::FromFile<Asset::EntityManifest>(assetManifestFile);
-        }
-        catch ( const Reflect::Exception& )
-        {
-        }
-
-        if (manifest.ReferencesObject())
-        {
-          for ( V_tuid::const_iterator shaderIDItr = manifest->m_Shaders.begin(),
-            shaderIDEnd = manifest->m_Shaders.end();
-            shaderIDItr != shaderIDEnd; ++shaderIDItr )
-          {
-            currentShaderIds.insert( M_TuidToStr::value_type( *shaderIDItr, "" ) );
-          }
-        }
-      }
-    }
-
-    Asset::ShaderUsagesAttributePtr shaderUsages = Reflect::DangerousCast< Asset::ShaderUsagesAttribute >( GetPackage< Asset::AssetClass >()->GetAttribute( Reflect::GetType< Asset::ShaderUsagesAttribute >() ) );
-    if ( !shaderUsages.ReferencesObject() )
-    {
-      // add the shader usages attribute
-      shaderUsages = new Asset::ShaderUsagesAttribute();
-      Undo::ExistenceCommandPtr cmd = new AttributeExistenceCommand( Undo::ExistenceActions::Add, this, PersistentDataFactory::GetInstance()->CreateTyped< Luna::AttributeWrapper >( shaderUsages, m_AssetManager ) );
-      // Operation is not undoable, so don't hold on to the command.
-    }
-
-    // now modify the shader usage attribute to have an entry per shader
-    // adding and removing entries as necessary
-
-    // first add any shader group shaders to the list
-    Attribute::AttributeViewer< Asset::ShaderGroupAttribute > shaderGroup( GetPackage< Asset::AssetClass >() );
-    if ( shaderGroup.Valid() )
-    {
-      Asset::V_ShaderGroupSmartPtr::const_iterator groupItr = shaderGroup->m_ShaderGroups.begin();
-      Asset::V_ShaderGroupSmartPtr::const_iterator groupEnd = shaderGroup->m_ShaderGroups.end();
-      for ( ; groupItr != groupEnd; ++groupItr )
-      {
-        const Asset::ShaderGroup* group = *groupItr;
-        M_tuid::const_iterator remapItr = group->m_ShaderMapping.begin();
-        M_tuid::const_iterator remapEnd = group->m_ShaderMapping.end();
-        for ( ; remapItr != remapEnd; ++remapItr )
-        {
-          if ( remapItr->first != remapItr->second && remapItr->second != TUID::Null )
-          {
-            Nocturnal::Insert< M_TuidToStr >::Result inserted = currentShaderIds.insert( M_TuidToStr::value_type( remapItr->second, group->GetTitle() ) );
-            if ( !inserted.second )
-            {
-              if ( !inserted.first->second.empty() )
-              {
-                inserted.first->second += ", ";
-                inserted.first->second += group->GetTitle();
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // next remove the shader usages that are no longer valid
-    Asset::V_ShaderUsage validUsages;
-    Asset::V_ShaderUsage::iterator itr = shaderUsages->m_ShaderUsages.begin();
-    Asset::V_ShaderUsage::iterator end = shaderUsages->m_ShaderUsages.end();
-
-    for ( ; itr != end; ++itr )
-    {
-      M_TuidToStr::iterator found = currentShaderIds.find( (*itr)->m_ShaderID );
-      if ( found != currentShaderIds.end() )
-      {
-        (*itr)->m_ShaderGroupName = found->second;
-        currentShaderIds.erase( (*itr)->m_ShaderID );
-        validUsages.push_back( (*itr) );
-      }
-    }
-
-    // for what is left, add new shader usages
-    M_TuidToStr::const_iterator newItr = currentShaderIds.begin();
-    M_TuidToStr::const_iterator newEnd = currentShaderIds.end();
-    for ( ; newItr != newEnd; ++newItr )
-    {
-      Asset::ShaderUsagePtr shaderUsage = new Asset::ShaderUsage();
-      shaderUsage->m_ShaderID = (newItr->first);
-      if ( !newItr->second.empty() )
-      {
-        shaderUsage->m_ShaderGroupName = newItr->second;
-      }
-      validUsages.push_back( shaderUsage );
-    }
-
-    // alphabetize the shaders by name
-    std::sort( validUsages.begin(), validUsages.end(), SortShaderUsages() );
-
-    // now update the attribute with the valid usages
-    shaderUsages->m_ShaderUsages = validUsages;
-
-    // Notify listeners that the persistent data has changed.
-    shaderUsages->RaiseChanged( shaderUsages->GetClass()->FindField( &Asset::ShaderUsagesAttribute::m_ShaderUsages ) );
-
-    m_AssetManager->ClearUndoQueue();
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Adds an Animation Attribute to this Asset if possible (if there's not already
-// one) and associates a new Animation Set with the Animation Attribute.
-// 
-Undo::CommandPtr AssetClass::AddAnimationSet( std::string& msg )
-{
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand();
-
-  // Make sure that there is an AnimationAttribute on this asset, and if not, add one.
-  Asset::AssetClass* pkg = GetPackage< Asset::AssetClass >();
-  Luna::AnimationAttribute* animationAttrib = Reflect::ObjectCast< Luna::AnimationAttribute >( FindAttribute( Reflect::GetType< Asset::AnimationAttribute >() ) );
-
-  if ( !animationAttrib )
-  {
-    // No AnimationAttribute so add it.
-    Asset::AnimationAttributePtr animPkg = Reflect::AssertCast< Asset::AnimationAttribute >( Reflect::Registry::GetInstance()->CreateInstance( Reflect::GetType< Asset::AnimationAttribute >() ) );
-    if ( !pkg->ValidateAttribute( animPkg, msg ) )
-    {
-      msg += "An Animation attribute could not be added to " + GetName() + ".";
-      return NULL;
-    }
-
-    // Add an undoable command to the batch that adds the animation attribute to this asset.
-    Luna::AttributeWrapperPtr newAttrib = PersistentDataFactory::GetInstance()->CreateTyped< Luna::AttributeWrapper >( animPkg, m_AssetManager );
-    animationAttrib = Reflect::AssertCast< Luna::AnimationAttribute >( newAttrib );
-    batch->Push( new AttributeExistenceCommand( Undo::ExistenceActions::Add, this, animationAttrib ) );
-  }
-  else
-  {
-    // Already has an AnimationAttribute, make sure that there's no AnimationSet associated.
-    if ( animationAttrib->GetAnimationSetID() != TUID::Null )
-    {
-      std::stringstream error;
-      error << "Failed to add an Animation Set to " << GetFilePath() << " because it already has a reference to an Animation Set in its Animation attribute.";
-      msg += error.str();
-      return NULL;
-    }
-  }
-
-  // If we get to here, we better have an AnimationAttribute to work with.
-  NOC_ASSERT( animationAttrib );
-
-  // Create the AnimationSet and add a reference to it on the AnimationAttribute...
-  Asset::AnimationSetAssetPtr animationSetPkg = Reflect::AssertCast< Asset::AnimationSetAsset >( Reflect::Registry::GetInstance()->CreateInstance( Reflect::GetType< Asset::AnimationSetAsset >() ) );
-  animationSetPkg->MakeDefault();
-
-  // Update the ArtFileAttribute reference on the AnimationSet to match this asset class.
-  Luna::AttributeWrapper* artFileAttribute = FindAttribute( Reflect::GetType< Asset::ArtFileAttribute >() );
-  if ( artFileAttribute )
-  {
-    Attribute::AttributeEditor< Asset::ArtFileAttribute > artFileEditor( animationSetPkg );
-    if ( artFileEditor.Valid() )
-    {
-      artFileEditor->m_FileID = artFileAttribute->GetPackage< Asset::ArtFileAttribute >()->m_FileID;
-    }
-  }
-
-  // Figure out where to put the new animation set.
-  tuid fileID = TUID::Null;
-  std::string filePath = GetFilePath();
-  FileSystem::StripExtension( filePath );
-  FinderSpecs::Asset::ANIMSET_DECORATION.Modify( filePath );
-
-  if ( FileSystem::Exists( filePath ) )
-  {
-    std::stringstream stream;
-    stream << "There is already a file located at: " << filePath << ". You need to hook up the Animation Set manually.";
-    wxMessageBox( stream.str(), "Error", wxCENTER | wxICON_ERROR | wxOK, GetAssetManager()->GetAssetEditor() );
-    return NULL;
-  }
-
-  try
-  {
-    fileID = File::GlobalManager().Open( filePath );
-  }
-  catch ( const Nocturnal::Exception& e )
-  {
-    msg += "Error: " + e.Get();
-    return NULL;
-  }
-
-  if ( fileID == TUID::Null )
-  {
-    msg += "Unable to assign a TUID to " + filePath;
-    return NULL;
-  }
-
-  // Let the Asset Editor know that we need a new AssetClass created.
-  animationSetPkg->m_AssetClassID = fileID;
-  animationSetPkg->Serialize();
-  animationSetPkg = NULL;
-  std::string loadMsg;
-  Luna::AssetClass* animationSet = m_AssetManager->Open( filePath, loadMsg, false );
-  if ( !animationSet )
-  {
-    msg += "Error loading " + filePath + ": " + loadMsg;
-    return NULL;
-  }
-
-  // Make an undoable command to associate the AnimationAttribute with the new AnimationSet.
-  batch->Push( new Undo::PropertyCommand< tuid >( new Nocturnal::MemberProperty< Luna::AnimationAttribute, tuid >( animationAttrib, &Luna::AnimationAttribute::GetAnimationSetID, &Luna::AnimationAttribute::SetAnimationSetID ), fileID ) );
-
-  // Return the batch if it's not empty.
-  if ( !batch->IsEmpty() )
-  {
-    return batch;
-  }
-  return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -14,8 +14,8 @@
 #include "Platform/Mutex.h"
 #include "SQL/MySQL.h"
 
-#include <mysql/include/mysql.h>
-#include <mysql/include/errmsg.h>
+#include <mysql.h>
+#include <errmsg.h>
 #include <sstream>
 
 namespace Luna

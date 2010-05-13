@@ -131,7 +131,6 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
 , m_Browser( browser )
 , m_BrowserSearch( browserSearch )
 , m_SearchHistory( searchHistory )
-, m_RemoteViewer( this )
 , m_PreferencePrefix( "BrowserFrame" )
 , m_NavigationPanel( NULL )
 , m_ResultsPanel( NULL )
@@ -1119,18 +1118,6 @@ void BrowserFrame::OnDelete( wxCommandEvent& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void BrowserFrame::RunViewer( Asset::AssetClass* asset, bool showOptions )
-{
-  if ( !m_RemoteViewer.IsEnabled() )
-  {
-    SessionManager::GetInstance()->GiveViewerControl( NULL );
-    m_RemoteViewer.Enable( true );
-  }
-
-  m_RemoteViewer.BuildAndViewAsset( asset, showOptions );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnViewOnTarget( wxCommandEvent& event )
 {
   wxBusyCursor busyCursor;
@@ -1156,12 +1143,6 @@ void BrowserFrame::OnViewOnTargetWithOptions( wxCommandEvent& event )
     Asset::AssetClassPtr asset = Asset::AssetFile::GetAssetClass( files.front() );
     RunViewer( asset, true );
   }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void BrowserFrame::OnViewerControlChanged( const ViewerControlChangeArgs& args )
-{
-  m_RemoteViewer.Enable( false );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

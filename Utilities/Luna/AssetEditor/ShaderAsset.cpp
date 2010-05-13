@@ -8,18 +8,8 @@
 #include "AssetReferenceNode.h"
 #include "PersistentDataFactory.h"
 
-#include "Asset/AnisotropicShaderAsset.h"
-#include "Asset/AudioVisualizationShaderAsset.h"
-#include "Asset/BRDFShaderAsset.h"
-#include "Asset/FoliageShaderAsset.h"
-#include "Asset/FurFragmentShaderAsset.h"
-#include "Asset/FurShaderAsset.h"
-#include "Asset/GroundFogShaderAsset.h"
-#include "Asset/OffScreenShaderAsset.h"
-#include "Asset/RefractionShaderAsset.h"
 #include "Asset/StandardShaderAsset.h"
 #include "Asset/TextureMapAttribute.h"
-#include "Asset/WaterPoolShaderAsset.h"
 
 #include "Common/String/Natural.h"
 #include "File/Manager.h"
@@ -130,47 +120,6 @@ std::string ShaderAsset::GetIcon() const
   if ( typeID != Reflect::GetType< Asset::StandardShaderAsset >() )
   {
     icon = "enginetype_custom_shader_16.png";
-  }
-
-  if ( typeID == Reflect::GetType< Asset::AnisotropicShaderAsset >() )
-  {
-    // TODO: need icon
-  }
-  else if ( typeID == Reflect::GetType< Asset::AudioVisualizationShaderAsset >() )
-  {
-    // TODO: need icon
-  }
-  else if ( typeID == Reflect::GetType< Asset::FurFragmentShaderAsset >() )
-  {
-    return "custom_shader_fur_16.png";
-  }
-  else if ( typeID == Reflect::GetType< Asset::FurShaderAsset >() )
-  {
-    // TODO: need icon
-  }
-  else if ( typeID == Reflect::GetType< Asset::GroundFogShaderAsset >() )
-  {
-    // TODO: need icon
-  }
-  else if ( typeID == Reflect::GetType< Asset::OffScreenShaderAsset >() )
-  {
-    // TODO: need icon
-  }
-  else if ( typeID == Reflect::GetType< Asset::RefractionShaderAsset >() )
-  {
-    // TODO: need icon
-  }
-  else if ( typeID == Reflect::GetType< Asset::WaterPoolShaderAsset >() )
-  {
-    // TODO: need icon
-  }
-  else if ( typeID == Reflect::GetType< Asset::BRDFShaderAsset >() )
-  {
-    // TODO: need icon
-  }
-  else if ( typeID == Reflect::GetType< Asset::FoliageShaderAsset >() )
-  {
-    return "custom_shader_foliage_16.png";
   }
 
   return icon;

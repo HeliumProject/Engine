@@ -17,8 +17,6 @@ namespace Luna
   namespace FilePathOptions{ enum FilePathOption; }
   class AssetOutliner;
   class BrowserToolBar;
-  class RemoteAsset;
-  class MultiAnimPanel; 
   class ContextMenuArgs;
   typedef Nocturnal::SmartPtr< ContextMenuArgs > ContextMenuArgsPtr;
   class AssetPreviewWindow;
@@ -33,10 +31,8 @@ namespace Luna
 
   private:
     Luna::AssetManager m_AssetManager;
-    RemoteAsset* m_RemoteAsset;
     UIToolKit::MenuMRUPtr m_MRU;
     AssetOutliner* m_Outliner;
-    MultiAnimPanel* m_MultiAnimPanel; 
     Inspect::Canvas m_PropertyCanvas;
     EnumeratorPtr m_Enumerator;
     PropertiesManagerPtr m_PropertiesManager;
@@ -68,7 +64,6 @@ namespace Luna
     virtual ~AssetEditor();
 
     Luna::AssetManager* GetAssetManager();
-    RemoteAsset* GetRemoteInterface();
 
     bool Open( const std::string& file );
 

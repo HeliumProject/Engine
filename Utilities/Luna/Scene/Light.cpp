@@ -20,7 +20,6 @@
 #include "Content/RectangleLight.h"
 #include "Content/CylinderLight.h"
 #include "Content/DiscLight.h"
-#include "Content/StencilTextureAttribute.h"
 
 #include "Attribute/AttributeHandle.h"
 #include "LightPanel.h"
@@ -1137,40 +1136,6 @@ bool Light::GetSelectionHelperPhysicalLight() const
 void Light::SetSelectionHelperPhysicalLight( bool b )
 {
   m_SelectionHelper[LightSelectionChoices::PhysicalLight] = b;
-}
-
-/*
-bool Light::GetSelectionHelperLightType() const
-{
-  return m_SelectionHelper[LightSelectionChoices::LightType];
-}
-
-void Light::SetSelectionHelperLightType( bool b )
-{
-  m_SelectionHelper[LightSelectionChoices::LightType] = b;
-}
-*/
-
-
-bool Light::GetUseStencilTexture() const
-{
-  Attribute::AttributeViewer< Content::StencilTextureAttribute > attr( GetPackage< Content::Light >() );
-  return attr.Valid();
-}
-
-void Light::SetUseStencilTexture( bool b )
-{
-  Content::Light* light = GetPackage< Content::Light >();
-  NOC_ASSERT(light);
-  if( b )
-  {
-    Attribute::AttributeEditor< Content::StencilTextureAttribute > attr( light  );
-    attr.Commit();
-  }
-  else
-  {
-    light->RemoveAttribute( Reflect::GetType<Content::StencilTextureAttribute >() );
-  }
 }
 
 static bool CompareLights( Content::Light* light1, Content::Light* light2, BitArray& selectionHelperMask  )

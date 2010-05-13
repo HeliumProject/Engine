@@ -96,8 +96,6 @@ namespace Luna
   typedef std::map<ElementTypeFlags, Reflect::Element*> M_ElementByType;
   typedef std::map<ElementTypeFlags, std::vector<Reflect::Element*> > M_ElementsByType;
   typedef std::map<ElementTypeFlags, Inspect::InterpreterPtr> M_InterpretersByType;
-  typedef std::map<std::string, Symbol::UDTInstance*> M_UDTInstanceBySymbol;
-  typedef std::map<std::string, std::vector<Symbol::UDTInstance*> > M_UDTInstancesBySymbol;
   typedef std::map<std::string, Inspect::InterpreterPtr> M_InterpretersBySymbol;
 
   class LUNA_CORE_API EnumerateElementArgs
@@ -106,17 +104,11 @@ namespace Luna
     M_ElementByType& m_CurrentElements;
     M_ElementsByType& m_CommonElements;
     M_InterpretersByType& m_CommonElementInterpreters;
-    M_UDTInstanceBySymbol& m_CurrentUDTInstances;
-    M_UDTInstancesBySymbol& m_CommonUDTInstances;
-    M_InterpretersBySymbol& m_CommonUDTInstanceInterpreters;
 
   public:
     EnumerateElementArgs( M_ElementByType& currentElements,
                           M_ElementsByType& commonElements,
-                          M_InterpretersByType& commonElementInterpreters,
-                          M_UDTInstanceBySymbol& currentUDTInstances,
-                          M_UDTInstancesBySymbol& commonUDTInstances,
-                          M_InterpretersBySymbol& commonUDTInstanceInterpreters );
+                          M_InterpretersByType& commonElementInterpreters );
 
     void EnumerateElement(Reflect::Element* element, i32 includeFlags = 0xFFFFFFFF, i32 excludeFlags = 0x0 );
   };

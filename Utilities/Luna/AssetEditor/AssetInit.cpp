@@ -1,10 +1,5 @@
 #include "Precompile.h"
 #include "AssetInit.h"
-#include "AnimationAttribute.h"
-#include "AnimationConfigAsset.h"
-#include "AnimationChain.h"
-#include "AnimationGroup.h"
-#include "AnimationSetAsset.h"
 #include "ArrayItemNode.h"
 #include "ArrayNode.h"
 #include "AssetEditor.h"
@@ -26,21 +21,13 @@
 #include "FieldNode.h"
 #include "FileArrayNode.h"
 #include "FileBackedAttribute.h"
-#include "FoliageAsset.h"
 #include "PersistentData.h"
 #include "PersistentNode.h" 
 #include "Inspect/ReflectClipboardData.h"
-#include "RuntimeDataNode.h"
 #include "ShaderAsset.h"
-#include "ShaderUsage.h"
-#include "ShaderUsagesAttribute.h"
 #include "SimpleFieldNode.h"
-#include "SkyAsset.h"
-#include "LooseGraphShaderAsset.h"
 #include "LevelAsset.h"
 #include "TextureMapAttribute.h"
-#include "UpdateClassAttribute.h"
-#include "WeatherAttribute.h"
 
 #include "Common/InitializerStack.h"
 #include "Asset/AssetInit.h"
@@ -96,30 +83,17 @@ void LunaAsset::InitializeModule()
     g_InitializerStack.Push( Luna::FileArrayNode::InitializeType, Luna::FileArrayNode::CleanupType );
     g_InitializerStack.Push( Luna::SimpleFieldNode::InitializeType, Luna::SimpleFieldNode::CleanupType );
     g_InitializerStack.Push( Luna::PersistentData::InitializeType, Luna::PersistentData::CleanupType );
-    g_InitializerStack.Push( Luna::AnimationChain::InitializeType, Luna::AnimationChain::CleanupType );
-    g_InitializerStack.Push( Luna::AnimationGroup::InitializeType, Luna::AnimationGroup::CleanupType );
     g_InitializerStack.Push( Luna::AssetClass::InitializeType, Luna::AssetClass::CleanupType );
     g_InitializerStack.Push( Luna::AssetReferenceNode::InitializeType, Luna::AssetReferenceNode::CleanupType );
-    g_InitializerStack.Push( Luna::AnimationConfigAsset::InitializeType, Luna::AnimationConfigAsset::CleanupType );
-    g_InitializerStack.Push( Luna::AnimationSetAsset::InitializeType, Luna::AnimationSetAsset::CleanupType );
-    g_InitializerStack.Push( Luna::SkyAsset::InitializeType, Luna::SkyAsset::CleanupType );
-    g_InitializerStack.Push( Luna::LooseGraphShaderAsset::InitializeType, Luna::LooseGraphShaderAsset::CleanupType );
-    g_InitializerStack.Push( Luna::FoliageAsset::InitializeType, Luna::FoliageAsset::CleanupType );
     g_InitializerStack.Push( Luna::LevelAsset::InitializeType, Luna::LevelAsset::CleanupType ); 
     g_InitializerStack.Push( Luna::ShaderAsset::InitializeType, Luna::ShaderAsset::CleanupType );
     g_InitializerStack.Push( Luna::AttributeWrapper::InitializeType, Luna::AttributeWrapper::CleanupType );
-    g_InitializerStack.Push( Luna::AnimationAttribute::InitializeType, Luna::AnimationAttribute::CleanupType );
     g_InitializerStack.Push( Luna::FileBackedAttribute::InitializeType, Luna::FileBackedAttribute::CleanupType );
-    g_InitializerStack.Push( Luna::UpdateClassAttribute::InitializeType, Luna::UpdateClassAttribute::CleanupType ); 
-    g_InitializerStack.Push( Luna::RuntimeDataNode::InitializeType, Luna::RuntimeDataNode::CleanupType ); 
     g_InitializerStack.Push( Luna::TextureMapAttribute::InitializeType, Luna::TextureMapAttribute::CleanupType );
-    g_InitializerStack.Push( Luna::ShaderUsagesAttribute::InitializeType, Luna::ShaderUsagesAttribute::CleanupType );
-    g_InitializerStack.Push( Luna::ShaderUsage::InitializeType, Luna::ShaderUsage::CleanupType );
     g_InitializerStack.Push( Luna::AttributeContainer::InitializeType, Luna::AttributeContainer::CleanupType );
     g_InitializerStack.Push( Luna::AttributeNode::InitializeType, Luna::AttributeNode::CleanupType );
     g_InitializerStack.Push( AssetDocument::InitializeType, AssetDocument::CleanupType );
     g_InitializerStack.Push( AssetEditor::InitializeEditor, AssetEditor::CleanupEditor );
-    g_InitializerStack.Push( Luna::WeatherAttribute::InitializeType, Luna::WeatherAttribute::CleanupType );
 
     UIToolKit::ImageManagerInit( FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder(),
       FinderSpecs::Luna::GAME_THEME_FOLDER.GetFolder() );

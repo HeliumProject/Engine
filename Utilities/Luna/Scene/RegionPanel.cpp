@@ -25,9 +25,6 @@ RegionPanel::RegionPanel(Enumerator* enumerator, const OS_SelectableDumbPtr& sel
     }
   }
 
-  // make another copy of the selection for the runtime data panel. 
-  LRegionRuntimeDataAdapter::CreateSelection(m_Selection, m_RuntimeSelection); 
-
   // set up some parent class configuration
   m_Expanded = true;
   m_Text = "Region"; 
@@ -35,21 +32,10 @@ RegionPanel::RegionPanel(Enumerator* enumerator, const OS_SelectableDumbPtr& sel
 
 RegionPanel::~RegionPanel()
 {
-  LRegionRuntimeDataAdapter::DeleteSelection(m_RuntimeSelection); 
 }
 
 void RegionPanel::Create()
 {
   m_ReflectInterpreter = m_Interpreter->CreateInterpreter<Inspect::ReflectInterpreter>(this);  
   m_ReflectInterpreter->Interpret( m_Regions ); 
-
-  m_RuntimeDataPanel = new RuntimeDataPanel(m_Enumerator, m_RuntimeSelection); 
-  m_RuntimeDataPanel->SetExpanded(true); 
-
-  m_Enumerator->Push( m_RuntimeDataPanel );
-  {
-    m_RuntimeDataPanel->SetCanvas( m_Enumerator->GetContainer()->GetCanvas() );
-    m_RuntimeDataPanel->Create();
-  }
-  m_Enumerator->Pop();
 }

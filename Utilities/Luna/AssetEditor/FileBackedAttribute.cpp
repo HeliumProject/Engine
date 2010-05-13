@@ -6,7 +6,7 @@
 #include "AssetPreferences.h"
 #include "PersistentDataFactory.h"
 
-#include "File/ManagedFileDialog.h"
+#include "FileUI/ManagedFileDialog.h"
 #include "FileBrowser/FileBrowser.h"
 #include "Finder/Finder.h"
 #include "Editor/ContextMenuGenerator.h"

@@ -339,14 +339,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\ShaderCache.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ShaderCache.h"
-					>
-				</File>
-				<File
 					RelativePath=".\StandardColorMapAttribute.cpp"
 					>
 				</File>

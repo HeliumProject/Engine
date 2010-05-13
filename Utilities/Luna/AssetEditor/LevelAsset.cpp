@@ -1,13 +1,9 @@
 #include "Precompile.h" 
 #include "LevelAsset.h" 
 
-#include "BuilderUtil/ColorPalette.h"
-
 #include "AssetManager.h"
 #include "AttributeExistenceCommand.h"
 #include "PersistentDataFactory.h"
-
-#include "Asset/WeatherAttribute.h"
 
 #include "Console/Console.h"
 #include "Inspect/Control.h"
@@ -50,15 +46,6 @@ LevelAsset::LevelAsset( Asset::LevelAsset* level, Luna::AssetManager* manager )
   // comes from Reflect::Element
   level->AddChangedListener( Reflect::ElementChangeSignature::Delegate (this, &LevelAsset::OnElementChanged)); 
 
-  // weather control attribute
-  {
-    const Attribute::AttributePtr attr = level->GetAttribute(Reflect::GetType<Asset::WeatherAttribute>());
-    if(attr)
-    {
-      attr->AddChangedListener(Reflect::ElementChangeSignature::Delegate( this, &LevelAsset::WeatherAttributeChanged ) );
-    }
-  }
-
   level->AddAttributeAddedListener( Attribute::AttributeCollectionChangedSignature::Delegate(this, &LevelAsset::OnAttributeAdded)); 
   level->AddAttributeRemovedListener( Attribute::AttributeCollectionChangedSignature::Delegate(this, &LevelAsset::OnAttributeRemoved)); 
 }
@@ -67,15 +54,6 @@ LevelAsset::~LevelAsset()
 {
   const Asset::LevelAssetPtr& level = GetPackage< Asset::LevelAsset >(); 
   level->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate (this, &LevelAsset::OnElementChanged)); 
-
-  // weather control attribute
-  {
-    const Attribute::AttributePtr attr = level->GetAttribute(Reflect::GetType<Asset::WeatherAttribute>());
-    if(attr)
-    {
-      attr->RemoveChangedListener(Reflect::ElementChangeSignature::Delegate( this, &LevelAsset::WeatherAttributeChanged ) );
-    }
-  }
 
   //Listen for add/remove attribute
   level->RemoveAttributeAddedListener( Attribute::AttributeCollectionChangedSignature::Delegate(this, &LevelAsset::OnAttributeAdded)); 
@@ -119,31 +97,6 @@ void LevelAsset::WeatherAttributeChanged(const Reflect::ElementChangeArgs& args)
       notifyArgs.m_Flags   |= Luna::WEATHER_OP_TEXTURES2D_RELOAD;
     }
 
-    if(args.m_Field->m_UIName == "Custom Palette")
-    {
-      Attribute::AttributeViewer< Asset::WeatherAttribute > weatherAttr( notifyArgs.m_LevelClass );
-      if(weatherAttr.Valid() && (weatherAttr->m_FogCustomPalette != TUID::Null))
-      {
-        ColorPalette::Palette::ValidateAndHandleCustomPalette(weatherAttr->m_FogCustomPalette);
-      }
-    }
-
-    if(args.m_Field->m_UIName == "Cube Map Override")
-    {
-      Attribute::AttributeViewer< Asset::WeatherAttribute > weatherAttr( notifyArgs.m_LevelClass );
-
-      if(weatherAttr->m_WetnessCubeMap != TUID::Null)
-      {
-        char      argv[512];
-        sprintf_s(argv, "buildtool "TUID_HEX_FORMAT"", weatherAttr->m_WetnessCubeMap);
-        intptr_t  result = system( argv );
-
-        if(result == EXIT_SUCCESS)
-        {
-          notifyArgs.m_Flags   |= Luna::WEATHER_OP_CUBEMAP_RELOAD;
-        }
-      }
-    }
   }
 
   m_LevelWeatherAttributesChanged.Raise(notifyArgs);
@@ -151,25 +104,8 @@ void LevelAsset::WeatherAttributeChanged(const Reflect::ElementChangeArgs& args)
 
 void LevelAsset::OnAttributeAdded(const Attribute::AttributeCollectionChanged& args)
 {
-  // weather control attribute
-  const Asset::WeatherAttributePtr attr = Reflect::ConstObjectCast<Asset::WeatherAttribute>(args.m_Attribute);
-  if(attr)
-  {
-    attr->AddChangedListener(Reflect::ElementChangeSignature::Delegate( this, &LevelAsset::WeatherAttributeChanged ) );
-    LevelWeatherAttributesChangedArgs notifyArgs; 
-    notifyArgs.m_Flags        = Luna::WEATHER_OP_TEXTURES2D_RELOAD;
-    notifyArgs.m_LevelClass   = GetPackage< Asset::LevelAsset >(); 
-    m_LevelWeatherAttributesChanged.Raise(notifyArgs);
-  }
 }
 
 void LevelAsset::OnAttributeRemoved(const Attribute::AttributeCollectionChanged& args)
 {
-  // weather control attribute
-  const Asset::WeatherAttributePtr attr = Reflect::ConstObjectCast<Asset::WeatherAttribute>(args.m_Attribute);
-  if(attr)
-  {
-    attr->RemoveChangedListener(Reflect::ElementChangeSignature::Delegate( this, &LevelAsset::WeatherAttributeChanged ) );
-    WeatherAttributeChanged(Reflect::ElementChangeArgs(attr, NULL));
-  }
 }

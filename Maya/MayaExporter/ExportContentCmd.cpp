@@ -16,7 +16,6 @@
 #include "Finder/ContentSpecs.h"
 #include "FileSystem/FileSystem.h"
 #include "RCS/RCS.h"
-#include "igAsset/AssetFile.h"
 
 using namespace MayaContent;
 
@@ -92,7 +91,7 @@ MStatus ExportContentCmd::doIt( const MArgList & args )
   // including fear that maya would crash during export and lose work
   if ( MGlobal::mayaState() == MGlobal::kInteractive )
   {
-    if ( PromptCheckoutMayaFile( currentFile ) )
+    if ( true ) //PromptCheckoutMayaFile( currentFile ) )
     {
       // don't want this callback hit from in here
       MSceneMessage::removeCallback( g_AfterSaveCallbackID );

@@ -9,7 +9,6 @@
 #include "Dependencies/Dependencies.h"
 
 #include "AssetBuilder/BuilderOptions.h"
-#include "IGSerializer/IGSerializer.h"
 
 #include "TextureProcess/TextureProcess.h"
 

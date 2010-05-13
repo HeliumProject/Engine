@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
+				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
+				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)\..&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -864,14 +864,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\RuntimeClassOutliner.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\RuntimeClassOutliner.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\Scene.cpp"
 				>
 			</File>
@@ -945,14 +937,6 @@
 			</File>
 			<File
 				RelativePath=".\Scene\SceneNode.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneNodeItem.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneNodeItem.h"
 				>
 			</File>
 			<File
@@ -1270,65 +1254,9 @@
 					RelativePath=".\Scene\PivotTransform.h"
 					>
 				</File>
-				<File
-					RelativePath=".\Scene\RuntimeDataPanel.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\RuntimeDataPanel.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\WaterPlane.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\WaterPlane.h"
-					>
-				</File>
 				<Filter
 					Name="Gameplay"
 					>
-					<File
-						RelativePath=".\Scene\Clue.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Clue.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ClueCreateTool.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ClueCreateTool.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Controller.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Controller.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ControllerCreateTool.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ControllerCreateTool.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ControllerType.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ControllerType.h"
-						>
-					</File>
 					<File
 						RelativePath=".\Scene\Curve.cpp"
 						>
@@ -1399,30 +1327,6 @@
 					</File>
 					<File
 						RelativePath=".\Scene\EntityType.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\GameCamera.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\GameCamera.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\GameCameraCreateTool.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\GameCameraCreateTool.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\GameCameraType.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\GameCameraType.h"
 						>
 					</File>
 					<File
@@ -1502,14 +1406,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Scene\CubeMapProbe.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\CubeMapProbe.h"
-						>
-					</File>
-					<File
 						RelativePath=".\Scene\DirectionalLight.cpp"
 						>
 					</File>
@@ -1518,247 +1414,11 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Scene\GroupItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\GroupItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\JobItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\JobItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LeafItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LeafItem.h"
-						>
-					</File>
-					<File
 						RelativePath=".\Scene\Light.cpp"
 						>
 					</File>
 					<File
 						RelativePath=".\Scene\Light.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightableGroupItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightableGroupItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightableItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightableItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightCreateTool.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightCreateTool.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightGroupItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightGroupItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingEnvironment.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingEnvironment.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingEnvironmentGroupItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingEnvironmentGroupItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingEnvironmentItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingEnvironmentItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingGenerated.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingGenerated.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingJob.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingJob.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingJobCommand.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingJobCommand.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingJobTree.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingJobTree.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingList.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingListLight.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingListLight.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingListLightingEnvironment.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingListLightingEnvironment.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingListObject.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingListObject.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingListProbe.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingListProbe.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingListVolume.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingListVolume.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingListZone.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingListZone.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingPanel.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingPanel.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingSetupChecker.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingSetupChecker.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingTool.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingTool.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingTreeItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingTreeItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingVolume.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingVolume.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingVolumePanel.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingVolumePanel.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingVolumeType.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightingVolumeType.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightmapUVViewer.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\LightmapUVViewer.h"
 						>
 					</File>
 					<File
@@ -1783,46 +1443,6 @@
 					</File>
 					<File
 						RelativePath=".\Scene\PortalLight.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ProbeGroupItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ProbeGroupItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ProbeItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ProbeItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\RenderGroupItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\RenderGroupItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ShadowDirection.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ShadowDirection.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ShadowGroupItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ShadowGroupItem.h"
 						>
 					</File>
 					<File
@@ -1864,14 +1484,6 @@
 				</File>
 				<File
 					RelativePath=".\Scene\LayerGrid.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\LightingLayerGrid.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\LightingLayerGrid.h"
 					>
 				</File>
 			</Filter>
@@ -2179,35 +1791,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ZoneGroupItem.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ZoneGroupItem.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ZoneItem.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ZoneItem.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Scene\ZonePanel.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Scene\ZonePanel.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ZoneUnloadedItem.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ZoneUnloadedItem.h"
 					>
 				</File>
 			</Filter>
@@ -2365,50 +1953,6 @@
 					</File>
 				</Filter>
 			</Filter>
-		</Filter>
-		<Filter
-			Name="Live"
-			>
-			<File
-				RelativePath=".\Live\LiveFrame.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Live\LiveFrame.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Live\LiveGenerated.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Live\LiveGenerated.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Live\LiveInit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Live\LiveInit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Live\LiveManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Live\LiveManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Live\RuntimeConnection.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Live\RuntimeConnection.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Browser"
@@ -2699,378 +2243,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Character Editor"
-			>
-			<File
-				RelativePath=".\CharacterEditor\AttachmentCollisionInterpreter.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\AttachmentCollisionInterpreter.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\BaseLooseAttachCollisionDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\BaseLooseAttachCollisionDialog.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterAttributesPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterAttributesPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterDocument.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterDocument.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterDynJointPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterDynJointPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterEditor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterEditor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterForms.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterForms.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterIKPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterIKPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterInit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterInit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterLooseAttachPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterLooseAttachPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterLooseAttachWizard.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterLooseAttachWizard.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterMainPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterMainPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterPhysicsPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterPhysicsPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterPreferences.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterPreferences.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterPropertiesPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\CharacterPropertiesPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\JointListPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\JointListPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\LooseAttachCollisionDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CharacterEditor\LooseAttachCollisionDialog.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="AnimationEventsEditor"
-			>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationActiveEventsPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationActiveEventsPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsDocument.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsDocument.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsEditor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsEditor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsEditorIDs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsInit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsInit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsPanels.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsPanels.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsPreferences.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsPreferences.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsUndoCommands.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationEventsUndoCommands.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationMainPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationMainPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationPanelBase.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationPropertyPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationPropertyPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationTimelinePanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationTimelinePanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationTimelineSlider.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\AnimationTimelineSlider.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\RemoteAnimationEvents.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationEventsEditor\RemoteAnimationEvents.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="CinematicEventsEditor"
-			>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicActiveEventsPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicActiveEventsPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsDocument.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsDocument.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsEditor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsEditor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsEditorIDs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsInit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsInit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsPanels.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsPanels.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsUndoCommands.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicEventsUndoCommands.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicMainPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicMainPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicPanelBase.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicPreferences.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicPreferences.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicPropertyPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicPropertyPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicTimelinePanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicTimelinePanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicTimelineSlider.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CinematicEventsEditor\CinematicTimelineSlider.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="AssetEditor"
 			>
 			<File
@@ -3162,18 +2334,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Helpers"
-				>
-				<File
-					RelativePath=".\AssetEditor\AnimationHelper.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\AssetEditor\AnimationHelper.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="Nodes"
 				>
 				<File
@@ -3214,14 +2374,6 @@
 				</File>
 				<File
 					RelativePath=".\AssetEditor\PersistentNode.h"
-					>
-				</File>
-				<File
-					RelativePath=".\AssetEditor\RuntimeDataNode.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\AssetEditor\RuntimeDataNode.h"
 					>
 				</File>
 				<Filter
@@ -3328,67 +2480,15 @@
 					RelativePath=".\AssetEditor\PersistentDataFactory.h"
 					>
 				</File>
-				<File
-					RelativePath=".\AssetEditor\ShaderUsage.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\AssetEditor\ShaderUsage.h"
-					>
-				</File>
-				<Filter
-					Name="Animation"
-					>
-					<File
-						RelativePath=".\AssetEditor\AnimationChain.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\AnimationChain.h"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\AnimationGroup.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\AnimationGroup.h"
-						>
-					</File>
-				</Filter>
 				<Filter
 					Name="Asset Classes"
 					>
-					<File
-						RelativePath=".\AssetEditor\AnimationConfigAsset.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\AnimationConfigAsset.h"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\AnimationSetAsset.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\AnimationSetAsset.h"
-						>
-					</File>
 					<File
 						RelativePath=".\AssetEditor\AssetClass.cpp"
 						>
 					</File>
 					<File
 						RelativePath=".\AssetEditor\AssetClass.h"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\FoliageAsset.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\FoliageAsset.h"
 						>
 					</File>
 					<File
@@ -3400,14 +2500,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\LooseGraphShaderAsset.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\LooseGraphShaderAsset.h"
-						>
-					</File>
-					<File
 						RelativePath=".\AssetEditor\ShaderAsset.cpp"
 						>
 					</File>
@@ -3415,26 +2507,10 @@
 						RelativePath=".\AssetEditor\ShaderAsset.h"
 						>
 					</File>
-					<File
-						RelativePath=".\AssetEditor\SkyAsset.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\SkyAsset.h"
-						>
-					</File>
 				</Filter>
 				<Filter
 					Name="Attributes"
 					>
-					<File
-						RelativePath=".\AssetEditor\AnimationAttribute.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\AnimationAttribute.h"
-						>
-					</File>
 					<File
 						RelativePath=".\AssetEditor\AttributeWrapper.cpp"
 						>
@@ -3452,35 +2528,11 @@
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ShaderUsagesAttribute.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\ShaderUsagesAttribute.h"
-						>
-					</File>
-					<File
 						RelativePath=".\AssetEditor\TextureMapAttribute.cpp"
 						>
 					</File>
 					<File
 						RelativePath=".\AssetEditor\TextureMapAttribute.h"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\UpdateClassAttribute.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\UpdateClassAttribute.h"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\WeatherAttribute.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\AssetEditor\WeatherAttribute.h"
 						>
 					</File>
 				</Filter>
@@ -3498,20 +2550,8 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Live"
-				>
-			</Filter>
-			<Filter
 				Name="User Interface"
 				>
-				<File
-					RelativePath=".\AssetEditor\AnimGroupDlg.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\AssetEditor\AnimGroupDlg.h"
-					>
-				</File>
 				<File
 					RelativePath=".\AssetEditor\AssetEditor.cpp"
 					>
@@ -3565,35 +2605,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\MultiAnimPanel.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\AssetEditor\MultiAnimPanel.h"
-					>
-				</File>
-				<File
 					RelativePath=".\AssetEditor\PromptNewExistingDlg.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\AssetEditor\PromptNewExistingDlg.h"
-					>
-				</File>
-				<File
-					RelativePath=".\AssetEditor\ShaderGroupDlg.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\AssetEditor\ShaderGroupDlg.h"
-					>
-				</File>
-				<File
-					RelativePath=".\AssetEditor\ShaderGroupPropGrid.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\AssetEditor\ShaderGroupPropGrid.h"
 					>
 				</File>
 			</Filter>

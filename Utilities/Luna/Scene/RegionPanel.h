@@ -2,10 +2,8 @@
 
 #include "API.h"
 #include "Region.h"
-#include "RuntimeDataPanel.h"
 #include "Core/Selectable.h"
 #include "Inspect/Panel.h"
-#include "InspectSymbol/SymbolInterpreter.h"
 #include "InspectReflect/ReflectInterpreter.h"
 #include "Core/Enumerator.h"
 
@@ -29,9 +27,6 @@ namespace Luna
     OS_SelectableDumbPtr               m_RuntimeSelection; 
     std::vector<Reflect::Element*>     m_Regions; 
 
-    RuntimeDataPanel*                 m_RuntimeDataPanel; 
     Inspect::ReflectInterpreterPtr m_ReflectInterpreter; 
-
-    typedef RuntimeDataAdapter<Luna::Region, Content::Region> LRegionRuntimeDataAdapter; 
   };
 }

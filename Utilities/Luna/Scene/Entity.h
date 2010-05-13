@@ -3,7 +3,6 @@
 #include "Instance.h"
 
 #include "Asset/Entity.h"
-#include "Asset/BakedLightingAttribute.h"
 
 namespace Luna
 {

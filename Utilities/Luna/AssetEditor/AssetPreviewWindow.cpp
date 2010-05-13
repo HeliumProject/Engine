@@ -3,10 +3,6 @@
 #include "AssetPreviewWindow.h"
 
 #include "AssetPreferences.h"
-#include "Asset/CustomMapsAttributes.h"
-#include "Asset/FoliageMapAttribute.h"
-#include "Asset/FoliageShadowMapAttribute.h"
-#include "Asset/GrainMapAttribute.h"
 #include "Asset/GraphShaderAsset.h"
 #include "Asset/StandardColorMapAttribute.h"
 #include "Asset/StandardNormalMapAttribute.h"
@@ -14,7 +10,6 @@
 #include "Asset/StandardDetailMapAttribute.h"
 #include "File/Manager.h"
 #include "igDXContent/ShaderLoader.h"
-#include "RemoteAsset.h"
 #include "ShaderProcess/ShaderProcess.h"
 #include "ShaderProcess/ShaderRegistry.h"
 

@@ -26,6 +26,7 @@ using namespace Luna;
 
 int Browser::s_InitCount = 0;
 Browser* Browser::s_GlobalBrowser = NULL;
+Nocturnal::InitializerStack Browser::s_InitializerStack;
 
 ///////////////////////////////////////////////////////////////////////////////
 void Browser::Initialize()

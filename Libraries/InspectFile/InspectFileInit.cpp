@@ -16,8 +16,8 @@
 
 using namespace Inspect;
 
-i32 g_InitCount = 0;
-Nocturnal::InitializerStack g_RegisteredTypes;
+static i32 g_InitCount = 0;
+static Nocturnal::InitializerStack g_RegisteredTypes;
 
 void InspectFile::Initialize()
 {

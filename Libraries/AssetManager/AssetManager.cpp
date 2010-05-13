@@ -74,14 +74,16 @@ public:
 typedef std::vector< RelatedFile > M_RelatedFile;
 M_RelatedFile g_RelatedFiles;
 
-
-int g_InitRef = 0;
-Nocturnal::InitializerStack g_InitializerStack;
+namespace AssetManager
+{
+    int g_InitCount = 0;
+    Nocturnal::InitializerStack g_InitializerStack;
+}
 
 
 void AssetManager::Initialize()
 {
-  if ( ++g_InitRef > 1 )
+  if ( ++g_InitCount > 1 )
   {
     return;
   }
@@ -112,7 +114,7 @@ void AssetManager::Initialize()
 
 void AssetManager::Cleanup()
 {
-  if ( --g_InitRef )
+  if ( --g_InitCount )
   {
     return;
   }

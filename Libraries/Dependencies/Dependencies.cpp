@@ -60,11 +60,11 @@ namespace Dependencies
   Windows::CriticalSection g_HighLevelCS;
 
   DependencyGraph* g_DependenciesGraph = NULL;
-  int g_InitRef = 0;
+  int g_InitCount = 0;
 
   void Initialize()
   {
-    if ( ++g_InitRef == 1 ) 
+    if ( ++g_InitCount == 1 ) 
     {
       g_DependenciesGraph = new DependencyGraph();
     }
@@ -72,7 +72,7 @@ namespace Dependencies
 
   void Cleanup()
   {
-    if ( --g_InitRef == 0 )
+    if ( --g_InitCount == 0 )
     {
       delete g_DependenciesGraph;
       g_DependenciesGraph = NULL;

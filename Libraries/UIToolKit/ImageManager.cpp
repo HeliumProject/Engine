@@ -16,7 +16,7 @@ namespace UIToolKit
 {
   static ImageManager* g_GlobalImageManager = NULL;
   
-  int g_InitRef = 0;
+  int g_InitCount = 0;
 
   const int g_IconSizes[IconSizes::Count] = { 16, 32, 64, 128 };
   
@@ -52,7 +52,7 @@ namespace UIToolKit
 
   bool ImageManagerInit( const std::string& defaultFolder, const std::string& themeFolder )
   {
-    if ( ++g_InitRef == 1 ) 
+    if ( ++g_InitCount == 1 ) 
     {
       // ImageHandlers:
       //    wxWidgets normally doesn't link in image handlers for all types of images,
@@ -83,7 +83,7 @@ namespace UIToolKit
 
   void ImageManagerCleanup()
   {
-    if ( --g_InitRef == 0 )
+    if ( --g_InitCount == 0 )
     {
 
       delete g_GlobalImageManager;

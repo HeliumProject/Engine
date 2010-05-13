@@ -14,7 +14,6 @@
 #include "Asset/CacheDB.h"
 #include "Common/Environment.h"
 #include "Common/Exception.h"
-#include "Common/InitializerStack.h"
 #include "Editor/SessionManager.h"
 #include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
@@ -25,61 +24,62 @@
 
 using namespace Luna;
 
+int Browser::s_InitCount = 0;
+Browser* Browser::s_GlobalBrowser = NULL;
 
 ///////////////////////////////////////////////////////////////////////////////
-Nocturnal::InitializerStack g_InitializerStack;
-int g_InitRef = 0;
-static Browser* g_GlobalBrowser = NULL;
 void Browser::Initialize()
 {
-  if ( ++g_InitRef > 1 )
+  if ( ++s_InitCount > 1 )
+  {
     return;
+  }
 
-  g_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
+  s_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
 
-  g_InitializerStack.Push( Reflect::RegisterClass<AssetCollection>( "AssetCollection" ) );
-  g_InitializerStack.Push( Reflect::RegisterClass<DependencyCollection>( "DependencyCollection" ) );
-  g_InitializerStack.Push( Reflect::RegisterClass<CollectionManager>( "CollectionManager" ) );
+  s_InitializerStack.Push( Reflect::RegisterClass<AssetCollection>( "AssetCollection" ) );
+  s_InitializerStack.Push( Reflect::RegisterClass<DependencyCollection>( "DependencyCollection" ) );
+  s_InitializerStack.Push( Reflect::RegisterClass<CollectionManager>( "CollectionManager" ) );
 
-  g_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::SearchTypes::SearchType>( &Luna::SearchTypes::SearchTypesEnumerateEnumeration, "SearchType" ) );
-  g_InitializerStack.Push( Reflect::RegisterClass<SearchQuery>( "SearchQuery" ) );
+  s_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::SearchTypes::SearchType>( &Luna::SearchTypes::SearchTypesEnumerateEnumeration, "SearchType" ) );
+  s_InitializerStack.Push( Reflect::RegisterClass<SearchQuery>( "SearchQuery" ) );
 
-  g_InitializerStack.Push( Reflect::RegisterClass<SearchHistory>( "SearchHistory" ) );
+  s_InitializerStack.Push( Reflect::RegisterClass<SearchHistory>( "SearchHistory" ) );
 
-  g_InitializerStack.Push( Reflect::RegisterEnumeration<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnumeration, "ViewOptionID" ) );
+  s_InitializerStack.Push( Reflect::RegisterEnumeration<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnumeration, "ViewOptionID" ) );
 
-  g_InitializerStack.Push( Reflect::RegisterClass<BrowserPreferences>( "BrowserPreferences" ) );
+  s_InitializerStack.Push( Reflect::RegisterClass<BrowserPreferences>( "BrowserPreferences" ) );
   
-  g_InitializerStack.Push( Luna::BrowserSearchDatabase::Initialize, Luna::BrowserSearchDatabase::Cleanup );
+  s_InitializerStack.Push( Luna::BrowserSearchDatabase::Initialize, Luna::BrowserSearchDatabase::Cleanup );
 
-  g_GlobalBrowser = new Browser();
-  g_GlobalBrowser->InitializePreferences();
+  s_GlobalBrowser = new Browser();
+  s_GlobalBrowser->InitializePreferences();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void Browser::Cleanup()
 {
-  if ( --g_InitRef > 0 )
+  if ( --s_InitCount > 0 )
     return;
 
-  NOC_ASSERT( g_InitRef == 0 );
-  g_InitRef = 0;
+  NOC_ASSERT( s_InitCount == 0 );
+  s_InitCount = 0;
 
-  delete g_GlobalBrowser;
-  g_GlobalBrowser = NULL;
+  delete s_GlobalBrowser;
+  s_GlobalBrowser = NULL;
 
-  g_InitializerStack.Cleanup();
+  s_InitializerStack.Cleanup();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 Browser& Luna::GlobalBrowser()
 {
-  if ( !g_GlobalBrowser )
+  if ( !Browser::GlobalBrowser() )
   {
     throw Nocturnal::Exception( "GlobalBrowser is not initialized, must call Browser::Initialize() first." );
   }
 
-  return *g_GlobalBrowser;
+  return *Browser::GlobalBrowser();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

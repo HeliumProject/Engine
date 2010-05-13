@@ -32,8 +32,11 @@ using namespace Inspect;
 
 EditFilePathSignature::Event Inspect::g_EditFilePath;
 
-i32 g_InitCount = 0;
-Nocturnal::InitializerStack g_InitializerStack;
+namespace Inspect
+{
+    i32 g_InitCount = 0;
+    Nocturnal::InitializerStack g_InitializerStack;
+}
 
 void Inspect::Initialize()
 {

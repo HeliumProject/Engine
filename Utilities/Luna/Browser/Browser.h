@@ -10,6 +10,7 @@
 #include "Asset/CacheDB.h"
 #include "Common/Memory/SmartPtr.h"
 #include "Common/Types.h"
+#include "Common/InitializerStack.h"
 #include "Editor/DocumentManager.h"
 
 //
@@ -43,11 +44,22 @@ namespace Luna
     Browser( const Browser& rhs ) {}
     Browser& operator=( const Browser& rhs ) {}
 
+
+  protected:
+    static Nocturnal::InitializerStack s_InitializerStack;
+    static int s_InitCount;
+    static Browser* s_GlobalBrowser;
+
   public:
     ~Browser();
     
     static void Initialize();
     static void Cleanup();
+
+    static Browser* GlobalBrowser()
+    {
+        return s_GlobalBrowser;
+    }
     
     void ShowBrowser( const std::string& queryString = std::string("") );
     bool HasFrame();

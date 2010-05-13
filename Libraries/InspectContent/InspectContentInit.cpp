@@ -14,8 +14,11 @@
 
 using namespace Inspect;
 
-i32 g_InitCount = 0;
-Nocturnal::InitializerStack g_InitializerStack;
+namespace InspectContent
+{
+    i32 g_InitCount = 0;
+    Nocturnal::InitializerStack g_InitializerStack;
+}
 
 void InspectContent::Initialize()
 {

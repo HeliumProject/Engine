@@ -15,7 +15,11 @@
 
 using namespace Inspect;
 
-i32 g_InitCount = 0;
+namespace InspectReflect
+{
+    i32 g_InitCount = 0;
+}
+
 Nocturnal::InitializerStack g_IntializerStack;
 
 void InspectReflect::Initialize()

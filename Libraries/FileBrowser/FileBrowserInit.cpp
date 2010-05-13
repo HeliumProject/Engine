@@ -4,8 +4,11 @@
 #include "File/Manager.h"
 #include "FileInfo.h"
 
-static u32 g_InitCount = 0;
-Nocturnal::InitializerStack g_RegisteredTypes;
+namespace FileBrowser
+{
+    static i32 g_InitCount = 0;
+    Nocturnal::InitializerStack g_RegisteredTypes;
+}
 
 void FileBrowser::Initialize()
 {

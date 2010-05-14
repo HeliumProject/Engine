@@ -7,7 +7,7 @@
 	>
 	<UserMacro
 		Name="boost"
-		Value="C:\Perforce\andyb_FRANCK-WMD-PC\Lunar\Dev\External\boost_1_43_0"
+		Value="$(SolutionDir)SDK\boost\1.42"
 	/>
 	<UserMacro
 		Name="Crypto++"
@@ -18,17 +18,17 @@
 		Value="c:\Program Files (x86)\Microsoft DirectX SDK (February 2010)"
 	/>
 	<UserMacro
-        Name="DirectXBin"
-        Value="C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Utilities\bin\x64"
-    />
+	  Name="DirectXBin"
+    Value="C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Utilities\bin\x64"
+  />
 	<UserMacro
 		Name="Expat"
 		Value="$(SolutionDir)SDK\Expat\2.01"
 	/>
-    <UserMacro
-        Name="Maya"
-        Value="C:\Perforce\andyb_FRANCK-WMD-PC\Lunar\Dev\External\Maya2011-x86"
-    />
+  <UserMacro
+    Name="Maya"
+    Value="C:\Program Files (x86)\Autodesk\Maya2011"
+  />
 	<UserMacro
 		Name="MySQL"
 		Value="$(SolutionDir)SDK\MySQL\6.0.2"
@@ -63,7 +63,7 @@
 	/>
 	<UserMacro
 		Name="wxWidgets"
-		Value="C:\Perforce\andyb_FRANCK-WMD-PC\Lunar\Dev\External\wxMSW-2.8.11"
+		Value="$(SolutionDir)SDK\wxWidgets\2.8.11"
 	/>
 	<UserMacro
 		Name="WXWIN"

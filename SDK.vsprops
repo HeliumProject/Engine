@@ -43,7 +43,7 @@
 	/>
 	<UserMacro
 		Name="p4api"
-		Value="$(SolutionDir)SDK\p4api\2009.1.205670"
+		Value="$(SolutionDir)SDK\p4api\2009.2"
 	/>
 	<UserMacro
 		Name="SQLite"

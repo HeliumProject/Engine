@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="xpm;..\..\libraries;&quot;$(IG_SDK_lua_unhacked)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(TargetDir)&quot;"
+				AdditionalIncludeDirectories="..\..\Libraries;xpm;&quot;$(lua)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(TargetDir)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
@@ -61,10 +61,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="lua.lib"
+				AdditionalDependencies="comctl32.lib rpcrt4.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(IG_SDK_lua_unhacked)\lib\$(PlatformName)\$(ConfigurationName)&quot;;$(wxWidgets)\lib\vc_lib"
+				AdditionalLibraryDirectories="&quot;$(wxWidgets)\lib\vc_lib&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -120,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="xpm;..\..\libraries;&quot;$(IG_SDK_lua_unhacked)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(TargetDir)&quot;"
+				AdditionalIncludeDirectories="..\..\Libraries;xpm;&quot;$(lua)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(TargetDir)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				WarningLevel="3"
@@ -138,10 +138,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="lua.lib"
+				AdditionalDependencies="comctl32.lib rpcrt4.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(IG_SDK_lua_unhacked)\lib\$(PlatformName)\$(ConfigurationName)&quot;;$(wxWidgets)\lib\vc_lib"
+				AdditionalLibraryDirectories="&quot;$(wxWidgets)\lib\vc_lib&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -193,6 +193,14 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{122FA330-2209-4BF0-A359-9C0C113369E2}"
 			RelativePathToProject=".\libraries\File\File.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{C87D1745-76D6-4A2E-B655-23564E398510}"
+			RelativePathToProject=".\SDK\lua\5.1.4\lua.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
+			RelativePathToProject=".\SDK\wxPropertyGrid\1.4.11\wxPropertyGrid.vcproj"
 		/>
 	</References>
 	<Files>

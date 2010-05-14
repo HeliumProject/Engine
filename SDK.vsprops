@@ -26,6 +26,10 @@
 		Value="$(SolutionDir)SDK\Expat\2.01"
 	/>
   <UserMacro
+    Name="lua"
+    Value="$(SolutionDir)SDK\lua\5.1.4"
+  />
+  <UserMacro
     Name="Maya"
     Value="C:\Program Files (x86)\Autodesk\Maya2011"
   />

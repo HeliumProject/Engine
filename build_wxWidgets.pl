@@ -51,8 +51,8 @@ sub BuildConfig
 
   chdir "$path\\build\\msw";
 
-  Build( "BUILD=debug SHARED=$shared MONOLITHIC=1 DEBUG_INFO=1 $options" );
-  Build( "BUILD=release SHARED=$shared MONOLITHIC=1 DEBUG_INFO=1 $options" );
+  Build( "BUILD=debug SHARED=$shared DEBUG_INFO=1 $options" );
+  Build( "BUILD=release SHARED=$shared DEBUG_INFO=1 $options" );
 }
 
 sub Build

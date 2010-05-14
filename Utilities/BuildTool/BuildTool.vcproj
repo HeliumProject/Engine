@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..;..\..\..\..;..\..\libraries;$(boost);&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..\..\libraries;&quot;$(boost)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;WXUSINGMONOLITHIC"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,8 +61,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll"
+				AdditionalDependencies="comctl32.lib rpcrt4.lib"
+				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				LargeAddressAware="2"
@@ -117,7 +117,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..;..\..\..\..;..\..\libraries;$(boost);&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..\..\libraries;&quot;$(boost)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;WXUSINGMONOLITHIC"
 				RuntimeLibrary="2"
 				OpenMP="false"
@@ -137,8 +137,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll"
+				AdditionalDependencies="comctl32.lib rpcrt4.lib"
+				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				LargeAddressAware="2"

@@ -5,11 +5,11 @@
 
 namespace igDXContent
 {
-  class IRBObjectLoader : public igDXRender::ObjectLoader
+  class RBObjectLoader : public igDXRender::ObjectLoader
   {
   public:
-    IRBObjectLoader();
-    virtual ~IRBObjectLoader();
+    RBObjectLoader();
+    virtual ~RBObjectLoader();
 
     u32 ParseFile(const char* fname,bool winding);
   };

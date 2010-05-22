@@ -51,7 +51,6 @@ namespace Luna
 
     // Launch a Luna Editor or an external editor to open a file
     void Edit( const std::string& file );
-    void Edit( const tuid& fileID );
 
     bool CheckOut( const std::string& file, bool prompt = false );
 

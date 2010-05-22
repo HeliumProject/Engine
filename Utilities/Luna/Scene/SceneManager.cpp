@@ -12,7 +12,6 @@
 #include "Attribute/AttributeHandle.h"
 #include "Common/Container/Insert.h" 
 #include "Console/Console.h"
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "UIToolKit/FileDialog.h"
 
@@ -118,22 +117,17 @@ DocumentPtr SceneManager::OpenPath( const std::string& path, std::string& error 
 
   std::string scenePath = path;
   SceneDocumentPtr document;
-  tuid fileID = File::GlobalManager().Open( path );
+  File::Reference fileRef( path );
 
   // If this is actually a level file, we need to open it, grab the level
   // settings, and also pull in the world file as a scene.
-  if ( FileSystem::HasExtension( path, FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() ) )
+  if ( fileRef.GetFile().GetPath().Extension() == FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() )
   {
     std::stringstream errStr; 
-    if ( fileID == TUID::Null )
-    {
-      error = "The file path (" + path + ") does not exist in the resolver and the system failed to open it.";
-      return NULL;
-    }
 
     try
     {
-      m_CurrentLevel = Reflect::AssertCast< Asset::LevelAsset >( Asset::AssetClass::FindAssetClass( fileID, false ) );
+      m_CurrentLevel = Reflect::AssertCast< Asset::LevelAsset >( Asset::AssetClass::LoadAssetClass( fileRef ) );
     }
     catch ( const Nocturnal::Exception& e )
     {
@@ -148,13 +142,15 @@ DocumentPtr SceneManager::OpenPath( const std::string& path, std::string& error 
     }
 
     Attribute::AttributeViewer< Asset::WorldFileAttribute > world( m_CurrentLevel, false );    
-    if ( !world.Valid() || world->GetFilePath().empty() )
+    world->GetFileReference().Resolve();
+
+    if ( !world.Valid() || world->GetFileReference().IsValid() )
     {
       error = "Level file " + path + " does not reference a world file."; 
       return NULL; 
     }
 
-    scenePath = world->GetFilePath(); 
+    scenePath = world->GetFileReference().GetPath();
   }
 
   ScenePtr scene = NewScene( m_Root == NULL, scenePath, true );
@@ -207,13 +203,15 @@ ScenePtr SceneManager::OpenZone( const std::string& path, std::string& error )
   }
   else
   {
-    tuid fileID = File::GlobalManager().GetID( path );
+      File::Reference zoneRef( path );
+      zoneRef.Resolve();
+
     S_ZoneDumbPtr::const_iterator zoneItr = m_Root->GetZones().begin();
     S_ZoneDumbPtr::const_iterator zoneEnd = m_Root->GetZones().end();
     for ( ; zoneItr != zoneEnd; ++zoneItr )
     {
       Zone* zone = *zoneItr;
-      if ( zone->GetFileID() == fileID )
+      if ( zone->GetFileReference()->GetHash() == zoneRef.GetHash() )
       {
         scene->SetColor( zone->GetColor() );
         break;
@@ -446,26 +444,6 @@ Luna::Scene* SceneManager::GetScene( const std::string& path ) const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Finds a scene by file ID.
-// 
-Luna::Scene* SceneManager::GetScene( const tuid& id ) const
-{
-  std::string path;
-
-  try
-  {
-    path = File::GlobalManager().GetPath( id );
-  }
-  catch ( const File::Exception& e )
-  {
-    Console::Error( "%s\n", e.what() );
-    return NULL;
-  }
-
-  return GetScene( path );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified scene is a nested (allocated) scene.  Otherwise
 // the scene is a world or zone.
 // 
@@ -504,31 +482,6 @@ Luna::Scene* SceneManager::AllocateNestedScene( const std::string& path, Luna::S
     // Increment the reference count on the nested scene.
     i32& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( scene, 0 ) ).first->second;
     ++referenceCount;
-  }
-
-  return scene;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Same as above function, but lets you specify a TUID.
-// 
-Luna::Scene* SceneManager::AllocateNestedScene( const tuid& id, Luna::Scene* parent )
-{
-  Luna::Scene* scene = NULL;
-  std::string path;
-
-  try
-  {
-    path = File::GlobalManager().GetPath( id );
-  }
-  catch ( const Nocturnal::Exception& e )
-  {
-    Console::Error( "%s\n", e.what() );
-  }
-
-  if ( !path.empty() )
-  {
-    scene = AllocateNestedScene( path, parent );
   }
 
   return scene;
@@ -583,41 +536,6 @@ bool SceneManager::IsCurrentScene( const Luna::Scene* sceneToCompare ) const
 Luna::Scene* SceneManager::GetCurrentScene() const
 {
   return m_CurrentScene;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the "lighting zone", optionally loading it if specified.
-// 
-Luna::Scene* SceneManager::GetLightingScene( bool load )
-{
-  if ( m_CurrentLevel.ReferencesObject() && m_CurrentLevel->m_LightingZone != TUID::Null )
-  {
-    Luna::Scene* lightingScene = GetScene( m_CurrentLevel->m_LightingZone );
-    if( !lightingScene && load )
-    {
-      std::string path;
-      try
-      {
-        path = File::GlobalManager().GetPath( m_CurrentLevel->m_LightingZone );
-      }
-      catch( File::Exception& e )
-      {
-        Console::Error( "Could not load lighting zone: %s", e.what() );
-      }      
-
-      if ( !path.empty() )
-      {
-        std::string error;
-        lightingScene = OpenZone( path, error );
-        if ( !lightingScene )
-        {
-          Console::Error( "Could not load lighting zone (%s): %s", path.c_str(), error.c_str() );
-        }
-      }
-    }
-    return lightingScene;
-  }
-  return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

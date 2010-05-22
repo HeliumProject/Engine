@@ -12,8 +12,6 @@
 #include "FieldFactory.h"
 #include "RemoveAssetNodeCommand.h"
 
-#include "File/Manager.h"
-#include "FileUI/ManagedFileDialog.h"
 #include "FileBrowser/FileBrowser.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
@@ -21,6 +19,7 @@
 #include "Editor/RefreshSelectionCommand.h"
 #include "Core/Enumerator.h"
 #include "UIToolKit/ImageManager.h"
+#include "UIToolKit/FileDialog.h"
 
 
 using namespace Luna;
@@ -33,8 +32,8 @@ LUNA_DEFINE_TYPE( Luna::AssetReferenceNode );
 // 
 void AssetReferenceNode::InitializeType()
 {
-  Reflect::RegisterClass<Luna::AssetReferenceNode>( "Luna::AssetReferenceNode" );
-  Enumerator::InitializePanel( "Asset", CreatePanelSignature::Delegate( &Luna::AssetReferenceNode::CreatePanel ) );
+    Reflect::RegisterClass<Luna::AssetReferenceNode>( "Luna::AssetReferenceNode" );
+    Enumerator::InitializePanel( "Asset", CreatePanelSignature::Delegate( &Luna::AssetReferenceNode::CreatePanel ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,28 +41,29 @@ void AssetReferenceNode::InitializeType()
 // 
 void AssetReferenceNode::CleanupType()
 {
-  Reflect::UnregisterClass<Luna::AssetReferenceNode>();
+    Reflect::UnregisterClass<Luna::AssetReferenceNode>();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-AssetReferenceNode::AssetReferenceNode( Luna::AssetManager* manager, const tuid& assetClassID, const Reflect::Field* field )
+AssetReferenceNode::AssetReferenceNode( Luna::AssetManager* manager, File::Reference& assetFileReference, const Reflect::Field* field )
 : Luna::AssetNode( manager )
 , m_Asset( NULL )
-, m_AssetID( assetClassID )
 , m_Element( NULL )
 , m_Field( field )
 , m_AttributeContainer( NULL )
 {
-  SetName( MakeLabel() );
-  SetIcon( MakeIcon() );
-  SetStyle( LabelStyles::Bold );
+    m_AssetFileReference = new File::Reference( assetFileReference );
 
-  // Add listeners
-  GetAssetManager()->AddAssetUnloadingListener( AssetLoadSignature::Delegate ( this, &AssetReferenceNode::AssetUnloading ) );
+    SetName( MakeLabel() );
+    SetIcon( MakeIcon() );
+    SetStyle( LabelStyles::Bold );
 
-  GetAssetEditorPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &AssetReferenceNode::PreferenceChanged ) );
+    // Add listeners
+    GetAssetManager()->AddAssetUnloadingListener( AssetLoadSignature::Delegate ( this, &AssetReferenceNode::AssetUnloading ) );
+
+    GetAssetEditorPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &AssetReferenceNode::PreferenceChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,23 +71,23 @@ AssetReferenceNode::AssetReferenceNode( Luna::AssetManager* manager, const tuid&
 // 
 AssetReferenceNode::~AssetReferenceNode()
 {
-  // Remove listeners
-  GetAssetManager()->RemoveAssetUnloadingListener( AssetLoadSignature::Delegate ( this, &AssetReferenceNode::AssetUnloading ) );
+    // Remove listeners
+    GetAssetManager()->RemoveAssetUnloadingListener( AssetLoadSignature::Delegate ( this, &AssetReferenceNode::AssetUnloading ) );
 
-  GetAssetEditorPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &AssetReferenceNode::PreferenceChanged ) );
+    GetAssetEditorPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &AssetReferenceNode::PreferenceChanged ) );
 
-  if ( IsFieldAssociated() )
-  {
-    m_Element->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate ( this, &AssetReferenceNode::OnElementChanged ) );
-  }
+    if ( IsFieldAssociated() )
+    {
+        m_Element->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate ( this, &AssetReferenceNode::OnElementChanged ) );
+    }
 
-  if ( m_Asset )
-  {
-    AssetDocument* doc = GetAssetManager()->FindAssetDocument( m_Asset );
-    doc->AddDocumentModifiedListener( DocumentChangedSignature::Delegate ( this, &AssetReferenceNode::DocumentModified ) );
-    m_Asset->UnregisterAssetReferenceNode( this );
-    m_Asset->GetPackage< Asset::AssetClass >()->RemoveEngineTypeChangedListener( Asset::EngineTypeChangeSignature::Delegate( this, &AssetReferenceNode::EngineTypeChanged ) );
-  }
+    if ( m_Asset )
+    {
+        AssetDocument* doc = GetAssetManager()->FindAssetDocument( m_Asset );
+        doc->AddDocumentModifiedListener( DocumentChangedSignature::Delegate ( this, &AssetReferenceNode::DocumentModified ) );
+        m_Asset->UnregisterAssetReferenceNode( this );
+        m_Asset->GetPackage< Asset::AssetClass >()->RemoveAssetTypeChangedListener( Asset::AssetTypeChangeSignature::Delegate( this, &AssetReferenceNode::AssetTypeChanged ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,12 +96,12 @@ AssetReferenceNode::~AssetReferenceNode()
 // 
 Luna::AssetClass* AssetReferenceNode::GetAssetClass() const
 {
-  if ( !m_Asset )
-  {
-    return __super::GetAssetClass();
-  }
+    if ( !m_Asset )
+    {
+        return __super::GetAssetClass();
+    }
 
-  return m_Asset;
+    return m_Asset;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -111,25 +111,25 @@ Luna::AssetClass* AssetReferenceNode::GetAssetClass() const
 // 
 void AssetReferenceNode::CreateChildren()
 {
-  if ( m_Asset )
-  {
-    // Fields on the asset class
-    Luna::FieldFactory::GetInstance()->CreateChildFieldNodes( this, m_Asset->GetPackage< Reflect::Element >(), GetAssetManager() );
-
-    m_AttributeContainer = new Luna::AttributeContainer( GetAssetManager(), m_Asset );
-    AddChild( m_AttributeContainer );
-
-    // Child for each attribute
-    M_AttributeSmartPtr::const_iterator attributeItr = m_Asset->GetAttributes().begin();
-    M_AttributeSmartPtr::const_iterator attributeEnd = m_Asset->GetAttributes().end();
-    for ( ; attributeItr != attributeEnd; ++attributeItr )
+    if ( m_Asset )
     {
-      const AttributeWrapperPtr& attribute = attributeItr->second;
-      Luna::AttributeNodePtr attributeNode = new Luna::AttributeNode( attribute );
-      m_AttributeContainer->AddChild( attributeNode );
-      attributeNode->CreateChildren();
+        // Fields on the asset class
+        Luna::FieldFactory::GetInstance()->CreateChildFieldNodes( this, m_Asset->GetPackage< Reflect::Element >(), GetAssetManager() );
+
+        m_AttributeContainer = new Luna::AttributeContainer( GetAssetManager(), m_Asset );
+        AddChild( m_AttributeContainer );
+
+        // Child for each attribute
+        M_AttributeSmartPtr::const_iterator attributeItr = m_Asset->GetAttributes().begin();
+        M_AttributeSmartPtr::const_iterator attributeEnd = m_Asset->GetAttributes().end();
+        for ( ; attributeItr != attributeEnd; ++attributeItr )
+        {
+            const AttributeWrapperPtr& attribute = attributeItr->second;
+            Luna::AttributeNodePtr attributeNode = new Luna::AttributeNode( attribute );
+            m_AttributeContainer->AddChild( attributeNode );
+            attributeNode->CreateChildren();
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -138,24 +138,26 @@ void AssetReferenceNode::CreateChildren()
 // 
 void AssetReferenceNode::ActivateItem()
 {
-  // Should we prompt if the file is already open elsewhere in the tree?
+    // Should we prompt if the file is already open elsewhere in the tree?
 
-  if ( m_AssetID == TUID::Null )
-  {
-    ContextMenuArgsPtr args = new ContextMenuArgs();
-    OnChangePathFinder( args );
-    if ( !args->GetBatch()->IsEmpty() )
+    m_AssetFileReference->Resolve();
+
+    if ( !m_AssetFileReference->IsValid() )
     {
-      GetAssetManager()->Push( args->GetBatch() );
+        ContextMenuArgsPtr args = new ContextMenuArgs();
+        OnChangePathFinder( args );
+        if ( !args->GetBatch()->IsEmpty() )
+        {
+            GetAssetManager()->Push( args->GetBatch() );
+        }
+        return;
     }
-    return;
-  }
 
-  if ( !m_Asset )
-  {
-    Load();
-    GetAssetManager()->GetSelection().Refresh();
-  }
+    if ( !m_Asset )
+    {
+        Load();
+        GetAssetManager()->GetSelection().Refresh();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -164,43 +166,43 @@ void AssetReferenceNode::ActivateItem()
 // 
 void AssetReferenceNode::Load()
 {
-  if ( !m_Asset )
-  {
-    Luna::AssetClass* assetClass = GetAssetManager()->FindAsset( m_AssetID );
-    if ( !assetClass )
+    if ( !m_Asset )
     {
-      std::string error;
-      assetClass = GetAssetManager()->Open( File::GlobalManager().GetPath( m_AssetID ), error, false );
-      if ( !error.empty() )
-      {
-        Console::Error( "%s\n", error.c_str() );
-      }
+        m_AssetFileReference->Resolve();
+
+        Luna::AssetClass* assetClass = GetAssetManager()->FindAsset( m_AssetFileReference->GetHash() );
+        if ( !assetClass )
+        {
+            std::string error;
+            assetClass = GetAssetManager()->Open( m_AssetFileReference->GetPath(), error, false );
+            if ( !error.empty() )
+            {
+                Console::Error( "%s\n", error.c_str() );
+            }
+        }
+
+        m_Asset = assetClass;
+        ClearCachedAssetClass();
+        CreateChildren();
+
+        if ( m_Asset )
+        {
+            // Add listeners
+            AssetDocument* doc = GetAssetManager()->FindAssetDocument( m_Asset );
+            doc->AddDocumentModifiedListener( DocumentChangedSignature::Delegate ( this, &AssetReferenceNode::DocumentModified ) );
+
+            m_Asset->GetPackage< Asset::AssetClass >()->AddAssetTypeChangedListener( Asset::AssetTypeChangeSignature::Delegate( this, &AssetReferenceNode::AssetTypeChanged ) );
+            m_Asset->RegisterAssetReferenceNode( this );
+
+            SetName( MakeLabel() );
+            SetIcon( MakeIcon() );
+        }
+        else
+        {
+            SetName( "Error loading: " + m_AssetFileReference->GetPath() );
+            SetIcon( "enginetype_unknown_16.png" );
+        }
     }
-
-    m_Asset = assetClass;
-    ClearCachedAssetClass();
-    CreateChildren();
-
-    if ( m_Asset )
-    {
-      // Add listeners
-      AssetDocument* doc = GetAssetManager()->FindAssetDocument( m_Asset );
-      doc->AddDocumentModifiedListener( DocumentChangedSignature::Delegate ( this, &AssetReferenceNode::DocumentModified ) );
-
-      m_Asset->GetPackage< Asset::AssetClass >()->AddEngineTypeChangedListener( Asset::EngineTypeChangeSignature::Delegate( this, &AssetReferenceNode::EngineTypeChanged ) );
-      m_Asset->RegisterAssetReferenceNode( this );
-
-      SetName( MakeLabel() );
-      SetIcon( MakeIcon() );
-    }
-    else
-    {
-      FilePathOptions::FilePathOption filePathOption = FilePathOptions::PartialPath;
-      GetAssetEditorPreferences()->GetEnum( GetAssetEditorPreferences()->FilePathOption(), filePathOption );
-      SetName( "Error loading: " + Luna::TuidToLabel( m_AssetID, filePathOption ) );
-      SetIcon( "enginetype_unknown_16.png" );
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -209,58 +211,22 @@ void AssetReferenceNode::Load()
 // 
 void AssetReferenceNode::Unload()
 {
-  if ( m_Asset )
-  {
-    // Remove listeners
-    AssetDocument* doc = GetAssetManager()->FindAssetDocument( m_Asset );
-    doc->RemoveDocumentModifiedListener( DocumentChangedSignature::Delegate ( this, &AssetReferenceNode::DocumentModified ) );
-
-    m_Asset->GetPackage< Asset::AssetClass >()->RemoveEngineTypeChangedListener( Asset::EngineTypeChangeSignature::Delegate( this, &AssetReferenceNode::EngineTypeChanged ) );
-
-    m_Asset->UnregisterAssetReferenceNode( this );
-
-    DeleteChildren();
-    m_Asset = NULL;
-    SetName( MakeLabel() );
-    SetIcon( MakeIcon() );
-    SetStyle( LabelStyles::Bold );
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the ID of the asset that this node references.
-// 
-tuid AssetReferenceNode::GetAssetID() const
-{
-  return m_AssetID;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Changes the asset that this node references.
-// 
-void AssetReferenceNode::SetAssetID( const tuid& newFileID )
-{
-  if ( m_AssetID != newFileID )
-  {
-    //  Update the serializer if necessary
-    if ( IsFieldAssociated() )
+    if ( m_Asset )
     {
-      // This will result in a callback (OnElementChanged) which will handle
-      // the rest of the operation.
-      Reflect::SerializerPtr serializer = m_Field->CreateSerializer();
-      serializer->ConnectField( m_Element, m_Field );
-      std::stringstream stream;
-      stream << TUID::HexFormat << newFileID;
-      stream >> *serializer;
-    }
-    else
-    {
-      // There's no field associated, so just update our internal pointer and UI.
-      SetAssetIDHelper( newFileID );
-    }
+        // Remove listeners
+        AssetDocument* doc = GetAssetManager()->FindAssetDocument( m_Asset );
+        doc->RemoveDocumentModifiedListener( DocumentChangedSignature::Delegate ( this, &AssetReferenceNode::DocumentModified ) );
 
-    GetAssetManager()->GetSelection().Refresh();
-  }
+        m_Asset->GetPackage< Asset::AssetClass >()->RemoveAssetTypeChangedListener( Asset::AssetTypeChangeSignature::Delegate( this, &AssetReferenceNode::AssetTypeChanged ) );
+
+        m_Asset->UnregisterAssetReferenceNode( this );
+
+        DeleteChildren();
+        m_Asset = NULL;
+        SetName( MakeLabel() );
+        SetIcon( MakeIcon() );
+        SetStyle( LabelStyles::Bold );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -269,26 +235,26 @@ void AssetReferenceNode::SetAssetID( const tuid& newFileID )
 // 
 void AssetReferenceNode::AssociateField( Reflect::Element* element, const Reflect::Field* field )
 {
-  // Sanity checks
-  NOC_ASSERT( element );
-  NOC_ASSERT( field );
-  NOC_ASSERT( field->m_Flags & Reflect::FieldFlags::FileID );
+    // Sanity checks
+    NOC_ASSERT( element );
+    NOC_ASSERT( field );
+    NOC_ASSERT( field->m_Flags & Reflect::FieldFlags::FileRef );
 
-  // Don't try to associate a reference that's already associated!
-  if ( IsFieldAssociated() )
-  {
-    throw Nocturnal::Exception( "Attempted to add field (%s) to reference '%s' when there is already a field associated", field->m_UIName.c_str(), GetName().c_str() );
-  }
+    // Don't try to associate a reference that's already associated!
+    if ( IsFieldAssociated() )
+    {
+        throw Nocturnal::Exception( "Attempted to add field (%s) to reference '%s' when there is already a field associated", field->m_UIName.c_str(), GetName().c_str() );
+    }
 
-  // Store the values
-  m_Element = element;
-  m_Field = field;
+    // Store the values
+    m_Element = element;
+    m_Field = field;
 
-  // Update the label
-  SetName( MakeLabel() );
+    // Update the label
+    SetName( MakeLabel() );
 
-  // Listeners
-  m_Element->AddChangedListener( Reflect::ElementChangeSignature::Delegate ( this, &AssetReferenceNode::OnElementChanged ) );
+    // Listeners
+    m_Element->AddChangedListener( Reflect::ElementChangeSignature::Delegate ( this, &AssetReferenceNode::OnElementChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -296,7 +262,7 @@ void AssetReferenceNode::AssociateField( Reflect::Element* element, const Reflec
 // 
 bool AssetReferenceNode::IsFieldAssociated() const
 {
-  return m_Element && m_Field;
+    return m_Element && m_Field;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -304,10 +270,10 @@ bool AssetReferenceNode::IsFieldAssociated() const
 // 
 void AssetReferenceNode::ConnectProperties( EnumerateElementArgs& args )
 {
-  if ( m_Asset )
-  {
-    args.EnumerateElement( m_Asset->GetPackage< Reflect::Element >() );
-  }
+    if ( m_Asset )
+    {
+        args.EnumerateElement( m_Asset->GetPackage< Reflect::Element >() );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -315,17 +281,17 @@ void AssetReferenceNode::ConnectProperties( EnumerateElementArgs& args )
 // 
 bool AssetReferenceNode::ValidatePanel( const std::string& name )
 {
-  if ( name == "Asset" )
-  {
-    return true;
-  }
+    if ( name == "Asset" )
+    {
+        return true;
+    }
 
-  if ( m_Asset )
-  {
-    return m_Asset->ValidatePanel( name );
-  }
+    if ( m_Asset )
+    {
+        return m_Asset->ValidatePanel( name );
+    }
 
-  return false;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -335,49 +301,49 @@ bool AssetReferenceNode::ValidatePanel( const std::string& name )
 // 
 void AssetReferenceNode::PreShowContextMenu()
 {
-  ContextMenuItemSet& contextMenu = GetContextMenu();
-  contextMenu.Clear();
+    ContextMenuItemSet& contextMenu = GetContextMenu();
+    contextMenu.Clear();
 
-  if ( m_Asset )
-  {
-    m_Asset->PopulateContextMenu( contextMenu );
-  }
-  else
-  {
-    const size_t numSelected = GetAssetManager()->GetSelection().GetItems().Size();
-
-    ContextMenuItemPtr menuItem = new ContextMenuItem( "Edit", "Open file in the Asset Editor." );
-    menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnOpen ) );
-    contextMenu.AppendItem( menuItem );
-
-    SubMenuPtr rcsSubMenu = new SubMenu( "Perforce" );
-    
-    menuItem = new ContextMenuItem( "Check Out" );
-    menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnCheckOutPath ) );
-    rcsSubMenu->AppendItem( menuItem );
-
-    menuItem = new ContextMenuItem( "Revision History" );
-    menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnRevisionHistory ) );
-    rcsSubMenu->AppendItem( menuItem );
-
-    contextMenu.AppendItem( rcsSubMenu );
-
-    if ( IsFieldAssociated() )
+    if ( m_Asset )
     {
-      contextMenu.AppendSeparator();
-      menuItem = new ContextMenuItem( "Change File Path", "Change this file's path using the Open File dialog" );
-      menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnChangePath ) );
-      menuItem->Enable( numSelected == 1 );
-      contextMenu.AppendItem( menuItem );
-
-    
-      wxBitmap finderIcon = UIToolKit::GlobalImageManager().GetBitmap( "magnify_16.png" );
-      menuItem = new ContextMenuItem( "Change File Path (Asset Finder)", "Change this file's path using the Asset Finder", finderIcon );
-      menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnChangePathFinder ) );
-      menuItem->Enable( numSelected == 1 );
-      contextMenu.AppendItem( menuItem );
+        m_Asset->PopulateContextMenu( contextMenu );
     }
-  }
+    else
+    {
+        const size_t numSelected = GetAssetManager()->GetSelection().GetItems().Size();
+
+        ContextMenuItemPtr menuItem = new ContextMenuItem( "Edit", "Open file in the Asset Editor." );
+        menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnOpen ) );
+        contextMenu.AppendItem( menuItem );
+
+        SubMenuPtr rcsSubMenu = new SubMenu( "Perforce" );
+
+        menuItem = new ContextMenuItem( "Check Out" );
+        menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnCheckOutPath ) );
+        rcsSubMenu->AppendItem( menuItem );
+
+        menuItem = new ContextMenuItem( "Revision History" );
+        menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnRevisionHistory ) );
+        rcsSubMenu->AppendItem( menuItem );
+
+        contextMenu.AppendItem( rcsSubMenu );
+
+        if ( IsFieldAssociated() )
+        {
+            contextMenu.AppendSeparator();
+            menuItem = new ContextMenuItem( "Change File Path", "Change this file's path using the Open File dialog" );
+            menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnChangePath ) );
+            menuItem->Enable( numSelected == 1 );
+            contextMenu.AppendItem( menuItem );
+
+
+            wxBitmap finderIcon = UIToolKit::GlobalImageManager().GetBitmap( "magnify_16.png" );
+            menuItem = new ContextMenuItem( "Change File Path (Asset Finder)", "Change this file's path using the Asset Finder", finderIcon );
+            menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnChangePathFinder ) );
+            menuItem->Enable( numSelected == 1 );
+            contextMenu.AppendItem( menuItem );
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -385,7 +351,7 @@ void AssetReferenceNode::PreShowContextMenu()
 // 
 bool AssetReferenceNode::CanBeCopied() const
 {
-  return true;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -393,14 +359,14 @@ bool AssetReferenceNode::CanBeCopied() const
 // 
 Inspect::ReflectClipboardDataPtr AssetReferenceNode::GetClipboardData()
 {
-  Inspect::ReflectClipboardDataPtr data;
-  if ( m_Asset )
-  {
-    data = m_Asset->GetClipboardData();
-  }
-  // TODO: store file path as clipboard data if asset isn't loaded
+    Inspect::ReflectClipboardDataPtr data;
+    if ( m_Asset )
+    {
+        data = m_Asset->GetClipboardData();
+    }
+    // TODO: store file path as clipboard data if asset isn't loaded
 
-  return data;
+    return data;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -409,12 +375,12 @@ Inspect::ReflectClipboardDataPtr AssetReferenceNode::GetClipboardData()
 // 
 bool AssetReferenceNode::CanHandleClipboardData( const Inspect::ReflectClipboardDataPtr& data )
 {
-  bool isValid = false;
-  if ( m_Asset )
-  {
-    isValid = m_Asset->CanHandleClipboardData( data );
-  }
-  return isValid;
+    bool isValid = false;
+    if ( m_Asset )
+    {
+        isValid = m_Asset->CanHandleClipboardData( data );
+    }
+    return isValid;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -422,31 +388,12 @@ bool AssetReferenceNode::CanHandleClipboardData( const Inspect::ReflectClipboard
 // 
 bool AssetReferenceNode::HandleClipboardData( const Inspect::ReflectClipboardDataPtr& data, ClipboardOperation op, Undo::BatchCommand* batch )
 {
-  bool handled = false;
-  if ( m_Asset )
-  {
-    handled = m_Asset->HandleClipboardData( data, op, batch );
-  }
-  return handled;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Updates the cached asset ID and the UI associated with this item.
-// 
-void AssetReferenceNode::SetAssetIDHelper( const tuid& newFileID )
-{
-  if ( m_AssetID != newFileID )
-  {
-    Unload();
-
-    // Update our internal data
-    m_AssetID = newFileID;
-
-    // Update UI
-    SetName( MakeLabel() );
-    SetIcon( MakeIcon() );
-    SetStyle( LabelStyles::Bold );
-  }
+    bool handled = false;
+    if ( m_Asset )
+    {
+        handled = m_Asset->HandleClipboardData( data, op, batch );
+    }
+    return handled;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -454,16 +401,16 @@ void AssetReferenceNode::SetAssetIDHelper( const tuid& newFileID )
 // 
 Luna::AttributeNode* AssetReferenceNode::FindAttributeNode( Luna::AttributeWrapper* attribute )
 {
-  if ( m_AttributeContainer )
-  {
-    M_AttributeNodeDumbPtr::const_iterator found = m_AttributeContainer->GetAttributes().find( attribute->GetSlot() );
-    if ( found != m_AttributeContainer->GetAttributes().end() )
+    if ( m_AttributeContainer )
     {
-      return found->second;
+        M_AttributeNodeDumbPtr::const_iterator found = m_AttributeContainer->GetAttributes().find( attribute->GetSlot() );
+        if ( found != m_AttributeContainer->GetAttributes().end() )
+        {
+            return found->second;
+        }
     }
-  }
 
-  return NULL;
+    return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -473,9 +420,9 @@ Luna::AttributeNode* AssetReferenceNode::FindAttributeNode( Luna::AttributeWrapp
 // 
 Undo::CommandPtr AssetReferenceNode::GetAddAttributeCommand( Luna::AttributeWrapper* attribute )
 {
-  Luna::AttributeNodePtr node = new Luna::AttributeNode( attribute );
-  node->CreateChildren();
-  return new Luna::AddAssetNodeCommand( m_AttributeContainer, node, NULL, false );
+    Luna::AttributeNodePtr node = new Luna::AttributeNode( attribute );
+    node->CreateChildren();
+    return new Luna::AddAssetNodeCommand( m_AttributeContainer, node, NULL, false );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -486,9 +433,9 @@ Undo::CommandPtr AssetReferenceNode::GetAddAttributeCommand( Luna::AttributeWrap
 // 
 Undo::CommandPtr AssetReferenceNode::GetRemoveAttributeCommand( Luna::AttributeWrapper* attribute )
 {
-  Luna::AttributeNode* node = FindAttributeNode( attribute );
-  NOC_ASSERT( node );
-  return new Luna::RemoveAssetNodeCommand( node, false );
+    Luna::AttributeNode* node = FindAttributeNode( attribute );
+    NOC_ASSERT( node );
+    return new Luna::RemoveAssetNodeCommand( node, false );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -496,68 +443,58 @@ Undo::CommandPtr AssetReferenceNode::GetRemoveAttributeCommand( Luna::AttributeW
 // 
 void AssetReferenceNode::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel( "Asset", true );
-  {
-    args.m_Enumerator->PushContainer();
+    args.m_Enumerator->PushPanel( "Asset", true );
     {
-      args.m_Enumerator->AddLabel( "Name" );
-      typedef std::string ( Luna::AssetReferenceNode::*Getter )() const;
-      typedef void ( Luna::AssetReferenceNode::*Setter )( const std::string& );
-      Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, std::string, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetFileName );
-      textBox->SetReadOnly( true );
-    }
-    args.m_Enumerator->Pop();
+        args.m_Enumerator->PushContainer();
+        {
+            args.m_Enumerator->AddLabel( "Name" );
+            typedef std::string ( Luna::AssetReferenceNode::*Getter )() const;
+            typedef void ( Luna::AssetReferenceNode::*Setter )( const std::string& );
+            Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, std::string, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetFileName );
+            textBox->SetReadOnly( true );
+        }
+        args.m_Enumerator->Pop();
 
-    args.m_Enumerator->PushContainer();
-    {
-      args.m_Enumerator->AddLabel( "Engine Type" );
-      typedef std::string ( Luna::AssetReferenceNode::*Getter )() const;
-      typedef void ( Luna::AssetReferenceNode::*Setter )( const std::string& );
-      Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, std::string, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetEngineTypeName );
-      textBox->SetReadOnly( true );
-    }
-    args.m_Enumerator->Pop();
+        args.m_Enumerator->PushContainer();
+        {
+            args.m_Enumerator->AddLabel( "Engine Type" );
+            typedef std::string ( Luna::AssetReferenceNode::*Getter )() const;
+            typedef void ( Luna::AssetReferenceNode::*Setter )( const std::string& );
+            Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, std::string, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetAssetTypeName );
+            textBox->SetReadOnly( true );
+        }
+        args.m_Enumerator->Pop();
 
-    args.m_Enumerator->PushContainer();
-    {
-      args.m_Enumerator->AddLabel( "Asset ID" );
-      typedef std::string ( Luna::AssetReferenceNode::*Getter )() const;
-      typedef void ( Luna::AssetReferenceNode::*Setter )( const std::string& );
-      Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, std::string, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetFileIDString );
-      textBox->SetReadOnly( true );
-    }
-    args.m_Enumerator->Pop();
+        args.m_Enumerator->PushContainer();
+        {
+            args.m_Enumerator->AddLabel( "File" );
+        }
+        args.m_Enumerator->Pop();
 
-    args.m_Enumerator->PushContainer();
-    {
-      args.m_Enumerator->AddLabel( "File" );
+        args.m_Enumerator->PushContainer();
+        {
+            typedef std::string ( Luna::AssetReferenceNode::*Getter )() const;
+            typedef void ( Luna::AssetReferenceNode::*Setter )( const std::string& );
+            Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, std::string, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetFilePath );
+            textBox->SetJustification( Inspect::Value::kRight );
+            textBox->SetReadOnly( true );
+        }
+        args.m_Enumerator->Pop();
     }
     args.m_Enumerator->Pop();
-
-    args.m_Enumerator->PushContainer();
-    {
-      typedef std::string ( Luna::AssetReferenceNode::*Getter )() const;
-      typedef void ( Luna::AssetReferenceNode::*Setter )( const std::string& );
-      Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, std::string, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetFilePath );
-      textBox->SetJustification( Inspect::Value::kRight );
-      textBox->SetReadOnly( true );
-    }
-    args.m_Enumerator->Pop();
-  }
-  args.m_Enumerator->Pop();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Returns a string displaying the engine type for this asset.
 // 
-std::string AssetReferenceNode::GetEngineTypeName() const
+std::string AssetReferenceNode::GetAssetTypeName() const
 {
-  if ( m_Asset )
-  {
-    return m_Asset->GetPackage< Asset::AssetClass >()->GetEngineTypeName();
-  }
+    if ( m_Asset )
+    {
+        return Asset::AssetClass::GetAssetTypeName( m_Asset->GetPackage< Asset::AssetClass >()->GetAssetType() );
+    }
 
-  return "Unknown";
+    return "Unknown";
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -565,13 +502,13 @@ std::string AssetReferenceNode::GetEngineTypeName() const
 // 
 std::string AssetReferenceNode::GetFileName() const
 {
-  std::string fileName = GetFilePath();
-  if ( !fileName.empty() )
-  {
-    fileName = FileSystem::GetLeaf( fileName );
-    FileSystem::StripExtension( fileName );
-  }
-  return fileName;
+    std::string fileName = GetFilePath();
+    if ( !fileName.empty() )
+    {
+        fileName = FileSystem::GetLeaf( fileName );
+        FileSystem::StripExtension( fileName );
+    }
+    return fileName;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -579,26 +516,15 @@ std::string AssetReferenceNode::GetFileName() const
 // 
 std::string AssetReferenceNode::GetFilePath() const
 {
-  std::string filePath;
-  try
-  {
-    filePath = File::GlobalManager().GetPath( m_AssetID );
-  }
-  catch ( const File::Exception& )
-  {
-  }
-
-  return filePath;
+    m_AssetFileReference->Resolve();
+    return m_AssetFileReference->GetPath();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Returns the file ID for this asset as a string (hex) representation.
-// 
-std::string AssetReferenceNode::GetFileIDString() const
+void AssetReferenceNode::SetFilePath( const std::string& path )
 {
-  std::stringstream stream;
-  stream << TUID::HexFormat << m_AssetID;
-  return stream.str();
+    delete m_AssetFileReference;
+    m_AssetFileReference = new File::Reference( path );
+    m_AssetFileReference->Resolve();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -606,32 +532,32 @@ std::string AssetReferenceNode::GetFileIDString() const
 // 
 std::string AssetReferenceNode::MakeLabel() const
 {
-  std::string label;
-  if ( IsFieldAssociated() )
-  {
-    if ( m_Field->m_SerializerID == Reflect::GetType< Reflect::U64Serializer >() )
+    std::string label;
+    if ( IsFieldAssociated() )
     {
-      label += m_Field->m_UIName + ": ";
+        if ( m_Field->m_SerializerID == Reflect::GetType< Reflect::U64Serializer >() )
+        {
+            label += m_Field->m_UIName + ": ";
+        }
     }
-  }
 
-  if ( m_AssetID != TUID::Null )
-  {
-    FilePathOptions::FilePathOption filePathOption = FilePathOptions::PartialPath;
-    GetAssetEditorPreferences()->GetEnum( GetAssetEditorPreferences()->FilePathOption(), filePathOption );
-    label += Luna::TuidToLabel( m_AssetID, filePathOption );
-  }
-  else
-  {
-    label += "(double-click to set)";
-  }
+    m_AssetFileReference->Resolve();
 
-  if ( !m_Asset && m_AssetID != TUID::Null )
-  {
-    label += " (double-click to load)";
-  }
+    if ( m_AssetFileReference->IsValid() )
+    {
+        label += m_AssetFileReference->GetRelativePath();
 
-  return label;
+        if ( !m_Asset )
+        {
+            label += " (double-click to load)";
+        }
+    }
+    else
+    {
+        label += "(double-click to set)";
+    }
+
+    return label;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -639,25 +565,25 @@ std::string AssetReferenceNode::MakeLabel() const
 // 
 std::string AssetReferenceNode::MakeIcon() const
 {
-  std::string icon;
-  
-  if ( m_Field )
-  {
-    icon = m_Field->GetProperty( Asset::AssetProperties::SmallIcon );
-  }
+    std::string icon;
 
-  if ( icon.empty() )
-  {
-    if ( m_Asset )
+    if ( m_Field )
     {
-      icon = m_Asset->GetIcon();
+        icon = m_Field->GetProperty( Asset::AssetProperties::SmallIcon );
     }
-    else
+
+    if ( icon.empty() )
     {
-      icon = "asset_reference_16.png";
+        if ( m_Asset )
+        {
+            icon = m_Asset->GetIcon();
+        }
+        else
+        {
+            icon = "asset_reference_16.png";
+        }
     }
-  }
-  return icon;
+    return icon;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -667,10 +593,10 @@ std::string AssetReferenceNode::MakeIcon() const
 // 
 void AssetReferenceNode::AssetUnloading( const AssetLoadArgs& args )
 {
-  if ( args.m_AssetClass->GetFileID() == m_AssetID )
-  {
-    Unload();
-  }
+    if ( args.m_AssetClass->GetFileReference()->GetHash() == m_AssetFileReference->GetHash() )
+    {
+        Unload();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -679,13 +605,13 @@ void AssetReferenceNode::AssetUnloading( const AssetLoadArgs& args )
 // 
 void AssetReferenceNode::PreferenceChanged( const Reflect::ElementChangeArgs& args )
 {
-  if ( args.m_Element && args.m_Field )
-  {
-    if ( args.m_Field == GetAssetEditorPreferences()->FilePathOption() )
+    if ( args.m_Element && args.m_Field )
     {
-      SetName( MakeLabel() );
+        if ( args.m_Field == GetAssetEditorPreferences()->FilePathOption() )
+        {
+            SetName( MakeLabel() );
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -694,17 +620,17 @@ void AssetReferenceNode::PreferenceChanged( const Reflect::ElementChangeArgs& ar
 // 
 void AssetReferenceNode::DocumentModified( const DocumentChangedArgs& args )
 {
-  if ( m_Asset )
-  {
-    if ( args.m_Document->IsModified() )
+    if ( m_Asset )
     {
-      SetStyle( GetStyle() | LabelStyles::Italic );
+        if ( args.m_Document->IsModified() )
+        {
+            SetStyle( GetStyle() | LabelStyles::Italic );
+        }
+        else
+        {
+            SetStyle( GetStyle() & ~LabelStyles::Italic );
+        }
     }
-    else
-    {
-      SetStyle( GetStyle() & ~LabelStyles::Italic );
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -712,7 +638,7 @@ void AssetReferenceNode::DocumentModified( const DocumentChangedArgs& args )
 // 
 void AssetReferenceNode::OnOpen( const ContextMenuArgsPtr& args )
 {
-  Load();
+    Load();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -721,34 +647,27 @@ void AssetReferenceNode::OnOpen( const ContextMenuArgsPtr& args )
 // 
 void AssetReferenceNode::OnElementChanged( const Reflect::ElementChangeArgs& args )
 {
-  if ( IsFieldAssociated() )
-  {
-    if ( args.m_Field == m_Field )
+    if ( IsFieldAssociated() )
     {
-      tuid newFileID = TUID::Null;
-      Reflect::SerializerPtr serializer = m_Field->CreateSerializer();
-      serializer->ConnectField( m_Element, m_Field );
-      std::stringstream stream;
-      stream << *serializer;
-      TUID::Parse( stream.str(), newFileID );
-
-      SetAssetIDHelper( newFileID );
+        if ( args.m_Field == m_Field )
+        {
+#pragma TODO( "handle file reference changing" )
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback for when the engine type changes.  Updates the UI (icon and property
 // panel).
 // 
-void AssetReferenceNode::EngineTypeChanged( const Asset::EngineTypeChangeArgs& args )
+void AssetReferenceNode::AssetTypeChanged( const Asset::AssetTypeChangeArgs& args )
 {
-  // Fix icon
-  SetIcon( MakeIcon() );
+    // Fix icon
+    SetIcon( MakeIcon() );
 
-  // Refresh the selection so that the Engine Type field updates as well.
-  // We have to wait and do this on the next frame.
-  GetAssetManager()->GetAssetEditor()->PostCommand( new RefreshSelectionCommand( &GetAssetManager()->GetSelection() ) );
+    // Refresh the selection so that the Engine Type field updates as well.
+    // We have to wait and do this on the next frame.
+    GetAssetManager()->GetAssetEditor()->PostCommand( new RefreshSelectionCommand( &GetAssetManager()->GetSelection() ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -757,43 +676,35 @@ void AssetReferenceNode::EngineTypeChanged( const Asset::EngineTypeChangeArgs& a
 // 
 void AssetReferenceNode::OnChangePath( const ContextMenuArgsPtr& args )
 {
-  File::ManagedFileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path", Finder::ProjectAssets().c_str() );
-  dialog.SetTuidRequired( true );
+    UIToolKit::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path", Finder::ProjectAssets().c_str() );
 
-  std::string currentPath = GetFilePath();
-  if ( !currentPath.empty() )
-  {
-    dialog.SetPath( currentPath.c_str() );
-  }
-  else if ( m_AssetID != TUID::Null )
-  {
-    // If the TUID did not resolve to a path, the user is probably trying to repair 
-    // this path and just needs to add a file to the resolver with this TUID, 
-    // so set the requested file ID on the the dialog.
-    dialog.SetRequestedFileID( m_AssetID );
-  }
-
-  std::string specName;
-  if ( m_Field->GetProperty( Asset::AssetProperties::FilterSpec, specName ) )
-  {
-    const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
-
-    dialog.SetFilter( spec->GetDialogFilter() );
-  }
-  else if ( m_Field->GetProperty( Asset::AssetProperties::ModifierSpec, specName ) )
-  {
-    const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
-
-    dialog.SetFilter( spec->GetDialogFilter() );
-  }
-
-  if ( dialog.ShowModal() == wxID_OK )
-  {
-    if ( m_AssetID != dialog.GetFileID() )
+    std::string currentPath = GetFilePath();
+    if ( !currentPath.empty() )
     {
-      args->GetBatch()->Push( new Undo::PropertyCommand< tuid >( new Nocturnal::MemberProperty< Luna::AssetReferenceNode, tuid >( this, &AssetReferenceNode::GetAssetID, &AssetReferenceNode::SetAssetID ), dialog.GetFileID() ) );
+        dialog.SetPath( currentPath.c_str() );
     }
-  }
+
+    std::string specName;
+    if ( m_Field->GetProperty( Asset::AssetProperties::FilterSpec, specName ) )
+    {
+        const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
+
+        dialog.SetFilter( spec->GetDialogFilter() );
+    }
+    else if ( m_Field->GetProperty( Asset::AssetProperties::ModifierSpec, specName ) )
+    {
+        const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
+
+        dialog.SetFilter( spec->GetDialogFilter() );
+    }
+
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        if ( GetFilePath() != dialog.GetFilePath() )
+        {
+            args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::AssetReferenceNode, std::string >( this, &AssetReferenceNode::GetFilePath, &AssetReferenceNode::SetFilePath ), dialog.GetFilePath() ) );
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -802,37 +713,27 @@ void AssetReferenceNode::OnChangePath( const ContextMenuArgsPtr& args )
 // 
 void AssetReferenceNode::OnChangePathFinder( const ContextMenuArgsPtr& args )
 {
-  File::FileBrowser dialog( GetAssetManager()->GetAssetEditor(), wxID_ANY, "Change File Path" );
+    File::FileBrowser dialog( GetAssetManager()->GetAssetEditor(), wxID_ANY, "Change File Path" );
 
-  std::string specName;
-  if ( m_Field->GetProperty( Asset::AssetProperties::FilterSpec, specName ) )
-  {
-    const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
-    dialog.SetFilter( *spec );
-  }
-  else if ( m_Field->GetProperty( Asset::AssetProperties::ModifierSpec, specName ) )
-  {
-    const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
-    dialog.SetFilter( *spec );
-  }
-  dialog.SetTuidRequired( true );
-
-  std::string currentPath = GetFilePath();
-  if ( currentPath.empty() && m_AssetID != TUID::Null )
-  {
-    // If the TUID did not resolve to a path, the user is probably trying to repair 
-    // this path and just needs to add a file to the resolver with this TUID, 
-    // so set the requested file ID on the the dialog.
-    dialog.SetRequestedFileID( m_AssetID );
-  }
-
-  if ( dialog.ShowModal() == wxID_OK )
-  {
-    if ( m_AssetID != dialog.GetFileID() )
+    std::string specName;
+    if ( m_Field->GetProperty( Asset::AssetProperties::FilterSpec, specName ) )
     {
-      args->GetBatch()->Push( new Undo::PropertyCommand< tuid >( new Nocturnal::MemberProperty< Luna::AssetReferenceNode, tuid >( this, &AssetReferenceNode::GetAssetID, &AssetReferenceNode::SetAssetID ), dialog.GetFileID() ) );
+        const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
+        dialog.SetFilter( *spec );
     }
-  }
+    else if ( m_Field->GetProperty( Asset::AssetProperties::ModifierSpec, specName ) )
+    {
+        const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
+        dialog.SetFilter( *spec );
+    }
+
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        if ( GetFilePath() != dialog.GetPath() )
+        {
+            args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::AssetReferenceNode, std::string >( this, &AssetReferenceNode::GetFilePath, &AssetReferenceNode::SetFilePath ), dialog.GetPath() ) );
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -840,7 +741,7 @@ void AssetReferenceNode::OnChangePathFinder( const ContextMenuArgsPtr& args )
 // 
 void AssetReferenceNode::OnCheckOutPath( const ContextMenuArgsPtr& args )
 {
-  SessionManager::GetInstance()->CheckOut( GetFilePath() );
+    SessionManager::GetInstance()->CheckOut( GetFilePath() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -848,9 +749,9 @@ void AssetReferenceNode::OnCheckOutPath( const ContextMenuArgsPtr& args )
 // 
 void AssetReferenceNode::OnRevisionHistory( const ContextMenuArgsPtr& args )
 {
-  const std::string& path = GetFilePath();
-  if ( !path.empty() )
-  {
-    GetAssetManager()->GetAssetEditor()->RevisionHistory( path );
-  }
+    const std::string& path = GetFilePath();
+    if ( !path.empty() )
+    {
+        GetAssetManager()->GetAssetEditor()->RevisionHistory( path );
+    }
 }

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <map>
-#include "TUID/TUID.h"
+
+#include "File/File.h"
 
 namespace Luna
 {
@@ -55,8 +56,7 @@ namespace Luna
     std::string PromptAddZone( const std::string& defaultPath );
     Zone* AddZone( std::string ( ScenesPanel::*PromptFunction )( const std::string& ) );
     void AddNewZone();
-    bool ContainsZone( const tuid& fileID ) const;
-    tuid PromptCreateZoneUniqueEntity( const std::string& zonePath );
+    bool ContainsZone( const File::Reference& zoneRef ) const;
     void PromptIfNoZones();
 
   private:

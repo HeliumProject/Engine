@@ -130,11 +130,10 @@ namespace Content
     //
     // Load a content file into the Scene
     //
-    void Load( tuid fileID );
     void Load( const std::string& filePath );
-    void Load( tuid fileID, Reflect::V_Element& elements, Reflect::StatusHandler* status = NULL );
     void Load( const std::string &filePath, Reflect::V_Element& elements, Reflect::StatusHandler* status = NULL );
     void LoadXML( const std::string& xml, Reflect::V_Element& elements, Reflect::StatusHandler* status = NULL );
+
   private:
     void PostLoad( Reflect::V_Element& elements );
 

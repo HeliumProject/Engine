@@ -7,6 +7,7 @@
 #include "InspectReflect/ReflectInterpreter.h"
 #include "Entity.h"
 #include "UIToolKit/FileDialog.h"
+#include "RCS/RCS.h"
 
 namespace Luna
 {
@@ -70,7 +71,7 @@ namespace Luna
     virtual void Create() NOC_OVERRIDE;
 
   protected:
-    void CreateEngineType();
+    void CreateAssetType();
     void CreateClassPath();
     void CreateClassActions();
     void CreateShowFlags();
@@ -289,9 +290,6 @@ public:
 
               try
               {
-                File::GlobalManager().SetWorkingChangeset( changelist );
-                File::GlobalManager().Add( objectsFile );
-                File::GlobalManager().SetWorkingChangeset( RCS::DefaultChangeset() );
                 changelist.Open( rcsObjectsFile );
 
                 V_Element loadedElements;

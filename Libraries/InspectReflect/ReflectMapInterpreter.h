@@ -17,8 +17,6 @@ namespace Inspect
     virtual void InterpretField( const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent ) NOC_OVERRIDE;
 
   protected:
-    virtual void TranslateInputKeyValueTUID( Reflect::TranslateInputEventArgs& args );
-    virtual void TranslateOutputKeyValueTUID( Reflect::TranslateOutputEventArgs& args );
 
     void OnAdd( Button* button );
     void OnRemove( Button* button );

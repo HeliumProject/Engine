@@ -46,20 +46,6 @@ std::string Zone::GetApplicationTypeName() const
   return "Zone";
 }
 
-std::string Zone::GetPath() const
-{
-  Content::ZonePtr zone = GetPackage< Content::Zone >();
-  return zone->GetFilePath();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the TUID of the file that backs this zone.
-// 
-tuid Zone::GetFileID() const
-{
-  return GetPackage< Content::Zone >()->m_FileID;
-}
-
 const Math::Color3& Zone::GetColor() const
 {
   return GetPackage< Content::Zone >()->m_Color;
@@ -89,13 +75,14 @@ void Zone::PackageChanged( const Reflect::ElementChangeArgs& args )
 {
   __super::PackageChanged( args );
 
-  Content::Zone* zone = GetPackage< Content::Zone >();
-  if ( args.m_Field == zone->GetClass()->FindField( &Content::Zone::m_Color ) )
-  {
-    Luna::Scene* loadedScene = m_Scene->GetManager()->GetScene( GetFileID() );
-    if ( loadedScene )
-    {
-      loadedScene->SetColor( zone->m_Color );
-    }
-  }
+#pragma TODO( "reimplement now that zones don't know their own path?" )
+  //Content::Zone* zone = GetPackage< Content::Zone >();
+  //if ( args.m_Field == zone->GetClass()->FindField( &Content::Zone::m_Color ) )
+  //{
+  //  Luna::Scene* loadedScene = m_Scene->GetManager()->GetScene( GetFileID() );
+  //  if ( loadedScene )
+  //  {
+  //    loadedScene->SetColor( zone->m_Color );
+  //  }
+  //}
 }

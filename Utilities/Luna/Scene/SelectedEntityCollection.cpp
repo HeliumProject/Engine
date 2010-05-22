@@ -1,6 +1,8 @@
 #include "Precompile.h"
 #include "SelectedEntityCollection.h"
 
+#include "EntityAssetSet.h"
+
 using namespace Luna;
 
 SelectedEntityCollection::SelectedEntityCollection( Selection* selection, const std::string& name )
@@ -36,38 +38,33 @@ void SelectedEntityCollection::RemoveEntityListeners()
   m_WatchedEntities.clear();
 }
 
-void SelectedEntityCollection::SetAssetIDsFromSelection( const OS_SelectableDumbPtr& selection )
+void SelectedEntityCollection::SetAssetsFromSelection( const OS_SelectableDumbPtr& selection )
 {
-  S_tuid fileIDs;
-  for ( OS_SelectableDumbPtr::Iterator selItr = selection.Begin(), selEnd = selection.End();
-    selItr != selEnd; ++selItr )
+    File::S_Reference files;
+  for ( OS_SelectableDumbPtr::Iterator selItr = selection.Begin(), selEnd = selection.End(); selItr != selEnd; ++selItr )
   {
     Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *selItr );
     if ( entity )
     {
       entity->AddClassChangedListener( EntityAssetChangeSignature::Delegate( this, &SelectedEntityCollection::OnEntityClassChanged ) );
       m_WatchedEntities.push_back( entity );
-      tuid id = entity->GetPackage< Asset::Entity >()->GetEntityAssetID();
-      if ( id != TUID::Null )
-      {
-        fileIDs.insert( id );
-      }
+      files.insert( entity->GetClassSet()->GetEntityAssetFileRef() );
     }
   }
 
-  SetAssetIDs( fileIDs );
+  SetAssetReferences( files );
 }
 
 void SelectedEntityCollection::OnEntityClassChanged( const EntityAssetChangeArgs& args )
 {
   if ( m_Selection )
   {
-    SetAssetIDsFromSelection( m_Selection->GetItems() );
+    SetAssetsFromSelection( m_Selection->GetItems() );
   }
   else
   {
     OS_SelectableDumbPtr empty;
-    SetAssetIDsFromSelection( empty );
+    SetAssetsFromSelection( empty );
   }
 }
 
@@ -75,5 +72,5 @@ void SelectedEntityCollection::OnSelectionChanged( const OS_SelectableDumbPtr& a
 {
   RemoveEntityListeners();
 
-  SetAssetIDsFromSelection( args );
+  SetAssetsFromSelection( args );
 }

@@ -286,10 +286,6 @@
 			ReferencedProjectIdentifier="{0E85A01E-6BFC-4DF8-BE0D-5F6FAB8AF587}"
 			RelativePathToProject=".\Maya\MayaCore\MayaCore.vcproj"
 		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{4AF12ED6-2980-4C1F-8918-F11846719FB3}"
-			RelativePathToProject=".\Libraries\FileUI\FileUI.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter
@@ -457,26 +453,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Attachments"
-				>
-				<File
-					RelativePath=".\LooseAttachmentCapsule.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\LooseAttachmentCapsule.h"
-					>
-				</File>
-				<File
-					RelativePath=".\LooseAttachmentSphere.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\LooseAttachmentSphere.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="Water"
 				>
 				<File
@@ -485,14 +461,6 @@
 				</File>
 				<File
 					RelativePath=".\Plane.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WaterPlane.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WaterPlane.h"
 					>
 				</File>
 			</Filter>
@@ -613,30 +581,6 @@
 				</File>
 				<File
 					RelativePath=".\EntityNodeCmd.h"
-					>
-				</File>
-				<File
-					RelativePath=".\FragmentCmd.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\FragmentCmd.h"
-					>
-				</File>
-				<File
-					RelativePath=".\KeepCmd.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\KeepCmd.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ZoneCmd.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ZoneCmd.h"
 					>
 				</File>
 			</Filter>

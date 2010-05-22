@@ -59,11 +59,10 @@ namespace Luna
 
     bool Contains( const std::string& path ) const;
 
-    virtual bool ValidateDocument( const Document* document, std::string& error ) const;
+    virtual bool ValidateDocument( Document* document, std::string& error ) const;
     virtual bool ValidatePath( const std::string& path, std::string& error ) const;
 
     virtual DocumentPtr OpenPath( const std::string& path, std::string& error );
-    virtual DocumentPtr OpenFileID( const tuid id, std::string& error );
 
     virtual bool Save( DocumentPtr document, std::string& error );
     virtual bool SaveAll( std::string& error );
@@ -72,20 +71,20 @@ namespace Luna
     virtual bool CloseDocument( DocumentPtr document, bool prompt = true );
     bool CloseDocuments( OS_DocumentSmartPtr documents );
 
-    bool QueryCheckOut( const Document* document ) const;
-    virtual bool IsCheckedOut( const Document* document ) const;
-    bool CheckOut( const Document* document ) const;
+    bool QueryCheckOut( Document* document ) const;
+    virtual bool IsCheckedOut( Document* document ) const;
+    bool CheckOut( Document* document ) const;
 
     bool QueryAllowChanges( Document* document ) const;
     bool AttemptChanges( Document* document ) const;
 
-    bool IsUpToDate( const Document* document ) const;
+    bool IsUpToDate( Document* document ) const;
 
     bool QueryAdd( Document* document ) const;
     bool QueryOpen( Document* document ) const;
-    SaveAction QuerySave( const Document* document ) const;
-    SaveAction QueryClose( const Document* document ) const;
-    SaveAction QueryCloseAll( const Document* document ) const;
+    SaveAction QuerySave( Document* document ) const;
+    SaveAction QueryClose( Document* document ) const;
+    SaveAction QueryCloseAll( Document* document ) const;
 
   protected:
     bool AddDocument( const DocumentPtr& document );

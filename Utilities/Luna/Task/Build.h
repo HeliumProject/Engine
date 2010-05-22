@@ -1,7 +1,7 @@
 #pragma once
 
-#include "tuid/TUID.h"
 #include "Asset/AssetClass.h"
+#include "AssetEditor/AssetClass.h"
 #include "AssetBuilder/AssetBuilder.h"
 #include "AssetBuilder/BuilderOptions.h"
 
@@ -10,29 +10,26 @@
 
 namespace Luna
 {
-  namespace Build
-  {
-    LUNA_TASK_API void Initialize();
-    LUNA_TASK_API void Cleanup();
-  }
-
-  struct BuildFinishedArgs : TaskFinishedArgs
-  {
-    S_tuid m_Assets;
-    bool m_View;
-    AssetBuilder::BuilderOptionsPtr m_BuilderOptions;
-
-    BuildFinishedArgs()
-      : m_View (false)
+    namespace Build
     {
-
+        LUNA_TASK_API void Initialize();
+        LUNA_TASK_API void Cleanup();
     }
-  };
 
-  LUNA_TASK_API void AddAssetBuiltListener(const AssetBuilder::AssetBuiltSignature::Delegate& listener);
-  LUNA_TASK_API void RemoveAssetBuiltListener(const AssetBuilder::AssetBuiltSignature::Delegate& listener);
+    struct BuildFinishedArgs : TaskFinishedArgs
+    {
+        File::S_Reference m_Assets;
+        AssetBuilder::BuilderOptionsPtr m_BuilderOptions;
 
-  LUNA_TASK_API void BuildAsset( const tuid& assetId, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions = NULL, bool showOptions = false, bool blocking = false, const tuid& viewAsset = TUID::Null );
-  LUNA_TASK_API void BuildAssets( const S_tuid& assetIds, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions = NULL, bool showOptions = false, bool blocking = false, const tuid& viewAsset = TUID::Null );
-  LUNA_TASK_API void ViewAsset( const tuid& assetId, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions = false, bool blocking = false );
+        BuildFinishedArgs()
+        {
+
+        }
+    };
+
+    LUNA_TASK_API void AddAssetBuiltListener(const AssetBuilder::AssetBuiltSignature::Delegate& listener);
+    LUNA_TASK_API void RemoveAssetBuiltListener(const AssetBuilder::AssetBuiltSignature::Delegate& listener);
+
+    LUNA_TASK_API void BuildAsset( const File::Reference& asset, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions = NULL, bool showOptions = false, bool blocking = false );
+    LUNA_TASK_API void BuildAssets( const File::S_Reference& assets, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions = NULL, bool showOptions = false, bool blocking = false );
 }

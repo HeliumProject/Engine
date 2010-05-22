@@ -4,7 +4,6 @@
 #include "CacheDBQuery.h"
 
 #include "Common/Boost/Regex.h"
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 
 using namespace Asset;
@@ -70,7 +69,6 @@ CacheDBPhraseExpr::~CacheDBPhraseExpr()
 void CacheDBPhraseExpr::SetPhrase( const std::string& phrase )
 {
   m_Phrase = phrase;
-  FileSystem::StripPrefix( File::GlobalManager().GetManagedAssetsRoot(), m_Phrase );
   CacheDB::CleanExpressionForSQL( m_Phrase );
 }
 

@@ -65,7 +65,7 @@ namespace SQL
 
     const std::string&  GetDBFilename() const { return m_DBFilename; }
     
-    const char*         GetFriendlyName() const { return m_FriendlyName; }
+    const std::string&  GetFriendlyName() const { return m_FriendlyName; }
 
     //
     // Dump DB
@@ -82,7 +82,7 @@ namespace SQL
     // Members
     //
 
-    char          m_FriendlyName[256];
+    std::string   m_FriendlyName;
     std::string   m_DBFilename;
     bool          m_IsTransOpen;
     int           m_NumStmtHandles;

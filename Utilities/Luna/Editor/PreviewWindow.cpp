@@ -107,7 +107,7 @@ bool PreviewWindow::LoadScene( const std::string& path )
 {
   NOC_ASSERT( m_MeshHandle == s_InvalidMesh );
   
-  igDXContent::IRBObjectLoader loader;
+  igDXContent::RBObjectLoader loader;
   loader.IncrRefCount();
   if ( m_Scene )
   {

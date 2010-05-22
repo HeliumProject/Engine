@@ -32,6 +32,7 @@ namespace RCS
     void Open( RCS::File& file, const RCS::OpenFlag flags = RCS::OpenFlags::Default ) const;
     void Edit( RCS::File& file, const RCS::OpenFlag flags = RCS::OpenFlags::Default ) const;
     void Copy( RCS::File& source, RCS::File& target, const RCS::OpenFlag flags = RCS::OpenFlags::Default ) const;
+    void Rename( RCS::File& source, RCS::File& target, const RCS::OpenFlag flags = RCS::OpenFlags::Default ) const;
     void Delete( RCS::File& file, const RCS::OpenFlag flags = RCS::OpenFlags::Default ) const;
 
     void Reopen( RCS::File& file, const RCS::OpenFlag flags = RCS::OpenFlags::Default ) const;

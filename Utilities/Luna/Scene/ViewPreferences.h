@@ -13,13 +13,13 @@ namespace Luna
       Layer,
       NodeType,
       Zone,
-      EngineType,
+      AssetType,
       Scale,
       ScaleGradient,
     };
     static void ViewColorModeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement( EngineType, "Engine Type" );
+      info->AddElement( AssetType, "Engine Type" );
       info->AddElement( Layer, "Layer" );
       info->AddElement( NodeType, "NodeType", "Node Type" );
       info->AddElement( Zone, "Zone" );

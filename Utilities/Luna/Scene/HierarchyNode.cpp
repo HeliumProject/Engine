@@ -781,7 +781,7 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
     }
     break;
   
-  case ViewColorModes::EngineType:
+  case ViewColorModes::AssetType:
     {
       Luna::HierarchyNode* hierarchyNode = (Luna::HierarchyNode*) this;
       Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( hierarchyNode );
@@ -793,8 +793,8 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
           Asset::EntityAsset* entityClass = entityClassSet->GetEntityAsset();
           if ( entityClass )
           {
-            Asset::EngineType engineType = entityClass->GetEngineType();
-            material = Luna::View::s_EngineTypeMaterials[ engineType ];
+            Asset::AssetType assetType = entityClass->GetAssetType();
+            material = Luna::View::s_AssetTypeMaterials[ assetType ];
           }
         }
       }

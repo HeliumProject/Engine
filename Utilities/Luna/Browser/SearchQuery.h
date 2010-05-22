@@ -53,7 +53,10 @@ namespace Luna
     void SetQueryString( const std::string& queryString );
     const std::string& GetQueryString() const { return m_QueryString; }
     
-    tuid GetQueryFileID() const { return m_QueryFileID; }
+    File::Reference& GetQueryFileRef()
+    {
+        return *m_QueryFileRef;
+    }
 
     const std::string& GetSelectPath() { return m_SelectPath; }
     void SetSelectPath( const std::string& selectPath );
@@ -61,8 +64,11 @@ namespace Luna
     Asset::CacheDBQuery* GetCacheDBQuery() const { return m_Search; }
 
     void SetCollection( const AssetCollection* collection );
-    AssetCollection* GetCollection() const;
-    tuid GetCollectionID() const { return m_CollectionID; }
+    AssetCollection* GetCollection();
+    File::Reference& GetCollectionRef() const
+    {
+        return *m_CollectionFileRef;
+    }
     
 
     bool operator<( const SearchQuery& rhs ) const;
@@ -79,8 +85,8 @@ namespace Luna
   private:
     SearchType              m_SearchType;
     std::string             m_QueryString;
-    tuid                    m_QueryFileID; // Only used for SearchTypes::ID
-    tuid                    m_CollectionID;
+    File::ReferencePtr      m_QueryFileRef;
+    File::ReferencePtr      m_CollectionFileRef;
 
     // Cache
     Asset::CacheDBQueryPtr  m_Search;

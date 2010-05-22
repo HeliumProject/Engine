@@ -6,7 +6,6 @@
 #include "StandardDetailMapAttribute.h"
 
 #include "Attribute/AttributeHandle.h"
-#include "File/Manager.h"
 #include "Finder/AssetSpecs.h"
 
 using namespace Asset;

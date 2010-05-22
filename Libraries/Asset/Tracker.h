@@ -13,87 +13,92 @@
 
 namespace Asset
 {
-  //
-  // Forwards
-  //
-  class CacheDB;
-  typedef ASSET_API Nocturnal::SmartPtr< CacheDB > CacheDBPtr;
+    //
+    // Forwards
+    //
+    class CacheDB;
+    typedef ASSET_API Nocturnal::SmartPtr< CacheDB > CacheDBPtr;
 
-  class AssetFile;
-  typedef Nocturnal::SmartPtr< AssetFile > AssetFilePtr;
-  typedef std::map< tuid, AssetFilePtr > M_AssetFiles;
+    class AssetFile;
+    typedef Nocturnal::SmartPtr< AssetFile > AssetFilePtr;
+    typedef std::map< tuid, AssetFilePtr > M_AssetFiles;
 
-  class AssetVisitor;
+    class AssetVisitor;
 
-  /////////////////////////////////////////////////////////////////////////////
-  struct TrackerArgs
-  {
-    bool m_IsTracking;
-    
-    TrackerArgs( bool isTracking )
-      : m_IsTracking( isTracking )
+    /////////////////////////////////////////////////////////////////////////////
+    struct TrackerArgs
     {
-    }
-  };
-  typedef Nocturnal::Signature< void, const TrackerArgs& > TrackerSignature;
+        bool m_IsTracking;
 
-  /////////////////////////////////////////////////////////////////////////////
-  ASSET_API class Tracker* GlobalTracker();
+        TrackerArgs( bool isTracking )
+            : m_IsTracking( isTracking )
+        {
+        }
+    };
+    typedef Nocturnal::Signature< void, const TrackerArgs& > TrackerSignature;
 
-  /////////////////////////////////////////////////////////////////////////////
-  class ASSET_API Tracker
-  {
-  private:
-    // Tracker is a singleton; Hide the ctor, copy ctor and assignment operator
-    Tracker();
-    Tracker( const Tracker& rhs );
-    Tracker& operator=( const Tracker& rhs );
+    /////////////////////////////////////////////////////////////////////////////
+    ASSET_API class Tracker* GlobalTracker();
 
-    friend Tracker* ::Asset::GlobalTracker();
+    /////////////////////////////////////////////////////////////////////////////
+    class ASSET_API Tracker
+    {
+    private:
+        // Tracker is a singleton; Hide the ctor, copy ctor and assignment operator
+        Tracker( const std::string& rootDirectory );
+        Tracker( const Tracker& rhs );
+        Tracker& operator=( const Tracker& rhs );
 
-  public:
-    ~Tracker();
+        friend Tracker* ::Asset::GlobalTracker();
 
-    static void Initialize();
-    static void Cleanup();
+    public:
+        ~Tracker();
 
-    bool IsTracking() const;
-    void StartThread();
-    void StopThread();
+        static void Initialize();
+        static void Cleanup();
 
-    bool InitialIndexingCompleted() const { return m_InitialIndexingCompleted; }
-    bool DidIndexingFail() const { return m_IndexingFailed; }
+        bool IsTracking() const;
+        void StartThread();
+        void StopThread();
 
-    u32 GetTrackingProgress();
-    u32 GetTrackingTotal();
+        bool InitialIndexingCompleted() const { return m_InitialIndexingCompleted; }
+        bool DidIndexingFail() const { return m_IndexingFailed; }
 
-  public:
-    // Thread entry points
-    static DWORD WINAPI TrackEverythingThread(LPVOID pvoid);
+        u32 GetTrackingProgress();
+        u32 GetTrackingTotal();
 
-  private:
-    void ResolverFindFilesByPath( const std::string& searchQuery, File::V_ManagedFilePtr& listOfFiles );
-    File::ManagedFilePtr ResolverGetManagedFile( tuid id );
+    public:
+        static void SetGlobalRootDirectory( const std::string& rootDirectory )
+        {
+            s_GlobalRootDirectory = rootDirectory;
+        }
 
-    bool TrackFile( const File::ManagedFilePtr& file );
-    bool TrackAssetFile( const File::ManagedFilePtr& file, M_AssetFiles* assetFiles );
-    void TrackEverything();
+    public:
+        // Thread entry points
+        static DWORD WINAPI TrackEverythingThread(LPVOID pvoid);
 
-  private:
-    Asset::CacheDBPtr     m_AssetCacheDB;
-    File::CacheDBPtr      m_FileCacheDB;
+    private:
 
-    const std::string     m_ManagedAssetsRoot;
-   
-    HANDLE                m_Thread;
-    DWORD                 m_ThreadID;
-    bool                  m_StopTracking;
+        bool TrackFile( const std::string& path );
+        bool TrackFile( File::ReferencePtr& fileRef );
+        bool TrackAssetFile( File::ReferencePtr& fileRef, M_AssetFiles* assetFiles );
+        void TrackEverything();
 
-    M_AssetFiles          m_AssetFiles;
+    private:
+        Asset::CacheDBPtr     m_AssetCacheDB;
 
-    bool                  m_InitialIndexingCompleted;
-    bool                  m_IndexingFailed;
-    u32                   m_CurrentProgress;
-    u32                   m_Total;
-  };
+        static std::string    s_GlobalRootDirectory;
+        const std::string     m_RootDirectory;
+
+        HANDLE                m_Thread;
+        DWORD                 m_ThreadID;
+        bool                  m_StopTracking;
+
+        M_AssetFiles          m_AssetFiles;
+
+        bool                  m_InitialIndexingCompleted;
+        bool                  m_IndexingFailed;
+        u32                   m_CurrentProgress;
+        u32                   m_Total;
+    };
 }

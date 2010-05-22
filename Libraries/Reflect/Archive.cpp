@@ -156,11 +156,11 @@ ArchiveType Archive::GetFileType(const std::string& file)
   char ext[MAX_PATH];
   _splitpath(file.c_str(), NULL, NULL, NULL, ext);
 
-  if (!_stricmp(ext, ".xml") || !_stricmp(ext, ".irx"))
+  if (!_stricmp(ext, ".xml") || !_stricmp(ext, ".rx"))
   {
     return ArchiveTypes::XML;
   }
-  else if (!_stricmp(ext, ".irb"))
+  else if (!_stricmp(ext, ".rb"))
   {
     return ArchiveTypes::Binary;
   }

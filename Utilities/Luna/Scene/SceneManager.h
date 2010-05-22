@@ -96,11 +96,9 @@ namespace Luna
 
     const M_SceneSmartPtr& GetScenes() const;
     Luna::Scene* GetScene( const std::string& path ) const;
-    Luna::Scene* GetScene( const tuid& id ) const;
 
     bool IsNestedScene( Luna::Scene* scene ) const;
     Luna::Scene* AllocateNestedScene( const std::string& path, Luna::Scene* parent );
-    Luna::Scene* AllocateNestedScene( const tuid& id, Luna::Scene* parent );
     void ReleaseNestedScene( Luna::Scene*& scene );
     
     static std::string GetUniqueFileName();
@@ -110,8 +108,6 @@ namespace Luna
 
     Luna::Scene* GetCurrentScene() const;
     void SetCurrentScene( Luna::Scene* scene );
-
-    Luna::Scene* GetLightingScene( bool load = false );
 
     void FreezeTreeSorting();
     void ThawTreeSorting();

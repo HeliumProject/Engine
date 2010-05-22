@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..;..\..\..\..;..\..\libraries;$(boost);&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;WXUSINGMONOLITHIC"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;WXUSINGDLL"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -61,6 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="wxmsw28d_core.lib wxbase28d.lib comctl32.lib rpcrt4.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll"
 				GenerateDebugInformation="true"
@@ -118,7 +119,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\..\..;..\..\..\..;..\..\libraries;$(boost);&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;WXUSINGMONOLITHIC"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;WXUSINGDLL"
 				RuntimeLibrary="2"
 				OpenMP="false"
 				UsePrecompiledHeader="0"
@@ -137,6 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="wxmsw28d_core.lib wxbase28d.lib comctl32.lib rpcrt4.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(wxWidgets)\lib\vc_dll"
 				GenerateDebugInformation="true"
@@ -236,11 +238,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}"
 			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{C60F64C2-876E-465B-8DCC-786C3A79B76A}"
-			UseInBuild="false"
-			RelativePathToProject=".\libraries\TexturePackBuilder\TexturePackBuilder.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"

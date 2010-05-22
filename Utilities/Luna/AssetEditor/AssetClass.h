@@ -51,7 +51,7 @@ namespace Luna
   protected:
     M_AttributeSmartPtr m_Attributes;
     mutable std::string m_Name;
-    mutable std::string m_FilePath;
+    mutable File::ReferencePtr m_FileReference;
     S_AssetReferenceNodeDumbPtr m_References;
 
   public:
@@ -73,8 +73,15 @@ namespace Luna
     bool IsViewable() const;
     bool IsExportable() const;
     const std::string& GetName() const;
-    const std::string& GetFilePath() const;
-    tuid GetFileID() const;
+    u64 GetHash() const
+    {
+        return m_FileReference->GetHash();
+    }
+    std::string GetFilePath();
+    File::ReferencePtr GetFileReference() const
+    {
+        return m_FileReference;
+    }
     virtual std::string GetIcon() const;
     const M_AttributeSmartPtr& GetAttributes();
     Luna::AttributeWrapper* FindAttribute( i32 slot );

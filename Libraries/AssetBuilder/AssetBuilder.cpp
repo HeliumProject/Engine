@@ -245,7 +245,7 @@ void PrintJobList( const V_BuildJob& jobs )
   int i = 0;
   for( V_BuildJob::const_iterator itr = jobs.begin(); itr != jobs.end(); ++itr )
   {
-    Console::Print( "%d: %x / %s / %s / "TUID_HEX_FORMAT"\n", i++, *(u32*)( (void*)(*itr)->m_Builder ), (*itr)->m_Asset->GetShortName().c_str(), (*itr)->m_Builder->GetBuildString().c_str(), (*itr)->m_Asset->GetFileID() );
+      Console::Print( "%d: %x / %s / %s / "TUID_HEX_FORMAT"\n", i++, *(u32*)( (void*)(*itr)->m_Builder ), (*itr)->m_Asset->GetShortName().c_str(), (*itr)->m_Builder->GetBuildString().c_str(), (*itr)->m_Asset->GetAssetFileRef()->GetHash() );
   }
 }
 
@@ -262,7 +262,7 @@ void TrimJobList( V_BuildJob& jobs )
 
 #pragma TODO( "We're using the vtable of the builder here to generate a unique ID per builder/asset pair.  We should do this differently in the future." )
     std::stringstream buildSignature;
-    buildSignature << job->m_Asset->GetFileID() << job->m_Builder->GetBuildString() << std::hex << *(u32*)( (void*)job->m_Builder );
+    buildSignature << job->m_Asset->GetAssetFileRef()->GetHash() << job->m_Builder->GetBuildString() << std::hex << *(u32*)( (void*)job->m_Builder );
 
     if ( jobSignatures.find( buildSignature.str() ) != jobSignatures.end() )
     {
@@ -342,7 +342,7 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
 
     // print some state
     Console::Print( "Building %s\n", builder->GetBuildString().c_str() );
-    Console::Print( Console::Levels::Verbose,  " TUID: "TUID_HEX_FORMAT"\n", assetClass->GetFileID() );
+    Console::Print( Console::Levels::Verbose,  " TUID: "TUID_HEX_FORMAT"\n", assetClass->GetAssetFileRef()->GetHash() );
 
     // capture this thread's console output
     PrintListener printListener (job->m_ConsoleOutput, job->m_WarningCount, job->m_ErrorCount, throttle);
@@ -376,7 +376,7 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
 
     g_BuildTime += elapsed;
 
-    BuilderStats::AddBuild( assetClass->m_AssetClassID, assetClass->GetEngineType(), builderName, elapsed );
+    BuilderStats::AddBuild( *( assetClass->GetAssetFileRef() ), assetClass->GetAssetType(), builderName, elapsed );
   }
   catch( const Nocturnal::Exception& e )
   {
@@ -393,7 +393,7 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
 
   if ( result == JobResults::Failure )
   {
-    g_FailedAssets.insert( assetClass->GetFileID() );
+    g_FailedAssets.insert( assetClass->GetAssetFileRef()->GetHash() );
     Console::Error( "Failure Building %s: %s\n", builder->GetBuildString().c_str(), failureReason.c_str() );
   }
 
@@ -444,7 +444,7 @@ void ProcessNewJobs( const BuildJobPtr& job, V_BuildJob& newJobs, V_BuildJob& jo
       // current list
 
       V_IBuilder builders;
-      BuilderInterface::AllocateBuilders( newJob->m_Asset->GetEngineType(), builders );
+      BuilderInterface::AllocateBuilders( newJob->m_Asset->GetAssetType(), builders );
 
       V_IBuilder::const_iterator builderItr = builders.begin();
       V_IBuilder::const_iterator builderEnd = builders.end();
@@ -507,7 +507,7 @@ bool BuildDependentJobs(V_BuildJob& allJobs, u32 pass)
         error << "Error gathering post-dependent jobs for job '" << job->m_Asset->GetFullName().c_str() << "': " << e.what();
 
         job->m_Result = JobResults::Failure;
-        g_FailedAssets.insert( job->m_Asset->GetFileID() );
+        g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
 
         if ( job->m_Flags & JobFlags::Required || Nocturnal::GetCmdLineFlag( CommandArgs::HaltOnError ) )
         {
@@ -730,7 +730,7 @@ void AssetBuilder::Build( V_BuildJob& jobs, i32 nice )
         // current list
 
         V_IBuilder builders;
-        BuilderInterface::AllocateBuilders( job->m_Asset->GetEngineType(), builders );
+        BuilderInterface::AllocateBuilders( job->m_Asset->GetAssetType(), builders );
 
         // if only one builder was allocated, set it in the current job
         if ( builders.size() == 1 )
@@ -762,7 +762,7 @@ void AssetBuilder::Build( V_BuildJob& jobs, i32 nice )
         error << "Error initializing builder for job '" << job->m_Asset->GetFullName().c_str() << "': " << e.what();
 
         job->m_Result = JobResults::Failure;
-        g_FailedAssets.insert( job->m_Asset->GetFileID() );
+        g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
 
         if ( job->m_Flags & JobFlags::Required || Nocturnal::GetCmdLineFlag( CommandArgs::HaltOnError ) )
         {
@@ -802,7 +802,7 @@ void AssetBuilder::Build( V_BuildJob& jobs, i32 nice )
         error << "Error gathering jobs for job '" << job->m_Asset->GetFullName().c_str() << "': " << e.what();
 
         job->m_Result = JobResults::Failure;
-        g_FailedAssets.insert( job->m_Asset->GetFileID() );
+        g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
 
         if ( job->m_Flags & JobFlags::Required || Nocturnal::GetCmdLineFlag( CommandArgs::HaltOnError )  )
         {
@@ -885,7 +885,7 @@ void AssetBuilder::Build( V_BuildJob& jobs, i32 nice )
         e.Set( error.str() );
 
         job->m_Result = JobResults::Failure;
-        g_FailedAssets.insert( job->m_Asset->GetFileID() );
+        g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
 
         if ( job->m_Flags & JobFlags::Required || Nocturnal::GetCmdLineFlag( CommandArgs::HaltOnError ) )
         {
@@ -999,7 +999,7 @@ void AssetBuilder::Build( V_BuildJob& jobs, i32 nice )
         job->m_Result = JobResults::Download;
 
         // now raise the event notifying that this asset has been downloaded
-        AssetBuiltArgsPtr builtArgs = new AssetBuiltArgs( builder->GetAssetClass()->m_AssetClassID, JobResults::Download );
+        AssetBuiltArgsPtr builtArgs = new AssetBuiltArgs( builder->GetAssetClass()->GetAssetFileRef()->GetHash(), JobResults::Download );
         g_AssetBuiltEvent.Raise( builtArgs );
       }
       else
@@ -1051,14 +1051,14 @@ void AssetBuilder::Build( V_BuildJob& jobs, i32 nice )
           outputFilesToUpdate.insert( outputFilesToUpdate.end(), job->m_OutputFiles.begin(), job->m_OutputFiles.end() );
 
           // now raise the event notifying that this asset has been built
-          AssetBuiltArgsPtr builtArgs = new AssetBuiltArgs( job->m_Asset->GetFileID(), JobResults::Clean );
+          AssetBuiltArgsPtr builtArgs = new AssetBuiltArgs( job->m_Asset->GetAssetFileRef()->GetHash(), JobResults::Clean );
           g_AssetBuiltEvent.Raise( builtArgs );
 
           filesToUpload.insert( filesToUpload.end(), job->m_OutputFiles.begin(), job->m_OutputFiles.end() );
         }
         else
         {
-          g_FailedAssets.insert( job->m_Asset->GetFileID() );
+          g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
 
           if ( job->m_Result == JobResults::Failure && job->m_Flags & JobFlags::Required )
           {
@@ -1095,10 +1095,10 @@ void AssetBuilder::Build( V_BuildJob& jobs, i32 nice )
       for ( ; nestedItr != nestedEnd; ++nestedItr )
       {
         BuildJob* nestedJob = *nestedItr;
-        if ( ( nestedJob->m_OriginalFlags & JobFlags::Required ) && DidBuildFail( nestedJob->m_Asset->GetFileID() ) )
+        if ( ( nestedJob->m_OriginalFlags & JobFlags::Required ) && DidBuildFail( nestedJob->m_Asset->GetAssetFileRef()->GetHash() ) )
         {
           job->m_Result = JobResults::Failure;
-          g_FailedAssets.insert( job->m_Asset->GetFileID() );
+          g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
           Console::Print( Console::Levels::Verbose, "Job '%s' marked as failed, because required job '%s' failed\n", job->m_BuildString.c_str(), nestedJob->m_BuildString.c_str() );
           break;
         }
@@ -1146,10 +1146,10 @@ void AssetBuilder::Build( V_BuildJob& jobs, i32 nice )
     for ( ; nestedItr != nestedEnd; ++nestedItr )
     {
       BuildJob* nestedJob = *nestedItr;
-      if ( ( nestedJob->m_OriginalFlags & JobFlags::Required ) && DidBuildFail( nestedJob->m_Asset->GetFileID() ) )
+      if ( ( nestedJob->m_OriginalFlags & JobFlags::Required ) && DidBuildFail( nestedJob->m_Asset->GetAssetFileRef()->GetHash() ) )
       {
         job->m_Result = JobResults::Failure;
-        g_FailedAssets.insert( job->m_Asset->GetFileID() );
+        g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
         Console::Print( Console::Levels::Verbose, "Job '%s' marked as failed, because required job '%s' failed\n", job->m_BuildString.c_str(), nestedJob->m_BuildString.c_str() );
         break;
       }
@@ -1193,7 +1193,7 @@ void SendTopLevelBuild( const AssetClassPtr& assetClass )
   topLevelBuild.m_SignatureCreationTime = g_SignatureCreationTime;
   topLevelBuild.m_TotalTime = g_TotalTime;
   topLevelBuild.m_UnaccountedTime = unaccounted;
-  BuilderStats::AddTopLevelBuild( assetClass->m_AssetClassID, assetClass->GetEngineType(), topLevelBuild );
+  BuilderStats::AddTopLevelBuild( *(assetClass->GetAssetFileRef()), assetClass->GetAssetType(), topLevelBuild );
 
   Console::Profile( "Top level build breakdown:\n" );
   Console::Profile( "\tDependency Checking:   %fs\n", ( g_DependencyCheckTime / 1000.0f ) );
@@ -1209,9 +1209,9 @@ void SendTopLevelBuild( const AssetClassPtr& assetClass )
 
 void AssetBuilder::Build( const AssetClassPtr& assetClass, const BuilderOptionsPtr& options )
 {
-  Console::TraceFileHandle trace ( FinderSpecs::Debug::TRACE_FILE.GetFile( assetClass->GetBuiltDir() ), AppUtils::GetTraceStreams() );
-  Console::TraceFileHandle warning ( FinderSpecs::Debug::WARNING_FILE.GetFile( assetClass->GetBuiltDir() ), Console::Streams::Warning );
-  Console::TraceFileHandle error ( FinderSpecs::Debug::ERROR_FILE.GetFile( assetClass->GetBuiltDir() ), Console::Streams::Error );
+  Console::TraceFileHandle trace ( FinderSpecs::Debug::TRACE_FILE.GetFile( assetClass->GetBuiltDirectory() ), AppUtils::GetTraceStreams() );
+  Console::TraceFileHandle warning ( FinderSpecs::Debug::WARNING_FILE.GetFile( assetClass->GetBuiltDirectory() ), Console::Streams::Warning );
+  Console::TraceFileHandle error ( FinderSpecs::Debug::ERROR_FILE.GetFile( assetClass->GetBuiltDirectory() ), Console::Streams::Error );
 
   Profile::Timer timer;
 
@@ -1221,7 +1221,7 @@ void AssetBuilder::Build( const AssetClassPtr& assetClass, const BuilderOptionsP
   }
 
   V_IBuilder builders;
-  BuilderInterface::AllocateBuilders( assetClass->GetEngineType(), builders );
+  BuilderInterface::AllocateBuilders( assetClass->GetAssetType(), builders );
 
   if ( builders.empty() )
   {
@@ -1248,9 +1248,9 @@ void AssetBuilder::Build( const AssetClassPtr& assetClass, const BuilderOptionsP
 
 void AssetBuilder::Build( const AssetClassPtr& assetClass, const V_string& options )
 {
-  Console::TraceFileHandle trace ( FinderSpecs::Debug::TRACE_FILE.GetFile( assetClass->GetBuiltDir() ), AppUtils::GetTraceStreams());
-  Console::TraceFileHandle warning ( FinderSpecs::Debug::WARNING_FILE.GetFile( assetClass->GetBuiltDir() ), Console::Streams::Warning );
-  Console::TraceFileHandle error ( FinderSpecs::Debug::ERROR_FILE.GetFile( assetClass->GetBuiltDir() ), Console::Streams::Error );
+  Console::TraceFileHandle trace ( FinderSpecs::Debug::TRACE_FILE.GetFile( assetClass->GetBuiltDirectory() ), AppUtils::GetTraceStreams());
+  Console::TraceFileHandle warning ( FinderSpecs::Debug::WARNING_FILE.GetFile( assetClass->GetBuiltDirectory() ), Console::Streams::Warning );
+  Console::TraceFileHandle error ( FinderSpecs::Debug::ERROR_FILE.GetFile( assetClass->GetBuiltDirectory() ), Console::Streams::Error );
 
   Profile::Timer timer;
 
@@ -1260,7 +1260,7 @@ void AssetBuilder::Build( const AssetClassPtr& assetClass, const V_string& optio
   }
 
   V_IBuilder builders;
-  BuilderInterface::AllocateBuilders( assetClass->GetEngineType(), builders );
+  BuilderInterface::AllocateBuilders( assetClass->GetAssetType(), builders );
 
   if ( builders.empty() )
   {
@@ -1291,120 +1291,18 @@ void AssetBuilder::Build( const AssetClassPtr& assetClass, const V_string& optio
   }
 }
 
-void AssetBuilder::Build( const tuid assetId, const BuilderOptionsPtr& builderOptions )
+void AssetBuilder::Build( File::Reference& fileRef, const BuilderOptionsPtr& builderOptions )
 {
-  AssetClassPtr assetClass = AssetClass::FindAssetClass( assetId );
+  AssetClassPtr assetClass = AssetClass::LoadAssetClass( fileRef );
 
   Build( assetClass, builderOptions );
 }
 
-void AssetBuilder::Build( const tuid assetId, const V_string& options )
+void AssetBuilder::Build( File::Reference& fileRef, const V_string& options )
 {
-  AssetClassPtr assetClass = AssetClass::FindAssetClass( assetId );
+  AssetClassPtr assetClass = AssetClass::LoadAssetClass( fileRef );
 
   Build( assetClass, options );
-}
-
-void AssetBuilder::View( const AssetClassPtr& assetClass, const std::string& region )
-{
-  tuid assetId = assetClass->m_AssetClassID;
-
-  std::ostringstream str;
-  str << "Viewing asset: " << std::endl;
-  str << "built: " << assetClass->GetBuiltDir() << std::endl;
-  Console::Print(str.str().c_str());
-
-  {
-    Asset::EngineType assetType = assetClass->GetEngineType();
-
-    std::stringstream tuidString;
-    tuidString << std::hex << assetId;
-
-    std::string transport;
-    if (Nocturnal::GetCmdLineFlag( "pipe" ))
-    {
-      transport = " -pipe Luna";
-    }
-    else
-    {
-      transport = " -tcp -port 31338";
-    }
-
-    std::string cmd;
-    switch( assetType )
-    {
-    case Asset::EngineTypes::Moby:
-      cmd = "vm.bat \"" + tuidString.str() + "\"" + transport;
-      break;
-
-    case Asset::EngineTypes::Tie:
-    case Asset::EngineTypes::Shrub:
-      cmd = "vt.bat \"" + tuidString.str() + "\"" + transport;
-      break;
-
-    case Asset::EngineTypes::Level:
-      cmd = "vl.bat \"" + AssetClass::GetQualifiedName( assetClass ) + "\" " + "\"" + region + "\"" + transport;
-      break;
-
-    case Asset::EngineTypes::Cinematic:
-      cmd = "vscene.bat \"" + AssetClass::GetQualifiedName( assetClass ) + "\"" + transport;
-      break;
-
-    case Asset::EngineTypes::Movie:
-      {
-        cmd = "vmovie.bat \"" + AssetClass::GetQualifiedName( assetClass ) + "\"" + transport;
-
-        std::stringstream command;
-        command << "packgamewad.pl";
-        system( command.str().c_str() );
-      }
-      break;
-
-    default:
-      throw Nocturnal::Exception ( "Can't view this asset!" );
-      break;
-    }
-
-    Console::Print( "Viewer command: %s\n", cmd.c_str() );
-
-    STARTUPINFO         startupInfo;
-    PROCESS_INFORMATION procInfo;
-    memset( &startupInfo, 0, sizeof( startupInfo ) );
-    startupInfo.cb = sizeof( startupInfo );
-    memset( &procInfo, 0, sizeof( procInfo ) );
-
-    // Start the child process. 
-    if( !CreateProcess
-      (
-      NULL,                             // No module name (use command line)
-      (LPTSTR) cmd.c_str(),             // Command line
-      NULL,                             // Process handle not inheritable
-      NULL,                             // Thread handle not inheritable
-      FALSE,                            // Set handle inheritance to FALSE
-      CREATE_NEW_CONSOLE,               // Creation flags
-      NULL,                             // Use parent's environment block
-      NULL,                             // Use parent's starting directory 
-      &startupInfo,                     // Pointer to STARTUPINFO structure
-      &procInfo )                       // Pointer to PROCESS_INFORMATION structure
-      )
-    {
-      LPVOID lpMsgBuf;
-      FormatMessage( 
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-        FORMAT_MESSAGE_FROM_SYSTEM,
-        NULL,
-        GetLastError(),
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-        (LPTSTR) &lpMsgBuf,
-        0,
-        NULL 
-        );
-
-      Console::Error( "Failed to start the viewer: %s\n", lpMsgBuf );
-
-      LocalFree( lpMsgBuf );
-    }
-  }
 }
 
 bool AssetBuilder::DidBuildFail( const tuid assetId )

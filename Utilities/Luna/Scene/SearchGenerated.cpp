@@ -53,20 +53,20 @@ SearchPanel::SearchPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, c
 	wxBoxSizer* engTypeSizer;
 	engTypeSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_StaticEngineType = new wxStaticText( m_TextPanel, wxID_ANY, wxT("Engine Type"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_StaticEngineType->Wrap( -1 );
-	engTypeSizer->Add( m_StaticEngineType, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_StaticAssetType = new wxStaticText( m_TextPanel, wxID_ANY, wxT("Engine Type"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_StaticAssetType->Wrap( -1 );
+	engTypeSizer->Add( m_StaticAssetType, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	engTypeSizer->Add( 38, 0, 0, wxEXPAND, 5 );
 	
-	m_EngineType = new wxComboBox( m_TextPanel, wxID_ANY, wxT("Any"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_EngineType->Append( wxT("Any") );
-	m_EngineType->Append( wxT("Moby") );
-	m_EngineType->Append( wxT("Tie") );
-	m_EngineType->Append( wxT("Shrub") );
-	m_EngineType->Append( wxT("Ufrag") );
-	engTypeSizer->Add( m_EngineType, 1, wxALL|wxEXPAND, 5 );
+	m_AssetType = new wxComboBox( m_TextPanel, wxID_ANY, wxT("Any"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_AssetType->Append( wxT("Any") );
+	m_AssetType->Append( wxT("Moby") );
+	m_AssetType->Append( wxT("Tie") );
+	m_AssetType->Append( wxT("Shrub") );
+	m_AssetType->Append( wxT("Ufrag") );
+	engTypeSizer->Add( m_AssetType, 1, wxALL|wxEXPAND, 5 );
 	
 	searchOuterSizer->Add( engTypeSizer, 0, wxEXPAND, 5 );
 	

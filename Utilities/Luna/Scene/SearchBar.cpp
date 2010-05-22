@@ -30,17 +30,17 @@ SearchBar::SearchBar( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& po
   // m_SearchOption->SetSelection( 0 );
   
   // Initialize Engine Types
-  m_EngineType->Clear();
-  m_EngineType->Append( wxString( "(Any)" ) );
-  const Reflect::Enumeration* engineTypes = Reflect::Registry::GetInstance()->GetEnumeration( Reflect::GetType< Asset::EngineTypes::EngineType >() );
-  for ( u32 engineType = 0; engineType < Asset::EngineTypes::Count; ++engineType )
+  m_AssetType->Clear();
+  m_AssetType->Append( wxString( "(Any)" ) );
+  const Reflect::Enumeration* assetTypes = Reflect::Registry::GetInstance()->GetEnumeration( Reflect::GetType< Asset::AssetTypes::AssetType >() );
+  for ( u32 assetType = 0; assetType < Asset::AssetTypes::Count; ++assetType )
   {
     std::string label;
-    bool check = engineTypes->GetElementLabel( engineType, label );
+    bool check = assetTypes->GetElementLabel( assetType, label );
     NOC_ASSERT( check );
-    m_EngineType->Append( wxString( label ) );
+    m_AssetType->Append( wxString( label ) );
   }
-  m_EngineType->SetSelection( 0 );
+  m_AssetType->SetSelection( 0 );
 	
   // Initialize Bound Options (must match up with BoundOptions::BoundOption)
   // m_BoundsOption->Clear();
@@ -54,7 +54,7 @@ SearchBar::SearchBar( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& po
   m_Results->InsertColumn( ResultColumns::EntityAsset, "Entity Class" );
   m_Results->InsertColumn( ResultColumns::Zone, "Zone" );
   m_Results->InsertColumn( ResultColumns::Region, "Region" );
-  m_Results->InsertColumn( ResultColumns::EngineType, "Engine Type" );
+  m_Results->InsertColumn( ResultColumns::AssetType, "Engine Type" );
   
   // Set Status
   m_Status->SetLabel( "" );
@@ -224,15 +224,7 @@ void SearchBar::SetupSearchCriteria( SearchBarTraverser& traverser )
       
       case SearchOptions::EntityAsset:
       {
-        tuid id = TUID::Null;
-        if ( TUID::Parse( searchText, id ) )
-        {
-          traverser.AddSearchCriteria( new EntityAssetIDCriteria( id ) );
-        }
-        else
-        {
-          traverser.AddSearchCriteria( new EntityAssetNameCriteria( WildcardToRegex( searchText ) ) );
-        }
+        traverser.AddSearchCriteria( new EntityAssetNameCriteria( WildcardToRegex( searchText ) ) );
         break;
       }
       
@@ -244,10 +236,10 @@ void SearchBar::SetupSearchCriteria( SearchBarTraverser& traverser )
     }
   }
   
-  int engineType = m_EngineType->GetSelection() - 1;
-  if ( ( engineType >= 0 ) && ( engineType < Asset::EngineTypes::Count ) )
+  int assetType = m_AssetType->GetSelection() - 1;
+  if ( ( assetType >= 0 ) && ( assetType < Asset::AssetTypes::Count ) )
   {
-    traverser.AddSearchCriteria( new EngineTypeCriteria( engineType ) );
+    traverser.AddSearchCriteria( new AssetTypeCriteria( assetType ) );
   }
   
   std::string lowerBoundString = m_BoundsGreaterThan->GetLineText( 0 );
@@ -309,7 +301,7 @@ void SearchBar::SetupScenes( M_SceneToZone& sceneToZone, S_RegionDumbPtr& region
     V_ZoneDumbPtr::iterator zoneEnd = zones.end();
     for ( ; zoneItr != zoneEnd; ++zoneItr )
     {
-      tuidToZone.insert( std::make_pair( (*zoneItr)->GetFileID(), *zoneItr ) );
+      tuidToZone.insert( std::make_pair( (*zoneItr)->GetID(), *zoneItr ) );
     }
   }
   
@@ -320,7 +312,7 @@ void SearchBar::SetupScenes( M_SceneToZone& sceneToZone, S_RegionDumbPtr& region
     M_SceneSmartPtr::const_iterator sceneEnd = scenes.end();
     for ( ; sceneItr != sceneEnd; ++sceneItr )
     {
-      M_TuidToZone::iterator zoneItr = tuidToZone.find( sceneItr->second->GetFileID() );
+      M_TuidToZone::iterator zoneItr = tuidToZone.find( sceneItr->second->GetId() );
       if ( zoneItr != tuidToZone.end() )
       {
         sceneToZone.insert( std::make_pair( sceneItr->second, zoneItr->second ) );
@@ -330,7 +322,7 @@ void SearchBar::SetupScenes( M_SceneToZone& sceneToZone, S_RegionDumbPtr& region
   else
   {
     Luna::Scene* currentScene = m_SceneEditor->GetSceneManager()->GetCurrentScene();
-    M_TuidToZone::iterator zoneItr = tuidToZone.find( currentScene->GetFileID() );
+    M_TuidToZone::iterator zoneItr = tuidToZone.find( currentScene->GetId() );
     if ( zoneItr != tuidToZone.end() )
     {
       sceneToZone.insert( std::make_pair( currentScene, zoneItr->second ) );
@@ -375,7 +367,7 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
     m_Status->SetLabel( "No matches found." );
   }
 
-  const Reflect::Enumeration* engineTypes = Reflect::Registry::GetInstance()->GetEnumeration( Reflect::GetType< Asset::EngineTypes::EngineType >() );
+  const Reflect::Enumeration* assetTypes = Reflect::Registry::GetInstance()->GetEnumeration( Reflect::GetType< Asset::AssetTypes::AssetType >() );
   V_HierarchyNodeSmartPtr::const_iterator resultsItr = m_ResultNodes.begin();
   V_HierarchyNodeSmartPtr::const_iterator resultsEnd = m_ResultNodes.end();
   for ( int id = 0; resultsItr != resultsEnd; ++id, ++resultsItr )
@@ -385,7 +377,7 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
     std::string entityClassPath = "";
     std::string zone = "";
     std::string region = "";
-    std::string engineType;
+    std::string assetType;
         
     Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *resultsItr );
     if ( entity )
@@ -400,12 +392,12 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
         Asset::EntityAsset* entityClass = entityClassSet->GetEntityAsset();
         if ( entityClass )
         {
-          std::string engineTypeString;
-          Asset::EngineType engineTypeEnum = entityClass->GetEngineType();
-          bool check = engineTypes->GetElementLabel( engineTypeEnum, engineTypeString );
+          std::string assetTypeString;
+          Asset::AssetType assetTypeEnum = entityClass->GetAssetType();
+          bool check = assetTypes->GetElementLabel( assetTypeEnum, assetTypeString );
           if ( check )
           {
-            engineType = engineTypeString;
+            assetType = assetTypeString;
           }
         }
       }
@@ -465,17 +457,17 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
     regionListItem.SetId( id );
     regionListItem.SetColumn( ResultColumns::Region );
     
-    wxListItem engineTypeListItem;
-    engineTypeListItem.SetMask( wxLIST_MASK_TEXT );
-    engineTypeListItem.SetText( engineType );
-    engineTypeListItem.SetId( id );
-    engineTypeListItem.SetColumn( ResultColumns::EngineType );
+    wxListItem assetTypeListItem;
+    assetTypeListItem.SetMask( wxLIST_MASK_TEXT );
+    assetTypeListItem.SetText( assetType );
+    assetTypeListItem.SetId( id );
+    assetTypeListItem.SetColumn( ResultColumns::AssetType );
     
     m_Results->InsertItem( nameListItem );
     m_Results->SetItem( entityClassNameListItem );
     m_Results->SetItem( zoneListItem );
     m_Results->SetItem( regionListItem );
-    m_Results->SetItem( engineTypeListItem );
+    m_Results->SetItem( assetTypeListItem );
   }
 }
 
@@ -533,25 +525,7 @@ bool EntityAssetNameCriteria::Validate( Luna::HierarchyNode* node )
   return boost::regex_match( classSet->GetName(), matchResults, boost::regex( m_Value, boost::regex::icase ) );
 }
 
-bool EntityAssetIDCriteria::Validate( Luna::HierarchyNode* node )
-{
-  Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( node );
-  if ( !entity )
-  {
-    return false;
-  }
-  
-  Luna::EntityAssetSet* classSet = entity->GetClassSet();
-  if ( !classSet )
-  {
-    return false;
-  }
-
-  tuid nodeTuid = classSet->GetEntityAssetID();
-  return ( nodeTuid == m_Value );
-}
-
-bool EngineTypeCriteria::Validate( Luna::HierarchyNode* node )
+bool AssetTypeCriteria::Validate( Luna::HierarchyNode* node )
 {
   Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( node );
   if ( !entity )
@@ -571,8 +545,8 @@ bool EngineTypeCriteria::Validate( Luna::HierarchyNode* node )
     return false;
   }
 
-  Asset::EngineType engineType = entityClass->GetEngineType();
-  return ( engineType == m_Value );
+  Asset::AssetType assetType = entityClass->GetAssetType();
+  return ( assetType == m_Value );
 }
 
 bool AABBCriteria::Validate( Luna::HierarchyNode* node )

@@ -2,7 +2,6 @@
 #include "SimpleFieldNode.h"
 #include "FieldFactory.h"
 
-#include "File/Manager.h"
 #include "Console/Console.h"
 
 using namespace Luna;

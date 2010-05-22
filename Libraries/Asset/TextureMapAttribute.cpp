@@ -2,7 +2,6 @@
 
 #include "StandardShaderAsset.h"
 #include "FileSystem/FileSystem.h"
-#include "File/Manager.h"
 
 using namespace Asset;
 
@@ -12,8 +11,8 @@ void TextureMapAttribute::EnumerateClass( Reflect::Compositor<TextureMapAttribut
 {
   comp.GetComposite().m_UIName = "Texture Map";
 
-  Reflect::Field* fieldFileID = comp.AddField( &TextureMapAttribute::m_FileID, "m_FileID", Reflect::FieldFlags::FileID | AssetFlags::RealTimeUpdateable | Asset::AssetFlags::ManageField );
-  fieldFileID->SetProperty( Asset::AssetProperties::FilterSpec, s_FileFilter.GetName() );
+  //Reflect::Field* fieldFileID = comp.AddField( &TextureMapAttribute::m_FileID, "m_FileID", Reflect::FieldFlags::FileID | AssetFlags::RealTimeUpdateable | Asset::AssetFlags::ManageField );
+  //fieldFileID->SetProperty( Asset::AssetProperties::FilterSpec, s_FileFilter.GetName() );
 
   Reflect::EnumerationField* enumReductionRatio = comp.AddEnumerationField( &TextureMapAttribute::m_ReductionRatio, "m_ReductionRatio", AssetFlags::RealTimeUpdateable );
   Reflect::EnumerationField* enumMipGenFilter = comp.AddEnumerationField( &TextureMapAttribute::m_MipGenFilter, "m_MipGenFilter", AssetFlags::RealTimeUpdateable );
@@ -45,27 +44,21 @@ bool TextureMapAttribute::ShouldRebuildTexture( const TextureMapAttribute* oldAt
     return true;
   }
 
-  return ( m_FileID != 0
-    && ( GetFilePath() != oldAttrib->GetFilePath()
+  return ( m_FileReference->GetFile().GetPath() != oldAttrib->m_FileReference->GetFile().GetPath()
     || m_ReductionRatio != oldAttrib->m_ReductionRatio
     || m_MipGenFilter != oldAttrib->m_MipGenFilter
     || m_PostMipFilter != oldAttrib->m_PostMipFilter 
-    || m_MipBias != oldAttrib->m_MipBias ) );
+    || m_MipBias != oldAttrib->m_MipBias );
 }
 
-tuid TextureMapAttribute::GetFileID() const
-{
-  return m_FileID;
-}
-
-void TextureMapAttribute::SetFileID( const tuid& fileID )
-{
-  if ( m_FileID != fileID )
-  {
-    m_FileID = fileID;
-    RaiseChanged( GetClass()->FindField( &TextureMapAttribute::m_FileID ) );
-  }
-}
+//void TextureMapAttribute::SetFileID( const tuid& fileID )
+//{
+//  if ( m_FileID != fileID )
+//  {
+//    m_FileID = fileID;
+//    RaiseChanged( GetClass()->FindField( &TextureMapAttribute::m_FileID ) );
+//  }
+//}
 
 const Finder::FinderSpec* TextureMapAttribute::GetFileFilter() const
 {

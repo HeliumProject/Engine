@@ -1,16 +1,50 @@
 #include "Precompile.h"
 #include "Preferences.h"
 
-#include "Common/CommandLine.h"
-#include "File/Manager.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
-
+#include "FileSystem/FileSystem.h"
+#include "Common/CommandLine.h"
 
 using namespace Luna;
 
+/////////////////////////////////////////////////////////////////////////////
+// Helper function to convert a file ref to an appropriate string 
+// representation.
+// 
+std::string Luna::FileRefToLabel( const File::Reference& fileRef, const FilePathOption filePathOption )
+{
+    Nocturnal::Path path = fileRef.GetFile().GetPath();
+    std::string filePath = path.Get();
+
+    // Determine whether to show full path or not...
+    if ( !filePath.empty() )
+    {
+        switch ( filePathOption )
+        {
+        case FilePathOptions::Basename:
+            filePath = path.Basename();
+            break;
+
+        case FilePathOptions::Filename:
+            filePath = path.Filename();
+            break;
+
+        case FilePathOptions::PartialPath:
+            FileSystem::StripPrefix( Finder::ProjectAssets(), filePath );
+            break;
+
+        case FilePathOptions::FullPath:
+            // Do nothing, it's already good to go
+            break;
+        }
+    }
+
+    return filePath;
+}
+
 // Definitions
 REFLECT_DEFINE_ABSTRACT( Preferences )
+
 
 void Preferences::EnumerateClass( Reflect::Compositor<Preferences>& comp )
 {
@@ -20,60 +54,12 @@ const char* Preferences::s_ResetPreferences = "reset";
 const char* Preferences::s_ResetPreferencesLong = "ResetPreferences";
 
 
-namespace Luna
-{
-  /////////////////////////////////////////////////////////////////////////////
-  // Helper function to convert a file ID to an appropriate string 
-  // representation.
-  // 
-  std::string TuidToLabel( const tuid& fileID, const FilePathOption filePathOption )
-  {
-    std::string filePath;
-    try
-    {
-      filePath = File::GlobalManager().GetPath( fileID );
-    }
-    catch ( const File::Exception& )
-    {
-      std::stringstream nameStream;
-      nameStream << "<" << TUID::HexFormat << fileID << ">";
-      return nameStream.str();
-    }
-
-    // Determine whether to show full path or not...
-    if ( !filePath.empty() )
-    {
-      switch ( filePathOption )
-      {
-      case FilePathOptions::FileName:
-        filePath = FileSystem::GetLeaf( filePath );
-        FileSystem::StripExtension( filePath );
-        break;
-
-      case FilePathOptions::FileNamePlusExt:
-        filePath = FileSystem::GetLeaf( filePath );
-        break;
-
-      case FilePathOptions::PartialPath:
-        FileSystem::StripPrefix( Finder::ProjectAssets(), filePath );
-        break;
-
-      case FilePathOptions::FullPath:
-        // Do nothing, it's already good to go
-        break;
-      }
-    }
-
-    return filePath;
-  }
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // Static initialization.
 // 
 void Preferences::InitializeType()
 {
-  Reflect::RegisterClass<Preferences>( "Preferences" );
+    Reflect::RegisterClass<Preferences>( "Preferences" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,7 +67,7 @@ void Preferences::InitializeType()
 // 
 void Preferences::CleanupType()
 {
-  Reflect::UnregisterClass<Preferences>();
+    Reflect::UnregisterClass<Preferences>();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -97,11 +83,11 @@ Preferences::Preferences()
 // 
 void Preferences::SavePreferences()
 {
-  std::string error;
-  if ( !SaveToFile( GetPreferencesPath(), error ) )
-  {
-    Console::Error( "%s\n", error.c_str() );
-  }
+    std::string error;
+    if ( !SaveToFile( GetPreferencesPath(), error ) )
+    {
+        Console::Error( "%s\n", error.c_str() );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -111,29 +97,29 @@ void Preferences::SavePreferences()
 // 
 void Preferences::LoadPreferences()
 {
-  static bool promptReset = true;
-  static bool resetPrefs = false;
-  if ( Nocturnal::GetCmdLineFlag( Preferences::s_ResetPreferences ) )
-  {
-    if ( promptReset )
+    static bool promptReset = true;
+    static bool resetPrefs = false;
+    if ( Nocturnal::GetCmdLineFlag( Preferences::s_ResetPreferences ) )
     {
-      promptReset = false;
+        if ( promptReset )
+        {
+            promptReset = false;
 
-      if ( wxYES == wxMessageBox( "Are you sure that you want to reset all of your preferences?  This includes window positions and your 'most recently used' file list.", "Reset All Preferences?", wxCENTER | wxYES_NO ) )
-      {
-        resetPrefs = true;
-      }
+            if ( wxYES == wxMessageBox( "Are you sure that you want to reset all of your preferences?  This includes window positions and your 'most recently used' file list.", "Reset All Preferences?", wxCENTER | wxYES_NO ) )
+            {
+                resetPrefs = true;
+            }
+        }
+
+        if ( resetPrefs )
+        {
+            return;
+        }
     }
 
-    if ( resetPrefs )
+    std::string path = GetPreferencesPath();
+    if ( !LoadFromFile( path ) )
     {
-      return;
+        Console::Debug( "Using default preferences; unable to load preferences from '%s'.\n", path.c_str() );
     }
-  }
-
-  std::string path = GetPreferencesPath();
-  if ( !LoadFromFile( path ) )
-  {
-    Console::Debug( "Using default preferences; unable to load preferences from '%s'.\n", path.c_str() );
-  }
 }

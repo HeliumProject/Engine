@@ -72,8 +72,7 @@ namespace Finder
 
   FINDER_API std::string  GetExportFolder( const std::string& path, bool useFilename = true );
   FINDER_API std::string  GetBuiltFolder( const std::string& path, bool useFilename = false );
-  FINDER_API std::string  GetBuiltFolder( tuid assetId );
-  FINDER_API std::string  GetThumbnailFolder( tuid assetId );
+  FINDER_API std::string  GetThumbnailFolder( const std::string& path );
   
   FINDER_API void         StripAnyProjectRoot( std::string& path );
   FINDER_API std::string  StripAnyProjectRoot( const char *path );

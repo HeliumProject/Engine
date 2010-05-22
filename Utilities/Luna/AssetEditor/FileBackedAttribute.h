@@ -28,9 +28,10 @@ namespace Luna
     virtual ~FileBackedAttribute();
     virtual std::string GetName() const NOC_OVERRIDE;
     virtual void PopulateContextMenu( ContextMenuItemSet& menu ) NOC_OVERRIDE;
-    tuid GetFileID() const;
-    void SetFileID( const tuid& fileID );
+    File::Reference& GetFileReference() const;
+    void SetFileReference( File::Reference& fileRef );
     std::string GetFilePath() const;
+    void SetFilePath( const std::string& path );
 
   protected:
     void OnElementChanged( const Reflect::ElementChangeArgs& args );

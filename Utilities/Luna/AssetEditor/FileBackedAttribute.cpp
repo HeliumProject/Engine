@@ -6,12 +6,12 @@
 #include "AssetPreferences.h"
 #include "PersistentDataFactory.h"
 
-#include "FileUI/ManagedFileDialog.h"
 #include "FileBrowser/FileBrowser.h"
 #include "Finder/Finder.h"
 #include "Editor/ContextMenuGenerator.h"
 #include "Editor/SessionManager.h"
 #include "UIToolKit/ImageManager.h"
+#include "UIToolKit/FileDialog.h"
 
 
 // Using
@@ -25,8 +25,8 @@ LUNA_DEFINE_TYPE( Luna::FileBackedAttribute );
 // 
 void FileBackedAttribute::InitializeType()
 {
-  Reflect::RegisterClass<Luna::FileBackedAttribute>( "Luna::FileBackedAttribute" );
-  PersistentDataFactory::GetInstance()->Register( Reflect::GetType< Asset::FileBackedAttribute >(), &Luna::FileBackedAttribute::CreateFileBackedAttribute );
+    Reflect::RegisterClass<Luna::FileBackedAttribute>( "Luna::FileBackedAttribute" );
+    PersistentDataFactory::GetInstance()->Register( Reflect::GetType< Asset::FileBackedAttribute >(), &Luna::FileBackedAttribute::CreateFileBackedAttribute );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ void FileBackedAttribute::InitializeType()
 // 
 void FileBackedAttribute::CleanupType()
 {
-  Reflect::UnregisterClass<Luna::FileBackedAttribute>();
+    Reflect::UnregisterClass<Luna::FileBackedAttribute>();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ void FileBackedAttribute::CleanupType()
 // 
 Luna::PersistentDataPtr FileBackedAttribute::CreateFileBackedAttribute( Reflect::Element* attribute, Luna::AssetManager* assetManager )
 {
-  return new Luna::FileBackedAttribute( Reflect::AssertCast< Asset::FileBackedAttribute >( attribute ), assetManager );
+    return new Luna::FileBackedAttribute( Reflect::AssertCast< Asset::FileBackedAttribute >( attribute ), assetManager );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -51,10 +51,10 @@ Luna::PersistentDataPtr FileBackedAttribute::CreateFileBackedAttribute( Reflect:
 FileBackedAttribute::FileBackedAttribute( Asset::FileBackedAttribute* attribute, Luna::AssetManager* assetManager )
 : Luna::AttributeWrapper( attribute, assetManager )
 {
-  // Add listeners
-  GetAssetEditorPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &FileBackedAttribute::OnPreferenceChanged ) );
+    // Add listeners
+    GetAssetEditorPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &FileBackedAttribute::OnPreferenceChanged ) );
 
-  attribute->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &FileBackedAttribute::OnElementChanged ) );
+    attribute->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &FileBackedAttribute::OnElementChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -62,10 +62,10 @@ FileBackedAttribute::FileBackedAttribute( Asset::FileBackedAttribute* attribute,
 // 
 FileBackedAttribute::~FileBackedAttribute()
 {
-  // Remove listeners
-  GetAssetEditorPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &FileBackedAttribute::OnPreferenceChanged ) );
+    // Remove listeners
+    GetAssetEditorPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &FileBackedAttribute::OnPreferenceChanged ) );
 
-  GetPackage< Reflect::Element >()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &FileBackedAttribute::OnElementChanged ) );
+    GetPackage< Reflect::Element >()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &FileBackedAttribute::OnElementChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,14 +73,14 @@ FileBackedAttribute::~FileBackedAttribute()
 // 
 std::string FileBackedAttribute::GetName() const
 {
-  const Asset::FileBackedAttribute* package = GetPackage< Asset::FileBackedAttribute >();
-  std::string name = package->GetClass()->m_UIName;
+    const Asset::FileBackedAttribute* package = GetPackage< Asset::FileBackedAttribute >();
+    std::string name = package->GetClass()->m_UIName;
 
-  FilePathOptions::FilePathOption filePathOption = FilePathOptions::PartialPath;
-  GetAssetEditorPreferences()->GetEnum( GetAssetEditorPreferences()->FilePathOption(), filePathOption );
+    FilePathOptions::FilePathOption filePathOption = FilePathOptions::PartialPath;
+    GetAssetEditorPreferences()->GetEnum( GetAssetEditorPreferences()->FilePathOption(), filePathOption );
 
-  name += ": " + Luna::TuidToLabel( package->GetFileID(), filePathOption );
-  return name;
+    name += ": " + Luna::FileRefToLabel( package->GetFileReference(), filePathOption );
+    return name;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -88,57 +88,39 @@ std::string FileBackedAttribute::GetName() const
 // 
 void FileBackedAttribute::PopulateContextMenu( ContextMenuItemSet& menu )
 {
-  // TODO: Make this work with multiple selection
-  const size_t numSelected = GetAssetManager()->GetSelection().GetItems().Size();
+    // TODO: Make this work with multiple selection
+    const size_t numSelected = GetAssetManager()->GetSelection().GetItems().Size();
 
-  menu.AppendSeparator();
-  ContextMenuItemPtr menuItem = new ContextMenuItem( "Edit", "Open file in the appropriate editor." );
-  menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedAttribute::OnOpen ) );
-  menu.AppendItem( menuItem );
+    menu.AppendSeparator();
+    ContextMenuItemPtr menuItem = new ContextMenuItem( "Edit", "Open file in the appropriate editor." );
+    menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedAttribute::OnOpen ) );
+    menu.AppendItem( menuItem );
 
-  menu.AppendSeparator();
-  SubMenuPtr rcsSubMenu = new SubMenu( "Perforce" );
+    menu.AppendSeparator();
+    SubMenuPtr rcsSubMenu = new SubMenu( "Perforce" );
 
-  menuItem = new ContextMenuItem( "Check Out" );
-  menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedAttribute::OnCheckOutPath ) );
-  rcsSubMenu->AppendItem( menuItem );
+    menuItem = new ContextMenuItem( "Check Out" );
+    menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedAttribute::OnCheckOutPath ) );
+    rcsSubMenu->AppendItem( menuItem );
 
-  menuItem = new ContextMenuItem( "Revision History" );
-  menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedAttribute::OnRevisionHistoryPath ) );
-  rcsSubMenu->AppendItem( menuItem );
+    menuItem = new ContextMenuItem( "Revision History" );
+    menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedAttribute::OnRevisionHistoryPath ) );
+    rcsSubMenu->AppendItem( menuItem );
 
-  menu.AppendItem( rcsSubMenu );
+    menu.AppendItem( rcsSubMenu );
 
-  menu.AppendSeparator();
-  menuItem = new ContextMenuItem( "Change File Path", "Change this file's path using the Open File dialog" );
-  menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedAttribute::OnChangePath ) );
-  menuItem->Enable( numSelected == 1 );
-  menu.AppendItem( menuItem );
+    menu.AppendSeparator();
+    menuItem = new ContextMenuItem( "Change File Path", "Change this file's path using the Open File dialog" );
+    menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedAttribute::OnChangePath ) );
+    menuItem->Enable( numSelected == 1 );
+    menu.AppendItem( menuItem );
 
 
-  wxBitmap finderIcon = UIToolKit::GlobalImageManager().GetBitmap( "magnify_16.png" );
-  menuItem = new ContextMenuItem( "Change File Path (Asset Finder)", "Change this file's path using the Asset Finder", finderIcon );
-  menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedAttribute::OnChangePathFinder ) );
-  menuItem->Enable( numSelected == 1 );
-  menu.AppendItem( menuItem );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the file ID of this attribute.
-// 
-tuid FileBackedAttribute::GetFileID() const
-{
-  const Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
-  return pkg->GetFileID();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Sets the file ID on this attribute.
-// 
-void FileBackedAttribute::SetFileID( const tuid& fileID )
-{
-  Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
-  pkg->SetFileID( fileID );
+    wxBitmap finderIcon = UIToolKit::GlobalImageManager().GetBitmap( "magnify_16.png" );
+    menuItem = new ContextMenuItem( "Change File Path (Asset Finder)", "Change this file's path using the Asset Finder", finderIcon );
+    menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedAttribute::OnChangePathFinder ) );
+    menuItem->Enable( numSelected == 1 );
+    menu.AppendItem( menuItem );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -146,18 +128,17 @@ void FileBackedAttribute::SetFileID( const tuid& fileID )
 // 
 std::string FileBackedAttribute::GetFilePath() const
 {
-  const Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
-  std::string filePath;
+    const Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
+    pkg->GetFileReference().Resolve();
+    return pkg->GetFileReference().GetPath();
+}
 
-  try
-  {
-    filePath = pkg->GetFilePath();
-  }
-  catch ( const Nocturnal::Exception& )
-  {
-  }
-
-  return filePath;
+void FileBackedAttribute::SetFilePath( const std::string& path )
+{
+    Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
+    File::Reference fileRef( path );
+    fileRef.Resolve();
+    pkg->SetFileReference( fileRef );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -165,10 +146,10 @@ std::string FileBackedAttribute::GetFilePath() const
 // 
 void FileBackedAttribute::OnElementChanged( const Reflect::ElementChangeArgs& args )
 {
-  // Convert element changed event into a name change event (might be a bit
-  // heavy-handed since a change on the element does not always indciate that
-  // the name needs to be udpated).
-  m_NameChanged.Raise( AttributeChangeArgs( this ) );
+    // Convert element changed event into a name change event (might be a bit
+    // heavy-handed since a change on the element does not always indciate that
+    // the name needs to be udpated).
+    m_NameChanged.Raise( AttributeChangeArgs( this ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -178,13 +159,13 @@ void FileBackedAttribute::OnElementChanged( const Reflect::ElementChangeArgs& ar
 // 
 void FileBackedAttribute::OnPreferenceChanged( const Reflect::ElementChangeArgs& args )
 {
-  if ( args.m_Element && args.m_Field )
-  {
-    if ( args.m_Field == GetAssetEditorPreferences()->FilePathOption() )
+    if ( args.m_Element && args.m_Field )
     {
-      m_NameChanged.Raise( AttributeChangeArgs( this ) );
+        if ( args.m_Field == GetAssetEditorPreferences()->FilePathOption() )
+        {
+            m_NameChanged.Raise( AttributeChangeArgs( this ) );
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -193,7 +174,7 @@ void FileBackedAttribute::OnPreferenceChanged( const Reflect::ElementChangeArgs&
 void FileBackedAttribute::OnOpen( const ContextMenuArgsPtr& args )
 {
 #pragma TODO( "Might need to do something different for references to Assets (open inline)" )
-  SessionManager::GetInstance()->Edit( GetFilePath() );
+    SessionManager::GetInstance()->Edit( GetFilePath() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -202,38 +183,26 @@ void FileBackedAttribute::OnOpen( const ContextMenuArgsPtr& args )
 // 
 void FileBackedAttribute::OnChangePath( const ContextMenuArgsPtr& args )
 {
-  File::ManagedFileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path", Finder::ProjectAssets().c_str() );
-  dialog.SetTuidRequired( true );
+    UIToolKit::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path", Finder::ProjectAssets().c_str() );
 
-  tuid currentFileID = GetFileID();
-  std::string currentPath = GetFilePath();
-  if ( !currentPath.empty() )
-  {
-    dialog.SetPath( currentPath.c_str() );
-  }
-  else if ( currentFileID != TUID::Null )
-  {
-    // If the TUID did not resolve to a path, the user is probably trying to repair 
-    // this path and just needs to add a file to the resolver with this TUID, 
-    // so set the requested file ID on the the dialog.
-    dialog.SetRequestedFileID( currentFileID );
-  }
-
-  const Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
-  const Finder::FinderSpec* spec = pkg->GetFileFilter();
-  if ( spec )
-  {
-    dialog.SetFilter( spec->GetDialogFilter() );
-  }
-
-  if ( dialog.ShowModal() == wxID_OK )
-  {
-    if ( currentFileID != dialog.GetFileID() )
+    std::string currentPath = GetFilePath();
+    if ( !currentPath.empty() )
     {
-      args->GetBatch()->Push( new Undo::PropertyCommand< tuid >( new Nocturnal::MemberProperty< Luna::FileBackedAttribute, tuid >( this, &Luna::FileBackedAttribute::GetFileID, &Luna::FileBackedAttribute::SetFileID ), dialog.GetFileID() ) );
-      GetAssetManager()->GetSelection().Refresh();
+        dialog.SetPath( currentPath.c_str() );
     }
-  }
+
+    const Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
+    const Finder::FinderSpec* spec = pkg->GetFileFilter();
+    if ( spec )
+    {
+        dialog.SetFilter( spec->GetDialogFilter() );
+    }
+
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::FileBackedAttribute, std::string >( this, &Luna::FileBackedAttribute::GetFilePath, &Luna::FileBackedAttribute::SetFilePath ), dialog.GetFilePath() ) );
+        GetAssetManager()->GetSelection().Refresh();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -242,33 +211,24 @@ void FileBackedAttribute::OnChangePath( const ContextMenuArgsPtr& args )
 // 
 void FileBackedAttribute::OnChangePathFinder( const ContextMenuArgsPtr& args )
 {
-  File::FileBrowser dialog( GetAssetManager()->GetAssetEditor(), wxID_ANY, "Change File Path" );
-  const Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
-  const Finder::FinderSpec* spec = pkg->GetFileFilter();
-  if ( spec )
-  {
-    dialog.SetFilter( *spec );
-  }
-  dialog.SetTuidRequired( true );
-
-  tuid currentFileID = GetFileID();
-  std::string currentPath = GetFilePath();
-  if ( currentPath.empty() && currentFileID != TUID::Null )
-  {
-    // If the TUID did not resolve to a path, the user is probably trying to repair 
-    // this path and just needs to add a file to the resolver with this TUID, 
-    // so set the requested file ID on the the dialog.
-    dialog.SetRequestedFileID( currentFileID );
-  }
-
-  if ( dialog.ShowModal() == wxID_OK )
-  {
-    if ( currentFileID != dialog.GetFileID() )
+    File::FileBrowser dialog( GetAssetManager()->GetAssetEditor(), wxID_ANY, "Change File Path" );
+    const Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
+    const Finder::FinderSpec* spec = pkg->GetFileFilter();
+    if ( spec )
     {
-      args->GetBatch()->Push( new Undo::PropertyCommand< tuid >( new Nocturnal::MemberProperty< Luna::FileBackedAttribute, tuid >( this, &Luna::FileBackedAttribute::GetFileID, &Luna::FileBackedAttribute::SetFileID ), dialog.GetFileID() ) );
-      GetAssetManager()->GetSelection().Refresh();
+        dialog.SetFilter( *spec );
     }
-  }
+
+    std::string currentPath = GetFilePath();
+
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        if ( currentPath != dialog.GetPath() )
+        {
+            args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::FileBackedAttribute, std::string >( this, &Luna::FileBackedAttribute::GetFilePath, &Luna::FileBackedAttribute::SetFilePath ), dialog.GetPath() ) );
+            GetAssetManager()->GetSelection().Refresh();
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -276,7 +236,7 @@ void FileBackedAttribute::OnChangePathFinder( const ContextMenuArgsPtr& args )
 // 
 void FileBackedAttribute::OnCheckOutPath( const ContextMenuArgsPtr& args )
 {
-  SessionManager::GetInstance()->CheckOut( GetFilePath() );
+    SessionManager::GetInstance()->CheckOut( GetFilePath() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -285,6 +245,6 @@ void FileBackedAttribute::OnCheckOutPath( const ContextMenuArgsPtr& args )
 // 
 void FileBackedAttribute::OnRevisionHistoryPath( const ContextMenuArgsPtr& args )
 {
-  GetAssetManager()->GetAssetEditor()->RevisionHistory( GetFilePath() );
+    GetAssetManager()->GetAssetEditor()->RevisionHistory( GetFilePath() );
 }
 

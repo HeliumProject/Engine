@@ -8,7 +8,6 @@
 #include "Asset/CacheDB.h"
 #include "Common/String/Tokenize.h"
 #include "Common/Container/Insert.h" 
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/AssetSpecs.h"
@@ -31,7 +30,7 @@ static const char* m_AttributeHelpText = "Here you can search for the value of\n
 static const char* s_CollectionDefaultText = "<Select Collection>";
 static const char* s_FileTypeDefaultText = "<All File Types>";
 static const char* s_CreatedByDefaultText = "<Select User>";
-static const char* s_EngineTypeDefaultText = "<Select Type>";
+static const char* s_AssetTypeDefaultText = "<Select Type>";
 static const char* s_FileIDDefaultText = "<Hex or Decimal file ID>";
 static const char* s_LevelDefaultText = "<Level Name>";
 static const char* s_ShaderDefaultText = "<Shader Name>";
@@ -83,7 +82,7 @@ BrowserSearchPanel::BrowserSearchPanel( BrowserFrame* browserFrame, wxWindow* pa
   m_DefaultFieldText.insert( std::make_pair( m_CollectionChoice->GetId(), s_CollectionDefaultText ) );
   m_DefaultFieldText.insert( std::make_pair( m_FileTypeChoice->GetId(), s_FileTypeDefaultText ) );
   m_DefaultFieldText.insert( std::make_pair( m_CreatedByComboBox->GetId(), s_CreatedByDefaultText ) );
-  m_DefaultFieldText.insert( std::make_pair( m_EngineTypeChoice->GetId(), s_EngineTypeDefaultText ) );
+  m_DefaultFieldText.insert( std::make_pair( m_AssetTypeChoice->GetId(), s_AssetTypeDefaultText ) );
   m_DefaultFieldText.insert( std::make_pair( m_FileIDTextCtrl->GetId(), s_FileIDDefaultText ) );
   m_DefaultFieldText.insert( std::make_pair( m_LevelTextCtrl->GetId(), s_LevelDefaultText ) );
   m_DefaultFieldText.insert( std::make_pair( m_ShaderTextCtrl->GetId(), s_ShaderDefaultText ) );
@@ -166,9 +165,9 @@ void BrowserSearchPanel::OnFieldText( wxCommandEvent& event )
   //  {
   //  }
   //}
-  //else if ( eventID == m_EngineTypeChoice->GetId() )
+  //else if ( eventID == m_AssetTypeChoice->GetId() )
   //{
-  //  if ( m_EngineTypeChoice->GetValue().empty() )
+  //  if ( m_AssetTypeChoice->GetValue().empty() )
   //  {
   //  }
   //}
@@ -365,7 +364,7 @@ void BrowserSearchPanel::PopulateForm()
 
   Freeze();
 
-  // populate combo boxes: m_CreatedByComboBox, m_EngineTypeChoice
+  // populate combo boxes: m_CreatedByComboBox, m_AssetTypeChoice
   V_string tableData;
   u32 numAdded = m_BrowserFrame->GetBrowser()->GetCacheDB()->GetPopulateTableData( (u32)Asset::CacheDBColumnIDs::FileType, tableData );
   if ( numAdded > 0 )
@@ -389,14 +388,14 @@ void BrowserSearchPanel::PopulateForm()
   }
 
   tableData.clear();
-  numAdded = m_BrowserFrame->GetBrowser()->GetCacheDB()->GetPopulateTableData( (u32)Asset::CacheDBColumnIDs::EngineType, tableData );
+  numAdded = m_BrowserFrame->GetBrowser()->GetCacheDB()->GetPopulateTableData( (u32)Asset::CacheDBColumnIDs::AssetType, tableData );
   if ( numAdded > 0 )
   {
-    PopulateChoiceControl( (wxControlWithItems*) m_EngineTypeChoice, tableData );
+    PopulateChoiceControl( (wxControlWithItems*) m_AssetTypeChoice, tableData );
   }
   else
   {
-    m_EngineTypeChoice->Enable( false );
+    m_AssetTypeChoice->Enable( false );
   }
 
 
@@ -508,7 +507,7 @@ void BrowserSearchPanel::PopulateCollectionsChoice()
     end = m_CollectionManager->GetCollections().end(); itr != end; ++itr )
   {    
     AssetCollection* collection = itr->second;
-    if ( collection && !collection->GetAssetIDs().empty() )
+    if ( collection && !collection->GetAssetReferences().empty() )
     {
       tableData.push_back( collection->GetName() );
       ++numAdded;
@@ -654,7 +653,8 @@ bool BrowserSearchPanel::ProcessForm()
   if ( !fieldStringValue.empty() )
   {
     FileSystem::CleanName( fieldStringValue.c_str(), cleanFieldValue );
-    FileSystem::StripPrefix( File::GlobalManager().GetManagedAssetsRoot(), cleanFieldValue );
+#pragma TODO( "support getting the asset root from the settings for the project to strip it" )
+    //    FileSystem::StripPrefix( File::GlobalManager().GetManagedAssetsRoot(), cleanFieldValue );
 
     if ( !cleanFieldValue.empty() )
     {
@@ -685,17 +685,17 @@ bool BrowserSearchPanel::ProcessForm()
 
 
   // -----------------------------------------
-  //  wxChoice*   m_EngineTypeChoice;
-  fieldStringValue = m_EngineTypeChoice->GetStringSelection();
+  //  wxChoice*   m_AssetTypeChoice;
+  fieldStringValue = m_AssetTypeChoice->GetStringSelection();
   fieldStringValue.Trim(true);  // trim white-space right 
   fieldStringValue.Trim(false); // trim white-space left
   if ( !fieldStringValue.empty()
-    && _stricmp( fieldStringValue.c_str(), s_EngineTypeDefaultText  ) != 0 )
+    && _stricmp( fieldStringValue.c_str(), s_AssetTypeDefaultText  ) != 0 )
   {
     bool needsQuotes = ( fieldStringValue.find( ' ' ) != -1 ) ? true : false;
 
     queryString += queryString.empty() ? "" : " ";
-    queryString += Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::EngineType ) + ":";
+    queryString += Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::AssetType ) + ":";
     queryString += needsQuotes ? "\"" : "";
     queryString += fieldStringValue.c_str();
     queryString += needsQuotes ? "\"" : "";
@@ -793,165 +793,3 @@ bool BrowserSearchPanel::ProcessForm()
 
   return true;
 }
-
-  //m_SearchCriteria->clear();
-
-  //if ( m_checkBoxDiskFiles->IsChecked() )
-  //{
-  //  m_SearchCriteria->m_SearchMode = m_SearchCriteria->m_SearchMode | SearchModes::FilesOnDisk;
-  //}
-
-  //// File History Data --------------------------
-  //m_SearchCriteria->m_SearchHistoryData = m_checkBoxSeachHistoryData->IsChecked();
-
-  //// Level Tracker-------------------------------
-  //wxString comboBoxLevel = m_comboBoxLevel->GetValue();
-  //if ( !comboBoxLevel.empty() )
-  //{
-  //  m_SearchCriteria->m_SearchMode = m_SearchCriteria->m_SearchMode | SearchModes::Level;
-  //  m_SearchCriteria->m_Level = comboBoxLevel.c_str();
-  //}
-
-  //// Update Class-------------------------------
-  //wxString comboBoxUpdateClass = m_comboBoxUpdateClass->GetValue();
-  //if ( !comboBoxUpdateClass.empty() )
-  //{
-  //  m_SearchCriteria->m_SearchMode = m_SearchCriteria->m_SearchMode | SearchModes::UpdateClass;
-  //  m_SearchCriteria->m_UpdateClass = comboBoxUpdateClass.c_str();
-  //}
-
-  //// Created by-------------------------------
-  //wxString comboBoxUserCreatedBy = m_comboBoxUserCreatedBy->GetValue();
-  //if ( !comboBoxUserCreatedBy.empty() )
-  //{
-  //  m_SearchCriteria->m_SearchMode = m_SearchCriteria->m_SearchMode | SearchModes::CreatedBy;
-  //  m_SearchCriteria->m_UserCreatedBy = comboBoxUserCreatedBy.c_str();
-  //}
-  //g_FieldMRU->AddItem( (wxControlWithItems*) m_comboBoxUserCreatedBy, "m_comboBoxUserCreatedBy", m_SearchCriteria->m_UserCreatedBy );
-  // 
-
-  //// TUID-------------------------------
-  //std::string strTUID = m_comboBoxTUID->GetValue().c_str();
-  //if ( !strTUID.empty() )
-  //{
-  //  std::istringstream idStream (strTUID);
-  //  tuid id;
-  //  
-  //  // if the TUID is in HEX
-  //  if ( strTUID.size() > 2 && ( strTUID[0] == '0' && (strTUID[1] == 'x' || strTUID[1] == 'X' )))
-  //  {
-  //    idStream >> std::hex >> id;
-  //  }
-  //  else
-  //  {
-  //    idStream >> id;
-  //  }
-
-  //  if ( id == 0 || id == _UI64_MAX )
-  //  {
-  //    wxMessageBox( "The asset ID you specified is not valid.", "Error", wxCENTER | wxOK | wxICON_ERROR, GetParent() );
-  //    return false;
-  //  }
-
-  //  m_SearchCriteria->m_SearchMode = m_SearchCriteria->m_SearchMode | SearchModes::AssetID;
-  //  m_SearchCriteria->m_TUID = id;
-  //}
-  //g_FieldMRU->AddItem( (wxControlWithItems*) m_comboBoxTUID, "m_comboBoxTUID", strTUID );
-
-
-  //// Legacy asset class-------------------------------
-  //std::string legacyID =  m_comboBoxLegacyID->GetValue().c_str();
-  //if ( !legacyID.empty() )
-  //{
-  //  m_SearchCriteria->m_LegacyID = atoi( legacyID.c_str() );
-  //  if ( m_SearchCriteria->m_LegacyID < 0 )
-  //  {
-  //    wxMessageBox( "Invalid legacy asset ID specified.", "Error", wxCENTER | wxOK | wxICON_ERROR, GetParent() );
-  //    return false;
-  //  }
-  //  
-  //  m_SearchCriteria->m_LegacyType =  m_choiceLegacyType->GetStringSelection().c_str();
-  //  if ( ( m_SearchCriteria->m_LegacyType != "level" )
-  //    && ( m_SearchCriteria->m_LegacyType != "moby" )
-  //    && ( m_SearchCriteria->m_LegacyType != "tie" )
-  //    && ( m_SearchCriteria->m_LegacyType != "shader" )
-  //    && ( m_SearchCriteria->m_LegacyType != "foliage" )
-  //    && ( m_SearchCriteria->m_LegacyType != "shrub" ) 
-  //    && ( m_SearchCriteria->m_LegacyType != "sky" ) )
-  //  {
-  //    wxMessageBox( "Please specify a legacy asset class.", "Error", wxCENTER | wxOK | wxICON_ERROR, GetParent() );
-  //    return false;
-  //  }
-  //  
-  //  m_SearchCriteria->m_SearchMode = m_SearchCriteria->m_SearchMode | SearchModes::LegacyInfo;
-  //}
-  //g_FieldMRU->AddItem( (wxControlWithItems*) m_comboBoxLegacyID, "m_comboBoxLegacyID", legacyID );
-
-
-  //// Look in folder-------------------------------
-  //wxString comboBoxLookIn = m_FolderChoice->GetValue();
-  //if ( !comboBoxLookIn.empty() )
-  //{
-  //  m_SearchCriteria->m_LookIn = comboBoxLookIn.c_str();
-
-  //  // clean user input
-  //  FileSystem::CleanName( m_SearchCriteria->m_LookIn );
-  //  FileSystem::GuaranteeSlash( m_SearchCriteria->m_LookIn ); 
-  //  g_FieldMRU->AddItem( (wxControlWithItems*) m_FolderChoice, "m_FolderChoice", m_SearchCriteria->m_LookIn );  
-  //}
-  //
-
-  //// Search Query-------------------------------
-  //wxString comboBoxSearch = m_comboBoxSearch->GetValue();
-  //comboBoxSearch.Trim(true);  // trim white-space right 
-  //comboBoxSearch.Trim(false); // trim white-space left
-  //if ( !comboBoxSearch.empty() )
-  //{
-  //  m_SearchCriteria->m_SearchMode = m_SearchCriteria->m_SearchMode | SearchModes::SearchQuery;
-  //  m_SearchCriteria->m_SearchQuery = comboBoxSearch.c_str();
-  //}
-  //g_FieldMRU->AddItem( (wxControlWithItems*) m_comboBoxSearch, "m_comboBoxSearch", m_SearchCriteria->m_SearchQuery );
-
-
-  //// File type filter-------------------------------
-  //std::string filter = m_choiceFiletype->GetStringSelection().c_str();
-  //const Filter* foundFilter = FindFilter( filter );
-  //if ( foundFilter != NULL )
-  //{
-  //  m_SearchCriteria->m_Filter = foundFilter->GetExtensions();
-  //}
-  //else
-  //{
-  //  wxMessageBox( "The file extension you specified is not valid.", "Error", wxCENTER | wxOK | wxICON_ERROR, GetParent() );
-  //  return false;
-  //}
-
-
-  //// get the search queries-------------------------------
-  //std::string searchQuery = "";
-  //if ( m_SearchCriteria->m_SearchMode & SearchModes::SearchQuery )
-  //{
-  //  searchQuery = !m_SearchCriteria->m_SearchQuery.empty() ? m_SearchCriteria->m_SearchQuery : "*";
-  //}
-  //
-  //if ( !FileSystem::HasPrefix( m_SearchCriteria->m_LookIn, searchQuery ) )
-  //{
-  //  searchQuery = m_SearchCriteria->m_LookIn + std::string( "*" ) + searchQuery;
-  //}
-  //
-
-  //// if they provided an extension that's part of this filter, add it specifically
-  //std::string queryExtension = FileSystem::GetExtension( searchQuery );
-  //for each ( const std::string& itFilter in m_SearchCriteria->m_Filter )
-  //{
-  //  // rat.en => [.entity.irb].find( [.en] )
-  //  if ( !queryExtension.empty() && itFilter.find( queryExtension ) == 0 )
-  //  {
-  //    std::string addQuery = searchQuery;
-  //    FileSystem::StripExtension( addQuery );
-  //    addQuery += itFilter;
-  //    m_SearchCriteria->m_SearchQueries.insert( m_SearchCriteria->m_SearchQueries.begin(), 1, addQuery );
-  //}
-
-  //  m_SearchCriteria->m_SearchQueries.push_back( searchQuery + std::string("*") + itFilter );
-  //}

@@ -15,11 +15,10 @@
 bool Luna::IsFileReference( Reflect::Element* element, const Reflect::Field* field )
 {
   bool isFileRef = false;
-  if ( field->m_Flags & Reflect::FieldFlags::FileID )
+  if ( field->m_Flags & Reflect::FieldFlags::FileRef )
   {
-    if ( field->m_SerializerID == Reflect::GetType< Reflect::U64Serializer >() ||
-      field->m_SerializerID == Reflect::GetType< Reflect::U64ArraySerializer >() ||
-      field->m_SerializerID == Reflect::GetType< Reflect::U64SetSerializer >() )
+      if ( field->m_SerializerID == Reflect::GetType< Reflect::PointerSerializer >() ||
+      field->m_SerializerID == Reflect::GetType< Reflect::SetSerializer >() )
     {
       isFileRef = true;
     }

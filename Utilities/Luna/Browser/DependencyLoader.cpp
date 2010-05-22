@@ -23,13 +23,13 @@ DependencyLoader::DependencyLoader( DependencyCollection* collection )
 ///////////////////////////////////////////////////////////////////////////////
 DependencyLoader::~DependencyLoader()
 {
-  m_AssetIDs.clear();
+  m_AssetFileRefs.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void DependencyLoader::InitData()
 {
-  m_AssetIDs.clear();
+  m_AssetFileRefs.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -48,12 +48,12 @@ void DependencyLoader::ThreadProc( i32 threadID )
     cacheDB->s_TrackerDBVersion,
     SQLITE_OPEN_READONLY );
 
-  cacheDB->GetAssetDependencies( m_Collection->GetRootID(), m_AssetIDs, m_Collection->IsReverse(), m_Collection->GetRecursionDepthForLoad(), 0, &m_StopThread );
+  cacheDB->GetAssetDependencies( m_Collection->GetRoot(), m_AssetFileRefs, m_Collection->IsReverse(), m_Collection->GetRecursionDepthForLoad(), 0, &m_StopThread );
 
   if ( CheckThreadLeave( threadID ) )
     return;
 
-  m_Collection->SetAssetIDs( m_AssetIDs );
+  m_Collection->SetAssetReferences( m_AssetFileRefs );
   
   ThreadLeave( threadID );
 }

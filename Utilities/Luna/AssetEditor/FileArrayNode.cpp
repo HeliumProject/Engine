@@ -6,7 +6,6 @@
 #include "AssetUtils.h"
 #include "FieldFileReference.h"
 
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "UIToolKit/ImageManager.h"
@@ -22,7 +21,7 @@ LUNA_DEFINE_TYPE( Luna::FileArrayNode );
 // 
 void FileArrayNode::InitializeType()
 {
-  Reflect::RegisterClass<Luna::FileArrayNode>( "Luna::FileArrayNode" );
+    Reflect::RegisterClass<Luna::FileArrayNode>( "Luna::FileArrayNode" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,26 +29,26 @@ void FileArrayNode::InitializeType()
 // 
 void FileArrayNode::CleanupType()
 {
-  Reflect::UnregisterClass<Luna::FileArrayNode>();
+    Reflect::UnregisterClass<Luna::FileArrayNode>();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns true if the specified field is flagged as a fileID and if the 
+// Returns true if the specified field is flagged as a fileRef and if the 
 // serializer on the field is appropriate.
 // 
 bool FileArrayNode::IsFileArray( Reflect::Element* element, const Reflect::Field* field )
 {
-  bool isFileArray = false;
-  
-  if ( field->m_Flags & Reflect::FieldFlags::FileID )
-  {
-    if ( field->m_SerializerID == Reflect::GetType< Reflect::U64ArraySerializer >() )
-    {
-      isFileArray = true;
-    }
-  }
+    bool isFileArray = false;
 
-  return isFileArray;
+    if ( field->m_Flags & Reflect::FieldFlags::FileRef )
+    {
+        if ( field->m_SerializerID == Reflect::GetType< Reflect::SetSerializer >() )
+        {
+            isFileArray = true;
+        }
+    }
+
+    return isFileArray;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,21 +59,21 @@ FileArrayNode::FileArrayNode( Luna::AssetManager* assetManager, Reflect::Element
 , m_IsAssetReference( false )
 , m_IgnoreChange( false )
 {
-  // Sanity check
-  NOC_ASSERT( IsFileArray( element, field ) );
+    // Sanity check
+    NOC_ASSERT( IsFileArray( element, field ) );
 
-  m_IsAssetReference = Luna::IsAssetFileReference( element, field );
+    m_IsAssetReference = Luna::IsAssetFileReference( element, field );
 
 #pragma TODO( "Implement Add File functionality" )
-  ContextMenuItemSet& contextMenu = GetContextMenu();
-  ContextMenuItemPtr menuItem = new ContextMenuItem( "Add file" );
-  menuItem->Disable();
-  contextMenu.AppendSeparator();
-  contextMenu.AppendItem( menuItem );
+    ContextMenuItemSet& contextMenu = GetContextMenu();
+    ContextMenuItemPtr menuItem = new ContextMenuItem( "Add file" );
+    menuItem->Disable();
+    contextMenu.AppendSeparator();
+    contextMenu.AppendItem( menuItem );
 
-  menuItem = new ContextMenuItem( "Add file (Asset Finder)", "Add a new file to this list using the Asset Finder", UIToolKit::GlobalImageManager().GetBitmap( "magnify_16.png" ) );
-  menuItem->Disable();
-  contextMenu.AppendItem( menuItem );
+    menuItem = new ContextMenuItem( "Add file (Asset Finder)", "Add a new file to this list using the Asset Finder", UIToolKit::GlobalImageManager().GetBitmap( "magnify_16.png" ) );
+    menuItem->Disable();
+    contextMenu.AppendItem( menuItem );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -89,32 +88,33 @@ FileArrayNode::~FileArrayNode()
 // 
 void FileArrayNode::CreateChildren()
 {
-  Reflect::U64ArraySerializer* serializer = Reflect::AssertCast< Reflect::U64ArraySerializer >( m_Serializer );
-  for each ( const tuid& fileID in serializer->m_Data.Get() )
-  {
-    Luna::AssetNode* newNode = NULL;
-    if ( m_IsAssetReference )
-    {
-      Luna::AssetReferenceNodePtr node = new Luna::AssetReferenceNode( GetAssetManager(), fileID, NULL );
-      node->AssociateField( GetElement(), GetField() );
-      AddChild( node );
-      newNode = node;
-    }
-    else
-    {
-      Luna::FieldFileReferencePtr node = new Luna::FieldFileReference( GetAssetManager(), GetElement(), GetField(), fileID );
-      node->SetUseLabelPrefix( false );
-      AddChild( node ); 
-      newNode = node;
-    }
+#pragma TODO( "reimplement for File::References" )
+    //Reflect::SetSerializer* serializer = Reflect::AssertCast< Reflect::SetSerializer >( m_Serializer );
+    //for each ( const File::ReferencePtr& fileRef in serializer->m_Data.get() )
+    //{
+    //    Luna::AssetNode* newNode = NULL;
+    //    if ( m_IsAssetReference )
+    //    {
+    //        Luna::AssetReferenceNodePtr node = new Luna::AssetReferenceNode( GetAssetManager(), fileID, NULL );
+    //        node->AssociateField( GetElement(), GetField() );
+    //        AddChild( node );
+    //        newNode = node;
+    //    }
+    //    else
+    //    {
+    //        Luna::FieldFileReferencePtr node = new Luna::FieldFileReference( GetAssetManager(), GetElement(), GetField(), fileID );
+    //        node->SetUseLabelPrefix( false );
+    //        AddChild( node ); 
+    //        newNode = node;
+    //    }
 
-    // Context menu
-    ContextMenuItemSet& contextMenu = newNode->GetContextMenu();
-    ContextMenuItemPtr menuItem = new ContextMenuItem( "Delete" );
-    menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileArrayNode::DeleteSelectedChildren ) );
-    contextMenu.AppendSeparator();
-    contextMenu.AppendItem( menuItem );
-  }
+    //    // Context menu
+    //    ContextMenuItemSet& contextMenu = newNode->GetContextMenu();
+    //    ContextMenuItemPtr menuItem = new ContextMenuItem( "Delete" );
+    //    menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileArrayNode::DeleteSelectedChildren ) );
+    //    contextMenu.AppendSeparator();
+    //    contextMenu.AppendItem( menuItem );
+    //}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,11 +122,11 @@ void FileArrayNode::CreateChildren()
 // 
 void FileArrayNode::HandleFieldChanged()
 {
-  if ( !m_IgnoreChange )
-  {
-    DeleteChildren();
-    CreateChildren();
-  }
+    if ( !m_IgnoreChange )
+    {
+        DeleteChildren();
+        CreateChildren();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -135,43 +135,43 @@ void FileArrayNode::HandleFieldChanged()
 // 
 void FileArrayNode::DeleteSelectedChildren( const ContextMenuArgsPtr& args )
 {
-  bool changed = false;
+    bool changed = false;
 
-  OS_SelectableDumbPtr selection = GetAssetManager()->GetSelection().GetItems();
-  Reflect::U64ArraySerializer* serializer = Reflect::AssertCast< Reflect::U64ArraySerializer >( m_Serializer );
-  V_AssetNodeDumbPtr nodesToDelete;
-  V_tuid fileIDs = serializer->m_Data.Get();
-  NOC_ASSERT( GetChildren().Size() == fileIDs.size() );
+    OS_SelectableDumbPtr selection = GetAssetManager()->GetSelection().GetItems();
+    Reflect::U64ArraySerializer* serializer = Reflect::AssertCast< Reflect::U64ArraySerializer >( m_Serializer );
+    V_AssetNodeDumbPtr nodesToDelete;
+    V_tuid fileIDs = serializer->m_Data.Get();
+    NOC_ASSERT( GetChildren().Size() == fileIDs.size() );
 
-  V_tuid::iterator dataItr = fileIDs.begin();
-  OS_AssetNodeSmartPtr::Iterator childItr = GetChildren().Begin();
-  OS_AssetNodeSmartPtr::Iterator childEnd = GetChildren().End();
-  for ( ; childItr != childEnd; ++childItr )
-  {
-    Luna::AssetNode* child = *childItr;
-    if ( child->IsSelected() )
+    V_tuid::iterator dataItr = fileIDs.begin();
+    OS_AssetNodeSmartPtr::Iterator childItr = GetChildren().Begin();
+    OS_AssetNodeSmartPtr::Iterator childEnd = GetChildren().End();
+    for ( ; childItr != childEnd; ++childItr )
     {
-      nodesToDelete.push_back( child );
-      dataItr = fileIDs.erase( dataItr );
-      selection.Remove( child );
+        Luna::AssetNode* child = *childItr;
+        if ( child->IsSelected() )
+        {
+            nodesToDelete.push_back( child );
+            dataItr = fileIDs.erase( dataItr );
+            selection.Remove( child );
+        }
+        else
+        {
+            ++dataItr;
+        }
     }
-    else
-    {
-      ++dataItr;
-    }
-  }
 
-  if ( nodesToDelete.size() > 0 )
-  {
-    GetAssetManager()->GetSelection().SetItems( selection );
-    for each ( Luna::AssetNode* node in nodesToDelete )
+    if ( nodesToDelete.size() > 0 )
     {
-      RemoveChild( node );
+        GetAssetManager()->GetSelection().SetItems( selection );
+        for each ( Luna::AssetNode* node in nodesToDelete )
+        {
+            RemoveChild( node );
+        }
+        serializer->m_Data.Set( fileIDs );
+        m_IgnoreChange = true;
+        m_Element->RaiseChanged( m_Field );
+        m_IgnoreChange = false;
     }
-    serializer->m_Data.Set( fileIDs );
-    m_IgnoreChange = true;
-    m_Element->RaiseChanged( m_Field );
-    m_IgnoreChange = false;
-  }
 }
 

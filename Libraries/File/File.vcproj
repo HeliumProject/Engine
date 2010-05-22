@@ -18,8 +18,9 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
+			OutputDirectory="$(SolutionDir)Built\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)Build\$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="0"
 			>
@@ -41,12 +42,14 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(SQLite)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;FILE_EXPORTS"
+				AdditionalIncludeDirectories="..\"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_WINDOWS;_USRDLL;FILE_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableEnhancedInstructionSet="0"
+				UsePrecompiledHeader="2"
 				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -61,7 +64,18 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalLibraryDirectories="$(boost)\stage\lib"
+				AdditionalDependencies=""
+				OutputFile="$(OutDir)/$(ProjectName).dll"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories=""
+				IgnoreDefaultLibraryNames=""
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
+				SubSystem="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				ImportLibrary="$(OutDir)/$(ProjectName).lib"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -83,13 +97,13 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)Built\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)Build\$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="0"
 			>
@@ -110,11 +124,13 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(SQLite)&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;FILE_EXPORTS"
+				AdditionalIncludeDirectories="..\"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;_USRDLL;FILE_EXPORTS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="0"
+				UsePrecompiledHeader="2"
 				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
 			/>
@@ -129,6 +145,19 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies=""
+				OutputFile="$(OutDir)/$(ProjectName).dll"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories=""
+				IgnoreDefaultLibraryNames=""
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				ImportLibrary="$(OutDir)/$(ProjectName).lib"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -150,26 +179,17 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{1E9F45BD-AE62-4A12-8A09-56665F644B79}"
-			RelativePathToProject=".\libraries\Console\Console.vcproj"
+			ReferencedProjectIdentifier="{F3DB1BFC-9BD1-443F-965A-E05E9D95E6AB}"
+			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
-			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{02269037-5B51-467E-A224-B56D816CDFD9}"
-			RelativePathToProject=".\libraries\FileSystem\FileSystem.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}"
-			RelativePathToProject=".\libraries\EventSystem\EventSystem.vcproj"
+			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
+			RelativePathToProject=".\libraries\Common\Common.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{45D62969-BE7F-4605-B43B-8586C28DD77D}"
@@ -180,78 +200,14 @@
 			RelativePathToProject=".\libraries\TUID\TUID.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
-			RelativePathToProject=".\libraries\Profile\profile.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
-			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{F3DB1BFC-9BD1-443F-965A-E05E9D95E6AB}"
-			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}"
-			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}"
-			RelativePathToProject=".\libraries\UIToolKit\UIToolKit.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
-			RelativePathToProject=".\libraries\Common\Common.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{9270A244-6F23-48F9-9382-0CCBADBDC0EE}"
-			RelativePathToProject=".\libraries\Perforce\perforce.vcproj"
+			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
+			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
 		/>
 	</References>
 	<Files>
 		<Filter
-			Name="Manager"
-			>
-			<File
-				RelativePath=".\Manager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Manager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Visitor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Visitor.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Resolver"
 			>
-			<File
-				RelativePath=".\CacheDB.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CacheDB.h"
-				>
-			</File>
-			<File
-				RelativePath=".\PatchOperations.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\PatchOperations.h"
-				>
-			</File>
 			<File
 				RelativePath=".\Resolver.cpp"
 				>
@@ -260,36 +216,32 @@
 				RelativePath=".\Resolver.h"
 				>
 			</File>
-			<File
-				RelativePath=".\TempResolver.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TempResolver.h"
-				>
-			</File>
 		</Filter>
 		<Filter
-			Name="ManagedFile"
+			Name="PCH"
 			>
 			<File
-				RelativePath=".\History.h"
+				RelativePath=".\StdAfx.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\ManagedFile.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ManagedFile.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ManagedFileUtils.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ManagedFileUtils.h"
+				RelativePath=".\StdAfx.h"
 				>
 			</File>
 		</Filter>
@@ -302,11 +254,31 @@
 			>
 		</File>
 		<File
+			RelativePath=".\File.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\File.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Handle.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Handle.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Reference.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\Reference.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Transaction.h"
 			>
 		</File>
 	</Files>

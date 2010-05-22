@@ -28,7 +28,7 @@ namespace FinderSpecs
   const FileSpec Luna::CHARACTER_EDITOR_PREFS    ( "Luna::CHARACTER_EDITOR_PREFS","LunaCharacterEditorPrefs",   Extension::REFLECT_BINARY );
 
   const FamilySpec Luna::ASSET_COLLECTION_FAMILY ( "Luna::ASSET_COLLECTION_FAMILY", "Asset Collection", "collection" );
-  const DecorationSpec Luna::ASSET_COLLECTION_IRB_DECORATION( "Luna::ASSET_COLLECTION_IRB_DECORATION", "Asset Collection", ASSET_COLLECTION_FAMILY , Extension::REFLECT_BINARY );
+  const DecorationSpec Luna::ASSET_COLLECTION_RB_DECORATION( "Luna::ASSET_COLLECTION_RB_DECORATION", "Asset Collection", ASSET_COLLECTION_FAMILY , Extension::REFLECT_BINARY );
   const DecorationSpec Luna::ASSET_COLLECTION_XML_DECORATION( "Luna::ASSET_COLLECTION_XML_DECORATION", "Asset Collection", ASSET_COLLECTION_FAMILY , Extension::XML );
 
   const FamilySpec Luna::SESSION_FAMILY          ( "Luna::SESSION_FAMILY",     "Luna Session",                "session" );

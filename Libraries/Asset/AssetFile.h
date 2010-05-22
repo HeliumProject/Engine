@@ -6,7 +6,7 @@
 #include "Common/Container/OrderedSet.h"
 #include "Common/Memory/SmartPtr.h"
 #include "Common/Types.h"
-#include "File/ManagedFile.h"
+#include "File/Reference.h"
 #include "Finder/Finder.h"
 #include "Reflect/Registry.h"
 #include "Reflect/Serializers.h"
@@ -18,72 +18,83 @@ namespace Asset
   class AssetFile;
   typedef Nocturnal::SmartPtr< AssetFile > AssetFilePtr;
   typedef std::vector< AssetFilePtr > V_AssetFiles;
-  typedef std::map< tuid, AssetFilePtr > M_AssetFiles;
+  typedef std::map< u64, AssetFilePtr > M_AssetFiles;
   typedef Nocturnal::OrderedSet< AssetFilePtr > OS_AssetFiles;
   
-  class ASSET_API AssetFile : public File::ManagedFile
+  class ASSET_API AssetFile : public Reflect::Element
   {   
   public:
     AssetFile();
-    AssetFile( const File::ManagedFile* file );
+    AssetFile( File::Reference& file );
     virtual ~AssetFile();
 
-    static AssetFilePtr FindAssetFile( const tuid id, bool useCacheDB = true );
     static AssetFilePtr FindAssetFile( const std::string& path, bool useCacheDB = true );
 
   public:
-    const tuid& GetFileID() const { return m_Id; }
-    const std::string& GetFilePath() const { return m_Path; }
+    std::string GetFilePath()
+    {
+        m_FileReference->Resolve();
+        return m_FileReference->GetPath();
+    }
+
+    void SetFileReference( File::Reference& fileRef )
+    {
+        if ( m_FileReference )
+        {
+            delete m_FileReference;
+        }
+
+        m_FileReference = new File::Reference( fileRef );
+    }
+    File::ReferencePtr& GetFileReference()
+    {
+        return m_FileReference;
+    }
 
     const std::string& GetShortName();
     const Finder::ModifierSpec* GetModifierSpec();
     const std::string& GetExtension();
     const std::string& GetFileType();
     
-    EngineType GetEngineType();
-    const std::string& GetEngineTypeName();
-
     u64 GetSize();
-    const std::string& GetP4User();
-    i32 GetP4Revision();
+    const std::string& GetRCSUser();
 
-    static AssetClassPtr GetAssetClass( const AssetFile* assetFile );
+    AssetType GetAssetType();
+
+    static AssetClassPtr GetAssetClass( AssetFile* assetFile );
 
     void AddAttribute( const std::string& attrName, const std::string& attrValue, bool canAppend = true );
     const M_string& GetAttributes() const { return m_Attributes; }
 
-    void AddDependencyID( const tuid dependencyID );
-    void SetDependencyIDs( const S_tuid& dependencyIDs );
-    bool HasDependencies() { return m_DependencyIDs.empty() ? false : true; }
-    const S_tuid& GetDependencyIDs() const { return m_DependencyIDs; }
-    void GetDependencyIDsOfType( M_AssetFiles* assetFiles, i32 type, S_tuid& dependencies );
+    void AddDependency( const File::ReferencePtr& fileRef );
+    void SetDependencies( const File::S_Reference& dependencies );
+    bool HasDependencies() { return !m_Dependencies.empty(); }
+    const File::S_Reference& GetDependencies() const { return m_Dependencies; }
+    void GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, File::S_Reference& dependencies );
 
     void SetRowID( const u64 rowID ) { m_RowID = rowID; }
     u64 GetRowID() { return m_RowID; }
 
  public:
-    REFLECT_DECLARE_ABSTRACT(AssetFile, File::ManagedFile);
+     REFLECT_DECLARE_ABSTRACT(AssetFile, Reflect::Element );
     static void EnumerateClass( Reflect::Compositor<AssetFile>& comp );
 
   private:
     void Init();
-    void SetManagedFile( const File::ManagedFile* file );
-    void GetDependencyIDsOfType( M_AssetFiles* assetFiles, i32 type, S_tuid& dependencies, S_tuid& visitedTuids, u32 depth );
+    void GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, File::S_Reference& dependencies, File::S_Reference& visited, u32 depth );
 
   private:
+    File::ReferencePtr m_FileReference;
+
     std::string   m_ShortName;
     const Finder::ModifierSpec* m_ModifierSpec;
     std::string   m_Extension;
     std::string   m_FileType;
-    EngineType    m_EngineType;
-    std::string   m_EngineTypeName;
+    AssetType     m_AssetType;
     u64           m_Size;
-    std::string   m_P4User;
     M_string      m_Attributes;
-    S_tuid        m_DependencyIDs;
+    File::S_Reference m_Dependencies;
     u64           m_RowID;
-    i32           m_P4LocalRevision;
-    bool          m_IsTemporary;
 
     friend class CacheDB;
   };

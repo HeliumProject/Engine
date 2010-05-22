@@ -22,42 +22,34 @@ SharedFileManager::~SharedFileManager()
 // 
 SharedFileManager* SharedFileManager::GetInstance()
 {
-  static SharedFileManager theSharedFiles;
-  return &theSharedFiles;
+    static SharedFileManager theSharedFiles;
+    return &theSharedFiles;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Adds a listener for a file event on a specific file.
 // 
-void SharedFileManager::AddFileListener( const tuid& fileID, const SharedFileChangedSignature::Delegate& listener )
+void SharedFileManager::AddFileListener( const File::Reference& fileRef, const SharedFileChangedSignature::Delegate& listener )
 {
-  if ( fileID != TUID::Null )
-  {
-    SharedFileChangedSignature::Event& evt = m_Events.insert( M_SharedFileChangedEvent::value_type( fileID, SharedFileChangedSignature::Event() ) ).first->second;
+    SharedFileChangedSignature::Event& evt = m_Events.insert( M_SharedFileChangedEvent::value_type( fileRef.GetHash(), SharedFileChangedSignature::Event() ) ).first->second;
     evt.Add( listener );
-  }
-  else
-  {
-    // Why are you listening for events on a non-existant file?
-    NOC_BREAK();
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Removes the specified listener from the list.
 // 
-void SharedFileManager::RemoveFileListener( const tuid& fileID, const SharedFileChangedSignature::Delegate& listener )
+void SharedFileManager::RemoveFileListener( const File::Reference& fileRef, const SharedFileChangedSignature::Delegate& listener )
 {
-  M_SharedFileChangedEvent::iterator found = m_Events.find( fileID );
-  if ( found != m_Events.end() )
-  {
-    SharedFileChangedSignature::Event& evt = found->second;
-    evt.Remove( listener );
-    if ( evt.Count() == 0 )
+    M_SharedFileChangedEvent::iterator found = m_Events.find( fileRef.GetHash() );
+    if ( found != m_Events.end() )
     {
-      m_Events.erase( found );
+        SharedFileChangedSignature::Event& evt = found->second;
+        evt.Remove( listener );
+        if ( evt.Count() == 0 )
+        {
+            m_Events.erase( found );
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,32 +57,32 @@ void SharedFileManager::RemoveFileListener( const tuid& fileID, const SharedFile
 // 
 void SharedFileManager::RemoveListenerFromAllFiles( const SharedFileChangedSignature::Delegate& listener )
 {
-  M_SharedFileChangedEvent::iterator itr = m_Events.begin();
-  M_SharedFileChangedEvent::iterator end = m_Events.end();
-  while ( itr != end )
-  {
-    SharedFileChangedSignature::Event& evt = itr->second;
-    evt.Remove( listener );
-    if ( evt.Count() == 0 )
+    M_SharedFileChangedEvent::iterator itr = m_Events.begin();
+    M_SharedFileChangedEvent::iterator end = m_Events.end();
+    while ( itr != end )
     {
-      itr = m_Events.erase( itr );
+        SharedFileChangedSignature::Event& evt = itr->second;
+        evt.Remove( listener );
+        if ( evt.Count() == 0 )
+        {
+            itr = m_Events.erase( itr );
+        }
+        else
+        {
+            ++itr;
+        }
     }
-    else
-    {
-      ++itr;
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Raises an event on the specified file.
 // 
-void SharedFileManager::FireEvent( const tuid& fileID, FileActions::FileAction action, const SharedFileChangedSignature::Delegate& emitter )
+void SharedFileManager::FireEvent( const File::Reference& fileRef, FileActions::FileAction action, const SharedFileChangedSignature::Delegate& emitter )
 {
-  M_SharedFileChangedEvent::iterator found = m_Events.find( fileID );
-  if ( found != m_Events.end() )
-  {
-    SharedFileChangedSignature::Event& evt = found->second;
-    evt.Raise( SharedFileChangeArgs( fileID, action ), emitter );
-  }
+    M_SharedFileChangedEvent::iterator found = m_Events.find( fileRef.GetHash() );
+    if ( found != m_Events.end() )
+    {
+        SharedFileChangedSignature::Event& evt = found->second;
+        evt.Raise( SharedFileChangeArgs( fileRef, action ), emitter );
+    }
 }

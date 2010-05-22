@@ -3,12 +3,12 @@
 
 #include "Content/ContentInit.h"
 #include "Content/Scene.h"
-#include "File/Manager.h"
+#include "File/File.h"
 
 #include <map>
 #include <set>
 
-igDXContent::IRBObjectLoader::IRBObjectLoader()
+igDXContent::RBObjectLoader::RBObjectLoader()
 : igDXRender::ObjectLoader()
 {
   Reflect::Initialize();
@@ -16,14 +16,14 @@ igDXContent::IRBObjectLoader::IRBObjectLoader()
   File::Initialize();
 }
 
-igDXContent::IRBObjectLoader::~IRBObjectLoader()
+igDXContent::RBObjectLoader::~RBObjectLoader()
 {
   File::Cleanup();
   Content::Cleanup();
   Reflect::Cleanup();
 }
 
-u32 igDXContent::IRBObjectLoader::ParseFile( const char* filename, bool winding )
+u32 igDXContent::RBObjectLoader::ParseFile( const char* filename, bool winding )
 {
   Content::Scene scene;
 
@@ -151,15 +151,17 @@ u32 igDXContent::IRBObjectLoader::ParseFile( const char* filename, bool winding 
 
         if ( shader )
         {
-          new_frag.m_Id = shader->GetAssetID();
-          new_frag.m_shader_loader = new IRBShaderLoader ();
+/*
+            new_frag.m_Id = shader->GetAssetID();
+          new_frag.m_shader_loader = new RBShaderLoader ();
 
-          if ( !File::GlobalManager().GetPath( new_frag.m_Id, new_frag.m_shader ) )
+          if ( !File::GlobalResolver().GetPath( new_frag.m_Id, new_frag.m_shader ) )
           {
             std::stringstream str;
             str << TUID::HexFormat << new_frag.m_Id;
             new_frag.m_shader = str.str();
           }
+          */
         }
 
         m_fragments.push_back( new_frag );

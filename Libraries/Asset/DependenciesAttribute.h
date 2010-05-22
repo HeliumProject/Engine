@@ -1,10 +1,10 @@
 #pragma once
 
 #include "API.h"
-#include "TUID/TUID.h"
 #include "Finder/AssetSpecs.h"
 
 #include "Attribute/Attribute.h"
+#include "File/File.h"
 
 namespace Asset
 {
@@ -12,8 +12,7 @@ namespace Asset
   {
   public:
 
-    V_tuid m_AssetIds;
-    V_string m_UpdateClasses;
+      File::S_Reference m_FileReferences;
 
   public:
     REFLECT_DECLARE_CLASS( DependenciesAttribute, AttributeBase );

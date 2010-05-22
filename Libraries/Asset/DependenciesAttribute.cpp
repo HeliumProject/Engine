@@ -12,10 +12,8 @@ void DependenciesAttribute::EnumerateClass( Reflect::Compositor<DependenciesAttr
   comp.GetComposite().SetProperty( AssetProperties::ShortDescription, "Allows for specifying other assets which are necessary for the current asset." );
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "This attribute allows for specifying other assets which are necessary for the given asset to function properly.  Often, this can be used on assets like levels to list entities that are needed but that can't be found via normal inclusion rules." );
 
-  Reflect::Field* fieldAssetIds = comp.AddField( &DependenciesAttribute::m_AssetIds, "m_AssetIds", Reflect::FieldFlags::FileID );
-  fieldAssetIds->SetProperty( Asset::AssetProperties::FilterSpec, FinderSpecs::Asset::DEPENDENCIES_FILTER.GetName() );
-
-  Reflect::Field* fieldUpdateClasses = comp.AddField( &DependenciesAttribute::m_UpdateClasses, "m_UpdateClasses" );
+  Reflect::Field* fieldFileReferences = comp.AddField( &DependenciesAttribute::m_FileReferences, "m_FileReferences", Reflect::FieldFlags::FileRef );
+  fieldFileReferences->SetProperty( Asset::AssetProperties::FilterSpec, FinderSpecs::Asset::DEPENDENCIES_FILTER.GetName() );
 }
 
 

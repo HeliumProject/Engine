@@ -4,7 +4,7 @@
 #include "Common/Compiler.h"
 #include "Common/Exception.h"
 
-#include "RCS/RCS.h"
+//#include "RCS/RCS.h"
 
 #include <sstream>
 
@@ -81,25 +81,27 @@ namespace File
   public:
     MissingFileException( const tuid& id, const std::string& referenceType = "", const std::string& referencingFile = "", const std::string& hint = "" )
     {
-      std::string message = std::string( "Unknown " ) + ( referenceType.empty() ? "file" : referenceType ) + " id: "TUID_HEX_FORMAT".";
-      
+      std::string message = std::string( "Unknown " ) + ( referenceType.empty() ? "file" : referenceType ) + " id: "TUID_HEX_FORMAT"\n";
+
+      /*
       if ( !referencingFile.empty() )
       {
-        message += std::string( "  The file '" ) + referencingFile + "' references an unknown file id, listed above.";
+        message += std::string( "The file '" ) + referencingFile + "' references an unknown file id, listed above.\n";
 
-        RCS::File rcsFile( referencingFile );
-        std::string username;
-        rcsFile.GetLastModifiedByUser( username );
-        message += std::string( "  The last user to edit '") + referencingFile + "' was: " + username + ".";
+        RCS::FileInfo info( referencingFile );
+        RCS::GetInfo( info );
+        message += std::string( "The last user to edit '") + referencingFile + "' was: " + info.GetLastUser() + "\n";
       }
+      */
 
       if ( !hint.empty() )
       {
-        message += "  ";
         message += hint;
+        message += "\n";
       }
 
-      SetMessage( message.c_str(), id );
+      Exception( message.c_str(), id );
     }
   };
+
 }

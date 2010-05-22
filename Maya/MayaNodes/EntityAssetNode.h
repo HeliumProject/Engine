@@ -10,7 +10,7 @@
 
 class EntityAssetNode;
 
-typedef std::map<tuid, EntityAssetNode*> M_TuidClassTransform;
+typedef std::map< u64, EntityAssetNode* > M_IdClassTransform;
 
 static const char kUnselectInstanceData[] = {"igUnselectInstanceData"};
 
@@ -36,14 +36,13 @@ public:
   static MObject s_EntityAssetGroup;
 
   // static data
-  static M_TuidClassTransform s_ClassTransformsMap;
+  static M_IdClassTransform   s_ClassTransformsMap;
   static MCallbackId          s_EditNodeAddedCBId;
   static MCallbackId          s_ImportNodeAddedCBId; 
   static bool                 s_DoRemoveNodeCallback;
 
 private:
-  // id for the asset class we are a container for
-  tuid m_AssetClassID;
+    File::Reference m_AssetFileReference;
 
   // client data for each instance of this art class
   M_EntityNode m_Instances;
@@ -62,12 +61,12 @@ public:
 
   bool operator == ( const EntityAssetNode& rhs ) const
   {
-    return m_AssetClassID == rhs.m_AssetClassID;
+      return m_AssetFileReference.GetHash() == rhs.m_AssetFileReference.GetHash();
   }  
 
   bool operator != ( const EntityAssetNode& rhs ) const
   {
-    return m_AssetClassID != rhs.m_AssetClassID;
+      return m_AssetFileReference.GetHash() != rhs.m_AssetFileReference.GetHash();
   }
 
   //
@@ -83,11 +82,8 @@ public:
   // WTF does this do?  what is it for? -Geoff
   static void FlattenInstances();
 
-  // get a reference to the specified EntityAssetNode, return EntityAssetNode::Null if it doesn't exist
-  static EntityAssetNode& Find( const tuid& assetClassID );
-
   // get a reference to the specified EntityAssetNode, create it if it doesn't exist
-  static EntityAssetNode& Get( const tuid& assetClassID );
+  static EntityAssetNode& Get( File::Reference& fileRef, bool createIfNotExisting = true );
 
   // get/create an EntityAssetNode, and an EntityNode for the given content Entity
   static std::pair< EntityAssetNode*, EntityNode* > CreateInstance( const Asset::EntityPtr& entity );

@@ -40,7 +40,6 @@ namespace Luna
     bool IsCollectionNameAvailable( AssetCollection* collection, const std::string& name, std::string& errors );
     void GetUniqueName( std::string& name, const char* baseName = "New Collection" );
 
-    AssetCollection* FindCollection( const tuid id ) const ;
     AssetCollection* FindCollection( const std::string& name ) const;
     bool AddCollection( AssetCollection* collection );
 
@@ -51,10 +50,9 @@ namespace Luna
     void CloseCollection( AssetCollection* collection );
 
     AssetCollection* ImportCollection( const std::string& path );
-    bool ExportCollection( AssetCollection* collection, const std::string& path );
     bool ImportIntoStaticCollection( AssetCollection* collection, const std::string& path );
 
-    bool SaveCollection( AssetCollection* collection );
+    bool SaveCollection( AssetCollection* collection, const std::string& path = "" );
     void SaveAllCollections();
 
   public:
@@ -76,7 +74,7 @@ namespace Luna
 
   private:
     M_AssetCollections m_AssetCollections;
-    S_tuid m_DirtyCollectionSigs;
+    S_u64 m_DirtyCollectionHashes;
 
     // This is what actually gets saved to disc
     S_string m_CollectionFilePaths;

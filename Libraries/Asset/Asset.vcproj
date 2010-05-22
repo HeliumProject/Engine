@@ -315,14 +315,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\GraphShaderAsset.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\GraphShaderAsset.h"
-					>
-				</File>
-				<File
 					RelativePath=".\NormalMapAttribute.cpp"
 					>
 				</File>
@@ -379,6 +371,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\TextureEnums.h"
+					>
+				</File>
+				<File
 					RelativePath=".\TextureMapAttribute.cpp"
 					>
 				</File>
@@ -432,38 +428,6 @@
 				</File>
 				<File
 					RelativePath=".\WorldFileAttribute.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="TexturePack"
-				>
-				<File
-					RelativePath=".\TextureEntry.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TextureEntry.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TextureEnums.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TexturePackAsset.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TexturePackAsset.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TexturePackBase.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TexturePackBase.h"
 					>
 				</File>
 			</Filter>
@@ -681,6 +645,18 @@
 			>
 		</File>
 		<File
+			RelativePath=".\AssetType.h"
+			>
+		</File>
+		<File
+			RelativePath=".\AssetTypeInfo.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\AssetTypeInfo.h"
+			>
+		</File>
+		<File
 			RelativePath=".\AssetVersion.cpp"
 			>
 		</File>
@@ -697,18 +673,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\EngineType.h"
-			>
-		</File>
-		<File
-			RelativePath=".\EngineTypeInfo.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\EngineTypeInfo.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Exceptions.h"
 			>
 		</File>
@@ -718,14 +682,6 @@
 		</File>
 		<File
 			RelativePath=".\ExporterJob.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Manager.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Manager.h"
 			>
 		</File>
 	</Files>

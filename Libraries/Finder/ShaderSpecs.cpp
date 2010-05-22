@@ -29,7 +29,7 @@ namespace FinderSpecs
 
   const FileSpec Shader::BUILT_FILE                     ( "Shader::BUILT_FILE",                     "built",          Extension::DATA,            "77 - mlee");
 
-  // file specs for the various custom .shader.irb files
+  // file specs for the various custom .shader.rb files
   const FileSpec Shader::WATER_BUILT_FILE               ( "Shader::WATER_BUILT_FILE",               "built",          Extension::DATA,            "22 - mlee" );
   const FileSpec Shader::FUR_BUILT_FILE                 ( "Shader::FUR_BUILT_FILE",                 "built",          Extension::DATA,            "17 - mlee" );
   const FileSpec Shader::REFRACTION_BUILT_FILE          ( "Shader::REFRACTION_BUILT_FILE",          "built",          Extension::DATA,            "17 - mlee" );

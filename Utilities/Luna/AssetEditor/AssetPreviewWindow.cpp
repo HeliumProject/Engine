@@ -3,12 +3,10 @@
 #include "AssetPreviewWindow.h"
 
 #include "AssetPreferences.h"
-#include "Asset/GraphShaderAsset.h"
 #include "Asset/StandardColorMapAttribute.h"
 #include "Asset/StandardNormalMapAttribute.h"
 #include "Asset/StandardExpensiveMapAttribute.h"
 #include "Asset/StandardDetailMapAttribute.h"
-#include "File/Manager.h"
 #include "igDXContent/ShaderLoader.h"
 
 using namespace Luna;
@@ -122,7 +120,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
     igDXRender::Shader* shader = m_Scene->m_render_class->m_shader_database->ResolveShader( shaderHandle );
     NOC_ASSERT( shader );
     
-    igDXContent::IRBShaderLoader::UpdateShaderClass( m_Scene->m_render_class->m_shader_database, shaderPath.c_str(), shaderClass->m_AlphaMode );
+    igDXContent::RBShaderLoader::UpdateShaderClass( m_Scene->m_render_class->m_shader_database, shaderPath.c_str(), shaderClass->m_AlphaMode );
     
     if ( shaderClass->m_DoubleSided )
     {
@@ -139,12 +137,12 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       igDXRender::TextureSettings settings;
       settings.Clear();
 
-      settings.m_Path = colorMap->GetFilePath();
+      settings.m_Path = colorMap->GetFileReference().GetPath();
       settings.m_Anisotropy = 0;
       settings.m_MipBias = colorMap->m_MipBias;
-      igDXContent::IRBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
-      igDXContent::IRBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
-      igDXContent::IRBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, igDXRender::Texture::SAMPLER_BASE_MAP );
+      igDXContent::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
+      igDXContent::RBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
+      igDXContent::RBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, igDXRender::Texture::SAMPLER_BASE_MAP );
       
       m_Scene->m_render_class->m_shader_database->UpdateShaderTexture( shaderPath.c_str(), igDXRender::Texture::SAMPLER_BASE_MAP, settings );
     }
@@ -153,7 +151,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       m_Scene->m_render_class->m_shader_database->SetShaderDefaultTexture( shaderPath.c_str(), igDXRender::Texture::SAMPLER_BASE_MAP );
     }
     
-    igDXContent::IRBShaderLoader::UpdateShaderColorMap( shader, colorMap );
+    igDXContent::RBShaderLoader::UpdateShaderColorMap( shader, colorMap );
 
     Asset::StandardNormalMapAttribute* normalMap = shaderClass->GetAttribute< Asset::StandardNormalMapAttribute >();
     if ( normalMap )
@@ -161,12 +159,12 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       igDXRender::TextureSettings settings;
       settings.Clear();
       
-      settings.m_Path = normalMap->GetFilePath();
+      settings.m_Path = normalMap->GetFileReference().GetPath();
       settings.m_Anisotropy = 0;
       settings.m_MipBias = normalMap->m_MipBias;
-      igDXContent::IRBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
-      igDXContent::IRBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
-      igDXContent::IRBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, igDXRender::Texture::SAMPLER_NORMAL_MAP );
+      igDXContent::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
+      igDXContent::RBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
+      igDXContent::RBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, igDXRender::Texture::SAMPLER_NORMAL_MAP );
       
       m_Scene->m_render_class->m_shader_database->UpdateShaderTexture( shaderPath.c_str(), igDXRender::Texture::SAMPLER_NORMAL_MAP, settings );
     }
@@ -175,7 +173,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       m_Scene->m_render_class->m_shader_database->SetShaderDefaultTexture( shaderPath.c_str(), igDXRender::Texture::SAMPLER_BASE_MAP );
     }
 
-    igDXContent::IRBShaderLoader::UpdateShaderNormalMap( shader, normalMap );
+    igDXContent::RBShaderLoader::UpdateShaderNormalMap( shader, normalMap );
 
     Asset::StandardExpensiveMapAttribute* expensiveMap = shaderClass->GetAttribute< Asset::StandardExpensiveMapAttribute >();
     if ( expensiveMap )
@@ -183,12 +181,12 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       igDXRender::TextureSettings settings;
       settings.Clear();
 
-      settings.m_Path = expensiveMap->GetFilePath();
+      settings.m_Path = expensiveMap->GetFileReference().GetPath();
       settings.m_Anisotropy = 0;
       settings.m_MipBias = expensiveMap->m_MipBias;
-      igDXContent::IRBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
-      igDXContent::IRBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
-      igDXContent::IRBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, igDXRender::Texture::SAMPLER_GPI_MAP );
+      igDXContent::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
+      igDXContent::RBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
+      igDXContent::RBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, igDXRender::Texture::SAMPLER_GPI_MAP );
 
       if (expensiveMap->m_DetailMapMaskEnabled && settings.m_Format == D3DFMT_DXT1)
       {
@@ -202,7 +200,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       m_Scene->m_render_class->m_shader_database->SetShaderDefaultTexture( shaderPath.c_str(), igDXRender::Texture::SAMPLER_BASE_MAP );
     }
 
-    igDXContent::IRBShaderLoader::UpdateShaderExpensiveMap( shader, expensiveMap );
+    igDXContent::RBShaderLoader::UpdateShaderExpensiveMap( shader, expensiveMap );
     
     Refresh();
   }

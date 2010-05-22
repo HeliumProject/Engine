@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "NavigationPanel.h"
 
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "UIToolKit/AutoCompleteComboBox.h"
 #include "UIToolKit/Button.h"
@@ -100,7 +99,8 @@ void NavigationPanel::SetNavBarValue( const std::string& navBarText, bool isFold
     std::string folder = navBarText;
     FileSystem::StripLeaf( folder );
     FileSystem::GuaranteeSlash( folder );
-    m_UpFolderButton->Enable( FileSystem::HasPrefix( File::GlobalManager().GetManagedAssetsRoot(), folder ) );
+    //m_UpFolderButton->Enable( FileSystem::HasPrefix( File::GlobalManager().GetManagedAssetsRoot(), folder ) );
+#pragma TODO( "enable/disable the button based on the location of the project's assets root" )
   }  
 }
 
@@ -186,10 +186,11 @@ void NavigationPanel::OnUpFolderButtonClick( wxCommandEvent& event )
     std::string folder = GetNavBarValue().c_str();
     FileSystem::StripLeaf( folder );
     FileSystem::GuaranteeSlash( folder );
-    if ( FileSystem::HasPrefix( File::GlobalManager().GetManagedAssetsRoot(), folder ) )
-    {
-      m_BrowserFrame->Search( folder );
-    }
+#pragma TODO( "enable this behavior on the project's asset root" )
+    //if ( FileSystem::HasPrefix( File::GlobalManager().GetManagedAssetsRoot(), folder ) )
+    //{
+    //  m_BrowserFrame->Search( folder );
+    //}
   }
 
   event.Skip();

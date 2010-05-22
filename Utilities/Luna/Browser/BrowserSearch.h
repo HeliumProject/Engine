@@ -53,7 +53,7 @@ namespace Luna
     i32                     m_CurrentSearchID;   // Used for debugging to track a search through the system
     SearchQueryPtr          m_CurrentSearchQuery;
     SearchResultsPtr        m_SearchResults;     // The results to populate and pass to ResultsAvailableArgs
-    S_tuid                  m_FoundFileIDs;      // The *complete* list of found file IDs from this section
+    File::S_Reference       m_FoundFiles;        // The *complete* list of found files from this section
     Platform::Mutex         m_SearchResultsMutex;
     
     // Searching Thread
@@ -83,9 +83,9 @@ namespace Luna
     void SearchThreadLeave( i32 searchID );
 
     bool FoundAssetFile( const std::string& path );
-    u32 FoundAssetFile( tuid assetFileID );
-    u32 FoundAssetFiles( const S_tuid& assetFileIDs, i32 searchID );
-    u32 FoundAssetFolder( const std::string& folder, i32 searchID );
+    u32 FoundAssetFile( File::Reference& assetFileRef );
+    u32 FoundAssetFiles( const File::S_Reference& assetFileRefs, i32 searchID );
+    u32 FoundAssetFolder( Nocturnal::Path& folder, i32 searchID );
 
     // 
     // Events

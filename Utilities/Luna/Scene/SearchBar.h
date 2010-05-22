@@ -48,7 +48,7 @@ namespace Luna
       EntityAsset,
       Zone,
       Region,
-      EngineType,
+      AssetType,
       Count
     };
   }
@@ -180,22 +180,11 @@ namespace Luna
     virtual bool Validate( Luna::HierarchyNode* node );
   };
 
-  class EntityAssetIDCriteria : public ValueCriteria<tuid>
+  class AssetTypeCriteria : public ValueCriteria<int>
   {
   public:
-    EntityAssetIDCriteria( tuid entityClassId )
-    : ValueCriteria( entityClassId )
-    {
-    }
-    
-    virtual bool Validate( Luna::HierarchyNode* node );
-  };
-
-  class EngineTypeCriteria : public ValueCriteria<int>
-  {
-  public:
-    EngineTypeCriteria( int engineType )
-    : ValueCriteria( engineType )
+    AssetTypeCriteria( int assetType )
+    : ValueCriteria( assetType )
     {
     }
     

@@ -4,7 +4,6 @@
 #include "DocumentManager.h"
 #include "SessionManager.h"
 
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/LunaSpecs.h"
 #include "RCS/RCS.h"
@@ -103,15 +102,7 @@ bool Editor::SaveSession( const EditorStatePtr& state )
   OS_DocumentSmartPtr::Iterator end = documents.End();
   for ( ; itr != end; ++itr )
   {
-    tuid id = File::GlobalManager().GetID( (*itr)->GetFilePath() );
-    if ( id != TUID::Null )
-    {
-      state->m_OpenFiles.push_back( id );
-    }
-    else
-    {
-      return false;
-    }
+      state->m_OpenFileRefs.insert( new File::Reference( (*itr)->GetFileReference() ) );
   }
 
   return true;
@@ -124,12 +115,12 @@ bool Editor::LoadSession( const EditorStatePtr& state )
 {
   std::string error;
   bool openedAllFiles = true;
-  V_tuid::iterator itr = state->m_OpenFiles.begin();
-  V_tuid::iterator end = state->m_OpenFiles.end();
-  for ( ; itr != end; ++itr )
+
+  for ( File::S_Reference::iterator itr = state->m_OpenFileRefs.begin(), end = state->m_OpenFileRefs.end(); itr != end; ++itr )
   {
     error.clear();
-    openedAllFiles &= GetDocumentManager()->OpenFileID( *itr, error ) != NULL;
+    (*itr)->Resolve();
+    openedAllFiles &= GetDocumentManager()->OpenPath( (*itr)->GetPath(), error ) != NULL;
   }
   return openedAllFiles;
 }

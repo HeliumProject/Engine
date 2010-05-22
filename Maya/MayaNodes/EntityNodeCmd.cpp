@@ -13,7 +13,6 @@
 #include "Finder/Finder.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
-#include "File/Manager.h"
 
 #include "FileBrowser/FileBrowser.h"
 #include "UIToolkit/FileDialog.h"
@@ -120,7 +119,6 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
     File::FileBrowser browserDlg( NULL, -1, "Create Instance" );
     browserDlg.AddFilter( FinderSpecs::Asset::ENTITY_DECORATION );
     browserDlg.SetFilterIndex( FinderSpecs::Asset::ENTITY_DECORATION );
-    browserDlg.SetTuidRequired( true );
 
     if ( browserDlg.ShowModal() == wxID_OK )
     {
@@ -129,10 +127,7 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
       {
         if ( FileSystem::HasExtension( fullPath, FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() ) )
         {
-          tuid id = browserDlg.GetFileID();
-          Asset::EntityPtr instance = new Asset::Entity();
-          instance->SetEntityAssetID( id );
-
+          Asset::EntityPtr instance = new Asset::Entity( fullPath );
           std::pair< EntityAssetNode*, EntityNode* >result = EntityAssetNode::CreateInstance( instance );
           MFnDependencyNode nodeFn( result.second->thisMObject() );
         }
@@ -169,7 +164,7 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
       return MS::kFailure;
     }
 
-    classTransform = &EntityAssetNode::Get( node->GetBackingEntity()->GetEntityAssetID() );
+    classTransform = &EntityAssetNode::Get( *(node->GetBackingEntity()->GetEntityAsset()->GetAssetFileRef()) );
     if( *classTransform == EntityAssetNode::Null )
     {
       return MS::kFailure;

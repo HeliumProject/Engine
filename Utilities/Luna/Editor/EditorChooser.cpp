@@ -11,7 +11,6 @@
 #include "Asset/Tracker.h"
 #include "Common/Assert.h"
 #include "Console/Console.h"
-#include "File/Manager.h"
 #include "Finder/Finder.h"
 #include "UIToolKit/ImageManager.h"
 #include "Windows/Process.h"

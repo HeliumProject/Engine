@@ -253,63 +253,7 @@
 		<Filter
 			Name="Finder Specs"
 			>
-			<File
-				RelativePath="..\Finder\TexturePackSpecs.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\Finder\TexturePackSpecs.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
 		</Filter>
-		<File
-			RelativePath=".\API.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Exceptions.h"
-			>
-		</File>
-		<File
-			RelativePath=".\TexturePackBuilder.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\TexturePackBuilder.h"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

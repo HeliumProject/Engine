@@ -3,7 +3,6 @@
 #include "ContainerNode.h"
 #include "SimpleFieldNode.h"
 #include "Asset/AssetFlags.h"
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 

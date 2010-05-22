@@ -13,9 +13,14 @@ void Changeset::Edit( File& file, const OpenFlag flags ) const
   file.Edit( flags, m_Id );
 }
 
-void Changeset::Copy( File& sourceInfo, File& targetInfo, const OpenFlag flags ) const
+void Changeset::Copy( File& source, File& target, const OpenFlag flags ) const
 {
-  sourceInfo.Copy( targetInfo, flags, m_Id );
+  source.Copy( target, flags, m_Id );
+}
+
+void Changeset::Rename( File& source, File& target, const OpenFlag flags ) const
+{
+    source.Rename( target, flags, m_Id );
 }
 
 void Changeset::Delete( File& file, const OpenFlag flags ) const

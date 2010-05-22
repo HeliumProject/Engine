@@ -26,7 +26,7 @@ namespace AssetBuilder
     static void EnumerateClass( Reflect::Compositor<AssetBuiltArgs>& comp );
 
   public:
-    tuid m_AssetId;
+    u64 m_AssetId;
     JobResult m_JobResult;
 
     AssetBuiltArgs()
@@ -35,7 +35,7 @@ namespace AssetBuilder
     {
     }
 
-    AssetBuiltArgs( tuid assetId, JobResult result )
+    AssetBuiltArgs( u64 assetId, JobResult result )
       : m_AssetId( assetId )
       , m_JobResult( result )
     {
@@ -63,14 +63,11 @@ namespace AssetBuilder
   // build assets
   ASSETBUILDER_API void Build( const Asset::AssetClassPtr& assetClass, const BuilderOptionsPtr& options = NULL );
   ASSETBUILDER_API void Build( const Asset::AssetClassPtr& assetClass, const V_string& options );
-  ASSETBUILDER_API void Build( const tuid assetId, const BuilderOptionsPtr& options = NULL );
-  ASSETBUILDER_API void Build( const tuid assetId, const V_string& options );
+  ASSETBUILDER_API void Build( File::Reference& fileRef, const BuilderOptionsPtr& options = NULL );
+  ASSETBUILDER_API void Build( File::Reference& fileRef, const V_string& options );
   ASSETBUILDER_API void Build( const BuildJobPtr& job );
   ASSETBUILDER_API void Build( V_BuildJob& jobs, i32 nice = -1 );
   
-  // view assets, region argument is only used for levels
-  ASSETBUILDER_API void View( const Asset::AssetClassPtr& assetClass, const std::string& region );
-
   // query build results
   ASSETBUILDER_API bool DidBuildFail( const tuid assetId );
 };

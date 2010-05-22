@@ -143,7 +143,7 @@ void MainFrame::OnDocumentRemoved(const DocumentArgs& args)
   }
 }
 
-static const char* FilterString = "Reflect Files (*.irb,*.irx,*.xml)|*.irb;*.irx;*.xml";
+static const char* FilterString = "Reflect Files (*.rb,*.rx,*.xml)|*.rb;*.rx;*.xml";
 
 void MainFrame::OnRequestOpenFile(FileArgs& args)
 {

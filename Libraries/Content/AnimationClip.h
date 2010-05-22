@@ -137,7 +137,6 @@ namespace Content
   public:
 
     UniqueID::TUID        m_SkeletonID;
-    tuid                  m_OptionalEntityID; // zero if unused
     std::string           m_ActorName;
     M_Animation           m_JointAnimationMap;
     M_CompressedAnimation m_JointCompressedAnimationMap;
@@ -163,8 +162,7 @@ namespace Content
     f32                   m_LinearDistancePerFrame;
 
     AnimationClip()
-      : m_OptionalEntityID( 0 )
-      , m_ActorName( "" )
+      : m_ActorName( "" )
       , m_StartFrame( 0 )
       , m_EndFrame( 0 )
       , m_Rate( 30 )
@@ -178,7 +176,6 @@ namespace Content
     static void EnumerateClass( Reflect::Compositor<AnimationClip>& comp )
     {
       Reflect::Field* fieldSkeletonID = comp.AddField( &AnimationClip::m_SkeletonID, "m_SkeletonID" );
-      Reflect::Field* fieldOptionalEntityID = comp.AddField( &AnimationClip::m_OptionalEntityID, "m_OptionalEntityID", Reflect::FieldFlags::FileID );
       Reflect::Field* fieldActorName = comp.AddField( &AnimationClip::m_ActorName, "m_ActorName" );
       Reflect::Field* fieldJointAnimationMap = comp.AddField( &AnimationClip::m_JointAnimationMap, "m_JointAnimationMap" );
       Reflect::Field* fieldJointCompressedAnimationMap = comp.AddField( &AnimationClip::m_JointCompressedAnimationMap, "m_JointCompressedAnimationMap" );

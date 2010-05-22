@@ -182,7 +182,7 @@ namespace Luna
 			wxChoice* m_FolderChoice;
 			wxButton* m_BrowserFoldersButton;
 			wxComboBox* m_CreatedByComboBox;
-			wxChoice* m_EngineTypeChoice;
+			wxChoice* m_AssetTypeChoice;
 			wxTextCtrl* m_FileIDTextCtrl;
 			wxChoice* m_AttributeNameChoice;
 			wxTextCtrl* m_AttributeValueTextCtrl;

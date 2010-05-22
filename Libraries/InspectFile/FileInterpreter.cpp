@@ -12,7 +12,6 @@
 #include "Inspect/ClipboardFileList.h"
 
 #include "Asset/AssetFlags.h"
-#include "File/Manager.h"
 #include "Finder/Finder.h"
 #include "Finder/ExtensionSpecs.h"
 #include "FileSystem/FileSystem.h"
@@ -48,14 +47,13 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
   ContainerPtr group = m_Container->GetCanvas()->Create<Container>(this);
   groups.push_back( group );
 
-  bool tuidField = field->m_SerializerID == Reflect::GetType<U64Serializer>() && field->m_Flags & FieldFlags::FileID;
+  bool fileRefField = field->m_SerializerID == Reflect::GetType< PointerSerializer >() && field->m_Flags & FieldFlags::FileRef;
   bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
 
   DataChangingSignature::Delegate changingDelegate;
 
   FileDialogButtonPtr fileDialogButton;
   FileBrowserButtonPtr browserButton;
-  const bool isTuidRequired = ( field->m_Flags & FieldFlags::FileID ) == FieldFlags::FileID ;
 
   //
   // Parse
@@ -66,7 +64,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
   if (!result)
   {
-    if ( tuidField || field->m_SerializerID == Reflect::GetType<StringSerializer>() )
+    if ( fileRefField || field->m_SerializerID == Reflect::GetType<StringSerializer>() )
     {
       ContainerPtr valueGroup = m_Container->GetCanvas()->Create<Container>(this);
       ValuePtr value = m_Container->GetCanvas()->Create<Value>(this);
@@ -75,7 +73,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
       valueGroup->AddControl( value );
       groups.push_back( valueGroup );
 
-      if ( tuidField || field->m_Flags & FieldFlags::FilePath ) 
+      if ( fileRefField || field->m_Flags & FieldFlags::FilePath ) 
       {
         if ( !readOnly )
         {
@@ -83,7 +81,6 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
           // File dialog button
           fileDialogButton = m_Container->GetCanvas()->Create<FileDialogButton>(this);
-          fileDialogButton->SetTuidRequired( isTuidRequired );
 
           m_FinderSpec = NULL;
           std::string specName;
@@ -104,7 +101,6 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
           // File search button
           browserButton = m_Container->GetCanvas()->Create<FileBrowserButton>(this);
-          browserButton->SetTuidRequired( ( field->m_Flags & FieldFlags::FileID ) == FieldFlags::FileID );
           if ( m_FinderSpec )
           {
             browserButton->SetFilter( m_FinderSpec->GetDialogFilter() );
@@ -189,12 +185,6 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
         return;
       }
 
-      if (tuidField)
-      {
-        s->SetTranslateInputListener( Reflect::TranslateInputSignature::Delegate ( this, &FileInterpreter::TranslateInputTUID ) );
-        s->SetTranslateOutputListener( Reflect::TranslateOutputSignature::Delegate ( this, &FileInterpreter::TranslateOutputTUID ) );
-      }
-
       s->ConnectField(*itr, field);
 
       ser.push_back(s);
@@ -247,87 +237,6 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
     {
       parent->AddControl(*itr);
     }
-  }
-}
-
-void FileInterpreter::TranslateInputTUID( Reflect::TranslateInputEventArgs& args )
-{
-  if (args.m_Serializer->GetType() == Reflect::GetType<Reflect::U64Serializer>())
-  {
-    U64Serializer* ser = DangerousCast< U64Serializer > ( args.m_Serializer );
-
-    std::string path;
-    std::getline( args.m_Stream, path );
-
-    if ( !path.empty() )
-    {
-      tuid fileID = TUID::Null;
-      if ( path.at( 0 ) == '<' && path.at( path.size() - 1 ) == '>' )
-      {
-        std::string fileStr = path.substr( 1, path.size() - 2 );
-        bool parsed = TUID::Parse( fileStr, fileID );
-        NOC_ASSERT( parsed );
-      }
-      else
-      {
-        try
-        {
-          fileID = File::GlobalManager().GetID( path );
-        }
-        catch ( const Nocturnal::Exception& e )
-        {
-          Console::Warning( "No TUID was found for path '%s' (Reason: %s); discarding.\n", path.c_str(), e.what() );
-        }
-      }
-
-      if ( fileID != TUID::Null )
-      {
-        ser->m_Data.Set( fileID );
-      }
-    }
-    else
-    {
-      ser->m_Data.Set( TUID::Null );
-    }
-  }
-  else
-  {
-    NOC_BREAK();
-  }
-}
-
-void FileInterpreter::TranslateOutputTUID( Reflect::TranslateOutputEventArgs& args )
-{
-  if ( args.m_Serializer->GetType() == Reflect::GetType<Reflect::U64Serializer>() )
-  {
-    U64Serializer* ser = DangerousCast< U64Serializer > ( args.m_Serializer );
-    std::string path;
-
-    bool set = false;
-
-    if ( ser->m_Data.Get() != TUID::Null )
-    {
-
-      if ( File::GlobalManager().GetPath( ser->m_Data.Get(), path ) )
-      {
-        set = true;
-      }
-    }
-
-    if ( !set && ser->m_Data.Val() != TUID::Null )
-		{
-      char buf[80];
-      _snprintf( buf, sizeof(buf), "<"TUID_HEX_FORMAT">", ser->m_Data.Val() );
-      buf[ sizeof(buf) - 1] = 0; 
-
-      path = buf;
-		}
-
-    args.m_Stream << path;
-  }
-  else
-  {
-    NOC_BREAK();
   }
 }
 
@@ -422,7 +331,6 @@ void FileInterpreter::OnDrop( const Inspect::FilteredDropTargetArgs& args )
 {
   if ( args.m_Paths.size() )
   {
-    File::GlobalManager().Open( args.m_Paths[0] );
     m_Value->SetText( args.m_Paths[ 0 ] );
   }
 }

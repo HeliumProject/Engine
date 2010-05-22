@@ -89,11 +89,6 @@ int TypeConfig::Validate(Luna::SceneNode* node)
   {
     Asset::Entity* entity = node->GetPackage< Asset::Entity >();
 
-    if (entity->GetEntityAssetID() == TUID::Null)
-    {
-      return -1;
-    }
-    else
     {
       std::string location = entity->GetEntityAssetPath();
 

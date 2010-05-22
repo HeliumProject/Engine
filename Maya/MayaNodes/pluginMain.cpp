@@ -18,11 +18,7 @@
 #include "GameplayCapsule.h"
 #include "GameplayCylinder.h"
 
-#include "LooseAttachmentSphere.h"
-#include "LooseAttachmentCapsule.h"
-
 #include "Plane.h"
-#include "WaterPlane.h"
 #include "JointEffector.h"
 
 #include "CenterOfMass.h"
@@ -43,9 +39,6 @@
 #include "EntityNodeCmd.h"
 #include "EntityAssetNode.h"
 #include "EntityGroupNode.h"
-#include "FragmentCmd.h"
-#include "KeepCmd.h"
-#include "ZoneCmd.h"
 
 #include "Common/InitializerStack.h"
 #include "Content/ContentInit.h"
@@ -114,15 +107,10 @@ MStatus initializePlugin( MObject obj )
   REGISTER_NODE( CenterOfMass, kLocatorNode );
   
   REGISTER_NODE( Plane, kLocatorNode );
-  REGISTER_NODE( WaterPlane, kLocatorNode );
-  
+ 
   REGISTER_NODE( CollisionCuboid, kLocatorNode );
   REGISTER_NODE( NavClueCuboid, kLocatorNode );
   REGISTER_NODE( NavEffectorCuboid, kLocatorNode );
-
-  REGISTER_NODE( LooseAttachmentSphere, kLocatorNode );
-  REGISTER_NODE( LooseAttachmentCapsule, kLocatorNode );
-  REGISTER_NODE( LooseAttachmentCapsuleChild, kLocatorNode );
 
   REGISTER_NODE( DestructionGlue, kLocatorNode );
   REGISTER_NODE( DestructionPin, kLocatorNode );
@@ -167,9 +155,6 @@ MStatus initializePlugin( MObject obj )
 
   REGISTER_TRANSFORM( EntityGroupNode, &MPxTransformationMatrix::creator,  MPxTransformationMatrix::baseTransformationMatrixId );
   REGISTER_COMMAND( EntityNodeCmd );
-  REGISTER_COMMAND( FragmentCmd );
-  REGISTER_COMMAND( KeepCmd );
-  REGISTER_COMMAND( ZoneCmd );
 
   g_MayaExitingCallbackID = MSceneMessage::addCallback( MSceneMessage::kMayaExiting, MayaExitingCallback );
   
@@ -185,10 +170,6 @@ MStatus uninitializePlugin( MObject obj )
 
   DEREGISTER_NODE( CollisionSphere );
   DEREGISTER_NODE( Plane );
-  DEREGISTER_NODE( LooseAttachmentCapsuleChild );
-  DEREGISTER_NODE( LooseAttachmentCapsule );
-  DEREGISTER_NODE( LooseAttachmentSphere );
-  DEREGISTER_NODE( WaterPlane );
   DEREGISTER_NODE( CenterOfMass );
   DEREGISTER_NODE( NavEffectorSphere );
   DEREGISTER_NODE( NavEffectorCylinder );
@@ -260,9 +241,6 @@ MStatus uninitializePlugin( MObject obj )
 
   DEREGISTER_TRANSFORM( EntityGroupNode );
   DEREGISTER_COMMAND( EntityNodeCmd );
-  DEREGISTER_COMMAND( FragmentCmd );
-  DEREGISTER_COMMAND( KeepCmd );
-  DEREGISTER_COMMAND( ZoneCmd );
 
   MSceneMessage::removeCallback( g_MayaExitingCallbackID );
 

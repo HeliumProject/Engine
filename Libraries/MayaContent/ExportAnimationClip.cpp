@@ -35,11 +35,6 @@ void ExportAnimationClip::GatherMayaData( V_ExportBase &newExportObjects )
   Maya::GetExportInfo( animClip->m_SkeletonID, skeletonInfo );
   NOC_ASSERT( skeletonInfo );
 
-  //
-  // this is how cinematics know what character to use
-  //
-  animClip->m_OptionalEntityID = skeletonInfo->m_entityID;
-
   boost::cmatch results;
   const boost::regex namePattern( "(.*):.*" );
   char partialName[255];

@@ -3,9 +3,9 @@
 #include "Common/Compiler.h"
 
 #ifdef FILE_EXPORTS
-# define FILE_API __declspec(dllexport)
+#  define FILE_API __declspec(dllexport)
 #else
-# define FILE_API __declspec(dllimport)
+#  define FILE_API __declspec(dllimport)
 #endif
 
 // profiling for header systems

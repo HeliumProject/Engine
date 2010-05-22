@@ -9,7 +9,6 @@
 #include "Asset/AssetFlags.h"
 #include "Common/Memory/SmartPtr.h"
 #include "Common/Types.h"
-#include "File/Manager.h"
 #include "Reflect/Field.h"
 #include "Reflect/Version.h"
 
@@ -63,7 +62,7 @@ namespace Asset
     //
     bool HandleElement( Reflect::Element* element );
     bool HandleField( Reflect::Element* element, const Reflect::Field* field );
-    void HandleFileID( Reflect::Element* element, const Reflect::Field* field, tuid id );
+    void HandleFileRef( Reflect::Element* element, const Reflect::Field* field, File::ReferencePtr& fileRef );
 
     
     //
@@ -92,8 +91,8 @@ namespace Asset
     //
     // Maintain ID stack & other helpers
     //
-    typedef std::vector<tuid> IDStack;
-    IDStack  m_VisitedIDStack;
+    typedef std::vector< u64 > HashStack;
+    HashStack  m_VisitedHashStack;
 
     AssetFile* GetCurrentAssetFile();
 
@@ -102,8 +101,8 @@ namespace Asset
 
     void AddDependency( AssetFile* assetFile );
 
-    void PushID( tuid id );
-    void PopID();
+    void PushHash( const u64& assetHash );
+    void PopHash();
   };
 
 } // namespace Asset

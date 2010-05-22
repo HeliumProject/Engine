@@ -62,7 +62,7 @@ static const char* g_PassWord = "t0o1z7e4m!";
 static const char* g_DataBase = STATS_DB_NAME;
 static const i32   g_Timeout  = SQL_MYSQL_DEFAULT_TIMEOUT;
 
-static const char* g_EngineTypesEnumName = "enum Asset::EngineTypes::EngineType";
+static const char* g_AssetTypesEnumName = "enum Asset::AssetTypes::AssetType";
 
 // User DB
 static const char* s_SelectUsersComputerIDSQL = "SELECT `id` FROM `"USERS_DB_NAME"`.`computers` WHERE `name`='%s';";
@@ -88,8 +88,8 @@ static const char* s_InsertToolsReleaseSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`rel
 static const char* s_SelectBuilderIDSQL = "SELECT `id` FROM `"STATS_DB_NAME"`.`builders` WHERE `name`='%s';";
 static const char* s_InsertBuilderSQL   = "INSERT INTO `"STATS_DB_NAME"`.`builders` (`name`) VALUES ('%s');";
 
-static const char* s_SelectEngineTypeIDSQL = "SELECT `id` FROM `"STATS_DB_NAME"`.`engine_types` WHERE `name`='%s';";
-static const char* s_InsertEngineTypeSQL = "INSERT INTO `"STATS_DB_NAME"`.`engine_types` (`name`) VALUES ('%s');";
+static const char* s_SelectAssetTypeIDSQL = "SELECT `id` FROM `"STATS_DB_NAME"`.`engine_types` WHERE `name`='%s';";
+static const char* s_InsertAssetTypeSQL = "INSERT INTO `"STATS_DB_NAME"`.`engine_types` (`name`) VALUES ('%s');";
 
 static const char* s_SelectBuiltAssetRowIDSQL = "SELECT `id` FROM `"STATS_DB_NAME"`.`built_assets` WHERE file_id='%I64u' AND project_id='%I64u' AND asset_branch_id='%I64u' AND engine_type_id='%I64u';";
 static const char* s_InsertBuiltAssetSQL = "INSERT INTO `"STATS_DB_NAME"`.`built_assets` ( file_id, project_id, asset_branch_id, engine_type_id ) VALUES( %I64u, %I64u, %I64u, %I64u );";
@@ -344,10 +344,10 @@ void BuilderStats::Initialize()
 {
   Windows::TakeSection sec( g_Section );
 
-  static const Reflect::Enumeration* info = Reflect::Registry::GetInstance()->GetEnumeration( g_EngineTypesEnumName );
+  static const Reflect::Enumeration* info = Reflect::Registry::GetInstance()->GetEnumeration( g_AssetTypesEnumName );
   if ( !info )
   {
-    Console::Warning( "Could not locate EngineTypes enum, build statistics reporting will not work properly, please report this error to the tools team." );
+    Console::Warning( "Could not locate AssetTypes enum, build statistics reporting will not work properly, please report this error to the tools team." );
   }
 
   std::string host;
@@ -404,16 +404,16 @@ void BuilderStats::Cleanup()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool GetBuiltAssetRowID( tuid fileID, Asset::EngineType engineType, u64& assetRowID )
+bool GetBuiltAssetRowID( File::Reference& fileRef, Asset::AssetType assetType, u64& assetRowID )
 {
   Windows::TakeSection sec( g_Section );
 
-  u64 engineTypeID = 0;
-  std::string engineTypeLabel;
-  static const Reflect::Enumeration* info = Reflect::Registry::GetInstance()->GetEnumeration( g_EngineTypesEnumName );
+  u64 assetTypeID = 0;
+  std::string assetTypeLabel;
+  static const Reflect::Enumeration* info = Reflect::Registry::GetInstance()->GetEnumeration( g_AssetTypesEnumName );
   if ( !info 
-    || !info->GetElementLabel( engineType, engineTypeLabel )
-    || !SelectID( s_SelectEngineTypeIDSQL, s_InsertEngineTypeSQL, engineTypeLabel.c_str(), engineTypeID ) )
+    || !info->GetElementLabel( assetType, assetTypeLabel )
+    || !SelectID( s_SelectAssetTypeIDSQL, s_InsertAssetTypeSQL, assetTypeLabel.c_str(), assetTypeID ) )
   {
     return false;
   }
@@ -423,27 +423,27 @@ bool GetBuiltAssetRowID( tuid fileID, Asset::EngineType engineType, u64& assetRo
   sprintf_s( insertBuff,
     sizeof( insertBuff ),
     s_InsertBuiltAssetSQL,
-    (u64) fileID,
+    (u64) fileRef.GetHash(),
     (u64) g_ProjectID,
     (u64) g_AssetBranchID,
-    (u64) engineTypeID );
+    (u64) assetTypeID );
 
   static char selectBuff[MAX_INSERT_LENGTH] = { '\0' };
   memset( selectBuff, '\0', MAX_QUERY_LENGTH );
   sprintf_s( selectBuff,
     sizeof( selectBuff ),
     s_SelectBuiltAssetRowIDSQL,
-    (u64) fileID,
+    (u64) fileRef.GetHash(),
     (u64) g_ProjectID,
     (u64) g_AssetBranchID,
-    (u64) engineTypeID );
+    (u64) assetTypeID );
 
   return InsertIfNotFound( selectBuff, insertBuff, assetRowID );
 }        
 
 
 ///////////////////////////////////////////////////////////////////////////////
-bool BuilderStats::AddBuild( tuid fileID, Asset::EngineType engineType, const std::string& builderName, f32 duration )
+bool BuilderStats::AddBuild( File::Reference& fileRef, Asset::AssetType assetType, const std::string& builderName, f32 duration )
 {
   Windows::TakeSection sec( g_Section );
 
@@ -452,11 +452,8 @@ bool BuilderStats::AddBuild( tuid fileID, Asset::EngineType engineType, const st
   if ( g_MySQL == NULL )
     return false;
 
-  if ( fileID == TUID::Null )
-    return false;
-
   u64 assetRowID;
-  if ( !GetBuiltAssetRowID( fileID, engineType, assetRowID ) )
+  if ( !GetBuiltAssetRowID( fileRef, assetType, assetRowID ) )
     return false;
 
   u64 builderRowID = 0;
@@ -493,7 +490,7 @@ bool BuilderStats::AddBuild( tuid fileID, Asset::EngineType engineType, const st
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool BuilderStats::AddTopLevelBuild( tuid fileID, Asset::EngineType engineType, TopLevelBuild& topLevelBuild )
+bool BuilderStats::AddTopLevelBuild( File::Reference& fileRef, Asset::AssetType assetType, TopLevelBuild& topLevelBuild )
 {
   Windows::TakeSection sec( g_Section );
 
@@ -502,11 +499,8 @@ bool BuilderStats::AddTopLevelBuild( tuid fileID, Asset::EngineType engineType, 
   if ( g_MySQL == NULL )
     return false;
 
-  if ( fileID == TUID::Null )
-    return false;
-
   u64 assetRowID;
-  if ( !GetBuiltAssetRowID( fileID, engineType, assetRowID ) )
+  if ( !GetBuiltAssetRowID( fileRef, assetType, assetRowID ) )
     return false;
 
   static char insertBuildBuff[MAX_INSERT_LENGTH] = { '\0' };

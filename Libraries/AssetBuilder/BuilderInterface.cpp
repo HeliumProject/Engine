@@ -8,8 +8,8 @@
 using namespace Asset;
 using namespace AssetBuilder;
 
-typedef std::map<EngineType, HMODULE> M_Library;
-typedef std::map<EngineType, AllocateBuildersFunc> M_Allocator;
+typedef std::map<AssetType, HMODULE> M_Library;
+typedef std::map<AssetType, AllocateBuildersFunc> M_Allocator;
 
 static const char* InitializeEntryPoint = "InitializeBuilderModule";
 static const char* CleanupEntryPoint = "CleanupBuilderModule";
@@ -50,10 +50,10 @@ void BuilderInterface::Cleanup()
 // Note: cache's each loaded Builder
 //
 ///////////////////////////////////////////////////////////////////////////////////////////
-void BuilderInterface::AllocateBuilders( EngineType engineType, AssetBuilder::V_IBuilder& builders )
+void BuilderInterface::AllocateBuilders( AssetType assetType, AssetBuilder::V_IBuilder& builders )
 {
   {
-    M_Allocator::const_iterator found = g_Allocators.find( engineType );
+    M_Allocator::const_iterator found = g_Allocators.find( assetType );
     if ( found != g_Allocators.end() )
     {
       found->second( builders );
@@ -62,24 +62,24 @@ void BuilderInterface::AllocateBuilders( EngineType engineType, AssetBuilder::V_
     }
   }
 
-  std::string builderDLL = AssetClass::GetEngineTypeBuilderDLL( engineType );
-  if ( builderDLL.empty() )
+  std::string builder = AssetClass::GetAssetTypeBuilder( assetType );
+  if ( builder.empty() )
   {
-    throw AssetBuilder::Exception( "Cannot find builder module for asset type %d", engineType );
+    throw AssetBuilder::Exception( "Cannot find builder module for asset type %d", assetType );
   }
 
-  HMODULE lib = LoadLibrary( builderDLL.c_str() );
+  HMODULE lib = LoadLibrary( builder.c_str() );
   if( lib == NULL )
   {
     DWORD err = ::GetLastError();
-    throw AssetBuilder::Exception( "Error loading library %s: (%d) %s\n", builderDLL.c_str(), err, Windows::GetErrorString(err).c_str() );
+    throw AssetBuilder::Exception( "Error loading library %s: (%d) %s\n", builder.c_str(), err, Windows::GetErrorString(err).c_str() );
   }
 
   void (*init)() = (void (*)())GetProcAddress( lib, InitializeEntryPoint );
   if( init == NULL )
   {
     FreeLibrary( lib );
-    throw AssetBuilder::Exception( "Cannot load builder interface from lib: %s", builderDLL.c_str() );
+    throw AssetBuilder::Exception( "Cannot load builder interface from lib: %s", builder.c_str() );
   }
 
   init();
@@ -88,11 +88,11 @@ void BuilderInterface::AllocateBuilders( EngineType engineType, AssetBuilder::V_
   if( func == NULL )
   {
     FreeLibrary( lib );
-    throw AssetBuilder::Exception( "Cannot load builder interface from lib: %s", builderDLL.c_str() );
+    throw AssetBuilder::Exception( "Cannot load builder interface from lib: %s", builder.c_str() );
   }
 
-  g_Libraries[engineType] = lib;
-  g_Allocators[engineType] = func;
+  g_Libraries[assetType] = lib;
+  g_Allocators[assetType] = func;
 
   func( builders );
 }

@@ -48,9 +48,9 @@ namespace Luna
 			wxStaticText* m_StaticName;
 			wxChoice* m_SearchOption;
 			wxTextCtrl* m_SearchText;
-			wxStaticText* m_StaticEngineType;
+			wxStaticText* m_StaticAssetType;
 			
-			wxComboBox* m_EngineType;
+			wxComboBox* m_AssetType;
 			wxCheckBox* m_SearchAllZones;
 			wxPanel* m_AttributesPanel;
 			wxStaticText* m_staticText8;

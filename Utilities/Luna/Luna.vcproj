@@ -234,10 +234,6 @@
 			RelativePathToProject=".\libraries\InspectReflect\InspectReflect.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{4AF12ED6-2980-4C1F-8918-F11846719FB3}"
-			RelativePathToProject=".\Libraries\FileUI\FileUI.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{AA86FEA7-AA10-4870-8C71-C6D5A94D2FE5}"
 			RelativePathToProject=".\libraries\Undo\Undo.vcproj"
 		/>
@@ -324,10 +320,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{15659B3D-2AE6-403D-AA91-7A56C252F454}"
 			RelativePathToProject=".\libraries\CodeGen\CodeGen.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{F6D24E52-7ADD-459E-8E7F-FDD20A0E6CAF}"
-			RelativePathToProject=".\libraries\AssetManager\AssetManager.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
@@ -1404,10 +1396,6 @@
 						RelativePath=".\Scene\SunLight.h"
 						>
 					</File>
-				</Filter>
-				<Filter
-					Name="Post"
-					>
 				</Filter>
 			</Filter>
 			<Filter

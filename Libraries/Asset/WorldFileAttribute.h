@@ -23,18 +23,14 @@ namespace Asset
     static const Finder::FinderSpec& s_FileFilter;
 
   public:
-    tuid  m_FileID;
 
-    WorldFileAttribute( tuid fileID = TUID::Null )
-      : m_FileID( fileID )
+    WorldFileAttribute()
     {
     }
 
     virtual Attribute::AttributeUsage GetAttributeUsage() const NOC_OVERRIDE;
     virtual Attribute::AttributeCategoryType GetCategoryType() const NOC_OVERRIDE;
 
-    virtual tuid GetFileID() const NOC_OVERRIDE;
-    virtual void SetFileID( const tuid& fileID ) NOC_OVERRIDE;
     virtual const Finder::FinderSpec* GetFileFilter() const NOC_OVERRIDE;
   };
 

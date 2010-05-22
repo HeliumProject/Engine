@@ -3,7 +3,7 @@
 
 #include "UIToolKit/IconMagnify.xpm"
 
-namespace FileBrowser
+namespace File
 {
 
   WX_PG_IMPLEMENT_EDITOR_CLASS( FilePickerEditor, FilePickerEditor, wxPGTextCtrlEditor );

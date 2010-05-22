@@ -3,7 +3,7 @@
 #include "API.h"
 
 
-namespace FileBrowser
+namespace File
 {
   /////////////////////////////////////////////////////////////////////////////
   // Property for choosing a file path, used in a property grid.  Automatically
@@ -27,7 +27,7 @@ namespace FileBrowser
    virtual bool OnEvent( wxPropertyGrid* propGrid, wxWindow* primary, wxEvent& event ) NOC_OVERRIDE;
 
   protected:
-    bool ShowManagedFileDialog( wxPropertyGrid* propGrid, wxString& value );
+    bool ShowFileDialog( wxPropertyGrid* propGrid, wxString& value );
     bool ShowFileBrowser( wxPropertyGrid* propGrid, wxString& value );
 
   public:

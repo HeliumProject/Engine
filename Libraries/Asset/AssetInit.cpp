@@ -11,15 +11,12 @@
 #include "ColorMapAttribute.h"
 #include "DependenciesAttribute.h"
 #include "DetailMapAttribute.h"
-#include "EngineTypeInfo.h"
 #include "Entity.h"
 #include "EntityAsset.h"
 #include "EntityManifest.h"
 #include "ExpensiveMapAttribute.h"
 #include "ExporterJob.h"
-#include "GraphShaderAsset.h"
 #include "LevelAsset.h"
-#include "Manager.h"
 #include "ManifestVersion.h"
 #include "NormalMapAttribute.h"
 #include "RequiredListAsset.h"
@@ -28,10 +25,7 @@
 #include "StandardExpensiveMapAttribute.h"
 #include "StandardNormalMapAttribute.h"
 #include "StandardShaderAsset.h"
-#include "TextureEntry.h"
 #include "TextureMapAttribute.h"
-#include "TexturePackBase.h"
-#include "TexturePackAsset.h"
 #include "WorldFileAttribute.h"
 #include "SceneManifest.h"
 
@@ -39,6 +33,7 @@
 #include "Attribute/AttributeCategories.h"
 #include "Common/InitializerStack.h"
 #include "Content/ContentInit.h"
+#include "File/File.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Reflect/Registry.h"
@@ -48,10 +43,10 @@
 using namespace Reflect;
 
 #define ASSET_BEGIN_REGISTER_ENGINE_TYPES                                       \
-  Nocturnal::Insert<M_EngineTypeInfo>::Result et_inserted;
+  Nocturnal::Insert<M_AssetTypeInfo>::Result et_inserted;
 
-#define ASSET_REGISTER_ENGINETYPE( __EngineTypeName )                           \
-  et_inserted = g_EngineTypeInfos.insert( M_EngineTypeInfo::value_type( EngineTypes::__EngineTypeName, EngineTypeInfo( #__EngineTypeName, #__EngineTypeName"Builder.dll" ) ) );
+#define ASSET_REGISTER_ENGINETYPE( __AssetTypeName )                           \
+  et_inserted = g_AssetTypeInfos.insert( M_AssetTypeInfo::value_type( AssetTypes::__AssetTypeName, AssetTypeInfo( #__AssetTypeName, #__AssetTypeName"Builder.dll" ) ) );
 
 #define _ASSET_REGISTER_ENGINETYPE_SET_MEMBER( __MemberName, __Value )          \
   if ( et_inserted.second ) et_inserted.first->second.__MemberName = __Value;
@@ -94,11 +89,7 @@ void Asset::Initialize()
     g_InitializerStack.Push( Attribute::Initialize, Attribute::Cleanup );
     g_InitializerStack.Push( Content::Initialize, Content::Cleanup );
     g_InitializerStack.Push( CacheDB::Initialize, CacheDB::Cleanup );
-    g_InitializerStack.Push( Manager::Initialize, Manager::Cleanup );
 
-
-    // for critial section in cache
-    AssetClass::InitializeCache();
 
     std::string configPath = getenv( NOCTURNAL_STUDIO_PREFIX"PROJECT_CONFIG" );
     configPath += "/AssetCreationAllowedDirs.xml" ;
@@ -141,8 +132,6 @@ void Asset::Initialize()
     g_InitializerStack.Push( Reflect::RegisterClass<AssetFile>( "AssetFile" ) );
     g_InitializerStack.Push( Reflect::RegisterClass<AssetFolder>( "AssetFolder" ) );
     g_InitializerStack.Push( Reflect::RegisterClass<ShaderAsset>( "ShaderAsset" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<TexturePackBase>( "TexturePackBase" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<TextureEntryBase>( "TextureEntryBase" ) );
     g_InitializerStack.Push( Reflect::RegisterClass<FileBackedAttribute>( "FileBackedAttribute" ) );
     g_InitializerStack.Push( Reflect::RegisterClass<Entity>( "Entity" ) );
 
@@ -159,11 +148,6 @@ void Asset::Initialize()
     // texture
     g_InitializerStack.Push( Reflect::RegisterEnumeration<TextureWrapModes::TextureWrapMode>( &TextureWrapModes::TextureWrapModeEnumerateEnumeration, "TextureWrapMode" ) );
     g_InitializerStack.Push( Reflect::RegisterEnumeration<TextureColorFormats::TextureColorFormat>( &TextureColorFormats::TextureColorFormatEnumerateEnumeration, "TextureColorFormat" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<StandardTextureEntry>( "StandardTextureEntry" ) );
-
-    // legacy
-    g_InitializerStack.Push( Reflect::RegisterClass<TextureEntry>( "TextureEntry" ) );
-
 
     //
     // Asset Attributes
@@ -207,14 +191,10 @@ void Asset::Initialize()
     g_AssetClassTypes.push_back( Reflect::GetType<LevelAsset>() );
     g_InitializerStack.Push( Reflect::RegisterClass<RequiredListAsset>( "RequiredListAsset" ) );
     g_AssetClassTypes.push_back( Reflect::GetType<RequiredListAsset>() );
-    g_InitializerStack.Push( Reflect::RegisterClass<TexturePackAsset>( "TexturePackAsset" ) );
-    g_AssetClassTypes.push_back( Reflect::GetType<TexturePackAsset>() );
 
     // Shaders
     g_InitializerStack.Push( Reflect::RegisterClass<StandardShaderAsset>( "StandardShaderAsset" ) );
     g_AssetClassTypes.push_back( Reflect::GetType<StandardShaderAsset>() );
-    g_InitializerStack.Push( Reflect::RegisterClass<GraphShaderAsset>( "GraphShaderAsset" ) );
-    g_AssetClassTypes.push_back( Reflect::GetType<GraphShaderAsset>() ); 
 
 
     /////////////////////////////////////////////////////////////
@@ -226,10 +206,11 @@ void Asset::Initialize()
     // entity class maps to.  (ie: an entity class maps to the
     // smallest superset)
 
+    /*
     ASSET_BEGIN_REGISTER_ENGINE_TYPES;
     {
       // Null == -1
-      g_EngineTypeInfos.insert( M_EngineTypeInfo::value_type( EngineTypes::Null, Asset::GetEngineTypeInfo( EngineTypes::Null ) ) );
+      g_AssetTypeInfos.insert( M_AssetTypeInfo::value_type( AssetTypes::Null, Asset::GetAssetTypeInfo( AssetTypes::Null ) ) );
 
       // Level
       ASSET_REGISTER_ENGINETYPE( Level );
@@ -252,8 +233,8 @@ void Asset::Initialize()
     //
     // Enums
     //
-    g_InitializerStack.Push( Reflect::RegisterEnumeration<Asset::EngineTypes::EngineType>( &Asset::EngineTypes::EngineTypeEnumerateEnumeration, "EngineType" ) );
-
+    g_InitializerStack.Push( Reflect::RegisterEnumeration<Asset::AssetTypes::AssetType>( &Asset::AssetTypes::AssetTypeEnumerateEnumeration, "AssetType" ) );
+*/
     // Above is for supporting engine types
     ///////////////////////////////////////////////////////////////
   }
@@ -264,9 +245,6 @@ void Asset::Cleanup()
   if ( --g_InitCount == 0 )
   {
     g_AssetClassTypes.clear();
-    g_EngineTypeInfos.clear();
-
-    AssetClass::CleanupCache();
 
     g_InitializerStack.Cleanup();
   }

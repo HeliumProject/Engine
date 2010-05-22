@@ -371,7 +371,7 @@ u32 igDXRender::Scene::ExtractMesh(const char* name, ObjectLoaderPtr loader, int
     char shader_name[ MAX_PATH ];
     Nocturnal::Path shaderPath( loader->m_fragments[ f ].m_shader );
 
-    if ( shaderPath.Extension() == "irb" )
+    if ( shaderPath.Extension() == "rb" )
     {
       sprintf( shader_name, "%s", shaderPath.c_str() );
     }

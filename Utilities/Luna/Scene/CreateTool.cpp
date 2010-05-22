@@ -12,7 +12,6 @@
 #include "Pick.h"
 
 #include "Math/AngleAxis.h"
-#include "File/Manager.h"
 #include "Editor/Orientation.h"
 
 #include "PrimitiveCircle.h"

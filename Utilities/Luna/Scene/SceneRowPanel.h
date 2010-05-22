@@ -77,7 +77,6 @@ namespace Luna
     void MakeCurrentScene();
     void UpdateCheckOutButton( bool enabled );
     void UpdateDeleteButton();
-    tuid GetFileID() const;
     std::string GetFilePath() const;
     ButtonMode GetButtonMode();
     void SetButtonMode( ButtonMode mode, bool enabled );

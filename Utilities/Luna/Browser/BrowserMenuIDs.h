@@ -30,17 +30,12 @@ namespace Luna
       CopyPathWindows,
       CopyPathClean,
 
-      CopyFileIDHex,
-      CopyFileIDDecimal,
-
       Sync,
       CheckOut,
       History,
 
       Open,
       Preview,
-      ViewOnTarget,
-      ViewOnTargetWithOptions,
 
       Refresh,
 
@@ -81,7 +76,7 @@ namespace Luna
 
       ImportCollection,
       ImportIntoCollection,
-      ExportCollection,
+      SaveCollection,
 
       AddToCollection,
       RemoveFromCollection,
@@ -111,10 +106,7 @@ namespace Luna
       "Cancel",
 
       "Path (Windows Format)",
-      "Path (Insomniac Format)",
-
-      "File ID (Hex)",
-      "File ID (Decimal)",
+      "Path (Clean Format)",
 
       "Sync",
       "Check Out",
@@ -122,8 +114,6 @@ namespace Luna
 
       "Open",
       "Preview",
-      "View on PS3",
-      "View on PS3 (+options)",
 
       "Refresh",
 
@@ -143,7 +133,7 @@ namespace Luna
       "Type",
 
       "Folders",
-      "Show in Perforce",
+      "Show in Revision Control",
       "Windows Explorer", 
 
       "Show",

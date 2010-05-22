@@ -16,7 +16,7 @@ namespace Luna
 
   private:
     void RemoveEntityListeners();
-    void SetAssetIDsFromSelection( const OS_SelectableDumbPtr& selection );
+    void SetAssetsFromSelection( const OS_SelectableDumbPtr& selection );
     void OnEntityClassChanged( const EntityAssetChangeArgs& args );
     void OnSelectionChanged( const OS_SelectableDumbPtr& args );
 

@@ -66,7 +66,7 @@ namespace Luna
   /////////////////////////////////////////////////////////////////////////////
   typedef std::map< const Finder::ModifierSpec*, DWORD > M_ModifierSpecColors;
   typedef std::map< const Finder::ModifierSpec*, ThumbnailPtr > M_ModifierSpecIcons;
-  typedef std::map< Asset::EngineType, ThumbnailPtr > M_EngineTypeIcons;
+  typedef std::map< Asset::AssetType, ThumbnailPtr > M_AssetTypeIcons;
 
   typedef std::vector< Math::Vector3 > V_TileCorners;
   typedef std::map< DWORD, V_TileCorners > M_RibbonColorTileCorners;
@@ -90,13 +90,9 @@ namespace Luna
 
       ID_CopyPathWindows = BrowserMenu::CopyPathWindows,
       ID_CopyPathClean = BrowserMenu::CopyPathClean,
-      ID_CopyFileIDHex = BrowserMenu::CopyFileIDHex,
-      ID_CopyFileIDDecimal = BrowserMenu::CopyFileIDDecimal,
 
       ID_Open = BrowserMenu::Open,
       ID_Preview = BrowserMenu::Preview,
-      ID_ViewOnTarget = BrowserMenu::ViewOnTarget,
-      ID_ViewOnTargetWithOptions = BrowserMenu::ViewOnTargetWithOptions,
 
       ID_Refresh = BrowserMenu::Refresh,
       ID_Preferences = BrowserMenu::Preferences,
@@ -309,7 +305,7 @@ namespace Luna
 
     M_ModifierSpecColors m_ModifierSpecColors;
     M_ModifierSpecIcons m_ModifierSpecIcons;
-    M_EngineTypeIcons m_EngineTypeIcons;
+    M_AssetTypeIcons m_AssetTypeIcons;
 
     V_TileCorners m_VisibleTileCorners;
     V_TileCorners m_HighlighedTileCorners;

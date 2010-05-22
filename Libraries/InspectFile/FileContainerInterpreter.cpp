@@ -17,7 +17,6 @@
 #include "Asset/AssetFlags.h"
 #include "Common/String/Tokenize.h"
 #include "Console/Console.h"
-#include "File/Manager.h"
 #include "FileBrowser/FileBrowser.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
@@ -45,9 +44,12 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
     return;
   }
 
-  bool isFileIdArray = ( field->m_SerializerID == Reflect::GetType<U64ArraySerializer>() ) && ( field->m_Flags & FieldFlags::FileID ) != 0;
-  bool isFileIdSet = ( field->m_SerializerID == Reflect::GetType<U64SetSerializer>() ) && ( field->m_Flags & FieldFlags::FileID ) != 0;
-  bool isFileIdContainer = isFileIdArray || isFileIdSet;
+  return;
+#pragma TODO( "support File::S_Reference and File::V_Reference" )
+/*
+  bool isfileidarray = ( field->m_serializerid == reflect::gettype<u64arrayserializer>() ) && ( field->m_flags & fieldflags::fileid ) != 0;
+  bool isfileidset = ( field->m_serializerid == reflect::gettype<u64setserializer>() ) && ( field->m_flags & fieldflags::fileid ) != 0;
+  bool isfileidcontainer = isfileidarray || isfileidset;
 
   // create the label
   ContainerPtr labelContainer = m_Container->GetCanvas()->Create<Container>(this);
@@ -193,143 +195,7 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
     *field->m_Default >> outStream;
     list->SetDefault(outStream.str());
   }
-}
-
-void FileContainerInterpreter::TranslateInputTUIDContainer( Reflect::TranslateInputEventArgs& args )
-{
-  bool isArraySerializer = args.m_Serializer->GetType() == Reflect::GetType<U64ArraySerializer>();
-  bool isSetSerializer = args.m_Serializer->GetType() == Reflect::GetType<U64SetSerializer>();
-
-  if ( isArraySerializer || isSetSerializer )
-  {
-    std::string path;
-    std::string value;
-    while ( !args.m_Stream.eof() )
-    {
-      std::getline(args.m_Stream, value);
-      if ( !path.empty() )
-      {
-        path += "\n"; // Replace newline characters in case they are the delimiters
-      }
-      path += value;
-    }
-
-    if ( !path.empty() )
-    {
-      V_string pathList;
-      ::Tokenize( path, pathList, s_ContainerItemDelimiter );
-      V_string::const_iterator itr = pathList.begin();
-      V_string::const_iterator end = pathList.end();
-      for ( ; itr != end; ++itr )
-      {
-        tuid fileID = TUID::Null;
-
-        if ( itr->at( 0 ) == '<' && itr->at( itr->size() - 1 ) == '>' )
-        {
-          std::string fileStr = (*itr).substr( 1, itr->size() - 2 );
-          bool parsed = TUID::Parse( fileStr, fileID );
-          NOC_ASSERT(parsed);
-        }
-        else
-        {
-          try
-          {
-            fileID = File::GlobalManager().GetID( *itr );
-          }
-          catch ( const Nocturnal::Exception& e )
-          {
-            Console::Warning( "No path was found for TUID '%s' (Reason: %s); discarding.\n", (*itr).c_str(), e.what() );
-          }
-        }
-
-        if ( fileID != TUID::Null )
-        {
-          if ( isArraySerializer )
-          {
-            U64ArraySerializer* ser = AssertCast< U64ArraySerializer > ( args.m_Serializer );
-          ser->m_Data->push_back( fileID );
-        }
-          else if ( isSetSerializer )
-          {
-            U64SetSerializer* ser = AssertCast< U64SetSerializer > ( args.m_Serializer );
-            ser->m_Data->insert( fileID );
-      }
-    }
-  }
-    }
-  }
-  else
-  {
-    NOC_BREAK();
-  }
-}
-
-void FileContainerInterpreter::TranslateOutputTUID( std::string& path, const u64& fileId )
-  {
-      bool set = false;
-
-      if ( fileId != TUID::Null )
-      {
-        if ( !path.empty() )
-        {
-          path += s_ContainerItemDelimiter;
-        }
-
-        std::string filePath;
-        if ( File::GlobalManager().GetPath( fileId, filePath ) )
-        {
-          path += filePath;
-          set = true;
-        }
-      }
-
-      if ( !set )
-      {
-        char buf[80];
-        _snprintf( buf, sizeof(buf), "<"TUID_HEX_FORMAT">", fileId );
-        buf[ sizeof(buf) - 1] = 0; 
-
-        path += buf;
-      }
-    }
-
-void FileContainerInterpreter::TranslateOutputTUIDContainer( Reflect::TranslateOutputEventArgs& args )
-{
-  bool isArraySerializer = args.m_Serializer->GetType() == Reflect::GetType<U64ArraySerializer>();
-  bool isSetSerializer = args.m_Serializer->GetType() == Reflect::GetType<U64SetSerializer>();
-
-  if ( isArraySerializer )
-  {
-    U64ArraySerializer* ser = AssertCast< U64ArraySerializer > ( args.m_Serializer );
-    V_u64::iterator itr = ser->m_Data->begin();
-    V_u64::iterator end = ser->m_Data->end();
-
-    std::string path;
-    for ( ; itr != end; ++itr )
-    {
-      const u64& fileId = *itr;
-      TranslateOutputTUID( path, fileId );
-    }
-    args.m_Stream << path;
-  }
-  else if ( isSetSerializer )
-  {
-    U64SetSerializer* ser = AssertCast< U64SetSerializer > ( args.m_Serializer );
-    S_u64::iterator itr = ser->m_Data->begin();
-    S_u64::iterator end = ser->m_Data->end();
-
-    std::string path;
-    for ( ; itr != end; ++itr )
-    {
-      const u64& fileId = *itr;
-      TranslateOutputTUID( path, fileId );
-    }
-    args.m_Stream << path;
-  }
-  else
-  {
-    NOC_BREAK();
-  }
+  */
 }
 
 void FileContainerInterpreter::OnAdd( Button* button )
@@ -376,16 +242,6 @@ void FileContainerInterpreter::OnAddFile( Button* button )
     if ( browserDlg.ShowModal() == wxID_OK )
     {
       std::string filePath = browserDlg.GetPath().c_str();
-      try
-      {
-        File::GlobalManager().Open( filePath );
-      }
-      catch ( const File::Exception& e )
-      {
-        Console::Error( "%s\n", e.what() );
-        return;
-      }
-      
       data->m_List->AddItem( filePath );
     }
 
@@ -402,7 +258,6 @@ void FileContainerInterpreter::OnFindFile( Button* button )
     ClientDataFilter* data = static_cast< ClientDataFilter* >( clientData.Ptr() );
 
     File::FileBrowser browserDlg( button->GetCanvas()->GetControl(), wxID_ANY, "Add Asset to List" );
-    browserDlg.SetTuidRequired( true );
 
     if ( !data->m_FinderSpec.empty() )
     {
@@ -495,8 +350,6 @@ void FileContainerInterpreter::OnDrop( const Inspect::FilteredDropTargetArgs& ar
     for ( V_string::const_iterator itr = args.m_Paths.begin(), end = args.m_Paths.end();
       itr != end; ++itr )
     {
-      // Make sure all the files are in the file resolver
-      File::GlobalManager().Open( *itr );
       m_List->AddItem( *itr );
     }
     m_List->Read();

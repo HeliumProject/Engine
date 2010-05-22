@@ -23,7 +23,7 @@ namespace Asset
       Name,
       Path,
       FileType,
-      EngineType,
+      AssetType,
       P4User,
       Shader,
       Level,
@@ -39,7 +39,7 @@ namespace Asset
     //  info->AddElement(Name, "Name");
     //  info->AddElement(Path, "Path");
     //  info->AddElement(FileType, "FileType");
-    //  info->AddElement(EngineType, "EngineType");
+    //  info->AddElement(AssetType, "AssetType");
     //  info->AddElement(P4User, "P4User");  
     //  info->AddElement(Shader, "Shader");
     //  info->AddElement(Level, "Level");
@@ -54,7 +54,7 @@ namespace Asset
       "Name",
       "Path",
       "FileType",
-      "EngineType",
+      "AssetType",
       "Created By", //P4 User
       "Shader",
       "Level",

@@ -99,7 +99,7 @@ namespace Attribute
     // this to avoid persisting attributes that are at a redundant state (as an example)
     virtual bool ValidatePersistent( const AttributePtr& attr ) const;
 
-    // Comparision API (for EngineType classification) -- IDEALLY SHOULD GO AWAY!
+    // Comparision API (for AssetType classification) -- IDEALLY SHOULD GO AWAY!
     bool IsSubset( const AttributeCollection* collection ) const;
 
 

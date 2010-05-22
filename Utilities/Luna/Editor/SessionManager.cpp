@@ -8,13 +8,12 @@
 #include "SessionVersion.h"
 
 #include "Console/Console.h"
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Finder/LunaSpecs.h"
 #include "Inspect/InspectInit.h"
 #include "Windows/Process.h"
-
+#include "RCS/RCS.h"
 
 // Using
 using Nocturnal::Insert; 
@@ -390,7 +389,7 @@ bool SessionManager::SaveAllOpenDocuments( Editor* currentEditor, bool& showProm
 ///////////////////////////////////////////////////////////////////////////////
 // Opens the specified file in one of the following:
 // If the file is a session, it will be opened in the session frame.
-// If the file ends in .irb, it will be opened in a Luna Editor.
+// If the file ends in .rb, it will be opened in a Luna Editor.
 // Else the file will be started from a command prompt.
 // 
 void SessionManager::Edit( const std::string& file )
@@ -437,37 +436,6 @@ void SessionManager::Edit( const std::string& file )
     {
       Windows::Execute( std::string ("cmd.exe /c start \"\" \"") + file + "\"", true );
     }
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Opens the specified file ID if it can be resolved to a path.
-// 
-void SessionManager::Edit( const tuid& fileID )
-{
-  if ( fileID != TUID::Null )
-  {
-    std::string path;
-    try
-    {
-      path = File::GlobalManager().GetPath( fileID );
-    }
-    catch ( const Nocturnal::Exception& e )
-    {
-      std::stringstream error;
-      error << "No path could be found for File ID: " << TUID::HexFormat << fileID << ".\n" << e.what();
-      wxMessageBox( error.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, NULL );
-      return;
-    }
-
-    if ( !path.empty() )
-    {
-      Edit( path );
-    }
-  }
-  else
-  {
-    Console::Warning( "No file specified!\n" );
   }
 }
 

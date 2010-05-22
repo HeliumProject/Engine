@@ -11,9 +11,6 @@ void ArtFileAttribute::EnumerateClass( Reflect::Compositor<ArtFileAttribute>& co
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "All instances of an entity will utilize the same Maya file to represent their geometry in-game.  In addition to entities, Animation Clips and Animation Sets can also be associated with Maya files." );
   comp.GetComposite().SetProperty( AssetProperties::SmallIcon, "attribute_artfile_16.png" );
 
-  Reflect::Field* fieldFileID = comp.AddField( &ArtFileAttribute::m_FileID, "m_FileID", Reflect::FieldFlags::FileID | Asset::AssetFlags::ManageField | Asset::AssetFlags::PerformOperation );
-  fieldFileID->SetProperty( Asset::AssetProperties::ModifierSpec, s_FileFilter.GetName() );
-
   Reflect::Field* fieldFragmentNode = comp.AddField( &ArtFileAttribute::m_FragmentNode, "m_FragmentNode" );
 
   Reflect::Field* fieldExtents = comp.AddField( &ArtFileAttribute::m_Extents, "m_Extents" );
@@ -27,20 +24,6 @@ const Finder::FinderSpec& ArtFileAttribute::s_FileFilter = FinderSpecs::Extensio
 Attribute::AttributeUsage ArtFileAttribute::GetAttributeUsage() const
 {
   return Attribute::AttributeUsages::Class;
-}
-
-tuid ArtFileAttribute::GetFileID() const
-{
-  return m_FileID;
-}
-
-void ArtFileAttribute::SetFileID( const tuid& fileID )
-{
-  if ( m_FileID != fileID )
-  {
-    m_FileID = fileID;
-    RaiseChanged( GetClass()->FindField( &ArtFileAttribute::m_FileID ) );
-  }
 }
 
 const Finder::FinderSpec* ArtFileAttribute::GetFileFilter() const

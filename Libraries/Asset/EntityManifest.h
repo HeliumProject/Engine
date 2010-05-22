@@ -4,14 +4,16 @@
 
 #include "AssetManifest.h"
 
+#include "File/Reference.h"
+
 namespace Asset
 {
   class ASSET_API EntityManifest : public AssetManifest
   {
   public:
-    V_tuid m_Shaders;
-    S_tuid m_BlendTextures;
-    V_tuid m_LooseTextures;
+      File::V_Reference m_Shaders;
+      File::V_Reference m_BlendTextures;
+      File::V_Reference m_LooseTextures;
 
     u32 m_TriangleCount;
 

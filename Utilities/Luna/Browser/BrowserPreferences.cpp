@@ -4,7 +4,6 @@
 
 #include "Asset/AssetFlags.h"
 #include "Common/Environment.h"
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/LunaSpecs.h"
 #include "Reflect/Serializer.h"
@@ -40,8 +39,9 @@ void BrowserPreferences::EnumerateClass( Reflect::Compositor< BrowserPreferences
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-BrowserPreferences::BrowserPreferences( ViewOptionID thumbnailMode, u32 thumbnailSize )
+BrowserPreferences::BrowserPreferences( const std::string& defaultFolder, ViewOptionID thumbnailMode, u32 thumbnailSize )
  : m_WindowSettings( new WindowSettings() )
+ , m_DefaultFolder( defaultFolder )
  , m_ThumbnailMode( thumbnailMode )
  , m_ThumbnailSize( thumbnailSize )
  , m_DisplayPreviewAxis( false )
@@ -50,33 +50,12 @@ BrowserPreferences::BrowserPreferences( ViewOptionID thumbnailMode, u32 thumbnai
  , m_DependencyCollectionRecursionDepth( 0 )
  , m_UsageCollectionRecursionDepth( 0 )
 {
-  m_DefaultFolder = File::GlobalManager().GetManagedAssetsRoot();
   FileSystem::CleanName( m_DefaultFolder );
   FileSystem::GuaranteeSlash( m_DefaultFolder );
 }
 
 BrowserPreferences::~BrowserPreferences()
 {
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void BrowserPreferences::PreSerialize()
-{
-  __super::PreSerialize();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void BrowserPreferences::PostDeserialize()
-{
-  __super::PostDeserialize();
-
-  if ( m_DefaultFolder.empty()
-    || !FileSystem::HasPrefix( File::GlobalManager().GetManagedAssetsRoot(), m_DefaultFolder ) ) 
-  {
-    m_DefaultFolder = File::GlobalManager().GetManagedAssetsRoot();
-    FileSystem::CleanName( m_DefaultFolder );
-    FileSystem::GuaranteeSlash( m_DefaultFolder );
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -206,13 +185,6 @@ const std::string& BrowserPreferences::GetDefaultFolderPath() const
 void BrowserPreferences::SetDefaultFolderPath( const std::string& path )
 {
   m_DefaultFolder = path;
-
-  if ( m_DefaultFolder.empty()
-    || !FileSystem::HasPrefix( File::GlobalManager().GetManagedAssetsRoot(), m_DefaultFolder ) ) 
-  {
-    m_DefaultFolder = File::GlobalManager().GetManagedAssetsRoot();
-  }
-
   FileSystem::CleanName( m_DefaultFolder );
   FileSystem::GuaranteeSlash( m_DefaultFolder );
 }

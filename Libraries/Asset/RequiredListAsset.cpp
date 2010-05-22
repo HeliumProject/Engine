@@ -12,7 +12,6 @@ void RequiredListAsset::EnumerateClass( Reflect::Compositor<RequiredListAsset>& 
   comp.GetComposite().SetProperty( AssetProperties::ModifierSpec, FinderSpecs::Asset::REQUIREDLIST_DECORATION.GetName() );
   comp.GetComposite().SetProperty( AssetProperties::RootFolderSpec, FinderSpecs::Asset::REQUIREDLIST_FOLDER.GetName() );
 
-  Reflect::Field* fieldAssetIds = comp.AddField( &RequiredListAsset::m_AssetIds, "m_AssetIds", Reflect::FieldFlags::FileID );
-  fieldAssetIds->SetProperty( Asset::AssetProperties::FilterSpec, FinderSpecs::Asset::DEPENDENCIES_FILTER.GetName() );
-  Reflect::Field* fieldUpdateClasses = comp.AddField( &RequiredListAsset::m_UpdateClasses, "m_UpdateClasses" );
+  Reflect::Field* fieldFileReferences = comp.AddField( &RequiredListAsset::m_FileReferences, "m_FileReferences", Reflect::FieldFlags::FileRef );
+  fieldFileReferences->SetProperty( Asset::AssetProperties::FilterSpec, FinderSpecs::Asset::DEPENDENCIES_FILTER.GetName() );
 }

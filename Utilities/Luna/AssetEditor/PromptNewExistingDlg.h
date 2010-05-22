@@ -2,6 +2,8 @@
 
 #include "Finder/Finder.h"
 
+#include "File/File.h"
+
 namespace Luna
 {
   // Function pointer for a file creation callback.
@@ -22,17 +24,15 @@ namespace Luna
     PromptNewExistingPanel* m_Panel;
     CreateFileCallback m_CreateFileCallback;
     const Finder::FinderSpec* m_FinderSpec;
-    bool m_RequiresTuid;
     
   public:
     PromptNewExistingDlg( wxWindow* parent, CreateFileCallback callback, const std::string& title, const std::string& desc, const std::string& createLabel, const std::string& existingLabel );
     virtual ~PromptNewExistingDlg();
     virtual int ShowModal() NOC_OVERRIDE;
     void SetFinderSpec( const Finder::FinderSpec* spec );
-    void SetRequiresTuid( bool requiresTuid );
     void SetNewFile( const std::string& file );
     void SetExistingFile( const std::string& file );
-    tuid GetFileID() const;
+
     std::string GetFilePath() const;
 
   private:

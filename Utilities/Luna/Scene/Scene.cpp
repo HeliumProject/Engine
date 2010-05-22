@@ -14,7 +14,6 @@
 #include "Asset/Entity.h"
 #include "Asset/SceneManifest.h"
 #include "Asset/Exceptions.h"
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/LunaSpecs.h"
 
@@ -90,6 +89,7 @@ using namespace Luna;
 
 Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
 : m_File( file )
+, m_Id( TUID::Generate() )
 , m_Progress( 0 )
 , m_Importing( false )
 , m_MiscSettings( new MiscSettings() )
@@ -234,23 +234,6 @@ const std::string& Scene::GetFullPath() const
   {
     return GetFileName();
   }
-}
-
-tuid Scene::GetFileID() const
-{
-  tuid fileID = TUID::Null;
-
-  try 
-  {
-    fileID = File::GlobalManager().GetID( GetFullPath() );
-  }
-  catch ( const File::Exception& )
-  {
-    // don't do anything here, having a null tuid is expected
-    //  until the file is saved for the first time
-  }
-
-  return fileID;
 }
 
 SceneDocument* Scene::GetSceneDocument() const
@@ -936,7 +919,8 @@ void Scene::ArchiveException(Reflect::ExceptionInfo& info)
     if ( entity )
     {
       // use the default entity class?
-      entity->SetEntityAssetID( 0x0 );
+#pragma TODO( "reimplement" )
+        //      entity->SetEntityAssetID( 0x0 );
 
       // accept this object from the file
       info.m_Action = Reflect::ExceptionActions::Accept;
@@ -3465,15 +3449,8 @@ Content::NodeVisibilityPtr Scene::GetVisibility(tuid nodeId)
 
 bool Scene::GetVisibilityFile(std::string& filename)
 {
-  tuid fileId = GetFileID(); 
-  
-  if(fileId == TUID::Null)
-  {
-    return false; 
-  }
-
   char buffer[1024]; 
-  snprintf(buffer, 1024, "visibility/" TUID_HEX_FORMAT ".vis.irb", fileId); 
+  snprintf(buffer, 1024, "visibility/" TUID_HEX_FORMAT ".vis.rb", m_File->GetFileReference().GetHash() ); 
 
   filename = FinderSpecs::Luna::PREFERENCES_FOLDER.GetFolder() + std::string(buffer); 
 

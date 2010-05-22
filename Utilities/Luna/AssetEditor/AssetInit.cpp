@@ -32,7 +32,6 @@
 #include "Common/InitializerStack.h"
 #include "Asset/AssetInit.h"
 #include "Asset/AssetVersion.h"
-#include "AssetManager/AssetManager.h"
 #include "Content/ContentInit.h"
 #include "FileSystem/FileSystem.h"
 #include "Console/Console.h"
@@ -65,7 +64,6 @@ void LunaAsset::InitializeModule()
   {
     g_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     g_InitializerStack.Push( Asset::Initialize, Asset::Cleanup );
-    g_InitializerStack.Push( ::AssetManager::Initialize, ::AssetManager::Cleanup );
     g_InitializerStack.Push( Content::Initialize, Content::Cleanup );
     g_InitializerStack.Push( AssetPreferences::InitializeType, AssetPreferences::CleanupType );
     g_InitializerStack.Push( Luna::AssetManagerClientData::InitializeType, Luna::AssetManagerClientData::CleanupType );

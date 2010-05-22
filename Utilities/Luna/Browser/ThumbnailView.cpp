@@ -8,7 +8,7 @@
 
 #include "Asset/AssetFile.h"
 #include "Asset/AssetFolder.h"
-#include "Asset/EngineTypeInfo.h"
+#include "Asset/AssetTypeInfo.h"
 #include "Common/String/Utilities.h"
 #include "Editor/Orientation.h"
 #include "Editor/UpdateStatusEvent.h"
@@ -44,7 +44,7 @@ const u32 s_MouseTolerance = 3; // in pixels, how far the mouse must move before
 
 static inline bool FloatIsEqual( float f0, float f1, float tolerance )
 {
-  return fabsf( f0 - f1 ) <= tolerance;
+    return fabsf( f0 - f1 ) <= tolerance;
 }
 
 
@@ -88,93 +88,93 @@ ThumbnailView::ThumbnailView( BrowserFrame *browserFrame, wxWindow *parent, wxWi
 , m_Scale( 128.0f )
 , m_BrowserFrame( browserFrame )
 {
-  // Don't erase background
-  SetBackgroundStyle( wxBG_STYLE_CUSTOM );
+    // Don't erase background
+    SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
-  // We are handling all scrolling ourself, don't let wxWidgets move our pixels around
-  EnableScrolling( false, false );
+    // We are handling all scrolling ourself, don't let wxWidgets move our pixels around
+    EnableScrolling( false, false );
 
-  // Set up camera orientation (orthographic)
-  const Math::Vector3 dir = Luna::OutVector * -1.f;
-  const Math::Vector3 up = Luna::UpVector;
-  m_Orientation.SetBasis( Luna::UpAxis, Math::Vector4( up ) );
-  m_Orientation.SetBasis( Luna::SideAxis, Math::Vector4( dir.Cross( up ) ) );
-  m_Orientation.SetBasis( Luna::OutAxis, Math::Vector4( Math::Vector3::Zero - dir ) );
-  m_Orientation.Invert();
+    // Set up camera orientation (orthographic)
+    const Math::Vector3 dir = Luna::OutVector * -1.f;
+    const Math::Vector3 up = Luna::UpVector;
+    m_Orientation.SetBasis( Luna::UpAxis, Math::Vector4( up ) );
+    m_Orientation.SetBasis( Luna::SideAxis, Math::Vector4( dir.Cross( up ) ) );
+    m_Orientation.SetBasis( Luna::OutAxis, Math::Vector4( Math::Vector3::Zero - dir ) );
+    m_Orientation.Invert();
 
-  m_World = Math::Matrix4( Math::Scale( m_Scale, m_Scale, m_Scale ) );
+    m_World = Math::Matrix4( Math::Scale( m_Scale, m_Scale, m_Scale ) );
 
-  // Set up camera view matrix
-  const Math::Vector3 pivot( 0, 0, 0 );
-  m_ViewMatrix = Math::Matrix4( pivot * -1 ) * m_Orientation * Math::Matrix4( OutVector * ( -s_FarClipDistance / 2.0f ) );
+    // Set up camera view matrix
+    const Math::Vector3 pivot( 0, 0, 0 );
+    m_ViewMatrix = Math::Matrix4( pivot * -1 ) * m_Orientation * Math::Matrix4( OutVector * ( -s_FarClipDistance / 2.0f ) );
 
-  m_D3DManager.InitD3D( GetHwnd(), 64, 64 );
-  m_D3DManager.AddDeviceFoundListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
-  m_D3DManager.AddDeviceLostListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
-  CreateResources();
+    m_D3DManager.InitD3D( GetHwnd(), 64, 64 );
+    m_D3DManager.AddDeviceFoundListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
+    m_D3DManager.AddDeviceLostListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+    CreateResources();
 
-  m_TileCreator.SetDefaultThumbnails( m_TextureError, m_TextureLoading, m_TextureFolder );
+    m_TileCreator.SetDefaultThumbnails( m_TextureError, m_TextureLoading, m_TextureFolder );
 
-  m_EditCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-  m_EditCtrl->Hide();
+    m_EditCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+    m_EditCtrl->Hide();
 
-  CalculateTotalItemSize();
+    CalculateTotalItemSize();
 
-  // Setup Ribbon colors and FileType Icons
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::ANIMCONFIG_DECORATION, D3DCOLOR_ARGB( 0xff, 150, 185, 150 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::ANIMSET_DECORATION, D3DCOLOR_ARGB( 0xff, 150, 185, 150 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::CINEMATIC_DECORATION, D3DCOLOR_ARGB( 0xff, 170, 170, 170 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::CUBEMAP_DECORATION, D3DCOLOR_ARGB( 0xff, 32, 215, 219 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::ENTITY_DECORATION, D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::FOLIAGE_DECORATION, D3DCOLOR_ARGB( 0xff, 58, 131, 0 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::LEVEL_DECORATION, D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::SHADER_DECORATION, D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::SKY_DECORATION, D3DCOLOR_ARGB( 0xff, 150, 210, 230 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::TEXTUREPACK_DECORATION, D3DCOLOR_ARGB( 0xff, 164, 93, 163 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::WRINKLEMAP_DECORATION, D3DCOLOR_ARGB( 0xff, 164, 93, 163 ) ) );
-  
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::MAYA_BINARY, D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::REFLECT_BINARY, D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::SPEEDTREE, D3DCOLOR_ARGB( 0xff, 16, 94, 145 ) ) );
-  m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::TGA, D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
+    // Setup Ribbon colors and FileType Icons
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::ANIMCONFIG_DECORATION, D3DCOLOR_ARGB( 0xff, 150, 185, 150 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::ANIMSET_DECORATION, D3DCOLOR_ARGB( 0xff, 150, 185, 150 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::CINEMATIC_DECORATION, D3DCOLOR_ARGB( 0xff, 170, 170, 170 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::CUBEMAP_DECORATION, D3DCOLOR_ARGB( 0xff, 32, 215, 219 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::ENTITY_DECORATION, D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::FOLIAGE_DECORATION, D3DCOLOR_ARGB( 0xff, 58, 131, 0 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::LEVEL_DECORATION, D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::SHADER_DECORATION, D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::SKY_DECORATION, D3DCOLOR_ARGB( 0xff, 150, 210, 230 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::TEXTUREPACK_DECORATION, D3DCOLOR_ARGB( 0xff, 164, 93, 163 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::WRINKLEMAP_DECORATION, D3DCOLOR_ARGB( 0xff, 164, 93, 163 ) ) );
 
-  IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
-  //InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::ANIMCONFIG_DECORATION, "moon_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::ANIMSET_DECORATION, "animation_set_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::CINEMATIC_DECORATION, "enginetype_cinematic_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::CUBEMAP_DECORATION, "enginetype_cubemap_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::ENTITY_DECORATION, "moon_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::FOLIAGE_DECORATION, "enginetype_foliage_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::LEVEL_DECORATION, "enginetype_level_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::SHADER_DECORATION, "enginetype_shader_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::SKY_DECORATION, "enginetype_sky_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::TEXTUREPACK_DECORATION, "enginetype_texturepack_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::WRINKLEMAP_DECORATION,  "enginetype_wrinklemap_16.png" );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::MAYA_BINARY, D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::REFLECT_BINARY, D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::SPEEDTREE, D3DCOLOR_ARGB( 0xff, 16, 94, 145 ) ) );
+    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::TGA, D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
 
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::MAYA_BINARY, "maya_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::REFLECT_BINARY, "moon_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::SPEEDTREE, "fileType_speed_tree_16.png" );
-  InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::TGA, "fileType_tga_16.png" );
-  
+    IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
+    //InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::ANIMCONFIG_DECORATION, "moon_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::ANIMSET_DECORATION, "animation_set_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::CINEMATIC_DECORATION, "enginetype_cinematic_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::CUBEMAP_DECORATION, "enginetype_cubemap_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::ENTITY_DECORATION, "moon_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::FOLIAGE_DECORATION, "enginetype_foliage_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::LEVEL_DECORATION, "enginetype_level_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::SHADER_DECORATION, "enginetype_shader_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::SKY_DECORATION, "enginetype_sky_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::TEXTUREPACK_DECORATION, "enginetype_texturepack_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::WRINKLEMAP_DECORATION,  "enginetype_wrinklemap_16.png" );
 
-  // Populate the EngineTypes lookup texture
-  for ( i32 index = 0; index < Asset::EngineTypes::Count; ++index )
-  {
-    const std::string& icon = Asset::GetEngineTypeIcon( (Asset::EngineType) index );
-    if ( icon != "null_16.png" )
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::MAYA_BINARY, "maya_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::REFLECT_BINARY, "moon_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::SPEEDTREE, "fileType_speed_tree_16.png" );
+    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::TGA, "fileType_tga_16.png" );
+
+
+    // Populate the AssetTypes lookup texture
+    for ( i32 index = 0; index < Asset::AssetTypes::Count; ++index )
     {
-      std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-      FileSystem::AppendPath( file, icon );
+        const std::string& icon = Asset::GetAssetTypeIcon( (Asset::AssetType) index );
+        if ( icon != "null_16.png" )
+        {
+            std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
+            FileSystem::AppendPath( file, icon );
 
-      Nocturnal::Insert<M_EngineTypeIcons>::Result inserted = m_EngineTypeIcons.insert( M_EngineTypeIcons::value_type( (Asset::EngineType) index, new Thumbnail( &m_D3DManager, LoadTexture( device, file ) ) ) );
-      NOC_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
+            Nocturnal::Insert<M_AssetTypeIcons>::Result inserted = m_AssetTypeIcons.insert( M_AssetTypeIcons::value_type( (Asset::AssetType) index, new Thumbnail( &m_D3DManager, LoadTexture( device, file ) ) ) );
+            NOC_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
+        }
     }
-  }
 
-  // Connect Listeners
-  m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
-  m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
-  m_BrowserFrame->Connect( m_BrowserFrame->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnBrowserFrameClosing ), NULL, this );
+    // Connect Listeners
+    m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
+    m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
+    m_BrowserFrame->Connect( m_BrowserFrame->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnBrowserFrameClosing ), NULL, this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -182,43 +182,43 @@ ThumbnailView::ThumbnailView( BrowserFrame *browserFrame, wxWindow *parent, wxWi
 // 
 ThumbnailView::~ThumbnailView()
 {
-  m_BrowserFrame->Disconnect( m_BrowserFrame->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnBrowserFrameClosing ), NULL, this );
-  m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
-  m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
+    m_BrowserFrame->Disconnect( m_BrowserFrame->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler( ThumbnailView::OnBrowserFrameClosing ), NULL, this );
+    m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
+    m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
 
-  m_D3DManager.RemoveDeviceFoundListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
-  m_D3DManager.RemoveDeviceLostListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+    m_D3DManager.RemoveDeviceFoundListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
+    m_D3DManager.RemoveDeviceLostListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
 
-  if ( m_LabelFont )
-  {
-    m_LabelFont->Release();
-    m_LabelFont = NULL;
-  }
+    if ( m_LabelFont )
+    {
+        m_LabelFont->Release();
+        m_LabelFont = NULL;
+    }
 
-  if ( m_TypeFont )
-  {
-    m_TypeFont->Release();
-    m_TypeFont = NULL;
-  }
+    if ( m_TypeFont )
+    {
+        m_TypeFont->Release();
+        m_TypeFont = NULL;
+    }
 
-  DeleteResources();
+    DeleteResources();
 
-  m_ModifierSpecColors.clear();
+    m_ModifierSpecColors.clear();
 
-  // This must be called before UnregisterWindow, otherwise the background thread might
-  // try to access a NULL device.  Probably no longer necessary since we cancel when the
-  // browser frame is about to shut down, but keeping it here just in case.
-  m_LoadManager.Cancel();
+    // This must be called before UnregisterWindow, otherwise the background thread might
+    // try to access a NULL device.  Probably no longer necessary since we cancel when the
+    // browser frame is about to shut down, but keeping it here just in case.
+    m_LoadManager.Cancel();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void ThumbnailView::InsertModifierSpecIcon( IDirect3DDevice9* device, M_ModifierSpecIcons& modifierSpecIcons, const Finder::ModifierSpec* spec, const char* fileName )
 {
-  std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-  FileSystem::AppendPath( file, fileName );
+    std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
+    FileSystem::AppendPath( file, fileName );
 
-  Nocturnal::Insert<M_ModifierSpecIcons>::Result inserted = modifierSpecIcons.insert( M_ModifierSpecIcons::value_type( spec, new Thumbnail( &m_D3DManager, LoadTexture( device, file ) ) ) );
-  NOC_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
+    Nocturnal::Insert<M_ModifierSpecIcons>::Result inserted = modifierSpecIcons.insert( M_ModifierSpecIcons::value_type( spec, new Thumbnail( &m_D3DManager, LoadTexture( device, file ) ) ) );
+    NOC_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -226,36 +226,36 @@ void ThumbnailView::InsertModifierSpecIcon( IDirect3DDevice9* device, M_Modifier
 // 
 void ThumbnailView::SetResults( SearchResults* results )
 {
-  if ( m_Results.Ptr() != results )
-  {
-    m_Results = results;
+    if ( m_Results.Ptr() != results )
+    {
+        m_Results = results;
 
-    m_Sorter.Clear();
+        m_Sorter.Clear();
 
-    m_MouseDownTile = NULL;
-    m_RangeSelectTile = NULL;
+        m_MouseDownTile = NULL;
+        m_RangeSelectTile = NULL;
 
-    m_FolderTiles.clear();
-    m_FileTiles.clear();
-    m_VisibleTiles.clear();
-    m_MouseOverTiles.clear();
-    m_SelectedTiles.clear();
-    m_CurrentTextureRequests.clear();
+        m_FolderTiles.clear();
+        m_FileTiles.clear();
+        m_VisibleTiles.clear();
+        m_MouseOverTiles.clear();
+        m_SelectedTiles.clear();
+        m_CurrentTextureRequests.clear();
 
-    m_VisibleTileCorners.clear();
-    m_HighlighedTileCorners.clear();
-    m_SelectedTileCorners.clear();
-    m_RibbonColorTileCorners.clear();
-    m_FileTypeTileCorners.clear();
+        m_VisibleTileCorners.clear();
+        m_HighlighedTileCorners.clear();
+        m_SelectedTileCorners.clear();
+        m_RibbonColorTileCorners.clear();
+        m_FileTypeTileCorners.clear();
 
-    m_LoadManager.Cancel();
-    m_LoadManager.Reset();
+        m_LoadManager.Cancel();
+        m_LoadManager.Reset();
 
-    m_TileCreator.StartThread();
+        m_TileCreator.StartThread();
 
-    AdjustScrollBar( false );
-    Refresh();
-  }
+        AdjustScrollBar( false );
+        Refresh();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -263,7 +263,7 @@ void ThumbnailView::SetResults( SearchResults* results )
 // 
 void ThumbnailView::ClearResults()
 {
-  SetResults( NULL );
+    SetResults( NULL );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -271,7 +271,7 @@ void ThumbnailView::ClearResults()
 // 
 const SearchResults* ThumbnailView::GetResults() const
 {
-  return m_Results;
+    return m_Results;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -281,36 +281,36 @@ const SearchResults* ThumbnailView::GetResults() const
 // * Selects the corresponding tile
 void ThumbnailView::SelectPath( const std::string& path )
 {
-  // Figure out where the tile is so we can scroll to it
-  u32 count = 0;
-  ThumbnailTile* found = NULL;
+    // Figure out where the tile is so we can scroll to it
+    u32 count = 0;
+    ThumbnailTile* found = NULL;
 
-  for ( ThumbnailIteratorPtr tileItr = m_Sorter.GetIterator(); !tileItr->IsDone() && !found; tileItr->Next(), ++count )
-  {
-    ThumbnailTile* tile = tileItr->GetCurrentTile();
-    u32 row = count / m_TotalVisibleItems.x;
-    u32 col = count % m_TotalVisibleItems.x;
-    tile->SetRowColumn( row, col );
-    if ( tile->IsFile() && ( tile->GetFile()->GetFilePath() == path ) )
+    for ( ThumbnailIteratorPtr tileItr = m_Sorter.GetIterator(); !tileItr->IsDone() && !found; tileItr->Next(), ++count )
     {
-      found = tile;
+        ThumbnailTile* tile = tileItr->GetCurrentTile();
+        u32 row = count / m_TotalVisibleItems.x;
+        u32 col = count % m_TotalVisibleItems.x;
+        tile->SetRowColumn( row, col );
+        if ( tile->IsFile() && ( tile->GetFile()->GetFilePath() == path ) )
+        {
+            found = tile;
+        }
+        else if ( tile->IsFolder() && ( tile->GetFolder()->GetFullPath() == path ) )
+        {
+            found = tile;
+        }
     }
-    else if ( tile->IsFolder() && ( tile->GetFolder()->GetFullPath() == path ) )
-    {
-      found = tile;
-    }
-  }
 
-  if ( found )
-  {
-    ClearSelection();
-    Select( found );
-    if ( !IsVisible( found ) )
+    if ( found )
     {
-      EnsureVisible( found );
+        ClearSelection();
+        Select( found );
+        if ( !IsVisible( found ) )
+        {
+            EnsureVisible( found );
+        }
+        Refresh();
     }
-    Refresh();
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -320,32 +320,32 @@ void ThumbnailView::SelectPath( const std::string& path )
 // 
 u32 ThumbnailView::GetSelectedPaths( V_string& paths, bool useForwardSlashes )
 {
-  paths.reserve( paths.size() + m_SelectedTiles.size() );
+    paths.reserve( paths.size() + m_SelectedTiles.size() );
 
-  for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(),
-    tileEnd = m_SelectedTiles.end(); tileItr != tileEnd; ++tileItr )
-  {
-    ThumbnailTile* tile = *tileItr;
-    std::string path;
-    if ( tile->IsFile() )
+    for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(),
+        tileEnd = m_SelectedTiles.end(); tileItr != tileEnd; ++tileItr )
     {
-      path = tile->GetFile()->GetFilePath();
-    }
-    else if ( tile->IsFolder() )
-    {
-      path = tile->GetFolder()->GetFullPath(); 
-    }
+        ThumbnailTile* tile = *tileItr;
+        std::string path;
+        if ( tile->IsFile() )
+        {
+            path = tile->GetFile()->GetFilePath();
+        }
+        else if ( tile->IsFolder() )
+        {
+            path = tile->GetFolder()->GetFullPath(); 
+        }
 
-    if ( !path.empty() )
-    {
-      if ( !useForwardSlashes )
-      {
-        FileSystem::Win32Name( path, false );
-      }
-      paths.push_back( path );
+        if ( !path.empty() )
+        {
+            if ( !useForwardSlashes )
+            {
+                FileSystem::Win32Name( path, false );
+            }
+            paths.push_back( path );
+        }
     }
-  }
-  return static_cast< u32 >( paths.size() );
+    return static_cast< u32 >( paths.size() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -354,19 +354,19 @@ u32 ThumbnailView::GetSelectedPaths( V_string& paths, bool useForwardSlashes )
 // 
 void ThumbnailView::GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders )
 {
-  for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(),
-    tileEnd = m_SelectedTiles.end(); tileItr != tileEnd; ++tileItr )
-  {
-    ThumbnailTile* tile = *tileItr;
-    if ( tile->IsFile() )
+    for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(),
+        tileEnd = m_SelectedTiles.end(); tileItr != tileEnd; ++tileItr )
     {
-      files.push_back( tile->GetFile() );
+        ThumbnailTile* tile = *tileItr;
+        if ( tile->IsFile() )
+        {
+            files.push_back( tile->GetFile() );
+        }
+        else if ( tile->IsFolder() )
+        {
+            folders.push_back( tile->GetFolder() ); 
+        }
     }
-    else if ( tile->IsFolder() )
-    {
-      folders.push_back( tile->GetFolder() ); 
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -374,12 +374,12 @@ void ThumbnailView::GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asse
 // 
 std::string ThumbnailView::GetHighlightedPath() const
 {
-  std::string path;
-  if ( !m_MouseOverTiles.empty() )
-  {
-    path = m_MouseOverTiles.front()->GetFullPath();
-  }
-  return path;
+    std::string path;
+    if ( !m_MouseOverTiles.empty() )
+    {
+        path = m_MouseOverTiles.front()->GetFullPath();
+    }
+    return path;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -389,55 +389,55 @@ std::string ThumbnailView::GetHighlightedPath() const
 // 
 void ThumbnailView::SetZoom( u16 zoom )
 {
-  float scale = zoom;
-  Math::Clamp( scale, s_MinThumbnailSize, s_MaxThumbnailSize );
+    float scale = zoom;
+    Math::Clamp( scale, s_MinThumbnailSize, s_MaxThumbnailSize );
 
-  if ( scale != m_Scale )
-  {
-    // Keep track of the first visible item so we can maintain it when the 
-    // view size changes.
-    ThumbnailTile* firstVisible = NULL;
-    if ( !m_VisibleTiles.empty() )
+    if ( scale != m_Scale )
     {
-      firstVisible = m_VisibleTiles.front();
+        // Keep track of the first visible item so we can maintain it when the 
+        // view size changes.
+        ThumbnailTile* firstVisible = NULL;
+        if ( !m_VisibleTiles.empty() )
+        {
+            firstVisible = m_VisibleTiles.front();
+        }
+
+        // Scale
+        m_Scale = scale;
+        m_World.x.x = m_Scale;
+        m_World.y.y = m_Scale;
+        m_World.z.z = m_Scale;
+
+        CalculateTotalItemSize();
+
+        // Maintain scroll position if possible
+        AdjustScrollBar( false );
+        if ( firstVisible && !IsVisible( firstVisible ) )
+        {
+            // We just changed the size of the tiles, so we have to go through and 
+            // recalculate the row and column for all the tiles up to the one we
+            // actually care about.
+            bool found = false;
+            u32 count = 0;
+            for ( ThumbnailIteratorPtr tileItr = m_Sorter.GetIterator(); !tileItr->IsDone() && !found; tileItr->Next(), ++count )
+            {
+                ThumbnailTile* tile = tileItr->GetCurrentTile();
+                u32 row = count / m_TotalVisibleItems.x;
+                u32 col = count % m_TotalVisibleItems.x;
+                tile->SetRowColumn( row, col );
+                found = tile == firstVisible;
+            }
+
+            if ( found )
+            {
+                EnsureVisible( firstVisible );
+            }
+        }
+        else
+        {
+            Refresh();
+        }
     }
-
-    // Scale
-    m_Scale = scale;
-    m_World.x.x = m_Scale;
-    m_World.y.y = m_Scale;
-    m_World.z.z = m_Scale;
-
-    CalculateTotalItemSize();
-
-    // Maintain scroll position if possible
-    AdjustScrollBar( false );
-    if ( firstVisible && !IsVisible( firstVisible ) )
-    {
-      // We just changed the size of the tiles, so we have to go through and 
-      // recalculate the row and column for all the tiles up to the one we
-      // actually care about.
-      bool found = false;
-      u32 count = 0;
-      for ( ThumbnailIteratorPtr tileItr = m_Sorter.GetIterator(); !tileItr->IsDone() && !found; tileItr->Next(), ++count )
-      {
-        ThumbnailTile* tile = tileItr->GetCurrentTile();
-        u32 row = count / m_TotalVisibleItems.x;
-        u32 col = count % m_TotalVisibleItems.x;
-        tile->SetRowColumn( row, col );
-        found = tile == firstVisible;
-      }
-
-      if ( found )
-      {
-        EnsureVisible( firstVisible );
-      }
-    }
-    else
-    {
-      Refresh();
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -445,7 +445,7 @@ void ThumbnailView::SetZoom( u16 zoom )
 // 
 ThumbnailSortMethod ThumbnailView::GetSortMethod() const
 {
-  return m_Sorter.GetSortMethod();
+    return m_Sorter.GetSortMethod();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -453,22 +453,22 @@ ThumbnailSortMethod ThumbnailView::GetSortMethod() const
 // 
 void ThumbnailView::Sort( ThumbnailSortMethod method, u32 sortOptions )
 {
-  // Only sort if we are being forced to, or if the sort method is actually changing
-  if ( method != GetSortMethod() || ( sortOptions & SortOptions::Force ) )
-  {
-    wxBusyCursor busyCursor;
-
-    m_Sorter.Clear();
-    m_Sorter.SetSortMethod( method );
-    m_Sorter.Add( m_FolderTiles );
-    m_Sorter.Add( m_FileTiles );
-
-    // Only refresh if the option is set
-    if ( sortOptions & SortOptions::Refresh )
+    // Only sort if we are being forced to, or if the sort method is actually changing
+    if ( method != GetSortMethod() || ( sortOptions & SortOptions::Force ) )
     {
-      Refresh();
+        wxBusyCursor busyCursor;
+
+        m_Sorter.Clear();
+        m_Sorter.SetSortMethod( method );
+        m_Sorter.Add( m_FolderTiles );
+        m_Sorter.Add( m_FileTiles );
+
+        // Only refresh if the option is set
+        if ( sortOptions & SortOptions::Refresh )
+        {
+            Refresh();
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -477,11 +477,11 @@ void ThumbnailView::Sort( ThumbnailSortMethod method, u32 sortOptions )
 // 
 void ThumbnailView::Scroll( int x, int y )
 {
-  // NOTE: we ignore the x value, this view only scrolls in the y direction.
+    // NOTE: we ignore the x value, this view only scrolls in the y direction.
 
-  SetScrollPos( wxVERTICAL, y, false );
-  AdjustScrollBar( true );
-  Refresh();
+    SetScrollPos( wxVERTICAL, y, false );
+    AdjustScrollBar( true );
+    Refresh();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -491,16 +491,16 @@ void ThumbnailView::Scroll( int x, int y )
 // 
 void ThumbnailView::OnTilesCreated( const M_FolderToTilePtr& folders, const M_FileToTilePtr& files, const ThumbnailSorter& sorter, const Asset::V_AssetFiles& textures )
 {
-  m_FolderTiles = folders;
-  m_FileTiles = files;
+    m_FolderTiles = folders;
+    m_FileTiles = files;
 
-  // Retain the sorting method regardless of the setting specified in the callback
-  ThumbnailSortMethod sortMethod = m_Sorter.GetSortMethod();
-  m_Sorter = sorter;
-  m_Sorter.SetSortMethod( sortMethod );
-  
-  m_LoadManager.Request( textures );
-  Refresh();
+    // Retain the sorting method regardless of the setting specified in the callback
+    ThumbnailSortMethod sortMethod = m_Sorter.GetSortMethod();
+    m_Sorter = sorter;
+    m_Sorter.SetSortMethod( sortMethod );
+
+    m_LoadManager.Request( textures );
+    Refresh();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -510,13 +510,13 @@ void ThumbnailView::OnTilesCreated( const M_FolderToTilePtr& folders, const M_Fi
 // 
 bool ThumbnailView::Select( ThumbnailTile* tile )
 {
-  tile->SetSelected( true );
-  Nocturnal::Insert< OS_ThumbnailTiles >::Result inserted = m_SelectedTiles.insert( tile );
-  if ( inserted.second )
-  {
-    m_SelectionChanged.Raise( m_SelectedTiles.size() );
-  }
-  return inserted.second;
+    tile->SetSelected( true );
+    Nocturnal::Insert< OS_ThumbnailTiles >::Result inserted = m_SelectedTiles.insert( tile );
+    if ( inserted.second )
+    {
+        m_SelectionChanged.Raise( m_SelectedTiles.size() );
+    }
+    return inserted.second;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -526,13 +526,13 @@ bool ThumbnailView::Select( ThumbnailTile* tile )
 // 
 bool ThumbnailView::Deselect( ThumbnailTile* tile )
 {
-  tile->SetSelected( false );
-  bool changed = ( m_SelectedTiles.erase( tile ) > 0 );
-  if ( changed )
-  {
-    m_SelectionChanged.Raise( m_SelectedTiles.size() );
-  }
-  return changed;
+    tile->SetSelected( false );
+    bool changed = ( m_SelectedTiles.erase( tile ) > 0 );
+    if ( changed )
+    {
+        m_SelectionChanged.Raise( m_SelectedTiles.size() );
+    }
+    return changed;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -540,11 +540,11 @@ bool ThumbnailView::Deselect( ThumbnailTile* tile )
 // 
 bool ThumbnailView::SetSelection( ThumbnailTile* tile, bool selected )
 {
-  if ( selected )
-  {
-    return Select( tile );
-  }
-  return Deselect( tile );
+    if ( selected )
+    {
+        return Select( tile );
+    }
+    return Deselect( tile );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -553,18 +553,18 @@ bool ThumbnailView::SetSelection( ThumbnailTile* tile, bool selected )
 // 
 bool ThumbnailView::ClearSelection()
 {
-  bool selectionChanged = !m_SelectedTiles.empty();
-  for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(), 
-    tileEnd = m_SelectedTiles.end(); tileItr != tileEnd; ++tileItr )
-  {
-    ( *tileItr )->SetSelected( false );
-  }
-  m_SelectedTiles.clear();
-  if ( selectionChanged )
-  {
-    m_SelectionChanged.Raise( 0 );
-  }
-  return selectionChanged;
+    bool selectionChanged = !m_SelectedTiles.empty();
+    for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(), 
+        tileEnd = m_SelectedTiles.end(); tileItr != tileEnd; ++tileItr )
+    {
+        ( *tileItr )->SetSelected( false );
+    }
+    m_SelectedTiles.clear();
+    if ( selectionChanged )
+    {
+        m_SelectionChanged.Raise( 0 );
+    }
+    return selectionChanged;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -572,17 +572,17 @@ bool ThumbnailView::ClearSelection()
 // 
 bool ThumbnailView::SelectRange( ThumbnailTile* first, ThumbnailTile* last )
 {
-  bool selectionChanged = false;
+    bool selectionChanged = false;
 
-  bool foundLast = false;
-  for ( ThumbnailIteratorPtr iterator = m_Sorter.GetIterator( first );
-    !iterator->IsDone() && !foundLast; iterator->Next() )
-  {
-    selectionChanged |= Select( iterator->GetCurrentTile() );
-    foundLast = iterator->GetCurrentTile() == last;
-  }
+    bool foundLast = false;
+    for ( ThumbnailIteratorPtr iterator = m_Sorter.GetIterator( first );
+        !iterator->IsDone() && !foundLast; iterator->Next() )
+    {
+        selectionChanged |= Select( iterator->GetCurrentTile() );
+        foundLast = iterator->GetCurrentTile() == last;
+    }
 
-  return selectionChanged;
+    return selectionChanged;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -591,17 +591,17 @@ bool ThumbnailView::SelectRange( ThumbnailTile* first, ThumbnailTile* last )
 // 
 void ThumbnailView::Highlight( ThumbnailTile* tile )
 {
-  if ( !tile->IsHighlighed() )
-  {
-    if ( !m_MouseOverTiles.empty() && m_MouseOverTiles.front().Ptr() != tile )
+    if ( !tile->IsHighlighed() )
     {
-      ClearHighlight();
+        if ( !m_MouseOverTiles.empty() && m_MouseOverTiles.front().Ptr() != tile )
+        {
+            ClearHighlight();
+        }
+        m_MouseOverTiles.insert( tile );
+        tile->SetHighlighted( true );
+        Refresh();
+        m_HighlightChanged.Raise( ThumbnailHighlightArgs( tile->GetFullPath() ) );
     }
-    m_MouseOverTiles.insert( tile );
-    tile->SetHighlighted( true );
-    Refresh();
-    m_HighlightChanged.Raise( ThumbnailHighlightArgs( tile->GetFullPath() ) );
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -609,13 +609,13 @@ void ThumbnailView::Highlight( ThumbnailTile* tile )
 // 
 void ThumbnailView::ClearHighlight()
 {
-  if ( !m_MouseOverTiles.empty() )
-  {
-    m_MouseOverTiles.front()->SetHighlighted( false );
-    m_MouseOverTiles.clear();
-    Refresh();
-    m_HighlightChanged.Raise( ThumbnailHighlightArgs( "" ) );
-  }
+    if ( !m_MouseOverTiles.empty() )
+    {
+        m_MouseOverTiles.front()->SetHighlighted( false );
+        m_MouseOverTiles.clear();
+        Refresh();
+        m_HighlightChanged.Raise( ThumbnailHighlightArgs( "" ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -624,21 +624,21 @@ void ThumbnailView::ClearHighlight()
 // 
 bool ThumbnailView::IsVisible( ThumbnailTile* tile )
 {
-  // If there's no scrollbar, it must be visible
-  if ( !HasScrollbar( wxVERTICAL ) )
-  {
-    return true;
-  }
+    // If there's no scrollbar, it must be visible
+    if ( !HasScrollbar( wxVERTICAL ) )
+    {
+        return true;
+    }
 
-  Math::Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
-  m_World.TransformVertex( itemSizePixels );
-  float tilePosY = itemSizePixels.y * ( float )( tile->GetRow() );
+    Math::Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
+    m_World.TransformVertex( itemSizePixels );
+    float tilePosY = itemSizePixels.y * ( float )( tile->GetRow() );
 
-  u32 scrollPosY = GetScrollPos( wxVERTICAL );
-  float viewTop = scrollPosY * s_ScrollBarIncrement;
-  float viewBottom = viewTop + GetSize().y;
+    u32 scrollPosY = GetScrollPos( wxVERTICAL );
+    float viewTop = scrollPosY * s_ScrollBarIncrement;
+    float viewBottom = viewTop + GetSize().y;
 
-  return ( FloatIsEqual( tilePosY, viewTop, 0.1f ) || ( tilePosY > viewTop ) ) && ( tilePosY < viewBottom );
+    return ( FloatIsEqual( tilePosY, viewTop, 0.1f ) || ( tilePosY > viewTop ) ) && ( tilePosY < viewBottom );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -646,13 +646,13 @@ bool ThumbnailView::IsVisible( ThumbnailTile* tile )
 // 
 void ThumbnailView::EnsureVisible( ThumbnailTile* tile )
 {
-  Math::Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
-  m_World.TransformVertex( itemSizePixels );
-  float tilePosY = itemSizePixels.y * ( float )( tile->GetRow() );
-  u32 scrollPosY = Math::Round( tilePosY / ( float )s_ScrollBarIncrement );
-  SetScrollPos( wxVERTICAL, scrollPosY, false );
-  AdjustScrollBar( true );
-  Refresh();
+    Math::Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
+    m_World.TransformVertex( itemSizePixels );
+    float tilePosY = itemSizePixels.y * ( float )( tile->GetRow() );
+    u32 scrollPosY = Math::Round( tilePosY / ( float )s_ScrollBarIncrement );
+    SetScrollPos( wxVERTICAL, scrollPosY, false );
+    AdjustScrollBar( true );
+    Refresh();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -660,18 +660,18 @@ void ThumbnailView::EnsureVisible( ThumbnailTile* tile )
 // 
 void ThumbnailView::UpdateProjectionMatrix()
 {
-  NOC_ASSERT( GetSize().x > 0 && GetSize().y > 0 );
+    NOC_ASSERT( GetSize().x > 0 && GetSize().y > 0 );
 
-  m_Projection = Math::Matrix4::Identity;
-  m_Projection.x = SideVector;
-  m_Projection.y = UpVector;
-  m_Projection.z = OutVector;
-  m_Projection.Invert();
+    m_Projection = Math::Matrix4::Identity;
+    m_Projection.x = SideVector;
+    m_Projection.y = UpVector;
+    m_Projection.z = OutVector;
+    m_Projection.Invert();
 
-  Math::Matrix4 ortho;
-  D3DXMatrixOrthoOffCenterRH( (D3DXMATRIX*)&ortho, 0, GetSize().x, -GetSize().y, 0, s_NearClipDistance, s_FarClipDistance );
+    Math::Matrix4 ortho;
+    D3DXMatrixOrthoOffCenterRH( (D3DXMATRIX*)&ortho, 0, GetSize().x, -GetSize().y, 0, s_NearClipDistance, s_FarClipDistance );
 
-  m_Projection *= ortho;
+    m_Projection *= ortho;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -679,129 +679,129 @@ void ThumbnailView::UpdateProjectionMatrix()
 // 
 void ThumbnailView::CreateResources()
 {
-  IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
-  if ( !device )
-  {
-    return;
-  }
+    IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
+    if ( !device )
+    {
+        return;
+    }
 
-  if ( !m_LabelFont )
-  {
-    HRESULT result = D3DXCreateFont(
-      device,
-      m_LabelFontHeight,
-      0,
-      600,
-      1,
-      FALSE,
-      DEFAULT_CHARSET,
-      OUT_DEFAULT_PRECIS,
-      NONANTIALIASED_QUALITY,
-      DEFAULT_PITCH | FF_DONTCARE,
-      "Arial",
-      &m_LabelFont );
+    if ( !m_LabelFont )
+    {
+        HRESULT result = D3DXCreateFont(
+            device,
+            m_LabelFontHeight,
+            0,
+            600,
+            1,
+            FALSE,
+            DEFAULT_CHARSET,
+            OUT_DEFAULT_PRECIS,
+            NONANTIALIASED_QUALITY,
+            DEFAULT_PITCH | FF_DONTCARE,
+            "Arial",
+            &m_LabelFont );
 
-    NOC_ASSERT( SUCCEEDED( result ) );
-  }
-  else
-  {
-    m_LabelFont->OnResetDevice();
-  }
+        NOC_ASSERT( SUCCEEDED( result ) );
+    }
+    else
+    {
+        m_LabelFont->OnResetDevice();
+    }
 
-  if ( !m_TypeFont )
-  {
-    HRESULT result = D3DXCreateFont(
-      device,
-      12, // HEIGHT
-      0,
-      700,
-      1,
-      FALSE,
-      DEFAULT_CHARSET,
-      OUT_DEFAULT_PRECIS,
-      NONANTIALIASED_QUALITY,
-      DEFAULT_PITCH | FF_DONTCARE,
-      "Arial",
-      &m_TypeFont );
+    if ( !m_TypeFont )
+    {
+        HRESULT result = D3DXCreateFont(
+            device,
+            12, // HEIGHT
+            0,
+            700,
+            1,
+            FALSE,
+            DEFAULT_CHARSET,
+            OUT_DEFAULT_PRECIS,
+            NONANTIALIASED_QUALITY,
+            DEFAULT_PITCH | FF_DONTCARE,
+            "Arial",
+            &m_TypeFont );
 
-    NOC_ASSERT( SUCCEEDED( result ) );
-  }
-  else
-  {
-    m_TypeFont->OnResetDevice();
-  }
+        NOC_ASSERT( SUCCEEDED( result ) );
+    }
+    else
+    {
+        m_TypeFont->OnResetDevice();
+    }
 
-  if ( !m_TextureMissing )
-  {
-    std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-    FileSystem::AppendPath( file, "screenshot_missing.png" );
+    if ( !m_TextureMissing )
+    {
+        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
+        FileSystem::AppendPath( file, "screenshot_missing.png" );
 
-    m_TextureMissing = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
-    NOC_ASSERT( m_TextureMissing->GetTexture() );
-  }
+        m_TextureMissing = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        NOC_ASSERT( m_TextureMissing->GetTexture() );
+    }
 
-  if ( !m_TextureError )
-  {
-    std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-    FileSystem::AppendPath( file, "file_error_256.png" );
+    if ( !m_TextureError )
+    {
+        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
+        FileSystem::AppendPath( file, "file_error_256.png" );
 
-    m_TextureError = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
-    NOC_ASSERT( m_TextureError->GetTexture() );
-  }
+        m_TextureError = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        NOC_ASSERT( m_TextureError->GetTexture() );
+    }
 
-  if ( !m_TextureLoading )
-  {
-    std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-    FileSystem::AppendPath( file, "screenshot_loading.png" );
+    if ( !m_TextureLoading )
+    {
+        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
+        FileSystem::AppendPath( file, "screenshot_loading.png" );
 
-    m_TextureLoading = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
-    NOC_ASSERT( m_TextureLoading->GetTexture() );
-  }
+        m_TextureLoading = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        NOC_ASSERT( m_TextureLoading->GetTexture() );
+    }
 
-  if ( !m_TextureFolder )
-  {
-    std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-    FileSystem::AppendPath( file, "folder_256.png" );
+    if ( !m_TextureFolder )
+    {
+        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
+        FileSystem::AppendPath( file, "folder_256.png" );
 
-    m_TextureFolder = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
-    NOC_ASSERT( m_TextureFolder->GetTexture() );
-  }
+        m_TextureFolder = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        NOC_ASSERT( m_TextureFolder->GetTexture() );
+    }
 
-  if ( !m_TextureOverlay )
-  {
-    std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-    FileSystem::AppendPath( file, "thumbnail_overlay.png" );
+    if ( !m_TextureOverlay )
+    {
+        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
+        FileSystem::AppendPath( file, "thumbnail_overlay.png" );
 
-    m_TextureOverlay = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
-    NOC_ASSERT( m_TextureOverlay->GetTexture() );
-  }
+        m_TextureOverlay = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        NOC_ASSERT( m_TextureOverlay->GetTexture() );
+    }
 
-  if ( !m_TextureSelected )
-  {
-    std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-    FileSystem::AppendPath( file, "thumbnail_overlay_selected.png" );
+    if ( !m_TextureSelected )
+    {
+        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
+        FileSystem::AppendPath( file, "thumbnail_overlay_selected.png" );
 
-    m_TextureSelected = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
-    NOC_ASSERT( m_TextureSelected->GetTexture() );
-  }
+        m_TextureSelected = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        NOC_ASSERT( m_TextureSelected->GetTexture() );
+    }
 
-  if ( !m_TextureHighlighted )
-  {
-    std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-    FileSystem::AppendPath( file, "thumbnail_overlay_highlighted.png" );
+    if ( !m_TextureHighlighted )
+    {
+        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
+        FileSystem::AppendPath( file, "thumbnail_overlay_highlighted.png" );
 
-    m_TextureHighlighted = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
-    NOC_ASSERT( m_TextureHighlighted->GetTexture() );
-  }
+        m_TextureHighlighted = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        NOC_ASSERT( m_TextureHighlighted->GetTexture() );
+    }
 
-  if ( !m_TextureBlankFile )
-  {
-    std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-    FileSystem::AppendPath( file, "blank_file_32.png" );
+    if ( !m_TextureBlankFile )
+    {
+        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
+        FileSystem::AppendPath( file, "blank_file_32.png" );
 
-    m_TextureBlankFile = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
-    NOC_ASSERT( m_TextureBlankFile->GetTexture() );
-  }
+        m_TextureBlankFile = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
+        NOC_ASSERT( m_TextureBlankFile->GetTexture() );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -809,15 +809,15 @@ void ThumbnailView::CreateResources()
 // 
 void ThumbnailView::DeleteResources()
 {
-  if ( m_LabelFont )
-  {
-    m_LabelFont->OnLostDevice();
-  }
+    if ( m_LabelFont )
+    {
+        m_LabelFont->OnLostDevice();
+    }
 
-  if ( m_TypeFont )
-  {
-    m_TypeFont->OnLostDevice();
-  }
+    if ( m_TypeFont )
+    {
+        m_TypeFont->OnLostDevice();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -826,16 +826,16 @@ void ThumbnailView::DeleteResources()
 // 
 void ThumbnailView::WorldToScreen( const Math::Vector3& p, float& x, float& y )
 {
-  Math::Vector4 v( p.x, p.y, p.z, 1.f );
+    Math::Vector4 v( p.x, p.y, p.z, 1.f );
 
-  // global to camera
-  m_ViewMatrix.Transform( v );
+    // global to camera
+    m_ViewMatrix.Transform( v );
 
-  // camera to projection
-  m_Projection.Transform( v );
+    // camera to projection
+    m_Projection.Transform( v );
 
-  // apply projection from w component
-  ViewportToScreen( Math::Vector3( v.x / v.w, v.y / v.w, v.z / v.w ), x, y );
+    // apply projection from w component
+    ViewportToScreen( Math::Vector3( v.x / v.w, v.y / v.w, v.z / v.w ), x, y );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -843,8 +843,8 @@ void ThumbnailView::WorldToScreen( const Math::Vector3& p, float& x, float& y )
 // 
 void ThumbnailView::ViewportToScreen( const Math::Vector3& v, float& x, float& y )
 {
-  x = ( (v.x + 1) * GetSize().x ) / 2.0f;
-  y = ( (-v.y + 1) * GetSize().y ) / 2.0f;
+    x = ( (v.x + 1) * GetSize().x ) / 2.0f;
+    y = ( (-v.y + 1) * GetSize().y ) / 2.0f;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -852,8 +852,8 @@ void ThumbnailView::ViewportToScreen( const Math::Vector3& v, float& x, float& y
 // 
 void ThumbnailView::ScreenToViewport( float x, float y, Math::Vector3& v ) const
 {
-  v.x = (((2.0f * x) / GetSize().x) - 1);
-  v.y = -(((2.0f * y) / GetSize().y) - 1);
+    v.x = (((2.0f * x) / GetSize().x) - 1);
+    v.y = -(((2.0f * y) / GetSize().y) - 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -861,20 +861,20 @@ void ThumbnailView::ScreenToViewport( float x, float y, Math::Vector3& v ) const
 // 
 void ThumbnailView::ViewportToWorldVertex( float x, float y, Math::Vector3& v ) const
 {
-  ScreenToViewport( x, y, v );
+    ScreenToViewport( x, y, v );
 
-  // treat this as a x/y coordinate only (at the camera location)
-  v.z = 0.0f;
+    // treat this as a x/y coordinate only (at the camera location)
+    v.z = 0.0f;
 
-  // unproject our screen space coordinate
-  Math::Matrix4 inverseProjection = m_Projection;
-  inverseProjection.Invert();
-  inverseProjection.TransformVertex( v );
+    // unproject our screen space coordinate
+    Math::Matrix4 inverseProjection = m_Projection;
+    inverseProjection.Invert();
+    inverseProjection.TransformVertex( v );
 
-  // orient the view vector
-  Math::Matrix4 inverseView = m_ViewMatrix;
-  inverseView.Invert();
-  inverseView.TransformVertex( v );
+    // orient the view vector
+    Math::Matrix4 inverseView = m_ViewMatrix;
+    inverseView.Invert();
+    inverseView.TransformVertex( v );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -884,23 +884,23 @@ void ThumbnailView::ViewportToWorldVertex( float x, float y, Math::Vector3& v ) 
 // 
 void ThumbnailView::CalculateTotalItemSize()
 {
-  Math::Matrix4 inverseWorld( m_World );
-  inverseWorld.Invert();
+    Math::Matrix4 inverseWorld( m_World );
+    inverseWorld.Invert();
 
-  Math::Vector3 screenOrigin( 0, 0, 0 );
-  Math::Vector3 worldUpperLeft;
-  inverseWorld.TransformVertex( screenOrigin );
-  ViewportToWorldVertex( screenOrigin.x, screenOrigin.y, worldUpperLeft );
+    Math::Vector3 screenOrigin( 0, 0, 0 );
+    Math::Vector3 worldUpperLeft;
+    inverseWorld.TransformVertex( screenOrigin );
+    ViewportToWorldVertex( screenOrigin.x, screenOrigin.y, worldUpperLeft );
 
-  Math::Vector3 screenFontHeight( 0, m_LabelFontHeight, 0 );
-  Math::Vector3 worldFontHeight;
-  inverseWorld.TransformVertex( screenFontHeight );
-  ViewportToWorldVertex( screenFontHeight.x, screenFontHeight.y, worldFontHeight );
+    Math::Vector3 screenFontHeight( 0, m_LabelFontHeight, 0 );
+    Math::Vector3 worldFontHeight;
+    inverseWorld.TransformVertex( screenFontHeight );
+    ViewportToWorldVertex( screenFontHeight.x, screenFontHeight.y, worldFontHeight );
 
-  m_TotalItemSize.x = s_ThumbnailSize;
-  m_TotalItemSize.y = s_ThumbnailSize + s_SpaceBetweenTileAndLabel + ( worldUpperLeft.y - worldFontHeight.y );
+    m_TotalItemSize.x = s_ThumbnailSize;
+    m_TotalItemSize.y = s_ThumbnailSize + s_SpaceBetweenTileAndLabel + ( worldUpperLeft.y - worldFontHeight.y );
 
-  CalculateTotalVisibleItems();
+    CalculateTotalVisibleItems();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -908,19 +908,19 @@ void ThumbnailView::CalculateTotalItemSize()
 // 
 void ThumbnailView::CalculateTotalVisibleItems()
 {
-  const wxSize size = GetSize();
+    const wxSize size = GetSize();
 
-  m_TotalVisibleItems.x = ( u32 )( size.x / ( m_Scale * ( m_TotalItemSize.x + s_GapBetweenTiles.x ) ) );
-  if ( m_TotalVisibleItems.x == 0 )
-  {
-    m_TotalVisibleItems.x = 1;
-  }
+    m_TotalVisibleItems.x = ( u32 )( size.x / ( m_Scale * ( m_TotalItemSize.x + s_GapBetweenTiles.x ) ) );
+    if ( m_TotalVisibleItems.x == 0 )
+    {
+        m_TotalVisibleItems.x = 1;
+    }
 
-  m_TotalVisibleItems.y = ( u32 )( size.y / ( m_Scale * ( m_TotalItemSize.y + s_GapBetweenTiles.y ) ) );
-  if ( m_TotalVisibleItems.y == 0 )
-  {
-    m_TotalVisibleItems.y = 1;
-  }
+    m_TotalVisibleItems.y = ( u32 )( size.y / ( m_Scale * ( m_TotalItemSize.y + s_GapBetweenTiles.y ) ) );
+    if ( m_TotalVisibleItems.y == 0 )
+    {
+        m_TotalVisibleItems.y = 1;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -931,26 +931,26 @@ void ThumbnailView::CalculateTotalVisibleItems()
 // 
 void ThumbnailView::AdjustScrollBar( bool maintainScrollPos )
 {
-  // Do the math
-  size_t totalItems = m_Results ? ( m_Results->GetFolders().size() + m_Results->GetFiles().size() ) : 0;
-  u32 totalItemsY = (u32)( ceil( ( float )totalItems / ( float )m_TotalVisibleItems.x ) );
-  Math::Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
-  m_World.TransformVertex( itemSizePixels );
-  u32 pixelsY = totalItemsY * itemSizePixels.y;
-  const u32 extraToPreventLastRowFromBeingChopped = 5;
-  u32 logicalStepsY = Math::Round( ( float )pixelsY / ( float )s_ScrollBarIncrement ) + extraToPreventLastRowFromBeingChopped;
-  int scrollPosY = 0;
-  if ( HasScrollbar( wxVERTICAL ) && maintainScrollPos )
-  {
-    scrollPosY = GetScrollPos( wxVERTICAL );
-  }
-  Math::Clamp( scrollPosY, 0, logicalStepsY );
+    // Do the math
+    size_t totalItems = m_Results ? ( m_Results->GetFolders().size() + m_Results->GetFiles().size() ) : 0;
+    u32 totalItemsY = (u32)( ceil( ( float )totalItems / ( float )m_TotalVisibleItems.x ) );
+    Math::Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
+    m_World.TransformVertex( itemSizePixels );
+    u32 pixelsY = totalItemsY * itemSizePixels.y;
+    const u32 extraToPreventLastRowFromBeingChopped = 5;
+    u32 logicalStepsY = Math::Round( ( float )pixelsY / ( float )s_ScrollBarIncrement ) + extraToPreventLastRowFromBeingChopped;
+    int scrollPosY = 0;
+    if ( HasScrollbar( wxVERTICAL ) && maintainScrollPos )
+    {
+        scrollPosY = GetScrollPos( wxVERTICAL );
+    }
+    Math::Clamp( scrollPosY, 0, logicalStepsY );
 
-  // Keep the view in line with what we are about to set on the scrollbar
-  m_ViewMatrix.t.y = scrollPosY * s_ScrollBarIncrement;
+    // Keep the view in line with what we are about to set on the scrollbar
+    m_ViewMatrix.t.y = scrollPosY * s_ScrollBarIncrement;
 
-  // Update scrollbars!
-  SetScrollbars( 0, s_ScrollBarIncrement, 0, logicalStepsY, 0, scrollPosY, true );
+    // Update scrollbars!
+    SetScrollbars( 0, s_ScrollBarIncrement, 0, logicalStepsY, 0, scrollPosY, true );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -958,219 +958,207 @@ void ThumbnailView::AdjustScrollBar( bool maintainScrollPos )
 // 
 void ThumbnailView::ShowContextMenu( const wxPoint& pos )
 {
-  // Iterate over the selection so we know what kind of menu to make
-  bool inFolder = m_BrowserFrame->InFolder();
-  bool onlyFiles = !m_FileTiles.empty() && m_FolderTiles.empty();
-  bool onlyFolders = !m_FolderTiles.empty() && m_FileTiles.empty();
-  size_t numSelected = m_SelectedTiles.size();
-  bool filesAndFolders = false;
+    // Iterate over the selection so we know what kind of menu to make
+    bool inFolder = m_BrowserFrame->InFolder();
+    bool onlyFiles = !m_FileTiles.empty() && m_FolderTiles.empty();
+    bool onlyFolders = !m_FolderTiles.empty() && m_FileTiles.empty();
+    size_t numSelected = m_SelectedTiles.size();
+    bool filesAndFolders = false;
 
-  bool skipIteration = onlyFiles || onlyFolders;
-  if ( !skipIteration )
-  {
-    bool foundFiles = false;
-    bool foundFolders = false;
-    for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(),
-      tileEnd = m_SelectedTiles.end(); tileItr != tileEnd && !filesAndFolders; ++tileItr )
+    bool skipIteration = onlyFiles || onlyFolders;
+    if ( !skipIteration )
     {
-      ThumbnailTile* tile = *tileItr;
-      foundFiles |= tile->IsFile();
-      foundFolders |= tile->IsFolder();
-      filesAndFolders = foundFiles && foundFolders;
+        bool foundFiles = false;
+        bool foundFolders = false;
+        for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(),
+            tileEnd = m_SelectedTiles.end(); tileItr != tileEnd && !filesAndFolders; ++tileItr )
+        {
+            ThumbnailTile* tile = *tileItr;
+            foundFiles |= tile->IsFile();
+            foundFolders |= tile->IsFolder();
+            filesAndFolders = foundFiles && foundFolders;
+        }
+
+        if ( !filesAndFolders )
+        {
+            onlyFiles = foundFiles;
+            onlyFolders = foundFolders;
+        }
     }
 
-    if ( !filesAndFolders )
+    bool viewOnTarget = onlyFiles && numSelected == 1;
+    if ( viewOnTarget )
     {
-      onlyFiles = foundFiles;
-      onlyFolders = foundFolders;
-    }
-  }
-
-  bool viewOnTarget = onlyFiles && numSelected == 1;
-  if ( viewOnTarget )
-  {
-    viewOnTarget &= FileSystem::HasExtension( m_SelectedTiles.front()->GetFile()->GetFilePath(), FinderSpecs::Extension::REFLECT_BINARY.GetExtension() );
-  }
-
-  // Prepare the menu
-  wxMenu menu;
-
-  if ( numSelected )
-  {
-    // Open
-    {
-      menu.Append( ID_Open, BrowserMenu::Label( ID_Open ) );
-      menu.AppendSeparator();
+        viewOnTarget &= FileSystem::HasExtension( m_SelectedTiles.front()->GetFile()->GetFilePath(), FinderSpecs::Extension::REFLECT_BINARY.GetExtension() );
     }
 
-    if ( onlyFiles )
-    {
-      // Preview
-      menu.Append( ID_Preview, BrowserMenu::Label( ID_Preview ) );
-      menu.Enable( ID_Preview, numSelected == 1 && m_BrowserFrame->IsPreviewable( ( *m_SelectedTiles.begin() )->GetFile() ) );
-      menu.AppendSeparator();
+    // Prepare the menu
+    wxMenu menu;
 
-      // View on PS3
-      menu.Append( ID_ViewOnTarget, BrowserMenu::Label( ID_ViewOnTarget ) );
-      menu.Enable( ID_ViewOnTarget, viewOnTarget );
-      menu.Append( ID_ViewOnTargetWithOptions, BrowserMenu::Label( ID_ViewOnTargetWithOptions ) );
-      menu.Enable( ID_ViewOnTargetWithOptions, viewOnTarget );
-      menu.AppendSeparator();
+    if ( numSelected )
+    {
+        // Open
+        {
+            menu.Append( ID_Open, BrowserMenu::Label( ID_Open ) );
+            menu.AppendSeparator();
+        }
+
+        if ( onlyFiles )
+        {
+            // Preview
+            menu.Append( ID_Preview, BrowserMenu::Label( ID_Preview ) );
+            menu.Enable( ID_Preview, numSelected == 1 && m_BrowserFrame->IsPreviewable( ( *m_SelectedTiles.begin() )->GetFile() ) );
+            menu.AppendSeparator();
+        }
+
+        // Perforce
+        {
+            wxMenu* p4Menu = new wxMenu;
+            p4Menu->Append( ID_CheckOut, BrowserMenu::Label( ID_CheckOut ) );
+            p4Menu->Append( ID_History, BrowserMenu::Label( ID_History ) );
+            p4Menu->Append( ID_ShowInPerforce, BrowserMenu::Label( ID_ShowInPerforce ) );
+            wxMenuItem* currentItem = menu.AppendSubMenu( p4Menu, "Perforce" );
+            p4Menu->Enable( ID_CheckOut, numSelected > 0 );
+            p4Menu->Enable( ID_History, onlyFiles && numSelected == 1 );
+            p4Menu->Enable( ID_ShowInPerforce, numSelected == 1 );
+            menu.Enable( currentItem->GetId(), p4Menu->IsEnabled( ID_CheckOut ) && p4Menu->IsEnabled( ID_History ) && p4Menu->IsEnabled( ID_ShowInPerforce ) );
+        }
+
+        // Show In...
+        {
+            wxMenu* showInMenu = new wxMenu;
+            showInMenu->Append( ID_ShowInFolders, BrowserMenu::Label( ID_ShowInFolders ) );
+            showInMenu->Append( ID_ShowInWindows, BrowserMenu::Label( ID_ShowInWindows ) );
+            wxMenuItem* currentItem = menu.AppendSubMenu( showInMenu, "Show In" );
+            menu.Enable( currentItem->GetId(), numSelected == 1 );
+        }
+
+        // Make Collection...
+        {
+            wxMenu* collectionMenu = new wxMenu;
+            collectionMenu->Append( ID_NewCollectionFromSel, BrowserMenu::Label( ID_NewCollectionFromSel ) );
+            collectionMenu->Append( ID_NewDependencyCollectionFromSel, BrowserMenu::Label( ID_NewDependencyCollectionFromSel ) );
+            collectionMenu->Append( ID_NewUsageCollectionFromSel, BrowserMenu::Label( ID_NewUsageCollectionFromSel ) );
+            wxMenuItem* currentItem = menu.AppendSubMenu( collectionMenu, "Make Collection" );
+            menu.Enable( currentItem->GetId(), numSelected > 0 && onlyFiles );
+            collectionMenu->Enable( ID_NewCollectionFromSel, onlyFiles );
+            const bool enableDependencyCollection = numSelected == 1 && onlyFiles;
+            collectionMenu->Enable( ID_NewDependencyCollectionFromSel, enableDependencyCollection );
+            collectionMenu->Enable( ID_NewUsageCollectionFromSel, enableDependencyCollection );
+        }
+
+        // Copy To Clipboard...
+        {
+            wxMenu* copyToClipboardMenu = new wxMenu;
+            copyToClipboardMenu->Append( ID_CopyPathWindows, BrowserMenu::Label( ID_CopyPathWindows ) );
+            copyToClipboardMenu->Append( ID_CopyPathClean, BrowserMenu::Label( ID_CopyPathClean ) );
+            wxMenuItem* currentItem = menu.AppendSubMenu( copyToClipboardMenu, "Copy To Clipboard" );
+            menu.Enable( currentItem->GetId(), numSelected > 0 );
+        }
+
+        // Cut, Copy, Rename, Delete
+        //{
+        //  menu.AppendSeparator();
+        //  menu.Append( ID_Cut, BrowserMenu::Label( ID_Cut ) + " (Coming Soon!)" );
+        //  menu.Enable( ID_Cut, false ); //onlyFiles && numSelected == 1 && inFolder );
+
+        //  menu.Append( ID_Copy, BrowserMenu::Label( ID_Copy ) + " (Coming Soon!)" );
+        //  menu.Enable( ID_Copy, false ); //onlyFiles && numSelected == 1 && inFolder );
+
+        //  menu.AppendSeparator();
+        //  menu.Append( ID_Delete, BrowserMenu::Label( ID_Delete ) );
+        //  menu.Enable( ID_Delete, onlyFiles && numSelected == 1 );
+
+        //  menu.Append( ID_Rename, BrowserMenu::Label( ID_Rename ) + " (Coming Soon!)" );
+        //  menu.Enable( ID_Rename, false ); //onlyFiles && numSelected == 1 && inFolder );
+        //}
+
+    }
+    else
+    {
+        // Thumbnail Size...
+        {
+            wxMenu* viewMenu = new wxMenu();
+            viewMenu->AppendCheckItem( ID_ViewSmall, BrowserMenu::Label( ID_ViewSmall ) + std::string( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Small ), BrowserMenu::Label( ID_ViewSmall ) );
+            viewMenu->AppendCheckItem( ID_ViewMedium, BrowserMenu::Label( ID_ViewMedium ) + std::string( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Medium ), BrowserMenu::Label( ID_ViewMedium ) );
+            viewMenu->AppendCheckItem( ID_ViewLarge, BrowserMenu::Label( ID_ViewLarge ) + std::string( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Large ), BrowserMenu::Label( ID_ViewLarge ) );
+            menu.AppendSubMenu( viewMenu, "Thumbnail Size" );
+
+            // Make sure view option is correct
+            menu.Check( ID_ViewLarge, m_Scale == ThumbnailSizes::Large );
+            menu.Check( ID_ViewMedium, m_Scale == ThumbnailSizes::Medium );
+            menu.Check( ID_ViewSmall, m_Scale == ThumbnailSizes::Small );
+        }
+
+        // Sort...
+        {
+            menu.AppendSeparator();
+
+            wxMenu* sortMenu = new wxMenu();
+            sortMenu->AppendCheckItem( ID_SortByName, BrowserMenu::Label( ID_SortByName ) );
+            sortMenu->AppendCheckItem( ID_SortByType, BrowserMenu::Label( ID_SortByType ) );
+            sortMenu->AppendSeparator();
+            sortMenu->Append( ID_Sort, BrowserMenu::Label( ID_Sort ) );
+            i32 sortMenuId = menu.AppendSubMenu( sortMenu, "Arrange Icons By" )->GetId();
+
+            sortMenu->Check( ID_SortByName, GetSortMethod() == ThumbnailSortMethods::AlphabeticalByName );
+            sortMenu->Check( ID_SortByType, GetSortMethod() == ThumbnailSortMethods::AlphabeticalByType );
+
+            menu.Enable( sortMenuId, m_Results && m_Results->HasResults() );
+        }  
+
+        // Refresh
+        {
+            menu.Append( ID_Refresh, BrowserMenu::Label( ID_Refresh ) );
+            menu.Enable( ID_Refresh, inFolder );
+        }
+
+        // Preference
+        {
+            menu.AppendSeparator();
+            menu.Append( ID_Preferences, BrowserMenu::Label( ID_Preferences ) );
+            menu.Enable( ID_Preferences, inFolder );
+        }
+
+        // New
+        {
+            menu.AppendSeparator();
+
+            wxMenu* newMenu = m_BrowserFrame->GetNewAssetMenu();
+            //newMenu->PrependSeparator();
+            //newMenu->Prepend( ID_NewFolder, BrowserMenu::Label( ID_NewFolder ) );
+            //newMenu->Enable( ID_NewFolder, inFolder );
+
+            wxMenuItem* menuItem = new wxMenuItem( &menu, ID_New, BrowserMenu::Label( ID_New ), BrowserMenu::Label( ID_New ), wxITEM_NORMAL, newMenu );
+            menuItem->SetBitmap( UIToolKit::GlobalImageManager().GetBitmap( "new_file_16.png" ) );
+            menu.Append( menuItem );
+            menuItem->Enable( inFolder );
+        }
+
+        // Paste
+        //{
+        //  menu.AppendSeparator();
+        //  menu.Append( ID_Paste, BrowserMenu::Label( ID_Paste ) + " (Coming Soon!)" );
+        //  menu.Enable( ID_Paste, false ); //inFolder ); 
+        //}
+
+        // Select All
+        {
+            menu.AppendSeparator();
+            menu.Append( ID_SelectAll, BrowserMenu::Label( ID_SelectAll ) );
+            menu.Enable( ID_SelectAll, m_Results && m_Results->HasResults() );
+        }
     }
 
-    // Perforce
+    // Properties
     {
-      wxMenu* p4Menu = new wxMenu;
-      p4Menu->Append( ID_CheckOut, BrowserMenu::Label( ID_CheckOut ) );
-      p4Menu->Append( ID_History, BrowserMenu::Label( ID_History ) );
-      p4Menu->Append( ID_ShowInPerforce, BrowserMenu::Label( ID_ShowInPerforce ) );
-      wxMenuItem* currentItem = menu.AppendSubMenu( p4Menu, "Perforce" );
-      p4Menu->Enable( ID_CheckOut, numSelected > 0 );
-      p4Menu->Enable( ID_History, onlyFiles && numSelected == 1 );
-      p4Menu->Enable( ID_ShowInPerforce, numSelected == 1 );
-      menu.Enable( currentItem->GetId(), p4Menu->IsEnabled( ID_CheckOut ) && p4Menu->IsEnabled( ID_History ) && p4Menu->IsEnabled( ID_ShowInPerforce ) );
+        menu.AppendSeparator();
+        menu.Append( ID_Properties, BrowserMenu::Label( ID_Properties ) );
+        menu.Enable( ID_Properties, numSelected > 0 && onlyFiles );
     }
 
-    // Show In...
-    {
-      wxMenu* showInMenu = new wxMenu;
-      showInMenu->Append( ID_ShowInFolders, BrowserMenu::Label( ID_ShowInFolders ) );
-      showInMenu->Append( ID_ShowInWindows, BrowserMenu::Label( ID_ShowInWindows ) );
-      wxMenuItem* currentItem = menu.AppendSubMenu( showInMenu, "Show In" );
-      menu.Enable( currentItem->GetId(), numSelected == 1 );
-    }
-
-    // Make Collection...
-    {
-      wxMenu* collectionMenu = new wxMenu;
-      collectionMenu->Append( ID_NewCollectionFromSel, BrowserMenu::Label( ID_NewCollectionFromSel ) );
-      collectionMenu->Append( ID_NewDependencyCollectionFromSel, BrowserMenu::Label( ID_NewDependencyCollectionFromSel ) );
-      collectionMenu->Append( ID_NewUsageCollectionFromSel, BrowserMenu::Label( ID_NewUsageCollectionFromSel ) );
-      wxMenuItem* currentItem = menu.AppendSubMenu( collectionMenu, "Make Collection" );
-      menu.Enable( currentItem->GetId(), numSelected > 0 && onlyFiles );
-      collectionMenu->Enable( ID_NewCollectionFromSel, onlyFiles );
-      const bool enableDependencyCollection = numSelected == 1 && onlyFiles;
-      collectionMenu->Enable( ID_NewDependencyCollectionFromSel, enableDependencyCollection );
-      collectionMenu->Enable( ID_NewUsageCollectionFromSel, enableDependencyCollection );
-    }
-
-    // Copy To Clipboard...
-    {
-      wxMenu* copyToClipboardMenu = new wxMenu;
-      copyToClipboardMenu->Append( ID_CopyPathWindows, BrowserMenu::Label( ID_CopyPathWindows ) );
-      copyToClipboardMenu->Append( ID_CopyPathClean, BrowserMenu::Label( ID_CopyPathClean ) );
-      copyToClipboardMenu->AppendSeparator();
-      copyToClipboardMenu->Append( ID_CopyFileIDHex, BrowserMenu::Label( ID_CopyFileIDHex ), BrowserMenu::Label( ID_CopyFileIDHex ), wxITEM_NORMAL );
-      copyToClipboardMenu->Append( ID_CopyFileIDDecimal, BrowserMenu::Label( ID_CopyFileIDDecimal ) );
-      wxMenuItem* currentItem = menu.AppendSubMenu( copyToClipboardMenu, "Copy To Clipboard" );
-      copyToClipboardMenu->Enable( ID_CopyFileIDHex, filesAndFolders || onlyFiles );
-      copyToClipboardMenu->Enable( ID_CopyFileIDDecimal, filesAndFolders || onlyFiles );
-      menu.Enable( currentItem->GetId(), numSelected > 0 );
-    }
-
-    // Cut, Copy, Rename, Delete
-    //{
-    //  menu.AppendSeparator();
-    //  menu.Append( ID_Cut, BrowserMenu::Label( ID_Cut ) + " (Coming Soon!)" );
-    //  menu.Enable( ID_Cut, false ); //onlyFiles && numSelected == 1 && inFolder );
-
-    //  menu.Append( ID_Copy, BrowserMenu::Label( ID_Copy ) + " (Coming Soon!)" );
-    //  menu.Enable( ID_Copy, false ); //onlyFiles && numSelected == 1 && inFolder );
-
-    //  menu.AppendSeparator();
-    //  menu.Append( ID_Delete, BrowserMenu::Label( ID_Delete ) );
-    //  menu.Enable( ID_Delete, onlyFiles && numSelected == 1 );
-
-    //  menu.Append( ID_Rename, BrowserMenu::Label( ID_Rename ) + " (Coming Soon!)" );
-    //  menu.Enable( ID_Rename, false ); //onlyFiles && numSelected == 1 && inFolder );
-    //}
-
-  }
-  else
-  {
-    // Thumbnail Size...
-    {
-      wxMenu* viewMenu = new wxMenu();
-      viewMenu->AppendCheckItem( ID_ViewSmall, BrowserMenu::Label( ID_ViewSmall ) + std::string( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Small ), BrowserMenu::Label( ID_ViewSmall ) );
-      viewMenu->AppendCheckItem( ID_ViewMedium, BrowserMenu::Label( ID_ViewMedium ) + std::string( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Medium ), BrowserMenu::Label( ID_ViewMedium ) );
-      viewMenu->AppendCheckItem( ID_ViewLarge, BrowserMenu::Label( ID_ViewLarge ) + std::string( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Large ), BrowserMenu::Label( ID_ViewLarge ) );
-      menu.AppendSubMenu( viewMenu, "Thumbnail Size" );
-
-      // Make sure view option is correct
-      menu.Check( ID_ViewLarge, m_Scale == ThumbnailSizes::Large );
-      menu.Check( ID_ViewMedium, m_Scale == ThumbnailSizes::Medium );
-      menu.Check( ID_ViewSmall, m_Scale == ThumbnailSizes::Small );
-    }
-
-    // Sort...
-    {
-      menu.AppendSeparator();
-
-      wxMenu* sortMenu = new wxMenu();
-      sortMenu->AppendCheckItem( ID_SortByName, BrowserMenu::Label( ID_SortByName ) );
-      sortMenu->AppendCheckItem( ID_SortByType, BrowserMenu::Label( ID_SortByType ) );
-      sortMenu->AppendSeparator();
-      sortMenu->Append( ID_Sort, BrowserMenu::Label( ID_Sort ) );
-      i32 sortMenuId = menu.AppendSubMenu( sortMenu, "Arrange Icons By" )->GetId();
-
-      sortMenu->Check( ID_SortByName, GetSortMethod() == ThumbnailSortMethods::AlphabeticalByName );
-      sortMenu->Check( ID_SortByType, GetSortMethod() == ThumbnailSortMethods::AlphabeticalByType );
-
-      menu.Enable( sortMenuId, m_Results && m_Results->HasResults() );
-    }  
-
-    // Refresh
-    {
-      menu.Append( ID_Refresh, BrowserMenu::Label( ID_Refresh ) );
-      menu.Enable( ID_Refresh, inFolder );
-    }
-
-    // Preference
-    {
-      menu.AppendSeparator();
-      menu.Append( ID_Preferences, BrowserMenu::Label( ID_Preferences ) );
-      menu.Enable( ID_Preferences, inFolder );
-    }
-
-    // New
-    {
-      menu.AppendSeparator();
-
-      wxMenu* newMenu = m_BrowserFrame->GetNewAssetMenu();
-      //newMenu->PrependSeparator();
-      //newMenu->Prepend( ID_NewFolder, BrowserMenu::Label( ID_NewFolder ) );
-      //newMenu->Enable( ID_NewFolder, inFolder );
-
-      wxMenuItem* menuItem = new wxMenuItem( &menu, ID_New, BrowserMenu::Label( ID_New ), BrowserMenu::Label( ID_New ), wxITEM_NORMAL, newMenu );
-      menuItem->SetBitmap( UIToolKit::GlobalImageManager().GetBitmap( "new_file_16.png" ) );
-      menu.Append( menuItem );
-      menuItem->Enable( inFolder );
-    }
-
-    // Paste
-    //{
-    //  menu.AppendSeparator();
-    //  menu.Append( ID_Paste, BrowserMenu::Label( ID_Paste ) + " (Coming Soon!)" );
-    //  menu.Enable( ID_Paste, false ); //inFolder ); 
-    //}
-
-    // Select All
-    {
-      menu.AppendSeparator();
-      menu.Append( ID_SelectAll, BrowserMenu::Label( ID_SelectAll ) );
-      menu.Enable( ID_SelectAll, m_Results && m_Results->HasResults() );
-    }
-  }
-
-  // Properties
-  {
-    menu.AppendSeparator();
-    menu.Append( ID_Properties, BrowserMenu::Label( ID_Properties ) );
-    menu.Enable( ID_Properties, numSelected > 0 && onlyFiles );
-  }
-
-  // Show the menu
-  PopupMenu( &menu, pos );
+    // Show the menu
+    PopupMenu( &menu, pos );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1178,13 +1166,13 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
 // 
 ThumbnailTile* ThumbnailView::FindTile( Asset::AssetFile* file ) const
 {
-  ThumbnailTile* tile = NULL;
-  M_FileToTilePtr::const_iterator found = m_FileTiles.find( file );
-  if ( found != m_FileTiles.end() )
-  {
-    tile = found->second;
-  }
-  return tile;
+    ThumbnailTile* tile = NULL;
+    M_FileToTilePtr::const_iterator found = m_FileTiles.find( file );
+    if ( found != m_FileTiles.end() )
+    {
+        tile = found->second;
+    }
+    return tile;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1192,13 +1180,13 @@ ThumbnailTile* ThumbnailView::FindTile( Asset::AssetFile* file ) const
 // 
 ThumbnailTile* ThumbnailView::FindTile( Asset::AssetFolder* folder ) const
 {
-  ThumbnailTile* tile = NULL;
-  M_FolderToTilePtr::const_iterator found = m_FolderTiles.find( folder );
-  if ( found != m_FolderTiles.end() )
-  {
-    tile = found->second;
-  }
-  return tile;
+    ThumbnailTile* tile = NULL;
+    M_FolderToTilePtr::const_iterator found = m_FolderTiles.find( folder );
+    if ( found != m_FolderTiles.end() )
+    {
+        tile = found->second;
+    }
+    return tile;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1209,14 +1197,14 @@ ThumbnailTile* ThumbnailView::FindTile( Asset::AssetFolder* folder ) const
 // 
 void ThumbnailView::GetTileCorners( ThumbnailTile* tile, Math::Vector3 corners[] ) const
 {
-  corners[ThumbnailTopLeft] = Math::Vector3( tile->GetColumn() * ( m_TotalItemSize.x + s_GapBetweenTiles.x ) + s_GapBetweenTiles.x,  -1.0f * tile->GetRow() * ( m_TotalItemSize.y + s_GapBetweenTiles.y ) - s_GapBetweenTiles.y, 0.0f );
-  corners[ThumbnailTopRight] = corners[ThumbnailTopLeft] + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f );
-  corners[ThumbnailBottomLeft] = corners[ThumbnailTopLeft] + Math::Vector3( 0.0f, -s_ThumbnailSize, 0.0f );
-  corners[ThumbnailBottomRight] = corners[ThumbnailTopLeft] + Math::Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f );
-  corners[LabelTopLeft] = corners[ThumbnailBottomLeft] + Math::Vector3( 0.0f, -s_SpaceBetweenTileAndLabel, 0.0f );
-  corners[LabelTopRight] = corners[LabelTopLeft] + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f );
-  corners[LabelBottomLeft] = corners[ThumbnailTopLeft] + Math::Vector3( 0.0f, -m_TotalItemSize.y, 0.0f );
-  corners[LabelBottomRight] = corners[LabelBottomLeft] + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f );
+    corners[ThumbnailTopLeft] = Math::Vector3( tile->GetColumn() * ( m_TotalItemSize.x + s_GapBetweenTiles.x ) + s_GapBetweenTiles.x,  -1.0f * tile->GetRow() * ( m_TotalItemSize.y + s_GapBetweenTiles.y ) - s_GapBetweenTiles.y, 0.0f );
+    corners[ThumbnailTopRight] = corners[ThumbnailTopLeft] + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f );
+    corners[ThumbnailBottomLeft] = corners[ThumbnailTopLeft] + Math::Vector3( 0.0f, -s_ThumbnailSize, 0.0f );
+    corners[ThumbnailBottomRight] = corners[ThumbnailTopLeft] + Math::Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f );
+    corners[LabelTopLeft] = corners[ThumbnailBottomLeft] + Math::Vector3( 0.0f, -s_SpaceBetweenTileAndLabel, 0.0f );
+    corners[LabelTopRight] = corners[LabelTopLeft] + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f );
+    corners[LabelBottomLeft] = corners[ThumbnailTopLeft] + Math::Vector3( 0.0f, -m_TotalItemSize.y, 0.0f );
+    corners[LabelBottomRight] = corners[LabelBottomLeft] + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1225,19 +1213,19 @@ void ThumbnailView::GetTileCorners( ThumbnailTile* tile, Math::Vector3 corners[]
 // 
 void ThumbnailView::EditTileLabel( ThumbnailTile* tile )
 {
-  Math::Vector3 corners[CORNER_COUNT];
-  GetTileCorners( tile, corners );
-  float left = 0.0f;
-  float top = 0.0f;
-  Math::Vector4 topLeft( corners[LabelTopLeft].x, corners[LabelTopLeft].y, corners[LabelTopLeft].z, 1.0f );
-  m_World.Transform( topLeft );
-  WorldToScreen( Math::Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
+    Math::Vector3 corners[CORNER_COUNT];
+    GetTileCorners( tile, corners );
+    float left = 0.0f;
+    float top = 0.0f;
+    Math::Vector4 topLeft( corners[LabelTopLeft].x, corners[LabelTopLeft].y, corners[LabelTopLeft].z, 1.0f );
+    m_World.Transform( topLeft );
+    WorldToScreen( Math::Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
 
-  m_EditCtrl->SetValue( tile->GetEditableName() );
-  m_EditCtrl->Move( left, top );
-  m_EditCtrl->Show();
-  m_EditCtrl->SetSelection( -1, -1 );
-  m_EditCtrl->SetFocus();
+    m_EditCtrl->SetValue( tile->GetEditableName() );
+    m_EditCtrl->Move( left, top );
+    m_EditCtrl->Show();
+    m_EditCtrl->SetSelection( -1, -1 );
+    m_EditCtrl->SetFocus();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1245,41 +1233,41 @@ void ThumbnailView::EditTileLabel( ThumbnailTile* tile )
 // 
 void ThumbnailView::Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTiles& hits )
 {
-  NOC_ASSERT( mousePos1 == mousePos2 );
+    NOC_ASSERT( mousePos1 == mousePos2 );
 #pragma TODO( "ThumbnailView::Pick - Support rubber-band selection, actually use mousePos2, return more than 1 hit in that case" )
 
-  // Convert mouse position from the screen to object (local space)
-  Math::Vector3 localMouse1;
-  ViewportToWorldVertex( mousePos1.x, mousePos1.y, localMouse1 );
+    // Convert mouse position from the screen to object (local space)
+    Math::Vector3 localMouse1;
+    ViewportToWorldVertex( mousePos1.x, mousePos1.y, localMouse1 );
 
-  Math::Matrix4 inverseWorld( m_World );
-  inverseWorld.Invert();
-  inverseWorld.TransformVertex( localMouse1 );
+    Math::Matrix4 inverseWorld( m_World );
+    inverseWorld.Invert();
+    inverseWorld.TransformVertex( localMouse1 );
 
-  // For each visible tile, get row/column, make bounding box, convert to 
-  // world, compare with cursor
-  bool done = false;
-  OS_ThumbnailTiles::const_iterator tileItr = m_VisibleTiles.begin();
-  OS_ThumbnailTiles::const_iterator tileEnd = m_VisibleTiles.end();
-  for ( ; tileItr != tileEnd && !done; ++tileItr )
-  {
-    ThumbnailTile* tile = *tileItr;
-
-    Math::Vector3 tileCorners[CORNER_COUNT];
-    GetTileCorners( tile, tileCorners );
-    if 
-      ( 
-      tileCorners[TopLeft].x <= localMouse1.x && 
-      tileCorners[BottomRight].x >= localMouse1.x &&
-      tileCorners[TopLeft].y >= localMouse1.y &&
-      tileCorners[BottomRight].y <= localMouse1.y 
-      )
+    // For each visible tile, get row/column, make bounding box, convert to 
+    // world, compare with cursor
+    bool done = false;
+    OS_ThumbnailTiles::const_iterator tileItr = m_VisibleTiles.begin();
+    OS_ThumbnailTiles::const_iterator tileEnd = m_VisibleTiles.end();
+    for ( ; tileItr != tileEnd && !done; ++tileItr )
     {
-      hits.insert( tile );
-      done = mousePos1 == mousePos2;
-      break;
+        ThumbnailTile* tile = *tileItr;
+
+        Math::Vector3 tileCorners[CORNER_COUNT];
+        GetTileCorners( tile, tileCorners );
+        if 
+            ( 
+            tileCorners[TopLeft].x <= localMouse1.x && 
+            tileCorners[BottomRight].x >= localMouse1.x &&
+            tileCorners[TopLeft].y >= localMouse1.y &&
+            tileCorners[BottomRight].y <= localMouse1.y 
+            )
+        {
+            hits.insert( tile );
+            done = mousePos1 == mousePos2;
+            break;
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1287,108 +1275,108 @@ void ThumbnailView::Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTile
 // 
 bool ThumbnailView::Draw()
 {
-  if ( !m_D3DManager.TestDeviceReady() )
-  {
-    return false;
-  }
+    if ( !m_D3DManager.TestDeviceReady() )
+    {
+        return false;
+    }
 
-  IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
+    IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
 
-  // Begin Scene
-  HRESULT result = S_OK;
-  result = device->BeginScene();
-  result = device->SetRenderTarget( 0, m_D3DManager.GetBackBuffer() );
-  result = device->SetDepthStencilSurface( m_D3DManager.GetDepthBuffer() );
-  result = device->Clear( NULL, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB( 255, 80, 80, 80 ), 1.0f, 0 );
+    // Begin Scene
+    HRESULT result = S_OK;
+    result = device->BeginScene();
+    result = device->SetRenderTarget( 0, m_D3DManager.GetBackBuffer() );
+    result = device->SetDepthStencilSurface( m_D3DManager.GetDepthBuffer() );
+    result = device->Clear( NULL, NULL, D3DCLEAR_TARGET | D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB( 255, 80, 80, 80 ), 1.0f, 0 );
 
-  // Camera Transforms
-  device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&m_World );
-  device->SetTransform( D3DTS_PROJECTION, (D3DMATRIX*)&m_Projection );
-  device->SetTransform( D3DTS_VIEW, (D3DMATRIX*)&m_ViewMatrix );
+    // Camera Transforms
+    device->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&m_World );
+    device->SetTransform( D3DTS_PROJECTION, (D3DMATRIX*)&m_Projection );
+    device->SetTransform( D3DTS_VIEW, (D3DMATRIX*)&m_ViewMatrix );
 
-  // Set render state
-  device->SetRenderState( D3DRS_SRCBLEND, D3DBLEND_SRCALPHA );
-  device->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
-  device->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
-  device->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
-  device->SetRenderState( D3DRS_LIGHTING, FALSE );
-  device->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_POINT );
-  device->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
-  device->SetSamplerState( 0, D3DSAMP_MIPFILTER, D3DTEXF_POINT );
-  device->SetPixelShader( NULL );
-  device->SetVertexShader( NULL );
+    // Set render state
+    device->SetRenderState( D3DRS_SRCBLEND, D3DBLEND_SRCALPHA );
+    device->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
+    device->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
+    device->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
+    device->SetRenderState( D3DRS_LIGHTING, FALSE );
+    device->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_POINT );
+    device->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_POINT );
+    device->SetSamplerState( 0, D3DSAMP_MIPFILTER, D3DTEXF_POINT );
+    device->SetPixelShader( NULL );
+    device->SetVertexShader( NULL );
 
-  // Vertex format
-  result = device->SetFVF( ElementFormats[ ElementTypes::PositionUV ] );
+    // Vertex format
+    result = device->SetFVF( ElementFormats[ ElementTypes::PositionUV ] );
 
-  // Visibility testing
-  m_VisibleTiles.clear();
-  m_ViewFrustum = Math::Frustum( m_World * m_ViewMatrix * m_Projection );
+    // Visibility testing
+    m_VisibleTiles.clear();
+    m_ViewFrustum = Math::Frustum( m_World * m_ViewMatrix * m_Projection );
 
-  m_VisibleTileCorners.clear();
-  m_HighlighedTileCorners.clear();
-  m_SelectedTileCorners.clear();
-  m_RibbonColorTileCorners.clear();
-  m_FileTypeTileCorners.clear();
+    m_VisibleTileCorners.clear();
+    m_HighlighedTileCorners.clear();
+    m_SelectedTileCorners.clear();
+    m_RibbonColorTileCorners.clear();
+    m_FileTypeTileCorners.clear();
 
-  // If there are any tiles, draw the visible ones
-  u32 count = 0;
-  for ( ThumbnailIteratorPtr tileItr = m_Sorter.GetIterator(); !tileItr->IsDone(); tileItr->Next(), ++count )
-  {
-    ThumbnailTile* tile = tileItr->GetCurrentTile();
-    u32 row = count / m_TotalVisibleItems.x;
-    u32 col = count % m_TotalVisibleItems.x;
-    tile->SetRowColumn( row, col );
-    DrawTile( device, tile );
-  }
+    // If there are any tiles, draw the visible ones
+    u32 count = 0;
+    for ( ThumbnailIteratorPtr tileItr = m_Sorter.GetIterator(); !tileItr->IsDone(); tileItr->Next(), ++count )
+    {
+        ThumbnailTile* tile = tileItr->GetCurrentTile();
+        u32 row = count / m_TotalVisibleItems.x;
+        u32 col = count % m_TotalVisibleItems.x;
+        tile->SetRowColumn( row, col );
+        DrawTile( device, tile );
+    }
 
-  // Ribbons Overlay
-  for ( M_RibbonColorTileCorners::iterator itr = m_RibbonColorTileCorners.begin(), end = m_RibbonColorTileCorners.end();
-    itr != end; ++itr )
-  {
-    DWORD ribbonColor = itr->first;
-    V_TileCorners& tileCorners = itr->second;
-    DrawTileRibbons( device, tileCorners, ribbonColor );
-  }
+    // Ribbons Overlay
+    for ( M_RibbonColorTileCorners::iterator itr = m_RibbonColorTileCorners.begin(), end = m_RibbonColorTileCorners.end();
+        itr != end; ++itr )
+    {
+        DWORD ribbonColor = itr->first;
+        V_TileCorners& tileCorners = itr->second;
+        DrawTileRibbons( device, tileCorners, ribbonColor );
+    }
 
-  // Emboss Overlay
-  DrawTileOverlays( device, m_VisibleTileCorners, m_TextureOverlay );
+    // Emboss Overlay
+    DrawTileOverlays( device, m_VisibleTileCorners, m_TextureOverlay );
 
-  // Highlight Overlay
-  DrawTileOverlays( device, m_HighlighedTileCorners, m_TextureHighlighted );
+    // Highlight Overlay
+    DrawTileOverlays( device, m_HighlighedTileCorners, m_TextureHighlighted );
 
-  // Selected Overlay
-  DrawTileOverlays( device, m_SelectedTileCorners, m_TextureSelected );
+    // Selected Overlay
+    DrawTileOverlays( device, m_SelectedTileCorners, m_TextureSelected );
 
-  // FileType Overlay
-  for ( M_FileTypeTileCorners::iterator itr = m_FileTypeTileCorners.begin(), end = m_FileTypeTileCorners.end();
-    itr != end; ++itr )
-  {
-    Thumbnail* thumbnail = itr->first;
-    V_TileCorners& tileCorners = itr->second;
+    // FileType Overlay
+    for ( M_FileTypeTileCorners::iterator itr = m_FileTypeTileCorners.begin(), end = m_FileTypeTileCorners.end();
+        itr != end; ++itr )
+    {
+        Thumbnail* thumbnail = itr->first;
+        V_TileCorners& tileCorners = itr->second;
 
-    DrawTileFileType( device, tileCorners, thumbnail );
-  }
+        DrawTileFileType( device, tileCorners, thumbnail );
+    }
 
-  // Request some textures to be loaded
-  if ( !m_CurrentTextureRequests.empty() )
-  {
-    m_LoadManager.Request( m_CurrentTextureRequests );
-    m_CurrentTextureRequests.clear();
-  }
+    // Request some textures to be loaded
+    if ( !m_CurrentTextureRequests.empty() )
+    {
+        m_LoadManager.Request( m_CurrentTextureRequests );
+        m_CurrentTextureRequests.clear();
+    }
 
-  device->SetRenderState( D3DRS_LIGHTING, TRUE );
-  device->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
-  device->EndScene();
+    device->SetRenderState( D3DRS_LIGHTING, TRUE );
+    device->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
+    device->EndScene();
 
-  if ( m_D3DManager.Display( GetHwnd() ) == D3DERR_DEVICELOST )
-  {
-    // Device needs to be reset, so tell the caller not to validate this window
-    m_D3DManager.SetDeviceLost();
-    return false;
-  }
+    if ( m_D3DManager.Display( GetHwnd() ) == D3DERR_DEVICELOST )
+    {
+        // Device needs to be reset, so tell the caller not to validate this window
+        m_D3DManager.SetDeviceLost();
+        return false;
+    }
 
-  return true;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1397,290 +1385,290 @@ bool ThumbnailView::Draw()
 // 
 void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, bool overlayOnly )
 {
-  // Calculate position
-  Math::Vector3 tileCorners[CORNER_COUNT];
-  GetTileCorners( tile, tileCorners );
-  PositionUV corners[4] =
-  {
-    PositionUV( tileCorners[ThumbnailBottomLeft],   Math::Vector2( 0, 1 ) ),
-    PositionUV( tileCorners[ThumbnailTopLeft],      Math::Vector2( 0, 0 ) ),
-    PositionUV( tileCorners[ThumbnailBottomRight],  Math::Vector2( 1, 1 ) ),
-    PositionUV( tileCorners[ThumbnailTopRight],     Math::Vector2( 1, 0 ) ),
-  };
-
-  // Decide if we really need to draw this tile
-  Math::AlignedBox box( corners[0].m_Position, corners[3].m_Position );
-  if ( m_ViewFrustum.IntersectsBox( box ) )
-  {
-    // Draw screenshot
-    device->SetTexture( 0, tile->GetThumbnail()->GetTexture() );
-    HRESULT result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, &corners[0], ElementSizes[ ElementTypes::PositionUV ] );
-    //NOC_ASSERT( SUCCEEDED( result ) );
-    device->SetTexture( 0, NULL );
-    
-    // Keep track of which tiles are visible
-    m_VisibleTiles.insert( tile );
-
-    // Add to overlay lists
-    m_VisibleTileCorners.push_back( tileCorners[ThumbnailTopLeft] );
-    if ( tile->IsHighlighed() )
+    // Calculate position
+    Math::Vector3 tileCorners[CORNER_COUNT];
+    GetTileCorners( tile, tileCorners );
+    PositionUV corners[4] =
     {
-      m_HighlighedTileCorners.push_back( tileCorners[ThumbnailTopLeft] );
-    }
-    else if ( tile->IsSelected() )
-    {
-      m_SelectedTileCorners.push_back( tileCorners[ThumbnailTopLeft] );
-    }
+        PositionUV( tileCorners[ThumbnailBottomLeft],   Math::Vector2( 0, 1 ) ),
+        PositionUV( tileCorners[ThumbnailTopLeft],      Math::Vector2( 0, 0 ) ),
+        PositionUV( tileCorners[ThumbnailBottomRight],  Math::Vector2( 1, 1 ) ),
+        PositionUV( tileCorners[ThumbnailTopRight],     Math::Vector2( 1, 0 ) ),
+    };
 
-    // Get the ribbon color for files
-    if ( tile->IsFile() )
+    // Decide if we really need to draw this tile
+    Math::AlignedBox box( corners[0].m_Position, corners[3].m_Position );
+    if ( m_ViewFrustum.IntersectsBox( box ) )
     {
-      DWORD ribbonColor = 0;
-      if ( tile->GetTypeColor( ribbonColor ) )
-      {
-        Nocturnal::Insert<M_RibbonColorTileCorners>::Result inserted = m_RibbonColorTileCorners.insert( M_RibbonColorTileCorners::value_type( ribbonColor, V_TileCorners() ) );
-        inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
-      }
-      else
-      {
-        M_ModifierSpecColors::iterator findColor = m_ModifierSpecColors.find( tile->GetFile()->GetModifierSpec() );
-        if ( findColor != m_ModifierSpecColors.end() )
+        // Draw screenshot
+        device->SetTexture( 0, tile->GetThumbnail()->GetTexture() );
+        HRESULT result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, &corners[0], ElementSizes[ ElementTypes::PositionUV ] );
+        //NOC_ASSERT( SUCCEEDED( result ) );
+        device->SetTexture( 0, NULL );
+
+        // Keep track of which tiles are visible
+        m_VisibleTiles.insert( tile );
+
+        // Add to overlay lists
+        m_VisibleTileCorners.push_back( tileCorners[ThumbnailTopLeft] );
+        if ( tile->IsHighlighed() )
         {
-          Nocturnal::Insert<M_RibbonColorTileCorners>::Result inserted = m_RibbonColorTileCorners.insert( M_RibbonColorTileCorners::value_type( findColor->second, V_TileCorners() ) );
-          inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
+            m_HighlighedTileCorners.push_back( tileCorners[ThumbnailTopLeft] );
         }
-      }
-
-      // FileType Overlay
-      Asset::EngineType type = tile->GetEngineType();
-      if ( type != Asset::EngineTypes::Null && m_EngineTypeIcons.find( type ) != m_EngineTypeIcons.end() )
-      {
-        Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( m_EngineTypeIcons[type], V_TileCorners() ) );
-        inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
-      }
-      else
-      {
-        M_ModifierSpecIcons::iterator findIcon = m_ModifierSpecIcons.find( tile->GetFile()->GetModifierSpec() );
-        if ( findIcon != m_ModifierSpecIcons.end() )
+        else if ( tile->IsSelected() )
         {
-          Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
-          inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
+            m_SelectedTileCorners.push_back( tileCorners[ThumbnailTopLeft] );
         }
-        else if ( FileSystem::HasExtension( tile->GetFile()->GetFilePath(), FinderSpecs::Extension::REFLECT_BINARY.GetExtension() )
-          && ( findIcon = m_ModifierSpecIcons.find( &FinderSpecs::Extension::REFLECT_BINARY ) ) != m_ModifierSpecIcons.end() )
+
+        // Get the ribbon color for files
+        if ( tile->IsFile() )
         {
-          Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
-          inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
+            DWORD ribbonColor = 0;
+            if ( tile->GetTypeColor( ribbonColor ) )
+            {
+                Nocturnal::Insert<M_RibbonColorTileCorners>::Result inserted = m_RibbonColorTileCorners.insert( M_RibbonColorTileCorners::value_type( ribbonColor, V_TileCorners() ) );
+                inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
+            }
+            else
+            {
+                M_ModifierSpecColors::iterator findColor = m_ModifierSpecColors.find( tile->GetFile()->GetModifierSpec() );
+                if ( findColor != m_ModifierSpecColors.end() )
+                {
+                    Nocturnal::Insert<M_RibbonColorTileCorners>::Result inserted = m_RibbonColorTileCorners.insert( M_RibbonColorTileCorners::value_type( findColor->second, V_TileCorners() ) );
+                    inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
+                }
+            }
+
+            // FileType Overlay
+            Asset::AssetType type = tile->GetAssetType();
+            if ( type != Asset::AssetTypes::Null && m_AssetTypeIcons.find( type ) != m_AssetTypeIcons.end() )
+            {
+                Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( m_AssetTypeIcons[type], V_TileCorners() ) );
+                inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
+            }
+            else
+            {
+                M_ModifierSpecIcons::iterator findIcon = m_ModifierSpecIcons.find( tile->GetFile()->GetModifierSpec() );
+                if ( findIcon != m_ModifierSpecIcons.end() )
+                {
+                    Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
+                    inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
+                }
+                else if ( FileSystem::HasExtension( tile->GetFile()->GetFilePath(), FinderSpecs::Extension::REFLECT_BINARY.GetExtension() )
+                    && ( findIcon = m_ModifierSpecIcons.find( &FinderSpecs::Extension::REFLECT_BINARY ) ) != m_ModifierSpecIcons.end() )
+                {
+                    Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
+                    inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
+                }
+            }
         }
-      }
-    }
 
-    if ( tile->GetThumbnail() == m_TextureLoading )
-    {
-      // Keep track of which textures that need to be loaded
-      m_CurrentTextureRequests.push_back( tile->GetFile() );
-    }
+        if ( tile->GetThumbnail() == m_TextureLoading )
+        {
+            // Keep track of which textures that need to be loaded
+            m_CurrentTextureRequests.push_back( tile->GetFile() );
+        }
 
-    // Draw label
-    std::string label = tile->GetLabel();
-    if ( !label.empty() )
-    {
-      float left = 0.0f;
-      float top = 0.0f;
-      Math::Vector4 topLeft( tileCorners[LabelTopLeft].x, tileCorners[LabelTopLeft].y, tileCorners[LabelTopLeft].z, 1.0f );
-      m_World.Transform( topLeft );
-      WorldToScreen( Math::Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
+        // Draw label
+        std::string label = tile->GetLabel();
+        if ( !label.empty() )
+        {
+            float left = 0.0f;
+            float top = 0.0f;
+            Math::Vector4 topLeft( tileCorners[LabelTopLeft].x, tileCorners[LabelTopLeft].y, tileCorners[LabelTopLeft].z, 1.0f );
+            m_World.Transform( topLeft );
+            WorldToScreen( Math::Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
 
-      float right = 0.0f;
-      float unused = 0.0f;
-      Math::Vector4 bottomRight( tileCorners[LabelBottomRight].x, tileCorners[LabelBottomRight].y, tileCorners[LabelBottomRight].z, 1.0f );
-      m_World.Transform( bottomRight );
-      WorldToScreen( Math::Vector3( bottomRight.x, bottomRight.y, bottomRight.z ), right, unused );
+            float right = 0.0f;
+            float unused = 0.0f;
+            Math::Vector4 bottomRight( tileCorners[LabelBottomRight].x, tileCorners[LabelBottomRight].y, tileCorners[LabelBottomRight].z, 1.0f );
+            m_World.Transform( bottomRight );
+            WorldToScreen( Math::Vector3( bottomRight.x, bottomRight.y, bottomRight.z ), right, unused );
 
-      RECT rect;
-      rect.top = top;
-      rect.left = left;
-      rect.right = right;
-      rect.bottom = top + m_LabelFontHeight;
-      LPD3DXSPRITE sprite = NULL;
+            RECT rect;
+            rect.top = top;
+            rect.left = left;
+            rect.right = right;
+            rect.bottom = top + m_LabelFontHeight;
+            LPD3DXSPRITE sprite = NULL;
 #pragma TODO( "ThumbnailView::DrawTile - Create a sprite object to improve efficiency (see DirectX docs)" )
-      RECT calcRect( rect );
+            RECT calcRect( rect );
 
-      if ( tile->IsSelected() )
-      {
-        device->ColorFill( m_D3DManager.GetBackBuffer(), &rect, s_TextColorBGSelected );
-      }
+            if ( tile->IsSelected() )
+            {
+                device->ColorFill( m_D3DManager.GetBackBuffer(), &rect, s_TextColorBGSelected );
+            }
 
-      //tile->IsSelected() ? s_TextColorBGSelected : s_TextColorDefault
-      m_LabelFont->DrawTextA( sprite, label.c_str(), -1, &calcRect, DT_CALCRECT, s_TextColorDefault );
-      u32 flags = 0;
-      if ( calcRect.right <= rect.right )
-      {
-        flags = DT_CENTER;
-      }
-      result = m_LabelFont->DrawTextA( sprite, label.c_str(), -1, &rect, flags, s_TextColorDefault );
-      //NOC_ASSERT( SUCCEEDED( result ) );
+            //tile->IsSelected() ? s_TextColorBGSelected : s_TextColorDefault
+            m_LabelFont->DrawTextA( sprite, label.c_str(), -1, &calcRect, DT_CALCRECT, s_TextColorDefault );
+            u32 flags = 0;
+            if ( calcRect.right <= rect.right )
+            {
+                flags = DT_CENTER;
+            }
+            result = m_LabelFont->DrawTextA( sprite, label.c_str(), -1, &rect, flags, s_TextColorDefault );
+            //NOC_ASSERT( SUCCEEDED( result ) );
+        }
+
+        // Draw type name on top of the thumbnail image
+        std::string typeLabel = tile->GetTypeLabel();
+        if ( !typeLabel.empty() )
+        {
+            float left = 0.0f;
+            float top = 0.0f;
+            Math::Vector4 topLeft( tileCorners[ThumbnailTopLeft].x, tileCorners[ThumbnailTopLeft].y, tileCorners[ThumbnailTopLeft].z, 1.0f );
+            m_World.Transform( topLeft );
+            WorldToScreen( Math::Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
+
+            float right = 0.0f;
+            float bottom = 0.0f;
+            Math::Vector4 bottomRight( tileCorners[ThumbnailBottomRight].x, tileCorners[ThumbnailBottomRight].y, tileCorners[ThumbnailBottomRight].z, 1.0f );
+            m_World.Transform( bottomRight );
+            WorldToScreen( Math::Vector3( bottomRight.x, bottomRight.y, bottomRight.z ), right, bottom );
+
+            RECT rect;
+            rect.top = top + 2;
+            rect.left = left;
+            rect.right = right;
+            rect.bottom = bottom;
+            LPD3DXSPRITE sprite = NULL;
+
+            DWORD color = s_TextColorDefault;
+            if ( tile->GetThumbnail()->IsFromIcon() )
+            {
+                color = s_TextColorDark;
+            }
+            result = m_LabelFont->DrawTextA( sprite, typeLabel.c_str(), -1, &rect, DT_CENTER, color );
+        }
     }
-
-    // Draw type name on top of the thumbnail image
-    std::string typeLabel = tile->GetTypeLabel();
-    if ( !typeLabel.empty() )
-    {
-      float left = 0.0f;
-      float top = 0.0f;
-      Math::Vector4 topLeft( tileCorners[ThumbnailTopLeft].x, tileCorners[ThumbnailTopLeft].y, tileCorners[ThumbnailTopLeft].z, 1.0f );
-      m_World.Transform( topLeft );
-      WorldToScreen( Math::Vector3( topLeft.x, topLeft.y, topLeft.z ), left, top );
-
-      float right = 0.0f;
-      float bottom = 0.0f;
-      Math::Vector4 bottomRight( tileCorners[ThumbnailBottomRight].x, tileCorners[ThumbnailBottomRight].y, tileCorners[ThumbnailBottomRight].z, 1.0f );
-      m_World.Transform( bottomRight );
-      WorldToScreen( Math::Vector3( bottomRight.x, bottomRight.y, bottomRight.z ), right, bottom );
-
-      RECT rect;
-      rect.top = top + 2;
-      rect.left = left;
-      rect.right = right;
-      rect.bottom = bottom;
-      LPD3DXSPRITE sprite = NULL;
-
-      DWORD color = s_TextColorDefault;
-      if ( tile->GetThumbnail()->IsFromIcon() )
-      {
-        color = s_TextColorDark;
-      }
-      result = m_LabelFont->DrawTextA( sprite, typeLabel.c_str(), -1, &rect, DT_CENTER, color );
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void ThumbnailView::DrawTileOverlays( IDirect3DDevice9* device, V_TileCorners& tileCorners, Thumbnail* thumbnail )
 {
-  HRESULT result = S_OK;
-  
-  device->SetTexture( 0, thumbnail->GetTexture() );
-  for ( V_TileCorners::iterator cornerItr = tileCorners.begin(), cornerEnd = tileCorners.end();
-    cornerItr != cornerEnd; ++cornerItr )
-  {
-    Math::Vector3 thumbnailTopLeft = (*cornerItr);
+    HRESULT result = S_OK;
 
-    PositionUV corners[4] =
+    device->SetTexture( 0, thumbnail->GetTexture() );
+    for ( V_TileCorners::iterator cornerItr = tileCorners.begin(), cornerEnd = tileCorners.end();
+        cornerItr != cornerEnd; ++cornerItr )
     {
-      PositionUV( thumbnailTopLeft + Math::Vector3( 0.0f, -s_ThumbnailSize, 0.0f ), Math::Vector2( 0, 1 ) ),            // BottomLeft
-      PositionUV( thumbnailTopLeft, Math::Vector2( 0, 0 ) ),                                                            // TopLeft
-      PositionUV( thumbnailTopLeft + Math::Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f ), Math::Vector2( 1, 1 ) ), // BottomRight
-      PositionUV( thumbnailTopLeft + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f ), Math::Vector2( 1, 0 ) ),             // TopRight
-    };
-    result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, &corners[0], ElementSizes[ ElementTypes::PositionUV ] );
-    //NOC_ASSERT( SUCCEEDED( result ) );
-  }
-  device->SetTexture( 0, NULL );
+        Math::Vector3 thumbnailTopLeft = (*cornerItr);
+
+        PositionUV corners[4] =
+        {
+            PositionUV( thumbnailTopLeft + Math::Vector3( 0.0f, -s_ThumbnailSize, 0.0f ), Math::Vector2( 0, 1 ) ),            // BottomLeft
+            PositionUV( thumbnailTopLeft, Math::Vector2( 0, 0 ) ),                                                            // TopLeft
+            PositionUV( thumbnailTopLeft + Math::Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f ), Math::Vector2( 1, 1 ) ), // BottomRight
+            PositionUV( thumbnailTopLeft + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f ), Math::Vector2( 1, 0 ) ),             // TopRight
+        };
+        result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, &corners[0], ElementSizes[ ElementTypes::PositionUV ] );
+        //NOC_ASSERT( SUCCEEDED( result ) );
+    }
+    device->SetTexture( 0, NULL );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void ThumbnailView::DrawTileRibbons( IDirect3DDevice9* device, V_TileCorners& tileCorners, DWORD color )
 {
-  HRESULT result = S_OK;
-  
-  result = device->SetFVF( ElementFormats[ ElementTypes::PositionColored ] );
+    HRESULT result = S_OK;
 
-  for ( V_TileCorners::iterator cornerItr = tileCorners.begin(), cornerEnd = tileCorners.end();
-    cornerItr != cornerEnd; ++cornerItr )
-  {
-    Math::Vector3 thumbnailTopLeft = (*cornerItr);
+    result = device->SetFVF( ElementFormats[ ElementTypes::PositionColored ] );
 
-    PositionColored vertices[3] =
+    for ( V_TileCorners::iterator cornerItr = tileCorners.begin(), cornerEnd = tileCorners.end();
+        cornerItr != cornerEnd; ++cornerItr )
     {
-      PositionColored( thumbnailTopLeft + Math::Vector3( 0.0f, -s_ThumbnailSize, 0.0f ) + Math::Vector3( s_ThumbnailSize * 0.75f, 0.0f, 0.0f ), color ), // BottomLeft
-      PositionColored( thumbnailTopLeft + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f ) + Math::Vector3( 0.0f, -s_ThumbnailSize * 0.75f, 0.0f ), color ), // TopRight
-      PositionColored( thumbnailTopLeft + Math::Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f ), color ), // BottomRight
-    };
-    result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 1, &vertices[0], ElementSizes[ ElementTypes::PositionColored ] );
-    //NOC_ASSERT( SUCCEEDED( result ) );
-  }
-  device->SetTexture( 0, NULL );
+        Math::Vector3 thumbnailTopLeft = (*cornerItr);
 
-  result = device->SetFVF( ElementFormats[ ElementTypes::PositionUV ] );
+        PositionColored vertices[3] =
+        {
+            PositionColored( thumbnailTopLeft + Math::Vector3( 0.0f, -s_ThumbnailSize, 0.0f ) + Math::Vector3( s_ThumbnailSize * 0.75f, 0.0f, 0.0f ), color ), // BottomLeft
+            PositionColored( thumbnailTopLeft + Math::Vector3( s_ThumbnailSize, 0.0f, 0.0f ) + Math::Vector3( 0.0f, -s_ThumbnailSize * 0.75f, 0.0f ), color ), // TopRight
+            PositionColored( thumbnailTopLeft + Math::Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f ), color ), // BottomRight
+        };
+        result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 1, &vertices[0], ElementSizes[ ElementTypes::PositionColored ] );
+        //NOC_ASSERT( SUCCEEDED( result ) );
+    }
+    device->SetTexture( 0, NULL );
+
+    result = device->SetFVF( ElementFormats[ ElementTypes::PositionUV ] );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void ThumbnailView::DrawTileFileType( IDirect3DDevice9* device, V_TileCorners& tileCorners, Thumbnail* thumbnail )
 {
-  if ( m_Scale < 35.0f )
-    return;
+    if ( m_Scale < 35.0f )
+        return;
 
-  HRESULT result = S_OK;
+    HRESULT result = S_OK;
 
 
 
-  // conver hieght
-  Math::Matrix4 inverseWorld( m_World );
-  inverseWorld.Invert();
+    // conver hieght
+    Math::Matrix4 inverseWorld( m_World );
+    inverseWorld.Invert();
 
-  Math::Vector3 paddingWidth( 3.0f, 0.0f, 0.0f );
-  inverseWorld.TransformVertex( paddingWidth );
+    Math::Vector3 paddingWidth( 3.0f, 0.0f, 0.0f );
+    inverseWorld.TransformVertex( paddingWidth );
 
-  float padding = s_ThumbnailSize * 0.05f;
-  Math::Vector3 bottomRightOffset = Math::Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f ) + Math::Vector3( -padding, padding, 0.0f ) + Math::Vector3( paddingWidth.x, 0.0f, 0.0f );
+    float padding = s_ThumbnailSize * 0.05f;
+    Math::Vector3 bottomRightOffset = Math::Vector3( s_ThumbnailSize, -s_ThumbnailSize, 0.0f ) + Math::Vector3( -padding, padding, 0.0f ) + Math::Vector3( paddingWidth.x, 0.0f, 0.0f );
 
-  // File Overlay
-  {
-    Math::Vector3 emptyFileSize( 32.0f, 32.0f, 0.0f );
-    inverseWorld.TransformVertex( emptyFileSize );
-
-    device->SetTexture( 0, m_TextureBlankFile->GetTexture() );
-    for ( V_TileCorners::iterator cornerItr = tileCorners.begin(), cornerEnd = tileCorners.end();
-      cornerItr != cornerEnd; ++cornerItr )
+    // File Overlay
     {
-      Math::Vector3 thumbnailTopLeft = (*cornerItr);
-      Math::Vector3 thumbnailBottomRight = thumbnailTopLeft + bottomRightOffset;
+        Math::Vector3 emptyFileSize( 32.0f, 32.0f, 0.0f );
+        inverseWorld.TransformVertex( emptyFileSize );
 
-      // we're going to calculate everything from the bottom right:
-      PositionUV corners[4] =
-      {
-        PositionUV( thumbnailBottomRight + Math::Vector3( -emptyFileSize.x, 0.0f, 0.0f ), Math::Vector2( 0, 1 ) ), // BottomLeft
-        PositionUV( thumbnailBottomRight + Math::Vector3( -emptyFileSize.x, emptyFileSize.y, 0.0f ), Math::Vector2( 0, 0 ) ), // TopLeft
-        PositionUV( thumbnailBottomRight, Math::Vector2( 1, 1 ) ), // BottomRight
-        PositionUV( thumbnailBottomRight + Math::Vector3( 0.0f, emptyFileSize.y, 0.0f ), Math::Vector2( 1, 0 ) ), // TopRight
-      };
+        device->SetTexture( 0, m_TextureBlankFile->GetTexture() );
+        for ( V_TileCorners::iterator cornerItr = tileCorners.begin(), cornerEnd = tileCorners.end();
+            cornerItr != cornerEnd; ++cornerItr )
+        {
+            Math::Vector3 thumbnailTopLeft = (*cornerItr);
+            Math::Vector3 thumbnailBottomRight = thumbnailTopLeft + bottomRightOffset;
 
-      result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, &corners[0], ElementSizes[ ElementTypes::PositionUV ] );
-      //NOC_ASSERT( SUCCEEDED( result ) );
+            // we're going to calculate everything from the bottom right:
+            PositionUV corners[4] =
+            {
+                PositionUV( thumbnailBottomRight + Math::Vector3( -emptyFileSize.x, 0.0f, 0.0f ), Math::Vector2( 0, 1 ) ), // BottomLeft
+                PositionUV( thumbnailBottomRight + Math::Vector3( -emptyFileSize.x, emptyFileSize.y, 0.0f ), Math::Vector2( 0, 0 ) ), // TopLeft
+                PositionUV( thumbnailBottomRight, Math::Vector2( 1, 1 ) ), // BottomRight
+                PositionUV( thumbnailBottomRight + Math::Vector3( 0.0f, emptyFileSize.y, 0.0f ), Math::Vector2( 1, 0 ) ), // TopRight
+            };
+
+            result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, &corners[0], ElementSizes[ ElementTypes::PositionUV ] );
+            //NOC_ASSERT( SUCCEEDED( result ) );
+        }
+        device->SetTexture( 0, NULL );
     }
-    device->SetTexture( 0, NULL );
-  }
 
 
-  // FileType Icon Overlay
-  {
-    Math::Vector3 fileTypeHeight( 16.0f, 16.0f, 0.0f );
-    inverseWorld.TransformVertex( fileTypeHeight );
-
-    Math::Vector3 fileTypeBottomRightOffset = bottomRightOffset + Math::Vector3( -fileTypeHeight.x * 0.5f, fileTypeHeight.y * 0.5f, 0.0f );
-
-    device->SetTexture( 0, thumbnail->GetTexture() );
-    for ( V_TileCorners::iterator cornerItr = tileCorners.begin(), cornerEnd = tileCorners.end();
-      cornerItr != cornerEnd; ++cornerItr )
+    // FileType Icon Overlay
     {
-      Math::Vector3 thumbnailTopLeft = (*cornerItr);
-      Math::Vector3 thumbnailBottomRight = thumbnailTopLeft + fileTypeBottomRightOffset;
+        Math::Vector3 fileTypeHeight( 16.0f, 16.0f, 0.0f );
+        inverseWorld.TransformVertex( fileTypeHeight );
 
-      // we're going to calculate everything from the bottom right:
-      PositionUV corners[4] =
-      {
-        PositionUV( thumbnailBottomRight + Math::Vector3( -fileTypeHeight.x, 0.0f, 0.0f ), Math::Vector2( 0, 1 ) ), // BottomLeft
-        PositionUV( thumbnailBottomRight + Math::Vector3( -fileTypeHeight.x, fileTypeHeight.y, 0.0f ), Math::Vector2( 0, 0 ) ), // TopLeft
-        PositionUV( thumbnailBottomRight, Math::Vector2( 1, 1 ) ), // BottomRight
-        PositionUV( thumbnailBottomRight + Math::Vector3( 0.0f, fileTypeHeight.y, 0.0f ), Math::Vector2( 1, 0 ) ), // TopRight
-      };
+        Math::Vector3 fileTypeBottomRightOffset = bottomRightOffset + Math::Vector3( -fileTypeHeight.x * 0.5f, fileTypeHeight.y * 0.5f, 0.0f );
 
-      result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, &corners[0], ElementSizes[ ElementTypes::PositionUV ] );
-      //NOC_ASSERT( SUCCEEDED( result ) );
+        device->SetTexture( 0, thumbnail->GetTexture() );
+        for ( V_TileCorners::iterator cornerItr = tileCorners.begin(), cornerEnd = tileCorners.end();
+            cornerItr != cornerEnd; ++cornerItr )
+        {
+            Math::Vector3 thumbnailTopLeft = (*cornerItr);
+            Math::Vector3 thumbnailBottomRight = thumbnailTopLeft + fileTypeBottomRightOffset;
+
+            // we're going to calculate everything from the bottom right:
+            PositionUV corners[4] =
+            {
+                PositionUV( thumbnailBottomRight + Math::Vector3( -fileTypeHeight.x, 0.0f, 0.0f ), Math::Vector2( 0, 1 ) ), // BottomLeft
+                PositionUV( thumbnailBottomRight + Math::Vector3( -fileTypeHeight.x, fileTypeHeight.y, 0.0f ), Math::Vector2( 0, 0 ) ), // TopLeft
+                PositionUV( thumbnailBottomRight, Math::Vector2( 1, 1 ) ), // BottomRight
+                PositionUV( thumbnailBottomRight + Math::Vector3( 0.0f, fileTypeHeight.y, 0.0f ), Math::Vector2( 1, 0 ) ), // TopRight
+            };
+
+            result = device->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, &corners[0], ElementSizes[ ElementTypes::PositionUV ] );
+            //NOC_ASSERT( SUCCEEDED( result ) );
+        }
+        device->SetTexture( 0, NULL );
     }
-    device->SetTexture( 0, NULL );
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1688,10 +1676,10 @@ void ThumbnailView::DrawTileFileType( IDirect3DDevice9* device, V_TileCorners& t
 // 
 void ThumbnailView::OnPaint( wxPaintEvent& args )
 {
-  if ( Draw() )
-  {
-    ::ValidateRect( ( HWND )GetHandle(), NULL );
-  }
+    if ( Draw() )
+    {
+        ::ValidateRect( ( HWND )GetHandle(), NULL );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1699,20 +1687,20 @@ void ThumbnailView::OnPaint( wxPaintEvent& args )
 // 
 void ThumbnailView::OnSize( wxSizeEvent& args )
 {
-  if ( !m_D3DManager.GetD3DDevice() )
-  {
-    return;
-  }
+    if ( !m_D3DManager.GetD3DDevice() )
+    {
+        return;
+    }
 
-  if ( args.GetSize().x > 0 && args.GetSize().y > 0 )
-  {
-    UpdateProjectionMatrix();
-    CalculateTotalVisibleItems();
-    AdjustScrollBar( true );
-    m_D3DManager.Resize( args.GetSize().x, args.GetSize().y );
-  }
+    if ( args.GetSize().x > 0 && args.GetSize().y > 0 )
+    {
+        UpdateProjectionMatrix();
+        CalculateTotalVisibleItems();
+        AdjustScrollBar( true );
+        m_D3DManager.Resize( args.GetSize().x, args.GetSize().y );
+    }
 
-  Refresh();
+    Refresh();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1720,26 +1708,26 @@ void ThumbnailView::OnSize( wxSizeEvent& args )
 // 
 void ThumbnailView::OnKeyDown( wxKeyEvent& args )
 {
-  switch ( toupper( args.KeyCode() ) )
-  {
-  case 'A':
-    if ( args.GetModifiers() == wxMOD_CONTROL )
+    switch ( toupper( args.KeyCode() ) )
     {
-      // Seletct All
-      wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED, ID_SelectAll );
-      evt.SetEventObject( this );
-      GetEventHandler()->ProcessEvent( evt );
-    }
-    else
-    {
-      args.Skip();
-    }
-    break;
+    case 'A':
+        if ( args.GetModifiers() == wxMOD_CONTROL )
+        {
+            // Seletct All
+            wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED, ID_SelectAll );
+            evt.SetEventObject( this );
+            GetEventHandler()->ProcessEvent( evt );
+        }
+        else
+        {
+            args.Skip();
+        }
+        break;
 
-  default:
-    args.Skip();
-    break;
-  }
+    default:
+        args.Skip();
+        break;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1747,14 +1735,14 @@ void ThumbnailView::OnKeyDown( wxKeyEvent& args )
 // 
 void ThumbnailView::OnMouseWheel( wxMouseEvent& args )
 {
-  if ( args.ControlDown() )
-  {
-    SetZoom( m_Scale + ( ( float )args.GetWheelRotation() / ( float )args.GetWheelDelta() * 2.0f ) );
-  }
-  else
-  {
-    args.Skip();
-  }
+    if ( args.ControlDown() )
+    {
+        SetZoom( m_Scale + ( ( float )args.GetWheelRotation() / ( float )args.GetWheelDelta() * 2.0f ) );
+    }
+    else
+    {
+        args.Skip();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1765,29 +1753,29 @@ void ThumbnailView::OnMouseWheel( wxMouseEvent& args )
 // 
 void ThumbnailView::MouseSelectionHelper()
 {
-  ThumbnailTile* onlySelectedTile = NULL;
-  if ( m_SelectedTiles.size() == 1 )
-  {
-    onlySelectedTile = m_SelectedTiles.front();
-  }
+    ThumbnailTile* onlySelectedTile = NULL;
+    if ( m_SelectedTiles.size() == 1 )
+    {
+        onlySelectedTile = m_SelectedTiles.front();
+    }
 
-  bool selectionChanged = false;
+    bool selectionChanged = false;
 
-  // If the control key was not down and the tile is not the only one that is 
-  // selected, clear selection
-  if ( !m_CtrlOnMouseDown && m_MouseDownTile != onlySelectedTile )
-  {
-    selectionChanged |= ClearSelection();
-  }
+    // If the control key was not down and the tile is not the only one that is 
+    // selected, clear selection
+    if ( !m_CtrlOnMouseDown && m_MouseDownTile != onlySelectedTile )
+    {
+        selectionChanged |= ClearSelection();
+    }
 
-  // Toggle the selection if the control key was down, otherwise just 
-  // select the tile
-  selectionChanged |= SetSelection( m_MouseDownTile, m_CtrlOnMouseDown ? !m_MouseDownTile->IsSelected() : true );
+    // Toggle the selection if the control key was down, otherwise just 
+    // select the tile
+    selectionChanged |= SetSelection( m_MouseDownTile, m_CtrlOnMouseDown ? !m_MouseDownTile->IsSelected() : true );
 
-  if ( selectionChanged )
-  {
-    Refresh();
-  }
+    if ( selectionChanged )
+    {
+        Refresh();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1795,73 +1783,73 @@ void ThumbnailView::MouseSelectionHelper()
 // 
 void ThumbnailView::OnMouseMove( wxMouseEvent& args )
 {
-  args.Skip();
+    args.Skip();
 
-  if ( m_MouseDown )
-  {
-    // Determine if a drag operation is starting based on amount of movement
-    wxPoint diff = args.GetPosition() - m_MouseDownLoc;
-    if ( abs( diff.x ) > s_MouseTolerance || abs( diff.y ) > s_MouseTolerance )
+    if ( m_MouseDown )
     {
-      // Handle any last minute selection before starting the drag
-      if ( m_MouseDownTile )
-      {
-        if ( !m_MouseDownTile->IsSelected() )
+        // Determine if a drag operation is starting based on amount of movement
+        wxPoint diff = args.GetPosition() - m_MouseDownLoc;
+        if ( abs( diff.x ) > s_MouseTolerance || abs( diff.y ) > s_MouseTolerance )
         {
-          MouseSelectionHelper();
-        }
-      }
+            // Handle any last minute selection before starting the drag
+            if ( m_MouseDownTile )
+            {
+                if ( !m_MouseDownTile->IsSelected() )
+                {
+                    MouseSelectionHelper();
+                }
+            }
 
-      // Build the list of items to drag and drop
-      bool doDrag = false;
-      wxFileDataObject clipboardData;
-      for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(),
-        tileEnd = m_SelectedTiles.end(); tileItr != tileEnd; ++tileItr )
-      {
-        ThumbnailTile* tile = *tileItr;
-        std::string path;
-        if ( tile->IsFile() )
+            // Build the list of items to drag and drop
+            bool doDrag = false;
+            wxFileDataObject clipboardData;
+            for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(),
+                tileEnd = m_SelectedTiles.end(); tileItr != tileEnd; ++tileItr )
+            {
+                ThumbnailTile* tile = *tileItr;
+                std::string path;
+                if ( tile->IsFile() )
+                {
+                    path = tile->GetFile()->GetFilePath();
+                }
+                else
+                {
+                    path = tile->GetFolder()->GetFullPath(); 
+                }
+
+                if ( !path.empty() )
+                {
+                    clipboardData.AddFile( path );
+                    doDrag = true;
+                }
+            }
+
+            // Drag and drop time
+            if ( doDrag )
+            {
+                Inspect::DropSource source( clipboardData, this );
+                source.SetAutoRaise( true );
+                source.DoDragDrop( wxDrag_DefaultMove );
+                m_MouseDown = false;
+            }
+        }
+    }
+
+    if ( !m_MouseDown || m_SelectedTiles.empty() )
+    {
+        // The mouse is not down, just track the item to highlight
+        OS_ThumbnailTiles hits;
+        Pick( args.GetPosition(), args.GetPosition(), hits );
+        if ( hits.size() > 0 )
         {
-          path = tile->GetFile()->GetFilePath();
+            ThumbnailTile* hit = *hits.begin();
+            Highlight( hit );
         }
         else
         {
-          path = tile->GetFolder()->GetFullPath(); 
+            ClearHighlight();
         }
-
-        if ( !path.empty() )
-        {
-          clipboardData.AddFile( path );
-          doDrag = true;
-        }
-      }
-
-      // Drag and drop time
-      if ( doDrag )
-      {
-        Inspect::DropSource source( clipboardData, this );
-        source.SetAutoRaise( true );
-        source.DoDragDrop( wxDrag_DefaultMove );
-        m_MouseDown = false;
-      }
     }
-  }
-
-  if ( !m_MouseDown || m_SelectedTiles.empty() )
-  {
-    // The mouse is not down, just track the item to highlight
-    OS_ThumbnailTiles hits;
-    Pick( args.GetPosition(), args.GetPosition(), hits );
-    if ( hits.size() > 0 )
-    {
-      ThumbnailTile* hit = *hits.begin();
-      Highlight( hit );
-    }
-    else
-    {
-      ClearHighlight();
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1870,50 +1858,50 @@ void ThumbnailView::OnMouseMove( wxMouseEvent& args )
 // 
 void ThumbnailView::OnMouseLeftDown( wxMouseEvent& args )
 {
-  args.Skip();
+    args.Skip();
 
-  SetFocusIgnoringChildren();
+    SetFocusIgnoringChildren();
 
-  m_MouseDown = true;
-  m_MouseDownLoc = args.GetPosition();
-  m_MouseDownTile = NULL;
-  m_CtrlOnMouseDown = args.ControlDown();
+    m_MouseDown = true;
+    m_MouseDownLoc = args.GetPosition();
+    m_MouseDownTile = NULL;
+    m_CtrlOnMouseDown = args.ControlDown();
 
-  OS_ThumbnailTiles hits;
-  ThumbnailTile* hit = NULL;
-  Pick( args.GetPosition(), args.GetPosition(), hits );
-  if ( hits.size() > 0 )
-  {
-    m_MouseDownTile = hits.front();
-
-    if ( args.ShiftDown() && !m_CtrlOnMouseDown )
+    OS_ThumbnailTiles hits;
+    ThumbnailTile* hit = NULL;
+    Pick( args.GetPosition(), args.GetPosition(), hits );
+    if ( hits.size() > 0 )
     {
-      ThumbnailTile* first = m_RangeSelectTile;
-      ThumbnailTile* second = m_MouseDownTile;
+        m_MouseDownTile = hits.front();
 
-      if ( first )
-      {
-        if ( m_Sorter.Compare( first, second ) > 0 )
+        if ( args.ShiftDown() && !m_CtrlOnMouseDown )
         {
-          first = m_MouseDownTile;
-          second = m_RangeSelectTile;
+            ThumbnailTile* first = m_RangeSelectTile;
+            ThumbnailTile* second = m_MouseDownTile;
+
+            if ( first )
+            {
+                if ( m_Sorter.Compare( first, second ) > 0 )
+                {
+                    first = m_MouseDownTile;
+                    second = m_RangeSelectTile;
+                }
+            }
+
+            ClearSelection();
+            SelectRange( first, second );
+            Refresh();
+
+            m_MouseDownTile = NULL;
         }
-      }
-
-      ClearSelection();
-      SelectRange( first, second );
-      Refresh();
-
-      m_MouseDownTile = NULL;
     }
-  }
-  else if ( !m_CtrlOnMouseDown )
-  {
-    if ( ClearSelection() )
+    else if ( !m_CtrlOnMouseDown )
     {
-      Refresh();
+        if ( ClearSelection() )
+        {
+            Refresh();
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1921,24 +1909,24 @@ void ThumbnailView::OnMouseLeftDown( wxMouseEvent& args )
 // 
 void ThumbnailView::OnMouseLeftUp( wxMouseEvent& args )
 {
-  args.Skip();
-  m_MouseDown = false;
+    args.Skip();
+    m_MouseDown = false;
 
-  if ( m_MouseDownTile )
-  {
-    wxPoint diff = args.GetPosition() - m_MouseDownLoc;
-    if ( abs( diff.x ) <= s_MouseTolerance || abs( diff.y ) <= s_MouseTolerance )
+    if ( m_MouseDownTile )
     {
-      MouseSelectionHelper();
+        wxPoint diff = args.GetPosition() - m_MouseDownLoc;
+        if ( abs( diff.x ) <= s_MouseTolerance || abs( diff.y ) <= s_MouseTolerance )
+        {
+            MouseSelectionHelper();
+        }
     }
-  }
 
-  if ( m_SelectedTiles.size() == 1 )
-  {
-    m_RangeSelectTile = m_SelectedTiles.front();
-  }
+    if ( m_SelectedTiles.size() == 1 )
+    {
+        m_RangeSelectTile = m_SelectedTiles.front();
+    }
 
-  m_MouseDownTile = NULL;
+    m_MouseDownTile = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1946,27 +1934,27 @@ void ThumbnailView::OnMouseLeftUp( wxMouseEvent& args )
 // 
 void ThumbnailView::OnMouseLeftDoubleClick( wxMouseEvent& args )
 {
-  args.Skip();
+    args.Skip();
 
-  SetFocusIgnoringChildren();
+    SetFocusIgnoringChildren();
 
-  OS_ThumbnailTiles hits;
-  ThumbnailTile* hit = NULL;
-  Pick( args.GetPosition(), args.GetPosition(), hits );
-  if ( !hits.empty() )
-  {
-    hit = hits.front();
-    if ( hit->IsFolder() )
+    OS_ThumbnailTiles hits;
+    ThumbnailTile* hit = NULL;
+    Pick( args.GetPosition(), args.GetPosition(), hits );
+    if ( !hits.empty() )
     {
-      m_BrowserFrame->Search( hit->GetFolder()->GetFullPath() );
+        hit = hits.front();
+        if ( hit->IsFolder() )
+        {
+            m_BrowserFrame->Search( hit->GetFolder()->GetFullPath() );
+        }
+        else if ( hit->IsFile() )
+        {
+            wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED, ID_Open );
+            evt.SetEventObject( this );
+            wxPostEvent( GetEventHandler(), evt );
+        }
     }
-    else if ( hit->IsFile() )
-    {
-      wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED, ID_Open );
-      evt.SetEventObject( this );
-      wxPostEvent( GetEventHandler(), evt );
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1974,35 +1962,35 @@ void ThumbnailView::OnMouseLeftDoubleClick( wxMouseEvent& args )
 // 
 void ThumbnailView::OnMouseRightDown( wxMouseEvent& args )
 {
-  args.Skip();
+    args.Skip();
 
-  OS_ThumbnailTiles hits;
-  Pick( args.GetPosition(), args.GetPosition(), hits );
+    OS_ThumbnailTiles hits;
+    Pick( args.GetPosition(), args.GetPosition(), hits );
 
-  if ( hits.empty() )
-  {
-    ClearSelection();
-  }
-  else
-  {
-    NOC_ASSERT( hits.size() == 1 );
-    ThumbnailTile* hit = hits.front().Ptr();
-    if ( !args.ControlDown() && !args.ShiftDown() && !hit->IsSelected() )
+    if ( hits.empty() )
     {
-      ClearSelection();
+        ClearSelection();
     }
-    Select( hit );
-  }
+    else
+    {
+        NOC_ASSERT( hits.size() == 1 );
+        ThumbnailTile* hit = hits.front().Ptr();
+        if ( !args.ControlDown() && !args.ShiftDown() && !hit->IsSelected() )
+        {
+            ClearSelection();
+        }
+        Select( hit );
+    }
 
-  if ( m_SelectedTiles.size() == 1 )
-  {
-    m_RangeSelectTile = m_SelectedTiles.front();
-  }
+    if ( m_SelectedTiles.size() == 1 )
+    {
+        m_RangeSelectTile = m_SelectedTiles.front();
+    }
 
-  // This will cause a Refresh as well
-  ClearHighlight();
+    // This will cause a Refresh as well
+    ClearHighlight();
 
-  ShowContextMenu( args.GetPosition() );
+    ShowContextMenu( args.GetPosition() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2010,9 +1998,9 @@ void ThumbnailView::OnMouseRightDown( wxMouseEvent& args )
 // 
 void ThumbnailView::OnMouseLeave( wxMouseEvent& args )
 {
-  args.Skip();
+    args.Skip();
 
-  ClearHighlight();
+    ClearHighlight();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2020,26 +2008,26 @@ void ThumbnailView::OnMouseLeave( wxMouseEvent& args )
 // 
 void ThumbnailView::OnScrollEvent( wxScrollWinEvent& args )
 {
-  // We are going to handle this event
-  args.Skip( false ); 
+    // We are going to handle this event
+    args.Skip( false ); 
 
-  SetFocusIgnoringChildren();
+    SetFocusIgnoringChildren();
 
-  if ( args.GetOrientation() != wxVERTICAL )
-  {
-    // We are assuming that there is only vertical scrolling in this function
-    return;
-  }
+    if ( args.GetOrientation() != wxVERTICAL )
+    {
+        // We are assuming that there is only vertical scrolling in this function
+        return;
+    }
 
-  // Figure out how much to scroll by and scroll
-  i32 amount = GetScrollHelper()->CalcScrollInc( args );
-  if ( amount != 0 )
-  {
-    i32 current = GetScrollPos( wxVERTICAL );
-    amount += current;
-    Math::Clamp( amount, 0, amount );
-    Scroll( 0, amount );
-  }
+    // Figure out how much to scroll by and scroll
+    i32 amount = GetScrollHelper()->CalcScrollInc( args );
+    if ( amount != 0 )
+    {
+        i32 current = GetScrollPos( wxVERTICAL );
+        amount += current;
+        Math::Clamp( amount, 0, amount );
+        Scroll( 0, amount );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2047,11 +2035,11 @@ void ThumbnailView::OnScrollEvent( wxScrollWinEvent& args )
 // 
 void ThumbnailView::OnSelectAll( wxCommandEvent& args )
 {
-  ThumbnailIteratorPtr iterator = m_Sorter.GetIterator();
-  if ( SelectRange( iterator->GetCurrentTile(), iterator->GetLastTile() ) )
-  {
-    Refresh();
-  }
+    ThumbnailIteratorPtr iterator = m_Sorter.GetIterator();
+    if ( SelectRange( iterator->GetCurrentTile(), iterator->GetLastTile() ) )
+    {
+        Refresh();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2059,7 +2047,7 @@ void ThumbnailView::OnSelectAll( wxCommandEvent& args )
 // 
 void ThumbnailView::OnSortAlphabetical( wxCommandEvent& args )
 {
-  Sort( ThumbnailSortMethods::AlphabeticalByName );
+    Sort( ThumbnailSortMethods::AlphabeticalByName );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2067,7 +2055,7 @@ void ThumbnailView::OnSortAlphabetical( wxCommandEvent& args )
 // 
 void ThumbnailView::OnSortByType( wxCommandEvent& args )
 {
-  Sort( ThumbnailSortMethods::AlphabeticalByType );
+    Sort( ThumbnailSortMethods::AlphabeticalByType );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2075,7 +2063,7 @@ void ThumbnailView::OnSortByType( wxCommandEvent& args )
 // 
 void ThumbnailView::OnSort( wxCommandEvent& args )
 {
-  Sort( GetSortMethod() );
+    Sort( GetSortMethod() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2083,30 +2071,30 @@ void ThumbnailView::OnSort( wxCommandEvent& args )
 // 
 void ThumbnailView::OnFileProperties( wxCommandEvent& args )
 {
-  Asset::V_AssetFiles files;
-  Asset::V_AssetFolders folders;
-  GetSelectedFilesAndFolders( files, folders );
-  if ( !files.empty() )
-  {
-    if ( files.size() > 5 )
+    Asset::V_AssetFiles files;
+    Asset::V_AssetFolders folders;
+    GetSelectedFilesAndFolders( files, folders );
+    if ( !files.empty() )
     {
-      std::stringstream message;
-      message << "Are you sure that you want to show the properties for all " << files.size() << " selected files?";
-      i32 result = wxMessageBox( message.str(), "Show Details?", wxCENTER | wxYES_NO | wxICON_QUESTION, this );
-      if ( result != wxYES )
-      {
-        return;
-      }
-    }
+        if ( files.size() > 5 )
+        {
+            std::stringstream message;
+            message << "Are you sure that you want to show the properties for all " << files.size() << " selected files?";
+            i32 result = wxMessageBox( message.str(), "Show Details?", wxCENTER | wxYES_NO | wxICON_QUESTION, this );
+            if ( result != wxYES )
+            {
+                return;
+            }
+        }
 
-    for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end();
-      fileItr != fileEnd; ++fileItr )
-    {
-      DetailsFrame* detailsWindow = new DetailsFrame( m_BrowserFrame );
-      detailsWindow->Populate( *fileItr );
-      detailsWindow->Show();
+        for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end();
+            fileItr != fileEnd; ++fileItr )
+        {
+            DetailsFrame* detailsWindow = new DetailsFrame( m_BrowserFrame );
+            detailsWindow->Populate( *fileItr );
+            detailsWindow->Show();
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2114,20 +2102,20 @@ void ThumbnailView::OnFileProperties( wxCommandEvent& args )
 // 
 void ThumbnailView::OnRename( wxCommandEvent& args )
 {
-  if ( m_SelectedTiles.size() == 1 )
-  {
-    ThumbnailTile* tile = m_SelectedTiles.front();
-
-    if ( !tile->IsFile() || !tile->GetFile() )
+    if ( m_SelectedTiles.size() == 1 )
     {
-      return;
-    }
+        ThumbnailTile* tile = m_SelectedTiles.front();
 
-    if ( true )//File::GlobalManager().ValidateCanDeleteFile( tile->GetFile()->GetFilePath() ) )
-    {
-      EditTileLabel( tile );
+        if ( !tile->IsFile() || !tile->GetFile() )
+        {
+            return;
+        }
+
+        if ( true )//File::GlobalManager().ValidateCanDeleteFile( tile->GetFile()->GetFilePath() ) )
+        {
+            EditTileLabel( tile );
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2136,7 +2124,7 @@ void ThumbnailView::OnRename( wxCommandEvent& args )
 // 
 void ThumbnailView::OnEditBoxLostFocus( wxFocusEvent& args )
 {
-  m_EditCtrl->Hide();
+    m_EditCtrl->Hide();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2144,8 +2132,8 @@ void ThumbnailView::OnEditBoxLostFocus( wxFocusEvent& args )
 // 
 void ThumbnailView::OnEditBoxPressEnter( wxCommandEvent& args )
 {
-  // TODO: actually rename the file/folder
-  m_EditCtrl->Hide();
+    // TODO: actually rename the file/folder
+    m_EditCtrl->Hide();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2153,80 +2141,80 @@ void ThumbnailView::OnEditBoxPressEnter( wxCommandEvent& args )
 // 
 void ThumbnailView::OnThumbnailLoaded( Luna::ThumbnailLoadedEvent& args )
 {
-  ThumbnailTile* tile = FindTile( args.GetAssetFile() );
-  if ( tile )
-  {
-    if ( !args.GetThumbnails().empty() )
+    ThumbnailTile* tile = FindTile( args.GetAssetFile() );
+    if ( tile )
     {
-      tile->SetThumbnail( *args.GetThumbnails().begin() );
-    }
-    else
-    {
-      // the extension is used to identify this type of file
-      std::string extension = FileSystem::GetExtension( args.GetAssetFile()->m_Path, 1 );
-      toLower( extension );
-
-      // look for a cached thumbnail for this extension
-      std::map<std::string, ThumbnailPtr>::const_iterator found = m_AssociatedIcons.find( extension );
-      if ( found != m_AssociatedIcons.end() )
-      {
-        // we got it, just share it
-        tile->SetThumbnail( found->second );
-      }
-      else // load the file associated icon from the shell
-      {
-        WORD index = 0;
-
-        // the win32 function below expects pretty paths
-        std::string win32;
-        FileSystem::Win32Name( args.GetAssetFile()->m_Path, win32 );
-
-        // get the icon resource for this example file
-        char path[MAX_PATH];
-        strcpy( path, win32.c_str() );
-        HICON icon = ExtractAssociatedIcon( NULL, path, &index );
-
-        // if we got the resource
-        if ( icon )
+        if ( !args.GetThumbnails().empty() )
         {
-          // check to see if its the fallback in shell32.dll
-          char file[MAX_PATH];
-          _splitpath( path, NULL, NULL, file, NULL );
+            tile->SetThumbnail( *args.GetThumbnails().begin() );
+        }
+        else
+        {
+            // the extension is used to identify this type of file
+            std::string extension = FileSystem::GetExtension( args.GetAssetFile()->GetFilePath(), 1 );
+            toLower( extension );
 
-          // if its windows' stub icon, don't bother using it
-          if ( stricmp( file, "SHELL32" ) )
-          {
-            // build a thumbnail texture from the icon resource
-            ThumbnailPtr thumb = new Thumbnail( &m_D3DManager );
-            if ( thumb->FromIcon( icon ) )
+            // look for a cached thumbnail for this extension
+            std::map<std::string, ThumbnailPtr>::const_iterator found = m_AssociatedIcons.find( extension );
+            if ( found != m_AssociatedIcons.end() )
             {
-              // cache it for re-use
-              m_AssociatedIcons[ extension ] = thumb;
+                // we got it, just share it
+                tile->SetThumbnail( found->second );
+            }
+            else // load the file associated icon from the shell
+            {
+                WORD index = 0;
 
-              // set this file's thumb
-              tile->SetThumbnail( thumb );
+                // the win32 function below expects pretty paths
+                std::string win32;
+                FileSystem::Win32Name( args.GetAssetFile()->GetFilePath(), win32 );
+
+                // get the icon resource for this example file
+                char path[MAX_PATH];
+                strcpy( path, win32.c_str() );
+                HICON icon = ExtractAssociatedIcon( NULL, path, &index );
+
+                // if we got the resource
+                if ( icon )
+                {
+                    // check to see if its the fallback in shell32.dll
+                    char file[MAX_PATH];
+                    _splitpath( path, NULL, NULL, file, NULL );
+
+                    // if its windows' stub icon, don't bother using it
+                    if ( stricmp( file, "SHELL32" ) )
+                    {
+                        // build a thumbnail texture from the icon resource
+                        ThumbnailPtr thumb = new Thumbnail( &m_D3DManager );
+                        if ( thumb->FromIcon( icon ) )
+                        {
+                            // cache it for re-use
+                            m_AssociatedIcons[ extension ] = thumb;
+
+                            // set this file's thumb
+                            tile->SetThumbnail( thumb );
+                        }
+                        else
+                        {
+                            // there is no decent associated icon, so juse use missing
+                            m_AssociatedIcons[ extension ] = m_TextureMissing;
+                        }
+                    }
+                }
+
+                // if we don't have a thumbnail use the fallback
+                if ( !tile->GetThumbnail() )
+                {
+                    tile->SetThumbnail( m_TextureMissing );
+                }
             }
-            else
-            {
-              // there is no decent associated icon, so juse use missing
-              m_AssociatedIcons[ extension ] = m_TextureMissing;
-            }
-          }
         }
 
-        // if we don't have a thumbnail use the fallback
-        if ( !tile->GetThumbnail() )
+        if ( IsVisible( tile ) )
         {
-          tile->SetThumbnail( m_TextureMissing );
+            Refresh();
         }
-      }
     }
-
-    if ( IsVisible( tile ) )
-    {
-      Refresh();
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2235,9 +2223,9 @@ void ThumbnailView::OnThumbnailLoaded( Luna::ThumbnailLoadedEvent& args )
 // 
 void ThumbnailView::OnBrowserFrameClosing( wxCloseEvent& args )
 {
-  args.Skip();
-  m_LoadManager.DetachFromWindow();
-  m_LoadManager.Cancel();
+    args.Skip();
+    m_LoadManager.DetachFromWindow();
+    m_LoadManager.Cancel();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2245,11 +2233,11 @@ void ThumbnailView::OnBrowserFrameClosing( wxCloseEvent& args )
 // 
 void ThumbnailView::OnReleaseResources( const DeviceStateArgs& args )
 {
-  DeleteResources();
+    DeleteResources();
 
-  // Our view is now corrupt, post a paint message and hopefully we can redraw
-  // during the next event update.
-  wxPostEvent( GetEventHandler(), wxPaintEvent() );
+    // Our view is now corrupt, post a paint message and hopefully we can redraw
+    // during the next event update.
+    wxPostEvent( GetEventHandler(), wxPaintEvent() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2257,5 +2245,5 @@ void ThumbnailView::OnReleaseResources( const DeviceStateArgs& args )
 // 
 void ThumbnailView::OnAllocateResources( const DeviceStateArgs& args )
 {
-  CreateResources();
+    CreateResources();
 }

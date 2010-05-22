@@ -6,212 +6,188 @@
 #include "API.h"
 #include "AssetFlags.h"
 #include "AssetVersion.h"
-#include "EngineType.h"
+#include "AssetType.h"
 
 #include "TUID/TUID.h"
 #include "Common/Container/OrderedSet.h"
+#include "Common/File/Path.h"
 #include "Attribute/Attribute.h" 
 #include "Attribute/AttributeCollection.h" 
+#include "File/Reference.h"
 
 #define REGEX_LEVEL_DIR "levels\\/(?:test\\/){0,1}([0-9a-zA-Z \\-_]+)?"
 
 namespace Asset
 {
-  class AssetClass;
-  typedef Nocturnal::SmartPtr< AssetClass > AssetClassPtr;
-  typedef std::vector< AssetClassPtr > V_AssetClass;
+    class AssetClass;
+    typedef Nocturnal::SmartPtr< AssetClass > AssetClassPtr;
+    typedef std::vector< AssetClassPtr > V_AssetClass;
 
-  typedef std::set<AssetClassPtr> S_AssetClass;
-  typedef Nocturnal::OrderedSet< Asset::AssetClassPtr > OS_AssetClass;
+    typedef std::set<AssetClassPtr> S_AssetClass;
+    typedef Nocturnal::OrderedSet< Asset::AssetClassPtr > OS_AssetClass;
 
-  // 
-  // Events and args for when an asset is classified.
-  // 
-  struct EngineTypeChangeArgs
-  {
-    const AssetClass* m_Asset;
-    EngineType m_PreviousEngineType;
+    // 
+    // Events and args for when an asset is classified.
+    // 
+    struct AssetTypeChangeArgs
+    {
+        const AssetClass* m_Asset;
+        AssetType m_PreviousAssetType;
+
+        AssetTypeChangeArgs( const AssetClass* asset, AssetType previousType )
+            : m_Asset( asset )
+            , m_PreviousAssetType( previousType )
+        {
+        }
+    };
+    typedef Nocturnal::Signature< void, const AssetTypeChangeArgs& > AssetTypeChangeSignature;
+
+
+    /////////////////////////////////////////////////////////////////////////////////
+    //
+    // The Definition of an Asset Class
+    //
+
+    class ASSET_API AssetClass NOC_ABSTRACT : public Attribute::AttributeCollection
+    {
+        //
+        // Member Data
+        //
+    private:
+
+        File::ReferencePtr m_AssetFileRef;
+
+        // description of this asset
+        std::string m_Description;
+
+        //
+        // RTTI
+        //
+
+    public:
+        REFLECT_DECLARE_ABSTRACT(AssetClass, AttributeCollection);
+
+        static void EnumerateClass( Reflect::Compositor<AssetClass>& comp );
+
+        //
+        // Member functions
+        //
+
+    public:
+        AssetClass();
+
+        static void SetBaseBuiltDirectory( const std::string& path )
+        {
+            s_BaseBuiltDirectory = path;
+        }
+
+        static AssetClassPtr LoadAssetClass( const std::string& path );
+        static AssetClassPtr LoadAssetClass( File::Reference& fileRef )
+        {
+            return LoadAssetClass( fileRef.GetPath() );
+        }
+
+        template <class T>
+        static Nocturnal::SmartPtr<T> LoadAssetClass( const std::string& path )
+        {
+            return Reflect::TryCast<T>( LoadAssetClass( path ) );
+        }
+
+        template <class T>
+        static Nocturnal::SmartPtr<T> LoadAssetClass( File::Reference& fileRef )
+        {
+            return Reflect::TryCast<T>( LoadAssetClass( fileRef.GetPath() ) );
+        }
+
+        void SetAssetFileRef( File::Reference& fileRef )
+        {
+            if ( m_AssetFileRef )
+            {
+                delete m_AssetFileRef;
+            }
+            
+            m_AssetFileRef = new File::Reference( fileRef );
+        }
+        File::ReferencePtr GetAssetFileRef()
+        {
+            return m_AssetFileRef;
+        }
+
+        Nocturnal::Path GetFilePath();
+        Nocturnal::Path GetDataDir();
+        Nocturnal::Path GetBuiltDirectory();
+
+        // x:\rcf\assets\entities\fruitBasketFromHell\appleSuccubus.entity.rb -> entities\fruitBasketFromHell\appleSuccubus.entity.rb
+        std::string GetFullName() const;
+
+        // x:\rcf\assets\entities\fruitBasketFromHell\appleSuccubus.entity.rb -> appleSuccubus
+        std::string GetShortName() const;
+
+        const std::string& GetDescription() const
+        {
+            return m_Description;
+        }
+        void SetDescription( const std::string& description )
+        {
+            m_Description = description;
+        }
     
-    EngineTypeChangeArgs( const AssetClass* asset, EngineType previousType )
-      : m_Asset( asset )
-      , m_PreviousEngineType( previousType )
-    {
-    }
-  };
-  typedef Nocturnal::Signature< void, const EngineTypeChangeArgs& > EngineTypeChangeSignature;
+        // AssetTypeInfo funcitons
+        static std::string GetAssetTypeName( const AssetType assetType );
+        static std::string GetAssetTypeBuilder( const AssetType AssetType );
+        static std::string GetAssetTypeIcon( const AssetType AssetType );
 
+        // configure this instance as the default instance of the derived class
+        virtual void MakeDefault() {}
 
-  /////////////////////////////////////////////////////////////////////////////////
-  //
-  // The Definition of an Asset Class
-  //
+        // we were changed by somebody, reclassify
+        virtual void AttributeChanged( const Attribute::AttributeBase* attr = NULL ) NOC_OVERRIDE;
 
-  class ASSET_API AssetClass NOC_ABSTRACT : public Attribute::AttributeCollection
-  {
-    //
-    // Member Data
-    //
+        // write to the location on disk backed by the file manager id
+        virtual void Serialize( const AssetVersionPtr &version = new AssetVersion () );
 
-  public:
-    // asset class's id in the file manager
-    tuid m_AssetClassID;
+        // add to or set an attribute in the collection
+        virtual void SetAttribute( const Attribute::AttributePtr& attr, bool validate = true ) NOC_OVERRIDE;
 
-    // description of this asset
-    std::string m_Description;
+        // remove attribute from a slot
+        virtual void RemoveAttribute( i32 typeID ) NOC_OVERRIDE;
 
-  private:
-    // the folder for our built data
-    mutable std::string m_ClassBuiltDirectory;
+        // Returns true by default. Override to specify more stringent requirements on the asset.
+        virtual bool ValidateClass( std::string& error ) const;
 
-    // the folder for our data?
-    mutable std::string m_ClassDataDirectory;
+        // validate the incoming attribute as ok to consume
+        virtual bool ValidateCompatible( const Attribute::AttributePtr &attr, std::string& error ) const NOC_OVERRIDE;
 
-    // unqiue name
-    mutable std::string m_FullName;
+        // callback when this AssetClass has finished loading off disk
+        virtual void LoadFinished();
 
-    // non-unqiue name
-    mutable std::string m_ShortName;
+        // can this asset type be built
+        virtual bool IsBuildable() const;
 
-    // the engine we have been classified as (invalidates upon changing)
-    mutable EngineType m_EngineType;
+        // can this asset type be viewed
+        virtual bool IsViewable() const;
 
-    //
-    // RTTI
-    //
+        // copy this asset and its attributes into the destination
+        virtual void CopyTo(const Reflect::ElementPtr& destination) NOC_OVERRIDE;
 
-  public:
-    REFLECT_DECLARE_ABSTRACT(AssetClass, AttributeCollection);
+        // classify the asset based on its type and its attributes
+        AssetType GetAssetType() const;
 
-    static void EnumerateClass( Reflect::Compositor<AssetClass>& comp );
+        static std::string s_BaseBuiltDirectory;
 
-    //
-    // Member functions
-    //
-
-  public:
-    AssetClass();
-
-    // useful paths
-    tuid GetFileID() const
-    {
-      return m_AssetClassID;
-    }
-    std::string GetFilePath() const;
-    virtual std::string GetBuiltDir() const;
-    std::string GetDataDir() const;
-
-    // x:\rcf\assets\entities\fruitBasketFromHell\appleSuccubus.entity.irb -> entities\fruitBasketFromHell\appleSuccubus.entity.irb
-    const std::string& GetFullName() const;
-
-    // x:\rcf\assets\entities\fruitBasketFromHell\appleSuccubus.entity.irb -> appleSuccubus
-    const std::string& GetShortName() const;
-
-    // Only for use with levels, movies and cinematics
-    // x:\rcf\assets\entities\fruitBasketFromHell\appleSuccubus.entity.irb -> fruitBasketFromHell\appleSuccubus
-    static std::string GetQualifiedName( const AssetClass* assetClass );
-
-    // the classified type for this asset class
-    virtual EngineType GetEngineType() const;
-    std::string GetEngineTypeName() const;
-
-    static void GetEngineTypeName( const Asset::AssetClass* assetClass, std::string& engineTypeName );
-
-    // EngineTypeInfo funcitons
-    static const std::string& GetEngineTypeBuilderDLL( const EngineType engineType );
-    static const std::string& GetEngineTypeIcon( const EngineType engineType );
-
-    // configure this instance as the default instance of the derived class
-    virtual void MakeDefault() {}
-
-    // we were changed by somebody, reclassify
-    virtual void AttributeChanged( const Attribute::AttributeBase* attr = NULL ) NOC_OVERRIDE;
-
-    // write to the location on disk backed by the file manager id
-    virtual void Serialize( const AssetVersionPtr &version = new AssetVersion () );
-
-    // add to or set an attribute in the collection
-    virtual void SetAttribute( const Attribute::AttributePtr& attr, bool validate = true ) NOC_OVERRIDE;
-
-    // remove attribute from a slot
-    virtual void RemoveAttribute( i32 typeID ) NOC_OVERRIDE;
-
-    // Returns true by default. Override to specify more stringent requirements on the asset.
-    virtual bool ValidateClass( std::string& error ) const;
-
-    // validate the incoming attribute as ok to consume
-    virtual bool ValidateCompatible( const Attribute::AttributePtr &attr, std::string& error ) const NOC_OVERRIDE;
-
-    // callback when this AssetClass has finished loading off disk
-    virtual void LoadFinished();
-
-    // can this asset type be built
-    virtual bool IsBuildable() const;
-
-    // can this asset type be viewed
-    virtual bool IsViewable() const;
-
-    // copy this asset and its attributes into the destination
-    virtual void CopyTo(const Reflect::ElementPtr& destination) NOC_OVERRIDE;
-
-    //
-    // Caching API, this holds instances in memory to keep the disk from thrashing during large builds
-    //
-
-    // init and cleanup
-    static void InitializeCache();
-    static void CleanupCache();
-
-    // invalidate a specific entry
-    static void InvalidateCache( tuid assetClassID );
-
-    // invalidate the entire cache
-    static void InvalidateCache();
-
-    static tuid FindAuthoritativeTuid( tuid assetClassID );
-    static AssetClassPtr FindAssetClass( tuid assetClassID, bool useCache = true );
-
-    template <class T>
-    static Nocturnal::SmartPtr<T> GetAssetClass( tuid assetClassID, bool useCache = true )
-    {
-      return Reflect::TryCast<T>( FindAssetClass( assetClassID, useCache ) );
-    }
-
-    template <class T>
-    static Nocturnal::SmartPtr<T> GetCachedAssetClass( tuid assetClassID )
-    {
-      return Reflect::TryCast<T>( FindAssetClass( assetClassID, true ) );
-    }
-
-    template <class T>
-    static Nocturnal::SmartPtr<T> GetSavedAssetClass( tuid assetClassID )
-    {
-      return Reflect::TryCast<T>( FindAssetClass( assetClassID, false ) );
-    }
-
-
-    //
-    // Classify API
-    //
-
-  private:
-    void Classify() const;
-    static EngineType Classify( const AssetClass* assetClass );
-
-    AssetClassPtr NearestEngineType( const Attribute::AttributeBase* addedAttribute = NULL );
-
-    // 
-    // Listeners
-    // 
-  private:
-    mutable EngineTypeChangeSignature::Event m_EngineTypeChanged;
-  public:
-    void AddEngineTypeChangedListener( const EngineTypeChangeSignature::Delegate& listener )
-    {
-      m_EngineTypeChanged.Add( listener );
-    }
-    void RemoveEngineTypeChangedListener( const EngineTypeChangeSignature::Delegate& listener )
-    {
-      m_EngineTypeChanged.Remove( listener );
-    }
-  };
+        // 
+        // Listeners
+        // 
+    private:
+        mutable AssetTypeChangeSignature::Event m_AssetTypeChanged;
+    public:
+        void AddAssetTypeChangedListener( const AssetTypeChangeSignature::Delegate& listener )
+        {
+            m_AssetTypeChanged.Add( listener );
+        }
+        void RemoveAssetTypeChangedListener( const AssetTypeChangeSignature::Delegate& listener )
+        {
+            m_AssetTypeChanged.Remove( listener );
+        }
+    };
 }

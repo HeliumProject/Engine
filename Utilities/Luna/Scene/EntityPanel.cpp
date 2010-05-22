@@ -12,7 +12,6 @@
 #include "Asset/ArtFileAttribute.h"
 #include "Asset/AssetClass.h"
 #include "FileSystem/FileSystem.h"
-#include "File/Manager.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ContentSpecs.h"
 #include "Console/Console.h"
@@ -108,7 +107,7 @@ bool SelectionHasSameAttribute(const OS_SelectableDumbPtr& selection, Attribute:
   return true;
 }
 
-bool IsEngineType( const OS_SelectableDumbPtr& selection, Asset::EngineTypes::EngineType engineType )
+bool IsAssetType( const OS_SelectableDumbPtr& selection, Asset::AssetTypes::AssetType assetType )
 {
   if ( selection.Empty() )
   {
@@ -122,7 +121,7 @@ bool IsEngineType( const OS_SelectableDumbPtr& selection, Asset::EngineTypes::En
     Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *itr );
     if ( entity && entity->GetClassSet() && entity->GetClassSet()->GetEntityAsset() )
     {
-      if ( entity->GetClassSet()->GetEntityAsset()->GetEngineType() != engineType )
+      if ( entity->GetClassSet()->GetEntityAsset()->GetAssetType() != assetType )
       {
         return false;
       }
@@ -206,12 +205,12 @@ EntityPanel::~EntityPanel()
   delete m_HighResShadowMapEnabler;
 }
 
-void EntityPanel::CreateEngineType()
+void EntityPanel::CreateAssetType()
 {
   m_Enumerator->PushContainer();
   {
     m_Enumerator->AddLabel( "Engine Type" );
-    Inspect::Value* textBox = m_Enumerator->AddValue<Luna::Entity, std::string>( m_Selection, &Luna::Entity::GetEngineTypeName, &Luna::Entity::SetEngineTypeName );
+    Inspect::Value* textBox = m_Enumerator->AddValue<Luna::Entity, std::string>( m_Selection, &Luna::Entity::GetAssetTypeName, &Luna::Entity::SetAssetTypeName );
     textBox->SetReadOnly( true );
   }
   m_Enumerator->Pop();
@@ -313,7 +312,7 @@ void EntityPanel::CreateClassActions()
       // get the entity class
       Asset::EntityAsset* entityClass = entity->GetClassSet()->GetEntityAsset();
 
-      if (entityClass && entityClass->GetEngineType() != Asset::EngineTypes::Null)
+      if (entityClass && entityClass->GetAssetType() != Asset::AssetTypes::Null)
       {
         buildable &= entityClass->IsBuildable();
         viewable &= entityClass->IsViewable();
@@ -435,7 +434,7 @@ void EntityPanel::CreateShowFlags()
 void EntityPanel::Create()
 {
   CreateApplicationType();
-  CreateEngineType(); 
+  CreateAssetType(); 
 
   CreateClassPath(); 
   CreateClassActions(); 
@@ -466,9 +465,6 @@ bool EntityPanel::OnEntityAssetChanging( const Inspect::ChangingArgs& args )
     // Make sure the file exists on disc
     if ( FileSystem::Exists( newValue ) )
     {
-      // Make sure the file can be resolved to a TUID
-      if ( File::GlobalManager().GetID( newValue ) != TUID::Null )
-      {
         // Make sure the file has the entity class extension
         std::string ext;
         FinderSpecs::Asset::ENTITY_DECORATION.Modify( ext );
@@ -476,7 +472,6 @@ bool EntityPanel::OnEntityAssetChanging( const Inspect::ChangingArgs& args )
         {
           result = true;
         }
-      }
     }
   }
   catch ( const Nocturnal::Exception& )
@@ -551,7 +546,6 @@ void EntityPanel::OnEntityAssetRefresh( Inspect::Button* button )
 
     if( entClassSet )
     {
-      Asset::AssetClass::InvalidateCache( entClassSet->GetEntityAssetID() );
       entClassSet->LoadAssetClass( );
     }
 
@@ -592,14 +586,14 @@ void EntityPanel::OnEntityAssetEditAsset( Inspect::Button* button )
 
 void EntityPanel::OnEntityAssetBuild( Inspect::Button* button )
 {
-  S_tuid assets;
+    File::S_Reference assets;
 
   OS_SelectableDumbPtr::Iterator selectionIter = m_Selection.Begin();
   OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
   for (; selectionIter != selectionEnd; ++selectionIter )
   {
     Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *selectionIter );
-    assets.insert( entity->GetClassSet()->GetEntityAssetID() );
+    assets.insert( entity->GetClassSet()->GetEntityAssetFileRef() );
   }
 
   bool showOptions = wxIsShiftDown();

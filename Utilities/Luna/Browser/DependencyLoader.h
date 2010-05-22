@@ -2,7 +2,7 @@
 
 #include "API.h"
 
-#include "TUID/TUID.h"
+#include "File/File.h"
 #include "UIToolKit/ThreadMechanism.h"
 
 namespace Luna
@@ -26,7 +26,7 @@ namespace Luna
 
   private:
     DependencyCollection* m_Collection;
-    S_tuid m_AssetIDs;
+    File::S_Reference m_AssetFileRefs;
   };
   
 }

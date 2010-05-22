@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "ApplicationPreferences.h"
 
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"

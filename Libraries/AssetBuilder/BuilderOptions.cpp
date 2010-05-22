@@ -20,7 +20,6 @@ void BuildRequest::EnumerateClass( Reflect::Compositor<BuildRequest>& comp )
 {
   Reflect::Field* fieldAssets = comp.AddField( &BuildRequest::m_Assets, "m_Assets" );
   Reflect::ElementField* elemOptions = comp.AddField( &BuildRequest::m_Options, "m_Options" );
-  Reflect::Field* fieldView = comp.AddField( &BuildRequest::m_View, "m_View" );
 }
 
   REFLECT_DEFINE_CLASS( ZoneBuilderOptions );

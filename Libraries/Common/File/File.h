@@ -8,7 +8,7 @@ namespace Nocturnal
   {
   public:
     File( const std::string& path = "" )
-      : m_ModTime( 0 )
+      : m_LastModTime( 0 )
     {
       m_Path.Set( path );
       Update();
@@ -27,28 +27,38 @@ namespace Nocturnal
       Update();
     }
 
-    Path& GetPath()
+    const Path& GetPath() const
     {
       return m_Path;
     }
 
-    bool Exists();
-    void MakePath();
-    void Create();
+    bool operator<( const File& rhs ) const
+    {
+        return m_Path < rhs.m_Path;
+    }
+
+    bool Exists() const;
+    bool MakePath();
+    bool Create();
     bool Copy( const std::string& target, bool overwrite = true );
     bool Move( const std::string& target );
     bool Delete();
 
-    bool GetAttributes( u32& attributes );
-    bool GetStats( struct _stat& stats );
-    bool GetStats64( struct _stati64& stats );
+    bool GetAttributes( u32& attributes ) const;
+    bool GetStats( struct _stat& stats ) const;
+    bool GetStats64( struct _stati64& stats ) const;
+
+    u64 GetCreatedTime();
+    u64 GetModifiedTime();
 
     u64 Size();
+    std::string SizeAsString();
 
-    bool IsWritable();
-    bool IsFile();
-    bool IsFolder();
-    bool HasChanged();
+    bool IsWritable() const;
+    bool IsFile() const;
+    bool IsFolder() const;
+    bool HasChanged() const;
+    bool HasChangedSince( u64 lastTime ) const;
 
     std::string CRC();
     bool VerifyCRC( const std::string &hashString );
@@ -58,6 +68,6 @@ namespace Nocturnal
 
   private:
     Path  m_Path;
-    i64   m_ModTime;
+    i64   m_LastModTime;
   };
 }

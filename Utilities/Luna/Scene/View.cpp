@@ -16,7 +16,7 @@
 #include "Statistics.h"
 #include "Tool.h"
 
-#include "Asset/EngineType.h"
+#include "Asset/AssetType.h"
 #include "Common/Exception.h"
 #include "Editor/Orientation.h"
 
@@ -59,7 +59,7 @@ D3DMATERIAL9 View::s_HighlightedMaterial;
 D3DMATERIAL9 View::s_UnselectableMaterial;
 D3DMATERIAL9 View::s_ComponentMaterial;
 D3DMATERIAL9 View::s_SelectedComponentMaterial;
-D3DMATERIAL9 View::s_EngineTypeMaterials[ Asset::EngineTypes::Count ];
+D3DMATERIAL9 View::s_AssetTypeMaterials[ Asset::AssetTypes::Count ];
 D3DMATERIAL9 View::s_RedMaterial;
 D3DMATERIAL9 View::s_YellowMaterial;
 D3DMATERIAL9 View::s_GreenMaterial;
@@ -123,36 +123,13 @@ void View::InitializeType()
   s_BlueMaterial.Diffuse = Luna::Color::BLACK;
   s_BlueMaterial.Specular = Luna::Color::BLACK;
   
-  ZeroMemory( s_EngineTypeMaterials, sizeof( s_EngineTypeMaterials ) );
-  for ( u32 i = 0; i < Asset::EngineTypes::Count; ++i )
+  ZeroMemory( s_AssetTypeMaterials, sizeof( s_AssetTypeMaterials ) );
+  for ( u32 i = 0; i < Asset::AssetTypes::Count; ++i )
   {
-    s_EngineTypeMaterials[ i ].Ambient = Luna::Color::BLACK;
-    s_EngineTypeMaterials[ i ].Diffuse = Luna::Color::BLACK;
-    s_EngineTypeMaterials[ i ].Specular = Luna::Color::BLACK;
+    s_AssetTypeMaterials[ i ].Ambient = Luna::Color::BLACK;
+    s_AssetTypeMaterials[ i ].Diffuse = Luna::Color::BLACK;
+    s_AssetTypeMaterials[ i ].Specular = Luna::Color::BLACK;
   }
-  
-  //
-  // Engine types likely to be encountered in the Scene Editor
-  //
-  s_EngineTypeMaterials[ Asset::EngineTypes::Foliage ].Ambient = Luna::Color::DARKGREEN;
-  s_EngineTypeMaterials[ Asset::EngineTypes::Foliage ].Diffuse = Luna::Color::BLACK;
-  s_EngineTypeMaterials[ Asset::EngineTypes::Foliage ].Specular = Luna::Color::BLACK;
-
-  s_EngineTypeMaterials[ Asset::EngineTypes::Moby ].Ambient = Luna::Color::RED;
-  s_EngineTypeMaterials[ Asset::EngineTypes::Moby ].Diffuse = Luna::Color::BLACK;
-  s_EngineTypeMaterials[ Asset::EngineTypes::Moby ].Specular = Luna::Color::BLACK;
-
-  s_EngineTypeMaterials[ Asset::EngineTypes::Shrub ].Ambient = Luna::Color::FORESTGREEN;
-  s_EngineTypeMaterials[ Asset::EngineTypes::Shrub ].Diffuse = Luna::Color::BLACK;
-  s_EngineTypeMaterials[ Asset::EngineTypes::Shrub ].Specular = Luna::Color::BLACK;
-
-  s_EngineTypeMaterials[ Asset::EngineTypes::Tie ].Ambient = Luna::Color::SKYBLUE;
-  s_EngineTypeMaterials[ Asset::EngineTypes::Tie ].Diffuse = Luna::Color::BLACK;
-  s_EngineTypeMaterials[ Asset::EngineTypes::Tie ].Specular = Luna::Color::BLACK;
-
-  s_EngineTypeMaterials[ Asset::EngineTypes::Ufrag ].Ambient = Luna::Color::ROYALBLUE;
-  s_EngineTypeMaterials[ Asset::EngineTypes::Ufrag ].Diffuse = Luna::Color::BLACK;
-  s_EngineTypeMaterials[ Asset::EngineTypes::Ufrag ].Specular = Luna::Color::BLACK;
 }
 
 void View::CleanupType()

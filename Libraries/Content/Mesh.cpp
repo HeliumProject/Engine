@@ -1,6 +1,5 @@
 #include "Mesh.h"
 #include "ContentVisitor.h" 
-#include "File/Manager.h"
 #include "Math/AlignedBox.h"
 #include "Math/CalculateBounds.h"
 #include "Math/Frustum.h"

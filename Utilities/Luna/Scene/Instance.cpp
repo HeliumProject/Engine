@@ -9,7 +9,6 @@
 
 #include "Console/Console.h"
 #include "Finder/ContentSpecs.h"
-#include "File/Manager.h"
 
 // Using
 using namespace Math;

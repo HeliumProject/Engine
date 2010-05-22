@@ -16,8 +16,6 @@ using namespace Inspect;
 // 
 FileBrowserButton::FileBrowserButton()
 : m_Title( "Open" )
-, m_IsTuidRequired( false )
-, m_RequestedFileID( TUID::Null )
 {
   SetIcon( "magnify_16.png" );
 
@@ -94,11 +92,6 @@ bool FileBrowserButton::Write()
 
     File::FileBrowser fileBrowser( parent, wxID_ANY, m_Title.c_str() );
     fileBrowser.SetFilter( filterStr.c_str() );
-    fileBrowser.SetTuidRequired( m_IsTuidRequired );
-    if ( m_IsTuidRequired )
-    {
-      fileBrowser.SetRequestedFileID( m_RequestedFileID );
-    }
 
     if ( fileBrowser.ShowModal() == wxID_OK )
     {
@@ -151,15 +144,6 @@ void FileBrowserButton::AddFilter( const std::string& filter )
   Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( filter ) );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Allows you to specify a file ID that should be used if the user selects
-// a file that is not in the resolver.
-// 
-void FileBrowserButton::SetRequestedFileID( const tuid& fileID )
-{
-  m_RequestedFileID = fileID;
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
@@ -194,11 +178,6 @@ void FileBrowserButton::SetPath( const std::string& path )
     WriteData( "" );
     m_Path.clear();
   }
-}
-
-void FileBrowserButton::SetTuidRequired( bool isRequired )
-{
-  m_IsTuidRequired = isRequired;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

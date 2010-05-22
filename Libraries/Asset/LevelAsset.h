@@ -25,17 +25,7 @@ namespace Asset
     bool        m_AutoBuildDefaultRegion;
     bool        m_IncludeGlobalReqs;
 
-    S_tuid      m_SkyAssets;
-
     float       m_DecalGeomMem;
-
-    tuid        m_DefaultCubeMap;
-    tuid        m_WaterCubeMap;
-
-    tuid        m_LightingZone;
-
-    tuid        m_CurveControl;
-    tuid        m_CurveControl_CRT;  // secondary optional curve control for CRT TVs
 
     Math::Vector3 m_ViewerStartingPosition;
     Math::Quaternion m_ViewerStartingRotation;
@@ -54,11 +44,6 @@ namespace Asset
       , m_AutoBuildDefaultRegion( true )
       , m_IncludeGlobalReqs( true )
       , m_DecalGeomMem( 1024.0f )
-      , m_DefaultCubeMap( TUID::Null )
-      , m_WaterCubeMap( TUID::Null )
-      , m_LightingZone( TUID::Null )
-      , m_CurveControl( TUID::Null )
-      , m_CurveControl_CRT( TUID::Null ) 
     {
     }
 
@@ -68,8 +53,6 @@ namespace Asset
 
     virtual bool IsBuildable() const NOC_OVERRIDE;
     virtual bool IsViewable() const NOC_OVERRIDE;
-
-		virtual std::string GetBuiltDir() const;
 
     void MakeDefault();
 

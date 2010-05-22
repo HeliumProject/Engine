@@ -11,11 +11,10 @@
 
 #include "Finder/FinderSpec.h"
 
-#include "TUID/TUID.h"
 #include "Common/Types.h"
 
-#include "FileInfo.h"
 #include "FileBrowserGenerated.h"
+#include "FileInfo.h"
 
 namespace File
 {
@@ -148,19 +147,9 @@ namespace File
     void SetFilterIndex( int filterIndex );
     void SetFilterIndex( const Finder::FinderSpec& spec );
 
-    bool IsTuidRequired() const;
-    void SetTuidRequired( bool isRequired = true );
-
-    void SetRequestedFileID( const tuid& request );
-
     void EnableMultipleSelection( bool enable = true );
     void DisableMultipleSelection() { EnableMultipleSelection( false ); }
     bool IsMultipleSelectionEnabled() const;
-
-
-    tuid GetFileID() const;
-    const S_tuid& GetFileIDs() const;
-
 
     void ShowDialogButtons( bool show = true );
     void HideDialogButtons();
@@ -279,12 +268,7 @@ namespace File
     inline void BeginSearchEvent();
     inline void EndSearchEvent();
     
-    void SearchByTUID();
-
-    void FindManagedFilesByHistory( const std::string& searchQuery, const std::string& modifiedBy, const std::string& operation = "%", bool searchHistoryData = false );
-
     void SearchManagedFiles();
-    void SearchByHistoryData();
     void FindManagedFiles( const std::string& searchQuery );
 
     void SearchFilesOnDisk();
@@ -301,11 +285,6 @@ namespace File
 
     int                       m_ReturnCode;
     S_string                  m_Paths;
-
-    bool                      m_IsTuidRequired;
-    S_tuid                    m_FileIDs; 
-
-    tuid                      m_RequestedFileID;
 
     bool                      m_IsLookInUserDefined;
     OS_Filter                 m_Filters;

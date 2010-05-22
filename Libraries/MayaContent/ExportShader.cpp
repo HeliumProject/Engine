@@ -2,7 +2,6 @@
 #include "ExportShader.h"
 #include "MayaContentCmd.h"
 
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 
 using namespace MayaContent;
@@ -47,21 +46,21 @@ void ExportShader::GatherMayaData( V_ExportBase &newExportObjects )
     {
     case MFn::kFileTexture:
       {
-        MString l_TexturePath;
-        MPlug	l_TextureFilePathPlug = l_NodeFn.findPlug("fileTextureName");
-        l_TextureFilePathPlug.getValue(l_TexturePath);
+        //MString l_TexturePath;
+        //MPlug	l_TextureFilePathPlug = l_NodeFn.findPlug("fileTextureName");
+        //l_TextureFilePathPlug.getValue(l_TexturePath);
 
-        if (FileSystem::Exists(l_TexturePath.asChar()))
-        {
-          try
-          {
-            contentShader->m_BaseTextureFileID = File::GlobalManager().Add( l_TexturePath.asChar() );
-          }
-          catch ( const File::Exception& e )
-          {
-            Console::Warning("Unable to add file '%s' to the file manager.\nReason: %s\n\n", l_TexturePath.asChar(), e.what() );
-          }
-        }
+        //if (FileSystem::Exists(l_TexturePath.asChar()))
+        //{
+        //  try
+        //  {
+        //    contentShader->m_BaseTextureFileID = File::GlobalManager().Add( l_TexturePath.asChar() );
+        //  }
+        //  catch ( const File::Exception& e )
+        //  {
+        //    Console::Warning("Unable to add file '%s' to the file manager.\nReason: %s\n\n", l_TexturePath.asChar(), e.what() );
+        //  }
+        //}
       }
       break;
 

@@ -39,7 +39,6 @@ namespace MayaContent
       Content::AnimationClipPtr clip = new Content::AnimationClip();
 
       clip->m_SkeletonID = skeletonID;
-      clip->m_OptionalEntityID = TUID::Null;
       clip->m_ActorName = "";
 
       m_ContentObject = clip;

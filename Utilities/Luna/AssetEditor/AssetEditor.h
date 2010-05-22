@@ -108,7 +108,6 @@ namespace Luna
     // Helper functions
     // 
   private:
-    AssetDocument* RunCreateAssetWizard( ::AssetManager::CreateAssetWizard& wizard );
     bool ToClipboard( const Inspect::ReflectClipboardDataPtr& clipboardData );
     Inspect::ReflectClipboardDataPtr FromClipboard();
     void UpdateUIElements();
@@ -144,7 +143,6 @@ namespace Luna
     void OnMoveUp( wxCommandEvent& args );
     void OnMoveDown( wxCommandEvent& args );
     void OnBuild( wxCommandEvent& args );
-    void OnExport( wxCommandEvent& args );
     void OnFileOption( wxCommandEvent& args );
     void OnHelpIndex( wxCommandEvent& args );
     void OnHelpSearch( wxCommandEvent& args );

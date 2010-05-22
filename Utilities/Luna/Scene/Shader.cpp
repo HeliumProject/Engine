@@ -33,10 +33,7 @@ Shader::Shader( Luna::Scene* scene, Content::Shader* shader )
 , m_BaseTextureSize (0)
 , m_BaseTexture ( NULL )
 {
-  if ( !shader->GetBaseTextureFilePath().empty() )
-  {
-    LoadTexture();
-  }
+#pragma TODO( "load up an appropriate texture file" )
 }
 
 i32 Shader::GetImageIndex() const
@@ -84,19 +81,21 @@ IDirect3DTexture9* Shader::GetBaseTexture() const
 
 bool Shader::LoadTexture()
 {
-  Content::Shader* shader = GetPackage< Content::Shader >();
-  NOC_ASSERT( shader );
+#pragma TODO( "reimplement" )
+  //Content::Shader* shader = GetPackage< Content::Shader >();
+  //NOC_ASSERT( shader );
 
-  const std::string& file = shader->GetBaseTextureFilePath();
-  if (!file.empty())
-  {
-    if ( FileSystem::Exists( file ) )
-    {
-      m_BaseTexture = Luna::LoadTexture( m_Scene->GetView()->GetDevice(), file, &m_BaseTextureSize, &m_Alpha );
+  //const std::string& file = shader->GetBaseTextureFilePath();
+  //if (!file.empty())
+  //{
+  //  if ( FileSystem::Exists( file ) )
+  //  {
+  //    m_BaseTexture = Luna::LoadTexture( m_Scene->GetView()->GetDevice(), file, &m_BaseTextureSize, &m_Alpha );
 
-      Profile::Memory::Allocate( g_ShaderTextureMemoryPool, m_BaseTextureSize );
-    }
-  }
+  //    Profile::Memory::Allocate( g_ShaderTextureMemoryPool, m_BaseTextureSize );
+  //  }
+  //}
 
-  return m_BaseTexture != NULL;
+  //return m_BaseTexture != NULL;
+    return false;
 }

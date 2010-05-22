@@ -62,7 +62,7 @@ namespace Luna
 
     void GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders );
 
-    static bool IsPreviewable( const Asset::AssetFile* file );
+    static bool IsPreviewable( Asset::AssetFile* file );
 
     Browser* GetBrowser() { return m_Browser; }
 
@@ -92,7 +92,6 @@ namespace Luna
     void OnCheckOut( wxCommandEvent& event );
     void OnRevisionHistory( wxCommandEvent& event );
     void OnCopyPath( wxCommandEvent& event );
-    void OnCopyFileID( wxCommandEvent& event );
     void OnShowInFolders( wxCommandEvent& event );
     void OnShowInPerforce( wxCommandEvent& event );
     void OnShowInWindowsExplorer( wxCommandEvent& event );
@@ -105,8 +104,6 @@ namespace Luna
     void OnCut( wxCommandEvent& args );
     void OnCopy( wxCommandEvent& args );
     void OnPaste( wxCommandEvent& args );
-    //void OnRename( wxCommandEvent& args );
-    void OnDelete( wxCommandEvent& args );
 
     void OnPreferences( wxCommandEvent& event );
 

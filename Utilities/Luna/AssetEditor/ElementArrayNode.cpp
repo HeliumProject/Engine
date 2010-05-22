@@ -6,7 +6,6 @@
 #include "PersistentNode.h"
 
 #include "Common/String/Tokenize.h"
-#include "File/Manager.h"
 #include "Console/Console.h"
 #include "Reflect/ElementArraySerializer.h"
 #include "TUID/TUID.h"

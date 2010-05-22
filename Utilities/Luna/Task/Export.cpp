@@ -11,7 +11,6 @@
 
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
-#include "File/Manager.h"
 
 #include "Dependencies/Dependencies.h"
 

@@ -16,8 +16,8 @@ static const char* s_SQLErrorMsgFormat = "%s: %s [%s %d] -- %s";
 DBManager::DBManager( const char* friendlyName )
 : m_IsTransOpen( false )
 , m_NumStmtHandles( 0 )
+, m_FriendlyName( friendlyName )
 {
-  strcpy( m_FriendlyName, friendlyName );
 }
 
 DBManager::~DBManager()

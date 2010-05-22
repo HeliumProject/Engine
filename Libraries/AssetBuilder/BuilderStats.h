@@ -38,6 +38,6 @@ namespace BuilderStats
   void Initialize();
   void Cleanup();
 
-  bool AddBuild( tuid fileID, Asset::EngineType engineType, const std::string& builderName, f32 duration );
-  bool AddTopLevelBuild( tuid fileID, Asset::EngineType engineType, TopLevelBuild& topLevelBuild );
+  bool AddBuild( File::Reference& fileRef, Asset::AssetType assetType, const std::string& builderName, f32 duration );
+  bool AddTopLevelBuild( File::Reference& fileRef, Asset::AssetType assetType, TopLevelBuild& topLevelBuild );
 }

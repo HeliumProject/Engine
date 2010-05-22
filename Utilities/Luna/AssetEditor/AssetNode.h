@@ -5,7 +5,7 @@
 #include "Editor/ContextMenuGenerator.h"
 #include "Core/Selectable.h"
 #include "Undo/Command.h"
-#include "TUID/TUID.h"
+#include "File/File.h"
 
 namespace Inspect
 {
@@ -201,7 +201,7 @@ namespace Luna
     virtual bool RearrangeChildren( Luna::AssetNode* child, Luna::AssetNode* beforeSibling );
     virtual bool CanAddChild( Luna::AssetNode* child ) const;
     virtual Undo::CommandPtr DeleteSelectedChildren();
-    virtual void GetExportFiles( S_tuid& fileIDs ) const;
+    virtual void GetExportFiles( File::S_Reference& files ) const;
 
     virtual Luna::AssetClass* GetAssetClass() const;
     Luna::AssetNode* GetParent() const;

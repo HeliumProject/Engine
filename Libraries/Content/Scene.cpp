@@ -11,7 +11,6 @@
 #include "Console/Console.h"
 
 #include "FileSystem/FileSystem.h"
-#include "File/Manager.h"
 
 #include "Finder/Finder.h"
 #include "Finder/ContentSpecs.h"
@@ -28,7 +27,6 @@
 
 using Nocturnal::Insert; 
 using namespace Reflect;
-using namespace File;
 using namespace Finder;
 using namespace Math;
 using namespace Asset;
@@ -48,12 +46,6 @@ namespace Content
     : m_MorphTargetData( new MorphTargetData() )
   {
 
-  }
-
-  Scene::Scene( tuid fileID )
-    : m_MorphTargetData( new MorphTargetData() )
-  {
-    Load( fileID );
   }
 
   Scene::Scene( const std::string &filePath )
@@ -174,12 +166,6 @@ namespace Content
     m_NodeAddedSignature.Raise( NodeAddedArgs( *node ) );
   }
 
-  void Scene::Load( tuid fileID )
-  {
-    Reflect::V_Element elements;
-    Load( fileID, elements );
-  }
-
   void Scene::Load( const std::string &filePath )
   {
     Reflect::V_Element elements;
@@ -269,17 +255,6 @@ namespace Content
 
     CalculateJointOrdering();
     m_MorphTargetData->CollateMorphTargets( m_Meshes );
-  }
-
-  void Scene::Load( tuid fileID, Reflect::V_Element& elements, Reflect::StatusHandler* status )
-  {
-    std::string filePath;
-    if ( !File::GlobalManager().GetPath( fileID, filePath ) )
-    {
-      throw Nocturnal::Exception( "Could not locate a content scene with id: "TUID_HEX_FORMAT, fileID );
-    }
-
-    Load( filePath, elements, status );
   }
 
   ShaderPtr Scene::GetShader( const MeshPtr &mesh, u32 triIndex )

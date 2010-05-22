@@ -15,7 +15,6 @@
 #include "Common/Environment.h"
 #include "Common/Exception.h"
 #include "Editor/SessionManager.h"
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/ProjectSpecs.h"
@@ -180,10 +179,9 @@ void Browser::OnDocumentChange( const DocumentManagerChangeArgs& args )
       if ( manager->GetCurrentLevel() )
       {
         std::string name = manager->GetCurrentLevel()->GetShortName();
-        const tuid rootID = manager->GetCurrentLevel()->GetFileID();
 
         DependencyCollection* collection = Reflect::ObjectCast<DependencyCollection>( m_CollectionManager->FindCollection( name ) );
-        if ( collection && collection->GetRootID() == rootID )
+        if ( collection && collection->GetFileReference().GetHash() == manager->GetCurrentLevel()->GetAssetFileRef()->GetHash() )
         {
           collection->LoadDependencies();
         }
@@ -192,7 +190,7 @@ void Browser::OnDocumentChange( const DocumentManagerChangeArgs& args )
           m_CollectionManager->GetUniqueName( name, name.c_str() );
 
           DependencyCollectionPtr collection = new DependencyCollection( name, AssetCollectionFlags::Temporary );
-          collection->SetRootID( rootID );
+          collection->SetRoot( *(manager->GetCurrentLevel()->GetAssetFileRef()) );
             
           if ( m_CollectionManager->AddCollection( collection ) )
           {

@@ -32,8 +32,6 @@ namespace Inspect
     void          SetFilter( const V_string& filter );
     void          AddFilter( const std::string& filter );
 
-    void          SetRequestedFileID( const tuid& fileID );
-
     std::string   GetPath();
 
   protected:
@@ -50,9 +48,6 @@ namespace Inspect
     std::string         m_Path;         // The path to start the file browser in, can contain file name
 
     S_string            m_Filters;      // The filter for which file types to show in the file browser dialog (defaults to "All Files (*.*)|*.*")
-
-    bool                m_IsTuidRequired;
-    tuid                m_RequestedFileID;
   };
 
   typedef Nocturnal::SmartPtr<FileBrowserButton> FileBrowserButtonPtr;

@@ -2,10 +2,11 @@
 #include "FileDialogButton.h"
 
 #include "Inspect/Canvas.h"
+#include "File/File.h"
 #include "FileSystem/FileSystem.h"
-#include "FileUI/ManagedFileDialog.h"
 #include "Finder/Finder.h"
-#include "Common/Container/Insert.h" 
+#include "Common/Container/Insert.h"
+#include "UIToolKit/FileDialog.h"
 
 // Using
 using namespace File;
@@ -16,8 +17,6 @@ using namespace Inspect;
 // 
 FileDialogButton::FileDialogButton()
 : m_Title( "Open" )
-, m_IsTuidRequired( false )
-, m_RequestedFileID( TUID::Null )
 {
   Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( "All files (*.*)|*.*" ) );
 
@@ -89,12 +88,8 @@ bool FileDialogButton::Write()
 
     wxWindow* parent = GetCanvas() ? GetCanvas()->GetControl() : NULL;
 
-    File::ManagedFileDialog fileDialog( parent, m_Title.c_str(), GetPath().c_str(), "", filterStr.c_str(), UIToolKit::FileDialogStyles::DefaultOpen );
-    fileDialog.SetTuidRequired( m_IsTuidRequired );
-    if ( m_IsTuidRequired )
-    {
-      fileDialog.SetRequestedFileID( m_RequestedFileID );
-    }
+    UIToolKit::FileDialog fileDialog( parent, m_Title.c_str(), GetPath().c_str(), "", filterStr.c_str(), UIToolKit::FileDialogStyles::DefaultOpen );
+
     if ( fileDialog.ShowModal() == wxID_OK )
     {
       std::string path = fileDialog.GetPath().c_str();
@@ -148,15 +143,6 @@ void FileDialogButton::AddFilter( const std::string& filter )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Allows you to specify a file ID that should be used if the user selects
-// a file that is not in the resolver.
-// 
-void FileDialogButton::SetRequestedFileID( const tuid& fileID )
-{
-  m_RequestedFileID = fileID;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // 
 // 
 std::string FileDialogButton::GetPath()
@@ -189,11 +175,6 @@ void FileDialogButton::SetPath( const std::string& path )
     WriteData( "" );
     m_Path.clear();
   }
-}
-
-void FileDialogButton::SetTuidRequired( bool isRequired )
-{
-  m_IsTuidRequired = isRequired;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

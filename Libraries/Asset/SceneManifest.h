@@ -3,13 +3,14 @@
 #include "API.h"
 
 #include "AssetManifest.h"
+#include "File/File.h"
 
 namespace Asset
 {
   class ASSET_API SceneManifest : public AssetManifest
   {
   public:
-    S_tuid m_Assets;
+      File::S_Reference m_Assets;
 
     REFLECT_DECLARE_CLASS(SceneManifest, AssetManifest);
 

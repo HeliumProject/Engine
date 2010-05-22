@@ -268,6 +268,9 @@ namespace Luna
     // file
     SceneDocumentPtr m_File;
 
+    // id
+    UniqueID::TUID m_Id;
+
     // load
     i32 m_Progress;
     UniqueID::HM_TUID m_RemappedIDs;
@@ -350,6 +353,11 @@ namespace Luna
     Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file );
     ~Scene();
 
+    UniqueID::TUID GetId() const
+    {
+        return m_Id;
+    }
+
     // is this the current scene in the editor?
     bool IsCurrent();
 
@@ -371,7 +379,6 @@ namespace Luna
     // Path to the file that this scene is currently editing
     const std::string& GetFileName() const;
     const std::string& GetFullPath() const;
-    tuid GetFileID() const;
     SceneDocument* GetSceneDocument() const;
 
     // get the current tool in use in this scene

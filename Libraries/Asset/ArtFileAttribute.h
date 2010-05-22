@@ -15,23 +15,19 @@ namespace Asset
     static const Finder::FinderSpec& s_FileFilter;
 
   public:
-    tuid  m_FileID;
     std::string m_FragmentNode;
     Math::Vector3 m_Extents;
     Math::Vector3 m_Offset;
     Math::Vector3 m_Minima;
     Math::Vector3 m_Maxima;
 
-    ArtFileAttribute( tuid fileID = TUID::Null )
-      : m_FileID( fileID )
+    ArtFileAttribute()
     {
     }
 
     virtual ~ArtFileAttribute() {}
     virtual Attribute::AttributeUsage GetAttributeUsage() const NOC_OVERRIDE;
 
-    virtual tuid GetFileID() const NOC_OVERRIDE;
-    virtual void SetFileID( const tuid& fileID ) NOC_OVERRIDE;
     virtual const Finder::FinderSpec* GetFileFilter() const NOC_OVERRIDE;
 
     REFLECT_DECLARE_CLASS( ArtFileAttribute, FileBackedAttribute );

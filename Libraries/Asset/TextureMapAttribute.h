@@ -48,7 +48,6 @@ namespace Asset
     static const Finder::FinderSpec& s_FileFilter;
 
   public:
-    tuid              m_FileID;
     ReductionRatio    m_ReductionRatio;
     MipGenFilterType  m_MipGenFilter;
     PostMipFilterType m_PostMipFilter;
@@ -58,8 +57,7 @@ namespace Asset
     bool              m_IsTextureDirty; // Not serialized - indicates if texture needs to be resent for real-time update
 
     TextureMapAttribute( tuid fileID = TUID::Null )
-      : m_FileID( fileID )
-      , m_ReductionRatio( ReductionRatios::ONE_ONE )
+      : m_ReductionRatio( ReductionRatios::ONE_ONE )
       , m_MipGenFilter( MipGenFilterTypes::MIP_SINC )
       , m_PostMipFilter( PostMipFilterTypes::POST_HIGH_PASS )
       , m_MipBias( 0.0f )
@@ -73,8 +71,6 @@ namespace Asset
     virtual Attribute::AttributeCategoryType GetCategoryType() const NOC_OVERRIDE;
     virtual bool ShouldRebuildTexture( const TextureMapAttribute* oldAttrib ) const;
 
-    virtual tuid GetFileID() const NOC_OVERRIDE;
-    virtual void SetFileID( const tuid& fileID ) NOC_OVERRIDE;
     virtual const Finder::FinderSpec* GetFileFilter() const NOC_OVERRIDE;
     bool IsTextureDirty() const;
     void SetTextureDirty( bool dirty = true );

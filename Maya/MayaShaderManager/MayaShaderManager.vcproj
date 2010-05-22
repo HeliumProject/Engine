@@ -242,20 +242,12 @@
 			RelativePathToProject=".\libraries\MayaUtils\MayaUtils.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{F6D24E52-7ADD-459E-8E7F-FDD20A0E6CAF}"
-			RelativePathToProject=".\libraries\AssetManager\AssetManager.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
 			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{0E85A01E-6BFC-4DF8-BE0D-5F6FAB8AF587}"
 			RelativePathToProject=".\Maya\MayaCore\MayaCore.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{4AF12ED6-2980-4C1F-8918-F11846719FB3}"
-			RelativePathToProject=".\Libraries\FileUI\FileUI.vcproj"
 		/>
 	</References>
 	<Files>

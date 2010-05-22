@@ -3,7 +3,6 @@
 
 #include "DirectoryCtrl.h"
 
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "Inspect/ClipboardDataObject.h"
 #include "Inspect/ClipboardFileList.h"
@@ -151,44 +150,6 @@ wxDragResult FoldersPanel::DragOver( const Inspect::DragArgs& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool FoldersPanel::GetAssetIDsFromClipBoard( Inspect::ReflectClipboardData* clipboardData, S_tuid& assetIDs, std::string& lastAssetName )
-{
-  bool ok = true;
-  if ( clipboardData->HasType( Reflect::GetType< Inspect::ClipboardFileList >() ) )
-  {
-    Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( clipboardData );
-    if ( fileList.ReferencesObject() )
-    {
-      S_string::const_iterator fileItr = fileList->GetFilePaths().begin();
-      S_string::const_iterator fileEnd = fileList->GetFilePaths().end();
-      for ( ; fileItr != fileEnd; ++fileItr )
-      {
-        const std::string& filePath = (*fileItr);
-
-        File::ManagedFilePtr managedFile = File::GlobalManager().GetManagedFile( filePath );
-        if ( managedFile )
-        {
-          Asset::AssetFilePtr assetFile = new Asset::AssetFile( managedFile );
-          assetIDs.insert( assetFile->GetFileID() );
-        }
-        else
-        {
-          ok = false;
-        }
-      }
-    }
-
-    if ( !fileList->GetFilePaths().empty() )
-    {
-      lastAssetName = *(fileList->GetFilePaths().begin());
-      lastAssetName = FileSystem::GetLeaf( lastAssetName );
-    }
-  }
-
-  return ok;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Callback for when items are dropped onto the tree.
 // 
 wxDragResult FoldersPanel::Drop( const Inspect::DragArgs& args )
@@ -197,69 +158,71 @@ wxDragResult FoldersPanel::Drop( const Inspect::DragArgs& args )
   
   wxDragResult result = wxDragNone;
 
+#pragma TODO( "reimplement using File::References" )
+
   // get the IDs
-  std::string assetName;
-  S_tuid assetIDs;
-  bool gotAllAssetIds = GetAssetIDsFromClipBoard( args.m_ClipboardData->FromBuffer(), assetIDs, assetName );
+  //std::string assetName;
+  //S_tuid assetIDs;
+  //bool gotAllAssetIds = GetAssetIDsFromClipBoard( args.m_ClipboardData->FromBuffer(), assetIDs, assetName );
 
-  if ( !assetIDs.empty() )
-  {
-    wxTreeItemId item = DragHitTest( treeCtrl, wxPoint( args.m_X, args.m_Y ) );
-    if ( item.IsOk() )
-    {
-      //AssetCollectionItemData* baseData = GetItemData( treeCtrl, item );
-      //if ( baseData )
-      //{
-      //  AssetCollection* collection = baseData->GetCollection<AssetCollection>();
-      //  if ( collection && collection->CanHandleDragAndDrop() )
-      //  {
-      //    if ( collection->GetType() == Reflect::GetType< Luna::DependencyCollection >() )
-      //    {
-      //      if ( assetIDs.size() == 1 )
-      //      {
-      //        tuid assetID = (*assetIDs.begin());
-      //        DependencyCollection* dependencyCollection = Reflect::ObjectCast<DependencyCollection>( collection );
-      //        if ( dependencyCollection->GetRootID() != assetID  )
-      //        {
-      //          std::string warning = "Are you sure you'd like to change the existing asset from\n";
-      //          warning += dependencyCollection->GetAssetName() + " to ";
-      //          warning += assetName + "?";
+  //if ( !assetIDs.empty() )
+  //{
+  //  wxTreeItemId item = DragHitTest( treeCtrl, wxPoint( args.m_X, args.m_Y ) );
+  //  if ( item.IsOk() )
+  //  {
+  //    //AssetCollectionItemData* baseData = GetItemData( treeCtrl, item );
+  //    //if ( baseData )
+  //    //{
+  //    //  AssetCollection* collection = baseData->GetCollection<AssetCollection>();
+  //    //  if ( collection && collection->CanHandleDragAndDrop() )
+  //    //  {
+  //    //    if ( collection->GetType() == Reflect::GetType< Luna::DependencyCollection >() )
+  //    //    {
+  //    //      if ( assetIDs.size() == 1 )
+  //    //      {
+  //    //        tuid assetID = (*assetIDs.begin());
+  //    //        DependencyCollection* dependencyCollection = Reflect::ObjectCast<DependencyCollection>( collection );
+  //    //        if ( dependencyCollection->GetRootID() != assetID  )
+  //    //        {
+  //    //          std::string warning = "Are you sure you'd like to change the existing asset from\n";
+  //    //          warning += dependencyCollection->GetAssetName() + " to ";
+  //    //          warning += assetName + "?";
 
-      //          if ( ( dependencyCollection->GetRootID() == TUID::Null )
-      //            || ( wxYES == 
-      //            wxMessageBox( warning,
-      //            "Replace Existing Asset?", 
-      //            wxCENTER | wxYES_NO | wxICON_WARNING,
-      //            this ) ) )
-      //          {
-      //            FileSystem::StripExtension( assetName );
-      //            m_CollectionManager->GetUniqueName( assetName, assetName.c_str() );
+  //    //          if ( ( dependencyCollection->GetRootID() == TUID::Null )
+  //    //            || ( wxYES == 
+  //    //            wxMessageBox( warning,
+  //    //            "Replace Existing Asset?", 
+  //    //            wxCENTER | wxYES_NO | wxICON_WARNING,
+  //    //            this ) ) )
+  //    //          {
+  //    //            FileSystem::StripExtension( assetName );
+  //    //            m_CollectionManager->GetUniqueName( assetName, assetName.c_str() );
 
-      //            dependencyCollection->IsLoading( true );
-      //            dependencyCollection->SetName( assetName );
+  //    //            dependencyCollection->IsLoading( true );
+  //    //            dependencyCollection->SetName( assetName );
 
-      //            dependencyCollection->Freeze();
+  //    //            dependencyCollection->Freeze();
 
-      //            std::string filePath;
-      //            AssetCollection::CreateFilePath( assetName, filePath );
-      //            dependencyCollection->SetFilePath( filePath );
+  //    //            std::string filePath;
+  //    //            AssetCollection::CreateFilePath( assetName, filePath );
+  //    //            dependencyCollection->SetFilePath( filePath );
 
-      //            dependencyCollection->SetRootID( assetID );
-      //            dependencyCollection->LoadDependencies();
-      //            dependencyCollection->Thaw();
-      //          }
+  //    //            dependencyCollection->SetRootID( assetID );
+  //    //            dependencyCollection->LoadDependencies();
+  //    //            dependencyCollection->Thaw();
+  //    //          }
 
-      //        }
-      //      }
-      //    }
-      //    else
-      //    {
-      //      collection->AddAssetIDs( assetIDs );
-      //    }
-      //  }
-      //}
-    }
-  }
+  //    //        }
+  //    //      }
+  //    //    }
+  //    //    else
+  //    //    {
+  //    //      collection->AddAssetIDs( assetIDs );
+  //    //    }
+  //    //  }
+  //    //}
+  //  }
+  //}
 
   if ( m_DragOverItem.IsOk() )
   {
@@ -267,10 +230,10 @@ wxDragResult FoldersPanel::Drop( const Inspect::DragArgs& args )
     m_DragOverItem.Unset();
   }
 
-  if ( !gotAllAssetIds )
-  {
-    wxMessageBox( "Some files could not be added to your collection", "Error", wxCENTER | wxOK | wxICON_ERROR, this );
-  }
+  //if ( !gotAllAssetIds )
+  //{
+  //  wxMessageBox( "Some files could not be added to your collection", "Error", wxCENTER | wxOK | wxICON_ERROR, this );
+  //}
 
   return result;
 }

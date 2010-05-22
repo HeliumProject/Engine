@@ -12,7 +12,6 @@
 #include "Asset/TextureMapAttribute.h"
 
 #include "Common/String/Natural.h"
-#include "File/Manager.h"
 #include "Editor/Editor.h"
 #include "Inspect/Button.h"
 #include "Inspect/Container.h"
@@ -30,37 +29,37 @@ LUNA_DEFINE_TYPE( Luna::ShaderAsset );
 class ShaderConvertHelper : public Luna::Object
 {
 private:
-  const Reflect::Class* m_ShaderType;
-  Luna::ShaderAsset* m_Shader;
-  Luna::AssetManager* m_AssetManager;
+    const Reflect::Class* m_ShaderType;
+    Luna::ShaderAsset* m_Shader;
+    Luna::AssetManager* m_AssetManager;
 
 public:
-  LUNA_DECLARE_TYPE( ShaderConvertHelper, Luna::Object );
-  ShaderConvertHelper( const Reflect::Class* shaderType, Luna::ShaderAsset* shader, Luna::AssetManager* manager ) 
-    : m_ShaderType( shaderType )
-    , m_Shader( shader )
-    , m_AssetManager( manager )
-  {
-  }
+    LUNA_DECLARE_TYPE( ShaderConvertHelper, Luna::Object );
+    ShaderConvertHelper( const Reflect::Class* shaderType, Luna::ShaderAsset* shader, Luna::AssetManager* manager ) 
+        : m_ShaderType( shaderType )
+        , m_Shader( shader )
+        , m_AssetManager( manager )
+    {
+    }
 
-  virtual ~ShaderConvertHelper() 
-  {
-  }
+    virtual ~ShaderConvertHelper() 
+    {
+    }
 
-  const Reflect::Class* GetShaderType() const 
-  { 
-    return m_ShaderType; 
-  }
+    const Reflect::Class* GetShaderType() const 
+    { 
+        return m_ShaderType; 
+    }
 
-  Luna::ShaderAssetPtr GetShader() const
-  {
-    return m_Shader;
-  }
+    Luna::ShaderAssetPtr GetShader() const
+    {
+        return m_Shader;
+    }
 
-  Luna::AssetManager* GetAssetManager() const
-  {
-    return m_AssetManager;
-  }
+    Luna::AssetManager* GetAssetManager() const
+    {
+        return m_AssetManager;
+    }
 };
 LUNA_DEFINE_TYPE( ShaderConvertHelper );
 
@@ -70,10 +69,10 @@ LUNA_DEFINE_TYPE( ShaderConvertHelper );
 // 
 void ShaderAsset::InitializeType()
 {
-  Reflect::RegisterClass<Luna::ShaderAsset>( "Luna::ShaderAsset" );
-  Reflect::RegisterClass<ShaderConvertHelper>( "ShaderConvertHelper" );
+    Reflect::RegisterClass<Luna::ShaderAsset>( "Luna::ShaderAsset" );
+    Reflect::RegisterClass<ShaderConvertHelper>( "ShaderConvertHelper" );
 
-  PersistentDataFactory::GetInstance()->Register( Reflect::GetType< Asset::ShaderAsset >(), &ShaderAsset::Create );
+    PersistentDataFactory::GetInstance()->Register( Reflect::GetType< Asset::ShaderAsset >(), &ShaderAsset::Create );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,8 +80,8 @@ void ShaderAsset::InitializeType()
 // 
 void ShaderAsset::CleanupType()
 {
-  Reflect::UnregisterClass<Luna::ShaderAsset>();
-  Reflect::UnregisterClass<ShaderConvertHelper>();
+    Reflect::UnregisterClass<Luna::ShaderAsset>();
+    Reflect::UnregisterClass<ShaderConvertHelper>();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -90,7 +89,7 @@ void ShaderAsset::CleanupType()
 // 
 Luna::PersistentDataPtr ShaderAsset::Create( Reflect::Element* shaderClass, Luna::AssetManager* manager )
 {
-  return new Luna::ShaderAsset( Reflect::AssertCast< Asset::ShaderAsset >( shaderClass ), manager );
+    return new Luna::ShaderAsset( Reflect::AssertCast< Asset::ShaderAsset >( shaderClass ), manager );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -99,7 +98,7 @@ Luna::PersistentDataPtr ShaderAsset::Create( Reflect::Element* shaderClass, Luna
 ShaderAsset::ShaderAsset( Asset::ShaderAsset* shaderClass, Luna::AssetManager* manager )
 : Luna::AssetClass( shaderClass, manager )
 {
-  InitializeContextMenu();
+    InitializeContextMenu();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -114,15 +113,15 @@ ShaderAsset::~ShaderAsset()
 // 
 std::string ShaderAsset::GetIcon() const
 {
-  const i32 typeID = GetPackage< Asset::ShaderAsset >()->GetType();
+    const i32 typeID = GetPackage< Asset::ShaderAsset >()->GetType();
 
-  std::string icon( "enginetype_shader_16.png" );
-  if ( typeID != Reflect::GetType< Asset::StandardShaderAsset >() )
-  {
-    icon = "enginetype_custom_shader_16.png";
-  }
+    std::string icon( "enginetype_shader_16.png" );
+    if ( typeID != Reflect::GetType< Asset::StandardShaderAsset >() )
+    {
+        icon = "enginetype_custom_shader_16.png";
+    }
 
-  return icon;
+    return icon;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -130,24 +129,24 @@ std::string ShaderAsset::GetIcon() const
 // 
 void ShaderAsset::PopulateContextMenu( ContextMenuItemSet& menu )
 {
-  __super::PopulateContextMenu( menu );
+    __super::PopulateContextMenu( menu );
 
-  menu.AppendSeparator();
-  SubMenuPtr subMenu = new SubMenu( "Convert Shader", "Convert this shader to a different type." );
-  D_ContextMenuItemSmartPtr::const_iterator itr = m_CustomShaders.GetItems().begin();
-  D_ContextMenuItemSmartPtr::const_iterator end = m_CustomShaders.GetItems().end();
-  for ( ; itr != end; ++itr )
-  {
-    subMenu->AppendItem( *itr );
-  }
-  menu.AppendItem( subMenu );
+    menu.AppendSeparator();
+    SubMenuPtr subMenu = new SubMenu( "Convert Shader", "Convert this shader to a different type." );
+    D_ContextMenuItemSmartPtr::const_iterator itr = m_CustomShaders.GetItems().begin();
+    D_ContextMenuItemSmartPtr::const_iterator end = m_CustomShaders.GetItems().end();
+    for ( ; itr != end; ++itr )
+    {
+        subMenu->AppendItem( *itr );
+    }
+    menu.AppendItem( subMenu );
 
-  // Append option to reload all textures
-  menu.AppendSeparator();
-  ContextMenuItemPtr menuItem = new ContextMenuItem( "Reload all textures" );
-  menuItem->AddCallback( ContextMenuSignature::Delegate( this, &ShaderAsset::ReloadAllTextures ) );
+    // Append option to reload all textures
+    menu.AppendSeparator();
+    ContextMenuItemPtr menuItem = new ContextMenuItem( "Reload all textures" );
+    menuItem->AddCallback( ContextMenuSignature::Delegate( this, &ShaderAsset::ReloadAllTextures ) );
 
-  menu.AppendItem( menuItem );
+    menu.AppendItem( menuItem );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -156,9 +155,9 @@ void ShaderAsset::PopulateContextMenu( ContextMenuItemSet& menu )
 // 
 void ShaderAsset::Unpack()
 {
-  __super::Unpack();
+    __super::Unpack();
 
-  m_OldShaderClass = Reflect::ObjectCast< Asset::ShaderAsset >( GetPackage< Asset::ShaderAsset >()->Clone() );
+    m_OldShaderClass = Reflect::ObjectCast< Asset::ShaderAsset >( GetPackage< Asset::ShaderAsset >()->Clone() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -167,44 +166,45 @@ void ShaderAsset::Unpack()
 // 
 void ShaderAsset::Changed( Inspect::Control* control )
 {
-  __super::Changed( control );
+    __super::Changed( control );
 
-  Asset::ShaderAssetPtr shaderClass = GetPackage< Asset::ShaderAsset >();
-  tuid textureID = TUID::Null;
+    Asset::ShaderAssetPtr shaderClass = GetPackage< Asset::ShaderAsset >();
 
-  if ( control && control->HasType( Reflect::GetType<Inspect::Button>() ) )
-  {
-    Inspect::StringData* data = Inspect::CastData< Inspect::StringData, Inspect::DataTypes::String >( control->GetData() );
-
-    std::string str;
-    data->Get( str );
-    textureID = File::GlobalManager().GetID( str );
-    if ( textureID != TUID::Null )
+    if ( control && control->HasType( Reflect::GetType<Inspect::Button>() ) )
     {
-      shaderClass->SetTextureDirty( textureID, true );
-    }
-  }
+        Inspect::StringData* data = Inspect::CastData< Inspect::StringData, Inspect::DataTypes::String >( control->GetData() );
 
-  CheckShaderChanged(textureID);
+        std::string str;
+        data->Get( str );
+
+        File::Reference textureRef( str );
+        textureRef.Resolve();
+        shaderClass->SetTextureDirty( textureRef, true );
+        CheckShaderChanged( &textureRef );
+    }
+    else
+    {
+        CheckShaderChanged( NULL );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function to check if a shader changed and signal the concerned parties
 // 
-void ShaderAsset::CheckShaderChanged(const tuid& textureID)
+void ShaderAsset::CheckShaderChanged( File::ReferencePtr textureRefPtr )
 {
-  Asset::ShaderAssetPtr shaderClass = GetPackage< Asset::ShaderAsset >();
+    Asset::ShaderAssetPtr shaderClass = GetPackage< Asset::ShaderAsset >();
 
-  if ( m_OldShaderClass.ReferencesObject() )
-  {
-    ShaderChangedArgs args;
-    args.m_ShaderClass = shaderClass;
-    args.m_OldShaderClass = m_OldShaderClass;
-    args.m_TextureID = textureID;
-    m_ShaderChanged.Raise( args );
+    if ( m_OldShaderClass.ReferencesObject() )
+    {
+        ShaderChangedArgs args;
+        args.m_ShaderClass = shaderClass;
+        args.m_OldShaderClass = m_OldShaderClass;
+        args.m_TextureFileReference = textureRefPtr;
+        m_ShaderChanged.Raise( args );
 
-    m_OldShaderClass = Reflect::ObjectCast< Asset::ShaderAsset >( shaderClass->Clone() );
-  }
+        m_OldShaderClass = Reflect::ObjectCast< Asset::ShaderAsset >( shaderClass->Clone() );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -212,50 +212,50 @@ void ShaderAsset::CheckShaderChanged(const tuid& textureID)
 // 
 void ShaderAsset::InitializeContextMenu()
 {
-  // Build a list of context menu items for each type of shader that exists in
-  // the system.
-  typedef std::map< std::string, ContextMenuItemPtr, CaseInsensitiveNatStrCmp > M_Ordered;
-  M_Ordered items;
-  ContextMenuItemPtr addStandardShader;
-  const Reflect::Class* classInfo = Reflect::GetClass< Asset::ShaderAsset >();
-  const std::set<std::string>& typeSet = classInfo->m_Derived;
-  std::set<std::string>::const_iterator typeItr = typeSet.begin();
-  std::set<std::string>::const_iterator typeEnd = typeSet.end();
-  for ( ; typeItr != typeEnd; ++typeItr )
-  {
-    const Reflect::Class* derived = Reflect::Registry::GetInstance()->GetClass( *typeItr );
-    ContextMenuItemPtr menuItem = new ContextMenuItem( derived->m_UIName );
-    menuItem->AddCallback( ContextMenuSignature::Delegate ( &ShaderAsset::ConvertShader ), new ShaderConvertHelper( derived, this, m_AssetManager ) );
-
-    // If this derived class is not the same type as us, add it to the list.
-    if ( derived->m_TypeID != GetPackage< Asset::ShaderAsset >()->GetType() )
+    // Build a list of context menu items for each type of shader that exists in
+    // the system.
+    typedef std::map< std::string, ContextMenuItemPtr, CaseInsensitiveNatStrCmp > M_Ordered;
+    M_Ordered items;
+    ContextMenuItemPtr addStandardShader;
+    const Reflect::Class* classInfo = Reflect::GetClass< Asset::ShaderAsset >();
+    const std::set<std::string>& typeSet = classInfo->m_Derived;
+    std::set<std::string>::const_iterator typeItr = typeSet.begin();
+    std::set<std::string>::const_iterator typeEnd = typeSet.end();
+    for ( ; typeItr != typeEnd; ++typeItr )
     {
-      if ( derived->m_TypeID == Reflect::GetType< Asset::StandardShaderAsset >() )
-      {
-        addStandardShader = menuItem;
-      }
-      else
-      {
-        items.insert( M_Ordered::value_type( derived->m_UIName, menuItem ) );
-      }
-    }
-  }
+        const Reflect::Class* derived = Reflect::Registry::GetInstance()->GetClass( *typeItr );
+        ContextMenuItemPtr menuItem = new ContextMenuItem( derived->m_UIName );
+        menuItem->AddCallback( ContextMenuSignature::Delegate ( &ShaderAsset::ConvertShader ), new ShaderConvertHelper( derived, this, m_AssetManager ) );
 
-  // Now that we have the menu items in the proper order, build the context menu
-  if ( addStandardShader.ReferencesObject() )
-  {
-    m_CustomShaders.AppendItem( addStandardShader );
-    if ( items.size() > 0 )
-    {
-      m_CustomShaders.AppendSeparator();
+        // If this derived class is not the same type as us, add it to the list.
+        if ( derived->m_TypeID != GetPackage< Asset::ShaderAsset >()->GetType() )
+        {
+            if ( derived->m_TypeID == Reflect::GetType< Asset::StandardShaderAsset >() )
+            {
+                addStandardShader = menuItem;
+            }
+            else
+            {
+                items.insert( M_Ordered::value_type( derived->m_UIName, menuItem ) );
+            }
+        }
     }
-  }
-  M_Ordered::const_iterator itemItr = items.begin();
-  M_Ordered::const_iterator itemEnd = items.end();
-  for ( ; itemItr != itemEnd; ++itemItr )
-  {
-    m_CustomShaders.AppendItem( itemItr->second );
-  }
+
+    // Now that we have the menu items in the proper order, build the context menu
+    if ( addStandardShader.ReferencesObject() )
+    {
+        m_CustomShaders.AppendItem( addStandardShader );
+        if ( items.size() > 0 )
+        {
+            m_CustomShaders.AppendSeparator();
+        }
+    }
+    M_Ordered::const_iterator itemItr = items.begin();
+    M_Ordered::const_iterator itemEnd = items.end();
+    for ( ; itemItr != itemEnd; ++itemItr )
+    {
+        m_CustomShaders.AppendItem( itemItr->second );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -263,76 +263,76 @@ void ShaderAsset::InitializeContextMenu()
 // 
 void ShaderAsset::ConvertShader( const ContextMenuArgsPtr& args )
 {
-  ShaderConvertHelper* changeArgs = Reflect::ObjectCast< ShaderConvertHelper >( args->GetClientData() );
-  if ( changeArgs )
-  {
-    Luna::ShaderAsset* changeShader = changeArgs->GetShader();
-    Luna::AssetManager* assetManager = changeShader->GetAssetManager();
-
-    if ( assetManager->IsEditable( changeShader ) )
+    ShaderConvertHelper* changeArgs = Reflect::ObjectCast< ShaderConvertHelper >( args->GetClientData() );
+    if ( changeArgs )
     {
-      AssetDocument* doc = assetManager->FindAssetDocument( changeShader );
-      if ( !assetManager->IsCheckedOut( doc ) )
-      {
-        std::string msg = "You must check out '" + doc->GetFileName() + "' in order to convert it to another shader type.";
-        wxMessageBox( msg.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, assetManager->GetAssetEditor() );
-        return;
-      }
+        Luna::ShaderAsset* changeShader = changeArgs->GetShader();
+        Luna::AssetManager* assetManager = changeShader->GetAssetManager();
 
-      // Clear the selection since we are about to close the selected shader.
-      assetManager->GetSelection().Clear();
-
-      const Reflect::Class* convertTo = changeArgs->GetShaderType();
-
-      changeShader->Pack();
-      Asset::ShaderAsset* pkg = changeShader->GetPackage< Asset::ShaderAsset >();
-
-      if ( convertTo->m_TypeID != pkg->GetType() )
-      {
-        Asset::ShaderAssetPtr newPkg = Reflect::ObjectCast< Asset::ShaderAsset >( Reflect::Registry::GetInstance()->CreateInstance( convertTo ) );
-        if ( newPkg.ReferencesObject() )
+        if ( assetManager->IsEditable( changeShader ) )
         {
-          // Copy the persistent data
-          pkg->CopyTo( newPkg );
-          newPkg->m_AssetClassID = pkg->m_AssetClassID;
-          std::string filePath = pkg->GetFilePath();
+            AssetDocument* doc = assetManager->FindAssetDocument( changeShader );
+            if ( !assetManager->IsCheckedOut( doc ) )
+            {
+                std::string msg = "You must check out '" + doc->GetFileName() + "' in order to convert it to another shader type.";
+                wxMessageBox( msg.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, assetManager->GetAssetEditor() );
+                return;
+            }
 
-          try
-          {
-            newPkg->Serialize();
-          }
-          catch ( const Nocturnal::Exception& e )
-          {
-            std::string msg = "Failed to convert shader: " + e.Get();
-            wxMessageBox( msg.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, assetManager->GetAssetEditor() );
-            return;
-          }
+            // Clear the selection since we are about to close the selected shader.
+            assetManager->GetSelection().Clear();
 
-          newPkg = NULL;
+            const Reflect::Class* convertTo = changeArgs->GetShaderType();
 
-          // Close the old shader
-          std::string error;
-          assetManager->CloseDocument( doc, false );
+            changeShader->Pack();
+            Asset::ShaderAsset* pkg = changeShader->GetPackage< Asset::ShaderAsset >();
 
-          if ( !assetManager->Open( filePath, error, true ) )
-          {
-            wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, assetManager->GetAssetEditor() );
-            return;
-          }
+            if ( convertTo->m_TypeID != pkg->GetType() )
+            {
+                Asset::ShaderAssetPtr newPkg = Reflect::ObjectCast< Asset::ShaderAsset >( Reflect::Registry::GetInstance()->CreateInstance( convertTo ) );
+                if ( newPkg.ReferencesObject() )
+                {
+                    // Copy the persistent data
+                    pkg->CopyTo( newPkg );
+                    newPkg->SetAssetFileRef( *(pkg->GetAssetFileRef()) );
+                    std::string filePath = pkg->GetFilePath();
+
+                    try
+                    {
+                        newPkg->Serialize();
+                    }
+                    catch ( const Nocturnal::Exception& e )
+                    {
+                        std::string msg = "Failed to convert shader: " + e.Get();
+                        wxMessageBox( msg.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, assetManager->GetAssetEditor() );
+                        return;
+                    }
+
+                    newPkg = NULL;
+
+                    // Close the old shader
+                    std::string error;
+                    assetManager->CloseDocument( doc, false );
+
+                    if ( !assetManager->Open( filePath, error, true ) )
+                    {
+                        wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, assetManager->GetAssetEditor() );
+                        return;
+                    }
+                }
+                else
+                {
+                    // You are not allowed to convert to an object that is not derived from ShaderAsset.
+                    NOC_BREAK(); 
+                }
+            }
         }
-        else
-        {
-          // You are not allowed to convert to an object that is not derived from ShaderAsset.
-          NOC_BREAK(); 
-        }
-      }
     }
-  }
-  else
-  {
-    // This callback did not have all the required information (should never happen!)
-    NOC_BREAK();
-  }
+    else
+    {
+        // This callback did not have all the required information (should never happen!)
+        NOC_BREAK();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -340,34 +340,29 @@ void ShaderAsset::ConvertShader( const ContextMenuArgsPtr& args )
 // 
 void ShaderAsset::ReloadAllTextures( const ContextMenuArgsPtr& args )
 {
-  Asset::ShaderAssetPtr shaderClass = GetPackage< Asset::ShaderAsset >();
-  Attribute::M_Attribute::const_iterator itr = shaderClass->GetAttributes().begin();
-  Attribute::M_Attribute::const_iterator end = shaderClass->GetAttributes().end(); 
+    Asset::ShaderAssetPtr shaderClass = GetPackage< Asset::ShaderAsset >();
+    Attribute::M_Attribute::const_iterator itr = shaderClass->GetAttributes().begin();
+    Attribute::M_Attribute::const_iterator end = shaderClass->GetAttributes().end(); 
 
-  V_tuid updateTuids;
+    File::S_Reference textureFiles;
 
-  while( itr != end )
-  {
-    // try to cast this item to a texture map attribute
-    Asset::TextureMapAttribute *textureAttr = Reflect::ObjectCast< Asset::TextureMapAttribute >( (*itr).second );
-
-    if( textureAttr )
+    while( itr != end )
     {
-      tuid texID = textureAttr->GetFileID();
+        // try to cast this item to a texture map attribute
+        Asset::TextureMapAttribute *textureAttr = Reflect::ObjectCast< Asset::TextureMapAttribute >( (*itr).second );
 
-      if( texID != TUID::Null )
-      {
-        updateTuids.push_back( texID );
-      }
-    }    
-    itr++;
-  }
+        if( textureAttr )
+        {
+            textureFiles.insert( &(textureAttr->GetFileReference()) );
+        }    
+        itr++;
+    }
 
-  for( int i = 0; i < (int)updateTuids.size(); i++ )
-  {
-    shaderClass->SetTextureDirty( updateTuids[i], true );
-    CheckShaderChanged(updateTuids[i]);
-  }
+    for( File::S_Reference::iterator itr = textureFiles.begin(), end = textureFiles.end(); itr != end; ++itr )
+    {
+        shaderClass->SetTextureDirty( *(*itr), true );
+        CheckShaderChanged( (*itr) );
+    }
 
-  return;
+    return;
 }

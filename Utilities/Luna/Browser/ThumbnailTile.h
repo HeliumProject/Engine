@@ -2,7 +2,7 @@
 
 #include "Thumbnail.h"
 
-#include "Asset/EngineType.h"
+#include "Asset/AssetType.h"
 #include "Common/Memory/SmartPtr.h"
 #include "Common/Container/insertion_ordered_set.h"
 
@@ -81,7 +81,7 @@ namespace Luna
     std::string GetFullPath() const;
     std::string GetTypeLabel() const;
     bool GetTypeColor( DWORD& color ) const;
-    Asset::EngineType GetEngineType() const;
+    Asset::AssetType GetAssetType() const;
 
     const Thumbnail* GetThumbnail() const;
     void SetThumbnail( ThumbnailPtr thumbnail );

@@ -2,8 +2,7 @@
 #include "ExportScene.h"
 #include "MayaContentCmd.h"
 #include "MayaUtils/Utils.h"
-#include "File/Manager.h"
-#include "RCS/rcs.h"
+#include "RCS/RCS.h"
 
 #include "Console/Console.h"
 

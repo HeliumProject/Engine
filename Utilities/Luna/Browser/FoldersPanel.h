@@ -45,7 +45,6 @@ namespace Luna
 
   private:
     wxTreeItemId DragHitTest( UIToolKit::SortTreeCtrl* treeCtrl, wxPoint point );
-    bool GetAssetIDsFromClipBoard( Inspect::ReflectClipboardData* clipboardData, S_tuid& assetIDs, std::string& lastAssetName );
 
   private:
     BrowserFrame* m_BrowserFrame;

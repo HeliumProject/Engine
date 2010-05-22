@@ -5,7 +5,7 @@
 namespace Content
 {
   //
-  // Shader stores UV modifiers, base material color, and texture file path
+  // Shader stores UV modifiers, base material color
   //
 
   class CONTENT_API Shader : public SceneNode
@@ -26,15 +26,11 @@ namespace Content
     // Base material color (128 bit)
     Math::Vector4 m_BaseColor;
 
-    // Absolute path to the texture file
-    tuid m_BaseTextureFileID;
-
     Shader ()
       : m_WrapU (true)
       , m_WrapV (true)
       , m_RepeatU (1.0)
       , m_RepeatV (1.0)
-      , m_BaseTextureFileID( TUID::Null )
     {
     }
 
@@ -44,18 +40,10 @@ namespace Content
       , m_WrapV (true)
       , m_RepeatU (1.0)
       , m_RepeatV (1.0)
-      , m_BaseTextureFileID( TUID::Null )
     {
     }
 
-    virtual bool ProcessComponent(Reflect::ElementPtr element, const std::string& fieldName) NOC_OVERRIDE;
-
     virtual void Host(ContentVisitor* visitor); 
-
-    std::string GetBaseTextureFilePath() const;
-
-    tuid GetAssetID() const;
-    void SetAssetID(tuid assetID);
 
   public:
 

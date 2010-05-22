@@ -21,6 +21,7 @@
 using Nocturnal::Insert; 
 
 #include "Common/Environment.h"
+#include "Common/Checksum/MurmurHash2.h"
 #include "FileSystem/FileSystem.h"
 
 using namespace Finder;
@@ -778,19 +779,19 @@ std::string Finder::GetBuiltFolder( const std::string &path, bool useFilename )
   return folder;
 }
 
-static std::string GetTuidFolder( std::string folder, tuid assetId )
+static std::string GetHashFolder( std::string folder, u64 hash )
 {
   char buf[ 32 ];
-  _snprintf( buf, sizeof( buf ), TUID_HEX_FORMAT, assetId );
+  _snprintf( buf, sizeof( buf ), TUID_HEX_FORMAT, hash );
   buf[ sizeof(buf) - 1] = 0; 
 
-  std::string hexTuid = buf;
+  std::string hex = buf;
 
   // erase the 0x
-  hexTuid.erase( 0, 2 );
+  hex.erase( 0, 2 );
 
-  folder += hexTuid.substr( 0, 3 ) + "/";
-  folder += hexTuid + "/";
+  folder += hex.substr( 0, 3 ) + "/";
+  folder += hex + "/";
 
   FileSystem::CleanName( folder );
   FileSystem::GuaranteeSlash( folder );
@@ -798,14 +799,13 @@ static std::string GetTuidFolder( std::string folder, tuid assetId )
   return folder;
 }
 
-std::string Finder::GetBuiltFolder( tuid assetId )
+std::string Finder::GetThumbnailFolder( const std::string& path )
 {
-  return GetTuidFolder( ProjectBuilt() + FinderSpecs::Asset::TUIDS_FOLDER.GetRelativeFolder(), assetId );
-}
+    std::string relativePath = path;
+    FileSystem::CleanName( relativePath );
+    FileSystem::StripPrefix( ProjectAssets(), relativePath );
 
-std::string Finder::GetThumbnailFolder( tuid assetId )
-{
-  return GetTuidFolder( ProjectAssets() + FinderSpecs::Asset::THUMBNAILS_FOLDER.GetRelativeFolder() + FinderSpecs::Asset::TUIDS_FOLDER.GetRelativeFolder(), assetId );
+    return GetHashFolder( ProjectAssets() + FinderSpecs::Asset::THUMBNAILS_FOLDER.GetRelativeFolder() + FinderSpecs::Asset::TUIDS_FOLDER.GetRelativeFolder(), Nocturnal::MurmurHash2( relativePath ) );
 }
 
 void Finder::StripAnyProjectRoot( std::string& path )

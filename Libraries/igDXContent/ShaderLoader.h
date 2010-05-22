@@ -16,11 +16,11 @@ namespace igDXRender
 
 namespace igDXContent
 {
-  class IRBShaderLoader : public igDXRender::ShaderLoader
+  class RBShaderLoader : public igDXRender::ShaderLoader
   {
   public:
-    IRBShaderLoader();
-    virtual ~IRBShaderLoader();
+    RBShaderLoader();
+    virtual ~RBShaderLoader();
 
     virtual igDXRender::Shader* ParseFile( const char* filename, igDXRender::ShaderDatabase* db );
 

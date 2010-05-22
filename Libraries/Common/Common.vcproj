@@ -270,6 +270,10 @@
 				RelativePath=".\Checksum\MD5.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Checksum\MurmurHash2.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Boost"

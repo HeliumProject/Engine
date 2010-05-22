@@ -5,7 +5,7 @@
 #include "CacheDBColumn.h"
 #include "CacheDBQuery.h"
 
-#include "File/ManagedFile.h"
+#include "File/Reference.h"
 #include "SQL/SQLiteDB.h"
 #include "TUID/TUID.h"
 
@@ -49,21 +49,20 @@ namespace Asset
 
     u32 GetPopulateTableData( const CacheDBColumnID columnID, V_string& tableData, bool* cancel = NULL ); 
 
-    u32 Search( const CacheDBQuery* search, V_AssetFiles& assetFiles, bool* cancel = NULL );
-    u32 Search( const CacheDBQuery* search, S_tuid& assetFileIDs, bool* cancel = NULL );
+    u32 Search( const CacheDBQuery* search, File::S_Reference& assetFiles, bool* cancel = NULL );
 
-    bool HasAssetChangedOnDisc( const File::ManagedFilePtr& file, bool* cancel = NULL );
-    void InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, S_tuid& visitedIDs, bool* cancel = NULL );
+    bool HasAssetChangedOnDisk( File::Reference& fileRef, bool* cancel = NULL );
+    void InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, File::S_Reference& visited, bool* cancel = NULL );
     void DeleteAssetFile( AssetFile* assetFile );
 
-    void SelectAssetPathByID( const tuid id, std::string& path );
-    void SelectAssetByID( const tuid id, AssetFile* assetFile );
+    void SelectAssetPathByHash( const u64 pathHash, std::string& path );
+    void SelectAssetByHash( const u64 pathHash, AssetFile* assetFile );
 
     u64 FindAttributeRowID( const std::string& value );
     u32 GetAttributesTableData( V_string& tableData, bool* cancel = NULL );
 
-    void GetAssetDependencies( const tuid id, S_tuid& dependencies, bool reverse = false, u32 maxDepth = 0, u32 currDepth = 0, bool* cancel = NULL );
-    void GetDependencyGraph( const tuid id, M_AssetFiles* assetFiles, bool reverse = false, u32 maxDepth = 0, u32 currDepth = 0, bool* cancel = NULL );
+    void GetAssetDependencies( File::ReferencePtr& fileRef, File::S_Reference& dependencies, bool reverse = false, u32 maxDepth = 0, u32 currDepth = 0, bool* cancel = NULL );
+    void GetDependencyGraph( File::ReferencePtr& fileRef, M_AssetFiles* assetFiles, bool reverse = false, u32 maxDepth = 0, u32 currDepth = 0, bool* cancel = NULL );
 
     static void CleanExpressionForSQL( std::string& argument, bool wrapEscape = true );
 
@@ -77,13 +76,13 @@ namespace Asset
     u64 SelectIDByName( SQL::StmtHandle select, const char* value, const char* insert = NULL, bool* cancel = NULL );
 
     void InsertAssetAttributes( AssetFile* assetFile, bool* cancel = NULL );
-    void InsertAssetUsages( AssetFile* assetFile, M_AssetFiles* assetFiles, S_tuid& visitedIDs, bool* cancel = NULL );
-    void InsertAssetShaders( AssetFile* assetFile, M_AssetFiles* assetFiles, S_tuid& visitedIDs, bool* cancel = NULL );
-    void InsertLevelEntities( AssetFile* assetFile, M_AssetFiles* assetFiles, S_tuid& visitedIDs, bool* cancel = NULL );
-    void InsertDependencyIds( S_tuid tuids, u64 assetRowID, M_AssetFiles* assetFiles, S_tuid& visitedIDs, const char* replaceSQL, const char* deleteSQL, const char* deleteUnrenewedSQL, bool* cancel = NULL );
+    void InsertAssetUsages( AssetFile* assetFile, M_AssetFiles* assetFiles, File::S_Reference& visited, bool* cancel = NULL );
+    void InsertAssetShaders( AssetFile* assetFile, M_AssetFiles* assetFiles, File::S_Reference& visited, bool* cancel = NULL );
+    void InsertLevelEntities( AssetFile* assetFile, M_AssetFiles* assetFiles, File::S_Reference& visited, bool* cancel = NULL );
+    void InsertDependencies( const File::S_Reference& dependencies, u64 assetRowID, M_AssetFiles* assetFiles, File::S_Reference& visited, const char* replaceSQL, const char* deleteSQL, const char* deleteUnrenewedSQL, bool* cancel = NULL );
 
     // Used by Search
-    tuid StepSelectFileID( int sqlResult, const SQL::StmtHandle stmt, bool resetStmt = false );
+    std::string StepSelectPath( int sqlResult, const SQL::StmtHandle stmt, bool resetStmt = false );
     void GetSelectStmt( const CacheDBQuery* search, std::string& selectStmt );
 
     // Used by UI to populate Choice boxes
@@ -106,7 +105,7 @@ namespace Asset
     SQL::StmtHandle   m_SelectDependenciesByIDHandle;
     SQL::StmtHandle   m_SelectUsagesByIDHandle;
     SQL::StmtHandle   m_SelectFileTypeIDHandle;
-    SQL::StmtHandle   m_SelectEngineTypeIDHandle;
+    SQL::StmtHandle   m_SelectAssetTypeIDHandle;
     SQL::StmtHandle   m_SelectAttributeIDHandle;
     SQL::StmtHandle   m_FindAttributeIDHandle;
     SQL::StmtHandle   m_SelectAttributesHandle;

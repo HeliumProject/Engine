@@ -17,7 +17,7 @@
 #include "Editor/Preferences.h"
 #include "Editor/SessionFrame.h"
 #include "Editor/SessionManager.h"
-#include "File/Manager.h"
+#include "File/File.h"
 #include "FileBrowser/FileBrowser.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
@@ -141,6 +141,8 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
 
       {
         Console::Bullet vault ("Asset Tracker...\n");
+#pragma TODO( "Set the global root directory to something reasonable, should be based on the game project's settings" )
+        Asset::Tracker::SetGlobalRootDirectory( "" );
         m_InitializerStack.Push( Asset::Tracker::Initialize, Asset::Tracker::Cleanup );
         SessionManager::GetInstance()->UseTracker( !parser.Found( "disable_tracker" ) );
       }

@@ -322,7 +322,7 @@ int Main(int argc, const char** argv)
 
           if (g_Binary)
           {
-            FileSystem::SetExtension( output, ".irb", 1 );
+            FileSystem::SetExtension( output, ".rb", 1 );
           }
 
           // do work

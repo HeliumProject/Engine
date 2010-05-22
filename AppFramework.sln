@@ -14,8 +14,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeGen", "libraries\CodeGe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NSCopy", "utilities\NSCopy\NSCopy.vcproj", "{C580839C-A81C-49AD-BBB9-F8CD9923D5E1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TexturePackBuilder", "libraries\TexturePackBuilder\TexturePackBuilder.vcproj", "{C60F64C2-876E-465B-8DCC-786C3A79B76A}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Undo", "libraries\Undo\Undo.vcproj", "{AA86FEA7-AA10-4870-8C71-C6D5A94D2FE5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextureProcess", "libraries\TextureProcess\TextureProcess.vcproj", "{F02AFE63-4A0A-4856-A6C3-0C6A7F866763}"
@@ -114,8 +112,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DebugUI", "libraries\DebugU
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InspectFile", "libraries\InspectFile\InspectFile.vcproj", "{44FD2A28-FC17-4B3E-AAE5-C3DBDD3192E5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetManager", "libraries\AssetManager\AssetManager.vcproj", "{F6D24E52-7ADD-459E-8E7F-FDD20A0E6CAF}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MayaShaderManager", "Maya\MayaShaderManager\MayaShaderManager.vcproj", "{159B2F9B-B5FD-40D8-96B0-3492D1684C4F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MayaCore", "Maya\MayaCore\MayaCore.vcproj", "{0E85A01E-6BFC-4DF8-BE0D-5F6FAB8AF587}"
@@ -141,8 +137,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Crypto++", "SDK\Crypto++\5.6.0\Crypto++.vcproj", "{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wxPropertyGrid", "SDK\wxPropertyGrid\1.4.11\wxPropertyGrid.vcproj", "{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FileUI", "Libraries\FileUI\FileUI.vcproj", "{4AF12ED6-2980-4C1F-8918-F11846719FB3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "squish", "SDK\squish\1.10\squish.vcproj", "{CF9387AB-7C10-4217-A248-575EE8610008}"
 EndProject
@@ -200,12 +194,6 @@ Global
 		{C580839C-A81C-49AD-BBB9-F8CD9923D5E1}.Release|Win32.ActiveCfg = Release|Win32
 		{C580839C-A81C-49AD-BBB9-F8CD9923D5E1}.Release|Win32.Build.0 = Release|Win32
 		{C580839C-A81C-49AD-BBB9-F8CD9923D5E1}.Release|x64.ActiveCfg = Release|Win32
-		{C60F64C2-876E-465B-8DCC-786C3A79B76A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{C60F64C2-876E-465B-8DCC-786C3A79B76A}.Debug|Win32.Build.0 = Debug|Win32
-		{C60F64C2-876E-465B-8DCC-786C3A79B76A}.Debug|x64.ActiveCfg = Debug|Win32
-		{C60F64C2-876E-465B-8DCC-786C3A79B76A}.Release|Win32.ActiveCfg = Release|Win32
-		{C60F64C2-876E-465B-8DCC-786C3A79B76A}.Release|Win32.Build.0 = Release|Win32
-		{C60F64C2-876E-465B-8DCC-786C3A79B76A}.Release|x64.ActiveCfg = Release|Win32
 		{AA86FEA7-AA10-4870-8C71-C6D5A94D2FE5}.Debug|Win32.ActiveCfg = Debug|Win32
 		{AA86FEA7-AA10-4870-8C71-C6D5A94D2FE5}.Debug|Win32.Build.0 = Debug|Win32
 		{AA86FEA7-AA10-4870-8C71-C6D5A94D2FE5}.Debug|x64.ActiveCfg = Debug|Win32
@@ -500,12 +488,6 @@ Global
 		{44FD2A28-FC17-4B3E-AAE5-C3DBDD3192E5}.Release|Win32.ActiveCfg = Release|Win32
 		{44FD2A28-FC17-4B3E-AAE5-C3DBDD3192E5}.Release|Win32.Build.0 = Release|Win32
 		{44FD2A28-FC17-4B3E-AAE5-C3DBDD3192E5}.Release|x64.ActiveCfg = Release|Win32
-		{F6D24E52-7ADD-459E-8E7F-FDD20A0E6CAF}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F6D24E52-7ADD-459E-8E7F-FDD20A0E6CAF}.Debug|Win32.Build.0 = Debug|Win32
-		{F6D24E52-7ADD-459E-8E7F-FDD20A0E6CAF}.Debug|x64.ActiveCfg = Debug|Win32
-		{F6D24E52-7ADD-459E-8E7F-FDD20A0E6CAF}.Release|Win32.ActiveCfg = Release|Win32
-		{F6D24E52-7ADD-459E-8E7F-FDD20A0E6CAF}.Release|Win32.Build.0 = Release|Win32
-		{F6D24E52-7ADD-459E-8E7F-FDD20A0E6CAF}.Release|x64.ActiveCfg = Release|Win32
 		{159B2F9B-B5FD-40D8-96B0-3492D1684C4F}.Debug|Win32.ActiveCfg = Debug|Win32
 		{159B2F9B-B5FD-40D8-96B0-3492D1684C4F}.Debug|Win32.Build.0 = Debug|Win32
 		{159B2F9B-B5FD-40D8-96B0-3492D1684C4F}.Debug|x64.ActiveCfg = Debug|Win32
@@ -588,12 +570,6 @@ Global
 		{ECA5FC4D-29CE-5030-9175-551834BF6CB0}.Release|Win32.Build.0 = Release|Win32
 		{ECA5FC4D-29CE-5030-9175-551834BF6CB0}.Release|x64.ActiveCfg = Release|x64
 		{ECA5FC4D-29CE-5030-9175-551834BF6CB0}.Release|x64.Build.0 = Release|x64
-		{4AF12ED6-2980-4C1F-8918-F11846719FB3}.Debug|Win32.ActiveCfg = Debug|Win32
-		{4AF12ED6-2980-4C1F-8918-F11846719FB3}.Debug|Win32.Build.0 = Debug|Win32
-		{4AF12ED6-2980-4C1F-8918-F11846719FB3}.Debug|x64.ActiveCfg = Debug|Win32
-		{4AF12ED6-2980-4C1F-8918-F11846719FB3}.Release|Win32.ActiveCfg = Release|Win32
-		{4AF12ED6-2980-4C1F-8918-F11846719FB3}.Release|Win32.Build.0 = Release|Win32
-		{4AF12ED6-2980-4C1F-8918-F11846719FB3}.Release|x64.ActiveCfg = Release|Win32
 		{CF9387AB-7C10-4217-A248-575EE8610008}.Debug|Win32.ActiveCfg = Debug|Win32
 		{CF9387AB-7C10-4217-A248-575EE8610008}.Debug|Win32.Build.0 = Debug|Win32
 		{CF9387AB-7C10-4217-A248-575EE8610008}.Debug|x64.ActiveCfg = Debug|Win32

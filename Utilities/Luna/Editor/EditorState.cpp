@@ -7,5 +7,5 @@ REFLECT_DEFINE_CLASS( EditorState )
 
 void EditorState::EnumerateClass( Reflect::Compositor<EditorState>& comp )
 {
-  Reflect::Field* fieldOpenFiles = comp.AddField( &EditorState::m_OpenFiles, "m_OpenFiles" );
+  Reflect::Field* fieldOpenFileRefs = comp.AddField( &EditorState::m_OpenFileRefs, "m_OpenFileRefs" );
 }

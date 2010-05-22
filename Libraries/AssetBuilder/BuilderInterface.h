@@ -93,7 +93,7 @@ namespace AssetBuilder
 
     virtual std::string GetOutputDirectory()
     {
-      return GetAssetClass()->GetBuiltDir();
+        return GetAssetClass()->GetBuiltDirectory().Get();
     }
 
     //! Initialize should do as little work as possible
@@ -160,7 +160,7 @@ namespace BuilderInterface
   void Initialize();
   void Cleanup();
 
-  ASSETBUILDER_API void AllocateBuilders( Asset::EngineType engineType, AssetBuilder::V_IBuilder& builders );
+  ASSETBUILDER_API void AllocateBuilders( Asset::AssetType assetType, AssetBuilder::V_IBuilder& builders );
 }
 
 // initialziation prototype

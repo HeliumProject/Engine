@@ -32,8 +32,6 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
     return;
   }
 
-  bool isFileIdKeyValue = ( field->m_SerializerID == Reflect::GetType< Reflect::U64U64MapSerializer >() ) && ( field->m_Flags & Reflect::FieldFlags::FileID ) != 0;
-
   // create the panel
   PanelPtr panel = m_Container->GetCanvas()->Create<Panel>( this );
   parent->AddControl( panel );
@@ -46,12 +44,6 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
   {
     Reflect::SerializerPtr ser = Reflect::AssertCast< Reflect::Serializer >( Reflect::Registry::GetInstance()->CreateInstance( field->m_SerializerID ) );
     PointerSizedUInt fieldAddress = ( PointerSizedUInt )( *itr ) + field->m_Offset;
-
-    if ( isFileIdKeyValue )
-    {
-      ser->SetTranslateInputListener( Reflect::TranslateInputSignature::Delegate ( this, &ReflectMapInterpreter::TranslateInputKeyValueTUID ) );
-      ser->SetTranslateOutputListener( Reflect::TranslateOutputSignature::Delegate ( this, &ReflectMapInterpreter::TranslateOutputKeyValueTUID ) );
-    }
 
     ser->ConnectData( ( void* )fieldAddress );
 
@@ -98,88 +90,6 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
   }
 }
 
-void ReflectMapInterpreter::TranslateInputKeyValueTUID( Reflect::TranslateInputEventArgs& args )
-{
-  if ( args.m_Serializer->GetType() == Reflect::GetType< Reflect::U64U64MapSerializer >() )
-  {
-    Reflect::U64U64MapSerializer* ser = Reflect::DangerousCast< Reflect::U64U64MapSerializer >( args.m_Serializer );
-
-    std::streamsize size = args.m_Stream.rdbuf()->in_avail();
-    if ( size > 0 )
-    {
-      std::string data;
-      data.resize( size );
-      args.m_Stream.read( const_cast< char* >( data.c_str() ), size );
-
-      size_t delimLength = strlen( Reflect::s_ContainerItemDelimiter );
-      std::string::size_type bgn = 0;
-      std::string::size_type mid = data.find( Reflect::s_ContainerItemDelimiter, bgn );
-      std::string::size_type end = data.find( Reflect::s_ContainerItemDelimiter, mid + 1 );
-      while ( bgn != std::string::npos && mid != std::string::npos )
-      {
-        std::string key = data.substr( bgn, mid - bgn );
-        std::string value = end != std::string::npos ? data.substr( mid + 1, end - mid - delimLength ) : data.substr( mid + 1 );
-        tuid tuidKey = TUID::Null;
-        tuid tuidValue = TUID::Null;
-        if ( TUID::Parse( key, tuidKey ) && TUID::Parse( value, tuidValue ) )
-        {
-          ser->m_Data->insert( Reflect::SimpleMapSerializer< u64, Reflect::U64Serializer, u64, Reflect::U64Serializer >::DataType::value_type( tuidKey, tuidValue ) );
-        }
-        else
-        {
-          NOC_BREAK();
-        }
-
-        if ( end != std::string::npos )
-        {
-          bgn = end + 1;
-          mid = data.find( Reflect::s_ContainerItemDelimiter, bgn );
-          end = data.find( Reflect::s_ContainerItemDelimiter, mid + 1 );
-        }
-        else
-        {
-          bgn = end;
-          mid = end;
-        }
-      }
-    }
-  }
-  else
-  {
-    NOC_BREAK();
-  }
-}
-
-void ReflectMapInterpreter::TranslateOutputKeyValueTUID( Reflect::TranslateOutputEventArgs& args )
-{
-  if ( args.m_Serializer->GetType() == Reflect::GetType< Reflect::U64U64MapSerializer >() )
-  {
-    Reflect::U64U64MapSerializer* ser = Reflect::DangerousCast< Reflect::U64U64MapSerializer > ( args.m_Serializer );
-
-    bool first = true;
-    M_tuid::const_iterator itr = ser->m_Data->begin();
-    M_tuid::const_iterator end = ser->m_Data->end();
-    for ( ; itr != end; ++itr )
-    {
-      const u64& key = itr->first;
-      const u64& val = itr->second;
-
-      if ( !first )
-      {
-        args.m_Stream << Reflect::s_ContainerItemDelimiter;
-      }
-      args.m_Stream << TUID::HexFormat << key;
-      args.m_Stream << Reflect::s_ContainerItemDelimiter;
-      args.m_Stream << TUID::HexFormat << val;
-     
-      first = false;
-    }
-  }
-  else
-  {
-    NOC_BREAK();
-  }
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Runs the dialog for editing a key-value pair.  Returns a string that is the

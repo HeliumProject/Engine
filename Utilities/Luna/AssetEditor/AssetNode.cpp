@@ -18,7 +18,7 @@ LUNA_DEFINE_TYPE( Luna::AssetNode );
 // 
 void AssetNode::InitializeType()
 {
-  Reflect::RegisterClass<Luna::AssetNode>( "Luna::AssetNode" );
+    Reflect::RegisterClass<Luna::AssetNode>( "Luna::AssetNode" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ void AssetNode::InitializeType()
 // 
 void AssetNode::CleanupType()
 {
-  Reflect::UnregisterClass<Luna::AssetNode>();
+    Reflect::UnregisterClass<Luna::AssetNode>();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@ AssetNode::AssetNode( Luna::AssetManager* assetManager )
 , m_CachedAsset( NULL )
 , m_IsRearranging( false )
 {
-  AddDefaultContextMenuItems( m_ContextMenu );
+    AddDefaultContextMenuItems( m_ContextMenu );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@ AssetNode::~AssetNode()
 // 
 const std::string& AssetNode::GetName() const
 {
-  return m_Name;
+    return m_Name;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -64,14 +64,14 @@ const std::string& AssetNode::GetName() const
 // 
 void AssetNode::SetName( const std::string& name )
 {
-  if ( name != m_Name )
-  {
-    NodeNameChangeArgs args( this, m_Name, name );
+    if ( name != m_Name )
+    {
+        NodeNameChangeArgs args( this, m_Name, name );
 
-    m_Name = name;
+        m_Name = name;
 
-    m_NameChanged.Raise( args );
-  }
+        m_NameChanged.Raise( args );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -79,7 +79,7 @@ void AssetNode::SetName( const std::string& name )
 // 
 i32 AssetNode::GetIconIndex() const
 {
-  return UIToolKit::GlobalImageManager().GetImageIndex( GetIcon() );
+    return UIToolKit::GlobalImageManager().GetImageIndex( GetIcon() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ i32 AssetNode::GetIconIndex() const
 // 
 const std::string& AssetNode::GetIcon() const
 {
-  return m_Icon;
+    return m_Icon;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -95,11 +95,11 @@ const std::string& AssetNode::GetIcon() const
 // 
 void AssetNode::SetIcon( const std::string& icon )
 {
-  if ( icon != m_Icon )
-  {
-    m_Icon = icon;
-    m_IconChanged.Raise( this );
-  }
+    if ( icon != m_Icon )
+    {
+        m_Icon = icon;
+        m_IconChanged.Raise( this );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -107,7 +107,7 @@ void AssetNode::SetIcon( const std::string& icon )
 // 
 u32 AssetNode::GetStyle() const
 {
-  return m_Style;
+    return m_Style;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -115,12 +115,12 @@ u32 AssetNode::GetStyle() const
 // 
 void AssetNode::SetStyle( u32 style )
 {
-  if ( m_Style != style )
-  {
-    NodeStyleChangeArgs args( this, m_Style, style );
-    m_Style = style;
-    m_StyleChanged.Raise( args );
-  }
+    if ( m_Style != style )
+    {
+        NodeStyleChangeArgs args( this, m_Style, style );
+        m_Style = style;
+        m_StyleChanged.Raise( args );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ void AssetNode::SetStyle( u32 style )
 // 
 const OS_AssetNodeSmartPtr& AssetNode::GetChildren() const
 {
-  return m_Children;
+    return m_Children;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -138,27 +138,27 @@ const OS_AssetNodeSmartPtr& AssetNode::GetChildren() const
 // 
 bool AssetNode::AddChild( Luna::AssetNodePtr child, Luna::AssetNode* beforeSibling )
 {
-  bool result = false;
-  if ( !beforeSibling )
-  {
-    result = m_Children.Append( child );
-  }
-  else
-  {
-    result = m_Children.Insert( child, beforeSibling );
-  }
-
-  if ( result )
-  {
-    child->SetParent( this );
-
-    if ( !m_IsRearranging )
+    bool result = false;
+    if ( !beforeSibling )
     {
-      m_ChildAdded.Raise( ChildChangeArgs( this, child ) );
+        result = m_Children.Append( child );
     }
-  }
+    else
+    {
+        result = m_Children.Insert( child, beforeSibling );
+    }
 
-  return result;
+    if ( result )
+    {
+        child->SetParent( this );
+
+        if ( !m_IsRearranging )
+        {
+            m_ChildAdded.Raise( ChildChangeArgs( this, child ) );
+        }
+    }
+
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -166,16 +166,16 @@ bool AssetNode::AddChild( Luna::AssetNodePtr child, Luna::AssetNode* beforeSibli
 // 
 bool AssetNode::RemoveChild( Luna::AssetNodePtr child )
 {
-  bool result = false;
-  result = m_Children.Remove( child );
-  if ( result )
-  {
-    if ( !m_IsRearranging )
+    bool result = false;
+    result = m_Children.Remove( child );
+    if ( result )
     {
-      m_ChildRemoved.Raise( ChildChangeArgs( this, child ) );
+        if ( !m_IsRearranging )
+        {
+            m_ChildRemoved.Raise( ChildChangeArgs( this, child ) );
+        }
     }
-  }
-  return result;
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -184,15 +184,15 @@ bool AssetNode::RemoveChild( Luna::AssetNodePtr child )
 void AssetNode::DeleteChildren()
 {
 #pragma TODO( "Events to distinguish removing all children from removing a single child" )
-  OS_AssetNodeSmartPtr::Iterator childItr = m_Children.Begin();
-  OS_AssetNodeSmartPtr::Iterator childEnd = m_Children.End();
-  for ( ; childItr != childEnd; ++childItr )
-  {
-    Luna::AssetNodePtr child = *childItr;
-    m_ChildRemoved.Raise( ChildChangeArgs( this, child ) );
-  }
+    OS_AssetNodeSmartPtr::Iterator childItr = m_Children.Begin();
+    OS_AssetNodeSmartPtr::Iterator childEnd = m_Children.End();
+    for ( ; childItr != childEnd; ++childItr )
+    {
+        Luna::AssetNodePtr child = *childItr;
+        m_ChildRemoved.Raise( ChildChangeArgs( this, child ) );
+    }
 
-  m_Children.Clear();
+    m_Children.Clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -209,7 +209,7 @@ void AssetNode::CreateChildren()
 // 
 bool AssetNode::CanBeMoved() const
 {
-  return false;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -218,7 +218,7 @@ bool AssetNode::CanBeMoved() const
 // 
 bool AssetNode::CanBeCopied() const
 {
-  return false;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -227,7 +227,7 @@ bool AssetNode::CanBeCopied() const
 // 
 Inspect::ReflectClipboardDataPtr AssetNode::GetClipboardData()
 {
-  return NULL;
+    return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -236,7 +236,7 @@ Inspect::ReflectClipboardDataPtr AssetNode::GetClipboardData()
 // 
 bool AssetNode::CanHandleClipboardData( const Inspect::ReflectClipboardDataPtr& data )
 {
-  return false;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -244,7 +244,7 @@ bool AssetNode::CanHandleClipboardData( const Inspect::ReflectClipboardDataPtr& 
 // 
 bool AssetNode::HandleClipboardData( const Inspect::ReflectClipboardDataPtr& data, ClipboardOperation op, Undo::BatchCommand* batch )
 {
-  return false;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -256,56 +256,56 @@ bool AssetNode::HandleClipboardData( const Inspect::ReflectClipboardDataPtr& dat
 // 
 bool AssetNode::RearrangeChildren( Luna::AssetNode* child, Luna::AssetNode* beforeSibling )
 {
-  // Determine whether the rearrange is even necessary
-  bool rearrange = false;
-  if ( beforeSibling )
-  {
-    OS_AssetNodeSmartPtr::Iterator currentBefore = GetChildren().FindPrevSibling( Luna::AssetNodePtr( child ) );
-    if ( currentBefore != GetChildren().End() )
+    // Determine whether the rearrange is even necessary
+    bool rearrange = false;
+    if ( beforeSibling )
     {
-      rearrange = ( ( *currentBefore ).Ptr() ) != beforeSibling;
+        OS_AssetNodeSmartPtr::Iterator currentBefore = GetChildren().FindPrevSibling( Luna::AssetNodePtr( child ) );
+        if ( currentBefore != GetChildren().End() )
+        {
+            rearrange = ( ( *currentBefore ).Ptr() ) != beforeSibling;
+        }
+        else
+        {
+            rearrange = true;
+        }
     }
     else
     {
-      rearrange = true;
+        rearrange = GetChildren().Back().Ptr() != child;
     }
-  }
-  else
-  {
-    rearrange = GetChildren().Back().Ptr() != child;
-  }
 
-  // Do the rearrange
-  bool isOk = false;
-  if ( rearrange )
-  {
-    // Make sure that the child is not deleted while we are removing it.
-    Luna::AssetNodePtr hold( child );
-
-    // Supress Add/Remove/Parent events
-    m_IsRearranging = true;
-
-    if ( RemoveChild( hold ) )
+    // Do the rearrange
+    bool isOk = false;
+    if ( rearrange )
     {
-      if ( AddChild( hold, beforeSibling ) )
-      {
-        isOk = true;
-      }
-      else
-      {
-        throw Nocturnal::Exception( "Unable to rearrange %s before %s", GetName().c_str(), beforeSibling->GetName().c_str() );
-      }
+        // Make sure that the child is not deleted while we are removing it.
+        Luna::AssetNodePtr hold( child );
+
+        // Supress Add/Remove/Parent events
+        m_IsRearranging = true;
+
+        if ( RemoveChild( hold ) )
+        {
+            if ( AddChild( hold, beforeSibling ) )
+            {
+                isOk = true;
+            }
+            else
+            {
+                throw Nocturnal::Exception( "Unable to rearrange %s before %s", GetName().c_str(), beforeSibling->GetName().c_str() );
+            }
+        }
+        m_IsRearranging = false;
     }
-    m_IsRearranging = false;
-  }
 
-  if ( isOk )
-  {
-    // Fire event
-    m_ChildRearranged.Raise( ChildChangeArgs( this, child ) );
-  }
+    if ( isOk )
+    {
+        // Fire event
+        m_ChildRearranged.Raise( ChildChangeArgs( this, child ) );
+    }
 
-  return isOk;
+    return isOk;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -314,7 +314,7 @@ bool AssetNode::RearrangeChildren( Luna::AssetNode* child, Luna::AssetNode* befo
 // 
 bool AssetNode::CanAddChild( Luna::AssetNode* child ) const
 {
-  return true;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -323,21 +323,21 @@ bool AssetNode::CanAddChild( Luna::AssetNode* child ) const
 // 
 Undo::CommandPtr AssetNode::DeleteSelectedChildren()
 {
-  return NULL;
+    return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Gets the asset class that this node is part of and adds that asset's TUID to 
+// Gets the asset class that this node is part of and adds that asset to 
 // the specified list if the asset is exportable.  Override in derived classes 
 // to do something fancier.
 // 
-void AssetNode::GetExportFiles( S_tuid& fileIDs ) const
+void AssetNode::GetExportFiles( File::S_Reference& files ) const
 {
-  Luna::AssetClass* asset = GetAssetClass();
-  if ( asset->IsExportable() )
-  {
-    fileIDs.insert( asset->GetFileID() );
-  }
+    Luna::AssetClass* asset = GetAssetClass();
+    if ( asset->IsExportable() )
+    {
+        files.insert( asset->GetFileReference() );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -345,16 +345,16 @@ void AssetNode::GetExportFiles( S_tuid& fileIDs ) const
 // 
 Luna::AssetClass* AssetNode::GetAssetClass() const
 {
-  if ( !m_CachedAsset && m_Parent )
-  {
-    m_CachedAsset = m_Parent->GetAssetClass();
-  }
+    if ( !m_CachedAsset && m_Parent )
+    {
+        m_CachedAsset = m_Parent->GetAssetClass();
+    }
 
-  // If you hit this assertion, there's a node in the hierarchy that does not 
-  // correspond to an asset class. This should not be possible!
-  NOC_ASSERT( m_CachedAsset );
+    // If you hit this assertion, there's a node in the hierarchy that does not 
+    // correspond to an asset class. This should not be possible!
+    NOC_ASSERT( m_CachedAsset );
 
-  return m_CachedAsset;
+    return m_CachedAsset;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -362,7 +362,7 @@ Luna::AssetClass* AssetNode::GetAssetClass() const
 // 
 Luna::AssetNode* AssetNode::GetParent() const
 {
-  return m_Parent;
+    return m_Parent;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -370,19 +370,19 @@ Luna::AssetNode* AssetNode::GetParent() const
 // 
 bool AssetNode::IsAncestor( Luna::AssetNode* node )
 {
-  // I expect that you will probably want to check for this condition elsewhere.
-  NOC_ASSERT( node != this );
+    // I expect that you will probably want to check for this condition elsewhere.
+    NOC_ASSERT( node != this );
 
-  bool isAncestor = false;
+    bool isAncestor = false;
 
-  Luna::AssetNode* parent = m_Parent;
-  while ( parent && !isAncestor )
-  {
-    isAncestor = parent == node;
-    parent = parent->GetParent();
-  }
+    Luna::AssetNode* parent = m_Parent;
+    while ( parent && !isAncestor )
+    {
+        isAncestor = parent == node;
+        parent = parent->GetParent();
+    }
 
-  return isAncestor;
+    return isAncestor;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -391,7 +391,7 @@ bool AssetNode::IsAncestor( Luna::AssetNode* node )
 // 
 ContextMenuItemSet& AssetNode::GetContextMenu()
 {
-  return m_ContextMenu;
+    return m_ContextMenu;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -399,7 +399,7 @@ ContextMenuItemSet& AssetNode::GetContextMenu()
 // 
 void AssetNode::SetContextMenu( const ContextMenuItemSet& menu )
 {
-  m_ContextMenu = menu;
+    m_ContextMenu = menu;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -429,25 +429,25 @@ void AssetNode::AddDefaultContextMenuItems( ContextMenuItemSet& menu ) const
 // 
 void AssetNode::SetParent( Luna::AssetNode* parent )
 {
-  if ( parent != m_Parent )
-  {
-    Luna::AssetNode* oldParent = m_Parent;
-
-    if ( !m_IsRearranging )
+    if ( parent != m_Parent )
     {
-      m_ParentChanging.Raise( ParentChangeArgs( this, oldParent, parent ) );
+        Luna::AssetNode* oldParent = m_Parent;
+
+        if ( !m_IsRearranging )
+        {
+            m_ParentChanging.Raise( ParentChangeArgs( this, oldParent, parent ) );
+        }
+
+        m_Parent = parent;
+
+        // Asset class will be recalculated next time it is needed.
+        ClearCachedAssetClass();
+
+        if ( !m_IsRearranging )
+        {
+            m_ParentChanged.Raise( ParentChangeArgs( this, oldParent, m_Parent ) );
+        }
     }
-
-    m_Parent = parent;
-
-    // Asset class will be recalculated next time it is needed.
-    ClearCachedAssetClass();
-
-    if ( !m_IsRearranging )
-    {
-      m_ParentChanged.Raise( ParentChangeArgs( this, oldParent, m_Parent ) );
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -456,13 +456,13 @@ void AssetNode::SetParent( Luna::AssetNode* parent )
 // 
 void AssetNode::ClearCachedAssetClass()
 {
-  m_CachedAsset = NULL; 
+    m_CachedAsset = NULL; 
 
-  // Recurse on children.
-  OS_AssetNodeSmartPtr::Iterator childItr = m_Children.Begin();
-  OS_AssetNodeSmartPtr::Iterator childEnd = m_Children.End();
-  for ( ; childItr != childEnd; ++childItr )
-  {
-    ( *childItr )->ClearCachedAssetClass();
-  }
+    // Recurse on children.
+    OS_AssetNodeSmartPtr::Iterator childItr = m_Children.Begin();
+    OS_AssetNodeSmartPtr::Iterator childEnd = m_Children.End();
+    for ( ; childItr != childEnd; ++childItr )
+    {
+        ( *childItr )->ClearCachedAssetClass();
+    }
 }

@@ -33,7 +33,7 @@ namespace Reflect
       Hide        = 1 << 3,        // hidden fields are not inherently visible in UI
       ReadOnly    = 1 << 4,        // read-only fields cannot be edited in the UI inherently
       FilePath    = 1 << 5,        // file path fields are strings that are file paths
-      FileID      = 1 << 6,        // file id fields are identifiers for file paths
+      FileRef     = 1 << 6,        // file ref fields are identifiers for File::References
       NodeID      = 1 << 7,        // this field is a container of other things
       RuntimeEnum = 1 << 8,        // this field is a runtime enum
 

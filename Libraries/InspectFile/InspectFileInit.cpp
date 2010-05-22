@@ -1,13 +1,13 @@
 #include "StdAfx.h"
 #include "InspectFileInit.h"
 
+#include "File/File.h"
 #include "Common/InitializerStack.h"
 #include "Inspect/Container.h"
 #include "Inspect/InspectInit.h"
 #include "InspectReflect/InspectReflectInit.h"
 #include "InspectReflect/ReflectInterpreter.h"
 
-#include "File/Manager.h"
 #include "FileDialogButton.h"
 #include "FileBrowserButton.h"
 
@@ -30,12 +30,7 @@ void InspectFile::Initialize()
     g_RegisteredTypes.Push( Reflect::RegisterClass<FileBrowserButton>( "InspectFileBrowserButton" ) );
 
     ReflectFieldInterpreterFactory::Register<FileContainerInterpreter>( Reflect::GetType<Reflect::StringArraySerializer>(), Reflect::FieldFlags::FilePath );
-    ReflectFieldInterpreterFactory::Register<FileContainerInterpreter>( Reflect::GetType<Reflect::TUIDArraySerializer>(), Reflect::FieldFlags::FileID );
-    ReflectFieldInterpreterFactory::Register<FileContainerInterpreter>( Reflect::GetType<Reflect::U64ArraySerializer>(), Reflect::FieldFlags::FileID );
-    ReflectFieldInterpreterFactory::Register<FileContainerInterpreter>( Reflect::GetType<Reflect::U64SetSerializer>(), Reflect::FieldFlags::FileID );
     ReflectFieldInterpreterFactory::Register<FileInterpreter>( Reflect::GetType<Reflect::StringSerializer>(), Reflect::FieldFlags::FilePath );
-    ReflectFieldInterpreterFactory::Register<FileInterpreter>( Reflect::GetType<Reflect::TUIDSerializer>(), Reflect::FieldFlags::FileID );
-    ReflectFieldInterpreterFactory::Register<FileInterpreter>( Reflect::GetType<Reflect::U64Serializer>(), Reflect::FieldFlags::FileID );
   }
 }
 

@@ -4,12 +4,13 @@
 #include "Asset/AssetFile.h"
 #include "FileSystem/FileSystem.h"
 #include "UIToolKit/ImageManager.h"
+#include "RCS/RCS.h"
 
 using namespace Luna;
 
 static const i32 s_DisplayTimeSize = 32;
 
-std::string GetPrintTime( u64 time )
+std::string TimeAsString( u64 time )
 {
   std::string result;
 
@@ -63,7 +64,7 @@ std::string GetRevisionString( const RCS::Revision* revision )
 {
   std::string str;
   str += revision->m_Username + "@" + revision->m_Client + " (" + GetOperationString( revision->m_Operation ) + ")\n";
-  str += GetPrintTime( revision->m_Time ) + "\n";
+  str += TimeAsString( revision->m_Time ) + "\n";
   str += revision->m_Description;
   return str;
 }
@@ -80,16 +81,14 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
 
   m_Name->SetValue( name );
 
-  std::string fileType( file->GetEngineTypeName() );
+  std::string fileType( Asset::AssetClass::GetAssetTypeName( file->GetAssetType() ) );
   if ( fileType == "Unknown" || fileType == "Null" )
   {
     fileType = file->GetFileType();
   }
   m_FileType->SetValue( fileType );
 
-  std::stringstream id;
-  id << TUID::HexFormat << file->GetFileID();
-  m_FileID->SetValue( id.str() );
+  m_FileID->SetValue( file->GetFilePath() );
 
   std::string folder( file->GetFilePath() );
   FileSystem::StripLeaf( folder );

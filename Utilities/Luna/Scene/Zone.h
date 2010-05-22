@@ -36,11 +36,24 @@ namespace Luna
     Zone( Luna::Scene* scene, Content::Zone* zone );
     virtual ~Zone();
 
+    File::ReferencePtr GetFileReference() const
+    {
+        return m_FileReference;
+    }
+
+    std::string GetPath()
+    {
+        if ( m_FileReference.ReferencesObject() )
+        {
+            m_FileReference->Resolve();
+            return m_FileReference->GetPath();
+        }
+
+        return std::string();
+    }
+
     virtual i32 GetImageIndex() const;
     virtual std::string GetApplicationTypeName() const NOC_OVERRIDE;
-
-    std::string GetPath() const;
-    tuid GetFileID() const;
 
     const Math::Color3& GetColor() const;
 
@@ -49,6 +62,8 @@ namespace Luna
 
   protected:
     virtual void PackageChanged( const Reflect::ElementChangeArgs& args ) NOC_OVERRIDE;
+
+    File::ReferencePtr m_FileReference;
   };
 
   typedef Nocturnal::SmartPtr< Zone > ZonePtr;

@@ -49,7 +49,7 @@ namespace Luna
     void OnCloseCollection( wxCommandEvent& event );
     void OnRenameCollection( wxCommandEvent& event );
     void OnImportIntoCollection( wxCommandEvent& event );
-    void OnExportCollection( wxCommandEvent& event );
+    void OnSaveCollection( wxCommandEvent& event );
     void OnAddToCollection( wxCommandEvent& event );
     void OnRemoveFromCollection( wxCommandEvent& event );
 
@@ -69,7 +69,6 @@ namespace Luna
 
   private:
     wxTreeItemId DragHitTest( UIToolKit::SortTreeCtrl* treeCtrl, wxPoint point );
-    bool GetAssetIDsFromClipBoard( Inspect::ReflectClipboardData* clipboardData, S_tuid& assetIDs, std::string& lastAssetName );
 
     static AssetCollection* NewCollection( CollectionManager* collectionManager, const i32 typeID, const std::string& tryName = std::string("") );
 
@@ -100,7 +99,7 @@ namespace Luna
     int                m_DependencyImageIndex;
     int                m_UsageImageIndex;
 
-    typedef std::map< tuid, wxTreeItemId > M_CollectionToItemID;
+    typedef std::map< u64, wxTreeItemId > M_CollectionToItemID;
     M_CollectionToItemID m_CollectionToItemIDs;
 
   private:
@@ -120,7 +119,7 @@ namespace Luna
 
       ID_ImportCollection = BrowserMenu::ImportCollection,
       ID_ImportIntoCollection = BrowserMenu::ImportIntoCollection,
-      ID_ExportCollection = BrowserMenu::ExportCollection,
+      ID_SaveCollection = BrowserMenu::SaveCollection,
 
       ID_AddToCollection = BrowserMenu::AddToCollection,
       ID_RemoveFromCollection = BrowserMenu::RemoveFromCollection,

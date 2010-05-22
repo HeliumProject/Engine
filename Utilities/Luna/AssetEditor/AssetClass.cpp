@@ -15,11 +15,9 @@
 #include "Attribute/AttributeHandle.h"
 #include "Asset/Exceptions.h"
 #include "Asset/StandardShaderAsset.h"
-#include "AssetManager/AssetManager.h"
 #include "Common/CommandLine.h"
 #include "Common/Container/Insert.h" 
 #include "Common/String/Natural.h"
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/ContentSpecs.h"
 #include "Console/Console.h"
@@ -146,8 +144,6 @@ bool AssetClass::Save( std::string& error )
   Pack();
 
   Asset::AssetClass* assetClass = GetPackage< Asset::AssetClass >();
-  tuid fileID = assetClass->m_AssetClassID;
-
   std::string path = GetFilePath();
   if ( path.empty() )
   {
@@ -159,7 +155,6 @@ bool AssetClass::Save( std::string& error )
   try
   {
     Reflect::Archive::ToFile( assetClass, path, new Asset::AssetVersion(), NULL );
-    Asset::AssetClass::InvalidateCache( assetClass->m_AssetClassID );
     saved = true;
   }
   catch ( const Nocturnal::Exception& e )
@@ -223,32 +218,10 @@ const std::string& AssetClass::GetName() const
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the path to this asset's location on disk.
 // 
-const std::string& AssetClass::GetFilePath() const
+std::string AssetClass::GetFilePath()
 {
-  if ( m_FilePath.empty() )
-  {
-    const Asset::AssetClass* package = GetPackage< Asset::AssetClass >();
-    try
-    {
-      m_FilePath = package->GetFilePath();
-    }
-    catch ( const Nocturnal::Exception& e )
-    {
-      Console::Error( "Unable to get asset path: %s\n", e.what() );
-      NOC_BREAK();
-    }
-  }
-
-  return m_FilePath;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the file ID tuid for this asset.
-// 
-tuid AssetClass::GetFileID() const
-{
-  const Asset::AssetClass* package = GetPackage< Asset::AssetClass >();
-  return package->GetFileID();
+    Asset::AssetClass* package = GetPackage< Asset::AssetClass >();
+    return package->GetFilePath().Get();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -257,7 +230,7 @@ tuid AssetClass::GetFileID() const
 std::string AssetClass::GetIcon() const
 {
   // get the engine type icon
-  std::string icon = Asset::AssetClass::GetEngineTypeIcon( GetPackage<Asset::AssetClass>()->GetEngineType() );
+  std::string icon = Asset::AssetClass::GetAssetTypeIcon( GetPackage<Asset::AssetClass>()->GetAssetType() );
   
   if ( icon.empty() )
   {
@@ -299,7 +272,7 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
 
   const size_t numSelected = m_AssetManager->GetSelection().GetItems().Size();
   const bool isShader = assetPkg->HasType( Reflect::GetType< Asset::ShaderAsset >() );
-  const bool isLevel = assetPkg->GetEngineType() == Asset::EngineTypes::Level;
+  const bool isLevel = assetPkg->GetAssetType() == Asset::AssetTypes::Level;
 
   const bool isUserAssetAdmin = Nocturnal::GetCmdLineFlag( "asset_admin" );
 
@@ -319,13 +292,13 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
     }
   }
 
-  V_string staticContentFiles;
-  ::AssetManager::GetStaticContentFiles( GetFileID(), staticContentFiles );
+  //V_string staticContentFiles;
+  //::AssetManager::GetStaticContentFiles( GetFileID(), staticContentFiles );
 
-  const bool canPreview = staticContentFiles.size() ? true : false;
-  std::string previewTip = canPreview
-    ? "Preview the asset in the preview panel."
-    : "This asset cannot be previewed in the preview panel.";
+  //const bool canPreview = staticContentFiles.size() ? true : false;
+  //std::string previewTip = canPreview
+  //  ? "Preview the asset in the preview panel."
+  //  : "This asset cannot be previewed in the preview panel.";
 
   const bool canDuplicate = ( numSelected == 1 ) && ( isUserAssetAdmin || ( !areAssetsLocked && ( isShader ) ) );
   std::string duplicateToolTip = canDuplicate 
@@ -344,28 +317,12 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
 
   ContextMenuItemPtr menuItem = new ContextMenuItem( "Preview" );
   menuItem->AddCallback( ContextMenuSignature::Delegate( m_AssetManager->GetAssetEditor(), &AssetEditor::OnAssetPreview ) );
-  menuItem->Enable( canPreview );
+  menuItem->Enable( false ); // TODO: enable this
   menu.AppendItem( menuItem );
 
   menu.AppendSeparator();
   menuItem = new ContextMenuItem( "Add Attribute" );
   menuItem->AddCallback( ContextMenuSignature::Delegate( m_AssetManager->GetAssetEditor(), &AssetEditor::PromptAddAttributes ) );
-  menu.AppendItem( menuItem );
-
-  menu.AppendSeparator();
-  menuItem = new ContextMenuItem( "Duplicate", duplicateToolTip.c_str() );
-  menuItem->AddCallback( ContextMenuSignature::Delegate( &Luna::OnDuplicateAsset ), new Luna::AssetManagerClientData( m_AssetManager ) );
-  menuItem->Enable( canDuplicate );
-  menu.AppendItem( menuItem );
-
-  menuItem = new ContextMenuItem( "Rename/Move", renameToolTip.c_str() );
-  menuItem->AddCallback( ContextMenuSignature::Delegate( &Luna::OnRenameAsset ), clientData );
-  menuItem->Enable( canRename );
-  menu.AppendItem( menuItem );
-
-  menuItem = new ContextMenuItem( "Delete", deleteToolTip.c_str() );
-  menuItem->AddCallback( ContextMenuSignature::Delegate( &Luna::OnDeleteAsset ), clientData );
-  menuItem->Enable( canDelete );
   menu.AppendItem( menuItem );
 
   menu.AppendSeparator();
@@ -536,7 +493,7 @@ Undo::CommandPtr AssetClass::CopyFrom( Luna::PersistentData* src )
 
     // Replace any other data on our cloned source that should not be overwritten.
     {
-      srcAsset->m_Description = dstAsset->m_Description;
+      srcAsset->SetDescription( dstAsset->GetDescription() );
     }
 
     // Perform the copy of the asset class

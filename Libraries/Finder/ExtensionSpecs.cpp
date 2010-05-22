@@ -26,8 +26,8 @@ namespace FinderSpecs
   const ExtensionSpec Extension::MENTALRAY             ( "Extension::MENTALRAY",             "Mental Ray File",                  "mi" );
   const ExtensionSpec Extension::MP3                   ( "Extension::MP3",                   "Mp3 File",                         "mp3" );
   const ExtensionSpec Extension::PNG                   ( "Extension::PNG",                   "PNG",                              "png" );
-  const ExtensionSpec Extension::REFLECT_BINARY        ( "Extension::REFLECT_BINARY",        "Reflect Binary File",              "irb" );
-  const ExtensionSpec Extension::REFLECT_TEXT          ( "Extension::REFLECT_TEXT",          "Reflect XML File",                 "irx" );
+  const ExtensionSpec Extension::REFLECT_BINARY        ( "Extension::REFLECT_BINARY",        "Reflect Binary File",              "rb" );
+  const ExtensionSpec Extension::REFLECT_TEXT          ( "Extension::REFLECT_TEXT",          "Reflect XML File",                 "rx" );
   const ExtensionSpec Extension::SFX                   ( "Extension::SFX",                   "SCREAM Sfx 4.0 File",              "sfx" );
   const ExtensionSpec Extension::SPEEDTREE             ( "Extension::SPEEDTREE",             "Speed Tree",                       "spt" );
   const ExtensionSpec Extension::SQL                   ( "Extension::SQL",                   "SQL",                              "sql" );

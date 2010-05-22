@@ -19,9 +19,6 @@ namespace Inspect
     virtual void InterpretField(const Reflect::Field* field, const std::vector<Reflect::Element*>& instances, Container* parent);
 
   private:
-    // translate TUID to file path and back
-    void TranslateInputTUID( Reflect::TranslateInputEventArgs& args );
-    void TranslateOutputTUID( Reflect::TranslateOutputEventArgs& args );
 
     // callbacks
     bool DataChanging( DataChangingArgs& args );

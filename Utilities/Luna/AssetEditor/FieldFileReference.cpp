@@ -32,9 +32,9 @@ void FieldFileReference::CleanupType()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-FieldFileReference::FieldFileReference( Luna::AssetManager* assetManager, Reflect::Element* element, const Reflect::Field* field, const tuid& fileID )
+FieldFileReference::FieldFileReference( Luna::AssetManager* assetManager, Reflect::Element* element, const Reflect::Field* field, const File::Reference& fileRef )
 : Luna::FieldNode( assetManager, element, field )
-, m_FileID( fileID )
+, m_FileReference( new File::Reference( fileRef ) )
 , m_UseLabelPrefix( true )
 {
   NOC_ASSERT( Luna::IsFileReference( element, field ) );
@@ -52,6 +52,8 @@ FieldFileReference::~FieldFileReference()
 {
   // Remove listeners
   GetAssetEditorPreferences()->RemoveChangedListener(  Reflect::ElementChangeSignature::Delegate( this, &FieldFileReference::PreferenceChanged ) );
+
+  delete m_FileReference;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,14 +67,6 @@ void FieldFileReference::SetUseLabelPrefix( bool useLabelPrefix )
     m_UseLabelPrefix = useLabelPrefix;
     SetName( MakeLabel() );
   }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the file ID that this node references.
-// 
-tuid FieldFileReference::GetFileID() const
-{
-  return m_FileID;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -95,7 +89,7 @@ std::string FieldFileReference::MakeLabel() const
 
   FilePathOptions::FilePathOption filePathOption = FilePathOptions::PartialPath;
   GetAssetEditorPreferences()->GetEnum( GetAssetEditorPreferences()->FilePathOption(), filePathOption );
-  label += Luna::TuidToLabel( m_FileID, filePathOption );
+  label += Luna::FileRefToLabel( *m_FileReference, filePathOption );
   return label;
 }
 

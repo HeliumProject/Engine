@@ -22,12 +22,12 @@ namespace Maya
   void MAYASHADERMANAGER_API CreateShader( std::string& shaderFilename, const std::string& shaderName, const std::string& colorMapPath, const std::string& normalMapPath, const std::string& expensiveMapPath );
   void MAYASHADERMANAGER_API Setup2dTextureNode( MObject &textureMapNode );
 
-  void MAYASHADERMANAGER_API SetShaderId( MObject &object, tuid shaderId, const std::string& shaderName = std::string( "" ) );
-  tuid MAYASHADERMANAGER_API GetShaderId( const MObject &object, bool getTopShaderId = false );
+  void MAYASHADERMANAGER_API SetShader( MObject &object, const std::string& shaderPath );
+  std::string MAYASHADERMANAGER_API GetShader( const MObject &object );
 
-  void MAYASHADERMANAGER_API LoadShader( const ShaderType shaderType, tuid shaderId, const std::string& shaderFilename = std::string( "" ) );
+  void MAYASHADERMANAGER_API LoadShader( const ShaderType shaderType, const std::string& shaderFile );
 
-  bool MAYASHADERMANAGER_API HasAlpha( const tuid shaderId );
+  bool MAYASHADERMANAGER_API HasAlpha( const std::string& shaderPath );
 
   void MAYASHADERMANAGER_API CleanupShaders();
 
@@ -38,24 +38,11 @@ namespace Maya
 
   void MAYASHADERMANAGER_API GetShaders( const std::string& nameFilter, V_string& shaderNames );
   void MAYASHADERMANAGER_API GetMayaSurfaceShaderNames( tuid shaderID, MStringArray& shaderNames );
-  void MAYASHADERMANAGER_API GetUniqueShaderIDs( MStringArray& shaderIDStrs );
+  void MAYASHADERMANAGER_API GetUniqueShaders( MStringArray& shaders );
 
   MStatus MAYASHADERMANAGER_API ShowShaderBrowser();
   void MAYASHADERMANAGER_API HideShaderBrowserCallBack( void* clientData );
 
-  MStatus MAYASHADERMANAGER_API CreateShaderWizard();
-
-  //
-  // API's for dual-layer shaders
-  //
-
-  bool MAYASHADERMANAGER_API IsDualLayerShader( MObject& shaderNode );
-
-  void MAYASHADERMANAGER_API GetDualTexturePaths( MObject& shaderNode, std::string& baseMap, std::string& topMap );
-  void MAYASHADERMANAGER_API SetDualTexturePaths( MObject& shaderNode, const std::string& baseMap, const std::string& topMap );
-  void MAYASHADERMANAGER_API GetBlendTexturePath( MObject& shaderNode, std::string& blendMap );
-  void MAYASHADERMANAGER_API SetBlendTexturePath( MObject& shaderNode, const std::string& blendMap );
-   
   class MAYASHADERMANAGER_API ShaderManager : public MPxCommand
   {
   public:

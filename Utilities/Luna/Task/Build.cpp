@@ -15,7 +15,6 @@
 
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
-#include "File/Manager.h"
 
 #include "Dependencies/Dependencies.h"
 
@@ -51,577 +50,457 @@ static Nocturnal::InitializerStack g_InitializerStack;
 
 void Build::Initialize()
 {
-  if ( ++g_InitCount == 1 )
-  {
-    g_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
-    g_InitializerStack.Push( AssetBuilder::Initialize, AssetBuilder::Cleanup );
-    g_InitializerStack.Push( Dependencies::Initialize, Dependencies::Cleanup );
-  }
+    if ( ++g_InitCount == 1 )
+    {
+        g_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
+        g_InitializerStack.Push( AssetBuilder::Initialize, AssetBuilder::Cleanup );
+        g_InitializerStack.Push( Dependencies::Initialize, Dependencies::Cleanup );
+    }
 }
 
 void Build::Cleanup()
 {
-  if ( --g_InitCount == 0 )
-  {
-    // non-blocking builds dangle thier thread handles
-    if ( g_BuildThread )
+    if ( --g_InitCount == 0 )
     {
-      CloseHandle( g_BuildThread );
-      g_BuildThread = NULL;
+        // non-blocking builds dangle thier thread handles
+        if ( g_BuildThread )
+        {
+            CloseHandle( g_BuildThread );
+            g_BuildThread = NULL;
+        }
+        g_InitializerStack.Cleanup();
     }
-    g_InitializerStack.Cleanup();
-  }
 }
 
 AssetBuilder::AssetBuiltSignature::Event g_AssetBuiltEvent;
 void Luna::AddAssetBuiltListener( const AssetBuilder::AssetBuiltSignature::Delegate& listener )
 {
-  g_AssetBuiltEvent.Add( listener );
+    g_AssetBuiltEvent.Add( listener );
 }
 
 void Luna::RemoveAssetBuiltListener( const AssetBuilder::AssetBuiltSignature::Delegate& listener )
 {
-  g_AssetBuiltEvent.Remove( listener );
+    g_AssetBuiltEvent.Remove( listener );
 }
 
 void BuildSignal(Nocturnal::Void)
 {
-  if (g_BuildInProgress)
-  {
-    // halt our build thread
-    g_BuildCancelling = true;
-
-    // murder the actual build process
-    g_WorkerProcess->Kill();
-
-    // release the process object (handle)
-    Worker::Process::Release( g_WorkerProcess );
-
-    // wait for it to complete
-    WaitForSingleObject( g_BuildThread, INFINITE );
-
-    // release the thread handle
-    CloseHandle( g_BuildThread );
-    g_BuildThread = NULL;
-
-    // reset cancel state
-    g_BuildCancelling = false;
-
-    // raise finished event
-    TaskFinishedArgs args;
-    args.m_Result = TaskResults::Cancel;
-    RaiseTaskFinished( args );
-
-    // flag as dormant
-    g_BuildInProgress = false;
-  }
-  else
-  {
-    if (g_OutputWindow)
+    if (g_BuildInProgress)
     {
-      g_OutputWindow->Destroy();
-      g_OutputWindow = NULL;
+        // halt our build thread
+        g_BuildCancelling = true;
+
+        // murder the actual build process
+        g_WorkerProcess->Kill();
+
+        // release the process object (handle)
+        Worker::Process::Release( g_WorkerProcess );
+
+        // wait for it to complete
+        WaitForSingleObject( g_BuildThread, INFINITE );
+
+        // release the thread handle
+        CloseHandle( g_BuildThread );
+        g_BuildThread = NULL;
+
+        // reset cancel state
+        g_BuildCancelling = false;
+
+        // raise finished event
+        TaskFinishedArgs args;
+        args.m_Result = TaskResults::Cancel;
+        RaiseTaskFinished( args );
+
+        // flag as dormant
+        g_BuildInProgress = false;
     }
-  }
+    else
+    {
+        if (g_OutputWindow)
+        {
+            g_OutputWindow->Destroy();
+            g_OutputWindow = NULL;
+        }
+    }
 }
 
 struct BuildParams
 {
-  S_tuid m_AssetIds;
-  tuid m_ViewAsset;
-  AssetBuilder::BuilderOptionsPtr m_BuilderOptions;
+    File::S_Reference m_Assets;
+    AssetBuilder::BuilderOptionsPtr m_BuilderOptions;
 
-  BuildParams()
-    : m_BuilderOptions( NULL )
-  {
+    BuildParams()
+        : m_BuilderOptions( NULL )
+    {
 
-  }
+    }
 };
 
-bool BuildEntry( const S_tuid& assetIDs, AssetBuilder::BuilderOptionsPtr options, bool view )
+bool BuildEntry( const File::S_Reference& assets, AssetBuilder::BuilderOptionsPtr options, bool view )
 {
-  g_WorkerProcess = Worker::Process::Create( "BuildTool.exe" );
+    g_WorkerProcess = Worker::Process::Create( "BuildTool.exe" );
 
-  if (!g_WorkerProcess->Start())
-  {
-    return false;
-  }
-
-  AssetBuilder::BuildRequestPtr req = new AssetBuilder::BuildRequest ();
-  req->m_Assets = assetIDs;
-  req->m_Options = options;
-  req->m_View = view;
-
-  std::stringstream stream;
-  
-  try
-  {
-    Reflect::Archive::ToStream( req, stream, Reflect::ArchiveTypes::Binary );
-  }
-  catch ( Nocturnal::Exception& ex )
-  {
-    Console::Error( "%s\n", ex.what() );
-    return false;
-  }
-
-  if (!g_WorkerProcess->Send(0x0, (u32)stream.str().length(), (const u8*)stream.str().c_str()))
-  {
-    return false;
-  }
-
-  while (g_WorkerProcess->Running() && !g_BuildCancelling)
-  {
-    IPC::Message* msg = g_WorkerProcess->Receive();
-
-    if (!msg)
+    if (!g_WorkerProcess->Start())
     {
-      break;
+        return false;
     }
 
-    u32 messageId = msg->GetID();
-    if (messageId == Worker::ConsoleOutputMessage)
+    AssetBuilder::BuildRequestPtr req = new AssetBuilder::BuildRequest ();
+    req->m_Assets = assets;
+    req->m_Options = options;
+
+    std::stringstream stream;
+
+    try
     {
-      Worker::ConsoleOutput* output = (Worker::ConsoleOutput*)msg->GetData();
-
-      Console::Statement statement ( output->m_String, output->m_Stream, output->m_Level, output->m_Indent );
-
-      if (g_OutputWindow)
-      {
-        g_OutputWindow->PrintListener( Console::PrintedArgs ( statement ) );
-      }
-      else
-      {
-        Console::PrintStatement( statement );
-      }
+        Reflect::Archive::ToStream( req, stream, Reflect::ArchiveTypes::Binary );
     }
-    else if ( messageId == 0x1 )
+    catch ( Nocturnal::Exception& ex )
     {
-      std::strstream stream ((char*)msg->GetData(), msg->GetSize());
-
-      AssetBuilder::AssetBuiltArgsPtr assetBuiltArgs = Reflect::ObjectCast<AssetBuilder::AssetBuiltArgs> (Reflect::Archive::FromStream(stream, Reflect::ArchiveTypes::Binary, Reflect::GetType<AssetBuilder::AssetBuiltArgs>()));
-      if ( assetBuiltArgs.ReferencesObject() )
-      {
-        g_AssetBuiltEvent.Raise( assetBuiltArgs );
-      }
+        Console::Error( "%s\n", ex.what() );
+        return false;
     }
 
-    delete msg;
-  }
+    if (!g_WorkerProcess->Send(0x0, (u32)stream.str().length(), (const u8*)stream.str().c_str()))
+    {
+        return false;
+    }
 
-  if (g_BuildCancelling)
-  {
-    ExitThread( 0 );
-    return 0;
-  }
-  else
-  {
-    int result = g_WorkerProcess->Finish();
+    while (g_WorkerProcess->Running() && !g_BuildCancelling)
+    {
+        IPC::Message* msg = g_WorkerProcess->Receive();
 
-    Worker::Process::Release( g_WorkerProcess );
+        if (!msg)
+        {
+            break;
+        }
 
-    return result == 0;
-  }
+        u32 messageId = msg->GetID();
+        if (messageId == Worker::ConsoleOutputMessage)
+        {
+            Worker::ConsoleOutput* output = (Worker::ConsoleOutput*)msg->GetData();
+
+            Console::Statement statement ( output->m_String, output->m_Stream, output->m_Level, output->m_Indent );
+
+            if (g_OutputWindow)
+            {
+                g_OutputWindow->PrintListener( Console::PrintedArgs ( statement ) );
+            }
+            else
+            {
+                Console::PrintStatement( statement );
+            }
+        }
+        else if ( messageId == 0x1 )
+        {
+            std::strstream stream ((char*)msg->GetData(), msg->GetSize());
+
+            AssetBuilder::AssetBuiltArgsPtr assetBuiltArgs = Reflect::ObjectCast<AssetBuilder::AssetBuiltArgs> (Reflect::Archive::FromStream(stream, Reflect::ArchiveTypes::Binary, Reflect::GetType<AssetBuilder::AssetBuiltArgs>()));
+            if ( assetBuiltArgs.ReferencesObject() )
+            {
+                g_AssetBuiltEvent.Raise( assetBuiltArgs );
+            }
+        }
+
+        delete msg;
+    }
+
+    if (g_BuildCancelling)
+    {
+        ExitThread( 0 );
+        return 0;
+    }
+    else
+    {
+        int result = g_WorkerProcess->Finish();
+
+        Worker::Process::Release( g_WorkerProcess );
+
+        return result == 0;
+    }
 }
 
 DWORD WINAPI BuildThread( LPVOID lpParam )
 {
-  bool success = true;
+    bool success = true;
 
-  BuildParams* params = static_cast< BuildParams* >( lpParam );
+    BuildParams* params = static_cast< BuildParams* >( lpParam );
 
-  S_tuid assets;
+    File::S_Reference assets;
 
-  for each ( const tuid assetId in params->m_AssetIds )
-  {
-    Asset::AssetClassPtr assetClass = Asset::AssetClass::FindAssetClass( assetId, false );
-
-    if ( assetClass->GetEngineType() == Asset::EngineTypes::Level )
+    for each ( const File::ReferencePtr& assetFileRef in params->m_Assets )
     {
-      if ( !params->m_BuilderOptions.ReferencesObject() )
-      {
-        params->m_BuilderOptions = new AssetBuilder::LevelBuilderOptions;
-      }
+        assetFileRef->Resolve();
 
-      if ( params->m_ViewAsset != TUID::Null )
-      {
-        AssetBuilder::LevelBuilderOptionsPtr options = Reflect::ObjectCast<AssetBuilder::LevelBuilderOptions>( params->m_BuilderOptions );
+        Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( *assetFileRef );
 
-        options->m_Viewer = true;
-      }
+        if ( assetClass->GetAssetType() == Asset::AssetTypes::Level )
+        {
+            if ( !params->m_BuilderOptions.ReferencesObject() )
+            {
+                params->m_BuilderOptions = new AssetBuilder::LevelBuilderOptions;
+            }
 
-      assets.insert( assetId );
+            assets.insert( assetFileRef );
+        }
+        else if ( assetClass->GetAssetType() == Asset::AssetTypes::Cinematic )
+        {
+            if ( !params->m_BuilderOptions.ReferencesObject() )
+            {
+                params->m_BuilderOptions = new AssetBuilder::LevelBuilderOptions;
+            }
+
+            assets.insert( assetFileRef );
+        }
+        else
+        {
+            assets.insert( assetFileRef );
+        }
     }
-    else if ( assetClass->GetEngineType() == Asset::EngineTypes::Cinematic )
-    {
-      if ( !params->m_BuilderOptions.ReferencesObject() )
-      {
-        params->m_BuilderOptions = new AssetBuilder::LevelBuilderOptions;
-      }
 
-      assets.insert( assetId );
+    success = BuildEntry( assets, params->m_BuilderOptions, false );
+
+    if ( !g_BuildCancelling )
+    {
+        // notify of successful finish
+        BuildFinishedArgs args;
+        args.m_Result = success ? TaskResults::Success : TaskResults::Failure;
+        args.m_Assets = params->m_Assets;
+        args.m_BuilderOptions = params->m_BuilderOptions;
+        RaiseTaskFinished( args );
+    }
+
+    g_BuildInProgress = false;
+
+    delete params;
+
+    return success ? 0 : 1;
+}
+
+AssetBuilder::BuilderOptionsPtr CreateBuilderOptions( const File::S_Reference& assets )
+{
+    Asset::AssetType assetType = Asset::AssetTypes::Null;
+    bool differentClasses = false;
+
+    // if all the assets are the same type, we can use their specific builder options.  Otherwise, use the base builder options
+    for each ( const File::ReferencePtr& assetFileRef in assets )
+    {
+        assetFileRef->Resolve();
+
+        Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( *assetFileRef );
+
+        Asset::AssetType currentType = assetClass->GetAssetType();
+
+        if ( assetType != Asset::AssetTypes::Null && currentType != assetType )
+        {
+            differentClasses = true;
+            assetType = Asset::AssetTypes::Null;
+        }
+
+        if ( !differentClasses )
+        {
+            assetType = currentType;
+        }
+    }
+
+    AssetBuilder::BuilderOptionsPtr builderOptions = NULL;
+
+    if ( differentClasses )
+    {
+        builderOptions = new AssetBuilder::BuilderOptions;
     }
     else
     {
-      assets.insert( assetId );
-    }
-  }
-
-  success = BuildEntry( assets, params->m_BuilderOptions, false );
-
-  if ( !g_BuildCancelling )
-  {
-    // notify of successful finish
-    BuildFinishedArgs args;
-    args.m_Result = success ? TaskResults::Success : TaskResults::Failure;
-    args.m_Assets = params->m_AssetIds;
-    args.m_View = params->m_ViewAsset != TUID::Null;
-    args.m_BuilderOptions = params->m_BuilderOptions;
-    RaiseTaskFinished( args );
-  }
-
-  g_BuildInProgress = false;
-
-  delete params;
-
-  return success ? 0 : 1;
-}
-
-AssetBuilder::BuilderOptionsPtr CreateBuilderOptions( const S_tuid& assetIds )
-{
-  Asset::EngineType engineType = Asset::EngineTypes::Null;
-  bool differentClasses = false;
-
-  // if all the assets are the same type, we can use their specific builder options.  Otherwise, use the base builder options
-  for each ( const tuid assetId in assetIds )
-  {
-    Asset::AssetClassPtr assetClass = Asset::AssetClass::FindAssetClass( assetId, false );
-
-    Asset::EngineType currentType = assetClass->GetEngineType();
-
-    if ( engineType != Asset::EngineTypes::Null && currentType != engineType )
-    {
-      differentClasses = true;
-      engineType = Asset::EngineTypes::Null;
-    }
-
-    if ( !differentClasses )
-    {
-      engineType = currentType;
-    }
-  }
-
-  AssetBuilder::BuilderOptionsPtr builderOptions = NULL;
-
-  if ( differentClasses )
-  {
-    builderOptions = new AssetBuilder::BuilderOptions;
-  }
-  else
-  {
-    switch ( engineType )
-    {
-    case Asset::EngineTypes::AnimationSet:
-      builderOptions = new AssetBuilder::AnimationBuilderOptions;
-      break;
-
-    case Asset::EngineTypes::Tie:
-      builderOptions = new AssetBuilder::TieBuilderOptions;
-      break;
-
-    case Asset::EngineTypes::Moby:
-      builderOptions = new AssetBuilder::MobyBuilderOptions;
-      break;
-
-    case Asset::EngineTypes::Level:
-      {
-        builderOptions = new AssetBuilder::LevelBuilderOptions;
-      }
-
-      break;
-
-    case Asset::EngineTypes::Shrub:
-      builderOptions = new AssetBuilder::ShrubBuilderOptions;
-      break;
-
-    case Asset::EngineTypes::Shader:
-      builderOptions = new AssetBuilder::ShaderBuilderOptions;
-      break;
-
-    case Asset::EngineTypes::Foliage:
-      builderOptions = new AssetBuilder::FoliageBuilderOptions;
-      break;
-
-    case Asset::EngineTypes::Sky:
-      builderOptions = new AssetBuilder::SkyBuilderOptions;
-      break;
-
-    case Asset::EngineTypes::Cinematic:
-      builderOptions = new AssetBuilder::CinematicBuilderOptions;
-      break;
-
-    case Asset::EngineTypes::Ufrag:
-      builderOptions = new AssetBuilder::UfragBuilderOptions;
-      break;
-
-    default:
-      builderOptions = new AssetBuilder::BuilderOptions;
-      break;
-    }
-  }
-
-  return builderOptions;
-}
-
-bool GetBuilderOptions( const S_tuid& assetIds, AssetBuilder::BuilderOptionsPtr& builderOptions, wxWindow* parent )
-{
-  TaskOptionsDialog dialog( parent, wxID_ANY, "Builder/Packer Options" );
-
-  Inspect::CanvasWindow* canvasWindow = new Inspect::CanvasWindow( dialog.GetPanel(), wxID_ANY, wxDefaultPosition, dialog.GetPanel()->GetSize(), wxALWAYS_SHOW_SB | wxCLIP_CHILDREN );
-
-  Inspect::Canvas* canvas = new Inspect::Canvas;
-  canvas->SetControl( canvasWindow );
-
-  Inspect::ReflectInterpreterPtr interpreter = new Inspect::ReflectInterpreter( canvas );
-
-  std::vector< Reflect::Element* > elems;
-
-  if ( builderOptions.ReferencesObject() )
-  {
-    elems.push_back( builderOptions );
-
-    interpreter->Interpret( elems );
-  }
-
-  canvas->Layout();
-  canvas->Read();
-  bool success = dialog.ShowModal() == wxID_OK;
-
-  delete canvas;
-
-  // if we're a level, check to see if the zones flag has been set.  if so, pop up the zone selector dialog
-  AssetBuilder::LevelBuilderOptions* levelBuildOptions = Reflect::ObjectCast< LevelBuilderOptions >( builderOptions );
-  if ( success && levelBuildOptions )
-  {
-    if ( levelBuildOptions->m_SelectZones )
-    {
-      V_string zoneNames;
-
-      // fill out the zone names from the level asset
-      Asset::LevelAssetPtr levelAsset = Asset::AssetClass::GetAssetClass<Asset::LevelAsset>( *assetIds.begin() );
-      Attribute::AttributeViewer< Asset::WorldFileAttribute > model( levelAsset );
-
-      Reflect::V_Element elements;     
-      try
-      {
-        Reflect::Archive::FromFile( model->GetFilePath(), elements );
-      }
-      catch ( Nocturnal::Exception& ex )
-      {
-        std::ostringstream str;
-        str << "Unable to load world from: " << model->GetFilePath() << ": " << ex.what();
-        wxMessageBox( str.str(), "Error", wxICON_ERROR | wxOK );
-        success = false;
-      }
-
-      if ( success )
-      {
-        V_string zoneNames;
-
-        Reflect::V_Element::iterator itr = elements.begin();
-        Reflect::V_Element::iterator end= elements.end();
-        for( ; itr != end; ++itr )
+        switch ( assetType )
         {
-          Content::ZonePtr zone = Reflect::ObjectCast< Content::Zone >( (*itr) );
-          if ( zone )
-          {
-            if ( zone->m_Active )
+        case Asset::AssetTypes::AnimationSet:
+            builderOptions = new AssetBuilder::AnimationBuilderOptions;
+            break;
+
+        case Asset::AssetTypes::Level:
             {
-              zoneNames.push_back( zone->GetName() );
+                builderOptions = new AssetBuilder::LevelBuilderOptions;
             }
-          }
-        }
 
-        std::sort( zoneNames.begin(), zoneNames.end() );
+            break;
 
-        // pop up the zone selector dialog
-        S_u32 selectedZones;
-        ZoneSelectorDialog zoneSelector( parent, "Select Zones", "", zoneNames, selectedZones );
+        case Asset::AssetTypes::Shader:
+            builderOptions = new AssetBuilder::ShaderBuilderOptions;
+            break;
 
-        if ( zoneSelector.ShowModal() != wxID_CANCEL )
-        {
-          for each ( u32 zoneNum in selectedZones )
-          {
-            levelBuildOptions->m_ZoneList.push_back( zoneNames[ zoneNum ] );
-          }
+        case Asset::AssetTypes::Sky:
+            builderOptions = new AssetBuilder::SkyBuilderOptions;
+            break;
+
+        case Asset::AssetTypes::Cinematic:
+            builderOptions = new AssetBuilder::CinematicBuilderOptions;
+            break;
+
+        default:
+            builderOptions = new AssetBuilder::BuilderOptions;
+            break;
         }
-        else  // dialog was canceled
-        {
-          success = false;
-        }
-      }
     }
-  }
 
-  return success;
+    return builderOptions;
 }
 
-void Luna::BuildAssets( const S_tuid& assetIds, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions, bool blocking, const tuid& viewAsset )
+bool GetBuilderOptions( const File::S_Reference& assets, AssetBuilder::BuilderOptionsPtr& builderOptions, wxWindow* parent )
 {
-  if ( g_BuildInProgress )
-  {
-    wxMessageBox( "Another build is already in progress!", "Build in Progress", wxICON_WARNING | wxOK );
-    return;
-  }
+    TaskOptionsDialog dialog( parent, wxID_ANY, "Builder/Packer Options" );
 
-  if ( g_BuildThread )
-  {
-    CloseHandle( g_BuildThread );
-    g_BuildThread = NULL;
-  }
+    Inspect::CanvasWindow* canvasWindow = new Inspect::CanvasWindow( dialog.GetPanel(), wxID_ANY, wxDefaultPosition, dialog.GetPanel()->GetSize(), wxALWAYS_SHOW_SB | wxCLIP_CHILDREN );
 
-  g_BuildInProgress = true;
+    Inspect::Canvas* canvas = new Inspect::Canvas;
+    canvas->SetControl( canvasWindow );
 
-  if ( !builderOptions.ReferencesObject() )
-  {
-    builderOptions = CreateBuilderOptions( assetIds );
-  }
+    Inspect::ReflectInterpreterPtr interpreter = new Inspect::ReflectInterpreter( canvas );
 
-  bool success = true;
-  if ( viewAsset != TUID::Null )
-  {
-    if ( assetIds.size() == 1 )
+    std::vector< Reflect::Element* > elems;
+
+    if ( builderOptions.ReferencesObject() )
     {
-      LevelBuilderOptionsPtr levelBuilderOptions = Reflect::ObjectCast< LevelBuilderOptions >( builderOptions );
-      if ( levelBuilderOptions.ReferencesObject() )
-      {
-        // fill out the region names from the level asset
-        Asset::LevelAssetPtr levelAsset = Asset::AssetClass::GetAssetClass<Asset::LevelAsset>( *assetIds.begin() );
-        Attribute::AttributeViewer< Asset::WorldFileAttribute > model( levelAsset );
+        elems.push_back( builderOptions );
 
-        Reflect::V_Element elements;
-        try
+        interpreter->Interpret( elems );
+    }
+
+    canvas->Layout();
+    canvas->Read();
+    bool success = dialog.ShowModal() == wxID_OK;
+
+    delete canvas;
+
+    // if we're a level, check to see if the zones flag has been set.  if so, pop up the zone selector dialog
+    AssetBuilder::LevelBuilderOptions* levelBuildOptions = Reflect::ObjectCast< LevelBuilderOptions >( builderOptions );
+    if ( success && levelBuildOptions )
+    {
+        if ( levelBuildOptions->m_SelectZones )
         {
-          Reflect::Archive::FromFile( model->GetFilePath(), elements );
-        }
-        catch ( Nocturnal::Exception& ex )
-        {
-          std::ostringstream str;
-          str << "Unable to load world from: " << model->GetFilePath() << ": " << ex.what();
-          wxMessageBox( str.str(), "Error", wxICON_ERROR | wxOK );
-          success = false;
-        }
+            V_string zoneNames;
 
-        if (success)
-        {
-          S_string regionNames;
+            // fill out the zone names from the level asset
+            Asset::LevelAssetPtr levelAsset = Asset::AssetClass::LoadAssetClass< Asset::LevelAsset >( *(*assets.begin()) );
+            Attribute::AttributeViewer< Asset::WorldFileAttribute > model( levelAsset );
 
-#pragma TODO( "Remove default region as an all-zones region" )
-          regionNames.insert( "default" );
-
-          Reflect::V_Element::iterator itr = elements.begin();
-          Reflect::V_Element::iterator end= elements.end();
-          for( ; itr != end; ++itr )
-          {
-            Content::ZonePtr zone = Reflect::ObjectCast< Content::Zone >( (*itr) );
-
-            if ( zone )
+            Reflect::V_Element elements;     
+            try
             {
-              if ( zone->m_Active )
-              {
-                if ( zone->m_Regions.empty() )
+                model->GetFileReference().Resolve();
+                Reflect::Archive::FromFile( model->GetFileReference().GetPath(), elements );
+            }
+            catch ( Nocturnal::Exception& ex )
+            {
+                std::ostringstream str;
+                str << "Unable to load world from: " << model->GetFileReference().GetPath() << ": " << ex.what();
+                wxMessageBox( str.str(), "Error", wxICON_ERROR | wxOK );
+                success = false;
+            }
+
+            if ( success )
+            {
+                V_string zoneNames;
+
+                Reflect::V_Element::iterator itr = elements.begin();
+                Reflect::V_Element::iterator end= elements.end();
+                for( ; itr != end; ++itr )
                 {
-                  zone->m_Regions.push_back( "default" );
+                    Content::ZonePtr zone = Reflect::ObjectCast< Content::Zone >( (*itr) );
+                    if ( zone )
+                    {
+                        if ( zone->m_Active )
+                        {
+                            zoneNames.push_back( zone->GetName() );
+                        }
+                    }
                 }
 
-                for each ( const std::string& region in zone->m_Regions )
+                std::sort( zoneNames.begin(), zoneNames.end() );
+
+                // pop up the zone selector dialog
+                S_u32 selectedZones;
+                ZoneSelectorDialog zoneSelector( parent, "Select Zones", "", zoneNames, selectedZones );
+
+                if ( zoneSelector.ShowModal() != wxID_CANCEL )
                 {
-                  std::string name = region;
-                  if ( name.empty() )
-                  {
-                    name = "default";
-                  }
-
-                  regionNames.insert( region );
+                    for each ( u32 zoneNum in selectedZones )
+                    {
+                        levelBuildOptions->m_ZoneList.push_back( zoneNames[ zoneNum ] );
+                    }
                 }
-              }
+                else  // dialog was canceled
+                {
+                    success = false;
+                }
             }
-          }
-
-          if ( regionNames.empty() )
-          {
-            regionNames.insert( "default" );
-          }
-
-          if ( regionNames.size() == 1 )
-          {
-            levelBuilderOptions->m_Regions.push_back( *regionNames.begin() );
-          }
-          else
-          {
-            // pop up the region selector dialog
-            std::string selectedRegion;
-            RegionSelectorDialog regionSelector( parent, "Select Region", "", regionNames, selectedRegion );
-
-            if ( regionSelector.ShowModal() != wxID_CANCEL )
-            {
-              levelBuilderOptions->m_Regions.push_back( selectedRegion );
-            }
-            else  // dialog was canceled
-            {
-              success = false;
-            }
-          }
-          
         }
-      }
-    }
-  }
-
-  if ( success && ( !showOptions || GetBuilderOptions( assetIds, builderOptions, parent ) ) )
-  {
-    if ( !g_OutputWindow && !blocking )
-    {
-      g_OutputWindow = new TaskOutputWindow( NULL, "Builder Output", 100, 100, 700, 500 );
-      g_OutputWindow->AddSignalListener( SignalSignature::Delegate ( &BuildSignal ) );
-      g_OutputWindow->CentreOnScreen();
     }
 
-    RaiseTaskStarted( true );
-
-    if ( g_OutputWindow )
-    {
-      g_OutputWindow->Show();
-      g_OutputWindow->Raise();
-    }
-
-    BuildParams* params = new BuildParams;
-    params->m_AssetIds = assetIds;
-    params->m_BuilderOptions = builderOptions;
-    params->m_ViewAsset = viewAsset;
-
-    g_BuildThread = CreateThread( NULL, 0, BuildThread, (LPVOID)params, 0, NULL );
-
-    if (blocking)
-    {
-      WaitForSingleObject( g_BuildThread, INFINITE );
-      CloseHandle( g_BuildThread );
-      g_BuildThread = NULL;
-    }
-  }
-  else
-  {
-    g_BuildInProgress = false;
-  }
+    return success;
 }
 
-void Luna::BuildAsset( const tuid& assetId, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions, bool blocking, const tuid& viewAsset )
+void Luna::BuildAssets( const File::S_Reference& assets, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions, bool blocking )
 {
-  S_tuid tuids;
-  tuids.insert( assetId );
-  BuildAssets( tuids, parent, builderOptions, showOptions, blocking, viewAsset );
+    if ( g_BuildInProgress )
+    {
+        wxMessageBox( "Another build is already in progress!", "Build in Progress", wxICON_WARNING | wxOK );
+        return;
+    }
+
+    if ( g_BuildThread )
+    {
+        CloseHandle( g_BuildThread );
+        g_BuildThread = NULL;
+    }
+
+    g_BuildInProgress = true;
+
+    if ( !builderOptions.ReferencesObject() )
+    {
+        builderOptions = CreateBuilderOptions( assets );
+    }
+
+    bool success = true;
+
+    if ( success && ( !showOptions || GetBuilderOptions( assets, builderOptions, parent ) ) )
+    {
+        if ( !g_OutputWindow && !blocking )
+        {
+            g_OutputWindow = new TaskOutputWindow( NULL, "Builder Output", 100, 100, 700, 500 );
+            g_OutputWindow->AddSignalListener( SignalSignature::Delegate ( &BuildSignal ) );
+            g_OutputWindow->CentreOnScreen();
+        }
+
+        RaiseTaskStarted( true );
+
+        if ( g_OutputWindow )
+        {
+            g_OutputWindow->Show();
+            g_OutputWindow->Raise();
+        }
+
+        BuildParams* params = new BuildParams;
+        params->m_Assets = assets;
+        params->m_BuilderOptions = builderOptions;
+
+        g_BuildThread = CreateThread( NULL, 0, BuildThread, (LPVOID)params, 0, NULL );
+
+        if (blocking)
+        {
+            WaitForSingleObject( g_BuildThread, INFINITE );
+            CloseHandle( g_BuildThread );
+            g_BuildThread = NULL;
+        }
+    }
+    else
+    {
+        g_BuildInProgress = false;
+    }
 }
 
-void Luna::ViewAsset( const tuid& assetId, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions, bool blocking )
+void Luna::BuildAsset( const File::Reference& asset, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions, bool blocking )
 {
-  BuildAsset( assetId, parent, builderOptions, showOptions, blocking, assetId );
+    File::S_Reference assets;
+    assets.insert( &asset );
+    BuildAssets( assets, parent, builderOptions, showOptions, blocking );
 }

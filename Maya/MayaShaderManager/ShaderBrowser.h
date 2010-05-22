@@ -60,7 +60,6 @@ namespace Maya
 
   private:
     ShaderType  m_ShaderType;
-    S_tuid      m_ShaderFileIDs;
 
   private:
     //

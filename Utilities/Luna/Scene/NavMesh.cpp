@@ -283,11 +283,12 @@ bool NavMesh::IsNavMeshZoneActive(const Luna::NavMesh* navMesh)
     Luna::ZonePtr& luna_nav_zone_ptr = rootScene->GetNavZone();
     if (luna_nav_zone_ptr)
     {
-      Luna::Scene* luna_zone_scene_ptr = navMesh->GetScene()->GetManager()->GetScene( luna_nav_zone_ptr->GetPath() );
-      if (luna_zone_scene_ptr && luna_zone_scene_ptr->IsCurrent())
-      {
-        return true;
-      }
+#pragma TODO( "reimplement" )
+        //Luna::Scene* luna_zone_scene_ptr = navMesh->GetScene()->GetManager()->GetScene( luna_nav_zone_ptr->GetPath() );
+      //if (luna_zone_scene_ptr && luna_zone_scene_ptr->IsCurrent())
+      //{
+      //  return true;
+      //}
     }
   }
   return false;

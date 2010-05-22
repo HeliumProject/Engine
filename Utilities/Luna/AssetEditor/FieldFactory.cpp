@@ -100,21 +100,22 @@ AssetNodePtr FieldFactory::CreateFieldNode( Luna::AssetManager* assetManager, Re
   {
     // Non-container
 
-    if ( Luna::IsAssetFileReference( element, field ) )
-    {
-      Reflect::U64SerializerPtr serializer = Reflect::AssertCast< Reflect::U64Serializer >( field->CreateSerializer( element ) );
-      tuid fileID = serializer->m_Data.Get();
-      Luna::AssetReferenceNodePtr refNode = new Luna::AssetReferenceNode( assetManager, fileID, field );
-      refNode->AssociateField( element, field );
-      node = refNode;
-    }
-    else if ( Luna::IsFileReference( element, field ) )
-    {
-      Reflect::U64SerializerPtr serializer = Reflect::AssertCast< Reflect::U64Serializer >( field->CreateSerializer( element ) );
-      tuid fileID = serializer->m_Data.Get();
-      node = new Luna::FieldFileReference( assetManager, element, field, fileID );
-    }
-    else
+#pragma TODO( "reimplement this for File::ReferncePtr" )
+    //if ( Luna::IsAssetFileReference( element, field ) )
+    //{
+    //    Reflect::PointerSerializerPtr serializer = Reflect::AssertCast< Reflect::PointerSerializer >( field->CreateSerializer( element ) );
+    //    File::ReferencePtr fileRefPtr = Reflect::AssertCast< File::ReferencePtr >( serializer->m_Data.Ptr() );
+    //    Luna::AssetReferenceNodePtr refNode = new Luna::AssetReferenceNode( assetManager, *fileRefPtr, field );
+    //    refNode->AssociateField( element, field );
+    //    node = refNode;
+    //}
+    //else if ( Luna::IsFileReference( element, field ) )
+    //{
+    //  Reflect::U64SerializerPtr serializer = Reflect::AssertCast< Reflect::U64Serializer >( field->CreateSerializer( element ) );
+    //  tuid fileID = serializer->m_Data.Get();
+    //  node = new Luna::FieldFileReference( assetManager, element, field, fileID );
+    //}
+    //else
     {
       node = new Luna::SimpleFieldNode( assetManager, element, field );
     }

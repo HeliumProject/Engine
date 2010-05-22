@@ -3,6 +3,7 @@
 #include "API.h"
 
 #include "PreferencesBase.h"
+#include "File/File.h"
 
 namespace Luna
 {
@@ -13,16 +14,16 @@ namespace Luna
   {
     enum FilePathOption
     {
-      FileName,
-      FileNamePlusExt,
+      Basename,
+      Filename,
       PartialPath,
       FullPath
     };
 
     static void FilePathOptionEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(FileName, "FileName");
-      info->AddElement(FileNamePlusExt, "FileNamePlusExt");
+      info->AddElement(Basename, "Basename");
+      info->AddElement(Filename, "Filename");
       info->AddElement(PartialPath, "PartialPath");
       info->AddElement(FullPath, "FullPath");
     }
@@ -30,7 +31,7 @@ namespace Luna
   typedef FilePathOptions::FilePathOption FilePathOption;
 
   // Get the UI label for a file path based upon the specified FilePathOption
-  LUNA_EDITOR_API std::string TuidToLabel( const tuid& fileID, const FilePathOption filePathOption );
+  LUNA_EDITOR_API std::string FileRefToLabel( const File::Reference& fileRef, const FilePathOption filePathOption );
 
   /////////////////////////////////////////////////////////////////////////////
   // Base class for preferenced within Luna.  Provides convenience functions

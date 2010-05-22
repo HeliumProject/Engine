@@ -3,7 +3,7 @@
 #include "API.h"
 
 
-namespace FileBrowser
+namespace File
 {
   /////////////////////////////////////////////////////////////////////////////
   // Editor for property grid items of type PropertyGridFilePicker.  Provides

@@ -28,7 +28,7 @@ namespace FinderSpecs
     const static FileSpec CHARACTER_EDITOR_PREFS;
 
     const static FamilySpec ASSET_COLLECTION_FAMILY;
-    const static DecorationSpec ASSET_COLLECTION_IRB_DECORATION;
+    const static DecorationSpec ASSET_COLLECTION_RB_DECORATION;
     const static DecorationSpec ASSET_COLLECTION_XML_DECORATION;
 
     // Session Manager files

@@ -5,7 +5,6 @@
 #include "WorldFileAttribute.h"
 
 #include "Attribute/AttributeHandle.h"
-#include "File/Manager.h"
 #include "Finder/ExtensionSpecs.h"
 #include "AllowedDirParser.h"
 
@@ -18,7 +17,7 @@ REFLECT_DEFINE_CLASS( LevelAsset );
 void LevelAsset::EnumerateClass( Reflect::Compositor<LevelAsset>& comp )
 {
   comp.GetComposite().m_UIName = "Level";
-  comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A level groups together various zones to make a level in the game.  The level asset will be associated with a world file (*.world.irb), which is the file that can be edited in the Scene Editor." );
+  comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A level groups together various zones to make a level in the game.  The level asset will be associated with a world file (*.world.rb), which is the file that can be edited in the Scene Editor." );
   comp.GetComposite().SetProperty( AssetProperties::ModifierSpec, FinderSpecs::Asset::LEVEL_DECORATION.GetName() );
   comp.GetComposite().SetProperty( AssetProperties::RootFolderSpec, FinderSpecs::Asset::LEVEL_FOLDER.GetName() );
 
@@ -33,31 +32,10 @@ void LevelAsset::EnumerateClass( Reflect::Compositor<LevelAsset>& comp )
   Reflect::Field* fieldAutoBuildDefaultRegion = comp.AddField( &LevelAsset::m_AutoBuildDefaultRegion, "m_EnableDefaultRegion" );
   Reflect::Field* fieldIncludeGlobalReqs = comp.AddField( &LevelAsset::m_IncludeGlobalReqs, "m_IncludeGlobalReqs" );
 
-  Reflect::Field* fieldSkyAssets = comp.AddField( &LevelAsset::m_SkyAssets, "m_SkyAssets", Reflect::FieldFlags::FileID | Asset::AssetFlags::ManageField | Asset::AssetFlags::PerformOperation );
-  fieldSkyAssets->SetProperty( Asset::AssetProperties::ModifierSpec, FinderSpecs::Asset::SKY_DECORATION.GetName() );
-  fieldSkyAssets->SetProperty( Asset::AssetProperties::SmallIcon, "enginetype_sky_16.png" );
-
   Reflect::Field* fieldDecalGeomMem = comp.AddField( &LevelAsset::m_DecalGeomMem, "m_DecalGeomMem" );
-
-  Reflect::Field* fieldDefaultCubeMap = comp.AddField( &LevelAsset::m_DefaultCubeMap, "m_DefaultCubeMap", Reflect::FieldFlags::FileID | Asset::AssetFlags::Hierarchy | Asset::AssetFlags::ManageField | Asset::AssetFlags::PerformOperation );
-  fieldDefaultCubeMap->SetProperty( Asset::AssetProperties::ModifierSpec, FinderSpecs::Asset::CUBEMAP_DECORATION.GetName() );
-  fieldDefaultCubeMap->SetProperty( Asset::AssetProperties::SmallIcon, "enginetype_cubemap_16.png" );
-
-  Reflect::Field* fieldWaterCubeMap = comp.AddField( &LevelAsset::m_WaterCubeMap, "m_WaterCubeMap", Reflect::FieldFlags::FileID | Asset::AssetFlags::Hierarchy | Asset::AssetFlags::ManageField | Asset::AssetFlags::PerformOperation );
-  fieldWaterCubeMap->SetProperty( Asset::AssetProperties::ModifierSpec, FinderSpecs::Asset::CUBEMAP_DECORATION.GetName() );
-  fieldWaterCubeMap->SetProperty( Asset::AssetProperties::SmallIcon, "water_cubemap_16.png" );
 
   Reflect::Field* fieldViewerStartingPosition = comp.AddField( &LevelAsset::m_ViewerStartingPosition, "m_ViewerStartingPosition" );
   Reflect::Field* fieldViewerStartingRotation = comp.AddField( &LevelAsset::m_ViewerStartingRotation, "m_ViewerStartingRotation" );
-
-  Reflect::Field* fieldLightingZone = comp.AddField( &LevelAsset::m_LightingZone, "m_LightingZone", Reflect::FieldFlags::FileID );
-  fieldLightingZone->SetProperty( Asset::AssetProperties::ModifierSpec, FinderSpecs::Asset::ZONE_DECORATION.GetName() );
-
-  Reflect::Field* fieldCurveControl = comp.AddField( &LevelAsset::m_CurveControl, "m_CurveControl", Reflect::FieldFlags::FileID );
-  fieldCurveControl->SetProperty( Asset::AssetProperties::ModifierSpec, FinderSpecs::Extension::ACV.GetName() );
-
-  Reflect::Field* fieldCurveControl_CRT = comp.AddField( &LevelAsset::m_CurveControl_CRT, "m_CurveControl_CRT", Reflect::FieldFlags::FileID );
-  fieldCurveControl_CRT->SetProperty( Asset::AssetProperties::ModifierSpec, FinderSpecs::Extension::ACV.GetName() );
 
   // asset creation template
   Reflect::V_Element assetTemplates;
@@ -82,17 +60,6 @@ void LevelAsset::EnumerateClass( Reflect::Compositor<LevelAsset>& comp )
 
 bool LevelAsset::ProcessComponent(Reflect::ElementPtr element, const std::string& fieldName)
 {
-  // Legacy support: if a single sky tuid was found, add it to the sky set
-  if ( fieldName == "m_SkyAsset" )
-  {
-    tuid sky_asset;
-    Reflect::Serializer::GetValue( Reflect::AssertCast<Reflect::U64Serializer>(element), sky_asset );
-
-    m_SkyAssets.insert( sky_asset );
-
-    return true;
-  }
-
   return __super::ProcessComponent( element, fieldName );
 }
 
@@ -117,15 +84,6 @@ void LevelAsset::MakeDefault()
   WorldFileAttributePtr worldFile = new WorldFileAttribute();
 
   SetAttribute( worldFile );
-}
-
-// levels are a special case (for now?)
-std::string LevelAsset::GetBuiltDir() const
-{
-  std::string assetPath;
-  File::GlobalManager().GetPath( m_AssetClassID, assetPath );
-
-  return Finder::GetBuiltFolder( assetPath );
 }
 
 bool LevelAsset::IsBuildable() const

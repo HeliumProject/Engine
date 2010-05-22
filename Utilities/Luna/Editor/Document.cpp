@@ -3,7 +3,6 @@
 
 #include "Common/Assert.h"
 #include "RCS/RCS.h"
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 
 using namespace Luna;
@@ -15,56 +14,58 @@ LUNA_DEFINE_TYPE( Document );
 
 void Document::InitializeType()
 {
-  Reflect::RegisterClass<Document>( "Document" );
+    Reflect::RegisterClass<Document>( "Document" );
 }
 
 void Document::CleanupType()
 {
-  Reflect::UnregisterClass<Document>();
+    Reflect::UnregisterClass<Document>();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
 Document::Document( const std::string& path, const std::string& name )
-: m_Path( path )
-, m_Name( name )
+: m_Name( name )
 , m_IsModified( false )
 , m_AllowChanges( false )
 , m_Revision( -1 )
 {
-  UpdateFileInfo();
+    m_FileReference = new File::Reference( path );
+    UpdateFileInfo();
 }
 
 void Document::UpdateFileInfo()
 {
-  m_Revision = -1;
+    m_Revision = -1;
 
-  if ( !m_Path.empty() )
-  {
-    if ( RCS::PathIsManaged( m_Path ) )
+    m_FileReference->Resolve();
+
+    if ( !m_FileReference->GetPath().empty() )
     {
-      RCS::File rcsFile( m_Path );
+        if ( RCS::PathIsManaged( m_FileReference->GetPath() ) )
+        {
+            RCS::File rcsFile( m_FileReference->GetPath() );
 
-      try
-      {
-        rcsFile.GetInfo();
-      }
-      catch ( Nocturnal::Exception& ex )
-      {
-        std::stringstream str;
-        str << "Unable to get info for '" << m_Path << "': " << ex.what();
-        wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
-      }
+            try
+            {
+                rcsFile.GetInfo();
+            }
+            catch ( Nocturnal::Exception& ex )
+            {
+                std::stringstream str;
+                str << "Unable to get info for '" << m_FileReference->GetPath() << "': " << ex.what();
+                wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
+            }
 
-      m_Revision = rcsFile.m_LocalRevision;
+            m_Revision = rcsFile.m_LocalRevision;
+        }
+
+        if ( m_Name.empty() )
+        {
+            m_Name = m_FileReference->GetFile().GetPath().Filename();
+        }
     }
-
-    if ( m_Name.empty() )
-    {
-      m_Name = FileSystem::GetLeaf( m_Path );
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -77,9 +78,9 @@ Document::~Document()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the full path for the file.
 // 
-const std::string& Document::GetFilePath() const
+File::Reference& Document::GetFileReference()
 {
-  return m_Path;
+    return *m_FileReference;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -88,40 +89,16 @@ const std::string& Document::GetFilePath() const
 // 
 void Document::SetFilePath( const std::string& newFilePath, const std::string& newName )
 {
-  if ( m_Path != newFilePath)
-  {
-    std::string oldFilePath = m_Path;
+    std::string oldFilePath = m_FileReference->GetPath();
     std::string oldFileName = m_Name;
 
-    m_Path = newFilePath; 
-    m_Name = newName;
-
+    delete m_FileReference;
+    m_FileReference = new File::Reference( newFilePath );
     UpdateFileInfo();
 
+    m_Name = newName;
+
     m_PathChanged.Raise( DocumentPathChangedArgs( this, oldFilePath, oldFileName ) );
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the File ID for this document, if there is one.
-// 
-tuid Document::GetFileID() const
-{
-  // This could be cached for faster access
-  tuid fileID = TUID::Null;
-
-  if ( !m_Path.empty() )
-  {
-    try
-    {
-      fileID = File::GlobalManager().GetID( m_Path );
-    }
-    catch ( const Nocturnal::Exception& )
-    {
-      // Do nothing, not every document has to have a TUID
-    }
-  }
-  return fileID;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -129,7 +106,12 @@ tuid Document::GetFileID() const
 // 
 const std::string& Document::GetFileName() const
 {
-  return m_Name;
+    return m_Name;
+}
+
+u64 Document::GetHash() const
+{
+    return m_FileReference->GetHash();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -137,7 +119,7 @@ const std::string& Document::GetFileName() const
 // 
 int Document::GetRevision() const
 {
-  return m_Revision;
+    return m_Revision;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -146,7 +128,7 @@ int Document::GetRevision() const
 // 
 bool Document::AllowChanges() const
 {
-  return m_AllowChanges;
+    return m_AllowChanges;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -154,7 +136,7 @@ bool Document::AllowChanges() const
 // 
 void Document::SetAllowChanges( bool allowChanges )
 {
-  m_AllowChanges = allowChanges;
+    m_AllowChanges = allowChanges;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -163,7 +145,7 @@ void Document::SetAllowChanges( bool allowChanges )
 // 
 bool Document::IsModified() const
 {
-  return m_IsModified;
+    return m_IsModified;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -172,10 +154,10 @@ bool Document::IsModified() const
 // 
 void Document::SetModified( bool modified )
 {
-  if ( m_IsModified != modified )
-  {
-    m_IsModified = modified;
+    if ( m_IsModified != modified )
+    {
+        m_IsModified = modified;
 
-    m_Modified.Raise( DocumentChangedArgs( this ) );
-  }
+        m_Modified.Raise( DocumentChangedArgs( this ) );
+    }
 }

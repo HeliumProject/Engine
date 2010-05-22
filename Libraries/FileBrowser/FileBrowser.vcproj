@@ -146,10 +146,6 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{89167DD4-39A9-444A-8ED9-CAB1B35A0DEA}"
-			RelativePathToProject=".\libraries\Asset\Asset.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
 			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
 		/>
@@ -186,20 +182,12 @@
 			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{A99087C6-C475-485A-8911-ACB7683156FF}"
-			RelativePathToProject=".\libraries\Attribute\Attribute.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
 			RelativePathToProject=".\libraries\Profile\profile.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 			RelativePathToProject=".\libraries\Common\Common.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{4AF12ED6-2980-4C1F-8918-F11846719FB3}"
-			RelativePathToProject=".\Libraries\FileUI\FileUI.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
@@ -278,18 +266,6 @@
 				>
 			</File>
 		</Filter>
-		<Filter
-			Name="FileInfo"
-			>
-			<File
-				RelativePath=".\FileInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\FileInfo.h"
-				>
-			</File>
-		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>
@@ -303,11 +279,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\FileBrowserInit.cpp"
+			RelativePath=".\FileInfo.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\FileBrowserInit.h"
+			RelativePath=".\FileInfo.h"
 			>
 		</File>
 	</Files>

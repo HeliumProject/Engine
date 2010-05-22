@@ -16,7 +16,6 @@
 
 #include "UIToolKit/FileDialog.h"
 
-#include "File/Manager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Console/Console.h"
@@ -34,28 +33,28 @@ LUNA_DEFINE_TYPE(Luna::EntityCreateTool);
 
 std::string EntityRowInfo::GetListName() const
 {
-  const int probabilityStringSize = 32;
-  char probabilityString[ probabilityStringSize + 1 ] = { 0 };
+    const int probabilityStringSize = 32;
+    char probabilityString[ probabilityStringSize + 1 ] = { 0 };
 
-  sprintf( probabilityString, " (%d%%)", (int) ( m_Probability * 100.0f ) );
-  std::string listName = m_Name + probabilityString;
+    sprintf( probabilityString, " (%d%%)", (int) ( m_Probability * 100.0f ) );
+    std::string listName = m_Name + probabilityString;
 
-  return listName;
+    return listName;
 }
 
 void EntityCreateTool::InitializeType()
 {
-  Reflect::RegisterClass< Luna::EntityCreateTool >( "Luna::EntityCreateTool" );
+    Reflect::RegisterClass< Luna::EntityCreateTool >( "Luna::EntityCreateTool" );
 }
 
 void EntityCreateTool::CleanupType()
 {
-  Reflect::UnregisterClass< Luna::EntityCreateTool >();
+    Reflect::UnregisterClass< Luna::EntityCreateTool >();
 }
 
 EntityCreateTool::EntityCreateTool(Luna::Scene* scene, Enumerator* enumerator)
 : Luna::CreateTool (scene, enumerator)
-, m_Class( TUID::Null )
+, m_ClassReference( NULL )
 , m_RandomEntityList ( NULL )
 , m_FileButton( NULL )
 , m_BrowserButton( NULL )
@@ -67,463 +66,460 @@ EntityCreateTool::EntityCreateTool(Luna::Scene* scene, Enumerator* enumerator)
 
 EntityCreateTool::~EntityCreateTool()
 {
-  s_RandomEntities.clear();
-  for ( V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin(), end = m_RandomEntityInfo.end(); itr != end; ++itr )
-  {
-    s_RandomEntities.push_back( (*itr).m_OriginalValue );
-  }
-  
-  m_Class = TUID::Null;
+    s_RandomEntities.clear();
+    for ( V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin(), end = m_RandomEntityInfo.end(); itr != end; ++itr )
+    {
+        s_RandomEntities.push_back( (*itr).m_OriginalValue );
+    }
+
+    if ( m_ClassReference )
+    {
+        delete m_ClassReference;
+    }
 }
 
 Luna::TransformPtr EntityCreateTool::CreateNode()
 {
-  tuid entityClass = TUID::Null;
-  
-  //
-  // Create Instance Object
-  //
-  try
-  {
-    if ( m_RandomEntityInfo.size() )
+    File::ReferencePtr entityClassPtr;
+
+    //
+    // Create Instance Object
+    //
+    try
     {
-      float total = 0.0f;  
-      V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
-      V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
-      for ( ; itr != end; ++itr )
-      {
-        total += (*itr).m_Probability;
-      }
-      
-      float probability = total * rand() / ( (float) RAND_MAX + 1.0f );
-      total = 0.0f;
-      for ( itr = m_RandomEntityInfo.begin(); itr != end; ++itr )
-      {
-        total += (*itr).m_Probability;
-        if ( probability < total )
+        if ( m_RandomEntityInfo.size() )
         {
-          entityClass = (*itr).m_Class;
-          break;
+            float total = 0.0f;  
+            V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
+            V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
+            for ( ; itr != end; ++itr )
+            {
+                total += (*itr).m_Probability;
+            }
+
+            float probability = total * rand() / ( (float) RAND_MAX + 1.0f );
+            total = 0.0f;
+            for ( itr = m_RandomEntityInfo.begin(); itr != end; ++itr )
+            {
+                total += (*itr).m_Probability;
+                if ( probability < total )
+                {
+                    entityClassPtr = (*itr).m_ClassRef;
+                    break;
+                }
+            }
         }
-      }
+
+        if ( entityClassPtr.ReferencesObject() )
+        {
+            entityClassPtr->Resolve();
+            EntityPtr entity = new Luna::Entity (m_Scene, new Asset::Entity( entityClassPtr->GetPath() ) );
+
+            entity->SetPointerVisible( s_PointerVisible );
+            entity->SetBoundsVisible( s_BoundsVisible );
+            entity->SetGeometryVisible( s_GeometryVisible );
+
+            entity->Rename( entity->GenerateName() );
+
+            return entity;
+        }
     }
-    
-    if (entityClass != TUID::Null)
+    catch ( const Nocturnal::Exception& ex )
     {
-      EntityPtr entity = new Luna::Entity (m_Scene, new Asset::Entity ( entityClass ));
-
-      entity->SetPointerVisible( s_PointerVisible );
-      entity->SetBoundsVisible( s_BoundsVisible );
-      entity->SetGeometryVisible( s_GeometryVisible );
-
-      entity->Rename( entity->GenerateName() );
-
-      return entity;
+        Console::Error( "%s\n", ex.what() );
     }
-  }
-  catch ( const Nocturnal::Exception& ex )
-  {
-    Console::Error( "%s\n", ex.what() );
-  }
 
-  return NULL;
+    return NULL;
 }
 
 void EntityCreateTool::CreateProperties()
 {
-  m_Enumerator->PushPanel("Entity", true);
-  {
-    m_Enumerator->PushContainer();
+    m_Enumerator->PushPanel("Entity", true);
     {
-      m_FileButton = m_Enumerator->AddFileDialogButton< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::SetEntityAsset ) );
-      m_BrowserButton = m_Enumerator->AddFileBrowserButton< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::SetEntityAsset ) );
+        m_Enumerator->PushContainer();
+        {
+            m_FileButton = m_Enumerator->AddFileDialogButton< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::SetEntityAsset ) );
+            m_BrowserButton = m_Enumerator->AddFileBrowserButton< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::SetEntityAsset ) );
 
-      m_FileButtonAdd = m_Enumerator->AddFileDialogButton< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
-      m_BrowserButtonAdd = m_Enumerator->AddFileBrowserButton< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
-      
-      m_FileButtonAdd->SetIcon( "ellipses_add_16.png" );
-      m_BrowserButtonAdd->SetIcon( "magnify_add_16.png" );
+            m_FileButtonAdd = m_Enumerator->AddFileDialogButton< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
+            m_BrowserButtonAdd = m_Enumerator->AddFileBrowserButton< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
 
-      Inspect::Action* modifyButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnModify ) );
-      modifyButton->SetToolTip( "Modify" );
-      modifyButton->SetIcon( "percent_16.png" );
-      modifyButton->SetClientData( this );
+            m_FileButtonAdd->SetIcon( "ellipses_add_16.png" );
+            m_BrowserButtonAdd->SetIcon( "magnify_add_16.png" );
 
-      Inspect::Action* normalizeButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnNormalize ) );
-      normalizeButton->SetToolTip( "Normalize" );
-      normalizeButton->SetIcon( "normalize_16.png" );
-      normalizeButton->SetClientData( this );
+            Inspect::Action* modifyButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnModify ) );
+            modifyButton->SetToolTip( "Modify" );
+            modifyButton->SetIcon( "percent_16.png" );
+            modifyButton->SetClientData( this );
 
-      Inspect::Action* deleteButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnDeleteClass ) );
-      deleteButton->SetToolTip( "Delete" );
-      deleteButton->SetIcon( "remove_16.png" );
-      deleteButton->SetClientData( this );
+            Inspect::Action* normalizeButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnNormalize ) );
+            normalizeButton->SetToolTip( "Normalize" );
+            normalizeButton->SetIcon( "normalize_16.png" );
+            normalizeButton->SetClientData( this );
 
-      Inspect::Action*  clearButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnClear ) );
-      clearButton->SetToolTip( "Clear" );
-      clearButton->SetIcon( "delete_16.png" );
-      clearButton->SetClientData( this );
+            Inspect::Action* deleteButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnDeleteClass ) );
+            deleteButton->SetToolTip( "Delete" );
+            deleteButton->SetIcon( "remove_16.png" );
+            deleteButton->SetClientData( this );
 
-      std::string specName;
-      if ( Reflect::GetClass<Asset::EntityAsset>()->GetProperty( Asset::AssetProperties::ModifierSpec, specName ) )
-      {
-        const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
+            Inspect::Action*  clearButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnClear ) );
+            clearButton->SetToolTip( "Clear" );
+            clearButton->SetIcon( "delete_16.png" );
+            clearButton->SetClientData( this );
 
-        m_FileButton->SetFilter( spec->GetDialogFilter() );
-        m_BrowserButton->SetFilter( spec->GetDialogFilter() );
+            std::string specName;
+            if ( Reflect::GetClass<Asset::EntityAsset>()->GetProperty( Asset::AssetProperties::ModifierSpec, specName ) )
+            {
+                const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
 
-        m_FileButtonAdd->SetFilter( spec->GetDialogFilter() );
-        m_BrowserButtonAdd->SetFilter( spec->GetDialogFilter() );
-      }
+                m_FileButton->SetFilter( spec->GetDialogFilter() );
+                m_BrowserButton->SetFilter( spec->GetDialogFilter() );
+
+                m_FileButtonAdd->SetFilter( spec->GetDialogFilter() );
+                m_BrowserButtonAdd->SetFilter( spec->GetDialogFilter() );
+            }
+        }
+        m_Enumerator->Pop();
+
+        m_Enumerator->PushContainer();
+        {
+            m_RandomEntityList = m_Enumerator->AddList< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string > (this, &EntityCreateTool::GetRandomEntity, &EntityCreateTool::SetRandomEntity) );
+
+            Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( &FinderSpecs::Asset::ENTITY_DECORATION );
+            filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &EntityCreateTool::OnEntityDropped ) );
+
+            m_RandomEntityList->SetDropTarget( filteredDropTarget );
+        }
+        m_Enumerator->Pop();
+
+        m_Enumerator->PushContainer();
+        {
+            m_Enumerator->AddLabel("Show Pointer");
+            m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::EntityCreateTool, bool> (this, &EntityCreateTool::GetPointerVisible, &EntityCreateTool::SetPointerVisible) );
+        }
+        m_Enumerator->Pop();
+
+        m_Enumerator->PushContainer();
+        {
+            m_Enumerator->AddLabel("Show Bounds");
+            m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::EntityCreateTool, bool> (this, &EntityCreateTool::GetBoundsVisible, &EntityCreateTool::SetBoundsVisible) );
+        }
+        m_Enumerator->Pop();
+
+        m_Enumerator->PushContainer();
+        {
+            m_Enumerator->AddLabel("Show Geometry");
+            m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::EntityCreateTool, bool> (this, &EntityCreateTool::GetGeometryVisible, &EntityCreateTool::SetGeometryVisible) );
+        }
+        m_Enumerator->Pop();
+
+        __super::CreateProperties();
     }
     m_Enumerator->Pop();
-      
-    m_Enumerator->PushContainer();
-    {
-      m_RandomEntityList = m_Enumerator->AddList< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string > (this, &EntityCreateTool::GetRandomEntity, &EntityCreateTool::SetRandomEntity) );
-      
-      Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( &FinderSpecs::Asset::ENTITY_DECORATION );
-      filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &EntityCreateTool::OnEntityDropped ) );
 
-      m_RandomEntityList->SetDropTarget( filteredDropTarget );
-    }
-    m_Enumerator->Pop();
-
-    m_Enumerator->PushContainer();
+    for ( V_string::iterator itr = s_RandomEntities.begin(), end = s_RandomEntities.end(); itr != end; ++itr )
     {
-      m_Enumerator->AddLabel("Show Pointer");
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::EntityCreateTool, bool> (this, &EntityCreateTool::GetPointerVisible, &EntityCreateTool::SetPointerVisible) );
+        SetEntityAsset( *itr );
     }
-    m_Enumerator->Pop();
-
-    m_Enumerator->PushContainer();
-    {
-      m_Enumerator->AddLabel("Show Bounds");
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::EntityCreateTool, bool> (this, &EntityCreateTool::GetBoundsVisible, &EntityCreateTool::SetBoundsVisible) );
-    }
-    m_Enumerator->Pop();
-
-    m_Enumerator->PushContainer();
-    {
-      m_Enumerator->AddLabel("Show Geometry");
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::EntityCreateTool, bool> (this, &EntityCreateTool::GetGeometryVisible, &EntityCreateTool::SetGeometryVisible) );
-    }
-    m_Enumerator->Pop();
-    
-    __super::CreateProperties();
-  }
-  m_Enumerator->Pop();
-  
-  for ( V_string::iterator itr = s_RandomEntities.begin(), end = s_RandomEntities.end(); itr != end; ++itr )
-  {
-    SetEntityAsset( *itr );
-  }
 }
 
 std::string EntityCreateTool::GetEntityAsset() const
 {
-  try
-  {
-    return File::GlobalManager().GetPath(m_Class);
-  }
-  catch ( const File::Exception& )
-  {
-    // its ok to return empty here, it happens when they haven't selected a class yet
-    return std::string ();
-  }
+    if ( m_ClassReference )
+    {
+        return m_ClassReference->GetPath();
+    }
+    else
+    {
+        return std::string();
+    }
 }
 
 void EntityCreateTool::SetEntityAsset(const std::string& value)
 {
-  m_RandomEntityInfo.clear();
-  AddEntityAsset( value );
+    m_RandomEntityInfo.clear();
+    AddEntityAsset( value );
 }
 
 void EntityCreateTool::AddEntityAsset(const std::string& value)
 {
-  m_Class = TUID::Null;
-  std::string entityName = "";
+    std::string entityName = "";
 
-  try
-  {
-    m_Class = File::GlobalManager().GetID(value);
-  }
-  catch ( const File::Exception& e )
-  {
-    Console::Error( "%s\n", e.what() );
-  }
+    if ( m_ClassReference )
+    {
+        delete m_ClassReference;
+    }
 
-  if ( m_Class != TUID::Null )
-  {
+    m_ClassReference = new File::Reference( value );
+    m_ClassReference->Resolve();
+
     try
     {
-      entityName = File::GlobalManager().GetPath( m_Class );
-      entityName = FileSystem::GetLeaf( entityName );
+        entityName = m_ClassReference->GetFile().GetPath().Filename();
 
-      V_EntityRowInfo::const_iterator itr = m_RandomEntityInfo.begin();
-      V_EntityRowInfo::const_iterator end = m_RandomEntityInfo.end();
-      for ( ; itr != end; ++itr )
-      {
-        if ( (*itr).m_Class == m_Class )
+        V_EntityRowInfo::const_iterator itr = m_RandomEntityInfo.begin();
+        V_EntityRowInfo::const_iterator end = m_RandomEntityInfo.end();
+        for ( ; itr != end; ++itr )
         {
-          Console::Warning( "Entity '%s' already exists in the random list of entities.\n", entityName.c_str() );
-          return;
+            if ( (*itr).m_ClassRef->GetHash() == m_ClassReference->GetHash() )
+            {
+                Console::Warning( "Entity '%s' already exists in the random list of entities.\n", entityName.c_str() );
+                return;
+            }
         }
-      }
 
-      EntityRowInfo rowInfo;
-      rowInfo.m_Class = m_Class;
-      rowInfo.m_Probability = 1.0f;
-      rowInfo.m_Name = entityName;
-      rowInfo.m_OriginalValue = value;
-      m_RandomEntityInfo.push_back( rowInfo );
+        EntityRowInfo rowInfo;
+        rowInfo.m_ClassRef = m_ClassReference;
+        rowInfo.m_Probability = 1.0f;
+        rowInfo.m_Name = entityName;
+        rowInfo.m_OriginalValue = value;
+        m_RandomEntityInfo.push_back( rowInfo );
     }
     catch ( const File::Exception& e )
     {
-      Console::Error( "%s\n", e.what() );
+        Console::Error( "%s\n", e.what() );
     }
-  }
 
-  m_Enumerator->GetContainer()->GetCanvas()->Read();
+    m_Enumerator->GetContainer()->GetCanvas()->Read();
 
-  Place(Math::Matrix4::Identity);
+    Place(Math::Matrix4::Identity);
 }
 
 bool EntityCreateTool::GetPointerVisible() const
 {
-  return s_PointerVisible;
+    return s_PointerVisible;
 }
 
 void EntityCreateTool::SetPointerVisible(bool show)
 {
-  s_PointerVisible = show;
+    s_PointerVisible = show;
 
-  Place( Math::Matrix4::Identity );
+    Place( Math::Matrix4::Identity );
 }
 
 bool EntityCreateTool::GetBoundsVisible() const
 {
-  return s_BoundsVisible;
+    return s_BoundsVisible;
 }
 
 void EntityCreateTool::SetBoundsVisible(bool show)
 {
-  s_BoundsVisible = show;
+    s_BoundsVisible = show;
 
-  Place( Math::Matrix4::Identity );
+    Place( Math::Matrix4::Identity );
 }
 
 bool EntityCreateTool::GetGeometryVisible() const
 {
-  return s_GeometryVisible;
+    return s_GeometryVisible;
 }
 
 void EntityCreateTool::SetGeometryVisible(bool show)
 {
-  s_GeometryVisible = show;
+    s_GeometryVisible = show;
 
-  Place( Math::Matrix4::Identity );
+    Place( Math::Matrix4::Identity );
 }
 
 std::string EntityCreateTool::GetRandomEntity() const
 {
-  std::string randomEntities;
-  V_EntityRowInfo::const_iterator itr = m_RandomEntityInfo.begin();
-  V_EntityRowInfo::const_iterator end = m_RandomEntityInfo.end();
-  for ( ; itr != end; ++itr )
-  {
-    if ( randomEntities.length() )
+    std::string randomEntities;
+    V_EntityRowInfo::const_iterator itr = m_RandomEntityInfo.begin();
+    V_EntityRowInfo::const_iterator end = m_RandomEntityInfo.end();
+    for ( ; itr != end; ++itr )
     {
-      randomEntities += Reflect::s_ContainerItemDelimiter;
+        if ( randomEntities.length() )
+        {
+            randomEntities += Reflect::s_ContainerItemDelimiter;
+        }
+
+        randomEntities += (*itr).GetListName();
     }
 
-    randomEntities += (*itr).GetListName();
-  }
-
-  return randomEntities;
+    return randomEntities;
 }
 
 void EntityCreateTool::SetRandomEntity( const std::string& entityName )
 {
-  NOC_BREAK();
+    NOC_BREAK();
 }
 
 void EntityCreateTool::OnDeleteClass( Inspect::Button* button )
 {
-  Luna::EntityCreateTool* thisTool = Reflect::ObjectCast< Luna::EntityCreateTool >( button->GetClientData() );
-  if ( !thisTool )
-  {
-    Console::Error( "Invalid EntityCreateTool in OnDeleteClass()" );
-    return;
-  }
-  
-  const V_string& selectedItems = m_RandomEntityList->GetSelectedItems();
-  
-  V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
-  while ( itr != m_RandomEntityInfo.end() )
-  {
-    std::string currentName = (*itr).GetListName();
-    
-    bool deleteItem = false;
-    V_string::const_iterator itemItr = selectedItems.begin();
-    V_string::const_iterator itemEnd = selectedItems.end();
-    for ( ; itemItr != itemEnd; ++itemItr )
+    Luna::EntityCreateTool* thisTool = Reflect::ObjectCast< Luna::EntityCreateTool >( button->GetClientData() );
+    if ( !thisTool )
     {
-      if ( *itemItr == currentName )
-      {
-        deleteItem = true;
-        break;
-      }
+        Console::Error( "Invalid EntityCreateTool in OnDeleteClass()" );
+        return;
     }
-    
-    if ( deleteItem )
-    {
-      if ( ( m_Class != TUID::Null ) && ( m_Class == ( *itr ).m_Class ) )
-      {
-        m_Class = TUID::Null;
-        Place( Math::Matrix4::Identity );
-      }
 
-      m_RandomEntityInfo.erase( itr );
-      itr = m_RandomEntityInfo.begin();
-    }
-    else
+    const V_string& selectedItems = m_RandomEntityList->GetSelectedItems();
+
+    V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
+    while ( itr != m_RandomEntityInfo.end() )
     {
-      ++itr;
+        std::string currentName = (*itr).GetListName();
+
+        bool deleteItem = false;
+        V_string::const_iterator itemItr = selectedItems.begin();
+        V_string::const_iterator itemEnd = selectedItems.end();
+        for ( ; itemItr != itemEnd; ++itemItr )
+        {
+            if ( *itemItr == currentName )
+            {
+                deleteItem = true;
+                break;
+            }
+        }
+
+        if ( deleteItem )
+        {
+            if ( m_ClassReference->GetHash() == ( *itr ).m_ClassRef->GetHash() )
+            {
+                delete m_ClassReference;
+                Place( Math::Matrix4::Identity );
+            }
+
+            m_RandomEntityInfo.erase( itr );
+            itr = m_RandomEntityInfo.begin();
+        }
+        else
+        {
+            ++itr;
+        }
     }
-  }
-  
-  thisTool->m_Enumerator->GetContainer()->GetCanvas()->Read();
-  
-  thisTool->RefreshInstance();
+
+    thisTool->m_Enumerator->GetContainer()->GetCanvas()->Read();
+
+    thisTool->RefreshInstance();
 }
 
 void EntityCreateTool::OnClear( Inspect::Button* button )
 {
-  Luna::EntityCreateTool* thisTool = Reflect::ObjectCast< Luna::EntityCreateTool >( button->GetClientData() );
-  if ( !thisTool )
-  {
-    Console::Error( "Invalid EntityCreateTool in OnClear()" );
-    return;
-  }
-  
-  m_RandomEntityInfo.clear();
-  
-  thisTool->m_FileButton->SetPath( "" );
-  thisTool->m_BrowserButton->SetPath( "" );
+    Luna::EntityCreateTool* thisTool = Reflect::ObjectCast< Luna::EntityCreateTool >( button->GetClientData() );
+    if ( !thisTool )
+    {
+        Console::Error( "Invalid EntityCreateTool in OnClear()" );
+        return;
+    }
 
-  thisTool->m_FileButtonAdd->SetPath( "" );
-  thisTool->m_BrowserButtonAdd->SetPath( "" );
+    m_RandomEntityInfo.clear();
 
-  thisTool->m_Enumerator->GetContainer()->GetCanvas()->Read();
-  
-  thisTool->RefreshInstance();
+    thisTool->m_FileButton->SetPath( "" );
+    thisTool->m_BrowserButton->SetPath( "" );
+
+    thisTool->m_FileButtonAdd->SetPath( "" );
+    thisTool->m_BrowserButtonAdd->SetPath( "" );
+
+    thisTool->m_Enumerator->GetContainer()->GetCanvas()->Read();
+
+    thisTool->RefreshInstance();
 }
 
 void EntityCreateTool::OnNormalize( Inspect::Button* button )
 {
-  Luna::EntityCreateTool* thisTool = Reflect::ObjectCast< Luna::EntityCreateTool >( button->GetClientData() );
-  if ( !thisTool )
-  {
-    Console::Error( "Invalid EntityCreateTool in OnNormalize()" );
-    return;
-  }
+    Luna::EntityCreateTool* thisTool = Reflect::ObjectCast< Luna::EntityCreateTool >( button->GetClientData() );
+    if ( !thisTool )
+    {
+        Console::Error( "Invalid EntityCreateTool in OnNormalize()" );
+        return;
+    }
 
-  float total = 0.0f;  
-  V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
-  V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
-  for ( ; itr != end; ++itr )
-  {
-    total += (*itr).m_Probability;
-  }
-
-  for ( itr = m_RandomEntityInfo.begin(); itr != end; ++itr )
-  {
-    (*itr).m_Probability /= total;
-  }
-
-  thisTool->m_Enumerator->GetContainer()->GetCanvas()->Read();
-}
-
-void EntityCreateTool::OnModify( Inspect::Button* button )
-{
-  Luna::EntityCreateTool* thisTool = Reflect::ObjectCast< Luna::EntityCreateTool >( button->GetClientData() );
-  if ( !thisTool )
-  {
-    Console::Error( "Invalid EntityCreateTool in OnModify()" );
-    return;
-  }
-
-  M_tuid selectedTuids;
-
-  const V_string& selectedItems = m_RandomEntityList->GetSelectedItems();
-  V_string::const_iterator selectedItr = selectedItems.begin();
-  V_string::const_iterator selectedEnd = selectedItems.end();
-  for ( ; selectedItr != selectedEnd; ++selectedItr )
-  {
+    float total = 0.0f;  
     V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
     V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
     for ( ; itr != end; ++itr )
     {
-      std::string listName = (*itr).GetListName();
-      if ( listName == *selectedItr )
-      {
-        selectedTuids.insert( std::make_pair( (*itr).m_Class, (*itr).m_Class ) );
-      }
+        total += (*itr).m_Probability;
     }
-  }
 
-  if ( selectedTuids.empty() )
-  {
-    Console::Warning( "No entities selected for modification in OnModify()!" );
-    return;
-  }
-  
-  wxTextEntryDialog dlg( NULL, "Please enter the new percentage", "Modify Percentage" );
-  if ( dlg.ShowModal() != wxID_OK )
-  {
-    return;
-  }
-
-  std::string input = dlg.GetValue().c_str();
-  if ( input.empty() )
-  {
-    return;
-  }
-  
-  f32 newPercentage = atof( input.c_str() ) / 100.0f;
-  V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
-  V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
-  for ( ; itr != end; ++itr )
-  {
-    if ( selectedTuids.find( (*itr).m_Class ) != selectedTuids.end() )
+    for ( itr = m_RandomEntityInfo.begin(); itr != end; ++itr )
     {
-      (*itr).m_Probability = newPercentage;
+        (*itr).m_Probability /= total;
     }
-  }  
 
-  thisTool->m_Enumerator->GetContainer()->GetCanvas()->Read();
+    thisTool->m_Enumerator->GetContainer()->GetCanvas()->Read();
+}
+
+void EntityCreateTool::OnModify( Inspect::Button* button )
+{
+    Luna::EntityCreateTool* thisTool = Reflect::ObjectCast< Luna::EntityCreateTool >( button->GetClientData() );
+    if ( !thisTool )
+    {
+        Console::Error( "Invalid EntityCreateTool in OnModify()" );
+        return;
+    }
+
+    M_u64 selectedHashes;
+
+    const V_string& selectedItems = m_RandomEntityList->GetSelectedItems();
+    V_string::const_iterator selectedItr = selectedItems.begin();
+    V_string::const_iterator selectedEnd = selectedItems.end();
+    for ( ; selectedItr != selectedEnd; ++selectedItr )
+    {
+        V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
+        V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
+        for ( ; itr != end; ++itr )
+        {
+            std::string listName = (*itr).GetListName();
+            if ( listName == *selectedItr )
+            {
+                selectedHashes.insert( std::make_pair( (*itr).m_ClassRef->GetHash(), (*itr).m_ClassRef->GetHash() ) );
+            }
+        }
+    }
+
+    if ( selectedHashes.empty() )
+    {
+        Console::Warning( "No entities selected for modification in OnModify()!" );
+        return;
+    }
+
+    wxTextEntryDialog dlg( NULL, "Please enter the new percentage", "Modify Percentage" );
+    if ( dlg.ShowModal() != wxID_OK )
+    {
+        return;
+    }
+
+    std::string input = dlg.GetValue().c_str();
+    if ( input.empty() )
+    {
+        return;
+    }
+
+    f32 newPercentage = atof( input.c_str() ) / 100.0f;
+    V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
+    V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
+    for ( ; itr != end; ++itr )
+    {
+        if ( selectedHashes.find( (*itr).m_ClassRef->GetHash() ) != selectedHashes.end() )
+        {
+            (*itr).m_Probability = newPercentage;
+        }
+    }  
+
+    thisTool->m_Enumerator->GetContainer()->GetCanvas()->Read();
 }
 
 void EntityCreateTool::OnEntityDropped( const Inspect::FilteredDropTargetArgs& args )
 {
-  DropEntities( args.m_Paths, wxIsShiftDown() );
+    DropEntities( args.m_Paths, wxIsShiftDown() );
 }
 
 void EntityCreateTool::DropEntities( const V_string& entities, bool appendToList )
 {
-  m_Enumerator->GetContainer()->GetCanvas()->Freeze();
+    m_Enumerator->GetContainer()->GetCanvas()->Freeze();
 
-  if ( !appendToList )
-  {
-    m_RandomEntityInfo.clear();
-  }
+    if ( !appendToList )
+    {
+        m_RandomEntityInfo.clear();
+    }
 
-  for ( V_string::const_iterator itr = entities.begin(), end = entities.end(); itr != end; ++itr )
-  {
-    AddEntityAsset( *itr );
-  }
+    for ( V_string::const_iterator itr = entities.begin(), end = entities.end(); itr != end; ++itr )
+    {
+        AddEntityAsset( *itr );
+    }
 
-  m_Enumerator->GetContainer()->GetCanvas()->Thaw();
+    m_Enumerator->GetContainer()->GetCanvas()->Thaw();
 }
 

@@ -175,8 +175,6 @@ namespace Luna
 
     virtual void SaveWindowState() NOC_OVERRIDE;
 
-    virtual bool LoadSession( const EditorStatePtr& state ) NOC_OVERRIDE;
-
     virtual DocumentManager* GetDocumentManager() NOC_OVERRIDE;
 
     void SyncPropertyThread();

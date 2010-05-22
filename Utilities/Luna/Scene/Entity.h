@@ -35,13 +35,13 @@ namespace Luna
   struct EntityAssetChangeArgs
   {
     Luna::Entity* m_Entity;
-    tuid m_OldId;
-    tuid m_NewId;
+    File::ReferencePtr m_OldRef;
+    File::ReferencePtr m_NewRef;
     
-    EntityAssetChangeArgs( Luna::Entity* entity, tuid oldId, tuid newId )
+    EntityAssetChangeArgs( Luna::Entity* entity, File::ReferencePtr oldRef, File::ReferencePtr newRef )
       : m_Entity( entity )
-      , m_OldId( oldId )
-      , m_NewId( newId )
+      , m_OldRef( oldRef )
+      , m_NewRef( newRef )
     {}
   };
   typedef Nocturnal::Signature< void, const EntityAssetChangeArgs& > EntityAssetChangeSignature;
@@ -154,8 +154,8 @@ namespace Luna
     std::string GetEntityAssetPath() const;
     void SetEntityAssetPath( const std::string& entityClass );
 
-    std::string GetEngineTypeName() const;
-    void SetEngineTypeName( const std::string& type );
+    std::string GetAssetTypeName() const;
+    void SetAssetTypeName( const std::string& type );
 
   public:
 

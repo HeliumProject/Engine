@@ -10,76 +10,76 @@
 
 namespace Luna
 {
-  class EntityRowInfo
-  {
-  public:
-    std::string m_OriginalValue;
-    std::string m_Name;
-    tuid m_Class;
-    float m_Probability;
-    
-    std::string GetListName() const;
-  };
+    class EntityRowInfo
+    {
+    public:
+        std::string m_OriginalValue;
+        std::string m_Name;
+        File::ReferencePtr m_ClassRef;
+        float m_Probability;
 
-  typedef std::vector< EntityRowInfo > V_EntityRowInfo;
-  
-  class EntityCreateTool : public Luna::CreateTool
-  {
-    //
-    // Members
-    //
+        std::string GetListName() const;
+    };
 
-  public:
-    tuid m_Class;
-    static bool s_PointerVisible;
-    static bool s_BoundsVisible;
-    static bool s_GeometryVisible;
+    typedef std::vector< EntityRowInfo > V_EntityRowInfo;
 
-    //
-    // RTTI
-    //
+    class EntityCreateTool : public Luna::CreateTool
+    {
+        //
+        // Members
+        //
 
-    LUNA_DECLARE_TYPE(Luna::EntityCreateTool, Luna::CreateTool);
-    static void InitializeType();
-    static void CleanupType();
+    public:
+        File::ReferencePtr m_ClassReference;
+        static bool s_PointerVisible;
+        static bool s_BoundsVisible;
+        static bool s_GeometryVisible;
 
-  protected:
-    Inspect::List* m_RandomEntityList;
-    V_EntityRowInfo m_RandomEntityInfo;
-    static V_string s_RandomEntities;
-    
-    Inspect::FileDialogButton* m_FileButton;
-    Inspect::FileBrowserButton* m_BrowserButton;
+        //
+        // RTTI
+        //
 
-    Inspect::FileDialogButton* m_FileButtonAdd;
-    Inspect::FileBrowserButton* m_BrowserButtonAdd;
-    
-  public:
-    EntityCreateTool(Luna::Scene* scene, Enumerator* enumerator);
-    virtual ~EntityCreateTool();
+        LUNA_DECLARE_TYPE(Luna::EntityCreateTool, Luna::CreateTool);
+        static void InitializeType();
+        static void CleanupType();
 
-    virtual Luna::TransformPtr CreateNode() NOC_OVERRIDE;
-    virtual void CreateProperties() NOC_OVERRIDE;
+    protected:
+        Inspect::List* m_RandomEntityList;
+        V_EntityRowInfo m_RandomEntityInfo;
+        static V_string s_RandomEntities;
 
-    std::string GetEntityAsset() const;
-    void SetEntityAsset(const std::string& value);
-    void AddEntityAsset(const std::string& value);
+        Inspect::FileDialogButton* m_FileButton;
+        Inspect::FileBrowserButton* m_BrowserButton;
 
-    bool GetPointerVisible() const;
-    void SetPointerVisible(bool show);
-    bool GetBoundsVisible() const;
-    void SetBoundsVisible(bool show);
-    bool GetGeometryVisible() const;
-    void SetGeometryVisible(bool show);
-    std::string GetRandomEntity() const;
-    void SetRandomEntity( const std::string& entityName );
+        Inspect::FileDialogButton* m_FileButtonAdd;
+        Inspect::FileBrowserButton* m_BrowserButtonAdd;
 
-    void OnDeleteClass( Inspect::Button* button );
-    void OnClear( Inspect::Button* button );
-    void OnNormalize( Inspect::Button* button );
-    void OnModify( Inspect::Button* button );
-    
-    void OnEntityDropped( const Inspect::FilteredDropTargetArgs& args );
-    void DropEntities( const V_string& entities, bool appendToList );
-  };
+    public:
+        EntityCreateTool(Luna::Scene* scene, Enumerator* enumerator);
+        virtual ~EntityCreateTool();
+
+        virtual Luna::TransformPtr CreateNode() NOC_OVERRIDE;
+        virtual void CreateProperties() NOC_OVERRIDE;
+
+        std::string GetEntityAsset() const;
+        void SetEntityAsset(const std::string& value);
+        void AddEntityAsset(const std::string& value);
+
+        bool GetPointerVisible() const;
+        void SetPointerVisible(bool show);
+        bool GetBoundsVisible() const;
+        void SetBoundsVisible(bool show);
+        bool GetGeometryVisible() const;
+        void SetGeometryVisible(bool show);
+        std::string GetRandomEntity() const;
+        void SetRandomEntity( const std::string& entityName );
+
+        void OnDeleteClass( Inspect::Button* button );
+        void OnClear( Inspect::Button* button );
+        void OnNormalize( Inspect::Button* button );
+        void OnModify( Inspect::Button* button );
+
+        void OnEntityDropped( const Inspect::FilteredDropTargetArgs& args );
+        void DropEntities( const V_string& entities, bool appendToList );
+    };
 }

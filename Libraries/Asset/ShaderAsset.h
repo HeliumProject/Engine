@@ -3,7 +3,7 @@
 #include "API.h"
 #include "AssetClass.h"
 
-#include "EngineType.h"
+#include "AssetType.h"
 #include "TextureMapAttribute.h" // we share some enums with the texture maps (AlphaType)
 
 #include "TUID/TUID.h"
@@ -15,7 +15,7 @@ namespace Finder
 
 namespace Asset
 {
-  typedef std::set< EngineTypes::EngineType > S_EngineType;
+  typedef std::set< AssetTypes::AssetType > S_AssetType;
 
   // UV Wrap Mode
   namespace WrapModes
@@ -81,13 +81,12 @@ namespace Asset
     {
     }
 
-    // Static validation function to check whether the specified shader is
-    // allowed to be attached to an object of the specified engine type.
-    static bool ValidateEngineType( tuid shaderID, EngineTypes::EngineType engineType );
+    // verify that this shader can be associated with the given asset type
+    bool ValidateAssetType( AssetTypes::AssetType assetType );
 
-    // Returns the set of engine types that this kind of shader is allowed to
+    // Returns the set of asset types that this kind of shader is allowed to
     // be attached to.  Override as required.
-    virtual void GetAllowableEngineTypes( S_EngineType& engineTypes ) const;
+    virtual void GetAllowableAssetTypes( S_AssetType& assetTypes ) const;
 
     virtual bool ValidateClass( std::string& error ) const NOC_OVERRIDE;
 
@@ -106,7 +105,7 @@ namespace Asset
 
     // Marks any texture channels with the specified texture as needing to be resent to the
     // devkit (or not).
-    virtual void SetTextureDirty( tuid textureID, bool dirty );
+    virtual void SetTextureDirty( File::Reference& fileRef, bool dirty );
 
     REFLECT_DECLARE_ABSTRACT( ShaderAsset, AssetClass );
 

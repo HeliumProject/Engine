@@ -68,11 +68,11 @@ void ThumbnailManager::OnThumbnailLoaded( const ThumbnailLoader::ResultArgs& arg
   Platform::Locker< Asset::M_AssetFiles >::Handle list = m_AllRequests.Lock();
   if ( args.m_Cancelled )
   {
-    list->erase( args.m_File->GetFileID() );
+      list->erase( args.m_File->GetFileReference()->GetHash() );
   }
   else
   {
-    Nocturnal::Insert< Asset::M_AssetFiles >::Result inserted = list->insert( std::make_pair( args.m_File->GetFileID(), args.m_File ) );
+      Nocturnal::Insert< Asset::M_AssetFiles >::Result inserted = list->insert( std::make_pair( args.m_File->GetFileReference()->GetHash(), args.m_File ) );
     if ( inserted.second )
     {
       // Only post to the window if we still have a pointer

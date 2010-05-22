@@ -319,13 +319,13 @@ SearchPanelGenerated::SearchPanelGenerated( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bSizer285;
 	bSizer285 = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxString m_EngineTypeChoiceChoices[] = { wxT("<Select Type>") };
-	int m_EngineTypeChoiceNChoices = sizeof( m_EngineTypeChoiceChoices ) / sizeof( wxString );
-	m_EngineTypeChoice = new wxChoice( m_ScrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_EngineTypeChoiceNChoices, m_EngineTypeChoiceChoices, 0 );
-	m_EngineTypeChoice->SetSelection( 0 );
-	m_EngineTypeChoice->SetMinSize( wxSize( 150,-1 ) );
+	wxString m_AssetTypeChoiceChoices[] = { wxT("<Select Type>") };
+	int m_AssetTypeChoiceNChoices = sizeof( m_AssetTypeChoiceChoices ) / sizeof( wxString );
+	m_AssetTypeChoice = new wxChoice( m_ScrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_AssetTypeChoiceNChoices, m_AssetTypeChoiceChoices, 0 );
+	m_AssetTypeChoice->SetSelection( 0 );
+	m_AssetTypeChoice->SetMinSize( wxSize( 150,-1 ) );
 	
-	bSizer285->Add( m_EngineTypeChoice, 0, wxALL, 5 );
+	bSizer285->Add( m_AssetTypeChoice, 0, wxALL, 5 );
 	
 	fgSizer2->Add( bSizer285, 0, wxEXPAND, 5 );
 	

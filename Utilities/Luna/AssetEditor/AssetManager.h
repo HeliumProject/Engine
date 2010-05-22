@@ -26,7 +26,7 @@ namespace Luna
   typedef Nocturnal::SmartPtr< HierarchyChangeToken > LHierarchyChangeTokenPtr;
 
   // Typedefs
-  typedef std::map< tuid, Luna::AssetClassPtr > M_AssetClassSmartPtr;
+  typedef std::map< u64, Luna::AssetClassPtr > M_AssetClassSmartPtr;
   typedef std::set< AttributeWrapperPtr > S_AttributeSmartPtr;
 
   /////////////////////////////////////////////////////////////////////////////
@@ -81,9 +81,9 @@ namespace Luna
     LHierarchyChangeTokenPtr GetHierarchyChangeToken();
 
     const M_AssetClassSmartPtr& GetAssets() const;
-    Luna::AssetClass* FindAsset( const tuid& fileID );
+    Luna::AssetClass* FindAsset( const u64& assetHash );
 
-    AssetDocument* FindAssetDocument( const Luna::AssetClass* asset ) const;
+    AssetDocument* FindAssetDocument( Luna::AssetClass* asset );
 
     virtual DocumentPtr OpenPath( const std::string& path, std::string& error ) NOC_OVERRIDE;
     Luna::AssetClass* Open( const std::string& path, std::string& error, bool addToRoot = false );
@@ -99,20 +99,15 @@ namespace Luna
     void RevisionHistorySelected();
 
     size_t GetSelectedAssets( S_AssetClassDumbPtr& list ) const;
-    size_t GetSelectedAssetIDs( S_tuid& fileIDs ) const;
     size_t GetSelectedAttributes( S_AttributeSmartPtr& list ) const;
     
-    bool IsEditable() const;
-    bool IsEditable( const Luna::AssetClass* assetClass ) const;
+    bool IsEditable();
+    bool IsEditable( Luna::AssetClass* assetClass );
     
     bool Push( const Undo::CommandPtr& command );
     
     void CanCopySelection( bool& canCopy, bool& canMove ) const;
     Inspect::ReflectClipboardDataPtr CopySelection( S_AssetNodeDumbPtr& parents, bool& canBeMoved ) const;
-
-    void DuplicateAsset( Luna::AssetClassPtr assetClass );
-    void RenameAsset( Luna::AssetClassPtr assetClass );
-    void DeleteAsset( Luna::AssetClassPtr assetClass );
 
     void AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args );
 

@@ -1,0 +1,663 @@
+<?xml version="1.0"?>
+<library path="Cg/Swizzle">
+	<node type="Gather Vector4">
+		<description>TODO</description>
+		<tool-tip>d = vector4(x,y,z,w)</tool-tip>
+		<ports>
+			<input name="x" required="true">
+				<check-type method="list" target="*">float,half,fixed,bool,int</check-type>
+			</input>
+			<input name="y" required="true">
+				<check-type method="list" target="*">float,half,fixed,bool,int</check-type>
+			</input>
+			<input name="z" required="true">
+				<check-type method="list" target="*">float,half,fixed,bool,int</check-type>
+			</input>
+			<input name="w" required="true">
+				<check-type method="list" target="*">float,half,fixed,bool,int</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.x.get_type() .. '4'</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = ${node.d.get_type()}( r${node.x.get_source().uid()}, r${node.y.get_source().uid()}, r${node.z.get_source().uid()}, r${node.w.get_source().uid()} );
+			</code>
+		</code-generation>
+	</node>
+	<node type="Scatter Vector4">
+		<description>TODO</description>
+		<tool-tip>x,y,z,w = vector4(a)</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">float4,half4,fixed4,bool4,int4</check-type>
+			</input>
+			<output name="x" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -2)</get-type>
+			</output>
+			<output name="y" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -2)</get-type>
+			</output>
+			<output name="z" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -2)</get-type>
+			</output>
+			<output name="w">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -2)</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.x.uid()} r${node.a.get_source().uid()}.x\n
+				#define r${node.y.uid()} r${node.a.get_source().uid()}.y\n
+				#define r${node.z.uid()} r${node.a.get_source().uid()}.z\n
+				#define r${node.w.uid()} r${node.a.get_source().uid()}.w
+			</code>
+		</code-generation>
+	</node>
+	<node type="Gather Vector3">
+		<description>TODO</description>
+		<tool-tip>d = vector3(x,y,z)</tool-tip>
+		<ports>
+			<input name="x" required="true">
+				<check-type method="list" target="*">float,half,fixed,bool,int</check-type>
+			</input>
+			<input name="y" required="true">
+				<check-type method="list" target="*">float,half,fixed,bool,int</check-type>
+			</input>
+			<input name="z" required="true">
+				<check-type method="list" target="*">float,half,fixed,bool,int</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.x.get_type() .. '3'</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = ${node.d.get_type()}( r${node.x.get_source().uid()}, r${node.y.get_source().uid()}, r${node.z.get_source().uid()} );
+			</code>
+		</code-generation>
+	</node>
+	<node type="Scatter Vector3">
+		<description>TODO</description>
+		<tool-tip>x,y,z = vector3(a)</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">float3,half3,fixed3,bool3,int3</check-type>
+			</input>
+			<output name="x" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -2)</get-type>
+			</output>
+			<output name="y" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -2)</get-type>
+			</output>
+			<output name="z" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -2)</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.x.uid()} r${node.a.get_source().uid()}.x\n
+				#define r${node.y.uid()} r${node.a.get_source().uid()}.y\n
+				#define r${node.z.uid()} r${node.a.get_source().uid()}.z
+			</code>
+		</code-generation>
+	</node>
+	<node type="Gather Vector2">
+		<description>TODO</description>
+		<tool-tip>d = vector2(x,y)</tool-tip>
+		<ports>
+			<input name="x" required="true">
+				<check-type method="list" target="*">float,half,fixed,bool,int</check-type>
+			</input>
+			<input name="y" required="true">
+				<check-type method="list" target="*">float,half,fixed,bool,int</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.x.get_type() .. '2'</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = ${node.d.get_type()}( r${node.x.get_source().uid()}, r${node.y.get_source().uid()} );\n
+			</code>
+		</code-generation>
+	</node>
+	<node type="Scatter Vector2">
+		<description>TODO</description>
+		<tool-tip>x,y = vector2(a)</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">float2,half2,fixed2,bool2,int2</check-type>
+			</input>
+			<output name="x" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -2)</get-type>
+			</output>
+			<output name="y" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -2)</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.x.uid()} r${node.a.get_source().uid()}.x\n
+				#define r${node.y.uid()} r${node.a.get_source().uid()}.y
+			</code>
+		</code-generation>
+	</node>
+	<node type="Gather Vector4x4">
+		<description>TODO</description>
+		<tool-tip>d = vector4x4(x,y,z,w)</tool-tip>
+		<ports>
+			<input name="x" required="true">
+				<check-type method="list" target="*">float4,half4,fixed4,bool4,int4</check-type>
+			</input>
+			<input name="y" required="true">
+				<check-type method="list" target="*">float4,half4,fixed4,bool4,int4</check-type>
+			</input>
+			<input name="z" required="true">
+				<check-type method="list" target="*">float4,half4,fixed4,bool4,int4</check-type>
+			</input>
+			<input name="w" required="true">
+				<check-type method="list" target="*">float4,half4,fixed4,bool4,int4</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.x.get_type() .. 'x4'</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = ${node.d.get_type()}( r${node.x.get_source().uid()}, r${node.y.get_source().uid()}, r${node.z.get_source().uid()}, r${node.w.get_source().uid()} );
+			</code>
+		</code-generation>
+	</node>
+	<node type="Gather Vector4x3">
+		<description>TODO</description>
+		<tool-tip>d = vector4x3(x,y,z)</tool-tip>
+		<ports>
+			<input name="x" required="true">
+				<check-type method="list" target="*">float4,half4,fixed4,bool4,int4</check-type>
+			</input>
+			<input name="y" required="true">
+				<check-type method="list" target="*">float4,half4,fixed4,bool4,int4</check-type>
+			</input>
+			<input name="z" required="true">
+				<check-type method="list" target="*">float4,half4,fixed4,bool4,int4</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.x.get_type() .. 'x3'</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = ${node.d.get_type()}( r${node.x.get_source().uid()}, r${node.y.get_source().uid()}, r${node.z.get_source().uid()} );
+			</code>
+		</code-generation>
+	</node>
+	<node type="Gather Vector4x2">
+		<description>TODO</description>
+		<tool-tip>d = vector4x2(x,y)</tool-tip>
+		<ports>
+			<input name="x" required="true">
+				<check-type method="list" target="*">float4,half4,fixed4,bool4,int4</check-type>
+			</input>
+			<input name="y" required="true">
+				<check-type method="list" target="*">float4,half4,fixed4,bool4,int4</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.x.get_type() .. 'x2'</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = ${node.d.get_type()}( r${node.x.get_source().uid()}, r${node.y.get_source().uid()} );
+			</code>
+		</code-generation>
+	</node>
+	<node type="Gather Vector3x4">
+		<description>TODO</description>
+		<tool-tip>d = vector3x4(x,y,z,w)</tool-tip>
+		<ports>
+			<input name="x" required="true">
+				<check-type method="list" target="*">float3,half3,fixed3,bool3,int3</check-type>
+			</input>
+			<input name="y" required="true">
+				<check-type method="list" target="*">float3,half3,fixed3,bool3,int3</check-type>
+			</input>
+			<input name="z" required="true">
+				<check-type method="list" target="*">float3,half3,fixed3,bool3,int3</check-type>
+			</input>
+			<input name="w" required="true">
+				<check-type method="list" target="*">float3,half3,fixed3,bool3,int3</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.x.get_type() .. 'x4'</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = ${node.d.get_type()}( r${node.x.get_source().uid()}, r${node.y.get_source().uid()}, r${node.z.get_source().uid()}, r${node.w.get_source().uid()} );
+			</code>
+		</code-generation>
+	</node>
+	<node type="Gather Vector3x3">
+		<description>TODO</description>
+		<tool-tip>d = vector3x3(x,y,z)</tool-tip>
+		<ports>
+			<input name="x" required="true">
+				<check-type method="list" target="*">float3,half3,fixed3,bool3,int3</check-type>
+			</input>
+			<input name="y" required="true">
+				<check-type method="list" target="*">float3,half3,fixed3,bool3,int3</check-type>
+			</input>
+			<input name="z" required="true">
+				<check-type method="list" target="*">float3,half3,fixed3,bool3,int3</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.x.get_type() .. 'x3'</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = ${node.d.get_type()}( r${node.x.get_source().uid()}, r${node.y.get_source().uid()}, r${node.z.get_source().uid()} );
+			</code>
+		</code-generation>
+	</node>
+	<node type="Gather Vector3x2">
+		<description>TODO</description>
+		<tool-tip>d = vector3x2(x,y)</tool-tip>
+		<ports>
+			<input name="x" required="true">
+				<check-type method="list" target="*">float3,half3,fixed3,bool3,int3</check-type>
+			</input>
+			<input name="y" required="true">
+				<check-type method="list" target="*">float3,half3,fixed3,bool3,int3</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.x.get_type() .. 'x2'</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = ${node.d.get_type()}( r${node.x.get_source().uid()}, r${node.y.get_source().uid()} );
+			</code>
+		</code-generation>
+	</node>
+	<node type="Gather Vector2x4">
+		<description>TODO</description>
+		<tool-tip>d = vector2x4(x,y,z,w)</tool-tip>
+		<ports>
+			<input name="x" required="true">
+				<check-type method="list" target="*">float2,half2,fixed2,bool2,int2</check-type>
+			</input>
+			<input name="y" required="true">
+				<check-type method="list" target="*">float2,half2,fixed2,bool2,int2</check-type>
+			</input>
+			<input name="z" required="true">
+				<check-type method="list" target="*">float2,half2,fixed2,bool2,int2</check-type>
+			</input>
+			<input name="w" required="true">
+				<check-type method="list" target="*">float2,half2,fixed2,bool2,int2</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.x.get_type() .. 'x4'</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = ${node.d.get_type()}( r${node.x.get_source().uid()}, r${node.y.get_source().uid()}, r${node.z.get_source().uid()}, r${node.w.get_source().uid()} );
+			</code>
+		</code-generation>
+	</node>
+	<node type="Gather Vector2x3">
+		<description>TODO</description>
+		<tool-tip>d = vector2x3(x,y,z)</tool-tip>
+		<ports>
+			<input name="x" required="true">
+				<check-type method="list" target="*">float2,half2,fixed2,bool2,int2</check-type>
+			</input>
+			<input name="y" required="true">
+				<check-type method="list" target="*">float2,half2,fixed2,bool2,int2</check-type>
+			</input>
+			<input name="z" required="true">
+				<check-type method="list" target="*">float2,half2,fixed2,bool2,int2</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.x.get_type() .. 'x3'</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = ${node.d.get_type()}( r${node.x.get_source().uid()}, r${node.y.get_source().uid()}, r${node.z.get_source().uid()} );
+			</code>
+		</code-generation>
+	</node>
+	<node type="Gather Vector2x2">
+		<description>TODO</description>
+		<tool-tip>d = vector2x2(x,y)</tool-tip>
+		<ports>
+			<input name="x" required="true">
+				<check-type method="list" target="*">float2,half2,fixed2,bool2,int2</check-type>
+			</input>
+			<input name="y" required="true">
+				<check-type method="list" target="*">float2,half2,fixed2,bool2,int2</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.x.get_type() .. 'x2'</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = ${node.d.get_type()}( r${node.x.get_source().uid()}, r${node.y.get_source().uid()} );
+			</code>
+		</code-generation>
+	</node>
+	<node type="Scatter Vector4x4">
+		<description>TODO</description>
+		<tool-tip>x,y,z,w = vector4x4(a)</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">float4x4,half4x4,fixed4x4,bool4x4,int4x4</check-type>
+			</input>
+			<output name="x" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="y" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="z" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="w">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.x.uid()} r${node.a.get_source().uid()}[0]\n
+				#define r${node.y.uid()} r${node.a.get_source().uid()}[1]\n
+				#define r${node.z.uid()} r${node.a.get_source().uid()}[2]\n
+				#define r${node.w.uid()} r${node.a.get_source().uid()}[3]\n
+			</code>
+		</code-generation>
+	</node>
+	<node type="Scatter Vector4x3">
+		<description>TODO</description>
+		<tool-tip>x,y,z = vector4x3(a)</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">float4x3,half4x3,fixed4x3,bool4x3,int4x3</check-type>
+			</input>
+			<output name="x" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="y" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="z" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.x.uid()} r${node.a.get_source().uid()}[0]\n
+				#define r${node.y.uid()} r${node.a.get_source().uid()}[1]\n
+				#define r${node.z.uid()} r${node.a.get_source().uid()}[2]\n
+			</code>
+		</code-generation>
+	</node>
+	<node type="Scatter Vector4x2">
+		<description>TODO</description>
+		<tool-tip>x,y = vector4x2(a)</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">float4x2,half4x2,fixed4x2,bool4x2,int4x2</check-type>
+			</input>
+			<output name="x" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="y" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.x.uid()} r${node.a.get_source().uid()}[0]\n
+				#define r${node.y.uid()} r${node.a.get_source().uid()}[1]
+			</code>
+		</code-generation>
+	</node>
+	<node type="Scatter Vector2x4">
+		<description>TODO</description>
+		<tool-tip>x,y,z,w = vector2x4(a)</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">float2x4,half2x4,fixed2x4,bool2x4,int2x4</check-type>
+			</input>
+			<output name="x" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="y" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="z" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="w">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.x.uid()} r${node.a.get_source().uid()}[0]\n
+				#define r${node.y.uid()} r${node.a.get_source().uid()}[1]\n
+				#define r${node.z.uid()} r${node.a.get_source().uid()}[2]\n
+				#define r${node.w.uid()} r${node.a.get_source().uid()}[3]
+			</code>
+		</code-generation>
+	</node>
+	<node type="Scatter Vector2x3">
+		<description>TODO</description>
+		<tool-tip>x,y,z = vector2x3(a)</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">float2x3,half2x3,fixed2x3,bool2x3,int2x3</check-type>
+			</input>
+			<output name="x" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="y" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="z" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.x.uid()} r${node.a.get_source().uid()}[0]\n
+				#define r${node.y.uid()} r${node.a.get_source().uid()}[1]\n
+				#define r${node.z.uid()} r${node.a.get_source().uid()}[2]
+			</code>
+		</code-generation>
+	</node>
+	<node type="Scatter Vector2x2">
+		<description>TODO</description>
+		<tool-tip>x,y = vector2x2(a)</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">float2x2,half2x2,fixed2x2,bool2x2,int2x2</check-type>
+			</input>
+			<output name="x" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="y" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.x.uid()} r${node.a.get_source().uid()}[0]\n
+				#define r${node.y.uid()} r${node.a.get_source().uid()}[1]
+			</code>
+		</code-generation>
+	</node>
+	<node type="Scatter Vector3x4">
+		<description>TODO</description>
+		<tool-tip>x,y,z,w = vector3x4(a)</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">float3x4,half3x4,fixed3x4,bool3x4,int3x4</check-type>
+			</input>
+			<output name="x" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="y" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="z" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="w">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.x.uid()} r${node.a.get_source().uid()}[0]\n
+				#define r${node.y.uid()} r${node.a.get_source().uid()}[1]\n
+				#define r${node.z.uid()} r${node.a.get_source().uid()}[2]\n
+				#define r${node.w.uid()} r${node.a.get_source().uid()}[3]
+			</code>
+		</code-generation>
+	</node>
+	<node type="Scatter Vector3x3">
+		<description>TODO</description>
+		<tool-tip>x,y,z = vector3x3(a)</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">float3x3,half3x3,fixed3x3,bool3x3,int3x3</check-type>
+			</input>
+			<output name="x" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="y" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="z" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.x.uid()} r${node.a.get_source().uid()}[0]\n
+				#define r${node.y.uid()} r${node.a.get_source().uid()}[1]\n
+				#define r${node.z.uid()} r${node.a.get_source().uid()}[2]
+			</code>
+		</code-generation>
+	</node>
+	<node type="Scatter Vector3x2">
+		<description>TODO</description>
+		<tool-tip>x,y = vector3x2(a)</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">float3x2,half3x2,fixed3x2,bool3x2,int3x2</check-type>
+			</input>
+			<output name="x" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+			<output name="y" required="true">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -3)</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.x.uid()} r${node.a.get_source().uid()}[0]\n
+				#define r${node.y.uid()} r${node.a.get_source().uid()}[1]
+			</code>
+		</code-generation>
+	</node>
+</library>

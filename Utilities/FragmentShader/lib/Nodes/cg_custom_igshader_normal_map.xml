@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<library path="CustomIGShader/CustomIGShaderNormalMap">
+	<node type="[IN] (sampler2D) Texture Sampler (normal_map)">
+		<description>Access Textures</description>
+		<ports>
+			<output name="d">
+				<get-type method="fixed" target="*">sampler2D</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+			<property name="choice_ndx" type="list">
+				<options>
+					<option>normal_map</option>
+					<option>custom_map_a</option>
+					<option>custom_map_b</option>
+					<option>r2o_normal_coarse</option>
+					<option>r2o_normal_fine</option>
+				</options>
+				<on-changed>node.Name.set_value('[IN] (sampler2D) Texture Sampler (' .. node.choice_ndx.get_value() .. ')')</on-changed>
+			</property>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.d.uid()} ${node.choice_ndx.get_value()}
+			</code>
+		</code-generation>
+	</node>
+	<node type="[IN] (float2) UV">
+		<description>Texture coordinates</description>
+		<ports>
+			<output name="d">
+				<get-type method="fixed" target="*">float2</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.d.uid()} float2( uv.xy )
+			</code>
+		</code-generation>
+	</node>
+	<node type="[IN] (float) Time (Seconds)">
+		<description>Time, in seconds</description>
+		<ports>
+			<output name="d">
+				<get-type method="fixed" target="*">float</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.d.uid()} time
+			</code>
+		</code-generation>
+	</node>
+	
+	<node type="[IN] (float4) Custom Input 1">
+		<description>Input base color</description>
+		<tool-tip>Input base color</tool-tip>
+		<ports>
+			<output name="d">
+				<get-type method="fixed" target="*">float4</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.d.uid()} g_graphshader_custom_input_1
+			</code>
+		</code-generation>
+	</node>
+	<node type="[IN] (float4) Custom Input 2">
+		<description>Input base color</description>
+		<tool-tip>Input base color</tool-tip>
+		<ports>
+			<output name="d">
+				<get-type method="fixed" target="*">float4</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.d.uid()} g_graphshader_custom_input_2
+			</code>
+		</code-generation>
+	</node>
+
+	<node type="[IN] (float4) Instance Float Randoms">
+		<description>Random float numbers in the 0 to 1 range generated per-instance in the xy, random floats per frame in the zw</description>
+		<ports>
+			<output name="d">
+				<get-type method="fixed" target="*">float4</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.d.uid()} instance_random_floats
+			</code>
+		</code-generation>
+	</node>
+	
+	<node type="[OUT] (float4) Final Color">
+		<description>Final output color of fragment</description>
+		<ports>
+			<input name="a">
+				<check-type method="fixed" target="*">float4</check-type>
+			</input>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				ts_normal.xyz = r${node.a.get_source().uid()}.xyz;
+			</code>
+		</code-generation>
+	</node>
+</library>

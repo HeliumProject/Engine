@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<library path="Cg/Debug">
+	<node type="[IN] (float4) Color A">
+		<description>[DEBUG ONLY] color_a</description>
+		<ports>
+			<output name="d">
+				<get-type method="fixed" target="*">float4</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.d.uid()} color_a
+			</code>
+		</code-generation>
+	</node>
+	<node type="[IN] (float4) Color B">
+		<description>[DEBUG ONLY] color_b</description>
+		<ports>
+			<output name="d">
+				<get-type method="fixed" target="*">float4</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				#define r${node.d.uid()} color_b
+			</code>
+		</code-generation>
+	</node>
+	<node type="[OUT] (float4) Color Result">
+		<description>[DEBUG ONLY] color_result</description>
+		<ports>
+			<input name="d">
+				<check-type method="list" target="*">float4</check-type>
+			</input>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				color_result = r${node.a.get_source().uid()};
+			</code>
+		</code-generation>
+	</node>
+</library>

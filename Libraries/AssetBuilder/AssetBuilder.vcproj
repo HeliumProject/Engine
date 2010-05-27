@@ -232,9 +232,6 @@
 			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{1C0440DB-3DB9-42C8-B879-36BABE0A309D}"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}"
 			RelativePathToProject=".\libraries\Dependencies\Dependencies.vcproj"
 		/>

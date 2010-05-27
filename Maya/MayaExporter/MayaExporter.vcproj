@@ -230,10 +230,6 @@
 			RelativePathToProject=".\libraries\FileSystem\FileSystem.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{409ACF8F-6E51-466A-BEE4-BFDF2E21C167}"
-			RelativePathToProject=".\Maya\igAsset\igAsset.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{0FBA8851-5A4E-4CEB-B24C-9487E9B9AF4A}"
 			RelativePathToProject=".\libraries\MayaUtils\MayaUtils.vcproj"
 		/>

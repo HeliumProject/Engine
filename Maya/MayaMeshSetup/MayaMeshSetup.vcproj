@@ -221,9 +221,6 @@
 			RelativePathToProject=".\libraries\UIToolKit\UIToolKit.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{FA37BB25-D435-4936-9DAA-E186A6DA9B45}"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{F3DB1BFC-9BD1-443F-965A-E05E9D95E6AB}"
 			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
 		/>

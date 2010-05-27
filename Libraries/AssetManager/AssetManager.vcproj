@@ -206,9 +206,6 @@
 			RelativePathToProject=".\libraries\Common\Common.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{396B05EC-7929-4E23-942C-FB953BA5702D}"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{75D0DF92-E7C4-4F46-A67A-3B8914477892}"
 			RelativePathToProject=".\libraries\PerforceUI\PerforceUI.vcproj"
 		/>

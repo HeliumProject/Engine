@@ -197,9 +197,6 @@
 			RelativePathToProject=".\libraries\Math\math.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{FA37BB25-D435-4936-9DAA-E186A6DA9B45}"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{1E9F45BD-AE62-4A12-8A09-56665F644B79}"
 			RelativePathToProject=".\libraries\Console\Console.vcproj"
 		/>
@@ -210,9 +207,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{74EBA5CC-62CC-4C95-9191-618AFEF3BEC0}"
 			RelativePathToProject=".\libraries\TUID\TUID.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{5BA9972C-67A7-4E6F-AA56-901453BDE835}"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{15659B3D-2AE6-403D-AA91-7A56C252F454}"

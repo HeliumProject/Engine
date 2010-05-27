@@ -7,7 +7,7 @@
 	>
 	<UserMacro
 		Name="boost"
-		Value="$(SolutionDir)SDK\boost\1.42"
+		Value="$(SolutionDir)SDK\boost\1.43"
 	/>
 	<UserMacro
 		Name="Crypto++"

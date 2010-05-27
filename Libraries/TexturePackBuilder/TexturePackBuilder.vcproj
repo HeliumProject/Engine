@@ -242,12 +242,6 @@
 			ReferencedProjectIdentifier="{A99087C6-C475-485A-8911-ACB7683156FF}"
 			RelativePathToProject=".\libraries\Attribute\Attribute.vcproj"
 		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{936C830A-4C7B-4F6D-8DBC-BF71C79DDC8B}"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{FA37BB25-D435-4936-9DAA-E186A6DA9B45}"
-		/>
 	</References>
 	<Files>
 		<Filter

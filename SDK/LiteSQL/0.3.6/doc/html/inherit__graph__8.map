@@ -1,0 +1,9 @@
+base referer
+rect $classlitesql_1_1Except.html 9,152 113,176
+rect $classlitesql_1_1DatabaseError.html 164,8 313,32
+rect $classlitesql_1_1InsertionError.html 166,56 310,80
+rect $classlitesql_1_1InternalError.html 169,104 308,128
+rect $classlitesql_1_1MemoryError.html 168,152 309,176
+rect $classlitesql_1_1NotFound.html 177,200 300,224
+rect $classlitesql_1_1SQLError.html 178,248 298,272
+rect $classlitesql_1_1UnknownError.html 164,296 313,320

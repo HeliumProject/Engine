@@ -14,8 +14,10 @@ using namespace Luna;
 ///////////////////////////////////////////////////////////////////////////////
 /// class DependencyLoader
 ///////////////////////////////////////////////////////////////////////////////
-DependencyLoader::DependencyLoader( DependencyCollection* collection )
+DependencyLoader::DependencyLoader( const std::string& rootDirectory, const std::string& configDirectory, DependencyCollection* collection )
 : UIToolKit::ThreadMechanism( "DependencyLoader" )
+, m_RootDirectory( rootDirectory )
+, m_ConfigDirectory( configDirectory )
 , m_Collection( collection )
 {
 }
@@ -23,47 +25,41 @@ DependencyLoader::DependencyLoader( DependencyCollection* collection )
 ///////////////////////////////////////////////////////////////////////////////
 DependencyLoader::~DependencyLoader()
 {
-  m_AssetFileRefs.clear();
+    m_AssetFileRefs.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void DependencyLoader::InitData()
 {
-  m_AssetFileRefs.clear();
+    m_AssetFileRefs.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void DependencyLoader::ThreadProc( i32 threadID )
 {
-  ThreadEnter( threadID );
+    ThreadEnter( threadID );
 
-  Asset::CacheDBPtr cacheDB = new Asset::CacheDB( "LunaBrowserDependencyLoader-AssetCacheDB" );
+    Nocturnal::Path cacheDBFilepath( m_RootDirectory + "/.tracker/cache.db" );
+    Asset::CacheDBPtr cacheDB = new Asset::CacheDB( "LunaBrowserDependencyLoader-AssetCacheDB", cacheDBFilepath.Get(), m_ConfigDirectory );
 
-  // Connect the DB
-  std::string rootDir = Finder::ProjectAssets() + FinderSpecs::Project::ASSET_TRACKER_FOLDER.GetRelativeFolder();
-  FileSystem::GuaranteeSlash( rootDir );
-  FileSystem::MakePath( rootDir );
-  cacheDB->Open( FinderSpecs::Project::ASSET_TRACKER_DB.GetFile( rootDir ),
-    FinderSpecs::Project::ASSET_TRACKER_CONFIGS.GetFolder(),
-    cacheDB->s_TrackerDBVersion,
-    SQLITE_OPEN_READONLY );
+    cacheDB->GetAssetDependencies( m_Collection->GetRoot(), m_AssetFileRefs, m_Collection->IsReverse(), m_Collection->GetRecursionDepthForLoad(), 0, &m_StopThread );
 
-  cacheDB->GetAssetDependencies( m_Collection->GetRoot(), m_AssetFileRefs, m_Collection->IsReverse(), m_Collection->GetRecursionDepthForLoad(), 0, &m_StopThread );
+    if ( CheckThreadLeave( threadID ) )
+    {
+        return;
+    }
 
-  if ( CheckThreadLeave( threadID ) )
-    return;
+    m_Collection->SetAssetReferences( m_AssetFileRefs );
 
-  m_Collection->SetAssetReferences( m_AssetFileRefs );
-  
-  ThreadLeave( threadID );
+    ThreadLeave( threadID );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void DependencyLoader::OnEndThread( const UIToolKit::ThreadProcArgs& args )
 {
-  if ( !IsCurrentThread( args.m_ThreadID ) )
-    return;
+    if ( !IsCurrentThread( args.m_ThreadID ) )
+        return;
 
-  m_Collection->IsLoading( false );
-  m_Collection->Thaw();
+    m_Collection->IsLoading( false );
+    m_Collection->Thaw();
 }

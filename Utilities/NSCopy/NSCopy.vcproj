@@ -187,10 +187,6 @@
 			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{A0FF2C19-D29F-4969-A959-E4D8A5C4B44F}"
-			RelativePathToProject=".\libraries\NSL\NSL.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{1E9F45BD-AE62-4A12-8A09-56665F644B79}"
 			RelativePathToProject=".\libraries\Console\Console.vcproj"
 		/>
@@ -208,10 +204,6 @@
 		/>
 	</References>
 	<Files>
-		<File
-			RelativePath=".\NSCopy.cpp"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

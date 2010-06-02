@@ -186,10 +186,6 @@
 			RelativePathToProject=".\libraries\Console\Console.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
-			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}"
 			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
 		/>

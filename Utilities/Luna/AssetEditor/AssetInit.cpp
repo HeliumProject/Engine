@@ -91,8 +91,7 @@ void LunaAsset::InitializeModule()
     g_InitializerStack.Push( AssetDocument::InitializeType, AssetDocument::CleanupType );
     g_InitializerStack.Push( AssetEditor::InitializeEditor, AssetEditor::CleanupEditor );
 
-    UIToolKit::ImageManagerInit( FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder(),
-      FinderSpecs::Luna::GAME_THEME_FOLDER.GetFolder() );
+    UIToolKit::ImageManagerInit( "", "" );
 
     UIToolKit::GlobalImageManager().LoadGuiArt();
   }

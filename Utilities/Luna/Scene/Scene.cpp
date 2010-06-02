@@ -11,6 +11,7 @@
 #include "Reflect/Version.h"
 #include "Console/Console.h"
 
+#include "AppUtils/Preferences.h"
 #include "Asset/Entity.h"
 #include "Asset/SceneManifest.h"
 #include "Asset/Exceptions.h"
@@ -224,7 +225,7 @@ const std::string& Scene::GetFileName() const
   return m_File->GetFileName();
 }
 
-const std::string& Scene::GetFullPath() const
+std::string Scene::GetFullPath() const
 {
   if ( !m_File->GetFilePath().empty() )
   {
@@ -2312,7 +2313,8 @@ void Scene::CurrentSceneChanging( const SceneChangeArgs& args )
   {
     // This scene is not going to be the current one, tell the collection
     // manager to stop displaying this collection.
-    GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->DeleteCollection( m_SelectedEntityCollection );
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+      //    GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->DeleteCollection( m_SelectedEntityCollection );
   }
 }
 
@@ -2323,7 +2325,8 @@ void Scene::CurrentSceneChanged( const SceneChangeArgs& args )
 {
   if ( args.m_Scene == this )
   {
-    GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->AddCollection( m_SelectedEntityCollection );
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+    //GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->AddCollection( m_SelectedEntityCollection );
   }
 }
 
@@ -3452,7 +3455,14 @@ bool Scene::GetVisibilityFile(std::string& filename)
   char buffer[1024]; 
   snprintf(buffer, 1024, "visibility/" TUID_HEX_FORMAT ".vis.rb", m_File->GetFileReference().GetHash() ); 
 
-  filename = FinderSpecs::Luna::PREFERENCES_FOLDER.GetFolder() + std::string(buffer); 
+  Nocturnal::Path prefsDir;
+  if ( !AppUtils::GetPreferencesDirectory( prefsDir ) )
+  {
+      return false;
+  }
+
+  Nocturnal::Path filePath( prefsDir.Get() + '/' + std::string(buffer) );
+  filename = filePath.Get();
 
   return true; 
 }

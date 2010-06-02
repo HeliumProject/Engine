@@ -5,7 +5,6 @@
 #include "AssetFile.h"
 #include "AssetFolder.h"
 #include "AssetTemplate.h"
-#include "AllowedDirParser.h"
 #include "AssetVersion.h"
 #include "CacheDB.h"
 #include "ColorMapAttribute.h"
@@ -77,8 +76,6 @@ i32 g_InitCount = 0;
 
 Nocturnal::InitializerStack g_InitializerStack;
 
-AllowedDirParser g_AllowedDirParser;
-
 void Asset::Initialize()
 {
   if ( ++g_InitCount == 1 )
@@ -88,15 +85,6 @@ void Asset::Initialize()
     g_InitializerStack.Push( File::Initialize, File::Cleanup );
     g_InitializerStack.Push( Attribute::Initialize, Attribute::Cleanup );
     g_InitializerStack.Push( Content::Initialize, Content::Cleanup );
-    g_InitializerStack.Push( CacheDB::Initialize, CacheDB::Cleanup );
-
-
-    std::string configPath = getenv( NOCTURNAL_STUDIO_PREFIX"PROJECT_CONFIG" );
-    configPath += "/AssetCreationAllowedDirs.xml" ;
-    if ( !g_AllowedDirParser.Load( configPath ) )
-    {
-      Console::Warning( "Could not load asset creation allowed directory data\n" );
-    }
 
     //
     // Numbered asset conversion

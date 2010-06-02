@@ -14,7 +14,6 @@
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 
-#include "FileBrowser/FileBrowser.h"
 #include "UIToolkit/FileDialog.h"
 
 #include "MayaUtils/NodeTypes.h"
@@ -116,23 +115,25 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
   }
   else if( argParser.isFlagSet( CreateInstanceFlag ) )
   {
-    File::FileBrowser browserDlg( NULL, -1, "Create Instance" );
-    browserDlg.AddFilter( FinderSpecs::Asset::ENTITY_DECORATION );
-    browserDlg.SetFilterIndex( FinderSpecs::Asset::ENTITY_DECORATION );
+      NOC_BREAK();
+#pragma TODO( "Reimplement to use the Vault" )
+    //File::FileBrowser browserDlg( NULL, -1, "Create Instance" );
+    //browserDlg.AddFilter( FinderSpecs::Asset::ENTITY_DECORATION );
+    //browserDlg.SetFilterIndex( FinderSpecs::Asset::ENTITY_DECORATION );
 
-    if ( browserDlg.ShowModal() == wxID_OK )
-    {
-      std::string fullPath = browserDlg.GetPath();
-      if ( FileSystem::Exists( fullPath ) )
-      {
-        if ( FileSystem::HasExtension( fullPath, FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() ) )
-        {
-          Asset::EntityPtr instance = new Asset::Entity( fullPath );
-          std::pair< EntityAssetNode*, EntityNode* >result = EntityAssetNode::CreateInstance( instance );
-          MFnDependencyNode nodeFn( result.second->thisMObject() );
-        }
-      }
-    }
+    //if ( browserDlg.ShowModal() == wxID_OK )
+    //{
+    //  std::string fullPath = browserDlg.GetPath();
+    //  if ( FileSystem::Exists( fullPath ) )
+    //  {
+    //    if ( FileSystem::HasExtension( fullPath, FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() ) )
+    //    {
+    //      Asset::EntityPtr instance = new Asset::Entity( fullPath );
+    //      std::pair< EntityAssetNode*, EntityNode* >result = EntityAssetNode::CreateInstance( instance );
+    //      MFnDependencyNode nodeFn( result.second->thisMObject() );
+    //    }
+    //  }
+    //}
 
     return MS::kSuccess;
   }

@@ -267,10 +267,6 @@
 			RelativePathToProject=".\libraries\Math\math.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{D0028BA8-6457-4115-8EB1-924A14B2306F}"
-			RelativePathToProject=".\libraries\FileBrowser\FileBrowser.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 			RelativePathToProject=".\libraries\Common\Common.vcproj"
 		/>

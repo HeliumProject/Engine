@@ -110,7 +110,8 @@ FoldersPanelGenerated::FoldersPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
 	
-	m_FoldersTreeCtrl = new Luna::DirectoryCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDIRCTRL_DIR_ONLY|wxDIRCTRL_EDIT_LABELS|wxNO_BORDER, wxEmptyString, 0 );
+#pragma TODO( "pass in the right root directory for the DirectoryCtrl" )
+	m_FoldersTreeCtrl = new Luna::DirectoryCtrl( "", this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDIRCTRL_DIR_ONLY|wxDIRCTRL_EDIT_LABELS|wxNO_BORDER, wxEmptyString, 0 );
 	
 	m_FoldersTreeCtrl->ShowHidden( false );
 	bSizer12->Add( m_FoldersTreeCtrl, 1, wxEXPAND, 5 );

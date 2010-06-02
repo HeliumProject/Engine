@@ -200,10 +200,6 @@
 			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{D0028BA8-6457-4115-8EB1-924A14B2306F}"
-			RelativePathToProject=".\libraries\FileBrowser\FileBrowser.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{ED5B2A66-1F2C-40C1-BC4B-C2AA1D2B7632}"
 			RelativePathToProject=".\libraries\InspectReflect\InspectReflect.vcproj"
 		/>

@@ -251,10 +251,6 @@ void CopyFileToServer( std::string sourceFile, std::string targetFile, Dependenc
 {
   TryMakePath( targetFile );
 
-  std::string localFile = sourceFile;
-  FileSystem::StripPrefix( Finder::ProjectAssets(), localFile );
-  Console::Debug("Copying to server: %s\n", localFile.c_str());
-
   std::string md5File = targetFile;
   FileSystem::StripLeaf( md5File );
   md5File += "md5.txt";
@@ -321,10 +317,6 @@ void CopyFileToServer( std::string sourceFile, std::string targetFile, Dependenc
 void CopyFileFromServer( std::string sourceFile, std::string targetFile, Dependencies::DependencyInfo* fileInfo )
 {
   TryMakePath( targetFile );
-
-  std::string localFile = targetFile;
-  FileSystem::StripPrefix( Finder::ProjectAssets(), localFile );
-  Console::Debug("Copying from server: %s\n", localFile.c_str());
 
   std::string md5File = sourceFile;
   FileSystem::StripLeaf( md5File );
@@ -424,7 +416,7 @@ DWORD WINAPI CopyThread( LPVOID lpParam )
   return TRUE;
 }
 
-bool CopyFiles( const Dependencies::V_DependencyInfo& files, bool toServer )
+bool CopyFiles( Dependencies::DependencyGraph& depGraph, const Dependencies::V_DependencyInfo& files, bool toServer )
 {
   if ( g_Disable )
   {
@@ -484,7 +476,7 @@ bool CopyFiles( const Dependencies::V_DependencyInfo& files, bool toServer )
         // Not really a problem, but not good either
         NOC_BREAK();
 
-        Dependencies::Graph().GetFileMD5( job.m_FileInfo );
+        depGraph.GetFileMD5( job.m_FileInfo );
       }
     }
     else
@@ -740,28 +732,28 @@ std::string CacheFiles::GetOutputFilename( const Dependencies::DependencyInfoPtr
   return serverFile;
 }
 
-bool CacheFiles::Get( const Dependencies::V_DependencyInfo& files )
+bool CacheFiles::Get( Dependencies::DependencyGraph& depGraph, const Dependencies::V_DependencyInfo& files )
 {
   NOC_ASSERT( g_InitCount );
-  return CopyFiles( files, false );
+  return CopyFiles( depGraph, files, false );
 }
 
-bool CacheFiles::Get( const Dependencies::FileInfoPtr& file )
+bool CacheFiles::Get( Dependencies::DependencyGraph& depGraph, const Dependencies::FileInfoPtr& file )
 {
   Dependencies::V_DependencyInfo files;
   files.push_back( file );
-  return Get( files );
+  return Get( depGraph, files );
 }
 
-void CacheFiles::Put( const Dependencies::V_DependencyInfo& files )
+void CacheFiles::Put( Dependencies::DependencyGraph& depGraph, const Dependencies::V_DependencyInfo& files )
 {
   NOC_ASSERT( g_InitCount );
-  CopyFiles( files, true );
+  CopyFiles( depGraph, files, true );
 }
 
-void CacheFiles::Put( const Dependencies::FileInfoPtr& file )
+void CacheFiles::Put( Dependencies::DependencyGraph& depGraph, const Dependencies::FileInfoPtr& file )
 {
   Dependencies::V_DependencyInfo files;
   files.push_back( file );
-  return Put( files );
+  return Put( depGraph, files );
 }

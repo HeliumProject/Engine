@@ -8,14 +8,6 @@ namespace FinderSpecs
   class FINDER_API Luna
   {
   public:      
-    const static FolderSpec GLOBAL_CONFIG_FOLDER;
-    const static FolderSpec CONFIG_FOLDER;
-    const static FolderSpec THEMES_FOLDER;
-    const static FolderSpec DEFAULT_THEME_FOLDER;
-    const static FolderSpec GAME_THEME_FOLDER;
-    const static FolderSpec SPLASH_SCREEN_FOLDER;
-    const static FolderSpec PREFERENCES_FOLDER;
-
     const static FileSpec EMPTY_MAYA_FILE;
     const static FileSpec TYPE_CONFIGURATIONS;
     const static FileSpec MISC_SETTINGS;

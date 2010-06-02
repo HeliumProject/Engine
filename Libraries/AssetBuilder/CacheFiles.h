@@ -1,6 +1,7 @@
 #pragma once
 
 #include "API.h"
+#include "Dependencies/Dependencies.h"
 #include "Dependencies/FileInfo.h"
 
 #include "Reflect/Serializers.h"
@@ -16,10 +17,10 @@ namespace CacheFiles
   ASSETBUILDER_API const std::string& GetCacheFilesPath();
   ASSETBUILDER_API std::string GetOutputFilename( const Dependencies::DependencyInfoPtr& file );
 
-  ASSETBUILDER_API bool Get( const Dependencies::V_DependencyInfo& files );
-  ASSETBUILDER_API bool Get( const Dependencies::FileInfoPtr& file );
+  ASSETBUILDER_API bool Get( Dependencies::DependencyGraph& depGraph, const Dependencies::V_DependencyInfo& files );
+  ASSETBUILDER_API bool Get( Dependencies::DependencyGraph& depGraph, const Dependencies::FileInfoPtr& file );
 
-  ASSETBUILDER_API void Put( const Dependencies::V_DependencyInfo& files );
-  ASSETBUILDER_API void Put( const Dependencies::FileInfoPtr& file );
+  ASSETBUILDER_API void Put( Dependencies::DependencyGraph& depGraph, const Dependencies::V_DependencyInfo& files );
+  ASSETBUILDER_API void Put( Dependencies::DependencyGraph& depGraph, const Dependencies::FileInfoPtr& file );
 }
 

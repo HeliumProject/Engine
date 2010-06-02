@@ -150,7 +150,9 @@ void SearchQuery::SetCollection( const AssetCollection* collection )
 AssetCollection* SearchQuery::GetCollection()
 {
     m_CollectionFileRef->Resolve();
-    return GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->FindCollection( m_CollectionFileRef->GetPath() );
+    //return GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->FindCollection( m_CollectionFileRef->GetPath() );
+#pragma TODO( "collections are being replaced... ?" )
+    return NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -218,18 +220,18 @@ bool ParseColumnID( const std::string& token, Asset::S_CacheDBColumnID& columnID
     {
         std::string phraseWhere;
         int count = 0;
-        Asset::M_CacheDBColumns::const_iterator colItr = GlobalBrowser().GetCacheDB()->GetDBColumns().begin();
-        Asset::M_CacheDBColumns::const_iterator colEnd = GlobalBrowser().GetCacheDB()->GetDBColumns().end();
-        for ( ; colItr != colEnd; ++colItr )
-        {
-            Asset::CacheDBColumn* cacheDBColumn = ( *colItr ).second;
+        //Asset::M_CacheDBColumns::const_iterator colItr = GlobalBrowser().GetCacheDB()->GetDBColumns().begin();
+        //Asset::M_CacheDBColumns::const_iterator colEnd = GlobalBrowser().GetCacheDB()->GetDBColumns().end();
+        //for ( ; colItr != colEnd; ++colItr )
+        //{
+        //    Asset::CacheDBColumn* cacheDBColumn = ( *colItr ).second;
 
-            if ( cacheDBColumn->m_ColumnAliases.find( cleanToken ) != cacheDBColumn->m_ColumnAliases.end() )
-            {
-                columnIDs.insert( ( *colItr ).first );
-                result = true;
-            }
-        }
+        //    if ( cacheDBColumn->m_ColumnAliases.find( cleanToken ) != cacheDBColumn->m_ColumnAliases.end() )
+        //    {
+        //        columnIDs.insert( ( *colItr ).first );
+        //        result = true;
+        //    }
+        //}
     }
 
     return result;
@@ -239,11 +241,12 @@ bool ParseAttributeRowID( const std::string& token, u64& rowID )
 {
     bool result = false;
 
-    rowID = GlobalBrowser().GetCacheDB()->FindAttributeRowID( token );
-    if ( rowID > 0 )
-    {
-        result = true;
-    }
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+    //rowID = GlobalBrowser().GetCacheDB()->FindAttributeRowID( token );
+    //if ( rowID > 0 )
+    //{
+    //    result = true;
+    //}
 
     return result;
 }
@@ -371,18 +374,20 @@ bool SearchQuery::ParseQueryString( const std::string& queryString, std::string&
                     {
                         if ( ParseCollectionName( curToken, matchResults, currentValue, errors ) )
                         {
-                            AssetCollection* collection = GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->FindCollection( currentValue );
-                            if ( !collection )
-                            {
-                                // TODO: error out
-                                errors = "Could not find collection named: " + currentValue;
-                                return false;
-                            }
-                            else if ( collection && query )
-                            {
-                                query->SetCollection( collection );
-                            }
-                            continue;
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+                            //AssetCollection* collection = GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->FindCollection( currentValue );
+                            //if ( !collection )
+                            //{
+                            //    // TODO: error out
+                            //    errors = "Could not find collection named: " + currentValue;
+                            //    return false;
+                            //}
+                            //else if ( collection && query )
+                            //{
+                            //    query->SetCollection( collection );
+                            //}
+                            //continue;
+                            return false;
                         }
                         else
                         {

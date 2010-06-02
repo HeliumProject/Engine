@@ -285,7 +285,7 @@ public:
             if( editor )
             {
               Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( entity->GetClassSet()->GetEntityAsset(), true );
-              std::string objectsFile = FinderSpecs::Content::OBJECTS_DECORATION.GetExportFile( entity->GetClassSet()->GetContentFile(), artFile->m_FragmentNode );
+              std::string objectsFile = entity->GetClassSet()->GetContentFile();
               RCS::File rcsObjectsFile( objectsFile );
 
               try
@@ -416,7 +416,7 @@ public:
               }
 
               Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( entity->GetClassSet()->GetEntityAsset(), true );
-              std::string lightFile = FinderSpecs::Content::OBJECTS_DECORATION.GetExportFile( entity->GetClassSet()->GetContentFile(), artFile->m_FragmentNode );
+              std::string lightFile = entity->GetClassSet()->GetContentFile();
 
               if( FileSystem::Exists( lightFile ) )
               {

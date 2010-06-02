@@ -2,6 +2,8 @@
 
 #include "API.h"
 
+#include <wx/filedlg.h>
+
 #include "Common/Compiler.h"
 #include "Common/Types.h"
 #include "Common/Container/OrderedSet.h"

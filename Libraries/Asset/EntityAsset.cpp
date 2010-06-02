@@ -9,7 +9,6 @@
 #include "AssetTemplate.h"
 #include "ArtFileAttribute.h"
 #include "DependenciesAttribute.h"
-#include "AllowedDirParser.h"
 
 #include "FileSystem/FileSystem.h"
 #include "Finder/ContentSpecs.h"
@@ -17,8 +16,6 @@
 using namespace Reflect;
 using namespace Asset;
 using namespace Attribute;
-
-extern AllowedDirParser g_AllowedDirParser;
 
 REFLECT_DEFINE_CLASS(EntityAsset)
 
@@ -38,8 +35,6 @@ void EntityAsset::EnumerateClass( Reflect::Compositor<EntityAsset>& comp )
 
     staticTemplate->m_DefaultAddSubDir = true;
     staticTemplate->m_ShowSubDirCheckbox = true;
-    staticTemplate->m_AboutDirSettings = g_AllowedDirParser.GetAboutDirSettings( staticTemplate->m_Name );
-    staticTemplate->m_DirectoryPatterns = g_AllowedDirParser.GetPatterns( staticTemplate->m_Name );
 
     staticTemplate->AddRequiredAttribute( Reflect::GetType< Asset::ArtFileAttribute >() );
     assetTemplates.push_back( staticTemplate );
@@ -51,8 +46,6 @@ void EntityAsset::EnumerateClass( Reflect::Compositor<EntityAsset>& comp )
 
     dynamicTemplate->m_DefaultAddSubDir = true;
     dynamicTemplate->m_ShowSubDirCheckbox = true;
-    dynamicTemplate->m_AboutDirSettings = g_AllowedDirParser.GetAboutDirSettings( dynamicTemplate->m_Name );
-    dynamicTemplate->m_DirectoryPatterns = g_AllowedDirParser.GetPatterns( dynamicTemplate->m_Name );
 
     dynamicTemplate->AddRequiredAttribute( Reflect::GetType< Asset::ArtFileAttribute >() );
     assetTemplates.push_back( dynamicTemplate );
@@ -64,8 +57,6 @@ void EntityAsset::EnumerateClass( Reflect::Compositor<EntityAsset>& comp )
 
     uniqueTemplate->m_DefaultAddSubDir = true;
     uniqueTemplate->m_ShowSubDirCheckbox = true;
-    uniqueTemplate->m_AboutDirSettings = g_AllowedDirParser.GetAboutDirSettings( uniqueTemplate->m_Name );
-    uniqueTemplate->m_DirectoryPatterns = g_AllowedDirParser.GetPatterns( uniqueTemplate->m_Name );
     uniqueTemplate->AddRequiredAttribute( Reflect::GetType< Asset::ArtFileAttribute >() );
     assetTemplates.push_back( uniqueTemplate );
 
@@ -118,17 +109,15 @@ const Asset::EntityManifestPtr EntityAsset::GetManifest()
 
     if( artFileAttribute.Valid() )
     {
-        std::string assetManifestFile = FinderSpecs::Content::MANIFEST_DECORATION.GetExportFile( artFileAttribute->GetFileReference().GetPath(), artFileAttribute->m_FragmentNode );
-
-        if (FileSystem::Exists(assetManifestFile))
+        if ( artFileAttribute->GetFileReference().GetFile().Exists() )
         {
             try
             {
-                m_Manifest = Archive::FromFile<Asset::EntityManifest>(assetManifestFile);
+                m_Manifest = Archive::FromFile<Asset::EntityManifest>( artFileAttribute->GetFileReference().GetPath() );
             }
             catch ( const Reflect::Exception& e )
             {
-                Console::Error("Error loading %s (%s)\n", assetManifestFile.c_str(), e.what());
+                Console::Error("Error loading %s (%s)\n", artFileAttribute->GetFileReference().GetPath().c_str(), e.what());
             }
         }
     }

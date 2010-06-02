@@ -172,13 +172,12 @@ bool AssetVisitor::HandleArtFileAttribute( Reflect::Element* element )
             const std::string& attrName = Reflect::Registry::GetInstance()->GetClass( element->GetType() )->m_FullName;
             assetFile->AddAttribute( attrName, artFile, false );
 
-            std::string assetManifestFile = FinderSpecs::Content::MANIFEST_DECORATION.GetExportFile( artFile, attribute->m_FragmentNode );
-            if ( FileSystem::Exists(assetManifestFile) )
+            if ( FileSystem::Exists( artFile ) )
             {
                 Asset::EntityManifestPtr manifest;
                 try
                 {
-                    manifest = Archive::FromFile<Asset::EntityManifest>(assetManifestFile);
+                    manifest = Archive::FromFile<Asset::EntityManifest>( artFile );
                 }
                 catch ( const Nocturnal::Exception& ex )
                 {
@@ -595,7 +594,7 @@ void AssetVisitor::HandleMayaFile( Reflect::Element* element, const Reflect::Fie
 
         if (!artFile.empty())
         {
-            std::string assetManifestFile = FinderSpecs::Content::MANIFEST_DECORATION.GetExportFile( artFile, model->m_FragmentNode );
+            std::string assetManifestFile = artFile;
 
             if (FileSystem::Exists(assetManifestFile))
             {

@@ -2,6 +2,7 @@
 #include "BrowserPreferences.h"
 #include "BrowserFrame.h"
 
+#include "AppUtils/Preferences.h"
 #include "Asset/AssetFlags.h"
 #include "Common/Environment.h"
 #include "FileSystem/FileSystem.h"
@@ -67,7 +68,12 @@ const std::string& BrowserPreferences::GetCurrentVersion() const
 ///////////////////////////////////////////////////////////////////////////////
 std::string BrowserPreferences::GetPreferencesPath() const
 {
-  return FinderSpecs::Luna::BROWSER_PREFS.GetFile( FinderSpecs::Luna::PREFERENCES_FOLDER );
+    Nocturnal::Path prefsDir;
+    if ( !AppUtils::GetPreferencesDirectory( prefsDir ) )
+    {
+        throw Nocturnal::Exception( "Could not get preferences directory." );
+    }
+    return FinderSpecs::Luna::BROWSER_PREFS.GetFile( prefsDir.Get() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

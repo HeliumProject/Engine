@@ -48,7 +48,10 @@ Reference::Reference( const std::string& path )
 , m_LastSignature( "" )
 , m_LastFileModifiedTime( 0 )
 {
-    Set( path );
+    if ( !path.empty() )
+    {
+        Set( path );
+    }
 }
 
 Reference::~Reference()
@@ -92,10 +95,10 @@ void Reference::Set( const std::string& path )
 
     m_Id = TUID::Null;
 
-    if ( !File::GlobalResolver().Find( *this ) )
+    if ( File::GlobalResolver() && !File::GlobalResolver()->Find( *this ) )
     {
         TUID::Generate( m_Id );
-        File::GlobalResolver().Insert( *this );
+        File::GlobalResolver()->Insert( *this );
     }
 
     m_LastUsername = getenv( "USERNAME" );
@@ -177,14 +180,14 @@ void Reference::Resolve()
         }
     }
 
-    if ( !File::GlobalResolver().Find( *this ) )
+    if ( File::GlobalResolver() && !File::GlobalResolver()->Find( *this ) )
     {
         if ( m_Id == TUID::Null )
         {
             TUID::Generate( m_Id );
         }
 
-        File::GlobalResolver().Insert( *this );
+        File::GlobalResolver()->Insert( *this );
     }
 
     m_ModifiedTime = (u64) _time64( NULL );
@@ -256,7 +259,10 @@ void Reference::Retarget( const std::string& newPath )
     m_FileObject.SetPath( newPath );
     m_FullPathForSerialization = m_FileObject.GetPath().Get();
 
-    File::GlobalResolver().Update( *this );
+    if ( File::GlobalResolver() )
+    {
+        File::GlobalResolver()->Update( *this );
+    }
 
     Resolve();
 }

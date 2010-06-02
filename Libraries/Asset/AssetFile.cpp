@@ -4,8 +4,6 @@
 #include "ArtFileAttribute.h"
 #include "ColorMapAttribute.h"
 
-#include "CacheDB.h"
-
 #include "Attribute/AttributeHandle.h"
 #include "Common/String/Utilities.h"
 #include "File/File.h"
@@ -46,7 +44,7 @@ AssetFile::~AssetFile()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-AssetFilePtr AssetFile::FindAssetFile( const std::string& path, bool useCacheDB )
+AssetFilePtr AssetFile::FindAssetFile( const std::string& path, CacheDB* cache )
 {
     NOC_ASSERT( !path.empty() );
 
@@ -55,10 +53,10 @@ AssetFilePtr AssetFile::FindAssetFile( const std::string& path, bool useCacheDB 
 
     AssetFilePtr assetFile = new AssetFile( file );
 
-    if ( useCacheDB )
+    if ( cache )
     {
         // select the file from the cache
-        Asset::GlobalCacheDB()->SelectAssetByHash( file.GetHash(), assetFile );
+        cache->SelectAssetByHash( file.GetHash(), assetFile );
     }
 
     return assetFile;

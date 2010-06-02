@@ -378,7 +378,7 @@ namespace Luna
 
     // Path to the file that this scene is currently editing
     const std::string& GetFileName() const;
-    const std::string& GetFullPath() const;
+    std::string GetFullPath() const;
     SceneDocument* GetSceneDocument() const;
 
     // get the current tool in use in this scene

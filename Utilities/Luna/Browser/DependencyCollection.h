@@ -60,7 +60,7 @@ namespace Luna
         Asset::AssetFilePtr m_AssetFile;
 
         bool m_IsLoading;
-        DependencyLoader m_DependencyLoader;
+        DependencyLoader* m_DependencyLoader;
     };
     typedef Nocturnal::SmartPtr< DependencyCollection > DependencyCollectionPtr;
 

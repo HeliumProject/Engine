@@ -17,7 +17,6 @@
 #include "Asset/AssetFlags.h"
 #include "Common/String/Tokenize.h"
 #include "Console/Console.h"
-#include "FileBrowser/FileBrowser.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/ExtensionSpecs.h"
@@ -257,23 +256,25 @@ void FileContainerInterpreter::OnFindFile( Button* button )
   {
     ClientDataFilter* data = static_cast< ClientDataFilter* >( clientData.Ptr() );
 
-    File::FileBrowser browserDlg( button->GetCanvas()->GetControl(), wxID_ANY, "Add Asset to List" );
+      NOC_BREAK();
+#pragma TODO( "Reimplement to use the Vault" )
+    //File::FileBrowser browserDlg( button->GetCanvas()->GetControl(), wxID_ANY, "Add Asset to List" );
 
-    if ( !data->m_FinderSpec.empty() )
-    {
-      const Finder::FinderSpec* spec = Finder::GetFinderSpec( data->m_FinderSpec );
-      browserDlg.SetFilter( *spec );
-      browserDlg.SetFilterIndex( *spec );
-    }
-    else
-    {
-      browserDlg.SetFilter( FinderSpecs::Extension::ALL_FILTER );
-    }
+    //if ( !data->m_FinderSpec.empty() )
+    //{
+    //  const Finder::FinderSpec* spec = Finder::GetFinderSpec( data->m_FinderSpec );
+    //  browserDlg.SetFilter( *spec );
+    //  browserDlg.SetFilterIndex( *spec );
+    //}
+    //else
+    //{
+    //  browserDlg.SetFilter( FinderSpecs::Extension::ALL_FILTER );
+    //}
 
-    if ( browserDlg.ShowModal() == wxID_OK )
-    {
-      data->m_List->AddItem( browserDlg.GetPath().c_str() );
-    }
+    //if ( browserDlg.ShowModal() == wxID_OK )
+    //{
+    //  data->m_List->AddItem( browserDlg.GetPath().c_str() );
+    //}
 
     button->GetCanvas()->Read();
   }

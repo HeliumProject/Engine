@@ -24,7 +24,6 @@
 #include "Finder/LunaSpecs.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ContentSpecs.h"
-#include "Finder/AnimationSpecs.h"
 #include "Finder/FinderSpec.h"
 #include "Finder/ProjectSpecs.h"
 #include "Reflect/Class.h"
@@ -54,56 +53,13 @@ static inline void PrependFilePath( const std::string& projectAssets, std::strin
     }
 }
 
-//
-// Init/Cleanup
-//
-
-std::string Tracker::s_GlobalRootDirectory = "";
-
-///////////////////////////////////////////////////////////////////////////////
-static int g_InitCount = 0;
-static Tracker* g_GlobalTracker = NULL;
-void Tracker::Initialize()
-{
-    if ( ++g_InitCount == 1 )
-    {
-        g_GlobalTracker = new Tracker( Tracker::s_GlobalRootDirectory );
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void Tracker::Cleanup()
-{
-    if ( --g_InitCount == 0 )
-    {
-        if ( g_GlobalTracker )
-        {
-            g_GlobalTracker->StopThread();
-
-            delete g_GlobalTracker;
-            g_GlobalTracker = NULL;
-        }
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-Tracker* Asset::GlobalTracker()
-{
-    if ( !g_GlobalTracker )
-    {
-        throw Nocturnal::Exception( "GlobalTracker is not initialized, must call Asset::Tracker::Initialize() first!" );
-    }
-    return g_GlobalTracker;
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Tracker
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-Tracker::Tracker( const std::string& rootDirectory )
-: m_AssetCacheDB( new Asset::CacheDB( "AssetTracker-AssetCacheDB" ) )
-, m_RootDirectory( rootDirectory )
+Tracker::Tracker( const std::string& rootDirectory, const std::string& configDirectory )
+: m_RootDirectory( rootDirectory )
 , m_Thread( NULL )
 , m_ThreadID( 0x0 )
 , m_StopTracking( false )
@@ -112,11 +68,18 @@ Tracker::Tracker( const std::string& rootDirectory )
 , m_Total( 0 )
 , m_CurrentProgress( 0 )
 {
+    Nocturnal::Path cacheDBFilepath( rootDirectory + "/.tracker/cache.db" );
+    m_AssetCacheDB = new Asset::CacheDB( "AssetTracker-AssetCacheDB", cacheDBFilepath.Get(), configDirectory );
 }
 
 Tracker::~Tracker()
 {
-    m_AssetCacheDB = NULL;
+    StopThread();
+    if ( m_AssetCacheDB )
+    {
+        delete m_AssetCacheDB;
+        m_AssetCacheDB = NULL;
+    }
     m_AssetFiles.clear();
 }
 
@@ -282,25 +245,7 @@ void Tracker::TrackEverything()
 
     m_StopTracking = false;
     m_InitialIndexingCompleted = false;
-
-    ////////////////////////////////
-    // Connect to the DBs
     m_IndexingFailed = false;
-    {
-        // Connect the Asset CacheDB
-        std::string rootDir = Finder::ProjectAssets() + FinderSpecs::Project::ASSET_TRACKER_FOLDER.GetRelativeFolder();
-        FileSystem::GuaranteeSlash( rootDir );
-        FileSystem::MakePath( rootDir );
-        if ( !m_AssetCacheDB->Open( FinderSpecs::Project::ASSET_TRACKER_DB.GetFile( rootDir ),
-            FinderSpecs::Project::ASSET_TRACKER_CONFIGS.GetFolder(),
-            m_AssetCacheDB->s_TrackerDBVersion ) )
-        {
-            Console::Error( "Tracker: Failed to open Asset Tracker Cache DB.\n" );
-            m_IndexingFailed = true;
-            m_StopTracking = true;
-            return;
-        }
-    }
 
     V_string foundFiles;
     while ( !m_StopTracking )
@@ -421,9 +366,9 @@ void Tracker::StopThread()
 ///////////////////////////////////////////////////////////////////////////////
 // Thread entry point to start tracking everything
 //
-DWORD WINAPI Tracker::TrackEverythingThread(LPVOID pvoid)
+DWORD WINAPI Tracker::TrackEverythingThread(LPVOID pTracker)
 {
-    g_GlobalTracker->TrackEverything();
+    ((Tracker*)pTracker)->TrackEverything();
 
     return (DWORD)0;
 }

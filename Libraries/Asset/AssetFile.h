@@ -2,6 +2,7 @@
 
 #include "API.h"
 #include "AssetClass.h"
+#include "CacheDB.h"
 
 #include "Common/Container/OrderedSet.h"
 #include "Common/Memory/SmartPtr.h"
@@ -28,7 +29,7 @@ namespace Asset
     AssetFile( File::Reference& file );
     virtual ~AssetFile();
 
-    static AssetFilePtr FindAssetFile( const std::string& path, bool useCacheDB = true );
+    static AssetFilePtr FindAssetFile( const std::string& path, CacheDB* cache = NULL );
 
   public:
     std::string GetFilePath()

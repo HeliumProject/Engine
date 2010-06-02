@@ -25,6 +25,10 @@
 		Name="Expat"
 		Value="$(SolutionDir)SDK\Expat\2.01"
 	/>
+	<UserMacro
+	    Name="LiteSQL"
+	    Value="$(SolutionDir)SDK\LiteSQL\0.3.7"
+	/>
   <UserMacro
     Name="Maya"
     Value="C:\Program Files (x86)\Autodesk\Maya2011"

@@ -47,11 +47,7 @@ void PreviewPanel::Preview( Asset::AssetClass* asset )
                 artFile->GetFileReference().Resolve();
                 if ( artFile->GetFileReference().IsValid() )
                 {
-                    std::string path = artFile->GetFileReference().GetPath();
-                    if ( !path.empty() )
-                    {
-                        m_ContentFile = FinderSpecs::Content::STATIC_DECORATION.GetExportFile( path, artFile->m_FragmentNode );
-                    }
+                    m_ContentFile = artFile->GetFileReference().GetPath();
                 }
             }
         }

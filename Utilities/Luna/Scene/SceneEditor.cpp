@@ -46,7 +46,6 @@
 #include "Content/ContentVersion.h"
 #include "Editor/MRUData.h"
 #include "Editor/SessionManager.h"
-#include "FileBrowser/FileBrowser.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
@@ -354,7 +353,7 @@ SceneEditor::SceneEditor()
     {
         std::string path = *itr;
         FileSystem::CleanName( path );
-        if ( FileSystem::Exists( path ) && FileSystem::HasPrefix( Finder::ProjectAssets(), path ) )
+        if ( FileSystem::Exists( path ) )
         {
             paths.push_back( *itr );
         }
@@ -1423,10 +1422,7 @@ bool SceneEditor::DoOpen( const std::string& path )
 // 
 void SceneEditor::OnOpen(wxCommandEvent& event)
 {
-    // For the default directory of the file open dialog
-    static std::string defaultDir = FinderSpecs::Asset::LEVEL_FOLDER.GetFolder();
-
-    UIToolKit::FileDialog openDlg( this, "Open", defaultDir.c_str(), "" );
+    UIToolKit::FileDialog openDlg( this, "Open" );
     openDlg.AddFilter( s_Filter.GetDialogFilter() );
     openDlg.SetFilterIndex( FinderSpecs::Asset::LEVEL_DECORATION.GetDialogFilter() );
 
@@ -1442,15 +1438,17 @@ void SceneEditor::OnOpen(wxCommandEvent& event)
 // 
 void SceneEditor::OnFind( wxCommandEvent& event )
 {
-    File::FileBrowser browserDlg( this, -1, "Open" );
+    NOC_BREAK();
+#pragma TODO( "Reimplement to use the Vault" )
+    //File::FileBrowser browserDlg( this, -1, "Open" );
 
-    browserDlg.SetFilter( s_Filter );
-    browserDlg.SetFilterIndex( FinderSpecs::Asset::LEVEL_DECORATION );
+    //browserDlg.SetFilter( s_Filter );
+    //browserDlg.SetFilterIndex( FinderSpecs::Asset::LEVEL_DECORATION );
 
-    if ( browserDlg.ShowModal() == wxID_OK )
-    {
-        DoOpen( browserDlg.GetPath() );
-    }
+    //if ( browserDlg.ShowModal() == wxID_OK )
+    //{
+    //    DoOpen( browserDlg.GetPath() );
+    //}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4241,7 +4239,8 @@ bool SceneEditor::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* 
             if (art && !art->GetContentFile().empty())
             {
                 std::string artPath( art->GetContentFile() );
-                FileSystem::StripPrefix( Finder::ProjectAssets(), artPath );
+
+#pragma TODO( "We need make the artPath relative to the game project file" )
 
                 // Why is the art path blank?
                 NOC_ASSERT(!artPath.empty());

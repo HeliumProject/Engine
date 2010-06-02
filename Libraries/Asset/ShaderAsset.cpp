@@ -13,11 +13,8 @@
 #include "Console/Console.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ShaderSpecs.h"
-#include "AllowedDirParser.h"
 
 using namespace Asset;
-
-extern AllowedDirParser g_AllowedDirParser;
 
 REFLECT_DEFINE_ABSTRACT( ShaderAsset );
 
@@ -41,9 +38,6 @@ void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
     AssetTemplatePtr shaderTemplate = new AssetTemplate( &comp.GetComposite() );
     shaderTemplate->m_DefaultAddSubDir = true;
     shaderTemplate->m_ShowSubDirCheckbox = true;
-    shaderTemplate->m_AboutDirSettings = g_AllowedDirParser.GetAboutDirSettings( shaderTemplate->m_Name );
-    shaderTemplate->m_DefaultRoot = FinderSpecs::Asset::SHADER_FOLDER.GetRelativeFolder();
-    shaderTemplate->m_DirectoryPatterns = g_AllowedDirParser.GetPatterns( shaderTemplate->m_Name );
 
     shaderTemplate->AddRequiredAttribute( Reflect::GetType< Asset::StandardColorMapAttribute >() );
 

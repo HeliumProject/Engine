@@ -1,6 +1,7 @@
 #include "Precompile.h"
 #include "BrowserFrame.h"
 
+#include "Application.h"
 #include "Browser.h"
 #include "BrowserEvents.h"
 #include "BrowserPreferencesDialog.h"
@@ -180,7 +181,8 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
     // Center Results List Ctrl
     //
     {
-        m_ResultsPanel = new ResultsPanel( this );
+#pragma TODO( "pass in the right root directory to the ResultsPanel" )
+        m_ResultsPanel = new ResultsPanel( "", this );
 
         wxAuiPaneInfo info;
         info.Name( "CenterPanel" );
@@ -387,7 +389,8 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
 
     m_ResultsPanel->AddResultsChangedListener( ResultSignature::Delegate( this, &BrowserFrame::OnResultsPanelUpdated ) );
 
-    m_StatusBar->UpdateTrackerStatus( Asset::GlobalTracker()->IsTracking() );
+    Asset::Tracker* assetTracker = Luna::wxGetApp().GetAssetTracker();
+    m_StatusBar->UpdateTrackerStatus( assetTracker ? assetTracker->IsTracking() : false );
 }
 
 BrowserFrame::~BrowserFrame()
@@ -464,8 +467,7 @@ bool BrowserFrame::IsPreviewable( Asset::AssetFile* file )
 
             if ( artFile->GetFileReference().IsValid() )
             {
-                Nocturnal::File exportFile( FinderSpecs::Content::STATIC_DECORATION.GetExportFile( artFile->GetFileReference().GetPath(), artFile->m_FragmentNode ) );
-                return exportFile.Exists();
+                return artFile->GetFileReference().GetFile().Exists();
             }
         }
     }
@@ -1213,21 +1215,25 @@ void BrowserFrame::UpdateStatusBar( size_t numFolders, size_t numFiles, size_t n
             }
         }
 
-        if ( Asset::GlobalTracker()->IsTracking() )
+        Asset::Tracker* assetTracker = wxGetApp().GetAssetTracker();
+        if ( assetTracker )
         {
-            if ( !status.str().empty() )
+            if ( assetTracker->IsTracking() )
             {
-                status << " ";
+                if ( !status.str().empty() )
+                {
+                    status << " ";
+                }
+                status << "(WARNING: Indexing is in progress, results may be incomplete)";
             }
-            status << "(WARNING: Indexing is in progress, results may be incomplete)";
-        }
-        else if ( Asset::GlobalTracker()->DidIndexingFail() )
-        {
-            if ( !status.str().empty() )
+            else if ( assetTracker->DidIndexingFail() )
             {
-                status << " ";
+                if ( !status.str().empty() )
+                {
+                    status << " ";
+                }
+                status << "(WARNING: Indexing FAILED! Results may be incomplete.)";
             }
-            status << "(WARNING: Indexing FAILED! Results may be incomplete.)";
         }
     }
 

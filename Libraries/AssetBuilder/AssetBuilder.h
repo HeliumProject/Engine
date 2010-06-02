@@ -61,12 +61,12 @@ namespace AssetBuilder
   ASSETBUILDER_API void Cleanup();
 
   // build assets
-  ASSETBUILDER_API void Build( const Asset::AssetClassPtr& assetClass, const BuilderOptionsPtr& options = NULL );
-  ASSETBUILDER_API void Build( const Asset::AssetClassPtr& assetClass, const V_string& options );
-  ASSETBUILDER_API void Build( File::Reference& fileRef, const BuilderOptionsPtr& options = NULL );
-  ASSETBUILDER_API void Build( File::Reference& fileRef, const V_string& options );
-  ASSETBUILDER_API void Build( const BuildJobPtr& job );
-  ASSETBUILDER_API void Build( V_BuildJob& jobs, i32 nice = -1 );
+  ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, const Asset::AssetClassPtr& assetClass, const BuilderOptionsPtr& options = NULL );
+  ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, const Asset::AssetClassPtr& assetClass, const V_string& options );
+  ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, File::Reference& fileRef, const BuilderOptionsPtr& options = NULL );
+  ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, File::Reference& fileRef, const V_string& options );
+  ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, const BuildJobPtr& job );
+  ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs, i32 nice = -1 );
   
   // query build results
   ASSETBUILDER_API bool DidBuildFail( const tuid assetId );

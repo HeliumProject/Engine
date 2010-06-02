@@ -6,45 +6,67 @@
 
 namespace Nocturnal
 {
-  struct COMMON_API FileChangedArgs
-  {
-    std::string m_Path;
-
-    FileChangedArgs( const std::string& path )
-      : m_Path( path )
+    namespace FileOperations
     {
+        enum FileOperation
+        {
+            Unknown = 0,
+            Added = 1 << 0,
+            Removed = 1 << 1, 
+            Modified = 1 << 2,
+            Renamed = 1 << 3,
+        };
     }
-  };
-  typedef Nocturnal::Signature< void, const FileChangedArgs& > FileChangedSignature;
+    typedef FileOperations::FileOperation FileOperation;
 
-  typedef void* HANDLE;
-  struct COMMON_API FileWatch
-  {
-    HANDLE                      m_ChangeHandle;
-    FileChangedSignature::Event m_Event;
-    File                        m_File;
 
-    FileWatch()
-      : m_ChangeHandle( NULL )
+    struct COMMON_API FileChangedArgs
     {
-    }
-  };
+        std::string   m_Path;
+        FileOperation m_Operation;
+        std::string   m_OldPath;
 
-  typedef std::map< std::string, FileWatch > M_PathToFileWatch;
 
-  typedef void* HANDLE;
+        FileChangedArgs( const std::string& path, const FileOperation operation = FileOperations::Unknown, const std::string& oldPath = "" )
+            : m_Path( path )
+            , m_Operation( operation )
+            , m_OldPath( oldPath )
+        {
+        }
+    };
+    typedef Nocturnal::Signature< void, const FileChangedArgs& > FileChangedSignature;
 
-  class COMMON_API FileWatcher
-  {
-  private:
-    M_PathToFileWatch m_Watches;
+    typedef void* HANDLE;
+    struct COMMON_API FileWatch
+    {
+        HANDLE                      m_ChangeHandle;
+        FileChangedSignature::Event m_Event;
+        Path                        m_Path;
+        bool                        m_WatchSubtree;
 
-  public:
-    FileWatcher();
-    ~FileWatcher();
 
-    bool Add( const std::string& path, FileChangedSignature::Delegate& listener );
-    bool Remove( const std::string& path, FileChangedSignature::Delegate& listener );
-    bool Watch( int timeout = 0xFFFFFFFF );
-  };
+        FileWatch()
+            : m_ChangeHandle( NULL )
+            , m_WatchSubtree( false )
+        {
+        }
+    };
+
+    typedef std::map< std::string, FileWatch > M_PathToFileWatch;
+
+    typedef void* HANDLE;
+
+    class COMMON_API FileWatcher
+    {
+    private:
+        M_PathToFileWatch m_Watches;
+
+    public:
+        FileWatcher();
+        ~FileWatcher();
+
+        bool Add( const std::string& path, FileChangedSignature::Delegate& listener, bool watchSubtree = false  );
+        bool Remove( const std::string& path, FileChangedSignature::Delegate& listener );
+        bool Watch( int timeout = 0xFFFFFFFF );
+    };
 }

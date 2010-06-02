@@ -261,52 +261,52 @@ void HandleResult(VersionResult result, std::string details)
 
 void AppUtils::CheckVersion()
 {
-  const char* projectName = getenv( NOCTURNAL_STUDIO_PREFIX "PROJECT_NAME" );
-  if ( projectName == NULL )
-  {
-    throw AppUtils::Exception( "The %sPROJECT_NAME environment variable not set!\n", NOCTURNAL_STUDIO_PREFIX );
-  }
+  //const char* projectName = getenv( NOCTURNAL_STUDIO_PREFIX "PROJECT_NAME" );
+  //if ( projectName == NULL )
+  //{
+  //  throw AppUtils::Exception( "The %sPROJECT_NAME environment variable not set!\n", NOCTURNAL_STUDIO_PREFIX );
+  //}
 
-  if ( _stricmp( projectName, NOCTURNAL_PROJECT_NAME ) != 0 )
-  {
-    throw AppUtils::Exception( "You are running in the wrong project: '%s' != '%s'\n", projectName, NOCTURNAL_PROJECT_NAME );
-  }
+  //if ( _stricmp( projectName, NOCTURNAL_PROJECT_NAME ) != 0 )
+  //{
+  //  throw AppUtils::Exception( "You are running in the wrong project: '%s' != '%s'\n", projectName, NOCTURNAL_PROJECT_NAME );
+  //}
 
-  const char* networkVersionPath = getenv( NOCTURNAL_STUDIO_PREFIX "NETWORK_VERSION_FILE" );
-  if ( networkVersionPath == NULL )
-  {
-    throw AppUtils::Exception( "The %sNETWORK_VERSION_FILE environment variable not set!\n", NOCTURNAL_STUDIO_PREFIX );
-  }
+  //const char* networkVersionPath = getenv( NOCTURNAL_STUDIO_PREFIX "NETWORK_VERSION_FILE" );
+  //if ( networkVersionPath == NULL )
+  //{
+  //  throw AppUtils::Exception( "The %sNETWORK_VERSION_FILE environment variable not set!\n", NOCTURNAL_STUDIO_PREFIX );
+  //}
 
-  const char* ignoreVersion = getenv( NOCTURNAL_STUDIO_PREFIX "IGNORE_TOOLS_VERSION" );
-  if ( ignoreVersion != NULL )
-  {
-    if ( atoi( ignoreVersion ) )
-    {
-      Console::Warning( "Ignoring tools version.  This is dangerous and you could cause data loss.\n" );
-      return;
-    }
-  }
+  //const char* ignoreVersion = getenv( NOCTURNAL_STUDIO_PREFIX "IGNORE_TOOLS_VERSION" );
+  //if ( ignoreVersion != NULL )
+  //{
+  //  if ( atoi( ignoreVersion ) )
+  //  {
+  //    Console::Warning( "Ignoring tools version.  This is dangerous and you could cause data loss.\n" );
+  //    return;
+  //  }
+  //}
 
-  Version localVersion (NOCTURNAL_VERSION_PROJECT, NOCTURNAL_VERSION_COMPATIBLE, NOCTURNAL_VERSION_FEATURE, NOCTURNAL_VERSION_PATCH);
+  //Version localVersion (NOCTURNAL_VERSION_PROJECT, NOCTURNAL_VERSION_COMPATIBLE, NOCTURNAL_VERSION_FEATURE, NOCTURNAL_VERSION_PATCH);
 
-  // retrieve from file
-  Version networkVersion;
-  bool gotNetworkVersion = GetVersion( networkVersionPath, networkVersion);
+  //// retrieve from file
+  //Version networkVersion;
+  //bool gotNetworkVersion = GetVersion( networkVersionPath, networkVersion);
 
-  // continue if we can't read the network version
-  if (!gotNetworkVersion)
-  {
-    Console::Warning("Unable to read network version from '%s'\n", networkVersionPath);
-    return;
-  }
+  //// continue if we can't read the network version
+  //if (!gotNetworkVersion)
+  //{
+  //  Console::Warning("Unable to read network version from '%s'\n", networkVersionPath);
+  //  return;
+  //}
 
-  // do the compare
-  VersionResult result = localVersion.Compare( networkVersion );
+  //// do the compare
+  //VersionResult result = localVersion.Compare( networkVersion );
 
-  // mainline version check, local to network
-  if (result != VersionResults::Match)
-  {
-    HandleResult(result, std::string("local: ") + localVersion.IntoString() + " != " + "network: " + networkVersion.IntoString());
-  }
+  //// mainline version check, local to network
+  //if (result != VersionResults::Match)
+  //{
+  //  HandleResult(result, std::string("local: ") + localVersion.IntoString() + " != " + "network: " + networkVersion.IntoString());
+  //}
 }

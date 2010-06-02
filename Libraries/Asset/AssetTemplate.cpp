@@ -24,10 +24,7 @@ void AssetTemplate::EnumerateClass( Reflect::Compositor<AssetTemplate>& comp )
 
   Reflect::Field* fieldDefaultAddSubDir = comp.AddField( &AssetTemplate::m_DefaultAddSubDir, "m_DefaultAddSubDir" );
   Reflect::Field* fieldShowSubDirCheckbox = comp.AddField( &AssetTemplate::m_ShowSubDirCheckbox, "m_ShowSubDirCheckbox" );
-  Reflect::Field* fieldAboutDirSettings = comp.AddField( &AssetTemplate::m_AboutDirSettings, "m_AboutDirSettings" );
-  Reflect::Field* fieldDefaultRoot = comp.AddField( &AssetTemplate::m_DefaultRoot, "m_DefaultRoot" );
   Reflect::Field* fieldDefaultFormat = comp.AddField( &AssetTemplate::m_DefaultFormat, "m_DefaultFormat" );
-  Reflect::Field* fieldDirectoryPatterns = comp.AddField( &AssetTemplate::m_DirectoryPatterns, "m_DirectoryPatterns" );
 
   Reflect::Field* fieldRequiredAttributes = comp.AddField( &AssetTemplate::m_RequiredAttributes, "m_RequiredAttributes" );
   Reflect::Field* fieldOptionalAttributes = comp.AddField( &AssetTemplate::m_OptionalAttributes, "m_OptionalAttributes" );
@@ -48,13 +45,6 @@ AssetTemplate::AssetTemplate( const Reflect::Composite* composite )
   {
     m_Name = composite->m_UIName;
     composite->GetProperty( AssetProperties::LongDescription, m_Description );
-
-    std::string specName;
-    if ( composite->GetProperty( AssetProperties::RootFolderSpec, specName ) )
-    {
-      m_DefaultRoot = Finder::GetFolderSpec( specName )->GetRelativeFolder();
-    }
-
     composite->GetProperty( AssetProperties::ModifierSpec, m_ModifierSpec );
   }
 }
@@ -64,52 +54,6 @@ AssetTemplate::AssetTemplate( const Reflect::Composite* composite )
 // 
 AssetTemplate::~AssetTemplate()
 {
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// 
-bool AssetTemplate::ValidateDirectory( const std::string& directory ) const
-{
-  if ( m_DirectoryPatterns.empty() || Nocturnal::GetCmdLineFlag( "asset_admin" ) )
-  {
-    return true;
-  }
-  
-  if ( !FileSystem::HasPrefix( Finder::ProjectAssets(), directory ) )
-  {
-    return false;
-  }
-
-  std::string relativeDir = directory;
-  FileSystem::StripPrefix( Finder::ProjectAssets(), relativeDir );
-
-  std::string pattern;
-  V_string::const_iterator itr = m_DirectoryPatterns.begin();
-  V_string::const_iterator end = m_DirectoryPatterns.end();
-  for ( ; itr != end; ++itr )
-  {
-    pattern = (*itr);
-
-    while ( !pattern.empty() && 
-      ( *pattern.rbegin() == '/' || *pattern.rbegin() == '\\' ) )
-    {
-      pattern.erase( pattern.size() - 1 );
-    }
-
-    if ( pattern.empty() )
-    {
-      return true;
-    }
-
-    pattern += "\\/.*";
-    const boost::regex matchValidDirectory( pattern, boost::match_single_line );    
-    boost::smatch matchResult;
-    if ( boost::regex_match( relativeDir, matchResult, matchValidDirectory ) )
-    {
-      return true;
-    }
-  }
-  return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

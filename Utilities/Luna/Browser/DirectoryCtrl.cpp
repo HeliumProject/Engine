@@ -13,13 +13,15 @@ EVT_TREE_ITEM_COLLAPSING( wxID_ANY, DirectoryCtrl::OnItemCollapsing )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////
-DirectoryCtrl::DirectoryCtrl()
+DirectoryCtrl::DirectoryCtrl( const std::string& rootDirectory )
+: m_RootDirectory( rootDirectory )
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 DirectoryCtrl::DirectoryCtrl
 (
+ const std::string& rootDirectory,
  wxWindow *parent, const wxWindowID id,
  const wxString &dir,
  const wxPoint& pos,
@@ -30,6 +32,7 @@ DirectoryCtrl::DirectoryCtrl
  const wxString& name
  )
  : wxGenericDirCtrl( parent, id, dir, pos, size, style, filter, defaultFilter, name )
+ , m_RootDirectory( rootDirectory )
 {
   m_ImageList.Create( 16, 16, true, DirectoryCtrlIconTypes::Count );
   
@@ -87,7 +90,7 @@ DirectoryCtrl::~DirectoryCtrl()
 ///////////////////////////////////////////////////////////////////////////////
 void DirectoryCtrl::SetupSections()
 {
-  std::string rootPath = Finder::ProjectAssets();
+  std::string rootPath = m_RootDirectory;
 
   std::string win32RootPath;
   FileSystem::Win32Name( rootPath, win32RootPath, true );

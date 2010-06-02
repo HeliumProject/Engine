@@ -73,14 +73,14 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-ThumbnailView::ThumbnailView( BrowserFrame *browserFrame, wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
+ThumbnailView::ThumbnailView( const std::string& thumbnailDirectory, BrowserFrame *browserFrame, wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 : wxScrolledWindow( parent, id, pos, size, style, name )
+, m_ThumbnailDirectory( thumbnailDirectory)
 , m_LabelFontHeight( 14 )
 , m_LabelFont( NULL )
 , m_TypeFont( NULL )
 , m_EditCtrl( NULL )
 , m_TileCreator( this )
-, m_LoadManager( this, &m_D3DManager )
 , m_MouseDown( false )
 , m_MouseDownTile( NULL )
 , m_RangeSelectTile( NULL )
@@ -88,6 +88,8 @@ ThumbnailView::ThumbnailView( BrowserFrame *browserFrame, wxWindow *parent, wxWi
 , m_Scale( 128.0f )
 , m_BrowserFrame( browserFrame )
 {
+    m_ThumbnailManager = new ThumbnailManager( this, &m_D3DManager, m_ThumbnailDirectory );
+
     // Don't erase background
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
@@ -124,14 +126,10 @@ ThumbnailView::ThumbnailView( BrowserFrame *browserFrame, wxWindow *parent, wxWi
     m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::ANIMCONFIG_DECORATION, D3DCOLOR_ARGB( 0xff, 150, 185, 150 ) ) );
     m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::ANIMSET_DECORATION, D3DCOLOR_ARGB( 0xff, 150, 185, 150 ) ) );
     m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::CINEMATIC_DECORATION, D3DCOLOR_ARGB( 0xff, 170, 170, 170 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::CUBEMAP_DECORATION, D3DCOLOR_ARGB( 0xff, 32, 215, 219 ) ) );
     m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::ENTITY_DECORATION, D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::FOLIAGE_DECORATION, D3DCOLOR_ARGB( 0xff, 58, 131, 0 ) ) );
     m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::LEVEL_DECORATION, D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
     m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::SHADER_DECORATION, D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
     m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::SKY_DECORATION, D3DCOLOR_ARGB( 0xff, 150, 210, 230 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::TEXTUREPACK_DECORATION, D3DCOLOR_ARGB( 0xff, 164, 93, 163 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::WRINKLEMAP_DECORATION, D3DCOLOR_ARGB( 0xff, 164, 93, 163 ) ) );
 
     m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::MAYA_BINARY, D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
     m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::REFLECT_BINARY, D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
@@ -142,14 +140,10 @@ ThumbnailView::ThumbnailView( BrowserFrame *browserFrame, wxWindow *parent, wxWi
     //InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::ANIMCONFIG_DECORATION, "moon_16.png" );
     InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::ANIMSET_DECORATION, "animation_set_16.png" );
     InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::CINEMATIC_DECORATION, "enginetype_cinematic_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::CUBEMAP_DECORATION, "enginetype_cubemap_16.png" );
     InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::ENTITY_DECORATION, "moon_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::FOLIAGE_DECORATION, "enginetype_foliage_16.png" );
     InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::LEVEL_DECORATION, "enginetype_level_16.png" );
     InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::SHADER_DECORATION, "enginetype_shader_16.png" );
     InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::SKY_DECORATION, "enginetype_sky_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::TEXTUREPACK_DECORATION, "enginetype_texturepack_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::WRINKLEMAP_DECORATION,  "enginetype_wrinklemap_16.png" );
 
     InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::MAYA_BINARY, "maya_16.png" );
     InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::REFLECT_BINARY, "moon_16.png" );
@@ -163,8 +157,8 @@ ThumbnailView::ThumbnailView( BrowserFrame *browserFrame, wxWindow *parent, wxWi
         const std::string& icon = Asset::GetAssetTypeIcon( (Asset::AssetType) index );
         if ( icon != "null_16.png" )
         {
-            std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-            FileSystem::AppendPath( file, icon );
+#pragma TODO( "reimplement icons as resources" )
+            std::string file = icon;
 
             Nocturnal::Insert<M_AssetTypeIcons>::Result inserted = m_AssetTypeIcons.insert( M_AssetTypeIcons::value_type( (Asset::AssetType) index, new Thumbnail( &m_D3DManager, LoadTexture( device, file ) ) ) );
             NOC_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
@@ -208,14 +202,15 @@ ThumbnailView::~ThumbnailView()
     // This must be called before UnregisterWindow, otherwise the background thread might
     // try to access a NULL device.  Probably no longer necessary since we cancel when the
     // browser frame is about to shut down, but keeping it here just in case.
-    m_LoadManager.Cancel();
+    m_ThumbnailManager->Cancel();
+    delete m_ThumbnailManager;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void ThumbnailView::InsertModifierSpecIcon( IDirect3DDevice9* device, M_ModifierSpecIcons& modifierSpecIcons, const Finder::ModifierSpec* spec, const char* fileName )
 {
-    std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-    FileSystem::AppendPath( file, fileName );
+#pragma TODO( "reimplement icons as resources" )
+    std::string file = fileName;
 
     Nocturnal::Insert<M_ModifierSpecIcons>::Result inserted = modifierSpecIcons.insert( M_ModifierSpecIcons::value_type( spec, new Thumbnail( &m_D3DManager, LoadTexture( device, file ) ) ) );
     NOC_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
@@ -248,8 +243,8 @@ void ThumbnailView::SetResults( SearchResults* results )
         m_RibbonColorTileCorners.clear();
         m_FileTypeTileCorners.clear();
 
-        m_LoadManager.Cancel();
-        m_LoadManager.Reset();
+        m_ThumbnailManager->Cancel();
+        m_ThumbnailManager->Reset();
 
         m_TileCreator.StartThread();
 
@@ -499,7 +494,7 @@ void ThumbnailView::OnTilesCreated( const M_FolderToTilePtr& folders, const M_Fi
     m_Sorter = sorter;
     m_Sorter.SetSortMethod( sortMethod );
 
-    m_LoadManager.Request( textures );
+    m_ThumbnailManager->Request( textures );
     Refresh();
 }
 
@@ -731,10 +726,11 @@ void ThumbnailView::CreateResources()
         m_TypeFont->OnResetDevice();
     }
 
+#pragma TODO( "redo the below as resources" )
+
     if ( !m_TextureMissing )
     {
-        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-        FileSystem::AppendPath( file, "screenshot_missing.png" );
+        std::string file = "screenshot_missing.png";
 
         m_TextureMissing = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureMissing->GetTexture() );
@@ -742,8 +738,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureError )
     {
-        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-        FileSystem::AppendPath( file, "file_error_256.png" );
+        std::string file = "file_error_256.png";
 
         m_TextureError = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureError->GetTexture() );
@@ -751,8 +746,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureLoading )
     {
-        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-        FileSystem::AppendPath( file, "screenshot_loading.png" );
+        std::string file = "screenshot_loading.png";
 
         m_TextureLoading = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureLoading->GetTexture() );
@@ -760,8 +754,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureFolder )
     {
-        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-        FileSystem::AppendPath( file, "folder_256.png" );
+        std::string file = "folder_256.png";
 
         m_TextureFolder = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureFolder->GetTexture() );
@@ -769,8 +762,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureOverlay )
     {
-        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-        FileSystem::AppendPath( file, "thumbnail_overlay.png" );
+        std::string file = "thumbnail_overlay.png";
 
         m_TextureOverlay = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureOverlay->GetTexture() );
@@ -778,8 +770,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureSelected )
     {
-        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-        FileSystem::AppendPath( file, "thumbnail_overlay_selected.png" );
+        std::string file = "thumbnail_overlay_selected.png";
 
         m_TextureSelected = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureSelected->GetTexture() );
@@ -787,8 +778,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureHighlighted )
     {
-        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-        FileSystem::AppendPath( file, "thumbnail_overlay_highlighted.png" );
+        std::string file = "thumbnail_overlay_highlighted.png";
 
         m_TextureHighlighted = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureHighlighted->GetTexture() );
@@ -796,8 +786,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureBlankFile )
     {
-        std::string file = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-        FileSystem::AppendPath( file, "blank_file_32.png" );
+        std::string file = "blank_file_32.png";
 
         m_TextureBlankFile = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureBlankFile->GetTexture() );
@@ -1361,7 +1350,7 @@ bool ThumbnailView::Draw()
     // Request some textures to be loaded
     if ( !m_CurrentTextureRequests.empty() )
     {
-        m_LoadManager.Request( m_CurrentTextureRequests );
+        m_ThumbnailManager->Request( m_CurrentTextureRequests );
         m_CurrentTextureRequests.clear();
     }
 
@@ -2224,8 +2213,8 @@ void ThumbnailView::OnThumbnailLoaded( Luna::ThumbnailLoadedEvent& args )
 void ThumbnailView::OnBrowserFrameClosing( wxCloseEvent& args )
 {
     args.Skip();
-    m_LoadManager.DetachFromWindow();
-    m_LoadManager.Cancel();
+    m_ThumbnailManager->DetachFromWindow();
+    m_ThumbnailManager->Cancel();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

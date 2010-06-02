@@ -216,18 +216,6 @@
 			RelativePathToProject=".\libraries\Config\Config.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{9270A244-6F23-48F9-9382-0CCBADBDC0EE}"
-			RelativePathToProject=".\libraries\Perforce\perforce.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
-			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
-			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"
 			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
 		/>
@@ -291,6 +279,14 @@
 		</File>
 		<File
 			RelativePath=".\Exceptions.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Preferences.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Preferences.h"
 			>
 		</File>
 		<File

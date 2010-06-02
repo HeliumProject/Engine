@@ -88,8 +88,6 @@ void EntityAssetSet::LoadAssetClass()
                     cube = dynamic_cast< Luna::PrimitiveCube* >( m_Shape );
                 }
 
-                std::string assetManifestFile = FinderSpecs::Content::MANIFEST_DECORATION.GetExportFile( m_ArtFile, model->m_FragmentNode );
-
                 if ( model->m_Minima != Math::Vector3::Zero || model->m_Maxima != Math::Vector3::Zero )
                 {
                     cube->SetBounds( model->m_Minima, model->m_Maxima );
@@ -104,15 +102,15 @@ void EntityAssetSet::LoadAssetClass()
                     cube->SetBounds( minima, maxima );
                     cube->Update();
                 }
-                else if (FileSystem::Exists(assetManifestFile))
+                else if (FileSystem::Exists( m_ArtFile ))
                 {
                     try
                     {
-                        m_Manifest = Reflect::Archive::FromFile<Asset::EntityManifest>(assetManifestFile);
+                        m_Manifest = Reflect::Archive::FromFile<Asset::EntityManifest>( m_ArtFile );
                     }
                     catch ( const Reflect::Exception& e )
                     {
-                        Console::Error("Error loading %s (%s)\n", assetManifestFile.c_str(), e.what());
+                        Console::Error("Error loading %s (%s)\n", m_ArtFile.c_str(), e.what());
                     }
 
                     if (m_Manifest.ReferencesObject())

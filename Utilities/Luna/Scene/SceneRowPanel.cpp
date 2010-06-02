@@ -253,7 +253,7 @@ void SceneRowPanel::SetLabel( const std::string& label )
     m_Text->SetLabel( trimmed.c_str() );
 
     // Tooltip
-    const std::string tooltip( FileSystem::StripPrefix( Finder::ProjectAssets(), GetFilePath().c_str() ) );
+    const std::string tooltip( GetFilePath().c_str() );
     m_Text->SetToolTip( tooltip.c_str() );
 }
 

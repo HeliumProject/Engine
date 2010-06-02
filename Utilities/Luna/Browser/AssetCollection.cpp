@@ -3,6 +3,7 @@
 
 #include "Browser.h"
 
+#include "AppUtils/Preferences.h"
 #include "Common/Boost/Regex.h"
 #include "Common/Checksum/MD5.h"
 #include "Common/Flags.h"
@@ -100,7 +101,20 @@ void AssetCollection::CreateSignature( tuid id, std::string& signature )
 ///////////////////////////////////////////////////////////////////////////////
 void AssetCollection::CreateFilePath( const std::string name, std::string& filePath, const std::string& folder )
 {
-    filePath = !folder.empty() ? folder : FinderSpecs::Luna::PREFERENCES_FOLDER.GetFolder() + "collections/";  
+    if ( folder.empty() )
+    {
+        Nocturnal::Path prefsPath;
+        if ( !AppUtils::GetPreferencesDirectory( prefsPath ) )
+        {
+            throw Nocturnal::Exception( "Could not get preferences directory." );
+        }
+        filePath = prefsPath.Get() + "collections/";
+    }
+    else
+    {
+        filePath = folder;
+    }
+
     filePath += name;
     FinderSpecs::Luna::ASSET_COLLECTION_RB_DECORATION.Modify( filePath );
 }

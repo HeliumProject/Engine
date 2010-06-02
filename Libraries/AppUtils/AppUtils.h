@@ -5,6 +5,7 @@
 
 #include "API.h"
 #include "Exceptions.h"
+#include "Preferences.h"
 
 #include "Common/Types.h"
 #include "Common/Automation/Event.h"
@@ -74,14 +75,6 @@ namespace AppUtils
   };
   typedef Nocturnal::Signature<void, const ShutdownArgs&> ShutdownSignature;
   extern APPUTILS_API ShutdownSignature::Event g_ShuttingDown;
-
-
-  //
-  // Revision Control
-  //
-
-  APPUTILS_API void InitializeRevisionControl();
-  APPUTILS_API void CleanupRevisionControl();
 
   //
   // Trace Files

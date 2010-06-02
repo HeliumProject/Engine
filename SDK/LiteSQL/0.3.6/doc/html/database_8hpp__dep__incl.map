@@ -1,0 +1,5 @@
+base referer
+rect $litesql_8hpp-source.html 637,60 720,84
+rect $datasource_8hpp-source.html 160,85 274,109
+rect $persistent_8hpp-source.html 482,109 589,133
+rect $operations_8hpp-source.html 324,109 433,133

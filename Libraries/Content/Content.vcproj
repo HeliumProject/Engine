@@ -237,10 +237,6 @@
 			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{A0FF2C19-D29F-4969-A959-E4D8A5C4B44F}"
-			RelativePathToProject=".\libraries\NSL\NSL.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
 			RelativePathToProject=".\libraries\UniqueID\UniqueID.vcproj"
 		/>

@@ -203,8 +203,6 @@ namespace Finder
     }
 
     std::string GetDecoration() const;
-    std::string GetExportFile( const std::string& path, const std::string& fragmentNode = std::string("") ) const;
-    std::string GetMetaDataFile( const std::string& path ) const;
     virtual std::string GetFilter() const NOC_OVERRIDE;
     virtual void Modify( std::string& path ) const NOC_OVERRIDE;
     virtual std::string GetModifier() const NOC_OVERRIDE { return GetDecoration(); }
@@ -275,14 +273,7 @@ namespace Finder
     enum FolderRoot
     {
       None,               // absolute folder path (dangerous)   (eg: C:, or WINDOWS)
-      Insomniac,          // relative to the insomniac root     (eg: rcf)       (used: X:\<FOLDER>)
-      ProjectRoot,        // relative to the project root       (eg: code)      (used: X:\\rcf\<FOLDER>)
-      ProjectCode,        // relative to the code branch        (eg: shared)    (used: X:\\rcf\code\<CODE_BRANCH>\<FOLDER>)
-      ProjectAssets,      // relative to the asset branch       (eg: entities)  (used: X:\\rcf\assets\<ASSET_BRANCH>\<FOLDER>)
-      ProjectProcessed,   // relative to the processed folder   (eg: )          (used: X:\\rcf\assets\<ASSET_BRANCH>\processed\<FOLDER>)
-      ProjectTools,       // junctioned tools directory         (eg: data)      (used: X:\\rcf\code\<CODE_BRANCH>\tools\runtime_junction\<FOLDER>)
-      ProjectTemp,        // relative to the project temp folder (eg x:\r2\temp)
-      ProjectBuilt,       // relative to the built folder (eg: x:\<project>\<assets folder>\built)
+      UserPrefs,          // relative to the user's preferences folder (eg: c:\Users\<username>\AppData\[Local/Roaming])
     };
   }
   typedef FolderRoots::FolderRoot FolderRoot;
@@ -299,7 +290,7 @@ namespace Finder
     const FolderSpec* m_ParentFolder; 
 
   public:
-    FolderSpec( const char* name, const char* value = "", FolderRoot root = FolderRoots::ProjectAssets )
+    FolderSpec( const char* name, const char* value = "", FolderRoot root = FolderRoots::None )
       : FinderSpec( name, value )
       , m_Root (root)
       , m_ParentFolder(NULL)

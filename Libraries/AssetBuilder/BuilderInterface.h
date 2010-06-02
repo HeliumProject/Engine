@@ -52,6 +52,8 @@ namespace AssetBuilder
 
   struct ASSETBUILDER_API BuildJob : public Nocturnal::RefCountBase<BuildJob>
   {
+    Dependencies::DependencyGraph* m_DependencyGraph;
+
     // input
     Asset::AssetClassPtr      m_Asset;
     BuilderOptionsPtr         m_Options;
@@ -72,7 +74,7 @@ namespace AssetBuilder
     u32                       m_OriginalFlags; // the build process can modify m_Flags, so this stores its original state
 
     BuildJob();
-    BuildJob( const Asset::AssetClassPtr& asset, const BuilderOptionsPtr& options, IBuilder* builder = NULL, u32 flags = 0 );
+    BuildJob( Dependencies::DependencyGraph* depGraph, const Asset::AssetClassPtr& asset, const BuilderOptionsPtr& options, IBuilder* builder = NULL, u32 flags = 0 );
   };
 
   class ASSETBUILDER_API IBuilder : public Nocturnal::RefCountBase<IBuilder>

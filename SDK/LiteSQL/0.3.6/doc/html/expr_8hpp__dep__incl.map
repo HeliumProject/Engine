@@ -1,0 +1,8 @@
+base referer
+rect $database_8hpp-source.html 141,161 242,185
+rect $litesql_8hpp-source.html 778,186 861,210
+rect $datasource_8hpp-source.html 301,210 415,234
+rect $persistent_8hpp-source.html 623,186 730,210
+rect $selectquery_8hpp-source.html 134,260 249,284
+rect $updatequery_8hpp-source.html 130,308 253,332
+rect $operations_8hpp-source.html 465,210 574,234

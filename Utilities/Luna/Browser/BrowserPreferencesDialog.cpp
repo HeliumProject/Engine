@@ -19,5 +19,6 @@ void BrowserPreferencesDialog::GetPreferences( Reflect::V_Element& preferences )
 {
   __super::GetPreferences( preferences );
 
-  preferences.push_back( GlobalBrowser().GetBrowserPreferences() );
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+  //  preferences.push_back( GlobalBrowser().GetBrowserPreferences() );
 }

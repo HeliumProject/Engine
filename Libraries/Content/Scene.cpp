@@ -14,7 +14,6 @@
 
 #include "Finder/Finder.h"
 #include "Finder/ContentSpecs.h"
-#include "Finder/TieSpecs.h"
 #include "Finder/ShaderSpecs.h"
 
 #include "AppUtils/AppUtils.h"

@@ -3,25 +3,23 @@
 
 #include "Inspect/Canvas.h"
 #include "FileSystem/FileSystem.h"
-#include "FileBrowser/FileBrowser.h"
 #include "Finder/Finder.h"
 #include "Common/Container/Insert.h" 
 
 // Using
-using namespace File;
 using namespace Inspect;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-FileBrowserButton::FileBrowserButton()
+FileBrowserButton::FileBrowserButton( const std::string& startPath )
 : m_Title( "Open" )
 {
   SetIcon( "magnify_16.png" );
 
   Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( "All files (*.*)|*.*" ) );
 
-  SetPath( Finder::ProjectAssets() );
+  SetPath( startPath );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -90,14 +88,16 @@ bool FileBrowserButton::Write()
 
     wxWindow* parent = GetCanvas() ? GetCanvas()->GetControl() : NULL;
 
-    File::FileBrowser fileBrowser( parent, wxID_ANY, m_Title.c_str() );
-    fileBrowser.SetFilter( filterStr.c_str() );
+      NOC_BREAK();
+#pragma TODO( "Reimplement to use the Vault" )
+    //File::FileBrowser fileBrowser( parent, wxID_ANY, m_Title.c_str() );
+    //fileBrowser.SetFilter( filterStr.c_str() );
 
-    if ( fileBrowser.ShowModal() == wxID_OK )
-    {
-      std::string path = fileBrowser.GetPath().c_str();
-      result = WriteData( path );
-    }
+    //if ( fileBrowser.ShowModal() == wxID_OK )
+    //{
+    //  std::string path = fileBrowser.GetPath().c_str();
+    //  result = WriteData( path );
+    //}
   }
 
   return result;

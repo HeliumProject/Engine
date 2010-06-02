@@ -14,8 +14,4 @@ namespace FinderSpecs
   const FileSpec Localization::DATABASE             ( "Localization::DATABASE",               "" );
 
   const FileSpec Localization::CHARACTER_KEYS_FILE  ( "Localization::CHARACTER_KEY_FILE",     "character_keys", Extension::XML );
-
-  const FolderSpec Localization::ASSET_FOLDER       ( "Localization::ASSET_FOLDER",           "localization",           FolderRoots::ProjectAssets );
-  const FolderSpec Localization::BASE_FOLDER        ( "Localization::BASE_FOLDER",            "localization" );
-  const FolderSpec Localization::CACHE_FOLDER       ( "Localization::CACHE_FOLDER",           "localization/cache" );
 }

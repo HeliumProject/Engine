@@ -3,7 +3,6 @@
 
 #include "AssetEditorGenerated.h"
 
-#include "FileBrowser/FileBrowser.h"
 #include "FileSystem/FileSystem.h"
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/FileDialog.h"
@@ -200,14 +199,16 @@ void PromptNewExistingDlg::OnButtonExistingClicked( wxCommandEvent& args )
 // 
 void PromptNewExistingDlg::OnButtonExistingFinderClicked( wxCommandEvent& args )
 {
-    File::FileBrowser dlg( this, wxID_ANY, "Asset Finder" );
-    if ( m_FinderSpec )
-    {
-        dlg.SetFilter( *m_FinderSpec );
-    }
+    NOC_BREAK();
+#pragma TODO( "Reimplement using the Vault" )
+    //File::FileBrowser dlg( this, wxID_ANY, "Asset Finder" );
+    //if ( m_FinderSpec )
+    //{
+    //    dlg.SetFilter( *m_FinderSpec );
+    //}
 
-    if ( dlg.ShowModal() == wxID_OK )
-    {
-        m_Panel->m_FilePathExisting->SetValue( dlg.GetPath() );
-    }
+    //if ( dlg.ShowModal() == wxID_OK )
+    //{
+    //    m_Panel->m_FilePathExisting->SetValue( dlg.GetPath() );
+    //}
 }

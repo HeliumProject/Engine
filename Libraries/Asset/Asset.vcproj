@@ -572,6 +572,10 @@
 			Name="Cache DB"
 			>
 			<File
+				RelativePath=".\CacheDB-1.sql.h"
+				>
+			</File>
+			<File
 				RelativePath=".\CacheDB.cpp"
 				>
 			</File>
@@ -604,14 +608,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\AllowedDirParser.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\AllowedDirParser.h"
-			>
-		</File>
 		<File
 			RelativePath=".\API.h"
 			>
@@ -682,6 +678,10 @@
 		</File>
 		<File
 			RelativePath=".\ExporterJob.h"
+			>
+		</File>
+		<File
+			RelativePath=".\resource.h"
 			>
 		</File>
 	</Files>

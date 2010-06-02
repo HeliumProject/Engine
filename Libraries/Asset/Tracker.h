@@ -38,24 +38,13 @@ namespace Asset
     typedef Nocturnal::Signature< void, const TrackerArgs& > TrackerSignature;
 
     /////////////////////////////////////////////////////////////////////////////
-    ASSET_API class Tracker* GlobalTracker();
-
-    /////////////////////////////////////////////////////////////////////////////
     class ASSET_API Tracker
     {
-    private:
-        // Tracker is a singleton; Hide the ctor, copy ctor and assignment operator
-        Tracker( const std::string& rootDirectory );
+    public:
+        Tracker( const std::string& rootDirectory, const std::string& configDirectory );
         Tracker( const Tracker& rhs );
         Tracker& operator=( const Tracker& rhs );
-
-        friend Tracker* ::Asset::GlobalTracker();
-
-    public:
         ~Tracker();
-
-        static void Initialize();
-        static void Cleanup();
 
         bool IsTracking() const;
         void StartThread();
@@ -67,17 +56,10 @@ namespace Asset
         u32 GetTrackingProgress();
         u32 GetTrackingTotal();
 
-    public:
-        static void SetGlobalRootDirectory( const std::string& rootDirectory )
-        {
-            s_GlobalRootDirectory = rootDirectory;
-        }
-
-    public:
-        // Thread entry points
-        static DWORD WINAPI TrackEverythingThread(LPVOID pvoid);
-
     private:
+
+        // Thread entry points
+        static DWORD WINAPI TrackEverythingThread(LPVOID pTracker);
 
         bool TrackFile( const std::string& path );
         bool TrackFile( File::ReferencePtr& fileRef );

@@ -92,7 +92,8 @@ int TypeConfig::Validate(Luna::SceneNode* node)
     {
       std::string location = entity->GetEntityAssetPath();
 
-      FileSystem::StripPrefix( FinderSpecs::Asset::ENTITY_FOLDER.GetFolder(), location );
+#pragma TODO( "do we need to strip this?" )
+      //FileSystem::StripPrefix( FinderSpecs::Asset::ENTITY_FOLDER.GetFolder(), location );
 
       if ( strstr( location.c_str(), m_Location.c_str() ) == location.c_str() )
       {
@@ -140,7 +141,8 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
 {
   TiXmlDocument doc;
 
-  std::string file = FinderSpecs::Luna::TYPE_CONFIGURATIONS.GetFile( FinderSpecs::Luna::GLOBAL_CONFIG_FOLDER );
+#pragma TODO( "reimplement to use a valid config folder location to get this file" )
+  std::string file = ""; //FinderSpecs::Luna::TYPE_CONFIGURATIONS.GetFile( FinderSpecs::Luna::GLOBAL_CONFIG_FOLDER );
 
   if (!doc.LoadFile( file.c_str() ))
   {
@@ -179,16 +181,8 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
             {
               t->m_Icon = setting->GetText();
 
-              // try the game theme folder first
-              std::string iconPath( FinderSpecs::Luna::GAME_THEME_FOLDER.GetFolder() );
-              FileSystem::AppendPath( iconPath, t->m_Icon );
-
-              // if this doesn't exist, use the default theme
-              if ( !FileSystem::Exists( iconPath ) )
-              {
-                iconPath = FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder();
-                FileSystem::AppendPath( iconPath, t->m_Icon );
-              }
+#pragma TODO( "reimplement icons as resources" )
+              std::string iconPath = t->m_Icon;
 
               if ( FileSystem::Exists( iconPath ) )
               {
@@ -196,7 +190,7 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
               }
               else
               {
-                iconPath = FinderSpecs::Luna::GLOBAL_CONFIG_FOLDER.GetFolder();
+                iconPath = ""; //FinderSpecs::Luna::GLOBAL_CONFIG_FOLDER.GetFolder();
                 FileSystem::AppendPath( iconPath, t->m_Icon );
                 if ( FileSystem::Exists( iconPath ) )
                 {

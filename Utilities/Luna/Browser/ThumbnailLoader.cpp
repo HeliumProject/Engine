@@ -101,7 +101,8 @@ void* ThumbnailLoader::LoadThread::Entry()
         else
         {
             V_string files;
-            FileSystem::GetFiles( Finder::GetThumbnailFolder( file->GetFilePath() ), files );
+            Nocturnal::Path thumbnailFolder( m_Loader.m_ThumbnailDirectory + '/' + file->GetFileReference()->GetHash() );
+            FileSystem::GetFiles( thumbnailFolder.Get(), files );
 
             for ( V_string::const_iterator itr = files.begin(), end = files.end();
                 itr != end;
@@ -149,9 +150,10 @@ void* ThumbnailLoader::LoadThread::Entry()
     return NULL;
 }
 
-ThumbnailLoader::ThumbnailLoader( igDXRender::D3DManager* d3dManager )
+ThumbnailLoader::ThumbnailLoader( igDXRender::D3DManager* d3dManager, const std::string& thumbnailDirectory )
 : m_LoadThread( *this )
 , m_Quit( false )
+, m_ThumbnailDirectory( thumbnailDirectory )
 , m_D3DManager( d3dManager )
 {
     m_LoadThread.Create();

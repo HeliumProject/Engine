@@ -411,7 +411,7 @@ void CollectionsPanel::OnNewCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnOpenCollection( wxCommandEvent& event )
 {
-    UIToolKit::FileDialog browserDlg( this, BrowserMenu::Label( ID_OpenCollection ), Finder::ProjectAssets().c_str(), "", "",
+    UIToolKit::FileDialog browserDlg( this, BrowserMenu::Label( ID_OpenCollection ), "", "", "",
         UIToolKit::FileDialogStyles::DefaultOpen | UIToolKit::FileDialogStyles::ShowAllFilesFilter | UIToolKit::FileDialogStyles::ExportFile );
 
     browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_RB_DECORATION.GetDialogFilter() );
@@ -519,7 +519,7 @@ void CollectionsPanel::OnImportIntoCollection( wxCommandEvent& event )
         return;
     }
 
-    UIToolKit::FileDialog browserDlg( this, BrowserMenu::Label( ID_ImportIntoCollection ), Finder::ProjectAssets().c_str(), "", "",
+    UIToolKit::FileDialog browserDlg( this, BrowserMenu::Label( ID_ImportIntoCollection ), "", "", "",
         UIToolKit::FileDialogStyles::DefaultOpen | UIToolKit::FileDialogStyles::ShowAllFilesFilter | UIToolKit::FileDialogStyles::ExportFile );
 
     browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_RB_DECORATION.GetDialogFilter() );

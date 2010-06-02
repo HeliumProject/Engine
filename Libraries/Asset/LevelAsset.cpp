@@ -6,11 +6,8 @@
 
 #include "Attribute/AttributeHandle.h"
 #include "Finder/ExtensionSpecs.h"
-#include "AllowedDirParser.h"
 
 using namespace Asset;
-
-extern AllowedDirParser g_AllowedDirParser;
 
 REFLECT_DEFINE_CLASS( LevelAsset );
 
@@ -19,7 +16,6 @@ void LevelAsset::EnumerateClass( Reflect::Compositor<LevelAsset>& comp )
   comp.GetComposite().m_UIName = "Level";
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A level groups together various zones to make a level in the game.  The level asset will be associated with a world file (*.world.rb), which is the file that can be edited in the Scene Editor." );
   comp.GetComposite().SetProperty( AssetProperties::ModifierSpec, FinderSpecs::Asset::LEVEL_DECORATION.GetName() );
-  comp.GetComposite().SetProperty( AssetProperties::RootFolderSpec, FinderSpecs::Asset::LEVEL_FOLDER.GetName() );
 
   Reflect::Field* fieldNearClipDist = comp.AddField( &LevelAsset::m_NearClipDist, "m_NearClipDist" );
   Reflect::Field* fieldFarClipDist = comp.AddField( &LevelAsset::m_FarClipDist, "m_FarClipDist" );
@@ -44,10 +40,7 @@ void LevelAsset::EnumerateClass( Reflect::Compositor<LevelAsset>& comp )
 
   classTemplate->m_DefaultAddSubDir = true;
   classTemplate->m_ShowSubDirCheckbox = false;
-  classTemplate->m_AboutDirSettings = g_AllowedDirParser.GetAboutDirSettings( classTemplate->m_Name );
-  classTemplate->m_DefaultRoot = FinderSpecs::Asset::LEVEL_FOLDER.GetRelativeFolder();
-  classTemplate->m_DirectoryPatterns = g_AllowedDirParser.GetPatterns( classTemplate->m_Name );
-
+  
   classTemplate->AddRequiredAttribute( Reflect::GetType< Asset::WorldFileAttribute >() );
   classTemplate->AddOptionalAttribute( Reflect::GetType< Asset::DependenciesAttribute >() );
   assetTemplates.push_back( classTemplate );

@@ -298,14 +298,6 @@
 			RelativePathToProject=".\libraries\File\File.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{A0FF2C19-D29F-4969-A959-E4D8A5C4B44F}"
-			RelativePathToProject=".\libraries\NSL\NSL.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{D0028BA8-6457-4115-8EB1-924A14B2306F}"
-			RelativePathToProject=".\libraries\FileBrowser\FileBrowser.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{9270A244-6F23-48F9-9382-0CCBADBDC0EE}"
 			RelativePathToProject=".\libraries\Perforce\perforce.vcproj"
 		/>
@@ -352,6 +344,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"
 			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
+			RelativePathToProject=".\SDK\wxPropertyGrid\1.4.11\wxPropertyGrid.vcproj"
 		/>
 	</References>
 	<Files>

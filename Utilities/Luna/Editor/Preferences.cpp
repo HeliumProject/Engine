@@ -30,7 +30,8 @@ std::string Luna::FileRefToLabel( const File::Reference& fileRef, const FilePath
             break;
 
         case FilePathOptions::PartialPath:
-            FileSystem::StripPrefix( Finder::ProjectAssets(), filePath );
+            //FileSystem::StripPrefix( Finder::ProjectAssets(), filePath );
+#pragma TODO( "Make this aware of the project root somehow" )
             break;
 
         case FilePathOptions::FullPath:

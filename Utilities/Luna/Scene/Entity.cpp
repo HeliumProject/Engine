@@ -135,41 +135,13 @@ Luna::Scene* Entity::GetNestedScene( GeometryMode mode, bool load_on_demand ) co
 
     if (m_ClassSet->GetEntityAsset())
     {
-        switch ( mode )
-        {
-        case GeometryModes::Render:
-            if ( !m_NestedSceneArt && load_on_demand )
-            {
-                Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( m_ClassSet->GetEntityAsset(), true );
-                std::string nestedFile = FinderSpecs::Content::STATIC_DECORATION.GetExportFile( m_ClassSet->GetContentFile(), artFile->m_FragmentNode );
-                m_NestedSceneArt = m_Scene->GetManager()->AllocateNestedScene( nestedFile, m_Scene );
-            }
-            nestedScene = m_NestedSceneArt;
-            break;
-
-        case GeometryModes::Collision:
-            if ( !m_NestedSceneCollision  && load_on_demand)
-            {
-                Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( m_ClassSet->GetEntityAsset(), true );
-                std::string nestedFile = FinderSpecs::Content::COLLISION_DECORATION.GetExportFile( m_ClassSet->GetContentFile(), artFile->m_FragmentNode );
-                m_NestedSceneCollision = m_Scene->GetManager()->AllocateNestedScene( nestedFile, m_Scene );
-            }
-            nestedScene = m_NestedSceneCollision;
-            break;
-
-        case GeometryModes::Pathfinding:
-            if ( !m_NestedScenePathfinding && load_on_demand)
-            {
-                Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( m_ClassSet->GetEntityAsset(), true );
-                std::string nestedFile = FinderSpecs::Content::PATHFINDING_DECORATION.GetExportFile( m_ClassSet->GetContentFile(), artFile->m_FragmentNode );
-                m_NestedScenePathfinding = m_Scene->GetManager()->AllocateNestedScene( nestedFile, m_Scene );
-            }
-            nestedScene = m_NestedScenePathfinding;
-            break;
-        }
+#pragma TODO( "Support the various rendering modes.  This used to load different files for art, collision, etc." )
+        Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( m_ClassSet->GetEntityAsset(), true );
+        std::string nestedFile = m_ClassSet->GetContentFile();
+        m_NestedSceneArt = m_Scene->GetManager()->AllocateNestedScene( nestedFile, m_Scene );
     }
 
-    return nestedScene;
+    return m_NestedSceneArt;
 }
 
 bool Entity::IsPointerVisible() const

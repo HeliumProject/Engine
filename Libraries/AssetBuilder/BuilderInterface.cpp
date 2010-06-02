@@ -98,7 +98,8 @@ void BuilderInterface::AllocateBuilders( AssetType assetType, AssetBuilder::V_IB
 }
 
 AssetBuilder::BuildJob::BuildJob()
-: m_Asset( NULL )
+: m_DependencyGraph( NULL )
+, m_Asset( NULL )
 , m_Options( NULL )
 , m_Builder( NULL )
 , m_Flags( 0 )
@@ -110,8 +111,9 @@ AssetBuilder::BuildJob::BuildJob()
 
 }
 
-AssetBuilder::BuildJob::BuildJob( const Asset::AssetClassPtr& asset, const BuilderOptionsPtr& options, IBuilder* builder, u32 flags )
-: m_Asset( asset )
+AssetBuilder::BuildJob::BuildJob( Dependencies::DependencyGraph* depGraph, const Asset::AssetClassPtr& asset, const BuilderOptionsPtr& options, IBuilder* builder, u32 flags )
+: m_DependencyGraph( depGraph )
+, m_Asset( asset )
 , m_Options( options )
 , m_Builder( builder )
 , m_Flags( flags )

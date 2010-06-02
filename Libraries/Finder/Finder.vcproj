@@ -196,6 +196,10 @@
 			ReferencedProjectIdentifier="{74EBA5CC-62CC-4C95-9191-618AFEF3BEC0}"
 			RelativePathToProject=".\libraries\TUID\TUID.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
+			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -222,14 +226,6 @@
 			Name="Finder Specs"
 			>
 			<File
-				RelativePath=".\AnimationSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AnimationSpecs.h"
-				>
-			</File>
-			<File
 				RelativePath=".\AssetSpecs.cpp"
 				>
 			</File>
@@ -246,27 +242,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\CodeSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CodeSpecs.h"
-				>
-			</File>
-			<File
 				RelativePath=".\ContentSpecs.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\ContentSpecs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CubeMapSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CubeMapSpecs.h"
 				>
 			</File>
 			<File
@@ -286,14 +266,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\FoliageSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\FoliageSpecs.h"
-				>
-			</File>
-			<File
 				RelativePath=".\FontSpecs.cpp"
 				>
 			</File>
@@ -307,14 +279,6 @@
 			</File>
 			<File
 				RelativePath=".\LevelSpecs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LipsyncSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\LipsyncSpecs.h"
 				>
 			</File>
 			<File
@@ -334,38 +298,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\MentalRaySpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MentalRaySpecs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MobySpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MobySpecs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MovieSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MovieSpecs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\OcclusionSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\OcclusionSpecs.h"
-				>
-			</File>
-			<File
 				RelativePath=".\ProjectSpecs.cpp"
 				>
 			</File>
@@ -382,27 +314,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SceneSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SceneSpecs.h"
-				>
-			</File>
-			<File
 				RelativePath=".\ShaderSpecs.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\ShaderSpecs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ShrubSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ShrubSpecs.h"
 				>
 			</File>
 			<File
@@ -422,43 +338,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TexturePackSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TexturePackSpecs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TieSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TieSpecs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UfragSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UfragSpecs.h"
-				>
-			</File>
-			<File
 				RelativePath=".\VisualEffectSpecs.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\VisualEffectSpecs.h"
-				>
-			</File>
-			<File
-				RelativePath=".\WrinkleMapSpecs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\WrinkleMapSpecs.h"
 				>
 			</File>
 			<File

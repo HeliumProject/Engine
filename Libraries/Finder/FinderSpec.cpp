@@ -1,7 +1,9 @@
 #include "FinderSpec.h"
 #include "Finder.h"
 
+#include "AppUtils/Preferences.h"
 #include "Common/Assert.h"
+#include "Common/File/Path.h"
 #include "FileSystem/FileSystem.h"
 
 namespace Finder
@@ -122,50 +124,6 @@ namespace Finder
   }
 
   /////////////////////////////////////////////////////////////////////////////
-  std::string DecorationSpec::GetExportFile( const std::string& path, const std::string& fragmentNode ) const
-  {
-    FINDER_SCOPE_TIMER((""));
-
-    std::string result = path;
-
-    FileSystem::StripExtension( result );
-
-    // it kind of sucks to do this here, but as far as I know this is the only export file
-    // pinch-point, we need to replace colons in the fragment name with underscores
-    std::string newFragmentNode = fragmentNode;
-    if ( !newFragmentNode.empty() )
-    {
-      size_t pos;
-      while ( ( pos = newFragmentNode.find( ":" ) ) != std::string::npos )
-      {
-        newFragmentNode.replace( pos, 1, "_" );
-      }
-    }
-
-    result += ( newFragmentNode + GetDecoration() );
-
-    FileSystem::StripPrefix( ProjectAssets(), result );
-  
-    return ProjectExport() + result;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-  std::string DecorationSpec::GetMetaDataFile( const std::string& path ) const
-  {
-    FINDER_SCOPE_TIMER((""));
-
-    std::string result = path;
-
-    FileSystem::StripExtension( result );
-
-    result += GetDecoration();
-
-    FileSystem::StripPrefix( ProjectAssets(), result );
-
-    return ProjectMetaData() + result;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
   std::string DecorationSpec::GetFilter() const
   {
     FINDER_SCOPE_TIMER((""));
@@ -221,11 +179,11 @@ namespace Finder
   {
     FINDER_SCOPE_TIMER((""));
 
-    std::string dir;
+    Nocturnal::Path dir;
 
     if(m_ParentFolder)
     {
-      dir = m_ParentFolder->GetFolder(); 
+      dir.Set( m_ParentFolder->GetFolder() ); 
     }
     else
     {
@@ -234,37 +192,12 @@ namespace Finder
         case FolderRoots::None:
           break;
 
-        case FolderRoots::Insomniac:
-          dir = getenv(NOCTURNAL_STUDIO_PREFIX"ROOT");
-          break;
-
-        case FolderRoots::ProjectRoot:
-          dir = ProjectRoot();
-          break;
-
-        case FolderRoots::ProjectCode:
-          dir = ProjectCode();
-          break;
-
-        case FolderRoots::ProjectAssets:
-          dir = ProjectAssets();
-          break;
-
-        case FolderRoots::ProjectProcessed:
-          dir = ProjectProcessed();
-          break;
-
-        case FolderRoots::ProjectTools:
-          dir = ProjectTools();
-          break;
-
-        case FolderRoots::ProjectTemp:
-          dir = ProjectTemp();
-          break;
-
-        case FolderRoots::ProjectBuilt:
-          dir = ProjectBuilt();
-          break;
+        case FolderRoots::UserPrefs:
+            if ( !AppUtils::GetPreferencesDirectory( dir ) )
+            {
+                throw Nocturnal::Exception( "Could not determine preferences directory.  Is the APPDATA environment variable set?" );
+            }
+            break;
 
         default:
           NOC_BREAK();
@@ -272,10 +205,8 @@ namespace Finder
 
     }
     
-    dir = dir + m_Value;
-    FileSystem::GuaranteeSlash( dir );
-
-    return dir;
+    dir.Set( dir.Get() + '/' + m_Value + '/');
+    return dir.Get();
   }
 
   

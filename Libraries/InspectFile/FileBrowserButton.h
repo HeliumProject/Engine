@@ -18,7 +18,7 @@ namespace Inspect
   class INSPECTFILE_API FileBrowserButton : public Reflect::ConcreteInheritor<FileBrowserButton, Inspect::Button>
   {
   public:
-    FileBrowserButton();
+      FileBrowserButton( const std::string& startPath = "" );
 
     virtual void  Realize( Inspect::Container* parent ) NOC_OVERRIDE;
     virtual void  Read() NOC_OVERRIDE;

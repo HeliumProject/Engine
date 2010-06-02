@@ -1,3 +1,6 @@
+#include "Windows/Windows.h"
+#include "Windows/Error.h"
+
 #include "AppUtils/AppUtils.h"
 #include "AssetBuilder/CacheFiles.h"
 #include "FileSystem/FileSystem.h"
@@ -6,8 +9,6 @@
 #include "Common/File/Directory.h"
 #include "Common/String/Units.h"
 #include "Console/Console.h"
-#include "Windows/Windows.h"
-#include "Windows/Error.h"
 
 #include <sstream>
 #include <algorithm>

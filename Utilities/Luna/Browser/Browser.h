@@ -18,80 +18,70 @@
 //
 namespace Asset
 {
-  class CacheDB;
-  typedef Nocturnal::SmartPtr< CacheDB > CacheDBPtr;
+    class CacheDB;
+    typedef Nocturnal::SmartPtr< CacheDB > CacheDBPtr;
 
-  class SearchResults;
-  typedef Nocturnal::SmartPtr< SearchResults > SearchResultsPtr;
+    class SearchResults;
+    typedef Nocturnal::SmartPtr< SearchResults > SearchResultsPtr;
 }
 
 namespace Luna
 {
-  //
-  // Forwards
-  //
-  class BrowserFrame;
+    //
+    // Forwards
+    //
+    class BrowserFrame;
 
-  /////////////////////////////////////////////////////////////////////////////
-  class Browser& GlobalBrowser();
-
-  class Browser
-  {
-  private:
-    // Browser is a singleton - should only be using GlobalBrowser;
-    // Hide the ctor, copy ctor and assignment operator
-    Browser();
-    Browser( const Browser& rhs ) {}
-    Browser& operator=( const Browser& rhs ) {}
-
-
-  protected:
-    static Nocturnal::InitializerStack s_InitializerStack;
-    static int s_InitCount;
-    static Browser* s_GlobalBrowser;
-
-  public:
-    ~Browser();
-    
-    static void Initialize();
-    static void Cleanup();
-
-    static Browser* GlobalBrowser()
+    class Browser
     {
-        return s_GlobalBrowser;
-    }
-    
-    void ShowBrowser( const std::string& queryString = std::string("") );
-    bool HasFrame();
-    
-    void InitializePreferences();
-    BrowserPreferences* GetBrowserPreferences();
+    public:
+        Browser( const std::string& rootDirectory, const std::string& configDirectory );
+        Browser( const Browser& rhs ) {}
+        Browser& operator=( const Browser& rhs ) {}
 
-    Asset::CacheDB* GetCacheDB() { return m_CacheDB; }
+    protected:
+        static Nocturnal::InitializerStack s_InitializerStack;
+        static int s_InitCount;
 
-    friend class BrowserFrame;
+    public:
+        ~Browser();
 
-  protected:
-    void OnCloseBrowser();
-    void OnDocumentChange( const DocumentManagerChangeArgs& args );
+        static void Initialize();
+        static void Cleanup();
 
-  protected:
-    
-    //
-    // Members
-    //
-  private:
-    Asset::CacheDBPtr     m_CacheDB;
-    BrowserSearchPtr      m_BrowserSearch;
-    BrowserFrame*         m_BrowserFrame;
-    bool                  m_HasFrame;
-    SearchHistory*        m_SearchHistory;
-    BrowserPreferencesPtr m_BrowserPreferences;
-    CollectionManager*    m_CollectionManager;
+        void ShowBrowser( const std::string& queryString = std::string("") );
+        bool HasFrame();
 
-  private:
-    
-  };
+        void InitializePreferences();
+        BrowserPreferences* GetBrowserPreferences();
+
+        Asset::CacheDB* GetCacheDB() { return m_CacheDB; }
+
+        friend class BrowserFrame;
+
+    protected:
+        void OnCloseBrowser();
+        void OnDocumentChange( const DocumentManagerChangeArgs& args );
+
+    protected:
+
+        //
+        // Members
+        //
+    private:
+        std::string           m_RootDirectory;
+        std::string           m_ConfigDirectory;
+        Asset::CacheDBPtr     m_CacheDB;
+        BrowserSearchPtr      m_BrowserSearch;
+        BrowserFrame*         m_BrowserFrame;
+        bool                  m_HasFrame;
+        SearchHistory*        m_SearchHistory;
+        BrowserPreferencesPtr m_BrowserPreferences;
+        CollectionManager*    m_CollectionManager;
+
+    private:
+
+    };
 
 
 } // namespace Luna

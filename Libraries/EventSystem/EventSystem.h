@@ -24,7 +24,7 @@ namespace ES
   class EVENTSYSTEM_API EventSystem : public Nocturnal::RefCountBase< EventSystem >
   {
   public:
-    EventSystem( const std::string& rootDirPath );
+    EventSystem( const std::string& rootDirPath, bool writeBinaryFormat );
     ~EventSystem();
 
     EventPtr CreateEvent( const std::string& eventData, const std::string& username );

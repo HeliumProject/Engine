@@ -134,35 +134,7 @@ bool GraphDB::Open( const std::string& dbFilename, const std::string& configFold
 {   
   Windows::TakeSection critSection( *m_GeneralCriticalSection );
 
-  // Legacy root dir used as the default path on all machines
-  static const char* s_GlobalDefaultPath   = "config/dependencygraph/";
-
-  std::string legacyRootDir = Finder::ProjectRoot() + s_GlobalDefaultPath;
-  std::string legacyDBFilename = FinderSpecs::Project::DEPENDENCY_GRAPH_DB.GetFile( legacyRootDir );
-
   FileSystem::MakePath( dbFilename, true );
-
-  // Initialize the SQLite DB and ensure it's not read-only
-  if ( !FileSystem::Exists( dbFilename ) && FileSystem::Exists( legacyDBFilename ) )
-  {
-    Console::Print( "\n" );
-    Console::Print( "Relocating dependency graph DB to new branched location: %s...\n\n", dbFilename.c_str() );
-
-    // Using CopyFile and DeleteFile because MoveFile is scary
-    FileSystem::MakePath( dbFilename, true );
-
-    if ( !CopyFile( legacyDBFilename.c_str(), dbFilename.c_str(), false ) )
-    {
-      std::string error = Windows::GetErrorString();
-      Console::Warning( "Could not copy dependency graph DB file %s to %s, Error: %s\n", legacyDBFilename.c_str(), dbFilename.c_str(), error.c_str() );
-    }
-    else
-    {
-      DeleteFile( legacyDBFilename.c_str() );
-      RemoveDirectory( legacyRootDir.c_str() );
-      SetFileAttributes( dbFilename.c_str(), FILE_ATTRIBUTE_NORMAL );
-    }
-  }
 
   return __super::Open( dbFilename, configFolder, version );
 }

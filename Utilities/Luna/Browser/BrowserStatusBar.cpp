@@ -1,6 +1,8 @@
 #include "Precompile.h"
 #include "BrowserStatusBar.h"
-#include "Asset/Tracker.h"
+
+#include "Application.h"
+
 #include "UIToolKit/ImageManager.h"
 
 using namespace Luna;
@@ -29,51 +31,51 @@ BrowserStatusBar::BrowserStatusBar( wxWindow *parent )
 , m_Throbber( new wxAnimationCtrl( this, wxID_ANY, UIToolKit::GlobalImageManager().GetAnimation( "throbber_16.gif" ) ) )
 , m_Message( new wxStaticText( this, wxID_ANY, s_TrackingInProgress ) )
 {
-  static const int widths[ FieldCount ] = { -1, 150 };
+    static const int widths[ FieldCount ] = { -1, 150 };
 
-  SetFieldsCount( FieldCount );
-  SetStatusWidths( FieldCount, widths );
+    SetFieldsCount( FieldCount );
+    SetStatusWidths( FieldCount, widths );
 
-  m_StatusText->Show();
-  m_Throbber->Hide();
-  m_Message->Hide();
+    m_StatusText->Show();
+    m_Throbber->Hide();
+    m_Message->Hide();
 
-  // Artificial size event to layout all child controls
-  wxPostEvent( this, wxSizeEvent( wxDefaultSize, GetId() ) );
+    // Artificial size event to layout all child controls
+    wxPostEvent( this, wxSizeEvent( wxDefaultSize, GetId() ) );
 
-  m_ProgressTimer.SetOwner( this );
-  Connect( m_ProgressTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( BrowserStatusBar::OnTimer ), NULL, this );
+    m_ProgressTimer.SetOwner( this );
+    Connect( m_ProgressTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( BrowserStatusBar::OnTimer ), NULL, this );
 }
 
 BrowserStatusBar::~BrowserStatusBar()
 {
-  Disconnect( m_ProgressTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( BrowserStatusBar::OnTimer ), NULL, this );
+    Disconnect( m_ProgressTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( BrowserStatusBar::OnTimer ), NULL, this );
 }
 
 void BrowserStatusBar::UpdateTrackerStatus( bool inProgress )
 {
-  m_ProgressTimer.Start( s_ProgressMiliseconds );
+    m_ProgressTimer.Start( s_ProgressMiliseconds );
 
-  if ( inProgress )
-  {
-    m_Throbber->Play();
-    m_Throbber->Show();
-    m_Throbber->SetToolTip( s_TooltipInProgress );
-    std::string label( m_InitialIndexingCompleted ? s_TrackingUpdating : s_TrackingInProgress );
-    label += m_PercentComplete;
-    m_Message->SetLabel( label );
-    m_Message->SetToolTip( s_TooltipInProgress );
-    m_Message->Show();
-  }
-  else
-  {
-    m_Throbber->Stop();
-    m_Throbber->Hide();
-    m_Throbber->SetToolTip( m_IndexingFailed ? s_TooltipFailed : s_TooltipComplete );
-    m_Message->SetLabel( m_IndexingFailed ? s_TrackingFailed : s_TrackingComplete );
-    m_Message->SetToolTip( m_IndexingFailed ? s_TooltipFailed : s_TooltipComplete );
-    m_Message->Show();
-  }
+    if ( inProgress )
+    {
+        m_Throbber->Play();
+        m_Throbber->Show();
+        m_Throbber->SetToolTip( s_TooltipInProgress );
+        std::string label( m_InitialIndexingCompleted ? s_TrackingUpdating : s_TrackingInProgress );
+        label += m_PercentComplete;
+        m_Message->SetLabel( label );
+        m_Message->SetToolTip( s_TooltipInProgress );
+        m_Message->Show();
+    }
+    else
+    {
+        m_Throbber->Stop();
+        m_Throbber->Hide();
+        m_Throbber->SetToolTip( m_IndexingFailed ? s_TooltipFailed : s_TooltipComplete );
+        m_Message->SetLabel( m_IndexingFailed ? s_TrackingFailed : s_TrackingComplete );
+        m_Message->SetToolTip( m_IndexingFailed ? s_TooltipFailed : s_TooltipComplete );
+        m_Message->Show();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -82,163 +84,170 @@ void BrowserStatusBar::UpdateTrackerStatus( bool inProgress )
 // 
 bool BrowserStatusBar::TrimString( wxString& strText, wxStaticText* textField, int maxWidth, bool prefix )
 {
-  int curWidth;
-  textField->GetTextExtent( strText, &curWidth, NULL );
+    int curWidth;
+    textField->GetTextExtent( strText, &curWidth, NULL );
 
-  if ( strText.size() < 1 || curWidth <= maxWidth )
-  {
-    // nothing to trim
-    return false;
-  }
-  
-  // try to find a good starting point
-  int avgCharWidth = curWidth / ( int ) strText.size();
-  int testLen = ( maxWidth / avgCharWidth );
-
-  wxString testStr = strText.Mid( 0, testLen ) + "...";
-  textField->GetTextExtent( testStr, &curWidth, NULL );
-
-  int low = 0;
-  int high = (int) strText.size();
-  while( curWidth != maxWidth && low < high )
-  {
-    if ( curWidth < maxWidth )
+    if ( strText.size() < 1 || curWidth <= maxWidth )
     {
-      low = testLen;
-      testLen = ( high + low ) / 2;
-    }
-    else if ( curWidth > maxWidth )
-    {
-      high = testLen;
-      testLen = ( high + low ) / 2;
-    }
-    else
-    {
-      // we found an exact match... weird
-      break;
+        // nothing to trim
+        return false;
     }
 
-    if ( testLen + 1 == high )
-    {
-      break;
-    }
+    // try to find a good starting point
+    int avgCharWidth = curWidth / ( int ) strText.size();
+    int testLen = ( maxWidth / avgCharWidth );
 
-    testStr = strText.Mid( 0, testLen ) + "...";
+    wxString testStr = strText.Mid( 0, testLen ) + "...";
     textField->GetTextExtent( testStr, &curWidth, NULL );
-  }
 
-  if ( testLen > 3 )
-  {
-    if ( prefix )
+    int low = 0;
+    int high = (int) strText.size();
+    while( curWidth != maxWidth && low < high )
     {
-      strText = "..." + strText.Mid( strText.length() - testLen );
+        if ( curWidth < maxWidth )
+        {
+            low = testLen;
+            testLen = ( high + low ) / 2;
+        }
+        else if ( curWidth > maxWidth )
+        {
+            high = testLen;
+            testLen = ( high + low ) / 2;
+        }
+        else
+        {
+            // we found an exact match... weird
+            break;
+        }
+
+        if ( testLen + 1 == high )
+        {
+            break;
+        }
+
+        testStr = strText.Mid( 0, testLen ) + "...";
+        textField->GetTextExtent( testStr, &curWidth, NULL );
+    }
+
+    if ( testLen > 3 )
+    {
+        if ( prefix )
+        {
+            strText = "..." + strText.Mid( strText.length() - testLen );
+        }
+        else
+        {
+            strText = strText.Mid( 0, testLen ) + "...";
+        }
     }
     else
     {
-      strText = strText.Mid( 0, testLen ) + "...";
+        strText = "...";
     }
-  }
-  else
-  {
-    strText = "...";
-  }
-  return true;
+    return true;
 }
 
 // From Help on SB_SETTEXT
 // The text for each part is limited to 127 characters. 
 void BrowserStatusBar::SetStatusText( const wxString& strText, int nField )
 {
-  if ( nField == FieldMain )
-  {
-    wxRect rect;
-    GetFieldRect( FieldMain, rect );
+    if ( nField == FieldMain )
+    {
+        wxRect rect;
+        GetFieldRect( FieldMain, rect );
 
-    m_CurrentStatus = strText;
-    wxString newText = m_CurrentStatus;
-    TrimString( newText, m_StatusText, rect.GetWidth() - 10 );
-    m_StatusText->SetLabel( newText );
-    m_StatusText->SetToolTip( m_CurrentStatus );
-  }
+        m_CurrentStatus = strText;
+        wxString newText = m_CurrentStatus;
+        TrimString( newText, m_StatusText, rect.GetWidth() - 10 );
+        m_StatusText->SetLabel( newText );
+        m_StatusText->SetToolTip( m_CurrentStatus );
+    }
 }
 
 void BrowserStatusBar::OnSize( wxSizeEvent& args )
 {
-  const u32 border = 2;
-  const u32 spaceBetweenItems = 4;
-  
-  // FieldMain:
-  {
-    wxRect rect;
-    GetFieldRect( FieldMain, rect );
+    const u32 border = 2;
+    const u32 spaceBetweenItems = 4;
 
-    // Layout the controls from left to right, track the left edge as we go
-    u32 x = rect.x + border;
+    // FieldMain:
+    {
+        wxRect rect;
+        GetFieldRect( FieldMain, rect );
 
-    wxSize statusSize = m_StatusText->GetSize();
-    m_StatusText->Move( x, rect.y + ( rect.height - statusSize.y ) / 2 );
+        // Layout the controls from left to right, track the left edge as we go
+        u32 x = rect.x + border;
 
-    wxString newText = m_CurrentStatus;
-    TrimString( newText, m_StatusText, rect.GetWidth() - 10 );
-    m_StatusText->SetLabel( newText );
-    m_StatusText->SetToolTip( m_CurrentStatus );
-  }
+        wxSize statusSize = m_StatusText->GetSize();
+        m_StatusText->Move( x, rect.y + ( rect.height - statusSize.y ) / 2 );
 
-  // FieldAssetTracker:
-  // Throbber and indexing status message
-  {
-    wxRect rect;
-    GetFieldRect( FieldAssetTracker, rect );
+        wxString newText = m_CurrentStatus;
+        TrimString( newText, m_StatusText, rect.GetWidth() - 10 );
+        m_StatusText->SetLabel( newText );
+        m_StatusText->SetToolTip( m_CurrentStatus );
+    }
 
-    // Layout the controls from left to right, track the left edge as we go
-    u32 x = rect.x + border;
+    // FieldAssetTracker:
+    // Throbber and indexing status message
+    {
+        wxRect rect;
+        GetFieldRect( FieldAssetTracker, rect );
 
-    // Throbber
-    wxSize throbberSize = m_Throbber->GetSize();
-    m_Throbber->Move( x, rect.y + ( rect.height - throbberSize.y ) / 2 );
-    x+= throbberSize.x + spaceBetweenItems;
+        // Layout the controls from left to right, track the left edge as we go
+        u32 x = rect.x + border;
 
-    // Message text
-    wxSize msgSize = m_Message->GetSize();
-    m_Message->Move( x, rect.y + ( rect.height - msgSize.y ) / 2 );
-    x+= msgSize.x + spaceBetweenItems;
-  }
+        // Throbber
+        wxSize throbberSize = m_Throbber->GetSize();
+        m_Throbber->Move( x, rect.y + ( rect.height - throbberSize.y ) / 2 );
+        x+= throbberSize.x + spaceBetweenItems;
 
-  args.Skip();
+        // Message text
+        wxSize msgSize = m_Message->GetSize();
+        m_Message->Move( x, rect.y + ( rect.height - msgSize.y ) / 2 );
+        x+= msgSize.x + spaceBetweenItems;
+    }
+
+    args.Skip();
 }
 
 void BrowserStatusBar::OnTimer( wxTimerEvent& args )
 {
-  m_IndexingFailed = Asset::GlobalTracker()->DidIndexingFail();
-  if ( m_IndexingFailed )
-  {
-    UpdateTrackerStatus( false );
-  }
-  else
-  {
-    u32 total = Asset::GlobalTracker()->GetTrackingTotal();
-    if ( total ) 
+    Asset::Tracker* assetTracker = wxGetApp().GetAssetTracker();
+
+    if ( !assetTracker )
     {
-      u32 currProgress = Asset::GlobalTracker()->GetTrackingProgress();
-      u32 percentComplete = (u32)(((f32)currProgress/(f32)total) * 100);
-      
-      std::stringstream ss;
-      ss << percentComplete << "%";
-      
-      std::string newPercentage;
-      newPercentage = ss.str();
-      if ( newPercentage != m_PercentComplete )
-      {
-        m_InitialIndexingCompleted = Asset::GlobalTracker()->InitialIndexingCompleted();
-        m_PercentComplete = newPercentage;
-        UpdateTrackerStatus( Asset::GlobalTracker()->IsTracking() );
-      }
+        return;
+    }
+
+    m_IndexingFailed = assetTracker->DidIndexingFail();
+    if ( m_IndexingFailed )
+    {
+        UpdateTrackerStatus( false );
     }
     else
     {
-      m_PercentComplete = "100%";
-      UpdateTrackerStatus( false );
+        u32 total = assetTracker->GetTrackingTotal();
+        if ( total ) 
+        {
+            u32 currProgress = assetTracker->GetTrackingProgress();
+            u32 percentComplete = (u32)(((f32)currProgress/(f32)total) * 100);
+
+            std::stringstream ss;
+            ss << percentComplete << "%";
+
+            std::string newPercentage;
+            newPercentage = ss.str();
+            if ( newPercentage != m_PercentComplete )
+            {
+                m_InitialIndexingCompleted = assetTracker->InitialIndexingCompleted();
+                m_PercentComplete = newPercentage;
+                UpdateTrackerStatus( assetTracker->IsTracking() );
+            }
+        }
+        else
+        {
+            m_PercentComplete = "100%";
+            UpdateTrackerStatus( false );
+        }
     }
-  }
 }
 

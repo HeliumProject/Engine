@@ -412,7 +412,7 @@ void BrowserSearchPanel::PopulateForm()
   }
 
   // populate from MRU: m_FolderChoice
-  m_FieldMRU->PopulateControl( (wxControlWithItems*) m_FolderChoice, "m_FolderChoice", Finder::ProjectAssets() );
+  m_FieldMRU->PopulateControl( (wxControlWithItems*) m_FolderChoice, "m_FolderChoice", "" );
 
   Thaw();
 

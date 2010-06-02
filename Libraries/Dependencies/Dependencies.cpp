@@ -41,10 +41,7 @@
 
 #include "Console/Console.h"
 
-#include "Windows/Thread.h"
-
 #define MAX_FILE_GRAPH_DEPTH 25
-
 
 namespace Dependencies
 {
@@ -57,52 +54,12 @@ namespace Dependencies
     return (GetFileAttributes(filename) != INVALID_FILE_ATTRIBUTES); 
   }
 
-  Windows::CriticalSection g_HighLevelCS;
-
-  DependencyGraph* g_DependenciesGraph = NULL;
-  int g_InitCount = 0;
-
-  void Initialize()
-  {
-    if ( ++g_InitCount == 1 ) 
-    {
-      g_DependenciesGraph = new DependencyGraph();
-    }
-  }
-
-  void Cleanup()
-  {
-    if ( --g_InitCount == 0 )
-    {
-      delete g_DependenciesGraph;
-      g_DependenciesGraph = NULL;
-    }
-  }
-
-
-  /////////////////////////////////////////////////////////////////////////////
-  // Returns a reference to the static global FileDependencies theFileDependencies.
-  // Adding the following will import gFileDependencies from the FR namespace:
-  // using gFileDependencies;
-  DependencyGraph &Graph()
-  {
-    if ( !g_DependenciesGraph )
-    {
-      throw Exception( "Graph is not initialized, must call Dependencies::Initialize() jerks!" );
-    }
-
-    return *g_DependenciesGraph;
-  }
-
-
   /////////////////////////////////////////////////////////////////////////////
   // Initialize constructor
-  DependencyGraph::DependencyGraph()
+  DependencyGraph::DependencyGraph( const std::string& graphDBFilename, const std::string& configFolder )
   {
     m_GraphDB = new GraphDB( "Global-DependencyGraphDB" );
-    m_GraphDB->Open( FinderSpecs::Project::DEPENDENCY_GRAPH_DB.GetFile( FinderSpecs::Project::DEPENDENCY_GRAPH_FOLDER ),
-      FinderSpecs::Project::DEPENDENCY_GRAPH_CONFIGS.GetFolder(),
-      m_GraphDB->s_GraphDBVersion );
+    m_GraphDB->Open( graphDBFilename, configFolder, m_GraphDB->s_GraphDBVersion );
   }
 
 
@@ -122,7 +79,7 @@ namespace Dependencies
   {
     DEPENDENCIES_SCOPE_TIMER((""));
 
-    Windows::TakeSection cs( g_HighLevelCS );
+    Windows::TakeSection cs( m_HighLevelCS );
 
     if ( output->m_Path.empty() || input->m_Path.empty() )
     {
@@ -143,7 +100,7 @@ namespace Dependencies
   //
   void DependencyGraph::RegisterInputs( const V_DependencyInfo &outputs, const V_DependencyInfo &inputs, bool inFilesAreOptional )
   {
-    Windows::TakeSection cs( g_HighLevelCS );
+    Windows::TakeSection cs( m_HighLevelCS );
 
     V_DependencyInfo::const_iterator outputItr = outputs.begin();
     V_DependencyInfo::const_iterator outputEnd = outputs.end();
@@ -165,7 +122,7 @@ namespace Dependencies
   // Update a bunch of outputs
   void DependencyGraph::UpdateOutputs( V_DependencyInfo &outputs )
   {
-    Windows::TakeSection cs( g_HighLevelCS );
+    Windows::TakeSection cs( m_HighLevelCS );
 
     DEPENDENCIES_SCOPE_TIMER((""));
 
@@ -202,7 +159,7 @@ namespace Dependencies
   // Gets the graph and determines if a file is up to date
   bool DependencyGraph::IsUpToDate( const std::string& filePath )
   {
-    Windows::TakeSection cs( g_HighLevelCS );
+    Windows::TakeSection cs( m_HighLevelCS );
 
     DEPENDENCIES_SCOPE_TIMER((""));
 
@@ -346,7 +303,7 @@ namespace Dependencies
   // ALWAYS generates the sig, even if there is already one cached
   void DependencyGraph::CreateSignature( const DependencyInfoPtr& file )
   {
-    Windows::TakeSection cs( g_HighLevelCS );
+    Windows::TakeSection cs( m_HighLevelCS );
 
     DEPENDENCIES_SCOPE_TIMER((""));
 
@@ -413,14 +370,9 @@ namespace Dependencies
       AppendFileToSignature( findFile->second, &hashFilter, outFile->m_SignatureTrace );
     }
 
-    /////////////////////////////////////////////////
-    // Append the outFile name and format version
-    std::string strippedPath = file->m_Path;
-    FileSystem::StripPrefix( Finder::ProjectAssets(), strippedPath );
-
     std::stringstream fileSig;
-    fileSig << strippedPath;
-    outFile->m_SignatureTrace.push_back( strippedPath );
+    fileSig << file->m_Path;
+    outFile->m_SignatureTrace.push_back( file->m_Path );
 
     fileSig << file->m_Spec->GetFormatVersion();
     outFile->m_SignatureTrace.push_back( file->m_Spec->GetFormatVersion() );

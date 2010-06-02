@@ -34,7 +34,8 @@ void MiscSettings::EnumerateClass( Reflect::Compositor<MiscSettings>& comp )
 
 void MiscSettings::LoadFromFile( MiscSettingsPtr& miscSettings )
 {
-  std::string miscSettingsFile = FinderSpecs::Luna::MISC_SETTINGS.GetFile( FinderSpecs::Luna::GLOBAL_CONFIG_FOLDER );
+#pragma TODO("reimplement to use a valid config folder" )
+    std::string miscSettingsFile = ""; //FinderSpecs::Luna::MISC_SETTINGS.GetFile( FinderSpecs::Luna::GLOBAL_CONFIG_FOLDER );
 
   MiscSettingsPtr miscSettingsPtr = NULL;
   

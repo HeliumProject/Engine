@@ -26,7 +26,7 @@ DependencyCollection::DependencyCollection()
 , m_IsReverse( false )
 , m_AssetFile( NULL )
 , m_IsLoading( false )
-, m_DependencyLoader( this )
+, m_DependencyLoader( NULL )
 {
 }
 
@@ -37,7 +37,7 @@ DependencyCollection::DependencyCollection( const std::string& name, const u32 f
 , m_IsReverse( reverse )
 , m_AssetFile( NULL )
 , m_IsLoading( false )
-, m_DependencyLoader( this )
+, m_DependencyLoader( NULL )
 {
 }
 
@@ -50,13 +50,15 @@ DependencyCollection::~DependencyCollection()
 void DependencyCollection::InitializeCollection() 
 {
     __super::InitializeCollection();
-    GlobalBrowser().GetBrowserPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &DependencyCollection::OnPreferencesChanged ) );
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+    //GlobalBrowser().GetBrowserPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &DependencyCollection::OnPreferencesChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void DependencyCollection::CleanupCollection() 
 {
-    GlobalBrowser().GetBrowserPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &DependencyCollection::OnPreferencesChanged ) );
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+//    GlobalBrowser().GetBrowserPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &DependencyCollection::OnPreferencesChanged ) );
     __super::CleanupCollection();
 }
 
@@ -136,14 +138,15 @@ std::string DependencyCollection::GetAssetName() const
 u32 DependencyCollection::GetRecursionDepthForLoad() const
 {
     u32 maxRecursionDepth = 0;
-    if ( IsReverse() )
-    {
-        maxRecursionDepth = GlobalBrowser().GetBrowserPreferences()->GetUsageCollectionRecursionDepth();
-    }
-    else
-    {
-        maxRecursionDepth = GlobalBrowser().GetBrowserPreferences()->GetDependencyCollectionRecursionDepth();
-    }
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+    //if ( IsReverse() )
+    //{
+    //    maxRecursionDepth = GlobalBrowser().GetBrowserPreferences()->GetUsageCollectionRecursionDepth();
+    //}
+    //else
+    //{
+    //    maxRecursionDepth = GlobalBrowser().GetBrowserPreferences()->GetDependencyCollectionRecursionDepth();
+    //}
     return maxRecursionDepth;
 }
 
@@ -154,7 +157,8 @@ void DependencyCollection::LoadDependencies( bool threaded )
     {
         Freeze();
         IsLoading( true );
-        m_DependencyLoader.StartThread();
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+        //        m_DependencyLoader->StartThread();
         // It will be thawed and m_IsLoading set to false in the DependencyLoader::OnEndThread callback
     }
     else
@@ -163,7 +167,8 @@ void DependencyCollection::LoadDependencies( bool threaded )
         IsLoading( true );
         {
             File::S_Reference assets;
-            GlobalBrowser().GetCacheDB()->GetAssetDependencies( m_spFileReference, assets, m_IsReverse, GetRecursionDepthForLoad() );
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+//            GlobalBrowser().GetCacheDB()->GetAssetDependencies( m_spFileReference, assets, m_IsReverse, GetRecursionDepthForLoad() );
             SetAssetReferences( assets );
         }
         IsLoading( false );

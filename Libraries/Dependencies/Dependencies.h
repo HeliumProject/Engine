@@ -11,7 +11,7 @@
 #include "Common/Container/OrderedSet.h"
 #include "Common/Memory/SmartPtr.h"
 
-#include "TUID/TUID.h"
+#include "Windows/Thread.h"
 
 // Forwards
 namespace CryptoPP{ class HashFilter; }
@@ -19,12 +19,6 @@ namespace CryptoPP{ class HashFilter; }
 // Dependencies API
 namespace Dependencies
 { 
-  void DEPENDENCIES_API Initialize();
-  void DEPENDENCIES_API Cleanup();
-
-  // static global Dependency Graph
-  DEPENDENCIES_API class DependencyGraph &Graph();
-  
   class GraphDB;
   typedef Nocturnal::SmartPtr< GraphDB > GraphDBPtr;
 
@@ -32,7 +26,7 @@ namespace Dependencies
   class DEPENDENCIES_API DependencyGraph
   {
   private:
-    DependencyGraph();
+    DependencyGraph( const std::string& graphDBFilename, const std::string& configFolder );
 
   public:
     ~DependencyGraph();
@@ -55,10 +49,6 @@ namespace Dependencies
     // public so that CacheFiles can use it if it needs to
     void  GetFileMD5( const DependencyInfoPtr& file );
 
-    // provide access to the ctor for the static global Dependency Graph
-    friend void ::Dependencies::Initialize();
-    friend DependencyGraph& ::Dependencies::Graph();    
-
   private:
 
     //
@@ -78,6 +68,7 @@ namespace Dependencies
     typedef std::set< DependencyInfoPtr >                                     DirtyFiles;
     typedef std::map< std::string, OS_string >                        ReregisterMap;
    
+    Windows::CriticalSection m_HighLevelCS;
 
     GraphDBPtr            m_GraphDB;
     ReregisterMap         m_ReregisterMap;        // files that have been registered during this run

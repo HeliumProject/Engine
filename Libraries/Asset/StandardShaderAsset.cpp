@@ -17,7 +17,6 @@ void StandardShaderAsset::EnumerateClass( Reflect::Compositor<StandardShaderAsse
   comp.GetComposite().m_UIName = "Shader (Standard)";
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A shader manages a group of textures that can be applied to an entity." );
   comp.GetComposite().SetProperty( AssetProperties::ModifierSpec, FinderSpecs::Asset::SHADER_DECORATION.GetName() );
-  comp.GetComposite().SetProperty( AssetProperties::RootFolderSpec, FinderSpecs::Asset::SHADER_FOLDER.GetName() );
 
   Reflect::Field* fieldCinematicShader = comp.AddField( &StandardShaderAsset::m_CinematicShader, "m_CinematicShader" );
 }

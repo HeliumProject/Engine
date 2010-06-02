@@ -327,20 +327,6 @@ Undo::CommandPtr AssetNode::DeleteSelectedChildren()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Gets the asset class that this node is part of and adds that asset to 
-// the specified list if the asset is exportable.  Override in derived classes 
-// to do something fancier.
-// 
-void AssetNode::GetExportFiles( File::S_Reference& files ) const
-{
-    Luna::AssetClass* asset = GetAssetClass();
-    if ( asset->IsExportable() )
-    {
-        files.insert( asset->GetFileReference() );
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Travels up the hierarchy and returns the first Luna::AssetClass that is found.
 // 
 Luna::AssetClass* AssetNode::GetAssetClass() const

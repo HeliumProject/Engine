@@ -216,6 +216,10 @@
 				RelativePath=".\Resolver.h"
 				>
 			</File>
+			<File
+				RelativePath=".\ResolverDB-1.sql.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="PCH"

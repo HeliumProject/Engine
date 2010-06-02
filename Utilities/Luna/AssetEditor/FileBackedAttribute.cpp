@@ -6,7 +6,6 @@
 #include "AssetPreferences.h"
 #include "PersistentDataFactory.h"
 
-#include "FileBrowser/FileBrowser.h"
 #include "Finder/Finder.h"
 #include "Editor/ContextMenuGenerator.h"
 #include "Editor/SessionManager.h"
@@ -183,7 +182,7 @@ void FileBackedAttribute::OnOpen( const ContextMenuArgsPtr& args )
 // 
 void FileBackedAttribute::OnChangePath( const ContextMenuArgsPtr& args )
 {
-    UIToolKit::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path", Finder::ProjectAssets().c_str() );
+    UIToolKit::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path" );
 
     std::string currentPath = GetFilePath();
     if ( !currentPath.empty() )
@@ -211,24 +210,26 @@ void FileBackedAttribute::OnChangePath( const ContextMenuArgsPtr& args )
 // 
 void FileBackedAttribute::OnChangePathFinder( const ContextMenuArgsPtr& args )
 {
-    File::FileBrowser dialog( GetAssetManager()->GetAssetEditor(), wxID_ANY, "Change File Path" );
-    const Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
-    const Finder::FinderSpec* spec = pkg->GetFileFilter();
-    if ( spec )
-    {
-        dialog.SetFilter( *spec );
-    }
+    NOC_BREAK();
+#pragma TODO( "Reimplement to use the Vault" )
+    //File::FileBrowser dialog( GetAssetManager()->GetAssetEditor(), wxID_ANY, "Change File Path" );
+    //const Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
+    //const Finder::FinderSpec* spec = pkg->GetFileFilter();
+    //if ( spec )
+    //{
+    //    dialog.SetFilter( *spec );
+    //}
 
-    std::string currentPath = GetFilePath();
+    //std::string currentPath = GetFilePath();
 
-    if ( dialog.ShowModal() == wxID_OK )
-    {
-        if ( currentPath != dialog.GetPath() )
-        {
-            args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::FileBackedAttribute, std::string >( this, &Luna::FileBackedAttribute::GetFilePath, &Luna::FileBackedAttribute::SetFilePath ), dialog.GetPath() ) );
-            GetAssetManager()->GetSelection().Refresh();
-        }
-    }
+    //if ( dialog.ShowModal() == wxID_OK )
+    //{
+    //    if ( currentPath != dialog.GetPath() )
+    //    {
+    //        args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::FileBackedAttribute, std::string >( this, &Luna::FileBackedAttribute::GetFilePath, &Luna::FileBackedAttribute::SetFilePath ), dialog.GetPath() ) );
+    //        GetAssetManager()->GetSelection().Refresh();
+    //    }
+    //}
 }
 
 ///////////////////////////////////////////////////////////////////////////////

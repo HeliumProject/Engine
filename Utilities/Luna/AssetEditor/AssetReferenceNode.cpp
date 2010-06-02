@@ -12,7 +12,6 @@
 #include "FieldFactory.h"
 #include "RemoveAssetNodeCommand.h"
 
-#include "FileBrowser/FileBrowser.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Editor/SessionManager.h"
@@ -676,7 +675,7 @@ void AssetReferenceNode::AssetTypeChanged( const Asset::AssetTypeChangeArgs& arg
 // 
 void AssetReferenceNode::OnChangePath( const ContextMenuArgsPtr& args )
 {
-    UIToolKit::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path", Finder::ProjectAssets().c_str() );
+    UIToolKit::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path" );
 
     std::string currentPath = GetFilePath();
     if ( !currentPath.empty() )
@@ -713,27 +712,29 @@ void AssetReferenceNode::OnChangePath( const ContextMenuArgsPtr& args )
 // 
 void AssetReferenceNode::OnChangePathFinder( const ContextMenuArgsPtr& args )
 {
-    File::FileBrowser dialog( GetAssetManager()->GetAssetEditor(), wxID_ANY, "Change File Path" );
+    NOC_BREAK();
+#pragma TODO( "Reimplemnt to use the Vault" )
+    //File::FileBrowser dialog( GetAssetManager()->GetAssetEditor(), wxID_ANY, "Change File Path" );
 
-    std::string specName;
-    if ( m_Field->GetProperty( Asset::AssetProperties::FilterSpec, specName ) )
-    {
-        const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
-        dialog.SetFilter( *spec );
-    }
-    else if ( m_Field->GetProperty( Asset::AssetProperties::ModifierSpec, specName ) )
-    {
-        const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
-        dialog.SetFilter( *spec );
-    }
+    //std::string specName;
+    //if ( m_Field->GetProperty( Asset::AssetProperties::FilterSpec, specName ) )
+    //{
+    //    const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
+    //    dialog.SetFilter( *spec );
+    //}
+    //else if ( m_Field->GetProperty( Asset::AssetProperties::ModifierSpec, specName ) )
+    //{
+    //    const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
+    //    dialog.SetFilter( *spec );
+    //}
 
-    if ( dialog.ShowModal() == wxID_OK )
-    {
-        if ( GetFilePath() != dialog.GetPath() )
-        {
-            args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::AssetReferenceNode, std::string >( this, &AssetReferenceNode::GetFilePath, &AssetReferenceNode::SetFilePath ), dialog.GetPath() ) );
-        }
-    }
+    //if ( dialog.ShowModal() == wxID_OK )
+    //{
+    //    if ( GetFilePath() != dialog.GetPath() )
+    //    {
+    //        args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::AssetReferenceNode, std::string >( this, &AssetReferenceNode::GetFilePath, &AssetReferenceNode::SetFilePath ), dialog.GetPath() ) );
+    //    }
+    //}
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -21,7 +21,6 @@
 #include "Asset/EntityAsset.h"
 #include "Asset/StandardShaderAsset.h"
 
-#include "FileBrowser/FileBrowser.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
@@ -1131,19 +1130,14 @@ void AssetEditor::OnNew( wxCommandEvent& args )
 // 
 void AssetEditor::OnOpen( wxCommandEvent& args )
 {
-    static std::string defaultPath = Finder::ProjectAssets();
-    UIToolKit::FileDialog browserDlg( this, "Open", defaultPath.c_str(), "", "", UIToolKit::FileDialogStyles::DefaultOpen | UIToolKit::FileDialogStyles::Multiple );
+    UIToolKit::FileDialog browserDlg( this, "Open", "", "", "", UIToolKit::FileDialogStyles::DefaultOpen | UIToolKit::FileDialogStyles::Multiple );
 
     browserDlg.AddFilter( FinderSpecs::Asset::ASSET_EDITOR_FILTER.GetDialogFilter() );
 
     if ( browserDlg.ShowModal() == wxID_OK )
     {
         const S_string& paths = browserDlg.GetFilePaths();
-        if ( DoOpen( paths ) && !paths.empty() )
-        {
-            defaultPath = *( paths.begin() );
-            FileSystem::StripLeaf( defaultPath );
-        }
+        DoOpen( paths );
     }
 }
 
@@ -1153,15 +1147,17 @@ void AssetEditor::OnOpen( wxCommandEvent& args )
 // 
 void AssetEditor::OnFind( wxCommandEvent& args )
 {
-    File::FileBrowser browserDlg( this, -1, "Asset Finder: Open" );
-    browserDlg.EnableMultipleSelection();
+    NOC_BREAK();
+#pragma TODO( "Reimplent using the Vault" )
+    //File::FileBrowser browserDlg( this, -1, "Asset Finder: Open" );
+    //browserDlg.EnableMultipleSelection();
 
-    browserDlg.SetFilter( FinderSpecs::Asset::ASSET_EDITOR_FILTER );
+    //browserDlg.SetFilter( FinderSpecs::Asset::ASSET_EDITOR_FILTER );
 
-    if ( browserDlg.ShowModal() == wxID_OK )
-    {
-        DoOpen( browserDlg.GetPaths() );
-    }
+    //if ( browserDlg.ShowModal() == wxID_OK )
+    //{
+    //    DoOpen( browserDlg.GetPaths() );
+    //}
 }
 
 ///////////////////////////////////////////////////////////////////////////////

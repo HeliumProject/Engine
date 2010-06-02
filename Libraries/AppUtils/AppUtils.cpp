@@ -31,12 +31,6 @@
 #include "Console/Console.h"
 #include "Common/Config.h"
 
-#ifdef MAKE_APPUTILS_TO_NOT_USE_RCS
-#include "Config/Config.h"
-#include "Finder/Finder.h"
-#include "Perforce/Perforce.h"
-#endif
-
 const char* AppUtils::Args::Script = "script";
 const char* AppUtils::Args::Attach = "attach";
 const char* AppUtils::Args::Profile = "profile";
@@ -65,8 +59,6 @@ ShutdownSignature::Event AppUtils::g_ShuttingDown;
 // are we shutting down
 bool g_ShutdownStarted = false;
 bool g_ShutdownComplete = false;
-
-static i32 g_RevisionControlInitCount = 0;
 
 // default to these streams for trace files, it is up to the app to ask for these, when creating a TraceFile
 V_string g_TraceFiles;
@@ -432,53 +424,6 @@ int AppUtils::Shutdown( int code )
 Console::Stream AppUtils::GetTraceStreams()
 {
   return g_TraceStreams; 
-}
-
-void AppUtils::InitializeRevisionControl()
-{
-  if ( ++g_RevisionControlInitCount > 1 )
-  {
-    return;
-  }
-
-#ifdef MAKE_APPUTILS_TO_NOT_USE_RCS
-  Perforce::Initialize();
-
-  Config::XMLConfig config( Finder::ProjectRoot() + "config/RCS.config.xml", "config" );
-  config.Read();
-
-  V_string managedPaths;
-  V_string ignoredPaths;
-
-#pragma TODO( "a) get this out of here, b) make the config a little nicer" )
-  config.GetValue( "ManagedPaths/item", managedPaths );
-  config.GetValue( "IgnoredPaths/item", ignoredPaths );
-
-  for( V_string::iterator itr = managedPaths.begin(), end = managedPaths.end(); itr != end; ++itr )
-  {
-    (*itr) = Finder::ProjectRoot() + (*itr) + "/";
-  }
-
-  for( V_string::iterator itr = ignoredPaths.begin(), end = ignoredPaths.end(); itr != end; ++itr )
-  {
-    (*itr) = Finder::ProjectRoot() + (*itr) + "/";
-  }
-
-  RCS::SetManagedPaths( managedPaths );
-  RCS::SetIgnoredPaths( ignoredPaths );
-#endif
-}
-
-void AppUtils::CleanupRevisionControl()
-{
-  if ( --g_RevisionControlInitCount > 0 )
-  {
-    return;
-  }
-
-#ifdef MAKE_APPUTILS_TO_NOT_USE_RCS
-  Perforce::Cleanup();
-#endif
 }
 
 void AppUtils::InitializeStandardTraceFiles()

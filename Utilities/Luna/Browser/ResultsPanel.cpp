@@ -8,17 +8,19 @@ using namespace Luna;
 BEGIN_EVENT_TABLE( Luna::ResultsPanel, ResultsPanelGenerated )
 END_EVENT_TABLE()
 
-ResultsPanel::ResultsPanel( BrowserFrame* browserFrame )
+ResultsPanel::ResultsPanel( const std::string& rootDirectory, BrowserFrame* browserFrame )
 : ResultsPanelGenerated( browserFrame, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL )
+, m_RootDirectory( rootDirectory )
 , m_CurrentMode( ViewModes::Invalid )
 , m_CurrentView( NULL )
-, m_ThumbnailView( new ThumbnailView( browserFrame, this ) )
 , m_BrowserSearchPanel( new BrowserSearchPanel( browserFrame, this ) )
 , m_BrowserFrame( browserFrame )
 {
   wxSizer* sizer = new wxBoxSizer( wxVERTICAL );
   SetSizer( sizer );
 
+  Nocturnal::Path thumbnailPath( m_RootDirectory + "/.thumbnails/" );
+  m_ThumbnailView = new ThumbnailView( thumbnailPath.Get(), browserFrame, this );
   m_ThumbnailView->AddSelectionChangedListener( ThumbnailSelectionSignature::Delegate( this, &ResultsPanel::OnThumbnailSelectionChanged ) );
   m_ThumbnailView->AddHighlightChangedListener( ThumbnailHighlightSignature::Delegate( this, &ResultsPanel::OnThumbnailHighlightChanged ) );
 
@@ -32,6 +34,9 @@ ResultsPanel::~ResultsPanel()
 {
   m_ThumbnailView->RemoveSelectionChangedListener( ThumbnailSelectionSignature::Delegate( this, &ResultsPanel::OnThumbnailSelectionChanged ) );
   m_ThumbnailView->RemoveHighlightChangedListener( ThumbnailHighlightSignature::Delegate( this, &ResultsPanel::OnThumbnailHighlightChanged ) );
+  delete m_ThumbnailView;
+
+  delete m_BrowserSearchPanel;
 }
 
 void ResultsPanel::SetViewMode( ViewMode view )

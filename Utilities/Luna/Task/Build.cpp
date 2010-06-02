@@ -54,7 +54,6 @@ void Build::Initialize()
     {
         g_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
         g_InitializerStack.Push( AssetBuilder::Initialize, AssetBuilder::Cleanup );
-        g_InitializerStack.Push( Dependencies::Initialize, Dependencies::Cleanup );
     }
 }
 

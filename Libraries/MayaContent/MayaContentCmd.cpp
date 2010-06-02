@@ -687,33 +687,6 @@ void MayaContentCmd::SetQueued(const MObject node)
   NOC_ASSERT(result);
 }
 
-// assumes a 1-to-1 mapping
-static const DecorationSpec& ExportTypeToFileSpec( MayaContentCmd::CommandData type )
-{
-  switch( type )
-  {
-  case MayaContentCmd::kAnimation:
-    return FinderSpecs::Content::ANIMATION_DECORATION;
-  case MayaContentCmd::kRiggedMesh:
-    return FinderSpecs::Content::RIGGED_DECORATION;
-  case MayaContentCmd::kStaticMesh:
-    return FinderSpecs::Content::STATIC_DECORATION;
-  case MayaContentCmd::kCollision:
-    return FinderSpecs::Content::COLLISION_DECORATION;
-  case MayaContentCmd::kGlue:
-    return FinderSpecs::Content::DESTRUCTION_GLUE_DECORATION;
-  case MayaContentCmd::kPathfinding:
-    return FinderSpecs::Content::PATHFINDING_DECORATION;
-  case MayaContentCmd::kCineScene:
-    return FinderSpecs::Content::CINESCENE_DECORATION;
-  default:
-    {
-      NOC_BREAK();
-      return FinderSpecs::Content::STATIC_DECORATION;
-    }
-  }
-}
-
 void MayaContentCmd::DetermineExportedTypes( BitArray& types )
 {
   EXPORT_SCOPE_TIMER( ("") );
@@ -949,7 +922,7 @@ void MayaContentCmd::ExportCurrentScene( MObject root, std::string& currentFile,
   // clean path returned by maya 
   FileSystem::CleanName( currentFile );
 
-  std::string contentFileDir = ExportTypeToFileSpec( MayaContentCmd::kStaticMesh ).GetExportFile( currentFile, fragmentName );
+  std::string contentFileDir = currentFile;
   FileSystem::StripLeaf( contentFileDir );
 
   FileSystem::MakePath( contentFileDir );
@@ -1000,7 +973,7 @@ void MayaContentCmd::ExportCurrentScene( MObject root, std::string& currentFile,
     }
 
     CommandData data = static_cast< CommandData >( i );
-    std::string contentFile = ExportTypeToFileSpec( data ).GetExportFile( currentFile, fragmentName );
+    std::string contentFile = currentFile;
 
     if( usedTypes[i] )
     {

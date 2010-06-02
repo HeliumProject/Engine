@@ -38,49 +38,7 @@ using namespace Asset;
 //
 
 ///////////////////////////////////////////////////////////////////////////////
-static int g_InitCount = 0;
-static CacheDB* g_GlobalCacheDB = NULL;
-const char* CacheDB::s_TrackerDBVersion = "3.0";
-
-void CacheDB::Initialize()
-{
-    if ( ++g_InitCount == 1 )
-    {
-        // Connect the DB
-        std::string rootDir = Finder::ProjectAssets() + FinderSpecs::Project::ASSET_TRACKER_FOLDER.GetRelativeFolder();
-        FileSystem::GuaranteeSlash( rootDir );
-        FileSystem::MakePath( rootDir );
-
-        g_GlobalCacheDB = new CacheDB( "Global-AssetCacheDB" );
-        g_GlobalCacheDB->Open( FinderSpecs::Project::ASSET_TRACKER_DB.GetFile( rootDir ),
-            FinderSpecs::Project::ASSET_TRACKER_CONFIGS.GetFolder(),
-            s_TrackerDBVersion ); //,SQLITE_OPEN_READONLY | SQLITE_OPEN_CREATE );
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void CacheDB::Cleanup()
-{
-    if ( --g_InitCount == 0 )
-    {
-        if ( g_GlobalCacheDB )
-        {
-            delete g_GlobalCacheDB;
-            g_GlobalCacheDB = NULL;
-        }
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-CacheDB* Asset::GlobalCacheDB()
-{
-    if ( !g_GlobalCacheDB )
-    {
-        throw Nocturnal::Exception( "GlobalCacheDB is not initialized, must call Asset::Initialize() first!" );
-    }
-    return g_GlobalCacheDB;
-}
-
+const char* CacheDB::s_TrackerDBVersion = "4.0";
 
 // max storage size for a query string
 #define MAX_QUERY_LENGTH  2048
@@ -206,7 +164,7 @@ static inline void PrependFilePath( const std::string& projectAssets, std::strin
 
 /////////////////////////////////////////////////////////////////////////////
 // Ctor - Initialiaze the CacheDB
-CacheDB::CacheDB( const char* friendlyName )
+CacheDB::CacheDB( const char* friendlyName, const std::string& dbFilename, const std::string& configFolder, int flags, const std::string& version )
 : SQL::SQLiteDB( friendlyName )
 {
     m_CacheDBColumns.insert( std::make_pair( CacheDBColumnIDs::FileID, new CacheDBColumn( this, "path_hash", "assets", "path_hash", "path_hash,fileid,asset_id,assetid,tuid,id" ) ) );
@@ -227,6 +185,8 @@ CacheDB::CacheDB( const char* friendlyName )
     m_CacheDBColumns.insert( std::make_pair( CacheDBColumnIDs::P4User, new CacheDBColumn( this, "rcs_user", "rcs_users", "username", "rcs_user,user,usr" ) ) );
     m_CacheDBColumns[CacheDBColumnIDs::P4User]->SetJoin( "id", "assets", "rcs_user_id" );
     m_CacheDBColumns[CacheDBColumnIDs::P4User]->SetPopulateSQL( "SELECT * FROM rcs_users;" );
+
+    Open( dbFilename, configFolder, version, flags );
 }
 
 
@@ -240,11 +200,12 @@ CacheDB::~CacheDB()
 /////////////////////////////////////////////////////////////////////////////
 // Opens and Load the  DB; creating the DB if it does not exist. Adds the
 // version to the dbfilename
-bool CacheDB::Open( std::string& dbFilename, const std::string& configFolder, const std::string& version, int flags )
+bool CacheDB::Open( const std::string& dbFilename, const std::string& configFolder, const std::string& version, int flags )
 { 
-    std::string::size_type idx = dbFilename.rfind( '.' );
-    dbFilename.insert( idx, "-" + version );
-    return __super::Open( dbFilename, configFolder, version, flags );
+    std::string filename = dbFilename;
+    std::string::size_type idx = filename.rfind( '.' );
+    filename.insert( idx, "-" + version );
+    return __super::Open( filename, configFolder, version, flags );
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -162,14 +162,17 @@ namespace Luna
 /////////////////////////////////////////////////////////////////////////////
 /// BrowserSearch
 /////////////////////////////////////////////////////////////////////////////
-BrowserSearch::BrowserSearch()
-: m_SearchResults( NULL )
+BrowserSearch::BrowserSearch( const std::string& rootDirectory, const std::string& configDirectory )
+: m_RootDirectory( rootDirectory )
+, m_ConfigDirectory( configDirectory )
+, m_SearchResults( NULL )
 , m_StopSearching( true )
 , m_DummyWindow( NULL )
 , m_CurrentSearchID( -1 )
 , m_CurrentSearchQuery( NULL )
 {
-    m_CacheDB = new Asset::CacheDB( "LunaBrowserSearch-AssetCacheDB" );
+    Nocturnal::Path dbFilepath( m_RootDirectory + "/.tracker/cache.db" );
+    m_CacheDB = new Asset::CacheDB( "LunaBrowserSearch-AssetCacheDB", dbFilepath.Get(), m_ConfigDirectory, SQLITE_OPEN_READONLY );
 
     m_SearchInitializedEvent = ::CreateEvent( NULL, TRUE, TRUE, "BrowserBeginSearchEvent" );
     m_EndSearchEvent = ::CreateEvent( NULL, TRUE, TRUE, "BrowserEndSearchEvent" );
@@ -439,15 +442,6 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
 inline void BrowserSearch::SearchThreadEnter( i32 searchID )
 {
     ::ResetEvent( m_EndSearchEvent );
-
-    // Connect the DB
-    std::string rootDir = Finder::ProjectAssets() + FinderSpecs::Project::ASSET_TRACKER_FOLDER.GetRelativeFolder();
-    FileSystem::GuaranteeSlash( rootDir );
-    FileSystem::MakePath( rootDir );
-    m_CacheDB->Open( FinderSpecs::Project::ASSET_TRACKER_DB.GetFile( rootDir ),
-        FinderSpecs::Project::ASSET_TRACKER_CONFIGS.GetFolder(),
-        m_CacheDB->s_TrackerDBVersion,
-        SQLITE_OPEN_READONLY );
 
     wxCommandEvent evt( igEVT_BEGIN_SEARCH, m_DummyWindow->GetId() );
     evt.SetInt( searchID );

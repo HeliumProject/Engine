@@ -15,12 +15,12 @@ using namespace Inspect;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-FileDialogButton::FileDialogButton()
+FileDialogButton::FileDialogButton( const std::string& path )
 : m_Title( "Open" )
 {
-  Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( "All files (*.*)|*.*" ) );
+    Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( "All files (*.*)|*.*" ) );
 
-  SetPath( Finder::ProjectAssets() );
+    SetPath( path );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -28,17 +28,17 @@ FileDialogButton::FileDialogButton()
 // 
 void FileDialogButton::Realize( Inspect::Container* parent )
 {
-  PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
+    PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
 
-  if ( !IsRealized() )
-  {
-    __super::Realize( parent );
-
-    if ( IsBound() )
+    if ( !IsRealized() )
     {
-      ReadPathData( m_Path );
+        __super::Realize( parent );
+
+        if ( IsBound() )
+        {
+            ReadPathData( m_Path );
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ void FileDialogButton::Realize( Inspect::Container* parent )
 // 
 void FileDialogButton::Read()
 {
-  std::string path = GetPath();
+    std::string path = GetPath();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -54,11 +54,11 @@ void FileDialogButton::Read()
 //
 void FileDialogButton::ReadPathData( std::string& path ) const
 {
-  ReadData( path );
-  if ( !path.empty() )
-  {
-    FileSystem::CleanName( path );
-  }
+    ReadData( path );
+    if ( !path.empty() )
+    {
+        FileSystem::CleanName( path );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -67,37 +67,37 @@ void FileDialogButton::ReadPathData( std::string& path ) const
 // 
 bool FileDialogButton::Write()
 {
-  bool result = true;
+    bool result = true;
 
-  // Show the file dialog and write the data back to the control.
-  if ( IsBound() )
-  {
-    std::string filterStr = "All files (*.*)|*.*";
-    if ( !m_Filters.empty() )
+    // Show the file dialog and write the data back to the control.
+    if ( IsBound() )
     {
-      filterStr = "";
-      S_string::iterator it = m_Filters.begin();
-      S_string::iterator itEnd = m_Filters.end();
-      for ( ; it != itEnd ; ++it )
-      {
-        filterStr += (*it);
-        filterStr += "|";
-      }
-      filterStr.erase( filterStr.size() - 1 );
+        std::string filterStr = "All files (*.*)|*.*";
+        if ( !m_Filters.empty() )
+        {
+            filterStr = "";
+            S_string::iterator it = m_Filters.begin();
+            S_string::iterator itEnd = m_Filters.end();
+            for ( ; it != itEnd ; ++it )
+            {
+                filterStr += (*it);
+                filterStr += "|";
+            }
+            filterStr.erase( filterStr.size() - 1 );
+        }
+
+        wxWindow* parent = GetCanvas() ? GetCanvas()->GetControl() : NULL;
+
+        UIToolKit::FileDialog fileDialog( parent, m_Title.c_str(), GetPath().c_str(), "", filterStr.c_str(), UIToolKit::FileDialogStyles::DefaultOpen );
+
+        if ( fileDialog.ShowModal() == wxID_OK )
+        {
+            std::string path = fileDialog.GetPath().c_str();
+            result = WriteData( path );
+        }
     }
 
-    wxWindow* parent = GetCanvas() ? GetCanvas()->GetControl() : NULL;
-
-    UIToolKit::FileDialog fileDialog( parent, m_Title.c_str(), GetPath().c_str(), "", filterStr.c_str(), UIToolKit::FileDialogStyles::DefaultOpen );
-
-    if ( fileDialog.ShowModal() == wxID_OK )
-    {
-      std::string path = fileDialog.GetPath().c_str();
-      result = WriteData( path );
-    }
-  }
-
-  return result;
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ bool FileDialogButton::Write()
 // 
 void FileDialogButton::SetTitleBar( const std::string& title )
 {
-  m_Title = title;
+    m_Title = title;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -113,8 +113,8 @@ void FileDialogButton::SetTitleBar( const std::string& title )
 // 
 void FileDialogButton::SetFilter( const std::string& filter )
 {
-  m_Filters.clear();
-  Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( filter ) );
+    m_Filters.clear();
+    Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( filter ) );
 }
 
 
@@ -123,14 +123,14 @@ void FileDialogButton::SetFilter( const std::string& filter )
 // 
 void FileDialogButton::SetFilter( const V_string& filter )
 {
-  m_Filters.clear();
+    m_Filters.clear();
 
-  V_string::const_iterator it = filter.begin();
-  V_string::const_iterator itEnd = filter.end();
-  for ( ; it != itEnd ; ++it )
-  {
-    Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( *it ) );
-  }
+    V_string::const_iterator it = filter.begin();
+    V_string::const_iterator itEnd = filter.end();
+    for ( ; it != itEnd ; ++it )
+    {
+        Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( *it ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -138,7 +138,7 @@ void FileDialogButton::SetFilter( const V_string& filter )
 // 
 void FileDialogButton::AddFilter( const std::string& filter )
 {
-  Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( filter ) );
+    Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( filter ) );
 }
 
 
@@ -147,12 +147,12 @@ void FileDialogButton::AddFilter( const std::string& filter )
 // 
 std::string FileDialogButton::GetPath()
 {
-  if ( IsBound() )
-  {
-    ReadPathData( m_Path );
-  }
+    if ( IsBound() )
+    {
+        ReadPathData( m_Path );
+    }
 
-  return m_Path;
+    return m_Path;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -161,20 +161,20 @@ std::string FileDialogButton::GetPath()
 // 
 void FileDialogButton::SetPath( const std::string& path )
 {
-  if ( !path.empty() )
-  {
-    m_Path = path;
-    FileSystem::CleanName( m_Path );
-    if ( IsBound() )
+    if ( !path.empty() )
     {
-      WriteData( m_Path );
+        m_Path = path;
+        FileSystem::CleanName( m_Path );
+        if ( IsBound() )
+        {
+            WriteData( m_Path );
+        }
     }
-  }
-  else
-  {
-    WriteData( "" );
-    m_Path.clear();
-  }
+    else
+    {
+        WriteData( "" );
+        m_Path.clear();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -183,27 +183,27 @@ void FileDialogButton::SetPath( const std::string& path )
 // 
 bool FileDialogButton::Process(const std::string& key, const std::string& value)
 {
-  bool wasHandled = false;
+    bool wasHandled = false;
 
-  if ( key == BUTTON_FILEDIALOG_ATTR_FILTER )
-  {
-    SetFilter( value );
-    wasHandled = true;
-  }
-  else if ( key == BUTTON_FILEDIALOG_ATTR_PATH )
-  {
-    SetPath( value );
-    wasHandled = true;
-  }
-  else if ( key == BUTTON_FILEDIALOG_ATTR_TITLE )
-  {
-    SetTitleBar( value );
-    wasHandled = true;
-  }
-  else
-  {
-    wasHandled = __super::Process( key, value );
-  }
+    if ( key == BUTTON_FILEDIALOG_ATTR_FILTER )
+    {
+        SetFilter( value );
+        wasHandled = true;
+    }
+    else if ( key == BUTTON_FILEDIALOG_ATTR_PATH )
+    {
+        SetPath( value );
+        wasHandled = true;
+    }
+    else if ( key == BUTTON_FILEDIALOG_ATTR_TITLE )
+    {
+        SetTitleBar( value );
+        wasHandled = true;
+    }
+    else
+    {
+        wasHandled = __super::Process( key, value );
+    }
 
-  return wasHandled;
+    return wasHandled;
 }

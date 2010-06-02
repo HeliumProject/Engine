@@ -57,7 +57,8 @@ void BrowserToolBar::OnButtonClick( wxCommandEvent& args )
   wxString value = m_SearchBox->GetValue();
   value.Trim(true);  // trim white-space right 
   value.Trim(false); // trim white-space left
-  GlobalBrowser().ShowBrowser( value.c_str() );
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+  //  GlobalBrowser().ShowBrowser( value.c_str() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,14 +74,15 @@ void BrowserToolBar::OnKeyDown( wxKeyEvent& evt )
     wxString value = m_SearchBox->GetValue();
     value.Trim(true);  // trim white-space right 
     value.Trim(false); // trim white-space left
-    if ( !value.empty() )
-    {
-      GlobalBrowser().ShowBrowser( value.c_str() );
-    }
-    else
-    {
-      GlobalBrowser().ShowBrowser();
-    }
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+    //if ( !value.empty() )
+    //{
+    //  GlobalBrowser().ShowBrowser( value.c_str() );
+    //}
+    //else
+    //{
+    //  GlobalBrowser().ShowBrowser();
+    //}
   }
 
   evt.Skip();
@@ -91,17 +93,18 @@ void BrowserToolBar::OnTextEnter( wxCommandEvent& event )
   wxString value = m_SearchBox->GetValue();
   value.Trim(true);  // trim white-space right 
   value.Trim(false); // trim white-space left
-  if ( !value.empty() )
-  {
-    GlobalBrowser().ShowBrowser( value.c_str() );
+#pragma TODO( "reimplemnent without GlobalBrowser" )
+  //if ( !value.empty() )
+  //{
+  //  GlobalBrowser().ShowBrowser( value.c_str() );
 
-    // store the results from entering a search in the navigation bar
-    BrowserSearchDatabase::UpdateSearchEvents( value.c_str() );
-  }
-  else
-  {
-    GlobalBrowser().ShowBrowser();
-  }
+  //  // store the results from entering a search in the navigation bar
+  //  BrowserSearchDatabase::UpdateSearchEvents( value.c_str() );
+  //}
+  //else
+  //{
+  //  GlobalBrowser().ShowBrowser();
+  //}
   event.Skip();
 }
 

@@ -32,6 +32,8 @@ using namespace ES;
 
 typedef i32 RecordCount;
 
+static const char* s_HandledEventsFilename = "handled_events.txt";
+
 
 struct SortEvents
 {
@@ -44,8 +46,8 @@ struct SortEvents
 /////////////////////////////////////////////////////////////////////////////
 // Default constructor
 //
-EventSystem::EventSystem( const std::string &rootDirPath )
-: m_WriteBinaryFormat( true )
+EventSystem::EventSystem( const std::string &rootDirPath, bool writeBinaryFormat )
+: m_WriteBinaryFormat( writeBinaryFormat )
 {
   EVENTSYSTEM_SCOPE_TIMER((""));
 
@@ -53,18 +55,7 @@ EventSystem::EventSystem( const std::string &rootDirPath )
   m_RootDirPath = rootDirPath;
   FileSystem::MakePath( m_RootDirPath );
 
-  m_HandledEventsFile = FinderSpecs::Project::HANDLED_EVENTS_FILE.GetFile( m_RootDirPath );
-
-  std::string fileType = "";
-  if ( Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"EVENT_SYSTEM_FILE_TYPE", fileType ) )
-  {
-    toLower( fileType );
-    if ( ( fileType.find( "bin" ) == std::string::npos )
-      && ( fileType.find( "dat" ) == std::string::npos ) )
-    {
-      m_WriteBinaryFormat = false;
-    }
-  }
+  m_HandledEventsFile = m_RootDirPath + '/' + s_HandledEventsFilename;
 }
 
 
@@ -72,24 +63,11 @@ void EventSystem::CreateEventsFilePath( std::string& eventsFilePath )
 {
   EVENTSYSTEM_SCOPE_TIMER((""));
 
-  std::string fileName = Finder::ProjectName() + "-";
-  fileName += Finder::ProjectAssetsBranch().substr( 0, Finder::ProjectAssetsBranch().length()-1 ) + "-";
-  fileName += getenv("USERNAME");
-  fileName += "-";
-  fileName += getenv("COMPUTERNAME");
+  std::string fileName = std::string( getenv("USERNAME") ) + '-' + getenv("COMPUTERNAME") + ".event." + ( m_WriteBinaryFormat ? "dat" : "txt" );
 
   eventsFilePath = m_RootDirPath;
   FileSystem::AppendPath( eventsFilePath, fileName );
   FileSystem::CleanName( eventsFilePath );
-
-  if ( m_WriteBinaryFormat )
-  {
-    FinderSpecs::Project::EVENTS_DAT_DECORATION.Modify( eventsFilePath );
-  }
-  else
-  {
-    FinderSpecs::Project::EVENTS_TXT_DECORATION.Modify( eventsFilePath );
-  }
 }
 
 
@@ -196,7 +174,7 @@ void EventSystem::GetEvents( V_EventPtr& listOfEvents, bool sorted )
 
   // Binary events
   V_string datEventFiles; 
-  FileSystem::GetFiles( m_RootDirPath, datEventFiles, FinderSpecs::Project::EVENTS_DAT_DECORATION.GetFilter(), findFlags );
+  FileSystem::GetFiles( m_RootDirPath, datEventFiles, "*.event.dat", findFlags );
 
   V_string::iterator itr = datEventFiles.begin();
   V_string::iterator end = datEventFiles.end();
@@ -208,7 +186,7 @@ void EventSystem::GetEvents( V_EventPtr& listOfEvents, bool sorted )
 
   // Text events
   V_string txtEventFiles;
-  FileSystem::GetFiles( m_RootDirPath, txtEventFiles, FinderSpecs::Project::EVENTS_TXT_DECORATION.GetFilter(), findFlags );
+  FileSystem::GetFiles( m_RootDirPath, txtEventFiles, "*.event.txt", findFlags );
 
   itr = txtEventFiles.begin();
   end = txtEventFiles.end();
@@ -738,7 +716,7 @@ void EventSystem::LoadEventsFromTextFile( const std::string& txtFile, const std:
   if ( cleanEventsFile.empty() )
   {
     cleanEventsFile = txtFile;
-    FileSystem::SetExtension( cleanEventsFile, FinderSpecs::Project::EVENTS_DAT_DECORATION.GetDecoration() );
+    FileSystem::SetExtension( cleanEventsFile, ".event.dat" );
   }
   FileSystem::MakePath( cleanEventsFile, true );
 

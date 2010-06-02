@@ -118,7 +118,8 @@ const std::string& AssetPreferences::GetCurrentVersion() const
 // 
 std::string AssetPreferences::GetPreferencesPath() const
 {
-  return FinderSpecs::Luna::ASSET_EDITOR_PREFS.GetFile( FinderSpecs::Luna::PREFERENCES_FOLDER );
+#pragma TODO( "reimplement" )
+  return "";
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -266,7 +266,7 @@ void PropToolFrame::ColorMapChanged( const FileDroppedArgs& args )
   if ( f.Exists() )
   {
     m_FileWatcher.Add( args.m_Path, delegate );
-    OnColorMapFileModification( Nocturnal::FileChangedArgs (args.m_Path) );
+    OnColorMapFileModification( Nocturnal::FileChangedArgs (args.m_Path.Get()) );
   }
   else
   {

@@ -18,7 +18,6 @@
 #include "Editor/SessionFrame.h"
 #include "Editor/SessionManager.h"
 #include "File/File.h"
-#include "FileBrowser/FileBrowser.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
@@ -30,6 +29,7 @@
 #include "Scene/SceneInit.h"
 #include "Task/TaskInit.h"
 #include "UIToolKit/ImageManager.h"
+#include "Windows/Windows.h"
 #include "Windows/Process.h"
 #include "Worker/Process.h"
 
@@ -39,18 +39,19 @@
 
 using namespace Luna;
 
-
-IMPLEMENT_APP( Application );
-
+namespace Luna
+{
+    IMPLEMENT_APP( Application );
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Called from OnInit.  Adds the command line description to the parser.
 // 
 void Application::OnInitCmdLine( wxCmdLineParser& parser )
 {
-  SetVendorName( "Insomniac Games" );
+  SetVendorName( "Nocturnal" );
 
-  parser.SetLogo( wxT( "Luna (c) 2009 - Insomniac Games\n" ) );
+  parser.SetLogo( wxT( "Luna (c) 2010 - Nocturnal\n" ) );
 
   parser.AddOption( "f",    "File",               "Open a file" );
   parser.AddSwitch( "a",    "AssetEditor",        "Launch Asset Editor" );
@@ -89,23 +90,14 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
   bool lowFragHeap = Windows::EnableLowFragmentationHeap();
   Console::Debug("Low Fragmentation Heap is %s\n", lowFragHeap ? "enabled" : "not enabled");
 
-  UIToolKit::ImageManagerInit( FinderSpecs::Luna::DEFAULT_THEME_FOLDER.GetFolder(), FinderSpecs::Luna::GAME_THEME_FOLDER.GetFolder() );
+#pragma TODO( "reimplement to use resources for images" )
+  UIToolKit::ImageManagerInit( "", "" );
   UIToolKit::GlobalImageManager().LoadGuiArt();
 
   V_string splashes;
   u32 rand;
   rand_s(&rand);
   const char* splashImage = "luna_logo.png";
-  std::string directory = FinderSpecs::Luna::SPLASH_SCREEN_FOLDER.GetFolder();
-  if ( FileSystem::Exists( directory ) )
-  {
-    FileSystem::GetFiles( directory, splashes, "*.png" );
-
-    if ( splashes.size() > 0 )
-    {
-      splashImage = splashes[rand % splashes.size()].c_str();
-    }
-  }
 
   // display splash
   wxBitmap bitmap;
@@ -141,9 +133,6 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
 
       {
         Console::Bullet vault ("Asset Tracker...\n");
-#pragma TODO( "Set the global root directory to something reasonable, should be based on the game project's settings" )
-        Asset::Tracker::SetGlobalRootDirectory( "" );
-        m_InitializerStack.Push( Asset::Tracker::Initialize, Asset::Tracker::Cleanup );
         SessionManager::GetInstance()->UseTracker( !parser.Found( "disable_tracker" ) );
       }
     }
@@ -184,12 +173,6 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
   }
 
   Console::Print("\n"); 
-
-  if ( SessionManager::GetInstance()->UseTracker() )
-  {
-    // Start the tracker after we've initialized everything else
-    Asset::GlobalTracker()->StartThread();
-  }
 
   // kill splash screen
   delete splash;
@@ -289,10 +272,10 @@ int Application::OnExit()
   // Save preferences
   Luna::GetApplicationPreferences()->SavePreferences();
 
-  if ( SessionManager::GetInstance()->UseTracker() )
+  if ( m_AssetTracker )
   {
-    // Stop the thread before we start breaking down the InitStack
-    Asset::GlobalTracker()->StopThread();
+      m_AssetTracker->StopThread();
+      delete m_AssetTracker;
   }
 
   UIToolKit::ImageManagerCleanup();
@@ -304,30 +287,32 @@ int Application::OnExit()
 
 std::string Application::ShowFileBrowser()
 {
-  File::FileBrowser browserDlg( NULL, -1, "Luna File Browser" );
+    NOC_BREAK();
+#pragma TODO( "Reimplent to use the Vault" )
+  //File::FileBrowser browserDlg( NULL, -1, "Luna File Browser" );
 
-  browserDlg.AddFilter( FinderSpecs::Asset::ANIM_DECORATION );
-  browserDlg.AddFilter( FinderSpecs::Asset::ANIMSET_DECORATION );
-  browserDlg.AddFilter( FinderSpecs::Asset::CINEMATIC_DECORATION ); 
-  browserDlg.AddFilter( FinderSpecs::Asset::CONTENT_DECORATION );
-  browserDlg.AddFilter( FinderSpecs::Asset::ENTITY_DECORATION );
-  browserDlg.AddFilter( FinderSpecs::Asset::FOLIAGE_DECORATION );
-  browserDlg.AddFilter( FinderSpecs::Asset::LEVEL_DECORATION );
-  browserDlg.AddFilter( FinderSpecs::Asset::MATERIAL_DECORATION );
-  browserDlg.AddFilter( FinderSpecs::Extension::MAYA_BINARY );
-  browserDlg.AddFilter( FinderSpecs::Asset::SHADER_DECORATION );
-  browserDlg.AddFilter( FinderSpecs::Extension::SPEEDTREE );
-  browserDlg.AddFilter( FinderSpecs::Asset::SKY_DECORATION );
-  browserDlg.AddFilter( FinderSpecs::Extension::TEXTUREMAP_FILTER );
+  //browserDlg.AddFilter( FinderSpecs::Asset::ANIM_DECORATION );
+  //browserDlg.AddFilter( FinderSpecs::Asset::ANIMSET_DECORATION );
+  //browserDlg.AddFilter( FinderSpecs::Asset::CINEMATIC_DECORATION ); 
+  //browserDlg.AddFilter( FinderSpecs::Asset::CONTENT_DECORATION );
+  //browserDlg.AddFilter( FinderSpecs::Asset::ENTITY_DECORATION );
+  //browserDlg.AddFilter( FinderSpecs::Asset::FOLIAGE_DECORATION );
+  //browserDlg.AddFilter( FinderSpecs::Asset::LEVEL_DECORATION );
+  //browserDlg.AddFilter( FinderSpecs::Asset::MATERIAL_DECORATION );
+  //browserDlg.AddFilter( FinderSpecs::Extension::MAYA_BINARY );
+  //browserDlg.AddFilter( FinderSpecs::Asset::SHADER_DECORATION );
+  //browserDlg.AddFilter( FinderSpecs::Extension::SPEEDTREE );
+  //browserDlg.AddFilter( FinderSpecs::Asset::SKY_DECORATION );
+  //browserDlg.AddFilter( FinderSpecs::Extension::TEXTUREMAP_FILTER );
 
-  if ( browserDlg.ShowModal() == wxID_OK )
-  {
-    std::string fullPath = browserDlg.GetPath();
-    if ( FileSystem::Exists( fullPath ) )
-    {
-      return fullPath;
-    }
-  }
+  //if ( browserDlg.ShowModal() == wxID_OK )
+  //{
+  //  std::string fullPath = browserDlg.GetPath();
+  //  if ( FileSystem::Exists( fullPath ) )
+  //  {
+  //    return fullPath;
+  //  }
+  //}
 
   return "";
 }

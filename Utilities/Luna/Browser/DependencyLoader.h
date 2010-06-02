@@ -7,26 +7,28 @@
 
 namespace Luna
 {
-  class DependencyCollection;
+    class DependencyCollection;
 
-  ///////////////////////////////////////////////////////////////////////////////
-  /// class DependencyLoader
-  ///////////////////////////////////////////////////////////////////////////////
-  class DependencyLoader : public UIToolKit::ThreadMechanism
-  {
-  public:
-    DependencyLoader( DependencyCollection* collection );
-    virtual ~DependencyLoader();
+    ///////////////////////////////////////////////////////////////////////////////
+    /// class DependencyLoader
+    ///////////////////////////////////////////////////////////////////////////////
+    class DependencyLoader : public UIToolKit::ThreadMechanism
+    {
+    public:
+        DependencyLoader( const std::string& rootDirectory, const std::string& configDirectory, DependencyCollection* collection );
+        virtual ~DependencyLoader();
 
-  protected:
-    virtual void InitData() NOC_OVERRIDE;
-    virtual void ThreadProc( i32 threadID ) NOC_OVERRIDE;
+    protected:
+        virtual void InitData() NOC_OVERRIDE;
+        virtual void ThreadProc( i32 threadID ) NOC_OVERRIDE;
 
-    void OnEndThread( const UIToolKit::ThreadProcArgs& args );
+        void OnEndThread( const UIToolKit::ThreadProcArgs& args );
 
-  private:
-    DependencyCollection* m_Collection;
-    File::S_Reference m_AssetFileRefs;
-  };
-  
+    private:
+        std::string           m_RootDirectory;
+        std::string           m_ConfigDirectory;
+        DependencyCollection* m_Collection;
+        File::S_Reference     m_AssetFileRefs;
+    };
+
 }

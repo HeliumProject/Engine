@@ -31,10 +31,7 @@ namespace Asset
 
     bool          m_DefaultAddSubDir;
     bool          m_ShowSubDirCheckbox;
-    std::string   m_AboutDirSettings;
-    std::string   m_DefaultRoot;
     std::string   m_DefaultFormat;
-    V_string      m_DirectoryPatterns;
 
     Attribute::AttributeCollectionPtr m_RequiredAttributes;
     Attribute::AttributeCollectionPtr m_OptionalAttributes;
@@ -42,8 +39,6 @@ namespace Asset
   public:
     AssetTemplate( const Reflect::Composite* composite = NULL );
     virtual ~AssetTemplate();
-
-    bool ValidateDirectory( const std::string& directory ) const;
 
     bool AddRequiredAttribute( const Attribute::AttributePtr& attribute );
     bool AddRequiredAttribute( const i32 typeID );

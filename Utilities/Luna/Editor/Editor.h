@@ -55,12 +55,6 @@ namespace Luna
     Editor( EditorType editorType, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame" );
     virtual ~Editor();
 
-    virtual EditorStatePtr GetSessionState();
-    void PromptSaveSession( bool forceSaveAs = false );
-    void PromptLoadSession();
-    virtual bool SaveSession( const EditorStatePtr& state );
-    virtual bool LoadSession( const EditorStatePtr& state );
-
     EditorType GetEditorType() const;
 
     virtual DocumentManager* GetDocumentManager() = 0;

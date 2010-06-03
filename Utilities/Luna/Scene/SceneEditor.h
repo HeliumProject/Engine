@@ -216,9 +216,6 @@ namespace Luna
     void OnExport(wxCommandEvent& event);
     void OnExportToObj(wxCommandEvent& event);
     void OnClose(wxCommandEvent& event);
-    void OnOpenSession(wxCommandEvent& event);
-    void OnSaveSession(wxCommandEvent& event);
-    void OnSaveSessionAs(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
     void OnExiting( wxCloseEvent& args );
 

@@ -1,4 +1,5 @@
 #include "Precompile.h"
+#include "Application.h"
 #include "AssetEditor.h"
 
 #include "AssetDocument.h"
@@ -31,7 +32,6 @@
 #include "Inspect/ClipboardDataObject.h"
 #include "Editor/ContextMenu.h"
 #include "Editor/EditorInfo.h"
-#include "Editor/SessionManager.h"
 
 #include "Task/Export.h"
 #include "Inspect/Canvas.h"
@@ -69,9 +69,6 @@ EVT_MENU( AssetEditorIDs::Build, OnBuild )
 EVT_MENU( wxID_HELP_INDEX, OnHelpIndex )
 EVT_MENU( wxID_HELP_SEARCH, OnHelpSearch )
 EVT_MENU( AssetEditorIDs::Checkout, OnCheckout )
-EVT_MENU( AssetEditorIDs::SaveSession, OnSaveSession )
-EVT_MENU( AssetEditorIDs::SaveSessionAs, OnSaveSessionAs )
-EVT_MENU( AssetEditorIDs::OpenSession, OnOpenSession )
 EVT_MENU( AssetEditorIDs::ExpandAll, OnExpandAll )
 EVT_MENU( AssetEditorIDs::CollapseAll, OnCollapseAll )
 END_EVENT_TABLE()
@@ -85,21 +82,6 @@ static const char* s_EditorTitle = "Luna Asset Editor";
 static Luna::Editor* CreateAssetEditor()
 {
     return new AssetEditor();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Static initialization.
-// 
-void AssetEditor::InitializeEditor()
-{
-    SessionManager::GetInstance()->RegisterEditor( new Luna::EditorInfo( EditorTypes::Asset, &CreateAssetEditor, &FinderSpecs::Asset::ASSET_EDITOR_FILTER ) );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Static cleanup.
-// 
-void AssetEditor::CleanupEditor()
-{
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1241,32 +1223,6 @@ void AssetEditor::OnSaveAll( wxCommandEvent& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Saves the current session, which is a collection of all the files that
-// are currently loaded.
-// 
-void AssetEditor::OnSaveSession( wxCommandEvent& args )
-{
-    PromptSaveSession();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Prompts the user to save the session to a new file location.
-// 
-void AssetEditor::OnSaveSessionAs( wxCommandEvent& args )
-{
-    PromptSaveSession( true );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Called when the user chooses to open a session.  Prompts for the session file
-// and loads it.
-// 
-void AssetEditor::OnOpenSession( wxCommandEvent& args )
-{
-    PromptLoadSession();
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Called when the user wants to expand all assets
 // 
 void AssetEditor::OnExpandAll( wxCommandEvent& args )
@@ -1440,7 +1396,8 @@ void AssetEditor::OnBuild( wxCommandEvent& args )
     {
         bool showOptions = wxIsShiftDown();
         bool shouldBuild = false;
-        if ( SessionManager::GetInstance()->SaveAllOpenDocuments( this, m_PromptModifiedFiles ) )
+        std::string error;
+        if ( wxGetApp().GetDocumentManager()->SaveAll( error ) )
         {
             shouldBuild = true;
         }

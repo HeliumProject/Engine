@@ -2,7 +2,6 @@
 #include "Editor.h"
 
 #include "DocumentManager.h"
-#include "SessionManager.h"
 
 #include "FileSystem/FileSystem.h"
 #include "Finder/LunaSpecs.h"
@@ -27,7 +26,6 @@ Editor::Editor( EditorType editorType, wxWindow* parent, wxWindowID id, const wx
 : Frame( parent, id, title, pos, size, style, name )
 , m_EditorType( editorType )
 {
-  SessionManager::GetInstance()->RegisterEditorInstance( this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,94 +33,6 @@ Editor::Editor( EditorType editorType, wxWindow* parent, wxWindowID id, const wx
 // 
 Editor::~Editor()
 {
-  SessionManager::GetInstance()->UnregisterEditorInstance( this );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns appropriate state container to save session information to.  Derived
-// classes should NOC_OVERRIDE this function and return a new EditorState derived
-// class as needed.
-// 
-EditorStatePtr Editor::GetSessionState() 
-{ 
-  return new EditorState(); 
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Saves the current session (a list of all open files), possibly prompting
-// the user on where to save the session if it has never been saved before.
-// 
-void Editor::PromptSaveSession( bool forceSaveAs )
-{
-  static std::string sessionPath;
-  if ( sessionPath.empty() || forceSaveAs )
-  {
-    UIToolKit::FileDialog fileDialog( this, "Save Session As...", "", "", "", wxSAVE | wxOVERWRITE_PROMPT );
-    fileDialog.SetFilter( FinderSpecs::Luna::SESSION_DECORATION.GetDialogFilter() );
-    if ( fileDialog.ShowModal() == wxID_OK )
-    {
-      // If new file name, save
-      sessionPath = fileDialog.GetPath().c_str();
-    }
-  }
-
-  if ( !sessionPath.empty() )
-  {
-    SessionManager::GetInstance()->SaveSession( sessionPath, GetEditorType() );
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Prompts the user to choose a session file to open.  
-// 
-void Editor::PromptLoadSession()
-{
-  UIToolKit::FileDialog fileDialog( this, "Open Session..." );
-  fileDialog.AddFilter( FinderSpecs::Luna::SESSION_DECORATION.GetDialogFilter() );
-  fileDialog.SetFilterIndex( FinderSpecs::Luna::SESSION_DECORATION.GetDialogFilter() );
-  if ( fileDialog.ShowModal() == wxID_OK )
-  {
-    std::string path( fileDialog.GetPath().c_str() );
-    
-    if ( FileSystem::Exists( path ) )
-    {
-      SessionManager::GetInstance()->LoadSession( path );
-    }
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Populate the EditorState with the list of currently open documents
-// 
-bool Editor::SaveSession( const EditorStatePtr& state )
-{
-  const OS_DocumentSmartPtr& documents = GetDocumentManager()->GetDocuments();
-  
-  OS_DocumentSmartPtr::Iterator itr = documents.Begin();
-  OS_DocumentSmartPtr::Iterator end = documents.End();
-  for ( ; itr != end; ++itr )
-  {
-      state->m_OpenFileRefs.insert( new File::Reference( (*itr)->GetFileReference() ) );
-  }
-
-  return true;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// 
-// 
-bool Editor::LoadSession( const EditorStatePtr& state )
-{
-  std::string error;
-  bool openedAllFiles = true;
-
-  for ( File::S_Reference::iterator itr = state->m_OpenFileRefs.begin(), end = state->m_OpenFileRefs.end(); itr != end; ++itr )
-  {
-    error.clear();
-    (*itr)->Resolve();
-    openedAllFiles &= GetDocumentManager()->OpenPath( (*itr)->GetPath(), error ) != NULL;
-  }
-  return openedAllFiles;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

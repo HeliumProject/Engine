@@ -6,7 +6,6 @@
 #include "Asset/AssetFile.h"
 #include "Asset/AssetFolder.h"
 #include "Common/String/Utilities.h"
-#include "Editor/SessionManager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"

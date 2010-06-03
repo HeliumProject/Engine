@@ -1,6 +1,7 @@
 #include "AssetInit.h"
 
 #include "ArtFileAttribute.h"
+#include "AssetType.h"
 #include "AssetClass.h"
 #include "AssetFile.h"
 #include "AssetFolder.h"
@@ -109,6 +110,7 @@ void Asset::Initialize()
     g_InitializerStack.Push( Reflect::RegisterEnumeration<GlossParaIncanTexFormats::GlossParaIncanTexFormat>( &GlossParaIncanTexFormats::GlossParaIncanTexFormatEnumerateEnumeration, "GlossParaIncanTexFormat" ) );
     g_InitializerStack.Push( Reflect::RegisterEnumeration<CubeSpecTypeFormats::CubeSpecTypeFormat>( &CubeSpecTypeFormats::CubeSpecTypeFormatEnumerateEnumeration, "CubeSpecTypeFormat" ) );
     g_InitializerStack.Push( Reflect::RegisterEnumeration<DetailTexFormats::DetailTexFormat>( &DetailTexFormats::DetailTexFormatEnumerateEnumeration, "DetailTexFormat" ) );
+    g_InitializerStack.Push( Reflect::RegisterEnumeration<Asset::AssetType>( &AssetTypes::AssetTypeEnumerateEnumeration, "AssetType" ) );
 
     //
     // Basic Types

@@ -14,7 +14,6 @@
 
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
-#include "Editor/SessionManager.h"
 #include "Editor/RefreshSelectionCommand.h"
 #include "Core/Enumerator.h"
 #include "UIToolKit/ImageManager.h"
@@ -742,7 +741,8 @@ void AssetReferenceNode::OnChangePathFinder( const ContextMenuArgsPtr& args )
 // 
 void AssetReferenceNode::OnCheckOutPath( const ContextMenuArgsPtr& args )
 {
-    SessionManager::GetInstance()->CheckOut( GetFilePath() );
+#pragma TODO( "Make this check out the file" )
+NOC_BREAK();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

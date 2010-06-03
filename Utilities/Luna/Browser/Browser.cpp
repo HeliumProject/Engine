@@ -14,7 +14,6 @@
 #include "Asset/CacheDB.h"
 #include "Common/Environment.h"
 #include "Common/Exception.h"
-#include "Editor/SessionManager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/ProjectSpecs.h"

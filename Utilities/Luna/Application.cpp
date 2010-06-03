@@ -1,5 +1,6 @@
 #include "Precompile.h"
 #include "Application.h"
+#include "AppPreferences.h"
 
 #include "AppUtils/AppUtils.h"
 #include "AssetEditor/AssetInit.h"
@@ -12,11 +13,8 @@
 #include "DebugUI/DebugUI.h"
 #include "Editor/ApplicationPreferences.h"
 #include "Editor/Editor.h"
-#include "Editor/EditorChooser.h"
 #include "Editor/EditorInit.h"
 #include "Editor/Preferences.h"
-#include "Editor/SessionFrame.h"
-#include "Editor/SessionManager.h"
 #include "File/File.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
@@ -44,6 +42,29 @@ namespace Luna
     IMPLEMENT_APP( Application );
 }
 
+Application::Application()
+: wxApp()
+, m_AssetTracker( NULL )
+, m_DocumentManager( new DocumentManager() )
+, m_SceneEditor( NULL )
+{
+}
+
+Application::~Application()
+{
+    if ( m_AssetTracker )
+    {
+        delete m_AssetTracker;
+    }
+
+    if ( m_DocumentManager )
+    {
+        delete m_DocumentManager;
+    }
+}
+
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // Called from OnInit.  Adds the command line description to the parser.
 // 
@@ -53,14 +74,7 @@ void Application::OnInitCmdLine( wxCmdLineParser& parser )
 
   parser.SetLogo( wxT( "Luna (c) 2010 - Nocturnal\n" ) );
 
-  parser.AddOption( "f",    "File",               "Open a file" );
-  parser.AddSwitch( "a",    "AssetEditor",        "Launch Asset Editor" );
-  parser.AddSwitch( "s",    "SceneEditor",        "Launch Scene Editor" );
-  parser.AddSwitch( "e",    "EffectEventsEditor", "Launch Animation Events Editor" );
-  parser.AddSwitch( "b",    "FileBrowser",        "Asset File Broswer" );
-  parser.AddSwitch( "c",    "CharacterEditor",    "Character Editor" ); 
   parser.AddSwitch( "pipe", "Pipe",               "Use pipe for console connection" ); 
-  parser.AddSwitch( "m",    "CinematicEditor",    "Cinematic Editor" );
   parser.AddSwitch( "disable_tracker", "DisableTracker", "Disable Asset Tracker" );
 
   parser.AddSwitch( WindowSettings::s_Reset, WindowSettings::s_ResetLong, "Reset all window positions (other prefs/mru will remain)" );
@@ -94,9 +108,6 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
   UIToolKit::ImageManagerInit( "", "" );
   UIToolKit::GlobalImageManager().LoadGuiArt();
 
-  V_string splashes;
-  u32 rand;
-  rand_s(&rand);
   const char* splashImage = "luna_logo.png";
 
   // display splash
@@ -133,7 +144,10 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
 
       {
         Console::Bullet vault ("Asset Tracker...\n");
-        SessionManager::GetInstance()->UseTracker( !parser.Found( "disable_tracker" ) );
+        m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
+        m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
+        m_InitializerStack.Push( AppPreferences::InitializeType, AppPreferences::CleanupType );
+        GetAppPreferences()->UseTracker( !parser.Found( "disable_tracker" ) );
       }
     }
 
@@ -184,74 +198,7 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
     wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
   }
 
-  wxString file;
-
-  // if the user just wants to browse files
-  if ( parser.Found( "b" ) )
-  {
-    std::string filePath = ShowFileBrowser();
-    if ( !filePath.empty() )
-    {
-      SessionManager::GetInstance()->Edit( file.c_str() );
-    }
-    else
-    {
-      Console::Error("No file selected!\n", file.c_str());
-      OnExit();
-      return false;
-    }
-  }
-  else if ( parser.Found( "f", &file ) )
-  {
-    if ( FileSystem::Exists( file.c_str() ) )
-    {
-      SessionManager::GetInstance()->Edit( file.c_str() );
-    }
-    else
-    {
-      Console::Error("File does not exist: '%s'\n", file.c_str());
-      OnExit();
-      return false;
-    }
-  }
-  else
-  {
-    Editor* editor = NULL;
-
-    // Determine which editors to show at startup
-    if ( parser.Found( "s" ) )
-    {
-      editor = SessionManager::GetInstance()->LaunchEditor( EditorTypes::Scene );
-    }
-
-    if ( parser.Found( "a" ) )
-    {
-      editor = SessionManager::GetInstance()->LaunchEditor( EditorTypes::Asset );
-    }
-
-    if ( parser.Found( "e" ) )
-    {
-      editor = SessionManager::GetInstance()->LaunchEditor( EditorTypes::AnimationEvents );
-    }
-
-    if (parser.Found( "c" ) )
-    {
-      editor = SessionManager::GetInstance()->LaunchEditor( EditorTypes::Character ); 
-    }
-
-    if ( parser.Found( "m" ) )
-    {
-      editor = SessionManager::GetInstance()->LaunchEditor( EditorTypes::CinematicEvents );
-    }
-
-    // No editor was specified via a command line switch, so prompt the user 
-    // for which editor to launch.
-    if ( !editor )
-    {
-      SessionFrame* session = new SessionFrame();
-      session->Show();
-    }
-  }
+  GetSceneEditor()->Show();
 
   return __super::OnCmdLineParsed( parser );
 }

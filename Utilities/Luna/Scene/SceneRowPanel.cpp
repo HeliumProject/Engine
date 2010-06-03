@@ -9,7 +9,6 @@
 #include "ScenesPanel.h"
 #include "SwitchSceneCommand.h"
 #include "Zone.h"
-#include "Editor/SessionManager.h"
 #include "Editor/ContextMenu.h"
 #include "Common/Boost/Regex.h" 
 #include "Common/CommandLine.h"
@@ -74,7 +73,7 @@ SceneRowPanel::SceneRowPanel( Luna::Scene* scene, Zone* zone, ScenesPanel* panel
         m_ToggleLoad->SetToolTip( toggleToolTip );
         rowSizer->Add( m_ToggleLoad, 0, wxALL, 5 );
 
-        m_ButtonDelete = new wxBitmapButton( this, wxID_ANY, UIToolKit::GlobalImageManager().GetBitmap( "delete_16.png" ), wxDefaultPosition, wxSize( 18,18 ), wxBU_AUTODRAW );
+        m_ButtonDelete = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_DELETE, wxART_OTHER, wxSize( 16, 16 ) ), wxDefaultPosition, wxSize( 18,18 ), wxBU_AUTODRAW );
         m_ButtonDelete->SetToolTip( wxT("Delete this zone") );
         m_ButtonDelete->SetClientObject( new ZoneClientData( m_Zone ) );
         rowSizer->Add( m_ButtonDelete, 0, wxALL, 1 );
@@ -102,7 +101,7 @@ SceneRowPanel::SceneRowPanel( Luna::Scene* scene, Zone* zone, ScenesPanel* panel
     renameItem->AddCallback( ContextMenuSignature::Delegate( this, &SceneRowPanel::Rename ) );
     m_ContextMenuItems.AppendItem( renameItem );
 
-    SubMenuPtr revisionControlSubMenu = new SubMenu( "Perforce", "", UIToolKit::GlobalImageManager().GetBitmap( "p4_16.png" ) );
+    SubMenuPtr revisionControlSubMenu = new SubMenu( "Perforce", "", wxArtProvider::GetBitmap( wxART_INFORMATION, wxART_OTHER, wxSize( 16, 16 ) ) );
 
     ContextMenuItemPtr checkOutItem = new ContextMenuItem( "Check Out" );
     checkOutItem->AddCallback( ContextMenuSignature::Delegate( this, &SceneRowPanel::CheckOutContext ) );
@@ -420,14 +419,14 @@ void SceneRowPanel::SetButtonMode( SceneRowPanel::ButtonMode mode, bool enabled 
     switch ( m_ButtonMode )
     {
     case ModeCheckout:
-        m_ButtonCheckOutOrSave->SetBitmapLabel( UIToolKit::GlobalImageManager().GetBitmap( "checkout_16.png" ) );
-        m_ButtonCheckOutOrSave->SetBitmapDisabled( UIToolKit::GlobalImageManager().GetBitmap( "checkout_disabled_16.png" ) );
+        m_ButtonCheckOutOrSave->SetBitmapLabel( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ) );
+        m_ButtonCheckOutOrSave->SetBitmapDisabled( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ) );
         m_ButtonCheckOutOrSave->SetToolTip( "Check out file" );
         break;
 
     case ModeSave:
-        m_ButtonCheckOutOrSave->SetBitmapLabel( UIToolKit::GlobalImageManager().GetBitmap( "save_16.png" ) );
-        m_ButtonCheckOutOrSave->SetBitmapDisabled( UIToolKit::GlobalImageManager().GetBitmap( "save_disabled_16.png" ) );
+        m_ButtonCheckOutOrSave->SetBitmapLabel( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ) );
+        m_ButtonCheckOutOrSave->SetBitmapDisabled( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ) );
         m_ButtonCheckOutOrSave->SetToolTip( "Save file" );
         break;
     }

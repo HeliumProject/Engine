@@ -76,19 +76,19 @@ LayerGrid::LayerGrid( wxWindow* parent, Luna::SceneManager* sceneManager, u32 lT
   m_ToolBar->PushEventHandler( this );
 
   // Set up the toolbar that goes at the top of the panel
-  m_ToolBar->AddTool( ID_NewLayer, wxT( "" ), UIToolKit::GlobalImageManager().GetBitmap( "new_16.png" ), wxT( "Create New Layer" ) );
-  m_ToolBar->AddTool( ID_NewLayerFromSelection, wxT( "" ), UIToolKit::GlobalImageManager().GetBitmap( "new_from_selection_16.png" ), wxT( "Create New Layer From Selection" ) );
-  m_ToolBar->AddTool( ID_DeleteLayer, wxT( "" ), UIToolKit::GlobalImageManager().GetBitmap( "delete_16.png" ), wxT( "Delete Highlighted Layer(s)" ) );
+  m_ToolBar->AddTool( ID_NewLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_NEW, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Create New Layer" ) );
+  m_ToolBar->AddTool( ID_NewLayerFromSelection, wxT( "" ), wxArtProvider::GetBitmap( wxART_NEW_DIR, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Create New Layer From Selection" ) );
+  m_ToolBar->AddTool( ID_DeleteLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_DELETE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Delete Highlighted Layer(s)" ) );
   m_ToolBar->AddSeparator();
-  m_ToolBar->AddTool( ID_AddSelectionToLayer, wxT( "" ), UIToolKit::GlobalImageManager().GetBitmap( "add_16.png" ), wxT( "Add Selection To Highlighted Layer(s)" ) );
-  m_ToolBar->AddTool( ID_RemoveSelectionFromLayer, wxT( "" ), UIToolKit::GlobalImageManager().GetBitmap( "remove_16.png" ), wxT( "Remove Selection From Highlighted Layer(s)" ) );
+  m_ToolBar->AddTool( ID_AddSelectionToLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_ADD_BOOKMARK, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Add Selection To Highlighted Layer(s)" ) );
+  m_ToolBar->AddTool( ID_RemoveSelectionFromLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_DEL_BOOKMARK, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Remove Selection From Highlighted Layer(s)" ) );
   m_ToolBar->AddSeparator();
-  m_ToolBar->AddTool( ID_SelectLayerMembers, wxT( "" ), UIToolKit::GlobalImageManager().GetBitmap( "select_16.png" ), wxT( "Select Layer Members" ) );
-  m_ToolBar->AddTool( ID_SelectLayer, wxT( "" ), UIToolKit::GlobalImageManager().GetBitmap( "folder_16.png" ), wxT( "Select Highlighted Layer(s)" ) );
+  m_ToolBar->AddTool( ID_SelectLayerMembers, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Select Layer Members" ) );
+  m_ToolBar->AddTool( ID_SelectLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Select Highlighted Layer(s)" ) );
   
   if(m_LayerType == Content::LayerTypes::LT_Lighting)
   {
-    m_ToolBar->AddTool( ID_CleanUpLayers, wxT( "" ), UIToolKit::GlobalImageManager().GetBitmap( "recycle_16.png" ), wxT( "Remove invalid Layer(s)" ) );
+    m_ToolBar->AddTool( ID_CleanUpLayers, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Remove invalid Layer(s)" ) );
   }
 
   m_ToolBar->Realize();

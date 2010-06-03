@@ -8,8 +8,6 @@
 #include "MRUData.h"
 #include "Preferences.h"
 #include "PreferencesBase.h"
-#include "SessionVersion.h"
-#include "SessionState.h"
 #include "WindowSettings.h"
 
 #include "Common/InitializerStack.h"
@@ -35,15 +33,11 @@ void Luna::EditorInitialize()
     g_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::FilePathOptions::FilePathOption>( &Luna::FilePathOptions::FilePathOptionEnumerateEnumeration, "FilePathOption" ) );
     g_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, "EditorType" ) );
 
-    g_InitializerStack.Push( Reflect::RegisterClass<SessionVersion>( "SessionVersion" ) );
     g_InitializerStack.Push( Reflect::RegisterClass<EditorState>( "EditorState" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<SessionState>( "SessionState" ) );
 
     g_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
-    g_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
     g_InitializerStack.Push( WindowSettings::InitializeType, WindowSettings::CleanupType );
     g_InitializerStack.Push( MRUData::InitializeType, MRUData::CleanupType );
-    g_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
     g_InitializerStack.Push( ApplicationPreferences::InitializeType, ApplicationPreferences::CleanupType );
   }
 }

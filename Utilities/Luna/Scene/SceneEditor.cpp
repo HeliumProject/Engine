@@ -1,6 +1,7 @@
 #include "Precompile.h"
 #include "SceneEditor.h"
 
+#include "Application.h"
 #include "CurveCreateTool.h"
 #include "CurveEditTool.h"
 #include "Drawer.h"
@@ -45,7 +46,6 @@
 #include "Console/Console.h"
 #include "Content/ContentVersion.h"
 #include "Editor/MRUData.h"
-#include "Editor/SessionManager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
@@ -95,9 +95,6 @@ EVT_MENU(SceneEditorIDs::ID_FileExport, SceneEditor::OnExport)
 EVT_MENU(SceneEditorIDs::ID_FileExportToClipboard, SceneEditor::OnExport)
 EVT_MENU(SceneEditorIDs::ID_FileExportToObj, SceneEditor::OnExportToObj)
 EVT_MENU(wxID_CLOSE, SceneEditor::OnClose)
-EVT_MENU(SceneEditorIDs::ID_FileOpenSession, SceneEditor::OnOpenSession)
-EVT_MENU(SceneEditorIDs::ID_FileSaveSession, SceneEditor::OnSaveSession)
-EVT_MENU(SceneEditorIDs::ID_FileSaveSessionAs, SceneEditor::OnSaveSessionAs)
 EVT_MENU(wxID_EXIT, SceneEditor::OnExit)
 EVT_CLOSE( SceneEditor::OnExiting )
 EVT_MENU(wxID_UNDO, SceneEditor::OnUndo)
@@ -274,8 +271,6 @@ void SceneEditor::InitializeEditor()
     s_Filter.AddSpec( FinderSpecs::Asset::CONTENT_DECORATION );
     s_Filter.AddSpec( FinderSpecs::Extension::REFLECT_BINARY );
 
-    SessionManager::GetInstance()->RegisterEditor( new EditorInfo( EditorTypes::Scene, &CreateSceneEditor, &s_Filter ) );
-
     s_CameraModeToSceneID.Insert( CameraModes::Orbit, SceneEditorIDs::ID_ViewOrbit );
     s_CameraModeToSceneID.Insert( CameraModes::Front, SceneEditorIDs::ID_ViewFront );
     s_CameraModeToSceneID.Insert( CameraModes::Side, SceneEditorIDs::ID_ViewSide );
@@ -327,12 +322,13 @@ SceneEditor::SceneEditor()
 
     wxIconBundle iconBundle;
     wxIcon tempIcon;
-    tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "scene_editor_64.png" ) );
-    iconBundle.AddIcon( tempIcon );
-    tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "scene_editor_32.png" ) );
-    iconBundle.AddIcon( tempIcon );
-    tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "scene_editor_16.png" ) );
-    iconBundle.AddIcon( tempIcon );
+#pragma TODO( "use resources for icons" )
+    //tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "scene_editor_64.png" ) );
+    //iconBundle.AddIcon( tempIcon );
+    //tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "scene_editor_32.png" ) );
+    //iconBundle.AddIcon( tempIcon );
+    //tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "scene_editor_16.png" ) );
+    //iconBundle.AddIcon( tempIcon );
     SetIcons( iconBundle );
 
     //
@@ -373,10 +369,10 @@ SceneEditor::SceneEditor()
     //
     m_StandardToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_StandardToolBar->SetToolBitmapSize(wxSize(16,16));
-    m_StandardToolBar->AddTool(wxID_NEW, wxT("New"), UIToolKit::GlobalImageManager().GetBitmap( "new_file_16.png" ), "Create a new scene");
-    m_StandardToolBar->AddTool(wxID_OPEN, wxT("Open"), wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_OTHER, wxSize(16,16)), "Open a scene file");
+    m_StandardToolBar->AddTool(wxID_NEW, wxT("New"), wxArtProvider::GetBitmap( wxART_NEW, wxART_OTHER, wxSize( 16, 16 ) ), "Create a new scene");
+    m_StandardToolBar->AddTool(wxID_OPEN, wxT("Open"), wxArtProvider::GetBitmap( wxART_FILE_OPEN, wxART_OTHER, wxSize(16,16) ), "Open a scene file");
     m_StandardToolBar->AddTool(SceneEditorIDs::ID_FileFind, wxT( "Find..." ), wxArtProvider::GetBitmap( wxART_FIND, wxART_OTHER, wxSize( 16, 16 ) ) );
-    m_StandardToolBar->AddTool(wxID_SAVE, wxT("Save All"), UIToolKit::GlobalImageManager().GetBitmap( "save_all_16.png" ), "Save all currently checked out scenes");
+    m_StandardToolBar->AddTool(wxID_SAVE, wxT("Save All"), wxArtProvider::GetBitmap( wxART_FILE_SAVE, wxART_OTHER, wxSize( 16, 16 ) ), "Save all currently checked out scenes");
     m_StandardToolBar->AddSeparator();
     m_StandardToolBar->AddTool(wxID_CUT, wxT("Cut"), wxArtProvider::GetBitmap(wxART_CUT, wxART_OTHER, wxSize(16,16)), "Cut selection contents to the clipboard");
     m_StandardToolBar->AddTool(wxID_COPY, wxT("Copy"), wxArtProvider::GetBitmap(wxART_COPY, wxART_OTHER, wxSize(16,16)), "Copy selection contents to the clipboard");
@@ -388,39 +384,39 @@ SceneEditor::SceneEditor()
 
     m_ViewToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_ViewToolBar->SetToolBitmapSize(wxSize(16, 16));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), UIToolKit::GlobalImageManager().GetBitmap( "camera_perspective_16.png" ), "Use the orbit perspective camera");
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), UIToolKit::GlobalImageManager().GetBitmap( "camera_front_16.png" ), "Use the front orthographic camera");
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), UIToolKit::GlobalImageManager().GetBitmap( "camera_side_16.png" ), "Use the side orthographic camera");
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), UIToolKit::GlobalImageManager().GetBitmap( "camera_top_16.png" ), "Use the top orthographic camera");
+    //m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), UIToolKit::GlobalImageManager().GetBitmap( "camera_perspective_16.png" ), "Use the orbit perspective camera");
+    //m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), UIToolKit::GlobalImageManager().GetBitmap( "camera_front_16.png" ), "Use the front orthographic camera");
+    //m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), UIToolKit::GlobalImageManager().GetBitmap( "camera_side_16.png" ), "Use the side orthographic camera");
+    //m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), UIToolKit::GlobalImageManager().GetBitmap( "camera_top_16.png" ), "Use the top orthographic camera");
     m_ViewToolBar->Realize();
 
     m_ToolsToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_ToolsToolBar->SetToolBitmapSize(wxSize(32,32));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsSelect, wxT("Select"), UIToolKit::GlobalImageManager().GetBitmap( "select_32.png" ), wxNullBitmap, "Select items from the workspace");
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsTranslate, wxT("Translate"), UIToolKit::GlobalImageManager().GetBitmap( "transform_translate_32.png" ), wxNullBitmap, "Translate items");
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsRotate, wxT("Rotate"), UIToolKit::GlobalImageManager().GetBitmap( "transform_rotate_32.png" ), wxNullBitmap, "Rotate selected items");
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsScale, wxT("Scale"), UIToolKit::GlobalImageManager().GetBitmap( "transform_scale_32.png" ), wxNullBitmap, "Scale selected items");
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsDuplicate, wxT("Duplicate"), UIToolKit::GlobalImageManager().GetBitmap( "under_construction_32.png" ), wxNullBitmap, "Duplicate the selected object numerous times");
-    m_ToolsToolBar->AddTool(SceneEditorIDs::ID_UtilitiesMeasureDistance, wxT("Measure"), UIToolKit::GlobalImageManager().GetBitmap( "measure_32.png" ), "Measure the distance between selected objects");
-
-    m_ToolsToolBar->AddSeparator();
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Entity"), UIToolKit::GlobalImageManager().GetBitmap( "create_entity_32.png" ), wxNullBitmap, "Place entity objects (such as art instances or characters)");
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Volume"), UIToolKit::GlobalImageManager().GetBitmap( "create_volume_32.png" ), wxNullBitmap, "Place volume objects (items for setting up gameplay)");
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsClueCreate, wxT("Clue"), UIToolKit::GlobalImageManager().GetBitmap( "create_clue_32.png" ), wxNullBitmap, "Place clue objects (items for setting up gameplay)");
-#if LUNA_GAME_CAMERA
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsGameCameraCreate, wxT("GameCamera"), UIToolKit::GlobalImageManager().GetBitmap( "game_camera_32.png" ), wxNullBitmap, "Place a camera");
-#endif
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsControllerCreate, wxT("Controller"), UIToolKit::GlobalImageManager().GetBitmap( "create_controller_32.png" ), wxNullBitmap, "Place controller objects (items for setting up gameplay)");
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Locator"), UIToolKit::GlobalImageManager().GetBitmap( "create_locator_32.png" ), wxNullBitmap, "Place locator objects (such as bug locators)");
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Curve"), UIToolKit::GlobalImageManager().GetBitmap( "create_curve_32.png" ), wxNullBitmap, "Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)");
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), UIToolKit::GlobalImageManager().GetBitmap( "edit_curve_32.png" ), wxNullBitmap, "Edit created curves (modify or create/delete control points)");
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLightCreate, wxT("Light"), UIToolKit::GlobalImageManager().GetBitmap( "create_light_32.png" ), wxNullBitmap, "Place lights in the scene");
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLighting, wxT("Lighting"), UIToolKit::GlobalImageManager().GetBitmap( "no_smoking_32.png" ), wxNullBitmap, "Light objects in the scene");
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate, wxT("Post Processing"), UIToolKit::GlobalImageManager().GetBitmap( "create_postprocessing_volume_32.png" ), wxNullBitmap, "Place post processing volume in the scene");
-
-    m_ToolsToolBar->AddSeparator();
-    m_ToolsToolBar->AddTool(SceneEditorIDs::ID_UtilitiesConstruction, wxT("Connect to Maya"), UIToolKit::GlobalImageManager().GetBitmap( "maya_32.png" ), "Connect to Maya with the selected items for editing");
-    m_ToolsToolBar->AddTool(SceneEditorIDs::ID_UtilitiesFlushSymbols, wxT("Flush Symbols"), UIToolKit::GlobalImageManager().GetBitmap( "header_32.png" ), "Flush symbol definitions (to re-parse headers)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsSelect, wxT("Select"), UIToolKit::GlobalImageManager().GetBitmap( "select_32.png" ), wxNullBitmap, "Select items from the workspace");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsTranslate, wxT("Translate"), UIToolKit::GlobalImageManager().GetBitmap( "transform_translate_32.png" ), wxNullBitmap, "Translate items");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsRotate, wxT("Rotate"), UIToolKit::GlobalImageManager().GetBitmap( "transform_rotate_32.png" ), wxNullBitmap, "Rotate selected items");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsScale, wxT("Scale"), UIToolKit::GlobalImageManager().GetBitmap( "transform_scale_32.png" ), wxNullBitmap, "Scale selected items");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsDuplicate, wxT("Duplicate"), UIToolKit::GlobalImageManager().GetBitmap( "under_construction_32.png" ), wxNullBitmap, "Duplicate the selected object numerous times");
+//    m_ToolsToolBar->AddTool(SceneEditorIDs::ID_UtilitiesMeasureDistance, wxT("Measure"), UIToolKit::GlobalImageManager().GetBitmap( "measure_32.png" ), "Measure the distance between selected objects");
+//
+//    m_ToolsToolBar->AddSeparator();
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Entity"), UIToolKit::GlobalImageManager().GetBitmap( "create_entity_32.png" ), wxNullBitmap, "Place entity objects (such as art instances or characters)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Volume"), UIToolKit::GlobalImageManager().GetBitmap( "create_volume_32.png" ), wxNullBitmap, "Place volume objects (items for setting up gameplay)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsClueCreate, wxT("Clue"), UIToolKit::GlobalImageManager().GetBitmap( "create_clue_32.png" ), wxNullBitmap, "Place clue objects (items for setting up gameplay)");
+//#if LUNA_GAME_CAMERA
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsGameCameraCreate, wxT("GameCamera"), UIToolKit::GlobalImageManager().GetBitmap( "game_camera_32.png" ), wxNullBitmap, "Place a camera");
+//#endif
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsControllerCreate, wxT("Controller"), UIToolKit::GlobalImageManager().GetBitmap( "create_controller_32.png" ), wxNullBitmap, "Place controller objects (items for setting up gameplay)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Locator"), UIToolKit::GlobalImageManager().GetBitmap( "create_locator_32.png" ), wxNullBitmap, "Place locator objects (such as bug locators)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Curve"), UIToolKit::GlobalImageManager().GetBitmap( "create_curve_32.png" ), wxNullBitmap, "Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), UIToolKit::GlobalImageManager().GetBitmap( "edit_curve_32.png" ), wxNullBitmap, "Edit created curves (modify or create/delete control points)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLightCreate, wxT("Light"), UIToolKit::GlobalImageManager().GetBitmap( "create_light_32.png" ), wxNullBitmap, "Place lights in the scene");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLighting, wxT("Lighting"), UIToolKit::GlobalImageManager().GetBitmap( "no_smoking_32.png" ), wxNullBitmap, "Light objects in the scene");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate, wxT("Post Processing"), UIToolKit::GlobalImageManager().GetBitmap( "create_postprocessing_volume_32.png" ), wxNullBitmap, "Place post processing volume in the scene");
+//
+//    m_ToolsToolBar->AddSeparator();
+//    m_ToolsToolBar->AddTool(SceneEditorIDs::ID_UtilitiesConstruction, wxT("Connect to Maya"), UIToolKit::GlobalImageManager().GetBitmap( "maya_32.png" ), "Connect to Maya with the selected items for editing");
+//    m_ToolsToolBar->AddTool(SceneEditorIDs::ID_UtilitiesFlushSymbols, wxT("Flush Symbols"), UIToolKit::GlobalImageManager().GetBitmap( "header_32.png" ), "Flush symbol definitions (to re-parse headers)");
 
     m_ToolsToolBar->Realize();
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsSelect, true );
@@ -428,22 +424,22 @@ SceneEditor::SceneEditor()
 
     m_NavToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_NavToolBar->SetToolBitmapSize(wxSize(16,16));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshImport, wxT("ImportMeshFromMayaExport"), UIToolKit::GlobalImageManager().GetBitmap( "door_in_16.png" ), wxNullBitmap, "Get the exported maya mesh into luna");
-    m_NavToolBar->AddSeparator();
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes, wxT("NavMeshEditLowResMesh"), UIToolKit::GlobalImageManager().GetBitmap( "map_magnify_16.png" ), wxNullBitmap, "Work with low res nav mesh");
-    m_NavToolBar->AddSeparator();
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshCreate, wxT("CreateNavMesh"), UIToolKit::GlobalImageManager().GetBitmap( "plugin_16.png" ), wxNullBitmap, "Create NavMesh or add new verts and tris");
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshManipulate, wxT("NavMeshEdit"), UIToolKit::GlobalImageManager().GetBitmap( "plugin_go_16.png" ), wxNullBitmap, "Translate Vert/Edge/Tri on NavMesh");
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshRotate, wxT("NavMeshRotate"), UIToolKit::GlobalImageManager().GetBitmap( "rotate_cw_16.png" ), wxNullBitmap, "Rotate Verts on NavMesh");
-    m_NavToolBar->AddSeparator();
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshVertexSelect, wxT("VertexSelect"), UIToolKit::GlobalImageManager().GetBitmap( "vertex.png" ), wxNullBitmap, "Vertex select mode");
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshEdgeSelect, wxT("EdgeSelect"), UIToolKit::GlobalImageManager().GetBitmap( "edge.png" ), wxNullBitmap, "Edge select mode");
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshTriSelect, wxT("TriSelect"), UIToolKit::GlobalImageManager().GetBitmap( "triangle.png" ), wxNullBitmap, "Triangle select mode");
-    m_NavToolBar->AddSeparator();
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOut, wxT("NavMeshPunchOutTool"), UIToolKit::GlobalImageManager().GetBitmap( "cube_punch_out.png" ), wxNullBitmap, "punch cube like hole in the nav mesh");
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate, wxT("NavMeshPunchOutTranslate"), UIToolKit::GlobalImageManager().GetBitmap( "transform_translate_16.png" ), wxNullBitmap, "Translate punch out volume");
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate, wxT("NavMeshPunchOutRotate"), UIToolKit::GlobalImageManager().GetBitmap( "transform_rotate_16.png" ), wxNullBitmap, "Rotate punch out volume");
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutScale, wxT("NavMeshPunchOutScale"), UIToolKit::GlobalImageManager().GetBitmap( "transform_scale_16.png" ), wxNullBitmap, "Scale punch out volume");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshImport, wxT("ImportMeshFromMayaExport"), UIToolKit::GlobalImageManager().GetBitmap( "door_in_16.png" ), wxNullBitmap, "Get the exported maya mesh into luna");
+    //m_NavToolBar->AddSeparator();
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes, wxT("NavMeshEditLowResMesh"), UIToolKit::GlobalImageManager().GetBitmap( "map_magnify_16.png" ), wxNullBitmap, "Work with low res nav mesh");
+    //m_NavToolBar->AddSeparator();
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshCreate, wxT("CreateNavMesh"), UIToolKit::GlobalImageManager().GetBitmap( "plugin_16.png" ), wxNullBitmap, "Create NavMesh or add new verts and tris");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshManipulate, wxT("NavMeshEdit"), UIToolKit::GlobalImageManager().GetBitmap( "plugin_go_16.png" ), wxNullBitmap, "Translate Vert/Edge/Tri on NavMesh");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshRotate, wxT("NavMeshRotate"), UIToolKit::GlobalImageManager().GetBitmap( "rotate_cw_16.png" ), wxNullBitmap, "Rotate Verts on NavMesh");
+    //m_NavToolBar->AddSeparator();
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshVertexSelect, wxT("VertexSelect"), UIToolKit::GlobalImageManager().GetBitmap( "vertex.png" ), wxNullBitmap, "Vertex select mode");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshEdgeSelect, wxT("EdgeSelect"), UIToolKit::GlobalImageManager().GetBitmap( "edge.png" ), wxNullBitmap, "Edge select mode");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshTriSelect, wxT("TriSelect"), UIToolKit::GlobalImageManager().GetBitmap( "triangle.png" ), wxNullBitmap, "Triangle select mode");
+    //m_NavToolBar->AddSeparator();
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOut, wxT("NavMeshPunchOutTool"), UIToolKit::GlobalImageManager().GetBitmap( "cube_punch_out.png" ), wxNullBitmap, "punch cube like hole in the nav mesh");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate, wxT("NavMeshPunchOutTranslate"), UIToolKit::GlobalImageManager().GetBitmap( "transform_translate_16.png" ), wxNullBitmap, "Translate punch out volume");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate, wxT("NavMeshPunchOutRotate"), UIToolKit::GlobalImageManager().GetBitmap( "transform_rotate_16.png" ), wxNullBitmap, "Rotate punch out volume");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutScale, wxT("NavMeshPunchOutScale"), UIToolKit::GlobalImageManager().GetBitmap( "transform_scale_16.png" ), wxNullBitmap, "Scale punch out volume");
     m_NavToolBar->Realize();
     m_NavToolBar->Disable();
 
@@ -656,10 +652,6 @@ SceneEditor::SceneEditor()
         m_FileMenu->Append(SceneEditorIDs::ID_FileExport, _("Export..."));
         m_FileMenu->Append(SceneEditorIDs::ID_FileExportToClipboard, _("Export to Clipboard..."));
         m_FileMenu->Append(SceneEditorIDs::ID_FileExportToObj, _("Export to OBJ File..."));
-        m_FileMenu->AppendSeparator();
-        m_FileMenu->Append(SceneEditorIDs::ID_FileOpenSession, "Open Session");
-        m_FileMenu->Append(SceneEditorIDs::ID_FileSaveSession, "Save Session");
-        m_FileMenu->Append(SceneEditorIDs::ID_FileSaveSessionAs, "Save Session As...");
         m_FileMenu->AppendSeparator();
         m_FileMenu->Append(wxID_EXIT, _("Exit"));
 
@@ -1019,7 +1011,12 @@ void SceneEditor::BuildAllLoadedAssets()
         }
     }
 
-    SessionManager::GetInstance()->SaveAllOpenDocuments();
+    std::string error;
+    if ( !wxGetApp().GetDocumentManager()->SaveAll( error ) )
+    {
+#pragma TODO( "Pop up error modal" )
+        NOC_BREAK();
+    }
     BuildAssets( assets, this );
 }
 
@@ -1891,31 +1888,6 @@ void SceneEditor::OnExportToObj(wxCommandEvent& event)
 void SceneEditor::OnClose(wxCommandEvent& event)
 {
     m_SceneManager.CloseAll();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Prompts the user to open a new session.
-// 
-void SceneEditor::OnOpenSession(wxCommandEvent& event)
-{
-    PromptLoadSession();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Prompts the user to save a session (no prompt if they have previously saved
-// a session).
-// 
-void SceneEditor::OnSaveSession(wxCommandEvent& event)
-{
-    PromptSaveSession();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Prompts the user to save a session.
-// 
-void SceneEditor::OnSaveSessionAs(wxCommandEvent& event)
-{
-    PromptSaveSession( true );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

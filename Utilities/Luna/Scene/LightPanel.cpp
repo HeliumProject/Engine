@@ -5,7 +5,6 @@
 #include "Light.h"
 #include "Scene.h"
 #include "SceneManager.h"
-#include "Editor/SessionManager.h"
 
 #include "Asset/LevelAsset.h"
 #include "math/Color3.h"

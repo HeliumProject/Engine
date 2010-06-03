@@ -8,7 +8,6 @@
 
 #include "Finder/Finder.h"
 #include "Editor/ContextMenuGenerator.h"
-#include "Editor/SessionManager.h"
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/FileDialog.h"
 
@@ -172,8 +171,8 @@ void FileBackedAttribute::OnPreferenceChanged( const Reflect::ElementChangeArgs&
 // 
 void FileBackedAttribute::OnOpen( const ContextMenuArgsPtr& args )
 {
-#pragma TODO( "Might need to do something different for references to Assets (open inline)" )
-    SessionManager::GetInstance()->Edit( GetFilePath() );
+#pragma TODO( "Open the file in the editor" );
+    NOC_BREAK(); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -237,7 +236,8 @@ void FileBackedAttribute::OnChangePathFinder( const ContextMenuArgsPtr& args )
 // 
 void FileBackedAttribute::OnCheckOutPath( const ContextMenuArgsPtr& args )
 {
-    SessionManager::GetInstance()->CheckOut( GetFilePath() );
+#pragma TODO( "Make this check out the file" )
+NOC_BREAK();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

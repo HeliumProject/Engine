@@ -161,19 +161,11 @@ std::string FileDialogButton::GetPath()
 // 
 void FileDialogButton::SetPath( const std::string& path )
 {
-    if ( !path.empty() )
+    m_Path = path;
+    FileSystem::CleanName( m_Path );
+    if ( IsBound() )
     {
-        m_Path = path;
-        FileSystem::CleanName( m_Path );
-        if ( IsBound() )
-        {
-            WriteData( m_Path );
-        }
-    }
-    else
-    {
-        WriteData( "" );
-        m_Path.clear();
+        WriteData( m_Path );
     }
 }
 

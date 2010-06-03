@@ -4,6 +4,8 @@
 #include "Common/InitializerStack.h"
 
 #include "Asset/Tracker.h"
+#include "Editor/DocumentManager.h"
+#include "Scene/SceneEditor.h"
 
 #include <wx/app.h>
 
@@ -12,11 +14,7 @@ namespace Luna
     class Application : public wxApp
     {
     public:
-        Application()
-            : wxApp()
-            , m_AssetTracker( NULL )
-        {
-        }
+        Application();
 
         Application(const Luna::Application &)
         {
@@ -24,13 +22,7 @@ namespace Luna
             throw Nocturnal::Exception( "Cannot copy the Luna application." );
         }
 
-        virtual ~Application()
-        {
-            if ( m_AssetTracker )
-            {
-                delete m_AssetTracker;
-            }
-        }
+        virtual ~Application();
 
         virtual void  OnInitCmdLine( wxCmdLineParser& parser ) NOC_OVERRIDE;
         virtual bool  OnCmdLineParsed( wxCmdLineParser& parser ) NOC_OVERRIDE;
@@ -44,9 +36,25 @@ namespace Luna
             return m_AssetTracker;
         }
 
+        DocumentManager* GetDocumentManager()
+        {
+            return m_DocumentManager;
+        }
+
+        SceneEditor* GetSceneEditor()
+        {
+            if ( !m_SceneEditor )
+            {
+                m_SceneEditor = new SceneEditor();
+            }
+            return m_SceneEditor;
+        }
+
     protected:
         Nocturnal::InitializerStack m_InitializerStack;
         Asset::Tracker* m_AssetTracker;
+        DocumentManager* m_DocumentManager;
+        SceneEditor* m_SceneEditor;
     };
 
     DECLARE_APP( Application );

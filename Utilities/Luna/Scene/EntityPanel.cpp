@@ -2,10 +2,11 @@
 #include "EntityPanel.h"
 #include "EntityAssetSet.h"
 
+#include "Application.h"
+
 #include "Inspect/Value.h"
 #include "Inspect/Button.h"
 #include "Task/Build.h"
-#include "Editor/SessionManager.h"
 
 #include "Asset/AssetInit.h"
 #include "Attribute/AttributeHandle.h"
@@ -580,7 +581,8 @@ void EntityPanel::OnEntityAssetEditAsset( Inspect::Button* button )
   S_string::const_iterator fileEnd = files.end();
   for ( ; fileItr != fileEnd; ++fileItr )
   {
-    SessionManager::GetInstance()->Edit( *fileItr );
+#pragma TODO( "Open the file for edit" )
+NOC_BREAK();
   }
 }
 
@@ -597,8 +599,13 @@ void EntityPanel::OnEntityAssetBuild( Inspect::Button* button )
   }
 
   bool showOptions = wxIsShiftDown();
-  SessionManager::GetInstance()->SaveAllOpenDocuments();
-  Luna::BuildAssets( assets, SessionManager::GetInstance()->LaunchEditor( EditorTypes::Scene ), NULL, showOptions );
+  std::string error;
+  if ( !wxGetApp().GetDocumentManager()->SaveAll( error ) )
+  {
+#pragma TODO( "Pop up an error modal" );
+      NOC_BREAK();
+  }
+  Luna::BuildAssets( assets, wxGetApp().GetSceneEditor(), NULL, showOptions );
 }
 
 void EntityPanel::OnEntityAssetEditArt( Inspect::Button* button )
@@ -612,7 +619,7 @@ void EntityPanel::OnEntityAssetView( Inspect::Button* button )
 void EntityPanel::OnEntityAssetRevisionHistory( Inspect::Button* button )
 {
   S_string files;
-  SceneEditor* editor = static_cast< SceneEditor* >( SessionManager::GetInstance()->LaunchEditor( EditorTypes::Scene ) );
+  SceneEditor* editor = wxGetApp().GetSceneEditor();
   OS_SelectableDumbPtr::Iterator selectionItr = m_Selection.Begin();
   OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
   for ( ; selectionItr != selectionEnd; ++selectionItr )

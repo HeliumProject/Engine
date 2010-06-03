@@ -2,6 +2,9 @@
 
 #include "API.h"
 #include "InstancePanel.h"
+
+#include "Application.h"
+
 #include "Inspect/Data.h"
 #include "Inspect/FilteredDropTarget.h"
 #include "InspectReflect/ReflectInterpreter.h"
@@ -280,7 +283,7 @@ public:
           Luna::Scene* scene = entity->GetScene();
           if( scene )
           {
-            Editor* editor = SessionManager::GetInstance()->LaunchEditor( EditorTypes::Scene );
+            Editor* editor = wxGetApp().GetSceneEditor();
 
             if( editor )
             {
@@ -400,7 +403,7 @@ public:
           Luna::Scene* scene = entity->GetScene();
           if( scene )
           {
-            Editor* editor = SessionManager::GetInstance()->LaunchEditor( EditorTypes::Scene );
+            Editor* editor = wxGetApp().GetSceneEditor();
 
             if( editor )
             {
@@ -458,7 +461,7 @@ public:
         }
       }
 
-      SceneEditor* editor = static_cast<SceneEditor*>( SessionManager::GetInstance()->LaunchEditor( EditorTypes::Scene ) );
+      SceneEditor* editor = wxGetApp().GetSceneEditor();
       if( editor )
       {
         Luna::Scene* scene = editor->GetSceneManager()->GetCurrentScene();
@@ -486,7 +489,7 @@ public:
           Luna::Scene* scene = entity->GetScene();
           if( scene )
           {
-            Editor* editor = SessionManager::GetInstance()->LaunchEditor( EditorTypes::Scene );
+            Editor* editor = wxGetApp().GetSceneEditor();
 
             if( editor )
             {
@@ -603,7 +606,7 @@ public:
     template <class LunaClass, class ContentClass >
     void OnImportFromFile( Inspect::Button* button )
     {
-      Editor* editor = SessionManager::GetInstance()->LaunchEditor( EditorTypes::Scene );
+      Editor* editor = wxGetApp().GetSceneEditor();
 
       if( editor )
       {

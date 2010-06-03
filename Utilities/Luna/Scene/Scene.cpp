@@ -34,7 +34,6 @@
 
 #include "Inspect/Data.h"
 #include "Inspect/Canvas.h"
-#include "Editor/SessionManager.h"
 #include "SceneGraph.h"
 #include "Undo/PropertyCommand.h"
 #include "Statistics.h"

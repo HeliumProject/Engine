@@ -16,7 +16,6 @@
 #include "Mesh.h"
 
 #include "Editor/Editor.h"
-#include "Editor/SessionManager.h"
 
 #include "Math/AngleAxis.h"
 #include "Math/Utils.h"

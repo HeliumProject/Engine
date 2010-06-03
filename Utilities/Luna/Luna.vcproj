@@ -511,22 +511,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Editor\EditorChooser.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\EditorChooser.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\EditorChooserInnerPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\EditorChooserInnerPanel.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Editor\EditorGenerated.cpp"
 				>
 			</File>
@@ -632,38 +616,6 @@
 			</File>
 			<File
 				RelativePath=".\Editor\RunGameFrame.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\SessionFrame.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\SessionFrame.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\SessionManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\SessionManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\SessionState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\SessionState.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\SessionVersion.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\SessionVersion.h"
 				>
 			</File>
 			<File
@@ -2559,6 +2511,14 @@
 		</File>
 		<File
 			RelativePath=".\Application.h"
+			>
+		</File>
+		<File
+			RelativePath=".\AppPreferences.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\AppPreferences.h"
 			>
 		</File>
 		<File

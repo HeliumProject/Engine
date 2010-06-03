@@ -53,12 +53,6 @@ namespace Luna
     AssetPreviewWindow* m_AssetPreviewWindow;
     bool m_PromptModifiedFiles;
 
-    
-
-  public:
-    static void InitializeEditor();
-    static void CleanupEditor();
-
   public:
     AssetEditor();
     virtual ~AssetEditor();
@@ -130,9 +124,6 @@ namespace Luna
     void OnExiting( wxCloseEvent& args );
     void OnSave( wxCommandEvent& args );
     void OnSaveAll( wxCommandEvent& args );
-    void OnSaveSession( wxCommandEvent& args );
-    void OnSaveSessionAs( wxCommandEvent& args );
-    void OnOpenSession( wxCommandEvent& args );
     void OnExpandAll( wxCommandEvent& args );
     void OnCollapseAll( wxCommandEvent& args );
     void OnUndo( wxCommandEvent& args );

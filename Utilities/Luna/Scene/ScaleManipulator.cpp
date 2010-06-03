@@ -15,7 +15,6 @@
 #include "ScenePreferences.h"
 
 #include "Editor/Editor.h"
-#include "Editor/SessionManager.h"
 
 using namespace Math;
 using namespace Luna;

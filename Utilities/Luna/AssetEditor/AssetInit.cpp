@@ -35,7 +35,6 @@
 #include "Content/ContentInit.h"
 #include "FileSystem/FileSystem.h"
 #include "Console/Console.h"
-#include "Editor/SessionManager.h"
 #include "Reflect/Registry.h"
 #include "UIToolKit/ImageManager.h"
 #include "Finder/LunaSpecs.h"
@@ -89,7 +88,6 @@ void LunaAsset::InitializeModule()
     g_InitializerStack.Push( Luna::AttributeContainer::InitializeType, Luna::AttributeContainer::CleanupType );
     g_InitializerStack.Push( Luna::AttributeNode::InitializeType, Luna::AttributeNode::CleanupType );
     g_InitializerStack.Push( AssetDocument::InitializeType, AssetDocument::CleanupType );
-    g_InitializerStack.Push( AssetEditor::InitializeEditor, AssetEditor::CleanupEditor );
 
     UIToolKit::ImageManagerInit( "", "" );
 

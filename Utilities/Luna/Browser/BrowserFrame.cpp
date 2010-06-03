@@ -23,7 +23,6 @@
 #include "Attribute/AttributeHandle.h"
 #include "Common/CommandLine.h"
 #include "Editor/DocumentManager.h"
-#include "Editor/SessionManager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/ContentSpecs.h"
 #include "Finder/Finder.h"
@@ -633,7 +632,8 @@ void BrowserFrame::OnOpen( wxCommandEvent& event )
         std::string path = ( *fileItr )->GetFilePath();
         if ( !path.empty() && FileSystem::Exists( path ) )
         {
-            SessionManager::GetInstance()->Edit( path );
+#pragma TODO( "Open the file for editing" )
+NOC_BREAK();
         }
     }
 }

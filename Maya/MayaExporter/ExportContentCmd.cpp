@@ -36,9 +36,6 @@ void AfterSaveCallback( void *clientData )
   std::string currentFile = MFileIO::currentFile().asChar();
   FileSystem::CleanName( currentFile );
 
-  if ( !Finder::IsInProject( currentFile ) )
-    return;
-
   // i hate mel
   int exportOnSave = 0;
   if ( !MGlobal::executeCommand( "optionVar -q \"exportOnSave\"", exportOnSave ) )

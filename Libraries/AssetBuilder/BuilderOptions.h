@@ -49,7 +49,6 @@ namespace AssetBuilder
 
         BuildRequest()
         {
-
         }
 
         REFLECT_DECLARE_CLASS( BuildRequest, Reflect::Element );

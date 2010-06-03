@@ -22,8 +22,8 @@
 #include "x.xpm"
 
 
+#include "File/File.h"
 #include "FileSystem/FileSystem.h"
-#include "File/Manager.h"
 
 BEGIN_EVENT_TABLE(Shader, wxFrame)
 	EVT_CLOSE(Shader::OnClose)
@@ -196,17 +196,6 @@ Shader::Open(const wxString& file)
 	ms->Add(wxID_SAVEGROUP);
 	ms->Get();
 
-  try
-  {
-    std::string cleanName = file.c_str();
-    FileSystem::CleanName( cleanName );
-    File::GlobalManager().Open( cleanName );
-  }
-  catch (File::Exception& ex)
-  {
-    wxMessageBox( wxT(ex.what()), wxT("Failed to add to file resolver"), wxOK, this );
-  }
-
   m_FileName = file;
   wxFileName fn(m_FileName);
   m_FilePath = fn.GetPath();	
@@ -255,17 +244,6 @@ Shader::SaveAs()
 
   if (choice == wxID_OK)
   {
-    try
-    {
-      std::string cleanName = dialog.GetPath().c_str();
-      FileSystem::CleanName( cleanName );
-      File::GlobalManager().Open( cleanName );    // Add the file to the file resolver
-    }
-    catch (File::Exception& ex)
-    {
-      wxMessageBox( wxT(ex.what()), wxT("Failed to add to file resolver"), wxOK, this );
-    }
-
     m_FileName = dialog.GetPath();
     wxFileName fn(m_FileName);
     m_FilePath = fn.GetPath();

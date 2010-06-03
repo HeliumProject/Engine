@@ -255,7 +255,7 @@ void AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool Build( File::S_Reference& assets, const V_string& options )
+bool Build( Dependencies::DependencyGraph& depGraph, File::S_Reference& assets, const V_string& options )
 {
     bool success = true;
 
@@ -272,7 +272,7 @@ bool Build( File::S_Reference& assets, const V_string& options )
 
             if (assetClass.ReferencesObject())
             {
-                AssetBuilder::Build( assetClass, options );
+                AssetBuilder::Build( depGraph, assetClass, options );
                 Report( assetClass );
             }
             else
@@ -288,7 +288,7 @@ bool Build( File::S_Reference& assets, const V_string& options )
 
                 if (assetClass.ReferencesObject())
                 {
-                    AssetBuilder::Build( assetClass, options );
+                    AssetBuilder::Build( depGraph, assetClass, options );
                     Report( assetClass );
                 }
                 else
@@ -312,7 +312,7 @@ bool Build( File::S_Reference& assets, const V_string& options )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool Build( File::S_Reference& assets, const AssetBuilder::BuilderOptionsPtr& options )
+bool Build( Dependencies::DependencyGraph& depGraph, File::S_Reference& assets, const AssetBuilder::BuilderOptionsPtr& options )
 {
     bool success = true;
 
@@ -331,7 +331,7 @@ bool Build( File::S_Reference& assets, const AssetBuilder::BuilderOptionsPtr& op
 
             if (assetClass.ReferencesObject())
             {
-                jobs.push_back( new AssetBuilder::BuildJob( assetClass, options, NULL, true ) );
+                jobs.push_back( new AssetBuilder::BuildJob( &depGraph, assetClass, options, NULL, true ) );
                 buildingAssets.push_back( assetClass );
             }
             else
@@ -347,7 +347,7 @@ bool Build( File::S_Reference& assets, const AssetBuilder::BuilderOptionsPtr& op
 
                 if (assetClass.ReferencesObject())
                 {
-                    jobs.push_back( new AssetBuilder::BuildJob( assetClass, options, NULL, true ) );
+                    jobs.push_back( new AssetBuilder::BuildJob( &depGraph, assetClass, options, NULL, true ) );
                     buildingAssets.push_back( assetClass );
                 }
                 else
@@ -369,13 +369,13 @@ bool Build( File::S_Reference& assets, const AssetBuilder::BuilderOptionsPtr& op
 
     if (AppUtils::IsDebuggerPresent())
     {
-        AssetBuilder::Build( jobs );
+        AssetBuilder::Build( depGraph, jobs );
     }
     else
     {
         try
         {
-            AssetBuilder::Build( jobs );
+            AssetBuilder::Build( depGraph, jobs );
         }
         catch( const Nocturnal::Exception& ex )
         {
@@ -402,7 +402,8 @@ bool QueryAndBuildAssets(const V_string& options)
     // get the asset files they want to build
     int maxMatches = g_NoMultiple ? 1 : (g_All ? -1 : MAX_MATCHES);
     File::S_Reference possibleMatches;
-    File::GlobalResolver().Find( g_SearchQuery, possibleMatches );
+#pragma TODO( "make this search the tracker" )
+    //    File::GlobalResolver().Find( g_SearchQuery, possibleMatches );
 
     if ( possibleMatches.empty() )
     {
@@ -425,11 +426,13 @@ bool QueryAndBuildAssets(const V_string& options)
         return false;
     }
 
-    return Build( possibleMatches, options );
+#pragma TODO( "instantiate the proper dependency graph and pass it in here" )
+//    return Build( possibleMatches, options );
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool RunAsBuildWorker()
+bool RunAsBuildWorker( Dependencies::DependencyGraph& depGraph )
 {
     bool success = true;
 
@@ -462,7 +465,7 @@ bool RunAsBuildWorker()
 
             Console::Debug( "Building %d requested assets\n", job->m_Assets.size() );
 
-            success &= Build( job->m_Assets, job->m_Options );
+            success &= Build( depGraph, job->m_Assets, job->m_Options );
 
             delete msg;
 
@@ -531,7 +534,8 @@ int Main (int argc, const char** argv)
     {
         if (Nocturnal::GetCmdLineFlag( Worker::Args::Worker ))
         {
-            success = RunAsBuildWorker();
+#pragma TODO( "Figure out how to handle dependency graphs with workers" )
+            //            success = RunAsBuildWorker();
         }
         else
         {
@@ -544,7 +548,8 @@ int Main (int argc, const char** argv)
         {
             if (Nocturnal::GetCmdLineFlag( Worker::Args::Worker ))
             {
-                success = RunAsBuildWorker();        
+#pragma TODO( "Figure out how to handle dependency graphs with workers" )
+//                success = RunAsBuildWorker();        
             }
             else
             {

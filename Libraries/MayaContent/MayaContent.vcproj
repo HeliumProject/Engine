@@ -242,9 +242,6 @@
 			RelativePathToProject=".\Maya\MayaNodes\MayaNodes.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{F789C68D-B4BE-47C4-AFD9-EF09E4C7455A}"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
 			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
 		/>
@@ -255,9 +252,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{A99087C6-C475-485A-8911-ACB7683156FF}"
 			RelativePathToProject=".\libraries\Attribute\Attribute.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{077BBF06-F54E-4662-9FA9-0952CECCED41}"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{0EB25C89-540D-48DB-8410-53EB39507242}"

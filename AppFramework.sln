@@ -136,6 +136,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nvtt", "SDK\nvtt\2.0.7\nvtt
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tiff", "SDK\tiff\3.9.2\tiff.vcproj", "{BC01F636-4D0F-489D-B082-7538025CE185}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua", "SDK\lua\5.1.4\lua.vcproj", "{C87D1745-76D6-4A2E-B655-23564E398510}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -556,6 +558,12 @@ Global
 		{BC01F636-4D0F-489D-B082-7538025CE185}.Release|Win32.ActiveCfg = Release|Win32
 		{BC01F636-4D0F-489D-B082-7538025CE185}.Release|Win32.Build.0 = Release|Win32
 		{BC01F636-4D0F-489D-B082-7538025CE185}.Release|x64.ActiveCfg = Release|Win32
+		{C87D1745-76D6-4A2E-B655-23564E398510}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C87D1745-76D6-4A2E-B655-23564E398510}.Debug|Win32.Build.0 = Debug|Win32
+		{C87D1745-76D6-4A2E-B655-23564E398510}.Debug|x64.ActiveCfg = Debug|Win32
+		{C87D1745-76D6-4A2E-B655-23564E398510}.Release|Win32.ActiveCfg = Release|Win32
+		{C87D1745-76D6-4A2E-B655-23564E398510}.Release|Win32.Build.0 = Release|Win32
+		{C87D1745-76D6-4A2E-B655-23564E398510}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

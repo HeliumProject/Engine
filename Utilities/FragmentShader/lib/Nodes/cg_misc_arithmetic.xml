@@ -1,0 +1,221 @@
+<?xml version="1.0"?>
+<library path="Cg/Misc Arithmetic">
+	<node type="rotate2">
+		<description><![CDATA[ouput = roate2(uvs, angle)
+			
+			rotate2 - returns the rotated value of vector2s
+			
+			SYNOPSIS
+			
+			float2 rotate2(float2 a);
+			
+			PARAMETERS
+			
+			a vector2.
+			
+			DESCRIPTION
+			
+			Returns the rotated value of a vector2.
+		]]></description>
+		<tool-tip>rotate2 - returns the rotated value of vector2s</tool-tip>
+		<ports>
+			<input name="uv">
+				<check-type method="list" target="*">float2,half2</check-type>
+			</input>
+			<input name="angle">
+				<check-type method="list" target="*">float,half</check-type>
+			</input>
+			<output name="Output">
+				<get-type method="same-as" target="*">uv</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="lua" target="*"><![CDATA[
+				local s = {
+					type 	= node.Output.get_type(),
+					d  	= 'r' .. node.Output.uid(),
+					uv 	= 'r' .. node.uv.get_source().uid(),
+					angle 	= 'r' .. node.angle.get_source().uid(),
+				}
+				local pat = [[
+					type d;
+					{
+						type fractional = frac( uv );
+						type offset_uv  = fractional - type( 0.5, 0.5 );
+						half cosine = cos ( angle ); /* should it be always half? */
+						half sine   = sin ( angle ); /* ditto */
+						type rotate_uv;
+						rotate_uv.x  = offset_uv.x * cosine + offset_uv.y * sine;
+						rotate_uv.y  = offset_uv.y * cosine - offset_uv.x * sine;
+						d = rotate_uv + type( 0.5, 0.5 );
+					}
+				]]
+				return (pat:gsub('[%w_]+', s))
+			]]></code>
+		</code-generation>
+	</node>
+	<node type="sqrt(1-x^2)">
+		<description><![CDATA[d = sqrt(1-x^2)
+		
+			Supported Types:
+
+			float
+			half
+			fixed
+			int
+			float4
+			half4
+			fixed4
+			int4
+			float3
+			half3
+			fixed3
+			int3
+			float2
+			half2
+			fixed2
+			int2
+		]]></description>
+		<tool-tip>d = sqrt(1-x^2)</tool-tip>
+		<ports>
+			<input name="a">
+				<check-type method="list" target="*">float,half,fixed,int,float4,half4,fixed4,int4,float3,half3,fixed3,int3,float2,half2,fixed2,int2</check-type>
+			</input>
+			<output name="d">
+				<get-type method="same-as" target="*">a</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="lua" target="*"><![CDATA[
+				local s = {
+					type = node.d.get_type(),
+					d = 'r' .. node.d.uid(),
+					a = 'r' .. node.a.get_source().uid(),
+				}
+				return (('type d = sqrt( type( 1 ) - ( x * x ) );'):gsub('[%w_]+', s))
+			]]></code>
+		</code-generation>
+	</node>
+	<node type="1/sqrt(1-x^2)">
+		<description><![CDATA[d = 1/sqrt(1-x^2)
+		
+			Supported Types:
+
+			float
+			half
+			fixed
+			int
+			float4
+			half4
+			fixed4
+			int4
+			float3
+			half3
+			fixed3
+			int3
+			float2
+			half2
+			fixed2
+			int2
+		]]></description>
+		<tool-tip>d = 1/sqrt(1-x^2)</tool-tip>
+		<ports>
+			<input name="a">
+				<check-type method="list" target="*">float,half,fixed,int,float4,half4,fixed4,int4,float3,half3,fixed3,int3,float2,half2,fixed2,int2</check-type>
+			</input>
+			<output name="d">
+				<get-type method="same-as" target="*">a</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="lua" target="*"><![CDATA[
+				local s = {
+					type = node.d.get_type(),
+					d = 'r' .. node.d.uid(),
+					a = 'r' .. node.a.get_source().uid(),
+				}
+				return (('type d = type( 1 ) / sqrt( type( 1 ) - ( x * x ) );'):gsub('[%w_]+', s))
+			]]></code>
+		</code-generation>
+	</node>
+	<node type="normalize3(xyz)">
+		<description><![CDATA[d = normalize(a.xyz)
+		
+			Supported Types:
+
+			float4
+			half4
+			fixed4
+			float3
+			half3
+			fixed3
+		]]></description>
+		<tool-tip>d = normalize(a.xyz)</tool-tip>
+		<ports>
+			<input name="a">
+				<check-type method="list" target="*">float4,half4,fixed4,float3,half3,fixed3</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -2) .. '3'</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="lua" target="*"><![CDATA[
+				local s = {
+					type = node.d.get_type(),
+					d = 'r' .. node.d.uid(),
+					a = 'r' .. node.a.get_source().uid(),
+				}
+				return (('type d = normalize( a.xyz );'):gsub('[%w_]+', s))
+			]]></code>
+		</code-generation>
+	</node>
+	<node type="normalize3_partial_derivative(xy)">
+		<description><![CDATA[d = normalize3_partial_derivative(a.xy)
+		
+			Supported Types:
+
+			float4
+			half4
+			fixed4
+			float3
+			half3
+			fixed3
+		]]></description>
+		<tool-tip>d = normalize(a.xy, 1.0f)</tool-tip>
+		<ports>
+			<input name="a">
+				<check-type method="list" target="*">float4,half4,fixed4,float3,half3,fixed3</check-type>
+			</input>
+			<output name="d">
+				<get-type method="lua" target="*">return node.a.get_type():sub(1, -2) .. '3'</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="lua" target="*"><![CDATA[
+				local s = {
+					type = node.d.get_type(),
+					d = 'r' .. node.d.uid(),
+					a = 'r' .. node.a.get_source().uid(),
+				}
+				'\ttype d = normalize( float3( a.xy, 1.0f ) );\n'
+				return (('type d = normalize( float3( a.xy, 1.0f ) );'):gsub('[%w_]+', s))
+			]]></code>
+		</code-generation>
+	</node>
+</library>

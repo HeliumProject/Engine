@@ -7,7 +7,7 @@
 	>
 	<UserMacro
 		Name="boost"
-		Value="$(SolutionDir)SDK\boost\1.42"
+		Value="$(SolutionDir)SDK\boost\1.43"
 	/>
 	<UserMacro
 		Name="Crypto++"
@@ -30,6 +30,10 @@
 	    Value="$(SolutionDir)SDK\LiteSQL\0.3.7"
 	/>
   <UserMacro
+    Name="lua"
+    Value="$(SolutionDir)SDK\lua\5.1.4"
+  />
+  <UserMacro
     Name="Maya"
     Value="C:\Program Files (x86)\Autodesk\Maya2011"
   />
@@ -43,7 +47,7 @@
 	/>
 	<UserMacro
 		Name="p4api"
-		Value="$(SolutionDir)SDK\p4api\2009.1.205670"
+		Value="$(SolutionDir)SDK\p4api\2009.2"
 	/>
 	<UserMacro
 		Name="SQLite"

@@ -8,7 +8,7 @@
 
 #include "EntityAsset.h"
 #include "ShaderAsset.h"
-#include "LevelAsset.h"
+#include "SceneAsset.h"
 
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
@@ -202,7 +202,7 @@ void AssetClass::CopyTo(const Reflect::ElementPtr& destination)
 
 AssetType AssetClass::GetAssetType() const
 {
-    if ( this->HasType( Reflect::GetType<LevelAsset>() ) )
+    if ( this->HasType( Reflect::GetType<SceneAsset>() ) )
     {
         return AssetTypes::Level;
     }

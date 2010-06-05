@@ -100,7 +100,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				Description="Copying Icons..."
+				CommandLine="xcopy &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons\&quot; /E /Y"
 			/>
 		</Configuration>
 		<Configuration
@@ -184,7 +185,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				Description="Copying Icons..."
+				CommandLine="xcopy &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons\&quot; /E /Y"
 			/>
 		</Configuration>
 	</Configurations>
@@ -2371,11 +2373,11 @@
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\LevelAsset.cpp"
+						RelativePath=".\AssetEditor\SceneAsset.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\LevelAsset.h"
+						RelativePath=".\AssetEditor\SceneAsset.h"
 						>
 					</File>
 					<File
@@ -2519,6 +2521,14 @@
 		</File>
 		<File
 			RelativePath=".\AppPreferences.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ArtProvider.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ArtProvider.h"
 			>
 		</File>
 		<File

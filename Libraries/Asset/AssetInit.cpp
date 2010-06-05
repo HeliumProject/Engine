@@ -16,7 +16,7 @@
 #include "EntityManifest.h"
 #include "ExpensiveMapAttribute.h"
 #include "ExporterJob.h"
-#include "LevelAsset.h"
+#include "SceneAsset.h"
 #include "ManifestVersion.h"
 #include "NormalMapAttribute.h"
 #include "RequiredListAsset.h"
@@ -177,8 +177,8 @@ void Asset::Initialize()
 
     g_InitializerStack.Push( Reflect::RegisterClass<EntityAsset>( "EntityAsset" ) );
     g_AssetClassTypes.push_back( Reflect::GetType<EntityAsset>() );
-    g_InitializerStack.Push( Reflect::RegisterClass<LevelAsset>( "LevelAsset" ) );
-    g_AssetClassTypes.push_back( Reflect::GetType<LevelAsset>() );
+    g_InitializerStack.Push( Reflect::RegisterClass<SceneAsset>( "SceneAsset" ) );
+    g_AssetClassTypes.push_back( Reflect::GetType<SceneAsset>() );
     g_InitializerStack.Push( Reflect::RegisterClass<RequiredListAsset>( "RequiredListAsset" ) );
     g_AssetClassTypes.push_back( Reflect::GetType<RequiredListAsset>() );
 

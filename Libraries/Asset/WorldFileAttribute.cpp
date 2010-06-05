@@ -1,6 +1,6 @@
 #include "WorldFileAttribute.h"
 
-#include "LevelAsset.h"
+#include "SceneAsset.h"
 #include "FileSystem/FileSystem.h"
 
 using namespace Asset;

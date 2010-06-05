@@ -989,7 +989,7 @@ void SceneEditor::BuildAllLoadedAssets()
     File::S_Reference assets;
 
     // hand over the current level's referenced stuff.
-    Asset::LevelAsset* currentLevel = m_SceneManager.GetCurrentLevel();
+    Asset::SceneAsset* currentLevel = m_SceneManager.GetCurrentLevel();
 
     // iterate over every entity instance, adding them to the viewers' scene
     const M_SceneSmartPtr& scenes = m_SceneManager.GetScenes();

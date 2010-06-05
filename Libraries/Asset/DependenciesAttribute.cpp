@@ -1,6 +1,6 @@
 #include "DependenciesAttribute.h"
 #include "EntityAsset.h"
-#include "LevelAsset.h"
+#include "SceneAsset.h"
 
 using namespace Asset;
 

@@ -15,7 +15,7 @@
 #include "Dependencies/Dependencies.h"
 
 #include "Asset/AssetClass.h"
-#include "Asset/LevelAsset.h"
+#include "Asset/SceneAsset.h"
 #include "Attribute/AttributeHandle.h"
 #include "Asset/WorldFileAttribute.h"
 #include "Asset/ExporterJob.h"

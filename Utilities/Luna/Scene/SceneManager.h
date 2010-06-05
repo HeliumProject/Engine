@@ -2,7 +2,7 @@
 
 #include "API.h"
 
-#include "Asset/LevelAsset.h"
+#include "Asset/SceneAsset.h"
 #include "Common/Automation/Event.h"
 #include "Editor/DocumentManager.h"
 #include "Core/Selection.h"
@@ -11,8 +11,8 @@
 
 namespace Asset
 {
-  class LevelAsset;
-  typedef Nocturnal::SmartPtr< LevelAsset > LevelAssetPtr;
+  class SceneAsset;
+  typedef Nocturnal::SmartPtr< SceneAsset > SceneAssetPtr;
 }
 
 namespace Luna
@@ -69,7 +69,7 @@ namespace Luna
     Undo::QueueManager m_UndoManager;
 
     // level that owns the world we're looking at (as far as we know)
-    Asset::LevelAssetPtr m_CurrentLevel; 
+    Asset::SceneAssetPtr m_CurrentLevel; 
 
   public:
     SceneManager( SceneEditor* editor );
@@ -77,7 +77,7 @@ namespace Luna
 
     SceneEditor* GetEditor();
 
-    Asset::LevelAsset* GetCurrentLevel() const;
+    Asset::SceneAsset* GetCurrentLevel() const;
 
     ScenePtr NewScene( bool isRoot, std::string path = "", bool addDoc = true );
     virtual DocumentPtr OpenPath( const std::string& path, std::string& error ) NOC_OVERRIDE;

@@ -6,7 +6,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-#include "Asset/LevelAsset.h"
+#include "Asset/SceneAsset.h"
 #include "math/Color3.h"
 
 #include "Attribute/AttributeHandle.h"

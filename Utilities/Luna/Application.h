@@ -8,6 +8,7 @@
 #include "Scene/SceneEditor.h"
 
 #include <wx/app.h>
+#include <wx/xrc/xmlres.h>
 
 namespace Luna
 {

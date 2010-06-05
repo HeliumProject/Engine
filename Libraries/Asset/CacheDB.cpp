@@ -8,7 +8,7 @@
 #include "AssetFile.h"
 #include "AssetFolder.h"
 #include "EntityAsset.h"
-#include "LevelAsset.h"
+#include "SceneAsset.h"
 #include "ShaderAsset.h"
 
 #include "Common/Boost/Regex.h"

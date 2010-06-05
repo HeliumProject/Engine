@@ -409,11 +409,11 @@
 				Name="Level"
 				>
 				<File
-					RelativePath=".\LevelAsset.cpp"
+					RelativePath=".\SceneAsset.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\LevelAsset.h"
+					RelativePath=".\SceneAsset.h"
 					>
 				</File>
 				<File

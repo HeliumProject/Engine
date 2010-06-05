@@ -7,7 +7,7 @@
 #include "SwitchSceneCommand.h"
 #include "Zone.h"
 
-#include "Asset/LevelAsset.h"
+#include "Asset/SceneAsset.h"
 #include "Asset/WorldFileAttribute.h"
 #include "Attribute/AttributeHandle.h"
 #include "Common/Container/Insert.h" 
@@ -61,7 +61,7 @@ SceneEditor* SceneManager::GetEditor()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the currently open level (if any).
 // 
-Asset::LevelAsset* SceneManager::GetCurrentLevel() const
+Asset::SceneAsset* SceneManager::GetCurrentLevel() const
 {
   return m_CurrentLevel; 
 }
@@ -127,7 +127,7 @@ DocumentPtr SceneManager::OpenPath( const std::string& path, std::string& error 
 
     try
     {
-      m_CurrentLevel = Reflect::AssertCast< Asset::LevelAsset >( Asset::AssetClass::LoadAssetClass( fileRef ) );
+      m_CurrentLevel = Reflect::AssertCast< Asset::SceneAsset >( Asset::AssetClass::LoadAssetClass( fileRef ) );
     }
     catch ( const Nocturnal::Exception& e )
     {

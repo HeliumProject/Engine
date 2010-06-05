@@ -1,6 +1,7 @@
 #include "Precompile.h"
 #include "Application.h"
 #include "AppPreferences.h"
+#include "ArtProvider.h"
 
 #include "AppUtils/AppUtils.h"
 #include "AssetEditor/AssetInit.h"
@@ -104,9 +105,7 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
   bool lowFragHeap = Windows::EnableLowFragmentationHeap();
   Console::Debug("Low Fragmentation Heap is %s\n", lowFragHeap ? "enabled" : "not enabled");
 
-#pragma TODO( "reimplement to use resources for images" )
-  UIToolKit::ImageManagerInit( "", "" );
-  UIToolKit::GlobalImageManager().LoadGuiArt();
+  wxArtProvider::Push( new Luna::ArtProvider() );
 
   const char* splashImage = "luna_logo.png";
 

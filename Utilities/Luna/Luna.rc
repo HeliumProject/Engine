@@ -2,4 +2,12 @@
 
 //ApplicationIcon ICON "../../distro/data/luna/themes/default/Luna.ico"
 
+#include "resource.h"
 #include "wx/msw/wx.rc"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_PNG_ICON_FILE_OPEN  PNG                     "..\\..\\Art\\Icons\\GlossySilver\\Icons\\open.png"

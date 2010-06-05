@@ -26,7 +26,7 @@
 #include "Inspect/ReflectClipboardData.h"
 #include "ShaderAsset.h"
 #include "SimpleFieldNode.h"
-#include "LevelAsset.h"
+#include "SceneAsset.h"
 #include "TextureMapAttribute.h"
 
 #include "Common/InitializerStack.h"
@@ -80,7 +80,7 @@ void LunaAsset::InitializeModule()
     g_InitializerStack.Push( Luna::PersistentData::InitializeType, Luna::PersistentData::CleanupType );
     g_InitializerStack.Push( Luna::AssetClass::InitializeType, Luna::AssetClass::CleanupType );
     g_InitializerStack.Push( Luna::AssetReferenceNode::InitializeType, Luna::AssetReferenceNode::CleanupType );
-    g_InitializerStack.Push( Luna::LevelAsset::InitializeType, Luna::LevelAsset::CleanupType ); 
+    g_InitializerStack.Push( Luna::SceneAsset::InitializeType, Luna::SceneAsset::CleanupType ); 
     g_InitializerStack.Push( Luna::ShaderAsset::InitializeType, Luna::ShaderAsset::CleanupType );
     g_InitializerStack.Push( Luna::AttributeWrapper::InitializeType, Luna::AttributeWrapper::CleanupType );
     g_InitializerStack.Push( Luna::FileBackedAttribute::InitializeType, Luna::FileBackedAttribute::CleanupType );

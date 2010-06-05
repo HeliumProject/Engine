@@ -171,7 +171,7 @@ void FileBackedAttribute::OnPreferenceChanged( const Reflect::ElementChangeArgs&
 // 
 void FileBackedAttribute::OnOpen( const ContextMenuArgsPtr& args )
 {
-#pragma TODO( "Open the file in the editor" );
+#pragma TODO( "Open the file in the editor" )
     NOC_BREAK(); 
 }
 

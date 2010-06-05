@@ -19,7 +19,7 @@
 #include "Dependencies/Dependencies.h"
 
 #include "Asset/AssetClass.h"
-#include "Asset/LevelAsset.h"
+#include "Asset/SceneAsset.h"
 #include "Attribute/AttributeHandle.h"
 #include "Asset/WorldFileAttribute.h"
 #include "AssetBuilder/AssetBuilder.h"
@@ -379,7 +379,7 @@ bool GetBuilderOptions( const File::S_Reference& assets, AssetBuilder::BuilderOp
             V_string zoneNames;
 
             // fill out the zone names from the level asset
-            Asset::LevelAssetPtr levelAsset = Asset::AssetClass::LoadAssetClass< Asset::LevelAsset >( *(*assets.begin()) );
+            Asset::SceneAssetPtr levelAsset = Asset::AssetClass::LoadAssetClass< Asset::SceneAsset >( *(*assets.begin()) );
             Attribute::AttributeViewer< Asset::WorldFileAttribute > model( levelAsset );
 
             Reflect::V_Element elements;     

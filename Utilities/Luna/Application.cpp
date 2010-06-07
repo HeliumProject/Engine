@@ -107,23 +107,6 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
 
   wxArtProvider::Push( new Luna::ArtProvider() );
 
-  const char* splashImage = "luna_logo.png";
-
-  // display splash
-  wxBitmap bitmap;
-  wxSplashScreen* splash = NULL;
-  if ( splashImage )
-  {
-    bitmap = UIToolKit::GlobalImageManager().GetBitmap( splashImage );
-    if ( bitmap.IsOk() )
-    {
-      splash = new wxSplashScreen(bitmap, wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_NO_TIMEOUT, 0, NULL, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFRAME_NO_TASKBAR );
-    }
-  }
-
-  // give up some time for the splash to show
-  Yield();
-
   // don't spend a lot of time updating idle events for windows that don't need it
   wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );
   wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
@@ -186,9 +169,6 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
   }
 
   Console::Print("\n"); 
-
-  // kill splash screen
-  delete splash;
 
   if ( Console::GetErrorCount() )
   {

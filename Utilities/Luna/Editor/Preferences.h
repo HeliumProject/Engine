@@ -3,7 +3,7 @@
 #include "API.h"
 
 #include "PreferencesBase.h"
-#include "File/File.h"
+#include "Common/File/Path.h"
 
 namespace Luna
 {
@@ -31,7 +31,7 @@ namespace Luna
   typedef FilePathOptions::FilePathOption FilePathOption;
 
   // Get the UI label for a file path based upon the specified FilePathOption
-  LUNA_EDITOR_API std::string FileRefToLabel( const File::Reference& fileRef, const FilePathOption filePathOption );
+  LUNA_EDITOR_API std::string PathToLabel( const Nocturnal::Path& path, const FilePathOption filePathOption );
 
   /////////////////////////////////////////////////////////////////////////////
   // Base class for preferenced within Luna.  Provides convenience functions

@@ -15,13 +15,12 @@
 using namespace Asset;
 using namespace Attribute;
 using namespace Content;
-using namespace File;
 
 REFLECT_DEFINE_CLASS(Entity);
 
 void Entity::EnumerateClass( Reflect::Compositor<Entity>& comp )
 {
-    Reflect::Field* fieldClassID = comp.AddField( &Entity::m_AssetFileRef, "m_AssetFileRef", Reflect::FieldFlags::FileRef );
+    Reflect::Field* fieldClassPath = comp.AddField( &Entity::m_Path, "m_Path", Reflect::FieldFlags::Path );
     Reflect::Field* fieldShowPointer = comp.AddField( &Entity::m_ShowPointer, "m_ShowPointer" );
     Reflect::Field* fieldShowBounds = comp.AddField( &Entity::m_ShowBounds, "m_ShowBounds" );
     Reflect::Field* fieldShowGeometry = comp.AddField( &Entity::m_ShowGeometry, "m_ShowGeometry" );
@@ -31,19 +30,18 @@ Entity::Entity( const std::string& assetPath )
 : m_ShowPointer (true)
 , m_ShowBounds (true)
 , m_ShowGeometry (false)
+, m_Path( assetPath )
 {
-    m_AssetFileRef = new File::Reference( assetPath );
 }
 
 EntityAssetPtr Entity::GetEntityAsset() const
 {
-    return AssetClass::LoadAssetClass< EntityAsset >( *m_AssetFileRef );
+    return AssetClass::LoadAssetClass< EntityAsset >( m_Path );
 }
 
 std::string Entity::GetEntityAssetPath()
 {
-    m_AssetFileRef->Resolve();
-    return m_AssetFileRef->GetPath();
+    return m_Path.Get();
 }
 
 bool Entity::ValidatePersistent( const Attribute::AttributePtr& attr ) const

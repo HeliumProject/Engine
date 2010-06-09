@@ -3,7 +3,6 @@
 
 #include "Content/ContentInit.h"
 #include "Content/Scene.h"
-#include "File/File.h"
 
 #include <map>
 #include <set>
@@ -13,12 +12,10 @@ igDXContent::RBObjectLoader::RBObjectLoader()
 {
   Reflect::Initialize();
   Content::Initialize();
-  File::Initialize();
 }
 
 igDXContent::RBObjectLoader::~RBObjectLoader()
 {
-  File::Cleanup();
   Content::Cleanup();
   Reflect::Cleanup();
 }

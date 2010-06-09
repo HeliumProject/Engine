@@ -11,9 +11,8 @@ using namespace Luna;
 // Helper function to convert a file ref to an appropriate string 
 // representation.
 // 
-std::string Luna::FileRefToLabel( const File::Reference& fileRef, const FilePathOption filePathOption )
+std::string Luna::PathToLabel( const Nocturnal::Path& path, const FilePathOption filePathOption )
 {
-    Nocturnal::Path path = fileRef.GetFile().GetPath();
     std::string filePath = path.Get();
 
     // Determine whether to show full path or not...

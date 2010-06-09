@@ -345,9 +345,7 @@ Zone* ScenesPanel::AddZone( std::string ( ScenesPanel::*PromptFunction )( const 
         return NULL;
     }
 
-    File::Reference zoneRef( zoneFile.GetPath().Get() );
-
-    if ( ContainsZone( zoneRef ) )
+    if ( ContainsZone( zoneFile.GetPath() ) )
     {
         // Error
         std::ostringstream msg;
@@ -358,7 +356,7 @@ Zone* ScenesPanel::AddZone( std::string ( ScenesPanel::*PromptFunction )( const 
 
     // Create the persistent data for the zone with the new tuid
     Content::Zone* contentZone = new Content::Zone();
-    contentZone->m_FileReference = new File::Reference( zoneRef );
+    contentZone->m_Path = zoneFile.GetPath();
 
     // Create the Luna application object that wraps a Content::Zone
     Zone* sceneZone = new Zone( rootScene, contentZone );
@@ -379,14 +377,11 @@ void ScenesPanel::PromptIfNoZones()
     // world file is always displayed, so 1 is "empty"
     if ( m_ZoneRows.size() == 1 )
     {
-        if ( FileSystem::HasExtension( m_ZoneRows[0]->GetScene()->GetFullPath(), FinderSpecs::Asset::WORLD_DECORATION.GetDecoration() ) )
+        if ( wxMessageBox( "There are no zones associated with this level.\nWould you like to create one?", "Create Zone?", wxYES_NO | wxICON_QUESTION, this ) == wxYES )
         {
-            if ( wxMessageBox( "There are no zones associated with this level.\nWould you like to create one?", "Create Zone?", wxYES_NO | wxICON_QUESTION, this ) == wxYES )
-            {
-                // we need to wait until whatever callback we got here from is finished
-                wxCommandEvent event( wxEVT_COMMAND_BUTTON_CLICKED, m_ButtonNewZone->GetId() );
-                wxPostEvent( m_ButtonNewZone, event );
-            }
+            // we need to wait until whatever callback we got here from is finished
+            wxCommandEvent event( wxEVT_COMMAND_BUTTON_CLICKED, m_ButtonNewZone->GetId() );
+            wxPostEvent( m_ButtonNewZone, event );
         }
     }
 }
@@ -395,7 +390,7 @@ void ScenesPanel::PromptIfNoZones()
 // Returns true if there is a zone with the specified TUID already in this
 // list.
 // 
-bool ScenesPanel::ContainsZone( const File::Reference& zoneRef ) const
+bool ScenesPanel::ContainsZone( const Nocturnal::Path& zonePath ) const
 {
     bool found = false;
     M_ZoneRows::const_iterator zoneItr = m_ZoneRows.begin();
@@ -405,10 +400,7 @@ bool ScenesPanel::ContainsZone( const File::Reference& zoneRef ) const
         Zone* zone = zoneItr->first;
         if ( zone )
         {
-            if ( zone->GetFileReference().ReferencesObject() )
-            {
-                found = zone->GetFileReference()->GetHash() == zoneRef.GetHash(); // breaks on true
-            }
+            found = zone->GetPathObject().Hash() == zonePath.Hash(); // breaks on true
         }
     }
 

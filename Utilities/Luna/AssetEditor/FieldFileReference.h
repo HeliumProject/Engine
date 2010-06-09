@@ -2,7 +2,7 @@
 
 #include "FieldNode.h"
 
-#include "File/File.h"
+#include "Common/File/Path.h"
 
 // Forwards
 namespace UIToolKit
@@ -19,7 +19,7 @@ namespace Luna
     class FieldFileReference : public Luna::FieldNode
     {
     protected:
-        File::ReferencePtr m_FileReference;
+        Nocturnal::Path m_Path;
         bool m_UseLabelPrefix;
 
     public:
@@ -29,13 +29,13 @@ namespace Luna
         static void CleanupType();
 
     public:
-        FieldFileReference( Luna::AssetManager* assetManager, Reflect::Element* element, const Reflect::Field* field, const File::Reference& fileRef );
+        FieldFileReference( Luna::AssetManager* assetManager, Reflect::Element* element, const Reflect::Field* field, const Nocturnal::Path& path );
         virtual ~FieldFileReference();
 
         void SetUseLabelPrefix( bool useLabelPrefix );
-        virtual File::ReferencePtr GetFileReference() const
+        virtual const Nocturnal::Path& GetPath() const
         {
-            return m_FileReference;
+            return m_Path;
         }
         virtual void ActivateItem() NOC_OVERRIDE;
 

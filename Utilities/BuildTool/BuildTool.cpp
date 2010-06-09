@@ -8,6 +8,7 @@
 #include "Common/Version.h"
 #include "Common/Exception.h"
 #include "Common/CommandLine.h"
+#include "Common/File/Path.h"
 #include "Common/String/Utilities.h"
 
 #include "rcs/rcs.h"
@@ -19,7 +20,6 @@
 #include "Windows/Console.h"
 #include "Windows/Process.h"
 
-#include "File/File.h"
 #include "Finder/Finder.h"
 #include "Finder/DebugSpecs.h"
 #include "Finder/AssetSpecs.h"
@@ -255,20 +255,19 @@ void AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool Build( Dependencies::DependencyGraph& depGraph, File::S_Reference& assets, const V_string& options )
+bool Build( Dependencies::DependencyGraph& depGraph, Nocturnal::S_Path& assets, const V_string& options )
 {
     bool success = true;
 
-    for ( File::S_Reference::iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
+    for ( Nocturnal::S_Path::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
     {
-        File::ReferencePtr& fileRef = (*itr);
-        fileRef->Resolve();
+        const Nocturnal::Path& path = (*itr);
 
         AssetClassPtr assetClass;
 
         if (AppUtils::IsDebuggerPresent() && !g_All)
         {
-            assetClass = AssetClass::LoadAssetClass( *fileRef );
+            assetClass = AssetClass::LoadAssetClass( path );
 
             if (assetClass.ReferencesObject())
             {
@@ -277,14 +276,14 @@ bool Build( Dependencies::DependencyGraph& depGraph, File::S_Reference& assets, 
             }
             else
             {
-                throw Nocturnal::Exception( "Unable to load asset '%s'", fileRef->GetFile().GetPath().c_str() );
+                throw Nocturnal::Exception( "Unable to load asset '%s'", path.c_str() );
             }
         }
         else
         {
             try
             {
-                assetClass = AssetClass::LoadAssetClass( *fileRef );
+                assetClass = AssetClass::LoadAssetClass( path );
 
                 if (assetClass.ReferencesObject())
                 {
@@ -293,7 +292,7 @@ bool Build( Dependencies::DependencyGraph& depGraph, File::S_Reference& assets, 
                 }
                 else
                 {
-                    throw Nocturnal::Exception( "Unable to load asset '%s'", fileRef->GetFile().GetPath().c_str() );
+                    throw Nocturnal::Exception( "Unable to load asset '%s'", path.c_str() );
                 }
             }
             catch( const Nocturnal::Exception& ex )
@@ -312,22 +311,22 @@ bool Build( Dependencies::DependencyGraph& depGraph, File::S_Reference& assets, 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool Build( Dependencies::DependencyGraph& depGraph, File::S_Reference& assets, const AssetBuilder::BuilderOptionsPtr& options )
+bool Build( Dependencies::DependencyGraph& depGraph, Nocturnal::S_Path& assets, const AssetBuilder::BuilderOptionsPtr& options )
 {
     bool success = true;
 
     AssetBuilder::V_BuildJob jobs;
     V_AssetClass buildingAssets;
 
-    for ( File::S_Reference::iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
+    for ( Nocturnal::S_Path::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
     {
-        File::ReferencePtr& fileRef = (*itr);
+        const Nocturnal::Path& filePath = (*itr);
 
         AssetClassPtr assetClass;
 
         if (AppUtils::IsDebuggerPresent() && !g_All)
         {
-            assetClass = AssetClass::LoadAssetClass( *fileRef );
+            assetClass = AssetClass::LoadAssetClass( filePath );
 
             if (assetClass.ReferencesObject())
             {
@@ -336,14 +335,14 @@ bool Build( Dependencies::DependencyGraph& depGraph, File::S_Reference& assets, 
             }
             else
             {
-                throw Nocturnal::Exception( "Unable to load asset '%s'", fileRef->GetFile().GetPath().c_str() );
+                throw Nocturnal::Exception( "Unable to load asset '%s'", filePath.c_str() );
             }
         }
         else
         {
             try
             {
-                assetClass = AssetClass::LoadAssetClass( *fileRef );
+                assetClass = AssetClass::LoadAssetClass( filePath );
 
                 if (assetClass.ReferencesObject())
                 {
@@ -352,7 +351,7 @@ bool Build( Dependencies::DependencyGraph& depGraph, File::S_Reference& assets, 
                 }
                 else
                 {
-                    throw Nocturnal::Exception( "Unable to locate asset '%s'", fileRef->GetFile().GetPath().c_str() );
+                    throw Nocturnal::Exception( "Unable to locate asset '%s'", filePath.c_str() );
                 }
             }
             catch( const Nocturnal::Exception& ex )
@@ -401,7 +400,7 @@ bool QueryAndBuildAssets(const V_string& options)
 { 
     // get the asset files they want to build
     int maxMatches = g_NoMultiple ? 1 : (g_All ? -1 : MAX_MATCHES);
-    File::S_Reference possibleMatches;
+    Nocturnal::S_Path possibleMatches;
 #pragma TODO( "make this search the tracker" )
     //    File::GlobalResolver().Find( g_SearchQuery, possibleMatches );
 
@@ -506,7 +505,6 @@ int Main (int argc, const char** argv)
     initializerStack.Push( Content::Initialize, Content::Cleanup );
     initializerStack.Push( Asset::Initialize, Asset::Cleanup );
     initializerStack.Push( Finder::Initialize, Finder::Cleanup );
-    initializerStack.Push( File::Initialize, File::Cleanup );
     initializerStack.Push( AssetBuilder::Initialize, AssetBuilder::Cleanup );
 
     AssetBuilder::AddAssetBuiltListener( AssetBuilder::AssetBuiltSignature::Delegate ( &AssetBuilt ) );

@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 #include "InspectFileInit.h"
 
-#include "File/File.h"
 #include "Common/InitializerStack.h"
 #include "Inspect/Container.h"
 #include "Inspect/InspectInit.h"
@@ -23,7 +22,6 @@ void InspectFile::Initialize()
 {
   if ( ++g_InitCount == 1 )
   {
-    File::Initialize();
     Inspect::Initialize();
 
     g_RegisteredTypes.Push( Reflect::RegisterClass<FileDialogButton>( "InspectFileDialogButton" ) );
@@ -40,6 +38,5 @@ void InspectFile::Cleanup()
   {
     g_RegisteredTypes.Cleanup();
     Inspect::Cleanup();
-    File::Cleanup();
   }
 }

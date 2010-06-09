@@ -35,7 +35,7 @@ namespace Asset
         virtual void SetAttribute( const Attribute::AttributePtr& attr, bool validate = true ) NOC_OVERRIDE;
 
     private:
-        File::ReferencePtr m_AssetFileRef;
+        Nocturnal::Path m_Path;
 
     public:
         // draw bound in editor

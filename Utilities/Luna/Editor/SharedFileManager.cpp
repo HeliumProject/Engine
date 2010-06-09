@@ -29,18 +29,18 @@ SharedFileManager* SharedFileManager::GetInstance()
 ///////////////////////////////////////////////////////////////////////////////
 // Adds a listener for a file event on a specific file.
 // 
-void SharedFileManager::AddFileListener( const File::Reference& fileRef, const SharedFileChangedSignature::Delegate& listener )
+void SharedFileManager::AddFileListener( const Nocturnal::Path& path, const SharedFileChangedSignature::Delegate& listener )
 {
-    SharedFileChangedSignature::Event& evt = m_Events.insert( M_SharedFileChangedEvent::value_type( fileRef.GetHash(), SharedFileChangedSignature::Event() ) ).first->second;
+    SharedFileChangedSignature::Event& evt = m_Events.insert( M_SharedFileChangedEvent::value_type( path.Hash(), SharedFileChangedSignature::Event() ) ).first->second;
     evt.Add( listener );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Removes the specified listener from the list.
 // 
-void SharedFileManager::RemoveFileListener( const File::Reference& fileRef, const SharedFileChangedSignature::Delegate& listener )
+void SharedFileManager::RemoveFileListener( const Nocturnal::Path& path, const SharedFileChangedSignature::Delegate& listener )
 {
-    M_SharedFileChangedEvent::iterator found = m_Events.find( fileRef.GetHash() );
+    M_SharedFileChangedEvent::iterator found = m_Events.find( path.Hash() );
     if ( found != m_Events.end() )
     {
         SharedFileChangedSignature::Event& evt = found->second;
@@ -77,12 +77,12 @@ void SharedFileManager::RemoveListenerFromAllFiles( const SharedFileChangedSigna
 ///////////////////////////////////////////////////////////////////////////////
 // Raises an event on the specified file.
 // 
-void SharedFileManager::FireEvent( const File::Reference& fileRef, FileActions::FileAction action, const SharedFileChangedSignature::Delegate& emitter )
+void SharedFileManager::FireEvent( const Nocturnal::Path& path, FileActions::FileAction action, const SharedFileChangedSignature::Delegate& emitter )
 {
-    M_SharedFileChangedEvent::iterator found = m_Events.find( fileRef.GetHash() );
+    M_SharedFileChangedEvent::iterator found = m_Events.find( path.Hash() );
     if ( found != m_Events.end() )
     {
         SharedFileChangedSignature::Event& evt = found->second;
-        evt.Raise( SharedFileChangeArgs( fileRef, action ), emitter );
+        evt.Raise( SharedFileChangeArgs( path, action ), emitter );
     }
 }

@@ -273,6 +273,7 @@ template SimpleSetSerializer< u64, U64Serializer >;
 template SimpleSetSerializer< f32, F32Serializer >;
 template SimpleSetSerializer< UniqueID::GUID, GUIDSerializer >;
 template SimpleSetSerializer< UniqueID::TUID, TUIDSerializer >;
+template SimpleSetSerializer< Nocturnal::Path, PathSerializer >;
 
 REFLECT_DEFINE_CLASS( StringSetSerializer );
 REFLECT_DEFINE_CLASS( U32SetSerializer );
@@ -280,3 +281,4 @@ REFLECT_DEFINE_CLASS( U64SetSerializer );
 REFLECT_DEFINE_CLASS( F32SetSerializer );
 REFLECT_DEFINE_CLASS( GUIDSetSerializer );
 REFLECT_DEFINE_CLASS( TUIDSetSerializer );
+REFLECT_DEFINE_CLASS( PathSetSerializer );

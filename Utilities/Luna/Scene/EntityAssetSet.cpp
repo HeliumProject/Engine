@@ -35,33 +35,33 @@ void EntityAssetSet::CleanupType()
     Reflect::UnregisterClass< Luna::EntityAssetSet >();
 }
 
-EntityAssetSet::EntityAssetSet(Luna::EntityType* type, const File::Reference& assetRef )
+EntityAssetSet::EntityAssetSet( Luna::EntityType* type, const Nocturnal::Path& assetPath )
 : Luna::InstanceSet (type)
-, m_AssetFileRef( new File::Reference( assetRef ) )
+, m_AssetPath( assetPath )
 , m_ClassMissing (false)
 , m_Shape (NULL)
 {
     LoadAssetClass();
 
-    SharedFileManager::GetInstance()->AddFileListener( *m_AssetFileRef, SharedFileChangedSignature::Delegate( this, &EntityAssetSet::FileChanged ) );
+    SharedFileManager::GetInstance()->AddFileListener( m_AssetPath, SharedFileChangedSignature::Delegate( this, &EntityAssetSet::FileChanged ) );
 }
 
 EntityAssetSet::~EntityAssetSet()
 {
     delete m_Shape;
 
-    SharedFileManager::GetInstance()->RemoveFileListener( *m_AssetFileRef, SharedFileChangedSignature::Delegate( this, &EntityAssetSet::FileChanged ) );
-    delete m_AssetFileRef;
+    SharedFileManager::GetInstance()->RemoveFileListener( m_AssetPath, SharedFileChangedSignature::Delegate( this, &EntityAssetSet::FileChanged ) );
+    delete m_AssetPath;
 }
 
 void EntityAssetSet::LoadAssetClass()
 {
 
-    m_Class = Asset::AssetClass::LoadAssetClass<Asset::EntityAsset>( *m_AssetFileRef );
+    m_Class = Asset::AssetClass::LoadAssetClass<Asset::EntityAsset>( m_AssetPath );
 
     if ( !m_Class.ReferencesObject() )
     {
-        m_Name = m_AssetFileRef->GetFile().GetPath().Basename();
+        m_Name = m_AssetPath.Basename();
     }
     else
     {
@@ -71,7 +71,7 @@ void EntityAssetSet::LoadAssetClass()
 
         if (model.Valid())
         {
-            m_ArtFile = model->GetFileReference().GetPath();
+            m_ArtFile = model->GetPath().Get();
 
             if (!m_ArtFile.empty())
             {

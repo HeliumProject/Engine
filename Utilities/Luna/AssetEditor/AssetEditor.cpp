@@ -1408,10 +1408,10 @@ void AssetEditor::OnBuild( wxCommandEvent& args )
 
         if ( shouldBuild )
         {
-            File::S_Reference assetFiles;
+            Nocturnal::S_Path assetFiles;
             for ( S_AssetClassDumbPtr::iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
             {
-                assetFiles.insert( (*itr)->GetFileReference() );
+                assetFiles.insert( (*itr)->GetPath() );
             }
             Luna::BuildAssets( assetFiles, this, NULL, showOptions );
         }

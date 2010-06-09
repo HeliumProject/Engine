@@ -29,26 +29,22 @@ REFLECT_DEFINE_ABSTRACT( AssetClass );
 void AssetClass::EnumerateClass( Reflect::Compositor<AssetClass>& comp )
 {
     Reflect::Field* fieldDescription = comp.AddField( &AssetClass::m_Description, "m_Description" );
-    Reflect::Field* fieldAssetFileRef = comp.AddField( &AssetClass::m_AssetFileRef, "m_AssetFileRef", Reflect::FieldFlags::Hide );
+    Reflect::Field* fieldPath = comp.AddField( &AssetClass::m_Path, "m_Path", Reflect::FieldFlags::Hide );
 }
 
-#pragma TODO( "if we're deserialized from a file that differs from our resolved m_AssetFileRef, reset our id, we've likely been copied" )
-
 AssetClass::AssetClass()
-: m_AssetFileRef( NULL )
 {
 }
 
-AssetClassPtr AssetClass::LoadAssetClass( const std::string& path )
+AssetClassPtr AssetClass::LoadAssetClass( const char* path )
 {
     AssetClassPtr assetClass = NULL;
     try
     {
-        File::Reference fileRef( path );
-        fileRef.Resolve();
+        Nocturnal::Path filePath( path );
 
-        assetClass = Reflect::Archive::FromFile< AssetClass >( fileRef.GetPath() );
-        assetClass->SetAssetFileRef( fileRef );
+        assetClass = Reflect::Archive::FromFile< AssetClass >( filePath );
+        assetClass->SetPath( filePath );
         assetClass->LoadFinished();
     }
     catch ( const Nocturnal::Exception& exception )
@@ -61,48 +57,34 @@ AssetClassPtr AssetClass::LoadAssetClass( const std::string& path )
 }
 
 
-Nocturnal::Path AssetClass::GetFilePath()
+const Nocturnal::Path& AssetClass::GetFilePath()
 {
-    NOC_ASSERT( m_AssetFileRef.ReferencesObject() );
-    m_AssetFileRef->Resolve();
-    return m_AssetFileRef->GetFile().GetPath();
+    return m_Path;
 }
 
 Nocturnal::Path AssetClass::GetDataDir()
 {
-    NOC_ASSERT( m_AssetFileRef.ReferencesObject() );
-    m_AssetFileRef->Resolve();
-    Nocturnal::Path dataDir;
-    dataDir.Set( m_AssetFileRef->GetFile().GetPath().Directory() );
-    return dataDir;
+    return Nocturnal::Path( m_Path.Directory() );
 }
 
 Nocturnal::Path AssetClass::GetBuiltDirectory()
 {
-    NOC_ASSERT( m_AssetFileRef.ReferencesObject() );
-
 #pragma TODO( "make human-readable built directories" )
     std::stringstream str;
-    str << TUID_HEX_FORMAT << m_AssetFileRef->GetHash();
+    str << TUID_HEX_FORMAT << m_Path.Hash();
     Nocturnal::Path builtDirectory( s_BaseBuiltDirectory + std::string( "/" ) + str.str() );
     return builtDirectory;
 }
 
 std::string AssetClass::GetFullName() const
 {
-    NOC_ASSERT( m_AssetFileRef.ReferencesObject() );
-
 #pragma TODO( "break out some settings stuff for the asset root" )
-    m_AssetFileRef->Resolve();
-    return m_AssetFileRef->GetFile().GetPath().Filename();
+    return m_Path.Filename();
 }
 
 std::string AssetClass::GetShortName() const
 {
-    NOC_ASSERT( m_AssetFileRef.ReferencesObject() );
-
-    m_AssetFileRef->Resolve();
-    std::string shortName = m_AssetFileRef->GetFile().GetPath().Filename();
+    std::string shortName = m_Path.Filename();
 
     // strip off extension
     while ( FileSystem::HasExtension( shortName ) )
@@ -147,10 +129,7 @@ void AssetClass::RemoveAttribute( i32 typeID )
 
 void AssetClass::Serialize( const AssetVersionPtr &version )
 {
-    NOC_ASSERT( m_AssetFileRef.ReferencesObject() );
-
-    m_AssetFileRef->Resolve();
-    Reflect::Archive::ToFile( this, m_AssetFileRef->GetPath(), version );
+    Reflect::Archive::ToFile( this, m_Path, version );
 
     m_Modified = false;
 }

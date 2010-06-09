@@ -507,7 +507,7 @@ void BrowserSearchPanel::PopulateCollectionsChoice()
     end = m_CollectionManager->GetCollections().end(); itr != end; ++itr )
   {    
     AssetCollection* collection = itr->second;
-    if ( collection && !collection->GetAssetReferences().empty() )
+    if ( collection && !collection->GetAssetPaths().empty() )
     {
       tableData.push_back( collection->GetName() );
       ++numAdded;

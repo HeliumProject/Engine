@@ -462,11 +462,9 @@ bool BrowserFrame::IsPreviewable( Asset::AssetFile* file )
         Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( asset );
         if ( artFile.Valid() )
         {
-            artFile->GetFileReference().Resolve();
-
-            if ( artFile->GetFileReference().IsValid() )
+            if ( !artFile->GetPath().Get().empty() )
             {
-                return artFile->GetFileReference().GetFile().Exists();
+                return artFile->GetPath().Exists();
             }
         }
     }
@@ -896,10 +894,10 @@ void BrowserFrame::OnNewCollectionFromSelection( wxCommandEvent& event )
         if ( event.GetId() == BrowserMenu::NewCollectionFromSelection )
         {
             collection = new AssetCollection( "New Collection", AssetCollectionFlags::CanRename | AssetCollectionFlags::CanHandleDragAndDrop );
-            File::S_Reference fileRefs;
+            Nocturnal::S_Path fileRefs;
             for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end(); fileItr != fileEnd; ++fileItr )
             {
-                fileRefs.insert( (*fileItr)->GetFileReference() );
+                fileRefs.insert( (*fileItr)->GetPath() );
             }
 
             if ( !fileRefs.empty() )
@@ -912,7 +910,7 @@ void BrowserFrame::OnNewCollectionFromSelection( wxCommandEvent& event )
             const bool reverse = event.GetId() == BrowserMenu::NewUsageCollectionFromSelection;
             Asset::AssetFile* file = *files.begin();
             DependencyCollectionPtr dependencyCollection = new DependencyCollection( file->GetShortName(), AssetCollectionFlags::Dynamic, reverse );
-            dependencyCollection->SetRoot( *(file->GetFileReference()) );
+            dependencyCollection->SetRoot( file->GetPath() );
             dependencyCollection->LoadDependencies();
             collection = dependencyCollection;
         }

@@ -5,6 +5,7 @@
 
 #include "Common/Types.h"
 #include "Common/Memory/SmartPtr.h"
+#include "Common/File/Path.h"
 
 #include "API.h"
 #include "Tracker.h"

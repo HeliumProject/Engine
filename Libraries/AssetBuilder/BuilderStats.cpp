@@ -404,7 +404,7 @@ void BuilderStats::Cleanup()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool GetBuiltAssetRowID( File::Reference& fileRef, Asset::AssetType assetType, u64& assetRowID )
+bool GetBuiltAssetRowID( const Nocturnal::Path& path, Asset::AssetType assetType, u64& assetRowID )
 {
   Windows::TakeSection sec( g_Section );
 
@@ -423,7 +423,7 @@ bool GetBuiltAssetRowID( File::Reference& fileRef, Asset::AssetType assetType, u
   sprintf_s( insertBuff,
     sizeof( insertBuff ),
     s_InsertBuiltAssetSQL,
-    (u64) fileRef.GetHash(),
+    (u64) path.Hash(),
     (u64) g_ProjectID,
     (u64) g_AssetBranchID,
     (u64) assetTypeID );
@@ -433,7 +433,7 @@ bool GetBuiltAssetRowID( File::Reference& fileRef, Asset::AssetType assetType, u
   sprintf_s( selectBuff,
     sizeof( selectBuff ),
     s_SelectBuiltAssetRowIDSQL,
-    (u64) fileRef.GetHash(),
+    (u64) path.Hash(),
     (u64) g_ProjectID,
     (u64) g_AssetBranchID,
     (u64) assetTypeID );
@@ -443,7 +443,7 @@ bool GetBuiltAssetRowID( File::Reference& fileRef, Asset::AssetType assetType, u
 
 
 ///////////////////////////////////////////////////////////////////////////////
-bool BuilderStats::AddBuild( File::Reference& fileRef, Asset::AssetType assetType, const std::string& builderName, f32 duration )
+bool BuilderStats::AddBuild( const Nocturnal::Path& path, Asset::AssetType assetType, const std::string& builderName, f32 duration )
 {
   Windows::TakeSection sec( g_Section );
 
@@ -453,7 +453,7 @@ bool BuilderStats::AddBuild( File::Reference& fileRef, Asset::AssetType assetTyp
     return false;
 
   u64 assetRowID;
-  if ( !GetBuiltAssetRowID( fileRef, assetType, assetRowID ) )
+  if ( !GetBuiltAssetRowID( path, assetType, assetRowID ) )
     return false;
 
   u64 builderRowID = 0;
@@ -490,7 +490,7 @@ bool BuilderStats::AddBuild( File::Reference& fileRef, Asset::AssetType assetTyp
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool BuilderStats::AddTopLevelBuild( File::Reference& fileRef, Asset::AssetType assetType, TopLevelBuild& topLevelBuild )
+bool BuilderStats::AddTopLevelBuild( const Nocturnal::Path& path, Asset::AssetType assetType, TopLevelBuild& topLevelBuild )
 {
   Windows::TakeSection sec( g_Section );
 
@@ -500,7 +500,7 @@ bool BuilderStats::AddTopLevelBuild( File::Reference& fileRef, Asset::AssetType 
     return false;
 
   u64 assetRowID;
-  if ( !GetBuiltAssetRowID( fileRef, assetType, assetRowID ) )
+  if ( !GetBuiltAssetRowID( path, assetType, assetRowID ) )
     return false;
 
   static char insertBuildBuff[MAX_INSERT_LENGTH] = { '\0' };

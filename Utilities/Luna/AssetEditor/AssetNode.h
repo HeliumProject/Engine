@@ -5,7 +5,6 @@
 #include "Editor/ContextMenuGenerator.h"
 #include "Core/Selectable.h"
 #include "Undo/Command.h"
-#include "File/File.h"
 
 namespace Inspect
 {

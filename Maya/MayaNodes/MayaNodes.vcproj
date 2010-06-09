@@ -220,10 +220,6 @@
 			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{122FA330-2209-4BF0-A359-9C0C113369E2}"
-			RelativePathToProject=".\libraries\File\File.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
 			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
 		/>

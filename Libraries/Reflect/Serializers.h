@@ -5,6 +5,7 @@
 #include "PointerSerializer.h"
 #include "EnumerationSerializer.h"
 #include "BitfieldSerializer.h"
+#include "PathSerializer.h"
 
 #include "ArraySerializer.h"
 #include "SetSerializer.h"

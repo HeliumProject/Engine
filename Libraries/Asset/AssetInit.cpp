@@ -26,14 +26,12 @@
 #include "StandardNormalMapAttribute.h"
 #include "StandardShaderAsset.h"
 #include "TextureMapAttribute.h"
-#include "WorldFileAttribute.h"
 #include "SceneManifest.h"
 
 #include "Attribute/AttributeInit.h"
 #include "Attribute/AttributeCategories.h"
 #include "Common/InitializerStack.h"
 #include "Content/ContentInit.h"
-#include "File/File.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Reflect/Registry.h"
@@ -83,7 +81,6 @@ void Asset::Initialize()
   {
     g_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     g_InitializerStack.Push( Finder::Initialize, Finder::Cleanup );
-    g_InitializerStack.Push( File::Initialize, File::Cleanup );
     g_InitializerStack.Push( Attribute::Initialize, Attribute::Cleanup );
     g_InitializerStack.Push( Content::Initialize, Content::Cleanup );
 
@@ -167,9 +164,6 @@ void Asset::Initialize()
     // appearance
     g_InitializerStack.Push( Reflect::RegisterClass<ArtFileAttribute>( "ArtFileAttribute" ) );
     Attribute::AttributeCategories::GetInstance()->Categorize( new ArtFileAttribute );
-    g_InitializerStack.Push( Reflect::RegisterClass<WorldFileAttribute>( "WorldFileAttribute" ) );
-    Attribute::AttributeCategories::GetInstance()->Categorize( new WorldFileAttribute );
-
 
     //
     // Asset classes

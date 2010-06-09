@@ -47,7 +47,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
   ContainerPtr group = m_Container->GetCanvas()->Create<Container>(this);
   groups.push_back( group );
 
-  bool fileRefField = field->m_SerializerID == Reflect::GetType< PointerSerializer >() && field->m_Flags & FieldFlags::FileRef;
+  bool pathField = field->m_SerializerID == Reflect::GetType< PointerSerializer >() && field->m_Flags & FieldFlags::Path;
   bool readOnly = ( field->m_Flags & FieldFlags::ReadOnly ) == FieldFlags::ReadOnly;
 
   DataChangingSignature::Delegate changingDelegate;
@@ -64,7 +64,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
   if (!result)
   {
-    if ( fileRefField || field->m_SerializerID == Reflect::GetType<StringSerializer>() )
+    if ( pathField || field->m_SerializerID == Reflect::GetType<StringSerializer>() )
     {
       ContainerPtr valueGroup = m_Container->GetCanvas()->Create<Container>(this);
       ValuePtr value = m_Container->GetCanvas()->Create<Value>(this);
@@ -73,7 +73,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
       valueGroup->AddControl( value );
       groups.push_back( valueGroup );
 
-      if ( fileRefField || field->m_Flags & FieldFlags::FilePath ) 
+      if ( pathField || field->m_Flags & FieldFlags::FilePath ) 
       {
         if ( !readOnly )
         {

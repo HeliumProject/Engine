@@ -15,7 +15,7 @@ namespace Luna
     public:
         std::string m_OriginalValue;
         std::string m_Name;
-        File::ReferencePtr m_ClassRef;
+        Nocturnal::Path m_ClassPath;
         float m_Probability;
 
         std::string GetListName() const;
@@ -30,7 +30,7 @@ namespace Luna
         //
 
     public:
-        File::ReferencePtr m_ClassReference;
+        Nocturnal::Path m_ClassPath;
         static bool s_PointerVisible;
         static bool s_BoundsVisible;
         static bool s_GeometryVisible;

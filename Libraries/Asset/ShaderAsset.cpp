@@ -73,7 +73,7 @@ bool ShaderAsset::ValidateClass( std::string& error ) const
         error = "Shader '" + GetShortName() + "' does not have a Color Map attribute. This shader will not build!";
         return false;
     }
-    else if ( !colorMap->GetFileReference().IsValid() )
+    else if ( !colorMap->GetPath().Exists() )
     {
         error = "Shader '" + GetShortName() + "' does not have a Color Map texture specified. This shader will not build! Click on the Color Map attribute and select a valid file to use as the texture.";
         return false;
@@ -102,7 +102,7 @@ const Finder::FileSpec& ShaderAsset::GetBuiltFileSpec() const
     return FinderSpecs::Shader::BUILT_FILE;
 }
 
-void ShaderAsset::SetTextureDirty( File::Reference& fileRef, bool dirty )
+void ShaderAsset::SetTextureDirty( const Nocturnal::Path& path, bool dirty )
 {
     Attribute::M_Attribute::const_iterator attrItr = GetAttributes().begin();
     Attribute::M_Attribute::const_iterator attrEnd = GetAttributes().end();
@@ -112,7 +112,7 @@ void ShaderAsset::SetTextureDirty( File::Reference& fileRef, bool dirty )
         if ( attrib->HasType( Reflect::GetType< TextureMapAttribute >() ) )
         {
             TextureMapAttributePtr texAttrib = Reflect::DangerousCast< TextureMapAttribute >( attrib );
-            if ( texAttrib->GetFileReference().GetFile().GetPath() == fileRef.GetFile().GetPath() )
+            if ( texAttrib->GetPath() == path )
             {
                 texAttrib->SetTextureDirty( dirty );
             }

@@ -244,7 +244,7 @@ void PrintJobList( const V_BuildJob& jobs )
     int i = 0;
     for( V_BuildJob::const_iterator itr = jobs.begin(); itr != jobs.end(); ++itr )
     {
-        Console::Print( "%d: %x / %s / %s / "TUID_HEX_FORMAT"\n", i++, *(u32*)( (void*)(*itr)->m_Builder ), (*itr)->m_Asset->GetShortName().c_str(), (*itr)->m_Builder->GetBuildString().c_str(), (*itr)->m_Asset->GetAssetFileRef()->GetHash() );
+        Console::Print( "%d: %x / %s / %s / "TUID_HEX_FORMAT"\n", i++, *(u32*)( (void*)(*itr)->m_Builder ), (*itr)->m_Asset->GetShortName().c_str(), (*itr)->m_Builder->GetBuildString().c_str(), (*itr)->m_Asset->GetPath().Hash() );
     }
 }
 
@@ -261,7 +261,7 @@ void TrimJobList( V_BuildJob& jobs )
 
 #pragma TODO( "We're using the vtable of the builder here to generate a unique ID per builder/asset pair.  We should do this differently in the future." )
         std::stringstream buildSignature;
-        buildSignature << job->m_Asset->GetAssetFileRef()->GetHash() << job->m_Builder->GetBuildString() << std::hex << *(u32*)( (void*)job->m_Builder );
+        buildSignature << job->m_Asset->GetPath().Hash() << job->m_Builder->GetBuildString() << std::hex << *(u32*)( (void*)job->m_Builder );
 
         if ( jobSignatures.find( buildSignature.str() ) != jobSignatures.end() )
         {
@@ -341,7 +341,7 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
 
         // print some state
         Console::Print( "Building %s\n", builder->GetBuildString().c_str() );
-        Console::Print( Console::Levels::Verbose,  " TUID: "TUID_HEX_FORMAT"\n", assetClass->GetAssetFileRef()->GetHash() );
+        Console::Print( Console::Levels::Verbose,  " TUID: "TUID_HEX_FORMAT"\n", assetClass->GetPath().Hash() );
 
         // capture this thread's console output
         PrintListener printListener (job->m_ConsoleOutput, job->m_WarningCount, job->m_ErrorCount, throttle);
@@ -378,7 +378,7 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
 
         g_BuildTime += elapsed;
 
-        BuilderStats::AddBuild( *( assetClass->GetAssetFileRef() ), assetClass->GetAssetType(), builderName, elapsed );
+        BuilderStats::AddBuild( assetClass->GetPath(), assetClass->GetAssetType(), builderName, elapsed );
     }
     catch( const Nocturnal::Exception& e )
     {
@@ -395,7 +395,7 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
 
     if ( result == JobResults::Failure )
     {
-        g_FailedAssets.insert( assetClass->GetAssetFileRef()->GetHash() );
+        g_FailedAssets.insert( assetClass->GetPath().Hash() );
         Console::Error( "Failure Building %s: %s\n", builder->GetBuildString().c_str(), failureReason.c_str() );
     }
 
@@ -509,7 +509,7 @@ bool BuildDependentJobs(V_BuildJob& allJobs, Dependencies::DependencyGraph& grap
                 error << "Error gathering post-dependent jobs for job '" << job->m_Asset->GetFullName().c_str() << "': " << e.what();
 
                 job->m_Result = JobResults::Failure;
-                g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
+                g_FailedAssets.insert( job->m_Asset->GetPath().Hash() );
 
                 if ( job->m_Flags & JobFlags::Required || Nocturnal::GetCmdLineFlag( CommandArgs::HaltOnError ) )
                 {
@@ -762,7 +762,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
                 error << "Error initializing builder for job '" << job->m_Asset->GetFullName().c_str() << "': " << e.what();
 
                 job->m_Result = JobResults::Failure;
-                g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
+                g_FailedAssets.insert( job->m_Asset->GetPath().Hash() );
 
                 if ( job->m_Flags & JobFlags::Required || Nocturnal::GetCmdLineFlag( CommandArgs::HaltOnError ) )
                 {
@@ -802,7 +802,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
                 error << "Error gathering jobs for job '" << job->m_Asset->GetFullName().c_str() << "': " << e.what();
 
                 job->m_Result = JobResults::Failure;
-                g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
+                g_FailedAssets.insert( job->m_Asset->GetPath().Hash() );
 
                 if ( job->m_Flags & JobFlags::Required || Nocturnal::GetCmdLineFlag( CommandArgs::HaltOnError )  )
                 {
@@ -885,7 +885,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
                 e.Set( error.str() );
 
                 job->m_Result = JobResults::Failure;
-                g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
+                g_FailedAssets.insert( job->m_Asset->GetPath().Hash() );
 
                 if ( job->m_Flags & JobFlags::Required || Nocturnal::GetCmdLineFlag( CommandArgs::HaltOnError ) )
                 {
@@ -999,7 +999,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
                 job->m_Result = JobResults::Download;
 
                 // now raise the event notifying that this asset has been downloaded
-                AssetBuiltArgsPtr builtArgs = new AssetBuiltArgs( builder->GetAssetClass()->GetAssetFileRef()->GetHash(), JobResults::Download );
+                AssetBuiltArgsPtr builtArgs = new AssetBuiltArgs( builder->GetAssetClass()->GetPath().Hash(), JobResults::Download );
                 g_AssetBuiltEvent.Raise( builtArgs );
             }
             else
@@ -1051,14 +1051,14 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
                     outputFilesToUpdate.insert( outputFilesToUpdate.end(), job->m_OutputFiles.begin(), job->m_OutputFiles.end() );
 
                     // now raise the event notifying that this asset has been built
-                    AssetBuiltArgsPtr builtArgs = new AssetBuiltArgs( job->m_Asset->GetAssetFileRef()->GetHash(), JobResults::Clean );
+                    AssetBuiltArgsPtr builtArgs = new AssetBuiltArgs( job->m_Asset->GetPath().Hash(), JobResults::Clean );
                     g_AssetBuiltEvent.Raise( builtArgs );
 
                     filesToUpload.insert( filesToUpload.end(), job->m_OutputFiles.begin(), job->m_OutputFiles.end() );
                 }
                 else
                 {
-                    g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
+                    g_FailedAssets.insert( job->m_Asset->GetPath().Hash() );
 
                     if ( job->m_Result == JobResults::Failure && job->m_Flags & JobFlags::Required )
                     {
@@ -1095,10 +1095,10 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
             for ( ; nestedItr != nestedEnd; ++nestedItr )
             {
                 BuildJob* nestedJob = *nestedItr;
-                if ( ( nestedJob->m_OriginalFlags & JobFlags::Required ) && DidBuildFail( nestedJob->m_Asset->GetAssetFileRef()->GetHash() ) )
+                if ( ( nestedJob->m_OriginalFlags & JobFlags::Required ) && DidBuildFail( nestedJob->m_Asset->GetPath().Hash() ) )
                 {
                     job->m_Result = JobResults::Failure;
-                    g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
+                    g_FailedAssets.insert( job->m_Asset->GetPath().Hash() );
                     Console::Print( Console::Levels::Verbose, "Job '%s' marked as failed, because required job '%s' failed\n", job->m_BuildString.c_str(), nestedJob->m_BuildString.c_str() );
                     break;
                 }
@@ -1146,10 +1146,10 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
         for ( ; nestedItr != nestedEnd; ++nestedItr )
         {
             BuildJob* nestedJob = *nestedItr;
-            if ( ( nestedJob->m_OriginalFlags & JobFlags::Required ) && DidBuildFail( nestedJob->m_Asset->GetAssetFileRef()->GetHash() ) )
+            if ( ( nestedJob->m_OriginalFlags & JobFlags::Required ) && DidBuildFail( nestedJob->m_Asset->GetPath().Hash() ) )
             {
                 job->m_Result = JobResults::Failure;
-                g_FailedAssets.insert( job->m_Asset->GetAssetFileRef()->GetHash() );
+                g_FailedAssets.insert( job->m_Asset->GetPath().Hash() );
                 Console::Print( Console::Levels::Verbose, "Job '%s' marked as failed, because required job '%s' failed\n", job->m_BuildString.c_str(), nestedJob->m_BuildString.c_str() );
                 break;
             }
@@ -1193,7 +1193,7 @@ void SendTopLevelBuild( const AssetClassPtr& assetClass )
     topLevelBuild.m_SignatureCreationTime = g_SignatureCreationTime;
     topLevelBuild.m_TotalTime = g_TotalTime;
     topLevelBuild.m_UnaccountedTime = unaccounted;
-    BuilderStats::AddTopLevelBuild( *(assetClass->GetAssetFileRef()), assetClass->GetAssetType(), topLevelBuild );
+    BuilderStats::AddTopLevelBuild( assetClass->GetPath(), assetClass->GetAssetType(), topLevelBuild );
 
     Console::Profile( "Top level build breakdown:\n" );
     Console::Profile( "\tDependency Checking:   %fs\n", ( g_DependencyCheckTime / 1000.0f ) );
@@ -1291,16 +1291,16 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, const AssetClass
     }
 }
 
-void AssetBuilder::Build( Dependencies::DependencyGraph& graph, File::Reference& fileRef, const BuilderOptionsPtr& builderOptions )
+void AssetBuilder::Build( Dependencies::DependencyGraph& graph, Nocturnal::Path& path, const BuilderOptionsPtr& builderOptions )
 {
-    AssetClassPtr assetClass = AssetClass::LoadAssetClass( fileRef );
+    AssetClassPtr assetClass = AssetClass::LoadAssetClass( path );
 
     Build( graph, assetClass, builderOptions );
 }
 
-void AssetBuilder::Build( Dependencies::DependencyGraph& graph, File::Reference& fileRef, const V_string& options )
+void AssetBuilder::Build( Dependencies::DependencyGraph& graph, Nocturnal::Path& path, const V_string& options )
 {
-    AssetClassPtr assetClass = AssetClass::LoadAssetClass( fileRef );
+    AssetClassPtr assetClass = AssetClass::LoadAssetClass( path );
 
     Build( graph, assetClass, options );
 }

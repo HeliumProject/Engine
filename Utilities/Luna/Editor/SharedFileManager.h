@@ -3,7 +3,7 @@
 #include "API.h"
 
 #include "Common/Automation/Event.h"
-#include "File/File.h"
+#include "Common/File/Path.h"
 
 #include <map>
 
@@ -30,11 +30,11 @@ namespace Luna
     // 
     struct LUNA_EDITOR_API SharedFileChangeArgs
     {
-        File::ReferencePtr m_spFileRef;
+        Nocturnal::Path m_Path;
         FileActions::FileAction m_Action;
 
-        SharedFileChangeArgs( const File::Reference& fileRef, FileActions::FileAction action )
-            : m_spFileRef( new File::Reference( fileRef ) )
+        SharedFileChangeArgs( const Nocturnal::Path& path, FileActions::FileAction action )
+            : m_Path( path )
             , m_Action( action )
         {
         }
@@ -62,9 +62,9 @@ namespace Luna
 
         static SharedFileManager* GetInstance();
 
-        void AddFileListener( const File::Reference& fileRef, const SharedFileChangedSignature::Delegate& listener );
-        void RemoveFileListener( const File::Reference& fileRef, const SharedFileChangedSignature::Delegate& listener );
+        void AddFileListener( const Nocturnal::Path& path, const SharedFileChangedSignature::Delegate& listener );
+        void RemoveFileListener( const Nocturnal::Path& path, const SharedFileChangedSignature::Delegate& listener );
         void RemoveListenerFromAllFiles( const SharedFileChangedSignature::Delegate& listener );
-        void FireEvent( const File::Reference& fileRef, FileActions::FileAction action, const SharedFileChangedSignature::Delegate& emitter = SharedFileChangedSignature::Delegate () );
+        void FireEvent( const Nocturnal::Path& path, FileActions::FileAction action, const SharedFileChangedSignature::Delegate& emitter = SharedFileChangedSignature::Delegate () );
     };
 }

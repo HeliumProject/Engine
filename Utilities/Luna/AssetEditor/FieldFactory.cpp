@@ -100,7 +100,7 @@ AssetNodePtr FieldFactory::CreateFieldNode( Luna::AssetManager* assetManager, Re
   {
     // Non-container
 
-#pragma TODO( "reimplement this for File::ReferncePtr" )
+#pragma TODO( "reimplement this for Nocturnal::Path" )
     //if ( Luna::IsAssetFileReference( element, field ) )
     //{
     //    Reflect::PointerSerializerPtr serializer = Reflect::AssertCast< Reflect::PointerSerializer >( field->CreateSerializer( element ) );

@@ -101,7 +101,7 @@ void* ThumbnailLoader::LoadThread::Entry()
         else
         {
             V_string files;
-            Nocturnal::Path thumbnailFolder( m_Loader.m_ThumbnailDirectory + '/' + file->GetFileReference()->GetHash() );
+            Nocturnal::Path thumbnailFolder( m_Loader.m_ThumbnailDirectory + '/' + file->GetPath().Hash() );
             FileSystem::GetFiles( thumbnailFolder.Get(), files );
 
             for ( V_string::const_iterator itr = files.begin(), end = files.end();
@@ -125,10 +125,9 @@ void* ThumbnailLoader::LoadThread::Entry()
                     Asset::ColorMapAttributePtr colorMap = Reflect::ObjectCast< Asset::ColorMapAttribute >( shader->GetAttribute( Reflect::GetType< Asset::ColorMapAttribute >() ) );
                     if ( colorMap )
                     {
-                        colorMap->GetFileReference().Resolve();
-                        if ( colorMap->GetFileReference().IsValid() )
+                        if ( !colorMap->GetPath().Get().empty() )
                         {
-                            std::string colorMapPath = colorMap->GetFileReference().GetPath();
+                            std::string colorMapPath = colorMap->GetPath().Get();
                             if ( FileSystem::Exists( colorMapPath ) && Luna::IsSupportedTexture( colorMapPath ) )
                             {
                                 IDirect3DTexture9* texture = NULL;

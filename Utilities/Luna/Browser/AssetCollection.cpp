@@ -7,6 +7,7 @@
 #include "Common/Boost/Regex.h"
 #include "Common/Checksum/MD5.h"
 #include "Common/Flags.h"
+#include "Common/File/File.h"
 #include "Common/String/Utilities.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
@@ -25,7 +26,7 @@ void AssetCollection::EnumerateClass( Reflect::Compositor<AssetCollection>& comp
 {
     Reflect::Field* fieldName = comp.AddField( &AssetCollection::m_Name, "m_Name" );
     Reflect::Field* fieldFlags = comp.AddField( &AssetCollection::m_Flags, "m_Flags" );
-    Reflect::Field* fieldAssetReferences = comp.AddField( &AssetCollection::m_AssetReferences, "m_AssetReferences", Reflect::FieldFlags::FileRef );
+    Reflect::Field* fieldAssetPaths = comp.AddField( &AssetCollection::m_AssetPaths, "m_AssetPaths", Reflect::FieldFlags::Path );
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -33,7 +34,6 @@ AssetCollection::AssetCollection()
 : m_FreezeCount( 0 ) 
 , m_Name( "" )
 , m_Flags( AssetCollectionFlags::Default )
-, m_spFileReference( NULL )
 {
 }
 
@@ -42,7 +42,6 @@ AssetCollection::AssetCollection( const std::string& name, const u32 flags )
 : m_FreezeCount( 0 ) 
 , m_Name( name )
 , m_Flags( AssetCollectionFlags::Default )
-, m_spFileReference( NULL )
 {
     SetFlags( flags );
 }
@@ -50,7 +49,7 @@ AssetCollection::AssetCollection( const std::string& name, const u32 flags )
 /////////////////////////////////////////////////////////////////////////////
 AssetCollection::~AssetCollection()
 {
-    m_AssetReferences.clear();
+    m_AssetPaths.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -134,8 +133,8 @@ std::string AssetCollection::GetDisplayName() const
 {
     std::stringstream stream;
     stream << GetName();
-    stream << " (" << GetAssetReferences().size() << " ";
-    stream << ( ( GetAssetReferences().size() == 1 ) ? "item" : "items" );
+    stream << " (" << GetAssetPaths().size() << " ";
+    stream << ( ( GetAssetPaths().size() == 1 ) ? "item" : "items" );
     stream << ")";
 
     return stream.str();
@@ -185,22 +184,21 @@ bool AssetCollection::ReadOnly() const
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void AssetCollection::SetAssetReferences( const File::S_Reference& references )
+void AssetCollection::SetAssetReferences( const Nocturnal::S_Path& references )
 {
-    m_AssetReferences.clear();
-    m_AssetReferences = references;
-    DirtyField( GetClass()->FindField( &AssetCollection::m_AssetReferences ) );
+    m_AssetPaths.clear();
+    m_AssetPaths = references;
+    DirtyField( GetClass()->FindField( &AssetCollection::m_AssetPaths ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool AssetCollection::AddAsset( const File::Reference& fileRef )
+bool AssetCollection::AddAsset( const Nocturnal::Path& path )
 {
-    if ( !ContainsAsset( fileRef.GetHash() ) )
+    if ( !ContainsAsset( path.Hash() ) )
     {
-        File::ReferencePtr ref = new File::Reference( fileRef );
-        m_AssetReferences.insert( ref );
+        m_AssetPaths.insert( path );
 
-        DirtyField( GetClass()->FindField( &AssetCollection::m_AssetReferences ) );
+        DirtyField( GetClass()->FindField( &AssetCollection::m_AssetPaths ) );
 
         return true;
     }
@@ -209,42 +207,41 @@ bool AssetCollection::AddAsset( const File::Reference& fileRef )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool AssetCollection::AddAssets( const File::S_Reference& assets )
+bool AssetCollection::AddAssets( const Nocturnal::S_Path& assets )
 {
     bool result = false;
 
-    for ( File::S_Reference::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
+    for ( Nocturnal::S_Path::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
     {
-        const File::Reference ref = *(*itr);
+        const Nocturnal::Path& path = *itr;
 
-        if ( !ContainsAsset( ref.GetHash() ) )
+        if ( !ContainsAsset( path.Hash() ) )
         {
-            File::ReferencePtr newRef = new File::Reference( ref );
-            m_AssetReferences.insert( newRef );
+            m_AssetPaths.insert( path );
             result = true;
         }
     }
 
     if ( result )
     {
-        DirtyField( GetClass()->FindField( &AssetCollection::m_AssetReferences ) );
+        DirtyField( GetClass()->FindField( &AssetCollection::m_AssetPaths ) );
     }
 
     return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool AssetCollection::RemoveAsset( const File::Reference& fileRef )
+bool AssetCollection::RemoveAsset( const Nocturnal::Path& path )
 {
-    if ( ContainsAsset( fileRef.GetHash() ) )
+    if ( ContainsAsset( path.Hash() ) )
     {
-        u64 passedId = fileRef.GetHash();
-        for( File::S_Reference::const_iterator itr = m_AssetReferences.begin(), end = m_AssetReferences.end(); itr != end; ++itr )
+        u64 passedId = path.Hash();
+        for( Nocturnal::S_Path::const_iterator itr = m_AssetPaths.begin(), end = m_AssetPaths.end(); itr != end; ++itr )
         {
-            if ( (*itr)->GetHash() == passedId )
+            if ( (*itr).Hash() == passedId )
             {
-                m_AssetReferences.erase( itr );
-                DirtyField( GetClass()->FindField( &AssetCollection::m_AssetReferences ) );
+                m_AssetPaths.erase( itr );
+                DirtyField( GetClass()->FindField( &AssetCollection::m_AssetPaths ) );
                 return true;
             }
         }
@@ -257,9 +254,9 @@ bool AssetCollection::RemoveAsset( const File::Reference& fileRef )
 // Queries the container for the existence of the specified asset
 bool AssetCollection::ContainsAsset( u64 id ) const
 {
-    for( File::S_Reference::const_iterator itr = m_AssetReferences.begin(), end = m_AssetReferences.end(); itr != end; ++itr )
+    for( Nocturnal::S_Path::const_iterator itr = m_AssetPaths.begin(), end = m_AssetPaths.end(); itr != end; ++itr )
     {
-        if ( (*itr)->GetHash() == id )
+        if ( (*itr).Hash() == id )
         {
             return true;
         }
@@ -271,9 +268,9 @@ bool AssetCollection::ContainsAsset( u64 id ) const
 /////////////////////////////////////////////////////////////////////////////
 void AssetCollection::ClearAssets()
 {
-    m_AssetReferences.clear();
+    m_AssetPaths.clear();
 
-    DirtyField( GetClass()->FindField( &AssetCollection::m_AssetReferences ) );
+    DirtyField( GetClass()->FindField( &AssetCollection::m_AssetPaths ) );
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -283,11 +280,11 @@ bool AssetCollection::operator<( const AssetCollection& rhs ) const
 }
 
 /////////////////////////////////////////////////////////////////////////////
-AssetCollectionPtr AssetCollection::LoadFrom( File::Reference& fileRef )
+AssetCollectionPtr AssetCollection::LoadFrom( const Nocturnal::Path& path )
 {
-    if ( !fileRef.GetFile().Exists() )
+    if ( !path.Exists() )
     {
-        Console::Warning( "Unable to read collection from file %s; Reason: File does not exist.\n", fileRef.GetPath().c_str() );
+        Console::Warning( "Unable to read collection from file %s; Reason: File does not exist.\n", path.c_str() );
         return NULL;
     }
 
@@ -295,22 +292,23 @@ AssetCollectionPtr AssetCollection::LoadFrom( File::Reference& fileRef )
     AssetCollectionPtr assetCollection = NULL;
     try
     {
-        assetCollection = Reflect::Archive::FromFile< AssetCollection >( fileRef.GetPath() );
+        assetCollection = Reflect::Archive::FromFile< AssetCollection >( path.c_str() );
     }
     catch ( const Nocturnal::Exception& ex )
     {
-        Console::Error( "Unable to read asset collection from file %s; Reason: %s.\n", fileRef.GetPath().c_str(), ex.what() );
+        Console::Error( "Unable to read asset collection from file %s; Reason: %s.\n", path.c_str(), ex.what() );
         return NULL;
     }
 
     if( assetCollection == NULL )
     {
-        Console::Error( "Unable to read asset collection from file %s.\n", fileRef.GetPath().c_str() );
+        Console::Error( "Unable to read asset collection from file %s.\n", path.c_str() );
         return NULL;
     }
 
     u32 flags = assetCollection->GetFlags();
-    if ( !fileRef.GetFile().IsWritable() )
+    Nocturnal::File file( path );
+    if ( !file.IsWritable() )
     {
         flags &= ~AssetCollectionFlags::CanRename;
         flags &= ~AssetCollectionFlags::CanHandleDragAndDrop;

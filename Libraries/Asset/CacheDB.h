@@ -5,7 +5,7 @@
 #include "CacheDBColumn.h"
 #include "CacheDBQuery.h"
 
-#include "File/Reference.h"
+#include "Common/File/Path.h"
 #include "SQL/SQLiteDB.h"
 #include "TUID/TUID.h"
 
@@ -42,10 +42,10 @@ namespace Asset
 
         u32 GetPopulateTableData( const CacheDBColumnID columnID, V_string& tableData, bool* cancel = NULL ); 
 
-        u32 Search( const CacheDBQuery* search, File::S_Reference& assetFiles, bool* cancel = NULL );
+        u32 Search( const CacheDBQuery* search, Nocturnal::S_Path& assetFiles, bool* cancel = NULL );
 
-        bool HasAssetChangedOnDisk( File::Reference& fileRef, bool* cancel = NULL );
-        void InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, File::S_Reference& visited, bool* cancel = NULL );
+        bool HasAssetChangedOnDisk( Nocturnal::Path& filePath, bool* cancel = NULL );
+        void InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, bool* cancel = NULL );
         void DeleteAssetFile( AssetFile* assetFile );
 
         void SelectAssetPathByHash( const u64 pathHash, std::string& path );
@@ -54,8 +54,8 @@ namespace Asset
         u64 FindAttributeRowID( const std::string& value );
         u32 GetAttributesTableData( V_string& tableData, bool* cancel = NULL );
 
-        void GetAssetDependencies( File::ReferencePtr& fileRef, File::S_Reference& dependencies, bool reverse = false, u32 maxDepth = 0, u32 currDepth = 0, bool* cancel = NULL );
-        void GetDependencyGraph( File::ReferencePtr& fileRef, M_AssetFiles* assetFiles, bool reverse = false, u32 maxDepth = 0, u32 currDepth = 0, bool* cancel = NULL );
+        void GetAssetDependencies( const Nocturnal::Path& path, Nocturnal::S_Path& dependencies, bool reverse = false, u32 maxDepth = 0, u32 currDepth = 0, bool* cancel = NULL );
+        void GetDependencyGraph( const Nocturnal::Path& path, M_AssetFiles* assetFiles, bool reverse = false, u32 maxDepth = 0, u32 currDepth = 0, bool* cancel = NULL );
 
         static void CleanExpressionForSQL( std::string& argument, bool wrapEscape = true );
 
@@ -71,10 +71,10 @@ namespace Asset
         u64 SelectIDByName( SQL::StmtHandle select, const char* value, const char* insert = NULL, bool* cancel = NULL );
 
         void InsertAssetAttributes( AssetFile* assetFile, bool* cancel = NULL );
-        void InsertAssetUsages( AssetFile* assetFile, M_AssetFiles* assetFiles, File::S_Reference& visited, bool* cancel = NULL );
-        void InsertAssetShaders( AssetFile* assetFile, M_AssetFiles* assetFiles, File::S_Reference& visited, bool* cancel = NULL );
-        void InsertLevelEntities( AssetFile* assetFile, M_AssetFiles* assetFiles, File::S_Reference& visited, bool* cancel = NULL );
-        void InsertDependencies( const File::S_Reference& dependencies, u64 assetRowID, M_AssetFiles* assetFiles, File::S_Reference& visited, const char* replaceSQL, const char* deleteSQL, const char* deleteUnrenewedSQL, bool* cancel = NULL );
+        void InsertAssetUsages( AssetFile* assetFile, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, bool* cancel = NULL );
+        void InsertAssetShaders( AssetFile* assetFile, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, bool* cancel = NULL );
+        void InsertLevelEntities( AssetFile* assetFile, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, bool* cancel = NULL );
+        void InsertDependencies( const Nocturnal::S_Path& dependencies, u64 assetRowID, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, const char* replaceSQL, const char* deleteSQL, const char* deleteUnrenewedSQL, bool* cancel = NULL );
 
         // Used by Search
         std::string StepSelectPath( int sqlResult, const SQL::StmtHandle stmt, bool resetStmt = false );

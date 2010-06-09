@@ -77,7 +77,7 @@ std::string FileBackedAttribute::GetName() const
     FilePathOptions::FilePathOption filePathOption = FilePathOptions::PartialPath;
     GetAssetEditorPreferences()->GetEnum( GetAssetEditorPreferences()->FilePathOption(), filePathOption );
 
-    name += ": " + Luna::FileRefToLabel( package->GetFileReference(), filePathOption );
+    name += ": " + Luna::PathToLabel( package->GetPath(), filePathOption );
     return name;
 }
 
@@ -127,16 +127,14 @@ void FileBackedAttribute::PopulateContextMenu( ContextMenuItemSet& menu )
 std::string FileBackedAttribute::GetFilePath() const
 {
     const Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
-    pkg->GetFileReference().Resolve();
-    return pkg->GetFileReference().GetPath();
+    return pkg->GetPath().Get();
 }
 
 void FileBackedAttribute::SetFilePath( const std::string& path )
 {
     Asset::FileBackedAttribute* pkg = GetPackage< Asset::FileBackedAttribute >();
-    File::Reference fileRef( path );
-    fileRef.Resolve();
-    pkg->SetFileReference( fileRef );
+    Nocturnal::Path filePath( path );
+    pkg->SetPath( filePath );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

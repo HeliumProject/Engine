@@ -44,7 +44,7 @@ bool TextureMapAttribute::ShouldRebuildTexture( const TextureMapAttribute* oldAt
     return true;
   }
 
-  return ( m_FileReference->GetFile().GetPath() != oldAttrib->m_FileReference->GetFile().GetPath()
+  return ( m_Path != oldAttrib->GetPath()
     || m_ReductionRatio != oldAttrib->m_ReductionRatio
     || m_MipGenFilter != oldAttrib->m_MipGenFilter
     || m_PostMipFilter != oldAttrib->m_PostMipFilter 

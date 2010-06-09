@@ -33,7 +33,7 @@ namespace Luna
 
     protected:
         // file resolver id
-        File::ReferencePtr m_AssetFileRef;
+        Nocturnal::Path m_AssetPath;
         bool m_ClassMissing;
 
         // loaded class data, not shared via cache
@@ -66,13 +66,13 @@ namespace Luna
         //
 
     public:
-        EntityAssetSet(Luna::EntityType* type, const File::Reference& assetRef );
+        EntityAssetSet( Luna::EntityType* type, const Nocturnal::Path& assetPath );
 
         virtual ~EntityAssetSet();
 
-        File::ReferencePtr GetEntityAssetFileRef() const
+        Nocturnal::Path GetEntityAssetPath() const
         {
-            return m_AssetFileRef;
+            return m_AssetPath;
         }
 
         Asset::EntityAsset* GetEntityAsset() const

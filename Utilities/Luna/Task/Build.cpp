@@ -125,7 +125,7 @@ void BuildSignal(Nocturnal::Void)
 
 struct BuildParams
 {
-    File::S_Reference m_Assets;
+    Nocturnal::S_Path m_Assets;
     AssetBuilder::BuilderOptionsPtr m_BuilderOptions;
 
     BuildParams()
@@ -135,7 +135,7 @@ struct BuildParams
     }
 };
 
-bool BuildEntry( const File::S_Reference& assets, AssetBuilder::BuilderOptionsPtr options, bool view )
+bool BuildEntry( const Nocturnal::S_Path& assets, AssetBuilder::BuilderOptionsPtr options, bool view )
 {
     g_WorkerProcess = Worker::Process::Create( "BuildTool.exe" );
 
@@ -225,13 +225,13 @@ DWORD WINAPI BuildThread( LPVOID lpParam )
 
     BuildParams* params = static_cast< BuildParams* >( lpParam );
 
-    File::S_Reference assets;
+    Nocturnal::S_Path assets;
 
-    for each ( const File::ReferencePtr& assetFileRef in params->m_Assets )
+    for ( Nocturnal::S_Path::const_iterator itr = params->m_Assets.begin(), end = params->m_Assets.end(); itr != end; ++itr )
     {
-        assetFileRef->Resolve();
+        const Nocturnal::Path& assetPath = (*itr);
 
-        Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( *assetFileRef );
+        Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( assetPath );
 
         if ( assetClass->GetAssetType() == Asset::AssetTypes::Level )
         {
@@ -240,7 +240,7 @@ DWORD WINAPI BuildThread( LPVOID lpParam )
                 params->m_BuilderOptions = new AssetBuilder::LevelBuilderOptions;
             }
 
-            assets.insert( assetFileRef );
+            assets.insert( assetPath );
         }
         else if ( assetClass->GetAssetType() == Asset::AssetTypes::Cinematic )
         {
@@ -249,11 +249,11 @@ DWORD WINAPI BuildThread( LPVOID lpParam )
                 params->m_BuilderOptions = new AssetBuilder::LevelBuilderOptions;
             }
 
-            assets.insert( assetFileRef );
+            assets.insert( assetPath );
         }
         else
         {
-            assets.insert( assetFileRef );
+            assets.insert( assetPath );
         }
     }
 
@@ -276,17 +276,16 @@ DWORD WINAPI BuildThread( LPVOID lpParam )
     return success ? 0 : 1;
 }
 
-AssetBuilder::BuilderOptionsPtr CreateBuilderOptions( const File::S_Reference& assets )
+AssetBuilder::BuilderOptionsPtr CreateBuilderOptions( const Nocturnal::S_Path& assets )
 {
     Asset::AssetType assetType = Asset::AssetTypes::Null;
     bool differentClasses = false;
 
     // if all the assets are the same type, we can use their specific builder options.  Otherwise, use the base builder options
-    for each ( const File::ReferencePtr& assetFileRef in assets )
+    for ( Nocturnal::S_Path::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
     {
-        assetFileRef->Resolve();
-
-        Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( *assetFileRef );
+        const Nocturnal::Path& assetPath = (*itr);
+        Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( assetPath );
 
         Asset::AssetType currentType = assetClass->GetAssetType();
 
@@ -344,7 +343,7 @@ AssetBuilder::BuilderOptionsPtr CreateBuilderOptions( const File::S_Reference& a
     return builderOptions;
 }
 
-bool GetBuilderOptions( const File::S_Reference& assets, AssetBuilder::BuilderOptionsPtr& builderOptions, wxWindow* parent )
+bool GetBuilderOptions( const Nocturnal::S_Path& assets, AssetBuilder::BuilderOptionsPtr& builderOptions, wxWindow* parent )
 {
     TaskOptionsDialog dialog( parent, wxID_ANY, "Builder/Packer Options" );
 
@@ -379,19 +378,18 @@ bool GetBuilderOptions( const File::S_Reference& assets, AssetBuilder::BuilderOp
             V_string zoneNames;
 
             // fill out the zone names from the level asset
-            Asset::SceneAssetPtr levelAsset = Asset::AssetClass::LoadAssetClass< Asset::SceneAsset >( *(*assets.begin()) );
+            Asset::SceneAssetPtr levelAsset = Asset::AssetClass::LoadAssetClass< Asset::SceneAsset >( *assets.begin() );
             Attribute::AttributeViewer< Asset::WorldFileAttribute > model( levelAsset );
 
             Reflect::V_Element elements;     
             try
             {
-                model->GetFileReference().Resolve();
-                Reflect::Archive::FromFile( model->GetFileReference().GetPath(), elements );
+                Reflect::Archive::FromFile( model->GetPath(), elements );
             }
             catch ( Nocturnal::Exception& ex )
             {
                 std::ostringstream str;
-                str << "Unable to load world from: " << model->GetFileReference().GetPath() << ": " << ex.what();
+                str << "Unable to load world from: " << model->GetPath().Get() << ": " << ex.what();
                 wxMessageBox( str.str(), "Error", wxICON_ERROR | wxOK );
                 success = false;
             }
@@ -438,7 +436,7 @@ bool GetBuilderOptions( const File::S_Reference& assets, AssetBuilder::BuilderOp
     return success;
 }
 
-void Luna::BuildAssets( const File::S_Reference& assets, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions, bool blocking )
+void Luna::BuildAssets( const Nocturnal::S_Path& assets, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions, bool blocking )
 {
     if ( g_BuildInProgress )
     {
@@ -497,9 +495,9 @@ void Luna::BuildAssets( const File::S_Reference& assets, wxWindow* parent, Asset
     }
 }
 
-void Luna::BuildAsset( const File::Reference& asset, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions, bool blocking )
+void Luna::BuildAsset( const Nocturnal::Path& asset, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions, bool blocking )
 {
-    File::S_Reference assets;
-    assets.insert( &asset );
+    Nocturnal::S_Path assets;
+    assets.insert( asset );
     BuildAssets( assets, parent, builderOptions, showOptions, blocking );
 }

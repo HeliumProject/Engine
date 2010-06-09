@@ -7,9 +7,7 @@
 
 #include "Common/Memory/SmartPtr.h"
 #include "Common/Types.h"
-#include "File/Resolver.h"
 #include "Reflect/Field.h"
-#include "TUID/TUID.h"
 
 namespace Asset
 {
@@ -62,8 +60,8 @@ namespace Asset
         static DWORD WINAPI TrackEverythingThread(LPVOID pTracker);
 
         bool TrackFile( const std::string& path );
-        bool TrackFile( File::ReferencePtr& fileRef );
-        bool TrackAssetFile( File::ReferencePtr& fileRef, M_AssetFiles* assetFiles );
+        bool TrackFile( Nocturnal::Path& filePath );
+        bool TrackAssetFile( Nocturnal::Path& filePath, M_AssetFiles* assetFiles );
         void TrackEverything();
 
     private:

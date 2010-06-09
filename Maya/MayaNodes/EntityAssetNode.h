@@ -42,7 +42,7 @@ public:
   static bool                 s_DoRemoveNodeCallback;
 
 private:
-    File::Reference m_AssetFileReference;
+    Nocturnal::Path m_AssetPath;
 
   // client data for each instance of this art class
   M_EntityNode m_Instances;
@@ -61,12 +61,12 @@ public:
 
   bool operator == ( const EntityAssetNode& rhs ) const
   {
-      return m_AssetFileReference.GetHash() == rhs.m_AssetFileReference.GetHash();
+      return m_AssetPath.Hash() == rhs.m_AssetPath.Hash();
   }  
 
   bool operator != ( const EntityAssetNode& rhs ) const
   {
-      return m_AssetFileReference.GetHash() != rhs.m_AssetFileReference.GetHash();
+      return m_AssetPath.Hash() != rhs.m_AssetPath.Hash();
   }
 
   //
@@ -83,7 +83,7 @@ public:
   static void FlattenInstances();
 
   // get a reference to the specified EntityAssetNode, create it if it doesn't exist
-  static EntityAssetNode& Get( File::Reference& fileRef, bool createIfNotExisting = true );
+  static EntityAssetNode& Get( const Nocturnal::Path& path, bool createIfNotExisting = true );
 
   // get/create an EntityAssetNode, and an EntityNode for the given content Entity
   static std::pair< EntityAssetNode*, EntityNode* > CreateInstance( const Asset::EntityPtr& entity );

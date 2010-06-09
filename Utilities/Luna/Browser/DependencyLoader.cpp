@@ -25,13 +25,13 @@ DependencyLoader::DependencyLoader( const std::string& rootDirectory, const std:
 ///////////////////////////////////////////////////////////////////////////////
 DependencyLoader::~DependencyLoader()
 {
-    m_AssetFileRefs.clear();
+    m_AssetPaths.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void DependencyLoader::InitData()
 {
-    m_AssetFileRefs.clear();
+    m_AssetPaths.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,14 +42,14 @@ void DependencyLoader::ThreadProc( i32 threadID )
     Nocturnal::Path cacheDBFilepath( m_RootDirectory + "/.tracker/cache.db" );
     Asset::CacheDBPtr cacheDB = new Asset::CacheDB( "LunaBrowserDependencyLoader-AssetCacheDB", cacheDBFilepath.Get(), m_ConfigDirectory );
 
-    cacheDB->GetAssetDependencies( m_Collection->GetRoot(), m_AssetFileRefs, m_Collection->IsReverse(), m_Collection->GetRecursionDepthForLoad(), 0, &m_StopThread );
+    cacheDB->GetAssetDependencies( m_Collection->GetRoot(), m_AssetPaths, m_Collection->IsReverse(), m_Collection->GetRecursionDepthForLoad(), 0, &m_StopThread );
 
     if ( CheckThreadLeave( threadID ) )
     {
         return;
     }
 
-    m_Collection->SetAssetReferences( m_AssetFileRefs );
+    m_Collection->SetAssetReferences( m_AssetPaths );
 
     ThreadLeave( threadID );
 }

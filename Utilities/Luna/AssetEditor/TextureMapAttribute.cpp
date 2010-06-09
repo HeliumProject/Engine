@@ -63,7 +63,7 @@ Undo::CommandPtr TextureMapAttribute::CopyFrom( Luna::PersistentData* src )
     
     // Change the file path on our clone (this way when we copy the data, it
     // won't clobber our file path).
-    clonedPkg->SetFileReference( GetPackage< Asset::TextureMapAttribute >()->GetFileReference() );
+    clonedPkg->SetPath( GetPackage< Asset::TextureMapAttribute >()->GetPath() );
 
     // Let the base class handle the rest, using our cloned data.
     Luna::TextureMapAttributePtr clonedSrc = PersistentDataFactory::GetInstance()->CreateTyped< Luna::TextureMapAttribute >( clonedPkg, m_AssetManager );

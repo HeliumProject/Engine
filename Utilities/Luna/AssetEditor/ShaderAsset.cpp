@@ -170,6 +170,8 @@ void ShaderAsset::Changed( Inspect::Control* control )
 
     Asset::ShaderAssetPtr shaderClass = GetPackage< Asset::ShaderAsset >();
 
+    Nocturnal::Path texturePath;
+
     if ( control && control->HasType( Reflect::GetType<Inspect::Button>() ) )
     {
         Inspect::StringData* data = Inspect::CastData< Inspect::StringData, Inspect::DataTypes::String >( control->GetData() );
@@ -177,21 +179,17 @@ void ShaderAsset::Changed( Inspect::Control* control )
         std::string str;
         data->Get( str );
 
-        File::Reference textureRef( str );
-        textureRef.Resolve();
-        shaderClass->SetTextureDirty( textureRef, true );
-        CheckShaderChanged( &textureRef );
+        texturePath.Set( str );
+        shaderClass->SetTextureDirty( texturePath, true );
     }
-    else
-    {
-        CheckShaderChanged( NULL );
-    }
+
+    CheckShaderChanged( texturePath );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function to check if a shader changed and signal the concerned parties
 // 
-void ShaderAsset::CheckShaderChanged( File::ReferencePtr textureRefPtr )
+void ShaderAsset::CheckShaderChanged( Nocturnal::Path texturePath )
 {
     Asset::ShaderAssetPtr shaderClass = GetPackage< Asset::ShaderAsset >();
 
@@ -200,7 +198,7 @@ void ShaderAsset::CheckShaderChanged( File::ReferencePtr textureRefPtr )
         ShaderChangedArgs args;
         args.m_ShaderClass = shaderClass;
         args.m_OldShaderClass = m_OldShaderClass;
-        args.m_TextureFileReference = textureRefPtr;
+        args.m_TexturePath = texturePath;
         m_ShaderChanged.Raise( args );
 
         m_OldShaderClass = Reflect::ObjectCast< Asset::ShaderAsset >( shaderClass->Clone() );
@@ -294,7 +292,7 @@ void ShaderAsset::ConvertShader( const ContextMenuArgsPtr& args )
                 {
                     // Copy the persistent data
                     pkg->CopyTo( newPkg );
-                    newPkg->SetAssetFileRef( *(pkg->GetAssetFileRef()) );
+                    newPkg->SetPath( pkg->GetPath() );
                     std::string filePath = pkg->GetFilePath();
 
                     try
@@ -344,7 +342,7 @@ void ShaderAsset::ReloadAllTextures( const ContextMenuArgsPtr& args )
     Attribute::M_Attribute::const_iterator itr = shaderClass->GetAttributes().begin();
     Attribute::M_Attribute::const_iterator end = shaderClass->GetAttributes().end(); 
 
-    File::S_Reference textureFiles;
+    Nocturnal::S_Path textureFiles;
 
     while( itr != end )
     {
@@ -353,14 +351,14 @@ void ShaderAsset::ReloadAllTextures( const ContextMenuArgsPtr& args )
 
         if( textureAttr )
         {
-            textureFiles.insert( &(textureAttr->GetFileReference()) );
+            textureFiles.insert( textureAttr->GetPath() );
         }    
         itr++;
     }
 
-    for( File::S_Reference::iterator itr = textureFiles.begin(), end = textureFiles.end(); itr != end; ++itr )
+    for( Nocturnal::S_Path::const_iterator itr = textureFiles.begin(), end = textureFiles.end(); itr != end; ++itr )
     {
-        shaderClass->SetTextureDirty( *(*itr), true );
+        shaderClass->SetTextureDirty( *itr, true );
         CheckShaderChanged( (*itr) );
     }
 

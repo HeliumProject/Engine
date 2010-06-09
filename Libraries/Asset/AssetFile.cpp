@@ -5,9 +5,8 @@
 #include "ColorMapAttribute.h"
 
 #include "Attribute/AttributeHandle.h"
+#include "Common/File/Path.h"
 #include "Common/String/Utilities.h"
-#include "File/File.h"
-#include "File/Resolver.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/AssetSpecs.h"
@@ -32,11 +31,11 @@ AssetFile::AssetFile()
     Init();
 }
 
-AssetFile::AssetFile( File::Reference& file )
+AssetFile::AssetFile( Nocturnal::Path& path )
 {
     Init();
 
-    SetFileReference( file );
+    SetPath( path );
 }
 
 AssetFile::~AssetFile()
@@ -44,19 +43,23 @@ AssetFile::~AssetFile()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-AssetFilePtr AssetFile::FindAssetFile( const std::string& path, CacheDB* cache )
+AssetFilePtr AssetFile::FindAssetFile( const std::string& filePath, CacheDB* cache )
 {
-    NOC_ASSERT( !path.empty() );
+    NOC_ASSERT( !filePath.empty() );
 
-    File::Reference file( path );
-    file.Resolve();
+    Nocturnal::Path path( filePath );
 
-    AssetFilePtr assetFile = new AssetFile( file );
+    AssetFilePtr assetFile = NULL;
 
     if ( cache )
     {
         // select the file from the cache
-        cache->SelectAssetByHash( file.GetHash(), assetFile );
+        cache->SelectAssetByHash( path.Hash(), assetFile );
+    }
+
+    if ( !assetFile )
+    {
+        assetFile = new AssetFile( path );
     }
 
     return assetFile;
@@ -183,7 +186,7 @@ AssetType AssetFile::GetAssetType()
 AssetClassPtr AssetFile::GetAssetClass( AssetFile* assetFile )
 {
     NOC_ASSERT( assetFile );
-    return Asset::AssetClass::LoadAssetClass( *(assetFile->GetFileReference()) );
+    return Asset::AssetClass::LoadAssetClass( assetFile->GetPath() );
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -208,56 +211,55 @@ void AssetFile::AddAttribute( const std::string& attrName, const std::string& at
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void AssetFile::AddDependency( const File::ReferencePtr& fileRef )
+void AssetFile::AddDependency( const Nocturnal::Path& path )
 {
-    m_Dependencies.insert( fileRef );
+    m_Dependencies.insert( path );
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void AssetFile::SetDependencies( const File::S_Reference& dependencies )
+void AssetFile::SetDependencies( const Nocturnal::S_Path& dependencies )
 {
     m_Dependencies.clear();
     m_Dependencies = dependencies;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void AssetFile::GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, File::S_Reference& dependencies )
+void AssetFile::GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, Nocturnal::S_Path& dependencies )
 {
-    File::S_Reference visited;
+    Nocturnal::S_Path visited;
     return GetDependenciesOfType( assetFiles, type, dependencies, visited, 0 );
 }
 
-void AssetFile::GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, File::S_Reference& dependencies, File::S_Reference& visited, u32 depth )
+void AssetFile::GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, Nocturnal::S_Path& dependencies, Nocturnal::S_Path& visited, u32 depth )
 {
     ++depth;
 
     if ( this->HasDependencies() )
     {
-        const File::S_Reference& assetDependencies = GetDependencies();
-        File::S_Reference::const_iterator itr = assetDependencies.begin();
-        File::S_Reference::const_iterator end = assetDependencies.end();
+        const Nocturnal::S_Path& assetDependencies = GetDependencies();
+        Nocturnal::S_Path::const_iterator itr = assetDependencies.begin();
+        Nocturnal::S_Path::const_iterator end = assetDependencies.end();
         for ( ; itr != end; ++itr )
         {
-            File::ReferencePtr fileRef = (*itr);
-            fileRef->Resolve();
+            Nocturnal::Path path = (*itr);
 
-            if ( FileSystem::HasExtension( fileRef->GetPath(), FinderSpecs::Extension::REFLECT_BINARY.GetExtension() ) )
+            if ( path.Extension() == FinderSpecs::Extension::REFLECT_BINARY.GetExtension() )
             {
-                if ( visited.find( fileRef ) == visited.end() )
+                if ( visited.find( path ) == visited.end() )
                 {
-                    visited.insert( fileRef );
+                    visited.insert( path );
 
-                    M_AssetFiles::iterator foundFile = assetFiles->find( fileRef->GetHash() );
+                    M_AssetFiles::iterator foundFile = assetFiles->find( path.Hash() );
                     if ( foundFile != assetFiles->end() )
                     {
                         AssetFile* assetDependency = foundFile->second;
                         AssetClassPtr assetClass = AssetFile::GetAssetClass( assetDependency );
                         if ( assetClass && assetClass->HasType( type ) )
                         {
-                            dependencies.insert( fileRef );
+                            dependencies.insert( path );
                         }
 
-                        File::S_Reference deps;
+                        Nocturnal::S_Path deps;
                         assetDependency->GetDependenciesOfType( assetFiles, type, deps, visited, depth );
                         dependencies.insert( deps.begin(), deps.end() );
                     }

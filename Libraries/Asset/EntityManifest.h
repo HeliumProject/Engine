@@ -2,18 +2,18 @@
 
 #include "API.h"
 
-#include "AssetManifest.h"
+#include "Common/File/Path.h"
 
-#include "File/Reference.h"
+#include "AssetManifest.h"
 
 namespace Asset
 {
   class ASSET_API EntityManifest : public AssetManifest
   {
   public:
-      File::V_Reference m_Shaders;
-      File::V_Reference m_BlendTextures;
-      File::V_Reference m_LooseTextures;
+      Nocturnal::S_Path m_Shaders;
+      Nocturnal::S_Path m_BlendTextures;
+      Nocturnal::S_Path m_LooseTextures;
 
     u32 m_TriangleCount;
 

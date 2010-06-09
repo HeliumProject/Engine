@@ -2,7 +2,7 @@
 
 #include "API.h"
 
-#include "File/File.h"
+#include "Common/File/Path.h"
 #include "UIToolKit/ThreadMechanism.h"
 
 namespace Luna
@@ -28,7 +28,7 @@ namespace Luna
         std::string           m_RootDirectory;
         std::string           m_ConfigDirectory;
         DependencyCollection* m_Collection;
-        File::S_Reference     m_AssetFileRefs;
+        Nocturnal::S_Path     m_AssetPaths;
     };
 
 }

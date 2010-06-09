@@ -478,21 +478,19 @@ void Entity::CreatePanel( CreatePanelArgs& args )
 
 std::string Entity::GetEntityAssetPath() const
 {
-#pragma TODO( "look at making this resolve first... couldn't make it go with crazy templated stuff and this becoming non-const" )
-    return GetPackage< Asset::Entity >()->GetEntityAsset()->GetAssetFileRef()->GetPath();
+    return GetPackage< Asset::Entity >()->GetEntityAsset()->GetPath().Get();
 }
 
 void Entity::SetEntityAssetPath( const std::string& entityClass )
 {
     Asset::Entity* entity = GetPackage< Asset::Entity >();
 
-    File::ReferencePtr oldRef = entity->GetEntityAsset()->GetAssetFileRef();
-    File::Reference newRef( entityClass );
-    newRef.Resolve();
+    Nocturnal::Path oldPath = entity->GetEntityAsset()->GetPath();
+    Nocturnal::Path newPath( entityClass );
 
-    m_ClassChanging.Raise( EntityAssetChangeArgs( this, oldRef, &newRef ) );
+    m_ClassChanging.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
 
-    entity->GetEntityAsset()->SetAssetFileRef( newRef );
+    entity->GetEntityAsset()->SetPath( newPath );
 
     // since our entity class is criteria used for deducing object type,
     //  ensure we are a member of the correct type
@@ -514,7 +512,7 @@ void Entity::SetEntityAssetPath( const std::string& entityClass )
         m_Scene->GetManager()->ReleaseNestedScene( m_NestedScenePathfinding );
     }
 
-    m_ClassChanged.Raise( EntityAssetChangeArgs( this, oldRef, &newRef ) );
+    m_ClassChanged.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
 
     Dirty();
 }

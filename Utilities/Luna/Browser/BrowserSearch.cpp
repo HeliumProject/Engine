@@ -356,13 +356,13 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
     // CacheDB Search
     if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::DBSearch )
     {
-        File::S_Reference assetFiles;
+        Nocturnal::S_Path assetFiles;
 
         Asset::CacheDBQuery* search = m_CurrentSearchQuery->GetCacheDBQuery();
         AssetCollection* collection = m_CurrentSearchQuery->GetCollection();    
 
         // Empty collection
-        if ( collection && collection->GetAssetReferences().empty() )
+        if ( collection && collection->GetAssetPaths().empty() )
         {
             SearchThreadLeave( searchID );
             return;
@@ -370,7 +370,7 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
         // Both collection and search
         else if ( collection && search )
         {
-            File::S_Reference searchFiles;
+            Nocturnal::S_Path searchFiles;
             m_CacheDB->Search( search, searchFiles, &m_StopSearching );
             if ( searchFiles.empty() )
             {
@@ -378,12 +378,12 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
                 return;
             }
 
-            File::S_Reference collections = collection->GetAssetReferences();
+            Nocturnal::S_Path collections = collection->GetAssetPaths();
 
             // filter by collection
             if ( collections.size() > searchFiles.size() )
             {
-                for ( File::S_Reference::iterator itr = searchFiles.begin(), end = searchFiles.end(); itr != end; ++itr )
+                for ( Nocturnal::S_Path::iterator itr = searchFiles.begin(), end = searchFiles.end(); itr != end; ++itr )
                 {
                     if ( collections.find( *itr ) != collections.end() )
                     {
@@ -393,7 +393,7 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
             }
             else
             {
-                for ( File::S_Reference::iterator itr = collections.begin(), end = collections.end(); itr != end; ++itr )
+                for ( Nocturnal::S_Path::iterator itr = collections.begin(), end = collections.end(); itr != end; ++itr )
                 {
                     if ( searchFiles.find( *itr ) != searchFiles.end() )
                     {
@@ -415,7 +415,7 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
         // Just the collection 
         else if ( collection )
         {
-            assetFiles = collection->GetAssetReferences();
+            assetFiles = collection->GetAssetPaths();
         }
 
         if ( CheckSearchThreadLeave( searchID ) )
@@ -507,28 +507,28 @@ bool BrowserSearch::FoundAssetFile( const std::string& path )
 
     Asset::AssetFilePtr assetFile = Asset::AssetFile::FindAssetFile( path );
     if ( assetFile 
-        && m_FoundFiles.find( assetFile->GetFileReference() ) == m_FoundFiles.end()
+        && m_FoundFiles.find( assetFile->GetPath() ) == m_FoundFiles.end()
         && m_SearchResults->AddFile( assetFile ) )
     {
-        m_FoundFiles.insert( assetFile->GetFileReference() );
+        m_FoundFiles.insert( assetFile->GetPath() );
         return true;
     }
 
     return false;
 }
 
-u32 BrowserSearch::FoundAssetFiles( const File::S_Reference& assetFileRefs, i32 searchID )
+u32 BrowserSearch::FoundAssetFiles( const Nocturnal::S_Path& assetFileRefs, i32 searchID )
 {
     Platform::TakeMutex mutex (m_SearchResultsMutex);
 
-    for ( File::S_Reference::const_iterator itr = assetFileRefs.begin(), end = assetFileRefs.end(); itr != end; ++itr )
+    for ( Nocturnal::S_Path::const_iterator itr = assetFileRefs.begin(), end = assetFileRefs.end(); itr != end; ++itr )
     {
-        Asset::AssetFilePtr assetFile = Asset::AssetFile::FindAssetFile( (*itr)->GetPath() );
+        Asset::AssetFilePtr assetFile = Asset::AssetFile::FindAssetFile( (*itr).Get() );
         if ( assetFile 
-            && m_FoundFiles.find( assetFile->GetFileReference() ) == m_FoundFiles.end()
+            && m_FoundFiles.find( assetFile->GetPath() ) == m_FoundFiles.end()
             && m_SearchResults->AddFile( assetFile ) )
         {
-            m_FoundFiles.insert( assetFile->GetFileReference() );
+            m_FoundFiles.insert( assetFile->GetPath() );
         }
     }
 

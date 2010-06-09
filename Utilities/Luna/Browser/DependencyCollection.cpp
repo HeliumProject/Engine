@@ -15,14 +15,13 @@ using namespace Luna;
 REFLECT_DEFINE_CLASS( DependencyCollection )
 void DependencyCollection::EnumerateClass( Reflect::Compositor<DependencyCollection>& comp )
 {
-    Reflect::Field* fieldRootFileRef = comp.AddField( &DependencyCollection::m_spRootFileRef, "m_spRootFileRef" );
+    Reflect::Field* fieldRootPath = comp.AddField( &DependencyCollection::m_RootPath, "m_RootPath" );
     Reflect::Field* fieldIsReverse = comp.AddField( &DependencyCollection::m_IsReverse, "m_IsReverse" );
 }
 
 /////////////////////////////////////////////////////////////////////////////
 DependencyCollection::DependencyCollection()
 : AssetCollection( "", AssetCollectionFlags::Dynamic )
-, m_spRootFileRef( NULL )
 , m_IsReverse( false )
 , m_AssetFile( NULL )
 , m_IsLoading( false )
@@ -33,7 +32,6 @@ DependencyCollection::DependencyCollection()
 /////////////////////////////////////////////////////////////////////////////
 DependencyCollection::DependencyCollection( const std::string& name, const u32 flags, const bool reverse )
 : AssetCollection( name, flags | AssetCollectionFlags::Dynamic )
-, m_spRootFileRef( NULL )
 , m_IsReverse( reverse )
 , m_AssetFile( NULL )
 , m_IsLoading( false )
@@ -58,7 +56,7 @@ void DependencyCollection::InitializeCollection()
 void DependencyCollection::CleanupCollection() 
 {
 #pragma TODO( "reimplemnent without GlobalBrowser" )
-//    GlobalBrowser().GetBrowserPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &DependencyCollection::OnPreferencesChanged ) );
+    //    GlobalBrowser().GetBrowserPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &DependencyCollection::OnPreferencesChanged ) );
     __super::CleanupCollection();
 }
 
@@ -75,12 +73,7 @@ void DependencyCollection::PostDeserialize()
 {
     __super::PostDeserialize();
 
-    if ( m_spRootFileRef.ReferencesObject() )
-    {
-        m_spRootFileRef->Resolve();
-
-        m_AssetFile = new Asset::AssetFile( *m_spRootFileRef );
-    }
+    m_AssetFile = new Asset::AssetFile( m_RootPath );
 
     IsLoading( false );
 }
@@ -97,7 +90,7 @@ std::string DependencyCollection::GetDisplayName() const
     }
     else
     {
-        stream << GetAssetReferences().size() << " " << ( ( GetAssetReferences().size() == 1 ) ? "item" : "items" );
+        stream << GetAssetPaths().size() << " " << ( ( GetAssetPaths().size() == 1 ) ? "item" : "items" );
     }
     stream << ")";
 
@@ -105,21 +98,14 @@ std::string DependencyCollection::GetDisplayName() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void DependencyCollection::SetRoot( File::Reference& fileRef )
+void DependencyCollection::SetRoot( const Nocturnal::Path& path )
 {
-    if ( m_spRootFileRef )
-    {
-        delete m_spRootFileRef;
-    }
+    m_RootPath = path;
+    m_AssetFile = new Asset::AssetFile( m_RootPath );
 
-    m_spRootFileRef = new File::Reference( fileRef );
+    DirtyField( GetClass()->FindField( &DependencyCollection::m_Path ) );
 
-   m_AssetFile = NULL;
-   m_AssetFile = new Asset::AssetFile( *m_spFileReference );
-
-   DirtyField( GetClass()->FindField( &DependencyCollection::m_spFileReference ) );
-
-   ClearAssets();
+    ClearAssets();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -166,9 +152,9 @@ void DependencyCollection::LoadDependencies( bool threaded )
         Freeze();
         IsLoading( true );
         {
-            File::S_Reference assets;
+            Nocturnal::S_Path assets;
 #pragma TODO( "reimplemnent without GlobalBrowser" )
-//            GlobalBrowser().GetCacheDB()->GetAssetDependencies( m_spFileReference, assets, m_IsReverse, GetRecursionDepthForLoad() );
+            //            GlobalBrowser().GetCacheDB()->GetAssetDependencies( m_spFileReference, assets, m_IsReverse, GetRecursionDepthForLoad() );
             SetAssetReferences( assets );
         }
         IsLoading( false );

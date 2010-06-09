@@ -109,15 +109,15 @@ const Asset::EntityManifestPtr EntityAsset::GetManifest()
 
     if( artFileAttribute.Valid() )
     {
-        if ( artFileAttribute->GetFileReference().GetFile().Exists() )
+        if ( artFileAttribute->GetPath().Exists() )
         {
             try
             {
-                m_Manifest = Archive::FromFile<Asset::EntityManifest>( artFileAttribute->GetFileReference().GetPath() );
+                m_Manifest = Archive::FromFile<Asset::EntityManifest>( artFileAttribute->GetPath() );
             }
             catch ( const Reflect::Exception& e )
             {
-                Console::Error("Error loading %s (%s)\n", artFileAttribute->GetFileReference().GetPath().c_str(), e.what());
+                Console::Error("Error loading %s (%s)\n", artFileAttribute->GetPath().c_str(), e.what());
             }
         }
     }

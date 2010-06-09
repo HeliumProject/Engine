@@ -89,7 +89,7 @@ void EntityType::PopulateManifest(Asset::SceneManifest* manifest) const
         // if our set is a class set, insert the class id into the manifest
         if (entitySet)
         {
-            manifest->m_Assets.insert( entitySet->GetEntityAssetFileRef() );
+            manifest->m_Assets.insert( entitySet->GetEntityAssetPath() );
         }
     }
 

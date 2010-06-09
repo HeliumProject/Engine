@@ -192,10 +192,6 @@
 			RelativePathToProject=".\libraries\Console\Console.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{122FA330-2209-4BF0-A359-9C0C113369E2}"
-			RelativePathToProject=".\libraries\File\File.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{FADD81C4-992F-4492-9750-C1F4B208EBD1}"
 			RelativePathToProject=".\libraries\smartbuffer\smartbuffer.vcproj"
 		/>

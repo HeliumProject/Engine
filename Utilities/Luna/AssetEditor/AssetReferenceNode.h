@@ -2,7 +2,7 @@
 
 #include "AssetNode.h"
 
-#include "File/File.h"
+#include "Common/File/Path.h"
 
 namespace Undo
 {
@@ -40,7 +40,7 @@ namespace Luna
     {
     private:
         Luna::AssetClass* m_Asset;
-        File::ReferencePtr m_AssetFileReference;
+        Nocturnal::Path m_AssetPath;
         Reflect::Element* m_Element;
         const Reflect::Field* m_Field;
         Luna::AttributeContainer* m_AttributeContainer;
@@ -52,15 +52,15 @@ namespace Luna
         static void CleanupType();
 
     public:
-        AssetReferenceNode( Luna::AssetManager* manager, File::Reference& assetFileReference, const Reflect::Field* field );
+        AssetReferenceNode( Luna::AssetManager* manager, const Nocturnal::Path& assetPath, const Reflect::Field* field );
         virtual ~AssetReferenceNode();
         virtual Luna::AssetClass* GetAssetClass() const NOC_OVERRIDE;
         virtual void CreateChildren();
         virtual void ActivateItem() NOC_OVERRIDE;
         void Load();
         void Unload();
-        File::ReferencePtr GetAssetFileReference() const;
-        void SetAssetFileReference( File::ReferencePtr fileRef );
+        Nocturnal::Path GetAssetPath() const;
+        void SetAssetPath( const Nocturnal::Path& path );
         void AssociateField( Reflect::Element* element, const Reflect::Field* field );
         bool IsFieldAssociated() const;
         virtual void ConnectProperties( EnumerateElementArgs& args ) NOC_OVERRIDE;

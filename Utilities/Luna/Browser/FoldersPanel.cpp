@@ -158,7 +158,7 @@ wxDragResult FoldersPanel::Drop( const Inspect::DragArgs& args )
   
   wxDragResult result = wxDragNone;
 
-#pragma TODO( "reimplement using File::References" )
+#pragma TODO( "reimplement using Nocturnal::Path" )
 
   // get the IDs
   //std::string assetName;

@@ -16,7 +16,6 @@
 #include "Editor/Editor.h"
 #include "Editor/EditorInit.h"
 #include "Editor/Preferences.h"
-#include "File/File.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
@@ -117,23 +116,6 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
     m_InitializerStack.Push( PerforceUI::Initialize, PerforceUI::Cleanup );
 
     {
-      Console::Bullet systems ("Systems:\n");
-
-      {
-        Console::Bullet bullet ("File Manager...\n");
-        m_InitializerStack.Push( File::Initialize, File::Cleanup );
-      }
-
-      {
-        Console::Bullet vault ("Asset Tracker...\n");
-        m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
-        m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
-        m_InitializerStack.Push( AppPreferences::InitializeType, AppPreferences::CleanupType );
-        GetAppPreferences()->UseTracker( !parser.Found( "disable_tracker" ) );
-      }
-    }
-
-    {
       Console::Bullet modules ("Modules:\n");
 
       {
@@ -143,6 +125,9 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
 
       {
         Console::Bullet bullet ("Editor...\n");
+        m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
+        m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
+        m_InitializerStack.Push( AppPreferences::InitializeType, AppPreferences::CleanupType );
         m_InitializerStack.Push( EditorInitialize, EditorCleanup );
       }
 
@@ -164,6 +149,15 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
       {
         Console::Bullet bullet ("Scene Editor...\n");
         m_InitializerStack.Push( SceneInitialize, SceneCleanup );
+      }
+    }
+
+    {
+      Console::Bullet systems ("Systems:\n");
+
+      {
+        Console::Bullet vault ("Asset Tracker...\n");
+        GetAppPreferences()->UseTracker( !parser.Found( "disable_tracker" ) );
       }
     }
   }

@@ -203,10 +203,6 @@
 			ReferencedProjectIdentifier="{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}"
 			RelativePathToProject=".\libraries\UIToolKit\UIToolKit.vcproj"
 		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{122FA330-2209-4BF0-A359-9C0C113369E2}"
-			RelativePathToProject=".\libraries\File\File.vcproj"
-		/>
 	</References>
 	<Files>
 		<File

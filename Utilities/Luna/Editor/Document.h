@@ -2,8 +2,7 @@
 
 #include "API.h"
 #include "Core/Object.h"
-
-#include "File/Reference.h"
+#include "Common/File/Path.h"
 
 namespace Luna
 {
@@ -52,7 +51,7 @@ namespace Luna
         //
 
     private:
-        File::ReferencePtr  m_FileReference;
+        Nocturnal::Path  m_Path;
         std::string         m_Name;          // the friendly name (for dialogs)
         bool                m_IsModified;    // have we been changed since we saved?
         bool                m_AllowChanges;  // allows override of checkout (but you can't save)
@@ -79,11 +78,10 @@ namespace Luna
         // Access
         //
 
-        File::Reference& GetFileReference();
-        std::string GetFilePath()
+        const Nocturnal::Path& GetPath() const;
+        std::string GetFilePath() const
         {
-            m_FileReference->Resolve();
-            return m_FileReference->GetPath();
+            return m_Path.Get();
         }
         void SetFilePath( const std::string& newFilePath, const std::string& newName = "" );
 

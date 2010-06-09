@@ -36,7 +36,6 @@
 
 using namespace Reflect;
 using namespace Asset;
-using namespace File;
 using namespace Attribute;
 
 // callbacks
@@ -206,13 +205,13 @@ void EntityAssetNode::FlattenInstances()
     EntityNode::s_EntityNodeGroup = MObject::kNullObj;
 }
 
-EntityAssetNode& EntityAssetNode::Get( File::Reference& fileRef, bool createIfNotExisting )
+EntityAssetNode& EntityAssetNode::Get( const Nocturnal::Path& path, bool createIfNotExisting )
 {
     MFnDagNode dagFn;
 
     try
     {
-        M_IdClassTransform::iterator findItor = s_ClassTransformsMap.find( fileRef.GetHash() );
+        M_IdClassTransform::iterator findItor = s_ClassTransformsMap.find( path.Hash() );
         if( findItor != s_ClassTransformsMap.end() )
         {
             return *findItor->second;
@@ -220,22 +219,22 @@ EntityAssetNode& EntityAssetNode::Get( File::Reference& fileRef, bool createIfNo
         else if ( createIfNotExisting )
         {
             // we couldn't find it, so create it and return the loaded art class
-            Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( fileRef );
+            Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( path );
 
             if ( assetClass.ReferencesObject() )
             {
                 AttributeViewer< ArtFileAttribute > artFile( assetClass );
-                std::string artFilePath = artFile->GetFileReference().GetPath();
+                std::string artFilePath = artFile->GetPath().Get();
 
                 MObject classTransform = dagFn.create( EntityAssetNode::s_TypeID, assetClass->GetShortName().c_str() );
                 dagFn.setDoNotWrite( true );
 
                 EntityAssetNode* artClass = static_cast<EntityAssetNode*>( dagFn.userNode() );
 
-                artClass->m_AssetFileReference = fileRef;
+                artClass->m_AssetPath = path;
                 artClass->SetArtFilePath( artFilePath.c_str() );
 
-                s_ClassTransformsMap[ fileRef.GetHash() ] = artClass;
+                s_ClassTransformsMap[ path.Hash() ] = artClass;
                 artClass->LoadArt();
 
                 return *artClass;
@@ -255,7 +254,7 @@ EntityAssetNode& EntityAssetNode::Get( File::Reference& fileRef, bool createIfNo
 
 std::pair< EntityAssetNode*, EntityNode*> EntityAssetNode::CreateInstance( const Asset::EntityPtr& entity )
 {
-    EntityAssetNode* artClass = &Get( *( entity->GetEntityAsset()->GetAssetFileRef() ) );
+    EntityAssetNode* artClass = &Get( entity->GetEntityAsset()->GetPath() );
     M_EntityNode::iterator instItor = artClass->m_Instances.find( entity->m_ID );
 
     EntityNode* entityNode = NULL;
@@ -282,7 +281,7 @@ std::pair< EntityAssetNode*, EntityNode*> EntityAssetNode::CreateInstance( const
 
 void EntityAssetNode::RemoveInstance( EntityNode* entityNode )
 {
-    EntityAssetNode& artClass = EntityAssetNode::Get( *( entityNode->GetEntity()->GetEntityAsset()->GetAssetFileRef() ), false );
+    EntityAssetNode& artClass = EntityAssetNode::Get( entityNode->GetEntity()->GetEntityAsset()->GetPath(), false );
 
     if ( artClass != EntityAssetNode::Null )
     {
@@ -668,7 +667,7 @@ void EntityAssetNode::NodeRemovedCallback( MObject& node, void* clientData )
         }
         artClass->m_Instances.clear();
 
-        s_ClassTransformsMap.erase( artClass->m_AssetFileReference.GetHash() );
+        s_ClassTransformsMap.erase( artClass->m_AssetPath.Hash() );
     }
     s_DoRemoveNodeCallback = true;
 

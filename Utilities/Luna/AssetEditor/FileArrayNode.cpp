@@ -40,7 +40,7 @@ bool FileArrayNode::IsFileArray( Reflect::Element* element, const Reflect::Field
 {
     bool isFileArray = false;
 
-    if ( field->m_Flags & Reflect::FieldFlags::FileRef )
+    if ( field->m_Flags & Reflect::FieldFlags::Path )
     {
         if ( field->m_SerializerID == Reflect::GetType< Reflect::SetSerializer >() )
         {
@@ -88,7 +88,7 @@ FileArrayNode::~FileArrayNode()
 // 
 void FileArrayNode::CreateChildren()
 {
-#pragma TODO( "reimplement for File::References" )
+#pragma TODO( "reimplement for Nocturnal::Path" )
     //Reflect::SetSerializer* serializer = Reflect::AssertCast< Reflect::SetSerializer >( m_Serializer );
     //for each ( const File::ReferencePtr& fileRef in serializer->m_Data.get() )
     //{

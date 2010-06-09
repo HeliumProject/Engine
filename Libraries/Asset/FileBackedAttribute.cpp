@@ -12,17 +12,12 @@ Attribute::AttributeCategoryType FileBackedAttribute::GetCategoryType() const
   return Attribute::AttributeCategoryTypes::File;
 }
 
-File::Reference& FileBackedAttribute::GetFileReference() const
+const Nocturnal::Path& FileBackedAttribute::GetPath() const
 {
-    return *m_FileReference;
+    return m_Path;
 }
 
-void FileBackedAttribute::SetFileReference( const File::Reference& fileReference )
+void FileBackedAttribute::SetPath( const Nocturnal::Path& path )
 {
-    if ( m_FileReference )
-    {
-        delete m_FileReference;
-    }
-    
-    m_FileReference = new File::Reference( fileReference );
+    m_Path = path;
 }

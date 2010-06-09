@@ -4,7 +4,9 @@
 #include "AssetClass.h"
 
 #include "Finder/AssetSpecs.h"
-#include "File/File.h"
+#include "Common/File/Path.h"
+
+#pragma TODO( "Uh, how is this different from a DependenciesAttribute?" )
 
 namespace Asset
 {
@@ -12,7 +14,7 @@ namespace Asset
     {
     public:
 
-        File::S_Reference m_FileReferences;
+        Nocturnal::S_Path m_Paths;
 
         RequiredListAsset() {}
         virtual ~RequiredListAsset() {}

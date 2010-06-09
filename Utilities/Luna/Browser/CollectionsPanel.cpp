@@ -399,7 +399,7 @@ void CollectionsPanel::OnNewCollection( wxCommandEvent& event )
         break;
     }
 
-    M_CollectionToItemID::iterator findItem = m_CollectionToItemIDs.find( collection->GetFileReference().GetHash() );
+    M_CollectionToItemID::iterator findItem = m_CollectionToItemIDs.find( collection->GetPath().Hash() );
     if ( findItem != m_CollectionToItemIDs.end()
         && findItem->second.IsOk() )
     {
@@ -554,10 +554,8 @@ void CollectionsPanel::OnSaveCollection( wxCommandEvent& event )
     AssetCollection* collection = baseData->GetCollection<AssetCollection>();
     if ( collection )
     {
-        collection->GetFileReference().Resolve();
-        Nocturnal::Path collectionPath = collection->GetFileReference().GetFile().GetPath();
-        std::string defaultDir( collectionPath.Directory() );
-        std::string defaultFile( collectionPath.Filename() );
+        std::string defaultDir( collection->GetPath().Directory() );
+        std::string defaultFile( collection->GetPath().Filename() );
 
         UIToolKit::FileDialog browserDlg( this, BrowserMenu::Label( ID_SaveCollection ), defaultDir.c_str(), defaultFile.c_str(), "",
             UIToolKit::FileDialogStyles::DefaultSave | UIToolKit::FileDialogStyles::ShowAllFilesFilter | UIToolKit::FileDialogStyles::ExportFile );
@@ -612,7 +610,7 @@ void CollectionsPanel::OnAddToCollection( wxCommandEvent& event )
         for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end();
             fileItr != fileEnd; ++fileItr )
         {
-            collection->AddAsset( *( (*fileItr)->GetFileReference() ) );
+            collection->AddAsset( (*fileItr)->GetPath() );
         }
         collection->Thaw();
     }
@@ -657,7 +655,7 @@ void CollectionsPanel::OnRemoveFromCollection( wxCommandEvent& event )
         for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end();
             fileItr != fileEnd; ++fileItr )
         {
-            collection->RemoveAsset( *( (*fileItr)->GetFileReference() ) );
+            collection->RemoveAsset( (*fileItr)->GetPath() );
         }
         collection->Thaw();
     }
@@ -696,8 +694,7 @@ void CollectionsPanel::OnCollectionModified( const Reflect::ElementChangeArgs& a
     if ( !collection )
         return;
 
-    collection->GetFileReference().Resolve();
-    M_CollectionToItemID::iterator findItem = m_CollectionToItemIDs.find( collection->GetFileReference().GetHash() );
+    M_CollectionToItemID::iterator findItem = m_CollectionToItemIDs.find( collection->GetPath().Hash() );
     if ( findItem != m_CollectionToItemIDs.end()
         && findItem->second.IsOk() )
     {
@@ -835,7 +832,7 @@ wxDragResult CollectionsPanel::Drop( const Inspect::DragArgs& args )
 
     wxDragResult result = wxDragNone;
 
-#pragma TODO( "Reimplement for File::References" )
+#pragma TODO( "Reimplement for Nocturnal::Path" )
     //// get the IDs
     //std::string assetName;
     //S_tuid assetIDs;
@@ -1050,8 +1047,7 @@ void CollectionsPanel::UpdateCollections()
                 -1,
                 new AssetCollectionItemData( collection ) );
 
-            collection->GetFileReference().Resolve();
-            m_CollectionToItemIDs.insert( M_CollectionToItemID::value_type( collection->GetFileReference().GetHash(), itemID ) );
+            m_CollectionToItemIDs.insert( M_CollectionToItemID::value_type( collection->GetPath().Hash(), itemID ) );
         }
 
         m_TempCollectionsTreeCtrl->Enable( tempItemsAdded > 0 );

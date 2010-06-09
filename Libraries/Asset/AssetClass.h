@@ -8,12 +8,10 @@
 #include "AssetVersion.h"
 #include "AssetType.h"
 
-#include "TUID/TUID.h"
 #include "Common/Container/OrderedSet.h"
 #include "Common/File/Path.h"
 #include "Attribute/Attribute.h" 
 #include "Attribute/AttributeCollection.h" 
-#include "File/Reference.h"
 
 #define REGEX_LEVEL_DIR "levels\\/(?:test\\/){0,1}([0-9a-zA-Z \\-_]+)?"
 
@@ -55,7 +53,7 @@ namespace Asset
         //
     private:
 
-        File::ReferencePtr m_AssetFileRef;
+        Nocturnal::Path m_Path;
 
         // description of this asset
         std::string m_Description;
@@ -81,39 +79,44 @@ namespace Asset
             s_BaseBuiltDirectory = path;
         }
 
-        static AssetClassPtr LoadAssetClass( const std::string& path );
-        static AssetClassPtr LoadAssetClass( File::Reference& fileRef )
+        static AssetClassPtr LoadAssetClass( const char* path );
+        static AssetClassPtr LoadAssetClass( const std::string& path )
         {
-            return LoadAssetClass( fileRef.GetPath() );
+            return LoadAssetClass( path.c_str() );
+        }
+        static AssetClassPtr LoadAssetClass( const Nocturnal::Path& path )
+        {
+            return LoadAssetClass( path.Get().c_str() );
         }
 
         template <class T>
-        static Nocturnal::SmartPtr<T> LoadAssetClass( const std::string& path )
+        static Nocturnal::SmartPtr<T> LoadAssetClass( const char* path )
         {
             return Reflect::TryCast<T>( LoadAssetClass( path ) );
         }
 
         template <class T>
-        static Nocturnal::SmartPtr<T> LoadAssetClass( File::Reference& fileRef )
+        static Nocturnal::SmartPtr<T> LoadAssetClass( const std::string& path )
         {
-            return Reflect::TryCast<T>( LoadAssetClass( fileRef.GetPath() ) );
+            return Reflect::TryCast<T>( LoadAssetClass( path.c_str() ) );
         }
 
-        void SetAssetFileRef( File::Reference& fileRef )
+        template <class T>
+        static Nocturnal::SmartPtr<T> LoadAssetClass( const Nocturnal::Path& path )
         {
-            if ( m_AssetFileRef )
-            {
-                delete m_AssetFileRef;
-            }
-            
-            m_AssetFileRef = new File::Reference( fileRef );
-        }
-        File::ReferencePtr GetAssetFileRef()
-        {
-            return m_AssetFileRef;
+            return Reflect::TryCast<T>( LoadAssetClass( path.Get().c_str() ) );
         }
 
-        Nocturnal::Path GetFilePath();
+        void SetPath( const Nocturnal::Path& path )
+        {
+            m_Path = path;
+        }
+        const Nocturnal::Path& GetPath()
+        {
+            return m_Path;
+        }
+
+        const Nocturnal::Path& GetFilePath();
         Nocturnal::Path GetDataDir();
         Nocturnal::Path GetBuiltDirectory();
 

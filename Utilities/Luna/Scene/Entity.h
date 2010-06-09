@@ -35,13 +35,13 @@ namespace Luna
   struct EntityAssetChangeArgs
   {
     Luna::Entity* m_Entity;
-    File::ReferencePtr m_OldRef;
-    File::ReferencePtr m_NewRef;
+    Nocturnal::Path m_OldPath;
+    Nocturnal::Path m_NewPath;
     
-    EntityAssetChangeArgs( Luna::Entity* entity, File::ReferencePtr oldRef, File::ReferencePtr newRef )
+    EntityAssetChangeArgs( Luna::Entity* entity, const Nocturnal::Path& oldPath, const Nocturnal::Path& newPath )
       : m_Entity( entity )
-      , m_OldRef( oldRef )
-      , m_NewRef( newRef )
+      , m_OldPath( oldPath )
+      , m_NewPath( newPath )
     {}
   };
   typedef Nocturnal::Signature< void, const EntityAssetChangeArgs& > EntityAssetChangeSignature;

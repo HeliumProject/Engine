@@ -40,6 +40,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
@@ -294,10 +295,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
 			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{122FA330-2209-4BF0-A359-9C0C113369E2}"
-			RelativePathToProject=".\libraries\File\File.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{9270A244-6F23-48F9-9382-0CCBADBDC0EE}"
@@ -2500,6 +2497,18 @@
 			>
 			<File
 				RelativePath=".\Luna.rc"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Data"
+			>
+			<File
+				RelativePath=".\Data\Project.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Data\Project.h"
 				>
 			</File>
 		</Filter>

@@ -155,7 +155,7 @@ void EntityNode::copyInternalData( MPxNode* node )
     UniqueID::TUID::Generate( m_Entity->m_ID );
     m_UID = m_Entity->m_ID;
 
-    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( *(m_Entity->GetEntityAsset()->GetAssetFileRef()) );
+    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntityAsset()->GetPath() );
     if( instanceClassNode == EntityAssetNode::Null )
     {
         return;
@@ -285,7 +285,7 @@ void EntityNode::SetBackingEntity( const Asset::EntityPtr& entity )
     AttributeViewer< ArtFileAttribute > artFile( m_Entity );
 
     m_Plug.setAttribute( s_ArtFilePath );
-    m_Plug.setValue( artFile->GetFileReference().GetPath().c_str() );
+    m_Plug.setValue( artFile->GetPath().c_str() );
 
     Math::Matrix4 gm = m_Entity->m_GlobalTransform * s_RelativeTransform.Inverted();
     MMatrix mat;
@@ -377,7 +377,7 @@ void EntityNode::Show( const EntityAssetNode& instanceClassNode )
 
 void EntityNode::Show()
 {
-    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( *(m_Entity->GetEntityAsset()->GetAssetFileRef()) );
+    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntityAsset()->GetPath() );
 
     Show( instanceClassNode );
 }
@@ -400,7 +400,7 @@ void EntityNode::Hide()
 
 void EntityNode::Flatten()
 {
-    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( *(m_Entity->GetEntityAsset()->GetAssetFileRef()) );
+    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntityAsset()->GetPath() );
 
     if( instanceClassNode == EntityAssetNode::Null )
         return;

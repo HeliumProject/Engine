@@ -18,7 +18,7 @@ namespace Luna
 
     struct BuildFinishedArgs : TaskFinishedArgs
     {
-        File::S_Reference m_Assets;
+        Nocturnal::S_Path m_Assets;
         AssetBuilder::BuilderOptionsPtr m_BuilderOptions;
 
         BuildFinishedArgs()
@@ -30,6 +30,6 @@ namespace Luna
     LUNA_TASK_API void AddAssetBuiltListener(const AssetBuilder::AssetBuiltSignature::Delegate& listener);
     LUNA_TASK_API void RemoveAssetBuiltListener(const AssetBuilder::AssetBuiltSignature::Delegate& listener);
 
-    LUNA_TASK_API void BuildAsset( const File::Reference& asset, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions = NULL, bool showOptions = false, bool blocking = false );
-    LUNA_TASK_API void BuildAssets( const File::S_Reference& assets, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions = NULL, bool showOptions = false, bool blocking = false );
+    LUNA_TASK_API void BuildAsset( const Nocturnal::Path& asset, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions = NULL, bool showOptions = false, bool blocking = false );
+    LUNA_TASK_API void BuildAssets( const Nocturnal::S_Path& assets, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions = NULL, bool showOptions = false, bool blocking = false );
 }

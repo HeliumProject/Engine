@@ -53,10 +53,9 @@ void CollectionManager::PostDeserialize()
     ClearCollectionMap();
     for ( S_string::const_iterator itr = copyCollectionFilePaths.begin(), end = copyCollectionFilePaths.end(); itr != end; ++itr )
     {
-        File::Reference collectionRef( *itr );
-        collectionRef.Resolve();
+        Nocturnal::Path collectionPath( *itr );
 
-        AssetCollectionPtr collection = AssetCollection::LoadFrom( collectionRef );
+        AssetCollectionPtr collection = AssetCollection::LoadFrom( collectionPath );
 
         if ( collection )
         {
@@ -78,7 +77,7 @@ bool CollectionManager::ContainsCollection( AssetCollection* collection ) const
         return false;
     }
 
-    return ( FindCollection( collection->GetFileReference().GetPath() ) == collection );
+    return ( FindCollection( collection->GetPath().Get() ) == collection );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -140,8 +139,7 @@ bool CollectionManager::RenameCollection( AssetCollection* collection, const std
 
     std::string oldName = collection->GetName();
     
-    collection->GetFileReference().Resolve();
-    std::string oldFilePath = collection->GetFileReference().GetPath();
+    std::string oldFilePath = collection->GetPath().Get();
 
     AssetCollection* foundCollection = FindCollection( oldName );
     if ( !foundCollection )
@@ -158,11 +156,11 @@ bool CollectionManager::RenameCollection( AssetCollection* collection, const std
         std::string filePath;
         AssetCollection::CreateFilePath( name, filePath );
         
-        File::Reference fileRef( filePath );
-        foundCollection->SetFileReference( fileRef );
+        Nocturnal::Path path( filePath );
+        foundCollection->SetPath( path );
 
         // erase the old reference from the map
-        if ( !filePath.empty() && FileSystem::Exists( oldFilePath ) )
+        if ( !filePath.empty() && path.Exists() )
         {
             FileSystem::Win32Name( oldFilePath );
             ::DeleteFile( oldFilePath.c_str() );
@@ -180,8 +178,7 @@ void CollectionManager::DeleteCollection( AssetCollection* collection )
     if ( !collection )
         return;
 
-    collection->GetFileReference().Resolve();
-    std::string filePath = collection->GetFileReference().GetPath();
+    std::string filePath = collection->GetPath().Get();
 
     CloseCollection( collection );
 
@@ -195,10 +192,9 @@ void CollectionManager::DeleteCollection( AssetCollection* collection )
 ///////////////////////////////////////////////////////////////////////////////
 AssetCollection* CollectionManager::OpenCollection( const std::string& path, bool copyLocal )
 {
-    File::Reference fileRef( path );
-    fileRef.Resolve();
+    Nocturnal::Path filePath( path );
 
-    AssetCollectionPtr loadCollection = AssetCollection::LoadFrom( fileRef );
+    AssetCollectionPtr loadCollection = AssetCollection::LoadFrom( filePath );
     if ( loadCollection )
     {
         std::string name;
@@ -211,10 +207,9 @@ AssetCollection* CollectionManager::OpenCollection( const std::string& path, boo
             std::string filePath;
             AssetCollection::CreateFilePath( name, filePath );
 
-            File::Reference localRef( filePath );
-            localRef.Resolve();
+            Nocturnal::Path localPath( filePath );
 
-            loadCollection->SetFileReference( localRef );
+            loadCollection->SetPath( localPath );
 
             flags |= AssetCollectionFlags::CanRename | AssetCollectionFlags::CanHandleDragAndDrop;
         }
@@ -265,17 +260,15 @@ bool CollectionManager::ImportIntoStaticCollection( AssetCollection* collection,
     if ( !collection )
         return false;
 
-    collection->GetFileReference().Resolve();
-    AssetCollection* foundCollection = FindCollection( collection->GetFileReference().GetPath() );
+    AssetCollection* foundCollection = FindCollection( collection->GetPath().Get() );
     if ( foundCollection )
     {
-        File::Reference fileRef( path );
-        fileRef.Resolve();
+        Nocturnal::Path filePath( path );
 
-        AssetCollectionPtr loadCollection = AssetCollection::LoadFrom( fileRef );
+        AssetCollectionPtr loadCollection = AssetCollection::LoadFrom( filePath );
         if ( loadCollection )
         {
-            if ( foundCollection->AddAssets( loadCollection->GetAssetReferences() ) )
+            if ( foundCollection->AddAssets( loadCollection->GetAssetPaths() ) )
             {
                 Dirty( foundCollection );
 
@@ -296,25 +289,24 @@ bool CollectionManager::SaveCollection( AssetCollection* collection, const std::
 
     bool result = false;
 
-    collection->GetFileReference().Resolve();
-    std::string outputFile = path.empty() ? collection->GetFileReference().GetPath() : path;
+    std::string outputFile = path.empty() ? collection->GetPath().Get() : path;
 
     if ( !collection->ReadOnly()
         && !collection->IsTemporary()
         && !outputFile.empty() )
     {
         // Only save dirty files
-        S_u64::iterator findCollection = m_DirtyCollectionHashes.find( collection->GetFileReference().GetHash() );
+        S_u64::iterator findCollection = m_DirtyCollectionHashes.find( collection->GetPath().Hash() );
         if ( findCollection != m_DirtyCollectionHashes.end() )
         {
             result = AssetCollection::SaveTo( collection, outputFile );
             if ( path.empty() ) // only unset dirty if they didn't pass in a different path to save to
             {
-                m_DirtyCollectionHashes.erase( collection->GetFileReference().GetHash() );
+                m_DirtyCollectionHashes.erase( collection->GetPath().Hash() );
             }
         }
 
-        m_CollectionFilePaths.insert( collection->GetFileReference().GetPath() );
+        m_CollectionFilePaths.insert( collection->GetPath().Get() );
     }
     else
     {
@@ -345,17 +337,14 @@ void CollectionManager::Dirty( const AssetCollection* collection )
     if ( !collection )
         return;
 
-    collection->GetFileReference().Resolve();
-    m_DirtyCollectionHashes.insert( collection->GetFileReference().GetHash() );
+    m_DirtyCollectionHashes.insert( collection->GetPath().Hash() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 Nocturnal::Insert<M_AssetCollections>::Result CollectionManager::AddCollectionToMap( AssetCollection* collection )
 {
-    collection->GetFileReference().Resolve();
-
     Nocturnal::Insert<M_AssetCollections>::Result inserted = m_AssetCollections.insert(
-        M_AssetCollections::value_type( collection->GetFileReference().GetHash(), collection ) );
+        M_AssetCollections::value_type( collection->GetPath().Hash(), collection ) );
 
     NOC_ASSERT( inserted.second );
 
@@ -385,9 +374,9 @@ bool CollectionManager::RemoveCollectionFromMap( AssetCollection* collection )
     collection->CleanupCollection();
     collection->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionManager::OnCollectionModified ) );
 
-    if ( m_AssetCollections.erase( collection->GetFileReference().GetHash() ) > 0 )
+    if ( m_AssetCollections.erase( collection->GetPath().Hash() ) > 0 )
     {
-        m_DirtyCollectionHashes.erase( collection->GetFileReference().GetHash() );
+        m_DirtyCollectionHashes.erase( collection->GetPath().Hash() );
         RaiseChanged( GetClass()->FindField( &CollectionManager::m_AssetCollections ) );
         return true;
     }

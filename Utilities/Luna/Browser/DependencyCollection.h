@@ -23,10 +23,10 @@ namespace Luna
 
         virtual std::string GetDisplayName() const;
 
-        void SetRoot( File::Reference& fileRef );
-        File::ReferencePtr& GetRoot()
+        void SetRoot( const Nocturnal::Path& path );
+        const Nocturnal::Path& GetRoot()
         {
-            return m_spRootFileRef;
+            return m_RootPath;
         }
 
         std::string GetAssetName() const;
@@ -53,7 +53,7 @@ namespace Luna
         virtual void PostDeserialize() NOC_OVERRIDE;
 
     private:
-        File::ReferencePtr m_spRootFileRef;
+        Nocturnal::Path m_RootPath;
         bool m_IsReverse;
 
         // Cache

@@ -331,6 +331,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\File\Handle.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\File\Handle.h"
+				>
+			</File>
+			<File
 				RelativePath=".\File\Path.cpp"
 				>
 			</File>

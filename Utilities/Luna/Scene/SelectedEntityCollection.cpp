@@ -40,7 +40,7 @@ void SelectedEntityCollection::RemoveEntityListeners()
 
 void SelectedEntityCollection::SetAssetsFromSelection( const OS_SelectableDumbPtr& selection )
 {
-    File::S_Reference files;
+    Nocturnal::S_Path files;
   for ( OS_SelectableDumbPtr::Iterator selItr = selection.Begin(), selEnd = selection.End(); selItr != selEnd; ++selItr )
   {
     Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *selItr );
@@ -48,7 +48,7 @@ void SelectedEntityCollection::SetAssetsFromSelection( const OS_SelectableDumbPt
     {
       entity->AddClassChangedListener( EntityAssetChangeSignature::Delegate( this, &SelectedEntityCollection::OnEntityClassChanged ) );
       m_WatchedEntities.push_back( entity );
-      files.insert( entity->GetClassSet()->GetEntityAssetFileRef() );
+      files.insert( entity->GetClassSet()->GetEntityAssetPath() );
     }
   }
 

@@ -15,7 +15,7 @@
 bool Luna::IsFileReference( Reflect::Element* element, const Reflect::Field* field )
 {
   bool isFileRef = false;
-  if ( field->m_Flags & Reflect::FieldFlags::FileRef )
+  if ( field->m_Flags & Reflect::FieldFlags::Path )
   {
       if ( field->m_SerializerID == Reflect::GetType< Reflect::PointerSerializer >() ||
       field->m_SerializerID == Reflect::GetType< Reflect::SetSerializer >() )

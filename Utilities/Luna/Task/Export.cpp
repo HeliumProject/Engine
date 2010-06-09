@@ -17,7 +17,6 @@
 #include "Asset/AssetClass.h"
 #include "Asset/SceneAsset.h"
 #include "Attribute/AttributeHandle.h"
-#include "Asset/WorldFileAttribute.h"
 #include "Asset/ExporterJob.h"
 
 #include "Content/Zone.h"

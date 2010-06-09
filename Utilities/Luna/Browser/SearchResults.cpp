@@ -67,7 +67,7 @@ Asset::AssetFile* SearchResults::FindFileByHash( const u64& hash ) const
 ///////////////////////////////////////////////////////////////////////////////
 bool SearchResults::AddFile( Asset::AssetFilePtr assetFile )
 {
-    Asset::AssetFile* foundFile = FindFileByHash( assetFile->GetFileReference()->GetHash() );
+    Asset::AssetFile* foundFile = FindFileByHash( assetFile->GetPath().Hash() );
     if ( foundFile )
     {
         // the file already exists, make sure it's up-to-date
@@ -76,7 +76,7 @@ bool SearchResults::AddFile( Asset::AssetFilePtr assetFile )
     {
         // insert the file
         m_AssetFiles.push_back( assetFile );
-        m_LookupByHash[ assetFile->GetFileReference()->GetHash() ] = m_AssetFiles.back();
+        m_LookupByHash[ assetFile->GetPath().Hash() ] = m_AssetFiles.back();
 
         return true;
     }
@@ -88,14 +88,14 @@ bool SearchResults::AddFile( Asset::AssetFilePtr assetFile )
 bool SearchResults::RemoveFile( Asset::AssetFilePtr assetFile )
 {
     // save ourselves a little time by looking up the file by ID
-    Asset::AssetFile* foundFile = FindFileByHash( assetFile->GetFileReference()->GetHash() );
+    Asset::AssetFile* foundFile = FindFileByHash( assetFile->GetPath().Hash() );
     if ( foundFile )
     {
         Asset::V_AssetFiles::iterator itr = m_AssetFiles.begin();
         Asset::V_AssetFiles::iterator end = m_AssetFiles.end();
         for ( ; itr != end; ++itr )
         {
-            if ( (*itr)->GetFileReference()->GetHash() == assetFile->GetFileReference()->GetHash() )
+            if ( (*itr)->GetPath().Hash() == assetFile->GetPath().Hash() )
             {
                 break;
             }
@@ -104,7 +104,7 @@ bool SearchResults::RemoveFile( Asset::AssetFilePtr assetFile )
         if ( itr != end )
         {
             m_AssetFiles.erase( itr );
-            m_LookupByHash.erase( assetFile->GetFileReference()->GetHash() );
+            m_LookupByHash.erase( assetFile->GetPath().Hash() );
             return true;
         }
     }

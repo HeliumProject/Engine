@@ -62,7 +62,7 @@ namespace Asset
     //
     bool HandleElement( Reflect::Element* element );
     bool HandleField( Reflect::Element* element, const Reflect::Field* field );
-    void HandleFileRef( Reflect::Element* element, const Reflect::Field* field, File::ReferencePtr& fileRef );
+    void HandlePath( Reflect::Element* element, const Reflect::Field* field, Nocturnal::Path& path );
 
     
     //

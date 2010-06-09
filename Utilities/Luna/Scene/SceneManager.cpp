@@ -24,11 +24,11 @@ using namespace Luna;
 // 
 static std::string GetUniqueSceneName()
 {
-  static i32 number = 1;
+    static i32 number = 1;
 
-  std::ostringstream str;
-  str << "Scene" << number++;
-  return str.str();
+    std::ostringstream str;
+    str << "Scene" << number++;
+    return str.str();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ SceneManager::~SceneManager()
 // 
 SceneEditor* SceneManager::GetEditor()
 {
-  return m_Editor;
+    return m_Editor;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ SceneEditor* SceneManager::GetEditor()
 // 
 Asset::SceneAsset* SceneManager::GetCurrentLevel() const
 {
-  return m_CurrentLevel; 
+    return m_CurrentLevel; 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,27 +71,27 @@ Asset::SceneAsset* SceneManager::GetCurrentLevel() const
 // 
 ScenePtr SceneManager::NewScene( bool isRoot, std::string path, bool addDoc )
 {
-  std::string name;
-  if ( path.empty() )
-  {
-    name = GetUniqueSceneName();
-  }
+    std::string name;
+    if ( path.empty() )
+    {
+        name = GetUniqueSceneName();
+    }
 
-  SceneDocumentPtr document = new SceneDocument( path, name );
-  document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::OnDocumentClosed ) );
-  ScenePtr scene = new Luna::Scene( this, document );
-  if ( isRoot )
-  {
-    SetRootScene( scene );
-  }
-  AddScene( scene );
+    SceneDocumentPtr document = new SceneDocument( path, name );
+    document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::OnDocumentClosed ) );
+    ScenePtr scene = new Luna::Scene( this, document );
+    if ( isRoot )
+    {
+        SetRootScene( scene );
+    }
+    AddScene( scene );
 
-  if ( addDoc && !AddDocument( document ) )
-  {
-    // Shouldn't happen
-    NOC_BREAK();
-  }
-  return scene;
+    if ( addDoc && !AddDocument( document ) )
+    {
+        // Shouldn't happen
+        NOC_BREAK();
+    }
+    return scene;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -99,94 +99,93 @@ ScenePtr SceneManager::NewScene( bool isRoot, std::string path, bool addDoc )
 // 
 DocumentPtr SceneManager::OpenPath( const std::string& path, std::string& error ) 
 {
-  if ( !CloseAll() )
-  {
-    return NULL;
-  }
-
-  // Create a batch command to toggle between the previous scene, the new scene,
-  // and no scene (while we are loading the file).  This batch command will be
-  // committed to the undo stack only if this is not the first scene that we
-  // are opening.
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand();
-  Luna::Scene* previousScene = GetCurrentScene();
-  if ( previousScene )
-  {
-    batch->Push( new LSwitchSceneCommand( this, NULL ) );
-  }
-
-  std::string scenePath = path;
-  SceneDocumentPtr document;
-  File::Reference fileRef( path );
-
-  // If this is actually a level file, we need to open it, grab the level
-  // settings, and also pull in the world file as a scene.
-  if ( fileRef.GetFile().GetPath().Extension() == FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() )
-  {
-    std::stringstream errStr; 
-
-    try
+    if ( !CloseAll() )
     {
-      m_CurrentLevel = Reflect::AssertCast< Asset::SceneAsset >( Asset::AssetClass::LoadAssetClass( fileRef ) );
-    }
-    catch ( const Nocturnal::Exception& e )
-    {
-      error = "Error loading level " + path + ": " + e.Get(); 
-      return NULL;
+        return NULL;
     }
 
-    if ( !m_CurrentLevel.ReferencesObject() )
-    {
-      error = path + " is not a valid level file."; 
-      return NULL; 
-    }
-
-    Attribute::AttributeViewer< Asset::WorldFileAttribute > world( m_CurrentLevel, false );    
-    world->GetFileReference().Resolve();
-
-    if ( !world.Valid() || world->GetFileReference().IsValid() )
-    {
-      error = "Level file " + path + " does not reference a world file."; 
-      return NULL; 
-    }
-
-    scenePath = world->GetFileReference().GetPath();
-  }
-
-  ScenePtr scene = NewScene( m_Root == NULL, scenePath, true );
-  if ( !scene->LoadFile( scenePath ) )
-  {
-    error = "Failed to load scene from " + path + ".";
-    RemoveScene( scene );
-    scene = NULL;
-  }
-
-  if ( scene.ReferencesObject() )
-  {
-    document = scene->GetSceneDocument();
-    if ( !m_CurrentScene )
-    {
-      SetCurrentScene( scene );
-    }
-
-    batch->Push( new LSwitchSceneCommand( this, scene ) );
-    if ( previousScene && GetRootScene() )
-    {
-      GetRootScene()->Push( batch );
-    }
-    // else: Throw away the batch;  it's already done the work of switching scenes
-    // and we didn't start with a valid scene, so this command is meaningless to put
-    // on the undo queue.
-  }
-  else
-  {
-    // If we switched from a valid scene, restore that scene as the current one
+    // Create a batch command to toggle between the previous scene, the new scene,
+    // and no scene (while we are loading the file).  This batch command will be
+    // committed to the undo stack only if this is not the first scene that we
+    // are opening.
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand();
+    Luna::Scene* previousScene = GetCurrentScene();
     if ( previousScene )
     {
-      batch->Push( new LSwitchSceneCommand( this, previousScene ) );
+        batch->Push( new LSwitchSceneCommand( this, NULL ) );
     }
-  }
-  return document;
+
+    std::string scenePath = path;
+    SceneDocumentPtr document;
+    Nocturnal::Path filePath( path );
+
+    // If this is actually a level file, we need to open it, grab the level
+    // settings, and also pull in the world file as a scene.
+    if ( filePath.Extension() == FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() )
+    {
+        std::stringstream errStr; 
+
+        try
+        {
+            m_CurrentLevel = Reflect::AssertCast< Asset::SceneAsset >( Asset::AssetClass::LoadAssetClass( filePath ) );
+        }
+        catch ( const Nocturnal::Exception& e )
+        {
+            error = "Error loading level " + path + ": " + e.Get(); 
+            return NULL;
+        }
+
+        if ( !m_CurrentLevel.ReferencesObject() )
+        {
+            error = path + " is not a valid level file."; 
+            return NULL; 
+        }
+
+        Attribute::AttributeViewer< Asset::WorldFileAttribute > world( m_CurrentLevel, false );    
+
+        if ( !world.Valid() || world->GetPath().Exists() )
+        {
+            error = "Level file " + path + " does not reference a world file."; 
+            return NULL; 
+        }
+
+        scenePath = world->GetPath().Get();
+    }
+
+    ScenePtr scene = NewScene( m_Root == NULL, scenePath, true );
+    if ( !scene->LoadFile( scenePath ) )
+    {
+        error = "Failed to load scene from " + path + ".";
+        RemoveScene( scene );
+        scene = NULL;
+    }
+
+    if ( scene.ReferencesObject() )
+    {
+        document = scene->GetSceneDocument();
+        if ( !m_CurrentScene )
+        {
+            SetCurrentScene( scene );
+        }
+
+        batch->Push( new LSwitchSceneCommand( this, scene ) );
+        if ( previousScene && GetRootScene() )
+        {
+            GetRootScene()->Push( batch );
+        }
+        // else: Throw away the batch;  it's already done the work of switching scenes
+        // and we didn't start with a valid scene, so this command is meaningless to put
+        // on the undo queue.
+    }
+    else
+    {
+        // If we switched from a valid scene, restore that scene as the current one
+        if ( previousScene )
+        {
+            batch->Push( new LSwitchSceneCommand( this, previousScene ) );
+        }
+    }
+    return document;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -194,31 +193,30 @@ DocumentPtr SceneManager::OpenPath( const std::string& path, std::string& error 
 // 
 ScenePtr SceneManager::OpenZone( const std::string& path, std::string& error )
 {
-  ScenePtr scene = NewScene( false, path, true );
-  if ( !scene->LoadFile( path ) )
-  {
-    error = "Failed to load scene from " + path + ".";
-    RemoveScene( scene );
-    scene = NULL;
-  }
-  else
-  {
-      File::Reference zoneRef( path );
-      zoneRef.Resolve();
-
-    S_ZoneDumbPtr::const_iterator zoneItr = m_Root->GetZones().begin();
-    S_ZoneDumbPtr::const_iterator zoneEnd = m_Root->GetZones().end();
-    for ( ; zoneItr != zoneEnd; ++zoneItr )
+    ScenePtr scene = NewScene( false, path, true );
+    if ( !scene->LoadFile( path ) )
     {
-      Zone* zone = *zoneItr;
-      if ( zone->GetFileReference()->GetHash() == zoneRef.GetHash() )
-      {
-        scene->SetColor( zone->GetColor() );
-        break;
-      }
+        error = "Failed to load scene from " + path + ".";
+        RemoveScene( scene );
+        scene = NULL;
     }
-  }
-  return scene;
+    else
+    {
+        Nocturnal::Path zonePath( path );
+
+        S_ZoneDumbPtr::const_iterator zoneItr = m_Root->GetZones().begin();
+        S_ZoneDumbPtr::const_iterator zoneEnd = m_Root->GetZones().end();
+        for ( ; zoneItr != zoneEnd; ++zoneItr )
+        {
+            Zone* zone = *zoneItr;
+            if ( zone->GetPathObject().Hash() == zonePath.Hash() )
+            {
+                scene->SetColor( zone->GetColor() );
+                break;
+            }
+        }
+    }
+    return scene;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -227,20 +225,20 @@ ScenePtr SceneManager::OpenZone( const std::string& path, std::string& error )
 // 
 static std::string PromptSaveAs( const DocumentPtr& file, wxWindow* window )
 {
-  std::string path;
-  std::string defaultDir( file->GetFilePath() );
-  std::string defaultFile( FileSystem::GetLeaf( defaultDir ) );
-  FileSystem::StripLeaf( defaultDir );
+    std::string path;
+    std::string defaultDir( file->GetFilePath() );
+    std::string defaultFile( FileSystem::GetLeaf( defaultDir ) );
+    FileSystem::StripLeaf( defaultDir );
 
-  UIToolKit::FileDialog saveDlg( window, "Save As...", defaultDir.c_str(), defaultFile.c_str(), "", UIToolKit::FileDialogStyles::DefaultSave );
-  saveDlg.AddFilter( FinderSpecs::Asset::WORLD_DECORATION.GetDialogFilter() );
-  saveDlg.AddFilter( FinderSpecs::Asset::ZONE_DECORATION.GetDialogFilter() );
-  if ( saveDlg.ShowModal() == wxID_OK )
-  {
-    path = saveDlg.GetPath();
-  }
+    UIToolKit::FileDialog saveDlg( window, "Save As...", defaultDir.c_str(), defaultFile.c_str(), "", UIToolKit::FileDialogStyles::DefaultSave );
+    saveDlg.AddFilter( FinderSpecs::Asset::WORLD_DECORATION.GetDialogFilter() );
+    saveDlg.AddFilter( FinderSpecs::Asset::ZONE_DECORATION.GetDialogFilter() );
+    if ( saveDlg.ShowModal() == wxID_OK )
+    {
+        path = saveDlg.GetPath();
+    }
 
-  return path;
+    return path;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -249,44 +247,44 @@ static std::string PromptSaveAs( const DocumentPtr& file, wxWindow* window )
 // 
 bool SceneManager::Save( DocumentPtr document, std::string& error )
 {
-  SceneDocument* sceneDocument = Reflect::ObjectCast< SceneDocument >( document );
-  if ( !sceneDocument )
-  {
-    NOC_BREAK();
-    error = document->GetFilePath() + " is not a valid scene file.";
-    return false;
-  }
-
-  Luna::Scene* scene = sceneDocument->GetScene();
-  if ( !scene )
-  {
-    NOC_BREAK();
-    error = scene->GetFullPath() + " does not contain a valid scene to save.";
-    return false;
-  }
-
-  // Check for "save as"
-  if ( document->GetFilePath().empty() )
-  {
-    std::string savePath = PromptSaveAs( sceneDocument, m_Editor );
-    if ( !savePath.empty() )
+    SceneDocument* sceneDocument = Reflect::ObjectCast< SceneDocument >( document );
+    if ( !sceneDocument )
     {
-      document->SetFilePath( savePath );
+        NOC_BREAK();
+        error = document->GetFilePath() + " is not a valid scene file.";
+        return false;
     }
-    else
+
+    Luna::Scene* scene = sceneDocument->GetScene();
+    if ( !scene )
     {
-      // No error, operation cancelled
-      return true;
+        NOC_BREAK();
+        error = scene->GetFullPath() + " does not contain a valid scene to save.";
+        return false;
     }
-  }
 
-  if ( scene->Save() )
-  {
-    return __super::Save( document, error );
-  }
+    // Check for "save as"
+    if ( document->GetFilePath().empty() )
+    {
+        std::string savePath = PromptSaveAs( sceneDocument, m_Editor );
+        if ( !savePath.empty() )
+        {
+            document->SetFilePath( savePath );
+        }
+        else
+        {
+            // No error, operation cancelled
+            return true;
+        }
+    }
 
-  error = "Failed to save " + scene->GetFullPath();
-  return false;
+    if ( scene->Save() )
+    {
+        return __super::Save( document, error );
+    }
+
+    error = "Failed to save " + scene->GetFullPath();
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -295,20 +293,20 @@ bool SceneManager::Save( DocumentPtr document, std::string& error )
 // 
 void SceneManager::SetRootScene( Luna::Scene* root )
 {
-  if ( m_Root.Ptr() != root )
-  {
-    if ( m_Root.Ptr() )
+    if ( m_Root.Ptr() != root )
     {
-      // Do something?  Close all open scenes?
-    }
+        if ( m_Root.Ptr() )
+        {
+            // Do something?  Close all open scenes?
+        }
 
-    m_Root = root;
+        m_Root = root;
 
-    if ( m_Root.Ptr() )
-    {
-      // Do something?  Notify listeners?
+        if ( m_Root.Ptr() )
+        {
+            // Do something?  Notify listeners?
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -316,7 +314,7 @@ void SceneManager::SetRootScene( Luna::Scene* root )
 // 
 Luna::Scene* SceneManager::GetRootScene()
 {
-  return m_Root;
+    return m_Root;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -324,7 +322,7 @@ Luna::Scene* SceneManager::GetRootScene()
 // 
 bool SceneManager::IsRoot( Luna::Scene* scene ) const
 {
-  return ( ( scene != NULL ) && ( scene == m_Root ) );
+    return ( ( scene != NULL ) && ( scene == m_Root ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -332,14 +330,14 @@ bool SceneManager::IsRoot( Luna::Scene* scene ) const
 // 
 void SceneManager::AddScene(Luna::Scene* scene)
 {
-  scene->GetSceneDocument()->AddDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
-  scene->AddNodeRemovedListener( NodeChangeSignature::Delegate( this, &SceneManager::SceneNodeDeleting ) );
+    scene->GetSceneDocument()->AddDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
+    scene->AddNodeRemovedListener( NodeChangeSignature::Delegate( this, &SceneManager::SceneNodeDeleting ) );
 
-  const std::string& path = scene->GetFullPath();
-  Nocturnal::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( path, scene ) );
-  NOC_ASSERT(inserted.second);
+    const std::string& path = scene->GetFullPath();
+    Nocturnal::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( path, scene ) );
+    NOC_ASSERT(inserted.second);
 
-  m_SceneAdded.Raise( scene );
+    m_SceneAdded.Raise( scene );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -347,42 +345,42 @@ void SceneManager::AddScene(Luna::Scene* scene)
 // 
 void SceneManager::RemoveScene(Luna::Scene* scene)
 {
-  // There is a problem in the code.  You should not be unloading a scene that
-  // someone still has allocated.
-  NOC_ASSERT( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() );
+    // There is a problem in the code.  You should not be unloading a scene that
+    // someone still has allocated.
+    NOC_ASSERT( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() );
 
-  // RemoveScene is called for nested scenes and non-nested
-  // we don't SaveVisibility in remove scene because i don't want to save it for nested scenes
-  // and because we remove from m_AllocatedScenes before calling RemoveScene, 
-  // we have no way to test (in this function) that it was a nested scene we're unloading. 
-  // 
+    // RemoveScene is called for nested scenes and non-nested
+    // we don't SaveVisibility in remove scene because i don't want to save it for nested scenes
+    // and because we remove from m_AllocatedScenes before calling RemoveScene, 
+    // we have no way to test (in this function) that it was a nested scene we're unloading. 
+    // 
 
-  scene->GetSceneDocument()->RemoveDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
-  scene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate( this, &SceneManager::SceneNodeDeleting ) );
-  m_SceneRemoving.Raise( scene );
+    scene->GetSceneDocument()->RemoveDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
+    scene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate( this, &SceneManager::SceneNodeDeleting ) );
+    m_SceneRemoving.Raise( scene );
 
-  M_SceneSmartPtr::iterator found = m_Scenes.find( scene->GetFullPath() );
-  NOC_ASSERT( found != m_Scenes.end() );
+    M_SceneSmartPtr::iterator found = m_Scenes.find( scene->GetFullPath() );
+    NOC_ASSERT( found != m_Scenes.end() );
 
-  if (found->second.Ptr() == m_CurrentScene)
-  {
-    if (m_Scenes.size() <= 1)
+    if (found->second.Ptr() == m_CurrentScene)
     {
-      SetCurrentScene(NULL);
+        if (m_Scenes.size() <= 1)
+        {
+            SetCurrentScene(NULL);
+        }
+        else
+        {
+            SetCurrentScene( FindFirstNonNestedScene() ); 
+        }
     }
-    else
+
+    if ( IsRoot( scene ) )
     {
-      SetCurrentScene( FindFirstNonNestedScene() ); 
+        SetRootScene( NULL );
     }
-  }
 
-  if ( IsRoot( scene ) )
-  {
-    SetRootScene( NULL );
-  }
-
-  RemoveDocument( scene->GetSceneDocument() );
-  m_Scenes.erase( found );
+    RemoveDocument( scene->GetSceneDocument() );
+    m_Scenes.erase( found );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -390,34 +388,34 @@ void SceneManager::RemoveScene(Luna::Scene* scene)
 // 
 void SceneManager::RemoveAllScenes()
 {
-  SetCurrentScene( NULL );
+    SetCurrentScene( NULL );
 
 #pragma TODO("This is a hack to support our current unwinding of all the allocated scenes, which is unordered.  We need to redesign the scene manager so that the root scene is deallocated last")
-  ScenePtr root = m_Root; // hold a reference to the root while we close all its nested scenes
+    ScenePtr root = m_Root; // hold a reference to the root while we close all its nested scenes
 
-  typedef std::vector< Luna::Scene* > V_SceneDumbPtr;
-  V_SceneDumbPtr topLevelScenes;
+    typedef std::vector< Luna::Scene* > V_SceneDumbPtr;
+    V_SceneDumbPtr topLevelScenes;
 
-  M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
-  M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
-  for ( ; sceneItr != sceneEnd; ++sceneItr )
-  {
-    Luna::Scene* scene = sceneItr->second;
-    if ( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() )
+    M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
+    M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
+    for ( ; sceneItr != sceneEnd; ++sceneItr )
     {
-      topLevelScenes.push_back( scene );
+        Luna::Scene* scene = sceneItr->second;
+        if ( m_AllocatedScenes.find( scene ) == m_AllocatedScenes.end() )
+        {
+            topLevelScenes.push_back( scene );
+        }
     }
-  }
 
-  V_SceneDumbPtr::const_iterator removeItr = topLevelScenes.begin();
-  V_SceneDumbPtr::const_iterator removeEnd = topLevelScenes.end();
-  for ( ; removeItr != removeEnd; ++removeItr )
-  {
-    (*removeItr)->SaveVisibility(); 
-    RemoveScene( *removeItr );
-  }
+    V_SceneDumbPtr::const_iterator removeItr = topLevelScenes.begin();
+    V_SceneDumbPtr::const_iterator removeEnd = topLevelScenes.end();
+    for ( ; removeItr != removeEnd; ++removeItr )
+    {
+        (*removeItr)->SaveVisibility(); 
+        RemoveScene( *removeItr );
+    }
 
-  root = NULL;
+    root = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -425,7 +423,7 @@ void SceneManager::RemoveAllScenes()
 // 
 const M_SceneSmartPtr& SceneManager::GetScenes() const 
 {
-  return m_Scenes;
+    return m_Scenes;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -433,14 +431,14 @@ const M_SceneSmartPtr& SceneManager::GetScenes() const
 // 
 Luna::Scene* SceneManager::GetScene( const std::string& path ) const
 {
-  M_SceneSmartPtr::const_iterator found = m_Scenes.find( path );
+    M_SceneSmartPtr::const_iterator found = m_Scenes.find( path );
 
-  if (found != m_Scenes.end())
-  {
-    return found->second.Ptr();
-  }
+    if (found != m_Scenes.end())
+    {
+        return found->second.Ptr();
+    }
 
-  return NULL;
+    return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -449,7 +447,7 @@ Luna::Scene* SceneManager::GetScene( const std::string& path ) const
 // 
 bool SceneManager::IsNestedScene( Luna::Scene* scene ) const
 {
-  return m_AllocatedScenes.find( scene ) != m_AllocatedScenes.end();
+    return m_AllocatedScenes.find( scene ) != m_AllocatedScenes.end();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -460,31 +458,31 @@ bool SceneManager::IsNestedScene( Luna::Scene* scene ) const
 // 
 Luna::Scene* SceneManager::AllocateNestedScene( const std::string& path, Luna::Scene* parent )
 {
-  Luna::Scene* scene = GetScene( path );
+    Luna::Scene* scene = GetScene( path );
 
-  if ( !scene )
-  {
-    // Try to load nested scene.
-    parent->ChangeStatus( std::string ("Loading ") + path + "..." );
-
-    ScenePtr scenePtr = NewScene( false, path, false );
-    if ( !scenePtr->LoadFile( path ) )
+    if ( !scene )
     {
-      Console::Error( "Failed to load scene from %s\n", path.c_str() );
+        // Try to load nested scene.
+        parent->ChangeStatus( std::string ("Loading ") + path + "..." );
+
+        ScenePtr scenePtr = NewScene( false, path, false );
+        if ( !scenePtr->LoadFile( path ) )
+        {
+            Console::Error( "Failed to load scene from %s\n", path.c_str() );
+        }
+
+        parent->ChangeStatus( "Ready" );
+        scene = scenePtr;
     }
 
-    parent->ChangeStatus( "Ready" );
-    scene = scenePtr;
-  }
+    if ( scene )
+    {
+        // Increment the reference count on the nested scene.
+        i32& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( scene, 0 ) ).first->second;
+        ++referenceCount;
+    }
 
-  if ( scene )
-  {
-    // Increment the reference count on the nested scene.
-    i32& referenceCount = m_AllocatedScenes.insert( M_AllocScene::value_type( scene, 0 ) ).first->second;
-    ++referenceCount;
-  }
-
-  return scene;
+    return scene;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -493,23 +491,23 @@ Luna::Scene* SceneManager::AllocateNestedScene( const std::string& path, Luna::S
 // 
 void SceneManager::ReleaseNestedScene( Luna::Scene*& scene )
 {
-  M_AllocScene::iterator found = m_AllocatedScenes.find( scene );
-  if ( found != m_AllocatedScenes.end() )
-  {
-    i32& referenceCount = found->second;
-    if ( --referenceCount == 0 )
+    M_AllocScene::iterator found = m_AllocatedScenes.find( scene );
+    if ( found != m_AllocatedScenes.end() )
     {
-      m_AllocatedScenes.erase( found );
-      RemoveScene( scene );
+        i32& referenceCount = found->second;
+        if ( --referenceCount == 0 )
+        {
+            m_AllocatedScenes.erase( found );
+            RemoveScene( scene );
+        }
     }
-  }
-  else
-  {
-    // You tried to release a scene that was not allocated
-    NOC_BREAK();
-  }
+    else
+    {
+        // You tried to release a scene that was not allocated
+        NOC_BREAK();
+    }
 
-  scene = NULL;
+    scene = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -518,7 +516,7 @@ void SceneManager::ReleaseNestedScene( Luna::Scene*& scene )
 // 
 bool SceneManager::HasCurrentScene() const
 {
-  return m_CurrentScene != NULL;
+    return m_CurrentScene != NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -527,7 +525,7 @@ bool SceneManager::HasCurrentScene() const
 // 
 bool SceneManager::IsCurrentScene( const Luna::Scene* sceneToCompare ) const
 {
-  return m_CurrentScene == sceneToCompare;
+    return m_CurrentScene == sceneToCompare;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -535,7 +533,7 @@ bool SceneManager::IsCurrentScene( const Luna::Scene* sceneToCompare ) const
 // 
 Luna::Scene* SceneManager::GetCurrentScene() const
 {
-  return m_CurrentScene;
+    return m_CurrentScene;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -543,7 +541,7 @@ Luna::Scene* SceneManager::GetCurrentScene() const
 // 
 void SceneManager::FreezeTreeSorting()
 {
-  m_Editor->GetTreeMonitor().FreezeSorting();
+    m_Editor->GetTreeMonitor().FreezeSorting();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -551,7 +549,7 @@ void SceneManager::FreezeTreeSorting()
 // 
 void SceneManager::ThawTreeSorting()
 {
-  m_Editor->GetTreeMonitor().ThawSorting();
+    m_Editor->GetTreeMonitor().ThawSorting();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -561,16 +559,16 @@ void SceneManager::ThawTreeSorting()
 // 
 void SceneManager::SetCurrentScene( Luna::Scene* scene )
 {
-  if ( m_CurrentScene == scene )
-  {
-    return;
-  }
+    if ( m_CurrentScene == scene )
+    {
+        return;
+    }
 
-  m_CurrentSceneChanging.Raise( m_CurrentScene );
+    m_CurrentSceneChanging.Raise( m_CurrentScene );
 
-  m_CurrentScene = scene;
+    m_CurrentScene = scene;
 
-  m_CurrentSceneChanged.Raise( m_CurrentScene );
+    m_CurrentSceneChanged.Raise( m_CurrentScene );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -578,7 +576,7 @@ void SceneManager::SetCurrentScene( Luna::Scene* scene )
 // 
 bool SceneManager::CanUndo()
 {
-  return m_UndoManager.CanUndo();
+    return m_UndoManager.CanUndo();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -586,7 +584,7 @@ bool SceneManager::CanUndo()
 // 
 bool SceneManager::CanRedo()
 {
-  return m_UndoManager.CanRedo();
+    return m_UndoManager.CanRedo();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -594,7 +592,7 @@ bool SceneManager::CanRedo()
 // 
 void SceneManager::Undo()
 {
-  m_UndoManager.Undo();
+    m_UndoManager.Undo();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -602,7 +600,7 @@ void SceneManager::Undo()
 // 
 void SceneManager::Redo()
 {
-  m_UndoManager.Redo();
+    m_UndoManager.Redo();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -613,7 +611,7 @@ void SceneManager::Redo()
 // 
 void SceneManager::Push( Undo::Queue* queue )
 {
-  m_UndoManager.Push( queue );
+    m_UndoManager.Push( queue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -622,20 +620,20 @@ void SceneManager::Push( Undo::Queue* queue )
 // 
 Luna::Scene* SceneManager::FindFirstNonNestedScene() const
 {
-  Luna::Scene* found = NULL;
-  M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
-  M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
-  const M_AllocScene::const_iterator nestedSceneEnd = m_AllocatedScenes.end();
-  for ( ; sceneItr != sceneEnd && !found; ++sceneItr )
-  {
-    Luna::Scene* current = sceneItr->second;
-    if ( m_AllocatedScenes.find( current ) == nestedSceneEnd )
+    Luna::Scene* found = NULL;
+    M_SceneSmartPtr::const_iterator sceneItr = m_Scenes.begin();
+    M_SceneSmartPtr::const_iterator sceneEnd = m_Scenes.end();
+    const M_AllocScene::const_iterator nestedSceneEnd = m_AllocatedScenes.end();
+    for ( ; sceneItr != sceneEnd && !found; ++sceneItr )
     {
-      found = current; // breaks out of loop
+        Luna::Scene* current = sceneItr->second;
+        if ( m_AllocatedScenes.find( current ) == nestedSceneEnd )
+        {
+            found = current; // breaks out of loop
+        }
     }
-  }
 
-  return found;
+    return found;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -644,19 +642,19 @@ Luna::Scene* SceneManager::FindFirstNonNestedScene() const
 // 
 void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
 {
-  const std::string pathOrName = !args.m_OldFilePath.empty() ? args.m_OldFilePath : args.m_OldFileName;
-  M_SceneSmartPtr::iterator found = m_Scenes.find( pathOrName );
-  if ( found != m_Scenes.end() )
-  {
-    // Hold a reference to the scene while we re-add it to the list, otherwise
-    // it will get deleted.
-    ScenePtr scene = found->second;
+    const std::string pathOrName = !args.m_OldFilePath.empty() ? args.m_OldFilePath : args.m_OldFileName;
+    M_SceneSmartPtr::iterator found = m_Scenes.find( pathOrName );
+    if ( found != m_Scenes.end() )
+    {
+        // Hold a reference to the scene while we re-add it to the list, otherwise
+        // it will get deleted.
+        ScenePtr scene = found->second;
 
-    m_Scenes.erase( found );
-    Nocturnal::Insert<M_SceneSmartPtr>::Result inserted = 
-      m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetFullPath(), scene ) );
-    NOC_ASSERT( inserted.second );
-  }
+        m_Scenes.erase( found );
+        Nocturnal::Insert<M_SceneSmartPtr>::Result inserted = 
+            m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetFullPath(), scene ) );
+        NOC_ASSERT( inserted.second );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -665,14 +663,14 @@ void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
 // 
 void SceneManager::SceneNodeDeleting( const NodeChangeArgs& args )
 {
-  if ( args.m_Node->HasType( Reflect::GetType< Zone >() ) )
-  {
-    Document* doc = FindDocument( Reflect::TryCast< Zone >( args.m_Node )->GetPath() );
-    if ( doc )
+    if ( args.m_Node->HasType( Reflect::GetType< Zone >() ) )
     {
-      CloseDocument( doc );
+        Document* doc = FindDocument( Reflect::TryCast< Zone >( args.m_Node )->GetPath() );
+        if ( doc )
+        {
+            CloseDocument( doc );
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -680,39 +678,39 @@ void SceneManager::SceneNodeDeleting( const NodeChangeArgs& args )
 // 
 void SceneManager::OnDocumentClosed( const DocumentChangedArgs& args )
 {
-  const SceneDocument* document = Reflect::ConstObjectCast< SceneDocument >( args.m_Document );
-  NOC_ASSERT( document );
+    const SceneDocument* document = Reflect::ConstObjectCast< SceneDocument >( args.m_Document );
+    NOC_ASSERT( document );
 
-  m_Editor->SyncPropertyThread();
+    m_Editor->SyncPropertyThread();
 
-  if ( document )
-  {
-    ScenePtr scene = document->GetScene();
-
-    // If the current scene is the one that is being closed, we need to set it
-    // to no longer be the current scene.
-    if ( HasCurrentScene() && GetCurrentScene() == scene )
+    if ( document )
     {
-      SetCurrentScene( NULL );
-    }
+        ScenePtr scene = document->GetScene();
 
-    if ( IsRoot( scene ) )
-    {
-      RemoveAllScenes();
-      m_CurrentLevel = NULL;
-    }
-    else
-    {
-      scene->SaveVisibility(); 
-      RemoveScene( scene );
-    }
+        // If the current scene is the one that is being closed, we need to set it
+        // to no longer be the current scene.
+        if ( HasCurrentScene() && GetCurrentScene() == scene )
+        {
+            SetCurrentScene( NULL );
+        }
 
-    // Select the next scene in the list, if there is one
-    if ( !HasCurrentScene() )
-    {
-      SetCurrentScene( FindFirstNonNestedScene() );
-    }
+        if ( IsRoot( scene ) )
+        {
+            RemoveAllScenes();
+            m_CurrentLevel = NULL;
+        }
+        else
+        {
+            scene->SaveVisibility(); 
+            RemoveScene( scene );
+        }
 
-    document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::OnDocumentClosed ) );
-  }
+        // Select the next scene in the list, if there is one
+        if ( !HasCurrentScene() )
+        {
+            SetCurrentScene( FindFirstNonNestedScene() );
+        }
+
+        document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::OnDocumentClosed ) );
+    }
 }

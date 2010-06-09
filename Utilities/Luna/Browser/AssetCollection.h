@@ -49,7 +49,7 @@ namespace Luna
 
         bool operator==( const AssetCollection& rhs ) const
         {
-            return m_spFileReference->GetHash() == rhs.m_spFileReference->GetHash();
+            return m_Path.Hash() == rhs.m_Path.Hash();
         }
 
         bool operator!=( const AssetCollection& rhs ) const
@@ -60,18 +60,13 @@ namespace Luna
         const std::string& GetName() const { return m_Name; }
         void SetName( const std::string& name );
 
-        File::Reference& GetFileReference() const
+        const Nocturnal::Path& GetPath() const
         {
-            return *m_spFileReference;
+            return m_Path;
         }
-        void SetFileReference( const File::Reference& fileRef )
+        void SetPath( const Nocturnal::Path& path )
         {
-            if ( m_spFileReference )
-            {
-                delete m_spFileReference;
-            }
-            
-            m_spFileReference = new File::Reference( fileRef );
+            m_Path = path;
         }
 
         virtual std::string GetDisplayName() const;
@@ -85,18 +80,18 @@ namespace Luna
         bool CanHandleDragAndDrop() const;
         bool ReadOnly() const;
 
-        void SetAssetReferences( const File::S_Reference& references );
-        const File::S_Reference& GetAssetReferences() const { return m_AssetReferences; };
-        bool AddAsset( const File::Reference& fileRef );
-        bool AddAssets( const File::S_Reference& assets );
-        bool RemoveAsset( const File::Reference& fileRef  );
+        void SetAssetReferences( const Nocturnal::S_Path& references );
+        const Nocturnal::S_Path& GetAssetPaths() const { return m_AssetPaths; };
+        bool AddAsset( const Nocturnal::Path& path );
+        bool AddAssets( const Nocturnal::S_Path& assets );
+        bool RemoveAsset( const Nocturnal::Path& path  );
         bool ContainsAsset( u64 id ) const;  
         void ClearAssets(); 
 
-        static AssetCollectionPtr LoadFrom( File::Reference& fileRef );
+        static AssetCollectionPtr LoadFrom( const Nocturnal::Path& path );
 
         template <class T>
-        static Nocturnal::SmartPtr<T> LoadFrom( File::Reference& fileRef )
+        static Nocturnal::SmartPtr<T> LoadFrom( Nocturnal::Path& path )
         {
             return Reflect::TryCast<T>( LoadFrom( fileRef ) );
         }
@@ -122,9 +117,9 @@ namespace Luna
     protected:
         i32           m_FreezeCount;
         std::string   m_Name;
-        File::ReferencePtr m_spFileReference;
+        Nocturnal::Path m_Path;
         u32           m_Flags;
-        File::S_Reference m_AssetReferences;
+        Nocturnal::S_Path m_AssetPaths;
     };
 
 }

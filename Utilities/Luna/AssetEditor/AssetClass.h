@@ -51,7 +51,7 @@ namespace Luna
   protected:
     M_AttributeSmartPtr m_Attributes;
     mutable std::string m_Name;
-    mutable File::ReferencePtr m_FileReference;
+    mutable Nocturnal::Path m_Path;
     S_AssetReferenceNodeDumbPtr m_References;
 
   public:
@@ -75,12 +75,12 @@ namespace Luna
     const std::string& GetName() const;
     u64 GetHash() const
     {
-        return m_FileReference->GetHash();
+        return m_Path.Hash();
     }
     std::string GetFilePath();
-    File::ReferencePtr GetFileReference() const
+    const Nocturnal::Path& GetPath() const
     {
-        return m_FileReference;
+        return m_Path;
     }
     virtual std::string GetIcon() const;
     const M_AttributeSmartPtr& GetAttributes();

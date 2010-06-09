@@ -210,10 +210,6 @@
 			RelativePathToProject=".\libraries\MayaContent\MayaContent.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{122FA330-2209-4BF0-A359-9C0C113369E2}"
-			RelativePathToProject=".\libraries\File\File.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
 			RelativePathToProject=".\libraries\Profile\profile.vcproj"
 		/>

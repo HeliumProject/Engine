@@ -2,7 +2,6 @@
 
 #include "AssetTemplate.h"
 #include "DependenciesAttribute.h"
-#include "WorldFileAttribute.h"
 
 #include "Attribute/AttributeHandle.h"
 #include "Finder/ExtensionSpecs.h"
@@ -24,6 +23,7 @@ void SceneAsset::EnumerateClass( Reflect::Compositor<SceneAsset>& comp )
   Reflect::Field* fieldOcclTestDownwardVis = comp.AddField( &SceneAsset::m_OcclTestDownwardVis, "m_OcclTestDownwardVis" );
   Reflect::Field* fieldOcclVisDistAdjust = comp.AddField( &SceneAsset::m_OcclVisDistAdjust, "m_OcclVisDistAdjust" );
   Reflect::Field* fieldDecalGeomMem = comp.AddField( &SceneAsset::m_DecalGeomMem, "m_DecalGeomMem" );
+  Reflect::Field* fieldZones = comp.AddField( &SceneAsset::m_Zones, "m_Zones" );
 
   // asset creation template
   Reflect::V_Element assetTemplates;
@@ -33,7 +33,6 @@ void SceneAsset::EnumerateClass( Reflect::Compositor<SceneAsset>& comp )
   classTemplate->m_DefaultAddSubDir = true;
   classTemplate->m_ShowSubDirCheckbox = false;
   
-  classTemplate->AddRequiredAttribute( Reflect::GetType< Asset::WorldFileAttribute >() );
   classTemplate->AddOptionalAttribute( Reflect::GetType< Asset::DependenciesAttribute >() );
   assetTemplates.push_back( classTemplate );
 
@@ -54,10 +53,6 @@ bool SceneAsset::ValidateCompatible( const Attribute::AttributePtr& attr, std::s
   {
     return true;
   }
-  else if ( attr->HasType( Reflect::GetType<WorldFileAttribute>() ) )
-  {
-    return true;
-  }
 
   return __super::ValidateCompatible( attr, error );
 }
@@ -65,10 +60,6 @@ bool SceneAsset::ValidateCompatible( const Attribute::AttributePtr& attr, std::s
 void SceneAsset::MakeDefault()
 {
   Clear();
-
-  WorldFileAttributePtr worldFile = new WorldFileAttribute();
-
-  SetAttribute( worldFile );
 }
 
 bool SceneAsset::IsBuildable() const

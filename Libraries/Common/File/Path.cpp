@@ -3,9 +3,11 @@
 #include "../Types.h"
 #include "../Exception.h"
 #include "../Checksum/MD5.h"
+#include "../Checksum/MurmurHash2.h"
 #include "Windows/Windows.h"
 
 #include <algorithm>
+#include <sys/stat.h>
 
 using namespace Nocturnal;
 
@@ -17,8 +19,6 @@ void Path::Init( const char* path )
     {
         std::replace( m_Path.begin(), m_Path.end(), s_PlatformSeparators[ platform ], s_PlatformSeparators[ Platforms::Internal ] );
     }
-
-    m_Signature.clear();
 }
 
 Path::Path( const char* path )
@@ -66,6 +66,28 @@ void Path::MakeNative( std::string& path )
 #pragma TODO( "Make 'native' not just mean 'windows'." )
     Platform platform = Platforms::Windows;
     std::replace( path.begin(), path.end(), s_PlatformSeparators[ Platforms::Internal ], s_PlatformSeparators[ platform ] );
+}
+
+bool Path::Exists( const std::string& path )
+{
+    struct stat statInfo;
+    return ( stat( path.c_str(), &statInfo ) == 0 );
+}
+
+bool Path::IsAbsolute( const std::string& path )
+{
+#ifdef _WINDOWS_
+    if ( path.length() > 1 )
+    {
+        if ( path[ 1 ] == ':' )
+            return true;
+
+        if ( path[ 0 ] == '\\' && path[ 1 ] == '\\' )
+            return true;
+    }
+#endif
+
+    return false;
 }
 
 bool Path::IsUnder( const std::string& location, const std::string& path )
@@ -154,19 +176,31 @@ std::string Path::Normalized() const
     return normalized;
 }
 
-const std::string& Path::Signature()
+u64 Path::Hash() const
 {
-    if ( m_Signature.empty() )
-    {
-        m_Signature = Nocturnal::MD5( m_Path );
-    }
+    return Nocturnal::MurmurHash2( m_Path );
+}
 
-    return m_Signature;
+std::string Path::Signature()
+{
+    return Nocturnal::MD5( m_Path );
 }
 
 void Path::ReplaceExtension( const std::string& newExtension )
 {
     m_Path.replace( m_Path.rfind( '.' ) + 1, newExtension.length(), newExtension );
+}
+
+bool Path::Exists() const
+{
+    std::string absolute = Absolute();
+    Path::MakeNative( absolute );
+    return Path::Exists( absolute );
+}
+
+bool Path::IsAbsolute() const
+{
+    return Path::IsAbsolute( m_Path );
 }
 
 bool Path::IsUnder( const std::string& location )

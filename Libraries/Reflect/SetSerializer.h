@@ -5,6 +5,7 @@
 #include "Registry.h"
 #include "SimpleSerializer.h"
 #include "ContainerSerializer.h"
+#include "PathSerializer.h"
 
 namespace Reflect
 {
@@ -60,4 +61,5 @@ namespace Reflect
   typedef SimpleSetSerializer<f32, F32Serializer> F32SetSerializer;                   REFLECT_SPECIALIZE_SERIALIZER( F32SetSerializer );
   typedef SimpleSetSerializer<UniqueID::GUID, GUIDSerializer> GUIDSetSerializer;      REFLECT_SPECIALIZE_SERIALIZER( GUIDSetSerializer );
   typedef SimpleSetSerializer<UniqueID::TUID, TUIDSerializer> TUIDSetSerializer;      REFLECT_SPECIALIZE_SERIALIZER( TUIDSetSerializer );
+  typedef SimpleSetSerializer< Nocturnal::Path, PathSerializer > PathSetSerializer;   REFLECT_SPECIALIZE_SERIALIZER( PathSetSerializer );
 }

@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "File/File.h"
+#include "Common/File/Path.h"
 
 namespace Luna
 {
@@ -56,7 +56,7 @@ namespace Luna
     std::string PromptAddZone( const std::string& defaultPath );
     Zone* AddZone( std::string ( ScenesPanel::*PromptFunction )( const std::string& ) );
     void AddNewZone();
-    bool ContainsZone( const File::Reference& zoneRef ) const;
+    bool ContainsZone( const Nocturnal::Path& zonePath ) const;
     void PromptIfNoZones();
 
   private:

@@ -530,6 +530,14 @@
 						>
 					</File>
 					<File
+						RelativePath=".\PathSerializer.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\PathSerializer.h"
+						>
+					</File>
+					<File
 						RelativePath=".\PointerSerializer.cpp"
 						>
 					</File>

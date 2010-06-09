@@ -150,11 +150,10 @@ Luna::AssetClass* Luna::AssetManager::Open( const std::string& path, std::string
         return NULL;
     }
 
-    File::Reference fileRef( path );
-    fileRef.Resolve();
+    Nocturnal::Path assetPath( path );
 
     // If the asset is already open, return it
-    Luna::AssetClass* found = FindAsset( fileRef.GetHash() );
+    Luna::AssetClass* found = FindAsset( assetPath.Hash() );
     if ( found )
     {
         // Select the first asset reference
@@ -166,7 +165,7 @@ Luna::AssetClass* Luna::AssetManager::Open( const std::string& path, std::string
     Asset::AssetClassPtr package;
     try
     {
-        package = Asset::AssetClass::LoadAssetClass( fileRef );
+        package = Asset::AssetClass::LoadAssetClass( assetPath );
     }
     catch ( const Nocturnal::Exception& e )
     {
@@ -190,7 +189,7 @@ Luna::AssetClass* Luna::AssetManager::Open( const std::string& path, std::string
 
     if ( addToRoot )
     {
-        Luna::AssetReferenceNodePtr ref = new Luna::AssetReferenceNode( this, *(assetClass->GetFileReference()), NULL );
+        Luna::AssetReferenceNodePtr ref = new Luna::AssetReferenceNode( this, assetClass->GetPath(), NULL );
         ref->Load();
         m_RootNode->AddChild( ref );
 

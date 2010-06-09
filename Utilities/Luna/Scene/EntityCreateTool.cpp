@@ -54,7 +54,6 @@ void EntityCreateTool::CleanupType()
 
 EntityCreateTool::EntityCreateTool(Luna::Scene* scene, Enumerator* enumerator)
 : Luna::CreateTool (scene, enumerator)
-, m_ClassReference( NULL )
 , m_RandomEntityList ( NULL )
 , m_FileButton( NULL )
 , m_BrowserButton( NULL )
@@ -72,15 +71,15 @@ EntityCreateTool::~EntityCreateTool()
         s_RandomEntities.push_back( (*itr).m_OriginalValue );
     }
 
-    if ( m_ClassReference )
+    if ( m_ClassPath )
     {
-        delete m_ClassReference;
+        delete m_ClassPath;
     }
 }
 
 Luna::TransformPtr EntityCreateTool::CreateNode()
 {
-    File::ReferencePtr entityClassPtr;
+    Nocturnal::Path entityClassPath;
 
     //
     // Create Instance Object
@@ -104,25 +103,21 @@ Luna::TransformPtr EntityCreateTool::CreateNode()
                 total += (*itr).m_Probability;
                 if ( probability < total )
                 {
-                    entityClassPtr = (*itr).m_ClassRef;
+                    entityClassPath = (*itr).m_ClassPath;
                     break;
                 }
             }
         }
 
-        if ( entityClassPtr.ReferencesObject() )
-        {
-            entityClassPtr->Resolve();
-            EntityPtr entity = new Luna::Entity (m_Scene, new Asset::Entity( entityClassPtr->GetPath() ) );
+        EntityPtr entity = new Luna::Entity (m_Scene, new Asset::Entity( entityClassPath.Get() ) );
 
-            entity->SetPointerVisible( s_PointerVisible );
-            entity->SetBoundsVisible( s_BoundsVisible );
-            entity->SetGeometryVisible( s_GeometryVisible );
+        entity->SetPointerVisible( s_PointerVisible );
+        entity->SetBoundsVisible( s_BoundsVisible );
+        entity->SetGeometryVisible( s_GeometryVisible );
 
-            entity->Rename( entity->GenerateName() );
+        entity->Rename( entity->GenerateName() );
 
-            return entity;
-        }
+        return entity;
     }
     catch ( const Nocturnal::Exception& ex )
     {
@@ -225,60 +220,40 @@ void EntityCreateTool::CreateProperties()
 
 std::string EntityCreateTool::GetEntityAsset() const
 {
-    if ( m_ClassReference )
-    {
-        return m_ClassReference->GetPath();
-    }
-    else
-    {
-        return std::string();
-    }
+    return m_ClassPath.Get();
 }
 
-void EntityCreateTool::SetEntityAsset(const std::string& value)
+void EntityCreateTool::SetEntityAsset( const std::string& value )
 {
     m_RandomEntityInfo.clear();
     AddEntityAsset( value );
 }
 
-void EntityCreateTool::AddEntityAsset(const std::string& value)
+void EntityCreateTool::AddEntityAsset( const std::string& value )
 {
     std::string entityName = "";
 
-    if ( m_ClassReference )
+    m_ClassPath.Set( value );
+
+    entityName = m_ClassPath.Filename();
+
+    V_EntityRowInfo::const_iterator itr = m_RandomEntityInfo.begin();
+    V_EntityRowInfo::const_iterator end = m_RandomEntityInfo.end();
+    for ( ; itr != end; ++itr )
     {
-        delete m_ClassReference;
-    }
-
-    m_ClassReference = new File::Reference( value );
-    m_ClassReference->Resolve();
-
-    try
-    {
-        entityName = m_ClassReference->GetFile().GetPath().Filename();
-
-        V_EntityRowInfo::const_iterator itr = m_RandomEntityInfo.begin();
-        V_EntityRowInfo::const_iterator end = m_RandomEntityInfo.end();
-        for ( ; itr != end; ++itr )
+        if ( (*itr).m_ClassPath.Hash() == m_ClassPath.Hash() )
         {
-            if ( (*itr).m_ClassRef->GetHash() == m_ClassReference->GetHash() )
-            {
-                Console::Warning( "Entity '%s' already exists in the random list of entities.\n", entityName.c_str() );
-                return;
-            }
+            Console::Warning( "Entity '%s' already exists in the random list of entities.\n", entityName.c_str() );
+            return;
         }
+    }
 
-        EntityRowInfo rowInfo;
-        rowInfo.m_ClassRef = m_ClassReference;
-        rowInfo.m_Probability = 1.0f;
-        rowInfo.m_Name = entityName;
-        rowInfo.m_OriginalValue = value;
-        m_RandomEntityInfo.push_back( rowInfo );
-    }
-    catch ( const File::Exception& e )
-    {
-        Console::Error( "%s\n", e.what() );
-    }
+    EntityRowInfo rowInfo;
+    rowInfo.m_ClassPath = m_ClassPath;
+    rowInfo.m_Probability = 1.0f;
+    rowInfo.m_Name = entityName;
+    rowInfo.m_OriginalValue = value;
+    m_RandomEntityInfo.push_back( rowInfo );
 
     m_Enumerator->GetContainer()->GetCanvas()->Read();
 
@@ -374,9 +349,9 @@ void EntityCreateTool::OnDeleteClass( Inspect::Button* button )
 
         if ( deleteItem )
         {
-            if ( m_ClassReference->GetHash() == ( *itr ).m_ClassRef->GetHash() )
+            if ( m_ClassPath.Hash() == ( *itr ).m_ClassPath.Hash() )
             {
-                delete m_ClassReference;
+                delete m_ClassPath;
                 Place( Math::Matrix4::Identity );
             }
 
@@ -464,7 +439,7 @@ void EntityCreateTool::OnModify( Inspect::Button* button )
             std::string listName = (*itr).GetListName();
             if ( listName == *selectedItr )
             {
-                selectedHashes.insert( std::make_pair( (*itr).m_ClassRef->GetHash(), (*itr).m_ClassRef->GetHash() ) );
+                selectedHashes.insert( std::make_pair( (*itr).m_ClassPath.Hash(), (*itr).m_ClassPath.Hash() ) );
             }
         }
     }
@@ -492,7 +467,7 @@ void EntityCreateTool::OnModify( Inspect::Button* button )
     V_EntityRowInfo::iterator end = m_RandomEntityInfo.end();
     for ( ; itr != end; ++itr )
     {
-        if ( selectedHashes.find( (*itr).m_ClassRef->GetHash() ) != selectedHashes.end() )
+        if ( selectedHashes.find( (*itr).m_ClassPath.Hash() ) != selectedHashes.end() )
         {
             (*itr).m_Probability = newPercentage;
         }

@@ -28,15 +28,14 @@ namespace Nocturnal
     };
 
     class Path;
-    typedef Nocturnal::SmartPtr< Path > PathPtr;
-    typedef std::vector< PathPtr > V_Path;
+    typedef std::vector< Path > V_Path;
+    typedef std::set< Path > S_Path;
 
-    class COMMON_API Path
+    class COMMON_API Path : public Nocturnal::RefCountBase< Path >
     {
     private:
 
         std::string m_Path;
-        std::string m_Signature;
 
         void Init( const char* path );
 
@@ -44,6 +43,8 @@ namespace Nocturnal
         static void Normalize( std::string& path );
         static void MakeNative( std::string& path );
 
+        static bool Exists( const std::string& path );
+        static bool IsAbsolute( const std::string& path );
         static bool IsUnder( const std::string& location, const std::string& path );
 
     public:
@@ -71,8 +72,11 @@ namespace Nocturnal
         std::string Absolute() const;
         std::string Normalized() const;
 
-        const std::string& Signature();
+        u64 Hash() const;
+        std::string Signature();
 
+        bool Exists() const;
+        bool IsAbsolute() const;
         bool IsUnder( const std::string& location );
 
     public:
@@ -92,5 +96,26 @@ namespace Nocturnal
         {
             return m_Path;
         }
+
+        friend COMMON_API std::ostream& operator<<( std::ostream& outStream, const Path& p );
+  	    friend COMMON_API std::istream& operator>>( std::istream& inStream, Path& p );
     };
+
+    inline std::ostream& operator<<( std::ostream& outStream, const Path& p )
+    {
+        outStream << p.c_str();
+
+        return outStream;
+    }
+
+    inline std::istream& operator>>( std::istream& inStream, Path& p )
+    {
+        std::string buf;
+        std::streamsize size = inStream.rdbuf()->in_avail();
+        buf.resize( (size_t) size );
+        inStream.read( const_cast<char*>( buf.c_str() ), size );
+        p.Set( buf );
+
+        return inStream;
+    }
 }

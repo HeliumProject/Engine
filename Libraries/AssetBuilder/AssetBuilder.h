@@ -63,8 +63,8 @@ namespace AssetBuilder
   // build assets
   ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, const Asset::AssetClassPtr& assetClass, const BuilderOptionsPtr& options = NULL );
   ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, const Asset::AssetClassPtr& assetClass, const V_string& options );
-  ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, File::Reference& fileRef, const BuilderOptionsPtr& options = NULL );
-  ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, File::Reference& fileRef, const V_string& options );
+  ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, Nocturnal::Path& path, const BuilderOptionsPtr& options = NULL );
+  ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, Nocturnal::Path& path, const V_string& options );
   ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, const BuildJobPtr& job );
   ASSETBUILDER_API void Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs, i32 nice = -1 );
   

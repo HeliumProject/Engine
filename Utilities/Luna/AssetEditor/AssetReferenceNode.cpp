@@ -45,15 +45,14 @@ void AssetReferenceNode::CleanupType()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-AssetReferenceNode::AssetReferenceNode( Luna::AssetManager* manager, File::Reference& assetFileReference, const Reflect::Field* field )
+AssetReferenceNode::AssetReferenceNode( Luna::AssetManager* manager, const Nocturnal::Path& assetPath, const Reflect::Field* field )
 : Luna::AssetNode( manager )
 , m_Asset( NULL )
 , m_Element( NULL )
 , m_Field( field )
 , m_AttributeContainer( NULL )
+, m_AssetPath( assetPath )
 {
-    m_AssetFileReference = new File::Reference( assetFileReference );
-
     SetName( MakeLabel() );
     SetIcon( MakeIcon() );
     SetStyle( LabelStyles::Bold );
@@ -138,9 +137,7 @@ void AssetReferenceNode::ActivateItem()
 {
     // Should we prompt if the file is already open elsewhere in the tree?
 
-    m_AssetFileReference->Resolve();
-
-    if ( !m_AssetFileReference->IsValid() )
+    if ( !m_AssetPath.Exists() )
     {
         ContextMenuArgsPtr args = new ContextMenuArgs();
         OnChangePathFinder( args );
@@ -166,13 +163,11 @@ void AssetReferenceNode::Load()
 {
     if ( !m_Asset )
     {
-        m_AssetFileReference->Resolve();
-
-        Luna::AssetClass* assetClass = GetAssetManager()->FindAsset( m_AssetFileReference->GetHash() );
+        Luna::AssetClass* assetClass = GetAssetManager()->FindAsset( m_AssetPath.Hash() );
         if ( !assetClass )
         {
             std::string error;
-            assetClass = GetAssetManager()->Open( m_AssetFileReference->GetPath(), error, false );
+            assetClass = GetAssetManager()->Open( m_AssetPath.Get(), error, false );
             if ( !error.empty() )
             {
                 Console::Error( "%s\n", error.c_str() );
@@ -197,7 +192,7 @@ void AssetReferenceNode::Load()
         }
         else
         {
-            SetName( "Error loading: " + m_AssetFileReference->GetPath() );
+            SetName( "Error loading: " + m_AssetPath.Get() );
             SetIcon( "enginetype_unknown_16.png" );
         }
     }
@@ -236,7 +231,7 @@ void AssetReferenceNode::AssociateField( Reflect::Element* element, const Reflec
     // Sanity checks
     NOC_ASSERT( element );
     NOC_ASSERT( field );
-    NOC_ASSERT( field->m_Flags & Reflect::FieldFlags::FileRef );
+    NOC_ASSERT( field->m_Flags & Reflect::FieldFlags::Path );
 
     // Don't try to associate a reference that's already associated!
     if ( IsFieldAssociated() )
@@ -514,15 +509,12 @@ std::string AssetReferenceNode::GetFileName() const
 // 
 std::string AssetReferenceNode::GetFilePath() const
 {
-    m_AssetFileReference->Resolve();
-    return m_AssetFileReference->GetPath();
+    return m_AssetPath.Get();
 }
 
 void AssetReferenceNode::SetFilePath( const std::string& path )
 {
-    delete m_AssetFileReference;
-    m_AssetFileReference = new File::Reference( path );
-    m_AssetFileReference->Resolve();
+    m_AssetPath.Set( path );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -539,11 +531,9 @@ std::string AssetReferenceNode::MakeLabel() const
         }
     }
 
-    m_AssetFileReference->Resolve();
-
-    if ( m_AssetFileReference->IsValid() )
+    if ( m_AssetPath.Exists() )
     {
-        label += m_AssetFileReference->GetRelativePath();
+        label += m_AssetPath.Get();
 
         if ( !m_Asset )
         {
@@ -591,7 +581,7 @@ std::string AssetReferenceNode::MakeIcon() const
 // 
 void AssetReferenceNode::AssetUnloading( const AssetLoadArgs& args )
 {
-    if ( args.m_AssetClass->GetFileReference()->GetHash() == m_AssetFileReference->GetHash() )
+    if ( args.m_AssetClass->GetPath().Hash() == m_AssetPath.Hash() )
     {
         Unload();
     }

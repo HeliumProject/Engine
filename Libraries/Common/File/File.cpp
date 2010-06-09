@@ -144,7 +144,7 @@ bool File::HasChangedSince( u64 lastTime ) const
 {
     struct _stati64 stats;
     GetStats64( stats );
-    return ( stats.st_mtime > lastTime );
+    return ( stats.st_mtime > (i64)lastTime );
 }
 
 bool File::GetStats( struct _stat& stats ) const

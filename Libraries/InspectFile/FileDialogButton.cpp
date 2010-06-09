@@ -2,14 +2,12 @@
 #include "FileDialogButton.h"
 
 #include "Inspect/Canvas.h"
-#include "File/File.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Common/Container/Insert.h"
 #include "UIToolKit/FileDialog.h"
 
 // Using
-using namespace File;
 using namespace Inspect;
 
 ///////////////////////////////////////////////////////////////////////////////

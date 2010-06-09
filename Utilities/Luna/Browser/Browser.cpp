@@ -160,7 +160,7 @@ void Browser::OnDocumentChange( const DocumentManagerChangeArgs& args )
                 std::string name = manager->GetCurrentLevel()->GetShortName();
 
                 DependencyCollection* collection = Reflect::ObjectCast<DependencyCollection>( m_CollectionManager->FindCollection( name ) );
-                if ( collection && collection->GetFileReference().GetHash() == manager->GetCurrentLevel()->GetAssetFileRef()->GetHash() )
+                if ( collection && collection->GetPath().Hash() == manager->GetCurrentLevel()->GetPath().Hash() )
                 {
                     collection->LoadDependencies();
                 }
@@ -169,7 +169,7 @@ void Browser::OnDocumentChange( const DocumentManagerChangeArgs& args )
                     m_CollectionManager->GetUniqueName( name, name.c_str() );
 
                     DependencyCollectionPtr collection = new DependencyCollection( name, AssetCollectionFlags::Temporary );
-                    collection->SetRoot( *(manager->GetCurrentLevel()->GetAssetFileRef()) );
+                    collection->SetRoot( manager->GetCurrentLevel()->GetPath() );
 
                     if ( m_CollectionManager->AddCollection( collection ) )
                     {

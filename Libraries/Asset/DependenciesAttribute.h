@@ -1,10 +1,10 @@
 #pragma once
 
 #include "API.h"
+#include "Common/File/Path.h"
 #include "Finder/AssetSpecs.h"
 
 #include "Attribute/Attribute.h"
-#include "File/File.h"
 
 namespace Asset
 {
@@ -12,7 +12,7 @@ namespace Asset
   {
   public:
 
-      File::S_Reference m_FileReferences;
+      Nocturnal::S_Path m_Paths;
 
   public:
     REFLECT_DECLARE_CLASS( DependenciesAttribute, AttributeBase );

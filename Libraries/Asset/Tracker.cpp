@@ -86,7 +86,7 @@ Tracker::~Tracker()
 ///////////////////////////////////////////////////////////////////////////////
 // Entry point for AssetVisitor
 //
-bool Tracker::TrackAssetFile( File::ReferencePtr& fileRef, M_AssetFiles* assetFiles )
+bool Tracker::TrackAssetFile( Nocturnal::Path& filePath, M_AssetFiles* assetFiles )
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
@@ -95,22 +95,20 @@ bool Tracker::TrackAssetFile( File::ReferencePtr& fileRef, M_AssetFiles* assetFi
         NOC_BREAK()
     }
 
-    fileRef->Resolve();
-
-    if ( !fileRef->GetFile().Exists() )
+    if ( !filePath.Exists() )
     {
         return false;
     }
 
-    Nocturnal::Insert<M_AssetFiles>::Result inserted = assetFiles->insert( M_AssetFiles::value_type( fileRef->GetHash(), new AssetFile( *fileRef ) ) );
+    Nocturnal::Insert<M_AssetFiles>::Result inserted = assetFiles->insert( M_AssetFiles::value_type( filePath.Hash(), new AssetFile( filePath ) ) );
     if ( inserted.second )
     {
         // this tuid may represent an asset file
-        if ( fileRef->GetFile().GetPath().Extension() == FinderSpecs::Extension::REFLECT_BINARY.GetExtension() )
+        if ( filePath.Extension() == FinderSpecs::Extension::REFLECT_BINARY.GetExtension() )
         {
             try
             {
-                Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( fileRef->GetPath() );
+                Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( filePath );
                 if ( assetClass && !m_StopTracking )
                 {
                     AssetFilePtr& assetFile = inserted.first->second;
@@ -132,11 +130,11 @@ bool Tracker::TrackAssetFile( File::ReferencePtr& fileRef, M_AssetFiles* assetFi
 ///////////////////////////////////////////////////////////////////////////////
 bool Tracker::TrackFile( const std::string& path )
 {
-    File::ReferencePtr fileRef = new File::Reference( path );
-    return TrackFile( fileRef );
+    Nocturnal::Path filePath( path );
+    return TrackFile( filePath );
 }
 
-bool Tracker::TrackFile( File::ReferencePtr& fileRef )
+bool Tracker::TrackFile( Nocturnal::Path& filePath )
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
@@ -161,13 +159,13 @@ bool Tracker::TrackFile( File::ReferencePtr& fileRef )
         //  result = true;
         //}
         //else
-        if ( m_AssetCacheDB->HasAssetChangedOnDisk( *fileRef, &m_StopTracking ) )
+        if ( m_AssetCacheDB->HasAssetChangedOnDisk( filePath, &m_StopTracking ) )
         {
-            File::S_Reference visited;
-            if ( TrackAssetFile( fileRef, &m_AssetFiles ) )
+            Nocturnal::S_Path visited;
+            if ( TrackAssetFile( filePath, &m_AssetFiles ) )
             {
                 // update the DB
-                M_AssetFiles::iterator found = m_AssetFiles.find( fileRef->GetHash() );
+                M_AssetFiles::iterator found = m_AssetFiles.find( filePath.Hash() );
                 if ( found != m_AssetFiles.end() )
                 {
                     AssetFilePtr& assetFile = found->second;
@@ -187,7 +185,7 @@ bool Tracker::TrackFile( File::ReferencePtr& fileRef )
             if ( !result )
             {
                 // still insert the file, even if we have no data for it
-                AssetFilePtr assetFile = new AssetFile( *fileRef );
+                AssetFilePtr assetFile = new AssetFile( filePath );
 
                 // make sure a transaction is open before inserting
                 if ( !m_AssetCacheDB->IsTransOpen() )

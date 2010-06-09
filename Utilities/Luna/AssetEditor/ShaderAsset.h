@@ -11,7 +11,7 @@ namespace Luna
   {
     Asset::ShaderAssetPtr m_ShaderClass;
     Asset::ShaderAssetPtr m_OldShaderClass;
-    File::ReferencePtr    m_TextureFileReference;
+    Nocturnal::Path       m_TexturePath;
   };
   typedef Nocturnal::Signature< void, const ShaderChangedArgs& > ShaderChangedSignature;
 
@@ -40,7 +40,7 @@ namespace Luna
     void InitializeContextMenu();
     static void ConvertShader( const ContextMenuArgsPtr& args );
     void ReloadAllTextures( const ContextMenuArgsPtr& args );
-    void CheckShaderChanged( File::ReferencePtr textureRef );
+    void CheckShaderChanged( Nocturnal::Path texturePath );
 
   protected:
     ShaderChangedSignature::Event m_ShaderChanged;

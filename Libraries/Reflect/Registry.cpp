@@ -92,6 +92,7 @@ void Reflect::Initialize()
     g_Instance->RegisterType(PointerSerializer::CreateClass("Pointer"));
     g_Instance->RegisterType(EnumerationSerializer::CreateClass("Enumeration"));
     g_Instance->RegisterType(BitfieldSerializer::CreateClass("Bitfield"));
+    g_Instance->RegisterType( PathSerializer::CreateClass( "PathSerializer" ) );
 
     // SimpleSerializer
     g_Instance->RegisterType(StringSerializer::CreateClass("String"));
@@ -154,6 +155,7 @@ void Reflect::Initialize()
     g_Instance->RegisterType(F32SetSerializer::CreateClass("F32Set"));
     g_Instance->RegisterType(GUIDSetSerializer::CreateClass("GUIDSet"));
     g_Instance->RegisterType(TUIDSetSerializer::CreateClass("TUIDSet"));
+    g_Instance->RegisterType( PathSetSerializer::CreateClass( "PathSet" ) );
 
     // MapSerializer
     g_Instance->RegisterType(MapSerializer::CreateClass("Map"));

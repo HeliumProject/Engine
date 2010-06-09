@@ -7,7 +7,6 @@
 #include "Common/Container/OrderedSet.h"
 #include "Common/Memory/SmartPtr.h"
 #include "Common/Types.h"
-#include "File/Reference.h"
 #include "Finder/Finder.h"
 #include "Reflect/Registry.h"
 #include "Reflect/Serializers.h"
@@ -26,7 +25,7 @@ namespace Asset
   {   
   public:
     AssetFile();
-    AssetFile( File::Reference& file );
+    AssetFile( Nocturnal::Path& path );
     virtual ~AssetFile();
 
     static AssetFilePtr FindAssetFile( const std::string& path, CacheDB* cache = NULL );
@@ -34,22 +33,16 @@ namespace Asset
   public:
     std::string GetFilePath()
     {
-        m_FileReference->Resolve();
-        return m_FileReference->GetPath();
+        return m_Path.Get();
     }
 
-    void SetFileReference( File::Reference& fileRef )
+    void SetPath( Nocturnal::Path& path )
     {
-        if ( m_FileReference )
-        {
-            delete m_FileReference;
-        }
-
-        m_FileReference = new File::Reference( fileRef );
+        m_Path = path;
     }
-    File::ReferencePtr& GetFileReference()
+    const Nocturnal::Path& GetPath()
     {
-        return m_FileReference;
+        return m_Path;
     }
 
     const std::string& GetShortName();
@@ -67,11 +60,11 @@ namespace Asset
     void AddAttribute( const std::string& attrName, const std::string& attrValue, bool canAppend = true );
     const M_string& GetAttributes() const { return m_Attributes; }
 
-    void AddDependency( const File::ReferencePtr& fileRef );
-    void SetDependencies( const File::S_Reference& dependencies );
+    void AddDependency( const Nocturnal::Path& path );
+    void SetDependencies( const Nocturnal::S_Path& dependencies );
     bool HasDependencies() { return !m_Dependencies.empty(); }
-    const File::S_Reference& GetDependencies() const { return m_Dependencies; }
-    void GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, File::S_Reference& dependencies );
+    const Nocturnal::S_Path& GetDependencies() const { return m_Dependencies; }
+    void GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, Nocturnal::S_Path& dependencies );
 
     void SetRowID( const u64 rowID ) { m_RowID = rowID; }
     u64 GetRowID() { return m_RowID; }
@@ -82,10 +75,10 @@ namespace Asset
 
   private:
     void Init();
-    void GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, File::S_Reference& dependencies, File::S_Reference& visited, u32 depth );
+    void GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, Nocturnal::S_Path& dependencies, Nocturnal::S_Path& visited, u32 depth );
 
   private:
-    File::ReferencePtr m_FileReference;
+      Nocturnal::Path m_Path;
 
     std::string   m_ShortName;
     const Finder::ModifierSpec* m_ModifierSpec;
@@ -94,7 +87,7 @@ namespace Asset
     AssetType     m_AssetType;
     u64           m_Size;
     M_string      m_Attributes;
-    File::S_Reference m_Dependencies;
+    Nocturnal::S_Path m_Dependencies;
     u64           m_RowID;
 
     friend class CacheDB;

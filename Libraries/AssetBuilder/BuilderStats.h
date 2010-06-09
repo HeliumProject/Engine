@@ -38,6 +38,6 @@ namespace BuilderStats
   void Initialize();
   void Cleanup();
 
-  bool AddBuild( File::Reference& fileRef, Asset::AssetType assetType, const std::string& builderName, f32 duration );
-  bool AddTopLevelBuild( File::Reference& fileRef, Asset::AssetType assetType, TopLevelBuild& topLevelBuild );
+  bool AddBuild( const Nocturnal::Path& path, Asset::AssetType assetType, const std::string& builderName, f32 duration );
+  bool AddTopLevelBuild( const Nocturnal::Path& path, Asset::AssetType assetType, TopLevelBuild& topLevelBuild );
 }

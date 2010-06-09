@@ -44,7 +44,7 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
   }
 
   return;
-#pragma TODO( "support File::S_Reference and File::V_Reference" )
+#pragma TODO( "support Nocturnal::S_Path and File::V_Reference" )
 /*
   bool isfileidarray = ( field->m_serializerid == reflect::gettype<u64arrayserializer>() ) && ( field->m_flags & fieldflags::fileid ) != 0;
   bool isfileidset = ( field->m_serializerid == reflect::gettype<u64setserializer>() ) && ( field->m_flags & fieldflags::fileid ) != 0;

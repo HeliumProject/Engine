@@ -16,6 +16,7 @@
 #include "Common/Exception.h"
 #include "Common/String/Tokenize.h"
 #include "Common/String/Utilities.h"
+#include "Common/File/File.h"
 #include "Console/Console.h"
 #include "Debug/Exception.h"
 #include "FileSystem/FileSystem.h"
@@ -501,14 +502,14 @@ void CacheDB::InsertAssetAttributes( AssetFile* assetFile, bool* cancel )
 
 /////////////////////////////////////////////////////////////////////////////
 // Insert a single shader usage row into the AssetDependenciesDB
-void CacheDB::InsertAssetUsages( AssetFile* assetFile, M_AssetFiles* assetFiles, File::S_Reference& visited, bool* cancel )
+void CacheDB::InsertAssetUsages( AssetFile* assetFile, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, bool* cancel )
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
     if ( CheckCancelQuery( cancel ) )
         return;
 
-    File::S_Reference dependencies = assetFile->GetDependencies();
+    Nocturnal::S_Path dependencies = assetFile->GetDependencies();
 
     if ( !dependencies.empty() )
     {
@@ -525,7 +526,7 @@ void CacheDB::InsertAssetUsages( AssetFile* assetFile, M_AssetFiles* assetFiles,
 
 /////////////////////////////////////////////////////////////////////////////
 // Insert all (not just direct dependency) shaders that this asset depends on 
-void CacheDB::InsertAssetShaders( AssetFile* assetFile, M_AssetFiles* assetFiles, File::S_Reference& visited, bool* cancel )
+void CacheDB::InsertAssetShaders( AssetFile* assetFile, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, bool* cancel )
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
@@ -534,7 +535,7 @@ void CacheDB::InsertAssetShaders( AssetFile* assetFile, M_AssetFiles* assetFiles
 
     if ( assetFile->HasDependencies() )
     {
-        File::S_Reference shaders;
+        Nocturnal::S_Path shaders;
         assetFile->GetDependenciesOfType( assetFiles, Reflect::GetType<ShaderAsset>(), shaders );
 
         if ( CheckCancelQuery( cancel ) )
@@ -553,7 +554,7 @@ void CacheDB::InsertAssetShaders( AssetFile* assetFile, M_AssetFiles* assetFiles
 
 /////////////////////////////////////////////////////////////////////////////
 // Insert all (not just direct dependency) entities that this level depends on 
-void CacheDB::InsertLevelEntities( AssetFile* assetFile, M_AssetFiles* assetFiles, File::S_Reference& visited, bool* cancel )
+void CacheDB::InsertLevelEntities( AssetFile* assetFile, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, bool* cancel )
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
@@ -562,7 +563,7 @@ void CacheDB::InsertLevelEntities( AssetFile* assetFile, M_AssetFiles* assetFile
 
     if ( !assetFile->GetDependencies().empty() )
     {
-        File::S_Reference entities;
+        Nocturnal::S_Path entities;
         assetFile->GetDependenciesOfType( assetFiles, Reflect::GetType<EntityAsset>(), entities );
 
         if ( CheckCancelQuery( cancel ) )
@@ -580,7 +581,7 @@ void CacheDB::InsertLevelEntities( AssetFile* assetFile, M_AssetFiles* assetFile
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, File::S_Reference& visited, bool* cancel )
+void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, bool* cancel )
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
@@ -597,9 +598,9 @@ void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, F
     // Insert the dependencies first since we will need their row in the DB to reference them to the parents
     if ( assetFile->HasDependencies() )
     {
-        File::S_Reference assetDependencies = assetFile->GetDependencies();
-        File::S_Reference::const_iterator itr = assetDependencies.begin();
-        File::S_Reference::const_iterator end = assetDependencies.end();
+        Nocturnal::S_Path assetDependencies = assetFile->GetDependencies();
+        Nocturnal::S_Path::const_iterator itr = assetDependencies.begin();
+        Nocturnal::S_Path::const_iterator end = assetDependencies.end();
         for ( ; itr != end; ++itr )
         {
             if ( CheckCancelQuery( cancel ) )
@@ -607,25 +608,25 @@ void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, F
                 return;
             }
 
-            File::ReferencePtr fileRef = (*itr);
+            Nocturnal::Path filePath = (*itr);
 
-            if ( visited.find( fileRef ) == visited.end() )
+            if ( visited.find( filePath ) == visited.end() )
             {
-                visited.insert( fileRef );
+                visited.insert( filePath );
 
-                M_AssetFiles::iterator foundFile = assetFiles->find( fileRef->GetHash() );
+                M_AssetFiles::iterator foundFile = assetFiles->find( filePath.Hash() );
                 if ( foundFile != assetFiles->end() )
                 {
                     AssetFile* assetDependency = foundFile->second;
 
-                    if ( HasAssetChangedOnDisk( *fileRef ) )
+                    if ( HasAssetChangedOnDisk( filePath ) )
                     {
                         InsertAssetFile( assetDependency, assetFiles, visited, cancel );
                     }
                     else
                     {
                         // This dependency is already in the DB so make sure we put the rowID on it
-                        u64 rowID = SelectAssetRowID( assetDependency->GetFileReference()->GetHash(), NULL, NULL, cancel );
+                        u64 rowID = SelectAssetRowID( assetDependency->GetPath().Hash(), NULL, NULL, cancel );
                         assetDependency->SetRowID( rowID );
                     }
                 }
@@ -653,14 +654,15 @@ void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, F
         return;
     }
 
-    std::string relativeFilePath = assetFile->GetFileReference()->GetRelativePath();
+#pragma TODO( "Figure out what to do about making paths relative to the asset root" )
+    std::string relativeFilePath = assetFile->GetPath().Get();
 
-    RCS::File rcsFile( assetFile->GetFileReference()->GetPath() );
+    RCS::File rcsFile( assetFile->GetPath().Get() );
     rcsFile.GetInfo();
 
     SQL::SQLiteString insertSqlString(
         s_InsertAssetFileSQL,
-        (i64) assetFile->GetFileReference()->GetHash(),
+        (i64) assetFile->GetPath().Hash(),
         relativeFilePath.c_str(),
         assetFile->GetShortName().c_str(),
         (i64) fileTypeID,
@@ -678,10 +680,10 @@ void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, F
         (i64) 0, //assetTypeID,
         (i64) assetFile->GetSize(),
         (i64) rcsFile.m_LocalRevision,
-        (i64) assetFile->GetFileReference()->GetHash() );
+        (i64) assetFile->GetPath().Hash() );
 
     // insert the asset
-    u64 rowID = SelectAssetRowID( assetFile->GetFileReference()->GetHash(), insertSqlString.GetString(), updateSqlString.GetString(), cancel );
+    u64 rowID = SelectAssetRowID( assetFile->GetPath().Hash(), insertSqlString.GetString(), updateSqlString.GetString(), cancel );
     assetFile->SetRowID( rowID );
 
     InsertAssetAttributes( assetFile, cancel );
@@ -704,7 +706,7 @@ void CacheDB::DeleteAssetFile( AssetFile* assetFile )
 
     Windows::TakeSection critSection( *m_GeneralCriticalSection );
 
-    u64 rowID = SelectAssetRowID( assetFile->GetFileReference()->GetHash() );
+    u64 rowID = SelectAssetRowID( assetFile->GetPath().Hash() );
 
     if ( rowID > 0 )
     {
@@ -718,14 +720,14 @@ void CacheDB::DeleteAssetFile( AssetFile* assetFile )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool CacheDB::HasAssetChangedOnDisk( File::Reference& fileRef, bool* cancel )
+bool CacheDB::HasAssetChangedOnDisk( Nocturnal::Path& filePath, bool* cancel )
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
     if ( CheckCancelQuery( cancel ) )
         return false;
 
-    if ( !fileRef.GetFile().Exists() )
+    if ( !filePath.Exists() )
     {
         return false;
     }
@@ -734,7 +736,7 @@ bool CacheDB::HasAssetChangedOnDisk( File::Reference& fileRef, bool* cancel )
 
     bool ret = false;
 
-    int lastUpdatedSqlResult = m_DBManager->ExecStatement( m_SelectAssetLastUpdatedHandle, (i64) fileRef.GetHash() );
+    int lastUpdatedSqlResult = m_DBManager->ExecStatement( m_SelectAssetLastUpdatedHandle, (i64) filePath.Hash() );
 
     if ( lastUpdatedSqlResult == SQLITE_DONE )
     {
@@ -752,28 +754,30 @@ bool CacheDB::HasAssetChangedOnDisk( File::Reference& fileRef, bool* cancel )
         m_DBManager->GetColumnI64( m_SelectAssetLastUpdatedHandle, 0, dbModifiedTime );
         m_DBManager->ResetStatement( m_SelectAssetLastUpdatedHandle );
 
+        Nocturnal::File file( filePath );
+
         // If the file is newer on disc than in the DB
-        if ( fileRef.GetFile().HasChangedSince( dbModifiedTime ) )
+        if ( file.HasChangedSince( dbModifiedTime ) )
         {
             if ( CheckCancelQuery( cancel ) )
                 return false;
 
             // If the file is writeable then update it
-            if ( fileRef.GetFile().IsWritable() )
+            if ( file.IsWritable() )
             {
                 ret = true;
             }
             // It's not writeable but is newer then get the P4 revision and check that
             else
             {
-                RCS::File rcsFile( fileRef.GetPath() );
+                RCS::File rcsFile( filePath );
                 rcsFile.GetInfo();
                 if ( rcsFile.m_LocalRevision > 0 )     // if it's not on disc then ignore it
                 {
                     if ( CheckCancelQuery( cancel ) )
                         return false;
 
-                    int sqlResult = m_DBManager->ExecStatement( m_SelectAssetP4RevisionHandle, (i64) fileRef.GetHash() );
+                    int sqlResult = m_DBManager->ExecStatement( m_SelectAssetP4RevisionHandle, (i64) filePath.Hash() );
 
                     if ( sqlResult == SQLITE_DONE )
                     {
@@ -799,14 +803,14 @@ bool CacheDB::HasAssetChangedOnDisk( File::Reference& fileRef, bool* cancel )
                             // Our timestamp is out of whack compared to the perforce revision, so update the
                             // timestamp in the db, that way we early out next time the tracker runs over this file.
                             char updateBuff[MAX_INSERT_LENGTH];
-                            sprintf_s( updateBuff, sizeof( updateBuff ), s_TouchLastUpdated, (i64) fileRef.GetHash() );
+                            sprintf_s( updateBuff, sizeof( updateBuff ), s_TouchLastUpdated, (i64) filePath.Hash() );
 
                             u64 rowID = 0;
                             int execResult = m_DBManager->ExecSQLVMPrintF( &updateBuff[0], rowID );
                             if ( execResult != SQLITE_OK )
                             {
                                 // Try to force the caller to update this row in the database
-                                Console::Error( "Failed to update timestamp on file '%s' ["TUID_HEX_FORMAT"].\n", fileRef.GetFile().GetPath().c_str(), fileRef.GetHash() );
+                                Console::Error( "Failed to update timestamp on file '%s' ["TUID_HEX_FORMAT"].\n", file.GetPath().c_str(), filePath.Hash() );
                                 ret = true;
                             }
                         }
@@ -823,10 +827,10 @@ bool CacheDB::HasAssetChangedOnDisk( File::Reference& fileRef, bool* cancel )
 // Common function used by several of the insert functions
 void CacheDB::InsertDependencies
 (
- const File::S_Reference& dependencies,
+ const Nocturnal::S_Path& dependencies,
  u64 assetRowID,
  M_AssetFiles* assetFiles,
- File::S_Reference& visited, 
+ Nocturnal::S_Path& visited, 
  const char* replaceSQL, 
  const char* deleteSQL, 
  const char* deleteUnrenewedSQL, 
@@ -844,16 +848,16 @@ void CacheDB::InsertDependencies
 
     validDependenciesStr.clear();
 
-    File::S_Reference::const_iterator itr = dependencies.begin();
-    File::S_Reference::const_iterator end = dependencies.end();
+    Nocturnal::S_Path::const_iterator itr = dependencies.begin();
+    Nocturnal::S_Path::const_iterator end = dependencies.end();
     for ( ; itr != end; ++itr )
     {
         if ( CheckCancelQuery( cancel ) )
             return;
 
-        const File::ReferencePtr& fileRef = (*itr);
+        const Nocturnal::Path& filePath = (*itr);
 
-        if ( assetFiles->find( fileRef->GetHash() ) == assetFiles->end() )
+        if ( assetFiles->find( filePath.Hash() ) == assetFiles->end() )
         {
             // this is where we used to call the Tracker on dependency files
             // if we hit this, something has gone wrong adn the Asset::Visitor is not 
@@ -861,13 +865,13 @@ void CacheDB::InsertDependencies
             NOC_BREAK();
         }
 
-        u64 dependencyRowID = (*assetFiles)[ fileRef->GetHash() ]->GetRowID();
+        u64 dependencyRowID = (*assetFiles)[ filePath.Hash() ]->GetRowID();
 
         if ( dependencyRowID == 0 )
         {
-            InsertAssetFile( (*assetFiles)[ fileRef->GetHash() ], assetFiles, visited, cancel ); 
+            InsertAssetFile( (*assetFiles)[ filePath.Hash() ], assetFiles, visited, cancel ); 
 
-            dependencyRowID = (*assetFiles)[ fileRef->GetHash() ]->GetRowID();
+            dependencyRowID = (*assetFiles)[ filePath.Hash() ]->GetRowID();
         }
 
         // insert into the db
@@ -1009,7 +1013,7 @@ u32 CacheDB::GetPopulateTableData( const SQL::StmtHandle stmt, V_string& tableDa
 
 /////////////////////////////////////////////////////////////////////////////
 // Returns number of files found  if anything was added to assetFiles
-u32 CacheDB::Search( const CacheDBQuery* search, File::S_Reference& assetFiles, bool* cancel )
+u32 CacheDB::Search( const CacheDBQuery* search, Nocturnal::S_Path& assetFiles, bool* cancel )
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
@@ -1054,9 +1058,8 @@ u32 CacheDB::Search( const CacheDBQuery* search, File::S_Reference& assetFiles, 
         }
 
         std::string path = StepSelectPath( sqlResult, selectHandle );
-        File::ReferencePtr assetRef = new File::Reference( path );
-        assetRef->Resolve();
-        assetFiles.insert( assetRef );
+        Nocturnal::Path assetPath( path );
+        assetFiles.insert( assetPath );
 
         sqlResult = m_DBManager->StepStatement( selectHandle );
     }
@@ -1185,8 +1188,8 @@ void CacheDB::SelectAssetPathByHash( const u64 pathHash, std::string& path )
         m_DBManager->GetColumnText( stmt, 0, path );
 
         // make absolute
-        File::Reference fileRef( path );
-        path = fileRef.GetPath();
+        Nocturnal::Path filePath( path );
+        path = filePath.Absolute();
 
         m_DBManager->ResetStatement( stmt );
     }
@@ -1250,8 +1253,8 @@ void CacheDB::SelectAssetByHash( const u64 pathHash, AssetFile* assetFile )
 
         std::string path;
         m_DBManager->GetColumnText( stmt, ++index, path );
-        File::Reference fileRef( path );
-        assetFile->SetFileReference( fileRef );
+        Nocturnal::Path filePath( path );
+        assetFile->SetPath( filePath );
 
         m_DBManager->GetColumnI64( stmt, ++index, (i64&) assetFile->m_Size );
 
@@ -1269,13 +1272,13 @@ void CacheDB::SelectAssetByHash( const u64 pathHash, AssetFile* assetFile )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void CacheDB::GetAssetDependencies( File::ReferencePtr& fileRef, File::S_Reference& dependencies, bool reverse, u32 maxDepth, u32 currDepth, bool* cancel )
+void CacheDB::GetAssetDependencies( const Nocturnal::Path& filePath, Nocturnal::S_Path& dependencies, bool reverse, u32 maxDepth, u32 currDepth, bool* cancel )
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
     Windows::TakeSection critSection( *m_GeneralCriticalSection );
 
-    Nocturnal::Insert< File::S_Reference >::Result inserted = dependencies.insert( fileRef );
+    Nocturnal::Insert< Nocturnal::S_Path >::Result inserted = dependencies.insert( filePath );
     if ( !inserted.second )
     {
         // circular dependancy?!
@@ -1302,7 +1305,7 @@ void CacheDB::GetAssetDependencies( File::ReferencePtr& fileRef, File::S_Referen
     /*
     S_tuid selectedIDs;
     u64 dep = 0;
-    int execResult = m_DBManager->ExecStatement( selectHandle, (i64) fileRef->GetHash() );
+    int execResult = m_DBManager->ExecStatement( selectHandle, (i64) filePath.Hash() );
     if ( execResult == SQLITE_ROW )
     {
         while( execResult == SQLITE_ROW )
@@ -1326,7 +1329,7 @@ void CacheDB::GetAssetDependencies( File::ReferencePtr& fileRef, File::S_Referen
     if ( CheckCancelQuery( cancel ) )
         return;
 
-    for( File::S_Reference::const_iterator itr = selectedIDs.begin(), end = selectedIDs.end(); itr != end; ++itr )
+    for( Nocturnal::S_Path::const_iterator itr = selectedIDs.begin(), end = selectedIDs.end(); itr != end; ++itr )
     {
         if ( CheckCancelQuery( cancel ) )
             break;
@@ -1338,7 +1341,7 @@ void CacheDB::GetAssetDependencies( File::ReferencePtr& fileRef, File::S_Referen
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void CacheDB::GetDependencyGraph( File::ReferencePtr& fileRef, M_AssetFiles* assetFiles, bool reverse, u32 maxDepth, u32 currDepth, bool* cancel )
+void CacheDB::GetDependencyGraph( const Nocturnal::Path& filePath, M_AssetFiles* assetFiles, bool reverse, u32 maxDepth, u32 currDepth, bool* cancel )
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
@@ -1360,7 +1363,7 @@ void CacheDB::GetDependencyGraph( File::ReferencePtr& fileRef, M_AssetFiles* ass
     }
 
     assetFile->m_Dependencies.clear();
-    GetAssetDependencies( assetFile->GetFileReference()->GetHash(), assetFile->m_Dependencies, reverse, 1, 0, cancel );
+    GetAssetDependencies( assetFile->GetPath().Hash(), assetFile->m_Dependencies, reverse, 1, 0, cancel );
 
     // are we done?
     if ( maxDepth != 0 && maxDepth <= currDepth )

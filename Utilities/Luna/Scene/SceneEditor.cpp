@@ -986,7 +986,7 @@ CameraMode SceneEditor::SceneEditorIDToCameraMode( SceneEditorID id )
 // 
 void SceneEditor::BuildAllLoadedAssets()
 {
-    File::S_Reference assets;
+    Nocturnal::S_Path assets;
 
     // hand over the current level's referenced stuff.
     Asset::SceneAsset* currentLevel = m_SceneManager.GetCurrentLevel();
@@ -1006,7 +1006,7 @@ void SceneEditor::BuildAllLoadedAssets()
         {
             if ( !entity->IsTransient() )
             {
-                assets.insert( entity->GetClassSet()->GetEntityAssetFileRef() );
+                assets.insert( entity->GetClassSet()->GetEntityAssetPath() );
             }
         }
     }
@@ -3507,19 +3507,18 @@ wxDragResult SceneEditor::Drop( const Inspect::DragArgs& args )
             {
                 for ( V_string::const_iterator itr = zones.begin(), end = zones.end(); itr != end; ++itr )
                 {
-                    File::Reference zoneRef( (*itr) );
-                    zoneRef.Resolve();
+                    Nocturnal::Path zonePath( (*itr) );
 
                     bool containsZone = false;
                     for ( S_ZoneDumbPtr::const_iterator otherItr = rootScene->GetZones().begin(), otherEnd = rootScene->GetZones().end(); otherItr != otherEnd && !containsZone; ++otherItr )
                     {
-                        containsZone = (*otherItr)->GetFileReference()->GetHash() == zoneRef.GetHash();
+                        containsZone = (*otherItr)->GetPathObject().Hash() == zonePath.Hash();
                     }
 
                     if ( !containsZone )
                     {
                         Content::ZonePtr contentZone = new Content::Zone ();
-                        contentZone->m_FileReference = new File::Reference( zoneRef );
+                        contentZone->m_Path = zonePath;
 
                         Luna::ZonePtr sceneZone = new Zone( m_SceneManager.GetRootScene(), contentZone );
                         rootScene->AddObject( sceneZone );
@@ -3812,7 +3811,7 @@ void SceneEditor::DocumentModified( const DocumentChangedArgs& args )
     OS_DocumentSmartPtr::Iterator docEnd = m_SceneManager.GetDocuments().End();
     for ( ; docItr != docEnd; ++docItr )
     {
-        if ( ( *docItr )->IsModified() || !( *docItr )->GetFileReference().IsValid() )
+        if ( ( *docItr )->IsModified() || !( *docItr )->GetPath().Exists() )
         {
             doAnyDocsNeedSaved = true;
             break;

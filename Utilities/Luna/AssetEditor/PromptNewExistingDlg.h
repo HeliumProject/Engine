@@ -2,8 +2,6 @@
 
 #include "Finder/Finder.h"
 
-#include "File/File.h"
-
 namespace Luna
 {
   // Function pointer for a file creation callback.

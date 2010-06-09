@@ -588,21 +588,21 @@ NOC_BREAK();
 
 void EntityPanel::OnEntityAssetBuild( Inspect::Button* button )
 {
-    File::S_Reference assets;
+    Nocturnal::S_Path assets;
 
   OS_SelectableDumbPtr::Iterator selectionIter = m_Selection.Begin();
   OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
   for (; selectionIter != selectionEnd; ++selectionIter )
   {
     Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *selectionIter );
-    assets.insert( entity->GetClassSet()->GetEntityAssetFileRef() );
+    assets.insert( entity->GetClassSet()->GetEntityAssetPath() );
   }
 
   bool showOptions = wxIsShiftDown();
   std::string error;
   if ( !wxGetApp().GetDocumentManager()->SaveAll( error ) )
   {
-#pragma TODO( "Pop up an error modal" );
+#pragma TODO( "Pop up an error modal" )
       NOC_BREAK();
   }
   Luna::BuildAssets( assets, wxGetApp().GetSceneEditor(), NULL, showOptions );

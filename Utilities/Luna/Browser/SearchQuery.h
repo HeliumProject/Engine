@@ -53,9 +53,9 @@ namespace Luna
     void SetQueryString( const std::string& queryString );
     const std::string& GetQueryString() const { return m_QueryString; }
     
-    File::Reference& GetQueryFileRef()
+    const Nocturnal::Path& GetQueryPath()
     {
-        return *m_QueryFileRef;
+        return m_QueryPath;
     }
 
     const std::string& GetSelectPath() { return m_SelectPath; }
@@ -65,9 +65,9 @@ namespace Luna
 
     void SetCollection( const AssetCollection* collection );
     AssetCollection* GetCollection();
-    File::Reference& GetCollectionRef() const
+    const Nocturnal::Path& GetCollectionPath() const
     {
-        return *m_CollectionFileRef;
+        return m_CollectionPath;
     }
     
 
@@ -85,8 +85,8 @@ namespace Luna
   private:
     SearchType              m_SearchType;
     std::string             m_QueryString;
-    File::ReferencePtr      m_QueryFileRef;
-    File::ReferencePtr      m_CollectionFileRef;
+    Nocturnal::Path      m_QueryPath;
+    Nocturnal::Path      m_CollectionPath;
 
     // Cache
     Asset::CacheDBQueryPtr  m_Search;

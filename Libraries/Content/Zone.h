@@ -3,10 +3,9 @@
 #include "API.h"
 #include "SceneNode.h"
 
+#include "Common/File/Path.h"
 #include "Finder/Finder.h"
 #include "Finder/ExtensionSpecs.h"
-
-#include "File/Reference.h"
 
 namespace Content
 {
@@ -17,7 +16,7 @@ namespace Content
     class CONTENT_API Zone : public SceneNode
     {
     public:
-        File::ReferencePtr m_FileReference;
+        Nocturnal::Path m_Path;
 
         V_string m_Modes;
         V_string m_Regions;
@@ -31,8 +30,7 @@ namespace Content
         Math::Color3 m_Color;
 
         Zone()
-            : m_FileReference( NULL )
-            , m_Active( true )
+            : m_Active( true )
             , m_Interactive( true )
             , m_Global( false )
             , m_Background( false )
@@ -44,7 +42,6 @@ namespace Content
 
         Zone( const UniqueID::TUID& id )
             : SceneNode( id )
-            , m_FileReference( NULL )
             , m_Active( true )
             , m_Interactive( true )
             , m_Global( false )

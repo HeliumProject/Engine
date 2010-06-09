@@ -105,7 +105,7 @@ namespace Asset
 
     // Marks any texture channels with the specified texture as needing to be resent to the
     // devkit (or not).
-    virtual void SetTextureDirty( File::Reference& fileRef, bool dirty );
+    virtual void SetTextureDirty( const Nocturnal::Path& path, bool dirty );
 
     REFLECT_DECLARE_ABSTRACT( ShaderAsset, AssetClass );
 

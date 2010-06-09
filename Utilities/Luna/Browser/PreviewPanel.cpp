@@ -44,10 +44,9 @@ void PreviewPanel::Preview( Asset::AssetClass* asset )
             Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( m_PreviewAsset );
             if ( artFile.Valid() )
             {
-                artFile->GetFileReference().Resolve();
-                if ( artFile->GetFileReference().IsValid() )
+                if ( !artFile->GetPath().Get().empty() )
                 {
-                    m_ContentFile = artFile->GetFileReference().GetPath();
+                    m_ContentFile = artFile->GetPath().Get();
                 }
             }
         }

@@ -193,7 +193,7 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
     {
         Asset::TextureMapAttribute* textureMap = Reflect::ObjectCast< Asset::TextureMapAttribute >( colorMap );
 
-        settings.m_Path = colorMap->GetFileReference().GetPath();
+        settings.m_Path = colorMap->GetPath().Get();
         settings.m_Anisotropy = 0;
         settings.m_Filter = TextureFilterMode( colorMap->m_TexFilter );
         settings.m_Format = GetD3DColorFormat( colorMap->m_TexFormat );
@@ -233,7 +233,7 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
     {
         Asset::TextureMapAttribute* textureMap = Reflect::ObjectCast< Asset::TextureMapAttribute >( normalMap );
 
-        settings.m_Path = normalMap->GetFileReference().GetPath();
+        settings.m_Path = normalMap->GetPath().Get();
         settings.m_Anisotropy = 0;
         settings.m_Filter = TextureFilterMode( normalMap->m_TexFilter );
         settings.m_Format = GetD3DColorFormat( normalMap->m_TexFormat );
@@ -273,7 +273,7 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
     {
         Asset::TextureMapAttribute* textureMap = Reflect::ObjectCast< Asset::TextureMapAttribute >( expensiveMap );
 
-        settings.m_Path = expensiveMap->GetFileReference().GetPath();
+        settings.m_Path = expensiveMap->GetPath().Get();
         settings.m_Anisotropy = 0;
         settings.m_Filter = TextureFilterMode( expensiveMap->m_TexFilter );
 

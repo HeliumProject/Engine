@@ -56,7 +56,7 @@ AssetVisitor::AssetVisitor( M_AssetFiles* assetFiles, Asset::AssetClass* assetCl
         NOC_BREAK();
     }
 
-    PushHash( m_AssetClass->GetAssetFileRef()->GetHash() );
+    PushHash( m_AssetClass->GetPath().Hash() );
     m_CurrentElement = m_AssetClass;
 
 
@@ -73,10 +73,6 @@ AssetVisitor::AssetVisitor( M_AssetFiles* assetFiles, Asset::AssetClass* assetCl
     m_FieldFilterTypes.insert( (i32)Reflect::FieldFlags::Discard );
 
     // Files
-    m_FileHandlerLookup.insert( FileHandlerLookup::value_type( 
-        &FinderSpecs::Asset::WORLD_DECORATION,
-        &AssetVisitor::HandleWorldFile ) );
-
     m_FileHandlerLookup.insert( FileHandlerLookup::value_type( 
         &FinderSpecs::Asset::ZONE_DECORATION,
         &AssetVisitor::HandleZoneFile ) );
@@ -163,9 +159,8 @@ bool AssetVisitor::HandleArtFileAttribute( Reflect::Element* element )
         // Determine which shaders this asset is currently using
         Asset::ArtFileAttribute* attribute = Reflect::AssertCast< Asset::ArtFileAttribute >(element);
 
-        File::Reference fileRef = attribute->GetFileReference();
-        fileRef.Resolve();
-        std::string artFile = fileRef.GetPath();
+        Nocturnal::Path filePath = attribute->GetPath();
+        std::string artFile = filePath.Get();
 
         if ( !artFile.empty() )
         {
@@ -186,16 +181,16 @@ bool AssetVisitor::HandleArtFileAttribute( Reflect::Element* element )
 
                 if (manifest.ReferencesObject())
                 {
-                    File::V_Reference::iterator newItr = manifest->m_Shaders.begin();
-                    File::V_Reference::iterator newEnd = manifest->m_Shaders.end();
+                    Nocturnal::S_Path::iterator newItr = manifest->m_Shaders.begin();
+                    Nocturnal::S_Path::iterator newEnd = manifest->m_Shaders.end();
                     for ( ; newItr != newEnd; ++newItr )
                     {
                         if ( CheckStopRequested( m_StopRequested ) )
                             return false;
 
-                        File::ReferencePtr shaderRef = (*newItr);
+                        Nocturnal::Path shaderPath = (*newItr);
 
-                        M_AssetFiles::iterator found = m_AssetFiles->find( shaderRef->GetId() );
+                        M_AssetFiles::iterator found = m_AssetFiles->find( shaderPath.Hash() );
                         if ( found != m_AssetFiles->end() )
                         {
                             // this file is already in our list so add it as a dependency and then move on
@@ -203,7 +198,7 @@ bool AssetVisitor::HandleArtFileAttribute( Reflect::Element* element )
                         }
                         else
                         {
-                            Insert<M_AssetFiles>::Result inserted = m_AssetFiles->insert( M_AssetFiles::value_type( shaderRef->GetId(), new AssetFile( *shaderRef ) ) );
+                            Insert<M_AssetFiles>::Result inserted = m_AssetFiles->insert( M_AssetFiles::value_type( shaderPath.Hash(), new AssetFile( shaderPath ) ) );
                             if ( inserted.second )
                             {
                                 AssetFilePtr& shaderAssetFile = inserted.first->second;
@@ -266,12 +261,12 @@ bool AssetVisitor::VisitField( Reflect::Element* element, const Reflect::Field* 
 //
 bool AssetVisitor::HandleField( Reflect::Element* element, const Reflect::Field* field )
 {
-    if ( ( field->m_Flags & Reflect::FieldFlags::FileRef ) != 0 )
+    if ( ( field->m_Flags & Reflect::FieldFlags::Path ) != 0 )
     {
-        File::ReferencePtr ref;
-        Reflect::Serializer::GetValue( field->CreateSerializer( element ), ref );
+        Nocturnal::Path path;
+        Reflect::Serializer::GetValue( field->CreateSerializer( element ), path );
 
-        HandleFileRef( element, field, ref );
+        HandlePath( element, field, path );
     }
     //-----------------------------------------------
     else if ( field->m_SerializerID == Reflect::GetType< Reflect::ElementArraySerializer >() )
@@ -299,16 +294,14 @@ bool AssetVisitor::HandleField( Reflect::Element* element, const Reflect::Field*
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void AssetVisitor::HandleFileRef( Reflect::Element* element, const Reflect::Field* field, File::ReferencePtr& fileRef )
+void AssetVisitor::HandlePath( Reflect::Element* element, const Reflect::Field* field, Nocturnal::Path& filePath )
 {
-    fileRef->Resolve();
-
-    if ( fileRef->GetId() == TUID::Null )
+    if ( filePath.Hash() == 0 )
     {
         return;
     }
 
-    if ( *fileRef == *( m_AssetClass->GetAssetFileRef() ) )
+    if ( filePath == m_AssetClass->GetPath() )
     {
         return;
     }
@@ -678,7 +671,7 @@ void AssetVisitor::PreHandleFile( AssetFile* assetFile )
         return;
 
     AddDependency( assetFile );
-    PushHash( assetFile->GetFileReference()->GetHash() );
+    PushHash( assetFile->GetPath().Hash() );
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -696,7 +689,7 @@ void AssetVisitor::AddDependency( AssetFile* assetFile )
     AssetFile* parentAssetFile = GetCurrentAssetFile();
     if ( parentAssetFile )
     {
-        parentAssetFile->AddDependency( assetFile->GetFileReference() );
+        parentAssetFile->AddDependency( assetFile->GetPath() );
     }
 }
 

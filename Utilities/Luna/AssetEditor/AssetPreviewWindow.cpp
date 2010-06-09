@@ -137,7 +137,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       igDXRender::TextureSettings settings;
       settings.Clear();
 
-      settings.m_Path = colorMap->GetFileReference().GetPath();
+      settings.m_Path = colorMap->GetPath().Get();
       settings.m_Anisotropy = 0;
       settings.m_MipBias = colorMap->m_MipBias;
       igDXContent::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
@@ -159,7 +159,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       igDXRender::TextureSettings settings;
       settings.Clear();
       
-      settings.m_Path = normalMap->GetFileReference().GetPath();
+      settings.m_Path = normalMap->GetPath().Get();
       settings.m_Anisotropy = 0;
       settings.m_MipBias = normalMap->m_MipBias;
       igDXContent::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
@@ -181,7 +181,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       igDXRender::TextureSettings settings;
       settings.Clear();
 
-      settings.m_Path = expensiveMap->GetFileReference().GetPath();
+      settings.m_Path = expensiveMap->GetPath().Get();
       settings.m_Anisotropy = 0;
       settings.m_MipBias = expensiveMap->m_MipBias;
       igDXContent::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );

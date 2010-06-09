@@ -191,10 +191,6 @@
 			RelativePathToProject=".\libraries\FileSystem\FileSystem.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{122FA330-2209-4BF0-A359-9C0C113369E2}"
-			RelativePathToProject=".\libraries\File\File.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{C87D1745-76D6-4A2E-B655-23564E398510}"
 			RelativePathToProject=".\SDK\lua\5.1.4\lua.vcproj"
 		/>

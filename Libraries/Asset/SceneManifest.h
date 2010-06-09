@@ -2,15 +2,16 @@
 
 #include "API.h"
 
+#include "Common/File/Path.h"
+
 #include "AssetManifest.h"
-#include "File/File.h"
 
 namespace Asset
 {
   class ASSET_API SceneManifest : public AssetManifest
   {
   public:
-      File::S_Reference m_Assets;
+      Nocturnal::S_Path m_Assets;
 
     REFLECT_DECLARE_CLASS(SceneManifest, AssetManifest);
 

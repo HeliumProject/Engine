@@ -44,7 +44,7 @@ namespace AssetBuilder
     class ASSETBUILDER_API BuildRequest : public Reflect::Element
     {
     public:
-        File::S_Reference m_Assets;
+        Nocturnal::S_Path m_Assets;
         BuilderOptionsPtr m_Options;
 
         BuildRequest()

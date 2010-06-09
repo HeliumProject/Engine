@@ -69,15 +69,13 @@ void SearchQuery::EnumerateClass( Reflect::Compositor<SearchQuery>& comp )
 {
     Reflect::EnumerationField* enumSearchType = comp.AddEnumerationField( &SearchQuery::m_SearchType, "m_SearchType" );
     Reflect::Field* fieldQueryString = comp.AddField( &SearchQuery::m_QueryString, "m_QueryString" );
-    Reflect::Field* fieldQueryFileID = comp.AddField( &SearchQuery::m_QueryFileRef, "m_QueryFileRef", Reflect::FieldFlags::Force );
-    Reflect::Field* fieldCollectionID = comp.AddField( &SearchQuery::m_CollectionFileRef, "m_CollectionFileRef", Reflect::FieldFlags::Force );
+    Reflect::Field* fieldQueryPath = comp.AddField( &SearchQuery::m_QueryPath, "m_QueryPath", Reflect::FieldFlags::Force );
+    Reflect::Field* fieldCollectionPath = comp.AddField( &SearchQuery::m_CollectionPath, "m_CollectionPath", Reflect::FieldFlags::Force );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 SearchQuery::SearchQuery()
 : m_SearchType( SearchTypes::DBSearch )
-, m_QueryFileRef( NULL )
-, m_CollectionFileRef( NULL )
 , m_Search( NULL )
 {
 
@@ -85,8 +83,6 @@ SearchQuery::SearchQuery()
 
 SearchQuery::~SearchQuery()
 {
-    m_QueryFileRef = NULL;
-    m_CollectionFileRef = NULL;
     m_Search = NULL;
 }
 
@@ -133,12 +129,12 @@ void SearchQuery::SetCollection( const AssetCollection* collection )
 
     m_SearchType = SearchTypes::DBSearch;
 
-    if ( m_CollectionFileRef )
+    if ( m_CollectionPath )
     {
-        delete m_CollectionFileRef;
+        delete m_CollectionPath;
     }
 
-    m_CollectionFileRef = new File::Reference( collection->GetFileReference() );
+    m_CollectionPath = collection->GetPath();
 
     if ( m_QueryString.empty() )
     {
@@ -149,8 +145,7 @@ void SearchQuery::SetCollection( const AssetCollection* collection )
 /////////////////////////////////////////////////////////////////////////////////
 AssetCollection* SearchQuery::GetCollection()
 {
-    m_CollectionFileRef->Resolve();
-    //return GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->FindCollection( m_CollectionFileRef->GetPath() );
+    //return GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->FindCollection( m_CollectionPath->GetPath() );
 #pragma TODO( "collections are being replaced... ?" )
     return NULL;
 }

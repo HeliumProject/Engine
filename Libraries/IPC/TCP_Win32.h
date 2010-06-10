@@ -1,8 +1,8 @@
 #pragma once
 
-#ifndef _WINDOWS_
-#error Windows.h not included
-#endif
+#include <winsock2.h>
+
+#include "Common/Types.h"
 
 typedef int socklen_t;
 
@@ -11,19 +11,23 @@ namespace IPC
   struct Socket
   {
     SOCKET m_Handle;
-    OVERLAPPED m_Overlapped;
-
-    Socket(int)
-      : m_Handle (0)
+    struct Overlapped
     {
-      memset(&m_Overlapped, 0, sizeof(m_Overlapped));
-      m_Overlapped.hEvent = ::CreateEvent(0, true, false, 0);
-    }
+      u32* Internal;
+      u32* InternalHigh;
+      union {
+          struct {
+              u32 Offset;
+              u32 OffsetHigh;
+          };
 
-    ~Socket()
-    {
-      ::CloseHandle( m_Overlapped.hEvent );
-    }
+          void* Pointer;
+      };
+      void* hEvent;
+    } m_Overlapped;
+
+    Socket(int);
+    ~Socket();
 
     operator SOCKET()
     {

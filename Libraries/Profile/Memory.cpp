@@ -2,7 +2,6 @@
 #include "Profile.h"
 #include "Timer.h"
 
-#define PLATFORM_INCLUDE_SYSTEM
 #include "Platform/Platform.h"
 #include "Platform/Thread.h"
 #include "Common/Assert.h"

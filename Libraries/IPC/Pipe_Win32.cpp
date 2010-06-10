@@ -6,6 +6,20 @@
 
 using namespace IPC;
 
+NOC_COMPILE_ASSERT( sizeof( Pipe::Overlapped ) == sizeof( OVERLAPPED ) );
+
+Pipe::Pipe(int)
+  : m_Handle (0)
+{
+  memset(&m_Overlapped, 0, sizeof(m_Overlapped));
+  m_Overlapped.hEvent = ::CreateEvent(0, true, false, 0);
+}
+
+Pipe::~Pipe()
+{
+  ::CloseHandle( m_Overlapped.hEvent );
+}
+
 bool Platform::InitializePipes()
 {
   return true;
@@ -183,7 +197,7 @@ bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& t
   }
 
   DWORD read_local = 0;
-  if ( !::ReadFile(pipe.m_Handle, buffer, bytes, &read_local, &pipe.m_Overlapped) )
+  if ( !::ReadFile(pipe.m_Handle, buffer, bytes, &read_local, (OVERLAPPED*)&pipe.m_Overlapped) )
   {
     if ( ::GetLastError() != ERROR_IO_PENDING )
     {
@@ -210,7 +224,7 @@ bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& t
         }
       }
 
-      if ( !::GetOverlappedResult(pipe.m_Handle, &pipe.m_Overlapped, &read_local, false) )
+      if ( !::GetOverlappedResult(pipe.m_Handle, (OVERLAPPED*)&pipe.m_Overlapped, &read_local, false) )
       {
 #ifdef IPC_PIPE_DEBUG_PIPES
         Platform::Print("Pipe Support: Failed read (%s)\n", Windows::GetErrorString().c_str());
@@ -233,7 +247,7 @@ bool Platform::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event&
   }
 
   DWORD wrote_local = 0;
-  if ( !::WriteFile(pipe.m_Handle, buffer, bytes, &wrote_local, &pipe.m_Overlapped) )
+  if ( !::WriteFile(pipe.m_Handle, buffer, bytes, &wrote_local, (OVERLAPPED*)&pipe.m_Overlapped) )
   {
     if ( ::GetLastError() != ERROR_IO_PENDING )
     {
@@ -260,7 +274,7 @@ bool Platform::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event&
         }
       }
 
-      if ( !::GetOverlappedResult(pipe.m_Handle, &pipe.m_Overlapped, &wrote_local, false) )
+      if ( !::GetOverlappedResult(pipe.m_Handle, (OVERLAPPED*)&pipe.m_Overlapped, &wrote_local, false) )
       {
 #ifdef IPC_PIPE_DEBUG_PIPES
         Platform::Print("Pipe Support: Failed write (%s)\n", Windows::GetErrorString().c_str());

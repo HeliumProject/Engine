@@ -14,7 +14,7 @@ namespace Platform
   {
   public:
 #ifdef WIN32
-    typedef HANDLE Handle;
+    typedef void* Handle;
 #else
     typedef sem_t Handle;
 #endif

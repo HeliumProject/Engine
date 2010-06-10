@@ -1,8 +1,6 @@
 #pragma once
 
-#ifndef _WINDOWS_
-#error Windows.h not included
-#endif
+#include "Common/Types.h"
 
 #define IPC_PIPE_ROOT ""
 
@@ -10,19 +8,23 @@ namespace IPC
 {
   struct Pipe
   {
-    HANDLE m_Handle;
-    OVERLAPPED m_Overlapped;
-
-    Pipe(int)
-      : m_Handle (0)
+    void* m_Handle;
+    struct Overlapped
     {
-      memset(&m_Overlapped, 0, sizeof(m_Overlapped));
-      m_Overlapped.hEvent = ::CreateEvent(0, true, false, 0);
-    }
+      u32* Internal;
+      u32* InternalHigh;
+      union {
+          struct {
+              u32 Offset;
+              u32 OffsetHigh;
+          };
 
-    ~Pipe()
-    {
-      ::CloseHandle( m_Overlapped.hEvent );
-    }
+          void* Pointer;
+      };
+      void* hEvent;
+    } m_Overlapped;
+
+    Pipe(int);
+    ~Pipe();
   };
 }

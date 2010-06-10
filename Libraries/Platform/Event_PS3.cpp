@@ -8,7 +8,7 @@ using namespace Platform;
 // Manual-Reset event implementation for pthreads:
 // http://www.cs.wustl.edu/~schmidt/win32-cv-2.html
 
-void event_init (Event::Handle* evt, bool manual_reset, bool initial_state)
+void event_init(Event::Handle* evt, bool manual_reset, bool initial_state)
 {
   evt->manual_reset = manual_reset;
   evt->is_signaled = initial_state;
@@ -18,13 +18,13 @@ void event_init (Event::Handle* evt, bool manual_reset, bool initial_state)
   pthread_mutex_init (&evt->lock, NULL);
 }
 
-void event_destroy (Event::Handle* evt)
+void event_destroy(Event::Handle* evt)
 {
   pthread_mutex_destroy (&evt->lock);
   pthread_cond_destroy (&evt->condition);
 }
 
-void event_wait (Event::Handle* evt)
+void event_wait(Event::Handle* evt)
 {
   // grab the lock first
   pthread_mutex_lock (&evt->lock);
@@ -51,7 +51,7 @@ void event_wait (Event::Handle* evt)
   pthread_mutex_unlock (&evt->lock);
 }
 
-void event_signal (Event::Handle* evt)
+void event_signal(Event::Handle* evt)
 {
   // grab the lock first
   pthread_mutex_lock (&evt->lock);
@@ -84,7 +84,7 @@ void event_signal (Event::Handle* evt)
   pthread_mutex_unlock (&evt->lock);
 }
 
-void event_pulse (Event::Handle* evt)
+void event_pulse(Event::Handle* evt)
 {
   // grab the lock first
   pthread_mutex_lock (&evt->lock);
@@ -109,7 +109,7 @@ void event_pulse (Event::Handle* evt)
   pthread_mutex_unlock (&evt->lock);
 }
 
-void event_reset (Event::Handle* evt)
+void event_reset(Event::Handle* evt)
 {
   // Grab the lock first
   pthread_mutex_lock (&evt->lock);
@@ -141,7 +141,9 @@ void Event::Reset()
   event_reset(&m_Handle);
 }
 
-void Event::Wait()
+bool Event::Wait(u32 timeout)
 {
+  NOC_ASSERT( timeout == 0xffffffff ); // not supported
   event_wait(&m_Handle);
+  return true;
 }

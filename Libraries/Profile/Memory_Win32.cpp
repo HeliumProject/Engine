@@ -1,8 +1,8 @@
 #include "Memory_Win32.h"
 #include "Profile.h"
 
-#define PLATFORM_INCLUDE_SYSTEM
 #include "Platform/Platform.h"
+#include "Windows/Windows.h"
 
 using namespace Profile; 
 

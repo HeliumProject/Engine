@@ -8,6 +8,9 @@
 
 using namespace IPC;
 
+NOC_COMPILE_ASSERT( sizeof( u32* ) == sizeof( SOCKET ) );
+NOC_COMPILE_ASSERT( sizeof( Socket::Overlapped ) == sizeof( OVERLAPPED ) );
+
 // in milliseconds
 #define KEEPALIVE_TIMEOUT 10000
 #define KEEPALIVE_INTERVAL 1000
@@ -15,6 +18,18 @@ using namespace IPC;
 // globals
 i32 g_Count = 0;
 WSADATA g_WSAData;
+
+Socket::Socket(int)
+  : m_Handle (0)
+{
+  memset(&m_Overlapped, 0, sizeof(m_Overlapped));
+  m_Overlapped.hEvent = ::CreateEvent(0, true, false, 0);
+}
+
+Socket::~Socket()
+{
+  ::CloseHandle( m_Overlapped.hEvent );
+}
 
 bool Platform::InitializeSockets()
 {
@@ -145,7 +160,7 @@ bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Ev
 
   DWORD flags = 0;
   DWORD read_local = 0;
-  if ( ::WSARecv(socket.m_Handle, &buf, 1, &read_local, &flags, &socket.m_Overlapped, NULL) != 0 )
+  if ( ::WSARecv(socket.m_Handle, &buf, 1, &read_local, &flags, (OVERLAPPED*)&socket.m_Overlapped, NULL) != 0 )
   {
     if ( WSAGetLastError() != WSA_IO_PENDING )
     {
@@ -169,7 +184,7 @@ bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Ev
         return false;
       }
 
-      if ( !::WSAGetOverlappedResult(socket.m_Handle, &socket.m_Overlapped, &read_local, false, &flags) )
+      if ( !::WSAGetOverlappedResult(socket.m_Handle, (OVERLAPPED*)&socket.m_Overlapped, &read_local, false, &flags) )
       {
 #ifdef IPC_TCP_DEBUG_SOCKETS
         Platform::Print("TCP Support: Failed read (%s)\n", Windows::GetErrorString().c_str());
@@ -202,7 +217,7 @@ bool Platform::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, 
 
   DWORD flags = 0;
   DWORD wrote_local = 0;
-  if ( ::WSASend(socket.m_Handle, &buf, 1, &wrote_local, 0, &socket.m_Overlapped, NULL) != 0 )
+  if ( ::WSASend(socket.m_Handle, &buf, 1, &wrote_local, 0, (OVERLAPPED*)&socket.m_Overlapped, NULL) != 0 )
   {
     if ( WSAGetLastError() != WSA_IO_PENDING )
     {
@@ -226,7 +241,7 @@ bool Platform::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, 
         return false;
       }
 
-      if ( !::WSAGetOverlappedResult(socket.m_Handle, &socket.m_Overlapped, &wrote_local, false, &flags) )
+      if ( !::WSAGetOverlappedResult(socket.m_Handle, (OVERLAPPED*)&socket.m_Overlapped, &wrote_local, false, &flags) )
       {
 #ifdef IPC_TCP_DEBUG_SOCKETS
         Platform::Print("TCP Support: Failed write (%s)\n", Windows::GetErrorString().c_str());

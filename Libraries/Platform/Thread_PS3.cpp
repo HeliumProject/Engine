@@ -52,7 +52,7 @@ void Thread::Close()
 
 Thread::Return Thread::Wait(u32 timeout)
 {
-  NOC_ASSERT( timeout == 0 ); // not supported
+  NOC_ASSERT( timeout == 0xffffffff ); // not supported
   sys_ppu_thread_join(m_Handle, NULL);
 }
 

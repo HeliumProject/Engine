@@ -15,8 +15,8 @@ namespace Platform
   {
   public:
 #ifdef WIN32
-    typedef HANDLE              Handle;
-    typedef DWORD               Return;
+    typedef void*               Handle;
+    typedef u32                 Return;
     typedef void*               Param;
     typedef Return              (*Entry)(Param);
 #else
@@ -65,7 +65,7 @@ namespace Platform
     void Close();
 
     // wait for thread completion
-    Return Wait(u32 timeout = 0);
+    Return Wait(u32 timeout = 0xffffffff);
 
     // are we running?
     bool Running();

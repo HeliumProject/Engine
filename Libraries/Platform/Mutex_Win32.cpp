@@ -8,22 +8,26 @@
 
 using namespace Platform;
 
+NOC_COMPILE_ASSERT( sizeof(Mutex::Handle::DebugInfoStruct::ListEntryStruct) == sizeof(LIST_ENTRY) );
+NOC_COMPILE_ASSERT( sizeof(Mutex::Handle::DebugInfoStruct) == sizeof(RTL_CRITICAL_SECTION_DEBUG) );
+NOC_COMPILE_ASSERT( sizeof(Mutex::Handle) == sizeof(CRITICAL_SECTION) );
+
 Mutex::Mutex()
 {
-  ::InitializeCriticalSection(&m_Handle);
+  ::InitializeCriticalSection((CRITICAL_SECTION*)&m_Handle);
 }
 
 Mutex::~Mutex()
 {
-  ::DeleteCriticalSection(&m_Handle);
+  ::DeleteCriticalSection((CRITICAL_SECTION*)&m_Handle);
 }
 
 void Mutex::Lock()
 {
-  ::EnterCriticalSection(&m_Handle);
+  ::EnterCriticalSection((CRITICAL_SECTION*)&m_Handle);
 }
 
 void Mutex::Unlock()
 {
-  ::LeaveCriticalSection(&m_Handle);
+  ::LeaveCriticalSection((CRITICAL_SECTION*)&m_Handle);
 }

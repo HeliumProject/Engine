@@ -14,7 +14,7 @@ namespace Platform
   {
   public:
 #ifdef WIN32
-    typedef HANDLE Handle;
+    typedef void* Handle;
 #else
     struct Handle
     {
@@ -49,6 +49,6 @@ namespace Platform
 
     void Signal();
     void Reset();
-    void Wait();
+    bool Wait(u32 timeout = 0xffffffff);
   };
 }

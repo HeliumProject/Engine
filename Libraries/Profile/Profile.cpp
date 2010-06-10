@@ -4,7 +4,6 @@
 
 #include "Common/Assert.h"
 
-#define PLATFORM_INCLUDE_SYSTEM
 #include "Platform/Platform.h"
 #include "Platform/Thread.h"
 

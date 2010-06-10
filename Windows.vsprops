@@ -5,9 +5,9 @@
 	Name="Windows"
 	InheritedPropertySheets=".\SDK.vsprops"
 	>
-  <Tool
+	<Tool
 		Name="VCCLCompilerTool"
-		PreprocessorDefinitions="_SECURE_SCL=1;_SECURE_SCL_THROWS=1;_CRT_SECURE_NO_DEPRECATE;REQUIRE_IOSTREAM=1;MLIBRARY_DONTUSE_MFC_MANIFEST=1"
+		PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;REQUIRE_IOSTREAM=1;NT_PLUGIN=1;MLIBRARY_DONTUSE_MFC_MANIFEST=1"
 		DisableSpecificWarnings="4996;4251"
 	/>
 	<UserMacro

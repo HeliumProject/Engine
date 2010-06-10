@@ -1,4 +1,3 @@
-#define PLATFORM_INCLUDE_SYSTEM
 #include "Platform/API.h"
 #include "Pipe.h"
 

@@ -48,12 +48,20 @@ void Event::Reset()
   }
 }
 
-void Event::Wait()
+bool Event::Wait(u32 timeout)
 {
-  DWORD result = ::WaitForSingleObject(m_Handle, INFINITE);
+  DWORD result = ::WaitForSingleObject(m_Handle, timeout);
+
+  if ( timeout != 0xffffffff && result == WAIT_TIMEOUT )
+  {
+    return false;
+  }
+
   if ( result != WAIT_OBJECT_0 )
   {
     Platform::Print("Failed to wait for event (%s)\n", Windows::GetErrorString().c_str());
     NOC_BREAK();
   }
+
+  return true;
 }

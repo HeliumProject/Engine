@@ -14,7 +14,29 @@ namespace Platform
   {
   public:
 #ifdef WIN32
-    typedef CRITICAL_SECTION Handle;
+    struct Handle
+    {
+      struct DebugInfoStruct
+      {
+        u16 Type;
+        u16 CreatorBackTraceIndex;
+        struct Handle *CriticalSection;
+        struct ListEntryStruct
+        {
+          struct ListEntryStruct *Flink;
+          struct ListEntryStruct *Blink;
+        } ProcessLocksList;
+        u32 EntryCount;
+        u32 ContentionCount;
+        u32 Spare[ 2 ];
+      } *DebugInfo;
+
+      i32 LockCount;
+      i32 RecursionCount;
+      void* OwningThread;
+      void* LockSemaphore;
+      u32* SpinCount;
+    };
 #else
     typedef pthread_mutex_t Handle;
 #endif

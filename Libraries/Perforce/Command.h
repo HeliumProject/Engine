@@ -9,8 +9,6 @@
 
 #include "Provider.h"
 #include "Exceptions.h"
-#include "Windows/Windows.h"
-#include "Windows/Thread.h"
 #include "Platform/Thread.h"
 #include "Profile/Timer.h"
 #include "RCS/Types.h"
@@ -19,29 +17,11 @@
 
 namespace Perforce
 {
-  //
-  // Command transaction thread object
-  //
-
-  namespace CommandPhases
-  {
-    enum CommandPhase
-    {
-      Unknown,
-      Executing,
-      Connecting,
-      Complete,
-    };
-  };
-  typedef CommandPhases::CommandPhase CommandPhase;
-
-  class Command : public ClientUser, public KeepAlive, public WaitInterface
+  class Command : public ClientUser
   {
   public:
     Command( Provider* provider, const char* command = "" )
-      : m_Phase ( CommandPhases::Unknown )
-      , m_Abort ( false )
-      , m_Provider( provider )
+      : m_Provider( provider )
       , m_Command( command )
       , m_ErrorCount( 0 )
     {
@@ -50,13 +30,6 @@ namespace Perforce
 
     virtual void Run();
 
-  private:
-    bool Connect();
-    void Execute();
-    virtual int	IsAlive();
-    virtual bool StopWaiting();
-
-  public:
     void AddArg( const std::string& arg )
     {
       m_Arguments.push_back( arg.c_str() );
@@ -71,13 +44,6 @@ namespace Perforce
 
     std::string AsString();
 
-  private:
-    Platform::Thread  m_Thread;
-    Profile::Timer    m_ConnectTimer;
-    CommandPhase      m_Phase;
-    bool              m_Abort;
-
-  protected:
     Provider*         m_Provider;
     const char*       m_Command;
     V_string          m_Arguments;

@@ -1,33 +1,85 @@
 #pragma once
 
 #include "API.h"
+
 #include "RCS/RCS.h"
 #include "RCS/Provider.h"
 #include "Common/Compiler.h"
 #include "Common/Automation/Event.h"
+#include "Platform/Thread.h"
+#include "Platform/Mutex.h"
+#include "Platform/Event.h"
 
-class ClientApi;
-
-namespace Platform
-{
-  class Mutex;
-}
+#ifndef P4CLIENTAPI_H
+# define P4CLIENTAPI_H
+# pragma warning (disable : 4267 4244)
+# include "p4/clientapi.h"
+# pragma warning (default : 4267 4244)
+#endif
 
 namespace Perforce
 {
+  //
+  // Command transaction thread object
+  //
+
+  namespace CommandPhases
+  {
+    enum CommandPhase
+    {
+      Unknown,
+      Executing,
+      Connecting,
+      Complete,
+    };
+  };
+  typedef CommandPhases::CommandPhase CommandPhase;
+
   class PERFORCE_API WaitInterface
   {
   public:
     virtual ~WaitInterface();
     virtual bool StopWaiting() = 0;
   };
+  typedef Nocturnal::Signature<bool, WaitInterface*> WaitSignature;
+  PERFORCE_API extern WaitSignature::Delegate g_ShowWaitDialog;
 
-  class PERFORCE_API Provider : public RCS::Provider
+  struct MessageArgs
+  {
+    std::string m_Message;
+    std::string m_Title;
+
+    MessageArgs( const std::string& message, const std::string& title )
+      : m_Message( message )
+      , m_Title( title )
+    {
+
+    }
+  };
+  typedef Nocturnal::Signature<void, const MessageArgs&> MessageSignature;
+  PERFORCE_API extern MessageSignature::Delegate g_ShowWarningDialog;
+
+#pragma warning (disable : 4275)
+  class PERFORCE_API Provider : public RCS::Provider, public KeepAlive, public WaitInterface
+#pragma warning (default : 4275)
   {
   public:
     Provider();
     ~Provider();
 
+    void Initialize();
+    void Cleanup();
+
+  private:
+    void ThreadEntry();
+
+  public:
+    void RunCommand( class Command* command );
+    bool Connect();
+    virtual int	IsAlive() NOC_OVERRIDE;
+    virtual bool StopWaiting() NOC_OVERRIDE;
+
+  public:
     //
     // RCS::Provider
     //
@@ -64,9 +116,26 @@ namespace Perforce
   public:
     bool                  m_Enabled;
     bool                  m_Connected;
-    ClientApi*            m_Client;
-    Platform::Mutex*      m_Mutex;
+    Profile::Timer        m_ConnectTimer;
+    u32                   m_ConnectionTestTimeout;        // the time we are willing to wait to test if the server is running
+    u32                   m_ForegroundExecuteTimeout;     // the timeout in the foreground thread before we open the wait dialog
+    u32                   m_BackgroundExecuteTimeout;     // this is lame and we should consider opening a new connection per-calling thread?
+
+    bool                  m_Abort;
+    ClientApi             m_Client;
     std::string           m_UserName;
     std::string           m_ClientName;
+
+  private:
+    // transaction thread
+    Platform::Thread      m_Thread;     // the thread to run commands in
+    bool                  m_Shutdown;   // the shutdown signal
+    Platform::Mutex       m_Mutex;      // to ensure thread safety
+    Platform::Event       m_Execute;    // to wakeup the command thread
+    Platform::Event       m_Completed;  // to wakeup the calling thread
+
+    // command to execute
+    class Command*        m_Command;    // the command to run
+    CommandPhase          m_Phase;
   };
 }

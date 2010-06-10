@@ -40,6 +40,7 @@ using namespace Content;
 using namespace Symbol;
 using namespace Finder;
 using namespace MayaContent;
+using namespace Nocturnal;
 
 static const char* ExportSelectionFlag = "-es";
 static const char* ExportSelectionFlagLong  = "-exportSelection";
@@ -205,7 +206,7 @@ bool MayaContentCmd::DefineExportScene()
 
     for each ( const Maya::ExportInfo& exportInfo in exportNodes )
     {
-      if ( exportInfo.m_ID == UniqueID::TUID::Null )
+      if ( exportInfo.m_ID == UID::TUID::Null )
         continue;
 
       ExportAnimationClipPtr exportAnimClip = new ExportAnimationClip( exportInfo.m_ID );
@@ -556,9 +557,9 @@ void MayaContentCmd::QueueNode(const MObject node, MObjectArray& objects)
   //
 
 
-  if (Maya::GetNodeID( node ) == UniqueID::TUID::Null)
+  if (Maya::GetNodeID( node ) == UID::TUID::Null)
   {
-    MGlobal::displayError("Unable to set UniqueID::TUID attribute on maya node!");
+    MGlobal::displayError("Unable to set UID::TUID attribute on maya node!");
     return;
   }
 
@@ -639,9 +640,9 @@ bool MayaContentCmd::QueueParents(const MObject node, MObjectArray& objects)
     //
 
 
-    if ( Maya::GetNodeID( parent ) == UniqueID::TUID::Null)
+    if ( Maya::GetNodeID( parent ) == UID::TUID::Null)
     {
-      MGlobal::displayError("Unable to set UniqueID::TUID attribute on maya node!");
+      MGlobal::displayError("Unable to set UID::TUID attribute on maya node!");
       return false;
     }
 

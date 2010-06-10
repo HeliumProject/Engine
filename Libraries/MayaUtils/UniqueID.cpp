@@ -1,7 +1,8 @@
 #include "UniqueID.h"
 
 #include "Common/Assert.h"
-#include "UniqueID/GUID.h"
+#include "UID/GUID.h"
+#include "UID/TUID.h"
 
 #include <maya/MGlobal.h>
 #include <maya/MFnDependencyNode.h>
@@ -13,11 +14,11 @@ using namespace Maya;
 const char* s_GUIDAttributeName = "GUID";
 const char* s_TUIDAttributeName = "TUID";
 
-UniqueID::TUID Maya::GetNodeID( const MObject& node, bool create )
+Nocturnal::UID::TUID Maya::GetNodeID( const MObject& node, bool create )
 {
   if (node == MObject::kNullObj)
   {
-    return UniqueID::TUID::Null;
+    return Nocturnal::UID::TUID::Null;
   }
 
   MObject attr = MObject::kNullObj;
@@ -43,12 +44,12 @@ UniqueID::TUID Maya::GetNodeID( const MObject& node, bool create )
       NOC_ASSERT( status != MS::kFailure );
 
       // parse it
-      UniqueID::GUID id;
+      Nocturnal::UID::GUID id;
       bool parsed = id.FromString(str.asChar());
       NOC_ASSERT( parsed );
 
       // convert it to a TUID and set the new attribute
-      UniqueID::TUID tuid;
+      Nocturnal::UID::TUID tuid;
       tuid.FromGUID( id );
       status = SetNodeID( node, tuid );
       NOC_ASSERT( status != MS::kFailure );
@@ -89,7 +90,7 @@ UniqueID::TUID Maya::GetNodeID( const MObject& node, bool create )
   if ( str.length() == 0 && create )
   {
     // generate a new ID
-    UniqueID::TUID id = UniqueID::TUID::Generate();
+    Nocturnal::UID::TUID id( Nocturnal::UID::TUID::Generate() );
 
     // set the new ID value on the node
     if( SetNodeID( node, id ) )
@@ -98,17 +99,17 @@ UniqueID::TUID Maya::GetNodeID( const MObject& node, bool create )
     }
     else
     {
-      return UniqueID::TUID::Null;
+      return Nocturnal::UID::TUID::Null;
     }
   }
 
   // parse the value (this may be null if we did not create the attribute)
-  UniqueID::TUID id;
+  Nocturnal::UID::TUID id;
   id.FromString(str.asChar());
   return id;
 }
 
-MStatus Maya::SetNodeID( const MObject& node, const UniqueID::TUID& id )
+MStatus Maya::SetNodeID( const MObject& node, const Nocturnal::UID::TUID& id )
 {
   MStatus status;
   MFnDependencyNode nodeFn (node);

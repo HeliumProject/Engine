@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SceneNode.h"
+#include "UID/TUID.h"
 
 namespace Content
 {
@@ -34,7 +35,7 @@ namespace Content
     {
     }
 
-    Shader (const UniqueID::TUID& id)
+    Shader (const Nocturnal::UID::TUID& id)
       : SceneNode (id)
       , m_WrapU (true)
       , m_WrapV (true)

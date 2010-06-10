@@ -15,7 +15,7 @@ namespace Content
 
     }
 
-    JointTransform (const UniqueID::TUID& id)
+    JointTransform (const Nocturnal::UID::TUID& id)
       : Transform (id)
       , m_SegmentScaleCompensate( false )
     {

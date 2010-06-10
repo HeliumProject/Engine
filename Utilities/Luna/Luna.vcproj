@@ -281,14 +281,6 @@
 			RelativePathToProject=".\libraries\smartbuffer\smartbuffer.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{74EBA5CC-62CC-4C95-9191-618AFEF3BEC0}"
-			RelativePathToProject=".\libraries\TUID\TUID.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
-			RelativePathToProject=".\libraries\UniqueID\UniqueID.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{02269037-5B51-467E-A224-B56D816CDFD9}"
 			RelativePathToProject=".\libraries\FileSystem\FileSystem.vcproj"
 		/>
@@ -347,6 +339,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
 			RelativePathToProject=".\SDK\wxPropertyGrid\1.4.11\wxPropertyGrid.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
+			RelativePathToProject=".\Libraries\UID\UID.vcproj"
 		/>
 	</References>
 	<Files>

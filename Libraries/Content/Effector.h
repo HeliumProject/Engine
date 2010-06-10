@@ -16,7 +16,7 @@ namespace Content
       : m_EffectorIndex( -1 )
     { }
 
-    Effector (const UniqueID::TUID& id)
+    Effector (const Nocturnal::UID::TUID& id)
       : PivotTransform (id) 
       , m_EffectorIndex( -1 ) 
     { }

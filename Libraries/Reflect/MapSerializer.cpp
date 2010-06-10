@@ -462,10 +462,10 @@ template SimpleMapSerializer<u64, U64Serializer, u32, U32Serializer>;
 template SimpleMapSerializer<u64, U64Serializer, u64, U64Serializer>;
 template SimpleMapSerializer<u64, U64Serializer, Math::Matrix4, Matrix4Serializer>;
 
-template SimpleMapSerializer<UniqueID::GUID, GUIDSerializer, u32, U32Serializer>;
-template SimpleMapSerializer<UniqueID::GUID, GUIDSerializer, Math::Matrix4, Matrix4Serializer>;
-template SimpleMapSerializer<UniqueID::TUID, TUIDSerializer, u32, U32Serializer>;
-template SimpleMapSerializer<UniqueID::TUID, TUIDSerializer, Math::Matrix4, Matrix4Serializer>;
+template SimpleMapSerializer<Nocturnal::UID::GUID, GUIDSerializer, u32, U32Serializer>;
+template SimpleMapSerializer<Nocturnal::UID::GUID, GUIDSerializer, Math::Matrix4, Matrix4Serializer>;
+template SimpleMapSerializer<Nocturnal::UID::TUID, TUIDSerializer, u32, U32Serializer>;
+template SimpleMapSerializer<Nocturnal::UID::TUID, TUIDSerializer, Math::Matrix4, Matrix4Serializer>;
 
 REFLECT_DEFINE_CLASS(StringStringMapSerializer);
 REFLECT_DEFINE_CLASS(StringBoolMapSerializer);

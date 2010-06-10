@@ -4,7 +4,7 @@
 #include "AssetClass.h"
 
 
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 #include "Reflect/Registry.h"
 
 #include "Finder/AssetSpecs.h"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AssetNode.h"
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 
 namespace Luna
 {

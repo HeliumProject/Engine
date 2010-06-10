@@ -24,7 +24,7 @@
 #include "Finder/Finder.h"
 #include "Console/Console.h"
 
-using namespace ES;
+using namespace Nocturnal::ES;
 
 
 #define TIME_SIZE 32
@@ -91,7 +91,7 @@ EventPtr EventSystem::CreateEvent( const std::string &eventData, const std::stri
   _ftime64_s( &now );
   u64 createdTime = ( now.time * 1000 ) + now.millitm;
 
-  return new Event( TUID::Generate(), createdTime, username, eventData ); 
+  return new Event( UID::TUID::Generate(), createdTime, username, eventData ); 
 }
 
 
@@ -106,7 +106,7 @@ struct FilterHandledEvents
   // () operater overloaded to be used by vector's remove_if
   //param event Event to look for in the set of handled events
   //return bool, true if the given Event's id is in the list of handled Events
-  bool operator()( const ES::EventPtr& event )
+  bool operator()( const EventPtr& event )
   {
     return m_HandledEventIds.find( event->m_Id ) != m_HandledEventIds.end();
   }

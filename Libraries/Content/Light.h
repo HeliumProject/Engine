@@ -118,7 +118,7 @@ namespace Content
     bool m_RandomAnimOffset;
     bool m_DoVisibilityRayTest;    //Collision detection to determine visibility (Directional lights only)
 
-    Light ( const UniqueID::TUID& id = UniqueID::TUID::Generate() )
+    Light ( const Nocturnal::UID::TUID& id = Nocturnal::UID::TUID::Generate() )
       : Instance( id )
       , m_Attenuate( true )
       , m_CastShadows( true )

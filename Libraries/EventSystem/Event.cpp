@@ -4,7 +4,7 @@
 #include <time.h>
 #include <sys/timeb.h>
 
-using namespace ES;
+using namespace Nocturnal::ES;
 
 std::string Event::Dump() const
 {
@@ -21,7 +21,7 @@ std::string Event::Dump() const
     _ctime64_s( timestr, sizeof(timestr), &created );
     timestr[ strlen(timestr) - 1 ] = '\0';
 
-    str << "ID        : " << TUID::HexFormat << m_Id << std::dec << std::endl;
+    str << "ID        : " << UID::TUID::HexFormat << m_Id << std::dec << std::endl;
     str << "Created   : " << timestr << " (+" << m_Created % 1000 << " ms)" << std::endl;
     str << "Username  : " << m_Username << std::endl;
     str << "Data      : " << m_Data << std::endl;

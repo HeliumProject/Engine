@@ -212,10 +212,6 @@
 			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{74EBA5CC-62CC-4C95-9191-618AFEF3BEC0}"
-			RelativePathToProject=".\libraries\TUID\TUID.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{072476F0-F19F-44E9-ABBD-4299805961D1}"
 			RelativePathToProject=".\libraries\IPC\ipc.vcproj"
 		/>

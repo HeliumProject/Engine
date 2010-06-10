@@ -12,7 +12,7 @@ namespace MayaContent
 
     }
 
-    ExportJoint( const MObject& mayaObject, UniqueID::TUID& id )
+    ExportJoint( const MObject& mayaObject, Nocturnal::UID::TUID& id )
       : ExportBase( mayaObject )
     {
       m_ContentObject = new Content::JointTransform( id );

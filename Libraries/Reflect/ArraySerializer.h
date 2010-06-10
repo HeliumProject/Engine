@@ -65,8 +65,9 @@ namespace Reflect
   typedef SimpleArraySerializer<i64> I64ArraySerializer;                                  REFLECT_SPECIALIZE_SERIALIZER( I64ArraySerializer );
   typedef SimpleArraySerializer<f32> F32ArraySerializer;                                  REFLECT_SPECIALIZE_SERIALIZER( F32ArraySerializer );
   typedef SimpleArraySerializer<f64> F64ArraySerializer;                                  REFLECT_SPECIALIZE_SERIALIZER( F64ArraySerializer );
-  typedef SimpleArraySerializer<UniqueID::GUID> GUIDArraySerializer;                      REFLECT_SPECIALIZE_SERIALIZER( GUIDArraySerializer );
-  typedef SimpleArraySerializer<UniqueID::TUID> TUIDArraySerializer;                      REFLECT_SPECIALIZE_SERIALIZER( TUIDArraySerializer );
+  typedef SimpleArraySerializer<Nocturnal::UID::GUID> GUIDArraySerializer;                REFLECT_SPECIALIZE_SERIALIZER( GUIDArraySerializer );
+  typedef SimpleArraySerializer<Nocturnal::UID::TUID> TUIDArraySerializer;                REFLECT_SPECIALIZE_SERIALIZER( TUIDArraySerializer );
+  typedef SimpleArraySerializer< Nocturnal::Path > PathArraySerializer;                   REFLECT_SPECIALIZE_SERIALIZER( PathArraySerializer );
 
   typedef SimpleArraySerializer<::Math::Vector2> Vector2ArraySerializer;                  REFLECT_SPECIALIZE_SERIALIZER( Vector2ArraySerializer );
   typedef SimpleArraySerializer<::Math::Vector3> Vector3ArraySerializer;                  REFLECT_SPECIALIZE_SERIALIZER( Vector3ArraySerializer );

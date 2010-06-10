@@ -3,7 +3,6 @@
 #include "API.h"
 #include "EntityNode.h"
 
-#include "tuid/TUID.h"
 #include "MayaContent/ExportScene.h"
 
 #include <maya/MPxTransform.h>

@@ -29,7 +29,7 @@ void JointOrdering::EnumerateClass( Reflect::Compositor<JointOrdering>& comp )
     return (u32)m_JointOrdering.size();
   }
 
-  void JointOrdering::AddJoint( const UniqueID::TUID& jointId )
+  void JointOrdering::AddJoint( const Nocturnal::UID::TUID& jointId )
   {
     m_JointOrdering.push_back( jointId );
   }
@@ -39,14 +39,14 @@ void JointOrdering::EnumerateClass( Reflect::Compositor<JointOrdering>& comp )
     m_JointOrdering.clear();
   }
 
-  bool JointOrdering::IsRequired( const UniqueID::TUID& jointId )
+  bool JointOrdering::IsRequired( const Nocturnal::UID::TUID& jointId )
   {
     return std::find( m_JointOrdering.begin(), m_JointOrdering.end(), jointId ) != m_JointOrdering.end();
   }
 
-  UniqueID::TUID JointOrdering::GetMasterJoint( const UniqueID::TUID& localJoint )
+  Nocturnal::UID::TUID JointOrdering::GetMasterJoint( const Nocturnal::UID::TUID& localJoint )
   {
-    UniqueID::HM_TUID::iterator jointIt = m_LocalToMasterMap.find( localJoint );
+    Nocturnal::UID::HM_TUID::iterator jointIt = m_LocalToMasterMap.find( localJoint );
 
     if ( jointIt == m_LocalToMasterMap.end() )
     {
@@ -58,9 +58,9 @@ void JointOrdering::EnumerateClass( Reflect::Compositor<JointOrdering>& comp )
     return jointIt->second;
   }
 
-  UniqueID::TUID JointOrdering::GetLocalJoint( const UniqueID::TUID& masterJoint )
+  Nocturnal::UID::TUID JointOrdering::GetLocalJoint( const Nocturnal::UID::TUID& masterJoint )
   {
-    UniqueID::HM_TUID::iterator jointIt = m_MasterToLocalMap.find( masterJoint );
+    Nocturnal::UID::HM_TUID::iterator jointIt = m_MasterToLocalMap.find( masterJoint );
 
     if ( jointIt == m_MasterToLocalMap.end() )
     {

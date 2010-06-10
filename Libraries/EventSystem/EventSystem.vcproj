@@ -188,10 +188,6 @@
 			RelativePathToProject=".\libraries\Console\Console.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{74EBA5CC-62CC-4C95-9191-618AFEF3BEC0}"
-			RelativePathToProject=".\libraries\TUID\TUID.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
 			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
 		/>
@@ -210,6 +206,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 			RelativePathToProject=".\libraries\Common\Common.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
+			RelativePathToProject=".\Libraries\UID\UID.vcproj"
 		/>
 	</References>
 	<Files>

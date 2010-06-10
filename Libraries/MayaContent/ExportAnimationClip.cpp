@@ -11,6 +11,7 @@
 
 using namespace Content;
 using namespace MayaContent;
+using namespace Nocturnal;
 
 // should be the same as s_KeyPoseAttrName in \MayaNodes\ExportNode.cpp
 const char* s_KeyPoseAttrName     = "KeyPose";
@@ -420,7 +421,7 @@ void ExportAnimationClip::SampleOneFramesMorphTargetWeights( const MTime& curren
 
       for( u32 targetIndex = 0; targetIndex < numTargets; ++targetIndex )
       {
-        UniqueID::TUID& targetId = exportDeformationWeight.m_TargetIds[targetIndex];
+        UID::TUID& targetId = exportDeformationWeight.m_TargetIds[targetIndex];
         frameMorphTargetInfo->AddTargetWeight( targetId, weight );
       }
     }

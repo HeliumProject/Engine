@@ -275,8 +275,8 @@ template SimpleElementMapSerializer<u32>;
 template SimpleElementMapSerializer<i32>;
 template SimpleElementMapSerializer<u64>;
 template SimpleElementMapSerializer<i64>;
-template SimpleElementMapSerializer<UniqueID::GUID>;
-template SimpleElementMapSerializer<UniqueID::TUID>;
+template SimpleElementMapSerializer<Nocturnal::UID::GUID>;
+template SimpleElementMapSerializer<Nocturnal::UID::TUID>;
 
 REFLECT_DEFINE_CLASS(TypeIDElementMapSerializer);
 REFLECT_DEFINE_CLASS(StringElementMapSerializer);

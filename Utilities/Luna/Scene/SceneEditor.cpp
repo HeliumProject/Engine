@@ -73,8 +73,8 @@
 // Useful for debugging if slowdown is occurring because of them.
 //#define LUNA_SCENE_DISABLE_OUTLINERS
 
-// Using
 using namespace Luna;
+using namespace Nocturnal;
 
 // Event handlers
 BEGIN_EVENT_TABLE(SceneEditor, Editor)
@@ -2844,15 +2844,14 @@ void SceneEditor::OnUtilitySelected(wxCommandEvent& event)
             {
                 m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshImport, false );   // this isn't a toggle
                 Luna::Scene* rootScene = m_SceneManager.GetRootScene();
-                UniqueID::TUID tuid;
-                UniqueID::TUID::Generate(tuid);
+                UID::TUID tuid( UID::TUID::Generate() );
                 Content::MeshPtr content_hi_res_nav = new Content::Mesh(tuid);
                 content_hi_res_nav->m_ExportTypes[ Content::ContentTypes::NavMeshHiRes ] = true;
                 content_hi_res_nav->m_GivenName = "HiResNavMesh";
                 content_hi_res_nav->m_MeshOriginType = Content::Mesh::NavHiRes;
                 content_hi_res_nav->m_UseGivenName = true;
                 content_hi_res_nav->m_ExportTypeIndex.insert( Content::M_ContentTypeToIndex::value_type(  Content::ContentTypes::NavMeshHiRes , 0) );
-                UniqueID::TUID::Generate(tuid);
+                UID::TUID::Generate(tuid);
                 Content::MeshPtr content_low_res_nav = new Content::Mesh(tuid);
                 content_low_res_nav->m_ExportTypes[ Content::ContentTypes::NavMeshLowRes ] = true;
                 content_low_res_nav->m_GivenName = "LowResNavMesh";

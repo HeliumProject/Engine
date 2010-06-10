@@ -203,7 +203,7 @@ namespace MayaContent
   struct MAYA_CONTENT_API ExportMorphTarget
   {
     std::string                  m_Name;
-    UniqueID::TUID                 m_Id;
+    Nocturnal::UID::TUID                 m_Id;
     V_ExportMorphTargetDelta     m_PosDeltas;
     Math::V_Vector3              m_NormalDeltaVectors;
   };
@@ -309,7 +309,7 @@ namespace MayaContent
     SceneIndicesTracker     m_SceneIndicesTracker;
 
   public:
-    ExportMesh( const MObject& mayaMesh, const UniqueID::TUID& id ) 
+    ExportMesh( const MObject& mayaMesh, const Nocturnal::UID::TUID& id ) 
       : ExportBase( mayaMesh )
       , m_HasVertexColors ( false )
       , m_HasLightMap ( false )

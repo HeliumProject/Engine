@@ -42,7 +42,7 @@ namespace Content
 
     }
 
-    PivotTransform (const UniqueID::TUID& id)
+    PivotTransform (const Nocturnal::UID::TUID& id)
       : Transform (id)
       , m_SnapPivots (true)
     {

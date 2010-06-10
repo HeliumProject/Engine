@@ -86,10 +86,11 @@
 
 using namespace Math;
 using namespace Luna;
+using namespace Nocturnal;
 
 Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
 : m_File( file )
-, m_Id( TUID::Generate() )
+, m_Id( UID::TUID::Generate() )
 , m_Progress( 0 )
 , m_Importing( false )
 , m_MiscSettings( new MiscSettings() )
@@ -99,1088 +100,1088 @@ Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
 , m_ValidSmartDuplicateMatrix( false )
 , m_Color( 255 )
 {
-  m_File->SetScene( this );
+    m_File->SetScene( this );
 
-  LoadVisibility(); 
+    LoadVisibility(); 
 
-  // Mark the scene as needing to be saved when a command is added to the undo stack
-  m_UndoQueue.AddCommandPushedListener( Undo::QueueChangeSignature::Delegate ( this, &Scene::UndoQueueCommandPushed ) );
-  m_UndoQueue.AddUndoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
-  m_UndoQueue.AddRedoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
+    // Mark the scene as needing to be saved when a command is added to the undo stack
+    m_UndoQueue.AddCommandPushedListener( Undo::QueueChangeSignature::Delegate ( this, &Scene::UndoQueueCommandPushed ) );
+    m_UndoQueue.AddUndoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
+    m_UndoQueue.AddRedoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
 
-  // This event delegate will cause the scene to execute and render a frame to effect the visual outcome of a selection change
-  m_Selection.AddChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );
-  m_Selection.AddChangedListener( SelectionChangedSignature::Delegate (this, &Scene::SelectionChanged) );
+    // This event delegate will cause the scene to execute and render a frame to effect the visual outcome of a selection change
+    m_Selection.AddChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );
+    m_Selection.AddChangedListener( SelectionChangedSignature::Delegate (this, &Scene::SelectionChanged) );
 
-  m_Manager->AddCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanging ) );
-  m_Manager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanged ) );
+    m_Manager->AddCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanging ) );
+    m_Manager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanged ) );
 
-  m_SelectedEntityCollection = new SelectedEntityCollection( &m_Selection, "Scene Editor selection" );
+    m_SelectedEntityCollection = new SelectedEntityCollection( &m_Selection, "Scene Editor selection" );
 
-  // Evaluation
-  m_Graph = new SceneGraph();
+    // Evaluation
+    m_Graph = new SceneGraph();
 
-  // Setup root node
-  m_Root = new Luna::PivotTransform( this );
-  m_Root->SetName( "Root" );
-  m_Root->Evaluate( GraphDirections::Downstream );
-  m_Graph->AddNode( m_Root.Ptr() );
+    // Setup root node
+    m_Root = new Luna::PivotTransform( this );
+    m_Root->SetName( "Root" );
+    m_Root->Evaluate( GraphDirections::Downstream );
+    m_Graph->AddNode( m_Root.Ptr() );
 
-  // All imports should default to the master root
-  m_ImportRoot = m_Root.Ptr();
+    // All imports should default to the master root
+    m_ImportRoot = m_Root.Ptr();
 
-  // Load configurations
-  MiscSettings::LoadFromFile( m_MiscSettings );
-  TypeConfig::LoadFromFile( m_TypeConfigs );
+    // Load configurations
+    MiscSettings::LoadFromFile( m_MiscSettings );
+    TypeConfig::LoadFromFile( m_TypeConfigs );
 
-  V_TypeConfigSmartPtr::const_iterator itr = m_TypeConfigs.begin();
-  V_TypeConfigSmartPtr::const_iterator end = m_TypeConfigs.end();
-  for ( ; itr != end; ++itr )
-  {
-    TypeConfig* config = *itr;
-
-    std::string contentType = config->m_ApplicationType;
-
-    const Reflect::Class* contentClass = Reflect::Registry::GetInstance()->GetClass(contentType);
-
-    if (contentClass->m_Create)
+    V_TypeConfigSmartPtr::const_iterator itr = m_TypeConfigs.begin();
+    V_TypeConfigSmartPtr::const_iterator end = m_TypeConfigs.end();
+    for ( ; itr != end; ++itr )
     {
-      Reflect::ObjectPtr contentElement = contentClass->m_Create();
+        TypeConfig* config = *itr;
 
-      Content::SceneNode* contentNode = Reflect::ObjectCast<Content::SceneNode>( contentElement );
+        std::string contentType = config->m_ApplicationType;
 
-      if (contentNode)
-      {
-        SceneNodePtr sceneNode = CreateNode( contentNode );
+        const Reflect::Class* contentClass = Reflect::Registry::GetInstance()->GetClass(contentType);
 
-        if (sceneNode.ReferencesObject())
+        if (contentClass->m_Create)
         {
-          Luna::Instance* instance = Reflect::ObjectCast<Luna::Instance>( sceneNode );
+            Reflect::ObjectPtr contentElement = contentClass->m_Create();
 
-          if (instance)
-          {
-            SceneNodeTypePtr type = instance->CreateNodeType( this );
+            Content::SceneNode* contentNode = Reflect::ObjectCast<Content::SceneNode>( contentElement );
 
-            Luna::InstanceType* instanceType = Reflect::AssertCast<Luna::InstanceType>(type);
+            if (contentNode)
+            {
+                SceneNodePtr sceneNode = CreateNode( contentNode );
 
-            instanceType->SetConfiguration( config );
+                if (sceneNode.ReferencesObject())
+                {
+                    Luna::Instance* instance = Reflect::ObjectCast<Luna::Instance>( sceneNode );
 
-            AddNodeType( instanceType );
-          }
+                    if (instance)
+                    {
+                        SceneNodeTypePtr type = instance->CreateNodeType( this );
+
+                        Luna::InstanceType* instanceType = Reflect::AssertCast<Luna::InstanceType>(type);
+
+                        instanceType->SetConfiguration( config );
+
+                        AddNodeType( instanceType );
+                    }
+                }
+            }
         }
-      }
     }
-  }
-  
-  // we listen to our own events because there a couple ways to add nodes and get this event
-  AddNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 
-  AddNodeRemovedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeRemoved )); 
-  SceneEditorPreferences()->GetViewPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
+
+    // we listen to our own events because there a couple ways to add nodes and get this event
+    AddNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 
+    AddNodeRemovedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeRemoved )); 
+    SceneEditorPreferences()->GetViewPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 }
 
 Scene::~Scene()
 {
-  m_SelectedEntityCollection->ClearSelection();
-  m_SelectedEntityCollection = NULL;
+    m_SelectedEntityCollection->ClearSelection();
+    m_SelectedEntityCollection = NULL;
 
-  SceneEditorPreferences()->GetViewPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
+    SceneEditorPreferences()->GetViewPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 
-  // remove our own listeners 
-  RemoveNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 
-  RemoveNodeRemovedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeRemoved )); 
+    // remove our own listeners 
+    RemoveNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 
+    RemoveNodeRemovedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeRemoved )); 
 
-  m_Manager->RemoveCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanging ) );
-  m_Manager->RemoveCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanged ) );
+    m_Manager->RemoveCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanging ) );
+    m_Manager->RemoveCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanged ) );
 
-  // remove undo listener
-  m_UndoQueue.RemoveCommandPushedListener( Undo::QueueChangeSignature::Delegate ( this, &Scene::UndoQueueCommandPushed ) );
-  m_UndoQueue.RemoveUndoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
-  m_UndoQueue.RemoveRedoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
+    // remove undo listener
+    m_UndoQueue.RemoveCommandPushedListener( Undo::QueueChangeSignature::Delegate ( this, &Scene::UndoQueueCommandPushed ) );
+    m_UndoQueue.RemoveUndoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
+    m_UndoQueue.RemoveRedoingListener( Undo::QueueChangingSignature::Delegate ( this, &Scene::UndoingOrRedoing ) );
 
-  // remove selection listener
-  m_Selection.RemoveChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );
-  m_Selection.RemoveChangedListener( SelectionChangedSignature::Delegate (this, &Scene::SelectionChanged) );
+    // remove selection listener
+    m_Selection.RemoveChangingListener( SelectionChangingSignature::Delegate (this, &Scene::SelectionChanging) );
+    m_Selection.RemoveChangedListener( SelectionChangedSignature::Delegate (this, &Scene::SelectionChanged) );
 
-  Reset();
+    Reset();
 }
 
 bool Scene::IsCurrent()
 {
-  return m_Manager->IsCurrentScene( this );
+    return m_Manager->IsCurrentScene( this );
 }
 
 bool Scene::IsEditable()
 {
-  if ( m_Manager->AttemptChanges( m_File ) )
-  {
-    m_File->SetModified( true );
-    return true;
-  }
-  return false;
+    if ( m_Manager->AttemptChanges( m_File ) )
+    {
+        m_File->SetModified( true );
+        return true;
+    }
+    return false;
 }
 
 const std::string& Scene::GetFileName() const
 {
-  return m_File->GetFileName();
+    return m_File->GetFileName();
 }
 
 std::string Scene::GetFullPath() const
 {
-  if ( !m_File->GetFilePath().empty() )
-  {
-    return m_File->GetFilePath();
-  }
-  else
-  {
-    return GetFileName();
-  }
+    if ( !m_File->GetFilePath().empty() )
+    {
+        return m_File->GetFilePath();
+    }
+    else
+    {
+        return GetFileName();
+    }
 }
 
 SceneDocument* Scene::GetSceneDocument() const
 {
-  return m_File;
+    return m_File;
 }
 
 const LToolPtr& Scene::GetTool()
 {
-  return m_Tool;
+    return m_Tool;
 }
 
 void Scene::SetTool(const LToolPtr& tool)
 {
-  if (m_Tool.ReferencesObject())
-  {
-    // clean up predecessor
-    m_Tool->Cleanup();
-  }
+    if (m_Tool.ReferencesObject())
+    {
+        // clean up predecessor
+        m_Tool->Cleanup();
+    }
 
-  // reset
-  m_Tool = NULL;
+    // reset
+    m_Tool = NULL;
 
-  if (tool && tool->Initialize())
-  {
-    // set the tool
-    m_Tool = tool;
-  }
+    if (tool && tool->Initialize())
+    {
+        // set the tool
+        m_Tool = tool;
+    }
 
-  // connect it to the view
-  m_View->SetTool(m_Tool);
+    // connect it to the view
+    m_View->SetTool(m_Tool);
 
-  // cancel pick, if any
-  if (m_PickData.ReferencesObject())
-  {
-    m_BusyCursorChanged.Raise(wxCURSOR_ARROW);
-    m_PickData = NULL;
-  }
+    // cancel pick, if any
+    if (m_PickData.ReferencesObject())
+    {
+        m_BusyCursorChanged.Raise(wxCURSOR_ARROW);
+        m_PickData = NULL;
+    }
 }
 
 const Math::Color3& Scene::GetColor() const
 {
-  return m_Color;
+    return m_Color;
 }
 
 void Scene::SetColor( const Math::Color3& color )
 {
-  if ( m_Color != color )
-  {
-    m_Color = color;
-  }
+    if ( m_Color != color )
+    {
+        m_Color = color;
+    }
 }
 
 bool Scene::Reload()
 {
-  Reset();
+    Reset();
 
-  return LoadFile( GetFullPath() );
+    return LoadFile( GetFullPath() );
 }
 
 bool Scene::LoadFile( const std::string& file )
 {
-  if ( !m_Nodes.empty() )
-  {
-    // Shouldn't happen
-    Console::Error( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n", m_File->GetFilePath().c_str(), file.c_str() );
-    return false;
-  }
+    if ( !m_Nodes.empty() )
+    {
+        // Shouldn't happen
+        Console::Error( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n", m_File->GetFilePath().c_str(), file.c_str() );
+        return false;
+    }
 
-  return ImportFile( file, ImportActions::Load, NULL ).ReferencesObject();
+    return ImportFile( file, ImportActions::Load, NULL ).ReferencesObject();
 }
 
 Undo::CommandPtr Scene::ImportFile( const std::string& file, ImportAction action, u32 importFlags, Luna::HierarchyNode* importRoot, i32 importReflectType )
 {
-  LUNA_SCENE_SCOPE_TIMER( ( "%s", file.c_str() ) );
+    LUNA_SCENE_SCOPE_TIMER( ( "%s", file.c_str() ) );
 
-  if ( action != ImportActions::Load )
-  {
-    if( !IsEditable() )
+    if ( action != ImportActions::Load )
     {
-      return NULL;
+        if( !IsEditable() )
+        {
+            return NULL;
+        }
     }
-  }
 
-  if ( file.empty() )
-  {
-    return NULL;
-  }
+    if ( file.empty() )
+    {
+        return NULL;
+    }
 
-  m_LoadStarted.Raise( LoadArgs( this ) );
+    m_LoadStarted.Raise( LoadArgs( this ) );
 
-  if ( !importRoot )
-  {
-    importRoot = GetRoot();
-  }
+    if ( !importRoot )
+    {
+        importRoot = GetRoot();
+    }
 
-  if ( action == ImportActions::Load )
-  {
-    m_File->SetFilePath( file );
+    if ( action == ImportActions::Load )
+    {
+        m_File->SetFilePath( file );
 
-    LoadVisibility(); 
-  }
+        LoadVisibility(); 
+    }
 
-  // setup
-  m_ImportRoot = importRoot;
+    // setup
+    m_ImportRoot = importRoot;
 
-  std::ostringstream str;
-  str << "Loading File: " << file;
-  m_StatusChanged.Raise( str.str() );
+    std::ostringstream str;
+    str << "Loading File: " << file;
+    m_StatusChanged.Raise( str.str() );
 
-  // read data
-  m_Progress = 0;
-  Reflect::V_Element elements;
+    // read data
+    m_Progress = 0;
+    Reflect::V_Element elements;
 
-  bool success = true;
+    bool success = true;
 
 
-  Content::ScenePtr scene = new Content::Scene();
+    Content::ScenePtr scene = new Content::Scene();
 
-  try
-  {
-    scene->Load( file, elements, this );
-  }
-  catch ( const Nocturnal::Exception& exception )
-  {
-    Console::Error( "%s\n", exception.what() );
-    success = false;
-  }
+    try
+    {
+        scene->Load( file, elements, this );
+    }
+    catch ( const Nocturnal::Exception& exception )
+    {
+        Console::Error( "%s\n", exception.what() );
+        success = false;
+    }
 
-  Undo::CommandPtr command;
+    Undo::CommandPtr command;
 
-  if ( success )
-  {
-    // load and init nodes
-    command = ImportSceneNodes( elements, action, importFlags, importReflectType );
-  }
+    if ( success )
+    {
+        // load and init nodes
+        command = ImportSceneNodes( elements, action, importFlags, importReflectType );
+    }
 
-  m_ImportRoot = m_Root;
-  m_LoadFinished.Raise( LoadArgs( this, success ) );
+    m_ImportRoot = m_Root;
+    m_LoadFinished.Raise( LoadArgs( this, success ) );
 
-  return command;
+    return command;
 }
 
 Undo::CommandPtr Scene::ImportXML( const std::string& xml, u32 importFlags, Luna::HierarchyNode* importRoot )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  m_LoadStarted.Raise( LoadArgs( this ) );
+    m_LoadStarted.Raise( LoadArgs( this ) );
 
-  if ( xml.empty() )
-  {
-    return NULL;
-  }
+    if ( xml.empty() )
+    {
+        return NULL;
+    }
 
-  if ( !importRoot )
-  {
-    importRoot = GetRoot();
-  }
+    if ( !importRoot )
+    {
+        importRoot = GetRoot();
+    }
 
-  // setup
-  m_ImportRoot = importRoot;
+    // setup
+    m_ImportRoot = importRoot;
 
-  std::ostringstream str;
-  str << "Parsing XML...";
-  m_StatusChanged.Raise( str.str() );
+    std::ostringstream str;
+    str << "Parsing XML...";
+    m_StatusChanged.Raise( str.str() );
 
-  // read data
-  m_Progress = 0;
-  Reflect::V_Element elements;
+    // read data
+    m_Progress = 0;
+    Reflect::V_Element elements;
 
-  bool success = true;
+    bool success = true;
 
-  Content::ScenePtr scene = new Content::Scene();
+    Content::ScenePtr scene = new Content::Scene();
 
-  try
-  {
-    scene->LoadXML( xml, elements, this );
-  }
-  catch ( Nocturnal::Exception& exception )
-  {
-    Console::Error( "%s\n", exception.what() );
-    success = false;
-  }
+    try
+    {
+        scene->LoadXML( xml, elements, this );
+    }
+    catch ( Nocturnal::Exception& exception )
+    {
+        Console::Error( "%s\n", exception.what() );
+        success = false;
+    }
 
-  Undo::CommandPtr command;
+    Undo::CommandPtr command;
 
-  if ( success )
-  {
-    // convert nodes
-    command = ImportSceneNodes( elements, ImportActions::Import, importFlags );
-  }
+    if ( success )
+    {
+        // convert nodes
+        command = ImportSceneNodes( elements, ImportActions::Import, importFlags );
+    }
 
-  m_ImportRoot = m_Root;
-  m_LoadFinished.Raise( LoadArgs( this, success ) );
+    m_ImportRoot = m_Root;
+    m_LoadFinished.Raise( LoadArgs( this, success ) );
 
-  return command;
+    return command;
 }
 
 SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
 {
-  SceneNodePtr createdNode;
+    SceneNodePtr createdNode;
 
-  if ( data->HasType( Reflect::GetType<Asset::Entity>() ) )
-  {
-    createdNode = new Luna::Entity( this, Reflect::DangerousCast< Asset::Entity >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::Volume>() ) )
-  {
-    createdNode = new Luna::Volume( this, Reflect::DangerousCast< Content::Volume >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::Locator>() ) )
-  {
-    createdNode = new Luna::Locator( this, Reflect::DangerousCast< Content::Locator >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::SunLight>() ) )
-  {
-    createdNode = new SunLight( this, Reflect::DangerousCast< Content::SunLight >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::DirectionalLight>() ) )
-  {
-    createdNode = new Luna::DirectionalLight( this, Reflect::DangerousCast< Content::DirectionalLight >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::SpotLight>() ) )
-  {
-    createdNode = new SpotLight( this, Reflect::DangerousCast< Content::SpotLight >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::PointLight>() ) )
-  {
-    createdNode = new Luna::PointLight( this, Reflect::DangerousCast< Content::PointLight >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::PortalLight>() ) )
-  {
-    createdNode = new Luna::PortalLight( this, Reflect::DangerousCast< Content::PortalLight >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::AmbientLight>() ) )
-  {
-    createdNode = new Luna::AmbientLight( this, Reflect::DangerousCast< Content::AmbientLight >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::AmbientVolumeLight>() ) )
-  {
-    createdNode = new AmbientVolumeLight( this, Reflect::DangerousCast< Content::AmbientVolumeLight >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::Shader>() ) )
-  {
-    createdNode = new Shader( this, Reflect::DangerousCast< Content::Shader >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::Skin>() ) )
-  {
-    createdNode = new Skin( this, Reflect::DangerousCast< Content::Skin >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::Mesh>() ) )
-  {
-    Content::Mesh* mesh = Reflect::DangerousCast< Content::Mesh >( data );
-    if (mesh->m_MeshOriginType == Content::Mesh::NavHiRes || mesh->m_MeshOriginType == Content::Mesh::NavLowRes)
+    if ( data->HasType( Reflect::GetType<Asset::Entity>() ) )
     {
-      createdNode = new Luna::NavMesh( this, mesh );
+        createdNode = new Luna::Entity( this, Reflect::DangerousCast< Asset::Entity >( data ) );
     }
-    else
+    else if ( data->HasType( Reflect::GetType<Content::Volume>() ) )
     {
-      createdNode = new Luna::Mesh( this, mesh );
+        createdNode = new Luna::Volume( this, Reflect::DangerousCast< Content::Volume >( data ) );
     }
-  }
-  else if ( data->HasType( Reflect::GetType<Content::Layer>() ) )
-  {
-    createdNode = new Luna::Layer( this, Reflect::DangerousCast< Content::Layer >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::Curve>() ) )
-  {
-    createdNode = new Luna::Curve( this, Reflect::DangerousCast< Content::Curve >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::PivotTransform>() ) )
-  {
-    createdNode = new Luna::PivotTransform( this, Reflect::DangerousCast< Content::PivotTransform >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::JointTransform>() ) )
-  {
-    createdNode = new Luna::JointTransform( this, Reflect::DangerousCast< Content::JointTransform >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::Zone>() ) )
-  {
-    createdNode = new Zone( this, Reflect::DangerousCast< Content::Zone >( data ) );
-  }
-  else if ( data->HasType( Reflect::GetType<Content::Region>() ) )
-  {
-    createdNode = new Luna::Region( this, Reflect::DangerousCast< Content::Region >( data ) ); 
-  }
-  else if ( data->HasType( Reflect::GetType<Content::Point>() ) )
-  {
-    createdNode = new Luna::Point( this, Reflect::DangerousCast< Content::Point >( data ) );
-  }
-
-  if ( createdNode.ReferencesObject() )
-  {
-    // post-create logic
-    createdNode->Unpack();
-  }
-  else
-  {
-    Console::Error( "Unable to create node for data of type '%s'.\n", data->GetClass()->m_UIName.c_str() );
-    NOC_BREAK();
-  }
-
-  return createdNode;
-}
-
-void Scene::Reset()
-{
-  // Clear selection to free Properties API UI
-  m_Selection.SetItems( OS_SelectableDumbPtr () );
-
-  // clear Highlighted
-  m_Highlighted.Clear();
-
-  // deallocate the tool
-  m_Tool = NULL;
-
-  // Clear undo queue
-  m_UndoQueue.Reset();
-
-  // Clear name cache
-  m_Names.clear();
-
-  // Reclaim resource memory
-  Delete();
-
-  // Break down entire graph
-  m_Graph->Reset();
-
-  // Clear flat hash of nodes
-  m_Nodes.clear();
-
-  // Flush graph objects, frees all objects (for now)
-  HM_StrToSceneNodeTypeSmartPtr::const_iterator tItr = m_NodeTypesByName.begin();
-  HM_StrToSceneNodeTypeSmartPtr::const_iterator tEnd = m_NodeTypesByName.end();
-  for ( ; tItr != tEnd; ++tItr )
-  {
-    SceneNodeTypePtr nodeType = tItr->second;
-    nodeType->Reset();
-  }
-  m_NodeTypesByName.clear();
-  m_NodeTypesByType.clear();
-
-  // Reset root
-  if ( m_Root.ReferencesObject() )
-  {
-    m_Root->Reset();
-  }
-}
-
-Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, u32 importFlags, i32 importReflectType )
-{
-  LUNA_SCENE_SCOPE_TIMER( ("") );
-
-  u64 startTimer = Platform::TimerGetClock();
-
-  // 
-  // Initialize
-  // 
-
-  m_Importing = true;
-  m_CursorChanged.Raise(wxCURSOR_WAIT);
-  m_TitleChanged.Raise( std::string ("Luna Scene Editor (Processing)") );
-  m_StatusChanged.Raise( std::string ("Loading Objects") );
-
-  m_RemappedIDs.clear();
-
-  // 
-  // Load Elements
-  // 
-
-  Undo::BatchCommandPtr command = new Undo::BatchCommand ();
-
-  V_SceneNodeSmartPtr createdNodes;
-  createdNodes.reserve( elements.size() );
-  {
-    Reflect::V_Element::const_iterator itr = elements.begin();
-    Reflect::V_Element::const_iterator end = elements.end();
-    for ( ; itr != end; ++itr )
+    else if ( data->HasType( Reflect::GetType<Content::Locator>() ) )
     {
-      command->Push( ImportSceneNode( *itr, createdNodes, action, importFlags, importReflectType ) );
+        createdNode = new Luna::Locator( this, Reflect::DangerousCast< Content::Locator >( data ) );
     }
-  }
-
-  // 
-  // Build Hierarchy
-  // 
-
-  {
-    V_SceneNodeSmartPtr::iterator itr = createdNodes.begin();
-    V_SceneNodeSmartPtr::iterator end = createdNodes.end();
-    for ( ; itr != end; ++itr )
+    else if ( data->HasType( Reflect::GetType<Content::SunLight>() ) )
     {
-      HierarchyNodePtr hierarchyNode = Reflect::ObjectCast<Luna::HierarchyNode>(*itr);
-
-      if (!hierarchyNode.ReferencesObject())
-      {
-        // its not a hierarchy node, just continue
-        continue;
-      }
-
-
-      // 
-      // Remap object id
-      // 
-
-      UniqueID::TUID childID = hierarchyNode->GetID();
-
-      UniqueID::HM_TUID::const_iterator findChild = m_RemappedIDs.find( childID );
-      if ( findChild != m_RemappedIDs.end() )
-      {
-        childID = findChild->second;
-      }
-
-
-      // 
-      // Remap parent id
-      // 
-
-      UniqueID::TUID parentID = hierarchyNode->GetPackage<Content::HierarchyNode>()->m_ParentID;
-
-      UniqueID::HM_TUID::const_iterator findParent = m_RemappedIDs.find( parentID );
-      if ( findParent != m_RemappedIDs.end() )
-      {
-        parentID = findParent->second;
-      }
-
-
-      // 
-      // Set Hierarchy
-      // 
-
-      Luna::HierarchyNode* child = NULL;
-      HM_SceneNodeDumbPtr::const_iterator foundChild = m_Nodes.find( childID );
-      if ( foundChild != m_Nodes.end() )
-      {
-        child = Reflect::ObjectCast< Luna::HierarchyNode >( foundChild->second );
-      }
-
-      if (child != NULL)
-      {
-        if (parentID != UniqueID::TUID::Null)
+        createdNode = new SunLight( this, Reflect::DangerousCast< Content::SunLight >( data ) );
+    }
+    else if ( data->HasType( Reflect::GetType<Content::DirectionalLight>() ) )
+    {
+        createdNode = new Luna::DirectionalLight( this, Reflect::DangerousCast< Content::DirectionalLight >( data ) );
+    }
+    else if ( data->HasType( Reflect::GetType<Content::SpotLight>() ) )
+    {
+        createdNode = new SpotLight( this, Reflect::DangerousCast< Content::SpotLight >( data ) );
+    }
+    else if ( data->HasType( Reflect::GetType<Content::PointLight>() ) )
+    {
+        createdNode = new Luna::PointLight( this, Reflect::DangerousCast< Content::PointLight >( data ) );
+    }
+    else if ( data->HasType( Reflect::GetType<Content::PortalLight>() ) )
+    {
+        createdNode = new Luna::PortalLight( this, Reflect::DangerousCast< Content::PortalLight >( data ) );
+    }
+    else if ( data->HasType( Reflect::GetType<Content::AmbientLight>() ) )
+    {
+        createdNode = new Luna::AmbientLight( this, Reflect::DangerousCast< Content::AmbientLight >( data ) );
+    }
+    else if ( data->HasType( Reflect::GetType<Content::AmbientVolumeLight>() ) )
+    {
+        createdNode = new AmbientVolumeLight( this, Reflect::DangerousCast< Content::AmbientVolumeLight >( data ) );
+    }
+    else if ( data->HasType( Reflect::GetType<Content::Shader>() ) )
+    {
+        createdNode = new Shader( this, Reflect::DangerousCast< Content::Shader >( data ) );
+    }
+    else if ( data->HasType( Reflect::GetType<Content::Skin>() ) )
+    {
+        createdNode = new Skin( this, Reflect::DangerousCast< Content::Skin >( data ) );
+    }
+    else if ( data->HasType( Reflect::GetType<Content::Mesh>() ) )
+    {
+        Content::Mesh* mesh = Reflect::DangerousCast< Content::Mesh >( data );
+        if (mesh->m_MeshOriginType == Content::Mesh::NavHiRes || mesh->m_MeshOriginType == Content::Mesh::NavLowRes)
         {
-          Luna::HierarchyNode* parent = NULL;
-
-          HM_SceneNodeDumbPtr::const_iterator foundParent = m_Nodes.find( parentID );
-          if ( foundParent != m_Nodes.end() )
-          {
-            parent = Reflect::ObjectCast< Luna::HierarchyNode >( foundParent->second );
-          }
-
-          if (parent != NULL)
-          {
-            child->SetParent( parent );
-          }
-          else
-          {
-            child->SetParent( m_ImportRoot );
-          }
+            createdNode = new Luna::NavMesh( this, mesh );
         }
         else
         {
-          child->SetParent( m_ImportRoot );
+            createdNode = new Luna::Mesh( this, mesh );
         }
-      }
     }
-  }
-
-  // 
-  // Process new data
-  // 
-
-  // evaluate the graph to build global transforms
-  m_StatusChanged.Raise( std::string ("Evaluating Objects...") );
-  Evaluate(true);
-
-  // initialize each object after initial evaluation is complete
-  V_HierarchyNodeDumbPtr newNodes;
-  m_StatusChanged.Raise( std::string ("Initializing Objects...") );
-  V_SceneNodeSmartPtr::const_iterator itr = createdNodes.begin();
-  V_SceneNodeSmartPtr::const_iterator end = createdNodes.end();
-  for ( ; itr != end; ++itr )
-  {
-    (*itr)->Initialize();
-
-    if ( importFlags & ImportFlags::Select )
+    else if ( data->HasType( Reflect::GetType<Content::Layer>() ) )
     {
-      Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>( *itr );
-      if ( node )
-      {
-        newNodes.push_back( node );
-      }
+        createdNode = new Luna::Layer( this, Reflect::DangerousCast< Content::Layer >( data ) );
     }
-  }
-
-  // select imported if the flag is set
-  if ( importFlags & ImportFlags::Select )
-  {
-    V_HierarchyNodeDumbPtr newParents;
-    GetCommonParents( newNodes, newParents );
-
-    if ( !newParents.empty() )
+    else if ( data->HasType( Reflect::GetType<Content::Curve>() ) )
     {
-      OS_SelectableDumbPtr newSelection;
-      V_HierarchyNodeDumbPtr::const_iterator itr = newParents.begin();
-      V_HierarchyNodeDumbPtr::const_iterator end = newParents.end();
-      for ( ; itr != end; ++itr )
-      {
-        newSelection.Append( *itr );
-      }
-
-      command->Push( m_Selection.SetItems( newSelection ) );
+        createdNode = new Luna::Curve( this, Reflect::DangerousCast< Content::Curve >( data ) );
     }
-    else
+    else if ( data->HasType( Reflect::GetType<Content::PivotTransform>() ) )
     {
-      NOC_BREAK();
+        createdNode = new Luna::PivotTransform( this, Reflect::DangerousCast< Content::PivotTransform >( data ) );
     }
-  }
-
-  // cleanup
-  m_RemappedIDs.clear();
-
-  // raise node added events (our nodes are ready to go now)
-  {
-    V_SceneNodeSmartPtr::iterator itr = createdNodes.begin();
-    V_SceneNodeSmartPtr::iterator end = createdNodes.end();
-    for ( ; itr != end; ++itr )
+    else if ( data->HasType( Reflect::GetType<Content::JointTransform>() ) )
     {
-      m_NodeAdded.Raise( NodeChangeArgs( *itr ) );
+        createdNode = new Luna::JointTransform( this, Reflect::DangerousCast< Content::JointTransform >( data ) );
     }
-  }
-
-  // report
-  std::ostringstream str;
-  str.precision( 2 );
-  str << "Scene Loading Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
-  m_StatusChanged.Raise( str.str() );
-
-  // done
-  m_TitleChanged.Raise( std::string ("Luna Scene Editor") );
-  m_StatusChanged.Raise( std::string ("Ready") );
-  m_CursorChanged.Raise(wxCURSOR_ARROW);
-  m_Importing = false;
-
-  return command;
-}
-
-Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, u32 importFlags, i32 importReflectType )
-{
-  LUNA_SCENE_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_ShortName.c_str()) );
-
-  SceneNodePtr createdNode = NULL;
-
-  if( importReflectType == Reflect::ReservedTypes::Invalid )
-    importReflectType = Reflect::GetType< Content::SceneNode >();
-
-  // 
-  // Merging Nodes / Duplicate ID check
-  // 
-  bool convertNode = action == ImportActions::Load;
-
-  if ( action == ImportActions::Import )
-  {
-    if ( element->HasType( importReflectType ) )
+    else if ( data->HasType( Reflect::GetType<Content::Zone>() ) )
     {
-      Content::SceneNode* node = Reflect::DangerousCast< Content::SceneNode >( element );
-
-      if ( ImportFlags::HasFlag( importFlags, ImportFlags::Merge ) )
-      {
-        HM_SceneNodeDumbPtr::const_iterator find = m_Nodes.find( node->m_ID );
-        if ( find != m_Nodes.end() )
-        {
-          Luna::SceneNode* dependNode = find->second;
-          element->CopyTo( dependNode->GetPackage< Reflect::Element >() );
-          dependNode->Unpack();
-          dependNode->Dirty();
-        }    
-      }
-      else
-      {
-        // Always generate a new ID when importing and not merging
-        UniqueID::TUID id = UniqueID::TUID::Generate();
-        m_RemappedIDs.insert( UniqueID::HM_TUID::value_type( node->m_ID, id ) );
-        node->m_ID = id;
-        convertNode = true;
-      }
+        createdNode = new Zone( this, Reflect::DangerousCast< Content::Zone >( data ) );
     }
-  }
-
-
-  // 
-  // Convert Node
-  // 
-
-  if ( convertNode )
-  {
-    if ( element->HasType( Reflect::GetType<Content::SceneNode>() ) )
+    else if ( data->HasType( Reflect::GetType<Content::Region>() ) )
     {
-      createdNode = CreateNode( Reflect::DangerousCast< Content::SceneNode >( element ) );
+        createdNode = new Luna::Region( this, Reflect::DangerousCast< Content::Region >( data ) ); 
+    }
+    else if ( data->HasType( Reflect::GetType<Content::Point>() ) )
+    {
+        createdNode = new Luna::Point( this, Reflect::DangerousCast< Content::Point >( data ) );
     }
 
     if ( createdNode.ReferencesObject() )
     {
-      // update ui
-      std::ostringstream str;
-      str << "Loading: " + createdNode->GetName();
-      m_StatusChanged.Raise( str.str() );
-      
-      // save it in the list of created nodes
-      createdNodes.push_back( createdNode );
-
-      // add object to the scene
-      return new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, createdNode );
+        // post-create logic
+        createdNode->Unpack();
     }
-  }
+    else
+    {
+        Console::Error( "Unable to create node for data of type '%s'.\n", data->GetClass()->m_UIName.c_str() );
+        NOC_BREAK();
+    }
 
-  return NULL;
+    return createdNode;
+}
+
+void Scene::Reset()
+{
+    // Clear selection to free Properties API UI
+    m_Selection.SetItems( OS_SelectableDumbPtr () );
+
+    // clear Highlighted
+    m_Highlighted.Clear();
+
+    // deallocate the tool
+    m_Tool = NULL;
+
+    // Clear undo queue
+    m_UndoQueue.Reset();
+
+    // Clear name cache
+    m_Names.clear();
+
+    // Reclaim resource memory
+    Delete();
+
+    // Break down entire graph
+    m_Graph->Reset();
+
+    // Clear flat hash of nodes
+    m_Nodes.clear();
+
+    // Flush graph objects, frees all objects (for now)
+    HM_StrToSceneNodeTypeSmartPtr::const_iterator tItr = m_NodeTypesByName.begin();
+    HM_StrToSceneNodeTypeSmartPtr::const_iterator tEnd = m_NodeTypesByName.end();
+    for ( ; tItr != tEnd; ++tItr )
+    {
+        SceneNodeTypePtr nodeType = tItr->second;
+        nodeType->Reset();
+    }
+    m_NodeTypesByName.clear();
+    m_NodeTypesByType.clear();
+
+    // Reset root
+    if ( m_Root.ReferencesObject() )
+    {
+        m_Root->Reset();
+    }
+}
+
+Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, u32 importFlags, i32 importReflectType )
+{
+    LUNA_SCENE_SCOPE_TIMER( ("") );
+
+    u64 startTimer = Platform::TimerGetClock();
+
+    // 
+    // Initialize
+    // 
+
+    m_Importing = true;
+    m_CursorChanged.Raise(wxCURSOR_WAIT);
+    m_TitleChanged.Raise( std::string ("Luna Scene Editor (Processing)") );
+    m_StatusChanged.Raise( std::string ("Loading Objects") );
+
+    m_RemappedIDs.clear();
+
+    // 
+    // Load Elements
+    // 
+
+    Undo::BatchCommandPtr command = new Undo::BatchCommand ();
+
+    V_SceneNodeSmartPtr createdNodes;
+    createdNodes.reserve( elements.size() );
+    {
+        Reflect::V_Element::const_iterator itr = elements.begin();
+        Reflect::V_Element::const_iterator end = elements.end();
+        for ( ; itr != end; ++itr )
+        {
+            command->Push( ImportSceneNode( *itr, createdNodes, action, importFlags, importReflectType ) );
+        }
+    }
+
+    // 
+    // Build Hierarchy
+    // 
+
+    {
+        V_SceneNodeSmartPtr::iterator itr = createdNodes.begin();
+        V_SceneNodeSmartPtr::iterator end = createdNodes.end();
+        for ( ; itr != end; ++itr )
+        {
+            HierarchyNodePtr hierarchyNode = Reflect::ObjectCast<Luna::HierarchyNode>(*itr);
+
+            if (!hierarchyNode.ReferencesObject())
+            {
+                // its not a hierarchy node, just continue
+                continue;
+            }
+
+
+            // 
+            // Remap object id
+            // 
+
+            UID::TUID childID = hierarchyNode->GetID();
+
+            UID::HM_TUID::const_iterator findChild = m_RemappedIDs.find( childID );
+            if ( findChild != m_RemappedIDs.end() )
+            {
+                childID = findChild->second;
+            }
+
+
+            // 
+            // Remap parent id
+            // 
+
+            UID::TUID parentID = hierarchyNode->GetPackage<Content::HierarchyNode>()->m_ParentID;
+
+            UID::HM_TUID::const_iterator findParent = m_RemappedIDs.find( parentID );
+            if ( findParent != m_RemappedIDs.end() )
+            {
+                parentID = findParent->second;
+            }
+
+
+            // 
+            // Set Hierarchy
+            // 
+
+            Luna::HierarchyNode* child = NULL;
+            HM_SceneNodeDumbPtr::const_iterator foundChild = m_Nodes.find( childID );
+            if ( foundChild != m_Nodes.end() )
+            {
+                child = Reflect::ObjectCast< Luna::HierarchyNode >( foundChild->second );
+            }
+
+            if (child != NULL)
+            {
+                if (parentID != UID::TUID::Null)
+                {
+                    Luna::HierarchyNode* parent = NULL;
+
+                    HM_SceneNodeDumbPtr::const_iterator foundParent = m_Nodes.find( parentID );
+                    if ( foundParent != m_Nodes.end() )
+                    {
+                        parent = Reflect::ObjectCast< Luna::HierarchyNode >( foundParent->second );
+                    }
+
+                    if (parent != NULL)
+                    {
+                        child->SetParent( parent );
+                    }
+                    else
+                    {
+                        child->SetParent( m_ImportRoot );
+                    }
+                }
+                else
+                {
+                    child->SetParent( m_ImportRoot );
+                }
+            }
+        }
+    }
+
+    // 
+    // Process new data
+    // 
+
+    // evaluate the graph to build global transforms
+    m_StatusChanged.Raise( std::string ("Evaluating Objects...") );
+    Evaluate(true);
+
+    // initialize each object after initial evaluation is complete
+    V_HierarchyNodeDumbPtr newNodes;
+    m_StatusChanged.Raise( std::string ("Initializing Objects...") );
+    V_SceneNodeSmartPtr::const_iterator itr = createdNodes.begin();
+    V_SceneNodeSmartPtr::const_iterator end = createdNodes.end();
+    for ( ; itr != end; ++itr )
+    {
+        (*itr)->Initialize();
+
+        if ( importFlags & ImportFlags::Select )
+        {
+            Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>( *itr );
+            if ( node )
+            {
+                newNodes.push_back( node );
+            }
+        }
+    }
+
+    // select imported if the flag is set
+    if ( importFlags & ImportFlags::Select )
+    {
+        V_HierarchyNodeDumbPtr newParents;
+        GetCommonParents( newNodes, newParents );
+
+        if ( !newParents.empty() )
+        {
+            OS_SelectableDumbPtr newSelection;
+            V_HierarchyNodeDumbPtr::const_iterator itr = newParents.begin();
+            V_HierarchyNodeDumbPtr::const_iterator end = newParents.end();
+            for ( ; itr != end; ++itr )
+            {
+                newSelection.Append( *itr );
+            }
+
+            command->Push( m_Selection.SetItems( newSelection ) );
+        }
+        else
+        {
+            NOC_BREAK();
+        }
+    }
+
+    // cleanup
+    m_RemappedIDs.clear();
+
+    // raise node added events (our nodes are ready to go now)
+    {
+        V_SceneNodeSmartPtr::iterator itr = createdNodes.begin();
+        V_SceneNodeSmartPtr::iterator end = createdNodes.end();
+        for ( ; itr != end; ++itr )
+        {
+            m_NodeAdded.Raise( NodeChangeArgs( *itr ) );
+        }
+    }
+
+    // report
+    std::ostringstream str;
+    str.precision( 2 );
+    str << "Scene Loading Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
+    m_StatusChanged.Raise( str.str() );
+
+    // done
+    m_TitleChanged.Raise( std::string ("Luna Scene Editor") );
+    m_StatusChanged.Raise( std::string ("Ready") );
+    m_CursorChanged.Raise(wxCURSOR_ARROW);
+    m_Importing = false;
+
+    return command;
+}
+
+Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_SceneNodeSmartPtr& createdNodes, ImportAction action, u32 importFlags, i32 importReflectType )
+{
+    LUNA_SCENE_SCOPE_TIMER( ("ImportSceneNode: %s", element->GetClass()->m_ShortName.c_str()) );
+
+    SceneNodePtr createdNode = NULL;
+
+    if( importReflectType == Reflect::ReservedTypes::Invalid )
+        importReflectType = Reflect::GetType< Content::SceneNode >();
+
+    // 
+    // Merging Nodes / Duplicate ID check
+    // 
+    bool convertNode = action == ImportActions::Load;
+
+    if ( action == ImportActions::Import )
+    {
+        if ( element->HasType( importReflectType ) )
+        {
+            Content::SceneNode* node = Reflect::DangerousCast< Content::SceneNode >( element );
+
+            if ( ImportFlags::HasFlag( importFlags, ImportFlags::Merge ) )
+            {
+                HM_SceneNodeDumbPtr::const_iterator find = m_Nodes.find( node->m_ID );
+                if ( find != m_Nodes.end() )
+                {
+                    Luna::SceneNode* dependNode = find->second;
+                    element->CopyTo( dependNode->GetPackage< Reflect::Element >() );
+                    dependNode->Unpack();
+                    dependNode->Dirty();
+                }    
+            }
+            else
+            {
+                // Always generate a new ID when importing and not merging
+                UID::TUID id( UID::TUID::Generate() );
+                m_RemappedIDs.insert( UID::HM_TUID::value_type( node->m_ID, id ) );
+                node->m_ID = id;
+                convertNode = true;
+            }
+        }
+    }
+
+
+    // 
+    // Convert Node
+    // 
+
+    if ( convertNode )
+    {
+        if ( element->HasType( Reflect::GetType<Content::SceneNode>() ) )
+        {
+            createdNode = CreateNode( Reflect::DangerousCast< Content::SceneNode >( element ) );
+        }
+
+        if ( createdNode.ReferencesObject() )
+        {
+            // update ui
+            std::ostringstream str;
+            str << "Loading: " + createdNode->GetName();
+            m_StatusChanged.Raise( str.str() );
+
+            // save it in the list of created nodes
+            createdNodes.push_back( createdNode );
+
+            // add object to the scene
+            return new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, createdNode );
+        }
+    }
+
+    return NULL;
 }
 
 void Scene::ArchiveStatus(Reflect::StatusInfo& info)
 {
-  switch (info.m_Action)
-  {
-  case Reflect::ArchiveStates::ArchiveStarting:
+    switch (info.m_Action)
     {
-      std::string verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? "Opening" : "Saving";
-      std::string type = info.m_Archive.GetType() == Reflect::ArchiveTypes::XML ? "XML" : "Binary";
-
-      std::ostringstream str;
-      str << verb << " " << type << " File: " << info.m_Archive.GetFile();
-      m_StatusChanged.Raise( str.str() );
-      break;
-    }
-
-  case Reflect::ArchiveStates::ElementProcessed:
-    {
-      if (info.m_Progress > m_Progress)
-      {
-        m_Progress = info.m_Progress;
-
+    case Reflect::ArchiveStates::ArchiveStarting:
         {
-          std::ostringstream str;
-          str << "Luna Scene Editor" << " (" << m_Progress << "%)";
-          m_TitleChanged.Raise( str.str() );
+            std::string verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? "Opening" : "Saving";
+            std::string type = info.m_Archive.GetType() == Reflect::ArchiveTypes::XML ? "XML" : "Binary";
+
+            std::ostringstream str;
+            str << verb << " " << type << " File: " << info.m_Archive.GetFile();
+            m_StatusChanged.Raise( str.str() );
+            break;
         }
 
+    case Reflect::ArchiveStates::ElementProcessed:
         {
-          std::string verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? "Opening" : "Saving";
+            if (info.m_Progress > m_Progress)
+            {
+                m_Progress = info.m_Progress;
 
-          std::ostringstream str;
-          str << verb << ": " << info.m_Archive.GetFile() << " (" << m_Progress << "%)";
-          m_StatusChanged.Raise( str.str() );
+                {
+                    std::ostringstream str;
+                    str << "Luna Scene Editor" << " (" << m_Progress << "%)";
+                    m_TitleChanged.Raise( str.str() );
+                }
+
+                {
+                    std::string verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? "Opening" : "Saving";
+
+                    std::ostringstream str;
+                    str << verb << ": " << info.m_Archive.GetFile() << " (" << m_Progress << "%)";
+                    m_StatusChanged.Raise( str.str() );
+                }
+            }
+
+            break;
         }
-      }
 
-      break;
+    case Reflect::ArchiveStates::Complete:
+        {
+            std::string verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? "Opening" : "Saving";
+
+            std::ostringstream str;
+            str << "Completed " << verb << ": " << info.m_Archive.GetFile();
+            m_StatusChanged.Raise( str.str() );
+            break;
+        }
+
+    case Reflect::ArchiveStates::PostProcessing:
+        {
+            std::ostringstream str;
+            str << "Processing: " << info.m_Archive.GetFile();
+            m_StatusChanged.Raise( str.str() );
+            break;
+        }
     }
-
-  case Reflect::ArchiveStates::Complete:
-    {
-      std::string verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? "Opening" : "Saving";
-
-      std::ostringstream str;
-      str << "Completed " << verb << ": " << info.m_Archive.GetFile();
-      m_StatusChanged.Raise( str.str() );
-      break;
-    }
-
-  case Reflect::ArchiveStates::PostProcessing:
-    {
-      std::ostringstream str;
-      str << "Processing: " << info.m_Archive.GetFile();
-      m_StatusChanged.Raise( str.str() );
-      break;
-    }
-  }
 }
 
 void Scene::ArchiveException(Reflect::ExceptionInfo& info)
 {
-  if ( typeid( info.m_Exception ) == typeid( Asset::UnableToLoadAssetClassException ) )
-  {
-    Asset::Entity* entity = Reflect::ObjectCast<Asset::Entity>( info.m_Element );
-    if ( entity )
+    if ( typeid( info.m_Exception ) == typeid( Asset::UnableToLoadAssetClassException ) )
     {
-      // use the default entity class?
+        Asset::Entity* entity = Reflect::ObjectCast<Asset::Entity>( info.m_Element );
+        if ( entity )
+        {
+            // use the default entity class?
 #pragma TODO( "reimplement" )
-        //      entity->SetEntityAssetID( 0x0 );
+            //      entity->SetEntityAssetID( 0x0 );
 
-      // accept this object from the file
-      info.m_Action = Reflect::ExceptionActions::Accept;
+            // accept this object from the file
+            info.m_Action = Reflect::ExceptionActions::Accept;
+        }
     }
-  }
 }
 
 bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::BatchCommand* changes )
 {
-  bool result = true;
+    bool result = true;
 
-  {
-    // before exporting anything build the manifest object that will live at the front of the file
-    Asset::SceneManifestPtr manifest = new Asset::SceneManifest ();
-
-    // the root node's global bounds will contain the extents of the scene
-    manifest->m_BoundingBoxMin = m_Root->GetGlobalHierarchyBounds().minimum;
-    manifest->m_BoundingBoxMax = m_Root->GetGlobalHierarchyBounds().maximum;
-
-    // iterate over the types' containers
-    HMS_TypeToSceneNodeTypeDumbPtr::const_iterator typesItr = m_NodeTypesByType.begin();
-    HMS_TypeToSceneNodeTypeDumbPtr::const_iterator typesEnd = m_NodeTypesByType.end();
-    for ( ; typesItr != typesEnd; ++typesItr )
     {
-      // iterate over every instance of the type
-      S_SceneNodeTypeDumbPtr::const_iterator typeItr = typesItr->second.begin();
-      S_SceneNodeTypeDumbPtr::const_iterator typeEnd = typesItr->second.end();
-      for ( ; typeItr != typeEnd; ++typeItr )
-      {
-        (*typeItr)->PopulateManifest( manifest );
-      }
+        // before exporting anything build the manifest object that will live at the front of the file
+        Asset::SceneManifestPtr manifest = new Asset::SceneManifest ();
+
+        // the root node's global bounds will contain the extents of the scene
+        manifest->m_BoundingBoxMin = m_Root->GetGlobalHierarchyBounds().minimum;
+        manifest->m_BoundingBoxMax = m_Root->GetGlobalHierarchyBounds().maximum;
+
+        // iterate over the types' containers
+        HMS_TypeToSceneNodeTypeDumbPtr::const_iterator typesItr = m_NodeTypesByType.begin();
+        HMS_TypeToSceneNodeTypeDumbPtr::const_iterator typesEnd = m_NodeTypesByType.end();
+        for ( ; typesItr != typesEnd; ++typesItr )
+        {
+            // iterate over every instance of the type
+            S_SceneNodeTypeDumbPtr::const_iterator typeItr = typesItr->second.begin();
+            S_SceneNodeTypeDumbPtr::const_iterator typeEnd = typesItr->second.end();
+            for ( ; typeItr != typeEnd; ++typeItr )
+            {
+                (*typeItr)->PopulateManifest( manifest );
+            }
+        }
+
+        elements.push_back( manifest );
     }
 
-    elements.push_back( manifest );
-  }
+    // ID's of the objects that have been exported so far (to prevent exporting dupes)
+    UID::S_TUID exported; 
 
-  // ID's of the objects that have been exported so far (to prevent exporting dupes)
-  UniqueID::S_TUID exported; 
-
-  if ( ExportFlags::HasFlag( args.m_Flags, ExportFlags::SelectedNodes ) )
-  {
-    // Walk through the selection list and export each dependency node
-    if ( m_Selection.GetItems().Size() > 0 )
+    if ( ExportFlags::HasFlag( args.m_Flags, ExportFlags::SelectedNodes ) )
     {
-      OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-      OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
-      for ( ; itr != end; ++itr )
-      {
-        Luna::SceneNode* node = Reflect::ObjectCast< Luna::SceneNode >( *itr );
-        if ( node )
+        // Walk through the selection list and export each dependency node
+        if ( m_Selection.GetItems().Size() > 0 )
         {
-          Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Luna::HierarchyNode >( node );
+            OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+            OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
+            for ( ; itr != end; ++itr )
+            {
+                Luna::SceneNode* node = Reflect::ObjectCast< Luna::SceneNode >( *itr );
+                if ( node )
+                {
+                    Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Luna::HierarchyNode >( node );
 
-          if ( hierarchyNode && ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
-          {
-            ExportHierarchyNode( hierarchyNode, elements, exported, args, changes );
-          }
-          else
-          {
+                    if ( hierarchyNode && ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
+                    {
+                        ExportHierarchyNode( hierarchyNode, elements, exported, args, changes );
+                    }
+                    else
+                    {
+                        if ( args.m_Bounds.empty() )
+                        {
+                            ExportSceneNode( node, elements, exported, args, changes );
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            Console::Warning( "Nothing is selected, there is nothing to export\n" );
+        }
+    }
+    else
+    {
+        // Walk through all the dependency nodes, adding each one to the list of elements
+        if ( m_Nodes.size() > 0 )
+        {
+            // Export the entire hierarchy, in order
+            S_HierarchyNodeDumbPtr::const_iterator childItr = m_Root->GetChildren().begin();
+            S_HierarchyNodeDumbPtr::const_iterator childEnd = m_Root->GetChildren().end();
+            for ( ; childItr != childEnd; ++childItr )
+            {
+                ExportHierarchyNode( *childItr, elements, exported, args, changes, true );
+            }
+
             if ( args.m_Bounds.empty() )
             {
-              ExportSceneNode( node, elements, exported, args, changes );
+                // Export the rest of the dependency nodes
+                HM_SceneNodeDumbPtr::const_iterator itr = m_Nodes.begin();
+                HM_SceneNodeDumbPtr::const_iterator end = m_Nodes.end();
+                for ( ; itr != end; ++itr )
+                {
+                    ExportSceneNode( itr->second, elements, exported, args, changes );
+                }
             }
-          }
         }
-      }
-    }
-    else
-    {
-      Console::Warning( "Nothing is selected, there is nothing to export\n" );
-    }
-  }
-  else
-  {
-    // Walk through all the dependency nodes, adding each one to the list of elements
-    if ( m_Nodes.size() > 0 )
-    {
-      // Export the entire hierarchy, in order
-      S_HierarchyNodeDumbPtr::const_iterator childItr = m_Root->GetChildren().begin();
-      S_HierarchyNodeDumbPtr::const_iterator childEnd = m_Root->GetChildren().end();
-      for ( ; childItr != childEnd; ++childItr )
-      {
-        ExportHierarchyNode( *childItr, elements, exported, args, changes, true );
-      }
-
-      if ( args.m_Bounds.empty() )
-      {
-        // Export the rest of the dependency nodes
-        HM_SceneNodeDumbPtr::const_iterator itr = m_Nodes.begin();
-        HM_SceneNodeDumbPtr::const_iterator end = m_Nodes.end();
-        for ( ; itr != end; ++itr )
+        else
         {
-          ExportSceneNode( itr->second, elements, exported, args, changes );
+            Console::Warning( "Scene is empty, there's nothing to save!\n" );
         }
-      }
     }
-    else
-    {
-      Console::Warning( "Scene is empty, there's nothing to save!\n" );
-    }
-  }
 
-  return result;
+    return result;
 }
 
-void Scene::ExportSceneNode( Luna::SceneNode* node, Reflect::V_Element& elements, UniqueID::S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
+void Scene::ExportSceneNode( Luna::SceneNode* node, Reflect::V_Element& elements, UID::S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
 {
-  // Don't export the root node
-  if ( node != m_Root )
-  {
-    // Don't export a node if it has already been exported
-    if ( exported.find( node->GetID() ) == exported.end() && !node->IsTransient() )
+    // Don't export the root node
+    if ( node != m_Root )
     {
-      if ( node->HasType( Reflect::GetType< Luna::Transform >() ) && !ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
-      {
-        // If we are exporting a transform node, but we are not maintaining the hierarchy,
-        // we would still like to maintain the object's global position.  So, we create
-        // reparent the node under the root (which maintains the node's position) and
-        // store that command so that it can be undone after export completes.
-        Luna::Transform* transformNode = Reflect::DangerousCast< Luna::Transform >( node );
-        changes->Push( new ParentCommand( transformNode, GetRoot() ) );
-      }
-
-      node->Pack();
-      elements.push_back( node->GetPackage() );
-      exported.insert( node->GetID() );
-
-      // Flag to indicate whether to recursively export ancestors of this node or not
-      if ( ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainDependencies ) )
-      {
-        S_SceneNodeDumbPtr::const_iterator ancestorItr = node->GetAncestors().begin();
-        S_SceneNodeDumbPtr::const_iterator ancestorEnd = node->GetAncestors().end();
-        for ( ; ancestorItr != ancestorEnd; ++ancestorItr )
+        // Don't export a node if it has already been exported
+        if ( exported.find( node->GetID() ) == exported.end() && !node->IsTransient() )
         {
-          Luna::SceneNode* ancestor = *ancestorItr;
-
-          bool skipAncestor = false;
-
-          // Check to see if the ancestor is a hierarchy node
-          if ( node->HasType( Reflect::GetType<Luna::HierarchyNode>() ) )
-          {
-            Luna::HierarchyNode* hierarchyNode = Reflect::DangerousCast< Luna::HierarchyNode >( node );
-            if ( hierarchyNode->GetParent() && hierarchyNode->GetParent() == ancestor )
+            if ( node->HasType( Reflect::GetType< Luna::Transform >() ) && !ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainHierarchy ) )
             {
-              // Hierarchy is exported separately, so ignore this ancestor if it is a parent of this node
-              skipAncestor = true;
+                // If we are exporting a transform node, but we are not maintaining the hierarchy,
+                // we would still like to maintain the object's global position.  So, we create
+                // reparent the node under the root (which maintains the node's position) and
+                // store that command so that it can be undone after export completes.
+                Luna::Transform* transformNode = Reflect::DangerousCast< Luna::Transform >( node );
+                changes->Push( new ParentCommand( transformNode, GetRoot() ) );
             }
-          }
 
-          if ( !skipAncestor )
-          {
-            ExportSceneNode( ancestor, elements, exported, args, changes );
-          }
+            node->Pack();
+            elements.push_back( node->GetPackage() );
+            exported.insert( node->GetID() );
+
+            // Flag to indicate whether to recursively export ancestors of this node or not
+            if ( ExportFlags::HasFlag( args.m_Flags, ExportFlags::MaintainDependencies ) )
+            {
+                S_SceneNodeDumbPtr::const_iterator ancestorItr = node->GetAncestors().begin();
+                S_SceneNodeDumbPtr::const_iterator ancestorEnd = node->GetAncestors().end();
+                for ( ; ancestorItr != ancestorEnd; ++ancestorItr )
+                {
+                    Luna::SceneNode* ancestor = *ancestorItr;
+
+                    bool skipAncestor = false;
+
+                    // Check to see if the ancestor is a hierarchy node
+                    if ( node->HasType( Reflect::GetType<Luna::HierarchyNode>() ) )
+                    {
+                        Luna::HierarchyNode* hierarchyNode = Reflect::DangerousCast< Luna::HierarchyNode >( node );
+                        if ( hierarchyNode->GetParent() && hierarchyNode->GetParent() == ancestor )
+                        {
+                            // Hierarchy is exported separately, so ignore this ancestor if it is a parent of this node
+                            skipAncestor = true;
+                        }
+                    }
+
+                    if ( !skipAncestor )
+                    {
+                        ExportSceneNode( ancestor, elements, exported, args, changes );
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }
 
-void Scene::ExportHierarchyNode( Luna::HierarchyNode* node, Reflect::V_Element& elements, UniqueID::S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
+void Scene::ExportHierarchyNode( Luna::HierarchyNode* node, Reflect::V_Element& elements, UID::S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
 {
-  // Export parents first
-  if ( node->GetParent() != m_Root )
-  {
-    ExportHierarchyNode( node->GetParent(), elements, exported, args, changes, false );
-  }
-
-  // If this child has not been exported yet (and is not transient)
-  if ( exported.find( node->GetID() ) == exported.end() )
-  {
-    // Transient nodes and their children will not be exported
-    if ( !node->IsTransient() )
+    // Export parents first
+    if ( node->GetParent() != m_Root )
     {
-      bool proceed = true;
-      
-      if ( !args.m_Bounds.empty() )
-      {
-        proceed = false;
-
-        for ( V_AlignedBox::const_iterator itr = args.m_Bounds.begin(), end = args.m_Bounds.end(); itr != end && !proceed; ++itr )
-        {
-          proceed = itr->IntersectsBox( node->GetGlobalBounds() );
-        }
-      }
-
-      if ( proceed )
-      {
-        // Do the export work for this node
-        ExportSceneNode( node, elements, exported, args, changes );
-      }
-
-      if ( exportChildren )
-      {
-        // Export all the children of the specified node, recursively.
-        S_HierarchyNodeDumbPtr::const_iterator childItr = node->GetChildren().begin();
-        S_HierarchyNodeDumbPtr::const_iterator childEnd = node->GetChildren().end();
-        for ( ; childItr != childEnd; ++childItr )
-        {
-          ExportHierarchyNode( *childItr, elements, exported, args, changes, true );
-        }
-      }
+        ExportHierarchyNode( node->GetParent(), elements, exported, args, changes, false );
     }
-  }
+
+    // If this child has not been exported yet (and is not transient)
+    if ( exported.find( node->GetID() ) == exported.end() )
+    {
+        // Transient nodes and their children will not be exported
+        if ( !node->IsTransient() )
+        {
+            bool proceed = true;
+
+            if ( !args.m_Bounds.empty() )
+            {
+                proceed = false;
+
+                for ( V_AlignedBox::const_iterator itr = args.m_Bounds.begin(), end = args.m_Bounds.end(); itr != end && !proceed; ++itr )
+                {
+                    proceed = itr->IntersectsBox( node->GetGlobalBounds() );
+                }
+            }
+
+            if ( proceed )
+            {
+                // Do the export work for this node
+                ExportSceneNode( node, elements, exported, args, changes );
+            }
+
+            if ( exportChildren )
+            {
+                // Export all the children of the specified node, recursively.
+                S_HierarchyNodeDumbPtr::const_iterator childItr = node->GetChildren().begin();
+                S_HierarchyNodeDumbPtr::const_iterator childEnd = node->GetChildren().end();
+                for ( ; childItr != childEnd; ++childItr )
+                {
+                    ExportHierarchyNode( *childItr, elements, exported, args, changes, true );
+                }
+            }
+        }
+    }
 }
 
 bool Scene::Save()
 {
-  NOC_ASSERT( !m_File->GetFilePath().empty() );
-  return ExportFile( m_File->GetFilePath(), ExportFlags::Default );
+    NOC_ASSERT( !m_File->GetFilePath().empty() );
+    return ExportFile( m_File->GetFilePath(), ExportFlags::Default );
 }
 
 bool Scene::ExportFile( const std::string& file, const ExportArgs& args )
 {
-  u64 startTimer = Platform::TimerGetClock();
+    u64 startTimer = Platform::TimerGetClock();
 
-  bool result = false;
+    bool result = false;
 
-  m_CursorChanged.Raise( wxCURSOR_WAIT );
+    m_CursorChanged.Raise( wxCURSOR_WAIT );
 
-  m_Progress = 0;
+    m_Progress = 0;
 
-  {
-    std::ostringstream str;
-    str << "Preparing to save: " << file;
-    m_StatusChanged.Raise( str.str() );
-  }
-
-  Undo::BatchCommandPtr changes = new Undo::BatchCommand();
-
-  Reflect::V_Element spool;
-  result = Export( spool, args, changes );
-
-  if (result)
-  {
-    try
     {
-      Reflect::Archive::ToFile( spool, file, new Content::ContentVersion (), this );
+        std::ostringstream str;
+        str << "Preparing to save: " << file;
+        m_StatusChanged.Raise( str.str() );
     }
-    catch ( Nocturnal::Exception& ex )
+
+    Undo::BatchCommandPtr changes = new Undo::BatchCommand();
+
+    Reflect::V_Element spool;
+    result = Export( spool, args, changes );
+
+    if (result)
     {
-      std::ostringstream str;
-      str << "Failed to write file " << file << ": " << ex.what();
-      wxMessageBox( str.str(), "Error", wxOK|wxCENTRE|wxICON_ERROR );
-      result = false;
+        try
+        {
+            Reflect::Archive::ToFile( spool, file, new Content::ContentVersion (), this );
+        }
+        catch ( Nocturnal::Exception& ex )
+        {
+            std::ostringstream str;
+            str << "Failed to write file " << file << ": " << ex.what();
+            wxMessageBox( str.str(), "Error", wxOK|wxCENTRE|wxICON_ERROR );
+            result = false;
+        }
     }
-  }
 
-  changes->Undo();
+    changes->Undo();
 
-  m_CursorChanged.Raise( wxCURSOR_ARROW );
+    m_CursorChanged.Raise( wxCURSOR_ARROW );
 
-  {
-    std::ostringstream str;
-    str.precision( 2 );
-    str << "Saving Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
-    m_StatusChanged.Raise( str.str() );
-    m_TitleChanged.Raise( std::string ("Luna Scene Editor") );
-  }
+    {
+        std::ostringstream str;
+        str.precision( 2 );
+        str << "Saving Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
+        m_StatusChanged.Raise( str.str() );
+        m_TitleChanged.Raise( std::string ("Luna Scene Editor") );
+    }
 
-  return result;
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1190,945 +1191,946 @@ bool Scene::ExportFile( const std::string& file, const ExportArgs& args )
 // 
 bool Scene::ExportXML( std::string& xml, const ExportArgs& args )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  bool result = false;
+    bool result = false;
 
-  u64 startTimer = Platform::TimerGetClock();
+    u64 startTimer = Platform::TimerGetClock();
 
-  m_CursorChanged.Raise( wxCURSOR_WAIT );
+    m_CursorChanged.Raise( wxCURSOR_WAIT );
 
-  m_Progress = 0;
+    m_Progress = 0;
 
-  {
-    std::ostringstream str;
-    str << "Preparing to export";
-    m_StatusChanged.Raise( str.str() );
-  }
-
-  Undo::BatchCommandPtr changes = new Undo::BatchCommand();
-
-  Reflect::V_Element spool;
-  result = Export( spool, args, changes );
-
-  if ( result && !spool.empty() )
-  {
-    try
     {
-      Reflect::Archive::ToXML( spool, xml, this );
+        std::ostringstream str;
+        str << "Preparing to export";
+        m_StatusChanged.Raise( str.str() );
     }
-    catch ( Nocturnal::Exception& ex )
+
+    Undo::BatchCommandPtr changes = new Undo::BatchCommand();
+
+    Reflect::V_Element spool;
+    result = Export( spool, args, changes );
+
+    if ( result && !spool.empty() )
     {
-      std::ostringstream str;
-      str << "Failed to generate xml: " << ex.what();
-      wxMessageBox( str.str(), "Error", wxOK|wxCENTRE|wxICON_ERROR );
-      result = false;
+        try
+        {
+            Reflect::Archive::ToXML( spool, xml, this );
+        }
+        catch ( Nocturnal::Exception& ex )
+        {
+            std::ostringstream str;
+            str << "Failed to generate xml: " << ex.what();
+            wxMessageBox( str.str(), "Error", wxOK|wxCENTRE|wxICON_ERROR );
+            result = false;
+        }
     }
-  }
 
-  changes->Undo();
+    changes->Undo();
 
-  m_CursorChanged.Raise( wxCURSOR_ARROW );
+    m_CursorChanged.Raise( wxCURSOR_ARROW );
 
-  {
-    std::ostringstream str;
-    str.precision( 2 );
-    str << "Export Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
-    m_StatusChanged.Raise( str.str() );
-    m_TitleChanged.Raise( std::string( "Luna Scene Editor" ) );
-  }
+    {
+        std::ostringstream str;
+        str.precision( 2 );
+        str << "Export Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
+        m_StatusChanged.Raise( str.str() );
+        m_TitleChanged.Raise( std::string( "Luna Scene Editor" ) );
+    }
 
-  return result;
+    return result;
 }
 
 int Scene::Split( std::string& outName )
 {
-  int ret = -1;
+    int ret = -1;
 
-  std::string name = outName.c_str();
+    std::string name = outName.c_str();
 
-  size_t lastNum = name.size();
-  while (lastNum > 0 && isdigit(name[lastNum-1]))
-  {
-    lastNum--;
-  }
+    size_t lastNum = name.size();
+    while (lastNum > 0 && isdigit(name[lastNum-1]))
+    {
+        lastNum--;
+    }
 
-  if ( lastNum < 0 || lastNum >= name.size() )
-  {
-    // we have no digit to split on
-  }
-  else
-  {
-    std::string numberString = name.substr(lastNum);
+    if ( lastNum < 0 || lastNum >= name.size() )
+    {
+        // we have no digit to split on
+    }
+    else
+    {
+        std::string numberString = name.substr(lastNum);
 
-    // trim name
-    outName = name.substr(0, lastNum);
+        // trim name
+        outName = name.substr(0, lastNum);
 
-    ret = atoi(numberString.c_str());
-  }
+        ret = atoi(numberString.c_str());
+    }
 
-  return ret;
+    return ret;
 }
 
 void Scene::SetName( Luna::SceneNode* sceneNode, const std::string& newName )
 {
-  // lua keywords
-  static stdext::hash_set<std::string, NameHasher> keywords;
-  if (keywords.empty())
-  {
-	  keywords.insert( "and" );
-	  keywords.insert( "break" );
-	  keywords.insert( "do" );
-	  keywords.insert( "else" );
-	  keywords.insert( "elseif" );
-	  keywords.insert( "end" );
-	  keywords.insert( "false" );
-	  keywords.insert( "for" );
-	  keywords.insert( "function" );
-	  keywords.insert( "if" );
-	  keywords.insert( "in" );
-	  keywords.insert( "local" );
-	  keywords.insert( "nil" );
-	  keywords.insert( "not" );
-	  keywords.insert( "or" );
-	  keywords.insert( "repeat" );
-	  keywords.insert( "return" );
-	  keywords.insert( "then" );
-	  keywords.insert( "true" );
-	  keywords.insert( "until" );
-	  keywords.insert( "while" );
-  }
-
-  std::string realName = newName;
-
-  // handle the no-name case
-  if (realName.empty() || keywords.find(realName) != keywords.end())
-  {
-    realName = sceneNode->GenerateName();
-  }
-
-  // handle invalid name (starts with numeral)
-  while ( !realName.empty() && isdigit(*realName.begin()) )
-  {
-    realName.erase(0, 1);
-  }
-
-  // handle invalid name (contains invalid characters)
-  bool inSpace = false;
-  std::string::iterator itr = realName.begin();
-  std::string::iterator end = realName.end();
-  while ( itr != end )
-  {
-    if ( !isdigit(*itr) && !isalpha(*itr) && *itr != '_' )
+    // lua keywords
+    static stdext::hash_set<std::string, NameHasher> keywords;
+    if (keywords.empty())
     {
-      // check for spaced region
-      inSpace = *itr == ' ';
-
-      // erase the invalid character
-      itr = realName.erase( itr );
-      end = realName.end();
-
-      // we are at the next character
-      continue;
+        keywords.insert( "and" );
+        keywords.insert( "break" );
+        keywords.insert( "do" );
+        keywords.insert( "else" );
+        keywords.insert( "elseif" );
+        keywords.insert( "end" );
+        keywords.insert( "false" );
+        keywords.insert( "for" );
+        keywords.insert( "function" );
+        keywords.insert( "if" );
+        keywords.insert( "in" );
+        keywords.insert( "local" );
+        keywords.insert( "nil" );
+        keywords.insert( "not" );
+        keywords.insert( "or" );
+        keywords.insert( "repeat" );
+        keywords.insert( "return" );
+        keywords.insert( "then" );
+        keywords.insert( "true" );
+        keywords.insert( "until" );
+        keywords.insert( "while" );
     }
 
-    if ( inSpace )
-    {
-      // camelCase
-      *itr = toupper(*itr);
+    std::string realName = newName;
 
-      // stop space
-      inSpace = false;
+    // handle the no-name case
+    if (realName.empty() || keywords.find(realName) != keywords.end())
+    {
+        realName = sceneNode->GenerateName();
     }
 
-    ++itr;
-  }
-
-  // check to see if this name is unique
-  HM_NameToSceneNodeDumbPtr::iterator foundName = m_Names.find( realName );
-
-  // if this name is used *BY ANOTHER OBJECT*
-  if ( foundName != m_Names.end() && foundName->second != sceneNode )
-  {
-    // split the name and number apart
-    int number = Split( realName );
-
-    // why would this happen?
-    if ( number < 0 )
+    // handle invalid name (starts with numeral)
+    while ( !realName.empty() && isdigit(*realName.begin()) )
     {
-      number = 0;
+        realName.erase(0, 1);
     }
 
-    // the result of numeric uniquification
-    std::string result;
-
-    // do finds while we haven't found a unique numeric version
-    HM_NameToSceneNodeDumbPtr::const_iterator searchItr = m_Names.end();
-    HM_NameToSceneNodeDumbPtr::const_iterator searchEnd = searchItr;
-    do
+    // handle invalid name (contains invalid characters)
+    bool inSpace = false;
+    std::string::iterator itr = realName.begin();
+    std::string::iterator end = realName.end();
+    while ( itr != end )
     {
-      // extract the number to ascii
-      number++;
-      std::ostringstream numberStr;
-      numberStr << number;
+        if ( !isdigit(*itr) && !isalpha(*itr) && *itr != '_' )
+        {
+            // check for spaced region
+            inSpace = *itr == ' ';
 
-      // build the new name to try
-      result = realName + numberStr.str();
+            // erase the invalid character
+            itr = realName.erase( itr );
+            end = realName.end();
 
-      // see if its taken
-      searchItr = m_Names.find( result );
+            // we are at the next character
+            continue;
+        }
+
+        if ( inSpace )
+        {
+            // camelCase
+            *itr = toupper(*itr);
+
+            // stop space
+            inSpace = false;
+        }
+
+        ++itr;
     }
-    while ( searchItr != searchEnd ); // continue until we find a name not taken
 
-    // set the numeric result
-    realName = result;
-  }
-  
-  // set our new name into the object
-  sceneNode->SetName( realName );
+    // check to see if this name is unique
+    HM_NameToSceneNodeDumbPtr::iterator foundName = m_Names.find( realName );
 
-  // mark it taken
-  Nocturnal::Insert<HM_NameToSceneNodeDumbPtr>::Result inserted = m_Names.insert( HM_NameToSceneNodeDumbPtr::value_type( realName, sceneNode ) );
-  bool previouslyInserted = sceneNode == inserted.first->second && sceneNode->GetName() == realName;
-  bool newlyInserted = inserted.second;
-  NOC_ASSERT( previouslyInserted || newlyInserted );
+    // if this name is used *BY ANOTHER OBJECT*
+    if ( foundName != m_Names.end() && foundName->second != sceneNode )
+    {
+        // split the name and number apart
+        int number = Split( realName );
+
+        // why would this happen?
+        if ( number < 0 )
+        {
+            number = 0;
+        }
+
+        // the result of numeric uniquification
+        std::string result;
+
+        // do finds while we haven't found a unique numeric version
+        HM_NameToSceneNodeDumbPtr::const_iterator searchItr = m_Names.end();
+        HM_NameToSceneNodeDumbPtr::const_iterator searchEnd = searchItr;
+        do
+        {
+            // extract the number to ascii
+            number++;
+            std::ostringstream numberStr;
+            numberStr << number;
+
+            // build the new name to try
+            result = realName + numberStr.str();
+
+            // see if its taken
+            searchItr = m_Names.find( result );
+        }
+        while ( searchItr != searchEnd ); // continue until we find a name not taken
+
+        // set the numeric result
+        realName = result;
+    }
+
+    // set our new name into the object
+    sceneNode->SetName( realName );
+
+    // mark it taken
+    Nocturnal::Insert<HM_NameToSceneNodeDumbPtr>::Result inserted = m_Names.insert( HM_NameToSceneNodeDumbPtr::value_type( realName, sceneNode ) );
+    bool previouslyInserted = sceneNode == inserted.first->second && sceneNode->GetName() == realName;
+    bool newlyInserted = inserted.second;
+    NOC_ASSERT( previouslyInserted || newlyInserted );
 }
 
 void Scene::Rename( Luna::SceneNode* sceneNode, const std::string& newName, std::string oldName )
 {
-  if ( oldName.empty() )
-  {
-    oldName = sceneNode->GetName();
-  }
-
-  // special case the root
-  if ( sceneNode == m_Root.Ptr() )
-  {
-    // roots NEVER change name
-    sceneNode->Rename( oldName );
-  }
-  else
-  {
-    // find our name
-    HM_NameToSceneNodeDumbPtr::iterator foundName = m_Names.find( oldName );
-
-    // if we found it, *AND ITS OUR OBJECT*
-    if ( foundName != m_Names.end() && foundName->second == sceneNode )
+    if ( oldName.empty() )
     {
-      // erase it
-      m_Names.erase( oldName );
+        oldName = sceneNode->GetName();
     }
 
-    // check it for uniqueness and set it
-    SetName( sceneNode, newName );
-  }
+    // special case the root
+    if ( sceneNode == m_Root.Ptr() )
+    {
+        // roots NEVER change name
+        sceneNode->Rename( oldName );
+    }
+    else
+    {
+        // find our name
+        HM_NameToSceneNodeDumbPtr::iterator foundName = m_Names.find( oldName );
+
+        // if we found it, *AND ITS OUR OBJECT*
+        if ( foundName != m_Names.end() && foundName->second == sceneNode )
+        {
+            // erase it
+            m_Names.erase( oldName );
+        }
+
+        // check it for uniqueness and set it
+        SetName( sceneNode, newName );
+    }
 }
 
 void Scene::AddNodeType(const SceneNodeTypePtr& nodeType)
 {
-  // insert into the map by name
-  m_NodeTypesByName.insert( HM_StrToSceneNodeTypeSmartPtr::value_type( nodeType->GetName(), nodeType ) );
+    // insert into the map by name
+    m_NodeTypesByName.insert( HM_StrToSceneNodeTypeSmartPtr::value_type( nodeType->GetName(), nodeType ) );
 
-  // insert into the map by compile time type id
-  Nocturnal::Insert<HMS_TypeToSceneNodeTypeDumbPtr>::Result typeSet = m_NodeTypesByType.insert( HMS_TypeToSceneNodeTypeDumbPtr::value_type( nodeType->GetInstanceType(), S_SceneNodeTypeDumbPtr() ) );
-  typeSet.first->second.insert( nodeType );
+    // insert into the map by compile time type id
+    Nocturnal::Insert<HMS_TypeToSceneNodeTypeDumbPtr>::Result typeSet = m_NodeTypesByType.insert( HMS_TypeToSceneNodeTypeDumbPtr::value_type( nodeType->GetInstanceType(), S_SceneNodeTypeDumbPtr() ) );
+    typeSet.first->second.insert( nodeType );
 
-  // insert it into the types for its bases
-  const Reflect::Class* type = Reflect::Registry::GetInstance()->GetClass( nodeType->GetInstanceType() );
-  for ( ; type->m_TypeID != Reflect::GetType<Luna::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
-  {
-    Nocturnal::Insert<HMS_TypeToSceneNodeTypeDumbPtr>::Result baseTypeSet = m_NodeTypesByType.insert( HMS_TypeToSceneNodeTypeDumbPtr::value_type( type->m_TypeID, S_SceneNodeTypeDumbPtr() ) );
-    baseTypeSet.first->second.insert( nodeType );
-  }
+    // insert it into the types for its bases
+    const Reflect::Class* type = Reflect::Registry::GetInstance()->GetClass( nodeType->GetInstanceType() );
+    for ( ; type->m_TypeID != Reflect::GetType<Luna::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
+    {
+        Nocturnal::Insert<HMS_TypeToSceneNodeTypeDumbPtr>::Result baseTypeSet = m_NodeTypesByType.insert( HMS_TypeToSceneNodeTypeDumbPtr::value_type( type->m_TypeID, S_SceneNodeTypeDumbPtr() ) );
+        baseTypeSet.first->second.insert( nodeType );
+    }
 
-  m_NodeTypeCreated.Raise( nodeType.Ptr() );
+    m_NodeTypeCreated.Raise( nodeType.Ptr() );
 }
 
 void Scene::RemoveNodeType(const SceneNodeTypePtr& nodeType)
 {
-  // erase from the map by name
-  m_NodeTypesByName.erase( nodeType->GetName() );
+    // erase from the map by name
+    m_NodeTypesByName.erase( nodeType->GetName() );
 
-  // erase from the map by compile time type id
-  HMS_TypeToSceneNodeTypeDumbPtr::iterator typeSet = m_NodeTypesByType.find( nodeType->GetInstanceType() );
-  typeSet->second.erase( nodeType );
+    // erase from the map by compile time type id
+    HMS_TypeToSceneNodeTypeDumbPtr::iterator typeSet = m_NodeTypesByType.find( nodeType->GetInstanceType() );
+    typeSet->second.erase( nodeType );
 
-  // we can conditional here to save time becase if our exact type set is not empty some other type stil must exist in the base class sets
-  //  otherwise if we are the last type removed then we must check each base type to see if we are the last base type to be removed
-  if (typeSet->second.empty())
-  {
-    m_NodeTypesByType.erase( typeSet );
-
-    const Reflect::Class* type = Reflect::Registry::GetInstance()->GetClass( nodeType->GetInstanceType() );
-    for ( ; type->m_TypeID != Reflect::GetType<Luna::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
+    // we can conditional here to save time becase if our exact type set is not empty some other type stil must exist in the base class sets
+    //  otherwise if we are the last type removed then we must check each base type to see if we are the last base type to be removed
+    if (typeSet->second.empty())
     {
-      HMS_TypeToSceneNodeTypeDumbPtr::iterator baseTypeSet = m_NodeTypesByType.find( type->m_TypeID );
+        m_NodeTypesByType.erase( typeSet );
 
-      // don't remove it until we are the last one, each base type is probably shared with other derivations
-      if (baseTypeSet->second.empty())
-      {
-        m_NodeTypesByType.erase( baseTypeSet );
-      }
+        const Reflect::Class* type = Reflect::Registry::GetInstance()->GetClass( nodeType->GetInstanceType() );
+        for ( ; type->m_TypeID != Reflect::GetType<Luna::SceneNode>(); type = Reflect::Registry::GetInstance()->GetClass( type->m_Base ) )
+        {
+            HMS_TypeToSceneNodeTypeDumbPtr::iterator baseTypeSet = m_NodeTypesByType.find( type->m_TypeID );
+
+            // don't remove it until we are the last one, each base type is probably shared with other derivations
+            if (baseTypeSet->second.empty())
+            {
+                m_NodeTypesByType.erase( baseTypeSet );
+            }
+        }
     }
-  }
 
-  m_NodeTypeDeleted.Raise( nodeType.Ptr() );
+    m_NodeTypeDeleted.Raise( nodeType.Ptr() );
 }
 
 void Scene::AddObject( const SceneNodePtr& node )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  ClearHighlight( ClearHighlightArgs (false) );
+    ClearHighlight( ClearHighlightArgs (false) );
 
-  // (re)insert node into graph, this restores deleted downstream graph connections
-  V_SceneNodeDumbPtr insertedNodes;
-  insertedNodes.push_back( node );
-  node->Insert( m_Graph, insertedNodes );
+    // (re)insert node into graph, this restores deleted downstream graph connections
+    V_SceneNodeDumbPtr insertedNodes;
+    insertedNodes.push_back( node );
+    node->Insert( m_Graph, insertedNodes );
 
-  V_SceneNodeDumbPtr::const_iterator itr = insertedNodes.begin();
-  V_SceneNodeDumbPtr::const_iterator end = insertedNodes.end();
-  for ( ; itr != end; ++itr )
-  {
-    AddSceneNode( *itr );
-  }
+    V_SceneNodeDumbPtr::const_iterator itr = insertedNodes.begin();
+    V_SceneNodeDumbPtr::const_iterator end = insertedNodes.end();
+    for ( ; itr != end; ++itr )
+    {
+        AddSceneNode( *itr );
+    }
 }
 
 void Scene::RemoveObject( const SceneNodePtr& node )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  ClearHighlight( ClearHighlightArgs (false) );
+    ClearHighlight( ClearHighlightArgs (false) );
 
-  // prune node branch from the DG and Hierarchy
-  V_SceneNodeDumbPtr prunedNodes;
-  node->Prune( prunedNodes );
-  prunedNodes.push_back( node );
+    // prune node branch from the DG and Hierarchy
+    V_SceneNodeDumbPtr prunedNodes;
+    node->Prune( prunedNodes );
+    prunedNodes.push_back( node );
 
-  V_SceneNodeDumbPtr::const_iterator itr = prunedNodes.begin();
-  V_SceneNodeDumbPtr::const_iterator end = prunedNodes.end();
-  for ( ; itr != end; ++itr )
-  {
-    RemoveSceneNode( *itr );
-  }
+    V_SceneNodeDumbPtr::const_iterator itr = prunedNodes.begin();
+    V_SceneNodeDumbPtr::const_iterator end = prunedNodes.end();
+    for ( ; itr != end; ++itr )
+    {
+        RemoveSceneNode( *itr );
+    }
 }
 
 void Scene::AddSceneNode( const SceneNodePtr& node )
 {
-  {
-    LUNA_SCENE_SCOPE_TIMER( ("Insert in node list") );
-
-    // this would be bad
-    NOC_ASSERT( node->GetID() != UniqueID::TUID::Null );
-
-    Nocturnal::Insert<HM_SceneNodeDumbPtr>::Result inserted = m_Nodes.insert( HM_SceneNodeDumbPtr::value_type( node->GetID(), node ) );
-    NOC_ASSERT( inserted.first->second == node );
-    if ( !inserted.second )
     {
-      Console::Error( "Attempted to add a node with the same ID as one that already exists - %s ["TUID_HEX_FORMAT"].\n", node->GetName().c_str(), node->GetID() );
-      NOC_BREAK();
-    }
-  }
+        LUNA_SCENE_SCOPE_TIMER( ("Insert in node list") );
 
-  {
+        // this would be bad
+        NOC_ASSERT( node->GetID() != UID::TUID::Null );
 
-    Luna::SceneNodeType* t = node->GetNodeType();
-    if ( t == NULL )
-    {
-      LUNA_SCENE_SCOPE_TIMER( ("Deduce node type") );
-      t = node->DeduceNodeType();
+        Nocturnal::Insert<HM_SceneNodeDumbPtr>::Result inserted = m_Nodes.insert( HM_SceneNodeDumbPtr::value_type( node->GetID(), node ) );
+        NOC_ASSERT( inserted.first->second == node );
+        if ( !inserted.second )
+        {
+            Console::Error( "Attempted to add a node with the same ID as one that already exists - %s ["TUID_HEX_FORMAT"].\n", node->GetName().c_str(), node->GetID() );
+            NOC_BREAK();
+        }
     }
 
     {
-      LUNA_SCENE_SCOPE_TIMER( ("Add instance") );
-      t->AddInstance(node);
+
+        Luna::SceneNodeType* t = node->GetNodeType();
+        if ( t == NULL )
+        {
+            LUNA_SCENE_SCOPE_TIMER( ("Deduce node type") );
+            t = node->DeduceNodeType();
+        }
+
+        {
+            LUNA_SCENE_SCOPE_TIMER( ("Add instance") );
+            t->AddInstance(node);
+        }
     }
-  }
 
 
-  {
-    LUNA_SCENE_SCOPE_TIMER( ("Set name") );
-
-    // check name
-    SetName( node, node->GetName() );
-  }
-
-  {
-    LUNA_SCENE_SCOPE_TIMER( ("Create") );
-    // (re)creates disposable resources in object
-    node->Create();
-  }
-
-  {
-    LUNA_SCENE_SCOPE_TIMER( ("Hierarchy check") );
-    if ( node->HasType( Reflect::GetType<Luna::HierarchyNode>() ) )
     {
-      Luna::HierarchyNode* hierarchyNode = Reflect::DangerousCast< Luna::HierarchyNode >( node );
+        LUNA_SCENE_SCOPE_TIMER( ("Set name") );
 
-      if (hierarchyNode->GetParent() == NULL)
-      {
-        hierarchyNode->SetParent(m_Root);
-      }
+        // check name
+        SetName( node, node->GetName() );
     }
-  }
 
-  {
-    LUNA_SCENE_SCOPE_TIMER( ("Zone check") );
-    if ( node->HasType( Reflect::GetType<Zone>() ) )
     {
-      m_Zones.insert( Reflect::DangerousCast< Zone >( node ) );
+        LUNA_SCENE_SCOPE_TIMER( ("Create") );
+        // (re)creates disposable resources in object
+        node->Create();
     }
-  }
 
-  {
-    LUNA_SCENE_SCOPE_TIMER( ("Region check") ); 
-    if ( node->HasType( Reflect::GetType<Luna::Region>() ) )
     {
-      m_Regions.insert( Reflect::DangerousCast< Luna::Region >( node ) ); 
-    }
-  }
+        LUNA_SCENE_SCOPE_TIMER( ("Hierarchy check") );
+        if ( node->HasType( Reflect::GetType<Luna::HierarchyNode>() ) )
+        {
+            Luna::HierarchyNode* hierarchyNode = Reflect::DangerousCast< Luna::HierarchyNode >( node );
 
-  {
-    LUNA_SCENE_SCOPE_TIMER( ("Raise events if not transient") );
-    if ( !node->IsTransient() && !m_Importing )
-    {
-      m_NodeAdded.Raise( NodeChangeArgs( node.Ptr() ) );
+            if (hierarchyNode->GetParent() == NULL)
+            {
+                hierarchyNode->SetParent(m_Root);
+            }
+        }
     }
-  }
+
+    {
+        LUNA_SCENE_SCOPE_TIMER( ("Zone check") );
+        if ( node->HasType( Reflect::GetType<Zone>() ) )
+        {
+            m_Zones.insert( Reflect::DangerousCast< Zone >( node ) );
+        }
+    }
+
+    {
+        LUNA_SCENE_SCOPE_TIMER( ("Region check") ); 
+        if ( node->HasType( Reflect::GetType<Luna::Region>() ) )
+        {
+            m_Regions.insert( Reflect::DangerousCast< Luna::Region >( node ) ); 
+        }
+    }
+
+    {
+        LUNA_SCENE_SCOPE_TIMER( ("Raise events if not transient") );
+        if ( !node->IsTransient() && !m_Importing )
+        {
+            m_NodeAdded.Raise( NodeChangeArgs( node.Ptr() ) );
+        }
+    }
 }
 
 void Scene::RemoveSceneNode( const SceneNodePtr& node )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  if ( !node->IsTransient() )
-  {
-    m_NodeRemoving.Raise( NodeChangeArgs( node.Ptr() ) );
-  }
+    if ( !node->IsTransient() )
+    {
+        m_NodeRemoving.Raise( NodeChangeArgs( node.Ptr() ) );
+    }
 
-  // remove shortcuts to node and children
-  m_Nodes.erase( node->GetID() );
+    // remove shortcuts to node and children
+    m_Nodes.erase( node->GetID() );
 
-  if ( node->HasType( Reflect::GetType<Zone>() ) )
-  {
-    m_Zones.erase( Reflect::DangerousCast< Zone >( node ) );
-  }
+    if ( node->HasType( Reflect::GetType<Zone>() ) )
+    {
+        m_Zones.erase( Reflect::DangerousCast< Zone >( node ) );
+    }
 
-  if ( node->HasType( Reflect::GetType<Luna::Region>() ) )
-  {
-    m_Regions.erase( Reflect::DangerousCast< Luna::Region >( node ) ); 
-  }
+    if ( node->HasType( Reflect::GetType<Luna::Region>() ) )
+    {
+        m_Regions.erase( Reflect::DangerousCast< Luna::Region >( node ) ); 
+    }
 
-  Luna::SceneNodeType* t = node->GetNodeType();
-  if ( t == NULL )
-  {
-    t = node->DeduceNodeType();
-  }
+    Luna::SceneNodeType* t = node->GetNodeType();
+    if ( t == NULL )
+    {
+        t = node->DeduceNodeType();
+    }
 
-  t->RemoveInstance( node );
+    t->RemoveInstance( node );
 
-  // cleanup name
-  m_Names.erase( node->GetName() );
+    // cleanup name
+    m_Names.erase( node->GetName() );
 
-  // destroys disposable resources in object
-  node->Delete();
+    // destroys disposable resources in object
+    node->Delete();
 
-  if ( !node->IsTransient() )
-  {
-    m_NodeRemoved.Raise( NodeChangeArgs( node.Ptr() ) );
-  }
+    if ( !node->IsTransient() )
+    {
+        m_NodeRemoved.Raise( NodeChangeArgs( node.Ptr() ) );
+    }
 }
 
 void Scene::OnSceneNodeAdded( const NodeChangeArgs& args )
 {
-  m_VisibilityDB->ActivateNode( args.m_Node->GetID() ); 
+    m_VisibilityDB->ActivateNode( args.m_Node->GetID() ); 
 }
 
 void Scene::OnSceneNodeRemoved( const NodeChangeArgs& args )
 {
-  m_VisibilityDB->DeactivateNode( args.m_Node->GetID() ); 
+    m_VisibilityDB->DeactivateNode( args.m_Node->GetID() ); 
 }
 
 void Scene::Evaluate(bool silent)
 {
-  LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("") );
 
-  Luna::EvaluateResult result = m_Graph->EvaluateGraph(silent);
+    Luna::EvaluateResult result = m_Graph->EvaluateGraph(silent);
 
-  Statistics* stats = m_View->GetStatistics();
-  stats->m_EvaluateTime += result.m_TotalTime;
-  stats->m_NodeCount += result.m_NodeCount;
+    Statistics* stats = m_View->GetStatistics();
+    stats->m_EvaluateTime += result.m_TotalTime;
+    stats->m_NodeCount += result.m_NodeCount;
 }
 
 void Scene::Execute(bool interactively)
 {
-  LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_EVALUATE_SCOPE_TIMER( ("") );
 
-  // update data
-  Evaluate();
+    // update data
+    Evaluate();
 
-  // invalidate the view
-  m_View->Refresh();
+    // invalidate the view
+    m_View->Refresh();
 
-  if (interactively)
-  {
-    // paint 3d view
-    m_View->Update();
-  }
+    if (interactively)
+    {
+        // paint 3d view
+        m_View->Update();
+    }
 
-  m_Executed.Raise( ExecuteArgs (this, interactively) );
+    m_Executed.Raise( ExecuteArgs (this, interactively) );
 }
 
 void Scene::Create()
 {
-  for each ( HM_StrToSceneNodeTypeSmartPtr::value_type valType in m_NodeTypesByName )
-  {
-    const SceneNodeTypePtr& t = valType.second;
-    if ( t->HasType( Reflect::GetType<Luna::HierarchyNodeType>() ) )
+    for each ( HM_StrToSceneNodeTypeSmartPtr::value_type valType in m_NodeTypesByName )
     {
-      Luna::HierarchyNodeType* h = Reflect::DangerousCast< Luna::HierarchyNodeType >( t );
-      h->Create();
+        const SceneNodeTypePtr& t = valType.second;
+        if ( t->HasType( Reflect::GetType<Luna::HierarchyNodeType>() ) )
+        {
+            Luna::HierarchyNodeType* h = Reflect::DangerousCast< Luna::HierarchyNodeType >( t );
+            h->Create();
+        }
     }
-  }
 
-  for each ( HM_SceneNodeDumbPtr::value_type valType in m_Nodes )
-  {
-    Luna::SceneNode* n = valType.second;
-    n->Create();
-  }
+    for each ( HM_SceneNodeDumbPtr::value_type valType in m_Nodes )
+    {
+        Luna::SceneNode* n = valType.second;
+        n->Create();
+    }
 }
 
 void Scene::Delete()
 {
-  for each ( HM_StrToSceneNodeTypeSmartPtr::value_type dependNodeType in m_NodeTypesByName )
-  {
-    const SceneNodeTypePtr& t = dependNodeType.second;
-    if ( t->HasType( Reflect::GetType<Luna::HierarchyNodeType>() ) )
+    for each ( HM_StrToSceneNodeTypeSmartPtr::value_type dependNodeType in m_NodeTypesByName )
     {
-      Luna::HierarchyNodeType* h = Reflect::DangerousCast< Luna::HierarchyNodeType >( t );
+        const SceneNodeTypePtr& t = dependNodeType.second;
+        if ( t->HasType( Reflect::GetType<Luna::HierarchyNodeType>() ) )
+        {
+            Luna::HierarchyNodeType* h = Reflect::DangerousCast< Luna::HierarchyNodeType >( t );
 
-      h->Delete();
+            h->Delete();
+        }
     }
-  }
 
-  for each ( HM_SceneNodeDumbPtr::value_type dependNode in m_Nodes )
-  {
-    Luna::SceneNode* n = dependNode.second;
-    n->Delete();
-  }
+    for each ( HM_SceneNodeDumbPtr::value_type dependNode in m_Nodes )
+    {
+        Luna::SceneNode* n = dependNode.second;
+        n->Delete();
+    }
 }
 
 void Scene::Render( RenderVisitor* render ) const
 {
-  {
-    LUNA_SCENE_DRAW_SCOPE_TIMER( ("") );
-
-    HierarchyRenderTraverser renderTraverser ( render );
-
-    m_Root->TraverseHierarchy( &renderTraverser );
-  }
-
-  S_ZoneDumbPtr::const_iterator zoneItr = m_Zones.begin();
-  S_ZoneDumbPtr::const_iterator zoneEnd = m_Zones.end();
-  for ( ; zoneItr != zoneEnd; ++zoneItr )
-  {
-    Zone* zone = *zoneItr;
-    Luna::Scene* scene = m_Manager->GetScene( zone->GetPath() );
-    if ( scene )
     {
-      scene->Render( render );
+        LUNA_SCENE_DRAW_SCOPE_TIMER( ("") );
+
+        HierarchyRenderTraverser renderTraverser ( render );
+
+        m_Root->TraverseHierarchy( &renderTraverser );
     }
-  }
-}
 
-bool Scene::Pick( PickVisitor* pick, bool zones ) const
-{
-  size_t hitCount = pick->GetHits().size();
-
-  {
-    LUNA_SCENE_SCOPE_TIMER( ("") );
-
-    HierarchyPickTraverser pickTraverser ( pick );
-
-    m_Root->TraverseHierarchy ( &pickTraverser );
-  }
-
-  if ( zones )
-  {
     S_ZoneDumbPtr::const_iterator zoneItr = m_Zones.begin();
     S_ZoneDumbPtr::const_iterator zoneEnd = m_Zones.end();
     for ( ; zoneItr != zoneEnd; ++zoneItr )
     {
-      Zone* zone = *zoneItr;
-      Luna::Scene* scene = m_Manager->GetScene( zone->GetPath() );
-      if ( scene )
-      {
-        scene->Pick( pick );
-      }
+        Zone* zone = *zoneItr;
+        Luna::Scene* scene = m_Manager->GetScene( zone->GetPath() );
+        if ( scene )
+        {
+            scene->Render( render );
+        }
     }
-  }
+}
 
-  return pick->GetHits().size() > hitCount;
+bool Scene::Pick( PickVisitor* pick, bool zones ) const
+{
+    size_t hitCount = pick->GetHits().size();
+
+    {
+        LUNA_SCENE_SCOPE_TIMER( ("") );
+
+        HierarchyPickTraverser pickTraverser ( pick );
+
+        m_Root->TraverseHierarchy ( &pickTraverser );
+    }
+
+    if ( zones )
+    {
+        S_ZoneDumbPtr::const_iterator zoneItr = m_Zones.begin();
+        S_ZoneDumbPtr::const_iterator zoneEnd = m_Zones.end();
+        for ( ; zoneItr != zoneEnd; ++zoneItr )
+        {
+            Zone* zone = *zoneItr;
+            Luna::Scene* scene = m_Manager->GetScene( zone->GetPath() );
+            if ( scene )
+            {
+                scene->Pick( pick );
+            }
+        }
+    }
+
+    return pick->GetHits().size() > hitCount;
 }
 
 void Scene::Select( const SelectArgs& args )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  ClearHighlight( ClearHighlightArgs (false) );
+    ClearHighlight( ClearHighlightArgs (false) );
 
-  bool result = Pick(args.m_Pick, false);
+    bool result = Pick(args.m_Pick, false);
 
-  OS_SelectableDumbPtr selection;
+    OS_SelectableDumbPtr selection;
 
-  switch (args.m_Target)
-  {
-  case SelectionTargetModes::Single:
+    switch (args.m_Target)
     {
-      V_PickHitSmartPtr sorted;
-      PickHit::Sort( m_View->GetCamera(), args.m_Pick->GetHits(), sorted, PickSortTypes::Intersection);
-
-      V_PickHitSmartPtr::const_iterator itr = sorted.begin();
-      V_PickHitSmartPtr::const_iterator end = sorted.end();
-      for ( ; itr != end; ++itr )
-      {
-        Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
-        if (selectable)
+    case SelectionTargetModes::Single:
         {
-          // add it to the new selection list
-          selection.Append(selectable);
-          break;
-        }
-      }
-      break;
-    }
+            V_PickHitSmartPtr sorted;
+            PickHit::Sort( m_View->GetCamera(), args.m_Pick->GetHits(), sorted, PickSortTypes::Intersection);
 
-  case SelectionTargetModes::Multiple:
-    {
-      V_PickHitSmartPtr::const_iterator itr = args.m_Pick->GetHits().begin();
-      V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
-      for ( ; itr != end; ++itr )
-      {
-        Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
-        if (selectable)
+            V_PickHitSmartPtr::const_iterator itr = sorted.begin();
+            V_PickHitSmartPtr::const_iterator end = sorted.end();
+            for ( ; itr != end; ++itr )
+            {
+                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+                if (selectable)
+                {
+                    // add it to the new selection list
+                    selection.Append(selectable);
+                    break;
+                }
+            }
+            break;
+        }
+
+    case SelectionTargetModes::Multiple:
         {
-          // add it to the new selection list
-          selection.Append(selectable);
+            V_PickHitSmartPtr::const_iterator itr = args.m_Pick->GetHits().begin();
+            V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
+            for ( ; itr != end; ++itr )
+            {
+                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+                if (selectable)
+                {
+                    // add it to the new selection list
+                    selection.Append(selectable);
+                }
+            }
+            break;
         }
-      }
-      break;
-    }
-  }
-
-  if (m_Tool && !m_Tool->ValidateSelection (selection))
-  {
-    return;
-  }
-
-  switch(args.m_Mode)
-  {
-  case SelectionModes::Replace:
-    {
-      Push( m_Selection.SetItems(selection) );
-      break;
     }
 
-  case SelectionModes::Add:
+    if (m_Tool && !m_Tool->ValidateSelection (selection))
     {
-      Push( m_Selection.AddItems(selection) );
-      break;
+        return;
     }
 
-  case SelectionModes::Remove:
+    switch(args.m_Mode)
     {
-      Push( m_Selection.RemoveItems (selection) );
-      break;
-    }
-
-  case SelectionModes::Toggle:
-    {
-      OS_SelectableDumbPtr newSelection = m_Selection.GetItems();
-      OS_SelectableDumbPtr::Iterator itr = selection.Begin();
-      OS_SelectableDumbPtr::Iterator end = selection.End();
-      for ( ; itr != end; ++itr )
-      {
-        if ( (*itr)->IsSelected() )
+    case SelectionModes::Replace:
         {
-          newSelection.Remove( *itr );
+            Push( m_Selection.SetItems(selection) );
+            break;
         }
-        else
-        {
-          newSelection.Append( *itr );
-        }
-      }
 
-      Push( m_Selection.SetItems(newSelection) );
+    case SelectionModes::Add:
+        {
+            Push( m_Selection.AddItems(selection) );
+            break;
+        }
+
+    case SelectionModes::Remove:
+        {
+            Push( m_Selection.RemoveItems (selection) );
+            break;
+        }
+
+    case SelectionModes::Toggle:
+        {
+            OS_SelectableDumbPtr newSelection = m_Selection.GetItems();
+            OS_SelectableDumbPtr::Iterator itr = selection.Begin();
+            OS_SelectableDumbPtr::Iterator end = selection.End();
+            for ( ; itr != end; ++itr )
+            {
+                if ( (*itr)->IsSelected() )
+                {
+                    newSelection.Remove( *itr );
+                }
+                else
+                {
+                    newSelection.Append( *itr );
+                }
+            }
+
+            Push( m_Selection.SetItems(newSelection) );
+        }
     }
-  }
 }
 
 void Scene::PickLink( const Inspect::PickLinkArgs& args )
 {
-  m_BusyCursorChanged.Raise(wxCURSOR_BULLSEYE);
-  m_PickData = args.m_Data;
+    m_BusyCursorChanged.Raise(wxCURSOR_BULLSEYE);
+    m_PickData = args.m_Data;
 }
 
 void Scene::SelectLink( const Inspect::SelectLinkArgs& args )
 {
-  Luna::SceneNode* o = FindNode( args.m_ID );
+    Luna::SceneNode* o = FindNode( args.m_ID );
 
-  if ( o == NULL )
-  {
-    UniqueID::TUID id;
-    if (id.FromString(args.m_ID))
+    if ( o == NULL )
     {
-      HM_SceneNodeDumbPtr::const_iterator found = m_Nodes.find( id );
-      if (found != m_Nodes.end())
-      {
-        o = found->second;
-      }
+        UID::TUID id;
+        if (id.FromString(args.m_ID))
+        {
+            HM_SceneNodeDumbPtr::const_iterator found = m_Nodes.find( id );
+            if (found != m_Nodes.end())
+            {
+                o = found->second;
+            }
+        }
     }
-  }
 
-  if ( o == NULL )
-  {
-    return;
-  }
+    if ( o == NULL )
+    {
+        return;
+    }
 
-  Luna::Layer* layer = Reflect::ObjectCast<Luna::Layer>( o );
+    Luna::Layer* layer = Reflect::ObjectCast<Luna::Layer>( o );
 
-  if ( layer )
-  {
-    m_Selection.SetItems( layer->GetMembers() );
-  }
-  else
-  {
-    m_Selection.SetItem( o );
-  }
+    if ( layer )
+    {
+        m_Selection.SetItems( layer->GetMembers() );
+    }
+    else
+    {
+        m_Selection.SetItem( o );
+    }
 }
 
 void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 {
-  std::string str;
+    std::string str;
 
-  if ( args.m_Items.empty() )
-  {
-    UniqueID::TUID::Null.ToString(str);
-    args.m_Items.push_back( Inspect::Item ("NULL", str) );
-  }
-
-  std::string suffix;
-
-  if ( !m_Manager->IsCurrentScene( this ) )
-  {
-    suffix = m_File->GetFileName();
-    FileSystem::StripExtension( suffix );
-    suffix = std::string (" (") + suffix + ")";
-  }
-
-  switch (args.m_Type)
-  {
-
-    //
-    // Everything else is an internal type
-    //
-
-  default:
+    if ( args.m_Items.empty() )
     {
-      //
-      // Map engine internal type to luna internal type
-      //
-
-      i32 typeID = -1;
-
-      switch (args.m_Type)
-      {
-      default:
-        {
-          // all the nodes
-          typeID = Reflect::GetType<Luna::SceneNode>();
-          break;
-        }
-      }
-
-      HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( typeID );
-      if (found != m_NodeTypesByType.end())
-      {
-        S_SceneNodeTypeDumbPtr::const_iterator itr = found->second.begin();
-        S_SceneNodeTypeDumbPtr::const_iterator end = found->second.end();
-        for ( ; itr != end; ++itr )
-        {
-          HM_SceneNodeSmartPtr::const_iterator nodeItr = (*itr)->GetInstances().begin();
-          HM_SceneNodeSmartPtr::const_iterator nodeEnd = (*itr)->GetInstances().end();
-          for ( ; nodeItr != nodeEnd; ++nodeItr )
-          {
-            nodeItr->second->GetID().ToString(str);
-            args.m_Items.push_back( Inspect::Item (nodeItr->second->GetName() + suffix, str) );
-          }
-        }
-      }
-      break;
+        UID::TUID null;
+        null.ToString(str);
+        args.m_Items.push_back( Inspect::Item ("NULL", str) );
     }
-  }
+
+    std::string suffix;
+
+    if ( !m_Manager->IsCurrentScene( this ) )
+    {
+        suffix = m_File->GetFileName();
+        FileSystem::StripExtension( suffix );
+        suffix = std::string (" (") + suffix + ")";
+    }
+
+    switch (args.m_Type)
+    {
+
+        //
+        // Everything else is an internal type
+        //
+
+    default:
+        {
+            //
+            // Map engine internal type to luna internal type
+            //
+
+            i32 typeID = -1;
+
+            switch (args.m_Type)
+            {
+            default:
+                {
+                    // all the nodes
+                    typeID = Reflect::GetType<Luna::SceneNode>();
+                    break;
+                }
+            }
+
+            HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( typeID );
+            if (found != m_NodeTypesByType.end())
+            {
+                S_SceneNodeTypeDumbPtr::const_iterator itr = found->second.begin();
+                S_SceneNodeTypeDumbPtr::const_iterator end = found->second.end();
+                for ( ; itr != end; ++itr )
+                {
+                    HM_SceneNodeSmartPtr::const_iterator nodeItr = (*itr)->GetInstances().begin();
+                    HM_SceneNodeSmartPtr::const_iterator nodeEnd = (*itr)->GetInstances().end();
+                    for ( ; nodeItr != nodeEnd; ++nodeItr )
+                    {
+                        nodeItr->second->GetID().ToString(str);
+                        args.m_Items.push_back( Inspect::Item (nodeItr->second->GetName() + suffix, str) );
+                    }
+                }
+            }
+            break;
+        }
+    }
 }
 
 void Scene::SetHighlight(const SetHighlightArgs& args)
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  ClearHighlight( ClearHighlightArgs (false) );
+    ClearHighlight( ClearHighlightArgs (false) );
 
-  if (args.m_Pick == NULL)
-    return;
+    if (args.m_Pick == NULL)
+        return;
 
-  OS_SelectableDumbPtr selection;
+    OS_SelectableDumbPtr selection;
 
-  bool result = Pick(args.m_Pick, false);
+    bool result = Pick(args.m_Pick, false);
 
-  switch (args.m_Target)
-  {
-  case SelectionTargetModes::Single:
+    switch (args.m_Target)
     {
-      V_PickHitSmartPtr sorted;
-      PickHit::Sort( m_View->GetCamera(), args.m_Pick->GetHits(), sorted, PickSortTypes::Intersection);
-
-      V_PickHitSmartPtr::const_iterator itr = sorted.begin();
-      V_PickHitSmartPtr::const_iterator end = sorted.end();
-      for ( ; itr != end; ++itr )
-      {
-        Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
-        if (selectable)
+    case SelectionTargetModes::Single:
         {
-          // add it to the new selection list
-          selection.Append(selectable);
-          break;
-        }
+            V_PickHitSmartPtr sorted;
+            PickHit::Sort( m_View->GetCamera(), args.m_Pick->GetHits(), sorted, PickSortTypes::Intersection);
+
+            V_PickHitSmartPtr::const_iterator itr = sorted.begin();
+            V_PickHitSmartPtr::const_iterator end = sorted.end();
+            for ( ; itr != end; ++itr )
+            {
+                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+                if (selectable)
+                {
+                    // add it to the new selection list
+                    selection.Append(selectable);
+                    break;
+                }
 
 #ifdef NOC_ASSERT_ENABLED
-        SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetObject() );
-        if (node)
-        {
-          NOC_ASSERT( node->GetScene() == this );
-        }
+                SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetObject() );
+                if (node)
+                {
+                    NOC_ASSERT( node->GetScene() == this );
+                }
 #endif
-      }
-      break;
-    }
-
-  case SelectionTargetModes::Multiple:
-    {
-      V_PickHitSmartPtr::const_iterator itr = args.m_Pick->GetHits().begin();
-      V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
-      for ( ; itr != end; ++itr )
-      {
-        Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
-        if (selectable)
-        {
-          // add it to the new selection list
-          selection.Append(selectable);
+            }
+            break;
         }
+
+    case SelectionTargetModes::Multiple:
+        {
+            V_PickHitSmartPtr::const_iterator itr = args.m_Pick->GetHits().begin();
+            V_PickHitSmartPtr::const_iterator end = args.m_Pick->GetHits().end();
+            for ( ; itr != end; ++itr )
+            {
+                Selectable* selectable = Reflect::ObjectCast<Selectable>((*itr)->GetObject());
+                if (selectable)
+                {
+                    // add it to the new selection list
+                    selection.Append(selectable);
+                }
 
 #ifdef NOC_ASSERT_ENABLED
-        SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetObject() );
+                SceneNode* node = Reflect::ObjectCast<SceneNode>( (*itr)->GetObject() );
+                if (node)
+                {
+                    NOC_ASSERT( node->GetScene() == this );
+                }
+#endif
+            }
+            break;
+        }
+    }
+
+    if (m_Tool && !m_Tool->ValidateSelection (selection) )
+    {
+        return;
+    }
+
+    m_Highlighted = selection;
+
+    Luna::HierarchyNode* first = NULL;
+    OS_SelectableDumbPtr::Iterator itr = m_Highlighted.Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Highlighted.End();
+    for ( ; itr != end; ++itr )
+    {
+        Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(*itr);
+
         if (node)
         {
-          NOC_ASSERT( node->GetScene() == this );
+            if ( !first )
+            {
+                first = node;
+            }
+
+            node->SetHighlighted(true);
         }
-#endif
-      }
-      break;
     }
-  }
 
-  if (m_Tool && !m_Tool->ValidateSelection (selection) )
-  {
-    return;
-  }
-
-  m_Highlighted = selection;
-
-  Luna::HierarchyNode* first = NULL;
-  OS_SelectableDumbPtr::Iterator itr = m_Highlighted.Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Highlighted.End();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(*itr);
-
-    if (node)
+    if (m_Highlighted.Size() == 1)
     {
-      if ( !first )
-      {
-        first = node;
-      }
+        std::string status = first->GetName();
+        std::string desc = first->GetDescription();
 
-      node->SetHighlighted(true);
+        if (!desc.empty())
+        {
+            status += std::string (" (") + desc + ")";
+        }
+
+        m_StatusChanged.Raise( status );
     }
-  }
-
-  if (m_Highlighted.Size() == 1)
-  {
-    std::string status = first->GetName();
-    std::string desc = first->GetDescription();
-
-    if (!desc.empty())
+    else if (m_Highlighted.Size() > 1)
     {
-      status += std::string (" (") + desc + ")";
+        std::ostringstream str;
+        str << m_Highlighted.Size() << " items";
+        m_StatusChanged.Raise( str.str() );
     }
-
-    m_StatusChanged.Raise( status );
-  }
-  else if (m_Highlighted.Size() > 1)
-  {
-    std::ostringstream str;
-    str << m_Highlighted.Size() << " items";
-    m_StatusChanged.Raise( str.str() );
-  }
 }
 
 void Scene::ClearHighlight( const ClearHighlightArgs& args )
 {
-  OS_SelectableDumbPtr::Iterator itr = m_Highlighted.Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Highlighted.End();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(*itr);
-
-    if (node)
+    OS_SelectableDumbPtr::Iterator itr = m_Highlighted.Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Highlighted.End();
+    for ( ; itr != end; ++itr )
     {
-      node->SetHighlighted (false);
+        Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(*itr);
+
+        if (node)
+        {
+            node->SetHighlighted (false);
+        }
     }
-  }
 
-  m_Highlighted.Clear();
+    m_Highlighted.Clear();
 
-  if ( args.m_Update )
-  {
-    Execute(false);
-  }
+    if ( args.m_Update )
+    {
+        Execute(false);
+    }
 }
 
 bool Scene::Push(const Undo::CommandPtr& command)
 {
-  if (!command.ReferencesObject())
-  {
-    // allow the null change
+    if (!command.ReferencesObject())
+    {
+        // allow the null change
+        return true;
+    }
+
+    if (command->IsSignificant() && !IsEditable())
+    {
+        // we are significant and not editable, abort operation
+        command->Undo();
+
+        // we aborted, restore state if necessary
+        return false;
+    }
+
+    m_UndoQueue.Push(command);
+    m_Manager->Push( &m_UndoQueue );
+
+    // change committed
     return true;
-  }
-
-  if (command->IsSignificant() && !IsEditable())
-  {
-    // we are significant and not editable, abort operation
-    command->Undo();
-
-    // we aborted, restore state if necessary
-    return false;
-  }
-
-  m_UndoQueue.Push(command);
-  m_Manager->Push( &m_UndoQueue );
-
-  // change committed
-  return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2137,12 +2139,12 @@ bool Scene::Push(const Undo::CommandPtr& command)
 // 
 bool Scene::UndoingOrRedoing( const Undo::QueueChangeArgs& args )
 {
-  bool allow = true;
-  if ( args.m_Command->IsSignificant() )
-  {
-    allow = IsEditable();
-  }
-  return allow;
+    bool allow = true;
+    if ( args.m_Command->IsSignificant() )
+    {
+        allow = IsEditable();
+    }
+    return allow;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2151,156 +2153,156 @@ bool Scene::UndoingOrRedoing( const Undo::QueueChangeArgs& args )
 // 
 void Scene::UndoQueueCommandPushed( const Undo::QueueChangeArgs& args )
 {
-  if ( args.m_Command->IsSignificant() )
-  {
-    m_File->SetModified( true );
-  }
+    if ( args.m_Command->IsSignificant() )
+    {
+        m_File->SetModified( true );
+    }
 }
 
-Luna::SceneNode* Scene::FindNode(const UniqueID::TUID& id)
+Luna::SceneNode* Scene::FindNode(const UID::TUID& id)
 {
-  Luna::SceneNode* node = NULL;
+    Luna::SceneNode* node = NULL;
 
-  // 
-  // Guid
-  // 
+    // 
+    // Guid
+    // 
 
-  HM_SceneNodeDumbPtr::const_iterator findGuid = m_Nodes.find( id );
-  if ( findGuid != m_Nodes.end() )
-  {
-    node = findGuid->second;
-  }
-  else if ( m_RemappedIDs.size() > 0 )
-  {
-    // Immediately after an import, there may be some remapped IDs that 
-    // can be searched to find the node.
-    UniqueID::HM_TUID::const_iterator findRemap = m_RemappedIDs.find( id );
-    if ( findRemap != m_RemappedIDs.end() )
+    HM_SceneNodeDumbPtr::const_iterator findGuid = m_Nodes.find( id );
+    if ( findGuid != m_Nodes.end() )
     {
-      HM_SceneNodeDumbPtr::const_iterator findRepeat = m_Nodes.find( findRemap->second );
-      if ( findRepeat != m_Nodes.end() )
-      {
-        node = findRepeat->second;
-      }
+        node = findGuid->second;
     }
-  }
+    else if ( m_RemappedIDs.size() > 0 )
+    {
+        // Immediately after an import, there may be some remapped IDs that 
+        // can be searched to find the node.
+        UID::HM_TUID::const_iterator findRemap = m_RemappedIDs.find( id );
+        if ( findRemap != m_RemappedIDs.end() )
+        {
+            HM_SceneNodeDumbPtr::const_iterator findRepeat = m_Nodes.find( findRemap->second );
+            if ( findRepeat != m_Nodes.end() )
+            {
+                node = findRepeat->second;
+            }
+        }
+    }
 
-  return node;
+    return node;
 }
 
 Luna::SceneNode* Scene::FindNode(const std::string& name)
 {
-  Luna::SceneNode* node = NULL;
+    Luna::SceneNode* node = NULL;
 
-  // 
-  // Name
-  // 
+    // 
+    // Name
+    // 
 
-  HM_NameToSceneNodeDumbPtr::const_iterator findName = m_Names.find( name );
-  if ( findName != m_Names.end() )
-  {
-    node = findName->second;
-  }
+    HM_NameToSceneNodeDumbPtr::const_iterator findName = m_Names.find( name );
+    if ( findName != m_Names.end() )
+    {
+        node = findName->second;
+    }
 
-  return node;
+    return node;
 }
 
 void Scene::ChangeStatus(const std::string& status)
 {
-  m_StatusChanged.Raise( status );
+    m_StatusChanged.Raise( status );
 }
 
 void Scene::RefreshSelection()
 {
-  m_Selection.Refresh();
+    m_Selection.Refresh();
 }
 
 bool Scene::PropertyChanging( const Inspect::ChangingArgs& args )
 {
-  m_Manager->FreezeTreeSorting();
+    m_Manager->FreezeTreeSorting();
 
-  if ( args.m_Preview )
-  {
-    return true;
-  }
-
-  if ( args.m_Control->GetData().ReferencesObject() )
-  {
-    Undo::CommandPtr command = args.m_Control->GetData()->GetUndoCommand();
-
-    if ( command )
+    if ( args.m_Preview )
     {
-      return Push( command );
+        return true;
     }
-  }
 
-  return IsEditable();
+    if ( args.m_Control->GetData().ReferencesObject() )
+    {
+        Undo::CommandPtr command = args.m_Control->GetData()->GetUndoCommand();
+
+        if ( command )
+        {
+            return Push( command );
+        }
+    }
+
+    return IsEditable();
 }
 
 void Scene::PropertyChanged( const Inspect::ChangeArgs& args )
 {
-  Execute(false);
-  m_Manager->ThawTreeSorting();
+    Execute(false);
+    m_Manager->ThawTreeSorting();
 }
 
 bool Scene::SelectionChanging(const OS_SelectableDumbPtr& selection)
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  bool result = true;
+    bool result = true;
 
-  if (m_PickData.ReferencesObject())
-  {
-    if (!selection.Empty())
+    if (m_PickData.ReferencesObject())
     {
-      Luna::SceneNode* node = Reflect::ObjectCast<Luna::SceneNode>( selection.Front() );
-
-      if (node)
-      {
-        std::string str;
-        node->GetID().ToString(str);
-
-        // set the picked object ID
-        Inspect::StringData* data = Inspect::CastData< Inspect::StringData, Inspect::DataTypes::String >( m_PickData );
-        if ( data && Push( data->GetUndoCommand() ) )
+        if (!selection.Empty())
         {
-          data->Set( str );
+            Luna::SceneNode* node = Reflect::ObjectCast<Luna::SceneNode>( selection.Front() );
+
+            if (node)
+            {
+                std::string str;
+                node->GetID().ToString(str);
+
+                // set the picked object ID
+                Inspect::StringData* data = Inspect::CastData< Inspect::StringData, Inspect::DataTypes::String >( m_PickData );
+                if ( data && Push( data->GetUndoCommand() ) )
+                {
+                    data->Set( str );
+                }
+
+                // eat the selection
+                result = false;
+
+                // refresh the attributes
+                Execute(false);
+            }
         }
 
-        // eat the selection
-        result = false;
-
-        // refresh the attributes
-        Execute(false);
-      }
+        m_BusyCursorChanged.Raise(wxCURSOR_ARROW);
+        m_PickData = NULL;
     }
 
-    m_BusyCursorChanged.Raise(wxCURSOR_ARROW);
-    m_PickData = NULL;
-  }
-
-  return result;
+    return result;
 }
 
 void Scene::SelectionChanged(const OS_SelectableDumbPtr& selection)
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  m_ValidSmartDuplicateMatrix = false;
+    m_ValidSmartDuplicateMatrix = false;
 
-  std::ostringstream str;
-  if ( selection.Empty() )
-  {
-    str << "Selection cleared";
-  }
-  else
-  {
-    str << "Selected " << selection.Size() << " objects";
-  }
-  
-  m_StatusChanged.Raise( str.str() );
+    std::ostringstream str;
+    if ( selection.Empty() )
+    {
+        str << "Selection cleared";
+    }
+    else
+    {
+        str << "Selected " << selection.Size() << " objects";
+    }
 
-  Execute(false);
+    m_StatusChanged.Raise( str.str() );
+
+    Execute(false);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2308,13 +2310,13 @@ void Scene::SelectionChanged(const OS_SelectableDumbPtr& selection)
 // 
 void Scene::CurrentSceneChanging( const SceneChangeArgs& args )
 {
-  if ( args.m_Scene == this )
-  {
-    // This scene is not going to be the current one, tell the collection
-    // manager to stop displaying this collection.
+    if ( args.m_Scene == this )
+    {
+        // This scene is not going to be the current one, tell the collection
+        // manager to stop displaying this collection.
 #pragma TODO( "reimplemnent without GlobalBrowser" )
-      //    GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->DeleteCollection( m_SelectedEntityCollection );
-  }
+        //    GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->DeleteCollection( m_SelectedEntityCollection );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2322,11 +2324,11 @@ void Scene::CurrentSceneChanging( const SceneChangeArgs& args )
 // 
 void Scene::CurrentSceneChanged( const SceneChangeArgs& args )
 {
-  if ( args.m_Scene == this )
-  {
+    if ( args.m_Scene == this )
+    {
 #pragma TODO( "reimplemnent without GlobalBrowser" )
-    //GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->AddCollection( m_SelectedEntityCollection );
-  }
+        //GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->AddCollection( m_SelectedEntityCollection );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2335,173 +2337,173 @@ void Scene::CurrentSceneChanged( const SceneChangeArgs& args )
 // 
 Luna::HierarchyNode* Scene::GetCommonParent( const V_HierarchyNodeDumbPtr& nodes )
 {
-  Luna::HierarchyNode* commonParent = NULL;
+    Luna::HierarchyNode* commonParent = NULL;
 
-  for each ( Luna::HierarchyNode* node in nodes )
-  {
-    Luna::HierarchyNode* currentParent = node->GetParent();
-    if ( !commonParent )
+    for each ( Luna::HierarchyNode* node in nodes )
     {
-      // First time through the loop, just use the current parent
-      commonParent = currentParent;
-    }
-    else
-    {
-      // Only need to do additional work if the current parent does not match
-      if ( currentParent != commonParent )
-      {
-        // Iterate up the hierarchy looking for the first node that is an ancestor
-        // to the "common parent" so far and the current node.
-        bool found = false;
-        Luna::HierarchyNode* parent = commonParent;
-        Luna::HierarchyNode* searchNode = node;
-        while ( !found && parent )
+        Luna::HierarchyNode* currentParent = node->GetParent();
+        if ( !commonParent )
         {
-          Luna::HierarchyNode* searchParent = searchNode;
-          while ( !found && searchParent )
-          {
-            if ( searchParent == parent )
-            {
-              commonParent = parent;
-              found = true;
-            }
-
-            searchParent = searchParent->GetParent();
-          }
-          parent = parent->GetParent();
+            // First time through the loop, just use the current parent
+            commonParent = currentParent;
         }
-      }
+        else
+        {
+            // Only need to do additional work if the current parent does not match
+            if ( currentParent != commonParent )
+            {
+                // Iterate up the hierarchy looking for the first node that is an ancestor
+                // to the "common parent" so far and the current node.
+                bool found = false;
+                Luna::HierarchyNode* parent = commonParent;
+                Luna::HierarchyNode* searchNode = node;
+                while ( !found && parent )
+                {
+                    Luna::HierarchyNode* searchParent = searchNode;
+                    while ( !found && searchParent )
+                    {
+                        if ( searchParent == parent )
+                        {
+                            commonParent = parent;
+                            found = true;
+                        }
+
+                        searchParent = searchParent->GetParent();
+                    }
+                    parent = parent->GetParent();
+                }
+            }
+        }
     }
-  }
 
 #pragma TODO("This should probably return NULL if commonParent == m_Root")
-  return commonParent;
+    return commonParent;
 }
 
 void Scene::GetCommonParents( const V_HierarchyNodeDumbPtr& nodes, V_HierarchyNodeDumbPtr& parents )
 {
-  parents.clear();
+    parents.clear();
 
-  // for each candidate item we want to test that has no other parent in the list
-  V_HierarchyNodeDumbPtr::const_iterator outerItr = nodes.begin();
-  V_HierarchyNodeDumbPtr::const_iterator outerEnd = nodes.end();
-  for ( ; outerItr != outerEnd; ++outerItr )
-  {
-    Luna::HierarchyNode* outer = *outerItr;
-
-    if ( !outer )
+    // for each candidate item we want to test that has no other parent in the list
+    V_HierarchyNodeDumbPtr::const_iterator outerItr = nodes.begin();
+    V_HierarchyNodeDumbPtr::const_iterator outerEnd = nodes.end();
+    for ( ; outerItr != outerEnd; ++outerItr )
     {
-      continue;
-    }
+        Luna::HierarchyNode* outer = *outerItr;
 
-    // are we the child of another node in the selection?
-    bool childNode = false;
-
-    // start walking up the hierarchy starting from my parent
-    Luna::HierarchyNode* parent = outer->GetParent();
-
-    // while we haven't hit the root
-    while ( parent != m_Root )
-    {
-      // check each item in the selection, looking for a match to 'parent'
-      V_HierarchyNodeDumbPtr::const_iterator innerItr = nodes.begin();
-      V_HierarchyNodeDumbPtr::const_iterator innerEnd = nodes.end();
-      for ( ; innerItr != innerEnd; ++innerItr )
-      {
-        Luna::HierarchyNode* inner = *innerItr;
-
-        if ( !inner )
+        if ( !outer )
         {
-          continue;
+            continue;
         }
 
-        // if we found our parent
-        if ( parent == inner )
+        // are we the child of another node in the selection?
+        bool childNode = false;
+
+        // start walking up the hierarchy starting from my parent
+        Luna::HierarchyNode* parent = outer->GetParent();
+
+        // while we haven't hit the root
+        while ( parent != m_Root )
         {
-          // our outer node is a child of another selection node
-          childNode = true;
+            // check each item in the selection, looking for a match to 'parent'
+            V_HierarchyNodeDumbPtr::const_iterator innerItr = nodes.begin();
+            V_HierarchyNodeDumbPtr::const_iterator innerEnd = nodes.end();
+            for ( ; innerItr != innerEnd; ++innerItr )
+            {
+                Luna::HierarchyNode* inner = *innerItr;
+
+                if ( !inner )
+                {
+                    continue;
+                }
+
+                // if we found our parent
+                if ( parent == inner )
+                {
+                    // our outer node is a child of another selection node
+                    childNode = true;
+                }
+            }
+
+            // walk up the hierarchy
+            NOC_ASSERT (parent);
+            parent = parent->GetParent();
         }
-      }
 
-      // walk up the hierarchy
-      NOC_ASSERT (parent);
-      parent = parent->GetParent();
+        // if we did not find a parent in the selection
+        if ( !childNode )
+        {
+            // add it to the list of parent nodes
+            parents.push_back( *outerItr );
+        }
     }
-
-    // if we did not find a parent in the selection
-    if ( !childNode )
-    {
-      // add it to the list of parent nodes
-      parents.push_back( *outerItr );
-    }
-  }
 }
 
 void Scene::GetSelectionParents(OS_SelectableDumbPtr& parents)
 {
-  parents.Clear();
+    parents.Clear();
 
-  // for each candidate item we want to test that has no other parent in the list
-  OS_SelectableDumbPtr::Iterator outerItr = m_Selection.GetItems().Begin();
-  OS_SelectableDumbPtr::Iterator outerEnd = m_Selection.GetItems().End();
-  for ( ; outerItr != outerEnd; ++outerItr )
-  {
-    Luna::HierarchyNode* outer = Reflect::ObjectCast< Luna::HierarchyNode > (*outerItr);
-
-    if ( !outer )
+    // for each candidate item we want to test that has no other parent in the list
+    OS_SelectableDumbPtr::Iterator outerItr = m_Selection.GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator outerEnd = m_Selection.GetItems().End();
+    for ( ; outerItr != outerEnd; ++outerItr )
     {
-      continue;
-    }
+        Luna::HierarchyNode* outer = Reflect::ObjectCast< Luna::HierarchyNode > (*outerItr);
 
-    // are we the child of another node in the selection?
-    bool childNode = false;
-
-    // start walking up the hierarchy starting from my parent
-    Luna::HierarchyNode* parent = outer->GetParent();
-    NOC_ASSERT( parent );
-
-    // while we haven't hit the root
-    while ( parent && parent != m_Root && !childNode )
-    {
-      // check each item in the selection, looking for a match to 'parent'
-      OS_SelectableDumbPtr::Iterator innerItr = m_Selection.GetItems().Begin();
-      OS_SelectableDumbPtr::Iterator innerEnd = m_Selection.GetItems().End();
-      for ( ; innerItr != innerEnd; ++innerItr )
-      {
-        Luna::HierarchyNode* inner = Reflect::ObjectCast< Luna::HierarchyNode > (*innerItr);
-
-        if ( !inner )
+        if ( !outer )
         {
-          continue;
+            continue;
         }
 
-        // if we found our parent
-        if ( parent == inner )
+        // are we the child of another node in the selection?
+        bool childNode = false;
+
+        // start walking up the hierarchy starting from my parent
+        Luna::HierarchyNode* parent = outer->GetParent();
+        NOC_ASSERT( parent );
+
+        // while we haven't hit the root
+        while ( parent && parent != m_Root && !childNode )
         {
-          // our outer node is a child of another selection node
-          childNode = true;
-          break;
+            // check each item in the selection, looking for a match to 'parent'
+            OS_SelectableDumbPtr::Iterator innerItr = m_Selection.GetItems().Begin();
+            OS_SelectableDumbPtr::Iterator innerEnd = m_Selection.GetItems().End();
+            for ( ; innerItr != innerEnd; ++innerItr )
+            {
+                Luna::HierarchyNode* inner = Reflect::ObjectCast< Luna::HierarchyNode > (*innerItr);
+
+                if ( !inner )
+                {
+                    continue;
+                }
+
+                // if we found our parent
+                if ( parent == inner )
+                {
+                    // our outer node is a child of another selection node
+                    childNode = true;
+                    break;
+                }
+            }
+
+            // walk up the hierarchy
+            if ( parent )
+            {
+                parent = parent->GetParent();
+            }
+            else
+            {
+                NOC_BREAK();
+            }
         }
-      }
 
-      // walk up the hierarchy
-      if ( parent )
-      {
-        parent = parent->GetParent();
-      }
-      else
-      {
-        NOC_BREAK();
-      }
+        // if we did not find a parent in the selection
+        if ( !childNode )
+        {
+            // add it to the list of parent nodes
+            parents.Append( *outerItr );
+        }
     }
-
-    // if we did not find a parent in the selection
-    if ( !childNode )
-    {
-      // add it to the list of parent nodes
-      parents.Append( *outerItr );
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2509,31 +2511,31 @@ void Scene::GetSelectionParents(OS_SelectableDumbPtr& parents)
 //
 void Scene::GetFlattenedSelection(OS_SelectableDumbPtr& selection)
 {
-  selection.Clear();
+    selection.Clear();
 
-  const OS_SelectableDumbPtr& selectedItems = m_Selection.GetItems();
-  OS_SelectableDumbPtr::Iterator it = selectedItems.Begin();
-  OS_SelectableDumbPtr::Iterator end = selectedItems.End();
-  for ( ; it != end; ++it )
-  {
-    const LSelectablePtr& selectable = *it;
-
-    selection.Append( selectable );
-
-    Luna::PivotTransform* group = Reflect::ObjectCast< Luna::PivotTransform >( selectable );
-    if ( group )
+    const OS_SelectableDumbPtr& selectedItems = m_Selection.GetItems();
+    OS_SelectableDumbPtr::Iterator it = selectedItems.Begin();
+    OS_SelectableDumbPtr::Iterator end = selectedItems.End();
+    for ( ; it != end; ++it )
     {
-      S_HierarchyNodeDumbPtr items;
-      GetFlattenedHierarchy( group, items );
+        const LSelectablePtr& selectable = *it;
 
-      S_HierarchyNodeDumbPtr::const_iterator itemIt = items.begin();
-      S_HierarchyNodeDumbPtr::const_iterator itemEnd = items.end();
-      for ( ; itemIt != itemEnd; ++itemIt )
-      {
-        selection.Append( *itemIt );
-      }
+        selection.Append( selectable );
+
+        Luna::PivotTransform* group = Reflect::ObjectCast< Luna::PivotTransform >( selectable );
+        if ( group )
+        {
+            S_HierarchyNodeDumbPtr items;
+            GetFlattenedHierarchy( group, items );
+
+            S_HierarchyNodeDumbPtr::const_iterator itemIt = items.begin();
+            S_HierarchyNodeDumbPtr::const_iterator itemEnd = items.end();
+            for ( ; itemIt != itemEnd; ++itemIt )
+            {
+                selection.Append( *itemIt );
+            }
+        }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2541,63 +2543,63 @@ void Scene::GetFlattenedSelection(OS_SelectableDumbPtr& selection)
 //
 void Scene::GetFlattenedHierarchy(Luna::HierarchyNode* node, S_HierarchyNodeDumbPtr& items)
 {
-  const S_HierarchyNodeDumbPtr& children = node->GetChildren();
-  S_HierarchyNodeDumbPtr::const_iterator childIt = children.begin();
-  S_HierarchyNodeDumbPtr::const_iterator childEnd = children.end();
-  for ( ; childIt != childEnd; ++childIt )
-  {
-    items.insert( *childIt );
-
-    Luna::HierarchyNode* group = Reflect::ObjectCast< Luna::HierarchyNode >( *childIt );
-    if ( group )
+    const S_HierarchyNodeDumbPtr& children = node->GetChildren();
+    S_HierarchyNodeDumbPtr::const_iterator childIt = children.begin();
+    S_HierarchyNodeDumbPtr::const_iterator childEnd = children.end();
+    for ( ; childIt != childEnd; ++childIt )
     {
-      GetFlattenedHierarchy( group, items );
+        items.insert( *childIt );
+
+        Luna::HierarchyNode* group = Reflect::ObjectCast< Luna::HierarchyNode >( *childIt );
+        if ( group )
+        {
+            GetFlattenedHierarchy( group, items );
+        }
     }
-  }
 }
 
 void Scene::GetSelectedTransforms( Math::V_Matrix4& transforms )
 {
-  OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
-  for (int i=0; itr != end; itr++, i++)
-  {
-    Luna::Transform* transform = Reflect::ObjectCast< Luna::Transform >( *itr );
-
-    if (transform)
+    OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
+    for (int i=0; itr != end; itr++, i++)
     {
-      transforms.push_back( transform->GetGlobalTransform() );
+        Luna::Transform* transform = Reflect::ObjectCast< Luna::Transform >( *itr );
+
+        if (transform)
+        {
+            transforms.push_back( transform->GetGlobalTransform() );
+        }
     }
-  }
 }
 
 Undo::CommandPtr Scene::SetSelectedTransforms( const Math::V_Matrix4& transforms )
 {
-  if (m_Selection.GetItems().Empty())
-  {
-    return NULL;
-  }
-
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
-
-  OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
-  for (size_t i=0; itr != end && i<transforms.size(); itr++, i++)
-  {
-    Luna::Transform* transform = Reflect::ObjectCast< Luna::Transform >( *itr );
-
-    if (transform)
+    if (m_Selection.GetItems().Empty())
     {
-      batch->Push( transform->SnapShot() );
-
-      transform->SetGlobalTransform( transforms[i] );
+        return NULL;
     }
-  }
 
-  // we don't end in a selection, so execute
-  Execute(false);
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-  return batch->IsEmpty() ? NULL : batch;
+    OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
+    for (size_t i=0; itr != end && i<transforms.size(); itr++, i++)
+    {
+        Luna::Transform* transform = Reflect::ObjectCast< Luna::Transform >( *itr );
+
+        if (transform)
+        {
+            batch->Push( transform->SnapShot() );
+
+            transform->SetGlobalTransform( transforms[i] );
+        }
+    }
+
+    // we don't end in a selection, so execute
+    Execute(false);
+
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2608,133 +2610,133 @@ Undo::CommandPtr Scene::SetSelectedTransforms( const Math::V_Matrix4& transforms
 // 
 Undo::CommandPtr Scene::SetHiddenSelected( bool hidden )
 {
-  if (m_Selection.GetItems().Empty())
-  {
-    return NULL;
-  }
-
-  Console::Print( "\n o SetHiddenSelected( %s )\n", hidden ? "true" : "false" );
-
-  if (hidden)
-  {
-    m_LastHidden.clear();
-  }
-
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
-
-  OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast<Luna::HierarchyNode>( *itr );
-    if ( hierarchyNode )
+    if (m_Selection.GetItems().Empty())
     {
-      if (hidden)
-      {
-        m_LastHidden.insert( hierarchyNode->GetID() );
-      }
-
-      Undo::PropertyCommand<bool>* command = 
-        new Undo::PropertyCommand<bool> ( new Nocturnal::MemberProperty<Luna::HierarchyNode, bool> (hierarchyNode, &Luna::HierarchyNode::IsHidden, &Luna::HierarchyNode::SetHidden), hidden ) ; 
-
-      command->SetSignificant( false ); 
-      batch->Push(command); 
+        return NULL;
     }
-  }
 
-  return batch->IsEmpty() ? NULL : batch;
+    Console::Print( "\n o SetHiddenSelected( %s )\n", hidden ? "true" : "false" );
+
+    if (hidden)
+    {
+        m_LastHidden.clear();
+    }
+
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+
+    OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
+    for ( ; itr != end; ++itr )
+    {
+        Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast<Luna::HierarchyNode>( *itr );
+        if ( hierarchyNode )
+        {
+            if (hidden)
+            {
+                m_LastHidden.insert( hierarchyNode->GetID() );
+            }
+
+            Undo::PropertyCommand<bool>* command = 
+                new Undo::PropertyCommand<bool> ( new Nocturnal::MemberProperty<Luna::HierarchyNode, bool> (hierarchyNode, &Luna::HierarchyNode::IsHidden, &Luna::HierarchyNode::SetHidden), hidden ) ; 
+
+            command->SetSignificant( false ); 
+            batch->Push(command); 
+        }
+    }
+
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 Undo::CommandPtr Scene::SetHiddenUnrelated( bool hidden )
 {
-  Console::Print( "\n o SetHiddenUnrelated( %s )\n", hidden ? "true" : "false" );
+    Console::Print( "\n o SetHiddenUnrelated( %s )\n", hidden ? "true" : "false" );
 
-  if (hidden)
-  {
-    m_LastHidden.clear();
-  }
-
-
-  //
-  // Bake selected root parents
-  //
-
-  OS_SelectableDumbPtr relatives;
-  OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast<Luna::HierarchyNode>( *itr );
-    if ( hierarchyNode )
+    if (hidden)
     {
-      relatives.Append( *itr );
-
-      Luna::HierarchyNode* parent = hierarchyNode->GetParent();
-      while ( parent && parent != m_Root )
-      {
-        relatives.Append( parent );
-
-        parent = parent->GetParent();
-      }
-
-      HierarchyChildTraverser traverser;
-      hierarchyNode->TraverseHierarchy( &traverser );
-
-      OS_SelectableDumbPtr::Iterator childItr = traverser.m_Children.Begin();
-      OS_SelectableDumbPtr::Iterator childEnd = traverser.m_Children.End();
-      for ( ; childItr != childEnd; ++childItr )
-      {
-        relatives.Append( *childItr );
-      }
+        m_LastHidden.clear();
     }
-  }
 
 
-  //
-  // Set visibility of the entire scene
-  //
+    //
+    // Bake selected root parents
+    //
 
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
-
-  {
-    HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( Reflect::GetType<Luna::HierarchyNode>() );
-
-    if (found != m_NodeTypesByType.end())
+    OS_SelectableDumbPtr relatives;
+    OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
+    for ( ; itr != end; ++itr )
     {
-      S_SceneNodeTypeDumbPtr::const_iterator typeItr = found->second.begin();
-      S_SceneNodeTypeDumbPtr::const_iterator typeEnd = found->second.end();
-      for ( ; typeItr != typeEnd; ++typeItr )
-      {
-        Luna::HierarchyNodeType* type = Reflect::AssertCast<Luna::HierarchyNodeType>( *typeItr );
-
-        if (type)
+        Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast<Luna::HierarchyNode>( *itr );
+        if ( hierarchyNode )
         {
-          HM_SceneNodeSmartPtr::const_iterator itr = type->GetInstances().begin();
-          HM_SceneNodeSmartPtr::const_iterator end = type->GetInstances().end();
-          for ( ; itr != end; ++itr )
-          {
-            Luna::HierarchyNode* node = Reflect::AssertCast<Luna::HierarchyNode>( itr->second );
+            relatives.Append( *itr );
 
-            if (node && !relatives.Contains(node))
+            Luna::HierarchyNode* parent = hierarchyNode->GetParent();
+            while ( parent && parent != m_Root )
             {
-              if (hidden && !node->IsHidden())
-              {
-                m_LastHidden.insert( node->GetID() );
-              }
+                relatives.Append( parent );
 
-              Undo::PropertyCommand<bool>* command = 
-                new Undo::PropertyCommand<bool> ( new Nocturnal::MemberProperty<Luna::HierarchyNode, bool> (node, &Luna::HierarchyNode::IsHidden, &Luna::HierarchyNode::SetHidden), hidden ); 
-              command->SetSignificant(false); 
-              batch->Push( command ); 
-
+                parent = parent->GetParent();
             }
-          }
-        }
-      }
-    }
-  }
 
-  return batch->IsEmpty() ? NULL : batch;
+            HierarchyChildTraverser traverser;
+            hierarchyNode->TraverseHierarchy( &traverser );
+
+            OS_SelectableDumbPtr::Iterator childItr = traverser.m_Children.Begin();
+            OS_SelectableDumbPtr::Iterator childEnd = traverser.m_Children.End();
+            for ( ; childItr != childEnd; ++childItr )
+            {
+                relatives.Append( *childItr );
+            }
+        }
+    }
+
+
+    //
+    // Set visibility of the entire scene
+    //
+
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+
+    {
+        HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( Reflect::GetType<Luna::HierarchyNode>() );
+
+        if (found != m_NodeTypesByType.end())
+        {
+            S_SceneNodeTypeDumbPtr::const_iterator typeItr = found->second.begin();
+            S_SceneNodeTypeDumbPtr::const_iterator typeEnd = found->second.end();
+            for ( ; typeItr != typeEnd; ++typeItr )
+            {
+                Luna::HierarchyNodeType* type = Reflect::AssertCast<Luna::HierarchyNodeType>( *typeItr );
+
+                if (type)
+                {
+                    HM_SceneNodeSmartPtr::const_iterator itr = type->GetInstances().begin();
+                    HM_SceneNodeSmartPtr::const_iterator end = type->GetInstances().end();
+                    for ( ; itr != end; ++itr )
+                    {
+                        Luna::HierarchyNode* node = Reflect::AssertCast<Luna::HierarchyNode>( itr->second );
+
+                        if (node && !relatives.Contains(node))
+                        {
+                            if (hidden && !node->IsHidden())
+                            {
+                                m_LastHidden.insert( node->GetID() );
+                            }
+
+                            Undo::PropertyCommand<bool>* command = 
+                                new Undo::PropertyCommand<bool> ( new Nocturnal::MemberProperty<Luna::HierarchyNode, bool> (node, &Luna::HierarchyNode::IsHidden, &Luna::HierarchyNode::SetHidden), hidden ); 
+                            command->SetSignificant(false); 
+                            batch->Push( command ); 
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2743,194 +2745,194 @@ Undo::CommandPtr Scene::SetHiddenUnrelated( bool hidden )
 // 
 Undo::CommandPtr Scene::SetGeometryShown( bool shown, bool selected )
 {
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-  HM_SceneNodeDumbPtr::const_iterator itr = m_Nodes.begin();
-  HM_SceneNodeDumbPtr::const_iterator end = m_Nodes.end();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( itr->second );
-    if ( entity && entity->IsSelected() == selected )
+    HM_SceneNodeDumbPtr::const_iterator itr = m_Nodes.begin();
+    HM_SceneNodeDumbPtr::const_iterator end = m_Nodes.end();
+    for ( ; itr != end; ++itr )
     {
-      Undo::PropertyCommand<bool>* command = 
-        new Undo::PropertyCommand<bool> ( new Nocturnal::MemberProperty<Luna::Entity, bool> (entity, &Luna::Entity::IsGeometryVisible, &Luna::Entity::SetGeometryVisible), shown ); 
+        Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( itr->second );
+        if ( entity && entity->IsSelected() == selected )
+        {
+            Undo::PropertyCommand<bool>* command = 
+                new Undo::PropertyCommand<bool> ( new Nocturnal::MemberProperty<Luna::Entity, bool> (entity, &Luna::Entity::IsGeometryVisible, &Luna::Entity::SetGeometryVisible), shown ); 
 
-      command->SetSignificant(false); 
-      batch->Push( command );
+            command->SetSignificant(false); 
+            batch->Push( command );
+        }
     }
-  }
 
-  return batch->IsEmpty() ? NULL : batch;
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 Undo::CommandPtr Scene::ShowLastHidden()
 {
-  Console::Print( "\n o ShowLastHidden()\n" );
+    Console::Print( "\n o ShowLastHidden()\n" );
 
-  if (m_LastHidden.empty())
-  {
-    return NULL;
-  }
-
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
-
-  std::set<UniqueID::TUID>::const_iterator itr = m_LastHidden.begin();
-  std::set<UniqueID::TUID>::const_iterator end = m_LastHidden.end();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast<Luna::HierarchyNode>( FindNode( *itr ) );
-    if ( hierarchyNode )
+    if (m_LastHidden.empty())
     {
-      Undo::PropertyCommand<bool>* command = 
-        new Undo::PropertyCommand<bool> ( new Nocturnal::MemberProperty<Luna::HierarchyNode, bool> (hierarchyNode, &Luna::HierarchyNode::IsHidden, &Luna::HierarchyNode::SetHidden), false ); 
-
-      command->SetSignificant(false); 
-      batch->Push( command );
+        return NULL;
     }
-  }
 
-  m_LastHidden.clear();
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-  return batch->IsEmpty() ? NULL : batch;
+    std::set<UID::TUID>::const_iterator itr = m_LastHidden.begin();
+    std::set<UID::TUID>::const_iterator end = m_LastHidden.end();
+    for ( ; itr != end; ++itr )
+    {
+        Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast<Luna::HierarchyNode>( FindNode( *itr ) );
+        if ( hierarchyNode )
+        {
+            Undo::PropertyCommand<bool>* command = 
+                new Undo::PropertyCommand<bool> ( new Nocturnal::MemberProperty<Luna::HierarchyNode, bool> (hierarchyNode, &Luna::HierarchyNode::IsHidden, &Luna::HierarchyNode::SetHidden), false ); 
+
+            command->SetSignificant(false); 
+            batch->Push( command );
+        }
+    }
+
+    m_LastHidden.clear();
+
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 Undo::CommandPtr Scene::SelectSimilar()
 {
-  OS_SelectableDumbPtr selection;
+    OS_SelectableDumbPtr selection;
 
-  OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>( *itr );
-
-    if (node)
+    OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
+    for ( ; itr != end; ++itr )
     {
-      V_HierarchyNodeDumbPtr similar;
-      node->FindSimilar( similar );
+        Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>( *itr );
 
-      V_HierarchyNodeDumbPtr::const_iterator similarItr = similar.begin();
-      V_HierarchyNodeDumbPtr::const_iterator similarEnd = similar.end();
-      for ( ; similarItr != similarEnd; ++similarItr )
-      {
-        selection.Append( *similarItr );
-      }
+        if (node)
+        {
+            V_HierarchyNodeDumbPtr similar;
+            node->FindSimilar( similar );
+
+            V_HierarchyNodeDumbPtr::const_iterator similarItr = similar.begin();
+            V_HierarchyNodeDumbPtr::const_iterator similarEnd = similar.end();
+            for ( ; similarItr != similarEnd; ++similarItr )
+            {
+                selection.Append( *similarItr );
+            }
+        }
     }
-  }
 
-  return m_Selection.SetItems(selection);
+    return m_Selection.SetItems(selection);
 }
 
 Undo::CommandPtr Scene::DeleteSelected()
 {
-  // since all of our children are going to be deleted with us, discard selected children from the working set
-  OS_SelectableDumbPtr roots;
-  GetSelectionParents(roots);
+    // since all of our children are going to be deleted with us, discard selected children from the working set
+    OS_SelectableDumbPtr roots;
+    GetSelectionParents(roots);
 
-  if (roots.Empty())
-  {
-    return NULL;
-  }
-
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand();
-
-  batch->Push( m_Selection.Clear() );
-
-  OS_SelectableDumbPtr::Iterator itr = roots.Begin();
-  OS_SelectableDumbPtr::Iterator end = roots.End();
-  for ( ; itr != end; ++itr )
-  {
-    SceneNodePtr node = Reflect::ObjectCast< Luna::SceneNode >( *itr );
-    if ( node )
+    if (roots.Empty())
     {
-      batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, this, node ) ); 
+        return NULL;
     }
-  }
 
-  Execute(false);
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand();
 
-  return batch->IsEmpty() ? NULL : batch;
+    batch->Push( m_Selection.Clear() );
+
+    OS_SelectableDumbPtr::Iterator itr = roots.Begin();
+    OS_SelectableDumbPtr::Iterator end = roots.End();
+    for ( ; itr != end; ++itr )
+    {
+        SceneNodePtr node = Reflect::ObjectCast< Luna::SceneNode >( *itr );
+        if ( node )
+        {
+            batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, this, node ) ); 
+        }
+    }
+
+    Execute(false);
+
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 Undo::CommandPtr Scene::ParentSelected()
 {
-  OS_SelectableDumbPtr selection;
-  GetSelectionParents( selection );
+    OS_SelectableDumbPtr selection;
+    GetSelectionParents( selection );
 
-  if (selection.Empty())
-  {
-    return NULL;
-  }
-
-  V_HierarchyNodeDumbPtr children;
-
-  // Go through the selection list and pull out any hierarchy nodes
-  OS_SelectableDumbPtr::Iterator itr = selection.Begin();
-  OS_SelectableDumbPtr::Iterator end = selection.End();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Luna::HierarchyNode >( *itr );
-    if ( hierarchyNode )
+    if (selection.Empty())
     {
-      children.push_back( hierarchyNode );
+        return NULL;
     }
-  }
 
-  if ( children.size() < 2 )
-  {
-    return NULL;
-  }
+    V_HierarchyNodeDumbPtr children;
 
-  Luna::HierarchyNode* parent = children.back();
-  children.resize( children.size() - 1 );
+    // Go through the selection list and pull out any hierarchy nodes
+    OS_SelectableDumbPtr::Iterator itr = selection.Begin();
+    OS_SelectableDumbPtr::Iterator end = selection.End();
+    for ( ; itr != end; ++itr )
+    {
+        Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Luna::HierarchyNode >( *itr );
+        if ( hierarchyNode )
+        {
+            children.push_back( hierarchyNode );
+        }
+    }
 
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    if ( children.size() < 2 )
+    {
+        return NULL;
+    }
 
-  // Reparent the selected items under the parent node (last selected one)
-  for each (Luna::HierarchyNode* hierarchyNode in children)
-  {
-    batch->Push( new ParentCommand( hierarchyNode, parent ) );
-  }
+    Luna::HierarchyNode* parent = children.back();
+    children.resize( children.size() - 1 );
 
-  return batch->IsEmpty() ? NULL : batch;
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+
+    // Reparent the selected items under the parent node (last selected one)
+    for each (Luna::HierarchyNode* hierarchyNode in children)
+    {
+        batch->Push( new ParentCommand( hierarchyNode, parent ) );
+    }
+
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 Undo::CommandPtr Scene::UnparentSelected()
 {
-  V_HierarchyNodeDumbPtr children;
+    V_HierarchyNodeDumbPtr children;
 
-  // Go through the selection list and pull out any hierarchy nodes
-  OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Luna::HierarchyNode >( *itr );
-    if ( hierarchyNode )
+    // Go through the selection list and pull out any hierarchy nodes
+    OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
+    for ( ; itr != end; ++itr )
     {
-      children.push_back( hierarchyNode );
+        Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Luna::HierarchyNode >( *itr );
+        if ( hierarchyNode )
+        {
+            children.push_back( hierarchyNode );
+        }
     }
-  }
 
-  if ( children.empty() )
-  {
-    return NULL;
-  }
-
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
-
-  // Reparent the selected items under the root
-  for each (Luna::HierarchyNode* hierarchyNode in children)
-  {
-    if ( hierarchyNode->GetParent() != m_Root )
+    if ( children.empty() )
     {
-      batch->Push( new ParentCommand( hierarchyNode, m_Root ) );
+        return NULL;
     }
-  }
 
-  // we don't end in a selection, so execute
-  Execute(false);
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-  return batch->IsEmpty() ? NULL : batch;
+    // Reparent the selected items under the root
+    for each (Luna::HierarchyNode* hierarchyNode in children)
+    {
+        if ( hierarchyNode->GetParent() != m_Root )
+        {
+            batch->Push( new ParentCommand( hierarchyNode, m_Root ) );
+        }
+    }
+
+    // we don't end in a selection, so execute
+    Execute(false);
+
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2939,587 +2941,587 @@ Undo::CommandPtr Scene::UnparentSelected()
 // 
 Undo::CommandPtr Scene::GroupSelected()
 {
-  OS_SelectableDumbPtr selection;
-  GetSelectionParents( selection );
+    OS_SelectableDumbPtr selection;
+    GetSelectionParents( selection );
 
-  if (selection.Empty())
-  {
-    return NULL;
-  }
-
-  V_HierarchyNodeDumbPtr selectedHierarchyNodes;
-
-  // Go through the selection list and pull out any hierarchy nodes
-  OS_SelectableDumbPtr::Iterator itr = selection.Begin();
-  OS_SelectableDumbPtr::Iterator end = selection.End();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Luna::HierarchyNode >( *itr );
-    if ( hierarchyNode )
+    if (selection.Empty())
     {
-      selectedHierarchyNodes.push_back( hierarchyNode );
+        return NULL;
     }
-  }
 
-  if ( selectedHierarchyNodes.empty() )
-  {
-    return NULL;
-  }
+    V_HierarchyNodeDumbPtr selectedHierarchyNodes;
 
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    // Go through the selection list and pull out any hierarchy nodes
+    OS_SelectableDumbPtr::Iterator itr = selection.Begin();
+    OS_SelectableDumbPtr::Iterator end = selection.End();
+    for ( ; itr != end; ++itr )
+    {
+        Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Luna::HierarchyNode >( *itr );
+        if ( hierarchyNode )
+        {
+            selectedHierarchyNodes.push_back( hierarchyNode );
+        }
+    }
 
-  Math::Vector3 pos;
-  const Luna::Transform* transform = selectedHierarchyNodes.back()->GetTransform();
-  NOC_ASSERT( transform );
-  if ( transform )
-  {
-    const Math::Matrix4& globalTransform = transform->GetGlobalTransform();
-    pos.x = globalTransform.t.x;
-    pos.y = globalTransform.t.y;
-    pos.z = globalTransform.t.z;
-  }
+    if ( selectedHierarchyNodes.empty() )
+    {
+        return NULL;
+    }
 
-  // Create the new group
-  Luna::PivotTransform* group = new Luna::PivotTransform( this );
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-  // Get a decent name
-  group->Rename( "group1" );
+    Math::Vector3 pos;
+    const Luna::Transform* transform = selectedHierarchyNodes.back()->GetTransform();
+    NOC_ASSERT( transform );
+    if ( transform )
+    {
+        const Math::Matrix4& globalTransform = transform->GetGlobalTransform();
+        pos.x = globalTransform.t.x;
+        pos.y = globalTransform.t.y;
+        pos.z = globalTransform.t.z;
+    }
 
-  // Make sure the new group is under the common parent for the selected nodes.
-  group->SetParent( GetCommonParent( selectedHierarchyNodes ) );
+    // Create the new group
+    Luna::PivotTransform* group = new Luna::PivotTransform( this );
 
-  // This will re-compute the local components
-  group->SetGlobalTransform( Matrix4 (pos) );
+    // Get a decent name
+    group->Rename( "group1" );
 
-  // Update the object
-  group->Evaluate( GraphDirections::Downstream );
+    // Make sure the new group is under the common parent for the selected nodes.
+    group->SetParent( GetCommonParent( selectedHierarchyNodes ) );
 
-  batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, group ) );
+    // This will re-compute the local components
+    group->SetGlobalTransform( Matrix4 (pos) );
 
-  // Reparent the selected items under the new group
-  for each (Luna::HierarchyNode* hierarchyNode in selectedHierarchyNodes)
-  {
-    batch->Push( new ParentCommand( hierarchyNode, group ) );
-  }
+    // Update the object
+    group->Evaluate( GraphDirections::Downstream );
 
-  // Select the newly created group
-  batch->Push( m_Selection.SetItem( group ) );
+    batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, group ) );
 
-  return batch->IsEmpty() ? NULL : batch;
+    // Reparent the selected items under the new group
+    for each (Luna::HierarchyNode* hierarchyNode in selectedHierarchyNodes)
+    {
+        batch->Push( new ParentCommand( hierarchyNode, group ) );
+    }
+
+    // Select the newly created group
+    batch->Push( m_Selection.SetItem( group ) );
+
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 Undo::CommandPtr Scene::UngroupSelected()
 {
-  if ( m_Selection.GetItems().Empty() )
-  {
-    return NULL;
-  }
-
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
-
-  OS_SelectableDumbPtr newSelection;
-
-  bool warn = false;
-  // For each selected item
-  OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
-  for ( ; itr != end; ++itr )
-  {
-    // If the item is a group (pivot transform)
-    Luna::SceneNode* sceneNode = Reflect::ObjectCast< Luna::SceneNode >( *itr );
-
-    if ( sceneNode && sceneNode->GetType() == Reflect::GetType<Luna::PivotTransform>() )
+    if ( m_Selection.GetItems().Empty() )
     {
-      Luna::PivotTransform* group = Reflect::AssertCast< Luna::PivotTransform >( sceneNode );
+        return NULL;
+    }
 
-      // If the group has children, parent the children under the group's parent (their grandparent)
-      if ( group->GetChildren().size() > 0 )
-      {
-        // Need to operate on a copy of the children since we are going to change the original
-        // group as we iterate over it.
-        S_HierarchyNodeDumbPtr copyOfChildren = group->GetChildren();
-        for each (Luna::HierarchyNode* child in copyOfChildren)
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+
+    OS_SelectableDumbPtr newSelection;
+
+    bool warn = false;
+    // For each selected item
+    OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
+    for ( ; itr != end; ++itr )
+    {
+        // If the item is a group (pivot transform)
+        Luna::SceneNode* sceneNode = Reflect::ObjectCast< Luna::SceneNode >( *itr );
+
+        if ( sceneNode && sceneNode->GetType() == Reflect::GetType<Luna::PivotTransform>() )
         {
-          // Push the parent command into the queue
-          batch->Push( new ParentCommand( child, group->GetParent() ) );
+            Luna::PivotTransform* group = Reflect::AssertCast< Luna::PivotTransform >( sceneNode );
 
-          // Add the child to the new selection list
-          newSelection.Append( child );
+            // If the group has children, parent the children under the group's parent (their grandparent)
+            if ( group->GetChildren().size() > 0 )
+            {
+                // Need to operate on a copy of the children since we are going to change the original
+                // group as we iterate over it.
+                S_HierarchyNodeDumbPtr copyOfChildren = group->GetChildren();
+                for each (Luna::HierarchyNode* child in copyOfChildren)
+                {
+                    // Push the parent command into the queue
+                    batch->Push( new ParentCommand( child, group->GetParent() ) );
+
+                    // Add the child to the new selection list
+                    newSelection.Append( child );
+                }
+            }
+
+            // Delete the group
+            batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, this, group ) );
         }
-      }
-
-      // Delete the group
-      batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, this, group ) );
+        else
+        {
+            std::string msg = "The Ungroup command only works on groups. The node '" + sceneNode->GetName() +"' is not a group.\n";
+            Console::Warning( msg.c_str() );
+            warn = true;
+        }
     }
-    else
+
+    // Change the selection
+    batch->Push( m_Selection.SetItems( newSelection ) );
+
+    if ( warn )
     {
-      std::string msg = "The Ungroup command only works on groups. The node '" + sceneNode->GetName() +"' is not a group.\n";
-      Console::Warning( msg.c_str() );
-      warn = true;
+        ChangeStatus( "The Ungroup command only works on groups.  See output window for more information." );
     }
-  }
 
-  // Change the selection
-  batch->Push( m_Selection.SetItems( newSelection ) );
-
-  if ( warn )
-  {
-    ChangeStatus( "The Ungroup command only works on groups.  See output window for more information." );
-  }
-
-  return batch->IsEmpty() ? NULL : batch;
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 Undo::CommandPtr Scene::CenterSelected()
 {
-  if (m_Selection.GetItems().Empty())
-  {
-    return NULL;
-  }
-
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
-
-  OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
-  for (int i=0; itr != end; itr++, i++)
-  {
-    Luna::Transform* transform = Reflect::ObjectCast< Luna::Transform >( *itr );
-
-    if (transform)
+    if (m_Selection.GetItems().Empty())
     {
-      batch->Push( transform->CenterTransform() );
+        return NULL;
     }
-  }
 
-  // we don't end in a selection, so execute
-  Execute(false);
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-  return batch->IsEmpty() ? NULL : batch;
+    OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
+    for (int i=0; itr != end; itr++, i++)
+    {
+        Luna::Transform* transform = Reflect::ObjectCast< Luna::Transform >( *itr );
+
+        if (transform)
+        {
+            batch->Push( transform->CenterTransform() );
+        }
+    }
+
+    // we don't end in a selection, so execute
+    Execute(false);
+
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 Undo::CommandPtr Scene::DuplicateSelected()
 {
-  // since all of our children are going to be duplicated with us, discard selected children from the working set
-  OS_SelectableDumbPtr roots;
-  GetSelectionParents(roots);
+    // since all of our children are going to be duplicated with us, discard selected children from the working set
+    OS_SelectableDumbPtr roots;
+    GetSelectionParents(roots);
 
-  // test for nothing to do
-  if (roots.Empty())
-  {
-    return NULL;
-  }
-
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
-
-  OS_SelectableDumbPtr newSelection;
-
-  OS_SelectableDumbPtr::Iterator itr = roots.Begin();
-  OS_SelectableDumbPtr::Iterator end = roots.End();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::HierarchyNode* node = Reflect::ObjectCast< Luna::HierarchyNode > (*itr);
-
-    if (!node)
+    // test for nothing to do
+    if (roots.Empty())
     {
-      continue;
+        return NULL;
     }
 
-    HierarchyNodePtr duplicate = node->Duplicate();
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-    newSelection.Append(duplicate);
+    OS_SelectableDumbPtr newSelection;
 
-    batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, duplicate ) );
-
-    duplicate->SetParent( node->GetParent() );
-
-    // make sure the new nodes are initialized
-    duplicate->InitializeHierarchy();
-  }
-
-  // setting the selection will invalidate the flag for having a valid smart duplicate matrix
-  batch->Push( m_Selection.SetItems (newSelection) );
-
-  // set the transform for smart duplicate, if there was only one selection
-  if (roots.Size() == 1)
-  {
-    Luna::HierarchyNode* node = Reflect::ObjectCast< Luna::HierarchyNode >(roots.Front());   
-    if (node)
+    OS_SelectableDumbPtr::Iterator itr = roots.Begin();
+    OS_SelectableDumbPtr::Iterator end = roots.End();
+    for ( ; itr != end; ++itr )
     {
-      m_SmartDuplicateMatrix = node->GetTransform()->GetGlobalTransform();
-      m_ValidSmartDuplicateMatrix = true;
-    }
-  }
+        Luna::HierarchyNode* node = Reflect::ObjectCast< Luna::HierarchyNode > (*itr);
 
-  return batch->IsEmpty() ? NULL : batch;
+        if (!node)
+        {
+            continue;
+        }
+
+        HierarchyNodePtr duplicate = node->Duplicate();
+
+        newSelection.Append(duplicate);
+
+        batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, duplicate ) );
+
+        duplicate->SetParent( node->GetParent() );
+
+        // make sure the new nodes are initialized
+        duplicate->InitializeHierarchy();
+    }
+
+    // setting the selection will invalidate the flag for having a valid smart duplicate matrix
+    batch->Push( m_Selection.SetItems (newSelection) );
+
+    // set the transform for smart duplicate, if there was only one selection
+    if (roots.Size() == 1)
+    {
+        Luna::HierarchyNode* node = Reflect::ObjectCast< Luna::HierarchyNode >(roots.Front());   
+        if (node)
+        {
+            m_SmartDuplicateMatrix = node->GetTransform()->GetGlobalTransform();
+            m_ValidSmartDuplicateMatrix = true;
+        }
+    }
+
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 Undo::CommandPtr Scene::SmartDuplicateSelected()
 {
-  // if we do not have a valid duplicate matrix, then just do duplicate selected
-  if (!m_ValidSmartDuplicateMatrix)
-  {
-    return DuplicateSelected();
-  }
+    // if we do not have a valid duplicate matrix, then just do duplicate selected
+    if (!m_ValidSmartDuplicateMatrix)
+    {
+        return DuplicateSelected();
+    }
 
-  // since all of our children are going to be duplicated with us, discard selected children from the working set
-  OS_SelectableDumbPtr roots;
-  GetSelectionParents(roots);
+    // since all of our children are going to be duplicated with us, discard selected children from the working set
+    OS_SelectableDumbPtr roots;
+    GetSelectionParents(roots);
 
-  // only operate on a single object!
-  if (roots.Size() != 1)
-  {
-    return DuplicateSelected();
-  }
+    // only operate on a single object!
+    if (roots.Size() != 1)
+    {
+        return DuplicateSelected();
+    }
 
-  Luna::Transform* node = Reflect::ObjectCast< Luna::Transform >(roots.Front());
+    Luna::Transform* node = Reflect::ObjectCast< Luna::Transform >(roots.Front());
 
-  if (!node)
-  {
-    return DuplicateSelected();
-  }
+    if (!node)
+    {
+        return DuplicateSelected();
+    }
 
-  HierarchyNodePtr duplicate = node->Duplicate();
+    HierarchyNodePtr duplicate = node->Duplicate();
 
-  Luna::Transform* transform = Reflect::AssertCast<Luna::Transform>( duplicate );
+    Luna::Transform* transform = Reflect::AssertCast<Luna::Transform>( duplicate );
 
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-  // transform the duplicate based off of the previous duplicate matrix
-  Math::Matrix4 matrix = transform->GetGlobalTransform() * m_SmartDuplicateMatrix.Inverted() * transform->GetGlobalTransform();
+    // transform the duplicate based off of the previous duplicate matrix
+    Math::Matrix4 matrix = transform->GetGlobalTransform() * m_SmartDuplicateMatrix.Inverted() * transform->GetGlobalTransform();
 
-  // save this for the next smart transform matrix
-  m_SmartDuplicateMatrix = transform->GetGlobalTransform();
+    // save this for the next smart transform matrix
+    m_SmartDuplicateMatrix = transform->GetGlobalTransform();
 
-  // add the duplicate to the scene
-  batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, duplicate ) );
+    // add the duplicate to the scene
+    batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, this, duplicate ) );
 
-  // parent it to the original nodes' parent
-  batch->Push( new ParentCommand( duplicate, node->GetParent() ) );
+    // parent it to the original nodes' parent
+    batch->Push( new ParentCommand( duplicate, node->GetParent() ) );
 
-  // set the global transform for the duplicate object
-  batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Nocturnal::MemberProperty<Luna::Transform, Math::Matrix4> (transform, &Luna::Transform::GetGlobalTransform, &Luna::Transform::SetGlobalTransform), matrix ) );
+    // set the global transform for the duplicate object
+    batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Nocturnal::MemberProperty<Luna::Transform, Math::Matrix4> (transform, &Luna::Transform::GetGlobalTransform, &Luna::Transform::SetGlobalTransform), matrix ) );
 
-  // make sure the new nodes are initialized
-  duplicate->InitializeHierarchy();
+    // make sure the new nodes are initialized
+    duplicate->InitializeHierarchy();
 
-  // setting the selection will invalidate the flag for having a valid smart duplicate matrix
-  batch->Push( m_Selection.SetItem(duplicate) );
+    // setting the selection will invalidate the flag for having a valid smart duplicate matrix
+    batch->Push( m_Selection.SetItem(duplicate) );
 
-  // reset the flag here
-  m_ValidSmartDuplicateMatrix = true;
+    // reset the flag here
+    m_ValidSmartDuplicateMatrix = true;
 
-  return batch->IsEmpty() ? NULL : batch;
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 Undo::CommandPtr Scene::SnapSelectedToCamera()
 {
-  if (m_Selection.GetItems().Empty())
-  {
-    return NULL;
-  }
-
-  Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
-
-  Matrix4 m = Matrix4 ( AngleAxis( Math::Pi, Vector3::BasisY ) ) * m_View->GetCamera()->GetInverseView();
-
-  OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
-  for (int i=0; itr != end; itr++, i++)
-  {
-    Luna::Transform* transform = Reflect::ObjectCast< Luna::Transform >( *itr );
-
-    if (transform)
+    if (m_Selection.GetItems().Empty())
     {
-      batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Nocturnal::MemberProperty<Luna::Transform, Math::Matrix4> (transform, &Luna::Transform::GetGlobalTransform, &Luna::Transform::SetGlobalTransform), m ) );
+        return NULL;
     }
-  }
 
-  // we don't end in a selection, so execute
-  Execute(false);
+    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-  return batch->IsEmpty() ? NULL : batch;
+    Matrix4 m = Matrix4 ( AngleAxis( Math::Pi, Vector3::BasisY ) ) * m_View->GetCamera()->GetInverseView();
+
+    OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
+    for (int i=0; itr != end; itr++, i++)
+    {
+        Luna::Transform* transform = Reflect::ObjectCast< Luna::Transform >( *itr );
+
+        if (transform)
+        {
+            batch->Push( new Undo::PropertyCommand<Math::Matrix4> ( new Nocturnal::MemberProperty<Luna::Transform, Math::Matrix4> (transform, &Luna::Transform::GetGlobalTransform, &Luna::Transform::SetGlobalTransform), m ) );
+        }
+    }
+
+    // we don't end in a selection, so execute
+    Execute(false);
+
+    return batch->IsEmpty() ? NULL : batch;
 }
 
 Undo::CommandPtr Scene::SnapCameraToSelected()
 {
-  if (m_Selection.GetItems().Empty())
-  {
+    if (m_Selection.GetItems().Empty())
+    {
+        return NULL;
+    }
+
+    Luna::Transform* transform = Reflect::ObjectCast< Luna::Transform >( *m_Selection.GetItems().Begin() );
+
+    if (transform)
+    {
+        Matrix4 m = Matrix4 ( AngleAxis( Math::Pi, Vector3::BasisY ) ) * transform->GetGlobalTransform();
+
+        m_View->GetCamera()->SetTransform( m );
+    }
+
+    // we don't end in a selection, so execute
+    Execute(false);
+
     return NULL;
-  }
-
-  Luna::Transform* transform = Reflect::ObjectCast< Luna::Transform >( *m_Selection.GetItems().Begin() );
-
-  if (transform)
-  {
-    Matrix4 m = Matrix4 ( AngleAxis( Math::Pi, Vector3::BasisY ) ) * transform->GetGlobalTransform();
-
-    m_View->GetCamera()->SetTransform( m );
-  }
-
-  // we don't end in a selection, so execute
-  Execute(false);
-
-  return NULL;
 }
 
 void Scene::MeasureDistance()
 {
-  Luna::Transform* first = NULL;
-  Luna::Transform* second = NULL;
+    Luna::Transform* first = NULL;
+    Luna::Transform* second = NULL;
 
-  OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::Transform* t = Reflect::ObjectCast<Luna::Transform>( *itr );
-
-    if (t)
+    OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
+    for ( ; itr != end; ++itr )
     {
-      if (!first)
-      {
-        first = t;
-        continue;
-      }
-      
-      if (!second)
-      {
-        second = t;
-        break;
-      }
+        Luna::Transform* t = Reflect::ObjectCast<Luna::Transform>( *itr );
+
+        if (t)
+        {
+            if (!first)
+            {
+                first = t;
+                continue;
+            }
+
+            if (!second)
+            {
+                second = t;
+                break;
+            }
+        }
     }
-  }
 
-  if (first && second)
-  {
-    std::ostringstream str;
+    if (first && second)
+    {
+        std::ostringstream str;
 
-    Vector3 v = Vector3 (first->GetGlobalTransform().t.x, first->GetGlobalTransform().t.y, first->GetGlobalTransform().t.z) -
-                Vector3 (second->GetGlobalTransform().t.x, second->GetGlobalTransform().t.y, second->GetGlobalTransform().t.z);
+        Vector3 v = Vector3 (first->GetGlobalTransform().t.x, first->GetGlobalTransform().t.y, first->GetGlobalTransform().t.z) -
+            Vector3 (second->GetGlobalTransform().t.x, second->GetGlobalTransform().t.y, second->GetGlobalTransform().t.z);
 
-    float distance = v.Length();
+        float distance = v.Length();
 
-    str << first->GetName() << " is " << distance << " meters from " << second->GetName();
+        str << first->GetName() << " is " << distance << " meters from " << second->GetName();
 
-    m_StatusChanged.Raise( StatusChangeArgs (str.str()) );
-  }
-  else
-  {
-    m_StatusChanged.Raise( StatusChangeArgs ("Please select 2 placed objects and try again") );
-  }
+        m_StatusChanged.Raise( StatusChangeArgs (str.str()) );
+    }
+    else
+    {
+        m_StatusChanged.Raise( StatusChangeArgs ("Please select 2 placed objects and try again") );
+    }
 }
 
 Undo::CommandPtr Scene::PickWalkUp()
 {
-  if (m_Selection.GetItems().Empty())
-  {
-    return NULL;
-  }
-
-  OS_SelectableDumbPtr newSelection;
-
-  OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
-  OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
-  for ( ; itr != end; ++itr )
-  {
-    Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(*itr);
-
-    if (node == NULL)
+    if (m_Selection.GetItems().Empty())
     {
-      return NULL;
+        return NULL;
     }
 
-    if (node->GetParent() != m_Root)
-    {
-      newSelection.Append( node->GetParent() );
-    }
-  }
+    OS_SelectableDumbPtr newSelection;
 
-  if (!newSelection.Empty())
-  {
-    return m_Selection.SetItems( newSelection );
-  }
-  else
-  {
-    return NULL;
-  }
+    OS_SelectableDumbPtr::Iterator itr = m_Selection.GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator end = m_Selection.GetItems().End();
+    for ( ; itr != end; ++itr )
+    {
+        Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(*itr);
+
+        if (node == NULL)
+        {
+            return NULL;
+        }
+
+        if (node->GetParent() != m_Root)
+        {
+            newSelection.Append( node->GetParent() );
+        }
+    }
+
+    if (!newSelection.Empty())
+    {
+        return m_Selection.SetItems( newSelection );
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 Undo::CommandPtr Scene::PickWalkDown()
 {
-  if (m_Selection.GetItems().Empty())
-  {
-    return NULL;
-  }
+    if (m_Selection.GetItems().Empty())
+    {
+        return NULL;
+    }
 
-  Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(m_Selection.GetItems().Front());
+    Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(m_Selection.GetItems().Front());
 
-  if (node == NULL)
-  {
-    return NULL;
-  }
+    if (node == NULL)
+    {
+        return NULL;
+    }
 
-  if (!node->GetChildren().empty())
-  {
-    return m_Selection.SetItem( *node->GetChildren().begin() );
-  }
-  else
-  {
-    return NULL;
-  }
+    if (!node->GetChildren().empty())
+    {
+        return m_Selection.SetItem( *node->GetChildren().begin() );
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 Undo::CommandPtr Scene::PickWalkSibling(bool forward)
 {
-  if (m_Selection.GetItems().Empty())
-  {
-    return NULL;
-  }
-
-  Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(m_Selection.GetItems().Front());
-
-  if (node == NULL)
-  {
-    return NULL;
-  }
-
-  if (node->GetParent() != NULL)
-  {
-    const S_HierarchyNodeDumbPtr& children = node->GetParent()->GetChildren();
-
-    if (!children.empty())
+    if (m_Selection.GetItems().Empty())
     {
-      typedef std::map<std::string, Luna::HierarchyNode*> M_NameToHierarchyNodeDumbPtr;
+        return NULL;
+    }
 
-      M_NameToHierarchyNodeDumbPtr sortedChildren;
-      {
-        S_HierarchyNodeDumbPtr::const_iterator itr = children.begin();
-        S_HierarchyNodeDumbPtr::const_iterator end = children.end();
-        for ( ; itr != end; ++itr )
+    Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(m_Selection.GetItems().Front());
+
+    if (node == NULL)
+    {
+        return NULL;
+    }
+
+    if (node->GetParent() != NULL)
+    {
+        const S_HierarchyNodeDumbPtr& children = node->GetParent()->GetChildren();
+
+        if (!children.empty())
         {
-          sortedChildren[ (*itr)->GetName() ] = *itr;
+            typedef std::map<std::string, Luna::HierarchyNode*> M_NameToHierarchyNodeDumbPtr;
+
+            M_NameToHierarchyNodeDumbPtr sortedChildren;
+            {
+                S_HierarchyNodeDumbPtr::const_iterator itr = children.begin();
+                S_HierarchyNodeDumbPtr::const_iterator end = children.end();
+                for ( ; itr != end; ++itr )
+                {
+                    sortedChildren[ (*itr)->GetName() ] = *itr;
+                }
+            }
+
+            typedef std::vector<Luna::HierarchyNode*> V_HierarchyNodeDumbPtr;
+
+            size_t index = -1;
+            V_HierarchyNodeDumbPtr indexedChildren;
+            {
+                M_NameToHierarchyNodeDumbPtr::const_iterator itr = sortedChildren.begin();
+                M_NameToHierarchyNodeDumbPtr::const_iterator end = sortedChildren.end();
+                for ( size_t i=0; itr != end; ++itr, ++i )
+                {
+                    if ( itr->second == node )
+                    {
+                        index = i;
+                    }
+
+                    indexedChildren.push_back( itr->second );
+                }
+            }
+
+            return m_Selection.SetItem( indexedChildren[ ( forward?(index+1):(index-1) ) % indexedChildren.size() ] );
         }
-      }
-
-      typedef std::vector<Luna::HierarchyNode*> V_HierarchyNodeDumbPtr;
-
-      size_t index = -1;
-      V_HierarchyNodeDumbPtr indexedChildren;
-      {
-        M_NameToHierarchyNodeDumbPtr::const_iterator itr = sortedChildren.begin();
-        M_NameToHierarchyNodeDumbPtr::const_iterator end = sortedChildren.end();
-        for ( size_t i=0; itr != end; ++itr, ++i )
+        else
         {
-          if ( itr->second == node )
-          {
-            index = i;
-          }
-
-          indexedChildren.push_back( itr->second );
+            return NULL;
         }
-      }
-
-      return m_Selection.SetItem( indexedChildren[ ( forward?(index+1):(index-1) ) % indexedChildren.size() ] );
     }
     else
     {
-      return NULL;
+        return NULL;
     }
-  }
-  else
-  {
-    return NULL;
-  }
 }
 
 void Scene::ViewPreferencesChanged( const Reflect::ElementChangeArgs& args )
 {
-  if ( args.m_Field == SceneEditorPreferences()->GetViewPreferences()->ColorModeField() )
-  {
-    Execute( false );
-  }
+    if ( args.m_Field == SceneEditorPreferences()->GetViewPreferences()->ColorModeField() )
+    {
+        Execute( false );
+    }
 }
 
 Content::NodeVisibilityPtr Scene::GetVisibility(tuid nodeId)
 {
-  NOC_ASSERT(m_VisibilityDB); 
+    NOC_ASSERT(m_VisibilityDB); 
 
-  tuid fallbackId = GetRemappedID(nodeId);
+    tuid fallbackId = GetRemappedID(nodeId);
 
-  return m_VisibilityDB->GetVisibility(nodeId, fallbackId); 
+    return m_VisibilityDB->GetVisibility(nodeId, fallbackId); 
 
 }
 
 bool Scene::GetVisibilityFile(std::string& filename)
 {
-  char buffer[1024]; 
-  snprintf(buffer, 1024, "visibility/" TUID_HEX_FORMAT ".vis.rb", m_File->GetPath().Hash() ); 
+    char buffer[1024]; 
+    snprintf(buffer, 1024, "visibility/" TUID_HEX_FORMAT ".vis.rb", m_File->GetPath().Hash() ); 
 
-  Nocturnal::Path prefsDir;
-  if ( !AppUtils::GetPreferencesDirectory( prefsDir ) )
-  {
-      return false;
-  }
+    Nocturnal::Path prefsDir;
+    if ( !AppUtils::GetPreferencesDirectory( prefsDir ) )
+    {
+        return false;
+    }
 
-  Nocturnal::Path filePath( prefsDir.Get() + '/' + std::string(buffer) );
-  filename = filePath.Get();
+    Nocturnal::Path filePath( prefsDir.Get() + '/' + std::string(buffer) );
+    filename = filePath.Get();
 
-  return true; 
+    return true; 
 }
 
 void Scene::LoadVisibility()
 {
-  // attempt to load up our visibility file...
-  std::string filename; 
-  if( GetVisibilityFile(filename) && FileSystem::Exists(filename) )
-  {
-    m_VisibilityDB = Reflect::Archive::FromFile<Content::SceneVisibility>(filename); 
-  }
-  else
-  {
-    m_VisibilityDB = new Content::SceneVisibility(); 
-  }
+    // attempt to load up our visibility file...
+    std::string filename; 
+    if( GetVisibilityFile(filename) && FileSystem::Exists(filename) )
+    {
+        m_VisibilityDB = Reflect::Archive::FromFile<Content::SceneVisibility>(filename); 
+    }
+    else
+    {
+        m_VisibilityDB = new Content::SceneVisibility(); 
+    }
 
-  m_VisibilityDB->SetNodeDefaults( SceneEditorPreferences()->GetDefaultNodeVisibility() ); 
+    m_VisibilityDB->SetNodeDefaults( SceneEditorPreferences()->GetDefaultNodeVisibility() ); 
 
 }
 
 void Scene::SaveVisibility()
 {
-  std::string filename; 
-  if(m_VisibilityDB && GetVisibilityFile(filename) )
-  {
-    Reflect::Archive::ToFile(m_VisibilityDB, filename); 
-  }
+    std::string filename; 
+    if(m_VisibilityDB && GetVisibilityFile(filename) )
+    {
+        Reflect::Archive::ToFile(m_VisibilityDB, filename); 
+    }
 }
 
-UniqueID::TUID Scene::GetRemappedID( tuid nodeId )
+UID::TUID Scene::GetRemappedID( tuid nodeId )
 {
-  UniqueID::HM_TUID::iterator itr = m_RemappedIDs.begin();
-  UniqueID::HM_TUID::iterator itrEnd = m_RemappedIDs.end();
+    UID::HM_TUID::iterator itr = m_RemappedIDs.begin();
+    UID::HM_TUID::iterator itrEnd = m_RemappedIDs.end();
 
-  while( itr != itrEnd )
-  {
-    if( nodeId == (*itr).second )
+    while( itr != itrEnd )
     {
-      return (*itr).first;
+        if( nodeId == (*itr).second )
+        {
+            return (*itr).first;
+        }
+        itr++;
     }
-    itr++;
-  }
 
-  return UniqueID::TUID::Null;
+    return UID::TUID::Null;
 }
 
 ZonePtr Scene::GetNavZone()
 {
-  S_ZoneDumbPtr::iterator zoneItr = m_Zones.begin();
-  S_ZoneDumbPtr::iterator zoneEnd = m_Zones.end();
-  for (; zoneItr!=zoneEnd; ++zoneItr)
-  {
-    Content::Zone* zone = (*zoneItr)->GetPackage< Content::Zone >();
-    if(zone->m_HasNavData)
+    S_ZoneDumbPtr::iterator zoneItr = m_Zones.begin();
+    S_ZoneDumbPtr::iterator zoneEnd = m_Zones.end();
+    for (; zoneItr!=zoneEnd; ++zoneItr)
     {
-      return *zoneItr;
+        Content::Zone* zone = (*zoneItr)->GetPackage< Content::Zone >();
+        if(zone->m_HasNavData)
+        {
+            return *zoneItr;
+        }
     }
-  }
-  return NULL;
+    return NULL;
 }

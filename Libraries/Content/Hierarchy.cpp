@@ -18,13 +18,13 @@ void Content::Hierarchy::Reserve(unsigned p_NodeCount)
 	m_Parents.reserve(p_NodeCount);
 }
 
-void Content::Hierarchy::AddParentID(UniqueID::TUID p_Node, UniqueID::TUID p_Parent)
+void Content::Hierarchy::AddParentID(Nocturnal::UID::TUID p_Node, Nocturnal::UID::TUID p_Parent)
 {
 	m_Objects.push_back(p_Node);
 	m_Parents.push_back(p_Parent);
 }
 
-UniqueID::TUID Content::Hierarchy::GetParentID(UniqueID::TUID p_Node)
+Nocturnal::UID::TUID Content::Hierarchy::GetParentID(Nocturnal::UID::TUID p_Node)
 {
 	for (unsigned int i=0; i<m_Objects.size(); i++)
 	{
@@ -33,5 +33,5 @@ UniqueID::TUID Content::Hierarchy::GetParentID(UniqueID::TUID p_Node)
 	}
 
 	// it has no parent, IE its a root object
-	return UniqueID::TUID::Null;
+	return Nocturnal::UID::TUID::Null;
 }

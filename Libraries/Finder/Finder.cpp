@@ -22,6 +22,7 @@ using Nocturnal::Insert;
 #include "Common/Checksum/MurmurHash2.h"
 #include "FileSystem/FileSystem.h"
 
+using namespace Nocturnal;
 using namespace Finder;
 
 
@@ -149,7 +150,7 @@ const FileSpec* Finder::GetFileSpec( const std::string &specName )
 
 void Finder::HackSpec( FileSpec* spec )
 {
-  tuid randomId = TUID::Generate();
+  tuid randomId = UID::TUID::Generate();
   std::stringstream str;
   str << randomId;
   spec->SetFormatVersion( str.str() );

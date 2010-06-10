@@ -64,12 +64,12 @@ namespace Reflect
     virtual void Host(Visitor& visitor) NOC_OVERRIDE;
   };
 
-  typedef SimpleElementMapSerializer<TypeID> TypeIDElementMapSerializer;          REFLECT_SPECIALIZE_SERIALIZER(TypeIDElementMapSerializer);
-  typedef SimpleElementMapSerializer<std::string> StringElementMapSerializer;     REFLECT_SPECIALIZE_SERIALIZER(StringElementMapSerializer);
-  typedef SimpleElementMapSerializer<u32> U32ElementMapSerializer;                REFLECT_SPECIALIZE_SERIALIZER(U32ElementMapSerializer);
-  typedef SimpleElementMapSerializer<i32> I32ElementMapSerializer;                REFLECT_SPECIALIZE_SERIALIZER(I32ElementMapSerializer);
-  typedef SimpleElementMapSerializer<u64> U64ElementMapSerializer;                REFLECT_SPECIALIZE_SERIALIZER(U64ElementMapSerializer);
-  typedef SimpleElementMapSerializer<i64> I64ElementMapSerializer;                REFLECT_SPECIALIZE_SERIALIZER(I64ElementMapSerializer);
-  typedef SimpleElementMapSerializer<UniqueID::GUID> GUIDElementMapSerializer;    REFLECT_SPECIALIZE_SERIALIZER(GUIDElementMapSerializer);
-  typedef SimpleElementMapSerializer<UniqueID::TUID> TUIDElementMapSerializer;    REFLECT_SPECIALIZE_SERIALIZER(TUIDElementMapSerializer);
+  typedef SimpleElementMapSerializer<TypeID> TypeIDElementMapSerializer;              REFLECT_SPECIALIZE_SERIALIZER(TypeIDElementMapSerializer);
+  typedef SimpleElementMapSerializer<std::string> StringElementMapSerializer;         REFLECT_SPECIALIZE_SERIALIZER(StringElementMapSerializer);
+  typedef SimpleElementMapSerializer<u32> U32ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(U32ElementMapSerializer);
+  typedef SimpleElementMapSerializer<i32> I32ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(I32ElementMapSerializer);
+  typedef SimpleElementMapSerializer<u64> U64ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(U64ElementMapSerializer);
+  typedef SimpleElementMapSerializer<i64> I64ElementMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(I64ElementMapSerializer);
+  typedef SimpleElementMapSerializer<Nocturnal::UID::GUID> GUIDElementMapSerializer;  REFLECT_SPECIALIZE_SERIALIZER(GUIDElementMapSerializer);
+  typedef SimpleElementMapSerializer<Nocturnal::UID::TUID> TUIDElementMapSerializer;  REFLECT_SPECIALIZE_SERIALIZER(TUIDElementMapSerializer);
 }

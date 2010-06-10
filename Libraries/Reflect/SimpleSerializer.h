@@ -11,6 +11,8 @@
 #include "Math/Color4.h"
 #include "Math/HDRColor3.h"
 #include "Math/HDRColor4.h"
+#include "UID/GUID.h"
+#include "UID/TUID.h"
 
 namespace Reflect
 {
@@ -60,8 +62,8 @@ namespace Reflect
   typedef SimpleSerializer<i64> I64Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( I64Serializer );
   typedef SimpleSerializer<f32> F32Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( F32Serializer );
   typedef SimpleSerializer<f64> F64Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( F64Serializer );
-  typedef SimpleSerializer<UniqueID::GUID> GUIDSerializer;                  REFLECT_SPECIALIZE_SERIALIZER( GUIDSerializer );
-  typedef SimpleSerializer<UniqueID::TUID> TUIDSerializer;                  REFLECT_SPECIALIZE_SERIALIZER( TUIDSerializer );
+  typedef SimpleSerializer<Nocturnal::UID::GUID> GUIDSerializer;            REFLECT_SPECIALIZE_SERIALIZER( GUIDSerializer );
+  typedef SimpleSerializer<Nocturnal::UID::TUID> TUIDSerializer;            REFLECT_SPECIALIZE_SERIALIZER( TUIDSerializer );
 
   typedef SimpleSerializer<::Math::Vector2> Vector2Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Vector2Serializer );
   typedef SimpleSerializer<::Math::Vector3> Vector3Serializer;              REFLECT_SPECIALIZE_SERIALIZER( Vector3Serializer );

@@ -7,7 +7,7 @@
 #include "Common/String/Utilities.h"
 
 #include "rcs/rcs.h"
-#include "tuid/TUID.h"
+#include "UID/TUID.h"
 #include "Console/Console.h"
 
 #include "FileSystem/FileSystem.h"
@@ -104,7 +104,7 @@ namespace Content
   {
     NOC_ASSERT( node.ReferencesObject() );
 
-    Insert<M_DependencyNode>::Result result = m_DependencyNodes.insert( std::pair<UniqueID::TUID, SceneNodePtr>( node->m_ID, node ) );
+    Insert<M_DependencyNode>::Result result = m_DependencyNodes.insert( std::pair<Nocturnal::UID::TUID, SceneNodePtr>( node->m_ID, node ) );
 
     //if it already exists in the scene, bail out early
     if( !result.second )
@@ -311,7 +311,7 @@ namespace Content
       if( itor->second->m_ID == node->m_ID )
       {
         m_Hierarchy.erase( itor );
-        node->m_ParentID = UniqueID::TUID::Null;
+        node->m_ParentID = Nocturnal::UID::TUID::Null;
         break;
       }      
     }
@@ -328,11 +328,11 @@ namespace Content
     AddChild( child, parent->m_ID );
   }
 
-  void Scene::AddChild( const HierarchyNodePtr& child, const UniqueID::TUID& parentID )
+  void Scene::AddChild( const HierarchyNodePtr& child, const Nocturnal::UID::TUID& parentID )
   {
     RemoveFromParent( child );
     child->m_ParentID = parentID;
-    m_Hierarchy.insert( std::pair<UniqueID::TUID, HierarchyNodePtr>( parentID, child ) );
+    m_Hierarchy.insert( std::pair<Nocturnal::UID::TUID, HierarchyNodePtr>( parentID, child ) );
   }
 
   void Scene::UpdateHierarchy()
@@ -342,7 +342,7 @@ namespace Content
 
     for( ; itor != end; ++itor )
     {
-      m_Hierarchy.insert( std::pair<UniqueID::TUID, HierarchyNodePtr>( (*itor)->m_ParentID, *itor ) );
+      m_Hierarchy.insert( std::pair<Nocturnal::UID::TUID, HierarchyNodePtr>( (*itor)->m_ParentID, *itor ) );
     }
 
     // done updating with the current batch of newly added hierarchy nodes...safe to clear it
@@ -487,7 +487,7 @@ namespace Content
     */
   }
 
-  bool Scene::Exists( const UniqueID::TUID& id )
+  bool Scene::Exists( const Nocturnal::UID::TUID& id )
   {
     M_DependencyNode::iterator findItor = m_DependencyNodes.find( id );
     return ( findItor != m_DependencyNodes.end() );
@@ -547,7 +547,7 @@ namespace Content
         continue;
       }
 
-      if (node->m_ParentID == UniqueID::TUID::Null || m_DependencyNodes.find( node->m_ParentID ) == m_DependencyNodes.end() )
+      if (node->m_ParentID == Nocturnal::UID::TUID::Null || m_DependencyNodes.find( node->m_ParentID ) == m_DependencyNodes.end() )
       {
         // node is a root node, he has not parent whether that be by null id or just missing
         Optimize( node );          
@@ -671,10 +671,10 @@ namespace Content
 
   void Scene::GetJointsFromClip( const AnimationClipPtr& clip, V_JointTransform& joints )
   {
-    UniqueID::V_TUID jointIDs;
+    Nocturnal::UID::V_TUID jointIDs;
     clip->GetJointIDs( jointIDs );
 
-    for each ( const UniqueID::TUID& uid in jointIDs )
+    for each ( const Nocturnal::UID::TUID& uid in jointIDs )
     {
       joints.push_back( Get<JointTransform>( uid ) );
     }
@@ -712,7 +712,7 @@ namespace Content
     // dump joint ids
     printf("----------------------------------------\n");
     printf("%5d joints\n", m_JointIds.size());
-    for(UniqueID::S_TUID::const_iterator ijoint = m_JointIds.begin(); ijoint != m_JointIds.end(); ++ijoint)
+    for(Nocturnal::UID::S_TUID::const_iterator ijoint = m_JointIds.begin(); ijoint != m_JointIds.end(); ++ijoint)
     {
       std::string joint_str;
       ijoint->ToString(joint_str);
@@ -726,7 +726,7 @@ namespace Content
 
 //    // dump inv bind mats
 //    printf("%%%----------------------------------------\n");
-//    for(UniqueID::S_TUID::const_iterator ijoint = m_JointIds.begin(); ijoint != m_JointIds.end(); ++ijoint)
+//    for(Nocturnal::UID::S_TUID::const_iterator ijoint = m_JointIds.begin(); ijoint != m_JointIds.end(); ++ijoint)
 //    {
 //      const igSuperJointArray* bindJoints = m_Processor.GetEngineScene().GetSuperJointArray();
 //
@@ -783,7 +783,7 @@ namespace Content
           for(u32 inf = 0; inf < num_weights; inf++)
           {
             f32                 weight          = influence->m_Weights[inf];
-            const UniqueID::TUID& weight_joint_id = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
+            const Nocturnal::UID::TUID& weight_joint_id = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
 
             std::string weight_joint_str;
             weight_joint_id.ToString(weight_joint_str);
@@ -839,7 +839,7 @@ namespace Content
               continue;
             }
 
-            const UniqueID::TUID&  joint_id  = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
+            const Nocturnal::UID::TUID&  joint_id  = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
             t_UidId              uid_id    = std::make_pair(joint_id, mesh_id);
 
             joint_verts_map[content_type][uid_id].push_back(pos);
@@ -875,7 +875,7 @@ namespace Content
       for(t_JointVertsMap::iterator i = start; i != end; ++i)
       {
         const t_UidId&      uid_id      = i->first;
-        const UniqueID::TUID& joint_id    = uid_id.first;
+        const Nocturnal::UID::TUID& joint_id    = uid_id.first;
         u64                 mesh_id     = uid_id.second;
         Math::V_Vector3&    joint_verts = i->second;
 
@@ -1011,7 +1011,7 @@ namespace Content
           const t_UidId&          uid_id  = i->first;
           const Math::V_Vector3&  verts   = i->second;
 
-          const UniqueID::TUID&  joint_id  = uid_id.first;
+          const Nocturnal::UID::TUID&  joint_id  = uid_id.first;
           u64                  mesh_id   = uid_id.second;
 
           std::string joint_str;
@@ -1044,7 +1044,7 @@ namespace Content
 
         for(M_UIDBSphere::const_iterator i = start; i != end; ++i)
         {
-          const UniqueID::TUID&             joint_id  = i->first;
+          const Nocturnal::UID::TUID&             joint_id  = i->first;
           const std::vector<t_BsphereId>& bspheres  = i->second;
 
           for(size_t ibsphere = 0; ibsphere < bspheres.size(); ibsphere++)
@@ -1099,9 +1099,9 @@ namespace Content
 
     #if 0
     {
-      for(UniqueID::S_TUID::const_iterator ijoint = m_JointIds.begin(); ijoint != m_JointIds.end(); ++ijoint)
+      for(Nocturnal::UID::S_TUID::const_iterator ijoint = m_JointIds.begin(); ijoint != m_JointIds.end(); ++ijoint)
       {
-        UniqueID::TUID joint_id = *ijoint;
+        Nocturnal::UID::TUID joint_id = *ijoint;
 
         std::string joint_str;
         joint_id.ToString(joint_str);
@@ -1182,7 +1182,7 @@ namespace Content
             continue;
           }
 
-          UniqueID::TUID joint_id = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
+          Nocturnal::UID::TUID joint_id = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
 
           for( u32 contentType = 0; contentType < Content::ContentTypes::NumContentTypes; ++contentType )
           {
@@ -1227,7 +1227,7 @@ namespace Content
 
       for( ; itor != end; ++itor )
       {
-          UniqueID::TUID joint_id = itor->first;
+          Nocturnal::UID::TUID joint_id = itor->first;
 
           #ifdef DO_BSPHERE_DUMP
           {
@@ -1297,7 +1297,7 @@ namespace Content
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  bool Scene::GetBSpheresForJoint(std::vector<t_BsphereId>& bspheres, const UniqueID::TUID& jointID, Content::ContentType contentType ) const
+  bool Scene::GetBSpheresForJoint(std::vector<t_BsphereId>& bspheres, const Nocturnal::UID::TUID& jointID, Content::ContentType contentType ) const
   {
     M_UIDBSphere::const_iterator findItor = m_JointBspheres[contentType].find( jointID);
     if( findItor == m_JointBspheres[contentType].end() )
@@ -1322,7 +1322,7 @@ namespace Content
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  bool Scene::GetSkinVerts(u32 contentType, const std::map<UniqueID::TUID, u32>& jointUidToId, const UniqueID::TUID& rootUid, std::vector<t_SkinVerts>& skinVerts) const
+  bool Scene::GetSkinVerts(u32 contentType, const std::map<Nocturnal::UID::TUID, u32>& jointUidToId, const Nocturnal::UID::TUID& rootUid, std::vector<t_SkinVerts>& skinVerts) const
   {
     u32         root_id = jointUidToId.find(rootUid)->second;
     M_u32       mesh_id_to_skin_verts;
@@ -1392,13 +1392,13 @@ namespace Content
 
           for(size_t inf = 0; inf < num_weights; inf++)
           {
-            const UniqueID::TUID& joint_id = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
+            const Nocturnal::UID::TUID& joint_id = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
 
             i32 joint_index = -1;
 
             TransformPtr transform = Get< Transform >( joint_id );
 
-            std::map< UniqueID::TUID, u32 >::const_iterator indexIt = jointUidToId.find(joint_id);
+            std::map< Nocturnal::UID::TUID, u32 >::const_iterator indexIt = jointUidToId.find(joint_id);
             
             if ( indexIt == jointUidToId.end() )
             {
@@ -1448,7 +1448,7 @@ namespace Content
   {
     for each (const SkinPtr& skin in m_Skins )
     {
-      for each ( const UniqueID::TUID& influenceObject in skin->m_InfluenceObjectIDs )
+      for each ( const Nocturnal::UID::TUID& influenceObject in skin->m_InfluenceObjectIDs )
       {
         JointTransformPtr joint = Get< JointTransform >( influenceObject );
         if ( joint.ReferencesObject() )
@@ -1463,8 +1463,8 @@ namespace Content
   {
     u32 depth = 0;
 
-    UniqueID::TUID parentId = node->m_ParentID;
-    while ( parentId != UniqueID::TUID::Null )
+    Nocturnal::UID::TUID parentId = node->m_ParentID;
+    while ( parentId != Nocturnal::UID::TUID::Null )
     {
       HierarchyNodePtr parentNode = Get< HierarchyNode >( parentId );
 
@@ -1476,7 +1476,7 @@ namespace Content
       }
       else
       {
-        parentId = UniqueID::TUID::Null;
+        parentId = Nocturnal::UID::TUID::Null;
       }
     }
 
@@ -1497,7 +1497,7 @@ namespace Content
     GetAll<CollisionPrimitive>( primitives );
     for each ( const CollisionPrimitivePtr& prim in primitives )
     {
-      if ( prim->m_ParentID == UniqueID::TUID::Null )
+      if ( prim->m_ParentID == Nocturnal::UID::TUID::Null )
       {
         continue;
       }
@@ -1514,7 +1514,7 @@ namespace Content
     GetAll<Effector>( effectors );
     for each ( const EffectorPtr& effector in effectors )
     {
-      if ( effector->m_ParentID == UniqueID::TUID::Null )
+      if ( effector->m_ParentID == Nocturnal::UID::TUID::Null )
       {
         continue;
       }
@@ -1538,8 +1538,8 @@ namespace Content
       // add the parent hierarchy of any joint that is required
       if ( requiredJoints.find( joint ) != requiredJoints.end() )
       {
-        UniqueID::TUID parentId = joint->m_ParentID;
-        while ( parentId != UniqueID::TUID::Null )
+        Nocturnal::UID::TUID parentId = joint->m_ParentID;
+        while ( parentId != Nocturnal::UID::TUID::Null )
         {
           JointTransformPtr parentJoint = Get< JointTransform >( parentId );
 
@@ -1551,7 +1551,7 @@ namespace Content
           }
           else
           {
-            parentId = UniqueID::TUID::Null;
+            parentId = Nocturnal::UID::TUID::Null;
           }
         }
       }
@@ -1587,7 +1587,7 @@ namespace Content
     }
   }
 
-  typedef std::multimap< UniqueID::TUID, MeshPtr > M_ShaderMesh;
+  typedef std::multimap< Nocturnal::UID::TUID, MeshPtr > M_ShaderMesh;
 
   void Scene::MergeMeshes()
   {
@@ -1595,7 +1595,7 @@ namespace Content
    
     for each( const MeshPtr& mesh in m_Meshes )
     { 
-      for each( const UniqueID::TUID& shaderID in mesh->m_ShaderIDs )
+      for each( const Nocturnal::UID::TUID& shaderID in mesh->m_ShaderIDs )
       {
         M_ShaderMesh::iterator itor = meshesByShader.lower_bound( shaderID );
         M_ShaderMesh::iterator upper = meshesByShader.upper_bound( shaderID );

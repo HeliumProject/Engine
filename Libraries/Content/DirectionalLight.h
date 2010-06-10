@@ -18,7 +18,7 @@ namespace Content
     {
     }
 
-    DirectionalLight (UniqueID::TUID &id)
+    DirectionalLight (Nocturnal::UID::TUID &id)
       : Light (id),
         m_GlobalSun( false ),
         m_ShadowSoftness( 0.0f ),

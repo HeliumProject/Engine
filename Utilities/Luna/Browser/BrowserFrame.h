@@ -14,7 +14,7 @@
 #include "Editor/UpdateStatusEvent.h"
 #include "Reflect/Element.h"
 #include "Reflect/Version.h"
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 
 #include <wx/listctrl.h>
 

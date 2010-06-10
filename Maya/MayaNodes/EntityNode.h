@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "tuid/TUID.h"
+#include "UID/TUID.h"
 #include "Asset/Entity.h"
 
 #include <maya/MDagMessage.h>
@@ -50,7 +50,7 @@ private:
   // private non-static members
   MPlug                 m_Plug;
   Asset::EntityPtr      m_Entity;
-  UniqueID::TUID        m_UID; // cache the UniqueID::TUID here so we don't have to look it up on the backing entityPtr each time we do a comparison
+  Nocturnal::UID::TUID        m_UID; // cache the UID::TUID here so we don't have to look it up on the backing entityPtr each time we do a comparison
   MCallbackId           m_AttributeChangedCB;
   MCallbackId           m_ChildAddedCB;
 
@@ -70,7 +70,7 @@ public:
   virtual MStatus   		  compute( const MPlug& plug, MDataBlock& data );
   virtual void            draw( M3dView& view, const MDagPath& path, M3dView::DisplayStyle style, M3dView::DisplayStatus status );
 
-  const UniqueID::TUID& GetUID() const
+  const Nocturnal::UID::TUID& GetUID() const
   {
     return m_UID;
   }
@@ -114,4 +114,4 @@ public:
   static void AllDagChangesCallback( MDagMessage::DagMessage dagMsg, MDagPath& child, MDagPath &parent, void* clientData );
 };
 
-typedef std::map< UniqueID::TUID, EntityNode* > M_EntityNode;
+typedef std::map< Nocturnal::UID::TUID, EntityNode* > M_EntityNode;

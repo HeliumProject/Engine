@@ -15,6 +15,7 @@
 #include "UIToolKit/ImageManager.h"
 
 using namespace Luna;
+using namespace Nocturnal;
 
 LUNA_DEFINE_TYPE( SceneNode );
 
@@ -48,12 +49,12 @@ SceneNode::~SceneNode()
 
 }
 
-const UniqueID::TUID& SceneNode::GetID() const
+const UID::TUID& SceneNode::GetID() const
 {
   return GetPackage<Content::SceneNode>()->m_ID;
 }
 
-void SceneNode::SetID( const UniqueID::TUID& id )
+void SceneNode::SetID( const UID::TUID& id )
 {
   GetPackage<Content::SceneNode>()->m_ID = id;
 }

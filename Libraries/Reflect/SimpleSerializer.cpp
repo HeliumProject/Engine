@@ -350,8 +350,8 @@ template SimpleSerializer<i64>;
 template SimpleSerializer<f32>;
 template SimpleSerializer<f64>;
 template SimpleSerializer<std::string>;
-template SimpleSerializer<UniqueID::GUID>;
-template SimpleSerializer<UniqueID::TUID>;
+template SimpleSerializer<Nocturnal::UID::GUID>;
+template SimpleSerializer<Nocturnal::UID::TUID>;
 
 template SimpleSerializer<Math::Vector2>;
 template SimpleSerializer<Math::Vector3>;

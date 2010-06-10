@@ -57,7 +57,7 @@ namespace Content
       
     { }
 
-    Descriptor (const UniqueID::TUID& id)
+    Descriptor (const Nocturnal::UID::TUID& id)
       : PivotTransform (id) 
       , m_ExportType( Content::ContentTypes::Default )
       , m_BangleGeometrySimulation( GeometrySimulations::Off )

@@ -2,8 +2,8 @@
 
 #include "API.h"
 
-#include "TUID/TUID.h"
-#include "UniqueID/TUID.h"
+#include "UID/TUID.h"
+#include "UID/TUID.h"
 
 #include "Mesh.h"
 #include "Shader.h"
@@ -39,8 +39,8 @@ namespace Content
 
   
 
-  typedef stdext::hash_map< UniqueID::TUID, SceneNodePtr > M_DependencyNode;
-  typedef stdext::hash_multimap< UniqueID::TUID, HierarchyNodePtr, UniqueID::TUIDHasher > MM_HierarchyNode;
+  typedef stdext::hash_map< Nocturnal::UID::TUID, SceneNodePtr > M_DependencyNode;
+  typedef stdext::hash_multimap< Nocturnal::UID::TUID, HierarchyNodePtr, Nocturnal::UID::TUIDHasher > MM_HierarchyNode;
   typedef std::pair< u32, u32 > ExportTypeAndIndexPair;
   typedef std::multimap< ExportTypeAndIndexPair, MeshPtr > MM_TypedMesh;
 
@@ -81,7 +81,7 @@ namespace Content
     struct t_SkinVert
     {
       Math::Vector3  m_pos;
-      UniqueID::V_TUID m_joint_ids;  // joint uids
+      Nocturnal::UID::V_TUID m_joint_ids;  // joint uids
       V_u32          m_joints;     // joint uids as runtime indices
       V_f32          m_weights;
     };
@@ -102,7 +102,7 @@ namespace Content
     // all the nodes in the scene
     M_DependencyNode     m_DependencyNodes;
 
-    UniqueID::S_TUID     m_JointIds;
+    Nocturnal::UID::S_TUID     m_JointIds;
     // shortcuts to each node by type
 
     // should probably have made this a map keyed by reflect type.
@@ -162,13 +162,13 @@ namespace Content
     u32  GetNumAnimationClips() const;
     void GetJointsFromClip( const AnimationClipPtr& clip, V_JointTransform& joints );
     u32  GetNumValidJointAnimations( u32 clipIndex = 0 ) const;
-    u32  GetNumValidJointAnimations( const UniqueID::S_TUID& jointList, u32 clipIndex = 0 ) const;
+    u32  GetNumValidJointAnimations( const Nocturnal::UID::S_TUID& jointList, u32 clipIndex = 0 ) const;
     void GetJointMismatchReport( V_string &mismatchMessages, u32 clipIndex = 0 ) const;
 
     void CalculateJointBoundingVolumes();
-    bool GetBSpheresForJoint          (std::vector<t_BsphereId>& bspheres, const UniqueID::TUID& jointID, Content::ContentType contentType ) const;
+    bool GetBSpheresForJoint          (std::vector<t_BsphereId>& bspheres, const Nocturnal::UID::TUID& jointID, Content::ContentType contentType ) const;
     bool GetBSpheres                  (std::vector<t_BsphereId>& bspheres, Content::ContentType contentType) const;
-    bool GetSkinVerts                 (u32 contentType, const std::map<UniqueID::TUID, u32>& jointUidToId, const UniqueID::TUID& rootUid, std::vector<t_SkinVerts>& skinVerts) const;
+    bool GetSkinVerts                 (u32 contentType, const std::map<Nocturnal::UID::TUID, u32>& jointUidToId, const Nocturnal::UID::TUID& rootUid, std::vector<t_SkinVerts>& skinVerts) const;
 
     void GetInfluentialJoints( S_JointTransform& joints );
     u32  GetHierarchyNodeDepth( const HierarchyNodePtr& node ) const;
@@ -181,7 +181,7 @@ namespace Content
     //
 
     template< class T >
-    Nocturnal::SmartPtr< T > Get( const UniqueID::TUID &uid ) const
+    Nocturnal::SmartPtr< T > Get( const Nocturnal::UID::TUID &uid ) const
     {
       M_DependencyNode::const_iterator itor = m_DependencyNodes.find( uid );
       if( itor != m_DependencyNodes.end() )
@@ -222,7 +222,7 @@ namespace Content
 
     bool IsChildOf( const HierarchyNodePtr& potentialChild, const HierarchyNodePtr &potentialParent ) const;
 
-    void AddChild( const HierarchyNodePtr& child, const UniqueID::TUID& parentID );
+    void AddChild( const HierarchyNodePtr& child, const Nocturnal::UID::TUID& parentID );
     void AddChild( const HierarchyNodePtr& child, const HierarchyNodePtr& parent );
 
     void RemoveFromHierarchy( const HierarchyNodePtr& child );
@@ -291,7 +291,7 @@ namespace Content
     //
     // Internal utilities 
     //
-    bool Exists( const UniqueID::TUID& id );
+    bool Exists( const Nocturnal::UID::TUID& id );
 
     void UpdateGlobalTransforms( const TransformPtr& transform );
     void UpdateExportData();

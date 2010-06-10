@@ -9,6 +9,7 @@
 #include "Mesh.h"
 
 using namespace Luna;
+using namespace Nocturnal;
 
 LUNA_DEFINE_TYPE( Skin );
 
@@ -47,8 +48,8 @@ void Skin::Initialize()
     m_Mesh->CreateDependency( this );
 
     // Dereference influence objects
-    UniqueID::V_TUID::const_iterator infItr = skin->m_InfluenceObjectIDs.begin();
-    UniqueID::V_TUID::const_iterator infEnd = skin->m_InfluenceObjectIDs.end();
+    UID::V_TUID::const_iterator infItr = skin->m_InfluenceObjectIDs.begin();
+    UID::V_TUID::const_iterator infEnd = skin->m_InfluenceObjectIDs.end();
     for ( ; infItr != infEnd; ++infItr )
     {
       Luna::SceneNode* obj = m_Scene->FindNode( *infItr );

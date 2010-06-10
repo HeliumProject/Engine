@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 
 #include <maya/MGlobal.h>
 #include <maya/MDagPath.h>
@@ -14,7 +14,7 @@
 #include <map>
 
 #include "Content/ContentTypes.h"
-#include "UniqueID/TUID.h"
+#include "UID/TUID.h"
 
 namespace Maya
 {
@@ -26,14 +26,14 @@ namespace Maya
     Content::ContentType m_type;
     int                  m_index;
     int                  m_artNumber;
-    UniqueID::TUID         m_ID;
+    Nocturnal::UID::TUID m_ID;
     tuid                 m_entityID;
 
     ExportInfo() 
       : m_type( Content::ContentTypes::Default )
       , m_index( 0 )
       , m_artNumber( 0 )
-      , m_entityID( TUID::Null )
+      , m_entityID( Nocturnal::UID::TUID::Null )
     {
     }
 
@@ -98,9 +98,9 @@ namespace Maya
                                Content::ContentType type      = Content::ContentTypes::Default,
                                int                index     = -1 );
 
-  bool MAYAUTILS_API GetExportInfo( const UniqueID::TUID& id, ExportInfo*& info );
+  bool MAYAUTILS_API GetExportInfo( const Nocturnal::UID::TUID& id, ExportInfo*& info );
 
-  bool MAYAUTILS_API RemoveMultiMapDupe( const UniqueID::TUID& id );
+  bool MAYAUTILS_API RemoveMultiMapDupe( const Nocturnal::UID::TUID& id );
 
   // makes queries via GetExportInfo
   Content::ContentType MAYAUTILS_API ExportType( const MObject & dagNodeObject );

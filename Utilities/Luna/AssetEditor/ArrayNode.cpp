@@ -4,7 +4,7 @@
 
 #include "Common/String/Tokenize.h"
 #include "Console/Console.h"
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 
 using namespace Luna;
 

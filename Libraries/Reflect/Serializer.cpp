@@ -4,7 +4,7 @@
 
 #include <boost/numeric/conversion/cast.hpp>
 
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 
 using namespace Reflect;
 
@@ -40,10 +40,10 @@ bool Cast(const Serializer* src, Serializer* dest)
 }
 
 template<>
-bool Cast<u64, UniqueID::TUID>(const Serializer* src, Serializer* dest)
+bool Cast<u64, Nocturnal::UID::TUID>(const Serializer* src, Serializer* dest)
 {
   const SimpleSerializer<u64>* source = static_cast<const SimpleSerializer<u64>*>(src);
-  SimpleSerializer<UniqueID::TUID>* destination = static_cast<SimpleSerializer<UniqueID::TUID>*>(dest);
+  SimpleSerializer<Nocturnal::UID::TUID>* destination = static_cast<SimpleSerializer<Nocturnal::UID::TUID>*>(dest);
 
   destination->m_Data.Set( source->m_Data.Get() );
 
@@ -51,9 +51,9 @@ bool Cast<u64, UniqueID::TUID>(const Serializer* src, Serializer* dest)
 }
 
 template<>
-bool Cast<UniqueID::TUID, u64>(const Serializer* src, Serializer* dest)
+bool Cast<Nocturnal::UID::TUID, u64>(const Serializer* src, Serializer* dest)
 {
-  const SimpleSerializer<UniqueID::TUID>* source = static_cast<const SimpleSerializer<UniqueID::TUID>*>(src);
+  const SimpleSerializer<Nocturnal::UID::TUID>* source = static_cast<const SimpleSerializer<Nocturnal::UID::TUID>*>(src);
   SimpleSerializer<u64>* destination = static_cast<SimpleSerializer<u64>*>(dest);
 
   destination->m_Data.Set( source->m_Data.Get() );
@@ -62,10 +62,10 @@ bool Cast<UniqueID::TUID, u64>(const Serializer* src, Serializer* dest)
 }
 
 template<>
-bool Cast<UniqueID::TUID, UniqueID::GUID>(const Serializer* src, Serializer* dest)
+bool Cast<Nocturnal::UID::TUID, Nocturnal::UID::GUID>(const Serializer* src, Serializer* dest)
 {
-  const SimpleSerializer<UniqueID::TUID>* source = static_cast<const SimpleSerializer<UniqueID::TUID>*>(src);
-  SimpleSerializer<UniqueID::GUID>* destination = static_cast<SimpleSerializer<UniqueID::GUID>*>(dest);
+  const SimpleSerializer<Nocturnal::UID::TUID>* source = static_cast<const SimpleSerializer<Nocturnal::UID::TUID>*>(src);
+  SimpleSerializer<Nocturnal::UID::GUID>* destination = static_cast<SimpleSerializer<Nocturnal::UID::GUID>*>(dest);
 
   destination->m_Data.Ref().FromTUID( source->m_Data.Get() );
 
@@ -73,10 +73,10 @@ bool Cast<UniqueID::TUID, UniqueID::GUID>(const Serializer* src, Serializer* des
 }
 
 template<>
-bool Cast<UniqueID::GUID, UniqueID::TUID>(const Serializer* src, Serializer* dest)
+bool Cast<Nocturnal::UID::GUID, Nocturnal::UID::TUID>(const Serializer* src, Serializer* dest)
 {
-  const SimpleSerializer<UniqueID::GUID>* source = static_cast<const SimpleSerializer<UniqueID::GUID>*>(src);
-  SimpleSerializer<UniqueID::TUID>* destination = static_cast<SimpleSerializer<UniqueID::TUID>*>(dest);
+  const SimpleSerializer<Nocturnal::UID::GUID>* source = static_cast<const SimpleSerializer<Nocturnal::UID::GUID>*>(src);
+  SimpleSerializer<Nocturnal::UID::TUID>* destination = static_cast<SimpleSerializer<Nocturnal::UID::TUID>*>(dest);
 
   destination->m_Data.Ref().FromGUID( source->m_Data.Get() );
 
@@ -163,10 +163,10 @@ void Serializer::Initialize()
   NOC_ASSERT(g_CastingFuncs.size() == 90);
 
   // u64 to TUID and back
-  MapCasts<u64, UniqueID::TUID>();
+  MapCasts<u64, Nocturnal::UID::TUID>();
 
   // GUID to TUID and back
-  MapCasts<UniqueID::GUID, UniqueID::TUID>();
+  MapCasts<Nocturnal::UID::GUID, Nocturnal::UID::TUID>();
 }
 
 void Serializer::Cleanup()

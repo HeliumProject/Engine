@@ -25,7 +25,7 @@ namespace Content
     M_u32                       m_TargetIndexToTargetSetId;
 
     // mapping of each target's TUID to its location in the list of targets
-    UniqueID::HM_TUIDU32        m_TargetIdToTargetIndex;
+    Nocturnal::UID::HM_TUIDU32        m_TargetIdToTargetIndex;
 
 
     MorphTargetData()
@@ -33,7 +33,7 @@ namespace Content
     }
 
     void CollateMorphTargets( const V_Mesh& meshes );
-    u32 GetMorphTargetIndex( const UniqueID::TUID& targetId ) const;
+    u32 GetMorphTargetIndex( const Nocturnal::UID::TUID& targetId ) const;
     u32 FindSetIDFromTargetIndex( const u32 targetIndex ) const;
     //void CopyMorphData( const MorphTargetData& source );
 

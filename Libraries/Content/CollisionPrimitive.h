@@ -37,7 +37,7 @@ namespace Content
 
   public:
     CollisionShape m_Shape;
-    UniqueID::TUID m_ChildID;      // this is used to match the child sphere of a capsule to the parent sphere
+    Nocturnal::UID::TUID m_ChildID;      // this is used to match the child sphere of a capsule to the parent sphere
 
     //
     // RTTI
@@ -59,7 +59,7 @@ namespace Content
 
     }
 
-    CollisionPrimitive (const UniqueID::TUID& id)
+    CollisionPrimitive (const Nocturnal::UID::TUID& id)
       : PivotTransform (id)
       , m_Shape (CollisionShapes::Cube)
     {

@@ -210,7 +210,7 @@ void Reflect::Initialize()
     Serializer::Initialize();
 
     //
-    // Legacy support for UniqueID::GUID
+    // Legacy support for UID::GUID
     //
 
     g_Instance->AliasType( Reflect::GetClass<GUIDSerializer>(), "UID" );

@@ -7,7 +7,6 @@
 #include "Common/Container/Insert.h"
 #include "Common/Environment.h"
 #include "Console/Console.h"
-#include "Windows/Module.h"
 
 #include <io.h>
 
@@ -233,75 +232,6 @@ void Reflect::Initialize()
 #endif
 }
 
-static std::map<std::string, HMODULE> g_LoadedModules;
-static std::map<std::string, HMODULE> g_CleanModules;
-typedef bool (*InitializeFunc)();
-typedef void (*CleanupFunc)();
-
-void Reflect::InitializeModules( const std::string& searchDirectory )
-{
-  Console::Bullet bullet ("Loading Reflect Modules...\n");
-
-  const char* extensions[] = { "dll", "exe", "mll" };
-
-  for ( int i=0; i<(sizeof(extensions)/sizeof(const char*)); i++ )
-  {
-    char spec[MAX_PATH];
-    sprintf(spec, "%s*.%s", searchDirectory.c_str(), extensions[i]);
-
-    _finddata_t data;
-    ZeroMemory(&data, sizeof(data));
-    intptr_t handle = _findfirst(spec, &data);
-
-    while (handle != -1)
-    {
-      bool found = false;
-
-      // build file path
-      std::string fileName = searchDirectory + data.name;
-
-      if ( Windows::ModuleContainsProc(fileName, "__InitializeReflectModule") )
-      {
-        Console::Bullet bullet ("%s\n", data.name);
-
-        // load dll into our address space
-        HMODULE module = LoadLibrary( data.name );
-
-        if (module)
-        {
-          // get the pointer to the init function
-          InitializeFunc init = reinterpret_cast<InitializeFunc>(GetProcAddress( module, "__InitializeReflectModule" ));
-
-          // call init function and check success
-          if (init)
-          {
-            Console::Debug("Initializing %s...\n", data.name);
-
-            init();
-
-            // save the module handle to free later (they are referenced counted by win32)
-            g_LoadedModules.insert(std::map<std::string, HMODULE>::value_type (data.name, module));
-          }
-          else
-          {
-            throw Nocturnal::Exception( "Failed to find initialize interface in %s", data.name );
-          }
-        }
-        else
-        {
-          Console::Error("Failed to load %s\n", data.name);
-        }
-      }
-
-      if (_findnext(handle, &data) != 0)
-      {
-        _findclose(handle);
-        handle = -1;
-      }
-    }
-  }
-}
-
 void Reflect::Cleanup()
 {
   if ( --g_InitCount == 0 )
@@ -312,9 +242,6 @@ void Reflect::Cleanup()
     // delete registry
     delete g_Instance;
     g_Instance = NULL;
-
-    // free our modules (after we delete the registry, which will call into virtual destructors in code in the dlls)
-    Reflect::FreeModules();
   }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
@@ -327,41 +254,6 @@ void Reflect::Cleanup()
   Console::Print( "\n" );
   Console::Print("%d\n\n%s\n", g_InitCount, str.c_str() );
 #endif
-}
-
-void Reflect::CleanupModules()
-{
-  std::map<std::string, HMODULE>::iterator itr = g_LoadedModules.begin();
-  std::map<std::string, HMODULE>::iterator end = g_LoadedModules.end();
-  for ( ; itr != end; ++itr )
-  {
-    CleanupFunc cleanup = reinterpret_cast<CleanupFunc>(GetProcAddress( itr->second, "__CleanupReflectModule" ));
-
-    if (cleanup)
-    {
-      cleanup();
-    }
-    else
-    {
-      Console::Print("%s: No cleanup entry point found\n", itr->first.c_str());
-    }
-
-    g_CleanModules[ itr->first ] = itr->second;
-  }
-
-  g_LoadedModules.clear();
-}
-
-void Reflect::FreeModules()
-{
-  std::map<std::string, HMODULE>::iterator itr = g_CleanModules.begin();
-  std::map<std::string, HMODULE>::iterator end = g_CleanModules.end();
-  for ( ; itr != end; ++itr )
-  {
-    FreeLibrary( itr->second );
-  }
-
-  g_CleanModules.clear();
 }
 
 Profile::MemoryPoolHandle g_MemoryPool;

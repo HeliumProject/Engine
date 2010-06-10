@@ -38,13 +38,8 @@ namespace Reflect
 
   // Init/Cleanup
   REFLECT_API bool IsInitialized();
-
   REFLECT_API void Initialize();
-  REFLECT_API void InitializeModules( const std::string& searchDirectory );
-
   REFLECT_API void Cleanup();
-  REFLECT_API void CleanupModules();
-  REFLECT_API void FreeModules();
 
   REFLECT_API Profile::MemoryPoolHandle MemoryPool();
 

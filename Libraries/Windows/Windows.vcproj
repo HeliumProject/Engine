@@ -205,18 +205,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Handle.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Module.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Module.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Process.cpp"
 			>
 		</File>

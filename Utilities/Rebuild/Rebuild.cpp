@@ -273,17 +273,7 @@ int Main(int argc, const char** argv)
     Nocturnal::InitializerStack initializerStack( true );
     initializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
 
-    char executablePathBuffer[ MAX_PATH ];
-    HANDLE hProcess = GetCurrentProcess();
-    if ( GetModuleFileName( NULL, executablePathBuffer, MAX_PATH ) == 0 )
-    {
-        throw Nocturnal::Exception( "Could not determine executable filename to locate Reflect modules." );
-    }
-
-    Nocturnal::Path rebuildBinaryPath( executablePathBuffer );
-    Reflect::InitializeModules( rebuildBinaryPath.Directory() );
-
-    initializerStack.Push( Reflect::CleanupModules );
+#pragma TODO("Need to init modules here -Geoff")
 
     if ( g_Batch.empty() && !g_Input.empty() )
     {

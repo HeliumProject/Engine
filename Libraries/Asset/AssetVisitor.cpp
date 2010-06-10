@@ -25,15 +25,12 @@
 #include "Reflect/Serializers.h"
 #include "Reflect/Version.h"
 #include "Reflect/Visitor.h"
-#include "TUID/TUID.h"
-#include "UniqueID/TUID.h"
+#include "UID/TUID.h"
 
 using Nocturnal::Insert; 
 using namespace Asset;
 using namespace Asset::AssetFlags;
-
-using namespace Asset;
-
+using namespace Nocturnal;
 
 /////////////////////////////////////////////////////////////////////////////
 inline bool CheckStopRequested( bool* cancel )
@@ -372,7 +369,7 @@ void AssetVisitor::HandleAssetFile( Reflect::Element* element, const Reflect::Fi
 /////////////////////////////////////////////////////////////////////////////
 void AssetVisitor::CollectRegionZones( const Content::RegionPtr& region, const Content::V_Zone& zones, Content::V_Zone& regionZones )
 {
-    const UniqueID::V_TUID& regionZoneID = region->GetZones(); 
+    const UID::V_TUID& regionZoneID = region->GetZones(); 
 
     // go through all the zones in the content file 
     Content::V_Zone::const_iterator itrZone = zones.begin();
@@ -409,8 +406,8 @@ void AssetVisitor::CollectRegionZones( const Content::RegionPtr& region, const C
             continue; 
         }
 
-        UniqueID::V_TUID::const_iterator itrRZ = regionZoneID.begin();
-        UniqueID::V_TUID::const_iterator endRZ = regionZoneID.end();
+        UID::V_TUID::const_iterator itrRZ = regionZoneID.begin();
+        UID::V_TUID::const_iterator endRZ = regionZoneID.end();
         for ( ; itrRZ != endRZ; ++itrRZ )
         {
             if ( CheckStopRequested( m_StopRequested ) )
@@ -496,7 +493,7 @@ void AssetVisitor::HandleWorldFile( Reflect::Element* element, const Reflect::Fi
         Nocturnal::Insert<M_RegionToZone>::Result inserted = regionToZones.insert( M_RegionToZone::value_type( region, Content::V_Zone() ) ); 
         if ( inserted.second )
         {
-            const UniqueID::V_TUID& regionZoneIDs = region->GetZones();
+            const UID::V_TUID& regionZoneIDs = region->GetZones();
 
             CollectRegionZones( region, zones, inserted.first->second ); 
             //region->GetName();

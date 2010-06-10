@@ -6,7 +6,7 @@
 #include "Common/Memory/SmartPtr.h"
 #include "Reflect/Registry.h"
 #include "Reflect/Serializers.h"
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 
 namespace Luna
 {

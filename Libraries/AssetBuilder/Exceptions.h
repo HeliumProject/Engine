@@ -4,7 +4,7 @@
 #include "Asset/ShaderAsset.h"
 #include "Common/Exception.h"
 #include "Reflect/Registry.h"
-#include "TUID/tuid.h"
+#include "UID/TUID.h"
 
 
 namespace AssetBuilder

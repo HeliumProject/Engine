@@ -8,41 +8,44 @@
 #include "Common/Types.h"
 #include "Common/Memory/SmartPtr.h"
 
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 
-namespace ES
-{ 
-  class EVENTSYSTEM_API Event : public Nocturnal::RefCountBase< Event >
-  {
-  public:
-    Event
-      (
-      const tuid id = TUID::Null,
-      u64 created = 0,
-      const std::string& username = std::string( "" ),
-      const std::string& data = std::string( "" )
-      )
-      : m_Id( id )
-      , m_Created( created )
-      , m_Username( username )
-      , m_Data( data )
-    {
+namespace Nocturnal
+{
+    namespace ES
+    { 
+        class EVENTSYSTEM_API Event : public Nocturnal::RefCountBase< Event >
+        {
+        public:
+            Event
+                (
+                const tuid id = UID::TUID::Null,
+                u64 created = 0,
+                const std::string& username = std::string( "" ),
+                const std::string& data = std::string( "" )
+                )
+                : m_Id( id )
+                , m_Created( created )
+                , m_Username( username )
+                , m_Data( data )
+            {
+            }
+
+            bool IsValid() const
+            {
+                return m_Id != UID::TUID::Null;
+            }
+
+            std::string Dump() const;
+
+        public:
+            tuid          m_Id;       // Events's unique id
+            u64           m_Created;  // time of Event record creation
+            std::string   m_Username; // username@computer
+            std::string   m_Data;           
+        };
+
+        typedef Nocturnal::SmartPtr< Event > EventPtr;
+        typedef std::vector< EventPtr > V_EventPtr;
     }
-
-    bool IsValid() const
-    {
-      return m_Id != TUID::Null;
-    }
-
-    std::string Dump() const;
-
-  public:
-    tuid          m_Id;       // Events's unique id
-    u64           m_Created;  // time of Event record creation
-    std::string   m_Username; // username@computer
-    std::string   m_Data;           
-  };
-
-  typedef Nocturnal::SmartPtr< Event > EventPtr;
-  typedef std::vector< EventPtr > V_EventPtr;
 }

@@ -180,10 +180,6 @@
 			RelativePathToProject=".\libraries\Profile\profile.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{74EBA5CC-62CC-4C95-9191-618AFEF3BEC0}"
-			RelativePathToProject=".\libraries\TUID\TUID.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{085AF6CC-A09C-4B8D-98B7-C57BC9D7CB18}"
 			RelativePathToProject=".\libraries\Inspect\Inspect.vcproj"
 		/>

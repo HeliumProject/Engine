@@ -5,7 +5,7 @@
 #include "BuilderInterface.h"
 #include "Common/Container/Insert.h"
 
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 #include "Asset/AssetClass.h"
 
 namespace AssetBuilder

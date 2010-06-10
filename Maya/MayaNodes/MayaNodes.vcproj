@@ -208,10 +208,6 @@
 			RelativePathToProject=".\libraries\MayaUtils\MayaUtils.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
-			RelativePathToProject=".\libraries\UniqueID\UniqueID.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{51249970-F796-4344-B558-4147F3225C30}"
 			RelativePathToProject=".\libraries\Content\Content.vcproj"
 		/>
@@ -274,6 +270,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{0E85A01E-6BFC-4DF8-BE0D-5F6FAB8AF587}"
 			RelativePathToProject=".\Maya\MayaCore\MayaCore.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
+			RelativePathToProject=".\Libraries\UID\UID.vcproj"
 		/>
 	</References>
 	<Files>

@@ -15,7 +15,7 @@ namespace Content
 
     }
 
-    Point( const UniqueID::TUID& id, const Math::Vector3& pos = Math::Vector3() )
+    Point( const Nocturnal::UID::TUID& id, const Math::Vector3& pos = Math::Vector3() )
       : HierarchyNode( id )
       , m_Position( pos )
     {

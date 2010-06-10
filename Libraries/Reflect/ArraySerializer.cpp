@@ -431,8 +431,9 @@ template SimpleArraySerializer<u64>;
 template SimpleArraySerializer<i64>;
 template SimpleArraySerializer<f32>;
 template SimpleArraySerializer<f64>;
-template SimpleArraySerializer<UniqueID::GUID>;
-template SimpleArraySerializer<UniqueID::TUID>;
+template SimpleArraySerializer<Nocturnal::UID::GUID>;
+template SimpleArraySerializer<Nocturnal::UID::TUID>;
+template SimpleArraySerializer< Nocturnal::Path >;
 
 template SimpleArraySerializer<Math::Vector2>;
 template SimpleArraySerializer<Math::Vector3>;
@@ -460,6 +461,7 @@ REFLECT_DEFINE_CLASS(F32ArraySerializer);
 REFLECT_DEFINE_CLASS(F64ArraySerializer);
 REFLECT_DEFINE_CLASS(GUIDArraySerializer);
 REFLECT_DEFINE_CLASS(TUIDArraySerializer);
+REFLECT_DEFINE_CLASS( PathArraySerializer );
 
 REFLECT_DEFINE_CLASS(Vector2ArraySerializer);
 REFLECT_DEFINE_CLASS(Vector3ArraySerializer);

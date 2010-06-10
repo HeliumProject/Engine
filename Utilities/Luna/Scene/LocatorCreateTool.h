@@ -4,7 +4,7 @@
 #include "Locator.h"
 #include "CreateTool.h"
 
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 
 namespace Luna
 {

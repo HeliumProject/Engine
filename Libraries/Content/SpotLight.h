@@ -48,7 +48,7 @@ namespace Content
       , m_GodRayClipPlaneOffset(0.0f)
     {}
 
-    SpotLight (UniqueID::TUID &id)
+    SpotLight (Nocturnal::UID::TUID &id)
       : Light (id)
       , m_InnerRadius( 1.0f )
       , m_OuterRadius( 1.0f )

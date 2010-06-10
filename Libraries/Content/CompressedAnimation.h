@@ -63,7 +63,7 @@ namespace Content
     V_i16 m_AvgRotate;
     V_u8  m_DiffTypeRotate;
 
-    UniqueID::TUID m_JointID;
+    Nocturnal::UID::TUID m_JointID;
 
     REFLECT_DECLARE_CLASS( CompressedAnimation, Reflect::Element );
 
@@ -92,5 +92,5 @@ namespace Content
 
   typedef Nocturnal::SmartPtr< CompressedAnimation > CompressedAnimationPtr;
   typedef std::vector< CompressedAnimationPtr > V_CompressedAnimation;
-  typedef std::map< UniqueID::TUID, CompressedAnimationPtr > M_CompressedAnimation;
+  typedef std::map< Nocturnal::UID::TUID, CompressedAnimationPtr > M_CompressedAnimation;
 }

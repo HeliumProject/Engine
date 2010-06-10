@@ -40,7 +40,7 @@ namespace Content
 
         }
 
-        Zone( const UniqueID::TUID& id )
+        Zone( const Nocturnal::UID::TUID& id )
             : SceneNode( id )
             , m_Active( true )
             , m_Interactive( true )

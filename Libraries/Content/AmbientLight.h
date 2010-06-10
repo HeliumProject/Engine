@@ -32,7 +32,7 @@ namespace Content
       Light::m_CastShadows = false;
     }
 
-    AmbientLight (UniqueID::TUID &id)
+    AmbientLight (Nocturnal::UID::TUID &id)
       : Light (id)
       , m_Samples( 16 )
       , m_SampleDistance( 500.0f )

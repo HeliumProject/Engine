@@ -13,9 +13,9 @@ namespace Content
     JointOrdering() : SceneNode() {}
     JointOrdering( u32 numRequiredJoints );
 
-    UniqueID::V_TUID m_JointOrdering;
-    UniqueID::HM_TUID m_MasterToLocalMap;
-    UniqueID::HM_TUID m_LocalToMasterMap;
+    Nocturnal::UID::V_TUID m_JointOrdering;
+    Nocturnal::UID::HM_TUID m_MasterToLocalMap;
+    Nocturnal::UID::HM_TUID m_LocalToMasterMap;
 
     REFLECT_DECLARE_CLASS( JointOrdering, SceneNode );
 
@@ -24,13 +24,13 @@ namespace Content
     void SetRequiredJointCount( u32 requiredJointCount );
     u32  GetRequiredJointCount();
 
-    void AddJoint( const UniqueID::TUID& jointId );
+    void AddJoint( const Nocturnal::UID::TUID& jointId );
     void Clear();
 
-    UniqueID::TUID GetMasterJoint( const UniqueID::TUID& localJoint );
-    UniqueID::TUID GetLocalJoint( const UniqueID::TUID& masterJoint );
+    Nocturnal::UID::TUID GetMasterJoint( const Nocturnal::UID::TUID& localJoint );
+    Nocturnal::UID::TUID GetLocalJoint( const Nocturnal::UID::TUID& masterJoint );
 
-    bool IsRequired( const UniqueID::TUID& jointId );
+    bool IsRequired( const Nocturnal::UID::TUID& jointId );
   };
 
   typedef Nocturnal::SmartPtr< JointOrdering > JointOrderingPtr;

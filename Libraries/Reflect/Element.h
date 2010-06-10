@@ -15,8 +15,8 @@
 #include "Common/Assert.h"
 #include "Common/Automation/Event.h"
 #include "Common/Memory/SmartPtr.h"
-#include "UniqueID/GUID.h"
-#include "UniqueID/TUID.h"
+#include "UID/GUID.h"
+#include "UID/TUID.h"
 #include "Windows/Atomic.h"
 
 //

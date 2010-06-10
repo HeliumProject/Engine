@@ -18,7 +18,7 @@ namespace Content
     {
     }
 
-    PointLight (UniqueID::TUID &id)
+    PointLight (Nocturnal::UID::TUID &id)
       : m_InnerRadius( 0.0f )
       , m_OuterRadius( 1.0f )
     {

@@ -32,13 +32,13 @@ namespace Content
   class Animation;
   typedef Nocturnal::SmartPtr<Animation> AnimationPtr;
   typedef std::vector<AnimationPtr> V_Animation;
-  typedef std::map< UniqueID::TUID, AnimationPtr > M_Animation;
+  typedef std::map< Nocturnal::UID::TUID, AnimationPtr > M_Animation;
 
   class CONTENT_API Animation : public Reflect::Element
   {
   public:
     
-    UniqueID::TUID       m_JointID;
+    Nocturnal::UID::TUID       m_JointID;
     f32                m_BlendFactor;
 
     // number of samples specified by the animator

@@ -30,7 +30,7 @@
 #include "Reflect/Serializers.h"
 #include "Reflect/Version.h"
 #include "Reflect/Visitor.h"
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 
 #define SHUTDOWN_THREAD 0
 

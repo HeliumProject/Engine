@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common/Exception.h"
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 
 namespace Asset
 {

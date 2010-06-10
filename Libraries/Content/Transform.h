@@ -36,7 +36,7 @@ namespace Content
 
     }
 
-    Transform (const UniqueID::TUID& id)
+    Transform (const Nocturnal::UID::TUID& id)
       : HierarchyNode (id)
       , m_Scale (1.0f, 1.0f, 1.0f)
       , m_InheritTransform (true)

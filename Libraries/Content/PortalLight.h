@@ -18,7 +18,7 @@ namespace Content
 
     }
 
-    PortalLight (UniqueID::TUID &id)
+    PortalLight (Nocturnal::UID::TUID &id)
     {
 
     }

@@ -2,6 +2,7 @@
 #include "SceneNodePanel.h"
 
 using namespace Luna;
+using namespace Nocturnal;
 
 SceneNodePanel::SceneNodePanel(Enumerator* enumerator, const OS_SelectableDumbPtr& selection)
 : m_Selection (selection)
@@ -20,7 +21,7 @@ void SceneNodePanel::Create()
   m_Enumerator->PushContainer();
   {
     m_Enumerator->AddLabel("ID");
-    Inspect::Value* textBox = m_Enumerator->AddValue<Luna::SceneNode, UniqueID::TUID>(m_Selection, &Luna::SceneNode::GetID, &Luna::SceneNode::SetID);
+    Inspect::Value* textBox = m_Enumerator->AddValue<Luna::SceneNode, UID::TUID>(m_Selection, &Luna::SceneNode::GetID, &Luna::SceneNode::SetID);
     textBox->SetReadOnly(true);
   }
   m_Enumerator->Pop();

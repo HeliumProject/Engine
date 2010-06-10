@@ -255,7 +255,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
-			RelativePathToProject=".\libraries\UniqueID\UniqueID.vcproj"
+			RelativePathToProject=".\Libraries\UID\UID.vcproj"
 		/>
 	</References>
 	<Files>

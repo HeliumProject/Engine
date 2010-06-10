@@ -16,7 +16,7 @@
 #include "Reflect/Version.h"
 
 using namespace Luna;
-
+using namespace Nocturnal;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// class AssetCollection
@@ -93,7 +93,7 @@ void AssetCollection::CreateSignature( const std::string& str, std::string& sign
 void AssetCollection::CreateSignature( tuid id, std::string& signature )
 {
     std::stringstream stream;
-    stream << TUID::HexFormat << id;
+    stream << UID::TUID::HexFormat << id;
     signature = Nocturnal::MD5( stream.str() );
 }
 

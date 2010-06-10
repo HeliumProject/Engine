@@ -8,7 +8,7 @@
 #include "Common/String/Tokenize.h"
 #include "Console/Console.h"
 #include "Reflect/ElementArraySerializer.h"
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 #include "UIToolKit/ImageManager.h"
 
 using namespace Luna;

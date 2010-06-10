@@ -23,6 +23,8 @@
 
 #include <math.h>
 
+using namespace Nocturnal;
+
 #define EPSILON (0.001)
 
 MString g_unknownCamera("unknownCam");
@@ -392,8 +394,7 @@ void CameraController::beforeSaveCallback(void* node)
     guidPlug.getValue( guidStr );
     if ( guidStr.length() == 0 )
     {
-      UniqueID::TUID id;
-      UniqueID::TUID::Generate( id );
+      UID::TUID id( UID::TUID::Generate() );
       std::string s;
       id.ToString(s);
       guidStr = MString(s.c_str());

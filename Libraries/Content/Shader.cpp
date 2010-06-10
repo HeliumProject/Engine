@@ -6,7 +6,7 @@
 #include "Finder/ContentSpecs.h"
 #include "Finder/ShaderSpecs.h"
 #include "Finder/AssetSpecs.h"
-#include "TUID/TUID.h"
+#include "UID/TUID.h"
 #include "Attribute/AttributeHandle.h"
 #include "Console/Console.h"
 #include "rcs/rcs.h"

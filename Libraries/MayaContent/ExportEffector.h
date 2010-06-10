@@ -8,7 +8,7 @@ namespace MayaContent
   class MAYA_CONTENT_API ExportEffector : public ExportBase
   {
   public:
-    ExportEffector( const MObject& mayaObject, UniqueID::TUID& id )
+    ExportEffector( const MObject& mayaObject, Nocturnal::UID::TUID& id )
       : ExportBase ( mayaObject )
     {
       m_ContentObject = new Content::Effector( id );

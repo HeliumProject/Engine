@@ -1,21 +1,23 @@
 #include "GUID.h"
+#include "TUID.h"
 
-#include "TUID/TUID.h"
 #include <objbase.h>
 
-const UniqueID::GUID UniqueID::GUID::Null;
+using namespace Nocturnal;
 
-UniqueID::GUID::GUID()
+const UID::GUID UID::GUID::Null;
+
+UID::GUID::GUID()
 {
   Reset();
 }
 
-UniqueID::GUID::GUID(const UniqueID::GUID &id)
+UID::GUID::GUID(const UID::GUID &id)
 {
   (*this)=id;
 }
 
-UniqueID::GUID& UniqueID::GUID::operator=(const UniqueID::GUID &rhs)
+UID::GUID& UID::GUID::operator=(const UID::GUID &rhs)
 {
   Data1 = rhs.Data1;
   Data2 = rhs.Data2;
@@ -33,7 +35,7 @@ UniqueID::GUID& UniqueID::GUID::operator=(const UniqueID::GUID &rhs)
   return (*this);
 }
 
-bool UniqueID::GUID::operator==(const UniqueID::GUID &rhs) const
+bool UID::GUID::operator==(const UID::GUID &rhs) const
 {
   if (Data1 == rhs.Data1 &&
       Data2 == rhs.Data2 &&
@@ -51,12 +53,12 @@ bool UniqueID::GUID::operator==(const UniqueID::GUID &rhs) const
   return false;
 }
 
-bool UniqueID::GUID::operator!=(const UniqueID::GUID &rhs) const
+bool UID::GUID::operator!=(const UID::GUID &rhs) const
 {
   return !((*this)==rhs);
 }
 
-bool UniqueID::GUID::operator<(const UniqueID::GUID &rhs) const
+bool UID::GUID::operator<(const UID::GUID &rhs) const
 {
   if ( Data1 != rhs.Data1 )
     return Data1 < rhs.Data1;
@@ -94,12 +96,14 @@ bool UniqueID::GUID::operator<(const UniqueID::GUID &rhs) const
   return false;
 }
 
-void UniqueID::GUID::ToTUID(tuid& id) const
+void UID::GUID::ToTUID( tuid& id ) const
 {
-  ::TUID::Downsample((const guid&)*this, id);
+    TUID t;
+    t.FromGUID( *this );
+    id = (tuid)t;
 }
 
-void UniqueID::GUID::ToString(std::string& id) const
+void UID::GUID::ToString(std::string& id) const
 {
   unsigned char *l_pszString;
 
@@ -110,14 +114,15 @@ void UniqueID::GUID::ToString(std::string& id) const
   RpcStringFree(&l_pszString);
 }
 
-void UniqueID::GUID::FromTUID(tuid id)
+void UID::GUID::FromTUID( tuid id )
 {
-  ::TUID::Upsample(id, (guid&)*this);
+    TUID t( id );
+    t.ToGUID( *this );
 }
 
-bool UniqueID::GUID::FromString(const std::string& id)
+bool UID::GUID::FromString(const std::string& id)
 {
-  UniqueID::GUID uid;
+  UID::GUID uid;
 
   if (RPC_S_OK == UuidFromStringA((unsigned char *)id.data(), reinterpret_cast<UUID*>(&uid)))
   {
@@ -128,7 +133,7 @@ bool UniqueID::GUID::FromString(const std::string& id)
   return false;
 }
 
-void UniqueID::GUID::Reset()
+void UID::GUID::Reset()
 {
   Data1 = 0;
   Data2 = 0;
@@ -143,14 +148,14 @@ void UniqueID::GUID::Reset()
   Data4[7] = 0;
 }
 
-UniqueID::GUID UniqueID::GUID::Generate()
+UID::GUID UID::GUID::Generate()
 {
-  UniqueID::GUID uid;
+  UID::GUID uid;
   UuidCreate(reinterpret_cast<UUID*>(&uid));
   return uid;
 }
 
-void UniqueID::GUID::Generate (UniqueID::GUID& uid)
+void UID::GUID::Generate (UID::GUID& uid)
 {
   UuidCreate(reinterpret_cast<UUID*>(&uid));
 }

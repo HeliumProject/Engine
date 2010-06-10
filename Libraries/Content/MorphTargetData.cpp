@@ -42,7 +42,7 @@ namespace Content
       for ( u32 targetIndex = 0; targetIndex < numMorphTargets ; ++targetIndex )
       {
         const MorphTarget* oldMorphTarget = mesh->m_MorphTargets[targetIndex];
-        const UniqueID::TUID& targetId = oldMorphTarget->m_Id;
+        const Nocturnal::UID::TUID& targetId = oldMorphTarget->m_Id;
 
         if ( m_TargetIdToTargetIndex.find( targetId ) != m_TargetIdToTargetIndex.end() )
         {
@@ -83,9 +83,9 @@ namespace Content
     NOC_ASSERT( m_TargetIndexToTargetSetId.size() == m_Targets.size() );
   }
 
-  u32 MorphTargetData::GetMorphTargetIndex( const UniqueID::TUID& targetId ) const 
+  u32 MorphTargetData::GetMorphTargetIndex( const Nocturnal::UID::TUID& targetId ) const 
   {
-    UniqueID::HM_TUIDU32::const_iterator findTargetId = m_TargetIdToTargetIndex.find( targetId ) ;
+    Nocturnal::UID::HM_TUIDU32::const_iterator findTargetId = m_TargetIdToTargetIndex.find( targetId ) ;
     if ( findTargetId != m_TargetIdToTargetIndex.end() )
     {
       return findTargetId->second;  
@@ -149,11 +149,11 @@ namespace Content
   //  }
 
   //  // fix-up the mapping of each target's TUID to its location in the new list of targets
-  //  UniqueID::HM_TUIDU32::const_iterator sourceTargetIdItr = source.m_TargetIdToTargetIndex.begin();
-  //  UniqueID::HM_TUIDU32::const_iterator sourceTargetIdEnd = source.m_TargetIdToTargetIndex.end();
+  //  Nocturnal::UID::HM_TUIDU32::const_iterator sourceTargetIdItr = source.m_TargetIdToTargetIndex.begin();
+  //  Nocturnal::UID::HM_TUIDU32::const_iterator sourceTargetIdEnd = source.m_TargetIdToTargetIndex.end();
   //  for ( ; sourceTargetIdItr != sourceTargetIdEnd; ++sourceTargetIdItr )
   //  {
-  //    const UniqueID::TUID& sourceTargetId = sourceTargetIdItr->first;
+  //    const Nocturnal::UID::TUID& sourceTargetId = sourceTargetIdItr->first;
   //    const u32 sourceTargetIndex = sourceTargetIdItr->second;
   //    const u32 newTargetIndex = sourceTargetIndex + newTargetIndexOffset;
 

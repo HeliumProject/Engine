@@ -7,10 +7,8 @@
 
 #include "Finder/Finder.h"
 #include "Finder/ExtensionSpecs.h"
-
-
-
 #include "Reflect/Field.h"
+#include "UID/TUID.h"
 
 #include "FileBackedAttribute.h"
 
@@ -56,7 +54,7 @@ namespace Asset
     V_i32             m_MipFilterPasses;
     bool              m_IsTextureDirty; // Not serialized - indicates if texture needs to be resent for real-time update
 
-    TextureMapAttribute( tuid fileID = TUID::Null )
+    TextureMapAttribute( tuid fileID = Nocturnal::UID::TUID::Null )
       : m_ReductionRatio( ReductionRatios::ONE_ONE )
       , m_MipGenFilter( MipGenFilterTypes::MIP_SINC )
       , m_PostMipFilter( PostMipFilterTypes::POST_HIGH_PASS )

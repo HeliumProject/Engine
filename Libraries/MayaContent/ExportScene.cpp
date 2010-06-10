@@ -19,6 +19,7 @@
 
 using namespace MayaContent;
 using namespace Maya;
+using namespace Nocturnal;
 
 static void AddChildrenToSet( S_MObject& objectSet, MObject object )
 {
@@ -95,7 +96,7 @@ void ExportScene::ExportNode( Content::SceneNode* node, S_ElementDumbPtr& duplic
 {
   Content::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Content::HierarchyNode >( node );
 
-  if ( hierarchyNode && hierarchyNode->m_ParentID != UniqueID::TUID::Null )
+  if ( hierarchyNode && hierarchyNode->m_ParentID != UID::TUID::Null )
   {
     Content::M_DependencyNode::const_iterator parentItr = m_ContentScene.m_DependencyNodes.find( hierarchyNode->m_ParentID );
     if ( parentItr != m_ContentScene.m_DependencyNodes.end() )

@@ -14,6 +14,7 @@
 
 using namespace Math;
 using namespace Luna;
+using namespace Nocturnal;
 
 LUNA_DEFINE_TYPE( Luna::Mesh );
 
@@ -96,8 +97,8 @@ void Mesh::Initialize()
   // Dereference Shaders
   //
 
-  UniqueID::V_TUID::const_iterator itr = mesh->m_ShaderIDs.begin();
-  UniqueID::V_TUID::const_iterator end = mesh->m_ShaderIDs.end();
+  UID::V_TUID::const_iterator itr = mesh->m_ShaderIDs.begin();
+  UID::V_TUID::const_iterator end = mesh->m_ShaderIDs.end();
   for ( ; itr != end; ++itr )
   {
     Shader* shader = Reflect::ObjectCast< Shader >( m_Scene->FindNode( *itr ) );

@@ -2,7 +2,6 @@
 
 #include "common/exception.h"
 #include "Windows/Windows.h"
-#include "Windows/Thread.h"
 #include "Windows/Error.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"

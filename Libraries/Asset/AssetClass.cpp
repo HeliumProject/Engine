@@ -13,7 +13,6 @@
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Console/Console.h"
-#include "Windows/Thread.h"
 #include "Reflect/Version.h"
 #include "Reflect/Object.h"
 

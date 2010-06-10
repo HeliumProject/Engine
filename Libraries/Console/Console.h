@@ -235,8 +235,8 @@ namespace Console
   CONSOLE_API void ResetWarningCount();
 
   // enter/leave this library's section
-  CONSOLE_API void EnterCriticalSection();
-  CONSOLE_API void LeaveCriticalSection();
+  CONSOLE_API void LockMutex();
+  CONSOLE_API void UnlockMutex();
 
 
   //

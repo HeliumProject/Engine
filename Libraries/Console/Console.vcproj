@@ -171,6 +171,10 @@
 	</Configurations>
 	<References>
 		<ProjectReference
+			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
+			RelativePathToProject=".\libraries\Platform\platform.vcproj"
+		/>
+		<ProjectReference
 			ReferencedProjectIdentifier="{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}"
 			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
 		/>

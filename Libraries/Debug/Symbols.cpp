@@ -471,17 +471,17 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 
   // we need to take console's section here because we are going to suspend threads,
   //  and this library could try and take this section via a function call
-  struct TakeConsoleSection
+  struct TakeConsoleMutex
   {
-    TakeConsoleSection()
+    TakeConsoleMutex()
     {
-      Console::EnterCriticalSection();
+      Console::LockMutex();
     }
-    ~TakeConsoleSection()
+    ~TakeConsoleMutex()
     {
-      Console::LeaveCriticalSection();
+      Console::UnlockMutex();
     }
-  } section;
+  } consoleMutex;
 
   typedef std::vector< std::pair<DWORD, HANDLE> > V_ThreadHandles;
   V_ThreadHandles threads;

@@ -26,7 +26,6 @@
 #include "Finder/ProjectSpecs.h"
 #include "SQL/SQLite.h"
 #include "Windows/Console.h"
-#include "Windows/Thread.h"
 
 #include "RCS/RCS.h"
 
@@ -236,7 +235,7 @@ void CacheDB::PrepareStatements()
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     m_SelectUsersComputerIDHandle     = m_DBManager->CreateStatement( s_SelectUsersComputerIDSQL, "t" );
     m_SelectP4IDHandle                = m_DBManager->CreateStatement( s_SelectP4UserIDSQL, "t" );
@@ -299,7 +298,7 @@ u64 CacheDB::SelectIDByName( SQL::StmtHandle select, const char* value, const ch
 
     NOC_ASSERT( select );
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     u64 id = 0;
     int execResult = m_DBManager->ExecStatement( select, value );
@@ -383,7 +382,7 @@ u64 CacheDB::SelectAssetRowID( u64 fileId, const char* insert, const char* updat
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     u64 id = 0;
     int execResult = m_DBManager->ExecStatement( m_SelectAssetRowIDHandle, (i64) fileId );
@@ -430,7 +429,7 @@ void CacheDB::InsertAssetAttributes( AssetFile* assetFile, bool* cancel )
     if ( CheckCancelQuery( cancel ) )
         return;
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     int execResult = SQLITE_OK;
     std::string validAttributeIDsStr;
@@ -705,7 +704,7 @@ void CacheDB::DeleteAssetFile( AssetFile* assetFile )
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     u64 rowID = SelectAssetRowID( assetFile->GetPath().Hash() );
 
@@ -733,7 +732,7 @@ bool CacheDB::HasAssetChangedOnDisk( Nocturnal::Path& filePath, bool* cancel )
         return false;
     }
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     bool ret = false;
 
@@ -840,7 +839,7 @@ void CacheDB::InsertDependencies
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     int execResult = SQLITE_OK;
 
@@ -927,7 +926,7 @@ u32 CacheDB::GetPopulateTableData( const SQL::StmtHandle stmt, M_CacheDBTableDat
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     u32 numFilesAdded = 0;
 
@@ -972,7 +971,7 @@ u32 CacheDB::GetPopulateTableData( const SQL::StmtHandle stmt, V_string& tableDa
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     u32 numFilesAdded = 0;
 
@@ -1020,7 +1019,7 @@ u32 CacheDB::Search( const CacheDBQuery* search, Nocturnal::S_Path& assetFiles, 
 
     u32 numFilesAdded = 0;
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     std::string selectStmt;
     GetSelectStmt( search, selectStmt );
@@ -1078,7 +1077,7 @@ std::string CacheDB::StepSelectPath( int sqlResult, const SQL::StmtHandle stmt, 
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     if ( sqlResult == SQLITE_DONE )
     {
@@ -1170,7 +1169,7 @@ void CacheDB::SelectAssetPathByHash( const u64 pathHash, std::string& path )
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     SQL::StmtHandle stmt = m_SelectAssetPathByIDHandle;
     int sqlResult = m_DBManager->ExecStatement( stmt, (i64) pathHash );
@@ -1231,7 +1230,7 @@ void CacheDB::SelectAssetByHash( const u64 pathHash, AssetFile* assetFile )
 
     ASSETTRACKER_SCOPE_TIMER((""));
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     SQL::StmtHandle stmt = m_SelectAssetByIDHandle;
     int sqlResult = m_DBManager->ExecStatement( stmt, (i64) pathHash );
@@ -1277,7 +1276,7 @@ void CacheDB::GetAssetDependencies( const Nocturnal::Path& filePath, Nocturnal::
 {
     ASSETTRACKER_SCOPE_TIMER((""));
 
-    Windows::TakeSection critSection( *m_GeneralCriticalSection );
+    Platform::TakeMutex mutex ( m_Mutex );
 
     Nocturnal::Insert< Nocturnal::S_Path >::Result inserted = dependencies.insert( filePath );
     if ( !inserted.second )

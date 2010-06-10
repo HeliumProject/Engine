@@ -34,8 +34,6 @@
 #include "UIToolKit/MenuButton.h"
 #include "Windows/Error.h"
 #include "Windows/Process.h"
-#include "Windows/Thread.h"
-
 
 #include <wx/clipbrd.h>
 

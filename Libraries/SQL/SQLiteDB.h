@@ -7,9 +7,7 @@
 #include "Common/Types.h"
 #include "Common/Memory/SmartPtr.h"
 
-struct _RTL_CRITICAL_SECTION;
-typedef struct _RTL_CRITICAL_SECTION RTL_CRITICAL_SECTION;
-typedef RTL_CRITICAL_SECTION CRITICAL_SECTION;
+#include "Platform/Mutex.h"
 
 namespace SQL
 { 
@@ -63,7 +61,7 @@ namespace SQL
     std::string          m_DBVersion;
     int                  m_OpenFlags;
 
-    CRITICAL_SECTION*    m_GeneralCriticalSection;
+	Platform::Mutex		 m_Mutex;
 
     StmtHandle           m_StmtHandleSelectDBVersion;
   };

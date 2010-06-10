@@ -201,6 +201,10 @@
 			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"
 			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
+			RelativePathToProject=".\libraries\Platform\platform.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter

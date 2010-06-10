@@ -233,10 +233,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Thread.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Windows.h"
 			>
 		</File>

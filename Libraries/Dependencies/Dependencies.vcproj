@@ -209,6 +209,10 @@
 			ReferencedProjectIdentifier="{190A611A-399F-47F6-B686-DF40C8B20F84}"
 			RelativePathToProject=".\SDK\SQLite\3.6.23.1\SQLite.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
+			RelativePathToProject=".\libraries\Platform\platform.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter

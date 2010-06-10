@@ -11,7 +11,7 @@
 #include "Common/Container/OrderedSet.h"
 #include "Common/Memory/SmartPtr.h"
 
-#include "Windows/Thread.h"
+#include "Platform/Mutex.h"
 
 // Forwards
 namespace CryptoPP{ class HashFilter; }
@@ -68,7 +68,7 @@ namespace Dependencies
     typedef std::set< DependencyInfoPtr >                                     DirtyFiles;
     typedef std::map< std::string, OS_string >                        ReregisterMap;
    
-    Windows::CriticalSection m_HighLevelCS;
+	Platform::Mutex       m_HighLevelMutex;
 
     GraphDBPtr            m_GraphDB;
     ReregisterMap         m_ReregisterMap;        // files that have been registered during this run

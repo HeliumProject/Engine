@@ -7,7 +7,7 @@
 
 #include "Debug/Symbols.h"
 #include "Finder/Finder.h"
-#include "Windows/Thread.h"
+#include "Platform/Mutex.h"
 
 using namespace Reflect;
 
@@ -50,7 +50,7 @@ void CreationRecord::Dump(FILE* f)
 #endif
 }
 
-Windows::CriticalSection g_TrackerSection;
+Platform::Mutex g_TrackerMutex;
 
 Tracker::Tracker()
 {
@@ -64,7 +64,7 @@ Tracker::~Tracker()
 
 StackRecordPtr Tracker::GetStack()
 {
-  Windows::TakeSection section (g_TrackerSection);
+  Platform::TakeMutex mutex (g_TrackerMutex);
 
   StackRecordPtr ptr = new StackRecord();
 
@@ -85,7 +85,7 @@ StackRecordPtr Tracker::GetStack()
 
 void Tracker::Create(PointerSizedUInt ptr)
 {
-  Windows::TakeSection section (g_TrackerSection);
+  Platform::TakeMutex mutex (g_TrackerMutex);
 
   M_CreationRecord::iterator create_iter = m_CreatedObjects.find( ptr );
   if ( create_iter == m_CreatedObjects.end() )
@@ -121,7 +121,7 @@ void Tracker::Create(PointerSizedUInt ptr)
 
 void Tracker::Delete(PointerSizedUInt ptr)
 {
-  Windows::TakeSection section (g_TrackerSection);
+  Platform::TakeMutex mutex (g_TrackerMutex);
 
   M_CreationRecord::iterator iter = m_CreatedObjects.find(ptr);
   if ( iter != m_CreatedObjects.end())
@@ -161,7 +161,7 @@ void Tracker::Delete(PointerSizedUInt ptr)
 
 void Tracker::Check(PointerSizedUInt ptr)
 {
-  Windows::TakeSection section (g_TrackerSection);
+  Platform::TakeMutex mutex (g_TrackerMutex);
 
   M_CreationRecord::iterator iter = m_CreatedObjects.find(ptr);
   if ( iter != m_CreatedObjects.end())
@@ -197,7 +197,7 @@ void Tracker::Check(PointerSizedUInt ptr)
 
 void Tracker::Dump()
 {
-  Windows::TakeSection section (g_TrackerSection);
+  Platform::TakeMutex mutex (g_TrackerMutex);
 
   FILE* f = fopen( (Finder::ProjectLog() + "ReflectDump.log").c_str(), "w");
   if ( f != NULL )

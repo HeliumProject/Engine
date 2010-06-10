@@ -7,7 +7,6 @@
 #include "FileSystem/FileSystem.h"
 #include "Windows/Error.h"
 #include "Windows/Process.h"
-#include "Windows/Thread.h"
 
 #include <sstream>
 
@@ -35,9 +34,6 @@ static const char* s_SelectDBFileVersionSQL = "SELECT version FROM db_file_versi
 SQLiteDB::SQLiteDB( const char* friendlyName )
 : m_DBManager( NULL )
 {
-  m_GeneralCriticalSection = new ::CRITICAL_SECTION;
-  ::InitializeCriticalSection( m_GeneralCriticalSection );
-
   m_DBManager = new SQLite( friendlyName );
 }
 
@@ -47,9 +43,6 @@ SQLiteDB::~SQLiteDB()
 {
   Close();
 
-  ::DeleteCriticalSection( m_GeneralCriticalSection );
-
-  delete m_GeneralCriticalSection;
   delete m_DBManager;
 }
 
@@ -61,7 +54,7 @@ static const char* s_SQLiteDataFile = "data.sql";
 // Opens and Load the  DB; creating the DB if it does not exist.
 bool SQLiteDB::Open( const std::string& dbFilename, const std::string& configFolder, const std::string& version, int flags )
 {   
-  Windows::TakeSection critSection( *m_GeneralCriticalSection );
+  Platform::TakeMutex mutex ( m_Mutex );
 
   //////////////////////////////////
   // Setup the class members
@@ -138,7 +131,7 @@ void SQLiteDB::Close()
 // Create the DB, either load it from the auth file, or from the versioned sql file
 bool SQLiteDB::Load()
 {
-  Windows::TakeSection critSection( *m_GeneralCriticalSection );
+  Platform::TakeMutex mutex ( m_Mutex );
 
   // IsOutOfDate may attempt to Update the db
   if ( !IsOutOfDate() )
@@ -241,7 +234,7 @@ bool SQLiteDB::IsOutOfDate()
 //
 bool SQLiteDB::Update( const std::string& dbVersion )
 {
-  Windows::TakeSection critSection( *m_GeneralCriticalSection );
+  Platform::TakeMutex mutex ( m_Mutex );
 
   m_DBManager->Close();
 
@@ -295,7 +288,7 @@ void SQLiteDB::UpdateDBFileVersionTable()
 // Deletes the  DB and handled events list
 void SQLiteDB::Delete()
 {
-  Windows::TakeSection critSection( *m_GeneralCriticalSection );
+  Platform::TakeMutex mutex ( m_Mutex );
 
   m_DBManager->Delete();
 }
@@ -334,7 +327,7 @@ bool SQLiteDB::SelectDBVersion( std::string& version )
 // Selects the current graph version from the DB
 bool SQLiteDB::SelectDBVersion( const std::string& sql, std::string& version )
 {
-  Windows::TakeSection critSection( *m_GeneralCriticalSection );
+  Platform::TakeMutex mutex ( m_Mutex );
 
   bool result = false;
 
@@ -370,7 +363,7 @@ bool SQLiteDB::SelectDBVersion( const std::string& sql, std::string& version )
 /////////////////////////////////////////////////////////////////////////////
 void SQLiteDB::BeginTrans()
 {
-  Windows::TakeSection critSection( *m_GeneralCriticalSection );
+  Platform::TakeMutex mutex ( m_Mutex );
 
   m_DBManager->BeginTrans();
 }
@@ -378,7 +371,7 @@ void SQLiteDB::BeginTrans()
 /////////////////////////////////////////////////////////////////////////////
 void SQLiteDB::CommitTrans()
 {
-  Windows::TakeSection critSection( *m_GeneralCriticalSection );
+  Platform::TakeMutex mutex ( m_Mutex );
 
   m_DBManager->CommitTrans();
 }
@@ -386,7 +379,7 @@ void SQLiteDB::CommitTrans()
 /////////////////////////////////////////////////////////////////////////////
 void SQLiteDB::RollbackTrans()
 {
-  Windows::TakeSection critSection( *m_GeneralCriticalSection );
+  Platform::TakeMutex mutex ( m_Mutex );
 
   m_DBManager->RollbackTrans();
 }
@@ -394,7 +387,7 @@ void SQLiteDB::RollbackTrans()
 /////////////////////////////////////////////////////////////////////////////
 bool SQLiteDB::IsTransOpen()
 {
-  Windows::TakeSection critSection( *m_GeneralCriticalSection );
+  Platform::TakeMutex mutex ( m_Mutex );
 
   return m_DBManager->IsTransOpen();
 }

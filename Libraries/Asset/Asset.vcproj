@@ -244,6 +244,10 @@
 			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
 			RelativePathToProject=".\Libraries\UID\UID.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
+			RelativePathToProject=".\libraries\Platform\platform.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter

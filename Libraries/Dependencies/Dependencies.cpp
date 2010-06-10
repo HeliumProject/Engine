@@ -79,7 +79,7 @@ namespace Dependencies
   {
     DEPENDENCIES_SCOPE_TIMER((""));
 
-    Windows::TakeSection cs( m_HighLevelCS );
+    Platform::TakeMutex mutex( m_HighLevelMutex );
 
     if ( output->m_Path.empty() || input->m_Path.empty() )
     {
@@ -100,7 +100,7 @@ namespace Dependencies
   //
   void DependencyGraph::RegisterInputs( const V_DependencyInfo &outputs, const V_DependencyInfo &inputs, bool inFilesAreOptional )
   {
-    Windows::TakeSection cs( m_HighLevelCS );
+    Platform::TakeMutex mutex( m_HighLevelMutex );
 
     V_DependencyInfo::const_iterator outputItr = outputs.begin();
     V_DependencyInfo::const_iterator outputEnd = outputs.end();
@@ -122,7 +122,7 @@ namespace Dependencies
   // Update a bunch of outputs
   void DependencyGraph::UpdateOutputs( V_DependencyInfo &outputs )
   {
-    Windows::TakeSection cs( m_HighLevelCS );
+    Platform::TakeMutex mutex( m_HighLevelMutex );
 
     DEPENDENCIES_SCOPE_TIMER((""));
 
@@ -159,7 +159,7 @@ namespace Dependencies
   // Gets the graph and determines if a file is up to date
   bool DependencyGraph::IsUpToDate( const std::string& filePath )
   {
-    Windows::TakeSection cs( m_HighLevelCS );
+    Platform::TakeMutex mutex( m_HighLevelMutex );
 
     DEPENDENCIES_SCOPE_TIMER((""));
 
@@ -303,7 +303,7 @@ namespace Dependencies
   // ALWAYS generates the sig, even if there is already one cached
   void DependencyGraph::CreateSignature( const DependencyInfoPtr& file )
   {
-    Windows::TakeSection cs( m_HighLevelCS );
+    Platform::TakeMutex mutex( m_HighLevelMutex );
 
     DEPENDENCIES_SCOPE_TIMER((""));
 

@@ -1,5 +1,4 @@
 #include "Windows/Windows.h"
-#include "Windows/Thread.h"
 #include "BuilderStats.h"
 
 #include "AppUtils/AppUtils.h"
@@ -11,8 +10,8 @@
 #include "Common/Environment.h"
 #include "Common/Version.h"
 #include "Common/Environment.h"
-
 #include "FileSystem/FileSystem.h"
+#include "Platform/Mutex.h"
 
 // max storage size for a query string
 #define MAX_QUERY_LENGTH  2048
@@ -125,7 +124,7 @@ static const char* s_InsertTopLevelBuildSQL =
     `unaccounted_duration`=%f, \
     `total_duration`=%f;";
 
-Windows::CriticalSection g_Section;
+Platform::Mutex g_Mutex;
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -342,7 +341,7 @@ static bool InitializeRowIDs()
 ///////////////////////////////////////////////////////////////////////////////
 void BuilderStats::Initialize()
 {
-  Windows::TakeSection sec( g_Section );
+  Platform::TakeMutex mutex ( g_Mutex );
 
   static const Reflect::Enumeration* info = Reflect::Registry::GetInstance()->GetEnumeration( g_AssetTypesEnumName );
   if ( !info )
@@ -394,7 +393,7 @@ void BuilderStats::Initialize()
 ///////////////////////////////////////////////////////////////////////////////
 void BuilderStats::Cleanup()
 {
-  Windows::TakeSection sec( g_Section );
+  Platform::TakeMutex mutex ( g_Mutex );
 
   if ( g_MySQL )
   {
@@ -406,7 +405,7 @@ void BuilderStats::Cleanup()
 ///////////////////////////////////////////////////////////////////////////////
 bool GetBuiltAssetRowID( const Nocturnal::Path& path, Asset::AssetType assetType, u64& assetRowID )
 {
-  Windows::TakeSection sec( g_Section );
+  Platform::TakeMutex mutex ( g_Mutex );
 
   u64 assetTypeID = 0;
   std::string assetTypeLabel;
@@ -445,7 +444,7 @@ bool GetBuiltAssetRowID( const Nocturnal::Path& path, Asset::AssetType assetType
 ///////////////////////////////////////////////////////////////////////////////
 bool BuilderStats::AddBuild( const Nocturnal::Path& path, Asset::AssetType assetType, const std::string& builderName, f32 duration )
 {
-  Windows::TakeSection sec( g_Section );
+  Platform::TakeMutex mutex ( g_Mutex );
 
   BUILDER_SCOPE_TIMER((""));
 
@@ -492,7 +491,7 @@ bool BuilderStats::AddBuild( const Nocturnal::Path& path, Asset::AssetType asset
 ///////////////////////////////////////////////////////////////////////////////
 bool BuilderStats::AddTopLevelBuild( const Nocturnal::Path& path, Asset::AssetType assetType, TopLevelBuild& topLevelBuild )
 {
-  Windows::TakeSection sec( g_Section );
+  Platform::TakeMutex mutex ( g_Mutex );
 
   BUILDER_SCOPE_TIMER((""));
 

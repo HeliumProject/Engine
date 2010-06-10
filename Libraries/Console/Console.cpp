@@ -18,7 +18,7 @@
 #include "Common/Assert.h"
 
 #include "Windows/Console.h"
-#include "Windows/Thread.h"
+#include "Platform/Mutex.h"
 
 using namespace Console;
 
@@ -26,7 +26,7 @@ using namespace Console;
 
 u32 g_LogFileCount = 20;
 
-Windows::CriticalSection g_Section;
+Platform::Mutex g_Mutex;
 
 DWORD g_MainThread = GetCurrentThreadId();
 
@@ -161,28 +161,28 @@ void Console::Statement::ApplyIndent( const char* string, std::string& output )
 
 void Console::AddPrintingListener(const PrintingSignature::Delegate& listener)
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   g_PrintingEvent.Add(listener);
 }
 
 void Console::RemovePrintingListener(const PrintingSignature::Delegate& listener)
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   g_PrintingEvent.Remove(listener);
 }
 
 void Console::AddPrintedListener(const PrintedSignature::Delegate& listener)
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   g_PrintedEvent.Add(listener);
 }
 
 void Console::RemovePrintedListener(const PrintedSignature::Delegate& listener)
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   g_PrintedEvent.Remove(listener);
 }
@@ -295,7 +295,7 @@ void RotateLogs(const std::string& file)
 
 bool AddFile( M_OutputFile& files, const std::string& fileName, Stream stream, u32 threadId, bool append )
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   M_OutputFile::iterator found = files.find( fileName );
   if ( found != files.end() )
@@ -342,7 +342,7 @@ bool AddFile( M_OutputFile& files, const std::string& fileName, Stream stream, u
 
 void RemoveFile( M_OutputFile& files, const std::string& fileName )
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   M_OutputFile::iterator found = files.find( fileName );
   if ( found != files.end() )
@@ -461,19 +461,19 @@ void Console::ResetWarningCount()
   g_WarningCount = 0;
 }
 
-void Console::EnterCriticalSection()
+void Console::LockMutex()
 {
-  g_Section.Enter();
+  g_Mutex.Lock();
 }
 
-void Console::LeaveCriticalSection()
+void Console::UnlockMutex()
 {
-  g_Section.Leave();
+  g_Mutex.Unlock();
 }
 
 void Console::PrintString(const char* string, Stream stream, Level level, Color color, int indent, char* output, u32 outputSize)
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   // check trace files
   bool trace = false;
@@ -569,14 +569,14 @@ void Console::PrintString(const char* string, Stream stream, Level level, Color 
 
 void Console::PrintStatement(const Statement& statement)
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   PrintString( statement.m_String.c_str(), statement.m_Stream, statement.m_Level, GetStreamColor( statement.m_Stream ), statement.m_Indent );
 }
 
 void Console::PrintStatements(const V_Statement& statements, u32 streamFilter)
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   V_Statement::const_iterator itr = statements.begin();
   V_Statement::const_iterator end = statements.end();
@@ -591,7 +591,7 @@ void Console::PrintStatements(const V_Statement& statements, u32 streamFilter)
 
 void Console::PrintColor(Console::Color color, const char* fmt, ...)
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   va_list args;
   va_start(args, fmt); 
@@ -605,7 +605,7 @@ void Console::PrintColor(Console::Color color, const char* fmt, ...)
 
 void Console::Print(const char *fmt,...) 
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   va_list args;
   va_start(args, fmt); 
@@ -620,7 +620,7 @@ void Console::Print(const char *fmt,...)
 
 void Console::Print(Level level, const char *fmt,...) 
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   va_list args;
   va_start(args, fmt); 
@@ -635,7 +635,7 @@ void Console::Print(Level level, const char *fmt,...)
 
 void Console::Debug(const char *fmt,...) 
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   va_list args;
   va_start(args, fmt); 
@@ -650,7 +650,7 @@ void Console::Debug(const char *fmt,...)
 
 void Console::Debug(Level level, const char *fmt,...) 
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   va_list args;
   va_start(args, fmt); 
@@ -665,7 +665,7 @@ void Console::Debug(Level level, const char *fmt,...)
 
 void Console::Profile(const char *fmt,...) 
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   va_list args;
   va_start(args, fmt); 
@@ -680,7 +680,7 @@ void Console::Profile(const char *fmt,...)
 
 void Console::Profile(Level level, const char *fmt,...) 
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   va_list args;
   va_start(args, fmt); 
@@ -695,7 +695,7 @@ void Console::Profile(Level level, const char *fmt,...)
 
 void Console::Warning(const char *fmt,...) 
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   static char format[MAX_PRINT_SIZE];
   sprintf(format, "Warning (%d): ", ++g_WarningCount);
@@ -714,7 +714,7 @@ void Console::Warning(const char *fmt,...)
 
 void Console::Warning(Level level, const char *fmt,...) 
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   static char format[MAX_PRINT_SIZE];
   if (level == Levels::Default)
@@ -740,7 +740,7 @@ void Console::Warning(Level level, const char *fmt,...)
 
 void Console::Error(const char *fmt,...) 
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   static char format[MAX_PRINT_SIZE];
   sprintf(format, "Error (%d): ", ++g_ErrorCount);
@@ -759,7 +759,7 @@ void Console::Error(const char *fmt,...)
 
 void Console::Error(Level level, const char *fmt,...) 
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   static char format[MAX_PRINT_SIZE];
   if (level == Levels::Default)
@@ -785,7 +785,7 @@ void Console::Error(Level level, const char *fmt,...)
 
 Console::Heading::Heading(const char *fmt, ...)
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   // do a basic print
   va_list args;
@@ -804,7 +804,7 @@ Console::Heading::Heading(const char *fmt, ...)
 
 Console::Heading::~Heading()
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   // unindent
   UnIndent();
@@ -819,7 +819,7 @@ Console::Bullet::Bullet(const char *fmt, ...)
 {
   if (m_Valid)
   {
-    Windows::TakeSection section (g_Section);
+    Platform::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
@@ -835,7 +835,7 @@ Console::Bullet::Bullet(Stream stream, Console::Level level, const char *fmt, ..
 {
   if (m_Valid)
   {
-    Windows::TakeSection section (g_Section);
+    Platform::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
@@ -848,7 +848,7 @@ Console::Bullet::~Bullet()
 {
   if (m_Valid)
   {
-    Windows::TakeSection section (g_Section);
+    Platform::TakeMutex mutex (g_Mutex);
 
     // this gates the output to the console for streams and levels that the user did not elect to see on in the console
     bool print = ( ( g_Streams & m_Stream ) == m_Stream ) && ( m_Level <= g_Level );
@@ -933,7 +933,7 @@ void Console::Bullet::CreateBullet(const char *fmt, va_list args)
 
 std::string Console::GetOutlineState()
 {
-  Windows::TakeSection section (g_Section);
+  Platform::TakeMutex mutex (g_Mutex);
 
   std::string state;
 

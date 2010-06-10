@@ -9,7 +9,6 @@
 #include "Finder/ProjectSpecs.h"
 #include "SQL/SQLite.h"
 #include "Windows/Error.h"
-#include "Windows/Thread.h"
 
 #include <sqlite3.h>
 
@@ -131,8 +130,8 @@ GraphDB::~GraphDB()
 /////////////////////////////////////////////////////////////////////////////
 // Opens and Load the  DB; creating the DB if it does not exist.
 bool GraphDB::Open( const std::string& dbFilename, const std::string& configFolder, const std::string& version )
-{   
-  Windows::TakeSection critSection( *m_GeneralCriticalSection );
+{
+  Platform::TakeMutex mutex ( m_Mutex );
 
   FileSystem::MakePath( dbFilename, true );
 

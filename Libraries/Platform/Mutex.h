@@ -46,6 +46,14 @@ namespace Platform
 
   public:
     Mutex();
+
+  private:
+    Mutex( const Mutex& mutex )
+    {
+
+    }
+
+  public:
     ~Mutex();
 
     const Handle& GetHandle()

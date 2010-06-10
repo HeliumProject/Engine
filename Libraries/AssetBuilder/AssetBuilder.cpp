@@ -29,7 +29,6 @@
 #include "Finder/Finder.h"
 #include "Finder/DebugSpecs.h"
 
-#include "Windows/Thread.h"
 #include "Windows/Windows.h"
 #include "Platform/Thread.h"
 #include "Platform/Mutex.h"
@@ -48,7 +47,7 @@ bool                        g_InConcurrentBuild = false;
 S_tuid                      g_FailedAssets;
 
 #ifdef PROFILE_ACCUMULATION
-Windows::CriticalSection g_ProfileSection;
+Platform::Mutex g_ProfileMutex;
 
 typedef std::map< std::string, Profile::Accumulator > M_StringToAccum;
 M_StringToAccum g_BuilderAccumulators;
@@ -305,7 +304,7 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
 
 #ifdef PROFILE_ACCUMULATION
     {
-        Windows::TakeSection section( g_ProfileSection );
+        Platform::TakeMutex mutex ( g_ProfileMutex );
         g_BuilderAccumulators[ builderName ].Init(  (builderName + std::string( " Build" ) ).c_str() );
     }
 

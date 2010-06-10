@@ -5,7 +5,6 @@
 #include "DBManager.h"
 #include "MySQLStmt.h"
 
-#include "Windows/Thread.h"
 #include "Common/Types.h"
 
 #ifndef _mysql_h

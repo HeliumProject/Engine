@@ -60,8 +60,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Worker", "libraries\Worker\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InspectReflect", "libraries\InspectReflect\InspectReflect.vcproj", "{ED5B2A66-1F2C-40C1-BC4B-C2AA1D2B7632}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProfileView", "utilities\ProfileView\ProfileView.vcproj", "{AAD6C412-3CCF-47DD-873F-11E0EEF38C77}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Platform", "libraries\Platform\platform.vcproj", "{4BC148DF-F832-4724-B9B9-2550D848E737}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BuildTool", "utilities\BuildTool\BuildTool.vcproj", "{469EA158-42B0-40EC-90A8-BAD0CCF649F2}"
@@ -312,12 +310,6 @@ Global
 		{ED5B2A66-1F2C-40C1-BC4B-C2AA1D2B7632}.Release|Win32.ActiveCfg = Release|Win32
 		{ED5B2A66-1F2C-40C1-BC4B-C2AA1D2B7632}.Release|Win32.Build.0 = Release|Win32
 		{ED5B2A66-1F2C-40C1-BC4B-C2AA1D2B7632}.Release|x64.ActiveCfg = Release|Win32
-		{AAD6C412-3CCF-47DD-873F-11E0EEF38C77}.Debug|Win32.ActiveCfg = Debug|Win32
-		{AAD6C412-3CCF-47DD-873F-11E0EEF38C77}.Debug|Win32.Build.0 = Debug|Win32
-		{AAD6C412-3CCF-47DD-873F-11E0EEF38C77}.Debug|x64.ActiveCfg = Debug|Win32
-		{AAD6C412-3CCF-47DD-873F-11E0EEF38C77}.Release|Win32.ActiveCfg = Release|Win32
-		{AAD6C412-3CCF-47DD-873F-11E0EEF38C77}.Release|Win32.Build.0 = Release|Win32
-		{AAD6C412-3CCF-47DD-873F-11E0EEF38C77}.Release|x64.ActiveCfg = Release|Win32
 		{4BC148DF-F832-4724-B9B9-2550D848E737}.Debug|Win32.ActiveCfg = Debug|Win32
 		{4BC148DF-F832-4724-B9B9-2550D848E737}.Debug|Win32.Build.0 = Debug|Win32
 		{4BC148DF-F832-4724-B9B9-2550D848E737}.Debug|x64.ActiveCfg = Debug|Win32

@@ -2495,6 +2495,50 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="CommandLine"
+			>
+			<File
+				RelativePath=".\CommandLine\Command.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CommandLine\Option.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CommandLine\Processor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CommandLine\Processor.h"
+				>
+			</File>
+			<Filter
+				Name="Commands"
+				>
+				<File
+					RelativePath=".\CommandLine\Commands\FailTest.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CommandLine\Commands\FailTest.h"
+					>
+				</File>
+				<File
+					RelativePath=".\CommandLine\Commands\Help.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CommandLine\Commands\Help.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Options"
+				>
+			</Filter>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>

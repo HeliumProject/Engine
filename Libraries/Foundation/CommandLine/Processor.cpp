@@ -1,9 +1,6 @@
-#include "Precompile.h"
 #include "Processor.h"
 
-using namespace Nocturnal;
-using namespace Nocturnal::Luna;
-using namespace Nocturnal::Luna::CommandLine;
+using namespace Nocturnal::CommandLine;
 
 Processor::Processor()
 {
@@ -11,7 +8,7 @@ Processor::Processor()
 
 Processor::~Processor()
 {
-    for ( M_StringToCommandDumbPtr::iterator itr = m_Commands.begin(), end = m_Commands.end(); itr != end; ++itr )
+    for ( M_StringToVerbDumbPtr::iterator itr = m_Verbs.begin(), end = m_Verbs.end(); itr != end; ++itr )
     {
         delete (*itr).second;
     }
@@ -35,7 +32,7 @@ bool Processor::Process( const std::vector< std::string >& arguments, std::strin
 
         if ( arg.length() >= 1 && arg[ 0 ] == '-' )
         {
-            M_StringToOptionDumbPtr::iterator optionItr = m_Options.find( arg.substr( 1 ) );
+            M_StringToOptionDumbPtr::const_iterator optionItr = m_Options.find( arg.substr( 1 ) );
             if ( optionItr != m_Options.end() )
             {
                 result &= (*optionItr).second->Process( error );
@@ -48,15 +45,16 @@ bool Processor::Process( const std::vector< std::string >& arguments, std::strin
         }
         else
         {
-            M_StringToCommandDumbPtr::iterator commandItr = m_Commands.find( arg );
-            if ( commandItr != m_Commands.end() )
+            M_StringToVerbDumbPtr::iterator commandItr = m_Verbs.find( arg );
+            if ( commandItr != m_Verbs.end() )
             {
                 result &= (*commandItr).second->Process( itr, arguments.end(), error );
             }
             else
             {
                 error = std::string( "Unknown command: " ) + arg + "\n\n";
-                for ( M_StringToCommandDumbPtr::const_iterator cItr = m_Commands.begin(), cEnd = m_Commands.end(); cItr != cEnd; ++cItr )
+
+                for ( M_StringToVerbDumbPtr::const_iterator cItr = m_Verbs.begin(), cEnd = m_Verbs.end(); cItr != cEnd; ++cItr )
                 {
                     error += (*cItr).second->GetShortHelp() + "\n";
                 }
@@ -67,29 +65,29 @@ bool Processor::Process( const std::vector< std::string >& arguments, std::strin
     return result;
 }
 
-bool Processor::RegisterCommand( Command* command )
+bool Processor::RegisterVerb( Verb* verb )
 {
-    m_Commands[ command->Token() ] = command;
-    command->SetOwner( this );
+    m_Verbs[ verb->Token() ] = verb;
+    verb->SetOwner( this );
     return true;
 }
 
-void Processor::UnregisterCommand( Command* command )
+void Processor::UnregisterVerb( Verb* verb )
 {
-    UnregisterCommand( command->Token() );
-    command->SetOwner( NULL );
+    UnregisterVerb( verb->Token() );
+    verb->SetOwner( NULL );
 }
 
-void Processor::UnregisterCommand( const std::string& token )
+void Processor::UnregisterVerb( const std::string& token )
 {
-    m_Commands.erase( token );
+    m_Verbs.erase( token );
 }
 
-const Command* Processor::GetCommand( const std::string& token )
+const Verb* Processor::GetVerb( const std::string& token )
 {
-    Command* command = NULL;
-    M_StringToCommandDumbPtr::iterator itr = m_Commands.find( token );
-    if ( itr != m_Commands.end() )
+    Verb* command = NULL;
+    M_StringToVerbDumbPtr::iterator itr = m_Verbs.find( token );
+    if ( itr != m_Verbs.end() )
     {
         command = (*itr).second;
     }

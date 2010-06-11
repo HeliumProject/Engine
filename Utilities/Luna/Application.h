@@ -25,10 +25,8 @@ namespace Luna
 
         virtual ~Application();
 
-        virtual bool Initialize( int& argc, wxChar** argv ) NOC_OVERRIDE;
-        //virtual void  OnInitCmdLine( wxCmdLineParser& parser ) NOC_OVERRIDE;
-        //virtual bool  OnCmdLineParsed( wxCmdLineParser& parser ) NOC_OVERRIDE;
-        virtual bool OnInit() NOC_OVERRIDE;
+        virtual void  OnInitCmdLine( wxCmdLineParser& parser ) NOC_OVERRIDE;
+        virtual bool  OnCmdLineParsed( wxCmdLineParser& parser ) NOC_OVERRIDE;
         virtual int   OnRun() NOC_OVERRIDE;
         virtual int   OnExit() NOC_OVERRIDE;
 

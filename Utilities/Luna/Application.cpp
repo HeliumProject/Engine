@@ -3,10 +3,6 @@
 #include "AppPreferences.h"
 #include "ArtProvider.h"
 
-#include "CommandLine/Processor.h"
-#include "CommandLine/Commands/FailTest.h"
-#include "CommandLine/Commands/Help.h"
-
 #include "AppUtils/AppUtils.h"
 #include "AssetEditor/AssetInit.h"
 #include "Asset/Tracker.h"
@@ -40,7 +36,6 @@
 
 using namespace Luna;
 using namespace Nocturnal;
-using namespace Nocturnal::Luna;
 
 namespace Luna
 {
@@ -71,59 +66,38 @@ Application::~Application()
 ///////////////////////////////////////////////////////////////////////////////
 // Called from OnInit.  Adds the command line description to the parser.
 // 
-//void Application::OnInitCmdLine( wxCmdLineParser& parser )
-//{
-//  SetVendorName( "Nocturnal" );
-//
-//  parser.SetLogo( wxT( "Luna (c) 2010 - Nocturnal\n" ) );
-//
-//  parser.AddSwitch( "pipe", "Pipe",               "Use pipe for console connection" ); 
-//  parser.AddSwitch( "disable_tracker", "DisableTracker", "Disable Asset Tracker" );
-//
-//  parser.AddSwitch( WindowSettings::s_Reset, WindowSettings::s_ResetLong, "Reset all window positions (other prefs/mru will remain)" );
-//  parser.AddSwitch( Preferences::s_ResetPreferences, Preferences::s_ResetPreferencesLong, "Resets all preferences for all of Luna" );
-//
-//  parser.AddSwitch( Worker::Args::Debug,      "Debug",                "Debug use of background processes" );
-//  parser.AddSwitch( Worker::Args::Wait,       "Wait",                 "Wait forever for background processes" );
-//  parser.AddSwitch( AppUtils::Args::Script,   "Script",               "Omit prefix and suffix in console output" );
-//  parser.AddSwitch( AppUtils::Args::Attach,   "Attach",               "Wait for a debugger to attach to the process on startup" );
-//  parser.AddSwitch( AppUtils::Args::Profile,  "Profile",              "Enable profile output to the console windows" );
-//  parser.AddSwitch( AppUtils::Args::Memory,   "Memory",               "Profile and report memory usage to the console" );
-//  parser.AddSwitch( AppUtils::Args::Verbose,  "Verbose",              "Output a verbose level of console output" );
-//  parser.AddSwitch( AppUtils::Args::Extreme,  "Extreme",              "Output an extremely verbose level of console output" );
-//  parser.AddSwitch( AppUtils::Args::Debug,    "Debug",                "Output debug console output" );
-//
-//  __super::OnInitCmdLine( parser );
-//}
+void Application::OnInitCmdLine( wxCmdLineParser& parser )
+{
+  SetVendorName( "Nocturnal" );
+
+  parser.SetLogo( wxT( "Luna (c) 2010 - Nocturnal\n" ) );
+
+  parser.AddSwitch( "pipe", "Pipe",               "Use pipe for console connection" ); 
+  parser.AddSwitch( "disable_tracker", "DisableTracker", "Disable Asset Tracker" );
+
+  parser.AddSwitch( WindowSettings::s_Reset, WindowSettings::s_ResetLong, "Reset all window positions (other prefs/mru will remain)" );
+  parser.AddSwitch( Preferences::s_ResetPreferences, Preferences::s_ResetPreferencesLong, "Resets all preferences for all of Luna" );
+
+  parser.AddSwitch( Worker::Args::Debug,      "Debug",                "Debug use of background processes" );
+  parser.AddSwitch( Worker::Args::Wait,       "Wait",                 "Wait forever for background processes" );
+  parser.AddSwitch( AppUtils::Args::Script,   "Script",               "Omit prefix and suffix in console output" );
+  parser.AddSwitch( AppUtils::Args::Attach,   "Attach",               "Wait for a debugger to attach to the process on startup" );
+  parser.AddSwitch( AppUtils::Args::Profile,  "Profile",              "Enable profile output to the console windows" );
+  parser.AddSwitch( AppUtils::Args::Memory,   "Memory",               "Profile and report memory usage to the console" );
+  parser.AddSwitch( AppUtils::Args::Verbose,  "Verbose",              "Output a verbose level of console output" );
+  parser.AddSwitch( AppUtils::Args::Extreme,  "Extreme",              "Output an extremely verbose level of console output" );
+  parser.AddSwitch( AppUtils::Args::Debug,    "Debug",                "Output debug console output" );
+
+  __super::OnInitCmdLine( parser );
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Called after OnInitCmdLine.  The base class handles the /help command line
 // switch and exits.  If we get this far, we need to parse the command line
 // and determine what mode to launch the app in.
 // 
-bool Application::Initialize( int& argc, wxChar** argv ) //( wxCmdLineParser& parser )
+bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
 {
-    std::vector< std::string > args;
-    for ( int i = 1; i < argc; ++i ) // 1 = application
-    {
-        args.push_back( argv[ i ] );
-    }
-
-    CommandLine::Processor processor;
-    CommandLine::FailTest* failTest = new CommandLine::FailTest();
-    CommandLine::Help* help = new CommandLine::Help();
-
-    processor.RegisterCommand( failTest );
-    processor.RegisterCommand( help );
-
-    std::string error;
-    if ( !processor.Process( args, error ) )
-    {
-        Log::Error( error.c_str() );
-        CleanUp();
-        return false;
-    }
-
   wxArtProvider::Push( new ::Luna::ArtProvider() );
 
   // don't spend a lot of time updating idle events for windows that don't need it
@@ -191,13 +165,9 @@ bool Application::Initialize( int& argc, wxChar** argv ) //( wxCmdLineParser& pa
     wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
   }
 
-  return __super::Initialize( argc, argv );
-}
+  GetSceneEditor()->Show();
 
-bool Application::OnInit()
-{
-    GetSceneEditor()->Show();
-    return true; // we'll handle the command line, thanks
+  return __super::OnCmdLineParsed( parser );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1,9 +1,7 @@
-#include "Precompile.h"
 #include "FailTest.h"
 
 using namespace Nocturnal;
-using namespace Nocturnal::Luna;
-using namespace Nocturnal::Luna::CommandLine;
+using namespace Nocturnal::CommandLine;
 
 const std::string FailTest::s_Token = "fail";
 const std::string FailTest::s_ShortHelp = "fail     - Causes the application to fail for testing purposes";

@@ -1,12 +1,10 @@
-#include "Precompile.h"
 #include "Help.h"
 
-#include "Luna/CommandLine/Processor.h"
+#include "Foundation/CommandLine/Processor.h"
 #include "Foundation/Log.h"
 
 using namespace Nocturnal;
-using namespace Nocturnal::Luna;
-using namespace Nocturnal::Luna::CommandLine;
+using namespace Nocturnal::CommandLine;
 
 const std::string Help::s_Token = "help";
 const std::string Help::s_ShortHelp = "help [command] - Displays the help for the command (or application if no command specified)";
@@ -25,15 +23,14 @@ bool Help::Process( std::vector< std::string >::const_iterator& itr, const std::
     const std::string& arg = (*itr);
     itr++;
 
-    const Command* command = m_Owner->GetCommand( arg );
-    if ( command )
+    const Verb* verb = m_Owner->GetVerb( arg );
+    if ( verb )
     {
-#pragma TODO( "Fix this up not to use Console" )
-        Log::Print( command->GetHelp().c_str() );
+        Log::Print( verb->GetHelp().c_str() );
     }
     else
     {
-        error = std::string( "No help for command: " ) + arg;
+        error = std::string( "No help for verb: " ) + arg;
         return  false;
     }
 

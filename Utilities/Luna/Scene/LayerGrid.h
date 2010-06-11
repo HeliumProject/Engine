@@ -2,8 +2,8 @@
 
 #include <map>
 #include <vector>
-#include "Common/Automation/Event.h"
-#include "Common/Container/OrderedSet.h"
+#include "Foundation/Automation/Event.h"
+#include "Foundation/Container/OrderedSet.h"
 #include "Content/LayerTypes.h"
 namespace Luna
 {

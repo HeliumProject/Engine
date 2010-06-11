@@ -103,7 +103,7 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
   }
   catch ( const Nocturnal::Exception& e )
   {
-    Console::Error( "%s\n", e.what() );
+    Log::Error( "%s\n", e.what() );
   }
 
   if ( gotRevisionInfo && rcsFile.ExistsInDepot() )

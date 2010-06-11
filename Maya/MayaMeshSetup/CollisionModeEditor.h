@@ -3,7 +3,7 @@
 #include "API.h"
 #include "CollisionModeDisplayNode.h"
 
-#include "Common/Automation/Event.h"
+#include "Foundation/Automation/Event.h"
 
 namespace Maya
 {

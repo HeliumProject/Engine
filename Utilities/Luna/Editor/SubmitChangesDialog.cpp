@@ -3,7 +3,7 @@
 #include "EditorGenerated.h"
 
 #include "rcs/rcs.h"
-#include "Windows/Process.h"
+#include "Platform/Process.h"
 
 #include <sstream>
 
@@ -85,7 +85,7 @@ int SubmitChangesDialog::ShowModal()
     // If there's no files in the changelist, ask the user if they want to launch P4V.
     if ( wxYES == wxMessageBox( "There are no files to commit in your default changelist.\nWould you like to launch P4V?", "Launch P4V?", wxYES_NO | wxCENTER | wxICON_QUESTION, GetParent() ) )
     {
-      Windows::Execute( "p4v.exe" );
+      Platform::Execute( "p4v.exe" );
     }
   }
 
@@ -157,7 +157,7 @@ void SubmitChangesDialog::Commit()
 
     if ( wxYES == wxMessageBox( error, "Launch P4V?", wxYES_NO | wxCENTER | wxICON_ERROR, this ) )
     {
-      Windows::Execute( "p4v.exe" );
+      Platform::Execute( "p4v.exe" );
     }
   }
 }
@@ -175,7 +175,7 @@ void SubmitChangesDialog::OnButtonClicked( wxCommandEvent& args )
     break;
 
   case wxID_NO:
-    Windows::Execute( "p4v.exe" );
+    Platform::Execute( "p4v.exe" );
     break;
 
   case wxID_CANCEL:

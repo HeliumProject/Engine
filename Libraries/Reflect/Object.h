@@ -4,9 +4,9 @@
 #include "Class.h"
 #include "Exceptions.h"
 
-#include "Common/Types.h"
-#include "Common/Assert.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Platform/Types.h"
+#include "Platform/Assert.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 namespace Reflect
 {

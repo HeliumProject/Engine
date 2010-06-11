@@ -3,7 +3,7 @@
 #include "AttributeWrapper.h"
 #include "PersistentData.h"
 #include "Asset/AssetClass.h"
-#include "Common/Automation/Event.h"
+#include "Foundation/Automation/Event.h"
 #include "Undo/BatchCommand.h"
 
 namespace Inspect

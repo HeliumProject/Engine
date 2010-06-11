@@ -58,11 +58,11 @@
 #include "NodeVisibility.h"
 #include "SceneVisibility.h"
 
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 #include "Attribute/AttributeInit.h"
 #include "Attribute/AttributeCategories.h"
 
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 
 using namespace Reflect;
 using namespace Math;

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ListView.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 using namespace UIToolKit;
 

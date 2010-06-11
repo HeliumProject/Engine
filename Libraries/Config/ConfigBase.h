@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string>
 
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 // Config API
 namespace Config

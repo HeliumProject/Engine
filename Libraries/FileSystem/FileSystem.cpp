@@ -1,16 +1,16 @@
-#include "Windows/Windows.h"
-#include "Windows/Error.h"
+#include "Platform/Windows/Windows.h"
+#include "Foundation/Exception.h"
 
 #pragma comment(lib, "version")
 
 #include "FileSystem.h"
 #include "FileIterator.h"
 
-#include "Common/Assert.h" 
-#include "Common/String/Utilities.h"
-#include "Common/String/Natural.h"
-#include "Common/Boost/Regex.h" 
-#include "Common/String/Tokenize.h"
+#include "Platform/Assert.h" 
+#include "Foundation/String/Utilities.h"
+#include "Foundation/String/Natural.h"
+#include "Foundation/Boost/Regex.h" 
+#include "Foundation/String/Tokenize.h"
 
 #include <io.h>
 #include <fcntl.h>
@@ -380,7 +380,7 @@ void FileSystem::Copy( const std::string& source, const std::string& destination
 {
   if (FALSE == ::CopyFile( source.c_str(), destination.c_str(), overwrite ? FALSE : TRUE ))
   {
-    throw Windows::Exception ( "Unable to copy file '%s' to '%s'", source.c_str(), destination.c_str() ); // will capture GetLastError();
+    throw Nocturnal::PlatformException ( "Unable to copy file '%s' to '%s'", source.c_str(), destination.c_str() ); // will capture GetLastError();
   }
 }
 
@@ -391,7 +391,7 @@ void FileSystem::Move( const std::string& source, const std::string& destination
 {
   if (FALSE == ::MoveFile( source.c_str(), destination.c_str() ))
   {
-    throw Windows::Exception ( "Unable to rename file '%s' to '%s'", source.c_str(), destination.c_str() ); // will capture GetLastError();
+    throw Nocturnal::PlatformException ( "Unable to rename file '%s' to '%s'", source.c_str(), destination.c_str() ); // will capture GetLastError();
   }
 }
 
@@ -407,7 +407,7 @@ void FileSystem::Delete( const std::string& fileName )
   {
     if (FALSE == ::DeleteFileA( clean.c_str() ))
     {
-      throw Windows::Exception ( "Unable to delete file '%s'", clean.c_str() ); // will capture GetLastError();
+      throw Nocturnal::PlatformException ( "Unable to delete file '%s'", clean.c_str() ); // will capture GetLastError();
     }
   }
 }
@@ -419,7 +419,7 @@ void FileSystem::AppendFile( std::ofstream& dst, std::ifstream& src )
 {
   if( !dst.is_open() || !src.is_open() )
   {
-    throw Windows::Exception( "Unable to append file. Src or Dst stream is not valid" );
+    throw Nocturnal::PlatformException( "Unable to append file. Src or Dst stream is not valid" );
   }
 
   const int MAX_FILE_BUFFER_SIZE = 690;
@@ -882,7 +882,7 @@ void FileSystem::GetAttributes( const std::string& path, u32& attributes )
   DWORD dwFileAttrs = GetFileAttributes( path.c_str() ); 
   if ( dwFileAttrs == INVALID_FILE_ATTRIBUTES )
   {
-    throw Windows::Exception(
+    throw Nocturnal::PlatformException(
       "GetAttributesFast failed, GetFileAttributes returned INVALID_FILE_ATTRIBUTES for path '%s'!",
       path.c_str() );
   }
@@ -901,7 +901,7 @@ void FileSystem::SetAttributes( const std::string& path, u32 attributes )
   
   if ( !SetFileAttributes( path.c_str(), originalAttributes | attributes ) )
   {
-    throw Windows::Exception(
+    throw Nocturnal::PlatformException(
       "SetFileAttributes failed, SetFileAttributes returned '%d' (false) for path '%s'!",
       ::GetLastError(),
       path.c_str() );
@@ -917,7 +917,7 @@ void FileSystem::ClearAttributes( const std::string& path, u32 attributes )
 
   if ( !SetFileAttributes( path.c_str(), originalAttributes & ~attributes ) )
   {
-    throw Windows::Exception(
+    throw Nocturnal::PlatformException(
       "ClearAttributes failed, ClearAttributes returned '%d' (false) for path '%s'!",
       ::GetLastError(),
       path.c_str() );

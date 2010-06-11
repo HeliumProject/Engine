@@ -2,9 +2,9 @@
 
 #include <hash_map>
 
-#include "Common/Types.h"
-#include "Common/Assert.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Platform/Types.h"
+#include "Platform/Assert.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 #include "API.h"
 #include "Render.h"

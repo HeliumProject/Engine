@@ -3,14 +3,14 @@
 #include <sstream>
 #include <iostream>
 
-#include "Common/Memory/HybridPtr.h"
-#include "Common/Automation/Event.h"
+#include "Foundation/Memory/HybridPtr.h"
+#include "Foundation/Automation/Event.h"
 #include "SmartBuffer/BasicBuffer.h"
 
 #include "Element.h"
 #include "Archive.h"
 
-#include "Windows/Atomic.h"
+#include "Foundation/Atomic.h"
 
 namespace Reflect
 {
@@ -48,7 +48,7 @@ namespace Reflect
 
     }
   };
-  typedef Nocturnal::Signature< void, TranslateInputEventArgs&, ::Windows::AtomicRefCountBase > TranslateInputSignature;
+  typedef Nocturnal::Signature< void, TranslateInputEventArgs&, Foundation::AtomicRefCountBase > TranslateInputSignature;
 
   struct TranslateOutputEventArgs : TranslateEventArgs
   {
@@ -62,7 +62,7 @@ namespace Reflect
 
     }
   };
-  typedef Nocturnal::Signature< void, TranslateOutputEventArgs&, ::Windows::AtomicRefCountBase > TranslateOutputSignature;
+  typedef Nocturnal::Signature< void, TranslateOutputEventArgs&, Foundation::AtomicRefCountBase > TranslateOutputSignature;
 
 
   //

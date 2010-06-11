@@ -149,14 +149,6 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
-			RelativePathToProject=".\libraries\Profile\profile.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{1E9F45BD-AE62-4A12-8A09-56665F644B79}"
-			RelativePathToProject=".\libraries\Console\Console.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{9270A244-6F23-48F9-9382-0CCBADBDC0EE}"
 			RelativePathToProject=".\libraries\Perforce\perforce.vcproj"
 		/>

@@ -3,7 +3,7 @@
 #include "API.h"
 
 #include "UID/TUID.h"
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 #include "Reflect/Serializers.h"
 

@@ -2,7 +2,7 @@
 
 #include "API.h"
 #include "Editor/Document.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 namespace Luna
 {

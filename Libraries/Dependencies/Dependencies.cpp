@@ -3,7 +3,7 @@
 #endif
 #include <windows.h>
 
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 
 #include "Dependencies.h"
 #include "DataInfo.h"
@@ -28,10 +28,10 @@
 #include <files.h>
 #pragma warning ( pop )
 
-#include "Common/Flags.h"
-#include "Common/Types.h"
-#include "Common/Container/Insert.h"
-#include "Common/String/Utilities.h"
+#include "Foundation/Flags.h"
+#include "Platform/Types.h"
+#include "Foundation/Container/Insert.h"
+#include "Foundation/String/Utilities.h"
 
 #include "FileSystem/File.h"
 #include "FileSystem/FileSystem.h"
@@ -39,7 +39,7 @@
 #include "Finder/Finder.h"
 #include "Finder/ProjectSpecs.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #define MAX_FILE_GRAPH_DEPTH 25
 
@@ -86,7 +86,7 @@ namespace Dependencies
       throw Exception( "Cannot register dependancy with an empty file name; inFilePath: %s, outFilePath: %s", input->m_Path.c_str(), output->m_Path.c_str() );
     }
 
-    Console::Bullet bullet( Console::Streams::Debug, Console::Levels::Verbose, "RegisterInput: %sInput %s -> Output %s\n", input->m_GraphConfigs & ConfigFlags::LeafInput ? "Leaf" : "Intermedate", input->m_Path.c_str(), output->m_Path.c_str() );
+    Log::Bullet bullet( Log::Streams::Debug, Log::Levels::Verbose, "RegisterInput: %sInput %s -> Output %s\n", input->m_GraphConfigs & ConfigFlags::LeafInput ? "Leaf" : "Intermedate", input->m_Path.c_str(), output->m_Path.c_str() );
 
     DependencyInfoPtr outFile = CacheRegisterDependency( output );
     DependencyInfoPtr inFile  = CacheRegisterDependency( input );
@@ -136,7 +136,7 @@ namespace Dependencies
       {
         const DependencyInfoPtr& output = (*it);
 
-        Console::Bullet updateOutputBullet( Console::Streams::Debug, Console::Levels::Verbose, "UpdateOutput %s\n", output->m_Path.c_str() );
+        Log::Bullet updateOutputBullet( Log::Streams::Debug, Log::Levels::Verbose, "UpdateOutput %s\n", output->m_Path.c_str() );
 
         GetFileMD5( output );
         CacheCommitGraph( output, false );
@@ -163,7 +163,7 @@ namespace Dependencies
 
     DEPENDENCIES_SCOPE_TIMER((""));
 
-    Console::Bullet isUpToDateBullet( Console::Streams::Debug, Console::Levels::Verbose, "IsUpToDate %s\n", filePath.c_str() );
+    Log::Bullet isUpToDateBullet( Log::Streams::Debug, Log::Levels::Verbose, "IsUpToDate %s\n", filePath.c_str() );
 
     DependencyInfoPtr file = CacheGetDependency( filePath );
     if ( !file )
@@ -247,7 +247,7 @@ namespace Dependencies
   {
     if ( file->AppendToSignature( hashFilter, trace ) )
     {
-      Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "CreateSignature is skipping optional input file (%s)\n", file->m_Path.c_str() );
+      Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "CreateSignature is skipping optional input file (%s)\n", file->m_Path.c_str() );
       return;
     }
   }
@@ -307,7 +307,7 @@ namespace Dependencies
 
     DEPENDENCIES_SCOPE_TIMER((""));
 
-    Console::Bullet createSigBullet( Console::Streams::Debug, Console::Levels::Verbose, "CreateSignature %s\n", file->m_Path.c_str() );
+    Log::Bullet createSigBullet( Log::Streams::Debug, Log::Levels::Verbose, "CreateSignature %s\n", file->m_Path.c_str() );
 
     // clear the signature
     file->m_Signature.clear();
@@ -407,7 +407,7 @@ namespace Dependencies
         (*it)->m_Signature.clear();
         if ( trapExceptions )
         {
-          Console::Error( "Error creating signature for file '%s': %s\n", (*it)->m_Path.c_str(), e.what() );
+          Log::Error( "Error creating signature for file '%s': %s\n", (*it)->m_Path.c_str(), e.what() );
         }
         else
         {
@@ -468,7 +468,7 @@ namespace Dependencies
     {
       if ( regFile->IsLeaf() != file->IsLeaf() )
       {
-        Console::Warning( "An input file has been registered with the dependencies systems as both a leaf and non-leaf input file: %s\n", file->m_Path.c_str() );
+        Log::Warning( "An input file has been registered with the dependencies systems as both a leaf and non-leaf input file: %s\n", file->m_Path.c_str() );
       }
     }
 
@@ -650,7 +650,7 @@ namespace Dependencies
       throw MaxGraphDepthException();
     }
 
-    Console::Bullet cacheGetGraphBullet( Console::Streams::Debug, Console::Levels::Verbose, "CacheGetGraph %s\n", outFile->m_Path.c_str() );
+    Log::Bullet cacheGetGraphBullet( Log::Streams::Debug, Log::Levels::Verbose, "CacheGetGraph %s\n", outFile->m_Path.c_str() );
 
     // determine if the outFile is out of date, this updates m_IsUpToDate
     if ( !outFile->m_IsUpToDate || !outFile->m_IsUpToDateCached )
@@ -658,7 +658,7 @@ namespace Dependencies
       outFile->m_IsUpToDate = !outFile->WasModified();
       if ( !outFile->m_IsUpToDate )
       {
-        Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "OUT-OF-DATE: file was modified\n" );
+        Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "OUT-OF-DATE: file was modified\n" );
       }
     }
 
@@ -690,7 +690,7 @@ namespace Dependencies
 
           // OUT-OF-DATE: the list of file dependencies has changed
           outFile->m_IsUpToDate = false;
-          Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "OUT-OF-DATE: the list of file dependencies has changed\n" );
+          Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "OUT-OF-DATE: the list of file dependencies has changed\n" );
 
           continue;
         }
@@ -708,7 +708,7 @@ namespace Dependencies
       {
         // OUT-OF-DATE: no cached dependencies found for the given outFile
         outFile->m_IsUpToDate = false;
-        Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "OUT-OF-DATE: no cached dependencies found for the given outFile\n" );
+        Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "OUT-OF-DATE: no cached dependencies found for the given outFile\n" );
       }
       else
       {
@@ -722,7 +722,7 @@ namespace Dependencies
             if ( foundOutFileReg->second.Size() != listOfFiles.Size() )
             {
               outFile->m_IsUpToDate = false;
-              Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "OUT-OF-DATE: the dependencies have changed\n" );
+              Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "OUT-OF-DATE: the dependencies have changed\n" );
             }
             else
             {
@@ -740,7 +740,7 @@ namespace Dependencies
                 outFile->m_IsUpToDate = ( foundOutFileReg->second == selectedFilePaths );
                 if ( !outFile->m_IsUpToDate )
                 {
-                  Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "OUT-OF-DATE: the input files are order dependent and the order of dependencies has changed\n" );
+                  Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "OUT-OF-DATE: the input files are order dependent and the order of dependencies has changed\n" );
                 }
               }
               // OUT-OF-DATE: the list of file dependencies has changed
@@ -753,7 +753,7 @@ namespace Dependencies
                   if ( !foundOutFileReg->second.Contains( (*itr)->m_Path ) )
                   {
                     outFile->m_IsUpToDate = false;
-                    Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "OUT-OF-DATE: the list of file dependencies has changed\n" );
+                    Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "OUT-OF-DATE: the list of file dependencies has changed\n" );
 
                     break;
                   }
@@ -776,7 +776,7 @@ namespace Dependencies
 
             // OUT-OF-DATE: the list of file dependencies has changed
             outFile->m_IsUpToDate = false;
-            Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "OUT-OF-DATE: the list of file dependencies has changed\n" );
+            Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "OUT-OF-DATE: the list of file dependencies has changed\n" );
 
             continue;
           }
@@ -872,14 +872,14 @@ namespace Dependencies
       NOC_BREAK(); // how did this happen?
 
       outFile->m_IsUpToDate = false;
-      Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "OUT-OF-DATE: there is no outfile meta date for this infile (%s)\n", inFile->m_Path.c_str() );
+      Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "OUT-OF-DATE: there is no outfile meta date for this infile (%s)\n", inFile->m_Path.c_str() );
     }
 
     // OUT-OF-DATE: the inFile's GraphInfo.m_LastModified time is != to it's current m_LastModifiedTime
     if ( outFile->m_IsUpToDate && inFile->m_LastModified != foundGraphInfo->second.m_LastModified ) 
     {
       outFile->m_IsUpToDate = false;
-      Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "OUT-OF-DATE: the inFile (%s) GraphInfo.m_LastModified time is != to it's current m_LastModifiedTime\n", inFile->m_Path.c_str() );
+      Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "OUT-OF-DATE: the inFile (%s) GraphInfo.m_LastModified time is != to it's current m_LastModifiedTime\n", inFile->m_Path.c_str() );
     }
 
     // determine if the input file is is optional
@@ -891,7 +891,7 @@ namespace Dependencies
       if ( outFile->m_IsUpToDate && inFileExists != foundGraphInfo->second.m_ExistedLastBuild )
       {
         outFile->m_IsUpToDate = false;
-        Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "OUT-OF-DATE: the inFile (%s) is optional and the exists state has changed since the last build\n", inFile->m_Path.c_str() );
+        Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "OUT-OF-DATE: the inFile (%s) is optional and the exists state has changed since the last build\n", inFile->m_Path.c_str() );
       }
     }
     // else throw an exception if the input file is NOT optional, and is missing
@@ -904,7 +904,7 @@ namespace Dependencies
     if ( outFile->m_IsUpToDate && inFile->m_LastModified > outFile->m_LastModified )
     {
       outFile->m_IsUpToDate = false;
-      Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "OUT-OF-DATE: one or more of it's dependencies' modified times is more recent\n" );
+      Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "OUT-OF-DATE: one or more of it's dependencies' modified times is more recent\n" );
     }
 
     // only get the inFile graph if it's not already in graph
@@ -918,7 +918,7 @@ namespace Dependencies
     if ( outFile->m_IsUpToDate && !inFileIsOptionalAndIsMissing && !inFile->m_IsUpToDate )
     {
       outFile->m_IsUpToDate = false;
-      Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "OUT-OF-DATE: one or more of it's dependencies is OUT-OF-DATE\n" );
+      Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "OUT-OF-DATE: one or more of it's dependencies is OUT-OF-DATE\n" );
     }
   }
 

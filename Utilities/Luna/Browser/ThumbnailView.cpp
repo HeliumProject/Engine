@@ -9,7 +9,7 @@
 #include "Asset/AssetFile.h"
 #include "Asset/AssetFolder.h"
 #include "Asset/AssetTypeInfo.h"
-#include "Common/String/Utilities.h"
+#include "Foundation/String/Utilities.h"
 #include "Editor/Orientation.h"
 #include "Editor/UpdateStatusEvent.h"
 #include "Finder/AssetSpecs.h"
@@ -232,9 +232,9 @@ void ThumbnailView::SetResults( SearchResults* results )
 
         m_FolderTiles.clear();
         m_FileTiles.clear();
-        m_VisibleTiles.clear();
-        m_MouseOverTiles.clear();
-        m_SelectedTiles.clear();
+        m_VisibleTiles.Clear();
+        m_MouseOverTiles.Clear();
+        m_SelectedTiles.Clear();
         m_CurrentTextureRequests.clear();
 
         m_VisibleTileCorners.clear();
@@ -315,10 +315,10 @@ void ThumbnailView::SelectPath( const std::string& path )
 // 
 u32 ThumbnailView::GetSelectedPaths( V_string& paths, bool useForwardSlashes )
 {
-    paths.reserve( paths.size() + m_SelectedTiles.size() );
+    paths.reserve( paths.size() + m_SelectedTiles.Size() );
 
-    for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(),
-        tileEnd = m_SelectedTiles.end(); tileItr != tileEnd; ++tileItr )
+    for ( OS_ThumbnailTiles::Iterator tileItr = m_SelectedTiles.Begin(),
+        tileEnd = m_SelectedTiles.End(); tileItr != tileEnd; ++tileItr )
     {
         ThumbnailTile* tile = *tileItr;
         std::string path;
@@ -349,8 +349,8 @@ u32 ThumbnailView::GetSelectedPaths( V_string& paths, bool useForwardSlashes )
 // 
 void ThumbnailView::GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders )
 {
-    for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(),
-        tileEnd = m_SelectedTiles.end(); tileItr != tileEnd; ++tileItr )
+    for ( OS_ThumbnailTiles::Iterator tileItr = m_SelectedTiles.Begin(),
+        tileEnd = m_SelectedTiles.End(); tileItr != tileEnd; ++tileItr )
     {
         ThumbnailTile* tile = *tileItr;
         if ( tile->IsFile() )
@@ -370,9 +370,9 @@ void ThumbnailView::GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asse
 std::string ThumbnailView::GetHighlightedPath() const
 {
     std::string path;
-    if ( !m_MouseOverTiles.empty() )
+    if ( !m_MouseOverTiles.Empty() )
     {
-        path = m_MouseOverTiles.front()->GetFullPath();
+        path = m_MouseOverTiles.Front()->GetFullPath();
     }
     return path;
 }
@@ -392,9 +392,9 @@ void ThumbnailView::SetZoom( u16 zoom )
         // Keep track of the first visible item so we can maintain it when the 
         // view size changes.
         ThumbnailTile* firstVisible = NULL;
-        if ( !m_VisibleTiles.empty() )
+        if ( !m_VisibleTiles.Empty() )
         {
-            firstVisible = m_VisibleTiles.front();
+            firstVisible = m_VisibleTiles.Front();
         }
 
         // Scale
@@ -506,12 +506,12 @@ void ThumbnailView::OnTilesCreated( const M_FolderToTilePtr& folders, const M_Fi
 bool ThumbnailView::Select( ThumbnailTile* tile )
 {
     tile->SetSelected( true );
-    Nocturnal::Insert< OS_ThumbnailTiles >::Result inserted = m_SelectedTiles.insert( tile );
-    if ( inserted.second )
+    if ( m_SelectedTiles.Append( tile ) )
     {
-        m_SelectionChanged.Raise( m_SelectedTiles.size() );
+        m_SelectionChanged.Raise( m_SelectedTiles.Size() );
+        return true;
     }
-    return inserted.second;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -522,12 +522,12 @@ bool ThumbnailView::Select( ThumbnailTile* tile )
 bool ThumbnailView::Deselect( ThumbnailTile* tile )
 {
     tile->SetSelected( false );
-    bool changed = ( m_SelectedTiles.erase( tile ) > 0 );
-    if ( changed )
+    if ( m_SelectedTiles.Remove( tile ) )
     {
-        m_SelectionChanged.Raise( m_SelectedTiles.size() );
+        m_SelectionChanged.Raise( m_SelectedTiles.Size() );
+        return true;
     }
-    return changed;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -548,13 +548,13 @@ bool ThumbnailView::SetSelection( ThumbnailTile* tile, bool selected )
 // 
 bool ThumbnailView::ClearSelection()
 {
-    bool selectionChanged = !m_SelectedTiles.empty();
-    for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(), 
-        tileEnd = m_SelectedTiles.end(); tileItr != tileEnd; ++tileItr )
+    bool selectionChanged = !m_SelectedTiles.Empty();
+    for ( OS_ThumbnailTiles::Iterator tileItr = m_SelectedTiles.Begin(), 
+        tileEnd = m_SelectedTiles.End(); tileItr != tileEnd; ++tileItr )
     {
         ( *tileItr )->SetSelected( false );
     }
-    m_SelectedTiles.clear();
+    m_SelectedTiles.Clear();
     if ( selectionChanged )
     {
         m_SelectionChanged.Raise( 0 );
@@ -588,11 +588,11 @@ void ThumbnailView::Highlight( ThumbnailTile* tile )
 {
     if ( !tile->IsHighlighed() )
     {
-        if ( !m_MouseOverTiles.empty() && m_MouseOverTiles.front().Ptr() != tile )
+        if ( !m_MouseOverTiles.Empty() && m_MouseOverTiles.Front().Ptr() != tile )
         {
             ClearHighlight();
         }
-        m_MouseOverTiles.insert( tile );
+        m_MouseOverTiles.Append( tile );
         tile->SetHighlighted( true );
         Refresh();
         m_HighlightChanged.Raise( ThumbnailHighlightArgs( tile->GetFullPath() ) );
@@ -604,10 +604,10 @@ void ThumbnailView::Highlight( ThumbnailTile* tile )
 // 
 void ThumbnailView::ClearHighlight()
 {
-    if ( !m_MouseOverTiles.empty() )
+    if ( !m_MouseOverTiles.Empty() )
     {
-        m_MouseOverTiles.front()->SetHighlighted( false );
-        m_MouseOverTiles.clear();
+        m_MouseOverTiles.Front()->SetHighlighted( false );
+        m_MouseOverTiles.Clear();
         Refresh();
         m_HighlightChanged.Raise( ThumbnailHighlightArgs( "" ) );
     }
@@ -951,7 +951,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
     bool inFolder = m_BrowserFrame->InFolder();
     bool onlyFiles = !m_FileTiles.empty() && m_FolderTiles.empty();
     bool onlyFolders = !m_FolderTiles.empty() && m_FileTiles.empty();
-    size_t numSelected = m_SelectedTiles.size();
+    size_t numSelected = m_SelectedTiles.Size();
     bool filesAndFolders = false;
 
     bool skipIteration = onlyFiles || onlyFolders;
@@ -959,8 +959,8 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
     {
         bool foundFiles = false;
         bool foundFolders = false;
-        for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(),
-            tileEnd = m_SelectedTiles.end(); tileItr != tileEnd && !filesAndFolders; ++tileItr )
+        for ( OS_ThumbnailTiles::Iterator tileItr = m_SelectedTiles.Begin(),
+            tileEnd = m_SelectedTiles.End(); tileItr != tileEnd && !filesAndFolders; ++tileItr )
         {
             ThumbnailTile* tile = *tileItr;
             foundFiles |= tile->IsFile();
@@ -978,7 +978,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
     bool viewOnTarget = onlyFiles && numSelected == 1;
     if ( viewOnTarget )
     {
-        viewOnTarget &= FileSystem::HasExtension( m_SelectedTiles.front()->GetFile()->GetFilePath(), FinderSpecs::Extension::REFLECT_BINARY.GetExtension() );
+        viewOnTarget &= FileSystem::HasExtension( m_SelectedTiles.Front()->GetFile()->GetFilePath(), FinderSpecs::Extension::REFLECT_BINARY.GetExtension() );
     }
 
     // Prepare the menu
@@ -996,7 +996,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
         {
             // Preview
             menu.Append( ID_Preview, BrowserMenu::Label( ID_Preview ) );
-            menu.Enable( ID_Preview, numSelected == 1 && m_BrowserFrame->IsPreviewable( ( *m_SelectedTiles.begin() )->GetFile() ) );
+            menu.Enable( ID_Preview, numSelected == 1 && m_BrowserFrame->IsPreviewable( ( m_SelectedTiles.Front() )->GetFile() ) );
             menu.AppendSeparator();
         }
 
@@ -1236,8 +1236,8 @@ void ThumbnailView::Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTile
     // For each visible tile, get row/column, make bounding box, convert to 
     // world, compare with cursor
     bool done = false;
-    OS_ThumbnailTiles::const_iterator tileItr = m_VisibleTiles.begin();
-    OS_ThumbnailTiles::const_iterator tileEnd = m_VisibleTiles.end();
+    OS_ThumbnailTiles::Iterator tileItr = m_VisibleTiles.Begin();
+    OS_ThumbnailTiles::Iterator tileEnd = m_VisibleTiles.End();
     for ( ; tileItr != tileEnd && !done; ++tileItr )
     {
         ThumbnailTile* tile = *tileItr;
@@ -1252,7 +1252,7 @@ void ThumbnailView::Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTile
             tileCorners[BottomRight].y <= localMouse1.y 
             )
         {
-            hits.insert( tile );
+            hits.Append( tile );
             done = mousePos1 == mousePos2;
             break;
         }
@@ -1299,7 +1299,7 @@ bool ThumbnailView::Draw()
     result = device->SetFVF( ElementFormats[ ElementTypes::PositionUV ] );
 
     // Visibility testing
-    m_VisibleTiles.clear();
+    m_VisibleTiles.Clear();
     m_ViewFrustum = Math::Frustum( m_World * m_ViewMatrix * m_Projection );
 
     m_VisibleTileCorners.clear();
@@ -1396,7 +1396,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
         device->SetTexture( 0, NULL );
 
         // Keep track of which tiles are visible
-        m_VisibleTiles.insert( tile );
+        m_VisibleTiles.Append( tile );
 
         // Add to overlay lists
         m_VisibleTileCorners.push_back( tileCorners[ThumbnailTopLeft] );
@@ -1743,9 +1743,9 @@ void ThumbnailView::OnMouseWheel( wxMouseEvent& args )
 void ThumbnailView::MouseSelectionHelper()
 {
     ThumbnailTile* onlySelectedTile = NULL;
-    if ( m_SelectedTiles.size() == 1 )
+    if ( m_SelectedTiles.Size() == 1 )
     {
-        onlySelectedTile = m_SelectedTiles.front();
+        onlySelectedTile = m_SelectedTiles.Front();
     }
 
     bool selectionChanged = false;
@@ -1792,8 +1792,8 @@ void ThumbnailView::OnMouseMove( wxMouseEvent& args )
             // Build the list of items to drag and drop
             bool doDrag = false;
             wxFileDataObject clipboardData;
-            for ( OS_ThumbnailTiles::const_iterator tileItr = m_SelectedTiles.begin(),
-                tileEnd = m_SelectedTiles.end(); tileItr != tileEnd; ++tileItr )
+            for ( OS_ThumbnailTiles::Iterator tileItr = m_SelectedTiles.Begin(),
+                tileEnd = m_SelectedTiles.End(); tileItr != tileEnd; ++tileItr )
             {
                 ThumbnailTile* tile = *tileItr;
                 std::string path;
@@ -1824,14 +1824,14 @@ void ThumbnailView::OnMouseMove( wxMouseEvent& args )
         }
     }
 
-    if ( !m_MouseDown || m_SelectedTiles.empty() )
+    if ( !m_MouseDown || m_SelectedTiles.Empty() )
     {
         // The mouse is not down, just track the item to highlight
         OS_ThumbnailTiles hits;
         Pick( args.GetPosition(), args.GetPosition(), hits );
-        if ( hits.size() > 0 )
+        if ( hits.Size() > 0 )
         {
-            ThumbnailTile* hit = *hits.begin();
+            ThumbnailTile* hit = hits.Front();
             Highlight( hit );
         }
         else
@@ -1859,9 +1859,9 @@ void ThumbnailView::OnMouseLeftDown( wxMouseEvent& args )
     OS_ThumbnailTiles hits;
     ThumbnailTile* hit = NULL;
     Pick( args.GetPosition(), args.GetPosition(), hits );
-    if ( hits.size() > 0 )
+    if ( hits.Size() > 0 )
     {
-        m_MouseDownTile = hits.front();
+        m_MouseDownTile = hits.Front();
 
         if ( args.ShiftDown() && !m_CtrlOnMouseDown )
         {
@@ -1910,9 +1910,9 @@ void ThumbnailView::OnMouseLeftUp( wxMouseEvent& args )
         }
     }
 
-    if ( m_SelectedTiles.size() == 1 )
+    if ( m_SelectedTiles.Size() == 1 )
     {
-        m_RangeSelectTile = m_SelectedTiles.front();
+        m_RangeSelectTile = m_SelectedTiles.Front();
     }
 
     m_MouseDownTile = NULL;
@@ -1930,9 +1930,9 @@ void ThumbnailView::OnMouseLeftDoubleClick( wxMouseEvent& args )
     OS_ThumbnailTiles hits;
     ThumbnailTile* hit = NULL;
     Pick( args.GetPosition(), args.GetPosition(), hits );
-    if ( !hits.empty() )
+    if ( !hits.Empty() )
     {
-        hit = hits.front();
+        hit = hits.Front();
         if ( hit->IsFolder() )
         {
             m_BrowserFrame->Search( hit->GetFolder()->GetFullPath() );
@@ -1956,14 +1956,14 @@ void ThumbnailView::OnMouseRightDown( wxMouseEvent& args )
     OS_ThumbnailTiles hits;
     Pick( args.GetPosition(), args.GetPosition(), hits );
 
-    if ( hits.empty() )
+    if ( hits.Empty() )
     {
         ClearSelection();
     }
     else
     {
-        NOC_ASSERT( hits.size() == 1 );
-        ThumbnailTile* hit = hits.front().Ptr();
+        NOC_ASSERT( hits.Size() == 1 );
+        ThumbnailTile* hit = hits.Front().Ptr();
         if ( !args.ControlDown() && !args.ShiftDown() && !hit->IsSelected() )
         {
             ClearSelection();
@@ -1971,9 +1971,9 @@ void ThumbnailView::OnMouseRightDown( wxMouseEvent& args )
         Select( hit );
     }
 
-    if ( m_SelectedTiles.size() == 1 )
+    if ( m_SelectedTiles.Size() == 1 )
     {
-        m_RangeSelectTile = m_SelectedTiles.front();
+        m_RangeSelectTile = m_SelectedTiles.Front();
     }
 
     // This will cause a Refresh as well
@@ -2091,9 +2091,9 @@ void ThumbnailView::OnFileProperties( wxCommandEvent& args )
 // 
 void ThumbnailView::OnRename( wxCommandEvent& args )
 {
-    if ( m_SelectedTiles.size() == 1 )
+    if ( m_SelectedTiles.Size() == 1 )
     {
-        ThumbnailTile* tile = m_SelectedTiles.front();
+        ThumbnailTile* tile = m_SelectedTiles.Front();
 
         if ( !tile->IsFile() || !tile->GetFile() )
         {

@@ -1,11 +1,11 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "SQLiteStmt.h"
 #include "SQLite.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
-#include "Windows/Error.h"
-#include "Windows/Process.h"
+#include "Foundation/Exception.h"
+#include "Platform/Process.h"
 #include <boost/regex.hpp>
 
 #include "sqlite3.h"
@@ -85,7 +85,7 @@ SQLite::SQLite( const char* friendlyName )
 : DBManager( friendlyName )
 , m_IsDBOpen( false )
 {
-    Console::Debug( Console::Levels::Verbose, "SQLite ThreadSafe: %d\n", sqlite3_threadsafe() );
+    Log::Debug( Log::Levels::Verbose, "SQLite ThreadSafe: %d\n", sqlite3_threadsafe() );
 }
 
 
@@ -104,7 +104,7 @@ void SQLite::Open( const std::string& dbPath, int flags )
 {
     Profile::Timer timer;
 
-    LogPrint( __FUNCTION__, Console::Levels::Verbose, "Connection settings: %s", dbPath.c_str() );
+    LogPrint( __FUNCTION__, Log::Levels::Verbose, "Connection settings: %s", dbPath.c_str() );
 
     ThrowIfDBConnected( __FUNCTION__ );
 
@@ -136,7 +136,7 @@ void SQLite::Open( const std::string& dbPath, int flags )
         throw SQL::DBManagerException( this, __FUNCTION__ );
     }
 
-    LogPrint( __FUNCTION__, Console::Levels::Verbose, "DB opened in %.2fms: %s", timer.Elapsed(), m_DBFilename.c_str() );
+    LogPrint( __FUNCTION__, Log::Levels::Verbose, "DB opened in %.2fms: %s", timer.Elapsed(), m_DBFilename.c_str() );
 }
 
 
@@ -153,7 +153,7 @@ void SQLite::Close()
         return;
     }
 
-    LogPrint( __FUNCTION__, Console::Levels::Verbose );
+    LogPrint( __FUNCTION__, Log::Levels::Verbose );
 
     if ( m_IsTransOpen )
         RollbackTrans();
@@ -184,7 +184,7 @@ void SQLite::Close()
     m_StmtHandles.clear();
     m_NumStmtHandles = 0;
 
-    LogPrint( __FUNCTION__, Console::Levels::Verbose, "DB closed in %.2fms: %s", timer.Elapsed(), m_DBFilename.c_str() );
+    LogPrint( __FUNCTION__, Log::Levels::Verbose, "DB closed in %.2fms: %s", timer.Elapsed(), m_DBFilename.c_str() );
 }
 
 
@@ -200,9 +200,9 @@ void SQLite::Delete()
     if ( FileSystem::Exists( m_DBFilename )
         && !DeleteFile( win32Name.c_str() ) )
     {
-        throw Windows::Exception( "Could not delete database file %s, Error: %s",
+        throw Nocturnal::PlatformException( "Could not delete database file %s, Error: %s",
             m_DBFilename.c_str(),
-            Windows::GetErrorString().c_str() );
+            Platform::GetErrorString().c_str() );
     }
 }
 
@@ -216,9 +216,9 @@ void SQLite::Delete( const std::string& dbFile )
     if ( FileSystem::Exists( dbFile )
         && !::DeleteFile( win32Name.c_str() ) )
     {
-        throw Windows::Exception( "Could not delete database file %s, Error: %s",
+        throw Nocturnal::PlatformException( "Could not delete database file %s, Error: %s",
             dbFile.c_str(),
-            Windows::GetErrorString().c_str() );
+            Platform::GetErrorString().c_str() );
     }
 }
 
@@ -255,7 +255,7 @@ bool SQLite::FromFile( const std::string& sqlFile, const std::string& dbFile, st
     FileSystem::MakePath( dbFile, true );
 
     std::string sqliteCmd = std::string ("sqlite3 -init \"") + sqlFile + std::string ("\" \"") + dbFile + std::string ("\" .quit");
-    result = ( Windows::Execute( sqliteCmd, false, true ) == 0 );
+    result = ( Platform::Execute( sqliteCmd, false, true ) == 0 );
 
     if ( !result || !FileSystem::Exists( dbFile ) )
     {
@@ -314,7 +314,7 @@ bool SQLite::ApplyFile( const std::string& sqlFile, const std::string& dbFile, s
     tempSQLFile << "\"";
     tempSQLFile.close();
 
-    result = ( Windows::Execute( tempBat, false, true ) == 0 );
+    result = ( Platform::Execute( tempBat, false, true ) == 0 );
 
     if ( !result )
     {
@@ -331,7 +331,7 @@ bool SQLite::ApplyFile( const std::string& sqlFile, const std::string& dbFile, s
 //
 int SQLite::ExecSQL( const char* sql, sqlite3_callback callback, void *callbacs_arg )
 {
-    LogPrint( __FUNCTION__, Console::Levels::Extreme, "SQL: %s", sql );
+    LogPrint( __FUNCTION__, Log::Levels::Extreme, "SQL: %s", sql );
 
     ThrowIfDBNotConnected( __FUNCTION__ );
 
@@ -432,7 +432,7 @@ int SQLite::ExecSQLVMPrintF( const char* sql, ... )
 //
 void SQLite::BeginTrans()
 {
-    LogPrint( __FUNCTION__, Console::Levels::Verbose );
+    LogPrint( __FUNCTION__, Log::Levels::Verbose );
 
     ThrowIfMaxOpenTrans( __FUNCTION__ );
 
@@ -452,7 +452,7 @@ void SQLite::BeginTrans()
 //
 void SQLite::CommitTrans()
 {
-    LogPrint( __FUNCTION__, Console::Levels::Verbose );
+    LogPrint( __FUNCTION__, Log::Levels::Verbose );
 
     ThrowIfNoTransOpen( __FUNCTION__ );
 
@@ -472,7 +472,7 @@ void SQLite::CommitTrans()
 //
 void SQLite::RollbackTrans()
 {
-    LogPrint( __FUNCTION__, Console::Levels::Verbose );
+    LogPrint( __FUNCTION__, Log::Levels::Verbose );
 
     ThrowIfNoTransOpen( __FUNCTION__ );
 
@@ -521,7 +521,7 @@ bool SQLite::ValidateBindFormat( const std::string& bindFormat )
 // Creates a SQLite statement handle.
 StmtHandle SQLite::CreateStatement( const char* sql, const std::string &bindFormat )
 {
-    LogPrint( __FUNCTION__, Console::Levels::Extreme, "Bind format: \"%s\";\nSQL: %s", bindFormat.c_str(), sql );
+    LogPrint( __FUNCTION__, Log::Levels::Extreme, "Bind format: \"%s\";\nSQL: %s", bindFormat.c_str(), sql );
 
     ThrowIfDBNotConnected( __FUNCTION__ );
 
@@ -641,7 +641,7 @@ int SQLite::StepStatement( const StmtHandle& handle, const bool autoReset )
 // Step the given statement handle.
 int SQLite::StepStatement( SQLiteStmt& stmt, const bool autoReset )
 {
-    LogPrint( __FUNCTION__, Console::Levels::Extreme, "SQL: %s", stmt.m_SQL.c_str() );
+    LogPrint( __FUNCTION__, Log::Levels::Extreme, "SQL: %s", stmt.m_SQL.c_str() );
 
     // make sure it's prepared and does not need to be recompiled
     if ( !stmt.IsPrepared() )

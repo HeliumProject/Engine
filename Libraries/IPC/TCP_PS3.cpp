@@ -1,7 +1,7 @@
 #include "TCP.h"
 
 #include "Platform/Platform.h"
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 using namespace IPC;
 

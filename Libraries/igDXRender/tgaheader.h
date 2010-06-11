@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 #pragma pack(push,1)
 namespace igDXRender

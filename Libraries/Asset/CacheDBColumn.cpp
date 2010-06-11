@@ -1,9 +1,9 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 
 #include "CacheDBColumn.h"
 #include "CacheDB.h"
 
-#include "Common/String/Tokenize.h"
+#include "Foundation/String/Tokenize.h"
 
 using namespace Asset;
 

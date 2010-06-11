@@ -4,7 +4,7 @@
 #include <maya/MString.h>
 #include <maya/MStatus.h>
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include "Export.h"
 

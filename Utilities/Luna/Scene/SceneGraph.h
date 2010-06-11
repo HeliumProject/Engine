@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "Common/Automation/Event.h"     // for Nocturnal::Delegate
+#include "Foundation/Automation/Event.h"     // for Nocturnal::Delegate
 #include "SceneNode.h"
 #include "Core/Object.h"
 

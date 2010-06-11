@@ -2,7 +2,7 @@
 
 #include "MessageDialog.h"
 
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 namespace UIToolKit
 {

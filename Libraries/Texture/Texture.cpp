@@ -2,11 +2,11 @@
 #include "Swizzle.h"
 #include "DXT.h"
 
-#include "Common/Exception.h"
+#include "Foundation/Exception.h"
 
-#include "Profile/Profile.h"
-#include "Console/Console.h"
-#include "Windows/Windows.h"
+#include "Foundation/Profile.h"
+#include "Foundation/Log.h"
+#include "Platform/Windows/Windows.h"
 
 #include "nvcore/Debug.h"
 #include "nvcore/Ptr.h"
@@ -245,7 +245,7 @@ Texture* Texture::LoadTIFF(const char* fname, bool convert_to_linear)
     // any code that gets to here always create a 32bit RGBA texture
     if (TIFFRGBAImageBegin(&img, tiff, 0, error) == 0)
     {
-      Console::Warning("TIFFRGBAImageBegin: %s\n", error);
+      Log::Warning("TIFFRGBAImageBegin: %s\n", error);
       TIFFClose(tiff);
       return 0;
     }
@@ -338,7 +338,7 @@ Texture* Texture::LoadTIFF(const char* fname, bool convert_to_linear)
     }
     else
     {
-      Console::Warning("TIFFRGBAImageOK: %s\n", error);
+      Log::Warning("TIFFRGBAImageOK: %s\n", error);
       TIFFClose(tiff);
       return 0;
     }
@@ -2074,14 +2074,14 @@ MipSet* Texture::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet:
 
         if(force_to_dxt1 == 1)
         {
-          Console::Bullet bullet ( Console::Streams::Normal, Console::Levels::Verbose,
+          Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose,
             "Forced DXT5 to DXT1 - setting alpha channel to 1.\n");
 
           dxtOptions.m_mips->m_runtime.m_alpha_channel = IG::COLOR_CHANNEL_FORCE_ONE;
         }
         if(force_to_dxt1 == 2)
         {
-          Console::Bullet bullet ( Console::Streams::Normal, Console::Levels::Verbose,
+          Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose,
             "Forced DXT5 to DXT1 - setting alpha channel to 0.\n");
 
           dxtOptions.m_mips->m_runtime.m_alpha_channel = IG::COLOR_CHANNEL_FORCE_ZERO;
@@ -2121,7 +2121,7 @@ MipSet* Texture::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet:
 
         if(force_to_swizzled_dxt1)
         {
-          Console::Bullet bullet ( Console::Streams::Normal, Console::Levels::Verbose,
+          Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose,
             "Swizzled alpha only texture to DXT1\n");
 
           u32 depth = (m_Depth == 0) ? 1 : m_Depth;

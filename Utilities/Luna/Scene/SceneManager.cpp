@@ -10,8 +10,8 @@
 #include "Asset/SceneAsset.h"
 #include "Asset/WorldFileAttribute.h"
 #include "Attribute/AttributeHandle.h"
-#include "Common/Container/Insert.h" 
-#include "Console/Console.h"
+#include "Foundation/Container/Insert.h" 
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
 #include "UIToolKit/FileDialog.h"
 
@@ -468,7 +468,7 @@ Luna::Scene* SceneManager::AllocateNestedScene( const std::string& path, Luna::S
         ScenePtr scenePtr = NewScene( false, path, false );
         if ( !scenePtr->LoadFile( path ) )
         {
-            Console::Error( "Failed to load scene from %s\n", path.c_str() );
+            Log::Error( "Failed to load scene from %s\n", path.c_str() );
         }
 
         parent->ChangeStatus( "Ready" );

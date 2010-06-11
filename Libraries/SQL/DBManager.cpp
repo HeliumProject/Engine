@@ -1,7 +1,7 @@
 #include "DBManager.h"
 #include "Exceptions.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 using namespace SQL;
 
@@ -66,9 +66,9 @@ void DBManager::ThrowIfNoTransOpen( const char* function )
 
 
 /////////////////////////////////////////////////////////////////////////////
-void DBManager::LogPrint( const char* function, Console::Level level, const char* fmt, ... )
+void DBManager::LogPrint( const char* function, Log::Level level, const char* fmt, ... )
 {
-  if ( level == Console::Levels::Extreme )
+  if ( level == Log::Levels::Extreme )
   {
 #ifndef SQL_DBMANAGER_LOGPRINT
     return;
@@ -88,11 +88,11 @@ void DBManager::LogPrint( const char* function, Console::Level level, const char
 
     string[ sizeof(string) - 1] = 0;
 
-    Console::Print( level, "%s: %s - %s\n", m_FriendlyName, function, string );
+    Log::Print( level, "%s: %s - %s\n", m_FriendlyName, function, string );
   }
   else
   {
-    Console::Print( level, "%s: %s\n", m_FriendlyName, function );
+    Log::Print( level, "%s: %s\n", m_FriendlyName, function );
   }
 }
 
@@ -156,5 +156,5 @@ void DBManager::SetLastError( const char* function, const char* errMsg, const ch
   m_LastErrMsg += m_DBFilename;
   m_LastErrMsg += ")";
 
-  LogPrint( __FUNCTION__, Console::Levels::Verbose, "%s", m_LastErrMsg.c_str() );
+  LogPrint( __FUNCTION__, Log::Levels::Verbose, "%s", m_LastErrMsg.c_str() );
 }

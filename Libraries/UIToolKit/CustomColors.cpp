@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "CustomColors.h"
 
-#include "Common/String/Tokenize.h"
-#include "Common/Types.h"
+#include "Foundation/String/Tokenize.h"
+#include "Platform/Types.h"
 
 #include <sstream>
 

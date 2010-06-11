@@ -2,8 +2,8 @@
 
 #include "API.h"
 
-#include "Common/Types.h"
-#include "Common/File/File.h"
+#include "Platform/Types.h"
+#include "Foundation/File/File.h"
 #include <wx/animate.h>
 
 // Forwards

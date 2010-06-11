@@ -1,8 +1,8 @@
 #pragma once
 
 #include "API.h"
-#include "Common/Compiler.h"
-#include "Common/Automation/Event.h"
+#include "Platform/Compiler.h"
+#include "Foundation/Automation/Event.h"
 #include <wx/dnd.h>
 
 

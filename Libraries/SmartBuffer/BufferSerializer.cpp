@@ -4,8 +4,8 @@
 #include "BasicBuffer.h"
 #include "Fixup.h"
 
-#include "Console/Console.h"
-#include "Common/CommandLine.h"
+#include "Foundation/Log.h"
+#include "Foundation/CommandLine.h"
 #include "AppUtils/AppUtils.h"
 #include "SmartLoader/SmartLoader.h"
 
@@ -184,7 +184,7 @@ bool BufferSerializer::WriteToFile( const char* filename ) const
   char print[512];
   _snprintf(print, sizeof(print), "Writing '%s'", filename);
   PROFILE_SCOPE_ACCUM_VERBOSE(s_WriteAccum, print);
-  Console::Debug("%s\n", print);
+  Log::Debug("%s\n", print);
 
   std::ofstream strm( filename, std::ios::out | std::ios::binary );
   if ( strm.is_open() )
@@ -413,7 +413,7 @@ bool BufferSerializer::ReadFromFile( const char* filename )
   char print[512];
   _snprintf(print, sizeof(print), "Reading '%s'", filename);
   PROFILE_SCOPE_ACCUM_VERBOSE(s_ReadAccum, print);
-  Console::Debug("%s\n", print);
+  Log::Debug("%s\n", print);
 
   std::ifstream strm( filename, std::ios::in | std::ios::binary );
   if ( strm.is_open() )

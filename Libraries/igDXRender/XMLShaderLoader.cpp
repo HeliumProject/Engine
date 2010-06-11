@@ -5,7 +5,7 @@
 #include "d3dx9.h"
 #include "tinyxml.h"
 #include <sys/stat.h>
-#include "Common/File/Path.h"
+#include "Foundation/File/Path.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 u32 TextureAddressModes(const char* text)

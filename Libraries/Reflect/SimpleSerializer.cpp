@@ -3,7 +3,7 @@
 #include "ArchiveBinary.h"
 #include "ArchiveXML.h"
 
-#include "Common/Memory/Endian.h"
+#include "Foundation/Memory/Endian.h"
 
 using namespace Reflect;
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "API.h"
-#include "Common/Assert.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Platform/Assert.h"
+#include "Foundation/Memory/SmartPtr.h"
 #include "AttributeCategoryTypes.h"
 
 #include <map>

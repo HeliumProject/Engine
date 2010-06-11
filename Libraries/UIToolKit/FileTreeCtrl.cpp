@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "FileTreeCtrl.h"
-#include "Common/String/Natural.h"
+#include "Foundation/String/Natural.h"
 
 #include "wx/artprov.h"
 

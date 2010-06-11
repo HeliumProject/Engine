@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 
 #ifdef DEPENDENCIES_EXPORTS
 #  define DEPENDENCIES_API __declspec (dllexport)

@@ -3,9 +3,9 @@
 #include <map>
 #include <string>
 
-#include "Common/Types.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/File/Path.h"
+#include "Platform/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/File/Path.h"
 
 #include "API.h"
 #include "Tracker.h"
@@ -38,13 +38,8 @@ namespace Reflect
 
   // Init/Cleanup
   REFLECT_API bool IsInitialized();
-
   REFLECT_API void Initialize();
-  REFLECT_API void InitializeModules( const std::string& searchDirectory );
-
   REFLECT_API void Cleanup();
-  REFLECT_API void CleanupModules();
-  REFLECT_API void FreeModules();
 
   REFLECT_API Profile::MemoryPoolHandle MemoryPool();
 

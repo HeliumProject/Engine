@@ -1,6 +1,6 @@
 #include "Preferences.h"
 
-#include "Common/Environment.h"
+#include "Foundation/Environment.h"
 
 bool AppUtils::GetPreferencesDirectory( Nocturnal::Path& preferencesDirectory )
 {

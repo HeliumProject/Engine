@@ -10,8 +10,8 @@
 #include "PersistentDataFactory.h"
 
 #include "AssetBuilder/AssetBuilder.h"
-#include "Common/Container/Insert.h" 
-#include "Console/Console.h"
+#include "Foundation/Container/Insert.h" 
+#include "Foundation/Log.h"
 #include "Editor/DocumentManager.h"
 
 // Using

@@ -2,7 +2,7 @@
 
 #include "API.h"
 #include "Exceptions.h"
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 namespace FileSystem
 {

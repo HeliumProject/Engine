@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 namespace AppUtils
 {

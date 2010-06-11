@@ -1,15 +1,15 @@
 #include "Precompile.h"
 
 #include "BrowserSearchDatabase.h"
-#include "Windows/Windows.h"
-#include "Windows/Console.h"
+#include "Platform/Windows/Windows.h"
+#include "Platform/Windows/Console.h"
 
 #include "Debug/Exception.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include "BrowserSearchEnvironment.h"
 
-#include "Common/Environment.h"
+#include "Foundation/Environment.h"
 
 #include "Platform/Mutex.h"
 #include "SQL/MySQL.h"
@@ -143,10 +143,10 @@ namespace Luna
     static inline void ResetConnectionData( )
     {
       std::string host;
-      if ( !Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"DB_HOST", host ) )
+      if ( !Nocturnal::GetEnvVar( "NOC_DB_HOST", host ) )
       {
-        std::string error = std::string( "No exception db set in environment.  Please set the " ) + NOCTURNAL_STUDIO_PREFIX"DB_HOST" + " environment variable.\n";
-        Windows::Print( Windows::ConsoleColors::Red, stderr, error.c_str() );
+        std::string error = std::string( "No exception db set in environment.  Please set the " ) + "NOC_DB_HOST" + " environment variable.\n";
+        Platform::Print( Platform::ConsoleColors::Red, stderr, error.c_str() );
         return;
       }
 
@@ -156,16 +156,16 @@ namespace Luna
       }
       catch( const Nocturnal::Exception& ex )
       {
-        Windows::Print( Windows::ConsoleColors::Red, stderr, "Failed to connect to tools MySQL database @ '%s', reason: %s\n", host.c_str(), ex.what() );
+        Platform::Print( Platform::ConsoleColors::Red, stderr, "Failed to connect to tools MySQL database @ '%s', reason: %s\n", host.c_str(), ex.what() );
       }
 
       if ( !g_DBHandle->IsConnected() )
       {
-        Windows::Print( Windows::ConsoleColors::Red, stderr, "Lost DB connection\n" );
+        Platform::Print( Platform::ConsoleColors::Red, stderr, "Lost DB connection\n" );
         return;
       }
 
-      Console::Debug("Updating AssetBrowser search_events database...\n");
+      Log::Debug("Updating AssetBrowser search_events database...\n");
 
       if( !g_SearchData )
       {
@@ -191,7 +191,7 @@ namespace Luna
         catch( const Nocturnal::Exception& ex)
         {
           const char* dbErrMsg = mysql_error( g_DBHandle->GetDBHandle() );
-          Windows::Print( Windows::ConsoleColors::Red, stderr, "%s; %s\n", ex.what(), dbErrMsg );
+          Platform::Print( Platform::ConsoleColors::Red, stderr, "%s; %s\n", ex.what(), dbErrMsg );
 
           g_DBHandle->RollbackTrans();  // roll back the transaction
 
@@ -288,7 +288,7 @@ namespace Luna
       // We lost the connection, or it was never established
       if ( !g_DBHandle->IsConnected() || !g_SearchData )
       {
-        Windows::Print( Windows::ConsoleColors::Red, stderr, "Lost DB connection: Unable to save search query\n" );
+        Platform::Print( Platform::ConsoleColors::Red, stderr, "Lost DB connection: Unable to save search query\n" );
 
         // Try once to reconnect it
         ResetConnectionData( );
@@ -304,11 +304,11 @@ namespace Luna
 
       if( !g_SearchData )
       {
-        Windows::Print( Windows::ConsoleColors::Red, stderr, "Lost DB connection: AssetBrowser Search Data failed to initialize\n" );
+        Platform::Print( Platform::ConsoleColors::Red, stderr, "Lost DB connection: AssetBrowser Search Data failed to initialize\n" );
         return;
       }
 
-      Console::Debug("Updating AssetBrowser search_events database...\n");
+      Log::Debug("Updating AssetBrowser search_events database...\n");
 
       g_DBHandle->BeginTrans();
 
@@ -341,7 +341,7 @@ namespace Luna
       catch( const Nocturnal::Exception& ex )
       {
         const char* dbErrMsg = mysql_error( g_DBHandle->GetDBHandle() );
-        Windows::Print( Windows::ConsoleColors::Red, stderr, "%s; %s\n", ex.what(), dbErrMsg );
+        Platform::Print( Platform::ConsoleColors::Red, stderr, "%s; %s\n", ex.what(), dbErrMsg );
         g_DBHandle->RollbackTrans();    // failed to do it, rollback the transaction
         g_DBHandle->Close();
         return;

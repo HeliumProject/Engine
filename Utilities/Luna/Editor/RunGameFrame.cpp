@@ -5,14 +5,14 @@
 #include "EditorGenerated.h"
 #include "WindowSettings.h"
 
-#include "Common/Environment.h"
-#include "Common/String/utilities.h"
-#include "Console/Console.h"
+#include "Foundation/Environment.h"
+#include "Foundation/String/utilities.h"
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/RegistryConfig.h"
 #include "UIToolKit/SortableListView.h"
-#include "Windows/Process.h"
+#include "Platform/Process.h"
 
 #include <algorithm>
 #include <sstream>
@@ -158,7 +158,7 @@ void RunGameFrame::SelectBuild()
 void RunGameFrame::RefreshBuilds()
 {
   std::string buildTemplate( "SINGLE_PLAYER" );
-  Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"BUILDSERVER_DEFAULT_TEMPLATE", buildTemplate );
+  Nocturnal::GetEnvVar( "NOC_BUILDSERVER_DEFAULT_TEMPLATE", buildTemplate );
   toUpper( buildTemplate );
 
   m_BuildServer.RefreshBuilds();
@@ -344,7 +344,7 @@ void RunGameFrame::OnSelectNone( wxCommandEvent& args )
 void RunGameFrame::OnRerun( wxCommandEvent& args )
 {
   std::string path;
-  if ( !Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"PROJECT_BAT", path ) )
+  if ( !Nocturnal::GetEnvVar( "NOC_PROJECT_BAT", path ) )
   {
     wxMessageBox( "Failed to find environment variable 'IG_PROJECT_BAT'", "Error", wxCENTER | wxICON_ERROR | wxOK, this );
     return;
@@ -355,13 +355,9 @@ void RunGameFrame::OnRerun( wxCommandEvent& args )
 
   std::string command( "cmd.exe /k \"" + path + "\"" );
 
-  try
+  if ( Platform::Execute( command, true, false ) == -1 )
   {
-    Windows::Execute( command, true, false );
-  }
-  catch ( ... )
-  {
-    Console::Error( "Failed to run command: %s\n", command.c_str() );
+    Log::Error( "Failed to run command: %s\n", Platform::GetErrorString().c_str() );
   }
 }
 
@@ -371,7 +367,7 @@ void RunGameFrame::OnRerun( wxCommandEvent& args )
 void RunGameFrame::OnRun( wxCommandEvent& args )
 {
   std::string scriptPath;
-  if ( !Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"PROJECT_SCRIPTS", scriptPath ) )
+  if ( !Nocturnal::GetEnvVar( "NOC_PROJECT_SCRIPTS", scriptPath ) )
   {
     wxMessageBox( "Failed to find environment variable 'IG_PROJECT_SCRIPTS'", "Error", wxCENTER | wxICON_ERROR | wxOK, this );
     return;
@@ -412,10 +408,10 @@ void RunGameFrame::OnRun( wxCommandEvent& args )
 
   try
   {
-    Windows::Execute( command, true, false );
+    Platform::Execute( command, true, false );
   }
   catch ( ... )
   {
-    Console::Error( "Failed to run command: %s\n", command.c_str() );
+    Log::Error( "Failed to run command: %s\n", Platform::GetErrorString().c_str() );
   }
 }

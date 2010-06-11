@@ -206,8 +206,8 @@
 			RelativePathToProject=".\libraries\Content\Content.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{1E9F45BD-AE62-4A12-8A09-56665F644B79}"
-			RelativePathToProject=".\libraries\Console\Console.vcproj"
+			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
+			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{1A179B8F-2027-467A-AB0C-7E90575C0F03}"
@@ -240,10 +240,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
 			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
-			RelativePathToProject=".\libraries\Profile\profile.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{A99087C6-C475-485A-8911-ACB7683156FF}"

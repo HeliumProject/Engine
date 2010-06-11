@@ -7,9 +7,9 @@
 #include "Exceptions.h"
 #include "Preferences.h"
 
-#include "Common/Types.h"
-#include "Common/Automation/Event.h"
-#include "Console/Console.h"
+#include "Platform/Types.h"
+#include "Foundation/Automation/Event.h"
+#include "Foundation/Log.h"
 #include "Debug/Symbols.h"
 
 #ifdef _WINDOWS_
@@ -94,7 +94,7 @@ namespace AppUtils
   APPUTILS_API bool IsDebuggerPresent();
 
   // Which streams should go into the trace file
-  APPUTILS_API ::Console::Stream GetTraceStreams(); 
+  APPUTILS_API ::Log::Stream GetTraceStreams(); 
 
 
   //

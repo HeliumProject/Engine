@@ -2,9 +2,9 @@
 
 #include "SearchResults.h"
 #include "SearchQuery.h"
-#include "Common/Automation/Event.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Types.h"
+#include "Foundation/Automation/Event.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Platform/Types.h"
 
 namespace Luna
 {  

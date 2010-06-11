@@ -3,7 +3,7 @@
 #include "Cache.h"
 #include "Serializer.h"
 #include "Registry.h"
-#include "Common/Container/Insert.h"
+#include "Foundation/Container/Insert.h"
 
 #include <memory>
 
@@ -40,7 +40,7 @@ static void CreateInstance(int type, ElementPtr& element)
 #ifdef REFLECT_DISPLAY_CACHE_INFO
   std::string name;
   GetTypeName(type, name);
-  Console::Print("Cache miss %d on type '%s', short name '%s', id '%d'\n", ++g_MissCount, name.c_str(), element->GetClass()->m_ShortName.c_str(), type);
+  Log::Print("Cache miss %d on type '%s', short name '%s', id '%d'\n", ++g_MissCount, name.c_str(), element->GetClass()->m_ShortName.c_str(), type);
 #endif
 }
 
@@ -78,7 +78,7 @@ bool Cache::Create(int type, ElementPtr& element)
 #ifdef REFLECT_DISPLAY_CACHE_INFO
       std::string name;
       GetTypeName(type, name);
-      Console::Print("Cache hit %d on type '%s', short name '%s', id '%d'\n", ++g_HitCount, name.c_str(), element->GetClass()->m_ShortName.c_str(), type);
+      Log::Print("Cache hit %d on type '%s', short name '%s', id '%d'\n", ++g_HitCount, name.c_str(), element->GetClass()->m_ShortName.c_str(), type);
   #endif
     }
 

@@ -1,5 +1,5 @@
-#include "Windows/Windows.h"
-#include "Windows/Error.h"
+#include "Platform/Windows/Windows.h"
+#include "Foundation/Exception.h"
 #undef CreateEvent
 
 #include "EventSystem.h"
@@ -14,15 +14,15 @@
 #include <set>
 
 #include "AppUtils/AppUtils.h"
-#include "Common/Boost/Regex.h" 
-#include "Common/Types.h"
-#include "Common/String/Utilities.h"
-#include "Common/Environment.h"
+#include "Foundation/Boost/Regex.h" 
+#include "Platform/Types.h"
+#include "Foundation/String/Utilities.h"
+#include "Foundation/Environment.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Finder/ProjectSpecs.h"
 #include "Finder/Finder.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 using namespace Nocturnal::ES;
 
@@ -653,7 +653,7 @@ void EventSystem::FlushHandledEvents()
 
     if ( DeleteFile( handledEventsWin32Name.c_str() ) == 0 )
     {
-      throw Windows::Exception( "Could not delete handled events file: %s", m_HandledEventsFile.c_str() );
+      throw PlatformException( "Could not delete handled events file: %s", m_HandledEventsFile.c_str() );
     }
   }
 }

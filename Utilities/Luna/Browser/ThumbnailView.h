@@ -8,8 +8,8 @@
 #include "ThumbnailSorter.h"
 #include "ThumbnailTileCreator.h"
 
-#include "Common/Compiler.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Platform/Compiler.h"
+#include "Foundation/Memory/SmartPtr.h"
 #include "Editor/D3DWindowManager.h"
 #include "Finder/FinderSpec.h"
 #include "Math/Matrix4.h"

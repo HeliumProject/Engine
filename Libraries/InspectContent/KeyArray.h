@@ -2,7 +2,7 @@
 
 #include "API.h"
 #include "Key.h"
-#include "Common/Automation/Event.h"
+#include "Foundation/Automation/Event.h"
 
 namespace Inspect
 {

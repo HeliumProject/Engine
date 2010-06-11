@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 #ifdef INSPECTCONTENT_DLL
 # ifdef INSPECTCONTENT_EXPORTS

@@ -251,7 +251,7 @@ bool Mesh::LightmapUVsInRange() const
     const Vector2& uv = *itor;
     if( uv.x > 1.0f || uv.x < 0.0f || uv.y > 1.0f || uv.y < 0.0f )
     {
-      Console::Debug( "Bad UV: %f %f", uv.x, uv.y );
+      Log::Debug( "Bad UV: %f %f", uv.x, uv.y );
       return false;
     }
   }

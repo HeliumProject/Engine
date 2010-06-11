@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Automation/Event.h"
+#include "Foundation/Automation/Event.h"
 
 namespace Luna
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Common/Compiler.h"
-#include "Common/InitializerStack.h"
+#include "Platform/Compiler.h"
+#include "Foundation/InitializerStack.h"
 
 #include "Asset/Tracker.h"
 #include "Editor/DocumentManager.h"

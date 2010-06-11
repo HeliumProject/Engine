@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 namespace Luna
 {

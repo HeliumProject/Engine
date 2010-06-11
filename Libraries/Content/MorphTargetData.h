@@ -3,7 +3,7 @@
 #include "API.h"
 
 #include "Mesh.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 namespace Content
 {  

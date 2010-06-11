@@ -3,8 +3,8 @@
 #include "API.h"
 #include "Document.h"
 
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Container/OrderedSet.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Container/OrderedSet.h"
 #include "UID/TUID.h"
 
 namespace Luna

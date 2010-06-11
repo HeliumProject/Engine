@@ -2,7 +2,7 @@
 
 #include "Grid.h"
 
-#include "Common/Compiler.h"
+#include "Platform/Compiler.h"
 
 namespace Luna
 {

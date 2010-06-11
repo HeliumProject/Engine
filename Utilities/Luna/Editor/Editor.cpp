@@ -7,8 +7,8 @@
 #include "Finder/LunaSpecs.h"
 #include "RCS/RCS.h"
 #include "UIToolKit/FileDialog.h"
-#include "Windows/Process.h"
-#include "Windows/Error.h"
+#include "Platform/Process.h"
+#include "Foundation/Exception.h"
 
 // Using
 using namespace Luna;
@@ -83,13 +83,9 @@ void Editor::RevisionHistory( const std::string& path )
   FileSystem::Win32Name( clean, win32Name );
   std::string command = std::string( "p4win.exe -H \"" ) + win32Name + std::string( "\"" );
 
-  try 
+  if ( Platform::Execute( command ) == -1 )
   {
-    Windows::Execute( command );
-  }
-  catch ( const Windows::Exception& e )
-  {
-    std::string error = e.Get();
+    std::string error = Platform::GetErrorString();
     error += "\nMake sure that you have p4win properly installed.";
     wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
     return;

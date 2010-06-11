@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AttributeGroup.h"
-#include "Common/Automation/Property.h"
+#include "Foundation/Automation/Property.h"
 #include "Inspect/Group.h"
 
 namespace Luna

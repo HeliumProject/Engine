@@ -2,13 +2,13 @@
 
 #include "ImageManager.h"
 
-#include "Common/Exception.h"
-#include "Common/Container/Insert.h" 
-#include "Common/File/File.h"
+#include "Foundation/Exception.h"
+#include "Foundation/Container/Insert.h" 
+#include "Foundation/File/File.h"
 using Nocturnal::Insert; 
 
 #include "FileSystem/FileSystem.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include <sstream>
 
@@ -195,7 +195,7 @@ namespace UIToolKit
     GetFullImagePath( fileName, fullPath );
     if ( !FileSystem::Exists( fullPath ) )
     {
-      Console::Warning( "Bitmap file does not exist %s\n", fullPath.c_str() );
+      Log::Warning( "Bitmap file does not exist %s\n", fullPath.c_str() );
     }
 
     if ( !exists )
@@ -206,7 +206,7 @@ namespace UIToolKit
       Insert<M_Bitmap>::Result inserted = m_Bitmaps.insert( M_Bitmap::value_type ( fileName, info) );
       if ( !inserted.first->second.m_Bitmap.LoadFile( fullPath.c_str(), tryType ) )
       {
-        Console::Warning( "Unable to load GUI image %s\n", fileName.c_str() );
+        Log::Warning( "Unable to load GUI image %s\n", fileName.c_str() );
         return inserted.first->second.m_Bitmap;
       }
 
@@ -280,7 +280,7 @@ namespace UIToolKit
       Insert<M_Bitmap>::Result inserted = m_Bitmaps.insert( M_Bitmap::value_type ( keyFileName, info ) );
       if ( !inserted.second )
       {
-        Console::Warning( "Failed to store scaled GUI image %s\n", fileName.c_str() );
+        Log::Warning( "Failed to store scaled GUI image %s\n", fileName.c_str() );
       }
 
       return inserted.first->second.m_Bitmap;
@@ -305,13 +305,13 @@ namespace UIToolKit
     GetFullImagePath( fileName, fullPath );
     if ( !FileSystem::Exists( fullPath ) )
     {
-      Console::Warning( "Animated image file does not exist %s\n", fullPath.c_str() );
+      Log::Warning( "Animated image file does not exist %s\n", fullPath.c_str() );
     }
 
     Insert<M_Animation>::Result inserted = m_Animations.insert( M_Animation::value_type( fileName, wxAnimation() ) );
     if ( !inserted.first->second.LoadFile( fullPath.c_str(), type ) )
     {
-      Console::Warning( "Unable to load animated image %s\n", fileName.c_str() );
+      Log::Warning( "Unable to load animated image %s\n", fileName.c_str() );
       inserted.first->second = wxNullAnimation;
     }
 
@@ -402,7 +402,7 @@ namespace UIToolKit
 
     if ( !image.LoadFile( fileName.c_str(), wxBITMAP_TYPE_PNG ) )
     {
-      Console::Warning( "Unable to load GUI image %s\n", fileName.c_str() );
+      Log::Warning( "Unable to load GUI image %s\n", fileName.c_str() );
       return false;
     }
     else

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "CoreInit.h"
 
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 #include "Inspect/InspectInit.h"
 #include "InspectReflect/InspectReflectInit.h"
 #include "InspectContent/InspectContentInit.h"
@@ -12,7 +12,7 @@
 #include "Persistent.h"
 #include "Enumerator.h"
 
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 
 using namespace Luna;
 

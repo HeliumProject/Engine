@@ -10,7 +10,7 @@
 #include "Provider.h"
 #include "Exceptions.h"
 #include "Platform/Thread.h"
-#include "Profile/Timer.h"
+#include "Foundation/Timer.h"
 #include "RCS/Types.h"
 
 #define PERFORCE_MAX_DICT_ENTRIES 64

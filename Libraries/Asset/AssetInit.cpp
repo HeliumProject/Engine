@@ -30,13 +30,13 @@
 
 #include "Attribute/AttributeInit.h"
 #include "Attribute/AttributeCategories.h"
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 #include "Content/ContentInit.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Reflect/Registry.h"
 
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 
 using namespace Reflect;
 

@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\libraries;..\..\..\.."
+				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;PLATFORM_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -115,7 +115,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\libraries;..\..\..\.."
+				AdditionalIncludeDirectories=".."
 				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;PLATFORM_EXPORTS"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
@@ -167,14 +167,262 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<ProjectReference
-			ReferencedProjectIdentifier="{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}"
-			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
-		/>
 	</References>
 	<Files>
+		<Filter
+			Name="POSIX"
+			>
+			<File
+				RelativePath=".\POSIX\Error.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\POSIX\Event.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\POSIX\Mutex.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\POSIX\Platform.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\POSIX\Process.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\POSIX\Profile.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\POSIX\Semaphore.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\POSIX\Thread.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="Windows"
+			>
+			<File
+				RelativePath=".\Windows\Error.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Windows\Event.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Windows\Mutex.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Windows\Platform.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Windows\Process.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Windows\Profile.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Windows\Semaphore.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Windows\Thread.cpp"
+				>
+			</File>
+			<Filter
+				Name="Misc"
+				>
+				<File
+					RelativePath=".\Windows\Clipboard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Windows\Clipboard.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Windows\Console.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Windows\Console.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Windows\Memory.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Windows\Memory.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Windows\Safe.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Windows\Safe.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Windows\Windows.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
 		<File
 			RelativePath="API.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Assert.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Compiler.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Error.h"
 			>
 		</File>
 		<File
@@ -182,59 +430,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Event_PS3.cpp"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath=".\Event_Win32.cpp"
-			>
-		</File>
-		<File
 			RelativePath=".\Mutex.h"
 			>
 		</File>
 		<File
-			RelativePath=".\Mutex_PS3.cpp"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath=".\Mutex_Win32.cpp"
-			>
-		</File>
-		<File
-			RelativePath="Platform.cpp"
+			RelativePath=".\Packets.h"
 			>
 		</File>
 		<File
@@ -242,27 +442,7 @@
 			>
 		</File>
 		<File
-			RelativePath="Platform_PS3.cpp"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="Platform_Win32.cpp"
+			RelativePath=".\Profile.h"
 			>
 		</File>
 		<File
@@ -270,55 +450,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Semaphore_PS3.cpp"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath=".\Semaphore_Win32.cpp"
-			>
-		</File>
-		<File
 			RelativePath=".\Thread.h"
 			>
 		</File>
 		<File
-			RelativePath=".\Thread_PS3.cpp"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath=".\Thread_Win32.cpp"
+			RelativePath=".\Types.h"
 			>
 		</File>
 	</Files>

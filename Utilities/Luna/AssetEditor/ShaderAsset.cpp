@@ -11,7 +11,7 @@
 #include "Asset/StandardShaderAsset.h"
 #include "Asset/TextureMapAttribute.h"
 
-#include "Common/String/Natural.h"
+#include "Foundation/String/Natural.h"
 #include "Editor/Editor.h"
 #include "Inspect/Button.h"
 #include "Inspect/Container.h"

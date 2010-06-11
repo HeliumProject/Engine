@@ -117,7 +117,7 @@ const Asset::EntityManifestPtr EntityAsset::GetManifest()
             }
             catch ( const Reflect::Exception& e )
             {
-                Console::Error("Error loading %s (%s)\n", artFileAttribute->GetPath().c_str(), e.what());
+                Log::Error("Error loading %s (%s)\n", artFileAttribute->GetPath().c_str(), e.what());
             }
         }
     }

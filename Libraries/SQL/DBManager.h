@@ -3,9 +3,9 @@
 #include "API.h"
 #include "SQL.h"
 
-#include "Common/Types.h"
-#include "Common/Compiler.h"
-#include "Console/Console.h"
+#include "Platform/Types.h"
+#include "Platform/Compiler.h"
+#include "Foundation/Log.h"
 
 
 namespace SQL
@@ -120,7 +120,7 @@ namespace SQL
     //virtual int         FinalizeStatement( Statement& stmt ) = 0;
     //virtual void        BindStatement( Statement& stmt, va_list bindArgs ) = 0;
 
-    virtual void        LogPrint( const char* function, Console::Level level = Console::Levels::Verbose, const char* fmt = "", ... );
+    virtual void        LogPrint( const char* function, Log::Level level = Log::Levels::Verbose, const char* fmt = "", ... );
 
     virtual void        SetLastError( const char* function, const char* errMsg = "", const char* msgFormat = "", ... );
     virtual const char* GetErrorString() = 0;

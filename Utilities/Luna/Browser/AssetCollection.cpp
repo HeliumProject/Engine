@@ -4,11 +4,11 @@
 #include "Browser.h"
 
 #include "AppUtils/Preferences.h"
-#include "Common/Boost/Regex.h"
-#include "Common/Checksum/MD5.h"
-#include "Common/Flags.h"
-#include "Common/File/File.h"
-#include "Common/String/Utilities.h"
+#include "Foundation/Boost/Regex.h"
+#include "Foundation/Checksum/MD5.h"
+#include "Foundation/Flags.h"
+#include "Foundation/File/File.h"
+#include "Foundation/String/Utilities.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
@@ -284,7 +284,7 @@ AssetCollectionPtr AssetCollection::LoadFrom( const Nocturnal::Path& path )
 {
     if ( !path.Exists() )
     {
-        Console::Warning( "Unable to read collection from file %s; Reason: File does not exist.\n", path.c_str() );
+        Log::Warning( "Unable to read collection from file %s; Reason: File does not exist.\n", path.c_str() );
         return NULL;
     }
 
@@ -296,13 +296,13 @@ AssetCollectionPtr AssetCollection::LoadFrom( const Nocturnal::Path& path )
     }
     catch ( const Nocturnal::Exception& ex )
     {
-        Console::Error( "Unable to read asset collection from file %s; Reason: %s.\n", path.c_str(), ex.what() );
+        Log::Error( "Unable to read asset collection from file %s; Reason: %s.\n", path.c_str(), ex.what() );
         return NULL;
     }
 
     if( assetCollection == NULL )
     {
-        Console::Error( "Unable to read asset collection from file %s.\n", path.c_str() );
+        Log::Error( "Unable to read asset collection from file %s.\n", path.c_str() );
         return NULL;
     }
 
@@ -330,7 +330,7 @@ bool AssetCollection::SaveTo( const AssetCollection* collection, const std::stri
     }
     catch ( const Nocturnal::Exception& ex )
     {
-        Console::Error( "Unable to save asset collection '%s', to '%s'; Reason: %s.\n", collection->GetName().c_str(), path.c_str(), ex.Get() );
+        Log::Error( "Unable to save asset collection '%s', to '%s'; Reason: %s.\n", collection->GetName().c_str(), path.c_str(), ex.Get() );
         saved = false;
     }
 

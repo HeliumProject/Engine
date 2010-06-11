@@ -1,8 +1,8 @@
 #include "BasicBuffer.h"
 #include "Fixup.h"
 
-#include "Common/Exception.h"
-#include "Console/Console.h"
+#include "Foundation/Exception.h"
+#include "Foundation/Log.h"
 
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"
@@ -264,7 +264,7 @@ u32 BasicBuffer::AddFile( const char* filename )
   size_t file_read = fread( m_Data + m_Size, 1, filesize, pfile );
   if(file_read != (size_t)filesize)
   {
-    Console::Warning("Could not read entire file '%s' to add to membuf '%s'.\n", filename, m_Name.c_str() );
+    Log::Warning("Could not read entire file '%s' to add to membuf '%s'.\n", filename, m_Name.c_str() );
   }
 
   fclose(pfile);

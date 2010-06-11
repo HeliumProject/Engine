@@ -7,8 +7,8 @@
 #include "AssetEditor/AssetInit.h"
 #include "Asset/Tracker.h"
 #include "Browser/Browser.h"
-#include "Common/InitializerStack.h"
-#include "Console/Console.h"
+#include "Foundation/InitializerStack.h"
+#include "Foundation/Log.h"
 #include "Core/CoreInit.h"
 #include "Debug/Exception.h"
 #include "DebugUI/DebugUI.h"
@@ -27,8 +27,8 @@
 #include "Scene/SceneInit.h"
 #include "Task/TaskInit.h"
 #include "UIToolKit/ImageManager.h"
-#include "Windows/Windows.h"
-#include "Windows/Process.h"
+#include "Platform/Windows/Windows.h"
+#include "Platform/Process.h"
 #include "Worker/Process.h"
 
 #include <wx/cmdline.h>
@@ -100,10 +100,6 @@ void Application::OnInitCmdLine( wxCmdLineParser& parser )
 // 
 bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
 {
-  // enable heap defragmenting
-  bool lowFragHeap = Windows::EnableLowFragmentationHeap();
-  Console::Debug("Low Fragmentation Heap is %s\n", lowFragHeap ? "enabled" : "not enabled");
-
   wxArtProvider::Push( new Luna::ArtProvider() );
 
   // don't spend a lot of time updating idle events for windows that don't need it
@@ -111,20 +107,20 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
   wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
 
   {
-    Console::Bullet initialize ("Initializing\n");
+    Log::Bullet initialize ("Initializing\n");
 
     m_InitializerStack.Push( PerforceUI::Initialize, PerforceUI::Cleanup );
 
     {
-      Console::Bullet modules ("Modules:\n");
+      Log::Bullet modules ("Modules:\n");
 
       {
-        Console::Bullet bullet ("Core...\n");
+        Log::Bullet bullet ("Core...\n");
         m_InitializerStack.Push( CoreInitialize, CoreCleanup );
       }
 
       {
-        Console::Bullet bullet ("Editor...\n");
+        Log::Bullet bullet ("Editor...\n");
         m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
         m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
         m_InitializerStack.Push( AppPreferences::InitializeType, AppPreferences::CleanupType );
@@ -132,39 +128,39 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
       }
 
       {
-        Console::Bullet bullet ("Task...\n");
+        Log::Bullet bullet ("Task...\n");
         m_InitializerStack.Push( TaskInitialize, TaskCleanup );
       }
 
       {
-        Console::Bullet vault ("Asset Vault...\n");
+        Log::Bullet vault ("Asset Vault...\n");
         m_InitializerStack.Push( Browser::Initialize, Browser::Cleanup );
       }
 
       {
-        Console::Bullet bullet ("Asset Editor...\n");
+        Log::Bullet bullet ("Asset Editor...\n");
         m_InitializerStack.Push( LunaAsset::InitializeModule, LunaAsset::CleanupModule );
       }
 
       {
-        Console::Bullet bullet ("Scene Editor...\n");
+        Log::Bullet bullet ("Scene Editor...\n");
         m_InitializerStack.Push( SceneInitialize, SceneCleanup );
       }
     }
 
     {
-      Console::Bullet systems ("Systems:\n");
+      Log::Bullet systems ("Systems:\n");
 
       {
-        Console::Bullet vault ("Asset Tracker...\n");
+        Log::Bullet vault ("Asset Tracker...\n");
         GetAppPreferences()->UseTracker( !parser.Found( "disable_tracker" ) );
       }
     }
   }
 
-  Console::Print("\n"); 
+  Log::Print("\n"); 
 
-  if ( Console::GetErrorCount() )
+  if ( Log::GetErrorCount() )
   {
     std::stringstream str;
     str << "There were errors during startup, use Luna with caution.";

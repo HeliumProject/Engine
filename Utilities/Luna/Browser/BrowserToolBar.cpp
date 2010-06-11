@@ -4,7 +4,7 @@
 #include "BrowserSearchDatabase.h"
 #include "BrowserToolBar.h"
 
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 #include "UIToolKit/ImageManager.h"
 
 #include <wx/textctrl.h>

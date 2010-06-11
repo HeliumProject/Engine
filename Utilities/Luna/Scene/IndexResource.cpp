@@ -37,7 +37,7 @@ namespace Luna
       if ( m_Buffer != m_Tracker->GetIndices() )
       {
 #ifdef LUNA_DEBUG_RESOURCES
-        Console::Print("Setting indices to 0x%p\n", m_Buffer);
+        Log::Print("Setting indices to 0x%p\n", m_Buffer);
 #endif
         m_Device->SetIndices( m_Buffer );
         m_Tracker->SetIndices( m_Buffer );

@@ -177,15 +177,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
-			RelativePathToProject=".\libraries\Common\Common.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
-			RelativePathToProject=".\libraries\Profile\profile.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{1E9F45BD-AE62-4A12-8A09-56665F644B79}"
-			RelativePathToProject=".\libraries\Console\Console.vcproj"
+			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
 		/>
 	</References>
 	<Files>

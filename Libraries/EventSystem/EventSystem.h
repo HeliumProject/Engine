@@ -6,8 +6,8 @@
 #include "Event.h"
 #include "Exceptions.h"
 
-#include "Common/Types.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Platform/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 #include "UID/TUID.h"
 

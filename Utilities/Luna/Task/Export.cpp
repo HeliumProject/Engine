@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 
 #include "Export.h"
 #include "TaskOutputWindow.h"
@@ -26,7 +26,7 @@
 #include "AppUtils/AppUtils.h"
 #include "Worker/Process.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Debug/Exception.h"
 
 #include <strstream>
@@ -154,7 +154,7 @@ bool Export( const S_tuid& assetIDs, bool recurse, const std::string& stateTrack
   }
   catch ( Nocturnal::Exception& ex )
   {
-    Console::Error( "%s\n", ex.what() );
+    Log::Error( "%s\n", ex.what() );
     return false;
   }
 
@@ -177,15 +177,15 @@ bool Export( const S_tuid& assetIDs, bool recurse, const std::string& stateTrack
     {
       Worker::ConsoleOutput* output = (Worker::ConsoleOutput*)msg->GetData();
 
-      Console::Statement statement ( output->m_String, output->m_Stream, output->m_Level, output->m_Indent );
+      Log::Statement statement ( output->m_String, output->m_Stream, output->m_Level, output->m_Indent );
 
       if (g_OutputWindow)
       {
-        g_OutputWindow->PrintListener( Console::PrintedArgs ( statement ) );
+        g_OutputWindow->PrintListener( Log::PrintedArgs ( statement ) );
       }
       else
       {
-        Console::PrintStatement( statement );
+        Log::PrintStatement( statement );
       }
     }
 

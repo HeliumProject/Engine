@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Compiler.h"
+#include "Platform/Compiler.h"
 
 #ifdef MAYAUTILSDLL_EXPORTS
 #define MAYAUTILS_API __declspec(dllexport)

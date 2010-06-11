@@ -4,8 +4,8 @@
 
 #include "RCS/RCS.h"
 #include "RCS/Provider.h"
-#include "Common/Compiler.h"
-#include "Common/Automation/Event.h"
+#include "Platform/Compiler.h"
+#include "Foundation/Automation/Event.h"
 #include "Platform/Thread.h"
 #include "Platform/Mutex.h"
 #include "Platform/Event.h"

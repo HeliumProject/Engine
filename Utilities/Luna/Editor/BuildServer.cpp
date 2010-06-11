@@ -1,9 +1,9 @@
 #include "Precompile.h"
 #include "BuildServer.h"
 
-#include "Common/Environment.h"
-#include "Common/Boost/Regex.h"
-#include "Console/Console.h"
+#include "Foundation/Environment.h"
+#include "Foundation/Boost/Regex.h"
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
 
 #include <fstream>
@@ -15,9 +15,9 @@ using namespace Luna;
 // 
 BuildServer::BuildServer()
 {
-  if ( !Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"BUILDSERVER_BUILDS", m_BuildLocation ) )
+  if ( !Nocturnal::GetEnvVar( "NOC_BUILDSERVER_BUILDS", m_BuildLocation ) )
   {
-    Console::Error( "Failed to find environment variable IG_BUILDSERVER_BUILDS.\n" );
+    Log::Error( "Failed to find environment variable IG_BUILDSERVER_BUILDS.\n" );
   }
 }
 

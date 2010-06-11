@@ -1,12 +1,12 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "SQLiteDB.h"
 #include "SQLite.h"
 
-#include "Common/String/Tokenize.h"
-#include "Console/Console.h"
+#include "Foundation/String/Tokenize.h"
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
-#include "Windows/Error.h"
-#include "Windows/Process.h"
+#include "Foundation/Exception.h"
+#include "Platform/Process.h"
 
 #include <sstream>
 
@@ -90,14 +90,14 @@ bool SQLiteDB::Open( const std::string& dbFilename, const std::string& configFol
     if ( FileSystem::HasAttribute( m_DBFilename, FILE_ATTRIBUTE_READONLY ) )
     {
       //throw SQL::DBManagerException( this, __FUNCTION__, "[%s] is read-only!", m_DBFilename.c_str() );
-      Console::Error( "SQLite DB [%s] is read-only.\n", m_DBFilename.c_str() );
+      Log::Error( "SQLite DB [%s] is read-only.\n", m_DBFilename.c_str() );
       return false;
     }
   }
   // db does NOT exist and we can NOT create
   else if ( !FileSystem::Exists( m_DBFilename ) && !( m_OpenFlags & SQLITE_OPEN_CREATE ) )
   {
-    Console::Error( "SQLite DB [%s] does not exist.\n", m_DBFilename.c_str() );
+    Log::Error( "SQLite DB [%s] does not exist.\n", m_DBFilename.c_str() );
     return false;
   }
 
@@ -140,12 +140,12 @@ bool SQLiteDB::Load()
   }
   else if ( !( m_OpenFlags & SQLITE_OPEN_CREATE ) )
   {
-    Console::Error( "SQLite DB [%s] is out of date and cannot be created.\n", m_DBFilename.c_str() );
+    Log::Error( "SQLite DB [%s] is out of date and cannot be created.\n", m_DBFilename.c_str() );
     return false;
   }
   else if ( m_OpenFlags & SQLITE_OPEN_READONLY )
   {
-    Console::Error( "SQLite DB [%s] is out of date and the DB is read-only.\n", m_DBFilename.c_str() );
+    Log::Error( "SQLite DB [%s] is out of date and the DB is read-only.\n", m_DBFilename.c_str() );
     return false;
   }
 
@@ -255,7 +255,7 @@ bool SQLiteDB::Update( const std::string& dbVersion )
   std::string error;
   if ( !m_DBManager->ApplyFile( updateFilePath, m_DBFilename, error ) )
   {    
-    Console::Warning( error.c_str() );
+    Log::Warning( error.c_str() );
     return false;
   }
 

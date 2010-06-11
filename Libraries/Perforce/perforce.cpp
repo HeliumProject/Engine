@@ -1,7 +1,7 @@
 #include "Perforce.h"
 #include "Provider.h"
 
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 
 #define MAX_ERR_LENGTH 200
 

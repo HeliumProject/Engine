@@ -2,7 +2,7 @@
 
 #include "Asset/AssetClass.h"
 #include "Asset/ShaderAsset.h"
-#include "Common/Exception.h"
+#include "Foundation/Exception.h"
 #include "Reflect/Registry.h"
 #include "UID/TUID.h"
 

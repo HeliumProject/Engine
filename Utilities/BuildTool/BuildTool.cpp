@@ -4,21 +4,20 @@
 #include <fstream>
 #include <string>
 
-#include "Common/Config.h"
-#include "Common/Version.h"
-#include "Common/Exception.h"
-#include "Common/CommandLine.h"
-#include "Common/File/Path.h"
-#include "Common/String/Utilities.h"
+#include "Foundation/Version.h"
+#include "Foundation/Exception.h"
+#include "Foundation/CommandLine.h"
+#include "Foundation/File/Path.h"
+#include "Foundation/String/Utilities.h"
 
 #include "rcs/rcs.h"
 #include "Debug/Exception.h"
 #include "DebugUI/DebugUI.h"
 #include "IPC/Connection.h"
-#include "Profile/Profile.h"
-#include "Console/Console.h"
-#include "Windows/Console.h"
-#include "Windows/Process.h"
+#include "Foundation/Profile.h"
+#include "Foundation/Log.h"
+#include "Platform/Windows/Console.h"
+#include "Platform/Process.h"
 
 #include "Finder/Finder.h"
 #include "Finder/DebugSpecs.h"
@@ -33,7 +32,7 @@
 #include "Worker/Client.h"
 #include "Worker/Process.h"
 #include "AppUtils/AppUtils.h"
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 #include "Content/ContentInit.h"
 
 using namespace Asset;
@@ -52,28 +51,28 @@ V_string          g_Regions;     // only for levels, which need to view a single
 ///////////////////////////////////////////////////////////////////////////////
 void PrintUsage()
 {
-    Console::Print( "Usage: buildtool asset [options]\n" );
-    Console::Print( "\n" );
-    Console::Print( "Basic Options:\n" );
-    Console::Print( "    -h[elp]              -- this help\n" );
-    Console::Print( "    -view                -- view the asset after building it\n" );
-    Console::Print( "\n" );
-    Console::Print( "Assets to Build:\n" );
-    Console::Print( " -region[s] <region list>     -- only build the listed regions\n" );
-    Console::Print( "    -defaults            -- build all the default assets\n" );
-    Console::Print( " -nm|nomultiple               -- asset must be unique, selection not necessary\n" );
-    Console::Print( " -all                         -- build all assets matching the input spec\n" );
-    Console::Print( "\n" );
-    Console::Print( "Build System:\n" );
-    Console::Print( " -f[orce]|hack_all_filespecs  -- force a build even if it's up to date\n" );
-    Console::Print( " -hack_filespec <specname>    -- invalidate the format version of a FileSpec\n" );
-    Console::Print( " -disable_cache_files         -- disable upload/download via cache file storage\n" );
-    Console::Print( " -single_thread               -- disable processing using multiple threads\n" );
-    Console::Print( "\n" );
-    Console::Print( "Error Handling:\n" );
-    Console::Print( " -halt_on_error               -- errors should immediately halt the build\n" );
-    Console::Print( " -report                      -- report users suspected of causing problems\n" );
-    Console::Print( "\n" );
+    Log::Print( "Usage: buildtool asset [options]\n" );
+    Log::Print( "\n" );
+    Log::Print( "Basic Options:\n" );
+    Log::Print( "    -h[elp]              -- this help\n" );
+    Log::Print( "    -view                -- view the asset after building it\n" );
+    Log::Print( "\n" );
+    Log::Print( "Assets to Build:\n" );
+    Log::Print( " -region[s] <region list>     -- only build the listed regions\n" );
+    Log::Print( "    -defaults            -- build all the default assets\n" );
+    Log::Print( " -nm|nomultiple               -- asset must be unique, selection not necessary\n" );
+    Log::Print( " -all                         -- build all assets matching the input spec\n" );
+    Log::Print( "\n" );
+    Log::Print( "Build System:\n" );
+    Log::Print( " -f[orce]|hack_all_filespecs  -- force a build even if it's up to date\n" );
+    Log::Print( " -hack_filespec <specname>    -- invalidate the format version of a FileSpec\n" );
+    Log::Print( " -disable_cache_files         -- disable upload/download via cache file storage\n" );
+    Log::Print( " -single_thread               -- disable processing using multiple threads\n" );
+    Log::Print( "\n" );
+    Log::Print( "Error Handling:\n" );
+    Log::Print( " -halt_on_error               -- errors should immediately halt the build\n" );
+    Log::Print( " -report                      -- report users suspected of causing problems\n" );
+    Log::Print( "\n" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,7 +140,7 @@ bool ParseProgramOptions( int argc, const char** argv )
 
                 if ( !Finder::HackSpec( specName ) )
                 {
-                    Console::Error( "Invalid filespec: %s\n", specName.c_str() );
+                    Log::Error( "Invalid filespec: %s\n", specName.c_str() );
                 }
             }
         }
@@ -189,15 +188,12 @@ void Except( const Nocturnal::Exception& ex, const Asset::AssetClassPtr& assetCl
         message << type << ": " << ex.what() << std::endl;
     }
 
-    Console::Error( "%s", message.str().c_str() );
+    Log::Error( "%s", message.str().c_str() );
 
     if (g_GenerateReport)
     {
-        std::string project (NOCTURNAL_PROJECT_NAME);
-        toUpper( project );
-
         std::ostringstream subject;
-        subject << project << " Error Report: " << Nocturnal::GetCmdLine();
+        subject << "Error Report: " << Nocturnal::GetCmdLine();
 
         //    Windows::SendMail( subject.str(), message.str() );
     }
@@ -206,28 +202,28 @@ void Except( const Nocturnal::Exception& ex, const Asset::AssetClassPtr& assetCl
 ///////////////////////////////////////////////////////////////////////////////
 void Report(Asset::AssetClass* assetClass)
 {
-    if (g_GenerateReport && (Console::GetErrorCount() || Console::GetWarningCount()))
+    if (g_GenerateReport && (Log::GetErrorCount() || Log::GetWarningCount()))
     {
         std::string line;
         std::fstream file ( FinderSpecs::Debug::ERROR_FILE.GetFile( assetClass->GetBuiltDirectory() ).c_str() );
         if ( !file.fail() )
         {
-            Windows::Print( Windows::ConsoleColors::White, stderr, "Warnings and Errors:\n" );
+            Platform::Print( Platform::ConsoleColors::White, stderr, "Warnings and Errors:\n" );
             while ( !file.eof() )
             {
                 std::getline( file, line );
 
-                Windows::ConsoleColor color = Windows::ConsoleColors::None;
+                Platform::ConsoleColor color = Platform::ConsoleColors::None;
                 if ( strncmp( "Error", line.c_str(), 5 ) == 0 )
                 {
-                    color = Windows::ConsoleColors::Red;
+                    color = Platform::ConsoleColors::Red;
                 }
                 else if ( strncmp( "Warning", line.c_str(), 7 ) == 0 )
                 {
-                    color = Windows::ConsoleColors::Yellow;
+                    color = Platform::ConsoleColors::Yellow;
                 }
 
-                Windows::Print( color, stderr, "%s\n", line.c_str() );
+                Platform::Print( color, stderr, "%s\n", line.c_str() );
             }
         }
     }
@@ -246,7 +242,7 @@ void AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
         }
         catch ( Nocturnal::Exception& ex )
         {
-            Console::Error( "%s\n", ex.what() );
+            Log::Error( "%s\n", ex.what() );
             return;
         }
 
@@ -440,7 +436,7 @@ bool RunAsBuildWorker( Dependencies::DependencyGraph& depGraph )
         return false;
     }
 
-    Console::Print("Waiting for build request...\n");
+    Log::Print("Waiting for build request...\n");
 
     do
     {
@@ -462,7 +458,7 @@ bool RunAsBuildWorker( Dependencies::DependencyGraph& depGraph )
 #endif
             }
 
-            Console::Debug( "Building %d requested assets\n", job->m_Assets.size() );
+            Log::Debug( "Building %d requested assets\n", job->m_Assets.size() );
 
             success &= Build( depGraph, job->m_Assets, job->m_Options );
 
@@ -494,11 +490,7 @@ int Main (int argc, const char** argv)
     memset(&status, 0, sizeof(status));
     status.dwLength = sizeof(status);
     ::GlobalMemoryStatusEx(&status);
-    Console::Print("Physical Memory: %I64u M bytes total, %I64u M bytes available\n", status.ullTotalPhys >> 20, status.ullAvailPhys >> 20);
-
-    // enable heap defragmenting
-    bool lowFragHeap = Windows::EnableLowFragmentationHeap();
-    Console::Debug("Low Fragmentation Heap is %s\n", lowFragHeap ? "enabled" : "not enabled");
+    Log::Print("Physical Memory: %I64u M bytes total, %I64u M bytes available\n", status.ullTotalPhys >> 20, status.ullAvailPhys >> 20);
 
     Nocturnal::InitializerStack initializerStack( true );
     initializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
@@ -523,7 +515,7 @@ int Main (int argc, const char** argv)
 
     if (g_Defaults)
     {
-        Console::Bullet bullet ("Building default assets...\n");
+        Log::Bullet bullet ("Building default assets...\n");
         //    success = BuildDefaultAssets(options);
         return success ? 0 : 1;
     }

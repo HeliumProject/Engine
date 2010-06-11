@@ -7,9 +7,9 @@
 
 #include "Asset/ArtFileAttribute.h"
 #include "Attribute/AttributeHandle.h"
-#include "Common/Container/Insert.h" 
-#include "Common/Flags.h"
-#include "Common/Types.h"
+#include "Foundation/Container/Insert.h" 
+#include "Foundation/Flags.h"
+#include "Platform/Types.h"
 #include "Content/Region.h"
 #include "Content/Scene.h"
 #include "Content/Zone.h"
@@ -110,7 +110,7 @@ bool AssetVisitor::VisitElement( Reflect::Element* element )
         return true;
     }
 
-    //Console::Bullet processBullet( "\nVisitElement: %s (%s)\n",
+    //Log::Bullet processBullet( "\nVisitElement: %s (%s)\n",
     //  element->GetClass()->m_UIName.c_str(),
     //  Reflect::Registry::GetInstance()->GetClass( element->GetType() )->m_FullName.c_str() );
 
@@ -138,7 +138,7 @@ bool AssetVisitor::HandleElement( Reflect::Element* element )
     if ( CheckStopRequested( m_StopRequested ) )
         return false;
 
-    //Console::Indentation indent;
+    //Log::Indentation indent;
     m_CurrentElement = element;
     element->Host( *this );
     return false;
@@ -173,7 +173,7 @@ bool AssetVisitor::HandleArtFileAttribute( Reflect::Element* element )
                 }
                 catch ( const Nocturnal::Exception& ex )
                 {
-                    Console::Warning( "%s\n", ex.what() );
+                    Log::Warning( "%s\n", ex.what() );
                 }
 
                 if (manifest.ReferencesObject())
@@ -238,7 +238,7 @@ bool AssetVisitor::VisitField( Reflect::Element* element, const Reflect::Field* 
         return true;
     }
 
-    //Console::Bullet processBullet( "VisitField: %s\n", field->m_UIName.c_str() );
+    //Log::Bullet processBullet( "VisitField: %s\n", field->m_UIName.c_str() );
     {
         //-----------------------------------------------
         // TODO: Add custom field processors
@@ -316,11 +316,11 @@ void AssetVisitor::HandlePath( Reflect::Element* element, const Reflect::Field* 
         if ( !file )
             return;
 
-        //Console::Bullet processBullet( "HandleFileID: %s\n", element->GetClass()->m_UIName.c_str() );
+        //Log::Bullet processBullet( "HandleFileID: %s\n", element->GetClass()->m_UIName.c_str() );
         Insert<M_AssetFiles>::Result inserted = m_AssetFiles->insert( M_AssetFiles::value_type( file->m_Id, new AssetFile( file ) ) );
         if ( inserted.second )
         {
-            //Console::Print( " o %s\n", file->m_Path.c_str() );
+            //Log::Print( " o %s\n", file->m_Path.c_str() );
 
             AssetFilePtr& assetFile = inserted.first->second;
             PreHandleFile( assetFile );
@@ -595,7 +595,7 @@ void AssetVisitor::HandleMayaFile( Reflect::Element* element, const Reflect::Fie
                 }
                 catch ( const Nocturnal::Exception& ex )
                 {
-                    Console::Warning( "%s\n", ex.what() );
+                    Log::Warning( "%s\n", ex.what() );
                 }
 
                 if (manifest.ReferencesObject())

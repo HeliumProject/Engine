@@ -8,15 +8,13 @@
 #include <fstream>
 #include <sys/stat.h>
 
-#include "Common/Assert.h"
-#include "Common/Config.h"
-#include "Common/Version.h"
+#include "Platform/Assert.h"
+#include "Foundation/Version.h"
 
-#include "Windows/Windows.h"
-#include "Windows/Console.h"
-#include "Console/Console.h"
-
-#include "Profile/Memory.h"
+#include "Platform/Windows/Windows.h"
+#include "Platform/Windows/Console.h"
+#include "Platform/Windows/Memory.h"
+#include "Foundation/Log.h"
 
 using namespace Debug;
 
@@ -44,7 +42,7 @@ void Debug::EnableExceptionFilter(bool enable)
 
 int Debug::GetExceptionBehavior()
 {
-  if (getenv( NOCTURNAL_STUDIO_PREFIX "CRASH_DONT_BLOCK" ) != NULL)
+  if (getenv( "NOC_CRASH_DONT_BLOCK" ) != NULL)
   {
     // do not propagate the exception up to the system (avoid dialog)
     return EXCEPTION_EXECUTE_HANDLER;
@@ -72,11 +70,11 @@ void Debug::ProcessException(const std::exception& exception, bool print, bool f
 
   args.m_Message = exception.what();
   args.m_CPPClass = cppClass;
-  args.m_State = Console::GetOutlineState();
+  args.m_State = Log::GetOutlineState();
 
   if (print)
   {
-    Windows::Print(Windows::ConsoleColors::Red, stderr, "An exception has occurred\nType:    C++ Exception\n Class:   %s\n Message: %s\n", args.m_CPPClass.c_str(), args.m_Message.c_str() );
+    Platform::Print(Platform::ConsoleColors::Red, stderr, "An exception has occurred\nType:    C++ Exception\n Class:   %s\n Message: %s\n", args.m_CPPClass.c_str(), args.m_Message.c_str() );
   }
 
   if ( g_ExceptionOccurred.Valid() )
@@ -106,7 +104,7 @@ DWORD Debug::ProcessException(LPEXCEPTION_POINTERS info, DWORD ret_code, bool pr
   // handle breakpoint exceptions outside the debugger
   if ( !::IsDebuggerPresent()
     && info->ExceptionRecord->ExceptionCode == EXCEPTION_BREAKPOINT
-    && getenv( NOCTURNAL_STUDIO_PREFIX "CRASH_DONT_BLOCK" ) == NULL
+    && getenv( "NOC_CRASH_DONT_BLOCK" ) == NULL
     && g_BreakpointOccurred.Valid() )
   {
     ret_code = g_BreakpointOccurred.Invoke( BreakpointArgs (info, fatal) );
@@ -115,7 +113,7 @@ DWORD Debug::ProcessException(LPEXCEPTION_POINTERS info, DWORD ret_code, bool pr
   {
     ExceptionArgs args ( ExceptionTypes::SEH, fatal );
 
-    args.m_State = Console::GetOutlineState();
+    args.m_State = Log::GetOutlineState();
 
     {
       Debug::EnableTranslator<Debug::TranslateException> enable;
@@ -126,16 +124,16 @@ DWORD Debug::ProcessException(LPEXCEPTION_POINTERS info, DWORD ret_code, bool pr
       }
       catch ( Debug::StructuredException& )
       {
-        Windows::Print( Windows::ConsoleColors::Red, stderr, "Exception occured in exception handler!\n" );
+        Platform::Print( Platform::ConsoleColors::Red, stderr, "Exception occured in exception handler!\n" );
       }
     }
 
     if ( print )
     {
-      Windows::Print( Windows::ConsoleColors::Red, stderr, "%s", GetExceptionInfo( info ).c_str() );
+      Platform::Print( Platform::ConsoleColors::Red, stderr, "%s", GetExceptionInfo( info ).c_str() );
     }
 
-    bool full = getenv( NOCTURNAL_STUDIO_PREFIX "CRASH_FULL_DUMP" ) != NULL;
+    bool full = getenv( "NOC_CRASH_FULL_DUMP" ) != NULL;
     
     args.m_Dump = Debug::WriteDump(info, full);
 

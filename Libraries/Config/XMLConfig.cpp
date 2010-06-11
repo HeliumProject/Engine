@@ -2,7 +2,7 @@
 
 #include "tinyxml.h"
 
-#include "Common/Exception.h"
+#include "Foundation/Exception.h"
 
 namespace Config
 {

@@ -2,8 +2,8 @@
 #include "ArrayNode.h"
 #include "ArrayItemNode.h"
 
-#include "Common/String/Tokenize.h"
-#include "Console/Console.h"
+#include "Foundation/String/Tokenize.h"
+#include "Foundation/Log.h"
 #include "UID/TUID.h"
 
 using namespace Luna;

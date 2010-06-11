@@ -5,7 +5,7 @@
 #include "BuilderOptions.h"
 
 #include "Asset/AssetClass.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Dependencies/Dependencies.h"
 
 namespace AssetBuilder
@@ -61,7 +61,7 @@ namespace AssetBuilder
 
     // ouput
     JobResult                 m_Result;
-    Console::V_Statement      m_ConsoleOutput;
+    Log::V_Statement      m_LogOutput;
     u32                       m_WarningCount;
     u32                       m_ErrorCount;
 

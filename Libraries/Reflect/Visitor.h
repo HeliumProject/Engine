@@ -2,14 +2,14 @@
 
 #include "API.h"
 
-#include "Windows/Atomic.h"
+#include "Foundation/Atomic.h"
 
 namespace Reflect
 {
   class Structure;
   class Field;
 
-  class REFLECT_API Visitor : public ::Windows::AtomicRefCountBase
+  class REFLECT_API Visitor : public Foundation::AtomicRefCountBase
   {
   public:
     virtual bool VisitElement(Element* element)

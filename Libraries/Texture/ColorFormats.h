@@ -2,8 +2,8 @@
 
 #include <math.h>
 
-#include "Common/Assert.h"
-#include "Common/Types.h"
+#include "Platform/Assert.h"
+#include "Platform/Types.h"
 #include "Math/Half.h"
 #include "Math/Vector3.h"
 

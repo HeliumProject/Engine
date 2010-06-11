@@ -1,7 +1,7 @@
 #include "stdafx.h" 
 #include "FileStream.h" 
 #include "Exceptions.h"
-#include "Profile/Profile.h" 
+#include "Foundation/Profile.h" 
 
 #include <fstream>
 #include <strstream>

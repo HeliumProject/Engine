@@ -5,9 +5,9 @@
 #include "IndexResource.h"
 #include "VertexResource.h"
 
-#include "Profile/Profile.h"
-#include "Console/Console.h"
-#include "Common/Container/Insert.h" 
+#include "Foundation/Profile.h"
+#include "Foundation/Log.h"
+#include "Foundation/Container/Insert.h" 
 
 #include <algorithm>
 
@@ -110,7 +110,7 @@ void Resource::Update()
     {
       if (!m_IsDirty && IsManaged())
       {
-        Console::Debug( "Re-creating non-default resource '%s'...\n", typeid(*this).name() );
+        Log::Debug( "Re-creating non-default resource '%s'...\n", typeid(*this).name() );
       }
 
       Delete();

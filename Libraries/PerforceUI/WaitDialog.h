@@ -2,7 +2,7 @@
 
 #include "Panels.h"
 
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 #include "Perforce/Provider.h"
 
 namespace PerforceUI

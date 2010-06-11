@@ -2,7 +2,7 @@
 #include "HierarchyNode.h"
 
 #include "Reflect/Object.h"
-#include "Common/Container/Insert.h" 
+#include "Foundation/Container/Insert.h" 
 
 #include "Color.h"
 #include "SceneGraph.h"
@@ -67,15 +67,16 @@ void HierarchyNode::InitializeHierarchy()
 {
   Initialize();
 
-  for each ( Luna::HierarchyNode* child in m_Children )
+  for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
   {
+    Luna::HierarchyNode* child = *itr;
     child->InitializeHierarchy();
   }
 }
 
 void HierarchyNode::Reset()
 {
-  m_Children.clear();
+  m_Children.Clear();
 }
 
 void HierarchyNode::Pack()
@@ -105,8 +106,8 @@ void HierarchyNode::SetTransient( bool isTransient )
   {
     __super::SetTransient( isTransient );
 
-    S_HierarchyNodeDumbPtr::const_iterator childItr = m_Children.begin();
-    S_HierarchyNodeDumbPtr::const_iterator childEnd = m_Children.end();
+    OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
+    OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
     for ( ; childItr != childEnd; ++childItr )
     {
       Luna::HierarchyNode* child = *childItr;
@@ -193,8 +194,8 @@ bool HierarchyNode::IsReactive() const
 void HierarchyNode::SetReactive( bool value )
 {
   m_Reactive = value;
-  S_HierarchyNodeDumbPtr::const_iterator childItr = m_Children.begin();
-  S_HierarchyNodeDumbPtr::const_iterator childEnd = m_Children.end();
+  OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
+  OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
   for ( ; childItr != childEnd; ++childItr )
   {
     Luna::HierarchyNode* child = *childItr;
@@ -287,15 +288,15 @@ void HierarchyNode::SetNext( Luna::HierarchyNode* value )
 void HierarchyNode::ReverseChildren()
 {
   V_HierarchyNodeSmartPtr children;
-  children.reserve( m_Children.size() );
-  S_HierarchyNodeDumbPtr::const_iterator childItr = m_Children.begin();
-  S_HierarchyNodeDumbPtr::const_iterator childEnd = m_Children.end();
+  children.reserve( m_Children.Size() );
+  OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
+  OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
   for ( ; childItr != childEnd; ++childItr )
   {
     children.push_back( *childItr );
   }
 
-  m_Children.clear();
+  m_Children.Clear();
   Luna::HierarchyNode* previous = NULL;
   V_HierarchyNodeSmartPtr::reverse_iterator rItr = children.rbegin();
   V_HierarchyNodeSmartPtr::reverse_iterator rEnd = children.rend();
@@ -307,7 +308,7 @@ void HierarchyNode::ReverseChildren()
     {
       previous->m_Next = current;
     }
-    m_Children.insert( current );
+    m_Children.Append( current );
 
     previous = current;
   }
@@ -355,8 +356,10 @@ HierarchyNodePtr HierarchyNode::Duplicate()
   }
 
   // recurse on each child
-  for each (Luna::HierarchyNode* child in GetChildren())
+  for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
   {
+    Luna::HierarchyNode* child = *itr;
+
     // duplicate recursively
     HierarchyNodePtr duplicateChild = child->Duplicate();
 
@@ -448,26 +451,26 @@ void HierarchyNode::DisconnectDescendant(Luna::SceneNode* descendant)
     NOC_ASSERT( child->GetParent() == this );
 
     // we should not be disconnecting descendant hierarchy nodes that are not our children
-    NOC_ASSERT( m_Children.find(child) != m_Children.end() );
-    Console::Debug("Removing %s from %s's child list (previous=%s next=%s)\n", child->GetName().c_str(), GetName().c_str(), child->m_Previous ? child->m_Previous->GetName().c_str() : "NULL" , child->m_Next ? child->m_Next->GetName().c_str() : "NULL");
+    NOC_ASSERT( m_Children.Contains(child) );
+    Log::Debug("Removing %s from %s's child list (previous=%s next=%s)\n", child->GetName().c_str(), GetName().c_str(), child->m_Previous ? child->m_Previous->GetName().c_str() : "NULL" , child->m_Next ? child->m_Next->GetName().c_str() : "NULL");
 
     // fix up linked list
     if ( child->m_Previous )
     {
-      Console::Debug("Setting %s's m_Next to %s\n", child->m_Previous->m_Next ? child->m_Previous->m_Next->GetName().c_str() : "NULL", child->m_Next ? child->m_Next->GetName().c_str() : "NULL");
-      NOC_ASSERT( m_Children.find( child->m_Previous ) != m_Children.end() );
+      Log::Debug("Setting %s's m_Next to %s\n", child->m_Previous->m_Next ? child->m_Previous->m_Next->GetName().c_str() : "NULL", child->m_Next ? child->m_Next->GetName().c_str() : "NULL");
+      NOC_ASSERT( m_Children.Contains( child->m_Previous ) );
       child->m_Previous->m_Next = child->m_Next;
     }
 
     if ( child->m_Next )
     {
-      Console::Debug("Setting %s's m_Previous to %s\n", child->m_Next->m_Previous ? child->m_Next->m_Previous->GetName().c_str() : "NULL", child->m_Previous ? child->m_Previous->GetName().c_str() : "NULL");
-      NOC_ASSERT( m_Children.find( child->m_Next ) != m_Children.end() );
+      Log::Debug("Setting %s's m_Previous to %s\n", child->m_Next->m_Previous ? child->m_Next->m_Previous->GetName().c_str() : "NULL", child->m_Previous ? child->m_Previous->GetName().c_str() : "NULL");
+      NOC_ASSERT( m_Children.Contains( child->m_Next ) );
       child->m_Next->m_Previous = child->m_Previous;
     }
 
     // do erase
-    m_Children.erase( child );
+    m_Children.Remove( child );
   }
 }
 
@@ -485,7 +488,7 @@ void HierarchyNode::ConnectDescendant(Luna::SceneNode* descendant)
     // if we had a previous child, connect that previous child's next pointer to the child
     if ( child->m_Previous )
     {
-      if ( m_Children.find( child->m_Previous ) != m_Children.end() )
+      if ( m_Children.Contains( child->m_Previous ) )
       {
         child->m_Previous->m_Next = child;
       }
@@ -496,12 +499,10 @@ void HierarchyNode::ConnectDescendant(Luna::SceneNode* descendant)
     }
 
     // look for the next child after the one we want to insert, we will insert the child before that one
-    S_HierarchyNodeDumbPtr::iterator insertBefore = m_Children.end();
+    OS_HierarchyNodeDumbPtr::Iterator insertBefore = m_Children.End();
     if ( child->m_Next )
     {
-      insertBefore = m_Children.find( child->m_Next );
-
-      if ( insertBefore != m_Children.end() )
+      if ( m_Children.Contains( child->m_Next ) )
       {
         child->m_Next->m_Previous = child;
       }
@@ -512,17 +513,17 @@ void HierarchyNode::ConnectDescendant(Luna::SceneNode* descendant)
     }
 
     // do insertion
-    Nocturnal::Insert<S_HierarchyNodeDumbPtr>::Result inserted;
+    bool inserted = false;
 
-    if ( insertBefore != m_Children.end() )
+    if ( insertBefore != m_Children.End() )
     {
-      inserted = m_Children.insert( insertBefore, child );
+      inserted = m_Children.Insert( child, *insertBefore );
     }
     else
     {
-      if ( m_Children.size() > 0 )
+      if ( m_Children.Size() > 0 )
       {
-        Luna::HierarchyNode* back = m_Children.back();
+        Luna::HierarchyNode* back = m_Children.Back();
         
         back->m_Next = child;
 
@@ -532,11 +533,8 @@ void HierarchyNode::ConnectDescendant(Luna::SceneNode* descendant)
         }
       }
 
-      inserted = m_Children.insert(child);
+      inserted = m_Children.Append(child);
     }
-
-    // assert that what is really inserted in that slot is what we want there
-    NOC_ASSERT(*inserted.first == child);
   }
 }
 
@@ -601,8 +599,9 @@ void HierarchyNode::Create()
 {
   __super::Create();
 
-  for each (Luna::HierarchyNode* child in m_Children)
+  for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
   {
+    Luna::HierarchyNode* child = *itr;
     child->Create();
   }
 }
@@ -611,8 +610,9 @@ void HierarchyNode::Delete()
 {
   __super::Delete();
 
-  for each (Luna::HierarchyNode* child in m_Children)
+  for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
   {
+    Luna::HierarchyNode* child = *itr;
     child->Delete();
   }
 }
@@ -715,8 +715,10 @@ void HierarchyNode::Evaluate(GraphDirection direction)
       m_ObjectHierarchyBounds.Merge( m_ObjectBounds );
 
       // for each hierarchy node child
-      for each (Luna::HierarchyNode* child in m_Children)
+      for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
       {
+        Luna::HierarchyNode* child = *itr;
+
         // get the hierarchical bounds for that child
         Math::AlignedBox bounds = child->GetObjectHierarchyBounds();
 
@@ -867,8 +869,10 @@ TraversalAction HierarchyNode::TraverseHierarchy( HierarchyTraverser* traverser 
   {
   case TraversalActions::Continue:
     {
-      for each (Luna::HierarchyNode* child in m_Children)
+      for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
       {
+        Luna::HierarchyNode* child = *itr;
+        
         TraversalAction childResult = child->TraverseHierarchy( traverser );
 
         if (childResult == TraversalActions::Abort)
@@ -994,8 +998,10 @@ Luna::HierarchyNode* HierarchyNode::Find( const std::string& targetName )
 
   Luna::HierarchyNode* found = NULL;
 
-  for each (Luna::HierarchyNode* child in m_Children)
+  for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
   {
+    Luna::HierarchyNode* child = *itr;
+
     const std::string& currentName = child->GetName();
 
     // Case-insensitive comparison to see if the name matches the target
@@ -1046,8 +1052,10 @@ Luna::HierarchyNode* HierarchyNode::FindFromPath( std::string path )
   }
 
   // search our children, matching the childName
-  for each (Luna::HierarchyNode* child in m_Children)
+  for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
   {
+    Luna::HierarchyNode* child = *itr;
+
     // if the name exists, and it matches
     const std::string& currentName = child->GetName();
 

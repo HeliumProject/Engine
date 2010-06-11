@@ -20,7 +20,7 @@
 #include "debug.h"
 
 #include "RCS/RCS.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 static std::map<wxString, wxString> l_Types;
 static Project *l_instance = NULL;
@@ -309,7 +309,7 @@ Project::Save(const wxString& filename)
     }
     catch ( const Nocturnal::Exception& e )
     {
-      Console::Error("Error Saving Graphshader <%s>: %s", filename.c_str(), e.what());
+      Log::Error("Error Saving Graphshader <%s>: %s", filename.c_str(), e.what());
       return;
     }
   }

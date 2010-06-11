@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Compiler.h"
+#include "Platform/Compiler.h"
 
 #ifdef ASSETDLL_EXPORTS
 #define ASSET_API __declspec(dllexport)

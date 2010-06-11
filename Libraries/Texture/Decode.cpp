@@ -1,7 +1,7 @@
 #include "Decode.h"
 #include "DXT.h"
 
-#include "Common/Exception.h"
+#include "Foundation/Exception.h"
 
 #include <squish.h>
 

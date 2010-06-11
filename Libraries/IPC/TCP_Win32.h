@@ -2,7 +2,7 @@
 
 #include <winsock2.h>
 
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 typedef int socklen_t;
 

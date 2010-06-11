@@ -1,11 +1,11 @@
 #pragma once
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 #include "API.h"
 
 #include "Content/Scene.h"
 
-#include "Common/Types.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Platform/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 namespace MayaContent
 {

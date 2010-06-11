@@ -3,7 +3,7 @@
 #include <stack>
 #include <hash_map>
 
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 #include "API.h"
 

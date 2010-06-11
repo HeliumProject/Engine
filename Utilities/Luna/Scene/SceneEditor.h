@@ -12,7 +12,7 @@
 #include "TreeSortTimer.h"
 #include "View.h"
 
-#include "Common/Container/ReversibleMap.h"
+#include "Foundation/Container/ReversibleMap.h"
 #include "Core/PropertiesManager.h"
 #include "Core/Selection.h"
 #include "Editor/Editor.h"

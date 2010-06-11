@@ -3,8 +3,8 @@
 #include "Thumbnail.h"
 
 #include "Asset/AssetType.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Container/insertion_ordered_set.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Container/OrderedSet.h"
 
 namespace Asset
 {
@@ -108,7 +108,7 @@ namespace Luna
   typedef std::vector< ThumbnailTilePtr > V_ThumbnailTilePtr;
 
   typedef std::set< ThumbnailTilePtr > S_ThumbnailTiles;
-  typedef Nocturnal::insertion_ordered_set< ThumbnailTilePtr > OS_ThumbnailTiles;
+  typedef Nocturnal::OrderedSet< ThumbnailTilePtr > OS_ThumbnailTiles;
 
   typedef std::map< Asset::AssetFile*, ThumbnailTilePtr > M_FileToTilePtr;
   typedef std::map< Asset::AssetFolder*, ThumbnailTilePtr > M_FolderToTilePtr;

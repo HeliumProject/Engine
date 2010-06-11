@@ -4,7 +4,7 @@
 
 #include "OBJObjectLoader.h"
 
-#include "Common/File/Path.h"
+#include "Foundation/File/Path.h"
 
 static std::vector<igDXRender::Mesh*>         g_loaded_meshes;
 static std::vector<igDXRender::Environment*>  g_loaded_environments;

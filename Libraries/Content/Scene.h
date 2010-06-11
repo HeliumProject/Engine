@@ -20,7 +20,7 @@
 #include "CollisionPrimitive.h"
 
 #include "Math/CalculateBounds.h"
-#include "Common/Automation/Event.h"
+#include "Foundation/Automation/Event.h"
 
 namespace Math
 {

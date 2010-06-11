@@ -42,8 +42,8 @@
 #include "Asset/WorldFileAttribute.h"
 #include "Asset/SceneManifest.h"
 #include "Attribute/AttributeHandle.h"
-#include "Common/Container/Insert.h" 
-#include "Console/Console.h"
+#include "Foundation/Container/Insert.h" 
+#include "Foundation/Log.h"
 #include "Content/ContentVersion.h"
 #include "Editor/MRUData.h"
 #include "FileSystem/FileSystem.h"
@@ -58,8 +58,8 @@
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/SortTreeCtrl.h"
 #include "Undo/PropertyCommand.h"
-#include "Windows/Clipboard.h"
-#include "Windows/Process.h"
+#include "Platform/Windows/Clipboard.h"
+#include "Platform/Process.h"
 
 #include "Content/Scene.h"
 
@@ -1504,9 +1504,9 @@ void SceneEditor::OnImport(wxCommandEvent& event)
             case SceneEditorIDs::ID_FileImportFromClipboard:
                 {
                     std::string xml, error;
-                    if ( !Windows::RetrieveFromClipboard( GetHwnd(), xml, error ) )
+                    if ( !Platform::RetrieveFromClipboard( GetHwnd(), xml, error ) )
                     {
-                        Console::Error( "%s\n", error.c_str() );
+                        Log::Error( "%s\n", error.c_str() );
                     }
 
                     currentScene->Push( currentScene->ImportXML( xml, flags, currentScene->GetRoot() ) );
@@ -1722,9 +1722,9 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                         }
 
                         std::string error;
-                        if ( !Windows::CopyToClipboard( GetHwnd(), xml, error ) )
+                        if ( !Platform::CopyToClipboard( GetHwnd(), xml, error ) )
                         {
-                            Console::Error( "%s\n", error.c_str() );
+                            Log::Error( "%s\n", error.c_str() );
                         }
 
                         break;
@@ -2016,12 +2016,12 @@ void SceneEditor::OnDelete(wxCommandEvent& event)
 
 void SceneEditor::OnHelpIndex( wxCommandEvent& event )
 {
-    Windows::Execute( "cmd /c start http://wiki/index.php/Luna" );
+    Platform::Execute( "cmd /c start http://wiki/index.php/Luna" );
 }
 
 void SceneEditor::OnHelpSearch( wxCommandEvent& event )
 {
-    Windows::Execute( "cmd /c start http://wiki/index.php/Special:Search" );
+    Platform::Execute( "cmd /c start http://wiki/index.php/Special:Search" );
 }
 
 void SceneEditor::OnPickWalk( wxCommandEvent& event )
@@ -2275,7 +2275,7 @@ void SceneEditor::OnViewVisibleChange(wxCommandEvent& event)
 
         default:
             {
-                Console::Warning( "SceneEditor::OnViewVisibleChange - Unhandled case\n" );
+                Log::Warning( "SceneEditor::OnViewVisibleChange - Unhandled case\n" );
                 return;
             }
         }
@@ -2987,8 +2987,9 @@ void SceneEditor::OnCenter(wxCommandEvent& event)
 
 static void RecurseToggleSelection( Luna::HierarchyNode* node, const OS_SelectableDumbPtr& oldSelection, OS_SelectableDumbPtr& newSelection )
 {
-    for each (Luna::HierarchyNode* child in node->GetChildren())
+    for ( OS_HierarchyNodeDumbPtr::Iterator itr = node->GetChildren().Begin(), end = node->GetChildren().End(); itr != end; ++itr )
     {
+        Luna::HierarchyNode* child = *itr;
         RecurseToggleSelection( child, oldSelection, newSelection );
     }
 
@@ -3078,9 +3079,9 @@ void SceneEditor::OnCopyTransform(wxCommandEvent& event)
         data->ToXML( xml );
 
         std::string error;
-        if ( !Windows::CopyToClipboard( GetHwnd(), xml, error ) )
+        if ( !Platform::CopyToClipboard( GetHwnd(), xml, error ) )
         {
-            Console::Error( "%s\n", error.c_str() );
+            Log::Error( "%s\n", error.c_str() );
         }
     }
 }
@@ -3090,9 +3091,9 @@ void SceneEditor::OnPasteTransform(wxCommandEvent& event)
     if ( m_SceneManager.HasCurrentScene() )
     {
         std::string xml, error;
-        if ( !Windows::RetrieveFromClipboard( GetHwnd(), xml, error ) )
+        if ( !Platform::RetrieveFromClipboard( GetHwnd(), xml, error ) )
         {
-            Console::Error( "%s\n", error.c_str() );
+            Log::Error( "%s\n", error.c_str() );
         }
 
         Reflect::V_Element elements;
@@ -3308,16 +3309,16 @@ bool SceneEditor::Copy( Luna::Scene* scene )
         std::string xml;
         if ( !scene->ExportXML( xml, ExportFlags::Default | ExportFlags::SelectedNodes ) )
         {
-            Console::Error( "There was an error while generating XML data from the selection.\n" );
+            Log::Error( "There was an error while generating XML data from the selection.\n" );
             isOk = false;
         }
         else
         {
             std::string error;
-            isOk = Windows::CopyToClipboard( GetHwnd(), xml, error );
+            isOk = Platform::CopyToClipboard( GetHwnd(), xml, error );
             if ( !isOk )
             {
-                Console::Error( "%s\n", error.c_str() );
+                Log::Error( "%s\n", error.c_str() );
             }
         }
     }
@@ -3339,7 +3340,7 @@ bool SceneEditor::Paste( Luna::Scene* scene )
 
     // Get data from the clipboard
     std::string unused;
-    Windows::RetrieveFromClipboard( GetHwnd(), xml, unused );
+    Platform::RetrieveFromClipboard( GetHwnd(), xml, unused );
 
     // Import data into the scene
     if ( !xml.empty() )

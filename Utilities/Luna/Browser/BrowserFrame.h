@@ -9,8 +9,8 @@
 #include "SearchQuery.h"
 #include "SearchHistory.h"
 
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Platform/Types.h"
 #include "Editor/UpdateStatusEvent.h"
 #include "Reflect/Element.h"
 #include "Reflect/Version.h"

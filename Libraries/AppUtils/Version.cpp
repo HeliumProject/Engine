@@ -7,9 +7,8 @@
 #include <iostream>
 #include <sstream>
 
-#include "Common/Config.h"
-#include "Common/Version.h"
-#include "Console/Console.h"
+#include "Foundation/Version.h"
+#include "Foundation/Log.h"
 
 using namespace AppUtils;
 
@@ -215,28 +214,28 @@ void HandleResult(VersionResult result, std::string details)
   {
   case VersionResults::Project:
     {
-      sprintf(buf, "Your tools for project '%s' are for a different project. You cannot proceed using these tools.", NOCTURNAL_PROJECT_NAME);
+      sprintf(buf, "Your tools are for a different project. You cannot proceed using these tools.");
       message = buf;
       break;
     }
 
   case VersionResults::Compatible:
     {
-      sprintf(buf, "Your tools for project '%s' are not compatible anymore. Sorry, but you must update immediately.", NOCTURNAL_PROJECT_NAME);
+      sprintf(buf, "Your tools are not compatible anymore. Sorry, but you must update immediately.");
       message = buf;
       break;
     }
 
   case VersionResults::Feature:
     {
-      sprintf(buf, "The tools for project '%s' have been improved. You should update as soon as possible.", NOCTURNAL_PROJECT_NAME);
+      sprintf(buf, "The tools have been improved. You should update as soon as possible.");
       message = buf;
       break;
     }
 
   case VersionResults::Patch:
     {
-      sprintf(buf, "The tools for project '%s' have been updated. You should update when you get a chance.", NOCTURNAL_PROJECT_NAME);
+      sprintf(buf, "The tools have been updated. You should update when you get a chance.");
       message = buf;
       break;
     }
@@ -255,13 +254,13 @@ void HandleResult(VersionResult result, std::string details)
   }
   else
   {
-    Console::Warning("%s\n", message.c_str());
+    Log::Warning("%s\n", message.c_str());
   }
 }
 
 void AppUtils::CheckVersion()
 {
-  //const char* projectName = getenv( NOCTURNAL_STUDIO_PREFIX "PROJECT_NAME" );
+  //const char* projectName = getenv( "NOC_PROJECT_NAME" );
   //if ( projectName == NULL )
   //{
   //  throw AppUtils::Exception( "The %sPROJECT_NAME environment variable not set!\n", NOCTURNAL_STUDIO_PREFIX );
@@ -272,18 +271,18 @@ void AppUtils::CheckVersion()
   //  throw AppUtils::Exception( "You are running in the wrong project: '%s' != '%s'\n", projectName, NOCTURNAL_PROJECT_NAME );
   //}
 
-  //const char* networkVersionPath = getenv( NOCTURNAL_STUDIO_PREFIX "NETWORK_VERSION_FILE" );
+  //const char* networkVersionPath = getenv( "NOC_NETWORK_VERSION_FILE" );
   //if ( networkVersionPath == NULL )
   //{
   //  throw AppUtils::Exception( "The %sNETWORK_VERSION_FILE environment variable not set!\n", NOCTURNAL_STUDIO_PREFIX );
   //}
 
-  //const char* ignoreVersion = getenv( NOCTURNAL_STUDIO_PREFIX "IGNORE_TOOLS_VERSION" );
+  //const char* ignoreVersion = getenv( "NOC_IGNORE_TOOLS_VERSION" );
   //if ( ignoreVersion != NULL )
   //{
   //  if ( atoi( ignoreVersion ) )
   //  {
-  //    Console::Warning( "Ignoring tools version.  This is dangerous and you could cause data loss.\n" );
+  //    Log::Warning( "Ignoring tools version.  This is dangerous and you could cause data loss.\n" );
   //    return;
   //  }
   //}
@@ -297,7 +296,7 @@ void AppUtils::CheckVersion()
   //// continue if we can't read the network version
   //if (!gotNetworkVersion)
   //{
-  //  Console::Warning("Unable to read network version from '%s'\n", networkVersionPath);
+  //  Log::Warning("Unable to read network version from '%s'\n", networkVersionPath);
   //  return;
   //}
 

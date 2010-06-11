@@ -4,7 +4,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Undo/Exceptions.h"
 
 using namespace Luna;
@@ -54,7 +54,7 @@ void LSwitchSceneCommand::Undo()
   }
   else
   {
-    Console::Warning( "Undo command to switch scenes is invalid because one of the scenes was unloaded, doing nothing.\n" );
+    Log::Warning( "Undo command to switch scenes is invalid because one of the scenes was unloaded, doing nothing.\n" );
   }
 }
 
@@ -69,7 +69,7 @@ void LSwitchSceneCommand::Redo()
   }
   else
   {
-    Console::Warning( "Redo command to switch scenes is invalid because one of the scenes was unloaded, doing nothing.\n" );
+    Log::Warning( "Redo command to switch scenes is invalid because one of the scenes was unloaded, doing nothing.\n" );
   }
 }
 

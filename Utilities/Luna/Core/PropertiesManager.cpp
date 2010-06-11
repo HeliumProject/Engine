@@ -201,7 +201,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
       M_PanelCreators currentPanels;
 
 #ifdef LUNA_DEBUG_ENUMERATOR
-      Console::Print("Object type %s:\n", typeid(*(*itr)).name());
+      Log::Print("Object type %s:\n", typeid(*(*itr)).name());
 #endif
 
       {
@@ -219,7 +219,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
           if ((*itr)->ValidatePanel(itrPanel->first))
           {
 #ifdef LUNA_DEBUG_ENUMERATOR
-            Console::Print(" accepts %s\n", itrPanel->first.c_str());
+            Log::Print(" accepts %s\n", itrPanel->first.c_str());
 #endif
             switch (m_Setting)
             {
@@ -243,14 +243,14 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
           else
           {
 #ifdef LUNA_DEBUG_ENUMERATOR
-            Console::Print(" rejects %s\n", itrPanel->first.c_str());
+            Log::Print(" rejects %s\n", itrPanel->first.c_str());
 #endif
           }
         }
       }
 
 #ifdef LUNA_DEBUG_ENUMERATOR
-      Console::Print("\n");
+      Log::Print("\n");
 #endif
 
       if (m_Setting == PropertySettings::Intersection)

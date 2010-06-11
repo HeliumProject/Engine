@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 
 #ifdef CODEGEN_EXPORTS
 # define CODEGEN_API __declspec(dllexport)

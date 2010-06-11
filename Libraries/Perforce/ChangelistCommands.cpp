@@ -1,7 +1,7 @@
 #include "ChangelistCommands.h"
 #include "Tags.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 using namespace Perforce;
 
@@ -104,7 +104,7 @@ void CreateChangelistCommand::OutputInfo( char level, const char* data )
 {
   if ( sscanf_s( data, "Change %d", &m_Changeset->m_Id ) != 1 )
   {
-    Console::Error( "Could not parse perforce changelist creation message:\n\n %s\n\nPlease contact support with this error message.\n" );
+    Log::Error( "Could not parse perforce changelist creation message:\n\n %s\n\nPlease contact support with this error message.\n" );
     m_ErrorCount++;
   }
 }

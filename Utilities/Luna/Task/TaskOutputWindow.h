@@ -10,7 +10,7 @@
 #include "wx/textctrl.h"
 #include "wx/button.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 namespace Luna
 {
@@ -37,7 +37,7 @@ namespace Luna
 
     CRITICAL_SECTION m_CriticalSection;
 
-    Console::V_Statement m_Statements;
+    Log::V_Statement m_Statements;
     UpdateTimer* m_MessageTimer;
 
   public:
@@ -49,7 +49,7 @@ namespace Luna
       return m_TextControl;
     }
 
-    Console::V_Statement& GetPendingStatements()
+    Log::V_Statement& GetPendingStatements()
     {
       return m_Statements;
     }
@@ -59,12 +59,12 @@ namespace Luna
     void LeaveMessageSection();
 
     // translate color definition
-    const wxColour& TranslateColor( Console::Color color );
+    const wxColour& TranslateColor( Log::Color color );
 
     // insomniac event handlers
     void TaskStarted( const TaskStartedArgs& args );
     void TaskFinished( const TaskFinishedArgs& args );
-    void PrintListener( const Console::PrintedArgs& args );
+    void PrintListener( const Log::PrintedArgs& args );
 
     // wx event handlers
     void OnClose( wxCommandEvent& event );

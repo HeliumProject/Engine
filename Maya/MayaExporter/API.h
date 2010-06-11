@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 
 #ifdef MAYAEXPORTER_EXPORTS
 #define MAYAEXPORTER_EXPORT	__declspec (dllexport)

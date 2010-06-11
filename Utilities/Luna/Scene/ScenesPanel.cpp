@@ -16,10 +16,10 @@
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/LunaSpecs.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "UIToolKit/FileDialog.h"
 #include "UIToolKit/ImageManager.h"
-#include "Common/Container/Insert.h" 
+#include "Foundation/Container/Insert.h" 
 
 // Using
 using namespace Luna;
@@ -542,7 +542,7 @@ void ScenesPanel::OnAddZone( wxCommandEvent& args )
 // 
 void ScenesPanel::OnMoveSelToZone( wxCommandEvent& args )
 {
-    Console::Debug( "Move Selection to Zone\n" );
+    Log::Debug( "Move Selection to Zone\n" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -27,7 +27,7 @@
 #include "Finder/ExtensionSpecs.h"
 #include "Finder/LunaSpecs.h"
 #include "Finder/Finder.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Task/Build.h"
 #include "Inspect/ClipboardDataObject.h"
 #include "Editor/ContextMenu.h"
@@ -39,7 +39,7 @@
 #include "UIToolKit/FileDialog.h"
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/ListDialog.h"
-#include "Windows/Process.h"
+#include "Platform/Process.h"
 #include <wx/clipbrd.h>
 
 // Using
@@ -756,7 +756,7 @@ void AssetEditor::DocumentSaved( const DocumentChangedArgs& args )
 //        Asset::AssetClassPtr package = wizard.GetAssetClass();
 //        if ( !package.ReferencesObject() )
 //        {
-//            Console::Error( "CreateAssetWizard returned a NULL asset when attempting to create new asset at location %s.", wizard.GetNewFileLocation().c_str() );
+//            Log::Error( "CreateAssetWizard returned a NULL asset when attempting to create new asset at location %s.", wizard.GetNewFileLocation().c_str() );
 //            return NULL;
 //        }
 //
@@ -764,7 +764,7 @@ void AssetEditor::DocumentSaved( const DocumentChangedArgs& args )
 //        Luna::AssetClass* asset = m_AssetManager.Open( package->GetFilePath(), error, true );
 //        if ( !asset )
 //        {
-//            Console::Error( "Unable to create new asset at location %s.", wizard.GetNewFileLocation().c_str() );
+//            Log::Error( "Unable to create new asset at location %s.", wizard.GetNewFileLocation().c_str() );
 //            return NULL;
 //        }
 //
@@ -1446,7 +1446,7 @@ void AssetEditor::OnFileOption( wxCommandEvent& args )
 //
 void AssetEditor::OnHelpIndex( wxCommandEvent& args )
 {
-    Windows::Execute( "cmd.exe /c start http://wiki.insomniacgames.com/index.php/Luna" );
+    Platform::Execute( "cmd.exe /c start http://wiki.insomniacgames.com/index.php/Luna" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1454,7 +1454,7 @@ void AssetEditor::OnHelpIndex( wxCommandEvent& args )
 //
 void AssetEditor::OnHelpSearch( wxCommandEvent& args )
 {
-    Windows::Execute( "cmd.exe /c start http://wiki.insomniacgames.com/index.php/Special:Search" );
+    Platform::Execute( "cmd.exe /c start http://wiki.insomniacgames.com/index.php/Special:Search" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

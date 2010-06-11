@@ -5,10 +5,10 @@
 #include "Camera.h"
 #include "SceneNode.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
-#include "Common/String/Wildcard.h"
-#include "Common/String/Tokenize.h"
+#include "Foundation/String/Wildcard.h"
+#include "Foundation/String/Tokenize.h"
 
 using namespace Math;
 using namespace Luna;
@@ -133,7 +133,7 @@ RenderEntry* RenderVisitor::Allocate(const SceneNode* node)
 
   if (m_EntryData.capacity() > capacity)
   {
-    Console::Debug("RenderEntries reallocated from %d to %d\n", capacity * sizeof(RenderEntry), m_EntryData.capacity() * sizeof(RenderEntry));
+    Log::Debug("RenderEntries reallocated from %d to %d\n", capacity * sizeof(RenderEntry), m_EntryData.capacity() * sizeof(RenderEntry));
   }
 
   return &m_EntryData.back();
@@ -402,12 +402,12 @@ IDirect3DTexture9* Luna::LoadTexture( IDirect3DDevice9* device, const std::strin
       }
       else
       {
-        Console::Warning( "Unable to create texture from file '%s'\n", file.c_str() );
+        Log::Warning( "Unable to create texture from file '%s'\n", file.c_str() );
       }
     }
     else
     {
-      Console::Warning( "File '%s' does not exist\n", file.c_str() );
+      Log::Warning( "File '%s' does not exist\n", file.c_str() );
     }
   }
 

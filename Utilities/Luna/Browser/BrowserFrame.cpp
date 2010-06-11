@@ -21,7 +21,7 @@
 #include "Asset/ShaderAsset.h"
 #include "Asset/Tracker.h"
 #include "Attribute/AttributeHandle.h"
-#include "Common/CommandLine.h"
+#include "Foundation/CommandLine.h"
 #include "Editor/DocumentManager.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/ContentSpecs.h"
@@ -32,8 +32,8 @@
 #include "UIToolKit/Button.h"
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/MenuButton.h"
-#include "Windows/Error.h"
-#include "Windows/Process.h"
+#include "Foundation/Exception.h"
+#include "Platform/Process.h"
 
 #include <wx/clipbrd.h>
 
@@ -771,13 +771,9 @@ void BrowserFrame::OnRevisionHistory( wxCommandEvent& event )
         std::string path = paths.front();
         std::string command = std::string( "p4win.exe -H \"" ) + path + std::string( "\"" );
 
-        try 
+        if ( Platform::Execute( command ) == -1 )
         {
-            Windows::Execute( command );
-        }
-        catch ( const Windows::Exception& e )
-        {
-            std::string error = e.Get();
+            std::string error = Platform::GetErrorString();
             error += "\nMake sure that you have p4win properly installed.";
             wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
             return;
@@ -837,13 +833,9 @@ void BrowserFrame::OnShowInPerforce( wxCommandEvent& event )
         std::string path = paths.front();
         std::string command = std::string( "p4win.exe -s \"" ) + path + std::string( "\"" );
 
-        try 
+        if ( Platform::Execute( command ) == -1 )
         {
-            Windows::Execute( command );
-        }
-        catch ( const Windows::Exception& e )
-        {
-            std::string error = e.Get();
+            std::string error = Platform::GetErrorString();
             error += "\nMake sure that you have p4win properly installed.";
             wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
             return;
@@ -866,15 +858,7 @@ void BrowserFrame::OnShowInWindowsExplorer( wxCommandEvent& event )
         FileSystem::Win32Name( path );
         command += "\"" + path + "\"";
 
-        try 
-        {
-            Windows::Execute( command );
-        }
-        catch ( const Windows::Exception& )
-        {
-            // Do nothing
-            return;
-        }
+        Platform::Execute( command );
     }
 }
 
@@ -955,7 +939,7 @@ void BrowserFrame::OnNew( wxCommandEvent& args )
     //            Asset::AssetClassPtr assetClass = wizard.GetAssetClass();
     //            if ( !assetClass.ReferencesObject() )
     //            {
-    //                Console::Error( "CreateAssetWizard returned a NULL asset when attempting to create new asset at location %s.", wizard.GetNewFileLocation().c_str() );
+    //                Log::Error( "CreateAssetWizard returned a NULL asset when attempting to create new asset at location %s.", wizard.GetNewFileLocation().c_str() );
     //            }
     //            else
     //            {

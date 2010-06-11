@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DropTarget.h"
 #include "ClipboardDataObject.h"
-#include "Common/Exception.h"
+#include "Foundation/Exception.h"
 
 using namespace Inspect;
 

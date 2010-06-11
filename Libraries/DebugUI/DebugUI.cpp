@@ -9,7 +9,7 @@
 #include "DebugUI.h"
 
 #include "Debug/Exception.h"
-#include "Windows/Console.h"
+#include "Platform/Windows/Console.h"
 
 static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
 {
@@ -32,7 +32,7 @@ static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
       Debug::GetExceptionDetails( args.m_Info, exArgs ); 
 
       // dump args.m_Info to console
-      Windows::Print(Windows::ConsoleColors::Red, stderr, "%s", Debug::GetExceptionInfo(args.m_Info).c_str());
+      Platform::Print(Platform::ConsoleColors::Red, stderr, "%s", Debug::GetExceptionInfo(args.m_Info).c_str());
 
       // display result
       std::string message ("A break point was triggered in the application:\n\n");

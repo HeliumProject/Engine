@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "Common/Compiler.h"
+#include "Platform/Compiler.h"
 #include <wx/dnd.h>
 
 namespace Inspect

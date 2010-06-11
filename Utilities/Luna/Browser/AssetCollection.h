@@ -3,7 +3,7 @@
 #include "API.h"
 
 #include "Asset/AssetFile.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 #include "Reflect/Registry.h"
 #include "Reflect/Serializers.h"
 #include "UID/TUID.h"

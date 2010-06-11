@@ -1,4 +1,4 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "AssetBuilder.h"
 
 #include "Exceptions.h"
@@ -12,24 +12,24 @@
 #include <stack>
 #include <algorithm>
 
-#include "Common/Version.h"
-#include "Common/CommandLine.h"
-#include "Common/String/Utilities.h"
-#include "Common/InitializerStack.h"
-#include "Console/Console.h"
+#include "Foundation/Version.h"
+#include "Foundation/CommandLine.h"
+#include "Foundation/String/Utilities.h"
+#include "Foundation/InitializerStack.h"
+#include "Foundation/Log.h"
 
 #include "AppUtils/AppUtils.h"
 #include "Asset/AssetInit.h"
 #include "Asset/AssetClass.h"
 #include "AssetBuilder/CacheFiles.h"
-#include "Common/Environment.h"
+#include "Foundation/Environment.h"
 #include "Debug/Exception.h"
 #include "Dependencies/Dependencies.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/DebugSpecs.h"
 
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "Platform/Thread.h"
 #include "Platform/Mutex.h"
 
@@ -124,7 +124,7 @@ void AssetBuilder::Initialize()
         SYSTEM_INFO info;
         GetSystemInfo( &info );
         g_ProcessorCount = info.dwNumberOfProcessors;
-        Console::Print( "Computer has %d processors\n", g_ProcessorCount );
+        Log::Print( "Computer has %d processors\n", g_ProcessorCount );
 
         // by default we use a thread per processor
         g_ThreadCount = g_ProcessorCount;
@@ -165,8 +165,8 @@ void AssetBuilder::RemoveAssetBuiltListener( const AssetBuiltSignature::Delegate
 class PrintListener
 {
 public:
-    PrintListener( Console::V_Statement& consoleOutput, u32& warningCount, u32& errorCount, bool throttle )
-        : m_ConsoleOutput( consoleOutput )
+    PrintListener( Log::V_Statement& consoleOutput, u32& warningCount, u32& errorCount, bool throttle )
+        : m_LogOutput( consoleOutput )
         , m_WarningCount( warningCount )
         , m_ErrorCount( errorCount )
         , m_Throttle( throttle )
@@ -182,19 +182,19 @@ public:
 
     void Start()
     {
-        Console::AddPrintingListener( Console::PrintingSignature::Delegate( this, &PrintListener::Listener ) );
+        Log::AddPrintingListener( Log::PrintingSignature::Delegate( this, &PrintListener::Listener ) );
     }
 
     void Stop()
     {
-        Console::RemovePrintingListener( Console::PrintingSignature::Delegate( this, &PrintListener::Listener ) );
+        Log::RemovePrintingListener( Log::PrintingSignature::Delegate( this, &PrintListener::Listener ) );
     }
 
     void Dump()
     {
         Stop();
 
-        Console::PrintStatements( m_ConsoleOutput );
+        Log::PrintStatements( m_LogOutput );
     }
 
     u32 GetWarningCount()
@@ -208,30 +208,30 @@ public:
     }
 
 private:
-    void Listener( Console::PrintingArgs& args )
+    void Listener( Log::PrintingArgs& args )
     {
         if ( m_Thread == GetCurrentThreadId() )
         {
-            if ( args.m_Statement.m_Stream == Console::Streams::Warning )
+            if ( args.m_Statement.m_Stream == Log::Streams::Warning )
             {
                 ++m_WarningCount;
             }
 
-            if ( args.m_Statement.m_Stream == Console::Streams::Error )
+            if ( args.m_Statement.m_Stream == Log::Streams::Error )
             {
                 ++m_ErrorCount;
             }
 
             if ( m_Throttle )
             {
-                m_ConsoleOutput.push_back( args.m_Statement );
+                m_LogOutput.push_back( args.m_Statement );
                 args.m_Skip = true;
             }
         }
     }
 
 private:
-    Console::V_Statement& m_ConsoleOutput;
+    Log::V_Statement& m_LogOutput;
     u32&                  m_WarningCount;
     u32&                  m_ErrorCount;
     bool                  m_Throttle;
@@ -243,7 +243,7 @@ void PrintJobList( const V_BuildJob& jobs )
     int i = 0;
     for( V_BuildJob::const_iterator itr = jobs.begin(); itr != jobs.end(); ++itr )
     {
-        Console::Print( "%d: %x / %s / %s / "TUID_HEX_FORMAT"\n", i++, *(u32*)( (void*)(*itr)->m_Builder ), (*itr)->m_Asset->GetShortName().c_str(), (*itr)->m_Builder->GetBuildString().c_str(), (*itr)->m_Asset->GetPath().Hash() );
+        Log::Print( "%d: %x / %s / %s / "TUID_HEX_FORMAT"\n", i++, *(u32*)( (void*)(*itr)->m_Builder ), (*itr)->m_Asset->GetShortName().c_str(), (*itr)->m_Builder->GetBuildString().c_str(), (*itr)->m_Asset->GetPath().Hash() );
     }
 }
 
@@ -251,7 +251,7 @@ void TrimJobList( V_BuildJob& jobs )
 {
     std::set< std::string > jobSignatures;
 
-    //  Console::Print( "Pre-trim:\n" );
+    //  Log::Print( "Pre-trim:\n" );
     //  PrintJobList( jobs );
 
     for( int i = 0; i < (int) jobs.size(); )
@@ -273,7 +273,7 @@ void TrimJobList( V_BuildJob& jobs )
         }
     }
 
-    //  Console::Print( "\n\nPost-trim:\n" );
+    //  Log::Print( "\n\nPost-trim:\n" );
     //  PrintJobList( jobs );
 }
 
@@ -329,9 +329,9 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
     std::string warningFile = outputDirectory + traceString + "_" + FinderSpecs::Debug::WARNING_FILE.GetFile();
     std::string errorFile = outputDirectory + traceString + "_" + FinderSpecs::Debug::ERROR_FILE.GetFile();
 
-    Console::TraceFileHandle trace ( traceFile, AppUtils::GetTraceStreams(), GetCurrentThreadId() );
-    Console::TraceFileHandle warning ( warningFile, Console::Streams::Warning, GetCurrentThreadId() );
-    Console::TraceFileHandle error ( errorFile, Console::Streams::Error, GetCurrentThreadId() );
+    Log::TraceFileHandle trace ( traceFile, AppUtils::GetTraceStreams(), GetCurrentThreadId() );
+    Log::TraceFileHandle warning ( warningFile, Log::Streams::Warning, GetCurrentThreadId() );
+    Log::TraceFileHandle error ( errorFile, Log::Streams::Error, GetCurrentThreadId() );
 
     std::string failureReason = "Unknown failure";
     try
@@ -339,11 +339,11 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
         Profile::Timer timer;
 
         // print some state
-        Console::Print( "Building %s\n", builder->GetBuildString().c_str() );
-        Console::Print( Console::Levels::Verbose,  " TUID: "TUID_HEX_FORMAT"\n", assetClass->GetPath().Hash() );
+        Log::Print( "Building %s\n", builder->GetBuildString().c_str() );
+        Log::Print( Log::Levels::Verbose,  " TUID: "TUID_HEX_FORMAT"\n", assetClass->GetPath().Hash() );
 
         // capture this thread's console output
-        PrintListener printListener (job->m_ConsoleOutput, job->m_WarningCount, job->m_ErrorCount, throttle);
+        PrintListener printListener (job->m_LogOutput, job->m_WarningCount, job->m_ErrorCount, throttle);
 
         result = builder->Build() ? JobResults::Clean : JobResults::Dirty;
 
@@ -395,7 +395,7 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
     if ( result == JobResults::Failure )
     {
         g_FailedAssets.insert( assetClass->GetPath().Hash() );
-        Console::Error( "Failure Building %s: %s\n", builder->GetBuildString().c_str(), failureReason.c_str() );
+        Log::Error( "Failure Building %s: %s\n", builder->GetBuildString().c_str(), failureReason.c_str() );
     }
 
     // free our reference to this builder.  In most cases this will entirely free the builder
@@ -473,7 +473,7 @@ bool BuildDependentJobs(V_BuildJob& allJobs, Dependencies::DependencyGraph& grap
     V_BuildJob dependentJobs; 
 
     {
-        Console::Bullet bullet( message.str().c_str() ); 
+        Log::Bullet bullet( message.str().c_str() ); 
 
         V_BuildJob::const_iterator jobItr = allJobs.begin();
         V_BuildJob::const_iterator jobEnd = allJobs.end();
@@ -516,7 +516,7 @@ bool BuildDependentJobs(V_BuildJob& allJobs, Dependencies::DependencyGraph& grap
                 }
                 else
                 {
-                    Console::Error( "%s\n", error.str().c_str() );
+                    Log::Error( "%s\n", error.str().c_str() );
                 }
 
                 Debug::ProcessException( e );
@@ -536,7 +536,7 @@ bool BuildDependentJobs(V_BuildJob& allJobs, Dependencies::DependencyGraph& grap
             message << "Building dependent jobs, pass " << pass << std::endl; 
         }
 
-        Console::Bullet bullet( message.str().c_str() ); 
+        Log::Bullet bullet( message.str().c_str() ); 
 
         // note that dependentJobs will be empty after this call, because Build
         // clears out its passed in job list ... hmmm. 
@@ -636,7 +636,7 @@ void InvokeBuilds( V_BuildJob& jobs, i32 nice )
         }
 
         size_t backgroundJobCount = jobs.size() - foregroundJobs.size();
-        Console::Print("Foreground jobs: %d, Background jobs: %d, Threads: %d\n", foregroundJobs.size(), backgroundJobCount, threadCount);
+        Log::Print("Foreground jobs: %d, Background jobs: %d, Threads: %d\n", foregroundJobs.size(), backgroundJobCount, threadCount);
 
         // create the build threads for the background jobs
         for ( u32 i = 0;i < threadCount; ++i )
@@ -697,7 +697,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
         message << jobs.size() << " jobs";
     }
 
-    Console::Bullet bullet( "Build Level %d (%s)\n", g_BuildStack, message.str().c_str() );
+    Log::Bullet bullet( "Build Level %d (%s)\n", g_BuildStack, message.str().c_str() );
 
     V_BuildJob allJobs;
     allJobs.reserve( jobs.size() );
@@ -770,7 +770,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
                 }
                 else
                 {
-                    Console::Error( "%s\n", error.str().c_str() );
+                    Log::Error( "%s\n", error.str().c_str() );
                 }
 
                 Debug::ProcessException( e );
@@ -779,7 +779,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
 
             g_InitializationTime += timer.Elapsed();
 
-            Console::Bullet bullet ( Console::Streams::Normal, Console::Levels::Verbose, "Initialized %s\n", job->m_BuildString.c_str() );
+            Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose, "Initialized %s\n", job->m_BuildString.c_str() );
 
             V_BuildJob newJobs;
             try
@@ -810,7 +810,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
                 }
                 else
                 {
-                    Console::Error( "%s\n", error.str().c_str() );
+                    Log::Error( "%s\n", error.str().c_str() );
                 }
 
                 Debug::ProcessException( e );
@@ -833,7 +833,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
     {
         PROFILE_SCOPE_ACCUM( g_DependencyCheckAccum );
 
-        Console::Bullet bullet( "Checking dependencies\n" );
+        Log::Bullet bullet( "Checking dependencies\n" );
 
         V_BuildJob::const_iterator jobItr = allJobs.begin();
         V_BuildJob::const_iterator jobEnd = allJobs.end();
@@ -859,7 +859,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
                 {
                     allUpToDate = false;
 
-                    Console::Bullet bullet ( Console::Streams::Normal, Console::Levels::Verbose, "Out-of-date: %s\n", job->m_BuildString.c_str() );
+                    Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose, "Out-of-date: %s\n", job->m_BuildString.c_str() );
 
                     if ( !needsPregisterInputs )
                     {
@@ -893,7 +893,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
                 }
                 else
                 {
-                    Console::Error( "%s\n", error.str().c_str() );
+                    Log::Error( "%s\n", error.str().c_str() );
                 }
 
                 Debug::ProcessException( e );
@@ -915,7 +915,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
     if ( !allOutputFiles.empty() )
     {
         Profile::Timer timer;
-        Console::Bullet bullet( "Creating signatures\n" );
+        Log::Bullet bullet( "Creating signatures\n" );
 
         // Create signatures on ALL the output files, since we will need them for uploading even if we're forcing the build
         graph.CreateSignatures( allOutputFiles, true );
@@ -940,7 +940,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
             PROFILE_SCOPE_ACCUM( g_DownloadAccum );
 
             Profile::Timer timer;
-            Console::Bullet bullet ( "Downloading data\n" );
+            Log::Bullet bullet ( "Downloading data\n" );
 
             CacheFiles::Get( graph, downloadOutputFiles );
 
@@ -1011,7 +1011,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
         {
             Profile::Timer timer;
 
-            Console::Bullet bullet( "Updating %d outputs\n", outputFilesToUpdate.size() );
+            Log::Bullet bullet( "Updating %d outputs\n", outputFilesToUpdate.size() );
             graph.UpdateOutputs( outputFilesToUpdate );
 
             g_DependencyCheckTime += timer.Elapsed();
@@ -1022,14 +1022,14 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
         {
             // Build each of the required builders
             TrimJobList( requiredJobs );
-            Console::Bullet bullet ("Running %d jobs\n", requiredJobs.size() );
+            Log::Bullet bullet ("Running %d jobs\n", requiredJobs.size() );
             InvokeBuilds( requiredJobs, nice );
         }
 
         Dependencies::V_DependencyInfo filesToUpload;
 
         {
-            Console::Bullet bullet ("Checking %d results\n", requiredJobs.size() );
+            Log::Bullet bullet ("Checking %d results\n", requiredJobs.size() );
 
             // If the build failed, add it to our list of failed builds
             u32 count = 0;
@@ -1041,8 +1041,8 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
 
                 if ( job->m_WarningCount || job->m_ErrorCount )
                 {
-                    Console::Print( "%s:\n", job->m_BuildString.c_str() );
-                    Console::PrintStatements( job->m_ConsoleOutput, Console::Streams::Warning | Console::Streams::Error );
+                    Log::Print( "%s:\n", job->m_BuildString.c_str() );
+                    Log::PrintStatements( job->m_LogOutput, Log::Streams::Warning | Log::Streams::Error );
                 }
 
                 if ( job->m_Result == JobResults::Clean )
@@ -1073,7 +1073,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
         // now upload any output files that were built
         if ( !filesToUpload.empty() )
         {
-            Console::Bullet bullet( "Uploading new data\n" );
+            Log::Bullet bullet( "Uploading new data\n" );
 
             Profile::Timer timer;
 
@@ -1098,7 +1098,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
                 {
                     job->m_Result = JobResults::Failure;
                     g_FailedAssets.insert( job->m_Asset->GetPath().Hash() );
-                    Console::Print( Console::Levels::Verbose, "Job '%s' marked as failed, because required job '%s' failed\n", job->m_BuildString.c_str(), nestedJob->m_BuildString.c_str() );
+                    Log::Print( Log::Levels::Verbose, "Job '%s' marked as failed, because required job '%s' failed\n", job->m_BuildString.c_str(), nestedJob->m_BuildString.c_str() );
                     break;
                 }
             }
@@ -1106,7 +1106,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
     }
     else
     {
-        Console::Bullet bullet( "All files up-to-date.\n" );
+        Log::Bullet bullet( "All files up-to-date.\n" );
     }
 
     // post jobs
@@ -1128,7 +1128,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
     // Build all the post jobs
     if(!allPostJobs.empty())
     {
-        Console::Bullet enter( "Building %d post jobs\n", allPostJobs.size() ); 
+        Log::Bullet enter( "Building %d post jobs\n", allPostJobs.size() ); 
 
         Build( graph, allPostJobs ); 
     }
@@ -1149,7 +1149,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs
             {
                 job->m_Result = JobResults::Failure;
                 g_FailedAssets.insert( job->m_Asset->GetPath().Hash() );
-                Console::Print( Console::Levels::Verbose, "Job '%s' marked as failed, because required job '%s' failed\n", job->m_BuildString.c_str(), nestedJob->m_BuildString.c_str() );
+                Log::Print( Log::Levels::Verbose, "Job '%s' marked as failed, because required job '%s' failed\n", job->m_BuildString.c_str(), nestedJob->m_BuildString.c_str() );
                 break;
             }
         }
@@ -1194,23 +1194,23 @@ void SendTopLevelBuild( const AssetClassPtr& assetClass )
     topLevelBuild.m_UnaccountedTime = unaccounted;
     BuilderStats::AddTopLevelBuild( assetClass->GetPath(), assetClass->GetAssetType(), topLevelBuild );
 
-    Console::Profile( "Top level build breakdown:\n" );
-    Console::Profile( "\tDependency Checking:   %fs\n", ( g_DependencyCheckTime / 1000.0f ) );
-    Console::Profile( "\tDownloading:           %fs\n", ( g_DownloadTime / 1000.0f ) );
-    Console::Profile( "\tUploading:             %fs\n", ( g_UploadTime / 1000.0f ) );
-    Console::Profile( "\tBuilding:              %fs\n", ( g_BuildTime / 1000.0f ) );
-    Console::Profile( "\tInitialization:        %fs\n", ( g_InitializationTime / 1000.0f ) );
-    Console::Profile( "\tJob Gathering:         %fs\n", ( g_JobGatheringTime / 1000.0f ) );
-    Console::Profile( "\tSignature Creation:    %fs\n", ( g_SignatureCreationTime / 1000.0f ) );
-    Console::Profile( "\tTotal:                 %fs\n", ( g_TotalTime / 1000.0f ) );
-    Console::Profile( "\tUnaccounted for:       %fs\n", ( unaccounted / 1000.0f ) );
+    Log::Profile( "Top level build breakdown:\n" );
+    Log::Profile( "\tDependency Checking:   %fs\n", ( g_DependencyCheckTime / 1000.0f ) );
+    Log::Profile( "\tDownloading:           %fs\n", ( g_DownloadTime / 1000.0f ) );
+    Log::Profile( "\tUploading:             %fs\n", ( g_UploadTime / 1000.0f ) );
+    Log::Profile( "\tBuilding:              %fs\n", ( g_BuildTime / 1000.0f ) );
+    Log::Profile( "\tInitialization:        %fs\n", ( g_InitializationTime / 1000.0f ) );
+    Log::Profile( "\tJob Gathering:         %fs\n", ( g_JobGatheringTime / 1000.0f ) );
+    Log::Profile( "\tSignature Creation:    %fs\n", ( g_SignatureCreationTime / 1000.0f ) );
+    Log::Profile( "\tTotal:                 %fs\n", ( g_TotalTime / 1000.0f ) );
+    Log::Profile( "\tUnaccounted for:       %fs\n", ( unaccounted / 1000.0f ) );
 }
 
 void AssetBuilder::Build( Dependencies::DependencyGraph& graph, const AssetClassPtr& assetClass, const BuilderOptionsPtr& options )
 {
-    Console::TraceFileHandle trace ( FinderSpecs::Debug::TRACE_FILE.GetFile( assetClass->GetBuiltDirectory() ), AppUtils::GetTraceStreams() );
-    Console::TraceFileHandle warning ( FinderSpecs::Debug::WARNING_FILE.GetFile( assetClass->GetBuiltDirectory() ), Console::Streams::Warning );
-    Console::TraceFileHandle error ( FinderSpecs::Debug::ERROR_FILE.GetFile( assetClass->GetBuiltDirectory() ), Console::Streams::Error );
+    Log::TraceFileHandle trace ( FinderSpecs::Debug::TRACE_FILE.GetFile( assetClass->GetBuiltDirectory() ), AppUtils::GetTraceStreams() );
+    Log::TraceFileHandle warning ( FinderSpecs::Debug::WARNING_FILE.GetFile( assetClass->GetBuiltDirectory() ), Log::Streams::Warning );
+    Log::TraceFileHandle error ( FinderSpecs::Debug::ERROR_FILE.GetFile( assetClass->GetBuiltDirectory() ), Log::Streams::Error );
 
     Profile::Timer timer;
 
@@ -1247,9 +1247,9 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, const AssetClass
 
 void AssetBuilder::Build( Dependencies::DependencyGraph& graph, const AssetClassPtr& assetClass, const V_string& options )
 {
-    Console::TraceFileHandle trace ( FinderSpecs::Debug::TRACE_FILE.GetFile( assetClass->GetBuiltDirectory() ), AppUtils::GetTraceStreams());
-    Console::TraceFileHandle warning ( FinderSpecs::Debug::WARNING_FILE.GetFile( assetClass->GetBuiltDirectory() ), Console::Streams::Warning );
-    Console::TraceFileHandle error ( FinderSpecs::Debug::ERROR_FILE.GetFile( assetClass->GetBuiltDirectory() ), Console::Streams::Error );
+    Log::TraceFileHandle trace ( FinderSpecs::Debug::TRACE_FILE.GetFile( assetClass->GetBuiltDirectory() ), AppUtils::GetTraceStreams());
+    Log::TraceFileHandle warning ( FinderSpecs::Debug::WARNING_FILE.GetFile( assetClass->GetBuiltDirectory() ), Log::Streams::Warning );
+    Log::TraceFileHandle error ( FinderSpecs::Debug::ERROR_FILE.GetFile( assetClass->GetBuiltDirectory() ), Log::Streams::Error );
 
     Profile::Timer timer;
 

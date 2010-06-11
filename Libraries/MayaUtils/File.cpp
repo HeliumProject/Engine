@@ -4,7 +4,7 @@
 #include <maya/MGlobal.h>
 
 #include "FileSystem/FileSystem.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "RCS/RCS.h"
 
 #include "Export.h"

@@ -5,7 +5,7 @@
 
 #include "UIToolKit/ImageManager.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/LunaSpecs.h"
@@ -128,7 +128,7 @@ bool TypeConfig::ContainsAttribute(Luna::SceneNode* node, const std::string& nam
 
   if (type == NULL)
   {
-    Console::Warning("Unable to resolve attribute name '%s'\n", name.c_str());
+    Log::Warning("Unable to resolve attribute name '%s'\n", name.c_str());
     return false;
   }
 
@@ -146,7 +146,7 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
 
   if (!doc.LoadFile( file.c_str() ))
   {
-    Console::Warning("Unable to load type configuration from %s\n", file.c_str());
+    Log::Warning("Unable to load type configuration from %s\n", file.c_str());
     return;
   }
 
@@ -200,7 +200,7 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
 
               if ( t->m_IconIndex < 0 )
               {
-                Console::Warning( "Unable to find icon for %s\n", t->m_Icon.c_str() );
+                Log::Warning( "Unable to find icon for %s\n", t->m_Icon.c_str() );
                 t->m_IconIndex = -1;
               }
               else
@@ -265,7 +265,7 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
               }
               else
               {
-                Console::Error("Type '%s' has more than one ApplicationType specified\n", t->m_Name.c_str());
+                Log::Error("Type '%s' has more than one ApplicationType specified\n", t->m_Name.c_str());
               }
             }
             else if ( std::string( criterion->Value() ) == "ContainsAttribute" )
@@ -296,7 +296,7 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
               }
               else
               {
-                Console::Error("Type '%s' has more than on Location specified\n", t->m_Name.c_str());
+                Log::Error("Type '%s' has more than on Location specified\n", t->m_Name.c_str());
               }
             }
           }

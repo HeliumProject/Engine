@@ -105,8 +105,8 @@ NavMeshCreateTool::NavMeshCreateTool( Luna::Scene* scene, Enumerator* enumerator
   m_SelectionFrame->Update();
   SetSurfaceSnap(true);
 
-  S_HierarchyNodeDumbPtr::iterator childItr = m_Scene->GetRoot()->GetChildren().begin();
-  S_HierarchyNodeDumbPtr::iterator childEnd = m_Scene->GetRoot()->GetChildren().end();
+  OS_HierarchyNodeDumbPtr::Iterator childItr = m_Scene->GetRoot()->GetChildren().Begin();
+  OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Scene->GetRoot()->GetChildren().End();
 
 #if (PUNCH_VOLUME)
   m_PunchOutVolume = NULL;
@@ -132,8 +132,8 @@ NavMeshCreateTool::NavMeshCreateTool( Luna::Scene* scene, Enumerator* enumerator
   }
 
 #endif
-  childItr = m_Scene->GetRoot()->GetChildren().begin();
-  childEnd = m_Scene->GetRoot()->GetChildren().end();
+  childItr = m_Scene->GetRoot()->GetChildren().Begin();
+  childEnd = m_Scene->GetRoot()->GetChildren().End();
   for ( ; childItr != childEnd; ++childItr )
   {
     Luna::NavMesh* mesh = Reflect::ObjectCast< Luna::NavMesh >( *childItr );
@@ -2117,8 +2117,8 @@ void NavMeshCreateTool::SetResolutionMode(u32 res_mode)
     m_Instance->ClearEditingState();
   }
 
-  S_HierarchyNodeDumbPtr::const_iterator childItr = m_Scene->GetRoot()->GetChildren().begin();
-  S_HierarchyNodeDumbPtr::const_iterator childEnd = m_Scene->GetRoot()->GetChildren().end();
+  OS_HierarchyNodeDumbPtr::Iterator childItr = m_Scene->GetRoot()->GetChildren().Begin();
+  OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Scene->GetRoot()->GetChildren().End();
   for ( ; childItr != childEnd; ++childItr )
   {
     Luna::NavMesh* mesh = Reflect::ObjectCast< Luna::NavMesh >( *childItr );

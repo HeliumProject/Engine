@@ -148,10 +148,6 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<ProjectReference
-			ReferencedProjectIdentifier="{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}"
-			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter

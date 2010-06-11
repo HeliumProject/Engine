@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Compiler.h"
+#include "Platform/Compiler.h"
 
 #ifdef FINDER_EXPORTS
 #  define FINDER_API __declspec(dllexport)

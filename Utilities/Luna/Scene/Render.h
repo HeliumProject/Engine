@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Common/Automation/Event.h" 
-#include "Common/Types.h"
+#include "Foundation/Automation/Event.h" 
+#include "Platform/Types.h"
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"

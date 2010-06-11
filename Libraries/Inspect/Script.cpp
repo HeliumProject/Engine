@@ -9,7 +9,7 @@
 #include "List.h"
 #include "Slider.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include <boost/regex.hpp> 
 
@@ -85,7 +85,7 @@ bool Script::PreProcess(std::string& script)
   //
 
 #ifdef INSPECT_DEBUG_SCRIPT_COMPILE
-  Console::Debug("Pre-preprocessed:\n\n%s\n\n", script.c_str());
+  Log::Debug("Pre-preprocessed:\n\n%s\n\n", script.c_str());
 #endif
 
   //
@@ -122,7 +122,7 @@ bool Script::PreProcess(std::string& script)
   //
 
 #ifdef INSPECT_DEBUG_SCRIPT_COMPILE
-  Console::Debug("Post-preprocessed:\n\n%s\n\n\n\n", script.c_str());
+  Log::Debug("Post-preprocessed:\n\n%s\n\n\n\n", script.c_str());
 #endif
 
   return true;
@@ -261,7 +261,7 @@ bool Script::Parse(const std::string& script, Interpreter* interpreter, Canvas* 
 
     if (i == g_ControlTypeMap.end())
     {
-      Console::Warning("Undefined script symbol \"%s\"\n", symbol.c_str());
+      Log::Warning("Undefined script symbol \"%s\"\n", symbol.c_str());
       return false;
     }
 
@@ -278,7 +278,7 @@ bool Script::Parse(const std::string& script, Interpreter* interpreter, Canvas* 
 
     if (control == NULL)
     {
-      Console::Warning("Unable to construct control \"%s\"\n", symbol.c_str());
+      Log::Warning("Unable to construct control \"%s\"\n", symbol.c_str());
       return false;
     }
 

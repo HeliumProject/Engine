@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "WorkerThreadDialog.h"
 #include "DialogWorkerThread.h"
-#include "Common/Exception.h"
+#include "Foundation/Exception.h"
 
 using namespace UIToolKit;
 

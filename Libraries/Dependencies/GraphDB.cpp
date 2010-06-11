@@ -1,14 +1,14 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #undef ReplaceDependency
 
 #include "GraphDB.h"
 
-#include "Common/Container/OrderedSet.h"
-#include "Console/Console.h"
+#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/ProjectSpecs.h"
 #include "SQL/SQLite.h"
-#include "Windows/Error.h"
+#include "Foundation/Exception.h"
 
 #include <sqlite3.h>
 
@@ -417,7 +417,7 @@ bool GraphDB::StepSelectDependency( int sqlResult, const SQL::StmtHandle stmt, c
     catch( const Finder::Exception & )
     {
       // this file's FileSpec has been removed from the system since being inserted into the DB
-      Console::Print( Console::Levels::Verbose, "Finder::GetFileSpec failed for FinderSpec \"%s\", file %s\n", file->m_SpecName.c_str(), file->m_Path.c_str() );
+      Log::Print( Log::Levels::Verbose, "Finder::GetFileSpec failed for FinderSpec \"%s\", file %s\n", file->m_SpecName.c_str(), file->m_Path.c_str() );
       file->m_Spec = NULL;
     }
 

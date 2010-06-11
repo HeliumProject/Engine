@@ -7,8 +7,8 @@
 #include "Types.h"
 #include "Exceptions.h"
 #include "Provider.h"
-#include "Common/Types.h"
-#include "Common/Assert.h"
+#include "Platform/Types.h"
+#include "Platform/Assert.h"
 
 // RCS API
 namespace RCS

@@ -4,12 +4,12 @@
 #include "Browser.h"
 
 #include "Asset/CacheDB.h"
-#include "Common/Boost/Regex.h"
-#include "Common/Container/Insert.h"
-#include "Common/Checksum/MD5.h"
-#include "Common/String/Tokenize.h"
-#include "Common/String/Utilities.h"
-#include "Console/Console.h"
+#include "Foundation/Boost/Regex.h"
+#include "Foundation/Container/Insert.h"
+#include "Foundation/Checksum/MD5.h"
+#include "Foundation/String/Tokenize.h"
+#include "Foundation/String/Utilities.h"
+#include "Foundation/Log.h"
 #include "FileSystem/File.h"
 #include "FileSystem/FileSystem.h"
 
@@ -94,7 +94,7 @@ void SearchQuery::PostDeserialize()
     std::string errors;
     if ( !ParseQueryString( m_QueryString, errors, this ) )
     {
-        Console::Warning( "Errors occurred while parsing the query string: %s\n  %s\n", m_QueryString.c_str(), errors.c_str() );
+        Log::Warning( "Errors occurred while parsing the query string: %s\n  %s\n", m_QueryString.c_str(), errors.c_str() );
         return;
     }
 }
@@ -110,7 +110,7 @@ void SearchQuery::SetQueryString( const std::string& queryString )
     std::string errors;
     if ( !ParseQueryString( m_QueryString, errors, this ) )
     {
-        Console::Warning( "Errors occurred while parsing the query string: %s\n  %s\n", m_QueryString.c_str(), errors.c_str() );
+        Log::Warning( "Errors occurred while parsing the query string: %s\n  %s\n", m_QueryString.c_str(), errors.c_str() );
         return;
     }
 }

@@ -1,8 +1,8 @@
 #include "StdAfx.h"
 #include "SortableListView.h"
-#include "Common/Types.h"
-#include "Common/String/Natural.h"
-#include "Common/Container/Insert.h" 
+#include "Platform/Types.h"
+#include "Foundation/String/Natural.h"
+#include "Foundation/Container/Insert.h" 
 
 using Nocturnal::Insert; 
 using namespace UIToolKit;

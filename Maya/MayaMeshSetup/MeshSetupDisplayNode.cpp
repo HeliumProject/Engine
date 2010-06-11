@@ -6,7 +6,7 @@
 #include "MayaUtils/NodeTypes.h"
 #include "MayaUtils/Utils.h"
 
-#include "Common/Checksum/CRC32.h"
+#include "Foundation/Checksum/CRC32.h"
 
 #include "Math/Utils.h"
 

@@ -6,8 +6,8 @@
 
 #include <vector>
 
-#include "Common/Types.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Platform/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 #include "SQL/SQLiteDB.h"
 

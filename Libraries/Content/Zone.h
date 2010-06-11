@@ -3,7 +3,7 @@
 #include "API.h"
 #include "SceneNode.h"
 
-#include "Common/File/Path.h"
+#include "Foundation/File/Path.h"
 #include "Finder/Finder.h"
 #include "Finder/ExtensionSpecs.h"
 

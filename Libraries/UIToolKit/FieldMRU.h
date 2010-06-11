@@ -3,9 +3,9 @@
 #include "API.h"
 #include "MRU.h"
 
-#include "Common/Assert.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Container/OrderedSet.h"
+#include "Platform/Assert.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Container/OrderedSet.h"
 
 //
 // Forwards

@@ -5,10 +5,10 @@
 #include "ClientCommands.h"
 #include "ChangelistCommands.h"
 
-#include "Common/Assert.h"
-#include "Common/Version.h"
+#include "Platform/Assert.h"
+#include "Foundation/Version.h"
 #include "AppUtils/AppUtils.h"
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "Platform/Mutex.h"
 #include "RCS/RCS.h"
 
@@ -102,7 +102,7 @@ void Provider::ThreadEntry()
         char print[512];
         _snprintf(print, sizeof(print), "Command 'p4 %s'", cmd.c_str());
         PROFILE_SCOPE_ACCUM_VERBOSE( g_CommandAccum, print );
-        Console::Debug("%s\n", print);
+        Log::Debug("%s\n", print);
         m_Client.Run( m_Command->m_Command, m_Command );
       }
 
@@ -206,7 +206,7 @@ void Provider::RunCommand( Command* command )
 
         if ( m_Connected )
         {
-          Console::Print("Connection to Perforce has been established\n");
+          Log::Print("Connection to Perforce has been established\n");
         }
       }
     }
@@ -266,7 +266,7 @@ bool Provider::Connect()
     {
       StrBuf buf;
       e.Fmt( &buf, EF_PLAIN );
-      Console::Warning( "%s\n", buf.Text() );
+      Log::Warning( "%s\n", buf.Text() );
     }
 #endif
   }
@@ -283,7 +283,7 @@ bool Provider::Connect()
     {
       StrBuf buf;
       e.Fmt( &buf, EF_PLAIN );
-      Console::Warning( "%s\n", buf.Text() );
+      Log::Warning( "%s\n", buf.Text() );
     }
 #endif
 

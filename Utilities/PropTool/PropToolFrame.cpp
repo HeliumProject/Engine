@@ -9,7 +9,7 @@
 #include "igDXRender/OBJObjectLoader.h"
 
 #include "UIToolKit/ImageManager.h"
-#include "Common/Version.h"
+#include "Foundation/Version.h"
 
 const char* g_Name = "PropTool";
 

@@ -4,7 +4,7 @@
 
 #include "TaskOutputWindow.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "UIToolKit/ImageManager.h"
 
 using namespace Luna;
@@ -29,13 +29,13 @@ void UpdateTimer::Notify()
 {
   m_Window->EnterMessageSection();
 
-  Console::V_Statement& statements = m_Window->GetPendingStatements();
+  Log::V_Statement& statements = m_Window->GetPendingStatements();
 
-  Console::V_Statement::iterator itr = statements.begin();
-  Console::V_Statement::iterator end = statements.end();
+  Log::V_Statement::iterator itr = statements.begin();
+  Log::V_Statement::iterator end = statements.end();
   for ( ; itr != end; ++itr )
   {
-    wxTextAttr attr ( m_Window->TranslateColor( Console::GetStreamColor( itr->m_Stream ) ) );
+    wxTextAttr attr ( m_Window->TranslateColor( Log::GetStreamColor( itr->m_Stream ) ) );
     m_Window->GetTextCtrl()->SetDefaultStyle( attr );
     m_Window->GetTextCtrl()->AppendText( itr->m_String );
   }
@@ -113,7 +113,7 @@ void TaskOutputWindow::LeaveMessageSection()
   ::LeaveCriticalSection(&m_CriticalSection);
 }
 
-const wxColour& TaskOutputWindow::TranslateColor( Console::Color color )
+const wxColour& TaskOutputWindow::TranslateColor( Log::Color color )
 {
   const wxColour* result = wxLIGHT_GREY;
 
@@ -125,37 +125,37 @@ const wxColour& TaskOutputWindow::TranslateColor( Console::Color color )
 
   switch ( color )
   {
-  case Console::Colors::Red:
+  case Log::Colors::Red:
     {
       return *wxRED;
     }
 
-  case Console::Colors::Green:
+  case Log::Colors::Green:
     {
       return *wxGREEN;
     }
 
-  case Console::Colors::Blue:
+  case Log::Colors::Blue:
     {
       return *wxBLUE;
     }
 
-  case Console::Colors::Yellow:
+  case Log::Colors::Yellow:
     {
       return *wxYELLOW;
     }
 
-  case Console::Colors::Aqua:
+  case Log::Colors::Aqua:
     {
       return *wxCYAN;
     }
 
-  case Console::Colors::Purple:
+  case Log::Colors::Purple:
     {
       return *wxPURPLE;
     }
 
-  case Console::Colors::White:
+  case Log::Colors::White:
     {
       return *wxWHITE;
     }
@@ -213,7 +213,7 @@ void TaskOutputWindow::TaskFinished( const TaskFinishedArgs& args )
   ::LeaveCriticalSection( &m_CriticalSection );
 }
 
-void TaskOutputWindow::PrintListener( const Console::PrintedArgs& args )
+void TaskOutputWindow::PrintListener( const Log::PrintedArgs& args )
 {
   ::EnterCriticalSection( &m_CriticalSection );
 

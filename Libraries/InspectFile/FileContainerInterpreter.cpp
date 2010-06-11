@@ -15,8 +15,8 @@
 #include "InspectReflect/InspectReflectInit.h"
 
 #include "Asset/AssetFlags.h"
-#include "Common/String/Tokenize.h"
-#include "Console/Console.h"
+#include "Foundation/String/Tokenize.h"
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/ExtensionSpecs.h"

@@ -4,7 +4,7 @@
 #include "ExportContentCmd.h"
 
 #include "MayaCore/MayaCore.h"
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 #include "Content/ContentInit.h"
 
 void AfterSaveCallback( void *clientData );

@@ -6,7 +6,7 @@
 #include "Math/Matrix4.h"
 #include "Math/Point.h"
 
-#include "Common/Automation/Event.h"
+#include "Foundation/Automation/Event.h"
 
 #include "wx/wx.h"
 

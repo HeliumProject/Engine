@@ -2,7 +2,7 @@
 
 #include "API.h"
 
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 #include "ExportNode.h"
 #include "MayaUtils/Utils.h"

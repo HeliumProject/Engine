@@ -10,7 +10,7 @@
 #include "PreferencesBase.h"
 #include "WindowSettings.h"
 
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 #include "Perforce/Perforce.h"
 #include "Reflect/Registry.h"
 #include "Finder/Finder.h"

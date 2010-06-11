@@ -3,7 +3,7 @@
 #include "Finder.h"
 #include "ExtensionSpecs.h"
 
-#include "Common/Environment.h"
+#include "Foundation/Environment.h"
 
 namespace FinderSpecs
 {

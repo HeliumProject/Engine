@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 #include "UIToolKit/AutoCompleteComboBox.h"
 using namespace UIToolKit;

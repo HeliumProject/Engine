@@ -1,14 +1,14 @@
-#include "Windows/Windows.h"
-#include "Windows/Error.h"
+#include "Platform/Windows/Windows.h"
+#include "Foundation/Exception.h"
 
 #include "AppUtils/AppUtils.h"
 #include "AssetBuilder/CacheFiles.h"
 #include "FileSystem/FileSystem.h"
 #include "FileSystem/File.h"
-#include "Common/InitializerStack.h"
-#include "Common/File/Directory.h"
-#include "Common/String/Units.h"
-#include "Console/Console.h"
+#include "Foundation/InitializerStack.h"
+#include "Foundation/File/Directory.h"
+#include "Foundation/String/Units.h"
+#include "Foundation/Log.h"
 
 #include <sstream>
 #include <algorithm>
@@ -37,7 +37,7 @@ bool DeleteCacheData( const Nocturnal::DirectoryItem& item )
 
     if ( !DeleteFile( file.c_str() ) )
     {
-      Console::Warning( "Failed to delete file: %s\t\treason%s:\n", file.c_str(), Windows::GetErrorString().c_str() );
+      Log::Warning( "Failed to delete file: %s\t\treason%s:\n", file.c_str(), Platform::GetErrorString().c_str() );
 
       return false;
     }
@@ -45,7 +45,7 @@ bool DeleteCacheData( const Nocturnal::DirectoryItem& item )
 
   if ( !RemoveDirectory( directory.c_str() ) )
   {
-    Console::Warning( "Failed to delete directory: %s\t\treason: %s\n", directory.c_str(), Windows::GetErrorString().c_str() );
+    Log::Warning( "Failed to delete directory: %s\t\treason: %s\n", directory.c_str(), Platform::GetErrorString().c_str() );
 
     return false;
   }
@@ -78,7 +78,7 @@ void CleanupCacheData( const std::string& path, u64 maxStorageUsed )
       if ( m_Files.size() >= lastSize + 10000 )
       {
         lastSize = m_Files.size();
-        Console::Print("%d found\n", lastSize );
+        Log::Print("%d found\n", lastSize );
       }
     }
 
@@ -89,22 +89,22 @@ void CleanupCacheData( const std::string& path, u64 maxStorageUsed )
   CacheFileFinder finder;
 
   {
-    Console::Bullet bullet ( "Finding files...\n" );
+    Log::Bullet bullet ( "Finding files...\n" );
 
     finder.Find( path );
   }
 
   std::string usage = Nocturnal::BytesToString( finder.m_Usage );
-  Console::Print( "Found %d files using %s\n", finder.m_Files.size(), usage.c_str() );
+  Log::Print( "Found %d files using %s\n", finder.m_Files.size(), usage.c_str() );
 
-  Console::Print( "Sorting by last modified time...\n" );
+  Log::Print( "Sorting by last modified time...\n" );
   std::sort( finder.m_Files.begin(), finder.m_Files.end(), &ItemCompare );
 
   u64 storageUsed = 0;
   u32 deletedFiles = 0;
   u64 freedSpace = 0;
 
-  Console::Print( "Deleting...\n" );
+  Log::Print( "Deleting...\n" );
   for ( std::vector<Nocturnal::DirectoryItem>::const_iterator itr = finder.m_Files.begin(), end = finder.m_Files.end(); itr != end; ++itr )
   {
     const Nocturnal::DirectoryItem& item = *itr;
@@ -126,12 +126,12 @@ void CleanupCacheData( const std::string& path, u64 maxStorageUsed )
   if ( deletedFiles )
   {
     std::string freed = Nocturnal::BytesToString( freedSpace );
-    Console::Print( "Deleted %d files, freeing %s of space\n", deletedFiles, freed.c_str() );
+    Log::Print( "Deleted %d files, freeing %s of space\n", deletedFiles, freed.c_str() );
   }
   else
   {
     std::string max = Nocturnal::BytesToString( maxStorageUsed );
-    Console::Print( "Current usage lower than %s, no files were deleted\n", max.c_str() );
+    Log::Print( "Current usage lower than %s, no files were deleted\n", max.c_str() );
   }
 }
 
@@ -149,14 +149,14 @@ int Main(int argc, const char** argv)
 
   if ( argc < 2 || path.empty() )
   {
-    Console::Print( "Usage: CleanupCacheFiles <storage space to trim down to in gigabytes> [path]\n" );
+    Log::Print( "Usage: CleanupCacheFiles <storage space to trim down to in gigabytes> [path]\n" );
     return 1;
   }
 
   u64 sizeInBytes = (u64)atol( argv[ 1 ] ) << 30;
 
   std::string size = Nocturnal::BytesToString( sizeInBytes );
-  Console::Bullet bullet ( "Trimming %s to %s\n", path.c_str(), size.c_str() );
+  Log::Bullet bullet ( "Trimming %s to %s\n", path.c_str(), size.c_str() );
   CleanupCacheData( path, sizeInBytes );
 
   return 0;

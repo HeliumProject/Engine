@@ -7,7 +7,7 @@
 #include "Inspect/Button.h"
 
 #include "Attribute/AttributeHandle.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include <algorithm>
 

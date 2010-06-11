@@ -6,10 +6,10 @@
 //
 
 // sanity check code generation settings
-#include "Common/Compiler.h"
+#include "Platform/Compiler.h"
 
 // smartpointer system
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 // reflect dll interface
 #ifdef NOCTURNAL_STATIC
@@ -28,7 +28,7 @@
 //
 
 // profile interface, where the global switch is
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 
 // tracks profile data in reflect only
 //#define REFLECT_PROFILE

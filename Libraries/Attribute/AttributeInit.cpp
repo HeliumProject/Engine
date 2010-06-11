@@ -6,7 +6,7 @@
 #include "AttributeCategory.h"
 #include "AttributeCategories.h"
 
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 #include "Reflect/Registry.h"
 
 using namespace Attribute;

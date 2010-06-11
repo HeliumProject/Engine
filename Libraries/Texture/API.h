@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 
 #ifdef TEXTURE_EXPORTS
 #define TEXTURE_API __declspec(dllexport)

@@ -2,8 +2,8 @@
 
 #include "Panel.h"
 
-#include "Common/Environment.h"
-#include "Common/Container/Insert.h" 
+#include "Foundation/Environment.h"
+#include "Foundation/Container/Insert.h" 
 
 using namespace PerforceUI;
 

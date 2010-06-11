@@ -15,7 +15,7 @@
 #include "Finder/Finder.h"
 #include "Finder/ContentSpecs.h"
 #include "FileSystem/FileSystem.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include "Asset/EntityAsset.h"
 #include "Attribute/AttributeHandle.h"
@@ -110,7 +110,7 @@ void EntityAssetSet::LoadAssetClass()
                     }
                     catch ( const Reflect::Exception& e )
                     {
-                        Console::Error("Error loading %s (%s)\n", m_ArtFile.c_str(), e.what());
+                        Log::Error("Error loading %s (%s)\n", m_ArtFile.c_str(), e.what());
                     }
 
                     if (m_Manifest.ReferencesObject())

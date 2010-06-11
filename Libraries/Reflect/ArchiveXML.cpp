@@ -5,7 +5,7 @@
 #include "ArchiveBinary.h"
 #include "ArchiveXML.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include <strstream>
 
@@ -550,7 +550,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 #ifdef REFLECT_DISPLAY_PARSE_STACK
   m_Indent.Push();
   m_Indent.Get(std::cout);
-  Console::Print("<Element>\n");
+  Log::Print("<Element>\n");
 #endif 
 }
 
@@ -594,7 +594,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
 
 #ifdef REFLECT_DISPLAY_PARSE_STACK
   m_Indent.Get(std::cout);
-  Console::Print("</Element>\n");
+  Log::Print("</Element>\n");
   m_Indent.Pop();
 #endif
 

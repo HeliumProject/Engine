@@ -9,8 +9,8 @@
 #include "RCS.h"
 #include "Exceptions.h"
 
-#include "Common/File/Path.h"
-#include "Console/Console.h"
+#include "Foundation/File/Path.h"
+#include "Foundation/Log.h"
 
 #include <algorithm>
 

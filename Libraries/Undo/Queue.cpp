@@ -1,8 +1,8 @@
 #include "Queue.h"
 
 #include "Exceptions.h"
-#include "Common/Assert.h"
-#include "Console/Console.h"
+#include "Platform/Assert.h"
+#include "Foundation/Log.h"
 
 #ifdef _DEBUG
 //#define DEBUG_UNDO
@@ -32,7 +32,7 @@ void Queue::Reset()
 
 void Queue::Print() const
 {
-  Console::Print("Max: %d\tUndo Length:\t%d\tRedo Length:\t%d\n", GetMaxLength(), m_Undo.size(), m_Redo.size() );
+  Log::Print("Max: %d\tUndo Length:\t%d\tRedo Length:\t%d\n", GetMaxLength(), m_Undo.size(), m_Redo.size() );
 }
 
 bool Queue::IsActive() const
@@ -149,8 +149,8 @@ void Queue::Undo()
     }
     catch ( const Undo::Exception& e )
     {
-      Console::Warning( "Invalid undo command has been removed from the stack.\n" );
-      Console::Warning( "%s\n", e.what() );
+      Log::Warning( "Invalid undo command has been removed from the stack.\n" );
+      Log::Warning( "%s\n", e.what() );
     }
   }
 
@@ -186,8 +186,8 @@ void Queue::Redo()
     }
     catch ( const Undo::Exception& e )
     {
-      Console::Warning( "Removing invalid command from undo stack.\n" );
-      Console::Warning( "%s\n", e.what() );
+      Log::Warning( "Removing invalid command from undo stack.\n" );
+      Log::Warning( "%s\n", e.what() );
     }
   }
 

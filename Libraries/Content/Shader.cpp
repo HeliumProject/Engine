@@ -8,7 +8,7 @@
 #include "Finder/AssetSpecs.h"
 #include "UID/TUID.h"
 #include "Attribute/AttributeHandle.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "rcs/rcs.h"
 
 using namespace Reflect;

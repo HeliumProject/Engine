@@ -2,7 +2,7 @@
 
 #include "Command.h"
 
-#include "Common/Automation/Property.h"
+#include "Foundation/Automation/Property.h"
 
 namespace Undo
 {

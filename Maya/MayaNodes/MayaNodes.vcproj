@@ -224,10 +224,6 @@
 			RelativePathToProject=".\libraries\Debug\Debug.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{1E9F45BD-AE62-4A12-8A09-56665F644B79}"
-			RelativePathToProject=".\libraries\Console\Console.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{A99087C6-C475-485A-8911-ACB7683156FF}"
 			RelativePathToProject=".\libraries\Attribute\Attribute.vcproj"
 		/>
@@ -257,15 +253,11 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
-			RelativePathToProject=".\libraries\Common\Common.vcproj"
+			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}"
 			RelativePathToProject=".\libraries\UIToolKit\UIToolKit.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}"
-			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{0E85A01E-6BFC-4DF8-BE0D-5F6FAB8AF587}"

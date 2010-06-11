@@ -1,10 +1,10 @@
-#include "Windows/Windows.h"
-#include "Windows/Error.h"
+#include "Platform/Windows/Windows.h"
+#include "Foundation/Exception.h"
 
 #include "FileIterator.h"
 #include "FileSystem.h"
 
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 using namespace FileSystem;
 
@@ -88,7 +88,7 @@ bool FileIterator::Find(bool first)
 
       if ( (error = GetLastError()) != ERROR_FILE_NOT_FOUND && error != ERROR_PATH_NOT_FOUND ) 
       {
-        throw Windows::Exception( error, "Error calling FindFirstFile" );
+        throw Nocturnal::PlatformException( error, "Error calling FindFirstFile" );
       }
     }
   }
@@ -102,7 +102,7 @@ bool FileIterator::Find(bool first)
 
       if ( (error = GetLastError()) != ERROR_NO_MORE_FILES ) 
       {
-        throw Windows::Exception( error, "Error calling FindNextFile" );
+        throw Nocturnal::PlatformException( error, "Error calling FindNextFile" );
       }
     }
   }
@@ -182,7 +182,7 @@ bool FileIterator::Find(bool first)
 
         if ( (error = GetLastError()) != ERROR_NO_MORE_FILES ) 
         {
-          throw Windows::Exception( error, "Error calling FindNextFile" );
+          throw Nocturnal::PlatformException( error, "Error calling FindNextFile" );
         }
       }
     }

@@ -6,9 +6,8 @@
 #include <wx/config.h>
 
 #include "AppUtils/AppUtils.h"
-#include "Common/Config.h"
-#include "Common/Environment.h"
-#include "Common/String/Utilities.h"
+#include "Foundation/Environment.h"
+#include "Foundation/String/Utilities.h"
 
 
 // Using

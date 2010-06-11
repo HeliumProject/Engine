@@ -8,9 +8,9 @@
 #include "SearchResults.h"
 #include "SearchHistory.h"
 #include "Asset/CacheDB.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Types.h"
-#include "Common/InitializerStack.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Platform/Types.h"
+#include "Foundation/InitializerStack.h"
 #include "Editor/DocumentManager.h"
 
 //

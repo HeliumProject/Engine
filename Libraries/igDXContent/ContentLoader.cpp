@@ -32,7 +32,7 @@ u32 igDXContent::RBObjectLoader::ParseFile( const char* filename, bool winding )
   }
   catch( Nocturnal::Exception& e )
   {
-    Console::Warning( e.what() );
+    Log::Warning( e.what() );
     m_parse_error = igDXRender::PARSE_FILE_FAILED;
     return igDXRender::PARSE_FILE_FAILED;
   }

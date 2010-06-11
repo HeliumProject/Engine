@@ -4,7 +4,7 @@
 #include "resource.h"
 
 #include "AppUtils/AppUtils.h"
-#include "Common/File/Path.h"
+#include "Foundation/File/Path.h"
 #include "Reflect/Registry.h"
 #include "Inspect/Controls.h"
 #include "Inspect/InspectInit.h"
@@ -22,15 +22,7 @@ int Application::OnRun()
 {
     Reflect::Initialize();
 
-    char executablePathBuffer[ MAX_PATH ];
-    HANDLE hProcess = GetCurrentProcess();
-    if ( GetModuleFileName( NULL, executablePathBuffer, MAX_PATH ) == 0 )
-    {
-        throw Nocturnal::Exception( "Could not determine executable filename to locate Reflect modules." );
-    }
-
-    Nocturnal::Path executablePath( executablePathBuffer );
-    Reflect::InitializeModules( executablePath.Directory() );
+#pragma TODO("Need to init modules here -Geoff")
 
     InspectReflect::Initialize();
 
@@ -72,7 +64,7 @@ int Application::OnRun()
 int Application::OnExit()
 {
     InspectReflect::Cleanup();
-    Reflect::CleanupModules();
+
     Reflect::Cleanup();
 
     return __super::OnExit();

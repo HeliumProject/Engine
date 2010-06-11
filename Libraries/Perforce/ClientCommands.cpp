@@ -1,7 +1,7 @@
 #include "ClientCommands.h"
 #include "Tags.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include <p4/errornum.h>
 #include <sstream>

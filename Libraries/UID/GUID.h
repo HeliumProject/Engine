@@ -6,8 +6,8 @@
 #include <hash_map>
 
 #include "API.h"
-#include "Common/Types.h"
-#include "Common/Memory/Endian.h"
+#include "Platform/Types.h"
+#include "Foundation/Memory/Endian.h"
 
 typedef u64 tuid;
 

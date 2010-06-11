@@ -724,7 +724,7 @@ void RotateManipulator::MouseMove(wxMouseEvent& e)
     {
       std::ostringstream str;
       str << totalRotation;
-      Console::Warning("Invalid floating point result during rotation: %s\n", str.str().c_str());
+      Log::Warning("Invalid floating point result during rotation: %s\n", str.str().c_str());
     }
   }
 

@@ -4,11 +4,11 @@
 
 #include "Type.h"
 
-#include "Windows/Atomic.h"
+#include "Foundation/Atomic.h"
 
 namespace Reflect
 {
-  class REFLECT_API EnumerationElement : public ::Windows::AtomicRefCountBase
+  class REFLECT_API EnumerationElement : public Foundation::AtomicRefCountBase
   {
   public:
     u32           m_Value;  // the value of the element

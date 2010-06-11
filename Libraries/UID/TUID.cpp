@@ -1,9 +1,9 @@
 #include "TUID.h"
 #include "GUID.h"
 
-#include "Common/Exception.h"
-#include "Common/Memory/Endian.h"
-#include "Windows/Windows.h"
+#include "Foundation/Exception.h"
+#include "Foundation/Memory/Endian.h"
+#include "Platform/Windows/Windows.h"
 
 #include <time.h>
 #include <iphlpapi.h>

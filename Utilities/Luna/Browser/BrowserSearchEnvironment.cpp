@@ -2,12 +2,12 @@
 
 #include "BrowserSearchEnvironment.h"
 
-#include "Common/Version.h"
-#include "Common/CommandLine.h"
-#include "Common/String/Utilities.h"
+#include "Foundation/Version.h"
+#include "Foundation/CommandLine.h"
+#include "Foundation/String/Utilities.h"
 #include "FileSystem/FileSystem.h"
-#include "Profile/Memory.h"
-#include "Windows/Process.h"
+#include "Platform/Windows/Memory.h"
+#include "Platform/Process.h"
 
 #include <sstream>
 
@@ -50,18 +50,18 @@ namespace Luna
 
       m_CodeBranch.clear();
       ZeroMemory( buf, MAX_PATH );
-      GetEnvironmentVariable( NOCTURNAL_STUDIO_PREFIX"CODE_BRANCH_NAME", buf, MAX_PATH );
+      GetEnvironmentVariable( "NOC_CODE_BRANCH_NAME", buf, MAX_PATH );
       m_CodeBranch = buf;
       FileSystem::CleanName( m_CodeBranch );
 
       m_ProjectName.clear();
       ZeroMemory( buf, MAX_PATH );
-      GetEnvironmentVariable( NOCTURNAL_STUDIO_PREFIX"PROJECT_NAME", buf, MAX_PATH );
+      GetEnvironmentVariable( "NOC_PROJECT_NAME", buf, MAX_PATH );
       m_ProjectName = buf;
 
       m_ToolsBuildConfig.clear();
       ZeroMemory( buf, MAX_PATH );
-      GetEnvironmentVariable( NOCTURNAL_STUDIO_PREFIX"BUILD_CONFIG", buf, MAX_PATH );
+      GetEnvironmentVariable( "NOC_BUILD_CONFIG", buf, MAX_PATH );
       m_ToolsBuildConfig = buf;
 
     }

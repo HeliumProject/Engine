@@ -4,7 +4,7 @@
 
 #include "Content/Shader.h"
 #include "FileSystem/FileSystem.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "UIToolKit/ImageManager.h"
 
 #include "Scene.h"

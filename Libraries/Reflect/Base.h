@@ -2,9 +2,9 @@
 
 #include "API.h"
 
-#include "Common/Types.h"
-#include "Common/Container/Insert.h"
-#include "Windows/Atomic.h"
+#include "Platform/Types.h"
+#include "Foundation/Container/Insert.h"
+#include "Foundation/Atomic.h"
 
 //
 // Obviously the reflection system itself can't use the same type checking as the code
@@ -49,7 +49,7 @@ namespace Reflect
   // This lets us safely cast between reflection class pointers
   //
 
-  class REFLECT_API Base : public ::Windows::AtomicRefCountBase
+  class REFLECT_API Base : public Foundation::AtomicRefCountBase
   {
   public:
     REFLECTION_BASE(ReflectionTypes::Invalid);

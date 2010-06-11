@@ -4,7 +4,7 @@
 
 #include "UIToolKit/CustomColors.h"
 #include "UIToolKit/RegistryConfig.h"
-#include "Windows/Clipboard.h"
+#include "Platform/Windows/Clipboard.h"
 
 #include <wx/colordlg.h>
 
@@ -303,7 +303,7 @@ bool KeyControl::ToClipboard( const V_KeyPtr& keys )
   }
   
   std::string error;
-  if ( !Windows::CopyToClipboard( (HWND)( GetHandle() ), xml, error ) )
+  if ( !Platform::CopyToClipboard( (HWND)( GetHandle() ), xml, error ) )
   {
     wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
     return false;
@@ -320,7 +320,7 @@ bool KeyControl::FromClipboard( V_KeyPtr& keys )
 {
   std::string xml;
   std::string error;
-  if ( !Windows::RetrieveFromClipboard( (HWND)( GetHandle() ), xml, error ) )
+  if ( !Platform::RetrieveFromClipboard( (HWND)( GetHandle() ), xml, error ) )
   {
     return false;
   }

@@ -2,7 +2,7 @@
 
 // Includes
 #include "API.h"
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 
 namespace Luna
 {

@@ -4,7 +4,7 @@
 #include "BrowserGenerated.h"
 #include "BrowserFrame.h"
 #include "BrowserSearchPanel.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 namespace Asset
 {

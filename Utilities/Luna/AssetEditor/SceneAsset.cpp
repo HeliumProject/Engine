@@ -5,7 +5,7 @@
 #include "AttributeExistenceCommand.h"
 #include "PersistentDataFactory.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Inspect/Control.h"
 #include "Inspect/Container.h"
 

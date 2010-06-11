@@ -2,8 +2,8 @@
 
 #include "API.h"
 #include "SearchQuery.h"
-#include "Common/Automation/Event.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Automation/Event.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 namespace Luna
 {

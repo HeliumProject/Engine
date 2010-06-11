@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "BuildInfo.h"
 
-#include "Common/Boost/Regex.h"
+#include "Foundation/Boost/Regex.h"
 #include "FileSystem/FileSystem.h"
 
 using namespace Luna;

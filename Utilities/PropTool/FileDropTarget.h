@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Common/File/Path.h"
-#include "Common/Automation/Event.h"
+#include "Foundation/File/Path.h"
+#include "Foundation/Automation/Event.h"
 
 #include <wx/dnd.h>
 

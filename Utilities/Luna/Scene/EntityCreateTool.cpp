@@ -18,7 +18,7 @@
 
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include <algorithm>
 
@@ -121,7 +121,7 @@ Luna::TransformPtr EntityCreateTool::CreateNode()
     }
     catch ( const Nocturnal::Exception& ex )
     {
-        Console::Error( "%s\n", ex.what() );
+        Log::Error( "%s\n", ex.what() );
     }
 
     return NULL;
@@ -243,7 +243,7 @@ void EntityCreateTool::AddEntityAsset( const std::string& value )
     {
         if ( (*itr).m_ClassPath.Hash() == m_ClassPath.Hash() )
         {
-            Console::Warning( "Entity '%s' already exists in the random list of entities.\n", entityName.c_str() );
+            Log::Warning( "Entity '%s' already exists in the random list of entities.\n", entityName.c_str() );
             return;
         }
     }
@@ -324,7 +324,7 @@ void EntityCreateTool::OnDeleteClass( Inspect::Button* button )
     Luna::EntityCreateTool* thisTool = Reflect::ObjectCast< Luna::EntityCreateTool >( button->GetClientData() );
     if ( !thisTool )
     {
-        Console::Error( "Invalid EntityCreateTool in OnDeleteClass()" );
+        Log::Error( "Invalid EntityCreateTool in OnDeleteClass()" );
         return;
     }
 
@@ -374,7 +374,7 @@ void EntityCreateTool::OnClear( Inspect::Button* button )
     Luna::EntityCreateTool* thisTool = Reflect::ObjectCast< Luna::EntityCreateTool >( button->GetClientData() );
     if ( !thisTool )
     {
-        Console::Error( "Invalid EntityCreateTool in OnClear()" );
+        Log::Error( "Invalid EntityCreateTool in OnClear()" );
         return;
     }
 
@@ -396,7 +396,7 @@ void EntityCreateTool::OnNormalize( Inspect::Button* button )
     Luna::EntityCreateTool* thisTool = Reflect::ObjectCast< Luna::EntityCreateTool >( button->GetClientData() );
     if ( !thisTool )
     {
-        Console::Error( "Invalid EntityCreateTool in OnNormalize()" );
+        Log::Error( "Invalid EntityCreateTool in OnNormalize()" );
         return;
     }
 
@@ -421,7 +421,7 @@ void EntityCreateTool::OnModify( Inspect::Button* button )
     Luna::EntityCreateTool* thisTool = Reflect::ObjectCast< Luna::EntityCreateTool >( button->GetClientData() );
     if ( !thisTool )
     {
-        Console::Error( "Invalid EntityCreateTool in OnModify()" );
+        Log::Error( "Invalid EntityCreateTool in OnModify()" );
         return;
     }
 
@@ -446,7 +446,7 @@ void EntityCreateTool::OnModify( Inspect::Button* button )
 
     if ( selectedHashes.empty() )
     {
-        Console::Warning( "No entities selected for modification in OnModify()!" );
+        Log::Warning( "No entities selected for modification in OnModify()!" );
         return;
     }
 

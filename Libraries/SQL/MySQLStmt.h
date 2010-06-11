@@ -3,7 +3,7 @@
 #include "API.h"
 #include "Statement.h"
 
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 //predeclare some mysql
 typedef struct st_mysql_stmt MYSQL_STMT;

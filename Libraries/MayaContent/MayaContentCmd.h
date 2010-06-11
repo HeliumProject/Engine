@@ -18,7 +18,7 @@
 
 #include "API.h"
 #include "ExportScene.h"
-#include "Common/types.h"
+#include "Platform/Types.h"
 #include "Asset/EntityManifest.h"
 
 

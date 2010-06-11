@@ -3,8 +3,8 @@
 
 #include "InspectReflect/ReflectInterpreter.h"
 
-#include "Console/Console.h"
-#include "Common/Container/Insert.h" 
+#include "Foundation/Log.h"
+#include "Foundation/Container/Insert.h" 
 
 #include "Inspect/Label.h"
 
@@ -51,11 +51,11 @@ bool Enumerator::InitializePanel(const std::string& name, const CreatePanelSigna
   {
     if (!creator.Equals( inserted.first->second ))
     {
-      Console::Error("Panel '%s' initialized with a different creator\n", name.c_str());     
+      Log::Error("Panel '%s' initialized with a different creator\n", name.c_str());     
     }
     else
     {
-      Console::Warning("Panel '%s' already initialized\n", name.c_str());
+      Log::Warning("Panel '%s' already initialized\n", name.c_str());
     }
   }
 
@@ -66,7 +66,7 @@ void Enumerator::CleanupPanel(const std::string& name)
 {
   NOC_ASSERT(g_Initialized);
 
-  Console::Print("Cleaned up Panel '%s'\n", name.c_str());
+  Log::Print("Cleaned up Panel '%s'\n", name.c_str());
 
   s_PanelCreators.erase(name);
 }

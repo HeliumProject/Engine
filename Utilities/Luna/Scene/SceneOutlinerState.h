@@ -2,7 +2,7 @@
 
 // Includes
 #include "API.h"
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 namespace Luna
 {

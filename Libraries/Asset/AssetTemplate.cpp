@@ -3,7 +3,7 @@
 #include "AssetFlags.h"
 
 #include "Attribute/AttributeCollection.h"
-#include "Common/CommandLine.h"
+#include "Foundation/CommandLine.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/FinderSpec.h"

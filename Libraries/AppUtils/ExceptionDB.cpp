@@ -1,13 +1,13 @@
-#include "Windows/Windows.h"
-#include "Windows/Console.h"
+#include "Platform/Windows/Windows.h"
+#include "Platform/Windows/Console.h"
 
 #include "ExceptionDB.h"
 #include "ExceptionReport.h"
 
 #include "Debug/Exception.h"
-#include "Console/Console.h"
-#include "Common/Boost/Regex.h"
-#include "Common/Environment.h"
+#include "Foundation/Log.h"
+#include "Foundation/Boost/Regex.h"
+#include "Foundation/Environment.h"
 #include "Platform/Mutex.h"
 #include "SQL/MySQL.h"
 
@@ -213,10 +213,10 @@ void AppUtils::UpdateExceptionDB( const ExceptionReport& report )
   Platform::TakeMutex mutex( g_ExceptionDBMutex );
 
   std::string host;
-  if ( !Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"DB_HOST", host ) )
+  if ( !Nocturnal::GetEnvVar( "NOC_DB_HOST", host ) )
   {
-    std::string error = std::string( "No exception db set in environment.  Please set the " ) + NOCTURNAL_STUDIO_PREFIX"DB_HOST" + " environment variable.\n";
-    Windows::Print( Windows::ConsoleColors::Red, stderr, error.c_str() );
+    std::string error = std::string( "No exception db set in environment.  Please set the " ) + "NOC_DB_HOST" + " environment variable.\n";
+    Platform::Print( Platform::ConsoleColors::Red, stderr, error.c_str() );
     return;
   }
 
@@ -226,16 +226,16 @@ void AppUtils::UpdateExceptionDB( const ExceptionReport& report )
   }
   catch( const Nocturnal::Exception& ex )
   {
-    Windows::Print( Windows::ConsoleColors::Red, stderr, "Failed to connect to tools MySQL database @ '%s', reason: %s\n", host.c_str(), ex.what() );
+    Platform::Print( Platform::ConsoleColors::Red, stderr, "Failed to connect to tools MySQL database @ '%s', reason: %s\n", host.c_str(), ex.what() );
   }
 
   if ( !g_DBHandle->IsConnected() )
   {
-    Windows::Print( Windows::ConsoleColors::Red, stderr, "Lost DB connection\n" );
+    Platform::Print( Platform::ConsoleColors::Red, stderr, "Lost DB connection\n" );
     return;
   }
 
-  Console::Debug("Updating report database...\n");
+  Log::Debug("Updating report database...\n");
 
   g_DBHandle->BeginTrans();
 
@@ -370,7 +370,7 @@ void AppUtils::UpdateExceptionDB( const ExceptionReport& report )
       }
       else
       {
-        Console::Error( "Failed to insert outline state.\n" );
+        Log::Error( "Failed to insert outline state.\n" );
       }
     }
 
@@ -472,7 +472,7 @@ void AppUtils::UpdateExceptionDB( const ExceptionReport& report )
 
             if ( execResult != MYSQL_OK )
             {
-              Console::Error( "Failed to insert into callstack_x_lines\n" );
+              Log::Error( "Failed to insert into callstack_x_lines\n" );
             }
           }
 
@@ -529,7 +529,7 @@ void AppUtils::UpdateExceptionDB( const ExceptionReport& report )
   catch( const Nocturnal::Exception& ex )
   {
     const char* dbErrMsg = mysql_error( g_DBHandle->GetDBHandle() );
-    Windows::Print( Windows::ConsoleColors::Red, stderr, "%s; %s\n", ex.what(), dbErrMsg );
+    Platform::Print( Platform::ConsoleColors::Red, stderr, "%s; %s\n", ex.what(), dbErrMsg );
     g_DBHandle->RollbackTrans();
     g_DBHandle->Close();
     return;

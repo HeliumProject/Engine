@@ -1,8 +1,8 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "BuilderInterface.h"
 
-#include "Console/Console.h"
-#include "Windows/Error.h"
+#include "Foundation/Log.h"
+#include "Foundation/Exception.h"
 #include "Asset/AssetClass.h"
 
 using namespace Asset;
@@ -72,7 +72,7 @@ void BuilderInterface::AllocateBuilders( AssetType assetType, AssetBuilder::V_IB
   if( lib == NULL )
   {
     DWORD err = ::GetLastError();
-    throw AssetBuilder::Exception( "Error loading library %s: (%d) %s\n", builder.c_str(), err, Windows::GetErrorString(err).c_str() );
+    throw AssetBuilder::Exception( "Error loading library %s: (%d) %s\n", builder.c_str(), err, Platform::GetErrorString(err).c_str() );
   }
 
   void (*init)() = (void (*)())GetProcAddress( lib, InitializeEntryPoint );

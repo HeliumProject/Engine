@@ -1,11 +1,10 @@
 #include "DXT.h"
 
-#include "common/exception.h"
-#include "Windows/Windows.h"
-#include "Windows/Error.h"
+#include "Platform/Windows/Windows.h"
+#include "Foundation/Exception.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include <squish.h>
 //#include "AtiCompress/ATI_Compress.h"

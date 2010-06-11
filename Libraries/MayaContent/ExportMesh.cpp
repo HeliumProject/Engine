@@ -4,7 +4,7 @@
 
 #include "ExportMesh.h"
 
-#include "Common/Container/Insert.h"
+#include "Foundation/Container/Insert.h"
 
 #include "MayaUtils/NodeTypes.h"
 
@@ -383,7 +383,7 @@ bool ExportMesh::GetBlendShapeDeformer( const MFnMesh& meshFn, MFnBlendShapeDefo
 {
   MStatus status;
 
-  Console::Debug( "Searching for morpher (blendShape) for mesh: %s...\n", meshFn.name().asChar() );
+  Log::Debug( "Searching for morpher (blendShape) for mesh: %s...\n", meshFn.name().asChar() );
 
   MItDependencyNodes blendShapeItr( MFn::kBlendShape );
 
@@ -408,7 +408,7 @@ bool ExportMesh::GetBlendShapeDeformer( const MFnMesh& meshFn, MFnBlendShapeDefo
 
       if ( baseObjects.length() != 1 )
       {
-        Console::Warning("Morph target (%s) has more than one base object, this is not supported", morpherFn.name().asChar() );
+        Log::Warning("Morph target (%s) has more than one base object, this is not supported", morpherFn.name().asChar() );
       }
 
       // check to see if it's the 
@@ -416,14 +416,14 @@ bool ExportMesh::GetBlendShapeDeformer( const MFnMesh& meshFn, MFnBlendShapeDefo
       {
         morpherFn.setObject( blendShapeObj );
 
-        Console::Debug( "Found morpher (blendShape): %s for baseObject mesh: %s\n", morpherFn.name().asChar(), meshFn.name().asChar() );
+        Log::Debug( "Found morpher (blendShape): %s for baseObject mesh: %s\n", morpherFn.name().asChar(), meshFn.name().asChar() );
 
         return true;
       }
     }
   }
 
-  Console::Debug( "None found.\n" );
+  Log::Debug( "None found.\n" );
   return false;
 }
 
@@ -436,7 +436,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
   MStatus status;
 
   std::string morpherFnName = morpherFn.name().asChar();
-  Console::Debug( "Gathering morph targets for morpher (blendShape): %s\n", morpherFn.name().asChar() );
+  Log::Debug( "Gathering morph targets for morpher (blendShape): %s\n", morpherFn.name().asChar() );
 
 
   // get the weights
@@ -446,7 +446,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
   status = morpherFn.weightIndexList(weightIndices);
 
   NOC_ASSERT(weightIndices.length() == numWeights);
-  Console::Debug( "NumWeights: %d\n", numWeights );
+  Log::Debug( "NumWeights: %d\n", numWeights );
 
   for( u32 weightIndex = 0; weightIndex < numWeights; ++weightIndex )
   {
@@ -458,7 +458,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
     NOC_ASSERT(status);
 
     u32 numTargets = targets.length();
-    Console::Debug( "WeightIndex: %d, NumTargets: %d\n", weightIndex, numTargets );
+    Log::Debug( "WeightIndex: %d, NumTargets: %d\n", weightIndex, numTargets );
 
     for(u32 targetIndex = 0; targetIndex < numTargets; ++targetIndex)
     {
@@ -551,12 +551,12 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
 
       if ( !exportMorphTarget.m_PosDeltas.empty() )
       {
-        Console::Debug( "Adding target mesh: %s\n", exportMorphTarget.m_Name.c_str() );
+        Log::Debug( "Adding target mesh: %s\n", exportMorphTarget.m_Name.c_str() );
         m_ExportMorphTargets.push_back( exportMorphTarget );
       }
       else
       {
-        Console::Warning( 
+        Log::Warning( 
           "Skipping target mesh %s because it has no delta points. " \
           "This means that the mesh does not differ from the base object. " \
           "This will cause errors in the builders.\n", exportMorphTarget.m_Name.c_str() );
@@ -924,7 +924,7 @@ void ExportMesh::ProcessPolygon( unsigned int & triangleIndex, const ExportPolyg
     status = meshFn.getPolygonTriangleVertices( poly.m_PolygonNumber, triIndex, vertexList );
     if ( !status )
     {
-      Console::Error( "Unable to fetch triangle vertices for poly #%d, tri #%d on mesh %s\n", poly.m_PolygonNumber, triIndex, meshFn.partialPathName().asChar() );
+      Log::Error( "Unable to fetch triangle vertices for poly #%d, tri #%d on mesh %s\n", poly.m_PolygonNumber, triIndex, meshFn.partialPathName().asChar() );
       NOC_BREAK();
     }
 
@@ -934,7 +934,7 @@ void ExportMesh::ProcessPolygon( unsigned int & triangleIndex, const ExportPolyg
 
     if ( v0 < 0 || v1 < 0 || v2 < 0 )
     {
-      Console::Error( "Invalid vertex index detected during polygon triangulation (poly #%d, tri #%d, mesh %s)\n", poly.m_PolygonNumber, triIndex, meshFn.partialPathName().asChar() );
+      Log::Error( "Invalid vertex index detected during polygon triangulation (poly #%d, tri #%d, mesh %s)\n", poly.m_PolygonNumber, triIndex, meshFn.partialPathName().asChar() );
       NOC_BREAK();
     }
 

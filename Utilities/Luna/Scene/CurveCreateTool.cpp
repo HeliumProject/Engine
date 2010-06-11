@@ -40,7 +40,7 @@ CurveCreateTool::~CurveCreateTool()
 {
   if (m_Instance.ReferencesObject())
   {
-    if ( m_Instance->GetChildren().size() > 1 )
+    if ( m_Instance->GetChildren().Size() > 1 )
     {
       AddToScene();
     }
@@ -164,7 +164,7 @@ void CurveCreateTool::AddToScene()
 
   m_Instance->SetTransient( false );
 
-  for ( S_HierarchyNodeDumbPtr::const_iterator childItr = m_Instance->GetChildren().begin(), childEnd = m_Instance->GetChildren().end(); childItr != childEnd; ++childItr )
+  for ( OS_HierarchyNodeDumbPtr::Iterator childItr = m_Instance->GetChildren().Begin(), childEnd = m_Instance->GetChildren().End(); childItr != childEnd; ++childItr )
   {
     (*childItr)->SetTransient( false );
   }

@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "Wizard.h"
 #include "WizardPage.h"
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 using namespace UIToolKit;
 

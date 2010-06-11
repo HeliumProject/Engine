@@ -1,9 +1,9 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 
 #include "CacheDB.h"
 #include "CacheDBQuery.h"
 
-#include "Common/Boost/Regex.h"
+#include "Foundation/Boost/Regex.h"
 #include "FileSystem/FileSystem.h"
 
 using namespace Asset;

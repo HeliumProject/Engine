@@ -16,9 +16,9 @@
 #include "Finder/ExtensionSpecs.h"
 #include "FileSystem/FileSystem.h"
 #include "UIToolKit/FileDialog.h"
-#include "Console/Console.h"
-#include "Common/String/Wildcard.h"
-#include "Common/String/Tokenize.h"
+#include "Foundation/Log.h"
+#include "Foundation/String/Wildcard.h"
+#include "Foundation/String/Tokenize.h"
 
 // Using
 using namespace Reflect;

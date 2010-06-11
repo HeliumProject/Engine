@@ -84,8 +84,8 @@ void HierarchyOutliner::RecurseAddHierarchyNode( Luna::HierarchyNode* node )
   AddHierarchyNode( node );
 
   // Recursively add all the children of node
-  S_HierarchyNodeDumbPtr::const_iterator childItr = node->GetChildren().begin();
-  S_HierarchyNodeDumbPtr::const_iterator childEnd = node->GetChildren().end();
+  OS_HierarchyNodeDumbPtr::Iterator childItr = node->GetChildren().Begin();
+  OS_HierarchyNodeDumbPtr::Iterator childEnd = node->GetChildren().End();
   for ( ; childItr != childEnd; ++childItr )
   {
     RecurseAddHierarchyNode( *childItr );

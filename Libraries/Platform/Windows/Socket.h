@@ -2,21 +2,24 @@
 
 #include <winsock2.h>
 
+#include "Platform/API.h"
 #include "Platform/Types.h"
 
 typedef int socklen_t;
 
-namespace IPC
+namespace Platform
 {
-  struct Socket
+  struct PLATFORM_API Socket
   {
     SOCKET m_Handle;
     struct Overlapped
     {
       u32* Internal;
       u32* InternalHigh;
-      union {
-          struct {
+      union
+      {
+          struct
+          {
               u32 Offset;
               u32 OffsetHigh;
           };

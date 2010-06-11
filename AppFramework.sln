@@ -34,8 +34,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PerforceUI", "libraries\Per
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "igDXContent", "libraries\igDXContent\igDXContent.vcproj", "{54F28FC6-3329-4BBD-BBC5-F0E7AC7A0FE1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IPC", "libraries\IPC\ipc.vcproj", "{072476F0-F19F-44E9-ABBD-4299805961D1}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rebuild", "utilities\Rebuild\rebuild.vcproj", "{0CA7E77E-15CF-43C7-A106-D3752E650A80}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dependencies", "libraries\Dependencies\Dependencies.vcproj", "{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}"
@@ -232,12 +230,6 @@ Global
 		{54F28FC6-3329-4BBD-BBC5-F0E7AC7A0FE1}.Release|Win32.ActiveCfg = Release|Win32
 		{54F28FC6-3329-4BBD-BBC5-F0E7AC7A0FE1}.Release|Win32.Build.0 = Release|Win32
 		{54F28FC6-3329-4BBD-BBC5-F0E7AC7A0FE1}.Release|x64.ActiveCfg = Release|Win32
-		{072476F0-F19F-44E9-ABBD-4299805961D1}.Debug|Win32.ActiveCfg = Debug|Win32
-		{072476F0-F19F-44E9-ABBD-4299805961D1}.Debug|Win32.Build.0 = Debug|Win32
-		{072476F0-F19F-44E9-ABBD-4299805961D1}.Debug|x64.ActiveCfg = Debug|Win32
-		{072476F0-F19F-44E9-ABBD-4299805961D1}.Release|Win32.ActiveCfg = Release|Win32
-		{072476F0-F19F-44E9-ABBD-4299805961D1}.Release|Win32.Build.0 = Release|Win32
-		{072476F0-F19F-44E9-ABBD-4299805961D1}.Release|x64.ActiveCfg = Release|Win32
 		{0CA7E77E-15CF-43C7-A106-D3752E650A80}.Debug|Win32.ActiveCfg = Debug|Win32
 		{0CA7E77E-15CF-43C7-A106-D3752E650A80}.Debug|Win32.Build.0 = Debug|Win32
 		{0CA7E77E-15CF-43C7-A106-D3752E650A80}.Debug|x64.ActiveCfg = Debug|Win32

@@ -72,14 +72,14 @@ void TCPConnection::ServerThread()
 
   Platform::Print("%s: Starting TCP server (ports %d, %d)\n", m_Name, m_ReadPort, m_WritePort);
 
-  Socket server_read_socket = 0;
+  Platform::Socket server_read_socket = 0;
   if (!Platform::CreateSocket(server_read_socket))
   {
     SetState(ConnectionStates::Failed);
     return;
   }
 
-  Socket server_write_socket = 0;
+  Platform::Socket server_write_socket = 0;
   if (!Platform::CreateSocket(server_write_socket))
   {
     SetState(ConnectionStates::Failed);

@@ -61,6 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib"
 				OutputFile="$(OutDir)/$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
@@ -139,6 +140,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib"
 				OutputFile="$(OutDir)/$(ProjectName).dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
@@ -340,6 +342,46 @@
 			</File>
 			<File
 				RelativePath=".\File\Path.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="IPC"
+			>
+			<File
+				RelativePath=".\IPC\Connection.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IPC\Connection.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IPC\IPC.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IPC\Message.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IPC\Message.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IPC\Pipe.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IPC\Pipe.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IPC\TCP.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IPC\TCP.h"
 				>
 			</File>
 		</Filter>

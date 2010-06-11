@@ -4,9 +4,9 @@
 #include <sys/types.h>
 #include <cell/cell_fs.h>
 
-#define IPC_PIPE_ROOT "/app_home/"
+#define IPC_PIPE_ROOT ""
 
-namespace IPC
+namespace Platform
 {
   typedef int Pipe;
 }

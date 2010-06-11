@@ -1,10 +1,11 @@
 #include "Platform/Windows/Windows.h"
-#include "Foundation/Exception.h"
-
-#include "Pipe.h"
+#include "Platform/Windows/Pipe.h"
+#include "Platform/Pipe.h"
 #include "Platform/Assert.h"
+#include "Platform/Error.h"
+#include "Platform/Platform.h"
 
-using namespace IPC;
+using namespace Platform;
 
 NOC_COMPILE_ASSERT( sizeof( Pipe::Overlapped ) == sizeof( OVERLAPPED ) );
 

@@ -3,7 +3,7 @@
 #include "Platform/Platform.h"
 #include "Platform/Assert.h"
 
-using namespace IPC;
+using namespace Platform;
 
 bool Platform::InitializeSockets()
 {

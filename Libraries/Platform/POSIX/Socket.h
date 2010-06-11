@@ -13,7 +13,7 @@
 #include <netex/errno.h>
 #include <arpa/inet.h>
 
-namespace IPC
+namespace Platform
 {
   typedef int Socket;
 }

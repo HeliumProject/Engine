@@ -240,10 +240,6 @@
 			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{072476F0-F19F-44E9-ABBD-4299805961D1}"
-			RelativePathToProject=".\libraries\IPC\ipc.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
 			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
 		/>

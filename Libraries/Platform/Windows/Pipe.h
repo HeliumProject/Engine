@@ -1,20 +1,23 @@
 #pragma once
 
+#include "Platform/API.h"
 #include "Platform/Types.h"
 
 #define IPC_PIPE_ROOT ""
 
-namespace IPC
+namespace Platform
 {
-  struct Pipe
+  struct PLATFORM_API Pipe
   {
     void* m_Handle;
     struct Overlapped
     {
       u32* Internal;
       u32* InternalHigh;
-      union {
-          struct {
+      union
+      {
+          struct
+          {
               u32 Offset;
               u32 OffsetHigh;
           };

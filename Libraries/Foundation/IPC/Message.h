@@ -1,12 +1,13 @@
 #pragma once
 
-#include "API.h"
 #include "Platform/Mutex.h"
 #include "Platform/Semaphore.h"
+#include "Foundation/API.h"
+#include "IPC.h"
 
 namespace IPC
 {
-  class IPC_API MessageHeader
+  class FOUNDATION_API MessageHeader
   {
   public:
     u32 m_ID;
@@ -37,7 +38,7 @@ namespace IPC
     }
   };
 
-  class IPC_API Message : private MessageHeader
+  class FOUNDATION_API Message : private MessageHeader
   {
     friend class Connection;
     friend class MessageQueue;
@@ -96,7 +97,7 @@ namespace IPC
     }
   };
 
-  class IPC_API MessageQueue
+  class FOUNDATION_API MessageQueue
   {
   private:
     Message* m_Head;    // pointer to head message 

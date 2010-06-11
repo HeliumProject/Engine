@@ -22,11 +22,11 @@
 #include "Content/Zone.h"
 #include "Reflect/Archive.h"
 
-#include "IPC/Connection.h"
 #include "AppUtils/AppUtils.h"
 #include "Worker/Process.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/IPC/Connection.h"
 #include "Debug/Exception.h"
 
 #include <strstream>

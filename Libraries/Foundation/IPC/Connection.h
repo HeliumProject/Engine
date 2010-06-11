@@ -31,7 +31,7 @@ namespace IPC
   }
   typedef MessageTypes::MessageType MessageType;
 
-  class IPC_API Connection
+  class FOUNDATION_API Connection
   {
   protected:
     char              m_Name[256];          // friendly name for this connection

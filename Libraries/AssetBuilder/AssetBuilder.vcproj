@@ -200,10 +200,6 @@
 			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{072476F0-F19F-44E9-ABBD-4299805961D1}"
-			RelativePathToProject=".\libraries\IPC\ipc.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{1A179B8F-2027-467A-AB0C-7E90575C0F03}"
 			RelativePathToProject=".\libraries\Debug\Debug.vcproj"
 		/>

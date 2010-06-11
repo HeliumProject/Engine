@@ -4,8 +4,7 @@
 
 #include "Foundation/Exception.h"
 #include "Foundation/CommandLine.h"
-
-#include "IPC/Pipe.h"
+#include "Foundation/IPC/Pipe.h"
 
 #include "Debug/Exception.h"
 #include "AppUtils/AppUtils.h"

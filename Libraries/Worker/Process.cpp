@@ -3,15 +3,13 @@
 
 #include <sstream>
 
-// must be before windows.h
-#include "IPC/Pipe.h"
-
 // libraries
 #include "Debug/Exception.h"
 #include "AppUtils/AppUtils.h"
 #include "Foundation/CommandLine.h"
 #include "Foundation/Log.h"
 #include "Foundation/Exception.h"
+#include "Foundation/IPC/Pipe.h"
 
 using namespace Worker;
 

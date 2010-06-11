@@ -256,10 +256,6 @@
 			RelativePathToProject=".\libraries\Dependencies\Dependencies.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{072476F0-F19F-44E9-ABBD-4299805961D1}"
-			RelativePathToProject=".\libraries\IPC\ipc.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{EBC5862F-F9EF-4CA6-AB18-F930074011AB}"
 			RelativePathToProject=".\libraries\Math\math.vcproj"
 		/>

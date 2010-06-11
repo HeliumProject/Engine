@@ -1,14 +1,23 @@
 #include "Platform/API.h"
 #include "Connection.h"
 
-#include "ProtocolMessages.h"
-
 #include "Platform/Assert.h"
 
 #include <string.h>
 
 using namespace IPC;
 
+namespace IPC
+{
+  namespace ProtocolMessageIDs
+  {
+    enum ProtocolMessageID
+    {
+      Disconnect,
+    };
+  }
+}
+  
 // Debug printing
 //#define IPC_CONNECTION_DEBUG
 

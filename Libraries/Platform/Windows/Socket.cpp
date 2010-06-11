@@ -1,12 +1,12 @@
 #include "Platform/Windows/Windows.h"
-#include "Foundation/Exception.h"
-
-#include "TCP.h"
+#include "Platform/Windows/Socket.h"
+#include "Platform/Socket.h"
 #include "Platform/Assert.h"
+#include "Platform/Platform.h"
 
 #include <mstcpip.h>
 
-using namespace IPC;
+using namespace Platform;
 
 NOC_COMPILE_ASSERT( sizeof( u32* ) == sizeof( SOCKET ) );
 NOC_COMPILE_ASSERT( sizeof( Socket::Overlapped ) == sizeof( OVERLAPPED ) );
@@ -20,7 +20,7 @@ i32 g_Count = 0;
 WSADATA g_WSAData;
 
 Socket::Socket(int)
-  : m_Handle (0)
+ : m_Handle (0)
 {
   memset(&m_Overlapped, 0, sizeof(m_Overlapped));
   m_Overlapped.hEvent = ::CreateEvent(0, true, false, 0);

@@ -30,9 +30,9 @@
 
 #include "AppUtils/AppUtils.h"
 #include "Worker/Process.h"
-#include "IPC/Connection.h"
-#include "Foundation/InitializerStack.h"
 #include "Foundation/Log.h"
+#include "Foundation/InitializerStack.h"
+#include "Foundation/IPC/Connection.h"
 #include "Debug/Exception.h"
 
 using namespace AssetBuilder;

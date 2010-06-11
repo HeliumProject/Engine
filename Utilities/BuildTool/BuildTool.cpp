@@ -13,9 +13,9 @@
 #include "rcs/rcs.h"
 #include "Debug/Exception.h"
 #include "DebugUI/DebugUI.h"
-#include "IPC/Connection.h"
-#include "Foundation/Profile.h"
 #include "Foundation/Log.h"
+#include "Foundation/Profile.h"
+#include "Foundation/IPC/Connection.h"
 #include "Platform/Windows/Console.h"
 #include "Platform/Process.h"
 

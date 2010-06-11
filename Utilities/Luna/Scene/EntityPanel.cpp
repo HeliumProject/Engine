@@ -26,8 +26,6 @@
 #include "SceneManager.h"
 #include "SceneEditor.h"
 
-#include "IPC/Connection.h"
-
 #include "Editor/Editor.h"
 
 using namespace Reflect;

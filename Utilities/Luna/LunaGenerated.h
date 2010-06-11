@@ -27,8 +27,6 @@ namespace UIToolKit{ class MenuButton; }
 #include <wx/statbmp.h>
 #include <wx/checkbox.h>
 #include <wx/panel.h>
-#include <wx/toolbar.h>
-#include <wx/scrolwin.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -77,57 +75,6 @@ namespace Luna
 		public:
 			ToolsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 170,325 ), long style = wxTAB_TRAVERSAL );
 			~ToolsPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class GameRowGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class GameRowGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			wxBoxSizer* m_InnerSizer;
-			wxStaticBitmap* m_Icon1;
-			wxStaticBitmap* m_Icon2;
-			wxCheckBox* m_CheckBox;
-			wxStaticText* m_Label;
-		
-		public:
-			GameRowGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,35 ), long style = wxTAB_TRAVERSAL );
-			~GameRowGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class GamePanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class GamePanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-			wxToolBar* m_ToolBar;
-			wxScrolledWindow* m_ScrollWindow;
-			wxPanel* m_panel2;
-			wxStaticBitmap* m_Icon;
-			wxCheckBox* m_CheckBox;
-			wxStaticText* m_Label;
-			
-			wxStaticBitmap* m_bitmap10;
-			wxPanel* m_panel21;
-			wxStaticBitmap* m_Icon1;
-			wxCheckBox* m_CheckBox1;
-			wxStaticText* m_Label1;
-			wxPanel* m_panel22;
-			wxStaticBitmap* m_Icon2;
-			wxCheckBox* m_CheckBox2;
-			wxStaticText* m_Label2;
-		
-		public:
-			GamePanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 345,300 ), long style = wxTAB_TRAVERSAL );
-			~GamePanelGenerated();
 		
 	};
 	

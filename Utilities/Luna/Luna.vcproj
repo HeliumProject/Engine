@@ -2577,30 +2577,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\GameOutline.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\GameOutline.h"
-			>
-		</File>
-		<File
-			RelativePath=".\GamePanel.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\GamePanel.h"
-			>
-		</File>
-		<File
-			RelativePath=".\GameRowPanel.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\GameRowPanel.h"
-			>
-		</File>
-		<File
 			RelativePath=".\LunaGenerated.cpp"
 			>
 		</File>

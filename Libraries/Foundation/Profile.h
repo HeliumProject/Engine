@@ -222,13 +222,13 @@ Profile::ScopeTimer __ScopeAccum ( &__Accum, __FUNCTION__, __LINE__, Profile::Se
 // instrumentation api enable
 #ifdef PROFILE_ENABLE
 // uncomment this to enable instrumentation
-# define PROFILE_INSTRUMENTATION
+//# define PROFILE_INSTRUMENTATION
 #endif
 
 // flag to instrument all code possible
 #ifdef PROFILE_INSTRUMENTATION
 // uncomment this to enable instrumentation everywhere
-# define PROFILE_INSTRUMENT_ALL
+//# define PROFILE_INSTRUMENT_ALL
 #endif
 
 #if defined(PROFILE_INSTRUMENTATION) && defined(WIN32)

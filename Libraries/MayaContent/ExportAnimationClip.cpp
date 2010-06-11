@@ -42,7 +42,7 @@ void ExportAnimationClip::GatherMayaData( V_ExportBase &newExportObjects )
   sprintf( partialName, "%s", skeletonInfo->m_pathStrPartial.c_str() );
   if ( boost::regex_search(partialName, results, namePattern))
   {
-    animClip->m_ActorName = ResultAsString(results, 1); 
+    animClip->m_ActorName = Nocturnal::BoostMatchResultAsString(results, 1); 
   }
 
   //

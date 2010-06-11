@@ -1141,7 +1141,7 @@ void FileSystem::GetExtension( const std::string &fileName, std::string &extensi
 
   if (boost::regex_match(fileName, matchResults, matchExtPattern))
   {
-    extension = ResultAsString(matchResults, 2); 
+    extension = Nocturnal::BoostMatchResultAsString(matchResults, 2); 
   }
 }
 

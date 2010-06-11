@@ -94,7 +94,7 @@ namespace Perforce
   template <class ResultType>
   inline RCS::Operation ResultAsOperation( ResultType& results, int i )
   {
-    return GetOperationEnum( ResultAsString( results, i ) );
+    return GetOperationEnum( Nocturnal::BoostMatchResultAsString( results, i ) );
   }
 
   inline void SetFlags( const std::string& flags, RCS::File* info )

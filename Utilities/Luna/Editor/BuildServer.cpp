@@ -107,7 +107,7 @@ void BuildServer::RefreshBuilds()
             // Template
             if ( results[1].matched )
             {
-              build->m_Template = ResultAsString( results, 1 );
+              build->m_Template = Nocturnal::BoostMatchResultAsString( results, 1 );
             }
           }
           else if ( boost::regex_search( line, results, levelPattern ) )
@@ -116,7 +116,7 @@ void BuildServer::RefreshBuilds()
             if ( results[1].matched )
             {
               LevelInfoPtr level = new LevelInfo();
-              level->m_Name = ResultAsString( results, 1 );
+              level->m_Name = Nocturnal::BoostMatchResultAsString( results, 1 );
 
               std::string levelFile( state );
               FileSystem::AppendPath( levelFile, "level_" + level->GetStrippedName() + "_done.txt" );

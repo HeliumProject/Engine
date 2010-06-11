@@ -183,7 +183,7 @@ bool TokenizeQuery( const std::string& queryString, V_string& tokens )
     for ( ; parseItr != parseEnd; ++parseItr )
     {
         const boost::match_results<std::string::const_iterator>& tokenizeResults = *parseItr;
-        curToken = tokenizeResults[1].matched ? ResultAsString( tokenizeResults, 1 ) : "";
+        curToken = tokenizeResults[1].matched ? Nocturnal::BoostMatchResultAsString( tokenizeResults, 1 ) : "";
         if ( !curToken.empty() )
         {
             tokens.push_back( curToken );
@@ -255,7 +255,7 @@ bool ParseCollectionName( const std::string& token, boost::smatch& matchResults,
     {
         if ( matchResults[1].matched )
         {
-            collectionName = ResultAsString( matchResults, 1 );
+            collectionName = Nocturnal::BoostMatchResultAsString( matchResults, 1 );
             return true;
         }
     }
@@ -275,7 +275,7 @@ bool ParsePhrase( const std::string& token, boost::smatch& matchResults, std::st
     {
         if ( matchResults[1].matched )
         {
-            phrase = ResultAsString( matchResults, 1 );
+            phrase = Nocturnal::BoostMatchResultAsString( matchResults, 1 );
             return true;
         }
     }
@@ -353,7 +353,7 @@ bool SearchQuery::ParseQueryString( const std::string& queryString, std::string&
                 // Token Query
                 if ( boost::regex_search( curToken, matchResults, parseColumnQuery ) && matchResults[1].matched )
                 {
-                    std::string columnAlias =  ResultAsString( matchResults, 1 );
+                    std::string columnAlias =  Nocturnal::BoostMatchResultAsString( matchResults, 1 );
 
                     ++tokenItr;
                     if ( tokenItr == tokenEnd )

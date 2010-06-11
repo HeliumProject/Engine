@@ -367,10 +367,10 @@ void EventSystem::ReadTextEventsFile( const std::string& eventsFile, V_EventPtr&
       throw Exception( "Could not parse text event: %s", line.c_str() );
     }
 
-    tuid id = ( tuid ) ResultAsU64(eventResultAttr, 1); 
-    u64 created = ( u64 )  ResultAsU64(eventResultAttr, 2); 
-    std::string username = ResultAsString(eventResultAttr, 3); 
-    i32 eventLength = ( i32 )  ResultAsInt(eventResultAttr, 4); 
+    tuid id = ( tuid ) Nocturnal::BoostMatchResult<tuid>(eventResultAttr, 1); 
+    u64 created = ( u64 ) Nocturnal::BoostMatchResult<u64>(eventResultAttr, 2); 
+    std::string username = Nocturnal::BoostMatchResultAsString(eventResultAttr, 3); 
+    i32 eventLength = ( i32 ) Nocturnal::BoostMatchResult<i32>(eventResultAttr, 4); 
 
     /////////////////////////////////////////////
     // parse the event data

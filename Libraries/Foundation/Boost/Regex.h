@@ -1,10 +1,8 @@
 #pragma once
 
-#include "Platform/Types.h" 
-
-#include <boost/regex.hpp>
 #include <string> 
-#include <stdlib.h> 
+#include <sstream>
+#include <boost/regex.hpp>
 
 //--------------------------------------------------------------
 // helper functions for using boost::regex
@@ -24,26 +22,23 @@
 // cmatch and smatch are not ambiguous at all. 
 // 
 
-template <class ResultType>
-inline std::string ResultAsString(ResultType& results, int i)
+namespace Nocturnal
 {
-  const char* random = &*results[i].first; 
+  template <class MatchT>
+  inline std::string BoostMatchResultAsString( const boost::match_results<MatchT>& results, int i )
+  {
+    return std::string ( results[i].first, results[i].second ); 
+  }
 
-  std::string temp( results[i].first, results[i].second); 
-  return temp; 
+  template <class T, class MatchT>
+  inline T BoostMatchResult( const boost::match_results<MatchT>& results, int i )
+  {
+    std::istringstream str ( BoostMatchResultAsString<MatchT>(results, i) );
+
+    T result;
+    str >> result;
+    NOC_ASSERT( !str.fail() );
+
+    return result;
+  }
 }
-
-template <class ResultType>
-inline int ResultAsInt(ResultType& results, int i)
-{
-  std::string resultString = ResultAsString(results, i); 
-
-  return atoi( resultString.c_str() ); 
-}
-
-template <class ResultType>
-inline u64 ResultAsU64(ResultType& results, int i)
-{
-  return _strtoui64( ResultAsString(results, i).c_str(), NULL, 10); 
-}
-

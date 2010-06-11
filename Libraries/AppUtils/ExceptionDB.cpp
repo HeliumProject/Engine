@@ -436,11 +436,11 @@ void AppUtils::UpdateExceptionDB( const ExceptionReport& report )
           boost::smatch results;
           if ( boost::regex_search( temp, results, callStackPattern ) )
           {
-            std::string module    = results[2].matched ? ResultAsString( results, 2 ) : "";
-            std::string function  = results[4].matched ? ResultAsString( results, 4 ) : "";
-            std::string offset    = results[5].matched ? ResultAsString( results, 5 ) : "";
-            std::string file      = results[7].matched ? ResultAsString( results, 7 ) : "";
-            u64 lineNumber        = results[8].matched ? ResultAsU64( results, 8 ) : 0;
+            std::string module    = results[2].matched ? Nocturnal::BoostMatchResultAsString( results, 2 ) : "";
+            std::string function  = results[4].matched ? Nocturnal::BoostMatchResultAsString( results, 4 ) : "";
+            std::string offset    = results[5].matched ? Nocturnal::BoostMatchResultAsString( results, 5 ) : "";
+            std::string file      = results[7].matched ? Nocturnal::BoostMatchResultAsString( results, 7 ) : "";
+            u64 lineNumber        = results[8].matched ? Nocturnal::BoostMatchResult<u64>( results, 8 ) : 0;
 
             memset( buff, '\0', MAX_QUERY_LENGTH );
             mysql_real_escape_string( g_DBHandle->GetDBHandle(), buff, module.c_str(), (unsigned long) module.length() );

@@ -1,6 +1,6 @@
 #include "FileBackedAttribute.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
 
 using namespace Asset;

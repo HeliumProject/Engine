@@ -58,7 +58,7 @@ void ExportShader::GatherMayaData( V_ExportBase &newExportObjects )
         //  }
         //  catch ( const File::Exception& e )
         //  {
-        //    Console::Warning("Unable to add file '%s' to the file manager.\nReason: %s\n\n", l_TexturePath.asChar(), e.what() );
+        //    Log::Warning("Unable to add file '%s' to the file manager.\nReason: %s\n\n", l_TexturePath.asChar(), e.what() );
         //  }
         //}
       }

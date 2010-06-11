@@ -1,15 +1,13 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "CacheFileStats.h"
 
 #include "AppUtils/AppUtils.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include <mysql.h>
 
-#include "Common/Config.h"
-#include "Common/Environment.h"
-#include "Common/Version.h"
-#include "Common/Environment.h"
+#include "Foundation/Version.h"
+#include "Foundation/Environment.h"
 
 // max storage size for a query string
 #define MAX_QUERY_LENGTH  2048
@@ -99,13 +97,13 @@ static inline bool InsertIfNotFound( const char* select, const char* insert, u64
     }
     else
     {
-      Console::Warning( "No result for: %s", select );
+      Log::Warning( "No result for: %s", select );
       return false;
     }
   }
   else
   {
-    Console::Warning( "Failed to execute SQL: %s", select );
+    Log::Warning( "Failed to execute SQL: %s", select );
     return false;
   }
 
@@ -127,7 +125,7 @@ static inline bool InsertIfNotFound( const char* select, const char* insert, u64
     }
     else
     {
-      Console::Warning( "Failed to execute SQL: %s", insert );
+      Log::Warning( "Failed to execute SQL: %s", insert );
       return false;
     }
   }
@@ -181,9 +179,9 @@ static bool InitializeRowIDs()
 void CacheFileStats::Initialize()
 {
   std::string host;
-  if ( !Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"DB_HOST", host ) )
+  if ( !Nocturnal::GetEnvVar( "NOC_DB_HOST", host ) )
   {
-    Console::Warning( "No database host set in environment (%s).  Build statistics will not be reported.\n", NOCTURNAL_STUDIO_PREFIX"DB_HOST" );
+    Log::Warning( "No database host set in environment (%s).  Build statistics will not be reported.\n", "NOC_DB_HOST" );
     return;
   }
 
@@ -191,7 +189,7 @@ void CacheFileStats::Initialize()
   MYSQL* handle = mysql_init( NULL );
   if ( handle == NULL )
   {
-    Console::Warning( "Call to mysql_init failed, could not init MySQL DB." );
+    Log::Warning( "Call to mysql_init failed, could not init MySQL DB." );
     g_MySQL = NULL;
   }
   else
@@ -210,7 +208,7 @@ void CacheFileStats::Initialize()
     // if a failure occured when connecting, then cleanup
     if ( g_MySQL == NULL )
     {
-      Console::Warning( "Call to mysql_real_connect failed, could not init MySQL DB." );
+      Log::Warning( "Call to mysql_real_connect failed, could not init MySQL DB." );
       mysql_close( handle );
       handle = NULL;
     }
@@ -280,7 +278,7 @@ bool CacheFileStats::UpdateStats( bool download, u64 size, u32 numFiles, f32 spe
   int execResult = mysql_query( g_MySQL, queryStr );
   if ( execResult != MYSQL_OK )
   {
-    Console::Warning( "Failed to report cache file statistics, UpdateStats failed.\n" );
+    Log::Warning( "Failed to report cache file statistics, UpdateStats failed.\n" );
     return false;
   }
 

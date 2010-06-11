@@ -527,7 +527,7 @@ void Control::SetToolTip( const std::string& toolTip )
 void Control::PrintLayout()
 {
   if (m_Window)
-    Console::Print("%p Type: '%s'\n  Size: (%d/%d, %d/%d) Position: (%d/%d, %d/%d)\n", this, typeid(*this).name(),
+    Log::Print("%p Type: '%s'\n  Size: (%d/%d, %d/%d) Position: (%d/%d, %d/%d)\n", this, typeid(*this).name(),
     m_Size.x, m_Window->GetSize().x,
     m_Size.y, m_Window->GetSize().y,
     m_Position.x, m_Window->GetPosition().x,

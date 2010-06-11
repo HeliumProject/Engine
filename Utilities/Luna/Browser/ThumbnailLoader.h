@@ -2,7 +2,7 @@
 
 #include "Thumbnail.h"
 #include "Asset/AssetFile.h"
-#include "Common/Automation/Event.h"
+#include "Foundation/Automation/Event.h"
 #include "Platform/Mutex.h"
 #include "Platform/Semaphore.h"
 

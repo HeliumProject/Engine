@@ -1,9 +1,9 @@
 #pragma once
 
 #include "API.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Automation/Event.h"
-#include "Common/Automation/Property.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Automation/Event.h"
+#include "Foundation/Automation/Property.h"
 #include "Reflect/Serializers.h"
 #include "Undo/Command.h"
 

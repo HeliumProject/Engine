@@ -2,7 +2,7 @@
 
 #include "API.h"
 #include "DBManager.h"
-#include "Common/Exception.h"
+#include "Foundation/Exception.h"
 
 namespace SQL
 {

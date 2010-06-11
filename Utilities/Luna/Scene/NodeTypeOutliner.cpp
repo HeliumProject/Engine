@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "SceneOutlinerItemData.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include "UIToolKit/SortTreeCtrl.h"
 
@@ -106,7 +106,7 @@ void NodeTypeOutliner::AddInstance( Luna::SceneNode* instance )
   }
   else
   {
-    Console::Warning( "Unable to add node %s to the Type Outliner because there is no type named %s.\n", instance->GetName().c_str(), instance->GetNodeType()->GetName().c_str() );
+    Log::Warning( "Unable to add node %s to the Type Outliner because there is no type named %s.\n", instance->GetName().c_str(), instance->GetNodeType()->GetName().c_str() );
   }
 }
 

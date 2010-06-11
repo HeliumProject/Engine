@@ -2,7 +2,7 @@
 
 #include "MayaContentCmd.h"
 
-#include "Common/Container/BitArray.h"
+#include "Foundation/Container/BitArray.h"
 
 #include "RCS/RCS.h"
 #include "Debug/Exception.h"
@@ -274,7 +274,7 @@ bool MayaContentCmd::WriteExportedData()
     }
     catch ( Nocturnal::Exception& ex )
     {
-      Console::Error( "%s\n", ex.what() );
+      Log::Error( "%s\n", ex.what() );
       success = false;
     }
 
@@ -994,7 +994,7 @@ void MayaContentCmd::ExportCurrentScene( MObject root, std::string& currentFile,
       }
       catch ( RCS::Exception& e )
       {
-        Console::Warning( "Could not revert '%s': %s\n", contentFile.c_str(), e.what() );
+        Log::Warning( "Could not revert '%s': %s\n", contentFile.c_str(), e.what() );
       }
 
       try
@@ -1003,7 +1003,7 @@ void MayaContentCmd::ExportCurrentScene( MObject root, std::string& currentFile,
       }
       catch ( RCS::Exception& e )
       {
-        Console::Warning( "Could not delete '%s': %s\n", contentFile.c_str(), e.what() );
+        Log::Warning( "Could not delete '%s': %s\n", contentFile.c_str(), e.what() );
       }
 
       // if file was never checked into perforce (+add), revert/delete

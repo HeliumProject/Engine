@@ -4,7 +4,7 @@
 #include "Canvas.h"
 #include "SerializerData.h"
 
-#include "Common/String/Tokenize.h"
+#include "Foundation/String/Tokenize.h"
 
 using namespace Reflect;
 using namespace Inspect;

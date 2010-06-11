@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Common/Types.h"
-#include "Common/Assert.h"
+#include "Platform/Types.h"
+#include "Platform/Assert.h"
 #include "Reflect/Enumeration.h"
 #include <sstream>
 

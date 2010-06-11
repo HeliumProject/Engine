@@ -3,7 +3,7 @@
 #include "API.h"
 #include "Exceptions.h"
 #include "FileIterator.h"
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 #include <time.h>
 #include <sys/timeb.h>

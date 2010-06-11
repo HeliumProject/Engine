@@ -1,4 +1,4 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 
 #include "Tracker.h"
 #include "CacheDB.h"
@@ -11,14 +11,13 @@
 
 #include "Attribute/AttributeHandle.h"
 #include "AppUtils/AppUtils.h"
-#include "Common/Container/Insert.h" 
-#include "Common/Flags.h"
-#include "Common/String/Utilities.h"
-#include "Common/Types.h"
-#include "Console/Console.h"
-#include "Console/Listener.h"
+#include "Foundation/Container/Insert.h" 
+#include "Foundation/Flags.h"
+#include "Foundation/String/Utilities.h"
+#include "Platform/Types.h"
+#include "Foundation/Log.h"
 #include "Content/ContentInit.h"
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
@@ -118,7 +117,7 @@ bool Tracker::TrackAssetFile( Nocturnal::Path& filePath, M_AssetFiles* assetFile
             }
             catch( const Nocturnal::Exception& ex )
             {
-                Console::Warning( Console::Levels::Verbose, "Tracker: %s\n", ex.what() );
+                Log::Warning( Log::Levels::Verbose, "Tracker: %s\n", ex.what() );
             }
         }
     }
@@ -248,7 +247,7 @@ void Tracker::TrackEverything()
     V_string foundFiles;
     while ( !m_StopTracking )
     {  
-        Console::Print( m_InitialIndexingCompleted ? Console::Levels::Verbose : Console::Levels::Default,
+        Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default,
             m_InitialIndexingCompleted ? "Tracker: Looking for new or updated files...\n" : "Tracker: Finding asset files...\n" );
 
         ////////////////////////////////
@@ -256,7 +255,7 @@ void Tracker::TrackEverything()
         {
             Profile::Timer timer;
             FileSystem::Find( m_RootDirectory, foundFiles, std::string( "*." ) + FinderSpecs::Extension::REFLECT_BINARY.GetExtension(), FileSystem::FindFlags::Recursive );
-            Console::Print( m_InitialIndexingCompleted ? Console::Levels::Verbose : Console::Levels::Default, "Tracker: File reslover database lookup took %.2fms\n", timer.Elapsed() );
+            Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, "Tracker: File reslover database lookup took %.2fms\n", timer.Elapsed() );
         }
 
         ////////////////////////////////
@@ -265,11 +264,11 @@ void Tracker::TrackEverything()
         m_Total = (u32)foundFiles.size();
         {
             Profile::Timer timer;
-            Console::Print( m_InitialIndexingCompleted ? Console::Levels::Verbose : Console::Levels::Default, "Tracker: Scanning %d asset file(s) for changes...\n", (u32)foundFiles.size() );
+            Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, "Tracker: Scanning %d asset file(s) for changes...\n", (u32)foundFiles.size() );
 
             while ( !m_StopTracking && !foundFiles.empty() )
             {
-                Console::Listener listener ( ~Console::Streams::Error );
+                Log::Listener listener ( ~Log::Streams::Error );
 
                 try
                 {
@@ -277,7 +276,7 @@ void Tracker::TrackEverything()
                 }
                 catch( const Nocturnal::Exception& ex )
                 {
-                    Console::Warning( "Tracker: %s\n", ex.what() );
+                    Log::Warning( "Tracker: %s\n", ex.what() );
                 }
 
                 foundFiles.pop_back();
@@ -287,16 +286,16 @@ void Tracker::TrackEverything()
             if ( m_StopTracking )
             {
                 u32 percentComplete = (u32)(((f32)m_CurrentProgress/(f32)m_Total) * 100);
-                Console::Print( m_InitialIndexingCompleted ? Console::Levels::Verbose : Console::Levels::Default, "Tracker: Indexing (%d%% complete) pre-empted after %.2fm\n", percentComplete, timer.Elapsed() / 1000.f / 60.f );
+                Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, "Tracker: Indexing (%d%% complete) pre-empted after %.2fm\n", percentComplete, timer.Elapsed() / 1000.f / 60.f );
             }
             else if ( !m_InitialIndexingCompleted )
             {
                 m_InitialIndexingCompleted = true;
-                Console::Print( "Tracker: Initial indexing completed in %.2fm\n", timer.Elapsed() / 1000.f / 60.f );
+                Log::Print( "Tracker: Initial indexing completed in %.2fm\n", timer.Elapsed() / 1000.f / 60.f );
             }
             else 
             {
-                Console::Print( Console::Levels::Verbose, "Tracker: Indexing updated in %.2fm\n" , timer.Elapsed() / 1000.f / 60.f );
+                Log::Print( Log::Levels::Verbose, "Tracker: Indexing updated in %.2fm\n" , timer.Elapsed() / 1000.f / 60.f );
             }
         }
         foundFiles.clear();
@@ -351,7 +350,7 @@ void Tracker::StopThread()
 
         do
         {
-            Console::Print( "Waiting for Tracker Thread shutdown...\n" );
+            Log::Print( "Waiting for Tracker Thread shutdown...\n" );
         }
         while ( WaitForSingleObject( m_Thread, 5 * 1000 /*wait 5 seconds*/ ) == WAIT_TIMEOUT );
 

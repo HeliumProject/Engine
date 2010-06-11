@@ -6,7 +6,7 @@
 #include "SQL.h"
 #include "SQLiteStmt.h"
 
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 
 // Each open sqlite database is represented by an instance of the

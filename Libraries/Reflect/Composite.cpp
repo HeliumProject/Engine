@@ -5,7 +5,7 @@
 #include "Serializers.h"
 #include "ArchiveBinary.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 using namespace Reflect;
 
@@ -158,7 +158,7 @@ void Composite::Report() const
   _snprintf(buf, sizeof(buf), "Reflect Type ID: %3d, Size: %4d, Name: `%s`\n", m_TypeID, m_Size, m_FullName.c_str());
   buf[ sizeof(buf) - 1] = 0; 
 
-  Console::Debug(Console::Levels::Verbose,  buf );
+  Log::Debug(Log::Levels::Verbose,  buf );
 
   u32 computedSize = 0;
   M_FieldIDToInfo::const_iterator itr = m_FieldIDToInfo.begin();
@@ -166,12 +166,12 @@ void Composite::Report() const
   for ( ; itr != end; ++itr )
   {
     computedSize += itr->second->m_Size;
-    Console::Debug(Console::Levels::Verbose, "  Field ID: %3d, Size %4d, Name: `%s`\n", itr->first, itr->second->m_Size, itr->second->m_Name.c_str());
+    Log::Debug(Log::Levels::Verbose, "  Field ID: %3d, Size %4d, Name: `%s`\n", itr->first, itr->second->m_Size, itr->second->m_Name.c_str());
   }
 
   if (computedSize != m_Size)
   {
-    Console::Debug(Console::Levels::Verbose, " %d bytes of hidden fields\n", m_Size - computedSize);
+    Log::Debug(Log::Levels::Verbose, " %d bytes of hidden fields\n", m_Size - computedSize);
   }
 }
 

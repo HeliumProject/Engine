@@ -2,11 +2,10 @@
 
 #include "API.h"
 
-#include "Common/Types.h"
+#include "Types.h"
 
 #ifndef WIN32
 # include <pthread.h>
-# include <sys/ppu_thread.h>
 #endif
 
 namespace Platform
@@ -95,5 +94,18 @@ namespace Platform
 
       return Thread::Exit();
     }
+  };
+
+  class PLATFORM_API ThreadLocalPointer
+  {
+  public:
+    ThreadLocalPointer();
+    ~ThreadLocalPointer();
+
+    void* GetPointer();
+    void SetPointer(void* value);
+
+  private:
+    u32 m_Key;
   };
 }

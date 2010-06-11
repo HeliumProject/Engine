@@ -5,11 +5,11 @@
 #include <hash_set>
 #include <cctype>
 
-#include "Common/Version.h"
-#include "Common/Container/Insert.h" 
+#include "Foundation/Version.h"
+#include "Foundation/Container/Insert.h" 
 
 #include "Reflect/Version.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include "AppUtils/Preferences.h"
 #include "Asset/Entity.h"
@@ -77,10 +77,10 @@
 #include "PortalLight.h"
 #include "AmbientLight.h"
 #include "AmbientVolumeLight.h"
-#include "common/string/utilities.h"
+#include "Foundation/String/Utilities.h"
 #include "Math/AngleAxis.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #define snprintf _snprintf
 
@@ -300,7 +300,7 @@ bool Scene::LoadFile( const std::string& file )
     if ( !m_Nodes.empty() )
     {
         // Shouldn't happen
-        Console::Error( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n", m_File->GetFilePath().c_str(), file.c_str() );
+        Log::Error( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n", m_File->GetFilePath().c_str(), file.c_str() );
         return false;
     }
 
@@ -360,7 +360,7 @@ Undo::CommandPtr Scene::ImportFile( const std::string& file, ImportAction action
     }
     catch ( const Nocturnal::Exception& exception )
     {
-        Console::Error( "%s\n", exception.what() );
+        Log::Error( "%s\n", exception.what() );
         success = false;
     }
 
@@ -415,7 +415,7 @@ Undo::CommandPtr Scene::ImportXML( const std::string& xml, u32 importFlags, Luna
     }
     catch ( Nocturnal::Exception& exception )
     {
-        Console::Error( "%s\n", exception.what() );
+        Log::Error( "%s\n", exception.what() );
         success = false;
     }
 
@@ -533,7 +533,7 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
     }
     else
     {
-        Console::Error( "Unable to create node for data of type '%s'.\n", data->GetClass()->m_UIName.c_str() );
+        Log::Error( "Unable to create node for data of type '%s'.\n", data->GetClass()->m_UIName.c_str() );
         NOC_BREAK();
     }
 
@@ -991,7 +991,7 @@ bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::
         }
         else
         {
-            Console::Warning( "Nothing is selected, there is nothing to export\n" );
+            Log::Warning( "Nothing is selected, there is nothing to export\n" );
         }
     }
     else
@@ -1000,8 +1000,8 @@ bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::
         if ( m_Nodes.size() > 0 )
         {
             // Export the entire hierarchy, in order
-            S_HierarchyNodeDumbPtr::const_iterator childItr = m_Root->GetChildren().begin();
-            S_HierarchyNodeDumbPtr::const_iterator childEnd = m_Root->GetChildren().end();
+            OS_HierarchyNodeDumbPtr::Iterator childItr = m_Root->GetChildren().Begin();
+            OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Root->GetChildren().End();
             for ( ; childItr != childEnd; ++childItr )
             {
                 ExportHierarchyNode( *childItr, elements, exported, args, changes, true );
@@ -1020,7 +1020,7 @@ bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::
         }
         else
         {
-            Console::Warning( "Scene is empty, there's nothing to save!\n" );
+            Log::Warning( "Scene is empty, there's nothing to save!\n" );
         }
     }
 
@@ -1116,8 +1116,8 @@ void Scene::ExportHierarchyNode( Luna::HierarchyNode* node, Reflect::V_Element& 
             if ( exportChildren )
             {
                 // Export all the children of the specified node, recursively.
-                S_HierarchyNodeDumbPtr::const_iterator childItr = node->GetChildren().begin();
-                S_HierarchyNodeDumbPtr::const_iterator childEnd = node->GetChildren().end();
+                OS_HierarchyNodeDumbPtr::Iterator childItr = node->GetChildren().Begin();
+                OS_HierarchyNodeDumbPtr::Iterator childEnd = node->GetChildren().End();
                 for ( ; childItr != childEnd; ++childItr )
                 {
                     ExportHierarchyNode( *childItr, elements, exported, args, changes, true );
@@ -1526,7 +1526,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
         NOC_ASSERT( inserted.first->second == node );
         if ( !inserted.second )
         {
-            Console::Error( "Attempted to add a node with the same ID as one that already exists - %s ["TUID_HEX_FORMAT"].\n", node->GetName().c_str(), node->GetID() );
+            Log::Error( "Attempted to add a node with the same ID as one that already exists - %s ["TUID_HEX_FORMAT"].\n", node->GetName().c_str(), node->GetID() );
             NOC_BREAK();
         }
     }
@@ -2525,11 +2525,11 @@ void Scene::GetFlattenedSelection(OS_SelectableDumbPtr& selection)
         Luna::PivotTransform* group = Reflect::ObjectCast< Luna::PivotTransform >( selectable );
         if ( group )
         {
-            S_HierarchyNodeDumbPtr items;
+            OS_HierarchyNodeDumbPtr items;
             GetFlattenedHierarchy( group, items );
 
-            S_HierarchyNodeDumbPtr::const_iterator itemIt = items.begin();
-            S_HierarchyNodeDumbPtr::const_iterator itemEnd = items.end();
+            OS_HierarchyNodeDumbPtr::Iterator itemIt = items.Begin();
+            OS_HierarchyNodeDumbPtr::Iterator itemEnd = items.End();
             for ( ; itemIt != itemEnd; ++itemIt )
             {
                 selection.Append( *itemIt );
@@ -2541,14 +2541,14 @@ void Scene::GetFlattenedSelection(OS_SelectableDumbPtr& selection)
 ///////////////////////////////////////////////////////////////////////////////
 // Flattends the hierarchy of an Luna::HierarchyNode into a flat list
 //
-void Scene::GetFlattenedHierarchy(Luna::HierarchyNode* node, S_HierarchyNodeDumbPtr& items)
+void Scene::GetFlattenedHierarchy(Luna::HierarchyNode* node, OS_HierarchyNodeDumbPtr& items)
 {
-    const S_HierarchyNodeDumbPtr& children = node->GetChildren();
-    S_HierarchyNodeDumbPtr::const_iterator childIt = children.begin();
-    S_HierarchyNodeDumbPtr::const_iterator childEnd = children.end();
+    const OS_HierarchyNodeDumbPtr& children = node->GetChildren();
+    OS_HierarchyNodeDumbPtr::Iterator childIt = children.Begin();
+    OS_HierarchyNodeDumbPtr::Iterator childEnd = children.End();
     for ( ; childIt != childEnd; ++childIt )
     {
-        items.insert( *childIt );
+        items.Append( *childIt );
 
         Luna::HierarchyNode* group = Reflect::ObjectCast< Luna::HierarchyNode >( *childIt );
         if ( group )
@@ -2615,7 +2615,7 @@ Undo::CommandPtr Scene::SetHiddenSelected( bool hidden )
         return NULL;
     }
 
-    Console::Print( "\n o SetHiddenSelected( %s )\n", hidden ? "true" : "false" );
+    Log::Print( "\n o SetHiddenSelected( %s )\n", hidden ? "true" : "false" );
 
     if (hidden)
     {
@@ -2649,7 +2649,7 @@ Undo::CommandPtr Scene::SetHiddenSelected( bool hidden )
 
 Undo::CommandPtr Scene::SetHiddenUnrelated( bool hidden )
 {
-    Console::Print( "\n o SetHiddenUnrelated( %s )\n", hidden ? "true" : "false" );
+    Log::Print( "\n o SetHiddenUnrelated( %s )\n", hidden ? "true" : "false" );
 
     if (hidden)
     {
@@ -2767,7 +2767,7 @@ Undo::CommandPtr Scene::SetGeometryShown( bool shown, bool selected )
 
 Undo::CommandPtr Scene::ShowLastHidden()
 {
-    Console::Print( "\n o ShowLastHidden()\n" );
+    Log::Print( "\n o ShowLastHidden()\n" );
 
     if (m_LastHidden.empty())
     {
@@ -3035,13 +3035,15 @@ Undo::CommandPtr Scene::UngroupSelected()
             Luna::PivotTransform* group = Reflect::AssertCast< Luna::PivotTransform >( sceneNode );
 
             // If the group has children, parent the children under the group's parent (their grandparent)
-            if ( group->GetChildren().size() > 0 )
+            if ( group->GetChildren().Size() > 0 )
             {
                 // Need to operate on a copy of the children since we are going to change the original
                 // group as we iterate over it.
-                S_HierarchyNodeDumbPtr copyOfChildren = group->GetChildren();
-                for each (Luna::HierarchyNode* child in copyOfChildren)
+                OS_HierarchyNodeDumbPtr copyOfChildren = group->GetChildren();
+                for ( OS_HierarchyNodeDumbPtr::Iterator itr = copyOfChildren.Begin(), end = copyOfChildren.End(); itr != end; ++itr )
                 {
+                    Luna::HierarchyNode* child = *itr;
+
                     // Push the parent command into the queue
                     batch->Push( new ParentCommand( child, group->GetParent() ) );
 
@@ -3056,7 +3058,7 @@ Undo::CommandPtr Scene::UngroupSelected()
         else
         {
             std::string msg = "The Ungroup command only works on groups. The node '" + sceneNode->GetName() +"' is not a group.\n";
-            Console::Warning( msg.c_str() );
+            Log::Warning( msg.c_str() );
             warn = true;
         }
     }
@@ -3360,9 +3362,9 @@ Undo::CommandPtr Scene::PickWalkDown()
         return NULL;
     }
 
-    if (!node->GetChildren().empty())
+    if (!node->GetChildren().Empty())
     {
-        return m_Selection.SetItem( *node->GetChildren().begin() );
+        return m_Selection.SetItem( node->GetChildren().Front() );
     }
     else
     {
@@ -3386,16 +3388,16 @@ Undo::CommandPtr Scene::PickWalkSibling(bool forward)
 
     if (node->GetParent() != NULL)
     {
-        const S_HierarchyNodeDumbPtr& children = node->GetParent()->GetChildren();
+        const OS_HierarchyNodeDumbPtr& children = node->GetParent()->GetChildren();
 
-        if (!children.empty())
+        if (!children.Empty())
         {
             typedef std::map<std::string, Luna::HierarchyNode*> M_NameToHierarchyNodeDumbPtr;
 
             M_NameToHierarchyNodeDumbPtr sortedChildren;
             {
-                S_HierarchyNodeDumbPtr::const_iterator itr = children.begin();
-                S_HierarchyNodeDumbPtr::const_iterator end = children.end();
+                OS_HierarchyNodeDumbPtr::Iterator itr = children.Begin();
+                OS_HierarchyNodeDumbPtr::Iterator end = children.End();
                 for ( ; itr != end; ++itr )
                 {
                     sortedChildren[ (*itr)->GetName() ] = *itr;

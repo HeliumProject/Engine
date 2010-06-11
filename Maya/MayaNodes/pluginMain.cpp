@@ -40,7 +40,7 @@
 #include "EntityAssetNode.h"
 #include "EntityGroupNode.h"
 
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 #include "Content/ContentInit.h"
 #include "MayaCore/MayaCore.h"
 #include "MayaUtils/NodeTypes.h"

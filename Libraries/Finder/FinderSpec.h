@@ -1,8 +1,8 @@
 #pragma once
 
 #include "API.h"
-#include "Common/Assert.h"
-#include "Common/Container/OrderedSet.h"
+#include "Platform/Assert.h"
+#include "Foundation/Container/OrderedSet.h"
 
 #include <string>
 #include <vector>

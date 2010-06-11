@@ -348,10 +348,10 @@ public:
                 }
                 // go through each of the entity's children and set child transforms such that
                 // the parent's global transform acts as their origin
-                const S_HierarchyNodeDumbPtr& children = entity->GetChildren();
+                const OS_HierarchyNodeDumbPtr& children = entity->GetChildren();
 
-                S_HierarchyNodeDumbPtr::const_iterator childrenItor = children.begin();
-                S_HierarchyNodeDumbPtr::const_iterator childrenEnd  = children.end();
+                OS_HierarchyNodeDumbPtr::Iterator childrenItor = children.Begin();
+                OS_HierarchyNodeDumbPtr::Iterator childrenEnd  = children.End();
                 for( ; childrenItor != childrenEnd; ++childrenItor )
                 {
                   if( (*childrenItor)->HasType( Reflect::GetType< LunaClass >() ) )
@@ -407,9 +407,9 @@ public:
 
             if( editor )
             {
-              const S_HierarchyNodeDumbPtr& children = entity->GetChildren();
-              S_HierarchyNodeDumbPtr::const_iterator itor = children.begin();
-              S_HierarchyNodeDumbPtr::const_iterator childrenEnd  = children.end();
+              const OS_HierarchyNodeDumbPtr& children = entity->GetChildren();
+              OS_HierarchyNodeDumbPtr::Iterator itor = children.Begin();
+              OS_HierarchyNodeDumbPtr::Iterator childrenEnd  = children.End();
               for( ; itor != childrenEnd; ++itor )
               {
                 if( (*itor)->HasType( Reflect::GetType<LunaClass>() ) )
@@ -447,9 +447,9 @@ public:
           Luna::Scene* scene = entity->GetScene();
           if( scene )
           {
-            const S_HierarchyNodeDumbPtr& children = entity->GetChildren();
-            S_HierarchyNodeDumbPtr::const_iterator itor = children.begin();
-            S_HierarchyNodeDumbPtr::const_iterator childrenEnd  = children.end();
+            const OS_HierarchyNodeDumbPtr& children = entity->GetChildren();
+            OS_HierarchyNodeDumbPtr::Iterator itor = children.Begin();
+            OS_HierarchyNodeDumbPtr::Iterator childrenEnd  = children.End();
             for( ; itor != childrenEnd; ++itor )
             {
               if( (*itor)->HasType( Reflect::GetType< LunaClass >() ) )
@@ -563,10 +563,10 @@ public:
                     }
                     // go through each of the entity's children and set child transforms such that
                     // the parent's global transform acts as their origin
-                    const S_HierarchyNodeDumbPtr& children = entity->GetChildren();
+                    const OS_HierarchyNodeDumbPtr& children = entity->GetChildren();
 
-                    S_HierarchyNodeDumbPtr::const_iterator childrenItor = children.begin();
-                    S_HierarchyNodeDumbPtr::const_iterator childrenEnd  = children.end();
+                    OS_HierarchyNodeDumbPtr::Iterator childrenItor = children.Begin();
+                    OS_HierarchyNodeDumbPtr::Iterator childrenEnd  = children.End();
                     for( ; childrenItor != childrenEnd; ++childrenItor )
                     {
                       if( (*childrenItor)->HasType( Reflect::GetType< LunaClass >() ) )
@@ -631,9 +631,9 @@ public:
                 {
                   if( FileSystem::Exists( filePath ) )
                   {
-                    const S_HierarchyNodeDumbPtr& children = entity->GetChildren();
-                    S_HierarchyNodeDumbPtr::const_iterator itor = children.begin();
-                    S_HierarchyNodeDumbPtr::const_iterator childrenEnd  = children.end();
+                    const OS_HierarchyNodeDumbPtr& children = entity->GetChildren();
+                    OS_HierarchyNodeDumbPtr::Iterator itor = children.Begin();
+                    OS_HierarchyNodeDumbPtr::Iterator childrenEnd  = children.End();
                     for( ; itor != childrenEnd; ++itor )
                     {
                       if( (*itor)->HasType( Reflect::GetType<LunaClass>() ) )

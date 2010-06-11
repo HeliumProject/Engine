@@ -1,15 +1,14 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "BuilderStats.h"
 
 #include "AppUtils/AppUtils.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include <mysql.h>
 
-#include "Common/Config.h"
-#include "Common/Environment.h"
-#include "Common/Version.h"
-#include "Common/Environment.h"
+#include "Foundation/Environment.h"
+#include "Foundation/Version.h"
+#include "Foundation/Environment.h"
 #include "FileSystem/FileSystem.h"
 #include "Platform/Mutex.h"
 
@@ -166,13 +165,13 @@ static inline bool InsertIfNotFound( const char* select, const char* insert, u64
     }
     else
     {
-      Console::Warning( "No result for: %s", select );
+      Log::Warning( "No result for: %s", select );
       return false;
     }
   }
   else
   {
-    Console::Warning( "Failed to execute SQL: %s", select );
+    Log::Warning( "Failed to execute SQL: %s", select );
     return false;
   }
 
@@ -194,7 +193,7 @@ static inline bool InsertIfNotFound( const char* select, const char* insert, u64
     }
     else
     {
-      Console::Warning( "Failed to execute SQL: %s", insert );
+      Log::Warning( "Failed to execute SQL: %s", insert );
       return false;
     }
   }
@@ -260,9 +259,9 @@ static bool InitializeRowIDs()
   /////////////////////////////////////
   // Tools Release name
   std::string toolsRelease;
-  if ( !Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"TOOLS_RELEASE_NAME", toolsRelease ) )
+  if ( !Nocturnal::GetEnvVar( "NOC_TOOLS_RELEASE_NAME", toolsRelease ) )
   {
-    Console::Warning( "Environment variable not set: %s.\n", NOCTURNAL_STUDIO_PREFIX"TOOLS_RELEASE_NAME" );
+    Log::Warning( "Environment variable not set: %s.\n", "NOC_TOOLS_RELEASE_NAME" );
     return false;
   }
 
@@ -275,7 +274,7 @@ static bool InitializeRowIDs()
   // is tools builder
   g_IsToolsBuilder = false;
   std::string toolsBuilder;
-  if ( Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"TOOLS_BUILDER", toolsBuilder )
+  if ( Nocturnal::GetEnvVar( "NOC_TOOLS_BUILDER", toolsBuilder )
     && stricmp( toolsBuilder.c_str(), "1" ) == 0 )
   {
     g_IsToolsBuilder = true;
@@ -285,7 +284,7 @@ static bool InitializeRowIDs()
   // is symbole builder
   g_IsSymbolBuilder = false;
   std::string symbolMode;
-  if ( Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"SYMBOL_MODE", symbolMode )
+  if ( Nocturnal::GetEnvVar( "NOC_SYMBOL_MODE", symbolMode )
     && stricmp( symbolMode.c_str(), "BUILD" ) == 0 )
   {
     g_IsSymbolBuilder = true;
@@ -294,9 +293,9 @@ static bool InitializeRowIDs()
   /////////////////////////////////////
   // Project Name
   std::string projectName;
-  if ( !Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"PROJECT_NAME", projectName ) )
+  if ( !Nocturnal::GetEnvVar( "NOC_PROJECT_NAME", projectName ) )
   {
-    Console::Warning( "Environment variable not set: %s.\n", NOCTURNAL_STUDIO_PREFIX"PROJECT_NAME" );
+    Log::Warning( "Environment variable not set: %s.\n", "NOC_PROJECT_NAME" );
     return false;
   }
 
@@ -308,9 +307,9 @@ static bool InitializeRowIDs()
   /////////////////////////////////////
   // Asset Branch Name
   std::string assetBranch;
-  if ( !Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"ASSETS_BRANCH_NAME", assetBranch ) )
+  if ( !Nocturnal::GetEnvVar( "NOC_ASSETS_BRANCH_NAME", assetBranch ) )
   {
-    Console::Warning( "Environment variable not set: %s.\n", NOCTURNAL_STUDIO_PREFIX"ASSETS_BRANCH_NAME" );
+    Log::Warning( "Environment variable not set: %s.\n", "NOC_ASSETS_BRANCH_NAME" );
     return false;
   }
   FileSystem::CleanName( assetBranch );
@@ -323,9 +322,9 @@ static bool InitializeRowIDs()
   /////////////////////////////////////
   // Code Branch Name
   std::string codeBranch;
-  if ( !Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"CODE_BRANCH_NAME", codeBranch ) )
+  if ( !Nocturnal::GetEnvVar( "NOC_CODE_BRANCH_NAME", codeBranch ) )
   {
-    Console::Warning( "Environment variable not set: %s.\n", NOCTURNAL_STUDIO_PREFIX"CODE_BRANCH_NAME" );
+    Log::Warning( "Environment variable not set: %s.\n", "NOC_CODE_BRANCH_NAME" );
     return false;
   }
   FileSystem::CleanName( codeBranch );
@@ -346,13 +345,13 @@ void BuilderStats::Initialize()
   static const Reflect::Enumeration* info = Reflect::Registry::GetInstance()->GetEnumeration( g_AssetTypesEnumName );
   if ( !info )
   {
-    Console::Warning( "Could not locate AssetTypes enum, build statistics reporting will not work properly, please report this error to the tools team." );
+    Log::Warning( "Could not locate AssetTypes enum, build statistics reporting will not work properly, please report this error to the tools team." );
   }
 
   std::string host;
-  if ( !Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"DB_HOST", host ) )
+  if ( !Nocturnal::GetEnvVar( "NOC_DB_HOST", host ) )
   {
-    Console::Warning( "No database host set in environment (%s).  Build statistics will not be reported.\n", NOCTURNAL_STUDIO_PREFIX"DB_HOST" );
+    Log::Warning( "No database host set in environment (%s).  Build statistics will not be reported.\n", "NOC_DB_HOST" );
     return;
   }
 
@@ -360,7 +359,7 @@ void BuilderStats::Initialize()
   MYSQL* handle = mysql_init( NULL );
   if ( handle == NULL )
   {
-    Console::Warning( "Call to mysql_init failed, could not init MySQL DB." );
+    Log::Warning( "Call to mysql_init failed, could not init MySQL DB." );
     g_MySQL = NULL;
   }
   else
@@ -379,7 +378,7 @@ void BuilderStats::Initialize()
     // if a failure occured when connecting, then cleanup
     if ( g_MySQL == NULL )
     {
-      Console::Warning( "Call to mysql_real_connect failed, could not init MySQL DB." );
+      Log::Warning( "Call to mysql_real_connect failed, could not init MySQL DB." );
       mysql_close( handle );
       handle = NULL;
     }
@@ -481,7 +480,7 @@ bool BuilderStats::AddBuild( const Nocturnal::Path& path, Asset::AssetType asset
   int execResult = mysql_query( g_MySQL, queryStr );
   if ( execResult != MYSQL_OK )
   {
-    Console::Warning( "Failed to report builder statistics, AddBuild failed.\n" );
+    Log::Warning( "Failed to report builder statistics, AddBuild failed.\n" );
     return false;
   }
 
@@ -531,7 +530,7 @@ bool BuilderStats::AddTopLevelBuild( const Nocturnal::Path& path, Asset::AssetTy
   int execResult = mysql_query( g_MySQL, queryStr );
   if ( execResult != MYSQL_OK )
   {
-    Console::Warning( "Failed to report builder statistics, AddTopLevelBuild failed.\n" );
+    Log::Warning( "Failed to report builder statistics, AddTopLevelBuild failed.\n" );
     return false;
   }
 

@@ -1,8 +1,8 @@
 #include "Symbols.h"
 #include "Exception.h"
 
-#include "Console/Console.h"
-#include "Windows/Windows.h"
+#include "Foundation/Log.h"
+#include "Platform/Windows/Windows.h"
 #include "Platform/Mutex.h"
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -13,8 +13,8 @@
 
 #include "tlhelp32.h"
 
-#include "Common/Types.h"
-#include "Windows/Error.h"
+#include "Platform/Types.h"
+#include "Foundation/Exception.h"
 #include <time.h>
 #include <shlobj.h>
 
@@ -55,16 +55,16 @@ static BOOL CALLBACK EnumerateLoadedModulesProc(PCSTR name, DWORD64 base, ULONG 
     {
       if ( moduleInfo.LoadedPdbName[0] != '\0' )
       {
-        Console::Debug( "Success loading symbols for module: %s, base: 0x%08I64X, size: %u: %s\n", name, base, size, moduleInfo.LoadedPdbName );
+        Log::Debug( "Success loading symbols for module: %s, base: 0x%08I64X, size: %u: %s\n", name, base, size, moduleInfo.LoadedPdbName );
       }
       else
       {
-        Console::Debug( "Success loading symbols for module: %s, base: 0x%08I64X, size: %u\n", name, base, size );
+        Log::Debug( "Success loading symbols for module: %s, base: 0x%08I64X, size: %u\n", name, base, size );
       }
     }
     else
     {
-      Console::Debug( "Failure loading symbols for module: %s: %s\n", name, Windows::GetErrorString().c_str() );
+      Log::Debug( "Failure loading symbols for module: %s: %s\n", name, Platform::GetErrorString().c_str() );
     }
   }
 
@@ -111,12 +111,12 @@ bool Debug::Initialize(const std::string& pdbPaths)
 
     SymSetOptions(options);
 
-    Console::Debug( "Symbol Path: %s\n", dir.c_str() );
+    Log::Debug( "Symbol Path: %s\n", dir.c_str() );
 
     // initialize symbols (dbghelp.dll)
     if ( SymInitialize(GetCurrentProcess(), dir.c_str(), FALSE) == 0 )
     {
-      Console::Debug( "Failure initializing symbol API: %s\n", Windows::GetErrorString().c_str() );
+      Log::Debug( "Failure initializing symbol API: %s\n", Platform::GetErrorString().c_str() );
       return false;
     }
 
@@ -475,11 +475,11 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
   {
     TakeConsoleMutex()
     {
-      Console::LockMutex();
+      Log::LockMutex();
     }
     ~TakeConsoleMutex()
     {
-      Console::UnlockMutex();
+      Log::UnlockMutex();
     }
   } consoleMutex;
 
@@ -715,10 +715,10 @@ std::string Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
 
 std::string Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
 {
-  char* tempDir = getenv( NOCTURNAL_STUDIO_PREFIX"PROJECT_TMP" );
+  char* tempDir = getenv( "NOC_PROJECT_TMP" );
   if ( tempDir == NULL )
   {
-    Console::Error( "Failed to write crash dump because the temporary directory (%s) to save the file to could not be determined.\n", NOCTURNAL_STUDIO_PREFIX"PROJECT_TMP" );
+    Log::Error( "Failed to write crash dump because the temporary directory (%s) to save the file to could not be determined.\n", "NOC_PROJECT_TMP" );
     return "";
   }
 

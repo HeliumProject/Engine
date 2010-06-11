@@ -2,7 +2,7 @@
 
 #include "API.h"
 #include "SceneNode.h"
-#include "Common/Container/BitArray.h"
+#include "Foundation/Container/BitArray.h"
 #include "Content/ContentTypes.h"
 #include "UID/TUID.h"
 

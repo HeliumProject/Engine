@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "RegistryConfig.h"
-#include "Common/Config.h"
 #include <wx/config.h>
 
 using namespace UIToolKit;
@@ -15,7 +14,8 @@ RegistryConfig::RegistryConfig()
 
   // All registry entries will be grouped in: VendorName/Application/ProjectName.
   // For example: Insomniac Games/Tool/Project
-  m_Config->SetPath( NOCTURNAL_PROJECT_NAME );
+#pragma TODO( "Old Project-name reference!" )
+  m_Config->SetPath( "Unknown" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

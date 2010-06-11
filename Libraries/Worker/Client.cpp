@@ -1,15 +1,15 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "Client.h"
 #include "Process.h"
 
-#include "Common/Exception.h"
-#include "Common/CommandLine.h"
+#include "Foundation/Exception.h"
+#include "Foundation/CommandLine.h"
 
 #include "IPC/Pipe.h"
 
 #include "Debug/Exception.h"
 #include "AppUtils/AppUtils.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include <sstream>
 
@@ -19,7 +19,7 @@ using namespace Worker;
 IPC::Connection* g_Connection = NULL;
 
 // Background processes hook functions for message emission
-static void PrintedListener(Console::PrintedArgs& args)
+static void PrintedListener(Log::PrintedArgs& args)
 {
   if (g_Connection && g_Connection->GetState() == IPC::ConnectionStates::Active)
   {
@@ -92,12 +92,12 @@ bool Client::Initialize()
   // error out with an exception if we didnt' connect
   if (g_Connection->GetState() != IPC::ConnectionStates::Active)
   {
-    Console::Error("Timeout connecting to manager process");
+    Log::Error("Timeout connecting to manager process");
     return false;
   }
 
   // hook up our handler to Console
-  Console::AddPrintedListener( Console::PrintedSignature::Delegate (&PrintedListener) );
+  Log::AddPrintedListener( Log::PrintedSignature::Delegate (&PrintedListener) );
 
   // hook up our handler to apputils
   AppUtils::g_ShuttingDown.Add( &ShutdownListener );

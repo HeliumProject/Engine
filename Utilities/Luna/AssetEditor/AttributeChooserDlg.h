@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 #include "Attribute/AttributeCategory.h"
 
 namespace Luna

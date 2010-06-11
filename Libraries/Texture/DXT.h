@@ -1,7 +1,7 @@
 #pragma once
 
-#include "common/types.h"
-#include "common/assert.h"
+#include "Platform/Types.h"
+#include "Platform/Assert.h"
 
 #include "DDS.h"
 #include "MipSet.h"

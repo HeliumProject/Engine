@@ -2,7 +2,7 @@
 #include "Scene.h"
 
 #include "Attribute/AttributeHandle.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Finder/ContentSpecs.h"
 
 using namespace Content;

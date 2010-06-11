@@ -3,8 +3,8 @@
 #include "EntityGroupNode.h"
 #include "EntityAssetNode.h"
 
-#include "Common/Types.h"
-#include "Common/Version.h"
+#include "Platform/Types.h"
+#include "Foundation/Version.h"
 
 #include "MayaUtils/NodeTypes.h"
 #include "MayaUtils/ErrorHelpers.h"

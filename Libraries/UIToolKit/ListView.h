@@ -1,8 +1,8 @@
 #pragma once
 
 #include "API.h"
-#include "Common/Automation/Event.h"
-#include "Common/Types.h"
+#include "Foundation/Automation/Event.h"
+#include "Platform/Types.h"
 #include <wx/listctrl.h>
 
 namespace UIToolKit

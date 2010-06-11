@@ -12,13 +12,13 @@
 //
 
 #include "API.h"
-#include "Common/Types.h"
-#include "Common/Assert.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Memory/Endian.h"
-#include "Common/Container/OrderedSet.h"
+#include "Platform/Types.h"
+#include "Platform/Assert.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Memory/Endian.h"
+#include "Foundation/Container/OrderedSet.h"
 
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 
 #include <vector>
 #include <map>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CommonGenerated.h"
-#include "Common/Compiler.h"
+#include "Platform/Compiler.h"
 
 namespace Luna
 {

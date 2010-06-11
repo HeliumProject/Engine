@@ -2,13 +2,13 @@
 #include "ContentVisitor.h" 
 
 #include "Effector.h"
-#include "Common/Version.h"
-#include "Common/Container/Insert.h" 
-#include "Common/String/Utilities.h"
+#include "Foundation/Version.h"
+#include "Foundation/Container/Insert.h" 
+#include "Foundation/String/Utilities.h"
 
 #include "rcs/rcs.h"
 #include "UID/TUID.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include "FileSystem/FileSystem.h"
 
@@ -861,8 +861,8 @@ namespace Content
     {
       #ifdef DO_BSPHERE_DUMP
       {
-        Console::Debug("--------------------\n");
-        Console::Debug("contentType %d\n", content_type);
+        Log::Debug("--------------------\n");
+        Log::Debug("contentType %d\n", content_type);
       }
       #endif //DO_BSPHERE_DUMP
 
@@ -886,8 +886,8 @@ namespace Content
 
           JointTransform* joint = Get< JointTransform >(joint_id);
 
-          Console::Debug("-----\n");
-          Console::Debug("joint '%s' (%s)\n", joint_str.c_str(), joint ? joint->m_Name.c_str() : "bad uid");
+          Log::Debug("-----\n");
+          Log::Debug("joint '%s' (%s)\n", joint_str.c_str(), joint ? joint->m_Name.c_str() : "bad uid");
         }
         #endif //DO_BSPHERE_DUMP
         
@@ -902,12 +902,12 @@ namespace Content
 
         #ifdef DO_BSPHERE_DUMP
         {
-          Console::Debug("  bsphere: myCreateSphere(%f, %f, %f, %f);\n", bvg_bsphere.m_Center.x, bvg_bsphere.m_Center.y, bvg_bsphere.m_Center.z, bvg_bsphere.m_Radius);
+          Log::Debug("  bsphere: myCreateSphere(%f, %f, %f, %f);\n", bvg_bsphere.m_Center.x, bvg_bsphere.m_Center.y, bvg_bsphere.m_Center.z, bvg_bsphere.m_Radius);
 
           Math::Vector3* vv = &joint_verts[0];
           for(u32 i = 0; i < (u32)joint_verts.size(); i++)
           {
-            Console::Debug("myCreatePoint(%f, %f, %f);\n", vv->x, vv->y, vv->z);
+            Log::Debug("myCreatePoint(%f, %f, %f);\n", vv->x, vv->y, vv->z);
             vv++;
           }
         }
@@ -944,8 +944,8 @@ namespace Content
 
           JointTransform* joint = Get< JointTransform >(joint_id);
 
-          Console::Debug("-----\n");
-          Console::Debug("joint '%s' (%s)\n", joint_str.c_str(), joint ? joint->m_Name.c_str() : "bad uid");
+          Log::Debug("-----\n");
+          Log::Debug("joint '%s' (%s)\n", joint_str.c_str(), joint ? joint->m_Name.c_str() : "bad uid");
         }
         #endif //DO_BSPHERE_DUMP
 
@@ -958,12 +958,12 @@ namespace Content
 
         #ifdef DO_BSPHERE_DUMP
         {
-          Console::Debug("  bsphere: myCreateSphere(%f, %f, %f, %f);\n", bvg_bsphere.m_Center.x, bvg_bsphere.m_Center.y, bvg_bsphere.m_Center.z, bvg_bsphere.m_Radius);
+          Log::Debug("  bsphere: myCreateSphere(%f, %f, %f, %f);\n", bvg_bsphere.m_Center.x, bvg_bsphere.m_Center.y, bvg_bsphere.m_Center.z, bvg_bsphere.m_Radius);
 
           Math::Vector3* vv = &itor->second[0];
           for(u32 i = 0; i < (u32)itor->second.size(); i++)
           {
-            Console::Debug("myCreatePoint(%f, %f, %f);\n", vv->x, vv->y, vv->z);
+            Log::Debug("myCreatePoint(%f, %f, %f);\n", vv->x, vv->y, vv->z);
             vv++;
           }
         }
@@ -984,7 +984,7 @@ namespace Content
 
       #ifdef DO_BSPHERE_DUMP
       {
-        Console::Debug("new bsphere: myCreateSphere(%f, %f, %f, %f);\n", bvg_bsphere.m_Center.x, bvg_bsphere.m_Center.y, bvg_bsphere.m_Center.z, bvg_bsphere.m_Radius);
+        Log::Debug("new bsphere: myCreateSphere(%f, %f, %f, %f);\n", bvg_bsphere.m_Center.x, bvg_bsphere.m_Center.y, bvg_bsphere.m_Center.z, bvg_bsphere.m_Radius);
       }
       #endif //DO_BSPHERE_DUMP
 
@@ -997,11 +997,11 @@ namespace Content
     // 
     #ifdef DO_BSPHERE_DUMP
     {
-      Console::Debug("\n\n\n--------------------\n");
+      Log::Debug("\n\n\n--------------------\n");
 
       for(u32 content_type = 0; content_type < Content::ContentTypes::NumContentTypes; content_type++)
       {
-        Console::Debug("***** content_type %d\n", content_type);
+        Log::Debug("***** content_type %d\n", content_type);
 
         t_JointVertsMap::const_iterator  start = joint_verts_map[content_type].begin();
         t_JointVertsMap::const_iterator  end   = joint_verts_map[content_type].end();
@@ -1019,11 +1019,11 @@ namespace Content
 
           JointTransform* joint = Get< JointTransform >(joint_id);
 
-          Console::Debug("*****   joint '%s' - mesh_id %2d - '%s'\n", joint_str.c_str(), (u32)mesh_id, joint ? joint->m_Name.c_str() : "bad uid");
+          Log::Debug("*****   joint '%s' - mesh_id %2d - '%s'\n", joint_str.c_str(), (u32)mesh_id, joint ? joint->m_Name.c_str() : "bad uid");
 
           for(u32 iv = 0; iv < verts.size(); iv++)
           {
-            Console::Debug("*****    myCreatePoint(%f, %f, %f);\n", verts[iv].x, verts[iv].y, verts[iv].z);
+            Log::Debug("*****    myCreatePoint(%f, %f, %f);\n", verts[iv].x, verts[iv].y, verts[iv].z);
           }
         }
       }
@@ -1057,7 +1057,7 @@ namespace Content
 
             JointTransform* joint = Get< JointTransform >(joint_id);
 
-            Console::Debug("***** joint '%s' - mesh_id %2d - %f %f %f %f - '%s'\n", joint_str.c_str(), (u32)mesh_id, bsphere.m_Center.x, bsphere.m_Center.y, bsphere.m_Center.z, bsphere.m_Radius, joint ? joint->m_Name.c_str() : "bad uid");
+            Log::Debug("***** joint '%s' - mesh_id %2d - %f %f %f %f - '%s'\n", joint_str.c_str(), (u32)mesh_id, bsphere.m_Center.x, bsphere.m_Center.y, bsphere.m_Center.z, bsphere.m_Radius, joint ? joint->m_Name.c_str() : "bad uid");
           }
         }
       }
@@ -1078,7 +1078,7 @@ namespace Content
           const Math::BoundingVolumeGenerator::BSphere& bsphere = m_Bspheres[content_type][i].first;
           u64                                           mesh_id = m_Bspheres[content_type][i].second;
 
-          Console::Debug("***** mesh_id %2d - myCreateSphere(%f, %f, %f, %f);\n", (u32)mesh_id, bsphere.m_Center.x, bsphere.m_Center.y, bsphere.m_Center.z, bsphere.m_Radius);
+          Log::Debug("***** mesh_id %2d - myCreateSphere(%f, %f, %f, %f);\n", (u32)mesh_id, bsphere.m_Center.x, bsphere.m_Center.y, bsphere.m_Center.z, bsphere.m_Radius);
         }
       }
     }
@@ -1108,8 +1108,8 @@ namespace Content
 
         JointTransform* joint = Get< JointTransform >(joint_id);
 
-        Console::Debug("@@@-----\n");
-        Console::Debug("@@@joint '%s' (%s)\n", joint_str.c_str(), joint ? joint->m_Name.c_str() : "bad uid");
+        Log::Debug("@@@-----\n");
+        Log::Debug("@@@joint '%s' (%s)\n", joint_str.c_str(), joint ? joint->m_Name.c_str() : "bad uid");
 
 
         for each (const SkinPtr& skin in m_Skins )
@@ -1151,7 +1151,7 @@ namespace Content
               }
 
               const Math::Vector3& v = mesh->m_Positions[ivert];
-              Console::Debug("@@@blah (%10.9f) myCreatePoint(%f, %f, %f);\n", influence->m_Weights[inf], v.x, v.y, v.z);
+              Log::Debug("@@@blah (%10.9f) myCreatePoint(%f, %f, %f);\n", influence->m_Weights[inf], v.x, v.y, v.z);
             }
           }
         }
@@ -1206,8 +1206,8 @@ namespace Content
     {
       #ifdef DO_BSPHERE_DUMP
       {
-        Console::Debug("--------------------\n");
-        Console::Debug("contentType %d\n", contentType);
+        Log::Debug("--------------------\n");
+        Log::Debug("contentType %d\n", contentType);
       }
       #endif //DO_BSPHERE_DUMP
 
@@ -1236,8 +1236,8 @@ namespace Content
 
             JointTransform* joint = Get< JointTransform >(joint_id);
 
-            Console::Debug("-----\n");
-            Console::Debug("joint '%s' (%s)\n", joint_str.c_str(), joint ? joint->m_Name.c_str() : "bad uid");
+            Log::Debug("-----\n");
+            Log::Debug("joint '%s' (%s)\n", joint_str.c_str(), joint ? joint->m_Name.c_str() : "bad uid");
           }
           #endif //DO_BSPHERE_DUMP
 
@@ -1250,12 +1250,12 @@ namespace Content
 
           #ifdef DO_BSPHERE_DUMP
           {
-            Console::Debug("  bsphere: myCreateSphere(%f, %f, %f, %f);\n", bvg_bsphere.m_Center.x, bvg_bsphere.m_Center.y, bvg_bsphere.m_Center.z, bvg_bsphere.m_Radius);
+            Log::Debug("  bsphere: myCreateSphere(%f, %f, %f, %f);\n", bvg_bsphere.m_Center.x, bvg_bsphere.m_Center.y, bvg_bsphere.m_Center.z, bvg_bsphere.m_Radius);
 
             Math::Vector3* vv = &itor->second[0];
             for(u32 i = 0; i < (u32)itor->second.size(); i++)
             {
-              Console::Debug("myCreatePoint(%f, %f, %f);\n", vv->x, vv->y, vv->z);
+              Log::Debug("myCreatePoint(%f, %f, %f);\n", vv->x, vv->y, vv->z);
               vv++;
             }
         }
@@ -1276,7 +1276,7 @@ namespace Content
 
         #ifdef DO_BSPHERE_DUMP
         {
-          Console::Debug("new bsphere: myCreateSphere(%f, %f, %f, %f);\n", bvg_bsphere.m_Center.x, bvg_bsphere.m_Center.y, bvg_bsphere.m_Center.z, bvg_bsphere.m_Radius);
+          Log::Debug("new bsphere: myCreateSphere(%f, %f, %f, %f);\n", bvg_bsphere.m_Center.x, bvg_bsphere.m_Center.y, bvg_bsphere.m_Center.z, bvg_bsphere.m_Radius);
         }
         #endif //DO_BSPHERE_DUMP
 
@@ -1572,7 +1572,7 @@ namespace Content
     {
       if ( requiredJoints.find( joint ) == requiredJoints.end() )
       {
-        Console::Debug( Console::Levels::Extreme, "Joint not required: %s\n", joint->GetName().c_str() );
+        Log::Debug( Log::Levels::Extreme, "Joint not required: %s\n", joint->GetName().c_str() );
       }
     }
   }
@@ -1665,7 +1665,7 @@ namespace Content
         }
       }
 
-      Console::Print( "Removing Mesh: %s\n", mesh->GetName().c_str() );
+      Log::Print( "Removing Mesh: %s\n", mesh->GetName().c_str() );
       Remove( mesh );
     }
       
@@ -1677,7 +1677,7 @@ namespace Content
     M_ShaderMesh::iterator end = meshesByShader.end();
     for( ; itor != end; ++itor )
     {
-      Console::Print( "Adding MergedMesh: %s\n", itor->second->GetName().c_str() );
+      Log::Print( "Adding MergedMesh: %s\n", itor->second->GetName().c_str() );
       Add( itor->second );
     }
     Update();

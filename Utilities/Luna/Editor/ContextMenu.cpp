@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "ContextMenu.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Undo/BatchCommand.h"
 
 using namespace Luna;

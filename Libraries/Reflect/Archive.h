@@ -15,11 +15,11 @@
 #include "Indent.h"
 #include "Stream.h" 
 
-#include "Common/Assert.h"
-#include "Common/Automation/Event.h"
-#include "Console/Console.h" 
+#include "Platform/Assert.h"
+#include "Foundation/Automation/Event.h"
+#include "Foundation/Log.h" 
 
-#include "Windows/Atomic.h"
+#include "Foundation/Atomic.h"
 
 namespace Reflect
 {
@@ -117,7 +117,7 @@ namespace Reflect
     bool m_Start;
     u64  m_Timer;
     int  m_Progress;
-    std::auto_ptr<::Console::Bullet> m_Bullet;
+    std::auto_ptr<::Log::Bullet> m_Bullet;
 
     PrintStatus()
       : m_Start (true)
@@ -166,7 +166,7 @@ namespace Reflect
   // Event Delegates
   //
 
-  class REFLECT_API ArchiveVisitor : public ::Windows::AtomicRefCountBase
+  class REFLECT_API ArchiveVisitor : public Foundation::AtomicRefCountBase
   {
   public:
     virtual void VisitElement(Element* element)
@@ -216,7 +216,7 @@ namespace Reflect
 
     }
   };
-  typedef Nocturnal::Signature<void, const FileAccessArgs&, ::Windows::AtomicRefCountBase> FileAccessSignature;
+  typedef Nocturnal::Signature<void, const FileAccessArgs&, Foundation::AtomicRefCountBase> FileAccessSignature;
 
   struct SerializeArgs
   {
@@ -228,7 +228,7 @@ namespace Reflect
 
     }
   };
-  typedef Nocturnal::Signature<void, SerializeArgs&, ::Windows::AtomicRefCountBase> SerializeSignature;
+  typedef Nocturnal::Signature<void, SerializeArgs&, Foundation::AtomicRefCountBase> SerializeSignature;
 
   struct DeserializeArgs
   {
@@ -240,7 +240,7 @@ namespace Reflect
 
     }
   };
-  typedef Nocturnal::Signature<void, DeserializeArgs&, ::Windows::AtomicRefCountBase> DeserializeSignature;
+  typedef Nocturnal::Signature<void, DeserializeArgs&, Foundation::AtomicRefCountBase> DeserializeSignature;
 
 
   //

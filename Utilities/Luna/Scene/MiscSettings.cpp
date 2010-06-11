@@ -2,7 +2,7 @@
 #include "MiscSettings.h"
 
 #include "Color.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/LunaSpecs.h"
 #include "Math/Utils.h"

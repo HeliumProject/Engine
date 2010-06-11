@@ -2,8 +2,8 @@
 #include "Finder.h"
 
 #include "AppUtils/Preferences.h"
-#include "Common/Assert.h"
-#include "Common/File/Path.h"
+#include "Platform/Assert.h"
+#include "Foundation/File/Path.h"
 #include "FileSystem/FileSystem.h"
 
 namespace Finder

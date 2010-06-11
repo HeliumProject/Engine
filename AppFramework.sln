@@ -4,7 +4,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Finder", "libraries\Finder\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Luna", "utilities\Luna\Luna.vcproj", "{42ACA40F-393C-4412-9709-CBAA776D1537}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "libraries\Common\Common.vcproj", "{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Foundation", "libraries\Foundation\Foundation.vcproj", "{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PropTool", "utilities\PropTool\PropTool.vcproj", "{55C17C56-0658-470B-9C01-C28838586422}"
 EndProject
@@ -19,8 +19,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MayaUtils", "libraries\MayaUtils\MayaUtils.vcproj", "{0FBA8851-5A4E-4CEB-B24C-9487E9B9AF4A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InspectContent", "libraries\InspectContent\InspectContent.vcproj", "{F2A5F05D-41A6-4FFB-82E4-611273CEAAB1}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Console", "libraries\Console\Console.vcproj", "{1E9F45BD-AE62-4A12-8A09-56665F644B79}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EventSystem", "libraries\EventSystem\EventSystem.vcproj", "{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}"
 EndProject
@@ -41,8 +39,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rebuild", "utilities\Rebuild\rebuild.vcproj", "{0CA7E77E-15CF-43C7-A106-D3752E650A80}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dependencies", "libraries\Dependencies\Dependencies.vcproj", "{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Profile", "libraries\Profile\profile.vcproj", "{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SmartLoader", "libraries\SmartLoader\SmartLoader.vcproj", "{6924A2EA-8CD4-40A1-9574-50F3AECC266D}"
 EndProject
@@ -73,8 +69,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FileSystem", "libraries\FileSystem\FileSystem.vcproj", "{02269037-5B51-467E-A224-B56D816CDFD9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Math", "libraries\Math\math.vcproj", "{EBC5862F-F9EF-4CA6-AB18-F930074011AB}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Windows", "libraries\Windows\Windows.vcproj", "{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetBuilder", "libraries\AssetBuilder\AssetBuilder.vcproj", "{296B05EC-7929-4E23-942C-FA953BB5602D}"
 EndProject
@@ -198,12 +192,6 @@ Global
 		{F2A5F05D-41A6-4FFB-82E4-611273CEAAB1}.Release|Win32.ActiveCfg = Release|Win32
 		{F2A5F05D-41A6-4FFB-82E4-611273CEAAB1}.Release|Win32.Build.0 = Release|Win32
 		{F2A5F05D-41A6-4FFB-82E4-611273CEAAB1}.Release|x64.ActiveCfg = Release|Win32
-		{1E9F45BD-AE62-4A12-8A09-56665F644B79}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1E9F45BD-AE62-4A12-8A09-56665F644B79}.Debug|Win32.Build.0 = Debug|Win32
-		{1E9F45BD-AE62-4A12-8A09-56665F644B79}.Debug|x64.ActiveCfg = Debug|Win32
-		{1E9F45BD-AE62-4A12-8A09-56665F644B79}.Release|Win32.ActiveCfg = Release|Win32
-		{1E9F45BD-AE62-4A12-8A09-56665F644B79}.Release|Win32.Build.0 = Release|Win32
-		{1E9F45BD-AE62-4A12-8A09-56665F644B79}.Release|x64.ActiveCfg = Release|Win32
 		{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}.Debug|Win32.ActiveCfg = Debug|Win32
 		{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}.Debug|Win32.Build.0 = Debug|Win32
 		{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}.Debug|x64.ActiveCfg = Debug|Win32
@@ -264,12 +252,6 @@ Global
 		{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}.Release|Win32.ActiveCfg = Release|Win32
 		{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}.Release|Win32.Build.0 = Release|Win32
 		{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}.Release|x64.ActiveCfg = Release|Win32
-		{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}.Debug|Win32.ActiveCfg = Debug|Win32
-		{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}.Debug|Win32.Build.0 = Debug|Win32
-		{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}.Debug|x64.ActiveCfg = Debug|Win32
-		{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}.Release|Win32.ActiveCfg = Release|Win32
-		{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}.Release|Win32.Build.0 = Release|Win32
-		{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}.Release|x64.ActiveCfg = Release|Win32
 		{6924A2EA-8CD4-40A1-9574-50F3AECC266D}.Debug|Win32.ActiveCfg = Debug|Win32
 		{6924A2EA-8CD4-40A1-9574-50F3AECC266D}.Debug|Win32.Build.0 = Debug|Win32
 		{6924A2EA-8CD4-40A1-9574-50F3AECC266D}.Debug|x64.ActiveCfg = Debug|Win32
@@ -360,12 +342,6 @@ Global
 		{EBC5862F-F9EF-4CA6-AB18-F930074011AB}.Release|Win32.ActiveCfg = Release|Win32
 		{EBC5862F-F9EF-4CA6-AB18-F930074011AB}.Release|Win32.Build.0 = Release|Win32
 		{EBC5862F-F9EF-4CA6-AB18-F930074011AB}.Release|x64.ActiveCfg = Release|Win32
-		{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}.Debug|Win32.ActiveCfg = Debug|Win32
-		{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}.Debug|Win32.Build.0 = Debug|Win32
-		{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}.Debug|x64.ActiveCfg = Debug|Win32
-		{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}.Release|Win32.ActiveCfg = Release|Win32
-		{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}.Release|Win32.Build.0 = Release|Win32
-		{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}.Release|x64.ActiveCfg = Release|Win32
 		{296B05EC-7929-4E23-942C-FA953BB5602D}.Debug|Win32.ActiveCfg = Debug|Win32
 		{296B05EC-7929-4E23-942C-FA953BB5602D}.Debug|Win32.Build.0 = Debug|Win32
 		{296B05EC-7929-4E23-942C-FA953BB5602D}.Debug|x64.ActiveCfg = Debug|Win32

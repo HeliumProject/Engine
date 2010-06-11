@@ -1,13 +1,13 @@
 #include "stdafx.h"
 
-#include "Common/Boost/Regex.h"
-#include "Console/Console.h"
+#include "Foundation/Boost/Regex.h"
+#include "Foundation/Log.h"
 #include "ExportAnimationClip.h"
 #include "MayaNodes/ExportNode.h"
 #include "MayaNodes/ExportNodeSet.h"
 #include "MayaContentCmd.h"
 #include "MayaUtils/Export.h"
-#include "Common/Boost/Regex.h"
+#include "Foundation/Boost/Regex.h"
 
 using namespace Content;
 using namespace MayaContent;
@@ -243,7 +243,7 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
 
     if ( baseObjects.length() != 1 )
     {
-      Console::Warning("Morph target (%s) has more than one base object, this is not supported", morpherFnName.c_str() );
+      Log::Warning("Morph target (%s) has more than one base object, this is not supported", morpherFnName.c_str() );
       continue;
     }
 
@@ -257,7 +257,7 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
     exportBlendShapeDeformer.m_BlendShapeObject = blendShapeObj;
     exportBlendShapeDeformer.m_BaseObject = baseObjects[0];
 
-    Console::Debug( "Gathering morph targets for morpher: %s", morpherFnName.c_str() );
+    Log::Debug( "Gathering morph targets for morpher: %s", morpherFnName.c_str() );
 
     u32 numWeights = morpherFn.numWeights( &status );
     if ( numWeights < 1 )

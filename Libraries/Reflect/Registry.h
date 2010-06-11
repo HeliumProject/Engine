@@ -3,9 +3,9 @@
 #include <map>
 #include <string>
 
-#include "Common/Types.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/File/Path.h"
+#include "Platform/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/File/Path.h"
 
 #include "API.h"
 #include "Tracker.h"

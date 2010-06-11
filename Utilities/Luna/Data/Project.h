@@ -2,9 +2,9 @@
 
 #include "API.h"
 
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 #include "Reflect/Element.h"
-#include "Common/File/Path.h"
+#include "Foundation/File/Path.h"
 
 namespace Luna
 {

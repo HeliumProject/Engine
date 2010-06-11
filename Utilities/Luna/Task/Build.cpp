@@ -31,8 +31,8 @@
 #include "AppUtils/AppUtils.h"
 #include "Worker/Process.h"
 #include "IPC/Connection.h"
-#include "Common/InitializerStack.h"
-#include "Console/Console.h"
+#include "Foundation/InitializerStack.h"
+#include "Foundation/Log.h"
 #include "Debug/Exception.h"
 
 using namespace AssetBuilder;
@@ -156,7 +156,7 @@ bool BuildEntry( const Nocturnal::S_Path& assets, AssetBuilder::BuilderOptionsPt
     }
     catch ( Nocturnal::Exception& ex )
     {
-        Console::Error( "%s\n", ex.what() );
+        Log::Error( "%s\n", ex.what() );
         return false;
     }
 
@@ -179,15 +179,15 @@ bool BuildEntry( const Nocturnal::S_Path& assets, AssetBuilder::BuilderOptionsPt
         {
             Worker::ConsoleOutput* output = (Worker::ConsoleOutput*)msg->GetData();
 
-            Console::Statement statement ( output->m_String, output->m_Stream, output->m_Level, output->m_Indent );
+            Log::Statement statement ( output->m_String, output->m_Stream, output->m_Level, output->m_Indent );
 
             if (g_OutputWindow)
             {
-                g_OutputWindow->PrintListener( Console::PrintedArgs ( statement ) );
+                g_OutputWindow->PrintListener( Log::PrintedArgs ( statement ) );
             }
             else
             {
-                Console::PrintStatement( statement );
+                Log::PrintStatement( statement );
             }
         }
         else if ( messageId == 0x1 )

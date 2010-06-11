@@ -5,7 +5,7 @@
 #include "Asset/EntityAsset.h"
 #include "Asset/ArtFileAttribute.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Content/Scene.h"
 #include "Finder/Finder.h"
 #include "Finder/ContentSpecs.h"

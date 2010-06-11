@@ -1,8 +1,8 @@
-#include "Windows/Windows.h"
-#include "Windows/Error.h"
+#include "Platform/Windows/Windows.h"
+#include "Foundation/Exception.h"
 
 #include "Pipe.h"
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 using namespace IPC;
 
@@ -54,7 +54,7 @@ bool Platform::CreatePipe(const char* name, Pipe& pipe)
     {
       if ( retry > 10 )
       {
-        Platform::Print("Pipe Support: Failed to create pipe '%s' (%s)\n", name, Windows::GetErrorString().c_str());
+        Platform::Print("Pipe Support: Failed to create pipe '%s' (%s)\n", name, Platform::GetErrorString().c_str());
         return false;
       }
       else
@@ -92,7 +92,7 @@ bool Platform::OpenPipe(const char* name, Pipe& pipe)
   {
     if (::GetLastError() != ERROR_PIPE_BUSY) 
     {
-      Platform::Print("Pipe Support: Failed to open pipe (%s)\n", Windows::GetErrorString().c_str());
+      Platform::Print("Pipe Support: Failed to open pipe (%s)\n", Platform::GetErrorString().c_str());
     }
 
     return false;
@@ -103,7 +103,7 @@ bool Platform::OpenPipe(const char* name, Pipe& pipe)
     DWORD mode = PIPE_READMODE_BYTE|PIPE_WAIT; 
     if ( !::SetNamedPipeHandleState(pipe.m_Handle, &mode, NULL, NULL) )
     {
-      Platform::Print("Pipe Support: Failed to set client byte mode (%s)\n", Windows::GetErrorString().c_str());
+      Platform::Print("Pipe Support: Failed to set client byte mode (%s)\n", Platform::GetErrorString().c_str());
       ::CloseHandle( pipe.m_Handle );
       return false;
     }
@@ -136,7 +136,7 @@ bool Platform::ConnectPipe(Pipe& pipe, Event& terminate)
     if ( error != ERROR_IO_PENDING )
     {
 #ifdef IPC_PIPE_DEBUG_PIPES
-      Platform::Print("Pipe Support: Failed to connect pipe (%s)\n", Windows::GetErrorString().c_str());
+      Platform::Print("Pipe Support: Failed to connect pipe (%s)\n", Platform::GetErrorString().c_str());
 #endif
       ::CloseHandle( connect.hEvent );
       return false;
@@ -164,7 +164,7 @@ bool Platform::ConnectPipe(Pipe& pipe, Event& terminate)
       if ( !::GetOverlappedResult(pipe.m_Handle, &connect, &bytes, false) )
       {
 #ifdef IPC_PIPE_DEBUG_PIPES
-        Platform::Print("Pipe Support: Failed to connect pipe (%s)\n", Windows::GetErrorString().c_str());
+        Platform::Print("Pipe Support: Failed to connect pipe (%s)\n", Platform::GetErrorString().c_str());
 #endif
         ::CloseHandle( connect.hEvent );
         return false;
@@ -180,12 +180,12 @@ void Platform::DisconnectPipe(Pipe& pipe)
 {
   if (!::FlushFileBuffers(pipe.m_Handle))
   {
-    Platform::Print("Pipe Support: Failed to flush pipe buffers (%s)\n", Windows::GetErrorString().c_str());
+    Platform::Print("Pipe Support: Failed to flush pipe buffers (%s)\n", Platform::GetErrorString().c_str());
   }
 
   if (!::DisconnectNamedPipe(pipe.m_Handle))
   {
-    Platform::Print("Pipe Support: Failed to diconnect pipe (%s)\n", Windows::GetErrorString().c_str());
+    Platform::Print("Pipe Support: Failed to diconnect pipe (%s)\n", Platform::GetErrorString().c_str());
   }
 }
 
@@ -202,7 +202,7 @@ bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& t
     if ( ::GetLastError() != ERROR_IO_PENDING )
     {
 #ifdef IPC_PIPE_DEBUG_PIPES
-      Platform::Print("Pipe Support: Failed to initiate overlapped read (%s)\n", Windows::GetErrorString().c_str());
+      Platform::Print("Pipe Support: Failed to initiate overlapped read (%s)\n", Platform::GetErrorString().c_str());
 #endif
       return false;
     }
@@ -227,7 +227,7 @@ bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& t
       if ( !::GetOverlappedResult(pipe.m_Handle, (OVERLAPPED*)&pipe.m_Overlapped, &read_local, false) )
       {
 #ifdef IPC_PIPE_DEBUG_PIPES
-        Platform::Print("Pipe Support: Failed read (%s)\n", Windows::GetErrorString().c_str());
+        Platform::Print("Pipe Support: Failed read (%s)\n", Platform::GetErrorString().c_str());
 #endif
         return false;
       }
@@ -252,7 +252,7 @@ bool Platform::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event&
     if ( ::GetLastError() != ERROR_IO_PENDING )
     {
 #ifdef IPC_PIPE_DEBUG_PIPES
-      Platform::Print("Pipe Support: Failed to initiate overlapped write (%s)\n", Windows::GetErrorString().c_str());
+      Platform::Print("Pipe Support: Failed to initiate overlapped write (%s)\n", Platform::GetErrorString().c_str());
 #endif
       return false;
     }
@@ -277,7 +277,7 @@ bool Platform::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event&
       if ( !::GetOverlappedResult(pipe.m_Handle, (OVERLAPPED*)&pipe.m_Overlapped, &wrote_local, false) )
       {
 #ifdef IPC_PIPE_DEBUG_PIPES
-        Platform::Print("Pipe Support: Failed write (%s)\n", Windows::GetErrorString().c_str());
+        Platform::Print("Pipe Support: Failed write (%s)\n", Platform::GetErrorString().c_str());
 #endif
         return false;
       }

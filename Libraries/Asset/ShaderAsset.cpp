@@ -10,7 +10,7 @@
 #include "TextureMapAttribute.h"
 
 #include "Attribute/AttributeHandle.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ShaderSpecs.h"
 

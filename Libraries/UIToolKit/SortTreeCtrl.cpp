@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "SortTreeCtrl.h"
-#include "Common/String/Natural.h"
+#include "Foundation/String/Natural.h"
 
 namespace UIToolKit
 {

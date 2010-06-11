@@ -17,7 +17,7 @@
 #include "Tool.h"
 
 #include "Asset/AssetType.h"
-#include "Common/Exception.h"
+#include "Foundation/Exception.h"
 #include "Editor/Orientation.h"
 
 using namespace Math;

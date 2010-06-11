@@ -3,10 +3,10 @@
 #include "Swizzle.h"
 #include "DXT.h"
 
-#include "Common/Exception.h"
+#include "Foundation/Exception.h"
 
-#include "Profile/Profile.h" 
-#include "Console/Console.h"
+#include "Foundation/Profile.h" 
+#include "Foundation/Log.h"
 #include "Math/Vector4.h"
 
 #include "DDS.h"

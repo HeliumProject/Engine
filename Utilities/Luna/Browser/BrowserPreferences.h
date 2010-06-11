@@ -5,7 +5,7 @@
 #include "SearchHistory.h"
 #include "SearchQuery.h"
 
-#include "Common/Container/insertion_ordered_set.h"
+#include "Foundation/Container/OrderedSet.h"
 #include "Editor/WindowSettings.h"
 #include "Editor/Preferences.h"
 #include "UID/TUID.h"

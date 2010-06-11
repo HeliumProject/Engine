@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "ThumbnailSorter.h"
-#include "Common/String/Natural.h"
+#include "Foundation/String/Natural.h"
 #include "FileSystem/FileSystem.h"
 
 using namespace Luna;

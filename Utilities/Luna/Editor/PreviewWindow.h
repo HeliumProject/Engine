@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Common/Types.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Platform/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
 #include "igDXRender/Render.h"
 #include "Camera.h"
 #include "BangleWindow.h"

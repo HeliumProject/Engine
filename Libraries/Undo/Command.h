@@ -4,8 +4,8 @@
 
 #include "API.h"
 
-#include "Common/Compiler.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Platform/Compiler.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 namespace Undo
 {

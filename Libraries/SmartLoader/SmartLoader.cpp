@@ -1,6 +1,6 @@
 #include "SmartLoader.h"
 
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 using namespace Nocturnal;
 

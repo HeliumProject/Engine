@@ -1,10 +1,10 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "AnimationClip.h"
 
 #include "Scene.h"
 #include "Exceptions.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 using namespace Reflect;
 using namespace Content;
@@ -514,7 +514,7 @@ void AnimationClip::DumpAnims( const JointOrderingPtr& jointOrdering )
 {
   for ( u32 frame = 0; frame < WindowSamples(); ++frame )
   {
-    Console::Print( "Frame %d:\n", frame );
+    Log::Print( "Frame %d:\n", frame );
 
     u32 jointIndex = 0;
     Nocturnal::UID::V_TUID::iterator it = jointOrdering->m_JointOrdering.begin();
@@ -525,17 +525,17 @@ void AnimationClip::DumpAnims( const JointOrderingPtr& jointOrdering )
       
       Animation* anim = m_JointAnimationMap[ id ];
 
-      Console::Print( "Joint %d ["TUID_HEX_FORMAT"]\n", jointIndex, id );
-      Console::Print( "\tq: %f %f %f %f\n", anim->m_Rotate[frame][0]
+      Log::Print( "Joint %d ["TUID_HEX_FORMAT"]\n", jointIndex, id );
+      Log::Print( "\tq: %f %f %f %f\n", anim->m_Rotate[frame][0]
                                        , anim->m_Rotate[frame][1]
                                        , anim->m_Rotate[frame][2]
                                        , anim->m_Rotate[frame][3]);
 
-      Console::Print( "\ts: %f %f %f\n", anim->m_Scale[frame].x
+      Log::Print( "\ts: %f %f %f\n", anim->m_Scale[frame].x
                                        , anim->m_Scale[frame].y
                                        , anim->m_Scale[frame].z );
 
-      Console::Print( "\tt: %f %f %f\n", anim->m_Translate[frame].x
+      Log::Print( "\tt: %f %f %f\n", anim->m_Translate[frame].x
                                        , anim->m_Translate[frame].y
                                        , anim->m_Translate[frame].z );
       
@@ -586,7 +586,7 @@ void AnimationClip::ConvertToAdditiveBlend( const Content::Scene& scene, const J
       }
       else
       {
-        Console::Warning("Additive Clip has reference frame out of range: ref %d, max %d\n", reference_frame, anim->WindowSamples()); 
+        Log::Warning("Additive Clip has reference frame out of range: ref %d, max %d\n", reference_frame, anim->WindowSamples()); 
       }
     }
 
@@ -643,7 +643,7 @@ u32 AnimationClip::CompressAnimations( const Content::Scene& scene, const Animat
       missingJoints++;
       std::string jointGuid;
       (*itor).first.ToString( jointGuid );
-      Console::Print(Console::Levels::Verbose,  "Joint [%s (%s)] not present in bind scene!\n", GetName().c_str(), jointGuid.c_str() );
+      Log::Print(Log::Levels::Verbose,  "Joint [%s (%s)] not present in bind scene!\n", GetName().c_str(), jointGuid.c_str() );
       continue;
     }
 
@@ -700,7 +700,7 @@ void AnimationClip::ExtractCinematicRootOffset( const Content::Scene  & scene,
       parentMat = cineRootParent->m_GlobalTransform;
     }
 
-    Console::Print("cinematic root joint is named %s\n", cineRoot->GetName().c_str() );
+    Log::Print("cinematic root joint is named %s\n", cineRoot->GetName().c_str() );
 
     M_Animation::const_iterator animIt = m_JointAnimationMap.find( cineRoot->m_ID );
     if ( animIt == m_JointAnimationMap.end() )

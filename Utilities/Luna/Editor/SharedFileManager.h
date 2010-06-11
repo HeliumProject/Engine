@@ -2,8 +2,8 @@
 
 #include "API.h"
 
-#include "Common/Automation/Event.h"
-#include "Common/File/Path.h"
+#include "Foundation/Automation/Event.h"
+#include "Foundation/File/Path.h"
 
 #include <map>
 

@@ -1019,13 +1019,13 @@ void TranslateManipulator::MouseMove(wxMouseEvent& e)
     case TranslateSnappingModes::Grid:
       {
 #ifdef DEBUG_TRANSLATE_MANIP_GRID
-        Console::Print("Value:   %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
+        Log::Print("Value:   %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
 #endif
 
         targetValue += primary->GetPivot();
 
 #ifdef DEBUG_TRANSLATE_MANIP_GRID
-        Console::Print("Val&Piv: %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
+        Log::Print("Val&Piv: %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
 #endif
 
         // bring value into global space
@@ -1038,7 +1038,7 @@ void TranslateManipulator::MouseMove(wxMouseEvent& e)
         inverseParent.TransformVertex(targetValue);
 
 #ifdef DEBUG_TRANSLATE_MANIP_GRID
-        Console::Print("Dragged: %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
+        Log::Print("Dragged: %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
 #endif
 
         // if the parent and frame don't line up we need to fixup the local frame, these matrices map those spaces
@@ -1070,7 +1070,7 @@ void TranslateManipulator::MouseMove(wxMouseEvent& e)
         }
 
 #ifdef DEBUG_TRANSLATE_MANIP_GRID
-        Console::Print("PreSnap: %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
+        Log::Print("PreSnap: %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
 #endif
 
         Vector3 startValInObjectSpace = startValue;
@@ -1115,7 +1115,7 @@ void TranslateManipulator::MouseMove(wxMouseEvent& e)
         }
 
 #ifdef DEBUG_TRANSLATE_MANIP_GRID
-        Console::Print("Snapped: %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
+        Log::Print("Snapped: %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
 #endif
 
         switch (m_Space)
@@ -1142,7 +1142,7 @@ void TranslateManipulator::MouseMove(wxMouseEvent& e)
         targetValue -= primary->GetPivot();
 
 #ifdef DEBUG_TRANSLATE_MANIP_GRID
-        Console::Print("Result:  %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
+        Log::Print("Result:  %08.3f, %08.3f, %08.3f\n", targetValue.x, targetValue.y, targetValue.z);
 #endif
 
         break;

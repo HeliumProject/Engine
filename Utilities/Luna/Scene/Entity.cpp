@@ -18,7 +18,7 @@
 #include "Asset/Entity.h"
 
 #include "Finder/ContentSpecs.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 // Using
 using namespace Math;

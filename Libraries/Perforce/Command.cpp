@@ -1,7 +1,7 @@
 #include "Command.h"
 #include "Perforce.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include <sstream>
 
 using namespace Perforce;
@@ -33,7 +33,7 @@ void Command::HandleError( Error *error )
   if ( error->IsWarning() )
   {
     error->Fmt( &buf );
-    Console::Warning( buf.Text() );
+    Log::Warning( buf.Text() );
   }
   else if ( error->IsError() )
   {
@@ -70,8 +70,8 @@ void Command::HandleError( Error *error )
 
 void Command::OutputStat( StrDict* dict )
 {
-  Console::Warning( "Unhandled perforce response for command '%s':\n", m_Command );
-  Console::Indentation indent;
+  Log::Warning( "Unhandled perforce response for command '%s':\n", m_Command );
+  Log::Indentation indent;
 
   StrRef var;
   StrRef value;
@@ -82,8 +82,8 @@ void Command::OutputStat( StrDict* dict )
     {
       break;
     }
-    Console::Warning( "%s: %s\n", var.Text(), value.Text() );
+    Log::Warning( "%s: %s\n", var.Text(), value.Text() );
   }
 
-  Console::Warning( "\n" );
+  Log::Warning( "\n" );
 }

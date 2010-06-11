@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 
 #ifdef WIN32
 # ifdef IPC_EXPORTS

@@ -12,12 +12,12 @@
 // Library includes
 //
 
-#include "Common/Assert.h"
-#include "Common/Automation/Event.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Platform/Assert.h"
+#include "Foundation/Automation/Event.h"
+#include "Foundation/Memory/SmartPtr.h"
 #include "UID/GUID.h"
 #include "UID/TUID.h"
-#include "Windows/Atomic.h"
+#include "Foundation/Atomic.h"
 
 //
 // API includes
@@ -55,7 +55,7 @@ namespace Reflect
 
     }
   };
-  typedef Nocturnal::Signature<void, const ElementChangeArgs&, ::Windows::AtomicRefCountBase> ElementChangeSignature;
+  typedef Nocturnal::Signature<void, const ElementChangeArgs&, Foundation::AtomicRefCountBase> ElementChangeSignature;
 
 
   //

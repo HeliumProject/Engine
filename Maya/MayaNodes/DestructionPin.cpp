@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "DestructionPin.h"
-#include "Common/Assert.h" 
+#include "Platform/Assert.h" 
 
 #include <cmath>
 

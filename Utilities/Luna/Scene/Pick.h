@@ -5,7 +5,7 @@
 #include "Math/Line.h"
 #include "Math/Frustum.h"
 
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 #include "Core/Object.h"
 

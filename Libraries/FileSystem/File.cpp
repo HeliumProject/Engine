@@ -1,11 +1,11 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 
 #include "File.h"
 #include "FileSystem.h"
 
-#include "Common/Checksum/MD5.h"
-#include "Common/Checksum/Crc32.h"
-#include "Common/String/Utilities.h"
+#include "Foundation/Checksum/MD5.h"
+#include "Foundation/Checksum/Crc32.h"
+#include "Foundation/String/Utilities.h"
 
 #include <sstream>
 

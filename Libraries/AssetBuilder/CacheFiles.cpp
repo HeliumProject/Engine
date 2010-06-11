@@ -1,19 +1,18 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "CacheFiles.h"
 #include "CacheFileStats.h"
 #include "Platform/Mutex.h"
 #include "FileSystem/FileSystem.h"
 #include "FileSystem/File.h"
 #include "AppUtils/AppUtils.h"
-#include "Console/Console.h"
-#include "Windows/Error.h"
-#include "Common/Config.h"
-#include "Common/CommandLine.h"
-#include "Common/Environment.h"
-#include "Common/String/Units.h"
-#include "Common/Version.h"
+#include "Foundation/Log.h"
+#include "Foundation/Exception.h"
+#include "Foundation/CommandLine.h"
+#include "Foundation/Environment.h"
+#include "Foundation/String/Units.h"
+#include "Foundation/Version.h"
 #include "Dependencies/Dependencies.h"
-#include "Profile/Timer.h"
+#include "Foundation/Timer.h"
 
 #include <algorithm>
 #include <vector>
@@ -184,7 +183,7 @@ void TouchFile( const std::string& path )
   HANDLE handle = CreateFile(path.c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
   if ( handle == INVALID_HANDLE_VALUE )
   {
-    Console::Warning( Console::Levels::Verbose, "Could not open file '%s' to update timestamp: %s\n", path.c_str(), Windows::GetErrorString().c_str() );
+    Log::Warning( Log::Levels::Verbose, "Could not open file '%s' to update timestamp: %s\n", path.c_str(), Platform::GetErrorString().c_str() );
   }
   else
   {
@@ -196,7 +195,7 @@ void TouchFile( const std::string& path )
 
     if ( !::SetFileTime( handle, (LPFILETIME) NULL, (LPFILETIME) NULL, &ft ) )
     {
-      Console::Warning( Console::Levels::Verbose, "Could not update timestamp on file '%s': %s\n", path.c_str(), Windows::GetErrorString().c_str() );
+      Log::Warning( Log::Levels::Verbose, "Could not update timestamp on file '%s': %s\n", path.c_str(), Platform::GetErrorString().c_str() );
     }
 
     ::CloseHandle( handle );
@@ -238,12 +237,12 @@ void TryCopyFile( const std::string& sourceFile, const std::string& targetFile )
   std::string tempTargetFile = targetFile + "." + computerName;
   if ( !::CopyFile( sourceFile.c_str(), tempTargetFile.c_str(), false ) )
   {
-    throw CacheFilesException( Results::CopyFailed, "Failed to copy '%s' to '%s': %s", sourceFile.c_str(), tempTargetFile.c_str(), Windows::GetErrorString().c_str() );
+    throw CacheFilesException( Results::CopyFailed, "Failed to copy '%s' to '%s': %s", sourceFile.c_str(), tempTargetFile.c_str(), Platform::GetErrorString().c_str() );
   }
 
   if ( !::MoveFileEx( tempTargetFile.c_str(), targetFile.c_str(), MOVEFILE_REPLACE_EXISTING ) )
   {
-    throw CacheFilesException( Results::CopyFailed, "Failed to move '%s' to '%s': %s", tempTargetFile.c_str(), targetFile.c_str(), Windows::GetErrorString().c_str() );
+    throw CacheFilesException( Results::CopyFailed, "Failed to move '%s' to '%s': %s", tempTargetFile.c_str(), targetFile.c_str(), Platform::GetErrorString().c_str() );
   }
 }
 
@@ -276,7 +275,7 @@ void CopyFileToServer( std::string sourceFile, std::string targetFile, Dependenc
     std::string storedMD5;
     if ( !ReadFile( md5File, storedMD5 ) )
     {
-      Console::Debug( "MD5 info does not exist for file: %s (local: %s), generating...\n", sourceFile.c_str(), targetFile.c_str() );
+      Log::Debug( "MD5 info does not exist for file: %s (local: %s), generating...\n", sourceFile.c_str(), targetFile.c_str() );
 
       // this is slow
       std::string localmd5;
@@ -291,8 +290,8 @@ void CopyFileToServer( std::string sourceFile, std::string targetFile, Dependenc
 
     if ( fileInfo->m_MD5 != storedMD5 )
     {
-      Console::Level level = AppUtils::IsToolsBuilder() ? Console::Levels::Default : Console::Levels::Verbose;
-      Console::Warning( level, "MD5 Mismatch: %s (target: %s): Local (built) MD5 (%s) did not match expected MD5 (%s)\n", sourceFile.c_str(), targetFile.c_str(), fileInfo->m_MD5.c_str(), storedMD5.c_str() );
+      Log::Level level = AppUtils::IsToolsBuilder() ? Log::Levels::Default : Log::Levels::Verbose;
+      Log::Warning( level, "MD5 Mismatch: %s (target: %s): Local (built) MD5 (%s) did not match expected MD5 (%s)\n", sourceFile.c_str(), targetFile.c_str(), fileInfo->m_MD5.c_str(), storedMD5.c_str() );
     }
   }
   else // file has not been added to CCS yet
@@ -384,7 +383,7 @@ DWORD WINAPI CopyThread( LPVOID lpParam )
         // is expected and acceptable behavior
         if ( !( job->m_Function == CopyFileFromServer && ex.GetResult() == Results::SourceMissing ) )
         {
-          Console::Warning( "Error copying file '%s' to '%s': %s\n", job->m_Source.c_str(), job->m_Target.c_str(), ex.what() );
+          Log::Warning( "Error copying file '%s' to '%s': %s\n", job->m_Source.c_str(), job->m_Target.c_str(), ex.what() );
           NOC_ASSERT( ex.GetResult() != Results::Success ); // this would not make sense...
         }
 
@@ -392,7 +391,7 @@ DWORD WINAPI CopyThread( LPVOID lpParam )
       }
       catch ( const std::exception& ex )
       {
-        Console::Warning( "Error copying file '%s' to '%s': %s\n", job->m_Source.c_str(), job->m_Target.c_str(), ex.what() );
+        Log::Warning( "Error copying file '%s' to '%s': %s\n", job->m_Source.c_str(), job->m_Target.c_str(), ex.what() );
         job->m_Result = Results::CopyFailed; // a general failure
       }
 
@@ -405,11 +404,11 @@ DWORD WINAPI CopyThread( LPVOID lpParam )
     }
     catch ( const std::exception& ex )
     {
-      Console::Warning( "Unhandled exception in CacheFiles::CopyThread: %s\n", ex.what() );
+      Log::Warning( "Unhandled exception in CacheFiles::CopyThread: %s\n", ex.what() );
     }
     catch ( ... )
     {
-      Console::Warning( "Unhandled exception in CacheFiles::CopyThread\n" );
+      Log::Warning( "Unhandled exception in CacheFiles::CopyThread\n" );
     }
   }
 
@@ -420,12 +419,12 @@ bool CopyFiles( Dependencies::DependencyGraph& depGraph, const Dependencies::V_D
 {
   if ( g_Disable )
   {
-    Console::Print( Console::Levels::Extreme, "Built file copy is disabled\n" );
+    Log::Print( Log::Levels::Extreme, "Built file copy is disabled\n" );
     return false;
   }
 
   Profile::Timer timer;
-  Console::Bullet bullet (files.size() >= 10 ? "Copying %d files\n" : NULL, files.size());
+  Log::Bullet bullet (files.size() >= 10 ? "Copying %d files\n" : NULL, files.size());
 
   // track the stats for this session
   TransferStatsPtr stats = new TransferStats ();
@@ -520,7 +519,7 @@ bool CopyFiles( Dependencies::DependencyGraph& depGraph, const Dependencies::V_D
       u32 toGo = (size / modulus) * modulus;
       if ( toGo )
       {
-        Console::Print("%d to go\n", toGo );
+        Log::Print("%d to go\n", toGo );
         lastCopiesLeft = size;
         lastModulus = modulus;
       }
@@ -559,7 +558,7 @@ bool CopyFiles( Dependencies::DependencyGraph& depGraph, const Dependencies::V_D
 
     str << std::endl;
 
-    Console::Print( Console::Levels::Verbose, str.str().c_str() );
+    Log::Print( Log::Levels::Verbose, str.str().c_str() );
 
     copied &= job.m_Result == Results::Success;
 
@@ -597,7 +596,7 @@ bool CopyFiles( Dependencies::DependencyGraph& depGraph, const Dependencies::V_D
   f32 elapsed = timer.Elapsed();
   if ( !copyType.empty() )
   {
-    Console::Profile( "[%s] of %d files took: %f ms\n", copyType.c_str(), files.size(), elapsed );
+    Log::Profile( "[%s] of %d files took: %f ms\n", copyType.c_str(), files.size(), elapsed );
   }
 
   stats->m_Download = !toServer;
@@ -605,7 +604,7 @@ bool CopyFiles( Dependencies::DependencyGraph& depGraph, const Dependencies::V_D
   stats->m_Speed = ( ( (f32) stats->m_Size / 1024 ) / ( elapsed / 1000.0f ) );
   stats->m_Count = (u32)files.size();
 
-  Console::Print( Console::Levels::Verbose, "CCS: Total Files: %d  Copied: %d  Size: %s  Speed: %s/s\n", stats->m_Count, stats->m_Copied, Nocturnal::BytesToString( stats->m_Size ).c_str(), Nocturnal::BytesToString( (u64) stats->m_Speed * 1024 ).c_str() );
+  Log::Print( Log::Levels::Verbose, "CCS: Total Files: %d  Copied: %d  Size: %s  Speed: %s/s\n", stats->m_Count, stats->m_Copied, Nocturnal::BytesToString( stats->m_Size ).c_str(), Nocturnal::BytesToString( (u64) stats->m_Speed * 1024 ).c_str() );
 
   f32 previousTotal = g_AverageThroughput * g_AverageThroughputSampleCount;
   f32 currentTotal = previousTotal + stats->m_Speed * 1000.f;
@@ -633,12 +632,12 @@ void CacheFiles::Initialize()
     }
 
     // this won't touch g_ThreadCount if this var doesn't exist
-    Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX"CCS_THREAD_COUNT", g_ThreadCount );
+    Nocturnal::GetEnvVar( "NOC_CCS_THREAD_COUNT", g_ThreadCount );
 
-    char* envVar = NOCTURNAL_STUDIO_PREFIX"CCS_STORE_PRODUCTION";
+    char* envVar = "NOC_CCS_STORE_PRODUCTION";
     if ( !production )
     {
-      envVar = NOCTURNAL_STUDIO_PREFIX"CCS_STORE_NONPRODUCTION";
+      envVar = "NOC_CCS_STORE_NONPRODUCTION";
     }
 
     Nocturnal::GetEnvVar( envVar, g_CacheFilesPath );
@@ -646,7 +645,7 @@ void CacheFiles::Initialize()
     // legacy support, in case the environment variable is not set
     if ( g_CacheFilesPath.empty() )
     {
-      Console::Warning( "%s is not defined in your environment, disabling sharing of cached built data\n", envVar );
+      Log::Warning( "%s is not defined in your environment, disabling sharing of cached built data\n", envVar );
       g_Disable = true;
     }
     else
@@ -663,11 +662,11 @@ void CacheFiles::Initialize()
 
     if ( g_Disable )
     {
-      Console::Warning( "CCS is disabled\n" );
+      Log::Warning( "CCS is disabled\n" );
     }
     else
     {
-      Console::Print( Console::Levels::Verbose, "CCS Enabled [ %s | %d threads ]\n", production ? "production" : "non-production", g_ThreadCount );
+      Log::Print( Log::Levels::Verbose, "CCS Enabled [ %s | %d threads ]\n", production ? "production" : "non-production", g_ThreadCount );
     }
   }
 }
@@ -704,16 +703,16 @@ void CacheFiles::Cleanup()
           CacheFileStats::RollbackTransaction();
         }
 
-        Console::Print( "CCS statistics sent\n" );
+        Log::Print( "CCS statistics sent\n" );
       }
       else
       {
-        Console::Warning( "Could not connect to CCS statistics database\n" );
+        Log::Warning( "Could not connect to CCS statistics database\n" );
       }
 
       CacheFileStats::Cleanup();
 
-      Console::Print( "CCS average throughput is %s/s (%d samples)\n", Nocturnal::BytesToString( (u64)g_AverageThroughput ).c_str(), g_AverageThroughputSampleCount );
+      Log::Print( "CCS average throughput is %s/s (%d samples)\n", Nocturnal::BytesToString( (u64)g_AverageThroughput ).c_str(), g_AverageThroughputSampleCount );
     }
   }
 }

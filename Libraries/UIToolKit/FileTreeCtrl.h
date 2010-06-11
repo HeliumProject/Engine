@@ -3,7 +3,7 @@
 #include "API.h"
 #include "SortTreeCtrl.h"
 
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 #include <wx/wx.h>
 #include "wx/generic/dirctrlg.h" // for wxTheFileIconsTable

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "API.h"
-#include "Common/Assert.h"
-#include "Common/Types.h"
+#include "Platform/Assert.h"
+#include "Platform/Types.h"
 
 
 namespace SQL

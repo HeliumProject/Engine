@@ -1,7 +1,7 @@
 #include "stdafx.h" 
 #include "Stream.h" 
 
-#include "Profile/Profile.h" 
+#include "Foundation/Profile.h" 
 #include "Exceptions.h"
 
 using namespace Reflect;

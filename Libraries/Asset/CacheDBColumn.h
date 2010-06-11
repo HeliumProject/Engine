@@ -3,8 +3,8 @@
 #include "API.h"
 
 #include "SQL/SQLiteDB.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Platform/Types.h"
 
 namespace Asset
 {

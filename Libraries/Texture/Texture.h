@@ -5,7 +5,7 @@
 #include <vector>
 #include <list>
 
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 #include "API.h"
 #include "MipSet.h"

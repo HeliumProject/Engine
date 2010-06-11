@@ -1,7 +1,7 @@
 #include "Utils.h"
 
-#include "Common/Assert.h"
-#include "Windows/Windows.h"
+#include "Platform/Assert.h"
+#include "Platform/Windows/Windows.h"
 
 using namespace Debug;
 

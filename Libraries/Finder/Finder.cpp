@@ -1,14 +1,13 @@
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 
 #include "Finder.h"
 #include "Exceptions.h"
 
-#include "Common/Assert.h"
-#include "Common/Config.h"
-#include "Common/Version.h"
-#include "Common/Boost/Regex.h" 
-#include "Common/Container/Insert.h"
-#include "Common/Environment.h"
+#include "Platform/Assert.h"
+#include "Foundation/Version.h"
+#include "Foundation/Boost/Regex.h" 
+#include "Foundation/Container/Insert.h"
+#include "Foundation/Environment.h"
 
 #include "AssetSpecs.h"
 #include "ExtensionSpecs.h"
@@ -18,8 +17,8 @@
 
 using Nocturnal::Insert; 
 
-#include "Common/Environment.h"
-#include "Common/Checksum/MurmurHash2.h"
+#include "Foundation/Environment.h"
+#include "Foundation/Checksum/MurmurHash2.h"
 #include "FileSystem/FileSystem.h"
 
 using namespace Nocturnal;

@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "EditorInfo.h"
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 using namespace Luna;
 

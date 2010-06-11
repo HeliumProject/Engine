@@ -5,7 +5,7 @@
 //
 #define _CRT_RAND_S // required for rand_s, must be declared before including stdlib.h
 
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 
 //
 // D3D

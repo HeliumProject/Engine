@@ -7,7 +7,7 @@
 //  Fast inline integer code to load a color jpeg file.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-#include "common/types.h"
+#include "Platform/Types.h"
 #include "Texture.h"
 #include "JPEG.h"
 

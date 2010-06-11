@@ -1,6 +1,6 @@
 #include "Pipe.h"
 
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 using namespace IPC;
 

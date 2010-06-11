@@ -2,7 +2,7 @@
 
 #include "API.h"
 
-#include "Common/Automation/Event.h"
+#include "Foundation/Automation/Event.h"
 #include "UID/TUID.h"
 #include "Reflect/Archive.h"
 #include "Reflect/Version.h"
@@ -794,7 +794,7 @@ namespace Luna
     void GetSelectionParents(OS_SelectableDumbPtr& parents);
 
     void GetFlattenedSelection(OS_SelectableDumbPtr& selection);
-    void GetFlattenedHierarchy(Luna::HierarchyNode* node, S_HierarchyNodeDumbPtr& items);
+    void GetFlattenedHierarchy(Luna::HierarchyNode* node, OS_HierarchyNodeDumbPtr& items);
 
     void GetSelectedTransforms( Math::V_Matrix4& transforms );
     Undo::CommandPtr SetSelectedTransforms( const Math::V_Matrix4& transforms );

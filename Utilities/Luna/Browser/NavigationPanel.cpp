@@ -152,7 +152,7 @@ void NavigationPanel::UpdateHistoryMenus()
 void NavigationPanel::UpdateNavBarMRU( const OS_SearchQuery& mruQueries )
 {
   wxArrayString mruEntries;
-  for ( OS_SearchQuery::const_iterator itr = mruQueries.begin(), end = mruQueries.end(); itr != end; ++itr )
+  for ( OS_SearchQuery::Iterator itr = mruQueries.Begin(), end = mruQueries.End(); itr != end; ++itr )
   {
     mruEntries.insert( mruEntries.begin(), (*itr)->GetQueryString() );
   }

@@ -3,8 +3,8 @@
 #include "Workspace.h"
 #include "FileDropTarget.h"
 #include "PropToolGenerated.h"
-#include "Common/Compiler.h"
-#include "Common/File/FileWatcher.h"
+#include "Platform/Compiler.h"
+#include "Foundation/File/FileWatcher.h"
 
 namespace igDXRender
 {

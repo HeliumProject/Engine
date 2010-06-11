@@ -171,10 +171,6 @@
 			RelativePathToProject=".\libraries\FileSystem\FileSystem.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{1E9F45BD-AE62-4A12-8A09-56665F644B79}"
-			RelativePathToProject=".\libraries\Console\Console.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
 			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
 		/>

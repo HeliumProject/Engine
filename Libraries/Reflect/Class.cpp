@@ -5,7 +5,7 @@
 #include "Serializers.h"
 #include "ArchiveBinary.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 using namespace Reflect;
 

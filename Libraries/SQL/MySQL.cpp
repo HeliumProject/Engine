@@ -1,11 +1,11 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "MySQLStmt.h"
 #include "MySQL.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
-#include "Windows/Error.h"
-#include "Windows/Process.h"
+#include "Foundation/Exception.h"
+#include "Platform/Process.h"
 #include <boost/regex.hpp>
 
 #include <sstream>
@@ -89,7 +89,7 @@ void MySQL::Connect
   dbFilenameStrm << m_Username << "@" << m_Hostname << ":" << m_Port << "/" << m_Database;
   m_DBFilename = dbFilenameStrm.str();
 
-  LogPrint( __FUNCTION__, Console::Levels::Verbose, "Connection settings: %s", m_DBFilename.c_str() );
+  LogPrint( __FUNCTION__, Log::Levels::Verbose, "Connection settings: %s", m_DBFilename.c_str() );
 
   MYSQL* handle = mysql_init( NULL );
 
@@ -139,7 +139,7 @@ void MySQL::Close()
     return;
   }
 
-  LogPrint( __FUNCTION__, Console::Levels::Verbose );
+  LogPrint( __FUNCTION__, Log::Levels::Verbose );
 
   if ( m_IsTransOpen )
   {
@@ -185,7 +185,7 @@ bool MySQL::IsConnected() const
 //
 int MySQL::ExecSQL( const char* sql )
 {
-  LogPrint( __FUNCTION__, Console::Levels::Extreme, "SQL: %s", sql );
+  LogPrint( __FUNCTION__, Log::Levels::Extreme, "SQL: %s", sql );
 
   ThrowIfDBNotConnected( __FUNCTION__ );
 
@@ -253,7 +253,7 @@ int MySQL::ExecSQLSNPrintF( const char* sql, ... )
 //
 void MySQL::BeginTrans()
 {
-  LogPrint( __FUNCTION__, Console::Levels::Verbose );
+  LogPrint( __FUNCTION__, Log::Levels::Verbose );
 
   ThrowIfMaxOpenTrans( __FUNCTION__ );
 
@@ -273,7 +273,7 @@ void MySQL::BeginTrans()
 //
 void MySQL::CommitTrans()
 {
-  LogPrint( __FUNCTION__, Console::Levels::Verbose );
+  LogPrint( __FUNCTION__, Log::Levels::Verbose );
 
   ThrowIfNoTransOpen( __FUNCTION__ );
 
@@ -293,7 +293,7 @@ void MySQL::CommitTrans()
 //
 void MySQL::RollbackTrans()
 {
-  LogPrint( __FUNCTION__, Console::Levels::Verbose );
+  LogPrint( __FUNCTION__, Log::Levels::Verbose );
 
   ThrowIfNoTransOpen( __FUNCTION__ );
 
@@ -351,7 +351,7 @@ bool MySQL::ValidateBindFormat( const std::string& bindFormat )
 //
 StmtHandle MySQL::CreateStatement( const char* sql, const std::string &bindFormat )
 {
-  LogPrint( __FUNCTION__, Console::Levels::Extreme, "Bind format: \"%s\";\nSQL: %s", bindFormat.c_str(), sql );
+  LogPrint( __FUNCTION__, Log::Levels::Extreme, "Bind format: \"%s\";\nSQL: %s", bindFormat.c_str(), sql );
 
   ThrowIfDBNotConnected( __FUNCTION__ );
 
@@ -471,7 +471,7 @@ int MySQL::StepStatement( const StmtHandle& handle, const bool autoReset )
   // Locate the handle
   MySQLStmt& stmt = FindStatement( handle );
 
-  LogPrint( __FUNCTION__, Console::Levels::Extreme, "SQL: %s", stmt.m_SQL.c_str() );
+  LogPrint( __FUNCTION__, Log::Levels::Extreme, "SQL: %s", stmt.m_SQL.c_str() );
 
   // make sure it's prepared and does not need to be recompiled
   if ( !stmt.IsPrepared() )

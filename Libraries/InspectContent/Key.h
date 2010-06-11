@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "common/memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 #include "Math/Color3.h"
 #include "Reflect/Element.h"
 

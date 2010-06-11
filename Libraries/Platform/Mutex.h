@@ -2,7 +2,7 @@
 
 #include "API.h"
 
-#include "Common/Types.h"
+#include "Types.h"
 
 #ifndef WIN32
 # include <pthread.h>

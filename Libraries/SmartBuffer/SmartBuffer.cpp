@@ -1,10 +1,10 @@
 #include "SmartBuffer.h"
 #include "Fixup.h"
 
-#include "Common/Assert.h"
-#include "Common/Exception.h"
-#include "Console/Console.h"
-#include "Windows/Windows.h"
+#include "Platform/Assert.h"
+#include "Foundation/Exception.h"
+#include "Foundation/Log.h"
+#include "Platform/Windows/Windows.h"
 
 using namespace Nocturnal;
 
@@ -422,8 +422,8 @@ void SmartBuffer::InheritFixups( const SmartBufferPtr& buffer, u32 offset )
 void SmartBuffer::Dump()
 {
 #if 0
-  Console::Print("Buffer Address %x [chunk ID = %x]\n",this,m_Type);
-  Console::Print("%d outgoing\n",m_OutgoingFixups.size());
+  Log::Print("Buffer Address %x [chunk ID = %x]\n",this,m_Type);
+  Log::Print("%d outgoing\n",m_OutgoingFixups.size());
 
   // inherit all the outgoing fixups from the buffer
   {
@@ -434,11 +434,11 @@ void SmartBuffer::Dump()
       SmartBuffer::Location destination;
       (*itr).second->GetDestination(destination);
 
-      Console::Print("  Offset %d - points to buffer %x [ChunkID %x], offset %d\n",(*itr).first,destination.second,destination.second->m_Type,destination.first);
+      Log::Print("  Offset %d - points to buffer %x [ChunkID %x], offset %d\n",(*itr).first,destination.second,destination.second->m_Type,destination.first);
     }
   }
 
-  Console::Print("%d incoming\n",m_IncomingFixups.size());
+  Log::Print("%d incoming\n",m_IncomingFixups.size());
 
   // also inherit any incoming fixups
   {
@@ -449,7 +449,7 @@ void SmartBuffer::Dump()
     {
       const DumbLocation& source_location = (*itr);
 
-      Console::Print("  Pointed to by buffer %x [Chunk ID = %x] (offset %d)\n",(*itr).second,(*itr).second->m_Type,(*itr).first );
+      Log::Print("  Pointed to by buffer %x [Chunk ID = %x] (offset %d)\n",(*itr).second,(*itr).second->m_Type,(*itr).first );
     }
   }
 

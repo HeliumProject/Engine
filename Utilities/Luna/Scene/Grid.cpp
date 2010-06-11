@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "Grid.h"
-#include "Common/Assert.h"
-#include "Common/Container/Insert.h" 
-#include "Console/Console.h"
+#include "Platform/Assert.h"
+#include "Foundation/Container/Insert.h" 
+#include "Foundation/Log.h"
 
 // Using
 using Nocturnal::Insert; 
@@ -232,14 +232,14 @@ bool Grid::SetRowName( const std::string& oldName, const std::string& newName )
     bool removed = RemoveRow( oldRow );
     if ( !removed )
     {
-      Console::Error( "Grid::SetRowName - unable to remove old row %s (#%d).\n", oldName.c_str(), oldRow );
+      Log::Error( "Grid::SetRowName - unable to remove old row %s (#%d).\n", oldName.c_str(), oldRow );
     }
 
     // Insert a new row with the new name and old state
     bool inserted = AddRow( newName, isVisible, isSelectable );
     if ( !inserted )
     {
-      Console::Error( "Grid::SetRowName - unable to insert new row %s.\n", newName.c_str() );
+      Log::Error( "Grid::SetRowName - unable to insert new row %s.\n", newName.c_str() );
     }
     else
     {
@@ -313,7 +313,7 @@ bool Grid::AddRow( const std::string& name, bool visible, bool selectable )
   }
   else
   {
-    Console::Error( "Unable to insert layer [%s] into grid at row [%d]\n", name.c_str(), row );
+    Log::Error( "Unable to insert layer [%s] into grid at row [%d]\n", name.c_str(), row );
     NOC_BREAK(); // This shouldn't happen
   }
 
@@ -489,7 +489,7 @@ i32 Grid::InsertName( const std::string& name )
   }
   else
   {
-    Console::Error( "Layer named %s already exists\n", name.c_str() );
+    Log::Error( "Layer named %s already exists\n", name.c_str() );
   }
 
   return row;
@@ -508,13 +508,13 @@ void Grid::ResizeColumns()
   //m_Panel->GetSize( &panelSize.x, &panelSize.y );
   //wxPoint virtualSize;
   //m_Grid->GetVirtualSize( &virtualSize.x, &virtualSize.y );
-  //Console::Debug( "=============================================\n" );
-  //Console::Debug( "Grid Size:        %d, %d\n", gridSize.x, gridSize.y );
-  //Console::Debug( "Grid Window Size: %d, %d\n", gridWindowSize.x, gridWindowSize.y );
-  //Console::Debug( "Sizer size:       %d, %d\n", sizerSize.x, sizerSize.y );
-  //Console::Debug( "Panel Size:       %d, %d\n", panelSize.x, panelSize.y );
-  //Console::Debug( "Grid Virt Size:   %d, %d\n", virtualSize.x, virtualSize.y );
-  //Console::Debug( "=============================================\n\n" );
+  //Log::Debug( "=============================================\n" );
+  //Log::Debug( "Grid Size:        %d, %d\n", gridSize.x, gridSize.y );
+  //Log::Debug( "Grid Window Size: %d, %d\n", gridWindowSize.x, gridWindowSize.y );
+  //Log::Debug( "Sizer size:       %d, %d\n", sizerSize.x, sizerSize.y );
+  //Log::Debug( "Panel Size:       %d, %d\n", panelSize.x, panelSize.y );
+  //Log::Debug( "Grid Virt Size:   %d, %d\n", virtualSize.x, virtualSize.y );
+  //Log::Debug( "=============================================\n\n" );
 
   // If the vertical scrollbar is currently visible, include it into our calculation to
   // prevent the horizontal scrollbar from also showing up.  This control does not ever

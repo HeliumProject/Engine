@@ -7,7 +7,7 @@
 
 #include "UIToolKit/ImageManager.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Finder/ContentSpecs.h"
 
 // Using

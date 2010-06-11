@@ -3,7 +3,7 @@
 
 #include "Finder/Finder.h"
 #include "FileSystem/FileSystem.h"
-#include "Common/CommandLine.h"
+#include "Foundation/CommandLine.h"
 
 using namespace Luna;
 
@@ -86,7 +86,7 @@ void Preferences::SavePreferences()
     std::string error;
     if ( !SaveToFile( GetPreferencesPath(), error ) )
     {
-        Console::Error( "%s\n", error.c_str() );
+        Log::Error( "%s\n", error.c_str() );
     }
 }
 
@@ -120,6 +120,6 @@ void Preferences::LoadPreferences()
     std::string path = GetPreferencesPath();
     if ( !LoadFromFile( path ) )
     {
-        Console::Debug( "Using default preferences; unable to load preferences from '%s'.\n", path.c_str() );
+        Log::Debug( "Using default preferences; unable to load preferences from '%s'.\n", path.c_str() );
     }
 }

@@ -12,8 +12,8 @@ using namespace Luna;
 
 TraversalAction HierarchyChildTraverser::VisitHierarchyNode(Luna::HierarchyNode* node)
 {
-  S_HierarchyNodeDumbPtr::const_iterator itr = node->GetChildren().begin();
-  S_HierarchyNodeDumbPtr::const_iterator end = node->GetChildren().end();
+  OS_HierarchyNodeDumbPtr::Iterator itr = node->GetChildren().Begin();
+  OS_HierarchyNodeDumbPtr::Iterator end = node->GetChildren().End();
   for ( ; itr != end; ++itr )
   {
     m_Children.Append( *itr );

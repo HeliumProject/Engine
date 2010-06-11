@@ -3,13 +3,13 @@
 #include "API.h"
 #include "Exceptions.h"
 
-#include "Common/Flags.h"
+#include "Foundation/Flags.h"
 
 #include "Finder/Finder.h"
 #include "FileSystem/FileSystem.h"
 #include "FileSystem/File.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include "SQL/SQL.h"
 

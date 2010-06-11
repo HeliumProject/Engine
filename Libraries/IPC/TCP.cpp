@@ -1,8 +1,8 @@
 #include "Platform/API.h"
 #include "TCP.h"
 
-#include "Common/Assert.h"
-#include "Common/Memory/Endian.h"
+#include "Platform/Assert.h"
+#include "Foundation/Memory/Endian.h"
 
 #include <string.h>
 #include <algorithm>

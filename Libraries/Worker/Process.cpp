@@ -1,4 +1,4 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "Process.h"
 
 #include <sstream>
@@ -9,9 +9,9 @@
 // libraries
 #include "Debug/Exception.h"
 #include "AppUtils/AppUtils.h"
-#include "Common/CommandLine.h"
-#include "Console/Console.h"
-#include "Windows/Error.h"
+#include "Foundation/CommandLine.h"
+#include "Foundation/Log.h"
+#include "Foundation/Exception.h"
 
 using namespace Worker;
 
@@ -113,7 +113,7 @@ bool Process::Start(int timeout)
   // Start the child process.
   if( !Nocturnal::GetCmdLineFlag( Worker::Args::Debug ) && !::CreateProcess( NULL, (LPTSTR) str.c_str(), NULL, NULL, FALSE, flags, NULL, NULL, &startupInfo, &procInfo ) )
   {
-    throw Nocturnal::Exception ( "Failed to run '%s' (%s)\n", str.c_str(), Windows::GetErrorString().c_str() );
+    throw Nocturnal::Exception ( "Failed to run '%s' (%s)\n", str.c_str(), Platform::GetErrorString().c_str() );
   }
   else
   {

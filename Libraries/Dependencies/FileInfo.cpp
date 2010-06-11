@@ -3,13 +3,13 @@
 #include "API.h"
 #include "Exceptions.h"
 
-#include "Common/Flags.h"
+#include "Foundation/Flags.h"
 
 #include "Finder/Finder.h"
 #include "FileSystem/FileSystem.h"
 #include "FileSystem/File.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include "SQL/SQL.h"
 
@@ -85,7 +85,7 @@ namespace Dependencies
     // file does not exist on disk
     if ( !FileExists( file.m_Path.c_str() ) )
     {
-      //Console::Bullet wasFileModifiedBullet( Console::Streams::Debug, Console::Levels::Verbose, "File was modified: file does not exist on disk\n" );
+      //Log::Bullet wasFileModifiedBullet( Log::Streams::Debug, Log::Levels::Verbose, "File was modified: file does not exist on disk\n" );
       return true;
     }
 
@@ -95,7 +95,7 @@ namespace Dependencies
     // file size has changed
     if ( file.m_Size != fileStats.st_size )
     {
-      //Console::Bullet wasFileModifiedBullet( Console::Streams::Debug, Console::Levels::Verbose, "File was modified: file size has changed\n" );
+      //Log::Bullet wasFileModifiedBullet( Log::Streams::Debug, Log::Levels::Verbose, "File was modified: file size has changed\n" );
       return true;
     }
 
@@ -124,12 +124,12 @@ namespace Dependencies
       }
       else
       {
-        //Console::Bullet wasFileModifiedBullet( Console::Streams::Debug, Console::Levels::Verbose, "File was modified: the cached md5 is not the same as the md5 of the file on disk\n" );
+        //Log::Bullet wasFileModifiedBullet( Log::Streams::Debug, Log::Levels::Verbose, "File was modified: the cached md5 is not the same as the md5 of the file on disk\n" );
         return true;
       }
     }
 
-    //Console::Bullet wasFileModifiedBullet( Console::Streams::Debug, Console::Levels::Verbose, "File was modified: default fall-through; assume true, there was no cached MD5 on file\n" );
+    //Log::Bullet wasFileModifiedBullet( Log::Streams::Debug, Log::Levels::Verbose, "File was modified: default fall-through; assume true, there was no cached MD5 on file\n" );
     return true;
   }
 
@@ -178,13 +178,13 @@ namespace Dependencies
     // the file does not currently exist in the GraphDB (invalid RowID)
     if ( m_VersionRowID == SQL::InvalidRowID || m_RowID == SQL::InvalidRowID )
     {
-      //Console::Bullet wasFileModifiedBullet( Console::Streams::Debug, Console::Levels::Verbose, "File was modified: the file does not currently exist in the GraphDB (invalid RowID)\n" );
+      //Log::Bullet wasFileModifiedBullet( Log::Streams::Debug, Log::Levels::Verbose, "File was modified: the file does not currently exist in the GraphDB (invalid RowID)\n" );
       return true;
     }
     // expected FormatVersion has changed (builder updated)
     else if ( !m_Spec || ( m_FormatVersion != m_Spec->GetFormatVersion() ) )
     {
-      //Console::Bullet wasFileModifiedBullet( Console::Streams::Debug, Console::Levels::Verbose, "File was modified: expected FormatVersion has changed (builder updated)\n" );
+      //Log::Bullet wasFileModifiedBullet( Log::Streams::Debug, Log::Levels::Verbose, "File was modified: expected FormatVersion has changed (builder updated)\n" );
       return true;
     }
     // the file was modified on disk
@@ -212,7 +212,7 @@ namespace Dependencies
     bool dirtyFile = false;
     if ( !FileExists( m_Path.c_str() ) )
     {
-      Console::Bullet cacheGetGraph( Console::Streams::Debug, Console::Levels::Verbose, "CreateSignature is skipping optional input dependency (%s)\n", m_Path.c_str() );
+      Log::Bullet cacheGetGraph( Log::Streams::Debug, Log::Levels::Verbose, "CreateSignature is skipping optional input dependency (%s)\n", m_Path.c_str() );
       return dirtyFile;
     }
 

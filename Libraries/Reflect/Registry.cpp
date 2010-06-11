@@ -3,10 +3,10 @@
 #include "Version.h"
 #include "Serializers.h"
 
-#include "Common/CommandLine.h"
-#include "Common/Container/Insert.h"
-#include "Common/Environment.h"
-#include "Console/Console.h"
+#include "Foundation/CommandLine.h"
+#include "Foundation/Container/Insert.h"
+#include "Foundation/Environment.h"
+#include "Foundation/Log.h"
 
 #include <io.h>
 
@@ -227,8 +227,8 @@ void Reflect::Initialize()
   std::string str;
   Debug::TranslateStackTrace( trace, str );
 
-  Console::Print( "\n" );
-  Console::Print("%d\n\n%s\n", g_InitCount, str.c_str() );
+  Log::Print( "\n" );
+  Log::Print("%d\n\n%s\n", g_InitCount, str.c_str() );
 #endif
 }
 
@@ -251,8 +251,8 @@ void Reflect::Cleanup()
   std::string str;
   Debug::TranslateStackTrace( trace, str );
 
-  Console::Print( "\n" );
-  Console::Print("%d\n\n%s\n", g_InitCount, str.c_str() );
+  Log::Print( "\n" );
+  Log::Print("%d\n\n%s\n", g_InitCount, str.c_str() );
 #endif
 }
 
@@ -320,7 +320,7 @@ bool Registry::RegisterType(Type* type)
 
           if (!shortNameResult.second && classType != shortNameResult.first->second)
           {
-            Console::Error("Re-registration of short name '%s' was attempted with different classType information\n", classType->m_ShortName.c_str());
+            Log::Error("Re-registration of short name '%s' was attempted with different classType information\n", classType->m_ShortName.c_str());
             NOC_BREAK();
             return false;
           }
@@ -338,7 +338,7 @@ bool Registry::RegisterType(Type* type)
             }
             else
             {
-              Console::Error("Base class of '%s' is not a valid type\n", classType->m_ShortName.c_str());
+              Log::Error("Base class of '%s' is not a valid type\n", classType->m_ShortName.c_str());
               NOC_BREAK();
               return false;
             }
@@ -349,7 +349,7 @@ bool Registry::RegisterType(Type* type)
       }
       else if (classType != idResult.first->second)
       {
-        Console::Error("Re-registration of classType '%s' was attempted with different classType information\n", classType->m_FullName.c_str());
+        Log::Error("Re-registration of classType '%s' was attempted with different classType information\n", classType->m_FullName.c_str());
         NOC_BREAK();
         return false;
       }
@@ -368,7 +368,7 @@ bool Registry::RegisterType(Type* type)
 
         if (!enumResult.second && enumeration != enumResult.first->second)
         {
-          Console::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_ShortName.c_str());
+          Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_ShortName.c_str());
           NOC_BREAK();
           return false;
         }
@@ -377,14 +377,14 @@ bool Registry::RegisterType(Type* type)
 
         if (!enumResult.second && enumeration != enumResult.first->second)
         {
-          Console::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_ShortName.c_str());
+          Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_ShortName.c_str());
           NOC_BREAK();
           return false;
         }
       }
       else if (enumeration != idResult.first->second)
       {
-        Console::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_FullName.c_str());
+        Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_FullName.c_str());
         NOC_BREAK();
         return false;
       }
@@ -422,7 +422,7 @@ void Registry::UnregisterType(const Type* type)
           }
           else
           {
-            Console::Error("Base class of '%s' is not a valid type\n", classType->m_ShortName.c_str());
+            Log::Error("Base class of '%s' is not a valid type\n", classType->m_ShortName.c_str());
             NOC_BREAK();
           }
         }

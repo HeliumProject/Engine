@@ -436,15 +436,17 @@ Undo::CommandPtr PivotTransform::CenterTransform()
   batch->Push( __super::CenterTransform() );
 
   // if we are not a group or we don't have children then don't bother
-  if (!IsGroup() || m_Children.empty())
+  if (!IsGroup() || m_Children.Empty())
   {
     return batch;
   }
 
   Math::Vector3 pos;
-  float w = 1.0f / m_Children.size();
-  for each (Luna::HierarchyNode* hierarchyNode in m_Children)
+  float w = 1.0f / m_Children.Size();
+  for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
   {
+    Luna::HierarchyNode* hierarchyNode = *itr;
+
     const Luna::Transform* transform = hierarchyNode->GetTransform();
     NOC_ASSERT( transform );
     if ( transform )
@@ -460,8 +462,10 @@ Undo::CommandPtr PivotTransform::CenterTransform()
 
   Evaluate(GraphDirections::Downstream);
 
-  for each (Luna::HierarchyNode* n in m_Children)
+  for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
   {
+    Luna::HierarchyNode* n = *itr;
+
     Luna::Transform* t = Reflect::ObjectCast<Luna::Transform>( n );
 
     if (!t)

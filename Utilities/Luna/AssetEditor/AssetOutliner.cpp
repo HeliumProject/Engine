@@ -7,7 +7,7 @@
 #include "AssetOutlineItemData.h"
 
 #include "Asset/AssetClass.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Inspect/ClipboardDataObject.h"
 #include "Inspect/ClipboardFileList.h"
 #include "Inspect/DropTarget.h"
@@ -165,7 +165,7 @@ bool AssetOutliner::AddItem( Luna::AssetNode* node )
       isOk = m_Items.insert( M_TreeItems::value_type( node, insertedItem ) ).second;
       if ( !isOk )
       {
-        Console::Error( "Error while trying to build lookup for node '%s'.\n", node->GetName().c_str() );
+        Log::Error( "Error while trying to build lookup for node '%s'.\n", node->GetName().c_str() );
         NOC_BREAK();
       }
       else
@@ -189,7 +189,7 @@ bool AssetOutliner::AddItem( Luna::AssetNode* node )
     }
     else
     {
-      Console::Error( "Unable to determine parent for node '%s'.\n", node->GetName().c_str() );
+      Log::Error( "Unable to determine parent for node '%s'.\n", node->GetName().c_str() );
       NOC_BREAK();
     }
   }
@@ -366,7 +366,7 @@ AssetOutlineItemData* AssetOutliner::GetItemData( const wxTreeItemId& id )
 
   if ( !data )
   {
-    Console::Error( "Tree item (%x: %s) does not have asset data associated with it\n", id.m_pItem, m_TreeControl->GetItemText( id ).c_str() );
+    Log::Error( "Tree item (%x: %s) does not have asset data associated with it\n", id.m_pItem, m_TreeControl->GetItemText( id ).c_str() );
     NOC_BREAK();
   }
 
@@ -382,8 +382,8 @@ void AssetOutliner::DebugDumpTree( const wxTreeItemId& treeItem, std::string pre
   if ( treeItem != m_TreeControl->GetRootItem() )
   {
     AssetOutlineItemData* data = GetItemData( treeItem );
-    Console::Print( prefix.c_str() );
-    Console::Print( "%s [%x] [%x] [%x]\n", m_TreeControl->GetItemText( treeItem ).c_str(), treeItem.m_pItem, data->GetId().m_pItem, data );
+    Log::Print( prefix.c_str() );
+    Log::Print( "%s [%x] [%x] [%x]\n", m_TreeControl->GetItemText( treeItem ).c_str(), treeItem.m_pItem, data->GetId().m_pItem, data );
   }
   wxTreeItemIdValue cookie;
   wxTreeItemId childItem = m_TreeControl->GetFirstChild( treeItem, cookie );

@@ -7,8 +7,8 @@
 #include "API.h"
 #include "Symbols.h"
 
-#include "Common/Exception.h"
-#include "Common/Automation/Event.h"
+#include "Foundation/Exception.h"
+#include "Foundation/Automation/Event.h"
 
 namespace Debug
 {

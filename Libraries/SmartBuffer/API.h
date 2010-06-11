@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Compiler.h"
+#include "Platform/Compiler.h"
 
 #ifdef SMARTBUFFERDLL_EXPORTS
 # define SMARTBUFFER_API __declspec(dllexport)
@@ -8,7 +8,7 @@
 # define SMARTBUFFER_API __declspec(dllimport)
 #endif
 
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 
 //#define SMARTBUFFER_PROFILE
 

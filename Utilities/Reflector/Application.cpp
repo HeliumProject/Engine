@@ -4,7 +4,7 @@
 #include "resource.h"
 
 #include "AppUtils/AppUtils.h"
-#include "Common/File/Path.h"
+#include "Foundation/File/Path.h"
 #include "Reflect/Registry.h"
 #include "Inspect/Controls.h"
 #include "Inspect/InspectInit.h"

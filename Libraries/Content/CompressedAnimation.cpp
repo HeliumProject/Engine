@@ -2,7 +2,7 @@
 
 #include "math/Conversion.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 using namespace Math;
 
@@ -151,7 +151,7 @@ void CompressedAnimation::EnumerateClass( Reflect::Compositor<CompressedAnimatio
 
     if ( autoCompressionReduction )
     {
-      Console::Warning( "Joint '%s' transform exceeded range, compression automatically reduced to: %d\n", jt_name.c_str(), m_TranslateScale - compressionReductionAmount );
+      Log::Warning( "Joint '%s' transform exceeded range, compression automatically reduced to: %d\n", jt_name.c_str(), m_TranslateScale - compressionReductionAmount );
     }
 
     m_ExceededRangeOnBindConversion = !status;

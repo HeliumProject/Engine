@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ClipboardFileList.h"
-#include "Common/Container/Insert.h"
+#include "Foundation/Container/Insert.h"
 #include "FileSystem/FileSystem.h"
 
 using namespace Inspect;

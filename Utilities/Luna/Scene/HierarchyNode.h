@@ -9,7 +9,7 @@
 #include "SceneNode.h"
 #include "SceneVisitor.h"
 
-#include "Common/Container/insertion_ordered_set.h"
+#include "Foundation/Container/OrderedSet.h"
 #include "Content/NodeVisibility.h"
 
 namespace Content
@@ -32,8 +32,7 @@ namespace Luna
 
   class HierarchyNode;
   typedef Nocturnal::SmartPtr< Luna::HierarchyNode > HierarchyNodePtr;
-
-  typedef Nocturnal::insertion_ordered_set< Luna::HierarchyNode* > S_HierarchyNodeDumbPtr;
+  typedef Nocturnal::OrderedSet< Luna::HierarchyNode* > OS_HierarchyNodeDumbPtr;
 
   typedef std::vector< Luna::HierarchyNode* > V_HierarchyNodeDumbPtr;
   typedef std::vector< HierarchyNodePtr > V_HierarchyNodeSmartPtr;
@@ -106,7 +105,7 @@ namespace Luna
     Luna::HierarchyNode* m_Parent;
     Luna::HierarchyNode* m_Previous;
     Luna::HierarchyNode* m_Next;
-    S_HierarchyNodeDumbPtr m_Children;
+    OS_HierarchyNodeDumbPtr m_Children;
 
     // Cached pointers to use for switching color modes in the 3D view
     Luna::Layer* m_LayerColor; 
@@ -221,7 +220,7 @@ namespace Luna
     void SetNext( Luna::HierarchyNode* value );
 
     // thie children of this node
-    const S_HierarchyNodeDumbPtr& GetChildren() const
+    const OS_HierarchyNodeDumbPtr& GetChildren() const
     {
       return m_Children;
     }

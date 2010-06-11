@@ -1,14 +1,14 @@
 #include "Debug/Exception.h"
 #include "AppUtils/AppUtils.h"
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 
-#include "Common/InitializerStack.h"
-#include "Common/Version.h"
-#include "Console/Console.h"
+#include "Foundation/InitializerStack.h"
+#include "Foundation/Version.h"
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "RCS/RCS.h"
-#include "Common/File/Path.h"
+#include "Foundation/File/Path.h"
 
 #include "Reflect/Archive.h"
 #include "Reflect/Version.h"
@@ -79,13 +79,13 @@ int ProcessFile(const std::string& input, const std::string& output)
             }
             catch (Nocturnal::Exception& ex)
             {
-                Console::Error("Verify FAILED: %s\n", ex.what());
+                Log::Error("Verify FAILED: %s\n", ex.what());
                 return REBUILD_BAD_READ;
             }
         }
 
-        Console::Print("\n" );
-        Console::Print("Verified OK\n");
+        Log::Print("\n" );
+        Log::Print("Verified OK\n");
         return REBUILD_SUCCESS;
     }
 
@@ -110,7 +110,7 @@ int ProcessFile(const std::string& input, const std::string& output)
         }
         catch (Nocturnal::Exception& ex)
         {
-            Console::Error("%s\n", ex.what());
+            Log::Error("%s\n", ex.what());
             return REBUILD_BAD_READ;
         }
     }
@@ -161,7 +161,7 @@ int ProcessFile(const std::string& input, const std::string& output)
             }
             catch (RCS::Exception& ex)
             {
-                Console::Error("%s\n", ex.what());
+                Log::Error("%s\n", ex.what());
                 return REBUILD_BAD_WRITE;
             }
         }
@@ -181,7 +181,7 @@ int ProcessFile(const std::string& input, const std::string& output)
         }
         catch (Nocturnal::Exception& ex)
         {
-            Console::Error("%s\n", ex.what());
+            Log::Error("%s\n", ex.what());
             return REBUILD_BAD_WRITE;
         }
     }
@@ -209,14 +209,14 @@ int ProcessFile(const std::string& input, const std::string& output)
             }
             catch (Nocturnal::Exception& ex)
             {
-                Console::Print("Verify FAILED: %s\n", ex.what());
+                Log::Print("Verify FAILED: %s\n", ex.what());
                 return REBUILD_BAD_WRITE;
             }
         }
     }
 
-    Console::Print("\n" );
-    Console::Print("Verified OK\n");
+    Log::Print("\n" );
+    Log::Print("Verified OK\n");
     return REBUILD_SUCCESS;
 }
 
@@ -224,8 +224,8 @@ int Main(int argc, const char** argv)
 {
     if ( argc < 2 )
     {
-        Console::Print("rebuild - Update Utility for Insomniac Games Reflect File Format\n\n");
-        Console::Print(" rebuild <input> [output]\n\n");
+        Log::Print("rebuild - Update Utility for Insomniac Games Reflect File Format\n\n");
+        Log::Print(" rebuild <input> [output]\n\n");
         return REBUILD_BAD_INPUT;
     }
 
@@ -290,7 +290,7 @@ int Main(int argc, const char** argv)
 
         if (!batchfile.is_open())
         {
-            Console::Error( "Unable to open file '%s' for read\n", g_Batch.c_str() );
+            Log::Error( "Unable to open file '%s' for read\n", g_Batch.c_str() );
         }
         else
         {
@@ -337,17 +337,17 @@ int Main(int argc, const char** argv)
 
             batchfile.close();
 
-            Console::Print("Rebuild Report:\n");
+            Log::Print("Rebuild Report:\n");
             for (int i=0; i<REBUILD_CODE_COUNT; i++)
             {
-                Console::Print(" %s: %d\n", g_RebuildStrings[i], g_RebuildTotals[i]);
+                Log::Print(" %s: %d\n", g_RebuildStrings[i], g_RebuildTotals[i]);
                 if (i > 0)
                 {
                     V_string::const_iterator itr = g_RebuildResults[i].begin();
                     V_string::const_iterator end = g_RebuildResults[i].end();
                     for ( int count = 0; itr != end; ++itr, ++count )
                     {
-                        Console::Print("  [%d]: %s\n", count, itr->c_str());
+                        Log::Print("  [%d]: %s\n", count, itr->c_str());
                     }
                 }
             }

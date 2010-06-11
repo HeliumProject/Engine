@@ -1,6 +1,6 @@
 #include "UniqueID.h"
 
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 #include "UID/GUID.h"
 #include "UID/TUID.h"
 

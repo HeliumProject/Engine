@@ -7,9 +7,9 @@
 #include "SceneEditor.h"
 #include "SceneManager.h"
 #include "SceneEditorIDs.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "UIToolKit/ImageManager.h"
-#include "Common/Container/Insert.h" 
+#include "Foundation/Container/Insert.h" 
 
 // Using
 using namespace Luna;
@@ -335,7 +335,7 @@ void LayerGrid::LayerSelectedItems( bool addToLayer )
   S_u32 selectedRows = m_Grid->GetSelectedRows();
   if ( selectedNodes.Size() > 0 && selectedRows.size() > 0 )
   {
-    //Console::Debug( "LayerSelectedItems\n" );
+    //Log::Debug( "LayerSelectedItems\n" );
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
     OS_SelectableDumbPtr::Iterator nodeItr = selectedNodes.Begin();
@@ -386,25 +386,25 @@ void LayerGrid::LayerSelectedItems( bool addToLayer )
             {
               // Finally make an undoable command to add/remove the node to/from the layer
               batch->Push( new DependencyCommand( action, layer, node ) );
-              //Console::Debug( "\t\t%s node %s %s layer %s [row=%d]\n", addToLayer ? "Added" : "Removed", node->GetName().c_str(), addToLayer ? "to" : "from", layer->GetName().c_str(), *rowItr );
+              //Log::Debug( "\t\t%s node %s %s layer %s [row=%d]\n", addToLayer ? "Added" : "Removed", node->GetName().c_str(), addToLayer ? "to" : "from", layer->GetName().c_str(), *rowItr );
             }
             else
             {
-              //Console::Debug( "\t\tNode %s was already a member of layer %s [row=%d]\n", node->GetName().c_str(), layer->GetName().c_str(), *rowItr );
+              //Log::Debug( "\t\tNode %s was already a member of layer %s [row=%d]\n", node->GetName().c_str(), layer->GetName().c_str(), *rowItr );
             }
           }
           else
           {
             // Something is wrong.  The rows that are selected in the grid do not correspond to
             // items in our list of layers (m_Layers).  Somehow those lists got out of sync.
-            Console::Error( "Unable to add selection to layer [row=%d] because it doesn't exist\n", *rowItr );
+            Log::Error( "Unable to add selection to layer [row=%d] because it doesn't exist\n", *rowItr );
             NOC_BREAK();
           }
         }
       }
     }
 
-    //Console::Debug( "\n" );
+    //Log::Debug( "\n" );
     if( !batch->IsEmpty() )
     {
       m_Scene->Push( batch );
@@ -420,25 +420,25 @@ void LayerGrid::LayerSelectedItems( bool addToLayer )
 void LayerGrid::DebugDumpSelection()
 {
 #ifdef _DEBUG
-  Console::Debug( "Dumping grid selection.\n" );
+  Log::Debug( "Dumping grid selection.\n" );
   S_u32 selection = m_Grid->GetSelectedRows();
   const size_t numSelected = selection.size();
   if ( numSelected == 0 )
   {
-    Console::Debug( "\tNo items are selected.\n" );
+    Log::Debug( "\tNo items are selected.\n" );
   }
   else
   {
-    Console::Debug( "\t%d item%s selected.\n", numSelected, ( numSelected == 1 ) ? "" : "s" );
+    Log::Debug( "\t%d item%s selected.\n", numSelected, ( numSelected == 1 ) ? "" : "s" );
     S_u32::const_iterator rowItr = selection.begin();
     S_u32::const_iterator rowEnd = selection.end();
     for ( ; rowItr != rowEnd; ++rowItr )
     {
       const std::string& name = m_Grid->GetRowName( *rowItr );
-      Console::Debug( "\t\t%s\n", name.c_str() );
+      Log::Debug( "\t\t%s\n", name.c_str() );
     }
   }
-  Console::Debug( "\n" );
+  Log::Debug( "\n" );
 #endif
 }
 
@@ -731,7 +731,7 @@ void LayerGrid::NameChanging( const SceneNodeChangeArgs& args )
     const std::string& name = layerItr->first;
     if ( args.m_Node != layer || layer->GetName() != name )
     {
-      Console::Error( "Layer in list (named %s), does not match layer named %s.\n", name.c_str(), args.m_Node->GetName().c_str() );
+      Log::Error( "Layer in list (named %s), does not match layer named %s.\n", name.c_str(), args.m_Node->GetName().c_str() );
       NOC_BREAK();
     }
     m_NameChangeInfo.m_Layer = layer;
@@ -739,7 +739,7 @@ void LayerGrid::NameChanging( const SceneNodeChangeArgs& args )
   }
   else
   {
-    Console::Error( "Layer named %s is not in the grid.\n", args.m_Node->GetName().c_str() );
+    Log::Error( "Layer named %s is not in the grid.\n", args.m_Node->GetName().c_str() );
     NOC_BREAK();
   }
 }
@@ -765,7 +765,7 @@ void LayerGrid::NameChanged( const SceneNodeChangeArgs& args )
   }
   else
   {
-    Console::Error( "Layer named %s is not in the grid.\n", m_NameChangeInfo.m_OldName.c_str() );
+    Log::Error( "Layer named %s is not in the grid.\n", m_NameChangeInfo.m_OldName.c_str() );
     NOC_BREAK();
   }
 
@@ -788,7 +788,7 @@ void LayerGrid::LayerVisibleChanged( const GridRowChangeArgs& args )
   }
   else
   {
-    Console::Error( "LayerVisibleChanged - layer named %s not found\n", name.c_str() );
+    Log::Error( "LayerVisibleChanged - layer named %s not found\n", name.c_str() );
     NOC_BREAK();
   }
 }
@@ -836,7 +836,7 @@ void LayerGrid::LayerSelectableChanged( const GridRowChangeArgs& args )
   }
   else
   {
-    Console::Error( "LayerSelectableChanged - layer named %s not found\n", name.c_str() );
+    Log::Error( "LayerSelectableChanged - layer named %s not found\n", name.c_str() );
     NOC_BREAK();
   }
 }

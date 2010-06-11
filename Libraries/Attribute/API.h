@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Compiler.h"
+#include "Platform/Compiler.h"
 
 #ifdef ATTRIBUTEDLL_EXPORTS
 #define ATTRIBUTE_API __declspec(dllexport)

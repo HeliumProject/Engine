@@ -6,8 +6,8 @@
 #include "CollectionManager.h"
 
 #include "Asset/CacheDB.h"
-#include "Common/String/Tokenize.h"
-#include "Common/Container/Insert.h" 
+#include "Foundation/String/Tokenize.h"
+#include "Foundation/Container/Insert.h" 
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/AssetSpecs.h"

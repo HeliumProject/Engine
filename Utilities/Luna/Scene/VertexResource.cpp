@@ -42,7 +42,7 @@ namespace Luna
       if ( m_Buffer != m_Tracker->GetVertices() )
       {
 #ifdef LUNA_DEBUG_RESOURCES
-        Console::Print("Setting vertices to 0x%p\n", m_Buffer);
+        Log::Print("Setting vertices to 0x%p\n", m_Buffer);
 #endif
         m_Device->SetStreamSource( 0, m_Buffer, 0, (UINT)ElementSizes[ GetElementType() ] );
         m_Tracker->SetVertices( m_Buffer );
@@ -51,7 +51,7 @@ namespace Luna
       if ( ElementFormats[ GetElementType() ] != m_Tracker->GetVertexFormat() )
       {
 #ifdef LUNA_DEBUG_RESOURCES
-        Console::Print("Setting FVF to 0x%x\n", ElementFormats[ m_ElementType ]);
+        Log::Print("Setting FVF to 0x%x\n", ElementFormats[ m_ElementType ]);
 #endif
         m_Device->SetFVF( ElementFormats[ GetElementType() ] );
         m_Tracker->SetVertexFormat( ElementFormats[ GetElementType() ] );

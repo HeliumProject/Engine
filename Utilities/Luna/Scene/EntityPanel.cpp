@@ -15,8 +15,8 @@
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ContentSpecs.h"
-#include "Console/Console.h"
-#include "Windows/Process.h"
+#include "Foundation/Log.h"
+#include "Platform/Process.h"
 #include "Task/Export.h"
 #include "Volume.h"
 

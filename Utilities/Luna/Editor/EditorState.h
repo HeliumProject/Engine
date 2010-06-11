@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "Common/File/Path.h"
+#include "Foundation/File/Path.h"
 #include "Reflect/Serializers.h"
 
 namespace Luna

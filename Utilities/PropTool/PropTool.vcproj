@@ -184,10 +184,6 @@
 			RelativePathToProject=".\libraries\igDXRender\igDXRender.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
-			RelativePathToProject=".\libraries\Profile\profile.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{06092F0D-324B-484D-A9ED-397DFF76AE53}"
 			RelativePathToProject=".\SDK\TinyXML\2.6.1\TinyXML.vcproj"
 		/>
@@ -197,7 +193,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
-			RelativePathToProject=".\libraries\Common\Common.vcproj"
+			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}"

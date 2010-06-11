@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Compiler.h"
+#include "Platform/Compiler.h"
 
 #include <wx/animate.h>
 

@@ -11,7 +11,7 @@ void ExportCurve::GatherMayaData( V_ExportBase& newExportObjects )
   MFnNurbsCurve curveFn( m_MayaObject, &status );
   if ( status != MS::kSuccess )
   {
-    Console::Error( "Unable to convert maya object to an ExportCurve.\n" );
+    Log::Error( "Unable to convert maya object to an ExportCurve.\n" );
     return;
   }
 

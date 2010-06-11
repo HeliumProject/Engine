@@ -1,8 +1,8 @@
 #pragma once
 
 #include "UID/TUID.h"
-#include "Common/Compiler.h"
-#include "Common/Exception.h"
+#include "Platform/Compiler.h"
+#include "Foundation/Exception.h"
 
 #include <sstream>
 

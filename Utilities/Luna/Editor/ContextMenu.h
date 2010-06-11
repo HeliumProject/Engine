@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "Common/Automation/Event.h"
+#include "Foundation/Automation/Event.h"
 #include "Core/Object.h"
 
 // Forwards

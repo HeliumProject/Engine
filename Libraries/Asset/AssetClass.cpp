@@ -1,4 +1,4 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 
 #include "AssetClass.h"
 #include "AssetTypeInfo.h"
@@ -12,7 +12,7 @@
 
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Reflect/Version.h"
 #include "Reflect/Object.h"
 
@@ -48,7 +48,7 @@ AssetClassPtr AssetClass::LoadAssetClass( const char* path )
     }
     catch ( const Nocturnal::Exception& exception )
     {
-        Console::Warning( "%s\n", exception.what() );
+        Log::Warning( "%s\n", exception.what() );
     }
 
     // success

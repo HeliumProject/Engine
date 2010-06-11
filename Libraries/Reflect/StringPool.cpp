@@ -5,9 +5,9 @@
 #include "ArchiveBinary.h" 
 #include "CompressionUtilities.h" 
 
-#include "Common/Assert.h"
-#include "Common/Memory/ArrayPtr.h" 
-#include "Console/Console.h"
+#include "Platform/Assert.h"
+#include "Foundation/Memory/ArrayPtr.h" 
+#include "Foundation/Log.h"
 
 using Nocturnal::ArrayPtr; 
 
@@ -92,7 +92,7 @@ void StringPool::Deserialize(ArchiveBinary* archive)
 void StringPool::SerializeDirect(Reflect::Stream& stream)
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-  Console::Debug("Serializing %d strings\n", m_Strings.size());
+  Log::Debug("Serializing %d strings\n", m_Strings.size());
 #endif
 
   i32 size = (i32)m_Strings.size();
@@ -106,7 +106,7 @@ void StringPool::SerializeDirect(Reflect::Stream& stream)
     const std::string& str (*itr);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-  Console::Debug(" [%d] : %s\n", index, str.c_str());
+  Log::Debug(" [%d] : %s\n", index, str.c_str());
 #endif
 
     stream.Write(&size); 
@@ -123,7 +123,7 @@ void StringPool::DeserializeDirect(Reflect::Stream& stream)
   stream.Read(&size);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-  Console::Debug("Deserializing %d strings\n", size);
+  Log::Debug("Deserializing %d strings\n", size);
 #endif
 
   m_Strings.resize(size);
@@ -141,7 +141,7 @@ void StringPool::DeserializeDirect(Reflect::Stream& stream)
     m_Indices[outputString] = i; 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-  Console::Debug(" [%d] : %s\n", i, outputString.c_str());
+  Log::Debug(" [%d] : %s\n", i, outputString.c_str());
 #endif
   }
 

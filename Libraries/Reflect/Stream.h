@@ -3,7 +3,7 @@
 #include "API.h"  
 #include "Exceptions.h"
 
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 namespace Reflect
 {

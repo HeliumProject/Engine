@@ -5,7 +5,7 @@
 #include "Scene.h"
 #include "SceneEditorIDs.h"
 #include "SceneManager.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 // Using
 using namespace Luna;
@@ -118,7 +118,7 @@ void TypeGrid::VisibilityChanged( const GridRowChangeArgs& args )
   }
   else
   {
-    Console::Error( "Unable to change visible property - Node type (%s) was not in list.\n", typeName.c_str() );
+    Log::Error( "Unable to change visible property - Node type (%s) was not in list.\n", typeName.c_str() );
     NOC_BREAK();
   }
 }
@@ -166,7 +166,7 @@ void TypeGrid::SelectabilityChanged( const GridRowChangeArgs& args )
   }
   else
   {
-    Console::Error( "Unable to change selectable property - Node type (%s) was not in list.\n", typeName.c_str() );
+    Log::Error( "Unable to change selectable property - Node type (%s) was not in list.\n", typeName.c_str() );
     NOC_BREAK();
   }
 }

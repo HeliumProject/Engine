@@ -3,7 +3,7 @@
 // Includes
 #include "API.h"
 #include "AppUtils/AppUtils.h"
-#include "Common/Automation/Event.h"
+#include "Foundation/Automation/Event.h"
 
 namespace Inspect
 {

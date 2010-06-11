@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 #include "InspectInit.h"
 
 #include "Control.h"

@@ -188,10 +188,6 @@
 			RelativePathToProject=".\libraries\Asset\Asset.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{1E9F45BD-AE62-4A12-8A09-56665F644B79}"
-			RelativePathToProject=".\libraries\Console\Console.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{FADD81C4-992F-4492-9750-C1F4B208EBD1}"
 			RelativePathToProject=".\libraries\smartbuffer\smartbuffer.vcproj"
 		/>
@@ -202,10 +198,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
 			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
-			RelativePathToProject=".\libraries\Profile\profile.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{072476F0-F19F-44E9-ABBD-4299805961D1}"
@@ -224,10 +216,6 @@
 			RelativePathToProject=".\libraries\FileSystem\FileSystem.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}"
-			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}"
 			RelativePathToProject=".\libraries\Dependencies\Dependencies.vcproj"
 		/>
@@ -237,7 +225,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
-			RelativePathToProject=".\libraries\Common\Common.vcproj"
+			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"

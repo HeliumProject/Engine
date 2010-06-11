@@ -1,7 +1,7 @@
 #include "Zone.h"
 #include "Finder/Finder.h"
 #include "FileSystem/FileSystem.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include "Attribute/AttributeHandle.h"
 

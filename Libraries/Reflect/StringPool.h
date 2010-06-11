@@ -3,7 +3,7 @@
 #include <vector>
 #include <hash_map>
 
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 #include "API.h"
 #include "Stream.h" 

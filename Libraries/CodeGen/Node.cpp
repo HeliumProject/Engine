@@ -1,5 +1,5 @@
 #include "Node.h"
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 using namespace CodeGen;
 

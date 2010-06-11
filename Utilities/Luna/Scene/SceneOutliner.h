@@ -4,7 +4,7 @@
 #include "API.h"
 #include "SceneOutlinerState.h"
 #include "Core/Selection.h"
-#include "Common/Types.h"
+#include "Platform/Types.h"
 #include "UIToolKit/SortTreeCtrl.h"
 
 namespace Luna

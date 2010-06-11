@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Statistics.h"
 
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 
 using namespace Luna;
 

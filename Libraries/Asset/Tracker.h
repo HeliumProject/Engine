@@ -5,8 +5,8 @@
 #include "AssetClass.h"
 #include "AssetFlags.h"
 
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Platform/Types.h"
 #include "Reflect/Field.h"
 
 namespace Asset

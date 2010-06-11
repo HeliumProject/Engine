@@ -6,7 +6,7 @@
 #include "ShaderLoader.h"
 #include "XMLShaderLoader.h"
 
-#include "Common/File/Path.h"
+#include "Foundation/File/Path.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 igDXRender::Texture::Texture(const char* fname)

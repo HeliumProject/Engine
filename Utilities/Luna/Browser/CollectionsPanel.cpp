@@ -5,7 +5,7 @@
 
 #include "Asset/AssetFile.h"
 #include "Asset/AssetFolder.h"
-#include "Common/String/Utilities.h"
+#include "Foundation/String/Utilities.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
@@ -1107,13 +1107,13 @@ AssetCollectionItemData* CollectionsPanel::GetItemData( UIToolKit::SortTreeCtrl*
 
         if ( !data )
         {
-            Console::Error( "Tree item (%x: %s) does not have asset data associated with it\n", id.m_pItem, treeCtrl->GetItemText( id ).c_str() );
+            Log::Error( "Tree item (%x: %s) does not have asset data associated with it\n", id.m_pItem, treeCtrl->GetItemText( id ).c_str() );
             NOC_BREAK();
         }
     }
     else
     {
-        Console::Error( "Tree item does not have asset data associated with it!\n" );
+        Log::Error( "Tree item does not have asset data associated with it!\n" );
         NOC_BREAK();
     }
 

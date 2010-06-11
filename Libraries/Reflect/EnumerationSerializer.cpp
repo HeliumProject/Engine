@@ -3,7 +3,7 @@
 #include "ArchiveBinary.h"
 #include "ArchiveXML.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 using namespace Reflect;
 

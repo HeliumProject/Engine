@@ -1,9 +1,9 @@
 #pragma once
 
 #include "API.h"
-#include "Common/Types.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Console/Console.h"
+#include "Platform/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Log.h"
 #include "Platform/Mutex.h"
 
 namespace IPC
@@ -29,8 +29,8 @@ namespace Worker
 #pragma warning ( disable: 4200 )
   struct ConsoleOutput
   {
-    Console::Stream m_Stream;
-    Console::Level  m_Level;
+    Log::Stream m_Stream;
+    Log::Level  m_Level;
     int             m_Indent;
     char            m_String[0];
   };

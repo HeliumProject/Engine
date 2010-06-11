@@ -1,13 +1,13 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 
 #include "ExceptionReport.h"
 
-#include "Common/Version.h"
-#include "Common/CommandLine.h"
-#include "Common/String/Utilities.h"
+#include "Foundation/Version.h"
+#include "Foundation/CommandLine.h"
+#include "Foundation/String/Utilities.h"
 #include "FileSystem/FileSystem.h"
-#include "Profile/Memory.h"
-#include "Windows/Process.h"
+#include "Platform/Windows/Memory.h"
+#include "Platform/Process.h"
 
 #include <sstream>
 
@@ -69,7 +69,7 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
 
   m_InheritedArgs.clear();
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( NOCTURNAL_STUDIO_PREFIX "CMD_ARGS", buf, MAX_PATH );
+  GetEnvironmentVariable( "NOC_CMD_ARGS", buf, MAX_PATH );
   m_InheritedArgs = buf;
   if ( m_InheritedArgs.empty() )
   {
@@ -78,24 +78,24 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
 
   m_AssetBranch.clear();
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( NOCTURNAL_STUDIO_PREFIX"ASSETS_BRANCH_NAME", buf, MAX_PATH );
+  GetEnvironmentVariable( "NOC_ASSETS_BRANCH_NAME", buf, MAX_PATH );
   m_AssetBranch = buf;
   FileSystem::CleanName( m_AssetBranch );
 
   m_CodeBranch.clear();
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( NOCTURNAL_STUDIO_PREFIX"CODE_BRANCH_NAME", buf, MAX_PATH );
+  GetEnvironmentVariable( "NOC_CODE_BRANCH_NAME", buf, MAX_PATH );
   m_CodeBranch = buf;
   FileSystem::CleanName( m_CodeBranch );
 
   m_ProjectName.clear();
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( NOCTURNAL_STUDIO_PREFIX"PROJECT_NAME", buf, MAX_PATH );
+  GetEnvironmentVariable( "NOC_PROJECT_NAME", buf, MAX_PATH );
   m_ProjectName = buf;
 
   m_IsToolsBuilder = false;
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( NOCTURNAL_STUDIO_PREFIX"TOOLS_BUILDER", buf, MAX_PATH );
+  GetEnvironmentVariable( "NOC_TOOLS_BUILDER", buf, MAX_PATH );
   if ( stricmp( buf, "1" ) == 0 )
   {
     m_IsToolsBuilder = true;
@@ -107,7 +107,7 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
 
   m_IsSymbolBuilder = false;
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( NOCTURNAL_STUDIO_PREFIX"SYMBOL_MODE", buf, MAX_PATH );
+  GetEnvironmentVariable( "NOC_SYMBOL_MODE", buf, MAX_PATH );
   if ( stricmp( buf, "BUILD" ) == 0 )
   {
     m_IsSymbolBuilder = true;
@@ -127,7 +127,7 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
 
   m_ToolsReleaseName.clear();
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( NOCTURNAL_STUDIO_PREFIX"TOOLS_RELEASE_NAME", buf, MAX_PATH );
+  GetEnvironmentVariable( "NOC_TOOLS_RELEASE_NAME", buf, MAX_PATH );
   m_ToolsReleaseName = buf;
 
   // Memory

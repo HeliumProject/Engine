@@ -3,7 +3,7 @@
 #include "API.h"
 #include "Content/Instance.h"
 #include "Asset/EntityAsset.h"
-#include "Common/Automation/Event.h"
+#include "Foundation/Automation/Event.h"
 
 namespace Asset
 {

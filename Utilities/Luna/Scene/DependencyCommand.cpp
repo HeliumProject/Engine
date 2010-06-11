@@ -2,7 +2,7 @@
 #include "DependencyCommand.h"
 #include "SceneNode.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 using namespace Luna;
 
@@ -18,7 +18,7 @@ DependencyCommand::DependencyCommand( DependencyAction action, const SceneNodePt
     S_SceneNodeSmartPtr::const_iterator foundDescendant = m_Ancestor->GetDescendants().find( m_Descendant );
     if ( foundDescendant != m_Ancestor->GetDescendants().end() )
     {
-      Console::Error( "DependencyCommand - Connection between ancestor (%s) and descendant (%s) already exists\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
+      Log::Error( "DependencyCommand - Connection between ancestor (%s) and descendant (%s) already exists\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
       NOC_BREAK();
     }
 
@@ -26,7 +26,7 @@ DependencyCommand::DependencyCommand( DependencyAction action, const SceneNodePt
     S_SceneNodeDumbPtr::const_iterator foundAncestor = m_Descendant->GetAncestors().find( m_Ancestor );
     if ( foundAncestor != m_Descendant->GetAncestors().end() )
     {
-      Console::Error( "DependencyCommand - Connection between ancestor (%s) and descendant (%s) already exists\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
+      Log::Error( "DependencyCommand - Connection between ancestor (%s) and descendant (%s) already exists\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
       NOC_BREAK();
     }
   }
@@ -37,7 +37,7 @@ DependencyCommand::DependencyCommand( DependencyAction action, const SceneNodePt
     S_SceneNodeSmartPtr::const_iterator foundDescendant = m_Ancestor->GetDescendants().find( m_Descendant );
     if ( foundDescendant == m_Ancestor->GetDescendants().end() )
     {
-      Console::Error( "DependencyCommand - Ancestor (%s) and descendant (%s) are not connected\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
+      Log::Error( "DependencyCommand - Ancestor (%s) and descendant (%s) are not connected\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
       NOC_BREAK();
     }
 
@@ -45,7 +45,7 @@ DependencyCommand::DependencyCommand( DependencyAction action, const SceneNodePt
     S_SceneNodeDumbPtr::const_iterator foundAncestor = m_Descendant->GetAncestors().find( m_Ancestor );
     if ( foundAncestor == m_Descendant->GetAncestors().end() )
     {
-      Console::Error( "DependencyCommand - Ancestor (%s) and descendant (%s) are not connected\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
+      Log::Error( "DependencyCommand - Ancestor (%s) and descendant (%s) are not connected\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
       NOC_BREAK();
     }
   }
@@ -63,14 +63,14 @@ void DependencyCommand::Undo()
   {
   case Connect:
     {
-      //Console::Debug( "DependencyCommand::Undo - Breaking connection between ancestor (%s) and descendant (%s)\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
+      //Log::Debug( "DependencyCommand::Undo - Breaking connection between ancestor (%s) and descendant (%s)\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
       m_Descendant->RemoveDependency( m_Ancestor );
     }
     break;
 
   case Disconnect:
     {
-      //Console::Debug( "DependencyCommand::Undo - Creating connection between ancestor (%s) and descendant (%s)\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
+      //Log::Debug( "DependencyCommand::Undo - Creating connection between ancestor (%s) and descendant (%s)\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
       m_Descendant->CreateDependency( m_Ancestor );
     }
     break;
@@ -83,14 +83,14 @@ void DependencyCommand::Redo()
   {
   case Connect:
     {
-      //Console::Debug( "DependencyCommand::Redo - Creating connection between ancestor (%s) and descendant (%s)\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
+      //Log::Debug( "DependencyCommand::Redo - Creating connection between ancestor (%s) and descendant (%s)\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
       m_Descendant->CreateDependency( m_Ancestor );
     }
     break;
 
   case Disconnect:
     {
-      //Console::Debug( "DependencyCommand::Redo - Breaking connection between ancestor (%s) and descendant (%s)\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
+      //Log::Debug( "DependencyCommand::Redo - Breaking connection between ancestor (%s) and descendant (%s)\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
       m_Descendant->RemoveDependency( m_Ancestor );
     }
     break;

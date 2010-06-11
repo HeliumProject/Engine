@@ -1,11 +1,11 @@
 #include "Precompile.h"
 #include "CollectionManager.h"
 
-#include "Common/Boost/Regex.h"
-#include "Common/Checksum/MD5.h"
-#include "Common/Flags.h"
+#include "Foundation/Boost/Regex.h"
+#include "Foundation/Checksum/MD5.h"
+#include "Foundation/Flags.h"
 #include "FileSystem/FileSystem.h"
-#include "Common/String/Utilities.h"
+#include "Foundation/String/Utilities.h"
 #include "Reflect/Element.h"
 #include "Reflect/Version.h"
 

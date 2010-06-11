@@ -4,9 +4,9 @@
 #include "DependencyCollection.h"
 
 #include "Asset/CacheDB.h"
-#include "Common/Container/insertion_ordered_set.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Types.h"
+#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Platform/Types.h"
 
 namespace Luna
 {
@@ -37,7 +37,7 @@ namespace Luna
   class SearchQuery;
   typedef Nocturnal::SmartPtr< SearchQuery > SearchQueryPtr;
   typedef std::vector< SearchQueryPtr > V_SearchQuery;
-  typedef Nocturnal::insertion_ordered_set< Nocturnal::SmartPtrComparator< SearchQuery > > OS_SearchQuery;
+  typedef Nocturnal::OrderedSet< Nocturnal::SmartPtrComparator< SearchQuery > > OS_SearchQuery;
 
   class SearchQuery : public Reflect::Element
   {

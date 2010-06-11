@@ -3,7 +3,7 @@
 
 #include "ProtocolMessages.h"
 
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 #include <string.h>
 

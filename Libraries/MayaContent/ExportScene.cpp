@@ -4,7 +4,7 @@
 #include "MayaUtils/Utils.h"
 #include "RCS/RCS.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 #include "MayaNodes/ExportNode.h"
 
@@ -61,7 +61,7 @@ void ExportScene::ProcessMayaData()
     {
       for (V_string::const_iterator error_it = dup_bangle_errors.begin(); error_it != dup_bangle_errors.end(); ++error_it)
       {
-        Console::Error( error_it->c_str());
+        Log::Error( error_it->c_str());
         MGlobal::displayError(error_it->c_str());
       }
     }

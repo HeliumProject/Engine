@@ -2,7 +2,7 @@
 #include "SimpleFieldNode.h"
 #include "FieldFactory.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 
 using namespace Luna;
 
@@ -64,7 +64,7 @@ SimpleFieldNode::~SimpleFieldNode()
 //      tuid fileID = UID::TUID::Null;
 //      if ( !ConvertLabelToTuid( path, fileID ) )
 //      {
-//        Console::Error( "No TUID was found for path '%s' (Reason: %s); discarding.\n", path.c_str() );
+//        Log::Error( "No TUID was found for path '%s' (Reason: %s); discarding.\n", path.c_str() );
 //      }
 //
 //      if ( fileID != UID::TUID::Null )

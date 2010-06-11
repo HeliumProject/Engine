@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Common/Compiler.h"
-#include "Profile/Profile.h"
+#include "Platform/Compiler.h"
+#include "Foundation/Profile.h"
 
 #ifdef CONTENTDLL_EXPORTS
 # define CONTENT_API __declspec(dllexport)

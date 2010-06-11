@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Common/Compiler.h"
-#include "Common/Exception.h"
+#include "Platform/Compiler.h"
+#include "Foundation/Exception.h"
 
 namespace FileSystem
 {

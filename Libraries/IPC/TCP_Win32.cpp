@@ -1,8 +1,8 @@
-#include "Windows/Windows.h"
-#include "Windows/Error.h"
+#include "Platform/Windows/Windows.h"
+#include "Foundation/Exception.h"
 
 #include "TCP.h"
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 #include <mstcpip.h>
 
@@ -165,7 +165,7 @@ bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Ev
     if ( WSAGetLastError() != WSA_IO_PENDING )
     {
 #ifdef IPC_TCP_DEBUG_SOCKETS
-      Platform::Print("TCP Support: Failed to initiate overlapped read (%s)\n", Windows::GetErrorString().c_str());
+      Platform::Print("TCP Support: Failed to initiate overlapped read (%s)\n", Platform::GetErrorString().c_str());
 #endif
       return false;
     }
@@ -187,7 +187,7 @@ bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Ev
       if ( !::WSAGetOverlappedResult(socket.m_Handle, (OVERLAPPED*)&socket.m_Overlapped, &read_local, false, &flags) )
       {
 #ifdef IPC_TCP_DEBUG_SOCKETS
-        Platform::Print("TCP Support: Failed read (%s)\n", Windows::GetErrorString().c_str());
+        Platform::Print("TCP Support: Failed read (%s)\n", Platform::GetErrorString().c_str());
 #endif
         return false;
       }
@@ -222,7 +222,7 @@ bool Platform::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, 
     if ( WSAGetLastError() != WSA_IO_PENDING )
     {
 #ifdef IPC_TCP_DEBUG_SOCKETS
-      Platform::Print("TCP Support: Failed to initiate overlapped write (%s)\n", Windows::GetErrorString().c_str());
+      Platform::Print("TCP Support: Failed to initiate overlapped write (%s)\n", Platform::GetErrorString().c_str());
 #endif
       return false;
     }
@@ -244,7 +244,7 @@ bool Platform::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, 
       if ( !::WSAGetOverlappedResult(socket.m_Handle, (OVERLAPPED*)&socket.m_Overlapped, &wrote_local, false, &flags) )
       {
 #ifdef IPC_TCP_DEBUG_SOCKETS
-        Platform::Print("TCP Support: Failed write (%s)\n", Windows::GetErrorString().c_str());
+        Platform::Print("TCP Support: Failed write (%s)\n", Platform::GetErrorString().c_str());
 #endif
         return false;
       }

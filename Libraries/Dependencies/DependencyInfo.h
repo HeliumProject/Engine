@@ -8,9 +8,9 @@
 #include <set>
 
 #include "Finder/Finder.h"
-#include "Common/Container/OrderedSet.h"
-#include "Common/Types.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Container/OrderedSet.h"
+#include "Platform/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 typedef Nocturnal::OrderedSet< std::string > OS_string;
 

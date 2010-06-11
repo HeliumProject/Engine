@@ -3,8 +3,8 @@
 
 #include "Asset/AssetClass.h"
 #include "Attribute/AttributeCategories.h"
-#include "Common/Boost/Regex.h" 
-#include "Console/Console.h"
+#include "Foundation/Boost/Regex.h" 
+#include "Foundation/Log.h"
 #include "FileSystem/FileSystem.h"
 #include "EntityAssetSet.h"
 #include "Region.h"

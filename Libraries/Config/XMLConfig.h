@@ -7,7 +7,7 @@
 #include <string>
 #include <sstream>
 
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 class TiXmlNode;
 class TiXmlDocument;

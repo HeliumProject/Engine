@@ -7,9 +7,9 @@
 
 #include <vector>
 
-#include "Common/Types.h"
-#include "Common/Container/OrderedSet.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Platform/Types.h"
+#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 #include "Platform/Mutex.h"
 

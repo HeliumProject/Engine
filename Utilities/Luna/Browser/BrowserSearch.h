@@ -4,8 +4,8 @@
 #include "SearchQuery.h"
 
 #include "Asset/CacheDB.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Platform/Types.h"
 #include "Platform/Mutex.h"
 
 //

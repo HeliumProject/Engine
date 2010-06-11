@@ -5,7 +5,7 @@
 #include "AssetFlags.h"
 
 #include "Attribute/AttributeCollection.h"
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 #include "Reflect/Element.h"
 #include "Reflect/Class.h"
 #include "Reflect/Serializers.h"

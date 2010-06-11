@@ -5,8 +5,8 @@
 #include "HierarchyChangeToken.h"
 #include "PersistentNode.h"
 
-#include "Common/String/Tokenize.h"
-#include "Console/Console.h"
+#include "Foundation/String/Tokenize.h"
+#include "Foundation/Log.h"
 #include "Reflect/ElementArraySerializer.h"
 #include "UID/TUID.h"
 #include "UIToolKit/ImageManager.h"

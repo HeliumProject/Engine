@@ -4,7 +4,7 @@
 
 #include "AppUtils/Preferences.h"
 #include "Asset/AssetFlags.h"
-#include "Common/Environment.h"
+#include "Foundation/Environment.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/LunaSpecs.h"
 #include "Reflect/Serializer.h"

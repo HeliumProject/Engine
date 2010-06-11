@@ -5,9 +5,9 @@
 #include "UIToolKit/ImageManager.h"
 #include "Inspect/Choice.h"
 
-#include "Common/Container/Insert.h" 
-#include "Common/String/Natural.h"
-#include "Console/Console.h"
+#include "Foundation/Container/Insert.h" 
+#include "Foundation/String/Natural.h"
+#include "Foundation/Log.h"
 
 using namespace Luna;
 using namespace Nocturnal;
@@ -96,7 +96,7 @@ void Layer::Initialize()
     {
       std::string idStr;
       (*itr).ToString( idStr );
-      Console::Debug( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n", GetName().c_str(), idStr.c_str() );
+      Log::Debug( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n", GetName().c_str(), idStr.c_str() );
     }
   }
 
@@ -273,7 +273,7 @@ void Layer::Insert(SceneGraph* g, V_SceneNodeDumbPtr& insertedNodes )
       {
         std::string idStr;
         id.ToString( idStr );
-        Console::Debug( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n", GetName().c_str(), idStr.c_str() );
+        Log::Debug( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n", GetName().c_str(), idStr.c_str() );
       }
     }
   }

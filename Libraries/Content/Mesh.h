@@ -5,7 +5,7 @@
 #include "API.h"
 
 #include "PivotTransform.h"
-#include "Common/Container/BitArray.h"
+#include "Foundation/Container/BitArray.h"
 #include "Content/ContentTypes.h"
 #include "Math/CalculateBounds.h"
 

@@ -6,7 +6,7 @@
 
 #include "Asset/AssetInit.h"
 #include "AssetBuilder/AssetBuilder.h"
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 #include "Reflect/Registry.h"
 
 using namespace Luna;

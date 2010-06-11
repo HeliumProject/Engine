@@ -15,12 +15,12 @@
 #include "Attribute/AttributeHandle.h"
 #include "Asset/Exceptions.h"
 #include "Asset/StandardShaderAsset.h"
-#include "Common/CommandLine.h"
-#include "Common/Container/Insert.h" 
-#include "Common/String/Natural.h"
+#include "Foundation/CommandLine.h"
+#include "Foundation/Container/Insert.h" 
+#include "Foundation/String/Natural.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/ContentSpecs.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Inspect/ClipboardElementArray.h"
 #include "Core/Enumerator.h"
 #include "Asset/EntityManifest.h"
@@ -147,7 +147,7 @@ bool AssetClass::Save( std::string& error )
   std::string path = GetFilePath();
   if ( path.empty() )
   {
-    Console::Error( "No file path for asset.\n" );
+    Log::Error( "No file path for asset.\n" );
     return false;
   }
 
@@ -207,7 +207,7 @@ const std::string& AssetClass::GetName() const
     }
     catch ( Nocturnal::Exception& e )
     {
-      Console::Error( "Unable to get asset name: %s\n", e.what() );
+      Log::Error( "Unable to get asset name: %s\n", e.what() );
       NOC_BREAK();
     }
   }
@@ -277,7 +277,7 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
   const bool isUserAssetAdmin = Nocturnal::GetCmdLineFlag( "asset_admin" );
 
   bool areAssetsLocked = true;
-  const char* networkLockAssetsPath = getenv( NOCTURNAL_STUDIO_PREFIX "NETWORK_LOCK_ASSETS_FILE" );
+  const char* networkLockAssetsPath = getenv( "NOC_NETWORK_LOCK_ASSETS_FILE" );
   if ( networkLockAssetsPath != NULL )
   {
     // Faster than FileSystem::Exists
@@ -615,7 +615,7 @@ bool AssetClass::AddAttribute( const Luna::AttributeWrapperPtr& attribute, bool 
     }
     catch ( const Asset::Exception& e )
     {
-      Console::Error( "%s\n", e.what() );
+      Log::Error( "%s\n", e.what() );
       return false;
     }
   }
@@ -639,7 +639,7 @@ bool AssetClass::RemoveAttribute( const Luna::AttributeWrapperPtr& attribute, bo
   M_AttributeSmartPtr::iterator found = m_Attributes.find( attribute->GetSlot() );
   if ( found == m_Attributes.end() )
   {
-    Console::Error( "Unable to remove attribute %s from asset %s because it has already been removed.\n", attribute->GetName().c_str(), GetName().c_str() );
+    Log::Error( "Unable to remove attribute %s from asset %s because it has already been removed.\n", attribute->GetName().c_str(), GetName().c_str() );
     return false;
   }
 
@@ -652,7 +652,7 @@ bool AssetClass::RemoveAttribute( const Luna::AttributeWrapperPtr& attribute, bo
     }
     catch ( const Nocturnal::Exception& )
     {
-      Console::Error( "Unable to update persistent data for removal of attribute %s from asset %s.\n", attribute->GetName().c_str(), GetName().c_str() );
+      Log::Error( "Unable to update persistent data for removal of attribute %s from asset %s.\n", attribute->GetName().c_str(), GetName().c_str() );
       return false;
     }
   }

@@ -4,9 +4,9 @@
 
 #include <wx/filedlg.h>
 
-#include "Common/Compiler.h"
-#include "Common/Types.h"
-#include "Common/Container/OrderedSet.h"
+#include "Platform/Compiler.h"
+#include "Platform/Types.h"
+#include "Foundation/Container/OrderedSet.h"
 
 ///////////////////////////////////////////////////////////////////////////
 

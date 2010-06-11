@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "Common/Types.h"
+#include "Platform/Types.h"
 #include "Debug/Exception.h"
 
 #include <string>

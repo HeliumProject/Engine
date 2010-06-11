@@ -2,7 +2,7 @@
 
 #include "DropTarget.h"
 
-#include "Windows/Atomic.h"
+#include "Foundation/Atomic.h"
 
 namespace Finder
 {
@@ -20,7 +20,7 @@ namespace Inspect
     {
     }
   };
-  typedef Nocturnal::Signature<void, const FilteredDropTargetArgs&, ::Windows::AtomicRefCountBase> FilteredDropTargetSignature;
+  typedef Nocturnal::Signature<void, const FilteredDropTargetArgs&, Foundation::AtomicRefCountBase> FilteredDropTargetSignature;
 
   class INSPECT_API FilteredDropTarget : public DropTarget
   {

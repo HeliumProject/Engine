@@ -3,7 +3,7 @@
 #include "Instance.h"
 #include "Content/Light.h"
 #include "Core/Enumerator.h"
-#include "Common/Container/BitArray.h"
+#include "Foundation/Container/BitArray.h"
 #include "Primitive.h"
 
 namespace Luna

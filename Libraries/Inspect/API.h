@@ -2,7 +2,7 @@
 
 #include "InspectTypes.h"
 
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 
 #ifdef INSPECT_DLL
 # ifdef INSPECT_EXPORTS

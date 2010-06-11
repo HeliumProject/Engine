@@ -178,12 +178,12 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{CF4C2A21-3991-4E26-8C68-EEDF6654B8B4}"
-			RelativePathToProject=".\libraries\Profile\profile.vcproj"
+			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
+			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}"
-			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
+			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
+			RelativePathToProject=".\libraries\Platform\platform.vcproj"
 		/>
 	</References>
 	<Files>

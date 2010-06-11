@@ -8,8 +8,8 @@
 #include "AssetVersion.h"
 #include "AssetType.h"
 
-#include "Common/Container/OrderedSet.h"
-#include "Common/File/Path.h"
+#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/File/Path.h"
 #include "Attribute/Attribute.h" 
 #include "Attribute/AttributeCollection.h" 
 

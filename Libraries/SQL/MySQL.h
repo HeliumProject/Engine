@@ -5,7 +5,7 @@
 #include "DBManager.h"
 #include "MySQLStmt.h"
 
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 #ifndef _mysql_h
 #define CR_UNKNOWN_ERROR                          2000 // Unknown MySQL error

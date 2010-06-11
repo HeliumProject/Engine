@@ -2,10 +2,10 @@
 
 #include "API.h"
 
-#include "Common/Assert.h"
-#include "Common/Container/OrderedSet.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Types.h"
+#include "Platform/Assert.h"
+#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Platform/Types.h"
 
 namespace UIToolKit
 {

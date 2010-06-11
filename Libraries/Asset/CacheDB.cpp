@@ -1,4 +1,4 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 
 #include "CacheDBColumn.h"
 #include "CacheDB.h"
@@ -11,13 +11,13 @@
 #include "SceneAsset.h"
 #include "ShaderAsset.h"
 
-#include "Common/Boost/Regex.h"
-#include "Common/Environment.h"
-#include "Common/Exception.h"
-#include "Common/String/Tokenize.h"
-#include "Common/String/Utilities.h"
-#include "Common/File/File.h"
-#include "Console/Console.h"
+#include "Foundation/Boost/Regex.h"
+#include "Foundation/Environment.h"
+#include "Foundation/Exception.h"
+#include "Foundation/String/Tokenize.h"
+#include "Foundation/String/Utilities.h"
+#include "Foundation/File/File.h"
+#include "Foundation/Log.h"
 #include "Debug/Exception.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
@@ -25,7 +25,7 @@
 #include "Finder/Finder.h"
 #include "Finder/ProjectSpecs.h"
 #include "SQL/SQLite.h"
-#include "Windows/Console.h"
+#include "Platform/Windows/Console.h"
 
 #include "RCS/RCS.h"
 
@@ -643,7 +643,7 @@ void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, N
 
     if ( !assetFile->GetModifierSpec() )
     {
-        Console::Error( "No modifier spec for file '%s'\n", assetFile->GetFilePath().c_str() );
+        Log::Error( "No modifier spec for file '%s'\n", assetFile->GetFilePath().c_str() );
         return;
     }
 
@@ -810,7 +810,7 @@ bool CacheDB::HasAssetChangedOnDisk( Nocturnal::Path& filePath, bool* cancel )
                             if ( execResult != SQLITE_OK )
                             {
                                 // Try to force the caller to update this row in the database
-                                Console::Error( "Failed to update timestamp on file '%s' ["TUID_HEX_FORMAT"].\n", file.GetPath().c_str(), filePath.Hash() );
+                                Log::Error( "Failed to update timestamp on file '%s' ["TUID_HEX_FORMAT"].\n", file.GetPath().c_str(), filePath.Hash() );
                                 ret = true;
                             }
                         }

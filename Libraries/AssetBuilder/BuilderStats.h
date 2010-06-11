@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Types.h"
+#include "Platform/Types.h"
 
 #include "UID/TUID.h"
 

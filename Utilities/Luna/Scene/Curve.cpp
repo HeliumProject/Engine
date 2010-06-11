@@ -14,7 +14,7 @@
 #include "UIToolKit/ImageManager.h"
 #include "Core/Enumerator.h"
 #include "Undo/PropertyCommand.h"
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "Editor/Orientation.h"
 
 #include "Math/Curve.h"
@@ -100,8 +100,8 @@ void Curve::Initialize()
 {
   __super::Initialize();
 
-  S_HierarchyNodeDumbPtr::const_iterator childItr = GetChildren().begin();
-  S_HierarchyNodeDumbPtr::const_iterator childEnd = GetChildren().end();
+  OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+  OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
   for ( ; childItr != childEnd; ++childItr )
   {
     Luna::Point* point = Reflect::ObjectCast< Luna::Point >( *childItr );
@@ -124,14 +124,10 @@ void Curve::Initialize()
     for ( ; orderItr != orderEnd; ++orderItr )
     {
       Luna::Point* controlPoint = Reflect::ObjectCast< Luna::Point >( m_Scene->FindNode( *orderItr ) );
-      if ( controlPoint && m_Children.find( controlPoint ) != m_Children.end() )
+      if ( controlPoint && m_Children.Contains( controlPoint ) )
       {
-        S_HierarchyNodeDumbPtr::iterator found = m_Children.find( controlPoint );
-        if ( found != m_Children.end() )
-        {
-          reordered.push_back( controlPoint );
-          m_Children.erase( found );
-        }
+        reordered.push_back( controlPoint );
+        m_Children.Remove( controlPoint );
       }
     }
 
@@ -204,8 +200,8 @@ int Curve::ClosestControlPoint( PickVisitor* pick )
 
   pick->SetCurrentObject (this, GetGlobalTransform(), GetInverseGlobalTransform() );
 
-  S_HierarchyNodeDumbPtr::const_iterator itr = GetChildren().begin();
-  S_HierarchyNodeDumbPtr::const_iterator end = GetChildren().end();
+  OS_HierarchyNodeDumbPtr::Iterator itr = GetChildren().Begin();
+  OS_HierarchyNodeDumbPtr::Iterator end = GetChildren().End();
   for ( u32 i = 0; itr != end; ++itr, ++i )
   {
     Luna::Point* point = Reflect::ObjectCast< Luna::Point >( *itr );
@@ -246,8 +242,8 @@ bool Curve::ClosestControlPoints( PickVisitor* pick, std::pair<u32, u32>& result
 
   pick->SetCurrentObject ( this, GetGlobalTransform(), GetInverseGlobalTransform() );
 
-  S_HierarchyNodeDumbPtr::const_iterator childItr = GetChildren().begin();
-  S_HierarchyNodeDumbPtr::const_iterator childEnd = GetChildren().end();
+  OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+  OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
   for ( u32 index = 0; childItr != childEnd; ++childItr )
   {
     current = Reflect::ObjectCast< Luna::Point >( *childItr );
@@ -351,8 +347,8 @@ i32 Curve::ClosestPoint(Math::Vector3& pos)
 u32 Curve::GetNumberControlPoints() const
 {
   u32 count = 0;
-  S_HierarchyNodeDumbPtr::const_iterator childItr = GetChildren().begin();
-  S_HierarchyNodeDumbPtr::const_iterator childEnd = GetChildren().end();
+  OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+  OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
   for ( ; childItr != childEnd; ++childItr )
   {
     if ( ( *childItr )->HasType( Reflect::GetType< Luna::Point >() ) )
@@ -368,8 +364,8 @@ Luna::Point* Curve::GetControlPointByIndex( u32 index )
 {
   Luna::Point* controlPoint = NULL;
 
-  S_HierarchyNodeDumbPtr::const_iterator childItr = GetChildren().begin();
-  S_HierarchyNodeDumbPtr::const_iterator childEnd = GetChildren().end();
+  OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+  OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
   for ( u32 i = 0; childItr != childEnd; ++childItr )
   {
     Luna::Point* point = Reflect::ObjectCast< Luna::Point >( *childItr );
@@ -391,8 +387,8 @@ i32 Curve::GetIndexForControlPoint( Luna::Point* pc )
 {
   i32 index = -1;
 
-  S_HierarchyNodeDumbPtr::const_iterator childItr = GetChildren().begin();
-  S_HierarchyNodeDumbPtr::const_iterator childEnd = GetChildren().end();
+  OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+  OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
   for ( u32 i = 0; childItr != childEnd; ++childItr )
   {
     Luna::Point* point = Reflect::ObjectCast< Luna::Point >( *childItr );
@@ -412,8 +408,8 @@ i32 Curve::GetIndexForControlPoint( Luna::Point* pc )
 
 Undo::CommandPtr Curve::RemoveControlPointAtIndex( u32 index )
 {
-  S_HierarchyNodeDumbPtr::iterator childItr = m_Children.begin();
-  S_HierarchyNodeDumbPtr::iterator childEnd = m_Children.end();
+  OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
+  OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
   for ( u32 i = 0; childItr != childEnd; ++childItr )
   {
     Luna::Point* point = Reflect::ObjectCast< Luna::Point >( *childItr );
@@ -435,8 +431,8 @@ Undo::CommandPtr Curve::InsertControlPointAtIndex( u32 index, Luna::Point* pc )
 {
   Luna::HierarchyNode* previous = NULL;
   Luna::HierarchyNode* next = NULL;
-  S_HierarchyNodeDumbPtr::iterator childItr = m_Children.begin();
-  S_HierarchyNodeDumbPtr::iterator childEnd = m_Children.end();
+  OS_HierarchyNodeDumbPtr::Iterator childItr = m_Children.Begin();
+  OS_HierarchyNodeDumbPtr::Iterator childEnd = m_Children.End();
   for ( u32 i = 0; childItr != childEnd; ++childItr )
   {
     Luna::Point* point = Reflect::ObjectCast< Luna::Point >( *childItr );
@@ -513,8 +509,8 @@ void Curve::Populate( PopulateArgs* args )
         // go over the control points
         u32 countControlPoints = 0;
         Luna::Point* firstPoint = NULL;
-        S_HierarchyNodeDumbPtr::const_iterator childItr = GetChildren().begin();
-        S_HierarchyNodeDumbPtr::const_iterator childEnd = GetChildren().end();
+        OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+        OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
         for ( ; childItr != childEnd; ++childItr )
         {
           Luna::Point* point = Reflect::ObjectCast< Luna::Point >( *childItr );
@@ -587,8 +583,8 @@ Undo::CommandPtr Curve::CenterTransform()
 
   {
     u32 controlPointCount = 0;
-    S_HierarchyNodeDumbPtr::const_iterator childItr = GetChildren().begin();
-    S_HierarchyNodeDumbPtr::const_iterator childEnd = GetChildren().end();
+    OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+    OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
     for ( ; childItr != childEnd; ++childItr )
     {
       Luna::Point* point = Reflect::ObjectCast< Luna::Point >( *childItr );
@@ -615,8 +611,8 @@ Undo::CommandPtr Curve::CenterTransform()
   m = m_GlobalTransform * m.Inverted();
 
   {
-    S_HierarchyNodeDumbPtr::const_iterator childItr = GetChildren().begin();
-    S_HierarchyNodeDumbPtr::const_iterator childEnd = GetChildren().end();
+    OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+    OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
     for ( ; childItr != childEnd; ++childItr )
     {
       Luna::Point* point = Reflect::ObjectCast< Luna::Point >( *childItr );
@@ -646,8 +642,10 @@ Undo::CommandPtr Curve::CenterTransform()
   Evaluate( GraphDirections::Downstream );
 
   // update each child's local transform to stay in the same global position
-  for each ( Luna::HierarchyNode* n in m_Children )
+  for ( OS_HierarchyNodeDumbPtr::Iterator itr = m_Children.Begin(), end = m_Children.End(); itr != end; ++itr )
   {
+    Luna::HierarchyNode* n = *itr;
+
     Luna::Transform* t = Reflect::ObjectCast<Luna::Transform>( n );
 
     if ( !t )
@@ -686,8 +684,8 @@ void Curve::Evaluate( GraphDirection direction )
   u32 controlCount = 0;
   Math::V_Vector3 points;
   {
-    S_HierarchyNodeDumbPtr::const_iterator childItr = GetChildren().begin();
-    S_HierarchyNodeDumbPtr::const_iterator childEnd = GetChildren().end();
+    OS_HierarchyNodeDumbPtr::Iterator childItr = GetChildren().Begin();
+    OS_HierarchyNodeDumbPtr::Iterator childEnd = GetChildren().End();
     for ( ; childItr != childEnd; ++childItr )
     {
       Luna::Point* point = Reflect::ObjectCast< Luna::Point >( *childItr );
@@ -877,8 +875,8 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
       char textBuf[256];
 
       device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
-      S_HierarchyNodeDumbPtr::const_iterator childItr = curve->GetChildren().begin();
-      S_HierarchyNodeDumbPtr::const_iterator childEnd = curve->GetChildren().end();
+      OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
+      OS_HierarchyNodeDumbPtr::Iterator childEnd = curve->GetChildren().End();
       for ( u32 i = 0; childItr != childEnd; ++childItr )
       {
         Luna::Point* point = Reflect::ObjectCast< Luna::Point >( *childItr );
@@ -935,8 +933,8 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
     // 
     {
       device->SetMaterial (&Luna::View::s_HighlightedMaterial);
-      S_HierarchyNodeDumbPtr::const_iterator childItr = curve->GetChildren().begin();
-      S_HierarchyNodeDumbPtr::const_iterator childEnd = curve->GetChildren().end();
+      OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
+      OS_HierarchyNodeDumbPtr::Iterator childEnd = curve->GetChildren().End();
       for ( u32 i = 0; childItr != childEnd; ++childItr )
       {
         Luna::Point* point = Reflect::ObjectCast< Luna::Point >( *childItr );

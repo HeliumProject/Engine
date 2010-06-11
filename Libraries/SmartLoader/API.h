@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Compiler.h"
+#include "Platform/Compiler.h"
 
 #ifdef SMARTLOADERDLL_EXPORTS
 # define SMARTLOADER_API __declspec(dllexport)
@@ -8,7 +8,7 @@
 # define SMARTLOADER_API __declspec(dllimport)
 #endif
 
-#include "Profile/Profile.h"
+#include "Foundation/Profile.h"
 
 //#define SMARTLOADER_PROFILE
 

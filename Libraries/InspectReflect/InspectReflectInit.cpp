@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "InspectReflectInit.h"
 
-#include "Common/InitializerStack.h"
+#include "Foundation/InitializerStack.h"
 #include "Inspect/InspectInit.h"
 #include "Inspect/Container.h"
 

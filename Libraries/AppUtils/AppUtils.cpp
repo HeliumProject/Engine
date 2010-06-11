@@ -1,4 +1,4 @@
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include "AppUtils.h"
 
 #include <crtdbg.h>
@@ -13,11 +13,11 @@
 #include <memory>
 #include <sys/timeb.h>
 
-#include "Common/Assert.h"
-#include "Common/Config.h"
-#include "Common/Version.h"
-#include "Common/Environment.h"
-#include "Common/CommandLine.h"
+#include "Platform/Assert.h"
+#include "Platform/Platform.h"
+#include "Foundation/Version.h"
+#include "Foundation/Environment.h"
+#include "Foundation/CommandLine.h"
 
 #include "Exceptions.h"
 #include "ExceptionListener.h"
@@ -25,11 +25,10 @@
 
 #include "Debug/Exception.h"
 #include "FileSystem/FileSystem.h"
-#include "Profile/Profile.h"
-#include "Windows/Error.h"
-#include "Windows/Process.h"
-#include "Console/Console.h"
-#include "Common/Config.h"
+#include "Foundation/Profile.h"
+#include "Foundation/Exception.h"
+#include "Platform/Process.h"
+#include "Foundation/Log.h"
 
 const char* AppUtils::Args::Script = "script";
 const char* AppUtils::Args::Attach = "attach";
@@ -62,7 +61,7 @@ bool g_ShutdownComplete = false;
 
 // default to these streams for trace files, it is up to the app to ask for these, when creating a TraceFile
 V_string g_TraceFiles;
-Console::Stream g_TraceStreams  = Console::Streams::Normal | Console::Streams::Warning | Console::Streams::Error; 
+Log::Stream g_TraceStreams  = Log::Streams::Normal | Log::Streams::Warning | Log::Streams::Error; 
 
 // so you can set _crtBreakAlloc in the debugger (expression evaluator doesn't like it)
 #ifdef _DEBUG
@@ -98,7 +97,7 @@ void AppUtils::Startup( int argc, const char** argv, bool checkVersion )
     {
       i32 timeout = 300; // 5min
 
-      Console::Print("Waiting %d minutes for debugger to attach...\n", timeout / 60);
+      Log::Print("Waiting %d minutes for debugger to attach...\n", timeout / 60);
 
       while ( !AppUtils::IsDebuggerPresent() && timeout-- )
       {
@@ -107,7 +106,7 @@ void AppUtils::Startup( int argc, const char** argv, bool checkVersion )
 
       if ( AppUtils::IsDebuggerPresent() )
       {
-        Console::Print("Debugger attached\n");
+        Log::Print("Debugger attached\n");
         NOC_ISSUE_BREAK();
       }
     }
@@ -146,10 +145,10 @@ void AppUtils::Startup( int argc, const char** argv, bool checkVersion )
       char name[MAX_PATH];
       _splitpath( module, NULL, NULL, name, NULL );
 
-      Console::Print( "Running %s\n", name );
-      Console::Print( "Tools: " NOCTURNAL_PROJECT_NAME " / " NOCTURNAL_VERSION_STRING "\n" );
-      Console::Print( "Current Time: %s", ctime( &g_StartTime.time ) );
-      Console::Print( "Command Line: %s\n", Nocturnal::GetCmdLine() );
+      Log::Print( "Running %s\n", name );
+      Log::Print( "Version: " NOCTURNAL_VERSION_STRING "\n" );
+      Log::Print( "Current Time: %s", ctime( &g_StartTime.time ) );
+      Log::Print( "Command Line: %s\n", Nocturnal::GetCmdLine() );
     }
 
 
@@ -159,20 +158,20 @@ void AppUtils::Startup( int argc, const char** argv, bool checkVersion )
 
     if ( Nocturnal::GetCmdLineFlag( AppUtils::Args::Extreme ) )
     {
-      Console::SetLevel( Console::Levels::Extreme );
+      Log::SetLevel( Log::Levels::Extreme );
     }
     else if ( Nocturnal::GetCmdLineFlag( AppUtils::Args::Verbose ) )
     {
-      Console::SetLevel( Console::Levels::Verbose );
+      Log::SetLevel( Log::Levels::Verbose );
     }
 
-    Console::EnableStream( Console::Streams::Debug, Nocturnal::GetCmdLineFlag( AppUtils::Args::Debug ) );
-    Console::EnableStream( Console::Streams::Profile, Nocturnal::GetCmdLineFlag( AppUtils::Args::Profile ) );
+    Log::EnableStream( Log::Streams::Debug, Nocturnal::GetCmdLineFlag( AppUtils::Args::Debug ) );
+    Log::EnableStream( Log::Streams::Profile, Nocturnal::GetCmdLineFlag( AppUtils::Args::Profile ) );
 
     if( Nocturnal::GetCmdLineFlag( AppUtils::Args::Debug ) )
     {
       // add the debug stream to the trace
-      g_TraceStreams |= Console::Streams::Debug; 
+      g_TraceStreams |= Log::Streams::Debug; 
 
       // dump env
       if ( Nocturnal::GetCmdLineFlag( AppUtils::Args::Verbose ) )
@@ -183,15 +182,15 @@ void AppUtils::Startup( int argc, const char** argv, bool checkVersion )
         // if the returned pointer is NULL, exit.
         if (env)
         {
-          Console::Debug("\n");
-          Console::Debug("Environment:\n");
+          Log::Debug("\n");
+          Log::Debug("Environment:\n");
 
           // variable strings are separated by NULL byte, and the block is terminated by a NULL byte. 
           for (const char* var = (const char*)env; *var; var++) 
           {
             if (*var != '=') // WTF?
             {
-              Console::Debug(" %s\n", var);
+              Log::Debug(" %s\n", var);
             }
 
             while (*var)
@@ -211,7 +210,7 @@ void AppUtils::Startup( int argc, const char** argv, bool checkVersion )
       Profile::Initialize(); 
 
       // add the profile stream to the trace
-      g_TraceStreams |= Console::Streams::Profile; 
+      g_TraceStreams |= Log::Streams::Profile; 
 
       // enable memory reports
       if ( Nocturnal::GetCmdLineFlag( AppUtils::Args::Memory ) )
@@ -234,10 +233,10 @@ void AppUtils::Startup( int argc, const char** argv, bool checkVersion )
     // Report inherited args
     //
 
-    const char* inherited = getenv( NOCTURNAL_STUDIO_PREFIX "CMD_ARGS" );
+    const char* inherited = getenv( "NOC_CMD_ARGS" );
     if ( inherited )
     {
-      Console::Print("Inheriting Args: %s\n", inherited);
+      Log::Print("Inheriting Args: %s\n", inherited);
     }
 
 
@@ -249,7 +248,7 @@ void AppUtils::Startup( int argc, const char** argv, bool checkVersion )
     InitializeExceptionListener();
 
     // handle 'new' errors, invalid parameters, etc...
-    Windows::EnableCPPErrorHandling(true);
+    Platform::Initialize();
 
     // disable dialogs for main line error cases
     SetErrorMode( SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX );
@@ -290,11 +289,11 @@ int AppUtils::Shutdown( int code )
       //
       // Print time usage
       //
-      Console::Print( "\n" );
+      Log::Print( "\n" );
 
       _timeb endTime;
       _ftime(&endTime); 
-      Console::Print( "Current Time: %s", ctime( &endTime.time ) );
+      Log::Print( "Current Time: %s", ctime( &endTime.time ) );
 
       int time = (int) (((endTime.time*1000) + endTime.millitm) - ((g_StartTime.time*1000) +  g_StartTime.millitm));
       int milli = time % 1000; time /= 1000;
@@ -304,25 +303,25 @@ int AppUtils::Shutdown( int code )
 
       if (hour > 0)
       {
-        Console::Print("Execution Time: %d:%02d:%02d.%02d hours\n", hour, min, sec, milli);
+        Log::Print("Execution Time: %d:%02d:%02d.%02d hours\n", hour, min, sec, milli);
       }
       else
       {
         if (min > 0)
         {
-          Console::Print("Execution Time: %d:%02d.%02d minutes\n", min, sec, milli);
+          Log::Print("Execution Time: %d:%02d.%02d minutes\n", min, sec, milli);
         }
         else
         {
           if (sec > 0)
           {
-            Console::Print("Execution Time: %d.%02d seconds\n", sec, milli);
+            Log::Print("Execution Time: %d.%02d seconds\n", sec, milli);
           }
           else
           {
             if (milli > 0)
             {
-              Console::Print("Execution Time: %02d milliseconds\n", milli);
+              Log::Print("Execution Time: %02d milliseconds\n", milli);
             }
           }
         }
@@ -338,39 +337,39 @@ int AppUtils::Shutdown( int code )
       char name[MAX_PATH];
       _splitpath( module, NULL, NULL, name, NULL );
 
-      Console::Print( "%s: ", name );
-      Console::PrintString( code ? "Failed" : "Succeeeded", Console::Streams::Normal, Console::Levels::Default, code ? Console::Colors::Red : Console::Colors::Green );
+      Log::Print( "%s: ", name );
+      Log::PrintString( code ? "Failed" : "Succeeeded", Log::Streams::Normal, Log::Levels::Default, code ? Log::Colors::Red : Log::Colors::Green );
 
 
       //
       // Print warning/error count
       //
 
-      if (Console::GetWarningCount() || Console::GetErrorCount())
+      if (Log::GetWarningCount() || Log::GetErrorCount())
       {
-        Console::Print(" with");
+        Log::Print(" with");
       }
 
-      if (Console::GetErrorCount())
-      {
-        char buf[80];
-        sprintf(buf, " %d error%s", Console::GetErrorCount(), Console::GetErrorCount() > 1 ? "s" : "");
-        Console::PrintString( buf, Console::Streams::Normal, Console::Levels::Default, Console::Colors::Red );
-      }
-
-      if (Console::GetWarningCount() && Console::GetErrorCount())
-      {
-        Console::Print(" and");
-      }
-
-      if (Console::GetWarningCount())
+      if (Log::GetErrorCount())
       {
         char buf[80];
-        sprintf(buf, " %d warning%s", Console::GetWarningCount(), Console::GetWarningCount() > 1 ? "s" : "");
-        Console::PrintString( buf, Console::Streams::Normal, Console::Levels::Default, Console::Colors::Yellow );
+        sprintf(buf, " %d error%s", Log::GetErrorCount(), Log::GetErrorCount() > 1 ? "s" : "");
+        Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, Log::Colors::Red );
       }
 
-      Console::Print("\n");
+      if (Log::GetWarningCount() && Log::GetErrorCount())
+      {
+        Log::Print(" and");
+      }
+
+      if (Log::GetWarningCount())
+      {
+        char buf[80];
+        sprintf(buf, " %d warning%s", Log::GetWarningCount(), Log::GetWarningCount() > 1 ? "s" : "");
+        Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, Log::Colors::Yellow );
+      }
+
+      Log::Print("\n");
     }
 
 
@@ -421,7 +420,7 @@ int AppUtils::Shutdown( int code )
   return code;
 }
 
-Console::Stream AppUtils::GetTraceStreams()
+Log::Stream AppUtils::GetTraceStreams()
 {
   return g_TraceStreams; 
 }
@@ -434,7 +433,7 @@ void AppUtils::InitializeStandardTraceFiles()
   char name[MAX_PATH];
   _splitpath( module, NULL, NULL, name, NULL );
 
-  const char* logVar = getenv( NOCTURNAL_STUDIO_PREFIX"PROJECT_LOG" );
+  const char* logVar = getenv( "NOC_PROJECT_LOG" );
   std::string logFolder = logVar ? logVar : "";
   if ( !logFolder.empty() && *logFolder.rbegin() != '/' && *logFolder.rbegin() != '\\' )
   {
@@ -442,13 +441,13 @@ void AppUtils::InitializeStandardTraceFiles()
   }
   
   g_TraceFiles.push_back( logFolder + name + ".log" );
-  Console::AddTraceFile( g_TraceFiles.back(), AppUtils::GetTraceStreams() );
+  Log::AddTraceFile( g_TraceFiles.back(), AppUtils::GetTraceStreams() );
   
   g_TraceFiles.push_back( logFolder + name + "Warnings.log" );
-  Console::AddTraceFile( g_TraceFiles.back(), Console::Streams::Warning );
+  Log::AddTraceFile( g_TraceFiles.back(), Log::Streams::Warning );
 
   g_TraceFiles.push_back( logFolder + name + "Errors.log" );
-  Console::AddTraceFile( g_TraceFiles.back(), Console::Streams::Error );
+  Log::AddTraceFile( g_TraceFiles.back(), Log::Streams::Error );
 }
 
 void AppUtils::CleanupStandardTraceFiles()
@@ -456,7 +455,7 @@ void AppUtils::CleanupStandardTraceFiles()
   for ( V_string::const_iterator itr = g_TraceFiles.begin(), 
     end = g_TraceFiles.begin(); itr != end; ++itr )
   {
-    Console::RemoveTraceFile( *itr );
+    Log::RemoveTraceFile( *itr );
   }
 
   g_TraceFiles.clear();
@@ -465,7 +464,7 @@ void AppUtils::CleanupStandardTraceFiles()
 bool AppUtils::IsToolsBuilder()
 {
   bool toolsBuilder = false;
-  Nocturnal::GetEnvVar( NOCTURNAL_STUDIO_PREFIX "TOOLS_BUILDER", toolsBuilder );
+  Nocturnal::GetEnvVar( "NOC_TOOLS_BUILDER", toolsBuilder );
   return toolsBuilder;
 }
 
@@ -533,7 +532,7 @@ static Platform::Thread::Return StandardThreadTryCatch( Platform::Thread::Entry 
     }
     catch ( const Nocturnal::Exception& ex )
     {
-      Console::Error( "%s\n", ex.what() );
+      Log::Error( "%s\n", ex.what() );
 
       ::ExitProcess( -1 );
     }
@@ -610,7 +609,7 @@ static int StandardMainTryCatch( int (*main)(int argc, const char** argv), int a
     }
     catch ( const Nocturnal::Exception& ex )
     {
-      Console::Error( "%s\n", ex.what() );
+      Log::Error( "%s\n", ex.what() );
 
       ::ExitProcess( -1 );
     }
@@ -629,7 +628,7 @@ static int StandardMainEntry( int (*main)(int argc, const char** argv), int argc
   }
   catch ( const AppUtils::CheckVersionException& ex )
   {
-    Console::Error( "%s\n", ex.what() );
+    Log::Error( "%s\n", ex.what() );
     result = 1;
   }
 
@@ -705,7 +704,7 @@ static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTAN
     }
     catch ( const Nocturnal::Exception& ex )
     {
-      Console::Error( "%s\n", ex.what() );
+      Log::Error( "%s\n", ex.what() );
       MessageBox(NULL, ex.what(), "Error", MB_OK|MB_ICONEXCLAMATION);
 
       ::ExitProcess( -1 );
@@ -730,7 +729,7 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
   catch ( const AppUtils::CheckVersionException& ex )
   {
     result = 1;
-    Console::Error( "%s\n", ex.what() );
+    Log::Error( "%s\n", ex.what() );
     MessageBox(NULL, ex.what(), "Fatal Error", MB_OK|MB_ICONEXCLAMATION);
   }
 

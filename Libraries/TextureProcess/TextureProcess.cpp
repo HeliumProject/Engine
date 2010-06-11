@@ -18,12 +18,12 @@
 #endif
 #include <windows.h>
 
-#include "Common/Types.h"
-#include "Common/String/Utilities.h"
-#include "Common/Exception.h"
-#include "Common/Checksum/CRC32.h"
+#include "Platform/Types.h"
+#include "Foundation/String/Utilities.h"
+#include "Foundation/Exception.h"
+#include "Foundation/Checksum/CRC32.h"
 
-#include "Console/Console.h"
+#include "Foundation/Log.h"
 #include "filesystem/filesystem.h"
 #include "finder/finder.h"
 
@@ -48,7 +48,7 @@ IG::PostMipImageFilter  TextureProcess::g_DefaultPostMipFilter  = IG::IMAGE_FILT
 ////////////////////////////////////////////////////////////////////////////////////////////////
 bool TextureProcess::Bank::LoadImages()
 {
-  Console::Bullet bullet ("Loading...\n");
+  Log::Bullet bullet ("Loading...\n");
 
   u32 c=0;
   for (V_Definition::iterator i=m_textures.begin();i!=m_textures.end();++i)
@@ -58,7 +58,7 @@ bool TextureProcess::Bank::LoadImages()
     if (pos != std::string::npos)
       filename = filename.substr(pos+1);
 
-    Console::Print( Console::Levels::Verbose, "[%d] : %s", c, filename.c_str());
+    Log::Print( Log::Levels::Verbose, "[%d] : %s", c, filename.c_str());
 
     bool convert_to_linear = (*i)->m_is_normal_map ? false : true;
     IG::Texture* tex = IG::Texture::LoadFile((*i)->m_texture_file.c_str(), convert_to_linear, NULL);
@@ -77,18 +77,18 @@ bool TextureProcess::Bank::LoadImages()
       char* type[] = {"2D TEXTURE","CUBE MAP","VOLUME TEXTURE"};
       if (tex->Type()==IG::Texture::VOLUME)
       {
-        Console::Print( Console::Levels::Verbose, "%s %d x %d x %d\n",type[tex->Type()],tex->m_Width,tex->m_Height,tex->m_Depth);
+        Log::Print( Log::Levels::Verbose, "%s %d x %d x %d\n",type[tex->Type()],tex->m_Width,tex->m_Height,tex->m_Depth);
       }
       else
       {
-        Console::Print( Console::Levels::Verbose, "%s %d x %d\n",type[tex->Type()],tex->m_Width,tex->m_Height);
+        Log::Print( Log::Levels::Verbose, "%s %d x %d\n",type[tex->Type()],tex->m_Width,tex->m_Height);
       }
 
       (*i)->m_texture = tex;
     }
     else
     {
-      Console::Warning("Failed to load '%s'\n",(*i)->m_texture_file.c_str());
+      Log::Warning("Failed to load '%s'\n",(*i)->m_texture_file.c_str());
       return false;
     }
     c++;
@@ -114,7 +114,7 @@ inline bool IsOne(float v)
 
 bool TextureProcess::Bank::AdjustImages()
 {
-  Console::Bullet bullet ("Adjusting...\n");
+  Log::Bullet bullet ("Adjusting...\n");
 
   // relative scale should be done before the power of 2 restriction...
   for (V_Definition::iterator i=m_textures.begin();i!=m_textures.end();i++)
@@ -146,7 +146,7 @@ bool TextureProcess::Bank::AdjustImages()
       if ( !Math::IsPowerOfTwo((*i)->m_texture->m_Width) || !Math::IsPowerOfTwo((*i)->m_texture->m_Height) )
       {
         // this texture is not a power of 2 so rescale it to fix it
-        Console::Warning("Rescaling texture '%s', it is not a power of 2 (%d x %d)\n",(*i)->m_texture_file.c_str(),(*i)->m_texture->m_Width,(*i)->m_texture->m_Height);
+        Log::Warning("Rescaling texture '%s', it is not a power of 2 (%d x %d)\n",(*i)->m_texture_file.c_str(),(*i)->m_texture->m_Width,(*i)->m_texture->m_Height);
 
         IG::Texture* new_tex = (*i)->m_texture->ScaleUpNextPowerOfTwo((*i)->m_texture->m_NativeFormat,IG::MIP_FILTER_CUBIC);
         if (!new_tex)
@@ -179,7 +179,7 @@ bool TextureProcess::Bank::AdjustImages()
 ////////////////////////////////////////////////////////////////////////////////////////////////
 bool TextureProcess::Bank::CompressImages()
 {
-  Console::Bullet bullet ("Compressing...\n");
+  Log::Bullet bullet ("Compressing...\n");
 
   u32 count=0;
   for (V_Definition::iterator i=m_textures.begin();i!=m_textures.end();i++)
@@ -228,7 +228,7 @@ bool TextureProcess::Bank::CompressImages()
       for (u32 level=0; level<mips->m_levels_used; level++)
         size += mips->m_datasize[level];
 
-      Console::Print( Console::Levels::Verbose, "%8.02f kb used by '%s'\n", (float)(size) / 1024.f, (*i)->m_texture_file.c_str() );
+      Log::Print( Log::Levels::Verbose, "%8.02f kb used by '%s'\n", (float)(size) / 1024.f, (*i)->m_texture_file.c_str() );
 
       (*i)->m_mips = mips;
     }
@@ -292,7 +292,7 @@ bool Bank::WriteDebugFile( const std::string& debug_file )
   FILE* f = fopen( debug_file.c_str(), "w" );
   if ( !f )
   {
-    Console::Warning( "Failed to open '%s' for write.\n", debug_file.c_str() );
+    Log::Warning( "Failed to open '%s' for write.\n", debug_file.c_str() );
     return false;
   }
 

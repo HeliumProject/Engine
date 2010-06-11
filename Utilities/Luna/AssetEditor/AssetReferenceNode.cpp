@@ -170,7 +170,7 @@ void AssetReferenceNode::Load()
             assetClass = GetAssetManager()->Open( m_AssetPath.Get(), error, false );
             if ( !error.empty() )
             {
-                Console::Error( "%s\n", error.c_str() );
+                Log::Error( "%s\n", error.c_str() );
             }
         }
 

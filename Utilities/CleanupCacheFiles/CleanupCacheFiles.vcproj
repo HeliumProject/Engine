@@ -179,12 +179,8 @@
 			RelativePathToProject=".\libraries\FileSystem\FileSystem.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{D4A0E7F0-4556-4FA8-A059-F0AFDFACD7EF}"
-			RelativePathToProject=".\libraries\Windows\Windows.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{1E9F45BD-AE62-4A12-8A09-56665F644B79}"
-			RelativePathToProject=".\libraries\Console\Console.vcproj"
+			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
+			RelativePathToProject=".\libraries\Platform\platform.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{296B05EC-7929-4E23-942C-FA953BB5602D}"
@@ -192,7 +188,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
-			RelativePathToProject=".\libraries\Common\Common.vcproj"
+			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
 		/>
 	</References>
 	<Files>

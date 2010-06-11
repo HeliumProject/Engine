@@ -5,8 +5,8 @@
 #include <intrin.h>
 #include <float.h>
 
-#include "Common/Types.h"
-#include "Common/Assert.h"
+#include "Platform/Types.h"
+#include "Platform/Assert.h"
 
 #include "API.h"
 #include "Macros.h"

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Document.h"
 
-#include "Common/Assert.h"
+#include "Platform/Assert.h"
 #include "RCS/RCS.h"
 #include "FileSystem/FileSystem.h"
 

@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include "Common/Types.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Automation/Event.h"
+#include "Platform/Types.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Foundation/Automation/Event.h"
 
 #include "Texture/Texture.h"
 

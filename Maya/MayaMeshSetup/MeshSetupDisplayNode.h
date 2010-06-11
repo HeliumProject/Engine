@@ -2,7 +2,7 @@
 
 #include "API.h"
 
-#include "Common/Memory/SmartPtr.h"
+#include "Foundation/Memory/SmartPtr.h"
 
 #include "Math/Color3.h"
 

@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Common/Automation/Event.h"
+#include "Foundation/Automation/Event.h"
 
 #include "Reflect/Serializer.h"
 

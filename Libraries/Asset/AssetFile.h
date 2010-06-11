@@ -4,9 +4,9 @@
 #include "AssetClass.h"
 #include "CacheDB.h"
 
-#include "Common/Container/OrderedSet.h"
-#include "Common/Memory/SmartPtr.h"
-#include "Common/Types.h"
+#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/Memory/SmartPtr.h"
+#include "Platform/Types.h"
 #include "Finder/Finder.h"
 #include "Reflect/Registry.h"
 #include "Reflect/Serializers.h"

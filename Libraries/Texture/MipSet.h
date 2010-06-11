@@ -5,7 +5,7 @@
 #include <vector>
 #include <list>
 
-#include "common/types.h"
+#include "Platform/Types.h"
 
 #include "API.h"
 #include "ColorFormats.h"

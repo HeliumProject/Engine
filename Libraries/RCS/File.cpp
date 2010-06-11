@@ -1,10 +1,10 @@
 #include "File.h"
 #include "RCS.h"
 
-#include "Common/File/File.h"
-#include "Console/Console.h"
+#include "Foundation/File/File.h"
+#include "Foundation/Log.h"
 
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #undef GetUserName
 
 using namespace RCS;
@@ -251,7 +251,7 @@ void File::Open( const OpenFlag flags, const u64 changesetId )
 {
   if ( !PathIsManaged( m_LocalPath ) )
   {
-    Console::Warning( Console::Levels::Verbose,  "Attempted to Open unmanaged path (not opening in RCS, but ensuring file existence): %s\n", m_LocalPath.c_str() );
+    Log::Warning( Log::Levels::Verbose,  "Attempted to Open unmanaged path (not opening in RCS, but ensuring file existence): %s\n", m_LocalPath.c_str() );
     _EnsureExistence( m_LocalPath );
     return;
   }

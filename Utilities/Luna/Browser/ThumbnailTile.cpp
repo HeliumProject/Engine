@@ -4,7 +4,7 @@
 #include "Asset/AssetFile.h"
 #include "Asset/AssetFolder.h"
 #include "Asset/AssetTypeInfo.h"
-#include "Common/Exception.h"
+#include "Foundation/Exception.h"
 
 using namespace Luna;
 

@@ -12,13 +12,13 @@
 #include "ArchiveBinary.h"
 #include "FileStream.h" 
 
-#include "Debug/Utils.h"
-#include "Common/CommandLine.h"
-#include "FileSystem/FileSystem.h"
-#include "Console/Console.h"
-#include "Profile/Profile.h"
 #include "Platform/Mutex.h"
-#include "Windows/Process.h"
+#include "Platform/Process.h"
+#include "Foundation/Log.h"
+#include "Foundation/Profile.h"
+#include "Foundation/CommandLine.h"
+#include "FileSystem/FileSystem.h"
+#include "Debug/Utils.h"
 
 using namespace Reflect;
 
@@ -38,12 +38,12 @@ void StatusHandler::ArchiveException( ExceptionInfo& info )
 
 void StatusHandler::ArchiveWarning(const std::string& warning)
 {
-  Console::Warning("%s", warning.c_str());
+  Log::Warning("%s", warning.c_str());
 }
 
 void StatusHandler::ArchiveDebug(const std::string& debug)
 {
-  Console::Debug("%s", debug.c_str());
+  Log::Debug("%s", debug.c_str());
 }
 
 void PrintStatus::ArchiveStatus(StatusInfo& info)
@@ -59,11 +59,11 @@ void PrintStatus::ArchiveStatus(StatusInfo& info)
 
       if (info.m_Archive.GetFile().empty())
       {
-        m_Bullet.reset( new Console::Bullet ("%s %s stream\n", verb, type) );
+        m_Bullet.reset( new Log::Bullet ("%s %s stream\n", verb, type) );
       }
       else
       {
-        m_Bullet.reset( new Console::Bullet ("%s %s file '%s'\n", verb, type, info.m_Archive.GetFile().c_str()) );
+        m_Bullet.reset( new Log::Bullet ("%s %s file '%s'\n", verb, type, info.m_Archive.GetFile().c_str()) );
 
         if (info.m_Archive.GetMode() == ArchiveModes::Read)
         {
@@ -72,11 +72,11 @@ void PrintStatus::ArchiveStatus(StatusInfo& info)
 
           if (st.st_size > 1000)
           {
-            Console::Bullet bullet ("Size: %dk\n", st.st_size / 1000);
+            Log::Bullet bullet ("Size: %dk\n", st.st_size / 1000);
           }
           else
           {
-            Console::Bullet bullet ("Size: %d\n", st.st_size);
+            Log::Bullet bullet ("Size: %d\n", st.st_size);
           }
         }
       }
@@ -88,19 +88,19 @@ void PrintStatus::ArchiveStatus(StatusInfo& info)
 
   case Reflect::ArchiveStates::PostProcessing:
     {
-      Console::Bullet bullet ("Processing...\n");
+      Log::Bullet bullet ("Processing...\n");
       break;
     }
 
   case Reflect::ArchiveStates::Complete:
     {
-      Console::Bullet bullet ("Completed in %.2f ms\n", Platform::CyclesToMillis(Platform::TimerGetClock() - m_Timer));
+      Log::Bullet bullet ("Completed in %.2f ms\n", Platform::CyclesToMillis(Platform::TimerGetClock() - m_Timer));
       break;
     }
 
   case Reflect::ArchiveStates::Publishing:
     {
-      Console::Bullet bullet ("Publishing to %s\n", info.m_DestinationFile.c_str());
+      Log::Bullet bullet ("Publishing to %s\n", info.m_DestinationFile.c_str());
       break;
     }
   }
@@ -110,7 +110,7 @@ void PrintStatus::ArchiveWarning(const std::string& warning)
 {
   if (m_Progress >= 0 && !m_Start)
   {
-    Console::Warning("\n");
+    Log::Warning("\n");
     m_Start = true;
   }
   __super::ArchiveWarning( warning );
@@ -120,7 +120,7 @@ void PrintStatus::ArchiveDebug(const std::string& debug)
 {
   if (m_Progress >= 0 && !m_Start)
   {
-    Console::Debug("\n");
+    Log::Debug("\n");
     m_Start = true;
   }
   __super::ArchiveDebug( debug );
@@ -192,7 +192,7 @@ void Archive::Warning(const char* fmt, ...)
   }
   else
   {
-    Console::Warning("%s", buff);
+    Log::Warning("%s", buff);
   }
 }
 
@@ -212,7 +212,7 @@ void Archive::Debug(const char* fmt, ...)
   }
   else
   {
-    Console::Debug("%s", buff);
+    Log::Debug("%s", buff);
   }
 }
 
@@ -706,7 +706,7 @@ void Archive::ToFile(const V_Element& elements, const std::string& file, Version
   // build a path to a unique file for this process
   std::string safetyFile = file;
   FileSystem::StripLeaf( safetyFile );
-  FileSystem::AppendPath( safetyFile, Windows::GetProcessString() );
+  FileSystem::AppendPath( safetyFile, Platform::GetProcessString() );
 
   // ensure it has the same extension in case we want to examine it
   std::string extension;

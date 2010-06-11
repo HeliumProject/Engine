@@ -35,7 +35,7 @@ void SearchHistory::PreSerialize()
   LimitMRUQueries();
 
   m_SavedMRUQueries.clear();
-  for ( OS_SearchQuery::const_iterator itr = m_MRUQueries.begin(), end = m_MRUQueries.end(); itr != end; ++itr )
+  for ( OS_SearchQuery::Iterator itr = m_MRUQueries.Begin(), end = m_MRUQueries.End(); itr != end; ++itr )
   {
     m_SavedMRUQueries.push_back( *itr );
   }
@@ -46,10 +46,10 @@ void SearchHistory::PostDeserialize()
 {
   __super::PostDeserialize();
 
-  m_MRUQueries.clear();
+  m_MRUQueries.Clear();
   for ( V_SearchQuery::const_iterator itr = m_SavedMRUQueries.begin(), end = m_SavedMRUQueries.end(); itr != end; ++itr )
   {
-    m_MRUQueries.insert( *itr );
+    m_MRUQueries.Append( *itr );
   }
   LimitMRUQueries();
 }
@@ -338,14 +338,12 @@ void SearchHistory::PushMRU( const SearchQuery* query )
   if ( !query )
     return;
 
-  OS_SearchQuery::iterator itr = m_MRUQueries.find( query );
-  while ( itr != m_MRUQueries.end() )
+  while ( m_MRUQueries.Contains( query ) )
   {
-    m_MRUQueries.erase( itr );
-    itr = m_MRUQueries.find( query );
+    m_MRUQueries.Remove( query );
   }
 
-  m_MRUQueries.insert( query );
+  m_MRUQueries.Append( query );
   LimitMRUQueries();
 
   m_MRUQueriesChangedListeners.Raise( GetMRUQueries() );
@@ -354,7 +352,7 @@ void SearchHistory::PushMRU( const SearchQuery* query )
 ///////////////////////////////////////////////////////////////////////////////
 SearchQueryPtr SearchHistory::FindQuery( const std::string& queryString )
 {
-  for ( OS_SearchQuery::iterator itr = m_MRUQueries.begin(), end = m_MRUQueries.end(); itr != end; ++itr )
+  for ( OS_SearchQuery::Iterator itr = m_MRUQueries.Begin(), end = m_MRUQueries.End(); itr != end; ++itr )
   {
     if ( (*itr)->GetQueryString() == queryString )
     {
@@ -369,9 +367,9 @@ SearchQueryPtr SearchHistory::FindQuery( const std::string& queryString )
 void SearchHistory::LimitMRUQueries()
 {
   const u32 maxQueries = GetMaxMRUQueries();
-  while ( m_MRUQueries.size() && ( m_MRUQueries.size() > maxQueries ) )
+  while ( m_MRUQueries.Size() && ( m_MRUQueries.Size() > maxQueries ) )
   {
-    m_MRUQueries.erase( m_MRUQueries.begin() );
+    m_MRUQueries.Remove( m_MRUQueries.Front() );
   }
 }
 

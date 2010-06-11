@@ -1,17 +1,17 @@
-#include "Windows/Windows.h"
-#include "Windows/Console.h"
-#include "Windows/Error.h"
+#include "Platform/Windows/Windows.h"
+#include "Platform/Windows/Console.h"
+#include "Foundation/Exception.h"
 
 #include "AppUtils.h"
 #include "ExceptionListener.h"
 #include "ExceptionDB.h"
 #include "ExceptionReport.h"
 
-#include "Common/Version.h"
-#include "Common/CommandLine.h"
-#include "Common/Environment.h"
-#include "Profile/Profile.h"
-#include "Console/Console.h"
+#include "Foundation/Version.h"
+#include "Foundation/CommandLine.h"
+#include "Foundation/Environment.h"
+#include "Foundation/Profile.h"
+#include "Foundation/Log.h"
 #include "Debug/Utils.h"
 #include "Debug/Exception.h"
 #include "FileSystem/FileSystem.h"
@@ -58,9 +58,9 @@ static void CopyDump( ExceptionReport& report )
     return;
   }
 
-  Console::Debug("Writing dump to network...\n");
+  Log::Debug("Writing dump to network...\n");
 
-  const char* store = getenv( NOCTURNAL_STUDIO_PREFIX "TOOLS_CRASH_DUMP_STORE" );
+  const char* store = getenv( "NOC_TOOLS_CRASH_DUMP_STORE" );
   if ( store == NULL )
   {
     return;
@@ -92,7 +92,7 @@ static void CopyDump( ExceptionReport& report )
 
   if ( FALSE == ::CopyFile( report.m_Args.m_Dump.c_str(), destination.str().c_str(), FALSE ) )
   {
-    Windows::Print(Windows::ConsoleColors::Red, stderr, "Failed to copy '%s' to '%s': %s\n", report.m_Args.m_Dump.c_str(), destination.str().c_str(), Windows::GetErrorString().c_str() );
+    Platform::Print(Platform::ConsoleColors::Red, stderr, "Failed to copy '%s' to '%s': %s\n", report.m_Args.m_Dump.c_str(), destination.str().c_str(), Platform::GetErrorString().c_str() );
   }
   else
   {
@@ -102,12 +102,12 @@ static void CopyDump( ExceptionReport& report )
 
 static void SendMail( ExceptionReport& report )
 {
-  if ( getenv( NOCTURNAL_STUDIO_PREFIX "CRASH_DONT_EMAIL" ) != NULL )
+  if ( getenv( "NOC_CRASH_DONT_EMAIL" ) != NULL )
   {
     return;
   }
 
-  Console::Debug("Sending email report...\n");
+  Log::Debug("Sending email report...\n");
 
   std::string subject;
   if ( report.m_Args.m_Fatal )
@@ -224,7 +224,7 @@ static void ProcessException( const Debug::ExceptionArgs& args )
   }
   catch ( Nocturnal::Exception& ex )
   {
-    Windows::Print(Windows::ConsoleColors::Red, stderr, "%s\n", ex.what() );
+    Platform::Print(Platform::ConsoleColors::Red, stderr, "%s\n", ex.what() );
   }
 }
 
@@ -245,16 +245,16 @@ void AppUtils::InitializeExceptionListener()
     if ( !AppUtils::IsToolsBuilder() )
     {
       // Search for network symbol storage
-      const char* symbolStoreVar = getenv( NOCTURNAL_STUDIO_PREFIX"TOOLS_SYMBOLS_STORE" );
+      const char* symbolStoreVar = getenv( "NOC_TOOLS_SYMBOLS_STORE" );
       std::string symbolStore = symbolStoreVar ? symbolStoreVar : "";
       if ( !symbolStore.empty() && FileSystem::Exists( symbolStore ) )
       {
         symbolStore += "\\"; 
-        symbolStore += getenv( NOCTURNAL_STUDIO_PREFIX"PROJECT_NAME" );
+        symbolStore += getenv( "NOC_PROJECT_NAME" );
         symbolStore += "\\"; 
-        symbolStore += getenv( NOCTURNAL_STUDIO_PREFIX"CODE_BRANCH_NAME" ); 
+        symbolStore += getenv( "NOC_CODE_BRANCH_NAME" ); 
         symbolStore += "\\";
-        symbolStore += getenv( NOCTURNAL_STUDIO_PREFIX"TOOLS_RELEASE_NAME" );
+        symbolStore += getenv( "NOC_TOOLS_RELEASE_NAME" );
         symbolStore += "\\";
         symbolStore += NOCTURNAL_VERSION_STRING;
 

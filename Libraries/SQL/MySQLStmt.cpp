@@ -1,6 +1,6 @@
 #include "MySQLStmt.h"
 
-#include "Windows/Windows.h"
+#include "Platform/Windows/Windows.h"
 #include <mysql.h>
 
 using namespace SQL;

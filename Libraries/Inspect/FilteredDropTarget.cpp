@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "FilteredDropTarget.h"
 
-#include "Common/String/Wildcard.h"
-#include "Common/String/Tokenize.h"
+#include "Foundation/String/Wildcard.h"
+#include "Foundation/String/Tokenize.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/FinderSpec.h"
 #include "Inspect/ClipboardDataObject.h"

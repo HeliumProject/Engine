@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Exception.h"
+#include "Foundation/Exception.h"
 #include "UID/TUID.h"
 
 namespace Asset

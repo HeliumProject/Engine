@@ -1,6 +1,7 @@
 #pragma once
 
-#include "API.h"
+#include "Application/API.h"
+
 #include "Node.h"
 #include "EnumValue.h"
 
@@ -12,7 +13,7 @@ namespace CodeGen
   /////////////////////////////////////////////////////////////////////////////
   // Class representing a C++ enumeration.
   // 
-  class CODEGEN_API Enum : public Node
+  class APPLICATION_API Enum : public Node
   {
   private:
     std::string m_Name;

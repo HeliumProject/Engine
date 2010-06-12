@@ -1,6 +1,7 @@
 #pragma once
 
-#include "API.h"
+#include "Application/API.h"
+
 #include "Namespace.h"
 
 namespace CodeGen
@@ -19,7 +20,7 @@ namespace CodeGen
   /////////////////////////////////////////////////////////////////////////////
   // Class for writing a C++ header from a collection of namespace elements.
   // 
-  class CODEGEN_API Writer
+  class APPLICATION_API Writer
   {
   private:
     std::string m_Name;

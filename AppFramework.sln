@@ -8,8 +8,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Foundation", "libraries\Fou
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PropTool", "utilities\PropTool\PropTool.vcproj", "{55C17C56-0658-470B-9C01-C28838586422}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeGen", "libraries\CodeGen\CodeGen.vcproj", "{15659B3D-2AE6-403D-AA91-7A56C252F454}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextureProcess", "libraries\TextureProcess\TextureProcess.vcproj", "{F02AFE63-4A0A-4856-A6C3-0C6A7F866763}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Debug", "libraries\Debug\Debug.vcproj", "{1A179B8F-2027-467A-AB0C-7E90575C0F03}"
@@ -142,12 +140,6 @@ Global
 		{55C17C56-0658-470B-9C01-C28838586422}.Release|Win32.ActiveCfg = Release|Win32
 		{55C17C56-0658-470B-9C01-C28838586422}.Release|Win32.Build.0 = Release|Win32
 		{55C17C56-0658-470B-9C01-C28838586422}.Release|x64.ActiveCfg = Release|Win32
-		{15659B3D-2AE6-403D-AA91-7A56C252F454}.Debug|Win32.ActiveCfg = Debug|Win32
-		{15659B3D-2AE6-403D-AA91-7A56C252F454}.Debug|Win32.Build.0 = Debug|Win32
-		{15659B3D-2AE6-403D-AA91-7A56C252F454}.Debug|x64.ActiveCfg = Debug|Win32
-		{15659B3D-2AE6-403D-AA91-7A56C252F454}.Release|Win32.ActiveCfg = Release|Win32
-		{15659B3D-2AE6-403D-AA91-7A56C252F454}.Release|Win32.Build.0 = Release|Win32
-		{15659B3D-2AE6-403D-AA91-7A56C252F454}.Release|x64.ActiveCfg = Release|Win32
 		{F02AFE63-4A0A-4856-A6C3-0C6A7F866763}.Debug|Win32.ActiveCfg = Debug|Win32
 		{F02AFE63-4A0A-4856-A6C3-0C6A7F866763}.Debug|Win32.Build.0 = Debug|Win32
 		{F02AFE63-4A0A-4856-A6C3-0C6A7F866763}.Debug|x64.ActiveCfg = Debug|Win32

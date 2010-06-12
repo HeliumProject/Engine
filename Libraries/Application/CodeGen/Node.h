@@ -1,8 +1,10 @@
 #pragma once
 
-#include "API.h"
-#include "Foundation/Memory/SmartPtr.h"
 #include <string>
+
+#include "Foundation/Memory/SmartPtr.h"
+
+#include "Application/API.h"
 
 namespace CodeGen
 {
@@ -22,7 +24,7 @@ namespace CodeGen
   /////////////////////////////////////////////////////////////////////////////
   // Class representing a C++ node (namespace, enum, struct, class).
   // 
-  class CODEGEN_API Node : public Nocturnal::RefCountBase<Node>
+  class APPLICATION_API Node : public Nocturnal::RefCountBase<Node>
   {
   private:
     Node* m_Parent;
@@ -58,5 +60,5 @@ namespace CodeGen
   }
 
   // Helper function to get the short name from a full one.
-  CODEGEN_API std::string GetShortName( const std::string& fullName );
+  APPLICATION_API std::string GetShortName( const std::string& fullName );
 }

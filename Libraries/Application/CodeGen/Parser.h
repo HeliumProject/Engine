@@ -1,8 +1,10 @@
 #pragma once
 
-#include "API.h"
-#include "Namespace.h"
 #include <string>
+
+#include "Application/API.h"
+
+#include "Namespace.h"
 
 // Forwards
 class TiXmlElement;
@@ -13,7 +15,7 @@ namespace CodeGen
   // Class for parsing an xml configuration file into header information
   // (namespaces, enumerations).
   // 
-  class CODEGEN_API Parser
+  class APPLICATION_API Parser
   {
   protected:
     std::string m_File;

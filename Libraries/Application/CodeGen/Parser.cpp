@@ -24,8 +24,6 @@ Parser::~Parser()
 // 
 bool Parser::Parse( const std::string& file )
 {
-  CODEGEN_SCOPE_TIMER( ("") );
-
   m_Root = NULL;
   m_LastError.clear();
   m_File = file;

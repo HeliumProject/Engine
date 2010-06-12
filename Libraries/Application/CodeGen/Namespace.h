@@ -1,6 +1,7 @@
 #pragma once
 
-#include "API.h"
+#include "Application/API.h"
+
 #include "Node.h"
 #include "Enum.h"
 
@@ -14,7 +15,7 @@ namespace CodeGen
   /////////////////////////////////////////////////////////////////////////////
   // Class representing a C++ namespace.
   // 
-  class CODEGEN_API Namespace : public Node
+  class APPLICATION_API Namespace : public Node
   {
   private:
     OS_EnumSmartPtr m_Enums;

@@ -197,10 +197,6 @@
 			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{15659B3D-2AE6-403D-AA91-7A56C252F454}"
-			RelativePathToProject=".\libraries\CodeGen\CodeGen.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{A99087C6-C475-485A-8911-ACB7683156FF}"
 			RelativePathToProject=".\libraries\Attribute\Attribute.vcproj"
 		/>

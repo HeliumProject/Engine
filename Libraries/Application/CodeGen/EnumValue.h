@@ -1,8 +1,9 @@
 #pragma once
 
-#include "API.h"
-#include "Node.h"
 #include "Foundation/Container/OrderedSet.h"
+
+#include "Application/API.h"
+#include "Node.h"
 
 namespace CodeGen
 {
@@ -13,7 +14,7 @@ namespace CodeGen
   /////////////////////////////////////////////////////////////////////////////
   // Class representing a C++ enumeration value.
   // 
-  class CODEGEN_API EnumValue : public Node
+  class APPLICATION_API EnumValue : public Node
   {
   private:
     i32 m_Value;

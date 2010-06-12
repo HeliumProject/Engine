@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;$(boost);$(MySQL)\include"
+				AdditionalIncludeDirectories="..;$(boost);$(TinyXML);$(MySQL)\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -121,7 +121,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;$(boost);$(MySQL)\include"
+				AdditionalIncludeDirectories="..;$(boost);$(TinyXML);$(MySQL)\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -203,6 +203,10 @@
 			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"
 			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{06092F0D-324B-484D-A9ED-397DFF76AE53}"
+			RelativePathToProject=".\SDK\TinyXML\2.6.1\TinyXML.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -278,6 +282,58 @@
 			</File>
 			<File
 				RelativePath=".\Worker\Process.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="CodeGen"
+			>
+			<File
+				RelativePath=".\CodeGen\Enum.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeGen\Enum.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeGen\EnumValue.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeGen\EnumValue.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeGen\Namespace.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeGen\Namespace.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeGen\Node.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeGen\Node.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeGen\Parser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeGen\Parser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeGen\Writer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CodeGen\Writer.h"
 				>
 			</File>
 		</Filter>

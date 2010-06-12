@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+#include "Precompile.h"
 #include "WaitDialog.h"
 
 #include "Perforce/Perforce.h"

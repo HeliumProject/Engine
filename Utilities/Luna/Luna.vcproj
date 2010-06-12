@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
+				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -129,7 +129,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
+				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -292,12 +292,8 @@
 			RelativePathToProject=".\libraries\igDXContent\igDXContent.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{75D0DF92-E7C4-4F46-A67A-3B8914477892}"
-			RelativePathToProject=".\libraries\PerforceUI\PerforceUI.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{09C23AAB-CEB0-4254-82F5-15547D30AFE9}"
-			RelativePathToProject=".\libraries\DebugUI\DebugUI.vcproj"
+			ReferencedProjectIdentifier="{1A179B8F-2027-467A-AB0C-7E90575C0F03}"
+			RelativePathToProject=".\libraries\Debug\Debug.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{06092F0D-324B-484D-A9ED-397DFF76AE53}"
@@ -2474,6 +2470,70 @@
 				RelativePath=".\Data\Project.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="UI"
+			>
+			<Filter
+				Name="DebugUI"
+				>
+				<File
+					RelativePath=".\UI\DebugUI\DebugUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\DebugUI\DebugUI.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="PerforceUI"
+				>
+				<File
+					RelativePath=".\UI\PerforceUI\Dialog.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Dialog.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panel.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panel.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panels.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panels.fbp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panels.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\PerforceUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\PerforceUI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\WaitDialog.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\WaitDialog.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\API.h"

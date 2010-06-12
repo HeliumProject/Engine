@@ -1,9 +1,11 @@
-#include "StdAfx.h"
+#include "Precompile.h"
 
-#include "Panel.h"
+#include <sstream>
 
 #include "Foundation/Environment.h"
 #include "Foundation/Container/Insert.h" 
+
+#include "Panel.h"
 
 using namespace PerforceUI;
 

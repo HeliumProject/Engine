@@ -12,7 +12,6 @@
 
 #include "rcs/rcs.h"
 #include "Debug/Exception.h"
-#include "DebugUI/DebugUI.h"
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/IPC/Connection.h"
@@ -580,9 +579,5 @@ IMPLEMENT_APP( BuildToolApp );
 
 int main()
 {
-    Nocturnal::InitializerStack initializerStack( true );
-
-    initializerStack.Push( &DebugUI::Initialize, &DebugUI::Cleanup );
-
     return Application::StandardWinMain( &wxEntry );
 }

@@ -5,7 +5,7 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "StdAfx.h"
+#include "Precompile.h"
 
 #include "Panels.h"
 

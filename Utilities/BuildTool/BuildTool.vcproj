@@ -219,10 +219,6 @@
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
 		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{09C23AAB-CEB0-4254-82F5-15547D30AFE9}"
-			RelativePathToProject=".\libraries\DebugUI\DebugUI.vcproj"
-		/>
 	</References>
 	<Files>
 		<File

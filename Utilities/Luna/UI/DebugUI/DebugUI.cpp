@@ -1,3 +1,5 @@
+#include "Precompile.h"
+
 #include <wx/wx.h>
 #include <wx/choicdlg.h>
 #include <wx/msw/private.h>

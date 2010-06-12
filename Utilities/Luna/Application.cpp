@@ -11,7 +11,6 @@
 #include "Foundation/Log.h"
 #include "Core/CoreInit.h"
 #include "Debug/Exception.h"
-#include "DebugUI/DebugUI.h"
 #include "Editor/ApplicationPreferences.h"
 #include "Editor/Editor.h"
 #include "Editor/EditorInit.h"
@@ -22,7 +21,6 @@
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
 #include "Math/Utils.h"
-#include "PerforceUI/PerforceUI.h"
 #include "Scene/SceneEditor.h"
 #include "Scene/SceneInit.h"
 #include "Task/TaskInit.h"
@@ -30,6 +28,9 @@
 #include "Platform/Windows/Windows.h"
 #include "Platform/Process.h"
 #include "Application/Worker/Process.h"
+
+#include "UI/DebugUI/DebugUI.h"
+#include "UI/PerforceUI/PerforceUI.h"
 
 #include <wx/cmdline.h>
 #include <wx/splash.h>

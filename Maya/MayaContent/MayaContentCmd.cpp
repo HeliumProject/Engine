@@ -206,7 +206,7 @@ bool MayaContentCmd::DefineExportScene()
 
     for each ( const Maya::ExportInfo& exportInfo in exportNodes )
     {
-      if ( exportInfo.m_ID == UID::TUID::Null )
+      if ( exportInfo.m_ID == TUID::Null )
         continue;
 
       ExportAnimationClipPtr exportAnimClip = new ExportAnimationClip( exportInfo.m_ID );
@@ -557,9 +557,9 @@ void MayaContentCmd::QueueNode(const MObject node, MObjectArray& objects)
   //
 
 
-  if (Maya::GetNodeID( node ) == UID::TUID::Null)
+  if (Maya::GetNodeID( node ) == TUID::Null)
   {
-    MGlobal::displayError("Unable to set UID::TUID attribute on maya node!");
+    MGlobal::displayError("Unable to set TUID attribute on maya node!");
     return;
   }
 
@@ -640,9 +640,9 @@ bool MayaContentCmd::QueueParents(const MObject node, MObjectArray& objects)
     //
 
 
-    if ( Maya::GetNodeID( parent ) == UID::TUID::Null)
+    if ( Maya::GetNodeID( parent ) == TUID::Null)
     {
-      MGlobal::displayError("Unable to set UID::TUID attribute on maya node!");
+      MGlobal::displayError("Unable to set TUID attribute on maya node!");
       return false;
     }
 

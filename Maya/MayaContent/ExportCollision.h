@@ -23,7 +23,7 @@ namespace MayaContent
   class MAYA_CONTENT_API ExportCollision : public ExportBase
   {
   public:
-    ExportCollision( const MObject& mayaObject, Nocturnal::UID::TUID& id )
+    ExportCollision( const MObject& mayaObject, Nocturnal::TUID& id )
       : ExportBase( mayaObject )
     {
       m_ContentObject = new Content::CollisionPrimitive( id );

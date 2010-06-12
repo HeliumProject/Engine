@@ -2,7 +2,7 @@
 
 #include "InstanceSet.h"
 
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 #include "Asset/EntityAsset.h"
 #include "Asset/EntityManifest.h"
 

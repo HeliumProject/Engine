@@ -3,21 +3,23 @@
 
 #include <objbase.h>
 
+#pragma comment( lib, "rpcrt4.lib" )
+
 using namespace Nocturnal;
 
-const UID::GUID UID::GUID::Null;
+const Nocturnal::GUID Nocturnal::GUID::Null;
 
-UID::GUID::GUID()
+Nocturnal::GUID::GUID()
 {
   Reset();
 }
 
-UID::GUID::GUID(const UID::GUID &id)
+Nocturnal::GUID::GUID(const GUID &id)
 {
   (*this)=id;
 }
 
-UID::GUID& UID::GUID::operator=(const UID::GUID &rhs)
+Nocturnal::GUID& Nocturnal::GUID::operator=(const Nocturnal::GUID &rhs)
 {
   Data1 = rhs.Data1;
   Data2 = rhs.Data2;
@@ -35,7 +37,7 @@ UID::GUID& UID::GUID::operator=(const UID::GUID &rhs)
   return (*this);
 }
 
-bool UID::GUID::operator==(const UID::GUID &rhs) const
+bool Nocturnal::GUID::operator==(const Nocturnal::GUID &rhs) const
 {
   if (Data1 == rhs.Data1 &&
       Data2 == rhs.Data2 &&
@@ -53,12 +55,12 @@ bool UID::GUID::operator==(const UID::GUID &rhs) const
   return false;
 }
 
-bool UID::GUID::operator!=(const UID::GUID &rhs) const
+bool Nocturnal::GUID::operator!=(const Nocturnal::GUID &rhs) const
 {
   return !((*this)==rhs);
 }
 
-bool UID::GUID::operator<(const UID::GUID &rhs) const
+bool Nocturnal::GUID::operator<(const Nocturnal::GUID &rhs) const
 {
   if ( Data1 != rhs.Data1 )
     return Data1 < rhs.Data1;
@@ -96,14 +98,14 @@ bool UID::GUID::operator<(const UID::GUID &rhs) const
   return false;
 }
 
-void UID::GUID::ToTUID( tuid& id ) const
+void Nocturnal::GUID::ToTUID( tuid& id ) const
 {
     TUID t;
     t.FromGUID( *this );
     id = (tuid)t;
 }
 
-void UID::GUID::ToString(std::string& id) const
+void Nocturnal::GUID::ToString(std::string& id) const
 {
   unsigned char *l_pszString;
 
@@ -114,15 +116,15 @@ void UID::GUID::ToString(std::string& id) const
   RpcStringFree(&l_pszString);
 }
 
-void UID::GUID::FromTUID( tuid id )
+void Nocturnal::GUID::FromTUID( tuid id )
 {
     TUID t( id );
     t.ToGUID( *this );
 }
 
-bool UID::GUID::FromString(const std::string& id)
+bool Nocturnal::GUID::FromString(const std::string& id)
 {
-  UID::GUID uid;
+  GUID uid;
 
   if (RPC_S_OK == UuidFromStringA((unsigned char *)id.data(), reinterpret_cast<UUID*>(&uid)))
   {
@@ -133,7 +135,7 @@ bool UID::GUID::FromString(const std::string& id)
   return false;
 }
 
-void UID::GUID::Reset()
+void Nocturnal::GUID::Reset()
 {
   Data1 = 0;
   Data2 = 0;
@@ -148,14 +150,14 @@ void UID::GUID::Reset()
   Data4[7] = 0;
 }
 
-UID::GUID UID::GUID::Generate()
+Nocturnal::GUID Nocturnal::GUID::Generate()
 {
-  UID::GUID uid;
+  GUID uid;
   UuidCreate(reinterpret_cast<UUID*>(&uid));
   return uid;
 }
 
-void UID::GUID::Generate (UID::GUID& uid)
+void Nocturnal::GUID::Generate (GUID& uid)
 {
   UuidCreate(reinterpret_cast<UUID*>(&uid));
 }

@@ -128,7 +128,7 @@ u32 igDXContent::RBObjectLoader::ParseFile( const char* filename, bool winding )
 
     // shaders - go through all the shaders in this mesh and create fragments for all the shaders that have not yet been seen. If a shader already
     // exists the use the existing fragment for that shader.
-    for ( UID::V_TUID::const_iterator shaderItr = mesh->m_ShaderIDs.begin(), shaderEnd = mesh->m_ShaderIDs.end(); shaderItr != shaderEnd; ++shaderItr )
+    for ( V_TUID::const_iterator shaderItr = mesh->m_ShaderIDs.begin(), shaderEnd = mesh->m_ShaderIDs.end(); shaderItr != shaderEnd; ++shaderItr )
     {
       std::map<u64,u32>::iterator i = frag_finder.find((u64) (*shaderItr));
       if (i != frag_finder.end())

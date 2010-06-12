@@ -3,7 +3,7 @@
 #include "API.h"
 #include "Reflect/Serializers.h"
 #include "Attribute/AttributeCollection.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 
 namespace Content
@@ -13,7 +13,7 @@ namespace Content
 
   //
   // This is the base class of all nodes in the XML hierarchy.
-  //  It encapsulates the ID (UID::TUID/Uuid) of each SceneNode.
+  //  It encapsulates the ID (TUID/Uuid) of each SceneNode.
   //
 
   class CONTENT_API SceneNode : public Attribute::AttributeCollection
@@ -22,7 +22,7 @@ namespace Content
     virtual void Host(ContentVisitor* visitor); 
 
     // The ID of the node
-    Nocturnal::UID::TUID m_ID;
+    Nocturnal::TUID m_ID;
 
     // A generated name of the node
     std::string m_DefaultName;
@@ -37,14 +37,14 @@ namespace Content
     bool m_Selected;
 
     SceneNode ()
-      : m_ID (Nocturnal::UID::TUID::Generate())
+      : m_ID (Nocturnal::TUID::Generate())
       , m_Selected( false )
       , m_UseGivenName( false )
     {
 
     }
 
-    SceneNode (const Nocturnal::UID::TUID& id)
+    SceneNode (const Nocturnal::TUID& id)
       : m_ID (id)
       , m_Selected( false )
       , m_UseGivenName( false )

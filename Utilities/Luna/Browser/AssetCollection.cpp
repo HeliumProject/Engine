@@ -93,7 +93,7 @@ void AssetCollection::CreateSignature( const std::string& str, std::string& sign
 void AssetCollection::CreateSignature( tuid id, std::string& signature )
 {
     std::stringstream stream;
-    stream << UID::TUID::HexFormat << id;
+    stream << TUID::HexFormat << id;
     signature = Nocturnal::MD5( stream.str() );
 }
 

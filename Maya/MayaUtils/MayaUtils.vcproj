@@ -179,8 +179,8 @@
 			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
-			RelativePathToProject=".\Libraries\UID\UID.vcproj"
+			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
+			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
 		/>
 	</References>
 	<Files>

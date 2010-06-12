@@ -17,7 +17,7 @@
 #include <maya/MFnNumericAttribute.h>
 #include <maya/MFnSet.h>
 
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 #include "Foundation/Container/Insert.h" 
 
 using Nocturnal::Insert; 
@@ -74,9 +74,9 @@ namespace Maya
 
   M_StringNodeDecode  g_standardNodes;
 
-  typedef std::map< Nocturnal::UID::TUID, u32 > M_UIDU32;
+  typedef std::map< Nocturnal::TUID, u32 > M_UIDU32;
 
-  typedef std::multimap< Nocturnal::UID::TUID, u32 > MM_UIDU32;
+  typedef std::multimap< Nocturnal::TUID, u32 > MM_UIDU32;
   typedef std::map< std::string, u32 > M_STRU32;
 
   V_ExportInfo        g_foundNodes;
@@ -187,7 +187,7 @@ namespace Maya
     MSelectionList selection;
     MObjectArray   sets;
     u32            setCount;
-    tuid           entityID = Nocturnal::UID::TUID::Null;
+    tuid           entityID = Nocturnal::TUID::Null;
 
     MFnDagNode     dagNode( path, &status );
     if ( status==MS::kSuccess )
@@ -201,7 +201,7 @@ namespace Maya
         setCount = sets.length();
         for ( u32 i=0; i<setCount
                     && status==MS::kSuccess
-                    && entityID==Nocturnal::UID::TUID::Null; i++ )
+                    && entityID==Nocturnal::TUID::Null; i++ )
         {
           MFnSet set( sets[i], &status );
           if ( status==MS::kSuccess )
@@ -216,13 +216,13 @@ namespace Maya
               tuidPlug.getValue( tuidMString );
               if ( tuidMString.length() > 0 )
               {
-                  Nocturnal::UID::TUID t( tuidMString.asChar() );
+                  Nocturnal::TUID t( tuidMString.asChar() );
                   entityID = (tuid) t;
               }
             }
           }
         }
-        if ( status==MS::kSuccess && entityID==Nocturnal::UID::TUID::Null )
+        if ( status==MS::kSuccess && entityID==Nocturnal::TUID::Null )
         {
           if ( dagNode.parentCount() > 0 )
           {
@@ -238,7 +238,7 @@ namespace Maya
             status = MS::kFailure;
           }
         }
-      } while ( status==MS::kSuccess && entityID==Nocturnal::UID::TUID::Null );
+      } while ( status==MS::kSuccess && entityID==Nocturnal::TUID::Null );
     }
     return entityID;
   }
@@ -311,7 +311,7 @@ namespace Maya
           && ( groupNode.empty() || isAPrefix( groupNode, rec.m_pathStrFull ) ) )
         {
           bool add = true;
-          if ( rec.m_ID != Nocturnal::UID::TUID::Null )
+          if ( rec.m_ID != Nocturnal::TUID::Null )
           {
             //Insert<MM_UIDU32>::Result result = g_nodeIDIndexMap.insert( MM_UIDU32::value_type( rec.m_ID, (u32)g_foundNodes.size() ) );
             g_nodeIDIndexMap.insert( MM_UIDU32::value_type( rec.m_ID, (u32)g_foundNodes.size() ) );
@@ -533,7 +533,7 @@ namespace Maya
     }
   }
 
-  bool RemoveMultiMapDupe( const Nocturnal::UID::TUID& id )
+  bool RemoveMultiMapDupe( const Nocturnal::TUID& id )
   {
     if ( g_nodeIDIndexMap.count( id ) > 1 )
     {
@@ -542,7 +542,7 @@ namespace Maya
     return true;
   }
 
-  bool GetExportInfo( const Nocturnal::UID::TUID& id, ExportInfo*& info )
+  bool GetExportInfo( const Nocturnal::TUID& id, ExportInfo*& info )
   {
     MM_UIDU32::const_iterator itr = g_nodeIDIndexMap.find( id );
     if ( itr == g_nodeIDIndexMap.end() )

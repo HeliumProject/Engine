@@ -10,7 +10,7 @@ namespace Content
   public:
     ShadowDirection () : Light()  {  }
 
-    ShadowDirection (Nocturnal::UID::TUID &id) : Light (id)  {  }
+    ShadowDirection (Nocturnal::TUID &id) : Light (id)  {  }
 
     REFLECT_DECLARE_CLASS(ShadowDirection, Light);
   };

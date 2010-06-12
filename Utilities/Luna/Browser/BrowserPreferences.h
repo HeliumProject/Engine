@@ -8,7 +8,7 @@
 #include "Foundation/Container/OrderedSet.h"
 #include "Editor/WindowSettings.h"
 #include "Editor/Preferences.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Luna
 {

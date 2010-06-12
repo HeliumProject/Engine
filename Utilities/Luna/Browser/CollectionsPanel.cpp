@@ -861,7 +861,7 @@ wxDragResult CollectionsPanel::Drop( const Inspect::DragArgs& args )
     //                            warning += dependencyCollection->GetAssetName() + " to ";
     //                            warning += assetName + "?";
 
-    //                            if ( ( dependencyCollection->GetRootID() == UID::TUID::Null )
+    //                            if ( ( dependencyCollection->GetRootID() == TUID::Null )
     //                                || ( wxYES == 
     //                                wxMessageBox( warning,
     //                                "Replace Existing Asset?", 

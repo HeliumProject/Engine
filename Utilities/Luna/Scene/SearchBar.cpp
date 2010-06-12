@@ -210,7 +210,7 @@ void SearchBar::SetupSearchCriteria( SearchBarTraverser& traverser )
 
         case SearchOptions::ID:
             {
-                UID::TUID parseId;
+                TUID parseId;
                 if ( parseId.FromString( searchText ) )
                 {
                     traverser.AddSearchCriteria( new EntityIDCriteria( (tuid)parseId ) );
@@ -413,7 +413,7 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
                 zone = sceneItr->second->GetName();
 
                 V_string regionNames;
-                UID::TUID zoneId = sceneItr->second->GetID(); 
+                TUID zoneId = sceneItr->second->GetID(); 
                 S_RegionDumbPtr::const_iterator regionItr = regionSet.begin();
                 S_RegionDumbPtr::const_iterator regionEnd = regionSet.end();
                 for ( ; regionItr != regionEnd; ++regionItr )

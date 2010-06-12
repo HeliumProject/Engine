@@ -9,7 +9,7 @@
 #include <Maya/MSelectionList.h>
 #include <Maya/MGlobal.h>
 
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Maya
 {

@@ -38,8 +38,8 @@ namespace Luna
   typedef std::set< Luna::SceneNode* > S_SceneNodeDumbPtr;
   typedef std::set< SceneNodePtr > S_SceneNodeSmartPtr;
 
-  typedef stdext::hash_map< Nocturnal::UID::TUID, Luna::SceneNode*, Nocturnal::UID::TUIDHasher > HM_SceneNodeDumbPtr;
-  typedef stdext::hash_map< Nocturnal::UID::TUID, SceneNodePtr, Nocturnal::UID::TUIDHasher > HM_SceneNodeSmartPtr;
+  typedef stdext::hash_map< Nocturnal::TUID, Luna::SceneNode*, Nocturnal::TUIDHasher > HM_SceneNodeDumbPtr;
+  typedef stdext::hash_map< Nocturnal::TUID, SceneNodePtr, Nocturnal::TUIDHasher > HM_SceneNodeSmartPtr;
 
 
   // 
@@ -286,8 +286,8 @@ namespace Luna
     //
 
   public:
-    virtual const Nocturnal::UID::TUID& SceneNode::GetID() const;
-    virtual void SceneNode::SetID(const Nocturnal::UID::TUID& id);
+    virtual const Nocturnal::TUID& SceneNode::GetID() const;
+    virtual void SceneNode::SetID(const Nocturnal::TUID& id);
 
     virtual std::string GenerateName() const;
     virtual const std::string& GetName() const;

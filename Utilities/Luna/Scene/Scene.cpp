@@ -90,7 +90,7 @@ using namespace Nocturnal;
 
 Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
 : m_File( file )
-, m_Id( UID::TUID::Generate() )
+, m_Id( TUID::Generate() )
 , m_Progress( 0 )
 , m_Importing( false )
 , m_MiscSettings( new MiscSettings() )
@@ -640,9 +640,9 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
             // Remap object id
             // 
 
-            UID::TUID childID = hierarchyNode->GetID();
+            TUID childID = hierarchyNode->GetID();
 
-            UID::HM_TUID::const_iterator findChild = m_RemappedIDs.find( childID );
+            HM_TUID::const_iterator findChild = m_RemappedIDs.find( childID );
             if ( findChild != m_RemappedIDs.end() )
             {
                 childID = findChild->second;
@@ -653,9 +653,9 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
             // Remap parent id
             // 
 
-            UID::TUID parentID = hierarchyNode->GetPackage<Content::HierarchyNode>()->m_ParentID;
+            TUID parentID = hierarchyNode->GetPackage<Content::HierarchyNode>()->m_ParentID;
 
-            UID::HM_TUID::const_iterator findParent = m_RemappedIDs.find( parentID );
+            HM_TUID::const_iterator findParent = m_RemappedIDs.find( parentID );
             if ( findParent != m_RemappedIDs.end() )
             {
                 parentID = findParent->second;
@@ -675,7 +675,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
 
             if (child != NULL)
             {
-                if (parentID != UID::TUID::Null)
+                if (parentID != TUID::Null)
                 {
                     Luna::HierarchyNode* parent = NULL;
 
@@ -815,8 +815,8 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
             else
             {
                 // Always generate a new ID when importing and not merging
-                UID::TUID id( UID::TUID::Generate() );
-                m_RemappedIDs.insert( UID::HM_TUID::value_type( node->m_ID, id ) );
+                TUID id( TUID::Generate() );
+                m_RemappedIDs.insert( HM_TUID::value_type( node->m_ID, id ) );
                 node->m_ID = id;
                 convertNode = true;
             }
@@ -959,7 +959,7 @@ bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::
     }
 
     // ID's of the objects that have been exported so far (to prevent exporting dupes)
-    UID::S_TUID exported; 
+    S_TUID exported; 
 
     if ( ExportFlags::HasFlag( args.m_Flags, ExportFlags::SelectedNodes ) )
     {
@@ -1027,7 +1027,7 @@ bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::
     return result;
 }
 
-void Scene::ExportSceneNode( Luna::SceneNode* node, Reflect::V_Element& elements, UID::S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
+void Scene::ExportSceneNode( Luna::SceneNode* node, Reflect::V_Element& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes )
 {
     // Don't export the root node
     if ( node != m_Root )
@@ -1081,7 +1081,7 @@ void Scene::ExportSceneNode( Luna::SceneNode* node, Reflect::V_Element& elements
     }
 }
 
-void Scene::ExportHierarchyNode( Luna::HierarchyNode* node, Reflect::V_Element& elements, UID::S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
+void Scene::ExportHierarchyNode( Luna::HierarchyNode* node, Reflect::V_Element& elements, S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren )
 {
     // Export parents first
     if ( node->GetParent() != m_Root )
@@ -1520,7 +1520,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
         LUNA_SCENE_SCOPE_TIMER( ("Insert in node list") );
 
         // this would be bad
-        NOC_ASSERT( node->GetID() != UID::TUID::Null );
+        NOC_ASSERT( node->GetID() != TUID::Null );
 
         Nocturnal::Insert<HM_SceneNodeDumbPtr>::Result inserted = m_Nodes.insert( HM_SceneNodeDumbPtr::value_type( node->GetID(), node ) );
         NOC_ASSERT( inserted.first->second == node );
@@ -1880,7 +1880,7 @@ void Scene::SelectLink( const Inspect::SelectLinkArgs& args )
 
     if ( o == NULL )
     {
-        UID::TUID id;
+        TUID id;
         if (id.FromString(args.m_ID))
         {
             HM_SceneNodeDumbPtr::const_iterator found = m_Nodes.find( id );
@@ -1914,7 +1914,7 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 
     if ( args.m_Items.empty() )
     {
-        UID::TUID null;
+        TUID null;
         null.ToString(str);
         args.m_Items.push_back( Inspect::Item ("NULL", str) );
     }
@@ -2159,7 +2159,7 @@ void Scene::UndoQueueCommandPushed( const Undo::QueueChangeArgs& args )
     }
 }
 
-Luna::SceneNode* Scene::FindNode(const UID::TUID& id)
+Luna::SceneNode* Scene::FindNode(const TUID& id)
 {
     Luna::SceneNode* node = NULL;
 
@@ -2176,7 +2176,7 @@ Luna::SceneNode* Scene::FindNode(const UID::TUID& id)
     {
         // Immediately after an import, there may be some remapped IDs that 
         // can be searched to find the node.
-        UID::HM_TUID::const_iterator findRemap = m_RemappedIDs.find( id );
+        HM_TUID::const_iterator findRemap = m_RemappedIDs.find( id );
         if ( findRemap != m_RemappedIDs.end() )
         {
             HM_SceneNodeDumbPtr::const_iterator findRepeat = m_Nodes.find( findRemap->second );
@@ -2776,8 +2776,8 @@ Undo::CommandPtr Scene::ShowLastHidden()
 
     Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
-    std::set<UID::TUID>::const_iterator itr = m_LastHidden.begin();
-    std::set<UID::TUID>::const_iterator end = m_LastHidden.end();
+    std::set<TUID>::const_iterator itr = m_LastHidden.begin();
+    std::set<TUID>::const_iterator end = m_LastHidden.end();
     for ( ; itr != end; ++itr )
     {
         Luna::HierarchyNode* hierarchyNode = Reflect::ObjectCast<Luna::HierarchyNode>( FindNode( *itr ) );
@@ -3496,10 +3496,10 @@ void Scene::SaveVisibility()
     }
 }
 
-UID::TUID Scene::GetRemappedID( tuid nodeId )
+TUID Scene::GetRemappedID( tuid nodeId )
 {
-    UID::HM_TUID::iterator itr = m_RemappedIDs.begin();
-    UID::HM_TUID::iterator itrEnd = m_RemappedIDs.end();
+    HM_TUID::iterator itr = m_RemappedIDs.begin();
+    HM_TUID::iterator itrEnd = m_RemappedIDs.end();
 
     while( itr != itrEnd )
     {
@@ -3510,7 +3510,7 @@ UID::TUID Scene::GetRemappedID( tuid nodeId )
         itr++;
     }
 
-    return UID::TUID::Null;
+    return TUID::Null;
 }
 
 ZonePtr Scene::GetNavZone()

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ExportBase.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 #include "Content/Shader.h"
 
 namespace MayaContent
@@ -26,7 +26,7 @@ namespace MayaContent
 
     }
 
-    ExportShader( const MObject& mayaShader, Nocturnal::UID::TUID& id ) 
+    ExportShader( const MObject& mayaShader, Nocturnal::TUID& id ) 
       : ExportBase( mayaShader )
       , m_OffsetU( 0.0f )
       , m_OffsetV( 0.0f )
@@ -47,5 +47,5 @@ namespace MayaContent
 
   typedef Nocturnal::SmartPtr< ExportShader > ExportShaderPtr;
   typedef std::vector< ExportShaderPtr > V_ExportShader;
-  typedef stdext::hash_map< Nocturnal::UID::TUID, ExportShaderPtr, Nocturnal::UID::TUIDHasher > M_UIDExportShader;
+  typedef stdext::hash_map< Nocturnal::TUID, ExportShaderPtr, Nocturnal::TUIDHasher > M_UIDExportShader;
 }

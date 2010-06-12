@@ -8,7 +8,7 @@ namespace MayaContent
   class MAYA_CONTENT_API ExportGameplay : public ExportBase
   {
   public:
-    ExportGameplay( const MObject& mayaObject, Nocturnal::UID::TUID& id )
+    ExportGameplay( const MObject& mayaObject, Nocturnal::TUID& id )
       : ExportBase( mayaObject )
     {
       m_ContentObject = new Content::Volume( id );

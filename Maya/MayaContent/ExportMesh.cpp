@@ -569,7 +569,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
 void ExportMesh::AddDefaultShader( V_ExportBase &newExportObjects, const Content::MeshPtr& contentMesh )
 {
   // FIXME not thread safe
-  static UID::TUID s_DefaultShaderID( UID::TUID::Generate() );
+  static TUID s_DefaultShaderID( TUID::Generate() );
   M_UIDExportShader::iterator itr = m_ExportShaderMap.find( s_DefaultShaderID );
   if ( itr == m_ExportShaderMap.end() )
   {
@@ -629,11 +629,11 @@ void ExportMesh::AddSkinData()
       influenceObject = m_JointClusters[i].m_influence;
     }
 
-    UID::TUID influenceUID = Maya::GetNodeID( influenceObject );
+    TUID influenceUID = Maya::GetNodeID( influenceObject );
 
-    if (influenceUID == UID::TUID::Null)
+    if (influenceUID == TUID::Null)
     {
-      MGlobal::displayError("Unable to set UID::TUID attribute on maya node! Export continuing but will probably result in bad data!");
+      MGlobal::displayError("Unable to set TUID attribute on maya node! Export continuing but will probably result in bad data!");
     }
 
     m_ContentSkin->m_InfluenceObjectIDs[i] = influenceUID;
@@ -1238,7 +1238,7 @@ void ExportMesh::ProcessTriangle( unsigned int& triangleIndex, unsigned int poly
 
   contentMesh->m_CollisionMaterialIndices[triangleIndex] = materialIndex;
 
-  const UID::TUID& shaderID = contentMesh->m_ShaderIDs[ contentMesh->m_ShaderIndices[ exportTri.m_Index ] ];
+  const TUID& shaderID = contentMesh->m_ShaderIDs[ contentMesh->m_ShaderIndices[ exportTri.m_Index ] ];
   M_UIDExportShader::const_iterator findItor = m_ExportShaderMap.find( shaderID );
   if( findItor != m_ExportShaderMap.end() )
   {

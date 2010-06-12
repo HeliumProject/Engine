@@ -6,7 +6,7 @@
 
 #include "Inspect/FilteredDropTarget.h"
 
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Luna
 {

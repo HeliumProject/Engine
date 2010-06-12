@@ -285,7 +285,7 @@ namespace Maya
     MStatus status( MStatus::kSuccess );
 
     std::stringstream idStr;
-    idStr << Nocturnal::UID::TUID::HexFormat << id;
+    idStr << Nocturnal::TUID::HexFormat << id;
 
     MString idMStr( idStr.str().c_str() );
     return SetStringAttribute( object, idAttributeName, idStr.str(), hidden );
@@ -301,7 +301,7 @@ namespace Maya
     std::string idStr;
     status = GetStringAttribute( object, idAttributeName, idStr );
 
-    tuid id = Nocturnal::UID::TUID::Null;
+    tuid id = Nocturnal::TUID::Null;
 
     if ( !idStr.empty() )
     {

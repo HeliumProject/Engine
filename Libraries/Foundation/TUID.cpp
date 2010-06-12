@@ -12,9 +12,10 @@
 #include <cctype>
 
 using namespace Nocturnal;
-using namespace Nocturnal::UID;
 
-const tuid UID::TUID::Null = 0x0;
+#pragma comment ( lib, "iphlpapi.lib" )
+
+const tuid TUID::Null = 0x0;
 
 static u64 s_CachedMacBits64 = 0; ///< cached 48-bit MAC address, centered in u64
 static u64 s_GUIDConvertConstant = 0xDEADDEADDEADDEAD;
@@ -38,7 +39,7 @@ bool isAlpha( int c )
     return ( std::isalpha( c ) != 0 );
 }
 
-void TUID::ToGUID( UID::GUID& id ) const
+void TUID::ToGUID( Nocturnal::GUID& id ) const
 {
     static guid null;
     if ( m_ID == 0x0 )
@@ -64,7 +65,7 @@ void TUID::ToString(std::string& id) const
     id = str.str();
 }
 
-void TUID::FromGUID( const UID::GUID& id )
+void TUID::FromGUID( const Nocturnal::GUID& id )
 {
     static guid null;
 

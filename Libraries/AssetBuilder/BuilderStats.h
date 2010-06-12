@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 #include "BuilderInterface.h"
 

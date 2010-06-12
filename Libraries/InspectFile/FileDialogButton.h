@@ -4,7 +4,7 @@
 #include "Inspect/Button.h"
 
 #include "Finder/FinderSpec.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Inspect
 {

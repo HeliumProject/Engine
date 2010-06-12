@@ -29,7 +29,7 @@
 #include "Reflect/Serializers.h"
 #include "Reflect/Version.h"
 #include "Reflect/Visitor.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 #define SHUTDOWN_THREAD 0
 

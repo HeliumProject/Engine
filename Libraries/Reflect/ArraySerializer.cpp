@@ -431,8 +431,8 @@ template SimpleArraySerializer<u64>;
 template SimpleArraySerializer<i64>;
 template SimpleArraySerializer<f32>;
 template SimpleArraySerializer<f64>;
-template SimpleArraySerializer<Nocturnal::UID::GUID>;
-template SimpleArraySerializer<Nocturnal::UID::TUID>;
+template SimpleArraySerializer<Nocturnal::GUID>;
+template SimpleArraySerializer<Nocturnal::TUID>;
 template SimpleArraySerializer< Nocturnal::Path >;
 
 template SimpleArraySerializer<Math::Vector2>;

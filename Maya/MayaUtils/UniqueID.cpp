@@ -1,8 +1,8 @@
 #include "UniqueID.h"
 
 #include "Platform/Assert.h"
-#include "UID/GUID.h"
-#include "UID/TUID.h"
+#include "Foundation/GUID.h"
+#include "Foundation/TUID.h"
 
 #include <maya/MGlobal.h>
 #include <maya/MFnDependencyNode.h>
@@ -14,11 +14,11 @@ using namespace Maya;
 const char* s_GUIDAttributeName = "GUID";
 const char* s_TUIDAttributeName = "TUID";
 
-Nocturnal::UID::TUID Maya::GetNodeID( const MObject& node, bool create )
+Nocturnal::TUID Maya::GetNodeID( const MObject& node, bool create )
 {
   if (node == MObject::kNullObj)
   {
-    return Nocturnal::UID::TUID::Null;
+    return Nocturnal::TUID::Null;
   }
 
   MObject attr = MObject::kNullObj;
@@ -44,12 +44,12 @@ Nocturnal::UID::TUID Maya::GetNodeID( const MObject& node, bool create )
       NOC_ASSERT( status != MS::kFailure );
 
       // parse it
-      Nocturnal::UID::GUID id;
+      Nocturnal::GUID id;
       bool parsed = id.FromString(str.asChar());
       NOC_ASSERT( parsed );
 
       // convert it to a TUID and set the new attribute
-      Nocturnal::UID::TUID tuid;
+      Nocturnal::TUID tuid;
       tuid.FromGUID( id );
       status = SetNodeID( node, tuid );
       NOC_ASSERT( status != MS::kFailure );
@@ -90,7 +90,7 @@ Nocturnal::UID::TUID Maya::GetNodeID( const MObject& node, bool create )
   if ( str.length() == 0 && create )
   {
     // generate a new ID
-    Nocturnal::UID::TUID id( Nocturnal::UID::TUID::Generate() );
+    Nocturnal::TUID id( Nocturnal::TUID::Generate() );
 
     // set the new ID value on the node
     if( SetNodeID( node, id ) )
@@ -99,17 +99,17 @@ Nocturnal::UID::TUID Maya::GetNodeID( const MObject& node, bool create )
     }
     else
     {
-      return Nocturnal::UID::TUID::Null;
+      return Nocturnal::TUID::Null;
     }
   }
 
   // parse the value (this may be null if we did not create the attribute)
-  Nocturnal::UID::TUID id;
+  Nocturnal::TUID id;
   id.FromString(str.asChar());
   return id;
 }
 
-MStatus Maya::SetNodeID( const MObject& node, const Nocturnal::UID::TUID& id )
+MStatus Maya::SetNodeID( const MObject& node, const Nocturnal::TUID& id )
 {
   MStatus status;
   MFnDependencyNode nodeFn (node);

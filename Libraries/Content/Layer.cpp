@@ -22,7 +22,7 @@ Layer::Layer()
 {
 }
 
-Layer::Layer( Nocturnal::UID::TUID& id )
+Layer::Layer( Nocturnal::TUID& id )
 : SceneNode( id )
 , m_Visible( true )
 , m_Selectable( true )

@@ -186,11 +186,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
-			RelativePathToProject=".\Libraries\UID\UID.vcproj"
+			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 	</References>
 	<Files>

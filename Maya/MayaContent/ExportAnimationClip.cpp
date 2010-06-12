@@ -421,7 +421,7 @@ void ExportAnimationClip::SampleOneFramesMorphTargetWeights( const MTime& curren
 
       for( u32 targetIndex = 0; targetIndex < numTargets; ++targetIndex )
       {
-        UID::TUID& targetId = exportDeformationWeight.m_TargetIds[targetIndex];
+        TUID& targetId = exportDeformationWeight.m_TargetIds[targetIndex];
         frameMorphTargetInfo->AddTargetWeight( targetId, weight );
       }
     }

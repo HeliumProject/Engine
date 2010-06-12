@@ -29,7 +29,7 @@ Instance::Instance()
 
 }
 
-Instance::Instance(const Nocturnal::UID::TUID& id)
+Instance::Instance(const Nocturnal::TUID& id)
 : PivotTransform (id)
 , m_Solid (false)
 , m_SolidOverride (false)

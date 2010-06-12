@@ -205,7 +205,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{0FBA8851-5A4E-4CEB-B24C-9487E9B9AF4A}"
-			RelativePathToProject=".\libraries\MayaUtils\MayaUtils.vcproj"
+			RelativePathToProject=".\Maya\MayaUtils\MayaUtils.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{51249970-F796-4344-B558-4147F3225C30}"
@@ -254,10 +254,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}"
 			RelativePathToProject=".\libraries\UIToolKit\UIToolKit.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
-			RelativePathToProject=".\Libraries\UID\UID.vcproj"
 		/>
 	</References>
 	<Files>

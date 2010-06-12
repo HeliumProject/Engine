@@ -394,7 +394,7 @@ void CameraController::beforeSaveCallback(void* node)
     guidPlug.getValue( guidStr );
     if ( guidStr.length() == 0 )
     {
-      UID::TUID id( UID::TUID::Generate() );
+      TUID id( TUID::Generate() );
       std::string s;
       id.ToString(s);
       guidStr = MString(s.c_str());

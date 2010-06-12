@@ -30,12 +30,12 @@ Region::Region()
 }
 
 
-bool Region::HasZone(Nocturnal::UID::TUID zoneId) const
+bool Region::HasZone(Nocturnal::TUID zoneId) const
 {
   return std::find(m_ZoneIds.begin(), m_ZoneIds.end(), zoneId) != m_ZoneIds.end(); 
 }
 
-void Region::AddZone(Nocturnal::UID::TUID zoneId)
+void Region::AddZone(Nocturnal::TUID zoneId)
 {
   if(!HasZone(zoneId))
   {
@@ -44,7 +44,7 @@ void Region::AddZone(Nocturnal::UID::TUID zoneId)
   }
 }
 
-void Region::RemoveZone(Nocturnal::UID::TUID zoneId)
+void Region::RemoveZone(Nocturnal::TUID zoneId)
 {
   if(HasZone(zoneId))
   {

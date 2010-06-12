@@ -9,7 +9,7 @@
 #include "MayaUtils/NodeTypes.h"
 #include "MayaUtils/ErrorHelpers.h"
 
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 #include "Attribute/AttributeHandle.h"
 #include "Asset/ArtFileAttribute.h"
 #include "MayaUtils/Duplicate.h"
@@ -92,7 +92,7 @@ MStatus EntityNode::RemoveCallbacks()
 }
 
 EntityNode::EntityNode() 
-: m_UID( UID::TUID::Null )
+: m_UID( TUID::Null )
 , m_AttributeChangedCB( -1 )
 , m_ChildAddedCB( -1 )
 {
@@ -153,7 +153,7 @@ void EntityNode::copyInternalData( MPxNode* node )
     EntityNode* source = (EntityNode*)(node);
     source->Hide();
     m_Entity = Reflect::ObjectCast< Asset::Entity >( source->m_Entity->Clone() );
-    UID::TUID::Generate( m_Entity->m_ID );
+    TUID::Generate( m_Entity->m_ID );
     m_UID = m_Entity->m_ID;
 
     EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntityAsset()->GetPath() );
@@ -162,7 +162,7 @@ void EntityNode::copyInternalData( MPxNode* node )
         return;
     }
 
-    instanceClassNode.m_Instances.insert( std::pair< UID::TUID, EntityNode*>( m_UID, this ) );
+    instanceClassNode.m_Instances.insert( std::pair< TUID, EntityNode*>( m_UID, this ) );
 
     s_ShowNodes.push_back( source );
     s_DupeNodes.push_back( this ); 

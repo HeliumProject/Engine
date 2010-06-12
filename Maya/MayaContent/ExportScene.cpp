@@ -96,7 +96,7 @@ void ExportScene::ExportNode( Content::SceneNode* node, S_ElementDumbPtr& duplic
 {
   Content::HierarchyNode* hierarchyNode = Reflect::ObjectCast< Content::HierarchyNode >( node );
 
-  if ( hierarchyNode && hierarchyNode->m_ParentID != UID::TUID::Null )
+  if ( hierarchyNode && hierarchyNode->m_ParentID != TUID::Null )
   {
     Content::M_DependencyNode::const_iterator parentItr = m_ContentScene.m_DependencyNodes.find( hierarchyNode->m_ParentID );
     if ( parentItr != m_ContentScene.m_DependencyNodes.end() )

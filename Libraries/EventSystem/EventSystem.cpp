@@ -91,7 +91,7 @@ EventPtr EventSystem::CreateEvent( const std::string &eventData, const std::stri
   _ftime64_s( &now );
   u64 createdTime = ( now.time * 1000 ) + now.millitm;
 
-  return new Event( UID::TUID::Generate(), createdTime, username, eventData ); 
+  return new Event( TUID::Generate(), createdTime, username, eventData ); 
 }
 
 

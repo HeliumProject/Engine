@@ -4,20 +4,20 @@
 #include "SceneNode.h"
 #include "Foundation/Container/BitArray.h"
 #include "Content/ContentTypes.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Content
 {
     //
     // This is the base class of all nodes in the XML hierarchy.
-    //  It encapsulates the ID (UID::TUID/Uuid) of each HierarchyNode.
+    //  It encapsulates the ID (TUID/Uuid) of each HierarchyNode.
     //
 
     class CONTENT_API HierarchyNode : public SceneNode
     {
     public:
         // The ID of the parent node
-        Nocturnal::UID::TUID m_ParentID;
+        Nocturnal::TUID m_ParentID;
 
         // The hidden state
         bool m_Hidden;
@@ -28,7 +28,7 @@ namespace Content
         BitArray m_ExportTypes;
 
         HierarchyNode()
-            : m_ParentID( Nocturnal::UID::TUID::Null )
+            : m_ParentID( Nocturnal::TUID::Null )
             , m_Hidden( false )
             , m_Live( false )
             , m_ExportTypes( Content::ContentTypes::NumContentTypes )
@@ -36,9 +36,9 @@ namespace Content
 
         }
 
-        HierarchyNode( const Nocturnal::UID::TUID& id )
+        HierarchyNode( const Nocturnal::TUID& id )
             : SceneNode( id )
-            , m_ParentID( Nocturnal::UID::TUID::Null )
+            , m_ParentID( Nocturnal::TUID::Null )
             , m_Hidden( false )
             , m_Live( false )
             , m_ExportTypes( Content::ContentTypes::NumContentTypes )

@@ -366,7 +366,7 @@ public:
 
                     clonedObject->m_GlobalTransform = clonedObject->m_ObjectTransform;
                     clonedObject->m_ObjectTransform = Math::Matrix4::Identity; 
-                    clonedObject->m_ParentID = Nocturnal::UID::TUID::Null;
+                    clonedObject->m_ParentID = Nocturnal::TUID::Null;
                     
                     serializeElements.push_back( clonedObject );
                   }
@@ -581,7 +581,7 @@ public:
 
                         clonedObject->m_GlobalTransform = clonedObject->m_ObjectTransform;
                         clonedObject->m_ObjectTransform = Math::Matrix4::Identity; 
-                        clonedObject->m_ParentID = Nocturnal::UID::TUID::Null;
+                        clonedObject->m_ParentID = Nocturnal::TUID::Null;
 
                         serializeElements.push_back( clonedObject );
                       }

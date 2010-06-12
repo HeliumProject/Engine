@@ -2,7 +2,7 @@
 
 #include "API.h"
 #include "SceneNode.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Content
 {
@@ -11,22 +11,22 @@ namespace Content
     public: 
         Region(); 
 
-        bool HasZone( Nocturnal::UID::TUID zoneId ) const;
-        void AddZone( Nocturnal::UID::TUID zoneId );
-        void RemoveZone( Nocturnal::UID::TUID zoneId );
+        bool HasZone( Nocturnal::TUID zoneId ) const;
+        void AddZone( Nocturnal::TUID zoneId );
+        void RemoveZone( Nocturnal::TUID zoneId );
 
         const Reflect::Field* ZonesField() const
         {
             return GetClass()->FindField( &Region::m_ZoneIds ); 
         }
 
-        const Nocturnal::UID::V_TUID& GetZones()
+        const Nocturnal::V_TUID& GetZones()
         {
             return m_ZoneIds; 
         }
 
     private: 
-        Nocturnal::UID::V_TUID m_ZoneIds; 
+        Nocturnal::V_TUID m_ZoneIds; 
 
     public: 
         float       m_SpatialGridSize;

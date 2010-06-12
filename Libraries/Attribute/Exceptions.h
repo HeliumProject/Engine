@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation/Exception.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Attribute
 {

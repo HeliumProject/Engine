@@ -298,11 +298,11 @@ void RegionsPanel::SceneLoadFinished( const LoadArgs& args )
 void RegionsPanel::CreateZoneNodes(Luna::Region* regionWrapper, wxTreeItemId regionNode, const S_ZoneDumbPtr& zones)
 {
   Content::RegionPtr region = regionWrapper->GetPackage<Content::Region>(); 
-  const UID::V_TUID& zoneIds = region->GetZones(); 
+  const V_TUID& zoneIds = region->GetZones(); 
 
   for(u32 z = 0; z < zoneIds.size(); ++z)
   {
-    UID::TUID zoneId = zoneIds[z]; 
+    TUID zoneId = zoneIds[z]; 
 
     M_TuidToZone::iterator found = m_ZoneMap.find( zoneId ); 
     if(found == m_ZoneMap.end())
@@ -791,7 +791,7 @@ void RegionsPanel::ContextRegionAddRemoveZones(const ContextMenuArgsPtr&)
   // THIS WILL HAVE TO BE CHANGED FOR MULTISELECT
   for(u32 i = 0; i < zones.size(); i++)
   {
-    UID::TUID zoneId = zones[i]->GetPackage<Content::Zone>()->m_ID; 
+    TUID zoneId = zones[i]->GetPackage<Content::Zone>()->m_ID; 
     if(region->HasZone(zoneId))
     {
       listBox->Check( i ); 
@@ -942,7 +942,7 @@ void RegionsPanel::ContextZoneChangeRegions(const ContextMenuArgsPtr&)
   std::vector<bool> currentlyOwned; 
   currentlyOwned.reserve(regions.size()); 
 
-  UID::TUID zoneId = zoneWrapper->GetID(); 
+  TUID zoneId = zoneWrapper->GetID(); 
 
   // THIS WILL HAVE TO BE CHANGED FOR MULTISELECT
   for(u32 i = 0; i < regions.size(); i++)

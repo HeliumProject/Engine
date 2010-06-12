@@ -15,8 +15,8 @@
 #include "Platform/Assert.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "UID/GUID.h"
-#include "UID/TUID.h"
+#include "Foundation/GUID.h"
+#include "Foundation/TUID.h"
 #include "Foundation/Atomic.h"
 
 //

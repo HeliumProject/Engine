@@ -271,8 +271,8 @@ template SimpleSetSerializer< std::string, StringSerializer >;
 template SimpleSetSerializer< u32, U32Serializer >;
 template SimpleSetSerializer< u64, U64Serializer >;
 template SimpleSetSerializer< f32, F32Serializer >;
-template SimpleSetSerializer< Nocturnal::UID::GUID, GUIDSerializer >;
-template SimpleSetSerializer< Nocturnal::UID::TUID, TUIDSerializer >;
+template SimpleSetSerializer< Nocturnal::GUID, GUIDSerializer >;
+template SimpleSetSerializer< Nocturnal::TUID, TUIDSerializer >;
 template SimpleSetSerializer< Nocturnal::Path, PathSerializer >;
 
 REFLECT_DEFINE_CLASS( StringSetSerializer );

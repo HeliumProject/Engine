@@ -49,12 +49,12 @@ SceneNode::~SceneNode()
 
 }
 
-const UID::TUID& SceneNode::GetID() const
+const TUID& SceneNode::GetID() const
 {
   return GetPackage<Content::SceneNode>()->m_ID;
 }
 
-void SceneNode::SetID( const UID::TUID& id )
+void SceneNode::SetID( const TUID& id )
 {
   GetPackage<Content::SceneNode>()->m_ID = id;
 }

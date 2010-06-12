@@ -56,7 +56,7 @@ namespace Content
 
     }
 
-    Volume (const Nocturnal::UID::TUID& id)
+    Volume (const Nocturnal::TUID& id)
       : Instance (id)
       , m_Shape (VolumeShapes::Cube)
     {

@@ -1,5 +1,5 @@
 #include "SceneVisibility.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 
 using namespace Content; 
@@ -39,7 +39,7 @@ NodeVisibilityPtr SceneVisibility::GetVisibility(tuid nodeId,tuid fallbackId)
   }
 
   // check for a fallback
-  if(fallbackId != Nocturnal::UID::TUID::Null)
+  if(fallbackId != Nocturnal::TUID::Null)
   {
     itr = m_NodeVisibility.find(fallbackId); 
 

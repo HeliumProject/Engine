@@ -9,7 +9,7 @@ namespace MayaContent
   class MAYA_CONTENT_API ExportCurve : public ExportBase
   {
   public:
-      ExportCurve( const MObject& mayaCurve, const Nocturnal::UID::TUID& id ) 
+      ExportCurve( const MObject& mayaCurve, const Nocturnal::TUID& id ) 
       : ExportBase( mayaCurve )
     {
       m_ContentObject = new Content::Curve( id );

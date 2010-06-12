@@ -97,8 +97,8 @@ void Mesh::Initialize()
   // Dereference Shaders
   //
 
-  UID::V_TUID::const_iterator itr = mesh->m_ShaderIDs.begin();
-  UID::V_TUID::const_iterator end = mesh->m_ShaderIDs.end();
+  V_TUID::const_iterator itr = mesh->m_ShaderIDs.begin();
+  V_TUID::const_iterator end = mesh->m_ShaderIDs.end();
   for ( ; itr != end; ++itr )
   {
     Shader* shader = Reflect::ObjectCast< Shader >( m_Scene->FindNode( *itr ) );

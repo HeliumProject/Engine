@@ -9,7 +9,7 @@ namespace MayaContent
   struct ExportDeformationWeight
   {
     u32               m_WeightId;
-    Nocturnal::UID::V_TUID  m_TargetIds;
+    Nocturnal::V_TUID  m_TargetIds;
   };
   typedef std::vector<ExportDeformationWeight> V_ExportDeformationWeight;
 
@@ -34,7 +34,7 @@ namespace MayaContent
     V_ExportBlendShapeDeformer m_ExportBlendShapeDeformers;
 
   public:
-    ExportAnimationClip(const Nocturnal::UID::TUID& skeletonID)
+    ExportAnimationClip(const Nocturnal::TUID& skeletonID)
     {
       Content::AnimationClipPtr clip = new Content::AnimationClip();
 

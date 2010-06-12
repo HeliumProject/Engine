@@ -249,10 +249,6 @@
 			ReferencedProjectIdentifier="{0EB25C89-540D-48DB-8410-53EB39507242}"
 			RelativePathToProject=".\Maya\MayaMeshSetup\MayaMeshSetup.vcproj"
 		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
-			RelativePathToProject=".\Libraries\UID\UID.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter

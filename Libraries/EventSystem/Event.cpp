@@ -21,7 +21,7 @@ std::string Event::Dump() const
     _ctime64_s( timestr, sizeof(timestr), &created );
     timestr[ strlen(timestr) - 1 ] = '\0';
 
-    str << "ID        : " << UID::TUID::HexFormat << m_Id << std::dec << std::endl;
+    str << "ID        : " << TUID::HexFormat << m_Id << std::dec << std::endl;
     str << "Created   : " << timestr << " (+" << m_Created % 1000 << " ms)" << std::endl;
     str << "Username  : " << m_Username << std::endl;
     str << "Data      : " << m_Data << std::endl;

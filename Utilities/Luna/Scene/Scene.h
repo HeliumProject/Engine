@@ -3,7 +3,7 @@
 #include "API.h"
 
 #include "Foundation/Automation/Event.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 #include "Reflect/Archive.h"
 #include "Reflect/Version.h"
 
@@ -256,7 +256,7 @@ namespace Luna
   //
 
   class Transform;
-  typedef std::map< Nocturnal::UID::TUID, const Luna::Transform* > M_TransformConstDumbPtr;
+  typedef std::map< Nocturnal::TUID, const Luna::Transform* > M_TransformConstDumbPtr;
 
   class LUNA_SCENE_API Scene : public Object, public Reflect::StatusHandler
   {
@@ -269,11 +269,11 @@ namespace Luna
     SceneDocumentPtr m_File;
 
     // id
-    Nocturnal::UID::TUID m_Id;
+    Nocturnal::TUID m_Id;
 
     // load
     i32 m_Progress;
-    Nocturnal::UID::HM_TUID m_RemappedIDs;
+    Nocturnal::HM_TUID m_RemappedIDs;
     Luna::HierarchyNode* m_ImportRoot;
     bool m_Importing;
 
@@ -338,7 +338,7 @@ namespace Luna
     bool m_ValidSmartDuplicateMatrix;
 
     // the set of last hidden
-    std::set<Nocturnal::UID::TUID> m_LastHidden;
+    std::set<Nocturnal::TUID> m_LastHidden;
 
     // set by the zone that this scene belongs to, and used for 
     // the 3D view's "color modes"
@@ -353,7 +353,7 @@ namespace Luna
     Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file );
     ~Scene();
 
-    Nocturnal::UID::TUID GetId() const
+    Nocturnal::TUID GetId() const
     {
         return m_Id;
     }
@@ -509,7 +509,7 @@ namespace Luna
 
     Luna::SceneNode* Find( const std::string& name ) const; 
 
-    Luna::SceneNode* Get( const Nocturnal::UID::TUID& uid ) const
+    Luna::SceneNode* Get( const Nocturnal::TUID& uid ) const
     {
       HM_SceneNodeDumbPtr::const_iterator it = m_Nodes.find( uid );
 
@@ -523,7 +523,7 @@ namespace Luna
 
 
     template< class T >
-    T* Get( const Nocturnal::UID::TUID &uid ) const
+    T* Get( const Nocturnal::TUID &uid ) const
     {
       return Reflect::ObjectCast< T >( Get( uid ) );
     }
@@ -650,8 +650,8 @@ namespace Luna
     /// When we copy elements, we give them a new UniqueID. If we need information related
     /// to the original node, we need a way to gather the id of the original node.
     /// @param nodeId the id of the copied node
-    /// @return returns the id of the source node if it exists. If not it returns Nocturnal::UID::TUID::Null
-    Nocturnal::UID::TUID  GetRemappedID( tuid nodeId );
+    /// @return returns the id of the source node if it exists. If not it returns Nocturnal::TUID::Null
+    Nocturnal::TUID  GetRemappedID( tuid nodeId );
 
     //
     // Save
@@ -671,8 +671,8 @@ namespace Luna
 
   private:
     // saving helpers
-    void ExportSceneNode( Luna::SceneNode* node, Reflect::V_Element& elements, Nocturnal::UID::S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes );
-    void ExportHierarchyNode( Luna::HierarchyNode* node, Reflect::V_Element& elements, Nocturnal::UID::S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren = true );
+    void ExportSceneNode( Luna::SceneNode* node, Reflect::V_Element& elements, Nocturnal::S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes );
+    void ExportHierarchyNode( Luna::HierarchyNode* node, Reflect::V_Element& elements, Nocturnal::S_TUID& exported, const ExportArgs& args, Undo::BatchCommand* changes, bool exportChildren = true );
 
 
     //
@@ -769,7 +769,7 @@ namespace Luna
     void PopulateLink( Inspect::PopulateLinkArgs& args );
 
     // find/search for an object by different criteria
-    Luna::SceneNode* FindNode( const Nocturnal::UID::TUID& id );
+    Luna::SceneNode* FindNode( const Nocturnal::TUID& id );
     Luna::SceneNode* FindNode( const std::string& name );
 
     // raise event

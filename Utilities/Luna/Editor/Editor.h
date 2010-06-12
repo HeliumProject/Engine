@@ -6,7 +6,7 @@
 #include "EditorInfo.h"
 #include "EditorState.h"
 #include "UID/TUID.h"
-#include "Undo/Command.h"
+#include "Application/Undo/Command.h"
 
 namespace Luna
 {

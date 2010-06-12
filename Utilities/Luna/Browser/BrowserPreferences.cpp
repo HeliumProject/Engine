@@ -2,7 +2,7 @@
 #include "BrowserPreferences.h"
 #include "BrowserFrame.h"
 
-#include "AppUtils/Preferences.h"
+#include "Application/Preferences.h"
 #include "Asset/AssetFlags.h"
 #include "Foundation/Environment.h"
 #include "FileSystem/FileSystem.h"
@@ -69,7 +69,7 @@ const std::string& BrowserPreferences::GetCurrentVersion() const
 std::string BrowserPreferences::GetPreferencesPath() const
 {
     Nocturnal::Path prefsDir;
-    if ( !AppUtils::GetPreferencesDirectory( prefsDir ) )
+    if ( !Application::GetPreferencesDirectory( prefsDir ) )
     {
         throw Nocturnal::Exception( "Could not get preferences directory." );
     }

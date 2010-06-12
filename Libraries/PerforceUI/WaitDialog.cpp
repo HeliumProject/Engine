@@ -2,7 +2,7 @@
 #include "WaitDialog.h"
 
 #include "Perforce/Perforce.h"
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 
 using namespace PerforceUI;
 

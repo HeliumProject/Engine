@@ -29,9 +29,9 @@
 #include "Asset/AssetInit.h"
 #include "Asset/AssetClass.h"
 
-#include "Worker/Client.h"
-#include "Worker/Process.h"
-#include "AppUtils/AppUtils.h"
+#include "Application/Worker/Client.h"
+#include "Application/Worker/Process.h"
+#include "Application/Application.h"
 #include "Foundation/InitializerStack.h"
 #include "Content/ContentInit.h"
 
@@ -261,7 +261,7 @@ bool Build( Dependencies::DependencyGraph& depGraph, Nocturnal::S_Path& assets, 
 
         AssetClassPtr assetClass;
 
-        if (AppUtils::IsDebuggerPresent() && !g_All)
+        if (Application::IsDebuggerPresent() && !g_All)
         {
             assetClass = AssetClass::LoadAssetClass( path );
 
@@ -320,7 +320,7 @@ bool Build( Dependencies::DependencyGraph& depGraph, Nocturnal::S_Path& assets, 
 
         AssetClassPtr assetClass;
 
-        if (AppUtils::IsDebuggerPresent() && !g_All)
+        if (Application::IsDebuggerPresent() && !g_All)
         {
             assetClass = AssetClass::LoadAssetClass( filePath );
 
@@ -362,7 +362,7 @@ bool Build( Dependencies::DependencyGraph& depGraph, Nocturnal::S_Path& assets, 
         }
     }
 
-    if (AppUtils::IsDebuggerPresent())
+    if (Application::IsDebuggerPresent())
     {
         AssetBuilder::Build( depGraph, jobs );
     }
@@ -520,7 +520,7 @@ int Main (int argc, const char** argv)
         return success ? 0 : 1;
     }
 
-    if (AppUtils::IsDebuggerPresent())
+    if (Application::IsDebuggerPresent())
     {
         if (Nocturnal::GetCmdLineFlag( Worker::Args::Worker ))
         {
@@ -560,7 +560,7 @@ int Main (int argc, const char** argv)
     return success ? 0 : 1;
 }
 
-class Application : public wxApp
+class BuildToolApp : public wxApp
 {
 public:
     virtual bool OnInit() NOC_OVERRIDE
@@ -574,9 +574,9 @@ public:
     }
 };
 
-DECLARE_APP( Application );
+DECLARE_APP( BuildToolApp );
 
-IMPLEMENT_APP( Application );
+IMPLEMENT_APP( BuildToolApp );
 
 int main()
 {
@@ -584,5 +584,5 @@ int main()
 
     initializerStack.Push( &DebugUI::Initialize, &DebugUI::Cleanup );
 
-    return AppUtils::StandardWinMain( &wxEntry );
+    return Application::StandardWinMain( &wxEntry );
 }

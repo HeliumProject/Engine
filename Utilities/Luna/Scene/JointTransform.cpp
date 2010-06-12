@@ -9,7 +9,7 @@
 #include "PrimitiveAxes.h"
 #include "PrimitiveRings.h"
 
-#include "Undo/PropertyCommand.h"
+#include "Application/Undo/PropertyCommand.h"
 #include "HierarchyNodeType.h"
 #include "Scene.h"
 

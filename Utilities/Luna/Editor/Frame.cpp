@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <wx/config.h>
 
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 #include "Foundation/Environment.h"
 #include "Foundation/String/Utilities.h"
 

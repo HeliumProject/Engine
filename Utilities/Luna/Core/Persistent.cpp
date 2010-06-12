@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Persistent.h"
 
-#include "Undo/PropertyCommand.h"
+#include "Application/Undo/PropertyCommand.h"
 
 using namespace Luna;
 

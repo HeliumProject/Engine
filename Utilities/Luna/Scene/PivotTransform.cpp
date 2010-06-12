@@ -5,7 +5,7 @@
 #include "math/EulerAngles.h"
 #include "math/Constants.h"
 
-#include "Undo/PropertyCommand.h"
+#include "Application/Undo/PropertyCommand.h"
 #include "HierarchyNodeType.h"
 #include "Scene.h"
 #include "UIToolKit/ImageManager.h"

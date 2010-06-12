@@ -4,8 +4,8 @@
 #include "PersistentDataFactory.h"
 
 #include "Inspect/ClipboardElementArray.h"
-#include "Undo/BatchCommand.h"
-#include "Undo/PropertyCommand.h"
+#include "Application/Undo/BatchCommand.h"
+#include "Application/Undo/PropertyCommand.h"
 
 using namespace Luna;
 

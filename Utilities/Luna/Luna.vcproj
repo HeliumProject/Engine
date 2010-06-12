@@ -197,7 +197,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
+			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}"
@@ -228,10 +228,6 @@
 			RelativePathToProject=".\libraries\InspectReflect\InspectReflect.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{AA86FEA7-AA10-4870-8C71-C6D5A94D2FE5}"
-			RelativePathToProject=".\libraries\Undo\Undo.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{89167DD4-39A9-444A-8ED9-CAB1B35A0DEA}"
 			RelativePathToProject=".\libraries\Asset\Asset.vcproj"
 		/>
@@ -246,10 +242,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{296B05EC-7929-4E23-942C-FA953BB5602D}"
 			RelativePathToProject=".\libraries\AssetBuilder\AssetBuilder.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{B3F3E187-E372-4A23-B9DA-5FCCE712D174}"
-			RelativePathToProject=".\libraries\Worker\Worker.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}"

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Undo/BatchCommand.h"
-#include "Undo/ExistenceCommand.h"
+#include "Application/Undo/BatchCommand.h"
+#include "Application/Undo/ExistenceCommand.h"
 
 namespace Luna
 {

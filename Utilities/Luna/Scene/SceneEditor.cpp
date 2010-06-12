@@ -57,7 +57,7 @@
 #include "UIToolKit/FileDialog.h"
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/SortTreeCtrl.h"
-#include "Undo/PropertyCommand.h"
+#include "Application/Undo/PropertyCommand.h"
 #include "Platform/Windows/Clipboard.h"
 #include "Platform/Process.h"
 

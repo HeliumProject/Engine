@@ -20,7 +20,7 @@
 
 #include "UIToolKit/ImageManager.h"
 #include "Core/Enumerator.h"
-#include "Undo/PropertyCommand.h"
+#include "Application/Undo/PropertyCommand.h"
 #include "Foundation/Log.h"
 #include "Editor/Orientation.h"
 

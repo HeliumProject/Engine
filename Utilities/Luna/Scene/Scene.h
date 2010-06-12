@@ -13,8 +13,8 @@
 #include "Inspect/Canvas.h"
 #include "Core/Enumerator.h"
 
-#include "Undo/ExistenceCommand.h"
-#include "Undo/Queue.h"
+#include "Application/Undo/ExistenceCommand.h"
+#include "Application/Undo/Queue.h"
 
 #include "SceneGraph.h"
 

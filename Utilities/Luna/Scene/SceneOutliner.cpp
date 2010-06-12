@@ -4,7 +4,7 @@
 #include "SceneManager.h"
 #include "SceneEditor.h"
 #include "SceneOutlinerItemData.h"
-#include "Undo/PropertyCommand.h"
+#include "Application/Undo/PropertyCommand.h"
 
 // Forwards
 using namespace Luna;

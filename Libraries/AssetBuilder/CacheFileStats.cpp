@@ -1,7 +1,7 @@
 #include "Platform/Windows/Windows.h"
 #include "CacheFileStats.h"
 
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 #include "Foundation/Log.h"
 
 #include <mysql.h>

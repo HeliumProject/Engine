@@ -1,7 +1,7 @@
 #include "Platform/Windows/Windows.h"
 #include "Foundation/Exception.h"
 
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 #include "AssetBuilder/CacheFiles.h"
 #include "FileSystem/FileSystem.h"
 #include "FileSystem/File.h"
@@ -164,5 +164,5 @@ int Main(int argc, const char** argv)
 
 int main(int argc, const char** argv)
 {
-  return AppUtils::StandardMain( &Main, argc, argv );
+  return Application::StandardMain( &Main, argc, argv );
 }

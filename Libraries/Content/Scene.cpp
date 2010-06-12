@@ -16,7 +16,7 @@
 #include "Finder/ContentSpecs.h"
 #include "Finder/ShaderSpecs.h"
 
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 #include "Math/EulerAngles.h"
 #include "Math/AlignedBox.h"
 #include "Math/Line.h"

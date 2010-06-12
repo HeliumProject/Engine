@@ -1,7 +1,7 @@
 #include "FinderSpec.h"
 #include "Finder.h"
 
-#include "AppUtils/Preferences.h"
+#include "Application/Preferences.h"
 #include "Platform/Assert.h"
 #include "Foundation/File/Path.h"
 #include "FileSystem/FileSystem.h"
@@ -193,7 +193,7 @@ namespace Finder
           break;
 
         case FolderRoots::UserPrefs:
-            if ( !AppUtils::GetPreferencesDirectory( dir ) )
+            if ( !Application::GetPreferencesDirectory( dir ) )
             {
                 throw Nocturnal::Exception( "Could not determine preferences directory.  Is the APPDATA environment variable set?" );
             }

@@ -217,7 +217,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
+			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{1A179B8F-2027-467A-AB0C-7E90575C0F03}"
@@ -254,10 +254,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}"
 			RelativePathToProject=".\libraries\UIToolKit\UIToolKit.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{0E85A01E-6BFC-4DF8-BE0D-5F6FAB8AF587}"
-			RelativePathToProject=".\Maya\MayaCore\MayaCore.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"

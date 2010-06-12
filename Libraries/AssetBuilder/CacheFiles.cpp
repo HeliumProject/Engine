@@ -4,7 +4,7 @@
 #include "Platform/Mutex.h"
 #include "FileSystem/FileSystem.h"
 #include "FileSystem/File.h"
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 #include "Foundation/Log.h"
 #include "Foundation/Exception.h"
 #include "Foundation/CommandLine.h"
@@ -290,7 +290,7 @@ void CopyFileToServer( std::string sourceFile, std::string targetFile, Dependenc
 
     if ( fileInfo->m_MD5 != storedMD5 )
     {
-      Log::Level level = AppUtils::IsToolsBuilder() ? Log::Levels::Default : Log::Levels::Verbose;
+      Log::Level level = Application::IsToolsBuilder() ? Log::Levels::Default : Log::Levels::Verbose;
       Log::Warning( level, "MD5 Mismatch: %s (target: %s): Local (built) MD5 (%s) did not match expected MD5 (%s)\n", sourceFile.c_str(), targetFile.c_str(), fileInfo->m_MD5.c_str(), storedMD5.c_str() );
     }
   }
@@ -626,7 +626,7 @@ void CacheFiles::Initialize()
     bool production = false;
 #endif
 
-    if ( AppUtils::IsToolsBuilder() )
+    if ( Application::IsToolsBuilder() )
     {
       production = false;
     }

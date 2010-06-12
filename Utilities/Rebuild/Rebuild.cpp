@@ -1,5 +1,5 @@
 #include "Debug/Exception.h"
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 #include "Platform/Windows/Windows.h"
 
 #include "Foundation/InitializerStack.h"
@@ -65,7 +65,7 @@ int ProcessFile(const std::string& input, const std::string& output)
     {
         V_Element elements;
 
-        if ( AppUtils::IsDebuggerPresent() )
+        if ( Application::IsDebuggerPresent() )
         {
             Reflect::PrintStatus status;
             Archive::FromFile( input, elements, &status );
@@ -96,7 +96,7 @@ int ProcessFile(const std::string& input, const std::string& output)
 
     V_Element spool;
 
-    if ( AppUtils::IsDebuggerPresent() )
+    if ( Application::IsDebuggerPresent() )
     {
         Reflect::PrintStatus status;
         Archive::FromFile( input, spool, &status );
@@ -167,7 +167,7 @@ int ProcessFile(const std::string& input, const std::string& output)
         }
     }
 
-    if ( AppUtils::IsDebuggerPresent() )
+    if ( Application::IsDebuggerPresent() )
     {
         Reflect::PrintStatus status;
         Archive::ToFile( spool, absolute, version, &status );
@@ -193,7 +193,7 @@ int ProcessFile(const std::string& input, const std::string& output)
 
     if (g_Verify)
     {
-        if ( AppUtils::IsDebuggerPresent() )
+        if ( Application::IsDebuggerPresent() )
         {
             V_Element duplicates;
             Reflect::PrintStatus status;
@@ -364,5 +364,5 @@ int Main(int argc, const char** argv)
 
 int main(int argc, const char** argv)
 {
-    return AppUtils::StandardMain( &Main, argc, argv );
+    return Application::StandardMain( &Main, argc, argv );
 }

@@ -11,7 +11,7 @@
 #include "Reflect/Version.h"
 #include "Foundation/Log.h"
 
-#include "AppUtils/Preferences.h"
+#include "Application/Preferences.h"
 #include "Asset/Entity.h"
 #include "Asset/SceneManifest.h"
 #include "Asset/Exceptions.h"
@@ -35,7 +35,7 @@
 #include "Inspect/Data.h"
 #include "Inspect/Canvas.h"
 #include "SceneGraph.h"
-#include "Undo/PropertyCommand.h"
+#include "Application/Undo/PropertyCommand.h"
 #include "Statistics.h"
 
 #include "SceneNodeType.h"
@@ -3459,7 +3459,7 @@ bool Scene::GetVisibilityFile(std::string& filename)
     snprintf(buffer, 1024, "visibility/" TUID_HEX_FORMAT ".vis.rb", m_File->GetPath().Hash() ); 
 
     Nocturnal::Path prefsDir;
-    if ( !AppUtils::GetPreferencesDirectory( prefsDir ) )
+    if ( !Application::GetPreferencesDirectory( prefsDir ) )
     {
         return false;
     }

@@ -4,7 +4,7 @@
 #include "PersistentData.h"
 #include "Asset/AssetClass.h"
 #include "Foundation/Automation/Event.h"
-#include "Undo/BatchCommand.h"
+#include "Application/Undo/BatchCommand.h"
 
 namespace Inspect
 { 

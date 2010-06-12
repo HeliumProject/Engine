@@ -3,7 +3,6 @@
 
 #include "ExportContentCmd.h"
 
-#include "MayaCore/MayaCore.h"
 #include "Foundation/InitializerStack.h"
 #include "Content/ContentInit.h"
 
@@ -34,7 +33,6 @@ Nocturnal::InitializerStack g_InitializerStack;
 
 MStatus initializePlugin( MObject obj )
 {   
-  g_InitializerStack.Push( &MayaCore::Initialize, &MayaCore::Cleanup );
   g_InitializerStack.Push( &Content::Initialize, &Content::Cleanup );
 
   MStatus   status;

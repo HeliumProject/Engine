@@ -1,10 +1,10 @@
 #pragma once
 
-class Application : public wxApp
+class ReflectorApp : public wxApp
 {
 public:
   int  OnRun();
   int  OnExit();
 };
 
-DECLARE_APP(Application);
+DECLARE_APP(ReflectorApp);

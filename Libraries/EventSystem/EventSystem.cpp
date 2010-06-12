@@ -13,7 +13,7 @@
 #include <sstream>
 #include <set>
 
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 #include "Foundation/Boost/Regex.h" 
 #include "Platform/Types.h"
 #include "Foundation/String/Utilities.h"

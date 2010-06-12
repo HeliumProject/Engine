@@ -4,7 +4,7 @@
 
 #include "Foundation/Automation/Event.h"
 
-#include "Undo/Command.h"
+#include "Application/Undo/Command.h"
 
 namespace Luna
 {

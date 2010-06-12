@@ -10,7 +10,7 @@
 #include "ArtFileAttribute.h"
 
 #include "Attribute/AttributeHandle.h"
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Flags.h"
 #include "Foundation/String/Utilities.h"

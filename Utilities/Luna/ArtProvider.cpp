@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "ArtProvider.h"
 
-#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 
 #include <sstream>
 
@@ -52,11 +52,11 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
     {
         std::stringstream strm;
         strm << exePath.Directory() << "Icons/" << size.x << 'x' << size.y << '/' << icon;
-        Nocturnal::File imageFile( strm.str() );
+        Nocturnal::Path imageFile( strm.str() );
 
         if ( imageFile.Exists() )
         {
-            wxImage image( imageFile.GetPath().c_str(), wxBITMAP_TYPE_PNG );
+            wxImage image( imageFile.c_str(), wxBITMAP_TYPE_PNG );
             if ( image.Ok() )
             {
                 return wxBitmap( image );

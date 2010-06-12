@@ -1,7 +1,7 @@
 #include "File.h"
 #include "RCS.h"
 
-#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Log.h"
 
 #include "Platform/Windows/Windows.h"
@@ -226,24 +226,12 @@ static void _EnsureExistence( const std::string &path )
 {
   RCS_SCOPE_TIMER( ("") );
 
-  Nocturnal::File file( path );
+  Nocturnal::Path file( path );
 
   // if the file doesn't exist, create a zero length 
   if( !file.Exists() )
   {
-    file.MakePath();
-
-    FILE *f = fopen( path.c_str(), "w" );
-
-    // if we couldn't open the file for some reason,
-    // eg: write protected but not under revision control,
-    // fail
-    if ( !f )
-    {
-      throw Exception( "Could not create file on disk: ", path.c_str() );
-    }
-
-    fclose(f);
+      file.Create();
   }
 }
 

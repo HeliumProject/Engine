@@ -334,7 +334,7 @@ Zone* ScenesPanel::AddZone( std::string ( ScenesPanel::*PromptFunction )( const 
         return NULL;
     }
 
-    Nocturnal::File zoneFile( newZonePath );
+    Nocturnal::Path zoneFile( newZonePath );
     
     if ( !zoneFile.Create() )
     {
@@ -345,7 +345,7 @@ Zone* ScenesPanel::AddZone( std::string ( ScenesPanel::*PromptFunction )( const 
         return NULL;
     }
 
-    if ( ContainsZone( zoneFile.GetPath() ) )
+    if ( ContainsZone( zoneFile ) )
     {
         // Error
         std::ostringstream msg;
@@ -356,11 +356,11 @@ Zone* ScenesPanel::AddZone( std::string ( ScenesPanel::*PromptFunction )( const 
 
     // Create the persistent data for the zone with the new tuid
     Content::Zone* contentZone = new Content::Zone();
-    contentZone->m_Path = zoneFile.GetPath();
+    contentZone->m_Path = zoneFile;
 
     // Create the Luna application object that wraps a Content::Zone
     Zone* sceneZone = new Zone( rootScene, contentZone );
-    sceneZone->Rename( zoneFile.GetPath().Get() );
+    sceneZone->Rename( zoneFile.Get() );
 
 #pragma TODO( "Make adding/removing zones undoable" )
     rootScene->AddObject( sceneZone );

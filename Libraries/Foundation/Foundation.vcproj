@@ -305,14 +305,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\File\File.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\File\File.h"
-				>
-			</File>
-			<File
 				RelativePath=".\File\FileHandle.cpp"
 				>
 			</File>

@@ -262,7 +262,7 @@ void PropToolFrame::ColorMapChanged( const FileDroppedArgs& args )
   Nocturnal::FileChangedSignature::Delegate delegate ( this, &PropToolFrame::OnColorMapFileModification );
   m_FileWatcher.Remove( m_ColorMapFilePicker->GetPath().c_str(), delegate );
 
-  Nocturnal::File f ( args.m_Path );
+  Nocturnal::Path f( args.m_Path );
   if ( f.Exists() )
   {
     m_FileWatcher.Add( args.m_Path, delegate );
@@ -309,7 +309,7 @@ void PropToolFrame::NormalMapChanged( const FileDroppedArgs& args )
   Nocturnal::FileChangedSignature::Delegate delegate ( this, &PropToolFrame::OnNormalMapFileModification );
   m_FileWatcher.Remove( m_NormalMapFilePicker->GetPath().c_str(), delegate );
   
-  Nocturnal::File f ( args.m_Path );
+  Nocturnal::Path f ( args.m_Path );
   if ( f.Exists() )
   {
     m_FileWatcher.Add( args.m_Path, delegate );
@@ -356,7 +356,7 @@ void PropToolFrame::GPIMapChanged( const FileDroppedArgs& args )
   Nocturnal::FileChangedSignature::Delegate delegate ( this, &PropToolFrame::OnGPIMapFileModification );
   m_FileWatcher.Remove( m_GPIMapFilePicker->GetPath().c_str(), delegate );
 
-  Nocturnal::File f ( args.m_Path );
+  Nocturnal::Path f ( args.m_Path );
   if ( f.Exists() )
   {
     m_FileWatcher.Add( args.m_Path, delegate );
@@ -399,7 +399,7 @@ void PropToolFrame::OnGPIMapFileModification( const Nocturnal::FileChangedArgs& 
 
 void PropToolFrame::Open( const std::string& filename )
 {
-  Nocturnal::File file ( filename );
+  Nocturnal::Path file ( filename );
 
   if ( !file.Exists() )
   {
@@ -413,7 +413,7 @@ void PropToolFrame::Open( const std::string& filename )
   objLoader.IncrRefCount();
 
   m_Workspace->ClearScene();
-  if ( !m_Workspace->LoadScene( file.GetPath().c_str(), &objLoader ) )
+  if ( !m_Workspace->LoadScene( file.c_str(), &objLoader ) )
   {
     std::stringstream str;
     str << "Unable to load '" << filename << "', failed to load scene";

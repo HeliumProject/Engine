@@ -4,27 +4,14 @@
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/String/Utilities.h"
 
+namespace Platform
+{
+    struct Stat;
+}
+
 namespace Nocturnal
 {
-    namespace Platforms
-    {
-        enum Platform
-        {
-            Internal,
-            Windows,
-            Unix,
-
-            Count
-        };
-    }
-    typedef Platforms::Platform Platform;
-
-    // must line up with enum above
-    const static char s_PlatformSeparators[] = {
-        '/',   // Internal
-        '\\',  // Windows
-        '/'    // Unix
-    };
+    const static char s_InternalPathSeparator = '/';
 
     class Path;
     typedef std::vector< Path > V_Path;
@@ -75,8 +62,30 @@ namespace Nocturnal
         std::string Signature();
 
         bool Exists() const;
+        bool Stat( Platform::Stat& stat ) const;
         bool IsAbsolute() const;
         bool IsUnder( const std::string& location );
+        bool IsFile() const;
+        bool IsDirectory() const;
+        bool Writable() const;
+        bool Readable() const;
+        bool ChangedSince( u64 lastTime ) const;
+        u64 ModifiedTime() const;
+        u64 CreatedTime() const;
+        u64 AccessTime() const;
+
+        bool MakePath() const;
+        bool Create() const;
+        bool Copy( const Nocturnal::Path& target, bool overwrite = true ) const;
+        bool Move( const Nocturnal::Path& target ) const;
+        bool Delete() const;
+
+        std::string FileCRC();
+        bool VerifyFileCRC( const std::string& hash );
+
+        std::string FileMD5();
+        bool VerifyFileMD5( const std::string& hash );
+
 
     public:
 

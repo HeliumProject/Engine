@@ -3,7 +3,7 @@
 #include "API.h"
 
 #include "Platform/Types.h"
-#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include <wx/animate.h>
 
 // Forwards
@@ -34,11 +34,14 @@ namespace UIToolKit
   struct BitmapFileInfo
   {
 
-    Nocturnal::File m_File;
+    Nocturnal::Path m_Path;
+    u64             m_PathLastUpdated;
     wxBitmap m_Bitmap;
 
-    BitmapFileInfo()
+    BitmapFileInfo( const std::string& path )
+        : m_Path( path )
     {
+        m_PathLastUpdated = m_Path.ModifiedTime();
     }
   };
 
@@ -99,7 +102,7 @@ namespace UIToolKit
 
     // wxImageList collection(s)
     typedef std::map< std::string, i32 > M_StrI32;
-    M_StrI32          m_FileNameToIndex;
+    M_StrI32          m_PathNameToIndex;
     
     typedef std::map< IconSize, wxImageList > M_IconSizeImageLists;
     M_IconSizeImageLists    m_GuiImageLists;

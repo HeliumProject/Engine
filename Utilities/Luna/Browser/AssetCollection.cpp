@@ -7,7 +7,7 @@
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Checksum/MD5.h"
 #include "Foundation/Flags.h"
-#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
@@ -307,8 +307,8 @@ AssetCollectionPtr AssetCollection::LoadFrom( const Nocturnal::Path& path )
     }
 
     u32 flags = assetCollection->GetFlags();
-    Nocturnal::File file( path );
-    if ( !file.IsWritable() )
+    Nocturnal::Path file( path );
+    if ( !file.Writable() )
     {
         flags &= ~AssetCollectionFlags::CanRename;
         flags &= ~AssetCollectionFlags::CanHandleDragAndDrop;

@@ -16,7 +16,7 @@
 #include "Foundation/Exception.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/String/Utilities.h"
-#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Log.h"
 #include "Debug/Exception.h"
 #include "FileSystem/FileSystem.h"
@@ -754,16 +754,16 @@ bool CacheDB::HasAssetChangedOnDisk( Nocturnal::Path& filePath, bool* cancel )
         m_DBManager->GetColumnI64( m_SelectAssetLastUpdatedHandle, 0, dbModifiedTime );
         m_DBManager->ResetStatement( m_SelectAssetLastUpdatedHandle );
 
-        Nocturnal::File file( filePath );
+        Nocturnal::Path file( filePath );
 
         // If the file is newer on disc than in the DB
-        if ( file.HasChangedSince( dbModifiedTime ) )
+        if ( file.ChangedSince( dbModifiedTime ) )
         {
             if ( CheckCancelQuery( cancel ) )
                 return false;
 
             // If the file is writeable then update it
-            if ( file.IsWritable() )
+            if ( file.Writable() )
             {
                 ret = true;
             }
@@ -810,7 +810,7 @@ bool CacheDB::HasAssetChangedOnDisk( Nocturnal::Path& filePath, bool* cancel )
                             if ( execResult != SQLITE_OK )
                             {
                                 // Try to force the caller to update this row in the database
-                                Log::Error( "Failed to update timestamp on file '%s' ["TUID_HEX_FORMAT"].\n", file.GetPath().c_str(), filePath.Hash() );
+                                Log::Error( "Failed to update timestamp on file '%s' ["TUID_HEX_FORMAT"].\n", file.c_str(), filePath.Hash() );
                                 ret = true;
                             }
                         }

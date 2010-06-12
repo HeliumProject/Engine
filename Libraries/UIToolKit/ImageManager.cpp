@@ -4,7 +4,7 @@
 
 #include "Foundation/Exception.h"
 #include "Foundation/Container/Insert.h" 
-#include "Foundation/File/File.h"
+#include "Foundation/File/Path.h"
 using Nocturnal::Insert; 
 
 #include "FileSystem/FileSystem.h"
@@ -185,7 +185,7 @@ namespace UIToolKit
     if ( found != m_Bitmaps.end() )
     {
       exists = true;
-      if ( !found->second.m_File.HasChanged() )
+      if ( !found->second.m_Path.ChangedSince( found->second.m_PathLastUpdated ) )
       {
         return found->second.m_Bitmap;
       }
@@ -200,8 +200,7 @@ namespace UIToolKit
 
     if ( !exists )
     {
-      BitmapFileInfo info;
-      info.m_File.SetPath( fullPath );
+      BitmapFileInfo info( fullPath );
 
       Insert<M_Bitmap>::Result inserted = m_Bitmaps.insert( M_Bitmap::value_type ( fileName, info) );
       if ( !inserted.first->second.m_Bitmap.LoadFile( fullPath.c_str(), tryType ) )
@@ -214,7 +213,7 @@ namespace UIToolKit
     }
     else
     {
-      found->second.m_Bitmap.LoadFile( found->second.m_File.GetPath().c_str(), tryType );
+      found->second.m_Bitmap.LoadFile( found->second.m_Path.c_str(), tryType );
       return found->second.m_Bitmap;
     }
   }
@@ -239,7 +238,7 @@ namespace UIToolKit
     if ( found != m_Bitmaps.end() )
     {
       exists = true;
-      if( !found->second.m_File.HasChanged() )
+      if( !found->second.m_Path.ChangedSince( found->second.m_PathLastUpdated ) )
       {
         return found->second.m_Bitmap;
       }
@@ -273,9 +272,8 @@ namespace UIToolKit
 
     if ( !exists )
     {
-      BitmapFileInfo info;
+      BitmapFileInfo info( fileName );
       info.m_Bitmap = wxBitmap( image );
-      info.m_File.SetPath( fileName );
 
       Insert<M_Bitmap>::Result inserted = m_Bitmaps.insert( M_Bitmap::value_type ( keyFileName, info ) );
       if ( !inserted.second )
@@ -335,8 +333,8 @@ namespace UIToolKit
   {
     static const std::string emptyString( "" );
 
-    M_StrI32::const_iterator itr = m_FileNameToIndex.begin();
-    M_StrI32::const_iterator end = m_FileNameToIndex.end();
+    M_StrI32::const_iterator itr = m_PathNameToIndex.begin();
+    M_StrI32::const_iterator end = m_PathNameToIndex.end();
     for ( ; itr != end; ++itr )
     {
       const std::string& currentName = itr->first;
@@ -410,7 +408,7 @@ namespace UIToolKit
       // The file was loaded, add it to the image list and store a mapping of file name to index
       u32 index = m_GuiImageLists[size].Add( wxBitmap( image ) );
 
-      m_FileNameToIndex.insert( M_StrI32::value_type( fileName, index ) );
+      m_PathNameToIndex.insert( M_StrI32::value_type( fileName, index ) );
 
       return true;
     }
@@ -438,8 +436,8 @@ namespace UIToolKit
     {
       std::string fullPath;
       GetFullImagePath( fileName, fullPath );
-      M_StrI32::const_iterator found = m_FileNameToIndex.find( fullPath );
-      if ( found != m_FileNameToIndex.end() )
+      M_StrI32::const_iterator found = m_PathNameToIndex.find( fullPath );
+      if ( found != m_PathNameToIndex.end() )
       {
         index = found->second;
       }
@@ -447,12 +445,12 @@ namespace UIToolKit
       {
         if (!LoadImage( fullPath, GetIconSize( fileName ) ))
         {
-          m_FileNameToIndex[ fullPath ] = -1;
+          m_PathNameToIndex[ fullPath ] = -1;
         }
         else
         {
-          M_StrI32::const_iterator found = m_FileNameToIndex.find( fullPath );
-          NOC_ASSERT( found != m_FileNameToIndex.end() );
+          M_StrI32::const_iterator found = m_PathNameToIndex.find( fullPath );
+          NOC_ASSERT( found != m_PathNameToIndex.end() );
           index = found->second;
         }
       }

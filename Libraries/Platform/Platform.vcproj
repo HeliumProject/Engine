@@ -233,6 +233,30 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\POSIX\Path.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\POSIX\Path.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\POSIX\Pipe.cpp"
 				>
 				<FileConfiguration
@@ -393,6 +417,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\POSIX\Stat.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\POSIX\Thread.cpp"
 				>
 				<FileConfiguration
@@ -429,6 +465,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Windows\Path.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Windows\Path.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Windows\Pipe.cpp"
 				>
 			</File>
@@ -458,6 +502,10 @@
 			</File>
 			<File
 				RelativePath=".\Windows\Socket.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Windows\Stat.cpp"
 				>
 			</File>
 			<File
@@ -534,6 +582,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Path.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Pipe.h"
 			>
 		</File>
@@ -551,6 +603,10 @@
 		</File>
 		<File
 			RelativePath=".\Socket.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Stat.h"
 			>
 		</File>
 		<File

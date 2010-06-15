@@ -1,8 +1,6 @@
 #include "Precompiled.h"
 #include "Document.h"
 
-#include "FileSystem/FileSystem.h"
-
 FileSignature::Event Document::s_RequestOpenFile;
 FileSignature::Event Document::s_RequestSaveFile;
 
@@ -36,13 +34,13 @@ bool Document::Open(const std::string& file)
 {
   bool success = true;
 
-  m_File = file;
+  m_File.Set( file );
 
   try
   {
-    m_Title = FileSystem::GetLeaf( m_File );
+    m_Title = m_File.Filename();
 
-    success = FileSystem::Exists( m_File );
+    success = m_File.Exists();
 
     if ( success )
     {
@@ -140,8 +138,8 @@ bool Document::SaveAs(const std::string& file)
 {
   bool success = true;
 
-  m_File = file;
-  m_Title = FileSystem::GetLeaf( m_File );
+  m_File.Set( file );
+  m_Title = m_File.Filename();
   m_TitleChanged.Raise( TitleArgs (m_Title) );
 
   try

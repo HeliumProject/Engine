@@ -1,16 +1,6 @@
 #include "Shader.h"
 #include "ContentVisitor.h"
 
-#include "FileSystem/FileSystem.h"
-#include "Finder/Finder.h"
-#include "Finder/ContentSpecs.h"
-#include "Finder/ShaderSpecs.h"
-#include "Finder/AssetSpecs.h"
-#include "UID/TUID.h"
-#include "Attribute/AttributeHandle.h"
-#include "Foundation/Log.h"
-#include "rcs/rcs.h"
-
 using namespace Reflect;
 using namespace Content;
 using namespace Attribute; 

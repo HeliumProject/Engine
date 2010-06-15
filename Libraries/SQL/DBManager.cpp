@@ -153,7 +153,7 @@ void DBManager::SetLastError( const char* function, const char* errMsg, const ch
 
   // Append the DBFilename to the last error message
   m_LastErrMsg += "(DB: ";
-  m_LastErrMsg += m_DBFilename;
+  m_LastErrMsg += m_DBFile.Get();
   m_LastErrMsg += ")";
 
   LogPrint( __FUNCTION__, Log::Levels::Verbose, "%s", m_LastErrMsg.c_str() );

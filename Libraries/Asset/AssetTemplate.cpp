@@ -4,7 +4,6 @@
 
 #include "Attribute/AttributeCollection.h"
 #include "Foundation/CommandLine.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/FinderSpec.h"
 #include "Reflect/Archive.h"

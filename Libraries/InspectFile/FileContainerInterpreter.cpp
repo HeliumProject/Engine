@@ -17,7 +17,6 @@
 #include "Asset/AssetFlags.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/ExtensionSpecs.h"
 #include "UIToolKit/FileDialog.h"

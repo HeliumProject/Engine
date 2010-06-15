@@ -6,7 +6,6 @@
 #include "AssetUtils.h"
 #include "FieldFileReference.h"
 
-#include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "UIToolKit/ImageManager.h"
 

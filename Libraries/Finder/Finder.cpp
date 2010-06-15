@@ -19,7 +19,7 @@ using Nocturnal::Insert;
 
 #include "Foundation/Environment.h"
 #include "Foundation/Checksum/MurmurHash2.h"
-#include "FileSystem/FileSystem.h"
+#include "Foundation/File/Path.h"
 
 using namespace Nocturnal;
 using namespace Finder;
@@ -197,7 +197,8 @@ const ModifierSpec* Finder::GetFileExtensionSpec( const std::string &fileName )
 
   ThrowIfNotInitialized();
 
-  std::string extension = FileSystem::GetExtension( fileName );
+  Nocturnal::Path path( fileName );
+  std::string extension = path.Extension();
 
   FileExtenisionSpecMap::const_iterator found = g_FileExtenisionSpecMap.find( extension );
 
@@ -253,8 +254,8 @@ static std::string GetHashFolder( std::string folder, u64 hash )
   folder += hex.substr( 0, 3 ) + "/";
   folder += hex + "/";
 
-  FileSystem::CleanName( folder );
-  FileSystem::GuaranteeSlash( folder );
+  Nocturnal::Path::Normalize( folder );
+  Nocturnal::Path::GuaranteeSlash( folder );
 
   return folder;
 }

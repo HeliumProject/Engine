@@ -264,10 +264,6 @@
 			RelativePathToProject=".\libraries\smartbuffer\smartbuffer.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{02269037-5B51-467E-A224-B56D816CDFD9}"
-			RelativePathToProject=".\libraries\FileSystem\FileSystem.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
 			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
 		/>
@@ -425,14 +421,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Editor\BuildServer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\BuildServer.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Editor\CommandQueue.cpp"
 				>
 			</File>
@@ -586,14 +574,6 @@
 			</File>
 			<File
 				RelativePath=".\Editor\RefreshSelectionCommand.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\RunGameFrame.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\RunGameFrame.h"
 				>
 			</File>
 			<File

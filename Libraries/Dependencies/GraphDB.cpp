@@ -5,7 +5,6 @@
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/ProjectSpecs.h"
 #include "SQL/SQLite.h"
 #include "Foundation/Exception.h"
@@ -133,7 +132,8 @@ bool GraphDB::Open( const std::string& dbFilename, const std::string& configFold
 {
   Platform::TakeMutex mutex ( m_Mutex );
 
-  FileSystem::MakePath( dbFilename, true );
+  Nocturnal::Path path( dbFilename );
+  path.Create();
 
   return __super::Open( dbFilename, configFolder, version );
 }
@@ -406,7 +406,11 @@ bool GraphDB::StepSelectDependency( int sqlResult, const SQL::StmtHandle stmt, c
   {
     int index = 0;
     m_DBManager->GetColumnI64(  stmt,   0,       ( i64 &)     file->m_RowID );
-    m_DBManager->GetColumnText( stmt,   ++index,              file->m_Path );
+
+    std::string path;
+    m_DBManager->GetColumnText( stmt,   ++index,              path );
+    file->m_Path.Set( path );
+
     m_DBManager->GetColumnI64(  stmt,   ++index, ( i64 &)     file->m_VersionRowID );
     m_DBManager->GetColumnText( stmt,   ++index,              file->m_SpecName );
 

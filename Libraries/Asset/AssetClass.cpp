@@ -10,7 +10,6 @@
 #include "ShaderAsset.h"
 #include "SceneAsset.h"
 
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Foundation/Log.h"
 #include "Reflect/Version.h"
@@ -83,15 +82,7 @@ std::string AssetClass::GetFullName() const
 
 std::string AssetClass::GetShortName() const
 {
-    std::string shortName = m_Path.Filename();
-
-    // strip off extension
-    while ( FileSystem::HasExtension( shortName ) )
-    {
-        FileSystem::StripExtension( shortName );
-    }
-
-    return shortName;
+    return m_Path.Basename();
 }
 
 #pragma TODO( "implement AssetType info lookup functions" )

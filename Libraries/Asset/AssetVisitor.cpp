@@ -13,7 +13,6 @@
 #include "Content/Region.h"
 #include "Content/Scene.h"
 #include "Content/Zone.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/ContentSpecs.h"
 #include "Finder/Finder.h"
 #include "Finder/AssetSpecs.h"
@@ -164,7 +163,7 @@ bool AssetVisitor::HandleArtFileAttribute( Reflect::Element* element )
             const std::string& attrName = Reflect::Registry::GetInstance()->GetClass( element->GetType() )->m_FullName;
             assetFile->AddAttribute( attrName, artFile, false );
 
-            if ( FileSystem::Exists( artFile ) )
+            if ( Nocturnal::Path( artFile ).Exists() )
             {
                 Asset::EntityManifestPtr manifest;
                 try

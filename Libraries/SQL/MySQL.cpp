@@ -3,7 +3,6 @@
 #include "MySQL.h"
 
 #include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
 #include "Foundation/Exception.h"
 #include "Platform/Process.h"
 #include <boost/regex.hpp>
@@ -87,9 +86,9 @@ void MySQL::Connect
   // Example: tools@toolshed.insomniacgames.com:3306/ExceptionReports
   std::stringstream dbFilenameStrm;
   dbFilenameStrm << m_Username << "@" << m_Hostname << ":" << m_Port << "/" << m_Database;
-  m_DBFilename = dbFilenameStrm.str();
+  m_DBFile.Set( dbFilenameStrm.str() );
 
-  LogPrint( __FUNCTION__, Log::Levels::Verbose, "Connection settings: %s", m_DBFilename.c_str() );
+  LogPrint( __FUNCTION__, Log::Levels::Verbose, "Connection settings: %s", m_DBFile.c_str() );
 
   MYSQL* handle = mysql_init( NULL );
 

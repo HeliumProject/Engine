@@ -10,9 +10,9 @@
 #include "Foundation/Exception.h"
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Container/Insert.h"
+#include "Foundation/File/Directory.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/String/Utilities.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/ProjectSpecs.h"
 
@@ -337,10 +337,9 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
     if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::File )
     {
         std::string searchFolder( m_CurrentSearchQuery->GetQueryString() );
-        FileSystem::StripLeaf( searchFolder );
         Nocturnal::Path searchPath( searchFolder );
 
-        if ( FoundAssetFolder( searchPath, searchID ) )
+        if ( FoundAssetFolder( Nocturnal::Path( searchPath.Directory() ), searchID ) )
         {
             SearchThreadLeave( searchID );
             return;
@@ -539,22 +538,20 @@ u32 BrowserSearch::FoundAssetFolder( Nocturnal::Path& folder, i32 searchID )
 {  
     u32 numFilesAdded = 0;
 
-    FileSystem::FileIterator fileIter( folder.Get(), "*" );
-    while ( !fileIter.IsDone() )
+    Nocturnal::S_Path files;
+    Nocturnal::Directory::GetFiles( folder.Get(), files );
+    for ( Nocturnal::S_Path::const_iterator itr = files.begin(), end = files.end(); itr != end; ++itr )
     {
         if ( m_StopSearching )
         {
             return numFilesAdded;
         }
 
-        std::string path = fileIter.Item();
-        FileSystem::CleanName( path );
+        const Nocturnal::Path& path = (*itr);
 
-        if ( FileSystem::IsFolder( path ) ) 
+        if ( path.IsDirectory() ) 
         {
             Platform::TakeMutex mutex (m_SearchResultsMutex);
-
-            FileSystem::GuaranteeSlash( path );
             if ( m_SearchResults->AddFolder( new Asset::AssetFolder( path ) ) )
             {
                 ++numFilesAdded;
@@ -569,7 +566,6 @@ u32 BrowserSearch::FoundAssetFolder( Nocturnal::Path& folder, i32 searchID )
         }
 
         ++numFilesAdded;
-        fileIter.Next();
     }
 
     return numFilesAdded;

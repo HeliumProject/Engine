@@ -62,8 +62,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Platform", "libraries\Platf
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BuildTool", "utilities\BuildTool\BuildTool.vcproj", "{469EA158-42B0-40EC-90A8-BAD0CCF649F2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FileSystem", "libraries\FileSystem\FileSystem.vcproj", "{02269037-5B51-467E-A224-B56D816CDFD9}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Math", "libraries\Math\math.vcproj", "{EBC5862F-F9EF-4CA6-AB18-F930074011AB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetBuilder", "libraries\AssetBuilder\AssetBuilder.vcproj", "{296B05EC-7929-4E23-942C-FA953BB5602D}"
@@ -314,12 +312,6 @@ Global
 		{469EA158-42B0-40EC-90A8-BAD0CCF649F2}.Release|Win32.ActiveCfg = Release|Win32
 		{469EA158-42B0-40EC-90A8-BAD0CCF649F2}.Release|Win32.Build.0 = Release|Win32
 		{469EA158-42B0-40EC-90A8-BAD0CCF649F2}.Release|x64.ActiveCfg = Release|Win32
-		{02269037-5B51-467E-A224-B56D816CDFD9}.Debug|Win32.ActiveCfg = Debug|Win32
-		{02269037-5B51-467E-A224-B56D816CDFD9}.Debug|Win32.Build.0 = Debug|Win32
-		{02269037-5B51-467E-A224-B56D816CDFD9}.Debug|x64.ActiveCfg = Debug|Win32
-		{02269037-5B51-467E-A224-B56D816CDFD9}.Release|Win32.ActiveCfg = Release|Win32
-		{02269037-5B51-467E-A224-B56D816CDFD9}.Release|Win32.Build.0 = Release|Win32
-		{02269037-5B51-467E-A224-B56D816CDFD9}.Release|x64.ActiveCfg = Release|Win32
 		{EBC5862F-F9EF-4CA6-AB18-F930074011AB}.Debug|Win32.ActiveCfg = Debug|Win32
 		{EBC5862F-F9EF-4CA6-AB18-F930074011AB}.Debug|Win32.Build.0 = Debug|Win32
 		{EBC5862F-F9EF-4CA6-AB18-F930074011AB}.Debug|x64.ActiveCfg = Debug|Win32

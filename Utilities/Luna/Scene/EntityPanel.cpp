@@ -12,7 +12,6 @@
 #include "Attribute/AttributeHandle.h"
 #include "Asset/ArtFileAttribute.h"
 #include "Asset/AssetClass.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ContentSpecs.h"
 #include "Foundation/Log.h"
@@ -462,12 +461,13 @@ bool EntityPanel::OnEntityAssetChanging( const Inspect::ChangingArgs& args )
   try
   {
     // Make sure the file exists on disc
-    if ( FileSystem::Exists( newValue ) )
+      Nocturnal::Path path( newValue );
+      if ( path.Exists() )
     {
         // Make sure the file has the entity class extension
         std::string ext;
         FinderSpecs::Asset::ENTITY_DECORATION.Modify( ext );
-        if ( FileSystem::HasExtension( newValue, ext ) )
+        if ( path.Extension() == ext )
         {
           result = true;
         }

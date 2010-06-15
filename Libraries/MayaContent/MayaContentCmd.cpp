@@ -8,7 +8,6 @@
 #include "Debug/Exception.h"
 #include "Finder/Finder.h"
 #include "Finder/ContentSpecs.h"
-#include "FileSystem/FileSystem.h"
 
 #include "Content/ContentVersion.h"
 #include "Content/Curve.h"
@@ -920,18 +919,15 @@ void MayaContentCmd::ExportCurrentScene( MObject root, std::string& currentFile,
   {
     currentFile = MFileIO::currentFile().asChar();
   }
-  // clean path returned by maya 
-  FileSystem::CleanName( currentFile );
-
-  std::string contentFileDir = currentFile;
-  FileSystem::StripLeaf( contentFileDir );
-
-  FileSystem::MakePath( contentFileDir );
-  contentFileDir += "...";
+  
+  // clean path returned by maya
+  Nocturnal::Path currentPath( currentFile );
+  Nocturnal::Path contentFileDir( currentPath.Directory() );
+  contentFileDir.MakePath();
 
   try
   {
-    RCS::File rcsContentFile( contentFileDir );
+    RCS::File rcsContentFile( contentFileDir.Get() + "..." );
     rcsContentFile.GetInfo();
     if ( rcsContentFile.ExistsInDepot() && !rcsContentFile.IsCheckedOutByMe() && !rcsContentFile.IsUpToDate() )
     {
@@ -984,7 +980,7 @@ void MayaContentCmd::ExportCurrentScene( MObject root, std::string& currentFile,
       cmd.m_FragmentName = fragmentName;
       cmd.doIt();
     }
-    else if( FileSystem::Exists( contentFile ) )        
+    else if( Nocturnal::Path( contentFile ).Exists() )
     {
       RCS::File rcsFile( contentFile );
 
@@ -1008,10 +1004,8 @@ void MayaContentCmd::ExportCurrentScene( MObject root, std::string& currentFile,
 
       // if file was never checked into perforce (+add), revert/delete
       // will leave the file on disk locally
-      if( FileSystem::Exists( contentFile ) )
-      {
-        FileSystem::Delete( contentFile );
-      }
+      Nocturnal::Path contentPath( contentFile );
+      contentPath.Delete();
     }
   }
 
@@ -1074,7 +1068,7 @@ MStatus MayaContentCmd::UnloadProxyFileReferences()
 
     // clean path returned by maya 
     std::string curFilePath = refFileName.asChar();
-    FileSystem::CleanName( curFilePath );
+    Nocturnal::Path::Normalize( curFilePath );
 
     std::string::size_type findProxyPos = curFilePath.rfind( s_ProxyRigSuffix );
     if ( findProxyPos != std::string::npos )
@@ -1083,7 +1077,7 @@ MStatus MayaContentCmd::UnloadProxyFileReferences()
       masterFilePath.erase( findProxyPos, strlen( s_ProxyRigSuffix ) );
       masterFilePath.insert( findProxyPos, s_MasterRigSuffix );
 
-      if ( FileSystem::Exists( masterFilePath ) )
+      if ( Nocturnal::Path( masterFilePath ).Exists() )
       {
         //file -loadReference "yourReferenceNodeHere" -type "mayaBinary" -options "v=0" "pathToNewReferenceFileHere";
         std::stringstream command;

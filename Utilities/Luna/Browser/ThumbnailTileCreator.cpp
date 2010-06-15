@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "ThumbnailTileCreator.h"
 #include "ThumbnailView.h"
-#include "FileSystem/FileSystem.h"
 #include "Asset/AssetFile.h"
 #include "Asset/AssetFolder.h"
 
@@ -70,7 +69,8 @@ void ThumbnailTileCreator::ThreadProc( i32 threadID )
       ThumbnailTilePtr tile = new ThumbnailTile( *fileItr );
       m_FileTiles.insert( std::make_pair( *fileItr, tile ) );
       m_Sorter.Add( tile );
-      if ( FileSystem::Exists( ( *fileItr )->GetFilePath() ) )
+      Nocturnal::Path path( ( *fileItr )->GetFilePath() );
+      if ( path.Exists() )
       {
         // Default to the loading texture
         tile->SetThumbnail( m_TextureLoading );

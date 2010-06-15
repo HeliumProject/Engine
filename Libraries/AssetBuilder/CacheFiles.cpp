@@ -2,8 +2,6 @@
 #include "CacheFiles.h"
 #include "CacheFileStats.h"
 #include "Platform/Mutex.h"
-#include "FileSystem/FileSystem.h"
-#include "FileSystem/File.h"
 #include "AppUtils/AppUtils.h"
 #include "Foundation/Log.h"
 #include "Foundation/Exception.h"
@@ -204,21 +202,13 @@ void TouchFile( const std::string& path )
 
 void TryMakePath( const std::string& targetFile )
 {
-  std::string path = targetFile;
-  FileSystem::StripLeaf( path );
+    Nocturnal::Path path( targetFile );
 
-  try
-  {
-    FileSystem::MakePath( path );
-  }
-  catch ( const std::exception& ex )
+    if ( !path.MakePath() && !path.Exists() )
   {
     // This can fail with an exception if another thread is attempting to make the same path at the same time
     //  so just check to see if the folder actually exists, and if it does it doesn't matter who created it
-    if ( !FileSystem::Exists( path ) )
-    {
-      throw CacheFilesException( Results::CopyFailed, "Failed to create path '%s': %s", path.c_str(), ex.what() );
-    }
+      throw CacheFilesException( Results::CopyFailed, "Failed to create path '%s'", path.c_str() );
   }
 }
 
@@ -250,17 +240,10 @@ void CopyFileToServer( std::string sourceFile, std::string targetFile, Dependenc
 {
   TryMakePath( targetFile );
 
-  std::string md5File = targetFile;
-  FileSystem::StripLeaf( md5File );
-  md5File += "md5.txt";
-
-  std::string traceFile = targetFile;
-  FileSystem::StripLeaf( traceFile );
-  traceFile += "trace.txt";
-
-  std::string toolsFile = targetFile;
-  FileSystem::StripLeaf( toolsFile );
-  toolsFile += "tools.txt";
+  Nocturnal::Path targetPath( targetFile );
+  Nocturnal::Path md5File( targetPath.Directory() + "md5.txt" );
+  Nocturnal::Path traceFile( targetPath.Directory() + "trace.txt" );
+  Nocturnal::Path toolsFile( targetPath.Directory() + "tools.txt" );
 
   // Faster than FileSystem::Exists
   WIN32_FILE_ATTRIBUTE_DATA targetStats;
@@ -278,8 +261,7 @@ void CopyFileToServer( std::string sourceFile, std::string targetFile, Dependenc
       Log::Debug( "MD5 info does not exist for file: %s (local: %s), generating...\n", sourceFile.c_str(), targetFile.c_str() );
 
       // this is slow
-      std::string localmd5;
-      FileSystem::File::GenerateMD5( targetFile, storedMD5 );
+      storedMD5 = targetPath.FileMD5();
 
       // write the md5 information
       if ( !WriteFile( md5File, storedMD5 ) )
@@ -317,9 +299,8 @@ void CopyFileFromServer( std::string sourceFile, std::string targetFile, Depende
 {
   TryMakePath( targetFile );
 
-  std::string md5File = sourceFile;
-  FileSystem::StripLeaf( md5File );
-  md5File += "md5.txt";
+  Nocturnal::Path sourcePath( sourceFile );
+  Nocturnal::Path md5File( sourcePath.Directory() + "md5.txt" );
 
   // do the actual file movement
   TryCopyFile( sourceFile, targetFile );
@@ -327,8 +308,7 @@ void CopyFileFromServer( std::string sourceFile, std::string targetFile, Depende
   std::string storedMD5;
   if ( ReadFile( md5File, storedMD5 ) )
   {
-    std::string localmd5;
-    FileSystem::File::GenerateMD5( targetFile, localmd5 );
+    std::string localmd5 = sourcePath.FileMD5();
 
     if ( localmd5 != storedMD5 )
     {
@@ -651,8 +631,8 @@ void CacheFiles::Initialize()
     else
     {
       // clean environment variable path
-      FileSystem::CleanName( g_CacheFilesPath );
-      FileSystem::GuaranteeSlash( g_CacheFilesPath );
+      Nocturnal::Path::Normalize( g_CacheFilesPath );
+      Nocturnal::Path::GuaranteeSlash( g_CacheFilesPath );
 
       if ( Nocturnal::GetCmdLineFlag( "disable_cache_files" ) )
       {
@@ -727,7 +707,7 @@ std::string CacheFiles::GetOutputFilename( const Dependencies::DependencyInfoPtr
   const std::string& signature = file->m_Signature;
   std::string subdir = signature.substr( 0, 2 );
   std::string serverFile = g_CacheFilesPath + subdir + '/' + signature + '/' + signature + ".file";
-  FileSystem::CleanName( serverFile ); // make path lower case and fix slash directions
+  Nocturnal::Path::Normalize( serverFile ); // make path lower case and fix slash directions
   return serverFile;
 }
 

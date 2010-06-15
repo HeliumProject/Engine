@@ -2,8 +2,6 @@
 #include "ExportShader.h"
 #include "MayaContentCmd.h"
 
-#include "FileSystem/FileSystem.h"
-
 using namespace MayaContent;
 
 void ExportShader::GatherMayaData( V_ExportBase &newExportObjects )

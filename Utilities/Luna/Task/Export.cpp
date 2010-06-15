@@ -9,7 +9,6 @@
 #include "InspectReflect/InspectReflectInit.h"
 #include "InspectReflect/ReflectInterpreter.h"
 
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 
 #include "Dependencies/Dependencies.h"

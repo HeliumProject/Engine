@@ -6,8 +6,6 @@
 #include "Foundation/Flags.h"
 
 #include "Finder/Finder.h"
-#include "FileSystem/FileSystem.h"
-#include "FileSystem/File.h"
 
 #include "Foundation/Log.h"
 
@@ -55,14 +53,10 @@ namespace Dependencies
     m_VersionRowID = SQL::InvalidRowID;
 
     {
-      FILEINFO_SCOPE_TIMER(("GetStats64"));
-
-      struct _stati64 fileStats;
-      if ( FileSystem::GetStats64( m_Path, fileStats ) )
-      {
-        m_LastModified = fileStats.st_mtime;
-        m_Size         = fileStats.st_size;
-      }
+      FILEINFO_SCOPE_TIMER(("File Stats"));
+      
+      m_LastModified = m_Path.ModifiedTime();
+      m_Size         = m_Path.Size();
     }
   }
 
@@ -89,18 +83,15 @@ namespace Dependencies
       return true;
     }
 
-    struct _stati64 fileStats;
-    FileSystem::GetStats64( file.m_Path, fileStats );
-
     // file size has changed
-    if ( file.m_Size != fileStats.st_size )
+    if ( file.m_Size != file.m_Path.Size() )
     {
       //Log::Bullet wasFileModifiedBullet( Log::Streams::Debug, Log::Levels::Verbose, "File was modified: file size has changed\n" );
       return true;
     }
 
     // Return false, and early out if the last modified time has changed
-    if ( file.m_LastModified == fileStats.st_mtime )
+    if ( file.m_LastModified == file.m_Path.ModifiedTime() )
     {
       return false;
     }
@@ -114,8 +105,7 @@ namespace Dependencies
     {
       FILEINFO_SCOPE_TIMER(("GenerateMD5"));
 
-      std::string curFileMD5;
-      FileSystem::File::GenerateMD5( file.m_Path, curFileMD5 );
+      std::string curFileMD5 = file.m_Path.FileMD5();
 
       //the cached md5 is not the same as the md5 of the file on disk
       if ( file.m_MD5 == curFileMD5 )
@@ -155,7 +145,7 @@ namespace Dependencies
   //
   void FileInfo::GenerateMD5()
   {
-    FileSystem::File::GenerateMD5( m_Path, m_MD5 );
+    m_MD5 = m_Path.FileMD5();
     m_IsMD5Valid = true;
   }
 
@@ -222,7 +212,8 @@ namespace Dependencies
     {
       DEPENDENCIES_SCOPE_TIMER(("GenerateMD5"));
 
-      FileSystem::File::GenerateMD5( m_AlternateSignatureGenerationPath, md5 );
+      Nocturnal::Path path( m_AlternateSignatureGenerationPath );
+      md5 = path.FileMD5();
     }
     else
     {

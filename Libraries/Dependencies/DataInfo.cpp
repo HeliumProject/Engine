@@ -6,8 +6,6 @@
 #include "Foundation/Flags.h"
 
 #include "Finder/Finder.h"
-#include "FileSystem/FileSystem.h"
-#include "FileSystem/File.h"
 
 #include "Foundation/Log.h"
 
@@ -182,7 +180,7 @@ namespace Dependencies
     }
 
     trace.push_back( md5 );
-    trace.back() += " (" + m_Path + ")";
+    trace.back() += " (" + m_Path.Get() + ")";
 
     return dirtyFile;
   }

@@ -3,7 +3,6 @@
 
 #include "Color.h"
 #include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/LunaSpecs.h"
 #include "Math/Utils.h"
 
@@ -39,7 +38,7 @@ void MiscSettings::LoadFromFile( MiscSettingsPtr& miscSettings )
 
   MiscSettingsPtr miscSettingsPtr = NULL;
   
-  if ( FileSystem::Exists( miscSettingsFile ) )
+  if ( Nocturnal::Path( miscSettingsFile ).Exists() )
   {
     try
     {

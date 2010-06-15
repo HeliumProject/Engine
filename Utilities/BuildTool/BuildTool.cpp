@@ -23,7 +23,6 @@
 #include "Finder/DebugSpecs.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
-#include "FileSystem/FileSystem.h"
 
 #include "AssetBuilder/AssetBuilder.h"
 #include "Asset/AssetInit.h"
@@ -97,7 +96,7 @@ bool ParseProgramOptions( int argc, const char** argv )
     // not changing it for this tools release. (10/29/2008)
     //
     g_SearchQuery = argv[ 1 ];
-    FileSystem::CleanName( g_SearchQuery );
+    Nocturnal::Path::Normalize( g_SearchQuery );
 
     if ( !stricmp( g_SearchQuery.c_str(), "-defaults" ) )
     {

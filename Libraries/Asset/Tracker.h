@@ -5,6 +5,8 @@
 #include "AssetClass.h"
 #include "AssetFlags.h"
 
+#include "Foundation/File/Directory.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
 #include "Reflect/Field.h"
@@ -64,7 +66,10 @@ namespace Asset
         bool TrackAssetFile( Nocturnal::Path& filePath, M_AssetFiles* assetFiles );
         void TrackEverything();
 
+        void HandleDirectoryItem( const Nocturnal::DirectoryItem& dirItem );
+
     private:
+        Nocturnal::S_Path     m_FoundPaths;
         Asset::CacheDBPtr     m_AssetCacheDB;
 
         static std::string    s_GlobalRootDirectory;

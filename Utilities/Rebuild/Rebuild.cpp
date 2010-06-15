@@ -5,7 +5,6 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Version.h"
 #include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "RCS/RCS.h"
 #include "Foundation/File/Path.h"
@@ -145,10 +144,9 @@ int ProcessFile(const std::string& input, const std::string& output)
     // Write output
     //
 
-    std::string absolute = output;
-
     // RCS requires absolute paths, this will resolve the output using cwd if necessary
-    FileSystem::MakeAbsolute( absolute );
+    Nocturnal::Path absolute( output );
+    absolute.Set( absolute.Absolute() );
 
     if (g_RCS)
     {
@@ -311,27 +309,30 @@ int Main(int argc, const char** argv)
                     output = line;
                 }
 
-                if (!input.empty() && FileSystem::Exists(input))
+                Nocturnal::Path inputPath( input );
+                Nocturnal::Path outputPath( output );
+
+                if (!input.empty() && inputPath.Exists() )
                 {
                     if (g_XML)
                     {
-                        FileSystem::SetExtension( output, ".xml", 1 );
+                        outputPath.ReplaceExtension( "xml" );
                     }
 
                     if (g_Binary)
                     {
-                        FileSystem::SetExtension( output, ".rb", 1 );
+                        outputPath.ReplaceExtension( "rb" );
                     }
 
                     // do work
-                    int code = ProcessFile(input, output);
+                    int code = ProcessFile(inputPath.Get(), outputPath.Get());
 
                     // verify result code
                     NOC_ASSERT(code >= 0 && code < REBUILD_CODE_COUNT);
 
                     // store result
                     g_RebuildTotals[code]++;
-                    g_RebuildResults[code].push_back(output);
+                    g_RebuildResults[code].push_back(outputPath.Get());
                 }
             }
 

@@ -3,8 +3,6 @@
 
 #include "AppUtils/AppUtils.h"
 #include "AssetBuilder/CacheFiles.h"
-#include "FileSystem/FileSystem.h"
-#include "FileSystem/File.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/File/Directory.h"
 #include "Foundation/String/Units.h"
@@ -25,17 +23,16 @@ bool ItemCompare( const Nocturnal::DirectoryItem& lhs, const Nocturnal::Director
 
 bool DeleteCacheData( const Nocturnal::DirectoryItem& item )
 {
-  std::string directory = item.m_Path;
-  FileSystem::StripLeaf( directory );
+    std::string directory = Nocturnal::Path( item.m_Path ).Directory();
 
-  V_string files;
-  FileSystem::Find( directory, files );
+    Nocturnal::S_Path files;
+    Nocturnal::Directory::GetFiles( directory, files );
 
-  for ( V_string::const_iterator itr = files.begin(), end = files.end(); itr != end; ++itr )
+    for ( Nocturnal::S_Path::const_iterator itr = files.begin(), end = files.end(); itr != end; ++itr )
   {
-    const std::string& file = *itr;
+      const Nocturnal::Path& file = *itr;
 
-    if ( !DeleteFile( file.c_str() ) )
+      if ( file.IsFile() && !file.Delete() )
     {
       Log::Warning( "Failed to delete file: %s\t\treason%s:\n", file.c_str(), Platform::GetErrorString().c_str() );
 
@@ -144,7 +141,7 @@ int Main(int argc, const char** argv)
   if ( argc > 2 )
   {
     path = argv[ 2 ];
-    FileSystem::GuaranteeSlash( path );
+    Nocturnal::Path::GuaranteeSlash( path );
   }
 
   if ( argc < 2 || path.empty() )

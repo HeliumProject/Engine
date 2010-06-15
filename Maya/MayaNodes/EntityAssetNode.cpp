@@ -24,8 +24,6 @@
 #include "Finder/AssetSpecs.h"
 #include "Finder/ContentSpecs.h"
 
-#include "FileSystem/FileSystem.h"
-
 #include "RCS/rcs.h"
 #include "MayaContent/MayaContentCmd.h"
 

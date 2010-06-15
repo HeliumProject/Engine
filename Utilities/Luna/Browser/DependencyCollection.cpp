@@ -3,11 +3,7 @@
 
 #include "Browser.h"
 
-#include "FileSystem/FileSystem.h"
-
 using namespace Luna;
-
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// class DependencyCollection
@@ -114,7 +110,7 @@ std::string DependencyCollection::GetAssetName() const
     std::string assetName;
     if ( m_AssetFile )
     {
-        FileSystem::GetLeaf( m_AssetFile->GetFilePath(), assetName );
+        assetName = m_AssetFile->GetPath().Filename();
     }
 
     return assetName;

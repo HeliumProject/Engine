@@ -3,7 +3,6 @@
 
 #include "Foundation/String/Wildcard.h"
 #include "Foundation/String/Tokenize.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/FinderSpec.h"
 #include "Inspect/ClipboardDataObject.h"
 #include "Inspect/ClipboardFileList.h"
@@ -44,13 +43,13 @@ bool FilteredDropTarget::ValidateDrag( const Inspect::DragArgs& args )
 
   for ( S_string::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
   {
-    const std::string& path = *fileItr;
-    if ( path.empty() )
+      Nocturnal::Path path( *fileItr );
+    if ( path.Get().empty() )
     {
       continue;
     }
     
-    if ( !FileSystem::Exists( path ) )
+    if ( !path.Exists() )
     {
       continue;
     }
@@ -101,20 +100,20 @@ wxDragResult FilteredDropTarget::Drop( const Inspect::DragArgs& args )
 
   for ( S_string::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
   {
-    const std::string& path = *fileItr;
-    if ( path.empty() )
+      Nocturnal::Path path( *fileItr );
+    if ( path.Get().empty() )
     {
       continue;
     }
     
-    if ( !FileSystem::Exists( path ) )
+    if ( !path.Exists() )
     {
       continue;
     }
 
     if ( extensions.empty() )
     {
-      validPaths.push_back( path );
+      validPaths.push_back( path.Get() );
     }
     else
     {

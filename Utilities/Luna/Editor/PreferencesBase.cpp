@@ -2,15 +2,13 @@
 
 #include "PreferencesBase.h"
 
-#include "FileSystem/FileSystem.h"
-
 using namespace Luna;
 
 REFLECT_DEFINE_ABSTRACT( PreferencesBase );
 
 void PreferencesBase::EnumerateClass( Reflect::Compositor<PreferencesBase>& comp )
 {
-  Reflect::Field* fieldSavedVersion = comp.AddField( &PreferencesBase::m_SavedVersion, "m_SavedVersion", Reflect::FieldFlags::Force | Reflect::FieldFlags::Hide );
+    Reflect::Field* fieldSavedVersion = comp.AddField( &PreferencesBase::m_SavedVersion, "m_SavedVersion", Reflect::FieldFlags::Force | Reflect::FieldFlags::Hide );
 }
 
 
@@ -20,7 +18,7 @@ void PreferencesBase::EnumerateClass( Reflect::Compositor<PreferencesBase>& comp
 // 
 void PreferencesBase::InitializeType()
 {
-  Reflect::RegisterClass<PreferencesBase>( "PreferencesBase" );
+    Reflect::RegisterClass<PreferencesBase>( "PreferencesBase" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -28,7 +26,7 @@ void PreferencesBase::InitializeType()
 // 
 void PreferencesBase::CleanupType()
 {
-  Reflect::UnregisterClass<PreferencesBase>();
+    Reflect::UnregisterClass<PreferencesBase>();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -52,9 +50,9 @@ PreferencesBase::~PreferencesBase()
 // 
 void PreferencesBase::PreSerialize()
 {
-  __super::PreSerialize();
+    __super::PreSerialize();
 
-  m_SavedVersion = GetCurrentVersion();
+    m_SavedVersion = GetCurrentVersion();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -64,30 +62,31 @@ void PreferencesBase::PreSerialize()
 // 
 bool PreferencesBase::LoadFromFile( const std::string& path )
 {
-  if ( FileSystem::Exists( path ) )
-  {
-    try
+    Nocturnal::Path file( path );
+    if ( file.Exists() )
     {
-      // Only use the settings on disk if the version matches
-      Reflect::VersionPtr version = Reflect::Archive::FromFile< Reflect::Version >( path );
-      if ( version && version->IsCurrent() )
-      {
-        PreferencesBasePtr fromFile = Reflect::Archive::FromFile< PreferencesBase >( path );
-        if ( fromFile.ReferencesObject() && fromFile->m_SavedVersion == GetCurrentVersion() )
+        try
         {
-          fromFile->CopyTo( this );
-          m_Loaded.Raise( PreferencesLoadedArgs() );
-          return true;
+            // Only use the settings on disk if the version matches
+            Reflect::VersionPtr version = Reflect::Archive::FromFile< Reflect::Version >( path );
+            if ( version && version->IsCurrent() )
+            {
+                PreferencesBasePtr fromFile = Reflect::Archive::FromFile< PreferencesBase >( path );
+                if ( fromFile.ReferencesObject() && fromFile->m_SavedVersion == GetCurrentVersion() )
+                {
+                    fromFile->CopyTo( this );
+                    m_Loaded.Raise( PreferencesLoadedArgs() );
+                    return true;
+                }
+            }
         }
-      }
+        catch ( const Nocturnal::Exception& e )
+        {
+            Log::Error( "Failed to load preferences from %s: %s\n", path.c_str(), e.what() );
+        }
     }
-    catch ( const Nocturnal::Exception& e )
-    {
-      Log::Error( "Failed to load preferences from %s: %s\n", path.c_str(), e.what() );
-    }
-  }
 
-  return false;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -95,18 +94,18 @@ bool PreferencesBase::LoadFromFile( const std::string& path )
 // 
 bool PreferencesBase::SaveToFile( const std::string& path, std::string& error, Reflect::VersionPtr version )
 {
-  bool result = false;
+    bool result = false;
 
-  try
-  {
-    Reflect::Archive::ToFile( this, path, version );
-    result = true;
-  }
-  catch ( const Reflect::Exception& e )
-  {
-    error = "Unable to save preferences to " + path;
-    error += " [" + e.Get() + "]";
-  }
+    try
+    {
+        Reflect::Archive::ToFile( this, path, version );
+        result = true;
+    }
+    catch ( const Reflect::Exception& e )
+    {
+        error = "Unable to save preferences to " + path;
+        error += " [" + e.Get() + "]";
+    }
 
-  return result;
+    return result;
 }

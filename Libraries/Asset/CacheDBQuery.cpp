@@ -4,7 +4,6 @@
 #include "CacheDBQuery.h"
 
 #include "Foundation/Boost/Regex.h"
-#include "FileSystem/FileSystem.h"
 
 using namespace Asset;
 

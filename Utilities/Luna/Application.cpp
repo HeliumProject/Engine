@@ -16,7 +16,6 @@
 #include "Editor/Editor.h"
 #include "Editor/EditorInit.h"
 #include "Editor/Preferences.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Finder/Finder.h"

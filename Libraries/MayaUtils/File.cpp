@@ -3,8 +3,8 @@
 #include <maya/MFileIO.h>
 #include <maya/MGlobal.h>
 
-#include "FileSystem/FileSystem.h"
 #include "Foundation/Log.h"
+#include "Foundation/File/Path.h"
 #include "RCS/RCS.h"
 
 #include "Export.h"
@@ -22,7 +22,8 @@ bool Maya::OpenFile(const std::string& filename, MFileIO::ReferenceMode referenc
       return true;
   }
 
-  if ( !FileSystem::Exists( filename ) )
+  Nocturnal::Path path( filename );
+  if ( !path.Exists() )
   {
     return false;
   }

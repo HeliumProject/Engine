@@ -9,7 +9,6 @@
 #include "Foundation/Flags.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
 #include "Reflect/Element.h"

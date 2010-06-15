@@ -13,7 +13,6 @@
 #include "Attribute/AttributeHandle.h"
 #include "Asset/ArtFileAttribute.h"
 #include "Content/ContentVersion.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/LunaSpecs.h"
 #include "Foundation/Log.h"
@@ -267,7 +266,7 @@ std::string ScenesPanel::PromptNewZone( const std::string& defaultPath )
         // If new file name, save
         savePath = fileDialog.GetPath().c_str();
 
-        if ( !FileSystem::Exists( savePath ) )
+        if ( !Nocturnal::Path( savePath ).Exists() )
         {
             Reflect::Archive::ToFile( Reflect::V_Element(), savePath, new Content::ContentVersion() );
         }
@@ -321,10 +320,9 @@ Zone* ScenesPanel::AddZone( std::string ( ScenesPanel::*PromptFunction )( const 
         return NULL;
     }
 
-    std::string path( rootScene->GetFullPath() );
-    FileSystem::StripLeaf( path );
+    Nocturnal::Path path( rootScene->GetFullPath() );
 
-    std::string newZonePath = ( this->*PromptFunction )( path );
+    std::string newZonePath = ( this->*PromptFunction )( path.Directory() );
 
     if ( newZonePath.empty() )
     {

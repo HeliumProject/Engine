@@ -14,7 +14,6 @@
 #include "Asset/CacheDB.h"
 #include "Foundation/Environment.h"
 #include "Foundation/Exception.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/ProjectSpecs.h"
 #include "Perforce/Perforce.h"

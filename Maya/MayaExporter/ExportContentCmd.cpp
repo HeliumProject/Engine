@@ -14,7 +14,6 @@
 
 #include "Finder/Finder.h"
 #include "Finder/ContentSpecs.h"
-#include "FileSystem/FileSystem.h"
 #include "RCS/RCS.h"
 
 using namespace MayaContent;
@@ -34,7 +33,7 @@ MString ExportContentCmd::CommandName( "exportContent" );
 void AfterSaveCallback( void *clientData )
 {
   std::string currentFile = MFileIO::currentFile().asChar();
-  FileSystem::CleanName( currentFile );
+  Nocturnal::Path::Normalize( currentFile );
 
   // i hate mel
   int exportOnSave = 0;
@@ -82,7 +81,7 @@ MStatus ExportContentCmd::doIt( const MArgList & args )
   MArgDatabase argParser( syntax(), args, &stat );
 
   std::string currentFile = MFileIO::currentFile().asChar();
-  FileSystem::CleanName( currentFile );
+  Nocturnal::Path::Normalize( currentFile );
 
   // make sure we save before we export, the artists asked us to do this for a variety of reasons
   // including fear that maya would crash during export and lose work

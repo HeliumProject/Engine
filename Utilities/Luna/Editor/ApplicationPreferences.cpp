@@ -2,7 +2,6 @@
 #include "ApplicationPreferences.h"
 
 #include "AppUtils/Preferences.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
 

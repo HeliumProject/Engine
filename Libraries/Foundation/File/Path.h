@@ -28,6 +28,7 @@ namespace Nocturnal
     public:
         static void Normalize( std::string& path );
         static void MakeNative( std::string& path );
+        static void GuaranteeSlash( std::string& path );
 
         static bool Exists( const std::string& path );
         static bool IsAbsolute( const std::string& path );
@@ -52,7 +53,11 @@ namespace Nocturnal
         std::string Basename() const;
         std::string Filename() const;
         std::string Directory() const;
+
         std::string Extension() const;
+        std::string FullExtension() const;
+        void RemoveExtension();
+        void RemoveFullExtension();
 
         std::string Native() const;
         std::string Absolute() const;
@@ -73,6 +78,7 @@ namespace Nocturnal
         u64 ModifiedTime() const;
         u64 CreatedTime() const;
         u64 AccessTime() const;
+        i64 Size() const;
 
         bool MakePath() const;
         bool Create() const;
@@ -80,16 +86,17 @@ namespace Nocturnal
         bool Move( const Nocturnal::Path& target ) const;
         bool Delete() const;
 
-        std::string FileCRC();
-        bool VerifyFileCRC( const std::string& hash );
+        std::string FileCRC() const;
+        bool VerifyFileCRC( const std::string& hash ) const;
 
-        std::string FileMD5();
-        bool VerifyFileMD5( const std::string& hash );
+        std::string FileMD5() const;
+        bool VerifyFileMD5( const std::string& hash ) const;
 
 
     public:
 
         void ReplaceExtension( const std::string& newExtension );
+        void ReplaceFullExtension( const std::string& newExtension );
 
     public:
 

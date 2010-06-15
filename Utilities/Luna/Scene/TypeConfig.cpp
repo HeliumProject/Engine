@@ -6,7 +6,6 @@
 #include "UIToolKit/ImageManager.h"
 
 #include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/LunaSpecs.h"
 
@@ -182,19 +181,18 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
               t->m_Icon = setting->GetText();
 
 #pragma TODO( "reimplement icons as resources" )
-              std::string iconPath = t->m_Icon;
+              Nocturnal::Path iconPath( t->m_Icon );
 
-              if ( FileSystem::Exists( iconPath ) )
+              if ( iconPath.Exists() )
               {
-                t->m_IconIndex = UIToolKit::GlobalImageManager().GetImageIndex( iconPath );
+                t->m_IconIndex = UIToolKit::GlobalImageManager().GetImageIndex( iconPath.Get() );
               }
               else
               {
-                iconPath = ""; //FinderSpecs::Luna::GLOBAL_CONFIG_FOLDER.GetFolder();
-                FileSystem::AppendPath( iconPath, t->m_Icon );
-                if ( FileSystem::Exists( iconPath ) )
+                iconPath.Set( "" + t->m_Icon ); //FinderSpecs::Luna::GLOBAL_CONFIG_FOLDER.GetFolder();
+                if ( iconPath.Exists() )
                 {
-                  t->m_IconIndex = UIToolKit::GlobalImageManager().GetImageIndex( iconPath );
+                  t->m_IconIndex = UIToolKit::GlobalImageManager().GetImageIndex( iconPath.Get() );
                 }
               }
 
@@ -205,7 +203,7 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
               }
               else
               {
-                t->m_Icon = iconPath;
+                t->m_Icon = iconPath.Get();
               }
             }
             else if ( std::string( setting->Value() ) == "Color" )
@@ -282,7 +280,7 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
               {
                 t->m_Location = criterion->GetText();
 
-                FileSystem::CleanName(t->m_Location);
+                Nocturnal::Path::Normalize( t->m_Location );
 
                 if (!t->m_Location.empty() && t->m_Location[0]== '/')
                 {

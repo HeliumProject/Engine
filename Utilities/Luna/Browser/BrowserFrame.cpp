@@ -23,7 +23,6 @@
 #include "Attribute/AttributeHandle.h"
 #include "Foundation/CommandLine.h"
 #include "Editor/DocumentManager.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/ContentSpecs.h"
 #include "Finder/Finder.h"
 #include "RCS/RCS.h"
@@ -590,8 +589,8 @@ void BrowserFrame::OnFolderSelected( wxTreeEvent& event )
     m_FoldersPanel->GetPath( queryString );
     if ( !queryString.empty() )
     {
-        FileSystem::CleanName( queryString );
-        FileSystem::GuaranteeSlash( queryString );
+        Nocturnal::Path::Normalize( queryString );
+        Nocturnal::Path::GuaranteeSlash( queryString );
         Search( queryString );
         event.Skip();
     }
@@ -625,8 +624,8 @@ void BrowserFrame::OnOpen( wxCommandEvent& event )
     for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end();
         fileItr != fileEnd; ++fileItr )
     {
-        std::string path = ( *fileItr )->GetFilePath();
-        if ( !path.empty() && FileSystem::Exists( path ) )
+        Nocturnal::Path path (( *fileItr )->GetFilePath() );
+        if ( path.Exists() )
         {
 #pragma TODO( "Open the file for editing" )
 NOC_BREAK();
@@ -693,8 +692,8 @@ void BrowserFrame::OnSync( wxCommandEvent& event )
         folderItr != folderEnd; ++folderItr )
     {
         std::string path = ( *folderItr )->GetFullPath();
-        FileSystem::GuaranteeSlash( path );
-        FileSystem::AppendPath( path, "..." );
+        Nocturnal::Path::GuaranteeSlash( path );
+        path += "...";
 
         try
         {
@@ -747,8 +746,8 @@ void BrowserFrame::OnCheckOut( wxCommandEvent& event )
         folderItr != folderEnd; ++folderItr )
     {
         std::string path = ( *folderItr )->GetFullPath();
-        FileSystem::GuaranteeSlash( path );
-        FileSystem::AppendPath( path, "..." );
+        Nocturnal::Path::GuaranteeSlash( path );
+        path += "...";
 
         try
         {
@@ -816,10 +815,10 @@ void BrowserFrame::OnShowInFolders( wxCommandEvent& event )
     {
         wxBusyCursor bc;
 
-        std::string path = paths.front();
-        if ( FileSystem::Exists( path ) )
+        Nocturnal::Path path( paths.front() );
+        if ( path.Exists() )
         {
-            Search( path );
+            Search( path.Get() );
         }
     }
 }
@@ -850,13 +849,12 @@ void BrowserFrame::OnShowInWindowsExplorer( wxCommandEvent& event )
     if ( m_ResultsPanel->GetSelectedPaths( paths ) == 1 )
     {
         std::string command = "explorer.exe ";
-        std::string path = paths.front();
-        if ( FileSystem::IsFile( path ) )
+        Nocturnal::Path path( paths.front() );
+        if ( path.IsFile() )
         {
             command += "/select,";
         }
-        FileSystem::Win32Name( path );
-        command += "\"" + path + "\"";
+        command += "\"" + path.Native() + "\"";
 
         Platform::Execute( command );
     }
@@ -1087,9 +1085,8 @@ void BrowserFrame::UpdateNavBar( const SearchQueryPtr& searchQuery )
     bool isFolder = false;
     if ( searchQuery->GetSearchType() == SearchTypes::File )
     {
-        std::string folder = searchQuery->GetQueryString();
-        FileSystem::StripLeaf( folder );
-        SetFolderPath( folder );
+        Nocturnal::Path path( searchQuery->GetQueryString() );
+        SetFolderPath( path.Directory() );
     }
     else if ( searchQuery->GetSearchType() == SearchTypes::Folder )
     {

@@ -13,7 +13,6 @@
 #include "Foundation/Boost/Regex.h" 
 #include "Foundation/CommandLine.h"
 #include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
 #include "RCS/RCS.h"
 #include "UIToolKit/ImageManager.h"
 
@@ -279,11 +278,11 @@ void SceneRowPanel::EnableSceneSwitch( bool enable )
 // 
 std::string SceneRowPanel::GetRowLabel() const
 {
-    std::string label = GetFilePath();
-    label = FileSystem::GetLeaf( label );
-    FileSystem::StripExtension( label );
+    Nocturnal::Path label( GetFilePath() );
+    label.Set( label.Filename() );
+    label.RemoveExtension();
 
-    return label;
+    return label.Get();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -555,8 +554,8 @@ static inline bool ValidateName( const std::string& name )
 void SceneRowPanel::Rename( const ContextMenuArgsPtr& args )
 {
     // Error checking
-    std::string path( GetFilePath() );
-    if ( !FileSystem::Exists( path ) )
+    Nocturnal::Path path( GetFilePath() );
+    if ( !path.Exists() )
     {
         std::string error = "You must save '";
         error += path.c_str();
@@ -566,28 +565,28 @@ void SceneRowPanel::Rename( const ContextMenuArgsPtr& args )
     }
 
     bool gotInfo = false;
-    RCS::File rcsFile( path );
+    RCS::File rcsFile( path.Get() );
     rcsFile.GetInfo();
 
     if ( rcsFile.IsCheckedOutByMe() )
     {
-        std::string error = "You must check in '" + path + "' before you can rename it.";
+        std::string error = "You must check in '" + path.Get() + "' before you can rename it.";
         wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
         return;
     }
     else if ( rcsFile.IsCheckedOut() )
     {
-        std::string error = "Cannot rename '" + path + "' because it is checked out by " + rcsFile.m_Username + ".";
+        std::string error = "Cannot rename '" + path.Get() + "' because it is checked out by " + rcsFile.m_Username + ".";
         wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
         return;
     }
 
-    Luna::Scene* scene = m_Editor->GetSceneManager()->GetScene( path );
+    Luna::Scene* scene = m_Editor->GetSceneManager()->GetScene( path.Get() );
     if ( scene )
     {
         if ( scene->GetSceneDocument()->IsModified() )
         {
-            std::string error = "You must save and check in '" + path + "' before you can rename it.";
+            std::string error = "You must save and check in '" + path.Get() + "' before you can rename it.";
             wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
             return;
         }
@@ -606,12 +605,9 @@ void SceneRowPanel::Rename( const ContextMenuArgsPtr& args )
             return;
         }
 
-        std::string ext;
-        FileSystem::GetExtension( path, ext );
-        std::string newPath( path );
-        FileSystem::StripLeaf( newPath );
-        FileSystem::AppendPath( newPath, newName );
-        FileSystem::AppendExtension( newPath, ext );
+        std::string ext = path.Extension();
+        std::string newPath = path.Directory();
+        newPath += newName + '.' + ext;
 
         std::string error;
 

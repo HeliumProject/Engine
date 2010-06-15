@@ -3,8 +3,8 @@
 #include "SQLite.h"
 
 #include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
 #include "Foundation/Exception.h"
+#include "Foundation/Profile.h"
 #include "Platform/Process.h"
 #include <boost/regex.hpp>
 
@@ -12,6 +12,7 @@
 
 #include <string>
 #include <sstream>
+#include <fstream>
 #include <vector>
 
 using namespace SQL;
@@ -109,20 +110,15 @@ void SQLite::Open( const std::string& dbPath, int flags )
     ThrowIfDBConnected( __FUNCTION__ );
 
     NOC_ASSERT( !dbPath.empty() && !IsConnected() );
-    m_DBFilename = dbPath;
-
-    if ( m_DBFilename.empty() )
+    m_DBFile.Set( dbPath );
+    if ( !m_DBFile.Create() )
     {
-        throw SQL::DBManagerException( this, __FUNCTION__, "No database file path was specified." );
+        throw Nocturnal::Exception( "Could not create db file: %s", m_DBFile.c_str() );
     }
 
-    FileSystem::MakePath( m_DBFilename, true );
-
-    std::string dbWin32Name = m_DBFilename;
-    FileSystem::Win32Name( dbWin32Name );
-    if ( sqlite3_open_v2( m_DBFilename.c_str(), &m_DB, flags, 0 ) != SQLITE_OK )
+    if ( sqlite3_open_v2( m_DBFile.c_str(), &m_DB, flags, 0 ) != SQLITE_OK )
     {
-        SetLastError( __FUNCTION__, "", "Could not connect to SQLite DB file: \"%s\".", m_DBFilename.c_str() );
+        SetLastError( __FUNCTION__, "", "Could not connect to SQLite DB file: \"%s\".", m_DBFile.c_str() );
         throw SQL::DBManagerException( this, __FUNCTION__ );
     }
 
@@ -136,7 +132,7 @@ void SQLite::Open( const std::string& dbPath, int flags )
         throw SQL::DBManagerException( this, __FUNCTION__ );
     }
 
-    LogPrint( __FUNCTION__, Log::Levels::Verbose, "DB opened in %.2fms: %s", timer.Elapsed(), m_DBFilename.c_str() );
+    LogPrint( __FUNCTION__, Log::Levels::Verbose, "DB opened in %.2fms: %s", timer.Elapsed(), m_DBFile.c_str() );
 }
 
 
@@ -171,7 +167,7 @@ void SQLite::Close()
 
     if ( sqlite3_close( m_DB ) != SQLITE_OK )
     {
-        SetLastError( __FUNCTION__, "", "Failed to close the DB connection \"%s\".", m_DBFilename.c_str() );
+        SetLastError( __FUNCTION__, "", "Failed to close the DB connection \"%s\".", m_DBFile.c_str() );
         throw SQL::DBManagerException( this, __FUNCTION__ );
     }
     m_IsDBOpen = false;
@@ -184,7 +180,7 @@ void SQLite::Close()
     m_StmtHandles.clear();
     m_NumStmtHandles = 0;
 
-    LogPrint( __FUNCTION__, Log::Levels::Verbose, "DB closed in %.2fms: %s", timer.Elapsed(), m_DBFilename.c_str() );
+    LogPrint( __FUNCTION__, Log::Levels::Verbose, "DB closed in %.2fms: %s", timer.Elapsed(), m_DBFile.c_str() );
 }
 
 
@@ -194,14 +190,10 @@ void SQLite::Delete()
 {
     Close();
 
-    std::string win32Name;
-    FileSystem::Win32Name( m_DBFilename, win32Name );
-
-    if ( FileSystem::Exists( m_DBFilename )
-        && !DeleteFile( win32Name.c_str() ) )
+    if ( !m_DBFile.Delete() )
     {
         throw Nocturnal::PlatformException( "Could not delete database file %s, Error: %s",
-            m_DBFilename.c_str(),
+            m_DBFile.c_str(),
             Platform::GetErrorString().c_str() );
     }
 }
@@ -209,12 +201,9 @@ void SQLite::Delete()
 /////////////////////////////////////////////////////////////////////////////
 // Deletes the  DB and handled events list
 void SQLite::Delete( const std::string& dbFile )
-{  
-    std::string win32Name;
-    FileSystem::Win32Name( dbFile, win32Name );
-
-    if ( FileSystem::Exists( dbFile )
-        && !::DeleteFile( win32Name.c_str() ) )
+{
+    Nocturnal::Path dbPath( dbFile );
+    if ( !dbPath.Delete() )
     {
         throw Nocturnal::PlatformException( "Could not delete database file %s, Error: %s",
             dbFile.c_str(),
@@ -229,13 +218,10 @@ bool SQLite::FromFile( const std::string& sqlFile, const std::string& dbFile, st
 {  
     bool result = false;
 
-    if ( sqlFile.empty() || dbFile.empty() )
-    {
-        error = std::string( "Could not create DB from file, sqlFile and/or dbFile are invalid path(s)" );
-        return result;
-    }
+    Nocturnal::Path sqlPath( sqlFile );
+    Nocturnal::Path dbPath( dbFile );
 
-    if ( FileSystem::Exists( dbFile ) )
+    if ( dbPath.Exists() )
     {
         if ( failIfExists )
         {
@@ -246,18 +232,18 @@ bool SQLite::FromFile( const std::string& sqlFile, const std::string& dbFile, st
         Delete( dbFile );
     }
 
-    if ( !FileSystem::Exists( sqlFile ) )
+    if ( !sqlPath.Exists() )
     {
         error = std::string( "DB create script does not exists: " ) +  sqlFile ;
         return result;
     }
 
-    FileSystem::MakePath( dbFile, true );
+    dbPath.MakePath();
 
     std::string sqliteCmd = std::string ("sqlite3 -init \"") + sqlFile + std::string ("\" \"") + dbFile + std::string ("\" .quit");
     result = ( Platform::Execute( sqliteCmd, false, true ) == 0 );
 
-    if ( !result || !FileSystem::Exists( dbFile ) )
+    if ( !result || !dbPath.Exists() )
     {
         error = std::string( "Could not create DB from file: " ) +  sqlFile ;
         return false;
@@ -273,13 +259,10 @@ bool SQLite::ApplyFile( const std::string& sqlFile, const std::string& dbFile, s
 {   
     bool result = false;
 
-    if ( sqlFile.empty() || dbFile.empty() )
-    {
-        error = std::string( "Could not apply sql file to DB, sqlFile and/or dbFile are invalid path(s)" );
-        return result;
-    }
+    Nocturnal::Path sqlPath( sqlFile );
+    Nocturnal::Path dbPath( dbFile );
 
-    if ( !FileSystem::Exists( sqlFile ) )
+    if ( !sqlPath.Exists() )
     {
         error = std::string( "SQL file does not exist: " ) + sqlFile;
         return result;
@@ -292,16 +275,15 @@ bool SQLite::ApplyFile( const std::string& sqlFile, const std::string& dbFile, s
         throw Nocturnal::Exception( "Unable to get the temporary directory on this computer." );
     }
 
-    std::string tempBat = tempDir;
-    FileSystem::MakePath( tempBat );
+    Nocturnal::Path tempBat( tempDir );
+    tempBat.MakePath();
 
-    FileSystem::AppendPath( tempBat, "tempSQL.bat" );
-    FileSystem::Win32Name( tempBat );
+    tempBat.Set( tempBat.Get() + "/tempSQL.bat" );
 
     std::ofstream tempSQLFile( tempBat.c_str(), std::ios::out | std::ios::trunc );
     if ( !tempSQLFile.is_open() )
     {
-        error = std::string( "Could not open file temporary batch file for writing: " ) + tempBat;
+        error = std::string( "Could not open file temporary batch file for writing: " ) + tempBat.Get();
         return result;
     }
 
@@ -321,7 +303,7 @@ bool SQLite::ApplyFile( const std::string& sqlFile, const std::string& dbFile, s
         error = std::string( "Could not apply sql file: " ) + sqlFile;
     }
 
-    ::DeleteFile( tempBat.c_str() );
+    tempBat.Delete();
 
     return result;
 }

@@ -2,7 +2,6 @@
 
 #include "Platform/Windows/Windows.h"
 #include "Foundation/Exception.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Foundation/Log.h"
 

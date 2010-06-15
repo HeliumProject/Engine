@@ -3,7 +3,6 @@
 
 #include "DocumentManager.h"
 
-#include "FileSystem/FileSystem.h"
 #include "Finder/LunaSpecs.h"
 #include "RCS/RCS.h"
 #include "UIToolKit/FileDialog.h"
@@ -71,7 +70,7 @@ void Editor::RevisionHistory( const std::string& path )
   }
 
   std::string clean( path );
-  FileSystem::CleanName( clean );
+  Nocturnal::Path::Normalize( clean );
   if ( !RCS::PathIsManaged( clean ) )
   {
     std::string msg = std::string( "The path '" ) + clean + "' is not under revision control. Unable to display revision history.";
@@ -80,7 +79,7 @@ void Editor::RevisionHistory( const std::string& path )
   }
 
   std::string win32Name( clean );
-  FileSystem::Win32Name( clean, win32Name );
+  Nocturnal::Path::MakeNative( win32Name );
   std::string command = std::string( "p4win.exe -H \"" ) + win32Name + std::string( "\"" );
 
   if ( Platform::Execute( command ) == -1 )

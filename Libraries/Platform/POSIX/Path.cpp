@@ -31,3 +31,8 @@ bool Platform::Delete( const char* path )
 {
     return false;
 }
+
+bool Platform::GetVersionInfo( const char* path, std::string& versionInfo )
+{
+    return false;
+}

@@ -4,7 +4,6 @@
 
 #include "Browser.h"
 
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/ProjectSpecs.h"
 

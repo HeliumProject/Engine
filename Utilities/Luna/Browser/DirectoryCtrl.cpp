@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "DirectoryCtrl.h"
 
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/SortTreeCtrl.h"
@@ -90,11 +89,9 @@ DirectoryCtrl::~DirectoryCtrl()
 ///////////////////////////////////////////////////////////////////////////////
 void DirectoryCtrl::SetupSections()
 {
-  std::string rootPath = m_RootDirectory;
+    Nocturnal::Path rootPath( m_RootDirectory );
 
-  std::string win32RootPath;
-  FileSystem::Win32Name( rootPath, win32RootPath, true );
-  m_Root = AddSection( win32RootPath, rootPath, DirectoryCtrlIconTypes::InsomniacMoon );
+    m_Root = AddSection( rootPath.Native(), rootPath.c_str(), DirectoryCtrlIconTypes::InsomniacMoon );
   if ( !GetTreeCtrl()->IsExpanded( m_Root ) )
   {
     GetTreeCtrl()->Toggle( m_Root );

@@ -5,7 +5,6 @@
 #include "Asset/AssetFile.h"
 #include "Asset/AssetFolder.h"
 #include "Asset/AssetClass.h"
-#include "FileSystem/FileSystem.h"
 
 using namespace Luna;
 

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ClipboardFileList.h"
 #include "Foundation/Container/Insert.h"
-#include "FileSystem/FileSystem.h"
 
 using namespace Inspect;
 
@@ -51,8 +50,8 @@ ClipboardFileList::~ClipboardFileList()
 // 
 bool ClipboardFileList::AddFilePath( const std::string& file )
 {
-  std::string clean;
-  FileSystem::CleanName( file, clean );
+  std::string clean = file;
+  Nocturnal::Path::Normalize( clean );
   Nocturnal::Insert< S_string >::Result inserted = m_Files.insert( clean );
   m_IsDirty = inserted.second;
   return m_IsDirty;

@@ -18,7 +18,6 @@
 #include "Foundation/CommandLine.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Natural.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/ContentSpecs.h"
 #include "Foundation/Log.h"
 #include "Inspect/ClipboardElementArray.h"

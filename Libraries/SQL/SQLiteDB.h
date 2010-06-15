@@ -5,6 +5,7 @@
 #include "Exceptions.h"
 
 #include "Platform/Types.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 #include "Platform/Mutex.h"
@@ -54,9 +55,9 @@ namespace SQL
   protected:
     SQLite*              m_DBManager;
 
-    std::string          m_DBFilename;
-    std::string          m_ConfigFolder;
-    std::string          m_DataFilename;
+    Nocturnal::Path      m_DBFile;
+    Nocturnal::Path      m_ConfigDir;
+    Nocturnal::Path      m_DataFile;
 
     std::string          m_DBVersion;
     int                  m_OpenFlags;

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "ThumbnailSorter.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/String/Natural.h"
-#include "FileSystem/FileSystem.h"
 
 using namespace Luna;
 
@@ -176,7 +176,9 @@ bool ThumbnailSorter::SortAlphabeticalByName( const ThumbnailTile* first, const 
   if ( result == 0 )
   {
     // 3. Labels are the same, look at the full path
-    return FileSystem::CompareFilePath( first->GetFullPath(), second->GetFullPath() );
+      Nocturnal::Path left( first->GetFullPath() );
+      Nocturnal::Path right( first->GetFullPath() );
+      return left < right;
   }
   return result < 0;
 }

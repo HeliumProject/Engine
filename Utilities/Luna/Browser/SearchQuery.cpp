@@ -10,8 +10,6 @@
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/String/Utilities.h"
 #include "Foundation/Log.h"
-#include "FileSystem/File.h"
-#include "FileSystem/FileSystem.h"
 
 using namespace Luna;
 
@@ -298,27 +296,26 @@ bool SearchQuery::ParseQueryString( const std::string& queryString, std::string&
     if ( boost::regex_match( queryString, matchResult, matchAssetPath ) )
     {
         // we know it's a path, clean it
-        std::string cleanName( queryString );
-        FileSystem::CleanName( cleanName );
-        if ( FileSystem::IsFolder( cleanName ) )
+        Nocturnal::Path path( queryString );
+        if ( path.IsDirectory() )
         {
             if ( query )
             {
                 query->m_SearchType = SearchTypes::Folder;
 
-                FileSystem::CleanName( query->m_QueryString );
-                FileSystem::GuaranteeSlash( query->m_QueryString );
+                Nocturnal::Path::Normalize( query->m_QueryString );
+                Nocturnal::Path::GuaranteeSlash( query->m_QueryString );
             }
             return true;
         }
-        else if ( FileSystem::IsFile( cleanName ) )
+        else if ( path.IsFile() )
         {
             // it's an AssetFile
             if ( query )
             {
                 query->m_SearchType = SearchTypes::File;
 
-                FileSystem::CleanName( query->m_QueryString );
+                Nocturnal::Path::Normalize( query->m_QueryString );
                 query->m_SelectPath = query->m_QueryString;
             }
             return true;

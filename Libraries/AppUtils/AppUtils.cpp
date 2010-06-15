@@ -24,7 +24,6 @@
 #include "Version.h"
 
 #include "Debug/Exception.h"
-#include "FileSystem/FileSystem.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Exception.h"
 #include "Platform/Process.h"

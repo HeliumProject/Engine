@@ -17,7 +17,6 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/CommandLine.h"
-#include "FileSystem/FileSystem.h"
 #include "Debug/Utils.h"
 
 using namespace Reflect;
@@ -679,8 +678,8 @@ void Archive::ToFile(const V_Element& elements, const std::string& file, Version
   archive->Debug("%s\n", print);
 
   s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreWrite ) );
-
-  FileSystem::MakePath( file, true );
+  Nocturnal::Path outputPath( file );
+  outputPath.MakePath();
 
   // alloc a version object if we don't have one
   if ( !version.ReferencesObject() )
@@ -704,14 +703,8 @@ void Archive::ToFile(const V_Element& elements, const std::string& file, Version
   }
 
   // build a path to a unique file for this process
-  std::string safetyFile = file;
-  FileSystem::StripLeaf( safetyFile );
-  FileSystem::AppendPath( safetyFile, Platform::GetProcessString() );
-
-  // ensure it has the same extension in case we want to examine it
-  std::string extension;
-  FileSystem::GetExtension( file, extension );
-  FileSystem::AppendExtension( safetyFile, extension );
+  Nocturnal::Path safetyPath( outputPath.Directory() + Platform::GetProcessString() );
+  safetyPath.ReplaceExtension( outputPath.Extension() );
 
   // this will install a translator that will cause a C++ throw if and SEH exception occurs
   Debug::EnableTranslator<Debug::TranslateException> translate;
@@ -719,7 +712,7 @@ void Archive::ToFile(const V_Element& elements, const std::string& file, Version
   // generate the file to the safety location
   try
   {
-    archive->OpenFile( safetyFile, true );
+    archive->OpenFile( safetyPath.Get(), true );
 
     try
     {
@@ -739,20 +732,13 @@ void Archive::ToFile(const V_Element& elements, const std::string& file, Version
     str << "While writing '" << file << "': " << ex.Get();
     ex.Set( str.str() );
 
-    if ( FileSystem::Exists( safetyFile ) )
-    {
-      FileSystem::Delete( safetyFile );
-    }
+    safetyPath.Delete();
 
     throw;
   }
   catch ( ... )
   {
-    if ( FileSystem::Exists( safetyFile ) )
-    {
-      FileSystem::Delete( safetyFile );
-    }
-
+      safetyPath.Delete();
     throw;
   }
 
@@ -766,21 +752,18 @@ void Archive::ToFile(const V_Element& elements, const std::string& file, Version
     }
 
     // delete the destination file
-    FileSystem::Delete( file );
+    outputPath.Delete();
 
     // move the written file to the destination location
-    FileSystem::Move( safetyFile, file );
+    safetyPath.Move( outputPath );
   }
   catch ( Nocturnal::Exception& ex )
   {
     std::stringstream str;
-    str << "While moving '" << safetyFile << "' to '" << file << "': " << ex.Get();
+    str << "While moving '" << safetyPath.c_str() << "' to '" << file << "': " << ex.Get();
     ex.Set( str.str() );
 
-    if ( FileSystem::Exists( safetyFile ) )
-    {
-      FileSystem::Delete( safetyFile );
-    }
+    safetyPath.Delete();
 
     throw;
   }

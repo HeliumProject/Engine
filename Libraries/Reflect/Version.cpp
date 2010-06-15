@@ -2,7 +2,7 @@
 #include "Version.h"
 #include "Serializers.h"
 
-#include "FileSystem/FileSystem.h"
+#include "Platform/Path.h"
 
 using namespace Reflect;
 
@@ -85,8 +85,8 @@ void Reflect::Version::DetectVersion()
   // if we found an executable, get its version
   if ( !m_Source.empty() )
   {
-    FileSystem::GetWinVersionInfo( m_Source, m_SourceVersion );
+      Platform::GetVersionInfo( m_Source.c_str(), m_SourceVersion );
 
-    FileSystem::GetLeaf( m_Source.c_str(), m_Source );
+      m_Source = Nocturnal::Path( m_Source ).Filename();
   }
 }

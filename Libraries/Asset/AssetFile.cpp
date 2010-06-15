@@ -7,7 +7,6 @@
 #include "Attribute/AttributeHandle.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
@@ -84,8 +83,9 @@ const std::string& AssetFile::GetShortName()
 {
     if ( m_ShortName.empty() )
     {
-        FileSystem::GetLeaf( GetFilePath(), m_ShortName );
-        FileSystem::StripExtension( m_ShortName );
+        Nocturnal::Path path( m_Path );
+        path.RemoveExtension();
+        m_ShortName = path.Filename();
     }
     return m_ShortName;
 }
@@ -106,7 +106,7 @@ const Finder::ModifierSpec* AssetFile::GetModifierSpec()
 
         if (!m_ModifierSpec )
         {
-            std::string extension = FileSystem::GetExtension( GetFilePath(), 1 );
+            std::string extension = Nocturnal::Path( GetFilePath() ).Extension();
             try
             {
                 m_ModifierSpec = Finder::GetFileExtensionSpec( extension );
@@ -125,7 +125,7 @@ const std::string& AssetFile::GetExtension()
 {
     if ( m_Extension.empty() )
     {
-        FileSystem::GetExtension( GetFilePath(), m_Extension );
+        m_Extension = Nocturnal::Path( GetFilePath() ).Extension();
     }
     return m_Extension;
 }
@@ -142,7 +142,7 @@ const std::string& AssetFile::GetFileType()
         }
         else
         {
-            m_FileType = FileSystem::GetExtension( GetFilePath(), 1 );
+            m_FileType = Nocturnal::Path( GetFilePath() ).Extension();
 
             if ( !m_FileType.empty() && *m_FileType.begin() == '.' )
             {
@@ -167,11 +167,7 @@ u64 AssetFile::GetSize()
 {
     if ( m_Size == 0 )
     {
-        struct _stati64 fileStats;
-        if ( FileSystem::GetStats64( GetFilePath(), fileStats ) )
-        {
-            m_Size = fileStats.st_size;
-        }
+        m_Size = Nocturnal::Path( GetFilePath() ).Size();
     }
     return m_Size;
 }

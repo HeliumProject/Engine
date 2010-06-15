@@ -25,7 +25,6 @@
 #include "Foundation/Environment.h"
 #include "Debug/Exception.h"
 #include "Dependencies/Dependencies.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/DebugSpecs.h"
 
@@ -311,8 +310,8 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
     PROFILE_SCOPE_ACCUM( g_BuilderAccumulators[ builderName ] );
 #endif
 
-    std::string outputDirectory = builder->GetOutputDirectory();
-    FileSystem::MakePath( outputDirectory );
+    Nocturnal::Path outputDirectory( builder->GetOutputDirectory() );
+    outputDirectory.MakePath();
 
     // add traces
     std::string traceString = builder->GetBuildString();
@@ -325,9 +324,9 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
         traceString.erase( pos, 1 );
     }
 
-    std::string traceFile = outputDirectory + traceString + "_" + FinderSpecs::Debug::TRACE_FILE.GetFile();
-    std::string warningFile = outputDirectory + traceString + "_" + FinderSpecs::Debug::WARNING_FILE.GetFile();
-    std::string errorFile = outputDirectory + traceString + "_" + FinderSpecs::Debug::ERROR_FILE.GetFile();
+    std::string traceFile = outputDirectory.Get() + traceString + "_" + FinderSpecs::Debug::TRACE_FILE.GetFile();
+    std::string warningFile = outputDirectory.Get() + traceString + "_" + FinderSpecs::Debug::WARNING_FILE.GetFile();
+    std::string errorFile = outputDirectory.Get() + traceString + "_" + FinderSpecs::Debug::ERROR_FILE.GetFile();
 
     Log::TraceFileHandle trace ( traceFile, AppUtils::GetTraceStreams(), GetCurrentThreadId() );
     Log::TraceFileHandle warning ( warningFile, Log::Streams::Warning, GetCurrentThreadId() );

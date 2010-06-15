@@ -12,7 +12,6 @@
 #include "FieldFactory.h"
 #include "RemoveAssetNodeCommand.h"
 
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Editor/RefreshSelectionCommand.h"
 #include "Core/Enumerator.h"
@@ -498,8 +497,9 @@ std::string AssetReferenceNode::GetFileName() const
     std::string fileName = GetFilePath();
     if ( !fileName.empty() )
     {
-        fileName = FileSystem::GetLeaf( fileName );
-        FileSystem::StripExtension( fileName );
+        Nocturnal::Path np( fileName );
+        np.RemoveExtension();
+        fileName = np.Filename();
     }
     return fileName;
 }

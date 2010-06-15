@@ -4,10 +4,10 @@
 
 #include "Foundation/Exception.h"
 #include "Foundation/Container/Insert.h" 
+#include "Foundation/File/Directory.h"
 #include "Foundation/File/Path.h"
 using Nocturnal::Insert; 
 
-#include "FileSystem/FileSystem.h"
 #include "Foundation/Log.h"
 
 #include <sstream>
@@ -152,15 +152,13 @@ namespace UIToolKit
     {
       if ( !m_ThemeFolder.empty() )
       {
-        fullPath = m_ThemeFolder;
-        FileSystem::AppendPath( fullPath, partialPath );
+          fullPath = Nocturnal::Path( m_ThemeFolder + '/' + partialPath ).Get();
       }
 
       // then use the default path
-      if ( !FileSystem::Exists( fullPath ) )
+      if ( !Nocturnal::Path( fullPath ).Exists() )
       {
-        fullPath = m_DefaultFolder;
-        FileSystem::AppendPath( fullPath, partialPath );
+          fullPath = Nocturnal::Path( m_DefaultFolder + '/' + partialPath ).Get();
       }
     }
   }
@@ -193,7 +191,7 @@ namespace UIToolKit
 
     std::string fullPath;
     GetFullImagePath( fileName, fullPath );
-    if ( !FileSystem::Exists( fullPath ) )
+    if ( !Nocturnal::Path( fullPath ).Exists() )
     {
       Log::Warning( "Bitmap file does not exist %s\n", fullPath.c_str() );
     }
@@ -226,15 +224,17 @@ namespace UIToolKit
   // 
   const wxBitmap& ImageManager::GetScaledBitmap( const std::string& fileName, int maxSize, long type )
   {
-    std::string keyFileName = fileName;
-    FileSystem::StripExtension( keyFileName );
+      Nocturnal::Path keyFile( fileName );
+      std::string ext = keyFile.Extension();
+
+      keyFile.ReplaceExtension( "" );
 
     std::stringstream keyStream;
-    keyStream << keyFileName << maxSize << FileSystem::GetExtension( fileName );
-    keyFileName = keyStream.str();
+    keyStream << keyFile.Get() << maxSize << ext;
+    keyFile.Set( keyStream.str() );
 
     bool exists = false;
-    M_Bitmap::iterator found = m_Bitmaps.find( keyFileName );
+    M_Bitmap::iterator found = m_Bitmaps.find( keyFile.Get() );
     if ( found != m_Bitmaps.end() )
     {
       exists = true;
@@ -275,7 +275,7 @@ namespace UIToolKit
       BitmapFileInfo info( fileName );
       info.m_Bitmap = wxBitmap( image );
 
-      Insert<M_Bitmap>::Result inserted = m_Bitmaps.insert( M_Bitmap::value_type ( keyFileName, info ) );
+      Insert<M_Bitmap>::Result inserted = m_Bitmaps.insert( M_Bitmap::value_type ( keyFile.Get(), info ) );
       if ( !inserted.second )
       {
         Log::Warning( "Failed to store scaled GUI image %s\n", fileName.c_str() );
@@ -301,7 +301,7 @@ namespace UIToolKit
 
     std::string fullPath;
     GetFullImagePath( fileName, fullPath );
-    if ( !FileSystem::Exists( fullPath ) )
+    if ( !Nocturnal::Path( fullPath ).Exists() )
     {
       Log::Warning( "Animated image file does not exist %s\n", fullPath.c_str() );
     }
@@ -366,20 +366,19 @@ namespace UIToolKit
   {
     bool isOk = true;
 
-    V_string artFiles;
-    FileSystem::GetFiles( m_DefaultFolder, artFiles, g_IconSizeSpecs[size],
-      FileSystem::FindFlags::Default, FileSystem::IteratorFlags::NoPrependRoot );
+    Nocturnal::S_Path artFiles;
+    Nocturnal::Directory::GetFiles( m_DefaultFolder, artFiles, g_IconSizeSpecs[size], true );
 
     const int numImages = static_cast< int >( artFiles.size() );
     if ( numImages > 0 )
     {
       m_GuiImageLists[size].Create( g_IconSizes[size], g_IconSizes[size], true, numImages );
-      V_string::const_iterator fileItr = artFiles.begin();
-      V_string::const_iterator fileEnd = artFiles.end();
+      Nocturnal::S_Path::const_iterator fileItr = artFiles.begin();
+      Nocturnal::S_Path::const_iterator fileEnd = artFiles.end();
       for ( ; fileItr != fileEnd; ++fileItr )
       {
         std::string currentFile;
-        GetFullImagePath( *fileItr, currentFile );
+        GetFullImagePath( (*fileItr).Get(), currentFile );
         isOk = LoadImage(currentFile, size);
       }
     }
@@ -467,7 +466,9 @@ namespace UIToolKit
   //
   long ImageManager::GetBitmapLoadType( const std::string& fileName )
   {    
-    M_ExtensionType::iterator findType = m_ExtensionType.find( FileSystem::GetExtension( fileName, 1 ) );
+      Nocturnal::Path path( fileName );
+
+      M_ExtensionType::iterator findType = m_ExtensionType.find( path.Extension() );
     if ( findType != m_ExtensionType.end() )
     {
       return findType->second;

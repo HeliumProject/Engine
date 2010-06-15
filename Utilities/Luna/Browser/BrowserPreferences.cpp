@@ -5,7 +5,6 @@
 #include "AppUtils/Preferences.h"
 #include "Asset/AssetFlags.h"
 #include "Foundation/Environment.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/LunaSpecs.h"
 #include "Reflect/Serializer.h"
 #include "Reflect/Serializers.h"
@@ -51,8 +50,8 @@ BrowserPreferences::BrowserPreferences( const std::string& defaultFolder, ViewOp
  , m_DependencyCollectionRecursionDepth( 0 )
  , m_UsageCollectionRecursionDepth( 0 )
 {
-  FileSystem::CleanName( m_DefaultFolder );
-  FileSystem::GuaranteeSlash( m_DefaultFolder );
+  Nocturnal::Path::Normalize( m_DefaultFolder );
+  Nocturnal::Path::GuaranteeSlash( m_DefaultFolder );
 }
 
 BrowserPreferences::~BrowserPreferences()
@@ -191,6 +190,6 @@ const std::string& BrowserPreferences::GetDefaultFolderPath() const
 void BrowserPreferences::SetDefaultFolderPath( const std::string& path )
 {
   m_DefaultFolder = path;
-  FileSystem::CleanName( m_DefaultFolder );
-  FileSystem::GuaranteeSlash( m_DefaultFolder );
+  Nocturnal::Path::Normalize( m_DefaultFolder );
+  Nocturnal::Path::GuaranteeSlash( m_DefaultFolder );
 }

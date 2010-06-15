@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "MenuMRU.h"
 
-#include "FileSystem/FileSystem.h"
-
+#include "Foundation/File/Path.h"
 
 using namespace UIToolKit;
 
@@ -119,15 +118,8 @@ void MenuMRU::RemoveInvalidItems( bool tuidRequired )
     }
 
     // Check to make sure the file exists on disk
-    bool exists = false;
-    try
-    {
-      exists = FileSystem::Exists( current );
-    }
-    catch ( const FileSystem::Exception& )
-    {
-      exists = false;
-    }
+    bool exists = Nocturnal::Path( current ).Exists();
+
     if ( !exists )
     {
       remove.insert( current );

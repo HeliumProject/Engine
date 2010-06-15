@@ -1,8 +1,5 @@
 #include "FileBackedAttribute.h"
 
-#include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
-
 using namespace Asset;
 
 REFLECT_DEFINE_ABSTRACT( FileBackedAttribute );

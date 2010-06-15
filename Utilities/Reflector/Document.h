@@ -120,7 +120,7 @@ public:
 
 private:
   // document data
-  std::string                 m_File;
+    Nocturnal::Path                 m_File;
   std::string                 m_Title;
   Reflect::V_Element          m_Elements;
   Reflect::V_Element          m_Selection;

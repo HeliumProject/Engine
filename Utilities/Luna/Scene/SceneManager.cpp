@@ -12,7 +12,6 @@
 #include "Attribute/AttributeHandle.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
 #include "UIToolKit/FileDialog.h"
 
 // Using
@@ -226,9 +225,8 @@ ScenePtr SceneManager::OpenZone( const std::string& path, std::string& error )
 static std::string PromptSaveAs( const DocumentPtr& file, wxWindow* window )
 {
     std::string path;
-    std::string defaultDir( file->GetFilePath() );
-    std::string defaultFile( FileSystem::GetLeaf( defaultDir ) );
-    FileSystem::StripLeaf( defaultDir );
+    std::string defaultDir = Nocturnal::Path( file->GetFilePath() ).Directory();
+    std::string defaultFile = file->GetFilePath();
 
     UIToolKit::FileDialog saveDlg( window, "Save As...", defaultDir.c_str(), defaultFile.c_str(), "", UIToolKit::FileDialogStyles::DefaultSave );
     saveDlg.AddFilter( FinderSpecs::Asset::WORLD_DECORATION.GetDialogFilter() );

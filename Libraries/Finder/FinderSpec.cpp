@@ -4,7 +4,6 @@
 #include "AppUtils/Preferences.h"
 #include "Platform/Assert.h"
 #include "Foundation/File/Path.h"
-#include "FileSystem/FileSystem.h"
 
 namespace Finder
 {
@@ -43,9 +42,9 @@ namespace Finder
     FINDER_SCOPE_TIMER((""));
 
     std::string extension;
-    FileSystem::GetExtension( path, extension );
-    FileSystem::StripExtension( path );
-    path += m_Value + extension;
+    Nocturnal::Path np( path );
+    np.ReplaceFullExtension( m_Value + '.' + np.Extension() );
+    path = np.Get();
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -54,7 +53,6 @@ namespace Finder
     FINDER_SCOPE_TIMER((""));
 
     std::string result = m_Value;
-    FileSystem::GuaranteeDot( result );
 
     return result;
   }
@@ -64,10 +62,9 @@ namespace Finder
   {
     FINDER_SCOPE_TIMER((""));
 
-    std::string extension;
-    FileSystem::GetExtension(path, extension);
-    FileSystem::StripExtension(path, 2);
-    path += GetFamily() + extension;
+    Nocturnal::Path np( path );
+    np.ReplaceFullExtension( GetFamily() + '.' + np.Extension() );
+    path = np.Get();
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -86,7 +83,6 @@ namespace Finder
     FINDER_SCOPE_TIMER((""));
 
     std::string result = m_Value;
-    FileSystem::GuaranteeDot( result );
 
     return result;
   }
@@ -96,8 +92,9 @@ namespace Finder
   {
     FINDER_SCOPE_TIMER((""));
 
-    FileSystem::StripExtension( path, 1 );
-    path += GetExtension();
+    Nocturnal::Path np( path );
+    np.ReplaceExtension( GetExtension() );
+    path = np.Get();
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -138,9 +135,9 @@ namespace Finder
   {
     FINDER_SCOPE_TIMER((""));
 
-    FileSystem::StripExtension( path );
-
-    path += GetDecoration();
+    Nocturnal::Path np( path );
+    np.ReplaceExtension( GetDecoration() );
+    path = np.Get();
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -225,7 +222,7 @@ namespace Finder
       result = m_Value; 
     }
 
-    FileSystem::GuaranteeSlash(result); 
+    Nocturnal::Path::GuaranteeSlash(result); 
     return result; 
   }
 
@@ -286,10 +283,8 @@ namespace Finder
   /////////////////////////////////////////////////////////////////////////////
   // Returns true if the extension matches one of the existing specs.
   // 
-  bool FilterSpec::IsExtensionValid( std::string ext ) const
+  bool FilterSpec::IsExtensionValid( const std::string& ext ) const
   {
-    FileSystem::GuaranteeDot( ext );
-
     OS_ModifierSpecConstDumbPtr::Iterator itr = m_Specs.Begin();
     OS_ModifierSpecConstDumbPtr::Iterator end = m_Specs.End();
     for ( ; itr != end; ++itr )

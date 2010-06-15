@@ -2,7 +2,6 @@
 #include "DetailsFrame.h"
 
 #include "Asset/AssetFile.h"
-#include "FileSystem/FileSystem.h"
 #include "UIToolKit/ImageManager.h"
 #include "RCS/RCS.h"
 
@@ -90,9 +89,8 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
 
   m_FileID->SetValue( file->GetFilePath() );
 
-  std::string folder( file->GetFilePath() );
-  FileSystem::StripLeaf( folder );
-  m_Folder->SetValue( folder );
+  Nocturnal::Path folder( file->GetFilePath() );
+  m_Folder->SetValue( folder.Directory() );
 
   bool gotRevisionInfo = false;
   RCS::File rcsFile( file->GetFilePath() );

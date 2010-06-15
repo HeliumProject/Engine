@@ -1,5 +1,6 @@
 #include "Parser.h"
-#include "FileSystem/FileSystem.h"
+
+#include "Foundation/File/Path.h"
 
 #include <tinyxml.h>
 
@@ -36,7 +37,8 @@ bool Parser::Parse( const std::string& file )
     return false;
   }
 
-  if ( !FileSystem::Exists( m_File ) )
+  Nocturnal::Path path( m_File );
+  if ( !path.Exists() )
   {
     m_LastError = "File does not exist: " + m_File;
     return false;

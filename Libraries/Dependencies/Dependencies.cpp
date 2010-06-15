@@ -33,9 +33,6 @@
 #include "Foundation/Container/Insert.h"
 #include "Foundation/String/Utilities.h"
 
-#include "FileSystem/File.h"
-#include "FileSystem/FileSystem.h"
-
 #include "Finder/Finder.h"
 #include "Finder/ProjectSpecs.h"
 
@@ -344,7 +341,7 @@ namespace Dependencies
       DependencyInfoPtr inFile = itGraph->second;
 
       //skip the output file:
-      if ( inFile->m_Path.compare( file->m_Path ) == 0 )
+      if ( inFile->m_Path == file->m_Path )
       {
         continue;
       }

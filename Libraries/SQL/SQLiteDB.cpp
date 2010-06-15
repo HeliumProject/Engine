@@ -4,7 +4,6 @@
 
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
 #include "Foundation/Exception.h"
 #include "Platform/Process.h"
 
@@ -64,40 +63,29 @@ bool SQLiteDB::Open( const std::string& dbFilename, const std::string& configFol
 
   // Initialize the SQLite DB and ensure it's not read-only
   NOC_ASSERT( !dbFilename.empty() );
-  m_DBFilename = dbFilename;
+  m_DBFile.Set( dbFilename );
+  m_DBFile.MakePath();
 
-  if ( m_DBFilename.empty() )
-  {
-    throw SQL::DBManagerException( m_DBManager, __FUNCTION__, "No database file path was specified." );
-  }
-
-  FileSystem::MakePath( m_DBFilename, true );
-
-  m_ConfigFolder = configFolder;
-  FileSystem::AppendPath( m_ConfigFolder, s_SQLiteDBFolder );
-
-  m_DataFilename = m_DBFilename;
-  FileSystem::StripLeaf( m_DataFilename );
-  FileSystem::AppendPath( m_DataFilename, s_SQLiteDataFile );
-
+  m_ConfigDir.Set( configFolder + '/' + s_SQLiteDBFolder );
+  m_DataFile.Set( m_DBFile.Directory() + s_SQLiteDataFile );
 
   //////////////////////////////////
   // Check the DB version
 
   // db does exists and we are NOT read-only - check that the file is writable
-  if ( FileSystem::Exists( m_DBFilename ) && !( m_OpenFlags & SQLITE_OPEN_READONLY ) )
+  if ( m_DBFile.Exists() && !( m_OpenFlags & SQLITE_OPEN_READONLY ) )
   {
-    if ( FileSystem::HasAttribute( m_DBFilename, FILE_ATTRIBUTE_READONLY ) )
+    if ( !m_DBFile.Writable() )
     {
       //throw SQL::DBManagerException( this, __FUNCTION__, "[%s] is read-only!", m_DBFilename.c_str() );
-      Log::Error( "SQLite DB [%s] is read-only.\n", m_DBFilename.c_str() );
+      Log::Error( "SQLite DB [%s] is read-only.\n", m_DBFile.c_str() );
       return false;
     }
   }
   // db does NOT exist and we can NOT create
-  else if ( !FileSystem::Exists( m_DBFilename ) && !( m_OpenFlags & SQLITE_OPEN_CREATE ) )
+  else if ( !m_DBFile.Exists() && !( m_OpenFlags & SQLITE_OPEN_CREATE ) )
   {
-    Log::Error( "SQLite DB [%s] does not exist.\n", m_DBFilename.c_str() );
+    Log::Error( "SQLite DB [%s] does not exist.\n", m_DBFile.c_str() );
     return false;
   }
 
@@ -111,7 +99,7 @@ bool SQLiteDB::Open( const std::string& dbFilename, const std::string& configFol
   // open the DB if we still need to
   if ( !m_DBManager->IsConnected() )
   {
-    m_DBManager->Open( m_DBFilename, m_OpenFlags );
+    m_DBManager->Open( m_DBFile.Get(), m_OpenFlags );
   }
 
   PrepareStatements();
@@ -140,12 +128,12 @@ bool SQLiteDB::Load()
   }
   else if ( !( m_OpenFlags & SQLITE_OPEN_CREATE ) )
   {
-    Log::Error( "SQLite DB [%s] is out of date and cannot be created.\n", m_DBFilename.c_str() );
+    Log::Error( "SQLite DB [%s] is out of date and cannot be created.\n", m_DBFile.c_str() );
     return false;
   }
   else if ( m_OpenFlags & SQLITE_OPEN_READONLY )
   {
-    Log::Error( "SQLite DB [%s] is out of date and the DB is read-only.\n", m_DBFilename.c_str() );
+    Log::Error( "SQLite DB [%s] is out of date and the DB is read-only.\n", m_DBFile.c_str() );
     return false;
   }
 
@@ -155,17 +143,14 @@ bool SQLiteDB::Load()
   std::string error;
 
   // create the cache DB from scratch
-  std::string dbCreateFilename = m_ConfigFolder;
-  FileSystem::AppendPath( dbCreateFilename, m_DBVersion );
-  dbCreateFilename += ".sql";
-  if ( !m_DBManager->FromFile( dbCreateFilename, m_DBFilename, error ) )
+  Nocturnal::Path dbCreateFile( m_ConfigDir.Get() + m_DBVersion + ".sql" );
+  if ( !m_DBManager->FromFile( dbCreateFile.Get(), m_DBFile.Get(), error ) )
   {
     throw SQL::DBManagerException( m_DBManager, __FUNCTION__, "%s", error.c_str() );
   }
 
   // If the data SQL file exists, read and execute the SQL into the DB
-  if ( FileSystem::Exists( m_DataFilename )
-    && !m_DBManager->ApplyFile( m_DataFilename, m_DBFilename, error ) )
+  if ( m_DataFile.Exists() && !m_DBManager->ApplyFile( m_DataFile.Get(), m_DBFile.Get(), error ) )
   {
     throw SQL::DBManagerException( m_DBManager, __FUNCTION__, "%s", error.c_str() );
   }
@@ -186,21 +171,16 @@ bool SQLiteDB::Load()
 //   AND we couldn't Update  
 bool SQLiteDB::IsOutOfDate()
 {
-  //  - the auth file exists and is newer than the DB
-  struct _stati64 dbFileStats;
-  if ( FileSystem::GetStats64( m_DBFilename, dbFileStats ) )
+  if ( !m_DBFile.Exists() )
   {
-    if ( ( FileSystem::Exists( m_DataFilename ) )
-      && ( FileSystem::UpdatedSince( m_DataFilename, dbFileStats.st_mtime ) ) )
-    {
       return true;
-    }
   }
-  else
+
+
+  if ( m_DataFile.ChangedSince( m_DBFile.ModifiedTime() ) )
   {
-    // the db doesn't exist
-    return true;
-  }    
+      return true;
+  }
 
   // - we couldn't select the version from the DB
   // - the version was empty
@@ -244,16 +224,15 @@ bool SQLiteDB::Update( const std::string& dbVersion )
   updateFileName << m_DBVersion;
   updateFileName << ".sql";
 
-  std::string updateFilePath = m_ConfigFolder;
-  FileSystem::AppendPath( updateFilePath, updateFileName.str() );
+  Nocturnal::Path updateFilePath( m_ConfigDir.Get() + '/' + updateFileName.str() );
 
-  if ( !FileSystem::Exists( updateFilePath ) )
+  if ( !updateFilePath.Exists() )
   {
     return false;
   }
 
   std::string error;
-  if ( !m_DBManager->ApplyFile( updateFilePath, m_DBFilename, error ) )
+  if ( !m_DBManager->ApplyFile( updateFilePath.Get(), m_DBFile.Get(), error ) )
   {    
     Log::Warning( error.c_str() );
     return false;
@@ -271,12 +250,12 @@ void SQLiteDB::UpdateDBFileVersionTable()
 {
   if ( !m_DBManager->IsConnected() )
   {
-    m_DBManager->Open( m_DBFilename, m_OpenFlags );
+    m_DBManager->Open( m_DBFile.Get(), m_OpenFlags );
   }
 
   if ( ( ( m_DBManager->ExecSQL( s_CreateFileVersionTableSQL ) )!= SQLITE_OK )
     || ( ( m_DBManager->ExecSQLVMPrintF( s_InsertDBFileVersionSQL,
-    FileSystem::GetLeaf( m_DBFilename ).c_str(), 
+    m_DBFile.Filename().c_str(), 
     m_DBVersion.c_str() ) ) != SQLITE_OK ) )
   {
     throw SQL::DBManagerException( m_DBManager, __FUNCTION__ );
@@ -308,7 +287,7 @@ void SQLiteDB::Recreate()
 
   if ( !m_DBManager->IsConnected() )
   {
-    m_DBManager->Open( m_DBFilename, m_OpenFlags );
+    m_DBManager->Open( m_DBFile.Get(), m_OpenFlags );
   }
 
   PrepareStatements();
@@ -333,7 +312,7 @@ bool SQLiteDB::SelectDBVersion( const std::string& sql, std::string& version )
 
   if ( !m_DBManager->IsConnected() )
   {
-    m_DBManager->Open( m_DBFilename, m_OpenFlags );
+    m_DBManager->Open( m_DBFile.Get(), m_OpenFlags );
   }
 
   try

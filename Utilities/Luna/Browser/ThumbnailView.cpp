@@ -9,13 +9,13 @@
 #include "Asset/AssetFile.h"
 #include "Asset/AssetFolder.h"
 #include "Asset/AssetTypeInfo.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "Editor/Orientation.h"
 #include "Editor/UpdateStatusEvent.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Finder/LunaSpecs.h"
-#include "FileSystem/FileSystem.h"
 #include "Inspect/DropSource.h"
 #include "Undo/Command.h"
 #include "UIToolKit/ImageManager.h"
@@ -335,7 +335,7 @@ u32 ThumbnailView::GetSelectedPaths( V_string& paths, bool useForwardSlashes )
         {
             if ( !useForwardSlashes )
             {
-                FileSystem::Win32Name( path, false );
+                Nocturnal::Path::MakeNative( path );
             }
             paths.push_back( path );
         }
@@ -978,7 +978,8 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
     bool viewOnTarget = onlyFiles && numSelected == 1;
     if ( viewOnTarget )
     {
-        viewOnTarget &= FileSystem::HasExtension( m_SelectedTiles.Front()->GetFile()->GetFilePath(), FinderSpecs::Extension::REFLECT_BINARY.GetExtension() );
+        Nocturnal::Path path( m_SelectedTiles.Front()->GetFile()->GetFilePath() );
+        viewOnTarget &= path.Extension() == FinderSpecs::Extension::REFLECT_BINARY.GetExtension();
     }
 
     // Prepare the menu
@@ -1443,7 +1444,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
                     Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
                     inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
                 }
-                else if ( FileSystem::HasExtension( tile->GetFile()->GetFilePath(), FinderSpecs::Extension::REFLECT_BINARY.GetExtension() )
+                else if ( Nocturnal::Path( tile->GetFile()->GetFilePath() ).Extension() == FinderSpecs::Extension::REFLECT_BINARY.GetExtension()
                     && ( findIcon = m_ModifierSpecIcons.find( &FinderSpecs::Extension::REFLECT_BINARY ) ) != m_ModifierSpecIcons.end() )
                 {
                     Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
@@ -2140,7 +2141,7 @@ void ThumbnailView::OnThumbnailLoaded( Luna::ThumbnailLoadedEvent& args )
         else
         {
             // the extension is used to identify this type of file
-            std::string extension = FileSystem::GetExtension( args.GetAssetFile()->GetFilePath(), 1 );
+            std::string extension = Nocturnal::Path( args.GetAssetFile()->GetFilePath() ).Extension();
             toLower( extension );
 
             // look for a cached thumbnail for this extension
@@ -2155,8 +2156,8 @@ void ThumbnailView::OnThumbnailLoaded( Luna::ThumbnailLoadedEvent& args )
                 WORD index = 0;
 
                 // the win32 function below expects pretty paths
-                std::string win32;
-                FileSystem::Win32Name( args.GetAssetFile()->GetFilePath(), win32 );
+                std::string win32 = args.GetAssetFile()->GetFilePath();
+                Nocturnal::Path::MakeNative( win32 );
 
                 // get the icon resource for this example file
                 char path[MAX_PATH];

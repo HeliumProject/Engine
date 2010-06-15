@@ -78,6 +78,31 @@ bool Directory::Open(const std::string &path, const std::string &spec /* = "" */
   return Find(query);
 }
 
+void Directory::GetFiles( const std::string& path, Nocturnal::S_Path& paths, const std::string& spec, bool recursive )
+{
+  for ( Directory dir( path ); !dir.IsDone(); dir.Next() )
+  {
+      const DirectoryItem& item = dir.GetItem();
+      paths.insert( Nocturnal::Path( item.m_Path ) );
+  }
+
+  if ( recursive )
+  {
+      for ( Directory dir ( path, "*.*", DirectoryFlags::SkipFiles ); !dir.IsDone(); dir.Next() )
+      {
+        if ( dir.GetItem().m_Flags & DirectoryItemFlags::Directory )
+        {
+            GetFiles( dir.GetItem().m_Path, paths, spec, recursive );
+        }
+      }
+  }
+}
+
+void Directory::GetFiles( Nocturnal::S_Path& paths, const std::string& spec, bool recursive )
+{
+    GetFiles( m_Path, paths, spec, recursive );
+}
+
 bool Directory::Find(const std::string& query)
 {
   DWORD error = 0x0;

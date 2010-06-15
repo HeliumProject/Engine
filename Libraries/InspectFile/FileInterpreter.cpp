@@ -14,7 +14,6 @@
 #include "Asset/AssetFlags.h"
 #include "Finder/Finder.h"
 #include "Finder/ExtensionSpecs.h"
-#include "FileSystem/FileSystem.h"
 #include "UIToolKit/FileDialog.h"
 #include "Foundation/Log.h"
 #include "Foundation/String/Wildcard.h"
@@ -247,17 +246,17 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
 
   if ( !text.empty() )
   {
-    FileSystem::CleanName( text, false );
+      Nocturnal::Path path( text );
 
-    if ( FileSystem::IsFile( text ) )
-    {
-      return true;
-    }
+      if ( path.IsFile() )
+      {
+          return true;
+      }
 
     std::string dir;
-    if ( FileSystem::IsFolder( text ) )
+    if ( path.IsDirectory() )
     {
-      dir = text;
+      dir = path.Get();
     }
 
     // case 1: the path is right but the file is wrong
@@ -267,7 +266,7 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
       _splitpath(text.c_str(), drive, folder, file, ext);
       std::ostringstream directory;
       directory << drive << folder;
-      if (FileSystem::Exists( directory.str() ))
+      if ( Nocturnal::Path( directory.str() ).Exists() )
       {
         dir = directory.str();
       }
@@ -281,7 +280,7 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
       while (token)
       {
         temp = temp + token + "/";
-        if ((strlen(token) == 2 && token[1] == ':') || FileSystem::Exists(temp))
+        if ((strlen(token) == 2 && token[1] == ':') || Nocturnal::Path( temp ).Exists() )
         {
           dir = dir + token + "/";
           token = strtok(NULL, "/");

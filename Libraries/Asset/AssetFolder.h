@@ -11,8 +11,8 @@ namespace Asset
   class ASSET_API AssetFolder : public Reflect::Element
   {
   public:
-    std::string m_Directory;
-    std::string m_FullPath;
+      Nocturnal::Path m_Directory;
+      Nocturnal::Path m_FullPath;
 
   public:
     AssetFolder( const std::string& fullPath );

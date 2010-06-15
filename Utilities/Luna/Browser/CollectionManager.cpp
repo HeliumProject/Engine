@@ -4,7 +4,6 @@
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Checksum/MD5.h"
 #include "Foundation/Flags.h"
-#include "FileSystem/FileSystem.h"
 #include "Foundation/String/Utilities.h"
 #include "Reflect/Element.h"
 #include "Reflect/Version.h"
@@ -160,10 +159,9 @@ bool CollectionManager::RenameCollection( AssetCollection* collection, const std
         foundCollection->SetPath( path );
 
         // erase the old reference from the map
-        if ( !filePath.empty() && path.Exists() )
+        if ( path.Exists() )
         {
-            FileSystem::Win32Name( oldFilePath );
-            ::DeleteFile( oldFilePath.c_str() );
+            path.Delete();
         }
 
         RaiseChanged( GetClass()->FindField( &CollectionManager::m_AssetCollections ) );    
@@ -182,10 +180,10 @@ void CollectionManager::DeleteCollection( AssetCollection* collection )
 
     CloseCollection( collection );
 
-    if ( !filePath.empty() && FileSystem::Exists( filePath ) )
+    Nocturnal::Path path( filePath );
+    if ( !filePath.empty() && path.Exists() )
     {
-        FileSystem::Win32Name( filePath );
-        ::DeleteFile( filePath.c_str() );
+        path.Delete();
     }
 }
 

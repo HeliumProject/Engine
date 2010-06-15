@@ -359,7 +359,7 @@ namespace Finder
     void AddSpec( const DecorationSpec& spec );
     virtual std::string GetDialogFilter() const NOC_OVERRIDE;
     virtual std::string GetFilter() const NOC_OVERRIDE;
-    bool IsExtensionValid( std::string ext ) const;
+    bool IsExtensionValid( const std::string& ext ) const;
 
   protected:
     void DoAddSpec( const ModifierSpec& spec );

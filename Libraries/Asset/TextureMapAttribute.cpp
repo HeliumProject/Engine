@@ -1,7 +1,6 @@
 #include "TextureMapAttribute.h"
 
 #include "StandardShaderAsset.h"
-#include "FileSystem/FileSystem.h"
 
 using namespace Asset;
 

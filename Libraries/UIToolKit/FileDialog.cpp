@@ -4,9 +4,8 @@
 
 #include "MessageDialog.h"
 
-#include "FileSystem/FileSystem.h"
-
 #include "Platform/Types.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "Foundation/String/Tokenize.h"
 
@@ -123,7 +122,7 @@ namespace UIToolKit
   wxString FileDialog::GetPath() const
   {
     std::string path( __super::GetPath().c_str() );
-    FileSystem::CleanName( path );
+    Nocturnal::Path::Normalize( path );
     return path.c_str();
   }
 
@@ -138,8 +137,8 @@ namespace UIToolKit
     size_t count = paths.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-      std::string file;
-      FileSystem::CleanName( paths[n].c_str(), file );
+        std::string file = paths[ n ].c_str();
+      Nocturnal::Path::Normalize( file );
       paths[n] = file.c_str();
     }
   }

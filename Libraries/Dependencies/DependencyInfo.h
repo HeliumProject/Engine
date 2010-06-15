@@ -9,8 +9,9 @@
 
 #include "Finder/Finder.h"
 #include "Foundation/Container/OrderedSet.h"
-#include "Platform/Types.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Memory/SmartPtr.h"
+#include "Platform/Types.h"
 
 typedef Nocturnal::OrderedSet< std::string > OS_string;
 
@@ -101,7 +102,7 @@ namespace Dependencies
 
     public:
 
-        std::string               m_Path;
+        Nocturnal::Path           m_Path;
         std::string               m_MD5;
         std::string               m_Signature;
         V_string                  m_SignatureTrace;

@@ -6,7 +6,6 @@
 #include "SceneNode.h"
 
 #include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
 #include "Foundation/String/Wildcard.h"
 #include "Foundation/String/Tokenize.h"
 
@@ -289,7 +288,7 @@ IDirect3DTexture9* Luna::LoadTexture( IDirect3DDevice9* device, const std::strin
 
   if (!file.empty())
   {
-    if ( FileSystem::Exists( file ) )
+      if ( Nocturnal::Path( file ).Exists() )
     {
       D3DFORMAT textureFormat = D3DFMT_DXT1; 
 

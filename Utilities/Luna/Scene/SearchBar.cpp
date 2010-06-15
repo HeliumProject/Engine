@@ -5,7 +5,6 @@
 #include "Attribute/AttributeCategories.h"
 #include "Foundation/Boost/Regex.h" 
 #include "Foundation/Log.h"
-#include "FileSystem/FileSystem.h"
 #include "EntityAssetSet.h"
 #include "Region.h"
 #include "SceneEditor.h"
@@ -387,8 +386,8 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
             if ( entityClassSet )
             {
                 entityClassPath = entityClassSet->GetName();
-                FileSystem::GetLeaf( entityClassPath, entityClassName );
-                FileSystem::StripExtension( entityClassName );
+                Nocturnal::Path path( entityClassPath );
+                entityClassName = path.Basename();
 
                 Asset::EntityAsset* entityClass = entityClassSet->GetEntityAsset();
                 if ( entityClass )

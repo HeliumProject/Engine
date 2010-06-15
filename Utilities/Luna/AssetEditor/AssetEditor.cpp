@@ -22,7 +22,8 @@
 #include "Asset/EntityAsset.h"
 #include "Asset/StandardShaderAsset.h"
 
-#include "FileSystem/FileSystem.h"
+#include "Foundation/File/Path.h"
+
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Finder/LunaSpecs.h"
@@ -956,7 +957,8 @@ bool AssetEditor::DoOpen( const S_string& files )
     for ( ; fileItr != fileEnd; ++fileItr )
     {
         wxBusyCursor wait;
-        if ( FileSystem::Exists( *fileItr ) )
+        Nocturnal::Path path( *fileItr );
+        if ( path.Exists() )
         {
             std::string error;
             Luna::AssetClass* asset = m_AssetManager.Open( *fileItr, error, true );

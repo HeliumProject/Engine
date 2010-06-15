@@ -46,7 +46,6 @@
 #include "Foundation/Log.h"
 #include "Content/ContentVersion.h"
 #include "Editor/MRUData.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Finder/Finder.h"
@@ -347,9 +346,8 @@ SceneEditor::SceneEditor()
     V_string::const_iterator end = SceneEditorPreferences()->GetMRU()->GetPaths().end();
     for ( ; itr != end; ++itr )
     {
-        std::string path = *itr;
-        FileSystem::CleanName( path );
-        if ( FileSystem::Exists( path ) )
+        Nocturnal::Path path( *itr );
+        if ( path.Exists() )
         {
             paths.push_back( *itr );
         }
@@ -1382,7 +1380,8 @@ void SceneEditor::OnNew(wxCommandEvent& event)
 bool SceneEditor::DoOpen( const std::string& path )
 {
     bool opened = false;
-    if ( !path.empty() && FileSystem::Exists( path ) )
+    Nocturnal::Path nocPath( path );
+    if ( !path.empty() && nocPath.Exists() )
     {
         if ( m_SceneManager.CloseAll() )
         {
@@ -3428,19 +3427,20 @@ bool SceneEditor::ValidateDrag( const Inspect::DragArgs& args )
             fileItr != fileEnd && !canHandleArgs;
             ++fileItr )
         {
-            const std::string& path = *fileItr;
+            Nocturnal::Path path( *fileItr );
 
-            if ( !path.empty() && FileSystem::Exists( path ) )
+            if ( path.Exists() )
             {
-                if ( FileSystem::HasExtension( path, FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() ) )
+                std::string ext = path.Extension();
+                if ( ext == FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() )
                 {
                     canHandleArgs = true;
                 }
-                else if ( FileSystem::HasExtension( path, FinderSpecs::Asset::ZONE_DECORATION.GetDecoration() ) )
+                else if ( ext == FinderSpecs::Asset::ZONE_DECORATION.GetDecoration() )
                 {
                     canHandleArgs = true;
                 }
-                else if ( FileSystem::HasExtension( path, FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() ) )
+                else if ( ext == FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() )
                 {
                     canHandleArgs = true;
                 }
@@ -3477,18 +3477,19 @@ wxDragResult SceneEditor::Drop( const Inspect::DragArgs& args )
             for ( S_string::const_iterator fileItr = fileList->GetFilePaths().begin(),
                 fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
             {
-                const std::string& path = *fileItr;
-                if ( !path.empty() && FileSystem::Exists( path ) )
+                Nocturnal::Path path( *fileItr );
+                if ( path.Exists() )
                 {
-                    if ( FileSystem::HasExtension( path, FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() ) )
+                    std::string ext = path.Extension();
+                    if ( ext == FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() )
                     {
                         levels.push_back( path );
                     }
-                    else if ( FileSystem::HasExtension( path, FinderSpecs::Asset::ZONE_DECORATION.GetDecoration() ) )
+                    else if ( ext == FinderSpecs::Asset::ZONE_DECORATION.GetDecoration() )
                     {
                         zones.push_back( path );
                     }
-                    else if ( FileSystem::HasExtension( path, FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() ) )
+                    else if ( ext == FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() )
                     {
                         entities.push_back( path );
                     }

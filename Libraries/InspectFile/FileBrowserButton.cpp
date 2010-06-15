@@ -2,7 +2,6 @@
 #include "FileBrowserButton.h"
 
 #include "Inspect/Canvas.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Foundation/Container/Insert.h" 
 
@@ -56,7 +55,7 @@ void FileBrowserButton::ReadPathData( std::string& path ) const
     ReadData( path );
     if ( !path.empty() )
     {
-        FileSystem::CleanName( path );
+        Nocturnal::Path::Normalize( path );
     }
 }
 
@@ -165,7 +164,7 @@ std::string FileBrowserButton::GetPath()
 void FileBrowserButton::SetPath( const std::string& path )
 {
     m_Path = path;
-    FileSystem::CleanName( m_Path );
+    Nocturnal::Path::Normalize( m_Path );
     if ( IsBound() )
     {
         WriteData( m_Path );

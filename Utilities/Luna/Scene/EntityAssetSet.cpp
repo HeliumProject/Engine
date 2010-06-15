@@ -14,7 +14,6 @@
 
 #include "Finder/Finder.h"
 #include "Finder/ContentSpecs.h"
-#include "FileSystem/FileSystem.h"
 #include "Foundation/Log.h"
 
 #include "Asset/EntityAsset.h"
@@ -102,7 +101,7 @@ void EntityAssetSet::LoadAssetClass()
                     cube->SetBounds( minima, maxima );
                     cube->Update();
                 }
-                else if (FileSystem::Exists( m_ArtFile ))
+                else if ( Nocturnal::Path( m_ArtFile ).Exists() )
                 {
                     try
                     {

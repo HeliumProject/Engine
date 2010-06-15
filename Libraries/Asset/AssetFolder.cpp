@@ -1,6 +1,6 @@
 #include "AssetFolder.h"
 
-#include "FileSystem/FileSystem.h"
+#include "Foundation/File/Path.h"
 
 using namespace Asset;
 
@@ -15,8 +15,7 @@ void AssetFolder::EnumerateClass( Reflect::Compositor<AssetFolder>& comp )
 // Ctor
 //
 AssetFolder::AssetFolder( const std::string& fullPath )
+: m_FullPath( fullPath )
 {
-  m_FullPath = fullPath;
-  FileSystem::CleanName( m_FullPath, false );
-  FileSystem::GetLeaf( m_FullPath, m_Directory );
+    m_Directory.Set( m_FullPath.Directory() );
 }

@@ -19,7 +19,6 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/Log.h"
 #include "Debug/Exception.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Finder/Finder.h"
@@ -157,7 +156,7 @@ inline bool CheckCancelQuery( bool* cancel )
 /////////////////////////////////////////////////////////////////////////////
 static inline void PrependFilePath( const std::string& projectAssets, std::string& path )
 {
-    if ( !FileSystem::HasPrefix( projectAssets, path ) )
+    if ( path.find( projectAssets ) != 0 )
     {
         path = projectAssets + path;
     }
@@ -214,10 +213,9 @@ bool CacheDB::Open( const std::string& dbFilename, const std::string& configFold
 bool CacheDB::Load()
 {
     std::string findVersionStr = "-" + m_DBVersion + ".";
-    if ( m_DataFilename.find( findVersionStr ) == std::string::npos )
+    if ( m_DataFile.Get().find( findVersionStr ) == std::string::npos )
     {
-        std::string::size_type idx = m_DataFilename.rfind( '.' );
-        m_DataFilename.insert( idx, "-" + m_DBVersion );
+        m_DataFile.ReplaceExtension( "-" + m_DBVersion );
     }
 
     return __super::Load();
@@ -689,11 +687,11 @@ void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, N
     InsertAssetAttributes( assetFile, cancel );
     InsertAssetUsages( assetFile, assetFiles, visited, cancel );
 
-    if ( FileSystem::HasExtension( assetFile->GetFilePath(), FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() ) )
+    if ( assetFile->GetPath().Extension() == FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() )
     {
         InsertAssetShaders( assetFile, assetFiles, visited, cancel );
     }
-    else if ( FileSystem::HasExtension( assetFile->GetFilePath(), FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() ) )
+    else if ( assetFile->GetPath().Extension() == FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() )
     {
         InsertLevelEntities( assetFile, assetFiles, visited, cancel );
     }

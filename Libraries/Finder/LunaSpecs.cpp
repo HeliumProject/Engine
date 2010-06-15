@@ -4,7 +4,6 @@
 #include "ExtensionSpecs.h"
 #include "ProjectSpecs.h"
 #include "Foundation/Environment.h"
-#include "FileSystem/FileSystem.h"
 
 namespace FinderSpecs
 {

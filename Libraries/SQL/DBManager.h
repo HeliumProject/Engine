@@ -6,6 +6,7 @@
 #include "Platform/Types.h"
 #include "Platform/Compiler.h"
 #include "Foundation/Log.h"
+#include "Foundation/File/Path.h"
 
 
 namespace SQL
@@ -63,7 +64,7 @@ namespace SQL
     virtual int         GetLastErrCode() { return m_LastErrCode; }
     virtual std::string GetLastErrMsg() { return m_LastErrMsg; }
 
-    const std::string&  GetDBFilename() const { return m_DBFilename; }
+    const std::string&  GetDBFilename() const { return m_DBFile.Get(); }
     
     const std::string&  GetFriendlyName() const { return m_FriendlyName; }
 
@@ -83,7 +84,7 @@ namespace SQL
     //
 
     std::string   m_FriendlyName;
-    std::string   m_DBFilename;
+    Nocturnal::Path m_DBFile;
     bool          m_IsTransOpen;
     int           m_NumStmtHandles;
     int           m_LastErrCode;

@@ -2,7 +2,7 @@
 #include "BuildInfo.h"
 
 #include "Foundation/Boost/Regex.h"
-#include "FileSystem/FileSystem.h"
+#include "Foundation/File/Path.h"
 
 using namespace Luna;
 
@@ -14,8 +14,7 @@ std::string LevelInfo::GetStrippedName() const
 {
   const boost::regex s_NonWords( "(\\W)" );
   const boost::regex s_TrailingSlashes( "(/+$)" );
-  std::string name( m_Name );
-  FileSystem::StripLeaf( name );
+  std::string name = Nocturnal::Path( m_Name ).Directory();
   name = boost::regex_replace( name, s_TrailingSlashes, "" );
   name = boost::regex_replace( name, s_NonWords, "_" );
   return name;

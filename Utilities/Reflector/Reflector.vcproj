@@ -198,10 +198,6 @@
 			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{02269037-5B51-467E-A224-B56D816CDFD9}"
-			RelativePathToProject=".\libraries\FileSystem\FileSystem.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{085AF6CC-A09C-4B8D-98B7-C57BC9D7CB18}"
 			RelativePathToProject=".\libraries\Inspect\Inspect.vcproj"
 		/>

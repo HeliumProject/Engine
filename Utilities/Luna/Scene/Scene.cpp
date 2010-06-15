@@ -15,7 +15,6 @@
 #include "Asset/Entity.h"
 #include "Asset/SceneManifest.h"
 #include "Asset/Exceptions.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/LunaSpecs.h"
 
 #include "Browser/Browser.h"
@@ -1923,9 +1922,9 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 
     if ( !m_Manager->IsCurrentScene( this ) )
     {
-        suffix = m_File->GetFileName();
-        FileSystem::StripExtension( suffix );
-        suffix = std::string (" (") + suffix + ")";
+        Nocturnal::Path path( m_File->GetFileName() );
+        path.RemoveExtension();
+        suffix = std::string (" (") + path.Get() + ")";
     }
 
     switch (args.m_Type)
@@ -3474,7 +3473,7 @@ void Scene::LoadVisibility()
 {
     // attempt to load up our visibility file...
     std::string filename; 
-    if( GetVisibilityFile(filename) && FileSystem::Exists(filename) )
+    if( GetVisibilityFile(filename) && Nocturnal::Path(filename).Exists() )
     {
         m_VisibilityDB = Reflect::Archive::FromFile<Content::SceneVisibility>(filename); 
     }

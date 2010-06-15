@@ -4,8 +4,8 @@
 
 #include "Asset/ShaderAsset.h"
 #include "Asset/ColorMapAttribute.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/AssetSpecs.h"
+#include "Foundation/File/Directory.h"
 #include "igDXRender/d3dmanager.h"
 
 using namespace Luna;
@@ -100,24 +100,23 @@ void* ThumbnailLoader::LoadThread::Entry()
         }
         else
         {
-            V_string files;
-            Nocturnal::Path thumbnailFolder( m_Loader.m_ThumbnailDirectory + '/' + file->GetPath().Hash() );
-            FileSystem::GetFiles( thumbnailFolder.Get(), files );
+            Nocturnal::Path thumbnailFolderPath( m_Loader.m_ThumbnailDirectory + '/' + file->GetPath().Hash() );
+            Nocturnal::Directory thumbnailFolder( thumbnailFolderPath.Get() );
 
-            for ( V_string::const_iterator itr = files.begin(), end = files.end();
-                itr != end;
-                ++itr )
+            while( !thumbnailFolder.IsDone() )
             {
                 IDirect3DTexture9* texture = NULL;
-                if ( texture = LoadTexture( device, *itr ) )
+                if ( texture = LoadTexture( device, thumbnailFolder.GetItem().m_Path ) )
                 {
                     ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_D3DManager, texture );
                     args.m_Textures.push_back( thumbnail );
                 }
+
+                thumbnailFolder.Next();
             }
 
             // Include the color map of a shader as a possible thumbnail image
-            if ( FileSystem::HasExtension( file->GetFilePath(), FinderSpecs::Asset::SHADER_DECORATION.GetDecoration() ) )
+            if ( file->GetPath().Extension() == FinderSpecs::Asset::SHADER_DECORATION.GetDecoration() )
             {
                 Asset::ShaderAssetPtr shader = Reflect::ObjectCast< Asset::ShaderAsset >( Asset::AssetFile::GetAssetClass( file ) );
                 if ( shader )
@@ -127,11 +126,10 @@ void* ThumbnailLoader::LoadThread::Entry()
                     {
                         if ( !colorMap->GetPath().Get().empty() )
                         {
-                            std::string colorMapPath = colorMap->GetPath().Get();
-                            if ( FileSystem::Exists( colorMapPath ) && Luna::IsSupportedTexture( colorMapPath ) )
+                            if ( colorMap->GetPath().Exists() && Luna::IsSupportedTexture( colorMap->GetPath().Get() ) )
                             {
                                 IDirect3DTexture9* texture = NULL;
-                                if ( texture = LoadTexture( device, colorMapPath ) )
+                                if ( texture = LoadTexture( device, colorMap->GetPath().Get() ) )
                                 {
                                     ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_D3DManager, texture );
                                     args.m_Textures.push_back( thumbnail );

@@ -3,7 +3,6 @@
 
 #include "AssetEditorGenerated.h"
 
-#include "FileSystem/FileSystem.h"
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/FileDialog.h"
 
@@ -83,7 +82,8 @@ int PromptNewExistingDlg::ShowModal()
         }
         else
         {
-            if ( !FileSystem::IsFile( m_Panel->m_FilePathExisting->GetValue().c_str() ) )
+            Nocturnal::Path path( m_Panel->m_FilePathExisting->GetValue().c_str() );
+            if ( !path.IsFile() )
             {
                 std::string error( "Invalid file: " );
                 error += m_Panel->m_FilePathExisting->GetValue().c_str();
@@ -136,7 +136,7 @@ std::string PromptNewExistingDlg::GetFilePath() const
     }
 
     // get and clean user input
-    FileSystem::CleanName( filePath );
+    Nocturnal::Path::Normalize( filePath );
     return filePath;
 }
 
@@ -167,21 +167,20 @@ void PromptNewExistingDlg::OnRadioButtonSelected( wxCommandEvent& args )
 // 
 void PromptNewExistingDlg::OnButtonExistingClicked( wxCommandEvent& args )
 {
-    std::string directory;
+    Nocturnal::Path dir;
     std::string file;
     if ( !m_Panel->m_FilePathExisting->GetValue().IsEmpty() )
     {
         // get and clean user input
-        directory = m_Panel->m_FilePathExisting->GetValue().c_str();
-        FileSystem::CleanName( directory );
-        if ( FileSystem::IsFile( directory ) )
+        dir.Set( m_Panel->m_FilePathExisting->GetValue().c_str() );
+        if ( dir.IsFile() )
         {
-            file = FileSystem::GetLeaf( directory );
-            FileSystem::StripLeaf( directory );
+            file = dir.Filename();
+            dir.Set( dir.Directory() );
         }
     }
 
-    UIToolKit::FileDialog dlg( this, "Open", directory.c_str(), file.c_str(), "", UIToolKit::FileDialogStyles::DefaultOpen );
+    UIToolKit::FileDialog dlg( this, "Open", dir.c_str(), file.c_str(), "", UIToolKit::FileDialogStyles::DefaultOpen );
     if ( m_FinderSpec )
     {
         dlg.SetFilter( m_FinderSpec->GetDialogFilter() );

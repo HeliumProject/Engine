@@ -9,7 +9,6 @@
 #include "Foundation/Environment.h"
 #include "Foundation/Version.h"
 #include "Foundation/Environment.h"
-#include "FileSystem/FileSystem.h"
 #include "Platform/Mutex.h"
 
 // max storage size for a query string
@@ -25,8 +24,6 @@
 #define STATS_DB_NAME   "AssetBuilder"
 #define TOOLS_DB_NAME   "Tools"
 #define USERS_DB_NAME   "Users"
-
-#include "FileSystem/FileSystem.h"
 
 // max storage size for a query string
 #define MAX_QUERY_LENGTH  2048
@@ -312,7 +309,7 @@ static bool InitializeRowIDs()
     Log::Warning( "Environment variable not set: %s.\n", "NOC_ASSETS_BRANCH_NAME" );
     return false;
   }
-  FileSystem::CleanName( assetBranch );
+  Nocturnal::Path::Normalize( assetBranch );
 
   if ( !SelectID( s_SelectToolsBranchIDSQL, s_InsertToolsBranchSQL, assetBranch.c_str(), g_AssetBranchID ) )
   {
@@ -327,7 +324,7 @@ static bool InitializeRowIDs()
     Log::Warning( "Environment variable not set: %s.\n", "NOC_CODE_BRANCH_NAME" );
     return false;
   }
-  FileSystem::CleanName( codeBranch );
+  Nocturnal::Path::Normalize( codeBranch );
 
   if ( !SelectID( s_SelectToolsBranchIDSQL, s_InsertToolsBranchSQL, codeBranch.c_str(), g_CodeBranchID ) )
   {

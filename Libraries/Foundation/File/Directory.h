@@ -4,6 +4,7 @@
 
 #include "Foundation/API.h"
 #include "Foundation/Automation/Event.h"
+#include "Foundation/File/Path.h"
 
 namespace Nocturnal
 {
@@ -70,6 +71,9 @@ namespace Nocturnal
 
     void Reset();
     bool Open(const std::string &path, const std::string &spec = "*.*", u32 flags = DirectoryFlags::Default);
+
+    static void GetFiles( const std::string& path, Nocturnal::S_Path& paths, const std::string& spec = "*.*", bool recursive = false );
+    void GetFiles( Nocturnal::S_Path& paths, const std::string& spec = "*.*", bool recursive = false );
 
   private:
     bool Find(const std::string& query = "");

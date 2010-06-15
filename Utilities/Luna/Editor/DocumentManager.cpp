@@ -3,7 +3,6 @@
 
 #include "YesNoAllDlg.h"
 
-#include "FileSystem/FileSystem.h"
 #include "RCS/RCS.h"
 
 #include <algorithm>

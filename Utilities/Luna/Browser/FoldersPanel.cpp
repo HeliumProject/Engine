@@ -3,7 +3,6 @@
 
 #include "DirectoryCtrl.h"
 
-#include "FileSystem/FileSystem.h"
 #include "Inspect/ClipboardDataObject.h"
 #include "Inspect/ClipboardFileList.h"
 #include "Inspect/DropTarget.h"

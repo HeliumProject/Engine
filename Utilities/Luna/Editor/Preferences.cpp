@@ -2,7 +2,6 @@
 #include "Preferences.h"
 
 #include "Finder/Finder.h"
-#include "FileSystem/FileSystem.h"
 #include "Foundation/CommandLine.h"
 
 using namespace Luna;

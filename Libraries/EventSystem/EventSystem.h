@@ -7,6 +7,7 @@
 #include "Exceptions.h"
 
 #include "Platform/Types.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 #include "UID/TUID.h"
@@ -46,8 +47,8 @@ namespace Nocturnal
             void StompEventsFile( const std::string& eventsFile, const V_EventPtr& listOfEvents );
 
         private:
-            std::string m_RootDirPath;
-            std::string m_HandledEventsFile;
+            Nocturnal::Path m_RootDirPath;
+            Nocturnal::Path m_HandledEventsFile;
             bool m_WriteBinaryFormat;
 
             void GetEvents( V_EventPtr& listOfEvents, bool sorted = false );

@@ -63,6 +63,14 @@ void Path::MakeNative( std::string& path )
     std::replace( path.begin(), path.end(), s_InternalPathSeparator, Platform::PathSeparator );
 }
 
+void Path::GuaranteeSlash( std::string& path )
+{
+  if ( !path.empty() && *path.rbegin() != '/' )
+  {
+    path += "/";
+  }
+}
+
 bool Path::Exists( const std::string& path )
 {
     Path native( path );
@@ -122,7 +130,7 @@ bool Path::Writable() const
     Platform::Stat stat;
     if ( !Platform::StatPath( Native().c_str(), stat ) )
     {
-        return false;
+        return true;
     }
 
     return ( stat.m_Mode & Platform::ModeFlags::Write ) == Platform::ModeFlags::Write;
@@ -183,6 +191,16 @@ u64 Path::AccessTime() const
     return 0;
 }
 
+i64 Path::Size() const
+{
+    Platform::Stat stat;
+    if ( Stat( stat ) )
+    {
+        return stat.m_Size;
+    }
+
+    return 0;
+}
 
 bool Path::MakePath() const
 {
@@ -266,6 +284,22 @@ std::string Path::Extension() const
     return m_Path.substr( m_Path.rfind( '.' ) + 1 );
 }
 
+std::string Path::FullExtension() const
+{
+    std::string filename = Filename();
+    return filename.substr( filename.find_first_of( '.' ) + 1 );
+}
+
+void Path::RemoveExtension()
+{
+    m_Path.erase( m_Path.find_last_of( '.' ) );
+}
+
+void Path::RemoveFullExtension()
+{
+    m_Path.erase( m_Path.find_first_of( '.', m_Path.find_last_of( '/' ) ) );
+}
+
 std::string Path::Native() const
 {
     std::string native = m_Path;
@@ -299,7 +333,20 @@ std::string Path::Signature()
 
 void Path::ReplaceExtension( const std::string& newExtension )
 {
-    m_Path.replace( m_Path.rfind( '.' ) + 1, newExtension.length(), newExtension );
+    int offset = m_Path.rfind( '.' );
+    if ( offset >= 0 )
+    {
+        m_Path.replace( offset + 1, newExtension.length(), newExtension );
+    }
+    else
+    {
+        m_Path += '.' + newExtension;
+    }
+}
+
+void Path::ReplaceFullExtension( const std::string& newExtension )
+{
+    m_Path.replace( m_Path.find_first_of( '.', m_Path.find_last_of( '/' ) ) + 1, newExtension.length(), newExtension );
 }
 
 bool Path::Exists() const
@@ -334,7 +381,7 @@ const char* Path::c_str() const
     return m_Path.c_str();
 }
 
-std::string Path::FileCRC()
+std::string Path::FileCRC() const
 {
     u32 crc = Nocturnal::FileCrc32( m_Path.c_str() );
 
@@ -343,17 +390,17 @@ std::string Path::FileCRC()
     return str.str();
 }
 
-bool Path::VerifyFileCRC( const std::string& hash )
+bool Path::VerifyFileCRC( const std::string& hash ) const
 {
     return FileCRC().compare( hash ) == 0;
 }
 
-std::string Path::FileMD5()
+std::string Path::FileMD5() const
 {
     return Nocturnal::FileMD5( m_Path.c_str() );
 }
 
-bool Path::VerifyFileMD5( const std::string& hash )
+bool Path::VerifyFileMD5( const std::string& hash ) const
 {
     return FileMD5().compare( hash ) == 0;
 }

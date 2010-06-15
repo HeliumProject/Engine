@@ -298,10 +298,11 @@ public:
                 V_Element loadedElements;
                 V_Element serializeElements;
 
-                NOC_ASSERT( FileSystem::Exists( objectsFile ) );
+                Nocturnal::Path path( objectsFile );
+                NOC_ASSERT( path.Exists() );
                 
-                if( FileSystem::GetSize( objectsFile ) )                
-                  Archive::FromFile( objectsFile, loadedElements );
+                if( path.Size() )                
+                  Archive::FromFile( path, loadedElements );
 
                 V_Element::iterator elemItor = loadedElements.begin();
                 V_Element::iterator elemEnd  = loadedElements.end();
@@ -421,7 +422,7 @@ public:
               Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( entity->GetClassSet()->GetEntityAsset(), true );
               std::string lightFile = entity->GetClassSet()->GetContentFile();
 
-              if( FileSystem::Exists( lightFile ) )
+              if( Nocturnal::Path( lightFile ).Exists() )
               {
                 Asset::Entity* assetEntity = entity->GetPackage< Asset::Entity >();
                 editor->PostCommand( new SceneImportCommand( scene, lightFile, ImportActions::Import, ImportFlags::None, entity, Reflect::GetType< ContentClass >() ) );
@@ -496,27 +497,23 @@ public:
               std::string filePath;
               try
               {
-                std::string assetPath = entity->GetEntityAssetPath();
-                FileSystem::StripLeaf( assetPath );
+                  std::string assetPath = Nocturnal::Path( entity->GetEntityAssetPath() ).Directory();
                 UIToolKit::FileDialog dialog( NULL, "export children to file", assetPath.c_str(), wxEmptyString, FinderSpecs::Extension::REFLECT_BINARY.GetDialogFilter(), UIToolKit::FileDialogStyles::DefaultSave );
                 if ( dialog.ShowModal() == wxID_OK )
                 {
                   filePath = dialog.GetPath();
                   if ( !filePath.empty() )
                   {
-                    std::string dummy = filePath;
-                    FileSystem::StripLeaf( dummy );
-                    FileSystem::MakePath( dummy );
-                    FILE* file = fopen( filePath.c_str(), "r" );
-                    fclose( file );
+                      Nocturnal::Path path( filePath );
+                      path.Create();
+                        NOC_ASSERT( path.Exists() );
 
-                    V_Element loadedElements;
+                      V_Element loadedElements;
                     V_Element serializeElements;
 
-                    NOC_ASSERT( FileSystem::Exists( filePath ) );
 
-                    if( FileSystem::GetSize( filePath ) )                
-                      Archive::FromFile( filePath, loadedElements );
+                    if( path.Size() )                
+                      Archive::FromFile( path, loadedElements );
 
                     V_Element::iterator elemItor = loadedElements.begin();
                     V_Element::iterator elemEnd  = loadedElements.end();
@@ -620,8 +617,7 @@ public:
             Luna::Scene* scene = entity->GetScene();
             if( scene )
             {              
-              std::string assetPath = entity->GetEntityAssetPath();
-              FileSystem::StripLeaf( assetPath );
+                std::string assetPath = Nocturnal::Path( entity->GetEntityAssetPath() ).Directory();
               std::string filePath;
               UIToolKit::FileDialog dialog( NULL, "import children to file", assetPath.c_str(), wxEmptyString, FinderSpecs::Extension::REFLECT_BINARY.GetDialogFilter(), UIToolKit::FileDialogStyles::DefaultOpen );
               if ( dialog.ShowModal() == wxID_OK )
@@ -629,7 +625,8 @@ public:
                 filePath = dialog.GetPath();
                 if ( !filePath.empty() )
                 {
-                  if( FileSystem::Exists( filePath ) )
+                    Nocturnal::Path path( filePath );
+                  if( path.Exists() )
                   {
                     const OS_HierarchyNodeDumbPtr& children = entity->GetChildren();
                     OS_HierarchyNodeDumbPtr::Iterator itor = children.Begin();

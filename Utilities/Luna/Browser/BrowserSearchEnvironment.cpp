@@ -4,8 +4,8 @@
 
 #include "Foundation/Version.h"
 #include "Foundation/CommandLine.h"
+#include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "FileSystem/FileSystem.h"
 #include "Platform/Windows/Memory.h"
 #include "Platform/Process.h"
 
@@ -52,7 +52,7 @@ namespace Luna
       ZeroMemory( buf, MAX_PATH );
       GetEnvironmentVariable( "NOC_CODE_BRANCH_NAME", buf, MAX_PATH );
       m_CodeBranch = buf;
-      FileSystem::CleanName( m_CodeBranch );
+      Nocturnal::Path::Normalize( m_CodeBranch );
 
       m_ProjectName.clear();
       ZeroMemory( buf, MAX_PATH );

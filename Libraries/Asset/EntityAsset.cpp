@@ -10,7 +10,6 @@
 #include "ArtFileAttribute.h"
 #include "DependenciesAttribute.h"
 
-#include "FileSystem/FileSystem.h"
 #include "Finder/ContentSpecs.h"
 
 using namespace Reflect;

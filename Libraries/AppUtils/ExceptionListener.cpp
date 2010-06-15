@@ -14,7 +14,6 @@
 #include "Foundation/Log.h"
 #include "Debug/Utils.h"
 #include "Debug/Exception.h"
-#include "FileSystem/FileSystem.h"
 #include "SQL/MySQL.h"
 
 #include <time.h>
@@ -27,6 +26,8 @@ static i32 g_InitCount = 0;
 
 static void RecurseDirectories( const std::string& directory, std::string& result )
 {
+
+#ifdef GEOFF_FIX_THIS
   if ( !result.empty() )
   {
     result += ";";
@@ -44,6 +45,7 @@ static void RecurseDirectories( const std::string& directory, std::string& resul
   {
     RecurseDirectories( *dirItr, result );
   }
+#endif
 }
 
 static void CopyDump( ExceptionReport& report )
@@ -53,7 +55,7 @@ static void CopyDump( ExceptionReport& report )
     return;
   }
 
-  if ( report.m_Args.m_Dump.empty() || !FileSystem::Exists( report.m_Args.m_Dump ) )
+  if ( report.m_Args.m_Dump.empty() || !Nocturnal::Path( report.m_Args.m_Dump ).Exists() )
   {
     return;
   }
@@ -85,10 +87,8 @@ static void CopyDump( ExceptionReport& report )
     << "." << std::setfill('0') << std::setw(2) << now->tm_sec
     << "." << std::setfill('0') << std::setw(3) << t % 1000 << ".dmp";
 
-  std::string dest = destination.str();
-
-  FileSystem::CleanName( dest );
-  FileSystem::MakePath( dest, true );
+  Nocturnal::Path dest( destination.str() );
+  dest.MakePath();
 
   if ( FALSE == ::CopyFile( report.m_Args.m_Dump.c_str(), destination.str().c_str(), FALSE ) )
   {
@@ -242,6 +242,7 @@ void AppUtils::InitializeExceptionListener()
     // Symbol path always starts with module directory
     std::string symbolPath( std::string( drive ) + std::string( path ) );
 
+#ifdef GEOFF_FIX_THIS
     if ( !AppUtils::IsToolsBuilder() )
     {
       // Search for network symbol storage
@@ -262,6 +263,8 @@ void AppUtils::InitializeExceptionListener()
         RecurseDirectories( symbolStore, symbolPath );
       }
     }
+
+#endif
 
     // initialize debug symbols
     Debug::Initialize( symbolPath );

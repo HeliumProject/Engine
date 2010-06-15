@@ -21,9 +21,6 @@
 #include "save.xpm"
 #include "x.xpm"
 
-
-#include "FileSystem/FileSystem.h"
-
 BEGIN_EVENT_TABLE(Shader, wxFrame)
 EVT_CLOSE(Shader::OnClose)
 EVT_COMMAND_RANGE(wxID_TYPES, wxID_TYPES + 99, wxEVT_COMMAND_MENU_SELECTED, Shader::OnNew)

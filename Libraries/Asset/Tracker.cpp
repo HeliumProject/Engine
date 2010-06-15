@@ -18,7 +18,6 @@
 #include "Foundation/Log.h"
 #include "Content/ContentInit.h"
 #include "Foundation/InitializerStack.h"
-#include "FileSystem/FileSystem.h"
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
 #include "Finder/AssetSpecs.h"
@@ -46,7 +45,7 @@ typedef std::map< tuid, S_tuid > M_AssetDependencies;
 ///////////////////////////////////////////////////////////////////////////////
 static inline void PrependFilePath( const std::string& projectAssets, std::string& path )
 {
-    if ( !FileSystem::HasPrefix( projectAssets, path ) )
+    if ( path.find( projectAssets ) != 0 )
     {
         path = projectAssets + path;
     }
@@ -233,6 +232,15 @@ inline void SleepBetweenTracking( bool* cancel = NULL, const u32 minutes = 1 )
     }
 }
 
+void Tracker::HandleDirectoryItem( const Nocturnal::DirectoryItem& dirItem )
+{
+    Nocturnal::Path path( dirItem.m_Path );
+    if ( path.IsFile() )
+    {
+        m_FoundPaths.insert( path );
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Process over all of the assets and insert them into the asset DB
 // 
@@ -244,7 +252,6 @@ void Tracker::TrackEverything()
     m_InitialIndexingCompleted = false;
     m_IndexingFailed = false;
 
-    V_string foundFiles;
     while ( !m_StopTracking )
     {  
         Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default,
@@ -254,33 +261,34 @@ void Tracker::TrackEverything()
         // Find Files
         {
             Profile::Timer timer;
-            FileSystem::Find( m_RootDirectory, foundFiles, std::string( "*." ) + FinderSpecs::Extension::REFLECT_BINARY.GetExtension(), FileSystem::FindFlags::Recursive );
+            Nocturnal::DirectoryItemSignature::Delegate callback( this, &Tracker::HandleDirectoryItem );
+            Nocturnal::RecurseDirectories( callback, m_RootDirectory, std::string( "*." ) + FinderSpecs::Extension::REFLECT_BINARY.GetExtension() );
             Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, "Tracker: File reslover database lookup took %.2fms\n", timer.Elapsed() );
         }
 
         ////////////////////////////////
         // Track Files
         m_CurrentProgress = 0;
-        m_Total = (u32)foundFiles.size();
+        m_Total = (u32)m_FoundPaths.size();
         {
             Profile::Timer timer;
-            Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, "Tracker: Scanning %d asset file(s) for changes...\n", (u32)foundFiles.size() );
+            Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, "Tracker: Scanning %d asset file(s) for changes...\n", (u32)m_FoundPaths.size() );
 
-            while ( !m_StopTracking && !foundFiles.empty() )
+            while ( !m_StopTracking && !m_FoundPaths.empty() )
             {
                 Log::Listener listener ( ~Log::Streams::Error );
 
                 try
                 {
-                    TrackFile( foundFiles.back() );
+                    TrackFile( *(m_FoundPaths.begin()) );
                 }
                 catch( const Nocturnal::Exception& ex )
                 {
                     Log::Warning( "Tracker: %s\n", ex.what() );
                 }
 
-                foundFiles.pop_back();
-                m_CurrentProgress = m_Total - (u32)foundFiles.size();
+                m_FoundPaths.erase( m_FoundPaths.begin() );
+                m_CurrentProgress = m_Total - (u32)m_FoundPaths.size();
             }
 
             if ( m_StopTracking )
@@ -298,7 +306,7 @@ void Tracker::TrackEverything()
                 Log::Print( Log::Levels::Verbose, "Tracker: Indexing updated in %.2fm\n" , timer.Elapsed() / 1000.f / 60.f );
             }
         }
-        foundFiles.clear();
+        m_FoundPaths.clear();
 
         m_Total = 0;
         m_CurrentProgress = 0;

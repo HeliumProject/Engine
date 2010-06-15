@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Foundation/API.h"
+#include "Platform/Types.h"
 
 //
 // Constants

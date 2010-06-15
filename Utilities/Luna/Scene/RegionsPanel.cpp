@@ -5,11 +5,10 @@
 
 #include "Content/Region.h"
 #include "Content/Zone.h"
-#include "UIToolKit/SortTreeCtrl.h"
-
 #include "Core/Object.h"
 #include "SceneNode.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/SortTreeCtrl.h"
+#include "Luna/UI/ImageManager.h"
 
 #include <algorithm>
 
@@ -61,10 +60,10 @@ RegionsPanel::RegionsPanel( SceneEditor* editor, Luna::SceneManager* manager, wx
   item->AddCallback( ContextMenuSignature::Delegate(this, &RegionsPanel::ContextZoneChangeRegions) ); 
   m_PerZoneContextMenu.AppendItem( item ); 
 
-  m_RegionTree->SetImageList( UIToolKit::GlobalImageManager().GetGuiImageList() ); 
+  m_RegionTree->SetImageList( Luna::GlobalImageManager().GetGuiImageList() ); 
 
-  m_RegionIcon = UIToolKit::GlobalImageManager().GetImageIndex( "region_16.png" );
-  m_ZoneIcon   = UIToolKit::GlobalImageManager().GetImageIndex( "zone_16.png" ); 
+  m_RegionIcon = Luna::GlobalImageManager().GetImageIndex( "region_16.png" );
+  m_ZoneIcon   = Luna::GlobalImageManager().GetImageIndex( "zone_16.png" ); 
 
   InitTree();
 }

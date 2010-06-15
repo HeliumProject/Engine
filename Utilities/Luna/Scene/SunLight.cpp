@@ -8,7 +8,7 @@
 #include "SceneManager.h"
 
 #include "Core/Enumerator.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 
 // Using
@@ -44,7 +44,7 @@ SunLight::SunLight(Luna::Scene* scene, Content::SunLight* light)
 
 i32 SunLight::GetImageIndex() const
 {
-  return UIToolKit::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Luna::GlobalImageManager().GetImageIndex( "light_16.png" );
 }
 
 std::string SunLight::GetApplicationTypeName() const

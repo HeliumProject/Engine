@@ -2,8 +2,8 @@
 #include "ColorPicker.h"
 #include "Container.h"
 
-#include "UIToolKit/ColorPicker.h"
-#include "UIToolKit/RegistryConfig.h"
+#include "Luna/UI/ColorPicker.h"
+#include "Luna/UI/RegistryConfig.h"
 
 #include <sstream>
 
@@ -13,14 +13,14 @@ using namespace Inspect;
 ///////////////////////////////////////////////////////////////////////////////
 // Class wrapping up the wxColourPickerCtrl.
 // 
-class StdColorPicker : public UIToolKit::ColorPicker
+class StdColorPicker : public Luna::ColorPicker
 {
 public:
   Inspect::ColorPicker* m_ColorPicker;
 
   // Constructor
   StdColorPicker( wxWindow* parent, Inspect::ColorPicker* colorPicker )
-    : UIToolKit::ColorPicker( parent, wxID_ANY )
+    : Luna::ColorPicker( parent, wxID_ANY )
     , m_ColorPicker( colorPicker )
   {
     EnableAutoSaveCustomColors();

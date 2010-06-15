@@ -15,8 +15,8 @@
 #include "Content/ContentVersion.h"
 #include "Finder/AssetSpecs.h"
 #include "Foundation/Log.h"
-#include "UIToolKit/FileDialog.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/FileDialog.h"
+#include "Luna/UI/ImageManager.h"
 #include "Foundation/Container/Insert.h" 
 
 // Using
@@ -257,7 +257,7 @@ std::string ScenesPanel::PromptNewZone( const std::string& defaultPath )
     std::string savePath;
 
     // Prompt
-    UIToolKit::FileDialog fileDialog( this, "Create a new zone", defaultPath.c_str(), wxEmptyString, wxFileSelectorDefaultWildcardStr, UIToolKit::FileDialogStyles::Save );
+    Luna::FileDialog fileDialog( this, "Create a new zone", defaultPath.c_str(), wxEmptyString, wxFileSelectorDefaultWildcardStr, Luna::FileDialogStyles::Save );
     fileDialog.SetFilter( FinderSpecs::Asset::ZONE_DECORATION.GetDialogFilter() );
 
     if ( fileDialog.ShowModal() == wxID_OK )
@@ -283,7 +283,7 @@ std::string ScenesPanel::PromptAddZone( const std::string& defaultPath )
     std::string savePath;
 
     // Prompt
-    UIToolKit::FileDialog fileDialog( this, "Add an existing zone", defaultPath.c_str(), wxEmptyString, wxFileSelectorDefaultWildcardStr, UIToolKit::FileDialogStyles::DefaultOpen );
+    Luna::FileDialog fileDialog( this, "Add an existing zone", defaultPath.c_str(), wxEmptyString, wxFileSelectorDefaultWildcardStr, Luna::FileDialogStyles::DefaultOpen );
     fileDialog.SetFilter( FinderSpecs::Asset::ZONE_DECORATION.GetDialogFilter() );
 
     if ( fileDialog.ShowModal() == wxID_OK )

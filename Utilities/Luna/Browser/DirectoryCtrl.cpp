@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "DirectoryCtrl.h"
 
-#include "UIToolKit/ImageManager.h"
-#include "UIToolKit/SortTreeCtrl.h"
+#include "Luna/UI/ImageManager.h"
+#include "Luna/UI/SortTreeCtrl.h"
 
 using namespace Luna;
 
@@ -18,16 +18,15 @@ DirectoryCtrl::DirectoryCtrl( const std::string& rootDirectory )
 
 ///////////////////////////////////////////////////////////////////////////////
 DirectoryCtrl::DirectoryCtrl
-(
- const std::string& rootDirectory,
- wxWindow *parent, const wxWindowID id,
+( wxWindow *parent, const wxWindowID id,
  const wxString &dir,
  const wxPoint& pos,
  const wxSize& size,
  long style,
  const wxString& filter,
  int defaultFilter,
- const wxString& name
+ const wxString& name,
+ const std::string& rootDirectory
  )
  : wxGenericDirCtrl( parent, id, dir, pos, size, style, filter, defaultFilter, name )
  , m_RootDirectory( rootDirectory )
@@ -49,15 +48,15 @@ DirectoryCtrl::DirectoryCtrl
     switch ( (DirectoryCtrlIconType) type )
     {
       case DirectoryCtrlIconTypes::Folder:
-        m_ImageList.Add( UIToolKit::GlobalImageManager().GetBitmap( "ms_folder_closed.png" ) );
+        m_ImageList.Add( Luna::GlobalImageManager().GetBitmap( "ms_folder_closed.png" ) );
         break;
 
       case DirectoryCtrlIconTypes::FolderOpen:
-        m_ImageList.Add( UIToolKit::GlobalImageManager().GetBitmap( "ms_folder_open.png" ) );
+        m_ImageList.Add( Luna::GlobalImageManager().GetBitmap( "ms_folder_open.png" ) );
         break;
 
       case DirectoryCtrlIconTypes::InsomniacMoon:
-        m_ImageList.Add( UIToolKit::GlobalImageManager().GetBitmap( "moon_16.png" ) );
+        m_ImageList.Add( Luna::GlobalImageManager().GetBitmap( "moon_16.png" ) );
         break;
 
       // We should not be using these anyway - if we are, setup a proper icon for them above
@@ -70,7 +69,7 @@ DirectoryCtrl::DirectoryCtrl
       case DirectoryCtrlIconTypes::Executable:
       case DirectoryCtrlIconTypes::Error:
       default:
-        m_ImageList.Add( UIToolKit::GlobalImageManager().GetBitmap( "error_16.png" ) );
+        m_ImageList.Add( Luna::GlobalImageManager().GetBitmap( "error_16.png" ) );
         break;
     }
   }
@@ -113,5 +112,5 @@ void DirectoryCtrl::OnItemCollapsing( wxTreeEvent& e )
 ///////////////////////////////////////////////////////////////////////////////
 wxTreeCtrl* DirectoryCtrl::CreateTreeCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long treeStyle)
 {
-  return reinterpret_cast<wxTreeCtrl*>( new UIToolKit::SortTreeCtrl( parent, id, pos, size, treeStyle ) );
+  return reinterpret_cast<wxTreeCtrl*>( new Luna::SortTreeCtrl( parent, id, pos, size, treeStyle ) );
 }

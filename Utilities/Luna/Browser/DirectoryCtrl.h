@@ -37,15 +37,16 @@ namespace Luna
     {
     public:
         DirectoryCtrl( const std::string& rootDirectory );
-        DirectoryCtrl( const std::string& rootDirectory, 
-            wxWindow *parent, const wxWindowID id = wxID_ANY,
+        DirectoryCtrl( wxWindow *parent,
+            const wxWindowID id = wxID_ANY,
             const wxString &dir = wxDirDialogDefaultFolderStr,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER,
             const wxString& filter = wxEmptyString,
             int defaultFilter = 0,
-            const wxString& name = wxTreeCtrlNameStr );
+            const wxString& name = wxTreeCtrlNameStr,
+            const std::string& rootDirectory = "" );
 
         virtual ~DirectoryCtrl();
 

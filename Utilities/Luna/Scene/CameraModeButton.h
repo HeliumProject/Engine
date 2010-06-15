@@ -2,13 +2,13 @@
 
 #include "SceneEditorIDs.h"
 #include "View.h"
-#include "UIToolKit/MenuButton.h"
+#include "Luna/UI/MenuButton.h"
 
 namespace Luna
 {
   class SceneEditor;
 
-  class CameraModeButton : public UIToolKit::MenuButton 
+  class CameraModeButton : public Luna::MenuButton 
   {
   public:
     CameraModeButton( wxWindow* parent, SceneEditor* sceneEditor, wxWindowID id = wxID_ANY );

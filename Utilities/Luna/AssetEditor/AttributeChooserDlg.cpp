@@ -11,8 +11,8 @@
 #include "Asset/AssetFlags.h"
 #include "Attribute/AttributeCategories.h"
 #include "Foundation/Container/Insert.h" 
-#include "UIToolKit/ImageManager.h"
-#include "UIToolKit/SortableListView.h"
+#include "Luna/UI/ImageManager.h"
+#include "Luna/UI/SortableListView.h"
 
 // Using
 using namespace Luna;
@@ -49,10 +49,10 @@ AttributeChooserDlg::AttributeChooserDlg( AssetEditor* editor, const wxPoint& po
   wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
   m_Toolbar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_HORIZONTAL, "AddAttributeToolbar" );
-  m_Toolbar->AddTool( AssetEditorIDs::AddAttribute, wxT("Add"), UIToolKit::GlobalImageManager().GetBitmap( "add_16.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Add the selected attribute to the current asset."), wxT("") );
+  m_Toolbar->AddTool( AssetEditorIDs::AddAttribute, wxT("Add"), Luna::GlobalImageManager().GetBitmap( "add_16.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Add the selected attribute to the current asset."), wxT("") );
   //TODO: Implement Help button
-	//m_Toolbar->AddTool( AssetEditorIDs::AttributeHelp, wxT("Help"), UIToolKit::GlobalImageManager().GetBitmap( "help_16.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Display additional information in the Browser."), wxT("") );
-	m_Toolbar->AddTool( AssetEditorIDs::ChangeAttributeView, wxT("View"), UIToolKit::GlobalImageManager().GetBitmap( "downarrow_16.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Change the attribute view."), wxT("") );
+	//m_Toolbar->AddTool( AssetEditorIDs::AttributeHelp, wxT("Help"), Luna::GlobalImageManager().GetBitmap( "help_16.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Display additional information in the Browser."), wxT("") );
+	m_Toolbar->AddTool( AssetEditorIDs::ChangeAttributeView, wxT("View"), Luna::GlobalImageManager().GetBitmap( "downarrow_16.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Change the attribute view."), wxT("") );
 	m_Toolbar->Realize();
   mainSizer->Add( m_Toolbar, 0, wxALL|wxEXPAND, 2 );
 	
@@ -124,8 +124,8 @@ AttributeCategoryPanel* AttributeChooserDlg::GetCategoryPanel( const Attribute::
   panel->m_ShortDescription->SetLabel( category->ShortDescription().c_str() );
   panel->m_ListCtrl->InsertColumn( ColumnName, "Name" );
   panel->m_ListCtrl->InsertColumn( ColumnError, "Error" );
-  panel->m_ListCtrl->SetImageList( UIToolKit::GlobalImageManager().GetGuiImageList(), wxIMAGE_LIST_NORMAL );
-  panel->m_ListCtrl->SetImageList( UIToolKit::GlobalImageManager().GetGuiImageList(), wxIMAGE_LIST_SMALL );
+  panel->m_ListCtrl->SetImageList( Luna::GlobalImageManager().GetGuiImageList(), wxIMAGE_LIST_NORMAL );
+  panel->m_ListCtrl->SetImageList( Luna::GlobalImageManager().GetGuiImageList(), wxIMAGE_LIST_SMALL );
   
   // Sort the attributes alphabetically
   S_SortedAttribute sorted;
@@ -153,7 +153,7 @@ AttributeCategoryPanel* AttributeChooserDlg::GetCategoryPanel( const Attribute::
       normalItem.SetTextColour( wxColour( *wxRED ) );
     }
     const std::string icon = Luna::AttributeWrapper::GetAttributeIcon( attribute ); 
-    normalItem.SetImage( UIToolKit::GlobalImageManager().GetImageIndex( icon ) );
+    normalItem.SetImage( Luna::GlobalImageManager().GetImageIndex( icon ) );
     normalItem.SetId( id );
     normalItem.SetColumn( ColumnName );
     panel->m_ListCtrl->InsertItem( normalItem );
@@ -214,7 +214,7 @@ void AttributeChooserDlg::SetDescription( const std::string& desc, AttributeChoo
     break;
 
   case IconError:
-    m_Panel->m_Icon->SetBitmap( UIToolKit::GlobalImageManager().GetBitmap( "error_32.png" ) );
+    m_Panel->m_Icon->SetBitmap( Luna::GlobalImageManager().GetBitmap( "error_32.png" ) );
     m_Panel->m_Icon->Show();
     break;
   }

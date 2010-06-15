@@ -16,7 +16,7 @@ namespace Asset
     struct AssetTypeChangeArgs;
 }
 
-namespace UIToolKit
+namespace Luna
 {
     struct PreferenceChangedArgs;
 }

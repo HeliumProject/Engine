@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "API.h"
+#include "Luna/API.h"
 #include "SceneOutliner.h"
 
 namespace Luna
@@ -34,7 +34,7 @@ namespace Luna
 
   protected:
     // Overrides from SceneOutliner
-    virtual UIToolKit::SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) NOC_OVERRIDE;
+    virtual Luna::SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) NOC_OVERRIDE;
     virtual void CurrentSceneChanged( Luna::Scene* oldScene ) NOC_OVERRIDE;
     virtual void ConnectSceneListeners() NOC_OVERRIDE;
     virtual void DisconnectSceneListeners() NOC_OVERRIDE;

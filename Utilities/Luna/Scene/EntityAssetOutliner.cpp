@@ -5,9 +5,8 @@
 #include "EntityAssetSet.h"
 #include "Scene.h"
 #include "SceneOutlinerItemData.h"
-#include "UIToolKit/ImageManager.h"
-
-#include "UIToolKit/SortTreeCtrl.h"
+#include "Luna/UI/ImageManager.h"
+#include "Luna/UI/SortTreeCtrl.h"
 
 // Using
 using namespace Luna;
@@ -120,7 +119,7 @@ void EntityAssetOutliner::AddEntityAssetSet( Luna::EntityAssetSet* classSet )
     bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
     m_TreeCtrl->DisableSorting();
 
-    const i32 image = UIToolKit::GlobalImageManager().GetImageIndex( "folder_16.png" );
+    const i32 image = Luna::GlobalImageManager().GetImageIndex( "folder_16.png" );
     wxTreeItemId classItem = AddItem( m_InvisibleRoot, 
                                       classSet->GetName(), 
                                       image, 
@@ -208,9 +207,9 @@ void EntityAssetOutliner::RemoveEntity( Luna::Entity* entity )
 // be called once.  The tree control is returned so that the caller can
 // insert it into the UI in the proper place.
 // 
-UIToolKit::SortTreeCtrl* EntityAssetOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
+Luna::SortTreeCtrl* EntityAssetOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
 {
-  UIToolKit::SortTreeCtrl* tree = new UIToolKit::SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_EDIT_LABELS | wxTR_MULTIPLE, wxDefaultValidator, "EntityAssetOutliner" );
+  Luna::SortTreeCtrl* tree = new Luna::SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_EDIT_LABELS | wxTR_MULTIPLE, wxDefaultValidator, "EntityAssetOutliner" );
   m_InvisibleRoot = tree->AddRoot( "INVISIBLE_ROOT" );
 
   // Override dynamic GUI event handlers here

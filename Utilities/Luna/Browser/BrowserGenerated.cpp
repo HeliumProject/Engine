@@ -8,10 +8,11 @@
 #include "Precompile.h"
 
 #include "DirectoryCtrl.h"
-#include "UIToolKit/AutoCompleteComboBox.h"
-#include "UIToolKit/Button.h"
-#include "UIToolKit/MenuButton.h"
-#include "UIToolKit/SortTreeCtrl.h"
+#include "Luna/UI//MenuButton.h"
+#include "Luna/UI/AutoCompleteComboBox.h"
+#include "Luna/UI/Button.h"
+#include "Luna/UI/MenuButton.h"
+#include "Luna/UI/SortTreeCtrl.h"
 
 #include "BrowserGenerated.h"
 
@@ -38,31 +39,31 @@ NavigationPanelGenerated::NavigationPanelGenerated( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer20;
 	bSizer20 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_BackButton = new UIToolKit::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_BackButton = new Luna::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	m_BackButton->Enable( false );
 	
 	m_BackButton->Enable( false );
 	
 	bSizer20->Add( m_BackButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_ForwardButton = new UIToolKit::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_ForwardButton = new Luna::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	m_ForwardButton->Enable( false );
 	
 	m_ForwardButton->Enable( false );
 	
 	bSizer20->Add( m_ForwardButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_UpFolderButton = new UIToolKit::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_UpFolderButton = new Luna::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	m_UpFolderButton->Enable( false );
 	
 	m_UpFolderButton->Enable( false );
 	
 	bSizer20->Add( m_UpFolderButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_NavBarComboBox = new UIToolKit::AutoCompleteComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxTE_PROCESS_ENTER|wxWANTS_CHARS ); 
+	m_NavBarComboBox = new Luna::AutoCompleteComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxTE_PROCESS_ENTER|wxWANTS_CHARS ); 
 	bSizer20->Add( m_NavBarComboBox, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	m_GoButton = new UIToolKit::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_GoButton = new Luna::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	m_GoButton->Enable( false );
 	
 	m_GoButton->Enable( false );
@@ -73,7 +74,7 @@ NavigationPanelGenerated::NavigationPanelGenerated( wxWindow* parent, wxWindowID
 	m_staticline13 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer20->Add( m_staticline13, 0, wxEXPAND | wxALL, 5 );
 	
-	m_OptionsButton = new UIToolKit::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_OptionsButton = new Luna::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	bSizer20->Add( m_OptionsButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 	
 	this->SetSizer( bSizer20 );
@@ -110,8 +111,7 @@ FoldersPanelGenerated::FoldersPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
 	
-#pragma TODO( "pass in the right root directory for the DirectoryCtrl" )
-	m_FoldersTreeCtrl = new Luna::DirectoryCtrl( "", this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDIRCTRL_DIR_ONLY|wxDIRCTRL_EDIT_LABELS|wxNO_BORDER, wxEmptyString, 0 );
+	m_FoldersTreeCtrl = new Luna::DirectoryCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDIRCTRL_DIR_ONLY|wxDIRCTRL_EDIT_LABELS|wxNO_BORDER, wxEmptyString, 0 );
 	
 	m_FoldersTreeCtrl->ShowHidden( false );
 	bSizer12->Add( m_FoldersTreeCtrl, 1, wxEXPAND, 5 );
@@ -313,7 +313,7 @@ SearchPanelGenerated::SearchPanelGenerated( wxWindow* parent, wxWindowID id, con
 	fgSizer2->Add( bSizer28, 0, wxEXPAND, 5 );
 	
 	wxStaticText* m_staticText191;
-	m_staticText191 = new wxStaticText( m_ScrolledWindow, wxID_ANY, wxT("Engine Type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText191 = new wxStaticText( m_ScrolledWindow, wxID_ANY, wxT("Asset Type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText191->Wrap( -1 );
 	fgSizer2->Add( m_staticText191, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
@@ -517,14 +517,14 @@ CollectionsPanelGenerated::CollectionsPanelGenerated( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizer17;
 	bSizer17 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_NewDependencyCollectionButton = new UIToolKit::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_NewDependencyCollectionButton = new Luna::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_NewDependencyCollectionButton->Hide();
 	
 	m_NewDependencyCollectionButton->Hide();
 	
 	bSizer17->Add( m_NewDependencyCollectionButton, 0, wxALL, 5 );
 	
-	m_NewCollectionButton = new UIToolKit::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_NewCollectionButton = new Luna::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_NewCollectionButton->Hide();
 	
 	m_NewCollectionButton->Hide();
@@ -536,7 +536,7 @@ CollectionsPanelGenerated::CollectionsPanelGenerated( wxWindow* parent, wxWindow
 	wxBoxSizer* m_MyCollectionsCtrlSizer;
 	m_MyCollectionsCtrlSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_MyCollectionsTreeCtrl = new UIToolKit::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTR_EDIT_LABELS|wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
+	m_MyCollectionsTreeCtrl = new Luna::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTR_EDIT_LABELS|wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
 	m_MyCollectionsTreeCtrl->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	
 	m_MyCollectionsCtrlSizer->Add( m_MyCollectionsTreeCtrl, 1, wxEXPAND|wxLEFT, 5 );
@@ -557,7 +557,7 @@ CollectionsPanelGenerated::CollectionsPanelGenerated( wxWindow* parent, wxWindow
 	wxBoxSizer* m_TempCollectionsCtrlSizer;
 	m_TempCollectionsCtrlSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_TempCollectionsTreeCtrl = new UIToolKit::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
+	m_TempCollectionsTreeCtrl = new Luna::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
 	m_TempCollectionsTreeCtrl->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_TempCollectionsTreeCtrl->Enable( false );
 	

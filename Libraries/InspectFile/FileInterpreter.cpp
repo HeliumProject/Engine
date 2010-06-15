@@ -13,7 +13,7 @@
 
 #include "Asset/AssetFlags.h"
 #include "Finder/Finder.h"
-#include "UIToolKit/FileDialog.h"
+#include "Luna/UI/FileDialog.h"
 #include "Foundation/Log.h"
 #include "Foundation/String/Wildcard.h"
 #include "Foundation/String/Tokenize.h"
@@ -296,7 +296,7 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
       text = dir;
     }
 
-    UIToolKit::FileDialog dialog ( m_Container->GetWindow(), wxFileSelectorPromptStr, text.c_str() );
+    Luna::FileDialog dialog ( m_Container->GetWindow(), wxFileSelectorPromptStr, text.c_str() );
 
     if (m_FinderSpec)
     {

@@ -5,7 +5,7 @@
 
 #include "Foundation/Log.h"
 
-#include "UIToolKit/SortTreeCtrl.h"
+#include "Luna/UI/SortTreeCtrl.h"
 
 // Using
 using namespace Luna;
@@ -161,9 +161,9 @@ void NodeTypeOutliner::OnBeginLabelEdit( wxTreeEvent& args )
 // be called once.  The tree control is returned so that the caller can
 // insert it into the UI in the proper place.
 // 
-UIToolKit::SortTreeCtrl* NodeTypeOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
+Luna::SortTreeCtrl* NodeTypeOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
 {
-  UIToolKit::SortTreeCtrl* tree = new UIToolKit::SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_EDIT_LABELS | wxTR_MULTIPLE, wxDefaultValidator, "NodeTypeOutliner" );
+  Luna::SortTreeCtrl* tree = new Luna::SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_EDIT_LABELS | wxTR_MULTIPLE, wxDefaultValidator, "NodeTypeOutliner" );
   m_InvisibleRoot = tree->AddRoot( "INVISIBLE_ROOT" );
 
   // Override dynamic GUI event handlers here

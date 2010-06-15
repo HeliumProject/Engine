@@ -5,7 +5,7 @@
 #include "Foundation/File/Path.h"
 
 // Forwards
-namespace UIToolKit
+namespace Luna
 {
     struct PreferenceChangedArgs;
 }

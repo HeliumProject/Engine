@@ -19,11 +19,11 @@
 #include "Foundation/Log.h"
 #include "Finder/Finder.h"
 #include "Finder/ExtensionSpecs.h"
-#include "UIToolKit/FileDialog.h"
+#include "Luna/UI/FileDialog.h"
 
 using namespace Reflect;
 using namespace Inspect;
-using namespace UIToolKit;
+using namespace Luna;
 
 FileContainerInterpreter::FileContainerInterpreter (Container* labelContainer)
 : ReflectFieldInterpreter (labelContainer)

@@ -17,7 +17,7 @@
 #include "Finder/ExtensionSpecs.h"
 #include "Inspect/DropSource.h"
 #include "Application/Undo/Command.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 #include "Scene/Color.h"  // BARF! Should we move Color.h to Editor?
 #include "Scene/Render.h" // BARF! Should we move Render.h to Editor?
@@ -1119,7 +1119,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             //newMenu->Enable( ID_NewFolder, inFolder );
 
             wxMenuItem* menuItem = new wxMenuItem( &menu, ID_New, BrowserMenu::Label( ID_New ), BrowserMenu::Label( ID_New ), wxITEM_NORMAL, newMenu );
-            menuItem->SetBitmap( UIToolKit::GlobalImageManager().GetBitmap( "new_file_16.png" ) );
+            menuItem->SetBitmap( Luna::GlobalImageManager().GetBitmap( "new_file_16.png" ) );
             menu.Append( menuItem );
             menuItem->Enable( inFolder );
         }

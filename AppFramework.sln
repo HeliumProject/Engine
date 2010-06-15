@@ -62,8 +62,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Texture", "libraries\Textur
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InspectFile", "libraries\InspectFile\InspectFile.vcproj", "{44FD2A28-FC17-4B3E-AAE5-C3DBDD3192E5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UIToolKit", "libraries\UIToolKit\UIToolKit.vcproj", "{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "igDXRender", "libraries\igDXRender\igDXRender.vcproj", "{2E9BA35F-931E-44F5-8374-22CE63DB8BDF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProfileDump", "utilities\ProfileDump\ProfileDump.vcproj", "{89F56274-1A64-4AF6-B548-5A70C287A0AD}"
@@ -284,12 +282,6 @@ Global
 		{44FD2A28-FC17-4B3E-AAE5-C3DBDD3192E5}.Release|Win32.ActiveCfg = Release|Win32
 		{44FD2A28-FC17-4B3E-AAE5-C3DBDD3192E5}.Release|Win32.Build.0 = Release|Win32
 		{44FD2A28-FC17-4B3E-AAE5-C3DBDD3192E5}.Release|x64.ActiveCfg = Release|Win32
-		{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}.Debug|Win32.ActiveCfg = Debug|Win32
-		{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}.Debug|Win32.Build.0 = Debug|Win32
-		{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}.Debug|x64.ActiveCfg = Debug|Win32
-		{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}.Release|Win32.ActiveCfg = Release|Win32
-		{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}.Release|Win32.Build.0 = Release|Win32
-		{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}.Release|x64.ActiveCfg = Release|Win32
 		{2E9BA35F-931E-44F5-8374-22CE63DB8BDF}.Debug|Win32.ActiveCfg = Debug|Win32
 		{2E9BA35F-931E-44F5-8374-22CE63DB8BDF}.Debug|Win32.Build.0 = Debug|Win32
 		{2E9BA35F-931E-44F5-8374-22CE63DB8BDF}.Debug|x64.ActiveCfg = Debug|Win32

@@ -25,10 +25,10 @@
 #include "Editor/DocumentManager.h"
 #include "RCS/RCS.h"
 #include "Scene/SceneManager.h"
-#include "UIToolKit/AutoCompleteComboBox.h"
-#include "UIToolKit/Button.h"
-#include "UIToolKit/ImageManager.h"
-#include "UIToolKit/MenuButton.h"
+#include "Luna/UI/AutoCompleteComboBox.h"
+#include "Luna/UI/Button.h"
+#include "Luna/UI/ImageManager.h"
+#include "Luna/UI/MenuButton.h"
 #include "Foundation/Exception.h"
 #include "Platform/Process.h"
 
@@ -37,9 +37,9 @@
 using namespace Luna;
 
 static const u32 s_ToggleButtonStyle = 
-( UIToolKit::ButtonStyles::BU_BITMAP
- | UIToolKit::ButtonStyles::BU_TOGGLE
- | UIToolKit::ButtonStyles::BU_CENTER );
+( Luna::ButtonStyles::BU_BITMAP
+ | Luna::ButtonStyles::BU_TOGGLE
+ | Luna::ButtonStyles::BU_CENTER );
 
 static const char* s_BrowserHelpText = 
 "Search for (\"*\" is wildcard): \n" \
@@ -141,10 +141,10 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
     wxIconBundle iconBundle;
 
     wxIcon tempIcon;
-    tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "vault_16.png" ) );
+    tempIcon.CopyFromBitmap( Luna::GlobalImageManager().GetBitmap( "vault_16.png" ) );
     iconBundle.AddIcon( tempIcon );
 
-    tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "vault_32.png" ) );
+    tempIcon.CopyFromBitmap( Luna::GlobalImageManager().GetBitmap( "vault_32.png" ) );
     iconBundle.AddIcon( tempIcon );
 
     SetIcons( iconBundle );

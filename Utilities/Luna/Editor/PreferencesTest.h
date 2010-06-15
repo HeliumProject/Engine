@@ -3,7 +3,7 @@
 #include "Preferences.h"
 #include "PreferencesInit.h"
 
-using namespace UIToolKit;
+using namespace Luna;
 
 namespace PrefTestEnumValues
 {
@@ -23,7 +23,7 @@ namespace PrefTestEnumValues
 typedef PrefTestEnumValues::PrefTestEnumValue PrefTestEnumValue;
 
 // Helper class for testing preferences
-class PrefTest : public UIToolKit::Preferences
+class PrefTest : public Luna::Preferences
 {
 private:
   i32 m_I32Var;
@@ -46,7 +46,7 @@ public:
     return GetClass()->FindField( &PrefTest::m_EnumVar ); 
   }
   
-  REFLECT_DECLARE_CLASS( PrefTest, UIToolKit::Preferences );
+  REFLECT_DECLARE_CLASS( PrefTest, Luna::Preferences );
   static void EnumerateClass( Reflect::Compositor<PrefTest>& comp )
   {
     Reflect::Field* fieldI32Var = comp.AddField( &PrefTest::m_I32Var, "m_I32Var" );

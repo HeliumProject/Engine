@@ -1,9 +1,9 @@
 #pragma once
 
-#include "API.h"
+#include "Luna/API.h"
 
 #include "Foundation/File/Path.h"
-#include "UIToolKit/ThreadMechanism.h"
+#include "Luna/UI/ThreadMechanism.h"
 
 namespace Luna
 {
@@ -12,17 +12,17 @@ namespace Luna
     ///////////////////////////////////////////////////////////////////////////////
     /// class DependencyLoader
     ///////////////////////////////////////////////////////////////////////////////
-    class DependencyLoader : public UIToolKit::ThreadMechanism
+    class DependencyLoader : public Luna::ThreadMechanism
     {
     public:
         DependencyLoader( const std::string& rootDirectory, const std::string& configDirectory, DependencyCollection* collection );
         virtual ~DependencyLoader();
 
     protected:
-        virtual void InitData() NOC_OVERRIDE;
-        virtual void ThreadProc( i32 threadID ) NOC_OVERRIDE;
+        virtual void InitData();
+        virtual void ThreadProc( i32 threadID );
 
-        void OnEndThread( const UIToolKit::ThreadProcArgs& args );
+        void OnEndThread( const Luna::ThreadProcArgs& args );
 
     private:
         std::string           m_RootDirectory;

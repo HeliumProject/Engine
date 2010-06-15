@@ -3,7 +3,7 @@
 #include "BrowserGenerated.h"
 #include "BrowserFrame.h"
 
-#include "UIToolKit/FieldMRU.h"
+#include "Luna/UI/FieldMRU.h"
 
 namespace Luna
 {
@@ -93,6 +93,6 @@ namespace Luna
     typedef Nocturnal::OrderedSet< Filter > OS_Filter;
     OS_Filter m_Filters;
 
-    UIToolKit::FieldMRUPtr m_FieldMRU;
+    Luna::FieldMRUPtr m_FieldMRU;
   };
 }

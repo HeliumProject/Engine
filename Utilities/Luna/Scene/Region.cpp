@@ -3,7 +3,7 @@
 #include "RegionPanel.h"
 #include "Scene.h"
 
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 #include "Core/Enumerator.h"
 
 #include <algorithm>
@@ -38,7 +38,7 @@ Region::~Region()
 
 i32 Region::GetImageIndex() const
 {
-  return UIToolKit::GlobalImageManager().GetImageIndex( "region_16.png" );
+  return Luna::GlobalImageManager().GetImageIndex( "region_16.png" );
 }
 
 std::string Region::GetApplicationTypeName() const

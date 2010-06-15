@@ -18,7 +18,7 @@
 #include "ReverseChildrenCommand.h"
 
 
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 #include "Core/Enumerator.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "Foundation/Log.h"
@@ -140,7 +140,7 @@ NavMesh::~NavMesh()
 
 i32 NavMesh::GetImageIndex() const
 {
-  return UIToolKit::GlobalImageManager().GetImageIndex( "mesh_16.png" );
+  return Luna::GlobalImageManager().GetImageIndex( "mesh_16.png" );
 }
 
 std::string NavMesh::GetApplicationTypeName() const

@@ -7,7 +7,7 @@
 #include "VolumeType.h"
 
 #include "Core/Enumerator.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 #include "PrimitiveCube.h"
 #include "PrimitiveCylinder.h"
@@ -55,7 +55,7 @@ Volume::~Volume()
 
 i32 Volume::GetImageIndex() const
 {
-  return UIToolKit::GlobalImageManager().GetImageIndex( "volume_16.png" );
+  return Luna::GlobalImageManager().GetImageIndex( "volume_16.png" );
 }
 
 std::string Volume::GetApplicationTypeName() const

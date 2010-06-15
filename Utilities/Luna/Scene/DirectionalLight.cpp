@@ -6,7 +6,7 @@
 #include "InstanceType.h"
 
 #include "Core/Enumerator.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 #include "PrimitivePointer.h"
 
@@ -43,7 +43,7 @@ DirectionalLight::DirectionalLight(Luna::Scene* scene, Content::DirectionalLight
 
 i32 DirectionalLight::GetImageIndex() const
 {
-  return UIToolKit::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Luna::GlobalImageManager().GetImageIndex( "light_16.png" );
 }
 
 std::string DirectionalLight::GetApplicationTypeName() const

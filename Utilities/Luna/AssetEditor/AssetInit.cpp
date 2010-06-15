@@ -35,7 +35,7 @@
 #include "Content/ContentInit.h"
 #include "Foundation/Log.h"
 #include "Reflect/Registry.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 // Using
 using namespace Luna;
@@ -87,9 +87,9 @@ void LunaAsset::InitializeModule()
     g_InitializerStack.Push( Luna::AttributeNode::InitializeType, Luna::AttributeNode::CleanupType );
     g_InitializerStack.Push( AssetDocument::InitializeType, AssetDocument::CleanupType );
 
-    UIToolKit::ImageManagerInit( "", "" );
+    Luna::ImageManagerInit( "", "" );
 
-    UIToolKit::GlobalImageManager().LoadGuiArt();
+    Luna::GlobalImageManager().LoadGuiArt();
   }
 }
 
@@ -103,6 +103,6 @@ void LunaAsset::CleanupModule()
   {
     g_InitializerStack.Cleanup();
 
-    UIToolKit::ImageManagerCleanup();
+    Luna::ImageManagerCleanup();
   }
 }

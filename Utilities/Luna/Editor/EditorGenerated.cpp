@@ -7,7 +7,7 @@
 
 #include "Precompile.h"
 
-#include "UIToolKit/SortableListView.h"
+#include "Luna/UI/SortableListView.h"
 
 #include "EditorGenerated.h"
 
@@ -105,7 +105,7 @@ RunGamePanel::RunGamePanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
 	
 	levelSizer->Add( m_LevelHelpText, 0, wxALL, 5 );
 	
-	m_Levels = new UIToolKit::SortableListView( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ALIGN_LEFT|wxLC_AUTOARRANGE|wxLC_LIST );
+	m_Levels = new Luna::SortableListView( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ALIGN_LEFT|wxLC_AUTOARRANGE|wxLC_LIST );
 	levelSizer->Add( m_Levels, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* levelButtonSizer;

@@ -5,7 +5,7 @@
 #include "TaskOutputWindow.h"
 
 #include "Foundation/Log.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 using namespace Luna;
 
@@ -73,9 +73,9 @@ TaskOutputWindow::TaskOutputWindow( wxWindow* parent, const std::string& title, 
 
   wxIconBundle iconBundle;
   wxIcon tempIcon;
-  tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "build_32.png" ) );
+  tempIcon.CopyFromBitmap( Luna::GlobalImageManager().GetBitmap( "build_32.png" ) );
   iconBundle.AddIcon( tempIcon );
-  tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "build_16.png" ) );
+  tempIcon.CopyFromBitmap( Luna::GlobalImageManager().GetBitmap( "build_16.png" ) );
   iconBundle.AddIcon( tempIcon );
   SetIcons( iconBundle );
 

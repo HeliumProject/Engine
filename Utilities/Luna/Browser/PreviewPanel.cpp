@@ -7,8 +7,8 @@
 #include "Asset/AssetClass.h"
 #include "Asset/ArtFileAttribute.h"
 #include "Attribute/AttributeHandle.h"
-#include "UIToolKit/ImageManager.h"
-#include "UIToolKit/MenuButton.h"
+#include "Luna/UI/ImageManager.h"
+#include "Luna/UI/MenuButton.h"
 
 using namespace Luna;
 

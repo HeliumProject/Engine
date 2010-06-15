@@ -8,8 +8,8 @@
 #ifndef __LunaGenerated__
 #define __LunaGenerated__
 
-namespace UIToolKit{ class Button; }
-namespace UIToolKit{ class MenuButton; }
+namespace Luna{ class Button; }
+namespace Luna{ class MenuButton; }
 
 #include <wx/sizer.h>
 #include <wx/gdicmn.h>
@@ -57,10 +57,10 @@ namespace Luna
 		private:
 		
 		protected:
-			UIToolKit::Button* m_ButtonCreateEntity;
-			UIToolKit::Button* m_ButtonCreateVolume;
-			UIToolKit::Button* m_ButtonCreateClue;
-			UIToolKit::MenuButton* m_ButtonCurve;
+			Luna::Button* m_ButtonCreateEntity;
+			Luna::Button* m_ButtonCreateVolume;
+			Luna::Button* m_ButtonCreateClue;
+			Luna::MenuButton* m_ButtonCurve;
 			wxStaticText* m_staticText1;
 			wxStaticText* m_staticText2;
 			wxBitmapButton* m_bpButton445;

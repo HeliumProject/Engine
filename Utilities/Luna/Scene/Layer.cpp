@@ -2,7 +2,7 @@
 #include "Layer.h"
 #include "Scene.h"
 
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 #include "Inspect/Choice.h"
 
 #include "Foundation/Container/Insert.h" 
@@ -53,7 +53,7 @@ Layer::~Layer()
 // 
 i32 Layer::GetImageIndex() const
 {
-  return UIToolKit::GlobalImageManager().GetImageIndex( "layer_16.png" );
+  return Luna::GlobalImageManager().GetImageIndex( "layer_16.png" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

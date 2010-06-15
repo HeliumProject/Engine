@@ -8,8 +8,8 @@
 
 #include "Editor/ContextMenuGenerator.h"
 #include "Finder/Finder.h"
-#include "UIToolKit/ImageManager.h"
-#include "UIToolKit/FileDialog.h"
+#include "Luna/UI/ImageManager.h"
+#include "Luna/UI/FileDialog.h"
 
 
 // Using
@@ -114,7 +114,7 @@ void FileBackedAttribute::PopulateContextMenu( ContextMenuItemSet& menu )
     menu.AppendItem( menuItem );
 
 
-    wxBitmap finderIcon = UIToolKit::GlobalImageManager().GetBitmap( "magnify_16.png" );
+    wxBitmap finderIcon = Luna::GlobalImageManager().GetBitmap( "magnify_16.png" );
     menuItem = new ContextMenuItem( "Change File Path (Asset Finder)", "Change this file's path using the Asset Finder", finderIcon );
     menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedAttribute::OnChangePathFinder ) );
     menuItem->Enable( numSelected == 1 );
@@ -179,7 +179,7 @@ void FileBackedAttribute::OnOpen( const ContextMenuArgsPtr& args )
 // 
 void FileBackedAttribute::OnChangePath( const ContextMenuArgsPtr& args )
 {
-    UIToolKit::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path" );
+    Luna::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path" );
 
     std::string currentPath = GetFilePath();
     if ( !currentPath.empty() )

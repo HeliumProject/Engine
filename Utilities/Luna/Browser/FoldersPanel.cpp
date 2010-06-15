@@ -7,7 +7,7 @@
 #include "Inspect/ClipboardFileList.h"
 #include "Inspect/DropTarget.h"
 #include "Inspect/ReflectClipboardData.h"
-#include "UIToolKit/SortTreeCtrl.h"
+#include "Luna/UI/SortTreeCtrl.h"
 
 using namespace Luna;
 
@@ -39,9 +39,9 @@ wxTreeCtrl* FoldersPanel::GetTreeCtrl()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-UIToolKit::SortTreeCtrl* FoldersPanel::GetSortTreeCtrl()
+Luna::SortTreeCtrl* FoldersPanel::GetSortTreeCtrl()
 {
-  return reinterpret_cast<UIToolKit::SortTreeCtrl*>( m_FoldersTreeCtrl->GetTreeCtrl() );
+  return reinterpret_cast<Luna::SortTreeCtrl*>( m_FoldersTreeCtrl->GetTreeCtrl() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ void FoldersPanel::GetPath( std::string& path ) const
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function for hit testing a point during a drag and drop operation.
 // 
-wxTreeItemId FoldersPanel::DragHitTest( UIToolKit::SortTreeCtrl* treeCtrl, wxPoint point )
+wxTreeItemId FoldersPanel::DragHitTest( Luna::SortTreeCtrl* treeCtrl, wxPoint point )
 {
   int flags = 0;
   wxTreeItemId item = treeCtrl->HitTest( point, flags );
@@ -96,7 +96,7 @@ wxTreeItemId FoldersPanel::DragHitTest( UIToolKit::SortTreeCtrl* treeCtrl, wxPoi
 // 
 wxDragResult FoldersPanel::DragOver( const Inspect::DragArgs& args )
 {
-  UIToolKit::SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
+  Luna::SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
 
   wxDragResult result = args.m_Default;
   wxTreeItemId item = DragHitTest( treeCtrl, wxPoint( args.m_X, args.m_Y ) );
@@ -153,7 +153,7 @@ wxDragResult FoldersPanel::DragOver( const Inspect::DragArgs& args )
 // 
 wxDragResult FoldersPanel::Drop( const Inspect::DragArgs& args )
 {
-  UIToolKit::SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
+  Luna::SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
   
   wxDragResult result = wxDragNone;
 
@@ -243,7 +243,7 @@ wxDragResult FoldersPanel::Drop( const Inspect::DragArgs& args )
 // 
 void FoldersPanel::DragLeave( Nocturnal::Void )
 {
-  UIToolKit::SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
+  Luna::SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
   
   if ( m_DragOverItem.IsOk() )
   {
@@ -319,7 +319,7 @@ void FoldersPanel::OnTreeItemMenu( wxTreeEvent& event )
   //  newMenu->Enable( ID_NewFolder, inFolder );
 
   //  wxMenuItem* menuItem = new wxMenuItem( &menu, ID_New, BrowserMenu::Label( ID_New ), BrowserMenu::Label( ID_New ), wxITEM_NORMAL, newMenu );
-  //  menuItem->SetBitmap( UIToolKit::GlobalImageManager().GetBitmap( "new_file_16.png" ) );
+  //  menuItem->SetBitmap( Luna::GlobalImageManager().GetBitmap( "new_file_16.png" ) );
   //  menu.Append( menuItem );
   //  menuItem->Enable( inFolder );
   //}

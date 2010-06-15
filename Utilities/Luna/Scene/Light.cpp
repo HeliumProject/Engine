@@ -8,7 +8,7 @@
 
 #include "Core/Enumerator.h"
 #include "SceneEditor.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 #include "PrimitiveSphere.h"
 #include "PrimitivePointer.h"
@@ -91,7 +91,7 @@ void Light::Delete()
 
 i32 Light::GetImageIndex() const
 {
-    return UIToolKit::GlobalImageManager().GetImageIndex( "light_16.png" );
+    return Luna::GlobalImageManager().GetImageIndex( "light_16.png" );
 }
 
 std::string Light::GetApplicationTypeName() const

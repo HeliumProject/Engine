@@ -1,10 +1,10 @@
 #include "Precompile.h"
 #include "NavigationPanel.h"
 
-#include "UIToolKit/AutoCompleteComboBox.h"
-#include "UIToolKit/Button.h"
-#include "UIToolKit/ImageManager.h"
-#include "UIToolKit/MenuButton.h"
+#include "Luna/UI/AutoCompleteComboBox.h"
+#include "Luna/UI/Button.h"
+#include "Luna/UI/ImageManager.h"
+#include "Luna/UI/MenuButton.h"
 
 #include "BrowserSearchDatabase.h"
 
@@ -19,24 +19,24 @@ NavigationPanel::NavigationPanel( BrowserFrame* browserFrame, SearchHistory* his
 , m_IgnoreNavBarTextChanged( false )
 {
   // Assign the button icons
-  m_BackButton->SetBitmapLabel( UIToolKit::GlobalImageManager().GetBitmap( "folder_back_16.png" ) );
-  m_BackButton->SetBitmapDisabled( UIToolKit::GlobalImageManager().GetBitmap( "folder_back_disabled_16.png" ) );
+  m_BackButton->SetBitmapLabel( Luna::GlobalImageManager().GetBitmap( "folder_back_16.png" ) );
+  m_BackButton->SetBitmapDisabled( Luna::GlobalImageManager().GetBitmap( "folder_back_disabled_16.png" ) );
   m_BackButton->SetHoldDelay( 0.5f );
   m_BackButton->Enable( false );
 
-  m_ForwardButton->SetBitmapLabel( UIToolKit::GlobalImageManager().GetBitmap( "folder_forward_16.png" ) );
-  m_ForwardButton->SetBitmapDisabled( UIToolKit::GlobalImageManager().GetBitmap( "folder_forward_disabled_16.png" ) );
+  m_ForwardButton->SetBitmapLabel( Luna::GlobalImageManager().GetBitmap( "folder_forward_16.png" ) );
+  m_ForwardButton->SetBitmapDisabled( Luna::GlobalImageManager().GetBitmap( "folder_forward_disabled_16.png" ) );
   m_ForwardButton->SetHoldDelay( 0.5f );
   m_ForwardButton->Enable( false );
 
-  m_UpFolderButton->SetBitmapLabel( UIToolKit::GlobalImageManager().GetBitmap( "folder_up_16.png" ) );
-  m_UpFolderButton->SetBitmapDisabled( UIToolKit::GlobalImageManager().GetBitmap( "folder_up_disabled_16.png" ) );
+  m_UpFolderButton->SetBitmapLabel( Luna::GlobalImageManager().GetBitmap( "folder_up_16.png" ) );
+  m_UpFolderButton->SetBitmapDisabled( Luna::GlobalImageManager().GetBitmap( "folder_up_disabled_16.png" ) );
   m_UpFolderButton->Enable( false );
 
-  m_GoButton->SetBitmapLabel( UIToolKit::GlobalImageManager().GetBitmap( "magnify_16.png" ) );
+  m_GoButton->SetBitmapLabel( Luna::GlobalImageManager().GetBitmap( "magnify_16.png" ) );
   m_GoButton->Enable( false );
   
-  m_OptionsButton->SetBitmapLabel( UIToolKit::GlobalImageManager().GetBitmap( "view_style_16.png" ) );
+  m_OptionsButton->SetBitmapLabel( Luna::GlobalImageManager().GetBitmap( "view_style_16.png" ) );
   m_OptionsButton->SetHoldDelay( 0.0f );
 
   UpdateHistoryMenus();

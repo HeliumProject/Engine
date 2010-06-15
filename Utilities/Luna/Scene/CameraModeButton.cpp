@@ -3,25 +3,25 @@
 
 #include "SceneEditor.h"
 
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 using namespace Luna;
 
-BEGIN_EVENT_TABLE( CameraModeButton, UIToolKit::MenuButton )
+BEGIN_EVENT_TABLE( CameraModeButton, Luna::MenuButton )
 END_EVENT_TABLE()
 
 CameraModeButton::CameraModeButton( wxWindow* parent, SceneEditor* sceneEditor, wxWindowID id )
-: UIToolKit::MenuButton( parent, id, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW )
+: Luna::MenuButton( parent, id, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW )
 , m_CurrentMode( CameraModes::Orbit )
 , m_SceneEditor( sceneEditor )
 {
   SetMargins( 4 );
   const Reflect::Enumeration* cameraModeEnum = Reflect::Registry::GetInstance()->GetEnumeration( Reflect::GetType< CameraModes::CameraMode >() );
 
-  m_Bitmaps[ CameraModes::Orbit ] = UIToolKit::GlobalImageManager().GetBitmap( "camera_perspective_32.png" );
-  m_Bitmaps[ CameraModes::Front ] = UIToolKit::GlobalImageManager().GetBitmap( "camera_front_32.png" );
-  m_Bitmaps[ CameraModes::Side ] = UIToolKit::GlobalImageManager().GetBitmap( "camera_side_32.png" );
-  m_Bitmaps[ CameraModes::Top ] = UIToolKit::GlobalImageManager().GetBitmap( "camera_top_32.png" );
+  m_Bitmaps[ CameraModes::Orbit ] = Luna::GlobalImageManager().GetBitmap( "camera_perspective_32.png" );
+  m_Bitmaps[ CameraModes::Front ] = Luna::GlobalImageManager().GetBitmap( "camera_front_32.png" );
+  m_Bitmaps[ CameraModes::Side ] = Luna::GlobalImageManager().GetBitmap( "camera_side_32.png" );
+  m_Bitmaps[ CameraModes::Top ] = Luna::GlobalImageManager().GetBitmap( "camera_top_32.png" );
 
   std::string label;
   wxMenu* menu = new wxMenu();

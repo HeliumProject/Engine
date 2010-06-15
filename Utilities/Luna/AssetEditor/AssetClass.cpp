@@ -22,7 +22,7 @@
 #include "Inspect/ClipboardElementArray.h"
 #include "Core/Enumerator.h"
 #include "Asset/EntityManifest.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 #include <algorithm>
 
@@ -324,7 +324,7 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
   menu.AppendItem( menuItem );
 
   menu.AppendSeparator();
-  menuItem = new ContextMenuItem( "Save", "Save selected Asset(s)", UIToolKit::GlobalImageManager().GetBitmap( "save_16.png" ) );
+  menuItem = new ContextMenuItem( "Save", "Save selected Asset(s)", Luna::GlobalImageManager().GetBitmap( "save_16.png" ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( &Luna::OnSaveSelectedAssets ), clientData );
   menu.AppendItem( menuItem );
   menu.AppendSeparator();

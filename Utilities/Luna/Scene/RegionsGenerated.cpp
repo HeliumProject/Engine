@@ -8,7 +8,7 @@
 #include "Precompile.h"
 
 
-#include "UIToolKit/SortTreeCtrl.h"
+#include "Luna/UI/SortTreeCtrl.h"
 
 #include "RegionsGenerated.h"
 
@@ -19,7 +19,7 @@ RegionsPanelBase::RegionsPanelBase( wxWindow* parent, wxWindowID id, const wxPoi
 {
 	m_Sizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_RegionTree = new UIToolKit::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE|wxTR_EDIT_LABELS|wxTR_HIDE_ROOT );
+	m_RegionTree = new Luna::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE|wxTR_EDIT_LABELS|wxTR_HIDE_ROOT );
 	m_Sizer->Add( m_RegionTree, 1, wxALL|wxEXPAND, 5 );
 	
 	this->SetSizer( m_Sizer );

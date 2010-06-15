@@ -3,7 +3,7 @@
 #include "Container.h"
 #include "Canvas.h"
 
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 // Using
 using namespace Inspect;
@@ -180,7 +180,7 @@ void Button::SetIcon(const std::string& icon)
     if ( !m_Icon.empty() )
     {
       m_Icon = icon;
-      Control::Cast< wxBitmapButton >( this )->SetBitmapLabel( UIToolKit::GlobalImageManager().GetBitmap( m_Icon ) );
+      Control::Cast< wxBitmapButton >( this )->SetBitmapLabel( Luna::GlobalImageManager().GetBitmap( m_Icon ) );
     }
   }
   else

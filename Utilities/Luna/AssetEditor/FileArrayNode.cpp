@@ -6,7 +6,7 @@
 #include "AssetUtils.h"
 #include "FieldFileReference.h"
 
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 using namespace Luna;
 
@@ -69,7 +69,7 @@ FileArrayNode::FileArrayNode( Luna::AssetManager* assetManager, Reflect::Element
     contextMenu.AppendSeparator();
     contextMenu.AppendItem( menuItem );
 
-    menuItem = new ContextMenuItem( "Add file (Asset Finder)", "Add a new file to this list using the Asset Finder", UIToolKit::GlobalImageManager().GetBitmap( "magnify_16.png" ) );
+    menuItem = new ContextMenuItem( "Add file (Asset Finder)", "Add a new file to this list using the Asset Finder", Luna::GlobalImageManager().GetBitmap( "magnify_16.png" ) );
     menuItem->Disable();
     contextMenu.AppendItem( menuItem );
 }

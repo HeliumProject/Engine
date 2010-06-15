@@ -6,7 +6,7 @@
 #include "AssetEditor.h"
 
 #include "Inspect/ReflectClipboardData.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 using namespace Luna;
 
@@ -79,7 +79,7 @@ void AssetNode::SetName( const std::string& name )
 // 
 i32 AssetNode::GetIconIndex() const
 {
-    return UIToolKit::GlobalImageManager().GetImageIndex( GetIcon() );
+    return Luna::GlobalImageManager().GetImageIndex( GetIcon() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

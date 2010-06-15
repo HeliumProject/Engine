@@ -7,7 +7,7 @@
 #include "Inspect/DropTarget.h"
 #include "Inspect/ReflectClipboardData.h"
 
-namespace UIToolKit
+namespace Luna
 {
   class SortTreeCtrl;
 }
@@ -24,7 +24,7 @@ namespace Luna
     virtual ~FoldersPanel();
 
     wxTreeCtrl* GetTreeCtrl();
-    UIToolKit::SortTreeCtrl* GetSortTreeCtrl();
+    Luna::SortTreeCtrl* GetSortTreeCtrl();
     void Unselect();
 
     void SetPath( const std::string& path );
@@ -44,7 +44,7 @@ namespace Luna
     void DragLeave( Nocturnal::Void );
 
   private:
-    wxTreeItemId DragHitTest( UIToolKit::SortTreeCtrl* treeCtrl, wxPoint point );
+    wxTreeItemId DragHitTest( Luna::SortTreeCtrl* treeCtrl, wxPoint point );
 
   private:
     BrowserFrame* m_BrowserFrame;

@@ -5,7 +5,7 @@
 #include "Math/Utils.h"
 #include "igDXContent/ContentLoader.h"
 #include "Scene/Camera.h"
-#include "UIToolKit/FileDialog.h"
+#include "Luna/UI/FileDialog.h"
 
 using namespace Luna;
 
@@ -506,7 +506,7 @@ void PreviewWindow::OnMouseWheel( wxMouseEvent& args )
 // 
 void PreviewWindow::OnScreenShotToFile( wxCommandEvent& args )
 {
-  UIToolKit::FileDialog dialog( this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, FinderSpecs::Extension::TGA.GetDialogFilter(), UIToolKit::FileDialogStyles::DefaultSave );
+  Luna::FileDialog dialog( this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, FinderSpecs::Extension::TGA.GetDialogFilter(), Luna::FileDialogStyles::DefaultSave );
   if ( dialog.ShowModal() == wxID_OK )
   {
     std::string path = dialog.GetPath();

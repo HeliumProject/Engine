@@ -2,11 +2,11 @@
 #include "Choice.h"
 #include "Container.h"
 
-#include "UIToolKit/AutoCompleteComboBox.h"
+#include "Luna/UI/AutoCompleteComboBox.h"
 
 using namespace Inspect;
 
-class ComboBox : public UIToolKit::AutoCompleteComboBox
+class ComboBox : public Luna::AutoCompleteComboBox
 {
 public:
   Choice* m_ComboBox;
@@ -14,7 +14,7 @@ public:
   bool m_Override;
 
   ComboBox (wxWindow* parent, Choice* comboBox, int flags)
-    : UIToolKit::AutoCompleteComboBox (parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, flags)
+    : Luna::AutoCompleteComboBox (parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, flags)
     , m_ComboBox (comboBox)
     , m_Override (false)
   {

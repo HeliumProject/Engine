@@ -8,7 +8,7 @@
 #ifndef __RegionsGenerated__
 #define __RegionsGenerated__
 
-namespace UIToolKit{ class SortTreeCtrl; }
+namespace Luna{ class SortTreeCtrl; }
 
 #include <wx/treectrl.h>
 #include <wx/gdicmn.h>
@@ -38,7 +38,7 @@ namespace Luna
 		
 		protected:
 			wxBoxSizer* m_Sizer;
-			UIToolKit::SortTreeCtrl* m_RegionTree;
+			Luna::SortTreeCtrl* m_RegionTree;
 			
 			// Virtual event handlers, overide them in your derived class
 			virtual void OnBeginLabelEdit( wxTreeEvent& event ){ event.Skip(); }

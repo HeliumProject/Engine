@@ -1,7 +1,7 @@
 #pragma once
 
-#include "API.h"
-#include "UIToolKit/MRU.h"
+#include "Luna/API.h"
+#include "Luna/UI/MRU.h"
 #include "Reflect/Element.h"
 #include "Reflect/ArraySerializer.h"
 

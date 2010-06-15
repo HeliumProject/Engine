@@ -9,7 +9,7 @@
 #include "Inspect/DropTarget.h"
 #include "Inspect/ReflectClipboardData.h"
 
-namespace UIToolKit
+namespace Luna
 {
   class SortTreeCtrl;
 }
@@ -68,7 +68,7 @@ namespace Luna
     void DragLeave( Nocturnal::Void );
 
   private:
-    wxTreeItemId DragHitTest( UIToolKit::SortTreeCtrl* treeCtrl, wxPoint point );
+    wxTreeItemId DragHitTest( Luna::SortTreeCtrl* treeCtrl, wxPoint point );
 
     static AssetCollection* NewCollection( CollectionManager* collectionManager, const i32 typeID, const std::string& tryName = std::string("") );
 
@@ -83,10 +83,10 @@ namespace Luna
     void DisconnectCollectionManagerListeners();
     void ConnectCollectionListeners();
     void UpdateCollections();
-    void PrePopulateTreeCtrl( UIToolKit::SortTreeCtrl* treeCtrl );
-    void PostPopulateTreeCtrl( UIToolKit::SortTreeCtrl* treeCtrl );
+    void PrePopulateTreeCtrl( Luna::SortTreeCtrl* treeCtrl );
+    void PostPopulateTreeCtrl( Luna::SortTreeCtrl* treeCtrl );
 
-    static AssetCollectionItemData* GetItemData( UIToolKit::SortTreeCtrl* treeCtrl, const wxTreeItemId& id );
+    static AssetCollectionItemData* GetItemData( Luna::SortTreeCtrl* treeCtrl, const wxTreeItemId& id );
 
   private:
     BrowserFrame*      m_BrowserFrame;

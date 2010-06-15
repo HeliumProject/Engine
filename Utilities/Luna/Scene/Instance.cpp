@@ -5,7 +5,7 @@
 
 #include "Scene.h"
 
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 #include "Foundation/Log.h"
 
@@ -48,7 +48,7 @@ void Instance::Unpack()
 
 i32 Instance::GetImageIndex() const
 {
-  i32 image = UIToolKit::GlobalImageManager().GetImageIndex( "null_16.png" );
+  i32 image = Luna::GlobalImageManager().GetImageIndex( "null_16.png" );
 
   if ( GetNodeType() )
   {

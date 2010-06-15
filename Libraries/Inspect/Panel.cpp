@@ -2,7 +2,7 @@
 #include "Panel.h"
 #include "Canvas.h"
 #include "Label.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 using namespace Reflect;
 using namespace Inspect;
@@ -43,9 +43,9 @@ bool Panel::Process(const std::string& key, const std::string& value)
 wxWindow* Panel::GetContextWindow()
 {
   wxTreeItemId item = m_ItemData.GetId();
-  if ( item != UIToolKit::wxTreeWndCtrlItemIdInvalid )
+  if ( item != Luna::wxTreeWndCtrlItemIdInvalid )
   {
-    UIToolKit::wxTreeWndCtrl* treeWndCtrl = (UIToolKit::wxTreeWndCtrl*) m_Window;
+    Luna::wxTreeWndCtrl* treeWndCtrl = (Luna::wxTreeWndCtrl*) m_Window;
     wxWindow* window = treeWndCtrl->GetItemWindow( item );
     if ( window )
     {
@@ -59,9 +59,9 @@ wxWindow* Panel::GetContextWindow()
 const wxWindow* Panel::GetContextWindow() const
 {
   wxTreeItemId item = m_ItemData.GetId();
-  if ( item != UIToolKit::wxTreeWndCtrlItemIdInvalid )
+  if ( item != Luna::wxTreeWndCtrlItemIdInvalid )
   {
-    UIToolKit::wxTreeWndCtrl* treeWndCtrl = (UIToolKit::wxTreeWndCtrl*) m_Window;
+    Luna::wxTreeWndCtrl* treeWndCtrl = (Luna::wxTreeWndCtrl*) m_Window;
     wxWindow* window = treeWndCtrl->GetItemWindow( item );
     if ( window )
     {
@@ -117,11 +117,11 @@ void Panel::Realize(Container* parent)
 void Panel::UnRealize()
 {
   wxTreeItemId item = m_ItemData.GetId();
-  if ( item != UIToolKit::wxTreeWndCtrlItemIdInvalid )
+  if ( item != Luna::wxTreeWndCtrlItemIdInvalid )
   {
-    UIToolKit::wxTreeWndCtrl* treeWndCtrl = (UIToolKit::wxTreeWndCtrl*) m_Window;
+    Luna::wxTreeWndCtrl* treeWndCtrl = (Luna::wxTreeWndCtrl*) m_Window;
     treeWndCtrl->Delete( item );
-    m_ItemData.SetId( UIToolKit::wxTreeWndCtrlItemIdInvalid );
+    m_ItemData.SetId( Luna::wxTreeWndCtrlItemIdInvalid );
   }
 
   if ( !m_OwnWindow )
@@ -154,32 +154,32 @@ void Panel::RefreshControls()
   if ( !m_RefreshControls )
     return;
     
-  UIToolKit::wxTreeWndCtrl* treeWndCtrl = NULL;
+  Luna::wxTreeWndCtrl* treeWndCtrl = NULL;
   if ( Reflect::ObjectCast<Panel>( m_Parent ) || Reflect::ObjectCast<Canvas>( m_Parent ) )
   {
-    treeWndCtrl = (UIToolKit::wxTreeWndCtrl*) m_Parent->GetWindow();
+    treeWndCtrl = (Luna::wxTreeWndCtrl*) m_Parent->GetWindow();
     m_OwnWindow = false;
   }
   else
   {
-    treeWndCtrl = new UIToolKit::wxTreeWndCtrl( m_Parent->GetWindow() );
+    treeWndCtrl = new Luna::wxTreeWndCtrl( m_Parent->GetWindow() );
     treeWndCtrl->AddRoot( "Panel Root (hidden)" );
     treeWndCtrl->SetHideRoot( true );
-    treeWndCtrl->SetImageList( UIToolKit::GlobalImageManager().GetGuiImageList() );
-    treeWndCtrl->SetStateImageList( UIToolKit::GlobalImageManager().GetGuiImageList() );
+    treeWndCtrl->SetImageList( Luna::GlobalImageManager().GetGuiImageList() );
+    treeWndCtrl->SetStateImageList( Luna::GlobalImageManager().GetGuiImageList() );
     m_OwnWindow = true;
   }
   
   m_Window = treeWndCtrl;
   treeWndCtrl->Freeze();
   
-  int collapsedIndex = UIToolKit::GlobalImageManager().GetImageIndex( "ms_folder_closed.png" );
-  int expandedIndex = UIToolKit::GlobalImageManager().GetImageIndex( "ms_folder_open.png" );
+  int collapsedIndex = Luna::GlobalImageManager().GetImageIndex( "ms_folder_closed.png" );
+  int expandedIndex = Luna::GlobalImageManager().GetImageIndex( "ms_folder_open.png" );
 
   wxTreeItemId item = m_ItemData.GetId();
   if ( m_ShowTreeNode )
   {
-    if ( item == UIToolKit::wxTreeWndCtrlItemIdInvalid )
+    if ( item == Luna::wxTreeWndCtrlItemIdInvalid )
     {
       treeWndCtrl->AppendItem( GetParentTreeNode( m_Parent ), m_Text, collapsedIndex, expandedIndex, &m_ItemData );
       item = m_ItemData.GetId();
@@ -187,7 +187,7 @@ void Panel::RefreshControls()
   }
   else
   {
-    NOC_ASSERT( item == UIToolKit::wxTreeWndCtrlItemIdInvalid );
+    NOC_ASSERT( item == Luna::wxTreeWndCtrlItemIdInvalid );
     item = GetParentTreeNode( m_Parent );
   }
 
@@ -338,9 +338,9 @@ void Panel::SetItemExpanded(bool expanded)
   if ( m_Canvas )
   {
     wxTreeItemId item = m_ItemData.GetId();
-    if ( item != UIToolKit::wxTreeWndCtrlItemIdInvalid )
+    if ( item != Luna::wxTreeWndCtrlItemIdInvalid )
     {
-      UIToolKit::wxTreeWndCtrl* treeWndCtrl = (UIToolKit::wxTreeWndCtrl*) m_Window;
+      Luna::wxTreeWndCtrl* treeWndCtrl = (Luna::wxTreeWndCtrl*) m_Window;
       if ( treeWndCtrl->IsExpanded( item ) != expanded )
       {
         bool ignoreToggle = m_ItemData.GetIgnoreToggle();
@@ -368,14 +368,14 @@ wxTreeItemId Panel::GetParentTreeNode(Container* parent)
     if ( parentPanel )
     {
       wxTreeItemId parentItem = parentPanel->m_ItemData.GetId();
-      if ( parentItem != UIToolKit::wxTreeWndCtrlItemIdInvalid )
+      if ( parentItem != Luna::wxTreeWndCtrlItemIdInvalid )
       {
         return parentItem;
       }
     }
   }
 
-  UIToolKit::wxTreeWndCtrl* treeWndCtrl = (UIToolKit::wxTreeWndCtrl*) m_Window;
+  Luna::wxTreeWndCtrl* treeWndCtrl = (Luna::wxTreeWndCtrl*) m_Window;
   return treeWndCtrl->GetRootItem();
 }
 
@@ -465,9 +465,9 @@ void Panel::Read()
     if ( m_Canvas )
     {
       wxTreeItemId item = m_ItemData.GetId();
-      if ( item != UIToolKit::wxTreeWndCtrlItemIdInvalid )
+      if ( item != Luna::wxTreeWndCtrlItemIdInvalid )
       {
-        UIToolKit::wxTreeWndCtrl* treeWndCtrl = (UIToolKit::wxTreeWndCtrl*) m_Window;
+        Luna::wxTreeWndCtrl* treeWndCtrl = (Luna::wxTreeWndCtrl*) m_Window;
         treeWndCtrl->SetItemText( item, m_Text );
       }
     }
@@ -488,9 +488,9 @@ void Panel::SetText(const std::string& text)
   if ( m_Canvas )
   {
     wxTreeItemId item = m_ItemData.GetId();
-    if ( item != UIToolKit::wxTreeWndCtrlItemIdInvalid )
+    if ( item != Luna::wxTreeWndCtrlItemIdInvalid )
     {
-      UIToolKit::wxTreeWndCtrl* treeWndCtrl = (UIToolKit::wxTreeWndCtrl*) m_Window;
+      Luna::wxTreeWndCtrl* treeWndCtrl = (Luna::wxTreeWndCtrl*) m_Window;
       treeWndCtrl->SetItemText( item, m_Text );
     }
   }

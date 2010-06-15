@@ -11,7 +11,7 @@ using namespace Luna;
 /// class DependencyLoader
 ///////////////////////////////////////////////////////////////////////////////
 DependencyLoader::DependencyLoader( const std::string& rootDirectory, const std::string& configDirectory, DependencyCollection* collection )
-: UIToolKit::ThreadMechanism( "DependencyLoader" )
+: Luna::ThreadMechanism( "DependencyLoader" )
 , m_RootDirectory( rootDirectory )
 , m_ConfigDirectory( configDirectory )
 , m_Collection( collection )
@@ -51,7 +51,7 @@ void DependencyLoader::ThreadProc( i32 threadID )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void DependencyLoader::OnEndThread( const UIToolKit::ThreadProcArgs& args )
+void DependencyLoader::OnEndThread( const Luna::ThreadProcArgs& args )
 {
     if ( !IsCurrentThread( args.m_ThreadID ) )
         return;

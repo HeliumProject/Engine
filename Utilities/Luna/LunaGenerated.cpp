@@ -7,8 +7,8 @@
 
 #include "Precompile.h"
 
-#include "UIToolKit/Button.h"
-#include "UIToolKit/MenuButton.h"
+#include "Luna/UI/Button.h"
+#include "Luna/UI/MenuButton.h"
 
 #include "LunaGenerated.h"
 
@@ -47,16 +47,16 @@ ToolsPanelGenerated::ToolsPanelGenerated( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_ButtonCreateEntity = new UIToolKit::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
+	m_ButtonCreateEntity = new Luna::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
 	bSizer10->Add( m_ButtonCreateEntity, 0, wxALL, 0 );
 	
-	m_ButtonCreateVolume = new UIToolKit::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
+	m_ButtonCreateVolume = new Luna::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
 	bSizer10->Add( m_ButtonCreateVolume, 0, wxALL, 0 );
 	
-	m_ButtonCreateClue = new UIToolKit::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
+	m_ButtonCreateClue = new Luna::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
 	bSizer10->Add( m_ButtonCreateClue, 0, wxALL, 0 );
 	
-	m_ButtonCurve = new UIToolKit::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
+	m_ButtonCurve = new Luna::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW );
 	bSizer10->Add( m_ButtonCurve, 0, wxALL, 0 );
 	
 	bSizer31->Add( bSizer10, 0, wxEXPAND, 5 );

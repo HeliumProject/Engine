@@ -19,7 +19,7 @@
 #include "Scene/SceneEditor.h"
 #include "Scene/SceneInit.h"
 #include "Task/TaskInit.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 #include "Platform/Windows/Windows.h"
 #include "Platform/Process.h"
 #include "Application/Worker/Process.h"
@@ -188,7 +188,7 @@ int LunaApp::OnExit()
       delete m_AssetTracker;
   }
 
-  UIToolKit::ImageManagerCleanup();
+  Luna::ImageManagerCleanup();
 
   m_InitializerStack.Cleanup();
 

@@ -4,7 +4,7 @@
 
 #include "API.h"
 #include "Container.h"
-#include "UIToolKit/wxTreeWndCtrl.h"
+#include "Luna/UI/wxTreeWndCtrl.h"
 
 namespace Inspect
 {
@@ -16,7 +16,7 @@ namespace Inspect
   // Defines the base wx-derived window used by the canvas
   //
 
-  class INSPECT_API CanvasWindow : public UIToolKit::wxTreeWndCtrl
+  class INSPECT_API CanvasWindow : public Luna::wxTreeWndCtrl
   {
   public:
     Canvas* m_Canvas;
@@ -29,9 +29,9 @@ namespace Inspect
                  const wxString& name = "CanvasWindow",
                  int treeStyle = ( wxTR_ALL_LINES | wxTR_HIDE_ROOT ),
                  unsigned int columnSize = WXTWC_DEFAULT_COLUMN_SIZE,
-                 wxBitmap expandedBitmap = UIToolKit::wxTreeWndCtrlDefaultExpand,
-                 wxBitmap collapsedBitmap = UIToolKit::wxTreeWndCtrlDefaultCollapse,
-                 wxPen pen = UIToolKit::wxTreeWndCtrlDefaultPen,
+                 wxBitmap expandedBitmap = Luna::wxTreeWndCtrlDefaultExpand,
+                 wxBitmap collapsedBitmap = Luna::wxTreeWndCtrlDefaultCollapse,
+                 wxPen pen = Luna::wxTreeWndCtrlDefaultPen,
                  unsigned int clickTolerance = WXTWC_DEFAULT_CLICK_TOLERANCE);
                  
     Canvas* GetCanvas();

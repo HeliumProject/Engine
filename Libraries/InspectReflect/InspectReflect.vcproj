@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\libraries;..\..\..\..\shared;$(boost);&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..\..\Utilities;..\..\libraries;..\..\..\..\shared;&quot;$(boost)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
@@ -110,7 +110,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\libraries;..\..\..\..\shared;$(boost);&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..\..\Utilities;..\..\libraries;..\..\..\..\shared;&quot;$(boost)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -158,10 +158,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
 			RelativePathToProject=".\libraries\Application\Application.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}"
-			RelativePathToProject=".\libraries\UIToolKit\UIToolKit.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{EBC5862F-F9EF-4CA6-AB18-F930074011AB}"

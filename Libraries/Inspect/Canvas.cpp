@@ -4,11 +4,11 @@
 
 #include "Controls.h"
 
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 using namespace Inspect;
 
-BEGIN_EVENT_TABLE(CanvasWindow, UIToolKit::wxTreeWndCtrl)
+BEGIN_EVENT_TABLE(CanvasWindow, Luna::wxTreeWndCtrl)
 EVT_SHOW(CanvasWindow::OnShow)
 EVT_SIZE(CanvasWindow::OnSize)
 EVT_LEFT_DOWN(CanvasWindow::OnClick)
@@ -188,7 +188,7 @@ void Canvas::RemoveControl(Control* control)
 {
   CanvasWindow* treeWndCtrl = GetControl();
   wxTreeItemId item = treeWndCtrl->FindItem( control->GetWindow() );
-  if ( item != UIToolKit::wxTreeWndCtrlItemIdInvalid )
+  if ( item != Luna::wxTreeWndCtrlItemIdInvalid )
   {
     treeWndCtrl->Delete( item );
   }
@@ -229,12 +229,12 @@ void Canvas::Realize(Container* parent)
   treeWndCtrl->SetColumnSize( 15 );
   if ( ( treeWndCtrl->GetStateImageList() == NULL ) && ( treeWndCtrl->GetImageList() == NULL ) )
   {
-    treeWndCtrl->SetImageList( UIToolKit::GlobalImageManager().GetGuiImageList() );
-    treeWndCtrl->SetStateImageList( UIToolKit::GlobalImageManager().GetGuiImageList() );
+    treeWndCtrl->SetImageList( Luna::GlobalImageManager().GetGuiImageList() );
+    treeWndCtrl->SetStateImageList( Luna::GlobalImageManager().GetGuiImageList() );
   }
 
   wxTreeItemId root = treeWndCtrl->GetRootItem();
-  if ( root == UIToolKit::wxTreeWndCtrlItemIdInvalid )
+  if ( root == Luna::wxTreeWndCtrlItemIdInvalid )
   {
     root = treeWndCtrl->AddRoot( "Canvas Root" );
   }

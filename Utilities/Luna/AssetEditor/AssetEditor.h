@@ -1,15 +1,15 @@
 #pragma once
 
-#include "API.h"
+#include "Luna/API.h"
 #include "AssetManager.h"
 #include "Core/PropertiesManager.h"
 #include "Editor/Editor.h"
-#include "UIToolKit/MenuMRU.h"
+#include "Luna/UI/MenuMRU.h"
 
 // Forwards
 namespace AssetManager { class CreateAssetWizard; }
 namespace Inspect { class CanvasWindow; }
-namespace UIToolKit { struct MRUArgs; }
+namespace Luna { struct MRUArgs; }
 
 namespace Luna
 {
@@ -31,7 +31,7 @@ namespace Luna
 
   private:
     Luna::AssetManager m_AssetManager;
-    UIToolKit::MenuMRUPtr m_MRU;
+    Luna::MenuMRUPtr m_MRU;
     AssetOutliner* m_Outliner;
     Inspect::Canvas m_PropertyCanvas;
     EnumeratorPtr m_Enumerator;
@@ -88,7 +88,7 @@ namespace Luna
     // 
     // Data change callbacks
     // 
-    void MRUOpen( const UIToolKit::MRUArgs& args );
+    void MRUOpen( const Luna::MRUArgs& args );
     bool PropertyChanging( const Inspect::ChangingArgs& args );
     void PropertyChanged( const Inspect::ChangeArgs& args );
     void UndoQueueChanged( const Undo::QueueChangeArgs& args );

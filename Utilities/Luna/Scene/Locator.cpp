@@ -7,7 +7,7 @@
 #include "LocatorType.h"
 
 #include "Core/Enumerator.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 #include "PrimitiveLocator.h"
 #include "PrimitiveCube.h"
@@ -52,7 +52,7 @@ Locator::~Locator()
 
 i32 Locator::GetImageIndex() const
 {
-  return UIToolKit::GlobalImageManager().GetImageIndex( "locator_16.png" );
+  return Luna::GlobalImageManager().GetImageIndex( "locator_16.png" );
 }
 
 std::string Locator::GetApplicationTypeName() const

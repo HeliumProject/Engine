@@ -3,7 +3,7 @@
 #include "Instance.h"
 #include "Entity.h"
 
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 #include "Foundation/Log.h"
 
@@ -183,14 +183,14 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
 
               if ( iconPath.Exists() )
               {
-                t->m_IconIndex = UIToolKit::GlobalImageManager().GetImageIndex( iconPath.Get() );
+                t->m_IconIndex = Luna::GlobalImageManager().GetImageIndex( iconPath.Get() );
               }
               else
               {
                 iconPath.Set( "" + t->m_Icon ); //FinderSpecs::Luna::GLOBAL_CONFIG_FOLDER.GetFolder();
                 if ( iconPath.Exists() )
                 {
-                  t->m_IconIndex = UIToolKit::GlobalImageManager().GetImageIndex( iconPath.Get() );
+                  t->m_IconIndex = Luna::GlobalImageManager().GetImageIndex( iconPath.Get() );
                 }
               }
 

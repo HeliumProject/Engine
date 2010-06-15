@@ -8,7 +8,7 @@
 #ifndef __EditorGenerated__
 #define __EditorGenerated__
 
-namespace UIToolKit{ class SortableListView; }
+namespace Luna{ class SortableListView; }
 
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -74,7 +74,7 @@ namespace Luna
 		
 		public:
 			wxChoice* m_BuildChoice;
-			UIToolKit::SortableListView* m_Levels;
+			Luna::SortableListView* m_Levels;
 			wxButton* m_SelectNone;
 			wxButton* m_SelectAll;
 			wxTextCtrl* m_Options;

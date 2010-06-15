@@ -13,7 +13,7 @@
 #include "Finder/AssetSpecs.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
-#include "UIToolKit/FileDialog.h"
+#include "Luna/UI/FileDialog.h"
 
 // Using
 using namespace Luna;
@@ -229,7 +229,7 @@ static std::string PromptSaveAs( const DocumentPtr& file, wxWindow* window )
     std::string defaultDir = Nocturnal::Path( file->GetFilePath() ).Directory();
     std::string defaultFile = file->GetFilePath();
 
-    UIToolKit::FileDialog saveDlg( window, "Save As...", defaultDir.c_str(), defaultFile.c_str(), "", UIToolKit::FileDialogStyles::DefaultSave );
+    Luna::FileDialog saveDlg( window, "Save As...", defaultDir.c_str(), defaultFile.c_str(), "", Luna::FileDialogStyles::DefaultSave );
     saveDlg.AddFilter( FinderSpecs::Asset::WORLD_DECORATION.GetDialogFilter() );
     saveDlg.AddFilter( FinderSpecs::Asset::ZONE_DECORATION.GetDialogFilter() );
     if ( saveDlg.ShowModal() == wxID_OK )

@@ -35,9 +35,9 @@
 #include "Task/Export.h"
 #include "Inspect/Canvas.h"
 #include "RCS/RCS.h"
-#include "UIToolKit/FileDialog.h"
-#include "UIToolKit/ImageManager.h"
-#include "UIToolKit/ListDialog.h"
+#include "Luna/UI/FileDialog.h"
+#include "Luna/UI/ImageManager.h"
+#include "Luna/UI/ListDialog.h"
 #include "Platform/Process.h"
 #include <wx/clipbrd.h>
 
@@ -89,7 +89,7 @@ static Luna::Editor* CreateAssetEditor()
 AssetEditor::AssetEditor()
 : Luna::Editor( EditorTypes::Asset, NULL, wxID_ANY, wxT( s_EditorTitle ), wxDefaultPosition, wxSize( 800, 600 ), wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER )
 , m_AssetManager( this )
-, m_MRU( new UIToolKit::MenuMRU( 30, this ) )
+, m_MRU( new Luna::MenuMRU( 30, this ) )
 , m_Outliner( new AssetOutliner( this ) )
 , m_MenuPanels( new wxMenu() )
 , m_MenuFile( new wxMenu() )
@@ -105,11 +105,11 @@ AssetEditor::AssetEditor()
 {
     wxIconBundle iconBundle;
     wxIcon tempIcon;
-    tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "asset_editor_64.png" ) );
+    tempIcon.CopyFromBitmap( Luna::GlobalImageManager().GetBitmap( "asset_editor_64.png" ) );
     iconBundle.AddIcon( tempIcon );
-    tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "asset_editor_32.png" ) );
+    tempIcon.CopyFromBitmap( Luna::GlobalImageManager().GetBitmap( "asset_editor_32.png" ) );
     iconBundle.AddIcon( tempIcon );
-    tempIcon.CopyFromBitmap( UIToolKit::GlobalImageManager().GetBitmap( "asset_editor_16.png" ) );
+    tempIcon.CopyFromBitmap( Luna::GlobalImageManager().GetBitmap( "asset_editor_16.png" ) );
     iconBundle.AddIcon( tempIcon );
     SetIcons( iconBundle );
 
@@ -117,17 +117,17 @@ AssetEditor::AssetEditor()
     m_AssetPreviewWindow = new AssetPreviewWindow( GetAssetManager(), this, wxID_ANY, wxDefaultPosition, wxSize( 250, 250 ), wxALWAYS_SHOW_SB | wxCLIP_CHILDREN );
 
     // MRU callback
-    m_MRU->AddItemSelectedListener( UIToolKit::MRUSignature::Delegate( this, &AssetEditor::MRUOpen ) );
+    m_MRU->AddItemSelectedListener( Luna::MRUSignature::Delegate( this, &AssetEditor::MRUOpen ) );
     m_MRU->FromVector( GetAssetEditorPreferences()->GetMRU()->GetPaths() );
 
     // Toolbars
     m_MainToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_MainToolBar->SetToolBitmapSize( wxSize( 16,16 ) );
-    m_MainToolBar->AddTool( wxID_NEW, wxT( "New" ), UIToolKit::GlobalImageManager().GetBitmap( "new_file_16.png" ), wxT( "New" ) );
+    m_MainToolBar->AddTool( wxID_NEW, wxT( "New" ), Luna::GlobalImageManager().GetBitmap( "new_file_16.png" ), wxT( "New" ) );
     m_MainToolBar->AddTool( wxID_OPEN, wxT( "Open" ), wxArtProvider::GetBitmap( wxART_FILE_OPEN, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Open" ) );
     m_MainToolBar->AddTool( AssetEditorIDs::SearchForFile, wxT( "Find..." ), wxArtProvider::GetBitmap( wxART_FIND, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Find..." ) );
     m_MainToolBar->AddTool( wxID_SAVE, wxT( "Save" ), wxArtProvider::GetBitmap( wxART_FILE_SAVE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Save" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::SaveAllAssetClasses, wxT( "Save All" ), UIToolKit::GlobalImageManager().GetBitmap( "save_all_16.png" ), wxT( "Save All" ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::SaveAllAssetClasses, wxT( "Save All" ), Luna::GlobalImageManager().GetBitmap( "save_all_16.png" ), wxT( "Save All" ) );
     m_MainToolBar->AddSeparator();
     m_MainToolBar->AddTool( wxID_CUT, wxT( "Cut" ), wxArtProvider::GetBitmap( wxART_CUT, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Cut" ) );
     m_MainToolBar->AddTool( wxID_COPY, wxT( "Copy" ), wxArtProvider::GetBitmap( wxART_COPY, wxART_OTHER, wxSize(16, 16 ) ), wxT( "Copy" ) );
@@ -136,17 +136,17 @@ AssetEditor::AssetEditor()
     m_MainToolBar->AddTool( wxID_UNDO, wxT( "Undo" ), wxArtProvider::GetBitmap( wxART_UNDO, wxART_OTHER, wxSize(16, 16 ) ), wxT( "Undo" ) );
     m_MainToolBar->AddTool( wxID_REDO, wxT( "Redo" ), wxArtProvider::GetBitmap( wxART_REDO, wxART_OTHER, wxSize(16, 16 ) ), wxT( "Redo" ) );
     m_MainToolBar->AddSeparator();
-    m_MainToolBar->AddTool( AssetEditorIDs::Preview, wxT( "Preview" ), UIToolKit::GlobalImageManager().GetBitmap( "preview_16.png" ), wxT( "Preview" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::Build, wxT( "Build" ), UIToolKit::GlobalImageManager().GetBitmap( "build_16.png" ), wxT( "Build (Shift-click for build options)" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::View, wxT( "View" ), UIToolKit::GlobalImageManager().GetBitmap( "view_16.png" ), wxT( "View (Shift-click for build options)" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::Export, wxT( "Export" ), UIToolKit::GlobalImageManager().GetBitmap( "export_16.png" ), wxT( "Export all relevant art assets (Shift-click for export options)" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::SyncShaders, wxT( "Sync Shaders" ), UIToolKit::GlobalImageManager().GetBitmap( "sync_shaders_16.png" ), wxT( "Synchronize the Shader Usage settings." ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::UpdateSymbols, wxT( "Update Symbols" ), UIToolKit::GlobalImageManager().GetBitmap( "header_16.png" ), wxT( "Update Symbols for Update Classes" ) ); 
+    m_MainToolBar->AddTool( AssetEditorIDs::Preview, wxT( "Preview" ), Luna::GlobalImageManager().GetBitmap( "preview_16.png" ), wxT( "Preview" ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::Build, wxT( "Build" ), Luna::GlobalImageManager().GetBitmap( "build_16.png" ), wxT( "Build (Shift-click for build options)" ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::View, wxT( "View" ), Luna::GlobalImageManager().GetBitmap( "view_16.png" ), wxT( "View (Shift-click for build options)" ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::Export, wxT( "Export" ), Luna::GlobalImageManager().GetBitmap( "export_16.png" ), wxT( "Export all relevant art assets (Shift-click for export options)" ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::SyncShaders, wxT( "Sync Shaders" ), Luna::GlobalImageManager().GetBitmap( "sync_shaders_16.png" ), wxT( "Synchronize the Shader Usage settings." ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::UpdateSymbols, wxT( "Update Symbols" ), Luna::GlobalImageManager().GetBitmap( "header_16.png" ), wxT( "Update Symbols for Update Classes" ) ); 
     m_MainToolBar->AddSeparator();
-    m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationSet, wxT( "Add Set" ), UIToolKit::GlobalImageManager().GetBitmap( "animationset_add_16.png" ), wxT( "Add an Animation Set to the selected asset(s)." ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationGroup, wxT( "Add Group" ), UIToolKit::GlobalImageManager().GetBitmap( "animationgroup_add_16.png" ), wxT( "Add a new Animation Group to the selected Animation Set(s)." ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::EditAnimationGroup, wxT( "Edit Group" ), UIToolKit::GlobalImageManager().GetBitmap( "animationgroup_edit_16.png" ), wxT( "Edit the selected Animation Group." ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationClip, wxT( "Add Clip" ), UIToolKit::GlobalImageManager().GetBitmap( "animationclip_add_16.png" ), wxT( "Add a new Animation Clip to the selected Animation Chain(s)." ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationSet, wxT( "Add Set" ), Luna::GlobalImageManager().GetBitmap( "animationset_add_16.png" ), wxT( "Add an Animation Set to the selected asset(s)." ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationGroup, wxT( "Add Group" ), Luna::GlobalImageManager().GetBitmap( "animationgroup_add_16.png" ), wxT( "Add a new Animation Group to the selected Animation Set(s)." ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::EditAnimationGroup, wxT( "Edit Group" ), Luna::GlobalImageManager().GetBitmap( "animationgroup_edit_16.png" ), wxT( "Edit the selected Animation Group." ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationClip, wxT( "Add Clip" ), Luna::GlobalImageManager().GetBitmap( "animationclip_add_16.png" ), wxT( "Add a new Animation Clip to the selected Animation Chain(s)." ) );
     m_MainToolBar->Realize();
     m_MainToolBar->EnableTool( AssetEditorIDs::Build, false );
     m_MainToolBar->EnableTool( AssetEditorIDs::View, false );
@@ -218,7 +218,7 @@ AssetEditor::AssetEditor()
     // File menu
 
     wxMenuItem* menuItem = new wxMenuItem( m_MenuFile, wxID_ANY, "New", "", wxITEM_NORMAL, m_MenuNew );
-    menuItem->SetBitmap( UIToolKit::GlobalImageManager().GetBitmap( "new_file_16.png" ) );
+    menuItem->SetBitmap( Luna::GlobalImageManager().GetBitmap( "new_file_16.png" ) );
     m_MenuFile->Append( menuItem );
 
     menuItem = new wxMenuItem( m_MenuFile, wxID_OPEN, "Open\tCtrl-o" );
@@ -244,7 +244,7 @@ AssetEditor::AssetEditor()
     m_MenuFile->Append( menuItem );
 
     menuItem = new wxMenuItem( m_MenuFile, AssetEditorIDs::SaveAllAssetClasses, "Save All\tCtrl-Shift-s" );
-    menuItem->SetBitmap( UIToolKit::GlobalImageManager().GetBitmap( "save_all_16.png" ) );
+    menuItem->SetBitmap( Luna::GlobalImageManager().GetBitmap( "save_all_16.png" ) );
     m_MenuFile->Append( menuItem );
 
     m_MenuFile->AppendSeparator();
@@ -290,11 +290,11 @@ AssetEditor::AssetEditor()
     m_MenuEdit->AppendSeparator();
 
     menuItem = new wxMenuItem( m_MenuEdit, AssetEditorIDs::MoveUp, "Move Up\tAlt-UP" );
-    menuItem->SetBitmap( UIToolKit::GlobalImageManager().GetBitmap( "arrow_up_16.png" ) );
+    menuItem->SetBitmap( Luna::GlobalImageManager().GetBitmap( "arrow_up_16.png" ) );
     m_MenuEdit->Append( menuItem );
 
     menuItem = new wxMenuItem( m_MenuEdit, AssetEditorIDs::MoveDown, "Move Down\tAlt-DOWN" );
-    menuItem->SetBitmap( UIToolKit::GlobalImageManager().GetBitmap( "arrow_down_16.png" ) );
+    menuItem->SetBitmap( Luna::GlobalImageManager().GetBitmap( "arrow_down_16.png" ) );
     m_MenuEdit->Append( menuItem );
 
     menuBar->Append( m_MenuEdit, "Edit" );
@@ -410,7 +410,7 @@ AssetEditor::~AssetEditor()
     m_AssetManager.GetSelection().RemoveChangedListener( SelectionChangedSignature::Delegate( this, &AssetEditor::SelectionChanged ) );
     m_AssetManager.RemoveAssetLoadedListener( AssetLoadSignature::Delegate( this, &AssetEditor::AssetLoaded ) );
     m_AssetManager.RemoveAssetUnloadingListener( AssetLoadSignature::Delegate( this, &AssetEditor::AssetUnloading ) );
-    m_MRU->RemoveItemSelectedListener( UIToolKit::MRUSignature::Delegate( this, &AssetEditor::MRUOpen ) );
+    m_MRU->RemoveItemSelectedListener( Luna::MRUSignature::Delegate( this, &AssetEditor::MRUOpen ) );
 
     delete m_Outliner;
 
@@ -538,7 +538,7 @@ Undo::CommandPtr AssetEditor::RemoveAttributes( const S_AttributeSmartPtr& attri
 // Callback for when an item is selected from the MRU menu.  Opens the 
 // specified item.
 // 
-void AssetEditor::MRUOpen( const UIToolKit::MRUArgs& args )
+void AssetEditor::MRUOpen( const Luna::MRUArgs& args )
 {
     if ( !Open( args.m_Item ) )
     {
@@ -1112,7 +1112,7 @@ void AssetEditor::OnNew( wxCommandEvent& args )
 // 
 void AssetEditor::OnOpen( wxCommandEvent& args )
 {
-    UIToolKit::FileDialog browserDlg( this, "Open", "", "", "", UIToolKit::FileDialogStyles::DefaultOpen | UIToolKit::FileDialogStyles::Multiple );
+    Luna::FileDialog browserDlg( this, "Open", "", "", "", Luna::FileDialogStyles::DefaultOpen | Luna::FileDialogStyles::Multiple );
 
     browserDlg.AddFilter( FinderSpecs::Asset::ASSET_EDITOR_FILTER.GetDialogFilter() );
 
@@ -1148,7 +1148,7 @@ void AssetEditor::OnFind( wxCommandEvent& args )
 // 
 void AssetEditor::OnSortFiles( wxCommandEvent& args )
 {
-    m_Outliner->Sort( UIToolKit::SortTreeCtrl::InvalidItemId, false );
+    m_Outliner->Sort( Luna::SortTreeCtrl::InvalidItemId, false );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1351,7 +1351,7 @@ void AssetEditor::OnMoveUp( wxCommandEvent& args )
             // Putting this is to make sure the selected items are visible after a MoveUp/MoveDown
             // This is a temporary hack and to fix it properly we need to not delete the whole list
             // and recreate it every time a MoveUp/MoveDown occurs
-            UIToolKit::SortTreeCtrl* treeCtrl = (UIToolKit::SortTreeCtrl*)m_Outliner->GetWindow();
+            Luna::SortTreeCtrl* treeCtrl = (Luna::SortTreeCtrl*)m_Outliner->GetWindow();
             wxArrayTreeItemIds selections;
             const size_t numSelections = treeCtrl->GetSelections( selections );
 
@@ -1376,7 +1376,7 @@ void AssetEditor::OnMoveDown( wxCommandEvent& args )
             // Putting this is to make sure the selected items are visible after a MoveUp/MoveDown
             // This is a temporary hack and to fix it properly we need to not delete the whole list
             // and recreate it every time a MoveUp/MoveDown occurs
-            UIToolKit::SortTreeCtrl* treeCtrl = (UIToolKit::SortTreeCtrl*)m_Outliner->GetWindow();
+            Luna::SortTreeCtrl* treeCtrl = (Luna::SortTreeCtrl*)m_Outliner->GetWindow();
             wxArrayTreeItemIds selections;
             const size_t numSelections = treeCtrl->GetSelections( selections );
 

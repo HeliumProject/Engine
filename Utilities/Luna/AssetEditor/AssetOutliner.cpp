@@ -12,7 +12,7 @@
 #include "Inspect/ClipboardFileList.h"
 #include "Inspect/DropTarget.h"
 #include "Inspect/ReflectClipboardData.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 
 // Using
@@ -32,7 +32,7 @@ END_EVENT_TABLE()
 AssetOutliner::AssetOutliner( AssetEditor* editor, const wxPoint& pos, const wxSize& size )
 : m_Editor( editor )
 , m_AssetManager( editor->GetAssetManager() )
-, m_TreeControl( new UIToolKit::SortTreeCtrl( editor, AssetEditorIDs::AssetOutlinerTreeControl, pos, size, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_MULTIPLE | wxTR_HIDE_ROOT, wxDefaultValidator, "AssetEditorOutliner" ) )
+, m_TreeControl( new Luna::SortTreeCtrl( editor, AssetEditorIDs::AssetOutlinerTreeControl, pos, size, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_MULTIPLE | wxTR_HIDE_ROOT, wxDefaultValidator, "AssetEditorOutliner" ) )
 , m_FreezeSelection( false )
 , m_DragOriginatedHere( false )
 {
@@ -40,7 +40,7 @@ AssetOutliner::AssetOutliner( AssetEditor* editor, const wxPoint& pos, const wxS
   // So, there will be an invisible root item, that will not be shown, effectively
   // making any items that are direct children of it appear to be root items.
   m_TreeControl->AddRoot( "INVISIBLE_ROOT_ITEM" );
-  m_TreeControl->SetImageList( UIToolKit::GlobalImageManager().GetGuiImageList() );
+  m_TreeControl->SetImageList( Luna::GlobalImageManager().GetGuiImageList() );
 
   // This class will handle all the events for the tree control.
   m_TreeControl->PushEventHandler( this );

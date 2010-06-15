@@ -3,7 +3,7 @@
 
 #include "Inspect/Canvas.h"
 #include "Foundation/Container/Insert.h"
-#include "UIToolKit/FileDialog.h"
+#include "Luna/UI/FileDialog.h"
 
 // Using
 using namespace Inspect;
@@ -84,7 +84,7 @@ bool FileDialogButton::Write()
 
         wxWindow* parent = GetCanvas() ? GetCanvas()->GetControl() : NULL;
 
-        UIToolKit::FileDialog fileDialog( parent, m_Title.c_str(), GetPath().c_str(), "", filterStr.c_str(), UIToolKit::FileDialogStyles::DefaultOpen );
+        Luna::FileDialog fileDialog( parent, m_Title.c_str(), GetPath().c_str(), "", filterStr.c_str(), Luna::FileDialogStyles::DefaultOpen );
 
         if ( fileDialog.ShowModal() == wxID_OK )
         {

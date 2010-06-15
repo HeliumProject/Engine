@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "GridCellImageRenderer.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 using namespace Luna;
 
@@ -33,7 +33,7 @@ void GridCellImageRenderer::Draw( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, 
   if ( !imageName.IsEmpty() )
   {
     // Draw the bitmap in the cell.
-    const wxBitmap& bmp = UIToolKit::GlobalImageManager().GetBitmap( imageName.c_str() );
+    const wxBitmap& bmp = Luna::GlobalImageManager().GetBitmap( imageName.c_str() );
     dc.DrawBitmap( bmp, rect.GetLeftTop(), true );
   }
 }
@@ -52,7 +52,7 @@ wxSize GridCellImageRenderer::GetBestSize(wxGrid& grid, wxGridCellAttr& attr, wx
   const wxString& imageName = grid.GetCellValue( row, col );
   if ( !imageName.IsEmpty() )
   {
-    const wxBitmap& bmp = UIToolKit::GlobalImageManager().GetBitmap( imageName.c_str() );
+    const wxBitmap& bmp = Luna::GlobalImageManager().GetBitmap( imageName.c_str() );
     if ( !bmp.IsNull() )
     {
       // Return the bitmap's dimensions plus some pad

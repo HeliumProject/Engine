@@ -187,7 +187,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
+			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{1A179B8F-2027-467A-AB0C-7E90575C0F03}"
@@ -204,10 +204,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{ED5B2A66-1F2C-40C1-BC4B-C2AA1D2B7632}"
 			RelativePathToProject=".\libraries\InspectReflect\InspectReflect.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}"
-			RelativePathToProject=".\libraries\UIToolKit\UIToolKit.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"

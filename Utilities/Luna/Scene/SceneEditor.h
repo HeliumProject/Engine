@@ -1,6 +1,6 @@
 #pragma once
 
-#include "API.h"
+#include "Luna/API.h"
 
 #include "LayerGrid.h"
 #include "Scene.h"
@@ -19,7 +19,7 @@
 #include "Editor/EditorInfo.h"
 #include "Inspect/Canvas.h"
 #include "Inspect/DropTarget.h"
-#include "UIToolKit/MenuMRU.h"
+#include "Luna/UI/MenuMRU.h"
 
 #include "Content/LayerTypes.h"
 #include <wx/dnd.h>
@@ -141,7 +141,7 @@ namespace Luna
     wxMenu* m_UtilitiesMenu;
     wxMenu* m_MRUMenu;
     wxMenuItem* m_MRUMenuItem;
-    UIToolKit::MenuMRUPtr m_MRU;
+    Luna::MenuMRUPtr m_MRU;
 
     // Toolbars
     wxToolBar* m_StandardToolBar;
@@ -271,7 +271,7 @@ namespace Luna
     void SelectItemInScene( wxCommandEvent& event );
     void SelectSimilarItemsInScene( wxCommandEvent& event );
 
-    void OnMRUOpen( const UIToolKit::MRUArgs& args );
+    void OnMRUOpen( const Luna::MRUArgs& args );
 
     void OnLightLinkEvent(wxKeyEvent& event);
     void BeginLayersGridBatching();

@@ -8,7 +8,7 @@
 #include "Application/Undo/PropertyCommand.h"
 #include "HierarchyNodeType.h"
 #include "Scene.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 using namespace Math;
 using namespace Luna;
@@ -41,7 +41,7 @@ PivotTransform::PivotTransform(Luna::Scene* scene, Content::PivotTransform* pivo
 
 i32 PivotTransform::GetImageIndex() const
 {
-  return UIToolKit::GlobalImageManager().GetImageIndex( "transform_16.png" );
+  return Luna::GlobalImageManager().GetImageIndex( "transform_16.png" );
 }
 
 std::string PivotTransform::GetApplicationTypeName() const

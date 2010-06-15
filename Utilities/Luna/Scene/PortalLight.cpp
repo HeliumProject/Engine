@@ -6,7 +6,7 @@
 #include "InstanceType.h"
 
 #include "Core/Enumerator.h"
-#include "UIToolKit/ImageManager.h"
+#include "Luna/UI/ImageManager.h"
 
 #include "PrimitiveCube.h"
 #include "PrimitivePointer.h"
@@ -51,7 +51,7 @@ PortalLight::~PortalLight()
 
 i32 PortalLight::GetImageIndex() const
 {
-  return UIToolKit::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Luna::GlobalImageManager().GetImageIndex( "light_16.png" );
 }
 
 std::string PortalLight::GetApplicationTypeName() const

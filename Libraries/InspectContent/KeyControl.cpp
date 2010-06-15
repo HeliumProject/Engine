@@ -2,14 +2,14 @@
 #include "KeyControl.h"
 #include "KeyClipboardData.h"
 
-#include "UIToolKit/CustomColors.h"
-#include "UIToolKit/RegistryConfig.h"
+#include "Luna/UI/CustomColors.h"
+#include "Luna/UI/RegistryConfig.h"
 #include "Platform/Windows/Clipboard.h"
 
 #include <wx/colordlg.h>
 
 using namespace Inspect;
-using namespace UIToolKit;
+using namespace Luna;
 
 // Event table
 BEGIN_EVENT_TABLE( KeyControl, wxPanel )

@@ -19,9 +19,6 @@
 #include "Foundation/File/Directory.h"
 #include "Foundation/String/Utilities.h"
 #include "Foundation/Environment.h"
-#include "Finder/ExtensionSpecs.h"
-#include "Finder/ProjectSpecs.h"
-#include "Finder/Finder.h"
 #include "Foundation/Log.h"
 
 using namespace Nocturnal::ES;
@@ -204,11 +201,11 @@ void EventSystem::ReadEventsFile( const std::string& eventsFile, V_EventPtr& lis
     EVENTSYSTEM_SCOPE_TIMER((""));
 
     Nocturnal::Path path( eventsFile );
-    if ( path.Extension() == FinderSpecs::Extension::DATA.GetExtension() )
+    if ( path.Extension() == "dat" )
     {
         ReadBinaryEventsFile( eventsFile, listOfEvents, sorted );
     }
-    else if ( path.Extension() == FinderSpecs::Extension::TXT.GetExtension() )
+    else if ( path.Extension() == "txt" )
     {
         ReadTextEventsFile( eventsFile, listOfEvents, sorted );
     }
@@ -422,11 +419,11 @@ void EventSystem::WriteEventsFile( const std::string& eventsFile, const V_EventP
     EVENTSYSTEM_SCOPE_TIMER((""));
 
     Nocturnal::Path path( eventsFile );
-    if ( path.Extension() == FinderSpecs::Extension::DATA.GetExtension() )
+    if ( path.Extension() == "dat" )
     {
         WriteBinaryEventsFile( eventsFile, listOfEvents );
     }
-    else if ( path.Extension() == FinderSpecs::Extension::TXT.GetExtension() )
+    else if ( path.Extension() == "txt" )
     {
         WriteTextEventsFile( eventsFile, listOfEvents );
     }
@@ -678,19 +675,19 @@ void EventSystem::DumpEventsToTextFile( const std::string& datFile, const std::s
     }
 
     // set up the output file
-    std::string cleanTextFile = txtFile;
-    if ( cleanTextFile.empty() )
+    Nocturnal::Path outputPath( txtFile );
+    if ( outputPath.empty() )
     {
-        cleanTextFile = datFile;
-        FinderSpecs::Extension::TXT.Modify( cleanTextFile );
+        outputPath.Set( datFile );
+        outputPath.ReplaceExtension( "txt" );
     }
-    Nocturnal::Path cleanTextFilePath( cleanTextFile );
-    cleanTextFilePath.Create();
+
+    outputPath.Create();
 
     // get this user's events
     ES::V_EventPtr listOfEvents;
     ReadBinaryEventsFile( datFile, listOfEvents, true );
-    WriteTextEventsFile( cleanTextFile, listOfEvents );
+    WriteTextEventsFile( outputPath.Get(), listOfEvents );
 }
 
 

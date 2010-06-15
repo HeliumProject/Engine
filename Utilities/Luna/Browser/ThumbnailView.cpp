@@ -978,7 +978,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
     if ( viewOnTarget )
     {
         Nocturnal::Path path( m_SelectedTiles.Front()->GetFile()->GetFilePath() );
-        viewOnTarget &= path.Extension() == FinderSpecs::Extension::REFLECT_BINARY.GetExtension();
+        viewOnTarget &= path.Extension() == Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary );
     }
 
     // Prepare the menu
@@ -1443,7 +1443,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
                     Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
                     inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
                 }
-                else if ( Nocturnal::Path( tile->GetFile()->GetFilePath() ).Extension() == FinderSpecs::Extension::REFLECT_BINARY.GetExtension()
+                else if ( Nocturnal::Path( tile->GetFile()->GetFilePath() ).Extension() == Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary )
                     && ( findIcon = m_ModifierSpecIcons.find( &FinderSpecs::Extension::REFLECT_BINARY ) ) != m_ModifierSpecIcons.end() )
                 {
                     Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );

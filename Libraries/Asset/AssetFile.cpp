@@ -235,7 +235,7 @@ void AssetFile::GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, Noctu
         {
             Nocturnal::Path path = (*itr);
 
-            if ( path.Extension() == FinderSpecs::Extension::REFLECT_BINARY.GetExtension() )
+            if ( path.Extension() == Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary ) )
             {
                 if ( visited.find( path ) == visited.end() )
                 {

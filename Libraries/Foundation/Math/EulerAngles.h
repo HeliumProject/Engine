@@ -14,7 +14,7 @@ namespace Math
   class AngleAxis;
   class Quaternion;
 
-  class MATH_API EulerAngles
+  class FOUNDATION_API EulerAngles
   {
   public:
     Vector3 angles;

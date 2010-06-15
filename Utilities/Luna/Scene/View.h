@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Math/Constants.h"
-#include "Math/Vector3.h"
-#include "Math/AlignedBox.h"
+#include "Foundation/Math/Constants.h"
+#include "Foundation/Math/Vector3.h"
+#include "Foundation/Math/AlignedBox.h"
 
 #include "Luna/API.h"
 #include "Render.h"

@@ -2,10 +2,10 @@
 
 #include "Foundation/Automation/Event.h" 
 #include "Platform/Types.h"
-#include "Math/Vector2.h"
-#include "Math/Vector3.h"
-#include "Math/Vector4.h"
-#include "Math/Matrix4.h"
+#include "Foundation/Math/Vector2.h"
+#include "Foundation/Math/Vector3.h"
+#include "Foundation/Math/Vector4.h"
+#include "Foundation/Math/Matrix4.h"
 
 #include "Pick.h"
 #include "Visitor.h"

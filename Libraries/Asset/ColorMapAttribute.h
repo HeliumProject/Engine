@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TextureMapAttribute.h"
-#include "math/Color3.h"
+#include "Foundation/Math/Color3.h"
 
 
 

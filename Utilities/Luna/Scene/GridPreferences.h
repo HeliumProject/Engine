@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Math/Color3.h"
+#include "Foundation/Math/Color3.h"
 #include "Reflect/Element.h"
 
 namespace Luna

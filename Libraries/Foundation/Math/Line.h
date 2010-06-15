@@ -8,7 +8,7 @@ namespace Math
   class Matrix4;
   class Plane;
 
-  class MATH_API Line
+  class FOUNDATION_API Line
   {
   public:
     Vector3 m_Origin;

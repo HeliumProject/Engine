@@ -4,8 +4,8 @@
 #include "VertexResource.h"
 #include "Render.h"
 
-#include "math/AlignedBox.h"
-#include "Math/Color3.h"
+#include "Foundation/Math/AlignedBox.h"
+#include "Foundation/Math/Color3.h"
 
 namespace Luna
 {

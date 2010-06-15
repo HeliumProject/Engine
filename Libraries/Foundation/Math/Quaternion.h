@@ -11,7 +11,7 @@ namespace Math
   class EulerAngles;
   class AngleAxis;
 
-  class MATH_API Quaternion
+  class FOUNDATION_API Quaternion
   {
   private:
     enum
@@ -90,8 +90,8 @@ namespace Math
     f32                   Dot ( const Quaternion& q2 ) const;
     bool                  Equal( const Quaternion &q2, f32 error = 0.0f ) const;
 
-    friend MATH_API std::ostream& operator<<(std::ostream& outStream, const Quaternion& quaternion);
-    friend MATH_API std::istream& operator>>(std::istream& inStream, Quaternion& quaternion);
+    friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Quaternion& quaternion);
+    friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Quaternion& quaternion);
   };
  
   inline bool Quaternion::Equal( const Quaternion& q2, f32 error ) const

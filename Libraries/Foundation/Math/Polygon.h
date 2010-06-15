@@ -1,6 +1,7 @@
 #pragma once
 
-#include "API.h"
+#include "Foundation/API.h"
+#include "Platform/Types.h"
 
 namespace Math
 {
@@ -192,7 +193,7 @@ namespace Math
   };
 
   template <class V>
-  class MATH_API DynamicPolygon
+  class FOUNDATION_API DynamicPolygon
   {
   public:
     std::vector<V> m_Vertices;

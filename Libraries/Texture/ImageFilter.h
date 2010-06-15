@@ -12,9 +12,9 @@
 
 #include <iostream>
 
-#include "math/Vector2.h"
-#include "math/Vector3.h"
-#include "math/Vector4.h"
+#include "Foundation/Math/Vector2.h"
+#include "Foundation/Math/Vector3.h"
+#include "Foundation/Math/Vector4.h"
 
 #include "Texture/Texture.h"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Math/Vector3.h"
+#include "Foundation/Math/Vector3.h"
 
 namespace Luna
 {

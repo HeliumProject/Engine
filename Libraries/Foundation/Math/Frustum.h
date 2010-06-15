@@ -5,7 +5,7 @@
 
 namespace Math
 {
-  class MATH_API Frustum
+  class FOUNDATION_API Frustum
   {
   public:
     Plane top;

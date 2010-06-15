@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Foundation/TUID.h"
-#include "Math/Vector4.h"
-#include "Math/CalculateBounds.h"
+#include "Foundation/Math/Vector4.h"
+#include "Foundation/Math/CalculateBounds.h"
 #include "Content/ContentTypes.h"
 
 namespace Content

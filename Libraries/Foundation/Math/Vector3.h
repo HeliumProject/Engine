@@ -10,7 +10,7 @@ namespace Math
 {
   class Scale;
 
-  class MATH_API Vector3
+  class FOUNDATION_API Vector3
   {
   public:
     f32 x, y, z;
@@ -67,8 +67,8 @@ namespace Math
     Vector3           Cross (const Vector3& v) const;
     void              Clamp ( const Vector3 &min, const Vector3 &max );
 
-    friend MATH_API std::ostream& operator<<(std::ostream& outStream, const Vector3& vector);
-  	friend MATH_API std::istream& operator>>(std::istream& inStream, Vector3& vector);
+    friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Vector3& vector);
+  	friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Vector3& vector);
   };
 
   typedef std::vector< Vector3 > V_Vector3;
@@ -180,6 +180,6 @@ namespace Math
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
   typedef std::multimap<i32, i32> MM_i32;
-  i32 MATH_API LookupPosInArray( const Vector3& pos, i32 min_key, i32 max_key, V_Vector3& pos_array, MM_i32& pos_lookup , f32 threshold);
+  i32 FOUNDATION_API LookupPosInArray( const Vector3& pos, i32 min_key, i32 max_key, V_Vector3& pos_array, MM_i32& pos_lookup , f32 threshold);
 
 }

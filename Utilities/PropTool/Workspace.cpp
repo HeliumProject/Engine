@@ -1,7 +1,7 @@
 #include "Workspace.h"
 #include "Camera.h"
 
-#include "Math/Utils.h"
+#include "Foundation/Math/Utils.h"
 #include "UIToolKit/FileDialog.h"
 
 static const u32 s_InvalidMesh = (u32)(-1);

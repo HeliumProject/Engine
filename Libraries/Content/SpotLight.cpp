@@ -1,6 +1,6 @@
 #include "SpotLight.h"
 #include "ContentVisitor.h"
-#include "Math/EulerAngles.h"
+#include "Foundation/Math/EulerAngles.h"
 
 using namespace Reflect;
 using namespace Content;

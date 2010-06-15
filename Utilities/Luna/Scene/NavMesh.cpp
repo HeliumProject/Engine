@@ -24,8 +24,8 @@
 #include "Foundation/Log.h"
 #include "Editor/Orientation.h"
 
-#include "Math/Curve.h"
-#include "Math/AngleAxis.h"
+#include "Foundation/Math/Curve.h"
+#include "Foundation/Math/AngleAxis.h"
 
 #include <algorithm>
 

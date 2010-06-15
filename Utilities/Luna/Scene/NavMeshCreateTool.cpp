@@ -25,8 +25,8 @@
 #include "Content/Mesh.h"
 #include "Content/Volume.h"
 
-#include "Math/AngleAxis.h"
-#include "Math/EulerAngles.h"
+#include "Foundation/Math/AngleAxis.h"
+#include "Foundation/Math/EulerAngles.h"
 
 using namespace Math;
 using namespace Luna;

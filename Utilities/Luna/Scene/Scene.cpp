@@ -76,7 +76,7 @@
 #include "AmbientLight.h"
 #include "AmbientVolumeLight.h"
 #include "Foundation/String/Utilities.h"
-#include "Math/AngleAxis.h"
+#include "Foundation/Math/AngleAxis.h"
 
 #include "Foundation/Log.h"
 

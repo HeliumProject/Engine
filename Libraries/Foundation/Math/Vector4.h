@@ -8,9 +8,9 @@
 
 namespace Math
 {
-  class MATH_API Matrix4;
+  class FOUNDATION_API Matrix4;
 
-  class MATH_API Vector4
+  class FOUNDATION_API Vector4
   {
   public:
     f32 x, y, z, w;
@@ -68,8 +68,8 @@ namespace Math
 
     void              Transform (const Matrix4& m);
 
-    friend MATH_API std::ostream& operator<<(std::ostream& outStream, const Vector4& vector);
-  	friend MATH_API std::istream& operator>>(std::istream& inStream, Vector4& vector);
+    friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Vector4& vector);
+  	friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Vector4& vector);
   };
 
   typedef std::vector< Vector4 > V_Vector4;

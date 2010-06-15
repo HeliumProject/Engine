@@ -5,7 +5,7 @@
 #include "Core/Manipulator.h"
 
 #include "HierarchyNode.h"
-#include "Math/EulerAngles.h"
+#include "Foundation/Math/EulerAngles.h"
 
 namespace Luna
 {

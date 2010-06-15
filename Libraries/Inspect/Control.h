@@ -5,7 +5,7 @@
 #include "Interpreter.h"
 #include "ContextMenu.h"
 
-#include "Math/Point.h"
+#include "Foundation/Math/Point.h"
 #include "Reflect/Class.h"
 #include "Reflect/Object.h"
 

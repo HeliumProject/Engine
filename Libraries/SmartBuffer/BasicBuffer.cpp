@@ -4,9 +4,9 @@
 #include "Foundation/Exception.h"
 #include "Foundation/Log.h"
 
-#include "Math/Vector3.h"
-#include "Math/Vector4.h"
-#include "Math/Half.h"
+#include "Foundation/Math/Vector3.h"
+#include "Foundation/Math/Vector4.h"
+#include "Foundation/Math/Half.h"
 
 using namespace Nocturnal;
 

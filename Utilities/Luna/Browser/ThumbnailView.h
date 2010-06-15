@@ -11,8 +11,8 @@
 #include "Platform/Compiler.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Editor/D3DWindowManager.h"
-#include "Math/Matrix4.h"
-#include "Math/Frustum.h"
+#include "Foundation/Math/Matrix4.h"
+#include "Foundation/Math/Frustum.h"
 
 namespace Asset
 {

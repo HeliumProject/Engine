@@ -3,7 +3,7 @@
 
 #include "Color.h"
 #include "Foundation/Log.h"
-#include "Math/Utils.h"
+#include "Foundation/Math/Utils.h"
 
 #include <tinyxml.h>
 

@@ -2,8 +2,8 @@
 
 #include "Luna/API.h"
 
-#include "Math/Line.h"
-#include "Math/Frustum.h"
+#include "Foundation/Math/Line.h"
+#include "Foundation/Math/Frustum.h"
 
 #include "Foundation/Memory/SmartPtr.h"
 

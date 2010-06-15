@@ -1,7 +1,7 @@
 #pragma once
 
-#include "API.h"
-
+#include "Foundation/API.h"
+#include "Platform/Types.h"
 
 //-------
 // Limits
@@ -158,7 +158,7 @@ namespace Math
   //
   //---------------------------------------------------------------------------
 
-  class MATH_API Half
+  class FOUNDATION_API Half
   {
   public:
 

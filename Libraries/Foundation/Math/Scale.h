@@ -7,7 +7,7 @@
 
 namespace Math
 {
-  class MATH_API Scale
+  class FOUNDATION_API Scale
   {
   public:
     f32 x, y, z;

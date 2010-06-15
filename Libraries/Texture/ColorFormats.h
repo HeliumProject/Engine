@@ -4,8 +4,8 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Types.h"
-#include "Math/Half.h"
-#include "Math/Vector3.h"
+#include "Foundation/Math/Half.h"
+#include "Foundation/Math/Vector3.h"
 
 namespace IG
 {

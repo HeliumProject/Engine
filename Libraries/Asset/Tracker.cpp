@@ -10,7 +10,7 @@
 #include "ArtFileAttribute.h"
 
 #include "Attribute/AttributeHandle.h"
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Flags.h"
 #include "Foundation/String/Utilities.h"
@@ -28,7 +28,7 @@
 #include "Reflect/Serializers.h"
 #include "Reflect/Version.h"
 #include "Reflect/Visitor.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 #define SHUTDOWN_THREAD 0
 

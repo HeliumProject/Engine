@@ -19,7 +19,7 @@ namespace Content
 
   public:
     Instance ();
-    Instance (const Nocturnal::UID::TUID& id);
+    Instance (const Nocturnal::TUID& id);
 
   public:
     // The overidden type of the node

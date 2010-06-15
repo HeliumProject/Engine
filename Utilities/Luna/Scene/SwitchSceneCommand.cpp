@@ -5,7 +5,7 @@
 #include "SceneManager.h"
 
 #include "Foundation/Log.h"
-#include "Undo/Exceptions.h"
+#include "Application/Undo/Exceptions.h"
 
 using namespace Luna;
 

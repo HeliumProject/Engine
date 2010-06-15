@@ -77,9 +77,9 @@ void Layer::Initialize()
   NOC_ASSERT( layer );
 
   m_Descendants.clear();
-  UID::V_TUID memberIDs;
-  UID::V_TUID::const_iterator itr = layer->m_Members.begin();
-  UID::V_TUID::const_iterator end = layer->m_Members.end();
+  V_TUID memberIDs;
+  V_TUID::const_iterator itr = layer->m_Members.begin();
+  V_TUID::const_iterator end = layer->m_Members.end();
   for ( ; itr != end; ++itr )
   {
     Luna::SceneNode* node = m_Scene->FindNode( *itr );
@@ -259,11 +259,11 @@ void Layer::Insert(SceneGraph* g, V_SceneNodeDumbPtr& insertedNodes )
     Content::Layer* layer = GetPackage< Content::Layer >();
     NOC_ASSERT( layer );
     NOC_ASSERT( m_Descendants.empty() );
-    UID::V_TUID::const_iterator itr = layer->m_Members.begin();
-    UID::V_TUID::const_iterator end = layer->m_Members.end();
+    V_TUID::const_iterator itr = layer->m_Members.begin();
+    V_TUID::const_iterator end = layer->m_Members.end();
     for ( ; itr != end; ++itr )
     {
-      const UID::TUID& id = *itr;
+      const TUID& id = *itr;
       Luna::SceneNode* node = m_Scene->FindNode( id );
       if ( node )
       {
@@ -427,7 +427,7 @@ void Layer::BuildUnionAndIntersection( Enumerator* enumerator, const OS_Selectab
         HM_SceneNodeDumbPtr::iterator intersectionEnd = mapIntersection.end();
         while ( intersectionItr != intersectionEnd )
         {
-          const UID::TUID& key = intersectionItr->first;
+          const TUID& key = intersectionItr->first;
           HM_SceneNodeDumbPtr::iterator found = layerMembers.find( key );
           if ( found == layerMembers.end() )
           {

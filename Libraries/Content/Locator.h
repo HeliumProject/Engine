@@ -58,14 +58,14 @@ namespace Content
 
     }
 
-    Locator (const Nocturnal::UID::TUID& id)
+    Locator (const Nocturnal::TUID& id)
       : Instance (id)
       , m_Shape (LocatorShapes::Cross)
     {
 
     }
 
-    Locator (const Nocturnal::UID::TUID& id, LocatorShape shape)
+    Locator (const Nocturnal::TUID& id, LocatorShape shape)
       : Instance (id)
       , m_Shape (shape)
     {

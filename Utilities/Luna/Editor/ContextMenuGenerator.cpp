@@ -2,7 +2,7 @@
 #include "ContextMenuGenerator.h"
 
 #include "Foundation/Container/Insert.h" 
-#include "Undo/BatchCommand.h"
+#include "Application/Undo/BatchCommand.h"
 
 using Nocturnal::Insert; 
 using namespace Luna;

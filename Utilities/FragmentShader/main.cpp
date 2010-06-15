@@ -6,7 +6,7 @@
 
 #include <wx/wx.h>
 
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 
 #include "shader.h"
 #include "project.h"
@@ -40,10 +40,10 @@ InitLibPath()
   }
 }
 
-class Application: public wxApp
+class FragmentShaderApp : public wxApp
 {
 	public:
-		Application() { }
+		FragmentShaderApp() { }
 		void ProcessOptions();
 		virtual bool OnInit();
 		virtual int OnRun();
@@ -57,10 +57,10 @@ class Application: public wxApp
 		wxArrayString output;
 		Shader *shader;
 
-	DECLARE_NO_COPY_CLASS(Application)
+	DECLARE_NO_COPY_CLASS(FragmentShaderApp)
 };
 
-IMPLEMENT_APP(Application)
+IMPLEMENT_APP(FragmentShaderApp)
 
 static void
 Abort(std::exception *e)
@@ -77,7 +77,7 @@ Abort(std::exception *e)
 }
 
 void
-Application::ProcessOptions()
+FragmentShaderApp::ProcessOptions()
 {
 	usage = false;
 	compile = false;
@@ -193,7 +193,7 @@ Application::ProcessOptions()
 }
 
 bool
-Application::OnInit()
+FragmentShaderApp::OnInit()
 {
   ProcessOptions();
 
@@ -231,7 +231,7 @@ Application::OnInit()
 }
 
 int
-Application::OnRun()
+FragmentShaderApp::OnRun()
 {
   // Register types for de-serialization.
   InputPort  t1; Persistent::RegisterClass(t1.GetClassName(), t1.Create);
@@ -316,19 +316,19 @@ Application::OnRun()
 }
 
 int
-Application::OnExit()
+FragmentShaderApp::OnExit()
 {
 	lua_close(g_L);
 	return wxApp::OnExit();
 }
 
 bool
-Application::OnExceptionInMainLoop()
+FragmentShaderApp::OnExceptionInMainLoop()
 {
 	throw;
 }
 
 int main()
 {
-  return AppUtils::StandardWinMain( &wxEntry );
+  return Application::StandardWinMain( &wxEntry );
 }

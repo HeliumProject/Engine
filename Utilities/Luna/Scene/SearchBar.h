@@ -7,7 +7,7 @@
 #include "Scene.h"
 #include "SceneVisitor.h"
 #include "Zone.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Luna
 {

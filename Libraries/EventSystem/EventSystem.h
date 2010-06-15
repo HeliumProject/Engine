@@ -10,7 +10,7 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Nocturnal
 {

@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "ApplicationPreferences.h"
-
-#include "AppUtils/Preferences.h"
+#include "Application/Preferences.h"
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
 
@@ -105,7 +104,7 @@ const std::string& ApplicationPreferences::GetCurrentVersion() const
 std::string ApplicationPreferences::GetPreferencesPath() const
 {
     Nocturnal::Path prefsDir;
-    if ( !AppUtils::GetPreferencesDirectory( prefsDir ) )
+    if ( !Application::GetPreferencesDirectory( prefsDir ) )
     {
         throw Nocturnal::Exception( "Could not get preferences directory." );
     }

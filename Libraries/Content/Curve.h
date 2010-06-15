@@ -82,7 +82,7 @@ namespace Content
 
     }
 
-    Curve (const Nocturnal::UID::TUID& id)
+    Curve (const Nocturnal::TUID& id)
       : PivotTransform( id )
       , m_Closed( false )
       , m_Type( CurveTypes::Linear )

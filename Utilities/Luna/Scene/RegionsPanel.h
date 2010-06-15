@@ -84,7 +84,7 @@ namespace Luna
 
     typedef std::map<Luna::Region*, wxTreeItemId>      M_RegionToId; 
     typedef std::map<Zone*, wxTreeItemId>        M_ZoneToId; 
-    typedef std::map<Nocturnal::UID::TUID, ZonePtr>    M_TuidToZone; 
+    typedef std::map<Nocturnal::TUID, ZonePtr>    M_TuidToZone; 
 
   private: 
     SceneEditor*       m_Editor; 

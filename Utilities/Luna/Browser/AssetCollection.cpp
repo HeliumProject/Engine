@@ -3,7 +3,7 @@
 
 #include "Browser.h"
 
-#include "AppUtils/Preferences.h"
+#include "Application/Preferences.h"
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Checksum/MD5.h"
 #include "Foundation/Flags.h"
@@ -92,7 +92,7 @@ void AssetCollection::CreateSignature( const std::string& str, std::string& sign
 void AssetCollection::CreateSignature( tuid id, std::string& signature )
 {
     std::stringstream stream;
-    stream << UID::TUID::HexFormat << id;
+    stream << TUID::HexFormat << id;
     signature = Nocturnal::MD5( stream.str() );
 }
 
@@ -102,7 +102,7 @@ void AssetCollection::CreateFilePath( const std::string name, std::string& fileP
     if ( folder.empty() )
     {
         Nocturnal::Path prefsPath;
-        if ( !AppUtils::GetPreferencesDirectory( prefsPath ) )
+        if ( !Application::GetPreferencesDirectory( prefsPath ) )
         {
             throw Nocturnal::Exception( "Could not get preferences directory." );
         }

@@ -39,7 +39,7 @@ namespace Content
 
     }
 
-    AmbientVolumeLight (Nocturnal::UID::TUID &id)
+    AmbientVolumeLight (Nocturnal::TUID &id)
       : m_InnerRadius( 0.0f )
       , m_OuterRadius( 1.0f )
       , m_VolumeLightType( VolumeLightTypes::Sphere )

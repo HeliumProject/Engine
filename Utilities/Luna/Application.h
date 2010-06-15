@@ -12,18 +12,11 @@
 
 namespace Luna
 {
-    class Application : public wxApp
+    class LunaApp : public wxApp
     {
     public:
-        Application();
-
-        Application(const Luna::Application &)
-        {
-            NOC_BREAK();
-            throw Nocturnal::Exception( "Cannot copy the Luna application." );
-        }
-
-        virtual ~Application();
+        LunaApp();
+        ~LunaApp();
 
         virtual void  OnInitCmdLine( wxCmdLineParser& parser ) NOC_OVERRIDE;
         virtual bool  OnCmdLineParsed( wxCmdLineParser& parser ) NOC_OVERRIDE;
@@ -58,5 +51,5 @@ namespace Luna
         SceneEditor* m_SceneEditor;
     };
 
-    DECLARE_APP( Application );
+    DECLARE_APP( LunaApp );
 }

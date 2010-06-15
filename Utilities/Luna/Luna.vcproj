@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
+				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -129,7 +129,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxPropertyGrid)\include&quot;"
+				AdditionalIncludeDirectories=".;.\Scene;..;..\..\libraries;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -197,7 +197,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
+			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{AA7F3535-378A-4C3C-9B2C-8E59DCD11BDF}"
@@ -228,10 +228,6 @@
 			RelativePathToProject=".\libraries\InspectReflect\InspectReflect.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{AA86FEA7-AA10-4870-8C71-C6D5A94D2FE5}"
-			RelativePathToProject=".\libraries\Undo\Undo.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{89167DD4-39A9-444A-8ED9-CAB1B35A0DEA}"
 			RelativePathToProject=".\libraries\Asset\Asset.vcproj"
 		/>
@@ -246,10 +242,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{296B05EC-7929-4E23-942C-FA953BB5602D}"
 			RelativePathToProject=".\libraries\AssetBuilder\AssetBuilder.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{B3F3E187-E372-4A23-B9DA-5FCCE712D174}"
-			RelativePathToProject=".\libraries\Worker\Worker.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}"
@@ -280,10 +272,6 @@
 			RelativePathToProject=".\libraries\Texture\Texture.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{15659B3D-2AE6-403D-AA91-7A56C252F454}"
-			RelativePathToProject=".\libraries\CodeGen\CodeGen.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
 			RelativePathToProject=".\libraries\Platform\platform.vcproj"
 		/>
@@ -300,12 +288,8 @@
 			RelativePathToProject=".\libraries\igDXContent\igDXContent.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{75D0DF92-E7C4-4F46-A67A-3B8914477892}"
-			RelativePathToProject=".\libraries\PerforceUI\PerforceUI.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{09C23AAB-CEB0-4254-82F5-15547D30AFE9}"
-			RelativePathToProject=".\libraries\DebugUI\DebugUI.vcproj"
+			ReferencedProjectIdentifier="{1A179B8F-2027-467A-AB0C-7E90575C0F03}"
+			RelativePathToProject=".\libraries\Debug\Debug.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{06092F0D-324B-484D-A9ED-397DFF76AE53}"
@@ -318,10 +302,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
 			RelativePathToProject=".\SDK\wxPropertyGrid\1.4.11\wxPropertyGrid.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{3280E624-B882-4835-88C7-97DE5115D19D}"
-			RelativePathToProject=".\Libraries\UID\UID.vcproj"
 		/>
 	</References>
 	<Files>
@@ -2470,6 +2450,70 @@
 				RelativePath=".\Data\Project.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="UI"
+			>
+			<Filter
+				Name="DebugUI"
+				>
+				<File
+					RelativePath=".\UI\DebugUI\DebugUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\DebugUI\DebugUI.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="PerforceUI"
+				>
+				<File
+					RelativePath=".\UI\PerforceUI\Dialog.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Dialog.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panel.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panel.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panels.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panels.fbp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panels.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\PerforceUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\PerforceUI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\WaitDialog.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\WaitDialog.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\API.h"

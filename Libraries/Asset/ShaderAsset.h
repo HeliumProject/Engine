@@ -6,7 +6,7 @@
 #include "AssetType.h"
 #include "TextureMapAttribute.h" // we share some enums with the texture maps (AlphaType)
 
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Finder
 {

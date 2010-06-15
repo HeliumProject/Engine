@@ -2,7 +2,6 @@
 
 #include "CollisionModeDisplayNode.h"
 
-#include "MayaCore/MayaCore.h"
 #include "MayaUtils/ErrorHelpers.h"
 #include "MayaUtils/NodeTypes.h"
 
@@ -22,8 +21,6 @@ void MayaExitingCallback( void *clientData );
 //
 MStatus initializePlugin( MObject object )
 {
-  MayaCore::Initialize();
-
   MStatus status;
   MFnPlugin	plugin( object, "Insomniac Games - MayaMeshSetup", "1.0" );
 
@@ -73,8 +70,6 @@ MStatus uninitializePlugin( MObject object )
   status = MMessage::removeCallbacks( g_CallbackIds );
   MCheckErr( status, "Failed to remove callbacks" );
 
-  MayaCore::Cleanup();
-
   return status;
 }
 
@@ -83,6 +78,4 @@ MStatus uninitializePlugin( MObject object )
 void MayaExitingCallback( void *clientData )
 {
   MMessage::removeCallbacks( g_CallbackIds );
-
-  MayaCore::Cleanup();
 }

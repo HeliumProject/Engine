@@ -193,7 +193,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
+			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{51249970-F796-4344-B558-4147F3225C30}"
@@ -212,16 +212,8 @@
 			RelativePathToProject=".\libraries\Debug\Debug.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{B3F3E187-E372-4A23-B9DA-5FCCE712D174}"
-			RelativePathToProject=".\libraries\Worker\Worker.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{09C23AAB-CEB0-4254-82F5-15547D30AFE9}"
-			RelativePathToProject=".\libraries\DebugUI\DebugUI.vcproj"
 		/>
 	</References>
 	<Files>

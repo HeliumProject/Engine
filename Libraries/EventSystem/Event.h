@@ -8,7 +8,7 @@
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Nocturnal
 {
@@ -19,7 +19,7 @@ namespace Nocturnal
         public:
             Event
                 (
-                const tuid id = UID::TUID::Null,
+                const tuid id = TUID::Null,
                 u64 created = 0,
                 const std::string& username = std::string( "" ),
                 const std::string& data = std::string( "" )
@@ -33,7 +33,7 @@ namespace Nocturnal
 
             bool IsValid() const
             {
-                return m_Id != UID::TUID::Null;
+                return m_Id != TUID::Null;
             }
 
             std::string Dump() const;

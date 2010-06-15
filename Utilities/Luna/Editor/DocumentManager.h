@@ -5,7 +5,7 @@
 
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Container/OrderedSet.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Luna
 {

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "AppPreferences.h"
 
-#include "AppUtils/Preferences.h"
+#include "Application/Preferences.h"
 
 using namespace Luna;
 
@@ -75,7 +75,7 @@ const std::string& AppPreferences::GetCurrentVersion() const
 std::string AppPreferences::GetPreferencesPath() const
 {
     Nocturnal::Path prefsPath;
-    if ( !AppUtils::GetPreferencesDirectory( prefsPath ) )
+    if ( !Application::GetPreferencesDirectory( prefsPath ) )
     {
         throw Nocturnal::Exception( "Could not get preferences directory." );
     }

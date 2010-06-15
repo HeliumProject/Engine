@@ -17,7 +17,7 @@
 #include "Finder/ExtensionSpecs.h"
 #include "Finder/LunaSpecs.h"
 #include "Inspect/DropSource.h"
-#include "Undo/Command.h"
+#include "Application/Undo/Command.h"
 #include "UIToolKit/ImageManager.h"
 
 #include "Scene/Color.h"  // BARF! Should we move Color.h to Editor?

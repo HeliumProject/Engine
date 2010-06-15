@@ -1,7 +1,7 @@
 #pragma once
 
 #include "HierarchyNode.h"
-#include "Undo/Command.h"
+#include "Application/Undo/Command.h"
 
 namespace Luna
 {

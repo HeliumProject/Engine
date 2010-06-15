@@ -454,6 +454,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\GUID.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\GUID.h"
+			>
+		</File>
+		<File
 			RelativePath=".\InitializerStack.cpp"
 			>
 		</File>
@@ -491,6 +499,14 @@
 		</File>
 		<File
 			RelativePath=".\Timer.h"
+			>
+		</File>
+		<File
+			RelativePath=".\TUID.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\TUID.h"
 			>
 		</File>
 		<File

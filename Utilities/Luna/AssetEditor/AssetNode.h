@@ -4,7 +4,7 @@
 #include "Foundation/Container/OrderedSet.h"
 #include "Editor/ContextMenuGenerator.h"
 #include "Core/Selectable.h"
-#include "Undo/Command.h"
+#include "Application/Undo/Command.h"
 
 namespace Inspect
 {

@@ -1246,7 +1246,7 @@ void CacheDB::SelectAssetByHash( const u64 pathHash, AssetFile* assetFile )
 
         m_DBManager->GetColumnI64( stmt, ++index, (i64&) assetFile->m_RowID );
 
-        tuid foundID = UID::TUID::Null;
+        tuid foundID = TUID::Null;
         m_DBManager->GetColumnI64( stmt, ++index, (i64&) foundID );
 
         std::string path;

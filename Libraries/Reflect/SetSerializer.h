@@ -59,7 +59,7 @@ namespace Reflect
   typedef SimpleSetSerializer<u32, U32Serializer> U32SetSerializer;                    REFLECT_SPECIALIZE_SERIALIZER( U32SetSerializer );
   typedef SimpleSetSerializer<u64, U64Serializer> U64SetSerializer;                    REFLECT_SPECIALIZE_SERIALIZER( U64SetSerializer );
   typedef SimpleSetSerializer<f32, F32Serializer> F32SetSerializer;                    REFLECT_SPECIALIZE_SERIALIZER( F32SetSerializer );
-  typedef SimpleSetSerializer<Nocturnal::UID::GUID, GUIDSerializer> GUIDSetSerializer; REFLECT_SPECIALIZE_SERIALIZER( GUIDSetSerializer );
-  typedef SimpleSetSerializer<Nocturnal::UID::TUID, TUIDSerializer> TUIDSetSerializer; REFLECT_SPECIALIZE_SERIALIZER( TUIDSetSerializer );
+  typedef SimpleSetSerializer<Nocturnal::GUID, GUIDSerializer> GUIDSetSerializer; REFLECT_SPECIALIZE_SERIALIZER( GUIDSetSerializer );
+  typedef SimpleSetSerializer<Nocturnal::TUID, TUIDSerializer> TUIDSetSerializer; REFLECT_SPECIALIZE_SERIALIZER( TUIDSetSerializer );
   typedef SimpleSetSerializer< Nocturnal::Path, PathSerializer > PathSetSerializer;    REFLECT_SPECIALIZE_SERIALIZER( PathSetSerializer );
 }

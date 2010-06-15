@@ -3,7 +3,7 @@
 #include "MainFrame.h"
 #include "resource.h"
 
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 #include "Foundation/File/Path.h"
 #include "Reflect/Registry.h"
 #include "Inspect/Controls.h"
@@ -11,14 +11,14 @@
 #include "InspectReflect/InspectReflectInit.h"
 #include "Finder/Finder.h"
 
-IMPLEMENT_APP_NO_MAIN(Application);
+IMPLEMENT_APP_NO_MAIN(ReflectorApp);
 
 int main(int argc, const char** argv)
 {
-    return AppUtils::StandardWinMain( &wxEntry );
+    return Application::StandardWinMain( &wxEntry );
 }
 
-int Application::OnRun()
+int ReflectorApp::OnRun()
 {
     Reflect::Initialize();
 
@@ -61,7 +61,7 @@ int Application::OnRun()
     return __super::OnRun();
 }
 
-int Application::OnExit()
+int ReflectorApp::OnExit()
 {
     InspectReflect::Cleanup();
 

@@ -3,7 +3,7 @@
 #include "AppPreferences.h"
 #include "ArtProvider.h"
 
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 #include "AssetEditor/AssetInit.h"
 #include "Asset/Tracker.h"
 #include "Browser/Browser.h"
@@ -11,7 +11,6 @@
 #include "Foundation/Log.h"
 #include "Core/CoreInit.h"
 #include "Debug/Exception.h"
-#include "DebugUI/DebugUI.h"
 #include "Editor/ApplicationPreferences.h"
 #include "Editor/Editor.h"
 #include "Editor/EditorInit.h"
@@ -21,14 +20,16 @@
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
 #include "Math/Utils.h"
-#include "PerforceUI/PerforceUI.h"
 #include "Scene/SceneEditor.h"
 #include "Scene/SceneInit.h"
 #include "Task/TaskInit.h"
 #include "UIToolKit/ImageManager.h"
 #include "Platform/Windows/Windows.h"
 #include "Platform/Process.h"
-#include "Worker/Process.h"
+#include "Application/Worker/Process.h"
+
+#include "UI/DebugUI/DebugUI.h"
+#include "UI/PerforceUI/PerforceUI.h"
 
 #include <wx/cmdline.h>
 #include <wx/splash.h>
@@ -38,10 +39,10 @@ using namespace Nocturnal;
 
 namespace Luna
 {
-    IMPLEMENT_APP( Application );
+    IMPLEMENT_APP( LunaApp );
 }
 
-Application::Application()
+LunaApp::LunaApp()
 : wxApp()
 , m_AssetTracker( NULL )
 , m_DocumentManager( new DocumentManager() )
@@ -49,7 +50,7 @@ Application::Application()
 {
 }
 
-Application::~Application()
+LunaApp::~LunaApp()
 {
     if ( m_AssetTracker )
     {
@@ -65,7 +66,7 @@ Application::~Application()
 ///////////////////////////////////////////////////////////////////////////////
 // Called from OnInit.  Adds the command line description to the parser.
 // 
-void Application::OnInitCmdLine( wxCmdLineParser& parser )
+void LunaApp::OnInitCmdLine( wxCmdLineParser& parser )
 {
   SetVendorName( "Nocturnal" );
 
@@ -79,13 +80,13 @@ void Application::OnInitCmdLine( wxCmdLineParser& parser )
 
   parser.AddSwitch( Worker::Args::Debug,      "Debug",                "Debug use of background processes" );
   parser.AddSwitch( Worker::Args::Wait,       "Wait",                 "Wait forever for background processes" );
-  parser.AddSwitch( AppUtils::Args::Script,   "Script",               "Omit prefix and suffix in console output" );
-  parser.AddSwitch( AppUtils::Args::Attach,   "Attach",               "Wait for a debugger to attach to the process on startup" );
-  parser.AddSwitch( AppUtils::Args::Profile,  "Profile",              "Enable profile output to the console windows" );
-  parser.AddSwitch( AppUtils::Args::Memory,   "Memory",               "Profile and report memory usage to the console" );
-  parser.AddSwitch( AppUtils::Args::Verbose,  "Verbose",              "Output a verbose level of console output" );
-  parser.AddSwitch( AppUtils::Args::Extreme,  "Extreme",              "Output an extremely verbose level of console output" );
-  parser.AddSwitch( AppUtils::Args::Debug,    "Debug",                "Output debug console output" );
+  parser.AddSwitch( Application::Args::Script,   "Script",               "Omit prefix and suffix in console output" );
+  parser.AddSwitch( Application::Args::Attach,   "Attach",               "Wait for a debugger to attach to the process on startup" );
+  parser.AddSwitch( Application::Args::Profile,  "Profile",              "Enable profile output to the console windows" );
+  parser.AddSwitch( Application::Args::Memory,   "Memory",               "Profile and report memory usage to the console" );
+  parser.AddSwitch( Application::Args::Verbose,  "Verbose",              "Output a verbose level of console output" );
+  parser.AddSwitch( Application::Args::Extreme,  "Extreme",              "Output an extremely verbose level of console output" );
+  parser.AddSwitch( Application::Args::Debug,    "Debug",                "Output debug console output" );
 
   __super::OnInitCmdLine( parser );
 }
@@ -95,7 +96,7 @@ void Application::OnInitCmdLine( wxCmdLineParser& parser )
 // switch and exits.  If we get this far, we need to parse the command line
 // and determine what mode to launch the app in.
 // 
-bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
+bool LunaApp::OnCmdLineParsed( wxCmdLineParser& parser )
 {
   wxArtProvider::Push( new ::Luna::ArtProvider() );
 
@@ -172,7 +173,7 @@ bool Application::OnCmdLineParsed( wxCmdLineParser& parser )
 ///////////////////////////////////////////////////////////////////////////////
 // Called when the application is ready to start running.
 // 
-int Application::OnRun()
+int LunaApp::OnRun()
 {
   return __super::OnRun();
 }
@@ -180,7 +181,7 @@ int Application::OnRun()
 ///////////////////////////////////////////////////////////////////////////////
 // Called when the application is being exited.  Cleans up resources.
 // 
-int Application::OnExit()
+int LunaApp::OnExit()
 {
   // Save preferences
     ::Luna::GetApplicationPreferences()->SavePreferences();
@@ -198,7 +199,7 @@ int Application::OnExit()
   return __super::OnExit();
 }
 
-std::string Application::ShowFileBrowser()
+std::string LunaApp::ShowFileBrowser()
 {
     NOC_BREAK();
 #pragma TODO( "Reimplent to use the Vault" )
@@ -240,5 +241,5 @@ int main()
 
   initializerStack.Push( &DebugUI::Initialize, &DebugUI::Cleanup );
 
-  return AppUtils::StandardWinMain( &wxEntry );
+  return Application::StandardWinMain( &wxEntry );
 }

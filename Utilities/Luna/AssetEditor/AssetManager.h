@@ -7,7 +7,7 @@
 #include "Editor/DocumentManager.h"
 #include "Inspect/ReflectClipboardData.h"
 #include "Core/Selection.h"
-#include "Undo/Queue.h"
+#include "Application/Undo/Queue.h"
 
 namespace AssetBuilder
 {

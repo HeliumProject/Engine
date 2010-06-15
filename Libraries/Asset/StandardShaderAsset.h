@@ -2,7 +2,7 @@
 
 #include "API.h"
 #include "ShaderAsset.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Asset
 {

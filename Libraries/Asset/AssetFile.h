@@ -10,7 +10,7 @@
 #include "Finder/Finder.h"
 #include "Reflect/Registry.h"
 #include "Reflect/Serializers.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 namespace Asset
 {

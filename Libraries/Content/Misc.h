@@ -1,22 +1,22 @@
 #pragma once
 
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 #include "Math/Vector4.h"
 #include "Math/CalculateBounds.h"
 #include "Content/ContentTypes.h"
 
 namespace Content
 {  
-    typedef std::pair<Nocturnal::UID::TUID, u64> t_UidId;                                                     // uid, mesh-id pair
+    typedef std::pair<Nocturnal::TUID, u64> t_UidId;                                                     // uid, mesh-id pair
     typedef std::pair<Math::BoundingVolumeGenerator::BSphere, u64> t_BsphereId;                       // bsphere, mesh-id pair
 
     typedef std::map<t_UidId, Math::V_Vector3> t_JointVertsMap;                                       // map (uid, id) to verts
-    typedef std::map<Nocturnal::UID::TUID, std::vector<t_BsphereId> > M_UIDBSphere;                           // map uid to (bsphere, id) list
+    typedef std::map<Nocturnal::TUID, std::vector<t_BsphereId> > M_UIDBSphere;                           // map uid to (bsphere, id) list
 
 
     struct UidBsphere_t
     {
-        Nocturnal::UID::TUID                    m_joint_id;
+        Nocturnal::TUID                    m_joint_id;
         u64                                     m_mesh_id;
         Math::BoundingVolumeGenerator::BSphere  m_bsphere;
     };

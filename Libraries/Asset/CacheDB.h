@@ -7,7 +7,7 @@
 
 #include "Foundation/File/Path.h"
 #include "SQL/SQLiteDB.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 
 namespace Asset

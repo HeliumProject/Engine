@@ -5,7 +5,7 @@
 #include "math/Constants.h"
 
 #include "Core/Manipulator.h"
-#include "Undo/PropertyCommand.h"
+#include "Application/Undo/PropertyCommand.h"
 #include "PrimitiveAxes.h"
 
 #include "Scene.h"

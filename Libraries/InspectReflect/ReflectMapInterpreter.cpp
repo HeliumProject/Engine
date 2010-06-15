@@ -10,7 +10,7 @@
 #include "Inspect/Panel.h"
 #include "Inspect/StringData.h"
 
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 
 using namespace Inspect;
 

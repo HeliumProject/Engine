@@ -14,13 +14,13 @@ namespace Content
   public:
     bool              m_Visible;
     bool              m_Selectable;
-    Nocturnal::UID::V_TUID  m_Members;
+    Nocturnal::V_TUID  m_Members;
     Math::Color3      m_Color;
     u32               m_Type;
 
 
     Layer();
-    Layer( Nocturnal::UID::TUID& id );
+    Layer( Nocturnal::TUID& id );
     virtual ~Layer();
 
     REFLECT_DECLARE_CLASS( Layer, SceneNode );

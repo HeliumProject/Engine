@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 #include "Reflect/Serializers.h"
 #include "SceneNode.h"
 
@@ -29,7 +29,7 @@ namespace Content
   class CONTENT_API MorphTargetWeight : public Reflect::Element
   {
   public: 
-    Nocturnal::UID::TUID  m_TargetId;
+    Nocturnal::TUID  m_TargetId;
     f32           m_Weight;
 
     MorphTargetWeight()
@@ -38,7 +38,7 @@ namespace Content
     {
     }
 
-    MorphTargetWeight( const Nocturnal::UID::TUID& targetId, const f32 weight )
+    MorphTargetWeight( const Nocturnal::TUID& targetId, const f32 weight )
       : m_TargetId( targetId )
       , m_Weight( weight )
     {
@@ -73,7 +73,7 @@ namespace Content
     {
     }
 
-    void AddTargetWeight( const Nocturnal::UID::TUID& targetId, const f32 weight )
+    void AddTargetWeight( const Nocturnal::TUID& targetId, const f32 weight )
     {
       m_MorphTargetWeights.push_back( new MorphTargetWeight( targetId, weight ) );
     }
@@ -136,7 +136,7 @@ namespace Content
   {
   public:
 
-    Nocturnal::UID::TUID        m_SkeletonID;
+    Nocturnal::TUID        m_SkeletonID;
     std::string           m_ActorName;
     M_Animation           m_JointAnimationMap;
     M_CompressedAnimation m_JointCompressedAnimationMap;
@@ -190,18 +190,18 @@ namespace Content
     }
 
     AnimationPtr GetAnimationForJoint( const JointTransformPtr& joint );
-    AnimationPtr GetAnimationForJoint( const Nocturnal::UID::TUID& jointID );
+    AnimationPtr GetAnimationForJoint( const Nocturnal::TUID& jointID );
 
     CompressedAnimationPtr GetCompressedAnimationForJoint( const JointTransformPtr& joint );
-    CompressedAnimationPtr GetCompressedAnimationForJoint( const Nocturnal::UID::TUID& jointID );
+    CompressedAnimationPtr GetCompressedAnimationForJoint( const Nocturnal::TUID& jointID );
 
     // associate an animation with a joint
     // note: setting overWrite = true will stomp any existing association of the specified joint to an animation
     void Associate( const JointTransformPtr& joint, const AnimationPtr& animation, bool overWrite = false );
 
-    void Associate( const Nocturnal::UID::TUID& jointID, const AnimationPtr& animation, bool overWrite = false );
+    void Associate( const Nocturnal::TUID& jointID, const AnimationPtr& animation, bool overWrite = false );
 
-    void GetJointIDs( Nocturnal::UID::V_TUID& jointIDs );
+    void GetJointIDs( Nocturnal::V_TUID& jointIDs );
 
     u32 NumAnimations()
     {
@@ -225,13 +225,13 @@ namespace Content
 
     void ConvertToWorldSpace(const Content::Scene& scene, JointOrderingPtr& joint_ordering);
     void ConvertToParentLocalSpace(const Content::Scene& scene, const Content::JointTransformPtr& rootJoint, JointOrderingPtr& joint_ordering);
-    void ApplyParentTransforms( const Content::Scene& scene, const Nocturnal::UID::TUID& targetJointId, bool zeroParents );
-    void ApplyInverseParentTransforms( const Content::Scene& scene, const Nocturnal::UID::TUID& targetJointId );
+    void ApplyParentTransforms( const Content::Scene& scene, const Nocturnal::TUID& targetJointId, bool zeroParents );
+    void ApplyInverseParentTransforms( const Content::Scene& scene, const Nocturnal::TUID& targetJointId );
     void DumpAnims( const JointOrderingPtr& jointOrdering );
-    void RemoveTransform( const Nocturnal::UID::TUID& targetJointId, const Nocturnal::UID::TUID& referenceJointId );
-    void RemoveFirstFrameTransform( const Nocturnal::UID::TUID& targetJointId );
-    void RemoveRotTrans( const Nocturnal::UID::TUID& targetJointId, Math::Vector3 translation, Math::Quaternion rotation );
-    void CalculateLinearDistancePerFrame( const Nocturnal::UID::TUID& referenceJointId );
+    void RemoveTransform( const Nocturnal::TUID& targetJointId, const Nocturnal::TUID& referenceJointId );
+    void RemoveFirstFrameTransform( const Nocturnal::TUID& targetJointId );
+    void RemoveRotTrans( const Nocturnal::TUID& targetJointId, Math::Vector3 translation, Math::Quaternion rotation );
+    void CalculateLinearDistancePerFrame( const Nocturnal::TUID& referenceJointId );
     void ConvertToAdditiveBlend( const Content::Scene& scene, const JointOrderingPtr& jointOrdering, i32 reference_frame );
 
     u32  CompressAnimations( const Content::Scene& scene,
@@ -243,8 +243,8 @@ namespace Content
 
     void ExtractCinematicRootOffset( const Content::Scene  & scene,
       Math::V_Vector3 & cinematicTranslationChannel,
-      const Nocturnal::UID::TUID    & abodyJointId,
-      const Nocturnal::UID::TUID    & motionJointId);
+      const Nocturnal::TUID    & abodyJointId,
+      const Nocturnal::TUID    & motionJointId);
   };
 
   typedef Nocturnal::SmartPtr<AnimationClip> AnimationClipPtr;

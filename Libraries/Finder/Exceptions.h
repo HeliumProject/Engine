@@ -1,6 +1,6 @@
 #pragma once
 
-#include "UID/TUID.h"
+#include "Foundation/TUID.h"
 #include "Platform/Compiler.h"
 #include "Foundation/Exception.h"
 

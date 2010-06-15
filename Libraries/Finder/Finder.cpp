@@ -149,7 +149,7 @@ const FileSpec* Finder::GetFileSpec( const std::string &specName )
 
 void Finder::HackSpec( FileSpec* spec )
 {
-  tuid randomId = UID::TUID::Generate();
+  tuid randomId = TUID::Generate();
   std::stringstream str;
   str << randomId;
   spec->SetFormatVersion( str.str() );

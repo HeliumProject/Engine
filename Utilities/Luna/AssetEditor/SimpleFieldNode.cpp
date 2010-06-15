@@ -61,13 +61,13 @@ SimpleFieldNode::~SimpleFieldNode()
 //
 //    if ( !path.empty() )
 //    {
-//      tuid fileID = UID::TUID::Null;
+//      tuid fileID = TUID::Null;
 //      if ( !ConvertLabelToTuid( path, fileID ) )
 //      {
 //        Log::Error( "No TUID was found for path '%s' (Reason: %s); discarding.\n", path.c_str() );
 //      }
 //
-//      if ( fileID != UID::TUID::Null )
+//      if ( fileID != TUID::Null )
 //      {
 //        ser->m_Data.Set( fileID );
 //      }

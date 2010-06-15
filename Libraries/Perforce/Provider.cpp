@@ -7,7 +7,7 @@
 
 #include "Platform/Assert.h"
 #include "Foundation/Version.h"
-#include "AppUtils/AppUtils.h"
+#include "Application/Application.h"
 #include "Platform/Windows/Windows.h"
 #include "Platform/Mutex.h"
 #include "RCS/RCS.h"

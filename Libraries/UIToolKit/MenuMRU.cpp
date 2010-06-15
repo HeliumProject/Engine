@@ -130,17 +130,17 @@ void MenuMRU::RemoveInvalidItems( bool tuidRequired )
     // If a TUID is required, make sure that we can find a tuid for this file.
     //if ( tuidRequired )
     //{
-    //  tuid fileID = UID::TUID::Null;
+    //  tuid fileID = TUID::Null;
     //  try
     //  {
     //    fileID = File::GlobalManager().GetID( current );
     //  }
     //  catch ( const File::Exception& )
     //  {
-    //    fileID = UID::TUID::Null;
+    //    fileID = TUID::Null;
     //  }
 
-    //  if ( fileID == UID::TUID::Null )
+    //  if ( fileID == TUID::Null )
     //  {
     //    remove.insert( current );
     //    continue;

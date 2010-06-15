@@ -25,7 +25,7 @@ namespace Content
       m_GroundColor.Set( 0.2f, 0.2f, 0.2f );
     }
 
-    SunLight (Nocturnal::UID::TUID &id)
+    SunLight (Nocturnal::TUID &id)
       : DirectionalLight (id),
       m_Haze( 0.0f ),
       m_RedBlueShift( 0.0f ),

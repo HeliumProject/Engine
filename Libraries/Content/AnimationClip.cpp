@@ -18,7 +18,7 @@ AnimationPtr AnimationClip::GetAnimationForJoint( const JointTransformPtr& joint
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-AnimationPtr AnimationClip::GetAnimationForJoint( const Nocturnal::UID::TUID& jointID )
+AnimationPtr AnimationClip::GetAnimationForJoint( const Nocturnal::TUID& jointID )
 {
   M_Animation::iterator findItor = m_JointAnimationMap.find( jointID );
   if( findItor != m_JointAnimationMap.end() )
@@ -35,7 +35,7 @@ CompressedAnimationPtr AnimationClip::GetCompressedAnimationForJoint( const Join
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-CompressedAnimationPtr AnimationClip::GetCompressedAnimationForJoint( const Nocturnal::UID::TUID& jointID )
+CompressedAnimationPtr AnimationClip::GetCompressedAnimationForJoint( const Nocturnal::TUID& jointID )
 {
   M_CompressedAnimation::iterator findItor = m_JointCompressedAnimationMap.find( jointID );
   if( findItor != m_JointCompressedAnimationMap.end() )
@@ -46,7 +46,7 @@ CompressedAnimationPtr AnimationClip::GetCompressedAnimationForJoint( const Noct
 }
 
 // note: setting overWrite = true will stomp any existing association of the specified joint to an animation
-void AnimationClip::Associate( const Nocturnal::UID::TUID& jointID, const AnimationPtr& animation, bool overWrite )
+void AnimationClip::Associate( const Nocturnal::TUID& jointID, const AnimationPtr& animation, bool overWrite )
 {
   if ( m_JointAnimationMap.size() && animation->TotalSamples() != m_JointAnimationMap.begin()->second->TotalSamples() )
     throw Nocturnal::Exception( "Cannot add an animation to an animation clip that has a different number of samples!" );
@@ -68,7 +68,7 @@ void AnimationClip::Associate( const JointTransformPtr& joint, const AnimationPt
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void AnimationClip::GetJointIDs( Nocturnal::UID::V_TUID& jointIDs )
+void AnimationClip::GetJointIDs( Nocturnal::V_TUID& jointIDs )
 {
   M_Animation::iterator itor = m_JointAnimationMap.begin();
   M_Animation::iterator end = m_JointAnimationMap.end();
@@ -90,7 +90,7 @@ void AnimationClip::GetAnimations( V_Animation& anims )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void AnimationClip::ApplyParentTransforms( const Content::Scene& scene, const Nocturnal::UID::TUID& targetJointId, bool zeroParents )
+void AnimationClip::ApplyParentTransforms( const Content::Scene& scene, const Nocturnal::TUID& targetJointId, bool zeroParents )
 {
   CONTENT_SCOPE_TIMER((""));
 
@@ -133,7 +133,7 @@ void AnimationClip::ApplyParentTransforms( const Content::Scene& scene, const No
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void AnimationClip::ApplyInverseParentTransforms( const Content::Scene& scene, const Nocturnal::UID::TUID& targetJointId )
+void AnimationClip::ApplyInverseParentTransforms( const Content::Scene& scene, const Nocturnal::TUID& targetJointId )
 {
   CONTENT_SCOPE_TIMER((""));
 
@@ -183,8 +183,8 @@ void AnimationClip::ConvertToWorldSpace(const Content::Scene& scene, JointOrderi
 {
 /*
   //assumes with joint_ordering we will see parent before child
-  Nocturnal::UID::V_TUID::iterator jt_tuid = joint_ordering->m_JointOrdering.begin();
-  Nocturnal::UID::V_TUID::iterator end_jt_tuid = joint_ordering->m_JointOrdering.end();
+  Nocturnal::V_TUID::iterator jt_tuid = joint_ordering->m_JointOrdering.begin();
+  Nocturnal::V_TUID::iterator end_jt_tuid = joint_ordering->m_JointOrdering.end();
   for (; jt_tuid!=end_jt_tuid; ++jt_tuid)
   {
     Content::JointTransformPtr targetJoint = scene.Get< Content::JointTransform >( *jt_tuid );
@@ -270,7 +270,7 @@ void AnimationClip::ConvertToWorldSpace(const Content::Scene& scene, JointOrderi
 
   Math::V_Vector3 stashed_scales(joint_ordering->m_JointOrdering.size());
 
-  Nocturnal::UID::TUID rootId = joint_ordering->GetMasterJoint( joint_ordering->m_JointOrdering[ 0 ] );
+  Nocturnal::TUID rootId = joint_ordering->GetMasterJoint( joint_ordering->m_JointOrdering[ 0 ] );
 
   Content::AnimationPtr jointAnimation = m_JointAnimationMap[ rootId ];
   if (!jointAnimation.ReferencesObject())
@@ -285,14 +285,14 @@ void AnimationClip::ConvertToWorldSpace(const Content::Scene& scene, JointOrderi
   for(u32 frameIndex = 0; frameIndex < numSamples; ++frameIndex)
   {
     //note: assumes with joint_ordering we will see parent before child
-    Nocturnal::UID::V_TUID::iterator it_tuid_start = joint_ordering->m_JointOrdering.begin();
-    Nocturnal::UID::V_TUID::iterator it_tuid_end   = joint_ordering->m_JointOrdering.end();
+    Nocturnal::V_TUID::iterator it_tuid_start = joint_ordering->m_JointOrdering.begin();
+    Nocturnal::V_TUID::iterator it_tuid_end   = joint_ordering->m_JointOrdering.end();
 
     // 
     // stash scales
     //
     u32 i = 0;
-    for(Nocturnal::UID::V_TUID::iterator it = it_tuid_start; it != it_tuid_end; ++it)
+    for(Nocturnal::V_TUID::iterator it = it_tuid_start; it != it_tuid_end; ++it)
     {
       Content::JointTransformPtr targetJoint = scene.Get< Content::JointTransform >( *it );
 
@@ -303,7 +303,7 @@ void AnimationClip::ConvertToWorldSpace(const Content::Scene& scene, JointOrderi
         throw MissingJointException( targetJointGuid, "Content Scene" );
       }
 
-      Nocturnal::UID::TUID masterId = joint_ordering->GetMasterJoint( *it );
+      Nocturnal::TUID masterId = joint_ordering->GetMasterJoint( *it );
 
       Content::AnimationPtr jointAnimation = m_JointAnimationMap[ masterId ];
       if ( !jointAnimation.ReferencesObject() )
@@ -326,7 +326,7 @@ continue;
     // 
     // transform by parent
     // 
-    for(Nocturnal::UID::V_TUID::iterator it = it_tuid_start; it != it_tuid_end; ++it)
+    for(Nocturnal::V_TUID::iterator it = it_tuid_start; it != it_tuid_end; ++it)
     {
       Content::JointTransformPtr targetJoint = scene.Get< Content::JointTransform >( *it );
       Content::JointTransformPtr parentJoint = scene.Get< Content::JointTransform >( targetJoint->m_ParentID );
@@ -336,7 +336,7 @@ continue;
         continue;
       }
 
-      Nocturnal::UID::TUID masterId = joint_ordering->GetMasterJoint( *it );
+      Nocturnal::TUID masterId = joint_ordering->GetMasterJoint( *it );
       Content::AnimationPtr jointAnimation  = m_JointAnimationMap[ masterId ];
 
 //@@@ bad_bad_bad_bad_bad_bad_bad_bad
@@ -346,7 +346,7 @@ if ( !jointAnimation.ReferencesObject() )
 }
 //@@@ bad_bad_bad_bad_bad_bad_bad_bad
 
-      Nocturnal::UID::TUID parentMasterId = joint_ordering->GetMasterJoint( parentJoint->m_ID  );
+      Nocturnal::TUID parentMasterId = joint_ordering->GetMasterJoint( parentJoint->m_ID  );
       Content::AnimationPtr parentAnimation = m_JointAnimationMap[ parentMasterId ];
 
       NOC_ASSERT(jointAnimation->TotalSamples() == numSamples);
@@ -383,11 +383,11 @@ if ( !jointAnimation.ReferencesObject() )
     // apply scales
     // 
     i = 0;
-    for(Nocturnal::UID::V_TUID::iterator it = it_tuid_start; it != it_tuid_end; ++it)
+    for(Nocturnal::V_TUID::iterator it = it_tuid_start; it != it_tuid_end; ++it)
     {
       Content::JointTransformPtr  targetJoint     = scene.Get< Content::JointTransform >( *it );
 
-      Nocturnal::UID::TUID masterId = joint_ordering->GetMasterJoint( *it );
+      Nocturnal::TUID masterId = joint_ordering->GetMasterJoint( *it );
       Content::AnimationPtr       jointAnimation  = m_JointAnimationMap[ masterId ];
 
 //@@@ bad_bad_bad_bad_bad_bad_bad_bad
@@ -403,7 +403,7 @@ if ( !jointAnimation.ReferencesObject() )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void AnimationClip::RemoveTransform( const Nocturnal::UID::TUID& targetJointId, const Nocturnal::UID::TUID& referenceJointId )
+void AnimationClip::RemoveTransform( const Nocturnal::TUID& targetJointId, const Nocturnal::TUID& referenceJointId )
 {
   CONTENT_SCOPE_TIMER((""));
 
@@ -443,7 +443,7 @@ void AnimationClip::RemoveTransform( const Nocturnal::UID::TUID& targetJointId, 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void AnimationClip::CalculateLinearDistancePerFrame( const Nocturnal::UID::TUID &referenceJointId )
+void AnimationClip::CalculateLinearDistancePerFrame( const Nocturnal::TUID &referenceJointId )
 {
   CONTENT_SCOPE_TIMER((""));
 
@@ -460,7 +460,7 @@ void AnimationClip::CalculateLinearDistancePerFrame( const Nocturnal::UID::TUID 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void AnimationClip::RemoveFirstFrameTransform( const Nocturnal::UID::TUID &targetJointId )
+void AnimationClip::RemoveFirstFrameTransform( const Nocturnal::TUID &targetJointId )
 {
   CONTENT_SCOPE_TIMER((""));
 
@@ -476,7 +476,7 @@ void AnimationClip::RemoveFirstFrameTransform( const Nocturnal::UID::TUID &targe
   RemoveRotTrans( targetJointId, targetAnim->m_Translate[ 0 ], targetAnim->m_Rotate[ 0 ] );
 }
 
-void AnimationClip::RemoveRotTrans( const Nocturnal::UID::TUID& targetJointId, Math::Vector3 translation, Math::Quaternion rotation )
+void AnimationClip::RemoveRotTrans( const Nocturnal::TUID& targetJointId, Math::Vector3 translation, Math::Quaternion rotation )
 {
   CONTENT_SCOPE_TIMER((""));
 
@@ -517,11 +517,11 @@ void AnimationClip::DumpAnims( const JointOrderingPtr& jointOrdering )
     Log::Print( "Frame %d:\n", frame );
 
     u32 jointIndex = 0;
-    Nocturnal::UID::V_TUID::iterator it = jointOrdering->m_JointOrdering.begin();
-    Nocturnal::UID::V_TUID::iterator end = jointOrdering->m_JointOrdering.end();
+    Nocturnal::V_TUID::iterator it = jointOrdering->m_JointOrdering.begin();
+    Nocturnal::V_TUID::iterator end = jointOrdering->m_JointOrdering.end();
     for ( ; it != end; ++it, ++jointIndex )
     {
-      Nocturnal::UID::TUID& id = *it;
+      Nocturnal::TUID& id = *it;
       
       Animation* anim = m_JointAnimationMap[ id ];
 
@@ -625,7 +625,7 @@ u32 AnimationClip::CompressAnimations( const Content::Scene& scene, const Animat
   CONTENT_SCOPE_TIMER((""));
 
   u32 missingJoints = 0;
-  Nocturnal::UID::S_TUID handledJoints;
+  Nocturnal::S_TUID handledJoints;
 
   M_Animation::iterator itor = m_JointAnimationMap.begin();
   M_Animation::iterator end = m_JointAnimationMap.end();
@@ -650,7 +650,7 @@ u32 AnimationClip::CompressAnimations( const Content::Scene& scene, const Animat
     CompressedAnimationPtr compressed = new CompressedAnimation( compressionControl, looping );
     compressed->Compress( joint->GetName(), (*itor).second, joint->m_Translate );
 
-    m_JointCompressedAnimationMap.insert( std::make_pair< Nocturnal::UID::TUID, CompressedAnimationPtr >( (*itor).first, compressed ) );
+    m_JointCompressedAnimationMap.insert( std::make_pair< Nocturnal::TUID, CompressedAnimationPtr >( (*itor).first, compressed ) );
     if ( !handledJoints.insert( (*itor).first ).second )
     {
       std::string jointGuid;
@@ -678,8 +678,8 @@ void AnimationClip::SmoothRotations()
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void AnimationClip::ExtractCinematicRootOffset( const Content::Scene  & scene,
                                                       Math::V_Vector3 & cinematicTranslationChannel,
-                                                const Nocturnal::UID::TUID    & abodyJointId,
-                                                const Nocturnal::UID::TUID    & motionJointId)
+                                                const Nocturnal::TUID    & abodyJointId,
+                                                const Nocturnal::TUID    & motionJointId)
 {
   JointTransformPtr cineRoot = scene.Get< JointTransform >( abodyJointId );
   JointTransformPtr cineMotion = scene.Get< JointTransform >( motionJointId );

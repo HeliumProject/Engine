@@ -71,14 +71,14 @@ namespace Content
     {
     public:
         std::string          m_Name;
-        Nocturnal::UID::TUID m_Id;
+        Nocturnal::TUID m_Id;
         V_MorphTargetDelta   m_Deltas;
 
         MorphTarget()
         {
         }
 
-        MorphTarget( const std::string& name, const Nocturnal::UID::TUID& id )
+        MorphTarget( const std::string& name, const Nocturnal::TUID& id )
             : m_Name( name )
             , m_Id( id )
         {
@@ -231,7 +231,7 @@ namespace Content
         //
 
         // The shaders referenced by all of the polygons of this mesh
-        Nocturnal::UID::V_TUID m_ShaderIDs;
+        Nocturnal::V_TUID m_ShaderIDs;
 
         // The counts of the number of triangles for each shader used
         V_u32 m_ShaderTriangleCounts;
@@ -246,7 +246,7 @@ namespace Content
 
         }
 
-        Mesh (const Nocturnal::UID::TUID& id)
+        Mesh (const Nocturnal::TUID& id)
             : PivotTransform (id)
         {
             m_MeshOriginType = Maya;

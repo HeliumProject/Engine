@@ -42,7 +42,6 @@
 
 #include "Foundation/InitializerStack.h"
 #include "Content/ContentInit.h"
-#include "MayaCore/MayaCore.h"
 #include "MayaUtils/NodeTypes.h"
 
 #include "CallBacks.h"
@@ -73,7 +72,6 @@ void MayaExitingCallback( void *clientData )
 
 MStatus initializePlugin( MObject obj )
 { 
-  g_InitializerStack.Push( &MayaCore::Initialize, &MayaCore::Cleanup );
   g_InitializerStack.Push( &Content::Initialize, &Content::Cleanup );
 
   MString registerNodeError( "registerNode " );

@@ -83,7 +83,7 @@ void HierarchyNode::Pack()
 {
   __super::Pack();
 
-  UID::TUID parentID( UID::TUID::Null );
+  TUID parentID( TUID::Null );
 
   if ( GetParent() != NULL && GetParent() != m_Scene->GetRoot() )
   {
@@ -325,7 +325,7 @@ HierarchyNodePtr HierarchyNode::Duplicate()
   Content::HierarchyNodePtr data = Reflect::DangerousCast< Content::HierarchyNode > ( GetPackage< Content::HierarchyNode > ()->Clone() );
 
   // generate new unique ID 
-  UID::TUID::Generate( data->m_ID ); 
+  TUID::Generate( data->m_ID ); 
 
   // have the scene create the correct application object for this data
   HierarchyNodePtr duplicate = Reflect::ObjectCast< Luna::HierarchyNode > ( m_Scene->CreateNode( data ) );

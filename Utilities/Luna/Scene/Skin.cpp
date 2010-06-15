@@ -48,8 +48,8 @@ void Skin::Initialize()
     m_Mesh->CreateDependency( this );
 
     // Dereference influence objects
-    UID::V_TUID::const_iterator infItr = skin->m_InfluenceObjectIDs.begin();
-    UID::V_TUID::const_iterator infEnd = skin->m_InfluenceObjectIDs.end();
+    V_TUID::const_iterator infItr = skin->m_InfluenceObjectIDs.begin();
+    V_TUID::const_iterator infEnd = skin->m_InfluenceObjectIDs.end();
     for ( ; infItr != infEnd; ++infItr )
     {
       Luna::SceneNode* obj = m_Scene->FindNode( *infItr );

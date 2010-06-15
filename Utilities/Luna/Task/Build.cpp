@@ -27,8 +27,8 @@
 #include "Content/Zone.h"
 #include "Reflect/Archive.h"
 
-#include "AppUtils/AppUtils.h"
-#include "Worker/Process.h"
+#include "Application/Application.h"
+#include "Application/Worker/Process.h"
 #include "Foundation/Log.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/IPC/Connection.h"

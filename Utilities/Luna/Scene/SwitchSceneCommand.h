@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "Undo/PropertyCommand.h"
+#include "Application/Undo/PropertyCommand.h"
 
 namespace Luna
 {

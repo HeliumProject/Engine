@@ -2,6 +2,8 @@
 
 #include "SceneAsset.h"
 
+#include "Finder/AssetSpecs.h"
+
 using namespace Asset;
 
 REFLECT_DEFINE_CLASS( WorldFileAttribute );

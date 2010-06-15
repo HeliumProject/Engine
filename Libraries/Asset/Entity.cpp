@@ -7,8 +7,6 @@
 
 #include "Foundation/Log.h"
 #include "Content/Scene.h"
-#include "Finder/Finder.h"
-#include "Finder/ContentSpecs.h"
 #include "RCS/RCS.h"
 
 using namespace Asset;

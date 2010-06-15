@@ -7,11 +7,7 @@
 #include "Attribute/AttributeHandle.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "Finder/Finder.h"
-#include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
-#include "Finder/FinderSpec.h"
-#include "Finder/ProjectSpecs.h"
 #include "RCS/RCS.h"
 
 using namespace Asset;

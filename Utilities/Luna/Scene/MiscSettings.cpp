@@ -3,7 +3,6 @@
 
 #include "Color.h"
 #include "Foundation/Log.h"
-#include "Finder/LunaSpecs.h"
 #include "Math/Utils.h"
 
 #include <tinyxml.h>

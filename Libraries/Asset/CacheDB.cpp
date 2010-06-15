@@ -20,9 +20,6 @@
 #include "Foundation/Log.h"
 #include "Debug/Exception.h"
 #include "Finder/AssetSpecs.h"
-#include "Finder/ExtensionSpecs.h"
-#include "Finder/Finder.h"
-#include "Finder/ProjectSpecs.h"
 #include "SQL/SQLite.h"
 #include "Platform/Windows/Console.h"
 

@@ -5,8 +5,6 @@
 
 #include "Foundation/Flags.h"
 
-#include "Finder/Finder.h"
-
 #include "Foundation/Log.h"
 
 #include "SQL/SQL.h"

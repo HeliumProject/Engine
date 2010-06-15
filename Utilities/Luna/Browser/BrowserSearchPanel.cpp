@@ -9,12 +9,6 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Container/Insert.h" 
-#include "Finder/Finder.h"
-#include "Finder/AssetSpecs.h"
-#include "Finder/ExtensionSpecs.h"
-#include "Finder/FinderSpec.h"
-#include "Finder/LunaSpecs.h"
-#include "Finder/ProjectSpecs.h"
 #include "UIToolKit/ImageManager.h"
 
 using namespace Luna;

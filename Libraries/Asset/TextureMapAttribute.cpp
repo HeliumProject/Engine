@@ -1,6 +1,7 @@
 #include "TextureMapAttribute.h"
-
 #include "StandardShaderAsset.h"
+
+#include "Finder/ExtensionSpecs.h"
 
 using namespace Asset;
 

@@ -23,8 +23,6 @@
 #include "Attribute/AttributeHandle.h"
 #include "Foundation/CommandLine.h"
 #include "Editor/DocumentManager.h"
-#include "Finder/ContentSpecs.h"
-#include "Finder/Finder.h"
 #include "RCS/RCS.h"
 #include "Scene/SceneManager.h"
 #include "UIToolKit/AutoCompleteComboBox.h"

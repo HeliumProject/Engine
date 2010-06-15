@@ -10,7 +10,6 @@
 #include "ShaderAsset.h"
 #include "SceneAsset.h"
 
-#include "Finder/Finder.h"
 #include "Foundation/Log.h"
 #include "Reflect/Version.h"
 #include "Reflect/Object.h"

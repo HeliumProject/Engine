@@ -7,9 +7,6 @@
 #include "Foundation/TUID.h"
 #include "Reflect/Registry.h"
 
-#include "Finder/AssetSpecs.h"
-#include "Finder/ExtensionSpecs.h"
-
 namespace Asset
 {
   class ASSET_API SceneAsset : public AssetClass

@@ -3,7 +3,6 @@
 #include "ContainerNode.h"
 #include "SimpleFieldNode.h"
 #include "Asset/AssetFlags.h"
-#include "Finder/AssetSpecs.h"
 
 using namespace Luna;
 

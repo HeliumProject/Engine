@@ -4,8 +4,6 @@
 
 
 #include "FileBackedAttribute.h"
-#include "Finder/ExtensionSpecs.h"
-
 
 namespace Asset
 {

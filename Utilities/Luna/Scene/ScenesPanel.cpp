@@ -14,7 +14,6 @@
 #include "Asset/ArtFileAttribute.h"
 #include "Content/ContentVersion.h"
 #include "Finder/AssetSpecs.h"
-#include "Finder/LunaSpecs.h"
 #include "Foundation/Log.h"
 #include "UIToolKit/FileDialog.h"
 #include "UIToolKit/ImageManager.h"

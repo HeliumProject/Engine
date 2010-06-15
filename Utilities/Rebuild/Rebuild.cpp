@@ -5,7 +5,6 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Version.h"
 #include "Foundation/Log.h"
-#include "Finder/Finder.h"
 #include "RCS/RCS.h"
 #include "Foundation/File/Path.h"
 

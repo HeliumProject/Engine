@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "Preferences.h"
 
-#include "Finder/Finder.h"
 #include "Foundation/CommandLine.h"
 
 using namespace Luna;

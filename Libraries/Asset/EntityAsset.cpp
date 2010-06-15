@@ -2,6 +2,7 @@
 
 #include "Attribute/AttributeHandle.h"
 #include "Exceptions.h"
+#include "Finder/AssetSpecs.h"
 #include "Reflect/Archive.h"
 #include "Reflect/Element.h"
 #include "Reflect/Version.h"
@@ -9,8 +10,6 @@
 #include "AssetTemplate.h"
 #include "ArtFileAttribute.h"
 #include "DependenciesAttribute.h"
-
-#include "Finder/ContentSpecs.h"
 
 using namespace Reflect;
 using namespace Asset;

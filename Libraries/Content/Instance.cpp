@@ -3,7 +3,6 @@
 
 #include "Attribute/AttributeHandle.h"
 #include "Foundation/Log.h"
-#include "Finder/ContentSpecs.h"
 
 using namespace Content;
 using namespace Attribute; 

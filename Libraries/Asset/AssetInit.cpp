@@ -32,8 +32,6 @@
 #include "Attribute/AttributeCategories.h"
 #include "Foundation/InitializerStack.h"
 #include "Content/ContentInit.h"
-#include "Finder/AssetSpecs.h"
-#include "Finder/ExtensionSpecs.h"
 #include "Reflect/Registry.h"
 
 #include "Foundation/InitializerStack.h"

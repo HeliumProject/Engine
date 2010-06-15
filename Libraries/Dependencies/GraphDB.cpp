@@ -5,7 +5,6 @@
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Log.h"
-#include "Finder/ProjectSpecs.h"
 #include "SQL/SQLite.h"
 #include "Foundation/Exception.h"
 

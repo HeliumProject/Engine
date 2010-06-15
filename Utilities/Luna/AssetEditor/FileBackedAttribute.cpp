@@ -6,8 +6,8 @@
 #include "AssetPreferences.h"
 #include "PersistentDataFactory.h"
 
-#include "Finder/Finder.h"
 #include "Editor/ContextMenuGenerator.h"
+#include "Finder/Finder.h"
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/FileDialog.h"
 

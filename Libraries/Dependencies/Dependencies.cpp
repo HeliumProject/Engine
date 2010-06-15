@@ -33,9 +33,6 @@
 #include "Foundation/Container/Insert.h"
 #include "Foundation/String/Utilities.h"
 
-#include "Finder/Finder.h"
-#include "Finder/ProjectSpecs.h"
-
 #include "Foundation/Log.h"
 
 #define MAX_FILE_GRAPH_DEPTH 25

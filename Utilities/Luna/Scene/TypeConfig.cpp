@@ -6,8 +6,6 @@
 #include "UIToolKit/ImageManager.h"
 
 #include "Foundation/Log.h"
-#include "Finder/AssetSpecs.h"
-#include "Finder/LunaSpecs.h"
 
 #include "Content/Instance.h"
 #include "Asset/Entity.h"

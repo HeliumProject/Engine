@@ -13,7 +13,6 @@
 
 #include "Asset/AssetFlags.h"
 #include "Finder/Finder.h"
-#include "Finder/ExtensionSpecs.h"
 #include "UIToolKit/FileDialog.h"
 #include "Foundation/Log.h"
 #include "Foundation/String/Wildcard.h"

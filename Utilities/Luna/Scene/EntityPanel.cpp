@@ -13,7 +13,7 @@
 #include "Asset/ArtFileAttribute.h"
 #include "Asset/AssetClass.h"
 #include "Finder/AssetSpecs.h"
-#include "Finder/ContentSpecs.h"
+#include "Finder/ExtensionSpecs.h"
 #include "Foundation/Log.h"
 #include "Platform/Process.h"
 #include "Task/Export.h"

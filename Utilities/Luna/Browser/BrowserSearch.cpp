@@ -13,8 +13,6 @@
 #include "Foundation/File/Directory.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/String/Utilities.h"
-#include "Finder/Finder.h"
-#include "Finder/ProjectSpecs.h"
 
 using namespace Luna;
 

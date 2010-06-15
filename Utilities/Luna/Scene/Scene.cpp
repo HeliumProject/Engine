@@ -15,7 +15,6 @@
 #include "Asset/Entity.h"
 #include "Asset/SceneManifest.h"
 #include "Asset/Exceptions.h"
-#include "Finder/LunaSpecs.h"
 
 #include "Browser/Browser.h"
 

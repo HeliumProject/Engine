@@ -3,7 +3,6 @@
 
 #include "DocumentManager.h"
 
-#include "Finder/LunaSpecs.h"
 #include "RCS/RCS.h"
 #include "UIToolKit/FileDialog.h"
 #include "Platform/Process.h"

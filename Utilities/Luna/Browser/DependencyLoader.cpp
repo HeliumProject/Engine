@@ -4,9 +4,6 @@
 
 #include "Browser.h"
 
-#include "Finder/Finder.h"
-#include "Finder/ProjectSpecs.h"
-
 using namespace Luna;
 
 

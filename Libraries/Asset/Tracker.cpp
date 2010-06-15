@@ -19,6 +19,7 @@
 #include "Content/ContentInit.h"
 #include "Foundation/InitializerStack.h"
 #include "Finder/Finder.h"
+#include "Finder/ExtensionSpecs.h"
 #include "Finder/LunaSpecs.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ContentSpecs.h"

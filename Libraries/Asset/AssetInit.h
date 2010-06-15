@@ -3,7 +3,6 @@
 #include "API.h"
 
 #include "Reflect/Registry.h"
-#include "Finder/Finder.h"
 
 namespace Asset
 {

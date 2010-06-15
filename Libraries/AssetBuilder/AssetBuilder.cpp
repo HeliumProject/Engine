@@ -25,7 +25,6 @@
 #include "Foundation/Environment.h"
 #include "Debug/Exception.h"
 #include "Dependencies/Dependencies.h"
-#include "Finder/Finder.h"
 #include "Finder/DebugSpecs.h"
 
 #include "Platform/Windows/Windows.h"

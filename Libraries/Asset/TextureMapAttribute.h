@@ -5,8 +5,6 @@
 
 #include "TextureEnums.h"
 
-#include "Finder/Finder.h"
-#include "Finder/ExtensionSpecs.h"
 #include "Reflect/Field.h"
 #include "Foundation/TUID.h"
 

@@ -4,8 +4,6 @@
 
 #include "Attribute/AttributeCollection.h"
 #include "Foundation/CommandLine.h"
-#include "Finder/Finder.h"
-#include "Finder/FinderSpec.h"
 #include "Reflect/Archive.h"
 
 #include <boost/regex.hpp> 

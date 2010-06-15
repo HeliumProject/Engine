@@ -9,7 +9,6 @@
 #include "Inspect/Controls.h"
 #include "Inspect/InspectInit.h"
 #include "InspectReflect/InspectReflectInit.h"
-#include "Finder/Finder.h"
 
 IMPLEMENT_APP_NO_MAIN(ReflectorApp);
 

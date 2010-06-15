@@ -19,6 +19,7 @@
 #include "Content/ContentInit.h"
 #include "Foundation/InitializerStack.h"
 #include "Finder/Finder.h"
+#include "Finder/ExtensionSpecs.h"
 #include "Finder/LunaSpecs.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ContentSpecs.h"
@@ -102,7 +103,7 @@ bool Tracker::TrackAssetFile( Nocturnal::Path& filePath, M_AssetFiles* assetFile
     if ( inserted.second )
     {
         // this tuid may represent an asset file
-        if ( filePath.Extension() == FinderSpecs::Extension::REFLECT_BINARY.GetExtension() )
+        if ( filePath.Extension() == Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary ) )
         {
             try
             {
@@ -262,7 +263,7 @@ void Tracker::TrackEverything()
         {
             Profile::Timer timer;
             Nocturnal::DirectoryItemSignature::Delegate callback( this, &Tracker::HandleDirectoryItem );
-            Nocturnal::RecurseDirectories( callback, m_RootDirectory, std::string( "*." ) + FinderSpecs::Extension::REFLECT_BINARY.GetExtension() );
+            Nocturnal::RecurseDirectories( callback, m_RootDirectory, std::string( "*." ) + Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary ) );
             Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, "Tracker: File reslover database lookup took %.2fms\n", timer.Elapsed() );
         }
 

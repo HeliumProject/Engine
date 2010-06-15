@@ -8,7 +8,6 @@
 #include "UIToolKit/ImageManager.h"
 
 #include "Foundation/Log.h"
-#include "Finder/ContentSpecs.h"
 
 // Using
 using namespace Math;

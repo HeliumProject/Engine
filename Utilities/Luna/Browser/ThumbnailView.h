@@ -11,7 +11,6 @@
 #include "Platform/Compiler.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Editor/D3DWindowManager.h"
-#include "Finder/FinderSpec.h"
 #include "Math/Matrix4.h"
 #include "Math/Frustum.h"
 

@@ -2,6 +2,8 @@
 #include "EntityAsset.h"
 #include "SceneAsset.h"
 
+#include "Finder/AssetSpecs.h"
+
 using namespace Asset;
 
 REFLECT_DEFINE_CLASS( DependenciesAttribute );

@@ -3,7 +3,6 @@
 #include "API.h"
 #include "Inspect/Button.h"
 
-#include "Finder/FinderSpec.h"
 #include "Foundation/TUID.h"
 
 namespace Inspect

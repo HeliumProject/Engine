@@ -7,7 +7,6 @@
 #include "Asset/AssetClass.h"
 #include "Asset/ArtFileAttribute.h"
 #include "Attribute/AttributeHandle.h"
-#include "Finder/ContentSpecs.h"
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/MenuButton.h"
 

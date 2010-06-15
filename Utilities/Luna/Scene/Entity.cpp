@@ -17,7 +17,6 @@
 #include "Asset/SceneManifest.h"
 #include "Asset/Entity.h"
 
-#include "Finder/ContentSpecs.h"
 #include "Foundation/Log.h"
 
 // Using

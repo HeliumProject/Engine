@@ -2,7 +2,6 @@
 #include "FileDialogButton.h"
 
 #include "Inspect/Canvas.h"
-#include "Finder/Finder.h"
 #include "Foundation/Container/Insert.h"
 #include "UIToolKit/FileDialog.h"
 

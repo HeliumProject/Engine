@@ -10,6 +10,7 @@
 #include "Asset/SceneAsset.h"
 #include "Asset/WorldFileAttribute.h"
 #include "Attribute/AttributeHandle.h"
+#include "Finder/AssetSpecs.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
 #include "UIToolKit/FileDialog.h"

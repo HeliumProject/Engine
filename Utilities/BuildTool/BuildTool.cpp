@@ -18,10 +18,7 @@
 #include "Platform/Windows/Console.h"
 #include "Platform/Process.h"
 
-#include "Finder/Finder.h"
 #include "Finder/DebugSpecs.h"
-#include "Finder/AssetSpecs.h"
-#include "Finder/ExtensionSpecs.h"
 
 #include "AssetBuilder/AssetBuilder.h"
 #include "Asset/AssetInit.h"

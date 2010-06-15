@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "ApplicationPreferences.h"
 #include "Application/Preferences.h"
-#include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
 
 using namespace Luna;

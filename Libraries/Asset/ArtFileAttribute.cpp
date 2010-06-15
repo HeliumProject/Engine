@@ -1,5 +1,7 @@
 #include "ArtFileAttribute.h"
 
+#include "Finder/ExtensionSpecs.h"
+
 using namespace Asset;
 
 REFLECT_DEFINE_CLASS( ArtFileAttribute );

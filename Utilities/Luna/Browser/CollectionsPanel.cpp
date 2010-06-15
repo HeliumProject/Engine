@@ -6,7 +6,6 @@
 #include "Asset/AssetFile.h"
 #include "Asset/AssetFolder.h"
 #include "Foundation/String/Utilities.h"
-#include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
 #include "Inspect/ClipboardDataObject.h"
 #include "Inspect/ClipboardFileList.h"

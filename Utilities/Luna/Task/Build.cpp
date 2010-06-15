@@ -13,8 +13,6 @@
 #include "InspectReflect/InspectReflectInit.h"
 #include "InspectReflect/ReflectInterpreter.h"
 
-#include "Finder/Finder.h"
-
 #include "Dependencies/Dependencies.h"
 
 #include "Asset/AssetClass.h"

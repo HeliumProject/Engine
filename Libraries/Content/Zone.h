@@ -4,8 +4,6 @@
 #include "SceneNode.h"
 
 #include "Foundation/File/Path.h"
-#include "Finder/Finder.h"
-#include "Finder/ExtensionSpecs.h"
 
 namespace Content
 {

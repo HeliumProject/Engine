@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "DirectoryCtrl.h"
 
-#include "Finder/Finder.h"
 #include "UIToolKit/ImageManager.h"
 #include "UIToolKit/SortTreeCtrl.h"
 

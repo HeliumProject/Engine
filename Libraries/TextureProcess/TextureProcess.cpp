@@ -24,7 +24,6 @@
 #include "Foundation/Checksum/CRC32.h"
 
 #include "Foundation/Log.h"
-#include "Finder/Finder.h"
 
 #include "Texture/Texture.h"
 #include "TextureProcess.h"

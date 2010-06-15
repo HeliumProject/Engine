@@ -152,27 +152,19 @@ Archive::~Archive()
 
 ArchiveType Archive::GetFileType(const std::string& file)
 {
-  char ext[MAX_PATH];
-  _splitpath(file.c_str(), NULL, NULL, NULL, ext);
+    Nocturnal::Path filePath( file );
+    std::string ext = filePath.Extension();
 
-  if (!_stricmp(ext, ".xml") || !_stricmp(ext, ".rx"))
-  {
-    return ArchiveTypes::XML;
-  }
-  else if (!_stricmp(ext, ".rb"))
-  {
-    return ArchiveTypes::Binary;
-  }
-  else if (!_stricmp(ext, ".tga") || !_stricmp(ext, ".png") || !_stricmp(ext, ".jpg"))
-  {
-    return ArchiveTypes::Binary;
-  }
-  else
-  {
-    throw Reflect::StreamException( "Unknown archive type for file '%s'", file.c_str() );
-  }
+    if ( ext == Archive::GetExtension( ArchiveTypes::XML ) )
+    {
+        return ArchiveTypes::XML;
+    }
+    else if ( ext == Archive::GetExtension( ArchiveTypes::Binary ) )
+    {
+        return ArchiveTypes::Binary;
+    }
 
-  return ArchiveTypes::Unknown;
+    return ArchiveTypes::Unknown;
 }
 
 void Archive::Warning(const char* fmt, ...)

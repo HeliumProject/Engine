@@ -4,7 +4,8 @@
 #include "DependenciesAttribute.h"
 
 #include "Attribute/AttributeHandle.h"
-#include "Finder/ExtensionSpecs.h"
+
+#include "Finder/AssetSpecs.h"
 
 using namespace Asset;
 

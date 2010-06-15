@@ -22,12 +22,10 @@
 #include "Asset/EntityAsset.h"
 #include "Asset/StandardShaderAsset.h"
 
+#include "Finder/AssetSpecs.h"
+
 #include "Foundation/File/Path.h"
 
-#include "Finder/AssetSpecs.h"
-#include "Finder/ExtensionSpecs.h"
-#include "Finder/LunaSpecs.h"
-#include "Finder/Finder.h"
 #include "Foundation/Log.h"
 #include "Task/Build.h"
 #include "Inspect/ClipboardDataObject.h"

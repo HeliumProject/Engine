@@ -8,7 +8,6 @@
 #include <vector>
 #include <set>
 
-#include "Finder/Finder.h"
 #include "Foundation/Container/OrderedSet.h"
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"

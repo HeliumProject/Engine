@@ -2,12 +2,7 @@
 
 #include "API.h"
 
-
-
 #include "EntityAsset.h"
-
-#include "Finder/Finder.h"
-#include "Finder/AssetSpecs.h"
 
 #include "FileBackedAttribute.h"
 

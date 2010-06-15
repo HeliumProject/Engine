@@ -10,10 +10,6 @@
 #include "Foundation/TUID.h"
 #include "Foundation/Log.h"
 
-#include "Finder/Finder.h"
-#include "Finder/ContentSpecs.h"
-#include "Finder/ShaderSpecs.h"
-
 #include "Application/Application.h"
 #include "Math/EulerAngles.h"
 #include "Math/AlignedBox.h"
@@ -24,7 +20,6 @@
 
 using Nocturnal::Insert; 
 using namespace Reflect;
-using namespace Finder;
 using namespace Math;
 using namespace Asset;
 

@@ -16,6 +16,7 @@
 
 #include "UIToolKit/FileDialog.h"
 
+#include "Finder/Finder.h"
 #include "Finder/AssetSpecs.h"
 #include "Foundation/Log.h"
 

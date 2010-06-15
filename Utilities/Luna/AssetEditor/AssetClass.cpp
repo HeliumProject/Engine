@@ -18,7 +18,6 @@
 #include "Foundation/CommandLine.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Natural.h"
-#include "Finder/ContentSpecs.h"
 #include "Foundation/Log.h"
 #include "Inspect/ClipboardElementArray.h"
 #include "Core/Enumerator.h"

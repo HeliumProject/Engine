@@ -36,7 +36,6 @@
 #include "Foundation/Log.h"
 #include "Reflect/Registry.h"
 #include "UIToolKit/ImageManager.h"
-#include "Finder/LunaSpecs.h"
 
 // Using
 using namespace Luna;

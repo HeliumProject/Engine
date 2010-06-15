@@ -13,8 +13,6 @@
 #include "Content/Region.h"
 #include "Content/Scene.h"
 #include "Content/Zone.h"
-#include "Finder/ContentSpecs.h"
-#include "Finder/Finder.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 #include "RCS/RCS.h"

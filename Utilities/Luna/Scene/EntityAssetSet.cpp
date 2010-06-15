@@ -12,8 +12,6 @@
 #include "PrimitiveCylinder.h"
 #include "PrimitiveCapsule.h"
 
-#include "Finder/Finder.h"
-#include "Finder/ContentSpecs.h"
 #include "Foundation/Log.h"
 
 #include "Asset/EntityAsset.h"

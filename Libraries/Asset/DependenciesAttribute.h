@@ -2,7 +2,6 @@
 
 #include "API.h"
 #include "Foundation/File/Path.h"
-#include "Finder/AssetSpecs.h"
 
 #include "Attribute/Attribute.h"
 

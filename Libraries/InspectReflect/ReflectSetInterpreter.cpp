@@ -2,12 +2,12 @@
 #include "ReflectSetInterpreter.h"
 #include "InspectReflectInit.h"
 
-#include "Inspect/Action.h"
-#include "Inspect/Canvas.h"
-#include "Inspect/Group.h"
-#include "Inspect/List.h"
-#include "Inspect/Panel.h"
-#include "Inspect/StringData.h"
+#include "Application/Inspect/Widgets/Button Controls/Action.h"
+#include "Application/Inspect/Widgets/Canvas.h"
+#include "Application/Inspect/Widgets/Group.h"
+#include "Application/Inspect/Widgets/Other Controls/List.h"
+#include "Application/Inspect/Widgets/InspectPanel.h"
+#include "Application/Inspect/Data/StringData.h"
 
 using namespace Inspect;
 

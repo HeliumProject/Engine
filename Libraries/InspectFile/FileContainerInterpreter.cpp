@@ -4,14 +4,14 @@
 
 #include <wx/aui/aui.h>
 
-#include "Inspect/FilteredDropTarget.h"
-#include "Inspect/Label.h"
-#include "Inspect/Value.h"
-#include "Inspect/Choice.h"
-#include "Inspect/List.h"
-#include "Inspect/Action.h"
-#include "Inspect/StringData.h"
-#include "Inspect/InspectInit.h"
+#include "Application/Inspect/DragDrop/FilteredDropTarget.h"
+#include "Application/Inspect/Widgets/Other Controls/Label.h"
+#include "Application/Inspect/Widgets/Text Controls/Value.h"
+#include "Application/Inspect/Widgets/Text Controls/Choice.h"
+#include "Application/Inspect/Widgets/Other Controls/List.h"
+#include "Application/Inspect/Widgets/Button Controls/Action.h"
+#include "Application/Inspect/Data/StringData.h"
+#include "Application/Inspect/InspectInit.h"
 #include "InspectReflect/InspectReflectInit.h"
 
 #include "Asset/AssetFlags.h"
@@ -19,11 +19,11 @@
 #include "Foundation/Log.h"
 #include "Finder/Finder.h"
 #include "Finder/ExtensionSpecs.h"
-#include "Luna/UI/FileDialog.h"
+#include "Application/UI/FileDialog.h"
 
 using namespace Reflect;
 using namespace Inspect;
-using namespace Luna;
+using namespace Nocturnal;
 
 FileContainerInterpreter::FileContainerInterpreter (Container* labelContainer)
 : ReflectFieldInterpreter (labelContainer)

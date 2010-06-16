@@ -9,11 +9,11 @@
 #define __BrowserGenerated__
 
 class Frame;
-namespace Luna{ class AutoCompleteComboBox; }
-namespace Luna{ class Button; }
 namespace Luna{ class DirectoryCtrl; }
-namespace Luna{ class MenuButton; }
-namespace Luna{ class SortTreeCtrl; }
+namespace Nocturnal{ class AutoCompleteComboBox; }
+namespace Nocturnal{ class Button; }
+namespace Nocturnal{ class MenuButton; }
+namespace Nocturnal{ class SortTreeCtrl; }
 
 #include "Editor/Frame.h"
 #include <wx/string.h>
@@ -87,12 +87,12 @@ namespace Luna
 			
 		
 		public:
-			Luna::MenuButton* m_BackButton;
-			Luna::MenuButton* m_ForwardButton;
-			Luna::Button* m_UpFolderButton;
-			Luna::AutoCompleteComboBox* m_NavBarComboBox;
-			Luna::Button* m_GoButton;
-			Luna::MenuButton* m_OptionsButton;
+			Nocturnal::MenuButton* m_BackButton;
+			Nocturnal::MenuButton* m_ForwardButton;
+			Nocturnal::Button* m_UpFolderButton;
+			Nocturnal::AutoCompleteComboBox* m_NavBarComboBox;
+			Nocturnal::Button* m_GoButton;
+			Nocturnal::MenuButton* m_OptionsButton;
 			NavigationPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 557,39 ), long style = wxNO_BORDER|wxTAB_TRAVERSAL );
 			~NavigationPanelGenerated();
 		
@@ -220,11 +220,11 @@ namespace Luna
 		
 		public:
 			wxStaticText* m_MyCollectionsTitle;
-			Luna::Button* m_NewDependencyCollectionButton;
-			Luna::Button* m_NewCollectionButton;
-			Luna::SortTreeCtrl* m_MyCollectionsTreeCtrl;
+			Nocturnal::Button* m_NewDependencyCollectionButton;
+			Nocturnal::Button* m_NewCollectionButton;
+			Nocturnal::SortTreeCtrl* m_MyCollectionsTreeCtrl;
 			wxStaticText* m_TempCollectionsTitle;
-			Luna::SortTreeCtrl* m_TempCollectionsTreeCtrl;
+			Nocturnal::SortTreeCtrl* m_TempCollectionsTreeCtrl;
 			CollectionsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 250,397 ), long style = wxTAB_TRAVERSAL );
 			~CollectionsPanelGenerated();
 		

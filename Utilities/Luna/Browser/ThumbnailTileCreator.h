@@ -2,13 +2,13 @@
 
 #include "SearchResults.h"
 #include "ThumbnailSorter.h"
-#include "Luna/UI/ThreadMechanism.h"
+#include "Application/UI/ThreadMechanism.h"
 
 namespace Luna
 {
   class ThumbnailView;
 
-  class ThumbnailTileCreator : public Luna::ThreadMechanism
+  class ThumbnailTileCreator : public Nocturnal::ThreadMechanism
   {
   public:
     ThumbnailTileCreator( ThumbnailView* view );
@@ -21,7 +21,7 @@ namespace Luna
     virtual void InitData() NOC_OVERRIDE;
     virtual void ThreadProc( i32 threadID ) NOC_OVERRIDE;
 
-    void OnEndThread( const Luna::ThreadProcArgs& args );
+    void OnEndThread( const Nocturnal::ThreadProcArgs& args );
 
   private:
     ThumbnailView* m_View;

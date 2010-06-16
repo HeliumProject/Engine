@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Inspect/Data.h"
+#include "Application/Inspect/Data/Data.h"
 #include "Content/ParametricKey.h"
 
 namespace Inspect

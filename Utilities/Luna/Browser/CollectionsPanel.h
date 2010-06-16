@@ -6,8 +6,8 @@
 #include "CollectionManager.h"
 
 #include "Editor/DocumentManager.h"
-#include "Inspect/DropTarget.h"
-#include "Inspect/ReflectClipboardData.h"
+#include "Application/Inspect/DragDrop/DropTarget.h"
+#include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 
 namespace Luna
 {
@@ -68,7 +68,7 @@ namespace Luna
     void DragLeave( Nocturnal::Void );
 
   private:
-    wxTreeItemId DragHitTest( Luna::SortTreeCtrl* treeCtrl, wxPoint point );
+    wxTreeItemId DragHitTest( Nocturnal::SortTreeCtrl* treeCtrl, wxPoint point );
 
     static AssetCollection* NewCollection( CollectionManager* collectionManager, const i32 typeID, const std::string& tryName = std::string("") );
 
@@ -83,10 +83,10 @@ namespace Luna
     void DisconnectCollectionManagerListeners();
     void ConnectCollectionListeners();
     void UpdateCollections();
-    void PrePopulateTreeCtrl( Luna::SortTreeCtrl* treeCtrl );
-    void PostPopulateTreeCtrl( Luna::SortTreeCtrl* treeCtrl );
+    void PrePopulateTreeCtrl( Nocturnal::SortTreeCtrl* treeCtrl );
+    void PostPopulateTreeCtrl( Nocturnal::SortTreeCtrl* treeCtrl );
 
-    static AssetCollectionItemData* GetItemData( Luna::SortTreeCtrl* treeCtrl, const wxTreeItemId& id );
+    static AssetCollectionItemData* GetItemData( Nocturnal::SortTreeCtrl* treeCtrl, const wxTreeItemId& id );
 
   private:
     BrowserFrame*      m_BrowserFrame;

@@ -2,7 +2,7 @@
 #include "Camera.h"
 
 #include "Math/Utils.h"
-#include "UIToolKit/FileDialog.h"
+#include "Application/UI/FileDialog.h"
 
 static const u32 s_InvalidMesh = (u32)(-1);
 
@@ -330,7 +330,7 @@ void Workspace::OnMouseWheel( wxMouseEvent& args )
 // 
 void Workspace::OnScreenShotToFile( wxCommandEvent& args )
 {
-  UIToolKit::FileDialog dialog( this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, "*.tga", UIToolKit::FileDialogStyles::DefaultSave );
+  Nocturnal::FileDialog dialog( this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, "*.tga", Nocturnal::FileDialogStyles::DefaultSave );
   if ( dialog.ShowModal() == wxID_OK )
   {
     std::string path = dialog.GetPath();

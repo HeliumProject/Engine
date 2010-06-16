@@ -179,7 +179,7 @@
                                         <property name="selected"></property>
                                         <property name="size">-1,-1</property>
                                         <property name="style">wxBU_AUTODRAW</property>
-                                        <property name="subclass">Luna::Button; Luna/UI/Button.h</property>
+                                        <property name="subclass">Nocturnal::Button; Application/UI/Button.h</property>
                                         <property name="tooltip"></property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
@@ -236,7 +236,7 @@
                                         <property name="selected"></property>
                                         <property name="size">-1,-1</property>
                                         <property name="style">wxBU_AUTODRAW</property>
-                                        <property name="subclass">Luna::Button; Luna/UI/Button.h</property>
+                                        <property name="subclass">Nocturnal::Button; Application/UI/Button.h</property>
                                         <property name="tooltip"></property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
@@ -293,7 +293,7 @@
                                         <property name="selected"></property>
                                         <property name="size">-1,-1</property>
                                         <property name="style">wxBU_AUTODRAW</property>
-                                        <property name="subclass">Luna::Button; Luna/UI/Button.h</property>
+                                        <property name="subclass">Nocturnal::Button; Application/UI/Button.h</property>
                                         <property name="tooltip"></property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
@@ -350,7 +350,7 @@
                                         <property name="selected"></property>
                                         <property name="size">-1,-1</property>
                                         <property name="style">wxBU_AUTODRAW</property>
-                                        <property name="subclass">Luna::MenuButton; Luna/UI/MenuButton.h</property>
+                                        <property name="subclass">Nocturnal::MenuButton; Application/UI/MenuButton.h</property>
                                         <property name="tooltip"></property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>

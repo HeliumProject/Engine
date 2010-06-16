@@ -9,7 +9,7 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Container/Insert.h" 
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 
 using namespace Luna;
 
@@ -61,17 +61,17 @@ BrowserSearchPanel::BrowserSearchPanel( BrowserFrame* browserFrame, wxWindow* pa
 : SearchPanelGenerated( parent )
 , m_BrowserFrame( browserFrame )
 , m_CollectionManager( NULL )
-, m_FieldMRU( new Luna::FieldMRU() )
+, m_FieldMRU( new Nocturnal::FieldMRU() )
 {
     m_GoButton->SetId( BrowserMenu::AdvancedSearchGo );
     m_CancelButton->SetId( BrowserMenu::AdvancedSearchCancel );
 
-    m_WordsHelpBitmap->SetBitmap( Luna::GlobalImageManager().GetBitmap( "help_16.png" ) );
-    m_PhraseHelpBitmap->SetBitmap( Luna::GlobalImageManager().GetBitmap( "help_16.png" ) );
-    m_FileIDHelpBitmap->SetBitmap( Luna::GlobalImageManager().GetBitmap( "help_16.png" ) );
-    m_AttributeHelpBitmap->SetBitmap( Luna::GlobalImageManager().GetBitmap( "help_16.png" ) );
-    m_LevelHelpBitmap->SetBitmap( Luna::GlobalImageManager().GetBitmap( "help_16.png" ) );
-    m_ShaderHelpBitmap->SetBitmap( Luna::GlobalImageManager().GetBitmap( "help_16.png" ) );
+    m_WordsHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
+    m_PhraseHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
+    m_FileIDHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
+    m_AttributeHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
+    m_LevelHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
+    m_ShaderHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
 
     m_DefaultFieldText.insert( std::make_pair( m_CollectionChoice->GetId(), s_CollectionDefaultText ) );
     m_DefaultFieldText.insert( std::make_pair( m_FileTypeChoice->GetId(), s_FileTypeDefaultText ) );

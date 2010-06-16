@@ -17,9 +17,9 @@
 #include "Core/Selection.h"
 #include "Editor/Editor.h"
 #include "Editor/EditorInfo.h"
-#include "Inspect/Canvas.h"
-#include "Inspect/DropTarget.h"
-#include "Luna/UI/MenuMRU.h"
+#include "Application/Inspect/Widgets/Canvas.h"
+#include "Application/Inspect/DragDrop/DropTarget.h"
+#include "Application/UI/MenuMRU.h"
 
 #include "Content/LayerTypes.h"
 #include <wx/dnd.h>
@@ -141,7 +141,7 @@ namespace Luna
     wxMenu* m_UtilitiesMenu;
     wxMenu* m_MRUMenu;
     wxMenuItem* m_MRUMenuItem;
-    Luna::MenuMRUPtr m_MRU;
+    Nocturnal::MenuMRUPtr m_MRU;
 
     // Toolbars
     wxToolBar* m_StandardToolBar;
@@ -271,7 +271,7 @@ namespace Luna
     void SelectItemInScene( wxCommandEvent& event );
     void SelectSimilarItemsInScene( wxCommandEvent& event );
 
-    void OnMRUOpen( const Luna::MRUArgs& args );
+    void OnMRUOpen( const Nocturnal::MRUArgs& args );
 
     void OnLightLinkEvent(wxKeyEvent& event);
     void BeginLayersGridBatching();

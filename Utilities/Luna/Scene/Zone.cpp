@@ -7,7 +7,7 @@
 
 #include "Content/Zone.h"
 #include "Core/Enumerator.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 
 // Using
 using namespace Luna;
@@ -37,7 +37,7 @@ Zone::~Zone()
 
 i32 Zone::GetImageIndex() const
 {
-  return Luna::GlobalImageManager().GetImageIndex( "zone_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "zone_16.png" );
 }
 
 std::string Zone::GetApplicationTypeName() const

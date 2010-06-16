@@ -4,9 +4,9 @@
 #include <map>
 
 #include "Luna/API.h"
-#include "Inspect/Data.h"
-#include "Inspect/Controls.h"
-#include "Inspect/Interpreter.h"
+#include "Application/Inspect/Data/Data.h"
+#include "Application/Inspect/Widgets/Controls.h"
+#include "Application/Inspect/Interpreter.h"
 #include "InspectFile/FileDialogButton.h"
 #include "InspectFile/FileBrowserButton.h"
 #include "InspectContent/ParametricKeyData.h"

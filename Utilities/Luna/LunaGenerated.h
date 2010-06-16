@@ -8,8 +8,8 @@
 #ifndef __LunaGenerated__
 #define __LunaGenerated__
 
-namespace Luna{ class Button; }
-namespace Luna{ class MenuButton; }
+namespace Nocturnal{ class Button; }
+namespace Nocturnal{ class MenuButton; }
 
 #include <wx/sizer.h>
 #include <wx/gdicmn.h>
@@ -57,10 +57,10 @@ namespace Luna
 		private:
 		
 		protected:
-			Luna::Button* m_ButtonCreateEntity;
-			Luna::Button* m_ButtonCreateVolume;
-			Luna::Button* m_ButtonCreateClue;
-			Luna::MenuButton* m_ButtonCurve;
+			Nocturnal::Button* m_ButtonCreateEntity;
+			Nocturnal::Button* m_ButtonCreateVolume;
+			Nocturnal::Button* m_ButtonCreateClue;
+			Nocturnal::MenuButton* m_ButtonCurve;
 			wxStaticText* m_staticText1;
 			wxStaticText* m_staticText2;
 			wxBitmapButton* m_bpButton445;

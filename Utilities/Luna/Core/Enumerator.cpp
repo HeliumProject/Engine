@@ -6,7 +6,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Container/Insert.h" 
 
-#include "Inspect/Label.h"
+#include "Application/Inspect/Widgets/Other Controls/Label.h"
 
 using namespace Luna;
 

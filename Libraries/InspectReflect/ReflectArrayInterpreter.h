@@ -2,9 +2,9 @@
 
 #include "ReflectFieldInterpreter.h"
 
-#include "Inspect/Canvas.h"
-#include "Inspect/Container.h"
-#include "Inspect/StringData.h"
+#include "Application/Inspect/Widgets/Canvas.h"
+#include "Application/Inspect/Widgets/Container.h"
+#include "Application/Inspect/Data/StringData.h"
 
 namespace Inspect
 {

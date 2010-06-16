@@ -8,7 +8,7 @@
 #include "igDXRender/scenemanager.h"
 #include "igDXRender/OBJObjectLoader.h"
 
-#include "UIToolKit/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 #include "Foundation/Version.h"
 
 const char* g_Name = "PropTool";
@@ -27,7 +27,7 @@ PropToolFrame::PropToolFrame( wxWindow* parent )
 {
   SetTitle( _( g_Name ) );
 
-  UIToolKit::ImageManagerInit( "" );
+  Nocturnal::ImageManagerInit( "" );
 
   FileDropTarget* target = NULL;
 
@@ -74,7 +74,7 @@ PropToolFrame::~PropToolFrame()
 {
   m_FileWatchTimer.Stop();
 
-  UIToolKit::ImageManagerCleanup();
+  Nocturnal::ImageManagerCleanup();
 }
 
 void PropToolFrame::OnOpen( wxCommandEvent& event )

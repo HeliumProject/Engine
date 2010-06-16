@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ParametricKeyInterpreter.h"
 
-#include "Inspect/Panel.h"
+#include "Application/Inspect/Widgets/InspectPanel.h"
 #include "ParametricKeyControl.h"
 #include "ParametricKeyData.h"
 

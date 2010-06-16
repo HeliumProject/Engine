@@ -2,8 +2,8 @@
 
 #include "API.h"
 
-#include "Inspect/Canvas.h"
-#include "Inspect/Interpreter.h"
+#include "Application/Inspect/Widgets/Canvas.h"
+#include "Application/Inspect/Interpreter.h"
 
 namespace Inspect
 {

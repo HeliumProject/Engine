@@ -2,7 +2,7 @@
 #include "CoreInit.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Inspect/InspectInit.h"
+#include "Application/Inspect/InspectInit.h"
 #include "InspectReflect/InspectReflectInit.h"
 #include "InspectContent/InspectContentInit.h"
 #include "InspectFile/InspectFileInit.h"

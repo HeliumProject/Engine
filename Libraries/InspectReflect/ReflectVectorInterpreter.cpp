@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "ReflectVectorInterpreter.h"
 
-#include "Inspect/Label.h"
-#include "Inspect/Value.h"
-#include "Inspect/Container.h"
-#include "Inspect/StringData.h"
+#include "Application/Inspect/Widgets/Other Controls/Label.h"
+#include "Application/Inspect/Widgets/Text Controls/Value.h"
+#include "Application/Inspect/Widgets/Container.h"
+#include "Application/Inspect/Data/StringData.h"
 
 using namespace Reflect;
 using namespace Inspect;

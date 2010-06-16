@@ -3,7 +3,7 @@
 #include "Luna/API.h"
 
 #include "Foundation/File/Path.h"
-#include "Luna/UI/ThreadMechanism.h"
+#include "Application/UI/ThreadMechanism.h"
 
 namespace Luna
 {
@@ -12,7 +12,7 @@ namespace Luna
     ///////////////////////////////////////////////////////////////////////////////
     /// class DependencyLoader
     ///////////////////////////////////////////////////////////////////////////////
-    class DependencyLoader : public Luna::ThreadMechanism
+    class DependencyLoader : public Nocturnal::ThreadMechanism
     {
     public:
         DependencyLoader( const std::string& rootDirectory, const std::string& configDirectory, DependencyCollection* collection );
@@ -22,7 +22,7 @@ namespace Luna
         virtual void InitData();
         virtual void ThreadProc( i32 threadID );
 
-        void OnEndThread( const Luna::ThreadProcArgs& args );
+        void OnEndThread( const Nocturnal::ThreadProcArgs& args );
 
     private:
         std::string           m_RootDirectory;

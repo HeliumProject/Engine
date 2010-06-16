@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 
-namespace Luna { class SortTreeCtrl; }
+namespace Nocturnal { class SortTreeCtrl; }
 
 namespace Luna
 {
@@ -23,7 +23,7 @@ namespace Luna
   class TreeMonitor
   {
   private:
-    typedef std::set< Luna::SortTreeCtrl* > S_Trees;
+    typedef std::set< Nocturnal::SortTreeCtrl* > S_Trees;
 
     Luna::SceneManager* m_SceneManager;
     S_Trees m_Trees;
@@ -34,8 +34,8 @@ namespace Luna
     TreeMonitor( Luna::SceneManager* sceneManager );
     virtual ~TreeMonitor();
 
-    void AddTree( Luna::SortTreeCtrl* tree );
-    void RemoveTree( Luna::SortTreeCtrl* tree );
+    void AddTree( Nocturnal::SortTreeCtrl* tree );
+    void RemoveTree( Nocturnal::SortTreeCtrl* tree );
     void ClearTrees();
 
     void FreezeSorting();

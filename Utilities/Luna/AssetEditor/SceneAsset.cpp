@@ -6,8 +6,8 @@
 #include "PersistentDataFactory.h"
 
 #include "Foundation/Log.h"
-#include "Inspect/Control.h"
-#include "Inspect/Container.h"
+#include "Application/Inspect/Widgets/Control.h"
+#include "Application/Inspect/Widgets/Container.h"
 
 #include "Attribute/AttributeHandle.h"
 

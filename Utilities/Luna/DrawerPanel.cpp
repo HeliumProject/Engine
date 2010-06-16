@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "DrawerPanel.h"
 
-#include "Luna/UI/Button.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/Button.h"
+#include "Application/UI/ImageManager.h"
 
 using namespace Luna;
 
@@ -24,11 +24,11 @@ DrawerPanel::~DrawerPanel()
 void DrawerPanel::AddDrawer( Drawer* drawer )
 {
   const u32 style = wxBU_AUTODRAW;
-  const u32 buttonStyle = Luna::ButtonStyles::BU_DEFAULT | Luna::ButtonStyles::BU_TOGGLE;
+  const u32 buttonStyle = Nocturnal::ButtonStyles::BU_DEFAULT | Nocturnal::ButtonStyles::BU_TOGGLE;
   const u32 margins = 10;
 
   // Set up the button
-  Luna::Button* button = new Luna::Button( this, wxID_ANY, drawer->GetIcon(), wxDefaultPosition, wxDefaultSize, style );
+  Nocturnal::Button* button = new Nocturnal::Button( this, wxID_ANY, drawer->GetIcon(), wxDefaultPosition, wxDefaultSize, style );
   m_Buttons.insert( std::make_pair( button->GetId(), button ) );
   button->SetLabel( drawer->GetTitle() );
   button->SetBitmapAlignment();
@@ -94,7 +94,7 @@ void DrawerPanel::SetClickToOpen( bool value )
   M_Button::const_iterator buttonEnd = m_Buttons.end();
   for ( ; buttonItr != buttonEnd; ++buttonItr )
   {
-    Luna::Button* button = buttonItr->second;
+    Nocturnal::Button* button = buttonItr->second;
 
     if ( m_ClickToOpen )
     {
@@ -144,9 +144,9 @@ Drawer* DrawerPanel::FindDrawer( i32 drawerID )
   return NULL;
 }
 
-Luna::Button* DrawerPanel::GetButtonForDrawer( Drawer* drawer )
+Nocturnal::Button* DrawerPanel::GetButtonForDrawer( Drawer* drawer )
 {
-  Luna::Button* button = NULL;
+  Nocturnal::Button* button = NULL;
   M_Button::const_iterator found = m_Buttons.find( drawer->GetDrawerID() );
   if ( found != m_Buttons.end() )
   {
@@ -185,7 +185,7 @@ void DrawerPanel::OnDrawerButtonClicked( wxCommandEvent& args )
       // Open this drawer
       if ( !drawer->IsOpen() )
       {
-        Luna::Button* button = GetButtonForDrawer( drawer );
+        Nocturnal::Button* button = GetButtonForDrawer( drawer );
         wxRect buttonRect = button->GetScreenRect();
         drawer->OpenDrawer( buttonRect.GetBottomLeft() );
         if ( !drawer->IsOpen() )
@@ -227,7 +227,7 @@ void DrawerPanel::OnDrawerClosed( const DrawerArgs& args )
 void DrawerPanel::OnMouseEnterButton( wxMouseEvent& args )
 {
   args.Skip();
-  Luna::Button* button = wxDynamicCast( args.GetEventObject(), Luna::Button );
+  Nocturnal::Button* button = wxDynamicCast( args.GetEventObject(), Nocturnal::Button );
   if ( button )
   {
     Drawer* drawer = FindDrawer( button->GetId() );

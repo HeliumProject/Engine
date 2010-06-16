@@ -9,8 +9,8 @@
 
 #include "Core/Selection.h"
 
-#include "Inspect/Data.h"
-#include "Inspect/Canvas.h"
+#include "Application/Inspect/Data/Data.h"
+#include "Application/Inspect/Widgets/Canvas.h"
 #include "Core/Enumerator.h"
 
 #include "Application/Undo/ExistenceCommand.h"

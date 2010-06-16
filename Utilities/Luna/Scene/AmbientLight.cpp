@@ -6,7 +6,7 @@
 #include "InstanceType.h"
 
 #include "Core/Enumerator.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 
 #include "PrimitivePointer.h"
 
@@ -43,7 +43,7 @@ AmbientLight::AmbientLight(Luna::Scene* scene, Content::AmbientLight* light)
 
 i32 AmbientLight::GetImageIndex() const
 {
-  return Luna::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "light_16.png" );
 }
 
 std::string AmbientLight::GetApplicationTypeName() const

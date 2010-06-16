@@ -3,7 +3,7 @@
 #include "Luna/API.h"
 #include "Zone.h"
 #include "Core/Selectable.h"
-#include "Inspect/Panel.h"
+#include "Application/Inspect/Widgets/InspectPanel.h"
 #include "InspectReflect/ReflectInterpreter.h"
 #include "Core/Enumerator.h"
 

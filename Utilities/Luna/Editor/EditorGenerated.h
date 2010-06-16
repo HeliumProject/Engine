@@ -8,8 +8,6 @@
 #ifndef __EditorGenerated__
 #define __EditorGenerated__
 
-namespace Luna{ class SortableListView; }
-
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -20,11 +18,8 @@ namespace Luna{ class SortableListView; }
 #include <wx/listbox.h>
 #include <wx/button.h>
 #include <wx/panel.h>
-#include <wx/choice.h>
-#include <wx/statbox.h>
-#include <wx/listctrl.h>
 #include <wx/textctrl.h>
-#include <wx/hyperlink.h>
+#include <wx/choice.h>
 #include <wx/treectrl.h>
 #include <wx/statline.h>
 
@@ -54,34 +49,6 @@ namespace Luna
 			wxButton* m_ButtonCancel;
 			SubmitChangesPanel( wxWindow* parent, wxWindowID id = ID_DEFAULT, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 340,250 ), long style = wxTAB_TRAVERSAL );
 			~SubmitChangesPanel();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/// Class RunGamePanel
-	///////////////////////////////////////////////////////////////////////////////
-	class RunGamePanel : public wxPanel 
-	{
-		private:
-		
-		protected:
-			
-			wxStaticText* m_LevelHelpText;
-			
-			
-			wxHyperlinkCtrl* m_BuildserverLink;
-			
-		
-		public:
-			wxChoice* m_BuildChoice;
-			Luna::SortableListView* m_Levels;
-			wxButton* m_SelectNone;
-			wxButton* m_SelectAll;
-			wxTextCtrl* m_Options;
-			wxButton* m_Rerun;
-			wxButton* m_RunGame;
-			RunGamePanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,370 ), long style = wxTAB_TRAVERSAL );
-			~RunGamePanel();
 		
 	};
 	

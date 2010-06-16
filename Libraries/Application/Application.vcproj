@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;$(boost);$(TinyXML);$(MySQL)\include"
+				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -62,9 +62,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="wxmsw28d_core.lib wxbase28d.lib comctl32.lib rpcrt4.lib ws2_32.lib"
 				OutputFile="$(OutDir)/$(ProjectName).dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(boost)\stage\lib"
+				AdditionalLibraryDirectories="$(boost)\stage\lib;$(wxWidgets)\lib\vc_lib"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/Application.pdb"
@@ -121,7 +122,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;$(boost);$(TinyXML);$(MySQL)\include"
+				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -141,9 +142,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="wxmsw28_core.lib wxbase28.lib comctl32.lib rpcrt4.lib ws2_32.lib"
 				OutputFile="$(OutDir)/$(ProjectName).dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(boost)\stage\lib"
+				AdditionalLibraryDirectories="$(boost)\stage\lib;$(wxWidgets)\lib\vc_lib"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -202,6 +204,22 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{06092F0D-324B-484D-A9ED-397DFF76AE53}"
 			RelativePathToProject=".\SDK\TinyXML\2.6.1\TinyXML.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{F3DB1BFC-9BD1-443F-965A-E05E9D95E6AB}"
+			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{EBC5862F-F9EF-4CA6-AB18-F930074011AB}"
+			RelativePathToProject=".\libraries\Math\math.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{9270A244-6F23-48F9-9382-0CCBADBDC0EE}"
+			RelativePathToProject=".\libraries\Perforce\perforce.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
+			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
 		/>
 	</References>
 	<Files>
@@ -332,6 +350,590 @@
 				RelativePath=".\CodeGen\Writer.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="Inspect"
+			>
+			<File
+				RelativePath=".\Inspect\Inspect.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\InspectInit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\InspectInit.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\InspectTypes.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Interpreter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Interpreter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Script.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Inspect\Script.h"
+				>
+			</File>
+			<Filter
+				Name="Data"
+				>
+				<File
+					RelativePath=".\Inspect\Data\Data.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Data\SerializerData.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Data\StringData.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="DragDrop"
+				>
+				<File
+					RelativePath=".\Inspect\DragDrop\ClipboardDataObject.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\ClipboardDataObject.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\ClipboardDataWrapper.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\ClipboardDataWrapper.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\ClipboardElementArray.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\ClipboardElementArray.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\ClipboardFileList.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\ClipboardFileList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\DropSource.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\DropSource.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\DropTarget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\DropTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\FilteredDropTarget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\FilteredDropTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\ReflectClipboardData.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\DragDrop\ReflectClipboardData.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Widgets"
+				>
+				<File
+					RelativePath=".\Inspect\Widgets\Canvas.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\Canvas.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\Container.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\Container.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\ContextMenu.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\ContextMenu.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\Control.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\Control.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\Controls.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\Group.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\Group.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\InspectPanel.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Inspect\Widgets\InspectPanel.h"
+					>
+				</File>
+				<Filter
+					Name="Button Controls"
+					>
+					<File
+						RelativePath=".\Inspect\Widgets\Button Controls\Action.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Button Controls\Action.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Button Controls\InspectButton.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Button Controls\InspectButton.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Text Controls"
+					>
+					<File
+						RelativePath=".\Inspect\Widgets\Text Controls\Choice.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Text Controls\Choice.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Text Controls\Items.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Text Controls\Items.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Text Controls\Value.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Text Controls\Value.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Other Controls"
+					>
+					<File
+						RelativePath=".\Inspect\Widgets\Other Controls\CheckBox.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Other Controls\CheckBox.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Other Controls\CheckList.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Other Controls\CheckList.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Other Controls\InspectColorPicker.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Other Controls\InspectColorPicker.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Other Controls\Label.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Other Controls\Label.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Other Controls\List.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Other Controls\List.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Other Controls\Slider.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Inspect\Widgets\Other Controls\Slider.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="UI"
+			>
+			<File
+				RelativePath=".\UI\AutoCompleteComboBox.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\AutoCompleteComboBox.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\AutoFlexSizer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\AutoFlexSizer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Button.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Button.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ColorPicker.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ColorPicker.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\CustomColors.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\CustomColors.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\DialogWorkerThread.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\DialogWorkerThread.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\FieldMRU.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\FieldMRU.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\FileDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\FileDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\FileTreeCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\FileTreeCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ImageManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ImageManager.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ImageViewPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ImageViewPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ListDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ListDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ListView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ListView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\MenuButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\MenuButton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\MenuMRU.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\MenuMRU.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\MessageDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\MessageDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ModalFrame.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ModalFrame.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\MRU.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PropertyGridAttribs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\RegistryConfig.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\RegistryConfig.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\SortableListView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\SortableListView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\SortTreeCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\SortTreeCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ThreadMechanism.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ThreadMechanism.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\treectrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\treectrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Wizard.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Wizard.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\WizardPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\WizardPage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\WizardPageTemplate.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\WorkerThreadDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\WorkerThreadDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\wxTreeWndCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\wxTreeWndCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\wxTreeWndCtrlApi.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\wxTreeWndCtrlItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\wxTreeWndCtrlItem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\wxTreeWndCtrlNode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\wxTreeWndCtrlNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\wxTreeWndCtrlSpacer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\wxTreeWndCtrlSpacer.h"
+				>
+			</File>
+			<Filter
+				Name="DebugUI"
+				>
+				<File
+					RelativePath=".\UI\DebugUI\DebugUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\DebugUI\DebugUI.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="PerforceUI"
+				>
+				<File
+					RelativePath=".\UI\PerforceUI\Dialog.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Dialog.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panels.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panels.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\PerforceUI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\PerforceUI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\PerforceUIPanel.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\PerforceUIPanel.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\WaitDialog.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\WaitDialog.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\API.h"

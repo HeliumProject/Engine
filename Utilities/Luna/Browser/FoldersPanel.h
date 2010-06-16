@@ -4,8 +4,8 @@
 #include "BrowserFrame.h"
 #include "BrowserMenuIDs.h"
 
-#include "Inspect/DropTarget.h"
-#include "Inspect/ReflectClipboardData.h"
+#include "Application/Inspect/DragDrop/DropTarget.h"
+#include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 
 namespace Luna
 {
@@ -24,7 +24,7 @@ namespace Luna
     virtual ~FoldersPanel();
 
     wxTreeCtrl* GetTreeCtrl();
-    Luna::SortTreeCtrl* GetSortTreeCtrl();
+    Nocturnal::SortTreeCtrl* GetSortTreeCtrl();
     void Unselect();
 
     void SetPath( const std::string& path );
@@ -44,7 +44,7 @@ namespace Luna
     void DragLeave( Nocturnal::Void );
 
   private:
-    wxTreeItemId DragHitTest( Luna::SortTreeCtrl* treeCtrl, wxPoint point );
+    wxTreeItemId DragHitTest( Nocturnal::SortTreeCtrl* treeCtrl, wxPoint point );
 
   private:
     BrowserFrame* m_BrowserFrame;

@@ -3,7 +3,7 @@
 #include "Attribute/Attribute.h"
 #include "Attribute/AttributeCollection.h"
 #include "Core/Persistent.h"
-#include "Inspect/Group.h"
+#include "Application/Inspect/Widgets/Group.h"
 #include "InspectReflect/ReflectInterpreter.h"
 
 namespace Luna

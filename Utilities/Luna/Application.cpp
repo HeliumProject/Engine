@@ -19,13 +19,13 @@
 #include "Scene/SceneEditor.h"
 #include "Scene/SceneInit.h"
 #include "Task/TaskInit.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 #include "Platform/Windows/Windows.h"
 #include "Platform/Process.h"
 #include "Application/Worker/Process.h"
 
-#include "UI/DebugUI/DebugUI.h"
-#include "UI/PerforceUI/PerforceUI.h"
+#include "Application/UI/DebugUI/DebugUI.h"
+#include "Application/UI/PerforceUI/PerforceUI.h"
 
 #include <wx/cmdline.h>
 #include <wx/splash.h>
@@ -188,7 +188,7 @@ int LunaApp::OnExit()
       delete m_AssetTracker;
   }
 
-  Luna::ImageManagerCleanup();
+  Nocturnal::ImageManagerCleanup();
 
   m_InitializerStack.Cleanup();
 

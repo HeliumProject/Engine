@@ -4,8 +4,8 @@
 #include "CameraModeButton.h"
 #include "SceneEditor.h"
 
-#include "Luna/UI/ImageManager.h"
-#include "Luna/UI/AutoFlexSizer.h"
+#include "Application/UI/ImageManager.h"
+#include "Application/UI/AutoFlexSizer.h"
 
 using namespace Luna;
 
@@ -19,31 +19,31 @@ ToolsPanel::ToolsPanel( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& 
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* autoFlexSizer;
-	autoFlexSizer = new Luna::AutoFlexSizer();
+	autoFlexSizer = new Nocturnal::AutoFlexSizer();
 	autoFlexSizer->SetFlexibleDirection( wxBOTH );
 	autoFlexSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 #if ( 1 )
 
-	m_button10 = new wxBitmapButton( this, wxID_ANY, Luna::GlobalImageManager().GetBitmap( "asset_editor_32.png" ) );
+	m_button10 = new wxBitmapButton( this, wxID_ANY, Nocturnal::GlobalImageManager().GetBitmap( "asset_editor_32.png" ) );
 	autoFlexSizer->Add( m_button10, 0, wxALL, 0 );
 
-	m_button11 = new wxBitmapButton( this, wxID_ANY, Luna::GlobalImageManager().GetBitmap( "create_clue_32.png" ) );
+	m_button11 = new wxBitmapButton( this, wxID_ANY, Nocturnal::GlobalImageManager().GetBitmap( "create_clue_32.png" ) );
 	autoFlexSizer->Add( m_button11, 0, wxALL, 0 );
 	
-	m_button12 = new wxBitmapButton( this, wxID_ANY, Luna::GlobalImageManager().GetBitmap( "create_collision_32.png" ) );
+	m_button12 = new wxBitmapButton( this, wxID_ANY, Nocturnal::GlobalImageManager().GetBitmap( "create_collision_32.png" ) );
 	autoFlexSizer->Add( m_button12, 0, wxALL, 0 );
 	
-	m_button13 = new wxBitmapButton( this, wxID_ANY, Luna::GlobalImageManager().GetBitmap( "create_controller_32.png" ) );
+	m_button13 = new wxBitmapButton( this, wxID_ANY, Nocturnal::GlobalImageManager().GetBitmap( "create_controller_32.png" ) );
 	autoFlexSizer->Add( m_button13, 0, wxALL, 0 );
 	
-	m_button14 = new wxBitmapButton( this, wxID_ANY, Luna::GlobalImageManager().GetBitmap( "create_entity_32.png" ) );
+	m_button14 = new wxBitmapButton( this, wxID_ANY, Nocturnal::GlobalImageManager().GetBitmap( "create_entity_32.png" ) );
 	autoFlexSizer->Add( m_button14, 0, wxALL, 0 );
 	
-	m_button15 = new wxBitmapButton( this, wxID_ANY, Luna::GlobalImageManager().GetBitmap( "create_light_32.png" ) );
+	m_button15 = new wxBitmapButton( this, wxID_ANY, Nocturnal::GlobalImageManager().GetBitmap( "create_light_32.png" ) );
 	autoFlexSizer->Add( m_button15, 0, wxALL, 0 );
 	
-	m_button16 = new wxBitmapButton( this, wxID_ANY, Luna::GlobalImageManager().GetBitmap( "create_volume_32.png" ) );
+	m_button16 = new wxBitmapButton( this, wxID_ANY, Nocturnal::GlobalImageManager().GetBitmap( "create_volume_32.png" ) );
 	autoFlexSizer->Add( m_button16, 0, wxALL, 0 );
 
   autoFlexSizer->Add( new CameraModeButton( this, m_SceneEditor ), 0, wxALL, 0 );

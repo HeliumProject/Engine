@@ -4,7 +4,7 @@
 #include <map>
 
 #include "Luna/API.h"
-#include "Inspect/Data.h"
+#include "Application/Inspect/Data/Data.h"
 
 #include "Selection.h"
 

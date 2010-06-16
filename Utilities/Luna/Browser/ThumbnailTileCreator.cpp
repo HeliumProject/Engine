@@ -102,7 +102,7 @@ void ThumbnailTileCreator::ThreadProc( i32 threadID )
   ThreadLeave( threadID );
 }
 
-void ThumbnailTileCreator::OnEndThread( const Luna::ThreadProcArgs& args )
+void ThumbnailTileCreator::OnEndThread( const Nocturnal::ThreadProcArgs& args )
 {
   if ( !IsCurrentThread( args.m_ThreadID ) )
     return;

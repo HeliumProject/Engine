@@ -2,7 +2,7 @@
 
 #include "Drawer.h"
 
-namespace Luna { class Button; }
+namespace Nocturnal { class Button; }
 
 namespace Luna
 {
@@ -27,7 +27,7 @@ namespace Luna
   private:
     void DestroyDrawers();
     Drawer* FindDrawer( i32 drawerID );
-    Luna::Button* GetButtonForDrawer( Drawer* drawer );
+    Nocturnal::Button* GetButtonForDrawer( Drawer* drawer );
     void ToggleDrawerButton( Drawer* drawer, bool pressed );
 
     void OnDrawerButtonClicked( wxCommandEvent& args );
@@ -41,7 +41,7 @@ namespace Luna
     bool m_IsFixedSizeButtons;;
     bool m_ClickToOpen;
 
-    typedef std::map< i32, Luna::Button* > M_Button;
+    typedef std::map< i32, Nocturnal::Button* > M_Button;
     M_Button m_Buttons;
   };
 }

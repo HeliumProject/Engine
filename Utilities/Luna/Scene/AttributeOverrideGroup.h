@@ -2,7 +2,7 @@
 
 #include "AttributeGroup.h"
 #include "Foundation/Automation/Property.h"
-#include "Inspect/Group.h"
+#include "Application/Inspect/Widgets/Group.h"
 
 namespace Luna
 {

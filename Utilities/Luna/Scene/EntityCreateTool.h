@@ -4,7 +4,7 @@
 #include "Entity.h"
 #include "CreateTool.h"
 
-#include "Inspect/FilteredDropTarget.h"
+#include "Application/Inspect/DragDrop/FilteredDropTarget.h"
 
 #include "Foundation/TUID.h"
 

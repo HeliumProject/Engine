@@ -30,8 +30,8 @@
 #include "Content/Zone.h"
 #include "Content/Region.h"
 
-#include "Inspect/Data.h"
-#include "Inspect/Canvas.h"
+#include "Application/Inspect/Data/Data.h"
+#include "Application/Inspect/Widgets/Canvas.h"
 #include "SceneGraph.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "Statistics.h"

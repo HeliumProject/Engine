@@ -2,9 +2,9 @@
 #include "ReflectBitfieldInterpreter.h"
 #include "ReflectBitfieldCheckBox.h"
 
-#include "Inspect/Label.h"
-#include "Inspect/Panel.h"
-#include "Inspect/StringData.h"
+#include "Application/Inspect/Widgets/Other Controls/Label.h"
+#include "Application/Inspect/Widgets/InspectPanel.h"
+#include "Application/Inspect/Data/StringData.h"
 
 #include "Reflect/Field.h"
 #include "Reflect/Enumeration.h"

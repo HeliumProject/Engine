@@ -3,7 +3,7 @@
 
 #include "Content/Mesh.h"
 
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 #include "Pick.h"
 #include "Color.h"
 
@@ -78,7 +78,7 @@ Mesh::~Mesh()
 
 i32 Mesh::GetImageIndex() const
 {
-  return Luna::GlobalImageManager().GetImageIndex( "mesh_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "mesh_16.png" );
 }
 
 std::string Mesh::GetApplicationTypeName() const

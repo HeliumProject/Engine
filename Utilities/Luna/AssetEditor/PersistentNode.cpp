@@ -6,7 +6,7 @@
 #include "PersistentDataFactory.h"
 
 #include "Asset/AssetFlags.h"
-#include "Inspect/ReflectClipboardData.h"
+#include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 #include "Core/PropertiesManager.h"
 
 using namespace Luna;

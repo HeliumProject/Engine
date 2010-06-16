@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "Inspect/FilteredDropTarget.h"
+#include "Application/Inspect/DragDrop/FilteredDropTarget.h"
 #include "InspectReflect/ReflectFieldInterpreter.h"
 
 namespace Finder

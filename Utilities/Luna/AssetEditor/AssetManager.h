@@ -5,7 +5,7 @@
 #include "AssetNode.h"
 
 #include "Editor/DocumentManager.h"
-#include "Inspect/ReflectClipboardData.h"
+#include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 #include "Core/Selection.h"
 #include "Application/Undo/Queue.h"
 

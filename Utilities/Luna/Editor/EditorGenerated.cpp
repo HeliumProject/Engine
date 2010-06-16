@@ -7,8 +7,6 @@
 
 #include "Precompile.h"
 
-#include "Luna/UI/SortableListView.h"
-
 #include "EditorGenerated.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -72,96 +70,6 @@ SubmitChangesPanel::SubmitChangesPanel( wxWindow* parent, wxWindowID id, const w
 }
 
 SubmitChangesPanel::~SubmitChangesPanel()
-{
-}
-
-RunGamePanel::RunGamePanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
-{
-	this->SetMinSize( wxSize( 370,300 ) );
-	
-	wxBoxSizer* mainSizer;
-	mainSizer = new wxBoxSizer( wxVERTICAL );
-	
-	wxStaticBoxSizer* buildSizer;
-	buildSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Choose Build") ), wxVERTICAL );
-	
-	wxString m_BuildChoiceChoices[] = { wxT("08_01_08_1117 (Current Good Build)"), wxT("08_01_08_1020"), wxT("08_01_08_1019"), wxT("alpha_sunday_testing") };
-	int m_BuildChoiceNChoices = sizeof( m_BuildChoiceChoices ) / sizeof( wxString );
-	m_BuildChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_BuildChoiceNChoices, m_BuildChoiceChoices, 0 );
-	m_BuildChoice->SetSelection( 0 );
-	buildSizer->Add( m_BuildChoice, 0, wxALL|wxEXPAND, 5 );
-	
-	mainSizer->Add( buildSizer, 0, wxEXPAND, 5 );
-	
-	
-	mainSizer->Add( 0, 5, 0, 0, 5 );
-	
-	wxStaticBoxSizer* levelSizer;
-	levelSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Choose Levels") ), wxVERTICAL );
-	
-	m_LevelHelpText = new wxStaticText( this, wxID_ANY, wxT("Levels with a red X do not have valid server data for this particular build."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_LevelHelpText->Wrap( -1 );
-	m_LevelHelpText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
-	
-	levelSizer->Add( m_LevelHelpText, 0, wxALL, 5 );
-	
-	m_Levels = new Luna::SortableListView( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ALIGN_LEFT|wxLC_AUTOARRANGE|wxLC_LIST );
-	levelSizer->Add( m_Levels, 1, wxALL|wxEXPAND, 5 );
-	
-	wxBoxSizer* levelButtonSizer;
-	levelButtonSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_SelectNone = new wxButton( this, wxID_ANY, wxT("Select None"), wxDefaultPosition, wxDefaultSize, 0 );
-	levelButtonSizer->Add( m_SelectNone, 0, wxALL, 5 );
-	
-	
-	levelButtonSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	m_SelectAll = new wxButton( this, wxID_ANY, wxT("Select All"), wxDefaultPosition, wxDefaultSize, 0 );
-	levelButtonSizer->Add( m_SelectAll, 0, wxALL, 5 );
-	
-	levelSizer->Add( levelButtonSizer, 0, wxEXPAND, 5 );
-	
-	mainSizer->Add( levelSizer, 1, wxEXPAND, 5 );
-	
-	
-	mainSizer->Add( 0, 5, 0, 0, 5 );
-	
-	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Command Line (optional)") ), wxVERTICAL );
-	
-	m_Options = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer3->Add( m_Options, 0, wxALL|wxEXPAND, 5 );
-	
-	mainSizer->Add( sbSizer3, 0, wxEXPAND, 5 );
-	
-	wxBoxSizer* bottomSizer;
-	bottomSizer = new wxBoxSizer( wxVERTICAL );
-	
-	wxBoxSizer* buttonSizer;
-	buttonSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_BuildserverLink = new wxHyperlinkCtrl( this, wxID_ANY, wxT("Buildserver Web Site"), wxT("http://buildserver"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
-	buttonSizer->Add( m_BuildserverLink, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	
-	buttonSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	m_Rerun = new wxButton( this, wxID_ANY, wxT("Rerun"), wxDefaultPosition, wxDefaultSize, 0 );
-	buttonSizer->Add( m_Rerun, 0, wxALL, 5 );
-	
-	m_RunGame = new wxButton( this, wxID_ANY, wxT("Run Game"), wxDefaultPosition, wxDefaultSize, 0 );
-	buttonSizer->Add( m_RunGame, 0, wxALL, 5 );
-	
-	bottomSizer->Add( buttonSizer, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
-	
-	mainSizer->Add( bottomSizer, 0, wxEXPAND, 5 );
-	
-	this->SetSizer( mainSizer );
-	this->Layout();
-}
-
-RunGamePanel::~RunGamePanel()
 {
 }
 

@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 #include "Enumerator.h"
-#include "Inspect/Controls.h"
+#include "Application/Inspect/Widgets/Controls.h"
 #include "Selection.h"
 #include "Platform/Mutex.h"
 

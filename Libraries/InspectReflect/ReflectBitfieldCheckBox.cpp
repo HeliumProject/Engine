@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "ReflectBitfieldCheckBox.h"
 
-#include "Inspect/Container.h"
-#include "Inspect/StringData.h"
+#include "Application/Inspect/Widgets/Container.h"
+#include "Application/Inspect/Data/StringData.h"
 #include "Foundation/String/Tokenize.h"
 
 using namespace Reflect;

@@ -4,7 +4,7 @@
 #include "Content/JointTransform.h"
 #include "math/EulerAngles.h"
 
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 #include "Color.h"
 #include "PrimitiveAxes.h"
 #include "PrimitiveRings.h"
@@ -50,7 +50,7 @@ JointTransform::~JointTransform()
 
 i32 JointTransform::GetImageIndex() const
 {
-  return Luna::GlobalImageManager().GetImageIndex( "joint_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "joint_16.png" );
 }
 
 std::string JointTransform::GetApplicationTypeName() const

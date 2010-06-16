@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AttributeGroup.h"
-#include "Inspect/Panel.h"
+#include "Application/Inspect/Widgets/InspectPanel.h"
 
 namespace Luna
 {

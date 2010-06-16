@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "FileBrowserButton.h"
 
-#include "Inspect/Canvas.h"
+#include "Application/Inspect/Widgets/Canvas.h"
 #include "Foundation/Container/Insert.h" 
 
 // Using

@@ -5,7 +5,7 @@
 #include "SceneOutlinerState.h"
 #include "Core/Selection.h"
 #include "Platform/Types.h"
-#include "Luna/UI/SortTreeCtrl.h"
+#include "Application/UI/SortTreeCtrl.h"
 
 namespace Luna
 {
@@ -30,7 +30,7 @@ namespace Luna
     // Member variables
     Luna::SceneManager* m_SceneManager;
     Luna::Scene* m_CurrentScene;
-    Luna::SortTreeCtrl* m_TreeCtrl;
+    Nocturnal::SortTreeCtrl* m_TreeCtrl;
     M_TreeItems m_Items;
     SceneOutlinerState m_StateInfo;
     bool m_IgnoreSelectionChange;
@@ -40,12 +40,12 @@ namespace Luna
     // Functions
     SceneOutliner( Luna::SceneManager* sceneManager );
     virtual ~SceneOutliner();
-    Luna::SortTreeCtrl* InitTreeCtrl( wxWindow* parent, wxWindowID id );
+    Nocturnal::SortTreeCtrl* InitTreeCtrl( wxWindow* parent, wxWindowID id );
     void SaveState( SceneOutlinerState& state );
     void RestoreState( const SceneOutlinerState& state );
     void DisableSorting();
     void EnableSorting();
-    virtual void Sort( const wxTreeItemId& root = Luna::SortTreeCtrl::InvalidItemId );
+    virtual void Sort( const wxTreeItemId& root = Nocturnal::SortTreeCtrl::InvalidItemId );
 
   protected:
     SceneOutlinerItemData* GetTreeItemData( const wxTreeItemId& item );
@@ -74,7 +74,7 @@ namespace Luna
 
   protected:
     // Derived classes must NOC_OVERRIDE these functions
-    virtual Luna::SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) = 0;
+    virtual Nocturnal::SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) = 0;
 
   private:
     // Tree event callbacks

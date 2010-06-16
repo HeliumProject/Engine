@@ -6,7 +6,7 @@
 #include "InstanceType.h"
 
 #include "Core/Enumerator.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 
 #include "PrimitiveSphere.h"
 #include "PrimitivePointer.h"
@@ -56,7 +56,7 @@ PointLight::~PointLight()
 
 i32 PointLight::GetImageIndex() const
 {
-  return Luna::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "light_16.png" );
 }
 
 std::string PointLight::GetApplicationTypeName() const

@@ -2,11 +2,11 @@
 #include "ReflectInterpreter.h"
 #include "ReflectValueInterpreter.h"
 
-#include "Inspect/Script.h"
-#include "Inspect/Button.h"
-#include "Inspect/Value.h"
-#include "Inspect/List.h"
-#include "Inspect/Panel.h"
+#include "Application/Inspect/Script.h"
+#include "Application/Inspect/Widgets/Button Controls/InspectButton.h"
+#include "Application/Inspect/Widgets/Text Controls/Value.h"
+#include "Application/Inspect/Widgets/Other Controls/List.h"
+#include "Application/Inspect/Widgets/InspectPanel.h"
 
 using namespace Reflect;
 using namespace Inspect;

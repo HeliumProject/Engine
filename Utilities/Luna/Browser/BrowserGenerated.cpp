@@ -7,12 +7,12 @@
 
 #include "Precompile.h"
 
+#include "Application/UI//MenuButton.h"
+#include "Application/UI/AutoCompleteComboBox.h"
+#include "Application/UI/Button.h"
+#include "Application/UI/MenuButton.h"
+#include "Application/UI/SortTreeCtrl.h"
 #include "DirectoryCtrl.h"
-#include "Luna/UI//MenuButton.h"
-#include "Luna/UI/AutoCompleteComboBox.h"
-#include "Luna/UI/Button.h"
-#include "Luna/UI/MenuButton.h"
-#include "Luna/UI/SortTreeCtrl.h"
 
 #include "BrowserGenerated.h"
 
@@ -39,31 +39,31 @@ NavigationPanelGenerated::NavigationPanelGenerated( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer20;
 	bSizer20 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_BackButton = new Luna::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_BackButton = new Nocturnal::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	m_BackButton->Enable( false );
 	
 	m_BackButton->Enable( false );
 	
 	bSizer20->Add( m_BackButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_ForwardButton = new Luna::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_ForwardButton = new Nocturnal::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	m_ForwardButton->Enable( false );
 	
 	m_ForwardButton->Enable( false );
 	
 	bSizer20->Add( m_ForwardButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_UpFolderButton = new Luna::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_UpFolderButton = new Nocturnal::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	m_UpFolderButton->Enable( false );
 	
 	m_UpFolderButton->Enable( false );
 	
 	bSizer20->Add( m_UpFolderButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_NavBarComboBox = new Luna::AutoCompleteComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxTE_PROCESS_ENTER|wxWANTS_CHARS ); 
+	m_NavBarComboBox = new Nocturnal::AutoCompleteComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxTE_PROCESS_ENTER|wxWANTS_CHARS ); 
 	bSizer20->Add( m_NavBarComboBox, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	m_GoButton = new Luna::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_GoButton = new Nocturnal::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	m_GoButton->Enable( false );
 	
 	m_GoButton->Enable( false );
@@ -74,7 +74,7 @@ NavigationPanelGenerated::NavigationPanelGenerated( wxWindow* parent, wxWindowID
 	m_staticline13 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer20->Add( m_staticline13, 0, wxEXPAND | wxALL, 5 );
 	
-	m_OptionsButton = new Luna::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_OptionsButton = new Nocturnal::MenuButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	bSizer20->Add( m_OptionsButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 	
 	this->SetSizer( bSizer20 );
@@ -517,14 +517,14 @@ CollectionsPanelGenerated::CollectionsPanelGenerated( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizer17;
 	bSizer17 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_NewDependencyCollectionButton = new Luna::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_NewDependencyCollectionButton = new Nocturnal::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_NewDependencyCollectionButton->Hide();
 	
 	m_NewDependencyCollectionButton->Hide();
 	
 	bSizer17->Add( m_NewDependencyCollectionButton, 0, wxALL, 5 );
 	
-	m_NewCollectionButton = new Luna::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_NewCollectionButton = new Nocturnal::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_NewCollectionButton->Hide();
 	
 	m_NewCollectionButton->Hide();
@@ -536,7 +536,7 @@ CollectionsPanelGenerated::CollectionsPanelGenerated( wxWindow* parent, wxWindow
 	wxBoxSizer* m_MyCollectionsCtrlSizer;
 	m_MyCollectionsCtrlSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_MyCollectionsTreeCtrl = new Luna::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTR_EDIT_LABELS|wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
+	m_MyCollectionsTreeCtrl = new Nocturnal::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTR_EDIT_LABELS|wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
 	m_MyCollectionsTreeCtrl->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	
 	m_MyCollectionsCtrlSizer->Add( m_MyCollectionsTreeCtrl, 1, wxEXPAND|wxLEFT, 5 );
@@ -557,7 +557,7 @@ CollectionsPanelGenerated::CollectionsPanelGenerated( wxWindow* parent, wxWindow
 	wxBoxSizer* m_TempCollectionsCtrlSizer;
 	m_TempCollectionsCtrlSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_TempCollectionsTreeCtrl = new Luna::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
+	m_TempCollectionsTreeCtrl = new Nocturnal::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
 	m_TempCollectionsTreeCtrl->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_TempCollectionsTreeCtrl->Enable( false );
 	

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "GridWithIcons.h"
 #include "GridCellImageRenderer.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 
 using namespace Luna;
 
@@ -57,7 +57,7 @@ bool GridWithIcons::AddRow( const std::string& name, bool visible, bool selectab
 
     if ( row >= 0 )
     {
-      const std::string& imageName = Luna::GlobalImageManager().GetNameFromImageIndex( imageIndex );
+      const std::string& imageName = Nocturnal::GlobalImageManager().GetNameFromImageIndex( imageIndex );
       m_Grid->SetCellValue( row, Icon, wxT( imageName.c_str() ) );
       isOk = true;
     }

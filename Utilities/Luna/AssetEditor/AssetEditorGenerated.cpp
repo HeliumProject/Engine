@@ -7,7 +7,7 @@
 
 #include "Precompile.h"
 
-#include "Luna/UI/AutoCompleteComboBox.h"
+#include "Application/UI/AutoCompleteComboBox.h"
 
 #include "AssetEditorGenerated.h"
 
@@ -121,7 +121,7 @@ MultiAnimPanelGenerated::MultiAnimPanelGenerated( wxWindow* parent, wxWindowID i
 	m_staticText1->Wrap( -1 );
 	bSizer8->Add( m_staticText1, 0, wxALL, 5 );
 	
-	m_AnimClipCombo = new Luna::AutoCompleteComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_SORT|wxTE_PROCESS_ENTER ); 
+	m_AnimClipCombo = new Nocturnal::AutoCompleteComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_SORT|wxTE_PROCESS_ENTER ); 
 	bSizer8->Add( m_AnimClipCombo, 1, wxALL|wxEXPAND, 5 );
 	
 	bSizer4->Add( bSizer8, 0, wxEXPAND, 5 );

@@ -4,8 +4,8 @@
 #include "ParentCommand.h"
 #include "Scene.h"
 
-#include "Luna/UI/ImageManager.h"
-#include "Luna/UI/SortTreeCtrl.h"
+#include "Application/UI/ImageManager.h"
+#include "Application/UI/SortTreeCtrl.h"
 
 // Using
 using namespace Luna;
@@ -57,7 +57,7 @@ void HierarchyOutliner::AddHierarchyNodes()
     RecurseAddHierarchyNode( m_CurrentScene->GetRoot() );
 
     // The root item gets a special icon
-    i32 image = Luna::GlobalImageManager().GetImageIndex( "world_16.png" );
+    i32 image = Nocturnal::GlobalImageManager().GetImageIndex( "world_16.png" );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Normal );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Expanded );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Selected );
@@ -116,9 +116,9 @@ void HierarchyOutliner::AddHierarchyNode( Luna::HierarchyNode* node )
 // Required by the base class.  Creates the tree control that this class wraps,
 // and connects GUI event handlers.
 // 
-Luna::SortTreeCtrl* HierarchyOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
+Nocturnal::SortTreeCtrl* HierarchyOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
 {
-  Luna::SortTreeCtrl* tree = new Luna::SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_MULTIPLE | wxTR_EDIT_LABELS, wxDefaultValidator, "HierarchyOutliner" );
+  Nocturnal::SortTreeCtrl* tree = new Nocturnal::SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_MULTIPLE | wxTR_EDIT_LABELS, wxDefaultValidator, "HierarchyOutliner" );
 
   // Override dynamic GUI event handlers here
   tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_BEGIN_DRAG, wxTreeEventHandler( HierarchyOutliner::OnBeginDrag ), NULL, this );

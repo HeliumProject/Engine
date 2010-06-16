@@ -6,7 +6,6 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/CommandLine.h"
-#include "Application/Application.h"
 #include "SmartLoader/SmartLoader.h"
 
 #include <iostream>

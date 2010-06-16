@@ -9,7 +9,7 @@
 #include "ZoneSelectorDialog.h"
 #include "RegionSelectorDialog.h"
 
-#include "Inspect/InspectInit.h"
+#include "Application/Inspect/InspectInit.h"
 #include "InspectReflect/InspectReflectInit.h"
 #include "InspectReflect/ReflectInterpreter.h"
 

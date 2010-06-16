@@ -5,8 +5,8 @@
 #include "KeyClipboardData.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Inspect/Container.h"
-#include "Inspect/InspectInit.h"
+#include "Application/Inspect/Widgets/Container.h"
+#include "Application/Inspect/InspectInit.h"
 #include "InspectReflect/InspectReflectInit.h"
 #include "InspectReflect/ReflectInterpreter.h"
 

@@ -2,8 +2,8 @@
 #include "InspectReflectInit.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Inspect/InspectInit.h"
-#include "Inspect/Container.h"
+#include "Application/Inspect/InspectInit.h"
+#include "Application/Inspect/Widgets/Container.h"
 
 #include "ReflectInterpreter.h"
 #include "ReflectBitfieldInterpreter.h"

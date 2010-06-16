@@ -3,17 +3,17 @@
 #include "FileDialogButton.h"
 #include "FileBrowserButton.h"
 
-#include "Inspect/InspectInit.h"
-#include "Inspect/StringData.h"
-#include "Inspect/Script.h"
-#include "Inspect/Action.h"
-#include "Inspect/Value.h"
-#include "Inspect/ClipboardDataObject.h"
-#include "Inspect/ClipboardFileList.h"
+#include "Application/Inspect/InspectInit.h"
+#include "Application/Inspect/Data/StringData.h"
+#include "Application/Inspect/Script.h"
+#include "Application/Inspect/Widgets/Button Controls/Action.h"
+#include "Application/Inspect/Widgets/Text Controls/Value.h"
+#include "Application/Inspect/DragDrop/ClipboardDataObject.h"
+#include "Application/Inspect/DragDrop/ClipboardFileList.h"
 
 #include "Asset/AssetFlags.h"
 #include "Finder/Finder.h"
-#include "Luna/UI/FileDialog.h"
+#include "Application/UI/FileDialog.h"
 #include "Foundation/Log.h"
 #include "Foundation/String/Wildcard.h"
 #include "Foundation/String/Tokenize.h"
@@ -296,7 +296,7 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
       text = dir;
     }
 
-    Luna::FileDialog dialog ( m_Container->GetWindow(), wxFileSelectorPromptStr, text.c_str() );
+    Nocturnal::FileDialog dialog ( m_Container->GetWindow(), wxFileSelectorPromptStr, text.c_str() );
 
     if (m_FinderSpec)
     {

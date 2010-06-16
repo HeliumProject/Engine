@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "Inspect/Control.h"
+#include "Application/Inspect/Widgets/Control.h"
 
 namespace Inspect
 {

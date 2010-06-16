@@ -15,8 +15,8 @@
 #include "Finder/Finder.h"
 #include "Editor/RefreshSelectionCommand.h"
 #include "Core/Enumerator.h"
-#include "Luna/UI/ImageManager.h"
-#include "Luna/UI/FileDialog.h"
+#include "Application/UI/ImageManager.h"
+#include "Application/UI/FileDialog.h"
 
 
 using namespace Luna;
@@ -329,7 +329,7 @@ void AssetReferenceNode::PreShowContextMenu()
             contextMenu.AppendItem( menuItem );
 
 
-            wxBitmap finderIcon = Luna::GlobalImageManager().GetBitmap( "magnify_16.png" );
+            wxBitmap finderIcon = Nocturnal::GlobalImageManager().GetBitmap( "magnify_16.png" );
             menuItem = new ContextMenuItem( "Change File Path (Asset Finder)", "Change this file's path using the Asset Finder", finderIcon );
             menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnChangePathFinder ) );
             menuItem->Enable( numSelected == 1 );
@@ -664,7 +664,7 @@ void AssetReferenceNode::AssetTypeChanged( const Asset::AssetTypeChangeArgs& arg
 // 
 void AssetReferenceNode::OnChangePath( const ContextMenuArgsPtr& args )
 {
-    Luna::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path" );
+    Nocturnal::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path" );
 
     std::string currentPath = GetFilePath();
     if ( !currentPath.empty() )

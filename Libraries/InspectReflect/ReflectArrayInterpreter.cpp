@@ -2,13 +2,13 @@
 #include "ReflectArrayInterpreter.h"
 #include "InspectReflectInit.h"
 
-#include "Inspect/Label.h"
-#include "Inspect/Value.h"
-#include "Inspect/Choice.h"
-#include "Inspect/List.h"
-#include "Inspect/Action.h"
-#include "Inspect/StringData.h"
-#include "Inspect/InspectInit.h"
+#include "Application/Inspect/Widgets/Other Controls/Label.h"
+#include "Application/Inspect/Widgets/Text Controls/Value.h"
+#include "Application/Inspect/Widgets/Text Controls/Choice.h"
+#include "Application/Inspect/Widgets/Other Controls/List.h"
+#include "Application/Inspect/Widgets/Button Controls/Action.h"
+#include "Application/Inspect/Data/StringData.h"
+#include "Application/Inspect/InspectInit.h"
 
 #include "Foundation/String/Tokenize.h"
 

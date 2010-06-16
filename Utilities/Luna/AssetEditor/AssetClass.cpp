@@ -19,10 +19,10 @@
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Natural.h"
 #include "Foundation/Log.h"
-#include "Inspect/ClipboardElementArray.h"
+#include "Application/Inspect/DragDrop/ClipboardElementArray.h"
 #include "Core/Enumerator.h"
 #include "Asset/EntityManifest.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 
 #include <algorithm>
 
@@ -324,7 +324,7 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
   menu.AppendItem( menuItem );
 
   menu.AppendSeparator();
-  menuItem = new ContextMenuItem( "Save", "Save selected Asset(s)", Luna::GlobalImageManager().GetBitmap( "save_16.png" ) );
+  menuItem = new ContextMenuItem( "Save", "Save selected Asset(s)", Nocturnal::GlobalImageManager().GetBitmap( "save_16.png" ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( &Luna::OnSaveSelectedAssets ), clientData );
   menu.AppendItem( menuItem );
   menu.AppendSeparator();

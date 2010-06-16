@@ -4,8 +4,8 @@
 
 #include "Application.h"
 
-#include "Inspect/Value.h"
-#include "Inspect/Button.h"
+#include "Application/Inspect/Widgets/Text Controls/Value.h"
+#include "Application/Inspect/Widgets/Button Controls/InspectButton.h"
 #include "Task/Build.h"
 
 #include "Asset/AssetInit.h"

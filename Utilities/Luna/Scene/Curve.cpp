@@ -10,7 +10,7 @@
 #include "HierarchyNodeType.h"
 #include "ReverseChildrenCommand.h"
 
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 #include "Core/Enumerator.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "Foundation/Log.h"
@@ -87,7 +87,7 @@ Curve::~Curve()
 
 i32 Curve::GetImageIndex() const
 {
-  return Luna::GlobalImageManager().GetImageIndex( "curve_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "curve_16.png" );
 }
 
 std::string Curve::GetApplicationTypeName() const

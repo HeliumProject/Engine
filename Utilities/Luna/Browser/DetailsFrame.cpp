@@ -2,7 +2,7 @@
 #include "DetailsFrame.h"
 
 #include "Asset/AssetFile.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 #include "RCS/RCS.h"
 
 using namespace Luna;
@@ -108,12 +108,12 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
   {
     if ( rcsFile.IsCheckedOutByMe() )
     {
-      m_RevisionStatusIcon->SetBitmap( Luna::GlobalImageManager().GetBitmap( "accept_16.png" ) );
+      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "accept_16.png" ) );
       m_RevisionStatus->SetLabel( "Checked out to you" );
     }
     else if ( rcsFile.IsCheckedOutBySomeoneElse() )
     {
-      m_RevisionStatusIcon->SetBitmap( Luna::GlobalImageManager().GetBitmap( "cancel_16.png" ) );
+      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "cancel_16.png" ) );
       
       std::string usernames;
       rcsFile.GetOpenedByUsers( usernames );
@@ -125,12 +125,12 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
     }
     else if ( !rcsFile.IsUpToDate() )
     {
-      m_RevisionStatusIcon->SetBitmap( Luna::GlobalImageManager().GetBitmap( "warning_16.png" ) );
+      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "warning_16.png" ) );
       m_RevisionStatus->SetLabel( "Out of date" );
     }
     else
     {
-      m_RevisionStatusIcon->SetBitmap( Luna::GlobalImageManager().GetBitmap( "p4_16.png" ) );
+      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "p4_16.png" ) );
       m_RevisionStatus->SetLabel( "Available for check out" );
     }
 
@@ -157,7 +157,7 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
   else
   {
     m_RevisionStatus->SetLabel( "No Perforce information available" );
-    m_RevisionStatusIcon->SetBitmap( Luna::GlobalImageManager().GetBitmap( "cancel_16.png" ) );
+    m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "cancel_16.png" ) );
     m_LastCheckInPanel->Hide();
     m_FirstCheckInPanel->Hide();
   }

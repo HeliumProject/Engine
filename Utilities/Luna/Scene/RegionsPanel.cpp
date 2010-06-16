@@ -7,8 +7,8 @@
 #include "Content/Zone.h"
 #include "Core/Object.h"
 #include "SceneNode.h"
-#include "Luna/UI/SortTreeCtrl.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/SortTreeCtrl.h"
+#include "Application/UI/ImageManager.h"
 
 #include <algorithm>
 
@@ -60,10 +60,10 @@ RegionsPanel::RegionsPanel( SceneEditor* editor, Luna::SceneManager* manager, wx
   item->AddCallback( ContextMenuSignature::Delegate(this, &RegionsPanel::ContextZoneChangeRegions) ); 
   m_PerZoneContextMenu.AppendItem( item ); 
 
-  m_RegionTree->SetImageList( Luna::GlobalImageManager().GetGuiImageList() ); 
+  m_RegionTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() ); 
 
-  m_RegionIcon = Luna::GlobalImageManager().GetImageIndex( "region_16.png" );
-  m_ZoneIcon   = Luna::GlobalImageManager().GetImageIndex( "zone_16.png" ); 
+  m_RegionIcon = Nocturnal::GlobalImageManager().GetImageIndex( "region_16.png" );
+  m_ZoneIcon   = Nocturnal::GlobalImageManager().GetImageIndex( "zone_16.png" ); 
 
   InitTree();
 }

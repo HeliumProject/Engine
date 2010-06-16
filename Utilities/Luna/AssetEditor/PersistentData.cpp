@@ -3,7 +3,7 @@
 
 #include "PersistentDataFactory.h"
 
-#include "Inspect/ClipboardElementArray.h"
+#include "Application/Inspect/DragDrop/ClipboardElementArray.h"
 #include "Application/Undo/BatchCommand.h"
 #include "Application/Undo/PropertyCommand.h"
 

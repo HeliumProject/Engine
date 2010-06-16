@@ -9,7 +9,7 @@
 #include "Foundation/Log.h"
 #include "Reflect/ElementArraySerializer.h"
 #include "Foundation/TUID.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 
 using namespace Luna;
 
@@ -448,11 +448,11 @@ Luna::PersistentNode* ElementArrayNode::NewChild( Reflect::Element* element )
 
   contextMenu.AppendSeparator();
 
-  ContextMenuItemPtr menuItemMoveUp = new ContextMenuItem( "Move Up\tAlt-UP", "Move the selected item(s) up in the list", Luna::GlobalImageManager().GetBitmap( "arrow_up_16.png" ) );
+  ContextMenuItemPtr menuItemMoveUp = new ContextMenuItem( "Move Up\tAlt-UP", "Move the selected item(s) up in the list", Nocturnal::GlobalImageManager().GetBitmap( "arrow_up_16.png" ) );
   menuItemMoveUp->AddCallback( ContextMenuSignature::Delegate::Create<Luna::ElementArrayNode, void (Luna::ElementArrayNode::*)( const ContextMenuArgsPtr& )>( this, &Luna::ElementArrayNode::MoveSelectedChildrenUp ) );
   contextMenu.AppendItem( menuItemMoveUp );
 
-  ContextMenuItemPtr menuItemMoveDown = new ContextMenuItem( "Move Down\tAlt-DOWN", "Move the selected item(s) down in the list", Luna::GlobalImageManager().GetBitmap( "arrow_down_16.png" ) );
+  ContextMenuItemPtr menuItemMoveDown = new ContextMenuItem( "Move Down\tAlt-DOWN", "Move the selected item(s) down in the list", Nocturnal::GlobalImageManager().GetBitmap( "arrow_down_16.png" ) );
   menuItemMoveDown->AddCallback( ContextMenuSignature::Delegate::Create<Luna::ElementArrayNode, void (Luna::ElementArrayNode::*)( const ContextMenuArgsPtr& )>( this, &Luna::ElementArrayNode::MoveSelectedChildrenDown ) );
   contextMenu.AppendItem( menuItemMoveDown );
 

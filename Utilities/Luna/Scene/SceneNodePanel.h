@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "Inspect/Data.h"
-#include "Inspect/Panel.h"
+#include "Application/Inspect/Data/Data.h"
+#include "Application/Inspect/Widgets/InspectPanel.h"
 #include "SceneNode.h"
 
 namespace Luna

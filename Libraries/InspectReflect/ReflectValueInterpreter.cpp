@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "ReflectValueInterpreter.h"
 
-#include "Inspect/InspectInit.h"
-#include "Inspect/Script.h"
-#include "Inspect/CheckBox.h"
-#include "Inspect/Choice.h"
-#include "Inspect/Action.h"
-#include "Inspect/StringData.h"
-#include "Inspect/Value.h"
-#include "Inspect/List.h"
+#include "Application/Inspect/InspectInit.h"
+#include "Application/Inspect/Script.h"
+#include "Application/Inspect/Widgets/Other Controls/CheckBox.h"
+#include "Application/Inspect/Widgets/Text Controls/Choice.h"
+#include "Application/Inspect/Widgets/Button Controls/Action.h"
+#include "Application/Inspect/Data/StringData.h"
+#include "Application/Inspect/Widgets/Text Controls/Value.h"
+#include "Application/Inspect/Widgets/Other Controls/List.h"
 
 // Using
 using namespace Reflect;

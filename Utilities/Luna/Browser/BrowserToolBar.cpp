@@ -5,7 +5,7 @@
 #include "BrowserToolBar.h"
 
 #include "Platform/Assert.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 
 #include <wx/textctrl.h>
 
@@ -27,7 +27,7 @@ BrowserToolBar::BrowserToolBar
   m_SearchBox = new wxTextCtrl( this, BrowserToolBarIDs::SearchBoxID, wxEmptyString, wxDefaultPosition, wxSize( 140, -1 ), 0 );
 
   SetToolBitmapSize( wxSize( 16, 16 ) );
-//  AddTool( BrowserToolBarIDs::ButtonID, wxT( "Vault" ), Luna::GlobalImageManager().GetBitmap( "vault_16.png" ) );
+//  AddTool( BrowserToolBarIDs::ButtonID, wxT( "Vault" ), Nocturnal::GlobalImageManager().GetBitmap( "vault_16.png" ) );
   AddControl( m_SearchBox );
   Realize();
 

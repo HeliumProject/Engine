@@ -6,7 +6,7 @@
 #include "InstanceType.h"
 
 #include "Core/Enumerator.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 
 #include "PrimitiveSphere.h"
 #include "PrimitiveCube.h"
@@ -57,7 +57,7 @@ AmbientVolumeLight::~AmbientVolumeLight()
 
 i32 AmbientVolumeLight::GetImageIndex() const
 {
-  return Luna::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "light_16.png" );
 }
 
 std::string AmbientVolumeLight::GetApplicationTypeName() const

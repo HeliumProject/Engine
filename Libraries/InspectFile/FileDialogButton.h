@@ -1,7 +1,7 @@
 #pragma once
 
 #include "API.h"
-#include "Inspect/Button.h"
+#include "Application/Inspect/Widgets/Button Controls/InspectButton.h"
 
 #include "Foundation/TUID.h"
 

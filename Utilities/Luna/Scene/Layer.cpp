@@ -2,8 +2,8 @@
 #include "Layer.h"
 #include "Scene.h"
 
-#include "Luna/UI/ImageManager.h"
-#include "Inspect/Choice.h"
+#include "Application/UI/ImageManager.h"
+#include "Application/Inspect/Widgets/Text Controls/Choice.h"
 
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Natural.h"
@@ -53,7 +53,7 @@ Layer::~Layer()
 // 
 i32 Layer::GetImageIndex() const
 {
-  return Luna::GlobalImageManager().GetImageIndex( "layer_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "layer_16.png" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

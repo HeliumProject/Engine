@@ -9,7 +9,7 @@
 #define __AssetEditorGenerated__
 
 namespace Luna{ class ShaderGroupPropGrid; }
-namespace Luna{ class AutoCompleteComboBox; }
+namespace Nocturnal{ class AutoCompleteComboBox; }
 
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -85,7 +85,7 @@ namespace Luna
 			wxStaticText* m_staticText111;
 			wxChoice* m_AttachJointChoice;
 			wxStaticText* m_staticText1;
-			Luna::AutoCompleteComboBox* m_AnimClipCombo;
+			Nocturnal::AutoCompleteComboBox* m_AnimClipCombo;
 			wxStaticLine* m_staticline1;
 			
 			wxBitmapButton* m_ButtonSnapBegin;

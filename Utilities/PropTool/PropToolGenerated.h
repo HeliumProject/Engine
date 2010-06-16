@@ -20,7 +20,7 @@ class Workspace;
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/filepicker.h>
-#include "UIToolkit/ImageViewPanel.h"
+#include "Application/UI/ImageViewPanel.h"
 #include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>

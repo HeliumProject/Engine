@@ -3,8 +3,8 @@
 #include "ParametricKeyData.h"
 #include "KeyControl.h"
 
-#include "Inspect/Canvas.h"
-#include "Inspect/Container.h"
+#include "Application/Inspect/Widgets/Canvas.h"
+#include "Application/Inspect/Widgets/Container.h"
 
 #include "Content/ParametricKey.h"
 

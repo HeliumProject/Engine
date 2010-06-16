@@ -13,8 +13,8 @@
 
 #include "Foundation/String/Natural.h"
 #include "Editor/Editor.h"
-#include "Inspect/Button.h"
-#include "Inspect/Container.h"
+#include "Application/Inspect/Widgets/Button Controls/InspectButton.h"
+#include "Application/Inspect/Widgets/Container.h"
 
 // Using
 using namespace Luna;

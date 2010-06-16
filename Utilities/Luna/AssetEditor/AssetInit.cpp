@@ -11,9 +11,9 @@
 #include "AttributeWrapper.h"
 #include "AttributeContainer.h"
 #include "AttributeNode.h"
-#include "Inspect/ClipboardDataWrapper.h"
-#include "Inspect/ClipboardElementArray.h"
-#include "Inspect/ClipboardFileList.h"
+#include "Application/Inspect/DragDrop/ClipboardDataWrapper.h"
+#include "Application/Inspect/DragDrop/ClipboardElementArray.h"
+#include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "ContainerItemNode.h"
 #include "ContainerNode.h"
 #include "ElementArrayNode.h"
@@ -23,7 +23,7 @@
 #include "FileBackedAttribute.h"
 #include "PersistentData.h"
 #include "PersistentNode.h" 
-#include "Inspect/ReflectClipboardData.h"
+#include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 #include "ShaderAsset.h"
 #include "SimpleFieldNode.h"
 #include "SceneAsset.h"
@@ -35,7 +35,7 @@
 #include "Content/ContentInit.h"
 #include "Foundation/Log.h"
 #include "Reflect/Registry.h"
-#include "Luna/UI/ImageManager.h"
+#include "Application/UI/ImageManager.h"
 
 // Using
 using namespace Luna;
@@ -87,9 +87,9 @@ void LunaAsset::InitializeModule()
     g_InitializerStack.Push( Luna::AttributeNode::InitializeType, Luna::AttributeNode::CleanupType );
     g_InitializerStack.Push( AssetDocument::InitializeType, AssetDocument::CleanupType );
 
-    Luna::ImageManagerInit( "", "" );
+    Nocturnal::ImageManagerInit( "", "" );
 
-    Luna::GlobalImageManager().LoadGuiArt();
+    Nocturnal::GlobalImageManager().LoadGuiArt();
   }
 }
 
@@ -103,6 +103,6 @@ void LunaAsset::CleanupModule()
   {
     g_InitializerStack.Cleanup();
 
-    Luna::ImageManagerCleanup();
+    Nocturnal::ImageManagerCleanup();
   }
 }

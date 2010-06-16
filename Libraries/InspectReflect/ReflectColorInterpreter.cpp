@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "ReflectColorInterpreter.h"
 
-#include "Inspect/Container.h"
-#include "Inspect/Label.h"
-#include "Inspect/Slider.h"
-#include "Inspect/Value.h"
-#include "Inspect/ColorPicker.h"
-#include "Inspect/StringData.h"
+#include "Application/Inspect/Widgets/Container.h"
+#include "Application/Inspect/Widgets/Other Controls/Label.h"
+#include "Application/Inspect/Widgets/Other Controls/Slider.h"
+#include "Application/Inspect/Widgets/Text Controls/Value.h"
+#include "Application/Inspect/Widgets/Other Controls/InspectColorPicker.h"
+#include "Application/Inspect/Data/StringData.h"
 
 using namespace Reflect;
 using namespace Inspect;

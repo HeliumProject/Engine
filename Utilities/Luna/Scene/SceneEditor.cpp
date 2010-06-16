@@ -48,13 +48,13 @@
 #include "Foundation/Log.h"
 #include "Content/ContentVersion.h"
 #include "Editor/MRUData.h"
-#include "Inspect/Control.h"
-#include "Inspect/ClipboardFileList.h"
-#include "Inspect/ClipboardDataObject.h"
+#include "Application/Inspect/Widgets/Control.h"
+#include "Application/Inspect/DragDrop/ClipboardFileList.h"
+#include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 #include "Task/Build.h"
-#include "Luna/UI/FileDialog.h"
-#include "Luna/UI/ImageManager.h"
-#include "Luna/UI/SortTreeCtrl.h"
+#include "Application/UI/FileDialog.h"
+#include "Application/UI/ImageManager.h"
+#include "Application/UI/SortTreeCtrl.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "Platform/Windows/Clipboard.h"
 #include "Platform/Process.h"
@@ -307,7 +307,7 @@ SceneEditor::SceneEditor()
 , m_UtilitiesMenu( NULL )
 , m_MRUMenu( NULL )
 , m_MRUMenuItem( NULL )
-, m_MRU( new Luna::MenuMRU( 30, this ) )
+, m_MRU( new Nocturnal::MenuMRU( 30, this ) )
 , m_StandardToolBar( NULL )
 , m_ViewToolBar( NULL )
 , m_ToolsToolBar( NULL )
@@ -321,11 +321,11 @@ SceneEditor::SceneEditor()
     wxIconBundle iconBundle;
     wxIcon tempIcon;
 #pragma TODO( "use resources for icons" )
-    //tempIcon.CopyFromBitmap( Luna::GlobalImageManager().GetBitmap( "scene_editor_64.png" ) );
+    //tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "scene_editor_64.png" ) );
     //iconBundle.AddIcon( tempIcon );
-    //tempIcon.CopyFromBitmap( Luna::GlobalImageManager().GetBitmap( "scene_editor_32.png" ) );
+    //tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "scene_editor_32.png" ) );
     //iconBundle.AddIcon( tempIcon );
-    //tempIcon.CopyFromBitmap( Luna::GlobalImageManager().GetBitmap( "scene_editor_16.png" ) );
+    //tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "scene_editor_16.png" ) );
     //iconBundle.AddIcon( tempIcon );
     SetIcons( iconBundle );
 
@@ -338,7 +338,7 @@ SceneEditor::SceneEditor()
     m_SceneManager.AddSceneAddedListener( SceneChangeSignature::Delegate( this, &SceneEditor::SceneAdded ) );
     m_SceneManager.AddSceneRemovingListener( SceneChangeSignature::Delegate( this, &SceneEditor::SceneRemoving ) );
 
-    m_MRU->AddItemSelectedListener( Luna::MRUSignature::Delegate( this, &SceneEditor::OnMRUOpen ) );
+    m_MRU->AddItemSelectedListener( Nocturnal::MRUSignature::Delegate( this, &SceneEditor::OnMRUOpen ) );
 
     V_string paths;
     V_string::const_iterator itr = SceneEditorPreferences()->GetMRU()->GetPaths().begin();
@@ -381,39 +381,39 @@ SceneEditor::SceneEditor()
 
     m_ViewToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_ViewToolBar->SetToolBitmapSize(wxSize(16, 16));
-    //m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), Luna::GlobalImageManager().GetBitmap( "camera_perspective_16.png" ), "Use the orbit perspective camera");
-    //m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), Luna::GlobalImageManager().GetBitmap( "camera_front_16.png" ), "Use the front orthographic camera");
-    //m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), Luna::GlobalImageManager().GetBitmap( "camera_side_16.png" ), "Use the side orthographic camera");
-    //m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), Luna::GlobalImageManager().GetBitmap( "camera_top_16.png" ), "Use the top orthographic camera");
+    //m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), Nocturnal::GlobalImageManager().GetBitmap( "camera_perspective_16.png" ), "Use the orbit perspective camera");
+    //m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), Nocturnal::GlobalImageManager().GetBitmap( "camera_front_16.png" ), "Use the front orthographic camera");
+    //m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), Nocturnal::GlobalImageManager().GetBitmap( "camera_side_16.png" ), "Use the side orthographic camera");
+    //m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), Nocturnal::GlobalImageManager().GetBitmap( "camera_top_16.png" ), "Use the top orthographic camera");
     m_ViewToolBar->Realize();
 
     m_ToolsToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_ToolsToolBar->SetToolBitmapSize(wxSize(32,32));
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsSelect, wxT("Select"), Luna::GlobalImageManager().GetBitmap( "select_32.png" ), wxNullBitmap, "Select items from the workspace");
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsTranslate, wxT("Translate"), Luna::GlobalImageManager().GetBitmap( "transform_translate_32.png" ), wxNullBitmap, "Translate items");
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsRotate, wxT("Rotate"), Luna::GlobalImageManager().GetBitmap( "transform_rotate_32.png" ), wxNullBitmap, "Rotate selected items");
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsScale, wxT("Scale"), Luna::GlobalImageManager().GetBitmap( "transform_scale_32.png" ), wxNullBitmap, "Scale selected items");
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsDuplicate, wxT("Duplicate"), Luna::GlobalImageManager().GetBitmap( "under_construction_32.png" ), wxNullBitmap, "Duplicate the selected object numerous times");
-//    m_ToolsToolBar->AddTool(SceneEditorIDs::ID_UtilitiesMeasureDistance, wxT("Measure"), Luna::GlobalImageManager().GetBitmap( "measure_32.png" ), "Measure the distance between selected objects");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsSelect, wxT("Select"), Nocturnal::GlobalImageManager().GetBitmap( "select_32.png" ), wxNullBitmap, "Select items from the workspace");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsTranslate, wxT("Translate"), Nocturnal::GlobalImageManager().GetBitmap( "transform_translate_32.png" ), wxNullBitmap, "Translate items");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsRotate, wxT("Rotate"), Nocturnal::GlobalImageManager().GetBitmap( "transform_rotate_32.png" ), wxNullBitmap, "Rotate selected items");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsScale, wxT("Scale"), Nocturnal::GlobalImageManager().GetBitmap( "transform_scale_32.png" ), wxNullBitmap, "Scale selected items");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsDuplicate, wxT("Duplicate"), Nocturnal::GlobalImageManager().GetBitmap( "under_construction_32.png" ), wxNullBitmap, "Duplicate the selected object numerous times");
+//    m_ToolsToolBar->AddTool(SceneEditorIDs::ID_UtilitiesMeasureDistance, wxT("Measure"), Nocturnal::GlobalImageManager().GetBitmap( "measure_32.png" ), "Measure the distance between selected objects");
 //
 //    m_ToolsToolBar->AddSeparator();
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Entity"), Luna::GlobalImageManager().GetBitmap( "create_entity_32.png" ), wxNullBitmap, "Place entity objects (such as art instances or characters)");
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Volume"), Luna::GlobalImageManager().GetBitmap( "create_volume_32.png" ), wxNullBitmap, "Place volume objects (items for setting up gameplay)");
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsClueCreate, wxT("Clue"), Luna::GlobalImageManager().GetBitmap( "create_clue_32.png" ), wxNullBitmap, "Place clue objects (items for setting up gameplay)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Entity"), Nocturnal::GlobalImageManager().GetBitmap( "create_entity_32.png" ), wxNullBitmap, "Place entity objects (such as art instances or characters)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Volume"), Nocturnal::GlobalImageManager().GetBitmap( "create_volume_32.png" ), wxNullBitmap, "Place volume objects (items for setting up gameplay)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsClueCreate, wxT("Clue"), Nocturnal::GlobalImageManager().GetBitmap( "create_clue_32.png" ), wxNullBitmap, "Place clue objects (items for setting up gameplay)");
 //#if LUNA_GAME_CAMERA
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsGameCameraCreate, wxT("GameCamera"), Luna::GlobalImageManager().GetBitmap( "game_camera_32.png" ), wxNullBitmap, "Place a camera");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsGameCameraCreate, wxT("GameCamera"), Nocturnal::GlobalImageManager().GetBitmap( "game_camera_32.png" ), wxNullBitmap, "Place a camera");
 //#endif
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsControllerCreate, wxT("Controller"), Luna::GlobalImageManager().GetBitmap( "create_controller_32.png" ), wxNullBitmap, "Place controller objects (items for setting up gameplay)");
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Locator"), Luna::GlobalImageManager().GetBitmap( "create_locator_32.png" ), wxNullBitmap, "Place locator objects (such as bug locators)");
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Curve"), Luna::GlobalImageManager().GetBitmap( "create_curve_32.png" ), wxNullBitmap, "Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)");
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), Luna::GlobalImageManager().GetBitmap( "edit_curve_32.png" ), wxNullBitmap, "Edit created curves (modify or create/delete control points)");
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLightCreate, wxT("Light"), Luna::GlobalImageManager().GetBitmap( "create_light_32.png" ), wxNullBitmap, "Place lights in the scene");
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLighting, wxT("Lighting"), Luna::GlobalImageManager().GetBitmap( "no_smoking_32.png" ), wxNullBitmap, "Light objects in the scene");
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate, wxT("Post Processing"), Luna::GlobalImageManager().GetBitmap( "create_postprocessing_volume_32.png" ), wxNullBitmap, "Place post processing volume in the scene");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsControllerCreate, wxT("Controller"), Nocturnal::GlobalImageManager().GetBitmap( "create_controller_32.png" ), wxNullBitmap, "Place controller objects (items for setting up gameplay)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Locator"), Nocturnal::GlobalImageManager().GetBitmap( "create_locator_32.png" ), wxNullBitmap, "Place locator objects (such as bug locators)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Curve"), Nocturnal::GlobalImageManager().GetBitmap( "create_curve_32.png" ), wxNullBitmap, "Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), Nocturnal::GlobalImageManager().GetBitmap( "edit_curve_32.png" ), wxNullBitmap, "Edit created curves (modify or create/delete control points)");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLightCreate, wxT("Light"), Nocturnal::GlobalImageManager().GetBitmap( "create_light_32.png" ), wxNullBitmap, "Place lights in the scene");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLighting, wxT("Lighting"), Nocturnal::GlobalImageManager().GetBitmap( "no_smoking_32.png" ), wxNullBitmap, "Light objects in the scene");
+//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate, wxT("Post Processing"), Nocturnal::GlobalImageManager().GetBitmap( "create_postprocessing_volume_32.png" ), wxNullBitmap, "Place post processing volume in the scene");
 //
 //    m_ToolsToolBar->AddSeparator();
-//    m_ToolsToolBar->AddTool(SceneEditorIDs::ID_UtilitiesConstruction, wxT("Connect to Maya"), Luna::GlobalImageManager().GetBitmap( "maya_32.png" ), "Connect to Maya with the selected items for editing");
-//    m_ToolsToolBar->AddTool(SceneEditorIDs::ID_UtilitiesFlushSymbols, wxT("Flush Symbols"), Luna::GlobalImageManager().GetBitmap( "header_32.png" ), "Flush symbol definitions (to re-parse headers)");
+//    m_ToolsToolBar->AddTool(SceneEditorIDs::ID_UtilitiesConstruction, wxT("Connect to Maya"), Nocturnal::GlobalImageManager().GetBitmap( "maya_32.png" ), "Connect to Maya with the selected items for editing");
+//    m_ToolsToolBar->AddTool(SceneEditorIDs::ID_UtilitiesFlushSymbols, wxT("Flush Symbols"), Nocturnal::GlobalImageManager().GetBitmap( "header_32.png" ), "Flush symbol definitions (to re-parse headers)");
 
     m_ToolsToolBar->Realize();
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsSelect, true );
@@ -421,22 +421,22 @@ SceneEditor::SceneEditor()
 
     m_NavToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_NavToolBar->SetToolBitmapSize(wxSize(16,16));
-    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshImport, wxT("ImportMeshFromMayaExport"), Luna::GlobalImageManager().GetBitmap( "door_in_16.png" ), wxNullBitmap, "Get the exported maya mesh into luna");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshImport, wxT("ImportMeshFromMayaExport"), Nocturnal::GlobalImageManager().GetBitmap( "door_in_16.png" ), wxNullBitmap, "Get the exported maya mesh into luna");
     //m_NavToolBar->AddSeparator();
-    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes, wxT("NavMeshEditLowResMesh"), Luna::GlobalImageManager().GetBitmap( "map_magnify_16.png" ), wxNullBitmap, "Work with low res nav mesh");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes, wxT("NavMeshEditLowResMesh"), Nocturnal::GlobalImageManager().GetBitmap( "map_magnify_16.png" ), wxNullBitmap, "Work with low res nav mesh");
     //m_NavToolBar->AddSeparator();
-    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshCreate, wxT("CreateNavMesh"), Luna::GlobalImageManager().GetBitmap( "plugin_16.png" ), wxNullBitmap, "Create NavMesh or add new verts and tris");
-    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshManipulate, wxT("NavMeshEdit"), Luna::GlobalImageManager().GetBitmap( "plugin_go_16.png" ), wxNullBitmap, "Translate Vert/Edge/Tri on NavMesh");
-    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshRotate, wxT("NavMeshRotate"), Luna::GlobalImageManager().GetBitmap( "rotate_cw_16.png" ), wxNullBitmap, "Rotate Verts on NavMesh");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshCreate, wxT("CreateNavMesh"), Nocturnal::GlobalImageManager().GetBitmap( "plugin_16.png" ), wxNullBitmap, "Create NavMesh or add new verts and tris");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshManipulate, wxT("NavMeshEdit"), Nocturnal::GlobalImageManager().GetBitmap( "plugin_go_16.png" ), wxNullBitmap, "Translate Vert/Edge/Tri on NavMesh");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshRotate, wxT("NavMeshRotate"), Nocturnal::GlobalImageManager().GetBitmap( "rotate_cw_16.png" ), wxNullBitmap, "Rotate Verts on NavMesh");
     //m_NavToolBar->AddSeparator();
-    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshVertexSelect, wxT("VertexSelect"), Luna::GlobalImageManager().GetBitmap( "vertex.png" ), wxNullBitmap, "Vertex select mode");
-    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshEdgeSelect, wxT("EdgeSelect"), Luna::GlobalImageManager().GetBitmap( "edge.png" ), wxNullBitmap, "Edge select mode");
-    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshTriSelect, wxT("TriSelect"), Luna::GlobalImageManager().GetBitmap( "triangle.png" ), wxNullBitmap, "Triangle select mode");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshVertexSelect, wxT("VertexSelect"), Nocturnal::GlobalImageManager().GetBitmap( "vertex.png" ), wxNullBitmap, "Vertex select mode");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshEdgeSelect, wxT("EdgeSelect"), Nocturnal::GlobalImageManager().GetBitmap( "edge.png" ), wxNullBitmap, "Edge select mode");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshTriSelect, wxT("TriSelect"), Nocturnal::GlobalImageManager().GetBitmap( "triangle.png" ), wxNullBitmap, "Triangle select mode");
     //m_NavToolBar->AddSeparator();
-    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOut, wxT("NavMeshPunchOutTool"), Luna::GlobalImageManager().GetBitmap( "cube_punch_out.png" ), wxNullBitmap, "punch cube like hole in the nav mesh");
-    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate, wxT("NavMeshPunchOutTranslate"), Luna::GlobalImageManager().GetBitmap( "transform_translate_16.png" ), wxNullBitmap, "Translate punch out volume");
-    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate, wxT("NavMeshPunchOutRotate"), Luna::GlobalImageManager().GetBitmap( "transform_rotate_16.png" ), wxNullBitmap, "Rotate punch out volume");
-    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutScale, wxT("NavMeshPunchOutScale"), Luna::GlobalImageManager().GetBitmap( "transform_scale_16.png" ), wxNullBitmap, "Scale punch out volume");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOut, wxT("NavMeshPunchOutTool"), Nocturnal::GlobalImageManager().GetBitmap( "cube_punch_out.png" ), wxNullBitmap, "punch cube like hole in the nav mesh");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate, wxT("NavMeshPunchOutTranslate"), Nocturnal::GlobalImageManager().GetBitmap( "transform_translate_16.png" ), wxNullBitmap, "Translate punch out volume");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate, wxT("NavMeshPunchOutRotate"), Nocturnal::GlobalImageManager().GetBitmap( "transform_rotate_16.png" ), wxNullBitmap, "Rotate punch out volume");
+    //m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutScale, wxT("NavMeshPunchOutScale"), Nocturnal::GlobalImageManager().GetBitmap( "transform_scale_16.png" ), wxNullBitmap, "Scale punch out volume");
     m_NavToolBar->Realize();
     m_NavToolBar->Disable();
 
@@ -470,33 +470,33 @@ SceneEditor::SceneEditor()
 
     // Directory
     m_Directory = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
-    m_Directory->SetImageList( Luna::GlobalImageManager().GetGuiImageList() );
+    m_Directory->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
     {
         // Zones
         m_ZonesPanel = new ScenesPanel( this, &m_SceneManager, m_Directory, SceneEditorIDs::ID_ZonesControl );
         m_ZonesPage  = m_Directory->GetPageCount();
-        m_Directory->AddPage(m_ZonesPanel, "Zones", false, Luna::GlobalImageManager().GetImageIndex( "zone_16.png" ));
+        m_Directory->AddPage(m_ZonesPanel, "Zones", false, Nocturnal::GlobalImageManager().GetImageIndex( "zone_16.png" ));
 
         m_RegionsPanel = new RegionsPanel( this, &m_SceneManager, m_Directory); 
         m_RegionsPage  = m_Directory->GetPageCount(); 
-        m_Directory->AddPage( m_RegionsPanel, "Regions", false, Luna::GlobalImageManager().GetImageIndex( "region_16.png" )); 
+        m_Directory->AddPage( m_RegionsPanel, "Regions", false, Nocturnal::GlobalImageManager().GetImageIndex( "region_16.png" )); 
 
         // Inner tab with different outlines
         wxNotebook* outlinerNotebook = new wxNotebook( m_Directory, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_NOPAGETHEME );
-        m_Directory->AddPage( outlinerNotebook, "Outlines", false, Luna::GlobalImageManager().GetImageIndex( "type_16.png" ));
+        m_Directory->AddPage( outlinerNotebook, "Outlines", false, Nocturnal::GlobalImageManager().GetImageIndex( "type_16.png" ));
         {
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
             // Types
             m_TypeOutline = new NodeTypeOutliner( &m_SceneManager );
-            Luna::SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( outlinerNotebook, SceneEditorIDs::ID_TypeOutlineControl );
-            typeTree->SetImageList( Luna::GlobalImageManager().GetGuiImageList() );
+            Nocturnal::SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( outlinerNotebook, SceneEditorIDs::ID_TypeOutlineControl );
+            typeTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
             outlinerNotebook->AddPage( typeTree, "Types" );
             m_TreeMonitor.AddTree( typeTree );
 
             // Entity Classes
             m_EntityAssetOutline = new EntityAssetOutliner( &m_SceneManager );
-            Luna::SortTreeCtrl* entityTree = m_EntityAssetOutline->InitTreeCtrl( outlinerNotebook, wxID_ANY );
-            entityTree->SetImageList( Luna::GlobalImageManager().GetGuiImageList() );
+            Nocturnal::SortTreeCtrl* entityTree = m_EntityAssetOutline->InitTreeCtrl( outlinerNotebook, wxID_ANY );
+            entityTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
             outlinerNotebook->AddPage( entityTree, "Entity Classes" );
             m_TreeMonitor.AddTree( entityTree );
 
@@ -506,10 +506,10 @@ SceneEditor::SceneEditor()
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
         // Hierarchy
         m_HierarchyOutline = new HierarchyOutliner( &m_SceneManager );
-        Luna::SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_HierarchyOutlineControl );
-        hierarchyTree->SetImageList( Luna::GlobalImageManager().GetGuiImageList() );
+        Nocturnal::SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_HierarchyOutlineControl );
+        hierarchyTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
         m_HierarchyOutlinePage = m_Directory->GetPageCount();
-        m_Directory->AddPage( hierarchyTree, "Hierarchy", false, Luna::GlobalImageManager().GetImageIndex( "world_16.png" ) );
+        m_Directory->AddPage( hierarchyTree, "Hierarchy", false, Nocturnal::GlobalImageManager().GetImageIndex( "world_16.png" ) );
         m_TreeMonitor.AddTree( hierarchyTree );
 #endif
     }
@@ -517,7 +517,7 @@ SceneEditor::SceneEditor()
 
     // Properties panel
     m_Properties = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250,250), wxNB_NOPAGETHEME);
-    m_Properties->SetImageList( Luna::GlobalImageManager().GetGuiImageList() );
+    m_Properties->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
     {
         // Properties panel - Selection page
         m_SelectionEnumerator = new Enumerator (&m_SelectionProperties);
@@ -525,14 +525,14 @@ SceneEditor::SceneEditor()
         LSelectionPropertiesPanel* selectionProperties = new LSelectionPropertiesPanel (m_SelectionPropertiesManager, m_Properties, SceneEditorIDs::ID_SelectionProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN);
         m_SelectionProperties.SetControl( selectionProperties->m_PropertyCanvas );
         m_SelectionPropertyPage = m_Properties->GetPageCount();
-        m_Properties->AddPage(selectionProperties, "Selection", false, Luna::GlobalImageManager().GetImageIndex( "select_16.png" ));
+        m_Properties->AddPage(selectionProperties, "Selection", false, Nocturnal::GlobalImageManager().GetImageIndex( "select_16.png" ));
 
         // Properties panel - Tool page
         m_ToolEnumerator = new Enumerator (&m_ToolProperties);
         m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
         m_ToolProperties.SetControl( new Inspect::CanvasWindow (m_Properties, SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
         m_ToolPropertyPage = m_Properties->GetPageCount();
-        m_Properties->AddPage(m_ToolProperties.GetControl(), "Tool", false, Luna::GlobalImageManager().GetImageIndex( "transform_16.png" ));
+        m_Properties->AddPage(m_ToolProperties.GetControl(), "Tool", false, Nocturnal::GlobalImageManager().GetImageIndex( "transform_16.png" ));
     }
     m_FrameManager.AddPane( m_Properties, wxAuiPaneInfo().Name(wxT("properties")).Caption(wxT("Properties")).Right().Layer(1).Position(1) );
 
@@ -542,7 +542,7 @@ SceneEditor::SceneEditor()
 
     // Layer panel
     m_LayersNotebook  = new wxNotebook( this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
-    m_LayersNotebook->SetImageList( Luna::GlobalImageManager().GetGuiImageList() );
+    m_LayersNotebook->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
     {
         // General purpose layers
         {
@@ -574,13 +574,13 @@ SceneEditor::SceneEditor()
 
     // Create drawers - commented out for now
     //{
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "directory" ), Luna::GlobalImageManager().GetBitmap( "world_16.png" ) ) );
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "properties" ), Luna::GlobalImageManager().GetBitmap( "transform_16.png" ) ) );
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "types" ), Luna::GlobalImageManager().GetBitmap( "type_16.png" ) ) );
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "layers" ), Luna::GlobalImageManager().GetBitmap( "layer_16.png" ) ) );
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "lighting" ), Luna::GlobalImageManager().GetBitmap( "light_16.png" ) ) );
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "live link" ), Luna::GlobalImageManager().GetBitmap( "joystick_16.png" ) ) );
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "search bar" ), Luna::GlobalImageManager().GetBitmap( "magnify_16.png" ) ) );
+    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "directory" ), Nocturnal::GlobalImageManager().GetBitmap( "world_16.png" ) ) );
+    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "properties" ), Nocturnal::GlobalImageManager().GetBitmap( "transform_16.png" ) ) );
+    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "types" ), Nocturnal::GlobalImageManager().GetBitmap( "type_16.png" ) ) );
+    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "layers" ), Nocturnal::GlobalImageManager().GetBitmap( "layer_16.png" ) ) );
+    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "lighting" ), Nocturnal::GlobalImageManager().GetBitmap( "light_16.png" ) ) );
+    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "live link" ), Nocturnal::GlobalImageManager().GetBitmap( "joystick_16.png" ) ) );
+    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "search bar" ), Nocturnal::GlobalImageManager().GetBitmap( "magnify_16.png" ) ) );
     //}
 
     // Tools (requires m_View) - REMOVING UNTIL UI IS COMPLETED
@@ -945,7 +945,7 @@ SceneEditor::~SceneEditor()
     m_SceneManager.RemoveSceneAddedListener( SceneChangeSignature::Delegate( this, &SceneEditor::SceneAdded ) );
     m_SceneManager.RemoveSceneRemovingListener( SceneChangeSignature::Delegate( this, &SceneEditor::SceneRemoving ) );
 
-    m_MRU->RemoveItemSelectedListener( Luna::MRUSignature::Delegate( this, &SceneEditor::OnMRUOpen ) );
+    m_MRU->RemoveItemSelectedListener( Nocturnal::MRUSignature::Delegate( this, &SceneEditor::OnMRUOpen ) );
 
     m_SelectionPropertiesManager->RemovePropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
     m_ToolPropertiesManager->RemovePropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
@@ -1417,7 +1417,7 @@ bool SceneEditor::DoOpen( const std::string& path )
 // 
 void SceneEditor::OnOpen(wxCommandEvent& event)
 {
-    Luna::FileDialog openDlg( this, "Open" );
+    Nocturnal::FileDialog openDlg( this, "Open" );
     openDlg.AddFilter( s_Filter.GetDialogFilter() );
     openDlg.SetFilterIndex( FinderSpecs::Asset::LEVEL_DECORATION.GetDialogFilter() );
 
@@ -1486,7 +1486,7 @@ void SceneEditor::OnImport(wxCommandEvent& event)
             {
             case SceneEditorIDs::ID_FileImport:
                 {
-                    Luna::FileDialog fileDialog( this, "Import" );
+                    Nocturnal::FileDialog fileDialog( this, "Import" );
                     fileDialog.AddFilter( FinderSpecs::Extension::REFLECT_BINARY.GetDialogFilter() );
                     fileDialog.AddFilter( FinderSpecs::Extension::REFLECT_TEXT.GetDialogFilter() );
                     fileDialog.SetFilterIndex( FinderSpecs::Extension::REFLECT_BINARY.GetDialogFilter() );
@@ -1677,7 +1677,7 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                 {
                 case SceneEditorIDs::ID_FileExport:
                     {
-                        Luna::FileDialog fileDialog( this, "Export Selection", "", "", wxFileSelectorDefaultWildcardStr, Luna::FileDialogStyles::DefaultSave );
+                        Nocturnal::FileDialog fileDialog( this, "Export Selection", "", "", wxFileSelectorDefaultWildcardStr, Nocturnal::FileDialogStyles::DefaultSave );
                         fileDialog.AddFilter( FinderSpecs::Extension::REFLECT_BINARY.GetDialogFilter() );
                         fileDialog.AddFilter( FinderSpecs::Extension::REFLECT_TEXT.GetDialogFilter() );
                         fileDialog.SetFilterIndex( FinderSpecs::Extension::REFLECT_BINARY.GetDialogFilter() );
@@ -1763,7 +1763,7 @@ void SceneEditor::OnExportToObj(wxCommandEvent& event)
         return;
     }
 
-    Luna::FileDialog fileDialog( this, "Export Selection", "", "", wxFileSelectorDefaultWildcardStr, Luna::FileDialogStyles::DefaultSave );
+    Nocturnal::FileDialog fileDialog( this, "Export Selection", "", "", wxFileSelectorDefaultWildcardStr, Nocturnal::FileDialogStyles::DefaultSave );
     fileDialog.AddFilter( FinderSpecs::Extension::MAYA_OBJ.GetDialogFilter() );
 
     if ( fileDialog.ShowModal() != wxID_OK )
@@ -3278,7 +3278,7 @@ void SceneEditor::SelectSimilarItemsInScene( wxCommandEvent& event )
 // Overridden from base class.  Called when attempting to open a file from the
 // MRU list.  Closes all currently open files before trying to open the new one.
 // 
-void SceneEditor::OnMRUOpen( const Luna::MRUArgs& args )
+void SceneEditor::OnMRUOpen( const Nocturnal::MRUArgs& args )
 {
     DoOpen( args.m_Item );
 }

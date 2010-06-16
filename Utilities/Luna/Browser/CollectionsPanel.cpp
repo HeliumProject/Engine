@@ -7,15 +7,15 @@
 #include "Asset/AssetFolder.h"
 #include "Foundation/String/Utilities.h"
 #include "Finder/LunaSpecs.h"
-#include "Inspect/ClipboardDataObject.h"
-#include "Inspect/ClipboardFileList.h"
-#include "Inspect/DropTarget.h"
-#include "Inspect/ReflectClipboardData.h"
+#include "Application/Inspect/DragDrop/ClipboardDataObject.h"
+#include "Application/Inspect/DragDrop/ClipboardFileList.h"
+#include "Application/Inspect/DragDrop/DropTarget.h"
+#include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 #include "Scene/SceneManager.h"
-#include "Luna/UI/FileDialog.h"
-#include "Luna/UI/ImageManager.h"
-#include "Luna/UI/MenuButton.h"
-#include "Luna/UI/SortTreeCtrl.h"
+#include "Application/UI/FileDialog.h"
+#include "Application/UI/ImageManager.h"
+#include "Application/UI/MenuButton.h"
+#include "Application/UI/SortTreeCtrl.h"
 
 
 using namespace Luna;
@@ -73,17 +73,17 @@ CollectionsPanel::CollectionsPanel( BrowserFrame* browserFrame )
 , m_CollectionManager( NULL )
 , m_DragOriginatedHere( false )
 {
-    m_MyCollectionsTreeCtrl->SetImageList( Luna::GlobalImageManager().GetGuiImageList() );
-    m_TempCollectionsTreeCtrl->SetImageList( Luna::GlobalImageManager().GetGuiImageList() );
+    m_MyCollectionsTreeCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
+    m_TempCollectionsTreeCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
 
-    m_ContainerImageIndex = Luna::GlobalImageManager().GetImageIndex( "folder_16.png" );
-    m_DependencyImageIndex = Luna::GlobalImageManager().GetImageIndex( "chart_organisation_16.png" );
-    m_UsageImageIndex = Luna::GlobalImageManager().GetImageIndex( "chart_organisation_reverse_16.png" );
+    m_ContainerImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( "folder_16.png" );
+    m_DependencyImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( "chart_organisation_16.png" );
+    m_UsageImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( "chart_organisation_reverse_16.png" );
 
     m_MyCollectionsToolBar->SetToolBitmapSize( wxSize( 16, 16 ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewCollection, "", Luna::GlobalImageManager().GetBitmap( "folder_add_16.png" ), BrowserMenu::Label( ID_NewCollection ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, "", Luna::GlobalImageManager().GetBitmap( "chart_organisation_add_16.png" ), BrowserMenu::Label( ID_NewDependencyCollection ) + " - Files this asset depends on." );
-    m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, "", Luna::GlobalImageManager().GetBitmap( "chart_organisation_reverse_add_16.png" ), BrowserMenu::Label( ID_NewUsageCollection ) + " - Files that use this asset." );
+    m_MyCollectionsToolBar->AddTool( ID_NewCollection, "", Nocturnal::GlobalImageManager().GetBitmap( "folder_add_16.png" ), BrowserMenu::Label( ID_NewCollection ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, "", Nocturnal::GlobalImageManager().GetBitmap( "chart_organisation_add_16.png" ), BrowserMenu::Label( ID_NewDependencyCollection ) + " - Files this asset depends on." );
+    m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, "", Nocturnal::GlobalImageManager().GetBitmap( "chart_organisation_reverse_add_16.png" ), BrowserMenu::Label( ID_NewUsageCollection ) + " - Files that use this asset." );
     m_MyCollectionsToolBar->Realize();
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
@@ -133,7 +133,7 @@ void CollectionsPanel::OnTempCollectionsDoubleClick( wxTreeEvent& event )
     event.Skip();
 
     // this just makes the code below more generic in case we want to abstract it later
-    Luna::SortTreeCtrl* treeCtrl = m_TempCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_TempCollectionsTreeCtrl;
 
     wxTreeItemId item = treeCtrl->GetSelection();
     if ( !item )
@@ -179,7 +179,7 @@ void CollectionsPanel::OnMyCollectionsTitleMenu( wxMouseEvent& event )
 void CollectionsPanel::OnMyCollectionsBeginLabelEdit( wxTreeEvent& event )
 {
     // this just makes the code below more generic in case we want to abstract it later
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     wxTreeItemId item = event.GetItem();
     if ( !item )
@@ -213,7 +213,7 @@ void CollectionsPanel::OnMyCollectionsBeginLabelEdit( wxTreeEvent& event )
 void CollectionsPanel::OnMyCollectionsEndLabelEdit( wxTreeEvent& event )
 {
     // this just makes the code below more generic in case we want to abstract it later
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     event.Veto();
 
@@ -266,7 +266,7 @@ void CollectionsPanel::OnMyCollectionsEndLabelEdit( wxTreeEvent& event )
 void CollectionsPanel::OnMyCollectionsDoubleClick( wxTreeEvent& event )
 {
     // this just makes the code below more generic in case we want to abstract it later
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     wxTreeItemId item = treeCtrl->GetSelection();
     if ( !item )
@@ -290,7 +290,7 @@ void CollectionsPanel::OnMyCollectionsDoubleClick( wxTreeEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnMyCollectionsMenu( wxTreeEvent& event )
 {
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     wxTreeItemId item = event.GetItem();
     if ( !item )
@@ -350,7 +350,7 @@ void CollectionsPanel::OnMyCollectionsMenu( wxTreeEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnShowCollection( wxCommandEvent& event )
 {
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -408,8 +408,8 @@ void CollectionsPanel::OnNewCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnOpenCollection( wxCommandEvent& event )
 {
-    Luna::FileDialog browserDlg( this, BrowserMenu::Label( ID_OpenCollection ), "", "", "",
-        Luna::FileDialogStyles::DefaultOpen | Luna::FileDialogStyles::ShowAllFilesFilter | Luna::FileDialogStyles::ExportFile );
+    Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_OpenCollection ), "", "", "",
+        Nocturnal::FileDialogStyles::DefaultOpen | Nocturnal::FileDialogStyles::ShowAllFilesFilter | Nocturnal::FileDialogStyles::ExportFile );
 
     browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_RB_DECORATION.GetDialogFilter() );
     browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_XML_DECORATION.GetDialogFilter() );
@@ -438,7 +438,7 @@ void CollectionsPanel::OnOpenCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnCloseCollection( wxCommandEvent& event )
 {
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -480,7 +480,7 @@ void CollectionsPanel::OnCloseCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnRenameCollection( wxCommandEvent& event )
 {
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -495,7 +495,7 @@ void CollectionsPanel::OnRenameCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnImportIntoCollection( wxCommandEvent& event )
 {
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -516,8 +516,8 @@ void CollectionsPanel::OnImportIntoCollection( wxCommandEvent& event )
         return;
     }
 
-    Luna::FileDialog browserDlg( this, BrowserMenu::Label( ID_ImportIntoCollection ), "", "", "",
-        Luna::FileDialogStyles::DefaultOpen | Luna::FileDialogStyles::ShowAllFilesFilter | Luna::FileDialogStyles::ExportFile );
+    Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_ImportIntoCollection ), "", "", "",
+        Nocturnal::FileDialogStyles::DefaultOpen | Nocturnal::FileDialogStyles::ShowAllFilesFilter | Nocturnal::FileDialogStyles::ExportFile );
 
     browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_RB_DECORATION.GetDialogFilter() );
     browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_XML_DECORATION.GetDialogFilter() );
@@ -534,7 +534,7 @@ void CollectionsPanel::OnImportIntoCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnSaveCollection( wxCommandEvent& event )
 {
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -555,8 +555,8 @@ void CollectionsPanel::OnSaveCollection( wxCommandEvent& event )
         std::string defaultDir( collection->GetPath().Directory() );
         std::string defaultFile( collection->GetPath().Filename() );
 
-        Luna::FileDialog browserDlg( this, BrowserMenu::Label( ID_SaveCollection ), defaultDir.c_str(), defaultFile.c_str(), "",
-            Luna::FileDialogStyles::DefaultSave | Luna::FileDialogStyles::ShowAllFilesFilter | Luna::FileDialogStyles::ExportFile );
+        Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_SaveCollection ), defaultDir.c_str(), defaultFile.c_str(), "",
+            Nocturnal::FileDialogStyles::DefaultSave | Nocturnal::FileDialogStyles::ShowAllFilesFilter | Nocturnal::FileDialogStyles::ExportFile );
 
         browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_RB_DECORATION.GetDialogFilter() );
         browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_XML_DECORATION.GetDialogFilter() );
@@ -572,7 +572,7 @@ void CollectionsPanel::OnSaveCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnAddToCollection( wxCommandEvent& event )
 {
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -617,7 +617,7 @@ void CollectionsPanel::OnAddToCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnRemoveFromCollection( wxCommandEvent& event )
 {
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -698,7 +698,7 @@ void CollectionsPanel::OnCollectionModified( const Reflect::ElementChangeArgs& a
     {
         wxTreeItemId itemID = findItem->second;
 
-        Luna::SortTreeCtrl* treeCtrl = collection->IsTemporary() ? m_TempCollectionsTreeCtrl : m_MyCollectionsTreeCtrl; 
+        Nocturnal::SortTreeCtrl* treeCtrl = collection->IsTemporary() ? m_TempCollectionsTreeCtrl : m_MyCollectionsTreeCtrl; 
         treeCtrl->SetItemText( itemID, collection->GetDisplayName() );
 
         int iconIndex = m_ContainerImageIndex;
@@ -745,7 +745,7 @@ void CollectionsPanel::OnClearAllCollections( const CollectionManagerArgs& args 
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function for hit testing a point during a drag and drop operation.
 // 
-wxTreeItemId CollectionsPanel::DragHitTest( Luna::SortTreeCtrl* treeCtrl, wxPoint point )
+wxTreeItemId CollectionsPanel::DragHitTest( Nocturnal::SortTreeCtrl* treeCtrl, wxPoint point )
 {
     int flags = 0;
     wxTreeItemId item = treeCtrl->HitTest( point, flags );
@@ -770,7 +770,7 @@ wxTreeItemId CollectionsPanel::DragHitTest( Luna::SortTreeCtrl* treeCtrl, wxPoin
 // 
 wxDragResult CollectionsPanel::DragOver( const Inspect::DragArgs& args )
 {
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     wxDragResult result = args.m_Default;
     wxTreeItemId item = DragHitTest( treeCtrl, wxPoint( args.m_X, args.m_Y ) );
@@ -826,7 +826,7 @@ wxDragResult CollectionsPanel::DragOver( const Inspect::DragArgs& args )
 // 
 wxDragResult CollectionsPanel::Drop( const Inspect::DragArgs& args )
 {
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     wxDragResult result = wxDragNone;
 
@@ -915,7 +915,7 @@ wxDragResult CollectionsPanel::Drop( const Inspect::DragArgs& args )
 // 
 void CollectionsPanel::DragLeave( Nocturnal::Void )
 {
-    Luna::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     if ( m_DragOverItem.IsOk() )
     {
@@ -1026,7 +1026,7 @@ void CollectionsPanel::UpdateCollections()
                 }
             }
 
-            Luna::SortTreeCtrl* treeCtrl = NULL;
+            Nocturnal::SortTreeCtrl* treeCtrl = NULL;
             if ( collection->IsTemporary() )
             {
                 treeCtrl = m_TempCollectionsTreeCtrl;
@@ -1059,7 +1059,7 @@ void CollectionsPanel::UpdateCollections()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void CollectionsPanel::PrePopulateTreeCtrl( Luna::SortTreeCtrl* treeCtrl )
+void CollectionsPanel::PrePopulateTreeCtrl( Nocturnal::SortTreeCtrl* treeCtrl )
 {
     treeCtrl->Freeze();
     treeCtrl->DeleteAllItems();
@@ -1069,7 +1069,7 @@ void CollectionsPanel::PrePopulateTreeCtrl( Luna::SortTreeCtrl* treeCtrl )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void CollectionsPanel::PostPopulateTreeCtrl( Luna::SortTreeCtrl* treeCtrl )
+void CollectionsPanel::PostPopulateTreeCtrl( Nocturnal::SortTreeCtrl* treeCtrl )
 {
     treeCtrl->SortChildren( treeCtrl->GetRootItem() );
     treeCtrl->Thaw();
@@ -1092,7 +1092,7 @@ void CollectionsPanel::PostPopulateTreeCtrl( Luna::SortTreeCtrl* treeCtrl )
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function to get the interface to the data stored on each tree item.
 // 
-AssetCollectionItemData* CollectionsPanel::GetItemData( Luna::SortTreeCtrl* treeCtrl, const wxTreeItemId& id )
+AssetCollectionItemData* CollectionsPanel::GetItemData( Nocturnal::SortTreeCtrl* treeCtrl, const wxTreeItemId& id )
 {
     AssetCollectionItemData* data = NULL;
     if ( id.IsOk() )

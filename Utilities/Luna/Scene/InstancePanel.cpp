@@ -3,8 +3,8 @@
 #include "Instance.h"
 #include "Volume.h"
 
-#include "Inspect/Choice.h"
-#include "Inspect/Button.h"
+#include "Application/Inspect/Widgets/Text Controls/Choice.h"
+#include "Application/Inspect/Widgets/Button Controls/InspectButton.h"
 
 #include "Attribute/AttributeHandle.h"
 #include "Foundation/Log.h"

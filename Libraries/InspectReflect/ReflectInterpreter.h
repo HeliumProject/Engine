@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Inspect/Canvas.h"
-#include "Inspect/Container.h"
-#include "Inspect/Interpreter.h"
+#include "Application/Inspect/Widgets/Canvas.h"
+#include "Application/Inspect/Widgets/Container.h"
+#include "Application/Inspect/Interpreter.h"
 #include "ReflectFieldInterpreter.h"
 
 namespace Inspect

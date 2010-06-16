@@ -1,9 +1,9 @@
 #pragma once
 
 #include <map>
-#include "Inspect/DropTarget.h"
+#include "Application/Inspect/DragDrop/DropTarget.h"
 #include "Core/Selectable.h"
-#include "Luna/UI/SortTreeCtrl.h"
+#include "Application/UI/SortTreeCtrl.h"
 
 #include <wx/dnd.h>
 
@@ -31,7 +31,7 @@ namespace Luna
     typedef std::map< Luna::AssetNode*, wxTreeItemId > M_TreeItems;
 
   private:
-    Luna::SortTreeCtrl* m_TreeControl;
+    Nocturnal::SortTreeCtrl* m_TreeControl;
     AssetEditor* m_Editor;
     Luna::AssetManager* m_AssetManager;
     M_TreeItems m_Items;
@@ -44,7 +44,7 @@ namespace Luna
     AssetOutliner( AssetEditor* editor, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
     virtual ~AssetOutliner();
     wxWindow* const GetWindow() const;
-    void Sort( const wxTreeItemId& itemId = Luna::SortTreeCtrl::InvalidItemId, bool recursive = true );
+    void Sort( const wxTreeItemId& itemId = Nocturnal::SortTreeCtrl::InvalidItemId, bool recursive = true );
 
     bool AddItem( Luna::AssetNode* node );
     void DeleteItem( Luna::AssetNode* node );

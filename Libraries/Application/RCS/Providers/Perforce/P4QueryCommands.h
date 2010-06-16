@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Command.h"
+#include "P4Command.h"
 
 namespace Perforce
 {

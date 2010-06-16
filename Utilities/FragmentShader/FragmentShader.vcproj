@@ -176,15 +176,11 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
+			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
-			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{C87D1745-76D6-4A2E-B655-23564E398510}"

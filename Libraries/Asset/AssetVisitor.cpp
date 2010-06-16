@@ -15,7 +15,7 @@
 #include "Content/Zone.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 #include "Reflect/Archive.h"
 #include "Reflect/Class.h"
 #include "Reflect/Field.h"

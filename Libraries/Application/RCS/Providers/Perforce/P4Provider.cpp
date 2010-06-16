@@ -1,16 +1,16 @@
-#include "Provider.h"
+#include "P4Provider.h"
 #include "Perforce.h"
-#include "Exceptions.h"
-#include "QueryCommands.h"
-#include "ClientCommands.h"
-#include "ChangelistCommands.h"
+#include "P4Exceptions.h"
+#include "P4QueryCommands.h"
+#include "P4ClientCommands.h"
+#include "P4ChangelistCommands.h"
 
 #include "Platform/Assert.h"
 #include "Foundation/Version.h"
 #include "Application/Application.h"
 #include "Platform/Windows/Windows.h"
 #include "Platform/Mutex.h"
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 
 using namespace Perforce;
 
@@ -114,8 +114,6 @@ void Provider::ThreadEntry()
 
 void Provider::RunCommand( Command* command )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   if ( !m_Enabled )
   {
     throw Perforce::Exception ("Perforce connection is not enabled");
@@ -368,8 +366,6 @@ const char* Provider::GetName()
 
 void Provider::Sync( RCS::File& file, const u64 timestamp )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   SyncCommand command( this, &file, timestamp );
 
   command.Run();
@@ -395,72 +391,54 @@ void Provider::GetInfo( const std::string& folder, RCS::V_File& files, bool recu
 
 void Provider::Add( RCS::File& file )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   OpenCommand command( this, "add", &file );
   command.Run();
 }
 
 void Provider::Edit( RCS::File& file )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   OpenCommand command ( this, "edit", &file );
   command.Run();
 }
 
 void Provider::Delete( RCS::File& file )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   OpenCommand command ( this, "delete", &file );
   command.Run();
 }
 
 void Provider::Integrate( RCS::File& source, RCS::File& dest )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   IntegrateCommand command( this, &source, &dest );
   command.Run();
 }
 
 void Provider::Reopen( RCS::File& file )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   OpenCommand command( this, "reopen", &file );
   command.Run();
 }
 
 void Provider::GetChangesets( RCS::V_Changeset& changesets )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   GetChangelistsCommand command( this, &changesets );
   command.Run();
 }
 
 void Provider::CreateChangeset( RCS::Changeset& changeset )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   CreateChangelistCommand command( this, &changeset );
   command.Run();
 }
 
 void Provider::GetOpenedFiles( RCS::V_File& files )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   OpenedCommand command( this, &files );
   command.Run();
 }
 
 void Provider::Commit( RCS::Changeset& changeset )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   SubmitCommand command( this, &changeset );
 
   command.AddArg( "-c" );
@@ -489,8 +467,6 @@ void Provider::Revert( RCS::Changeset& changeset, bool revertUnchangedOnly )
 
 void Provider::Revert( RCS::File& file, bool revertUnchangedOnly )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   RevertCommand command( this, &file );
 
   command.AddArg( "-c" );

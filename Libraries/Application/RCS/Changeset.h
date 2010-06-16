@@ -1,13 +1,13 @@
 #pragma once
 
-#include "API.h"
-#include "File.h"
+#include "Application/API.h"
+#include "RCSFile.h"
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 namespace RCS
 {
-  class RCS_API Changeset : public Nocturnal::RefCountBase< Changeset >
+  class APPLICATION_API Changeset : public Nocturnal::RefCountBase< Changeset >
   {
   public:
     u64                m_Id;
@@ -17,6 +17,9 @@ namespace RCS
     Changeset( const std::string& description = std::string( "" ), int changesetId = DefaultChangesetId )
       : m_Id( changesetId )
       , m_Description( description )
+    {
+    }
+    virtual ~Changeset()
     {
     }
 

@@ -3,7 +3,7 @@
 
 #include "YesNoAllDlg.h"
 
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 
 #include <algorithm>
 #include <cctype>

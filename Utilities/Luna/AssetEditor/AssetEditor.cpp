@@ -34,7 +34,7 @@
 
 #include "Task/Export.h"
 #include "Application/Inspect/Widgets/Canvas.h"
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 #include "Application/UI/FileDialog.h"
 #include "Application/UI/ImageManager.h"
 #include "Application/UI/ListDialog.h"

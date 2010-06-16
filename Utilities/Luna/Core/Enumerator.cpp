@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Enumerator.h"
 
-#include "InspectReflect/ReflectInterpreter.h"
+#include "Application/Inspect/Reflect/ReflectInterpreter.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Container/Insert.h" 

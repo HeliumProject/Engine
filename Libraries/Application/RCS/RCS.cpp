@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "RCS.h"
-#include "Exceptions.h"
+#include "RCSExceptions.h"
 
 #include "Foundation/File/Path.h"
 #include "Foundation/Log.h"
@@ -81,8 +81,6 @@ void RCS::SetIgnoredPaths( const std::vector< std::string >& paths )
 
 bool RCS::PathIsManaged( const std::string &path )
 {
-  RCS_SCOPE_TIMER( ("") );
-
   // check to see if we should be ignoring this path first
   if( !g_IgnoredPaths.empty() && _IsSubdir( path, g_IgnoredPaths ) )
   {
@@ -116,8 +114,6 @@ u64 RCS::GetSyncTimestamp()
 
 void RCS::GetChangesets( RCS::V_Changeset& changesets )
 {
-  RCS_SCOPE_TIMER( ("") );
-
   g_Provider->GetChangesets( changesets );
 
   V_File files;
@@ -145,8 +141,6 @@ void RCS::GetChangesets( RCS::V_Changeset& changesets )
 
 bool RCS::IsValidChangeset( const RCS::Changeset& changeset )
 {
-  RCS_SCOPE_TIMER( ("") );
-
   if ( changeset.m_Id == DefaultChangesetId )
   {
     return true;

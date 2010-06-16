@@ -10,8 +10,8 @@
 #include "RegionSelectorDialog.h"
 
 #include "Application/Inspect/InspectInit.h"
-#include "InspectReflect/InspectReflectInit.h"
-#include "InspectReflect/ReflectInterpreter.h"
+#include "Application/Inspect/Reflect/InspectReflectInit.h"
+#include "Application/Inspect/Reflect/ReflectInterpreter.h"
 
 #include "Dependencies/Dependencies.h"
 

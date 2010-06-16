@@ -179,7 +179,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\libraries\AppUtils\AppUtils.vcproj"
+			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{1A179B8F-2027-467A-AB0C-7E90575C0F03}"
@@ -188,10 +188,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{F3DB1BFC-9BD1-443F-965A-E05E9D95E6AB}"
 			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
-			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"

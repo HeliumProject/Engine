@@ -30,15 +30,11 @@ void Changeset::Delete( File& file, const OpenFlag flags ) const
 
 void Changeset::Create()
 {
-  RCS_SCOPE_TIMER( ("") );
-
   GetProvider()->CreateChangeset( *this );
 }
 
 void Changeset::Commit()
 {
-  RCS_SCOPE_TIMER( ("") );
-
   // if they are committing the default changeset, we need to gather
   // up the files that are open in there and move them into the newly
   // created changeset
@@ -69,15 +65,12 @@ void Changeset::Commit()
 
 void Changeset::Revert( const OpenFlag flags )
 {
-  RCS_SCOPE_TIMER( ("") );
   GetProvider()->Revert( *this, ( ( flags & OpenFlags::UnchangedOnly ) == OpenFlags::UnchangedOnly ) );
   m_Id = DefaultChangesetId;
 }
 
 void Changeset::Reopen( File& file, const OpenFlag flags ) const
 {
-  RCS_SCOPE_TIMER( ("") );
-
   // verify we have it checked out
   file.GetInfo();
   if ( !file.IsCheckedOutByMe() )

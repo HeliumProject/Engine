@@ -7,10 +7,10 @@
 
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/DragDrop/FilteredDropTarget.h"
-#include "InspectReflect/ReflectInterpreter.h"
+#include "Application/Inspect/Reflect/ReflectInterpreter.h"
 #include "Entity.h"
 #include "Application/UI/FileDialog.h"
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 
 namespace Luna
 {

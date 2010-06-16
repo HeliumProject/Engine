@@ -1,7 +1,7 @@
 #pragma once
 
-#include "RCS/RCS.h"
-#include "Perforce/Perforce.h"
+#include "Application/RCS/RCS.h"
+#include "Application/RCS/Providers/Perforce/Perforce.h"
 
 #include <wx/dialog.h>
 

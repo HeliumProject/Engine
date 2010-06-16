@@ -7,8 +7,8 @@
 #include "EntityType.h"
 #include "EntityAssetSet.h"
 
-#include "InspectFile/FileDialogButton.h"
-#include "InspectFile/FileBrowserButton.h"
+#include "Application/Inspect/File/FileDialogButton.h"
+#include "Application/Inspect/File/FileBrowserButton.h"
 #include "Pick.h"
 
 #include "Asset/AssetInit.h"

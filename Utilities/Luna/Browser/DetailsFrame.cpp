@@ -3,7 +3,7 @@
 
 #include "Asset/AssetFile.h"
 #include "Application/UI/ImageManager.h"
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 
 using namespace Luna;
 

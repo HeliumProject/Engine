@@ -13,7 +13,7 @@
 #include "Foundation/Boost/Regex.h" 
 #include "Foundation/CommandLine.h"
 #include "Foundation/Log.h"
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 #include "Application/UI/ImageManager.h"
 
 // Using

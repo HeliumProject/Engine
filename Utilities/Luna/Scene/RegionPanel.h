@@ -4,7 +4,7 @@
 #include "Region.h"
 #include "Core/Selectable.h"
 #include "Application/Inspect/Widgets/InspectPanel.h"
-#include "InspectReflect/ReflectInterpreter.h"
+#include "Application/Inspect/Reflect/ReflectInterpreter.h"
 #include "Core/Enumerator.h"
 
 #include "Content/Region.h"

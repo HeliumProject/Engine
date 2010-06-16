@@ -1,7 +1,7 @@
 #pragma once
 
-#include "API.h"
-#include "File.h"
+#include "Application/API.h"
+#include "RCSFile.h"
 #include "Changeset.h"
 
 namespace RCS
@@ -10,7 +10,7 @@ namespace RCS
   // Abstract base class for a revision control provider
   //
 
-  class RCS_API Provider
+  class APPLICATION_API Provider
   {
   public:
     Provider();

@@ -8,7 +8,7 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "Finder/ExtensionSpecs.h"
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 
 using namespace Asset;
 

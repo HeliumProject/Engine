@@ -205,10 +205,6 @@
 			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
-			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{45D62969-BE7F-4605-B43B-8586C28DD77D}"
 			RelativePathToProject=".\libraries\SQL\SQL.vcproj"
 		/>

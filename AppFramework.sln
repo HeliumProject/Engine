@@ -30,8 +30,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SmartBuffer", "libraries\sm
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQL", "libraries\SQL\SQL.vcproj", "{45D62969-BE7F-4605-B43B-8586C28DD77D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RCS", "libraries\RCS\rcs.vcproj", "{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Platform", "libraries\Platform\platform.vcproj", "{4BC148DF-F832-4724-B9B9-2550D848E737}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BuildTool", "utilities\BuildTool\BuildTool.vcproj", "{469EA158-42B0-40EC-90A8-BAD0CCF649F2}"
@@ -45,8 +43,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Reflect", "libraries\Reflect\reflect.vcproj", "{F3DB1BFC-9BD1-443F-965A-E05E9D95E6AB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FragmentShader", "utilities\FragmentShader\FragmentShader.vcproj", "{83516907-853B-41DA-AB81-7458E6927DE3}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Perforce", "libraries\Perforce\perforce.vcproj", "{9270A244-6F23-48F9-9382-0CCBADBDC0EE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Texture", "libraries\Texture\Texture.vcproj", "{3D90DA7D-4FA4-4DB0-8CCD-6FE9D470F75A}"
 EndProject
@@ -174,12 +170,6 @@ Global
 		{45D62969-BE7F-4605-B43B-8586C28DD77D}.Release|Win32.ActiveCfg = Release|Win32
 		{45D62969-BE7F-4605-B43B-8586C28DD77D}.Release|Win32.Build.0 = Release|Win32
 		{45D62969-BE7F-4605-B43B-8586C28DD77D}.Release|x64.ActiveCfg = Release|Win32
-		{6E1F0C16-ECEA-490C-8621-9760187C9D8E}.Debug|Win32.ActiveCfg = Debug|Win32
-		{6E1F0C16-ECEA-490C-8621-9760187C9D8E}.Debug|Win32.Build.0 = Debug|Win32
-		{6E1F0C16-ECEA-490C-8621-9760187C9D8E}.Debug|x64.ActiveCfg = Debug|Win32
-		{6E1F0C16-ECEA-490C-8621-9760187C9D8E}.Release|Win32.ActiveCfg = Release|Win32
-		{6E1F0C16-ECEA-490C-8621-9760187C9D8E}.Release|Win32.Build.0 = Release|Win32
-		{6E1F0C16-ECEA-490C-8621-9760187C9D8E}.Release|x64.ActiveCfg = Release|Win32
 		{4BC148DF-F832-4724-B9B9-2550D848E737}.Debug|Win32.ActiveCfg = Debug|Win32
 		{4BC148DF-F832-4724-B9B9-2550D848E737}.Debug|Win32.Build.0 = Debug|Win32
 		{4BC148DF-F832-4724-B9B9-2550D848E737}.Debug|x64.ActiveCfg = Debug|Win32
@@ -222,12 +212,6 @@ Global
 		{83516907-853B-41DA-AB81-7458E6927DE3}.Release|Win32.ActiveCfg = Release|Win32
 		{83516907-853B-41DA-AB81-7458E6927DE3}.Release|Win32.Build.0 = Release|Win32
 		{83516907-853B-41DA-AB81-7458E6927DE3}.Release|x64.ActiveCfg = Release|Win32
-		{9270A244-6F23-48F9-9382-0CCBADBDC0EE}.Debug|Win32.ActiveCfg = Debug|Win32
-		{9270A244-6F23-48F9-9382-0CCBADBDC0EE}.Debug|Win32.Build.0 = Debug|Win32
-		{9270A244-6F23-48F9-9382-0CCBADBDC0EE}.Debug|x64.ActiveCfg = Debug|Win32
-		{9270A244-6F23-48F9-9382-0CCBADBDC0EE}.Release|Win32.ActiveCfg = Release|Win32
-		{9270A244-6F23-48F9-9382-0CCBADBDC0EE}.Release|Win32.Build.0 = Release|Win32
-		{9270A244-6F23-48F9-9382-0CCBADBDC0EE}.Release|x64.ActiveCfg = Release|Win32
 		{3D90DA7D-4FA4-4DB0-8CCD-6FE9D470F75A}.Debug|Win32.ActiveCfg = Debug|Win32
 		{3D90DA7D-4FA4-4DB0-8CCD-6FE9D470F75A}.Debug|Win32.Build.0 = Debug|Win32
 		{3D90DA7D-4FA4-4DB0-8CCD-6FE9D470F75A}.Debug|x64.ActiveCfg = Debug|Win32

@@ -1,5 +1,5 @@
-#include "QueryCommands.h"
-#include "Tags.h"
+#include "P4QueryCommands.h"
+#include "P4Tags.h"
 
 #include "Foundation/Log.h"
 

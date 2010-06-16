@@ -23,7 +23,7 @@
 #include "SQL/SQLite.h"
 #include "Platform/Windows/Console.h"
 
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 
 //#include "sqlite/src/sqlite3.h"
 

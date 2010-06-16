@@ -1,4 +1,4 @@
-#include "File.h"
+#include "RCSFile.h"
 #include "RCS.h"
 
 #include "Foundation/File/Path.h"
@@ -16,8 +16,6 @@ void File::GetInfo( const GetInfoFlag flags )
 
 void File::Sync( const u64 timestamp )
 {
-  RCS_SCOPE_TIMER( ( "" ) );
-
   u64 syncTime = timestamp ? timestamp : GetSyncTimestamp();
 
   GetProvider()->Sync( *this, syncTime );
@@ -25,8 +23,6 @@ void File::Sync( const u64 timestamp )
 
 void File::Add( const OpenFlag flags, const u64 changesetId )
 {
-  RCS_SCOPE_TIMER( ("") );
-
   GetInfo();
 
   if ( IsCheckedOutByMe() && ( m_Operation == Operations::Add || m_Operation == Operations::Branch ) )
@@ -48,8 +44,6 @@ void File::Add( const OpenFlag flags, const u64 changesetId )
 
 void File::Edit( const OpenFlag flags, const u64 changesetId )
 {
-  RCS_SCOPE_TIMER( ("") );
-
   GetInfo();
 
   if ( IsCheckedOutByMe() && m_Operation == Operations::Edit )
@@ -84,8 +78,6 @@ void File::Edit( const OpenFlag flags, const u64 changesetId )
 
 void File::Delete( const OpenFlag flags, const u64 changesetId )
 {
-  RCS_SCOPE_TIMER( ("") );
-
   GetInfo();
 
   if ( !ExistsInDepot() )
@@ -112,8 +104,6 @@ void File::Delete( const OpenFlag flags, const u64 changesetId )
 
 void File::Reopen( const Changeset& changeset, const OpenFlag flags )
 {
-  RCS_SCOPE_TIMER( ("") );
-
   // verify we have it checked out
   GetInfo();
   if ( !IsCheckedOutByMe() )
@@ -128,8 +118,6 @@ void File::Reopen( const Changeset& changeset, const OpenFlag flags )
 
 void File::Copy( File& target, const OpenFlag flags, const u64 changesetId )
 {
-  RCS_SCOPE_TIMER( ("") );
-
   GetInfo();
   target.GetInfo();
 
@@ -202,8 +190,6 @@ void File::Rename( File& target, const OpenFlag flags, const u64 changesetId )
 
 void File::Revert( const OpenFlag flags )
 {
-  RCS_SCOPE_TIMER( ("") );
-
   GetInfo();
 
   if ( !IsCheckedOutByMe() )
@@ -224,8 +210,6 @@ void File::Revert( const OpenFlag flags )
 //
 static void _EnsureExistence( const std::string &path )
 {
-  RCS_SCOPE_TIMER( ("") );
-
   Nocturnal::Path file( path );
 
   // if the file doesn't exist, create a zero length 

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "PropertiesManager.h"
 
-#include "InspectReflect/ReflectInterpreter.h"
+#include "Application/Inspect/Reflect/ReflectInterpreter.h"
 #include "Platform/Platform.h"
 #include "Platform/Thread.h"
 

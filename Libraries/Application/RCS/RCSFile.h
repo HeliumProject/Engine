@@ -1,7 +1,7 @@
 #pragma once
 
-#include "API.h"
-#include "Types.h"
+#include "Application/API.h"
+#include "RCSTypes.h"
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 
@@ -72,7 +72,7 @@ namespace RCS
   }
   typedef ActionData::ActionDatum ActionDatum;
 
-  class RCS_API Action : public Nocturnal::RefCountBase< Action >
+  class APPLICATION_API Action : public Nocturnal::RefCountBase< Action >
   {
   public:
     // this gates which of the fields below are populated when info is gathered explicitly
@@ -131,7 +131,7 @@ namespace RCS
   }
   typedef FileData::FileDatum FileDatum;
 
-  class RCS_API File : public Nocturnal::RefCountBase< File >
+  class APPLICATION_API File : public Nocturnal::RefCountBase< File >
   {
   public:
     // this gates which of the fields below are populated when info is gathered explicitly

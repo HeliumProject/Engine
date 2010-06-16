@@ -1,5 +1,5 @@
-#include "ClientCommands.h"
-#include "Tags.h"
+#include "P4ClientCommands.h"
+#include "P4Tags.h"
 
 #include "Foundation/Log.h"
 
@@ -94,8 +94,6 @@ void OpenCommand::OutputStat( StrDict* dict )
 
 void OpenCommand::Run()
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   AddArg( "-c" );
   AddArg( RCS::GetChangesetIdAsString( m_File->m_ChangesetId ) );
 

@@ -2,7 +2,7 @@
 
 #include "Application/API.h"
 #include "ParametricKeyControl.h"
-#include "InspectReflect/ReflectFieldInterpreter.h"
+#include "Application/Inspect/Reflect/ReflectFieldInterpreter.h"
 
 namespace Inspect
 {

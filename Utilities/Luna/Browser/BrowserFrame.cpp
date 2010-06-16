@@ -23,7 +23,7 @@
 #include "Attribute/AttributeHandle.h"
 #include "Foundation/CommandLine.h"
 #include "Editor/DocumentManager.h"
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 #include "Scene/SceneManager.h"
 #include "Application/UI/AutoCompleteComboBox.h"
 #include "Application/UI/Button.h"

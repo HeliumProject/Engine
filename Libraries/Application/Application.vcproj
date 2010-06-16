@@ -62,10 +62,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw28d_core.lib wxbase28d.lib comctl32.lib rpcrt4.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw28d_core.lib wxbase28d.lib comctl32.lib rpcrt4.lib ws2_32.lib libclient.lib librpc.lib libsupp.lib oldnames.lib kernel32.lib advapi32.lib"
 				OutputFile="$(OutDir)/$(ProjectName).dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(boost)\stage\lib;$(wxWidgets)\lib\vc_lib"
+				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/Application.pdb"
@@ -142,10 +142,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw28_core.lib wxbase28.lib comctl32.lib rpcrt4.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw28_core.lib wxbase28.lib comctl32.lib rpcrt4.lib ws2_32.lib libclient.lib librpc.lib libsupp.lib oldnames.lib kernel32.lib advapi32.lib"
 				OutputFile="$(OutDir)/$(ProjectName).dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(boost)\stage\lib;$(wxWidgets)\lib\vc_lib"
+				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -212,14 +212,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
 			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{9270A244-6F23-48F9-9382-0CCBADBDC0EE}"
-			RelativePathToProject=".\libraries\Perforce\perforce.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
-			RelativePathToProject=".\libraries\RCS\rcs.vcproj"
 		/>
 	</References>
 	<Files>
@@ -1141,6 +1133,114 @@
 					RelativePath=".\UI\PerforceUI\WaitDialog.h"
 					>
 				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="RCS"
+			>
+			<File
+				RelativePath=".\RCS\Changeset.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RCS\Changeset.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RCS\Provider.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RCS\Provider.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RCS\RCS.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RCS\RCS.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RCS\RCSFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RCS\RCSFile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RCS\RCSTypes.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RCS\RCSTypes.h"
+				>
+			</File>
+			<Filter
+				Name="Providers"
+				>
+				<Filter
+					Name="Perforce"
+					>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4ChangelistCommands.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4ChangelistCommands.h"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4ClientCommands.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4ClientCommands.h"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4Command.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4Command.h"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4Exceptions.h"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4Provider.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4Provider.h"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4QueryCommands.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4QueryCommands.h"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\P4Tags.h"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\Perforce.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\RCS\Providers\Perforce\Perforce.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<File

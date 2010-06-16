@@ -1,7 +1,7 @@
 #include "PerforceUI.h"
 #include "WaitDialog.h"
 
-#include "Perforce/Perforce.h"
+#include "Application/RCS/Providers/Perforce/Perforce.h"
 
 #include <wx/msgdlg.h>
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "API.h"
+#include "Application/API.h"
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 
@@ -9,7 +9,7 @@ namespace RCS
   static const u64 InvalidChangesetId = 0xFFFFFFFFFFFFFFFF;
   static const u64 DefaultChangesetId = 0x0;
 
-  RCS_API std::string GetChangesetIdAsString( const u64 changesetId );
+  APPLICATION_API std::string GetChangesetIdAsString( const u64 changesetId );
 
   namespace FileStates
   {

@@ -1,11 +1,12 @@
 #pragma once
 
-#include "API.h"
+#include "Application/API.h"
 
-#include "RCS/RCS.h"
-#include "RCS/Provider.h"
+#include "Application/RCS/RCS.h"
+#include "Application/RCS/Provider.h"
 #include "Platform/Compiler.h"
 #include "Foundation/Automation/Event.h"
+#include "Foundation/Profile.h"
 #include "Platform/Thread.h"
 #include "Platform/Mutex.h"
 #include "Platform/Event.h"
@@ -35,14 +36,14 @@ namespace Perforce
   };
   typedef CommandPhases::CommandPhase CommandPhase;
 
-  class PERFORCE_API WaitInterface
+  class APPLICATION_API WaitInterface
   {
   public:
     virtual ~WaitInterface();
     virtual bool StopWaiting() = 0;
   };
   typedef Nocturnal::Signature<bool, WaitInterface*> WaitSignature;
-  PERFORCE_API extern WaitSignature::Delegate g_ShowWaitDialog;
+  APPLICATION_API extern WaitSignature::Delegate g_ShowWaitDialog;
 
   struct MessageArgs
   {
@@ -57,10 +58,10 @@ namespace Perforce
     }
   };
   typedef Nocturnal::Signature<void, const MessageArgs&> MessageSignature;
-  PERFORCE_API extern MessageSignature::Delegate g_ShowWarningDialog;
+  APPLICATION_API extern MessageSignature::Delegate g_ShowWarningDialog;
 
 #pragma warning (disable : 4275)
-  class PERFORCE_API Provider : public RCS::Provider, public KeepAlive, public WaitInterface
+  class APPLICATION_API Provider : public RCS::Provider, public KeepAlive, public WaitInterface
 #pragma warning (default : 4275)
   {
   public:

@@ -2,7 +2,7 @@
 #include "SubmitChangesDialog.h"
 #include "EditorGenerated.h"
 
-#include "rcs/rcs.h"
+#include "Application/RCS/RCS.h"
 #include "Platform/Process.h"
 
 #include <sstream>

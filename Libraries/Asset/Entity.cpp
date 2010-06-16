@@ -7,7 +7,7 @@
 
 #include "Foundation/Log.h"
 #include "Content/Scene.h"
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 
 using namespace Asset;
 using namespace Attribute;

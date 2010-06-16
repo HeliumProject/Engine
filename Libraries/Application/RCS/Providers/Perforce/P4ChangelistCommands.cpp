@@ -1,5 +1,5 @@
-#include "ChangelistCommands.h"
-#include "Tags.h"
+#include "P4ChangelistCommands.h"
+#include "P4Tags.h"
 
 #include "Foundation/Log.h"
 
@@ -80,8 +80,6 @@ void RevertCommand::OutputStat( StrDict* dict )
 
 void CreateChangelistCommand::InputData( StrBuf *buf, Error *e )
 {
-  PERFORCE_SCOPE_TIMER( ( "" ) );
-
   std::string spec;
   spec  = "Change: new\n\n";
   spec += "Client: ";

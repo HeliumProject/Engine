@@ -7,11 +7,11 @@
 # pragma warning (default : 4267 4244)
 #endif
 
-#include "Provider.h"
-#include "Exceptions.h"
+#include "P4Provider.h"
+#include "P4Exceptions.h"
 #include "Platform/Thread.h"
 #include "Foundation/Timer.h"
-#include "RCS/Types.h"
+#include "Application/RCS/RCSTypes.h"
 
 #define PERFORCE_MAX_DICT_ENTRIES 64
 

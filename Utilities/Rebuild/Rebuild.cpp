@@ -5,7 +5,7 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Version.h"
 #include "Foundation/Log.h"
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 #include "Foundation/File/Path.h"
 
 #include "Reflect/Archive.h"

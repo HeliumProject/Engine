@@ -10,7 +10,7 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 
-#include "rcs/rcs.h"
+#include "Application/RCS/RCS.h"
 #include "Debug/Exception.h"
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"

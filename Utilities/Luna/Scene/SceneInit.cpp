@@ -3,7 +3,7 @@
 
 // Libraries
 #include "Foundation/InitializerStack.h"
-#include "Perforce/Perforce.h"
+#include "Application/RCS/Providers/Perforce/Perforce.h"
 #include "Reflect/Registry.h"
 #include "Content/ContentInit.h"
 #include "Content/ContentVersion.h"

@@ -1,5 +1,5 @@
 #include "Perforce.h"
-#include "Provider.h"
+#include "P4Provider.h"
 
 #include "Platform/Windows/Windows.h"
 

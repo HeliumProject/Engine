@@ -3,7 +3,7 @@
 #include "Panels.h"
 
 #include "Foundation/Profile.h"
-#include "Perforce/Provider.h"
+#include "Application/RCS/Providers/Perforce/P4Provider.h"
 
 #include <wx/dialog.h>
 #include <wx/timer.h>

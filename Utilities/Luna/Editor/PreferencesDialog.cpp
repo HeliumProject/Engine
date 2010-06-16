@@ -6,7 +6,7 @@
 
 #include "Core/Enumerator.h"
 #include "Application/Inspect/Widgets/Canvas.h"
-#include "InspectReflect/ReflectInterpreter.h"
+#include "Application/Inspect/Reflect/ReflectInterpreter.h"
 
 using namespace Luna;
 

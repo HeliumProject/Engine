@@ -19,7 +19,7 @@
 
 #include "debug.h"
 
-#include "RCS/RCS.h"
+#include "Application/RCS/RCS.h"
 #include "Foundation/Log.h"
 
 static std::map<wxString, wxString> l_Types;

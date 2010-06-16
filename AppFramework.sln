@@ -24,8 +24,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Attribute", "libraries\Attr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SmartBuffer", "libraries\smartbuffer\smartbuffer.vcproj", "{FADD81C4-992F-4492-9750-C1F4B208EBD1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQL", "libraries\SQL\SQL.vcproj", "{45D62969-BE7F-4605-B43B-8586C28DD77D}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Platform", "libraries\Platform\platform.vcproj", "{4BC148DF-F832-4724-B9B9-2550D848E737}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BuildTool", "utilities\BuildTool\BuildTool.vcproj", "{469EA158-42B0-40EC-90A8-BAD0CCF649F2}"
@@ -148,12 +146,6 @@ Global
 		{FADD81C4-992F-4492-9750-C1F4B208EBD1}.Release|Win32.ActiveCfg = Release|Win32
 		{FADD81C4-992F-4492-9750-C1F4B208EBD1}.Release|Win32.Build.0 = Release|Win32
 		{FADD81C4-992F-4492-9750-C1F4B208EBD1}.Release|x64.ActiveCfg = Release|Win32
-		{45D62969-BE7F-4605-B43B-8586C28DD77D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{45D62969-BE7F-4605-B43B-8586C28DD77D}.Debug|Win32.Build.0 = Debug|Win32
-		{45D62969-BE7F-4605-B43B-8586C28DD77D}.Debug|x64.ActiveCfg = Debug|Win32
-		{45D62969-BE7F-4605-B43B-8586C28DD77D}.Release|Win32.ActiveCfg = Release|Win32
-		{45D62969-BE7F-4605-B43B-8586C28DD77D}.Release|Win32.Build.0 = Release|Win32
-		{45D62969-BE7F-4605-B43B-8586C28DD77D}.Release|x64.ActiveCfg = Release|Win32
 		{4BC148DF-F832-4724-B9B9-2550D848E737}.Debug|Win32.ActiveCfg = Debug|Win32
 		{4BC148DF-F832-4724-B9B9-2550D848E737}.Debug|Win32.Build.0 = Debug|Win32
 		{4BC148DF-F832-4724-B9B9-2550D848E737}.Debug|x64.ActiveCfg = Debug|Win32

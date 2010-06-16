@@ -7,7 +7,7 @@
 
 #include "Foundation/Log.h"
 
-#include "SQL/SQL.h"
+#include "Application/SQL/SQL.h"
 
 #include <cryptlib.h>
 #include <md5.h>

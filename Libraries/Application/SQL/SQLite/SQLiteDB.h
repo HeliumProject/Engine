@@ -1,8 +1,8 @@
 #pragma once
 
-#include "API.h"
+#include "Application/API.h"
 #include "SQLite.h"
-#include "Exceptions.h"
+#include "Application/SQL/SQLExceptions.h"
 
 #include "Platform/Types.h"
 #include "Foundation/File/Path.h"
@@ -15,7 +15,7 @@ namespace SQL
   // Forwards
   class SQLite;
 
-  class SQL_API SQLiteDB : public Nocturnal::RefCountBase< SQLiteDB >
+  class APPLICATION_API SQLiteDB : public Nocturnal::RefCountBase< SQLiteDB >
   {
   public:
     SQLiteDB( const char* friendlyName );

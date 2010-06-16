@@ -205,10 +205,6 @@
 			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{45D62969-BE7F-4605-B43B-8586C28DD77D}"
-			RelativePathToProject=".\libraries\SQL\SQL.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{06092F0D-324B-484D-A9ED-397DFF76AE53}"
 			RelativePathToProject=".\SDK\TinyXML\2.6.1\TinyXML.vcproj"
 		/>

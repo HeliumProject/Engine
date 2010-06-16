@@ -20,7 +20,7 @@
 #include "Foundation/Log.h"
 #include "Debug/Exception.h"
 #include "Finder/AssetSpecs.h"
-#include "SQL/SQLite.h"
+#include "Application/SQL/SQLite/SQLite.h"
 #include "Platform/Windows/Console.h"
 
 #include "Application/RCS/RCS.h"

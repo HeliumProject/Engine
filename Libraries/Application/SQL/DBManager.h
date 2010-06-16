@@ -1,6 +1,6 @@
 #pragma once
 
-#include "API.h"
+#include "Application/API.h"
 #include "SQL.h"
 
 #include "Platform/Types.h"
@@ -15,7 +15,7 @@ namespace SQL
   //  Manages connections to a SQLite DB.
   //  The SQLite is an implementation of the DBManager interface.
   //  
-  class SQL_API DBManager NOC_ABSTRACT
+  class APPLICATION_API DBManager NOC_ABSTRACT
   {
   public:
     DBManager( const char* friendlyName );

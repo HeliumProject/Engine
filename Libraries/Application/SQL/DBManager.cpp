@@ -1,5 +1,5 @@
 #include "DBManager.h"
-#include "Exceptions.h"
+#include "Application/SQL/SQLExceptions.h"
 
 #include "Foundation/Log.h"
 

@@ -9,7 +9,7 @@
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Environment.h"
 #include "Platform/Mutex.h"
-#include "SQL/MySQL.h"
+#include "Application/SQL/MySQL/MySQL.h"
 
 #include <mysql.h>
 #include <errmsg.h>

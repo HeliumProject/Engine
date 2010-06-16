@@ -239,10 +239,6 @@
 			RelativePathToProject=".\libraries\Platform\platform.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{45D62969-BE7F-4605-B43B-8586C28DD77D}"
-			RelativePathToProject=".\libraries\SQL\SQL.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{2E9BA35F-931E-44F5-8374-22CE63DB8BDF}"
 			RelativePathToProject=".\libraries\igDXRender\igDXRender.vcproj"
 		/>

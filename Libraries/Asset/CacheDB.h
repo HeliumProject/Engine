@@ -6,7 +6,7 @@
 #include "CacheDBQuery.h"
 
 #include "Foundation/File/Path.h"
-#include "SQL/SQLiteDB.h"
+#include "Application/SQL/SQLite/SQLiteDB.h"
 #include "Foundation/TUID.h"
 
 

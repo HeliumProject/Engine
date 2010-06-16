@@ -9,7 +9,7 @@
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "SQL/SQLiteDB.h"
+#include "Application/SQL/SQLite/SQLiteDB.h"
 
 namespace Dependencies
 { 

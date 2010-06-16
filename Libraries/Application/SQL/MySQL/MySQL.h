@@ -1,8 +1,8 @@
 #pragma once
 
-#include "API.h"
-#include "Exceptions.h"
-#include "DBManager.h"
+#include "Application/API.h"
+#include "Application/SQL/SQLExceptions.h"
+#include "Application/SQL/DBManager.h"
 #include "MySQLStmt.h"
 
 #include "Platform/Types.h"
@@ -79,7 +79,7 @@ namespace SQL
   // Manages connections to a MySQL DB.
   // The MySQL is an implementation of the MySQL interface.
   //
-  class SQL_API MySQL : public DBManager
+  class APPLICATION_API MySQL : public DBManager
   {
   public:
     MySQL( const char* friendlyName );

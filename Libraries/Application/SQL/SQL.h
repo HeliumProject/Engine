@@ -1,13 +1,13 @@
 #pragma once
 
-#include "API.h"
+#include "Application/API.h"
 #include "Platform/Assert.h"
 #include "Platform/Types.h"
 
 
 namespace SQL
 {
-  typedef SQL_API i32 StmtHandle;
+  typedef APPLICATION_API i32 StmtHandle;
   const static i32 NullStatement = 0; 
 
   static const i64 InvalidRowID = -1;
@@ -52,5 +52,5 @@ namespace SQL
       return s_String[id];
     }
   }
-  SQL_API typedef BinaryOperators::BinaryOperator BinaryOperator;
+  APPLICATION_API typedef BinaryOperators::BinaryOperator BinaryOperator;
 }

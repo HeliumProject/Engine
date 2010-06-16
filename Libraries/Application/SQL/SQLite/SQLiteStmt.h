@@ -1,7 +1,7 @@
 #pragma once
 
-#include "API.h"
-#include "Statement.h"
+#include "Application/API.h"
+#include "Application/SQL/Statement.h"
 
 struct sqlite3_stmt;
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "API.h"
-#include "Exceptions.h"
-#include "DBManager.h"
-#include "SQL.h"
+#include "Application/API.h"
+#include "Application/SQL/SQLExceptions.h"
+#include "Application/SQL/DBManager.h"
+#include "Application/SQL/SQL.h"
 #include "SQLiteStmt.h"
 
 #include "Platform/Types.h"
@@ -92,11 +92,11 @@ namespace SQL
 
     static const u32 Default = ( Schema | Data );
   }
-  typedef SQL_API u32 DumpConfig;
+  typedef APPLICATION_API u32 DumpConfig;
 
 
   /////////////////////////////////////////////////////////////////////////////
-  class SQL_API SQLiteString
+  class APPLICATION_API SQLiteString
   {
   public:
     SQLiteString( const char* sql, ... );
@@ -113,7 +113,7 @@ namespace SQL
   // Manages connections to a SQLite DB.
   // The SQLite is an implementation of the SQLite interface.
   //
-  class SQL_API SQLite : public DBManager
+  class APPLICATION_API SQLite : public DBManager
   {
   private:
     //SQLite();

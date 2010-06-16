@@ -178,8 +178,8 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{45D62969-BE7F-4605-B43B-8586C28DD77D}"
-			RelativePathToProject=".\libraries\SQL\SQL.vcproj"
+			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
+			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
@@ -192,10 +192,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}"
 			RelativePathToProject=".\SDK\Crypto++\5.6.0\Crypto++.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{190A611A-399F-47F6-B686-DF40C8B20F84}"
-			RelativePathToProject=".\SDK\SQLite\3.6.23.1\SQLite.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"

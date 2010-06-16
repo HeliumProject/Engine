@@ -1,6 +1,6 @@
 #pragma once
 
-#include "API.h"
+#include "Pipeline/API.h"
 
 #include <vector>
 #include <set>
@@ -14,7 +14,7 @@ namespace Nocturnal
 {
     namespace ES
     { 
-        class EVENTSYSTEM_API Event : public Nocturnal::RefCountBase< Event >
+        class PIPELINE_API Event : public Nocturnal::RefCountBase< Event >
         {
         public:
             Event

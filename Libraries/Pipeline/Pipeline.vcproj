@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="EventSystem"
-	ProjectGUID="{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}"
-	RootNamespace="EventSystem"
+	Name="Pipeline"
+	ProjectGUID="{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
+	RootNamespace="Pipeline"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -41,11 +41,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\;..\..\utilities;..\..\..\..\shared;$(boost)"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;EVENTSYSTEM_EXPORTS"
+				AdditionalIncludeDirectories="..;$(boost);"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
+				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				EnableEnhancedInstructionSet="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
@@ -64,7 +64,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/$(ProjectName).dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(boost)\stage\lib"
+				AdditionalLibraryDirectories="..;$(boost)\stage\lib"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
@@ -121,10 +121,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\;..\..\utilities;..\..\..\..\shared;$(boost)"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;EVENTSYSTEM_EXPORTS"
+				AdditionalIncludeDirectories="..;$(boost);"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
+				ExceptionHandling="2"
 				RuntimeLibrary="2"
-				EnableEnhancedInstructionSet="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
@@ -141,9 +141,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies=""
 				OutputFile="$(OutDir)/$(ProjectName).dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(boost)\stage\lib"
+				AdditionalLibraryDirectories="..;$(boost)\stage\lib"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -180,45 +181,41 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
-			RelativePathToProject=".\libraries\Platform\platform.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\libraries\Application\Application.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
+			RelativePathToProject=".\libraries\Platform\platform.vcproj"
 		/>
 	</References>
 	<Files>
 		<Filter
-			Name="Event"
+			Name="EventSystem"
 			>
 			<File
-				RelativePath=".\Event.cpp"
+				RelativePath=".\EventSystem\EventSystem.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Event.h"
+				RelativePath=".\EventSystem\EventSystem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EventSystem\EventSystemEvent.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EventSystem\EventSystemEvent.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EventSystem\EventSystemExceptions.h"
 				>
 			</File>
 		</Filter>
 		<File
 			RelativePath=".\API.h"
-			>
-		</File>
-		<File
-			RelativePath=".\EventSystem.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\EventSystem.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Exceptions.h"
 			>
 		</File>
 	</Files>

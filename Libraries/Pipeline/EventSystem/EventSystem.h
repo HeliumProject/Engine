@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "API.h"
-#include "Event.h"
-#include "Exceptions.h"
+#include "Pipeline/API.h"
+#include "EventSystemEvent.h"
+#include "EventSystemExceptions.h"
 
 #include "Platform/Types.h"
 #include "Foundation/File/Path.h"
@@ -17,13 +17,13 @@ namespace Nocturnal
     namespace ES
     {
         class EventSystem;
-        typedef EVENTSYSTEM_API Nocturnal::SmartPtr< EventSystem > EventSystemPtr;
+        typedef PIPELINE_API Nocturnal::SmartPtr< EventSystem > EventSystemPtr;
 
         /////////////////////////////////////////////////////////////////////////////
         // This distributed event system manages the creation and handling of unique events.
         // Assigns each event a TUID and maintains a list of already handled events.
         //
-        class EVENTSYSTEM_API EventSystem : public Nocturnal::RefCountBase< EventSystem >
+        class PIPELINE_API EventSystem : public Nocturnal::RefCountBase< EventSystem >
         {
         public:
             EventSystem( const std::string& rootDirPath, bool writeBinaryFormat );

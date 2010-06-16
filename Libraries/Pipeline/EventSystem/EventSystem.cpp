@@ -47,8 +47,6 @@ EventSystem::EventSystem( const std::string &rootDirPath, bool writeBinaryFormat
 : m_RootDirPath( rootDirPath )
 , m_WriteBinaryFormat( writeBinaryFormat )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     m_RootDirPath.MakePath();
     m_HandledEventsFile.Set( m_RootDirPath.Get() + '/' + s_HandledEventsFilename );
 }
@@ -56,8 +54,6 @@ EventSystem::EventSystem( const std::string &rootDirPath, bool writeBinaryFormat
 
 void EventSystem::CreateEventsFilePath( std::string& eventsFilePath )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     std::string fileName = std::string( getenv("USERNAME") ) + '-' + getenv("COMPUTERNAME") + ".event." + ( m_WriteBinaryFormat ? "dat" : "txt" );
 
     eventsFilePath = m_RootDirPath.Get() + fileName;
@@ -78,8 +74,6 @@ EventSystem::~EventSystem( )
 //
 EventPtr EventSystem::CreateEvent( const std::string &eventData, const std::string& username )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     // get the current time
     __timeb64 now;
     _ftime64_s( &now );
@@ -115,8 +109,6 @@ struct FilterHandledEvents
 //
 void EventSystem::GetUnhandledEvents( V_EventPtr &listOfEvents )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     S_tuid handledEventIDs;
     if ( m_HandledEventsFile.Exists() )
     {
@@ -141,8 +133,6 @@ void EventSystem::GetUnhandledEvents( V_EventPtr &listOfEvents )
 /////////////////////////////////////////////////////////////////////////////
 void EventSystem::GetUnhandledEvents( V_EventPtr& listOfEvents, S_tuid& handledEventIDs )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     // Get the list of events
     GetEvents( listOfEvents );
 
@@ -161,8 +151,6 @@ void EventSystem::GetUnhandledEvents( V_EventPtr& listOfEvents, S_tuid& handledE
 //
 void EventSystem::GetEvents( V_EventPtr& listOfEvents, bool sorted )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     // Binary events
     Nocturnal::S_Path datEventFiles;
     Nocturnal::Directory::GetFiles( m_RootDirPath, datEventFiles, "*.event.dat", true );
@@ -198,8 +186,6 @@ void EventSystem::GetEvents( V_EventPtr& listOfEvents, bool sorted )
 
 void EventSystem::ReadEventsFile( const std::string& eventsFile, V_EventPtr& listOfEvents, bool sorted )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     Nocturnal::Path path( eventsFile );
     if ( path.Extension() == "dat" )
     {
@@ -220,8 +206,6 @@ void EventSystem::ReadEventsFile( const std::string& eventsFile, V_EventPtr& lis
 //
 void EventSystem::ReadBinaryEventsFile( const std::string& eventsFile, V_EventPtr& listOfEvents, bool sorted )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     std::ifstream recordsFile( eventsFile.c_str(), std::ios::in | std::ios::binary ); 
     if ( !recordsFile.is_open() )
     {
@@ -301,8 +285,6 @@ void EventSystem::ReadBinaryEventsFile( const std::string& eventsFile, V_EventPt
 //
 void EventSystem::ReadTextEventsFile( const std::string& eventsFile, V_EventPtr& listOfEvents, bool sorted )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     // Open the file for read
     std::ifstream recordsFile( eventsFile.c_str(), std::ios::in );
     if ( !recordsFile.is_open() )
@@ -416,8 +398,6 @@ void EventSystem::ReadTextEventsFile( const std::string& eventsFile, V_EventPtr&
 //
 void EventSystem::WriteEventsFile( const std::string& eventsFile, const V_EventPtr& listOfEvents )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     Nocturnal::Path path( eventsFile );
     if ( path.Extension() == "dat" )
     {
@@ -436,8 +416,6 @@ void EventSystem::WriteEventsFile( const std::string& eventsFile, const V_EventP
 
 void EventSystem::WriteBinaryEventsFile( const std::string& eventsFile, const V_EventPtr& listOfEvents )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     if ( listOfEvents.empty() )
     {
         return;
@@ -507,8 +485,6 @@ void EventSystem::WriteBinaryEventsFile( const std::string& eventsFile, const V_
 
 void EventSystem::WriteTextEventsFile( const std::string& eventsFile, const V_EventPtr& listOfEvents )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     if ( listOfEvents.empty() )
     {
         return;
@@ -607,8 +583,6 @@ void EventSystem::WriteTextEventsFile( const std::string& eventsFile, const V_Ev
 //
 void EventSystem::WriteHandledEvents( const V_EventPtr& listOfEvents )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     if ( listOfEvents.empty() )
     {
         return;
@@ -638,8 +612,6 @@ void EventSystem::WriteHandledEvents( const V_EventPtr& listOfEvents )
 //
 void EventSystem::FlushHandledEvents()
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     if ( m_HandledEventsFile.Exists() )
     {
         if ( !m_HandledEventsFile.Delete() )
@@ -654,8 +626,6 @@ void EventSystem::FlushHandledEvents()
 //
 bool EventSystem::HandleEventsFileExists()
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     return m_HandledEventsFile.Exists();
 }
 
@@ -665,8 +635,6 @@ bool EventSystem::HandleEventsFileExists()
 // 
 void EventSystem::DumpEventsToTextFile( const std::string& datFile, const std::string& txtFile )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     Nocturnal::Path path( datFile );
     // setup the input file
     if ( !path.Exists() )
@@ -696,8 +664,6 @@ void EventSystem::DumpEventsToTextFile( const std::string& datFile, const std::s
 //
 void EventSystem::LoadEventsFromTextFile( const std::string& txtFile, const std::string& datFile )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     Nocturnal::Path path( txtFile );
     // setup the input file
     if ( !path.Exists() )
@@ -733,8 +699,6 @@ void EventSystem::LoadEventsFromTextFile( const std::string& txtFile, const std:
 //
 void EventSystem::StompEventsFile( const std::string& eventsFile, const V_EventPtr& listOfEvents )
 {
-    EVENTSYSTEM_SCOPE_TIMER((""));
-
     Nocturnal::Path path( eventsFile );
     // make sure it's not read only
     if ( !path.Writable() )

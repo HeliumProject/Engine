@@ -189,10 +189,6 @@
 			RelativePathToProject=".\libraries\Attribute\Attribute.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}"
-			RelativePathToProject=".\libraries\EventSystem\EventSystem.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{FADD81C4-992F-4492-9750-C1F4B208EBD1}"
 			RelativePathToProject=".\libraries\smartbuffer\smartbuffer.vcproj"
 		/>

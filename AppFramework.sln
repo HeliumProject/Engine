@@ -12,8 +12,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextureProcess", "libraries
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Debug", "libraries\Debug\Debug.vcproj", "{1A179B8F-2027-467A-AB0C-7E90575C0F03}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EventSystem", "libraries\EventSystem\EventSystem.vcproj", "{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "igDXContent", "libraries\igDXContent\igDXContent.vcproj", "{54F28FC6-3329-4BBD-BBC5-F0E7AC7A0FE1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rebuild", "utilities\Rebuild\rebuild.vcproj", "{0CA7E77E-15CF-43C7-A106-D3752E650A80}"
@@ -72,6 +70,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tiff", "SDK\tiff\3.9.2\tiff
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua", "SDK\lua\5.1.4\lua.vcproj", "{C87D1745-76D6-4A2E-B655-23564E398510}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pipeline", "Libraries\Pipeline\Pipeline.vcproj", "{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -116,12 +116,6 @@ Global
 		{1A179B8F-2027-467A-AB0C-7E90575C0F03}.Release|Win32.ActiveCfg = Release|Win32
 		{1A179B8F-2027-467A-AB0C-7E90575C0F03}.Release|Win32.Build.0 = Release|Win32
 		{1A179B8F-2027-467A-AB0C-7E90575C0F03}.Release|x64.ActiveCfg = Release|Win32
-		{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}.Debug|Win32.Build.0 = Debug|Win32
-		{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}.Debug|x64.ActiveCfg = Debug|Win32
-		{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}.Release|Win32.ActiveCfg = Release|Win32
-		{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}.Release|Win32.Build.0 = Release|Win32
-		{1A2BBC03-2AA7-4F29-95D1-53BFC285CD7D}.Release|x64.ActiveCfg = Release|Win32
 		{54F28FC6-3329-4BBD-BBC5-F0E7AC7A0FE1}.Debug|Win32.ActiveCfg = Debug|Win32
 		{54F28FC6-3329-4BBD-BBC5-F0E7AC7A0FE1}.Debug|Win32.Build.0 = Debug|Win32
 		{54F28FC6-3329-4BBD-BBC5-F0E7AC7A0FE1}.Debug|x64.ActiveCfg = Debug|Win32
@@ -300,6 +294,12 @@ Global
 		{C87D1745-76D6-4A2E-B655-23564E398510}.Release|Win32.ActiveCfg = Release|Win32
 		{C87D1745-76D6-4A2E-B655-23564E398510}.Release|Win32.Build.0 = Release|Win32
 		{C87D1745-76D6-4A2E-B655-23564E398510}.Release|x64.ActiveCfg = Release|Win32
+		{6005C4B7-F1A0-442F-81AA-1377FF18F910}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6005C4B7-F1A0-442F-81AA-1377FF18F910}.Debug|Win32.Build.0 = Debug|Win32
+		{6005C4B7-F1A0-442F-81AA-1377FF18F910}.Debug|x64.ActiveCfg = Debug|Win32
+		{6005C4B7-F1A0-442F-81AA-1377FF18F910}.Release|Win32.ActiveCfg = Release|Win32
+		{6005C4B7-F1A0-442F-81AA-1377FF18F910}.Release|Win32.Build.0 = Release|Win32
+		{6005C4B7-F1A0-442F-81AA-1377FF18F910}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

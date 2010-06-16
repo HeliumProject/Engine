@@ -208,18 +208,6 @@
 			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{F2A5F05D-41A6-4FFB-82E4-611273CEAAB1}"
-			RelativePathToProject=".\libraries\InspectContent\InspectContent.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{44FD2A28-FC17-4B3E-AAE5-C3DBDD3192E5}"
-			RelativePathToProject=".\libraries\InspectFile\InspectFile.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{ED5B2A66-1F2C-40C1-BC4B-C2AA1D2B7632}"
-			RelativePathToProject=".\libraries\InspectReflect\InspectReflect.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{89167DD4-39A9-444A-8ED9-CAB1B35A0DEA}"
 			RelativePathToProject=".\libraries\Asset\Asset.vcproj"
 		/>
@@ -241,7 +229,6 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{EBC5862F-F9EF-4CA6-AB18-F930074011AB}"
-			RelativePathToProject=".\libraries\Math\math.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{FADD81C4-992F-4492-9750-C1F4B208EBD1}"

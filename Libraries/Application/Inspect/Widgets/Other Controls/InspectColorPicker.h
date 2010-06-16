@@ -3,8 +3,8 @@
 #include "Application/API.h"
 #include "Application/Inspect/Widgets/Control.h"
 
-#include "Math/Color3.h"
-#include "Math/Color4.h"
+#include "Foundation/Math/Color3.h"
+#include "Foundation/Math/Color4.h"
 #include "Reflect/Class.h"
 
 namespace Inspect

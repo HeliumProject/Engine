@@ -1,5 +1,5 @@
 #include "Dialog.h"
-#include "Application/UI/PerforceUI/Panel.h"
+#include "Application/UI/PerforceUI/PerforceUIPanel.h"
 
 using namespace PerforceUI;
 

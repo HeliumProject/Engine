@@ -7,7 +7,7 @@
 
 #include "Foundation/Profile.h" 
 #include "Foundation/Log.h"
-#include "Math/Vector4.h"
+#include "Foundation/Math/Vector4.h"
 
 #include "DDS.h"
 

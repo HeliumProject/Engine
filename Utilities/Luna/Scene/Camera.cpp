@@ -2,7 +2,7 @@
 #include "Camera.h"
 #include "View.h"
 #include "Editor/Orientation.h"
-#include "Math/AngleAxis.h"
+#include "Foundation/Math/AngleAxis.h"
 
 using namespace Math;
 using namespace Luna;

@@ -20,7 +20,7 @@ namespace Math
   class AngleAxis;
   class Quaternion;
 
-  class MATH_API Matrix4
+  class FOUNDATION_API Matrix4
   {
   public: 
     union
@@ -213,9 +213,9 @@ namespace Math
 
     Matrix4&              RowScale( const Vector4& scaleVector );
 
-    friend MATH_API std::ostream& operator<<(std::ostream& outStream, const Matrix4& vector);
-    friend MATH_API std::istream& operator>>(std::istream& inStream, Matrix4& vector);
-    friend class MATH_API Matrix3;
+    friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Matrix4& vector);
+    friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Matrix4& vector);
+    friend class FOUNDATION_API Matrix3;
   };
 
   typedef std::vector< Matrix4 >   V_Matrix4;

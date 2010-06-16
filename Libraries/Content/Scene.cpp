@@ -11,9 +11,9 @@
 #include "Foundation/Log.h"
 
 #include "Application/Application.h"
-#include "Math/EulerAngles.h"
-#include "Math/AlignedBox.h"
-#include "Math/Line.h"
+#include "Foundation/Math/EulerAngles.h"
+#include "Foundation/Math/AlignedBox.h"
+#include "Foundation/Math/Line.h"
 
 #include <algorithm>
 #include <omp.h>

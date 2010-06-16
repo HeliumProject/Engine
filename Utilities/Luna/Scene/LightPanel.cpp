@@ -7,7 +7,7 @@
 #include "SceneManager.h"
 
 #include "Asset/SceneAsset.h"
-#include "math/Color3.h"
+#include "Foundation/Math/Color3.h"
 
 #include "Attribute/AttributeHandle.h"
 

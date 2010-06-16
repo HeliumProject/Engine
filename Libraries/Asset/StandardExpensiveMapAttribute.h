@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ExpensiveMapAttribute.h"
-#include "math/Color3.h"
-#include "math/HDRColor3.h"
+#include "Foundation/Math/Color3.h"
+#include "Foundation/Math/HDRColor3.h"
 
 namespace Asset
 {

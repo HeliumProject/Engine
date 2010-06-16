@@ -1,8 +1,8 @@
 #include "Mesh.h"
 #include "ContentVisitor.h" 
-#include "Math/AlignedBox.h"
-#include "Math/CalculateBounds.h"
-#include "Math/Frustum.h"
+#include "Foundation/Math/AlignedBox.h"
+#include "Foundation/Math/CalculateBounds.h"
+#include "Foundation/Math/Frustum.h"
 #include "Scene.h"
 #include <float.h>
 using namespace Reflect;

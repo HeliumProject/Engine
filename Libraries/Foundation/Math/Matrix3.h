@@ -18,7 +18,7 @@ namespace Math
   class AngleAxis;
   class Quaternion;
 
-  class MATH_API Matrix3
+  class FOUNDATION_API Matrix3
   {
   public:
     union
@@ -166,9 +166,9 @@ namespace Math
     static Matrix3        RotateY (f32 theta);
     static Matrix3        RotateZ (f32 theta);
 
-    friend MATH_API std::ostream& operator<<(std::ostream& outStream, const Matrix3& vector);
-    friend MATH_API std::istream& operator>>(std::istream& inStream, Matrix3& vector);
-    friend class MATH_API Matrix4;
+    friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Matrix3& vector);
+    friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Matrix3& vector);
+    friend class FOUNDATION_API Matrix4;
   };
 
   typedef std::vector<Matrix3> V_Matrix3;

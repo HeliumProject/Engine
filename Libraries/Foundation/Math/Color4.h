@@ -8,7 +8,7 @@
 
 namespace Math
 {
-  class MATH_API Color4
+  class FOUNDATION_API Color4
   {
   public:
     u8 r, g, b, a;
@@ -66,8 +66,8 @@ namespace Math
       va = a / 255.0f;
     }
 
-    friend MATH_API std::ostream& operator<<(std::ostream& outStream, const Color4& color);
-    friend MATH_API std::istream& operator>>(std::istream& inStream, Color4& color);
+    friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Color4& color);
+    friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Color4& color);
   };
 
   typedef std::vector< Color4 > V_Color4;

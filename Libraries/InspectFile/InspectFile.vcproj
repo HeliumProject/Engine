@@ -160,10 +160,6 @@
 			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{EBC5862F-F9EF-4CA6-AB18-F930074011AB}"
-			RelativePathToProject=".\libraries\Math\math.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
 			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
 		/>

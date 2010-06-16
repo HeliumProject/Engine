@@ -7,7 +7,7 @@
 
 namespace Math
 {
-  class MATH_API Vector2
+  class FOUNDATION_API Vector2
   {
   public:
     f32 x, y;
@@ -53,8 +53,8 @@ namespace Math
 
     f32               Dot (const Vector2& v) const { return (x * v.x + y * v.y); }
 
-    friend MATH_API std::ostream& operator<<(std::ostream& outStream, const Vector2& v);
-  	friend MATH_API std::istream& operator>>(std::istream& inStream, Vector2& v);
+    friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Vector2& v);
+  	friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Vector2& v);
   };
 
   typedef std::vector< Vector2 > V_Vector2;

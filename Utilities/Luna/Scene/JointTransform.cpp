@@ -2,7 +2,7 @@
 #include "JointTransform.h"
 
 #include "Content/JointTransform.h"
-#include "math/EulerAngles.h"
+#include "Foundation/Math/EulerAngles.h"
 
 #include "Application/UI/ImageManager.h"
 #include "Color.h"

@@ -19,7 +19,7 @@
 #include "MorphTargetData.h"
 #include "CollisionPrimitive.h"
 
-#include "Math/CalculateBounds.h"
+#include "Foundation/Math/CalculateBounds.h"
 #include "Foundation/Automation/Event.h"
 
 namespace Math

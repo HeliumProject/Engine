@@ -2,7 +2,7 @@
 
 #include "API.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Math/Color3.h"
+#include "Foundation/Math/Color3.h"
 #include "Reflect/Element.h"
 
 namespace Inspect

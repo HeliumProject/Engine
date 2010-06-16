@@ -1,6 +1,6 @@
 #include "Curve.h"
 #include "Scene.h"
-#include "Math/Line.h"
+#include "Foundation/Math/Line.h"
 
 using namespace Reflect;
 using namespace Content;

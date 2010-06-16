@@ -7,7 +7,7 @@
 
 namespace Math
 {
-  class MATH_API Shear
+  class FOUNDATION_API Shear
   {
   public:
     f32 yz, xz, xy;

@@ -102,7 +102,7 @@ namespace Math
     };
   }
 
-  class MATH_API EulerOrder
+  class FOUNDATION_API EulerOrder
   {
   public:
     EulerOrders::EulerOrder o;

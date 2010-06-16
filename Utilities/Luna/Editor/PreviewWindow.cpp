@@ -2,7 +2,7 @@
 #include "PreviewWindow.h"
 
 #include "Finder/ExtensionSpecs.h"
-#include "Math/Utils.h"
+#include "Foundation/Math/Utils.h"
 #include "igDXContent/ContentLoader.h"
 #include "Scene/Camera.h"
 #include "Application/UI/FileDialog.h"

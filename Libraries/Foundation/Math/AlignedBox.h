@@ -6,7 +6,7 @@ namespace Math
 {
   class Matrix4;
 
-  class MATH_API AlignedBox
+  class FOUNDATION_API AlignedBox
   {
   public:
     Vector3 minimum;

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Application/Undo/ExistenceCommand.h"
-#include "math/Vector3.h"
-#include "math/Matrix4.h"
+#include "Foundation/Math/Vector3.h"
+#include "Foundation/Math/Matrix4.h"
 
 namespace Luna
 {

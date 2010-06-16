@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Math/AlignedBox.h"
+#include "Foundation/Math/AlignedBox.h"
 
 #include "Pick.h"
 #include "View.h"

@@ -550,10 +550,6 @@
 			ReferencedProjectIdentifier="{6E1F0C16-ECEA-490C-8621-9760187C9D8E}"
 			RelativePathToProject=".\libraries\rcs\rcs.vcproj"
 		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{EBC5862F-F9EF-4CA6-AB18-F930074011AB}"
-			RelativePathToProject=".\libraries\math\math.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter

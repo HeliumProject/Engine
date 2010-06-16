@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Math/Line.h"
-#include "Math/Frustum.h"
-#include "Math/Vector3.h"
-#include "Math/Matrix4.h"
-#include "Math/Point.h"
+#include "Foundation/Math/Line.h"
+#include "Foundation/Math/Frustum.h"
+#include "Foundation/Math/Vector3.h"
+#include "Foundation/Math/Matrix4.h"
+#include "Foundation/Math/Point.h"
 
 #include "Foundation/Automation/Event.h"
 

@@ -20,7 +20,7 @@
 namespace Math
 {
 
-  class MATH_API BoundingVolumeGenerator
+  class FOUNDATION_API BoundingVolumeGenerator
   {
   public:
     ////////////////////////////////////////////////////////////////////////////////////////////////

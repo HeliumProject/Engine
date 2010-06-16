@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "Transform.h"
 
-#include "math/EulerAngles.h"
-#include "math/Constants.h"
+#include "Foundation/Math/EulerAngles.h"
+#include "Foundation/Math/Constants.h"
 
 #include "Core/Manipulator.h"
 #include "Application/Undo/PropertyCommand.h"

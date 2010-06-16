@@ -15,7 +15,7 @@
 #include "Editor/Editor.h"
 #include "Editor/EditorInit.h"
 #include "Editor/Preferences.h"
-#include "Math/Utils.h"
+#include "Foundation/Math/Utils.h"
 #include "Scene/SceneEditor.h"
 #include "Scene/SceneInit.h"
 #include "Task/TaskInit.h"

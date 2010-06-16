@@ -17,8 +17,8 @@
 
 #include "Editor/Editor.h"
 
-#include "Math/AngleAxis.h"
-#include "Math/Utils.h"
+#include "Foundation/Math/AngleAxis.h"
+#include "Foundation/Math/Utils.h"
 
 using namespace Math;
 using namespace Luna;

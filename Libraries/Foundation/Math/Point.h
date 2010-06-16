@@ -4,7 +4,7 @@
 
 namespace Math
 {
-  class MATH_API Point
+  class FOUNDATION_API Point
   {
   public:
     i32 x, y;

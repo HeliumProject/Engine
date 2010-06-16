@@ -12,7 +12,7 @@ namespace Math
   class EulerAngles;
   class Quaternion;
 
-  class MATH_API AngleAxis
+  class FOUNDATION_API AngleAxis
   {
   public:
     f32 angle;

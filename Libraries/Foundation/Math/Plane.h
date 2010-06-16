@@ -4,7 +4,7 @@
 
 namespace Math
 {
-  class MATH_API Plane
+  class FOUNDATION_API Plane
   {
   public:
     Vector4 p;

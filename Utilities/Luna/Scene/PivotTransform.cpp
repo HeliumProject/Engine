@@ -2,8 +2,8 @@
 #include "PivotTransform.h"
 
 #include "Content/PivotTransform.h"
-#include "math/EulerAngles.h"
-#include "math/Constants.h"
+#include "Foundation/Math/EulerAngles.h"
+#include "Foundation/Math/Constants.h"
 
 #include "Application/Undo/PropertyCommand.h"
 #include "HierarchyNodeType.h"

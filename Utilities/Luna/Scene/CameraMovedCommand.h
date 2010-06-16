@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Application/Undo/Command.h"
-#include "Math/Matrix4.h"
+#include "Foundation/Math/Matrix4.h"
 
 namespace Luna
 {

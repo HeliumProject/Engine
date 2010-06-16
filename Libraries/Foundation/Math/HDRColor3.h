@@ -11,7 +11,7 @@
 
 namespace Math
 {
-  class MATH_API HDRColor3 : public Color3
+  class FOUNDATION_API HDRColor3 : public Color3
   {
   public:
     f32 s; // scale, for HDR
@@ -61,8 +61,8 @@ namespace Math
     void ToLinearFloat( f32& r, f32& g, f32& b ) const;
     void Clamp ( const HDRColor3 &min, const HDRColor3 &mar );
 
-    friend MATH_API std::ostream& operator<<(std::ostream& outStream, const HDRColor3& color);
-    friend MATH_API std::istream& operator>>(std::istream& inStream, HDRColor3& color);
+    friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const HDRColor3& color);
+    friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, HDRColor3& color);
   };
 
   typedef std::vector< HDRColor3 > V_HDRColor3;

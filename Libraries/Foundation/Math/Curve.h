@@ -4,7 +4,7 @@
 
 namespace Math
 {
-  class MATH_API Curve
+  class FOUNDATION_API Curve
   {
   public:
     enum Type

@@ -8,7 +8,7 @@
 
 namespace Math
 {
-  class MATH_API Color3
+  class FOUNDATION_API Color3
   {
   public:
     u8 r, g, b;
@@ -69,8 +69,8 @@ namespace Math
 
     void Clamp ( const Color3 &min, const Color3 &mar );
 
-    friend MATH_API std::ostream& operator<<(std::ostream& outStream, const Color3& color);
-    friend MATH_API std::istream& operator>>(std::istream& inStream, Color3& color);
+    friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Color3& color);
+    friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Color3& color);
   };
 
   typedef std::vector< Color3 > V_Color3;

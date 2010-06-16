@@ -7,7 +7,7 @@
 #include "PivotTransform.h"
 #include "Foundation/Container/BitArray.h"
 #include "Content/ContentTypes.h"
-#include "Math/CalculateBounds.h"
+#include "Foundation/Math/CalculateBounds.h"
 
 namespace Math
 {

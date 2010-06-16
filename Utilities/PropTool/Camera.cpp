@@ -1,6 +1,6 @@
 #include "Camera.h"
-#include "Math/AngleAxis.h"
-#include "Math/Matrix3.h"
+#include "Foundation/Math/AngleAxis.h"
+#include "Foundation/Math/Matrix3.h"
 
 #include "d3dx9.h"
 

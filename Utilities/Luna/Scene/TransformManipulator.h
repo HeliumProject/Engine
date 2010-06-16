@@ -2,8 +2,8 @@
 
 #include <hash_map>
 
-#include "Math/Vector3.h"
-#include "Math/Matrix4.h"
+#include "Foundation/Math/Vector3.h"
+#include "Foundation/Math/Matrix4.h"
 
 #include "SceneTool.h"
 #include "Transform.h"

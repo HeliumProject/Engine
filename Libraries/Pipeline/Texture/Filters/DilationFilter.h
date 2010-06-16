@@ -2,9 +2,9 @@
 
 #include "ImageFilter.h"
 
-namespace IG
+namespace Nocturnal
 {
-  class TEXTURE_API DilationFilter : public ImageFilter
+  class PIPELINE_API DilationFilter : public ImageFilter
   {
   public:
     DilationFilter(const char* inputfile, const char* outputfile, unsigned int xres, unsigned int yres, unsigned int flags, bool smoothSeams);
@@ -14,14 +14,14 @@ namespace IG
     virtual void filter(void);
 
   private:
-    bool DilateHorizontal(IG::Texture *dst, IG::Texture *src);
-    bool DilateVertical(IG::Texture *dst, IG::Texture *src);
-    void Normalize(IG::Texture *input);
+    bool DilateHorizontal(Nocturnal::Texture *dst, Nocturnal::Texture *src);
+    bool DilateVertical(Nocturnal::Texture *dst, Nocturnal::Texture *src);
+    void Normalize(Nocturnal::Texture *input);
 
     // was pure virtual in base class...
     virtual Math::Vector4 generateFilteredPixel(unsigned int x, unsigned int y) { return Math::Vector4::Zero; };
 
-    IG::ColorFormat outputFormat;
+    Nocturnal::ColorFormat outputFormat;
     bool m_smoothSeams;
   };
 }

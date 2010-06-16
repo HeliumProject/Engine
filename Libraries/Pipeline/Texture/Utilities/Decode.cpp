@@ -1,11 +1,11 @@
 #include "Decode.h"
-#include "DXT.h"
+#include "Pipeline/Texture/Image/Formats/DXT.h"
 
 #include "Foundation/Exception.h"
 
 #include <squish.h>
 
-using namespace IG;
+using namespace Nocturnal;
 
 DecodeMips::DecodeMips(MipSet* mips)
 {
@@ -46,10 +46,10 @@ void DecodeMips::Decode(MipSet* mips)
         {
           // we need to convert DUDV back into a 3 byte vector
           i8*   src_data  = (i8*)mips->m_levels[0][i].m_data;
-          f32*  r_ptr     = m_images[i]->m_Channels[0][IG::Texture::R];
-          f32*  g_ptr     = m_images[i]->m_Channels[0][IG::Texture::G];
-          f32*  b_ptr     = m_images[i]->m_Channels[0][IG::Texture::B];
-          f32*  a_ptr     = m_images[i]->m_Channels[0][IG::Texture::A];
+          f32*  r_ptr     = m_images[i]->m_Channels[0][Nocturnal::Texture::R];
+          f32*  g_ptr     = m_images[i]->m_Channels[0][Nocturnal::Texture::G];
+          f32*  b_ptr     = m_images[i]->m_Channels[0][Nocturnal::Texture::B];
+          f32*  a_ptr     = m_images[i]->m_Channels[0][Nocturnal::Texture::A];
 
           for (u32 p=0;p<width*height;p++)
           {

@@ -4,10 +4,10 @@
 #include "Platform/Assert.h"
 
 #include "DDS.h"
-#include "MipSet.h"
-#include "Texture.h"
+#include "Pipeline/Texture/Image/MipSet.h"
+#include "Pipeline/Texture/Texture.h"
 
-namespace IG
+namespace Nocturnal
 {
   struct DXTOptions
   {

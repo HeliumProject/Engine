@@ -10,12 +10,12 @@
 
 #pragma once
 
-#include "Texture.h"
+#include "Pipeline/Texture/Texture.h"
 
-namespace IG
+namespace Nocturnal
 {
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  class TEXTURE_API DecodeMips
+  class PIPELINE_API DecodeMips
   {
   public:
     DecodeMips(MipSet* mips);

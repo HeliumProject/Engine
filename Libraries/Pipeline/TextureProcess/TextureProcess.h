@@ -6,9 +6,9 @@
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Automation/Event.h"
 
-#include "Texture/Texture.h"
+#include "Pipeline/Texture/Texture.h"
 
-namespace IG
+namespace Nocturnal
 {
   class IGSerializer;
 }
@@ -28,8 +28,8 @@ namespace TextureProcess
   extern bool                   g_PowerOfTwo;
   extern float                  g_DefaultScaleX;
   extern float                  g_DefaultScaleY;
-  extern IG::OutputColorFormat  g_DefaultOutputFormat;
-  extern IG::PostMipImageFilter g_DefaultPostMipFilter;
+  extern Nocturnal::OutputColorFormat  g_DefaultOutputFormat;
+  extern Nocturnal::PostMipImageFilter g_DefaultPostMipFilter;
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -57,10 +57,10 @@ namespace TextureProcess
       m_output_format = g_DefaultOutputFormat;
       m_post_filter = g_DefaultPostMipFilter;
 
-      m_runtime.m_wrap_u = IG::UV_WRAP;
-      m_runtime.m_wrap_v = IG::UV_WRAP;
-      m_runtime.m_wrap_w = IG::UV_WRAP;
-      m_runtime.m_filter = IG::FILTER_LINEAR_LINEAR_MIP;
+      m_runtime.m_wrap_u = Nocturnal::UV_WRAP;
+      m_runtime.m_wrap_v = Nocturnal::UV_WRAP;
+      m_runtime.m_wrap_w = Nocturnal::UV_WRAP;
+      m_runtime.m_filter = Nocturnal::FILTER_LINEAR_LINEAR_MIP;
       m_runtime.m_direct_uvs = false;
       m_runtime.m_expand_range = false;
     }
@@ -74,8 +74,8 @@ namespace TextureProcess
     // input data
     std::string                     m_enum;
     std::string                     m_texture_file;
-    IG::OutputColorFormat           m_output_format;
-    IG::PostMipImageFilter          m_post_filter;
+    Nocturnal::OutputColorFormat           m_output_format;
+    Nocturnal::PostMipImageFilter          m_post_filter;
     float                           m_relscale_x;
     float                           m_relscale_y;
     bool                            m_force_power_of_2;
@@ -85,9 +85,9 @@ namespace TextureProcess
     bool                            m_is_detail_map_only;
 
     // output data
-    IG::Texture*                 m_texture;
-    IG::MipSet*                  m_mips;
-    IG::MipSet::RuntimeSettings  m_runtime;
+    Nocturnal::Texture*                 m_texture;
+    Nocturnal::MipSet*                  m_mips;
+    Nocturnal::MipSet::RuntimeSettings  m_runtime;
     u32                          m_mip_levels;
 
     // user data

@@ -9,7 +9,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #include "ImageFilter.h"
 
-using namespace IG;
+using namespace Nocturnal;
 
 ImageFilter::ImageFilter(unsigned int width, unsigned int flags)
 : input(NULL)
@@ -31,7 +31,7 @@ ImageFilter::ImageFilter(const char* inputfile, const char* outputfile, unsigned
 , opFlags(flags)
 , outputPath(outputfile)
 {
-  input = IG::Texture::LoadFile(inputfile, false, NULL);    // gamma correction????
+  input = Nocturnal::Texture::LoadFile(inputfile, false, NULL);    // gamma correction????
 
   if (!input)
   {
@@ -55,7 +55,7 @@ ImageFilter::ImageFilter(const char* inputfile, const char* outputfile, unsigned
     yres = input->m_Height;
   }
 
-  output = new IG::Texture(xres, yres, input->m_NativeFormat);
+  output = new Nocturnal::Texture(xres, yres, input->m_NativeFormat);
 }
 
 ImageFilter::~ImageFilter(void)

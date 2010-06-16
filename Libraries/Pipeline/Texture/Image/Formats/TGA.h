@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 
-namespace IG
+namespace Nocturnal
 {
   #pragma pack(push,1)
   struct TGAHeader

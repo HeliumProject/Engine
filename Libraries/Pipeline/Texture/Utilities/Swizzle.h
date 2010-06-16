@@ -13,10 +13,10 @@
 
 #include "Platform/Types.h"
 
-#include "API.h"
-#include "ColorFormats.h"
+#include "Pipeline/API.h"
+#include "Pipeline/Texture/Image/ColorFormats.h"
 
-namespace IG
+namespace Nocturnal
 {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //   Most of the time when messing with a texture, you will be incrementing
@@ -64,7 +64,7 @@ namespace IG
   //  seemingly random order.
   //
   //////////////////////////////////////////////////////////////////////////////////////////////// 
-  class TEXTURE_API Swizzler 
+  class PIPELINE_API Swizzler 
   {
   public:
     // Dimensions of the texture
@@ -311,7 +311,7 @@ namespace IG
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  TEXTURE_API void UnswizzleBox
+  PIPELINE_API void UnswizzleBox
     (
     u8*       src,          // The source buffer (swizzled data)
     u8*       dst,          // The destination buffer
@@ -322,7 +322,7 @@ namespace IG
     );
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  TEXTURE_API void SwizzleBox
+  PIPELINE_API void SwizzleBox
     (
     u8*         src,          // The source buffer (linear data)
     u8*         dst,          // The destination buffer (swizzled data)

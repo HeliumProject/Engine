@@ -235,14 +235,6 @@
 			RelativePathToProject=".\libraries\smartbuffer\smartbuffer.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{F02AFE63-4A0A-4856-A6C3-0C6A7F866763}"
-			RelativePathToProject=".\libraries\TextureProcess\TextureProcess.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{3D90DA7D-4FA4-4DB0-8CCD-6FE9D470F75A}"
-			RelativePathToProject=".\libraries\Texture\Texture.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
 			RelativePathToProject=".\libraries\Platform\platform.vcproj"
 		/>

@@ -13,7 +13,7 @@
 #include "swizzle.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void IG::SwizzleBox(u8* src, u8* dst, u32 Width, u32 Height, u32 Depth, u32 BytesPerPixel)
+void Nocturnal::SwizzleBox(u8* src, u8* dst, u32 Width, u32 Height, u32 Depth, u32 BytesPerPixel)
 {
   //PERF: swizzling/unswizzling 3D when Width==1 || Height==1 || Depth==1 is the same as 2d 
   //PERF: if 2 of the following are true: Width==2, Height==1, Depth==1: use memcpy
@@ -78,7 +78,7 @@ void IG::SwizzleBox(u8* src, u8* dst, u32 Width, u32 Height, u32 Depth, u32 Byte
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Unswizzle a box from a texture into a buffer.
-void IG::UnswizzleBox(u8* src, u8* dst, u32 Width, u32 Height, u32 Depth, u32 BytesPerPixel)
+void Nocturnal::UnswizzleBox(u8* src, u8* dst, u32 Width, u32 Height, u32 Depth, u32 BytesPerPixel)
 {
   //swizzling/unswizzling 3D when Width==1 || Height==1 || Depth==1 is the same as 2d 
   //if 2 of the following are true: Width==2, Height==1, Depth==1: use memcpy

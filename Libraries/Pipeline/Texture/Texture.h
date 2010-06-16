@@ -7,10 +7,10 @@
 
 #include "Platform/Types.h"
 
-#include "API.h"
-#include "MipSet.h"
+#include "Pipeline/API.h"
+#include "Pipeline/Texture/Image/MipSet.h"
 
-namespace IG
+namespace Nocturnal
 {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -19,7 +19,7 @@ namespace IG
   // Create a 2D texture in the specified format
   //
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  class TEXTURE_API Texture
+  class PIPELINE_API Texture
   {
   public:
     enum TextureType

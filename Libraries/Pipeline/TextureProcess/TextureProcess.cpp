@@ -13,11 +13,7 @@
 #include <vector>
 #include <time.h>
 
-#ifndef WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
-
+#include "Platform/Windows/Windows.h"
 #include "Platform/Types.h"
 #include "Foundation/String/Utilities.h"
 #include "Foundation/Exception.h"
@@ -25,16 +21,16 @@
 
 #include "Foundation/Log.h"
 
-#include "Texture/Texture.h"
-#include "TextureProcess.h"
+#include "Pipeline/Texture/Texture.h"
+#include "Pipeline/TextureProcess/TextureProcess.h"
 
 using namespace TextureProcess;
 
 bool                    TextureProcess::g_PowerOfTwo            = false;
 float                   TextureProcess::g_DefaultScaleX         = 1.0f;
 float                   TextureProcess::g_DefaultScaleY         = 1.0f;
-IG::OutputColorFormat   TextureProcess::g_DefaultOutputFormat   = IG::OUTPUT_CF_DXT5;
-IG::PostMipImageFilter  TextureProcess::g_DefaultPostMipFilter  = IG::IMAGE_FILTER_NONE;
+Nocturnal::OutputColorFormat   TextureProcess::g_DefaultOutputFormat   = Nocturnal::OUTPUT_CF_DXT5;
+Nocturnal::PostMipImageFilter  TextureProcess::g_DefaultPostMipFilter  = Nocturnal::IMAGE_FILTER_NONE;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,21 +55,21 @@ bool TextureProcess::Bank::LoadImages()
     Log::Print( Log::Levels::Verbose, "[%d] : %s", c, filename.c_str());
 
     bool convert_to_linear = (*i)->m_is_normal_map ? false : true;
-    IG::Texture* tex = IG::Texture::LoadFile((*i)->m_texture_file.c_str(), convert_to_linear, NULL);
+    Nocturnal::Texture* tex = Nocturnal::Texture::LoadFile((*i)->m_texture_file.c_str(), convert_to_linear, NULL);
     if (tex)
     {
       // convert all input images to either RGBA 8 bit or RGBA floating point
       if (ColorFormatHDR( (*i)->m_output_format))
       {
-        tex->m_NativeFormat = IG::CF_RGBAFLOATMAP;
+        tex->m_NativeFormat = Nocturnal::CF_RGBAFLOATMAP;
       }
       else
       {
-        tex->m_NativeFormat = IG::CF_ARGB8888;
+        tex->m_NativeFormat = Nocturnal::CF_ARGB8888;
       }
 
       char* type[] = {"2D TEXTURE","CUBE MAP","VOLUME TEXTURE"};
-      if (tex->Type()==IG::Texture::VOLUME)
+      if (tex->Type()==Nocturnal::Texture::VOLUME)
       {
         Log::Print( Log::Levels::Verbose, "%s %d x %d x %d\n",type[tex->Type()],tex->m_Width,tex->m_Height,tex->m_Depth);
       }
@@ -124,7 +120,7 @@ bool TextureProcess::Bank::AdjustImages()
 
       if ( !IsOne( (*i)->m_relscale_x ) || !IsOne( (*i)->m_relscale_y ) )
       {
-        IG::Texture* new_tex = (*i)->m_texture->RelativeScaleImage((*i)->m_relscale_x, (*i)->m_relscale_y, (*i)->m_texture->m_NativeFormat, IG::MIP_FILTER_CUBIC);
+        Nocturnal::Texture* new_tex = (*i)->m_texture->RelativeScaleImage((*i)->m_relscale_x, (*i)->m_relscale_y, (*i)->m_texture->m_NativeFormat, Nocturnal::MIP_FILTER_CUBIC);
         if (new_tex)
         {
           throw Nocturnal::Exception("Failed to rescale, aborting");
@@ -146,7 +142,7 @@ bool TextureProcess::Bank::AdjustImages()
         // this texture is not a power of 2 so rescale it to fix it
         Log::Warning("Rescaling texture '%s', it is not a power of 2 (%d x %d)\n",(*i)->m_texture_file.c_str(),(*i)->m_texture->m_Width,(*i)->m_texture->m_Height);
 
-        IG::Texture* new_tex = (*i)->m_texture->ScaleUpNextPowerOfTwo((*i)->m_texture->m_NativeFormat,IG::MIP_FILTER_CUBIC);
+        Nocturnal::Texture* new_tex = (*i)->m_texture->ScaleUpNextPowerOfTwo((*i)->m_texture->m_NativeFormat,Nocturnal::MIP_FILTER_CUBIC);
         if (!new_tex)
         {
           throw Nocturnal::Exception("Failed to rescale, aborting");
@@ -184,7 +180,7 @@ bool TextureProcess::Bank::CompressImages()
   {
     if ((*i)->m_texture)
     {
-      IG::MipGenOptions m;
+      Nocturnal::MipGenOptions m;
       if ( (*i)->m_force_single_mip_level || !Math::IsPowerOfTwo((*i)->m_texture->m_Width) || !Math::IsPowerOfTwo((*i)->m_texture->m_Height) )
       {
         // NP2 textures get only 1 mip level
@@ -196,11 +192,11 @@ bool TextureProcess::Bank::CompressImages()
       m.m_PostFilter    = (*i)->m_post_filter;
 
       // generate mipset
-      IG::MipSet* mips = NULL;
+      Nocturnal::MipSet* mips = NULL;
       if ( (*i)->m_is_normal_map )
       {
         // does a clone if sizes are the same
-        IG::Texture* nt = (*i)->m_texture->ScaleImage((*i)->m_texture->m_Width, (*i)->m_texture->m_Height, (*i)->m_texture->m_NativeFormat, m.m_Filter);
+        Nocturnal::Texture* nt = (*i)->m_texture->ScaleImage((*i)->m_texture->m_Width, (*i)->m_texture->m_Height, (*i)->m_texture->m_NativeFormat, m.m_Filter);
 
         nt->PrepareFor2ChannelNormalMap((*i)->m_is_detail_normal_map, (*i)->m_is_detail_map_only);
 

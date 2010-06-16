@@ -8,10 +8,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Platform/Types.h"
-#include "Texture.h"
+#include "Pipeline/Texture/Texture.h"
 #include "JPEG.h"
 
-using namespace IG;
+using namespace Nocturnal;
 
 //-----------------------------------------------------------------------------
 static const u8 JPGZig1[64] =

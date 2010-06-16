@@ -1,6 +1,7 @@
 #include "DXT.h"
 
 #include "Platform/Windows/Windows.h"
+#include "Foundation/Profile.h"
 #include "Foundation/Exception.h"
 #include "Foundation/Log.h"
 
@@ -14,7 +15,7 @@ Profile::Accumulator g_DecompressAccum ("DXT Decompress");
 // disabled -- doesn't seem to improve things
 #define DO_PERCEPTUAL_WEIGHTING    0
 
-using namespace IG;
+using namespace Nocturnal;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -32,7 +33,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
 
   OutputColorFormat output_format = dxt_options->m_mip_gen_options[Texture::R]->m_OutputFormat;
 
-  if (output_format == IG::OUTPUT_CF_FLOATMAP)
+  if (output_format == Nocturnal::OUTPUT_CF_FLOATMAP)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(float)*4];
@@ -51,7 +52,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
       src+=4;
     }
   }
-  else if (output_format == IG::OUTPUT_CF_HALFMAP)
+  else if (output_format == Nocturnal::OUTPUT_CF_HALFMAP)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(i16)*4];
@@ -69,7 +70,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
       src+=4;
     }
   }
-  else if (output_format == IG::OUTPUT_CF_F32F32)
+  else if (output_format == Nocturnal::OUTPUT_CF_F32F32)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(float)*2];
@@ -86,7 +87,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
       src+=4;
     }
   }
-  else if (output_format == IG::OUTPUT_CF_F32)
+  else if (output_format == Nocturnal::OUTPUT_CF_F32)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(float)];
@@ -102,7 +103,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
       src+=4;
     }
   }
-  else if (output_format == IG::OUTPUT_CF_RGBE)
+  else if (output_format == Nocturnal::OUTPUT_CF_RGBE)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(u32)];
@@ -118,7 +119,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
       dst+=1;
     }
   }
-  else if (output_format == IG::OUTPUT_CF_F16)
+  else if (output_format == Nocturnal::OUTPUT_CF_F16)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(i16)];
@@ -135,7 +136,7 @@ u32 FinalizeMips_HDR( void *data, int mip_level, int width, int height, int dept
       src+=4;
     }
   }
-  else if (output_format == IG::OUTPUT_CF_F16F16)
+  else if (output_format == Nocturnal::OUTPUT_CF_F16F16)
   {
     // input is RGBA in floating point
     p_curr_mip->m_data = new u8[width*height*sizeof(i16)*2];
@@ -217,26 +218,26 @@ inline u32 ImageByteSize(OutputColorFormat format, u32 width, u32 height)
   switch(format)
   {
     //Fixed point
-    case IG::OUTPUT_CF_ARGB8888:    multiplier = 1.0f;    break;
-    case IG::OUTPUT_CF_ARGB4444:    multiplier = 0.5f;    break;
-    case IG::OUTPUT_CF_ARGB1555:    multiplier = 0.5f;    break;
-    case IG::OUTPUT_CF_RGB565:      multiplier = 0.5f;    break;
-    case IG::OUTPUT_CF_A8:          multiplier = 0.25f;   break;
-    case IG::OUTPUT_CF_L8:          multiplier = 0.25f;   break;
-    case IG::OUTPUT_CF_AL88:        multiplier = 0.5f;    break;
-    case IG::OUTPUT_CF_DXT1:        multiplier = 0.125f;  break;
-    case IG::OUTPUT_CF_DXT3:        multiplier = 0.25f;   break;
-    case IG::OUTPUT_CF_DXT5:        multiplier = 0.25f;   break;
-    case IG::OUTPUT_CF_DUDV:        multiplier = 0.5f;    break;
+    case Nocturnal::OUTPUT_CF_ARGB8888:    multiplier = 1.0f;    break;
+    case Nocturnal::OUTPUT_CF_ARGB4444:    multiplier = 0.5f;    break;
+    case Nocturnal::OUTPUT_CF_ARGB1555:    multiplier = 0.5f;    break;
+    case Nocturnal::OUTPUT_CF_RGB565:      multiplier = 0.5f;    break;
+    case Nocturnal::OUTPUT_CF_A8:          multiplier = 0.25f;   break;
+    case Nocturnal::OUTPUT_CF_L8:          multiplier = 0.25f;   break;
+    case Nocturnal::OUTPUT_CF_AL88:        multiplier = 0.5f;    break;
+    case Nocturnal::OUTPUT_CF_DXT1:        multiplier = 0.125f;  break;
+    case Nocturnal::OUTPUT_CF_DXT3:        multiplier = 0.25f;   break;
+    case Nocturnal::OUTPUT_CF_DXT5:        multiplier = 0.25f;   break;
+    case Nocturnal::OUTPUT_CF_DUDV:        multiplier = 0.5f;    break;
 
     //Floating point
-    case IG::OUTPUT_CF_F32:         multiplier = 1.0f;    break;
-    case IG::OUTPUT_CF_F32F32:      multiplier = 2.0f;    break;
-    case IG::OUTPUT_CF_FLOATMAP:    multiplier = 4.0f;    break;
-    case IG::OUTPUT_CF_F16:         multiplier = 0.5f;    break;
-    case IG::OUTPUT_CF_F16F16:      multiplier = 1.0f;    break;
-    case IG::OUTPUT_CF_HALFMAP:     multiplier = 2.0f;    break;
-    case IG::OUTPUT_CF_RGBE:        multiplier = 1.0f;    break;
+    case Nocturnal::OUTPUT_CF_F32:         multiplier = 1.0f;    break;
+    case Nocturnal::OUTPUT_CF_F32F32:      multiplier = 2.0f;    break;
+    case Nocturnal::OUTPUT_CF_FLOATMAP:    multiplier = 4.0f;    break;
+    case Nocturnal::OUTPUT_CF_F16:         multiplier = 0.5f;    break;
+    case Nocturnal::OUTPUT_CF_F16F16:      multiplier = 1.0f;    break;
+    case Nocturnal::OUTPUT_CF_HALFMAP:     multiplier = 2.0f;    break;
+    case Nocturnal::OUTPUT_CF_RGBE:        multiplier = 1.0f;    break;
     default:
       NOC_ASSERT(!"WTF");
   }
@@ -252,9 +253,9 @@ inline bool ShouldAllocateWorkBuffer(OutputColorFormat format)
 {
   switch(format)
   {
-    case IG::OUTPUT_CF_DXT1:
-    case IG::OUTPUT_CF_DXT3:
-    case IG::OUTPUT_CF_DXT5:
+    case Nocturnal::OUTPUT_CF_DXT1:
+    case Nocturnal::OUTPUT_CF_DXT3:
+    case Nocturnal::OUTPUT_CF_DXT5:
       return true;
   }
 
@@ -274,28 +275,28 @@ void ProcessMip(const Texture* mip, u32 mip_level, u32 face, OutputColorFormat f
   switch(format)
   {
     //Fixed point
-    case IG::OUTPUT_CF_ARGB4444:  conversion_format = CF_ARGB4444;    break;
-    case IG::OUTPUT_CF_ARGB1555:  conversion_format = CF_ARGB1555;    break;
-    case IG::OUTPUT_CF_RGB565:    conversion_format = CF_RGB565;      break;
-    case IG::OUTPUT_CF_A8:        conversion_format = CF_A8;          break;
-    case IG::OUTPUT_CF_L8:        conversion_format = CF_L8;          break;
-    case IG::OUTPUT_CF_AL88:      conversion_format = CF_AL88;        break;
-    case IG::OUTPUT_CF_DXT1:      dxt_compress      = true;           break;
-    case IG::OUTPUT_CF_DXT3:      dxt_compress      = true;           break;
-    case IG::OUTPUT_CF_DXT5:      dxt_compress      = true;           break;
-    case IG::OUTPUT_CF_DUDV:
+    case Nocturnal::OUTPUT_CF_ARGB4444:  conversion_format = CF_ARGB4444;    break;
+    case Nocturnal::OUTPUT_CF_ARGB1555:  conversion_format = CF_ARGB1555;    break;
+    case Nocturnal::OUTPUT_CF_RGB565:    conversion_format = CF_RGB565;      break;
+    case Nocturnal::OUTPUT_CF_A8:        conversion_format = CF_A8;          break;
+    case Nocturnal::OUTPUT_CF_L8:        conversion_format = CF_L8;          break;
+    case Nocturnal::OUTPUT_CF_AL88:      conversion_format = CF_AL88;        break;
+    case Nocturnal::OUTPUT_CF_DXT1:      dxt_compress      = true;           break;
+    case Nocturnal::OUTPUT_CF_DXT3:      dxt_compress      = true;           break;
+    case Nocturnal::OUTPUT_CF_DXT5:      dxt_compress      = true;           break;
+    case Nocturnal::OUTPUT_CF_DUDV:
       NOC_ASSERT("We don't use this format! Converting to A8L8");
       conversion_format = CF_AL88;
       break;
 
     //Floating point
-    case IG::OUTPUT_CF_F32:
-    case IG::OUTPUT_CF_F32F32:
-    case IG::OUTPUT_CF_FLOATMAP:
-    case IG::OUTPUT_CF_F16:
-    case IG::OUTPUT_CF_F16F16:
-    case IG::OUTPUT_CF_HALFMAP:
-    case IG::OUTPUT_CF_RGBE:
+    case Nocturnal::OUTPUT_CF_F32:
+    case Nocturnal::OUTPUT_CF_F32F32:
+    case Nocturnal::OUTPUT_CF_FLOATMAP:
+    case Nocturnal::OUTPUT_CF_F16:
+    case Nocturnal::OUTPUT_CF_F16F16:
+    case Nocturnal::OUTPUT_CF_HALFMAP:
+    case Nocturnal::OUTPUT_CF_RGBE:
     {
       conversion_format = CF_RGBAFLOATMAP;
       hdr               = true;
@@ -313,7 +314,7 @@ void ProcessMip(const Texture* mip, u32 mip_level, u32 face, OutputColorFormat f
   if (dxt_compress)
   {
     // force alpha to 1 in the source buffer before doing dxt1 compression
-    if (format == IG::OUTPUT_CF_DXT1)
+    if (format == Nocturnal::OUTPUT_CF_DXT1)
     {
       for (u32 a_idx = 0; a_idx < mip->m_Width*mip->m_Height*depth; ++a_idx)
       {
@@ -326,8 +327,8 @@ void ProcessMip(const Texture* mip, u32 mip_level, u32 face, OutputColorFormat f
 
     switch (format)
     {
-      case IG::OUTPUT_CF_DXT3:      squish_flags |= squish::kDxt3;  break;
-      case IG::OUTPUT_CF_DXT5:      squish_flags |= squish::kDxt5;  break;
+      case Nocturnal::OUTPUT_CF_DXT3:      squish_flags |= squish::kDxt3;  break;
+      case Nocturnal::OUTPUT_CF_DXT5:      squish_flags |= squish::kDxt5;  break;
       default:                      squish_flags |= squish::kDxt1;  break;
     }
 
@@ -338,7 +339,7 @@ void ProcessMip(const Texture* mip, u32 mip_level, u32 face, OutputColorFormat f
 #endif
       squish_flags |= squish::kColourMetricUniform;       // assume we are working with linear data
 
-    if ((format != IG::OUTPUT_CF_DXT1) && convert_to_srgb)
+    if ((format != Nocturnal::OUTPUT_CF_DXT1) && convert_to_srgb)
     {
       squish_flags |= squish::kWeightColourByAlpha;
     }
@@ -382,7 +383,7 @@ void ProcessMip(const Texture* mip, u32 mip_level, u32 face, OutputColorFormat f
 }
 
 
-bool IG::DXTGenerateMipSet(const Texture* top_mip, DXTOptions* dxt_options)
+bool Nocturnal::DXTGenerateMipSet(const Texture* top_mip, DXTOptions* dxt_options)
 {
   //Shorter dereferencing names
   const MipGenOptions*    c_mip_gen_opts[4] = { dxt_options->m_mip_gen_options[Texture::R],
@@ -410,9 +411,9 @@ bool IG::DXTGenerateMipSet(const Texture* top_mip, DXTOptions* dxt_options)
   u32                     pixel_size_limit  = 1;
 
   //Since DXT compression works on 4 x 4 pixel blocks, don't go below size 4 for those formats
-  if((output_format  == IG::OUTPUT_CF_DXT1) ||
-     (output_format  == IG::OUTPUT_CF_DXT3) ||
-     (output_format  == IG::OUTPUT_CF_DXT5))
+  if((output_format  == Nocturnal::OUTPUT_CF_DXT1) ||
+     (output_format  == Nocturnal::OUTPUT_CF_DXT3) ||
+     (output_format  == Nocturnal::OUTPUT_CF_DXT5))
   {
     pixel_size_limit = 4;
 
@@ -422,14 +423,14 @@ bool IG::DXTGenerateMipSet(const Texture* top_mip, DXTOptions* dxt_options)
       //Choose uncompressed ARGB8888
 
       //We don't support alpha with DXT1 textures
-      if(output_format == IG::OUTPUT_CF_DXT1)
+      if(output_format == Nocturnal::OUTPUT_CF_DXT1)
       {
-        dxt_options->m_mips->m_runtime.m_alpha_channel = IG::COLOR_CHANNEL_FORCE_ONE;
+        dxt_options->m_mips->m_runtime.m_alpha_channel = Nocturnal::COLOR_CHANNEL_FORCE_ONE;
       }     
 
       //Change the format
-      output_format                 = IG::OUTPUT_CF_ARGB8888;
-      dxt_options->m_mips->m_format = IG::OUTPUT_CF_ARGB8888;
+      output_format                 = Nocturnal::OUTPUT_CF_ARGB8888;
+      dxt_options->m_mips->m_format = Nocturnal::OUTPUT_CF_ARGB8888;
     }
   }
 
@@ -520,15 +521,15 @@ bool IG::DXTGenerateMipSet(const Texture* top_mip, DXTOptions* dxt_options)
     // point composite filtering works by blending 50% of a point-sample mip into the generated mip
     //
     bool point_comp_mask[4];
-    point_comp_mask[Texture::R] = (c_mip_gen_filters[Texture::R] == IG::MIP_FILTER_POINT_COMPOSITE);
-    point_comp_mask[Texture::G] = (c_mip_gen_filters[Texture::G] == IG::MIP_FILTER_POINT_COMPOSITE);
-    point_comp_mask[Texture::B] = (c_mip_gen_filters[Texture::B] == IG::MIP_FILTER_POINT_COMPOSITE);
-    point_comp_mask[Texture::A] = (c_mip_gen_filters[Texture::A] == IG::MIP_FILTER_POINT_COMPOSITE);
+    point_comp_mask[Texture::R] = (c_mip_gen_filters[Texture::R] == Nocturnal::MIP_FILTER_POINT_COMPOSITE);
+    point_comp_mask[Texture::G] = (c_mip_gen_filters[Texture::G] == Nocturnal::MIP_FILTER_POINT_COMPOSITE);
+    point_comp_mask[Texture::B] = (c_mip_gen_filters[Texture::B] == Nocturnal::MIP_FILTER_POINT_COMPOSITE);
+    point_comp_mask[Texture::A] = (c_mip_gen_filters[Texture::A] == Nocturnal::MIP_FILTER_POINT_COMPOSITE);
 
     if (point_comp_mask[Texture::R] || point_comp_mask[Texture::G] || point_comp_mask[Texture::B] || point_comp_mask[Texture::A])
     {
       // generate a point sampled mip from the higher res image
-      const FilterType point_sampled_filters[] = { IG::MIP_FILTER_POINT, IG::MIP_FILTER_POINT, IG::MIP_FILTER_POINT, IG::MIP_FILTER_POINT };
+      const FilterType point_sampled_filters[] = { Nocturnal::MIP_FILTER_POINT, Nocturnal::MIP_FILTER_POINT, Nocturnal::MIP_FILTER_POINT, Nocturnal::MIP_FILTER_POINT };
       Texture* point_sampled_mip = prev_mip->ScaleImageFace( curr_mip_width, 
                                                              curr_mip_height, 
                                                              curr_face, 
@@ -553,10 +554,10 @@ bool IG::DXTGenerateMipSet(const Texture* top_mip, DXTOptions* dxt_options)
     if((use_mip_post_filters != 0) && (pass_sum != 0))
     {
       //Determine the final post filters
-      PostMipImageFilter  post_filters[]  = { c_mip_gen_opts[Texture::R]->m_ApplyPostFilter[i] ? c_mip_post_filters[Texture::R] : IG::IMAGE_FILTER_NONE,
-                                              c_mip_gen_opts[Texture::G]->m_ApplyPostFilter[i] ? c_mip_post_filters[Texture::G] : IG::IMAGE_FILTER_NONE,
-                                              c_mip_gen_opts[Texture::B]->m_ApplyPostFilter[i] ? c_mip_post_filters[Texture::B] : IG::IMAGE_FILTER_NONE,
-                                              c_mip_gen_opts[Texture::A]->m_ApplyPostFilter[i] ? c_mip_post_filters[Texture::A] : IG::IMAGE_FILTER_NONE};
+      PostMipImageFilter  post_filters[]  = { c_mip_gen_opts[Texture::R]->m_ApplyPostFilter[i] ? c_mip_post_filters[Texture::R] : Nocturnal::IMAGE_FILTER_NONE,
+                                              c_mip_gen_opts[Texture::G]->m_ApplyPostFilter[i] ? c_mip_post_filters[Texture::G] : Nocturnal::IMAGE_FILTER_NONE,
+                                              c_mip_gen_opts[Texture::B]->m_ApplyPostFilter[i] ? c_mip_post_filters[Texture::B] : Nocturnal::IMAGE_FILTER_NONE,
+                                              c_mip_gen_opts[Texture::A]->m_ApplyPostFilter[i] ? c_mip_post_filters[Texture::A] : Nocturnal::IMAGE_FILTER_NONE};
 
       //Filter the mip
       Texture*            filtered_mip    = curr_mip->FilterImageFace(post_filters, 0, i);
@@ -565,10 +566,10 @@ bool IG::DXTGenerateMipSet(const Texture* top_mip, DXTOptions* dxt_options)
       // high pass filtering is handled separately because it is more complex than the other post-mip filters
       //
       bool high_pass_mask[4];
-      high_pass_mask[Texture::R] = (post_filters[Texture::R] == IG::IMAGE_FILTER_HIGH_PASS);
-      high_pass_mask[Texture::G] = (post_filters[Texture::G] == IG::IMAGE_FILTER_HIGH_PASS);
-      high_pass_mask[Texture::B] = (post_filters[Texture::B] == IG::IMAGE_FILTER_HIGH_PASS);
-      high_pass_mask[Texture::A] = (post_filters[Texture::A] == IG::IMAGE_FILTER_HIGH_PASS);
+      high_pass_mask[Texture::R] = (post_filters[Texture::R] == Nocturnal::IMAGE_FILTER_HIGH_PASS);
+      high_pass_mask[Texture::G] = (post_filters[Texture::G] == Nocturnal::IMAGE_FILTER_HIGH_PASS);
+      high_pass_mask[Texture::B] = (post_filters[Texture::B] == Nocturnal::IMAGE_FILTER_HIGH_PASS);
+      high_pass_mask[Texture::A] = (post_filters[Texture::A] == Nocturnal::IMAGE_FILTER_HIGH_PASS);
 
       if (high_pass_mask[Texture::R] || high_pass_mask[Texture::G] || high_pass_mask[Texture::B] || high_pass_mask[Texture::A])
       {

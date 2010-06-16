@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Reflect/Enumeration.h"
-#include "Texture/ColorFormats.h"
-#include "Texture/MipSet.h"
+#include "Pipeline/Texture/Image/ColorFormats.h"
+#include "Pipeline/Texture/Image/MipSet.h"
 
 namespace Asset
 {
@@ -10,14 +10,14 @@ namespace Asset
   {
     enum TextureWrapMode
     {
-      Wrap    = IG::UV_WRAP,
-      Mirror  = IG::UV_MIRROR,
-      Clamp   = IG::UV_CLAMP,
-      Border  = IG::UV_BORDER,
+      Wrap    = Nocturnal::UV_WRAP,
+      Mirror  = Nocturnal::UV_MIRROR,
+      Clamp   = Nocturnal::UV_CLAMP,
+      Border  = Nocturnal::UV_BORDER,
       Count
     };
 
-    NOC_COMPILE_ASSERT(Count == IG::UV_COUNT);
+    NOC_COMPILE_ASSERT(Count == Nocturnal::UV_COUNT);
 
     static void TextureWrapModeEnumerateEnumeration( Reflect::Enumeration* info )
     {
@@ -34,29 +34,29 @@ namespace Asset
   {
     enum TextureColorFormat
     {
-      UNKNOWN  = IG::OUTPUT_CF_UNKNOWN,
-      ARGB8888 = IG::OUTPUT_CF_ARGB8888,
-      ARGB4444 = IG::OUTPUT_CF_ARGB4444,
-      ARGB1555 = IG::OUTPUT_CF_ARGB1555,
-      RGB565   = IG::OUTPUT_CF_RGB565,
-      A8       = IG::OUTPUT_CF_A8,
-      L8       = IG::OUTPUT_CF_L8,
-      AL88     = IG::OUTPUT_CF_AL88,
-      DXT1     = IG::OUTPUT_CF_DXT1,
-      DXT3     = IG::OUTPUT_CF_DXT3,
-      DXT5     = IG::OUTPUT_CF_DXT5,
-      DUDV     = IG::OUTPUT_CF_DUDV,
-      F32      = IG::OUTPUT_CF_F32,
-      F32F32   = IG::OUTPUT_CF_F32F32,
-      FLOATMAP = IG::OUTPUT_CF_FLOATMAP,
-      F16      = IG::OUTPUT_CF_F16,
-      F16F16   = IG::OUTPUT_CF_F16F16,
-      HALFMAP  = IG::OUTPUT_CF_HALFMAP,
-      RGBE     = IG::OUTPUT_CF_RGBE,
+      UNKNOWN  = Nocturnal::OUTPUT_CF_UNKNOWN,
+      ARGB8888 = Nocturnal::OUTPUT_CF_ARGB8888,
+      ARGB4444 = Nocturnal::OUTPUT_CF_ARGB4444,
+      ARGB1555 = Nocturnal::OUTPUT_CF_ARGB1555,
+      RGB565   = Nocturnal::OUTPUT_CF_RGB565,
+      A8       = Nocturnal::OUTPUT_CF_A8,
+      L8       = Nocturnal::OUTPUT_CF_L8,
+      AL88     = Nocturnal::OUTPUT_CF_AL88,
+      DXT1     = Nocturnal::OUTPUT_CF_DXT1,
+      DXT3     = Nocturnal::OUTPUT_CF_DXT3,
+      DXT5     = Nocturnal::OUTPUT_CF_DXT5,
+      DUDV     = Nocturnal::OUTPUT_CF_DUDV,
+      F32      = Nocturnal::OUTPUT_CF_F32,
+      F32F32   = Nocturnal::OUTPUT_CF_F32F32,
+      FLOATMAP = Nocturnal::OUTPUT_CF_FLOATMAP,
+      F16      = Nocturnal::OUTPUT_CF_F16,
+      F16F16   = Nocturnal::OUTPUT_CF_F16F16,
+      HALFMAP  = Nocturnal::OUTPUT_CF_HALFMAP,
+      RGBE     = Nocturnal::OUTPUT_CF_RGBE,
       COUNT
     };
 
-    NOC_COMPILE_ASSERT(COUNT == IG::OUTPUT_CF_COUNT);
+    NOC_COMPILE_ASSERT(COUNT == Nocturnal::OUTPUT_CF_COUNT);
 
     static void TextureColorFormatEnumerateEnumeration( Reflect::Enumeration* info )
     {
@@ -88,16 +88,16 @@ namespace Asset
   {
     enum RunTimeFilter
     {
-      RTF_POINT = IG::FILTER_POINT_SELECT_MIP,
-      RTF_BILINEAR = IG::FILTER_LINEAR_SELECT_MIP,
-      RTF_TRILINEAR = IG::FILTER_LINEAR_LINEAR_MIP,
-      RTF_ANISO2_BI = IG::FILTER_ANISO_2_SELECT_MIP,
-      RTF_ANISO2_TRI = IG::FILTER_ANISO_2_LINEAR_MIP,
-      RTF_ANISO4_BI = IG::FILTER_ANISO_4_SELECT_MIP,
-      RTF_ANISO4_TRI = IG::FILTER_ANISO_4_LINEAR_MIP,
+      RTF_POINT = Nocturnal::FILTER_POINT_SELECT_MIP,
+      RTF_BILINEAR = Nocturnal::FILTER_LINEAR_SELECT_MIP,
+      RTF_TRILINEAR = Nocturnal::FILTER_LINEAR_LINEAR_MIP,
+      RTF_ANISO2_BI = Nocturnal::FILTER_ANISO_2_SELECT_MIP,
+      RTF_ANISO2_TRI = Nocturnal::FILTER_ANISO_2_LINEAR_MIP,
+      RTF_ANISO4_BI = Nocturnal::FILTER_ANISO_4_SELECT_MIP,
+      RTF_ANISO4_TRI = Nocturnal::FILTER_ANISO_4_LINEAR_MIP,
       RTF_COUNT
     };
-    NOC_COMPILE_ASSERT( RTF_COUNT == IG::FILTER_COUNT );
+    NOC_COMPILE_ASSERT( RTF_COUNT == Nocturnal::FILTER_COUNT );
     static void RunTimeFilterEnumerateEnumeration( Reflect::Enumeration* info )
     {
       info->AddElement(RTF_POINT, "RTF_POINT", "POINT");
@@ -134,20 +134,20 @@ namespace Asset
   {
     enum MipGenFilterType
     {
-      MIP_NONE            = IG::MIP_FILTER_NONE,
-      MIP_POINT           = IG::MIP_FILTER_POINT,
-      MIP_BOX             = IG::MIP_FILTER_BOX,
-      MIP_TRIANGLE        = IG::MIP_FILTER_TRIANGLE,
-      MIP_QUADRATIC       = IG::MIP_FILTER_QUADRATIC,
-      MIP_CUBIC           = IG::MIP_FILTER_CUBIC,
-      MIP_MITCHELL        = IG::MIP_FILTER_MITCHELL,
-      MIP_GAUSSIAN        = IG::MIP_FILTER_GAUSSIAN,
-      MIP_SINC            = IG::MIP_FILTER_SINC,
-      MIP_KAISER          = IG::MIP_FILTER_KAISER,
-      MIP_POINT_COMPOSITE = IG::MIP_FILTER_POINT_COMPOSITE,
+      MIP_NONE            = Nocturnal::MIP_FILTER_NONE,
+      MIP_POINT           = Nocturnal::MIP_FILTER_POINT,
+      MIP_BOX             = Nocturnal::MIP_FILTER_BOX,
+      MIP_TRIANGLE        = Nocturnal::MIP_FILTER_TRIANGLE,
+      MIP_QUADRATIC       = Nocturnal::MIP_FILTER_QUADRATIC,
+      MIP_CUBIC           = Nocturnal::MIP_FILTER_CUBIC,
+      MIP_MITCHELL        = Nocturnal::MIP_FILTER_MITCHELL,
+      MIP_GAUSSIAN        = Nocturnal::MIP_FILTER_GAUSSIAN,
+      MIP_SINC            = Nocturnal::MIP_FILTER_SINC,
+      MIP_KAISER          = Nocturnal::MIP_FILTER_KAISER,
+      MIP_POINT_COMPOSITE = Nocturnal::MIP_FILTER_POINT_COMPOSITE,
       MIP_COUNT
     };
-    NOC_COMPILE_ASSERT( MIP_COUNT == IG::MIP_FILTER_COUNT );
+    NOC_COMPILE_ASSERT( MIP_COUNT == Nocturnal::MIP_FILTER_COUNT );
 
     static void MipGenFilterTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
@@ -171,20 +171,20 @@ namespace Asset
   {
     enum PostMipFilterType
     {
-      POST_NOCHANGE        = IG::IMAGE_FILTER_NONE,
-      POST_LIGHTER         = IG::IMAGE_FILTER_LIGHTER,
-      POST_DARKER          = IG::IMAGE_FILTER_DARKER,
-      POST_MORE_CONTRAST   = IG::IMAGE_FILTER_MORE_CONTRAST,
-      POST_LESS_CONTRAST   = IG::IMAGE_FILTER_LESS_CONTRAST,
-      POST_SMOOTH          = IG::IMAGE_FILTER_SMOOTH,
-      POST_SHARPEN_GRADUAL = IG::IMAGE_FILTER_SHARPEN_GRADUAL,
-      POST_SHARPEN1X       = IG::IMAGE_FILTER_SHARPEN1X,
-      POST_SHARPEN2X       = IG::IMAGE_FILTER_SHARPEN2X,
-      POST_SHARPEN3X       = IG::IMAGE_FILTER_SHARPEN3X,
-      POST_HIGH_PASS       = IG::IMAGE_FILTER_HIGH_PASS,
+      POST_NOCHANGE        = Nocturnal::IMAGE_FILTER_NONE,
+      POST_LIGHTER         = Nocturnal::IMAGE_FILTER_LIGHTER,
+      POST_DARKER          = Nocturnal::IMAGE_FILTER_DARKER,
+      POST_MORE_CONTRAST   = Nocturnal::IMAGE_FILTER_MORE_CONTRAST,
+      POST_LESS_CONTRAST   = Nocturnal::IMAGE_FILTER_LESS_CONTRAST,
+      POST_SMOOTH          = Nocturnal::IMAGE_FILTER_SMOOTH,
+      POST_SHARPEN_GRADUAL = Nocturnal::IMAGE_FILTER_SHARPEN_GRADUAL,
+      POST_SHARPEN1X       = Nocturnal::IMAGE_FILTER_SHARPEN1X,
+      POST_SHARPEN2X       = Nocturnal::IMAGE_FILTER_SHARPEN2X,
+      POST_SHARPEN3X       = Nocturnal::IMAGE_FILTER_SHARPEN3X,
+      POST_HIGH_PASS       = Nocturnal::IMAGE_FILTER_HIGH_PASS,
       POST_COUNT
     };
-    NOC_COMPILE_ASSERT( POST_COUNT == IG::IMAGE_FILTER_COUNT );
+    NOC_COMPILE_ASSERT( POST_COUNT == Nocturnal::IMAGE_FILTER_COUNT );
 
     static void PostMipFilterTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {

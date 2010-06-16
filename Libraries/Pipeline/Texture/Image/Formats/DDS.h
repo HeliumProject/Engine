@@ -3,7 +3,7 @@
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-namespace IG
+namespace Nocturnal
 {
   const u32 DDS_MAGIC                   =0x20534444;
 

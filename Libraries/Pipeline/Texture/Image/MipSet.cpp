@@ -1,7 +1,7 @@
 #include "MipSet.h"
 
-#include "Swizzle.h"
-#include "DXT.h"
+#include "Pipeline/Texture/Utilities/Swizzle.h"
+#include "Pipeline/Texture/Image/Formats/DXT.h"
 
 #include "Foundation/Exception.h"
 
@@ -9,14 +9,14 @@
 #include "Foundation/Log.h"
 #include "Foundation/Math/Vector4.h"
 
-#include "DDS.h"
+#include "Pipeline/Texture/Image/Formats/DDS.h"
 
-using namespace IG;
+using namespace Nocturnal;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-IG::MipSet::MipSet()
+Nocturnal::MipSet::MipSet()
 {
   m_levels_used = 0;
   for (int i=0;i<MAX_TEXTURE_MIPS;i++)
@@ -37,7 +37,7 @@ IG::MipSet::MipSet()
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-IG::MipSet::~MipSet()
+Nocturnal::MipSet::~MipSet()
 {
   for (u32 i=0;i<MAX_TEXTURE_MIPS;i++)
   {
@@ -138,7 +138,7 @@ bool MipSet::RuntimeSettings::operator == (const RuntimeSettings& rhs)
 // Removes the specified number of mips from the tail of the mip set (removes the N smallest mips).
 // There has to be at least a single mip level remaining after levels have been removed.
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool IG::MipSet::RemoveFromTail(u32 levels)
+bool Nocturnal::MipSet::RemoveFromTail(u32 levels)
 {
   if (levels>=m_levels_used)
   {
@@ -168,7 +168,7 @@ bool IG::MipSet::RemoveFromTail(u32 levels)
 // Removes the specified number of mips from the head of the mip set (removes the N biggest mips).
 // There has to be at least a single mip level remaining after levels have been removed.
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool IG::MipSet::RemoveFromHead(u32 levels)
+bool Nocturnal::MipSet::RemoveFromHead(u32 levels)
 {
   if (levels>=m_levels_used)
   {
@@ -217,7 +217,7 @@ bool IG::MipSet::RemoveFromHead(u32 levels)
 //
 // DO NOT CALL THIS FOR PC TEXTURES
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool IG::MipSet::Swizzle()
+bool Nocturnal::MipSet::Swizzle()
 {
   // do not attempt to swizzle if it already is swizzled
   if (m_swizzled)
@@ -232,9 +232,9 @@ bool IG::MipSet::Swizzle()
       m_swizzled = false;
     }
     // Do VTC swizzling for DXT compressed volume textures
-    else if(  (m_format == IG::OUTPUT_CF_DXT1) ||
-              (m_format == IG::OUTPUT_CF_DXT3) ||
-              (m_format == IG::OUTPUT_CF_DXT5) )
+    else if(  (m_format == Nocturnal::OUTPUT_CF_DXT1) ||
+              (m_format == Nocturnal::OUTPUT_CF_DXT3) ||
+              (m_format == Nocturnal::OUTPUT_CF_DXT5) )
     {
       VTCSwizzle();
       m_swizzled = true;
@@ -285,11 +285,11 @@ bool IG::MipSet::Swizzle()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool IG::MipSet::VTCSwizzle()
+bool Nocturnal::MipSet::VTCSwizzle()
 {
   // Some assumptions made since we should only be called from Swizzle()
   NOC_ASSERT(!m_swizzled);
-  NOC_ASSERT( (m_format == IG::OUTPUT_CF_DXT1) || (m_format == IG::OUTPUT_CF_DXT3) || (m_format == IG::OUTPUT_CF_DXT5) );
+  NOC_ASSERT( (m_format == Nocturnal::OUTPUT_CF_DXT1) || (m_format == Nocturnal::OUTPUT_CF_DXT3) || (m_format == Nocturnal::OUTPUT_CF_DXT5) );
   NOC_ASSERT(m_depth > 1);
   NOC_ASSERT_MSG(m_levels_used == 1, ("Mipmap support not yet implimented for volume textures"));
 
@@ -303,7 +303,7 @@ bool IG::MipSet::VTCSwizzle()
   u32 block_height = m_height / 4;
   u32 num_layer_blocks = block_width * block_height;
 
-  u32 block_size = (m_format == IG::OUTPUT_CF_DXT1) ? 8 : 16;
+  u32 block_size = (m_format == Nocturnal::OUTPUT_CF_DXT1) ? 8 : 16;
   u32 layer_size = num_layer_blocks * block_size;
 
   u32 num_layer_sets = m_depth / 4;
@@ -351,10 +351,10 @@ bool IG::MipSet::VTCSwizzle()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool IG::MipSet::ExtractNonePowerOfTwo(u32 width, u32 height, u32 depth)
+bool Nocturnal::MipSet::ExtractNonePowerOfTwo(u32 width, u32 height, u32 depth)
 {
   // we do not currently support extracting volume data
-  if (m_texture_type==IG::Texture::VOLUME)
+  if (m_texture_type==Nocturnal::Texture::VOLUME)
     return false;
 
   // we only support compressed

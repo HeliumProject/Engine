@@ -1,6 +1,6 @@
 #include "Texture.h"
-#include "Swizzle.h"
-#include "DXT.h"
+#include "Pipeline/Texture/Utilities/Swizzle.h"
+#include "Pipeline/Texture/Image/Formats/DXT.h"
 
 #include "Foundation/Exception.h"
 
@@ -18,7 +18,7 @@
 
 #include "tiffio.h"
 
-using namespace IG;
+using namespace Nocturnal;
 
 //-----------------------------------------------------------------------------
 char* Texture::p_volume_identifier_strings[VOLUME_NUM_IDENTIFIERS] =
@@ -1295,7 +1295,7 @@ Texture* Texture::LoadHDR(const void* data)
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-static inline nv::FloatImage::WrapMode ConvertIGWrapModeToNV(IG::UVAddressMode mode)
+static inline nv::FloatImage::WrapMode ConvertIGWrapModeToNV(Nocturnal::UVAddressMode mode)
 {
   switch(mode)
   {
@@ -2014,11 +2014,11 @@ MipSet* Texture::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet:
   u32             o_height;
 
   // if the output format is compressed
-  if( (outputFormat == IG::OUTPUT_CF_DXT1) ||
-      (outputFormat == IG::OUTPUT_CF_DXT3) ||
-      (outputFormat == IG::OUTPUT_CF_DXT5))
+  if( (outputFormat == Nocturnal::OUTPUT_CF_DXT1) ||
+      (outputFormat == Nocturnal::OUTPUT_CF_DXT3) ||
+      (outputFormat == Nocturnal::OUTPUT_CF_DXT5))
   {
-    if( (outputFormat == IG::OUTPUT_CF_DXT3) || (outputFormat == IG::OUTPUT_CF_DXT5) )
+    if( (outputFormat == Nocturnal::OUTPUT_CF_DXT3) || (outputFormat == Nocturnal::OUTPUT_CF_DXT5) )
     {
       // Check if the texture actually has alpha. If not, force to DXT1
       const f32 upper_alpha_threshold = 0.99f;
@@ -2069,22 +2069,22 @@ MipSet* Texture::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet:
       {
         NOC_ASSERT(force_to_dxt1 <= 2);
 
-        outputFormat                = IG::OUTPUT_CF_DXT1;
-        dxtOptions.m_mips->m_format = IG::OUTPUT_CF_DXT1;
+        outputFormat                = Nocturnal::OUTPUT_CF_DXT1;
+        dxtOptions.m_mips->m_format = Nocturnal::OUTPUT_CF_DXT1;
 
         if(force_to_dxt1 == 1)
         {
           Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose,
             "Forced DXT5 to DXT1 - setting alpha channel to 1.\n");
 
-          dxtOptions.m_mips->m_runtime.m_alpha_channel = IG::COLOR_CHANNEL_FORCE_ONE;
+          dxtOptions.m_mips->m_runtime.m_alpha_channel = Nocturnal::COLOR_CHANNEL_FORCE_ONE;
         }
         if(force_to_dxt1 == 2)
         {
           Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose,
             "Forced DXT5 to DXT1 - setting alpha channel to 0.\n");
 
-          dxtOptions.m_mips->m_runtime.m_alpha_channel = IG::COLOR_CHANNEL_FORCE_ZERO;
+          dxtOptions.m_mips->m_runtime.m_alpha_channel = Nocturnal::COLOR_CHANNEL_FORCE_ZERO;
         }
       }
       else
@@ -2143,12 +2143,12 @@ MipSet* Texture::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet:
             }
           }
 
-          outputFormat                = IG::OUTPUT_CF_DXT1;
-          dxtOptions.m_mips->m_format = IG::OUTPUT_CF_DXT1;
-          dxtOptions.m_mips->m_runtime.m_alpha_channel = IG::COLOR_CHANNEL_GET_FROM_G; // DXT stores packed colors as 5:6:5, so green has one more bit of accuracy in it
-          dxtOptions.m_mips->m_runtime.m_red_channel = IG::COLOR_CHANNEL_FORCE_ONE;
-          dxtOptions.m_mips->m_runtime.m_green_channel = IG::COLOR_CHANNEL_FORCE_ONE;
-          dxtOptions.m_mips->m_runtime.m_blue_channel = IG::COLOR_CHANNEL_FORCE_ONE;
+          outputFormat                = Nocturnal::OUTPUT_CF_DXT1;
+          dxtOptions.m_mips->m_format = Nocturnal::OUTPUT_CF_DXT1;
+          dxtOptions.m_mips->m_runtime.m_alpha_channel = Nocturnal::COLOR_CHANNEL_GET_FROM_G; // DXT stores packed colors as 5:6:5, so green has one more bit of accuracy in it
+          dxtOptions.m_mips->m_runtime.m_red_channel = Nocturnal::COLOR_CHANNEL_FORCE_ONE;
+          dxtOptions.m_mips->m_runtime.m_green_channel = Nocturnal::COLOR_CHANNEL_FORCE_ONE;
+          dxtOptions.m_mips->m_runtime.m_blue_channel = Nocturnal::COLOR_CHANNEL_FORCE_ONE;
 
           // Because we're getting alpha from a color channel, don't do sRGB
           {
@@ -2578,7 +2578,7 @@ void  Texture::HighPassFilterImage(const bool*                channel_mask,
   // here we're trying to approximate the photoshop Gaussian blur with radius 0.7 by running the cubic filter twice
   //
   for (u32 ic = 0; ic < 4; ic++)
-    nv_filters[ic] = GetTextureFilter(IG::MIP_FILTER_QUADRATIC);
+    nv_filters[ic] = GetTextureFilter(Nocturnal::MIP_FILTER_QUADRATIC);
 
   Texture* blur_tex = new Texture(m_Width, m_Height, m_NativeFormat);
 
@@ -2595,7 +2595,7 @@ void  Texture::HighPassFilterImage(const bool*                channel_mask,
   for (u32 ic = 0; ic < 4; ic++)
   {
     delete nv_filters[ic];
-    nv_filters[ic] = GetTextureFilter(IG::MIP_FILTER_CUBIC);
+    nv_filters[ic] = GetTextureFilter(Nocturnal::MIP_FILTER_CUBIC);
   }
 
   Texture* overlay_tex = new Texture(m_Width, m_Height, m_NativeFormat);

@@ -16,18 +16,18 @@
 #include "Foundation/Math/Vector3.h"
 #include "Foundation/Math/Vector4.h"
 
-#include "Texture/Texture.h"
+#include "Pipeline/Texture/Texture.h"
 
 #define NORMAL_NORMALIZE (0x1)
 
-namespace IG
+namespace Nocturnal
 {
   //
   // Base class for image filtering that handles basic file and pixel operations and pixel iteration.
   // Subclasses define the filtering operation for each pixel.
   //
 
-  class TEXTURE_API ImageFilter
+  class PIPELINE_API ImageFilter
   {
   public:
     ImageFilter(unsigned int width, unsigned int flags);
@@ -49,8 +49,8 @@ namespace IG
     // Checks if the pixel specified by color is considered an undefined pixel
     bool isNullPixel(const Math::Vector4& color) const;
 
-    IG::Texture*       input;            // input image
-    IG::Texture*       output;           // output image
+    Nocturnal::Texture*       input;            // input image
+    Nocturnal::Texture*       output;           // output image
 
     unsigned int        filterWidth;        // filter width
     unsigned int        opFlags;              // flags for normalizing, etc.
@@ -71,7 +71,7 @@ namespace IG
   // from the undefined pixels.
   //
 
-  class TEXTURE_API FillImageFilter : public ImageFilter
+  class PIPELINE_API FillImageFilter : public ImageFilter
   {
   public:
     // Reads input file and initializes output to be of xres by yres resolution. If xres or yres is zero, use corresponding
@@ -97,7 +97,7 @@ namespace IG
   // in the filter.
   //
 
-  class TEXTURE_API BoxImageFilter : public ImageFilter
+  class PIPELINE_API BoxImageFilter : public ImageFilter
   {
   public:
     // Reads input file and initializes output to be of xres by yres resolution. If xres or yres is zero, use corresponding

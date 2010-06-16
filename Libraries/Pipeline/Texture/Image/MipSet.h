@@ -7,10 +7,10 @@
 
 #include "Platform/Types.h"
 
-#include "API.h"
+#include "Pipeline/API.h"
 #include "ColorFormats.h"
 
-namespace IG
+namespace Nocturnal
 {
   enum
   {
@@ -49,7 +49,7 @@ namespace IG
   const TexelType D_MAP_DEFAULT_BLUE    = 0.5f;
   const TexelType D_MAP_DEFAULT_ALPHA   = 1.0f;
 
-  const IG::ColorFormat TEXTURE_PROCESS_FORMAT = IG::CF_RGBAFLOATMAP;
+  const Nocturnal::ColorFormat TEXTURE_PROCESS_FORMAT = Nocturnal::CF_RGBAFLOATMAP;
   const TexelType BLACK_TEXEL = 0.0f;
   const TexelType WHITE_TEXEL = 1.0f;
   const TexelType COLOR_MAP_ALPHA_THRESHOLD = 0.95f;
@@ -135,7 +135,7 @@ namespace IG
   };
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  struct TEXTURE_API TextureGenerationSettings
+  struct PIPELINE_API TextureGenerationSettings
   {
     //
     // Channels could be partitioned arbitrarily and processed separately before combining them for compression
@@ -161,16 +161,16 @@ namespace IG
     }
 
     // The Filter to use when generating the mip maps (for now 2 are used since separate for color+alpha, AG and IP)
-    IG::FilterType           m_mip_filter[TEXTURE_CHANNEL_NUM];
+    Nocturnal::FilterType           m_mip_filter[TEXTURE_CHANNEL_NUM];
 
     // The image filter to apply after the mips have been generated (for now 2 are used since sepearate for color+alpha, AG and IP)
-    IG::PostMipImageFilter   m_image_filter[TEXTURE_CHANNEL_NUM];
+    Nocturnal::PostMipImageFilter   m_image_filter[TEXTURE_CHANNEL_NUM];
 
     // The number of times to apply the image filter to each mip level (for now 2 are used since sepearate for color+alpha, AG and IP)
     u32                      m_ifilter_cnt[TEXTURE_CHANNEL_NUM][MAX_TEXTURE_MIPS];
 
     // Output format for this texture
-    IG::OutputColorFormat    m_output_format;
+    Nocturnal::OutputColorFormat    m_output_format;
 
     // Tool time scale factor
     float                    m_scale;
@@ -236,7 +236,7 @@ namespace IG
   // Options to use when generating a mipset from a texture
   //
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  struct TEXTURE_API MipGenOptions
+  struct PIPELINE_API MipGenOptions
   {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Constructor to set suitable defaults
@@ -294,7 +294,7 @@ namespace IG
   //  ps3 (linear/normalized UVs, swizzled vs linear) and are ignored by the PC.
   //
   ////////////////////////////////////////////////////////////////////////////////////////////////
-  class TEXTURE_API MipSet
+  class PIPELINE_API MipSet
   {
   public:
     struct MipInfo
@@ -307,7 +307,7 @@ namespace IG
 
     // currently this entire structure is ignored on the PC, all texture state is specified
     // in the shader and is managed at runtime
-    struct TEXTURE_API RuntimeSettings
+    struct PIPELINE_API RuntimeSettings
     {
       UVAddressMode           m_wrap_u;
       UVAddressMode           m_wrap_v;

@@ -7,7 +7,7 @@
 #include "Foundation/Math/Half.h"
 #include "Foundation/Math/Vector3.h"
 
-namespace IG
+namespace Nocturnal
 {
   const u32 RGBE_EXPONENT_BIAS=128;
 

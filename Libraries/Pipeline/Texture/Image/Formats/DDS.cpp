@@ -1,9 +1,9 @@
-#include "Texture.h"
+#include "Pipeline/Texture/Texture.h"
 #include "DDS.h"
 
 #include <squish.h>
 
-using namespace IG;
+using namespace Nocturnal;
 
 static inline u32 GetLineStride(u32 bits_per_pixel, u32 width)
 {
@@ -14,230 +14,230 @@ static inline u32 GetLineStride(u32 bits_per_pixel, u32 width)
 #endif
 }
 
-static u32  GetFourCC(IG::OutputColorFormat format)
+static u32  GetFourCC(Nocturnal::OutputColorFormat format)
 {
   switch(format)
   {
-    case  IG::OUTPUT_CF_DXT1:     return  DDS_CC_D3DFMT_DXT1;
-    case  IG::OUTPUT_CF_DXT3:     return  DDS_CC_D3DFMT_DXT3;
-    case  IG::OUTPUT_CF_DXT5:     return  DDS_CC_D3DFMT_DXT5;
-    case  IG::OUTPUT_CF_DUDV:     return  117;
-    case  IG::OUTPUT_CF_F32:      return  DDS_CC_D3DFMT_R32F;
-    case  IG::OUTPUT_CF_F32F32:   return  DDS_CC_D3DFMT_G32R32F;
-    case  IG::OUTPUT_CF_FLOATMAP: return  DDS_CC_D3DFMT_A32B32G32R32F;
-    case  IG::OUTPUT_CF_F16:      return  DDS_CC_D3DFMT_R16F;
-    case  IG::OUTPUT_CF_F16F16:   return  DDS_CC_D3DFMT_G16R16F;
-    case  IG::OUTPUT_CF_HALFMAP:  return  DDS_CC_D3DFMT_A16B16G16R16F;
+    case  Nocturnal::OUTPUT_CF_DXT1:     return  DDS_CC_D3DFMT_DXT1;
+    case  Nocturnal::OUTPUT_CF_DXT3:     return  DDS_CC_D3DFMT_DXT3;
+    case  Nocturnal::OUTPUT_CF_DXT5:     return  DDS_CC_D3DFMT_DXT5;
+    case  Nocturnal::OUTPUT_CF_DUDV:     return  117;
+    case  Nocturnal::OUTPUT_CF_F32:      return  DDS_CC_D3DFMT_R32F;
+    case  Nocturnal::OUTPUT_CF_F32F32:   return  DDS_CC_D3DFMT_G32R32F;
+    case  Nocturnal::OUTPUT_CF_FLOATMAP: return  DDS_CC_D3DFMT_A32B32G32R32F;
+    case  Nocturnal::OUTPUT_CF_F16:      return  DDS_CC_D3DFMT_R16F;
+    case  Nocturnal::OUTPUT_CF_F16F16:   return  DDS_CC_D3DFMT_G16R16F;
+    case  Nocturnal::OUTPUT_CF_HALFMAP:  return  DDS_CC_D3DFMT_A16B16G16R16F;
   }
 
   return 0;
 }
 
-static u32  GetLinearSize(IG::OutputColorFormat format, u32 width, u32 height)
+static u32  GetLinearSize(Nocturnal::OutputColorFormat format, u32 width, u32 height)
 {
   switch(format)
   {
-    case  IG::OUTPUT_CF_DXT1:     return  (width*height)>>1;
-    case  IG::OUTPUT_CF_DXT3:     return  (width*height);
-    case  IG::OUTPUT_CF_DXT5:     return  (width*height);
+    case  Nocturnal::OUTPUT_CF_DXT1:     return  (width*height)>>1;
+    case  Nocturnal::OUTPUT_CF_DXT3:     return  (width*height);
+    case  Nocturnal::OUTPUT_CF_DXT5:     return  (width*height);
 
-    case  IG::OUTPUT_CF_ARGB8888: return  (width*height)*4;
-    case  IG::OUTPUT_CF_ARGB4444: return  (width*height)*2;
-    case  IG::OUTPUT_CF_ARGB1555: return  (width*height)*2;
-    case  IG::OUTPUT_CF_RGB565:   return  (width*height)*2;
-    case  IG::OUTPUT_CF_A8:       return  (width*height);
-    case  IG::OUTPUT_CF_L8:       return  (width*height);
-    case  IG::OUTPUT_CF_AL88:     return  (width*height)*2;
-    case  IG::OUTPUT_CF_DUDV:     return  (width*height)*2;
-    case  IG::OUTPUT_CF_F32:      return  (width*height)*4;
-    case  IG::OUTPUT_CF_F32F32:   return  (width*height)*8;
-    case  IG::OUTPUT_CF_FLOATMAP: return  (width*height)*16;
-    case  IG::OUTPUT_CF_F16:      return  (width*height)*2;
-    case  IG::OUTPUT_CF_F16F16:   return  (width*height)*4;
-    case  IG::OUTPUT_CF_HALFMAP:  return  (width*height)*8;
-    case  IG::OUTPUT_CF_RGBE:     return  (width*height)*4;
+    case  Nocturnal::OUTPUT_CF_ARGB8888: return  (width*height)*4;
+    case  Nocturnal::OUTPUT_CF_ARGB4444: return  (width*height)*2;
+    case  Nocturnal::OUTPUT_CF_ARGB1555: return  (width*height)*2;
+    case  Nocturnal::OUTPUT_CF_RGB565:   return  (width*height)*2;
+    case  Nocturnal::OUTPUT_CF_A8:       return  (width*height);
+    case  Nocturnal::OUTPUT_CF_L8:       return  (width*height);
+    case  Nocturnal::OUTPUT_CF_AL88:     return  (width*height)*2;
+    case  Nocturnal::OUTPUT_CF_DUDV:     return  (width*height)*2;
+    case  Nocturnal::OUTPUT_CF_F32:      return  (width*height)*4;
+    case  Nocturnal::OUTPUT_CF_F32F32:   return  (width*height)*8;
+    case  Nocturnal::OUTPUT_CF_FLOATMAP: return  (width*height)*16;
+    case  Nocturnal::OUTPUT_CF_F16:      return  (width*height)*2;
+    case  Nocturnal::OUTPUT_CF_F16F16:   return  (width*height)*4;
+    case  Nocturnal::OUTPUT_CF_HALFMAP:  return  (width*height)*8;
+    case  Nocturnal::OUTPUT_CF_RGBE:     return  (width*height)*4;
   }
   NOC_ASSERT(!"WTF");
   return (width*height);
 }
 
-static u32  GetPitchOrLinearSize(IG::OutputColorFormat format, u32 width, u32 height)
+static u32  GetPitchOrLinearSize(Nocturnal::OutputColorFormat format, u32 width, u32 height)
 {
   switch(format)
   {
-    case  IG::OUTPUT_CF_DXT1:     return  (width*height)>>1;
-    case  IG::OUTPUT_CF_DXT3:     return  width*height;
-    case  IG::OUTPUT_CF_DXT5:     return  width*height;
+    case  Nocturnal::OUTPUT_CF_DXT1:     return  (width*height)>>1;
+    case  Nocturnal::OUTPUT_CF_DXT3:     return  width*height;
+    case  Nocturnal::OUTPUT_CF_DXT5:     return  width*height;
 
-    case  IG::OUTPUT_CF_F32:      return  width*4;
-    case  IG::OUTPUT_CF_F32F32:   return  width*8;
-    case  IG::OUTPUT_CF_FLOATMAP: return  width*16;
-    case  IG::OUTPUT_CF_F16:      return  width*2;
-    case  IG::OUTPUT_CF_F16F16:   return  width*4;
-    case  IG::OUTPUT_CF_HALFMAP:  return  width*8;
+    case  Nocturnal::OUTPUT_CF_F32:      return  width*4;
+    case  Nocturnal::OUTPUT_CF_F32F32:   return  width*8;
+    case  Nocturnal::OUTPUT_CF_FLOATMAP: return  width*16;
+    case  Nocturnal::OUTPUT_CF_F16:      return  width*2;
+    case  Nocturnal::OUTPUT_CF_F16F16:   return  width*4;
+    case  Nocturnal::OUTPUT_CF_HALFMAP:  return  width*8;
   }
 
   return 0;
 }
 
-static u32  GetPixelFormatFlag(IG::OutputColorFormat format)
+static u32  GetPixelFormatFlag(Nocturnal::OutputColorFormat format)
 {
   switch(format)
   {
-    case  IG::OUTPUT_CF_F32:
-    case  IG::OUTPUT_CF_F32F32:
-    case  IG::OUTPUT_CF_FLOATMAP:
-    case  IG::OUTPUT_CF_F16:
-    case  IG::OUTPUT_CF_F16F16:
-    case  IG::OUTPUT_CF_HALFMAP:
-    case  IG::OUTPUT_CF_DXT1:
-    case  IG::OUTPUT_CF_DXT3:
-    case  IG::OUTPUT_CF_DXT5:
-      return IG::DDS_PF_FLAGS_FOURCC;
+    case  Nocturnal::OUTPUT_CF_F32:
+    case  Nocturnal::OUTPUT_CF_F32F32:
+    case  Nocturnal::OUTPUT_CF_FLOATMAP:
+    case  Nocturnal::OUTPUT_CF_F16:
+    case  Nocturnal::OUTPUT_CF_F16F16:
+    case  Nocturnal::OUTPUT_CF_HALFMAP:
+    case  Nocturnal::OUTPUT_CF_DXT1:
+    case  Nocturnal::OUTPUT_CF_DXT3:
+    case  Nocturnal::OUTPUT_CF_DXT5:
+      return Nocturnal::DDS_PF_FLAGS_FOURCC;
 
-    case  IG::OUTPUT_CF_ARGB8888:
-    case  IG::OUTPUT_CF_ARGB4444:
-    case  IG::OUTPUT_CF_ARGB1555:
-    case  IG::OUTPUT_CF_RGBE:
-      return  IG::DDS_PF_FLAGS_RGB | IG::DDS_PF_FLAGS_ALPHA;
+    case  Nocturnal::OUTPUT_CF_ARGB8888:
+    case  Nocturnal::OUTPUT_CF_ARGB4444:
+    case  Nocturnal::OUTPUT_CF_ARGB1555:
+    case  Nocturnal::OUTPUT_CF_RGBE:
+      return  Nocturnal::DDS_PF_FLAGS_RGB | Nocturnal::DDS_PF_FLAGS_ALPHA;
 
-    case  IG::OUTPUT_CF_RGB565:
-      return  IG::DDS_PF_FLAGS_RGB;
+    case  Nocturnal::OUTPUT_CF_RGB565:
+      return  Nocturnal::DDS_PF_FLAGS_RGB;
 
-    case  IG::OUTPUT_CF_A8:
-      return IG::DDS_PF_FLAGS_ALPHA_ONLY;
+    case  Nocturnal::OUTPUT_CF_A8:
+      return Nocturnal::DDS_PF_FLAGS_ALPHA_ONLY;
 
-    case  IG::OUTPUT_CF_L8:
-      return IG::DDS_PF_LUMINANCE;
+    case  Nocturnal::OUTPUT_CF_L8:
+      return Nocturnal::DDS_PF_LUMINANCE;
 
-    case  IG::OUTPUT_CF_AL88:
-      return IG::DDS_PF_LUMINANCE |DDS_PF_FLAGS_ALPHA;
+    case  Nocturnal::OUTPUT_CF_AL88:
+      return Nocturnal::DDS_PF_LUMINANCE |DDS_PF_FLAGS_ALPHA;
   }
 
   return 0;
 }
 
-static u32  GetRedMask(IG::OutputColorFormat format)
+static u32  GetRedMask(Nocturnal::OutputColorFormat format)
 {
   switch(format)
   {
-    case  IG::OUTPUT_CF_ARGB8888:
-    case  IG::OUTPUT_CF_RGBE:
+    case  Nocturnal::OUTPUT_CF_ARGB8888:
+    case  Nocturnal::OUTPUT_CF_RGBE:
       return  0x00FF0000;
 
-    case  IG::OUTPUT_CF_ARGB4444:
+    case  Nocturnal::OUTPUT_CF_ARGB4444:
       return  0x00000F00;
 
-    case  IG::OUTPUT_CF_ARGB1555:
+    case  Nocturnal::OUTPUT_CF_ARGB1555:
       return  0x00007C00;
 
-    case  IG::OUTPUT_CF_RGB565:
+    case  Nocturnal::OUTPUT_CF_RGB565:
       return  0x0000F800;
 
-    case  IG::OUTPUT_CF_L8:
-    case  IG::OUTPUT_CF_AL88:
+    case  Nocturnal::OUTPUT_CF_L8:
+    case  Nocturnal::OUTPUT_CF_AL88:
      return  0x000000FF;
   }
 
   return 0;
 }
 
-static u32  GetGreenMask(IG::OutputColorFormat format)
+static u32  GetGreenMask(Nocturnal::OutputColorFormat format)
 {
   switch(format)
   {
-    case  IG::OUTPUT_CF_ARGB8888:
-    case  IG::OUTPUT_CF_RGBE:
+    case  Nocturnal::OUTPUT_CF_ARGB8888:
+    case  Nocturnal::OUTPUT_CF_RGBE:
       return  0x0000FF00;
 
-    case  IG::OUTPUT_CF_ARGB4444:
+    case  Nocturnal::OUTPUT_CF_ARGB4444:
       return  0x000000F0;
 
-    case  IG::OUTPUT_CF_ARGB1555:
+    case  Nocturnal::OUTPUT_CF_ARGB1555:
       return  0x000003E0;
 
-    case  IG::OUTPUT_CF_RGB565:
+    case  Nocturnal::OUTPUT_CF_RGB565:
       return  0x000007e0;
   }
 
   return 0;
 }
 
-static u32  GetBlueMask(IG::OutputColorFormat format)
+static u32  GetBlueMask(Nocturnal::OutputColorFormat format)
 {
   switch(format)
   {
-    case  IG::OUTPUT_CF_ARGB8888:
-    case  IG::OUTPUT_CF_RGBE:
+    case  Nocturnal::OUTPUT_CF_ARGB8888:
+    case  Nocturnal::OUTPUT_CF_RGBE:
       return  0x000000FF;
 
-    case  IG::OUTPUT_CF_ARGB4444:
+    case  Nocturnal::OUTPUT_CF_ARGB4444:
       return  0x0000000F;
 
-    case  IG::OUTPUT_CF_ARGB1555:
+    case  Nocturnal::OUTPUT_CF_ARGB1555:
       return  0x0000001F;
 
-    case  IG::OUTPUT_CF_RGB565:
+    case  Nocturnal::OUTPUT_CF_RGB565:
       return  0x0000001F;
   }
 
   return 0;
 }
 
-static u32  GetAlphaMask(IG::OutputColorFormat format)
+static u32  GetAlphaMask(Nocturnal::OutputColorFormat format)
 {
   switch(format)
   {
-    case  IG::OUTPUT_CF_ARGB8888:
-    case  IG::OUTPUT_CF_RGBE:
+    case  Nocturnal::OUTPUT_CF_ARGB8888:
+    case  Nocturnal::OUTPUT_CF_RGBE:
       return  0xFF000000;
 
-    case  IG::OUTPUT_CF_ARGB4444:
+    case  Nocturnal::OUTPUT_CF_ARGB4444:
       return  0x0000F000;
 
-    case  IG::OUTPUT_CF_ARGB1555:
+    case  Nocturnal::OUTPUT_CF_ARGB1555:
       return  0x00008000;
 
-    case  IG::OUTPUT_CF_AL88:
+    case  Nocturnal::OUTPUT_CF_AL88:
       return  0x0000FF00;
 
-    case  IG::OUTPUT_CF_A8:
+    case  Nocturnal::OUTPUT_CF_A8:
       return  0x000000FF;
   }
 
   return 0;
 }
 
-static u32  GetBitCount(IG::OutputColorFormat format)
+static u32  GetBitCount(Nocturnal::OutputColorFormat format)
 {
   switch(format)
   {
-    case  IG::OUTPUT_CF_DXT1:
-    case  IG::OUTPUT_CF_DXT3:
-    case  IG::OUTPUT_CF_DXT5:
-    case  IG::OUTPUT_CF_ARGB8888:
-    case  IG::OUTPUT_CF_F32:
-    case  IG::OUTPUT_CF_F16F16:
-    case  IG::OUTPUT_CF_RGBE:
+    case  Nocturnal::OUTPUT_CF_DXT1:
+    case  Nocturnal::OUTPUT_CF_DXT3:
+    case  Nocturnal::OUTPUT_CF_DXT5:
+    case  Nocturnal::OUTPUT_CF_ARGB8888:
+    case  Nocturnal::OUTPUT_CF_F32:
+    case  Nocturnal::OUTPUT_CF_F16F16:
+    case  Nocturnal::OUTPUT_CF_RGBE:
       return  32;
 
-    case  IG::OUTPUT_CF_ARGB4444:
-    case  IG::OUTPUT_CF_ARGB1555:
-    case  IG::OUTPUT_CF_RGB565:
-    case  IG::OUTPUT_CF_AL88:
-    case  IG::OUTPUT_CF_DUDV:
-    case  IG::OUTPUT_CF_F16:
+    case  Nocturnal::OUTPUT_CF_ARGB4444:
+    case  Nocturnal::OUTPUT_CF_ARGB1555:
+    case  Nocturnal::OUTPUT_CF_RGB565:
+    case  Nocturnal::OUTPUT_CF_AL88:
+    case  Nocturnal::OUTPUT_CF_DUDV:
+    case  Nocturnal::OUTPUT_CF_F16:
       return 16;
 
-    case  IG::OUTPUT_CF_A8:
-    case  IG::OUTPUT_CF_L8:
+    case  Nocturnal::OUTPUT_CF_A8:
+    case  Nocturnal::OUTPUT_CF_L8:
       return 8;
 
-    case  IG::OUTPUT_CF_F32F32:
-    case  IG::OUTPUT_CF_HALFMAP:
+    case  Nocturnal::OUTPUT_CF_F32F32:
+    case  Nocturnal::OUTPUT_CF_HALFMAP:
       return 64;
 
-    case  IG::OUTPUT_CF_FLOATMAP:
+    case  Nocturnal::OUTPUT_CF_FLOATMAP:
       return  128;
   }
   NOC_ASSERT(!"WTF");
@@ -255,27 +255,27 @@ static u32 GetFourCCPixelSize(u32 cc)
 {
   switch (cc)
   {
-    case IG::DDS_CC_D3DFMT_DXT1:
+    case Nocturnal::DDS_CC_D3DFMT_DXT1:
       return 4;
 
-    case IG::DDS_CC_D3DFMT_DXT2:
-    case IG::DDS_CC_D3DFMT_DXT3:
-    case IG::DDS_CC_D3DFMT_DXT4:
-    case IG::DDS_CC_D3DFMT_DXT5:
+    case Nocturnal::DDS_CC_D3DFMT_DXT2:
+    case Nocturnal::DDS_CC_D3DFMT_DXT3:
+    case Nocturnal::DDS_CC_D3DFMT_DXT4:
+    case Nocturnal::DDS_CC_D3DFMT_DXT5:
       return 8;
 
-    case IG::DDS_CC_D3DFMT_R16F:
+    case Nocturnal::DDS_CC_D3DFMT_R16F:
       return 16;
 
-    case IG::DDS_CC_D3DFMT_G16R16F:
-    case IG::DDS_CC_D3DFMT_R32F:
+    case Nocturnal::DDS_CC_D3DFMT_G16R16F:
+    case Nocturnal::DDS_CC_D3DFMT_R32F:
       return 32;
 
-    case IG::DDS_CC_D3DFMT_G32R32F:
-    case IG::DDS_CC_D3DFMT_A16B16G16R16F:
+    case Nocturnal::DDS_CC_D3DFMT_G32R32F:
+    case Nocturnal::DDS_CC_D3DFMT_A16B16G16R16F:
       return 64;
 
-    case IG::DDS_CC_D3DFMT_A32B32G32R32F:
+    case Nocturnal::DDS_CC_D3DFMT_A32B32G32R32F:
       return 128;
   }
 
@@ -290,88 +290,88 @@ static u32 GetFourCCPixelSize(u32 cc)
 // direct mapping this function returns CF_UNKNOWN and the caller can decide what to do.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-static IG::ColorFormat GetDirectlyCompatibleColorFormat(IG::DDSPixelFormat* pf)
+static Nocturnal::ColorFormat GetDirectlyCompatibleColorFormat(Nocturnal::DDSPixelFormat* pf)
 {
   // if the 4 CC code of pixel format is set then use it to figure out the format.
   // if the 4 CC code is not set then the format has to be an RGB format, use the pixel format
   // to figure the RGB layout
-  if (pf->m_flags & IG::DDS_PF_FLAGS_FOURCC)
+  if (pf->m_flags & Nocturnal::DDS_PF_FLAGS_FOURCC)
   {
     switch (pf->m_fourcc)
     {
-    case IG::DDS_CC_D3DFMT_A16B16G16R16F:
-      return IG::CF_RGBAHALFMAP;
-    case IG::DDS_CC_D3DFMT_R32F:
-      return IG::CF_F32;
-    case IG::DDS_CC_D3DFMT_A32B32G32R32F:
-      return IG::CF_RGBAFLOATMAP;
+    case Nocturnal::DDS_CC_D3DFMT_A16B16G16R16F:
+      return Nocturnal::CF_RGBAHALFMAP;
+    case Nocturnal::DDS_CC_D3DFMT_R32F:
+      return Nocturnal::CF_F32;
+    case Nocturnal::DDS_CC_D3DFMT_A32B32G32R32F:
+      return Nocturnal::CF_RGBAFLOATMAP;
     }
   }
-  else if ( (pf->m_flags & IG::DDS_PF_FLAGS_RGB) !=0 )
+  else if ( (pf->m_flags & Nocturnal::DDS_PF_FLAGS_RGB) !=0 )
   {
     // This is an RGB format, may also have alpha
     if (pf->m_bit_count==16)
     {
       if ((pf->m_red_mask == 0x0f00) && (pf->m_green_mask == 0x00f0) && (pf->m_blue_mask == 0x000f))
-        return IG::CF_ARGB4444;
+        return Nocturnal::CF_ARGB4444;
 
       if ((pf->m_red_mask == 0xf800) && (pf->m_green_mask == 0x07e0) && (pf->m_blue_mask == 0x001f))
-        return IG::CF_RGB565;
+        return Nocturnal::CF_RGB565;
 
       if ((pf->m_red_mask == 0x7c00) && (pf->m_green_mask == 0x03e0) && (pf->m_blue_mask == 0x001f))
-        return IG::CF_ARGB1555;
+        return Nocturnal::CF_ARGB1555;
     }
     else if (pf->m_bit_count==32)
     {
       if (pf->m_red_mask != 0x00ff0000)
-        return IG::CF_UNKNOWN;
+        return Nocturnal::CF_UNKNOWN;
       if (pf->m_green_mask != 0x0000ff00)
-        return IG::CF_UNKNOWN;
+        return Nocturnal::CF_UNKNOWN;
       if (pf->m_blue_mask != 0x000000ff)
-        return IG::CF_UNKNOWN;
+        return Nocturnal::CF_UNKNOWN;
 
-      return IG::CF_ARGB8888;
+      return Nocturnal::CF_ARGB8888;
     }
   }
   else if (pf->m_flags & DDS_PF_FLAGS_ALPHA_ONLY)
   {
     if (pf->m_alpha_mask == 0xff)
-      return IG::CF_A8;
+      return Nocturnal::CF_A8;
   }
   else if (pf->m_flags & DDS_PF_LUMINANCE)
   {
     if (pf->m_bit_count==8)
     {
       if ((pf->m_red_mask == 0xff)  && (pf->m_green_mask == 0x00) && (pf->m_blue_mask == 0x00))
-        return IG::CF_L8;
+        return Nocturnal::CF_L8;
 
       if ((pf->m_red_mask == 0x00)  && (pf->m_green_mask == 0xff) && (pf->m_blue_mask == 0x00))
-        return IG::CF_L8;
+        return Nocturnal::CF_L8;
 
       if ((pf->m_red_mask == 0x00)  && (pf->m_green_mask == 0x00) && (pf->m_blue_mask == 0xff))
-        return IG::CF_L8;
+        return Nocturnal::CF_L8;
     }
     else if (pf->m_bit_count==16)
     {
       if (pf->m_flags & DDS_PF_FLAGS_ALPHA)
       {
         if ((pf->m_red_mask == 0x000000ff)  && (pf->m_green_mask == 00) && (pf->m_blue_mask == 0x0) && (pf->m_alpha_mask == 0xff00))
-          return IG::CF_AL88;
+          return Nocturnal::CF_AL88;
       }
 
       if ((pf->m_red_mask == 0x0000ffff)  && (pf->m_green_mask == 00) && (pf->m_blue_mask == 0x0))
-        return IG::CF_L16;
+        return Nocturnal::CF_L16;
 
       if ((pf->m_red_mask == 0x0000)  && (pf->m_green_mask == 0xffff) && (pf->m_blue_mask == 0x0000))
-        return IG::CF_L16;
+        return Nocturnal::CF_L16;
 
       if ((pf->m_red_mask == 0x0000)  && (pf->m_green_mask == 0x0000) && (pf->m_blue_mask == 0xffff))
-        return IG::CF_L16;
+        return Nocturnal::CF_L16;
     }
   }
 
   // do not know what this format is
-  return IG::CF_UNKNOWN;
+  return Nocturnal::CF_UNKNOWN;
 }
 
 
@@ -383,85 +383,85 @@ static IG::ColorFormat GetDirectlyCompatibleColorFormat(IG::DDSPixelFormat* pf)
 // direct mapping this function returns CF_UNKNOWN and the caller can decide what to do.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-static IG::OutputColorFormat GetOutputCompatibleColorFormat(IG::DDSPixelFormat* pf)
+static Nocturnal::OutputColorFormat GetOutputCompatibleColorFormat(Nocturnal::DDSPixelFormat* pf)
 {
   // if the 4 CC code of pixel format is set then use it to figure out the format.
   // if the 4 CC code is not set then the format has to be an RGB format, use the pixel format
   // to figure the RGB layout
-  if (pf->m_flags & IG::DDS_PF_FLAGS_FOURCC)
+  if (pf->m_flags & Nocturnal::DDS_PF_FLAGS_FOURCC)
   {
     switch (pf->m_fourcc)
     {
-    case IG::DDS_CC_D3DFMT_A16B16G16R16F:
-      return IG::OUTPUT_CF_HALFMAP;
-    case IG::DDS_CC_D3DFMT_R32F:
-      return IG::OUTPUT_CF_F32;
-    case IG::DDS_CC_D3DFMT_A32B32G32R32F:
-      return IG::OUTPUT_CF_FLOATMAP;
-    case IG::DDS_CC_D3DFMT_DXT1:
-      return IG::OUTPUT_CF_DXT1;
-    case IG::DDS_CC_D3DFMT_DXT3:
-      return IG::OUTPUT_CF_DXT3;
-    case IG::DDS_CC_D3DFMT_DXT5:
-      return IG::OUTPUT_CF_DXT5;
+    case Nocturnal::DDS_CC_D3DFMT_A16B16G16R16F:
+      return Nocturnal::OUTPUT_CF_HALFMAP;
+    case Nocturnal::DDS_CC_D3DFMT_R32F:
+      return Nocturnal::OUTPUT_CF_F32;
+    case Nocturnal::DDS_CC_D3DFMT_A32B32G32R32F:
+      return Nocturnal::OUTPUT_CF_FLOATMAP;
+    case Nocturnal::DDS_CC_D3DFMT_DXT1:
+      return Nocturnal::OUTPUT_CF_DXT1;
+    case Nocturnal::DDS_CC_D3DFMT_DXT3:
+      return Nocturnal::OUTPUT_CF_DXT3;
+    case Nocturnal::DDS_CC_D3DFMT_DXT5:
+      return Nocturnal::OUTPUT_CF_DXT5;
     }
   }
-  else if ( (pf->m_flags & IG::DDS_PF_FLAGS_RGB) !=0 )
+  else if ( (pf->m_flags & Nocturnal::DDS_PF_FLAGS_RGB) !=0 )
   {
     // This is an RGB format, may also have alpha
     if (pf->m_bit_count==16)
     {
       if ((pf->m_red_mask == 0x0f00) && (pf->m_green_mask == 0x00f0) && (pf->m_blue_mask == 0x000f))
-        return IG::OUTPUT_CF_ARGB4444;
+        return Nocturnal::OUTPUT_CF_ARGB4444;
 
       if ((pf->m_red_mask == 0xf800) && (pf->m_green_mask == 0x07e0) && (pf->m_blue_mask == 0x001f))
-        return IG::OUTPUT_CF_RGB565;
+        return Nocturnal::OUTPUT_CF_RGB565;
 
       if ((pf->m_red_mask == 0x7c00) && (pf->m_green_mask == 0x03e0) && (pf->m_blue_mask == 0x001f))
-        return IG::OUTPUT_CF_ARGB1555;
+        return Nocturnal::OUTPUT_CF_ARGB1555;
     }
     else if (pf->m_bit_count==32)
     {
       if (pf->m_red_mask != 0x00ff0000)
-        return IG::OUTPUT_CF_UNKNOWN;
+        return Nocturnal::OUTPUT_CF_UNKNOWN;
       if (pf->m_green_mask != 0x0000ff00)
-        return IG::OUTPUT_CF_UNKNOWN;
+        return Nocturnal::OUTPUT_CF_UNKNOWN;
       if (pf->m_blue_mask != 0x000000ff)
-        return IG::OUTPUT_CF_UNKNOWN;
+        return Nocturnal::OUTPUT_CF_UNKNOWN;
 
-      return IG::OUTPUT_CF_ARGB8888;
+      return Nocturnal::OUTPUT_CF_ARGB8888;
     }
   }
   else if (pf->m_flags & DDS_PF_FLAGS_ALPHA_ONLY)
   {
     if (pf->m_alpha_mask == 0xff)
-      return IG::OUTPUT_CF_A8;
+      return Nocturnal::OUTPUT_CF_A8;
   }
   else if (pf->m_flags & DDS_PF_LUMINANCE)
   {
     if (pf->m_bit_count==8)
     {
       if ((pf->m_red_mask == 0xff)  && (pf->m_green_mask == 0x00) && (pf->m_blue_mask == 0x00))
-        return IG::OUTPUT_CF_L8;
+        return Nocturnal::OUTPUT_CF_L8;
 
       if ((pf->m_red_mask == 0x00)  && (pf->m_green_mask == 0xff) && (pf->m_blue_mask == 0x00))
-        return IG::OUTPUT_CF_L8;
+        return Nocturnal::OUTPUT_CF_L8;
 
       if ((pf->m_red_mask == 0x00)  && (pf->m_green_mask == 0x00) && (pf->m_blue_mask == 0xff))
-        return IG::OUTPUT_CF_L8;
+        return Nocturnal::OUTPUT_CF_L8;
     }
     else if (pf->m_bit_count==16)
     {
       if (pf->m_flags & DDS_PF_FLAGS_ALPHA)
       {
         if ((pf->m_red_mask == 0x000000ff)  && (pf->m_green_mask == 00) && (pf->m_blue_mask == 0x0) && (pf->m_alpha_mask == 0xff00))
-          return IG::OUTPUT_CF_AL88;
+          return Nocturnal::OUTPUT_CF_AL88;
       }
     }
   }
 
   // do not know what this format is
-  return IG::OUTPUT_CF_UNKNOWN;
+  return Nocturnal::OUTPUT_CF_UNKNOWN;
 }
 
 
@@ -474,7 +474,7 @@ static IG::OutputColorFormat GetOutputCompatibleColorFormat(IG::DDSPixelFormat* 
 // Get the bits per pixel of the pixels in the DDS files
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-static u32 GetBitsPerPixel(IG::DDSPixelFormat* pf)
+static u32 GetBitsPerPixel(Nocturnal::DDSPixelFormat* pf)
 {
   if (pf->m_flags & DDS_PF_FLAGS_FOURCC)
   {
@@ -518,7 +518,7 @@ u32 CalculateImageAndMipSize(u32 pixel_size,u32 width,u32 height,u32 depth,u32 m
 // Returns true for one of the DXTC formats
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool IsDXTC(IG::DDSPixelFormat* pf)
+bool IsDXTC(Nocturnal::DDSPixelFormat* pf)
 {
   if (pf->m_flags & DDS_PF_FLAGS_FOURCC)
   {
@@ -542,7 +542,7 @@ bool IsDXTC(IG::DDSPixelFormat* pf)
 // Calculates the number of bytes to the next image in the source data
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 CalculateImageSize(IG::DDSPixelFormat* pf,u32 width,u32 height,u32 depth)
+u32 CalculateImageSize(Nocturnal::DDSPixelFormat* pf,u32 width,u32 height,u32 depth)
 {
   if (depth==0)
     depth=1;
@@ -691,15 +691,15 @@ Texture* Texture::LoadDDS(const void* ddsadr, bool convert_to_linear)
       if (fmt == CF_UNKNOWN)
       {
         u32 flags;
-        if (header->m_pixel_format.m_fourcc == IG::DDS_CC_D3DFMT_DXT1)
+        if (header->m_pixel_format.m_fourcc == Nocturnal::DDS_CC_D3DFMT_DXT1)
         {
           flags = squish::kDxt1;
         }
-        else if (header->m_pixel_format.m_fourcc == IG::DDS_CC_D3DFMT_DXT3)
+        else if (header->m_pixel_format.m_fourcc == Nocturnal::DDS_CC_D3DFMT_DXT3)
         {
           flags = squish::kDxt3;
         }
-        else if (header->m_pixel_format.m_fourcc == IG::DDS_CC_D3DFMT_DXT5)
+        else if (header->m_pixel_format.m_fourcc == Nocturnal::DDS_CC_D3DFMT_DXT5)
         {
           flags = squish::kDxt5;
         }
@@ -882,7 +882,7 @@ MipSet* Texture::LoadDDSToMipSet(const void* ddsadr)
 }
 
 //Write DDS file
-bool IG::MipSet::WriteDDS(const char* fname) const
+bool Nocturnal::MipSet::WriteDDS(const char* fname) const
 {
   FILE * file = fopen(fname, "wb");
   if (!file)
@@ -890,17 +890,17 @@ bool IG::MipSet::WriteDDS(const char* fname) const
     return false;
   }
 
-  IG::DDSHeader header;
+  Nocturnal::DDSHeader header;
   memset(&header, 0, sizeof(header));
 
-  header.m_magic  = IG::DDS_MAGIC;
+  header.m_magic  = Nocturnal::DDS_MAGIC;
   header.m_size   = 124;
 
-  header.m_flags |= IG::DDS_FLAGS_CAPS        |
-                    IG::DDS_FLAGS_HEIGHT      |
-                    IG::DDS_FLAGS_WIDTH       |
-                    IG::DDS_FLAGS_PIXELFORMAT |
-                    IG::DDS_FLAGS_MIPMAPCOUNT;
+  header.m_flags |= Nocturnal::DDS_FLAGS_CAPS        |
+                    Nocturnal::DDS_FLAGS_HEIGHT      |
+                    Nocturnal::DDS_FLAGS_WIDTH       |
+                    Nocturnal::DDS_FLAGS_PIXELFORMAT |
+                    Nocturnal::DDS_FLAGS_MIPMAPCOUNT;
 
   header.m_height     = m_height;
   header.m_width      = m_width;
@@ -921,31 +921,31 @@ bool IG::MipSet::WriteDDS(const char* fname) const
   header.m_pixel_format.m_alpha_mask  = GetAlphaMask(m_format);
 
   //Caps
-  header.m_caps.m_caps1 = IG::DDS_CAPS1_TEXTURE;
+  header.m_caps.m_caps1 = Nocturnal::DDS_CAPS1_TEXTURE;
 
   if(m_levels_used > 1)
   {
-    header.m_caps.m_caps1 |= (IG::DDS_CAPS1_MIPMAPS | IG::DDS_CAPS1_COMPLEX);
+    header.m_caps.m_caps1 |= (Nocturnal::DDS_CAPS1_MIPMAPS | Nocturnal::DDS_CAPS1_COMPLEX);
   }
 
-  if(m_texture_type != IG::Texture::REGULAR)
+  if(m_texture_type != Nocturnal::Texture::REGULAR)
   {
-    header.m_caps.m_caps1 |= IG::DDS_CAPS1_COMPLEX;
+    header.m_caps.m_caps1 |= Nocturnal::DDS_CAPS1_COMPLEX;
   }
 
-  if(m_texture_type == IG::Texture::CUBE)
+  if(m_texture_type == Nocturnal::Texture::CUBE)
   {
-    header.m_caps.m_caps2 = IG::DDS_CAPS2_CUBEMAP |
-                            IG::DDS_CAPS2_CUBEMAP_POSX |
-                            IG::DDS_CAPS2_CUBEMAP_NEGX |
-                            IG::DDS_CAPS2_CUBEMAP_POSY |
-                            IG::DDS_CAPS2_CUBEMAP_NEGY |
-                            IG::DDS_CAPS2_CUBEMAP_POSZ |
-                            IG::DDS_CAPS2_CUBEMAP_NEGZ;
+    header.m_caps.m_caps2 = Nocturnal::DDS_CAPS2_CUBEMAP |
+                            Nocturnal::DDS_CAPS2_CUBEMAP_POSX |
+                            Nocturnal::DDS_CAPS2_CUBEMAP_NEGX |
+                            Nocturnal::DDS_CAPS2_CUBEMAP_POSY |
+                            Nocturnal::DDS_CAPS2_CUBEMAP_NEGY |
+                            Nocturnal::DDS_CAPS2_CUBEMAP_POSZ |
+                            Nocturnal::DDS_CAPS2_CUBEMAP_NEGZ;
   }
-  else if(m_texture_type == IG::Texture::VOLUME)
+  else if(m_texture_type == Nocturnal::Texture::VOLUME)
   {
-    header.m_caps.m_caps2 = IG::DDS_CAPS2_VOLUME;
+    header.m_caps.m_caps2 = Nocturnal::DDS_CAPS2_VOLUME;
   }
 
   fwrite(&header, sizeof(header), 1, file);
@@ -956,12 +956,12 @@ bool IG::MipSet::WriteDDS(const char* fname) const
   {
     for(u32 level = 0; level < num_levels; ++level)
     {
-      const IG::MipSet::MipInfo*  face_data       = &m_levels[face][level];
+      const Nocturnal::MipSet::MipInfo*  face_data       = &m_levels[face][level];
       const u32                   dds_linear_size = GetLinearSize(m_format, face_data->m_width, face_data->m_height);
       fwrite(face_data->m_data, dds_linear_size, 1, file);
     }
 
-    if(m_texture_type != IG::Texture::CUBE)
+    if(m_texture_type != Nocturnal::Texture::CUBE)
     {
       break;
     }
@@ -973,48 +973,48 @@ bool IG::MipSet::WriteDDS(const char* fname) const
 }
 
 //Write DDS file
-bool IG::Texture::WriteDDS(const char* fname, bool convert_to_srgb, IG::OutputColorFormat output_fmt) const
+bool Nocturnal::Texture::WriteDDS(const char* fname, bool convert_to_srgb, Nocturnal::OutputColorFormat output_fmt) const
 {
   //If we don't sepecify an output format, pick a suitable one
-  if(output_fmt == IG::OUTPUT_CF_UNKNOWN)
+  if(output_fmt == Nocturnal::OUTPUT_CF_UNKNOWN)
   {
     switch(m_NativeFormat)
     {
-      case  IG::CF_ARGB8888:        output_fmt = IG::OUTPUT_CF_ARGB8888;  break;
-      case  IG::CF_ARGB4444:        output_fmt = IG::OUTPUT_CF_ARGB4444;  break;
-      case  IG::CF_ARGB1555:        output_fmt = IG::OUTPUT_CF_ARGB1555;  break;
-      case  IG::CF_RGB565:          output_fmt = IG::OUTPUT_CF_RGB565;    break;
-      case  IG::CF_A8:              output_fmt = IG::OUTPUT_CF_A8;        break;
-      case  IG::CF_L8:              output_fmt = IG::OUTPUT_CF_L8;        break;
-      case  IG::CF_AL88:            output_fmt = IG::OUTPUT_CF_AL88;      break;
-      case  IG::CF_F32:             output_fmt = IG::OUTPUT_CF_F32;       break;
-      case  IG::CF_F32F32:          output_fmt = IG::OUTPUT_CF_F32F32;    break;
-      case  IG::CF_RGBAFLOATMAP:    output_fmt = IG::OUTPUT_CF_FLOATMAP;  break;
-      case  IG::CF_F16:             output_fmt = IG::OUTPUT_CF_F16;       break;
-      case  IG::CF_F16F16:          output_fmt = IG::OUTPUT_CF_F16F16;    break;
-      case  IG::CF_RGBAHALFMAP:     output_fmt = IG::OUTPUT_CF_HALFMAP;   break;
-      case  IG::CF_RGBE:            output_fmt = IG::OUTPUT_CF_RGBE;      break;
+      case  Nocturnal::CF_ARGB8888:        output_fmt = Nocturnal::OUTPUT_CF_ARGB8888;  break;
+      case  Nocturnal::CF_ARGB4444:        output_fmt = Nocturnal::OUTPUT_CF_ARGB4444;  break;
+      case  Nocturnal::CF_ARGB1555:        output_fmt = Nocturnal::OUTPUT_CF_ARGB1555;  break;
+      case  Nocturnal::CF_RGB565:          output_fmt = Nocturnal::OUTPUT_CF_RGB565;    break;
+      case  Nocturnal::CF_A8:              output_fmt = Nocturnal::OUTPUT_CF_A8;        break;
+      case  Nocturnal::CF_L8:              output_fmt = Nocturnal::OUTPUT_CF_L8;        break;
+      case  Nocturnal::CF_AL88:            output_fmt = Nocturnal::OUTPUT_CF_AL88;      break;
+      case  Nocturnal::CF_F32:             output_fmt = Nocturnal::OUTPUT_CF_F32;       break;
+      case  Nocturnal::CF_F32F32:          output_fmt = Nocturnal::OUTPUT_CF_F32F32;    break;
+      case  Nocturnal::CF_RGBAFLOATMAP:    output_fmt = Nocturnal::OUTPUT_CF_FLOATMAP;  break;
+      case  Nocturnal::CF_F16:             output_fmt = Nocturnal::OUTPUT_CF_F16;       break;
+      case  Nocturnal::CF_F16F16:          output_fmt = Nocturnal::OUTPUT_CF_F16F16;    break;
+      case  Nocturnal::CF_RGBAHALFMAP:     output_fmt = Nocturnal::OUTPUT_CF_HALFMAP;   break;
+      case  Nocturnal::CF_RGBE:            output_fmt = Nocturnal::OUTPUT_CF_RGBE;      break;
     }
   }
 
-  if((output_fmt == IG::OUTPUT_CF_UNKNOWN) || (output_fmt == IG::OUTPUT_CF_DUDV))
+  if((output_fmt == Nocturnal::OUTPUT_CF_UNKNOWN) || (output_fmt == Nocturnal::OUTPUT_CF_DUDV))
   {
     NOC_ASSERT(!"Unkown or unspported DDS output format");
     return false;
   }
 
   //Reuse some of the tools functionality instead of writing more code!
-  IG::MipGenOptions mip_gen_options;
-  IG::MipSet::RuntimeSettings runtime;
+  Nocturnal::MipGenOptions mip_gen_options;
+  Nocturnal::MipSet::RuntimeSettings runtime;
 
   mip_gen_options.m_Levels        = 1;                     //We're only interested in the top mip
-  mip_gen_options.m_PostFilter    = IG::IMAGE_FILTER_NONE; //Unused
-  mip_gen_options.m_Filter        = IG::MIP_FILTER_POINT;  //Unused
+  mip_gen_options.m_PostFilter    = Nocturnal::IMAGE_FILTER_NONE; //Unused
+  mip_gen_options.m_Filter        = Nocturnal::MIP_FILTER_POINT;  //Unused
   mip_gen_options.m_OutputFormat  = output_fmt;
   mip_gen_options.m_ConvertToSrgb = convert_to_srgb;
 
   //Generate the mipset
-  IG::MipSet* mip_set = GenerateMipSet(mip_gen_options, runtime);
+  Nocturnal::MipSet* mip_set = GenerateMipSet(mip_gen_options, runtime);
 
   //Verify the mipset
   if(mip_set)

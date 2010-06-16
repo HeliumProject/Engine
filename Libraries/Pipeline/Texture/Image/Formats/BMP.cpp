@@ -1,7 +1,7 @@
-#include "Texture.h"
+#include "Pipeline/Texture/Texture.h"
 #include "BMP.h"
 
-using namespace IG;
+using namespace Nocturnal;
 
 Texture* Texture::LoadBMP(const void* filedata, bool convert_to_linear)
 {

@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 
-namespace IG
+namespace Nocturnal
 {
   const u32 BMP_COMPRESSION_RGB       = 0;
   const u32 BMP_COMPRESSION_RLE8      = 1;

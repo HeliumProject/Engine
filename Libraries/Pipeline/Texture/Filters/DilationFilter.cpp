@@ -1,6 +1,6 @@
 #include "DilationFilter.h"
 
-using namespace IG;
+using namespace Nocturnal;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -46,7 +46,7 @@ DilationFilter::DilationFilter(const char* inputfile, const char* outputfile, un
   ImageFilter::outputPath = outputfile;
 
   bool convert_to_linear = true;
-  input = IG::Texture::LoadFile(inputfile, convert_to_linear, NULL);
+  input = Nocturnal::Texture::LoadFile(inputfile, convert_to_linear, NULL);
   if (!input)
   {
     std::cerr << "Unable to open input file: " << inputfile << std::endl;
@@ -60,14 +60,14 @@ DilationFilter::DilationFilter(const char* inputfile, const char* outputfile, un
   if (yres == 0)
     yres = input->m_Height;
 
-  IG::Texture *scaled_input = input->ScaleImage(xres, yres, IG::CF_RGBAFLOATMAP, IG::MIP_FILTER_GAUSSIAN);
+  Nocturnal::Texture *scaled_input = input->ScaleImage(xres, yres, Nocturnal::CF_RGBAFLOATMAP, Nocturnal::MIP_FILTER_GAUSSIAN);
   delete input;
   input = scaled_input;
 
   if(opFlags & NORMAL_NORMALIZE)
     Normalize(input);
 
-  output = new IG::Texture(xres, yres, IG::CF_RGBAFLOATMAP);
+  output = new Nocturnal::Texture(xres, yres, Nocturnal::CF_RGBAFLOATMAP);
 }
 
 
@@ -128,7 +128,7 @@ void DilationFilter::filter(void)
   output->m_NativeFormat = outputFormat;
 }
 
-bool DilationFilter::DilateHorizontal(IG::Texture *dst, IG::Texture *src)
+bool DilationFilter::DilateHorizontal(Nocturnal::Texture *dst, Nocturnal::Texture *src)
 {
   bool finished = true;
 
@@ -185,7 +185,7 @@ bool DilationFilter::DilateHorizontal(IG::Texture *dst, IG::Texture *src)
   return finished;
 }
 
-bool DilationFilter::DilateVertical(IG::Texture *dst, IG::Texture *src)
+bool DilationFilter::DilateVertical(Nocturnal::Texture *dst, Nocturnal::Texture *src)
 {
   bool finished = true;
 
@@ -242,7 +242,7 @@ bool DilationFilter::DilateVertical(IG::Texture *dst, IG::Texture *src)
   return finished;
 }
 
-void DilationFilter::Normalize(IG::Texture *tex)
+void DilationFilter::Normalize(Nocturnal::Texture *tex)
 {
   NOC_ASSERT(tex)
 

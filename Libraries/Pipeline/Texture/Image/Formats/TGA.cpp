@@ -1,7 +1,7 @@
-#include "Texture.h"
+#include "Pipeline/Texture/Texture.h"
 #include "TGA.h"
 
-using namespace IG;
+using namespace Nocturnal;
 
 //
 // see http://astronomy.swin.edu.au/~pbourke/dataformats/tga/

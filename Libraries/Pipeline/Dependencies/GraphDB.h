@@ -1,8 +1,8 @@
 #pragma once
 
-#include "API.h"
-#include "Exceptions.h"
-#include "FileInfo.h"
+#include "Pipeline/API.h"
+#include "Pipeline/Dependencies/DependenciesExceptions.h"
+#include "Pipeline/Dependencies/Info/FileInfo.h"
 
 #include <vector>
 

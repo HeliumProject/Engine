@@ -14,8 +14,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "igDXContent", "libraries\ig
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rebuild", "utilities\Rebuild\rebuild.vcproj", "{0CA7E77E-15CF-43C7-A106-D3752E650A80}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dependencies", "libraries\Dependencies\Dependencies.vcproj", "{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SmartLoader", "libraries\SmartLoader\SmartLoader.vcproj", "{6924A2EA-8CD4-40A1-9574-50F3AECC266D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Content", "libraries\Content\Content.vcproj", "{51249970-F796-4344-B558-4147F3225C30}"
@@ -116,12 +114,6 @@ Global
 		{0CA7E77E-15CF-43C7-A106-D3752E650A80}.Release|Win32.ActiveCfg = Release|Win32
 		{0CA7E77E-15CF-43C7-A106-D3752E650A80}.Release|Win32.Build.0 = Release|Win32
 		{0CA7E77E-15CF-43C7-A106-D3752E650A80}.Release|x64.ActiveCfg = Release|Win32
-		{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}.Debug|Win32.Build.0 = Debug|Win32
-		{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}.Debug|x64.ActiveCfg = Debug|Win32
-		{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}.Release|Win32.ActiveCfg = Release|Win32
-		{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}.Release|Win32.Build.0 = Release|Win32
-		{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}.Release|x64.ActiveCfg = Release|Win32
 		{6924A2EA-8CD4-40A1-9574-50F3AECC266D}.Debug|Win32.ActiveCfg = Debug|Win32
 		{6924A2EA-8CD4-40A1-9574-50F3AECC266D}.Debug|Win32.Build.0 = Debug|Win32
 		{6924A2EA-8CD4-40A1-9574-50F3AECC266D}.Debug|x64.ActiveCfg = Debug|Win32

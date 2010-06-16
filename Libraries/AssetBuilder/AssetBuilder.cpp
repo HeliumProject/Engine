@@ -24,7 +24,7 @@
 #include "AssetBuilder/CacheFiles.h"
 #include "Foundation/Environment.h"
 #include "Debug/Exception.h"
-#include "Dependencies/Dependencies.h"
+#include "Pipeline/Dependencies/Dependencies.h"
 #include "Finder/DebugSpecs.h"
 
 #include "Platform/Windows/Windows.h"

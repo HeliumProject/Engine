@@ -9,7 +9,7 @@
 #include "Foundation/Environment.h"
 #include "Foundation/String/Units.h"
 #include "Foundation/Version.h"
-#include "Dependencies/Dependencies.h"
+#include "Pipeline/Dependencies/Dependencies.h"
 #include "Foundation/Timer.h"
 
 #include <algorithm>

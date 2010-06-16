@@ -1,7 +1,7 @@
 #include "DependencyInfo.h"
 
-#include "API.h"
-#include "Exceptions.h"
+#include "Pipeline/API.h"
+#include "Pipeline/Dependencies/DependenciesExceptions.h"
 
 #include "Foundation/Flags.h"
 
@@ -65,8 +65,6 @@ namespace Dependencies
     /////////////////////////////////////////////////////////////////////////////
     void DependencyInfo::SetInfo()
     {
-        FILEINFO_SCOPE_TIMER((""));
-
         if ( m_Spec )
         {
             m_FormatVersion = m_Spec->GetFormatVersion();
@@ -158,8 +156,6 @@ namespace Dependencies
     // Determines if two dependencies are equal
     bool DependencyInfo::IsEqual(const DependencyInfo &rhs ) const
     {
-        FILEINFO_SCOPE_TIMER((""));
-
         bool eq = true;
 
         eq = eq && ( m_Path                           == rhs.m_Path );

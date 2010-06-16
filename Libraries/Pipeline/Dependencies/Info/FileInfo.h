@@ -1,8 +1,8 @@
 #pragma once
 
 #include "DependencyInfo.h"
-#include "API.h"
-#include "Exceptions.h"
+#include "Pipeline/API.h"
+#include "Pipeline/Dependencies/DependenciesExceptions.h"
 
 #include <string>
 #include <vector>
@@ -20,7 +20,7 @@ namespace Dependencies
 
   /////////////////////////////////////////////////////////////////////////////
 
-  class DEPENDENCIES_API FileInfo : public DependencyInfo
+  class PIPELINE_API FileInfo : public DependencyInfo
   {
   public:
 

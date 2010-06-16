@@ -1,8 +1,8 @@
 #pragma once
 
 #include "API.h"
-#include "Dependencies/Dependencies.h"
-#include "Dependencies/FileInfo.h"
+#include "Pipeline/Dependencies/Dependencies.h"
+#include "Pipeline/Dependencies/Info/FileInfo.h"
 
 #include "Reflect/Serializers.h"
 #include "Reflect/Element.h"

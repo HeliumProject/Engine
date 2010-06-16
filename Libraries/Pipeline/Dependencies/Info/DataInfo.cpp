@@ -1,7 +1,7 @@
 #include "DataInfo.h"
 
-#include "API.h"
-#include "Exceptions.h"
+#include "Pipeline/API.h"
+#include "Pipeline/Dependencies/DependenciesExceptions.h"
 
 #include "Foundation/Flags.h"
 
@@ -120,8 +120,6 @@ namespace Dependencies
     }
     else
     {
-      FILEINFO_SCOPE_TIMER(("GenerateMD5"));
-
       std::string curMD5;
       CryptoPP::MD5 hash;
       CryptoPP::StringSource source( m_Data, m_DataSize, false, new CryptoPP::HashFilter( hash ) );
@@ -173,7 +171,6 @@ namespace Dependencies
     md5 = m_MD5;
 
     {
-      DEPENDENCIES_SCOPE_TIMER(("Signature Hashing"));
       hashFilter->Put( ( byte const* ) md5.data(), md5.size() );
     }
 
@@ -227,8 +224,6 @@ namespace Dependencies
   // Determines if two dependencies are equal
   bool DataInfo::IsEqual( const DependencyInfo &rhs ) const
   {
-    FILEINFO_SCOPE_TIMER((""));
-
     bool eq = true;
 
     eq = eq && __super::IsEqual( rhs );

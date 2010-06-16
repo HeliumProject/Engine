@@ -204,12 +204,8 @@
 			RelativePathToProject=".\libraries\Debug\Debug.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{B3F3E187-E372-4A23-B9DA-5FCCE712D174}"
-			RelativePathToProject=".\libraries\Worker\Worker.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}"
-			RelativePathToProject=".\libraries\Dependencies\Dependencies.vcproj"
+			ReferencedProjectIdentifier="{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
+			RelativePathToProject=".\Libraries\Pipeline\Pipeline.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"

@@ -1,7 +1,7 @@
 #include "FileInfo.h"
 
-#include "API.h"
-#include "Exceptions.h"
+#include "Pipeline/API.h"
+#include "Pipeline/Dependencies/DependenciesExceptions.h"
 
 #include "Foundation/Flags.h"
 
@@ -41,8 +41,6 @@ namespace Dependencies
   /////////////////////////////////////////////////////////////////////////////
   void FileInfo::SetInfo()
   {
-    FILEINFO_SCOPE_TIMER((""));
-
     if ( m_Spec )
     {
       m_FormatVersion = m_Spec->GetFormatVersion();
@@ -51,8 +49,6 @@ namespace Dependencies
     m_VersionRowID = SQL::InvalidRowID;
 
     {
-      FILEINFO_SCOPE_TIMER(("File Stats"));
-      
       m_LastModified = m_Path.ModifiedTime();
       m_Size         = m_Path.Size();
     }
@@ -71,8 +67,6 @@ namespace Dependencies
   //
   bool WasFileModifiedOnDisk( const FileInfo& file )
   {
-
-    FILEINFO_SCOPE_TIMER(("GetStats64"));
 
     // file does not exist on disk
     if ( !FileExists( file.m_Path.c_str() ) )
@@ -101,8 +95,6 @@ namespace Dependencies
     // (otherwise it's very unlikely that the MD5 is the same)
     if ( !file.m_MD5.empty() )
     {
-      FILEINFO_SCOPE_TIMER(("GenerateMD5"));
-
       std::string curFileMD5 = file.m_Path.FileMD5();
 
       //the cached md5 is not the same as the md5 of the file on disk
@@ -208,8 +200,6 @@ namespace Dependencies
 
     if ( !m_AlternateSignatureGenerationPath.empty() )
     {
-      DEPENDENCIES_SCOPE_TIMER(("GenerateMD5"));
-
       Nocturnal::Path path( m_AlternateSignatureGenerationPath );
       md5 = path.FileMD5();
     }
@@ -225,8 +215,6 @@ namespace Dependencies
     }
 
     {
-      DEPENDENCIES_SCOPE_TIMER(("Signature Hashing"));
-
       hashFilter->Put( ( byte const* ) md5.data(), md5.size() );
     }
 
@@ -268,8 +256,6 @@ namespace Dependencies
   // Determines if two dependencies are equal
   bool FileInfo::IsEqual( const DependencyInfo &rhs ) const
   {
-    FILEINFO_SCOPE_TIMER((""));
-
     bool eq = true;
 
     eq = eq && __super::IsEqual( rhs );

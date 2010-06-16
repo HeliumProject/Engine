@@ -141,8 +141,6 @@ bool GraphDB::Open( const std::string& dbFilename, const std::string& configFold
 // Prepares all of the statements.
 void GraphDB::PrepareStatements()
 {
-  DEPENDENCIES_SCOPE_TIMER((""));
-
   m_SqlSelectVersionIdStmtHandle          = m_DBManager->CreateStatement( s_SelectVersionIdSQL, "tt" );
   m_SqlSelectDependencyRowIdByPathStmtHandle    = m_DBManager->CreateStatement( s_SelectDependencyRowIdByPathSQL, "t" );
   m_SqlSelectDependencyBySigStmtHandle          = m_DBManager->CreateStatement( s_SelectDependencyBySigSQL, "t" );
@@ -165,8 +163,6 @@ void GraphDB::PrepareStatements()
 // Insert a single version table row into the GraphDB
 i64 GraphDB::InsertVersion( const Finder::FileSpec& fileSpec, const FormatVersion formatVersion )
 {
-  DEPENDENCIES_SCOPE_TIMER((""));
-
   // return the current rowID if it is already in the graph
   i64 rowID = SelectVersionId( fileSpec, formatVersion );
   if ( rowID != SQL::InvalidRowID )
@@ -198,8 +194,6 @@ void GraphDB::DeleteInvalidVersion( const Finder::FileSpec& fileSpec )
 // Insert a single file table row into the GraphDB
 i64 GraphDB::InsertDependency( const DependencyInfoPtr& file, const i64 versionId )
 {
-  DEPENDENCIES_SCOPE_TIMER((""));
-
   if ( versionId == SQL::InvalidRowID )
     throw Exception( "Invalid version row id passed to InsertFile, versionId: %I64d", versionId );
 
@@ -238,8 +232,6 @@ i64 GraphDB::InsertDependency( const DependencyInfoPtr& file, const i64 versionI
 // Insert a single file table row into the GraphDB
 i64 GraphDB::ReplaceDependency( const ::Dependencies::DependencyInfoPtr& file, const i64 versionId )
 {
-  DEPENDENCIES_SCOPE_TIMER((""));
-
   if ( versionId == SQL::InvalidRowID )
     throw Exception( "Invalid version row id passed to ReplaceDependency, versionId: %I64d", versionId );
 
@@ -303,8 +295,6 @@ void GraphDB::InsertGraph
  const bool inFileExistedLastBuild 
  )
 {
-  DEPENDENCIES_SCOPE_TIMER((""));
-
   if ( outFileId == SQL::InvalidRowID || inFileId == SQL::InvalidRowID )
   {
     throw Exception( "Invalid row id passed to InsertGraph, outFileId: %I64d  inFileId: %I64d ",
@@ -322,8 +312,6 @@ void GraphDB::InsertGraph
 // Removes graph entries that are not in the list of graphIds
 void GraphDB::DeleteGraphPairs( const i64 outFileId, const std::string& inFileIdIds )
 {
-  DEPENDENCIES_SCOPE_TIMER((""));
-
   if ( m_DBManager->ExecSQLVMPrintF( s_DeleteGraphPairsSQL, outFileId, inFileIdIds.c_str() ) != SQLITE_OK )
     throw SQL::DBManagerException( m_DBManager, __FUNCTION__ );
 }
@@ -334,8 +322,6 @@ void GraphDB::DeleteGraphPairs( const i64 outFileId, const std::string& inFileId
 /////////////////////////////////////////////////////////////////////////////
 i64 GraphDB::StepSelectRowId( int sqlResult, SQL::StmtHandle stmt )
 {
-  DEPENDENCIES_SCOPE_TIMER((""));
-
   int rowID = SQL::InvalidRowID;
 
   if ( sqlResult == SQLITE_ROW )
@@ -389,9 +375,7 @@ i64 GraphDB::SelectGraphRowId( const i64 outFileId, const i64 inFileId, const i6
 //
 bool GraphDB::StepSelectDependency( int sqlResult, const SQL::StmtHandle stmt, const DependencyInfoPtr& file, bool resetStmt, bool getGraphInfo )
 {    
-  DEPENDENCIES_SCOPE_TIMER((""))
-
-    int rowID = SQL::InvalidRowID;
+  int rowID = SQL::InvalidRowID;
 
   if ( sqlResult == SQLITE_DONE )
   {
@@ -508,11 +492,9 @@ i64 GraphDB::SelectDependencyBySig( const std::string& signature, const Dependen
 /////////////////////////////////////////////////////////////////////////////
 void GraphDB::SelectGraph( const DependencyInfoPtr& outFile, OS_DependencyInfo &listOfFiles )
 {
-  DEPENDENCIES_SCOPE_TIMER((""))
+  int sqlResult;
 
-    int sqlResult;
   {
-    DEPENDENCIES_SCOPE_TIMER(("SQLite Statement Execution"));
     sqlResult = m_DBManager->ExecStatement( m_SqlSelectGraphStmtHandle, outFile->m_Path.c_str(), outFile->m_SpecName.c_str(), outFile->m_FormatVersion.c_str() );
   }
 

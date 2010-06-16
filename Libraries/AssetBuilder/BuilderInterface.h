@@ -6,7 +6,7 @@
 
 #include "Asset/AssetClass.h"
 #include "Foundation/Log.h"
-#include "Dependencies/Dependencies.h"
+#include "Pipeline/Dependencies/Dependencies.h"
 
 namespace AssetBuilder
 {

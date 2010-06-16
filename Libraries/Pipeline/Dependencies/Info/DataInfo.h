@@ -7,7 +7,7 @@
 namespace Dependencies
 { 
   
-  class DEPENDENCIES_API DataInfo : public DependencyInfo
+  class PIPELINE_API DataInfo : public DependencyInfo
   {
   public:
 

@@ -13,7 +13,7 @@
 #include "Application/Inspect/Reflect/InspectReflectInit.h"
 #include "Application/Inspect/Reflect/ReflectInterpreter.h"
 
-#include "Dependencies/Dependencies.h"
+#include "Pipeline/Dependencies/Dependencies.h"
 
 #include "Asset/AssetClass.h"
 #include "Asset/SceneAsset.h"

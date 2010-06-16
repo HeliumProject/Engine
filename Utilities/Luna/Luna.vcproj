@@ -224,10 +224,6 @@
 			RelativePathToProject=".\libraries\AssetBuilder\AssetBuilder.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{F01E02C5-A33D-4681-96F6-E1FAA8BC265A}"
-			RelativePathToProject=".\libraries\Dependencies\Dependencies.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{EBC5862F-F9EF-4CA6-AB18-F930074011AB}"
 		/>
 		<ProjectReference

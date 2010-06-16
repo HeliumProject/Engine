@@ -6,8 +6,8 @@
 #include "Foundation/Profile.h"
 
 #include "Dependencies.h"
-#include "DataInfo.h"
-#include "Exceptions.h"
+#include "Pipeline/Dependencies/Info/DataInfo.h"
+#include "Pipeline/Dependencies/DependenciesExceptions.h"
 #include "GraphDB.h"
 
 #include <cstdarg> 
@@ -71,8 +71,6 @@ namespace Dependencies
   // file is writen to disc
   void DependencyGraph::RegisterInput( const DependencyInfoPtr& output, const DependencyInfoPtr& input, bool inFileIsOptional )
   {
-    DEPENDENCIES_SCOPE_TIMER((""));
-
     Platform::TakeMutex mutex( m_HighLevelMutex );
 
     if ( output->m_Path.empty() || input->m_Path.empty() )
@@ -118,8 +116,6 @@ namespace Dependencies
   {
     Platform::TakeMutex mutex( m_HighLevelMutex );
 
-    DEPENDENCIES_SCOPE_TIMER((""));
-
     m_GraphDB->BeginTrans();
 
     try
@@ -154,8 +150,6 @@ namespace Dependencies
   bool DependencyGraph::IsUpToDate( const std::string& filePath )
   {
     Platform::TakeMutex mutex( m_HighLevelMutex );
-
-    DEPENDENCIES_SCOPE_TIMER((""));
 
     Log::Bullet isUpToDateBullet( Log::Streams::Debug, Log::Levels::Verbose, "IsUpToDate %s\n", filePath.c_str() );
 
@@ -209,8 +203,6 @@ namespace Dependencies
   //
   void DependencyGraph::GetFileMD5( const DependencyInfoPtr& file )
   {
-    DEPENDENCIES_SCOPE_TIMER((""));
-
     // if this file is in the cache, use the cacheFile
     DependencyInfoPtr cacheFile = CacheGetDependency( file->m_Path );
     if ( cacheFile )
@@ -298,8 +290,6 @@ namespace Dependencies
   void DependencyGraph::CreateSignature( const DependencyInfoPtr& file )
   {
     Platform::TakeMutex mutex( m_HighLevelMutex );
-
-    DEPENDENCIES_SCOPE_TIMER((""));
 
     Log::Bullet createSigBullet( Log::Streams::Debug, Log::Levels::Verbose, "CreateSignature %s\n", file->m_Path.c_str() );
 
@@ -426,8 +416,6 @@ namespace Dependencies
   //
   DependencyInfoPtr DependencyGraph::CacheDependency( const DependencyInfoPtr& file, bool makeDirty )
   {
-    DEPENDENCIES_SCOPE_TIMER((""));
-
     // store the contents of file in the cache
     m_CachedFileGraph[ file->m_Path ] = file;
 
@@ -444,8 +432,6 @@ namespace Dependencies
   //
   void DependencyGraph::CacheDirtyDependency( DependencyInfoPtr file )
   {
-    DEPENDENCIES_SCOPE_TIMER((""));
-
     m_CachedDirtyFiles.insert( file );
   }
 
@@ -483,8 +469,6 @@ namespace Dependencies
   //
   DependencyInfoPtr DependencyGraph::CacheGetDependency( const DependencyInfoPtr& info, bool useDB )
   {
-    DEPENDENCIES_SCOPE_TIMER((""));
-
     DependencyInfoPtr file = NULL;
 
     FileGraphCache::iterator found = m_CachedFileGraph.find( info->m_Path );
@@ -519,8 +503,6 @@ namespace Dependencies
   //
   DependencyInfoPtr DependencyGraph::CacheGetDependency( const std::string& filePath, bool useDB )
   {
-    DEPENDENCIES_SCOPE_TIMER((""));
-
     DependencyInfoPtr file = NULL;
 
     FileGraphCache::iterator found = m_CachedFileGraph.find( filePath );
@@ -584,8 +566,6 @@ namespace Dependencies
   //
   void DependencyGraph::CacheGraph( DependencyInfoPtr outFile, DependencyInfoPtr inFile, bool inFileIsOptional )
   {
-    DEPENDENCIES_SCOPE_TIMER((""));
-
     // insert this pair into the list of re-registered files
     ReregisterMap::iterator found = m_ReregisterMap.find( outFile->m_Path );
     if ( found == m_ReregisterMap.end() )
@@ -920,8 +900,6 @@ namespace Dependencies
   // Update the output file's graph
   void DependencyGraph::CacheCommitGraph( const DependencyInfoPtr file, bool useTransaction )
   {
-    DEPENDENCIES_SCOPE_TIMER((""));
-
     if ( useTransaction )
     {
       m_GraphDB->BeginTrans();

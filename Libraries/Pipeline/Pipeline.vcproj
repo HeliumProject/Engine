@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;$(boost);$(tiff);$(tiff)\libtiff;$(squish);$(nvtt)\src;$(nvtt)\project\vc8"
+				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(Crypto++)&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -121,7 +121,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;$(boost);$(tiff);$(tiff)\libtiff;$(squish);$(nvtt)\src;$(nvtt)\project\vc8"
+				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(Crypto++)&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -199,6 +199,18 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{BC01F636-4D0F-489D-B082-7538025CE185}"
 			RelativePathToProject=".\SDK\tiff\3.9.2\tiff.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}"
+			RelativePathToProject=".\SDK\Crypto++\5.6.0\Crypto++.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
+			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
+			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 	</References>
 	<Files>
@@ -346,6 +358,58 @@
 				</File>
 				<File
 					RelativePath=".\Texture\Utilities\Swizzle.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="Dependencies"
+			>
+			<File
+				RelativePath=".\Dependencies\Dependencies.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Dependencies\Dependencies.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Dependencies\DependenciesExceptions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Dependencies\GraphDB.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Dependencies\GraphDB.h"
+				>
+			</File>
+			<Filter
+				Name="Info"
+				>
+				<File
+					RelativePath=".\Dependencies\Info\DataInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Dependencies\Info\DataInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Dependencies\Info\DependencyInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Dependencies\Info\DependencyInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Dependencies\Info\FileInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Dependencies\Info\FileInfo.h"
 					>
 				</File>
 			</Filter>

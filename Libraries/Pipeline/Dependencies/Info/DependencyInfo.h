@@ -1,7 +1,7 @@
 #pragma once
 
-#include "API.h"
-#include "Exceptions.h"
+#include "Pipeline/API.h"
+#include "Pipeline/Dependencies/DependenciesExceptions.h"
 
 #include <string>
 #include <vector>
@@ -31,9 +31,9 @@ namespace Dependencies
     class GraphInfo;
 
     // M_GraphInfo is a maping of an outfile path to a GraphInfo struct containing configs for this infile FileInfo
-    typedef DEPENDENCIES_API std::map< std::string, GraphInfo > M_GraphInfo;
+    typedef PIPELINE_API std::map< std::string, GraphInfo > M_GraphInfo;
 
-    class DEPENDENCIES_API GraphInfo
+    class PIPELINE_API GraphInfo
     {
     public:
         i64   m_LastModified;     // last time the given outfile was built, this was the last modified time of this infile
@@ -50,7 +50,7 @@ namespace Dependencies
 
 
     /////////////////////////////////////////////////////////////////////////////
-    typedef DEPENDENCIES_API u32 GraphConfigs;
+    typedef PIPELINE_API u32 GraphConfigs;
     namespace ConfigFlags
     {
         enum ConfigFlag
@@ -66,7 +66,7 @@ namespace Dependencies
 
     /////////////////////////////////////////////////////////////////////////////
 
-    class DEPENDENCIES_API DependencyInfo : public Nocturnal::RefCountBase<DependencyInfo>
+    class PIPELINE_API DependencyInfo : public Nocturnal::RefCountBase<DependencyInfo>
     {
     public:
 

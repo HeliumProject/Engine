@@ -1,9 +1,9 @@
 #pragma once
 
-#include "API.h"
-#include "Exceptions.h"
-#include "DependencyInfo.h"
-#include "FileInfo.h"
+#include "Pipeline/API.h"
+#include "Pipeline/Dependencies/DependenciesExceptions.h"
+#include "Pipeline/Dependencies/Info/DependencyInfo.h"
+#include "Pipeline/Dependencies/Info/FileInfo.h"
 
 #include <vector>
 
@@ -23,7 +23,7 @@ namespace Dependencies
   typedef Nocturnal::SmartPtr< GraphDB > GraphDBPtr;
 
   // Hidden Ctor/Dtor - this is a singleton class
-  class DEPENDENCIES_API DependencyGraph
+  class PIPELINE_API DependencyGraph
   {
   private:
     DependencyGraph( const std::string& graphDBFilename, const std::string& configFolder );

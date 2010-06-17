@@ -18,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="0"
@@ -43,7 +43,7 @@
 				Optimization="0"
 				InlineFunctionExpansion="0"
 				AdditionalIncludeDirectories="..\..\libraries;..\..\..\..;..\..\..\..\shared"
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;SMARTBUFFERDLL_EXPORTS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL"
 				StringPooling="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -62,16 +62,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				GenerateDebugInformation="true"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -83,16 +77,13 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="0"
@@ -120,7 +111,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
 				AdditionalIncludeDirectories="..\..\libraries;..\..\..\..;..\..\..\..\shared"
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;SMARTBUFFERDLL_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -141,16 +132,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				GenerateDebugInformation="true"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -160,9 +145,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"

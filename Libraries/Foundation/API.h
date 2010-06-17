@@ -2,14 +2,14 @@
 
 //#include "Foundation/Profile.h"
 
-#ifdef NOCTURNAL_STATIC
-#define FOUNDATION_API
-#else
+#ifdef FOUNDATION_DLL
 # ifdef FOUNDATION_EXPORTS
 #  define FOUNDATION_API __declspec(dllexport)
 # else
 #  define FOUNDATION_API __declspec(dllimport)
 # endif
+#else
+#define FOUNDATION_API
 #endif
 
 // profiling

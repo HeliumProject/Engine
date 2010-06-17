@@ -34,36 +34,35 @@
 using namespace Asset;
 using namespace AssetBuilder;
 
-Nocturnal::InitializerStack g_InitializerStack;
-i32                         g_InitCount = 0;
-u32                         g_BuildStack = 0;
-u32                         g_NiceCount = 0;
-u32                         g_ThreadCount = 1;
-u32                         g_ProcessorCount = 1;
-bool                        g_InConcurrentBuild = false;
-
-S_tuid                      g_FailedAssets;
+static Nocturnal::InitializerStack g_InitializerStack;
+static i32                         g_InitCount = 0;
+static u32                         g_BuildStack = 0;
+static u32                         g_NiceCount = 0;
+static u32                         g_ThreadCount = 1;
+static u32                         g_ProcessorCount = 1;
+static bool                        g_InConcurrentBuild = false;
+static S_tuid                      g_FailedAssets;
 
 #ifdef PROFILE_ACCUMULATION
-Platform::Mutex g_ProfileMutex;
+static Platform::Mutex g_ProfileMutex;
 
 typedef std::map< std::string, Profile::Accumulator > M_StringToAccum;
-M_StringToAccum g_BuilderAccumulators;
-Profile::Accumulator g_InitializeAccum          ( "AssetBuilder Initialization" );
-Profile::Accumulator g_DependencyCheckAccum     ( "AssetBuilder Dependency Checking" );
-Profile::Accumulator g_GatherDependentJobsAccum ( "AssetBuilder Gather Jobs" );
-Profile::Accumulator g_DownloadAccum            ( "AssetBuilder Data Download" );
-Profile::Accumulator g_BuildAccum               ( "AssetBuilder Build" );
+static M_StringToAccum g_BuilderAccumulators;
+static Profile::Accumulator g_InitializeAccum          ( "AssetBuilder Initialization" );
+static Profile::Accumulator g_DependencyCheckAccum     ( "AssetBuilder Dependency Checking" );
+static Profile::Accumulator g_GatherDependentJobsAccum ( "AssetBuilder Gather Jobs" );
+static Profile::Accumulator g_DownloadAccum            ( "AssetBuilder Data Download" );
+static Profile::Accumulator g_BuildAccum               ( "AssetBuilder Build" );
 #endif
 
-f32 g_DownloadTime = 0.0f;
-f32 g_UploadTime = 0.0f;
-f32 g_BuildTime = 0.0f;
-f32 g_DependencyCheckTime = 0.0f;
-f32 g_InitializationTime = 0.0f;
-f32 g_SignatureCreationTime = 0.0f;
-f32 g_JobGatheringTime = 0.0f;
-f32 g_TotalTime = 0.0f;
+static f32 g_DownloadTime = 0.0f;
+static f32 g_UploadTime = 0.0f;
+static f32 g_BuildTime = 0.0f;
+static f32 g_DependencyCheckTime = 0.0f;
+static f32 g_InitializationTime = 0.0f;
+static f32 g_SignatureCreationTime = 0.0f;
+static f32 g_JobGatheringTime = 0.0f;
+static f32 g_TotalTime = 0.0f;
 
 const char* AssetBuilder::CommandArgs::HaltOnError = "halt_on_error";
 
@@ -148,7 +147,7 @@ void AssetBuilder::Cleanup()
     }
 }
 
-AssetBuiltSignature::Event g_AssetBuiltEvent;
+static AssetBuiltSignature::Event g_AssetBuiltEvent;
 
 void AssetBuilder::AddAssetBuiltListener( const AssetBuiltSignature::Delegate& listener )
 {

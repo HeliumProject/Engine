@@ -120,7 +120,7 @@ static const char* s_InsertTopLevelBuildSQL =
     `unaccounted_duration`=%f, \
     `total_duration`=%f;";
 
-Platform::Mutex g_Mutex;
+static Platform::Mutex g_Mutex;
 
 
 /////////////////////////////////////////////////////////////////////////////

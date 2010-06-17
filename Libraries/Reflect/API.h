@@ -12,14 +12,14 @@
 #include "Foundation/Memory/SmartPtr.h"
 
 // reflect dll interface
-#ifdef NOCTURNAL_STATIC
-#define REFLECT_API
-#else
+#ifdef REFLECT_DLL
 # ifdef REFLECTDLL_EXPORTS
 #  define REFLECT_API __declspec(dllexport)
 # else
 #  define REFLECT_API __declspec(dllimport)
 # endif
+#else
+# define REFLECT_API
 #endif
 
 

@@ -68,7 +68,8 @@ void Build::Cleanup()
     }
 }
 
-AssetBuilder::AssetBuiltSignature::Event g_AssetBuiltEvent;
+static AssetBuilder::AssetBuiltSignature::Event g_AssetBuiltEvent;
+
 void Luna::AddAssetBuiltListener( const AssetBuilder::AssetBuiltSignature::Delegate& listener )
 {
     g_AssetBuiltEvent.Add( listener );

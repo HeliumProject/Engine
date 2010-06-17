@@ -25,7 +25,8 @@
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			WholeProgramOptimization="1"
+			CharacterSet="2"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -164,6 +165,8 @@
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"

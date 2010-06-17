@@ -322,8 +322,6 @@ namespace Content
 
         f32 LightmapTexelsPerMeter( u32 logTextureSize, Math::Scale* scale = NULL ) const;
 
-        bool ShareLightmap() const;
-
         // verts-per-meter
         f32 VertDensity(  ) const;
 

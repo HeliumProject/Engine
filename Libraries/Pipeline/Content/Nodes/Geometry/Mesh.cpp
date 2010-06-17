@@ -473,23 +473,6 @@ f32 Mesh::LightmapTexelsPerMeter( u32 logTextureSize, Math::Scale* scale ) const
   return sqrt( ( uvArea * (f32)dim * (f32)dim ) / SurfaceArea( scale ) );
 }
 
-bool Mesh::ShareLightmap() const
-{
-  // can't share lightmap uv's unless it's an overlay mesh
-  if( !m_ExportTypes[ContentTypes::Overlay] )
-    return false;
-
-  Reflect::ElementPtr component = GetComponent( "shareLightmap", Reflect::GetType<BoolSerializer>() );
-
-  if( !component.ReferencesObject() ) 
-    return false;
-
-  bool shareLightmap = false;
-  Serializer::GetValue( AssertCast<Serializer>(component), shareLightmap  );
-
-  return shareLightmap;
-}
-
 void Mesh::GetTriangle( u32 triIndex, Math::Vector3& v0, Math::Vector3& v1, Math::Vector3& v2, Math::Matrix4* transform )
 {
   NOC_ASSERT( m_TriangleVertexIndices.size()%3 == 0 );

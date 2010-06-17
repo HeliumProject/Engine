@@ -275,8 +275,6 @@ namespace Content
 
     f32 MeshSurfaceAreaComponents( Content::ContentType meshType, Math::Vector3& areaVec ) const;
 
-    bool HasSharedLightmapOverlays() const;
-
    // void UniqueAssetClasses( S_tuid& assetClasses, bool (*verifyFunc)( Asset::Entity& ) = NULL ) const;
 
     void MeshesWithVertDensity( V_Mesh& meshes, f32 density = 10.0f ) const;

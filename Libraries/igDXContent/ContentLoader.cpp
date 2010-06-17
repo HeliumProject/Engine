@@ -52,31 +52,8 @@ u32 igDXContent::RBObjectLoader::ParseFile( const char* filename, bool winding )
   u32 mesh_count = (u32)meshes.size();
   for ( u32 m=0;m<mesh_count;m++)
   {
-    int bangleIndex = 0;
     Content::Mesh* mesh = meshes[m];
     
-    int exportTypeIndex = mesh->GetExportTypeIndex( Content::ContentTypes::Bangle );
-    if ( exportTypeIndex >= 0 )
-    {
-      bool draw = false;
-
-      for ( Content::V_Descriptor::iterator itr = descriptors.begin(), end = descriptors.end(); itr != end; ++itr )
-      {
-        if ( (*itr)->m_ExportType == Content::ContentTypes::Bangle && (*itr)->m_ContentNum == (u16) exportTypeIndex )
-        {
-          Reflect::ElementPtr component = (*itr)->GetComponent( "DefaultDraw" );
-          if (component.ReferencesObject())
-          {
-            Reflect::Serializer::GetValue( Reflect::AssertCast<Reflect::Serializer>(component), draw );
-            break;
-          }
-        }
-      }
-      
-      bangleIndex = exportTypeIndex + 1;
-      m_bangleInfo.insert( std::make_pair( bangleIndex, draw ) );
-    }
-
     u32 master_base_position = (u32)m_positions.size()/m_posSize;
     u32 master_base_normal = (u32)m_normals.size()/3;
     u32 master_base_uv = (u32)m_texcoords.size()/m_tcSize;
@@ -131,20 +108,11 @@ u32 igDXContent::RBObjectLoader::ParseFile( const char* filename, bool winding )
     for ( V_TUID::const_iterator shaderItr = mesh->m_ShaderIDs.begin(), shaderEnd = mesh->m_ShaderIDs.end(); shaderItr != shaderEnd; ++shaderItr )
     {
       std::map<u64,u32>::iterator i = frag_finder.find((u64) (*shaderItr));
-      if (i != frag_finder.end())
-      {
-        igDXRender::ShaderFrag& frag = m_fragments[ i->second ];
-        if ( frag.m_bangle_index != bangleIndex )
-        {
-          i = frag_finder.end();
-        }
-      }
 
       if (i == frag_finder.end())
       {
         //A fragment with this shader ID does not exist, create a new fragment        
         igDXRender::ShaderFrag new_frag;  
-        new_frag.m_bangle_index = bangleIndex;
 
         Content::Shader* shader = scene.Get< Content::Shader >( (*shaderItr ) );
 

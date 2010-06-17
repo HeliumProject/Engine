@@ -22,7 +22,7 @@ void Attribute::Initialize()
   {
     g_InitializerStack.Push( &Reflect::Initialize, &Reflect::Cleanup );
 
-    g_RegisteredTypes.Push( Reflect::RegisterClass<ComponentCollection>( "ComponentCollection" ) );
+//    g_RegisteredTypes.Push( Reflect::RegisterClass<ComponentCollection>( "ComponentCollection" ) );
 
     g_RegisteredTypes.Push( Reflect::RegisterClass<AttributeBase>( "AttributeBase" ) );
     g_RegisteredTypes.Push( Reflect::RegisterClass<AttributeCollection>( "AttributeCollection" ) );

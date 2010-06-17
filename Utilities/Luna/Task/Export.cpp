@@ -13,7 +13,7 @@
 
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/SceneAsset.h"
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/ExporterJob.h"
 
 #include "Pipeline/Content/Nodes/Zone.h"

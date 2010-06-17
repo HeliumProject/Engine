@@ -1,9 +1,9 @@
 #include "SceneAsset.h"
 
 #include "Pipeline/Asset/AssetTemplate.h"
-#include "Pipeline/Asset/Attributes/DependenciesAttribute.h"
+#include "Pipeline/Asset/Components/DependenciesComponent.h"
 
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 
 #include "Finder/AssetSpecs.h"
 
@@ -34,7 +34,7 @@ void SceneAsset::EnumerateClass( Reflect::Compositor<SceneAsset>& comp )
   classTemplate->m_DefaultAddSubDir = true;
   classTemplate->m_ShowSubDirCheckbox = false;
   
-  classTemplate->AddOptionalAttribute( Reflect::GetType< Asset::DependenciesAttribute >() );
+  classTemplate->AddOptionalComponent( Reflect::GetType< Asset::DependenciesComponent >() );
   assetTemplates.push_back( classTemplate );
 
   std::stringstream stream;
@@ -48,9 +48,9 @@ bool SceneAsset::ProcessComponent(Reflect::ElementPtr element, const std::string
   return __super::ProcessComponent( element, fieldName );
 }
 
-bool SceneAsset::ValidateCompatible( const Attribute::AttributePtr& attr, std::string& error ) const
+bool SceneAsset::ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const
 {
-  if ( attr->HasType( Reflect::GetType<DependenciesAttribute>() ) )
+  if ( attr->HasType( Reflect::GetType<DependenciesComponent>() ) )
   {
     return true;
   }

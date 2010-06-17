@@ -581,7 +581,7 @@
                                     </object>
                                     <object class="notebookpage" expanded="1">
                                         <property name="bitmap"></property>
-                                        <property name="label">Attributes</property>
+                                        <property name="label">Components</property>
                                         <property name="select">0</property>
                                         <object class="wxPanel" expanded="0">
                                             <property name="bg"></property>
@@ -593,7 +593,7 @@
                                             <property name="id">wxID_ANY</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_AttributesPanel</property>
+                                            <property name="name">m_ComponentsPanel</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
@@ -651,7 +651,7 @@
                                                                 <property name="font"></property>
                                                                 <property name="hidden">0</property>
                                                                 <property name="id">wxID_ANY</property>
-                                                                <property name="label">Select the attributes that each object should have.</property>
+                                                                <property name="label">Select the components that each object should have.</property>
                                                                 <property name="maximum_size"></property>
                                                                 <property name="minimum_size"></property>
                                                                 <property name="name">m_staticText8</property>
@@ -707,7 +707,7 @@
                                                         <property name="id">wxID_ANY</property>
                                                         <property name="maximum_size">-1,100</property>
                                                         <property name="minimum_size">-1,100</property>
-                                                        <property name="name">m_Attributes</property>
+                                                        <property name="name">m_Components</property>
                                                         <property name="permission">protected</property>
                                                         <property name="pos"></property>
                                                         <property name="size"></property>

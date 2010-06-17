@@ -10,8 +10,8 @@
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"
-#include "Attribute/Attribute.h" 
-#include "Attribute/AttributeCollection.h" 
+#include "Pipeline/Component/Component.h"
+#include "Pipeline/Component/ComponentCollection.h" 
 
 #define REGEX_LEVEL_DIR "levels\\/(?:test\\/){0,1}([0-9a-zA-Z \\-_]+)?"
 
@@ -46,7 +46,7 @@ namespace Asset
     // The Definition of an Asset Class
     //
 
-    class PIPELINE_API AssetClass NOC_ABSTRACT : public Attribute::AttributeCollection
+    class PIPELINE_API AssetClass NOC_ABSTRACT : public Component::ComponentCollection
     {
         //
         // Member Data
@@ -63,7 +63,7 @@ namespace Asset
         //
 
     public:
-        REFLECT_DECLARE_ABSTRACT(AssetClass, AttributeCollection);
+        REFLECT_DECLARE_ABSTRACT(AssetClass, ComponentCollection);
 
         static void EnumerateClass( Reflect::Compositor<AssetClass>& comp );
 
@@ -144,22 +144,22 @@ namespace Asset
         virtual void MakeDefault() {}
 
         // we were changed by somebody, reclassify
-        virtual void AttributeChanged( const Attribute::AttributeBase* attr = NULL ) NOC_OVERRIDE;
+        virtual void ComponentChanged( const Component::ComponentBase* attr = NULL ) NOC_OVERRIDE;
 
         // write to the location on disk backed by the file manager id
         virtual void Serialize( const AssetVersionPtr &version = new AssetVersion () );
 
         // add to or set an attribute in the collection
-        virtual void SetAttribute( const Attribute::AttributePtr& attr, bool validate = true ) NOC_OVERRIDE;
+        virtual void SetComponent( const Component::ComponentPtr& attr, bool validate = true ) NOC_OVERRIDE;
 
         // remove attribute from a slot
-        virtual void RemoveAttribute( i32 typeID ) NOC_OVERRIDE;
+        virtual void RemoveComponent( i32 typeID ) NOC_OVERRIDE;
 
         // Returns true by default. Override to specify more stringent requirements on the asset.
         virtual bool ValidateClass( std::string& error ) const;
 
         // validate the incoming attribute as ok to consume
-        virtual bool ValidateCompatible( const Attribute::AttributePtr &attr, std::string& error ) const NOC_OVERRIDE;
+        virtual bool ValidateCompatible( const Component::ComponentPtr &component, std::string& error ) const NOC_OVERRIDE;
 
         // callback when this AssetClass has finished loading off disk
         virtual void LoadFinished();

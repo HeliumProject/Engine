@@ -5,8 +5,8 @@
 #include "BrowserPreferences.h"
 
 #include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Application/UI/ImageManager.h"
 #include "Application/UI/MenuButton.h"
 
@@ -40,7 +40,7 @@ void PreviewPanel::Preview( Asset::AssetClass* asset )
         {
             m_Label->SetValue( m_PreviewAsset->GetFilePath().Get() );
 
-            Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( m_PreviewAsset );
+            Component::ComponentViewer< Asset::ArtFileComponent > artFile( m_PreviewAsset );
             if ( artFile.Valid() )
             {
                 if ( !artFile->GetPath().Get().empty() )

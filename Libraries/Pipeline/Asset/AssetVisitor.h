@@ -72,7 +72,7 @@ namespace Asset
     // Elements
     S_i32 m_ElementFilterTypes; // TODO: Add more element filters
     ElementHandlerLookup m_ElementHandlerLookup;
-    bool HandleArtFileAttribute( Reflect::Element* element );
+    bool HandleArtFileComponent( Reflect::Element* element );
 
     // Fields
     S_i32 m_FieldFilterTypes;   // TODO: Add more field filters

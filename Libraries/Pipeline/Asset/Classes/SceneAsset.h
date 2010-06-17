@@ -35,7 +35,7 @@ namespace Asset
 
     virtual bool ProcessComponent(Reflect::ElementPtr element, const std::string& fieldName) NOC_OVERRIDE;
 
-    virtual bool ValidateCompatible( const Attribute::AttributePtr& attr, std::string& error ) const NOC_OVERRIDE;
+    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const NOC_OVERRIDE;
 
     virtual bool IsBuildable() const NOC_OVERRIDE;
     virtual bool IsViewable() const NOC_OVERRIDE;

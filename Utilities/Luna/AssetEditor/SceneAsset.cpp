@@ -2,14 +2,14 @@
 #include "SceneAsset.h" 
 
 #include "AssetManager.h"
-#include "AttributeExistenceCommand.h"
+#include "ComponentExistenceCommand.h"
 #include "PersistentDataFactory.h"
 
 #include "Foundation/Log.h"
 #include "Application/Inspect/Widgets/Control.h"
 #include "Application/Inspect/Widgets/Container.h"
 
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 
 using namespace Luna;
 
@@ -46,8 +46,8 @@ SceneAsset::SceneAsset( Asset::SceneAsset* level, Luna::AssetManager* manager )
   // comes from Reflect::Element
   level->AddChangedListener( Reflect::ElementChangeSignature::Delegate (this, &SceneAsset::OnElementChanged)); 
 
-  level->AddAttributeAddedListener( Attribute::AttributeCollectionChangedSignature::Delegate(this, &SceneAsset::OnAttributeAdded)); 
-  level->AddAttributeRemovedListener( Attribute::AttributeCollectionChangedSignature::Delegate(this, &SceneAsset::OnAttributeRemoved)); 
+  level->AddComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate(this, &SceneAsset::OnComponentAdded)); 
+  level->AddComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate(this, &SceneAsset::OnComponentRemoved)); 
 }
 
 SceneAsset::~SceneAsset()
@@ -56,8 +56,8 @@ SceneAsset::~SceneAsset()
   level->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate (this, &SceneAsset::OnElementChanged)); 
 
   //Listen for add/remove attribute
-  level->RemoveAttributeAddedListener( Attribute::AttributeCollectionChangedSignature::Delegate(this, &SceneAsset::OnAttributeAdded)); 
-  level->RemoveAttributeRemovedListener( Attribute::AttributeCollectionChangedSignature::Delegate(this, &SceneAsset::OnAttributeRemoved)); 
+  level->RemoveComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate(this, &SceneAsset::OnComponentAdded)); 
+  level->RemoveComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate(this, &SceneAsset::OnComponentRemoved)); 
 }
 
 void SceneAsset::OnElementChanged(const Reflect::ElementChangeArgs& args)
@@ -74,9 +74,9 @@ void SceneAsset::OnElementChanged(const Reflect::ElementChangeArgs& args)
   m_LevelChanged.Raise(notifyArgs); 
 }
 
-void SceneAsset::WeatherAttributeChanged(const Reflect::ElementChangeArgs& args)
+void SceneAsset::WeatherComponentChanged(const Reflect::ElementChangeArgs& args)
 {
-  LevelWeatherAttributesChangedArgs notifyArgs; 
+  LevelWeatherComponentsChangedArgs notifyArgs; 
   notifyArgs.m_Flags        = Luna::WEATHER_OP_NONE;
   notifyArgs.m_LevelClass   = GetPackage< Asset::SceneAsset >(); 
 
@@ -99,13 +99,13 @@ void SceneAsset::WeatherAttributeChanged(const Reflect::ElementChangeArgs& args)
 
   }
 
-  m_LevelWeatherAttributesChanged.Raise(notifyArgs);
+  m_LevelWeatherComponentsChanged.Raise(notifyArgs);
 }
 
-void SceneAsset::OnAttributeAdded(const Attribute::AttributeCollectionChanged& args)
+void SceneAsset::OnComponentAdded(const Component::ComponentCollectionChanged& args)
 {
 }
 
-void SceneAsset::OnAttributeRemoved(const Attribute::AttributeCollectionChanged& args)
+void SceneAsset::OnComponentRemoved(const Component::ComponentCollectionChanged& args)
 {
 }

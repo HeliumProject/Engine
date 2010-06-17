@@ -2,7 +2,7 @@
 #include "SearchBar.h"
 
 #include "Pipeline/Asset/AssetClass.h"
-#include "Attribute/AttributeCategories.h"
+#include "Pipeline/Component/ComponentCategories.h"
 #include "Foundation/Boost/Regex.h" 
 #include "Foundation/Log.h"
 #include "EntityAssetSet.h"
@@ -59,33 +59,31 @@ SearchBar::SearchBar( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& po
     // Set Status
     m_Status->SetLabel( "" );
 
-    // Set Attributes
-    Attribute::V_Attribute attributes;
-    Attribute::AttributeCategories* attributeCategories = Attribute::AttributeCategories::GetInstance();
-    if ( attributeCategories )
+    // Set Components
+    Component::V_Component components;
+    Component::ComponentCategories* componentCategories = Component::ComponentCategories::GetInstance();
+    if ( componentCategories )
     {
-        Attribute::M_AttributeCategories::const_iterator categoryItr = attributeCategories->GetCategories().begin();
-        Attribute::M_AttributeCategories::const_iterator categoryEnd = attributeCategories->GetCategories().end();
+        Component::M_ComponentCategories::const_iterator categoryItr = componentCategories->GetCategories().begin();
+        Component::M_ComponentCategories::const_iterator categoryEnd = componentCategories->GetCategories().end();
         for ( ; categoryItr != categoryEnd; ++categoryItr )
         {
-            Attribute::M_Attribute::const_iterator attributeItr = categoryItr->second->Attributes().begin();
-            Attribute::M_Attribute::const_iterator attributeEnd = categoryItr->second->Attributes().end();
-            for ( ; attributeItr != attributeEnd; ++id, ++attributeItr )
+            Component::M_Component::const_iterator componentItr = categoryItr->second->Components().begin();
+            Component::M_Component::const_iterator componentEnd = categoryItr->second->Components().end();
+            for ( ; componentItr != componentEnd; ++id, ++componentItr )
             {
-                attributes.push_back( attributeItr->second );
+                components.push_back( componentItr->second );
             }
         }
     }
 
-    // Initialize Attributes
-    m_Attributes->Clear();
-    std::sort( attributes.begin(), attributes.end(), CompareAttributes );
-    Attribute::V_Attribute::iterator attributeItr = attributes.begin();
-    Attribute::V_Attribute::iterator attributeEnd = attributes.end();
-    for ( int id = 0; attributeItr != attributeEnd; ++id, ++attributeItr )
+    // Initialize Components
+    std::sort( components.begin(), components.end(), CompareComponents );
+    Component::V_Component::iterator componentItr = components.begin();
+    Component::V_Component::iterator componentEnd = components.end();
+    for ( int id = 0; componentItr != componentEnd; ++id, ++componentItr )
     {
-        m_IndexToAttribute.insert( std::make_pair( id, *attributeItr ) );
-        m_Attributes->Insert( (*attributeItr)->GetClass()->m_UIName, id );
+        m_IndexToComponent.insert( std::make_pair( id, *componentItr ) );
     }
 
     // Listeners
@@ -268,21 +266,6 @@ void SearchBar::SetupSearchCriteria( SearchBarTraverser& traverser )
                 break;
             }
         }
-    }
-
-    Attribute::V_Attribute attributes;
-    int numAttributes = (int) m_IndexToAttribute.size();
-    for ( int i = 0; i < numAttributes; ++i )
-    {
-        if ( m_Attributes->IsChecked( i ) )
-        {
-            attributes.push_back( m_IndexToAttribute[ i ] );
-        }
-    }
-
-    if ( attributes.size() )
-    {
-        traverser.AddSearchCriteria( new AttributeCriteria( attributes ) );
     }
 }
 
@@ -471,7 +454,7 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
     }
 }
 
-bool SearchBar::CompareAttributes( const Attribute::AttributePtr& rhs, const Attribute::AttributePtr& lhs )
+bool SearchBar::CompareComponents( const Component::ComponentPtr& rhs, const Component::ComponentPtr& lhs )
 {
     return ( rhs->GetClass()->m_UIName < lhs->GetClass()->m_UIName );
 }
@@ -611,7 +594,7 @@ bool OBBCriteria::Validate( Luna::HierarchyNode* node )
     return true;
 }
 
-bool AttributeCriteria::Validate( Luna::HierarchyNode* node )
+bool ComponentCriteria::Validate( Luna::HierarchyNode* node )
 {
     Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( node );
     if ( !entity )
@@ -631,11 +614,11 @@ bool AttributeCriteria::Validate( Luna::HierarchyNode* node )
         return false;
     }
 
-    Attribute::V_Attribute::iterator itr = m_Attributes.begin();
-    Attribute::V_Attribute::iterator end = m_Attributes.end();
+    Component::V_Component::iterator itr = m_Components.begin();
+    Component::V_Component::iterator end = m_Components.end();
     for ( ; itr != end; ++itr )
     {
-        if ( !entityClass->ContainsAttribute( (*itr)->GetType() ) )
+        if ( !entityClass->ContainsComponent( (*itr)->GetType() ) )
         {
             return false;
         }

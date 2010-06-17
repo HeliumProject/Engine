@@ -11,7 +11,7 @@ using namespace Asset;
 #define MAX_QUERY_LENGTH  2048
 #define MAX_INSERT_LENGTH 2048
 
-static const char* s_AttributeExpr = 
+static const char* s_ComponentExpr = 
 "( assets.id IN " \
 "\n  ( SELECT asset_x_attribute.asset_id" \
 "\n    FROM asset_x_attribute" \
@@ -187,24 +187,24 @@ bool CacheDBColumnExpr::GetExpression( const M_CacheDBColumns& columns, std::str
 
 
 /////////////////////////////////////////////////////////////////////////////
-/// class CacheDBAttributeExpr
+/// class CacheDBComponentExpr
 /////////////////////////////////////////////////////////////////////////////
-CacheDBAttributeExpr::CacheDBAttributeExpr()
+CacheDBComponentExpr::CacheDBComponentExpr()
 : CacheDBPhraseExpr()
 {
 }
 
-CacheDBAttributeExpr::~CacheDBAttributeExpr()
+CacheDBComponentExpr::~CacheDBComponentExpr()
 {
 }
 
 
-bool CacheDBAttributeExpr::GetExpression( const M_CacheDBColumns& columns, std::string& expr, S_CacheDBColumnID& tables ) const
+bool CacheDBComponentExpr::GetExpression( const M_CacheDBColumns& columns, std::string& expr, S_CacheDBColumnID& tables ) const
 {
-  if ( !GetPhrase().empty() && GetAttributeRowID() > 0 )
+  if ( !GetPhrase().empty() && GetComponentRowID() > 0 )
   {
     char buff[MAX_INSERT_LENGTH];
-    sprintf_s( buff, sizeof( buff ), s_AttributeExpr, GetAttributeRowID(), GetPhrase().c_str() );
+    sprintf_s( buff, sizeof( buff ), s_ComponentExpr, GetComponentRowID(), GetPhrase().c_str() );
     expr = buff;
 
     if ( NegateExpr() )

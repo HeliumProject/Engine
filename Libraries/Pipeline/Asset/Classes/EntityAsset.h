@@ -42,7 +42,7 @@ namespace Asset
 
     EntityAsset();
 
-    virtual bool ValidateCompatible( const Attribute::AttributePtr& attr, std::string& error ) const NOC_OVERRIDE;
+    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const NOC_OVERRIDE;
     void MakeDefault();
 
     virtual bool IsBuildable() const NOC_OVERRIDE;

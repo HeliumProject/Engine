@@ -9,7 +9,7 @@
 #include "PersistentDataFactory.h"
 
 #include "Pipeline/Asset/Classes/StandardShaderAsset.h"
-#include "Pipeline/Asset/Attributes/TextureMapAttribute.h"
+#include "Pipeline/Asset/Components/TextureMapComponent.h"
 
 #include "Foundation/String/Natural.h"
 #include "Editor/Editor.h"
@@ -339,15 +339,15 @@ void ShaderAsset::ConvertShader( const ContextMenuArgsPtr& args )
 void ShaderAsset::ReloadAllTextures( const ContextMenuArgsPtr& args )
 {
     Asset::ShaderAssetPtr shaderClass = GetPackage< Asset::ShaderAsset >();
-    Attribute::M_Attribute::const_iterator itr = shaderClass->GetAttributes().begin();
-    Attribute::M_Attribute::const_iterator end = shaderClass->GetAttributes().end(); 
+    Component::M_Component::const_iterator itr = shaderClass->GetComponents().begin();
+    Component::M_Component::const_iterator end = shaderClass->GetComponents().end(); 
 
     Nocturnal::S_Path textureFiles;
 
     while( itr != end )
     {
         // try to cast this item to a texture map attribute
-        Asset::TextureMapAttribute *textureAttr = Reflect::ObjectCast< Asset::TextureMapAttribute >( (*itr).second );
+        Asset::TextureMapComponent *textureAttr = Reflect::ObjectCast< Asset::TextureMapComponent >( (*itr).second );
 
         if( textureAttr )
         {

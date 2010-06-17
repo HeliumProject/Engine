@@ -14,13 +14,13 @@
 #include "ResultsPanel.h"
 #include "SearchQuery.h"
 
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/AssetFile.h"
 #include "Pipeline/Asset/AssetFolder.h"
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Pipeline/Asset/Tracker/Tracker.h"
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Foundation/CommandLine.h"
 #include "Editor/DocumentManager.h"
 #include "Application/RCS/RCS.h"
@@ -454,7 +454,7 @@ bool BrowserFrame::IsPreviewable( Asset::AssetFile* file )
     Asset::AssetClassPtr asset = Asset::AssetFile::GetAssetClass( file );
     if ( asset.ReferencesObject() )
     {
-        Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( asset );
+        Component::ComponentViewer< Asset::ArtFileComponent > artFile( asset );
         if ( artFile.Valid() )
         {
             if ( !artFile->GetPath().Get().empty() )

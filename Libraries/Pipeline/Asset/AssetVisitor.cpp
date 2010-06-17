@@ -3,10 +3,10 @@
 #include "Pipeline/Asset/AssetExceptions.h"
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Classes/EntityAsset.h"
-#include "Pipeline/Asset/Attributes/DependenciesAttribute.h"
+#include "Pipeline/Asset/Components/DependenciesComponent.h"
 
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Flags.h"
 #include "Platform/Types.h"
@@ -60,8 +60,8 @@ AssetVisitor::AssetVisitor( M_AssetFiles* assetFiles, Asset::AssetClass* assetCl
 
     // Elements
     m_ElementHandlerLookup.insert( ElementHandlerLookup::value_type( 
-        Reflect::GetType<Asset::ArtFileAttribute>(),
-        &AssetVisitor::HandleArtFileAttribute ) );
+        Reflect::GetType<Asset::ArtFileComponent>(),
+        &AssetVisitor::HandleArtFileComponent ) );
 
     // Field
     m_FieldFilterTypes.insert( (i32)Reflect::FieldFlags::Discard );
@@ -142,7 +142,7 @@ bool AssetVisitor::HandleElement( Reflect::Element* element )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool AssetVisitor::HandleArtFileAttribute( Reflect::Element* element )
+bool AssetVisitor::HandleArtFileComponent( Reflect::Element* element )
 {
     using namespace Asset;
     using namespace Reflect;
@@ -151,7 +151,7 @@ bool AssetVisitor::HandleArtFileAttribute( Reflect::Element* element )
     if ( assetFile )
     {
         // Determine which shaders this asset is currently using
-        Asset::ArtFileAttribute* attribute = Reflect::AssertCast< Asset::ArtFileAttribute >(element);
+        Asset::ArtFileComponent* attribute = Reflect::AssertCast< Asset::ArtFileComponent >(element);
 
         Nocturnal::Path filePath = attribute->GetPath();
         std::string artFile = filePath.Get();
@@ -567,7 +567,7 @@ void AssetVisitor::HandleMayaFile( Reflect::Element* element, const Reflect::Fie
     return;
 
     AssetClassPtr assetClass = AssetFile::GetAssetClass( assetFile );
-    Attribute::AttributeViewer< ArtFileAttribute > model ( assetClass );
+    Component::ComponentViewer< ArtFileComponent > model ( assetClass );
     if ( model.Valid() )
     {
         std::string artFile;

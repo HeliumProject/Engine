@@ -223,7 +223,7 @@ namespace Luna
       if ( enable )
       {
         // This will create a new attribute or enable an existing one.
-        Attribute::AttributeEditor< T > editor( pkg );
+        Component::ComponentEditor< T > editor( pkg );
         editor.Commit();
       }
       else

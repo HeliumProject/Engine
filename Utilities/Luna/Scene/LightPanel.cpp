@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "LightPanel.h"
 
-#include "AttributeOverrideGroup.h"
 #include "Light.h"
 #include "Scene.h"
 #include "SceneManager.h"
@@ -9,7 +8,7 @@
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Foundation/Math/Color3.h"
 
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 
 using namespace Luna;
 

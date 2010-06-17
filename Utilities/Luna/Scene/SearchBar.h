@@ -2,7 +2,7 @@
 
 #include "SearchGenerated.h"
 
-#include "Attribute/AttributeCategory.h"
+#include "Pipeline/Component/ComponentCategory.h"
 #include "Entity.h"
 #include "Scene.h"
 #include "SceneVisitor.h"
@@ -58,7 +58,7 @@ namespace Luna
   private:
     SceneEditor* m_SceneEditor;
     V_HierarchyNodeSmartPtr m_ResultNodes;
-    Attribute::M_Attribute m_IndexToAttribute;
+    Component::M_Component m_IndexToComponent;
 
   public:
     SearchBar( SceneEditor* sceneEditor, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 362,34 ), long style = wxTAB_TRAVERSAL );
@@ -76,7 +76,7 @@ namespace Luna
     void DisplayResults( const M_SceneToZone& sceneToZone, const S_RegionDumbPtr& regionSet, SearchBarTraverser& traverser );
     void RefreshResults( const M_SceneToZone& sceneToZone, const S_RegionDumbPtr& regionSet );
     
-    static bool CompareAttributes( const Attribute::AttributePtr& rhs, const Attribute::AttributePtr& lhs );
+    static bool CompareComponents( const Component::ComponentPtr& rhs, const Component::ComponentPtr& lhs );
     static std::string WildcardToRegex( const std::string& str, bool partialMatch = true );
   };
 
@@ -218,17 +218,17 @@ namespace Luna
     virtual bool Validate( Luna::HierarchyNode* node );
   };
   
-  class AttributeCriteria : public SearchBarCriteria
+  class ComponentCriteria : public SearchBarCriteria
   {
   public:
-    AttributeCriteria( const Attribute::V_Attribute& attributes )
+    ComponentCriteria( const Component::V_Component& components )
     {
-      m_Attributes = attributes;
+      m_Components = components;
     }
     
     virtual bool Validate( Luna::HierarchyNode* node );
   
   private:
-    Attribute::V_Attribute m_Attributes;
+    Component::V_Component m_Components;
   };
 }

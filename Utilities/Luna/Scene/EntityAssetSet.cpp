@@ -15,8 +15,8 @@
 #include "Foundation/Log.h"
 
 #include "Pipeline/Asset/Classes/EntityAsset.h"
-#include "Attribute/AttributeHandle.h"
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
+#include "Pipeline/Component/ComponentHandle.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
 
 using namespace Luna;
 
@@ -64,7 +64,7 @@ void EntityAssetSet::LoadAssetClass()
     {
         m_Name = m_Class->GetFullName();
 
-        Attribute::AttributeViewer< Asset::ArtFileAttribute > model (m_Class);
+        Component::ComponentViewer< Asset::ArtFileComponent > model (m_Class);
 
         if (model.Valid())
         {

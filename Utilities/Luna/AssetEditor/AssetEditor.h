@@ -22,7 +22,7 @@ namespace Luna
   class AssetPreviewWindow;
 
   ///////////////////////////////////////////////////////////////////////////
-  // Main UI window for editing AssetClasses and their Attributes.
+  // Main UI window for editing AssetClasses and their Components.
   // 
   class AssetEditor : public Luna::Editor
   {
@@ -67,8 +67,8 @@ namespace Luna
     // 
     // Context menu callbacks
     // 
-    void PromptAddAttributes( const ContextMenuArgsPtr& args );
-    void RemoveSelectedAttributes( const ContextMenuArgsPtr& args );
+    void PromptAddComponents( const ContextMenuArgsPtr& args );
+    void RemoveSelectedComponents( const ContextMenuArgsPtr& args );
     void CloseSelectedAssetClasses( const ContextMenuArgsPtr& args );
     void OnAssetPreview( const ContextMenuArgsPtr& args );
     void OnExpandSelectedAssets( const ContextMenuArgsPtr& args );
@@ -77,7 +77,7 @@ namespace Luna
     // 
     // Shortcuts for complex commands
     // 
-    Undo::CommandPtr RemoveAttributes( const S_AttributeSmartPtr& attributesToDelete );
+    Undo::CommandPtr RemoveComponents( const S_ComponentSmartPtr& componentsToDelete );
 
   private:
     

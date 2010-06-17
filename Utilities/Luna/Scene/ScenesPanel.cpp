@@ -10,8 +10,8 @@
 #include "Zone.h"
 
 #include "Pipeline/Asset/Classes/EntityAsset.h"
-#include "Attribute/AttributeHandle.h"
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
+#include "Pipeline/Component/ComponentHandle.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Content/ContentVersion.h"
 #include "Finder/AssetSpecs.h"
 #include "Foundation/Log.h"

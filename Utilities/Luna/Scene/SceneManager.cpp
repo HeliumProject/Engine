@@ -8,8 +8,8 @@
 #include "Zone.h"
 
 #include "Pipeline/Asset/Classes/SceneAsset.h"
-#include "Pipeline/Asset/Attributes/WorldFileAttribute.h"
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Asset/Components/WorldFileComponent.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Finder/AssetSpecs.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
@@ -141,7 +141,7 @@ DocumentPtr SceneManager::OpenPath( const std::string& path, std::string& error 
             return NULL; 
         }
 
-        Attribute::AttributeViewer< Asset::WorldFileAttribute > world( m_CurrentLevel, false );    
+        Component::ComponentViewer< Asset::WorldFileComponent > world( m_CurrentLevel, false );    
 
         if ( !world.Valid() || world->GetPath().Exists() )
         {

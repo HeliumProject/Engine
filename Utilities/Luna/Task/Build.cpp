@@ -17,8 +17,8 @@
 
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/SceneAsset.h"
-#include "Attribute/AttributeHandle.h"
-#include "Pipeline/Asset/Attributes/WorldFileAttribute.h"
+#include "Pipeline/Component/ComponentHandle.h"
+#include "Pipeline/Asset/Components/WorldFileComponent.h"
 #include "Pipeline/AssetBuilder/AssetBuilder.h"
 #include "Pipeline/AssetBuilder/BuilderOptions.h"
 
@@ -376,7 +376,7 @@ bool GetBuilderOptions( const Nocturnal::S_Path& assets, AssetBuilder::BuilderOp
 
             // fill out the zone names from the level asset
             Asset::SceneAssetPtr levelAsset = Asset::AssetClass::LoadAssetClass< Asset::SceneAsset >( *assets.begin() );
-            Attribute::AttributeViewer< Asset::WorldFileAttribute > model( levelAsset );
+            Component::ComponentViewer< Asset::WorldFileComponent > model( levelAsset );
 
             Reflect::V_Element elements;     
             try

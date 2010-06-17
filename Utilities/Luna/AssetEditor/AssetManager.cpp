@@ -5,7 +5,7 @@
 #include "AssetDocument.h"
 #include "AssetEditor.h"
 #include "AssetReferenceNode.h"
-#include "AttributeNode.h"
+#include "ComponentNode.h"
 #include "HierarchyChangeToken.h"
 #include "PersistentDataFactory.h"
 
@@ -528,16 +528,16 @@ size_t Luna::AssetManager::GetSelectedAssets( S_AssetClassDumbPtr& list ) const
 // Fills out the list with all the attributes that are currently selected.
 // Returns the number of items in the list.
 // 
-size_t Luna::AssetManager::GetSelectedAttributes( S_AttributeSmartPtr& list ) const
+size_t Luna::AssetManager::GetSelectedComponents( S_ComponentSmartPtr& list ) const
 {
     OS_SelectableDumbPtr::Iterator selItr = m_Selection.GetItems().Begin();
     OS_SelectableDumbPtr::Iterator selEnd = m_Selection.GetItems().End();
     for ( ; selItr != selEnd; ++selItr )
     {
-        Luna::AttributeNode* node = Reflect::ObjectCast< Luna::AttributeNode >( *selItr );
+        Luna::ComponentNode* node = Reflect::ObjectCast< Luna::ComponentNode >( *selItr );
         if ( node )
         {
-            list.insert( node->GetAttribute() );
+            list.insert( node->GetComponent() );
         }
     }
     return list.size();

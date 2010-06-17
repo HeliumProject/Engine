@@ -38,7 +38,7 @@ namespace FinderSpecs
     const static FamilySpec CUBEMAP_FAMILY;
     const static FamilySpec MOVIE_FAMILY;
     const static FamilySpec SHARED_ANIMGROUP_FAMILY;
-    const static FamilySpec ATTRIBUTE_FAMILY; 
+    const static FamilySpec COMPONENT_FAMILY; 
     const static FamilySpec SKELETON_FAMILY;
     const static FamilySpec SHADOWCASTERS_FAMILY;
     const static FamilySpec WRINKLEMAP_FAMILY; 
@@ -63,7 +63,7 @@ namespace FinderSpecs
     const static DecorationSpec WORLD_DECORATION;
     const static DecorationSpec ZONE_DECORATION;
     const static DecorationSpec MOVIE_DECORATION;
-    const static DecorationSpec ATTRIBUTE_DECORATION; 
+    const static DecorationSpec COMPONENT_DECORATION; 
     const static DecorationSpec SKELETON_DECORATION; 
     const static DecorationSpec SHADOWCASTERS_DECORATION; 
 

@@ -284,7 +284,7 @@ SearchPanelGenerated::SearchPanelGenerated( wxWindow* parent, wxWindowID id, con
 	bSizer58->Add( 0, 8, 0, 0, 5 );
 	
 	wxStaticText* m_staticText41;
-	m_staticText41 = new wxStaticText( m_ScrolledWindow, wxID_ANY, wxT("Special Attributes:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText41 = new wxStaticText( m_ScrolledWindow, wxID_ANY, wxT("Special Components:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText41->Wrap( -1 );
 	m_staticText41->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
@@ -352,32 +352,32 @@ SearchPanelGenerated::SearchPanelGenerated( wxWindow* parent, wxWindowID id, con
 	
 	fgSizer2->Add( bSizer282, 0, wxEXPAND, 5 );
 	
-	m_staticText151 = new wxStaticText( m_ScrolledWindow, wxID_ANY, wxT("Has Attribute:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText151 = new wxStaticText( m_ScrolledWindow, wxID_ANY, wxT("Has Component:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText151->Wrap( -1 );
 	fgSizer2->Add( m_staticText151, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
 	wxBoxSizer* bSizer261;
 	bSizer261 = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxString m_AttributeNameChoiceChoices[] = { wxT("<Select Attribute Name>") };
-	int m_AttributeNameChoiceNChoices = sizeof( m_AttributeNameChoiceChoices ) / sizeof( wxString );
-	m_AttributeNameChoice = new wxChoice( m_ScrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_AttributeNameChoiceNChoices, m_AttributeNameChoiceChoices, 0 );
-	m_AttributeNameChoice->SetSelection( 0 );
-	m_AttributeNameChoice->SetToolTip( wxT("Here you can search for the value of\na given attribute.") );
-	m_AttributeNameChoice->SetMinSize( wxSize( 150,-1 ) );
+	wxString m_ComponentNameChoiceChoices[] = { wxT("<Select Component Name>") };
+	int m_ComponentNameChoiceNChoices = sizeof( m_ComponentNameChoiceChoices ) / sizeof( wxString );
+	m_ComponentNameChoice = new wxChoice( m_ScrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ComponentNameChoiceNChoices, m_ComponentNameChoiceChoices, 0 );
+	m_ComponentNameChoice->SetSelection( 0 );
+	m_ComponentNameChoice->SetToolTip( wxT("Here you can search for the value of\na given attribute.") );
+	m_ComponentNameChoice->SetMinSize( wxSize( 150,-1 ) );
 	
-	bSizer261->Add( m_AttributeNameChoice, 0, wxALL, 5 );
+	bSizer261->Add( m_ComponentNameChoice, 0, wxALL, 5 );
 	
-	m_AttributeValueTextCtrl = new wxTextCtrl( m_ScrolledWindow, wxID_ANY, wxT("<Attribute Value>"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_AttributeValueTextCtrl->SetToolTip( wxT("Here you can search for the value of\na given attribute.") );
-	m_AttributeValueTextCtrl->SetMinSize( wxSize( 150,-1 ) );
+	m_ComponentValueTextCtrl = new wxTextCtrl( m_ScrolledWindow, wxID_ANY, wxT("<Component Value>"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ComponentValueTextCtrl->SetToolTip( wxT("Here you can search for the value of\na given attribute.") );
+	m_ComponentValueTextCtrl->SetMinSize( wxSize( 150,-1 ) );
 	
-	bSizer261->Add( m_AttributeValueTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer261->Add( m_ComponentValueTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_AttributeHelpBitmap = new wxStaticBitmap( m_ScrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_AttributeHelpBitmap->SetToolTip( wxT("Here you can search for the value of\na given attribute.") );
+	m_ComponentHelpBitmap = new wxStaticBitmap( m_ScrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ComponentHelpBitmap->SetToolTip( wxT("Here you can search for the value of\na given attribute.") );
 	
-	bSizer261->Add( m_AttributeHelpBitmap, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
+	bSizer261->Add( m_ComponentHelpBitmap, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
 	
 	fgSizer2->Add( bSizer261, 1, wxEXPAND, 5 );
 	

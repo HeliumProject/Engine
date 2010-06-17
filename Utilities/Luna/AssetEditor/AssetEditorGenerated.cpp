@@ -311,7 +311,7 @@ AnimGroupPanel::~AnimGroupPanel()
 {
 }
 
-AttribChooserPanel::AttribChooserPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+ComponentChooserPanel::ComponentChooserPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
@@ -365,11 +365,11 @@ AttribChooserPanel::AttribChooserPanel( wxWindow* parent, wxWindowID id, const w
 	this->Layout();
 }
 
-AttribChooserPanel::~AttribChooserPanel()
+ComponentChooserPanel::~ComponentChooserPanel()
 {
 }
 
-AttributeCategoriesPanel::AttributeCategoriesPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+ComponentCategoriesPanel::ComponentCategoriesPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
@@ -423,11 +423,11 @@ AttributeCategoriesPanel::AttributeCategoriesPanel( wxWindow* parent, wxWindowID
 	this->Layout();
 }
 
-AttributeCategoriesPanel::~AttributeCategoriesPanel()
+ComponentCategoriesPanel::~ComponentCategoriesPanel()
 {
 }
 
-AttributeCategoryPanel::AttributeCategoryPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+ComponentCategoryPanel::ComponentCategoryPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
@@ -455,7 +455,7 @@ AttributeCategoryPanel::AttributeCategoryPanel( wxWindow* parent, wxWindowID id,
 	this->Layout();
 }
 
-AttributeCategoryPanel::~AttributeCategoryPanel()
+ComponentCategoryPanel::~ComponentCategoryPanel()
 {
 }
 

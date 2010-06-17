@@ -3,10 +3,10 @@
 #include "AssetPreviewWindow.h"
 
 #include "AssetPreferences.h"
-#include "Pipeline/Asset/Attributes/StandardColorMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardNormalMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardExpensiveMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardDetailMapAttribute.h"
+#include "Pipeline/Asset/Components/StandardColorMapComponent.h"
+#include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
+#include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
+#include "Pipeline/Asset/Components/StandardDetailMapComponent.h"
 #include "igDXContent/ShaderLoader.h"
 
 using namespace Luna;
@@ -131,7 +131,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       shader->m_flags &= ~SHDR_FLAG_TWO_SIDED;
     }
 
-    Asset::StandardColorMapAttribute* colorMap = shaderClass->GetAttribute< Asset::StandardColorMapAttribute >();
+    Asset::StandardColorMapComponent* colorMap = shaderClass->GetComponent< Asset::StandardColorMapComponent >();
     if ( colorMap )
     {
       igDXRender::TextureSettings settings;
@@ -153,7 +153,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
     
     igDXContent::RBShaderLoader::UpdateShaderColorMap( shader, colorMap );
 
-    Asset::StandardNormalMapAttribute* normalMap = shaderClass->GetAttribute< Asset::StandardNormalMapAttribute >();
+    Asset::StandardNormalMapComponent* normalMap = shaderClass->GetComponent< Asset::StandardNormalMapComponent >();
     if ( normalMap )
     {
       igDXRender::TextureSettings settings;
@@ -175,7 +175,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
 
     igDXContent::RBShaderLoader::UpdateShaderNormalMap( shader, normalMap );
 
-    Asset::StandardExpensiveMapAttribute* expensiveMap = shaderClass->GetAttribute< Asset::StandardExpensiveMapAttribute >();
+    Asset::StandardExpensiveMapComponent* expensiveMap = shaderClass->GetComponent< Asset::StandardExpensiveMapComponent >();
     if ( expensiveMap )
     {
       igDXRender::TextureSettings settings;
@@ -220,8 +220,8 @@ void AssetPreviewWindow::OnAssetLoaded( const AssetLoadArgs& args )
 
   m_ListenShaders.insert( shaderClass );
   shaderClass->AddShaderChangedListener( ShaderChangedSignature::Delegate( this, &AssetPreviewWindow::OnShaderChanged ) );
-  shaderClass->AddAttributeAddedListener( AttributeExistenceSignature::Delegate( this, &AssetPreviewWindow::OnShaderAttributedChanged ) );
-  shaderClass->AddAttributeRemovedListener( AttributeExistenceSignature::Delegate( this, &AssetPreviewWindow::OnShaderAttributedChanged ) );
+  shaderClass->AddComponentAddedListener( ComponentExistenceSignature::Delegate( this, &AssetPreviewWindow::OnShaderComponentdChanged ) );
+  shaderClass->AddComponentRemovedListener( ComponentExistenceSignature::Delegate( this, &AssetPreviewWindow::OnShaderComponentdChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -238,8 +238,8 @@ void AssetPreviewWindow::OnAssetUnloaded( const AssetLoadArgs& args )
 
   m_ListenShaders.erase( shaderClass );
   shaderClass->RemoveShaderChangedListener( ShaderChangedSignature::Delegate( this, &AssetPreviewWindow::OnShaderChanged ) );
-  shaderClass->RemoveAttributeAddedListener( AttributeExistenceSignature::Delegate( this, &AssetPreviewWindow::OnShaderAttributedChanged ) );
-  shaderClass->RemoveAttributeRemovedListener( AttributeExistenceSignature::Delegate( this, &AssetPreviewWindow::OnShaderAttributedChanged ) );
+  shaderClass->RemoveComponentAddedListener( ComponentExistenceSignature::Delegate( this, &AssetPreviewWindow::OnShaderComponentdChanged ) );
+  shaderClass->RemoveComponentRemovedListener( ComponentExistenceSignature::Delegate( this, &AssetPreviewWindow::OnShaderComponentdChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -281,7 +281,7 @@ void AssetPreviewWindow::OnShaderChanged( const ShaderChangedArgs& args )
 // This is an event that will fire when a shader attribute is added or
 // removed.
 // 
-void AssetPreviewWindow::OnShaderAttributedChanged( const AttributeExistenceArgs& args )
+void AssetPreviewWindow::OnShaderComponentdChanged( const ComponentExistenceArgs& args )
 {
   Asset::ShaderAsset* shaderAsset = Reflect::ObjectCast< Asset::ShaderAsset >( args.m_Asset->GetPackage() );
   NOC_ASSERT( shaderAsset );

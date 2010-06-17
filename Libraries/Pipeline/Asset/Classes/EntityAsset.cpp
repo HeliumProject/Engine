@@ -1,6 +1,6 @@
 #include "EntityAsset.h"
 
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetExceptions.h"
 #include "Finder/AssetSpecs.h"
 #include "Reflect/Archive.h"
@@ -8,12 +8,12 @@
 #include "Reflect/Version.h"
 
 #include "Pipeline/Asset/AssetTemplate.h"
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
-#include "Pipeline/Asset/Attributes/DependenciesAttribute.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
+#include "Pipeline/Asset/Components/DependenciesComponent.h"
 
 using namespace Reflect;
 using namespace Asset;
-using namespace Attribute;
+using namespace Component;
 
 REFLECT_DEFINE_CLASS(EntityAsset)
 
@@ -34,7 +34,7 @@ void EntityAsset::EnumerateClass( Reflect::Compositor<EntityAsset>& comp )
     staticTemplate->m_DefaultAddSubDir = true;
     staticTemplate->m_ShowSubDirCheckbox = true;
 
-    staticTemplate->AddRequiredAttribute( Reflect::GetType< Asset::ArtFileAttribute >() );
+    staticTemplate->AddRequiredComponent( Reflect::GetType< Asset::ArtFileComponent >() );
     assetTemplates.push_back( staticTemplate );
 
     // Dynamic Entity (Moby)
@@ -45,7 +45,7 @@ void EntityAsset::EnumerateClass( Reflect::Compositor<EntityAsset>& comp )
     dynamicTemplate->m_DefaultAddSubDir = true;
     dynamicTemplate->m_ShowSubDirCheckbox = true;
 
-    dynamicTemplate->AddRequiredAttribute( Reflect::GetType< Asset::ArtFileAttribute >() );
+    dynamicTemplate->AddRequiredComponent( Reflect::GetType< Asset::ArtFileComponent >() );
     assetTemplates.push_back( dynamicTemplate );
 
     // Unique Geometry (UFrag)
@@ -55,7 +55,7 @@ void EntityAsset::EnumerateClass( Reflect::Compositor<EntityAsset>& comp )
 
     uniqueTemplate->m_DefaultAddSubDir = true;
     uniqueTemplate->m_ShowSubDirCheckbox = true;
-    uniqueTemplate->AddRequiredAttribute( Reflect::GetType< Asset::ArtFileAttribute >() );
+    uniqueTemplate->AddRequiredComponent( Reflect::GetType< Asset::ArtFileComponent >() );
     assetTemplates.push_back( uniqueTemplate );
 
     std::stringstream stream;
@@ -67,13 +67,13 @@ EntityAsset::EntityAsset()
 {
 }
 
-bool EntityAsset::ValidateCompatible( const Attribute::AttributePtr& attr, std::string& error ) const
+bool EntityAsset::ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const
 {
-    if ( attr->HasType( Reflect::GetType<ArtFileAttribute>() ) )
+    if ( attr->HasType( Reflect::GetType<ArtFileComponent>() ) )
     {
         return true;
     }
-    else if ( attr->HasType( Reflect::GetType<DependenciesAttribute>() ) )
+    else if ( attr->HasType( Reflect::GetType<DependenciesComponent>() ) )
     {
         return true;
     }
@@ -85,9 +85,9 @@ void EntityAsset::MakeDefault()
 {
     Clear();
 
-    ArtFileAttributePtr artFile = new ArtFileAttribute();
+    ArtFileComponentPtr artFile = new ArtFileComponent();
 
-    SetAttribute( artFile );
+    SetComponent( artFile );
 }
 
 bool EntityAsset::IsBuildable() const
@@ -103,19 +103,19 @@ bool EntityAsset::IsViewable() const
 
 const Asset::EntityManifestPtr EntityAsset::GetManifest()
 {
-    AttributeViewer< Asset::ArtFileAttribute > artFileAttribute( this );
+    ComponentViewer< Asset::ArtFileComponent > artFileComponent( this );
 
-    if( artFileAttribute.Valid() )
+    if( artFileComponent.Valid() )
     {
-        if ( artFileAttribute->GetPath().Exists() )
+        if ( artFileComponent->GetPath().Exists() )
         {
             try
             {
-                m_Manifest = Archive::FromFile<Asset::EntityManifest>( artFileAttribute->GetPath() );
+                m_Manifest = Archive::FromFile<Asset::EntityManifest>( artFileComponent->GetPath() );
             }
             catch ( const Reflect::Exception& e )
             {
-                Log::Error("Error loading %s (%s)\n", artFileAttribute->GetPath().c_str(), e.what());
+                Log::Error("Error loading %s (%s)\n", artFileComponent->GetPath().c_str(), e.what());
             }
         }
     }

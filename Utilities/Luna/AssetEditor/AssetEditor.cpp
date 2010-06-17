@@ -7,18 +7,18 @@
 #include "AssetOutliner.h"
 #include "AssetPreferences.h"
 #include "AssetReferenceNode.h"
-#include "AttributeChooserDlg.h"
-#include "AttributeExistenceCommand.h"
+#include "ComponentChooserDlg.h"
+#include "ComponentExistenceCommand.h"
 #include "ElementArrayNode.h"
 #include "PersistentNode.h"
 #include "AssetPreviewWindow.h"
 #include "AssetEditorGenerated.h"
 #include "Browser/BrowserToolBar.h"
 
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/AssetInit.h"
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/Classes/EntityAsset.h"
 #include "Pipeline/Asset/Classes/StandardShaderAsset.h"
 
@@ -455,11 +455,11 @@ DocumentManager* AssetEditor::GetDocumentManager()
 // Displays the attribute chooser dialog, allowing the user to add attributes
 // to the selected asset classes.
 // 
-void AssetEditor::PromptAddAttributes( const ContextMenuArgsPtr& args )
+void AssetEditor::PromptAddComponents( const ContextMenuArgsPtr& args )
 {
     AssetPreferences* preferences = GetAssetEditorPreferences();
-    WindowSettings* settings = preferences->GetAttributeChooserDlgWindowSettings();
-    AttributeChooserDlg dlg( this );
+    WindowSettings* settings = preferences->GetComponentChooserDlgWindowSettings();
+    ComponentChooserDlg dlg( this );
     settings->ApplyToWindow( &dlg );
     dlg.ShowModal();
     settings->SetFromWindow( &dlg );
@@ -470,13 +470,13 @@ void AssetEditor::PromptAddAttributes( const ContextMenuArgsPtr& args )
 // selection list and creates an undoable batch command that deletes all of
 // the selected attributes.
 // 
-void AssetEditor::RemoveSelectedAttributes( const ContextMenuArgsPtr& args )
+void AssetEditor::RemoveSelectedComponents( const ContextMenuArgsPtr& args )
 {
-    S_AttributeSmartPtr attributesToDelete;
-    if ( m_AssetManager.GetSelectedAttributes( attributesToDelete ) > 0 )
+    S_ComponentSmartPtr attributesToDelete;
+    if ( m_AssetManager.GetSelectedComponents( attributesToDelete ) > 0 )
     {
         args->GetBatch()->Push( m_AssetManager.GetSelection().Clear() );
-        args->GetBatch()->Push( RemoveAttributes( attributesToDelete ) );
+        args->GetBatch()->Push( RemoveComponents( attributesToDelete ) );
     }
 }
 
@@ -510,21 +510,21 @@ void AssetEditor::OnCollapseSelectedAssets( const ContextMenuArgsPtr& args )
 // from their respective asset classes.  Returns the number of attributes 
 // removed.
 // 
-Undo::CommandPtr AssetEditor::RemoveAttributes( const S_AttributeSmartPtr& attributesToDelete )
+Undo::CommandPtr AssetEditor::RemoveComponents( const S_ComponentSmartPtr& attributesToDelete )
 {
     if ( attributesToDelete.size() > 0 && m_AssetManager.IsEditable() )
     {
         Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
 
         // Remove each of the attributes from their respective Luna::AssetClass
-        S_AttributeSmartPtr::const_iterator attrItr = attributesToDelete.begin();
-        S_AttributeSmartPtr::const_iterator attrEnd = attributesToDelete.end();
+        S_ComponentSmartPtr::const_iterator attrItr = attributesToDelete.begin();
+        S_ComponentSmartPtr::const_iterator attrEnd = attributesToDelete.end();
         for ( ; attrItr != attrEnd; ++attrItr )
         {
-            const AttributeWrapperPtr& attribute = *attrItr;
+            const ComponentWrapperPtr& attribute = *attrItr;
             if ( m_AssetManager.IsEditable( attribute->GetAssetClass() ) )
             {
-                batch->Push( new AttributeExistenceCommand( Undo::ExistenceActions::Remove, attribute->GetAssetClass(), attribute ) );
+                batch->Push( new ComponentExistenceCommand( Undo::ExistenceActions::Remove, attribute->GetAssetClass(), attribute ) );
             }
         }
 
@@ -893,7 +893,7 @@ void AssetEditor::UpdateUIElements()
                 exportable &= asset->IsExportable();
                 isEntity &= asset->GetPackage< Asset::AssetClass >()->HasType( Reflect::GetType< Asset::EntityAsset >() );
 
-                Attribute::AttributeViewer< Asset::ArtFileAttribute > model ( asset->GetPackage< Asset::AssetClass >() );
+                Component::ComponentViewer< Asset::ArtFileComponent > model ( asset->GetPackage< Asset::AssetClass >() );
                 canSyncShaders &= model.Valid();
                 canSyncShaders &= isEntity;
 

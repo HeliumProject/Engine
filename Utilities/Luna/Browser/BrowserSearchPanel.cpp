@@ -19,7 +19,7 @@ static const char* s_FileTypeHelpText = "Search for files with this extension.";
 static const char* s_FileIDHelpText = "Search by the file's ID (or TUID) using\nthe Hex or Decimal value.";
 static const char* s_LevelHelpText = "Add a level name here to search for\nassets that are placed in a given level.";
 static const char* s_ShaderHelpText = "Add a shader name here to only find\nassets that use the given shader.";
-static const char* m_AttributeHelpText = "Here you can search for the value of\na given attribute.";
+static const char* m_ComponentHelpText = "Here you can search for the value of\na given attribute.";
 
 static const char* s_CollectionDefaultText = "<Select Collection>";
 static const char* s_FileTypeDefaultText = "<All File Types>";
@@ -28,8 +28,8 @@ static const char* s_AssetTypeDefaultText = "<Select Type>";
 static const char* s_FileIDDefaultText = "<Hex or Decimal file ID>";
 static const char* s_LevelDefaultText = "<Level Name>";
 static const char* s_ShaderDefaultText = "<Shader Name>";
-static const char* s_AttributeNameDefaultText = "<Select Attribute Name>";
-static const char* s_AttributeValueDefaultText = "<Attribute Value>";
+static const char* s_ComponentNameDefaultText = "<Select Component Name>";
+static const char* s_ComponentValueDefaultText = "<Component Value>";
 
 
 
@@ -69,7 +69,7 @@ BrowserSearchPanel::BrowserSearchPanel( BrowserFrame* browserFrame, wxWindow* pa
     m_WordsHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
     m_PhraseHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
     m_FileIDHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
-    m_AttributeHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
+    m_ComponentHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
     m_LevelHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
     m_ShaderHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
 
@@ -80,8 +80,8 @@ BrowserSearchPanel::BrowserSearchPanel( BrowserFrame* browserFrame, wxWindow* pa
     m_DefaultFieldText.insert( std::make_pair( m_FileIDTextCtrl->GetId(), s_FileIDDefaultText ) );
     m_DefaultFieldText.insert( std::make_pair( m_LevelTextCtrl->GetId(), s_LevelDefaultText ) );
     m_DefaultFieldText.insert( std::make_pair( m_ShaderTextCtrl->GetId(), s_ShaderDefaultText ) );
-    m_DefaultFieldText.insert( std::make_pair( m_AttributeNameChoice->GetId(), s_AttributeNameDefaultText ) );
-    m_DefaultFieldText.insert( std::make_pair( m_AttributeValueTextCtrl->GetId(), s_AttributeValueDefaultText ) );
+    m_DefaultFieldText.insert( std::make_pair( m_ComponentNameChoice->GetId(), s_ComponentNameDefaultText ) );
+    m_DefaultFieldText.insert( std::make_pair( m_ComponentValueTextCtrl->GetId(), s_ComponentValueDefaultText ) );
 
     ConnectListners();
 
@@ -394,15 +394,15 @@ void BrowserSearchPanel::PopulateForm()
 
 
     tableData.clear();
-    numAdded = m_BrowserFrame->GetBrowser()->GetCacheDB()->GetAttributesTableData( tableData );
+    numAdded = m_BrowserFrame->GetBrowser()->GetCacheDB()->GetComponentsTableData( tableData );
     if ( numAdded > 0 )
     {
-        PopulateChoiceControl( (wxControlWithItems*) m_AttributeNameChoice, tableData );
+        PopulateChoiceControl( (wxControlWithItems*) m_ComponentNameChoice, tableData );
     }
     else
     {
-        m_AttributeNameChoice->Enable( false );
-        m_AttributeValueTextCtrl->Enable( false );
+        m_ComponentNameChoice->Enable( false );
+        m_ComponentValueTextCtrl->Enable( false );
     }
 
     // populate from MRU: m_FolderChoice
@@ -713,21 +713,21 @@ bool BrowserSearchPanel::ProcessForm()
     }
 
     // -----------------------------------------
-    //  wxChoice*   m_AttributeNameChoice;
-    //  wxTextCtrl* m_AttributeValueTextCtrl
-    fieldStringValue = m_AttributeNameChoice->GetStringSelection();
+    //  wxChoice*   m_ComponentNameChoice;
+    //  wxTextCtrl* m_ComponentValueTextCtrl
+    fieldStringValue = m_ComponentNameChoice->GetStringSelection();
     fieldStringValue.Trim(true);  // trim white-space right 
     fieldStringValue.Trim(false); // trim white-space left
     if ( !fieldStringValue.empty()
-        && _stricmp( fieldStringValue.c_str(), s_AttributeNameDefaultText  ) != 0 )
+        && _stricmp( fieldStringValue.c_str(), s_ComponentNameDefaultText  ) != 0 )
     {
         cleanFieldValue = fieldStringValue.c_str();
 
-        fieldStringValue = m_AttributeValueTextCtrl->GetValue();
+        fieldStringValue = m_ComponentValueTextCtrl->GetValue();
         fieldStringValue.Trim(true);  // trim white-space right 
         fieldStringValue.Trim(false); // trim white-space left
         if ( !fieldStringValue.empty()
-            && _stricmp( fieldStringValue.c_str(), s_AttributeValueDefaultText  ) != 0 )
+            && _stricmp( fieldStringValue.c_str(), s_ComponentValueDefaultText  ) != 0 )
         {
             bool needsQuotes = ( fieldStringValue.find( ' ' ) != -1 ) ? true : false;
 

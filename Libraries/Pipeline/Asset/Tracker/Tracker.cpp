@@ -7,9 +7,9 @@
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/AssetVisitor.h"
 #include "Pipeline/Asset/Manifests/EntityManifest.h"
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
 
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Application/Application.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Flags.h"

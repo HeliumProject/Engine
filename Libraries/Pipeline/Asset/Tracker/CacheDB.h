@@ -52,7 +52,7 @@ namespace Asset
         void SelectAssetByHash( const u64 pathHash, AssetFile* assetFile );
 
         u64 FindAttributeRowID( const std::string& value );
-        u32 GetAttributesTableData( V_string& tableData, bool* cancel = NULL );
+        u32 GetComponentsTableData( V_string& tableData, bool* cancel = NULL );
 
         void GetAssetDependencies( const Nocturnal::Path& path, Nocturnal::S_Path& dependencies, bool reverse = false, u32 maxDepth = 0, u32 currDepth = 0, bool* cancel = NULL );
         void GetDependencyGraph( const Nocturnal::Path& path, M_AssetFiles* assetFiles, bool reverse = false, u32 maxDepth = 0, u32 currDepth = 0, bool* cancel = NULL );

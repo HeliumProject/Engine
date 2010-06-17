@@ -12,8 +12,8 @@
 #include "PrimitiveCube.h"
 #include "PrimitivePointer.h"
 
-#include "Attribute/AttributeHandle.h"
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
+#include "Pipeline/Component/ComponentHandle.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 #include "Pipeline/Asset/Classes/Entity.h"
 
@@ -22,7 +22,7 @@
 // Using
 using namespace Math;
 using namespace Luna;
-using namespace Attribute;
+using namespace Component;
 
 // RTTI
 LUNA_DEFINE_TYPE(Luna::Entity);
@@ -69,8 +69,8 @@ Entity::~Entity()
 
     Asset::Entity* pkg = GetPackage< Asset::Entity >();
 
-    pkg->RemoveAttributeAddedListener( Attribute::AttributeCollectionChangedSignature::Delegate( this, &Entity::OnAttributeAdded ) );
-    pkg->RemoveAttributeRemovedListener( Attribute::AttributeCollectionChangedSignature::Delegate( this, &Entity::OnAttributeRemoved ) );
+    pkg->RemoveComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &Entity::OnComponentAdded ) );
+    pkg->RemoveComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &Entity::OnComponentRemoved ) );
 
 }
 
@@ -83,8 +83,8 @@ void Entity::ConstructorInit()
 
     Asset::Entity* pkg = GetPackage< Asset::Entity >();
 
-    pkg->AddAttributeAddedListener( Attribute::AttributeCollectionChangedSignature::Delegate( this, &Entity::OnAttributeAdded ) );
-    pkg->AddAttributeRemovedListener( Attribute::AttributeCollectionChangedSignature::Delegate( this, &Entity::OnAttributeRemoved ) );
+    pkg->AddComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &Entity::OnComponentAdded ) );
+    pkg->AddComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &Entity::OnComponentRemoved ) );
 }
 
 std::string Entity::GenerateName() const
@@ -135,7 +135,7 @@ Luna::Scene* Entity::GetNestedScene( GeometryMode mode, bool load_on_demand ) co
     if (m_ClassSet->GetEntityAsset())
     {
 #pragma TODO( "Support the various rendering modes.  This used to load different files for art, collision, etc." )
-        Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( m_ClassSet->GetEntityAsset(), true );
+        Component::ComponentViewer< Asset::ArtFileComponent > artFile( m_ClassSet->GetEntityAsset(), true );
         std::string nestedFile = m_ClassSet->GetContentFile();
         m_NestedSceneArt = m_Scene->GetManager()->AllocateNestedScene( nestedFile, m_Scene );
     }
@@ -533,14 +533,14 @@ void Entity::SetAssetTypeName( const std::string& type )
     NOC_BREAK();
 }
 
-void Entity::OnInstanceCollisionAttributeModified( const Reflect::ElementChangeArgs& args )
+void Entity::OnInstanceCollisionComponentModified( const Reflect::ElementChangeArgs& args )
 {
 }
 
-void Entity::OnAttributeAdded( const Attribute::AttributeCollectionChanged& args )
+void Entity::OnComponentAdded( const Component::ComponentCollectionChanged& args )
 {
 }
 
-void Entity::OnAttributeRemoved( const Attribute::AttributeCollectionChanged& args )
+void Entity::OnComponentRemoved( const Component::ComponentCollectionChanged& args )
 {
 }

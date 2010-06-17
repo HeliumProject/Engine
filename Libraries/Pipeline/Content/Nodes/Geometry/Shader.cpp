@@ -3,7 +3,7 @@
 
 using namespace Reflect;
 using namespace Content;
-using namespace Attribute; 
+using namespace Component;
 
 REFLECT_DEFINE_CLASS(Shader)
 

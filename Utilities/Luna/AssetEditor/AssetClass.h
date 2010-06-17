@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AttributeWrapper.h"
+#include "ComponentWrapper.h"
 #include "PersistentData.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Foundation/Automation/Event.h"
@@ -30,18 +30,18 @@ namespace Luna
   /////////////////////////////////////////////////////////////////////////////
   // Arguments and events for attribute existence changes on an Luna::AssetClass.
   // 
-  struct AttributeExistenceArgs
+  struct ComponentExistenceArgs
   {
     Luna::AssetClass* m_Asset;
-    Luna::AttributeWrapper* m_Attribute;
+    Luna::ComponentWrapper* m_Component;
     
-    AttributeExistenceArgs( Luna::AssetClass* asset, Luna::AttributeWrapper* attribute )
+    ComponentExistenceArgs( Luna::AssetClass* asset, Luna::ComponentWrapper* component )
       : m_Asset( asset )
-      , m_Attribute( attribute )
+      , m_Component( component )
     {
     }
   };
-  typedef Nocturnal::Signature< void, const AttributeExistenceArgs& > AttributeExistenceSignature;
+  typedef Nocturnal::Signature< void, const ComponentExistenceArgs& > ComponentExistenceSignature;
 
   /////////////////////////////////////////////////////////////////////////////
   // Wrapper around an Asset::AssetClass.
@@ -49,7 +49,7 @@ namespace Luna
   class AssetClass : public Luna::PersistentData
   {
   protected:
-    M_AttributeSmartPtr m_Attributes;
+    M_ComponentSmartPtr m_Components;
     mutable std::string m_Name;
     mutable Nocturnal::Path m_Path;
     S_AssetReferenceNodeDumbPtr m_References;
@@ -83,8 +83,8 @@ namespace Luna
         return m_Path;
     }
     virtual std::string GetIcon() const;
-    const M_AttributeSmartPtr& GetAttributes();
-    Luna::AttributeWrapper* FindAttribute( i32 slot );
+    const M_ComponentSmartPtr& GetComponents();
+    Luna::ComponentWrapper* FindComponent( i32 slot );
     virtual void PopulateContextMenu( ContextMenuItemSet& menu );
     void RegisterAssetReferenceNode( Luna::AssetReferenceNode* node );
     void UnregisterAssetReferenceNode( Luna::AssetReferenceNode* node );
@@ -98,42 +98,42 @@ namespace Luna
     virtual void BuildFinished() {}
 
   protected:
-    virtual Undo::CommandPtr CopyAttributesFrom( const Attribute::M_Attribute& srcAttribs );
+    virtual Undo::CommandPtr CopyComponentsFrom( const Component::M_Component& srcComponents );
 
   protected:
     // Note: These functions are not public because they do not properly
     // udpate all reference nodes in the hierarchy by themselves.  Use
-    // AttributeExistenceCommand to perform these operations.
-    bool AddAttribute( const Luna::AttributeWrapperPtr& attribute );
-    bool RemoveAttribute( const Luna::AttributeWrapperPtr& attribute );
-    friend class AttributeExistenceCommand;
+    // ComponentExistenceCommand to perform these operations.
+    bool AddComponent( const Luna::ComponentWrapperPtr& component );
+    bool RemoveComponent( const Luna::ComponentWrapperPtr& component );
+    friend class ComponentExistenceCommand;
 
   private:
-    bool AddAttribute( const Luna::AttributeWrapperPtr& attribute, bool updatePackage );
-    bool RemoveAttribute( const Luna::AttributeWrapperPtr& attribute, bool updatePackage );
+    bool AddComponent( const Luna::ComponentWrapperPtr& component, bool updatePackage );
+    bool RemoveComponent( const Luna::ComponentWrapperPtr& component, bool updatePackage );
 
     // Listeners
   private:
-    AttributeExistenceSignature::Event m_AttributeAdded;
+    ComponentExistenceSignature::Event m_ComponentAdded;
   public:
-    void AddAttributeAddedListener( const AttributeExistenceSignature::Delegate& listener )
+    void AddComponentAddedListener( const ComponentExistenceSignature::Delegate& listener )
     {
-      m_AttributeAdded.Add( listener );
+      m_ComponentAdded.Add( listener );
     }
-    void RemoveAttributeAddedListener( const AttributeExistenceSignature::Delegate& listener )
+    void RemoveComponentAddedListener( const ComponentExistenceSignature::Delegate& listener )
     {
-      m_AttributeAdded.Remove( listener );
+      m_ComponentAdded.Remove( listener );
     }
   private:
-    AttributeExistenceSignature::Event m_AttributeRemoved;
+    ComponentExistenceSignature::Event m_ComponentRemoved;
   public:
-    void AddAttributeRemovedListener( const AttributeExistenceSignature::Delegate& listener )
+    void AddComponentRemovedListener( const ComponentExistenceSignature::Delegate& listener )
     {
-      m_AttributeRemoved.Add( listener );
+      m_ComponentRemoved.Add( listener );
     }
-    void RemoveAttributeRemovedListener( const AttributeExistenceSignature::Delegate& listener )
+    void RemoveComponentRemovedListener( const ComponentExistenceSignature::Delegate& listener )
     {
-      m_AttributeRemoved.Remove( listener );
+      m_ComponentRemoved.Remove( listener );
     }
   };
 }

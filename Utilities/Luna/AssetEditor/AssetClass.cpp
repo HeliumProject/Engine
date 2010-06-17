@@ -4,15 +4,15 @@
 #include "AssetEditor.h"
 #include "AssetDocument.h"
 #include "AssetManager.h"
-#include "AttributeContainer.h"
-#include "AttributeExistenceCommand.h"
-#include "AttributeNode.h"
+#include "ComponentContainer.h"
+#include "ComponentExistenceCommand.h"
+#include "ComponentNode.h"
 #include "ContextMenuCallbacks.h"
 #include "FieldFactory.h"
 #include "PersistentDataFactory.h"
 
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetExceptions.h"
 #include "Pipeline/Asset/Classes/StandardShaderAsset.h"
 #include "Foundation/CommandLine.h"
@@ -78,12 +78,12 @@ AssetClass::~AssetClass()
 // 
 void AssetClass::Pack()
 {
-  M_AttributeSmartPtr::const_iterator attrItr = m_Attributes.begin();
-  M_AttributeSmartPtr::const_iterator attrEnd = m_Attributes.end();
-  for ( ; attrItr != attrEnd; ++attrItr )
+  M_ComponentSmartPtr::const_iterator componentItr = m_Components.begin();
+  M_ComponentSmartPtr::const_iterator componentEnd = m_Components.end();
+  for ( ; componentItr != componentEnd; ++componentItr )
   {
-    const Luna::AttributeWrapperPtr& attrib = attrItr->second;
-    attrib->Pack();
+    const Luna::ComponentWrapperPtr& component = componentItr->second;
+    component->Pack();
   }
 
   __super::Pack();
@@ -107,22 +107,22 @@ void AssetClass::Unpack()
   Asset::AssetClass* package = GetPackage< Asset::AssetClass >();
 
   NOC_ASSERT( package );
-  if ( !m_Attributes.empty() )
+  if ( !m_Components.empty() )
   {
-    NOC_ASSERT( package->GetAttributes().empty() );
+    NOC_ASSERT( package->GetComponents().empty() );
   }
 
-  Attribute::M_Attribute::const_iterator attrItr = package->GetAttributes().begin();
-  Attribute::M_Attribute::const_iterator attrEnd = package->GetAttributes().end();
-  for ( ; attrItr != attrEnd; ++attrItr )
+  Component::M_Component::const_iterator componentItr = package->GetComponents().begin();
+  Component::M_Component::const_iterator componentEnd = package->GetComponents().end();
+  for ( ; componentItr != componentEnd; ++componentItr )
   {
-    const Attribute::AttributePtr& attribute = attrItr->second;
-    Luna::AttributeWrapperPtr attributeWrapper = PersistentDataFactory::GetInstance()->CreateTyped< Luna::AttributeWrapper >( attribute, GetAssetManager() );
-    if ( !attributeWrapper.ReferencesObject() )
+    const Component::ComponentPtr& component = componentItr->second;
+    Luna::ComponentWrapperPtr componentWrapper = PersistentDataFactory::GetInstance()->CreateTyped< Luna::ComponentWrapper >( component, GetAssetManager() );
+    if ( !componentWrapper.ReferencesObject() )
     {
-      throw ( Nocturnal::Exception( "Internal error - Unable to create attribute in Luna::AssetClass::Unpack" ) );
+      throw ( Nocturnal::Exception( "Internal error - Unable to create component in Luna::AssetClass::Unpack" ) );
     }
-    AddAttribute( attributeWrapper, false );
+    AddComponent( componentWrapper, false );
   }
 
   std::string error;
@@ -186,7 +186,7 @@ bool AssetClass::IsViewable() const
 // 
 bool AssetClass::IsExportable() const
 {
-  Attribute::AttributeViewer< Asset::ArtFileAttribute > artViewer( GetPackage< Asset::AssetClass >() );
+  Component::ComponentViewer< Asset::ArtFileComponent > artViewer( GetPackage< Asset::AssetClass >() );
   return artViewer.Valid();
 }
 
@@ -239,20 +239,20 @@ std::string AssetClass::GetIcon() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns the list of attributes belonging to this asset.
+// Returns the list of components belonging to this asset.
 // 
-const M_AttributeSmartPtr& AssetClass::GetAttributes()
+const M_ComponentSmartPtr& AssetClass::GetComponents()
 {
-  return m_Attributes;
+  return m_Components;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns the attribute in the specified slot.
+// Returns the component in the specified slot.
 // 
-Luna::AttributeWrapper* AssetClass::FindAttribute( i32 slot )
+Luna::ComponentWrapper* AssetClass::FindComponent( i32 slot )
 {
-  M_AttributeSmartPtr::const_iterator found = m_Attributes.find( slot );
-  if ( found != m_Attributes.end() )
+  M_ComponentSmartPtr::const_iterator found = m_Components.find( slot );
+  if ( found != m_Components.end() )
   {
     return found->second;
   }
@@ -319,8 +319,8 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
   menu.AppendItem( menuItem );
 
   menu.AppendSeparator();
-  menuItem = new ContextMenuItem( "Add Attribute" );
-  menuItem->AddCallback( ContextMenuSignature::Delegate( m_AssetManager->GetAssetEditor(), &AssetEditor::PromptAddAttributes ) );
+  menuItem = new ContextMenuItem( "Add Component" );
+  menuItem->AddCallback( ContextMenuSignature::Delegate( m_AssetManager->GetAssetEditor(), &AssetEditor::PromptAddComponents ) );
   menu.AppendItem( menuItem );
 
   menu.AppendSeparator();
@@ -395,17 +395,17 @@ void AssetClass::Changed( Inspect::Control* control )
 
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function to determine if the clipboard data references one or more
-// attributes.
+// components.
 // 
-static inline bool IsAttributeData( const Inspect::ReflectClipboardDataPtr& data )
+static inline bool IsComponentData( const Inspect::ReflectClipboardDataPtr& data )
 {
   Inspect::ClipboardElementArray* elementArray = Reflect::ObjectCast< Inspect::ClipboardElementArray >( data );
   if ( elementArray )
   {
     const Reflect::Class* classToCheck = Reflect::Registry::GetInstance()->GetClass( elementArray->GetCommonBaseTypeID() );
-    if ( classToCheck->HasType( Reflect::GetType< Attribute::AttributeBase >() ) )
+    if ( classToCheck->HasType( Reflect::GetType< Component::ComponentBase >() ) )
     {
-      // Clipboard contains one or more attributes.
+      // Clipboard contains one or more components.
       return true;
     }
   }
@@ -414,7 +414,7 @@ static inline bool IsAttributeData( const Inspect::ReflectClipboardDataPtr& data
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Assets can accept clipboard data from attributes or other assets.
+// Assets can accept clipboard data from components or other assets.
 // 
 bool AssetClass::CanHandleClipboardData( const Inspect::ReflectClipboardDataPtr& data )
 {
@@ -423,7 +423,7 @@ bool AssetClass::CanHandleClipboardData( const Inspect::ReflectClipboardDataPtr&
     return true;
   }
 
-  return IsAttributeData( data );
+  return IsComponentData( data );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -436,25 +436,25 @@ bool AssetClass::HandleClipboardData( const Inspect::ReflectClipboardDataPtr& da
     // Make a copy of the data so that we can use it directly without fear of 
     // modifying what's on the clipboard.
     Inspect::ClipboardElementArrayPtr dataCopy = Reflect::AssertCast< Inspect::ClipboardElementArray >( data->Clone() );
-    if ( IsAttributeData( data ) )
+    if ( IsComponentData( data ) )
     {
-      // Build a list of attributes from the source data.
-      Attribute::M_Attribute srcAttributes;
+      // Build a list of components from the source data.
+      Component::M_Component srcComponents;
       Reflect::V_Element::const_iterator elementItr = dataCopy->m_Elements.begin();
       Reflect::V_Element::const_iterator elementEnd = dataCopy->m_Elements.end();
       for ( ; elementItr != elementEnd; ++elementItr )
       {
-        Attribute::AttributeBase* attribPkg = Reflect::ObjectCast< Attribute::AttributeBase >( *elementItr );
-        if ( attribPkg )
+        Component::ComponentBase* componentPkg = Reflect::ObjectCast< Component::ComponentBase >( *elementItr );
+        if ( componentPkg )
         {
-          srcAttributes.insert( Attribute::M_Attribute::value_type( attribPkg->GetSlot(), attribPkg ) );
+          srcComponents.insert( Component::M_Component::value_type( componentPkg->GetSlot(), componentPkg ) );
         }
       }
 
-      // Copy all the attribute data onto this object.
-      if ( !srcAttributes.empty() )
+      // Copy all the component data onto this object.
+      if ( !srcComponents.empty() )
       {
-        batch->Push( CopyAttributesFrom( srcAttributes ) );
+        batch->Push( CopyComponentsFrom( srcComponents ) );
       }
 
       return true;
@@ -482,11 +482,11 @@ Undo::CommandPtr AssetClass::CopyFrom( Luna::PersistentData* src )
     Luna::AssetClassPtr newSource = PersistentDataFactory::GetInstance()->CreateTyped< Luna::AssetClass >( srcAsset, m_AssetManager );
     Asset::AssetClass* dstAsset = GetPackage< Asset::AssetClass >();
 
-    // Keep around a copy of the source attributes so that they can be cleared
-    // from the source.  This prevents them from clobbering the attributes
-    // that already exist on this asset (which are wrapped in Attributes and 
+    // Keep around a copy of the source components so that they can be cleared
+    // from the source.  This prevents them from clobbering the components
+    // that already exist on this asset (which are wrapped in Components and 
     // need to be maintained).
-    Attribute::M_Attribute srcAttribs = srcAsset->GetAttributes();
+    Component::M_Component srcAttribs = srcAsset->GetComponents();
     srcAsset->Clear();
 
     // Replace any other data on our cloned source that should not be overwritten.
@@ -497,8 +497,8 @@ Undo::CommandPtr AssetClass::CopyFrom( Luna::PersistentData* src )
     // Perform the copy of the asset class
     batch->Push( __super::CopyFrom( newSource ) ); 
 
-    // Perform the copy of each attribute
-    batch->Push( CopyAttributesFrom( srcAttribs ) );
+    // Perform the copy of each component
+    batch->Push( CopyComponentsFrom( srcAttribs ) );
   }
   else
   {
@@ -516,44 +516,44 @@ Undo::CommandPtr AssetClass::CopyFrom( Luna::PersistentData* src )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Helper function to deal with copying attributes into this asset from the
+// Helper function to deal with copying components into this asset from the
 // given source.
 // 
-Undo::CommandPtr AssetClass::CopyAttributesFrom( const Attribute::M_Attribute& srcAttribs )
+Undo::CommandPtr AssetClass::CopyComponentsFrom( const Component::M_Component& srcAttribs )
 {
   Undo::BatchCommandPtr batch = new Undo::BatchCommand();
 
-  // Copy data from each source attribute into the attribute that occupies the same
+  // Copy data from each source component into the component that occupies the same
   // slot on this class.
-  Attribute::M_Attribute leftOvers = srcAttribs;
-  Attribute::M_Attribute::const_iterator srcAttrItr = srcAttribs.begin();
-  Attribute::M_Attribute::const_iterator srcAttrEnd = srcAttribs.end();
+  Component::M_Component leftOvers = srcAttribs;
+  Component::M_Component::const_iterator srcAttrItr = srcAttribs.begin();
+  Component::M_Component::const_iterator srcAttrEnd = srcAttribs.end();
   for ( ; srcAttrItr != srcAttrEnd; ++srcAttrItr )
   {
     i32 slot = srcAttrItr->first;
-    Attribute::AttributeBase* srcPkg = srcAttrItr->second;
-    Luna::AttributeWrapper* destAttr = FindAttribute( slot );
+    Component::ComponentBase* srcPkg = srcAttrItr->second;
+    Luna::ComponentWrapper* destAttr = FindComponent( slot );
     if ( destAttr )
     {
-      batch->Push( destAttr->CopyFrom( PersistentDataFactory::GetInstance()->CreateTyped< Luna::AttributeWrapper >( srcPkg, m_AssetManager ) ) );
+      batch->Push( destAttr->CopyFrom( PersistentDataFactory::GetInstance()->CreateTyped< Luna::ComponentWrapper >( srcPkg, m_AssetManager ) ) );
       leftOvers.erase( slot );
     }
   }
 
-  // If there are any attributes left in the source list, try adding them to this asset.
+  // If there are any components left in the source list, try adding them to this asset.
   if ( !leftOvers.empty() )
   {
     Asset::AssetClass* pkg = GetPackage< Asset::AssetClass >();
-    Attribute::M_Attribute::const_iterator leftOverItr = leftOvers.begin();
-    Attribute::M_Attribute::const_iterator leftOverEnd = leftOvers.end();
+    Component::M_Component::const_iterator leftOverItr = leftOvers.begin();
+    Component::M_Component::const_iterator leftOverEnd = leftOvers.end();
     for ( ; leftOverItr != leftOverEnd; ++leftOverItr )
     {
-      // If the attribute can be added to this asset, perform the command.
+      // If the component can be added to this asset, perform the command.
       std::string unused;
-      if ( pkg->ValidateAttribute( leftOverItr->second, unused ) )
+      if ( pkg->ValidateComponent( leftOverItr->second, unused ) )
       {
-        Luna::AttributeWrapperPtr srcAttrib = PersistentDataFactory::GetInstance()->CreateTyped< Luna::AttributeWrapper >( leftOverItr->second, m_AssetManager );
-        batch->Push( new AttributeExistenceCommand( Undo::ExistenceActions::Add, this, srcAttrib ) );
+        Luna::ComponentWrapperPtr srcAttrib = PersistentDataFactory::GetInstance()->CreateTyped< Luna::ComponentWrapper >( leftOverItr->second, m_AssetManager );
+        batch->Push( new ComponentExistenceCommand( Undo::ExistenceActions::Add, this, srcAttrib ) );
       }
     }
   }
@@ -567,14 +567,14 @@ Undo::CommandPtr AssetClass::CopyAttributesFrom( const Attribute::M_Attribute& s
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Adds the specified attribute and returns true if successful.  On success,
+// Adds the specified component and returns true if successful.  On success,
 // interested listeners will be notified.
 // 
-bool AssetClass::AddAttribute( const Luna::AttributeWrapperPtr& attribute )
+bool AssetClass::AddComponent( const Luna::ComponentWrapperPtr& component )
 {
-  if ( AddAttribute( attribute, true ) )
+  if ( AddComponent( component, true ) )
   {
-    m_AttributeAdded.Raise( AttributeExistenceArgs( this, attribute.Ptr() ) );
+    m_ComponentAdded.Raise( ComponentExistenceArgs( this, component.Ptr() ) );
     return true;
   }
 
@@ -582,15 +582,15 @@ bool AssetClass::AddAttribute( const Luna::AttributeWrapperPtr& attribute )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Removes the specified attribute and returns true if successful.  On success,
+// Removes the specified component and returns true if successful.  On success,
 // interested listeners will be notified.
 // 
-bool AssetClass::RemoveAttribute( const Luna::AttributeWrapperPtr& attribute )
+bool AssetClass::RemoveComponent( const Luna::ComponentWrapperPtr& component )
 {
-  Luna::AttributeWrapperPtr preventDeletion = attribute;
-  if ( RemoveAttribute( attribute, true ) )
+  Luna::ComponentWrapperPtr preventDeletion = component;
+  if ( RemoveComponent( component, true ) )
   {
-    m_AttributeRemoved.Raise( AttributeExistenceArgs( this, attribute.Ptr() ) );
+    m_ComponentRemoved.Raise( ComponentExistenceArgs( this, component.Ptr() ) );
     return true;
   }
 
@@ -598,18 +598,18 @@ bool AssetClass::RemoveAttribute( const Luna::AttributeWrapperPtr& attribute )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Helper function to add a new attribute to this asset class.  The updatePackage
+// Helper function to add a new component to this asset class.  The updatePackage
 // flag indicates whether the change needs to be pushed down into the persistent
 // data or not.
 // 
-bool AssetClass::AddAttribute( const Luna::AttributeWrapperPtr& attribute, bool updatePackage )
+bool AssetClass::AddComponent( const Luna::ComponentWrapperPtr& component, bool updatePackage )
 {
   if ( updatePackage )
   {
     Asset::AssetClass* package = GetPackage< Asset::AssetClass >();
     try
     {
-      package->SetAttribute( attribute->GetPackage< Attribute::AttributeBase >() );
+      package->SetComponent( component->GetPackage< Component::ComponentBase >() );
     }
     catch ( const Asset::Exception& e )
     {
@@ -618,26 +618,26 @@ bool AssetClass::AddAttribute( const Luna::AttributeWrapperPtr& attribute, bool 
     }
   }
 
-  Nocturnal::Insert<M_AttributeSmartPtr>::Result inserted = m_Attributes.insert( M_AttributeSmartPtr::value_type( attribute->GetSlot(), attribute ) );
+  Nocturnal::Insert<M_ComponentSmartPtr>::Result inserted = m_Components.insert( M_ComponentSmartPtr::value_type( component->GetSlot(), component ) );
   if ( !inserted.second )
   {
-    throw Nocturnal::Exception( "Attempted to add the same attribute (%s) twice to asset (%s)", attribute->GetName().c_str(), GetName().c_str() );
+    throw Nocturnal::Exception( "Attempted to add the same component (%s) twice to asset (%s)", component->GetName().c_str(), GetName().c_str() );
   }
 
-  attribute->SetAssetClass( this );
+  component->SetAssetClass( this );
   return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Helper function to remove the specified attribute from this asset.  You can 
+// Helper function to remove the specified component from this asset.  You can 
 // specify whether or not to update the persistent data.
 // 
-bool AssetClass::RemoveAttribute( const Luna::AttributeWrapperPtr& attribute, bool updatePackage )
+bool AssetClass::RemoveComponent( const Luna::ComponentWrapperPtr& component, bool updatePackage )
 {
-  M_AttributeSmartPtr::iterator found = m_Attributes.find( attribute->GetSlot() );
-  if ( found == m_Attributes.end() )
+  M_ComponentSmartPtr::iterator found = m_Components.find( component->GetSlot() );
+  if ( found == m_Components.end() )
   {
-    Log::Error( "Unable to remove attribute %s from asset %s because it has already been removed.\n", attribute->GetName().c_str(), GetName().c_str() );
+    Log::Error( "Unable to remove component %s from asset %s because it has already been removed.\n", component->GetName().c_str(), GetName().c_str() );
     return false;
   }
 
@@ -646,16 +646,16 @@ bool AssetClass::RemoveAttribute( const Luna::AttributeWrapperPtr& attribute, bo
     Asset::AssetClass* package = GetPackage< Asset::AssetClass >();
     try
     {
-      package->RemoveAttribute( attribute->GetSlot() );
+      package->RemoveComponent( component->GetSlot() );
     }
     catch ( const Nocturnal::Exception& )
     {
-      Log::Error( "Unable to update persistent data for removal of attribute %s from asset %s.\n", attribute->GetName().c_str(), GetName().c_str() );
+      Log::Error( "Unable to update persistent data for removal of component %s from asset %s.\n", component->GetName().c_str(), GetName().c_str() );
       return false;
     }
   }
 
   found->second->SetAssetClass( NULL );
-  m_Attributes.erase( found );
+  m_Components.erase( found );
   return true;
 }

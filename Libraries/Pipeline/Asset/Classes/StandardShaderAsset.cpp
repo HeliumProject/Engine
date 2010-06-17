@@ -1,11 +1,11 @@
 #include "StandardShaderAsset.h"
 
-#include "Pipeline/Asset/Attributes/StandardColorMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardNormalMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardExpensiveMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardDetailMapAttribute.h"
+#include "Pipeline/Asset/Components/StandardColorMapComponent.h"
+#include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
+#include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
+#include "Pipeline/Asset/Components/StandardDetailMapComponent.h"
 
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Finder/AssetSpecs.h"
 
 using namespace Asset;
@@ -26,9 +26,9 @@ void StandardShaderAsset::EnumerateClass( Reflect::Compositor<StandardShaderAsse
   {
     Clear();
 
-    StandardColorMapAttributePtr colorMap = new StandardColorMapAttribute();
+    StandardColorMapComponentPtr colorMap = new StandardColorMapComponent();
 
-    SetAttribute( colorMap );
+    SetComponent( colorMap );
   }
 
   void StandardShaderAsset::PostDeserialize()
@@ -36,9 +36,9 @@ void StandardShaderAsset::EnumerateClass( Reflect::Compositor<StandardShaderAsse
     __super::PostDeserialize();
 
 #pragma TODO( "Remove legacy shader support" )
-    // Legacy support.  Migrate StandardColorMapAttribute::m_AlphaMode to
+    // Legacy support.  Migrate StandardColorMapComponent::m_AlphaMode to
     // StandardShaderAsset::m_AlphaMode.
-    StandardColorMapAttributePtr colorMap = Reflect::ObjectCast< StandardColorMapAttribute >( GetAttribute( Reflect::GetType< StandardColorMapAttribute >() ) );
+    StandardColorMapComponentPtr colorMap = Reflect::ObjectCast< StandardColorMapComponent >( GetComponent( Reflect::GetType< StandardColorMapComponent >() ) );
     if ( colorMap.ReferencesObject() )
     {
       if ( colorMap->m_AlphaMode != static_cast< AlphaType >( -1 ) )
@@ -49,16 +49,16 @@ void StandardShaderAsset::EnumerateClass( Reflect::Compositor<StandardShaderAsse
     }
   }
 
-  bool StandardShaderAsset::ValidateCompatible( const Attribute::AttributePtr& attr, std::string& error ) const
+  bool StandardShaderAsset::ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const
   {
     bool isValid = false;
   
     if ( __super::ValidateCompatible( attr, error ) )
     {
-      isValid = ( attr->GetType() == Reflect::GetType< StandardColorMapAttribute >() ||
-        attr->GetType() == Reflect::GetType< StandardNormalMapAttribute >() ||
-        attr->GetType() == Reflect::GetType< StandardDetailMapAttribute >() ||
-        attr->GetType() == Reflect::GetType< StandardExpensiveMapAttribute >() );
+      isValid = ( attr->GetType() == Reflect::GetType< StandardColorMapComponent >() ||
+        attr->GetType() == Reflect::GetType< StandardNormalMapComponent >() ||
+        attr->GetType() == Reflect::GetType< StandardDetailMapComponent >() ||
+        attr->GetType() == Reflect::GetType< StandardExpensiveMapComponent >() );
       
       if ( !isValid )
       {

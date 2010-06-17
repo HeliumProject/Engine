@@ -1,16 +1,16 @@
 #include "Entity.h"
 
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/EntityAsset.h"
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
 
 #include "Foundation/Log.h"
 #include "Pipeline/Content/Scene.h"
 #include "Application/RCS/RCS.h"
 
 using namespace Asset;
-using namespace Attribute;
+using namespace Component;
 using namespace Content;
 
 REFLECT_DEFINE_CLASS(Entity);
@@ -41,16 +41,16 @@ std::string Entity::GetEntityAssetPath()
     return m_Path.Get();
 }
 
-bool Entity::ValidatePersistent( const Attribute::AttributePtr& attr ) const
+bool Entity::ValidatePersistent( const Component::ComponentPtr& attr ) const
 {
     AssetClassPtr entityClass = GetEntityAsset();
 
     if ( entityClass.ReferencesObject() )
     {
         // if the value of the attribute we are setting to is the default value, don't set the attribute, and attempt to remove it if it exists in the Entity
-        if ( attr->GetAttributeUsage() == AttributeUsages::Overridable )
+        if ( attr->GetComponentUsage() == ComponentUsages::Overridable )
         {
-            AttributePtr classAttr = entityClass->GetAttribute( attr->GetType() );
+            ComponentPtr classAttr = entityClass->GetComponent( attr->GetType() );
 
             if ( attr->Equals( classAttr ) )
             {
@@ -62,28 +62,28 @@ bool Entity::ValidatePersistent( const Attribute::AttributePtr& attr ) const
     return __super::ValidatePersistent(attr);
 }
 
-const AttributePtr& Entity::GetAttribute(i32 typeID) const
+const ComponentPtr& Entity::GetComponent(i32 typeID) const
 {
     // try to get the attribute from the Entity
-    const AttributePtr &instAttr = __super::GetAttribute( typeID );
+    const ComponentPtr &instAttr = __super::GetComponent( typeID );
 
     if ( instAttr )
     {
-        AttributeUsage usage = instAttr->GetAttributeUsage();
+        ComponentUsage usage = instAttr->GetComponentUsage();
 
         // NOTE: this handles the case where the Overridable attribute has been removed from the AssetClass
-        if ( usage == AttributeUsages::Overridable )
+        if ( usage == ComponentUsages::Overridable )
         {
             AssetClassPtr entityClass = GetEntityAsset();
 
             if ( entityClass.ReferencesObject() )
             {
-                const AttributePtr &classAttr = entityClass->GetAttribute( typeID );
+                const ComponentPtr &classAttr = entityClass->GetComponent( typeID );
 
                 if ( classAttr == NULL )
                 {
                     // Fan-fucking-tastic
-                    const_cast<Entity*>(this)->RemoveAttribute( typeID );
+                    const_cast<Entity*>(this)->RemoveComponent( typeID );
                     return classAttr;
                 }
             }
@@ -97,13 +97,13 @@ const AttributePtr& Entity::GetAttribute(i32 typeID) const
 
     if ( entityClass.ReferencesObject() )
     {
-        return entityClass->GetAttribute( typeID );
+        return entityClass->GetComponent( typeID );
     }
 
     return instAttr;
 }
 
-void Entity::SetAttribute(const AttributePtr& attr, bool validate)
+void Entity::SetComponent(const ComponentPtr& attr, bool validate)
 {
     // NOTE: GetAssetClass should ensure that the AssetClass is valid, and throw an exception otherwise
     AssetClassPtr entityClass = GetEntityAsset();
@@ -111,7 +111,7 @@ void Entity::SetAttribute(const AttributePtr& attr, bool validate)
     if ( entityClass.ReferencesObject() )
     {
         // find the attribute of the corresponding type in the asset class
-        AttributePtr classAttr = entityClass->GetAttribute( attr->GetType() );
+        ComponentPtr classAttr = entityClass->GetComponent( attr->GetType() );
 
         // make sure we aren't attempting to pass in an attribute with the same address as the corresponding attribute in the EntityAsset attr
         if ( classAttr == attr )
@@ -120,5 +120,5 @@ void Entity::SetAttribute(const AttributePtr& attr, bool validate)
         }
     }
 
-    __super::SetAttribute( attr, validate );
+    __super::SetComponent( attr, validate );
 }

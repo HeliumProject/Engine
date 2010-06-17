@@ -235,10 +235,6 @@
 			RelativePathToProject=".\libraries\igDXContent\igDXContent.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{1A179B8F-2027-467A-AB0C-7E90575C0F03}"
-			RelativePathToProject=".\libraries\Debug\Debug.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{06092F0D-324B-484D-A9ED-397DFF76AE53}"
 			RelativePathToProject=".\SDK\TinyXML\2.6.1\TinyXML.vcproj"
 		/>

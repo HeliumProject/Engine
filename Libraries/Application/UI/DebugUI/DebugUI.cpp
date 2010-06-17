@@ -8,8 +8,8 @@
 
 #include "DebugUI.h"
 
-#include "Debug/Exception.h"
 #include "Platform/Windows/Console.h"
+#include "Application/Exception.h"
 
 static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
 {

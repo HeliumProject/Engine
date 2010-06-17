@@ -12,7 +12,7 @@
 #include "Foundation/Environment.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Log.h"
-#include "Debug/Exception.h"
+#include "Foundation/Exception.h"
 #include "Application/SQL/MySQL/MySQL.h"
 
 #include <time.h>

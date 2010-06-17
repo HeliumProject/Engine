@@ -30,7 +30,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/IPC/Connection.h"
-#include "Debug/Exception.h"
+#include "Foundation/Exception.h"
 
 using namespace AssetBuilder;
 using namespace Luna;

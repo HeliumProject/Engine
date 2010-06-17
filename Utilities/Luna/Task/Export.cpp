@@ -24,7 +24,7 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/IPC/Connection.h"
-#include "Debug/Exception.h"
+#include "Foundation/Exception.h"
 
 #include <strstream>
 

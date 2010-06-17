@@ -1,22 +1,16 @@
-#include "Symbols.h"
-#include "Exception.h"
+#include "Debug.h"
 
-#include "Foundation/Log.h"
-#include "Platform/Windows/Windows.h"
+#include "Platform/Types.h"
 #include "Platform/Mutex.h"
+#include "Platform/Windows/Windows.h"
+#include "Foundation/Log.h"
+#include "Foundation/Exception.h"
 
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
+#include <time.h>
+#include <shlobj.h>
 #include <dbghelp.h>
 #include <tlhelp32.h>
 #pragma comment ( lib, "dbghelp.lib" )
-
-#include "Platform/Types.h"
-#include "Foundation/Exception.h"
-#include <time.h>
-#include <shlobj.h>
 
 //#define DEBUG_SYMBOLS
 
@@ -38,7 +32,6 @@ static void PrintString(std::string& buffer, const char* str, ...)
   vsnprintf(buf, sizeof(buf), str, argptr);
   buf[ sizeof(buf) - 1] = 0; 
   va_end(argptr);
-
 
   buffer += buf;
 }

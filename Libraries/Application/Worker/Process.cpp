@@ -3,13 +3,13 @@
 
 #include <sstream>
 
-// libraries
-#include "Debug/Exception.h"
-#include "Application/Application.h"
-#include "Foundation/CommandLine.h"
 #include "Foundation/Log.h"
 #include "Foundation/Exception.h"
+#include "Foundation/CommandLine.h"
 #include "Foundation/IPC/Pipe.h"
+
+#include "Application/Application.h"
+#include "Application/Exception.h"
 
 using namespace Worker;
 

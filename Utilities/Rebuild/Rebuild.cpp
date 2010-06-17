@@ -1,4 +1,4 @@
-#include "Debug/Exception.h"
+#include "Foundation/Exception.h"
 #include "Application/Application.h"
 #include "Platform/Windows/Windows.h"
 

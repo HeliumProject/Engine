@@ -15,19 +15,19 @@
 
 #include "Platform/Assert.h"
 #include "Platform/Platform.h"
+#include "Platform/Process.h"
+
+#include "Foundation/Log.h"
+#include "Foundation/Profile.h"
 #include "Foundation/Version.h"
+#include "Foundation/Exception.h"
 #include "Foundation/Environment.h"
 #include "Foundation/CommandLine.h"
 
+#include "Exception.h"
 #include "Exceptions.h"
 #include "ExceptionListener.h"
 #include "Version.h"
-
-#include "Debug/Exception.h"
-#include "Foundation/Profile.h"
-#include "Foundation/Exception.h"
-#include "Platform/Process.h"
-#include "Foundation/Log.h"
 
 const char* Application::Args::Script = "script";
 const char* Application::Args::Attach = "attach";

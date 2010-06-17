@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Debug/Symbols.h"
+#include "Platform/Windows/Debug.h"
 
 #include "API.h"
 

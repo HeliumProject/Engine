@@ -5,7 +5,7 @@
 
 #ifdef REFLECT_OBJECT_TRACKING
 
-#include "Debug/Symbols.h"
+#include "Platform/Windows/Debug.h"
 #include "Finder/Finder.h"
 #include "Platform/Mutex.h"
 

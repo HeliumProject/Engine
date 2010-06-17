@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Application/API.h"
 #include "Platform/Types.h"
-#include "Debug/Exception.h"
+
+#include "Application/API.h"
+#include "Application/Exception.h"
 
 namespace Application
 {

@@ -152,10 +152,6 @@
 			RelativePathToProject=".\libraries\smartbuffer\smartbuffer.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{1A179B8F-2027-467A-AB0C-7E90575C0F03}"
-			RelativePathToProject=".\libraries\Debug\Debug.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
 			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
 		/>

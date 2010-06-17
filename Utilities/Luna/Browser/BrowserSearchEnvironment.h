@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 #include "Platform/Types.h"
-#include "Debug/Exception.h"
+#include "Foundation/Exception.h"
 
 #include <string>
 

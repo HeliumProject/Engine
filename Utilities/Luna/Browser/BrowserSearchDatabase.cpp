@@ -4,7 +4,7 @@
 #include "Platform/Windows/Windows.h"
 #include "Platform/Windows/Console.h"
 
-#include "Debug/Exception.h"
+#include "Foundation/Exception.h"
 #include "Foundation/Log.h"
 
 #include "BrowserSearchEnvironment.h"

@@ -41,7 +41,7 @@ NOC_COMPILE_ASSERT( sizeof(std::streamoff) == sizeof(i32));
 // this is sneaky, but in general people shouldn't use this
 namespace Reflect
 {
-  __declspec(dllexport) bool g_OverrideCRC = false;
+  REFLECT_API bool g_OverrideCRC = false;
 }
 
 //

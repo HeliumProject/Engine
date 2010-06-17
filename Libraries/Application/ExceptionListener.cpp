@@ -12,7 +12,6 @@
 #include "Foundation/Environment.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Log.h"
-#include "Debug/Utils.h"
 #include "Debug/Exception.h"
 #include "Application/SQL/MySQL/MySQL.h"
 
@@ -23,30 +22,6 @@
 using namespace Application;
 
 static i32 g_InitCount = 0;
-
-static void RecurseDirectories( const std::string& directory, std::string& result )
-{
-
-#ifdef GEOFF_FIX_THIS
-  if ( !result.empty() )
-  {
-    result += ";";
-  }
-
-  std::string win32Name( directory );
-  FileSystem::Win32Name( win32Name );
-  result += win32Name;
-
-  V_string subDirs;
-  FileSystem::GetDirectories( directory, subDirs );
-  V_string::const_iterator dirItr = subDirs.begin();
-  V_string::const_iterator dirEnd = subDirs.end();
-  for ( ; dirItr != dirEnd; ++dirItr )
-  {
-    RecurseDirectories( *dirItr, result );
-  }
-#endif
-}
 
 static void CopyDump( ExceptionReport& report )
 {
@@ -207,8 +182,6 @@ static void SendMail( ExceptionReport& report )
 
 static void ProcessException( const Debug::ExceptionArgs& args )
 {
-  Debug::EnableTranslator<Debug::TranslateException> translate;
-
   Application::ExceptionReport report ( args );
 
   try
@@ -217,10 +190,7 @@ static void ProcessException( const Debug::ExceptionArgs& args )
 
     SendMail( report );
 
-    if ( !Application::IsToolsBuilder() )
-    {
-      UpdateExceptionDB( report );
-    }
+    UpdateExceptionDB( report );
   }
   catch ( Nocturnal::Exception& ex )
   {
@@ -241,30 +211,6 @@ void Application::InitializeExceptionListener()
 
     // Symbol path always starts with module directory
     std::string symbolPath( std::string( drive ) + std::string( path ) );
-
-#ifdef GEOFF_FIX_THIS
-    if ( !Application::IsToolsBuilder() )
-    {
-      // Search for network symbol storage
-      const char* symbolStoreVar = getenv( "NOC_TOOLS_SYMBOLS_STORE" );
-      std::string symbolStore = symbolStoreVar ? symbolStoreVar : "";
-      if ( !symbolStore.empty() && FileSystem::Exists( symbolStore ) )
-      {
-        symbolStore += "\\"; 
-        symbolStore += getenv( "NOC_PROJECT_NAME" );
-        symbolStore += "\\"; 
-        symbolStore += getenv( "NOC_CODE_BRANCH_NAME" ); 
-        symbolStore += "\\";
-        symbolStore += getenv( "NOC_TOOLS_RELEASE_NAME" );
-        symbolStore += "\\";
-        symbolStore += NOCTURNAL_VERSION_STRING;
-
-        // Add subdirectories
-        RecurseDirectories( symbolStore, symbolPath );
-      }
-    }
-
-#endif
 
     // initialize debug symbols
     Debug::Initialize( symbolPath );

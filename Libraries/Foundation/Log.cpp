@@ -212,84 +212,6 @@ void Redirect(const std::string& fileName, const char* str, bool stampNewLine = 
   }
 }
 
-void RotateLogs(const std::string& file)
-{
-  // chop up the full log file path
-  char drive[MAX_PATH], dir[MAX_PATH], name[MAX_PATH], ext[MAX_PATH];
-  _splitpath( file.c_str(), drive, dir, name, ext );
-
-  // build a path to the dir the log lives in
-  std::string logDirectory;
-  logDirectory = drive;
-  logDirectory += dir;
-
-  // ensure we are a valid dir name
-  if ( logDirectory.find( "/" ) == std::string::npos )
-  {
-    logDirectory = "./";
-  }
-
-  // Make sure that the directory exists
-  SHCreateDirectoryEx( NULL, logDirectory.c_str(), NULL );
-
-  // get the current list of log files
-  V_string fileList;
-
-  // do the folder iteration
-  char spec[NTFS_PATH_MAX];
-  _snprintf(spec, sizeof(spec), "%s%s%s%s", drive, dir, name, "*.log"); // DT: *.* was including files that were 'not' log files!
-  spec[ sizeof(spec) - 1 ] = 0; 
-
-  struct _finddata_t finddata;
-  intptr_t handle = _findfirst(spec, &finddata);
-  while (handle != -1)
-  {
-    if(!(finddata.attrib& _A_SUBDIR))
-    {
-      char itrName[NTFS_PATH_MAX];
-      _splitpath( finddata.name, NULL, NULL, itrName, NULL );
-
-      std::string file = itrName;
-      std::string number = file.substr(strlen(name));
-
-      // we only want to munge files that are our log or a numbered backup
-      if (number.empty() || isdigit(number[0]))
-      {
-        fileList.push_back( logDirectory + finddata.name );
-      }
-    }
-
-    if (_findnext(handle, &finddata) != 0)
-    {
-      _findclose(handle);
-      handle = -1;
-    }
-  }
-
-  // walk the list in reverse and delete excess while rotating each file
-  size_t count = fileList.size();
-  V_string::reverse_iterator itr = fileList.rbegin();
-  V_string::reverse_iterator end = fileList.rend();
-  for ( ; itr != end; ++itr, --count )
-  {
-    const std::string& current = *itr;
-
-    // if we have too many files, delete
-    if ( g_LogFileCount > 0 && count >= g_LogFileCount )
-    {
-      ::DeleteFile( current.c_str() );
-    }
-    else
-    {
-      char rotated[NTFS_PATH_MAX];
-      _snprintf( rotated, sizeof( rotated ), "%s%s%02d%s", logDirectory.c_str(), name, count, ext );
-      rotated[ sizeof(rotated) - 1 ] = 0; 
-
-      ::MoveFileEx( current.c_str(), rotated, MOVEFILE_REPLACE_EXISTING );
-    }
-  }
-}
-
 bool AddFile( M_OutputFile& files, const std::string& fileName, Stream stream, u32 threadId, bool append )
 {
   Platform::TakeMutex mutex (g_Mutex);
@@ -316,8 +238,6 @@ bool AddFile( M_OutputFile& files, const std::string& fileName, Stream stream, u
     if (fileName != "")
     {
       char *mode = append ? "at+" : "wt+";
-
-      RotateLogs( fileName );
 
       f = fopen( fileName.c_str(), mode );
     }

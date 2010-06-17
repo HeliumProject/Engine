@@ -17,7 +17,6 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/CommandLine.h"
-#include "Debug/Utils.h"
 
 using namespace Reflect;
 
@@ -697,9 +696,6 @@ void Archive::ToFile(const V_Element& elements, const std::string& file, Version
   // build a path to a unique file for this process
   Nocturnal::Path safetyPath( outputPath.Directory() + Platform::GetProcessString() );
   safetyPath.ReplaceExtension( outputPath.Extension() );
-
-  // this will install a translator that will cause a C++ throw if and SEH exception occurs
-  Debug::EnableTranslator<Debug::TranslateException> translate;
 
   // generate the file to the safety location
   try

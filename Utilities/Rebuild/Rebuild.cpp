@@ -50,7 +50,7 @@ V_string g_RebuildResults[REBUILD_CODE_COUNT];
 
 namespace Reflect
 {
-    __declspec(dllimport) extern bool g_OverrideCRC;
+    REFLECT_API extern bool g_OverrideCRC;
 }
 
 int ProcessFile(const std::string& input, const std::string& output)

@@ -8,18 +8,9 @@
 #include "Preferences.h"
 
 #include "Platform/Types.h"
+#include "Platform/Thread.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Log.h"
-#include "Debug/Symbols.h"
-
-#ifdef _WINDOWS_
-#include "Platform/Thread.h"
-#endif
-
-namespace IPC
-{
-  class Message;
-}
 
 namespace Application
 {
@@ -87,9 +78,6 @@ namespace Application
   // Application behavior
   //
 
-  // Did you make these tools, or did you download a release
-  APPLICATION_API bool IsToolsBuilder();
-
   // Detects if a debugger is attached to the process
   APPLICATION_API bool IsDebuggerPresent();
 
@@ -116,9 +104,7 @@ namespace Application
   //  }
   //
 
-#ifdef _WINDOWS_
   APPLICATION_API Platform::Thread::Return StandardThread( Platform::Thread::Entry entry, Platform::Thread::Param param );
-#endif
 
   //
   // Main wrappers for console applications
@@ -145,7 +131,7 @@ namespace Application
   //  }
   //
 
-#ifdef _WINDOWS_
+#if defined( WIN32 ) && defined ( _WINDOWS_ )
   APPLICATION_API int StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd ),
                                     HINSTANCE hInstance = ::GetModuleHandle(NULL),
                                     HINSTANCE hPrevInstance = NULL,

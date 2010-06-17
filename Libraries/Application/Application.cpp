@@ -218,11 +218,12 @@ void Application::Startup( int argc, const char** argv, bool checkVersion )
       }
     }
 
+
     //
     // Version check
     //
 
-    if ( checkVersion && !IsToolsBuilder() )
+    if ( checkVersion )
     {
       CheckVersion();
     }
@@ -429,23 +430,22 @@ void Application::InitializeStandardTraceFiles()
   char module[MAX_PATH];
   GetModuleFileName( 0, module, MAX_PATH );
 
+  char drive[MAX_PATH];
+  char dir[MAX_PATH];
   char name[MAX_PATH];
-  _splitpath( module, NULL, NULL, name, NULL );
+  _splitpath( module, drive, dir, name, NULL );
 
-  const char* logVar = getenv( "NOC_PROJECT_LOG" );
-  std::string logFolder = logVar ? logVar : "";
-  if ( !logFolder.empty() && *logFolder.rbegin() != '/' && *logFolder.rbegin() != '\\' )
-  {
-    logFolder += "/";
-  }
-  
-  g_TraceFiles.push_back( logFolder + name + ".log" );
+  std::string path = drive;
+  path += dir;
+  path += name;
+
+  g_TraceFiles.push_back( path + ".log" );
   Log::AddTraceFile( g_TraceFiles.back(), Application::GetTraceStreams() );
-  
-  g_TraceFiles.push_back( logFolder + name + "Warnings.log" );
+
+  g_TraceFiles.push_back( path + "Warnings.log" );
   Log::AddTraceFile( g_TraceFiles.back(), Log::Streams::Warning );
 
-  g_TraceFiles.push_back( logFolder + name + "Errors.log" );
+  g_TraceFiles.push_back( path + "Errors.log" );
   Log::AddTraceFile( g_TraceFiles.back(), Log::Streams::Error );
 }
 
@@ -458,13 +458,6 @@ void Application::CleanupStandardTraceFiles()
   }
 
   g_TraceFiles.clear();
-}
-
-bool Application::IsToolsBuilder()
-{
-  bool toolsBuilder = false;
-  Nocturnal::GetEnvVar( "NOC_TOOLS_BUILDER", toolsBuilder );
-  return toolsBuilder;
 }
 
 bool Application::IsDebuggerPresent()

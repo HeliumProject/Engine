@@ -1,5 +1,4 @@
 #include "Exception.h"
-#include "Utils.h"
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -115,19 +114,8 @@ DWORD Debug::ProcessException(LPEXCEPTION_POINTERS info, DWORD ret_code, bool pr
 
     args.m_State = Log::GetOutlineState();
 
-    {
-      Debug::EnableTranslator<Debug::TranslateException> enable;
-
-      try
-      {
-        Debug::GetExceptionDetails( info, args );
-      }
-      catch ( Debug::StructuredException& )
-      {
-        Platform::Print( Platform::ConsoleColors::Red, stderr, "Exception occured in exception handler!\n" );
-      }
-    }
-
+    Debug::GetExceptionDetails( info, args );
+ 
     if ( print )
     {
       Platform::Print( Platform::ConsoleColors::Red, stderr, "%s", GetExceptionInfo( info ).c_str() );

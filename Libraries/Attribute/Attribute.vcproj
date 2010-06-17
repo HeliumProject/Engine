@@ -214,14 +214,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\ComponentCollection.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ComponentCollection.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Exceptions.h"
 			>
 		</File>

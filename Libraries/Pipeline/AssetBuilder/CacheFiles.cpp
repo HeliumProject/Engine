@@ -272,8 +272,7 @@ void CopyFileToServer( std::string sourceFile, std::string targetFile, Dependenc
 
     if ( fileInfo->m_MD5 != storedMD5 )
     {
-      Log::Level level = Application::IsToolsBuilder() ? Log::Levels::Default : Log::Levels::Verbose;
-      Log::Warning( level, "MD5 Mismatch: %s (target: %s): Local (built) MD5 (%s) did not match expected MD5 (%s)\n", sourceFile.c_str(), targetFile.c_str(), fileInfo->m_MD5.c_str(), storedMD5.c_str() );
+      Log::Warning( "MD5 Mismatch: %s (target: %s): Local (built) MD5 (%s) did not match expected MD5 (%s)\n", sourceFile.c_str(), targetFile.c_str(), fileInfo->m_MD5.c_str(), storedMD5.c_str() );
     }
   }
   else // file has not been added to CCS yet
@@ -606,26 +605,14 @@ void CacheFiles::Initialize()
     bool production = false;
 #endif
 
-    if ( Application::IsToolsBuilder() )
-    {
-      production = false;
-    }
-
     // this won't touch g_ThreadCount if this var doesn't exist
     Nocturnal::GetEnvVar( "NOC_CCS_THREAD_COUNT", g_ThreadCount );
-
-    char* envVar = "NOC_CCS_STORE_PRODUCTION";
-    if ( !production )
-    {
-      envVar = "NOC_CCS_STORE_NONPRODUCTION";
-    }
-
-    Nocturnal::GetEnvVar( envVar, g_CacheFilesPath );
+    Nocturnal::GetEnvVar( "NOC_CCS_STORE", g_CacheFilesPath );
 
     // legacy support, in case the environment variable is not set
     if ( g_CacheFilesPath.empty() )
     {
-      Log::Warning( "%s is not defined in your environment, disabling sharing of cached built data\n", envVar );
+      Log::Warning( "NOC_CCS_STORE is not defined in your environment, disabling sharing of cached built data\n" );
       g_Disable = true;
     }
     else

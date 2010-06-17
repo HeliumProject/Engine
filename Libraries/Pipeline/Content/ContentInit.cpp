@@ -58,8 +58,8 @@
 #include "Pipeline/Content/SceneVisibility.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Attribute/AttributeInit.h"
-#include "Attribute/AttributeCategories.h"
+#include "Pipeline/Component/ComponentInit.h"
+#include "Pipeline/Component/ComponentCategories.h"
 
 #include "Foundation/InitializerStack.h"
 
@@ -76,7 +76,7 @@ namespace Content
     if ( ++g_InitCount == 1 )
     {
       g_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-      g_InitializerStack.Push( Attribute::Initialize, Attribute::Cleanup );
+      g_InitializerStack.Push( Component::Initialize, Component::Cleanup );
 
       g_InitializerStack.Push( Reflect::RegisterClass<ContentVersion>( "ContentVersion" ) );
       g_InitializerStack.Push( Reflect::RegisterEnumeration<ContentTypes::ContentType>( &ContentTypes::ContentTypeEnumerateEnumeration, "ContentType" ) );

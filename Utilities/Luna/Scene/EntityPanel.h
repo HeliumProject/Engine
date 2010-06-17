@@ -190,7 +190,7 @@ namespace Luna
           pkg->SetAttribute( new AttributeType () );
         }
 
-        Attribute::AttributeEditor< AttributeType > attr( pkg );
+        Component::ComponentEditor< AttributeType > attr( pkg );
         (attr.operator->())->*PtrToBool = o;
         attr.Commit();
       }
@@ -211,7 +211,7 @@ namespace Luna
         Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *itr );
         NOC_ASSERT(entity);
 
-        Attribute::AttributeViewer< AttributeType > attr (entity->GetPackage<Asset::Entity>());
+        Component::ComponentViewer< AttributeType > attr (entity->GetPackage<Asset::Entity>());
         if (!attr.Valid())
         {
           return "";
@@ -246,7 +246,7 @@ namespace Luna
         Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *itr );
         NOC_ASSERT(entity);
 
-        Attribute::AttributeEditor< AttributeType > attr (entity->GetPackage<Asset::Entity>());
+        Component::ComponentEditor< AttributeType > attr (entity->GetPackage<Asset::Entity>());
         NOC_ASSERT(attr.Valid());
 
         (attr.operator->())->*MemberPtr = value;
@@ -287,7 +287,7 @@ public:
 
             if( editor )
             {
-              Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( entity->GetClassSet()->GetEntityAsset(), true );
+              Component::ComponentViewer< Asset::ArtFileComponent > artFile( entity->GetClassSet()->GetEntityAsset(), true );
               std::string objectsFile = entity->GetClassSet()->GetContentFile();
               RCS::File rcsObjectsFile( objectsFile );
 
@@ -419,7 +419,7 @@ public:
                 }
               }
 
-              Attribute::AttributeViewer< Asset::ArtFileAttribute > artFile( entity->GetClassSet()->GetEntityAsset(), true );
+              Component::ComponentViewer< Asset::ArtFileComponent > artFile( entity->GetClassSet()->GetEntityAsset(), true );
               std::string lightFile = entity->GetClassSet()->GetContentFile();
 
               if( Nocturnal::Path( lightFile ).Exists() )

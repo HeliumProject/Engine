@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "ZonePanel.h"
 #include "Reflect/Element.h"
-#include "Attribute/AttributeHandle.h"
-#include "AttributeOverrideGroup.h"
+#include "Pipeline/Component/ComponentHandle.h"
+#include "ComponentOverrideGroup.h"
 
 using namespace Luna; 
 

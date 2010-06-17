@@ -1,10 +1,10 @@
 #include "Pipeline/Content/Nodes/Region.h"
 #include <algorithm>
 
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 
 using namespace Content; 
-using namespace Attribute; 
+using namespace Component;
 
 REFLECT_DEFINE_CLASS(Region)
 

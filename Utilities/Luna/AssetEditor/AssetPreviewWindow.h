@@ -28,7 +28,7 @@ namespace Luna
     void OnAssetLoaded( const AssetLoadArgs& args );
     void OnAssetUnloaded( const AssetLoadArgs& args );
     void OnShaderChanged( const ShaderChangedArgs& args );
-    void OnShaderAttributedChanged( const AttributeExistenceArgs& args );
+    void OnShaderComponentdChanged( const ComponentExistenceArgs& args );
     void OnMeshUpdated( const Nocturnal::FileChangedArgs& e );
     void OnShaderUpdated( const Nocturnal::FileChangedArgs& e );
     void OnTextureUpdated( const Nocturnal::FileChangedArgs& e );

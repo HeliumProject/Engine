@@ -31,8 +31,8 @@ namespace Luna
 
     // Criteria
     std::string m_ApplicationType;
-    S_string m_ContainsAttributes;
-    S_string m_MissingAttributes;
+    S_string m_ContainsComponents;
+    S_string m_MissingComponents;
     std::string m_Location;
 
 
@@ -53,7 +53,7 @@ namespace Luna
 
     int Validate(Luna::SceneNode* node);
 
-    bool ContainsAttribute(Luna::SceneNode* node, const std::string& name);
+    bool ContainsComponent(Luna::SceneNode* node, const std::string& name);
 
     static void LoadFromFile(V_TypeConfigSmartPtr& types);
   };

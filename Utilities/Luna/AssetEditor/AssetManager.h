@@ -27,7 +27,7 @@ namespace Luna
 
   // Typedefs
   typedef std::map< u64, Luna::AssetClassPtr > M_AssetClassSmartPtr;
-  typedef std::set< AttributeWrapperPtr > S_AttributeSmartPtr;
+  typedef std::set< ComponentWrapperPtr > S_ComponentSmartPtr;
 
   /////////////////////////////////////////////////////////////////////////////
   // Arguments for events concerning the loading or unloading of asset classes.
@@ -99,7 +99,7 @@ namespace Luna
     void RevisionHistorySelected();
 
     size_t GetSelectedAssets( S_AssetClassDumbPtr& list ) const;
-    size_t GetSelectedAttributes( S_AttributeSmartPtr& list ) const;
+    size_t GetSelectedComponents( S_ComponentSmartPtr& list ) const;
     
     bool IsEditable();
     bool IsEditable( Luna::AssetClass* assetClass );

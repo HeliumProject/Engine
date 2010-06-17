@@ -51,11 +51,11 @@ int TypeConfig::Validate(Luna::SceneNode* node)
   }
 
   {
-    std::set<std::string>::const_iterator itr = m_ContainsAttributes.begin();
-    std::set<std::string>::const_iterator end = m_ContainsAttributes.end();
+    std::set<std::string>::const_iterator itr = m_ContainsComponents.begin();
+    std::set<std::string>::const_iterator end = m_ContainsComponents.end();
     for ( ; itr != end; ++itr )
     {
-      if (ContainsAttribute(node, *itr))
+      if (ContainsComponent(node, *itr))
       {
         score++;
       }
@@ -67,11 +67,11 @@ int TypeConfig::Validate(Luna::SceneNode* node)
   }
 
   {
-    std::set<std::string>::const_iterator itr = m_MissingAttributes.begin();
-    std::set<std::string>::const_iterator end = m_MissingAttributes.end();
+    std::set<std::string>::const_iterator itr = m_MissingComponents.begin();
+    std::set<std::string>::const_iterator end = m_MissingComponents.end();
     for ( ; itr != end; ++itr )
     {
-      if (!ContainsAttribute(node, *itr))
+      if (!ContainsComponent(node, *itr))
       {
         score++;
       }
@@ -119,7 +119,7 @@ int TypeConfig::Validate(Luna::SceneNode* node)
   return score;
 }
 
-bool TypeConfig::ContainsAttribute(Luna::SceneNode* node, const std::string& name)
+bool TypeConfig::ContainsComponent(Luna::SceneNode* node, const std::string& name)
 {
   const Reflect::Class* type = Reflect::Registry::GetInstance()->GetClass(name);
 
@@ -129,7 +129,7 @@ bool TypeConfig::ContainsAttribute(Luna::SceneNode* node, const std::string& nam
     return false;
   }
 
-  const Attribute::AttributePtr attr = node->GetPackage<Content::SceneNode>()->GetAttribute(type->m_TypeID);
+  const Component::ComponentPtr attr = node->GetPackage<Content::SceneNode>()->GetComponent(type->m_TypeID);
 
   return attr.ReferencesObject();
 }
@@ -264,13 +264,13 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
                 Log::Error("Type '%s' has more than one ApplicationType specified\n", t->m_Name.c_str());
               }
             }
-            else if ( std::string( criterion->Value() ) == "ContainsAttribute" )
+            else if ( std::string( criterion->Value() ) == "ContainsComponent" )
             {
-              t->m_ContainsAttributes.insert( criterion->GetText() );
+              t->m_ContainsComponents.insert( criterion->GetText() );
             }
-            else if ( std::string( criterion->Value() ) == "MissingAttribute" )
+            else if ( std::string( criterion->Value() ) == "MissingComponent" )
             {
-              t->m_MissingAttributes.insert( criterion->GetText() );
+              t->m_MissingComponents.insert( criterion->GetText() );
             }
             else if ( std::string( criterion->Value() ) == "Location" )
             {

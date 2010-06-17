@@ -329,7 +329,7 @@ namespace Content
       }
       if( attributeType != -1 )
       {
-        if( node->GetAttribute( attributeType ).ReferencesObject() )
+        if( node->GetComponent( attributeType ).ReferencesObject() )
           objects.push_back(node);
       }
       else

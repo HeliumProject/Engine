@@ -1773,7 +1773,7 @@
             <property name="id">ID_DEFAULT</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">AttribChooserPanel</property>
+            <property name="name">ComponentChooserPanel</property>
             <property name="pos"></property>
             <property name="size">380,375</property>
             <property name="subclass"></property>
@@ -1922,7 +1922,7 @@
                                 <property name="style">wxTE_MULTILINE|wxTE_READONLY</property>
                                 <property name="subclass"></property>
                                 <property name="tooltip"></property>
-                                <property name="value">Select an attribute (or attributes) to add from the list above.</property>
+                                <property name="value">Select an component (or components) to add from the list above.</property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
@@ -2165,7 +2165,7 @@
             <property name="id">ID_DEFAULT</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">AttributeCategoriesPanel</property>
+            <property name="name">ComponentCategoriesPanel</property>
             <property name="pos"></property>
             <property name="size">332,350</property>
             <property name="subclass"></property>
@@ -2417,7 +2417,7 @@
                                                             <property name="style">wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH</property>
                                                             <property name="subclass"></property>
                                                             <property name="tooltip"></property>
-                                                            <property name="value">Select an attribute and click the add button. You can also double-click on an attribute to add it to the currently selected asset.</property>
+                                                            <property name="value">Select an component and click the add button. You can also double-click on an component to add it to the currently selected asset.</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style">wxNO_BORDER</property>
@@ -2471,7 +2471,7 @@
             <property name="id">ID_DEFAULT</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">AttributeCategoryPanel</property>
+            <property name="name">ComponentCategoryPanel</property>
             <property name="pos"></property>
             <property name="size">430,400</property>
             <property name="subclass"></property>

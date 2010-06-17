@@ -181,10 +181,6 @@
 			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{A99087C6-C475-485A-8911-ACB7683156FF}"
-			RelativePathToProject=".\libraries\Attribute\Attribute.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"
 			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
 		/>
@@ -1062,110 +1058,110 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Attributes"
+				Name="Components"
 				>
 				<File
-					RelativePath=".\Asset\Attributes\ArtFileAttribute.cpp"
+					RelativePath=".\Asset\Components\ArtFileComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\ArtFileAttribute.h"
+					RelativePath=".\Asset\Components\ArtFileComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\ColorMapAttribute.cpp"
+					RelativePath=".\Asset\Components\ColorMapComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\ColorMapAttribute.h"
+					RelativePath=".\Asset\Components\ColorMapComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\DependenciesAttribute.cpp"
+					RelativePath=".\Asset\Components\DependenciesComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\DependenciesAttribute.h"
+					RelativePath=".\Asset\Components\DependenciesComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\DetailMapAttribute.cpp"
+					RelativePath=".\Asset\Components\DetailMapComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\DetailMapAttribute.h"
+					RelativePath=".\Asset\Components\DetailMapComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\ExpensiveMapAttribute.cpp"
+					RelativePath=".\Asset\Components\ExpensiveMapComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\ExpensiveMapAttribute.h"
+					RelativePath=".\Asset\Components\ExpensiveMapComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\FileBackedAttribute.cpp"
+					RelativePath=".\Asset\Components\FileBackedComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\FileBackedAttribute.h"
+					RelativePath=".\Asset\Components\FileBackedComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\NormalMapAttribute.cpp"
+					RelativePath=".\Asset\Components\NormalMapComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\NormalMapAttribute.h"
+					RelativePath=".\Asset\Components\NormalMapComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\StandardColorMapAttribute.cpp"
+					RelativePath=".\Asset\Components\StandardColorMapComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\StandardColorMapAttribute.h"
+					RelativePath=".\Asset\Components\StandardColorMapComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\StandardDetailMapAttribute.cpp"
+					RelativePath=".\Asset\Components\StandardDetailMapComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\StandardDetailMapAttribute.h"
+					RelativePath=".\Asset\Components\StandardDetailMapComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\StandardExpensiveMapAttribute.cpp"
+					RelativePath=".\Asset\Components\StandardExpensiveMapComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\StandardExpensiveMapAttribute.h"
+					RelativePath=".\Asset\Components\StandardExpensiveMapComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\StandardNormalMapAttribute.cpp"
+					RelativePath=".\Asset\Components\StandardNormalMapComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\StandardNormalMapAttribute.h"
+					RelativePath=".\Asset\Components\StandardNormalMapComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\TextureMapAttribute.cpp"
+					RelativePath=".\Asset\Components\TextureMapComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\TextureMapAttribute.h"
+					RelativePath=".\Asset\Components\TextureMapComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\WorldFileAttribute.cpp"
+					RelativePath=".\Asset\Components\WorldFileComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Attributes\WorldFileAttribute.h"
+					RelativePath=".\Asset\Components\WorldFileComponent.h"
 					>
 				</File>
 			</Filter>
@@ -1245,6 +1241,62 @@
 					>
 				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="Component"
+			>
+			<File
+				RelativePath=".\Component\Component.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\Component.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentCategories.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentCategories.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentCategory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentCategory.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentCategoryTypes.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentCollection.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentCollection.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentExceptions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentHandle.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentInit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentInit.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\API.h"

@@ -2,7 +2,7 @@
 
 #include "Pipeline/API.h"
 #include "Reflect/Serializers.h"
-#include "Attribute/AttributeCollection.h"
+#include "Pipeline/Component/ComponentCollection.h"
 #include "Foundation/TUID.h"
 
 
@@ -16,7 +16,7 @@ namespace Content
   //  It encapsulates the ID (TUID/Uuid) of each SceneNode.
   //
 
-  class PIPELINE_API SceneNode : public Attribute::AttributeCollection
+  class PIPELINE_API SceneNode : public Component::ComponentCollection
   {
   public:
     virtual void Host(ContentVisitor* visitor); 
@@ -52,7 +52,7 @@ namespace Content
 
     }
 
-    REFLECT_DECLARE_ABSTRACT(SceneNode, Attribute::AttributeCollection);
+    REFLECT_DECLARE_ABSTRACT(SceneNode, Component::ComponentCollection);
 
     static void EnumerateClass( Reflect::Compositor<SceneNode>& comp );
 
@@ -63,7 +63,7 @@ namespace Content
     virtual bool ProcessComponent( Reflect::ElementPtr element, const std::string& fieldName ) NOC_OVERRIDE;
 
     // invalidates class attributes
-    virtual bool ValidateCompatible( const Attribute::AttributePtr& attr, std::string& error ) const NOC_OVERRIDE;
+    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const NOC_OVERRIDE;
 
     const std::string& GetName() const
     {

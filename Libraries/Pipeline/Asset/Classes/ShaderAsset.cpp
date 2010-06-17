@@ -2,14 +2,14 @@
 #include "Pipeline/Asset/AssetExceptions.h" 
 
 #include "Pipeline/Asset/AssetTemplate.h"
-#include "Pipeline/Asset/Attributes/ColorMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardColorMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardDetailMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardExpensiveMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardNormalMapAttribute.h"
-#include "Pipeline/Asset/Attributes/TextureMapAttribute.h"
+#include "Pipeline/Asset/Components/ColorMapComponent.h"
+#include "Pipeline/Asset/Components/StandardColorMapComponent.h"
+#include "Pipeline/Asset/Components/StandardDetailMapComponent.h"
+#include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
+#include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
+#include "Pipeline/Asset/Components/TextureMapComponent.h"
 
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Foundation/Log.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ShaderSpecs.h"
@@ -39,11 +39,11 @@ void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
     shaderTemplate->m_DefaultAddSubDir = true;
     shaderTemplate->m_ShowSubDirCheckbox = true;
 
-    shaderTemplate->AddRequiredAttribute( Reflect::GetType< Asset::StandardColorMapAttribute >() );
+    shaderTemplate->AddRequiredComponent( Reflect::GetType< Asset::StandardColorMapComponent >() );
 
-    shaderTemplate->AddOptionalAttribute( Reflect::GetType< Asset::StandardDetailMapAttribute >() );
-    shaderTemplate->AddOptionalAttribute( Reflect::GetType< Asset::StandardExpensiveMapAttribute >() );
-    shaderTemplate->AddOptionalAttribute( Reflect::GetType< Asset::StandardNormalMapAttribute >() );
+    shaderTemplate->AddOptionalComponent( Reflect::GetType< Asset::StandardDetailMapComponent >() );
+    shaderTemplate->AddOptionalComponent( Reflect::GetType< Asset::StandardExpensiveMapComponent >() );
+    shaderTemplate->AddOptionalComponent( Reflect::GetType< Asset::StandardNormalMapComponent >() );
 
     assetTemplates.push_back( shaderTemplate );
 
@@ -67,7 +67,7 @@ void ShaderAsset::GetAllowableAssetTypes( S_AssetType& assetTypes ) const
 
 bool ShaderAsset::ValidateClass( std::string& error ) const
 {
-    TextureMapAttribute* colorMap = Reflect::ObjectCast< Asset::TextureMapAttribute >( GetAttribute( Reflect::GetType< ColorMapAttribute >() ) );
+    TextureMapComponent* colorMap = Reflect::ObjectCast< Asset::TextureMapComponent >( GetComponent( Reflect::GetType< ColorMapComponent >() ) );
     if ( !colorMap )
     {
         error = "Shader '" + GetShortName() + "' does not have a Color Map attribute. This shader will not build!";
@@ -87,9 +87,9 @@ bool ShaderAsset::ValidateClass( std::string& error ) const
     return __super::ValidateClass( error );
 }
 
-bool ShaderAsset::ValidateCompatible( const Attribute::AttributePtr& attr, std::string& error ) const
+bool ShaderAsset::ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const
 {
-    if ( attr->HasType( Reflect::GetType<TextureMapAttribute>() ) )
+    if ( attr->HasType( Reflect::GetType<TextureMapComponent>() ) )
     {
         return true;
     }
@@ -104,14 +104,14 @@ const Finder::FileSpec& ShaderAsset::GetBuiltFileSpec() const
 
 void ShaderAsset::SetTextureDirty( const Nocturnal::Path& path, bool dirty )
 {
-    Attribute::M_Attribute::const_iterator attrItr = GetAttributes().begin();
-    Attribute::M_Attribute::const_iterator attrEnd = GetAttributes().end();
+    Component::M_Component::const_iterator attrItr = GetComponents().begin();
+    Component::M_Component::const_iterator attrEnd = GetComponents().end();
     for ( ; attrItr != attrEnd; ++attrItr )
     {
-        const Attribute::AttributePtr& attrib = attrItr->second;
-        if ( attrib->HasType( Reflect::GetType< TextureMapAttribute >() ) )
+        const Component::ComponentPtr& attrib = attrItr->second;
+        if ( attrib->HasType( Reflect::GetType< TextureMapComponent >() ) )
         {
-            TextureMapAttributePtr texAttrib = Reflect::DangerousCast< TextureMapAttribute >( attrib );
+            TextureMapComponentPtr texAttrib = Reflect::DangerousCast< TextureMapComponent >( attrib );
             if ( texAttrib->GetPath() == path )
             {
                 texAttrib->SetTextureDirty( dirty );

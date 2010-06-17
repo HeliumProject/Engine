@@ -334,7 +334,7 @@ u64 CacheDB::FindAttributeRowID( const std::string& value )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-u32 CacheDB::GetAttributesTableData( V_string& tableData, bool* cancel )
+u32 CacheDB::GetComponentsTableData( V_string& tableData, bool* cancel )
 {
     u32 result = GetPopulateTableData( m_SelectAttributesHandle, tableData, cancel );
     if ( result > 0 )
@@ -421,8 +421,8 @@ void CacheDB::InsertAssetAttributes( AssetFile* assetFile, bool* cancel )
     int execResult = SQLITE_OK;
     std::string validAttributeIDsStr;
 
-    M_string::const_iterator attrItr = assetFile->GetAttributes().begin();
-    M_string::const_iterator attrEnd = assetFile->GetAttributes().end();
+    M_string::const_iterator attrItr = assetFile->GetComponents().begin();
+    M_string::const_iterator attrEnd = assetFile->GetComponents().end();
     for ( ; attrItr != attrEnd; ++attrItr )
     {
         if ( CheckCancelQuery( cancel ) )

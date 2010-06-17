@@ -368,7 +368,7 @@ namespace Luna
     template < class T >
     bool HasAttribute() const
     {
-      const Attribute::AttributeCollection* pkg = GetPackage< Attribute::AttributeCollection >();
+      const Component::ComponentCollection* pkg = GetPackage< Component::ComponentCollection >();
       return ( pkg->GetAttribute( Reflect::GetType< T >() ).ReferencesObject() );
     }
 
@@ -378,11 +378,11 @@ namespace Luna
     template < class T >
     void SetAttribute( bool enable )
     {
-      Attribute::AttributeCollection* pkg = GetPackage< Attribute::AttributeCollection >(); 
+      Component::ComponentCollection* pkg = GetPackage< Component::ComponentCollection >(); 
       if ( enable )
       {
         // This will create a new attribute or enable an existing one.
-        Attribute::AttributeEditor< T > editor( pkg );
+        Component::ComponentEditor< T > editor( pkg );
         editor.Commit();
       }
       else

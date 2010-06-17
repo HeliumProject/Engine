@@ -28,12 +28,12 @@ namespace Luna
   typedef Nocturnal::Signature< void, const LevelChangedArgs& > LevelChangedSignature;
 
   // Forwards
-  struct LevelWeatherAttributesChangedArgs
+  struct LevelWeatherComponentsChangedArgs
   {
     Asset::SceneAssetPtr  m_LevelClass; 
     u32                   m_Flags;
   };
-  typedef Nocturnal::Signature< void, const LevelWeatherAttributesChangedArgs& > LevelWeatherAttributesChangedSignature;
+  typedef Nocturnal::Signature< void, const LevelWeatherComponentsChangedArgs& > LevelWeatherComponentsChangedSignature;
 
   // overridden to provide real-time update of Level Settings
   // 
@@ -55,7 +55,7 @@ namespace Luna
     void OnElementChanged(const Reflect::ElementChangeArgs& args); 
 
   protected:
-    LevelWeatherAttributesChangedSignature::Event   m_LevelWeatherAttributesChanged;
+    LevelWeatherComponentsChangedSignature::Event   m_LevelWeatherComponentsChanged;
     LevelChangedSignature::Event                    m_LevelChanged;
 
   public:
@@ -69,18 +69,18 @@ namespace Luna
       m_LevelChanged.Remove( listener );
     }
 
-    void AddLevelWeatherAttributesChangedListener( const LevelWeatherAttributesChangedSignature::Delegate& listener )
+    void AddLevelWeatherComponentsChangedListener( const LevelWeatherComponentsChangedSignature::Delegate& listener )
     {
-      m_LevelWeatherAttributesChanged.Add( listener );
+      m_LevelWeatherComponentsChanged.Add( listener );
     }
 
-    void RemoveLevelWeatherAttributesChangedListener( const LevelWeatherAttributesChangedSignature::Delegate& listener )
+    void RemoveLevelWeatherComponentsChangedListener( const LevelWeatherComponentsChangedSignature::Delegate& listener )
     {
-      m_LevelWeatherAttributesChanged.Remove( listener );
+      m_LevelWeatherComponentsChanged.Remove( listener );
     }
 
-    void WeatherAttributeChanged(const Reflect::ElementChangeArgs& args);
-    void OnAttributeAdded(const Attribute::AttributeCollectionChanged& args); 
-    void OnAttributeRemoved(const Attribute::AttributeCollectionChanged& args); 
+    void WeatherComponentChanged(const Reflect::ElementChangeArgs& args);
+    void OnComponentAdded(const Component::ComponentCollectionChanged& args); 
+    void OnComponentRemoved(const Component::ComponentCollectionChanged& args); 
   };
 }

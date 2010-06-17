@@ -2,7 +2,7 @@
 #include "Pipeline/Content/ContentVisitor.h"
 
 using namespace Reflect;
-using namespace Attribute;
+using namespace Component;
 using namespace Content;
 
 REFLECT_DEFINE_ABSTRACT(SceneNode);
@@ -39,13 +39,13 @@ bool SceneNode::ProcessComponent(ElementPtr element, const std::string& fieldNam
   return __super::ProcessComponent( element, fieldName );
 }
 
-bool SceneNode::ValidateCompatible( const AttributePtr& attr, std::string& error ) const
+bool SceneNode::ValidateCompatible( const ComponentPtr& component, std::string& error ) const
 {
-  if ( attr->GetAttributeUsage() == AttributeUsages::Class )
+  if ( component->GetComponentUsage() == ComponentUsages::Class )
   {
-    error = attr->GetClass()->m_UIName + " is a class attribute, so it cannot be added to an instance.";
+    error = component->GetClass()->m_UIName + " is a class component, so it cannot be added to an instance.";
     return false;
   }
 
-  return __super::ValidateCompatible( attr, error );
+  return __super::ValidateCompatible( component, error );
 }

@@ -3,7 +3,7 @@
 #include "Pipeline/API.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/AssetType.h"
-#include "Pipeline/Asset/Attributes/TextureMapAttribute.h" // we share some enums with the texture maps (AlphaType)
+#include "Pipeline/Asset/Components/TextureMapComponent.h" // we share some enums with the texture maps (AlphaType)
 
 #include "Foundation/TUID.h"
 
@@ -89,7 +89,7 @@ namespace Asset
 
     virtual bool ValidateClass( std::string& error ) const NOC_OVERRIDE;
 
-    virtual bool ValidateCompatible( const Attribute::AttributePtr& attr, std::string& error ) const NOC_OVERRIDE;
+    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const NOC_OVERRIDE;
 
     virtual bool IsBuildable() const NOC_OVERRIDE;
 

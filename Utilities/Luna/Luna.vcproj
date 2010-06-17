@@ -212,10 +212,6 @@
 			RelativePathToProject=".\Libraries\Pipeline\Pipeline.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{A99087C6-C475-485A-8911-ACB7683156FF}"
-			RelativePathToProject=".\libraries\Attribute\Attribute.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{EBC5862F-F9EF-4CA6-AB18-F930074011AB}"
 		/>
 		<ProjectReference
@@ -612,11 +608,11 @@
 			Name="Scene"
 			>
 			<File
-				RelativePath=".\Scene\AttributeGroup.h"
+				RelativePath=".\Scene\ComponentGroup.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\AttributeOverrideGroup.h"
+				RelativePath=".\Scene\ComponentOverrideGroup.h"
 				>
 			</File>
 			<File
@@ -2065,11 +2061,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AttributeExistenceCommand.cpp"
+					RelativePath=".\AssetEditor\ComponentExistenceCommand.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AttributeExistenceCommand.h"
+					RelativePath=".\AssetEditor\ComponentExistenceCommand.h"
 					>
 				</File>
 				<File
@@ -2113,19 +2109,19 @@
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AttributeContainer.cpp"
+					RelativePath=".\AssetEditor\ComponentContainer.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AttributeContainer.h"
+					RelativePath=".\AssetEditor\ComponentContainer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AttributeNode.cpp"
+					RelativePath=".\AssetEditor\ComponentNode.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AttributeNode.h"
+					RelativePath=".\AssetEditor\ComponentNode.h"
 					>
 				</File>
 				<File
@@ -2269,30 +2265,30 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="Attributes"
+					Name="Components"
 					>
 					<File
-						RelativePath=".\AssetEditor\AttributeWrapper.cpp"
+						RelativePath=".\AssetEditor\ComponentWrapper.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\AttributeWrapper.h"
+						RelativePath=".\AssetEditor\ComponentWrapper.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\FileBackedAttribute.cpp"
+						RelativePath=".\AssetEditor\FileBackedComponent.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\FileBackedAttribute.h"
+						RelativePath=".\AssetEditor\FileBackedComponent.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\TextureMapAttribute.cpp"
+						RelativePath=".\AssetEditor\TextureMapComponent.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\TextureMapAttribute.h"
+						RelativePath=".\AssetEditor\TextureMapComponent.h"
 						>
 					</File>
 				</Filter>
@@ -2357,11 +2353,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AttributeChooserDlg.cpp"
+					RelativePath=".\AssetEditor\ComponentChooserDlg.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AttributeChooserDlg.h"
+					RelativePath=".\AssetEditor\ComponentChooserDlg.h"
 					>
 				</File>
 				<File

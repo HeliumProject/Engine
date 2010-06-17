@@ -14,8 +14,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rebuild", "utilities\Rebuil
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SmartLoader", "libraries\SmartLoader\SmartLoader.vcproj", "{6924A2EA-8CD4-40A1-9574-50F3AECC266D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Attribute", "libraries\Attribute\Attribute.vcproj", "{A99087C6-C475-485A-8911-ACB7683156FF}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SmartBuffer", "libraries\smartbuffer\smartbuffer.vcproj", "{FADD81C4-992F-4492-9750-C1F4B208EBD1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Platform", "libraries\Platform\platform.vcproj", "{4BC148DF-F832-4724-B9B9-2550D848E737}"
@@ -106,12 +104,6 @@ Global
 		{6924A2EA-8CD4-40A1-9574-50F3AECC266D}.Release|Win32.ActiveCfg = Release|Win32
 		{6924A2EA-8CD4-40A1-9574-50F3AECC266D}.Release|Win32.Build.0 = Release|Win32
 		{6924A2EA-8CD4-40A1-9574-50F3AECC266D}.Release|x64.ActiveCfg = Release|Win32
-		{A99087C6-C475-485A-8911-ACB7683156FF}.Debug|Win32.ActiveCfg = Debug|Win32
-		{A99087C6-C475-485A-8911-ACB7683156FF}.Debug|Win32.Build.0 = Debug|Win32
-		{A99087C6-C475-485A-8911-ACB7683156FF}.Debug|x64.ActiveCfg = Debug|Win32
-		{A99087C6-C475-485A-8911-ACB7683156FF}.Release|Win32.ActiveCfg = Release|Win32
-		{A99087C6-C475-485A-8911-ACB7683156FF}.Release|Win32.Build.0 = Release|Win32
-		{A99087C6-C475-485A-8911-ACB7683156FF}.Release|x64.ActiveCfg = Release|Win32
 		{FADD81C4-992F-4492-9750-C1F4B208EBD1}.Debug|Win32.ActiveCfg = Debug|Win32
 		{FADD81C4-992F-4492-9750-C1F4B208EBD1}.Debug|Win32.Build.0 = Debug|Win32
 		{FADD81C4-992F-4492-9750-C1F4B208EBD1}.Debug|x64.ActiveCfg = Debug|Win32

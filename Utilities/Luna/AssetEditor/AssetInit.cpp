@@ -8,9 +8,9 @@
 #include "AssetPreferences.h"
 #include "AssetReferenceNode.h"
 #include "AssetNode.h"
-#include "AttributeWrapper.h"
-#include "AttributeContainer.h"
-#include "AttributeNode.h"
+#include "ComponentWrapper.h"
+#include "ComponentContainer.h"
+#include "ComponentNode.h"
 #include "Application/Inspect/DragDrop/ClipboardDataWrapper.h"
 #include "Application/Inspect/DragDrop/ClipboardElementArray.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
@@ -20,14 +20,14 @@
 #include "FieldFileReference.h"
 #include "FieldNode.h"
 #include "FileArrayNode.h"
-#include "FileBackedAttribute.h"
+#include "FileBackedComponent.h"
 #include "PersistentData.h"
 #include "PersistentNode.h" 
 #include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 #include "ShaderAsset.h"
 #include "SimpleFieldNode.h"
 #include "SceneAsset.h"
-#include "TextureMapAttribute.h"
+#include "TextureMapComponent.h"
 
 #include "Foundation/InitializerStack.h"
 #include "Pipeline/Asset/AssetInit.h"
@@ -80,11 +80,11 @@ void LunaAsset::InitializeModule()
     g_InitializerStack.Push( Luna::AssetReferenceNode::InitializeType, Luna::AssetReferenceNode::CleanupType );
     g_InitializerStack.Push( Luna::SceneAsset::InitializeType, Luna::SceneAsset::CleanupType ); 
     g_InitializerStack.Push( Luna::ShaderAsset::InitializeType, Luna::ShaderAsset::CleanupType );
-    g_InitializerStack.Push( Luna::AttributeWrapper::InitializeType, Luna::AttributeWrapper::CleanupType );
-    g_InitializerStack.Push( Luna::FileBackedAttribute::InitializeType, Luna::FileBackedAttribute::CleanupType );
-    g_InitializerStack.Push( Luna::TextureMapAttribute::InitializeType, Luna::TextureMapAttribute::CleanupType );
-    g_InitializerStack.Push( Luna::AttributeContainer::InitializeType, Luna::AttributeContainer::CleanupType );
-    g_InitializerStack.Push( Luna::AttributeNode::InitializeType, Luna::AttributeNode::CleanupType );
+    g_InitializerStack.Push( Luna::ComponentWrapper::InitializeType, Luna::ComponentWrapper::CleanupType );
+    g_InitializerStack.Push( Luna::FileBackedComponent::InitializeType, Luna::FileBackedComponent::CleanupType );
+    g_InitializerStack.Push( Luna::TextureMapComponent::InitializeType, Luna::TextureMapComponent::CleanupType );
+    g_InitializerStack.Push( Luna::ComponentContainer::InitializeType, Luna::ComponentContainer::CleanupType );
+    g_InitializerStack.Push( Luna::ComponentNode::InitializeType, Luna::ComponentNode::CleanupType );
     g_InitializerStack.Push( AssetDocument::InitializeType, AssetDocument::CleanupType );
 
     Nocturnal::ImageManagerInit( "", "" );

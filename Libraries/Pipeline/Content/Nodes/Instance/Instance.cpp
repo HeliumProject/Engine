@@ -1,11 +1,11 @@
 #include "Pipeline/Content/Nodes/Instance/Instance.h"
 #include "Pipeline/Content/Scene.h"
 
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Foundation/Log.h"
 
 using namespace Content;
-using namespace Attribute; 
+using namespace Component;
 
 REFLECT_DEFINE_ABSTRACT(Instance);
 

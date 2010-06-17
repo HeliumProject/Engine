@@ -36,7 +36,7 @@ namespace FinderSpecs
   const FamilySpec Asset::WORLD_FAMILY                    ( "Asset::WORLD_FAMILY",               "World",                               "world" );
   const FamilySpec Asset::ZONE_FAMILY                     ( "Asset::ZONE_FAMILY",                "Zone",                                "zone" );
   const FamilySpec Asset::MOVIE_FAMILY                    ( "Asset::MOVIE_FAMILY",               "Movie",                               "movie" );
-  const FamilySpec Asset::ATTRIBUTE_FAMILY                ( "Asset::ATTRIBUTE_FAMILY",           "Attributes",                          "attribute" ); 
+  const FamilySpec Asset::COMPONENT_FAMILY                ( "Asset::COMPONENT_FAMILY",           "Components",                          "component" ); 
   const FamilySpec Asset::SKELETON_FAMILY                 ( "Asset::SKELETON_FAMILY",            "Skeleton",                            "skeleton"  ); 
 
   //
@@ -62,7 +62,7 @@ namespace FinderSpecs
   const DecorationSpec Asset::WORLD_DECORATION            ( "Asset::WORLD_DECORATION",              "World",              WORLD_FAMILY,         Extension::REFLECT_BINARY );
   const DecorationSpec Asset::ZONE_DECORATION             ( "Asset::ZONE_DECORATION",               "Zone",               ZONE_FAMILY,          Extension::REFLECT_BINARY );
   const DecorationSpec Asset::MOVIE_DECORATION            ( "Asset::MOVIE_DECORATION",              "Movie",              MOVIE_FAMILY,         Extension::REFLECT_BINARY );
-  const DecorationSpec Asset::ATTRIBUTE_DECORATION        ( "Asset::ATTRIBUTE_DECORATION",          "Attribute",          ATTRIBUTE_FAMILY,     Extension::REFLECT_BINARY ); 
+  const DecorationSpec Asset::COMPONENT_DECORATION        ( "Asset::COMPONENT_DECORATION",          "Component",          COMPONENT_FAMILY,     Extension::REFLECT_BINARY ); 
   const DecorationSpec Asset::SKELETON_DECORATION         ( "Asset::SKELETON_DECORATION",           "Skeleton" ,          SKELETON_FAMILY,      Extension::REFLECT_BINARY ); 
 
   FilterSpec Asset::ASSET_EDITOR_FILTER ( "Asset::ASSET_EDITOR_FILTER", "All asset files" );
@@ -86,11 +86,11 @@ namespace FinderSpecs
     ASSET_EDITOR_FILTER.AddSpec( SKELETON_DECORATION ); 
 
 
-    // These are the file types used by an AnimationGroupAttribute
+    // These are the file types used by an AnimationGroupComponent
     ANIMATION_FILTER.AddSpec( ANIM_DECORATION );
     ANIMATION_FILTER.AddSpec( ANIMCHAIN_DECORATION );
 
-    // These are the file types used by the DependenciesAttribute/RequiredListAsset
+    // These are the file types used by the DependenciesComponent/RequiredListAsset
     DEPENDENCIES_FILTER.AddSpec( ENTITY_DECORATION );
     DEPENDENCIES_FILTER.AddSpec( FONT_DECORATION );
     DEPENDENCIES_FILTER.AddSpec( MOVIE_DECORATION );

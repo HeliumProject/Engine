@@ -9,8 +9,8 @@
 #include "Task/Build.h"
 
 #include "Pipeline/Asset/AssetInit.h"
-#include "Attribute/AttributeHandle.h"
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
+#include "Pipeline/Component/ComponentHandle.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
@@ -52,7 +52,7 @@ bool SelectionHasAttribute(const OS_SelectableDumbPtr& selection)
       return false;
     }
 
-    Attribute::AttributeViewer<T> attr ( packageNode );
+    Component::ComponentViewer<T> attr ( packageNode );
 
     if (!attr.Valid())
     {
@@ -64,7 +64,7 @@ bool SelectionHasAttribute(const OS_SelectableDumbPtr& selection)
 }
 
 template <class T>
-bool SelectionHasSameAttribute(const OS_SelectableDumbPtr& selection, Attribute::AttributeViewer< T >& attribute)
+bool SelectionHasSameAttribute(const OS_SelectableDumbPtr& selection, Component::ComponentViewer< T >& attribute)
 {
   OS_SelectableDumbPtr::Iterator itr = selection.Begin();
   OS_SelectableDumbPtr::Iterator end = selection.End();
@@ -94,7 +94,7 @@ bool SelectionHasSameAttribute(const OS_SelectableDumbPtr& selection, Attribute:
     }
     else
     {
-      Attribute::AttributeViewer< T > nextAttribute = Attribute::AttributeViewer< T >( packageNode );
+      Component::ComponentViewer< T > nextAttribute = Component::ComponentViewer< T >( packageNode );
       if ( !nextAttribute.Valid() || ( attribute.operator->() != nextAttribute.operator->() ) )
       {
         return false;

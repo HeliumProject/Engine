@@ -6,7 +6,7 @@
 #include "Finder/AssetSpecs.h"
 #include "Foundation/File/Path.h"
 
-#pragma TODO( "Uh, how is this different from a DependenciesAttribute?" )
+#pragma TODO( "Uh, how is this different from a DependenciesComponent?" )
 
 namespace Asset
 {

@@ -4,7 +4,7 @@
 #include "Pipeline/Asset/AssetTypeInfo.h"
 #include "Pipeline/Asset/AssetExceptions.h"
 
-#include "Attribute/Attribute.h"
+#include "Pipeline/Component/Component.h"
 
 #include "Pipeline/Asset/Classes/EntityAsset.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
@@ -101,19 +101,19 @@ std::string AssetClass::GetAssetTypeIcon( const AssetType AssetType )
 }
 
 
-void AssetClass::AttributeChanged( const Attribute::AttributeBase* attr )
+void AssetClass::ComponentChanged( const Component::ComponentBase* attr )
 {
-    __super::AttributeChanged( attr );
+    __super::ComponentChanged( attr );
 }
 
-void AssetClass::SetAttribute( const Attribute::AttributePtr& attr, bool validate )
+void AssetClass::SetComponent( const Component::ComponentPtr& attr, bool validate )
 {
-    __super::SetAttribute( attr, validate );
+    __super::SetComponent( attr, validate );
 }
 
-void AssetClass::RemoveAttribute( i32 typeID )
+void AssetClass::RemoveComponent( i32 typeID )
 {
-    __super::RemoveAttribute( typeID );
+    __super::RemoveComponent( typeID );
 }
 
 void AssetClass::Serialize( const AssetVersionPtr &version )
@@ -135,15 +135,15 @@ bool AssetClass::ValidateClass( std::string& error ) const
     return true;
 }
 
-bool AssetClass::ValidateCompatible( const Attribute::AttributePtr &attr, std::string& error ) const
+bool AssetClass::ValidateCompatible( const Component::ComponentPtr &component, std::string& error ) const
 {
-    if ( attr->GetAttributeUsage() == Attribute::AttributeUsages::Instance )
+    if ( component->GetComponentUsage() == Component::ComponentUsages::Instance )
     {
-        error = "The " + attr->GetClass()->m_UIName + " attribute can only be added to an instance of an asset.";
+        error = "The " + component->GetClass()->m_UIName + " component can only be added to an instance of an asset.";
         return false;
     }
 
-    return __super::ValidateCompatible( attr, error );
+    return __super::ValidateCompatible( component, error );
 }
 
 void AssetClass::LoadFinished()
@@ -189,11 +189,11 @@ static int ScoreAssetType( const AssetClass* assetClass, const AssetClass* engin
 {
     int score = 0;
 
-    Attribute::M_Attribute::const_iterator itor = assetClass->GetAttributes().begin();
-    Attribute::M_Attribute::const_iterator end = assetClass->GetAttributes().end();
+    Component::M_Component::const_iterator itor = assetClass->GetComponents().begin();
+    Component::M_Component::const_iterator end = assetClass->GetComponents().end();
     for( ; itor != end; ++itor )
     {
-        if( engineClass->ContainsAttribute( itor->second->GetType() ) )
+        if( engineClass->ContainsComponent( itor->second->GetType() ) )
             ++score;
 
 
@@ -201,11 +201,11 @@ static int ScoreAssetType( const AssetClass* assetClass, const AssetClass* engin
 
     // not sure if we want to do this since the global engine type "templates" contain the
     // maximum number of attributes that something can have and still be classified as that type
-    itor = engineClass->GetAttributes().begin();
-    end = engineClass->GetAttributes().end();
+    itor = engineClass->GetComponents().begin();
+    end = engineClass->GetComponents().end();
     for( ; itor != end; ++itor )
     {
-        if( !assetClass->ContainsAttribute( itor->second->GetType() ) )
+        if( !assetClass->ContainsComponent( itor->second->GetType() ) )
             --score;
     }
 

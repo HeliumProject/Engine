@@ -27,12 +27,12 @@ namespace Asset
         Asset::EntityAssetPtr GetEntityAsset() const;
 
         //
-        // AttributeCollection overrides
+        // ComponentCollection overrides
         //
 
-        virtual bool ValidatePersistent( const Attribute::AttributePtr& attr ) const NOC_OVERRIDE;
-        virtual const Attribute::AttributePtr& GetAttribute( i32 typeID ) const NOC_OVERRIDE;
-        virtual void SetAttribute( const Attribute::AttributePtr& attr, bool validate = true ) NOC_OVERRIDE;
+        virtual bool ValidatePersistent( const Component::ComponentPtr& attr ) const NOC_OVERRIDE;
+        virtual const Component::ComponentPtr& GetComponent( i32 typeID ) const NOC_OVERRIDE;
+        virtual void SetComponent( const Component::ComponentPtr& component, bool validate = true ) NOC_OVERRIDE;
 
     private:
         Nocturnal::Path m_Path;

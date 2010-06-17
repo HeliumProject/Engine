@@ -27,9 +27,9 @@ namespace Luna
     class Enumerator;
     struct CreatePanelArgs;
     class AssetManager;
-    class AttributeContainer;
-    class AttributeWrapper;
-    class AttributeNode;
+    class ComponentContainer;
+    class ComponentWrapper;
+    class ComponentNode;
     struct AssetLoadArgs;
     struct DocumentChangedArgs;
 
@@ -43,7 +43,7 @@ namespace Luna
         Nocturnal::Path m_AssetPath;
         Reflect::Element* m_Element;
         const Reflect::Field* m_Field;
-        Luna::AttributeContainer* m_AttributeContainer;
+        Luna::ComponentContainer* m_ComponentContainer;
 
     public:
         // Runtime Type Info
@@ -73,10 +73,10 @@ namespace Luna
 
         // Helpers
     private:
-        Luna::AttributeNode* FindAttributeNode( Luna::AttributeWrapper* attribute );
-        Undo::CommandPtr GetAddAttributeCommand( Luna::AttributeWrapper* attribute );
-        Undo::CommandPtr GetRemoveAttributeCommand( Luna::AttributeWrapper* attribute );
-        friend class AttributeExistenceCommand;
+        Luna::ComponentNode* FindComponentNode( Luna::ComponentWrapper* attribute );
+        Undo::CommandPtr GetAddComponentCommand( Luna::ComponentWrapper* attribute );
+        Undo::CommandPtr GetRemoveComponentCommand( Luna::ComponentWrapper* attribute );
+        friend class ComponentExistenceCommand;
 
         static void CreatePanel( CreatePanelArgs& args );
         std::string GetFileName() const;

@@ -9,8 +9,8 @@ void AssetPreferences::EnumerateClass( Reflect::Compositor<AssetPreferences>& co
 {
   Reflect::ElementField* elemAssetEditorWindowSettings = comp.AddField( &AssetPreferences::m_AssetEditorWindowSettings, "m_AssetEditorWindowSettings" );
   Reflect::ElementField* elemAnimGroupDlgWindowSettings = comp.AddField( &AssetPreferences::m_AnimGroupDlgWindowSettings, "m_AnimGroupDlgWindowSettings" );
-  Reflect::ElementField* elemAttrChooserDlgWindowSettings = comp.AddField( &AssetPreferences::m_AttributeChooserDlgWindowSettings, "m_AttributeChooserDlgWindowSettings" );
-  Reflect::Field* fieldAttrChooserTab = comp.AddField( &AssetPreferences::m_AttributeChooserTab, "m_AttributeChooserTab" );
+  Reflect::ElementField* elemAttrChooserDlgWindowSettings = comp.AddField( &AssetPreferences::m_ComponentChooserDlgWindowSettings, "m_ComponentChooserDlgWindowSettings" );
+  Reflect::Field* fieldAttrChooserTab = comp.AddField( &AssetPreferences::m_ComponentChooserTab, "m_ComponentChooserTab" );
   Reflect::EnumerationField* enumFilePathOption = comp.AddEnumerationField( &AssetPreferences::m_FilePathOption, "m_FilePathOption" );
   Reflect::ElementField* elemMRU = comp.AddField( &AssetPreferences::m_MRU, "m_MRU" );
   Reflect::Field* fieldDisplayPreviewAxis = comp.AddField( &AssetPreferences::m_DisplayPreviewAxis, "m_DisplayPreviewAxis" );
@@ -34,7 +34,7 @@ const static std::string s_WindowSettingsVersion( "5" );
 const static std::string s_AnimGroupDlgVersion( "1" );
 
 // Increment this value to invalidate just the window settings for the Anim Group dialog
-const static std::string s_AttributeChooserDlgVersion( "1" );
+const static std::string s_ComponentChooserDlgVersion( "1" );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static initialization.
@@ -76,8 +76,8 @@ AssetPreferences* Luna::GetAssetEditorPreferences()
 AssetPreferences::AssetPreferences()
 : m_AssetEditorWindowSettings( new WindowSettings( s_WindowSettingsVersion ) )
 , m_AnimGroupDlgWindowSettings( new WindowSettings( s_AnimGroupDlgVersion ) )
-, m_AttributeChooserDlgWindowSettings( new WindowSettings( s_AttributeChooserDlgVersion, wxDefaultPosition, wxSize( 700, 400 ) ) )
-, m_AttributeChooserTab( "" )
+, m_ComponentChooserDlgWindowSettings( new WindowSettings( s_ComponentChooserDlgVersion, wxDefaultPosition, wxSize( 700, 400 ) ) )
+, m_ComponentChooserTab( "" )
 , m_FilePathOption( FilePathOptions::PartialPath )
 , m_MRU( new MRUData() )
 , m_DisplayPreviewAxis( false )
@@ -123,11 +123,11 @@ std::string AssetPreferences::GetPreferencesPath() const
 
 ///////////////////////////////////////////////////////////////////////////////
 // This field represents the name of the tab that was last selected in the
-// Attribute Chooser Dialog.
+// Component Chooser Dialog.
 // 
-const Reflect::Field* AssetPreferences::AttributeChooserTab() const
+const Reflect::Field* AssetPreferences::ComponentChooserTab() const
 {
-  return GetClass()->FindField( &AssetPreferences::m_AttributeChooserTab );
+  return GetClass()->FindField( &AssetPreferences::m_ComponentChooserTab );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -155,11 +155,11 @@ WindowSettings* AssetPreferences::GetAnimGroupDlgWindowSettings()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns the Attribute Chooser Dialog's window settings.
+// Returns the Component Chooser Dialog's window settings.
 // 
-WindowSettings* AssetPreferences::GetAttributeChooserDlgWindowSettings()
+WindowSettings* AssetPreferences::GetComponentChooserDlgWindowSettings()
 {
-  return m_AttributeChooserDlgWindowSettings.Ptr();
+  return m_ComponentChooserDlgWindowSettings.Ptr();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

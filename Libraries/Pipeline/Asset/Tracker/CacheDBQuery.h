@@ -86,21 +86,21 @@ namespace Asset
 
 
   /////////////////////////////////////////////////////////////////////////////
-  class PIPELINE_API CacheDBAttributeExpr : public CacheDBPhraseExpr
+  class PIPELINE_API CacheDBComponentExpr : public CacheDBPhraseExpr
   {
   public:
-    CacheDBAttributeExpr();
-    virtual ~CacheDBAttributeExpr();
+    CacheDBComponentExpr();
+    virtual ~CacheDBComponentExpr();
 
-    void SetAttributeRowID( const u32 rowID ) { m_AttributeRowID = rowID; }
-    u32 GetAttributeRowID() const { return m_AttributeRowID; }
+    void SetComponentRowID( const u32 rowID ) { m_ComponentRowID = rowID; }
+    u32 GetComponentRowID() const { return m_ComponentRowID; }
 
     virtual bool GetExpression( const M_CacheDBColumns& columns, std::string& expr, S_CacheDBColumnID& tables ) const NOC_OVERRIDE;
 
   protected:
-    u32 m_AttributeRowID;
+    u32 m_ComponentRowID;
   };
-  PIPELINE_API typedef Nocturnal::SmartPtr< CacheDBAttributeExpr > CacheDBAttributeExprPtr;
+  PIPELINE_API typedef Nocturnal::SmartPtr< CacheDBComponentExpr > CacheDBComponentExprPtr;
 
 
   /////////////////////////////////////////////////////////////////////////////

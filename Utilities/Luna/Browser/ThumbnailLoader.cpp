@@ -3,7 +3,7 @@
 #include "Render.h"
 
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
-#include "Pipeline/Asset/Attributes/ColorMapAttribute.h"
+#include "Pipeline/Asset/Components/ColorMapComponent.h"
 #include "Finder/AssetSpecs.h"
 #include "Foundation/File/Directory.h"
 #include "igDXRender/d3dmanager.h"
@@ -121,7 +121,7 @@ void* ThumbnailLoader::LoadThread::Entry()
                 Asset::ShaderAssetPtr shader = Reflect::ObjectCast< Asset::ShaderAsset >( Asset::AssetFile::GetAssetClass( file ) );
                 if ( shader )
                 {
-                    Asset::ColorMapAttributePtr colorMap = Reflect::ObjectCast< Asset::ColorMapAttribute >( shader->GetAttribute( Reflect::GetType< Asset::ColorMapAttribute >() ) );
+                    Asset::ColorMapComponentPtr colorMap = Reflect::ObjectCast< Asset::ColorMapComponent >( shader->GetComponent( Reflect::GetType< Asset::ColorMapComponent >() ) );
                     if ( colorMap )
                     {
                         if ( !colorMap->GetPath().Get().empty() )

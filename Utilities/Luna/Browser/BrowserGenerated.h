@@ -154,7 +154,7 @@ namespace Luna
 			
 			wxStaticBitmap* m_FileIDHelpBitmap;
 			wxStaticText* m_staticText151;
-			wxStaticBitmap* m_AttributeHelpBitmap;
+			wxStaticBitmap* m_ComponentHelpBitmap;
 			wxStaticBitmap* m_LevelHelpBitmap;
 			wxStaticBitmap* m_ShaderHelpBitmap;
 			
@@ -184,8 +184,8 @@ namespace Luna
 			wxComboBox* m_CreatedByComboBox;
 			wxChoice* m_AssetTypeChoice;
 			wxTextCtrl* m_FileIDTextCtrl;
-			wxChoice* m_AttributeNameChoice;
-			wxTextCtrl* m_AttributeValueTextCtrl;
+			wxChoice* m_ComponentNameChoice;
+			wxTextCtrl* m_ComponentValueTextCtrl;
 			wxTextCtrl* m_LevelTextCtrl;
 			wxTextCtrl* m_ShaderTextCtrl;
 			wxButton* m_GoButton;

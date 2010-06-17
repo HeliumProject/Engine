@@ -163,9 +163,9 @@ namespace Luna
     // Callbacks
     //
   protected:
-    void OnInstanceCollisionAttributeModified( const Reflect::ElementChangeArgs& args );
-    void OnAttributeAdded( const Attribute::AttributeCollectionChanged& args );
-    void OnAttributeRemoved( const Attribute::AttributeCollectionChanged& args );
+    void OnInstanceCollisionComponentModified( const Reflect::ElementChangeArgs& args );
+    void OnComponentAdded( const Component::ComponentCollectionChanged& args );
+    void OnComponentRemoved( const Component::ComponentCollectionChanged& args );
 
     //
     // Events

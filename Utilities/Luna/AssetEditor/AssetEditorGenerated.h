@@ -140,9 +140,9 @@ namespace Luna
 	};
 	
 	///////////////////////////////////////////////////////////////////////////////
-	/// Class AttribChooserPanel
+	/// Class ComponentChooserPanel
 	///////////////////////////////////////////////////////////////////////////////
-	class AttribChooserPanel : public wxPanel 
+	class ComponentChooserPanel : public wxPanel 
 	{
 		private:
 		
@@ -155,15 +155,15 @@ namespace Luna
 		public:
 			wxTreeCtrl* m_TreeCtrl;
 			wxTextCtrl* m_Description;
-			AttribChooserPanel( wxWindow* parent, wxWindowID id = ID_DEFAULT, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 380,375 ), long style = wxTAB_TRAVERSAL );
-			~AttribChooserPanel();
+			ComponentChooserPanel( wxWindow* parent, wxWindowID id = ID_DEFAULT, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 380,375 ), long style = wxTAB_TRAVERSAL );
+			~ComponentChooserPanel();
 		
 	};
 	
 	///////////////////////////////////////////////////////////////////////////////
-	/// Class AttributeCategoriesPanel
+	/// Class ComponentCategoriesPanel
 	///////////////////////////////////////////////////////////////////////////////
-	class AttributeCategoriesPanel : public wxPanel 
+	class ComponentCategoriesPanel : public wxPanel 
 	{
 		private:
 		
@@ -174,15 +174,15 @@ namespace Luna
 			wxPanel* m_MessagePanel;
 			wxStaticBitmap* m_Icon;
 			wxTextCtrl* m_Message;
-			AttributeCategoriesPanel( wxWindow* parent, wxWindowID id = ID_DEFAULT, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 332,350 ), long style = wxTAB_TRAVERSAL );
-			~AttributeCategoriesPanel();
+			ComponentCategoriesPanel( wxWindow* parent, wxWindowID id = ID_DEFAULT, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 332,350 ), long style = wxTAB_TRAVERSAL );
+			~ComponentCategoriesPanel();
 		
 	};
 	
 	///////////////////////////////////////////////////////////////////////////////
-	/// Class AttributeCategoryPanel
+	/// Class ComponentCategoryPanel
 	///////////////////////////////////////////////////////////////////////////////
-	class AttributeCategoryPanel : public wxPanel 
+	class ComponentCategoryPanel : public wxPanel 
 	{
 		private:
 		
@@ -191,8 +191,8 @@ namespace Luna
 		public:
 			wxStaticText* m_ShortDescription;
 			wxListCtrl* m_ListCtrl;
-			AttributeCategoryPanel( wxWindow* parent, wxWindowID id = ID_DEFAULT, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 430,400 ), long style = wxTAB_TRAVERSAL );
-			~AttributeCategoryPanel();
+			ComponentCategoryPanel( wxWindow* parent, wxWindowID id = ID_DEFAULT, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 430,400 ), long style = wxTAB_TRAVERSAL );
+			~ComponentCategoryPanel();
 		
 	};
 	

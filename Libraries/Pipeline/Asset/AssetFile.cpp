@@ -1,10 +1,10 @@
 #include "AssetFile.h"
 
 #include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
-#include "Pipeline/Asset/Attributes/ColorMapAttribute.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
+#include "Pipeline/Asset/Components/ColorMapComponent.h"
 
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "Finder/ExtensionSpecs.h"

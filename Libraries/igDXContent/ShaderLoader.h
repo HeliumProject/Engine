@@ -4,9 +4,9 @@
 
 namespace Asset
 {
-  class StandardColorMapAttribute;
-  class StandardNormalMapAttribute;
-  class StandardExpensiveMapAttribute;
+  class StandardColorMapComponent;
+  class StandardNormalMapComponent;
+  class StandardExpensiveMapComponent;
 }
 
 namespace igDXRender
@@ -29,8 +29,8 @@ namespace igDXContent
     static void SetColorFormat( igDXRender::TextureSettings* settings, u32 colorFormat, u32 mode );
 
     static void UpdateShaderClass(igDXRender::ShaderDatabase* db, const char* shaderFilename, u32 alphaMode);
-    static void UpdateShaderColorMap(igDXRender::Shader* sh, const Asset::StandardColorMapAttribute* colorMap);
-    static void UpdateShaderNormalMap(igDXRender::Shader* sh, const Asset::StandardNormalMapAttribute* colorMap);
-    static void UpdateShaderExpensiveMap(igDXRender::Shader* sh, const Asset::StandardExpensiveMapAttribute* colorMap);
+    static void UpdateShaderColorMap(igDXRender::Shader* sh, const Asset::StandardColorMapComponent* colorMap);
+    static void UpdateShaderNormalMap(igDXRender::Shader* sh, const Asset::StandardNormalMapComponent* colorMap);
+    static void UpdateShaderExpensiveMap(igDXRender::Shader* sh, const Asset::StandardExpensiveMapComponent* colorMap);
   };
 }

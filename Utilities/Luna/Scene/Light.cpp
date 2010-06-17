@@ -21,7 +21,7 @@
 #include "Pipeline/Content/Nodes/Lights/AreaLights/CylinderLight.h"
 #include "Pipeline/Content/Nodes/Lights/AreaLights/DiscLight.h"
 
-#include "Attribute/AttributeHandle.h"
+#include "Pipeline/Component/ComponentHandle.h"
 #include "LightPanel.h"
 
 // Using

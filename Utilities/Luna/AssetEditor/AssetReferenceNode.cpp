@@ -6,8 +6,8 @@
 #include "AssetEditor.h"
 #include "AssetManager.h"
 #include "AssetPreferences.h"
-#include "AttributeContainer.h"
-#include "AttributeNode.h"
+#include "ComponentContainer.h"
+#include "ComponentNode.h"
 #include "ContextMenuCallbacks.h"
 #include "FieldFactory.h"
 #include "RemoveAssetNodeCommand.h"
@@ -49,7 +49,7 @@ AssetReferenceNode::AssetReferenceNode( Luna::AssetManager* manager, const Noctu
 , m_Asset( NULL )
 , m_Element( NULL )
 , m_Field( field )
-, m_AttributeContainer( NULL )
+, m_ComponentContainer( NULL )
 , m_AssetPath( assetPath )
 {
     SetName( MakeLabel() );
@@ -112,17 +112,17 @@ void AssetReferenceNode::CreateChildren()
         // Fields on the asset class
         Luna::FieldFactory::GetInstance()->CreateChildFieldNodes( this, m_Asset->GetPackage< Reflect::Element >(), GetAssetManager() );
 
-        m_AttributeContainer = new Luna::AttributeContainer( GetAssetManager(), m_Asset );
-        AddChild( m_AttributeContainer );
+        m_ComponentContainer = new Luna::ComponentContainer( GetAssetManager(), m_Asset );
+        AddChild( m_ComponentContainer );
 
         // Child for each attribute
-        M_AttributeSmartPtr::const_iterator attributeItr = m_Asset->GetAttributes().begin();
-        M_AttributeSmartPtr::const_iterator attributeEnd = m_Asset->GetAttributes().end();
+        M_ComponentSmartPtr::const_iterator attributeItr = m_Asset->GetComponents().begin();
+        M_ComponentSmartPtr::const_iterator attributeEnd = m_Asset->GetComponents().end();
         for ( ; attributeItr != attributeEnd; ++attributeItr )
         {
-            const AttributeWrapperPtr& attribute = attributeItr->second;
-            Luna::AttributeNodePtr attributeNode = new Luna::AttributeNode( attribute );
-            m_AttributeContainer->AddChild( attributeNode );
+            const ComponentWrapperPtr& attribute = attributeItr->second;
+            Luna::ComponentNodePtr attributeNode = new Luna::ComponentNode( attribute );
+            m_ComponentContainer->AddChild( attributeNode );
             attributeNode->CreateChildren();
         }
     }
@@ -389,14 +389,14 @@ bool AssetReferenceNode::HandleClipboardData( const Inspect::ReflectClipboardDat
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Finds the child Luna::AttributeNode that corresponds to the specified Luna::AttributeWrapper.
+// Finds the child Luna::ComponentNode that corresponds to the specified Luna::ComponentWrapper.
 // 
-Luna::AttributeNode* AssetReferenceNode::FindAttributeNode( Luna::AttributeWrapper* attribute )
+Luna::ComponentNode* AssetReferenceNode::FindComponentNode( Luna::ComponentWrapper* attribute )
 {
-    if ( m_AttributeContainer )
+    if ( m_ComponentContainer )
     {
-        M_AttributeNodeDumbPtr::const_iterator found = m_AttributeContainer->GetAttributes().find( attribute->GetSlot() );
-        if ( found != m_AttributeContainer->GetAttributes().end() )
+        M_ComponentNodeDumbPtr::const_iterator found = m_ComponentContainer->GetComponents().find( attribute->GetSlot() );
+        if ( found != m_ComponentContainer->GetComponents().end() )
         {
             return found->second;
         }
@@ -406,26 +406,26 @@ Luna::AttributeNode* AssetReferenceNode::FindAttributeNode( Luna::AttributeWrapp
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns a command for adding the specified Luna::AttributeWrapper to this reference (will
-// result in the creation of a new Luna::AttributeNode).  The command will not have
+// Returns a command for adding the specified Luna::ComponentWrapper to this reference (will
+// result in the creation of a new Luna::ComponentNode).  The command will not have
 // been executed, so you must call Redo() on it to actually perform the operation.
 // 
-Undo::CommandPtr AssetReferenceNode::GetAddAttributeCommand( Luna::AttributeWrapper* attribute )
+Undo::CommandPtr AssetReferenceNode::GetAddComponentCommand( Luna::ComponentWrapper* attribute )
 {
-    Luna::AttributeNodePtr node = new Luna::AttributeNode( attribute );
+    Luna::ComponentNodePtr node = new Luna::ComponentNode( attribute );
     node->CreateChildren();
-    return new Luna::AddAssetNodeCommand( m_AttributeContainer, node, NULL, false );
+    return new Luna::AddAssetNodeCommand( m_ComponentContainer, node, NULL, false );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns a command for removing the specified Luna::AttributeWrapper from this reference
-// (will remove the corresponding Luna::AttributeNode from this reference).  The 
+// Returns a command for removing the specified Luna::ComponentWrapper from this reference
+// (will remove the corresponding Luna::ComponentNode from this reference).  The 
 // command will not have been executed, so you must call Redo() on it to actually
 // perform the operation.
 // 
-Undo::CommandPtr AssetReferenceNode::GetRemoveAttributeCommand( Luna::AttributeWrapper* attribute )
+Undo::CommandPtr AssetReferenceNode::GetRemoveComponentCommand( Luna::ComponentWrapper* attribute )
 {
-    Luna::AttributeNode* node = FindAttributeNode( attribute );
+    Luna::ComponentNode* node = FindComponentNode( attribute );
     NOC_ASSERT( node );
     return new Luna::RemoveAssetNodeCommand( node, false );
 }

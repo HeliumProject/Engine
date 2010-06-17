@@ -4,7 +4,7 @@
 
 #include "AssetFlags.h"
 
-#include "Attribute/AttributeCollection.h"
+#include "Pipeline/Component/ComponentCollection.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Reflect/Element.h"
 #include "Reflect/Class.h"
@@ -33,20 +33,20 @@ namespace Asset
     bool          m_ShowSubDirCheckbox;
     std::string   m_DefaultFormat;
 
-    Attribute::AttributeCollectionPtr m_RequiredAttributes;
-    Attribute::AttributeCollectionPtr m_OptionalAttributes;
+    Component::ComponentCollectionPtr m_RequiredComponents;
+    Component::ComponentCollectionPtr m_OptionalComponents;
 
   public:
     AssetTemplate( const Reflect::Composite* composite = NULL );
     virtual ~AssetTemplate();
 
-    bool AddRequiredAttribute( const Attribute::AttributePtr& attribute );
-    bool AddRequiredAttribute( const i32 typeID );
-    const Attribute::M_Attribute& GetRequiredAttributes() const;
+    bool AddRequiredComponent( const Component::ComponentPtr& attribute );
+    bool AddRequiredComponent( const i32 typeID );
+    const Component::M_Component& GetRequiredComponents() const;
 
-    bool AddOptionalAttribute( const Attribute::AttributePtr& attribute );
-    bool AddOptionalAttribute( const i32 typeID );
-    const Attribute::M_Attribute& GetOptionalAttributes() const;
+    bool AddOptionalComponent( const Component::ComponentPtr& attribute );
+    bool AddOptionalComponent( const i32 typeID );
+    const Component::M_Component& GetOptionalComponents() const;
 
     static void GetAssetTemplates( const i32 typeID, Reflect::V_Element& assetTemplates );
   public:

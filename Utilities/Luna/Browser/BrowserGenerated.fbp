@@ -1747,7 +1747,7 @@
                                     <property name="font">,90,92,-1,70,0</property>
                                     <property name="hidden">0</property>
                                     <property name="id">wxID_ANY</property>
-                                    <property name="label">Special Attributes:</property>
+                                    <property name="label">Special Components:</property>
                                     <property name="maximum_size"></property>
                                     <property name="minimum_size"></property>
                                     <property name="name">m_staticText41</property>
@@ -2209,7 +2209,7 @@
                                             <property name="font"></property>
                                             <property name="hidden">0</property>
                                             <property name="id">wxID_ANY</property>
-                                            <property name="label">Has Attribute:</property>
+                                            <property name="label">Has Component:</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
                                             <property name="name">m_staticText151</property>
@@ -2263,7 +2263,7 @@
                                                 <property name="proportion">0</property>
                                                 <object class="wxChoice" expanded="1">
                                                     <property name="bg"></property>
-                                                    <property name="choices">&quot;&lt;Select Attribute Name&gt;&quot;</property>
+                                                    <property name="choices">&quot;&lt;Select Component Name&gt;&quot;</property>
                                                     <property name="context_help"></property>
                                                     <property name="enabled">1</property>
                                                     <property name="fg"></property>
@@ -2272,13 +2272,13 @@
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size">150,-1</property>
-                                                    <property name="name">m_AttributeNameChoice</property>
+                                                    <property name="name">m_ComponentNameChoice</property>
                                                     <property name="permission">public</property>
                                                     <property name="pos"></property>
                                                     <property name="selection">0</property>
                                                     <property name="size"></property>
                                                     <property name="subclass"></property>
-                                                    <property name="tooltip">Here you can search for the value of&#x0A;a given attribute.</property>
+                                                    <property name="tooltip">Here you can search for the value of&#x0A;a given component.</property>
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
@@ -2323,14 +2323,14 @@
                                                     <property name="maximum_size"></property>
                                                     <property name="maxlength">0</property>
                                                     <property name="minimum_size">150,-1</property>
-                                                    <property name="name">m_AttributeValueTextCtrl</property>
+                                                    <property name="name">m_ComponentValueTextCtrl</property>
                                                     <property name="permission">public</property>
                                                     <property name="pos"></property>
                                                     <property name="size"></property>
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
-                                                    <property name="tooltip">Here you can search for the value of&#x0A;a given attribute.</property>
-                                                    <property name="value">&lt;Attribute Value&gt;</property>
+                                                    <property name="tooltip">Here you can search for the value of&#x0A;a given component.</property>
+                                                    <property name="value">&lt;Component Value&gt;</property>
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
@@ -2378,12 +2378,12 @@
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
-                                                    <property name="name">m_AttributeHelpBitmap</property>
+                                                    <property name="name">m_ComponentHelpBitmap</property>
                                                     <property name="permission">protected</property>
                                                     <property name="pos"></property>
                                                     <property name="size"></property>
                                                     <property name="subclass"></property>
-                                                    <property name="tooltip">Here you can search for the value of&#x0A;a given attribute.</property>
+                                                    <property name="tooltip">Here you can search for the value of&#x0A;a given component.</property>
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>

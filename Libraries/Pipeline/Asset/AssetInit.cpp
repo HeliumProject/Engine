@@ -1,6 +1,6 @@
 #include "AssetInit.h"
 
-#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/AssetType.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/AssetFile.h"
@@ -8,28 +8,28 @@
 #include "Pipeline/Asset/AssetTemplate.h"
 #include "Pipeline/Asset/AssetVersion.h"
 #include "Pipeline/Asset/Tracker/CacheDB.h"
-#include "Pipeline/Asset/Attributes/ColorMapAttribute.h"
-#include "Pipeline/Asset/Attributes/DependenciesAttribute.h"
-#include "Pipeline/Asset/Attributes/DetailMapAttribute.h"
+#include "Pipeline/Asset/Components/ColorMapComponent.h"
+#include "Pipeline/Asset/Components/DependenciesComponent.h"
+#include "Pipeline/Asset/Components/DetailMapComponent.h"
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Classes/EntityAsset.h"
 #include "Pipeline/Asset/Manifests/EntityManifest.h"
-#include "Pipeline/Asset/Attributes/ExpensiveMapAttribute.h"
+#include "Pipeline/Asset/Components/ExpensiveMapComponent.h"
 #include "Pipeline/Asset/ExporterJob.h"
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Pipeline/Asset/Manifests/ManifestVersion.h"
-#include "Pipeline/Asset/Attributes/NormalMapAttribute.h"
+#include "Pipeline/Asset/Components/NormalMapComponent.h"
 #include "Pipeline/Asset/Classes/RequiredListAsset.h"
-#include "Pipeline/Asset/Attributes/StandardColorMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardDetailMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardExpensiveMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardNormalMapAttribute.h"
+#include "Pipeline/Asset/Components/StandardColorMapComponent.h"
+#include "Pipeline/Asset/Components/StandardDetailMapComponent.h"
+#include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
+#include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
 #include "Pipeline/Asset/Classes/StandardShaderAsset.h"
-#include "Pipeline/Asset/Attributes/TextureMapAttribute.h"
+#include "Pipeline/Asset/Components/TextureMapComponent.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 
-#include "Attribute/AttributeInit.h"
-#include "Attribute/AttributeCategories.h"
+#include "Pipeline/Component/ComponentInit.h"
+#include "Pipeline/Component/ComponentCategories.h"
 #include "Foundation/InitializerStack.h"
 #include "Pipeline/Content/ContentInit.h"
 #include "Reflect/Registry.h"
@@ -63,7 +63,7 @@ using namespace Reflect;
 #define ASSET_REGISTER_ENGINETYPE_ENTITYCLASS_ATTRIB( __Attribute )             \
   _ASSET_REGISTER_ENGINETYPE_ENTITYCLASS                                        \
   if ( et_inserted.second && et_inserted.first->second.m_EntityAsset != NULL )  \
-  et_inserted.first->second.m_EntityAsset->SetAttribute( new __Attribute() );
+  et_inserted.first->second.m_EntityAsset->SetComponent( new __Attribute() );
 
 using namespace Asset;
 
@@ -79,7 +79,7 @@ void Asset::Initialize()
   {
     g_AssetInitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     g_AssetInitializerStack.Push( Finder::Initialize, Finder::Cleanup );
-    g_AssetInitializerStack.Push( Attribute::Initialize, Attribute::Cleanup );
+    g_AssetInitializerStack.Push( Component::Initialize, Component::Cleanup );
     g_AssetInitializerStack.Push( Content::Initialize, Content::Cleanup );
 
     //
@@ -117,7 +117,7 @@ void Asset::Initialize()
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetFile>( "AssetFile" ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetFolder>( "AssetFolder" ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<ShaderAsset>( "ShaderAsset" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<FileBackedAttribute>( "FileBackedAttribute" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<FileBackedComponent>( "FileBackedComponent" ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<Entity>( "Entity" ) );
 
     g_AssetInitializerStack.Push( Reflect::RegisterClass<ManifestVersion>( "ManifestVersion" ) );
@@ -138,30 +138,30 @@ void Asset::Initialize()
     // Asset Attributes
     //
 
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<DependenciesAttribute>( "DependenciesAttribute" ) );
-    Attribute::AttributeCategories::GetInstance()->Categorize( new DependenciesAttribute );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<DependenciesComponent>( "DependenciesComponent" ) );
+    Component::ComponentCategories::GetInstance()->Categorize( new DependenciesComponent );
 
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<TextureMapAttribute>( "TextureMapAttribute" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ColorMapAttribute>( "ColorMapAttribute" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<NormalMapAttribute>( "NormalMapAttribute" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ExpensiveMapAttribute>( "ExpensiveMapAttribute" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<DetailMapAttribute>( "DetailMapAttribute" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardColorMapAttribute>( "StandardColorMapAttribute" ) );
-    Attribute::AttributeCategories::GetInstance()->Categorize( new StandardColorMapAttribute );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardNormalMapAttribute>( "StandardNormalMapAttribute" ) );
-    Attribute::AttributeCategories::GetInstance()->Categorize( new StandardNormalMapAttribute );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardExpensiveMapAttribute>( "StandardExpensiveMapAttribute" ) );
-    Attribute::AttributeCategories::GetInstance()->Categorize( new StandardExpensiveMapAttribute );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardDetailMapAttribute>( "StandardDetailMapAttribute" ) );
-    Attribute::AttributeCategories::GetInstance()->Categorize( new StandardDetailMapAttribute );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<TextureMapComponent>( "TextureMapComponent" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<ColorMapComponent>( "ColorMapComponent" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<NormalMapComponent>( "NormalMapComponent" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<ExpensiveMapComponent>( "ExpensiveMapComponent" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<DetailMapComponent>( "DetailMapComponent" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardColorMapComponent>( "StandardColorMapComponent" ) );
+    Component::ComponentCategories::GetInstance()->Categorize( new StandardColorMapComponent );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardNormalMapComponent>( "StandardNormalMapComponent" ) );
+    Component::ComponentCategories::GetInstance()->Categorize( new StandardNormalMapComponent );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardExpensiveMapComponent>( "StandardExpensiveMapComponent" ) );
+    Component::ComponentCategories::GetInstance()->Categorize( new StandardExpensiveMapComponent );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardDetailMapComponent>( "StandardDetailMapComponent" ) );
+    Component::ComponentCategories::GetInstance()->Categorize( new StandardDetailMapComponent );
 
     //
     // Attribute Sets
     //
 
     // appearance
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ArtFileAttribute>( "ArtFileAttribute" ) );
-    Attribute::AttributeCategories::GetInstance()->Categorize( new ArtFileAttribute );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<ArtFileComponent>( "ArtFileComponent" ) );
+    Component::ComponentCategories::GetInstance()->Categorize( new ArtFileComponent );
 
     //
     // Asset classes

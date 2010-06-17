@@ -40,7 +40,7 @@ using namespace Luna;
 //    ID,
 //    Phrase,
 //    ColumnName,
-//    AttributeName,
+//    ComponentName,
 //  };
 //}
 
@@ -230,12 +230,12 @@ bool ParseColumnID( const std::string& token, Asset::S_CacheDBColumnID& columnID
     return result;
 }
 
-bool ParseAttributeRowID( const std::string& token, u64& rowID )
+bool ParseComponentRowID( const std::string& token, u64& rowID )
 {
     bool result = false;
 
 #pragma TODO( "reimplemnent without GlobalBrowser" )
-    //rowID = GlobalBrowser().GetCacheDB()->FindAttributeRowID( token );
+    //rowID = GlobalBrowser().GetCacheDB()->FindComponentRowID( token );
     //if ( rowID > 0 )
     //{
     //    result = true;
@@ -432,9 +432,9 @@ bool SearchQuery::ParseQueryString( const std::string& queryString, std::string&
                     }
 
                     //-------------------------------------------
-                    // Attribute Query
+                    // Component Query
                     u64 attrRowID;
-                    if ( ParseAttributeRowID( columnAlias, attrRowID ) )
+                    if ( ParseComponentRowID( columnAlias, attrRowID ) )
                     {
                         if ( !ParsePhrase( curToken, matchResults, currentValue, errors )  )
                         {
@@ -449,8 +449,8 @@ bool SearchQuery::ParseQueryString( const std::string& queryString, std::string&
                                 query->m_Search = new Asset::CacheDBQuery();
                             }
 
-                            Asset::CacheDBAttributeExpr* attrExpr = dynamic_cast<Asset::CacheDBAttributeExpr*>( query->m_Search->AddExprs( new Asset::CacheDBAttributeExpr() ) );
-                            attrExpr->SetAttributeRowID( attrRowID );
+                            Asset::CacheDBComponentExpr* attrExpr = dynamic_cast<Asset::CacheDBComponentExpr*>( query->m_Search->AddExprs( new Asset::CacheDBComponentExpr() ) );
+                            attrExpr->SetComponentRowID( attrRowID );
                             attrExpr->SetPhrase( currentValue );
                         }
 

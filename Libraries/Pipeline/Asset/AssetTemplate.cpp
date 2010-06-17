@@ -2,7 +2,7 @@
 
 #include "AssetFlags.h"
 
-#include "Attribute/AttributeCollection.h"
+#include "Pipeline/Component/ComponentCollection.h"
 #include "Foundation/CommandLine.h"
 #include "Reflect/Archive.h"
 
@@ -23,8 +23,8 @@ void AssetTemplate::EnumerateClass( Reflect::Compositor<AssetTemplate>& comp )
   Reflect::Field* fieldShowSubDirCheckbox = comp.AddField( &AssetTemplate::m_ShowSubDirCheckbox, "m_ShowSubDirCheckbox" );
   Reflect::Field* fieldDefaultFormat = comp.AddField( &AssetTemplate::m_DefaultFormat, "m_DefaultFormat" );
 
-  Reflect::Field* fieldRequiredAttributes = comp.AddField( &AssetTemplate::m_RequiredAttributes, "m_RequiredAttributes" );
-  Reflect::Field* fieldOptionalAttributes = comp.AddField( &AssetTemplate::m_OptionalAttributes, "m_OptionalAttributes" );
+  Reflect::Field* fieldRequiredComponents = comp.AddField( &AssetTemplate::m_RequiredComponents, "m_RequiredComponents" );
+  Reflect::Field* fieldOptionalComponents = comp.AddField( &AssetTemplate::m_OptionalComponents, "m_OptionalComponents" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,8 +35,8 @@ AssetTemplate::AssetTemplate( const Reflect::Composite* composite )
 , m_Description( "Default Description - Ask a tools programmer to add more useful info here!" )
 , m_DefaultAddSubDir( false )
 , m_ShowSubDirCheckbox( false )
-, m_RequiredAttributes( new Attribute::AttributeCollection() )
-, m_OptionalAttributes( new Attribute::AttributeCollection() )
+, m_RequiredComponents( new Component::ComponentCollection() )
+, m_OptionalComponents( new Component::ComponentCollection() )
 {
   if ( composite )
   {
@@ -57,24 +57,24 @@ AssetTemplate::~AssetTemplate()
 // Adds the specified attribute to the list of required attributes that must
 // be present when this template creates an asset class.
 // 
-bool AssetTemplate::AddRequiredAttribute( const Attribute::AttributePtr& attribute )
+bool AssetTemplate::AddRequiredComponent( const Component::ComponentPtr& attribute )
 {
   bool isOk = false;
-  if ( !m_RequiredAttributes->ContainsAttribute( attribute->GetType() ) )
+  if ( !m_RequiredComponents->ContainsComponent( attribute->GetType() ) )
   {
-    m_RequiredAttributes->SetAttribute( attribute, false );
+    m_RequiredComponents->SetComponent( attribute, false );
     isOk = true;
   }
   return isOk;
 }
 
-bool AssetTemplate::AddRequiredAttribute( const i32 typeID )
+bool AssetTemplate::AddRequiredComponent( const i32 typeID )
 {
   bool isOk = false;
-  if ( !m_RequiredAttributes->ContainsAttribute( typeID ) )
+  if ( !m_RequiredComponents->ContainsComponent( typeID ) )
   {
-    Attribute::AttributePtr attribute = Reflect::AssertCast< Attribute::AttributeBase >( Reflect::Registry::GetInstance()->CreateInstance( typeID ) );
-    m_RequiredAttributes->SetAttribute( attribute, false );
+    Component::ComponentPtr attribute = Reflect::AssertCast< Component::ComponentBase >( Reflect::Registry::GetInstance()->CreateInstance( typeID ) );
+    m_RequiredComponents->SetComponent( attribute, false );
     isOk = true;
   }
   return isOk;
@@ -84,32 +84,32 @@ bool AssetTemplate::AddRequiredAttribute( const i32 typeID )
 // Returns the list of attributes that must be present on assets that are 
 // created with this template.
 // 
-const Attribute::M_Attribute& AssetTemplate::GetRequiredAttributes() const
+const Component::M_Component& AssetTemplate::GetRequiredComponents() const
 {
-  return m_RequiredAttributes->GetAttributes();
+  return m_RequiredComponents->GetComponents();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Adds the specified attribute as an optional one.  
 // 
-bool AssetTemplate::AddOptionalAttribute( const Attribute::AttributePtr& attribute )
+bool AssetTemplate::AddOptionalComponent( const Component::ComponentPtr& attribute )
 {
   bool isOk = false;
-  if ( !m_OptionalAttributes->ContainsAttribute( attribute->GetType() ) )
+  if ( !m_OptionalComponents->ContainsComponent( attribute->GetType() ) )
   {
-    m_OptionalAttributes->SetAttribute( attribute, false );
+    m_OptionalComponents->SetComponent( attribute, false );
     isOk = true;
   }
   return isOk;
 }
 
-bool AssetTemplate::AddOptionalAttribute( const i32 typeID )
+bool AssetTemplate::AddOptionalComponent( const i32 typeID )
 {
   bool isOk = false;
-  if ( !m_OptionalAttributes->ContainsAttribute( typeID ) )
+  if ( !m_OptionalComponents->ContainsComponent( typeID ) )
   {
-    Attribute::AttributePtr attribute = Reflect::AssertCast< Attribute::AttributeBase >( Reflect::Registry::GetInstance()->CreateInstance( typeID ) );
-    m_OptionalAttributes->SetAttribute( attribute, false );
+    Component::ComponentPtr attribute = Reflect::AssertCast< Component::ComponentBase >( Reflect::Registry::GetInstance()->CreateInstance( typeID ) );
+    m_OptionalComponents->SetComponent( attribute, false );
     isOk = true;
   }
   return isOk;
@@ -119,9 +119,9 @@ bool AssetTemplate::AddOptionalAttribute( const i32 typeID )
 // Returns the list of optional attributes for this template.  These attributes
 // can be present when creating an asset using this template.
 // 
-const Attribute::M_Attribute& AssetTemplate::GetOptionalAttributes() const
+const Component::M_Component& AssetTemplate::GetOptionalComponents() const
 {
-  return m_OptionalAttributes->GetAttributes();
+  return m_OptionalComponents->GetComponents();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

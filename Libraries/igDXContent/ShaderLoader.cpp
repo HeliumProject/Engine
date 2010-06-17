@@ -4,10 +4,10 @@
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 
-#include "Pipeline/Asset/Attributes/TextureMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardColorMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardNormalMapAttribute.h"
-#include "Pipeline/Asset/Attributes/StandardExpensiveMapAttribute.h"
+#include "Pipeline/Asset/Components/TextureMapComponent.h"
+#include "Pipeline/Asset/Components/StandardColorMapComponent.h"
+#include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
+#include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
 
 #include "d3d9.h"
 #include "d3dx9.h"
@@ -188,10 +188,10 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
     settings.m_WrapU = TextureAddressModes( shaderClass->m_WrapModeU );
     settings.m_WrapV = TextureAddressModes( shaderClass->m_WrapModeV );
 
-    Asset::StandardColorMapAttribute* colorMap = shaderClass->GetAttribute< Asset::StandardColorMapAttribute >();
+    Asset::StandardColorMapComponent* colorMap = shaderClass->GetComponent< Asset::StandardColorMapComponent >();
     if( colorMap )
     {
-        Asset::TextureMapAttribute* textureMap = Reflect::ObjectCast< Asset::TextureMapAttribute >( colorMap );
+        Asset::TextureMapComponent* textureMap = Reflect::ObjectCast< Asset::TextureMapComponent >( colorMap );
 
         settings.m_Path = colorMap->GetPath().Get();
         settings.m_Anisotropy = 0;
@@ -228,10 +228,10 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
     settings.m_WrapU = TextureAddressModes( shaderClass->m_WrapModeU );
     settings.m_WrapV = TextureAddressModes( shaderClass->m_WrapModeV );
 
-    Asset::StandardNormalMapAttribute* normalMap = shaderClass->GetAttribute< Asset::StandardNormalMapAttribute >();
+    Asset::StandardNormalMapComponent* normalMap = shaderClass->GetComponent< Asset::StandardNormalMapComponent >();
     if( normalMap && normalMap->m_NormalMapScale>0.0f)
     {
-        Asset::TextureMapAttribute* textureMap = Reflect::ObjectCast< Asset::TextureMapAttribute >( normalMap );
+        Asset::TextureMapComponent* textureMap = Reflect::ObjectCast< Asset::TextureMapComponent >( normalMap );
 
         settings.m_Path = normalMap->GetPath().Get();
         settings.m_Anisotropy = 0;
@@ -268,10 +268,10 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
     settings.m_WrapU = TextureAddressModes( shaderClass->m_WrapModeU );
     settings.m_WrapV = TextureAddressModes( shaderClass->m_WrapModeV );
 
-    Asset::StandardExpensiveMapAttribute* expensiveMap = shaderClass->GetAttribute< Asset::StandardExpensiveMapAttribute >();
+    Asset::StandardExpensiveMapComponent* expensiveMap = shaderClass->GetComponent< Asset::StandardExpensiveMapComponent >();
     if( expensiveMap )
     {
-        Asset::TextureMapAttribute* textureMap = Reflect::ObjectCast< Asset::TextureMapAttribute >( expensiveMap );
+        Asset::TextureMapComponent* textureMap = Reflect::ObjectCast< Asset::TextureMapComponent >( expensiveMap );
 
         settings.m_Path = expensiveMap->GetPath().Get();
         settings.m_Anisotropy = 0;
@@ -408,7 +408,7 @@ void igDXContent::RBShaderLoader::UpdateShaderClass(igDXRender::ShaderDatabase* 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXContent::RBShaderLoader::UpdateShaderColorMap(igDXRender::Shader* sh, const Asset::StandardColorMapAttribute* colorMap)
+void igDXContent::RBShaderLoader::UpdateShaderColorMap(igDXRender::Shader* sh, const Asset::StandardColorMapComponent* colorMap)
 {
     if (colorMap && !colorMap->m_DisableBaseTint)
     {
@@ -427,7 +427,7 @@ void igDXContent::RBShaderLoader::UpdateShaderColorMap(igDXRender::Shader* sh, c
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXContent::RBShaderLoader::UpdateShaderNormalMap(igDXRender::Shader* sh, const Asset::StandardNormalMapAttribute* normalMap)
+void igDXContent::RBShaderLoader::UpdateShaderNormalMap(igDXRender::Shader* sh, const Asset::StandardNormalMapComponent* normalMap)
 {
     if (!normalMap)
     {
@@ -439,7 +439,7 @@ void igDXContent::RBShaderLoader::UpdateShaderNormalMap(igDXRender::Shader* sh, 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXContent::RBShaderLoader::UpdateShaderExpensiveMap(igDXRender::Shader* sh, const Asset::StandardExpensiveMapAttribute* expensiveMap)
+void igDXContent::RBShaderLoader::UpdateShaderExpensiveMap(igDXRender::Shader* sh, const Asset::StandardExpensiveMapComponent* expensiveMap)
 {
     if (!expensiveMap)
     {

@@ -12,7 +12,7 @@
 using namespace Component;
 
 i32 g_ComponentInitCount = 0; 
-Nocturnal::InitializerStack g_RegisteredTypes;
+Nocturnal::InitializerStack g_ComponentRegisteredTypes;
 
 Nocturnal::InitializerStack g_ComponentInitializerStack;
 
@@ -22,11 +22,11 @@ void Component::Initialize()
   {
     g_ComponentInitializerStack.Push( &Reflect::Initialize, &Reflect::Cleanup );
 
-//    g_RegisteredTypes.Push( Reflect::RegisterClass<ComponentCollection>( "ComponentCollection" ) );
+//    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentCollection>( "ComponentCollection" ) );
 
-    g_RegisteredTypes.Push( Reflect::RegisterClass<ComponentBase>( "ComponentBase" ) );
-    g_RegisteredTypes.Push( Reflect::RegisterClass<ComponentCollection>( "ComponentCollection" ) );
-    g_RegisteredTypes.Push( Reflect::RegisterClass<ComponentCategory>( "ComponentCategory" ) );
+    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentBase>( "ComponentBase" ) );
+    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentCollection>( "ComponentCollection" ) );
+    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentCategory>( "ComponentCategory" ) );
 
     ComponentCategories::Initialize();
   }
@@ -37,7 +37,7 @@ void Component::Cleanup()
   if (--g_ComponentInitCount == 0)
   {
     ComponentCategories::Cleanup();
-    g_RegisteredTypes.Cleanup();
+    g_ComponentRegisteredTypes.Cleanup();
     g_ComponentInitializerStack.Cleanup();
   }
 }

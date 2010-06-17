@@ -1683,7 +1683,7 @@ namespace Content
 
     for each( const Content::MeshPtr& mesh in meshes )
     {
-      if( mesh->m_ExportTypes[Content::ContentTypes::LightMapped] && !mesh->ShareLightmap() )
+      if( mesh->m_ExportTypes[Content::ContentTypes::LightMapped] )
       {
         mentalRayMeshes.push_back( mesh );
       }
@@ -1702,7 +1702,7 @@ namespace Content
 
     for each( const Content::MeshPtr& mesh in meshes )
     {
-      if( mesh->m_ExportTypes[Content::ContentTypes::LightMapped] && !mesh->ShareLightmap() )
+      if( mesh->m_ExportTypes[Content::ContentTypes::LightMapped] )
       {
         lightmapped.push_back( mesh );
       }
@@ -1720,7 +1720,7 @@ namespace Content
 
     for each( const Content::MeshPtr& mesh in meshes )
     {
-      if( mesh->m_ExportTypes[Content::ContentTypes::LightMapped] && !mesh->ShareLightmap() )
+      if( mesh->m_ExportTypes[Content::ContentTypes::LightMapped] )
       {
         lightmapped.push_back( mesh );
       }
@@ -2181,7 +2181,7 @@ namespace Content
          mesh = m_Meshes[i];
        }
 
-       if( mesh->m_ExportTypes[Content::ContentTypes::LightMapped] && !mesh->ShareLightmap() )
+       if( mesh->m_ExportTypes[Content::ContentTypes::LightMapped] )
        {
          texelsPerMeter += mesh->LightmapTexelsPerMeter( logTextureSize, scale );
          numMeshes +=1;
@@ -2207,7 +2207,7 @@ namespace Content
          mesh = m_Meshes[i];
        }
 
-       if( mesh->m_ExportTypes[Content::ContentTypes::LightMapped] && !mesh->ShareLightmap() )
+       if( mesh->m_ExportTypes[Content::ContentTypes::LightMapped] )
        {
          surfaceArea += mesh->SurfaceArea( scale );
          uvArea += mesh->UVSurfaceArea( UVSetTypes::Lightmap );
@@ -2233,7 +2233,7 @@ namespace Content
          mesh = m_Meshes[i];
        }
 
-       if( mesh->m_ExportTypes[Content::ContentTypes::LightMapped] && !mesh->ShareLightmap() )
+       if( mesh->m_ExportTypes[Content::ContentTypes::LightMapped] )
        {
          surfaceArea += mesh->SurfaceArea();
        }
@@ -2260,7 +2260,7 @@ namespace Content
 
        if( uvSetType == UVSetTypes::Lightmap )
        {
-         if( !mesh->m_ExportTypes[Content::ContentTypes::LightMapped] && !mesh->ShareLightmap() )
+         if( !mesh->m_ExportTypes[Content::ContentTypes::LightMapped] )
            continue;
        }
        surfaceArea += mesh->UVSurfaceArea( uvSetType );
@@ -2283,7 +2283,7 @@ namespace Content
          mesh = m_Meshes[i];
        }
 
-       if( mesh->m_ExportTypes[meshType] && !mesh->ShareLightmap() )
+       if( mesh->m_ExportTypes[meshType] )
          surfaceArea += mesh->SurfaceArea( scale );       
      }
      return surfaceArea;
@@ -2303,22 +2303,10 @@ namespace Content
          mesh = m_Meshes[i];
        }
 
-       if( mesh->m_ExportTypes[meshType] && !mesh->ShareLightmap() )
+       if( mesh->m_ExportTypes[meshType] )
          surfaceArea += mesh->SurfaceAreaComponents( areaVec );       
      }
      return surfaceArea;
-   }
-
-   bool Scene::HasSharedLightmapOverlays() const
-   {
-     Content::V_Mesh::const_iterator itor = m_Meshes.begin();
-     Content::V_Mesh::const_iterator end  = m_Meshes.end();
-     for ( ; itor != end; ++itor )
-     {
-       if( (*itor)->ShareLightmap() )
-         return true;
-     }
-     return false;
    }
 
    bool Scene::IntersectSegment( const Math::Line& segment,  Math::Matrix4* transform )

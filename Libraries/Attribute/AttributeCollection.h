@@ -8,7 +8,6 @@
 #include "Reflect/Serializers.h"
 
 #include "Attribute.h"
-#include "ComponentCollection.h"
 
 namespace Attribute
 {
@@ -34,10 +33,10 @@ namespace Attribute
    
   typedef Nocturnal::SmartPtr<AttributeCollection> AttributeCollectionPtr;
 
-  class ATTRIBUTE_API AttributeCollection : public ComponentCollection
+  class ATTRIBUTE_API AttributeCollection : public Reflect::Element
   {
   public:
-    REFLECT_DECLARE_CLASS(AttributeCollection, ComponentCollection);
+      REFLECT_DECLARE_CLASS(AttributeCollection, Reflect::Element);
     static void EnumerateClass( Reflect::Compositor<AttributeCollection>& comp );
 
     AttributeCollection();

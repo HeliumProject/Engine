@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Workspace.h"
-#include "FileDropTarget.h"
+#include "Application/UI/FileDropTarget.h"
 #include "PropToolGenerated.h"
 #include "Platform/Compiler.h"
 #include "Foundation/File/FileWatcher.h"

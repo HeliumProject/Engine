@@ -858,6 +858,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\FileDropTarget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\FileDropTarget.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\FileTreeCtrl.cpp"
 				>
 			</File>

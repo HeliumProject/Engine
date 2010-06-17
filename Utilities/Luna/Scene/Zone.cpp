@@ -5,7 +5,7 @@
 #include "SceneManager.h"
 #include "SceneNodeType.h"
 
-#include "Content/Zone.h"
+#include "Pipeline/Content/Nodes/Zone.h"
 #include "Core/Enumerator.h"
 #include "Application/UI/ImageManager.h"
 

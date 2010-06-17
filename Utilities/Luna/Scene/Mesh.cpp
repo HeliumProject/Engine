@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Mesh.h"
 
-#include "Content/Mesh.h"
+#include "Pipeline/Content/Nodes/Geometry/Mesh.h"
 
 #include "Application/UI/ImageManager.h"
 #include "Pick.h"

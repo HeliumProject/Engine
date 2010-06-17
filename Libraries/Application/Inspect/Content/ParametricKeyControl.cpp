@@ -5,7 +5,7 @@
 #include "Application/Inspect/Widgets/Canvas.h"
 #include "Application/Inspect/Widgets/Container.h"
 
-#include "Content/ParametricKey.h"
+#include "Pipeline/Content/ParametricKey/ParametricKey.h"
 
 using namespace Inspect;
 

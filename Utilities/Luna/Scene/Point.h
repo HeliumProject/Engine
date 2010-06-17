@@ -2,7 +2,7 @@
 
 #include "HierarchyNode.h"
 
-#include "Content/Point.h"
+#include "Pipeline/Content/Nodes/Curve/Point.h"
 #include "Core/Manipulator.h"
 
 namespace Luna

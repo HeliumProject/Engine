@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Reflect/Element.h"
-#include "Content/Camera.h"
+#include "Pipeline/Content/Nodes/Camera.h"
 #include "Camera.h" 
 #include "View.h"
 

@@ -46,7 +46,7 @@
 #include "Finder/ExtensionSpecs.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
-#include "Content/ContentVersion.h"
+#include "Pipeline/Content/ContentVersion.h"
 #include "Editor/MRUData.h"
 #include "Application/Inspect/Widgets/Control.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
@@ -59,7 +59,7 @@
 #include "Platform/Windows/Clipboard.h"
 #include "Platform/Process.h"
 
-#include "Content/Scene.h"
+#include "Pipeline/Content/Scene.h"
 
 #include <algorithm>
 #include <boost/algorithm/string.hpp>

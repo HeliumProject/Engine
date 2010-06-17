@@ -7,8 +7,8 @@
 
 #include "Reflect/Serializers.h"
 
-#include "Content/Zone.h"
-#include "Content/Region.h"
+#include "Pipeline/Content/Nodes/Zone.h"
+#include "Pipeline/Content/Nodes/Region.h"
 
 namespace AssetBuilder
 {

@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "SpotLight.h"
-#include "Content/SpotLight.h"
+#include "Pipeline/Content/Nodes/Lights/SpotLight.h"
 
 #include "Scene.h"
 #include "SceneManager.h"

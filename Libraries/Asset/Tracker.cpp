@@ -16,7 +16,7 @@
 #include "Foundation/String/Utilities.h"
 #include "Platform/Types.h"
 #include "Foundation/Log.h"
-#include "Content/ContentInit.h"
+#include "Pipeline/Content/ContentInit.h"
 #include "Foundation/InitializerStack.h"
 #include "Finder/Finder.h"
 #include "Finder/ExtensionSpecs.h"

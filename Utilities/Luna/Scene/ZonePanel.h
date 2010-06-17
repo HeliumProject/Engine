@@ -7,7 +7,7 @@
 #include "Application/Inspect/Reflect/ReflectInterpreter.h"
 #include "Core/Enumerator.h"
 
-#include "Content/Zone.h"
+#include "Pipeline/Content/Nodes/Zone.h"
 
 namespace Luna
 {

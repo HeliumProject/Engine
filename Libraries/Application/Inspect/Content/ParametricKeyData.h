@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Application/Inspect/Data/Data.h"
-#include "Content/ParametricKey.h"
+#include "Pipeline/Content/ParametricKey/ParametricKey.h"
 
 namespace Inspect
 {

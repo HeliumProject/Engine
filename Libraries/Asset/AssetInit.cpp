@@ -31,7 +31,7 @@
 #include "Attribute/AttributeInit.h"
 #include "Attribute/AttributeCategories.h"
 #include "Foundation/InitializerStack.h"
-#include "Content/ContentInit.h"
+#include "Pipeline/Content/ContentInit.h"
 #include "Reflect/Registry.h"
 
 #include "Foundation/InitializerStack.h"

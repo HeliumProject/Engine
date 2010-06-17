@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "JointTransform.h"
 
-#include "Content/JointTransform.h"
+#include "Pipeline/Content/Nodes/Transform/JointTransform.h"
 #include "Foundation/Math/EulerAngles.h"
 
 #include "Application/UI/ImageManager.h"

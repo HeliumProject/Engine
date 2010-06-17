@@ -208,16 +208,16 @@
 			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
 		/>
 		<ProjectReference
+			ReferencedProjectIdentifier="{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
+			RelativePathToProject=".\Libraries\Pipeline\Pipeline.vcproj"
+		/>
+		<ProjectReference
 			ReferencedProjectIdentifier="{89167DD4-39A9-444A-8ED9-CAB1B35A0DEA}"
 			RelativePathToProject=".\libraries\Asset\Asset.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{A99087C6-C475-485A-8911-ACB7683156FF}"
 			RelativePathToProject=".\libraries\Attribute\Attribute.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{51249970-F796-4344-B558-4147F3225C30}"
-			RelativePathToProject=".\libraries\Content\Content.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{296B05EC-7929-4E23-942C-FA953BB5602D}"

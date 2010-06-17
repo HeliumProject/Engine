@@ -193,8 +193,8 @@
 			RelativePathToProject=".\libraries\Attribute\Attribute.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{51249970-F796-4344-B558-4147F3225C30}"
-			RelativePathToProject=".\libraries\Content\Content.vcproj"
+			ReferencedProjectIdentifier="{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
+			RelativePathToProject=".\Libraries\Pipeline\Pipeline.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"

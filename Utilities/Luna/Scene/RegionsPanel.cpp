@@ -3,8 +3,8 @@
 #include "Region.h"
 #include "Zone.h"
 
-#include "Content/Region.h"
-#include "Content/Zone.h"
+#include "Pipeline/Content/Nodes/Region.h"
+#include "Pipeline/Content/Nodes/Zone.h"
 #include "Core/Object.h"
 #include "SceneNode.h"
 #include "Application/UI/SortTreeCtrl.h"

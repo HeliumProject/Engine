@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 #include "SceneNode.h"
-#include "Content/Zone.h"
+#include "Pipeline/Content/Nodes/Zone.h"
 
 namespace Luna
 {

@@ -6,7 +6,7 @@
 #include "Asset/ArtFileAttribute.h"
 
 #include "Foundation/Log.h"
-#include "Content/Scene.h"
+#include "Pipeline/Content/Scene.h"
 #include "Application/RCS/RCS.h"
 
 using namespace Asset;

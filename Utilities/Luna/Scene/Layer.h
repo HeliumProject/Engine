@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Content/Layer.h"
-#include "Content/NodeVisibility.h"
+#include "Pipeline/Content/Nodes/Layer.h"
+#include "Pipeline/Content/NodeVisibility.h"
 
 #include "Luna/API.h"
 #include "SceneNode.h"

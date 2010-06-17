@@ -4,7 +4,7 @@
 #include "Application/Inspect/Content/ParametricKeyControl.h"
 #include "Application/Inspect/Content/ParametricKeyData.h"
 
-#include "Content/ParametricKey.h"
+#include "Pipeline/Content/ParametricKey/ParametricKey.h"
 
 using namespace Inspect;
 

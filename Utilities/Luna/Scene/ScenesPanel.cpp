@@ -12,7 +12,7 @@
 #include "Asset/EntityAsset.h"
 #include "Attribute/AttributeHandle.h"
 #include "Asset/ArtFileAttribute.h"
-#include "Content/ContentVersion.h"
+#include "Pipeline/Content/ContentVersion.h"
 #include "Finder/AssetSpecs.h"
 #include "Foundation/Log.h"
 #include "Application/UI/FileDialog.h"

@@ -1,8 +1,8 @@
 #include "ContentLoader.h"
 #include "ShaderLoader.h"
 
-#include "Content/ContentInit.h"
-#include "Content/Scene.h"
+#include "Pipeline/Content/ContentInit.h"
+#include "Pipeline/Content/Scene.h"
 
 #include <map>
 #include <set>

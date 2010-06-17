@@ -16,10 +16,10 @@
 #include "PrimitiveCircle.h"
 #include "PrimitiveCylinder.h"
 
-#include "Content/SphereLight.h"
-#include "Content/RectangleLight.h"
-#include "Content/CylinderLight.h"
-#include "Content/DiscLight.h"
+#include "Pipeline/Content/Nodes/Lights/AreaLights/SphereLight.h"
+#include "Pipeline/Content/Nodes/Lights/AreaLights/RectangleLight.h"
+#include "Pipeline/Content/Nodes/Lights/AreaLights/CylinderLight.h"
+#include "Pipeline/Content/Nodes/Lights/AreaLights/DiscLight.h"
 
 #include "Attribute/AttributeHandle.h"
 #include "LightPanel.h"

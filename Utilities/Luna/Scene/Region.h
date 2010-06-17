@@ -4,7 +4,7 @@
 #include "SceneNode.h"
 #include "Scene.h"
 #include "Zone.h"
-#include "Content/Region.h"
+#include "Pipeline/Content/Nodes/Region.h"
 
 namespace Luna
 {

@@ -22,7 +22,7 @@
 #include "AssetBuilder/AssetBuilder.h"
 #include "AssetBuilder/BuilderOptions.h"
 
-#include "Content/Zone.h"
+#include "Pipeline/Content/Nodes/Zone.h"
 #include "Reflect/Archive.h"
 
 #include "Application/Application.h"

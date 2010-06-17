@@ -28,8 +28,8 @@
 #include "Transform.h"
 #include "TypeConfig.h"
 
-#include "Content/NodeVisibility.h"
-#include "Content/SceneVisibility.h"
+#include "Pipeline/Content/NodeVisibility.h"
+#include "Pipeline/Content/SceneVisibility.h"
 
 namespace Content
 {

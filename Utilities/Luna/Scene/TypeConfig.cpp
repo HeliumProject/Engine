@@ -7,7 +7,7 @@
 
 #include "Foundation/Log.h"
 
-#include "Content/Instance.h"
+#include "Pipeline/Content/Nodes/Instance/Instance.h"
 #include "Asset/Entity.h"
 
 #include <tinyxml.h>

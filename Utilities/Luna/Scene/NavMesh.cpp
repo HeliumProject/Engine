@@ -2,8 +2,8 @@
 #include "Precompile.h"
 #include "NavMesh.h"
 
-#include "Content/Camera.h"
-#include "Content/Mesh.h"
+#include "Pipeline/Content/Nodes/Camera.h"
+#include "Pipeline/Content/Nodes/Geometry/Mesh.h"
 
 #include "Pick.h"
 #include "PrimitiveLocator.h"

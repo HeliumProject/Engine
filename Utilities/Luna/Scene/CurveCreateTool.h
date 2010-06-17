@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 
-#include "Content/Curve.h"
+#include "Pipeline/Content/Nodes/Curve/Curve.h"
 #include "Curve.h"
 #include "SceneTool.h"
 

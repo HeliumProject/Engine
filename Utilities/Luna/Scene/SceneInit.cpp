@@ -5,8 +5,8 @@
 #include "Foundation/InitializerStack.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
 #include "Reflect/Registry.h"
-#include "Content/ContentInit.h"
-#include "Content/ContentVersion.h"
+#include "Pipeline/Content/ContentInit.h"
+#include "Pipeline/Content/ContentVersion.h"
 #include "Asset/AssetInit.h"
 #include "MiscSettings.h"
 

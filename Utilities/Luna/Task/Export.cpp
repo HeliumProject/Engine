@@ -16,7 +16,7 @@
 #include "Attribute/AttributeHandle.h"
 #include "Asset/ExporterJob.h"
 
-#include "Content/Zone.h"
+#include "Pipeline/Content/Nodes/Zone.h"
 #include "Reflect/Archive.h"
 
 #include "Application/Application.h"

@@ -4,7 +4,7 @@
 #include "Point.h"
 #include "VertexResource.h"
 
-#include "Content/Curve.h"
+#include "Pipeline/Content/Nodes/Curve/Curve.h"
 
 namespace Math
 {

@@ -21,7 +21,7 @@
 #include "Application/Inspect/DragDrop/DropTarget.h"
 #include "Application/UI/MenuMRU.h"
 
-#include "Content/LayerTypes.h"
+#include "Pipeline/Content/Nodes/LayerTypes.h"
 #include <wx/dnd.h>
 
 namespace Luna

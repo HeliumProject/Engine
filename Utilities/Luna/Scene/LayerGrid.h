@@ -2,9 +2,11 @@
 
 #include <map>
 #include <vector>
+
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Container/OrderedSet.h"
-#include "Content/LayerTypes.h"
+#include "Pipeline/Content/Nodes/LayerTypes.h"
+
 namespace Luna
 {
   // Forwards & typdefs (some are duplicates so that additonal headers are not needed)

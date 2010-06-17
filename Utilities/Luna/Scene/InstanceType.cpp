@@ -8,7 +8,7 @@
 #include "Color.h"
 #include "PrimitivePointer.h"
 
-#include "Content/Instance.h"
+#include "Pipeline/Content/Nodes/Instance/Instance.h"
 #include "Foundation/Container/Insert.h" 
 
 using Nocturnal::Insert; 

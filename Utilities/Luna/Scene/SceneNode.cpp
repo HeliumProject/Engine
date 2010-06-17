@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "SceneNode.h"
 
-#include "Content/SceneNode.h"
+#include "Pipeline/Content/Nodes/SceneNode.h"
 
 #include "SceneNodeType.h"
 #include "SceneNodePanel.h"

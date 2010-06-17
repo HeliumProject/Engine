@@ -2,7 +2,7 @@
 
 #include "PivotTransform.h"
 
-#include "Content/Instance.h"
+#include "Pipeline/Content/Nodes/Instance/Instance.h"
 
 namespace Luna
 {

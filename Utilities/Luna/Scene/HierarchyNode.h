@@ -10,7 +10,7 @@
 #include "SceneVisitor.h"
 
 #include "Foundation/Container/OrderedSet.h"
-#include "Content/NodeVisibility.h"
+#include "Pipeline/Content/NodeVisibility.h"
 
 namespace Content
 {

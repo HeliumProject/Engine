@@ -28,7 +28,7 @@
 #include "Application/Worker/Process.h"
 #include "Application/Application.h"
 #include "Foundation/InitializerStack.h"
-#include "Content/ContentInit.h"
+#include "Pipeline/Content/ContentInit.h"
 
 using namespace Asset;
 

@@ -7,7 +7,7 @@
 #include "Editor/WindowSettings.h"
 #include "Editor/MRUData.h"
 
-#include "Content/NodeVisibility.h"
+#include "Pipeline/Content/NodeVisibility.h"
 #include "ViewPreferences.h"
 #include "GridPreferences.h"
 

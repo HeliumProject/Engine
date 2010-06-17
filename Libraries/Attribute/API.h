@@ -2,8 +2,12 @@
 
 #include "Platform/Compiler.h"
 
-#ifdef ATTRIBUTEDLL_EXPORTS
-#define ATTRIBUTE_API __declspec(dllexport)
+#ifdef ATTRIBUTE_DLL
+# ifdef ATTRIBUTE_EXPORTS
+#  define ATTRIBUTE_API __declspec(dllexport)
+# else
+#  define ATTRIBUTE_API __declspec(dllimport)
+# endif
 #else
-#define ATTRIBUTE_API __declspec(dllimport)
+# define ATTRIBUTE_API
 #endif

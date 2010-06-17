@@ -46,57 +46,57 @@ const char* s_DBName  = REPORTS_DB_NAME;
 
 
 // Users DB
-const char* s_SelectUsersComputerIDSQL = "SELECT `id` FROM `"USERS_DB_NAME"`.`computers` WHERE `name`='%s';";
-const char* s_InsertUsersComputerSQL = "INSERT INTO `"USERS_DB_NAME"`.`computers` (`name`) VALUES ('%s');";
+static const char* s_SelectUsersComputerIDSQL = "SELECT `id` FROM `"USERS_DB_NAME"`.`computers` WHERE `name`='%s';";
+static const char* s_InsertUsersComputerSQL = "INSERT INTO `"USERS_DB_NAME"`.`computers` (`name`) VALUES ('%s');";
 
-const char* s_SelectUsersLoginIDSQL = "SELECT `id` FROM `"USERS_DB_NAME"`.`login_names` WHERE `login_name`='%s';";
-const char* s_InsertUsersLoginSQL = "INSERT INTO `"USERS_DB_NAME"`.`login_names` (`login_name`) VALUES ('%s');";
+static const char* s_SelectUsersLoginIDSQL = "SELECT `id` FROM `"USERS_DB_NAME"`.`login_names` WHERE `login_name`='%s';";
+static const char* s_InsertUsersLoginSQL = "INSERT INTO `"USERS_DB_NAME"`.`login_names` (`login_name`) VALUES ('%s');";
 
-const char* s_SelectUsersP4ClientIDSQL = "SELECT `id` FROM `"USERS_DB_NAME"`.`p4_clients` WHERE `name`='%s';";
-const char* s_InsertUsersP4ClientSQL = "INSERT INTO `"USERS_DB_NAME"`.`p4_clients` (`name`) VALUES ('%s');";
+static const char* s_SelectUsersP4ClientIDSQL = "SELECT `id` FROM `"USERS_DB_NAME"`.`p4_clients` WHERE `name`='%s';";
+static const char* s_InsertUsersP4ClientSQL = "INSERT INTO `"USERS_DB_NAME"`.`p4_clients` (`name`) VALUES ('%s');";
 
-const char* s_SelectUsersP4UserIDSQL = "SELECT `id` FROM `"USERS_DB_NAME"`.`p4_users` WHERE `username`='%s';";
-const char* s_InsertUsersP4UserSQL = "INSERT INTO `"USERS_DB_NAME"`.`p4_users` (`username`) VALUES ('%s');";
+static const char* s_SelectUsersP4UserIDSQL = "SELECT `id` FROM `"USERS_DB_NAME"`.`p4_users` WHERE `username`='%s';";
+static const char* s_InsertUsersP4UserSQL = "INSERT INTO `"USERS_DB_NAME"`.`p4_users` (`username`) VALUES ('%s');";
 
 // Tools DB
-const char* s_SelectToolsAppIDSQL = "SELECT `id` FROM `"TOOLS_DB_NAME"`.`applications` WHERE `name`='%s';";
-const char* s_InsertToolsAppSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`applications` (`name`) VALUES ('%s');";
+static const char* s_SelectToolsAppIDSQL = "SELECT `id` FROM `"TOOLS_DB_NAME"`.`applications` WHERE `name`='%s';";
+static const char* s_InsertToolsAppSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`applications` (`name`) VALUES ('%s');";
 
-const char* s_SelectToolsBranchIDSQL = "SELECT `id` FROM `"TOOLS_DB_NAME"`.`branches` WHERE `name`='%s';";
-const char* s_InsertToolsBranchSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`branches` (`name`) VALUES ('%s');";
+static const char* s_SelectToolsBranchIDSQL = "SELECT `id` FROM `"TOOLS_DB_NAME"`.`branches` WHERE `name`='%s';";
+static const char* s_InsertToolsBranchSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`branches` (`name`) VALUES ('%s');";
 
-const char* s_SelectToolsBuildConfigIDSQL = "SELECT `id` FROM `"TOOLS_DB_NAME"`.`build_configs` WHERE `name`='%s';";
-const char* s_InsertToolsBuildConfigSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`build_configs` (`name`) VALUES ('%s');";
+static const char* s_SelectToolsBuildConfigIDSQL = "SELECT `id` FROM `"TOOLS_DB_NAME"`.`build_configs` WHERE `name`='%s';";
+static const char* s_InsertToolsBuildConfigSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`build_configs` (`name`) VALUES ('%s');";
 
-const char* s_SelectToolsProjectIDSQL = "SELECT `id` FROM `"TOOLS_DB_NAME"`.`projects` WHERE `name`='%s';";
-const char* s_InsertToolsProjectSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`projects` (`name`) VALUES ('%s');";
+static const char* s_SelectToolsProjectIDSQL = "SELECT `id` FROM `"TOOLS_DB_NAME"`.`projects` WHERE `name`='%s';";
+static const char* s_InsertToolsProjectSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`projects` (`name`) VALUES ('%s');";
 
-const char* s_SelectToolsReleaseIDSQL = "SELECT `id` FROM `"TOOLS_DB_NAME"`.`releases` WHERE `name`='%s';";
-const char* s_InsertToolsReleaseSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`releases` (`name`) VALUES ('%s');";
+static const char* s_SelectToolsReleaseIDSQL = "SELECT `id` FROM `"TOOLS_DB_NAME"`.`releases` WHERE `name`='%s';";
+static const char* s_InsertToolsReleaseSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`releases` (`name`) VALUES ('%s');";
 
-const char* s_SelectToolsVersionIDSQL = "SELECT `id` FROM `"TOOLS_DB_NAME"`.`versions` WHERE `version`='%s';";
-const char* s_InsertToolsVersionSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`versions` (`version`) VALUES ('%s');";
+static const char* s_SelectToolsVersionIDSQL = "SELECT `id` FROM `"TOOLS_DB_NAME"`.`versions` WHERE `version`='%s';";
+static const char* s_InsertToolsVersionSQL = "INSERT INTO `"TOOLS_DB_NAME"`.`versions` (`version`) VALUES ('%s');";
 
 // Reports DB
-const char* s_InsertReportsCommandSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`commands` (`application_id`,`application_path`,`arguments`,`inherited_args`) VALUES (%I64u,'%s','%s','%s');";
-const char* s_InsertReportsEnvSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`environments` (`vars`) VALUES ('%s');";
-const char* s_InsertReportsCallstackRawSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`callstacks` (`callstack`) VALUES ('%s');";
+static const char* s_InsertReportsCommandSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`commands` (`application_id`,`application_path`,`arguments`,`inherited_args`) VALUES (%I64u,'%s','%s','%s');";
+static const char* s_InsertReportsEnvSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`environments` (`vars`) VALUES ('%s');";
+static const char* s_InsertReportsCallstackRawSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`callstacks` (`callstack`) VALUES ('%s');";
 
-const char* s_InsertReportsOutlineStateSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`outline_states` (`state`) VALUES ('%s');";
+static const char* s_InsertReportsOutlineStateSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`outline_states` (`state`) VALUES ('%s');";
 
-const char* s_InsertReportsCallstackLineSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`callstack_lines` (`module`, `function`, `offset`, `file`, `line_number`) VALUES ('%s','%s','%s','%s',%I64u);";
-const char* s_SelectReportsCallstackLineSQL = "SELECT `id` FROM `"REPORTS_DB_NAME"`.`callstack_lines` WHERE `module`='%s' AND `function`='%s' AND `offset`='%s' AND `file`='%s' AND `line_number`=%I64u;";
+static const char* s_InsertReportsCallstackLineSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`callstack_lines` (`module`, `function`, `offset`, `file`, `line_number`) VALUES ('%s','%s','%s','%s',%I64u);";
+static const char* s_SelectReportsCallstackLineSQL = "SELECT `id` FROM `"REPORTS_DB_NAME"`.`callstack_lines` WHERE `module`='%s' AND `function`='%s' AND `offset`='%s' AND `file`='%s' AND `line_number`=%I64u;";
 
-const char* s_InsertReportsCallstackXLinesSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`callstack_x_lines` (`report_id`, `callstack_line_id`, `line_number`) VALUES (%I64u, %I64u, %I64u)";
+static const char* s_InsertReportsCallstackXLinesSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`callstack_x_lines` (`report_id`, `callstack_line_id`, `line_number`) VALUES (%I64u, %I64u, %I64u)";
 
-const char* s_InsertReportsDumpSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`dumps` SET `path`='%s';";
-const char* s_SelectReportsDumpSQL = "SELECT `id` from `"REPORTS_DB_NAME"`.`dumps` WHERE `path`='%s'";
+static const char* s_InsertReportsDumpSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`dumps` SET `path`='%s';";
+static const char* s_SelectReportsDumpSQL = "SELECT `id` from `"REPORTS_DB_NAME"`.`dumps` WHERE `path`='%s'";
 
-const char* s_InsertReportsMemorySQL = "INSERT INTO `"REPORTS_DB_NAME"`.`memory` (`total_reserved`,`total_commit`,`total_free`,`largest_free`) VALUES (%I64u,%I64u,%I64u,%I64u);";
-const char* s_InsertReportsCPPSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`cpp_exceptions` (`report_id`,`exception_message`,`exception`) VALUES (%I64u,'%s','%s');";
-const char* s_InsertReportsSEHSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`seh_exceptions` (`report_id`,`exception_message`,`control_registers`,`integer_registers`) VALUES (%I64u,'%s','%s','%s');";
+static const char* s_InsertReportsMemorySQL = "INSERT INTO `"REPORTS_DB_NAME"`.`memory` (`total_reserved`,`total_commit`,`total_free`,`largest_free`) VALUES (%I64u,%I64u,%I64u,%I64u);";
+static const char* s_InsertReportsCPPSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`cpp_exceptions` (`report_id`,`exception_message`,`exception`) VALUES (%I64u,'%s','%s');";
+static const char* s_InsertReportsSEHSQL = "INSERT INTO `"REPORTS_DB_NAME"`.`seh_exceptions` (`report_id`,`exception_message`,`control_registers`,`integer_registers`) VALUES (%I64u,'%s','%s','%s');";
 
-const char* s_InsertReportSQL =
+static const char* s_InsertReportSQL =
 "INSERT INTO `"REPORTS_DB_NAME"`.`reports` \
 SET `login_name_id`=%I64u, \
     `computer_id`=%I64u, \

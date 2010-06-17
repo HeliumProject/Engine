@@ -10,8 +10,8 @@
 #endif
 #include <windows.h>
 #include <dbghelp.h>
-
-#include "tlhelp32.h"
+#include <tlhelp32.h>
+#pragma comment ( lib, "dbghelp.lib" )
 
 #include "Platform/Types.h"
 #include "Foundation/Exception.h"

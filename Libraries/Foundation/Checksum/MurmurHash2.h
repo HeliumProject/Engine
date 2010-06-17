@@ -7,7 +7,7 @@ namespace Nocturnal
 
     // 64-bit hash for 64-bit platforms
 
-    u64 MurmurHash64A ( const void * key, u64 len, unsigned int seed )
+    inline u64 MurmurHash64A ( const void * key, u64 len, unsigned int seed )
     {
         const u64 m = 0xc6a4a7935bd1e995;
         const int r = 47;

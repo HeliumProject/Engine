@@ -2,10 +2,14 @@
 
 #include "Platform/Compiler.h"
 
-#ifdef SMARTBUFFERDLL_EXPORTS
-# define SMARTBUFFER_API __declspec(dllexport)
-#else
-# define SMARTBUFFER_API __declspec(dllimport)
+#ifdef SMARTBUFFER_DLL
+# ifdef SMARTBUFFER_EXPORTS
+#  define SMARTBUFFER_API __declspec(dllexport)
+# else
+#  define SMARTBUFFER_API __declspec(dllimport)
+# endif
+# else
+# define SMARTBUFFER_API
 #endif
 
 #include "Foundation/Profile.h"

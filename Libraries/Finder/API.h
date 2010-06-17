@@ -2,10 +2,14 @@
 
 #include "Platform/Compiler.h"
 
-#ifdef FINDER_EXPORTS
+#ifdef FINDER_DLL
+# ifdef FINDER_EXPORTS
 #  define FINDER_API __declspec(dllexport)
-#else
+# else
 #  define FINDER_API __declspec(dllimport)
+# endif
+#else
+# define FINDER_API
 #endif
 
 // profiling for header systems

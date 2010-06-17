@@ -11,10 +11,9 @@
 
 using namespace Attribute;
 
-i32 g_InitCount = 0; 
-Nocturnal::InitializerStack g_RegisteredTypes;
-
-Nocturnal::InitializerStack g_InitializerStack;
+static i32 g_InitCount = 0; 
+static Nocturnal::InitializerStack g_RegisteredTypes;
+static Nocturnal::InitializerStack g_InitializerStack;
 
 void Attribute::Initialize()
 {

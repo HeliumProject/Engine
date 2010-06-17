@@ -1,11 +1,11 @@
 #pragma once
 
-#ifdef NOCTURNAL_STATIC
-# define DEBUG_API
-#else
+#ifdef DEBUG_DLL
 # ifdef DEBUGDLL_EXPORTS
 #  define DEBUG_API __declspec(dllexport)
 # else
 #  define DEBUG_API __declspec(dllimport)
 # endif
+#else
+# define DEBUG_API
 #endif

@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 #include "Thumbnail.h"
-#include "Asset/AssetFile.h"
+#include "Pipeline/Asset/AssetFile.h"
 
 namespace Luna
 {

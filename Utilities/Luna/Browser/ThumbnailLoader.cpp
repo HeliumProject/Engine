@@ -2,8 +2,8 @@
 #include "ThumbnailLoader.h"
 #include "Render.h"
 
-#include "Asset/ShaderAsset.h"
-#include "Asset/ColorMapAttribute.h"
+#include "Pipeline/Asset/Classes/ShaderAsset.h"
+#include "Pipeline/Asset/Attributes/ColorMapAttribute.h"
 #include "Finder/AssetSpecs.h"
 #include "Foundation/File/Directory.h"
 #include "igDXRender/d3dmanager.h"

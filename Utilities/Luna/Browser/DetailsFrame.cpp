@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "DetailsFrame.h"
 
-#include "Asset/AssetFile.h"
+#include "Pipeline/Asset/AssetFile.h"
 #include "Application/UI/ImageManager.h"
 #include "Application/RCS/RCS.h"
 

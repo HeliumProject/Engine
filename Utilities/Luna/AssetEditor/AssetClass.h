@@ -2,7 +2,7 @@
 
 #include "AttributeWrapper.h"
 #include "PersistentData.h"
-#include "Asset/AssetClass.h"
+#include "Pipeline/Asset/AssetClass.h"
 #include "Foundation/Automation/Event.h"
 #include "Application/Undo/BatchCommand.h"
 

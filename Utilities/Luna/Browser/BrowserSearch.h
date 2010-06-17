@@ -3,7 +3,7 @@
 #include "BrowserEvents.h"
 #include "SearchQuery.h"
 
-#include "Asset/CacheDB.h"
+#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
 #include "Platform/Mutex.h"

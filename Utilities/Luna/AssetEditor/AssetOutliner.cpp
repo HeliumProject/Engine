@@ -6,7 +6,7 @@
 #include "AssetManager.h"
 #include "AssetOutlineItemData.h"
 
-#include "Asset/AssetClass.h"
+#include "Pipeline/Asset/AssetClass.h"
 #include "Foundation/Log.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"

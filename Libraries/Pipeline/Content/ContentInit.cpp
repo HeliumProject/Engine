@@ -177,6 +177,4 @@ namespace Content
       g_InitializerStack.Cleanup();
     }
   }
-
-  REFLECT_DEFINE_ENTRY_POINTS(Initialize, Cleanup);
 }

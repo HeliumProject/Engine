@@ -4,8 +4,8 @@
 #include "Build.h"
 #include "Export.h"
 
-#include "Asset/AssetInit.h"
-#include "AssetBuilder/AssetBuilder.h"
+#include "Pipeline/Asset/AssetInit.h"
+#include "Pipeline/AssetBuilder/AssetBuilder.h"
 #include "Foundation/InitializerStack.h"
 #include "Reflect/Registry.h"
 

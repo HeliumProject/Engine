@@ -20,9 +20,9 @@
 
 #include "Finder/DebugSpecs.h"
 
-#include "AssetBuilder/AssetBuilder.h"
-#include "Asset/AssetInit.h"
-#include "Asset/AssetClass.h"
+#include "Pipeline/AssetBuilder/AssetBuilder.h"
+#include "Pipeline/Asset/AssetInit.h"
+#include "Pipeline/Asset/AssetClass.h"
 
 #include "Application/Worker/Client.h"
 #include "Application/Worker/Process.h"

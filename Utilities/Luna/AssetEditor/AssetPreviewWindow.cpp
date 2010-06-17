@@ -3,10 +3,10 @@
 #include "AssetPreviewWindow.h"
 
 #include "AssetPreferences.h"
-#include "Asset/StandardColorMapAttribute.h"
-#include "Asset/StandardNormalMapAttribute.h"
-#include "Asset/StandardExpensiveMapAttribute.h"
-#include "Asset/StandardDetailMapAttribute.h"
+#include "Pipeline/Asset/Attributes/StandardColorMapAttribute.h"
+#include "Pipeline/Asset/Attributes/StandardNormalMapAttribute.h"
+#include "Pipeline/Asset/Attributes/StandardExpensiveMapAttribute.h"
+#include "Pipeline/Asset/Attributes/StandardDetailMapAttribute.h"
 #include "igDXContent/ShaderLoader.h"
 
 using namespace Luna;

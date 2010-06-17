@@ -15,12 +15,12 @@
 
 #include "Pipeline/Dependencies/Dependencies.h"
 
-#include "Asset/AssetClass.h"
-#include "Asset/SceneAsset.h"
+#include "Pipeline/Asset/AssetClass.h"
+#include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Attribute/AttributeHandle.h"
-#include "Asset/WorldFileAttribute.h"
-#include "AssetBuilder/AssetBuilder.h"
-#include "AssetBuilder/BuilderOptions.h"
+#include "Pipeline/Asset/Attributes/WorldFileAttribute.h"
+#include "Pipeline/AssetBuilder/AssetBuilder.h"
+#include "Pipeline/AssetBuilder/BuilderOptions.h"
 
 #include "Pipeline/Content/Nodes/Zone.h"
 #include "Reflect/Archive.h"

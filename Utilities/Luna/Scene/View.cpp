@@ -16,7 +16,7 @@
 #include "Statistics.h"
 #include "Tool.h"
 
-#include "Asset/AssetType.h"
+#include "Pipeline/Asset/AssetType.h"
 #include "Foundation/Exception.h"
 #include "Editor/Orientation.h"
 

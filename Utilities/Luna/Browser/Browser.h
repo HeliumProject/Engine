@@ -7,7 +7,7 @@
 #include "SearchQuery.h"
 #include "SearchResults.h"
 #include "SearchHistory.h"
-#include "Asset/CacheDB.h"
+#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
 #include "Foundation/InitializerStack.h"

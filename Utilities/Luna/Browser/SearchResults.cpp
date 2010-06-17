@@ -2,9 +2,9 @@
 
 #include "SearchResults.h"
 
-#include "Asset/AssetFile.h"
-#include "Asset/AssetFolder.h"
-#include "Asset/AssetClass.h"
+#include "Pipeline/Asset/AssetFile.h"
+#include "Pipeline/Asset/AssetFolder.h"
+#include "Pipeline/Asset/AssetClass.h"
 
 using namespace Luna;
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Asset/AssetClass.h"
+#include "Pipeline/Asset/AssetClass.h"
 #include "AssetEditor/AssetClass.h"
-#include "AssetBuilder/AssetBuilder.h"
-#include "AssetBuilder/BuilderOptions.h"
+#include "Pipeline/AssetBuilder/AssetBuilder.h"
+#include "Pipeline/AssetBuilder/BuilderOptions.h"
 
 #include "Luna/API.h"
 #include "Task.h"

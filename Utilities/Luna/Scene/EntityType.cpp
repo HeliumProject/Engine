@@ -13,7 +13,7 @@
 #include "PrimitiveCylinder.h"
 
 #include "Attribute/AttributeHandle.h"
-#include "Asset/SceneManifest.h"
+#include "Pipeline/Asset/Manifests/SceneManifest.h"
 
 using namespace Luna;
 

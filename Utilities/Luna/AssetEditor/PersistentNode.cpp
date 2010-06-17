@@ -5,7 +5,7 @@
 #include "FieldNode.h"
 #include "PersistentDataFactory.h"
 
-#include "Asset/AssetFlags.h"
+#include "Pipeline/Asset/AssetFlags.h"
 #include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 #include "Core/PropertiesManager.h"
 

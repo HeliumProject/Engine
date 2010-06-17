@@ -13,7 +13,7 @@
 #include "Application/Inspect/InspectInit.h"
 #include "Application/Inspect/Reflect/InspectReflectInit.h"
 
-#include "Asset/AssetFlags.h"
+#include "Pipeline/Asset/AssetFlags.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Log.h"
 #include "Finder/Finder.h"

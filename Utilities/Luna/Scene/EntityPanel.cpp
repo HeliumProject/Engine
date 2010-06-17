@@ -8,10 +8,10 @@
 #include "Application/Inspect/Widgets/Button Controls/InspectButton.h"
 #include "Task/Build.h"
 
-#include "Asset/AssetInit.h"
+#include "Pipeline/Asset/AssetInit.h"
 #include "Attribute/AttributeHandle.h"
-#include "Asset/ArtFileAttribute.h"
-#include "Asset/AssetClass.h"
+#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
+#include "Pipeline/Asset/AssetClass.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Foundation/Log.h"

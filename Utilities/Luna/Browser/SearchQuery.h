@@ -3,7 +3,7 @@
 #include "AssetCollection.h"
 #include "DependencyCollection.h"
 
-#include "Asset/CacheDB.h"
+#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"

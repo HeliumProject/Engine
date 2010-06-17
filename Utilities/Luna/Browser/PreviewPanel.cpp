@@ -4,8 +4,8 @@
 #include "BrowserFrame.h"
 #include "BrowserPreferences.h"
 
-#include "Asset/AssetClass.h"
-#include "Asset/ArtFileAttribute.h"
+#include "Pipeline/Asset/AssetClass.h"
+#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
 #include "Attribute/AttributeHandle.h"
 #include "Application/UI/ImageManager.h"
 #include "Application/UI/MenuButton.h"

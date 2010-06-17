@@ -7,7 +7,7 @@
 #include "Reflect/Registry.h"
 #include "Pipeline/Content/ContentInit.h"
 #include "Pipeline/Content/ContentVersion.h"
-#include "Asset/AssetInit.h"
+#include "Pipeline/Asset/AssetInit.h"
 #include "MiscSettings.h"
 
 // Types

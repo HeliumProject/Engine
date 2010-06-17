@@ -212,16 +212,8 @@
 			RelativePathToProject=".\Libraries\Pipeline\Pipeline.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{89167DD4-39A9-444A-8ED9-CAB1B35A0DEA}"
-			RelativePathToProject=".\libraries\Asset\Asset.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{A99087C6-C475-485A-8911-ACB7683156FF}"
 			RelativePathToProject=".\libraries\Attribute\Attribute.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{296B05EC-7929-4E23-942C-FA953BB5602D}"
-			RelativePathToProject=".\libraries\AssetBuilder\AssetBuilder.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{EBC5862F-F9EF-4CA6-AB18-F930074011AB}"

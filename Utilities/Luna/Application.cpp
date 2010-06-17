@@ -5,7 +5,7 @@
 
 #include "Application/Application.h"
 #include "AssetEditor/AssetInit.h"
-#include "Asset/Tracker.h"
+#include "Pipeline/Asset/Tracker/Tracker.h"
 #include "Browser/Browser.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Log.h"

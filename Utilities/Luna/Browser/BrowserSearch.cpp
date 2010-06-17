@@ -4,9 +4,9 @@
 #include "Browser.h"
 #include "SearchResults.h"
 
-#include "Asset/AssetFile.h"
-#include "Asset/AssetFolder.h"
-#include "Asset/CacheDB.h"
+#include "Pipeline/Asset/AssetFile.h"
+#include "Pipeline/Asset/AssetFolder.h"
+#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Foundation/Exception.h"
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Container/Insert.h"

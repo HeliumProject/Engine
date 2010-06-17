@@ -9,7 +9,7 @@
 #include "HierarchyChangeToken.h"
 #include "PersistentDataFactory.h"
 
-#include "AssetBuilder/AssetBuilder.h"
+#include "Pipeline/AssetBuilder/AssetBuilder.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
 #include "Editor/DocumentManager.h"

@@ -2,7 +2,7 @@
 
 #include "Instance.h"
 
-#include "Asset/Entity.h"
+#include "Pipeline/Asset/Classes/Entity.h"
 
 namespace Luna
 {

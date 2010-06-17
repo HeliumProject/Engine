@@ -2,7 +2,7 @@
 
 #include "AssetClass.h"
 
-#include "Asset/StandardShaderAsset.h"
+#include "Pipeline/Asset/Classes/StandardShaderAsset.h"
 #include "Editor/ContextMenuGenerator.h"
 
 namespace Luna

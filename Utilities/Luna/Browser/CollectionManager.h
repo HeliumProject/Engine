@@ -5,7 +5,7 @@
 #include "AssetCollection.h"
 #include "DependencyCollection.h"
 
-#include "Asset/AssetFile.h"
+#include "Pipeline/Asset/AssetFile.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Reflect/Registry.h"
 #include "Reflect/Serializers.h"

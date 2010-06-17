@@ -3,8 +3,8 @@
 #include "InstanceSet.h"
 
 #include "Foundation/TUID.h"
-#include "Asset/EntityAsset.h"
-#include "Asset/EntityManifest.h"
+#include "Pipeline/Asset/Classes/EntityAsset.h"
+#include "Pipeline/Asset/Manifests/EntityManifest.h"
 
 namespace Luna
 {

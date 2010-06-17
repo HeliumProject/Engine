@@ -30,8 +30,8 @@
 #include "TextureMapAttribute.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Asset/AssetInit.h"
-#include "Asset/AssetVersion.h"
+#include "Pipeline/Asset/AssetInit.h"
+#include "Pipeline/Asset/AssetVersion.h"
 #include "Pipeline/Content/ContentInit.h"
 #include "Foundation/Log.h"
 #include "Reflect/Registry.h"

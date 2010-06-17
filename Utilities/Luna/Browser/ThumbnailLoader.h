@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Thumbnail.h"
-#include "Asset/AssetFile.h"
+#include "Pipeline/Asset/AssetFile.h"
 #include "Foundation/Automation/Event.h"
 #include "Platform/Mutex.h"
 #include "Platform/Semaphore.h"

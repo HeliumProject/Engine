@@ -6,7 +6,7 @@
 #include "PersistentDataFactory.h"
 #include "Core/PropertiesManager.h"
 
-#include "Asset/AssetFlags.h"
+#include "Pipeline/Asset/AssetFlags.h"
 #include "Attribute/Attribute.h"
 
 // Using

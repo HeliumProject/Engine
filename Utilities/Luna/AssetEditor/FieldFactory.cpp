@@ -8,7 +8,7 @@
 #include "FileArrayNode.h"
 #include "SimpleFieldNode.h"
 
-#include "Asset/AssetFlags.h"
+#include "Pipeline/Asset/AssetFlags.h"
 
 using namespace Luna;
 

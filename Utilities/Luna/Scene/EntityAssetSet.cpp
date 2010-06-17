@@ -14,9 +14,9 @@
 
 #include "Foundation/Log.h"
 
-#include "Asset/EntityAsset.h"
+#include "Pipeline/Asset/Classes/EntityAsset.h"
 #include "Attribute/AttributeHandle.h"
-#include "Asset/ArtFileAttribute.h"
+#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
 
 using namespace Luna;
 

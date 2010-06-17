@@ -2,7 +2,7 @@
 #include "SceneNodeType.h"
 #include "SceneNode.h"
 #include "Foundation/Container/Insert.h" 
-#include "Asset/SceneManifest.h"
+#include "Pipeline/Asset/Manifests/SceneManifest.h"
 
 using namespace Luna;
 

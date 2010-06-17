@@ -7,8 +7,8 @@
 #include "SwitchSceneCommand.h"
 #include "Zone.h"
 
-#include "Asset/SceneAsset.h"
-#include "Asset/WorldFileAttribute.h"
+#include "Pipeline/Asset/Classes/SceneAsset.h"
+#include "Pipeline/Asset/Attributes/WorldFileAttribute.h"
 #include "Attribute/AttributeHandle.h"
 #include "Finder/AssetSpecs.h"
 #include "Foundation/Container/Insert.h" 

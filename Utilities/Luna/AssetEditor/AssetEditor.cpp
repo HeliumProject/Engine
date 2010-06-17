@@ -15,12 +15,12 @@
 #include "AssetEditorGenerated.h"
 #include "Browser/BrowserToolBar.h"
 
-#include "Asset/ArtFileAttribute.h"
-#include "Asset/AssetClass.h"
-#include "Asset/AssetInit.h"
+#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
+#include "Pipeline/Asset/AssetClass.h"
+#include "Pipeline/Asset/AssetInit.h"
 #include "Attribute/AttributeHandle.h"
-#include "Asset/EntityAsset.h"
-#include "Asset/StandardShaderAsset.h"
+#include "Pipeline/Asset/Classes/EntityAsset.h"
+#include "Pipeline/Asset/Classes/StandardShaderAsset.h"
 
 #include "Finder/AssetSpecs.h"
 

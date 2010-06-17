@@ -2,6 +2,7 @@
 
 #include "Pipeline/API.h"
 #include "Pipeline/Dependencies/DependenciesExceptions.h"
+#include "Pipeline/Dependencies/GraphDB.h"
 #include "Pipeline/Dependencies/Info/DependencyInfo.h"
 #include "Pipeline/Dependencies/Info/FileInfo.h"
 
@@ -19,8 +20,6 @@ namespace CryptoPP{ class HashFilter; }
 // Dependencies API
 namespace Dependencies
 { 
-  class GraphDB;
-  typedef Nocturnal::SmartPtr< GraphDB > GraphDBPtr;
 
   // Hidden Ctor/Dtor - this is a singleton class
   class PIPELINE_API DependencyGraph

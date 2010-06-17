@@ -13,9 +13,9 @@
 #include "PrimitivePointer.h"
 
 #include "Attribute/AttributeHandle.h"
-#include "Asset/ArtFileAttribute.h"
-#include "Asset/SceneManifest.h"
-#include "Asset/Entity.h"
+#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
+#include "Pipeline/Asset/Manifests/SceneManifest.h"
+#include "Pipeline/Asset/Classes/Entity.h"
 
 #include "Foundation/Log.h"
 

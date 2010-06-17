@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "SearchBar.h"
 
-#include "Asset/AssetClass.h"
+#include "Pipeline/Asset/AssetClass.h"
 #include "Attribute/AttributeCategories.h"
 #include "Foundation/Boost/Regex.h" 
 #include "Foundation/Log.h"

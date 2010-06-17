@@ -41,5 +41,3 @@ void Attribute::Cleanup()
     g_InitializerStack.Cleanup();
   }
 }
-
-REFLECT_DEFINE_ENTRY_POINTS(Attribute::Initialize, Attribute::Cleanup); 

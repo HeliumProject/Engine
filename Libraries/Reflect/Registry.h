@@ -274,18 +274,3 @@ namespace Reflect
     Reflect::Registry::GetInstance()->UnregisterType( Reflect::GetEnumeration<T>() );
   }
 }
-
-//
-// This defines the entry points for modules that want to expose thier types dynamically
-//
-
-#define REFLECT_DEFINE_ENTRY_POINTS(__Initialize, __Cleanup)        \
-  extern "C" __declspec(dllexport) void __InitializeReflectModule() \
-  {                                                                 \
-    __Initialize();                                                 \
-  }                                                                 \
-                                                                    \
-  extern "C" __declspec(dllexport) void __CleanupReflectModule()    \
-  {                                                                 \
-    __Cleanup();                                                    \
-  }

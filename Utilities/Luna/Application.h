@@ -3,7 +3,7 @@
 #include "Platform/Compiler.h"
 #include "Foundation/InitializerStack.h"
 
-#include "Asset/Tracker.h"
+#include "Pipeline/Asset/Tracker/Tracker.h"
 #include "Editor/DocumentManager.h"
 #include "Scene/SceneEditor.h"
 

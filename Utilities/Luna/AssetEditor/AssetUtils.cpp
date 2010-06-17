@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "AssetUtils.h"
-#include "Asset/AssetFlags.h"
+#include "Pipeline/Asset/AssetFlags.h"
 #include "Finder/Finder.h"
 #include "Finder/AssetSpecs.h"
 #include "Reflect/Element.h"

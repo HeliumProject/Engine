@@ -8,8 +8,8 @@
 #include "AssetReferenceNode.h"
 #include "PersistentDataFactory.h"
 
-#include "Asset/StandardShaderAsset.h"
-#include "Asset/TextureMapAttribute.h"
+#include "Pipeline/Asset/Classes/StandardShaderAsset.h"
+#include "Pipeline/Asset/Attributes/TextureMapAttribute.h"
 
 #include "Foundation/String/Natural.h"
 #include "Editor/Editor.h"

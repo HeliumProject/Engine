@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "ThumbnailTileCreator.h"
 #include "ThumbnailView.h"
-#include "Asset/AssetFile.h"
-#include "Asset/AssetFolder.h"
+#include "Pipeline/Asset/AssetFile.h"
+#include "Pipeline/Asset/AssetFolder.h"
 
 using namespace Luna;
 

@@ -6,9 +6,9 @@
 #include "DetailsFrame.h"
 #include "ThumbnailLoadedEvent.h"
 
-#include "Asset/AssetFile.h"
-#include "Asset/AssetFolder.h"
-#include "Asset/AssetTypeInfo.h"
+#include "Pipeline/Asset/AssetFile.h"
+#include "Pipeline/Asset/AssetFolder.h"
+#include "Pipeline/Asset/AssetTypeInfo.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "Editor/Orientation.h"

@@ -2,7 +2,7 @@
 #include "FieldNode.h"
 #include "ContainerNode.h"
 #include "SimpleFieldNode.h"
-#include "Asset/AssetFlags.h"
+#include "Pipeline/Asset/AssetFlags.h"
 
 using namespace Luna;
 

@@ -2,7 +2,7 @@
 
 #include "Thumbnail.h"
 
-#include "Asset/AssetType.h"
+#include "Pipeline/Asset/AssetType.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Container/OrderedSet.h"
 

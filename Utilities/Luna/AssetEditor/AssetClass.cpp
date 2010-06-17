@@ -11,17 +11,17 @@
 #include "FieldFactory.h"
 #include "PersistentDataFactory.h"
 
-#include "Asset/ArtFileAttribute.h"
+#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
 #include "Attribute/AttributeHandle.h"
-#include "Asset/Exceptions.h"
-#include "Asset/StandardShaderAsset.h"
+#include "Pipeline/Asset/AssetExceptions.h"
+#include "Pipeline/Asset/Classes/StandardShaderAsset.h"
 #include "Foundation/CommandLine.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Natural.h"
 #include "Foundation/Log.h"
 #include "Application/Inspect/DragDrop/ClipboardElementArray.h"
 #include "Core/Enumerator.h"
-#include "Asset/EntityManifest.h"
+#include "Pipeline/Asset/Manifests/EntityManifest.h"
 #include "Application/UI/ImageManager.h"
 
 #include <algorithm>

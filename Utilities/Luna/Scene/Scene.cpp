@@ -12,9 +12,9 @@
 #include "Foundation/Log.h"
 
 #include "Application/Preferences.h"
-#include "Asset/Entity.h"
-#include "Asset/SceneManifest.h"
-#include "Asset/Exceptions.h"
+#include "Pipeline/Asset/Classes/Entity.h"
+#include "Pipeline/Asset/Manifests/SceneManifest.h"
+#include "Pipeline/Asset/AssetExceptions.h"
 
 #include "Browser/Browser.h"
 

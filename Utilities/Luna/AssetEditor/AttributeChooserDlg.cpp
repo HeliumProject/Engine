@@ -8,7 +8,7 @@
 #include "AttributeExistenceCommand.h"
 #include "PersistentDataFactory.h"
 
-#include "Asset/AssetFlags.h"
+#include "Pipeline/Asset/AssetFlags.h"
 #include "Attribute/AttributeCategories.h"
 #include "Foundation/Container/Insert.h" 
 #include "Application/UI/ImageManager.h"

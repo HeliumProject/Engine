@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AssetClass.h"
-#include "Asset/SceneAsset.h" 
+#include "Pipeline/Asset/Classes/SceneAsset.h" 
 #include "Reflect/Element.h"
 
 namespace Inspect

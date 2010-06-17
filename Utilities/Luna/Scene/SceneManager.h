@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 
-#include "Asset/SceneAsset.h"
+#include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Foundation/Automation/Event.h"
 #include "Editor/DocumentManager.h"
 #include "Core/Selection.h"

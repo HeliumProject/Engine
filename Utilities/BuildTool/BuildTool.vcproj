@@ -176,16 +176,8 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{89167DD4-39A9-444A-8ED9-CAB1B35A0DEA}"
-			RelativePathToProject=".\libraries\Asset\Asset.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{F3DB1BFC-9BD1-443F-965A-E05E9D95E6AB}"
 			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{296B05EC-7929-4E23-942C-FA953BB5602D}"
-			RelativePathToProject=".\libraries\AssetBuilder\AssetBuilder.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"

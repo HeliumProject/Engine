@@ -1,13 +1,13 @@
 #include "ShaderLoader.h"
 #include "igDXRender/shadermanager.h"
 
-#include "Asset/AssetInit.h"
-#include "Asset/ShaderAsset.h"
+#include "Pipeline/Asset/AssetInit.h"
+#include "Pipeline/Asset/Classes/ShaderAsset.h"
 
-#include "Asset/TextureMapAttribute.h"
-#include "Asset/StandardColorMapAttribute.h"
-#include "Asset/StandardNormalMapAttribute.h"
-#include "Asset/StandardExpensiveMapAttribute.h"
+#include "Pipeline/Asset/Attributes/TextureMapAttribute.h"
+#include "Pipeline/Asset/Attributes/StandardColorMapAttribute.h"
+#include "Pipeline/Asset/Attributes/StandardNormalMapAttribute.h"
+#include "Pipeline/Asset/Attributes/StandardExpensiveMapAttribute.h"
 
 #include "d3d9.h"
 #include "d3dx9.h"

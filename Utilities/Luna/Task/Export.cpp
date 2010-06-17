@@ -11,10 +11,10 @@
 
 #include "Pipeline/Dependencies/Dependencies.h"
 
-#include "Asset/AssetClass.h"
-#include "Asset/SceneAsset.h"
+#include "Pipeline/Asset/AssetClass.h"
+#include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Attribute/AttributeHandle.h"
-#include "Asset/ExporterJob.h"
+#include "Pipeline/Asset/ExporterJob.h"
 
 #include "Pipeline/Content/Nodes/Zone.h"
 #include "Reflect/Archive.h"

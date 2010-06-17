@@ -3,7 +3,7 @@
 #include "BrowserFrame.h"
 
 #include "Application/Preferences.h"
-#include "Asset/AssetFlags.h"
+#include "Pipeline/Asset/AssetFlags.h"
 #include "Foundation/Environment.h"
 #include "Finder/LunaSpecs.h"
 #include "Reflect/Serializer.h"

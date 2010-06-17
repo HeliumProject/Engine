@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FileBackedAttribute.h"
-#include "Asset/TextureMapAttribute.h"
+#include "Pipeline/Asset/Attributes/TextureMapAttribute.h"
 
 namespace Luna
 {

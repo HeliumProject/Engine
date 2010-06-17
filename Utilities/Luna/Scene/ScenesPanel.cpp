@@ -9,9 +9,9 @@
 #include "SwitchSceneCommand.h"
 #include "Zone.h"
 
-#include "Asset/EntityAsset.h"
+#include "Pipeline/Asset/Classes/EntityAsset.h"
 #include "Attribute/AttributeHandle.h"
-#include "Asset/ArtFileAttribute.h"
+#include "Pipeline/Asset/Attributes/ArtFileAttribute.h"
 #include "Pipeline/Content/ContentVersion.h"
 #include "Finder/AssetSpecs.h"
 #include "Foundation/Log.h"

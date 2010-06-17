@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AttributeWrapper.h"
-#include "Asset/FileBackedAttribute.h"
+#include "Pipeline/Asset/Attributes/FileBackedAttribute.h"
 
 
 namespace Luna

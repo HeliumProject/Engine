@@ -3,8 +3,8 @@
 
 #include "Browser.h"
 
-#include "Asset/AssetFile.h"
-#include "Asset/AssetFolder.h"
+#include "Pipeline/Asset/AssetFile.h"
+#include "Pipeline/Asset/AssetFolder.h"
 #include "Foundation/String/Utilities.h"
 #include "Finder/LunaSpecs.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"

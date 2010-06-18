@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mesh.h"
+#include "RenderMesh.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 namespace igDXRender

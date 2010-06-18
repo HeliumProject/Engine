@@ -2402,14 +2402,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Render\Mesh.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\Mesh.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Render\Misc.cpp"
 				>
 			</File>
@@ -2459,6 +2451,14 @@
 			</File>
 			<File
 				RelativePath=".\Render\Renderer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Render\RenderMesh.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Render\RenderMesh.h"
 				>
 			</File>
 			<File

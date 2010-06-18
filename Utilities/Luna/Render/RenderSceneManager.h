@@ -6,7 +6,7 @@
 
 #include "ObjectLoader.h"
 #include "Environment.h"
-#include "Mesh.h"
+#include "RenderMesh.h"
 
 namespace igDXRender
 {

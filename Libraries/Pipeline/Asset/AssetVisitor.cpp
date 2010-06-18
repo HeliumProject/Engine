@@ -16,12 +16,12 @@
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Application/RCS/RCS.h"
-#include "Reflect/Archive.h"
-#include "Reflect/Class.h"
-#include "Reflect/Field.h"
-#include "Reflect/Serializers.h"
-#include "Reflect/Version.h"
-#include "Reflect/Visitor.h"
+#include "Foundation/Reflect/Archive.h"
+#include "Foundation/Reflect/Class.h"
+#include "Foundation/Reflect/Field.h"
+#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Version.h"
+#include "Foundation/Reflect/Visitor.h"
 #include "Foundation/TUID.h"
 
 using Nocturnal::Insert; 

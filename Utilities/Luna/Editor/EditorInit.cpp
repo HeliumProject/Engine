@@ -12,7 +12,7 @@
 
 #include "Foundation/InitializerStack.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
-#include "Reflect/Registry.h"
+#include "Foundation/Reflect/Registry.h"
 #include "Finder/Finder.h"
 
 using namespace Luna;

@@ -7,8 +7,8 @@
 
 #include "Pipeline/Asset/AssetFile.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Reflect/Registry.h"
-#include "Reflect/Serializers.h"
+#include "Foundation/Reflect/Registry.h"
+#include "Foundation/Reflect/Serializers.h"
 #include "Foundation/TUID.h"
 
 namespace Luna

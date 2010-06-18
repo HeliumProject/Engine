@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Pipeline/API.h"
-#include "Reflect/Element.h"
-#include "Reflect/Serializers.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Serializers.h"
 
 namespace Content
 {

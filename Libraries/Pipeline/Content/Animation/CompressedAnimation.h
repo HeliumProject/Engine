@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Pipeline/API.h"
-#include "Reflect/Serializers.h"
+#include "Foundation/Reflect/Serializers.h"
 #include <hash_map>
 
 #include "Animation.h"

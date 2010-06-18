@@ -2,7 +2,7 @@
 #include "ContentVersion.h"
 #include "ContentTypes.h"
 
-#include "Reflect/Registry.h"
+#include "Foundation/Reflect/Registry.h"
 
 #include "Pipeline/Content/Nodes/SceneNode.h"
 #include "Pipeline/Content/Nodes/HierarchyNode.h"

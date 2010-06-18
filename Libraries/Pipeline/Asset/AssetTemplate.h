@@ -6,9 +6,9 @@
 
 #include "Pipeline/Component/ComponentCollection.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Reflect/Element.h"
-#include "Reflect/Class.h"
-#include "Reflect/Serializers.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Class.h"
+#include "Foundation/Reflect/Serializers.h"
 
 namespace Finder
 {

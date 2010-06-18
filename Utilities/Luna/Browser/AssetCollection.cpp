@@ -11,8 +11,8 @@
 #include "Foundation/String/Utilities.h"
 #include "Finder/Finder.h"
 #include "Finder/LunaSpecs.h"
-#include "Reflect/Element.h"
-#include "Reflect/Version.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Version.h"
 
 using namespace Luna;
 using namespace Nocturnal;

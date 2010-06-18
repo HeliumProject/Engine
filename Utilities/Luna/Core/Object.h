@@ -7,9 +7,9 @@
 #include "Luna/API.h"
 
 // Persistent data member and serialization
-#include "Reflect/Object.h"
-#include "Reflect/Class.h"
-#include "Reflect/Serializers.h"
+#include "Foundation/Reflect/Object.h"
+#include "Foundation/Reflect/Class.h"
+#include "Foundation/Reflect/Serializers.h"
 
 //
 // These macros define our RTTI data for our application classes

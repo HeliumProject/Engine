@@ -9,7 +9,7 @@
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 
-#include "Reflect/Registry.h"
+#include "Foundation/Reflect/Registry.h"
 
 #pragma TODO( "Why is RegisterClass defined as RegisterClassA here? That is ridiculous." )
 #undef RegisterClass

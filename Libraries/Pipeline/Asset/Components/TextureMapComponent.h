@@ -5,7 +5,7 @@
 
 #include "Pipeline/Asset/TextureEnums.h"
 
-#include "Reflect/Field.h"
+#include "Foundation/Reflect/Field.h"
 #include "Foundation/TUID.h"
 
 #include "FileBackedComponent.h"

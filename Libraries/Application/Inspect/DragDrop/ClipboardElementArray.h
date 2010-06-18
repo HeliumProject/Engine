@@ -2,8 +2,8 @@
 
 #include "Application/API.h"
 #include "ReflectClipboardData.h"
-#include "Reflect/SimpleSerializer.h"
-#include "Reflect/ElementArraySerializer.h"
+#include "Foundation/Reflect/SimpleSerializer.h"
+#include "Foundation/Reflect/ElementArraySerializer.h"
 
 namespace Inspect
 {

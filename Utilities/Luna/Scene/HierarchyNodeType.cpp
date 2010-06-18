@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "HierarchyNodeType.h"
 
-#include "Reflect/Object.h" 
+#include "Foundation/Reflect/Object.h" 
 
 #include "Scene.h"
 #include "HierarchyNode.h"

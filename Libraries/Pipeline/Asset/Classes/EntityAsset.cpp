@@ -3,9 +3,9 @@
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetExceptions.h"
 #include "Finder/AssetSpecs.h"
-#include "Reflect/Archive.h"
-#include "Reflect/Element.h"
-#include "Reflect/Version.h"
+#include "Foundation/Reflect/Archive.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Version.h"
 
 #include "Pipeline/Asset/AssetTemplate.h"
 #include "Pipeline/Asset/Components/ArtFileComponent.h"

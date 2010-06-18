@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reflect/Enumeration.h"
+#include "Foundation/Reflect/Enumeration.h"
 
 namespace Asset
 {

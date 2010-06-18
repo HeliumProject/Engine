@@ -10,7 +10,7 @@
 #include "Editor/D3DWindowManager.h"
 #include "Application/Undo/Queue.h"
 
-#include "Reflect/Enumeration.h"
+#include "Foundation/Reflect/Enumeration.h"
 
 namespace Luna
 {

@@ -12,8 +12,8 @@
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
 #include "Editor/UpdateStatusEvent.h"
-#include "Reflect/Element.h"
-#include "Reflect/Version.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Version.h"
 #include "Foundation/TUID.h"
 
 #include <wx/listctrl.h>

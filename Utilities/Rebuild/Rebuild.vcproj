@@ -182,10 +182,6 @@
 			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{F3DB1BFC-9BD1-443F-965A-E05E9D95E6AB}"
-			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
 			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
 		/>
@@ -196,6 +192,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
 			RelativePathToProject=".\Libraries\Pipeline\Pipeline.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{533F2B69-13FC-4557-9D26-517FDA493D75}"
+			RelativePathToProject=".\SDK\Expat\2.01\Expat.vcproj"
 		/>
 	</References>
 	<Files>

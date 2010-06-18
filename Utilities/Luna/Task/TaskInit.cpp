@@ -7,7 +7,7 @@
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/AssetBuilder/AssetBuilder.h"
 #include "Foundation/InitializerStack.h"
-#include "Reflect/Registry.h"
+#include "Foundation/Reflect/Registry.h"
 
 using namespace Luna;
 

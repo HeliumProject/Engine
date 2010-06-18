@@ -3,7 +3,7 @@
 #include "Application/API.h"
 #include "Application/Inspect/Widgets/Control.h"
 
-#include "Reflect/Class.h"
+#include "Foundation/Reflect/Class.h"
 
 class CheckListBox;
 

@@ -4,7 +4,7 @@
 #include "Component.h"
 #include "ComponentCategoryTypes.h"
 
-#include "Reflect/Element.h"
+#include "Foundation/Reflect/Element.h"
 
 namespace Component
 {

@@ -5,7 +5,7 @@
 
 #include "Foundation/Math/Color3.h"
 #include "Foundation/Math/Color4.h"
-#include "Reflect/Class.h"
+#include "Foundation/Reflect/Class.h"
 
 namespace Inspect
 {

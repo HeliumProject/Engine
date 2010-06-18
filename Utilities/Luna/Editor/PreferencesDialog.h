@@ -5,7 +5,7 @@
 
 #include <map>
 
-#include "Reflect/Element.h"
+#include "Foundation/Reflect/Element.h"
 #include "wx/wx.h"
 
 namespace Inspect

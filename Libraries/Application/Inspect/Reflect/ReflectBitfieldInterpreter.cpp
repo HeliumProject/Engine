@@ -5,8 +5,8 @@
 #include "Application/Inspect/Widgets/InspectPanel.h"
 #include "Application/Inspect/Data/StringData.h"
 
-#include "Reflect/Field.h"
-#include "Reflect/Enumeration.h"
+#include "Foundation/Reflect/Field.h"
+#include "Foundation/Reflect/Enumeration.h"
 
 using namespace Reflect;
 using namespace Inspect;

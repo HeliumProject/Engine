@@ -4,7 +4,7 @@
 
 #include "Luna/API.h"
 #include "Foundation/Automation/Event.h"
-#include "Reflect/Element.h"
+#include "Foundation/Reflect/Element.h"
 
 #include "Selectable.h"
 #include "Application/Undo/PropertyCommand.h"

@@ -6,8 +6,8 @@
 #include "Application/Inspect/Widgets/ContextMenu.h"
 
 #include "Foundation/Math/Point.h"
-#include "Reflect/Class.h"
-#include "Reflect/Object.h"
+#include "Foundation/Reflect/Class.h"
+#include "Foundation/Reflect/Object.h"
 
 #include <wx/dnd.h>
 

@@ -5,7 +5,7 @@
 
 
 #include "Foundation/TUID.h"
-#include "Reflect/Registry.h"
+#include "Foundation/Reflect/Registry.h"
 
 namespace Asset
 {

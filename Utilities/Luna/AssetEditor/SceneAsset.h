@@ -2,7 +2,7 @@
 
 #include "AssetClass.h"
 #include "Pipeline/Asset/Classes/SceneAsset.h" 
-#include "Reflect/Element.h"
+#include "Foundation/Reflect/Element.h"
 
 namespace Inspect
 {

@@ -1,6 +1,6 @@
 #include "Platform/Path.h"
 
-const static char Platform::PathSeparator = '/';
+const char Platform::PathSeparator = '/';
 
 bool Platform::GetFullPath( const char* path, std::string& fullPath )
 {

@@ -3,9 +3,9 @@
 #include "Platform/API.h"
 
 #ifdef WIN32
-#  include "Platform/Windows/Path.h"
+# include "Platform/Windows/Path.h"
 #else
-#  include "Platform/POSIX/Path.h"
+# include "Platform/POSIX/Path.h"
 #endif
 
 #include <string>

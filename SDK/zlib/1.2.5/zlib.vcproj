@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="zlib"
+	Name="ZLib"
 	ProjectGUID="{CFCA9C73-C321-48BA-8F29-097FD061EBB1}"
 	RootNamespace="zlib"
 	Keyword="Win32Proj"
@@ -143,7 +143,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine=" "
 			/>
 		</Configuration>
 	</Configurations>

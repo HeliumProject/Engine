@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="nvtt"
+	Name="nVidiaTextureTools"
 	ProjectGUID="{1A02AC8B-51F6-46CD-A5BB-0B3F09FB2ABF}"
 	RootNamespace="nvtt"
 	Keyword="Win32Proj"
@@ -143,7 +143,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine=" "
 			/>
 		</Configuration>
 	</Configurations>

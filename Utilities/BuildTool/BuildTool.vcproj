@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw28d_core.lib wxbase28d.lib comctl32.lib rpcrt4.lib"
+				AdditionalDependencies="comctl32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(boost)\stage\lib;$(wxWidgets)\lib\vc_lib"
 				GenerateDebugInformation="true"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxmsw28d_core.lib wxbase28d.lib comctl32.lib rpcrt4.lib"
+				AdditionalDependencies="comctl32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(boost)\stage\lib;$(wxWidgets)\lib\vc_lib"
 				GenerateDebugInformation="true"
@@ -175,10 +175,6 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<ProjectReference
-			ReferencedProjectIdentifier="{F3DB1BFC-9BD1-443F-965A-E05E9D95E6AB}"
-			RelativePathToProject=".\libraries\Reflect\reflect.vcproj"
-		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
 			RelativePathToProject=".\libraries\Platform\platform.vcproj"

@@ -139,7 +139,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine=" "
 			/>
 		</Configuration>
 	</Configurations>

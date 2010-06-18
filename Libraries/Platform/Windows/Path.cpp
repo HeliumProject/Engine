@@ -4,7 +4,7 @@
 
 #include <sys/stat.h>
 
-const static char Platform::PathSeparator = '\\';
+const char Platform::PathSeparator = '\\';
 
 #pragma comment( lib, "Version.lib" )
 
@@ -56,7 +56,6 @@ void SplitDirectories( const std::string& path, V_string& output )
     }
     output.push_back( path.substr( start ) ); 
 }
-
 
 bool Platform::MakePath( const char* path )
 {

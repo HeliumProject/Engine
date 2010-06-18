@@ -1,6 +1,7 @@
-#include "scenemanager.h"
-#include "render.h"
-#include "misc.h"
+#include "Precompile.h"
+#include "RenderSceneManager.h"
+#include "Renderer.h"
+#include "Misc.h"
 
 #include "OBJObjectLoader.h"
 

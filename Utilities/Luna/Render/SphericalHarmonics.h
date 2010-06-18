@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "platform.h"
-#include "d3dx9.h"
+#include "Platform.h"
+#include <d3dx9.h>
 
 #define fconst1 (4.0f/17.0f)
 #define fconst2 (8.0f/17.0f)

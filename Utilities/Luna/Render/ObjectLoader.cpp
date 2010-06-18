@@ -1,4 +1,8 @@
-#include "objectloader.h"
+#include "Precompile.h"
+#include "ObjectLoader.h"
+
+#include "Foundation/Math/Utils.h"
+
 #include <map>
 #include <set>
 
@@ -563,7 +567,7 @@ void igDXRender::ObjectLoader::Rescale( float radius, D3DXVECTOR3& r, D3DXVECTOR
   if ( m_positions.empty())
       return;
 
-  float oldRadius = max(r.x, max(r.y, r.z));
+  float oldRadius = MAX(r.x, MAX(r.y, r.z));
   float scale = radius / oldRadius;
 
   for ( std::vector<float>::iterator pit = m_positions.begin(); pit < m_positions.end(); pit += m_posSize) 

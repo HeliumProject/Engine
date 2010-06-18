@@ -1,11 +1,14 @@
+#include "Precompile.h"
 #include "XMLShaderLoader.h"
-#include "shadermanager.h"
+#include "ShaderManager.h"
 
-#include "d3d9.h"
-#include "d3dx9.h"
-#include "tinyxml.h"
-#include <sys/stat.h>
 #include "Foundation/File/Path.h"
+
+#include <d3d9.h>
+#include <d3dx9.h>
+#include <tinyxml.h>
+#include <sys/stat.h>
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 u32 TextureAddressModes(const char* text)

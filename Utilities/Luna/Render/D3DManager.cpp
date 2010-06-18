@@ -1,5 +1,6 @@
-#include "render.h"
-#include "tgaheader.h"
+#include "Precompile.h"
+#include "Renderer.h"
+#include "TGAHeader.h"
 
 bool                           igDXRender::D3DManager::m_unique = false;
 u32                            igDXRender::D3DManager::m_master_count = 0;

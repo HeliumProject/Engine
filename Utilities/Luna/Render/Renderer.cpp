@@ -1,7 +1,8 @@
-#include "render.h"
-#include "sphericalharmonics.h"
-#include "misc.h"
-#include "tgaheader.h"
+#include "Precompile.h"
+#include "Renderer.h"
+#include "Misc.h"
+#include "TGAHeader.h"
+#include "SphericalHarmonics.h"
 
 #include <mmsystem.h>
 

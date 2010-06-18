@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "ThumbnailManager.h"
 #include "ThumbnailLoadedEvent.h"
-#include "igDXRender/D3DManager.h"
+#include "Render/D3DManager.h"
 
 using namespace Luna;
 

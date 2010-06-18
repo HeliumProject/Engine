@@ -1,6 +1,7 @@
+#include "Precompile.h"
 #include "Mesh.h"
 
-#include "misc.h"
+#include "Misc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 igDXRender::Mesh::Mesh(const char* name)

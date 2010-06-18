@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "Thumbnail.h"
-#include "igDXRender/d3dmanager.h"
+#include "Render/D3DManager.h"
 
 using namespace Luna;
 

@@ -1,9 +1,10 @@
+#include "Precompile.h"
 #include "OBJObjectLoader.h"
+
 #include <map>
 #include <set>
 
 #define BUF_SIZE 1024
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 static void skipLine(char * buf, int size, FILE * fp)

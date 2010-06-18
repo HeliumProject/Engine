@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "ShaderLoader.h"
 
 igDXRender::ShaderLoader::ShaderLoader()

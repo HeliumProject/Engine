@@ -6,7 +6,7 @@
 #include "Pipeline/Asset/Components/ColorMapComponent.h"
 #include "Finder/AssetSpecs.h"
 #include "Foundation/File/Directory.h"
-#include "igDXRender/d3dmanager.h"
+#include "Render/D3DManager.h"
 
 using namespace Luna;
 

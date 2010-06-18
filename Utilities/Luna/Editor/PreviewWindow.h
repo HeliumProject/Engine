@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "igDXRender/Render.h"
+#include "Render/Renderer.h"
 #include "Camera.h"
 #include "BangleWindow.h"
 

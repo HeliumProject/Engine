@@ -1,7 +1,7 @@
 #pragma once
 
-#include "platform.h"
-#include "d3dx9.h"
+#include "Platform.h"
+#include <d3dx9.h>
 
 extern const u8 u16_to_rgb_map[];
 

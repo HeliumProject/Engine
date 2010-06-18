@@ -1,7 +1,7 @@
 #pragma once
 
-#include "igDXRender/platform.h"
-#include "igDXRender/ObjectLoader.h"
+#include "Render/Platform.h"
+#include "Render/ObjectLoader.h"
 
 namespace igDXContent
 {

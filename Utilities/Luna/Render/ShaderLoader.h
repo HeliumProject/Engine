@@ -9,7 +9,6 @@ namespace igDXRender
   class ShaderDatabase;
 
   class ShaderLoader: public Nocturnal::RefCountBase<ShaderLoader>
-
   {
   public:
     ShaderLoader();

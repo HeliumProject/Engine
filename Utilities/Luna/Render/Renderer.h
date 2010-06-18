@@ -1,9 +1,9 @@
 #pragma once
 
-#include "platform.h"
-#include "d3dmanager.h"
-#include "scenemanager.h"
-#include "shadermanager.h"
+#include "Platform.h"
+#include "D3DManager.h"
+#include "ShaderManager.h"
+#include "RenderSceneManager.h"
 
 namespace igDXRender
 {

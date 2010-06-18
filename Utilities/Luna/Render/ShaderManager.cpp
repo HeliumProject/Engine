@@ -1,12 +1,13 @@
-#include "shadermanager.h"
-#include "render.h"
-#include "misc.h"
-#include "d3dx9.h"
-
+#include "Precompile.h"
+#include "ShaderManager.h"
+#include "Renderer.h"
+#include "Misc.h"
 #include "ShaderLoader.h"
 #include "XMLShaderLoader.h"
 
 #include "Foundation/File/Path.h"
+
+#include <d3dx9.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 igDXRender::Texture::Texture(const char* fname)

@@ -1,5 +1,6 @@
-#include "ContentLoader.h"
-#include "ShaderLoader.h"
+#include "Precompile.h"
+#include "RBObjectLoader.h"
+#include "RBShaderLoader.h"
 
 #include "Pipeline/Content/ContentInit.h"
 #include "Pipeline/Content/Scene.h"

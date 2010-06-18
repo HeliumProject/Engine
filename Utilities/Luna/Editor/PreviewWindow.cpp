@@ -3,7 +3,7 @@
 
 #include "Finder/ExtensionSpecs.h"
 #include "Foundation/Math/Utils.h"
-#include "igDXContent/ContentLoader.h"
+#include "Render/RBObjectLoader.h"
 #include "Scene/Camera.h"
 #include "Application/UI/FileDialog.h"
 

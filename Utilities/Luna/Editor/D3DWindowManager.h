@@ -2,7 +2,7 @@
 
 #include "Platform/Compiler.h"
 #include "Foundation/Automation/Event.h"
-#include "igDXRender/d3dmanager.h"
+#include "Render/D3DManager.h"
 
 namespace Luna
 {

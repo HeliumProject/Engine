@@ -1,13 +1,15 @@
 #include "Precompile.h"
 
 #include "AssetPreviewWindow.h"
-
 #include "AssetPreferences.h"
+
 #include "Pipeline/Asset/Components/StandardColorMapComponent.h"
 #include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
 #include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
 #include "Pipeline/Asset/Components/StandardDetailMapComponent.h"
-#include "igDXContent/ShaderLoader.h"
+
+#include "Render/RBShaderLoader.h"
+#include "Render/RBObjectLoader.h"
 
 using namespace Luna;
 

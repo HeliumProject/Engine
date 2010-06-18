@@ -7,8 +7,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "platform.h"
-#include "d3dx9.h"
+#include "Platform.h"
+#include <d3dx9.h>
 
 #include "ObjectLoader.h"
 

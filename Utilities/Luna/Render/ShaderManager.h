@@ -1,7 +1,7 @@
 #pragma once
 
-#include "platform.h"
-#include "d3d9.h"
+#include "Platform.h"
+#include <d3d9.h>
 
 #include "ShaderLoader.h"
 

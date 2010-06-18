@@ -1,4 +1,5 @@
-#include "misc.h"
+#include "Precompile.h"
+#include "Misc.h"
 
 const u8 u16_to_rgb_map[] = { 15, 23, 31, 14, 22, 30, 13, 21, 29, 12, 20, 28, 11, 19, 27, 10 };
 

@@ -1,5 +1,6 @@
-#include "ShaderLoader.h"
-#include "igDXRender/shadermanager.h"
+#include "Precompile.h"
+#include "RBShaderLoader.h"
+#include "ShaderManager.h"
 
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
@@ -9,8 +10,8 @@
 #include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
 #include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
 
-#include "d3d9.h"
-#include "d3dx9.h"
+#include <d3d9.h>
+#include <d3dx9.h>
 
 //   Asset::Initialize();
 //   Asset::Cleanup();

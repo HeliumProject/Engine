@@ -1,6 +1,7 @@
+#include "Precompile.h"
 #include "Environment.h"
 
-#include "misc.h"
+#include "Misc.h"
 
 igDXRender::Environment::Environment(const char* fname)
 {

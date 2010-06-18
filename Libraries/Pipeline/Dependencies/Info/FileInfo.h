@@ -12,48 +12,38 @@
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-typedef Nocturnal::OrderedSet< std::string > OS_string;
-
 namespace Dependencies
 { 
-  
+    class DependencyGraph;
 
-  /////////////////////////////////////////////////////////////////////////////
+    class PIPELINE_API FileInfo : public DependencyInfo
+    {
+    public:
 
-  class PIPELINE_API FileInfo : public DependencyInfo
-  {
-  public:
+        FileInfo();
+        FileInfo( DependencyGraph* owner, const std::string& path, const std::string& typeName, const GraphConfigs graphConfigs = ConfigFlags::Default );
 
-    FileInfo();
-    FileInfo( const std::string &path, const Finder::FileSpec &fileSpec, const GraphConfigs graphConfigs = ConfigFlags::Default );
-    
-    ~FileInfo();
+        ~FileInfo();
 
-    virtual void SetInfo(); 
-    
-    virtual bool IsMD5Valid();
-    virtual void GenerateMD5();
-    virtual bool WasModified();
-    virtual bool AppendToSignature( CryptoPP::HashFilter* hashFilter, V_string& trace );
-    virtual void CacheCopy( DependencyInfo& rhs );
-    virtual bool Exists();
+        virtual void SetInfo(); 
 
-   
-    virtual void CopyFrom( const DependencyInfo &rhs );
-    virtual bool IsEqual( const DependencyInfo &rhs ) const;
+        virtual bool IsMD5Valid();
+        virtual void GenerateMD5();
+        virtual bool WasModified();
+        virtual bool AppendToSignature( CryptoPP::HashFilter* hashFilter, V_string& trace );
+        virtual void CacheCopy( DependencyInfo& rhs );
+        virtual bool Exists();
 
-      
-  public:
-    //
-    // Members
-    //
 
-    std::string m_AlternateSignatureGenerationPath;
+        virtual void CopyFrom( const DependencyInfo &rhs );
+        virtual bool IsEqual( const DependencyInfo &rhs ) const;
 
-  };
-  typedef Nocturnal::SmartPtr< FileInfo > FileInfoPtr;
-  //typedef std::vector< FileInfoPtr > V_FileInfo;
-  //typedef V_DependencyInfo V_FileInfo;
-  //typedef std::vector< V_FileInfo > VV_FileInfo;
-  typedef Nocturnal::OrderedSet< FileInfoPtr > OS_FileInfo;
+
+    public:
+
+        std::string m_AlternateSignatureGenerationPath;
+
+    };
+    typedef Nocturnal::SmartPtr< FileInfo > FileInfoPtr;
+    typedef Nocturnal::OrderedSet< FileInfoPtr > OS_FileInfo;
 }

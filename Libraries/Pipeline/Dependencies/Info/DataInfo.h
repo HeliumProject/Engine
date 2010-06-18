@@ -6,15 +6,15 @@
 
 namespace Dependencies
 { 
-  
+  class DependencyGraph;
+
   class PIPELINE_API DataInfo : public DependencyInfo
   {
   public:
 
     DataInfo();
-    DataInfo( const std::string &path, const Finder::FileSpec &fileSpec, const GraphConfigs graphConfigs = ConfigFlags::Default );
-    DataInfo( const std::string &path, const Finder::FileSpec &fileSpec, u8* data, const size_t dataSize, 
-              const GraphConfigs graphConfigs = ConfigFlags::Default );
+    DataInfo( DependencyGraph* owner, const std::string &path, const std::string& typeName, const GraphConfigs graphConfigs = ConfigFlags::Default );
+    DataInfo( DependencyGraph* owner, const std::string &path, const std::string& typeName, u8* data, const size_t dataSize, const GraphConfigs graphConfigs = ConfigFlags::Default );
     //DataInfo( const DataInfo &rhs );
 
     ~DataInfo();

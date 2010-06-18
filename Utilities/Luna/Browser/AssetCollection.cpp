@@ -9,8 +9,6 @@
 #include "Foundation/Flags.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "Finder/Finder.h"
-#include "Finder/LunaSpecs.h"
 #include "Reflect/Element.h"
 #include "Reflect/Version.h"
 
@@ -114,7 +112,7 @@ void AssetCollection::CreateFilePath( const std::string name, std::string& fileP
     }
 
     filePath += name;
-    FinderSpecs::Luna::ASSET_COLLECTION_RB_DECORATION.Modify( filePath );
+    filePath += ".collection.rb";
 }
 
 /////////////////////////////////////////////////////////////////////////////

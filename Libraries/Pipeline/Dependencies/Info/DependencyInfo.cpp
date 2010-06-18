@@ -18,35 +18,23 @@ namespace Dependencies
         Initialize();
     }
 
-
     /////////////////////////////////////////////////////////////////////////////
-    DependencyInfo::DependencyInfo( const std::string &name, const Finder::FileSpec &fileSpec, const GraphConfigs graphConfigs )
+    DependencyInfo::DependencyInfo( DependencyGraph* owner, const std::string& name, const std::string& typeName, const GraphConfigs graphConfigs )
     {
         Initialize();
 
+        m_OwnerGraph          = owner;
         m_Path                = name;
-        m_Spec                = &fileSpec;
-        m_SpecName            = fileSpec.GetName();
+        m_TypeName            = typeName;
         m_GraphConfigs        = graphConfigs;
     }
-
-
-    /////////////////////////////////////////////////////////////////////////////
-    //DependencyInfo::DependencyInfo( const DependencyInfo &file )
-    //{
-    //  Initialize();
-
-    //  (*this) = file;
-    //}
-
 
     /////////////////////////////////////////////////////////////////////////////
     void DependencyInfo::Initialize()
     {
+        m_OwnerGraph          = NULL;
         m_Path                = "";
-        m_Spec                = NULL;
-        m_NewSpec             = NULL;
-        m_SpecName            = "";
+        m_TypeName            = "";
         m_FormatVersion       = "";
         m_GraphConfigs        = ConfigFlags::Default;
         m_Size                = 0;
@@ -65,11 +53,6 @@ namespace Dependencies
     /////////////////////////////////////////////////////////////////////////////
     void DependencyInfo::SetInfo()
     {
-        if ( m_Spec )
-        {
-            m_FormatVersion = m_Spec->GetFormatVersion();
-        }
-
         m_VersionRowID = SQL::InvalidRowID;
         m_LastModified = 0;
     }
@@ -107,16 +90,6 @@ namespace Dependencies
 
         IsLeaf( rhs.IsLeaf() );
         InputOrderMatters( rhs.InputOrderMatters() );
-
-        // update the FileSpec
-        if ( !m_Spec )
-        {
-            m_Spec = rhs.m_Spec;
-        }
-        else if ( m_Spec != rhs.m_Spec )
-        {
-            m_NewSpec = rhs.m_Spec;
-        }
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -125,10 +98,9 @@ namespace Dependencies
     {
         if ( this != &rhs )
         {
+            m_OwnerGraph         = rhs.m_OwnerGraph;
             m_Path               = rhs.m_Path;
-            m_Spec               = rhs.m_Spec;
-            m_NewSpec            = rhs.m_NewSpec;
-            m_SpecName           = rhs.m_SpecName;
+            m_TypeName           = rhs.m_TypeName;
             m_FormatVersion      = rhs.m_FormatVersion;
             m_GraphConfigs       = rhs.m_GraphConfigs;
             m_LastModified       = rhs.m_LastModified;
@@ -158,13 +130,14 @@ namespace Dependencies
     {
         bool eq = true;
 
-        eq = eq && ( m_Path                           == rhs.m_Path );
-        eq = eq && ( m_Spec                           == rhs.m_Spec );
-        eq = eq && ( m_FormatVersion                  == rhs.m_FormatVersion );
-        eq = eq && ( m_GraphConfigs                   == rhs.m_GraphConfigs );
-        eq = eq && ( m_LastModified                   == rhs.m_LastModified );
-        eq = eq && ( m_Size                           == rhs.m_Size );
-        eq = eq && ( m_Downloaded											== rhs.m_Downloaded);
+        eq = eq && ( m_OwnerGraph     == rhs.m_OwnerGraph );
+        eq = eq && ( m_Path           == rhs.m_Path );
+        eq = eq && ( m_TypeName       == rhs.m_TypeName );
+        eq = eq && ( m_FormatVersion  == rhs.m_FormatVersion );
+        eq = eq && ( m_GraphConfigs   == rhs.m_GraphConfigs );
+        eq = eq && ( m_LastModified   == rhs.m_LastModified );
+        eq = eq && ( m_Size           == rhs.m_Size );
+        eq = eq && ( m_Downloaded	  == rhs.m_Downloaded);
 
         // Only compare the MD5 and signature if both LHS and RHS are not empty
         if ( !m_MD5.empty() && !rhs.m_MD5.empty() )

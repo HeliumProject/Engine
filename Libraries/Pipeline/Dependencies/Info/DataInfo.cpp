@@ -1,6 +1,7 @@
 #include "DataInfo.h"
 
 #include "Pipeline/API.h"
+#include "Pipeline/Dependencies/Dependencies.h"
 #include "Pipeline/Dependencies/DependenciesExceptions.h"
 
 #include "Foundation/Flags.h"
@@ -29,18 +30,17 @@ namespace Dependencies
 
 
   /////////////////////////////////////////////////////////////////////////////
-  DataInfo::DataInfo( const std::string &path, const Finder::FileSpec &fileSpec, const GraphConfigs graphConfigs ) 
-    : DependencyInfo( path, fileSpec, graphConfigs )
+  DataInfo::DataInfo( DependencyGraph* owner, const std::string& path, const std::string& typeName, const GraphConfigs graphConfigs ) 
+    : DependencyInfo( owner, path, typeName, graphConfigs )
 
   {
     m_LastModified = 0;
   }
 
-  DataInfo::DataInfo( const std::string &path, const Finder::FileSpec &fileSpec, u8* data, 
-    const size_t dataSize, const GraphConfigs graphConfigs ) 
-    : DependencyInfo( path, fileSpec, graphConfigs )
-    , m_Data(data)
-    , m_DataSize(dataSize)
+  DataInfo::DataInfo( DependencyGraph* owner, const std::string &path, const std::string& typeName, u8* data, const size_t dataSize, const GraphConfigs graphConfigs ) 
+    : DependencyInfo( owner, path, typeName, graphConfigs )
+    , m_Data( data )
+    , m_DataSize( dataSize )
   {
     m_LastModified = 0;
   }
@@ -108,7 +108,7 @@ namespace Dependencies
       return true;
     }
     // expected FormatVersion has changed (builder updated)
-    else if ( !m_Spec || ( m_FormatVersion != m_Spec->GetFormatVersion() ) )
+    else if ( m_TypeName.empty() || ( m_OwnerGraph && ( m_FormatVersion != m_OwnerGraph->GetFormatVersion( m_TypeName ) ) ) )
     {
       //Log::Bullet wasFileModifiedBullet( Log::Streams::Debug, Log::Levels::Verbose, "File was modified: expected FormatVersion has changed (builder updated)\n" );
       return true;

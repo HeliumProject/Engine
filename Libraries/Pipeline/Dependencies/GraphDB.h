@@ -21,9 +21,9 @@ namespace Dependencies
 
     virtual bool Open( const std::string& dbFilename, const std::string& configFolder, const std::string& version = std::string( "" ) );
 
-    i64   InsertVersion( const Finder::FileSpec& fileSpec, const Finder::FormatVersion formatVersion = "" );
-    i64   SelectVersionId( const Finder::FileSpec& fileSpec, const Finder::FormatVersion formatVersion = "" );
-    void  DeleteInvalidVersion( const Finder::FileSpec& fileSpec );
+    i64   InsertVersion( const std::string& typeName, const std::string& formatVersion = "" );
+    i64   SelectVersionId( const std::string& typeName, const std::string& formatVersion = "" );
+    void  DeleteInvalidVersion( const std::string& typeName );
 
     i64   ReplaceDependency( const DependencyInfoPtr& file, const i64 versionId );
     i64   SelectDependency( const std::string& filePath, const DependencyInfoPtr& file );

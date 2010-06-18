@@ -7,7 +7,6 @@
 #include <vector>
 #include <set>
 
-#include "Finder/Finder.h"
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Memory/SmartPtr.h"
@@ -23,7 +22,7 @@ namespace CryptoPP
 namespace Dependencies
 { 
 
-
+    class DependencyGraph;
 
     /////////////////////////////////////////////////////////////////////////////
     // cache output file path and the 
@@ -71,7 +70,7 @@ namespace Dependencies
     public:
 
         DependencyInfo();
-        DependencyInfo( const std::string &name, const Finder::FileSpec &fileSpec, const GraphConfigs graphConfigs = ConfigFlags::Default );
+        DependencyInfo( DependencyGraph* owner, const std::string& name, const std::string& typeName, const GraphConfigs graphConfigs = ConfigFlags::Default );
 
         virtual void Initialize();
 
@@ -102,15 +101,15 @@ namespace Dependencies
 
     public:
 
+        DependencyGraph*          m_OwnerGraph;
+
         Nocturnal::Path           m_Path;
         std::string               m_MD5;
         std::string               m_Signature;
         V_string                  m_SignatureTrace;
 
-        const Finder::FileSpec*   m_Spec;
-        std::string               m_SpecName;
-        Finder::FormatVersion     m_FormatVersion;
-        const Finder::FileSpec*   m_NewSpec; // used only if the file spec changes from teh last time is was used
+        std::string               m_TypeName;
+        std::string               m_FormatVersion;
 
         GraphConfigs              m_GraphConfigs;
 

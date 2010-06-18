@@ -10,15 +10,14 @@
 
 #include <sqlite3.h>
 
-using namespace Finder;
 using namespace Dependencies;
 
 const char* GraphDB::s_GraphDBVersion = "6.0";
 
 ///////////////////////////////////////////////
 // Version Table SQL
-static const char* s_SelectVersionIdSQL = "SELECT id FROM version WHERE spec_name=? AND version=?;";
-static const char* s_InsertVersionSQL   = "INSERT INTO version (spec_name,version) VALUES('%q','%q');";
+static const char* s_SelectVersionIdSQL = "SELECT id FROM version WHERE type_name=? AND version=?;";
+static const char* s_InsertVersionSQL   = "INSERT INTO version (type_name,version) VALUES('%q','%q');";
 
 static const char* s_DeleteInvalidVersionSQL =
   "BEGIN TRANSACTION; \n \
@@ -27,7 +26,7 @@ static const char* s_DeleteInvalidVersionSQL =
   SELECT DISTINCT fc.id \n \
     FROM file     AS fc \n \
     JOIN version  AS ver ON ver.id = fc.version_id \n \
-    WHERE ver.spec_name='%q'  \n \
+    WHERE ver.type_name='%q'  \n \
       AND ver.version='%q';   \n \
   DROP TABLE IF EXISTS temp.del_graph; \n \
   CREATE TEMP TABLE temp.del_graph AS \n \
@@ -47,13 +46,13 @@ static const char* s_DeleteInvalidVersionSQL =
 static const char* s_SelectDependencyRowIdByPathSQL = "SELECT id FROM file WHERE path=?;";
 
 static const char* s_SelectDependencyBySigSQL =
-  "SELECT fc.id,fc.path,ver.id,ver.spec_name,ver.version,fc.is_leaf,fc.input_order_matters,fc.last_modified,fc.size,fc.md5,fc.signature \n \
+  "SELECT fc.id,fc.path,ver.id,ver.type_name,ver.version,fc.is_leaf,fc.input_order_matters,fc.last_modified,fc.size,fc.md5,fc.signature \n \
     FROM file    AS fc \n \
     JOIN version AS ver ON ver.id = fc.version_id \n \
    WHERE fc.signature=?;";
 
 static const char* s_SelectDependencySQL   = 
-  "SELECT fc.id,fc.path,ver.id,ver.spec_name,ver.version,fc.is_leaf,fc.input_order_matters,fc.last_modified,fc.size,fc.md5,fc.signature \n \
+  "SELECT fc.id,fc.path,ver.id,ver.type_name,ver.version,fc.is_leaf,fc.input_order_matters,fc.last_modified,fc.size,fc.md5,fc.signature \n \
     FROM file    AS fc \n \
     JOIN version AS ver ON ver.id = fc.version_id \n \
    WHERE fc.path=?;";
@@ -83,7 +82,7 @@ static const char* s_SelectGraphSQL =
 "SELECT in_fc.id, \
        in_fc.path, \
        in_v.id, \
-       in_v.spec_name, \
+       in_v.type_name, \
        in_v.version, \
        in_fc.is_leaf, \
        in_fc.input_order_matters, \
@@ -101,7 +100,7 @@ static const char* s_SelectGraphSQL =
   JOIN version as in_v   ON in_v.id   = in_fc.version_id \
   JOIN version as out_v  ON out_v.id  = out_fc.version_id \
  WHERE out_fc.path=? \
-   AND out_v.spec_name=? \
+   AND out_v.type_name=? \
    AND out_v.version=? \
 ORDER BY gc.in_file_order_index;";
 
@@ -161,31 +160,31 @@ void GraphDB::PrepareStatements()
 
 /////////////////////////////////////////////////////////////////////////////
 // Insert a single version table row into the GraphDB
-i64 GraphDB::InsertVersion( const Finder::FileSpec& fileSpec, const FormatVersion formatVersion )
+i64 GraphDB::InsertVersion( const std::string& typeName, const std::string& formatVersion )
 {
   // return the current rowID if it is already in the graph
-  i64 rowID = SelectVersionId( fileSpec, formatVersion );
+  i64 rowID = SelectVersionId( typeName, formatVersion );
   if ( rowID != SQL::InvalidRowID )
   {
     return rowID;
   }
 
-  if ( ( m_DBManager->ExecSQLVMPrintF( s_InsertVersionSQL, fileSpec.GetName().c_str(), formatVersion.c_str() ) != SQLITE_OK )
+  if ( ( m_DBManager->ExecSQLVMPrintF( s_InsertVersionSQL, typeName.c_str(), formatVersion.c_str() ) != SQLITE_OK )
     && !m_DBManager->IsNotUniqueErr() )
   {
     throw SQL::DBManagerException( m_DBManager, __FUNCTION__ );
   }
 
-  rowID = SelectVersionId( fileSpec, formatVersion );
+  rowID = SelectVersionId( typeName, formatVersion );
   return rowID;
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
 // Invalidate an old FormatVersion and it's graph DB, by removing these entries from the GraphDB
-void GraphDB::DeleteInvalidVersion( const Finder::FileSpec& fileSpec )
+void GraphDB::DeleteInvalidVersion( const std::string& typeName )
 {
-  if ( m_DBManager->ExecSQLVMPrintF( s_DeleteInvalidVersionSQL, fileSpec.GetName() ) != SQLITE_OK )
+  if ( m_DBManager->ExecSQLVMPrintF( s_DeleteInvalidVersionSQL, typeName ) != SQLITE_OK )
     throw SQL::DBManagerException( m_DBManager, __FUNCTION__ );
 }
 
@@ -339,9 +338,9 @@ i64 GraphDB::StepSelectRowId( int sqlResult, SQL::StmtHandle stmt )
 
 
 /////////////////////////////////////////////////////////////////////////////
-i64 GraphDB::SelectVersionId( const Finder::FileSpec& fileSpec, const FormatVersion formatVersion )
+i64 GraphDB::SelectVersionId( const std::string& typeName, const std::string& formatVersion )
 {
-  int sqlResult = m_DBManager->ExecStatement( m_SqlSelectVersionIdStmtHandle, fileSpec.GetName().c_str(), formatVersion.c_str() );
+  int sqlResult = m_DBManager->ExecStatement( m_SqlSelectVersionIdStmtHandle, typeName.c_str(), formatVersion.c_str() );
   return StepSelectRowId( sqlResult, m_SqlSelectVersionIdStmtHandle );
 }
 
@@ -395,19 +394,7 @@ bool GraphDB::StepSelectDependency( int sqlResult, const SQL::StmtHandle stmt, c
     file->m_Path.Set( path );
 
     m_DBManager->GetColumnI64(  stmt,   ++index, ( i64 &)     file->m_VersionRowID );
-    m_DBManager->GetColumnText( stmt,   ++index,              file->m_SpecName );
-
-    try
-    {
-      file->m_Spec = Finder::GetFileSpec( file->m_SpecName );
-    }
-    catch( const Finder::Exception & )
-    {
-      // this file's FileSpec has been removed from the system since being inserted into the DB
-      Log::Print( Log::Levels::Verbose, "Finder::GetFileSpec failed for FinderSpec \"%s\", file %s\n", file->m_SpecName.c_str(), file->m_Path.c_str() );
-      file->m_Spec = NULL;
-    }
-
+    m_DBManager->GetColumnText( stmt,   ++index,              file->m_TypeName );
     m_DBManager->GetColumnText( stmt,   ++index,              file->m_FormatVersion );
 
     int isLeaf;
@@ -495,7 +482,7 @@ void GraphDB::SelectGraph( const DependencyInfoPtr& outFile, OS_DependencyInfo &
   int sqlResult;
 
   {
-    sqlResult = m_DBManager->ExecStatement( m_SqlSelectGraphStmtHandle, outFile->m_Path.c_str(), outFile->m_SpecName.c_str(), outFile->m_FormatVersion.c_str() );
+    sqlResult = m_DBManager->ExecStatement( m_SqlSelectGraphStmtHandle, outFile->m_Path.c_str(), outFile->m_TypeName.c_str(), outFile->m_FormatVersion.c_str() );
   }
 
   // if no files were found return

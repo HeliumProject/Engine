@@ -12,6 +12,7 @@
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/AssetClass.h"
+#include "Finder/Finder.h"
 #include "Finder/AssetSpecs.h"
 #include "Finder/ExtensionSpecs.h"
 #include "Foundation/Log.h"

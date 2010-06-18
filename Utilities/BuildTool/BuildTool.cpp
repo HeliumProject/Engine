@@ -18,6 +18,7 @@
 #include "Platform/Windows/Console.h"
 #include "Platform/Process.h"
 
+#include "Finder/Finder.h"
 #include "Finder/DebugSpecs.h"
 
 #include "Pipeline/AssetBuilder/AssetBuilder.h"

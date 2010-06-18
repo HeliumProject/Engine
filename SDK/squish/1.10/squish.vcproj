@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="squish"
+	Name="Squish"
 	ProjectGUID="{CF9387AB-7C10-4217-A248-575EE8610008}"
 	RootNamespace="squish"
 	Keyword="Win32Proj"
@@ -143,7 +143,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine=" "
 			/>
 		</Configuration>
 	</Configurations>

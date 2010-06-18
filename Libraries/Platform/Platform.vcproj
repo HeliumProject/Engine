@@ -47,7 +47,6 @@
 				RuntimeLibrary="3"
 				EnableEnhancedInstructionSet="0"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(IntDir)/ipc.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
@@ -106,12 +105,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".."
-				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL;PLATFORM_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_USRDLL"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				EnableEnhancedInstructionSet="0"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(IntDir)/ipc.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4251;4996"
@@ -142,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine=" "
 			/>
 		</Configuration>
 	</Configurations>
@@ -223,12 +221,28 @@
 						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\POSIX\Path.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -407,6 +421,14 @@
 						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\POSIX\Thread.cpp"
@@ -563,10 +585,6 @@
 		</File>
 		<File
 			RelativePath=".\Mutex.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Packets.h"
 			>
 		</File>
 		<File

@@ -2,7 +2,7 @@
 
 #include "Application/API.h"
 #include "ReflectClipboardData.h"
-#include "Reflect/Serializers.h"
+#include "Foundation/Reflect/Serializers.h"
 
 namespace Inspect
 {

@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "igDXRender/Render.h"
+#include "Render/Renderer.h"
 #include "Camera.h"
 #include "BangleWindow.h"
 
@@ -12,12 +12,12 @@ namespace Luna
   
   typedef struct
   {
-    igDXRender::Scene* m_Scene;
+    Render::Scene* m_Scene;
     bool m_Draw;
   } BangleScene;
   
   typedef std::map< u32, BangleScene > M_BangleScene;
-  typedef std::vector< igDXRender::Scene* > V_Scene;
+  typedef std::vector< Render::Scene* > V_Scene;
   
   class PreviewWindow : public wxWindow
   {
@@ -38,7 +38,7 @@ namespace Luna
     void SetBangleDraw( u32 bangleIndex, bool draw );
 
   protected:
-    virtual void SetupLighting( igDXRender::Scene* scene );
+    virtual void SetupLighting( Render::Scene* scene );
     virtual void Draw();
     virtual void Resize( const wxSize& size );
     virtual void ShowContextMenu( const wxPoint& pos );
@@ -62,8 +62,8 @@ namespace Luna
     void OnBangles( wxCommandEvent& args );
 
   protected:
-    igDXRender::Render m_Render;
-    igDXRender::Scene* m_Scene;
+    Render::Renderer m_Render;
+    Render::Scene* m_Scene;
     bool m_IsDeviceLost;
     Luna::Camera m_Camera;
     u32 m_MeshHandle;

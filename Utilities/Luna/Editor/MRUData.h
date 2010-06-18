@@ -2,8 +2,8 @@
 
 #include "Luna/API.h"
 #include "Application/UI/MRU.h"
-#include "Reflect/Element.h"
-#include "Reflect/ArraySerializer.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/ArraySerializer.h"
 
 namespace Luna
 {

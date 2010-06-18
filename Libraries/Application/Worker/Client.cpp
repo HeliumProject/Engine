@@ -2,13 +2,13 @@
 #include "Client.h"
 #include "Process.h"
 
+#include "Foundation/Log.h"
 #include "Foundation/Exception.h"
 #include "Foundation/CommandLine.h"
 #include "Foundation/IPC/Pipe.h"
 
-#include "Debug/Exception.h"
+#include "Application/Exception.h"
 #include "Application/Application.h"
-#include "Foundation/Log.h"
 
 #include <sstream>
 

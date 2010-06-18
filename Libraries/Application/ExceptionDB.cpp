@@ -4,7 +4,7 @@
 #include "ExceptionDB.h"
 #include "ExceptionReport.h"
 
-#include "Debug/Exception.h"
+#include "Foundation/Exception.h"
 #include "Foundation/Log.h"
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Environment.h"

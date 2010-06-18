@@ -4,31 +4,30 @@
 #include <fstream>
 #include <string>
 
+#include "Platform/Process.h"
+#include "Platform/Windows/Console.h"
+
+#include "Foundation/Log.h"
+#include "Foundation/Profile.h"
 #include "Foundation/Version.h"
 #include "Foundation/Exception.h"
 #include "Foundation/CommandLine.h"
+#include "Foundation/InitializerStack.h"
 #include "Foundation/File/Path.h"
+#include "Foundation/IPC/Connection.h"
 #include "Foundation/String/Utilities.h"
 
 #include "Application/RCS/RCS.h"
-#include "Debug/Exception.h"
-#include "Foundation/Log.h"
-#include "Foundation/Profile.h"
-#include "Foundation/IPC/Connection.h"
-#include "Platform/Windows/Console.h"
-#include "Platform/Process.h"
-
-#include "Finder/Finder.h"
-#include "Finder/DebugSpecs.h"
-
-#include "Pipeline/AssetBuilder/AssetBuilder.h"
-#include "Pipeline/Asset/AssetInit.h"
-#include "Pipeline/Asset/AssetClass.h"
-
+#include "Application/Exception.h"
 #include "Application/Worker/Client.h"
 #include "Application/Worker/Process.h"
 #include "Application/Application.h"
-#include "Foundation/InitializerStack.h"
+
+#include "Finder/Finder.h"
+#include "Finder/DebugSpecs.h"
+#include "Pipeline/AssetBuilder/AssetBuilder.h"
+#include "Pipeline/Asset/AssetInit.h"
+#include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Content/ContentInit.h"
 
 using namespace Asset;

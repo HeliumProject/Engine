@@ -3,7 +3,7 @@
 
 #include "Finder/ExtensionSpecs.h"
 #include "Foundation/Math/Utils.h"
-#include "igDXContent/ContentLoader.h"
+#include "Render/RBObjectLoader.h"
 #include "Scene/Camera.h"
 #include "Application/UI/FileDialog.h"
 
@@ -45,12 +45,12 @@ PreviewWindow::PreviewWindow( wxWindow *parent, wxWindowID id, const wxPoint& po
   m_Render.Init( GetHwnd(), 513, 541, 0 );
   if ( m_Render.GetD3DDevice() )
   {
-    m_Scene = new igDXRender::Scene( &m_Render );
+    m_Scene = new Render::Scene( &m_Render );
     m_Scene->m_normalscale = 0.1f;     // set the scale of the normals before loading the mesh (default scale is 1.0)
     m_Scene->m_render_reference_grid = false;
     m_Scene->m_render_wireframe = false;
     m_Scene->m_render_env_cube = false;
-    igDXRender::Light* t1 = new igDXRender::Light();
+    Render::Light* t1 = new Render::Light();
     t1->m_color = D3DXVECTOR4( 1, 1, 1, 0 );
     t1->m_direction = D3DXVECTOR4( 0, 1, 0, 0 );
     m_Scene->m_lights.push_back( t1 );
@@ -107,7 +107,7 @@ bool PreviewWindow::LoadScene( const std::string& path )
 {
   NOC_ASSERT( m_MeshHandle == s_InvalidMesh );
   
-  igDXContent::RBObjectLoader loader;
+  Content::RBObjectLoader loader;
   loader.IncrRefCount();
   if ( m_Scene )
   {
@@ -117,7 +117,7 @@ bool PreviewWindow::LoadScene( const std::string& path )
     {
       for ( std::map<int, bool>::iterator itr = loader.m_bangleInfo.begin(), end = loader.m_bangleInfo.end(); itr != end; ++itr )
       {
-        igDXRender::Scene* scene = new igDXRender::Scene( &m_Render );
+        Render::Scene* scene = new Render::Scene( &m_Render );
         if ( !scene )
         {
           continue;
@@ -273,14 +273,14 @@ void PreviewWindow::SetBangleDraw( u32 bangleIndex, bool draw )
 ///////////////////////////////////////////////////////////////////////////////
 // Sets up lighting in the scene.
 // 
-void PreviewWindow::SetupLighting( igDXRender::Scene* scene )
+void PreviewWindow::SetupLighting( Render::Scene* scene )
 {
   if ( !scene )
   {
     return;
   }
 
-  for ( std::vector< igDXRender::Light* >::iterator itr = scene->m_lights.begin(), end = scene->m_lights.end(); itr != end; ++itr )
+  for ( std::vector< Render::Light* >::iterator itr = scene->m_lights.begin(), end = scene->m_lights.end(); itr != end; ++itr )
   {
     delete *itr;
   }
@@ -292,12 +292,12 @@ void PreviewWindow::SetupLighting( igDXRender::Scene* scene )
   scene->m_ambient.z = 0.4f;
   scene->m_ambient.w = 0.0f;
   
-  igDXRender::Light* light1 = new igDXRender::Light();
+  Render::Light* light1 = new Render::Light();
   light1->m_direction = D3DXVECTOR4( 1.0f, 1.0f, 1.0f, 0.0f );
   light1->m_color = D3DXVECTOR4( 0.5f, 0.5f, 0.5f, 0.0f );
   scene->m_lights.push_back( light1 );
 
-  igDXRender::Light* light2 = new igDXRender::Light();
+  Render::Light* light2 = new Render::Light();
   light2->m_direction = D3DXVECTOR4( -1.0f, -1.0f, -1.0f, 0.0f );
   light2->m_color = D3DXVECTOR4( 0.45f, 0.45f, 0.45f, 0.0f );
   scene->m_lights.push_back( light2 );
@@ -390,7 +390,7 @@ bool PreviewWindow::RenderScene()
 {
   if ( m_MeshHandle != s_InvalidMesh && m_Scene )
   {
-    std::vector< igDXRender::Scene* > renderScenes;
+    std::vector< Render::Scene* > renderScenes;
     renderScenes.reserve( m_BangleScenes.size() + 1 );
 
     m_Scene->m_viewmat = *( ( D3DMATRIX* )( &m_Camera.GetView() ) );
@@ -401,7 +401,7 @@ bool PreviewWindow::RenderScene()
     {
       if ( itr->second.m_Draw )
       {
-        igDXRender::Scene* scene = itr->second.m_Scene;
+        Render::Scene* scene = itr->second.m_Scene;
 
         scene->m_viewmat = *( ( D3DMATRIX* )( &m_Camera.GetView() ) );
         scene->m_projmat = *( ( D3DMATRIX* )( &m_Camera.SetProjection( scene->m_width, scene->m_height ) ) );

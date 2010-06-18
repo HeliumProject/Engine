@@ -32,7 +32,7 @@
 #include "Pipeline/Component/ComponentCategories.h"
 #include "Foundation/InitializerStack.h"
 #include "Pipeline/Content/ContentInit.h"
-#include "Reflect/Registry.h"
+#include "Foundation/Reflect/Registry.h"
 
 #include "Foundation/InitializerStack.h"
 

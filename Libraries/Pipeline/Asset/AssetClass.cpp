@@ -11,8 +11,8 @@
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 
 #include "Foundation/Log.h"
-#include "Reflect/Version.h"
-#include "Reflect/Object.h"
+#include "Foundation/Reflect/Version.h"
+#include "Foundation/Reflect/Object.h"
 
 #include <memory>
 

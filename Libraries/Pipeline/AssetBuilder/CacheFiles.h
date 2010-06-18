@@ -4,10 +4,10 @@
 #include "Pipeline/Dependencies/Dependencies.h"
 #include "Pipeline/Dependencies/Info/FileInfo.h"
 
-#include "Reflect/Serializers.h"
-#include "Reflect/Element.h"
-#include "Reflect/Archive.h"
-#include "Reflect/Registry.h"
+#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Archive.h"
+#include "Foundation/Reflect/Registry.h"
 
 namespace CacheFiles
 {

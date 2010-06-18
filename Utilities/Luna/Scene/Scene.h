@@ -4,8 +4,8 @@
 
 #include "Foundation/Automation/Event.h"
 #include "Foundation/TUID.h"
-#include "Reflect/Archive.h"
-#include "Reflect/Version.h"
+#include "Foundation/Reflect/Archive.h"
+#include "Foundation/Reflect/Version.h"
 
 #include "Core/Selection.h"
 

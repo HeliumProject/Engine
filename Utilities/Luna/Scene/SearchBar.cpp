@@ -8,8 +8,8 @@
 #include "EntityAssetSet.h"
 #include "Region.h"
 #include "SceneEditor.h"
-#include "Reflect/Object.h"
-#include "Reflect/Registry.h"
+#include "Foundation/Reflect/Object.h"
+#include "Foundation/Reflect/Registry.h"
 
 using namespace Luna;
 using namespace Nocturnal;

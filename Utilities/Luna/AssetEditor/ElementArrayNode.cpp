@@ -7,7 +7,7 @@
 
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Log.h"
-#include "Reflect/ElementArraySerializer.h"
+#include "Foundation/Reflect/ElementArraySerializer.h"
 #include "Foundation/TUID.h"
 #include "Application/UI/ImageManager.h"
 

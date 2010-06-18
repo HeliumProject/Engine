@@ -6,7 +6,7 @@
 #include "Pipeline/Asset/Components/ColorMapComponent.h"
 #include "Finder/AssetSpecs.h"
 #include "Foundation/File/Directory.h"
-#include "igDXRender/d3dmanager.h"
+#include "Render/D3DManager.h"
 
 using namespace Luna;
 
@@ -147,7 +147,7 @@ void* ThumbnailLoader::LoadThread::Entry()
     return NULL;
 }
 
-ThumbnailLoader::ThumbnailLoader( igDXRender::D3DManager* d3dManager, const std::string& thumbnailDirectory )
+ThumbnailLoader::ThumbnailLoader( Render::D3DManager* d3dManager, const std::string& thumbnailDirectory )
 : m_LoadThread( *this )
 , m_Quit( false )
 , m_ThumbnailDirectory( thumbnailDirectory )

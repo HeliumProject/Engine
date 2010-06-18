@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reflect/Class.h"
+#include "Foundation/Reflect/Class.h"
 
 namespace Content
 {

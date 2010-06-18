@@ -4,7 +4,7 @@
 
 #include "Foundation/Automation/Event.h"
 
-#include "Reflect/Serializer.h"
+#include "Foundation/Reflect/Serializer.h"
 
 namespace Inspect
 {

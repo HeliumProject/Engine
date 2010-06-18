@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "GridPreferences.h"
 
-#include "Reflect/Serializer.h"
-#include "Reflect/Serializers.h"
+#include "Foundation/Reflect/Serializer.h"
+#include "Foundation/Reflect/Serializers.h"
 
 using namespace Luna;
 

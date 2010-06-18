@@ -34,7 +34,7 @@
 #include "Pipeline/Asset/AssetVersion.h"
 #include "Pipeline/Content/ContentInit.h"
 #include "Foundation/Log.h"
-#include "Reflect/Registry.h"
+#include "Foundation/Reflect/Registry.h"
 #include "Application/UI/ImageManager.h"
 
 // Using

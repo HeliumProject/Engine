@@ -3,9 +3,9 @@
 #include "Pipeline/Asset/AssetFlags.h"
 #include "Finder/Finder.h"
 #include "Finder/AssetSpecs.h"
-#include "Reflect/Element.h"
-#include "Reflect/Field.h"
-#include "Reflect/Serializers.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Field.h"
+#include "Foundation/Reflect/Serializers.h"
 #include <algorithm>
 
 ///////////////////////////////////////////////////////////////////////////////

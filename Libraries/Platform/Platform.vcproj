@@ -512,6 +512,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Windows\Debug.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Windows\Debug.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Windows\Memory.cpp"
 					>
 				</File>

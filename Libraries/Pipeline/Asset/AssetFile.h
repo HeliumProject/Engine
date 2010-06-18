@@ -8,8 +8,8 @@
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
 #include "Finder/Finder.h"
-#include "Reflect/Registry.h"
-#include "Reflect/Serializers.h"
+#include "Foundation/Reflect/Registry.h"
+#include "Foundation/Reflect/Serializers.h"
 #include "Foundation/TUID.h"
 
 namespace Asset

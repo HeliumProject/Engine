@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Reflect/Element.h"
-#include "Reflect/Serializers.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Serializers.h"
 
 #include "Luna/API.h"
 #include "Task.h"

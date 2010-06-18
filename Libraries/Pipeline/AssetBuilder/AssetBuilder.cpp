@@ -12,24 +12,25 @@
 #include <stack>
 #include <algorithm>
 
+#include "Platform/Thread.h"
+#include "Platform/Mutex.h"
+#include "Platform/Windows/Windows.h"
+
 #include "Foundation/Version.h"
 #include "Foundation/CommandLine.h"
+#include "Foundation/Environment.h"
 #include "Foundation/String/Utilities.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Log.h"
 
-#include "Application/Application.h"
+#include "Finder/DebugSpecs.h"
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/AssetBuilder/CacheFiles.h"
-#include "Foundation/Environment.h"
-#include "Debug/Exception.h"
 #include "Pipeline/Dependencies/Dependencies.h"
-#include "Finder/DebugSpecs.h"
 
-#include "Platform/Windows/Windows.h"
-#include "Platform/Thread.h"
-#include "Platform/Mutex.h"
+#include "Application/Application.h"
+#include "Application/Exception.h"
 
 using namespace Asset;
 using namespace AssetBuilder;

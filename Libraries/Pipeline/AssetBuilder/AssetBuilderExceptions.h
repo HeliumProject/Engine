@@ -3,7 +3,7 @@
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Foundation/Exception.h"
-#include "Reflect/Registry.h"
+#include "Foundation/Reflect/Registry.h"
 #include "Foundation/TUID.h"
 
 

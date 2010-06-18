@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Application/API.h"
-#include "Reflect/Serializers.h"
+#include "Foundation/Reflect/Serializers.h"
 
 namespace Inspect
 {

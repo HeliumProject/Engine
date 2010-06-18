@@ -2,7 +2,7 @@
 
 #include "Pipeline/API.h"
 
-#include "Reflect/Registry.h"
+#include "Foundation/Reflect/Registry.h"
 
 namespace Asset
 {

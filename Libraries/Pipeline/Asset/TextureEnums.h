@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reflect/Enumeration.h"
+#include "Foundation/Reflect/Enumeration.h"
 #include "Pipeline/Texture/Image/ColorFormats.h"
 #include "Pipeline/Texture/Image/MipSet.h"
 

@@ -1,13 +1,15 @@
 #include "Precompile.h"
 
 #include "AssetPreviewWindow.h"
-
 #include "AssetPreferences.h"
+
 #include "Pipeline/Asset/Components/StandardColorMapComponent.h"
 #include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
 #include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
 #include "Pipeline/Asset/Components/StandardDetailMapComponent.h"
-#include "igDXContent/ShaderLoader.h"
+
+#include "Render/RBShaderLoader.h"
+#include "Render/RBObjectLoader.h"
 
 using namespace Luna;
 
@@ -59,14 +61,14 @@ void AssetPreviewWindow::SetupScene( std::string meshPath )
     m_WatchMeshes.insert( meshPath );
     
     V_string shaderFiles;
-    m_Scene->m_render_class->m_shader_database->GetShaderFilenames( shaderFiles );
+    m_Scene->m_renderer->m_shader_manager.GetShaderFilenames( shaderFiles );
     for ( V_string::iterator itr = shaderFiles.begin(), end = shaderFiles.end(); itr != end; ++itr )
     {
       m_WatchShaders.insert( *itr );
     }
 
     V_string textureFiles;
-    m_Scene->m_render_class->m_shader_database->GetTextureFilenames( textureFiles );
+    m_Scene->m_renderer->m_shader_manager.GetTextureFilenames( textureFiles );
     for ( V_string::iterator itr = textureFiles.begin(), end = textureFiles.end(); itr != end; ++itr )
     {
       m_WatchTextures.insert( *itr );
@@ -111,16 +113,16 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
   if ( m_Scene )
   {
     std::string shaderPath = shaderClass->GetFilePath().c_str();
-    u32 shaderHandle = m_Scene->m_render_class->m_shader_database->FindShader( shaderPath.c_str() );
+    u32 shaderHandle = m_Scene->m_renderer->m_shader_manager.FindShader( shaderPath.c_str() );
     if ( shaderHandle == 0xffffffff )
     {
       return;
     }
 
-    igDXRender::Shader* shader = m_Scene->m_render_class->m_shader_database->ResolveShader( shaderHandle );
+    Render::Shader* shader = m_Scene->m_renderer->m_shader_manager.ResolveShader( shaderHandle );
     NOC_ASSERT( shader );
     
-    igDXContent::RBShaderLoader::UpdateShaderClass( m_Scene->m_render_class->m_shader_database, shaderPath.c_str(), shaderClass->m_AlphaMode );
+    Content::RBShaderLoader::UpdateShaderClass( &m_Scene->m_renderer->m_shader_manager, shaderPath.c_str(), shaderClass->m_AlphaMode );
     
     if ( shaderClass->m_DoubleSided )
     {
@@ -134,73 +136,73 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
     Asset::StandardColorMapComponent* colorMap = shaderClass->GetComponent< Asset::StandardColorMapComponent >();
     if ( colorMap )
     {
-      igDXRender::TextureSettings settings;
+      Render::TextureSettings settings;
       settings.Clear();
 
       settings.m_Path = colorMap->GetPath().Get();
       settings.m_Anisotropy = 0;
       settings.m_MipBias = colorMap->m_MipBias;
-      igDXContent::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
-      igDXContent::RBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
-      igDXContent::RBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, igDXRender::Texture::SAMPLER_BASE_MAP );
+      Content::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
+      Content::RBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
+      Content::RBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, Render::Texture::SAMPLER_BASE_MAP );
       
-      m_Scene->m_render_class->m_shader_database->UpdateShaderTexture( shaderPath.c_str(), igDXRender::Texture::SAMPLER_BASE_MAP, settings );
+      m_Scene->m_renderer->m_shader_manager.UpdateShaderTexture( shaderPath.c_str(), Render::Texture::SAMPLER_BASE_MAP, settings );
     }
     else
     {
-      m_Scene->m_render_class->m_shader_database->SetShaderDefaultTexture( shaderPath.c_str(), igDXRender::Texture::SAMPLER_BASE_MAP );
+      m_Scene->m_renderer->m_shader_manager.SetShaderDefaultTexture( shaderPath.c_str(), Render::Texture::SAMPLER_BASE_MAP );
     }
     
-    igDXContent::RBShaderLoader::UpdateShaderColorMap( shader, colorMap );
+    Content::RBShaderLoader::UpdateShaderColorMap( shader, colorMap );
 
     Asset::StandardNormalMapComponent* normalMap = shaderClass->GetComponent< Asset::StandardNormalMapComponent >();
     if ( normalMap )
     {
-      igDXRender::TextureSettings settings;
+      Render::TextureSettings settings;
       settings.Clear();
       
       settings.m_Path = normalMap->GetPath().Get();
       settings.m_Anisotropy = 0;
       settings.m_MipBias = normalMap->m_MipBias;
-      igDXContent::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
-      igDXContent::RBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
-      igDXContent::RBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, igDXRender::Texture::SAMPLER_NORMAL_MAP );
+      Content::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
+      Content::RBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
+      Content::RBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, Render::Texture::SAMPLER_NORMAL_MAP );
       
-      m_Scene->m_render_class->m_shader_database->UpdateShaderTexture( shaderPath.c_str(), igDXRender::Texture::SAMPLER_NORMAL_MAP, settings );
+      m_Scene->m_renderer->m_shader_manager.UpdateShaderTexture( shaderPath.c_str(), Render::Texture::SAMPLER_NORMAL_MAP, settings );
     }
     else
     {
-      m_Scene->m_render_class->m_shader_database->SetShaderDefaultTexture( shaderPath.c_str(), igDXRender::Texture::SAMPLER_BASE_MAP );
+      m_Scene->m_renderer->m_shader_manager.SetShaderDefaultTexture( shaderPath.c_str(), Render::Texture::SAMPLER_BASE_MAP );
     }
 
-    igDXContent::RBShaderLoader::UpdateShaderNormalMap( shader, normalMap );
+    Content::RBShaderLoader::UpdateShaderNormalMap( shader, normalMap );
 
     Asset::StandardExpensiveMapComponent* expensiveMap = shaderClass->GetComponent< Asset::StandardExpensiveMapComponent >();
     if ( expensiveMap )
     {
-      igDXRender::TextureSettings settings;
+      Render::TextureSettings settings;
       settings.Clear();
 
       settings.m_Path = expensiveMap->GetPath().Get();
       settings.m_Anisotropy = 0;
       settings.m_MipBias = expensiveMap->m_MipBias;
-      igDXContent::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
-      igDXContent::RBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
-      igDXContent::RBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, igDXRender::Texture::SAMPLER_GPI_MAP );
+      Content::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
+      Content::RBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
+      Content::RBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, Render::Texture::SAMPLER_GPI_MAP );
 
       if (expensiveMap->m_DetailMapMaskEnabled && settings.m_Format == D3DFMT_DXT1)
       {
         settings.m_Format = D3DFMT_DXT5;
       }
 
-      m_Scene->m_render_class->m_shader_database->UpdateShaderTexture( shaderPath.c_str(), igDXRender::Texture::SAMPLER_GPI_MAP, settings );
+      m_Scene->m_renderer->m_shader_manager.UpdateShaderTexture( shaderPath.c_str(), Render::Texture::SAMPLER_GPI_MAP, settings );
     }
     else
     {
-      m_Scene->m_render_class->m_shader_database->SetShaderDefaultTexture( shaderPath.c_str(), igDXRender::Texture::SAMPLER_BASE_MAP );
+      m_Scene->m_renderer->m_shader_manager.SetShaderDefaultTexture( shaderPath.c_str(), Render::Texture::SAMPLER_BASE_MAP );
     }
 
-    igDXContent::RBShaderLoader::UpdateShaderExpensiveMap( shader, expensiveMap );
+    Content::RBShaderLoader::UpdateShaderExpensiveMap( shader, expensiveMap );
     
     Refresh();
   }
@@ -316,7 +318,7 @@ void AssetPreviewWindow::OnWatchFiles( wxTimerEvent& args )
       S_string::iterator itr = m_ReloadTextures.begin();
       while ( itr != m_ReloadTextures.end() )
       {
-        if ( m_Scene->m_render_class->m_shader_database->ReloadTexture( (*itr).c_str() ) )
+        if ( m_Scene->m_renderer->m_shader_manager.ReloadTexture( (*itr).c_str() ) )
         {
           itr = m_ReloadTextures.erase( itr );
         }

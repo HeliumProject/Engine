@@ -2,7 +2,7 @@
 
 #include "Platform/Types.h"
 #include "Platform/Assert.h"
-#include "Reflect/Enumeration.h"
+#include "Foundation/Reflect/Enumeration.h"
 #include <sstream>
 
 namespace Luna

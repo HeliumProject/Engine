@@ -4,7 +4,7 @@
 #include "ThumbnailLoader.h"
 #include "Platform/Mutex.h"
 
-namespace igDXRender
+namespace Render
 {
     class D3DManager;
 }
@@ -27,7 +27,7 @@ namespace Luna
     class ThumbnailManager
     {
     public:
-        ThumbnailManager( wxWindow* window, igDXRender::D3DManager* d3dmanager, const std::string& thumbnailDirectory );
+        ThumbnailManager( wxWindow* window, Render::D3DManager* d3dmanager, const std::string& thumbnailDirectory );
         virtual ~ThumbnailManager();
 
         void Reset();

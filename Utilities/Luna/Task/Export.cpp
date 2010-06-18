@@ -17,14 +17,14 @@
 #include "Pipeline/Asset/ExporterJob.h"
 
 #include "Pipeline/Content/Nodes/Zone.h"
-#include "Reflect/Archive.h"
+#include "Foundation/Reflect/Archive.h"
 
 #include "Application/Application.h"
 #include "Application/Worker/Process.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/IPC/Connection.h"
-#include "Debug/Exception.h"
+#include "Foundation/Exception.h"
 
 #include <strstream>
 

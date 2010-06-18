@@ -2,8 +2,8 @@
 
 #include "Luna/API.h"
 
-#include "Reflect/Element.h"
-#include "Reflect/Version.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Version.h"
 
 
 namespace Luna

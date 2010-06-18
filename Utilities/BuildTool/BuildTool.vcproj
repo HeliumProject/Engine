@@ -196,10 +196,6 @@
 			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{1A179B8F-2027-467A-AB0C-7E90575C0F03}"
-			RelativePathToProject=".\libraries\Debug\Debug.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
 		/>

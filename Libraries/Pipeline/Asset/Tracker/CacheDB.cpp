@@ -18,7 +18,7 @@
 #include "Foundation/String/Utilities.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Log.h"
-#include "Debug/Exception.h"
+#include "Foundation/Exception.h"
 #include "Finder/AssetSpecs.h"
 #include "Application/SQL/SQLite/SQLite.h"
 #include "Platform/Windows/Console.h"

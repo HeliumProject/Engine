@@ -4,7 +4,7 @@
 #include "Application/Inspect/Widgets/Control.h"
 #include "Foundation/Automation/Event.h"
 
-#include "Reflect/Class.h"
+#include "Foundation/Reflect/Class.h"
 
 namespace Inspect
 {

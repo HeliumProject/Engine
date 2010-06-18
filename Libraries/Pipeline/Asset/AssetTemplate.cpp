@@ -4,7 +4,7 @@
 
 #include "Pipeline/Component/ComponentCollection.h"
 #include "Foundation/CommandLine.h"
-#include "Reflect/Archive.h"
+#include "Foundation/Reflect/Archive.h"
 
 #include <boost/regex.hpp> 
 

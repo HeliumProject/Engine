@@ -14,11 +14,11 @@ D3DWindowManager::~D3DWindowManager()
 
 HRESULT D3DWindowManager::HandleClientDefaultPool( u32 reason )
 {
-  if ( reason == igDXRender::DEFPOOL_RELEASE )
+  if ( reason == Render::DEFPOOL_RELEASE )
   {
     m_Lost.Raise( DeviceStates::Lost );
   }
-  else if ( reason == igDXRender::DEFPOOL_CREATE )
+  else if ( reason == Render::DEFPOOL_CREATE )
   {
     m_Found.Raise( DeviceStates::Found );
   }

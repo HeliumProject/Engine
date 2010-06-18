@@ -1,4 +1,4 @@
-#include "Debug/Exception.h"
+#include "Foundation/Exception.h"
 #include "Application/Application.h"
 #include "Platform/Windows/Windows.h"
 
@@ -8,8 +8,8 @@
 #include "Application/RCS/RCS.h"
 #include "Foundation/File/Path.h"
 
-#include "Reflect/Archive.h"
-#include "Reflect/Version.h"
+#include "Foundation/Reflect/Archive.h"
+#include "Foundation/Reflect/Version.h"
 
 using namespace Reflect;
 
@@ -50,7 +50,7 @@ V_string g_RebuildResults[REBUILD_CODE_COUNT];
 
 namespace Reflect
 {
-    REFLECT_API extern bool g_OverrideCRC;
+    FOUNDATION_API extern bool g_OverrideCRC;
 }
 
 int ProcessFile(const std::string& input, const std::string& output)

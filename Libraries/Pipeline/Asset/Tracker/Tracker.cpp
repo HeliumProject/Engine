@@ -25,10 +25,10 @@
 #include "Finder/ContentSpecs.h"
 #include "Finder/FinderSpec.h"
 #include "Finder/ProjectSpecs.h"
-#include "Reflect/Class.h"
-#include "Reflect/Serializers.h"
-#include "Reflect/Version.h"
-#include "Reflect/Visitor.h"
+#include "Foundation/Reflect/Class.h"
+#include "Foundation/Reflect/Serializers.h"
+#include "Foundation/Reflect/Version.h"
+#include "Foundation/Reflect/Visitor.h"
 #include "Foundation/TUID.h"
 
 #define SHUTDOWN_THREAD 0

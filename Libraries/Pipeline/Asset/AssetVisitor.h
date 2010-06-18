@@ -9,8 +9,8 @@
 #include "Pipeline/Asset/AssetFlags.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
-#include "Reflect/Field.h"
-#include "Reflect/Version.h"
+#include "Foundation/Reflect/Field.h"
+#include "Foundation/Reflect/Version.h"
 
 //
 // Forwards

@@ -5,8 +5,8 @@
 #include "Foundation/Checksum/MD5.h"
 #include "Foundation/Flags.h"
 #include "Foundation/String/Utilities.h"
-#include "Reflect/Element.h"
-#include "Reflect/Version.h"
+#include "Foundation/Reflect/Element.h"
+#include "Foundation/Reflect/Version.h"
 
 using namespace Luna;
 

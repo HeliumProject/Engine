@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Reflect/Registry.h"
+#include "Foundation/Reflect/Registry.h"
 #include "Pipeline/API.h"
 
 namespace Content

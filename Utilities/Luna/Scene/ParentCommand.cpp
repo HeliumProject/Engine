@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "ParentCommand.h"
 #include "Transform.h"
-#include "Reflect/Object.h"
+#include "Foundation/Reflect/Object.h"
 
 using namespace Luna;
 

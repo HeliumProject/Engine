@@ -103,22 +103,22 @@ D3DFORMAT GetD3DColorFormat( const Asset::GlossParaIncanTexFormat format )
 
 u32 TextureFilterMode( const Asset::RunTimeFilter mode )
 {
-    u32 outMode = igDXRender::Texture::FILTER_LINEAR;
+    u32 outMode = Render::Texture::FILTER_LINEAR;
 
     switch( mode )
     {
     case Asset::RunTimeFilters::RTF_POINT:
-        outMode = igDXRender::Texture::FILTER_POINT;
+        outMode = Render::Texture::FILTER_POINT;
         break;
     case Asset::RunTimeFilters::RTF_ANISO2_BI:
     case Asset::RunTimeFilters::RTF_ANISO2_TRI:
     case Asset::RunTimeFilters::RTF_ANISO4_BI:
     case Asset::RunTimeFilters::RTF_ANISO4_TRI:
-        outMode = igDXRender::Texture::FILTER_ANISOTROPIC;
+        outMode = Render::Texture::FILTER_ANISOTROPIC;
         break;
     case Asset::RunTimeFilters::RTF_BILINEAR:
     case Asset::RunTimeFilters::RTF_TRILINEAR:
-        outMode = igDXRender::Texture::FILTER_LINEAR;
+        outMode = Render::Texture::FILTER_LINEAR;
         break;
     default:
         break;
@@ -127,44 +127,44 @@ u32 TextureFilterMode( const Asset::RunTimeFilter mode )
     return outMode;
 }
 
-void SetShaderClassAlpha( igDXRender::Shader* sh, Asset::AlphaType alphaMode )
+void SetShaderClassAlpha( Render::Shader* sh, Asset::AlphaType alphaMode )
 {
     switch ( alphaMode )
     {
     case Asset::AlphaTypes::ALPHA_OPAQUE:
-        sh->m_alpha_type = igDXRender::Shader::ALPHA_OPAQUE;
+        sh->m_alpha_type = Render::Shader::ALPHA_OPAQUE;
         break;
 
         break;
 
     case Asset::AlphaTypes::ALPHA_ADDITIVE:
-        sh->m_alpha_type = igDXRender::Shader::ALPHA_ADDITIVE;
+        sh->m_alpha_type = Render::Shader::ALPHA_ADDITIVE;
         break;
 
     case Asset::AlphaTypes::ALPHA_CUTOUT:
     case Asset::AlphaTypes::ALPHA_SOFT_EDGE:
-        sh->m_alpha_type = igDXRender::Shader::ALPHA_CUTOUT;
+        sh->m_alpha_type = Render::Shader::ALPHA_CUTOUT;
         break;
 
     case Asset::AlphaTypes::ALPHA_SCUNGE:
     case Asset::AlphaTypes::ALPHA_OVERLAY:
     case Asset::AlphaTypes::ALPHA_BLENDED:
-        sh->m_alpha_type = igDXRender::Shader::ALPHA_BLENDED;
+        sh->m_alpha_type = Render::Shader::ALPHA_BLENDED;
         break;
     }
 }
 
-igDXContent::RBShaderLoader::RBShaderLoader()
+Content::RBShaderLoader::RBShaderLoader()
 {
 
 }
 
-igDXContent::RBShaderLoader::~RBShaderLoader()
+Content::RBShaderLoader::~RBShaderLoader()
 {
 
 }
 
-igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, igDXRender::ShaderDatabase* db )
+Render::Shader* Content::RBShaderLoader::ParseFile( const char* fname, Render::ShaderManager* db )
 {
     Asset::ShaderAssetPtr shaderClass = Asset::AssetClass::LoadAssetClass< Asset::ShaderAsset >( fname );
     if ( !shaderClass.ReferencesObject() )
@@ -174,7 +174,7 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
     }
 
     // this seems like a valid shader, allocate a shader
-    igDXRender::Shader* sh = new igDXRender::Shader(db,fname);
+    Render::Shader* sh = new Render::Shader(db,fname);
 
     std::string texturePath;
     bool hadError = false;
@@ -184,7 +184,7 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
     if (shaderClass->m_DoubleSided)
         sh->m_flags|=SHDR_FLAG_TWO_SIDED;
 
-    igDXRender::TextureSettings settings;
+    Render::TextureSettings settings;
     settings.Clear();
     settings.m_WrapU = TextureAddressModes( shaderClass->m_WrapModeU );
     settings.m_WrapV = TextureAddressModes( shaderClass->m_WrapModeV );
@@ -208,7 +208,7 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
 
     UpdateShaderColorMap(sh, colorMap);
 
-    if( !db->LoadTextureWithSettings( settings, sh, igDXRender::Texture::SAMPLER_BASE_MAP ) )
+    if( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_BASE_MAP ) )
     {
         if ( settings.m_Path != "@@base" )
         {
@@ -217,7 +217,7 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
             settings.m_Format = D3DFMT_UNKNOWN;
             settings.m_Path = "@@base";
 
-            if ( !db->LoadTextureWithSettings( settings, sh, igDXRender::Texture::SAMPLER_BASE_MAP ) )
+            if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_BASE_MAP ) )
             {
                 printf( "ERROR: Could not load default base map.\n" );
                 hadError = true;
@@ -248,7 +248,7 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
 
     UpdateShaderNormalMap( sh, normalMap );
 
-    if( !db->LoadTextureWithSettings( settings, sh, igDXRender::Texture::SAMPLER_NORMAL_MAP ) )
+    if( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_NORMAL_MAP ) )
     {
         if ( settings.m_Path != "@@normal" )
         {
@@ -257,7 +257,7 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
             settings.m_Format = D3DFMT_UNKNOWN;
             settings.m_Path = "@@normal";
 
-            if ( !db->LoadTextureWithSettings( settings, sh, igDXRender::Texture::SAMPLER_NORMAL_MAP ) )
+            if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_NORMAL_MAP ) )
             {
                 printf( "ERROR: Could not load default normal map.\n" );
                 hadError = true;
@@ -287,10 +287,10 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
             settings.m_Format = D3DFMT_DXT5;
         }
 
-        if( db->LoadTextureWithSettings( settings, sh, igDXRender::Texture::SAMPLER_GPI_MAP ) )
+        if( db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_GPI_MAP ) )
         {
-            sh->m_textures[ igDXRender::Texture::SAMPLER_INCAN_MAP ] = 0xffffffff;
-            sh->m_textures[ igDXRender::Texture::SAMPLER_PARALLAX_MAP ] = 0xffffffff;
+            sh->m_textures[ Render::Texture::SAMPLER_INCAN_MAP ] = 0xffffffff;
+            sh->m_textures[ Render::Texture::SAMPLER_PARALLAX_MAP ] = 0xffffffff;
 
             sh->m_flags |= SHDR_FLAG_GPI_MAP;
 
@@ -304,19 +304,19 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
             settings.m_Format = D3DFMT_UNKNOWN;
 
             settings.m_Path = "@@gloss";
-            if ( !db->LoadTextureWithSettings( settings, sh, igDXRender::Texture::SAMPLER_GLOSS_MAP ) )
+            if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_GLOSS_MAP ) )
             {
                 printf( "ERROR: Could not load default gloss map.\n" );
                 hadError = true;
             }
             settings.m_Path = "@@parallax";
-            if ( !db->LoadTextureWithSettings( settings, sh, igDXRender::Texture::SAMPLER_PARALLAX_MAP ) )
+            if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_PARALLAX_MAP ) )
             {
                 printf( "ERROR: Could not load default parallax map.\n" );
                 hadError = true;
             }
             settings.m_Path = "@@incan";
-            if ( !db->LoadTextureWithSettings( settings, sh, igDXRender::Texture::SAMPLER_INCAN_MAP ) )
+            if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_INCAN_MAP ) )
             {
                 printf( "ERROR: Could not load default incan map.\n" );
                 hadError = true;
@@ -331,19 +331,19 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
         settings.m_Format = D3DFMT_UNKNOWN;
 
         settings.m_Path = "@@gloss";
-        if ( !db->LoadTextureWithSettings( settings, sh, igDXRender::Texture::SAMPLER_GLOSS_MAP ) )
+        if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_GLOSS_MAP ) )
         {
             printf( "ERROR: Could not load default gloss map.\n" );
             hadError = true;
         }
         settings.m_Path = "@@parallax";
-        if ( !db->LoadTextureWithSettings( settings, sh, igDXRender::Texture::SAMPLER_PARALLAX_MAP ) )
+        if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_PARALLAX_MAP ) )
         {
             printf( "ERROR: Could not load default parallax map.\n" );
             hadError = true;
         }
         settings.m_Path = "@@incan";
-        if ( !db->LoadTextureWithSettings( settings, sh, igDXRender::Texture::SAMPLER_INCAN_MAP ) )
+        if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_INCAN_MAP ) )
         {
             printf( "ERROR: Could not load default incan map.\n" );
             hadError = true;
@@ -361,32 +361,32 @@ igDXRender::Shader* igDXContent::RBShaderLoader::ParseFile( const char* fname, i
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXContent::RBShaderLoader::SetWrapUV( igDXRender::TextureSettings* settings, u32 wrapU, u32 wrapV )
+void Content::RBShaderLoader::SetWrapUV( Render::TextureSettings* settings, u32 wrapU, u32 wrapV )
 {
     settings->m_WrapU = TextureAddressModes( wrapU );
     settings->m_WrapV = TextureAddressModes( wrapV );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXContent::RBShaderLoader::SetFilter( igDXRender::TextureSettings* settings, u32 filter )
+void Content::RBShaderLoader::SetFilter( Render::TextureSettings* settings, u32 filter )
 {
     settings->m_Filter = TextureFilterMode( (Asset::RunTimeFilter) filter );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXContent::RBShaderLoader::SetColorFormat( igDXRender::TextureSettings* settings, u32 colorFormat, u32 mode )
+void Content::RBShaderLoader::SetColorFormat( Render::TextureSettings* settings, u32 colorFormat, u32 mode )
 {
     switch ( mode )
     {
-    case igDXRender::Texture::SAMPLER_GPI_MAP:
+    case Render::Texture::SAMPLER_GPI_MAP:
         settings->m_Format = GetD3DColorFormat( (Asset::GlossParaIncanTexFormat) colorFormat );
         break;
 
-    case igDXRender::Texture::SAMPLER_NORMAL_MAP:
+    case Render::Texture::SAMPLER_NORMAL_MAP:
         settings->m_Format = GetD3DColorFormat( (Asset::NormalTexFormat) colorFormat );
         break;
 
-    case igDXRender::Texture::SAMPLER_BASE_MAP:
+    case Render::Texture::SAMPLER_BASE_MAP:
     default:
         settings->m_Format = GetD3DColorFormat( (Asset::ColorTexFormat) colorFormat );
         break;
@@ -394,7 +394,7 @@ void igDXContent::RBShaderLoader::SetColorFormat( igDXRender::TextureSettings* s
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXContent::RBShaderLoader::UpdateShaderClass(igDXRender::ShaderDatabase* db, const char* shaderFilename, u32 alphaMode)
+void Content::RBShaderLoader::UpdateShaderClass(Render::ShaderManager* db, const char* shaderFilename, u32 alphaMode)
 {
     u32 shaderHandle = db->FindShader( shaderFilename );
     if ( shaderHandle == 0xffffffff )
@@ -402,14 +402,14 @@ void igDXContent::RBShaderLoader::UpdateShaderClass(igDXRender::ShaderDatabase* 
         return;
     }
 
-    igDXRender::Shader* sh = db->ResolveShader( shaderHandle );
+    Render::Shader* sh = db->ResolveShader( shaderHandle );
     NOC_ASSERT( sh );
 
     SetShaderClassAlpha( sh, (Asset::AlphaType) alphaMode );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXContent::RBShaderLoader::UpdateShaderColorMap(igDXRender::Shader* sh, const Asset::StandardColorMapComponent* colorMap)
+void Content::RBShaderLoader::UpdateShaderColorMap(Render::Shader* sh, const Asset::StandardColorMapComponent* colorMap)
 {
     if (colorMap && !colorMap->m_DisableBaseTint)
     {
@@ -428,7 +428,7 @@ void igDXContent::RBShaderLoader::UpdateShaderColorMap(igDXRender::Shader* sh, c
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXContent::RBShaderLoader::UpdateShaderNormalMap(igDXRender::Shader* sh, const Asset::StandardNormalMapComponent* normalMap)
+void Content::RBShaderLoader::UpdateShaderNormalMap(Render::Shader* sh, const Asset::StandardNormalMapComponent* normalMap)
 {
     if (!normalMap)
     {
@@ -440,7 +440,7 @@ void igDXContent::RBShaderLoader::UpdateShaderNormalMap(igDXRender::Shader* sh, 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXContent::RBShaderLoader::UpdateShaderExpensiveMap(igDXRender::Shader* sh, const Asset::StandardExpensiveMapComponent* expensiveMap)
+void Content::RBShaderLoader::UpdateShaderExpensiveMap(Render::Shader* sh, const Asset::StandardExpensiveMapComponent* expensiveMap)
 {
     if (!expensiveMap)
     {

@@ -34,7 +34,7 @@ static void ObjError(FILE* fp, int fpos, int currpos,const char* error)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::OBJObjectLoader::ParseFile(const char* fname, bool winding)
+u32 Render::OBJObjectLoader::ParseFile(const char* fname, bool winding)
 {
   //winding = true;
   FILE *fp;

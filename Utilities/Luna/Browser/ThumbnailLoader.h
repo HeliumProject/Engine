@@ -6,7 +6,7 @@
 #include "Platform/Mutex.h"
 #include "Platform/Semaphore.h"
 
-namespace igDXRender
+namespace Render
 {
     class D3DManager;
 }
@@ -20,7 +20,7 @@ namespace Luna
     class ThumbnailLoader
     {
     public:
-        ThumbnailLoader( igDXRender::D3DManager* d3dManager, const std::string& thumbnailDirectory );
+        ThumbnailLoader( Render::D3DManager* d3dManager, const std::string& thumbnailDirectory );
         ~ThumbnailLoader();
 
         //
@@ -78,7 +78,7 @@ namespace Luna
         Platform::Locker<Asset::OS_AssetFiles>  m_FileQueue; // The queue of files to load (mutex locked)
         Platform::Semaphore                     m_Signal; // Signalling semaphore to wake up load thread
         bool                                    m_Quit;
-        igDXRender::D3DManager*                 m_D3DManager;
+        Render::D3DManager*                 m_D3DManager;
         std::string                             m_ThumbnailDirectory;
     };
 }

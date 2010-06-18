@@ -10,20 +10,20 @@
 
 using namespace Nocturnal;
 
-igDXContent::RBObjectLoader::RBObjectLoader()
-: igDXRender::ObjectLoader()
+Content::RBObjectLoader::RBObjectLoader()
+: Render::ObjectLoader()
 {
   Reflect::Initialize();
   Content::Initialize();
 }
 
-igDXContent::RBObjectLoader::~RBObjectLoader()
+Content::RBObjectLoader::~RBObjectLoader()
 {
   Content::Cleanup();
   Reflect::Cleanup();
 }
 
-u32 igDXContent::RBObjectLoader::ParseFile( const char* filename, bool winding )
+u32 Content::RBObjectLoader::ParseFile( const char* filename, bool winding )
 {
   Content::Scene scene;
 
@@ -34,8 +34,8 @@ u32 igDXContent::RBObjectLoader::ParseFile( const char* filename, bool winding )
   catch( Nocturnal::Exception& e )
   {
     Log::Warning( e.what() );
-    m_parse_error = igDXRender::PARSE_FILE_FAILED;
-    return igDXRender::PARSE_FILE_FAILED;
+    m_parse_error = Render::PARSE_FILE_FAILED;
+    return Render::PARSE_FILE_FAILED;
   }
 
 
@@ -113,7 +113,7 @@ u32 igDXContent::RBObjectLoader::ParseFile( const char* filename, bool winding )
       if (i == frag_finder.end())
       {
         //A fragment with this shader ID does not exist, create a new fragment        
-        igDXRender::ShaderFrag new_frag;  
+        Render::ShaderFrag new_frag;  
 
         Content::Shader* shader = scene.Get< Content::Shader >( (*shaderItr ) );
 
@@ -148,7 +148,7 @@ u32 igDXContent::RBObjectLoader::ParseFile( const char* filename, bool winding )
       // there is no way we should not be able to find the fragment, we just added them all above
       assert(frag_idx!=frag_finder.end());
 
-      igDXRender::ShaderFrag& frag = m_fragments[ (*frag_idx).second ];
+      Render::ShaderFrag& frag = m_fragments[ (*frag_idx).second ];
     
       frag.m_pIndex.push_back( mesh->m_TriangleVertexIndices[f*3+0]+master_base_position );
       frag.m_pIndex.push_back( mesh->m_TriangleVertexIndices[f*3+1]+master_base_position );
@@ -186,6 +186,6 @@ u32 igDXContent::RBObjectLoader::ParseFile( const char* filename, bool winding )
     }
   }
   
-  m_parse_error = m_parse_warnings?igDXRender::PARSE_FILE_FIXUP:igDXRender::PARSE_FILE_OK;;
+  m_parse_error = m_parse_warnings?Render::PARSE_FILE_FIXUP:Render::PARSE_FILE_OK;;
   return m_parse_error;
 }

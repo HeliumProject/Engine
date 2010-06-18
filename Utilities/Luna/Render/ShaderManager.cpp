@@ -10,7 +10,7 @@
 #include <d3dx9.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Texture::Texture(const char* fname)
+Render::Texture::Texture(const char* fname)
 {
   m_filename = fname;  
   m_timestamp = (u64)-1;
@@ -26,7 +26,7 @@ igDXRender::Texture::Texture(const char* fname)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Texture::~Texture()
+Render::Texture::~Texture()
 {
   if (m_d3d_texture)
   {
@@ -36,7 +36,7 @@ igDXRender::Texture::~Texture()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Shader::Shader(ShaderDatabase* sd, const char* shader)
+Render::Shader::Shader(ShaderManager* sd, const char* shader)
 {
   m_filename = shader;  
   m_timestamp = (u64)-1;
@@ -52,7 +52,7 @@ igDXRender::Shader::Shader(ShaderDatabase* sd, const char* shader)
   m_textures[3] = sd->LoadTexture("@@parallax",D3DFMT_UNKNOWN);
   m_textures[4] = sd->LoadTexture("@@incan",D3DFMT_UNKNOWN);
 
-  m_alpha_type=igDXRender::Shader::ALPHA_OPAQUE;
+  m_alpha_type=Render::Shader::ALPHA_OPAQUE;
   m_glosstint[0] = 1.0f;
   m_glosstint[1] = 1.0f;
   m_glosstint[2] = 1.0f;
@@ -73,14 +73,14 @@ igDXRender::Shader::Shader(ShaderDatabase* sd, const char* shader)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Shader::~Shader()
+Render::Shader::~Shader()
 {
   // reduce the ref counts of the textures this shader was using
-  for (u32 t=0;t<igDXRender::Texture::__SAMPLER_LAST__;t++)
+  for (u32 t=0;t<Render::Texture::__SAMPLER_LAST__;t++)
   {
     if (m_textures[t]!=0xffffffff)
     {
-      igDXRender::Texture* tex = m_sd->ResolveTexture(m_textures[t]);
+      Render::Texture* tex = m_sd->ResolveTexture(m_textures[t]);
       tex->DecrementUsage();
       m_textures[t] = 0xffffffff;
     }
@@ -88,11 +88,11 @@ igDXRender::Shader::~Shader()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Shader::ReplaceTexture(u32 th, u32 slot)
+void Render::Shader::ReplaceTexture(u32 th, u32 slot)
 {
   if (m_textures[slot]!=0xffffffff)
   {
-    igDXRender::Texture* current = m_sd->ResolveTexture(m_textures[slot]);
+    Render::Texture* current = m_sd->ResolveTexture(m_textures[slot]);
     if (current->DecrementUsage()==0)
     {
 #pragma TODO("delete now?")
@@ -103,19 +103,19 @@ void igDXRender::Shader::ReplaceTexture(u32 th, u32 slot)
 
   if (th!=0xffffffff)
   {
-    igDXRender::Texture* ntex = m_sd->ResolveTexture(th);
+    Render::Texture* ntex = m_sd->ResolveTexture(th);
     ntex->IncrementUsage();
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::ShaderDatabase::ShaderDatabase(igDXRender::Render* rc)
-: m_render_class ( rc )
+Render::ShaderManager::ShaderManager(Render::Renderer* rc)
+: m_renderer ( rc )
 {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::ShaderDatabase::~ShaderDatabase()
+Render::ShaderManager::~ShaderManager()
 {
   // go thorugh all the shaders and delete them
   u32 shader_count = (u32)m_loaded_shaders.size();
@@ -156,11 +156,11 @@ static void FillTexture(IDirect3DTexture9* tex, u32 val)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::ShaderDatabase::CreateDefaults()
+void Render::ShaderManager::CreateDefaults()
 {
   printf("Default shaders/textures created\n");
 
-  IDirect3DDevice9* device = m_render_class->GetD3DDevice();
+  IDirect3DDevice9* device = m_renderer->GetD3DDevice();
 
   IDirect3DTexture9* default_base;
   IDirect3DTexture9* default_normal;
@@ -181,12 +181,12 @@ void igDXRender::ShaderDatabase::CreateDefaults()
   FillTexture(default_incan,D3DCOLOR_ARGB(0xff,0x0,0x0,0x0));
   FillTexture(default_gpi,D3DCOLOR_ARGB(0xff,0x00,0x0,0x00));  // alpha, gloss,incan,parallax
 
-  igDXRender::Texture* base_texture = new igDXRender::Texture("@@base");
-  igDXRender::Texture* normal_texture = new igDXRender::Texture("@@normal");
-  igDXRender::Texture* gloss_texture = new igDXRender::Texture("@@gloss");
-  igDXRender::Texture* parallax_texture = new igDXRender::Texture("@@parallax");
-  igDXRender::Texture* incan_texture = new igDXRender::Texture("@@incan");
-  igDXRender::Texture* gpi_texture = new igDXRender::Texture("@@gpi");
+  Render::Texture* base_texture = new Render::Texture("@@base");
+  Render::Texture* normal_texture = new Render::Texture("@@normal");
+  Render::Texture* gloss_texture = new Render::Texture("@@gloss");
+  Render::Texture* parallax_texture = new Render::Texture("@@parallax");
+  Render::Texture* incan_texture = new Render::Texture("@@incan");
+  Render::Texture* gpi_texture = new Render::Texture("@@gpi");
 
   base_texture->m_d3d_texture = default_base;
   m_loaded_textures.push_back(base_texture);
@@ -207,13 +207,13 @@ void igDXRender::ShaderDatabase::CreateDefaults()
   m_loaded_textures.push_back(gpi_texture);
 
   // now create the shader (this will internally use the default textures)
-  igDXRender::Shader* sh = new igDXRender::Shader(this,"@@default");
+  Render::Shader* sh = new Render::Shader(this,"@@default");
   AddShader(sh);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // add a shader pointer to the array of loaded shaders
-u32 igDXRender::ShaderDatabase::AddShader(igDXRender::Shader* sh)
+u32 Render::ShaderManager::AddShader(Render::Shader* sh)
 {
   u32 shader_count = (u32)m_loaded_shaders.size();
   u32 handle = 0xffffffff;
@@ -241,7 +241,7 @@ u32 igDXRender::ShaderDatabase::AddShader(igDXRender::Shader* sh)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // shader is an XML file
-u32 igDXRender::ShaderDatabase::LoadNewShader( const char* fname, ShaderLoaderPtr loader )
+u32 Render::ShaderManager::LoadNewShader( const char* fname, ShaderLoaderPtr loader )
 {
   Nocturnal::Path shaderPath( fname );
 
@@ -273,7 +273,7 @@ u32 igDXRender::ShaderDatabase::LoadNewShader( const char* fname, ShaderLoaderPt
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::ShaderDatabase::LoadShader(const char* fname, bool inc, ShaderLoaderPtr loader)
+u32 Render::ShaderManager::LoadShader(const char* fname, bool inc, ShaderLoaderPtr loader)
 {
   u32 handle = FindShader(fname);
 
@@ -292,7 +292,7 @@ u32 igDXRender::ShaderDatabase::LoadShader(const char* fname, bool inc, ShaderLo
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::ShaderDatabase::FindShader(const char* fname)
+u32 Render::ShaderManager::FindShader(const char* fname)
 {
   u32 crc = StringHashDJB2(fname);
 
@@ -314,21 +314,21 @@ u32 igDXRender::ShaderDatabase::FindShader(const char* fname)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::ShaderDatabase::DuplicateShader(u32 handle,const char* new_shader)
+u32 Render::ShaderManager::DuplicateShader(u32 handle,const char* new_shader)
 {
   // convert the handle to a pointer
-  igDXRender::Shader* sh = ResolveShader(handle);
+  Render::Shader* sh = ResolveShader(handle);
 
   // this seems like a valid shader, allocate a shader
-  igDXRender::Shader* newsh = new igDXRender::Shader(this,new_shader);
+  Render::Shader* newsh = new Render::Shader(this,new_shader);
  
   // copy the textures and increment the usage on any that are valid
-  for (u32 t=0;t<igDXRender::Texture::__SAMPLER_LAST__;t++)
+  for (u32 t=0;t<Render::Texture::__SAMPLER_LAST__;t++)
   {
     newsh->m_textures[t] = sh->m_textures[t];
     if (sh->m_textures[t]!=0xffffffff)
     {
-      igDXRender::Texture* tex = ResolveTexture(sh->m_textures[t]);
+      Render::Texture* tex = ResolveTexture(sh->m_textures[t]);
       tex->IncrementUsage();
     }
   }
@@ -354,16 +354,16 @@ u32 igDXRender::ShaderDatabase::DuplicateShader(u32 handle,const char* new_shade
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::ShaderDatabase::LoadTexture(const char* fname,D3DFORMAT fmt, u32 levels,bool inc)
+u32 Render::ShaderManager::LoadTexture(const char* fname,D3DFORMAT fmt, u32 levels,bool inc)
 {
   u32 handle = FindTexture(fname);
 
   if (handle==0xffffffff)
   {
     // wasn't found so load the new texture
-    igDXRender::Texture* t = new igDXRender::Texture(fname);
+    Render::Texture* t = new Render::Texture(fname);
 
-    if (FAILED(D3DXCreateTextureFromFileExA(m_render_class->GetD3DDevice(),fname,0,0,levels,0,fmt,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,0,0,0,&t->m_d3d_texture)))
+    if (FAILED(D3DXCreateTextureFromFileExA(m_renderer->GetD3DDevice(),fname,0,0,levels,0,fmt,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,0,0,0,&t->m_d3d_texture)))
     {
       printf("Failed to load texture '%s'\n",fname);
       delete t;
@@ -383,7 +383,7 @@ u32 igDXRender::ShaderDatabase::LoadTexture(const char* fname,D3DFORMAT fmt, u32
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool igDXRender::ShaderDatabase::LoadTextureWithSettings(const igDXRender::TextureSettings& textureSettings, igDXRender::Shader* shader, u32 sampler)
+bool Render::ShaderManager::LoadTextureWithSettings(const Render::TextureSettings& textureSettings, Render::Shader* shader, u32 sampler)
 {
   u32 handle = LoadTexture( textureSettings.m_Path.c_str(), textureSettings.m_Format, textureSettings.m_Levels );
 
@@ -392,7 +392,7 @@ bool igDXRender::ShaderDatabase::LoadTextureWithSettings(const igDXRender::Textu
     
   UpdateTextureSettings(handle, textureSettings);
 
-  igDXRender::Texture* texture = ResolveTexture( handle );
+  Render::Texture* texture = ResolveTexture( handle );
   texture->IncrementUsage();
   shader->m_textures[sampler]=handle;
 
@@ -400,9 +400,9 @@ bool igDXRender::ShaderDatabase::LoadTextureWithSettings(const igDXRender::Textu
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::ShaderDatabase::UpdateTextureSettings(u32 handle, const igDXRender::TextureSettings& textureSettings)
+void Render::ShaderManager::UpdateTextureSettings(u32 handle, const Render::TextureSettings& textureSettings)
 {
-  igDXRender::Texture* texture = ResolveTexture( handle );
+  Render::Texture* texture = ResolveTexture( handle );
   texture->m_wrap_u = textureSettings.m_WrapU;
   texture->m_wrap_v = textureSettings.m_WrapV;
   texture->m_filter = textureSettings.m_Filter;
@@ -417,7 +417,7 @@ void igDXRender::ShaderDatabase::UpdateTextureSettings(u32 handle, const igDXRen
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool igDXRender::ShaderDatabase::ReloadTexture( const char* fname )
+bool Render::ShaderManager::ReloadTexture( const char* fname )
 {
   u32 handle = FindTexture( fname );
   if ( handle == 0xffffffff )
@@ -430,7 +430,7 @@ bool igDXRender::ShaderDatabase::ReloadTexture( const char* fname )
   u32 level_count = m_loaded_textures[ handle ]->m_d3d_texture->GetLevelCount();
 
   u32 texture_count = (u32) m_loaded_textures.size();
-  igDXRender::Texture* old_texture = m_loaded_textures[ handle ];
+  Render::Texture* old_texture = m_loaded_textures[ handle ];
   m_loaded_textures[ handle ] = 0;
   
   u32 new_handle = LoadTexture(fname, fmt, level_count, false);
@@ -455,7 +455,7 @@ bool igDXRender::ShaderDatabase::ReloadTexture( const char* fname )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::ShaderDatabase::FindTexture(const char* fname)
+u32 Render::ShaderManager::FindTexture(const char* fname)
 {
   // NOTE: We only include the name in the CRC, we really should include other info such as the format
   u32 crc = StringHashDJB2(fname);
@@ -478,19 +478,19 @@ u32 igDXRender::ShaderDatabase::FindTexture(const char* fname)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Texture* igDXRender::ShaderDatabase::ResolveTexture(u32 handle)
+Render::Texture* Render::ShaderManager::ResolveTexture(u32 handle)
 {
   return m_loaded_textures[handle];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Shader* igDXRender::ShaderDatabase::ResolveShader(u32 handle)
+Render::Shader* Render::ShaderManager::ResolveShader(u32 handle)
 {
   return m_loaded_shaders[handle];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::ShaderDatabase::SetShaderDefaultTexture(const char* shaderFilename, u32 textureIndex)
+void Render::ShaderManager::SetShaderDefaultTexture(const char* shaderFilename, u32 textureIndex)
 {
   u32 shaderHandle = FindShader( shaderFilename );
   if ( shaderHandle == 0xffffffff )
@@ -498,24 +498,24 @@ void igDXRender::ShaderDatabase::SetShaderDefaultTexture(const char* shaderFilen
     return;
   }
 
-  igDXRender::Shader* shader = ResolveShader( shaderHandle );
+  Render::Shader* shader = ResolveShader( shaderHandle );
   NOC_ASSERT( shader );
 
   switch ( textureIndex )
   {
-    case igDXRender::Texture::SAMPLER_GPI_MAP:
+    case Render::Texture::SAMPLER_GPI_MAP:
       shader->m_flags &= ~SHDR_FLAG_GPI_MAP;
-      shader->ReplaceTexture( FindTexture( "@@gloss" ), igDXRender::Texture::SAMPLER_GLOSS_MAP );
-      shader->ReplaceTexture( FindTexture( "@@parallax" ), igDXRender::Texture::SAMPLER_PARALLAX_MAP );
-      shader->ReplaceTexture( FindTexture( "@@incan" ), igDXRender::Texture::SAMPLER_INCAN_MAP );
+      shader->ReplaceTexture( FindTexture( "@@gloss" ), Render::Texture::SAMPLER_GLOSS_MAP );
+      shader->ReplaceTexture( FindTexture( "@@parallax" ), Render::Texture::SAMPLER_PARALLAX_MAP );
+      shader->ReplaceTexture( FindTexture( "@@incan" ), Render::Texture::SAMPLER_INCAN_MAP );
     break;
     
-    case igDXRender::Texture::SAMPLER_NORMAL_MAP:
-      shader->ReplaceTexture( FindTexture( "@@normal" ), igDXRender::Texture::SAMPLER_NORMAL_MAP );
+    case Render::Texture::SAMPLER_NORMAL_MAP:
+      shader->ReplaceTexture( FindTexture( "@@normal" ), Render::Texture::SAMPLER_NORMAL_MAP );
     break;
     
-    case igDXRender::Texture::SAMPLER_BASE_MAP:
-      shader->ReplaceTexture( FindTexture( "@@base" ), igDXRender::Texture::SAMPLER_BASE_MAP );
+    case Render::Texture::SAMPLER_BASE_MAP:
+      shader->ReplaceTexture( FindTexture( "@@base" ), Render::Texture::SAMPLER_BASE_MAP );
     break;
     
     default:
@@ -524,7 +524,7 @@ void igDXRender::ShaderDatabase::SetShaderDefaultTexture(const char* shaderFilen
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::ShaderDatabase::UpdateShaderTexture( const char* shaderFilename, u32 textureIndex, const igDXRender::TextureSettings& settings )
+void Render::ShaderManager::UpdateShaderTexture( const char* shaderFilename, u32 textureIndex, const Render::TextureSettings& settings )
 {
   u32 shader_handle = FindShader( shaderFilename );
   if ( shader_handle == 0xffffffff )
@@ -532,7 +532,7 @@ void igDXRender::ShaderDatabase::UpdateShaderTexture( const char* shaderFilename
     return;
   }
 
-  igDXRender::Shader* sh = ResolveShader( shader_handle );
+  Render::Shader* sh = ResolveShader( shader_handle );
   NOC_ASSERT( sh );
 
   u32 texture_handle = FindTexture( settings.m_Path.c_str() );
@@ -542,7 +542,7 @@ void igDXRender::ShaderDatabase::UpdateShaderTexture( const char* shaderFilename
     return;
   }
 
-  igDXRender::Texture* tex = ResolveTexture( texture_handle );
+  Render::Texture* tex = ResolveTexture( texture_handle );
   NOC_ASSERT( tex );
 
   if ( tex->m_format != settings.m_Format )
@@ -558,14 +558,14 @@ void igDXRender::ShaderDatabase::UpdateShaderTexture( const char* shaderFilename
     sh->ReplaceTexture( texture_handle, textureIndex );
   }
     
-  if ( textureIndex == igDXRender::Texture::SAMPLER_GPI_MAP )
+  if ( textureIndex == Render::Texture::SAMPLER_GPI_MAP )
   {
     sh->m_flags |= SHDR_FLAG_GPI_MAP;
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::ShaderDatabase::GetShaderFilenames( V_string& filenames )
+void Render::ShaderManager::GetShaderFilenames( V_string& filenames )
 {
   for( u32 i = 0; i < m_loaded_shaders.size(); ++i )
   {
@@ -574,7 +574,7 @@ void igDXRender::ShaderDatabase::GetShaderFilenames( V_string& filenames )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::ShaderDatabase::GetTextureFilenames( V_string& filenames )
+void Render::ShaderManager::GetTextureFilenames( V_string& filenames )
 {
   for( u32 i = 0; i < m_loaded_textures.size(); ++i )
   {

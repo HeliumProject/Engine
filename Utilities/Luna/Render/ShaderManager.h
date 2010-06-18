@@ -5,7 +5,7 @@
 
 #include "ShaderLoader.h"
 
-namespace igDXRender
+namespace Render
 {
   class Texture
   {
@@ -81,7 +81,7 @@ namespace igDXRender
       , m_Levels( 0 )
       , m_WrapU( D3DTADDRESS_CLAMP )
       , m_WrapV( D3DTADDRESS_CLAMP )
-      , m_Filter( igDXRender::Texture::FILTER_LINEAR )
+      , m_Filter( Render::Texture::FILTER_LINEAR )
       , m_Anisotropy( 0 )
       , m_MipBias( 0.0f )
     {
@@ -93,7 +93,7 @@ namespace igDXRender
       m_Format = D3DFMT_UNKNOWN;
       m_Levels = 0;
       m_WrapU = m_WrapV = D3DTADDRESS_CLAMP;
-      m_Filter = igDXRender::Texture::FILTER_LINEAR;
+      m_Filter = Render::Texture::FILTER_LINEAR;
       m_Anisotropy = 0;
       m_MipBias = 0.0f;
     }
@@ -106,7 +106,7 @@ namespace igDXRender
   class Shader
   {
   public:
-    Shader(class ShaderDatabase* sd, const char* fname);
+    Shader(class ShaderManager* sd, const char* fname);
     ~Shader();
 
     u32 IncrementUsage()
@@ -134,7 +134,7 @@ namespace igDXRender
     u32           m_flags;
 
     // Use ReplaceTexture() to modify these so the ref counting works
-    class ShaderDatabase* m_sd;
+    class ShaderManager*  m_sd;
     u32                   m_textures[Texture::__SAMPLER_LAST__];
 
     // These values can be modified directly by the UI
@@ -159,11 +159,11 @@ namespace igDXRender
   };
 
   // there is only a single shader database regardless of how many meshes are loaded.
-  class ShaderDatabase
+  class ShaderManager
   {
   public:
-    ShaderDatabase(class Render* render);
-    ~ShaderDatabase();
+    ShaderManager(class Renderer* render);
+    ~ShaderManager();
 
     // don't call directly
     void CreateDefaults();
@@ -185,8 +185,8 @@ namespace igDXRender
 
     // load a single texture, get the handle
     u32 LoadTexture(const char* fname,D3DFORMAT fmt,u32 levels=0,bool inc=false);
-    bool LoadTextureWithSettings(const igDXRender::TextureSettings& textureSettings, igDXRender::Shader* shader, u32 sampler);
-    void UpdateTextureSettings(u32 handle, const igDXRender::TextureSettings& textureSettings);
+    bool LoadTextureWithSettings(const Render::TextureSettings& textureSettings, Render::Shader* shader, u32 sampler);
+    void UpdateTextureSettings(u32 handle, const Render::TextureSettings& textureSettings);
     bool ReloadTexture( const char* fname );
 
     // return the handle of the texture with the given name (0xffffffff if it cannot be found)
@@ -195,12 +195,12 @@ namespace igDXRender
     Shader* ResolveShader(u32 handle);
     
     void SetShaderDefaultTexture( const char* shaderFilename, u32 textureIndex );
-    void UpdateShaderTexture( const char* shaderFilename, u32 textureIndex, const igDXRender::TextureSettings& settings );
+    void UpdateShaderTexture( const char* shaderFilename, u32 textureIndex, const Render::TextureSettings& settings );
     void GetShaderFilenames( V_string& filenames );
     void GetTextureFilenames( V_string& filenames );
     
     std::vector<Shader*>   m_loaded_shaders;
     std::vector<Texture*>  m_loaded_textures;
-    Render*                m_render_class;
+    Renderer*              m_renderer;
   };
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace igDXRender
+namespace Render
 {
   // our math types are just floats
   struct vec4

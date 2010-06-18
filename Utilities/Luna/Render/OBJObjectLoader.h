@@ -12,7 +12,7 @@
 
 #include "ObjectLoader.h"
 
-namespace igDXRender
+namespace Render
 {
   class OBJObjectLoader : public ObjectLoader
   {

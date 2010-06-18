@@ -7,7 +7,7 @@
 #include <set>
 
 //  Index gathering and ordering structure
-namespace igDXRender
+namespace Render
 {
   struct IdxSet 
   {
@@ -44,17 +44,17 @@ namespace igDXRender
   };
 }
 
-igDXRender::ObjectLoader::ObjectLoader()
+Render::ObjectLoader::ObjectLoader()
   : m_posSize( 3 )
   , m_tcSize( 2 )
 {
 }
 
-igDXRender::ObjectLoader::~ObjectLoader()
+Render::ObjectLoader::~ObjectLoader()
 {
 }
 
-void igDXRender::ObjectLoader::Compile(bool flip)
+void Render::ObjectLoader::Compile(bool flip)
 {
   // make sure the mesh is fully specified
   InsertColors();
@@ -155,7 +155,7 @@ void igDXRender::ObjectLoader::Compile(bool flip)
 
 //////////////////////////////////////////////////////////////////////
 // Insert dummy white colors in the mesh if it wasn't loaded with any
-void igDXRender::ObjectLoader::InsertColors()
+void Render::ObjectLoader::InsertColors()
 {
   // we already have colors
   if (m_colors.size()>0)
@@ -179,7 +179,7 @@ void igDXRender::ObjectLoader::InsertColors()
 
 //////////////////////////////////////////////////////////////////////
 // Insert spherically mapped UVs
-void igDXRender::ObjectLoader::InsertTexCoords()
+void Render::ObjectLoader::InsertTexCoords()
 {
   // we already have colors
   if (m_texcoords.size()>0)
@@ -208,7 +208,7 @@ void igDXRender::ObjectLoader::InsertTexCoords()
 
 
 //////////////////////////////////////////////////////////////////////
-void igDXRender::ObjectLoader::SetNoTangents()
+void Render::ObjectLoader::SetNoTangents()
 {
   // delete the existing tangents
 
@@ -230,7 +230,7 @@ void igDXRender::ObjectLoader::SetNoTangents()
 
 // compute tangents in the U direction (binormal is V direction)
 //////////////////////////////////////////////////////////////////////
-void igDXRender::ObjectLoader::ComputeTangents() 
+void Render::ObjectLoader::ComputeTangents() 
 {
   //make sure tangents don't already exist
   if ( m_sTangents.size()>0) 
@@ -399,7 +399,7 @@ void igDXRender::ObjectLoader::ComputeTangents()
 //
 //compute vertex normals
 //////////////////////////////////////////////////////////////////////
-void igDXRender::ObjectLoader::ComputeNormals() 
+void Render::ObjectLoader::ComputeNormals() 
 {
     // don't recompute normals
   if (m_normals.size()>0)
@@ -535,7 +535,7 @@ void igDXRender::ObjectLoader::ComputeNormals()
 
 
 //////////////////////////////////////////////////////////////////////
-void igDXRender::ObjectLoader::ComputeBoundingBox( D3DXVECTOR3 &minVal, D3DXVECTOR3 &maxVal) 
+void Render::ObjectLoader::ComputeBoundingBox( D3DXVECTOR3 &minVal, D3DXVECTOR3 &maxVal) 
 {
   if (m_positions.empty())
       return;
@@ -562,7 +562,7 @@ void igDXRender::ObjectLoader::ComputeBoundingBox( D3DXVECTOR3 &minVal, D3DXVECT
 }
 
 //////////////////////////////////////////////////////////////////////
-void igDXRender::ObjectLoader::Rescale( float radius, D3DXVECTOR3& r, D3DXVECTOR3& center) 
+void Render::ObjectLoader::Rescale( float radius, D3DXVECTOR3& r, D3DXVECTOR3& center) 
 {
   if ( m_positions.empty())
       return;
@@ -580,7 +580,7 @@ void igDXRender::ObjectLoader::Rescale( float radius, D3DXVECTOR3& r, D3DXVECTOR
 }
 
 //////////////////////////////////////////////////////////////////////
-u32 igDXRender::ObjectLoader::GetNumFragments( int bangleIndex )
+u32 Render::ObjectLoader::GetNumFragments( int bangleIndex )
 {
   if ( bangleIndex < 0 )
   {
@@ -588,7 +588,7 @@ u32 igDXRender::ObjectLoader::GetNumFragments( int bangleIndex )
   }
   
   u32 numFragments = 0;
-  for ( std::vector<igDXRender::ShaderFrag>::iterator fragItr = m_fragments.begin(), fragEnd = m_fragments.end(); fragItr != fragEnd; ++fragItr )
+  for ( std::vector<Render::ShaderFrag>::iterator fragItr = m_fragments.begin(), fragEnd = m_fragments.end(); fragItr != fragEnd; ++fragItr )
   {
     if ( (*fragItr).m_bangle_index == bangleIndex )
     {

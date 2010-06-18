@@ -4,14 +4,14 @@
 
 using namespace Luna;
 
-Thumbnail::Thumbnail( igDXRender::D3DManager* d3dManager )
+Thumbnail::Thumbnail( Render::D3DManager* d3dManager )
 : m_D3DManager( d3dManager )
 , m_Texture( NULL )
 , m_IsFromIcon( false )
 {
 }
 
-Thumbnail::Thumbnail( igDXRender::D3DManager* d3dManager, IDirect3DTexture9* texture )
+Thumbnail::Thumbnail( Render::D3DManager* d3dManager, IDirect3DTexture9* texture )
 : m_D3DManager( d3dManager )
 , m_Texture( texture )
 , m_IsFromIcon( false )

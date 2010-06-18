@@ -5,7 +5,7 @@
 #include "ShaderManager.h"
 #include "RenderSceneManager.h"
 
-namespace igDXRender
+namespace Render
 {
   enum
   {
@@ -32,11 +32,11 @@ namespace igDXRender
   };
 
   // Only create a single renderer
-  class Render : public D3DManager
+  class Renderer : public D3DManager
   {
   public:
-    Render();
-    ~Render();
+    Renderer();
+    ~Renderer();
 
     bool Init(HWND hwnd, u32 width, u32 height, u32 flags);
     u32 GetPixel(u32 x, u32 y);
@@ -56,6 +56,6 @@ namespace igDXRender
     void RenderScenes(int num, Scene** scenes);
 
     // the master shader database
-    ShaderDatabase*          m_shader_database;
+    ShaderManager m_shader_manager;
   };
 }

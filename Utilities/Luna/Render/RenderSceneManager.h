@@ -8,14 +8,14 @@
 #include "Environment.h"
 #include "RenderMesh.h"
 
-namespace igDXRender
+namespace Render
 {
-  class Render;
+  class Renderer;
 
   class Scene
   {
   public:
-    Scene(Render* render);
+    Scene(Renderer* render);
     ~Scene();
 
     void SetMeshHandle(u32 handle);
@@ -44,7 +44,7 @@ namespace igDXRender
     static void RemoveAllEnvironments();
 
     // render class
-    Render*               m_render_class;
+    Renderer*               m_renderer;
 
     // handle to an environment
     u32                   m_environment;

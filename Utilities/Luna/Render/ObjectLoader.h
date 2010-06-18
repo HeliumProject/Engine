@@ -3,7 +3,7 @@
 #include "RenderMesh.h"
 #include "Foundation/Memory/SmartPtr.h"
 
-namespace igDXRender
+namespace Render
 {
   enum
   {

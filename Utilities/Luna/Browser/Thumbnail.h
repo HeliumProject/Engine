@@ -2,7 +2,7 @@
 
 #include "Foundation/Memory/SmartPtr.h"
 
-namespace igDXRender
+namespace Render
 {
   class D3DManager;
 }
@@ -12,8 +12,8 @@ namespace Luna
   class Thumbnail : public Nocturnal::RefCountBase< Thumbnail >
   {
   public:
-    Thumbnail( igDXRender::D3DManager* d3dManager );
-    Thumbnail( igDXRender::D3DManager* d3dManager, IDirect3DTexture9* texture );
+    Thumbnail( Render::D3DManager* d3dManager );
+    Thumbnail( Render::D3DManager* d3dManager, IDirect3DTexture9* texture );
     virtual ~Thumbnail();
 
     bool FromIcon( HICON icon );
@@ -25,7 +25,7 @@ namespace Luna
     }
 
   private:
-    igDXRender::D3DManager* m_D3DManager;
+    Render::D3DManager* m_D3DManager;
     IDirect3DTexture9* m_Texture;
     bool m_IsFromIcon;
   };

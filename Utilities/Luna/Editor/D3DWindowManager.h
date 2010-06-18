@@ -27,7 +27,7 @@ namespace Luna
   };
   typedef Nocturnal::Signature< void, const DeviceStateArgs& > DeviceStateSignature;
 
-  class D3DWindowManager : public igDXRender::D3DManager
+  class D3DWindowManager : public Render::D3DManager
   {
   public:
     D3DWindowManager();

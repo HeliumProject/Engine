@@ -3,9 +3,9 @@
 #include "Render/Platform.h"
 #include "Render/ObjectLoader.h"
 
-namespace igDXContent
+namespace Content
 {
-  class RBObjectLoader : public igDXRender::ObjectLoader
+  class RBObjectLoader : public Render::ObjectLoader
   {
   public:
     RBObjectLoader();

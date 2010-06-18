@@ -7,27 +7,27 @@
 
 #include "Foundation/File/Path.h"
 
-static std::vector<igDXRender::Mesh*>         g_loaded_meshes;
-static std::vector<igDXRender::Environment*>  g_loaded_environments;
+static std::vector<Render::Mesh*>         g_loaded_meshes;
+static std::vector<Render::Environment*>  g_loaded_environments;
 static u32 g_init_count = 0;
 
 // fwd
-void CreateDefaultMeshes(igDXRender::Render* render);
-void CreateDefaultEnvironments(igDXRender::Render* render);
+void CreateDefaultMeshes(Render::Renderer* render);
+void CreateDefaultEnvironments(Render::Renderer* render);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Mesh* igDXRender::Scene::ResolveMeshHandle( u32 handle )
+Render::Mesh* Render::Scene::ResolveMeshHandle( u32 handle )
 {
   return g_loaded_meshes[handle];
 }
 
-igDXRender::Environment* igDXRender::Scene::ResolveEnvironmentHandle( u32 handle )
+Render::Environment* Render::Scene::ResolveEnvironmentHandle( u32 handle )
 {
   return g_loaded_environments[handle];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Scene::Scene(Render* render)
+Render::Scene::Scene(Renderer* render)
 {
   if ( ++g_init_count == 1 )
   {
@@ -54,7 +54,7 @@ igDXRender::Scene::Scene(Render* render)
   m_ypos=0;
   m_width = render->GetWidth();
   m_height = render->GetHeight();
-  m_render_class = render;
+  m_renderer = render;
 
   // automatically scale the scene to unit scale and translate to the origin
   m_scene_scale = 1.0f;
@@ -62,7 +62,7 @@ igDXRender::Scene::Scene(Render* render)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Scene::~Scene()
+Render::Scene::~Scene()
 {
   // decrement the mesh
   SetMeshHandle( 0xffffffff );
@@ -70,7 +70,7 @@ igDXRender::Scene::~Scene()
   // decrement the env
   if (m_environment!=0xffffffff)
   {
-    igDXRender::Environment* env = ResolveEnvironmentHandle(m_environment);
+    Render::Environment* env = ResolveEnvironmentHandle(m_environment);
     if (env->DecrementUsage()==0)
     {
       // delete the environment
@@ -96,7 +96,7 @@ igDXRender::Scene::~Scene()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Scene::SetMeshHandle(u32 handle)
+void Render::Scene::SetMeshHandle(u32 handle)
 {
   if (m_mesh_handle!=0xffffffff)
   {
@@ -138,7 +138,7 @@ void igDXRender::Scene::SetMeshHandle(u32 handle)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Scene::SetEnvironmentHandle(u32 handle)
+void Render::Scene::SetEnvironmentHandle(u32 handle)
 {
   if (m_environment!=0xffffffff)
   {
@@ -157,7 +157,7 @@ void igDXRender::Scene::SetEnvironmentHandle(u32 handle)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::Scene::LoadNewMesh( const char* fname, ObjectLoaderPtr loader, int bangleIndex )
+u32 Render::Scene::LoadNewMesh( const char* fname, ObjectLoaderPtr loader, int bangleIndex )
 {
   Nocturnal::Path path( fname );
 
@@ -210,7 +210,7 @@ u32 igDXRender::Scene::LoadNewMesh( const char* fname, ObjectLoaderPtr loader, i
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::Scene::LoadMesh(const char* fname,ObjectLoaderPtr loader, int bangleIndex)
+u32 Render::Scene::LoadMesh(const char* fname,ObjectLoaderPtr loader, int bangleIndex)
 {
   u32 crc = StringHashDJB2(fname);
 
@@ -238,7 +238,7 @@ u32 igDXRender::Scene::LoadMesh(const char* fname,ObjectLoaderPtr loader, int ba
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::Scene::ExtractMesh(const char* name, ObjectLoaderPtr loader, int bangleIndex)
+u32 Render::Scene::ExtractMesh(const char* name, ObjectLoaderPtr loader, int bangleIndex)
 {
   char meshName[ 1024 ];
   const char* fname = name;
@@ -252,7 +252,7 @@ u32 igDXRender::Scene::ExtractMesh(const char* name, ObjectLoaderPtr loader, int
 
   u32 frag_count = (u32)loader->m_fragments.size();
 
-  igDXRender::Mesh* result = new igDXRender::Mesh(fname);
+  Render::Mesh* result = new Render::Mesh(fname);
 
   loader->ComputeBoundingBox(result->m_min,result->m_max);
   D3DXVECTOR3 r = 0.5f*(result->m_max - result->m_min);
@@ -273,7 +273,7 @@ u32 igDXRender::Scene::ExtractMesh(const char* name, ObjectLoaderPtr loader, int
   result->m_vert_count = (u32)loader->m_vertices.size()/loader->m_vtxSize;  // size is in floats
   result->m_index_count = total_indices;
   
-  u32 bytes = result->m_vert_count*sizeof(igDXRender::MeshVertex);
+  u32 bytes = result->m_vert_count*sizeof(Render::MeshVertex);
   if ( bytes == 0 )
   {
     printf("Possible legacy file. '%s'\n",fname);
@@ -281,7 +281,7 @@ u32 igDXRender::Scene::ExtractMesh(const char* name, ObjectLoaderPtr loader, int
   }
   u32 vec_bytes = result->m_vert_count*sizeof(VertexDebug)*2;
 
-  IDirect3DDevice9* device = m_render_class->GetD3DDevice();
+  IDirect3DDevice9* device = m_renderer->GetD3DDevice();
 
   device->CreateVertexBuffer(bytes,D3DUSAGE_WRITEONLY,0,D3DPOOL_MANAGED,&result->m_verts,0);
   device->CreateIndexBuffer(result->m_index_count*2,D3DUSAGE_WRITEONLY,D3DFMT_INDEX16,D3DPOOL_MANAGED,&result->m_indices,0);
@@ -290,7 +290,7 @@ u32 igDXRender::Scene::ExtractMesh(const char* name, ObjectLoaderPtr loader, int
   device->CreateVertexBuffer(vec_bytes,D3DUSAGE_WRITEONLY,0,D3DPOOL_MANAGED,&result->m_dbg_tangent,0);
 
 	// vertex buffer
-  igDXRender::MeshVertex *p;
+  Render::MeshVertex *p;
   if ( !result->m_verts )
   {
     printf("Possible legacy file. '%s'\n",fname);
@@ -353,9 +353,9 @@ u32 igDXRender::Scene::ExtractMesh(const char* name, ObjectLoaderPtr loader, int
   result->m_dbg_tangent->Unlock();
 
 
-  result->m_vert_size = sizeof(igDXRender::MeshVertex);
+  result->m_vert_size = sizeof(Render::MeshVertex);
   result->m_fragment_count = loader->GetNumFragments( bangleIndex );
-  result->m_fragments = new igDXRender::Fragment[result->m_fragment_count];
+  result->m_fragments = new Render::Fragment[result->m_fragment_count];
 
   u16 *idx;
   result->m_indices->Lock(0,0,(void**)&idx,0);    
@@ -382,10 +382,10 @@ u32 igDXRender::Scene::ExtractMesh(const char* name, ObjectLoaderPtr loader, int
     }
 
     u32 idx_count = (u32)loader->m_fragments[f].m_indices.size();
-    result->m_fragments[currentFragment].m_orig_shader = m_render_class->m_shader_database->LoadShader(shader_name, true, loader->m_fragments[ f ].m_shader_loader);
+    result->m_fragments[currentFragment].m_orig_shader = m_renderer->m_shader_manager.LoadShader(shader_name, true, loader->m_fragments[ f ].m_shader_loader);
     if (result->m_fragments[currentFragment].m_orig_shader==0xffffffff)
     {
-      result->m_fragments[currentFragment].m_orig_shader = m_render_class->m_shader_database->LoadShader("@@default", true);
+      result->m_fragments[currentFragment].m_orig_shader = m_renderer->m_shader_manager.LoadShader("@@default", true);
     }
     result->m_fragments[currentFragment].m_base_index = pos;
     result->m_fragments[currentFragment].m_prim_count = idx_count/3;
@@ -415,13 +415,13 @@ u32 igDXRender::Scene::ExtractMesh(const char* name, ObjectLoaderPtr loader, int
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::Scene::LoadNewEnvironment(const char* fname,u32 clear_color)
+u32 Render::Scene::LoadNewEnvironment(const char* fname,u32 clear_color)
 {
   float r[9];
   float g[9];
   float b[9];
   IDirect3DCubeTexture9* cube_tex;
-  if (FAILED(D3DXCreateCubeTextureFromFileExA(m_render_class->GetD3DDevice(),fname,0,0,0,D3DFMT_A16B16G16R16F,D3DPOOL_MANAGED ,D3DX_DEFAULT ,D3DX_DEFAULT ,0,0,0,&cube_tex)))
+  if (FAILED(D3DXCreateCubeTextureFromFileExA(m_renderer->GetD3DDevice(),fname,0,0,0,D3DFMT_A16B16G16R16F,D3DPOOL_MANAGED ,D3DX_DEFAULT ,D3DX_DEFAULT ,0,0,0,&cube_tex)))
   {
     printf("failed to load cubemap '%s'\n",fname);
     return 0xffffffff;
@@ -440,7 +440,7 @@ u32 igDXRender::Scene::LoadNewEnvironment(const char* fname,u32 clear_color)
   D3DXSHRotate(b1,3,&mat,b);
 
 
-  igDXRender::Environment* env = new igDXRender::Environment(fname);
+  Render::Environment* env = new Render::Environment(fname);
   env->m_env_texture = cube_tex;
   env->m_clearcolor = clear_color;
 
@@ -458,7 +458,7 @@ u32 igDXRender::Scene::LoadNewEnvironment(const char* fname,u32 clear_color)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::Scene::LoadEnvironment(const char* fname, u32 clear_color)
+u32 Render::Scene::LoadEnvironment(const char* fname, u32 clear_color)
 {
   u32 crc = StringHashDJB2(fname);
 
@@ -661,21 +661,21 @@ inline D3DXVECTOR3 deriv_uv(D3DXVECTOR3 (*f)(float,float), float u, float v)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Mesh* InitMesh(igDXRender::Render* render,const char* name,D3DXVECTOR3 (*func)(float,float),i32 num_u, i32 num_v)
+Render::Mesh* InitMesh(Render::Renderer* render,const char* name,D3DXVECTOR3 (*func)(float,float),i32 num_u, i32 num_v)
 {
-  igDXRender::Mesh* result = new igDXRender::Mesh(name);
+  Render::Mesh* result = new Render::Mesh(name);
 
   result->m_vert_count = (num_u + 1) * (num_v + 1);
   result->m_index_count = num_u * num_v * 6;
 
   IDirect3DDevice9* device = render->GetD3DDevice();
 
-  device->CreateVertexBuffer(result->m_vert_count*sizeof(igDXRender::MeshVertex),D3DUSAGE_WRITEONLY,0,D3DPOOL_MANAGED,&result->m_verts,0);
+  device->CreateVertexBuffer(result->m_vert_count*sizeof(Render::MeshVertex),D3DUSAGE_WRITEONLY,0,D3DPOOL_MANAGED,&result->m_verts,0);
   device->CreateIndexBuffer(result->m_index_count*2,D3DUSAGE_WRITEONLY,D3DFMT_INDEX16,D3DPOOL_MANAGED,&result->m_indices,0);
 
 	// vertex buffer
 	{
-    igDXRender::MeshVertex *p;
+    Render::MeshVertex *p;
     result->m_verts->Lock(0,0,(void**)&p,0);
 
 		for (i32 j = 0; j <= num_v; j++)
@@ -746,10 +746,10 @@ igDXRender::Mesh* InitMesh(igDXRender::Render* render,const char* name,D3DXVECTO
   }
 
   // fragments
-  result->m_vert_size = sizeof(igDXRender::MeshVertex);
-  result->m_fragments = new igDXRender::Fragment[1];
+  result->m_vert_size = sizeof(Render::MeshVertex);
+  result->m_fragments = new Render::Fragment[1];
   result->m_fragment_count = 1;
-  result->m_fragments->m_orig_shader = render->m_shader_database->LoadShader("@@default", true);
+  result->m_fragments->m_orig_shader = render->m_shader_manager.LoadShader("@@default", true);
   result->m_fragments->m_base_index = 0;
   result->m_fragments->m_prim_count = result->m_index_count/3;
   
@@ -762,7 +762,7 @@ igDXRender::Mesh* InitMesh(igDXRender::Render* render,const char* name,D3DXVECTO
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void CreateDefaultMeshes(igDXRender::Render* render)
+void CreateDefaultMeshes(Render::Renderer* render)
 {
   printf("Creating default meshes\n");
   g_loaded_meshes.push_back(InitMesh(render,"@@torus",torus,40,40));
@@ -773,7 +773,7 @@ void CreateDefaultMeshes(igDXRender::Render* render)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Scene::RemoveAllMeshes()
+void Render::Scene::RemoveAllMeshes()
 {
   u32 count = (u32)g_loaded_meshes.size();
   for (u32 i=0;i<count;i++)
@@ -802,9 +802,9 @@ static void FillCubeTexture(IDirect3DCubeTexture9* tex, D3DCUBEMAP_FACES face, u
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void CreateDefaultEnvironments(igDXRender::Render* render)
+void CreateDefaultEnvironments(Render::Renderer* render)
 {
-  igDXRender::Environment* env = new igDXRender::Environment("@@default");
+  Render::Environment* env = new Render::Environment("@@default");
   env->m_clearcolor = D3DCOLOR_ARGB(0x00,0x40,0x40,0x40);
   env->m_env_bias = 0.0f;
   env->m_env_scale = 1.0f;
@@ -863,7 +863,7 @@ void CreateDefaultEnvironments(igDXRender::Render* render)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Scene::RemoveAllEnvironments()
+void Render::Scene::RemoveAllEnvironments()
 {
   u32 count = (u32)g_loaded_environments.size();
   for (u32 i=0;i<count;i++)

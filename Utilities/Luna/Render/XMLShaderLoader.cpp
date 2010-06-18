@@ -38,22 +38,22 @@ u32 TextureFilterMode(const char* text)
 {
   if (_stricmp(text,"point")==0)
   {
-    return igDXRender::Texture::FILTER_POINT;
+    return Render::Texture::FILTER_POINT;
   }
   else if (_stricmp(text,"linear")==0)
   {
-    return igDXRender::Texture::FILTER_LINEAR;
+    return Render::Texture::FILTER_LINEAR;
   }
   else if (_stricmp(text,"anisotropic")==0)
   {
-    return igDXRender::Texture::FILTER_ANISOTROPIC;
+    return Render::Texture::FILTER_ANISOTROPIC;
   }
   else
   {
     printf("'%s' is an unknown texture filter mode, defaulting to 'linear'\n",text);
   }
 
-  return igDXRender::Texture::FILTER_LINEAR;
+  return Render::Texture::FILTER_LINEAR;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,35 +81,35 @@ bool LoadColor(const TiXmlElement* node,float* col)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool LoadAlphaSettings(const TiXmlElement* node,igDXRender::Shader* shader)
+bool LoadAlphaSettings(const TiXmlElement* node,Render::Shader* shader)
 {
-  shader->m_alpha_type=igDXRender::Shader::ALPHA_OPAQUE;
+  shader->m_alpha_type=Render::Shader::ALPHA_OPAQUE;
 
   const char* res = node->Attribute("type");
   if (res)
   {
     if (_stricmp(res,"opaque")==0)
     {
-      shader->m_alpha_type=igDXRender::Shader::ALPHA_OPAQUE;
+      shader->m_alpha_type=Render::Shader::ALPHA_OPAQUE;
     }
     else if (_stricmp(res,"additive")==0)
     {
-      shader->m_alpha_type=igDXRender::Shader::ALPHA_ADDITIVE;
+      shader->m_alpha_type=Render::Shader::ALPHA_ADDITIVE;
     }
     else if (_stricmp(res,"blended")==0)
     {
-      shader->m_alpha_type=igDXRender::Shader::ALPHA_BLENDED;
+      shader->m_alpha_type=Render::Shader::ALPHA_BLENDED;
     }
     else if (_stricmp(res,"cutout")==0)
     {
-      shader->m_alpha_type=igDXRender::Shader::ALPHA_CUTOUT;
+      shader->m_alpha_type=Render::Shader::ALPHA_CUTOUT;
     }
   } 
   return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool LoadGlossSettings(const TiXmlElement* node,igDXRender::Shader* shader)
+bool LoadGlossSettings(const TiXmlElement* node,Render::Shader* shader)
 {
   shader->m_gloss_scale=1.0f;
 
@@ -126,7 +126,7 @@ bool LoadGlossSettings(const TiXmlElement* node,igDXRender::Shader* shader)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool LoadSpecularSettings(const TiXmlElement* node,igDXRender::Shader* shader)
+bool LoadSpecularSettings(const TiXmlElement* node,Render::Shader* shader)
 {
   shader->m_specular_power=20.0f;
 
@@ -147,7 +147,7 @@ bool LoadSpecularSettings(const TiXmlElement* node,igDXRender::Shader* shader)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool LoadNormalSettings(const TiXmlElement* node,igDXRender::Shader* shader)
+bool LoadNormalSettings(const TiXmlElement* node,Render::Shader* shader)
 {
   shader->m_normal_scale = 1.0f;
 
@@ -161,7 +161,7 @@ bool LoadNormalSettings(const TiXmlElement* node,igDXRender::Shader* shader)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool LoadParallaxSettings(const TiXmlElement* node,igDXRender::Shader* shader)
+bool LoadParallaxSettings(const TiXmlElement* node,Render::Shader* shader)
 {
   shader->m_parallax_scale=1.0f;
   shader->m_parallax_bias = 0.0f;
@@ -179,7 +179,7 @@ bool LoadParallaxSettings(const TiXmlElement* node,igDXRender::Shader* shader)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool ParseXMLTextureSettings( const TiXmlElement* node, const char* baseDirectory, igDXRender::TextureSettings& textureSettings )
+bool ParseXMLTextureSettings( const TiXmlElement* node, const char* baseDirectory, Render::TextureSettings& textureSettings )
 {
   textureSettings.m_Path = baseDirectory;
 
@@ -283,9 +283,9 @@ bool ParseXMLTextureSettings( const TiXmlElement* node, const char* baseDirector
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Shader* igDXRender::XMLShaderLoader::ParseFile( const char* fname, ShaderDatabase* db )
+Render::Shader* Render::XMLShaderLoader::ParseFile( const char* fname, ShaderManager* db )
 {
-  igDXRender::Shader* sh = new igDXRender::Shader(db,fname);
+  Render::Shader* sh = new Render::Shader(db,fname);
 
   struct stat s;
   if ( stat( fname, &s ) < 0 )
@@ -317,7 +317,7 @@ igDXRender::Shader* igDXRender::XMLShaderLoader::ParseFile( const char* fname, S
     if (_stricmp(n->Value(),"colormap")==0)
     {
       if (!ParseXMLTextureSettings( n, shaderDirectory.c_str(), settings )
-          || !db->LoadTextureWithSettings(settings,sh,igDXRender::Texture::SAMPLER_BASE_MAP))
+          || !db->LoadTextureWithSettings(settings,sh,Render::Texture::SAMPLER_BASE_MAP))
       {
         return sh;
       }
@@ -325,7 +325,7 @@ igDXRender::Shader* igDXRender::XMLShaderLoader::ParseFile( const char* fname, S
     else if (_stricmp(n->Value(),"normalmap")==0)
     {
       if (!ParseXMLTextureSettings( n, shaderDirectory.c_str(), settings )
-          || !db->LoadTextureWithSettings(settings,sh,igDXRender::Texture::SAMPLER_NORMAL_MAP))
+          || !db->LoadTextureWithSettings(settings,sh,Render::Texture::SAMPLER_NORMAL_MAP))
       {
         return sh;
       }
@@ -333,7 +333,7 @@ igDXRender::Shader* igDXRender::XMLShaderLoader::ParseFile( const char* fname, S
     else if (_stricmp(n->Value(),"glossmap")==0)
     {
       if (!ParseXMLTextureSettings( n, shaderDirectory.c_str(), settings )
-          || !db->LoadTextureWithSettings(settings,sh,igDXRender::Texture::SAMPLER_GLOSS_MAP))
+          || !db->LoadTextureWithSettings(settings,sh,Render::Texture::SAMPLER_GLOSS_MAP))
       {
         return sh;
       }
@@ -341,7 +341,7 @@ igDXRender::Shader* igDXRender::XMLShaderLoader::ParseFile( const char* fname, S
     else if (_stricmp(n->Value(),"incanmap")==0)
     {
       if (!ParseXMLTextureSettings( n, shaderDirectory.c_str(), settings )
-          || !db->LoadTextureWithSettings(settings,sh,igDXRender::Texture::SAMPLER_INCAN_MAP))
+          || !db->LoadTextureWithSettings(settings,sh,Render::Texture::SAMPLER_INCAN_MAP))
       {
         return sh;
       }
@@ -349,7 +349,7 @@ igDXRender::Shader* igDXRender::XMLShaderLoader::ParseFile( const char* fname, S
     else if (_stricmp(n->Value(),"parallaxmap")==0)
     {
       if (!ParseXMLTextureSettings( n, shaderDirectory.c_str(), settings )
-          || !db->LoadTextureWithSettings(settings,sh,igDXRender::Texture::SAMPLER_PARALLAX_MAP))
+          || !db->LoadTextureWithSettings(settings,sh,Render::Texture::SAMPLER_PARALLAX_MAP))
       {
         return sh;
       }

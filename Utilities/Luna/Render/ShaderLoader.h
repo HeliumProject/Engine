@@ -3,10 +3,10 @@
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
  
-namespace igDXRender
+namespace Render
 {
   class Shader;
-  class ShaderDatabase;
+  class ShaderManager;
 
   class ShaderLoader: public Nocturnal::RefCountBase<ShaderLoader>
   {
@@ -14,7 +14,7 @@ namespace igDXRender
     ShaderLoader();
     virtual ~ShaderLoader();
 
-    virtual Shader* ParseFile( const char* filename, ShaderDatabase* db ) = 0;
+    virtual Shader* ParseFile( const char* filename, ShaderManager* db ) = 0;
   };
 
   typedef Nocturnal::SmartPtr<ShaderLoader> ShaderLoaderPtr;

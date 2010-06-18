@@ -3,7 +3,7 @@
 
 #include "Misc.h"
 
-igDXRender::Environment::Environment(const char* fname)
+Render::Environment::Environment(const char* fname)
 {
   m_load_count = 0;
   m_filename = fname;
@@ -16,7 +16,7 @@ igDXRender::Environment::Environment(const char* fname)
 }
 
 
-igDXRender::Environment::~Environment()
+Render::Environment::~Environment()
 {
   if (m_env_texture)
   {

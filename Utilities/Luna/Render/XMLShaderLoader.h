@@ -2,7 +2,7 @@
 
 #include "ShaderLoader.h"
 
-namespace igDXRender
+namespace Render
 {
   class XMLShaderLoader : public ShaderLoader
   {
@@ -15,6 +15,6 @@ namespace igDXRender
     {
     }
 
-    virtual class Shader* ParseFile( const char* filename, class ShaderDatabase* db );
+    virtual class Shader* ParseFile( const char* filename, class ShaderManager* db );
   };
 }

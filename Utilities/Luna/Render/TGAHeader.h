@@ -3,7 +3,7 @@
 #include "Platform/Types.h"
 
 #pragma pack(push,1)
-namespace igDXRender
+namespace Render
 {
   struct TGAHeader
   {

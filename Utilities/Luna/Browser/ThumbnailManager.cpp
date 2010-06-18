@@ -9,7 +9,7 @@ using namespace Luna;
 // Constructor
 // window - the window to receive ThumbnailLoadedEvents.
 // 
-ThumbnailManager::ThumbnailManager( wxWindow* window, igDXRender::D3DManager* d3dmanager, const std::string& thumbnailDirectory )
+ThumbnailManager::ThumbnailManager( wxWindow* window, Render::D3DManager* d3dmanager, const std::string& thumbnailDirectory )
 : m_Window( window )
 , m_Loader( d3dmanager, thumbnailDirectory )
 {

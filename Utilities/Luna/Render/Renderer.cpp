@@ -7,33 +7,31 @@
 #include <mmsystem.h>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Render::Render()
+Render::Renderer::Renderer()
+: m_shader_manager (this)
 {
-  m_shader_database = new ShaderDatabase(this);
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-igDXRender::Render::~Render()
+Render::Renderer::~Renderer()
 {
-  // delete all the loaded assets before we destroy D3D
-  delete m_shader_database;
-
   // release any default pool resources here
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool igDXRender::Render::Init(HWND hwnd, u32 width, u32 height, u32 flags)
+bool Render::Renderer::Init(HWND hwnd, u32 width, u32 height, u32 flags)
 {
   HRESULT hr = D3DManager::InitD3D(hwnd,width,height,flags);
   if (FAILED(hr))
     return false;
 
-  m_shader_database->CreateDefaults();
+  m_shader_manager.CreateDefaults();
   return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Render::RenderEnvironment(igDXRender::Scene* scene,igDXRender::Environment* env,D3DXMATRIX& viewproj)
+void Render::Renderer::RenderEnvironment(Render::Scene* scene,Render::Environment* env,D3DXMATRIX& viewproj)
 {
   IDirect3DDevice9* device = GetD3DDevice();
 
@@ -85,7 +83,7 @@ void igDXRender::Render::RenderEnvironment(igDXRender::Scene* scene,igDXRender::
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Render::RenderWireframe(igDXRender::Scene* scene,igDXRender::Mesh* mesh)
+void Render::Renderer::RenderWireframe(Render::Scene* scene,Render::Mesh* mesh)
 {
   IDirect3DDevice9* device = GetD3DDevice();
   
@@ -113,7 +111,7 @@ void igDXRender::Render::RenderWireframe(igDXRender::Scene* scene,igDXRender::Me
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Render::RenderNormals(igDXRender::Scene* scene,igDXRender::Mesh* mesh)
+void Render::Renderer::RenderNormals(Render::Scene* scene,Render::Mesh* mesh)
 {
   IDirect3DDevice9* device = GetD3DDevice();
 
@@ -131,7 +129,7 @@ void igDXRender::Render::RenderNormals(igDXRender::Scene* scene,igDXRender::Mesh
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Render::RenderTangents(igDXRender::Scene* scene,igDXRender::Mesh* mesh)
+void Render::Renderer::RenderTangents(Render::Scene* scene,Render::Mesh* mesh)
 {
   IDirect3DDevice9* device = GetD3DDevice();
 
@@ -155,7 +153,7 @@ void igDXRender::Render::RenderTangents(igDXRender::Scene* scene,igDXRender::Mes
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-static void SetTexture(IDirect3DDevice9* device,igDXRender::Texture* tex,u32 sampler)
+static void SetTexture(IDirect3DDevice9* device,Render::Texture* tex,u32 sampler)
 {
   //set the sampler state for the texture
   device->SetSamplerState(sampler,D3DSAMP_ADDRESSU,tex->m_wrap_u);
@@ -163,19 +161,19 @@ static void SetTexture(IDirect3DDevice9* device,igDXRender::Texture* tex,u32 sam
 
   switch(tex->m_filter)
   {
-  case igDXRender::Texture::FILTER_POINT:
+  case Render::Texture::FILTER_POINT:
     device->SetSamplerState(sampler,D3DSAMP_MAGFILTER,D3DTEXF_POINT);
     device->SetSamplerState(sampler,D3DSAMP_MINFILTER,D3DTEXF_POINT);
     device->SetSamplerState(sampler,D3DSAMP_MIPFILTER,D3DTEXF_LINEAR);    
     break;
 
-  case igDXRender::Texture::FILTER_LINEAR:
+  case Render::Texture::FILTER_LINEAR:
     device->SetSamplerState(sampler,D3DSAMP_MAGFILTER,D3DTEXF_LINEAR);
     device->SetSamplerState(sampler,D3DSAMP_MINFILTER,D3DTEXF_LINEAR);
     device->SetSamplerState(sampler,D3DSAMP_MIPFILTER,D3DTEXF_LINEAR);    
     break;
 
-  case igDXRender::Texture::FILTER_ANISOTROPIC:
+  case Render::Texture::FILTER_ANISOTROPIC:
     device->SetSamplerState(sampler,D3DSAMP_MAGFILTER,D3DTEXF_LINEAR);
     device->SetSamplerState(sampler,D3DSAMP_MINFILTER,D3DTEXF_ANISOTROPIC);
     device->SetSamplerState(sampler,D3DSAMP_MIPFILTER,D3DTEXF_LINEAR);    
@@ -191,7 +189,7 @@ static void SetTexture(IDirect3DDevice9* device,igDXRender::Texture* tex,u32 sam
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Render::RenderDebug(igDXRender::Scene* scene,igDXRender::Mesh* mesh)
+void Render::Renderer::RenderDebug(Render::Scene* scene,Render::Mesh* mesh)
 {
   IDirect3DDevice9* device = GetD3DDevice();
 
@@ -260,7 +258,7 @@ void igDXRender::Render::RenderDebug(igDXRender::Scene* scene,igDXRender::Mesh* 
     Shader* sh = 0;
     if (scene->m_shader_table[i]!=0xffffffff)
     {
-      sh = m_shader_database->ResolveShader(scene->m_shader_table[i]);
+      sh = m_shader_manager.ResolveShader(scene->m_shader_table[i]);
     }
 
     // set the shader for this fragment
@@ -270,9 +268,9 @@ void igDXRender::Render::RenderDebug(igDXRender::Scene* scene,igDXRender::Mesh* 
       {
         if (sh)
         {
-          if (sh->m_textures[igDXRender::Texture::SAMPLER_BASE_MAP]!=0xffffffff)
+          if (sh->m_textures[Render::Texture::SAMPLER_BASE_MAP]!=0xffffffff)
           {
-            igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_BASE_MAP]);
+            Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_BASE_MAP]);
             SetTexture(device,tex,0);
           }
           else
@@ -290,9 +288,9 @@ void igDXRender::Render::RenderDebug(igDXRender::Scene* scene,igDXRender::Mesh* 
       {
         if (sh)
         {
-          if (sh->m_textures[igDXRender::Texture::SAMPLER_NORMAL_MAP]!=0xffffffff)
+          if (sh->m_textures[Render::Texture::SAMPLER_NORMAL_MAP]!=0xffffffff)
           {
-            igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_NORMAL_MAP]);
+            Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_NORMAL_MAP]);
             SetTexture(device,tex,0);
           }
           else
@@ -322,9 +320,9 @@ void igDXRender::Render::RenderDebug(igDXRender::Scene* scene,igDXRender::Mesh* 
             device->SetPixelShader(GetStockPS(PIXEL_SHADER_TEXTURE_GREEN));
           }
 
-          if (sh->m_textures[igDXRender::Texture::SAMPLER_GLOSS_MAP]!=0xffffffff)
+          if (sh->m_textures[Render::Texture::SAMPLER_GLOSS_MAP]!=0xffffffff)
           {
-            igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_GLOSS_MAP]);
+            Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_GLOSS_MAP]);
             SetTexture(device,tex,0);
           }
           else
@@ -342,9 +340,9 @@ void igDXRender::Render::RenderDebug(igDXRender::Scene* scene,igDXRender::Mesh* 
       {
         if (sh)
         {
-          if ((sh->m_textures[igDXRender::Texture::SAMPLER_INCAN_MAP]!=0xffffffff) && ((sh->m_flags & SHDR_FLAG_GPI_MAP)==0))
+          if ((sh->m_textures[Render::Texture::SAMPLER_INCAN_MAP]!=0xffffffff) && ((sh->m_flags & SHDR_FLAG_GPI_MAP)==0))
           {
-            igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_INCAN_MAP]);
+            Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_INCAN_MAP]);
             SetTexture(device,tex,0);
           }
           else
@@ -363,9 +361,9 @@ void igDXRender::Render::RenderDebug(igDXRender::Scene* scene,igDXRender::Mesh* 
       {
         if (sh)
         {
-          if ((sh->m_textures[igDXRender::Texture::SAMPLER_PARALLAX_MAP]!=0xffffffff)  && ((sh->m_flags & SHDR_FLAG_GPI_MAP)==0))
+          if ((sh->m_textures[Render::Texture::SAMPLER_PARALLAX_MAP]!=0xffffffff)  && ((sh->m_flags & SHDR_FLAG_GPI_MAP)==0))
           {
-            igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_PARALLAX_MAP]);
+            Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_PARALLAX_MAP]);
             SetTexture(device,tex,0);
           }
           else
@@ -458,7 +456,7 @@ void igDXRender::Render::RenderDebug(igDXRender::Scene* scene,igDXRender::Mesh* 
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* mesh)
+void Render::Renderer::RenderMesh(Render::Scene* scene,Render::Mesh* mesh)
 {
   IDirect3DDevice9* device = GetD3DDevice();
 
@@ -478,7 +476,7 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
   IDirect3DCubeTexture9* cube = 0;
   if (scene->m_environment!=0xffffffff)
   {
-    igDXRender::Environment* env = scene->ResolveEnvironmentHandle(scene->m_environment);
+    Render::Environment* env = scene->ResolveEnvironmentHandle(scene->m_environment);
     cube=env->m_env_texture;
     env_scale=env->m_env_scale;
     env_bias=env->m_env_bias;
@@ -491,7 +489,7 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
   for (u32 i=0;i<mesh->m_fragment_count;i++)
   {
     // set the shader for this fragment
-    Shader* sh = m_shader_database->ResolveShader(scene->m_shader_table[i]);
+    Shader* sh = m_shader_manager.ResolveShader(scene->m_shader_table[i]);
 
     // we only want cutout or opaque on the first pass
     if ((sh->m_alpha_type!=Shader::ALPHA_OPAQUE) && (sh->m_alpha_type !=Shader::ALPHA_CUTOUT))
@@ -535,9 +533,9 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
       }
     }
 
-    if (sh->m_textures[igDXRender::Texture::SAMPLER_BASE_MAP]!=0xffffffff)
+    if (sh->m_textures[Render::Texture::SAMPLER_BASE_MAP]!=0xffffffff)
     {
-      igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_BASE_MAP]);
+      Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_BASE_MAP]);
       SetTexture(device,tex,0);
     }
     else
@@ -545,9 +543,9 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
       device->SetTexture(0,0);
     }
 
-    if (sh->m_textures[igDXRender::Texture::SAMPLER_NORMAL_MAP]!=0xffffffff)
+    if (sh->m_textures[Render::Texture::SAMPLER_NORMAL_MAP]!=0xffffffff)
     {
-      igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_NORMAL_MAP]);
+      Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_NORMAL_MAP]);
       SetTexture(device,tex,1);
     }
     else
@@ -556,9 +554,9 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
     }
 
     // this will also set the combined GPI map
-    if (sh->m_textures[igDXRender::Texture::SAMPLER_GLOSS_MAP]!=0xffffffff)
+    if (sh->m_textures[Render::Texture::SAMPLER_GLOSS_MAP]!=0xffffffff)
     {
-      igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_GLOSS_MAP]);
+      Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_GLOSS_MAP]);
       SetTexture(device,tex,2);
     }
     else
@@ -566,9 +564,9 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
       device->SetTexture(2,0);
     }
 
-    if (sh->m_textures[igDXRender::Texture::SAMPLER_PARALLAX_MAP]!=0xffffffff)
+    if (sh->m_textures[Render::Texture::SAMPLER_PARALLAX_MAP]!=0xffffffff)
     {
-      igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_PARALLAX_MAP]);
+      Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_PARALLAX_MAP]);
       SetTexture(device,tex,3);
     }
     else
@@ -576,9 +574,9 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
       device->SetTexture(3,0);
     }
 
-    if (sh->m_textures[igDXRender::Texture::SAMPLER_INCAN_MAP]!=0xffffffff)
+    if (sh->m_textures[Render::Texture::SAMPLER_INCAN_MAP]!=0xffffffff)
     {
-      igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_INCAN_MAP]);
+      Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_INCAN_MAP]);
       SetTexture(device,tex,4);
     }
     else
@@ -629,7 +627,7 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
   for (u32 i=0;i<mesh->m_fragment_count;i++)
   {
     // set the shader for this fragment
-    Shader* sh = m_shader_database->ResolveShader(scene->m_shader_table[i]);
+    Shader* sh = m_shader_manager.ResolveShader(scene->m_shader_table[i]);
 
     // we only want alpha on the second pass
     if ((sh->m_alpha_type==Shader::ALPHA_OPAQUE) || (sh->m_alpha_type==Shader::ALPHA_CUTOUT))
@@ -678,9 +676,9 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
       }
     }
 
-    if (sh->m_textures[igDXRender::Texture::SAMPLER_BASE_MAP]!=0xffffffff)
+    if (sh->m_textures[Render::Texture::SAMPLER_BASE_MAP]!=0xffffffff)
     {
-      igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_BASE_MAP]);
+      Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_BASE_MAP]);
       SetTexture(device,tex,0);
     }
     else
@@ -688,9 +686,9 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
       device->SetTexture(0,0);
     }
 
-    if (sh->m_textures[igDXRender::Texture::SAMPLER_NORMAL_MAP]!=0xffffffff)
+    if (sh->m_textures[Render::Texture::SAMPLER_NORMAL_MAP]!=0xffffffff)
     {
-      igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_NORMAL_MAP]);
+      Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_NORMAL_MAP]);
       SetTexture(device,tex,1);
     }
     else
@@ -699,9 +697,9 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
     }
 
     // this will also set the combined GPI map
-    if (sh->m_textures[igDXRender::Texture::SAMPLER_GLOSS_MAP]!=0xffffffff)
+    if (sh->m_textures[Render::Texture::SAMPLER_GLOSS_MAP]!=0xffffffff)
     {
-      igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_GLOSS_MAP]);
+      Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_GLOSS_MAP]);
       SetTexture(device,tex,2);
     }
     else
@@ -709,9 +707,9 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
       device->SetTexture(2,0);
     }
 
-    if (sh->m_textures[igDXRender::Texture::SAMPLER_PARALLAX_MAP]!=0xffffffff)
+    if (sh->m_textures[Render::Texture::SAMPLER_PARALLAX_MAP]!=0xffffffff)
     {
-      igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_PARALLAX_MAP]);
+      Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_PARALLAX_MAP]);
       SetTexture(device,tex,3);
     }
     else
@@ -719,9 +717,9 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
       device->SetTexture(3,0);
     }
 
-    if (sh->m_textures[igDXRender::Texture::SAMPLER_INCAN_MAP]!=0xffffffff)
+    if (sh->m_textures[Render::Texture::SAMPLER_INCAN_MAP]!=0xffffffff)
     {
-      igDXRender::Texture* tex = m_shader_database->ResolveTexture(sh->m_textures[igDXRender::Texture::SAMPLER_INCAN_MAP]);
+      Render::Texture* tex = m_shader_manager.ResolveTexture(sh->m_textures[Render::Texture::SAMPLER_INCAN_MAP]);
       SetTexture(device,tex,4);
     }
     else
@@ -774,7 +772,7 @@ void igDXRender::Render::RenderMesh(igDXRender::Scene* scene,igDXRender::Mesh* m
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Render::RenderReferenceGrid(igDXRender::Scene* scene)
+void Render::Renderer::RenderReferenceGrid(Render::Scene* scene)
 {
   IDirect3DDevice9* device = GetD3DDevice();
 
@@ -826,13 +824,13 @@ void igDXRender::Render::RenderReferenceGrid(igDXRender::Scene* scene)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Render::RenderScene(igDXRender::Scene* scene)
+void Render::Renderer::RenderScene(Render::Scene* scene)
 {
   RenderScenes( 1, &scene );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void igDXRender::Render::RenderScenes(int num, igDXRender::Scene** scenes)
+void Render::Renderer::RenderScenes(int num, Render::Scene** scenes)
 {
   IDirect3DDevice9* device = GetD3DDevice();
 
@@ -844,7 +842,7 @@ void igDXRender::Render::RenderScenes(int num, igDXRender::Scene** scenes)
 
   for ( int i = 0; i < num; ++i )
   {
-    igDXRender::Scene* scene = scenes[ i ];
+    Render::Scene* scene = scenes[ i ];
 
     // compute the view proj and set in constant 0
     D3DXMATRIX viewproj = scene->m_viewmat*scene->m_projmat;
@@ -891,7 +889,7 @@ void igDXRender::Render::RenderScenes(int num, igDXRender::Scene** scenes)
 
     if (scene->m_environment!=0xffffffff && scene->m_draw_mode==DRAW_MODE_NORMAL)
     {
-      igDXRender::Environment* env = scene->ResolveEnvironmentHandle(scene->m_environment);
+      Render::Environment* env = scene->ResolveEnvironmentHandle(scene->m_environment);
 
       if ( i == 0 )
       {
@@ -926,7 +924,7 @@ void igDXRender::Render::RenderScenes(int num, igDXRender::Scene** scenes)
 
     if (scene->m_mesh_handle!=0xffffffff)
     {
-      igDXRender::Mesh* mesh = scene->ResolveMeshHandle(scene->m_mesh_handle);
+      Render::Mesh* mesh = scene->ResolveMeshHandle(scene->m_mesh_handle);
       if (scene->m_draw_mode==DRAW_MODE_NORMAL)
         RenderMesh(scene,mesh);
       else
@@ -954,7 +952,7 @@ void igDXRender::Render::RenderScenes(int num, igDXRender::Scene** scenes)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::Render::GetPixel(u32 x, u32 y)
+u32 Render::Renderer::GetPixel(u32 x, u32 y)
 {
   IDirect3DSurface9* surface = GetBufferData();
   if (surface==0)
@@ -977,7 +975,7 @@ u32 igDXRender::Render::GetPixel(u32 x, u32 y)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-u32 igDXRender::Render::GetIndex(u32 x, u32 y)
+u32 Render::Renderer::GetIndex(u32 x, u32 y)
 {
   u32 col = GetPixel(x,y);
   if (col==0)

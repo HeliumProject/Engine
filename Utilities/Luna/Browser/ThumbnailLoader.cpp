@@ -147,7 +147,7 @@ void* ThumbnailLoader::LoadThread::Entry()
     return NULL;
 }
 
-ThumbnailLoader::ThumbnailLoader( igDXRender::D3DManager* d3dManager, const std::string& thumbnailDirectory )
+ThumbnailLoader::ThumbnailLoader( Render::D3DManager* d3dManager, const std::string& thumbnailDirectory )
 : m_LoadThread( *this )
 , m_Quit( false )
 , m_ThumbnailDirectory( thumbnailDirectory )

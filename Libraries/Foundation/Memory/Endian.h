@@ -21,7 +21,7 @@ inline u64 ConvertEndian(u64 val, bool endian = true)
 {
   if (endian)
   {
-#ifdef WIN32
+#if defined( WIN32 ) && defined ( _M_IX86 )
     _asm mov eax,DWORD PTR [val]
     _asm mov ebx,DWORD PTR [val+4]
     _asm bswap eax
@@ -73,7 +73,7 @@ inline u32 ConvertEndian(u32 val, bool endian = true)
 {
   if (endian)
   {
-#ifdef WIN32
+#if defined( WIN32 ) && defined ( _M_IX86 )
     _asm mov eax,val
     _asm bswap eax
     _asm mov val,eax
@@ -121,7 +121,7 @@ inline u16 ConvertEndian(u16 val, bool endian = true)
 {
   if (endian)
   {
-#ifdef WIN32
+#if defined( WIN32 ) && defined ( _M_IX86 )
     _asm mov ax,val
     _asm xchg al,ah
     _asm mov val,ax

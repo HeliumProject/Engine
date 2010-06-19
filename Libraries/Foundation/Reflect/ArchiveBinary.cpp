@@ -32,12 +32,6 @@ const u32 CRC_BLOCK_SIZE = 4;
 const u32 CRC_BLOCK_SIZE = 4096;
 #endif
 
-// if this COMPILE_ASSERT fails, we should find any usage of std::streamoff 
-// when writing to streams, and replace it with an explicit sized type
-// to maintain format compatiblity (will this be a problem for 64 bit?)
-
-NOC_COMPILE_ASSERT( sizeof(std::streamoff) == sizeof(i32)); 
-
 // this is sneaky, but in general people shouldn't use this
 namespace Reflect
 {
@@ -125,7 +119,7 @@ void ArchiveBinary::Read()
     NOC_ASSERT(current_crc == CRC_DEFAULT);
 
     // snapshot our starting location
-    std::streamoff start = m_Stream->TellRead();
+    u32 start = (u32)m_Stream->TellRead();
 
     // roll through file
     while (!m_Stream->Done())
@@ -165,11 +159,11 @@ void ArchiveBinary::Read()
   }
 
   // load some offsets
-  std::streamoff type_offset;
+  u32 type_offset;
   m_Stream->Read(&type_offset); 
-  std::streamoff string_offset;
+  u32 string_offset;
   m_Stream->Read(&string_offset);
-  std::streamoff element_offset = m_Stream->TellRead();
+  u32 element_offset = (u32)m_Stream->TellRead();
 
   // deserialize string pool
   {
@@ -277,13 +271,13 @@ void ArchiveBinary::Write()
   u32 crc = CRC_INVALID;
 
   // save the offset and write the invalid crc to the stream
-  std::streamoff crc_offset = m_Stream->TellWrite();
+  u32 crc_offset = (u32)m_Stream->TellWrite();
   m_Stream->Write(&crc); 
 
   // save some offsets to write offsets to
-  std::streamoff type_offset = m_Stream->TellWrite();
+  u32 type_offset = (u32)m_Stream->TellWrite();
   m_Stream->Write(&type_offset); 
-  std::streamoff string_offset = m_Stream->TellWrite();
+  u32 string_offset = (u32)m_Stream->TellWrite();
   m_Stream->Write(&string_offset);
 
   // serialize main file elements
@@ -309,7 +303,7 @@ void ArchiveBinary::Write()
     REFLECT_SCOPE_TIMER( ("RTTI Write") );
 
     // write our current location back at our offset
-    std::streamoff type_location = m_Stream->TellWrite();
+    u32 type_location = (u32)m_Stream->TellWrite();
     m_Stream->SeekWrite(type_offset, std::ios_base::beg);
     m_Stream->Write(&type_location);
     m_Stream->SeekWrite(0, std::ios_base::end);
@@ -343,7 +337,7 @@ void ArchiveBinary::Write()
     REFLECT_SCOPE_TIMER( ("String Pool Write") );
 
     // write our current location back at our offset
-    std::streamoff string_location = m_Stream->TellWrite();
+    u32 string_location = (u32)m_Stream->TellWrite();
     m_Stream->SeekWrite(string_offset, std::ios_base::beg);
     m_Stream->Write(&string_location); 
     m_Stream->SeekWrite(0, std::ios_base::end);
@@ -438,7 +432,7 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
   m_Stream->Write(&index); 
 
   // get and stub out the start offset where we are now (will become length after writing is done)
-  std::streamoff start_offset = m_Stream->TellWrite();
+  u32 start_offset = (u32)m_Stream->TellWrite();
   m_Stream->Write(&start_offset); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -495,13 +489,13 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
   }
 
   // save our end offset to substract the start from
-  std::streamoff end_offset = m_Stream->TellWrite();
+  u32 end_offset = (u32)m_Stream->TellWrite();
 
   // seek back to the start offset
   m_Stream->SeekWrite(start_offset, std::ios_base::beg);
 
   // compute amound written
-  std::streamoff length = end_offset - start_offset;
+  u32 length = end_offset - start_offset;
 
   // write written amount at start offset
   m_Stream->Write(&length); 
@@ -670,7 +664,7 @@ ElementPtr ArchiveBinary::Allocate()
   const std::string& str = m_Strings.GetString(index);
 
   // read length info if we have it
-  std::streamoff length = 0;
+  u32 length = 0;
   if (m_Version > 1)
   {
     m_Stream->Read(&length);
@@ -678,7 +672,7 @@ ElementPtr ArchiveBinary::Allocate()
     if (m_Skip)
     {
       // skip it, but account for already reading the length from the stream
-      m_Stream->SeekRead(length - sizeof(std::streamoff), std::ios_base::cur);
+      m_Stream->SeekRead(length - sizeof(u32), std::ios_base::cur);
 
       // we should just keep processing even though we return null
       return NULL;
@@ -716,7 +710,7 @@ ElementPtr ArchiveBinary::Allocate()
     if (m_Version > 1)
     {
       // skip it, but account for already reading the length from the stream
-      m_Stream->SeekRead(length - sizeof(std::streamoff), std::ios_base::cur);
+      m_Stream->SeekRead(length - sizeof(u32), std::ios_base::cur);
 
       // if you see this, then data is being lost because:
       //  1 - a type was completely removed from the codebase
@@ -797,7 +791,7 @@ void ArchiveBinary::Deserialize(ElementPtr& element)
 
 void ArchiveBinary::Deserialize(V_Element& elements, u32 flags)
 {
-  std::streamoff start_offset = m_Stream->TellRead();
+  u32 start_offset = (u32)m_Stream->TellRead();
 
   i32 element_count = -1;
   m_Stream->Read(&element_count); 
@@ -826,7 +820,7 @@ void ArchiveBinary::Deserialize(V_Element& elements, u32 flags)
 
         if (flags & ArchiveFlags::Status && m_Status != NULL)
         {
-          std::streamoff current = m_Stream->TellRead();
+          u32 current = (u32)m_Stream->TellRead();
 
           StatusInfo info (*this, ArchiveStates::ElementProcessed);
           info.m_Progress = (int)(((float)(current - start_offset) / (float)m_Size) * 100.0f);

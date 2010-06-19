@@ -226,7 +226,7 @@ namespace Luna
     sizeof(PositionUV),           // PositionUV
   };
 
-  NOC_COMPILE_ASSERT(sizeof(ElementSizes) / sizeof(size_t) == ElementTypes::Count);
+  NOC_COMPILE_ASSERT(sizeof(ElementSizes) / sizeof(u32) == ElementTypes::Count);
 
   static u32 ElementFormats[] =
   {

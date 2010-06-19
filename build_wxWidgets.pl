@@ -18,11 +18,8 @@ Usage: $scriptName -v <VERSION> [-o|-options <OPTIONS>]
 }
 
 my $version = undef;
-my $options = undef;
 
-my $result = GetOptions (
-  "version=s" => \$version,
-  "options=s" => \$options);
+my $result = GetOptions ("version=s" => \$version);
 
 if ( !$result )
 {
@@ -37,22 +34,30 @@ if ( !defined $version )
   exit 1;
 }
 
-BuildConfig( 0 );
-BuildConfig( 1 );
+BuildConfig();
 
 sub BuildConfig
 {
-  my $static = shift;
-  my $shared = $static ? 0 : 1 ;
-
-  print STDOUT ("\nBuilding with options: SHARED=$shared\n\n");
-
   my $path = "SDK\\wxWidgets\\$version";
 
   chdir "$path\\build\\msw";
+  
+  my $target;
+  if ( $ENV{PATH} =~ /VC\\BIN\\amd64;/i )
+  {
+    $target = "TARGET_CPU=AMD64";
+  }
+  elsif ( $ENV{PATH} =~ /VC\\BIN;/i )
+  {
+    $target = "";
+  }
+  else
+  {
+    die "Microsoft Visual Studio Tools cannot be found in your PATH";
+  }
 
-  Build( "BUILD=debug SHARED=$shared DEBUG_INFO=1 $options" );
-  Build( "BUILD=release SHARED=$shared DEBUG_INFO=1 $options" );
+  Build( "BUILD=debug SHARED=0 DEBUG_INFO=1 $target" );
+  Build( "BUILD=release SHARED=0 DEBUG_INFO=1 $target" );
 }
 
 sub Build

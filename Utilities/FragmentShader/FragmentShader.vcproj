@@ -12,6 +12,9 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -63,8 +66,83 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="comctl32.lib rpcrt4.lib"
-				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
 				SubSystem="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			ConfigurationType="1"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			UseOfMFC="0"
+			CharacterSet="2"
+			ManagedExtensions="0"
+			WholeProgramOptimization="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\..\Libraries;xpm;&quot;$(lua)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(TargetDir)&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="3"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4251;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="comctl32.lib rpcrt4.lib"
+				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;"
+				SubSystem="1"
+				TargetMachine="17"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -134,8 +212,81 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="comctl32.lib rpcrt4.lib"
-				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
 				SubSystem="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			ConfigurationType="1"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			UseOfMFC="0"
+			CharacterSet="2"
+			ManagedExtensions="0"
+			WholeProgramOptimization="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..\..\Libraries;xpm;&quot;$(lua)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(TargetDir)&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG"
+				RuntimeLibrary="2"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4251;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="comctl32.lib rpcrt4.lib"
+				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;"
+				SubSystem="1"
+				TargetMachine="17"
 			/>
 			<Tool
 				Name="VCALinkTool"

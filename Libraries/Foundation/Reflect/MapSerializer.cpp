@@ -13,45 +13,45 @@ REFLECT_DEFINE_ABSTRACT(MapSerializer)
 template< typename TKey, typename TVal >
 inline void Tokenize( const std::string& str, std::map< TKey, TVal >& tokens, const std::string& delimiters )
 {
-  // Skip delimiters at beginning.
-  std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
-  // Find first "non-delimiter".
-  std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    // Skip delimiters at beginning.
+    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    // Find first "non-delimiter".
+    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-  while ( std::string::npos != pos || std::string::npos != lastPos )
-  {
-    std::stringstream kStream( str.substr( lastPos, pos - lastPos ) );
-
-    // Skip delimiters.  Note the "not_of"
-    lastPos = str.find_first_not_of( delimiters, pos );
-    // Find next "non-delimiter"
-    pos = str.find_first_of( delimiters, lastPos );
-
-    if ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( std::string::npos != pos || std::string::npos != lastPos )
     {
-      std::stringstream vStream( str.substr( lastPos, pos - lastPos ) );
+        std::stringstream kStream( str.substr( lastPos, pos - lastPos ) );
 
-      // At this point, we have the key and value.  Build the map entry.
-      // Note that the stream operator stops at spaces.
-      TKey k;
-      kStream >> k;
-      TVal v;
-      vStream >> v;
-      tokens.insert( std::map< TKey, TVal >::value_type( k, v ) );
+        // Skip delimiters.  Note the "not_of"
+        lastPos = str.find_first_not_of( delimiters, pos );
+        // Find next "non-delimiter"
+        pos = str.find_first_of( delimiters, lastPos );
 
-      // Skip delimiters.  Note the "not_of"
-      lastPos = str.find_first_not_of( delimiters, pos );
+        if ( std::string::npos != pos || std::string::npos != lastPos )
+        {
+            std::stringstream vStream( str.substr( lastPos, pos - lastPos ) );
 
-      // Find next "non-delimiter"
-      pos = str.find_first_of( delimiters, lastPos );
+            // At this point, we have the key and value.  Build the map entry.
+            // Note that the stream operator stops at spaces.
+            TKey k;
+            kStream >> k;
+            TVal v;
+            vStream >> v;
+            tokens.insert( std::map< TKey, TVal >::value_type( k, v ) );
+
+            // Skip delimiters.  Note the "not_of"
+            lastPos = str.find_first_not_of( delimiters, pos );
+
+            // Find next "non-delimiter"
+            pos = str.find_first_of( delimiters, lastPos );
+        }
+        else
+        {
+            // Delimited map is messed up. It should alternate key-value pairs, but there is
+            // a key without a value.
+            NOC_BREAK();
+        }
     }
-    else
-    {
-      // Delimited map is messed up. It should alternate key-value pairs, but there is
-      // a key without a value.
-      NOC_BREAK();
-    }
-  }
 }
 
 // Partial specialization for strings as TVal, that gets around the stream operator stopping
@@ -59,40 +59,40 @@ inline void Tokenize( const std::string& str, std::map< TKey, TVal >& tokens, co
 template< typename TKey, typename TVal >
 inline void Tokenize( const std::string& str, std::map< TKey, std::string >& tokens, const std::string& delimiters )
 {
-  // Skip delimiters at beginning.
-  std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
-  // Find first "non-delimiter".
-  std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    // Skip delimiters at beginning.
+    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    // Find first "non-delimiter".
+    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-  while ( std::string::npos != pos || std::string::npos != lastPos )
-  {
-    std::stringstream kStream( str.substr( lastPos, pos - lastPos ) );
-
-    // Skip delimiters.  Note the "not_of"
-    lastPos = str.find_first_not_of( delimiters, pos );
-    // Find next "non-delimiter"
-    pos = str.find_first_of( delimiters, lastPos );
-
-    if ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( std::string::npos != pos || std::string::npos != lastPos )
     {
-      // At this point, we have the key and value.  Build the map entry.
-      TKey k;
-      kStream >> k;
-      tokens.insert( std::map< TKey, TVal >::value_type( k, str.substr( lastPos, pos - lastPos ) ) );
+        std::stringstream kStream( str.substr( lastPos, pos - lastPos ) );
 
-      // Skip delimiters.  Note the "not_of"
-      lastPos = str.find_first_not_of( delimiters, pos );
+        // Skip delimiters.  Note the "not_of"
+        lastPos = str.find_first_not_of( delimiters, pos );
+        // Find next "non-delimiter"
+        pos = str.find_first_of( delimiters, lastPos );
 
-      // Find next "non-delimiter"
-      pos = str.find_first_of( delimiters, lastPos );
+        if ( std::string::npos != pos || std::string::npos != lastPos )
+        {
+            // At this point, we have the key and value.  Build the map entry.
+            TKey k;
+            kStream >> k;
+            tokens.insert( std::map< TKey, TVal >::value_type( k, str.substr( lastPos, pos - lastPos ) ) );
+
+            // Skip delimiters.  Note the "not_of"
+            lastPos = str.find_first_not_of( delimiters, pos );
+
+            // Find next "non-delimiter"
+            pos = str.find_first_of( delimiters, lastPos );
+        }
+        else
+        {
+            // Delimited map is messed up. It should alternate key-value pairs, but there is
+            // a key without a value.
+            NOC_BREAK();
+        }
     }
-    else
-    {
-      // Delimited map is messed up. It should alternate key-value pairs, but there is
-      // a key without a value.
-      NOC_BREAK();
-    }
-  }
 }
 
 // Partial specialization for strings as TKey, that gets around the stream operator stopping
@@ -100,42 +100,42 @@ inline void Tokenize( const std::string& str, std::map< TKey, std::string >& tok
 template< typename TKey, typename TVal >
 inline void Tokenize( const std::string& str, std::map< std::string, TVal >& tokens, const std::string& delimiters )
 {
-  // Skip delimiters at beginning.
-  std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
-  // Find first "non-delimiter".
-  std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    // Skip delimiters at beginning.
+    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    // Find first "non-delimiter".
+    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-  while ( std::string::npos != pos || std::string::npos != lastPos )
-  {
-    std::string key( str.substr( lastPos, pos - lastPos ) );
-
-    // Skip delimiters.  Note the "not_of"
-    lastPos = str.find_first_not_of( delimiters, pos );
-    // Find next "non-delimiter"
-    pos = str.find_first_of( delimiters, lastPos );
-
-    if ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( std::string::npos != pos || std::string::npos != lastPos )
     {
-      std::stringstream vStream( str.substr( lastPos, pos - lastPos ) );
+        std::string key( str.substr( lastPos, pos - lastPos ) );
 
-      // At this point, we have the key and value.  Build the map entry.
-      TVal v;
-      vStream >> v;
-      tokens.insert( std::map< TKey, TVal >::value_type( key, v ) );
+        // Skip delimiters.  Note the "not_of"
+        lastPos = str.find_first_not_of( delimiters, pos );
+        // Find next "non-delimiter"
+        pos = str.find_first_of( delimiters, lastPos );
 
-      // Skip delimiters.  Note the "not_of"
-      lastPos = str.find_first_not_of( delimiters, pos );
+        if ( std::string::npos != pos || std::string::npos != lastPos )
+        {
+            std::stringstream vStream( str.substr( lastPos, pos - lastPos ) );
 
-      // Find next "non-delimiter"
-      pos = str.find_first_of( delimiters, lastPos );
+            // At this point, we have the key and value.  Build the map entry.
+            TVal v;
+            vStream >> v;
+            tokens.insert( std::map< TKey, TVal >::value_type( key, v ) );
+
+            // Skip delimiters.  Note the "not_of"
+            lastPos = str.find_first_not_of( delimiters, pos );
+
+            // Find next "non-delimiter"
+            pos = str.find_first_of( delimiters, lastPos );
+        }
+        else
+        {
+            // Delimited map is messed up. It should alternate key-value pairs, but there is
+            // a key without a value.
+            NOC_BREAK();
+        }
     }
-    else
-    {
-      // Delimited map is messed up. It should alternate key-value pairs, but there is
-      // a key without a value.
-      NOC_BREAK();
-    }
-  }
 }
 
 // Explicit implementation for strings, that gets around the stream operator stopping
@@ -143,38 +143,38 @@ inline void Tokenize( const std::string& str, std::map< std::string, TVal >& tok
 template< typename TKey, typename TVal >
 inline void Tokenize( const std::string& str, std::map< std::string, std::string >& tokens, const std::string& delimiters )
 {
-  // Skip delimiters at beginning.
-  std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
-  // Find first "non-delimiter".
-  std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    // Skip delimiters at beginning.
+    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    // Find first "non-delimiter".
+    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-  while ( std::string::npos != pos || std::string::npos != lastPos )
-  {
-    std::string key( str.substr( lastPos, pos - lastPos ) );
-
-    // Skip delimiters.  Note the "not_of"
-    lastPos = str.find_first_not_of( delimiters, pos );
-    // Find next "non-delimiter"
-    pos = str.find_first_of( delimiters, lastPos );
-
-    if ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( std::string::npos != pos || std::string::npos != lastPos )
     {
-      // At this point, we have the key and value.  Build the map entry.
-      tokens.insert( std::map< std::string, std::string >::value_type( key, str.substr( lastPos, pos - lastPos ) ) );
+        std::string key( str.substr( lastPos, pos - lastPos ) );
 
-      // Skip delimiters.  Note the "not_of"
-      lastPos = str.find_first_not_of( delimiters, pos );
+        // Skip delimiters.  Note the "not_of"
+        lastPos = str.find_first_not_of( delimiters, pos );
+        // Find next "non-delimiter"
+        pos = str.find_first_of( delimiters, lastPos );
 
-      // Find next "non-delimiter"
-      pos = str.find_first_of( delimiters, lastPos );
+        if ( std::string::npos != pos || std::string::npos != lastPos )
+        {
+            // At this point, we have the key and value.  Build the map entry.
+            tokens.insert( std::map< std::string, std::string >::value_type( key, str.substr( lastPos, pos - lastPos ) ) );
+
+            // Skip delimiters.  Note the "not_of"
+            lastPos = str.find_first_not_of( delimiters, pos );
+
+            // Find next "non-delimiter"
+            pos = str.find_first_of( delimiters, lastPos );
+        }
+        else
+        {
+            // Delimited map is messed up. It should alternate key-value pairs, but there is
+            // a key without a value.
+            NOC_BREAK();
+        }
     }
-    else
-    {
-      // Delimited map is messed up. It should alternate key-value pairs, but there is
-      // a key without a value.
-      NOC_BREAK();
-    }
-  }
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
@@ -192,254 +192,254 @@ SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::~SimpleMapSerializer()
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 size_t SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetSize() const
 {
-  return m_Data->size();
+    return m_Data->size();
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Clear()
 {
-  return m_Data->clear();
+    return m_Data->clear();
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::ConnectData(Nocturnal::HybridPtr<void> data)
 {
-  __super::ConnectData( data );
+    __super::ConnectData( data );
 
-  m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 i32 SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetKeyType() const
 {
-  return Serializer::DeduceType<KeyT>();
+    return Serializer::DeduceType<KeyT>();
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 i32 SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetValueType() const
 {
-  return Serializer::DeduceType<ValueT>();
+    return Serializer::DeduceType<ValueT>();
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetItems(V_ValueType& items)
 {
-  items.resize(m_Data->size());
-  DataType::const_iterator itr = m_Data->begin();
-  DataType::const_iterator end = m_Data->end();
-  for ( size_t index=0; itr != end; ++itr, ++index )
-  {
-    items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
-    items[index].second = Serializer::Bind( itr->second, m_Instance, m_Field );
-  }
+    items.resize(m_Data->size());
+    DataType::const_iterator itr = m_Data->begin();
+    DataType::const_iterator end = m_Data->end();
+    for ( size_t index=0; itr != end; ++itr, ++index )
+    {
+        items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
+        items[index].second = Serializer::Bind( itr->second, m_Instance, m_Field );
+    }
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetItems(V_ConstValueType& items) const
 {
-  items.resize(m_Data->size());
-  DataType::const_iterator itr = m_Data->begin();
-  DataType::const_iterator end = m_Data->end();
-  for ( size_t index=0; itr != end; ++itr, ++index )
-  {
-    items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
-    items[index].second = Serializer::Bind( itr->second, m_Instance, m_Field );
-  }
+    items.resize(m_Data->size());
+    DataType::const_iterator itr = m_Data->begin();
+    DataType::const_iterator end = m_Data->end();
+    for ( size_t index=0; itr != end; ++itr, ++index )
+    {
+        items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
+        items[index].second = Serializer::Bind( itr->second, m_Instance, m_Field );
+    }
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 SerializerPtr SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetItem(const Serializer* key)
 {
-  KeyT keyValue;
-  Serializer::GetValue(key, keyValue);
+    KeyT keyValue;
+    Serializer::GetValue(key, keyValue);
 
-  DataType::const_iterator found = m_Data->find( keyValue );
-  if ( found != m_Data->end() )
-  {
-    return Serializer::Bind( found->second, m_Instance, m_Field );
-  }
+    DataType::const_iterator found = m_Data->find( keyValue );
+    if ( found != m_Data->end() )
+    {
+        return Serializer::Bind( found->second, m_Instance, m_Field );
+    }
 
-  return NULL;
+    return NULL;
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 ConstSerializerPtr SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetItem(const Serializer* key) const
 {
-  KeyT keyValue;
-  Serializer::GetValue(key, keyValue);
+    KeyT keyValue;
+    Serializer::GetValue(key, keyValue);
 
-  DataType::const_iterator found = m_Data->find( keyValue );
-  if ( found != m_Data->end() )
-  {
-    return Serializer::Bind( found->second, m_Instance, m_Field );
-  }
+    DataType::const_iterator found = m_Data->find( keyValue );
+    if ( found != m_Data->end() )
+    {
+        return Serializer::Bind( found->second, m_Instance, m_Field );
+    }
 
-  return NULL;
+    return NULL;
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::SetItem(const Serializer* key, const Serializer* value)
 {
-  KeyT keyValue;
-  Serializer::GetValue(key, keyValue);
+    KeyT keyValue;
+    Serializer::GetValue(key, keyValue);
 
-  ValueT valueValue;
-  Serializer::GetValue(value, valueValue);
+    ValueT valueValue;
+    Serializer::GetValue(value, valueValue);
 
-  (m_Data.Ref())[keyValue] = valueValue;
+    (m_Data.Ref())[keyValue] = valueValue;
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::RemoveItem(const Serializer* key)
 {
-  KeyT keyValue;
-  Serializer::GetValue(key, keyValue);
+    KeyT keyValue;
+    Serializer::GetValue(key, keyValue);
 
-  (m_Data.Ref()).erase(keyValue);
+    (m_Data.Ref()).erase(keyValue);
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 bool SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Set(const Serializer* src, u32 flags)
 {
-  const MapSerializerT* rhs = ConstObjectCast<MapSerializerT>(src);
-  if (!rhs)
-  {
-    return false;
-  }
+    const MapSerializerT* rhs = ConstObjectCast<MapSerializerT>(src);
+    if (!rhs)
+    {
+        return false;
+    }
 
-  m_Data.Set( rhs->m_Data.Get() );
+    m_Data.Set( rhs->m_Data.Get() );
 
-  return true;
+    return true;
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 bool SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Equals(const Serializer* s) const
 {
-  const MapSerializerT* rhs = ConstObjectCast<MapSerializerT>(s);
-  if (!rhs)
-  {
-    return false;
-  }
+    const MapSerializerT* rhs = ConstObjectCast<MapSerializerT>(s);
+    if (!rhs)
+    {
+        return false;
+    }
 
-  return m_Data.Get() == rhs->m_Data.Get();
+    return m_Data.Get() == rhs->m_Data.Get();
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Serialize(Archive& archive) const
 {
-  int i = 0;
-  V_Element components;
-  components.resize( m_Data->size() * 2 );
+    int i = 0;
+    V_Element components;
+    components.resize( m_Data->size() * 2 );
 
-  {
-    DataType::const_iterator itr = m_Data->begin();
-    DataType::const_iterator end = m_Data->end();
+    {
+        DataType::const_iterator itr = m_Data->begin();
+        DataType::const_iterator end = m_Data->end();
+        for ( ; itr != end; ++itr )
+        {
+            ElementPtr keyElem;
+            ElementPtr dataElem;
+
+            // query cache for a serializer of this type
+            archive.GetCache().Create( Reflect::GetType<KeySer>(), keyElem );
+            archive.GetCache().Create( Reflect::GetType<ValueSer>(), dataElem );
+
+            // downcast to serializer type
+            KeySer* keySer = DangerousCast<KeySer>(keyElem);
+            ValueSer* dataSer = DangerousCast<ValueSer>(dataElem);
+
+            // connect to our map key memory address
+            keySer->ConnectData(const_cast<KeyT*>(&(itr->first)));
+
+            // connect to our map data memory address
+            dataSer->ConnectData(const_cast<ValueT*>(&(itr->second)));
+
+            // serialize to the archive stream
+            components[i++] = keySer;
+            components[i++] = dataSer;
+        }
+    }
+
+    archive.Serialize(components);
+
+    V_Element::iterator itr = components.begin();
+    V_Element::iterator end = components.end();
     for ( ; itr != end; ++itr )
     {
-      ElementPtr keyElem;
-      ElementPtr dataElem;
+        // downcast to serializer type
+        Serializer* ser = DangerousCast<Serializer>(*itr);
 
-      // query cache for a serializer of this type
-      archive.GetCache().Create( Reflect::GetType<KeySer>(), keyElem );
-      archive.GetCache().Create( Reflect::GetType<ValueSer>(), dataElem );
+        // disconnect from memory
+        ser->Disconnect();
 
-      // downcast to serializer type
-      KeySer* keySer = DangerousCast<KeySer>(keyElem);
-      ValueSer* dataSer = DangerousCast<ValueSer>(dataElem);
-
-      // connect to our map key memory address
-      keySer->ConnectData(const_cast<KeyT*>(&(itr->first)));
-
-      // connect to our map data memory address
-      dataSer->ConnectData(const_cast<ValueT*>(&(itr->second)));
-
-      // serialize to the archive stream
-      components[i++] = keySer;
-      components[i++] = dataSer;
+        // restore serializer to the cache
+        archive.GetCache().Free( ser );
     }
-  }
-
-  archive.Serialize(components);
-
-  V_Element::iterator itr = components.begin();
-  V_Element::iterator end = components.end();
-  for ( ; itr != end; ++itr )
-  {
-    // downcast to serializer type
-    Serializer* ser = DangerousCast<Serializer>(*itr);
-
-    // disconnect from memory
-    ser->Disconnect();
-
-    // restore serializer to the cache
-    archive.GetCache().Free( ser );
-  }
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Deserialize(Archive& archive)
 {
-  V_Element components;
-  archive.Deserialize(components, ArchiveFlags::Sparse);
+    V_Element components;
+    archive.Deserialize(components, ArchiveFlags::Sparse);
 
-  if (components.size() % 2 != 0)
-  {
-    throw Reflect::DataFormatException("Unmatched map objects");
-  }
-
-  // if we are referring to a real field, clear its contents
-  m_Data->clear();
-
-  V_Element::iterator itr = components.begin();
-  V_Element::iterator end = components.end();
-  for ( ; itr != end; ++itr )
-  {
-    KeySer* key = ObjectCast<KeySer>( *itr );
-    ValueSer* value = ObjectCast<ValueSer>( *(++itr) );
-
-    if (key && value)
+    if (components.size() % 2 != 0)
     {
-      m_Data.Ref()[ key->m_Data.Get() ] = value->m_Data.Get();
+        throw Reflect::DataFormatException("Unmatched map objects");
     }
-  }
+
+    // if we are referring to a real field, clear its contents
+    m_Data->clear();
+
+    V_Element::iterator itr = components.begin();
+    V_Element::iterator end = components.end();
+    for ( ; itr != end; ++itr )
+    {
+        KeySer* key = ObjectCast<KeySer>( *itr );
+        ValueSer* value = ObjectCast<ValueSer>( *(++itr) );
+
+        if (key && value)
+        {
+            m_Data.Ref()[ key->m_Data.Get() ] = value->m_Data.Get();
+        }
+    }
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 std::ostream& SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::operator >> (std::ostream& stream) const
 {
-  if (!TranslateOutput( stream ))
-  {
-    DataType::const_iterator itr = m_Data->begin();
-    DataType::const_iterator end = m_Data->end();
-    for ( ; itr != end; ++itr )
+    if (!TranslateOutput( stream ))
     {
-      if ( itr != m_Data->begin() )
-      {
-        stream << s_ContainerItemDelimiter;
-      }
+        DataType::const_iterator itr = m_Data->begin();
+        DataType::const_iterator end = m_Data->end();
+        for ( ; itr != end; ++itr )
+        {
+            if ( itr != m_Data->begin() )
+            {
+                stream << s_ContainerItemDelimiter;
+            }
 
-      stream << itr->first << s_ContainerItemDelimiter << itr->second;
+            stream << itr->first << s_ContainerItemDelimiter << itr->second;
+        }
     }
-  }
 
-  return stream;
+    return stream;
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 std::istream& SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::operator << (std::istream& stream)
 {
-  m_Data->clear();
+    m_Data->clear();
 
-  if (!TranslateInput( stream ))
-  {
-    std::string str;
-    std::streamsize size = stream.rdbuf()->in_avail();
-    str.resize( (size_t) size);
-    stream.read( const_cast< char* >( str.c_str() ), size );
+    if (!TranslateInput( stream ))
+    {
+        std::string str;
+        std::streamsize size = stream.rdbuf()->in_avail();
+        str.resize( (size_t) size);
+        stream.read( const_cast< char* >( str.c_str() ), size );
 
-    Tokenize< KeyT, ValueT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
-  }
-  return stream;
+        Tokenize< KeyT, ValueT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    }
+    return stream;
 }  
 
 template SimpleMapSerializer<std::string, StringSerializer, std::string, StringSerializer>;

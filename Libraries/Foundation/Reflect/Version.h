@@ -4,23 +4,23 @@
 
 namespace Reflect
 {
-  class FOUNDATION_API Version : public ConcreteInheritor<Version, Element>
-  {
-  public:
-    std::string m_Source;
-    std::string m_SourceVersion;
+    class FOUNDATION_API Version : public ConcreteInheritor<Version, Element>
+    {
+    public:
+        std::string m_Source;
+        std::string m_SourceVersion;
 
-    static void EnumerateClass( Reflect::Compositor<Version>& comp );
-    
-    Version ();
-    Version(const char* source, const char* sourceVersion);
+        static void EnumerateClass( Reflect::Compositor<Version>& comp );
 
-    virtual bool IsCurrent();
+        Version ();
+        Version(const char* source, const char* sourceVersion);
 
-    bool ConvertToInts( int* ints );
+        virtual bool IsCurrent();
 
-    void DetectVersion();
-  };
+        bool ConvertToInts( int* ints );
 
-  typedef Nocturnal::SmartPtr<Version> VersionPtr;
+        void DetectVersion();
+    };
+
+    typedef Nocturnal::SmartPtr<Version> VersionPtr;
 }

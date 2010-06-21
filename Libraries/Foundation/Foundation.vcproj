@@ -541,15 +541,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Math\Color3.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Math\Color3.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Math\Color4.cpp"
 				>
 			</File>
 			<File
@@ -605,15 +597,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Math\HDRColor3.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Math\HDRColor3.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Math\HDRColor4.cpp"
 				>
 			</File>
 			<File
@@ -665,10 +649,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Math\Polygon.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Math\Polygon.h"
 				>
 			</File>
@@ -694,10 +674,6 @@
 			</File>
 			<File
 				RelativePath=".\Math\Shear.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Math\Utils.cpp"
 				>
 			</File>
 			<File
@@ -758,10 +734,6 @@
 			</File>
 			<File
 				RelativePath=".\SmartBuffer\Fixup.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SmartBuffer\ObjectBuffer.cpp"
 				>
 			</File>
 			<File

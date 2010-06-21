@@ -49,685 +49,685 @@ template <class _T>
 class CExpatImpl
 {
 
-// @access Constructors and destructors
-public:
-	
-	// @cmember General constructor
-
-	CExpatImpl ()
-	{
-		m_p = NULL;
-	}
-
-	// @cmember Destructor
-
-	virtual ~CExpatImpl ()
-	{
-		Destroy ();
-	}
-
-// @access Parser creation and deletion methods
+    // @access Constructors and destructors
 public:
 
-	// @cmember Create a parser
+    // @cmember General constructor
 
-	bool Create (const XML_Char *pszEncoding = NULL, 
-		const XML_Char *pszSep = NULL)
-	{
+    CExpatImpl ()
+    {
+        m_p = NULL;
+    }
 
-		//
-		// Destroy the old parser
-		//
+    // @cmember Destructor
 
-		Destroy ();
+    virtual ~CExpatImpl ()
+    {
+        Destroy ();
+    }
 
-		//
-		// If the encoding or seperator are empty, then NULL
-		//
-
-		if (pszEncoding != NULL && pszEncoding [0] == 0)
-			pszEncoding = NULL;
-		if (pszSep != NULL && pszSep [0] == 0)
-			pszSep = NULL;
-
-		//
-		// Create the new one
-		//
-
-		m_p = XML_ParserCreate_MM (pszEncoding, NULL, pszSep);
-		if (m_p == NULL)
-			return false;
-
-		//
-		// Invoke the post create routine
-		//
-
-		_T *pThis = static_cast <_T *> (this);
-		pThis ->OnPostCreate ();
-
-		//
-		// Set the user data used in callbacks
-		//
-
-		XML_SetUserData (m_p, (void *) this);
-		return true;
-	}
-
-	// @cmember Destroy the parser
-
-	void Destroy ()
-	{
-		if (m_p != NULL)
-			XML_ParserFree (m_p);
-		m_p = NULL;
-	}
-
-// @access Parser parse methods
+    // @access Parser creation and deletion methods
 public:
 
-	// @cmember Parse a block of data
+    // @cmember Create a parser
 
-	bool Parse (const char *pszBuffer, int nLength = -1, bool fIsFinal = true)
-	{
+    bool Create (const XML_Char *pszEncoding = NULL, 
+        const XML_Char *pszSep = NULL)
+    {
 
-		//
-		// Validate
-		//
+        //
+        // Destroy the old parser
+        //
 
-		assert (m_p != NULL);
+        Destroy ();
 
-		//
-		// Get the length if not specified
-		//
+        //
+        // If the encoding or seperator are empty, then NULL
+        //
 
-		if (nLength < 0)
-			nLength = (int) strlen (pszBuffer);
+        if (pszEncoding != NULL && pszEncoding [0] == 0)
+            pszEncoding = NULL;
+        if (pszSep != NULL && pszSep [0] == 0)
+            pszSep = NULL;
 
-		//
-		// Invoke the parser
-		//
+        //
+        // Create the new one
+        //
 
-		return XML_Parse (m_p, pszBuffer, nLength, fIsFinal) != 0;
-	}
+        m_p = XML_ParserCreate_MM (pszEncoding, NULL, pszSep);
+        if (m_p == NULL)
+            return false;
 
-	// @cmember Parse a block of data
+        //
+        // Invoke the post create routine
+        //
+
+        _T *pThis = static_cast <_T *> (this);
+        pThis ->OnPostCreate ();
+
+        //
+        // Set the user data used in callbacks
+        //
+
+        XML_SetUserData (m_p, (void *) this);
+        return true;
+    }
+
+    // @cmember Destroy the parser
+
+    void Destroy ()
+    {
+        if (m_p != NULL)
+            XML_ParserFree (m_p);
+        m_p = NULL;
+    }
+
+    // @access Parser parse methods
+public:
+
+    // @cmember Parse a block of data
+
+    bool Parse (const char *pszBuffer, int nLength = -1, bool fIsFinal = true)
+    {
+
+        //
+        // Validate
+        //
+
+        assert (m_p != NULL);
+
+        //
+        // Get the length if not specified
+        //
+
+        if (nLength < 0)
+            nLength = (int) strlen (pszBuffer);
+
+        //
+        // Invoke the parser
+        //
+
+        return XML_Parse (m_p, pszBuffer, nLength, fIsFinal) != 0;
+    }
+
+    // @cmember Parse a block of data
 
 #ifdef WCHAR
-	bool Parse (const WCHAR *pszBuffer, int nLength = -1, bool fIsFinal = true)
-	{
+    bool Parse (const WCHAR *pszBuffer, int nLength = -1, bool fIsFinal = true)
+    {
 
-		//
-		// Validate
-		//
+        //
+        // Validate
+        //
 
-		assert (m_p != NULL);
+        assert (m_p != NULL);
 
-		//
-		// Get the length if not specified
-		//
+        //
+        // Get the length if not specified
+        //
 
-		if (nLength < 0)
-			nLength = wcslen (pszBuffer) * 2;
+        if (nLength < 0)
+            nLength = wcslen (pszBuffer) * 2;
 
-		//
-		// Invoke the parser
-		//
+        //
+        // Invoke the parser
+        //
 
-		return XML_Parse (m_p, pszBuffer, nLength, fIsFinal) != 0;
-	}
+        return XML_Parse (m_p, pszBuffer, nLength, fIsFinal) != 0;
+    }
 #endif
 
-	// @cmember Parse internal buffer
+    // @cmember Parse internal buffer
 
-	bool ParseBuffer (int nLength, bool fIsFinal = true)
-	{
-		assert (m_p != NULL);
-		return XML_ParseBuffer (m_p, nLength, fIsFinal) != 0;
-	}
+    bool ParseBuffer (int nLength, bool fIsFinal = true)
+    {
+        assert (m_p != NULL);
+        return XML_ParseBuffer (m_p, nLength, fIsFinal) != 0;
+    }
 
-	// @cmember Get the internal buffer
+    // @cmember Get the internal buffer
 
-	void *GetBuffer (int nLength)
-	{
-		assert (m_p != NULL);
-		return XML_GetBuffer (m_p, nLength);
-	}
+    void *GetBuffer (int nLength)
+    {
+        assert (m_p != NULL);
+        return XML_GetBuffer (m_p, nLength);
+    }
 
-// @access Parser callback enable/disable methods
+    // @access Parser callback enable/disable methods
 public:
 
-	// @cmember Enable/Disable the start element handler
+    // @cmember Enable/Disable the start element handler
 
-	void EnableStartElementHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetStartElementHandler (m_p, fEnable ? StartElementHandler : NULL);
-	}
+    void EnableStartElementHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        XML_SetStartElementHandler (m_p, fEnable ? StartElementHandler : NULL);
+    }
 
-	// @cmember Enable/Disable the end element handler
+    // @cmember Enable/Disable the end element handler
 
-	void EnableEndElementHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetEndElementHandler (m_p, fEnable ? EndElementHandler : NULL);
-	}
+    void EnableEndElementHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        XML_SetEndElementHandler (m_p, fEnable ? EndElementHandler : NULL);
+    }
 
-	// @cmember Enable/Disable the element handlers
+    // @cmember Enable/Disable the element handlers
 
-	void EnableElementHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		EnableStartElementHandler (fEnable);
-		EnableEndElementHandler (fEnable);
-	}
+    void EnableElementHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        EnableStartElementHandler (fEnable);
+        EnableEndElementHandler (fEnable);
+    }
 
-	// @cmember Enable/Disable the character data handler
+    // @cmember Enable/Disable the character data handler
 
-	void EnableCharacterDataHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetCharacterDataHandler (m_p,
-			fEnable ? CharacterDataHandler : NULL);
-	}
+    void EnableCharacterDataHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        XML_SetCharacterDataHandler (m_p,
+            fEnable ? CharacterDataHandler : NULL);
+    }
 
-	// @cmember Enable/Disable the processing instruction handler
+    // @cmember Enable/Disable the processing instruction handler
 
-	void EnableProcessingInstructionHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetProcessingInstructionHandler (m_p, 
-			fEnable ? ProcessingInstructionHandler : NULL);
-	}
+    void EnableProcessingInstructionHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        XML_SetProcessingInstructionHandler (m_p, 
+            fEnable ? ProcessingInstructionHandler : NULL);
+    }
 
-	// @cmember Enable/Disable the comment handler
+    // @cmember Enable/Disable the comment handler
 
-	void EnableCommentHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetCommentHandler (m_p, fEnable ? CommentHandler : NULL);
-	}
+    void EnableCommentHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        XML_SetCommentHandler (m_p, fEnable ? CommentHandler : NULL);
+    }
 
-	// @cmember Enable/Disable the start CDATA section handler
+    // @cmember Enable/Disable the start CDATA section handler
 
-	void EnableStartCdataSectionHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetStartCdataSectionHandler (m_p, 
-			fEnable ? StartCdataSectionHandler : NULL);
-	}
+    void EnableStartCdataSectionHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        XML_SetStartCdataSectionHandler (m_p, 
+            fEnable ? StartCdataSectionHandler : NULL);
+    }
 
-	// @cmember Enable/Disable the end CDATA section handler
+    // @cmember Enable/Disable the end CDATA section handler
 
-	void EnableEndCdataSectionHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetEndCdataSectionHandler (m_p, 
-			fEnable ? EndCdataSectionHandler : NULL);
-	}
+    void EnableEndCdataSectionHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        XML_SetEndCdataSectionHandler (m_p, 
+            fEnable ? EndCdataSectionHandler : NULL);
+    }
 
-	// @cmember Enable/Disable the CDATA section handlers
+    // @cmember Enable/Disable the CDATA section handlers
 
-	void EnableCdataSectionHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		EnableStartCdataSectionHandler (fEnable);
-		EnableEndCdataSectionHandler (fEnable);
-	}
+    void EnableCdataSectionHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        EnableStartCdataSectionHandler (fEnable);
+        EnableEndCdataSectionHandler (fEnable);
+    }
 
-	// @cmember Enable/Disable default handler
-	
-	void EnableDefaultHandler (bool fEnable = true, bool fExpand = true)
-	{
-		assert (m_p != NULL);
-		if (fExpand)
-		{
-			XML_SetDefaultHandlerExpand (m_p, 
-				fEnable ? DefaultHandler : NULL);
-		}
-		else
-			XML_SetDefaultHandler (m_p, fEnable ? DefaultHandler : NULL);
-	}
+    // @cmember Enable/Disable default handler
 
-	/*
+    void EnableDefaultHandler (bool fEnable = true, bool fExpand = true)
+    {
+        assert (m_p != NULL);
+        if (fExpand)
+        {
+            XML_SetDefaultHandlerExpand (m_p, 
+                fEnable ? DefaultHandler : NULL);
+        }
+        else
+            XML_SetDefaultHandler (m_p, fEnable ? DefaultHandler : NULL);
+    }
 
-  Geoff Evans, 5-20-04... Disabled this because it wouldn't compile in DLL
+    /*
 
-	// @cmember Enable/Disable external entity ref handler
+    Geoff Evans, 5-20-04... Disabled this because it wouldn't compile in DLL
 
-	void EnableExternalEntityRefHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetExternalEntityRefHandler (m_p, 
-			fEnable ? (XML_ExternalEntityRefHandler)ExternalEntityRefHandler : NULL);
-	}
-	
-	// @cmember Enable/Disable unknown encoding handler
+    // @cmember Enable/Disable external entity ref handler
 
-	void EnableUnknownEncodingHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetUnknownEncodingHandler (m_p, 
-			fEnable ? (XML_UnknownEncodingHandler)UnknownEncodingHandler : NULL);
-	}
-  */
-	
-	// @cmember Enable/Disable start namespace handler
-	
-	void EnableStartNamespaceDeclHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetStartNamespaceDeclHandler (m_p, 
-			fEnable ? StartNamespaceDeclHandler : NULL);
-	}
-	
-	// @cmember Enable/Disable end namespace handler
-	
-	void EnableEndNamespaceDeclHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetEndNamespaceDeclHandler (m_p, 
-			fEnable ? EndNamespaceDeclHandler : NULL);
-	}
+    void EnableExternalEntityRefHandler (bool fEnable = true)
+    {
+    assert (m_p != NULL);
+    XML_SetExternalEntityRefHandler (m_p, 
+    fEnable ? (XML_ExternalEntityRefHandler)ExternalEntityRefHandler : NULL);
+    }
 
-	// @cmember Enable/Disable namespace handlers
+    // @cmember Enable/Disable unknown encoding handler
 
-	void EnableNamespaceDeclHandler (bool fEnable = true)
-	{
-		EnableStartNamespaceDeclHandler (fEnable);
-		EnableEndNamespaceDeclHandler (fEnable);
-	}
-	
-	// @cmember Enable/Disable the XML declaration handler
+    void EnableUnknownEncodingHandler (bool fEnable = true)
+    {
+    assert (m_p != NULL);
+    XML_SetUnknownEncodingHandler (m_p, 
+    fEnable ? (XML_UnknownEncodingHandler)UnknownEncodingHandler : NULL);
+    }
+    */
 
-	void EnableXmlDeclHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetXmlDeclHandler (m_p, fEnable ? XmlDeclHandler : NULL);
-	}
+    // @cmember Enable/Disable start namespace handler
 
-	// @cmember Enable/Disable the start DOCTYPE declaration handler
+    void EnableStartNamespaceDeclHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        XML_SetStartNamespaceDeclHandler (m_p, 
+            fEnable ? StartNamespaceDeclHandler : NULL);
+    }
 
-	void EnableStartDoctypeDeclHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetStartDoctypeDeclHandler (m_p, 
-			fEnable ? StartDoctypeDeclHandler : NULL);
-	}
+    // @cmember Enable/Disable end namespace handler
 
-	// @cmember Enable/Disable the end DOCTYPE declaration handler
+    void EnableEndNamespaceDeclHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        XML_SetEndNamespaceDeclHandler (m_p, 
+            fEnable ? EndNamespaceDeclHandler : NULL);
+    }
 
-	void EnableEndDoctypeDeclHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		XML_SetEndDoctypeDeclHandler (m_p, 
-			fEnable ? EndDoctypeDeclHandler : NULL);
-	}
+    // @cmember Enable/Disable namespace handlers
 
-	// @cmember Enable/Disable the DOCTYPE declaration handler
+    void EnableNamespaceDeclHandler (bool fEnable = true)
+    {
+        EnableStartNamespaceDeclHandler (fEnable);
+        EnableEndNamespaceDeclHandler (fEnable);
+    }
 
-	void EnableDoctypeDeclHandler (bool fEnable = true)
-	{
-		assert (m_p != NULL);
-		EnableStartDoctypeDeclHandler (fEnable);
-		EnableEndDoctypeDeclHandler (fEnable);
-	}
+    // @cmember Enable/Disable the XML declaration handler
 
-// @access Parser error reporting methods
+    void EnableXmlDeclHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        XML_SetXmlDeclHandler (m_p, fEnable ? XmlDeclHandler : NULL);
+    }
+
+    // @cmember Enable/Disable the start DOCTYPE declaration handler
+
+    void EnableStartDoctypeDeclHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        XML_SetStartDoctypeDeclHandler (m_p, 
+            fEnable ? StartDoctypeDeclHandler : NULL);
+    }
+
+    // @cmember Enable/Disable the end DOCTYPE declaration handler
+
+    void EnableEndDoctypeDeclHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        XML_SetEndDoctypeDeclHandler (m_p, 
+            fEnable ? EndDoctypeDeclHandler : NULL);
+    }
+
+    // @cmember Enable/Disable the DOCTYPE declaration handler
+
+    void EnableDoctypeDeclHandler (bool fEnable = true)
+    {
+        assert (m_p != NULL);
+        EnableStartDoctypeDeclHandler (fEnable);
+        EnableEndDoctypeDeclHandler (fEnable);
+    }
+
+    // @access Parser error reporting methods
 public:
 
-	// @cmember Get last error
+    // @cmember Get last error
 
-	enum XML_Error GetErrorCode () 
-	{
-		assert (m_p != NULL);
-		return XML_GetErrorCode (m_p);
-	}
+    enum XML_Error GetErrorCode () 
+    {
+        assert (m_p != NULL);
+        return XML_GetErrorCode (m_p);
+    }
 
-	// @cmember Get the current byte index
+    // @cmember Get the current byte index
 
-	long GetCurrentByteIndex () 
-	{
-		assert (m_p != NULL);
-		return XML_GetCurrentByteIndex (m_p);
-	}
+    long GetCurrentByteIndex () 
+    {
+        assert (m_p != NULL);
+        return XML_GetCurrentByteIndex (m_p);
+    }
 
-	// @cmember Get the current line number
+    // @cmember Get the current line number
 
-	int GetCurrentLineNumber () 
-	{
-		assert (m_p != NULL);
-		return XML_GetCurrentLineNumber (m_p);
-	}
+    int GetCurrentLineNumber () 
+    {
+        assert (m_p != NULL);
+        return XML_GetCurrentLineNumber (m_p);
+    }
 
-	// @cmember Get the current column number
+    // @cmember Get the current column number
 
-	int GetCurrentColumnNumber () 
-	{
-		assert (m_p != NULL);
-		return XML_GetCurrentColumnNumber (m_p);
-	}
+    int GetCurrentColumnNumber () 
+    {
+        assert (m_p != NULL);
+        return XML_GetCurrentColumnNumber (m_p);
+    }
 
-	// @cmember Get the current byte count
+    // @cmember Get the current byte count
 
-	int GetCurrentByteCount () 
-	{
-		assert (m_p != NULL);
-		return XML_GetCurrentByteCount (m_p);
-	}
+    int GetCurrentByteCount () 
+    {
+        assert (m_p != NULL);
+        return XML_GetCurrentByteCount (m_p);
+    }
 
-	// @cmember Get the input context
+    // @cmember Get the input context
 
-	const char *GetInputContext (int *pnOffset, int *pnSize)
-	{
-		assert (m_p != NULL);
-		return XML_GetInputContext (m_p, pnOffset, pnSize);
-	}
+    const char *GetInputContext (int *pnOffset, int *pnSize)
+    {
+        assert (m_p != NULL);
+        return XML_GetInputContext (m_p, pnOffset, pnSize);
+    }
 
-	// @cmember Get last error string
+    // @cmember Get last error string
 
-	const XML_LChar *GetErrorString () 
-	{
-		return XML_ErrorString (GetErrorCode ());
-	}
+    const XML_LChar *GetErrorString () 
+    {
+        return XML_ErrorString (GetErrorCode ());
+    }
 
-// @access Parser other methods
+    // @access Parser other methods
 public:
 
-	// @cmember Return the version string
+    // @cmember Return the version string
 
-	static const XML_LChar *GetExpatVersion ()
-	{
-		return XML_ExpatVersion ();
-	}
+    static const XML_LChar *GetExpatVersion ()
+    {
+        return XML_ExpatVersion ();
+    }
 
-	// @cmember Get the version information
+    // @cmember Get the version information
 
-	static void GetExpatVersion (int *pnMajor, int *pnMinor, int *pnMicro)
-	{
-		XML_Expat_Version v = XML_ExpatVersionInfo ();
-		if (pnMajor)
-			*pnMajor = v .major;
-		if (pnMinor)
-			*pnMinor = v .minor;
-		if (pnMicro)
-			*pnMicro = v .micro;
-	}
+    static void GetExpatVersion (int *pnMajor, int *pnMinor, int *pnMicro)
+    {
+        XML_Expat_Version v = XML_ExpatVersionInfo ();
+        if (pnMajor)
+            *pnMajor = v .major;
+        if (pnMinor)
+            *pnMinor = v .minor;
+        if (pnMicro)
+            *pnMicro = v .micro;
+    }
 
-	// @cmember Get last error string
+    // @cmember Get last error string
 
-	static const XML_LChar *GetErrorString (enum XML_Error nError) 
-	{
-		return XML_ErrorString (nError);
-	}
+    static const XML_LChar *GetErrorString (enum XML_Error nError) 
+    {
+        return XML_ErrorString (nError);
+    }
 
-// @access Public handler methods
+    // @access Public handler methods
 public:
 
-	// @cmember Start element handler
+    // @cmember Start element handler
 
-	void OnStartElement (const XML_Char *pszName, const XML_Char **papszAttrs)
-	{
-		return;
-	}
+    void OnStartElement (const XML_Char *pszName, const XML_Char **papszAttrs)
+    {
+        return;
+    }
 
-	// @cmember End element handler
+    // @cmember End element handler
 
-	void OnEndElement (const XML_Char *pszName)
-	{
-		return;
-	}
+    void OnEndElement (const XML_Char *pszName)
+    {
+        return;
+    }
 
-	// @cmember Character data handler
+    // @cmember Character data handler
 
-	void OnCharacterData (const XML_Char *pszData, int nLength)
-	{
-		return;
-	}
+    void OnCharacterData (const XML_Char *pszData, int nLength)
+    {
+        return;
+    }
 
-	// @cmember Processing instruction handler
+    // @cmember Processing instruction handler
 
-	void OnProcessingInstruction (const XML_Char *pszTarget, 
-		const XML_Char *pszData)
-	{
-		return;
-	}
+    void OnProcessingInstruction (const XML_Char *pszTarget, 
+        const XML_Char *pszData)
+    {
+        return;
+    }
 
-	// @cmember Comment handler
+    // @cmember Comment handler
 
-	void OnComment (const XML_Char *pszData)
-	{
-		return;
-	}
+    void OnComment (const XML_Char *pszData)
+    {
+        return;
+    }
 
-	// @cmember Start CDATA section handler
+    // @cmember Start CDATA section handler
 
-	void OnStartCdataSection ()
-	{
-		return;
-	}
+    void OnStartCdataSection ()
+    {
+        return;
+    }
 
-	// @cmember End CDATA section handler
+    // @cmember End CDATA section handler
 
-	void OnEndCdataSection ()
-	{
-		return;
-	}
+    void OnEndCdataSection ()
+    {
+        return;
+    }
 
-	// @cmember Default handler
-	
-	void OnDefault (const XML_Char *pszData, int nLength)
-	{
-		return;
-	}
-	
-	// @cmember External entity ref handler
-	
-	bool OnExternalEntityRef (const XML_Char *pszContext,
-		const XML_Char *pszBase, const XML_Char *pszSystemID,
-		const XML_Char *pszPublicID)
-	{
-		return false;
-	}
-	
-	// @cmember Unknown encoding handler
-	
-	bool OnUnknownEncoding (const XML_Char *pszName, XML_Encoding *pInfo)
-	{
-		return false;
-	}
-	
-	// @cmember Start namespace declaration handler
-	
-	void OnStartNamespaceDecl (const XML_Char *pszPrefix, 
-		const XML_Char *pszURI)
-	{
-		return;
-	}
-	
-	// @cmember End namespace declaration handler
-	
-	void OnEndNamespaceDecl (const XML_Char *pszPrefix)
-	{
-		return;
-	}
-	
-	// @cmember XML declaration handler
+    // @cmember Default handler
 
-	void OnXmlDecl (const XML_Char *pszVersion, const XML_Char *pszEncoding,
-		bool fStandalone)
-	{
-		return;
-	}
+    void OnDefault (const XML_Char *pszData, int nLength)
+    {
+        return;
+    }
 
-	// @cmember Start DOCTYPE declaration handler
+    // @cmember External entity ref handler
 
-	void OnStartDoctypeDecl (const XML_Char *pszDoctypeName, 
-		const XML_Char *pszSysID, const XML_Char *pszPubID,
-		bool fHasInternalSubset)
-	{
-		return;
-	}
+    bool OnExternalEntityRef (const XML_Char *pszContext,
+        const XML_Char *pszBase, const XML_Char *pszSystemID,
+        const XML_Char *pszPublicID)
+    {
+        return false;
+    }
 
-	// @cmember End DOCTYPE declaration handler
+    // @cmember Unknown encoding handler
 
-	void OnEndDoctypeDecl ()
-	{
-		return;
-	}
+    bool OnUnknownEncoding (const XML_Char *pszName, XML_Encoding *pInfo)
+    {
+        return false;
+    }
 
-// @access Protected methods
+    // @cmember Start namespace declaration handler
+
+    void OnStartNamespaceDecl (const XML_Char *pszPrefix, 
+        const XML_Char *pszURI)
+    {
+        return;
+    }
+
+    // @cmember End namespace declaration handler
+
+    void OnEndNamespaceDecl (const XML_Char *pszPrefix)
+    {
+        return;
+    }
+
+    // @cmember XML declaration handler
+
+    void OnXmlDecl (const XML_Char *pszVersion, const XML_Char *pszEncoding,
+        bool fStandalone)
+    {
+        return;
+    }
+
+    // @cmember Start DOCTYPE declaration handler
+
+    void OnStartDoctypeDecl (const XML_Char *pszDoctypeName, 
+        const XML_Char *pszSysID, const XML_Char *pszPubID,
+        bool fHasInternalSubset)
+    {
+        return;
+    }
+
+    // @cmember End DOCTYPE declaration handler
+
+    void OnEndDoctypeDecl ()
+    {
+        return;
+    }
+
+    // @access Protected methods
 protected:
 
-	// @cmember Handle any post creation
+    // @cmember Handle any post creation
 
-	void OnPostCreate ()
-	{
-	}
+    void OnPostCreate ()
+    {
+    }
 
-// @access Protected static methods
+    // @access Protected static methods
 protected:
 
-	// @cmember Start element handler wrapper
+    // @cmember Start element handler wrapper
 
-	static void __cdecl StartElementHandler (void *pUserData,
-		const XML_Char *pszName, const XML_Char **papszAttrs)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnStartElement (pszName, papszAttrs);
-	}
+    static void __cdecl StartElementHandler (void *pUserData,
+        const XML_Char *pszName, const XML_Char **papszAttrs)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnStartElement (pszName, papszAttrs);
+    }
 
-	// @cmember End element handler wrapper
+    // @cmember End element handler wrapper
 
-	static void __cdecl EndElementHandler (void *pUserData,
-		const XML_Char *pszName)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnEndElement (pszName);
-	}
+    static void __cdecl EndElementHandler (void *pUserData,
+        const XML_Char *pszName)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnEndElement (pszName);
+    }
 
-	// @cmember Character data handler wrapper
+    // @cmember Character data handler wrapper
 
-	static void __cdecl CharacterDataHandler (void *pUserData,
-		const XML_Char *pszData, int nLength)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnCharacterData (pszData, nLength);
-	}
+    static void __cdecl CharacterDataHandler (void *pUserData,
+        const XML_Char *pszData, int nLength)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnCharacterData (pszData, nLength);
+    }
 
-	// @cmember Processing instruction handler wrapper
+    // @cmember Processing instruction handler wrapper
 
-	static void __cdecl ProcessingInstructionHandler (void *pUserData,
-		const XML_Char *pszTarget, const XML_Char *pszData)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnProcessingInstruction (pszTarget, pszData);
-	}
+    static void __cdecl ProcessingInstructionHandler (void *pUserData,
+        const XML_Char *pszTarget, const XML_Char *pszData)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnProcessingInstruction (pszTarget, pszData);
+    }
 
-	// @cmember Comment handler wrapper
+    // @cmember Comment handler wrapper
 
-	static void __cdecl CommentHandler (void *pUserData,
-		const XML_Char *pszData)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnComment (pszData);
-	}
+    static void __cdecl CommentHandler (void *pUserData,
+        const XML_Char *pszData)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnComment (pszData);
+    }
 
-	// @cmember Start CDATA section wrapper
+    // @cmember Start CDATA section wrapper
 
-	static void __cdecl StartCdataSectionHandler (void *pUserData)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnStartCdataSection ();
-	}
+    static void __cdecl StartCdataSectionHandler (void *pUserData)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnStartCdataSection ();
+    }
 
-	// @cmember End CDATA section wrapper
+    // @cmember End CDATA section wrapper
 
-	static void __cdecl EndCdataSectionHandler (void *pUserData)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnEndCdataSection ();
-	}
+    static void __cdecl EndCdataSectionHandler (void *pUserData)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnEndCdataSection ();
+    }
 
-	// @cmember Default wrapper
-	
-	static void __cdecl DefaultHandler (void *pUserData, 
-		const XML_Char *pszData, int nLength)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnDefault (pszData, nLength);
-	}
-	
-	// @cmember External entity ref wrapper
-	
-	static int __cdecl ExternalEntityRefHandler (void *pUserData, 
-		const XML_Char *pszContext, const XML_Char *pszBase, 
-		const XML_Char *pszSystemID, const XML_Char *pszPublicID)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		return pThis ->OnExternalEntityRef (pszContext, 
-			pszBase, pszSystemID, pszPublicID) ? 1 : 0;
-	}
-	
-	// @cmember Unknown encoding wrapper
-	
-	static int __cdecl UnknownEncodingHandler (void *pUserData, 
-		const XML_Char *pszName, XML_Encoding *pInfo)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		return pThis ->OnUnknownEncoding (pszName, pInfo) ? 1 : 0;
-	}
-	
-	// @cmember Start namespace decl wrapper
-	
-	static void __cdecl StartNamespaceDeclHandler (void *pUserData, 
-		const XML_Char *pszPrefix, const XML_Char *pszURI)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnStartNamespaceDecl (pszPrefix, pszURI);
-	}
-	
-	// @cmember End namespace decl wrapper
-	
-	static void __cdecl EndNamespaceDeclHandler (void *pUserData, 
-		const XML_Char *pszPrefix)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnEndNamespaceDecl (pszPrefix);
-	}
-	
-	// @cmember XML declaration wrapper
+    // @cmember Default wrapper
 
-	static void __cdecl XmlDeclHandler (void *pUserData,
-		const XML_Char *pszVersion, const XML_Char *pszEncoding,
-		int nStandalone)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnXmlDecl (pszVersion, pszEncoding, nStandalone != 0);
-	}
+    static void __cdecl DefaultHandler (void *pUserData, 
+        const XML_Char *pszData, int nLength)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnDefault (pszData, nLength);
+    }
 
-	// @cmember Start Doctype declaration wrapper
+    // @cmember External entity ref wrapper
 
-	static void __cdecl StartDoctypeDeclHandler (void *pUserData,
-		const XML_Char *pszDoctypeName, const XML_Char *pszSysID, 
-		const XML_Char *pszPubID, int nHasInternalSubset)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnStartDoctypeDecl (pszDoctypeName, pszSysID, 
-			pszPubID, nHasInternalSubset != 0);
-	}
+    static int __cdecl ExternalEntityRefHandler (void *pUserData, 
+        const XML_Char *pszContext, const XML_Char *pszBase, 
+        const XML_Char *pszSystemID, const XML_Char *pszPublicID)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        return pThis ->OnExternalEntityRef (pszContext, 
+            pszBase, pszSystemID, pszPublicID) ? 1 : 0;
+    }
 
-	// @cmember End Doctype declaration wrapper
+    // @cmember Unknown encoding wrapper
 
-	static void __cdecl EndDoctypeDeclHandler (void *pUserData)
-	{
-		_T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
-		pThis ->OnEndDoctypeDecl ();
-	}
+    static int __cdecl UnknownEncodingHandler (void *pUserData, 
+        const XML_Char *pszName, XML_Encoding *pInfo)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        return pThis ->OnUnknownEncoding (pszName, pInfo) ? 1 : 0;
+    }
 
-// @access Protected members
+    // @cmember Start namespace decl wrapper
+
+    static void __cdecl StartNamespaceDeclHandler (void *pUserData, 
+        const XML_Char *pszPrefix, const XML_Char *pszURI)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnStartNamespaceDecl (pszPrefix, pszURI);
+    }
+
+    // @cmember End namespace decl wrapper
+
+    static void __cdecl EndNamespaceDeclHandler (void *pUserData, 
+        const XML_Char *pszPrefix)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnEndNamespaceDecl (pszPrefix);
+    }
+
+    // @cmember XML declaration wrapper
+
+    static void __cdecl XmlDeclHandler (void *pUserData,
+        const XML_Char *pszVersion, const XML_Char *pszEncoding,
+        int nStandalone)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnXmlDecl (pszVersion, pszEncoding, nStandalone != 0);
+    }
+
+    // @cmember Start Doctype declaration wrapper
+
+    static void __cdecl StartDoctypeDeclHandler (void *pUserData,
+        const XML_Char *pszDoctypeName, const XML_Char *pszSysID, 
+        const XML_Char *pszPubID, int nHasInternalSubset)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnStartDoctypeDecl (pszDoctypeName, pszSysID, 
+            pszPubID, nHasInternalSubset != 0);
+    }
+
+    // @cmember End Doctype declaration wrapper
+
+    static void __cdecl EndDoctypeDeclHandler (void *pUserData)
+    {
+        _T *pThis = static_cast <_T *> ((CExpatImpl <_T> *) pUserData);
+        pThis ->OnEndDoctypeDecl ();
+    }
+
+    // @access Protected members
 protected:
 
-	XML_Parser		m_p;
+    XML_Parser		m_p;
 };
 
 //-----------------------------------------------------------------------------
@@ -738,128 +738,128 @@ protected:
 
 class CExpat : public CExpatImpl <CExpat>
 {
-// @access Constructors and destructors
-public:
-	
-	CExpat ()
-	{
-	}
-
-// @access Public handler methods
+    // @access Constructors and destructors
 public:
 
-	// @cmember Start element handler
+    CExpat ()
+    {
+    }
 
-	virtual void OnStartElement (const XML_Char *pszName, 
-		const XML_Char **papszAttrs)
-	{
-		return;
-	}
+    // @access Public handler methods
+public:
 
-	// @cmember End element handler
+    // @cmember Start element handler
 
-	virtual void OnEndElement (const XML_Char *pszName)
-	{
-		return;
-	}
+    virtual void OnStartElement (const XML_Char *pszName, 
+        const XML_Char **papszAttrs)
+    {
+        return;
+    }
 
-	// @cmember Character data handler
+    // @cmember End element handler
 
-	virtual void OnCharacterData (const XML_Char *pszData, int nLength)
-	{
-		return;
-	}
+    virtual void OnEndElement (const XML_Char *pszName)
+    {
+        return;
+    }
 
-	// @cmember Processing instruction handler
+    // @cmember Character data handler
 
-	virtual void OnProcessingInstruction (const XML_Char *pszTarget, 
-		const XML_Char *pszData)
-	{
-		return;
-	}
+    virtual void OnCharacterData (const XML_Char *pszData, int nLength)
+    {
+        return;
+    }
 
-	// @cmember Comment handler
+    // @cmember Processing instruction handler
 
-	virtual void OnComment (const XML_Char *pszData)
-	{
-		return;
-	}
+    virtual void OnProcessingInstruction (const XML_Char *pszTarget, 
+        const XML_Char *pszData)
+    {
+        return;
+    }
 
-	// @cmember Start CDATA section handler
+    // @cmember Comment handler
 
-	virtual void OnStartCdataSection ()
-	{
-		return;
-	}
+    virtual void OnComment (const XML_Char *pszData)
+    {
+        return;
+    }
 
-	// @cmember End CDATA section handler
+    // @cmember Start CDATA section handler
 
-	virtual void OnEndCdataSection ()
-	{
-		return;
-	}
+    virtual void OnStartCdataSection ()
+    {
+        return;
+    }
 
-	// @cmember Default handler
-	
-	virtual void OnDefault (const XML_Char *pszData, int nLength)
-	{
-		return;
-	}
-	
-	// @cmember External entity ref handler
-	
-	virtual bool OnExternalEntityRef (const XML_Char *pszContext,
-		const XML_Char *pszBase, const XML_Char *pszSystemID,
-		const XML_Char *pszPublicID)
-	{
-		return false;
-	}
-	
-	// @cmember Unknown encoding handler
-	
-	virtual bool OnUnknownEncoding (const XML_Char *pszName, XML_Encoding *pInfo)
-	{
-		return false;
-	}
-	
-	// @cmember Start namespace declaration handler
-	
-	virtual void OnStartNamespaceDecl (const XML_Char *pszPrefix, 
-		const XML_Char *pszURI)
-	{
-		return;
-	}
-	
-	// @cmember End namespace declaration handler
-	
-	virtual void OnEndNamespaceDecl (const XML_Char *pszPrefix)
-	{
-		return;
-	}
-	
-	// @cmember XML declaration handler
+    // @cmember End CDATA section handler
 
-	virtual void OnXmlDecl (const XML_Char *pszVersion, 
-		const XML_Char *pszEncoding, bool fStandalone)
-	{
-		return;
-	}
+    virtual void OnEndCdataSection ()
+    {
+        return;
+    }
 
-	// @cmember Start DOCTYPE declaration handler
+    // @cmember Default handler
 
-	virtual void OnStartDoctypeDecl (const XML_Char *pszDoctypeName, 
-		const XML_Char *pszSysID, const XML_Char *pszPubID,
-		bool fHasInternalSubset)
-	{
-		return;
-	}
+    virtual void OnDefault (const XML_Char *pszData, int nLength)
+    {
+        return;
+    }
 
-	// @cmember End DOCTYPE declaration handler
+    // @cmember External entity ref handler
 
-	virtual void OnEndDoctypeDecl ()
-	{
-		return;
-	}
+    virtual bool OnExternalEntityRef (const XML_Char *pszContext,
+        const XML_Char *pszBase, const XML_Char *pszSystemID,
+        const XML_Char *pszPublicID)
+    {
+        return false;
+    }
+
+    // @cmember Unknown encoding handler
+
+    virtual bool OnUnknownEncoding (const XML_Char *pszName, XML_Encoding *pInfo)
+    {
+        return false;
+    }
+
+    // @cmember Start namespace declaration handler
+
+    virtual void OnStartNamespaceDecl (const XML_Char *pszPrefix, 
+        const XML_Char *pszURI)
+    {
+        return;
+    }
+
+    // @cmember End namespace declaration handler
+
+    virtual void OnEndNamespaceDecl (const XML_Char *pszPrefix)
+    {
+        return;
+    }
+
+    // @cmember XML declaration handler
+
+    virtual void OnXmlDecl (const XML_Char *pszVersion, 
+        const XML_Char *pszEncoding, bool fStandalone)
+    {
+        return;
+    }
+
+    // @cmember Start DOCTYPE declaration handler
+
+    virtual void OnStartDoctypeDecl (const XML_Char *pszDoctypeName, 
+        const XML_Char *pszSysID, const XML_Char *pszPubID,
+        bool fHasInternalSubset)
+    {
+        return;
+    }
+
+    // @cmember End DOCTYPE declaration handler
+
+    virtual void OnEndDoctypeDecl ()
+    {
+        return;
+    }
 };
 
 #endif // DSSI_EXPATIMPL_H

@@ -76,7 +76,7 @@ bool FileWatcher::Remove( const std::string& path, FileChangedSignature::Delegat
 bool FileWatcher::Watch( int timeout )
 {
     HANDLE changeHandles[ MAXIMUM_WAIT_OBJECTS ];
-//    FILE_NOTIFY_INFORMATION notificationInformation[1024];
+    //    FILE_NOTIFY_INFORMATION notificationInformation[1024];
     FileWatch* watches[ MAXIMUM_WAIT_OBJECTS ];
 
     for ( u32 i = 0; i < MAXIMUM_WAIT_OBJECTS; ++i )

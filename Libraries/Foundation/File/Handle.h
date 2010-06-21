@@ -7,48 +7,48 @@
 
 namespace Nocturnal
 { 
-  class FOUNDATION_API Handle : public Nocturnal::RefCountBase< Handle >
-  {
-  public:
-    Handle( const std::string& path, const char* mode = "r" );
-
-    virtual ~Handle()
+    class FOUNDATION_API Handle : public Nocturnal::RefCountBase< Handle >
     {
-      // we don't just call Close() because it is linked to Open() calls
-      if ( m_FileHandle )
-      {
-        fclose( m_FileHandle );
-      }
-    }
+    public:
+        Handle( const std::string& path, const char* mode = "r" );
 
-    bool IsValid();
+        virtual ~Handle()
+        {
+            // we don't just call Close() because it is linked to Open() calls
+            if ( m_FileHandle )
+            {
+                fclose( m_FileHandle );
+            }
+        }
 
-    bool Open();
-    void Close();
+        bool IsValid();
 
-    const std::string& GetPath() const
-    {
-      return m_Path;
-    }
+        bool Open();
+        void Close();
 
-    const char* GetMode() const
-    {
-      return m_Mode;
-    }
+        const std::string& GetPath() const
+        {
+            return m_Path;
+        }
 
-    FILE* Get() const
-    {
-      return m_FileHandle;
-    }
+        const char* GetMode() const
+        {
+            return m_Mode;
+        }
 
-  private:
-    u32  m_OpenCount;
-    std::string m_Path;
-    const char* m_Mode;
-    FILE* m_FileHandle;
-  };
+        FILE* Get() const
+        {
+            return m_FileHandle;
+        }
 
-  typedef Nocturnal::SmartPtr< Handle > HandlePtr;
-  typedef std::vector< HandlePtr > V_Handle;
+    private:
+        u32  m_OpenCount;
+        std::string m_Path;
+        const char* m_Mode;
+        FILE* m_FileHandle;
+    };
+
+    typedef Nocturnal::SmartPtr< Handle > HandlePtr;
+    typedef std::vector< HandlePtr > V_Handle;
 
 }

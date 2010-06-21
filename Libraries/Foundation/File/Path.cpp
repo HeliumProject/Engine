@@ -65,10 +65,10 @@ void Path::MakeNative( std::string& path )
 
 void Path::GuaranteeSlash( std::string& path )
 {
-  if ( !path.empty() && *path.rbegin() != '/' )
-  {
-    path += "/";
-  }
+    if ( !path.empty() && *path.rbegin() != '/' )
+    {
+        path += "/";
+    }
 }
 
 bool Path::Exists( const std::string& path )

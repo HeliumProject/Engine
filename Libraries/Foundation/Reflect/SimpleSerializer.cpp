@@ -22,115 +22,115 @@ SimpleSerializer<T>::~SimpleSerializer()
 template <class T>
 bool SimpleSerializer<T>::IsCompact() const
 { 
-  return true; 
+    return true; 
 }
 
 template <class T>
 void SimpleSerializer<T>::ConnectData(Nocturnal::HybridPtr<void> data)
 {
-  __super::ConnectData( data );
+    __super::ConnectData( data );
 
-  m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
 template <class T>
 bool SimpleSerializer<T>::Set(const Serializer* src, u32 flags)
 {
-  const SimpleSerializerT* rhs = ConstObjectCast<SimpleSerializerT>(src);
-  if (!rhs)
-  {
-    return false;
-  }
+    const SimpleSerializerT* rhs = ConstObjectCast<SimpleSerializerT>(src);
+    if (!rhs)
+    {
+        return false;
+    }
 
-  m_Data.Set( rhs->m_Data.Get() );
+    m_Data.Set( rhs->m_Data.Get() );
 
-  return true;
+    return true;
 }
 
 template <class T>
 bool SimpleSerializer<T>::Equals(const Serializer* s) const
 {
-  const SimpleSerializerT* rhs = ConstObjectCast<SimpleSerializerT>(s);
-  if (!rhs)
-  {
-    return false;
-  }
+    const SimpleSerializerT* rhs = ConstObjectCast<SimpleSerializerT>(s);
+    if (!rhs)
+    {
+        return false;
+    }
 
-  return rhs->m_Data.Get() == m_Data.Get();
+    return rhs->m_Data.Get() == m_Data.Get();
 }
 
 template <class T>
 void SimpleSerializer<T>::Serialize(Archive& archive) const
 {
-  switch (archive.GetType())
-  {
-  case ArchiveTypes::XML:
+    switch (archive.GetType())
     {
-      archive.GetOutput() << m_Data.Get();
-      break;
-    }
+    case ArchiveTypes::XML:
+        {
+            archive.GetOutput() << m_Data.Get();
+            break;
+        }
 
-  case ArchiveTypes::Binary:
-    {
-      archive.GetOutput().Write(m_Data.Ptr()); 
-      break;
+    case ArchiveTypes::Binary:
+        {
+            archive.GetOutput().Write(m_Data.Ptr()); 
+            break;
+        }
     }
-  }
 }
 
 template <class T>
 void SimpleSerializer<T>::Serialize(const Nocturnal::BasicBufferPtr& buffer, const char* debugStr) const
 {
-  T val = m_Data.Get();
+    T val = m_Data.Get();
 
-  Nocturnal::Swizzle( val, buffer->GetPlatform() != Nocturnal::BufferPlatforms::x86 );
+    Nocturnal::Swizzle( val, buffer->GetPlatform() != Nocturnal::BufferPlatforms::x86 );
 
-  buffer->AddBuffer( (const u8*)&val, sizeof(T), debugStr );
+    buffer->AddBuffer( (const u8*)&val, sizeof(T), debugStr );
 }
 
 template <class T>
 std::ostream& SimpleSerializer<T>::operator >> (std::ostream& stream) const
 {
-  if (!TranslateOutput( stream ))
-  {
-    stream << m_Data.Get();
-  }
-  return stream;
+    if (!TranslateOutput( stream ))
+    {
+        stream << m_Data.Get();
+    }
+    return stream;
 }
 
 template <class T>
 void SimpleSerializer<T>::Deserialize(Archive& archive)
 {
-  switch (archive.GetType())
-  {
-  case ArchiveTypes::XML:
+    switch (archive.GetType())
     {
-      archive.GetInput() >> m_Data.Ref();
-      break;
-    }
+    case ArchiveTypes::XML:
+        {
+            archive.GetInput() >> m_Data.Ref();
+            break;
+        }
 
-  case ArchiveTypes::Binary:
-    {
-      archive.GetInput().Read(m_Data.Ptr()); 
-      break;
+    case ArchiveTypes::Binary:
+        {
+            archive.GetInput().Read(m_Data.Ptr()); 
+            break;
+        }
     }
-  }
 }
 
 template <class T>
 std::istream& SimpleSerializer<T>::operator << (std::istream& stream)
 {
-  if (!TranslateInput( stream ))
-  {
-    stream >> m_Data.Ref();
-
-    if ( m_Instance && m_Field && m_Field->m_Type->GetReflectionType() == ReflectionTypes::Class )
+    if (!TranslateInput( stream ))
     {
-      Element* element = (Element*)m_Instance;
-      element->RaiseChanged( m_Field );
+        stream >> m_Data.Ref();
+
+        if ( m_Instance && m_Field && m_Field->m_Type->GetReflectionType() == ReflectionTypes::Class )
+        {
+            Element* element = (Element*)m_Instance;
+            element->RaiseChanged( m_Field );
+        }
     }
-  }
-  return stream;
+    return stream;
 }
 
 //
@@ -141,201 +141,201 @@ std::istream& SimpleSerializer<T>::operator << (std::istream& stream)
 template <>
 void StringSerializer::Serialize(Archive& archive) const
 {
-  switch (archive.GetType())
-  {
-  case ArchiveTypes::XML:
+    switch (archive.GetType())
     {
-      archive.GetOutput() << "<![CDATA[" << m_Data.Get() << "]]>";
-      break;
-    }
+    case ArchiveTypes::XML:
+        {
+            archive.GetOutput() << "<![CDATA[" << m_Data.Get() << "]]>";
+            break;
+        }
 
-  case ArchiveTypes::Binary:
-    {
-      i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().AssignIndex(m_Data.Get());
-      archive.GetOutput().Write(&index); 
-      break;
+    case ArchiveTypes::Binary:
+        {
+            i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().AssignIndex(m_Data.Get());
+            archive.GetOutput().Write(&index); 
+            break;
+        }
     }
-  }
 }
 
 // keep reading the string until we run out of buffer
 template <>
 void StringSerializer::Deserialize(Archive& archive)
 {
-  switch (archive.GetType())
-  {
-  case ArchiveTypes::XML:
+    switch (archive.GetType())
     {
-      std::streamsize size = archive.GetInput().BytesAvailable(); 
-      m_Data->resize( (size_t) size);
-      archive.GetInput().ReadBuffer(const_cast<char*>(m_Data->c_str()), size);
-      break;
-    }
+    case ArchiveTypes::XML:
+        {
+            std::streamsize size = archive.GetInput().BytesAvailable(); 
+            m_Data->resize( (size_t) size);
+            archive.GetInput().ReadBuffer(const_cast<char*>(m_Data->c_str()), size);
+            break;
+        }
 
-  case ArchiveTypes::Binary:
-    {
-      i32 index;
-      archive.GetInput().Read(&index); 
-      m_Data.Set( static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index) );
-      break;
+    case ArchiveTypes::Binary:
+        {
+            i32 index;
+            archive.GetInput().Read(&index); 
+            m_Data.Set( static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index) );
+            break;
+        }
     }
-  }
 }
 
 template<>
 std::ostream& StringSerializer::operator >> (std::ostream& stream) const
 {
-  if (!TranslateOutput( stream ))
-  {
-    stream << m_Data.Get();
-  }
-  return stream;
+    if (!TranslateOutput( stream ))
+    {
+        stream << m_Data.Get();
+    }
+    return stream;
 }
 
 template<>
 std::istream& StringSerializer::operator << (std::istream& stream)
 {
-  if (!TranslateInput( stream ))
-  {
-    std::streamsize size = stream.rdbuf()->in_avail();
-    m_Data->resize( (size_t) size);
-    stream.read(const_cast<char*>(m_Data.Get().c_str()), size);
-  }
-  return stream;
+    if (!TranslateInput( stream ))
+    {
+        std::streamsize size = stream.rdbuf()->in_avail();
+        m_Data->resize( (size_t) size);
+        stream.read(const_cast<char*>(m_Data.Get().c_str()), size);
+    }
+    return stream;
 }
 
 // this is a char, we must treat it as a number
 template <>
 void U8Serializer::Serialize(Archive& archive) const
 {
-  switch (archive.GetType())
-  {
-  case ArchiveTypes::XML:
+    switch (archive.GetType())
     {
-      u16 tmp = m_Data.Get();
-      archive.GetOutput() << tmp;
-      break;
-    }
+    case ArchiveTypes::XML:
+        {
+            u16 tmp = m_Data.Get();
+            archive.GetOutput() << tmp;
+            break;
+        }
 
-  case ArchiveTypes::Binary:
-    {
-      archive.GetOutput().Write(m_Data.Ptr()); 
-      break;
+    case ArchiveTypes::Binary:
+        {
+            archive.GetOutput().Write(m_Data.Ptr()); 
+            break;
+        }
     }
-  }
 }
 
 template <>
 void U8Serializer::Deserialize(Archive& archive)
 {
-  switch (archive.GetType())
-  {
-  case ArchiveTypes::XML:
+    switch (archive.GetType())
     {
-      u16 tmp;
+    case ArchiveTypes::XML:
+        {
+            u16 tmp;
 
-      archive.GetInput() >> tmp;
-      m_Data.Set( (unsigned char)tmp );
+            archive.GetInput() >> tmp;
+            m_Data.Set( (unsigned char)tmp );
 
-      break;
+            break;
+        }
+
+    case ArchiveTypes::Binary:
+        {
+            archive.GetInput().Read(m_Data.Ptr()); 
+            break;
+        }
     }
-
-  case ArchiveTypes::Binary:
-    {
-      archive.GetInput().Read(m_Data.Ptr()); 
-      break;
-    }
-  }
 }
 
 template<>
 std::ostream& U8Serializer::operator >> (std::ostream& stream) const
 {
-  if (!TranslateOutput( stream ))
-  {
-    u16 val = m_Data.Get();
-    stream << val;
-  }
-  return stream;
+    if (!TranslateOutput( stream ))
+    {
+        u16 val = m_Data.Get();
+        stream << val;
+    }
+    return stream;
 }
 
 template<>
 std::istream& U8Serializer::operator << (std::istream& stream)
 {
-  if (!TranslateInput( stream ))
-  {
-    u16 val;
-    stream >> val;
-    m_Data.Set( (u8)val );
-  }
-  return stream;
+    if (!TranslateInput( stream ))
+    {
+        u16 val;
+        stream >> val;
+        m_Data.Set( (u8)val );
+    }
+    return stream;
 }
 
 // this is a char, we must treat it as a number
 template <>
 void I8Serializer::Serialize(Archive& archive) const
 {
-  switch (archive.GetType())
-  {
-  case ArchiveTypes::XML:
+    switch (archive.GetType())
     {
-      i16 tmp = m_Data.Get();
-      archive.GetOutput() << tmp;
-      break;
-    }
+    case ArchiveTypes::XML:
+        {
+            i16 tmp = m_Data.Get();
+            archive.GetOutput() << tmp;
+            break;
+        }
 
-  case ArchiveTypes::Binary:
-    {
-      archive.GetOutput().Write(m_Data.Ptr()); 
-      break;
+    case ArchiveTypes::Binary:
+        {
+            archive.GetOutput().Write(m_Data.Ptr()); 
+            break;
+        }
     }
-  }
 }
 
 template <>
 void I8Serializer::Deserialize(Archive& archive)
 {
-  switch (archive.GetType())
-  {
-  case ArchiveTypes::XML:
+    switch (archive.GetType())
     {
-      i16 tmp;
+    case ArchiveTypes::XML:
+        {
+            i16 tmp;
 
-      archive.GetInput() >> tmp;
-      m_Data.Set( (unsigned char)tmp );
+            archive.GetInput() >> tmp;
+            m_Data.Set( (unsigned char)tmp );
 
-      break;
+            break;
+        }
+
+    case ArchiveTypes::Binary:
+        {
+            archive.GetInput().Read(m_Data.Ptr()); 
+            break;
+        }
     }
-
-  case ArchiveTypes::Binary:
-    {
-      archive.GetInput().Read(m_Data.Ptr()); 
-      break;
-    }
-  }
 }
 
 template<>
 std::ostream& I8Serializer::operator >> (std::ostream& stream) const
 {
-  if (!TranslateOutput( stream ))
-  {
-    i16 val = m_Data.Get();
-    stream << val;
-  }
-  return stream;
+    if (!TranslateOutput( stream ))
+    {
+        i16 val = m_Data.Get();
+        stream << val;
+    }
+    return stream;
 }
 
 template<>
 std::istream& I8Serializer::operator << (std::istream& stream)
 {
-  if (!TranslateInput( stream ))
-  {
-    i16 val;
-    stream >> val;
-    m_Data.Set( (u8)val );
-  }
-  return stream;
+    if (!TranslateInput( stream ))
+    {
+        i16 val;
+        stream >> val;
+        m_Data.Set( (u8)val );
+    }
+    return stream;
 }
 
 template SimpleSerializer<bool>;

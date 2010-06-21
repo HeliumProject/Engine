@@ -34,23 +34,23 @@ Profile::Accumulator Reflect::g_PostDeserializeAccum ("Reflect Deserialize Post-
 template <class T>
 struct CaseInsensitiveCompare
 {
-  const std::string& value;
+    const std::string& value;
 
-  CaseInsensitiveCompare(const std::string& str)
-    : value (str)
-  {
+    CaseInsensitiveCompare(const std::string& str)
+        : value (str)
+    {
 
-  }
+    }
 
-  bool operator()(const std::pair<const std::string, T> &rhs)
-  {
-    return stricmp(rhs.first.c_str(), value.c_str()) == 0;
-  }
+    bool operator()(const std::pair<const std::string, T> &rhs)
+    {
+        return stricmp(rhs.first.c_str(), value.c_str()) == 0;
+    }
 };
 
 namespace Reflect
 {
-  i32 g_InitCount = 0;
+    i32 g_InitCount = 0;
 }
 
 //
@@ -59,200 +59,200 @@ namespace Reflect
 class CleanupChecker
 {
 public:
-  ~CleanupChecker()
-  {
-    NOC_ASSERT_MSG( Reflect::g_InitCount == 0, ( "Reflect not cleaned up properly!" ) );
-  }
+    ~CleanupChecker()
+    {
+        NOC_ASSERT_MSG( Reflect::g_InitCount == 0, ( "Reflect not cleaned up properly!" ) );
+    }
 
 } g_Checker;
 
 bool Reflect::IsInitialized()
 {
-  return g_Instance != NULL;
+    return g_Instance != NULL;
 }
 
 void Reflect::Initialize()
 {
-  if (++g_InitCount == 1)
-  {
-    g_Instance = new Registry();
-    NOC_ASSERT(g_Instance != NULL);
+    if (++g_InitCount == 1)
+    {
+        g_Instance = new Registry();
+        NOC_ASSERT(g_Instance != NULL);
 
-    //
-    // Serializers
-    //
+        //
+        // Serializers
+        //
 
-    g_Instance->RegisterType(Class::Create<Object>("", "Object"));
-    g_Instance->RegisterType(Element::CreateClass("Element"));
-    g_Instance->RegisterType(Serializer::CreateClass("Serializer"));
-    g_Instance->RegisterType(ContainerSerializer::CreateClass("Container"));
-    g_Instance->RegisterType(ElementContainerSerializer::CreateClass("ElementContainer"));
-    g_Instance->RegisterType(TypeIDSerializer::CreateClass("TypeID"));
-    g_Instance->RegisterType(PointerSerializer::CreateClass("Pointer"));
-    g_Instance->RegisterType(EnumerationSerializer::CreateClass("Enumeration"));
-    g_Instance->RegisterType(BitfieldSerializer::CreateClass("Bitfield"));
-    g_Instance->RegisterType( PathSerializer::CreateClass( "PathSerializer" ) );
+        g_Instance->RegisterType(Class::Create<Object>("", "Object"));
+        g_Instance->RegisterType(Element::CreateClass("Element"));
+        g_Instance->RegisterType(Serializer::CreateClass("Serializer"));
+        g_Instance->RegisterType(ContainerSerializer::CreateClass("Container"));
+        g_Instance->RegisterType(ElementContainerSerializer::CreateClass("ElementContainer"));
+        g_Instance->RegisterType(TypeIDSerializer::CreateClass("TypeID"));
+        g_Instance->RegisterType(PointerSerializer::CreateClass("Pointer"));
+        g_Instance->RegisterType(EnumerationSerializer::CreateClass("Enumeration"));
+        g_Instance->RegisterType(BitfieldSerializer::CreateClass("Bitfield"));
+        g_Instance->RegisterType( PathSerializer::CreateClass( "PathSerializer" ) );
 
-    // SimpleSerializer
-    g_Instance->RegisterType(StringSerializer::CreateClass("String"));
-    g_Instance->RegisterType(BoolSerializer::CreateClass("Bool"));
-    g_Instance->RegisterType(U8Serializer::CreateClass("U8"));
-    g_Instance->RegisterType(I8Serializer::CreateClass("I8"));
-    g_Instance->RegisterType(U16Serializer::CreateClass("U16"));
-    g_Instance->RegisterType(I16Serializer::CreateClass("I16"));
-    g_Instance->RegisterType(U32Serializer::CreateClass("U32"));
-    g_Instance->RegisterType(I32Serializer::CreateClass("I32"));
-    g_Instance->RegisterType(U64Serializer::CreateClass("U64"));
-    g_Instance->RegisterType(I64Serializer::CreateClass("I64"));
-    g_Instance->RegisterType(F32Serializer::CreateClass("F32"));
-    g_Instance->RegisterType(F64Serializer::CreateClass("F64"));
-    g_Instance->RegisterType(GUIDSerializer::CreateClass("GUID"));
-    g_Instance->RegisterType(TUIDSerializer::CreateClass("TUID"));
-    g_Instance->RegisterType(Vector2Serializer::CreateClass("Vector2"));
-    g_Instance->RegisterType(Vector3Serializer::CreateClass("Vector3"));
-    g_Instance->RegisterType(Vector4Serializer::CreateClass("Vector4"));
-    g_Instance->RegisterType(Matrix3Serializer::CreateClass("Matrix3"));
-    g_Instance->RegisterType(Matrix4Serializer::CreateClass("Matrix4"));
-    g_Instance->RegisterType(QuaternionSerializer::CreateClass("Quaternion"));
-    g_Instance->RegisterType(Color3Serializer::CreateClass("Color3"));
-    g_Instance->RegisterType(Color4Serializer::CreateClass("Color4"));
-    g_Instance->RegisterType(HDRColor3Serializer::CreateClass("HDRColor3"));
-    g_Instance->RegisterType(HDRColor4Serializer::CreateClass("HDRColor4"));
+        // SimpleSerializer
+        g_Instance->RegisterType(StringSerializer::CreateClass("String"));
+        g_Instance->RegisterType(BoolSerializer::CreateClass("Bool"));
+        g_Instance->RegisterType(U8Serializer::CreateClass("U8"));
+        g_Instance->RegisterType(I8Serializer::CreateClass("I8"));
+        g_Instance->RegisterType(U16Serializer::CreateClass("U16"));
+        g_Instance->RegisterType(I16Serializer::CreateClass("I16"));
+        g_Instance->RegisterType(U32Serializer::CreateClass("U32"));
+        g_Instance->RegisterType(I32Serializer::CreateClass("I32"));
+        g_Instance->RegisterType(U64Serializer::CreateClass("U64"));
+        g_Instance->RegisterType(I64Serializer::CreateClass("I64"));
+        g_Instance->RegisterType(F32Serializer::CreateClass("F32"));
+        g_Instance->RegisterType(F64Serializer::CreateClass("F64"));
+        g_Instance->RegisterType(GUIDSerializer::CreateClass("GUID"));
+        g_Instance->RegisterType(TUIDSerializer::CreateClass("TUID"));
+        g_Instance->RegisterType(Vector2Serializer::CreateClass("Vector2"));
+        g_Instance->RegisterType(Vector3Serializer::CreateClass("Vector3"));
+        g_Instance->RegisterType(Vector4Serializer::CreateClass("Vector4"));
+        g_Instance->RegisterType(Matrix3Serializer::CreateClass("Matrix3"));
+        g_Instance->RegisterType(Matrix4Serializer::CreateClass("Matrix4"));
+        g_Instance->RegisterType(QuaternionSerializer::CreateClass("Quaternion"));
+        g_Instance->RegisterType(Color3Serializer::CreateClass("Color3"));
+        g_Instance->RegisterType(Color4Serializer::CreateClass("Color4"));
+        g_Instance->RegisterType(HDRColor3Serializer::CreateClass("HDRColor3"));
+        g_Instance->RegisterType(HDRColor4Serializer::CreateClass("HDRColor4"));
 
-    // ArraySerializer
-    g_Instance->RegisterType(ArraySerializer::CreateClass("Array"));
-    g_Instance->RegisterType(StringArraySerializer::CreateClass("StringArray"));
-    g_Instance->RegisterType(BoolArraySerializer::CreateClass("BoolArray"));
-    g_Instance->RegisterType(U8ArraySerializer::CreateClass("U8Array"));
-    g_Instance->RegisterType(I8ArraySerializer::CreateClass("I8Array"));
-    g_Instance->RegisterType(U16ArraySerializer::CreateClass("U16Array"));
-    g_Instance->RegisterType(I16ArraySerializer::CreateClass("I16Array"));
-    g_Instance->RegisterType(U32ArraySerializer::CreateClass("U32Array"));
-    g_Instance->RegisterType(I32ArraySerializer::CreateClass("I32Array"));
-    g_Instance->RegisterType(U64ArraySerializer::CreateClass("U64Array"));
-    g_Instance->RegisterType(I64ArraySerializer::CreateClass("I64Array"));
-    g_Instance->RegisterType(F32ArraySerializer::CreateClass("F32Array"));
-    g_Instance->RegisterType(F64ArraySerializer::CreateClass("F64Array"));
-    g_Instance->RegisterType(GUIDArraySerializer::CreateClass("GUIDArray"));
-    g_Instance->RegisterType(TUIDArraySerializer::CreateClass("TUIDArray"));
-    g_Instance->RegisterType(Vector2ArraySerializer::CreateClass("Vector2Array"));
-    g_Instance->RegisterType(Vector3ArraySerializer::CreateClass("Vector3Array"));
-    g_Instance->RegisterType(Vector4ArraySerializer::CreateClass("Vector4Array"));
-    g_Instance->RegisterType(Matrix3ArraySerializer::CreateClass("Matrix3Array"));
-    g_Instance->RegisterType(Matrix4ArraySerializer::CreateClass("Matrix4Array"));
-    g_Instance->RegisterType(QuaternionArraySerializer::CreateClass("QuaternionArray"));
-    g_Instance->RegisterType(Color3ArraySerializer::CreateClass("Color3Array"));
-    g_Instance->RegisterType(Color4ArraySerializer::CreateClass("Color4Array"));
-    g_Instance->RegisterType(HDRColor3ArraySerializer::CreateClass("HDRColor3Array"));
-    g_Instance->RegisterType(HDRColor4ArraySerializer::CreateClass("HDRColor4Array"));
+        // ArraySerializer
+        g_Instance->RegisterType(ArraySerializer::CreateClass("Array"));
+        g_Instance->RegisterType(StringArraySerializer::CreateClass("StringArray"));
+        g_Instance->RegisterType(BoolArraySerializer::CreateClass("BoolArray"));
+        g_Instance->RegisterType(U8ArraySerializer::CreateClass("U8Array"));
+        g_Instance->RegisterType(I8ArraySerializer::CreateClass("I8Array"));
+        g_Instance->RegisterType(U16ArraySerializer::CreateClass("U16Array"));
+        g_Instance->RegisterType(I16ArraySerializer::CreateClass("I16Array"));
+        g_Instance->RegisterType(U32ArraySerializer::CreateClass("U32Array"));
+        g_Instance->RegisterType(I32ArraySerializer::CreateClass("I32Array"));
+        g_Instance->RegisterType(U64ArraySerializer::CreateClass("U64Array"));
+        g_Instance->RegisterType(I64ArraySerializer::CreateClass("I64Array"));
+        g_Instance->RegisterType(F32ArraySerializer::CreateClass("F32Array"));
+        g_Instance->RegisterType(F64ArraySerializer::CreateClass("F64Array"));
+        g_Instance->RegisterType(GUIDArraySerializer::CreateClass("GUIDArray"));
+        g_Instance->RegisterType(TUIDArraySerializer::CreateClass("TUIDArray"));
+        g_Instance->RegisterType(Vector2ArraySerializer::CreateClass("Vector2Array"));
+        g_Instance->RegisterType(Vector3ArraySerializer::CreateClass("Vector3Array"));
+        g_Instance->RegisterType(Vector4ArraySerializer::CreateClass("Vector4Array"));
+        g_Instance->RegisterType(Matrix3ArraySerializer::CreateClass("Matrix3Array"));
+        g_Instance->RegisterType(Matrix4ArraySerializer::CreateClass("Matrix4Array"));
+        g_Instance->RegisterType(QuaternionArraySerializer::CreateClass("QuaternionArray"));
+        g_Instance->RegisterType(Color3ArraySerializer::CreateClass("Color3Array"));
+        g_Instance->RegisterType(Color4ArraySerializer::CreateClass("Color4Array"));
+        g_Instance->RegisterType(HDRColor3ArraySerializer::CreateClass("HDRColor3Array"));
+        g_Instance->RegisterType(HDRColor4ArraySerializer::CreateClass("HDRColor4Array"));
 
-    // SetSerializer
-    g_Instance->RegisterType(SetSerializer::CreateClass("Set"));
-    g_Instance->RegisterType(StringSetSerializer::CreateClass("StrSet"));
-    g_Instance->RegisterType(U32SetSerializer::CreateClass("U32Set"));
-    g_Instance->RegisterType(U64SetSerializer::CreateClass("U64Set"));
-    g_Instance->RegisterType(F32SetSerializer::CreateClass("F32Set"));
-    g_Instance->RegisterType(GUIDSetSerializer::CreateClass("GUIDSet"));
-    g_Instance->RegisterType(TUIDSetSerializer::CreateClass("TUIDSet"));
-    g_Instance->RegisterType( PathSetSerializer::CreateClass( "PathSet" ) );
+        // SetSerializer
+        g_Instance->RegisterType(SetSerializer::CreateClass("Set"));
+        g_Instance->RegisterType(StringSetSerializer::CreateClass("StrSet"));
+        g_Instance->RegisterType(U32SetSerializer::CreateClass("U32Set"));
+        g_Instance->RegisterType(U64SetSerializer::CreateClass("U64Set"));
+        g_Instance->RegisterType(F32SetSerializer::CreateClass("F32Set"));
+        g_Instance->RegisterType(GUIDSetSerializer::CreateClass("GUIDSet"));
+        g_Instance->RegisterType(TUIDSetSerializer::CreateClass("TUIDSet"));
+        g_Instance->RegisterType( PathSetSerializer::CreateClass( "PathSet" ) );
 
-    // MapSerializer
-    g_Instance->RegisterType(MapSerializer::CreateClass("Map"));
-    g_Instance->RegisterType(StringStringMapSerializer::CreateClass("StrStrMap"));
-    g_Instance->RegisterType(StringBoolMapSerializer::CreateClass("StrBoolMap"));
-    g_Instance->RegisterType(StringU32MapSerializer::CreateClass("StrU32Map"));
-    g_Instance->RegisterType(StringI32MapSerializer::CreateClass("StrI32Map"));
-    g_Instance->RegisterType(U32StringMapSerializer::CreateClass("U32StrMap"));
-    g_Instance->RegisterType(U32U32MapSerializer::CreateClass("U32U32Map"));
-    g_Instance->RegisterType(U32I32MapSerializer::CreateClass("U32I32Map"));
-    g_Instance->RegisterType(U32U64MapSerializer::CreateClass("U32U64Map"));
-    g_Instance->RegisterType(I32StringMapSerializer::CreateClass("I32StrMap"));
-    g_Instance->RegisterType(I32U32MapSerializer::CreateClass("I32U32Map"));
-    g_Instance->RegisterType(I32I32MapSerializer::CreateClass("I32I32Map"));
-    g_Instance->RegisterType(I32U64MapSerializer::CreateClass("I32U64Map"));
-    g_Instance->RegisterType(U64StringMapSerializer::CreateClass("U64StrMap"));
-    g_Instance->RegisterType(U64U32MapSerializer::CreateClass("U64U32Map"));
-    g_Instance->RegisterType(U64U64MapSerializer::CreateClass("U64U64Map"));
-    g_Instance->RegisterType(U64Matrix4MapSerializer::CreateClass("U64Matrix4Map"));
-    g_Instance->RegisterType(GUIDU32MapSerializer::CreateClass("GUIDU32Map"));
-    g_Instance->RegisterType(GUIDMatrix4MapSerializer::CreateClass("GUIDMatrix4Map"));
-    g_Instance->RegisterType(TUIDU32MapSerializer::CreateClass("TUIDU32Map"));
-    g_Instance->RegisterType(TUIDMatrix4MapSerializer::CreateClass("TUIDMatrix4Map"));
+        // MapSerializer
+        g_Instance->RegisterType(MapSerializer::CreateClass("Map"));
+        g_Instance->RegisterType(StringStringMapSerializer::CreateClass("StrStrMap"));
+        g_Instance->RegisterType(StringBoolMapSerializer::CreateClass("StrBoolMap"));
+        g_Instance->RegisterType(StringU32MapSerializer::CreateClass("StrU32Map"));
+        g_Instance->RegisterType(StringI32MapSerializer::CreateClass("StrI32Map"));
+        g_Instance->RegisterType(U32StringMapSerializer::CreateClass("U32StrMap"));
+        g_Instance->RegisterType(U32U32MapSerializer::CreateClass("U32U32Map"));
+        g_Instance->RegisterType(U32I32MapSerializer::CreateClass("U32I32Map"));
+        g_Instance->RegisterType(U32U64MapSerializer::CreateClass("U32U64Map"));
+        g_Instance->RegisterType(I32StringMapSerializer::CreateClass("I32StrMap"));
+        g_Instance->RegisterType(I32U32MapSerializer::CreateClass("I32U32Map"));
+        g_Instance->RegisterType(I32I32MapSerializer::CreateClass("I32I32Map"));
+        g_Instance->RegisterType(I32U64MapSerializer::CreateClass("I32U64Map"));
+        g_Instance->RegisterType(U64StringMapSerializer::CreateClass("U64StrMap"));
+        g_Instance->RegisterType(U64U32MapSerializer::CreateClass("U64U32Map"));
+        g_Instance->RegisterType(U64U64MapSerializer::CreateClass("U64U64Map"));
+        g_Instance->RegisterType(U64Matrix4MapSerializer::CreateClass("U64Matrix4Map"));
+        g_Instance->RegisterType(GUIDU32MapSerializer::CreateClass("GUIDU32Map"));
+        g_Instance->RegisterType(GUIDMatrix4MapSerializer::CreateClass("GUIDMatrix4Map"));
+        g_Instance->RegisterType(TUIDU32MapSerializer::CreateClass("TUIDU32Map"));
+        g_Instance->RegisterType(TUIDMatrix4MapSerializer::CreateClass("TUIDMatrix4Map"));
 
-    // ElementArraySerializer
-    g_Instance->RegisterType(ElementArraySerializer::CreateClass("ElementArray"));
+        // ElementArraySerializer
+        g_Instance->RegisterType(ElementArraySerializer::CreateClass("ElementArray"));
 
-    // ElementSetSerializer
-    g_Instance->RegisterType(ElementSetSerializer::CreateClass("ElementSet"));
+        // ElementSetSerializer
+        g_Instance->RegisterType(ElementSetSerializer::CreateClass("ElementSet"));
 
-    // ElementMapSerializer
-    g_Instance->RegisterType(ElementMapSerializer::CreateClass("ElementMap"));
-    g_Instance->RegisterType(TypeIDElementMapSerializer::CreateClass("TypeIDElementMap"));
-    g_Instance->RegisterType(StringElementMapSerializer::CreateClass("StringElementMap"));
-    g_Instance->RegisterType(U32ElementMapSerializer::CreateClass("U32ElementMap"));
-    g_Instance->RegisterType(I32ElementMapSerializer::CreateClass("I32ElementMap"));
-    g_Instance->RegisterType(U64ElementMapSerializer::CreateClass("U64ElementMap"));
-    g_Instance->RegisterType(I64ElementMapSerializer::CreateClass("I64ElementMap"));
-    g_Instance->RegisterType(GUIDElementMapSerializer::CreateClass("GUIDElementMap"));
-    g_Instance->RegisterType(TUIDElementMapSerializer::CreateClass("TUIDElementMap"));
+        // ElementMapSerializer
+        g_Instance->RegisterType(ElementMapSerializer::CreateClass("ElementMap"));
+        g_Instance->RegisterType(TypeIDElementMapSerializer::CreateClass("TypeIDElementMap"));
+        g_Instance->RegisterType(StringElementMapSerializer::CreateClass("StringElementMap"));
+        g_Instance->RegisterType(U32ElementMapSerializer::CreateClass("U32ElementMap"));
+        g_Instance->RegisterType(I32ElementMapSerializer::CreateClass("I32ElementMap"));
+        g_Instance->RegisterType(U64ElementMapSerializer::CreateClass("U64ElementMap"));
+        g_Instance->RegisterType(I64ElementMapSerializer::CreateClass("I64ElementMap"));
+        g_Instance->RegisterType(GUIDElementMapSerializer::CreateClass("GUIDElementMap"));
+        g_Instance->RegisterType(TUIDElementMapSerializer::CreateClass("TUIDElementMap"));
 
-    //
-    // Register Elements
-    //
+        //
+        // Register Elements
+        //
 
-    g_Instance->RegisterType(Version::CreateClass("Version"));
+        g_Instance->RegisterType(Version::CreateClass("Version"));
 
-    //
-    // Build Casting Table
-    //
+        //
+        // Build Casting Table
+        //
 
-    Serializer::Initialize();
+        Serializer::Initialize();
 
-    //
-    // Legacy support for GUID
-    //
+        //
+        // Legacy support for GUID
+        //
 
-    g_Instance->AliasType( Reflect::GetClass<GUIDSerializer>(), "UID" );
-    g_Instance->AliasType( Reflect::GetClass<GUIDArraySerializer>(), "UIDArray" );
-    g_Instance->AliasType( Reflect::GetClass<GUIDSetSerializer>(), "UIDSet" );
-    g_Instance->AliasType( Reflect::GetClass<GUIDU32MapSerializer>(), "UIDU32Map" );
-    g_Instance->AliasType( Reflect::GetClass<GUIDMatrix4MapSerializer>(), "UIDMatrix4Map" );
-    g_Instance->AliasType( Reflect::GetClass<GUIDElementMapSerializer>(), "UIDElementMap" );
-  }
+        g_Instance->AliasType( Reflect::GetClass<GUIDSerializer>(), "UID" );
+        g_Instance->AliasType( Reflect::GetClass<GUIDArraySerializer>(), "UIDArray" );
+        g_Instance->AliasType( Reflect::GetClass<GUIDSetSerializer>(), "UIDSet" );
+        g_Instance->AliasType( Reflect::GetClass<GUIDU32MapSerializer>(), "UIDU32Map" );
+        g_Instance->AliasType( Reflect::GetClass<GUIDMatrix4MapSerializer>(), "UIDMatrix4Map" );
+        g_Instance->AliasType( Reflect::GetClass<GUIDElementMapSerializer>(), "UIDElementMap" );
+    }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
-  Debug::V_DWORD64 trace;
-  Debug::GetStackTrace( trace );
+    Debug::V_DWORD64 trace;
+    Debug::GetStackTrace( trace );
 
-  std::string str;
-  Debug::TranslateStackTrace( trace, str );
+    std::string str;
+    Debug::TranslateStackTrace( trace, str );
 
-  Log::Print( "\n" );
-  Log::Print("%d\n\n%s\n", g_InitCount, str.c_str() );
+    Log::Print( "\n" );
+    Log::Print("%d\n\n%s\n", g_InitCount, str.c_str() );
 #endif
 }
 
 void Reflect::Cleanup()
 {
-  if ( --g_InitCount == 0 )
-  {
-    // free our casting memory
-    Serializer::Cleanup();
+    if ( --g_InitCount == 0 )
+    {
+        // free our casting memory
+        Serializer::Cleanup();
 
-    // delete registry
-    delete g_Instance;
-    g_Instance = NULL;
-  }
+        // delete registry
+        delete g_Instance;
+        g_Instance = NULL;
+    }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
-  Debug::V_DWORD64 trace;
-  Debug::GetStackTrace( trace );
+    Debug::V_DWORD64 trace;
+    Debug::GetStackTrace( trace );
 
-  std::string str;
-  Debug::TranslateStackTrace( trace, str );
+    std::string str;
+    Debug::TranslateStackTrace( trace, str );
 
-  Log::Print( "\n" );
-  Log::Print("%d\n\n%s\n", g_InitCount, str.c_str() );
+    Log::Print( "\n" );
+    Log::Print("%d\n\n%s\n", g_InitCount, str.c_str() );
 #endif
 }
 
@@ -260,7 +260,7 @@ Profile::MemoryPoolHandle g_MemoryPool;
 
 Profile::MemoryPoolHandle Reflect::MemoryPool()
 {
-  return g_MemoryPool;
+    return g_MemoryPool;
 }
 
 // private constructor
@@ -269,350 +269,350 @@ Registry::Registry()
 , m_Created (NULL)
 , m_Destroyed (NULL)
 {
-  m_InitThread = ::GetCurrentThreadId();
+    m_InitThread = ::GetCurrentThreadId();
 
-  if ( Profile::Settings::MemoryProfilingEnabled() )
-  {
-    g_MemoryPool = Profile::Memory::CreatePool("Reflect Objects");
-  }
+    if ( Profile::Settings::MemoryProfilingEnabled() )
+    {
+        g_MemoryPool = Profile::Memory::CreatePool("Reflect Objects");
+    }
 }
 
 Registry::~Registry()
 {
-  m_TypesByID.clear();
-  m_TypesByName.clear();
-  m_TypesByAlias.clear();
+    m_TypesByID.clear();
+    m_TypesByName.clear();
+    m_TypesByAlias.clear();
 
-  m_Created = NULL;
-  m_Destroyed = NULL;
+    m_Created = NULL;
+    m_Destroyed = NULL;
 }
 
 Registry* Registry::GetInstance()
 {
-  NOC_ASSERT(g_Instance != NULL);
-  return g_Instance;
+    NOC_ASSERT(g_Instance != NULL);
+    return g_Instance;
 }
 
 bool Registry::IsInitThread()
 {
-  return m_InitThread == GetCurrentThreadId();
+    return m_InitThread == GetCurrentThreadId();
 }
 
 bool Registry::RegisterType(Type* type)
 {
-  NOC_ASSERT( IsInitThread() );
+    NOC_ASSERT( IsInitThread() );
 
-  switch (type->GetReflectionType())
-  {
-  case ReflectionTypes::Class:
+    switch (type->GetReflectionType())
     {
-      Class* classType = static_cast<Class*>(type);
-
-      Insert<M_IDToType>::Result idResult = m_TypesByID.insert(M_IDToType::value_type (classType->m_TypeID, classType));
-
-      if (idResult.second)
-      {
-        m_TypesByName.insert(M_StrToType::value_type (classType->m_FullName, classType));
-
-        if ( !classType->m_ShortName.empty() )
+    case ReflectionTypes::Class:
         {
-          Insert<M_StrToType>::Result shortNameResult = m_TypesByName.insert(M_StrToType::value_type (classType->m_ShortName, classType));
+            Class* classType = static_cast<Class*>(type);
 
-          if (!shortNameResult.second && classType != shortNameResult.first->second)
-          {
-            Log::Error("Re-registration of short name '%s' was attempted with different classType information\n", classType->m_ShortName.c_str());
-            NOC_BREAK();
-            return false;
-          }
+            Insert<M_IDToType>::Result idResult = m_TypesByID.insert(M_IDToType::value_type (classType->m_TypeID, classType));
+
+            if (idResult.second)
+            {
+                m_TypesByName.insert(M_StrToType::value_type (classType->m_FullName, classType));
+
+                if ( !classType->m_ShortName.empty() )
+                {
+                    Insert<M_StrToType>::Result shortNameResult = m_TypesByName.insert(M_StrToType::value_type (classType->m_ShortName, classType));
+
+                    if (!shortNameResult.second && classType != shortNameResult.first->second)
+                    {
+                        Log::Error("Re-registration of short name '%s' was attempted with different classType information\n", classType->m_ShortName.c_str());
+                        NOC_BREAK();
+                        return false;
+                    }
+                }
+
+                if ( !classType->m_Base.empty() )
+                {
+                    M_StrToType::const_iterator found = m_TypesByName.find( classType->m_Base );
+                    if (found != m_TypesByName.end())
+                    {
+                        Type* baseClass = found->second;
+                        if (baseClass->GetReflectionType() == ReflectionTypes::Class)
+                        {
+                            static_cast<Class*>(baseClass)->m_Derived.insert( classType->m_FullName );
+                        }
+                        else
+                        {
+                            Log::Error("Base class of '%s' is not a valid type\n", classType->m_ShortName.c_str());
+                            NOC_BREAK();
+                            return false;
+                        }
+                    }
+                }
+
+                classType->Report();
+            }
+            else if (classType != idResult.first->second)
+            {
+                Log::Error("Re-registration of classType '%s' was attempted with different classType information\n", classType->m_FullName.c_str());
+                NOC_BREAK();
+                return false;
+            }
+            break;
         }
 
-        if ( !classType->m_Base.empty() )
+    case ReflectionTypes::Enumeration:
         {
-          M_StrToType::const_iterator found = m_TypesByName.find( classType->m_Base );
-          if (found != m_TypesByName.end())
-          {
-            Type* baseClass = found->second;
-            if (baseClass->GetReflectionType() == ReflectionTypes::Class)
-            {
-              static_cast<Class*>(baseClass)->m_Derived.insert( classType->m_FullName );
-            }
-            else
-            {
-              Log::Error("Base class of '%s' is not a valid type\n", classType->m_ShortName.c_str());
-              NOC_BREAK();
-              return false;
-            }
-          }
-        }
+            Enumeration* enumeration = static_cast<Enumeration*>(type);
 
-        classType->Report();
-      }
-      else if (classType != idResult.first->second)
-      {
-        Log::Error("Re-registration of classType '%s' was attempted with different classType information\n", classType->m_FullName.c_str());
-        NOC_BREAK();
-        return false;
-      }
-      break;
+            Insert<M_IDToType>::Result idResult = m_TypesByID.insert(M_IDToType::value_type (enumeration->m_TypeID, enumeration));
+
+            if (idResult.second)
+            {
+                Insert<M_StrToType>::Result enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_ShortName, enumeration));
+
+                if (!enumResult.second && enumeration != enumResult.first->second)
+                {
+                    Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_ShortName.c_str());
+                    NOC_BREAK();
+                    return false;
+                }
+
+                enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_FullName, enumeration));
+
+                if (!enumResult.second && enumeration != enumResult.first->second)
+                {
+                    Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_ShortName.c_str());
+                    NOC_BREAK();
+                    return false;
+                }
+            }
+            else if (enumeration != idResult.first->second)
+            {
+                Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_FullName.c_str());
+                NOC_BREAK();
+                return false;
+            }
+
+            break;
+        }
     }
 
-  case ReflectionTypes::Enumeration:
-    {
-      Enumeration* enumeration = static_cast<Enumeration*>(type);
-
-      Insert<M_IDToType>::Result idResult = m_TypesByID.insert(M_IDToType::value_type (enumeration->m_TypeID, enumeration));
-
-      if (idResult.second)
-      {
-        Insert<M_StrToType>::Result enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_ShortName, enumeration));
-
-        if (!enumResult.second && enumeration != enumResult.first->second)
-        {
-          Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_ShortName.c_str());
-          NOC_BREAK();
-          return false;
-        }
-
-        enumResult = m_TypesByName.insert(M_StrToType::value_type (enumeration->m_FullName, enumeration));
-
-        if (!enumResult.second && enumeration != enumResult.first->second)
-        {
-          Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_ShortName.c_str());
-          NOC_BREAK();
-          return false;
-        }
-      }
-      else if (enumeration != idResult.first->second)
-      {
-        Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_FullName.c_str());
-        NOC_BREAK();
-        return false;
-      }
-
-      break;
-    }
-  }
-
-  return true;
+    return true;
 }
 
 void Registry::UnregisterType(const Type* type)
 {
-  NOC_ASSERT( IsInitThread() );
+    NOC_ASSERT( IsInitThread() );
 
-  switch (type->GetReflectionType())
-  {
-  case ReflectionTypes::Class:
+    switch (type->GetReflectionType())
     {
-      const Class* classType = static_cast<const Class*>(type);
-
-      if ( !classType->m_ShortName.empty() )
-      {
-        m_TypesByName.erase( classType->m_ShortName );
-      }
-
-      if ( !classType->m_Base.empty() )
-      {
-        M_StrToType::const_iterator found = m_TypesByName.find( classType->m_Base );
-        if ( found != m_TypesByName.end() )
+    case ReflectionTypes::Class:
         {
-          if ( found->second->GetReflectionType() == ReflectionTypes::Class )
-          {
-            static_cast<Class*>(found->second.Ptr())->m_Derived.erase( classType->m_FullName );
-          }
-          else
-          {
-            Log::Error("Base class of '%s' is not a valid type\n", classType->m_ShortName.c_str());
-            NOC_BREAK();
-          }
+            const Class* classType = static_cast<const Class*>(type);
+
+            if ( !classType->m_ShortName.empty() )
+            {
+                m_TypesByName.erase( classType->m_ShortName );
+            }
+
+            if ( !classType->m_Base.empty() )
+            {
+                M_StrToType::const_iterator found = m_TypesByName.find( classType->m_Base );
+                if ( found != m_TypesByName.end() )
+                {
+                    if ( found->second->GetReflectionType() == ReflectionTypes::Class )
+                    {
+                        static_cast<Class*>(found->second.Ptr())->m_Derived.erase( classType->m_FullName );
+                    }
+                    else
+                    {
+                        Log::Error("Base class of '%s' is not a valid type\n", classType->m_ShortName.c_str());
+                        NOC_BREAK();
+                    }
+                }
+            }
+
+            m_TypesByName.erase(classType->m_FullName);
+            m_TypesByID.erase(classType->m_TypeID);
+
+            break;
         }
-      }
 
-      m_TypesByName.erase(classType->m_FullName);
-      m_TypesByID.erase(classType->m_TypeID);
+    case ReflectionTypes::Enumeration:
+        {
+            const Enumeration* enumeration = static_cast<const Enumeration*>(type);
 
-      break;
+            m_TypesByName.erase(enumeration->m_ShortName);
+            m_TypesByName.erase(enumeration->m_FullName);
+        }
     }
-
-  case ReflectionTypes::Enumeration:
-    {
-      const Enumeration* enumeration = static_cast<const Enumeration*>(type);
-
-      m_TypesByName.erase(enumeration->m_ShortName);
-      m_TypesByName.erase(enumeration->m_FullName);
-    }
-  }
 }
 
 void Registry::AliasType(const Type* type, const std::string& alias)
 {
-  NOC_ASSERT( IsInitThread() );
+    NOC_ASSERT( IsInitThread() );
 
-  m_TypesByAlias.insert(M_StrToType::value_type (alias, type));
+    m_TypesByAlias.insert(M_StrToType::value_type (alias, type));
 }
 
 void Registry::UnAliasType(const Type* type, const std::string& alias)
 {
-  NOC_ASSERT( IsInitThread() );
+    NOC_ASSERT( IsInitThread() );
 
-  M_StrToType::iterator found = m_TypesByAlias.find( alias );
-  if (found != m_TypesByAlias.end() && found->second == type)
-  {
-    m_TypesByAlias.erase(found);
-  }
+    M_StrToType::iterator found = m_TypesByAlias.find( alias );
+    if (found != m_TypesByAlias.end() && found->second == type)
+    {
+        m_TypesByAlias.erase(found);
+    }
 }
 
 const Type* Registry::GetType(int id) const
 {
-  M_IDToType::const_iterator found = m_TypesByID.find (id);
+    M_IDToType::const_iterator found = m_TypesByID.find (id);
 
-  if (found != m_TypesByID.end())
-  {
-    return found->second;
-  }
-  else
-  {
-    return NULL;
-  }
+    if (found != m_TypesByID.end())
+    {
+        return found->second;
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 const Type* Registry::GetType(const std::string& str) const
 {
-  M_StrToType::const_iterator found = m_TypesByAlias.find(str);
+    M_StrToType::const_iterator found = m_TypesByAlias.find(str);
 
-  if (found != m_TypesByAlias.end())
-  {
-    return found->second;
-  }
+    if (found != m_TypesByAlias.end())
+    {
+        return found->second;
+    }
 
-  found = m_TypesByName.find(str);
+    found = m_TypesByName.find(str);
 
-  if (found != m_TypesByName.end())
-  {
-    return found->second;
-  }
+    if (found != m_TypesByName.end())
+    {
+        return found->second;
+    }
 
-  found = std::find_if(m_TypesByName.begin(), m_TypesByName.end(), CaseInsensitiveCompare<Type*>(str));
+    found = std::find_if(m_TypesByName.begin(), m_TypesByName.end(), CaseInsensitiveCompare<Type*>(str));
 
-  if (found != m_TypesByName.end())
-  {
-    return found->second;
-  }
+    if (found != m_TypesByName.end())
+    {
+        return found->second;
+    }
 
-  return NULL;
+    return NULL;
 }
 
 void Registry::AtomicGetType(int id, const Type** addr) const
 {
 #ifdef _WIN64
-  InterlockedExchange64( (volatile LONGLONG*)addr, (LONGLONG)(PointerSizedUInt)GetType(id) );
+    InterlockedExchange64( (volatile LONGLONG*)addr, (LONGLONG)(PointerSizedUInt)GetType(id) );
 #else
-  InterlockedExchange( (volatile LONG*)addr, (LONG)(PointerSizedUInt)GetType(id) );
+    InterlockedExchange( (volatile LONG*)addr, (LONG)(PointerSizedUInt)GetType(id) );
 #endif
 }
 
 void Registry::AtomicGetType(const std::string& str, const Type** addr) const
 {
 #ifdef _WIN64
-  InterlockedExchange64( (volatile LONGLONG*)addr, (LONGLONG)(PointerSizedUInt)GetType(str) );
+    InterlockedExchange64( (volatile LONGLONG*)addr, (LONGLONG)(PointerSizedUInt)GetType(str) );
 #else
-  InterlockedExchange( (volatile LONG*)addr, (LONG)(PointerSizedUInt)GetType(str) );
+    InterlockedExchange( (volatile LONG*)addr, (LONG)(PointerSizedUInt)GetType(str) );
 #endif
 }
 
 ObjectPtr Registry::CreateInstance(int id) const
 {
-  M_IDToType::const_iterator type = m_TypesByID.find(id);
+    M_IDToType::const_iterator type = m_TypesByID.find(id);
 
-  if (type != m_TypesByID.end() && type->second->GetReflectionType() == ReflectionTypes::Class)
-  {
-    return ReflectionCast<const Class>(type->second)->m_Create();
-  }
-  else
-  {
-    return NULL;
-  }
+    if (type != m_TypesByID.end() && type->second->GetReflectionType() == ReflectionTypes::Class)
+    {
+        return ReflectionCast<const Class>(type->second)->m_Create();
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 ObjectPtr Registry::CreateInstance(const Class* type) const
 {
-  if (type && type->m_Create)
-  {
-    return type->m_Create();
-  }
-  else
-  {
-    return NULL;
-  }
+    if (type && type->m_Create)
+    {
+        return type->m_Create();
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 ObjectPtr Registry::CreateInstance(const std::string& str) const
 {
-  M_StrToType::const_iterator type = m_TypesByName.find(str);
+    M_StrToType::const_iterator type = m_TypesByName.find(str);
 
-  if (type == m_TypesByName.end())
-    return NULL;
+    if (type == m_TypesByName.end())
+        return NULL;
 
-  if (type->second->GetReflectionType() != ReflectionTypes::Class)
-    return NULL;
+    if (type->second->GetReflectionType() != ReflectionTypes::Class)
+        return NULL;
 
-  return CreateInstance(static_cast<Class*>(type->second.Ptr()));
+    return CreateInstance(static_cast<Class*>(type->second.Ptr()));
 }
 
 void Registry::Created(Object* object)
 {
 #ifdef REFLECT_OBJECT_TRACKING
-  Registry::GetInstance()->TrackCreate((PointerSizedUInt)object);
+    Registry::GetInstance()->TrackCreate((PointerSizedUInt)object);
 #endif
 
-  if (m_Created != NULL)
-  {
-    m_Created(object);
-  }
+    if (m_Created != NULL)
+    {
+        m_Created(object);
+    }
 }
 
 void Registry::Destroyed(Object* object)
 {
 #ifdef REFLECT_OBJECT_TRACKING
-  Registry::GetInstance()->TrackDelete((PointerSizedUInt)object);
+    Registry::GetInstance()->TrackDelete((PointerSizedUInt)object);
 #endif
 
-  if (m_Destroyed != NULL)
-  {
-    m_Destroyed(object);
-  }
+    if (m_Destroyed != NULL)
+    {
+        m_Destroyed(object);
+    }
 }
 
 void Registry::SetCreatedCallback(CreatedFunc created)
 {
-  m_Created = created;
+    m_Created = created;
 }
 
 void Registry::SetDestroyedCallback(DestroyedFunc destroyed)
 {
-  m_Destroyed = destroyed;
+    m_Destroyed = destroyed;
 }
 
 #ifdef REFLECT_OBJECT_TRACKING
 
 void Registry::TrackCreate(PointerSizedUInt ptr)
 {
-  m_Tracker.Create( ptr );
+    m_Tracker.Create( ptr );
 }
 
 void Registry::TrackDelete(PointerSizedUInt ptr)
 {
-  m_Tracker.Delete( ptr );
+    m_Tracker.Delete( ptr );
 }
 
 void Registry::TrackCheck(PointerSizedUInt ptr)
 {
-  m_Tracker.Check( ptr );
+    m_Tracker.Check( ptr );
 }
 
 void Registry::TrackDump()
 {
-  m_Tracker.Dump();
+    m_Tracker.Dump();
 }
 
 #endif

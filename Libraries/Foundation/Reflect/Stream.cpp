@@ -18,119 +18,119 @@ Stream::Stream()
 
 Stream::Stream(std::iostream* p_Stream, bool ownStream) : 
 m_Stream(p_Stream), 
-  m_OwnStream(ownStream)
+m_OwnStream(ownStream)
 {
 
 }
 
 Stream::~Stream()
 {
-  if(m_OwnStream)
-  {
-    delete m_Stream; 
-    m_Stream    = NULL; 
-    m_OwnStream = false; 
-  }
+    if(m_OwnStream)
+    {
+        delete m_Stream; 
+        m_Stream    = NULL; 
+        m_OwnStream = false; 
+    }
 }
 
 void Stream::Open()
 {
-  // no op
+    // no op
 }
 
 void Stream::Close()
 {
-  // no op
+    // no op
 }
 
 void Stream::SkipWhitespace()
 {
-  *m_Stream >> std::ws; 
+    *m_Stream >> std::ws; 
 }
 
 Stream& Stream::SeekWrite(std::streamoff offset, std::ios_base::seekdir dir)
 {
-  m_Stream->seekp(offset, dir); 
-  return *this; 
+    m_Stream->seekp(offset, dir); 
+    return *this; 
 }
 
 Stream& Stream::SeekRead(std::streamoff offset, std::ios_base::seekdir dir)
 {
-  m_Stream->seekg(offset, dir); 
-  return *this; 
+    m_Stream->seekg(offset, dir); 
+    return *this; 
 }
 
 std::streampos Stream::TellRead()
 {
-  return m_Stream->tellg(); 
+    return m_Stream->tellg(); 
 }
 
 std::streampos Stream::TellWrite()
 {
-  return m_Stream->tellp(); 
+    return m_Stream->tellp(); 
 }
 
 std::streamsize Stream::BytesRead() const
 {
-  return m_Stream->gcount(); 
+    return m_Stream->gcount(); 
 }
 
 Stream& Stream::write(const char* t, std::streamsize size)
 {
-  PROFILE_SCOPE_ACCUM(g_StreamWrite); 
+    PROFILE_SCOPE_ACCUM(g_StreamWrite); 
 
-  m_Stream->write(t, size); 
+    m_Stream->write(t, size); 
 
-  if (m_Stream->fail())
-  {
-    throw Reflect::StreamException("General write failure"); 
-  }
+    if (m_Stream->fail())
+    {
+        throw Reflect::StreamException("General write failure"); 
+    }
 
-  return *this; 
+    return *this; 
 }
 
 Stream& Stream::read(char* t, std::streamsize size)
 {
-  PROFILE_SCOPE_ACCUM(g_StreamRead); 
+    PROFILE_SCOPE_ACCUM(g_StreamRead); 
 
-  m_Stream->read(t, size); 
+    m_Stream->read(t, size); 
 
-  if (m_Stream->fail() && !m_Stream->eof())
-  {
-    throw Reflect::StreamException("General read failure"); 
-  }
+    if (m_Stream->fail() && !m_Stream->eof())
+    {
+        throw Reflect::StreamException("General read failure"); 
+    }
 
-  return *this; 
+    return *this; 
 }
 
 bool Stream::Fail(void)
 {
-  return m_Stream->fail(); 
+    return m_Stream->fail(); 
 }
 
 
 bool Stream::Done()
 {
-  return m_Stream->eof(); 
+    return m_Stream->eof(); 
 }
 
 void Stream::Clear()
 {
-  m_Stream->clear(); 
+    m_Stream->clear(); 
 }
 
 Stream& Stream::Flush()
 {
-  m_Stream->flush(); 
-  return *this; 
+    m_Stream->flush(); 
+    return *this; 
 }
 
 void Stream::SetPrecision(int p)
 {
-  m_Stream->precision(p); 
+    m_Stream->precision(p); 
 }
 
 std::streamsize Stream::BytesAvailable()
 {
-  return m_Stream->rdbuf()->in_avail();
+    return m_Stream->rdbuf()->in_avail();
 }

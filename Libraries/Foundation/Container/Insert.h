@@ -15,9 +15,9 @@
 
 namespace Nocturnal
 {
-  template <typename Container>
-  struct Insert
-  {
-    typedef std::pair<typename Container::iterator, bool> Result;
-  };
+    template <typename Container>
+    struct Insert
+    {
+        typedef std::pair<typename Container::iterator, bool> Result;
+    };
 }

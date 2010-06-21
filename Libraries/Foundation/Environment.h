@@ -10,61 +10,61 @@
 
 namespace Nocturnal
 {
-  //
-  // Environment variable access
-  //
+    //
+    // Environment variable access
+    //
 
-  template<class T>
-  inline bool GetEnvVar( const std::string& envVarName, T& envVarValue )
-  {
-    char* envVarSetting = getenv( envVarName.c_str() );
-
-    if ( envVarSetting )
+    template<class T>
+    inline bool GetEnvVar( const std::string& envVarName, T& envVarValue )
     {
-      std::strstream str ( envVarSetting, (std::streamsize)strlen( envVarSetting ) );
-      str >> envVarValue;
-      return !str.fail();
+        char* envVarSetting = getenv( envVarName.c_str() );
+
+        if ( envVarSetting )
+        {
+            std::strstream str ( envVarSetting, (std::streamsize)strlen( envVarSetting ) );
+            str >> envVarValue;
+            return !str.fail();
+        }
+
+        return false;
     }
 
-    return false;
-  }
-
-  template<>
-  inline bool GetEnvVar( const std::string& envVarName, std::string& envVarValue )
-  {
-    char *envVarSetting = getenv( envVarName.c_str() );
-
-    if ( envVarSetting )
+    template<>
+    inline bool GetEnvVar( const std::string& envVarName, std::string& envVarValue )
     {
-      envVarValue = envVarSetting;
-      return true;
+        char *envVarSetting = getenv( envVarName.c_str() );
+
+        if ( envVarSetting )
+        {
+            envVarValue = envVarSetting;
+            return true;
+        }
+
+        return false;
     }
 
-    return false;
-  }
-
-  template<>
-  inline bool GetEnvVar( const std::string& envVarName, bool& envVarValue )
-  {
-    char *envVarSetting = getenv( envVarName.c_str() );
-
-    if ( envVarSetting )
+    template<>
+    inline bool GetEnvVar( const std::string& envVarName, bool& envVarValue )
     {
-      if ( !stricmp( envVarSetting, "false" ) || !stricmp( envVarSetting, "0" ) )
-      {
-        envVarValue = false;
-        return true;
-      }
+        char *envVarSetting = getenv( envVarName.c_str() );
 
-      if ( !stricmp( envVarSetting, "true" ) || !stricmp( envVarSetting, "1" ) )
-      {
-        envVarValue = true;
-        return true;
-      }
+        if ( envVarSetting )
+        {
+            if ( !stricmp( envVarSetting, "false" ) || !stricmp( envVarSetting, "0" ) )
+            {
+                envVarValue = false;
+                return true;
+            }
+
+            if ( !stricmp( envVarSetting, "true" ) || !stricmp( envVarSetting, "1" ) )
+            {
+                envVarValue = true;
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    return false;
-  }
-
-  FOUNDATION_API bool GetEnvFlag( const std::string &envVarName );
+    FOUNDATION_API bool GetEnvFlag( const std::string &envVarName );
 }

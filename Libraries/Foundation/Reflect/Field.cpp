@@ -26,103 +26,103 @@ Field::~Field()
 
 Field* Field::Create(const Composite* type)
 {
-  return new Field( type );
+    return new Field( type );
 }
 
 SerializerPtr Field::CreateSerializer(Element* instance) const
 {
-  SerializerPtr ser;
+    SerializerPtr ser;
 
-  if (m_SerializerID != Reflect::ReservedTypes::Invalid)
-  {
-    ObjectPtr object = Registry::GetInstance()->CreateInstance(m_SerializerID);
-
-    if (object.ReferencesObject())
+    if (m_SerializerID != Reflect::ReservedTypes::Invalid)
     {
-      ser = AssertCast<Serializer>(object);
+        ObjectPtr object = Registry::GetInstance()->CreateInstance(m_SerializerID);
+
+        if (object.ReferencesObject())
+        {
+            ser = AssertCast<Serializer>(object);
+        }
     }
-  }
 
-  if (ser.ReferencesObject() && instance)
-  {
-    ser->ConnectField( instance, this );
-  }
+    if (ser.ReferencesObject() && instance)
+    {
+        ser->ConnectField( instance, this );
+    }
 
-  return ser;
+    return ser;
 }
 
 bool Field::HasDefaultValue(Element* instance) const
 {
-  // if we don't have a default value, we can never be at the default value
-  if (m_Default == NULL)
-  {
+    // if we don't have a default value, we can never be at the default value
+    if (m_Default == NULL)
+    {
+        return false;
+    }
+
+    // get a serializer
+    SerializerPtr serializer = CreateSerializer();
+
+    if (serializer.ReferencesObject())
+    {
+        // set data pointer
+        serializer->ConnectField(instance, this);
+
+        // return equality
+        bool result = m_Default->Equals(serializer);
+
+        // disconnect
+        serializer->Disconnect();
+
+        // result
+        return result;
+    }
+
     return false;
-  }
-
-  // get a serializer
-  SerializerPtr serializer = CreateSerializer();
-
-  if (serializer.ReferencesObject())
-  {
-    // set data pointer
-    serializer->ConnectField(instance, this);
-
-    // return equality
-    bool result = m_Default->Equals(serializer);
-
-    // disconnect
-    serializer->Disconnect();
-
-    // result
-    return result;
-  }
-
-  return false;
 }
 
 bool Field::SetDefaultValue(Element* instance) const
 {
-  // if we don't have a default value, we can never be at the default value
-  if (m_Default == NULL)
-  {
+    // if we don't have a default value, we can never be at the default value
+    if (m_Default == NULL)
+    {
+        return false;
+    }
+
+    // get a serializer
+    SerializerPtr serializer = CreateSerializer();
+
+    if (serializer.ReferencesObject())
+    {
+        // set data pointer
+        serializer->ConnectField(instance, this);
+
+        // copy the data
+        serializer->Set(m_Default);
+
+        // disconnect
+        serializer->Disconnect();
+
+        return true;
+    }
+
     return false;
-  }
-
-  // get a serializer
-  SerializerPtr serializer = CreateSerializer();
-
-  if (serializer.ReferencesObject())
-  {
-    // set data pointer
-    serializer->ConnectField(instance, this);
-
-    // copy the data
-    serializer->Set(m_Default);
-
-    // disconnect
-    serializer->Disconnect();
-
-    return true;
-  }
-
-  return false;
 }
 
 void Field::SetName(const std::string& name)
 {
-  m_Name = name;
+    m_Name = name;
 
-  if ( m_UIName.empty() )
-  {
-    if (m_Name.substr(0, 2) == "m_")
+    if ( m_UIName.empty() )
     {
-      m_UIName = m_Name.substr(2);
+        if (m_Name.substr(0, 2) == "m_")
+        {
+            m_UIName = m_Name.substr(2);
+        }
+        else
+        {
+            m_UIName = m_Name;
+        }
     }
-    else
-    {
-      m_UIName = m_Name;
-    }
-  }
 }
 
 ElementField::ElementField(const Composite* type)
@@ -139,31 +139,31 @@ ElementField::~ElementField()
 
 ElementField* ElementField::Create(const Composite* type)
 {
-  return new ElementField( type );
+    return new ElementField( type );
 }
 
 SerializerPtr ElementField::CreateSerializer(Element* instance) const
 {
-  SerializerPtr ser = __super::CreateSerializer(instance);
+    SerializerPtr ser = __super::CreateSerializer(instance);
 
-  if (ser.ReferencesObject())
-  {
-    PointerSerializer* pointerSerializer = ObjectCast<PointerSerializer>( ser );
-    if ( pointerSerializer )
+    if (ser.ReferencesObject())
     {
-      pointerSerializer->m_TypeID = m_TypeID;
+        PointerSerializer* pointerSerializer = ObjectCast<PointerSerializer>( ser );
+        if ( pointerSerializer )
+        {
+            pointerSerializer->m_TypeID = m_TypeID;
+        }
+        else
+        {
+            ElementContainerSerializer* containerSerializer = ObjectCast<ElementContainerSerializer>( ser );
+            if ( containerSerializer )
+            {
+                containerSerializer->m_TypeID = m_TypeID;
+            }
+        }
     }
-    else
-    {
-      ElementContainerSerializer* containerSerializer = ObjectCast<ElementContainerSerializer>( ser );
-      if ( containerSerializer )
-      {
-        containerSerializer->m_TypeID = m_TypeID;
-      }
-    }
-  }
 
-  return ser;
+    return ser;
 }
 
 EnumerationField::EnumerationField(const Composite* type, const Enumeration* enumeration)
@@ -180,17 +180,17 @@ EnumerationField::~EnumerationField()
 
 EnumerationField* EnumerationField::Create(const Composite* type, const Enumeration* enumeration)
 {
-  return new EnumerationField( type, enumeration );
+    return new EnumerationField( type, enumeration );
 }
 
 SerializerPtr EnumerationField::CreateSerializer(Element* instance) const
 {
-  EnumerationSerializerPtr ser = AssertCast<EnumerationSerializer>(__super::CreateSerializer(instance));
+    EnumerationSerializerPtr ser = AssertCast<EnumerationSerializer>(__super::CreateSerializer(instance));
 
-  if (ser.ReferencesObject())
-  {
-    ser->m_Enumeration = m_Enumeration;
-  }
+    if (ser.ReferencesObject())
+    {
+        ser->m_Enumeration = m_Enumeration;
+    }
 
-  return ser;
+    return ser;
 }

@@ -13,12 +13,12 @@ FindByTypeVisitor::FindByTypeVisitor(i32 type, V_Element& found)
 
 bool FindByTypeVisitor::VisitElement(Element* element)
 {
-  if (element->HasType(m_Type))
-  {
-    m_Found.push_back(element);
-  }
+    if (element->HasType(m_Type))
+    {
+        m_Found.push_back(element);
+    }
 
-  return true;
+    return true;
 }
 
 FindByTypeSetVisitor::FindByTypeSetVisitor(const S_i32& types, V_Element& found)
@@ -30,16 +30,16 @@ FindByTypeSetVisitor::FindByTypeSetVisitor(const S_i32& types, V_Element& found)
 
 bool FindByTypeSetVisitor::VisitElement(Element* element)
 {
-  S_i32::const_iterator itr = m_Types.begin();
-  S_i32::const_iterator end = m_Types.end();
-  for ( ; itr != end; ++itr )
-  {
-    if (element->HasType(*itr))
+    S_i32::const_iterator itr = m_Types.begin();
+    S_i32::const_iterator end = m_Types.end();
+    for ( ; itr != end; ++itr )
     {
-      m_Found.push_back(element);
-      break;
+        if (element->HasType(*itr))
+        {
+            m_Found.push_back(element);
+            break;
+        }
     }
-  }
 
-  return true;
+    return true;
 }

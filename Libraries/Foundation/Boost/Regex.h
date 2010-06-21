@@ -24,21 +24,21 @@
 
 namespace Nocturnal
 {
-  template <class MatchT>
-  inline std::string BoostMatchResultAsString( const boost::match_results<MatchT>& results, int i )
-  {
-    return std::string ( results[i].first, results[i].second ); 
-  }
+    template <class MatchT>
+    inline std::string BoostMatchResultAsString( const boost::match_results<MatchT>& results, int i )
+    {
+        return std::string ( results[i].first, results[i].second ); 
+    }
 
-  template <class T, class MatchT>
-  inline T BoostMatchResult( const boost::match_results<MatchT>& results, int i )
-  {
-    std::istringstream str ( BoostMatchResultAsString<MatchT>(results, i) );
+    template <class T, class MatchT>
+    inline T BoostMatchResult( const boost::match_results<MatchT>& results, int i )
+    {
+        std::istringstream str ( BoostMatchResultAsString<MatchT>(results, i) );
 
-    T result;
-    str >> result;
-    NOC_ASSERT( !str.fail() );
+        T result;
+        str >> result;
+        NOC_ASSERT( !str.fail() );
 
-    return result;
-  }
+        return result;
+    }
 }

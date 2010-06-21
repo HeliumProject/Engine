@@ -29,7 +29,7 @@ namespace Nocturnal
         u16 Data3;
         u8 Data4[ 8 ];
 
-        
+
         GUID(); // Null ID
         GUID( const GUID &id );
         GUID& operator=( const GUID &rhs );

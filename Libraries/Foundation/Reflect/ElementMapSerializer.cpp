@@ -18,255 +18,255 @@ SimpleElementMapSerializer<KeyT>::~SimpleElementMapSerializer()
 template < class KeyT >
 void SimpleElementMapSerializer<KeyT>::ConnectData(Nocturnal::HybridPtr<void> data)
 {
-  __super::ConnectData( data );
+    __super::ConnectData( data );
 
-  m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
 }
 
 template < class KeyT >
 size_t SimpleElementMapSerializer<KeyT>::GetSize() const
 {
-  return m_Data->size();
+    return m_Data->size();
 }
 
 template < class KeyT >
 void SimpleElementMapSerializer<KeyT>::Clear()
 {
-  return m_Data->clear();
+    return m_Data->clear();
 }
 
 template < class KeyT >
 i32 SimpleElementMapSerializer<KeyT>::GetKeyType() const
 {
-  return Serializer::DeduceType<KeyT>();
+    return Serializer::DeduceType<KeyT>();
 }
 
 template < class KeyT >
 void SimpleElementMapSerializer<KeyT>::GetItems(V_ValueType& items)
 {
-  items.resize(m_Data->size());
-  DataType::iterator itr = m_Data->begin();
-  DataType::iterator end = m_Data->end();
-  for ( size_t index=0; itr != end; ++itr, ++index )
-  {
-    items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
-    items[index].second = &itr->second;
-  }
+    items.resize(m_Data->size());
+    DataType::iterator itr = m_Data->begin();
+    DataType::iterator end = m_Data->end();
+    for ( size_t index=0; itr != end; ++itr, ++index )
+    {
+        items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
+        items[index].second = &itr->second;
+    }
 }
 
 template < class KeyT >
 void SimpleElementMapSerializer<KeyT>::GetItems(V_ConstValueType& items) const
 {
-  items.resize(m_Data->size());
-  DataType::const_iterator itr = m_Data->begin();
-  DataType::const_iterator end = m_Data->end();
-  for ( size_t index=0; itr != end; ++itr, ++index )
-  {
-    items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
-    items[index].second = &itr->second;
-  }
+    items.resize(m_Data->size());
+    DataType::const_iterator itr = m_Data->begin();
+    DataType::const_iterator end = m_Data->end();
+    for ( size_t index=0; itr != end; ++itr, ++index )
+    {
+        items[index].first = Serializer::Bind( itr->first, m_Instance, m_Field );
+        items[index].second = &itr->second;
+    }
 }
 
 template < class KeyT >
 ElementPtr* SimpleElementMapSerializer<KeyT>::GetItem(const Serializer* key)
 {
-  KeyT keyValue;
-  Serializer::GetValue(key, keyValue);
+    KeyT keyValue;
+    Serializer::GetValue(key, keyValue);
 
-  DataType::iterator found = m_Data->find( keyValue );
-  if ( found != m_Data->end() )
-  {
-    return &found->second;
-  }
+    DataType::iterator found = m_Data->find( keyValue );
+    if ( found != m_Data->end() )
+    {
+        return &found->second;
+    }
 
-  return NULL;
+    return NULL;
 }
 
 template < class KeyT >
 const ElementPtr* SimpleElementMapSerializer<KeyT>::GetItem(const Serializer* key) const
 {
-  KeyT keyValue;
-  Serializer::GetValue(key, keyValue);
+    KeyT keyValue;
+    Serializer::GetValue(key, keyValue);
 
-  DataType::const_iterator found = m_Data->find( keyValue );
-  if ( found != m_Data->end() )
-  {
-    return &found->second;
-  }
+    DataType::const_iterator found = m_Data->find( keyValue );
+    if ( found != m_Data->end() )
+    {
+        return &found->second;
+    }
 
-  return NULL;
+    return NULL;
 }
 
 template < class KeyT >
 void SimpleElementMapSerializer<KeyT>::SetItem(const Serializer* key, const Element* value)
 {
-  KeyT keyValue;
-  Serializer::GetValue(key, keyValue);
+    KeyT keyValue;
+    Serializer::GetValue(key, keyValue);
 
-  (m_Data.Ref())[keyValue] = value;
+    (m_Data.Ref())[keyValue] = value;
 }
 
 template < class KeyT >
 void SimpleElementMapSerializer<KeyT>::RemoveItem(const Serializer* key)
 {
-  KeyT keyValue;
-  Serializer::GetValue(key, keyValue);
+    KeyT keyValue;
+    Serializer::GetValue(key, keyValue);
 
-  (m_Data.Ref()).erase(keyValue);
+    (m_Data.Ref()).erase(keyValue);
 }
 
 template < class KeyT >
 bool SimpleElementMapSerializer<KeyT>::Set(const Serializer* src, u32 flags)
 {
-  const ElementMapSerializerT* rhs = ConstObjectCast<ElementMapSerializerT>(src);
-  if (!rhs)
-  {
-    return false;
-  }
-
-  m_Data->clear();
-
-  DataType::const_iterator itr = rhs->m_Data->begin();
-  DataType::const_iterator end = rhs->m_Data->end();
-  for ( ; itr != end; ++itr )
-  {
-    if (flags & SerializerFlags::Shallow)
+    const ElementMapSerializerT* rhs = ConstObjectCast<ElementMapSerializerT>(src);
+    if (!rhs)
     {
-      m_Data.Ref()[itr->first] = itr->second;
+        return false;
     }
-    else
-    {
-      m_Data.Ref()[itr->first] = itr->second->Clone();
-    }
-  }
 
-  return true;
+    m_Data->clear();
+
+    DataType::const_iterator itr = rhs->m_Data->begin();
+    DataType::const_iterator end = rhs->m_Data->end();
+    for ( ; itr != end; ++itr )
+    {
+        if (flags & SerializerFlags::Shallow)
+        {
+            m_Data.Ref()[itr->first] = itr->second;
+        }
+        else
+        {
+            m_Data.Ref()[itr->first] = itr->second->Clone();
+        }
+    }
+
+    return true;
 }
 
 template < class KeyT >
 bool SimpleElementMapSerializer<KeyT>::Equals(const Serializer* s) const
 {
-  const ElementMapSerializerT* rhs = ConstObjectCast<ElementMapSerializerT>(s);
-  if (!rhs)
-  {
-    return false;
-  }
-
-  if (m_Data->size() != rhs->m_Data->size())
-  {
-    return false;
-  }
-
-  DataType::const_iterator itrLHS = m_Data->begin();
-  DataType::const_iterator endLHS = m_Data->end();
-  DataType::const_iterator itrRHS = rhs->m_Data->begin();
-  DataType::const_iterator endRHS = rhs->m_Data->end();
-  for ( ; itrLHS != endLHS && itrRHS != endRHS; ++itrLHS, ++itrRHS )
-  {
-    if ( itrLHS->first != itrRHS->first )
+    const ElementMapSerializerT* rhs = ConstObjectCast<ElementMapSerializerT>(s);
+    if (!rhs)
     {
-      return false;
+        return false;
     }
 
-    if ( !itrLHS->second->Equals(itrRHS->second))
+    if (m_Data->size() != rhs->m_Data->size())
     {
-      return false;
+        return false;
     }
-  }
 
-  return true;
+    DataType::const_iterator itrLHS = m_Data->begin();
+    DataType::const_iterator endLHS = m_Data->end();
+    DataType::const_iterator itrRHS = rhs->m_Data->begin();
+    DataType::const_iterator endRHS = rhs->m_Data->end();
+    for ( ; itrLHS != endLHS && itrRHS != endRHS; ++itrLHS, ++itrRHS )
+    {
+        if ( itrLHS->first != itrRHS->first )
+        {
+            return false;
+        }
+
+        if ( !itrLHS->second->Equals(itrRHS->second))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 template < class KeyT >
 void SimpleElementMapSerializer<KeyT>::Serialize(Archive& archive) const
 {
-  V_Element components;
-  components.resize(m_Data->size() * 2);
+    V_Element components;
+    components.resize(m_Data->size() * 2);
 
-  {
-    DataType::const_iterator itr = m_Data->begin();
-    DataType::const_iterator end = m_Data->end();
-    for ( int i = 0; itr != end; ++itr )
     {
-      if (!itr->second.ReferencesObject())
-      {
-        continue;
-      }
+        DataType::const_iterator itr = m_Data->begin();
+        DataType::const_iterator end = m_Data->end();
+        for ( int i = 0; itr != end; ++itr )
+        {
+            if (!itr->second.ReferencesObject())
+            {
+                continue;
+            }
 
-      ElementPtr elem;
-      archive.GetCache().Create( Serializer::DeduceType<KeyT>(), elem );
+            ElementPtr elem;
+            archive.GetCache().Create( Serializer::DeduceType<KeyT>(), elem );
 
-      Serializer* ser = AssertCast<Serializer>(elem.Ptr());
-      ser->ConnectData((void*)&(itr->first));
+            Serializer* ser = AssertCast<Serializer>(elem.Ptr());
+            ser->ConnectData((void*)&(itr->first));
 
-      components[i++] = ser;
-      components[i++] = itr->second;
+            components[i++] = ser;
+            components[i++] = itr->second;
+        }
     }
-  }
 
-  archive.Serialize(components);
+    archive.Serialize(components);
 
-  {
-    V_Element::iterator itr = components.begin();
-    V_Element::iterator end = components.end();
-    for ( ; itr != end; ++itr )
     {
-      Serializer* ser = AssertCast<Serializer>(*itr);
-      ser->Disconnect();
-      archive.GetCache().Free(ser);
-      ++itr;
+        V_Element::iterator itr = components.begin();
+        V_Element::iterator end = components.end();
+        for ( ; itr != end; ++itr )
+        {
+            Serializer* ser = AssertCast<Serializer>(*itr);
+            ser->Disconnect();
+            archive.GetCache().Free(ser);
+            ++itr;
+        }
     }
-  }
 }
 
 template < class KeyT >
 void SimpleElementMapSerializer<KeyT>::Deserialize(Archive& archive)
 {
-  V_Element components;
-  archive.Deserialize(components, ArchiveFlags::Sparse);
+    V_Element components;
+    archive.Deserialize(components, ArchiveFlags::Sparse);
 
-  if (components.size() % 2 != 0)
-  {
-    throw Reflect::DataFormatException("Unmatched map objects");
-  }
-
-  // if we are referring to a real field, clear its contents
-  m_Data->clear();
-
-  V_Element::iterator itr = components.begin();
-  V_Element::iterator end = components.end();
-  for ( ; itr != end; ++itr )
-  {
-    Serializer* key = ObjectCast<Serializer>(*itr);
-    Element* value = *(++itr);
-    if ( key && value )
+    if (components.size() % 2 != 0)
     {
-      KeyT k;
-      Serializer::GetValue( key, k );
-      m_Data.Ref()[ k ] = value;
+        throw Reflect::DataFormatException("Unmatched map objects");
     }
-  }
+
+    // if we are referring to a real field, clear its contents
+    m_Data->clear();
+
+    V_Element::iterator itr = components.begin();
+    V_Element::iterator end = components.end();
+    for ( ; itr != end; ++itr )
+    {
+        Serializer* key = ObjectCast<Serializer>(*itr);
+        Element* value = *(++itr);
+        if ( key && value )
+        {
+            KeyT k;
+            Serializer::GetValue( key, k );
+            m_Data.Ref()[ k ] = value;
+        }
+    }
 }
 
 template < class KeyT >
 void SimpleElementMapSerializer<KeyT>::Host(Visitor& visitor)
 {
-  DataType::iterator itr = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->begin();
-  DataType::iterator end = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->end();
-  for ( ; itr != end; ++itr )
-  {
-    if (!itr->second.ReferencesObject())
+    DataType::iterator itr = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->begin();
+    DataType::iterator end = const_cast<Serializer::DataPtr<DataType>&>(m_Data)->end();
+    for ( ; itr != end; ++itr )
     {
-      continue;
-    }
+        if (!itr->second.ReferencesObject())
+        {
+            continue;
+        }
 
-    if (!visitor.VisitPointer(itr->second))
-    {
-      continue;
-    }
+        if (!visitor.VisitPointer(itr->second))
+        {
+            continue;
+        }
 
-    itr->second->Host( visitor );
-  }
+        itr->second->Host( visitor );
+    }
 }
 
 template SimpleElementMapSerializer<TypeID>;

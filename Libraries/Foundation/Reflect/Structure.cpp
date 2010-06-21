@@ -16,5 +16,5 @@ Structure::~Structure ()
 
 Structure* Structure::Create()
 {
-  return new Structure();
+    return new Structure();
 }

@@ -60,9 +60,9 @@ namespace Debug
   //
 
   // some constants
-  extern FOUNDATION_API DWORD ExecuteHandler;    // execute the __except statement for this __try
-  extern FOUNDATION_API DWORD ContinueSearch;    // continue up the stack and look for another __except to handle this exception
-  extern FOUNDATION_API DWORD ContinueExecution; // continue execution at the exception point (ex. after you changed some instructions or mapped some memory)
+  extern FOUNDATION_API u32 ExecuteHandler;    // execute the __except statement for this __try
+  extern FOUNDATION_API u32 ContinueSearch;    // continue up the stack and look for another __except to handle this exception
+  extern FOUNDATION_API u32 ContinueExecution; // continue execution at the exception point (ex. after you changed some instructions or mapped some memory)
 
   // get environment-driven handling behavior
   FOUNDATION_API int GetExceptionBehavior();
@@ -73,8 +73,8 @@ namespace Debug
                                    bool fatal = false );
 
   // prepare and dispatch a report for an SEH exception such as divide by zero, page fault from a invalid memory access, or even breakpoint instructions
-  FOUNDATION_API DWORD ProcessException( LPEXCEPTION_POINTERS info,
-                                    DWORD ret_code = GetExceptionBehavior(),
+  FOUNDATION_API u32 ProcessException( LPEXCEPTION_POINTERS info,
+                                    u32 ret_code = GetExceptionBehavior(),
                                     bool print = false,
                                     bool fatal = false );
 };

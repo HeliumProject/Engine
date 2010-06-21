@@ -5,32 +5,32 @@
 
 namespace Profile
 {
-  //
-  // Bare Timer
-  //
+    //
+    // Bare Timer
+    //
 
-  class FOUNDATION_API Timer
-  {
-  private:
-    u64 m_StartTime;
-
-  public:
-    Timer()
+    class FOUNDATION_API Timer
     {
-      Reset();
-    }
+    private:
+        u64 m_StartTime;
 
-  private:
-    Timer(const Timer& rhs)
-    {
+    public:
+        Timer()
+        {
+            Reset();
+        }
 
-    }
+    private:
+        Timer(const Timer& rhs)
+        {
 
-  public:
-    // reset timer (for re-use)
-    void Reset();
+        }
 
-    // get elapsed time in millis
-    float Elapsed();
-  };
+    public:
+        // reset timer (for re-use)
+        void Reset();
+
+        // get elapsed time in millis
+        float Elapsed();
+    };
 }

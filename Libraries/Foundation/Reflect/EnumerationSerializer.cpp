@@ -22,194 +22,194 @@ EnumerationSerializer::~EnumerationSerializer()
 
 bool EnumerationSerializer::IsCompact () const 
 { 
-  return true; 
+    return true; 
 }
 
 void EnumerationSerializer::ConnectData(Nocturnal::HybridPtr<void> data)
 {
-  __super::ConnectData( data );
+    __super::ConnectData( data );
 
-  m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
+    m_Data.Connect( Nocturnal::HybridPtr<DataType> (data.Address(), data.State()) );
 
-  if ( data.Address() == NULL )
-  {
-    // Disconnect case
-    m_Enumeration = NULL;
-  }
+    if ( data.Address() == NULL )
+    {
+        // Disconnect case
+        m_Enumeration = NULL;
+    }
 }
 
 void EnumerationSerializer::ConnectField(Nocturnal::HybridPtr<Element> instance, const Field* field, PointerSizedUInt offsetInField)
 {
-  __super::ConnectField(instance, field, offsetInField);
+    __super::ConnectField(instance, field, offsetInField);
 
-  const EnumerationField* enumField = ReflectionCast<EnumerationField>(field);
-  NOC_ASSERT( enumField );
+    const EnumerationField* enumField = ReflectionCast<EnumerationField>(field);
+    NOC_ASSERT( enumField );
 
-  m_Enumeration = enumField->m_Enumeration;
+    m_Enumeration = enumField->m_Enumeration;
 }
 
 bool EnumerationSerializer::Set(const Serializer* src, u32 flags)
 {
-  if (GetType() != src->GetType())
-  {
-    return false;
-  }
+    if (GetType() != src->GetType())
+    {
+        return false;
+    }
 
-  const EnumerationSerializer* rhs = static_cast<const EnumerationSerializer*>(src);
+    const EnumerationSerializer* rhs = static_cast<const EnumerationSerializer*>(src);
 
-  m_Data.Set( rhs->m_Data.Get() );
+    m_Data.Set( rhs->m_Data.Get() );
 
-  return true;
+    return true;
 }
 
 bool EnumerationSerializer::Equals(const Serializer* s) const
 {
-  if (GetType() != s->GetType())
-  {
-    return false;
-  }
+    if (GetType() != s->GetType())
+    {
+        return false;
+    }
 
-  const EnumerationSerializer* rhs = static_cast<const EnumerationSerializer*>(s);
+    const EnumerationSerializer* rhs = static_cast<const EnumerationSerializer*>(s);
 
-  return rhs->m_Data.Get() == m_Data.Get();
+    return rhs->m_Data.Get() == m_Data.Get();
 }
 
 void EnumerationSerializer::Serialize(Archive& archive) const
 {
-  switch (archive.GetType())
-  {
-  case ArchiveTypes::XML:
+    switch (archive.GetType())
     {
-      std::string label;
-
-      if (m_Enumeration)
-      {
-        if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
+    case ArchiveTypes::XML:
         {
-          throw Reflect::TypeInformationException( "Unable to serialize enumeration '%s', value %d",
-            m_Enumeration->m_ShortName.c_str(), m_Data.Get() );
+            std::string label;
+
+            if (m_Enumeration)
+            {
+                if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
+                {
+                    throw Reflect::TypeInformationException( "Unable to serialize enumeration '%s', value %d",
+                        m_Enumeration->m_ShortName.c_str(), m_Data.Get() );
+                }
+            }
+
+            // store corresponding string
+            archive.GetOutput() << label;
+
+            break;
         }
-      }
 
-      // store corresponding string
-      archive.GetOutput() << label;
+    case ArchiveTypes::Binary:
+        {
+            std::string label;
 
-      break;
+            if (m_Enumeration)
+            {
+                if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
+                {
+                    throw Reflect::TypeInformationException( "Unable to serialize enumeration '%s', value %d",
+                        m_Enumeration->m_ShortName.c_str(), m_Data.Get() );
+                }
+            }
+
+            // get string pool index
+            i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().AssignIndex(label);
+
+            // write that index
+            archive.GetOutput().Write(&index); 
+
+            break;
+        }
     }
 
-  case ArchiveTypes::Binary:
+    if (m_Enumeration == NULL)
     {
-      std::string label;
-
-      if (m_Enumeration)
-      {
-        if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
-        {
-          throw Reflect::TypeInformationException( "Unable to serialize enumeration '%s', value %d",
-            m_Enumeration->m_ShortName.c_str(), m_Data.Get() );
-        }
-      }
-
-      // get string pool index
-      i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().AssignIndex(label);
-
-      // write that index
-      archive.GetOutput().Write(&index); 
-
-      break;
+        throw Reflect::TypeInformationException( "Missing type information" );
     }
-  }
-
-  if (m_Enumeration == NULL)
-  {
-    throw Reflect::TypeInformationException( "Missing type information" );
-  }
 }
 
 void EnumerationSerializer::Deserialize(Archive& archive)
 {
-  switch (archive.GetType())
-  {
-  case ArchiveTypes::XML:
+    switch (archive.GetType())
     {
-      std::string buf;
-      archive.GetInput() >> buf;
-
-      if (!buf.empty())
-      {
-        if (m_Enumeration && !m_Enumeration->GetElementValue(buf, m_Data.Ref()))
+    case ArchiveTypes::XML:
         {
-          archive.Debug( "Unable to deserialize %s::%s, discarding\n", m_Enumeration->m_ShortName.c_str(), buf.c_str() );
-        }
-        else
-        {
-          m_String = buf;
-        }
-      }
+            std::string buf;
+            archive.GetInput() >> buf;
 
-      break;
+            if (!buf.empty())
+            {
+                if (m_Enumeration && !m_Enumeration->GetElementValue(buf, m_Data.Ref()))
+                {
+                    archive.Debug( "Unable to deserialize %s::%s, discarding\n", m_Enumeration->m_ShortName.c_str(), buf.c_str() );
+                }
+                else
+                {
+                    m_String = buf;
+                }
+            }
+
+            break;
+        }
+
+    case ArchiveTypes::Binary:
+        {
+            i32 index = -1;
+            archive.GetInput().Read(&index); 
+
+            if (index >= 0)
+            {
+                const std::string& str (static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index));
+
+                if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
+                {
+                    archive.Debug( "Unable to deserialize %s::%s, discarding\n", m_Enumeration->m_ShortName.c_str(), str.c_str() );
+                }
+                else
+                {
+                    m_String = str;
+                }
+            }
+
+            break;
+        }
     }
 
-  case ArchiveTypes::Binary:
+    if (m_Enumeration == NULL)
     {
-      i32 index = -1;
-      archive.GetInput().Read(&index); 
-
-      if (index >= 0)
-      {
-        const std::string& str (static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index));
-
-        if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
-        {
-          archive.Debug( "Unable to deserialize %s::%s, discarding\n", m_Enumeration->m_ShortName.c_str(), str.c_str() );
-        }
-        else
-        {
-          m_String = str;
-        }
-      }
-
-      break;
+        throw Reflect::TypeInformationException( "Missing type information" );
     }
-  }
-
-  if (m_Enumeration == NULL)
-  {
-    throw Reflect::TypeInformationException( "Missing type information" );
-  }
 }
 
 std::ostream& EnumerationSerializer::operator >> (std::ostream& stream) const
 {
-  bool set = false;
+    bool set = false;
 
-  std::string label;
-  if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
-  {
-    // something is amiss, we should be guaranteed serialization of enum elements
-    NOC_BREAK();
-  }
+    std::string label;
+    if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
+    {
+        // something is amiss, we should be guaranteed serialization of enum elements
+        NOC_BREAK();
+    }
 
-  stream << label;
+    stream << label;
 
-  return stream;
+    return stream;
 }
 
 std::istream& EnumerationSerializer::operator << (std::istream& stream)
 {
-  std::string buf;
-  stream >> buf;
+    std::string buf;
+    stream >> buf;
 
-  if (!buf.empty())
-  {
-    m_Enumeration->GetElementValue(buf, m_Data.Ref());
-
-    if ( m_Instance && m_Field && m_Field->m_Type->GetReflectionType() == ReflectionTypes::Class )
+    if (!buf.empty())
     {
-      Element* element = (Element*)m_Instance;
-      element->RaiseChanged( m_Field );
-    }
-  }
+        m_Enumeration->GetElementValue(buf, m_Data.Ref());
 
-  return stream;
+        if ( m_Instance && m_Field && m_Field->m_Type->GetReflectionType() == ReflectionTypes::Class )
+        {
+            Element* element = (Element*)m_Instance;
+            element->RaiseChanged( m_Field );
+        }
+    }
+
+    return stream;
 }

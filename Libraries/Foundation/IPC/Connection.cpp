@@ -9,24 +9,24 @@ using namespace IPC;
 
 namespace IPC
 {
-  namespace ProtocolMessageIDs
-  {
-    enum ProtocolMessageID
+    namespace ProtocolMessageIDs
     {
-      Disconnect,
-    };
-  }
+        enum ProtocolMessageID
+        {
+            Disconnect,
+        };
+    }
 }
-  
+
 // Debug printing
 //#define IPC_CONNECTION_DEBUG
 
 static const char* ConnectionStateNames[] = 
 {
-  "Waiting",
-  "Active",
-  "Closed",
-  "Failed",
+    "Waiting",
+    "Active",
+    "Closed",
+    "Failed",
 };
 
 NOC_COMPILE_ASSERT( ConnectionStates::Count == (sizeof(ConnectionStateNames) / sizeof(const char*)) );
@@ -39,7 +39,7 @@ Connection::Connection()
 , m_RemotePlatform ((Platform::Type)-1)
 , m_NextTransaction (0)
 {
-  SetState(ConnectionStates::Closed);
+    SetState(ConnectionStates::Closed);
 }
 
 Connection::~Connection()
@@ -49,397 +49,397 @@ Connection::~Connection()
 
 bool Connection::Initialize(bool server, const char* name)
 {
-  strcpy(m_Name, name);
-  m_Server = server;
+    strcpy(m_Name, name);
+    m_Server = server;
 
-  if (server)
-  {
-    m_NextTransaction = -1;
-  }
-  else
-  {
-    m_NextTransaction = 1;
-  }
+    if (server)
+    {
+        m_NextTransaction = -1;
+    }
+    else
+    {
+        m_NextTransaction = 1;
+    }
 
-  return true;
+    return true;
 }
 
 void Connection::Cleanup()
 {
-  if (!m_Terminating)
-  {
-    m_Terminating = true;
-    m_Terminate.Signal();
-
-    if (m_ConnectThread.Valid())
+    if (!m_Terminating)
     {
-      // wait for them to quit
-      m_ConnectThread.Wait();
+        m_Terminating = true;
+        m_Terminate.Signal();
 
-      // close handle
-      m_ConnectThread.Close();
+        if (m_ConnectThread.Valid())
+        {
+            // wait for them to quit
+            m_ConnectThread.Wait();
+
+            // close handle
+            m_ConnectThread.Close();
+        }
+
+        m_ReadQueue.Clear();
+        m_WriteQueue.Clear();
+
+        SetState(ConnectionStates::Closed);
+
+        m_Terminating = false;
+        m_Terminate.Reset();
     }
-
-    m_ReadQueue.Clear();
-    m_WriteQueue.Clear();
-
-    SetState(ConnectionStates::Closed);
-
-    m_Terminating = false;
-    m_Terminate.Reset();
-  }
 }
 
 void Connection::SetState(ConnectionState state)
 {
-  Platform::TakeMutex mutex (m_Mutex);
+    Platform::TakeMutex mutex (m_Mutex);
 
-  if (m_State != state)
-  {
-    // report status change
+    if (m_State != state)
+    {
+        // report status change
 #ifdef IPC_CONNECTION_DEBUG
-    Platform::Print("%s: State changing from '%s' to '%s'\n", m_Name, ConnectionStateNames[m_State], ConnectionStateNames[state]);
+        Platform::Print("%s: State changing from '%s' to '%s'\n", m_Name, ConnectionStateNames[m_State], ConnectionStateNames[state]);
 #else
-    if (m_State != ConnectionStates::Active && state == ConnectionStates::Active)
-    {
-      Platform::Print("%s: Connected\n", m_Name);
-    }
+        if (m_State != ConnectionStates::Active && state == ConnectionStates::Active)
+        {
+            Platform::Print("%s: Connected\n", m_Name);
+        }
 
-    if (m_State == ConnectionStates::Active && state != ConnectionStates::Active)
-    {
-      Platform::Print("%s: Disconnected\n", m_Name);
-    }
+        if (m_State == ConnectionStates::Active && state != ConnectionStates::Active)
+        {
+            Platform::Print("%s: Disconnected\n", m_Name);
+        }
 
-    if (m_State == ConnectionStates::Active && state == ConnectionStates::Waiting)
-    {
-      Platform::Print("%S: Waiting for connection\n", m_Name);
-    }
+        if (m_State == ConnectionStates::Active && state == ConnectionStates::Waiting)
+        {
+            Platform::Print("%S: Waiting for connection\n", m_Name);
+        }
 #endif
 
-    // inrement our connect count if necessary
-    if (m_State != ConnectionStates::Active && state == ConnectionStates::Active)
-    {
-      m_ConnectCount++;
-    }
+        // inrement our connect count if necessary
+        if (m_State != ConnectionStates::Active && state == ConnectionStates::Active)
+        {
+            m_ConnectCount++;
+        }
 
-    // set the state
-    m_State = state;
-  }
+        // set the state
+        m_State = state;
+    }
 }
 
 Message* Connection::CreateMessage(u32 id, u32 size, i32 trans, u32 type)
 {
-  NOC_ASSERT(m_NextTransaction != 0);
+    NOC_ASSERT(m_NextTransaction != 0);
 
-  if (trans == 0)
-  {
-    if (m_Server)
+    if (trans == 0)
     {
-      trans = m_NextTransaction--;
+        if (m_Server)
+        {
+            trans = m_NextTransaction--;
+        }
+        else
+        {
+            trans = m_NextTransaction++;
+        }
     }
-    else
+
+    IPC::Message* msg = new Message (id, trans, size, type);
+
+    if (!msg)
     {
-      trans = m_NextTransaction++;
+        Platform::Print("%s: Failed to create message (ID: %u, TRN: %u, Size: %u)\n", m_Name, id, trans, size);
     }
-  }
 
-  IPC::Message* msg = new Message (id, trans, size, type);
-
-  if (!msg)
-  {
-    Platform::Print("%s: Failed to create message (ID: %u, TRN: %u, Size: %u)\n", m_Name, id, trans, size);
-  }
-
-  return msg;
+    return msg;
 }
 
 bool Connection::CreatedMessage(i32 transaction)
 {
-  if (m_Server)
-  {
-    return transaction < 0;
-  }
-  else
-  {
-    return transaction > 0;
-  }
+    if (m_Server)
+    {
+        return transaction < 0;
+    }
+    else
+    {
+        return transaction > 0;
+    }
 }
 
 void Connection::Wait()
 {
-  m_ReadQueue.Wait();
+    m_ReadQueue.Wait();
 }
 
 ConnectionState Connection::Send(Message* message)
 {
-  ConnectionState result = GetState();
+    ConnectionState result = GetState();
 
-  if (result != ConnectionStates::Active)
-  {
+    if (result != ConnectionStates::Active)
+    {
+        return result;
+    }
+
+    m_WriteQueue.Add(message);
+
     return result;
-  }
-
-  m_WriteQueue.Add(message);
-
-  return result;
 }
 
 ConnectionState Connection::Receive(Message** msg, bool wait)
 {
-  ConnectionState result = GetState();
+    ConnectionState result = GetState();
 
-  if (result != ConnectionStates::Active)
-  {
+    if (result != ConnectionStates::Active)
+    {
+        if (msg)
+        {
+            *msg = 0;
+        }
+
+        return result;
+    }
+
     if (msg)
     {
-      *msg = 0;
+        if (wait || m_ReadQueue.Count())
+        {
+            *msg = m_ReadQueue.Remove();
+        }
     }
 
     return result;
-  }
-
-  if (msg)
-  {
-    if (wait || m_ReadQueue.Count())
-    {
-      *msg = m_ReadQueue.Remove();
-    }
-  }
-
-  return result;
 }
 
 void Connection::CleanupThread()
 {
-  // nothing to do by default
+    // nothing to do by default
 }
 
 bool Connection::ReadPump()
 {
-  Message* msg = NULL;
+    Message* msg = NULL;
 
-  // attempt to read the message from the connction
-  bool result = ReadMessage(&msg);
+    // attempt to read the message from the connction
+    bool result = ReadMessage(&msg);
 
-  // success, add it to the incoming queue if it exists
-  if (msg)
-  {
-    if ( msg->GetType() == MessageTypes::Protocol )
+    // success, add it to the incoming queue if it exists
+    if (msg)
     {
-      ProcessProtocolMessage(msg);
-    }
-    else
-    {
-      m_ReadQueue.Add(msg);
-    }
+        if ( msg->GetType() == MessageTypes::Protocol )
+        {
+            ProcessProtocolMessage(msg);
+        }
+        else
+        {
+            m_ReadQueue.Add(msg);
+        }
 
 #ifdef IPC_CONNECTION_DEBUG
-    Platform::Print("%s: Got message %d, id '%d', transaction '%d', size '%d'\n", m_Name, msg->GetNumber(), msg->GetID(), msg->GetTransaction(), msg->GetSize());
+        Platform::Print("%s: Got message %d, id '%d', transaction '%d', size '%d'\n", m_Name, msg->GetNumber(), msg->GetID(), msg->GetTransaction(), msg->GetSize());
 #endif
-  }
+    }
 
-  if (!result)
-  {
-    // close the connection
-    SetState(ConnectionStates::Closed);
-  }
+    if (!result)
+    {
+        // close the connection
+        SetState(ConnectionStates::Closed);
+    }
 
-  return result;
+    return result;
 }
 
 bool Connection::WritePump()
 {
-  bool result = false;
+    bool result = false;
 
-  Message* msg = m_WriteQueue.Remove();
-  if (msg)
-  {
-    // the result will be true unless there was heinous breakage
-    result = WriteMessage(msg);
+    Message* msg = m_WriteQueue.Remove();
+    if (msg)
+    {
+        // the result will be true unless there was heinous breakage
+        result = WriteMessage(msg);
 
 #ifdef IPC_CONNECTION_DEBUG
-    Platform::Print("%s: Put message %d, id '%d', transaction '%d', size '%d'\n", m_Name, msg->GetNumber(), msg->GetID(), msg->GetTransaction(), msg->GetSize());
+        Platform::Print("%s: Put message %d, id '%d', transaction '%d', size '%d'\n", m_Name, msg->GetNumber(), msg->GetID(), msg->GetTransaction(), msg->GetSize());
 #endif
 
-    // free the memory
-    delete msg;
-  }
+        // free the memory
+        delete msg;
+    }
 
-  // there was a failure
-  if (!result)
-  {
-    // close the connection
-    SetState(ConnectionStates::Closed);
-  }
+    // there was a failure
+    if (!result)
+    {
+        // close the connection
+        SetState(ConnectionStates::Closed);
+    }
 
-  return result;
+    return result;
 }
 
 void Connection::ReadThread()
 {
-  while (1)
-  {
-    if (GetState() == ConnectionStates::Closed || m_Terminating)
+    while (1)
     {
-      break;
+        if (GetState() == ConnectionStates::Closed || m_Terminating)
+        {
+            break;
+        }
+
+        if (!ReadPump())
+        {
+            break;
+        }
     }
 
-    if (!ReadPump())
-    {
-      break;
-    }
-  }
+    CleanupThread();
 
-  CleanupThread();
-
-  return;
+    return;
 }
 
 void Connection::WriteThread()
 {
-  while (1)
-  {
-    if (GetState() == ConnectionStates::Closed || m_Terminating)
+    while (1)
     {
-      break;
+        if (GetState() == ConnectionStates::Closed || m_Terminating)
+        {
+            break;
+        }
+
+        if (!WritePump())
+        {
+            break;
+        }
     }
 
-    if (!WritePump())
-    {
-      break;
-    }
-  }
+    CleanupThread();
 
-  CleanupThread();
-
-  return;
+    return;
 }
 
 void Connection::ConnectThread()
 {
-  if (m_Server)
-  {
-    // client write first
-    if ( !ReadHostType() )
+    if (m_Server)
     {
-      return;
+        // client write first
+        if ( !ReadHostType() )
+        {
+            return;
+        }
+
+        // server write second
+        if ( !WriteHostType() )
+        {
+            return;
+        }
+    }
+    else
+    {
+        // client write first
+        if ( !WriteHostType() )
+        {
+            return;
+        }
+
+        // server write second
+        if ( !ReadHostType() )
+        {
+            return;
+        }
     }
 
-    // server write second
-    if ( !WriteHostType() )
+    // we have handshaked, go active
+    SetState(ConnectionStates::Active);
+
+    // report our remote platform type
+    Platform::Print("%s: Remote platform is '%s'\n", m_Name, Platform::GetTypeName(m_RemotePlatform));
+
+    // start read thread
+    if (!m_ReadThread.Create(&Platform::Thread::EntryHelper<Connection, &Connection::ReadThread>, this, "IPC Read Thread"))
     {
-      return;
+        NOC_BREAK();
+        return;
     }
-  }
-  else
-  {
-    // client write first
-    if ( !WriteHostType() )
+
+    // start write thread
+    if (!m_WriteThread.Create(&Platform::Thread::EntryHelper<Connection, &Connection::WriteThread>, this, "IPC Write Thread"))
     {
-      return;
+        NOC_BREAK();
+        return;
     }
 
-    // server write second
-    if ( !ReadHostType() )
-    {
-      return;
-    }
-  }
+    // wait for the read thread to quit
+    m_ReadThread.Wait();
+    m_ReadThread.Close();
 
-  // we have handshaked, go active
-  SetState(ConnectionStates::Active);
+    // wake up any reader blocking waiting for messages
+    m_ReadQueue.Add(NULL);
 
-  // report our remote platform type
-  Platform::Print("%s: Remote platform is '%s'\n", m_Name, Platform::GetTypeName(m_RemotePlatform));
+    // wake up the writer thread so that it detects the disconnect
+    m_WriteQueue.Add(NULL);
 
-  // start read thread
-  if (!m_ReadThread.Create(&Platform::Thread::EntryHelper<Connection, &Connection::ReadThread>, this, "IPC Read Thread"))
-  {
-    NOC_BREAK();
-    return;
-  }
+    // wait for the write thread to quit
+    m_WriteThread.Wait();
+    m_WriteThread.Close();
 
-  // start write thread
-  if (!m_WriteThread.Create(&Platform::Thread::EntryHelper<Connection, &Connection::WriteThread>, this, "IPC Write Thread"))
-  {
-    NOC_BREAK();
-    return;
-  }
+    // erase messages
+    m_ReadQueue.Clear();
+    m_WriteQueue.Clear();
 
-  // wait for the read thread to quit
-  m_ReadThread.Wait();
-  m_ReadThread.Close();
+    // send the disconnect message
+    SendProtocolMessage( ProtocolMessageIDs::Disconnect );
 
-  // wake up any reader blocking waiting for messages
-  m_ReadQueue.Add(NULL);
-
-  // wake up the writer thread so that it detects the disconnect
-  m_WriteQueue.Add(NULL);
-
-  // wait for the write thread to quit
-  m_WriteThread.Wait();
-  m_WriteThread.Close();
-
-  // erase messages
-  m_ReadQueue.Clear();
-  m_WriteQueue.Clear();
-
-  // send the disconnect message
-  SendProtocolMessage( ProtocolMessageIDs::Disconnect );
-
-  CleanupThread();
+    CleanupThread();
 }
 
 void Connection::ProcessProtocolMessage( Message* msg )
 {
-  if ( msg )
-  {
-    switch( msg->m_ID )
+    if ( msg )
     {
-    case ProtocolMessageIDs::Disconnect:
-      {
-        SetState(ConnectionStates::Closed);
-        break;
-      }
-    }
+        switch( msg->m_ID )
+        {
+        case ProtocolMessageIDs::Disconnect:
+            {
+                SetState(ConnectionStates::Closed);
+                break;
+            }
+        }
 
-    delete msg;
-  }
+        delete msg;
+    }
 }
 
 void Connection::SendProtocolMessage( u32 message )
 {
-  Message* msg = CreateMessage( ProtocolMessageIDs::Disconnect, 0, 0, message );
-  if (msg)
-  {
-    WriteMessage(msg);
-    delete msg;
-  }
+    Message* msg = CreateMessage( ProtocolMessageIDs::Disconnect, 0, 0, message );
+    if (msg)
+    {
+        WriteMessage(msg);
+        delete msg;
+    }
 }
 
 bool Connection::ReadHostType()
 {
-  u8 byte;
+    u8 byte;
 
-  if (!Read(&byte, sizeof(byte)))
-  {
-    Platform::Print("%s: Failed to read remote platform type!\n", m_Name);
-    return false;
-  }
+    if (!Read(&byte, sizeof(byte)))
+    {
+        Platform::Print("%s: Failed to read remote platform type!\n", m_Name);
+        return false;
+    }
 
-  m_RemotePlatform = (Platform::Type)byte;
+    m_RemotePlatform = (Platform::Type)byte;
 
-  return true;
+    return true;
 }
 
 bool Connection::WriteHostType()
 {
-  u8 byte = (u8)Platform::GetType();
-  if (!Write(&byte, sizeof(byte)))
-  {
-    Platform::Print("%s: Failed to write remote Platform type!\n", m_Name);
-    return false;
-  }
+    u8 byte = (u8)Platform::GetType();
+    if (!Write(&byte, sizeof(byte)))
+    {
+        Platform::Print("%s: Failed to write remote Platform type!\n", m_Name);
+        return false;
+    }
 
-  return true;
+    return true;
 }

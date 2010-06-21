@@ -31,146 +31,146 @@
 
 namespace Profile
 {
-  namespace Settings
-  {
-    FOUNDATION_API bool Enabled();
-    FOUNDATION_API bool MemoryProfilingEnabled();
-  }
-
-  const static int MAX_DESCRIPTION = 256;
-
-  FOUNDATION_API void Initialize(); 
-  FOUNDATION_API void Cleanup(); 
-
-  //
-  // Accumulates information over multiple calls
-  //
-
-  class FOUNDATION_API Accumulator
-  {
-  public:
-    u32   m_Hits; 
-    float m_TotalMillis; 
-
-    i32   m_Index;
-    char  m_Name[MAX_DESCRIPTION];
-
-    Accumulator(); 
-    Accumulator(const char* name);
-    Accumulator (const char* function, const char* name);
-    ~Accumulator();
-
-    void Init(const char* name);
-    void Report();
-
-    static void ReportAll();
-
-  private: 
-  };
-
-  //
-  // Scope timer prints or logs information
-  //
-
-  class FOUNDATION_API ScopeTimer
-  {
-  public: 
-    ScopeTimer(Accumulator* accum, const char* func, u32 line, const char* desc = NULL); 
-    ~ScopeTimer(); 
-
-    char         m_Description[MAX_DESCRIPTION]; 
-    u64          m_StartTicks; 
-    Accumulator* m_Accum; 
-    u32          m_UniqueID; 
-    bool         m_Print; 
-
-  private: 
-    ScopeTimer(const ScopeTimer& rhs);  // no implementation
-
-  };
-
-  struct Header
-  {
-    u16 m_Command; 
-    u16 m_Size; 
-  }; 
-
-  struct InitPacket 
-  {
-    Header m_Header; 
-    u32    m_Version; 
-    u32    m_Signature; 
-    f32    m_Conversion; // PROFILE_CYCLES_FOR_CONVERSION cycles -> how many millis?
-  }; 
-
-  struct ScopeEnterPacket
-  {
-    Header m_Header; 
-    u32    m_UniqueID; 
-    u32    m_StackDepth; 
-    u32    m_Line; 
-    u64    m_StartTicks; 
-    char   m_Description[PROFILE_PACKET_STRING_BUFSIZE]; 
-    char   m_Function[PROFILE_PACKET_STRING_BUFSIZE]; 
-  }; 
-
-  struct ScopeExitPacket 
-  {
-    Header m_Header;
-    u32    m_UniqueID;   
-    u32    m_StackDepth; 
-    u64    m_Duration; 
-  }; 
-
-  struct BlockEndPacket
-  {
-    Header m_Header; 
-  };
-
-  union UberPacket
-  {
-    Header           m_Header; 
-    InitPacket       m_Init; 
-    ScopeEnterPacket m_ScopeEnter; 
-    ScopeExitPacket  m_ScopeExitPacket; 
-  };
-
-  class FOUNDATION_API Context
-  {
-  public:
-    Platform::TraceFile m_TraceFile; 
-    u32               m_UniqueID; 
-    u32               m_StackDepth; 
-    u32               m_PacketBufferOffset; 
-    u8                m_PacketBuffer[PROFILE_PACKET_BLOCK_SIZE]; 
-    u32               m_AccumStack[PROFILE_ACCUMULATOR_MAX]; 
-
-    Context(); 
-    ~Context(); 
-
-    void FlushFile(); 
-
-    template <class T>
-    T* AllocPacket(u32 cmd)
+    namespace Settings
     {
-      u32 spaceNeeded = sizeof(T) + sizeof(BlockEndPacket) + sizeof(ScopeEnterPacket); 
-
-      if (m_PacketBufferOffset + spaceNeeded >= PROFILE_PACKET_BLOCK_SIZE)
-      {
-        FlushFile(); 
-      }
-
-      T* packet = (T*) (m_PacketBuffer + m_PacketBufferOffset); 
-      m_PacketBufferOffset += sizeof(T); 
-
-      //Log::Print("CMD %d OFFSET %d\n", cmd, m_PacketBufferOffset); 
-
-      packet->m_Header.m_Command = cmd; 
-      packet->m_Header.m_Size    = sizeof(T); 
-
-      return packet; 
+        FOUNDATION_API bool Enabled();
+        FOUNDATION_API bool MemoryProfilingEnabled();
     }
-  }; 
+
+    const static int MAX_DESCRIPTION = 256;
+
+    FOUNDATION_API void Initialize(); 
+    FOUNDATION_API void Cleanup(); 
+
+    //
+    // Accumulates information over multiple calls
+    //
+
+    class FOUNDATION_API Accumulator
+    {
+    public:
+        u32   m_Hits; 
+        float m_TotalMillis; 
+
+        i32   m_Index;
+        char  m_Name[MAX_DESCRIPTION];
+
+        Accumulator(); 
+        Accumulator(const char* name);
+        Accumulator (const char* function, const char* name);
+        ~Accumulator();
+
+        void Init(const char* name);
+        void Report();
+
+        static void ReportAll();
+
+    private: 
+    };
+
+    //
+    // Scope timer prints or logs information
+    //
+
+    class FOUNDATION_API ScopeTimer
+    {
+    public: 
+        ScopeTimer(Accumulator* accum, const char* func, u32 line, const char* desc = NULL); 
+        ~ScopeTimer(); 
+
+        char         m_Description[MAX_DESCRIPTION]; 
+        u64          m_StartTicks; 
+        Accumulator* m_Accum; 
+        u32          m_UniqueID; 
+        bool         m_Print; 
+
+    private: 
+        ScopeTimer(const ScopeTimer& rhs);  // no implementation
+
+    };
+
+    struct Header
+    {
+        u16 m_Command; 
+        u16 m_Size; 
+    }; 
+
+    struct InitPacket 
+    {
+        Header m_Header; 
+        u32    m_Version; 
+        u32    m_Signature; 
+        f32    m_Conversion; // PROFILE_CYCLES_FOR_CONVERSION cycles -> how many millis?
+    }; 
+
+    struct ScopeEnterPacket
+    {
+        Header m_Header; 
+        u32    m_UniqueID; 
+        u32    m_StackDepth; 
+        u32    m_Line; 
+        u64    m_StartTicks; 
+        char   m_Description[PROFILE_PACKET_STRING_BUFSIZE]; 
+        char   m_Function[PROFILE_PACKET_STRING_BUFSIZE]; 
+    }; 
+
+    struct ScopeExitPacket 
+    {
+        Header m_Header;
+        u32    m_UniqueID;   
+        u32    m_StackDepth; 
+        u64    m_Duration; 
+    }; 
+
+    struct BlockEndPacket
+    {
+        Header m_Header; 
+    };
+
+    union UberPacket
+    {
+        Header           m_Header; 
+        InitPacket       m_Init; 
+        ScopeEnterPacket m_ScopeEnter; 
+        ScopeExitPacket  m_ScopeExitPacket; 
+    };
+
+    class FOUNDATION_API Context
+    {
+    public:
+        Platform::TraceFile m_TraceFile; 
+        u32               m_UniqueID; 
+        u32               m_StackDepth; 
+        u32               m_PacketBufferOffset; 
+        u8                m_PacketBuffer[PROFILE_PACKET_BLOCK_SIZE]; 
+        u32               m_AccumStack[PROFILE_ACCUMULATOR_MAX]; 
+
+        Context(); 
+        ~Context(); 
+
+        void FlushFile(); 
+
+        template <class T>
+        T* AllocPacket(u32 cmd)
+        {
+            u32 spaceNeeded = sizeof(T) + sizeof(BlockEndPacket) + sizeof(ScopeEnterPacket); 
+
+            if (m_PacketBufferOffset + spaceNeeded >= PROFILE_PACKET_BLOCK_SIZE)
+            {
+                FlushFile(); 
+            }
+
+            T* packet = (T*) (m_PacketBuffer + m_PacketBufferOffset); 
+            m_PacketBufferOffset += sizeof(T); 
+
+            //Log::Print("CMD %d OFFSET %d\n", cmd, m_PacketBufferOffset); 
+
+            packet->m_Header.m_Command = cmd; 
+            packet->m_Header.m_Size    = sizeof(T); 
+
+            return packet; 
+        }
+    }; 
 }
 
 // profile flag check
@@ -201,9 +201,9 @@ namespace Profile
 // accumulation macros
 #ifdef PROFILE_ACCUMULATION
 # define PROFILE_SCOPE_ACCUM(__Accum) \
-Profile::ScopeTimer __ScopeAccum ( &__Accum, __FUNCTION__, __LINE__); 
+    Profile::ScopeTimer __ScopeAccum ( &__Accum, __FUNCTION__, __LINE__); 
 # define PROFILE_SCOPE_ACCUM_VERBOSE(__Accum, __Str) \
-Profile::ScopeTimer __ScopeAccum ( &__Accum, __FUNCTION__, __LINE__, Profile::Settings::Enabled() ? __Str : NULL );
+    Profile::ScopeTimer __ScopeAccum ( &__Accum, __FUNCTION__, __LINE__, Profile::Settings::Enabled() ? __Str : NULL );
 #else
 # define PROFILE_SCOPE_ACCUM(__Accum)
 # define PROFILE_SCOPE_ACCUM_VERBOSE(__Accum, __Str)
@@ -239,12 +239,12 @@ Profile::ScopeTimer __ScopeAccum ( &__Accum, __FUNCTION__, __LINE__, Profile::Se
 #ifdef PROFILE_INSTRUMENTATION
 
 # define PROFILE_FUNCTION_TIMER() \
-  static Profile::Accumulator __Accumulator ( __FUNCTION__ ); \
-  Profile::ScopeTimer __ScopeTimer ( &__Accumulator, __FUNCTION__, 0, __FILE__ );
+    static Profile::Accumulator __Accumulator ( __FUNCTION__ ); \
+    Profile::ScopeTimer __ScopeTimer ( &__Accumulator, __FUNCTION__, 0, __FILE__ );
 
 # define PROFILE_SCOPE_TIMER(__Description) \
-  static Profile::Accumulator __Accumulator ( __FUNCTION__, ":" PROFILE_TOSTRING(__LINE__) ); \
-  Profile::ScopeTimer __ScopeTimer ( &__Accumulator, __FUNCTION__, __LINE__, __Description );
+    static Profile::Accumulator __Accumulator ( __FUNCTION__, ":" PROFILE_TOSTRING(__LINE__) ); \
+    Profile::ScopeTimer __ScopeTimer ( &__Accumulator, __FUNCTION__, __LINE__, __Description );
 
 #else
 

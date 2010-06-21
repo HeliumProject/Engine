@@ -23,105 +23,105 @@ static int g_MissCount = 0;
 
 static void GetTypeName(int type, std::string& name)
 {
-  const Class* typeInfo = Registry::GetInstance()->GetClass( type );
-  NOC_ASSERT( typeInfo );
+    const Class* typeInfo = Registry::GetInstance()->GetClass( type );
+    NOC_ASSERT( typeInfo );
 
-  name = typeInfo->m_ShortName;
+    name = typeInfo->m_ShortName;
 }
 
 static void CreateInstance(int type, ElementPtr& element)
 {
-  ObjectPtr object = Registry::GetInstance()->CreateInstance(type);
+    ObjectPtr object = Registry::GetInstance()->CreateInstance(type);
 
-  NOC_ASSERT( object.ReferencesObject() );
+    NOC_ASSERT( object.ReferencesObject() );
 
-  element = AssertCast<Element>( object );
+    element = AssertCast<Element>( object );
 
 #ifdef REFLECT_DISPLAY_CACHE_INFO
-  std::string name;
-  GetTypeName(type, name);
-  Log::Print("Cache miss %d on type '%s', short name '%s', id '%d'\n", ++g_MissCount, name.c_str(), element->GetClass()->m_ShortName.c_str(), type);
+    std::string name;
+    GetTypeName(type, name);
+    Log::Print("Cache miss %d on type '%s', short name '%s', id '%d'\n", ++g_MissCount, name.c_str(), element->GetClass()->m_ShortName.c_str(), type);
 #endif
 }
 
 bool Cache::Create(int type, ElementPtr& element)
 {
 #ifdef REFLECT_DISABLE_CACHING
-  ::CreateInstance(type, element);
-
-  return true;
-#else
-  H_Element::iterator found = m_Elements.find(type);
-
-  if (found == m_Elements.end())
-  {
     ::CreateInstance(type, element);
 
     return true;
-  }
-  else
-  {
-    S_Element& stack (found->second);
+#else
+    H_Element::iterator found = m_Elements.find(type);
 
-    if (stack.size() == 0)
+    if (found == m_Elements.end())
     {
-      ::CreateInstance(type, element);
+        ::CreateInstance(type, element);
+
+        return true;
     }
     else
     {
-      ElementPtr top = stack.top();
+        S_Element& stack (found->second);
 
-      stack.pop();
+        if (stack.size() == 0)
+        {
+            ::CreateInstance(type, element);
+        }
+        else
+        {
+            ElementPtr top = stack.top();
 
-      element = top;
+            stack.pop();
+
+            element = top;
 
 #ifdef REFLECT_DISPLAY_CACHE_INFO
-      std::string name;
-      GetTypeName(type, name);
-      Log::Print("Cache hit %d on type '%s', short name '%s', id '%d'\n", ++g_HitCount, name.c_str(), element->GetClass()->m_ShortName.c_str(), type);
-  #endif
-    }
+            std::string name;
+            GetTypeName(type, name);
+            Log::Print("Cache hit %d on type '%s', short name '%s', id '%d'\n", ++g_HitCount, name.c_str(), element->GetClass()->m_ShortName.c_str(), type);
+#endif
+        }
 
-    return true;
-  }
+        return true;
+    }
 #endif
 }
 
 bool Cache::Create(const std::string& shortName, ElementPtr& element)
 {
-  const Class* typeInfo = Registry::GetInstance()->GetClass(shortName);
+    const Class* typeInfo = Registry::GetInstance()->GetClass(shortName);
 
-  if ( typeInfo )
-  {
-    return Create(typeInfo->m_TypeID, element);
-  }
-  else
-  {
-    return false;
-  }
+    if ( typeInfo )
+    {
+        return Create(typeInfo->m_TypeID, element);
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void Cache::Free(ElementPtr element)
 {
-  if (!element->HasType(Reflect::GetType<Serializer>()))
-    return;
+    if (!element->HasType(Reflect::GetType<Serializer>()))
+        return;
 
-  H_Element::iterator found = m_Elements.find(element->GetType());
+    H_Element::iterator found = m_Elements.find(element->GetType());
 
-  if (found == m_Elements.end())
-  {
-    S_Element stack;
+    if (found == m_Elements.end())
+    {
+        S_Element stack;
 
-    stack.push(element);
+        stack.push(element);
 
-    Insert<H_Element>::Result result = m_Elements.insert(H_Element::value_type (element->GetType(), stack));
+        Insert<H_Element>::Result result = m_Elements.insert(H_Element::value_type (element->GetType(), stack));
 
-    NOC_ASSERT( result.second );
-  }
-  else
-  {
-    S_Element& stack (found->second);
+        NOC_ASSERT( result.second );
+    }
+    else
+    {
+        S_Element& stack (found->second);
 
-    stack.push(element);
-  }
+        stack.push(element);
+    }
 }

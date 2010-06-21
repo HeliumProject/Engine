@@ -12,26 +12,26 @@ Handle::Handle( const std::string& path, const char* mode )
 
 bool Handle::IsValid()
 {
-  return m_FileHandle != NULL;
+    return m_FileHandle != NULL;
 }
 
 bool Handle::Open()
 {
-  ++m_OpenCount;
+    ++m_OpenCount;
 
-  if ( m_FileHandle == NULL )
-  {
-    m_FileHandle = fopen( m_Path.c_str(), m_Mode );
-  }
+    if ( m_FileHandle == NULL )
+    {
+        m_FileHandle = fopen( m_Path.c_str(), m_Mode );
+    }
 
-  return IsValid();
+    return IsValid();
 }
 
 void Handle::Close()
 {
-  if ( --m_OpenCount == 0 && m_FileHandle )
-  {
-    fclose( m_FileHandle );
-    m_FileHandle = NULL;
-  }
+    if ( --m_OpenCount == 0 && m_FileHandle )
+    {
+        fclose( m_FileHandle );
+        m_FileHandle = NULL;
+    }
 }

@@ -12,6 +12,9 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -80,6 +83,70 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Debug|x64"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			CharacterSet="2"
+			WholeProgramOptimization="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..;$(expat);$(zlib);$(boost)"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4251;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=""
+			/>
+		</Configuration>
+		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
@@ -100,6 +167,68 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..;$(expat);$(zlib);$(boost)"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4251;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=" "
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
+			CharacterSet="2"
+			WholeProgramOptimization="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -412,15 +541,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Math\Color3.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Math\Color3.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Math\Color4.cpp"
 				>
 			</File>
 			<File
@@ -476,15 +597,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Math\HDRColor3.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Math\HDRColor3.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Math\HDRColor4.cpp"
 				>
 			</File>
 			<File
@@ -536,10 +649,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Math\Polygon.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Math\Polygon.h"
 				>
 			</File>
@@ -565,10 +674,6 @@
 			</File>
 			<File
 				RelativePath=".\Math\Shear.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Math\Utils.cpp"
 				>
 			</File>
 			<File
@@ -629,10 +734,6 @@
 			</File>
 			<File
 				RelativePath=".\SmartBuffer\Fixup.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SmartBuffer\ObjectBuffer.cpp"
 				>
 			</File>
 			<File

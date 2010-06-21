@@ -10,84 +10,84 @@
 
 namespace Reflect
 {
-  //
-  // Stack record captures stack addresses
-  //
+    //
+    // Stack record captures stack addresses
+    //
 
-  class StackRecord : public Nocturnal::RefCountBase<StackRecord>
-  {
-  public:
-    Debug::V_DWORD64    m_Stack;
-    std::string         m_String;
-    bool                m_Converted;
-
-    StackRecord()
-      : m_Converted ( false )
+    class StackRecord : public Nocturnal::RefCountBase<StackRecord>
     {
-      m_Stack.reserve( 30 );
-    }
+    public:
+        Debug::V_DWORD64    m_Stack;
+        std::string         m_String;
+        bool                m_Converted;
 
-    const std::string& Convert();  
-  };
+        StackRecord()
+            : m_Converted ( false )
+        {
+            m_Stack.reserve( 30 );
+        }
 
-  typedef Nocturnal::SmartPtr< StackRecord > StackRecordPtr;
-  typedef std::vector< StackRecordPtr > V_StackRecordPtr;
-  typedef std::map< Debug::V_DWORD64, StackRecordPtr > M_StackRecord;
+        const std::string& Convert();  
+    };
 
-
-  //
-  // Creation record stores object information
-  //
-
-  class CreationRecord
-  {
-  public:
-    PointerSizedUInt    m_Address;
-    std::string         m_ShortName;
-    int                 m_Type;
-
-    StackRecordPtr m_CreateStack;
-    StackRecordPtr m_DeleteStack;
-
-    CreationRecord();
-
-    CreationRecord(PointerSizedUInt ptr);
-
-    void Dump(FILE* f);
-  };
-
-  typedef std::map<PointerSizedUInt, CreationRecord> M_CreationRecord;
+    typedef Nocturnal::SmartPtr< StackRecord > StackRecordPtr;
+    typedef std::vector< StackRecordPtr > V_StackRecordPtr;
+    typedef std::map< Debug::V_DWORD64, StackRecordPtr > M_StackRecord;
 
 
-  //
-  // Tracker object
-  //
+    //
+    // Creation record stores object information
+    //
 
-  class Tracker
-  {
-  public:
-    M_CreationRecord m_CreatedObjects;
-    M_CreationRecord m_DeletedObjects;
-    M_StackRecord    m_Stacks;
+    class CreationRecord
+    {
+    public:
+        PointerSizedUInt    m_Address;
+        std::string         m_ShortName;
+        int                 m_Type;
 
-    Tracker();
-    virtual ~Tracker();
+        StackRecordPtr m_CreateStack;
+        StackRecordPtr m_DeleteStack;
 
-    // make a stack record
-    StackRecordPtr GetStack();
+        CreationRecord();
 
-    // save debug info during creation
-    void Create(PointerSizedUInt ptr);
+        CreationRecord(PointerSizedUInt ptr);
 
-    // callback on object delete
-    void Delete(PointerSizedUInt ptr);
+        void Dump(FILE* f);
+    };
 
-    // validate a pointer
-    void Check(PointerSizedUInt ptr);
+    typedef std::map<PointerSizedUInt, CreationRecord> M_CreationRecord;
 
-    // dump all debug info
-    void Dump();
-  };
+
+    //
+    // Tracker object
+    //
+
+    class Tracker
+    {
+    public:
+        M_CreationRecord m_CreatedObjects;
+        M_CreationRecord m_DeletedObjects;
+        M_StackRecord    m_Stacks;
+
+        Tracker();
+        virtual ~Tracker();
+
+        // make a stack record
+        StackRecordPtr GetStack();
+
+        // save debug info during creation
+        void Create(PointerSizedUInt ptr);
+
+        // callback on object delete
+        void Delete(PointerSizedUInt ptr);
+
+        // validate a pointer
+        void Check(PointerSizedUInt ptr);
+
+        // dump all debug info
+        void Dump();
+    };
 }
 
 #endif

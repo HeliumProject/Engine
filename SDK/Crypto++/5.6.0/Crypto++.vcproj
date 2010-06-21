@@ -90,10 +90,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(PlatformName)\Output\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			WholeProgramOptimization="1"
@@ -122,10 +120,8 @@
 				OmitFramePointers="true"
 				PreprocessorDefinitions="NDEBUG;_WINDOWS;USE_PRECOMPILED_HEADERS;WIN32"
 				StringPooling="true"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="pch.h"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -228,10 +224,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(PlatformName)\Output\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -256,9 +250,7 @@
 				Optimization="0"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions="_DEBUG;_WINDOWS;USE_PRECOMPILED_HEADERS;WIN32"
-				RuntimeLibrary="1"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="pch.h"
+				RuntimeLibrary="3"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"

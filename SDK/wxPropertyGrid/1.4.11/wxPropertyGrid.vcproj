@@ -48,7 +48,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\msw;$(WXWIN)\include;include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswd;$(WXWIN)\include;include"
 				PreprocessorDefinitions="WIN32;_LIB;__WXMSW__"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
@@ -94,9 +94,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="..\lib\vc_amd64_lib"
-			IntermediateDirectory="vcmsw\propgrid"
 			ConfigurationType="4"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -121,13 +120,11 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_amd64_lib\msw;$(WXWIN)\include;..\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswd;$(WXWIN)\include;include"
 				PreprocessorDefinitions="WIN32;_LIB;__WXMSW__"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vcmsw\propgrid\"
-				ProgramDataBaseFileName="..\lib\vc_amd64_lib\wxcode_msw28_propgrid.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="0"
@@ -146,7 +143,6 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\vc_amd64_lib\wxcode_msw28_propgrid.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -245,9 +241,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="..\lib\vc_amd64_lib"
-			IntermediateDirectory="vcmswd\propgrid"
 			ConfigurationType="4"
+			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -272,15 +267,13 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_amd64_lib\mswd;$(WXWIN)\include;..\include"
+				AdditionalIncludeDirectories="$(WXWIN)\lib\vc_lib\mswd;$(WXWIN)\include;include"
 				PreprocessorDefinitions="WIN32;_LIB;__WXDEBUG__;__WXMSW__;_DEBUG"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vcmswd\propgrid\"
-				ProgramDataBaseFileName="..\lib\vc_amd64_lib\wxcode_msw28d_propgrid.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -299,7 +292,6 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\lib\vc_amd64_lib\wxcode_msw28d_propgrid.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

@@ -10,13 +10,13 @@ REFLECT_DEFINE_CLASS(Version);
 
 void Version::EnumerateClass( Reflect::Compositor<Version>& comp )
 {
-  comp.AddField( &Version::m_Source, "m_Source" );
-  comp.AddField( &Version::m_SourceVersion, "m_SourceVersion" );
+    comp.AddField( &Version::m_Source, "m_Source" );
+    comp.AddField( &Version::m_SourceVersion, "m_SourceVersion" );
 }
 
 Reflect::Version::Version()
 {
-  DetectVersion();
+    DetectVersion();
 }
 
 Reflect::Version::Version(const char* source, const char* sourceVersion)
@@ -28,65 +28,65 @@ Reflect::Version::Version(const char* source, const char* sourceVersion)
 
 bool Reflect::Version::IsCurrent()
 {
-  return true;
+    return true;
 }
 
 bool Reflect::Version::ConvertToInts( int* ints )
 {
-  bool return_val = false;
+    bool return_val = false;
 
-  if ( !m_SourceVersion.empty() )
-  {
-    return_val = true;
-
-    std::string digit;
-    int tmp;
-
-    size_t cur = 0, mark = -1;
-    for ( int i = 0; i < 4; ++i )
+    if ( !m_SourceVersion.empty() )
     {
-      ints[i] = 0;
+        return_val = true;
 
-      mark = i == 3 ? m_SourceVersion.length() : m_SourceVersion.find( '.', cur );
-      if ( mark == -1 )
-      {
-        return_val = false;
-        break;
-      }
+        std::string digit;
+        int tmp;
 
-      digit = m_SourceVersion.substr( cur, mark - cur );
+        size_t cur = 0, mark = -1;
+        for ( int i = 0; i < 4; ++i )
+        {
+            ints[i] = 0;
 
-      if ( 1 == sscanf( digit.c_str(), "%d", &tmp) )
-      {
-        ints[i] = tmp;
-      }
-      else
-      {
-        return_val = false;
-        break;
-      }
+            mark = i == 3 ? m_SourceVersion.length() : m_SourceVersion.find( '.', cur );
+            if ( mark == -1 )
+            {
+                return_val = false;
+                break;
+            }
 
-      cur = mark + 1;
+            digit = m_SourceVersion.substr( cur, mark - cur );
+
+            if ( 1 == sscanf( digit.c_str(), "%d", &tmp) )
+            {
+                ints[i] = tmp;
+            }
+            else
+            {
+                return_val = false;
+                break;
+            }
+
+            cur = mark + 1;
+        }
     }
-  }
 
-  return return_val;
+    return return_val;
 }
 
 void Reflect::Version::DetectVersion()
 {
-  HMODULE moduleHandle = GetModuleHandle( NULL );
+    HMODULE moduleHandle = GetModuleHandle( NULL );
 
-  char exeFilename[ MAX_PATH + 1 ];
-  GetModuleFileName( moduleHandle, exeFilename, MAX_PATH );
+    char exeFilename[ MAX_PATH + 1 ];
+    GetModuleFileName( moduleHandle, exeFilename, MAX_PATH );
 
-  m_Source = exeFilename;
+    m_Source = exeFilename;
 
-  // if we found an executable, get its version
-  if ( !m_Source.empty() )
-  {
-      Platform::GetVersionInfo( m_Source.c_str(), m_SourceVersion );
+    // if we found an executable, get its version
+    if ( !m_Source.empty() )
+    {
+        Platform::GetVersionInfo( m_Source.c_str(), m_SourceVersion );
 
-      m_Source = Nocturnal::Path( m_Source ).Filename();
-  }
+        m_Source = Nocturnal::Path( m_Source ).Filename();
+    }
 }

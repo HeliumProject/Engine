@@ -12,20 +12,20 @@ NOC_COMPILE_ASSERT( sizeof(Mutex::Handle) == sizeof(CRITICAL_SECTION) );
 
 Mutex::Mutex()
 {
-  ::InitializeCriticalSection((CRITICAL_SECTION*)&m_Handle);
+    ::InitializeCriticalSection((CRITICAL_SECTION*)&m_Handle);
 }
 
 Mutex::~Mutex()
 {
-  ::DeleteCriticalSection((CRITICAL_SECTION*)&m_Handle);
+    ::DeleteCriticalSection((CRITICAL_SECTION*)&m_Handle);
 }
 
 void Mutex::Lock()
 {
-  ::EnterCriticalSection((CRITICAL_SECTION*)&m_Handle);
+    ::EnterCriticalSection((CRITICAL_SECTION*)&m_Handle);
 }
 
 void Mutex::Unlock()
 {
-  ::LeaveCriticalSection((CRITICAL_SECTION*)&m_Handle);
+    ::LeaveCriticalSection((CRITICAL_SECTION*)&m_Handle);
 }

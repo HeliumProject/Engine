@@ -12,33 +12,33 @@ Vector3  Vector3::operator* (const Scale& v) const { return Vector3 (x * v.x, y 
 
 namespace Math
 {
-  i32 LookupPosInArray( const Vector3& pos, i32 min_key, i32 max_key, V_Vector3& pos_array, MM_i32& pos_lookup , f32 threshold)
-  {
-    for (i32 key = min_key; key <= max_key; ++key)
+    i32 LookupPosInArray( const Vector3& pos, i32 min_key, i32 max_key, V_Vector3& pos_array, MM_i32& pos_lookup , f32 threshold)
     {
-      // lookup the first element with this key in the multi-map
-      MM_i32::iterator ipos = pos_lookup.lower_bound( key );
-
-      // continue if nothing matched this key
-      if (ipos == pos_lookup.end())
-        continue;
-
-      // lookup the last element with this key in the multi-map
-      MM_i32::iterator ipos_end = pos_lookup.upper_bound( key );
-
-      // search through the elements with this key and explicitly test for a match
-      for ( ; ipos != ipos_end; ++ipos)
-      {
-        // compare positions
-        if ( pos.Equal(pos_array[ ipos->second ], threshold ) )
+        for (i32 key = min_key; key <= max_key; ++key)
         {
-          // return index of matched position vector
-          return ipos->second;
-        }
-      }
-    }
+            // lookup the first element with this key in the multi-map
+            MM_i32::iterator ipos = pos_lookup.lower_bound( key );
 
-    // no match was found
-    return -1;
-  }
+            // continue if nothing matched this key
+            if (ipos == pos_lookup.end())
+                continue;
+
+            // lookup the last element with this key in the multi-map
+            MM_i32::iterator ipos_end = pos_lookup.upper_bound( key );
+
+            // search through the elements with this key and explicitly test for a match
+            for ( ; ipos != ipos_end; ++ipos)
+            {
+                // compare positions
+                if ( pos.Equal(pos_array[ ipos->second ], threshold ) )
+                {
+                    // return index of matched position vector
+                    return ipos->second;
+                }
+            }
+        }
+
+        // no match was found
+        return -1;
+    }
 }

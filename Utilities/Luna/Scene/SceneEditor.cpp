@@ -53,7 +53,6 @@
 #include "Application/UI/ImageManager.h"
 #include "Application/UI/SortTreeCtrl.h"
 #include "Application/Undo/PropertyCommand.h"
-#include "Platform/Windows/Clipboard.h"
 #include "Platform/Process.h"
 
 #include "Pipeline/Content/Scene.h"
@@ -1496,10 +1495,16 @@ void SceneEditor::OnImport(wxCommandEvent& event)
 
             case SceneEditorIDs::ID_FileImportFromClipboard:
                 {
-                    std::string xml, error;
-                    if ( !Platform::RetrieveFromClipboard( GetHwnd(), xml, error ) )
+                    std::string xml;
+                    if (wxTheClipboard->Open())
                     {
-                        Log::Error( "%s\n", error.c_str() );
+                        if (wxTheClipboard->IsSupported( wxDF_TEXT ))
+                        {
+                            wxTextDataObject data;
+                            wxTheClipboard->GetData( data );
+                            xml = data.GetText();
+                        }  
+                        wxTheClipboard->Close();
                     }
 
                     currentScene->Push( currentScene->ImportXML( xml, flags, currentScene->GetRoot() ) );
@@ -1719,10 +1724,10 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                             result = false;
                         }
 
-                        std::string error;
-                        if ( !Platform::CopyToClipboard( GetHwnd(), xml, error ) )
+                        if ( wxTheClipboard->Open() )
                         {
-                            Log::Error( "%s\n", error.c_str() );
+                            wxTheClipboard->SetData( new wxTextDataObject( xml ) );
+                            wxTheClipboard->Close();
                         }
 
                         break;
@@ -2942,10 +2947,10 @@ void SceneEditor::OnCopyTransform(wxCommandEvent& event)
         std::string xml;
         data->ToXML( xml );
 
-        std::string error;
-        if ( !Platform::CopyToClipboard( GetHwnd(), xml, error ) )
+        if ( wxTheClipboard->Open() )
         {
-            Log::Error( "%s\n", error.c_str() );
+            wxTheClipboard->SetData( new wxTextDataObject( xml ) );
+            wxTheClipboard->Close();
         }
     }
 }
@@ -2954,10 +2959,16 @@ void SceneEditor::OnPasteTransform(wxCommandEvent& event)
 {
     if ( m_SceneManager.HasCurrentScene() )
     {
-        std::string xml, error;
-        if ( !Platform::RetrieveFromClipboard( GetHwnd(), xml, error ) )
+        std::string xml;
+        if (wxTheClipboard->Open())
         {
-            Log::Error( "%s\n", error.c_str() );
+            if (wxTheClipboard->IsSupported( wxDF_TEXT ))
+            {
+                wxTextDataObject data;
+                wxTheClipboard->GetData( data );
+                xml = data.GetText();
+            }  
+            wxTheClipboard->Close();
         }
 
         Reflect::V_Element elements;
@@ -3178,11 +3189,10 @@ bool SceneEditor::Copy( Luna::Scene* scene )
         }
         else
         {
-            std::string error;
-            isOk = Platform::CopyToClipboard( GetHwnd(), xml, error );
-            if ( !isOk )
+            if ( wxTheClipboard->Open() )
             {
-                Log::Error( "%s\n", error.c_str() );
+                wxTheClipboard->SetData( new wxTextDataObject( xml ) );
+                wxTheClipboard->Close();
             }
         }
     }
@@ -3201,10 +3211,16 @@ bool SceneEditor::Paste( Luna::Scene* scene )
 
     bool isOk = false;
     std::string xml;
-
-    // Get data from the clipboard
-    std::string unused;
-    Platform::RetrieveFromClipboard( GetHwnd(), xml, unused );
+    if (wxTheClipboard->Open())
+    {
+        if (wxTheClipboard->IsSupported( wxDF_TEXT ))
+        {
+            wxTextDataObject data;
+            wxTheClipboard->GetData( data );
+            xml = data.GetText();
+        }  
+        wxTheClipboard->Close();
+    }
 
     // Import data into the scene
     if ( !xml.empty() )

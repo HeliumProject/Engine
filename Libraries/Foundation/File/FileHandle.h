@@ -10,79 +10,79 @@
 
 namespace Nocturnal
 {
-  class FileOperationException : public Nocturnal::Exception
-  {
-  public:
-    FileOperationException( const char *msgFormat, ... ) : Exception()
+    class FileOperationException : public Nocturnal::Exception
     {
-      va_list msgArgs;
-      va_start( msgArgs, msgFormat );
-      SetMessage( msgFormat, msgArgs );
-      va_end( msgArgs );
-    }
-  };
-
-  namespace FileOffsets
-  {
-    enum FileOffset
-    {
-      Beginning,
-      Current,
-      End,
+    public:
+        FileOperationException( const char *msgFormat, ... ) : Exception()
+        {
+            va_list msgArgs;
+            va_start( msgArgs, msgFormat );
+            SetMessage( msgFormat, msgArgs );
+            va_end( msgArgs );
+        }
     };
-  }
-  typedef FileOffsets::FileOffset FileOffset;
 
-  typedef i64 FileLocation;
-
-  class FOUNDATION_API FileHandle : public Nocturnal::RefCountBase< FileHandle >
-  {
-  public:
-    FileHandle( const std::string& path, const char* mode = "r" );
-
-    virtual ~FileHandle()
+    namespace FileOffsets
     {
-      // we don't just call Close() because it is linked to Open() calls
-      if ( m_FileHandle )
-      {
-        fclose( m_FileHandle );
-      }
+        enum FileOffset
+        {
+            Beginning,
+            Current,
+            End,
+        };
     }
+    typedef FileOffsets::FileOffset FileOffset;
 
-    bool IsValid();
+    typedef i64 FileLocation;
 
-    bool Open();
-    void Close();
-
-    u32 Read( u8* buffer, size_t amount );
-    void Write( u8* buffer, size_t amount );
-
-    FileLocation Tell();
-    void Seek( FileLocation location, FileOffset offsetType = FileOffsets::Beginning );
-
-    const Path& GetPath() const
+    class FOUNDATION_API FileHandle : public Nocturnal::RefCountBase< FileHandle >
     {
-      return m_Path;
-    }
+    public:
+        FileHandle( const std::string& path, const char* mode = "r" );
 
-    const char* GetMode() const
-    {
-      return m_Mode;
-    }
+        virtual ~FileHandle()
+        {
+            // we don't just call Close() because it is linked to Open() calls
+            if ( m_FileHandle )
+            {
+                fclose( m_FileHandle );
+            }
+        }
 
-    FILE* Get() const
-    {
-      return m_FileHandle;
-    }
+        bool IsValid();
 
-  private:
-    u32  m_OpenCount;
-    Path m_Path;
-    const char* m_Mode;
-    FILE* m_FileHandle;
-  };
+        bool Open();
+        void Close();
 
-  typedef Nocturnal::SmartPtr< FileHandle > FileHandlePtr;
-  typedef std::vector< FileHandlePtr > V_FileHandle;
+        u32 Read( u8* buffer, size_t amount );
+        void Write( u8* buffer, size_t amount );
+
+        FileLocation Tell();
+        void Seek( FileLocation location, FileOffset offsetType = FileOffsets::Beginning );
+
+        const Path& GetPath() const
+        {
+            return m_Path;
+        }
+
+        const char* GetMode() const
+        {
+            return m_Mode;
+        }
+
+        FILE* Get() const
+        {
+            return m_FileHandle;
+        }
+
+    private:
+        u32  m_OpenCount;
+        Path m_Path;
+        const char* m_Mode;
+        FILE* m_FileHandle;
+    };
+
+    typedef Nocturnal::SmartPtr< FileHandle > FileHandlePtr;
+    typedef std::vector< FileHandlePtr > V_FileHandle;
 
 }

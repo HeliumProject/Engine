@@ -1,1 +1,0 @@
-#include "HDRColor3.h"

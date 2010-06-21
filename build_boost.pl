@@ -4,6 +4,7 @@ use Cwd;
 use Data::Dumper;
 use File::Spec;
 use File::Find;
+use File::Path;
 use Getopt::Long;
 
 sub PrintUsage
@@ -44,9 +45,41 @@ sub BuildConfig
   my $path = "SDK\\boost\\$version";
 
   chdir "$path";
+  
+  my $target;
+  if ( $ENV{PATH} =~ /VC\\BIN\\amd64;/i )
+  {
+    $target = "address-model=64";
+  }
+  elsif ( $ENV{PATH} =~ /VC\\BIN;/i )
+  {
+    $target = "";
+  }
+  else
+  {
+    die "Microsoft Visual Studio Tools cannot be found in your PATH";
+  }
 
   Do( "bootstrap" );
-  Do( "bjam" );
+  Do( "bjam $target" );
+  
+  my $target;
+  if ( $ENV{PATH} =~ /VC\\BIN\\amd64;/i )
+  {
+    rmtree( "stage\\lib\\x64" );
+    mkpath( "stage\\lib\\x64" );
+    system( "move stage\\lib\\*.* stage\\lib\\x64" );
+  }
+  elsif ( $ENV{PATH} =~ /VC\\BIN;/i )
+  {
+    rmtree( "stage\\lib\\Win32" );
+    mkpath( "stage\\lib\\Win32" );
+    system( "move stage\\lib\\*.* stage\\lib\\Win32" );
+  }
+  else
+  {
+    die "Microsoft Visual Studio Tools cannot be found in your PATH";
+  }
 }
 
 sub Do

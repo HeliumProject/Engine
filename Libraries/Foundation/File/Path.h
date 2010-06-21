@@ -113,7 +113,7 @@ namespace Nocturnal
         }
 
         friend FOUNDATION_API std::ostream& operator<<( std::ostream& outStream, const Path& p );
-  	    friend FOUNDATION_API std::istream& operator>>( std::istream& inStream, Path& p );
+        friend FOUNDATION_API std::istream& operator>>( std::istream& inStream, Path& p );
     };
 
     inline std::ostream& operator<<( std::ostream& outStream, const Path& p )

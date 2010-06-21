@@ -23,43 +23,43 @@
 template< typename T >
 void Tokenize( const std::string& str, std::vector< T >& tokens, const std::string delimiters )
 {
-  boost::regex splitPattern(delimiters); 
+    boost::regex splitPattern(delimiters); 
 
-  boost::sregex_token_iterator i(str.begin(), str.end(), splitPattern, -1); 
-  boost::sregex_token_iterator end; 
+    boost::sregex_token_iterator i(str.begin(), str.end(), splitPattern, -1); 
+    boost::sregex_token_iterator end; 
 
-  for(; i != end; i++)
-  {
-    if( (*i).matched)
+    for(; i != end; i++)
     {
-      T temp; 
-      std::stringstream inStream(*i); 
-      inStream >> temp; 
+        if( (*i).matched)
+        {
+            T temp; 
+            std::stringstream inStream(*i); 
+            inStream >> temp; 
 
-      tokens.push_back(temp);
+            tokens.push_back(temp);
+        }
     }
-  }
 }
 
 template< typename T >
 void Tokenize( const std::string& str, std::set< T >& tokens, const std::string delimiters )
 {
-  boost::regex splitPattern(delimiters); 
+    boost::regex splitPattern(delimiters); 
 
-  boost::sregex_token_iterator i(str.begin(), str.end(), splitPattern, -1); 
-  boost::sregex_token_iterator end; 
+    boost::sregex_token_iterator i(str.begin(), str.end(), splitPattern, -1); 
+    boost::sregex_token_iterator end; 
 
-  for(; i != end; i++)
-  {
-    if( (*i).matched)
+    for(; i != end; i++)
     {
-      T temp; 
-      std::stringstream inStream(*i); 
-      inStream >> temp; 
+        if( (*i).matched)
+        {
+            T temp; 
+            std::stringstream inStream(*i); 
+            inStream >> temp; 
 
-      tokens.push_back(temp);
+            tokens.push_back(temp);
+        }
     }
-  }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -71,33 +71,33 @@ void Tokenize( const std::string& str, std::set< T >& tokens, const std::string 
 template<>
 inline void Tokenize( const std::string& str, std::vector< std::string >& tokens, const std::string delimiters )
 {
-  boost::regex splitPattern(delimiters); 
+    boost::regex splitPattern(delimiters); 
 
-  boost::sregex_token_iterator i(str.begin(), str.end(), splitPattern, -1); 
-  boost::sregex_token_iterator end; 
+    boost::sregex_token_iterator i(str.begin(), str.end(), splitPattern, -1); 
+    boost::sregex_token_iterator end; 
 
-  for(; i != end; i++)
-  {
-    if( (*i).matched)
+    for(; i != end; i++)
     {
-      tokens.push_back(*i); 
+        if( (*i).matched)
+        {
+            tokens.push_back(*i); 
+        }
     }
-  }
 }
 
 template<>
 inline void Tokenize( const std::string& str, std::set< std::string >& tokens, const std::string delimiters )
 {
-  boost::regex splitPattern(delimiters); 
+    boost::regex splitPattern(delimiters); 
 
-  boost::sregex_token_iterator i(str.begin(), str.end(), splitPattern, -1); 
-  boost::sregex_token_iterator end; 
+    boost::sregex_token_iterator i(str.begin(), str.end(), splitPattern, -1); 
+    boost::sregex_token_iterator end; 
 
-  for(; i != end; i++)
-  {
-    if( (*i).matched)
+    for(; i != end; i++)
     {
-      tokens.insert( *i ); 
+        if( (*i).matched)
+        {
+            tokens.insert( *i ); 
+        }
     }
-  }
 }

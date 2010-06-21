@@ -448,7 +448,7 @@ bool RunAsBuildWorker( Dependencies::DependencyGraph& depGraph )
         }
         else
         {
-            _asm nop;
+            NOC_BREAK();
         }
     }
     while (g_ImmortalWorker);

@@ -15,5 +15,5 @@
 
 namespace Platform
 {
-  typedef int Socket;
+    typedef int Socket;
 }

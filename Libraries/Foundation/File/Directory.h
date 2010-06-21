@@ -8,86 +8,86 @@
 
 namespace Nocturnal
 {
-  namespace DirectoryFlags
-  {
-    enum Flags
+    namespace DirectoryFlags
     {
-      SkipFiles         = 1 << 0,          // Skip files
-      SkipDirectories   = 1 << 1,          // Skip directories
-      RelativePath      = 1 << 3,          // Don't preped each file with the root path
-    };
+        enum Flags
+        {
+            SkipFiles         = 1 << 0,          // Skip files
+            SkipDirectories   = 1 << 1,          // Skip directories
+            RelativePath      = 1 << 3,          // Don't preped each file with the root path
+        };
 
-    const u32 Default = 0;
-  }
-
-  typedef void* DirectoryHandle;
-
-  namespace DirectoryItemFlags
-  {
-    enum Flags
-    {
-      Directory   = 1 << 1,                 // It's actually a directory
-    };
-
-    const u32 Default = 0;
-  }
-
-  struct FOUNDATION_API DirectoryItem
-  {
-    DirectoryItem()
-      : m_CreateTime ( 0x0 )
-      , m_ModTime ( 0x0 )
-      , m_Size( 0x0 )
-      , m_Flags ( 0x0 )
-    {
-
+        const u32 Default = 0;
     }
 
-    void Clear()
+    typedef void* DirectoryHandle;
+
+    namespace DirectoryItemFlags
     {
-      m_Path.clear();
-      m_CreateTime = 0x0;
-      m_ModTime = 0x0;
-      m_Size = 0x0;
+        enum Flags
+        {
+            Directory   = 1 << 1,                 // It's actually a directory
+        };
+
+        const u32 Default = 0;
     }
 
-    std::string         m_Path;
-    u64                 m_CreateTime;
-    u64                 m_ModTime;
-    u64                 m_Size;
-    u32                 m_Flags;
-  };
+    struct FOUNDATION_API DirectoryItem
+    {
+        DirectoryItem()
+            : m_CreateTime ( 0x0 )
+            , m_ModTime ( 0x0 )
+            , m_Size( 0x0 )
+            , m_Flags ( 0x0 )
+        {
 
-  class FOUNDATION_API Directory
-  {
-  public:
-    Directory();
-    Directory(const std::string &path, const std::string &spec = "*.*", u32 flags = DirectoryFlags::Default);
-    ~Directory();
+        }
 
-    bool IsDone();
-    bool Next();
-    const DirectoryItem& GetItem();
+        void Clear()
+        {
+            m_Path.clear();
+            m_CreateTime = 0x0;
+            m_ModTime = 0x0;
+            m_Size = 0x0;
+        }
 
-    void Reset();
-    bool Open(const std::string &path, const std::string &spec = "*.*", u32 flags = DirectoryFlags::Default);
+        std::string         m_Path;
+        u64                 m_CreateTime;
+        u64                 m_ModTime;
+        u64                 m_Size;
+        u32                 m_Flags;
+    };
 
-    static void GetFiles( const std::string& path, Nocturnal::S_Path& paths, const std::string& spec = "*.*", bool recursive = false );
-    void GetFiles( Nocturnal::S_Path& paths, const std::string& spec = "*.*", bool recursive = false );
+    class FOUNDATION_API Directory
+    {
+    public:
+        Directory();
+        Directory(const std::string &path, const std::string &spec = "*.*", u32 flags = DirectoryFlags::Default);
+        ~Directory();
 
-  private:
-    bool Find(const std::string& query = "");
-    void Close();
+        bool IsDone();
+        bool Next();
+        const DirectoryItem& GetItem();
 
-    std::string         m_Path;
-    std::string         m_Spec;
-    u32                 m_Flags;
-    DirectoryHandle     m_Handle;
-    DirectoryItem       m_Item;
-    bool                m_Done;
-  };
+        void Reset();
+        bool Open(const std::string &path, const std::string &spec = "*.*", u32 flags = DirectoryFlags::Default);
 
-  typedef Nocturnal::Signature<void, const DirectoryItem&> DirectoryItemSignature;
+        static void GetFiles( const std::string& path, Nocturnal::S_Path& paths, const std::string& spec = "*.*", bool recursive = false );
+        void GetFiles( Nocturnal::S_Path& paths, const std::string& spec = "*.*", bool recursive = false );
 
-  FOUNDATION_API void RecurseDirectories( DirectoryItemSignature::Delegate delegate, const std::string &path, const std::string &spec = "*.*", u32 flags = DirectoryFlags::Default);
+    private:
+        bool Find(const std::string& query = "");
+        void Close();
+
+        std::string         m_Path;
+        std::string         m_Spec;
+        u32                 m_Flags;
+        DirectoryHandle     m_Handle;
+        DirectoryItem       m_Item;
+        bool                m_Done;
+    };
+
+    typedef Nocturnal::Signature<void, const DirectoryItem&> DirectoryItemSignature;
+
+    FOUNDATION_API void RecurseDirectories( DirectoryItemSignature::Delegate delegate, const std::string &path, const std::string &spec = "*.*", u32 flags = DirectoryFlags::Default);
 }

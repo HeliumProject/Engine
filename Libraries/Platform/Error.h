@@ -7,11 +7,11 @@
 
 namespace Platform
 {
-  //
-  // Decode the last error string
-  //
+    //
+    // Decode the last error string
+    //
 
-  PLATFORM_API u32 GetLastError();
+    PLATFORM_API u32 GetLastError();
 
-  PLATFORM_API std::string GetErrorString( u32 errorOverride = 0 );
+    PLATFORM_API std::string GetErrorString( u32 errorOverride = 0 );
 }

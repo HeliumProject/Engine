@@ -5,41 +5,41 @@
 
 namespace Platform
 {
-  PLATFORM_API void Initialize();
-  PLATFORM_API void Cleanup();
+    PLATFORM_API void Initialize();
+    PLATFORM_API void Cleanup();
 
-  namespace Types
-  {
-    enum Type
+    namespace Types
     {
-      Windows,
-      PlayStation3,
-      Count,
-    };
+        enum Type
+        {
+            Windows,
+            PlayStation3,
+            Count,
+        };
 
-    static const char* Strings[] = 
-    {
-      "Windows",
-      "PlayStation3",
-    };
+        static const char* Strings[] = 
+        {
+            "Windows",
+            "PlayStation3",
+        };
 
-    NOC_COMPILE_ASSERT( Platform::Types::Count == sizeof(Strings) / sizeof(const char*) );
-  }
-  typedef Types::Type Type;
-
-  inline const char* GetTypeName(Type t)
-  {
-    if (t >= 0 && t<Types::Count)
-    {
-      return Types::Strings[t];
+        NOC_COMPILE_ASSERT( Platform::Types::Count == sizeof(Strings) / sizeof(const char*) );
     }
-    else
-    {
-      return Types::Strings[0];
-    }
-  }
+    typedef Types::Type Type;
 
-  PLATFORM_API Type GetType();
-  PLATFORM_API void Print(const char* fmt, ...);
-  PLATFORM_API void Sleep(int millis);
+    inline const char* GetTypeName(Type t)
+    {
+        if (t >= 0 && t<Types::Count)
+        {
+            return Types::Strings[t];
+        }
+        else
+        {
+            return Types::Strings[0];
+        }
+    }
+
+    PLATFORM_API Type GetType();
+    PLATFORM_API void Print(const char* fmt, ...);
+    PLATFORM_API void Sleep(int millis);
 }

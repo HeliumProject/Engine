@@ -4,33 +4,33 @@
 
 namespace Reflect
 {
-  // Delimiter to use when representing the data in the container as a 
-  // single string.  If your data contains this delimiter naturally, the
-  // string representation may not show up properly.
-  static const char* s_ContainerItemDelimiter = "\n";
+    // Delimiter to use when representing the data in the container as a 
+    // single string.  If your data contains this delimiter naturally, the
+    // string representation may not show up properly.
+    static const char* s_ContainerItemDelimiter = "\n";
 
-  class FOUNDATION_API ContainerSerializer : public Serializer
-  {
-  public:
-    REFLECT_DECLARE_ABSTRACT( ContainerSerializer, Serializer )
+    class FOUNDATION_API ContainerSerializer : public Serializer
+    {
+    public:
+        REFLECT_DECLARE_ABSTRACT( ContainerSerializer, Serializer )
 
-    ContainerSerializer();
+            ContainerSerializer();
 
-    virtual size_t GetSize() const = 0;
-    virtual void Clear() = 0;
-   };
+        virtual size_t GetSize() const = 0;
+        virtual void Clear() = 0;
+    };
 
-  typedef Nocturnal::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
+    typedef Nocturnal::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
 
-  class FOUNDATION_API ElementContainerSerializer : public ContainerSerializer
-  {
-  public:
-    REFLECT_DECLARE_ABSTRACT( ElementContainerSerializer, ContainerSerializer );
+    class FOUNDATION_API ElementContainerSerializer : public ContainerSerializer
+    {
+    public:
+        REFLECT_DECLARE_ABSTRACT( ElementContainerSerializer, ContainerSerializer );
 
-    i32 m_TypeID;
+        i32 m_TypeID;
 
-    ElementContainerSerializer();
-  };
+        ElementContainerSerializer();
+    };
 
-  typedef Nocturnal::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
+    typedef Nocturnal::SmartPtr<ContainerSerializer> ContainerSerializerPtr;
 }

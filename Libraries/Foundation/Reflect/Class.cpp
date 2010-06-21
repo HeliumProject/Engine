@@ -22,27 +22,27 @@ Class::~Class()
 
 Class* Class::Create()
 {
-  return new Class();
+    return new Class();
 }
 
 ElementPtr Class::Clone(Element* element)
 {
-  if (!element)
-  {
-    return NULL;
-  }
+    if (!element)
+    {
+        return NULL;
+    }
 
-  ElementPtr clone = AssertCast<Element>( Registry::GetInstance()->CreateInstance(element->GetType()) );
+    ElementPtr clone = AssertCast<Element>( Registry::GetInstance()->CreateInstance(element->GetType()) );
 
-  element->PreSerialize();
+    element->PreSerialize();
 
-  clone->PreDeserialize();
+    clone->PreDeserialize();
 
-  Class::Copy( element, clone );
+    Class::Copy( element, clone );
 
-  clone->PostDeserialize();
+    clone->PostDeserialize();
 
-  element->PostSerialize();
+    element->PostSerialize();
 
-  return clone;
+    return clone;
 }

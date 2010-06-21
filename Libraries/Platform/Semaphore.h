@@ -10,29 +10,29 @@
 
 namespace Platform
 {
-  class PLATFORM_API Semaphore
-  {
-  public:
+    class PLATFORM_API Semaphore
+    {
+    public:
 #ifdef WIN32
-    typedef void* Handle;
+        typedef void* Handle;
 #else
-    typedef sem_t Handle;
+        typedef sem_t Handle;
 #endif
 
-  private:
-    Handle m_Handle;
+    private:
+        Handle m_Handle;
 
-  public:
-     Semaphore();
-    ~Semaphore();
+    public:
+        Semaphore();
+        ~Semaphore();
 
-    const Handle& GetHandle()
-    {
-      return m_Handle;
-    }
+        const Handle& GetHandle()
+        {
+            return m_Handle;
+        }
 
-    void Increment();
-    void Decrement();
-    void Reset();
-  };
+        void Increment();
+        void Decrement();
+        void Reset();
+    };
 }

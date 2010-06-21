@@ -54,13 +54,10 @@ bool FileArrayNode::IsFileArray( Reflect::Element* element, const Reflect::Field
 // 
 FileArrayNode::FileArrayNode( Luna::AssetManager* assetManager, Reflect::Element* element, const Reflect::Field* field )
 : Luna::ArrayNode( assetManager, element, field )
-, m_IsAssetReference( false )
 , m_IgnoreChange( false )
 {
     // Sanity check
     NOC_ASSERT( IsFileArray( element, field ) );
-
-    m_IsAssetReference = Luna::IsAssetFileReference( element, field );
 
 #pragma TODO( "Implement Add File functionality" )
     ContextMenuItemSet& contextMenu = GetContextMenu();

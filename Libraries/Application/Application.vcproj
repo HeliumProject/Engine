@@ -292,10 +292,6 @@
 			RelativePathToProject=".\SDK\TinyXML\2.6.1\TinyXML.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
-			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{190A611A-399F-47F6-B686-DF40C8B20F84}"
 			RelativePathToProject=".\SDK\SQLite\3.6.23.1\SQLite.vcproj"
 		/>

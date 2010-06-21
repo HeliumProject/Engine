@@ -22,8 +22,6 @@
 #include "Pipeline/Asset/Classes/EntityAsset.h"
 #include "Pipeline/Asset/Classes/StandardShaderAsset.h"
 
-#include "Finder/AssetSpecs.h"
-
 #include "Foundation/File/Path.h"
 
 #include "Foundation/Log.h"
@@ -74,6 +72,9 @@ END_EVENT_TABLE()
 
 // Statics
 static const char* s_EditorTitle = "Luna Asset Editor";
+
+#pragma TODO( "This needs to be rethought" )
+static const char* s_FileFilter = "*.entity.*;*.font.*;*.scene.*";
 
 ///////////////////////////////////////////////////////////////////////////////
 // Creates a new Asset Editor.
@@ -415,6 +416,11 @@ AssetEditor::~AssetEditor()
     delete m_Outliner;
 
     m_Outliner = NULL; 
+}
+
+const char* GetFileFilter()
+{
+    return s_FileFilter;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1114,7 +1120,12 @@ void AssetEditor::OnOpen( wxCommandEvent& args )
 {
     Nocturnal::FileDialog browserDlg( this, "Open", "", "", "", Nocturnal::FileDialogStyles::DefaultOpen | Nocturnal::FileDialogStyles::Multiple );
 
-    browserDlg.AddFilter( FinderSpecs::Asset::ASSET_EDITOR_FILTER.GetDialogFilter() );
+    S_string filters;
+    Reflect::Archive::GetFileFilters( filters );
+    for ( S_string::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+    {
+        browserDlg.AddFilter( (*itr) );
+    }
 
     if ( browserDlg.ShowModal() == wxID_OK )
     {
@@ -1129,17 +1140,20 @@ void AssetEditor::OnOpen( wxCommandEvent& args )
 // 
 void AssetEditor::OnFind( wxCommandEvent& args )
 {
-    NOC_BREAK();
-#pragma TODO( "Reimplent using the Vault" )
-    //File::FileBrowser browserDlg( this, -1, "Asset Finder: Open" );
-    //browserDlg.EnableMultipleSelection();
+    Nocturnal::FileDialog browserDlg( this, "Open", "", "", "", Nocturnal::FileDialogStyles::DefaultOpen | Nocturnal::FileDialogStyles::Multiple );
 
-    //browserDlg.SetFilter( FinderSpecs::Asset::ASSET_EDITOR_FILTER );
+    S_string filters;
+    Reflect::Archive::GetFileFilters( filters );
+    for ( S_string::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+    {
+        browserDlg.AddFilter( (*itr) );
+    }
 
-    //if ( browserDlg.ShowModal() == wxID_OK )
-    //{
-    //    DoOpen( browserDlg.GetPaths() );
-    //}
+    if ( browserDlg.ShowModal() == wxID_OK )
+    {
+        const S_string& paths = browserDlg.GetFilePaths();
+        DoOpen( paths );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

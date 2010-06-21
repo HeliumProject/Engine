@@ -39,11 +39,8 @@
 
 #include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/Components/WorldFileComponent.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Finder/AssetSpecs.h"
-#include "Finder/ExtensionSpecs.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
 #include "Pipeline/Content/ContentVersion.h"
@@ -90,7 +87,6 @@ EVT_MENU(SceneEditorIDs::ID_FileImport, SceneEditor::OnImport)
 EVT_MENU(SceneEditorIDs::ID_FileImportFromClipboard, SceneEditor::OnImport)
 EVT_MENU(SceneEditorIDs::ID_FileExport, SceneEditor::OnExport)
 EVT_MENU(SceneEditorIDs::ID_FileExportToClipboard, SceneEditor::OnExport)
-EVT_MENU(SceneEditorIDs::ID_FileExportToObj, SceneEditor::OnExportToObj)
 EVT_MENU(wxID_CLOSE, SceneEditor::OnClose)
 EVT_MENU(wxID_EXIT, SceneEditor::OnExit)
 EVT_CLOSE( SceneEditor::OnExiting )
@@ -224,7 +220,7 @@ END_EVENT_TABLE()
 
 
 // Specifies the files that can be opened by the Scene Editor
-Finder::FilterSpec SceneEditor::s_Filter( "SceneEditor::s_Filter", "All valid files" );
+std::string SceneEditor::s_FileFilter = "Reflect Files (*.rb, *.rx)|*.rb;*.rx";
 
 // Mapping between CameraMode and SceneEditorID
 SceneEditor::RM_CamModeToSceneID SceneEditor::s_CameraModeToSceneID;
@@ -263,11 +259,6 @@ static Editor* CreateSceneEditor()
 // 
 void SceneEditor::InitializeEditor()
 {
-    s_Filter.AddSpec( FinderSpecs::Asset::LEVEL_DECORATION ); 
-    s_Filter.AddSpec( FinderSpecs::Asset::ZONE_DECORATION );
-    s_Filter.AddSpec( FinderSpecs::Asset::CONTENT_DECORATION );
-    s_Filter.AddSpec( FinderSpecs::Extension::REFLECT_BINARY );
-
     s_CameraModeToSceneID.Insert( CameraModes::Orbit, SceneEditorIDs::ID_ViewOrbit );
     s_CameraModeToSceneID.Insert( CameraModes::Front, SceneEditorIDs::ID_ViewFront );
     s_CameraModeToSceneID.Insert( CameraModes::Side, SceneEditorIDs::ID_ViewSide );
@@ -1417,8 +1408,7 @@ bool SceneEditor::DoOpen( const std::string& path )
 void SceneEditor::OnOpen(wxCommandEvent& event)
 {
     Nocturnal::FileDialog openDlg( this, "Open" );
-    openDlg.AddFilter( s_Filter.GetDialogFilter() );
-    openDlg.SetFilterIndex( FinderSpecs::Asset::LEVEL_DECORATION.GetDialogFilter() );
+    openDlg.AddFilter( s_FileFilter );
 
     if ( openDlg.ShowModal() == wxID_OK )
     {
@@ -1486,9 +1476,14 @@ void SceneEditor::OnImport(wxCommandEvent& event)
             case SceneEditorIDs::ID_FileImport:
                 {
                     Nocturnal::FileDialog fileDialog( this, "Import" );
-                    fileDialog.AddFilter( FinderSpecs::Extension::REFLECT_BINARY.GetDialogFilter() );
-                    fileDialog.AddFilter( FinderSpecs::Extension::REFLECT_TEXT.GetDialogFilter() );
-                    fileDialog.SetFilterIndex( FinderSpecs::Extension::REFLECT_BINARY.GetDialogFilter() );
+
+                    S_string filters;
+                    Reflect::Archive::GetFileFilters( filters );
+                    for ( S_string::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+                    {
+                        fileDialog.AddFilter( (*itr) );
+                    }
+
                     if ( fileDialog.ShowModal() != wxID_OK )
                     {
                         return;
@@ -1683,9 +1678,14 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                 case SceneEditorIDs::ID_FileExport:
                     {
                         Nocturnal::FileDialog fileDialog( this, "Export Selection", "", "", wxFileSelectorDefaultWildcardStr, Nocturnal::FileDialogStyles::DefaultSave );
-                        fileDialog.AddFilter( FinderSpecs::Extension::REFLECT_BINARY.GetDialogFilter() );
-                        fileDialog.AddFilter( FinderSpecs::Extension::REFLECT_TEXT.GetDialogFilter() );
-                        fileDialog.SetFilterIndex( FinderSpecs::Extension::REFLECT_BINARY.GetDialogFilter() );
+                        
+                        S_string filters;
+                        Reflect::Archive::GetFileFilters( filters );
+                        for ( S_string::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+                        {
+                            fileDialog.AddFilter( (*itr) );
+                        }
+
                         if ( fileDialog.ShowModal() != wxID_OK )
                         {
                             return;
@@ -1748,140 +1748,6 @@ void SceneEditor::OnExport(wxCommandEvent& event)
             }
         }
     }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Called when the "Export to OBJ file" item is chosen in the UI.
-// Exports the selection to an OBJ file.
-// 
-void SceneEditor::OnExportToObj(wxCommandEvent& event)
-{
-    if ( !m_SceneManager.HasCurrentScene() )
-    {
-        return;
-    }
-
-    OS_SelectableDumbPtr selection;
-    m_SceneManager.GetCurrentScene()->GetFlattenedSelection( selection );
-    if ( selection.Empty() )
-    {
-        return;
-    }
-
-    Nocturnal::FileDialog fileDialog( this, "Export Selection", "", "", wxFileSelectorDefaultWildcardStr, Nocturnal::FileDialogStyles::DefaultSave );
-    fileDialog.AddFilter( FinderSpecs::Extension::MAYA_OBJ.GetDialogFilter() );
-
-    if ( fileDialog.ShowModal() != wxID_OK )
-    {
-        return;
-    }
-
-    Math::V_Vector3 vertices;
-    V_u32 indices;
-
-    for ( OS_SelectableDumbPtr::Iterator itr = selection.Begin(), end = selection.End(); itr != end; ++itr )
-    {
-        Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *itr );
-        if ( !entity )
-        {
-            continue;
-        }
-
-        const Luna::Scene* geometryScene = entity->GetNestedScene( GeometryModes::Render );
-        if ( !geometryScene )
-        {
-            continue;
-        }
-
-        const Math::Matrix4& worldSpaceTransform = entity->GetGlobalTransform();
-
-        HM_SceneNodeDumbPtr geometrySceneNodes = geometryScene->GetNodes();
-        for ( HM_SceneNodeDumbPtr::const_iterator nodeItr = geometrySceneNodes.begin(), nodeEnd = geometrySceneNodes.end(); nodeItr != nodeEnd; ++nodeItr )
-        {
-            const Luna::Mesh* mesh = Reflect::ConstObjectCast< Luna::Mesh >( nodeItr->second );
-            if ( !mesh )
-            {
-                continue;
-            }
-
-            const Content::Mesh* contentMesh = mesh->GetPackage< Content::Mesh >();
-            if ( !contentMesh )
-            {
-                continue;
-            }
-
-            u32 startingIndex = (u32) vertices.size() + 1;
-            for ( Math::V_Vector3::const_iterator vertexItr = contentMesh->m_Positions.begin(), vertexEnd = contentMesh->m_Positions.end(); vertexItr != vertexEnd; ++vertexItr )
-            {
-                Math::Vector3 vertex( *vertexItr );
-                worldSpaceTransform.TransformVertex( vertex );
-                vertex *= 100.0f;
-                vertices.push_back( vertex );
-            }
-
-            for ( V_u32::const_iterator indexItr = contentMesh->m_TriangleVertexIndices.begin(), indexEnd = contentMesh->m_TriangleVertexIndices.end(); indexItr != indexEnd; ++indexItr )
-            {
-                indices.push_back( startingIndex + *indexItr );
-            }
-        }
-    }
-
-    std::string file = fileDialog.GetPath();
-    FILE* f = fopen( file.c_str(), "w" );
-    if ( !f )
-    {
-        std::string errorMessage = "Failed to open '" + file + "' for writing!";
-        wxMessageBox( errorMessage, "Error", wxCENTER | wxICON_ERROR | wxOK );
-        return;
-    }
-
-    fprintf( f, "#                      Vertices: %d\n", vertices.size() );
-    fprintf( f, "#                        Points: 0\n" );
-    fprintf( f, "#                         Lines: 0\n" );
-    fprintf( f, "#                         Faces: %d\n", indices.size() / 3 );
-    fprintf( f, "#                     Materials: 0\n" );
-    fprintf( f, "\no 1\n" );
-
-    fprintf( f, "\n# Vertex list\n\n" );
-    for ( Math::V_Vector3::iterator itr = vertices.begin(), end = vertices.end(); itr != end; ++itr )
-    {
-        fprintf( f, "v %f %f %f\n", itr->x, itr->y, itr->z );
-    }
-
-    fprintf( f, "\n# Point/Line/Face list\n\n" );
-    fprintf( f, "usemtl Default\n" );
-    V_u32::iterator indexItr = indices.begin();
-    V_u32::iterator indexEnd = indices.end();
-    while ( indexItr != indexEnd )
-    {
-        u32 index1 = 0;
-        u32 index2 = 0;
-        u32 index3 = 0;
-
-        if ( indexItr != indexEnd )
-        {
-            index1 = *indexItr;
-            ++indexItr;
-        }
-
-        if ( indexItr != indexEnd )
-        {
-            index2 = *indexItr;
-            ++indexItr;
-        }
-
-        if ( indexItr != indexEnd )
-        {
-            index3 = *indexItr;
-            ++indexItr;
-        }
-
-        fprintf( f, "f %d %d %d\n", index1, index2, index3 );
-    }
-
-    fprintf( f, "\n# End of file\n" );
-
-    fclose( f );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3435,6 +3301,9 @@ bool SceneEditor::ValidateDrag( const Inspect::DragArgs& args )
 {
     bool canHandleArgs = false;
 
+    S_string reflectExtensions;
+    Reflect::Archive::GetExtensions( reflectExtensions );
+
     Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( fileList )
     {
@@ -3447,15 +3316,7 @@ bool SceneEditor::ValidateDrag( const Inspect::DragArgs& args )
             if ( path.Exists() )
             {
                 std::string ext = path.Extension();
-                if ( ext == FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() )
-                {
-                    canHandleArgs = true;
-                }
-                else if ( ext == FinderSpecs::Asset::ZONE_DECORATION.GetDecoration() )
-                {
-                    canHandleArgs = true;
-                }
-                else if ( ext == FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() )
+                if ( reflectExtensions.find( ext ) != reflectExtensions.end() )
                 {
                     canHandleArgs = true;
                 }
@@ -3482,8 +3343,6 @@ wxDragResult SceneEditor::Drop( const Inspect::DragArgs& args )
 {
     wxDragResult result = args.m_Default;
 
-    V_string levels, zones, entities;
-
     if ( ValidateDrag( args ) )
     {
         Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
@@ -3493,75 +3352,9 @@ wxDragResult SceneEditor::Drop( const Inspect::DragArgs& args )
                 fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
             {
                 Nocturnal::Path path( *fileItr );
-                if ( path.Exists() )
-                {
-                    std::string ext = path.Extension();
-                    if ( ext == FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() )
-                    {
-                        levels.push_back( path );
-                    }
-                    else if ( ext == FinderSpecs::Asset::ZONE_DECORATION.GetDecoration() )
-                    {
-                        zones.push_back( path );
-                    }
-                    else if ( ext == FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() )
-                    {
-                        entities.push_back( path );
-                    }
-                }
+
+#pragma TODO( "Load the files" )
             }
-        }
-
-        if ( levels.size() == 1 )
-        {
-            DoOpen( levels.front() );
-        }
-        else if ( zones.size() && m_SceneManager.GetCurrentLevel() )
-        {
-            Luna::Scene* rootScene = m_SceneManager.GetRootScene();
-            if ( rootScene && rootScene->IsEditable() )
-            {
-                for ( V_string::const_iterator itr = zones.begin(), end = zones.end(); itr != end; ++itr )
-                {
-                    Nocturnal::Path zonePath( (*itr) );
-
-                    bool containsZone = false;
-                    for ( S_ZoneDumbPtr::const_iterator otherItr = rootScene->GetZones().begin(), otherEnd = rootScene->GetZones().end(); otherItr != otherEnd && !containsZone; ++otherItr )
-                    {
-                        containsZone = (*otherItr)->GetPathObject().Hash() == zonePath.Hash();
-                    }
-
-                    if ( !containsZone )
-                    {
-                        Content::ZonePtr contentZone = new Content::Zone ();
-                        contentZone->m_Path = zonePath;
-
-                        Luna::ZonePtr sceneZone = new Zone( m_SceneManager.GetRootScene(), contentZone );
-                        rootScene->AddObject( sceneZone );
-
-                        sceneZone->Initialize();
-                    }
-                }
-            }
-        }
-        else if ( entities.size() )
-        {
-            if ( !m_SceneManager.GetCurrentScene() )
-            {
-                return result;
-            }
-
-            // Fake a command to change the tool
-            wxCommandEvent toolChangeEvt( wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsEntityCreate );
-            OnToolSelected( toolChangeEvt );
-
-            Luna::EntityCreateTool* tool = Reflect::ObjectCast< Luna::EntityCreateTool >( m_SceneManager.GetCurrentScene()->GetTool() );
-            if ( !tool )
-            {
-                return result;
-            }
-
-            tool->DropEntities( entities, wxIsShiftDown() );
         }
     }
 

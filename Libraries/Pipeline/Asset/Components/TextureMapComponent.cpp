@@ -1,8 +1,6 @@
 #include "TextureMapComponent.h"
 #include "Pipeline/Asset/Classes/StandardShaderAsset.h"
 
-#include "Finder/ExtensionSpecs.h"
-
 using namespace Asset;
 
 REFLECT_DEFINE_ABSTRACT( TextureMapComponent );
@@ -10,9 +8,6 @@ REFLECT_DEFINE_ABSTRACT( TextureMapComponent );
 void TextureMapComponent::EnumerateClass( Reflect::Compositor<TextureMapComponent>& comp )
 {
   comp.GetComposite().m_UIName = "Texture Map";
-
-  //Reflect::Field* fieldFileID = comp.AddField( &TextureMapComponent::m_FileID, "m_FileID", Reflect::FieldFlags::FileID | AssetFlags::RealTimeUpdateable | Asset::AssetFlags::ManageField );
-  //fieldFileID->SetProperty( Asset::AssetProperties::FilterSpec, s_FileFilter.GetName() );
 
   Reflect::EnumerationField* enumReductionRatio = comp.AddEnumerationField( &TextureMapComponent::m_ReductionRatio, "m_ReductionRatio", AssetFlags::RealTimeUpdateable );
   Reflect::EnumerationField* enumMipGenFilter = comp.AddEnumerationField( &TextureMapComponent::m_MipGenFilter, "m_MipGenFilter", AssetFlags::RealTimeUpdateable );
@@ -25,7 +20,7 @@ void TextureMapComponent::EnumerateClass( Reflect::Compositor<TextureMapComponen
 }
 
 
-const Finder::FinderSpec& TextureMapComponent::s_FileFilter = FinderSpecs::Extension::TEXTUREMAP_FILTER;
+const std::string TextureMapComponent::s_FileFilter = "*.tga;*.png;*.bmp";
 
 Component::ComponentCategoryType TextureMapComponent::GetCategoryType() const
 {
@@ -60,9 +55,9 @@ bool TextureMapComponent::ShouldRebuildTexture( const TextureMapComponent* oldAt
 //  }
 //}
 
-const Finder::FinderSpec* TextureMapComponent::GetFileFilter() const
+const std::string& TextureMapComponent::GetFileFilter() const
 {
-  return &s_FileFilter;
+  return s_FileFilter;
 }
 
 bool TextureMapComponent::IsTextureDirty() const

@@ -13,7 +13,6 @@
 #include "Foundation/InitializerStack.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
 #include "Foundation/Reflect/Registry.h"
-#include "Finder/Finder.h"
 
 using namespace Luna;
 
@@ -27,7 +26,6 @@ void Luna::EditorInitialize()
     // initialize core tools libraries before luna tools libraries
     g_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
     g_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-    g_InitializerStack.Push( Finder::Initialize, Finder::Cleanup );
 
     // then register reflect stuff
     g_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::FilePathOptions::FilePathOption>( &Luna::FilePathOptions::FilePathOptionEnumerateEnumeration, "FilePathOption" ) );

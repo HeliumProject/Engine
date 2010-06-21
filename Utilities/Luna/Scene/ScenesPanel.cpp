@@ -13,7 +13,6 @@
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Content/ContentVersion.h"
-#include "Finder/AssetSpecs.h"
 #include "Foundation/Log.h"
 #include "Application/UI/FileDialog.h"
 #include "Application/UI/ImageManager.h"
@@ -254,24 +253,9 @@ void ScenesPanel::DeleteAllRows()
 // 
 std::string ScenesPanel::PromptNewZone( const std::string& defaultPath )
 {
-    std::string savePath;
-
-    // Prompt
-    Nocturnal::FileDialog fileDialog( this, "Create a new zone", defaultPath.c_str(), wxEmptyString, wxFileSelectorDefaultWildcardStr, Nocturnal::FileDialogStyles::Save );
-    fileDialog.SetFilter( FinderSpecs::Asset::ZONE_DECORATION.GetDialogFilter() );
-
-    if ( fileDialog.ShowModal() == wxID_OK )
-    {
-        // If new file name, save
-        savePath = fileDialog.GetPath().c_str();
-
-        if ( !Nocturnal::Path( savePath ).Exists() )
-        {
-            Reflect::Archive::ToFile( Reflect::V_Element(), savePath, new Content::ContentVersion() );
-        }
-    }
-
-    return savePath;
+    NOC_BREAK();
+#pragma TODO( "Zones are deprecated" )
+    return "";
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -280,19 +264,9 @@ std::string ScenesPanel::PromptNewZone( const std::string& defaultPath )
 // 
 std::string ScenesPanel::PromptAddZone( const std::string& defaultPath )
 {
-    std::string savePath;
-
-    // Prompt
-    Nocturnal::FileDialog fileDialog( this, "Add an existing zone", defaultPath.c_str(), wxEmptyString, wxFileSelectorDefaultWildcardStr, Nocturnal::FileDialogStyles::DefaultOpen );
-    fileDialog.SetFilter( FinderSpecs::Asset::ZONE_DECORATION.GetDialogFilter() );
-
-    if ( fileDialog.ShowModal() == wxID_OK )
-    {
-        // If new file name, save
-        savePath = fileDialog.GetPath().c_str();
-    }
-
-    return savePath;
+    NOC_BREAK();
+#pragma TODO( "Zones are deprecated" )
+    return "";
 }
 
 ///////////////////////////////////////////////////////////////////////////////

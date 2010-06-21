@@ -12,7 +12,6 @@ namespace Luna
   class FileArrayNode : public Luna::ArrayNode
   {
   private:
-    bool m_IsAssetReference;
     bool m_IgnoreChange;
 
   public:

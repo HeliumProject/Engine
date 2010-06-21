@@ -4,7 +4,6 @@
 
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Pipeline/Asset/Components/ColorMapComponent.h"
-#include "Finder/AssetSpecs.h"
 #include "Foundation/File/Directory.h"
 #include "Render/D3DManager.h"
 
@@ -116,7 +115,7 @@ void* ThumbnailLoader::LoadThread::Entry()
             }
 
             // Include the color map of a shader as a possible thumbnail image
-            if ( file->GetPath().Extension() == FinderSpecs::Asset::SHADER_DECORATION.GetDecoration() )
+            if ( file->GetPath().FullExtension() == "shader.rb" )
             {
                 Asset::ShaderAssetPtr shader = Reflect::ObjectCast< Asset::ShaderAsset >( Asset::AssetFile::GetAssetClass( file ) );
                 if ( shader )

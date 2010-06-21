@@ -47,15 +47,15 @@ namespace Luna
   private:
     EditorType m_Type;
     CreateEditorFunc m_CreateFunc;
-    const Finder::FilterSpec* m_FilterSpec;
+    std::string m_FileFilter;
 
   public:
-    EditorInfo( EditorType type, CreateEditorFunc createFunc, const Finder::FilterSpec* filter );
+      EditorInfo( EditorType type, CreateEditorFunc createFunc, const std::string& filter );
     virtual ~EditorInfo();
 
     Editor* Create() const;
     EditorType GetType() const;
-    const Finder::FilterSpec* GetFilterSpec() const;
+    const std::string& GetFileFilter() const;
   };
 
   typedef Nocturnal::SmartPtr< EditorInfo > EditorInfoPtr;

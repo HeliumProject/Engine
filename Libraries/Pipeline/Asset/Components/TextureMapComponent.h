@@ -41,7 +41,7 @@ namespace Asset
   class PIPELINE_API TextureMapComponent NOC_ABSTRACT : public FileBackedComponent
   {
   private:
-    static const Finder::FinderSpec& s_FileFilter;
+      static const std::string s_FileFilter;
 
   public:
     ReductionRatio    m_ReductionRatio;
@@ -67,7 +67,8 @@ namespace Asset
     virtual Component::ComponentCategoryType GetCategoryType() const NOC_OVERRIDE;
     virtual bool ShouldRebuildTexture( const TextureMapComponent* oldAttrib ) const;
 
-    virtual const Finder::FinderSpec* GetFileFilter() const NOC_OVERRIDE;
+    virtual const std::string& GetFileFilter() const NOC_OVERRIDE;
+
     bool IsTextureDirty() const;
     void SetTextureDirty( bool dirty = true );
 

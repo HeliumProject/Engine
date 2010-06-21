@@ -5,8 +5,6 @@
 
 #include "Pipeline/Component/ComponentHandle.h"
 
-#include "Finder/AssetSpecs.h"
-
 using namespace Asset;
 
 REFLECT_DEFINE_CLASS( SceneAsset );
@@ -15,7 +13,7 @@ void SceneAsset::EnumerateClass( Reflect::Compositor<SceneAsset>& comp )
 {
   comp.GetComposite().m_UIName = "Scene";
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A level groups together various zones to make a level in the game.  The level asset will be associated with a world file (*.world.rb), which is the file that can be edited in the Scene Editor." );
-  comp.GetComposite().SetProperty( AssetProperties::ModifierSpec, FinderSpecs::Asset::LEVEL_DECORATION.GetName() );
+  comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.level.*" );
 
   Reflect::Field* fieldNearClipDist = comp.AddField( &SceneAsset::m_NearClipDist, "m_NearClipDist" );
   Reflect::Field* fieldFarClipDist = comp.AddField( &SceneAsset::m_FarClipDist, "m_FarClipDist" );

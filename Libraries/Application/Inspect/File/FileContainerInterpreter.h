@@ -2,7 +2,6 @@
 
 #include "Application/API.h"
 #include "Application/Inspect/Reflect/ReflectFieldInterpreter.h"
-#include "Finder/FinderSpec.h"
 
 namespace Inspect
 {
@@ -37,7 +36,7 @@ namespace Inspect
     void OnDrop( const Inspect::FilteredDropTargetArgs& args );
 
   private:
-    const Finder::FinderSpec* m_FinderSpec;
+      std::string m_FileFilter;
     Inspect::List* m_List;
   };
 

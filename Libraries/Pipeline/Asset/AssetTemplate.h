@@ -27,7 +27,7 @@ namespace Asset
   public:
     std::string   m_Name;               // was m_Title
     std::string   m_Description;
-    std::string   m_ModifierSpec;
+    std::string   m_FileFilter;
 
     bool          m_DefaultAddSubDir;
     bool          m_ShowSubDirCheckbox;

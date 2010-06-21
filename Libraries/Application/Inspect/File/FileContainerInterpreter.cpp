@@ -16,8 +16,6 @@
 #include "Pipeline/Asset/AssetFlags.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Log.h"
-#include "Finder/Finder.h"
-#include "Finder/ExtensionSpecs.h"
 #include "Application/UI/FileDialog.h"
 
 using namespace Reflect;
@@ -27,7 +25,7 @@ using namespace Nocturnal;
 FileContainerInterpreter::FileContainerInterpreter (Container* labelContainer)
 : ReflectFieldInterpreter (labelContainer)
 , m_List( NULL )
-, m_FinderSpec( NULL )
+, m_FileFilter( "" )
 {
 
 }
@@ -226,14 +224,13 @@ void FileContainerInterpreter::OnAddFile( Button* button )
 
     FileDialog browserDlg( button->GetCanvas()->GetControl() );
 
-    if ( !data->m_FinderSpec.empty() )
+    if ( !data->m_FileFilter.empty() )
     {
-      const Finder::FinderSpec* spec = Finder::GetFinderSpec( data->m_FinderSpec );
-      browserDlg.SetFilter( spec->GetDialogFilter() );
+      browserDlg.SetFilter( data->m_FileFilter );
     }
     else
     {
-      browserDlg.SetFilter( FinderSpecs::Extension::ALL_FILTER.GetDialogFilter() );
+      browserDlg.SetFilter( "All (*.*)|*.*" );
     }
 
     if ( browserDlg.ShowModal() == wxID_OK )

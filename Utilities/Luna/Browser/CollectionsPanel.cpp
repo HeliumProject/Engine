@@ -6,7 +6,6 @@
 #include "Pipeline/Asset/AssetFile.h"
 #include "Pipeline/Asset/AssetFolder.h"
 #include "Foundation/String/Utilities.h"
-#include "Finder/LunaSpecs.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
@@ -411,9 +410,9 @@ void CollectionsPanel::OnOpenCollection( wxCommandEvent& event )
     Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_OpenCollection ), "", "", "",
         Nocturnal::FileDialogStyles::DefaultOpen | Nocturnal::FileDialogStyles::ShowAllFilesFilter | Nocturnal::FileDialogStyles::ExportFile );
 
-    browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_RB_DECORATION.GetDialogFilter() );
-    browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_XML_DECORATION.GetDialogFilter() );
-    browserDlg.SetFilterIndex( FinderSpecs::Luna::ASSET_COLLECTION_RB_DECORATION.GetDialogFilter() );
+    V_string filters;
+    AssetCollection::GetFileFilters( filters );
+    browserDlg.AddFilters( filters );
 
     if ( browserDlg.ShowModal() == wxID_OK )
     {
@@ -519,9 +518,9 @@ void CollectionsPanel::OnImportIntoCollection( wxCommandEvent& event )
     Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_ImportIntoCollection ), "", "", "",
         Nocturnal::FileDialogStyles::DefaultOpen | Nocturnal::FileDialogStyles::ShowAllFilesFilter | Nocturnal::FileDialogStyles::ExportFile );
 
-    browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_RB_DECORATION.GetDialogFilter() );
-    browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_XML_DECORATION.GetDialogFilter() );
-    browserDlg.SetFilterIndex( FinderSpecs::Luna::ASSET_COLLECTION_RB_DECORATION.GetDialogFilter() );
+    V_string filters;
+    AssetCollection::GetFileFilters( filters );
+    browserDlg.AddFilters( filters );
 
     if ( browserDlg.ShowModal() == wxID_OK )
     {
@@ -558,9 +557,9 @@ void CollectionsPanel::OnSaveCollection( wxCommandEvent& event )
         Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_SaveCollection ), defaultDir.c_str(), defaultFile.c_str(), "",
             Nocturnal::FileDialogStyles::DefaultSave | Nocturnal::FileDialogStyles::ShowAllFilesFilter | Nocturnal::FileDialogStyles::ExportFile );
 
-        browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_RB_DECORATION.GetDialogFilter() );
-        browserDlg.AddFilter( FinderSpecs::Luna::ASSET_COLLECTION_XML_DECORATION.GetDialogFilter() );
-        browserDlg.SetFilterIndex( FinderSpecs::Luna::ASSET_COLLECTION_XML_DECORATION.GetDialogFilter() );
+        V_string filters;
+        AssetCollection::GetFileFilters( filters );
+        browserDlg.AddFilters( filters );
 
         if ( browserDlg.ShowModal() == wxID_OK )
         {

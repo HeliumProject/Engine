@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "ApplicationPreferences.h"
 #include "Application/Preferences.h"
-#include "Finder/LunaSpecs.h"
 
 using namespace Luna;
 
@@ -107,7 +106,7 @@ std::string ApplicationPreferences::GetPreferencesPath() const
     {
         throw Nocturnal::Exception( "Could not get preferences directory." );
     }
-    return FinderSpecs::Luna::GLOBAL_PREFS.GetFile( prefsDir.Get() );
+    return prefsDir.Get() + "LunaGlobalPrefs.rb";
 }
 
 ///////////////////////////////////////////////////////////////////////////////

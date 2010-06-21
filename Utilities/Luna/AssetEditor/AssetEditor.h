@@ -27,6 +27,9 @@ namespace Luna
   class AssetEditor : public Luna::Editor
   {
   private:
+      static char* s_FileFilter;
+
+  private:
     typedef std::map< i32, FilePathOptions::FilePathOption > M_MenuToFileOption;
 
   private:
@@ -56,6 +59,8 @@ namespace Luna
   public:
     AssetEditor();
     virtual ~AssetEditor();
+
+    static const char* GetFileFilter();
 
     Luna::AssetManager* GetAssetManager();
 

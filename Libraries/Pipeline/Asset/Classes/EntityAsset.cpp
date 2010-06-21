@@ -2,7 +2,6 @@
 
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetExceptions.h"
-#include "Finder/AssetSpecs.h"
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Element.h"
 #include "Foundation/Reflect/Version.h"
@@ -21,7 +20,7 @@ void EntityAsset::EnumerateClass( Reflect::Compositor<EntityAsset>& comp )
 {
     comp.GetComposite().m_UIName = "Entity";
     comp.GetComposite().SetProperty( AssetProperties::LongDescription, "Entities are objects that can be placed in the game engine. This includes pieces of the environment and characters. All entities are associated with a corresponding Maya art file. Instances of entities can be placed in a level with the Scene Editor." );
-    comp.GetComposite().SetProperty( AssetProperties::ModifierSpec, FinderSpecs::Asset::ENTITY_DECORATION.GetName() );
+    comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.entity.*" );
 
     // asset creation template
     Reflect::V_Element assetTemplates;

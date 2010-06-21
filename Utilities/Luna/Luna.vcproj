@@ -376,10 +376,6 @@
 			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
-			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
 			RelativePathToProject=".\Libraries\Pipeline\Pipeline.vcproj"
 		/>

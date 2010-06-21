@@ -11,8 +11,6 @@
 
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Foundation/Log.h"
-#include "Finder/AssetSpecs.h"
-#include "Finder/ShaderSpecs.h"
 
 using namespace Asset;
 
@@ -21,7 +19,7 @@ REFLECT_DEFINE_ABSTRACT( ShaderAsset );
 void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
 {
     comp.GetComposite().m_UIName = "Shader";
-    comp.GetComposite().SetProperty( AssetProperties::ModifierSpec, FinderSpecs::Asset::SHADER_DECORATION.GetName() );
+    comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.shader.*" );
 
     Reflect::Field* fieldDoubleSided = comp.AddField( &ShaderAsset::m_DoubleSided, "m_DoubleSided", AssetFlags::RealTimeUpdateable );
 
@@ -95,11 +93,6 @@ bool ShaderAsset::ValidateCompatible( const Component::ComponentPtr& attr, std::
     }
 
     return __super::ValidateCompatible( attr, error );
-}
-
-const Finder::FileSpec& ShaderAsset::GetBuiltFileSpec() const
-{
-    return FinderSpecs::Shader::BUILT_FILE;
 }
 
 void ShaderAsset::SetTextureDirty( const Nocturnal::Path& path, bool dirty )

@@ -5,7 +5,6 @@
 #include "Application/Preferences.h"
 #include "Pipeline/Asset/AssetFlags.h"
 #include "Foundation/Environment.h"
-#include "Finder/LunaSpecs.h"
 #include "Foundation/Reflect/Serializer.h"
 #include "Foundation/Reflect/Serializers.h"
 
@@ -72,7 +71,7 @@ std::string BrowserPreferences::GetPreferencesPath() const
     {
         throw Nocturnal::Exception( "Could not get preferences directory." );
     }
-    return FinderSpecs::Luna::BROWSER_PREFS.GetFile( prefsDir.Get() );
+    return prefsDir.Get() + "LunaBrowserPrefs.rb";
 }
 
 ///////////////////////////////////////////////////////////////////////////////

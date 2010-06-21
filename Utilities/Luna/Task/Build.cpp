@@ -18,7 +18,6 @@
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Pipeline/Asset/Components/WorldFileComponent.h"
 #include "Pipeline/AssetBuilder/AssetBuilder.h"
 #include "Pipeline/AssetBuilder/BuilderOptions.h"
 
@@ -366,71 +365,6 @@ bool GetBuilderOptions( const Nocturnal::S_Path& assets, AssetBuilder::BuilderOp
     bool success = dialog.ShowModal() == wxID_OK;
 
     delete canvas;
-
-    // if we're a level, check to see if the zones flag has been set.  if so, pop up the zone selector dialog
-    AssetBuilder::LevelBuilderOptions* levelBuildOptions = Reflect::ObjectCast< LevelBuilderOptions >( builderOptions );
-    if ( success && levelBuildOptions )
-    {
-        if ( levelBuildOptions->m_SelectZones )
-        {
-            V_string zoneNames;
-
-            // fill out the zone names from the level asset
-            Asset::SceneAssetPtr levelAsset = Asset::AssetClass::LoadAssetClass< Asset::SceneAsset >( *assets.begin() );
-            Component::ComponentViewer< Asset::WorldFileComponent > model( levelAsset );
-
-            Reflect::V_Element elements;     
-            try
-            {
-                Reflect::Archive::FromFile( model->GetPath(), elements );
-            }
-            catch ( Nocturnal::Exception& ex )
-            {
-                std::ostringstream str;
-                str << "Unable to load world from: " << model->GetPath().Get() << ": " << ex.what();
-                wxMessageBox( str.str(), "Error", wxICON_ERROR | wxOK );
-                success = false;
-            }
-
-            if ( success )
-            {
-                V_string zoneNames;
-
-                Reflect::V_Element::iterator itr = elements.begin();
-                Reflect::V_Element::iterator end= elements.end();
-                for( ; itr != end; ++itr )
-                {
-                    Content::ZonePtr zone = Reflect::ObjectCast< Content::Zone >( (*itr) );
-                    if ( zone )
-                    {
-                        if ( zone->m_Active )
-                        {
-                            zoneNames.push_back( zone->GetName() );
-                        }
-                    }
-                }
-
-                std::sort( zoneNames.begin(), zoneNames.end() );
-
-                // pop up the zone selector dialog
-                S_u32 selectedZones;
-                ZoneSelectorDialog zoneSelector( parent, "Select Zones", "", zoneNames, selectedZones );
-
-                if ( zoneSelector.ShowModal() != wxID_CANCEL )
-                {
-                    for each ( u32 zoneNum in selectedZones )
-                    {
-                        levelBuildOptions->m_ZoneList.push_back( zoneNames[ zoneNum ] );
-                    }
-                }
-                else  // dialog was canceled
-                {
-                    success = false;
-                }
-            }
-        }
-    }
-
     return success;
 }
 

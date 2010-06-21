@@ -11,5 +11,4 @@ namespace Reflect
 namespace Luna
 {
   bool IsFileReference( Reflect::Element* element, const Reflect::Field* field );
-  bool IsAssetFileReference( Reflect::Element* element, const Reflect::Field* field );
 }

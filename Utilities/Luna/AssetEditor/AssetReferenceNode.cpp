@@ -12,7 +12,6 @@
 #include "FieldFactory.h"
 #include "RemoveAssetNodeCommand.h"
 
-#include "Finder/Finder.h"
 #include "Editor/RefreshSelectionCommand.h"
 #include "Core/Enumerator.h"
 #include "Application/UI/ImageManager.h"
@@ -672,18 +671,10 @@ void AssetReferenceNode::OnChangePath( const ContextMenuArgsPtr& args )
         dialog.SetPath( currentPath.c_str() );
     }
 
-    std::string specName;
-    if ( m_Field->GetProperty( Asset::AssetProperties::FilterSpec, specName ) )
+    std::string filter;
+    if ( m_Field->GetProperty( Asset::AssetProperties::FileFilter, filter ) )
     {
-        const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
-
-        dialog.SetFilter( spec->GetDialogFilter() );
-    }
-    else if ( m_Field->GetProperty( Asset::AssetProperties::ModifierSpec, specName ) )
-    {
-        const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
-
-        dialog.SetFilter( spec->GetDialogFilter() );
+        dialog.SetFilter( filter );
     }
 
     if ( dialog.ShowModal() == wxID_OK )
@@ -702,28 +693,22 @@ void AssetReferenceNode::OnChangePath( const ContextMenuArgsPtr& args )
 void AssetReferenceNode::OnChangePathFinder( const ContextMenuArgsPtr& args )
 {
     NOC_BREAK();
-#pragma TODO( "Reimplemnt to use the Vault" )
-    //File::FileBrowser dialog( GetAssetManager()->GetAssetEditor(), wxID_ANY, "Change File Path" );
 
-    //std::string specName;
-    //if ( m_Field->GetProperty( Asset::AssetProperties::FilterSpec, specName ) )
-    //{
-    //    const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
-    //    dialog.SetFilter( *spec );
-    //}
-    //else if ( m_Field->GetProperty( Asset::AssetProperties::ModifierSpec, specName ) )
-    //{
-    //    const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
-    //    dialog.SetFilter( *spec );
-    //}
+    Nocturnal::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path" );
 
-    //if ( dialog.ShowModal() == wxID_OK )
-    //{
-    //    if ( GetFilePath() != dialog.GetPath() )
-    //    {
-    //        args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::AssetReferenceNode, std::string >( this, &AssetReferenceNode::GetFilePath, &AssetReferenceNode::SetFilePath ), dialog.GetPath() ) );
-    //    }
-    //}
+    std::string filter;
+    if ( m_Field->GetProperty( Asset::AssetProperties::FileFilter, filter ) )
+    {
+        dialog.SetFilter( filter );
+    }
+
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        if ( GetFilePath() != dialog.GetPath() )
+        {
+            args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::AssetReferenceNode, std::string >( this, &AssetReferenceNode::GetFilePath, &AssetReferenceNode::SetFilePath ), dialog.GetFilePath() ) );
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

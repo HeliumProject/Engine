@@ -8,5 +8,5 @@
 
 namespace Platform
 {
-  typedef int Pipe;
+    typedef int Pipe;
 }

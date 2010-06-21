@@ -27,11 +27,11 @@ typedef unsigned int          p32;
 typedef unsigned __int64      p64;
 
 #ifdef _WIN64
-  typedef unsigned __int64    PointerSizedUInt;
-  typedef __int64             PointerSizedInt;
+typedef unsigned __int64    PointerSizedUInt;
+typedef __int64             PointerSizedInt;
 #else
-  typedef __w64 unsigned int  PointerSizedUInt;
-  typedef __w64 int           PointerSizedInt;
+typedef __w64 unsigned int  PointerSizedUInt;
+typedef __w64 int           PointerSizedInt;
 #endif
 
 //
@@ -43,9 +43,9 @@ typedef std::set<std::string>                   S_string;
 typedef std::map<std::string, std::string>      M_string;
 
 #define STD_TYPES( __Type ) \
-typedef std::vector<__Type>         V_##__Type; \
-typedef std::set<__Type>            S_##__Type; \
-typedef std::map<__Type, __Type>    M_##__Type;
+    typedef std::vector<__Type>         V_##__Type; \
+    typedef std::set<__Type>            S_##__Type; \
+    typedef std::map<__Type, __Type>    M_##__Type;
 
 STD_TYPES( u8 );
 STD_TYPES( i8 );

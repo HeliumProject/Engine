@@ -890,14 +890,6 @@
 				Name="Misc"
 				>
 				<File
-					RelativePath=".\Windows\Clipboard.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Windows\Clipboard.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Windows\Console.cpp"
 					>
 				</File>

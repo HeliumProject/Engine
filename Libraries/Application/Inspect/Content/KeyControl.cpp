@@ -9,9 +9,9 @@
 #include <wx/image.h>
 #include <wx/msgdlg.h>
 #include <wx/settings.h>
+#include <wx/clipbrd.h>
 
 #include "Platform/Windows/Windows.h"
-#include "Platform/Windows/Clipboard.h"
 
 using namespace Inspect;
 using namespace Nocturnal;
@@ -307,11 +307,10 @@ bool KeyControl::ToClipboard( const V_KeyPtr& keys )
     return false;
   }
   
-  std::string error;
-  if ( !Platform::CopyToClipboard( (HWND)( GetHandle() ), xml, error ) )
+  if ( wxTheClipboard->Open() )
   {
-    wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
-    return false;
+      wxTheClipboard->SetData( new wxTextDataObject( xml ) );
+      wxTheClipboard->Close();
   }
 
   return true;
@@ -323,12 +322,17 @@ bool KeyControl::ToClipboard( const V_KeyPtr& keys )
 // 
 bool KeyControl::FromClipboard( V_KeyPtr& keys )
 {
-  std::string xml;
-  std::string error;
-  if ( !Platform::RetrieveFromClipboard( (HWND)( GetHandle() ), xml, error ) )
-  {
-    return false;
-  }
+    std::string xml;
+    if (wxTheClipboard->Open())
+    {
+        if (wxTheClipboard->IsSupported( wxDF_TEXT ))
+        {
+            wxTextDataObject data;
+            wxTheClipboard->GetData( data );
+            xml = data.GetText();
+        }  
+        wxTheClipboard->Close();
+    }
 
   if ( xml.empty() )
   {

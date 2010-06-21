@@ -78,7 +78,7 @@ bool Platform::MakePath( const char* path )
 
         currentDirectory += std::string( "\\" ) + *itr;
     }
-   
+
     return true;
 }
 
@@ -99,88 +99,88 @@ bool Platform::Delete( const char* path )
 
 bool GetTranslationId(LPVOID lpData, UINT unBlockSize, WORD wLangId, DWORD &dwId, bool bPrimaryEnough/*= FALSE*/)
 {
-  LPWORD lpwData;
-  for (lpwData = (LPWORD)lpData; (LPBYTE)lpwData < ((LPBYTE)lpData)+unBlockSize; lpwData+=2)
-  {
-    if (*lpwData == wLangId)
+    LPWORD lpwData;
+    for (lpwData = (LPWORD)lpData; (LPBYTE)lpwData < ((LPBYTE)lpData)+unBlockSize; lpwData+=2)
     {
-      dwId = *((DWORD*)lpwData);
-      return TRUE;
+        if (*lpwData == wLangId)
+        {
+            dwId = *((DWORD*)lpwData);
+            return TRUE;
+        }
     }
-  }
 
-  if (!bPrimaryEnough)
+    if (!bPrimaryEnough)
+        return FALSE;
+
+    for (lpwData = (LPWORD)lpData; (LPBYTE)lpwData < ((LPBYTE)lpData)+unBlockSize; lpwData+=2)
+    {
+        if (((*lpwData)&0x00FF) == (wLangId&0x00FF))
+        {
+            dwId = *((DWORD*)lpwData);
+            return TRUE;
+        }
+    }
+
     return FALSE;
-
-  for (lpwData = (LPWORD)lpData; (LPBYTE)lpwData < ((LPBYTE)lpData)+unBlockSize; lpwData+=2)
-  {
-    if (((*lpwData)&0x00FF) == (wLangId&0x00FF))
-    {
-      dwId = *((DWORD*)lpwData);
-      return TRUE;
-    }
-  }
-
-  return FALSE;
 }
 
 bool Platform::GetVersionInfo( const char* path, std::string& versionInfo )
 {
-  DWORD	dwHandle;
-  DWORD fileDataSize = GetFileVersionInfoSize( ( LPTSTR ) path, ( LPDWORD ) &dwHandle );
+    DWORD	dwHandle;
+    DWORD fileDataSize = GetFileVersionInfoSize( ( LPTSTR ) path, ( LPDWORD ) &dwHandle );
 
-  // file has no version info in this case
-  if ( fileDataSize <= 0 )
-    return false;
+    // file has no version info in this case
+    if ( fileDataSize <= 0 )
+        return false;
 
-  LPVOID fileData = ( LPVOID ) malloc ( fileDataSize );
-  if ( fileData == NULL )
-  {
-    return false;
-  }
-
-  // get the version info
-  dwHandle = 0;
-  if ( GetFileVersionInfo( ( LPTSTR ) path, dwHandle, fileDataSize, fileData ) )
-  {
-    // catch default information
-    LPVOID lpInfo;
-    UINT unInfoLen;
-    VerQueryValue( fileData, "\\", &lpInfo, &unInfoLen );
-
-    // find best matching language and codepage
-    VerQueryValue( fileData, "\\VarFile\\Translation", &lpInfo, &unInfoLen );
-
-    DWORD dwLangCode = 0;
-    if ( !GetTranslationId(lpInfo, unInfoLen, GetUserDefaultLangID(), dwLangCode, FALSE ) )
+    LPVOID fileData = ( LPVOID ) malloc ( fileDataSize );
+    if ( fileData == NULL )
     {
-      if ( !GetTranslationId(lpInfo, unInfoLen, GetUserDefaultLangID(), dwLangCode, TRUE ) )
-      {
-        if ( !GetTranslationId(lpInfo, unInfoLen, MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL ), dwLangCode, TRUE ) )
+        return false;
+    }
+
+    // get the version info
+    dwHandle = 0;
+    if ( GetFileVersionInfo( ( LPTSTR ) path, dwHandle, fileDataSize, fileData ) )
+    {
+        // catch default information
+        LPVOID lpInfo;
+        UINT unInfoLen;
+        VerQueryValue( fileData, "\\", &lpInfo, &unInfoLen );
+
+        // find best matching language and codepage
+        VerQueryValue( fileData, "\\VarFile\\Translation", &lpInfo, &unInfoLen );
+
+        DWORD dwLangCode = 0;
+        if ( !GetTranslationId(lpInfo, unInfoLen, GetUserDefaultLangID(), dwLangCode, FALSE ) )
         {
-          if ( !GetTranslationId(lpInfo, unInfoLen, MAKELANGID( LANG_ENGLISH, SUBLANG_NEUTRAL ), dwLangCode, TRUE ) )
-          {
-            // use the first one we can get
-            dwLangCode = *( ( DWORD* ) lpInfo );
-          }
+            if ( !GetTranslationId(lpInfo, unInfoLen, GetUserDefaultLangID(), dwLangCode, TRUE ) )
+            {
+                if ( !GetTranslationId(lpInfo, unInfoLen, MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL ), dwLangCode, TRUE ) )
+                {
+                    if ( !GetTranslationId(lpInfo, unInfoLen, MAKELANGID( LANG_ENGLISH, SUBLANG_NEUTRAL ), dwLangCode, TRUE ) )
+                    {
+                        // use the first one we can get
+                        dwLangCode = *( ( DWORD* ) lpInfo );
+                    }
+                }
+            }
         }
-      }
+
+        char key[64];
+        sprintf_s(
+            key,
+            64,
+            "\\StringFile\\%04X%04X\\FileVersion",
+            ( dwLangCode & 0x0000FFFF ),
+            ( dwLangCode & 0xFFFF0000 ) >> 16 );
+
+        if ( VerQueryValue( fileData, ( LPTSTR ) key, &lpInfo, &unInfoLen ) )
+        {
+            versionInfo = ( LPCTSTR ) lpInfo;
+        }
     }
 
-    char key[64];
-    sprintf_s(
-      key,
-      64,
-      "\\StringFile\\%04X%04X\\FileVersion",
-      ( dwLangCode & 0x0000FFFF ),
-      ( dwLangCode & 0xFFFF0000 ) >> 16 );
-
-    if ( VerQueryValue( fileData, ( LPTSTR ) key, &lpInfo, &unInfoLen ) )
-    {
-      versionInfo = ( LPCTSTR ) lpInfo;
-    }
-  }
-
-  free( fileData );
-  return true;
+    free( fileData );
+    return true;
 }

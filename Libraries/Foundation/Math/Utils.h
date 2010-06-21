@@ -156,15 +156,19 @@ namespace Math
   //
   inline u32 Log2(u32 v)
   {
-#if defined(_M_IX86)
+#ifdef _MSC_VER
+# ifdef _M_IX86
     _asm
     {
       bsr eax,v
     }
-#else
+# else
     u32 result = 0;
     _BitScanReverse((unsigned long*)&result, v);
     return result;
+# endif
+#else
+    NOC_COMPILE_ASSERT(false);
 #endif
   }
 

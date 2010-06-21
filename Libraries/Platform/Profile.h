@@ -20,31 +20,31 @@ typedef struct _iobuf FILE;
 
 namespace Platform
 {
-  class PLATFORM_API TraceFile
-  {
-  private:
-    FILE_HANDLE m_FileHandle;
-
-  public:
-    TraceFile()
-      : m_FileHandle (INVALID_FILE_HANDLE)
+    class PLATFORM_API TraceFile
     {
+    private:
+        FILE_HANDLE m_FileHandle;
 
-    }
+    public:
+        TraceFile()
+            : m_FileHandle (INVALID_FILE_HANDLE)
+        {
 
-    void Open(const char* file);
+        }
 
-    void Close();
+        void Open(const char* file);
 
-    void Write(const char* data, int size);
+        void Close();
 
-    static const char* GetFilePath();
-  };
+        void Write(const char* data, int size);
 
-  PLATFORM_API u64 TimerGetClock();
-  PLATFORM_API float CyclesToMillis(u64 cycles);
-  PLATFORM_API float TimeTaken(u64 start_time);
-  PLATFORM_API void ReportTime(const char* segment, u64 start_time, double& total_millis);
+        static const char* GetFilePath();
+    };
 
-  PLATFORM_API u64 GetTotalMemory();
+    PLATFORM_API u64 TimerGetClock();
+    PLATFORM_API float CyclesToMillis(u64 cycles);
+    PLATFORM_API float TimeTaken(u64 start_time);
+    PLATFORM_API void ReportTime(const char* segment, u64 start_time, double& total_millis);
+
+    PLATFORM_API u64 GetTotalMemory();
 }

@@ -13,61 +13,61 @@ Thread::Thread()
 
 Thread::~Thread()
 {
-  if (Valid())
-  {
-    Close();
-  }
+    if (Valid())
+    {
+        Close();
+    }
 }
 
 bool Thread::Create(Entry entry, void* obj, const char* name, int priority)
 {
-  NOC_ASSERT( false );
-  return true;
+    NOC_ASSERT( false );
+    return true;
 }
 
 Thread::Return Thread::Exit()
 {
-  NOC_ASSERT( false );
+    NOC_ASSERT( false );
 }
 
 void Thread::Close()
 {
-  m_Handle = 0x0;
+    m_Handle = 0x0;
 }
 
 Thread::Return Thread::Wait(u32 timeout)
 {
-  NOC_ASSERT( false );
+    NOC_ASSERT( false );
 }
 
 bool Thread::Running()
 {
-  NOC_ASSERT( false );
+    NOC_ASSERT( false );
 }
 
 bool Thread::Valid()
 {
-  return m_Handle != 0;
+    return m_Handle != 0;
 }
 
 ThreadLocalPointer::ThreadLocalPointer()
 {
-  int status = pthread_key_create(&m_Key, NULL); 
-  NOC_ASSERT( status == 0 && "Profile library could not create pthread_key"); 
-  SetPointer(NULL); 
+    int status = pthread_key_create(&m_Key, NULL); 
+    NOC_ASSERT( status == 0 && "Profile library could not create pthread_key"); 
+    SetPointer(NULL); 
 }
 
 ThreadLocalPointer::~ThreadLocalPointer()
 {
-  pthread_key_delete(m_Key); 
+    pthread_key_delete(m_Key); 
 }
 
 void* ThreadLocalPointer::GetPointer()
 {
-  return pthread_getspecific(m_Key); 
+    return pthread_getspecific(m_Key); 
 }
 
 void ThreadLocalPointer::SetPointer(void* pointer)
 {
-  pthread_setspecific(m_Key, pointer); 
+    pthread_setspecific(m_Key, pointer); 
 }

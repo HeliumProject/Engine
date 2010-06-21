@@ -7,27 +7,27 @@
 
 namespace Platform
 {
-  struct PLATFORM_API Pipe
-  {
-    void* m_Handle;
-    struct Overlapped
+    struct PLATFORM_API Pipe
     {
-      u32* Internal;
-      u32* InternalHigh;
-      union
-      {
-          struct
-          {
-              u32 Offset;
-              u32 OffsetHigh;
-          };
+        void* m_Handle;
+        struct Overlapped
+        {
+            u32* Internal;
+            u32* InternalHigh;
+            union
+            {
+                struct
+                {
+                    u32 Offset;
+                    u32 OffsetHigh;
+                };
 
-          void* Pointer;
-      };
-      void* hEvent;
-    } m_Overlapped;
+                void* Pointer;
+            };
+            void* hEvent;
+        } m_Overlapped;
 
-    Pipe(int);
-    ~Pipe();
-  };
+        Pipe(int);
+        ~Pipe();
+    };
 }

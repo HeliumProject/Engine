@@ -81,13 +81,13 @@ namespace Reflect
 //
 
 // enable verbose archive printing
-#define REFLECT_ARCHIVE_VERBOSE
+//#define REFLECT_ARCHIVE_VERBOSE
 
 // track allocted instances in memory
-#define REFLECT_OBJECT_TRACKING
+//#define REFLECT_OBJECT_TRACKING
 
 // verbose printing for tracked objects
-#define REFLECT_OBJECT_VERBOSE_TRACKING
+//#define REFLECT_OBJECT_VERBOSE_TRACKING
 
 // track the create/delete stacks of tracked objects
-#define REFLECT_OBJECT_STACK_TRACKING
+//#define REFLECT_OBJECT_STACK_TRACKING

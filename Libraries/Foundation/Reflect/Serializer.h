@@ -184,7 +184,7 @@ namespace Reflect
         }
 
         // connect to a field of an object
-        virtual void ConnectField(Nocturnal::HybridPtr<Element> instance, const Field* field, PointerSizedUInt offsetInField = 0)
+        virtual void ConnectField(Nocturnal::HybridPtr<Element> instance, const Field* field, uintptr offsetInField = 0)
         {
             ConnectData( Nocturnal::HybridPtr<void>( instance.Address() + field->m_Offset + offsetInField, instance.State())); 
 

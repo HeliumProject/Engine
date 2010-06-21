@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Enumeration.h"
 
 using namespace Reflect;

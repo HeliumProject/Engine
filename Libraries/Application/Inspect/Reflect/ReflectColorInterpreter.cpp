@@ -93,10 +93,10 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
         {
           SerializerPtr s = new U8Serializer ();
 
-          PointerSizedUInt fieldAddress = (PointerSizedUInt)(*itr) + field->m_Offset;
+          uintptr fieldAddress = (uintptr)(*itr) + field->m_Offset;
 
           Math::Color4* col = (Math::Color4*)fieldAddress;
-          PointerSizedInt offsetInField = (PointerSizedInt)( &col->a ) - fieldAddress;
+          intptr offsetInField = (intptr)( &col->a ) - fieldAddress;
           s->ConnectField( *itr, field, offsetInField );
 
           alphaSer.push_back( s );
@@ -128,19 +128,19 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
         {
           SerializerPtr s = new F32Serializer();
 
-          PointerSizedUInt fieldAddress = (PointerSizedUInt)(*itr) + field->m_Offset;
+          uintptr fieldAddress = (uintptr)(*itr) + field->m_Offset;
 
           if ( color3 )
           {
             Math::HDRColor3* col = (Math::HDRColor3*)fieldAddress;
-            PointerSizedInt offsetInField = (PointerSizedInt)( &col->s ) - fieldAddress;
+            intptr offsetInField = (intptr)( &col->s ) - fieldAddress;
             s->ConnectField( *itr, field, offsetInField );
           }
 
           if ( color4 )
           {
             Math::HDRColor4* col = (Math::HDRColor4*)fieldAddress;
-            PointerSizedInt offsetInField = (PointerSizedInt)( &col->s ) - fieldAddress;
+            intptr offsetInField = (intptr)( &col->s ) - fieldAddress;
             s->ConnectField( *itr, field, offsetInField );
           }
 

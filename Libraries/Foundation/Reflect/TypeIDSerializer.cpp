@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "TypeIDSerializer.h"
 #include "ArchiveBinary.h"
 #include "ArchiveXML.h"

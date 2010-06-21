@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Composite.h"
 #include "Element.h"
 #include "Registry.h"
@@ -24,7 +23,7 @@ Composite::~Composite()
 
 }
 
-Reflect::Field* Composite::AddField(Element& instance, const std::string& name, const PointerSizedUInt offset, u32 size, i32 serializerID, i32 flags)
+Reflect::Field* Composite::AddField(Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, i32 flags)
 {
     NOC_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end()); 
 
@@ -64,7 +63,7 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
     return fieldInfo;
 }
 
-Reflect::ElementField* Composite::AddElementField(Element& instance, const std::string& name, const PointerSizedUInt offset, u32 size, i32 serializerID, i32 typeID, i32 flags)
+Reflect::ElementField* Composite::AddElementField(Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, i32 typeID, i32 flags)
 {
     NOC_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end());
 
@@ -105,7 +104,7 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
     return fieldInfo;
 }
 
-Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, const std::string& name, const PointerSizedUInt offset, u32 size, i32 serializerID, const std::string& enumName, i32 flags)
+Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, const std::string& enumName, i32 flags)
 {
     NOC_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end());
 

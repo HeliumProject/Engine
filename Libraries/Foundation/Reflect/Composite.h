@@ -132,9 +132,9 @@ namespace Reflect
         // Add fields to the composite
         //
 
-        Reflect::Field* AddField ( Element& instance, const std::string& name, const PointerSizedUInt offset, u32 size, i32 serializerID, i32 flags = 0 );
-        Reflect::ElementField* AddElementField ( Element& instance, const std::string& name, const PointerSizedUInt offset, u32 size, i32 serializerID, i32 typeID, i32 flags = 0 );
-        Reflect::EnumerationField* AddEnumerationField ( Element& instance, const std::string& name, const PointerSizedUInt offset, u32 size, i32 serializerID, const std::string& enumName, i32 flags = 0 );
+        Reflect::Field* AddField ( Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, i32 flags = 0 );
+        Reflect::ElementField* AddElementField ( Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, i32 typeID, i32 flags = 0 );
+        Reflect::EnumerationField* AddEnumerationField ( Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, const std::string& enumName, i32 flags = 0 );
 
         //
         // Report information to stdout
@@ -248,7 +248,7 @@ namespace Reflect
         template <class FieldT>
         static inline u32 GetOffset( FieldT T::* field )
         {
-            return (u32) (PointerSizedUInt) &( ((T*)NULL)->*field); 
+            return (u32) (uintptr) &( ((T*)NULL)->*field); 
         }
 
         template <class FieldT>
@@ -270,7 +270,7 @@ namespace Reflect
                 m_Instance,
                 GetName(name),
                 GetOffset(field),
-                sizeof(PointerSizedUInt),
+                sizeof(uintptr),
                 Reflect::GetType<Reflect::PointerSerializer>(),
                 Reflect::GetType<ElementT>(),
                 flags );

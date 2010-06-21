@@ -13,7 +13,7 @@ AssetTypeInfo::AssetTypeInfo
  const std::string& name,
  const std::string& builder,
  const std::string& iconFilename,
- const DWORD typeColor
+ const u32 typeColor
  )
 : m_Name( name )
 , m_Builder( builder )
@@ -65,7 +65,7 @@ const std::string& Asset::GetAssetTypeIcon( const AssetType assetType )
   return assetTypeInfo.m_IconFilename;
 }
 
-DWORD Asset::GetAssetTypeColor( const AssetType assetType )
+u32 Asset::GetAssetTypeColor( const AssetType assetType )
 {
   const AssetTypeInfo& assetTypeInfo = GetAssetTypeInfo( assetType );
   return assetTypeInfo.m_TypeColor;

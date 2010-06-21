@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Structure.h"
 #include "Serializers.h"
 

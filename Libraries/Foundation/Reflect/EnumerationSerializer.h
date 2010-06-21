@@ -20,7 +20,7 @@ namespace Reflect
         virtual bool IsCompact () const  NOC_OVERRIDE;
 
         virtual void ConnectData(Nocturnal::HybridPtr<void> data) NOC_OVERRIDE;
-        virtual void ConnectField(Nocturnal::HybridPtr<Element> instance, const Field* field, PointerSizedUInt offsetInField = 0) NOC_OVERRIDE;
+        virtual void ConnectField(Nocturnal::HybridPtr<Element> instance, const Field* field, uintptr offsetInField = 0) NOC_OVERRIDE;
 
         virtual bool Set(const Serializer* src, u32 flags = 0) NOC_OVERRIDE;
         virtual bool Equals(const Serializer* s) const NOC_OVERRIDE;

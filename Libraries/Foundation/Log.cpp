@@ -16,7 +16,6 @@
 #include <sys/timeb.h>
 #include <time.h>
 
-#pragma TODO("Nest this in namespace Nocturnal -Geoff")
 using namespace Log;
 
 #define NTFS_PATH_MAX (0x7FFF)

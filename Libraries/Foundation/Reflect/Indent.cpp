@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Indent.h"
 
 using namespace Reflect;

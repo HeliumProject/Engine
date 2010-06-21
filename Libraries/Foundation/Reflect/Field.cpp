@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Field.h"
 #include "Registry.h"
 #include "Serializers.h"

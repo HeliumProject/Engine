@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "ArraySerializer.h"
 #include "CompressionUtilities.h" 
 #include "ArchiveBinary.h"

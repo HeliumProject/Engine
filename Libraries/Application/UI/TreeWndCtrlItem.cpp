@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wxTreeWndCtrlItem.cpp
+// Name:        TreeWndCtrlItem.cpp
 // Purpose:     Implementation for standard item
 // Author:      Insomniac Games
 // Created:     03/23/03
@@ -11,61 +11,61 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wxTreeWndCtrlItem.h"
-#include "wxTreeWndCtrl.h"
+#include "TreeWndCtrlItem.h"
+#include "TreeWndCtrl.h"
 
 using namespace Nocturnal;
 
 // ----------------------------------------------------------------------------
-// wxTreeWndCtrlItem
+// TreeWndCtrlItem
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTreeWndCtrlItem, wxPanel)
+IMPLEMENT_DYNAMIC_CLASS(TreeWndCtrlItem, wxPanel)
 
-BEGIN_EVENT_TABLE( wxTreeWndCtrlItem, wxPanel )
-EVT_PAINT( wxTreeWndCtrlItem::OnPaint )
-EVT_LEFT_DCLICK( wxTreeWndCtrlItem::OnDoubleClick )
+BEGIN_EVENT_TABLE( TreeWndCtrlItem, wxPanel )
+EVT_PAINT( TreeWndCtrlItem::OnPaint )
+EVT_LEFT_DCLICK( TreeWndCtrlItem::OnDoubleClick )
 END_EVENT_TABLE()
 
-wxTreeWndCtrlItem::wxTreeWndCtrlItem()
-                 : wxPanel(),
-                   m_bitmapTextWidth(-1),
-                   m_image(-1),
-                   m_stateImage(-1),
-                   m_spacing(WXTWC_DEFAULT_ITEM_SPACING),
-                   m_dirty(true),
-                   m_bitmapPoint(0, 0),
-                   m_textPoint(0, 0),
-                   m_item(wxTreeWndCtrlItemIdInvalid),
-                   m_text(""),
-                   m_treeWndCtrl(NULL)
+TreeWndCtrlItem::TreeWndCtrlItem()
+: wxPanel(),
+m_bitmapTextWidth(-1),
+m_image(-1),
+m_stateImage(-1),
+m_spacing(WXTWC_DEFAULT_ITEM_SPACING),
+m_dirty(true),
+m_bitmapPoint(0, 0),
+m_textPoint(0, 0),
+m_item(TreeWndCtrlItemIdInvalid),
+m_text(""),
+m_treeWndCtrl(NULL)
 {
 }
 
-wxTreeWndCtrlItem::wxTreeWndCtrlItem(wxTreeWndCtrl *parent,
-                                     const wxString& text,
-                                     int image,
-                                     int stateImage)
-                 : wxPanel(parent),
-                   m_bitmapTextWidth(-1),
-                   m_image(image),
-                   m_stateImage(stateImage),
-                   m_spacing(WXTWC_DEFAULT_ITEM_SPACING),
-                   m_dirty(true),
-                   m_bitmapPoint(0, 0),
-                   m_textPoint(0, 0),
-                   m_item(wxTreeWndCtrlItemIdInvalid),
-                   m_text(text),
-                   m_treeWndCtrl(parent)
+TreeWndCtrlItem::TreeWndCtrlItem(TreeWndCtrl *parent,
+                                 const wxString& text,
+                                 int image,
+                                 int stateImage)
+                                 : wxPanel(parent),
+                                 m_bitmapTextWidth(-1),
+                                 m_image(image),
+                                 m_stateImage(stateImage),
+                                 m_spacing(WXTWC_DEFAULT_ITEM_SPACING),
+                                 m_dirty(true),
+                                 m_bitmapPoint(0, 0),
+                                 m_textPoint(0, 0),
+                                 m_item(TreeWndCtrlItemIdInvalid),
+                                 m_text(text),
+                                 m_treeWndCtrl(parent)
 {
 }
 
-bool wxTreeWndCtrlItem::Layout()
+bool TreeWndCtrlItem::Layout()
 {
     if ( m_dirty )
     {
         Freeze();
-        
+
         m_bitmapPoint = wxPoint(0, 0);
         m_textPoint = wxPoint(0, 0);
 
@@ -77,16 +77,16 @@ bool wxTreeWndCtrlItem::Layout()
         wxBitmap bitmap = GetBitmap();
         if ( bitmap.Ok() )
         {
-          bitmapWidth = bitmap.GetWidth();
-          bitmapHeight = bitmap.GetHeight();
+            bitmapWidth = bitmap.GetWidth();
+            bitmapHeight = bitmap.GetHeight();
         }
 
         if ( bitmapWidth )
             width = bitmapWidth + m_spacing;
-        
+
         wxCoord textWidth = 0;
         wxCoord textHeight = 0;
-            
+
         wxClientDC dc(this);
         wxFont oldFont = dc.GetFont();
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
@@ -106,38 +106,38 @@ bool wxTreeWndCtrlItem::Layout()
             height = textHeight;
             m_bitmapPoint.y = (textHeight - bitmapHeight) / 2;
         }
-        
+
         SetSize(width, height);
         m_bitmapTextWidth = width;
 
         Thaw();
         m_dirty = false;
     }
-    
+
     return __super::Layout();
 }
 
-void wxTreeWndCtrlItem::OnPaint(wxPaintEvent& e)
+void TreeWndCtrlItem::OnPaint(wxPaintEvent& e)
 {
     wxPaintDC dc(this);
-    
+
     wxBitmap bitmap = GetBitmap();
     if ( bitmap.Ok() )
     {
-      dc.DrawBitmap(bitmap, m_bitmapPoint.x, m_bitmapPoint.y, true);
+        dc.DrawBitmap(bitmap, m_bitmapPoint.x, m_bitmapPoint.y, true);
     }
 
     wxFont oldFont = dc.GetFont();
     dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
     dc.DrawText(m_text, m_textPoint.x, m_textPoint.y);
     dc.SetFont(oldFont);
-    
+
     e.Skip();
 }
 
-void wxTreeWndCtrlItem::OnDoubleClick(wxMouseEvent& e)
+void TreeWndCtrlItem::OnDoubleClick(wxMouseEvent& e)
 {
-    if ( m_item == wxTreeWndCtrlItemIdInvalid )
+    if ( m_item == TreeWndCtrlItemIdInvalid )
         return;
 
     if ( ( m_bitmapTextWidth >= 0 ) && ( e.GetPosition().x > m_bitmapTextWidth ) )
@@ -146,45 +146,45 @@ void wxTreeWndCtrlItem::OnDoubleClick(wxMouseEvent& e)
     m_treeWndCtrl->Toggle(m_item);
 }
 
-void wxTreeWndCtrlItem::SetSpacing(int spacing)
+void TreeWndCtrlItem::SetSpacing(int spacing)
 {
     m_spacing = spacing;
     m_dirty = true;
     Layout();
 }
 
-void wxTreeWndCtrlItem::SetItem(const wxTreeItemId& item)
+void TreeWndCtrlItem::SetItem(const wxTreeItemId& item)
 {
     m_item = item;
     m_dirty = true;
     Layout();
 }
 
-void wxTreeWndCtrlItem::SetText(const wxString& text)
+void TreeWndCtrlItem::SetText(const wxString& text)
 {
     m_text = text;
     m_dirty = true;
     Layout();
 }    
 
-void wxTreeWndCtrlItem::SetImage(int image)
+void TreeWndCtrlItem::SetImage(int image)
 {
     m_image = image;
     m_dirty = true;
     Layout();
 }
 
-void wxTreeWndCtrlItem::SetStateImage(int stateImage)
+void TreeWndCtrlItem::SetStateImage(int stateImage)
 {
     m_stateImage = stateImage;
     m_dirty = true;
     Layout();
 }
 
-wxBitmap wxTreeWndCtrlItem::GetBitmap()
+wxBitmap TreeWndCtrlItem::GetBitmap()
 {
     wxBitmap bitmap;
-    if ( m_item == wxTreeWndCtrlItemIdInvalid )
+    if ( m_item == TreeWndCtrlItemIdInvalid )
         return bitmap;
 
     int image = -1;
@@ -199,11 +199,11 @@ wxBitmap wxTreeWndCtrlItem::GetBitmap()
         image = m_image;
         imageList = m_treeWndCtrl->GetImageList();
     }
-    
+
     if ( imageList && ( image >= 0 ) )
     {
         bitmap = imageList->GetBitmap(image);
     }
-    
+
     return bitmap;
 }

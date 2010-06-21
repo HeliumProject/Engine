@@ -1,4 +1,3 @@
-#include "stdafx.h" 
 #include "FileStream.h" 
 #include "Exceptions.h"
 #include "Foundation/Profile.h" 

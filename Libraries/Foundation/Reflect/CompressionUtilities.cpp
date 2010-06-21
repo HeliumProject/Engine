@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "CompressionUtilities.h" 
 #include "Exceptions.h" 
 

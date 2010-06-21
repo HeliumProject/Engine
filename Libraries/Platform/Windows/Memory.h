@@ -12,10 +12,10 @@ namespace Profile
     class PLATFORM_API MemoryStatus
     {
     public:
-        PointerSizedUInt m_TotalReserve;
-        PointerSizedUInt m_TotalCommit;
-        PointerSizedUInt m_TotalFree;
-        PointerSizedUInt m_LargestFree;
+        uintptr m_TotalReserve;
+        uintptr m_TotalCommit;
+        uintptr m_TotalFree;
+        uintptr m_LargestFree;
 
         MemoryStatus()
             : m_TotalReserve (0)

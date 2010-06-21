@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "PointerSerializer.h"
 
 using namespace Reflect;

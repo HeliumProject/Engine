@@ -332,7 +332,7 @@ bool BufferSerializer::WriteToStream( std::ostream& strm ) const
         }
     }
 
-    u32 test= strm.tellp();
+    u32 test = (u32)strm.tellp();
 
     // write the number fixups
     u32 num_fixups_32 = (u32)fixup_32.size();
@@ -353,7 +353,7 @@ bool BufferSerializer::WriteToStream( std::ostream& strm ) const
             M_BuffU32::const_iterator target_chunk_offset = buffer_to_offset_map.find( (*itr).target_chunk_buffer );
             NOC_ASSERT( target_chunk_offset != buffer_to_offset_map.end() );
 
-            u32 curr_offset   = strm.tellp();
+            u32 curr_offset   = (u32)strm.tellp();
             u32 target_offset = ( (*target_chunk_offset).second + (*itr).target_offset );
             u32 source_offset = ( (*itr).source_chunk_offset + (*itr).source_offset );
 
@@ -385,7 +385,7 @@ bool BufferSerializer::WriteToStream( std::ostream& strm ) const
             M_BuffU32::const_iterator target_chunk_offset = buffer_to_offset_map.find( (*itr).target_chunk_buffer );
             NOC_ASSERT( target_chunk_offset != buffer_to_offset_map.end() );
 
-            u32 curr_offset   = strm.tellp();
+            u32 curr_offset   = (u32)strm.tellp();
             u32 target_offset = ( (*target_chunk_offset).second + (*itr).target_offset );
             u32 source_offset = ( (*itr).source_chunk_offset + (*itr).source_offset );
 
@@ -435,7 +435,7 @@ bool BufferSerializer::ReadFromStream( std::istream& strm )
     ChunkFileHeader file_header;
     strm.read( (char*)&file_header, sizeof( ChunkFileHeader ) );
 
-    u32 test1 = strm.tellg();
+    u32 test1 = (u32)strm.tellg();
 
     bool swizzle = false;
 
@@ -511,7 +511,7 @@ bool BufferSerializer::ReadFromStream( std::istream& strm )
         }
     }
 
-    u32 test = strm.tellg();
+    u32 test = (u32)strm.tellg();
 
     // read the fixups
     u32 num_fixups;

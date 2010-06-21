@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Type.h"
 #include "Registry.h"
 #include "Serializer.h"

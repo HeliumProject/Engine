@@ -1,4 +1,3 @@
-#include "stdafx.h" 
 #include "Stream.h" 
 
 #include "Foundation/Profile.h" 

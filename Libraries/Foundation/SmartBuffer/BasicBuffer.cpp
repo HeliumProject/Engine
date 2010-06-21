@@ -270,7 +270,7 @@ u32 BasicBuffer::AddFile( const char* filename )
     fclose(pfile);
 
     m_Size += (u32)file_read;
-    return m_Size - file_read;
+    return m_Size - (u32)file_read;
 }
 
 u32 BasicBuffer::AddI8( i8 val, const char* dbgStr, ... )

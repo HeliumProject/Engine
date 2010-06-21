@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "PathSerializer.h"
 #include "ArchiveBinary.h"
 #include "ArchiveXML.h"

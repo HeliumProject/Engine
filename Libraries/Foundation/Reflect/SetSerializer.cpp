@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "SetSerializer.h"
 
 using namespace Reflect;

@@ -1,8 +1,9 @@
-#include "stdafx.h"
 #include "Object.h"
 #include "Registry.h"
 #include "Class.h"
 #include "Serializer.h"
+
+#include "Platform/Atomic.h"
 
 using namespace Reflect;
 
@@ -78,11 +79,11 @@ void Object::IncrRefCount() const
 #ifdef REFLECT_OBJECT_TRACKING
     if (Reflect::IsInitialized() && m_RefCount != 0)
     {
-        Reflect::Registry::GetInstance()->TrackCheck((PointerSizedUInt)this);
+        Reflect::Registry::GetInstance()->TrackCheck((uintptr)this);
     }
 #endif
 
-    InterlockedIncrement( (LONG*) &m_RefCount); 
+    Platform::AtomicIncrement( &m_RefCount );
 }
 
 void Object::DecrRefCount() const
@@ -90,13 +91,13 @@ void Object::DecrRefCount() const
 #ifdef REFLECT_OBJECT_TRACKING
     if (Reflect::IsInitialized())
     {
-        Reflect::Registry::GetInstance()->TrackCheck((PointerSizedUInt)this);
+        Reflect::Registry::GetInstance()->TrackCheck((uintptr)this);
     }
 #endif
 
-    LONG result = InterlockedDecrement( (LONG*) &m_RefCount); 
+    Platform::AtomicDecrement( &m_RefCount ); 
 
-    if (result == 0)
+    if (m_RefCount == 0)
     {
         delete this; 
     }

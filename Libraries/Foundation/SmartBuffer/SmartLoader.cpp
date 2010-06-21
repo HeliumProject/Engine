@@ -109,7 +109,7 @@ bool Nocturnal::ParseChunkedData( ChunkFile& chunk_file, void* data, u32 data_si
 
             // make sure it is in a valid range 
             NOC_ASSERT( *pointer <= data_to_fixup_size );
-            *pointer += (u32)(PointerSizedUInt)(data_to_fixup);
+            *pointer += (u32)(uintptr)(data_to_fixup);
         }
     }
 

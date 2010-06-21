@@ -42,9 +42,9 @@ bool Panel::Process(const std::string& key, const std::string& value)
 wxWindow* Panel::GetContextWindow()
 {
   wxTreeItemId item = m_ItemData.GetId();
-  if ( item != Nocturnal::wxTreeWndCtrlItemIdInvalid )
+  if ( item != Nocturnal::TreeWndCtrlItemIdInvalid )
   {
-    Nocturnal::wxTreeWndCtrl* treeWndCtrl = (Nocturnal::wxTreeWndCtrl*) m_Window;
+    Nocturnal::TreeWndCtrl* treeWndCtrl = (Nocturnal::TreeWndCtrl*) m_Window;
     wxWindow* window = treeWndCtrl->GetItemWindow( item );
     if ( window )
     {
@@ -58,9 +58,9 @@ wxWindow* Panel::GetContextWindow()
 const wxWindow* Panel::GetContextWindow() const
 {
   wxTreeItemId item = m_ItemData.GetId();
-  if ( item != Nocturnal::wxTreeWndCtrlItemIdInvalid )
+  if ( item != Nocturnal::TreeWndCtrlItemIdInvalid )
   {
-    Nocturnal::wxTreeWndCtrl* treeWndCtrl = (Nocturnal::wxTreeWndCtrl*) m_Window;
+    Nocturnal::TreeWndCtrl* treeWndCtrl = (Nocturnal::TreeWndCtrl*) m_Window;
     wxWindow* window = treeWndCtrl->GetItemWindow( item );
     if ( window )
     {
@@ -116,11 +116,11 @@ void Panel::Realize(Container* parent)
 void Panel::UnRealize()
 {
   wxTreeItemId item = m_ItemData.GetId();
-  if ( item != Nocturnal::wxTreeWndCtrlItemIdInvalid )
+  if ( item != Nocturnal::TreeWndCtrlItemIdInvalid )
   {
-    Nocturnal::wxTreeWndCtrl* treeWndCtrl = (Nocturnal::wxTreeWndCtrl*) m_Window;
+    Nocturnal::TreeWndCtrl* treeWndCtrl = (Nocturnal::TreeWndCtrl*) m_Window;
     treeWndCtrl->Delete( item );
-    m_ItemData.SetId( Nocturnal::wxTreeWndCtrlItemIdInvalid );
+    m_ItemData.SetId( Nocturnal::TreeWndCtrlItemIdInvalid );
   }
 
   if ( !m_OwnWindow )
@@ -153,15 +153,15 @@ void Panel::RefreshControls()
   if ( !m_RefreshControls )
     return;
     
-  Nocturnal::wxTreeWndCtrl* treeWndCtrl = NULL;
+  Nocturnal::TreeWndCtrl* treeWndCtrl = NULL;
   if ( Reflect::ObjectCast<Panel>( m_Parent ) || Reflect::ObjectCast<Canvas>( m_Parent ) )
   {
-    treeWndCtrl = (Nocturnal::wxTreeWndCtrl*) m_Parent->GetWindow();
+    treeWndCtrl = (Nocturnal::TreeWndCtrl*) m_Parent->GetWindow();
     m_OwnWindow = false;
   }
   else
   {
-    treeWndCtrl = new Nocturnal::wxTreeWndCtrl( m_Parent->GetWindow() );
+    treeWndCtrl = new Nocturnal::TreeWndCtrl( m_Parent->GetWindow() );
     treeWndCtrl->AddRoot( "Panel Root (hidden)" );
     treeWndCtrl->SetHideRoot( true );
     treeWndCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
@@ -178,7 +178,7 @@ void Panel::RefreshControls()
   wxTreeItemId item = m_ItemData.GetId();
   if ( m_ShowTreeNode )
   {
-    if ( item == Nocturnal::wxTreeWndCtrlItemIdInvalid )
+    if ( item == Nocturnal::TreeWndCtrlItemIdInvalid )
     {
       treeWndCtrl->AppendItem( GetParentTreeNode( m_Parent ), m_Text, collapsedIndex, expandedIndex, &m_ItemData );
       item = m_ItemData.GetId();
@@ -186,7 +186,7 @@ void Panel::RefreshControls()
   }
   else
   {
-    NOC_ASSERT( item == Nocturnal::wxTreeWndCtrlItemIdInvalid );
+    NOC_ASSERT( item == Nocturnal::TreeWndCtrlItemIdInvalid );
     item = GetParentTreeNode( m_Parent );
   }
 
@@ -337,9 +337,9 @@ void Panel::SetItemExpanded(bool expanded)
   if ( m_Canvas )
   {
     wxTreeItemId item = m_ItemData.GetId();
-    if ( item != Nocturnal::wxTreeWndCtrlItemIdInvalid )
+    if ( item != Nocturnal::TreeWndCtrlItemIdInvalid )
     {
-      Nocturnal::wxTreeWndCtrl* treeWndCtrl = (Nocturnal::wxTreeWndCtrl*) m_Window;
+      Nocturnal::TreeWndCtrl* treeWndCtrl = (Nocturnal::TreeWndCtrl*) m_Window;
       if ( treeWndCtrl->IsExpanded( item ) != expanded )
       {
         bool ignoreToggle = m_ItemData.GetIgnoreToggle();
@@ -367,14 +367,14 @@ wxTreeItemId Panel::GetParentTreeNode(Container* parent)
     if ( parentPanel )
     {
       wxTreeItemId parentItem = parentPanel->m_ItemData.GetId();
-      if ( parentItem != Nocturnal::wxTreeWndCtrlItemIdInvalid )
+      if ( parentItem != Nocturnal::TreeWndCtrlItemIdInvalid )
       {
         return parentItem;
       }
     }
   }
 
-  Nocturnal::wxTreeWndCtrl* treeWndCtrl = (Nocturnal::wxTreeWndCtrl*) m_Window;
+  Nocturnal::TreeWndCtrl* treeWndCtrl = (Nocturnal::TreeWndCtrl*) m_Window;
   return treeWndCtrl->GetRootItem();
 }
 
@@ -464,9 +464,9 @@ void Panel::Read()
     if ( m_Canvas )
     {
       wxTreeItemId item = m_ItemData.GetId();
-      if ( item != Nocturnal::wxTreeWndCtrlItemIdInvalid )
+      if ( item != Nocturnal::TreeWndCtrlItemIdInvalid )
       {
-        Nocturnal::wxTreeWndCtrl* treeWndCtrl = (Nocturnal::wxTreeWndCtrl*) m_Window;
+        Nocturnal::TreeWndCtrl* treeWndCtrl = (Nocturnal::TreeWndCtrl*) m_Window;
         treeWndCtrl->SetItemText( item, m_Text );
       }
     }
@@ -487,9 +487,9 @@ void Panel::SetText(const std::string& text)
   if ( m_Canvas )
   {
     wxTreeItemId item = m_ItemData.GetId();
-    if ( item != Nocturnal::wxTreeWndCtrlItemIdInvalid )
+    if ( item != Nocturnal::TreeWndCtrlItemIdInvalid )
     {
-      Nocturnal::wxTreeWndCtrl* treeWndCtrl = (Nocturnal::wxTreeWndCtrl*) m_Window;
+      Nocturnal::TreeWndCtrl* treeWndCtrl = (Nocturnal::TreeWndCtrl*) m_Window;
       treeWndCtrl->SetItemText( item, m_Text );
     }
   }

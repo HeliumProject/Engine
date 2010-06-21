@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Class.h"
 #include "Element.h"
 #include "Registry.h"

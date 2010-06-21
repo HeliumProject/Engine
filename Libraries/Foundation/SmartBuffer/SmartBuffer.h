@@ -132,7 +132,7 @@ namespace Nocturnal
         SmartBuffer::Location GetAddressLocation( void* address )
         {
             NOC_ASSERT( (u8*)address >= m_Data && (u8*)address < ( m_Data + m_Size ) );
-            return Location( (u32)(PointerSizedUInt)((u8*)address - m_Data), this );
+            return Location( (u32)(uintptr)((u8*)address - m_Data), this );
         }
 
         // Outgoing fixup access

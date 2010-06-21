@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include "Cache.h"
 #include "Serializer.h"
 #include "Registry.h"

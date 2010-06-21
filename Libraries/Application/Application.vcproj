@@ -1101,11 +1101,55 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\treectrl.cpp"
+				RelativePath=".\UI\TreeCtrl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\UI\treectrl.h"
+				RelativePath=".\UI\TreeCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeWndCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeWndCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeWndCtrlApi.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeWndCtrlCollapsed.xpm"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeWndCtrlExpanded.xpm"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeWndCtrlItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeWndCtrlItem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeWndCtrlNode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeWndCtrlNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeWndCtrlSpacer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TreeWndCtrlSpacer.h"
 				>
 			</File>
 			<File
@@ -1134,42 +1178,6 @@
 			</File>
 			<File
 				RelativePath=".\UI\WorkerThreadDialog.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\wxTreeWndCtrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\wxTreeWndCtrl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\wxTreeWndCtrlApi.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\wxTreeWndCtrlItem.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\wxTreeWndCtrlItem.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\wxTreeWndCtrlNode.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\wxTreeWndCtrlNode.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\wxTreeWndCtrlSpacer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\wxTreeWndCtrlSpacer.h"
 				>
 			</File>
 			<Filter

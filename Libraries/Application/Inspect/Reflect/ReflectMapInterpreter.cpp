@@ -42,7 +42,7 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
   for ( ; itr != end; ++itr )
   {
     Reflect::SerializerPtr ser = Reflect::AssertCast< Reflect::Serializer >( Reflect::Registry::GetInstance()->CreateInstance( field->m_SerializerID ) );
-    PointerSizedUInt fieldAddress = ( PointerSizedUInt )( *itr ) + field->m_Offset;
+    uintptr fieldAddress = ( uintptr )( *itr ) + field->m_Offset;
 
     ser->ConnectData( ( void* )fieldAddress );
 

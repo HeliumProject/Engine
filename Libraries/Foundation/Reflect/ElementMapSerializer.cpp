@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "ElementMapSerializer.h"
 
 using namespace Reflect;

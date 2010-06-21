@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "EnumerationSerializer.h"
 #include "ArchiveBinary.h"
 #include "ArchiveXML.h"
@@ -38,7 +37,7 @@ void EnumerationSerializer::ConnectData(Nocturnal::HybridPtr<void> data)
     }
 }
 
-void EnumerationSerializer::ConnectField(Nocturnal::HybridPtr<Element> instance, const Field* field, PointerSizedUInt offsetInField)
+void EnumerationSerializer::ConnectField(Nocturnal::HybridPtr<Element> instance, const Field* field, uintptr offsetInField)
 {
     __super::ConnectField(instance, field, offsetInField);
 

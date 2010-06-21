@@ -333,7 +333,7 @@ std::string Path::Signature()
 
 void Path::ReplaceExtension( const std::string& newExtension )
 {
-    int offset = m_Path.rfind( '.' );
+    int offset = (int)m_Path.rfind( '.' );
     if ( offset >= 0 )
     {
         m_Path.replace( offset + 1, newExtension.length(), newExtension );

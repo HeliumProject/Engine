@@ -4,7 +4,7 @@
 
 #include "Application/API.h"
 #include "Application/Inspect/Widgets/Container.h"
-#include "Application/UI/wxTreeWndCtrl.h"
+#include "Application/UI/TreeWndCtrl.h"
 
 namespace Inspect
 {
@@ -16,7 +16,7 @@ namespace Inspect
   // Defines the base wx-derived window used by the canvas
   //
 
-  class APPLICATION_API CanvasWindow : public Nocturnal::wxTreeWndCtrl
+  class APPLICATION_API CanvasWindow : public Nocturnal::TreeWndCtrl
   {
   public:
     Canvas* m_Canvas;
@@ -29,9 +29,9 @@ namespace Inspect
                  const wxString& name = "CanvasWindow",
                  int treeStyle = ( wxTR_ALL_LINES | wxTR_HIDE_ROOT ),
                  unsigned int columnSize = WXTWC_DEFAULT_COLUMN_SIZE,
-                 wxBitmap expandedBitmap = Nocturnal::wxTreeWndCtrlDefaultExpand,
-                 wxBitmap collapsedBitmap = Nocturnal::wxTreeWndCtrlDefaultCollapse,
-                 wxPen pen = Nocturnal::wxTreeWndCtrlDefaultPen,
+                 wxBitmap expandedBitmap = Nocturnal::TreeWndCtrlDefaultExpand,
+                 wxBitmap collapsedBitmap = Nocturnal::TreeWndCtrlDefaultCollapse,
+                 wxPen pen = Nocturnal::TreeWndCtrlDefaultPen,
                  unsigned int clickTolerance = WXTWC_DEFAULT_CLICK_TOLERANCE);
                  
     Canvas* GetCanvas();

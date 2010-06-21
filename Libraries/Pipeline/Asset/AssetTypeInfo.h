@@ -17,13 +17,13 @@ namespace Asset
     std::string               m_Builder;
 
     std::string               m_IconFilename;
-    DWORD                     m_TypeColor;
+    u32                       m_TypeColor;
 
     AssetTypeInfo (
       const std::string& name = std::string( "" ),
       const std::string& builder = std::string( "" ),
       const std::string& iconFilename = std::string( "null_16.png" ),
-      const DWORD typeColor = 0 );
+      const u32 typeColor = 0 );
 
     bool IsValid() const { return ( !m_Name.empty() || m_Name.compare( "Null" ) == 0 ); }
   };
@@ -39,5 +39,5 @@ namespace Asset
   PIPELINE_API const std::string& GetAssetTypeName( const AssetType assetType );
   PIPELINE_API const std::string& GetAssetTypeBuilder( const AssetType assetType );
   PIPELINE_API const std::string& GetAssetTypeIcon( const AssetType assetType );
-  PIPELINE_API DWORD GetAssetTypeColor( const AssetType assetType );
+  PIPELINE_API u32 GetAssetTypeColor( const AssetType assetType );
 }

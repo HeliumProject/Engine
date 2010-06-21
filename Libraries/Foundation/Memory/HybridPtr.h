@@ -69,7 +69,7 @@ namespace Nocturnal
 
         }
 
-        HybridPtr(PointerSizedUInt address, PointerState state)
+        HybridPtr(uintptr address, PointerState state)
             : m_State (state)
         {
             switch (m_State)
@@ -192,9 +192,9 @@ namespace Nocturnal
             return m_Constant;
         }
 
-        PointerSizedUInt Address()
+        uintptr Address()
         {
-            return (PointerSizedUInt)m_Mutable;
+            return (uintptr)m_Mutable;
         }
 
         PointerState State()

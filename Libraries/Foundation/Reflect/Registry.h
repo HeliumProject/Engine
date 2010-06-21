@@ -8,14 +8,95 @@
 #include "Foundation/File/Path.h"
 
 #include "API.h"
-#include "Tracker.h"
-
 #include "Type.h"
 #include "Class.h"
 #include "Enumeration.h"
 
 namespace Reflect
 {
+#ifdef REFLECT_OBJECT_TRACKING
+
+    //
+    // Stack record captures stack addresses
+    //
+
+    class StackRecord : public Nocturnal::RefCountBase<StackRecord>
+    {
+    public:
+        std::vector<uintptr>    m_Stack;
+        std::string             m_String;
+        bool                    m_Converted;
+
+        StackRecord()
+            : m_Converted ( false )
+        {
+            m_Stack.reserve( 30 );
+        }
+
+        const std::string& Convert();  
+    };
+
+    typedef Nocturnal::SmartPtr< StackRecord > StackRecordPtr;
+    typedef std::vector< StackRecordPtr > V_StackRecordPtr;
+    typedef std::map< std::vector<uintptr>, StackRecordPtr > M_StackRecord;
+
+
+    //
+    // Creation record stores object information
+    //
+
+    class CreationRecord
+    {
+    public:
+        uintptr    m_Address;
+        std::string         m_ShortName;
+        int                 m_Type;
+
+        StackRecordPtr m_CreateStack;
+        StackRecordPtr m_DeleteStack;
+
+        CreationRecord();
+
+        CreationRecord(uintptr ptr);
+
+        void Dump(FILE* f);
+    };
+
+    typedef std::map<uintptr, CreationRecord> M_CreationRecord;
+
+
+    //
+    // Tracker object
+    //
+
+    class Tracker
+    {
+    public:
+        M_CreationRecord m_CreatedObjects;
+        M_CreationRecord m_DeletedObjects;
+        M_StackRecord    m_Stacks;
+
+        Tracker();
+        virtual ~Tracker();
+
+        // make a stack record
+        StackRecordPtr GetStack();
+
+        // save debug info during creation
+        void Create(uintptr ptr);
+
+        // callback on object delete
+        void Delete(uintptr ptr);
+
+        // validate a pointer
+        void Check(uintptr ptr);
+
+        // dump all debug info
+        void Dump();
+    };
+
+#endif
+
     // Callbacks for external APIs
     typedef void (*CreatedFunc)(Object* object);
     typedef void (*DestroyedFunc)(Object* object);
@@ -128,9 +209,9 @@ namespace Reflect
         void SetDestroyedCallback(DestroyedFunc destroyed);
 
 #ifdef REFLECT_OBJECT_TRACKING
-        void TrackCreate(PointerSizedUInt ptr);
-        void TrackDelete(PointerSizedUInt ptr);
-        void TrackCheck(PointerSizedUInt ptr);
+        void TrackCreate(uintptr ptr);
+        void TrackDelete(uintptr ptr);
+        void TrackCheck(uintptr ptr);
         void TrackDump();
 #endif
     };

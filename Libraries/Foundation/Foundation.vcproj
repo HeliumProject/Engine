@@ -797,10 +797,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Reflect\Base.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Reflect\Base.h"
 				>
 			</File>
@@ -1001,14 +997,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Reflect\stdafx.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Reflect\stdafx.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Reflect\Stream.cpp"
 				>
 			</File>
@@ -1030,14 +1018,6 @@
 			</File>
 			<File
 				RelativePath=".\Reflect\Structure.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Reflect\Tracker.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Reflect\Tracker.h"
 				>
 			</File>
 			<File

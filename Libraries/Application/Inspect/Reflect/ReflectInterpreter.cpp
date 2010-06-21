@@ -241,7 +241,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
         std::vector<Reflect::Element*>::const_iterator elementEnd = instances.end();
         for ( ; elementItr != elementEnd; ++elementItr )
         {
-          PointerSizedUInt fieldAddress = (PointerSizedUInt)(*elementItr) + itr->second->m_Offset;
+          uintptr fieldAddress = (uintptr)(*elementItr) + itr->second->m_Offset;
 
           Element* element = *((ElementPtr*)(fieldAddress));
 
@@ -296,7 +296,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
 
         if ( instances.size() == 1 )
         {
-          PointerSizedUInt fieldAddress = (PointerSizedUInt)(instances.front()) + itr->second->m_Offset;
+          uintptr fieldAddress = (uintptr)(instances.front()) + itr->second->m_Offset;
 
           V_Element* elements = (V_Element*)fieldAddress;
 

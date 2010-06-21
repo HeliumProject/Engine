@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Element.h"
 #include "Registry.h"
 #include "Serializers.h"
@@ -1077,7 +1076,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
 void ArchiveBinary::SerializeComposite(const Composite* composite)
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug(" Serializing %s (%d fields)\n", m_ShortName.c_str(), m_FieldIDToInfo.size());
+    Log::Debug(" Serializing %s (%d fields)\n", composite->m_ShortName.c_str(), composite->m_FieldIDToInfo.size());
 #endif
 
     i32 string_index = m_Strings.AssignIndex(composite->m_ShortName);
@@ -1110,7 +1109,7 @@ bool ArchiveBinary::DeserializeComposite(Composite* composite)
     m_Stream->Read(&field_count); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug(" Deserializing %s (%d fields)\n", m_ShortName.c_str(), field_count);
+    Log::Debug(" Deserializing %s (%d fields)\n", composite->m_ShortName.c_str(), field_count);
 #endif
 
     for ( i32 i=0; i<field_count; ++i )
@@ -1146,10 +1145,10 @@ void ArchiveBinary::SerializeField(const Field* field)
     m_Stream->Write(&string_index); 
 
     // field type id short name
-    const Class* type = Registry::GetInstance()->GetClass(field->m_SerializerID);
-    if (type != NULL)
+    const Class* c = Registry::GetInstance()->GetClass(field->m_SerializerID);
+    if (c != NULL)
     {
-        string_index = m_Strings.AssignIndex(type->m_ShortName);
+        string_index = m_Strings.AssignIndex(c->m_ShortName);
     }
     else
     {
@@ -1158,7 +1157,7 @@ void ArchiveBinary::SerializeField(const Field* field)
     m_Stream->Write(&string_index); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug("  Serializing %s (short name %s)\n", m_Name.c_str(), type->m_ShortName.c_str());
+    Log::Debug("  Serializing %s (short name %s)\n", c->m_FullName.c_str(), c->m_ShortName.c_str());
 #endif
 }
 
@@ -1200,7 +1199,7 @@ bool ArchiveBinary::DeserializeField(Field* field)
         }
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-        Log::Debug("  Deserializing %s (short name %s)\n", m_Name.c_str(), str.c_str());
+        Log::Debug("  Deserializing %s (short name %s)\n", c->m_FullName.c_str(), str.c_str());
 #endif
     }
 

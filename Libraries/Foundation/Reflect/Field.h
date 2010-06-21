@@ -56,7 +56,7 @@ namespace Reflect
         std::string         m_Name;         // name of this field
         std::string         m_UIName;       // friendly name
         u32                 m_Size;         // the size of this field
-        PointerSizedUInt    m_Offset;       // the offset to the field
+        uintptr    m_Offset;       // the offset to the field
         u32                 m_Flags;        // flags for special behavior
         i32                 m_FieldID;      // the unique id of this field
         i32                 m_SerializerID; // type id of the serializer to use

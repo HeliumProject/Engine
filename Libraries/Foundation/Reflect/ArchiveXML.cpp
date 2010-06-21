@@ -1,8 +1,6 @@
-#include "stdafx.h"
 #include "Element.h"
 #include "Registry.h"
 #include "Serializers.h"
-#include "ArchiveBinary.h"
 #include "ArchiveXML.h"
 
 #include "Foundation/Log.h"
@@ -65,7 +63,7 @@ void ArchiveXML::Read()
     {
         m_Progress = (int)(((float)(step++ * buffer_size) / (float)size) * 100.0f);
 
-        LPSTR pszBuffer = (LPSTR)GetBuffer(buffer_size); // REQUEST
+        char* pszBuffer = (char*)GetBuffer(buffer_size); // REQUEST
         NOC_ASSERT(pszBuffer != NULL);
 
         m_Stream->ReadBuffer(pszBuffer, buffer_size);
@@ -73,7 +71,7 @@ void ArchiveXML::Read()
         int last_read = static_cast<int>(m_Stream->BytesRead());
         if (!ParseBuffer( last_read, last_read == 0 ))
         {
-            throw Reflect::DataFormatException ("XML parsing failure, buffer contents:\n%s", (LPCSTR)pszBuffer);
+            throw Reflect::DataFormatException ("XML parsing failure, buffer contents:\n%s", (const char*)pszBuffer);
         }
     }
 
@@ -476,27 +474,14 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
                 // this is our new element
                 ElementPtr element = NULL;
 
-                if ( GetVersion() < ArchiveBinary::FIRST_VERSION_WITH_POINTER_SERIALIZER && newState->m_Field->m_SerializerID == Reflect::GetType<PointerSerializer>() )
+                // create the object
+                m_Cache.Create(newState->m_Field->m_SerializerID, element);
+
+                // if we are a serializer
+                if (element->HasType(Reflect::GetType<Serializer>()))
                 {
-                    m_Cache.Create(elementType, element);
-
-                    // build the address of the pointer
-                    ElementPtr* address = (ElementPtr*)((PointerSizedUInt)parentElement.Ptr() + newState->m_Field->m_Offset);
-
-                    // set the pointer's value to be the new object
-                    *address = element;
-                }
-                else
-                {
-                    // create the object
-                    m_Cache.Create(newState->m_Field->m_SerializerID, element);
-
-                    // if we are a serializer
-                    if (element->HasType(Reflect::GetType<Serializer>()))
-                    {
-                        // connect the current instance to the serializer
-                        DangerousCast<Serializer>(element)->ConnectField(parentElement.Ptr(), newState->m_Field);
-                    }
+                    // connect the current instance to the serializer
+                    DangerousCast<Serializer>(element)->ConnectField(parentElement.Ptr(), newState->m_Field);
                 }
 
                 if (element != NULL)

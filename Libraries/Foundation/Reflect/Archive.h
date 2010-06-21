@@ -142,7 +142,6 @@ namespace Reflect
     {
         enum ArchiveType
         {
-            Unknown,
             Binary,
             XML,
         };
@@ -152,9 +151,15 @@ namespace Reflect
     // must line up with enum above
     const static char* s_ArchiveExtensions[] =
     {
-        "xxx",   // Unknown
         "rb",    // Binary
         "xml"    // XML
+    };
+
+    // must line up with archive type enum
+    const static char* s_ArchiveDescriptions[] =
+    {
+        "Binary Reflect File",
+        "XML Reflect File"
     };
 
     namespace ArchiveModes
@@ -343,7 +348,7 @@ namespace Reflect
         }
 
         // Peek the type of file
-        static ArchiveType GetFileType(const std::string& file );
+        static bool GetFileType( const std::string& file, ArchiveType& type );
 
         // Get the type of this archive
         virtual ArchiveType GetType() const = 0;
@@ -395,6 +400,23 @@ namespace Reflect
         {
             NOC_ASSERT( t < sizeof( s_ArchiveExtensions ) );
             return s_ArchiveExtensions[ t ];
+        }
+
+        static void GetExtensions( std::set< std::string>& extensions )
+        {
+            for ( int i = 0; i < sizeof( s_ArchiveExtensions ); ++i )
+            {
+                extensions.insert( s_ArchiveExtensions[ i ] );
+            }
+        }
+
+        static void GetFileFilters( std::set< std::string > filters )
+        {
+            for ( int i = 0; i < sizeof( s_ArchiveExtensions ); ++i )
+            {
+                std::string filter = std::string( s_ArchiveDescriptions[ i ] ) + " (*." + s_ArchiveExtensions[ i ] + ")|*." + s_ArchiveExtensions[ i ];
+                filters.insert( filter );
+            }
         }
 
 

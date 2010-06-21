@@ -14,7 +14,7 @@ using namespace Luna;
 PromptNewExistingDlg::PromptNewExistingDlg( wxWindow* parent, CreateFileCallback callback, const std::string& title, const std::string& desc, const std::string& createLabel, const std::string& existingLabel )
 : wxDialog( parent, wxID_ANY, title.c_str(), wxDefaultPosition, wxSize( 500, 210 ), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER, title.c_str() )
 , m_CreateFileCallback( callback )
-, m_FinderSpec( NULL )
+, m_FileFilter( "" )
 {
     NOC_ASSERT( m_CreateFileCallback );
 
@@ -98,9 +98,9 @@ int PromptNewExistingDlg::ShowModal()
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the finder spec to use for any displayed dialogs.
 // 
-void PromptNewExistingDlg::SetFinderSpec( const Finder::FinderSpec* spec )
+void PromptNewExistingDlg::SetFileFilter( const std::string& filter )
 {
-    m_FinderSpec = spec;
+    m_FileFilter = filter;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -181,9 +181,9 @@ void PromptNewExistingDlg::OnButtonExistingClicked( wxCommandEvent& args )
     }
 
     Nocturnal::FileDialog dlg( this, "Open", dir.c_str(), file.c_str(), "", Nocturnal::FileDialogStyles::DefaultOpen );
-    if ( m_FinderSpec )
+    if ( !m_FileFilter.empty() )
     {
-        dlg.SetFilter( m_FinderSpec->GetDialogFilter() );
+        dlg.SetFilter( m_FileFilter );
     }
 
     if ( dlg.ShowModal() == wxID_OK )

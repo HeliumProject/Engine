@@ -63,8 +63,8 @@ namespace Luna
 
 
     /////////////////////////////////////////////////////////////////////////////
-    typedef std::map< const Finder::ModifierSpec*, DWORD > M_ModifierSpecColors;
-    typedef std::map< const Finder::ModifierSpec*, ThumbnailPtr > M_ModifierSpecIcons;
+    typedef std::map< std::string, DWORD > M_FileTypeColors;
+    typedef std::map< std::string, ThumbnailPtr > M_FileTypeIcons;
     typedef std::map< Asset::AssetType, ThumbnailPtr > M_AssetTypeIcons;
 
     typedef std::vector< Math::Vector3 > V_TileCorners;
@@ -214,7 +214,7 @@ namespace Luna
 
         void Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTiles& hits );
 
-        void InsertModifierSpecIcon( IDirect3DDevice9* device, M_ModifierSpecIcons& modifierSpecIcons, const Finder::ModifierSpec* spec, const char* fileName );
+        void InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const std::string& type, const char* fileName );
 
         bool Draw();
         void DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, bool overlayOnly = false );
@@ -303,8 +303,8 @@ namespace Luna
         OS_ThumbnailTiles m_MouseOverTiles; // there will only be one
         OS_ThumbnailTiles m_SelectedTiles;
 
-        M_ModifierSpecColors m_ModifierSpecColors;
-        M_ModifierSpecIcons m_ModifierSpecIcons;
+        M_FileTypeColors m_FileTypeColors;
+        M_FileTypeIcons m_FileTypeIcons;
         M_AssetTypeIcons m_AssetTypeIcons;
 
         V_TileCorners m_VisibleTileCorners;

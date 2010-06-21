@@ -17,7 +17,7 @@ void AssetTemplate::EnumerateClass( Reflect::Compositor<AssetTemplate>& comp )
 {
   Reflect::Field* fieldName = comp.AddField( &AssetTemplate::m_Name, "m_Name" );
   Reflect::Field* fieldDescription = comp.AddField( &AssetTemplate::m_Description, "m_Description" );
-  Reflect::Field* fieldModifierSpec = comp.AddField( &AssetTemplate::m_ModifierSpec, "m_ModifierSpec" );
+  Reflect::Field* fieldFileFilter = comp.AddField( &AssetTemplate::m_FileFilter, "m_FileFilter" );
 
   Reflect::Field* fieldDefaultAddSubDir = comp.AddField( &AssetTemplate::m_DefaultAddSubDir, "m_DefaultAddSubDir" );
   Reflect::Field* fieldShowSubDirCheckbox = comp.AddField( &AssetTemplate::m_ShowSubDirCheckbox, "m_ShowSubDirCheckbox" );
@@ -42,7 +42,7 @@ AssetTemplate::AssetTemplate( const Reflect::Composite* composite )
   {
     m_Name = composite->m_UIName;
     composite->GetProperty( AssetProperties::LongDescription, m_Description );
-    composite->GetProperty( AssetProperties::ModifierSpec, m_ModifierSpec );
+    composite->GetProperty( AssetProperties::FileFilter, m_FileFilter );
   }
 }
 

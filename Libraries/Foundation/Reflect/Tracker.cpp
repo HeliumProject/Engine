@@ -6,7 +6,6 @@
 #ifdef REFLECT_OBJECT_TRACKING
 
 #include "Platform/Windows/Debug.h"
-#include "Finder/Finder.h"
 #include "Platform/Mutex.h"
 
 using namespace Reflect;
@@ -199,6 +198,8 @@ void Tracker::Dump()
 {
   Platform::TakeMutex mutex (g_TrackerMutex);
 
+  NOC_BREAK();
+#pragma TODO( "replace the Finder:: call" )
   FILE* f = fopen( (Finder::ProjectLog() + "ReflectDump.log").c_str(), "w");
   if ( f != NULL )
   {

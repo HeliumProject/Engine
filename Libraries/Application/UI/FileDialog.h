@@ -85,6 +85,7 @@ namespace Nocturnal
     void SetFilter( const std::string& filter );
     void SetFilterIndex( const std::string& filter );
     void AddFilter( const std::string& filter );
+    void AddFilters( const V_string& filters );
 
   protected:
     void OnOkButtonClicked( wxCommandEvent& evt );

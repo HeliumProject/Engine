@@ -7,7 +7,6 @@
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "Finder/ExtensionSpecs.h"
 #include "Application/RCS/RCS.h"
 
 using namespace Asset;
@@ -64,7 +63,7 @@ AssetFilePtr AssetFile::FindAssetFile( const std::string& filePath, CacheDB* cac
 void AssetFile::Init()
 {
     m_ShortName               = "";
-    m_ModifierSpec            = NULL;
+    m_FileFilter              = "";
     m_Extension               = "";
     m_FileType                = "";
     m_AssetType               = Asset::AssetTypes::Null;
@@ -87,32 +86,13 @@ const std::string& AssetFile::GetShortName()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-const Finder::ModifierSpec* AssetFile::GetModifierSpec()
+const std::string& AssetFile::GetFileFilter()
 {
-    if ( !m_ModifierSpec )
+    if ( m_FileFilter.empty() )
     {
-        try
-        {
-            m_ModifierSpec = Finder::GetFileExtensionSpec( GetFilePath() );
-        }
-        catch( Finder::Exception & )
-        {
-            // try again below
-        }
-
-        if (!m_ModifierSpec )
-        {
-            std::string extension = Nocturnal::Path( GetFilePath() ).Extension();
-            try
-            {
-                m_ModifierSpec = Finder::GetFileExtensionSpec( extension );
-            }
-            catch( Finder::Exception & )
-            {
-            }
-        }
+        m_FileFilter = std::string( "*." ) + Nocturnal::Path( GetFilePath() ).Extension();
     }
-    return m_ModifierSpec;
+    return m_FileFilter;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -132,27 +112,20 @@ const std::string& AssetFile::GetFileType()
 {
     if ( m_FileType.empty() )
     {
-        if ( GetModifierSpec() )
+        m_FileType = Nocturnal::Path( GetFilePath() ).Extension();
+
+        if ( !m_FileType.empty() && *m_FileType.begin() == '.' )
         {
-            m_FileType = GetModifierSpec()->GetUIName();
+            m_FileType.erase( 0, 1 );
+        }
+
+        if ( m_FileType.empty() )
+        {
+            m_FileType = "Unknown";
         }
         else
         {
-            m_FileType = Nocturnal::Path( GetFilePath() ).Extension();
-
-            if ( !m_FileType.empty() && *m_FileType.begin() == '.' )
-            {
-                m_FileType.erase( 0, 1 );
-            }
-
-            if ( m_FileType.empty() )
-            {
-                m_FileType = "Unknown";
-            }
-            else
-            {
-                toUpper( m_FileType );
-            }
+            toUpper( m_FileType );
         }
     }
     return m_FileType;

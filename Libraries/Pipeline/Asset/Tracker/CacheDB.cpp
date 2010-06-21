@@ -16,10 +16,10 @@
 #include "Foundation/Exception.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/String/Utilities.h"
+#include "Foundation/String/Wildcard.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Log.h"
 #include "Foundation/Exception.h"
-#include "Finder/AssetSpecs.h"
 #include "Application/SQL/SQLite/SQLite.h"
 #include "Platform/Windows/Console.h"
 
@@ -620,13 +620,13 @@ void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, N
 
 //    u64 assetTypeID  = SelectIDByName( m_SelectAssetTypeIDHandle, assetFile->GetAssetType(), s_InsertAssetTypeSQL, cancel );
 
-    if ( !assetFile->GetModifierSpec() )
+    if ( assetFile->GetFileFilter().empty() )
     {
-        Log::Error( "No modifier spec for file '%s'\n", assetFile->GetFilePath().c_str() );
+        Log::Error( "No file filter for file '%s'\n", assetFile->GetFilePath().c_str() );
         return;
     }
 
-    u64 fileTypeID    = SelectIDByName( m_SelectFileTypeIDHandle, assetFile->GetModifierSpec()->GetModifier().c_str(), s_InsertFileTypeSQL, cancel );
+    u64 fileTypeID    = SelectIDByName( m_SelectFileTypeIDHandle, assetFile->GetFileFilter().c_str(), s_InsertFileTypeSQL, cancel );
 
     if ( CheckCancelQuery( cancel ) )
     {
@@ -668,11 +668,11 @@ void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, N
     InsertAssetAttributes( assetFile, cancel );
     InsertAssetUsages( assetFile, assetFiles, visited, cancel );
 
-    if ( assetFile->GetPath().Extension() == FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() )
+    if ( WildcardMatch( "entity.*", assetFile->GetPath().FullExtension().c_str() ) )
     {
         InsertAssetShaders( assetFile, assetFiles, visited, cancel );
     }
-    else if ( assetFile->GetPath().Extension() == FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() )
+    else if ( WildcardMatch( "scene.*", assetFile->GetPath().FullExtension().c_str() ) )
     {
         InsertLevelEntities( assetFile, assetFiles, visited, cancel );
     }

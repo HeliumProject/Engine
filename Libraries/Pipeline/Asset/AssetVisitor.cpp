@@ -13,8 +13,6 @@
 #include "Pipeline/Content/Scene.h"
 #include "Pipeline/Content/Nodes/Region.h"
 #include "Pipeline/Content/Nodes/Zone.h"
-#include "Finder/AssetSpecs.h"
-#include "Finder/ExtensionSpecs.h"
 #include "Application/RCS/RCS.h"
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Class.h"
@@ -67,17 +65,12 @@ AssetVisitor::AssetVisitor( M_AssetFiles* assetFiles, Asset::AssetClass* assetCl
     m_FieldFilterTypes.insert( (i32)Reflect::FieldFlags::Discard );
 
     // Files
-    m_FileHandlerLookup.insert( FileHandlerLookup::value_type( 
-        &FinderSpecs::Asset::ZONE_DECORATION,
-        &AssetVisitor::HandleZoneFile ) );
-
-    m_FileHandlerLookup.insert( FileHandlerLookup::value_type( 
-        &FinderSpecs::Extension::MAYA_BINARY,
-        &AssetVisitor::HandleMayaFile ) );
-
-    m_FileHandlerLookup.insert( FileHandlerLookup::value_type( 
-        &FinderSpecs::Extension::REFLECT_BINARY,
-        &AssetVisitor::HandleAssetFile ) ); 
+    S_string extensions;
+    Reflect::Archive::GetExtensions( extensions );
+    for ( S_string::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
+    {
+        m_FileHandlerLookup.insert( FileHandlerLookup::value_type( *itr, &AssetVisitor::HandleAssetFile ) );
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////

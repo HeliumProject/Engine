@@ -7,7 +7,6 @@
 #include "PersistentDataFactory.h"
 
 #include "Editor/ContextMenuGenerator.h"
-#include "Finder/Finder.h"
 #include "Application/UI/ImageManager.h"
 #include "Application/UI/FileDialog.h"
 
@@ -188,11 +187,8 @@ void FileBackedComponent::OnChangePath( const ContextMenuArgsPtr& args )
     }
 
     const Asset::FileBackedComponent* pkg = GetPackage< Asset::FileBackedComponent >();
-    const Finder::FinderSpec* spec = pkg->GetFileFilter();
-    if ( spec )
-    {
-        dialog.SetFilter( spec->GetDialogFilter() );
-    }
+    const std::string& filter = pkg->GetFileFilter();
+    dialog.SetFilter( filter );
 
     if ( dialog.ShowModal() == wxID_OK )
     {

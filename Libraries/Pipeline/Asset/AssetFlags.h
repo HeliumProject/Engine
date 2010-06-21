@@ -42,8 +42,7 @@ namespace Asset
     static const char* LongDescription   = "ShortDescription";
     static const char* SmallIcon         = "SmallIcon";
     static const char* RootFolderSpec    = "RootFolderSpec";
-    static const char* FilterSpec        = "FilterSpec";
-    static const char* ModifierSpec      = "ModifierSpec";
+    static const char* FileFilter        = "FileFilter";
     static const char* AssetTemplates    = "AssetTemplates";
   }
 }

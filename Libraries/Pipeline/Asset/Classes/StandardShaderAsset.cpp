@@ -6,17 +6,16 @@
 #include "Pipeline/Asset/Components/StandardDetailMapComponent.h"
 
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Finder/AssetSpecs.h"
 
 using namespace Asset;
 
-  REFLECT_DEFINE_CLASS( StandardShaderAsset );
+REFLECT_DEFINE_CLASS( StandardShaderAsset );
 
 void StandardShaderAsset::EnumerateClass( Reflect::Compositor<StandardShaderAsset>& comp )
 {
   comp.GetComposite().m_UIName = "Shader (Standard)";
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A shader manages a group of textures that can be applied to an entity." );
-  comp.GetComposite().SetProperty( AssetProperties::ModifierSpec, FinderSpecs::Asset::SHADER_DECORATION.GetName() );
+  comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.shader.*" );
 
   Reflect::Field* fieldCinematicShader = comp.AddField( &StandardShaderAsset::m_CinematicShader, "m_CinematicShader" );
 }

@@ -16,8 +16,6 @@
 
 #include "Application/UI/FileDialog.h"
 
-#include "Finder/Finder.h"
-#include "Finder/AssetSpecs.h"
 #include "Foundation/Log.h"
 
 #include <algorithm>
@@ -162,16 +160,14 @@ void EntityCreateTool::CreateProperties()
             clearButton->SetIcon( "delete_16.png" );
             clearButton->SetClientData( this );
 
-            std::string specName;
-            if ( Reflect::GetClass<Asset::EntityAsset>()->GetProperty( Asset::AssetProperties::ModifierSpec, specName ) )
+            std::string filter;
+            if ( Reflect::GetClass<Asset::EntityAsset>()->GetProperty( Asset::AssetProperties::FileFilter, filter ) )
             {
-                const Finder::FinderSpec* spec = Finder::GetFinderSpec( specName );
+                m_FileButton->SetFilter( filter );
+                m_BrowserButton->SetFilter( filter );
 
-                m_FileButton->SetFilter( spec->GetDialogFilter() );
-                m_BrowserButton->SetFilter( spec->GetDialogFilter() );
-
-                m_FileButtonAdd->SetFilter( spec->GetDialogFilter() );
-                m_BrowserButtonAdd->SetFilter( spec->GetDialogFilter() );
+                m_FileButtonAdd->SetFilter( filter );
+                m_BrowserButtonAdd->SetFilter( filter );
             }
         }
         m_Enumerator->Pop();
@@ -180,7 +176,7 @@ void EntityCreateTool::CreateProperties()
         {
             m_RandomEntityList = m_Enumerator->AddList< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string > (this, &EntityCreateTool::GetRandomEntity, &EntityCreateTool::SetRandomEntity) );
 
-            Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( &FinderSpecs::Asset::ENTITY_DECORATION );
+            Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( "*.entity.*" );
             filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &EntityCreateTool::OnEntityDropped ) );
 
             m_RandomEntityList->SetDropTarget( filteredDropTarget );

@@ -13,8 +13,6 @@
 #include "Foundation/String/Utilities.h"
 #include "Editor/Orientation.h"
 #include "Editor/UpdateStatusEvent.h"
-#include "Finder/AssetSpecs.h"
-#include "Finder/ExtensionSpecs.h"
 #include "Application/Inspect/DragDrop/DropSource.h"
 #include "Application/Undo/Command.h"
 #include "Application/UI/ImageManager.h"
@@ -122,32 +120,23 @@ ThumbnailView::ThumbnailView( const std::string& thumbnailDirectory, BrowserFram
     CalculateTotalItemSize();
 
     // Setup Ribbon colors and FileType Icons
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::ANIMCONFIG_DECORATION, D3DCOLOR_ARGB( 0xff, 150, 185, 150 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::ANIMSET_DECORATION, D3DCOLOR_ARGB( 0xff, 150, 185, 150 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::CINEMATIC_DECORATION, D3DCOLOR_ARGB( 0xff, 170, 170, 170 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::ENTITY_DECORATION, D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::LEVEL_DECORATION, D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::SHADER_DECORATION, D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Asset::SKY_DECORATION, D3DCOLOR_ARGB( 0xff, 150, 210, 230 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( "*.entity.*", D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( "*.scene.*", D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( "*.shader.*", D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
 
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::MAYA_BINARY, D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::REFLECT_BINARY, D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::SPEEDTREE, D3DCOLOR_ARGB( 0xff, 16, 94, 145 ) ) );
-    m_ModifierSpecColors.insert( M_ModifierSpecColors::value_type( &FinderSpecs::Extension::TGA, D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( "*.fbx", D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( "*.rb", D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( "*.tga", D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
 
     IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
-    //InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::ANIMCONFIG_DECORATION, "moon_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::ANIMSET_DECORATION, "animation_set_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::CINEMATIC_DECORATION, "enginetype_cinematic_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::ENTITY_DECORATION, "moon_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::LEVEL_DECORATION, "enginetype_level_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::SHADER_DECORATION, "enginetype_shader_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Asset::SKY_DECORATION, "enginetype_sky_16.png" );
 
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::MAYA_BINARY, "maya_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::REFLECT_BINARY, "moon_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::SPEEDTREE, "fileType_speed_tree_16.png" );
-    InsertModifierSpecIcon( device, m_ModifierSpecIcons, &FinderSpecs::Extension::TGA, "fileType_tga_16.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, "*.entity.*", "moon_16.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, "*.scene.*", "enginetype_level_16.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, "*.shader.*", "enginetype_shader_16.png" );
+
+    InsertFileTypeIcon( device, m_FileTypeIcons, "*.fbx", "maya_16.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, "*.rb", "moon_16.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, "*.tga", "fileType_tga_16.png" );
 
 
     // Populate the AssetTypes lookup texture
@@ -196,7 +185,7 @@ ThumbnailView::~ThumbnailView()
 
     DeleteResources();
 
-    m_ModifierSpecColors.clear();
+    m_FileTypeColors.clear();
 
     // This must be called before UnregisterWindow, otherwise the background thread might
     // try to access a NULL device.  Probably no longer necessary since we cancel when the
@@ -206,12 +195,12 @@ ThumbnailView::~ThumbnailView()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ThumbnailView::InsertModifierSpecIcon( IDirect3DDevice9* device, M_ModifierSpecIcons& modifierSpecIcons, const Finder::ModifierSpec* spec, const char* fileName )
+void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const std::string& type, const char* fileName )
 {
 #pragma TODO( "reimplement icons as resources" )
     std::string file = fileName;
 
-    Nocturnal::Insert<M_ModifierSpecIcons>::Result inserted = modifierSpecIcons.insert( M_ModifierSpecIcons::value_type( spec, new Thumbnail( &m_D3DManager, LoadTexture( device, file ) ) ) );
+    Nocturnal::Insert<M_FileTypeIcons>::Result inserted = fileTypeIcons.insert( M_FileTypeIcons::value_type( type, new Thumbnail( &m_D3DManager, LoadTexture( device, file ) ) ) );
     NOC_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
 }
 
@@ -1420,8 +1409,8 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
             }
             else
             {
-                M_ModifierSpecColors::iterator findColor = m_ModifierSpecColors.find( tile->GetFile()->GetModifierSpec() );
-                if ( findColor != m_ModifierSpecColors.end() )
+                M_FileTypeColors::iterator findColor = m_FileTypeColors.find( tile->GetFile()->GetPath().FullExtension() );
+                if ( findColor != m_FileTypeColors.end() )
                 {
                     Nocturnal::Insert<M_RibbonColorTileCorners>::Result inserted = m_RibbonColorTileCorners.insert( M_RibbonColorTileCorners::value_type( findColor->second, V_TileCorners() ) );
                     inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
@@ -1437,14 +1426,14 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
             }
             else
             {
-                M_ModifierSpecIcons::iterator findIcon = m_ModifierSpecIcons.find( tile->GetFile()->GetModifierSpec() );
-                if ( findIcon != m_ModifierSpecIcons.end() )
+                M_FileTypeIcons::iterator findIcon = m_FileTypeIcons.find( tile->GetFile()->GetPath().FullExtension() );
+                if ( findIcon != m_FileTypeIcons.end() )
                 {
                     Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
                     inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
                 }
                 else if ( Nocturnal::Path( tile->GetFile()->GetFilePath() ).Extension() == Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary )
-                    && ( findIcon = m_ModifierSpecIcons.find( &FinderSpecs::Extension::REFLECT_BINARY ) ) != m_ModifierSpecIcons.end() )
+                    && ( findIcon = m_FileTypeIcons.find( Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary ) ) ) != m_FileTypeIcons.end() )
                 {
                     Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
                     inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );

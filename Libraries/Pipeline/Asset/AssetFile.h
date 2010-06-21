@@ -7,7 +7,6 @@
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
-#include "Finder/Finder.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Serializers.h"
 #include "Foundation/TUID.h"
@@ -46,7 +45,7 @@ namespace Asset
     }
 
     const std::string& GetShortName();
-    const Finder::ModifierSpec* GetModifierSpec();
+    const std::string& GetFileFilter();
     const std::string& GetExtension();
     const std::string& GetFileType();
     
@@ -81,7 +80,7 @@ namespace Asset
       Nocturnal::Path m_Path;
 
     std::string   m_ShortName;
-    const Finder::ModifierSpec* m_ModifierSpec;
+    std::string   m_FileFilter;
     std::string   m_Extension;
     std::string   m_FileType;
     AssetType     m_AssetType;

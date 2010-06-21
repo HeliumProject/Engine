@@ -49,6 +49,21 @@ AssetCollection::~AssetCollection()
     m_AssetPaths.clear();
 }
 
+void AssetCollection::GetFileFilters( V_string& filters )
+{
+    std::string filterFormat = "Asset Collection (*.collection.%s)|*.collection.%s";
+
+    S_string reflectExtensions;
+    Reflect::Archive::GetExtensions( reflectExtensions );
+
+    char filter[ 128 ];
+    for ( S_string::const_iterator itr = reflectExtensions.begin(), end = reflectExtensions.end(); itr != end; ++itr )
+    {
+        sprintf_s( filter, 128, filterFormat.c_str(), (*itr).c_str(), (*itr).c_str() );
+        filters.push_back( filter );
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 void AssetCollection::Freeze()
 {

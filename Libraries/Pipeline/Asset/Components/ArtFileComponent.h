@@ -10,7 +10,7 @@ namespace Asset
   class PIPELINE_API ArtFileComponent : public FileBackedComponent
   {
   private:
-    static const Finder::FinderSpec& s_FileFilter;
+      static const std::string s_FileFilter;
 
   public:
     std::string m_FragmentNode;
@@ -26,7 +26,7 @@ namespace Asset
     virtual ~ArtFileComponent() {}
     virtual Component::ComponentUsage GetComponentUsage() const NOC_OVERRIDE;
 
-    virtual const Finder::FinderSpec* GetFileFilter() const NOC_OVERRIDE;
+    virtual const std::string& GetFileFilter() const NOC_OVERRIDE;
 
     REFLECT_DECLARE_CLASS( ArtFileComponent, FileBackedComponent );
 

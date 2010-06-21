@@ -95,13 +95,6 @@ namespace Asset
 
     virtual bool IsCinematicShader() const;
 
-    //
-    //  There is an important abstraction here that allows different shader types to have
-    // different format versions.  otherwise a logic change that could only require a small
-    // subset of the shaders to rebuild would force *all* the shaders to rebuild
-    //
-    virtual const Finder::FileSpec& GetBuiltFileSpec() const;
-
     // Marks any texture channels with the specified texture as needing to be resent to the
     // devkit (or not).
     virtual void SetTextureDirty( const Nocturnal::Path& path, bool dirty );

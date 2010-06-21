@@ -237,6 +237,13 @@ namespace Nocturnal
     UpdateFilter();
   }
 
+  void FileDialog::AddFilters( const V_string& filters )
+  {
+      for ( V_string::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+      {
+          AddFilter( *itr );
+      }
+  }
 
   /////////////////////////////////////////////////////////////////////////////
   void FileDialog::UpdateFilter()

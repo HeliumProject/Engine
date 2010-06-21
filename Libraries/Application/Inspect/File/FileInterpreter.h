@@ -27,7 +27,7 @@ namespace Inspect
     void OnDrop( const Inspect::FilteredDropTargetArgs& args );
 
   protected:
-    const Finder::FinderSpec* m_FinderSpec;
+      std::string m_FileFilter;
 
   private:
     Inspect::Value* m_Value;

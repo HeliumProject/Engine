@@ -27,12 +27,12 @@ namespace Inspect
   public:
     List*       m_List;
     i32         m_ClassType;
-    std::string m_FinderSpec;
+    std::string m_FileFilter;
 
-    ClientDataFilter( List* list, i32 classType, const std::string& specName )
+    ClientDataFilter( List* list, i32 classType, const std::string& filter )
       : m_List( list )
       , m_ClassType( classType )
-      , m_FinderSpec( specName )
+      , m_FileFilter( filter )
     {
 
     }

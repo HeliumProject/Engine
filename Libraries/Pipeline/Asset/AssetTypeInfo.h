@@ -4,8 +4,6 @@
 #include "AssetType.h"
 #include "Pipeline/Asset/Classes/EntityAsset.h"
 
-#include "Finder/Finder.h"
-
 namespace Asset
 {
   /////////////////////////////////////////////////////////////////////////////

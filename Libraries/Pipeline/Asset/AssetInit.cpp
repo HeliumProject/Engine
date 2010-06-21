@@ -19,7 +19,6 @@
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Pipeline/Asset/Manifests/ManifestVersion.h"
 #include "Pipeline/Asset/Components/NormalMapComponent.h"
-#include "Pipeline/Asset/Classes/RequiredListAsset.h"
 #include "Pipeline/Asset/Components/StandardColorMapComponent.h"
 #include "Pipeline/Asset/Components/StandardDetailMapComponent.h"
 #include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
@@ -78,7 +77,6 @@ void Asset::Initialize()
   if ( ++g_AssetInitCount == 1 )
   {
     g_AssetInitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-    g_AssetInitializerStack.Push( Finder::Initialize, Finder::Cleanup );
     g_AssetInitializerStack.Push( Component::Initialize, Component::Cleanup );
     g_AssetInitializerStack.Push( Content::Initialize, Content::Cleanup );
 
@@ -171,8 +169,6 @@ void Asset::Initialize()
     g_AssetClassTypes.push_back( Reflect::GetType<EntityAsset>() );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<SceneAsset>( "SceneAsset" ) );
     g_AssetClassTypes.push_back( Reflect::GetType<SceneAsset>() );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<RequiredListAsset>( "RequiredListAsset" ) );
-    g_AssetClassTypes.push_back( Reflect::GetType<RequiredListAsset>() );
 
     // Shaders
     g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardShaderAsset>( "StandardShaderAsset" ) );

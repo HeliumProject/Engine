@@ -1,7 +1,5 @@
 #include "ArtFileComponent.h"
 
-#include "Finder/ExtensionSpecs.h"
-
 using namespace Asset;
 
 REFLECT_DEFINE_CLASS( ArtFileComponent );
@@ -21,14 +19,14 @@ void ArtFileComponent::EnumerateClass( Reflect::Compositor<ArtFileComponent>& co
   Reflect::Field* fieldMaxima = comp.AddField( &ArtFileComponent::m_Maxima, "m_Maxima" );
 }
 
-const Finder::FinderSpec& ArtFileComponent::s_FileFilter = FinderSpecs::Extension::MAYA_BINARY;
+const std::string ArtFileComponent::s_FileFilter = "*.fbx";
 
 Component::ComponentUsage ArtFileComponent::GetComponentUsage() const
 {
   return Component::ComponentUsages::Class;
 }
 
-const Finder::FinderSpec* ArtFileComponent::GetFileFilter() const
+const std::string& ArtFileComponent::GetFileFilter() const
 {
-  return &s_FileFilter;
+  return s_FileFilter;
 }

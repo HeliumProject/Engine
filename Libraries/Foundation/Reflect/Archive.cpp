@@ -149,21 +149,23 @@ Archive::~Archive()
 
 }
 
-ArchiveType Archive::GetFileType(const std::string& file)
+bool Archive::GetFileType( const std::string& file, ArchiveType& type )
 {
     Nocturnal::Path filePath( file );
     std::string ext = filePath.Extension();
 
     if ( ext == Archive::GetExtension( ArchiveTypes::XML ) )
     {
-        return ArchiveTypes::XML;
+        type = ArchiveTypes::XML;
+        return true;
     }
     else if ( ext == Archive::GetExtension( ArchiveTypes::Binary ) )
     {
-        return ArchiveTypes::Binary;
+        type = ArchiveTypes::Binary;
+        return true;
     }
 
-    return ArchiveTypes::Unknown;
+    return false;
 }
 
 void Archive::Warning(const char* fmt, ...)
@@ -213,7 +215,13 @@ Archive* Archive::GetArchive(const std::string& file, StatusHandler* handler)
     throw Reflect::StreamException( "File path is empty" );
   }
 
-  return GetArchive(GetFileType(file), handler);
+  Reflect::ArchiveType archiveType;
+  if ( GetFileType( file, archiveType ) )
+  {
+    return GetArchive( archiveType, handler);
+  }
+
+  return NULL;
 }
 
 Archive* Archive::GetArchive(ArchiveType type, StatusHandler* handler)

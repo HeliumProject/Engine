@@ -214,14 +214,6 @@ void BrowserSearchPanel::OnCollectionManagerChanged( const Reflect::ElementChang
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// Adds a FinderSpec filter to the current list of filters.
-//
-void BrowserSearchPanel::AddFilter( const Finder::FinderSpec& filterSpec )
-{
-    AddFilter( filterSpec.GetDialogFilter().c_str() );
-}
-
-/////////////////////////////////////////////////////////////////////////////
 // Adds a string filter with the following format to the current list of filters.
 //   "<Display String>|<Extension Mask>"
 //
@@ -248,12 +240,12 @@ void BrowserSearchPanel::AddFilter( const char* filter )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void BrowserSearchPanel::SetFilterIndex( const Finder::FinderSpec& spec )
+void BrowserSearchPanel::SetFilterIndex( const std::string& filter )
 {
     size_t index = 0;
 
     V_string splitFilter;
-    Tokenize( spec.GetDialogFilter(), splitFilter, "\\|" );
+    Tokenize( filter, splitFilter, "\\|" );
 
     if ( (int)splitFilter.size() % 2 != 0 )
         return; // error
@@ -475,18 +467,7 @@ void BrowserSearchPanel::PopulateFileTypeChoice( V_string& contents )
             continue;
         }
 
-        try
-        {
-            const Finder::ModifierSpec* modifierSpec = Finder::GetFileExtensionSpec( value );
-            if ( modifierSpec )
-            {
-                AddFilter( *modifierSpec );
-            }
-        }
-        catch ( const Nocturnal::Exception& )
-        {
-            // do nothing
-        }
+        AddFilter( std::string( std::string( "*." ) + value ).c_str() );
     }
 
     UpdateFilters();

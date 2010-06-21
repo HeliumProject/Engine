@@ -169,10 +169,6 @@
 			RelativePathToProject=".\SDK\Crypto++\5.6.0\Crypto++.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
-			RelativePathToProject=".\libraries\Finder\Finder.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
 			RelativePathToProject=".\libraries\Application\Application.vcproj"
 		/>
@@ -1024,14 +1020,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Classes\RequiredListAsset.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Classes\RequiredListAsset.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Asset\Classes\SceneAsset.cpp"
 					>
 				</File>
@@ -1153,14 +1141,6 @@
 				</File>
 				<File
 					RelativePath=".\Asset\Components\TextureMapComponent.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\WorldFileComponent.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\WorldFileComponent.h"
 					>
 				</File>
 			</Filter>

@@ -2,7 +2,6 @@
 #include "ScenePreferences.h"
 
 #include "Application/Preferences.h"
-#include "Finder/LunaSpecs.h"
 
 using namespace Luna;
 
@@ -137,7 +136,7 @@ std::string ScenePreferences::GetPreferencesPath() const
     Nocturnal::Path prefsDir;
     if ( Application::GetPreferencesDirectory( prefsDir ) )
     {
-        return FinderSpecs::Luna::SCENE_EDITOR_PREFS.GetFile( prefsDir.Get() );
+        return prefsDir.Get() + "LunaSceneEditorPrefs.rb";
     }
     return "";
 }

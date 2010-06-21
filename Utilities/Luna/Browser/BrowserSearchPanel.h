@@ -64,10 +64,9 @@ namespace Luna
     void OnCollectionManagerChanged( const Reflect::ElementChangeArgs& args );
 
   private:
-    void AddFilter( const Finder::FinderSpec& filterSpec );   
     void AddFilter( const char* filter );
     void SetFilterIndex( int filterIndex );
-    void SetFilterIndex( const Finder::FinderSpec& spec );
+    void SetFilterIndex( const std::string& filter );
     std::string GetFilter(); 
     void UpdateFilters();
     const Filter* FindFilter( const std::string& name );

@@ -7,10 +7,10 @@ using namespace Luna;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-EditorInfo::EditorInfo( EditorType type, CreateEditorFunc createFunc, const Finder::FilterSpec* filter )
+EditorInfo::EditorInfo( EditorType type, CreateEditorFunc createFunc, const std::string& filter )
 : m_Type( type )
 , m_CreateFunc( createFunc )
-, m_FilterSpec( filter )
+, m_FileFilter( filter )
 {
 }
 
@@ -43,7 +43,7 @@ EditorTypes::EditorType EditorInfo::GetType() const
 // Returns the filter spec identifying which file types this editor can work 
 // with.
 // 
-const Finder::FilterSpec* EditorInfo::GetFilterSpec() const
+const std::string& EditorInfo::GetFileFilter() const
 {
-  return m_FilterSpec;
+  return m_FileFilter;
 }

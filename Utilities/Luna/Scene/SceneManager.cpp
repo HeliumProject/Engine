@@ -8,9 +8,7 @@
 #include "Zone.h"
 
 #include "Pipeline/Asset/Classes/SceneAsset.h"
-#include "Pipeline/Asset/Components/WorldFileComponent.h"
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Finder/AssetSpecs.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
 #include "Application/UI/FileDialog.h"
@@ -119,39 +117,6 @@ DocumentPtr SceneManager::OpenPath( const std::string& path, std::string& error 
     SceneDocumentPtr document;
     Nocturnal::Path filePath( path );
 
-    // If this is actually a level file, we need to open it, grab the level
-    // settings, and also pull in the world file as a scene.
-    if ( filePath.Extension() == FinderSpecs::Asset::LEVEL_DECORATION.GetDecoration() )
-    {
-        std::stringstream errStr; 
-
-        try
-        {
-            m_CurrentLevel = Reflect::AssertCast< Asset::SceneAsset >( Asset::AssetClass::LoadAssetClass( filePath ) );
-        }
-        catch ( const Nocturnal::Exception& e )
-        {
-            error = "Error loading level " + path + ": " + e.Get(); 
-            return NULL;
-        }
-
-        if ( !m_CurrentLevel.ReferencesObject() )
-        {
-            error = path + " is not a valid level file."; 
-            return NULL; 
-        }
-
-        Component::ComponentViewer< Asset::WorldFileComponent > world( m_CurrentLevel, false );    
-
-        if ( !world.Valid() || world->GetPath().Exists() )
-        {
-            error = "Level file " + path + " does not reference a world file."; 
-            return NULL; 
-        }
-
-        scenePath = world->GetPath().Get();
-    }
-
     ScenePtr scene = NewScene( m_Root == NULL, scenePath, true );
     if ( !scene->LoadFile( scenePath ) )
     {
@@ -230,8 +195,14 @@ static std::string PromptSaveAs( const DocumentPtr& file, wxWindow* window )
     std::string defaultFile = file->GetFilePath();
 
     Nocturnal::FileDialog saveDlg( window, "Save As...", defaultDir.c_str(), defaultFile.c_str(), "", Nocturnal::FileDialogStyles::DefaultSave );
-    saveDlg.AddFilter( FinderSpecs::Asset::WORLD_DECORATION.GetDialogFilter() );
-    saveDlg.AddFilter( FinderSpecs::Asset::ZONE_DECORATION.GetDialogFilter() );
+    
+    S_string extensions;
+    Reflect::Archive::GetExtensions( extensions );
+    for ( S_string::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
+    {
+        saveDlg.AddFilter( std::string( "Scene (*.scene." ) + *itr + ")|*.scene." + *itr );
+    }
+
     if ( saveDlg.ShowModal() == wxID_OK )
     {
         path = saveDlg.GetPath();

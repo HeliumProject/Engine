@@ -23,7 +23,6 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Log.h"
 
-#include "Finder/DebugSpecs.h"
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/AssetBuilder/CacheFiles.h"
@@ -323,9 +322,9 @@ JobResult InvokeBuild( BuildJob* job, bool throttle )
         traceString.erase( pos, 1 );
     }
 
-    std::string traceFile = outputDirectory.Get() + traceString + "_" + FinderSpecs::Debug::TRACE_FILE.GetFile();
-    std::string warningFile = outputDirectory.Get() + traceString + "_" + FinderSpecs::Debug::WARNING_FILE.GetFile();
-    std::string errorFile = outputDirectory.Get() + traceString + "_" + FinderSpecs::Debug::ERROR_FILE.GetFile();
+    std::string traceFile = outputDirectory.Get() + traceString + "_" + "trace.txt";
+    std::string warningFile = outputDirectory.Get() + traceString + "_" + "warning.txt";
+    std::string errorFile = outputDirectory.Get() + traceString + "_" + "error.txt";
 
     Log::TraceFileHandle trace ( traceFile, Application::GetTraceStreams(), GetCurrentThreadId() );
     Log::TraceFileHandle warning ( warningFile, Log::Streams::Warning, GetCurrentThreadId() );
@@ -1206,9 +1205,9 @@ void SendTopLevelBuild( const AssetClassPtr& assetClass )
 
 void AssetBuilder::Build( Dependencies::DependencyGraph& graph, const AssetClassPtr& assetClass, const BuilderOptionsPtr& options )
 {
-    Log::TraceFileHandle trace ( FinderSpecs::Debug::TRACE_FILE.GetFile( assetClass->GetBuiltDirectory() ), Application::GetTraceStreams() );
-    Log::TraceFileHandle warning ( FinderSpecs::Debug::WARNING_FILE.GetFile( assetClass->GetBuiltDirectory() ), Log::Streams::Warning );
-    Log::TraceFileHandle error ( FinderSpecs::Debug::ERROR_FILE.GetFile( assetClass->GetBuiltDirectory() ), Log::Streams::Error );
+    Log::TraceFileHandle trace ( assetClass->GetBuiltDirectory().Get() + "trace.txt", Application::GetTraceStreams() );
+    Log::TraceFileHandle warning ( assetClass->GetBuiltDirectory().Get() + "warning.txt", Log::Streams::Warning );
+    Log::TraceFileHandle error ( assetClass->GetBuiltDirectory().Get() + "error.txt", Log::Streams::Error );
 
     Profile::Timer timer;
 
@@ -1245,9 +1244,9 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, const AssetClass
 
 void AssetBuilder::Build( Dependencies::DependencyGraph& graph, const AssetClassPtr& assetClass, const V_string& options )
 {
-    Log::TraceFileHandle trace ( FinderSpecs::Debug::TRACE_FILE.GetFile( assetClass->GetBuiltDirectory() ), Application::GetTraceStreams());
-    Log::TraceFileHandle warning ( FinderSpecs::Debug::WARNING_FILE.GetFile( assetClass->GetBuiltDirectory() ), Log::Streams::Warning );
-    Log::TraceFileHandle error ( FinderSpecs::Debug::ERROR_FILE.GetFile( assetClass->GetBuiltDirectory() ), Log::Streams::Error );
+    Log::TraceFileHandle trace ( assetClass->GetBuiltDirectory().Get() + "trace.txt", Application::GetTraceStreams());
+    Log::TraceFileHandle warning ( assetClass->GetBuiltDirectory().Get() + "warning.txt", Log::Streams::Warning );
+    Log::TraceFileHandle error ( assetClass->GetBuiltDirectory().Get() + "error.txt", Log::Streams::Error );
 
     Profile::Timer timer;
 

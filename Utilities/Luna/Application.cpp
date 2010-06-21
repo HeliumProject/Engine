@@ -199,31 +199,6 @@ std::string LunaApp::ShowFileBrowser()
 {
     NOC_BREAK();
 #pragma TODO( "Reimplent to use the Vault" )
-  //File::FileBrowser browserDlg( NULL, -1, "Luna File Browser" );
-
-  //browserDlg.AddFilter( FinderSpecs::Asset::ANIM_DECORATION );
-  //browserDlg.AddFilter( FinderSpecs::Asset::ANIMSET_DECORATION );
-  //browserDlg.AddFilter( FinderSpecs::Asset::CINEMATIC_DECORATION ); 
-  //browserDlg.AddFilter( FinderSpecs::Asset::CONTENT_DECORATION );
-  //browserDlg.AddFilter( FinderSpecs::Asset::ENTITY_DECORATION );
-  //browserDlg.AddFilter( FinderSpecs::Asset::FOLIAGE_DECORATION );
-  //browserDlg.AddFilter( FinderSpecs::Asset::LEVEL_DECORATION );
-  //browserDlg.AddFilter( FinderSpecs::Asset::MATERIAL_DECORATION );
-  //browserDlg.AddFilter( FinderSpecs::Extension::MAYA_BINARY );
-  //browserDlg.AddFilter( FinderSpecs::Asset::SHADER_DECORATION );
-  //browserDlg.AddFilter( FinderSpecs::Extension::SPEEDTREE );
-  //browserDlg.AddFilter( FinderSpecs::Asset::SKY_DECORATION );
-  //browserDlg.AddFilter( FinderSpecs::Extension::TEXTUREMAP_FILTER );
-
-  //if ( browserDlg.ShowModal() == wxID_OK )
-  //{
-  //  std::string fullPath = browserDlg.GetPath();
-  //  if ( FileSystem::Exists( fullPath ) )
-  //  {
-  //    return fullPath;
-  //  }
-  //}
-
   return "";
 }
 

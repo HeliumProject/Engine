@@ -23,8 +23,6 @@
 #include "Application/Worker/Process.h"
 #include "Application/Application.h"
 
-#include "Finder/Finder.h"
-#include "Finder/DebugSpecs.h"
 #include "Pipeline/AssetBuilder/AssetBuilder.h"
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/AssetClass.h"
@@ -127,22 +125,6 @@ bool ParseProgramOptions( int argc, const char** argv )
                 arg++;
             }
         }
-        else if ( !stricmp( argv[ arg ], "-hack_filespec" ) )
-        {
-            if ( arg + 1 < argc )
-            {
-                std::string specName = argv[ ++arg ];
-
-                if ( !Finder::HackSpec( specName ) )
-                {
-                    Log::Error( "Invalid filespec: %s\n", specName.c_str() );
-                }
-            }
-        }
-        else if ( !stricmp( argv[ arg ], "-hack_all_filespecs" ) || !stricmp( argv[ arg ], "-f" ) || !stricmp( argv[ arg ], "-force" ) )
-        {
-            Finder::HackAllSpecs();
-        }
     }
 
     return true;
@@ -200,7 +182,7 @@ void Report(Asset::AssetClass* assetClass)
     if (g_GenerateReport && (Log::GetErrorCount() || Log::GetWarningCount()))
     {
         std::string line;
-        std::fstream file ( FinderSpecs::Debug::ERROR_FILE.GetFile( assetClass->GetBuiltDirectory() ).c_str() );
+        std::fstream file ( std::string( assetClass->GetBuiltDirectory() + "error.txt" ).c_str() );
         if ( !file.fail() )
         {
             Platform::Print( Platform::ConsoleColors::White, stderr, "Warnings and Errors:\n" );
@@ -491,7 +473,6 @@ int Main (int argc, const char** argv)
     initializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
     initializerStack.Push( Content::Initialize, Content::Cleanup );
     initializerStack.Push( Asset::Initialize, Asset::Cleanup );
-    initializerStack.Push( Finder::Initialize, Finder::Cleanup );
     initializerStack.Push( AssetBuilder::Initialize, AssetBuilder::Cleanup );
 
     AssetBuilder::AddAssetBuiltListener( AssetBuilder::AssetBuiltSignature::Delegate ( &AssetBuilt ) );

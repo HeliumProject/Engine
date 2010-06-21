@@ -139,7 +139,7 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
   TiXmlDocument doc;
 
 #pragma TODO( "reimplement to use a valid config folder location to get this file" )
-  std::string file = ""; //FinderSpecs::Luna::TYPE_CONFIGURATIONS.GetFile( FinderSpecs::Luna::GLOBAL_CONFIG_FOLDER );
+  std::string file = "";
 
   if (!doc.LoadFile( file.c_str() ))
   {
@@ -187,7 +187,7 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
               }
               else
               {
-                iconPath.Set( "" + t->m_Icon ); //FinderSpecs::Luna::GLOBAL_CONFIG_FOLDER.GetFolder();
+                iconPath.Set( "" + t->m_Icon );
                 if ( iconPath.Exists() )
                 {
                   t->m_IconIndex = Nocturnal::GlobalImageManager().GetImageIndex( iconPath.Get() );

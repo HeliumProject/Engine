@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "PreviewWindow.h"
 
-#include "Finder/ExtensionSpecs.h"
 #include "Foundation/Math/Utils.h"
 #include "Render/RBObjectLoader.h"
 #include "Scene/Camera.h"
@@ -506,7 +505,10 @@ void PreviewWindow::OnMouseWheel( wxMouseEvent& args )
 // 
 void PreviewWindow::OnScreenShotToFile( wxCommandEvent& args )
 {
-  Nocturnal::FileDialog dialog( this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, FinderSpecs::Extension::TGA.GetDialogFilter(), Nocturnal::FileDialogStyles::DefaultSave );
+  Nocturnal::FileDialog dialog( this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, "", Nocturnal::FileDialogStyles::DefaultSave );
+
+  dialog.AddFilter( "TGA (*.tga)|*.tga" );
+
   if ( dialog.ShowModal() == wxID_OK )
   {
     std::string path = dialog.GetPath();

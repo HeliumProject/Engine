@@ -1,7 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Finder", "libraries\Finder\Finder.vcproj", "{4EE7C012-89FE-409D-8306-68C59DE9BC56}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Luna", "utilities\Luna\Luna.vcproj", "{42ACA40F-393C-4412-9709-CBAA776D1537}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Foundation", "libraries\Foundation\Foundation.vcproj", "{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
@@ -26,19 +24,19 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite", "SDK\SQLite\3.6.23
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinyXML", "SDK\TinyXML\2.6.1\TinyXML.vcproj", "{06092F0D-324B-484D-A9ED-397DFF76AE53}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "SDK\zlib\1.2.5\zlib.vcproj", "{CFCA9C73-C321-48BA-8F29-097FD061EBB1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZLib", "SDK\zlib\1.2.5\zlib.vcproj", "{CFCA9C73-C321-48BA-8F29-097FD061EBB1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Crypto++", "SDK\Crypto++\5.6.0\Crypto++.vcproj", "{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wxPropertyGrid", "SDK\wxPropertyGrid\1.4.11\wxPropertyGrid.vcproj", "{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "squish", "SDK\squish\1.10\squish.vcproj", "{CF9387AB-7C10-4217-A248-575EE8610008}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Squish", "SDK\squish\1.10\squish.vcproj", "{CF9387AB-7C10-4217-A248-575EE8610008}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nvtt", "SDK\nvtt\2.0.7\nvtt.vcproj", "{1A02AC8B-51F6-46CD-A5BB-0B3F09FB2ABF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nVidiaTextureTools", "SDK\nvtt\2.0.7\nvtt.vcproj", "{1A02AC8B-51F6-46CD-A5BB-0B3F09FB2ABF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tiff", "SDK\tiff\3.9.2\tiff.vcproj", "{BC01F636-4D0F-489D-B082-7538025CE185}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TIFF", "SDK\tiff\3.9.2\tiff.vcproj", "{BC01F636-4D0F-489D-B082-7538025CE185}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua", "SDK\lua\5.1.4\lua.vcproj", "{C87D1745-76D6-4A2E-B655-23564E398510}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lua", "SDK\lua\5.1.4\lua.vcproj", "{C87D1745-76D6-4A2E-B655-23564E398510}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pipeline", "Libraries\Pipeline\Pipeline.vcproj", "{6005C4B7-F1A0-442F-81AA-1377FF18F910}"
 EndProject
@@ -50,12 +48,6 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4EE7C012-89FE-409D-8306-68C59DE9BC56}.Debug|Win32.ActiveCfg = Debug|Win32
-		{4EE7C012-89FE-409D-8306-68C59DE9BC56}.Debug|Win32.Build.0 = Debug|Win32
-		{4EE7C012-89FE-409D-8306-68C59DE9BC56}.Debug|x64.ActiveCfg = Debug|Win32
-		{4EE7C012-89FE-409D-8306-68C59DE9BC56}.Release|Win32.ActiveCfg = Release|Win32
-		{4EE7C012-89FE-409D-8306-68C59DE9BC56}.Release|Win32.Build.0 = Release|Win32
-		{4EE7C012-89FE-409D-8306-68C59DE9BC56}.Release|x64.ActiveCfg = Release|Win32
 		{42ACA40F-393C-4412-9709-CBAA776D1537}.Debug|Win32.ActiveCfg = Debug|Win32
 		{42ACA40F-393C-4412-9709-CBAA776D1537}.Debug|Win32.Build.0 = Debug|Win32
 		{42ACA40F-393C-4412-9709-CBAA776D1537}.Debug|x64.ActiveCfg = Debug|Win32

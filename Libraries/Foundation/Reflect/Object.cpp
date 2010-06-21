@@ -5,6 +5,8 @@
 
 #include "Platform/Atomic.h"
 
+#include <malloc.h>
+
 using namespace Reflect;
 
 Object::Object()
@@ -36,7 +38,7 @@ void* Object::operator new(size_t bytes)
         Profile::Memory::Allocate( Reflect::MemoryPool(), (u32)bytes );
     }
 
-    return ::malloc(bytes);
+    return ::malloc( bytes );
 }
 
 void Object::operator delete(void *ptr, size_t bytes)
@@ -46,7 +48,7 @@ void Object::operator delete(void *ptr, size_t bytes)
         Profile::Memory::Deallocate( Reflect::MemoryPool(), (u32)bytes );
     }
 
-    return ::free(ptr);
+    ::free(ptr);
 }
 
 i32 Object::GetType() const

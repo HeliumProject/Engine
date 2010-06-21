@@ -41,10 +41,6 @@ typedef _EXCEPTION_POINTERS EXCEPTION_POINTERS;
 typedef EXCEPTION_POINTERS* PEXCEPTION_POINTERS;
 typedef PEXCEPTION_POINTERS LPEXCEPTION_POINTERS;
 
-typedef unsigned int UINT;
-typedef unsigned long DWORD;
-typedef unsigned __int64 DWORD64;
-
 namespace Debug
 {
     namespace ExceptionTypes
@@ -74,7 +70,7 @@ namespace Debug
         std::string     m_Dump;
 
         // SEH-specific info
-        DWORD           m_SEHCode;
+        u32             m_SEHCode;
         std::string     m_SEHClass;
         std::string     m_SEHControlRegisters;
         std::string     m_SEHIntegerRegisters;
@@ -90,24 +86,22 @@ namespace Debug
         };
     };
 
-    typedef std::vector<DWORD64> V_DWORD64;
-
     // Init (need to specify the search paths to the pdbs if they aren't with the executables)
     PLATFORM_API bool Initialize( const std::string& pdbPaths = "" );
     PLATFORM_API bool IsInitialized();
 
     // Query information from a bare address (should be pretty safe to call)
-    PLATFORM_API std::string GetSymbolInfo( DWORD64 adr, bool enumLoadedModules = true );
-    PLATFORM_API std::exception* GetCxxException( DWORD64 addr );
+    PLATFORM_API std::string GetSymbolInfo( uintptr adr, bool enumLoadedModules = true );
+    PLATFORM_API std::exception* GetCxxException( uintptr addr );
 
     // Stack traces (capture with or without an explicit context, translate to string rep)
-    PLATFORM_API bool GetStackTrace( V_DWORD64& trace, unsigned omitFrames = 0 );
-    PLATFORM_API bool GetStackTrace( LPCONTEXT context, V_DWORD64& stack, unsigned omitFrames = 0 );
-    PLATFORM_API void TranslateStackTrace( const V_DWORD64& trace, std::string& buffer );
+    PLATFORM_API bool GetStackTrace( std::vector<uintptr>& trace, unsigned omitFrames = 0 );
+    PLATFORM_API bool GetStackTrace( LPCONTEXT context, std::vector<uintptr>& stack, unsigned omitFrames = 0 );
+    PLATFORM_API void TranslateStackTrace( const std::vector<uintptr>& trace, std::string& buffer );
 
     // Query SEH exception pointers for full report, abbreviated name, or more details
     PLATFORM_API std::string GetExceptionInfo( LPEXCEPTION_POINTERS info );
-    PLATFORM_API const char* GetExceptionClass( DWORD exceptionCode );
+    PLATFORM_API const char* GetExceptionClass( u32 exceptionCode );
     PLATFORM_API void GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args );
 
     // Core dumps (full dumps include process heaps)

@@ -125,7 +125,7 @@ bool Debug::IsInitialized()
   return g_Initialized;
 }
 
-std::string Debug::GetSymbolInfo(DWORD64 adr, bool enumLoadedModules)
+std::string Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
 {
   NOC_ASSERT( Debug::IsInitialized() );
 
@@ -222,7 +222,7 @@ std::string Debug::GetSymbolInfo(DWORD64 adr, bool enumLoadedModules)
   }
 }
 
-std::exception* Debug::GetCxxException(DWORD64 addr)
+std::exception* Debug::GetCxxException(uintptr addr)
 {
   std::exception* cppException = (std::exception*)addr;
 
@@ -245,7 +245,7 @@ std::exception* Debug::GetCxxException(DWORD64 addr)
   }
 }
 
-bool Debug::GetStackTrace(V_DWORD64& trace, unsigned omitFrames)
+bool Debug::GetStackTrace(std::vector<uintptr>& trace, unsigned omitFrames)
 {
   //  Some techniques borrowed from Visual Leak Detector 1.9
   //   (http://www.codeproject.com/tools/visualleakdetector.asp)
@@ -265,7 +265,7 @@ bool Debug::GetStackTrace(V_DWORD64& trace, unsigned omitFrames)
   return GetStackTrace(&context, trace, omitFrames+1);
 }
 
-bool Debug::GetStackTrace(LPCONTEXT context, V_DWORD64& stack, unsigned omitFrames)
+bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr>& stack, unsigned omitFrames)
 {
   NOC_ASSERT( Debug::IsInitialized() );
 
@@ -333,7 +333,7 @@ bool Debug::GetStackTrace(LPCONTEXT context, V_DWORD64& stack, unsigned omitFram
 
     if (omitFrames == 0)
     {
-      stack.push_back( frame.AddrReturn.Offset );
+      stack.push_back( (uintptr)frame.AddrReturn.Offset );
     }
     else
     {
@@ -344,17 +344,17 @@ bool Debug::GetStackTrace(LPCONTEXT context, V_DWORD64& stack, unsigned omitFram
   return !stack.empty();
 }
 
-void Debug::TranslateStackTrace(const V_DWORD64& trace, std::string& buffer)
+void Debug::TranslateStackTrace(const std::vector<uintptr>& trace, std::string& buffer)
 {
-  V_DWORD64::const_iterator itr = trace.begin();
-  V_DWORD64::const_iterator end = trace.end();
+  std::vector<uintptr>::const_iterator itr = trace.begin();
+  std::vector<uintptr>::const_iterator end = trace.end();
   for ( ; itr != end; ++itr )
   {
     PrintString(buffer, "0x%08I64X - %s\n", *itr, GetSymbolInfo(*itr, false).c_str() );
   }
 }
 
-const char* Debug::GetExceptionClass(DWORD exceptionCode)
+const char* Debug::GetExceptionClass(u32 exceptionCode)
 {
   const char* ex_name = NULL;
 
@@ -545,7 +545,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 
       PrintString( args.m_Threads.back(), "\nCallstack:\n" );
 
-      V_DWORD64 trace;
+      std::vector<uintptr> trace;
       if ( GetStackTrace( &context, trace ) )
       {
         TranslateStackTrace( trace, args.m_Threads.back() );
@@ -630,7 +630,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
     }
   }
 
-  V_DWORD64 trace;
+  std::vector<uintptr> trace;
   if ( GetStackTrace( info->ContextRecord, trace ) )
   {
     TranslateStackTrace( trace, args.m_Callstack );

@@ -18,9 +18,9 @@
 using namespace Debug;
 
 bool g_EnableExceptionFilter = false;
-DWORD Debug::ExecuteHandler = EXCEPTION_EXECUTE_HANDLER;
-DWORD Debug::ContinueSearch = EXCEPTION_CONTINUE_SEARCH;
-DWORD Debug::ContinueExecution = EXCEPTION_CONTINUE_EXECUTION;
+u32 Debug::ExecuteHandler = EXCEPTION_EXECUTE_HANDLER;
+u32 Debug::ContinueSearch = EXCEPTION_CONTINUE_SEARCH;
+u32 Debug::ContinueExecution = EXCEPTION_CONTINUE_EXECUTION;
 
 BreakpointSignature::Delegate Debug::g_BreakpointOccurred;
 ExceptionSignature::Delegate Debug::g_ExceptionOccurred;
@@ -96,7 +96,7 @@ void Debug::ProcessException(const std::exception& exception, bool print, bool f
   }
 }
 
-DWORD Debug::ProcessException(LPEXCEPTION_POINTERS info, DWORD ret_code, bool print, bool fatal)
+u32 Debug::ProcessException(LPEXCEPTION_POINTERS info, u32 ret_code, bool print, bool fatal)
 {
   SetUnhandledExceptionFilter( NULL );
 

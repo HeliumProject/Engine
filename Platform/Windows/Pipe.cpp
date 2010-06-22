@@ -31,7 +31,7 @@ void Platform::CleanupPipes()
 
 }
 
-bool Platform::CreatePipe(const char* name, Pipe& pipe)
+bool Platform::CreatePipe(const tchar* name, Pipe& pipe)
 {
     //
     // We must retry here because quickly thrashing the pipe API can sometimes cause
@@ -55,7 +55,7 @@ bool Platform::CreatePipe(const char* name, Pipe& pipe)
         {
             if ( retry > 10 )
             {
-                Platform::Print("Pipe Support: Failed to create pipe '%s' (%s)\n", name, Platform::GetErrorString().c_str());
+                Platform::Print(TXT("Pipe Support: Failed to create pipe '%s' (%s)\n"), name, Platform::GetErrorString().c_str());
                 return false;
             }
             else
@@ -74,7 +74,7 @@ bool Platform::CreatePipe(const char* name, Pipe& pipe)
     return true;
 }
 
-bool Platform::OpenPipe(const char* name, Pipe& pipe)
+bool Platform::OpenPipe(const tchar* name, Pipe& pipe)
 {
     if ( !::WaitNamedPipe(name, 0) ) 
     {
@@ -93,7 +93,7 @@ bool Platform::OpenPipe(const char* name, Pipe& pipe)
     {
         if (::GetLastError() != ERROR_PIPE_BUSY) 
         {
-            Platform::Print("Pipe Support: Failed to open pipe (%s)\n", Platform::GetErrorString().c_str());
+            Platform::Print(TXT("Pipe Support: Failed to open pipe (%s)\n"), Platform::GetErrorString().c_str());
         }
 
         return false;
@@ -104,7 +104,7 @@ bool Platform::OpenPipe(const char* name, Pipe& pipe)
         DWORD mode = PIPE_READMODE_BYTE|PIPE_WAIT; 
         if ( !::SetNamedPipeHandleState(pipe.m_Handle, &mode, NULL, NULL) )
         {
-            Platform::Print("Pipe Support: Failed to set client byte mode (%s)\n", Platform::GetErrorString().c_str());
+            Platform::Print(TXT("Pipe Support: Failed to set client byte mode (%s)\n"), Platform::GetErrorString().c_str());
             ::CloseHandle( pipe.m_Handle );
             return false;
         }
@@ -181,12 +181,12 @@ void Platform::DisconnectPipe(Pipe& pipe)
 {
     if (!::FlushFileBuffers(pipe.m_Handle))
     {
-        Platform::Print("Pipe Support: Failed to flush pipe buffers (%s)\n", Platform::GetErrorString().c_str());
+        Platform::Print(TXT("Pipe Support: Failed to flush pipe buffers (%s)\n"), Platform::GetErrorString().c_str());
     }
 
     if (!::DisconnectNamedPipe(pipe.m_Handle))
     {
-        Platform::Print("Pipe Support: Failed to diconnect pipe (%s)\n", Platform::GetErrorString().c_str());
+        Platform::Print(TXT("Pipe Support: Failed to diconnect pipe (%s)\n"), Platform::GetErrorString().c_str());
     }
 }
 

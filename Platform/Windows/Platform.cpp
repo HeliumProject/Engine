@@ -11,9 +11,9 @@ using namespace Platform;
 
 static int NewHandler( size_t size )
 {
-    std::ostringstream str;
-    str << "Failed to allocate " << size << " bytes";
-    throw std::exception ( str.str().c_str() );
+    std::ostringstream tstring;
+    tstring << "Failed to allocate " << size << " bytes";
+    throw std::exception ( tstring.str().c_str() );
 }
 
 static void PureCallHandler()
@@ -33,13 +33,13 @@ static void InvalidParameterHandler( const wchar_t* expression, const wchar_t* f
     char fl[ 256 ];
     wcstombs( fl, file ? file : unknown, sizeof(fl) );
 
-    std::ostringstream str;
-    str << "An invalid parameter was passed: ";
-    str << "Expression: " << ex;
-    str << "Function: " << fn;
-    str << "File: " << fl;
-    str << "Line: " << line;
-    throw std::exception ( str.str().c_str() );
+    std::ostringstream tstring;
+    tstring << "An invalid parameter was passed: ";
+    tstring << "Expression: " << ex;
+    tstring << "Function: " << fn;
+    tstring << "File: " << fl;
+    tstring << "Line: " << line;
+    throw std::exception ( tstring.str().c_str() );
 #else
     throw std::exception ("An invalid parameter was passed");
 #endif
@@ -93,11 +93,11 @@ Platform::Type Platform::GetType()
     return Types::Windows;
 }
 
-void Platform::Print(const char* fmt, ...)
+void Platform::Print(const tchar* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
-    vprintf(fmt, args);
+    _vtprintf(fmt, args);
     va_end(args);
 }
 

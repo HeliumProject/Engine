@@ -3,7 +3,7 @@
 
 using namespace Platform;
 
-void Platform::Print(ConsoleColor color, FILE* stream, const char* fmt, ...)
+void Platform::Print(ConsoleColor color, FILE* stream, const tchar* fmt, ...)
 {
     CONSOLE_SCREEN_BUFFER_INFO info;
 
@@ -21,7 +21,7 @@ void Platform::Print(ConsoleColor color, FILE* stream, const char* fmt, ...)
 
     va_list args;
     va_start(args, fmt); 
-    vfprintf(stream, fmt, args);
+    _vftprintf(stream, fmt, args);
     va_end(args); 
 
     fflush(stream);
@@ -33,7 +33,7 @@ void Platform::Print(ConsoleColor color, FILE* stream, const char* fmt, ...)
     }
 }
 
-void Platform::PrintArgs(ConsoleColor color, FILE* stream, const char* fmt, va_list args)
+void Platform::PrintArgs(ConsoleColor color, FILE* stream, const tchar* fmt, va_list args)
 {
     CONSOLE_SCREEN_BUFFER_INFO info;
 
@@ -49,7 +49,7 @@ void Platform::PrintArgs(ConsoleColor color, FILE* stream, const char* fmt, va_l
         SetConsoleTextAttribute(GetStdHandle(STD_ERROR_HANDLE), color | FOREGROUND_INTENSITY | background);
     }
 
-    vfprintf(stream, fmt, args);
+    _vftprintf(stream, fmt, args);
 
     fflush(stream);
 
@@ -60,7 +60,7 @@ void Platform::PrintArgs(ConsoleColor color, FILE* stream, const char* fmt, va_l
     }
 }
 
-void Platform::PrintString(ConsoleColor color, FILE* stream, const std::string& str)
+void Platform::PrintString(ConsoleColor color, FILE* stream, const tstring& tstring)
 {
     CONSOLE_SCREEN_BUFFER_INFO info;
 
@@ -76,7 +76,7 @@ void Platform::PrintString(ConsoleColor color, FILE* stream, const std::string& 
         SetConsoleTextAttribute(GetStdHandle(STD_ERROR_HANDLE), color | FOREGROUND_INTENSITY | background);
     }
 
-    fprintf(stream, "%s", str.c_str());
+    fprintf(stream, "%s", tstring.c_str());
 
     fflush(stream);
 

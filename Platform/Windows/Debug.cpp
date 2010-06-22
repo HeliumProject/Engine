@@ -2,9 +2,9 @@
 
 #include "Platform/Types.h"
 #include "Platform/Mutex.h"
+#include "Platform/Error.h"
+#include "Platform/Assert.h"
 #include "Platform/Windows/Windows.h"
-#include "Foundation/Log.h"
-#include "Foundation/Exception.h"
 
 #include <map>
 #include <time.h>
@@ -12,6 +12,16 @@
 #include <dbghelp.h>
 #include <tlhelp32.h>
 #pragma comment ( lib, "dbghelp.lib" )
+
+#ifdef _UNICODE
+# undef IMAGEHLP_MODULE64
+# define IMAGEHLP_MODULE64 IMAGEHLP_MODULEW64
+# undef IMAGEHLP_LINE64
+# define IMAGEHLP_LINE64 IMAGEHLP_LINEW64
+# define SymInitialize SymInitializeW
+# define SymGetModuleInfo64 SymGetModuleInfoW64
+# define SymGetLineFromAddr64 SymGetLineFromAddrW64
+#endif
 
 //#define DEBUG_SYMBOLS
 
@@ -24,13 +34,13 @@
 static bool g_Initialized = false;
 
 // Utility to print to a string
-static void PrintString(std::string& buffer, const char* str, ...)
+static void PrintString(tstring& buffer, const tchar* tstring, ...)
 {
-  static char buf[4096];
+  static tchar buf[4096];
 
   va_list argptr;
-  va_start(argptr, str);
-  vsnprintf(buf, sizeof(buf), str, argptr);
+  va_start(argptr, tstring);
+  _vsntprintf(buf, sizeof(buf), tstring, argptr);
   buf[ sizeof(buf) - 1] = 0; 
   va_end(argptr);
 
@@ -49,16 +59,16 @@ static BOOL CALLBACK EnumerateLoadedModulesProc(PCSTR name, DWORD64 base, ULONG 
     {
       if ( moduleInfo.LoadedPdbName[0] != '\0' )
       {
-        Log::Debug( "Success loading symbols for module: %s, base: 0x%08I64X, size: %u: %s\n", name, base, size, moduleInfo.LoadedPdbName );
+        _tprintf( TXT("Success loading symbols for module: %s, base: 0x%08I64X, size: %u: %s\n"), name, base, size, moduleInfo.LoadedPdbName );
       }
       else
       {
-        Log::Debug( "Success loading symbols for module: %s, base: 0x%08I64X, size: %u\n", name, base, size );
+        _tprintf( TXT("Success loading symbols for module: %s, base: 0x%08I64X, size: %u\n"), name, base, size );
       }
     }
     else
     {
-      Log::Debug( "Failure loading symbols for module: %s: %s\n", name, Platform::GetErrorString().c_str() );
+      _tprintf( TXT("Failure loading symbols for module: %s: %s\n"), name, Platform::GetErrorString().c_str() );
     }
   }
 
@@ -75,21 +85,21 @@ static void EnumerateLoadedModules()
   EnumerateLoadedModules64(GetCurrentProcess(), &EnumerateLoadedModulesProc, NULL);
 }
 
-bool Debug::Initialize(const std::string& pdbPaths)
+bool Debug::Initialize(const tstring& pdbPaths)
 {
   if ( !g_Initialized )
   {
-    std::string dir;
+    tstring dir;
 
     if ( pdbPaths.empty() )
     {
-      char module[MAX_PATH];
-      char drive[MAX_PATH];
-      char path[MAX_PATH];
-      char file[MAX_PATH];
-      char ext[MAX_PATH];
+      tchar module[MAX_PATH];
+      tchar drive[MAX_PATH];
+      tchar path[MAX_PATH];
+      tchar file[MAX_PATH];
+      tchar ext[MAX_PATH];
       GetModuleFileName(0,module,MAX_PATH);
-      _splitpath(module,drive,path,file,ext);
+      _tsplitpath(module,drive,path,file,ext);
 
       dir = drive;
       dir += path;
@@ -105,12 +115,12 @@ bool Debug::Initialize(const std::string& pdbPaths)
 
     SymSetOptions(options);
 
-    Log::Debug( "Symbol Path: %s\n", dir.c_str() );
+    _tprintf( TXT("Symbol Path: %s\n"), dir.c_str() );
 
     // initialize symbols (dbghelp.dll)
     if ( SymInitialize(GetCurrentProcess(), dir.c_str(), FALSE) == 0 )
     {
-      Log::Debug( "Failure initializing symbol API: %s\n", Platform::GetErrorString().c_str() );
+      _tprintf( TXT("Failure initializing symbol API: %s\n"), Platform::GetErrorString().c_str() );
       return false;
     }
 
@@ -126,7 +136,7 @@ bool Debug::IsInitialized()
   return g_Initialized;
 }
 
-std::string Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
+tstring Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
 {
   NOC_ASSERT( Debug::IsInitialized() );
 
@@ -137,24 +147,24 @@ std::string Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
   }
 
   // module image name "reflect.dll"
-  static char module[MAX_PATH];
+  static tchar module[MAX_PATH];
   ZeroMemory(&module, sizeof(module));
-  static char extension[MAX_PATH];
+  static tchar extension[MAX_PATH];
   ZeroMemory(&extension, sizeof(extension));
 
   // symbol name "Reflect::Class::AddSerializer + 0x16d"
-  static char symbol[MAX_SYM_NAME+16];
+  static tchar symbol[MAX_SYM_NAME+16];
   ZeroMemory(&symbol, sizeof(symbol));
 
   // source file name "typeinfo.cpp"
-  static char filename[MAX_PATH];
+  static tchar filename[MAX_PATH];
   ZeroMemory(&filename, sizeof(filename));
 
   // line number in source "246"
   DWORD line = 0xFFFFFFFF;
 
   // resulting line is worst case of all components
-  static char result[sizeof(module) + sizeof(symbol) + sizeof(filename) + 64];
+  static tchar result[sizeof(module) + sizeof(symbol) + sizeof(filename) + 64];
   ZeroMemory(&result, sizeof(result));
 
 
@@ -168,8 +178,8 @@ std::string Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
   if (SymGetModuleInfo64(GetCurrentProcess(), adr, &moduleInfo))
   {
     // success, copy the module info
-    _splitpath(moduleInfo.ImageName, NULL, NULL, module, extension);
-    strcat(module, extension);
+    _tsplitpath(moduleInfo.ImageName, NULL, NULL, module, extension);
+    _tcscat(module, extension);
 
     //
     // Now find symbol information
@@ -187,7 +197,7 @@ std::string Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
     if ( SymFromAddr(GetCurrentProcess(), adr, &disp, symbolInfo) != 0 )
     {
       // success, copy the symbol info
-      sprintf(symbol, "%s + 0x%X", symbolInfo->Name, disp);
+      _stprintf(symbol, TXT("%s + 0x%X"), symbolInfo->Name, disp);
 
       //
       // Now find source line information
@@ -200,26 +210,26 @@ std::string Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
       if ( SymGetLineFromAddr64(GetCurrentProcess(), adr, &d, &l) !=0 )
       {
         // success, copy the source file name
-        strcpy(filename, l.FileName);
-        static char ext[MAX_PATH];
-        static char file[MAX_PATH];
-        _splitpath(filename, NULL, NULL, file, ext);
+        _tcscpy(filename, l.FileName);
+        static tchar ext[MAX_PATH];
+        static tchar file[MAX_PATH];
+        _tsplitpath(filename, NULL, NULL, file, ext);
 
-        sprintf(result, "%s, %s : %s%s(%d)", module, symbol, file, ext, l.LineNumber);
+        _stprintf(result, TXT("%s, %s : %s%s(%d)"), module, symbol, file, ext, l.LineNumber);
         return result;
       }
 
-      sprintf(result, "%s, %s", module, symbol);
+      _stprintf(result, TXT("%s, %s"), module, symbol);
       return result;
     }
 
-    sprintf(result, "%s", module);
+    _stprintf(result, TXT("%s"), module);
     return result;
   }
   else
   {
     DWORD err = GetLastError();
-    return "Unknown";
+    return TXT("Unknown");
   }
 }
 
@@ -253,7 +263,7 @@ bool Debug::GetStackTrace(std::vector<uintptr>& trace, unsigned omitFrames)
 
   CONTEXT context;
 
-  volatile char *p = 0;
+  volatile tchar *p = 0;
   __try
   {
     *p = 0;
@@ -345,114 +355,114 @@ bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr>& stack, unsign
   return !stack.empty();
 }
 
-void Debug::TranslateStackTrace(const std::vector<uintptr>& trace, std::string& buffer)
+void Debug::TranslateStackTrace(const std::vector<uintptr>& trace, tstring& buffer)
 {
   std::vector<uintptr>::const_iterator itr = trace.begin();
   std::vector<uintptr>::const_iterator end = trace.end();
   for ( ; itr != end; ++itr )
   {
-    PrintString(buffer, "0x%08I64X - %s\n", *itr, GetSymbolInfo(*itr, false).c_str() );
+    PrintString(buffer, TXT("0x%08I64X - %s\n"), *itr, GetSymbolInfo(*itr, false).c_str() );
   }
 }
 
-const char* Debug::GetExceptionClass(u32 exceptionCode)
+const tchar* Debug::GetExceptionClass(u32 exceptionCode)
 {
-  const char* ex_name = NULL;
+  const tchar* ex_name = NULL;
 
   switch (exceptionCode)
   {
   case EXCEPTION_ACCESS_VIOLATION:
-    ex_name = "EXCEPTION_ACCESS_VIOLATION";
+    ex_name = TXT("EXCEPTION_ACCESS_VIOLATION");
     break;
 
   case EXCEPTION_BREAKPOINT:
-    ex_name = "EXCEPTION_BREAKPOINT";
+    ex_name = TXT("EXCEPTION_BREAKPOINT");
     break;
 
   case EXCEPTION_SINGLE_STEP:
-    ex_name = "EXCEPTION_SINGLE_STEP";
+    ex_name = TXT("EXCEPTION_SINGLE_STEP");
     break;
 
   case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:
-    ex_name = "EXCEPTION_ARRAY_BOUNDS_EXCEEDED";
+    ex_name = TXT("EXCEPTION_ARRAY_BOUNDS_EXCEEDED");
     break;
 
   case EXCEPTION_FLT_DENORMAL_OPERAND:
-    ex_name = "EXCEPTION_FLT_DENORMAL_OPERAND";
+    ex_name = TXT("EXCEPTION_FLT_DENORMAL_OPERAND");
     break;
 
   case EXCEPTION_FLT_DIVIDE_BY_ZERO:
-    ex_name = "EXCEPTION_FLT_DIVIDE_BY_ZERO";
+    ex_name = TXT("EXCEPTION_FLT_DIVIDE_BY_ZERO");
     break;
 
   case EXCEPTION_FLT_INEXACT_RESULT:
-    ex_name = "EXCEPTION_FLT_INEXACT_RESULT";
+    ex_name = TXT("EXCEPTION_FLT_INEXACT_RESULT");
     break;
 
   case EXCEPTION_FLT_INVALID_OPERATION:
-    ex_name = "EXCEPTION_FLT_INVALID_OPERATION";
+    ex_name = TXT("EXCEPTION_FLT_INVALID_OPERATION");
     break;
 
   case EXCEPTION_FLT_OVERFLOW:
-    ex_name = "EXCEPTION_FLT_OVERFLOW";
+    ex_name = TXT("EXCEPTION_FLT_OVERFLOW");
     break;
 
   case EXCEPTION_FLT_STACK_CHECK:
-    ex_name = "EXCEPTION_FLT_STACK_CHECK";
+    ex_name = TXT("EXCEPTION_FLT_STACK_CHECK");
     break;
 
   case EXCEPTION_FLT_UNDERFLOW:
-    ex_name = "EXCEPTION_FLT_UNDERFLOW";
+    ex_name = TXT("EXCEPTION_FLT_UNDERFLOW");
     break;
 
   case EXCEPTION_INT_DIVIDE_BY_ZERO:
-    ex_name = "EXCEPTION_INT_DIVIDE_BY_ZERO";
+    ex_name = TXT("EXCEPTION_INT_DIVIDE_BY_ZERO");
     break;
 
   case EXCEPTION_INT_OVERFLOW:
-    ex_name = "EXCEPTION_INT_OVERFLOW";
+    ex_name = TXT("EXCEPTION_INT_OVERFLOW");
     break;
 
   case EXCEPTION_PRIV_INSTRUCTION:
-    ex_name = "EXCEPTION_PRIV_INSTRUCTION";
+    ex_name = TXT("EXCEPTION_PRIV_INSTRUCTION");
     break;
 
   case EXCEPTION_IN_PAGE_ERROR:
-    ex_name = "EXCEPTION_IN_PAGE_ERROR";
+    ex_name = TXT("EXCEPTION_IN_PAGE_ERROR");
     break;
 
   case EXCEPTION_ILLEGAL_INSTRUCTION:
-    ex_name = "EXCEPTION_ILLEGAL_INSTRUCTION";
+    ex_name = TXT("EXCEPTION_ILLEGAL_INSTRUCTION");
     break;
 
   case EXCEPTION_NONCONTINUABLE_EXCEPTION:
-    ex_name = "EXCEPTION_NONCONTINUABLE_EXCEPTION";
+    ex_name = TXT("EXCEPTION_NONCONTINUABLE_EXCEPTION");
     break;
 
   case EXCEPTION_STACK_OVERFLOW:
-    ex_name = "EXCEPTION_STACK_OVERFLOW";
+    ex_name = TXT("EXCEPTION_STACK_OVERFLOW");
     break;
 
   case EXCEPTION_INVALID_DISPOSITION:
-    ex_name = "EXCEPTION_INVALID_DISPOSITION";
+    ex_name = TXT("EXCEPTION_INVALID_DISPOSITION");
     break;
 
   case EXCEPTION_GUARD_PAGE:
-    ex_name = "EXCEPTION_GUARD_PAGE";
+    ex_name = TXT("EXCEPTION_GUARD_PAGE");
     break;
 
   case EXCEPTION_INVALID_HANDLE:
-    ex_name = "EXCEPTION_INVALID_HANDLE";
+    ex_name = TXT("EXCEPTION_INVALID_HANDLE");
     break;
 
   case 0xC00002B5:
-    ex_name = "Multiple floating point traps";
+    ex_name = TXT("Multiple floating point traps");
     break;
   }
 
   if (ex_name == NULL)
   {
-    ex_name = "Unknown Exception";
+    ex_name = TXT("Unknown Exception");
   }
 
   return ex_name;
@@ -462,20 +472,6 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 {
   static Platform::Mutex s_ExceptionMutex;
   Platform::TakeMutex mutex ( s_ExceptionMutex );
-
-  // we need to take console's section here because we are going to suspend threads,
-  //  and this library could try and take this section via a function call
-  struct TakeConsoleMutex
-  {
-    TakeConsoleMutex()
-    {
-      Log::LockMutex();
-    }
-    ~TakeConsoleMutex()
-    {
-      Log::UnlockMutex();
-    }
-  } consoleMutex;
 
   typedef std::vector< std::pair<DWORD, HANDLE> > V_ThreadHandles;
   V_ThreadHandles threads;
@@ -514,9 +510,9 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
     DWORD id = itr->first;
     HANDLE handle = itr->second;
 
-    args.m_Threads.push_back( "" );
-    PrintString( args.m_Threads.back(), "Thread %d:\n", id );
-    std::string::size_type size = args.m_Threads.back().size();
+    args.m_Threads.push_back( TXT("") );
+    PrintString( args.m_Threads.back(), TXT("Thread %d:\n"), id );
+    tstring::size_type size = args.m_Threads.back().size();
 
     CONTEXT context;
     memset(&context, 0, sizeof( context ));
@@ -524,19 +520,19 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
     if ( ::GetThreadContext( handle, &context ) )
     {
       PrintString( args.m_Threads.back(), 
-        "\nControl Registers:\n"
-        "EIP = 0x%08X  ESP = 0x%08X\n"
-        "EBP = 0x%08X  EFL = 0x%08X\n",
+        TXT("\nControl Registers:\n")
+        TXT("EIP = 0x%08X  ESP = 0x%08X\n")
+        TXT("EBP = 0x%08X  EFL = 0x%08X\n"),
         info->ContextRecord->IPREG,
         info->ContextRecord->SPREG,
         info->ContextRecord->BPREG,
         info->ContextRecord->EFlags );
 
       PrintString( args.m_Threads.back(), 
-        "\nInteger Registers:\n"
-        "EAX = 0x%08X  EBX = 0x%08X\n"
-        "ECX = 0x%08X  EDX = 0x%08X\n"
-        "ESI = 0x%08X  EDI = 0x%08X\n",
+        TXT("\nInteger Registers:\n")
+        TXT("EAX = 0x%08X  EBX = 0x%08X\n")
+        TXT("ECX = 0x%08X  EDX = 0x%08X\n")
+        TXT("ESI = 0x%08X  EDI = 0x%08X\n"),
         info->ContextRecord->AXREG,
         info->ContextRecord->BXREG,
         info->ContextRecord->CXREG,
@@ -544,7 +540,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
         info->ContextRecord->SIREG,
         info->ContextRecord->DIREG );
 
-      PrintString( args.m_Threads.back(), "\nCallstack:\n" );
+      PrintString( args.m_Threads.back(), TXT("\nCallstack:\n") );
 
       std::vector<uintptr> trace;
       if ( GetStackTrace( &context, trace ) )
@@ -555,7 +551,7 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 
     if ( args.m_Threads.back().size() == size )
     {
-      args.m_Threads.back() += "No thread info\n";
+      args.m_Threads.back() += TXT("No thread info\n");
     }
 
     ::ResumeThread( handle );
@@ -584,12 +580,31 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
         cppClass = "Unknown";
       }
 
-      args.m_CPPClass = cppClass;
-      args.m_Message = cppException->what();
+      tchar name[MAX_PATH];
+
+#ifdef UNICODE
+      mbstowcs( name, cppClass, sizeof(name) );
+#else
+      strncpy( name, cppClass, sizeof(name) );
+#endif
+      args.m_CPPClass = name;
+
+#pragma TODO("Make Nocturnal::Exception not subclass std::exception")
+      const char* what = cppException->what();
+      size_t whatLength = strlen( what );
+      tchar* message = (tchar*)alloca( whatLength * sizeof( tchar ) );
+
+#ifdef UNICODE
+      mbstowcs( message, what, whatLength );
+#else
+      strncpy( message, cppClass, sizeof(message) );
+#endif
+
+      args.m_Message = message;
     }
     else
     {
-      args.m_Message = "Thrown object is not a std::exception";
+      args.m_Message = TXT("Thrown object is not a std::exception");
     }
 
     info->ContextRecord->IPREG = (DWORD)info->ExceptionRecord->ExceptionInformation[2];
@@ -600,15 +615,15 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
 
     if (args.m_SEHCode == EXCEPTION_ACCESS_VIOLATION)
     {
-      PrintString( args.m_Message, "Attempt to %s address 0x%08X", (info->ExceptionRecord->ExceptionInformation[0]==1)?"write to":"read from", info->ExceptionRecord->ExceptionInformation[1]);
+      PrintString( args.m_Message, TXT("Attempt to %s address 0x%08X"), (info->ExceptionRecord->ExceptionInformation[0]==1)?TXT("write to"):TXT("read from"), info->ExceptionRecord->ExceptionInformation[1]);
     }
 
     if (info->ContextRecord->ContextFlags & CONTEXT_CONTROL)
     {
       PrintString( args.m_SEHControlRegisters, 
-        "Control Registers:\n"
-        "EIP = 0x%08X  ESP = 0x%08X\n"
-        "EBP = 0x%08X  EFL = 0x%08X\n",
+        TXT("Control Registers:\n")
+        TXT("EIP = 0x%08X  ESP = 0x%08X\n")
+        TXT("EBP = 0x%08X  EFL = 0x%08X\n"),
         info->ContextRecord->IPREG,
         info->ContextRecord->SPREG,
         info->ContextRecord->BPREG,
@@ -618,10 +633,10 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
     if ( info->ContextRecord->ContextFlags & CONTEXT_INTEGER )
     {
       PrintString( args.m_SEHIntegerRegisters, 
-        "Integer Registers:\n"
-        "EAX = 0x%08X  EBX = 0x%08X\n"
-        "ECX = 0x%08X  EDX = 0x%08X\n"
-        "ESI = 0x%08X  EDI = 0x%08X\n",
+        TXT("Integer Registers:\n")
+        TXT("EAX = 0x%08X  EBX = 0x%08X\n")
+        TXT("ECX = 0x%08X  EDX = 0x%08X\n")
+        TXT("ESI = 0x%08X  EDI = 0x%08X\n"),
         info->ContextRecord->AXREG,
         info->ContextRecord->BXREG,
         info->ContextRecord->CXREG,
@@ -638,24 +653,24 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
   }
 }
 
-std::string Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
+tstring Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
 {
   ExceptionArgs args ( ExceptionTypes::SEH, false );
   GetExceptionDetails( info, args );
 
-  std::string buffer;
-  buffer += "An exception has occurred\n";
+  tstring buffer;
+  buffer += TXT("An exception has occurred\n");
 
   switch ( args.m_Type )
   {
   case ExceptionTypes::CPP:
     {
-      PrintString( buffer, "Type:    C++ Exception\n" );
-      PrintString( buffer, "Class:   %s\n", args.m_CPPClass.c_str() );
+      PrintString( buffer, TXT("Type:    C++ Exception\n") );
+      PrintString( buffer, TXT("Class:   %s\n"), args.m_CPPClass.c_str() );
 
       if ( !args.m_Message.empty() )
       {
-        PrintString( buffer, "Message:\n%s\n", args.m_Message.c_str() );
+        PrintString( buffer, TXT("Message:\n%s\n"), args.m_Message.c_str() );
       }
 
       break;
@@ -663,75 +678,75 @@ std::string Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
 
   case ExceptionTypes::SEH:
     {
-      PrintString( buffer, "Type:    SEH Exception\n" );
-      PrintString( buffer, "Code:    0x%08X\n", args.m_SEHCode );
-      PrintString( buffer, "Class:   %s\n", args.m_SEHClass.c_str() );
+      PrintString( buffer, TXT("Type:    SEH Exception\n") );
+      PrintString( buffer, TXT("Code:    0x%08X\n"), args.m_SEHCode );
+      PrintString( buffer, TXT("Class:   %s\n"), args.m_SEHClass.c_str() );
 
       if ( !args.m_Message.empty() )
       {
-        PrintString( buffer, "Message:\n%s\n", args.m_Message.c_str() );
+        PrintString( buffer, TXT("Message:\n%s\n"), args.m_Message.c_str() );
       }
 
       if ( !args.m_SEHControlRegisters.empty() )
       {
-        PrintString( buffer, "\n%s", args.m_SEHControlRegisters.c_str() );
+        PrintString( buffer, TXT("\n%s"), args.m_SEHControlRegisters.c_str() );
       }
 
       if ( !args.m_SEHIntegerRegisters.empty() )
       {
-        PrintString( buffer, "\n%s", args.m_SEHIntegerRegisters.c_str() );
+        PrintString( buffer, TXT("\n%s"), args.m_SEHIntegerRegisters.c_str() );
       }
       
       break;
     }
   }
 
-  buffer += "\nCallstack:\n";
+  buffer += TXT("\nCallstack:\n");
 
   if ( !args.m_Callstack.empty() )
   {
-    PrintString( buffer, "%s", args.m_Callstack.c_str() );
+    PrintString( buffer, TXT("%s"), args.m_Callstack.c_str() );
   }
   else
   {
-    buffer += "No call stack info\n";
+    buffer += TXT("No call stack info\n");
   }
 
-  std::vector< std::string >::const_iterator itr = args.m_Threads.begin();
-  std::vector< std::string >::const_iterator end = args.m_Threads.end();
+  std::vector< tstring >::const_iterator itr = args.m_Threads.begin();
+  std::vector< tstring >::const_iterator end = args.m_Threads.end();
   for ( ; itr != end; ++itr )
   {
-    PrintString( buffer, "\n%s", itr->c_str() );
+    PrintString( buffer, TXT("\n%s"), itr->c_str() );
   }
 
   return buffer;
 }
 
-std::string Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
+tstring Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
 {
-  char* tempDir = getenv( "NOC_PROJECT_TMP" );
+  tchar* tempDir = _tgetenv( TXT("NOC_PROJECT_TMP") );
   if ( tempDir == NULL )
   {
-    Log::Error( "Failed to write crash dump because the temporary directory (%s) to save the file to could not be determined.\n", "NOC_PROJECT_TMP" );
-    return "";
+    _tprintf( TXT("Failed to write crash dump because the temporary directory (%s) to save the file to could not be determined.\n"), TXT("NOC_PROJECT_TMP") );
+    return TXT("");
   }
 
   // Make sure that the directory exists
-  char directory[MAX_PATH] = { '\0' };
-  sprintf_s( directory, sizeof( directory ) - 1, "%s\\crashdumps", tempDir );
+  tchar directory[MAX_PATH] = { 0 };
+  _sntprintf( directory, sizeof( directory ) - 1, TXT("%s\\crashdumps"), tempDir );
   SHCreateDirectoryEx( NULL, directory, NULL );
 
   // Tack time (in seconds since UTC) onto end of file name
   time_t now;
   time( &now );
 
-  char module[MAX_PATH];
-  char file[MAX_PATH];
+  tchar module[MAX_PATH];
+  tchar file[MAX_PATH];
   GetModuleFileName( 0, module, MAX_PATH );
-  _splitpath( module, NULL, NULL, file, NULL );
+  _tsplitpath( module, NULL, NULL, file, NULL );
 
-  char dmp_file[MAX_PATH] = { '\0' };
-  sprintf_s( dmp_file, sizeof( dmp_file ) - 1, "%s\\%s_%ld.dmp", directory, file, now );
+  tchar dmp_file[MAX_PATH] = { '\0' };
+  _sntprintf( dmp_file, sizeof( dmp_file ) - 1, TXT("%s\\%s_%ld.dmp"), directory, file, now );
 
   HANDLE dmp;
   dmp = CreateFile( dmp_file, FILE_ALL_ACCESS, FILE_SHARE_READ, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0 );
@@ -762,5 +777,5 @@ std::string Debug::WriteDump(LPEXCEPTION_POINTERS info, bool full)
     return dmp_file;
   }
 
-  return "";
+  return TXT("");
 }

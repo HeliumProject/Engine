@@ -39,5 +39,5 @@ namespace Platform
         }
     };
 
-    PLATFORM_API bool StatPath( const char* path, Stat& stat );
+    PLATFORM_API bool StatPath( const tchar* path, Stat& stat );
 }

@@ -32,19 +32,19 @@ namespace Platform
 
         }
 
-        void Open(const char* file);
+        void Open(const tchar* file);
 
         void Close();
 
-        void Write(const char* data, int size);
+        void Write(const tchar* data, int size);
 
-        static const char* GetFilePath();
+        static const tchar* GetFilePath();
     };
 
     PLATFORM_API u64 TimerGetClock();
     PLATFORM_API float CyclesToMillis(u64 cycles);
     PLATFORM_API float TimeTaken(u64 start_time);
-    PLATFORM_API void ReportTime(const char* segment, u64 start_time, double& total_millis);
+    PLATFORM_API void ReportTime(const tchar* segment, u64 start_time, double& total_millis);
 
     PLATFORM_API u64 GetTotalMemory();
 }

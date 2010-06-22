@@ -49,5 +49,5 @@ namespace Profile
     //
 
     PLATFORM_API void GetMemoryStatus(MemoryStatus* status);
-    PLATFORM_API void GetMemoryStatus(char* buffer, size_t bufSize);
+    PLATFORM_API void GetMemoryStatus(tchar* buffer, size_t bufSize);
 }

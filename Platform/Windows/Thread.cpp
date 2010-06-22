@@ -20,7 +20,7 @@ Thread::~Thread()
     }
 }
 
-bool Thread::Create(Entry entry, void* obj, const char* name, int priority)
+bool Thread::Create(Entry entry, void* obj, const tchar* name, int priority)
 {
     if (Valid())
     {
@@ -30,7 +30,7 @@ bool Thread::Create(Entry entry, void* obj, const char* name, int priority)
     m_Handle = ::CreateThread(0,0,(LPTHREAD_START_ROUTINE)entry,obj,0,0);
     if (!m_Handle)
     {
-        Platform::Print("Failed to create thread: %s\n [0x%x: %s]", name, ::GetLastError(), Platform::GetErrorString().c_str());
+        Platform::Print(TXT("Failed to create thread: %s\n [0x%x: %s]"), name, ::GetLastError(), Platform::GetErrorString().c_str());
         return false;
     }
 
@@ -52,7 +52,7 @@ void Thread::Close()
     BOOL result = ::CloseHandle(m_Handle);
     if ( result != TRUE )
     {
-        Platform::Print("Failed to close thread (%s)\n", Platform::GetErrorString().c_str());
+        Platform::Print(TXT("Failed to close thread (%s)\n"), Platform::GetErrorString().c_str());
         NOC_BREAK();
     }
     m_Handle = NULL;
@@ -69,14 +69,14 @@ Thread::Return Thread::Wait(u32 timeout)
 
     if ( timeout == 0xffffffff && result != WAIT_OBJECT_0 )
     {
-        Platform::Print("Failed to wait for thread (%s)\n", Platform::GetErrorString().c_str());
+        Platform::Print(TXT("Failed to wait for thread (%s)\n"), Platform::GetErrorString().c_str());
         NOC_BREAK();
     }
 
     DWORD code;
     if ( !::GetExitCodeThread(m_Handle, &code) )
     {
-        Platform::Print("Failed to get thread exit code (%s)\n", Platform::GetErrorString().c_str());
+        Platform::Print(TXT("Failed to get thread exit code (%s)\n"), Platform::GetErrorString().c_str());
         NOC_BREAK();
     }
 

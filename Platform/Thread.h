@@ -50,8 +50,8 @@ namespace Platform
         }
 
         // create and execute a thread
-        bool Create(Entry entry, void* obj, const char* name, int priority = 0);
-        bool CreateWithArgs(Entry entry, void* obj, void* args, const char* name, int priority = 0)
+        bool Create(Entry entry, void* obj, const tchar* name, int priority = 0);
+        bool CreateWithArgs(Entry entry, void* obj, void* args, const tchar* name, int priority = 0)
         {
             ThreadHelperArgs* threadHelperArgs = new ThreadHelperArgs( obj, args );
             return Create(entry, threadHelperArgs, name);

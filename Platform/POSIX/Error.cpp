@@ -7,7 +7,7 @@ u32 Platform::GetLastError()
     return 0xffffffff;
 }
 
-std::string Platform::GetErrorString( u32 errorOverride )
+tstring Platform::GetErrorString( u32 errorOverride )
 {
     return "Unknown";
 }

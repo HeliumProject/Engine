@@ -1,16 +1,16 @@
 #include "Platform/Process.h"
 
-int Platform::Execute( const std::string& command, bool showWindow, bool block )
+int Platform::Execute( const tstring& command, bool showWindow, bool block )
 {
     return -1;
 }
 
-int Platform::Execute( const std::string& command, std::string& output, bool showWindow )
+int Platform::Execute( const tstring& command, tstring& output, bool showWindow )
 {
     return -1;
 }
 
-std::string Platform::GetProcessString()
+tstring Platform::GetProcessString()
 {
     return "";
 }

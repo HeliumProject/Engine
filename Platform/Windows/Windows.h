@@ -43,6 +43,7 @@
 // internet explorer 6
 #define _WIN32_IE 0x0600
 
+#include <tchar.h>
 #include <windows.h>
 #include <winsock2.h>
 

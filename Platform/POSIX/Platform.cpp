@@ -11,7 +11,7 @@ Platform::Type Platform::GetType()
     return Types::PlayStation3;
 }
 
-void Platform::Print(const char* fmt, ...)
+void Platform::Print(const tchar* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);

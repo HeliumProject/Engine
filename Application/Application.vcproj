@@ -23,7 +23,7 @@
 			Name="Debug|Win32"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
 			<Tool
@@ -87,7 +87,7 @@
 			Name="Debug|x64"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
 			<Tool
@@ -152,7 +152,7 @@
 			Name="Release|Win32"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
 			<Tool
@@ -214,7 +214,7 @@
 			Name="Release|x64"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
 			<Tool
@@ -277,11 +277,11 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
-			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
+			RelativePathToProject=".\Foundation\Foundation.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
-			RelativePathToProject=".\libraries\Platform\platform.vcproj"
+			RelativePathToProject=".\Platform\Platform.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"

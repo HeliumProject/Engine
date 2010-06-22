@@ -67,7 +67,7 @@ namespace Safe
             // note that "T" here HAS to be a template parameter, otherwise builtin types will generate compile error
             // apparently only the template compiler knows how to differentiate between builtin and user types (without
             // entering builtin type specialization hell)
-            (ptr)->~T();
+            (ptr)->~TXT();
         }
 
         static void Destruct(T* ptr, size_t count)
@@ -360,9 +360,9 @@ namespace Safe
             m_string.data()[0] = '\0';
         }
 
-        String (const C* str)
+        String (const C* tstring)
         {
-            operator=(str);
+            operator=(tstring);
         }
 
         String (const String<C>& rhs)
@@ -370,34 +370,34 @@ namespace Safe
             operator=(rhs.data());
         }
 
-        String (const std::basic_string<C>& str)
+        String (const std::basic_string<C>& tstring)
         {
-            operator=(str);
+            operator=(tstring);
         }
 
-        String<C>& operator=(const C* str)
+        String<C>& operator=(const C* tstring)
         {
-            size_t size = strlen(str);
+            size_t size = strlen(tstring);
 
             resize(size);
 
             if (!empty())
             {
-                Memorycpy(m_string.data(), str, sizeof(C)*size);
+                Memorycpy(m_string.data(), tstring, sizeof(C)*size);
             }
 
             return *this;
         }
 
-        String<C>& operator=(const std::basic_string<C>& str)
+        String<C>& operator=(const std::basic_string<C>& tstring)
         {
-            size_t size = str.length();
+            size_t size = tstring.length();
 
             resize(size);
 
             if (!empty())
             {
-                Memorycpy(m_string.data(), &(*str.begin()), sizeof(C)*size);
+                Memorycpy(m_string.data(), &(*tstring.begin()), sizeof(C)*size);
             }
 
             return *this;
@@ -408,14 +408,14 @@ namespace Safe
             return m_string.data();
         }
 
-        bool operator==(const C* str)
+        bool operator==(const C* tstring)
         {
-            return strcmp(m_string.data(), str)==0;
+            return strcmp(m_string.data(), tstring)==0;
         }
 
-        bool operator!=(const C* str)
+        bool operator!=(const C* tstring)
         {
-            return !operator==(str);
+            return !operator==(tstring);
         }
 
         virtual C* data() const
@@ -525,13 +525,13 @@ namespace Safe
         void construct(pointer ptr, const T& val)
         {
             // construct object at ptr with value val
-            ::new(ptr) T(val); 
+            ::new(ptr) TXT(val); 
         }
 
         void destroy(pointer ptr)
         {
             // destroy object at ptr
-            ptr->~T(); 
+            ptr->~TXT(); 
         }
 
         size_t max_size() const 

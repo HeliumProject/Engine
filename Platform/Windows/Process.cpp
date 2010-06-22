@@ -6,7 +6,7 @@
 
 #include <sstream>
 
-int Platform::Execute( const std::string& command, bool showWindow, bool block )
+int Platform::Execute( const tstring& command, bool showWindow, bool block )
 {
     DWORD result = 0;
 
@@ -47,7 +47,7 @@ int Platform::Execute( const std::string& command, bool showWindow, bool block )
     return result;
 }
 
-int Platform::Execute( const std::string& command, std::string& output, bool showWindow )
+int Platform::Execute( const tstring& command, tstring& output, bool showWindow )
 {
     HANDLE hReadPipe;
     HANDLE hWritePipe;
@@ -73,11 +73,11 @@ int Platform::Execute( const std::string& command, std::string& output, bool sho
 
     if( !CreateProcess(
         NULL,                                                 // filename
-        (LPSTR) command.c_str(),                             // command line for child
+        (tchar*) command.c_str(),                               // command line for child
         NULL,                                                 // process security descriptor
         NULL,                                                 // thread security descriptor
         TRUE,                                                 // inherit handles?
-        showWindow ? CREATE_NEW_CONSOLE : CREATE_NO_WINDOW,  // creation flags
+        showWindow ? CREATE_NEW_CONSOLE : CREATE_NO_WINDOW,   // creation flags
         NULL,                                                 // inherited environment address
         NULL,                                                 // startup dir; NULL = start in current
         &si,                                                  // pointer to startup info (input)
@@ -92,9 +92,9 @@ int Platform::Execute( const std::string& command, std::string& output, bool sho
     ::CloseHandle( hWritePipe );
 
     // read from the pipe until EOF condition reached
-    char buffer[80];
+    tchar buffer[80];
     unsigned long count;
-    std::ostringstream str;
+    tstringstream stream;
     BOOL success = TRUE;
     do
     {
@@ -102,7 +102,7 @@ int Platform::Execute( const std::string& command, std::string& output, bool sho
         {
             if( success )
             {
-                str.write( buffer, count );
+                stream.write( buffer, count );
             }
             else
             {
@@ -122,7 +122,7 @@ int Platform::Execute( const std::string& command, std::string& output, bool sho
     ::CloseHandle( hReadPipe );
 
     // copy output string
-    output = str.str();
+    output = stream.str();
 
     // get exit code
     DWORD result = 0;
@@ -136,17 +136,17 @@ int Platform::Execute( const std::string& command, std::string& output, bool sho
     return result;
 }
 
-std::string Platform::GetProcessString()
+tstring Platform::GetProcessString()
 {
     HMODULE moduleHandle = GetModuleHandle( NULL );
 
-    char module[ MAX_PATH + 1 ];
+    tchar module[ MAX_PATH + 1 ];
     GetModuleFileName( moduleHandle, module, MAX_PATH );
 
-    char file[ MAX_PATH + 1 ];
-    _splitpath( module, NULL, NULL, file, NULL );
+    tchar file[ MAX_PATH + 1 ];
+    _tsplitpath( module, NULL, NULL, file, NULL );
 
-    std::ostringstream result;
+    tostringstream result;
     result << file << "_" << GetCurrentProcessId() << "_" << GetCurrentThreadId();
     return result.str();
 }

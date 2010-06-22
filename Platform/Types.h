@@ -34,22 +34,22 @@ typedef int                     intptr;
 
 #elif defined (__GCC__) || defined (__SNC__)
 
-typedef unsigned char         u8;
-typedef signed char           i8;
-typedef unsigned short        u16;
-typedef signed short          i16;
-typedef unsigned int          u32;
-typedef signed int            i32;
-typedef unsigned long long    u64;
-typedef long long             i64;
-typedef float                 f32;
-typedef double                f64;
+typedef unsigned char           u8;
+typedef signed char             i8;
+typedef unsigned short          u16;
+typedef signed short            i16;
+typedef unsigned int            u32;
+typedef signed int              i32;
+typedef unsigned long long      u64;
+typedef long long               i64;
+typedef float                   f32;
+typedef double                  f64;
 
-typedef unsigned int          p32;
-typedef unsigned long long    p64;
+typedef unsigned int            p32;
+typedef unsigned long long      p64;
 
-typedef unsigned int          uintptr;
-typedef int                   intptr;
+typedef unsigned int            uintptr;
+typedef int                     intptr;
 
 #endif
 
@@ -58,13 +58,32 @@ typedef int                   intptr;
 //
 
 #include <string>
+#include <sstream>
 
 #ifdef _UNICODE
-typedef wchar_t                 chr;
-typedef std::wstring            str;
-#define STR(s) L#s
+# ifndef UNICODE
+#  define UNICODE
+# endif
+#endif
+
+#ifdef UNICODE
+# ifndef _UNICODE
+#  define _UNICODE
+# endif
+#endif
+
+#ifdef UNICODE
+typedef wchar_t                 tchar;
+typedef std::wstring            tstring;
+typedef std::wstringstream      tstringstream;
+typedef std::wistringstream     tistringstream;
+typedef std::wostringstream     tostringstream;
+#define TXT(s) L##s
 #else
-typedef char                    chr;
-typedef std::string             str;
-#define STR(s) s
+typedef char                    tchar;
+typedef std::string             tstring;
+typedef std::stringstream       tstringstream;
+typedef std::istringstream      tistringstream;
+typedef std::ostringstream      tostringstream;
+#define TXT(s) s
 #endif

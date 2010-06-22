@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Types.h"
 
 //
 // Setup state
@@ -72,7 +73,7 @@
 // Compile time
 //
 
-#define NOC_COMPILE_ASSERT(exp) typedef char __NOC_COMPILE_ASSERT__[(exp)?1:-1] 
+#define NOC_COMPILE_ASSERT(exp) typedef tchar __NOC_COMPILE_ASSERT__[(exp)?1:-1] 
 
 
 //

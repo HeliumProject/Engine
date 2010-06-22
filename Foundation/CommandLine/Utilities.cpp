@@ -1,5 +1,5 @@
-#include "CommandLine.h"
-#include "Environment.h"
+#include "Utilities.h"
+#include "Foundation/Environment.h"
 
 using namespace Nocturnal;
 

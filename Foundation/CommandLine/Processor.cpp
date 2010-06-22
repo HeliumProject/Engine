@@ -1,41 +1,137 @@
 #include "Processor.h"
 
+#include "Foundation/Log.h"
+
 using namespace Nocturnal::CommandLine;
 
-Processor::Processor()
+Processor::Processor( const char* token, const char* usage, const char* shortHelp )
+: m_Token( token )
+, m_Usage( usage )
+, m_ShortHelp( shortHelp )
+, m_HelpFlag( "help", "print command usage" )
 {
+	m_HelpCommand.SetOwner( this );
 }
 
 Processor::~Processor()
 {
-    for ( M_StringToVerbDumbPtr::iterator itr = m_Verbs.begin(), end = m_Verbs.end(); itr != end; ++itr )
-    {
-        delete (*itr).second;
-    }
+	for ( M_StringToOptionDumbPtr::iterator argsBegin = m_Options.begin(), argsEnd = m_Options.end(); argsBegin != argsEnd; ++argsBegin )
+	{
+		delete (*argsBegin).second;
+	}
 
-    for ( M_StringToOptionDumbPtr::iterator itr = m_Options.begin(), end = m_Options.end(); itr != end; ++itr )
+    for ( M_StringToCommandDumbPtr::iterator argsBegin = m_Commands.begin(), end = m_Commands.end(); argsBegin != end; ++argsBegin )
     {
-        delete (*itr).second;
+        delete (*argsBegin).second;
     }
 }
 
-bool Processor::Process( const std::vector< std::string >& arguments, std::string& error )
+const std::string& Processor::Help() const
 {
-    bool result = true;
+	if ( m_Help.empty() )
+	{
+		m_Help += m_ShortHelp + std::string( "\n" );
+		
+		m_Help += std::string( "\nUsage: " ) + m_Token + std::string( " " ) + m_Usage + std::string( "\n" );
 
-    std::vector< std::string >::const_iterator itr = arguments.begin(), end = arguments.end();
+		m_Help += std::string( "\nCommands:\n" );
+		for ( M_StringToCommandDumbPtr::const_iterator argsBegin = m_Commands.begin(), argsEnd = m_Commands.end(); argsBegin != argsEnd; ++argsBegin )
+		{
+			const Command* command = (*argsBegin).second;
+			m_Help += std::string( "  " ) + command->Token() + std::string( "\t" ) + command->ShortHelp() + std::string( "\n" );
+		}
+	}
+	return m_Help;
+}
 
-    while ( result && ( itr != end ) )
-    {
-        const std::string& arg = (*itr);
-        itr++;
+bool Processor::RegisterOption( Option* option )
+{
+	m_Options[ option->Token() ] = option;
+	return true;
+}
+
+void Processor::UnregisterOption( Option* option )
+{
+	m_Options.erase( option->Token() );
+	m_Help.clear();
+}
+
+void Processor::UnregisterOption( const std::string& token )
+{
+	m_Options.erase( token );
+	m_Help.clear();
+}
+
+const Option* Processor::GetOption( const std::string& token )
+{
+	Option* option = NULL;
+	M_StringToOptionDumbPtr::iterator optionsItr = m_Options.find( token );
+	if ( optionsItr != m_Options.end() )
+	{
+		option = (*optionsItr).second;
+	}
+	return option;
+}
+
+void Processor::RegisterOptions()
+{
+	RegisterOption( &m_HelpFlag );
+}
+
+bool Processor::RegisterCommand( Command* command )
+{
+	m_Commands[ command->Token() ] = command;
+	return true;
+}
+
+void Processor::UnregisterCommand( Command* command )
+{
+	m_Commands.erase( command->Token() );
+	m_Help.clear();
+}
+
+void Processor::UnregisterCommand( const std::string& token )
+{
+	m_Commands.erase( token );
+	m_Help.clear();
+}
+
+const Command* Processor::GetCommand( const std::string& token )
+{
+	Command* command = NULL;
+	M_StringToCommandDumbPtr::iterator commandsItr = m_Commands.find( token );
+	if ( commandsItr != m_Commands.end() )
+	{
+		command = (*commandsItr).second;
+	}
+	return command;
+}
+
+void Processor::RegisterCommands()
+{
+	RegisterCommand( &m_HelpCommand );
+}
+
+bool Processor::Parse( const std::vector< std::string >& options, std::string& error )
+{
+	return Parse( options.begin(), options.end(), error );
+}
+
+bool Processor::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+{
+	bool result = true;
+
+	while ( result && ( argsBegin != argsEnd ) )
+	{
+        const std::string& arg = (*argsBegin);
+        argsBegin++;
 
         if ( arg.length() >= 1 && arg[ 0 ] == '-' )
         {
             M_StringToOptionDumbPtr::const_iterator optionItr = m_Options.find( arg.substr( 1 ) );
             if ( optionItr != m_Options.end() )
             {
-                result &= (*optionItr).second->Process( error );
+                result &= (*optionItr).second->Parse( argsBegin, argsEnd, error );
             }
             else
             {
@@ -45,78 +141,18 @@ bool Processor::Process( const std::vector< std::string >& arguments, std::strin
         }
         else
         {
-            M_StringToVerbDumbPtr::iterator commandItr = m_Verbs.find( arg );
-            if ( commandItr != m_Verbs.end() )
+            M_StringToCommandDumbPtr::iterator commandItr = m_Commands.find( arg );
+            if ( commandItr != m_Commands.end() )
             {
-                result &= (*commandItr).second->Process( itr, arguments.end(), error );
+                result &= (*commandItr).second->Parse( argsBegin, argsEnd, error );
             }
             else
             {
                 error = std::string( "Unknown command: " ) + arg + "\n\n";
-
-                for ( M_StringToVerbDumbPtr::const_iterator cItr = m_Verbs.begin(), cEnd = m_Verbs.end(); cItr != cEnd; ++cItr )
-                {
-                    error += (*cItr).second->GetShortHelp() + "\n";
-                }
+				return false;
             }
         }
     }
 
     return result;
-}
-
-bool Processor::RegisterVerb( Verb* verb )
-{
-    m_Verbs[ verb->Token() ] = verb;
-    verb->SetOwner( this );
-    return true;
-}
-
-void Processor::UnregisterVerb( Verb* verb )
-{
-    UnregisterVerb( verb->Token() );
-    verb->SetOwner( NULL );
-}
-
-void Processor::UnregisterVerb( const std::string& token )
-{
-    m_Verbs.erase( token );
-}
-
-const Verb* Processor::GetVerb( const std::string& token )
-{
-    Verb* command = NULL;
-    M_StringToVerbDumbPtr::iterator itr = m_Verbs.find( token );
-    if ( itr != m_Verbs.end() )
-    {
-        command = (*itr).second;
-    }
-    return command;
-}
-
-bool Processor::RegisterOption( Option* option )
-{
-    m_Options[ option->Token() ] = option;
-    option->SetOwner( this );
-    return true;
-}
-void Processor::UnregisterOption( Option* option )
-{
-    UnregisterOption( option->Token() );
-    option->SetOwner( NULL );
-}
-void Processor::UnregisterOption( const std::string& token )
-{
-    m_Options.erase( token );
-}
-
-const Option* Processor::GetOption( const std::string& token )
-{
-    Option* option = NULL;
-    M_StringToOptionDumbPtr::iterator itr = m_Options.find( token );
-    if ( itr != m_Options.end() )
-    {
-        option = (*itr).second;
-    }
-    return option;
 }

@@ -3,6 +3,8 @@
 #include "Foundation/String/Natural.h"
 #include "Foundation/Container/Insert.h" 
 
+#include <map>
+
 using Nocturnal::Insert; 
 using namespace Nocturnal;
 

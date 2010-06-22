@@ -1,12 +1,13 @@
 #pragma once
 
-#include "Application/API.h"
-
-#include "Platform/Types.h"
-#include "Foundation/File/Path.h"
+#include <map>
 
 #include <wx/animate.h>
 #include <wx/imaglist.h>
+
+#include "Platform/Types.h"
+#include "Foundation/File/Path.h"
+#include "Application/API.h"
 
 // Forwards
 class wxImageList;

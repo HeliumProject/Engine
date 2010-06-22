@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "Luna/API.h"
 #include "Foundation/Memory/SmartPtr.h"
 

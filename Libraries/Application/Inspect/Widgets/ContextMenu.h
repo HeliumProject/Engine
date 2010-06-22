@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Application/API.h"
+#include <map>
 
 #include "Platform/Types.h"
 #include "Foundation/Automation/Event.h"
+#include "Application/API.h"
 
 #include <wx/event.h>
 

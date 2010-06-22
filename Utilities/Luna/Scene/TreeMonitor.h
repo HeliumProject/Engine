@@ -1,5 +1,7 @@
 #pragma once
 
+#include <set>
+
 #include "Platform/Types.h"
 
 namespace Nocturnal { class SortTreeCtrl; }

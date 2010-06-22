@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "Foundation/Memory/SmartPtr.h"
 
 namespace Render

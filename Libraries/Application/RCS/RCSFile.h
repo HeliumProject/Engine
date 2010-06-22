@@ -1,9 +1,11 @@
 #pragma once
 
-#include "Application/API.h"
-#include "RCSTypes.h"
+#include <vector>
+
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
+#include "Application/API.h"
+#include "RCSTypes.h"
 
 namespace RCS
 {

@@ -1,11 +1,13 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
-#include <string>
-#include <hash_map>
-#include <set>
 #include <iomanip>
+#include <string>
+
+#include <vector>
+#include <set>
+#include <map>
+#include <hash_map>
 
 #include "Platform/Types.h"
 

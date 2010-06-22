@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"
 

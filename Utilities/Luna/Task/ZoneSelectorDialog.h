@@ -1,5 +1,8 @@
 #pragma once
 
+#include <set>
+#include <vector>
+
 #include "Luna/API.h"
 
 #include "Platform/Types.h"

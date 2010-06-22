@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <map>
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <set>
+
 #include "Foundation/Automation/Event.h"
 #include "Platform/Types.h"
 #include "Foundation/String/Natural.h"

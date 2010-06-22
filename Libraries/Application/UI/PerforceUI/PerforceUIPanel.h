@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "Application/UI/PerforceUI/Panels.h"
 
 #include "Application/RCS/RCS.h"

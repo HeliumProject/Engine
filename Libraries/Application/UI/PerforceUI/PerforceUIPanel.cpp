@@ -1,5 +1,6 @@
 #include "PerforceUIPanel.h"
 
+#include <set>
 #include <sstream>
 
 #include "Foundation/Environment.h"

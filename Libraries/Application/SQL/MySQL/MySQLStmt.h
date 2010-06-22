@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "Application/API.h"
 #include "Application/SQL/Statement.h"
 

@@ -2,6 +2,7 @@
 
 #include "Foundation/File/Path.h"
 
+#include <map>
 #include <wx/menu.h>
 
 using namespace Nocturnal;

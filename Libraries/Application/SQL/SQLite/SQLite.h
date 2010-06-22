@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "Application/API.h"
 #include "Application/SQL/SQLExceptions.h"
 #include "Application/SQL/DBManager.h"

@@ -83,6 +83,4 @@ namespace Nocturnal
     };
 
     typedef Nocturnal::SmartPtr< FileHandle > FileHandlePtr;
-    typedef std::vector< FileHandlePtr > V_FileHandle;
-
 }

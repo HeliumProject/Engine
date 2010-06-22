@@ -1,11 +1,13 @@
 #pragma once
 
-#include "Application/API.h"
-#include "MRU.h"
+#include <map>
 
 #include "Platform/Assert.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Container/OrderedSet.h"
+#include "Application/API.h"
+
+#include "MRU.h"
 
 //
 // Forwards

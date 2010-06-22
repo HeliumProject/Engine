@@ -1,3 +1,4 @@
+#include <set>
 #include <wx/wx.h>
 #include <wx/choicdlg.h>
 #include <wx/msw/private.h>

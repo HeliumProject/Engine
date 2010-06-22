@@ -1,9 +1,10 @@
 #pragma once
 
+#include <string>
+
 #include "Application/API.h"
 #include "Platform/Assert.h"
 #include "Platform/Types.h"
-
 
 namespace SQL
 {

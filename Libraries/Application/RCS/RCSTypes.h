@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "Application/API.h"
 #include "Platform/Types.h"
 #include "Foundation/Memory/SmartPtr.h"

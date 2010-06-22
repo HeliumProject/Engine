@@ -1,8 +1,10 @@
 #pragma once
 
 #include <cmath>
+#include <string>
 #include <vector>
 #include <iostream>
+
 #include "Utils.h"
 #include "Color3.h"
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "Foundation/API.h"
 #include "Foundation/Automation/Event.h"
 

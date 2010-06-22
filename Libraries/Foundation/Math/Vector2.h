@@ -1,8 +1,10 @@
 #pragma once
 
 #include <cmath>
-#include <vector>
 #include <iostream>
+
+#include <vector>
+
 #include "Utils.h"
 
 namespace Math

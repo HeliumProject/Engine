@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "Platform/Types.h"
 
 #include "Foundation/API.h"
@@ -49,6 +51,4 @@ namespace Nocturnal
     };
 
     typedef Nocturnal::SmartPtr< Handle > HandlePtr;
-    typedef std::vector< HandlePtr > V_Handle;
-
 }

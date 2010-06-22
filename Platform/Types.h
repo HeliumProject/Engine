@@ -1,5 +1,9 @@
 #pragma once
 
+//
+// Register types
+//
+
 #ifndef NULL
 #define NULL (0)
 #endif
@@ -47,4 +51,20 @@ typedef unsigned long long    p64;
 typedef unsigned int          uintptr;
 typedef int                   intptr;
 
+#endif
+
+//
+// String types
+//
+
+#include <string>
+
+#ifdef _UNICODE
+typedef wchar_t                 chr;
+typedef std::wstring            str;
+#define STR(s) L#s
+#else
+typedef char                    chr;
+typedef std::string             str;
+#define STR(s) s
 #endif

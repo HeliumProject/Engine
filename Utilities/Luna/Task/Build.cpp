@@ -122,7 +122,7 @@ void BuildSignal(Nocturnal::Void)
 
 struct BuildParams
 {
-    Nocturnal::S_Path m_Assets;
+    std::set< Nocturnal::Path > m_Assets;
     AssetBuilder::BuilderOptionsPtr m_BuilderOptions;
 
     BuildParams()
@@ -132,7 +132,7 @@ struct BuildParams
     }
 };
 
-bool BuildEntry( const Nocturnal::S_Path& assets, AssetBuilder::BuilderOptionsPtr options, bool view )
+bool BuildEntry( const std::set< Nocturnal::Path >& assets, AssetBuilder::BuilderOptionsPtr options, bool view )
 {
     g_WorkerProcess = Worker::Process::Create( "BuildTool.exe" );
 
@@ -222,9 +222,9 @@ DWORD WINAPI BuildThread( LPVOID lpParam )
 
     BuildParams* params = static_cast< BuildParams* >( lpParam );
 
-    Nocturnal::S_Path assets;
+    std::set< Nocturnal::Path > assets;
 
-    for ( Nocturnal::S_Path::const_iterator itr = params->m_Assets.begin(), end = params->m_Assets.end(); itr != end; ++itr )
+    for ( std::set< Nocturnal::Path >::const_iterator itr = params->m_Assets.begin(), end = params->m_Assets.end(); itr != end; ++itr )
     {
         const Nocturnal::Path& assetPath = (*itr);
 
@@ -273,13 +273,13 @@ DWORD WINAPI BuildThread( LPVOID lpParam )
     return success ? 0 : 1;
 }
 
-AssetBuilder::BuilderOptionsPtr CreateBuilderOptions( const Nocturnal::S_Path& assets )
+AssetBuilder::BuilderOptionsPtr CreateBuilderOptions( const std::set< Nocturnal::Path >& assets )
 {
     Asset::AssetType assetType = Asset::AssetTypes::Null;
     bool differentClasses = false;
 
     // if all the assets are the same type, we can use their specific builder options.  Otherwise, use the base builder options
-    for ( Nocturnal::S_Path::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
+    for ( std::set< Nocturnal::Path >::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
     {
         const Nocturnal::Path& assetPath = (*itr);
         Asset::AssetClassPtr assetClass = Asset::AssetClass::LoadAssetClass( assetPath );
@@ -340,7 +340,7 @@ AssetBuilder::BuilderOptionsPtr CreateBuilderOptions( const Nocturnal::S_Path& a
     return builderOptions;
 }
 
-bool GetBuilderOptions( const Nocturnal::S_Path& assets, AssetBuilder::BuilderOptionsPtr& builderOptions, wxWindow* parent )
+bool GetBuilderOptions( const std::set< Nocturnal::Path >& assets, AssetBuilder::BuilderOptionsPtr& builderOptions, wxWindow* parent )
 {
     TaskOptionsDialog dialog( parent, wxID_ANY, "Builder/Packer Options" );
 
@@ -368,7 +368,7 @@ bool GetBuilderOptions( const Nocturnal::S_Path& assets, AssetBuilder::BuilderOp
     return success;
 }
 
-void Luna::BuildAssets( const Nocturnal::S_Path& assets, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions, bool blocking )
+void Luna::BuildAssets( const std::set< Nocturnal::Path >& assets, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions, bool blocking )
 {
     if ( g_BuildInProgress )
     {
@@ -429,7 +429,7 @@ void Luna::BuildAssets( const Nocturnal::S_Path& assets, wxWindow* parent, Asset
 
 void Luna::BuildAsset( const Nocturnal::Path& asset, wxWindow* parent, AssetBuilder::BuilderOptionsPtr builderOptions, bool showOptions, bool blocking )
 {
-    Nocturnal::S_Path assets;
+    std::set< Nocturnal::Path > assets;
     assets.insert( asset );
     BuildAssets( assets, parent, builderOptions, showOptions, blocking );
 }

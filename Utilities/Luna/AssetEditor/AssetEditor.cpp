@@ -1422,7 +1422,7 @@ void AssetEditor::OnBuild( wxCommandEvent& args )
 
         if ( shouldBuild )
         {
-            Nocturnal::S_Path assetFiles;
+            std::set< Nocturnal::Path > assetFiles;
             for ( S_AssetClassDumbPtr::iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
             {
                 assetFiles.insert( (*itr)->GetPath() );

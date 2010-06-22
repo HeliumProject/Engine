@@ -973,7 +973,7 @@ CameraMode SceneEditor::SceneEditorIDToCameraMode( SceneEditorID id )
 // 
 void SceneEditor::BuildAllLoadedAssets()
 {
-    Nocturnal::S_Path assets;
+    std::set< Nocturnal::Path > assets;
 
     // hand over the current level's referenced stuff.
     Asset::SceneAsset* currentLevel = m_SceneManager.GetCurrentLevel();

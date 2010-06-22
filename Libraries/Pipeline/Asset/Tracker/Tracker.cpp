@@ -149,7 +149,7 @@ bool Tracker::TrackFile( Nocturnal::Path& filePath )
         //else
         if ( m_AssetCacheDB->HasAssetChangedOnDisk( filePath, &m_StopTracking ) )
         {
-            Nocturnal::S_Path visited;
+            std::set< Nocturnal::Path > visited;
             if ( TrackAssetFile( filePath, &m_AssetFiles ) )
             {
                 // update the DB

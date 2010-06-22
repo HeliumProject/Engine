@@ -872,7 +872,7 @@ void BrowserFrame::OnNewCollectionFromSelection( wxCommandEvent& event )
         if ( event.GetId() == BrowserMenu::NewCollectionFromSelection )
         {
             collection = new AssetCollection( "New Collection", AssetCollectionFlags::CanRename | AssetCollectionFlags::CanHandleDragAndDrop );
-            Nocturnal::S_Path fileRefs;
+            std::set< Nocturnal::Path > fileRefs;
             for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end(); fileItr != fileEnd; ++fileItr )
             {
                 fileRefs.insert( (*fileItr)->GetPath() );

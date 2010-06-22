@@ -11,7 +11,7 @@ namespace Asset
   {
   public:
 
-      Nocturnal::S_Path m_Paths;
+      std::set< Nocturnal::Path > m_Paths;
 
   public:
     REFLECT_DECLARE_CLASS( DependenciesComponent, ComponentBase );

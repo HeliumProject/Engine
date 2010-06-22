@@ -60,10 +60,10 @@ namespace Asset
     const M_string& GetComponents() const { return m_Attributes; }
 
     void AddDependency( const Nocturnal::Path& path );
-    void SetDependencies( const Nocturnal::S_Path& dependencies );
+    void SetDependencies( const std::set< Nocturnal::Path >& dependencies );
     bool HasDependencies() { return !m_Dependencies.empty(); }
-    const Nocturnal::S_Path& GetDependencies() const { return m_Dependencies; }
-    void GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, Nocturnal::S_Path& dependencies );
+    const std::set< Nocturnal::Path >& GetDependencies() const { return m_Dependencies; }
+    void GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, std::set< Nocturnal::Path >& dependencies );
 
     void SetRowID( const u64 rowID ) { m_RowID = rowID; }
     u64 GetRowID() { return m_RowID; }
@@ -74,7 +74,7 @@ namespace Asset
 
   private:
     void Init();
-    void GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, Nocturnal::S_Path& dependencies, Nocturnal::S_Path& visited, u32 depth );
+    void GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, std::set< Nocturnal::Path >& dependencies, std::set< Nocturnal::Path >& visited, u32 depth );
 
   private:
       Nocturnal::Path m_Path;
@@ -86,7 +86,7 @@ namespace Asset
     AssetType     m_AssetType;
     u64           m_Size;
     M_string      m_Attributes;
-    Nocturnal::S_Path m_Dependencies;
+    std::set< Nocturnal::Path > m_Dependencies;
     u64           m_RowID;
 
     friend class CacheDB;

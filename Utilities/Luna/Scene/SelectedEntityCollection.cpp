@@ -40,7 +40,7 @@ void SelectedEntityCollection::RemoveEntityListeners()
 
 void SelectedEntityCollection::SetAssetsFromSelection( const OS_SelectableDumbPtr& selection )
 {
-    Nocturnal::S_Path files;
+    std::set< Nocturnal::Path > files;
   for ( OS_SelectableDumbPtr::Iterator selItr = selection.Begin(), selEnd = selection.End(); selItr != selEnd; ++selItr )
   {
     Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *selItr );

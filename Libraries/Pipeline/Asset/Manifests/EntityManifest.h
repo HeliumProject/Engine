@@ -11,9 +11,9 @@ namespace Asset
   class PIPELINE_API EntityManifest : public AssetManifest
   {
   public:
-      Nocturnal::S_Path m_Shaders;
-      Nocturnal::S_Path m_BlendTextures;
-      Nocturnal::S_Path m_LooseTextures;
+      std::set< Nocturnal::Path > m_Shaders;
+      std::set< Nocturnal::Path > m_BlendTextures;
+      std::set< Nocturnal::Path > m_LooseTextures;
 
     u32 m_TriangleCount;
 

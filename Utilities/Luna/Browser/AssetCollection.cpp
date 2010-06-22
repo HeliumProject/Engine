@@ -196,7 +196,7 @@ bool AssetCollection::ReadOnly() const
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void AssetCollection::SetAssetReferences( const Nocturnal::S_Path& references )
+void AssetCollection::SetAssetReferences( const std::set< Nocturnal::Path >& references )
 {
     m_AssetPaths.clear();
     m_AssetPaths = references;
@@ -219,11 +219,11 @@ bool AssetCollection::AddAsset( const Nocturnal::Path& path )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool AssetCollection::AddAssets( const Nocturnal::S_Path& assets )
+bool AssetCollection::AddAssets( const std::set< Nocturnal::Path >& assets )
 {
     bool result = false;
 
-    for ( Nocturnal::S_Path::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
+    for ( std::set< Nocturnal::Path >::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
     {
         const Nocturnal::Path& path = *itr;
 
@@ -248,7 +248,7 @@ bool AssetCollection::RemoveAsset( const Nocturnal::Path& path )
     if ( ContainsAsset( path.Hash() ) )
     {
         u64 passedId = path.Hash();
-        for( Nocturnal::S_Path::const_iterator itr = m_AssetPaths.begin(), end = m_AssetPaths.end(); itr != end; ++itr )
+        for( std::set< Nocturnal::Path >::const_iterator itr = m_AssetPaths.begin(), end = m_AssetPaths.end(); itr != end; ++itr )
         {
             if ( (*itr).Hash() == passedId )
             {
@@ -266,7 +266,7 @@ bool AssetCollection::RemoveAsset( const Nocturnal::Path& path )
 // Queries the container for the existence of the specified asset
 bool AssetCollection::ContainsAsset( u64 id ) const
 {
-    for( Nocturnal::S_Path::const_iterator itr = m_AssetPaths.begin(), end = m_AssetPaths.end(); itr != end; ++itr )
+    for( std::set< Nocturnal::Path >::const_iterator itr = m_AssetPaths.begin(), end = m_AssetPaths.end(); itr != end; ++itr )
     {
         if ( (*itr).Hash() == id )
         {

@@ -489,12 +489,12 @@ void CacheDB::InsertAssetAttributes( AssetFile* assetFile, bool* cancel )
 
 /////////////////////////////////////////////////////////////////////////////
 // Insert a single shader usage row into the AssetDependenciesDB
-void CacheDB::InsertAssetUsages( AssetFile* assetFile, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, bool* cancel )
+void CacheDB::InsertAssetUsages( AssetFile* assetFile, M_AssetFiles* assetFiles, std::set< Nocturnal::Path >& visited, bool* cancel )
 {
     if ( CheckCancelQuery( cancel ) )
         return;
 
-    Nocturnal::S_Path dependencies = assetFile->GetDependencies();
+    std::set< Nocturnal::Path > dependencies = assetFile->GetDependencies();
 
     if ( !dependencies.empty() )
     {
@@ -511,14 +511,14 @@ void CacheDB::InsertAssetUsages( AssetFile* assetFile, M_AssetFiles* assetFiles,
 
 /////////////////////////////////////////////////////////////////////////////
 // Insert all (not just direct dependency) shaders that this asset depends on 
-void CacheDB::InsertAssetShaders( AssetFile* assetFile, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, bool* cancel )
+void CacheDB::InsertAssetShaders( AssetFile* assetFile, M_AssetFiles* assetFiles, std::set< Nocturnal::Path >& visited, bool* cancel )
 {
     if ( CheckCancelQuery( cancel ) )
         return;
 
     if ( assetFile->HasDependencies() )
     {
-        Nocturnal::S_Path shaders;
+        std::set< Nocturnal::Path > shaders;
         assetFile->GetDependenciesOfType( assetFiles, Reflect::GetType<ShaderAsset>(), shaders );
 
         if ( CheckCancelQuery( cancel ) )
@@ -537,14 +537,14 @@ void CacheDB::InsertAssetShaders( AssetFile* assetFile, M_AssetFiles* assetFiles
 
 /////////////////////////////////////////////////////////////////////////////
 // Insert all (not just direct dependency) entities that this level depends on 
-void CacheDB::InsertLevelEntities( AssetFile* assetFile, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, bool* cancel )
+void CacheDB::InsertLevelEntities( AssetFile* assetFile, M_AssetFiles* assetFiles, std::set< Nocturnal::Path >& visited, bool* cancel )
 {
     if ( CheckCancelQuery( cancel ) )
         return;
 
     if ( !assetFile->GetDependencies().empty() )
     {
-        Nocturnal::S_Path entities;
+        std::set< Nocturnal::Path > entities;
         assetFile->GetDependenciesOfType( assetFiles, Reflect::GetType<EntityAsset>(), entities );
 
         if ( CheckCancelQuery( cancel ) )
@@ -562,7 +562,7 @@ void CacheDB::InsertLevelEntities( AssetFile* assetFile, M_AssetFiles* assetFile
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, Nocturnal::S_Path& visited, bool* cancel )
+void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, std::set< Nocturnal::Path >& visited, bool* cancel )
 {
     if ( CheckCancelQuery( cancel ) )
     {
@@ -577,9 +577,9 @@ void CacheDB::InsertAssetFile( AssetFile* assetFile, M_AssetFiles* assetFiles, N
     // Insert the dependencies first since we will need their row in the DB to reference them to the parents
     if ( assetFile->HasDependencies() )
     {
-        Nocturnal::S_Path assetDependencies = assetFile->GetDependencies();
-        Nocturnal::S_Path::const_iterator itr = assetDependencies.begin();
-        Nocturnal::S_Path::const_iterator end = assetDependencies.end();
+        std::set< Nocturnal::Path > assetDependencies = assetFile->GetDependencies();
+        std::set< Nocturnal::Path >::const_iterator itr = assetDependencies.begin();
+        std::set< Nocturnal::Path >::const_iterator end = assetDependencies.end();
         for ( ; itr != end; ++itr )
         {
             if ( CheckCancelQuery( cancel ) )
@@ -802,10 +802,10 @@ bool CacheDB::HasAssetChangedOnDisk( Nocturnal::Path& filePath, bool* cancel )
 // Common function used by several of the insert functions
 void CacheDB::InsertDependencies
 (
- const Nocturnal::S_Path& dependencies,
+ const std::set< Nocturnal::Path >& dependencies,
  u64 assetRowID,
  M_AssetFiles* assetFiles,
- Nocturnal::S_Path& visited, 
+ std::set< Nocturnal::Path >& visited, 
  const char* replaceSQL, 
  const char* deleteSQL, 
  const char* deleteUnrenewedSQL, 
@@ -821,8 +821,8 @@ void CacheDB::InsertDependencies
 
     validDependenciesStr.clear();
 
-    Nocturnal::S_Path::const_iterator itr = dependencies.begin();
-    Nocturnal::S_Path::const_iterator end = dependencies.end();
+    std::set< Nocturnal::Path >::const_iterator itr = dependencies.begin();
+    std::set< Nocturnal::Path >::const_iterator end = dependencies.end();
     for ( ; itr != end; ++itr )
     {
         if ( CheckCancelQuery( cancel ) )
@@ -982,7 +982,7 @@ u32 CacheDB::GetPopulateTableData( const SQL::StmtHandle stmt, V_string& tableDa
 
 /////////////////////////////////////////////////////////////////////////////
 // Returns number of files found  if anything was added to assetFiles
-u32 CacheDB::Search( const CacheDBQuery* search, Nocturnal::S_Path& assetFiles, bool* cancel )
+u32 CacheDB::Search( const CacheDBQuery* search, std::set< Nocturnal::Path >& assetFiles, bool* cancel )
 {
     u32 numFilesAdded = 0;
 
@@ -1231,11 +1231,11 @@ void CacheDB::SelectAssetByHash( const u64 pathHash, AssetFile* assetFile )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void CacheDB::GetAssetDependencies( const Nocturnal::Path& filePath, Nocturnal::S_Path& dependencies, bool reverse, u32 maxDepth, u32 currDepth, bool* cancel )
+void CacheDB::GetAssetDependencies( const Nocturnal::Path& filePath, std::set< Nocturnal::Path >& dependencies, bool reverse, u32 maxDepth, u32 currDepth, bool* cancel )
 {
     Platform::TakeMutex mutex ( m_Mutex );
 
-    Nocturnal::Insert< Nocturnal::S_Path >::Result inserted = dependencies.insert( filePath );
+    Nocturnal::Insert< std::set< Nocturnal::Path > >::Result inserted = dependencies.insert( filePath );
     if ( !inserted.second )
     {
         // circular dependancy?!
@@ -1286,7 +1286,7 @@ void CacheDB::GetAssetDependencies( const Nocturnal::Path& filePath, Nocturnal::
     if ( CheckCancelQuery( cancel ) )
         return;
 
-    for( Nocturnal::S_Path::const_iterator itr = selectedIDs.begin(), end = selectedIDs.end(); itr != end; ++itr )
+    for( std::set< Nocturnal::Path >::const_iterator itr = selectedIDs.begin(), end = selectedIDs.end(); itr != end; ++itr )
     {
         if ( CheckCancelQuery( cancel ) )
             break;

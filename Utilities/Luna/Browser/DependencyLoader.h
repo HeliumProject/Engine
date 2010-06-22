@@ -28,7 +28,7 @@ namespace Luna
         std::string           m_RootDirectory;
         std::string           m_ConfigDirectory;
         DependencyCollection* m_Collection;
-        Nocturnal::S_Path     m_AssetPaths;
+        std::set< Nocturnal::Path >     m_AssetPaths;
     };
 
 }

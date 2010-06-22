@@ -353,7 +353,7 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
     // CacheDB Search
     if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::DBSearch )
     {
-        Nocturnal::S_Path assetFiles;
+        std::set< Nocturnal::Path > assetFiles;
 
         Asset::CacheDBQuery* search = m_CurrentSearchQuery->GetCacheDBQuery();
         AssetCollection* collection = m_CurrentSearchQuery->GetCollection();    
@@ -367,7 +367,7 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
         // Both collection and search
         else if ( collection && search )
         {
-            Nocturnal::S_Path searchFiles;
+            std::set< Nocturnal::Path > searchFiles;
             m_CacheDB->Search( search, searchFiles, &m_StopSearching );
             if ( searchFiles.empty() )
             {
@@ -375,12 +375,12 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
                 return;
             }
 
-            Nocturnal::S_Path collections = collection->GetAssetPaths();
+            std::set< Nocturnal::Path > collections = collection->GetAssetPaths();
 
             // filter by collection
             if ( collections.size() > searchFiles.size() )
             {
-                for ( Nocturnal::S_Path::iterator itr = searchFiles.begin(), end = searchFiles.end(); itr != end; ++itr )
+                for ( std::set< Nocturnal::Path >::iterator itr = searchFiles.begin(), end = searchFiles.end(); itr != end; ++itr )
                 {
                     if ( collections.find( *itr ) != collections.end() )
                     {
@@ -390,7 +390,7 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
             }
             else
             {
-                for ( Nocturnal::S_Path::iterator itr = collections.begin(), end = collections.end(); itr != end; ++itr )
+                for ( std::set< Nocturnal::Path >::iterator itr = collections.begin(), end = collections.end(); itr != end; ++itr )
                 {
                     if ( searchFiles.find( *itr ) != searchFiles.end() )
                     {
@@ -514,11 +514,11 @@ bool BrowserSearch::FoundAssetFile( const std::string& path )
     return false;
 }
 
-u32 BrowserSearch::FoundAssetFiles( const Nocturnal::S_Path& assetFileRefs, i32 searchID )
+u32 BrowserSearch::FoundAssetFiles( const std::set< Nocturnal::Path >& assetFileRefs, i32 searchID )
 {
     Platform::TakeMutex mutex (m_SearchResultsMutex);
 
-    for ( Nocturnal::S_Path::const_iterator itr = assetFileRefs.begin(), end = assetFileRefs.end(); itr != end; ++itr )
+    for ( std::set< Nocturnal::Path >::const_iterator itr = assetFileRefs.begin(), end = assetFileRefs.end(); itr != end; ++itr )
     {
         Asset::AssetFilePtr assetFile = Asset::AssetFile::FindAssetFile( (*itr).Get() );
         if ( assetFile 
@@ -536,9 +536,9 @@ u32 BrowserSearch::FoundAssetFolder( Nocturnal::Path& folder, i32 searchID )
 {  
     u32 numFilesAdded = 0;
 
-    Nocturnal::S_Path files;
+    std::set< Nocturnal::Path > files;
     Nocturnal::Directory::GetFiles( folder.Get(), files );
-    for ( Nocturnal::S_Path::const_iterator itr = files.begin(), end = files.end(); itr != end; ++itr )
+    for ( std::set< Nocturnal::Path >::const_iterator itr = files.begin(), end = files.end(); itr != end; ++itr )
     {
         if ( m_StopSearching )
         {

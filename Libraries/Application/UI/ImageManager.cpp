@@ -366,15 +366,15 @@ namespace Nocturnal
   {
     bool isOk = true;
 
-    Nocturnal::S_Path artFiles;
+    std::set< Nocturnal::Path > artFiles;
     Nocturnal::Directory::GetFiles( m_DefaultFolder, artFiles, g_IconSizeSpecs[size], true );
 
     const int numImages = static_cast< int >( artFiles.size() );
     if ( numImages > 0 )
     {
       m_GuiImageLists[size].Create( g_IconSizes[size], g_IconSizes[size], true, numImages );
-      Nocturnal::S_Path::const_iterator fileItr = artFiles.begin();
-      Nocturnal::S_Path::const_iterator fileEnd = artFiles.end();
+      std::set< Nocturnal::Path >::const_iterator fileItr = artFiles.begin();
+      std::set< Nocturnal::Path >::const_iterator fileEnd = artFiles.end();
       for ( ; fileItr != fileEnd; ++fileItr )
       {
         std::string currentFile;

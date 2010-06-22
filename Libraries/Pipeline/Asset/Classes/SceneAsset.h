@@ -20,7 +20,7 @@ namespace Asset
     float       m_OcclVisDistAdjust;
     float       m_DecalGeomMem;
 
-    Nocturnal::S_Path m_Zones;
+    std::set< Nocturnal::Path > m_Zones;
 
     SceneAsset()
       : m_NearClipDist( 0.06f )

@@ -44,7 +44,7 @@ namespace AssetBuilder
     class PIPELINE_API BuildRequest : public Reflect::Element
     {
     public:
-        Nocturnal::S_Path m_Assets;
+        std::set< Nocturnal::Path > m_Assets;
         BuilderOptionsPtr m_Options;
 
         BuildRequest()

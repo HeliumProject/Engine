@@ -78,7 +78,7 @@ bool Directory::Open(const std::string &path, const std::string &spec /* = "" */
     return Find(query);
 }
 
-void Directory::GetFiles( const std::string& path, Nocturnal::S_Path& paths, const std::string& spec, bool recursive )
+void Directory::GetFiles( const std::string& path, std::set< Nocturnal::Path >& paths, const std::string& spec, bool recursive )
 {
     for ( Directory dir( path ); !dir.IsDone(); dir.Next() )
     {
@@ -98,7 +98,7 @@ void Directory::GetFiles( const std::string& path, Nocturnal::S_Path& paths, con
     }
 }
 
-void Directory::GetFiles( Nocturnal::S_Path& paths, const std::string& spec, bool recursive )
+void Directory::GetFiles( std::set< Nocturnal::Path >& paths, const std::string& spec, bool recursive )
 {
     GetFiles( m_Path, paths, spec, recursive );
 }

@@ -342,7 +342,7 @@ void ShaderAsset::ReloadAllTextures( const ContextMenuArgsPtr& args )
     Component::M_Component::const_iterator itr = shaderClass->GetComponents().begin();
     Component::M_Component::const_iterator end = shaderClass->GetComponents().end(); 
 
-    Nocturnal::S_Path textureFiles;
+    std::set< Nocturnal::Path > textureFiles;
 
     while( itr != end )
     {
@@ -356,7 +356,7 @@ void ShaderAsset::ReloadAllTextures( const ContextMenuArgsPtr& args )
         itr++;
     }
 
-    for( Nocturnal::S_Path::const_iterator itr = textureFiles.begin(), end = textureFiles.end(); itr != end; ++itr )
+    for( std::set< Nocturnal::Path >::const_iterator itr = textureFiles.begin(), end = textureFiles.end(); itr != end; ++itr )
     {
         shaderClass->SetTextureDirty( *itr, true );
         CheckShaderChanged( (*itr) );

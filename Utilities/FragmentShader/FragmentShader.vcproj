@@ -46,7 +46,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\Libraries;xpm;&quot;$(lua)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(TargetDir)&quot;"
+				AdditionalIncludeDirectories="..\..\;xpm;&quot;$(lua)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(TargetDir)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
@@ -193,7 +193,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\Libraries;xpm;&quot;$(lua)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(TargetDir)&quot;"
+				AdditionalIncludeDirectories="..\..\;xpm;&quot;$(lua)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(TargetDir)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				WarningLevel="3"
@@ -315,11 +315,11 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\libraries\Application\Application.vcproj"
+			RelativePathToProject=".\Application\Application.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
-			RelativePathToProject=".\libraries\Foundation\Foundation.vcproj"
+			RelativePathToProject=".\Foundation\Foundation.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{C87D1745-76D6-4A2E-B655-23564E398510}"

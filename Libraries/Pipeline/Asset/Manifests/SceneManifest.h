@@ -11,7 +11,7 @@ namespace Asset
   class PIPELINE_API SceneManifest : public AssetManifest
   {
   public:
-      Nocturnal::S_Path m_Assets;
+      std::set< Nocturnal::Path > m_Assets;
 
     REFLECT_DECLARE_CLASS(SceneManifest, AssetManifest);
 

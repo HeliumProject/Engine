@@ -14,7 +14,7 @@ namespace Luna
     {
     public:
         // each file that was open in the last state
-        Nocturnal::S_Path m_OpenFilePaths;
+        std::set< Nocturnal::Path > m_OpenFilePaths;
 
         REFLECT_DECLARE_CLASS( EditorState, Reflect::Element );
 

@@ -152,11 +152,11 @@ void EventSystem::GetUnhandledEvents( V_EventPtr& listOfEvents, S_tuid& handledE
 void EventSystem::GetEvents( V_EventPtr& listOfEvents, bool sorted )
 {
     // Binary events
-    Nocturnal::S_Path datEventFiles;
+    std::set< Nocturnal::Path > datEventFiles;
     Nocturnal::Directory::GetFiles( m_RootDirPath, datEventFiles, "*.event.dat", true );
 
-    Nocturnal::S_Path::iterator itr = datEventFiles.begin();
-    Nocturnal::S_Path::iterator end = datEventFiles.end();
+    std::set< Nocturnal::Path >::iterator itr = datEventFiles.begin();
+    std::set< Nocturnal::Path >::iterator end = datEventFiles.end();
     for( ; itr != end; ++itr )
     {
         const Nocturnal::Path& filePath = (*itr);
@@ -165,7 +165,7 @@ void EventSystem::GetEvents( V_EventPtr& listOfEvents, bool sorted )
     }
 
     // Text events
-    Nocturnal::S_Path txtEventFiles;
+    std::set< Nocturnal::Path > txtEventFiles;
     Nocturnal::Directory::GetFiles( m_RootDirPath, txtEventFiles, "*.event.txt", true );
 
     itr = txtEventFiles.begin();

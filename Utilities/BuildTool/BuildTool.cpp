@@ -228,11 +228,11 @@ void AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool Build( Dependencies::DependencyGraph& depGraph, Nocturnal::S_Path& assets, const std::vector< std::string >& options )
+bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const std::vector< std::string >& options )
 {
     bool success = true;
 
-    for ( Nocturnal::S_Path::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
+    for ( std::set< Nocturnal::Path >::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
     {
         const Nocturnal::Path& path = (*itr);
 
@@ -284,14 +284,14 @@ bool Build( Dependencies::DependencyGraph& depGraph, Nocturnal::S_Path& assets, 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool Build( Dependencies::DependencyGraph& depGraph, Nocturnal::S_Path& assets, const AssetBuilder::BuilderOptionsPtr& options )
+bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const AssetBuilder::BuilderOptionsPtr& options )
 {
     bool success = true;
 
     AssetBuilder::V_BuildJob jobs;
     V_AssetClass buildingAssets;
 
-    for ( Nocturnal::S_Path::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
+    for ( std::set< Nocturnal::Path >::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
     {
         const Nocturnal::Path& filePath = (*itr);
 
@@ -373,7 +373,7 @@ bool QueryAndBuildAssets(const std::vector< std::string >& options)
 { 
     // get the asset files they want to build
     int maxMatches = g_NoMultiple ? 1 : (g_All ? -1 : MAX_MATCHES);
-    Nocturnal::S_Path possibleMatches;
+    std::set< Nocturnal::Path > possibleMatches;
 #pragma TODO( "make this search the tracker" )
     //    File::GlobalResolver().Find( g_SearchQuery, possibleMatches );
 

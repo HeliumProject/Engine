@@ -15,10 +15,6 @@ namespace Nocturnal
 {
     const static char s_InternalPathSeparator = '/';
 
-    class Path;
-    typedef std::vector< Path > V_Path;
-    typedef std::set< Path > S_Path;
-
     class FOUNDATION_API Path : public Nocturnal::RefCountBase< Path >
     {
     private:

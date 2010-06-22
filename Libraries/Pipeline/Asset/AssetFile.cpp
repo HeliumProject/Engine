@@ -182,28 +182,28 @@ void AssetFile::AddDependency( const Nocturnal::Path& path )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void AssetFile::SetDependencies( const Nocturnal::S_Path& dependencies )
+void AssetFile::SetDependencies( const std::set< Nocturnal::Path >& dependencies )
 {
     m_Dependencies.clear();
     m_Dependencies = dependencies;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void AssetFile::GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, Nocturnal::S_Path& dependencies )
+void AssetFile::GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, std::set< Nocturnal::Path >& dependencies )
 {
-    Nocturnal::S_Path visited;
+    std::set< Nocturnal::Path > visited;
     return GetDependenciesOfType( assetFiles, type, dependencies, visited, 0 );
 }
 
-void AssetFile::GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, Nocturnal::S_Path& dependencies, Nocturnal::S_Path& visited, u32 depth )
+void AssetFile::GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, std::set< Nocturnal::Path >& dependencies, std::set< Nocturnal::Path >& visited, u32 depth )
 {
     ++depth;
 
     if ( this->HasDependencies() )
     {
-        const Nocturnal::S_Path& assetDependencies = GetDependencies();
-        Nocturnal::S_Path::const_iterator itr = assetDependencies.begin();
-        Nocturnal::S_Path::const_iterator end = assetDependencies.end();
+        const std::set< Nocturnal::Path >& assetDependencies = GetDependencies();
+        std::set< Nocturnal::Path >::const_iterator itr = assetDependencies.begin();
+        std::set< Nocturnal::Path >::const_iterator end = assetDependencies.end();
         for ( ; itr != end; ++itr )
         {
             Nocturnal::Path path = (*itr);
@@ -224,7 +224,7 @@ void AssetFile::GetDependenciesOfType( M_AssetFiles* assetFiles, i32 type, Noctu
                             dependencies.insert( path );
                         }
 
-                        Nocturnal::S_Path deps;
+                        std::set< Nocturnal::Path > deps;
                         assetDependency->GetDependenciesOfType( assetFiles, type, deps, visited, depth );
                         dependencies.insert( deps.begin(), deps.end() );
                     }

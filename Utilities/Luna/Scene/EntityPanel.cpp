@@ -568,7 +568,7 @@ void EntityPanel::OnEntityAssetEditAsset( Inspect::Button* button )
 
 void EntityPanel::OnEntityAssetBuild( Inspect::Button* button )
 {
-    Nocturnal::S_Path assets;
+    std::set< Nocturnal::Path > assets;
 
     OS_SelectableDumbPtr::Iterator selectionIter = m_Selection.Begin();
     OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();

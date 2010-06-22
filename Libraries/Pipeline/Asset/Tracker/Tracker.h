@@ -69,7 +69,7 @@ namespace Asset
         void HandleDirectoryItem( const Nocturnal::DirectoryItem& dirItem );
 
     private:
-        Nocturnal::S_Path     m_FoundPaths;
+        std::set< Nocturnal::Path >     m_FoundPaths;
         Asset::CacheDBPtr     m_AssetCacheDB;
 
         static std::string    s_GlobalRootDirectory;

@@ -168,8 +168,8 @@ bool AssetVisitor::HandleArtFileComponent( Reflect::Element* element )
 
                 if (manifest.ReferencesObject())
                 {
-                    Nocturnal::S_Path::iterator newItr = manifest->m_Shaders.begin();
-                    Nocturnal::S_Path::iterator newEnd = manifest->m_Shaders.end();
+                    std::set< Nocturnal::Path >::iterator newItr = manifest->m_Shaders.begin();
+                    std::set< Nocturnal::Path >::iterator newEnd = manifest->m_Shaders.end();
                     for ( ; newItr != newEnd; ++newItr )
                     {
                         if ( CheckStopRequested( m_StopRequested ) )

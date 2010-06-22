@@ -82,10 +82,10 @@ namespace Luna
         bool CanHandleDragAndDrop() const;
         bool ReadOnly() const;
 
-        void SetAssetReferences( const Nocturnal::S_Path& references );
-        const Nocturnal::S_Path& GetAssetPaths() const { return m_AssetPaths; };
+        void SetAssetReferences( const std::set< Nocturnal::Path >& references );
+        const std::set< Nocturnal::Path >& GetAssetPaths() const { return m_AssetPaths; };
         bool AddAsset( const Nocturnal::Path& path );
-        bool AddAssets( const Nocturnal::S_Path& assets );
+        bool AddAssets( const std::set< Nocturnal::Path >& assets );
         bool RemoveAsset( const Nocturnal::Path& path  );
         bool ContainsAsset( u64 id ) const;  
         void ClearAssets(); 
@@ -121,7 +121,7 @@ namespace Luna
         std::string   m_Name;
         Nocturnal::Path m_Path;
         u32           m_Flags;
-        Nocturnal::S_Path m_AssetPaths;
+        std::set< Nocturnal::Path > m_AssetPaths;
     };
 
 }

@@ -148,7 +148,7 @@ void DependencyCollection::LoadDependencies( bool threaded )
         Freeze();
         IsLoading( true );
         {
-            Nocturnal::S_Path assets;
+            std::set< Nocturnal::Path > assets;
 #pragma TODO( "reimplemnent without GlobalBrowser" )
             //            GlobalBrowser().GetCacheDB()->GetAssetDependencies( m_spFileReference, assets, m_IsReverse, GetRecursionDepthForLoad() );
             SetAssetReferences( assets );

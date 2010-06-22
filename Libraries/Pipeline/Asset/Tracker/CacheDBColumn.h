@@ -126,7 +126,7 @@ namespace Asset
 
     bool        m_UseInGenericSearch;
 
-    S_string    m_ColumnAliases;//  - engine_type,engine,eng,type
+    std::set< std::string >    m_ColumnAliases;//  - engine_type,engine,eng,type
 
     std::string m_TableColumn;  //  - engine_types.type
     std::string m_JoinExpr;     //  - LEFT JOIN file_types ON file_types.id = assets.file_type_id

@@ -108,7 +108,7 @@ AddNavMeshCommand::AddNavMeshCommand( Luna::NavMeshPtr mesh, const Math::V_Vecto
   case kPaste:
     {
       m_Mesh->ClearEditingState();
-      V_u32 selected_verts;
+      std::vector< u32 > selected_verts;
 
       for ( u32 i = 0; i < m_OldPositions.size(); i++ )
       {
@@ -373,7 +373,7 @@ void AddNavMeshCommand::Redo()
   case kPaste:
     {
       m_Mesh->ClearEditingState();
-      V_u32 selected_verts;
+      std::vector< u32 > selected_verts;
 
       for ( u32 i = 0; i < m_OldPositions.size(); i++ )
       {

@@ -128,11 +128,11 @@ void ReflectMapInterpreter::OnAdd( Button* button )
     {
       bool warn = false;
       const std::string editedKey = result.substr( 0, result.find_first_of( List::s_MapKeyValDelim ) );
-      V_string items;
+      std::vector< std::string > items;
       items.push_back( result );
 
-      V_string::const_iterator itr = list->GetItems().begin();
-      V_string::const_iterator end = list->GetItems().end();
+      std::vector< std::string >::const_iterator itr = list->GetItems().begin();
+      std::vector< std::string >::const_iterator end = list->GetItems().end();
       for ( ; itr != end; ++itr )
       {
         const std::string& item ( *itr );
@@ -175,19 +175,19 @@ void ReflectMapInterpreter::OnRemove( Button* button )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
-    const V_string& selectedItems = list->GetSelectedItems();
+    const std::vector< std::string >& selectedItems = list->GetSelectedItems();
     if ( selectedItems.size() > 0 )
     {
-      V_string::const_iterator selBegin = selectedItems.begin();
-      V_string::const_iterator selEnd = selectedItems.end();
+      std::vector< std::string >::const_iterator selBegin = selectedItems.begin();
+      std::vector< std::string >::const_iterator selEnd = selectedItems.end();
 
-      V_string items;
-      V_string::const_iterator itr = list->GetItems().begin();
-      V_string::const_iterator end = list->GetItems().end();
+      std::vector< std::string > items;
+      std::vector< std::string >::const_iterator itr = list->GetItems().begin();
+      std::vector< std::string >::const_iterator end = list->GetItems().end();
       for ( ; itr != end; ++itr )
       {
         const std::string& item ( *itr );
-        V_string::const_iterator found = std::find( selBegin, selEnd, item );
+        std::vector< std::string >::const_iterator found = std::find( selBegin, selEnd, item );
         if ( found == selEnd )
         {
           items.push_back( item );
@@ -216,7 +216,7 @@ void ReflectMapInterpreter::OnEdit( Button* button )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
-    const V_string& selected = list->GetSelectedItems();
+    const std::vector< std::string >& selected = list->GetSelectedItems();
     if ( selected.size() == 1 )
     {
       std::string key;
@@ -231,10 +231,10 @@ void ReflectMapInterpreter::OnEdit( Button* button )
 
       if ( !result.empty() )
       {
-        V_string newList;
+        std::vector< std::string > newList;
 
-        V_string::const_iterator itr = list->GetItems().begin();
-        V_string::const_iterator end = list->GetItems().end();
+        std::vector< std::string >::const_iterator itr = list->GetItems().begin();
+        std::vector< std::string >::const_iterator end = list->GetItems().end();
         for ( ; itr != end; ++itr )
         {
           const std::string& item ( *itr );

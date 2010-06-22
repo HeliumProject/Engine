@@ -520,7 +520,7 @@ void NavMeshCreateTool::MouseUp( wxMouseEvent& e )
       // set the manipulator position to be the average of all selected points
       u32 numVerts = 0;
       Math::Vector3 vertsAdded = Math::Vector3::Zero;
-      V_u32 selected_verts = m_Instance->GetSelectedVerts();
+      std::vector< u32 > selected_verts = m_Instance->GetSelectedVerts();
       for( u32 i = 0; i < selected_verts.size(); i++ )
       {
         numVerts++;
@@ -634,7 +634,7 @@ bool NavMeshCreateTool::MouseDown( wxMouseEvent& e )
                 }
                 if ( m_Instance->ToggleMouseOverEdgeSelection() )
                 {
-                  V_u32 selected_verts = m_Instance->GetSelectedVerts();
+                  std::vector< u32 > selected_verts = m_Instance->GetSelectedVerts();
                   Math::Vector3 p1 = m_Instance->GetVertPosition( selected_verts.at(0) );
                   Math::Vector3 p2 = m_Instance->GetVertPosition( selected_verts.at(1) );
 
@@ -664,7 +664,7 @@ bool NavMeshCreateTool::MouseDown( wxMouseEvent& e )
                 }
                 else
                 {
-                  V_u32 selected_verts = m_Instance->GetSelectedVerts();
+                  std::vector< u32 > selected_verts = m_Instance->GetSelectedVerts();
                   Math::Vector3 p1 = m_Instance->GetVertPosition( selected_verts.at(0) );
                   Math::Vector3 p2 = m_Instance->GetVertPosition( selected_verts.at(1) );
                   Math::Vector3 p3 = m_Instance->GetVertPosition( selected_verts.at(2) );
@@ -884,7 +884,7 @@ bool NavMeshCreateTool::MouseDown( wxMouseEvent& e )
               }
               else if ( m_Instance->ToggleMouseOverEdgeSelection() )
               {
-                V_u32 selected_verts = m_Instance->GetSelectedVerts();
+                std::vector< u32 > selected_verts = m_Instance->GetSelectedVerts();
                 Math::Vector3 p1 = m_Instance->GetVertPosition( selected_verts.at(0) );
                 Math::Vector3 p2 = m_Instance->GetVertPosition( selected_verts.at(1) );
 
@@ -913,7 +913,7 @@ bool NavMeshCreateTool::MouseDown( wxMouseEvent& e )
                 }
                 else
                 {
-                  V_u32 selected_verts = m_Instance->GetSelectedVerts();
+                  std::vector< u32 > selected_verts = m_Instance->GetSelectedVerts();
                   Math::Vector3 p1 = m_Instance->GetVertPosition( selected_verts.at(0) );
                   Math::Vector3 p2 = m_Instance->GetVertPosition( selected_verts.at(1) );
                   Math::Vector3 p3 = m_Instance->GetVertPosition( selected_verts.at(2) );
@@ -1838,7 +1838,7 @@ void NavMeshCreateTool::SetEditMode(u32 mode)
           // set the manipulator position to be the average of all selected points
           u32 numVerts = 0;
           Math::Vector3 vertsAdded = Math::Vector3::Zero;
-          V_u32 selected_verts = m_Instance->GetSelectedVerts();
+          std::vector< u32 > selected_verts = m_Instance->GetSelectedVerts();
           for( u32 i = 0; i < selected_verts.size(); i++ )
           {
             numVerts++;
@@ -1855,7 +1855,7 @@ void NavMeshCreateTool::SetEditMode(u32 mode)
       // set the manipulator position to be the average of all selected points
       u32 numVerts = 0;
       Math::Vector3 vertsAdded = Math::Vector3::Zero;
-      V_u32 selected_verts = m_Instance->GetSelectedVerts();
+      std::vector< u32 > selected_verts = m_Instance->GetSelectedVerts();
       for( u32 i = 0; i < selected_verts.size(); i++ )
       {
         numVerts++;
@@ -2583,7 +2583,7 @@ void NavMeshCreateTool::MoveRotator( wxMouseEvent& e )
   m_ManipulatorPos.t = cached_pos.t;
 
   // Apply the rotation to the selected verts
-  V_u32 selected_verts = m_Instance->GetSelectedVerts();
+  std::vector< u32 > selected_verts = m_Instance->GetSelectedVerts();
   for ( u32 i = 0; i < selected_verts.size(); i++ )
   {
     Math::Vector3 new_pos = m_CachedPositions.at(i);
@@ -2682,7 +2682,7 @@ void NavMeshCreateTool::CopySelected()
 {
   m_CopiedPositions.clear();
 
-  V_u32 selected_verts = m_Instance->GetSelectedVerts();
+  std::vector< u32 > selected_verts = m_Instance->GetSelectedVerts();
 
   for ( u32 i = 0; i < selected_verts.size(); i++ )
   {

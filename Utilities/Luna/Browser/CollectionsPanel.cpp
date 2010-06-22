@@ -410,7 +410,7 @@ void CollectionsPanel::OnOpenCollection( wxCommandEvent& event )
     Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_OpenCollection ), "", "", "",
         Nocturnal::FileDialogStyles::DefaultOpen | Nocturnal::FileDialogStyles::ShowAllFilesFilter | Nocturnal::FileDialogStyles::ExportFile );
 
-    V_string filters;
+    std::vector< std::string > filters;
     AssetCollection::GetFileFilters( filters );
     browserDlg.AddFilters( filters );
 
@@ -518,7 +518,7 @@ void CollectionsPanel::OnImportIntoCollection( wxCommandEvent& event )
     Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_ImportIntoCollection ), "", "", "",
         Nocturnal::FileDialogStyles::DefaultOpen | Nocturnal::FileDialogStyles::ShowAllFilesFilter | Nocturnal::FileDialogStyles::ExportFile );
 
-    V_string filters;
+    std::vector< std::string > filters;
     AssetCollection::GetFileFilters( filters );
     browserDlg.AddFilters( filters );
 
@@ -557,7 +557,7 @@ void CollectionsPanel::OnSaveCollection( wxCommandEvent& event )
         Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_SaveCollection ), defaultDir.c_str(), defaultFile.c_str(), "",
             Nocturnal::FileDialogStyles::DefaultSave | Nocturnal::FileDialogStyles::ShowAllFilesFilter | Nocturnal::FileDialogStyles::ExportFile );
 
-        V_string filters;
+        std::vector< std::string > filters;
         AssetCollection::GetFileFilters( filters );
         browserDlg.AddFilters( filters );
 

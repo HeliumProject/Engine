@@ -20,7 +20,7 @@ bool FindByTypeVisitor::VisitElement(Element* element)
     return true;
 }
 
-FindByTypeSetVisitor::FindByTypeSetVisitor(const S_i32& types, V_Element& found)
+FindByTypeSetVisitor::FindByTypeSetVisitor(const std::set< i32 >& types, V_Element& found)
 : m_Types (types)
 , m_Found (found)
 {
@@ -29,8 +29,8 @@ FindByTypeSetVisitor::FindByTypeSetVisitor(const S_i32& types, V_Element& found)
 
 bool FindByTypeSetVisitor::VisitElement(Element* element)
 {
-    S_i32::const_iterator itr = m_Types.begin();
-    S_i32::const_iterator end = m_Types.end();
+    std::set< i32 >::const_iterator itr = m_Types.begin();
+    std::set< i32 >::const_iterator end = m_Types.end();
     for ( ; itr != end; ++itr )
     {
         if (element->HasType(*itr))

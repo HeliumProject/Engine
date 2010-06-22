@@ -39,7 +39,7 @@ bool              g_NoMultiple = false;
 bool              g_GenerateReport = false;
 bool              g_ImmortalWorker = false;
 bool              g_Defaults = false;
-V_string          g_Regions;     // only for levels, which need to view a single region
+std::vector< std::string >          g_Regions;     // only for levels, which need to view a single region
 
 ///////////////////////////////////////////////////////////////////////////////
 void PrintUsage()
@@ -228,7 +228,7 @@ void AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool Build( Dependencies::DependencyGraph& depGraph, Nocturnal::S_Path& assets, const V_string& options )
+bool Build( Dependencies::DependencyGraph& depGraph, Nocturnal::S_Path& assets, const std::vector< std::string >& options )
 {
     bool success = true;
 
@@ -369,7 +369,7 @@ bool Build( Dependencies::DependencyGraph& depGraph, Nocturnal::S_Path& assets, 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool QueryAndBuildAssets(const V_string& options)
+bool QueryAndBuildAssets(const std::vector< std::string >& options)
 { 
     // get the asset files they want to build
     int maxMatches = g_NoMultiple ? 1 : (g_All ? -1 : MAX_MATCHES);
@@ -483,7 +483,7 @@ int Main (int argc, const char** argv)
     }
 
     // fill out the options vector
-    V_string options;
+    std::vector< std::string > options;
     for ( int i = 2; i < argc; ++i )
     {
         options.push_back( argv[ i ] );

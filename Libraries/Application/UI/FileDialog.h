@@ -55,7 +55,7 @@ namespace Nocturnal
 
   protected:
 
-    S_string                m_Files;
+    std::set< std::string >                m_Files;
 
 
   public:
@@ -80,12 +80,12 @@ namespace Nocturnal
     virtual wxString GetPath() const NOC_OVERRIDE;
     virtual void GetPaths( wxArrayString& paths ) const NOC_OVERRIDE;
     virtual const std::string& GetFilePath() const;
-    virtual const S_string& GetFilePaths() const;
+    virtual const std::set< std::string >& GetFilePaths() const;
 
     void SetFilter( const std::string& filter );
     void SetFilterIndex( const std::string& filter );
     void AddFilter( const std::string& filter );
-    void AddFilters( const V_string& filters );
+    void AddFilters( const std::vector< std::string >& filters );
 
   protected:
     void OnOkButtonClicked( wxCommandEvent& evt );

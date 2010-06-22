@@ -142,22 +142,22 @@ namespace Luna
     Math::Vector3 m_LocatorPos;
     bool m_DrawLocator;
 
-    V_u32  m_selected_tris;
-    V_u32  m_selected_verts;
+    std::vector< u32 >  m_selected_tris;
+    std::vector< u32 >  m_selected_verts;
     u32    m_selected_edge; //0, 1, 2
-    V_u32  m_cached_selected_tris;
+    std::vector< u32 >  m_cached_selected_tris;
 
-    V_u32  m_marquee_selected_verts;
-    V_u32  m_marquee_selected_edges;
-    V_u32  m_marquee_selected_tris;
+    std::vector< u32 >  m_marquee_selected_verts;
+    std::vector< u32 >  m_marquee_selected_edges;
+    std::vector< u32 >  m_marquee_selected_tris;
 
 
     u32    m_mouse_over_vert;
     u32    m_mouse_over_edge;
     u32    m_mouse_over_tri;
 
-    V_u32  m_to_be_deleted_tris;
-    V_u32  m_to_be_deleted_verts;
+    std::vector< u32 >  m_to_be_deleted_tris;
+    std::vector< u32 >  m_to_be_deleted_verts;
 
     void   ClearSelectionState();
     void   ClearEditingState();
@@ -190,13 +190,13 @@ namespace Luna
 
     Math::Vector3 GetMouseOverVertPosition();
     void SelectNearestEdge( const Math::Vector3& position );
-    V_u32 GetSelectedVerts() { return m_selected_verts; }
+    std::vector< u32 > GetSelectedVerts() { return m_selected_verts; }
     const Math::Vector3& GetVertPosition( u32 index );
 
     void SetSelectionMode( u32 mode );
 
-    void GetMeshData( Math::V_Vector3& positions, V_u32& triVerts, V_u32& wireVerts );
-    void UpdateMeshData( const Math::V_Vector3& positions, const V_u32& triVerts, const V_u32& wireVerts );
+    void GetMeshData( Math::V_Vector3& positions, std::vector< u32 >& triVerts, std::vector< u32 >& wireVerts );
+    void UpdateMeshData( const Math::V_Vector3& positions, const std::vector< u32 >& triVerts, const std::vector< u32 >& wireVerts );
 
     enum MarqueeSelectionMode
     {

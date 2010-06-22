@@ -165,8 +165,8 @@ static void SendMail( ExceptionReport& report )
     body << report.m_Args.m_Callstack << std::endl;
   }
 
-  V_string::const_iterator itr = report.m_Args.m_Threads.begin();
-  V_string::const_iterator end = report.m_Args.m_Threads.end();
+  std::vector< std::string >::const_iterator itr = report.m_Args.m_Threads.begin();
+  std::vector< std::string >::const_iterator end = report.m_Args.m_Threads.end();
   for ( ; itr != end; ++itr )
   {
     body << std::endl << *itr << std::endl;

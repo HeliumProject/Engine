@@ -6,6 +6,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Exception.h"
 
+#include <map>
 #include <time.h>
 #include <shlobj.h>
 #include <dbghelp.h>
@@ -696,8 +697,8 @@ std::string Debug::GetExceptionInfo(LPEXCEPTION_POINTERS info)
     buffer += "No call stack info\n";
   }
 
-  V_string::const_iterator itr = args.m_Threads.begin();
-  V_string::const_iterator end = args.m_Threads.end();
+  std::vector< std::string >::const_iterator itr = args.m_Threads.begin();
+  std::vector< std::string >::const_iterator end = args.m_Threads.end();
   for ( ; itr != end; ++itr )
   {
     PrintString( buffer, "\n%s", itr->c_str() );

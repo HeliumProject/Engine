@@ -204,10 +204,10 @@ namespace Content
         //
 
         // The indices for the wireframe drawing (a line list)
-        V_u32 m_WireframeVertexIndices;
+        std::vector< u32 > m_WireframeVertexIndices;
 
         // The indices into the above arrays (vertex position, normal, color, etc)
-        V_u32 m_TriangleVertexIndices;
+        std::vector< u32 > m_TriangleVertexIndices;
 
 
         // Optional morphtarget (blend shap) objects
@@ -218,13 +218,13 @@ namespace Content
         //
 
         // The index of the polygon each triangle is triangulated from
-        V_u32 m_PolygonIndices; // size is number of tris
+        std::vector< u32 > m_PolygonIndices; // size is number of tris
 
         // The shader index for each triangle
-        V_u32 m_ShaderIndices; // size is number of tris
+        std::vector< u32 > m_ShaderIndices; // size is number of tris
 
         // The collision material for each triangle
-        V_u32 m_CollisionMaterialIndices; // size is number of tris
+        std::vector< u32 > m_CollisionMaterialIndices; // size is number of tris
 
         //
         // Per mesh data
@@ -234,7 +234,7 @@ namespace Content
         Nocturnal::V_TUID m_ShaderIDs;
 
         // The counts of the number of triangles for each shader used
-        V_u32 m_ShaderTriangleCounts;
+        std::vector< u32 > m_ShaderTriangleCounts;
 
         M_ContentTypeToIndex m_ExportTypeIndex;
 
@@ -334,13 +334,13 @@ namespace Content
         u32  GetEdgeIdForVerts(u32 vert_a, u32 vert_b);
         void AddTri(u32 vert_a, u32 vert_b, u32 vert_c);
         u32  GetClosestTri(const Math::Vector3& sphere_pos, const f32& sphere_rad);
-        void NopTrisByTriList(const V_u32& ip_tris);
-        void NopTrisByVertList(const V_u32& ip_verts);
-        void NopTrisByEdgeList( const V_u32& ip_edges );
+        void NopTrisByTriList(const std::vector< u32 >& ip_tris);
+        void NopTrisByVertList(const std::vector< u32 >& ip_verts);
+        void NopTrisByEdgeList( const std::vector< u32 >& ip_edges );
         void PruneVertsNotInTris();
-        void DeleteTris(const V_u32& ip_tris);
-        void DeleteVerts(const V_u32& ip_verts);
-        void DeleteEdges( const V_u32& ip_edges );
+        void DeleteTris(const std::vector< u32 >& ip_tris);
+        void DeleteVerts(const std::vector< u32 >& ip_verts);
+        void DeleteEdges( const std::vector< u32 >& ip_edges );
         u32  GetClosestVert(const Math::Vector3& sphere_start_pos, const f32& sphere_Rad, const Math::Vector3& swept_dir, const f32& len);
         u32  GetClosestVert(const Math::Matrix4& view_proj_mat, const f32 porj_space_threshold_sqr, Math::Vector2 proj_pt);
         u32  GetClosestEdge(const Math::Vector3& sphere_start_pos, const f32& sphere_Rad, const Math::Vector3& swept_dir, const f32& len);

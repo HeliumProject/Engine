@@ -48,7 +48,7 @@ namespace Luna
     u32 m_TriangleCount;
 
     // the start index of each shader-sorted segment of indices
-    V_u32 m_ShaderStartIndices;
+    std::vector< u32 > m_ShaderStartIndices;
 
     // materials
     static D3DMATERIAL9 s_WireMaterial;

@@ -18,8 +18,8 @@ using namespace RCS;
 
 Provider*     g_Provider = NULL;
 Changeset     g_DefaultChangeset;
-V_string      g_ManagedPaths;
-V_string      g_IgnoredPaths;
+std::vector< std::string >      g_ManagedPaths;
+std::vector< std::string >      g_IgnoredPaths;
 u64           g_SyncTimestamp = 0;
 
 ///////////////////////////////////////////////////////////////////
@@ -29,11 +29,11 @@ u64           g_SyncTimestamp = 0;
 // prepends projectRoot onto each element of paths 
 // checks to see if the resulting prefix is found in the query path
 // 
-static bool _IsSubdir( const std::string& query, V_string& paths )
+static bool _IsSubdir( const std::string& query, std::vector< std::string >& paths )
 {
   Nocturnal::Path queryPath( query );
 
-  for( V_string::const_iterator it = paths.begin(), end = paths.end(); it != end; ++it )
+  for( std::vector< std::string >::const_iterator it = paths.begin(), end = paths.end(); it != end; ++it )
   {
     Nocturnal::Path path( (*it) );
 

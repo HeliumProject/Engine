@@ -139,9 +139,9 @@ void Instance::CheckNodeType()
   __super::CheckNodeType();
 }
 
-S_string Instance::GetValidConfiguredTypeNames()
+std::set< std::string > Instance::GetValidConfiguredTypeNames()
 {
-  S_string names;
+  std::set< std::string > names;
 
   // iterate and score configs
   V_TypeConfigSmartPtr::const_iterator itr = m_Scene->GetTypeConfigs().begin();

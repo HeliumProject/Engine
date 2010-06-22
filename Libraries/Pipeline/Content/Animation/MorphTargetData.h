@@ -13,7 +13,7 @@ namespace Content
   // Morph Target Data
   // 
   typedef std::map< std::string, u32 > M_TargetSetNameToId; // map target-set-name to target-set-id
-  typedef std::map< u32, V_u32 > M_TargetSetIdToTargetIndex;   // map target-set-id to target-ids
+  typedef std::map< u32, std::vector< u32 > > M_TargetSetIdToTargetIndex;   // map target-set-id to target-ids
 
   class PIPELINE_API MorphTargetData : public Nocturnal::RefCountBase<MorphTargetData>
   {
@@ -22,7 +22,7 @@ namespace Content
 
     M_TargetSetNameToId         m_TargetSetNameToId;
     M_TargetSetIdToTargetIndex  m_TargetSetIdToTargetIndiciesMap;
-    M_u32                       m_TargetIndexToTargetSetId;
+    std::map< u32, u32 >                       m_TargetIndexToTargetSetId;
 
     // mapping of each target's TUID to its location in the list of targets
     Nocturnal::HM_TUIDU32        m_TargetIdToTargetIndex;

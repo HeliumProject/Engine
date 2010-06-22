@@ -109,17 +109,17 @@ CheckBoxStates::CheckBoxState ReflectBitfieldCheckBox::GetChecked()
   // If we have data, use it (otherwise, just use the state)
   if ( IsBound() && !m_BitfieldString.empty() )
   {
-    V_string strs;
+    std::vector< std::string > strs;
     ReadAll( strs );
 
     bool previous = false;
-    const V_string::const_iterator strBegin = strs.begin();
-    V_string::const_iterator strItr = strBegin;
-    const V_string::const_iterator strEnd = strs.end();
+    const std::vector< std::string >::const_iterator strBegin = strs.begin();
+    std::vector< std::string >::const_iterator strItr = strBegin;
+    const std::vector< std::string >::const_iterator strEnd = strs.end();
     for ( ; strItr != strEnd; ++strItr )
     {
 #pragma TODO( "There should be a version of Tokenize that builds sets instead of vectors to make all these searches faster" )
-      V_string tokens;
+      std::vector< std::string > tokens;
       ::Tokenize( *strItr, tokens, "\\|" );
       bool found = std::find( tokens.begin(), tokens.end(), m_BitfieldString ) != tokens.end();
       m_State = found ? CheckBoxStates::Checked : CheckBoxStates::Unchecked;
@@ -166,7 +166,7 @@ bool ReflectBitfieldCheckBox::IsDefault() const
   }
   else
   {
-    V_string tokens;
+    std::vector< std::string > tokens;
     ::Tokenize( m_Default, tokens, "\\|" );
     bool shouldBeChecked = std::find( tokens.begin(), tokens.end(), m_BitfieldString ) != tokens.end();
     switch ( GetUIState() )
@@ -215,19 +215,19 @@ bool ReflectBitfieldCheckBox::WriteBitfield()
   {
     if ( m_State != CheckBoxStates::Tristate )
     {
-      V_string newVals;
-      V_string strs;
+      std::vector< std::string > newVals;
+      std::vector< std::string > strs;
       ReadAll( strs );
 
-      V_string::const_iterator strItr = strs.begin();
-      V_string::const_iterator strEnd = strs.end();
+      std::vector< std::string >::const_iterator strItr = strs.begin();
+      std::vector< std::string >::const_iterator strEnd = strs.end();
       for ( ; strItr != strEnd; ++strItr )
       {
         const std::string& current = *strItr;
         std::string newVal = current;
-        V_string tokens;
+        std::vector< std::string > tokens;
         ::Tokenize( current, tokens, "\\|" );
-        V_string::iterator foundItr = std::find( tokens.begin(), tokens.end(), m_BitfieldString );
+        std::vector< std::string >::iterator foundItr = std::find( tokens.begin(), tokens.end(), m_BitfieldString );
         if ( ( m_State == CheckBoxStates::Checked ) && ( foundItr == tokens.end() ) )
         {
           tokens.push_back( m_BitfieldString );
@@ -255,11 +255,11 @@ bool ReflectBitfieldCheckBox::WriteBitfield()
   return dataWasUpdated;
 }
 
-std::string ReflectBitfieldCheckBox::BuildBitfieldString( V_string tokens, const std::string& delimiter )
+std::string ReflectBitfieldCheckBox::BuildBitfieldString( std::vector< std::string > tokens, const std::string& delimiter )
 {
   std::string result;
-  V_string::const_iterator itr = tokens.begin();
-  V_string::const_iterator end = tokens.end();
+  std::vector< std::string >::const_iterator itr = tokens.begin();
+  std::vector< std::string >::const_iterator end = tokens.end();
   for ( ; itr != end; ++itr )
   {
     if ( !result.empty() )

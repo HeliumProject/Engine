@@ -28,7 +28,7 @@ namespace Content
     return validJointAnimations;
   }
 
-  void Scene::GetJointMismatchReport( V_string &mismatchMessages, u32 clipIndex ) const
+  void Scene::GetJointMismatchReport( std::vector< std::string > &mismatchMessages, u32 clipIndex ) const
   {
     std::set< Nocturnal::TUID > animatedJoints;
 

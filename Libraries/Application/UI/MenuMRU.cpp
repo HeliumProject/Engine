@@ -103,7 +103,7 @@ MenuMRU::~MenuMRU()
 // 
 void MenuMRU::RemoveInvalidItems( bool tuidRequired )
 {
-  S_string remove; // Lame, we should fix this
+  std::set< std::string > remove; // Lame, we should fix this
   OS_OrderedTypeSet::Iterator mruItr = m_OrderedSet.Begin();
   OS_OrderedTypeSet::Iterator mruEnd = m_OrderedSet.End();
 
@@ -150,8 +150,8 @@ void MenuMRU::RemoveInvalidItems( bool tuidRequired )
   }
 
   // Remove all the bad items
-  S_string::const_iterator removeItr = remove.begin();
-  S_string::const_iterator removeEnd = remove.end();
+  std::set< std::string >::const_iterator removeItr = remove.begin();
+  std::set< std::string >::const_iterator removeEnd = remove.end();
   for ( ; removeItr != removeEnd; ++removeItr )
   {
     Remove( *removeItr );

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <set>
+
 #include "Foundation/API.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/String/Utilities.h"

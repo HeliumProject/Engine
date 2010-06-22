@@ -42,22 +42,22 @@ void InstancePanel::CreateApplicationType()
     Inspect::Choice* choice = m_Enumerator->AddChoice< Luna::Instance, std::string >( m_Selection, &Luna::Instance::GetConfiguredTypeName, &Luna::Instance::SetConfiguredTypeName );
 
     // this is the set of names that are compatible with all selected items
-    S_string names;
+    std::set< std::string > names;
 
     {
       OS_SelectableDumbPtr::Iterator itr = m_Selection.Begin();
       OS_SelectableDumbPtr::Iterator end = m_Selection.End();
       for ( ; itr != end; ++itr )
       {
-        S_string current = Reflect::AssertCast<Luna::Instance>(*itr)->GetValidConfiguredTypeNames();
+        std::set< std::string > current = Reflect::AssertCast<Luna::Instance>(*itr)->GetValidConfiguredTypeNames();
         if (itr == m_Selection.Begin())
         {
           names = current;
         }
         else
         {
-          S_string::iterator namesItr = names.begin();
-          S_string::iterator namesEnd = names.end();
+          std::set< std::string >::iterator namesItr = names.begin();
+          std::set< std::string >::iterator namesEnd = names.end();
           while ( namesItr != namesEnd )
           {
             if ( current.find( *namesItr ) == current.end() )
@@ -85,8 +85,8 @@ void InstancePanel::CreateApplicationType()
       items[0].m_Key = "<AUTOMATIC>";
       items[0].m_Data = "";
 
-      S_string::const_iterator itr = names.begin();
-      S_string::const_iterator end = names.end();
+      std::set< std::string >::const_iterator itr = names.begin();
+      std::set< std::string >::const_iterator end = names.end();
       for ( size_t index=1; itr != end; ++itr, ++index )
       {
         Inspect::Item& item = items[index];
@@ -155,11 +155,11 @@ void InstancePanel::CreateAppearanceFlags()
   }
 }
 
-void InstancePanel::Intersect(S_string& intersection, const S_string& classList)
+void InstancePanel::Intersect(std::set< std::string >& intersection, const std::set< std::string >& classList)
 {
-  for(S_string::iterator it = intersection.begin(); it != intersection.end(); )
+  for(std::set< std::string >::iterator it = intersection.begin(); it != intersection.end(); )
   {
-    S_string::const_iterator input = std::find(classList.begin(), classList.end(), *it); 
+    std::set< std::string >::const_iterator input = std::find(classList.begin(), classList.end(), *it); 
     if(input == classList.end())
     {
       it = intersection.erase(it); 

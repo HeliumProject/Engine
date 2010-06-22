@@ -34,8 +34,8 @@ void ContextMenu::OnShow( wxContextMenuEvent& event )
 {
   wxMenu menu;
 
-  V_string::const_iterator itr = m_Items.begin();
-  V_string::const_iterator end = m_Items.end();
+  std::vector< std::string >::const_iterator itr = m_Items.begin();
+  std::vector< std::string >::const_iterator end = m_Items.end();
   for ( i32 count = 0; itr != end; ++itr, ++count )
   {
     if ( *itr == "-" )

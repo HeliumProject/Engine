@@ -16,7 +16,7 @@ namespace Luna
   private:
     std::string m_Name;
     std::string m_Filters;
-    S_string    m_Extensions;
+    std::set< std::string >    m_Extensions;
 
   public:
     Filter( const std::string& name, const std::string& filters );
@@ -28,7 +28,7 @@ namespace Luna
 
     const std::string& GetName() const { return m_Name; }
     const std::string& GetFilters() const { return m_Filters; }
-    const S_string& GetExtensions() const { return m_Extensions; }
+    const std::set< std::string >& GetExtensions() const { return m_Extensions; }
 
     void Clear()
     {
@@ -72,8 +72,8 @@ namespace Luna
     const Filter* FindFilter( const std::string& name );
 
     void PopulateForm();
-    void PopulateChoiceControl( wxControlWithItems* control, V_string& contents );
-    void PopulateFileTypeChoice( V_string& contents );
+    void PopulateChoiceControl( wxControlWithItems* control, std::vector< std::string >& contents );
+    void PopulateFileTypeChoice( std::vector< std::string >& contents );
     void PopulateCollectionsChoice();
 
     bool ProcessForm();

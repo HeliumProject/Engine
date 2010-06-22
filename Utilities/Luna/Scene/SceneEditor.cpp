@@ -330,9 +330,9 @@ SceneEditor::SceneEditor()
 
     m_MRU->AddItemSelectedListener( Nocturnal::MRUSignature::Delegate( this, &SceneEditor::OnMRUOpen ) );
 
-    V_string paths;
-    V_string::const_iterator itr = SceneEditorPreferences()->GetMRU()->GetPaths().begin();
-    V_string::const_iterator end = SceneEditorPreferences()->GetMRU()->GetPaths().end();
+    std::vector< std::string > paths;
+    std::vector< std::string >::const_iterator itr = SceneEditorPreferences()->GetMRU()->GetPaths().begin();
+    std::vector< std::string >::const_iterator end = SceneEditorPreferences()->GetMRU()->GetPaths().end();
     for ( ; itr != end; ++itr )
     {
         Nocturnal::Path path( *itr );
@@ -920,7 +920,7 @@ SceneEditor::~SceneEditor()
     }
 
     // Save preferences and MRU
-    V_string mruPaths;
+    std::vector< std::string > mruPaths;
     m_MRU->ToVector( mruPaths );
     SceneEditorPreferences()->GetMRU()->SetPaths( mruPaths );
     SceneEditorPreferences()->GetViewPreferences()->LoadFromView( m_View ); 
@@ -1477,9 +1477,9 @@ void SceneEditor::OnImport(wxCommandEvent& event)
                 {
                     Nocturnal::FileDialog fileDialog( this, "Import" );
 
-                    S_string filters;
+                    std::set< std::string > filters;
                     Reflect::Archive::GetFileFilters( filters );
-                    for ( S_string::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+                    for ( std::set< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
                     {
                         fileDialog.AddFilter( (*itr) );
                     }
@@ -1679,9 +1679,9 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                     {
                         Nocturnal::FileDialog fileDialog( this, "Export Selection", "", "", wxFileSelectorDefaultWildcardStr, Nocturnal::FileDialogStyles::DefaultSave );
                         
-                        S_string filters;
+                        std::set< std::string > filters;
                         Reflect::Archive::GetFileFilters( filters );
-                        for ( S_string::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+                        for ( std::set< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
                         {
                             fileDialog.AddFilter( (*itr) );
                         }
@@ -3301,13 +3301,13 @@ bool SceneEditor::ValidateDrag( const Inspect::DragArgs& args )
 {
     bool canHandleArgs = false;
 
-    S_string reflectExtensions;
+    std::set< std::string > reflectExtensions;
     Reflect::Archive::GetExtensions( reflectExtensions );
 
     Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( fileList )
     {
-        for ( S_string::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end();
+        for ( std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end();
             fileItr != fileEnd && !canHandleArgs;
             ++fileItr )
         {
@@ -3348,7 +3348,7 @@ wxDragResult SceneEditor::Drop( const Inspect::DragArgs& args )
         Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
         if ( fileList )
         {
-            for ( S_string::const_iterator fileItr = fileList->GetFilePaths().begin(),
+            for ( std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin(),
                 fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
             {
                 Nocturnal::Path path( *fileItr );

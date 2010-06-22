@@ -81,7 +81,7 @@ namespace Dependencies
         virtual bool IsMD5Valid() = 0;
         virtual void GenerateMD5() = 0;
         virtual bool WasModified() = 0;
-        virtual bool AppendToSignature( CryptoPP::HashFilter* hashFilter, V_string& trace ) = 0;
+        virtual bool AppendToSignature( CryptoPP::HashFilter* hashFilter, std::vector< std::string >& trace ) = 0;
         virtual void CacheCopy( DependencyInfo& rhs );
         virtual bool Exists() = 0;
 
@@ -106,7 +106,7 @@ namespace Dependencies
         Nocturnal::Path           m_Path;
         std::string               m_MD5;
         std::string               m_Signature;
-        V_string                  m_SignatureTrace;
+        std::vector< std::string >                  m_SignatureTrace;
 
         std::string               m_TypeName;
         std::string               m_FormatVersion;

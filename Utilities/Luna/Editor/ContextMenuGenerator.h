@@ -15,7 +15,7 @@ namespace Luna
   {
   private:
     D_ContextMenuItemSmartPtr m_Items;
-    S_string m_Labels;
+    std::set< std::string > m_Labels;
 
   public:
     ContextMenuItemSet();

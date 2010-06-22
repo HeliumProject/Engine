@@ -31,8 +31,8 @@ namespace Luna
 
     // Criteria
     std::string m_ApplicationType;
-    S_string m_ContainsComponents;
-    S_string m_MissingComponents;
+    std::set< std::string > m_ContainsComponents;
+    std::set< std::string > m_MissingComponents;
     std::string m_Location;
 
 

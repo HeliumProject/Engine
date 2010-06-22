@@ -1242,7 +1242,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, const AssetClass
     }
 }
 
-void AssetBuilder::Build( Dependencies::DependencyGraph& graph, const AssetClassPtr& assetClass, const V_string& options )
+void AssetBuilder::Build( Dependencies::DependencyGraph& graph, const AssetClassPtr& assetClass, const std::vector< std::string >& options )
 {
     Log::TraceFileHandle trace ( assetClass->GetBuiltDirectory().Get() + "trace.txt", Application::GetTraceStreams());
     Log::TraceFileHandle warning ( assetClass->GetBuiltDirectory().Get() + "warning.txt", Log::Streams::Warning );
@@ -1294,7 +1294,7 @@ void AssetBuilder::Build( Dependencies::DependencyGraph& graph, Nocturnal::Path&
     Build( graph, assetClass, builderOptions );
 }
 
-void AssetBuilder::Build( Dependencies::DependencyGraph& graph, Nocturnal::Path& path, const V_string& options )
+void AssetBuilder::Build( Dependencies::DependencyGraph& graph, Nocturnal::Path& path, const std::vector< std::string >& options )
 {
     AssetClassPtr assetClass = AssetClass::LoadAssetClass( path );
 

@@ -332,7 +332,7 @@ void LayerGrid::LayerSelectedItems( bool addToLayer )
 
   // If there are selected nodes in the scene, and selected rows in this control...
   const OS_SelectableDumbPtr& selectedNodes = m_Scene->GetSelection().GetItems();
-  S_u32 selectedRows = m_Grid->GetSelectedRows();
+  std::set< u32 > selectedRows = m_Grid->GetSelectedRows();
   if ( selectedNodes.Size() > 0 && selectedRows.size() > 0 )
   {
     //Log::Debug( "LayerSelectedItems\n" );
@@ -340,8 +340,8 @@ void LayerGrid::LayerSelectedItems( bool addToLayer )
 
     OS_SelectableDumbPtr::Iterator nodeItr = selectedNodes.Begin();
     OS_SelectableDumbPtr::Iterator nodeEnd = selectedNodes.End();
-    S_u32::const_iterator rowItr;
-    const S_u32::const_iterator rowEnd = selectedRows.end();
+    std::set< u32 >::const_iterator rowItr;
+    const std::set< u32 >::const_iterator rowEnd = selectedRows.end();
     const M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
 
     // For each node in the scene's selection list...
@@ -421,7 +421,7 @@ void LayerGrid::DebugDumpSelection()
 {
 #ifdef _DEBUG
   Log::Debug( "Dumping grid selection.\n" );
-  S_u32 selection = m_Grid->GetSelectedRows();
+  std::set< u32 > selection = m_Grid->GetSelectedRows();
   const size_t numSelected = selection.size();
   if ( numSelected == 0 )
   {
@@ -430,8 +430,8 @@ void LayerGrid::DebugDumpSelection()
   else
   {
     Log::Debug( "\t%d item%s selected.\n", numSelected, ( numSelected == 1 ) ? "" : "s" );
-    S_u32::const_iterator rowItr = selection.begin();
-    S_u32::const_iterator rowEnd = selection.end();
+    std::set< u32 >::const_iterator rowItr = selection.begin();
+    std::set< u32 >::const_iterator rowEnd = selection.end();
     for ( ; rowItr != rowEnd; ++rowItr )
     {
       const std::string& name = m_Grid->GetRowName( *rowItr );
@@ -542,9 +542,9 @@ void LayerGrid::DeleteSelectedLayers()
     // This makes sure that removing an item doesn't change the row number of another
     // item that will be removed later in the loop.  If we don't do this, we run the
     // risk of invalidating the selection array as we iterate over it.
-    const S_u32& selection = m_Grid->GetSelectedRows();
-    S_u32::const_reverse_iterator rowItr = selection.rbegin();
-    S_u32::const_reverse_iterator rowEnd = selection.rend();
+    const std::set< u32 >& selection = m_Grid->GetSelectedRows();
+    std::set< u32 >::const_reverse_iterator rowItr = selection.rbegin();
+    std::set< u32 >::const_reverse_iterator rowEnd = selection.rend();
     for ( ; rowItr != rowEnd; ++rowItr )
     {
       M_LayerDumbPtr::iterator layerItr = m_Layers.find( m_Grid->GetRowName( *rowItr ) );
@@ -655,9 +655,9 @@ void LayerGrid::OnSelectLayer( wxCommandEvent& event )
   {
     OS_SelectableDumbPtr newSelection;
 
-    const S_u32& selection = m_Grid->GetSelectedRows();
-    S_u32::const_iterator rowItr = selection.begin();
-    S_u32::const_iterator rowEnd = selection.end();
+    const std::set< u32 >& selection = m_Grid->GetSelectedRows();
+    std::set< u32 >::const_iterator rowItr = selection.begin();
+    std::set< u32 >::const_iterator rowEnd = selection.end();
     for ( ; rowItr != rowEnd; ++rowItr )
     {
       M_LayerDumbPtr::iterator layerItr = m_Layers.find( m_Grid->GetRowName( *rowItr ) );

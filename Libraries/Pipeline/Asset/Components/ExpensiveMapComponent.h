@@ -17,9 +17,9 @@ namespace Asset
     MipGenFilterType m_DetailMaskMipGenFilter;
     PostMipFilterType m_DetailMaskPostMipFilter;
 
-    V_i32 m_IncanMipFilterPasses;
-    V_i32 m_ParaMipFilterPasses;
-    V_i32 m_DetailMaskMipFilterPasses;
+    std::vector< i32 > m_IncanMipFilterPasses;
+    std::vector< i32 > m_ParaMipFilterPasses;
+    std::vector< i32 > m_DetailMaskMipFilterPasses;
 
     ExpensiveMapComponent()
       : m_IncanMipGenFilter( MipGenFilterTypes::MIP_SINC )

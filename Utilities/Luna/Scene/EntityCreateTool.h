@@ -46,7 +46,7 @@ namespace Luna
     protected:
         Inspect::List* m_RandomEntityList;
         V_EntityRowInfo m_RandomEntityInfo;
-        static V_string s_RandomEntities;
+        static std::vector< std::string > s_RandomEntities;
 
         Inspect::FileDialogButton* m_FileButton;
         Inspect::FileBrowserButton* m_BrowserButton;
@@ -80,6 +80,6 @@ namespace Luna
         void OnModify( Inspect::Button* button );
 
         void OnEntityDropped( const Inspect::FilteredDropTargetArgs& args );
-        void DropEntities( const V_string& entities, bool appendToList );
+        void DropEntities( const std::vector< std::string >& entities, bool appendToList );
     };
 }

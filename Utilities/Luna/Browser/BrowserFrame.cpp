@@ -475,8 +475,8 @@ wxMenu* BrowserFrame::GetNewAssetMenu( bool forceEnableAll )
 
     if ( !m_MenuItemToAssetType.empty() )
     {
-        M_i32::const_iterator itr = m_MenuItemToAssetType.begin();
-        M_i32::const_iterator end = m_MenuItemToAssetType.end();
+        std::map< i32, i32 >::const_iterator itr = m_MenuItemToAssetType.begin();
+        std::map< i32, i32 >::const_iterator end = m_MenuItemToAssetType.end();
         for ( ; itr != end; ++itr )
         {
             i32 menuItemID = itr->first;
@@ -502,8 +502,8 @@ wxMenu* BrowserFrame::GetNewAssetMenu( bool forceEnableAll )
     shaderSubMenuItem->Enable( enableItems );
 
     // Populate the New asset menu
-    V_i32::const_iterator assetItr = Asset::g_AssetClassTypes.begin();
-    V_i32::const_iterator assetEnd = Asset::g_AssetClassTypes.end();
+    std::vector< i32 >::const_iterator assetItr = Asset::g_AssetClassTypes.begin();
+    std::vector< i32 >::const_iterator assetEnd = Asset::g_AssetClassTypes.end();
     for ( ; assetItr != assetEnd; ++assetItr )
     {
         const i32 typeID = (*assetItr);
@@ -525,7 +525,7 @@ wxMenu* BrowserFrame::GetNewAssetMenu( bool forceEnableAll )
 
         // Map the menu item ID to the asset class ID so that when we get a menu item
         // callback, we know which type of asset to create.
-        m_MenuItemToAssetType.insert( M_i32::value_type( menuItem->GetId(), typeID ) );
+        m_MenuItemToAssetType.insert( std::map< i32, i32 >::value_type( menuItem->GetId(), typeID ) );
 
         // Connect a callback for when the menu item is selected.  No need to disconnect
         // this handler since the lifetime of this class is tied to the menu.
@@ -762,7 +762,7 @@ void BrowserFrame::OnCheckOut( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnRevisionHistory( wxCommandEvent& event )
 {
-    V_string paths;
+    std::vector< std::string > paths;
     if ( m_ResultsPanel->GetSelectedPaths( paths ) == 1 )
     {
         std::string path = paths.front();
@@ -781,12 +781,12 @@ void BrowserFrame::OnRevisionHistory( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnCopyPath( wxCommandEvent& event )
 {
-    V_string paths;
+    std::vector< std::string > paths;
     if ( m_ResultsPanel->GetSelectedPaths( paths, event.GetId() == BrowserMenu::CopyPathClean ) )
     {
         wxString text;
         wxTextDataObject* dataObject = new wxTextDataObject();
-        for ( V_string::const_iterator pathItr = paths.begin(),
+        for ( std::vector< std::string >::const_iterator pathItr = paths.begin(),
             pathEnd = paths.end(); pathItr != pathEnd; ++pathItr )
         {
             if ( !text.empty() )
@@ -808,7 +808,7 @@ void BrowserFrame::OnCopyPath( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnShowInFolders( wxCommandEvent& event )
 {
-    V_string paths;
+    std::vector< std::string > paths;
     if ( m_ResultsPanel->GetSelectedPaths( paths )  == 1 )
     {
         wxBusyCursor bc;
@@ -824,7 +824,7 @@ void BrowserFrame::OnShowInFolders( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnShowInPerforce( wxCommandEvent& event )
 {
-    V_string paths;
+    std::vector< std::string > paths;
     if ( m_ResultsPanel->GetSelectedPaths( paths )  == 1 )
     {
         std::string path = paths.front();
@@ -843,7 +843,7 @@ void BrowserFrame::OnShowInPerforce( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnShowInWindowsExplorer( wxCommandEvent& event )
 {
-    V_string paths;
+    std::vector< std::string > paths;
     if ( m_ResultsPanel->GetSelectedPaths( paths ) == 1 )
     {
         std::string command = "explorer.exe ";
@@ -914,7 +914,7 @@ void BrowserFrame::OnRefresh( wxCommandEvent& args )
 void BrowserFrame::OnNew( wxCommandEvent& args )
 {
 #pragma TODO( "Reimplement without the wizard" )
-    //M_i32::const_iterator found = m_MenuItemToAssetType.find( args.GetId() );
+    //std::map< i32, i32 >::const_iterator found = m_MenuItemToAssetType.find( args.GetId() );
     //if ( found != m_MenuItemToAssetType.end() )
     //{
     //    const i32 assetTypeID = found->second;

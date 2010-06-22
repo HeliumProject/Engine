@@ -59,7 +59,7 @@ bool g_ShutdownStarted = false;
 bool g_ShutdownComplete = false;
 
 // default to these streams for trace files, it is up to the app to ask for these, when creating a TraceFile
-V_string g_TraceFiles;
+std::vector< std::string > g_TraceFiles;
 Log::Stream g_TraceStreams  = Log::Streams::Normal | Log::Streams::Warning | Log::Streams::Error; 
 
 // so you can set _crtBreakAlloc in the debugger (expression evaluator doesn't like it)
@@ -451,7 +451,7 @@ void Application::InitializeStandardTraceFiles()
 
 void Application::CleanupStandardTraceFiles()
 {
-  for ( V_string::const_iterator itr = g_TraceFiles.begin(), 
+  for ( std::vector< std::string >::const_iterator itr = g_TraceFiles.begin(), 
     end = g_TraceFiles.begin(); itr != end; ++itr )
   {
     Log::RemoveTraceFile( *itr );

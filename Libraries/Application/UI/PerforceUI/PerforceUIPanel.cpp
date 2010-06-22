@@ -102,7 +102,7 @@ void Panel::SetChangeset( const RCS::Changeset& changeset, bool getFiles )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::SetFileList( const V_string& filePaths )
+void Panel::SetFileList( const std::vector< std::string >& filePaths )
 {
   m_FilePaths.clear();
   m_FilePaths = filePaths;
@@ -496,9 +496,9 @@ void Panel::CommitChanges()
 
   // gather the list of info to submit and reopn info if they should 
   // be removed from this changelist 
-  S_string reopenFilePaths;
+  std::set< std::string > reopenFilePaths;
 
-  for ( V_string::const_iterator itr = m_FilePaths.begin(), end = m_FilePaths.end(); itr != end; ++itr )
+  for ( std::vector< std::string >::const_iterator itr = m_FilePaths.begin(), end = m_FilePaths.end(); itr != end; ++itr )
   {
     // if the commit buttons are showing (meaning that the user also 
     // sees the checkboxes), and the file was unselected - move it
@@ -557,7 +557,7 @@ void Panel::CommitChanges()
     // reopen info
     if ( m_ReopenFiles )
     {
-      for( S_string::const_iterator reopenItr = reopenFilePaths.begin(), reopenEnd = reopenFilePaths.end(); reopenItr != reopenEnd; ++reopenItr )
+      for( std::set< std::string >::const_iterator reopenItr = reopenFilePaths.begin(), reopenEnd = reopenFilePaths.end(); reopenItr != reopenEnd; ++reopenItr )
       {
         RCS::File rcsFile( (*reopenItr) );
         rcsFile.Edit();

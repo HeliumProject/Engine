@@ -66,8 +66,8 @@ namespace PerforceUI
     const std::string& GetChangeDescription() const { return m_Changeset.m_Description; }
     void SetChangeDescription( const std::string& description = std::string("") );
 
-    const V_string& GetFileList() const { return m_FilePaths; }
-    void SetFileList( const V_string& filePaths );
+    const std::vector< std::string >& GetFileList() const { return m_FilePaths; }
+    void SetFileList( const std::vector< std::string >& filePaths );
 
     const std::string& GetJobStatus() const { return m_JobStatus; }
     void SetJobStatus( const std::string& jobStatus = std::string("") );
@@ -144,7 +144,7 @@ namespace PerforceUI
 
     std::string           m_JobStatus;
 
-    V_string              m_FilePaths;
+    std::vector< std::string >              m_FilePaths;
 
     bool                  m_ReopenFiles;
     Action                m_Action;

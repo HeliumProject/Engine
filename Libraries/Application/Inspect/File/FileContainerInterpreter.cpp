@@ -282,7 +282,7 @@ void FileContainerInterpreter::OnEdit( Button* button )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
-    const V_string& selectedItems = list->GetSelectedItems();
+    const std::vector< std::string >& selectedItems = list->GetSelectedItems();
 
     // It would be nice to iterate over the selection here, but this is not safe since
     // each call to open can destroy this control and invalidate our iterator.
@@ -300,11 +300,11 @@ void FileContainerInterpreter::OnRemove( Button* button )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
-    const V_string& selectedItems = list->GetSelectedItems();
+    const std::vector< std::string >& selectedItems = list->GetSelectedItems();
     if ( !selectedItems.empty() )
     {
-      V_string::const_iterator itr = selectedItems.begin();
-      V_string::const_iterator end = selectedItems.end();
+      std::vector< std::string >::const_iterator itr = selectedItems.begin();
+      std::vector< std::string >::const_iterator end = selectedItems.end();
       list->Freeze();
       for ( ; itr != end; ++itr )
       {
@@ -343,7 +343,7 @@ void FileContainerInterpreter::OnDrop( const Inspect::FilteredDropTargetArgs& ar
   if ( args.m_Paths.size() )
   {
     m_List->Freeze();
-    for ( V_string::const_iterator itr = args.m_Paths.begin(), end = args.m_Paths.end();
+    for ( std::vector< std::string >::const_iterator itr = args.m_Paths.begin(), end = args.m_Paths.end();
       itr != end; ++itr )
     {
       m_List->AddItem( *itr );

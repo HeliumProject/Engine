@@ -129,7 +129,7 @@ bool Enumeration::GetBitfieldValue(const std::string& str, u32& value) const
     static char tmp[1024];
     strcpy( tmp, str.c_str() );
 
-    V_string strs;
+    std::vector< std::string > strs;
 
     char seps[] = "|";
     char *token = strtok( tmp, seps );
@@ -144,12 +144,12 @@ bool Enumeration::GetBitfieldValue(const std::string& str, u32& value) const
     return GetBitfieldValue(strs, value);
 }
 
-bool Enumeration::GetBitfieldValue(const V_string& strs, u32& value) const
+bool Enumeration::GetBitfieldValue(const std::vector< std::string >& strs, u32& value) const
 {
     value = 0;
 
-    V_string::const_iterator itr = strs.begin();
-    V_string::const_iterator end = strs.end();
+    std::vector< std::string >::const_iterator itr = strs.begin();
+    std::vector< std::string >::const_iterator end = strs.end();
     for ( ; itr != end; ++itr )
     {
         u32 flags;
@@ -167,7 +167,7 @@ bool Enumeration::GetBitfieldString(const u32 value, std::string& str) const
 {
     bool first = true;
 
-    V_string strs;
+    std::vector< std::string > strs;
     if (!GetBitfieldStrings(value, strs))
     {
         return false;
@@ -179,8 +179,8 @@ bool Enumeration::GetBitfieldString(const u32 value, std::string& str) const
     }
 
     // search the map
-    V_string::const_iterator itr = strs.begin();
-    V_string::const_iterator end = strs.end();
+    std::vector< std::string >::const_iterator itr = strs.begin();
+    std::vector< std::string >::const_iterator end = strs.end();
     for ( ; itr != end; ++itr )
     {
         if ( !first )
@@ -196,7 +196,7 @@ bool Enumeration::GetBitfieldString(const u32 value, std::string& str) const
     return !first;
 }
 
-bool Enumeration::GetBitfieldStrings(const u32 value, V_string& strs) const
+bool Enumeration::GetBitfieldStrings(const u32 value, std::vector< std::string >& strs) const
 {
     // search the map
     V_EnumerationElement::const_iterator itr = m_Elements.begin();

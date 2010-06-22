@@ -82,8 +82,8 @@ namespace Content
     {
       Math::Vector3  m_pos;
       Nocturnal::V_TUID m_joint_ids;  // joint uids
-      V_u32          m_joints;     // joint uids as runtime indices
-      V_f32          m_weights;
+      std::vector< u32 >          m_joints;     // joint uids as runtime indices
+      std::vector< f32 >          m_weights;
     };
 
     struct t_SkinVerts
@@ -163,7 +163,7 @@ namespace Content
     void GetJointsFromClip( const AnimationClipPtr& clip, V_JointTransform& joints );
     u32  GetNumValidJointAnimations( u32 clipIndex = 0 ) const;
     u32  GetNumValidJointAnimations( const Nocturnal::S_TUID& jointList, u32 clipIndex = 0 ) const;
-    void GetJointMismatchReport( V_string &mismatchMessages, u32 clipIndex = 0 ) const;
+    void GetJointMismatchReport( std::vector< std::string > &mismatchMessages, u32 clipIndex = 0 ) const;
 
     void CalculateJointBoundingVolumes();
     bool GetBSpheresForJoint          (std::vector<t_BsphereId>& bspheres, const Nocturnal::TUID& jointID, Content::ContentType contentType ) const;
@@ -258,7 +258,7 @@ namespace Content
 
     bool MeshesAreClassifiedForLighting() const;    
 
-    void GetUVShells( UVSetType set, V_UVShell& uvShells, std::vector< V_u32 >& triangleIndices ) const;
+    void GetUVShells( UVSetType set, V_UVShell& uvShells, std::vector< std::vector< u32 > >& triangleIndices ) const;
 
     // takes power-of-two size of the texture
     f32 AvgLightmapTexelsPerMeter( u32 logTextureSize, Math::Scale* scale = NULL ) const;
@@ -296,7 +296,7 @@ namespace Content
     void UpdateHierarchy();
 
   public:
-    bool HasDuplicateBangleIndexedExportNodes( V_string& duplicate_bangle_ids_info);
+    bool HasDuplicateBangleIndexedExportNodes( std::vector< std::string >& duplicate_bangle_ids_info);
     void Optimize();
 
   private:

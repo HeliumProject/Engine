@@ -73,10 +73,10 @@ namespace Content
         u32 targetSetId = m_TargetSetNameToId[targetSetName];
 
         // insert the target id into the target set list
-        m_TargetSetIdToTargetIndiciesMap.insert( M_TargetSetIdToTargetIndex::value_type( targetSetId, V_u32() ) );
+        m_TargetSetIdToTargetIndiciesMap.insert( M_TargetSetIdToTargetIndex::value_type( targetSetId, std::vector< u32 >() ) );
         m_TargetSetIdToTargetIndiciesMap[targetSetId].push_back( targetIndex );
 
-        m_TargetIndexToTargetSetId.insert( M_u32::value_type( targetIndex, targetSetId ) ); 
+        m_TargetIndexToTargetSetId.insert( std::map< u32, u32 >::value_type( targetIndex, targetSetId ) ); 
       }
     }
 
@@ -108,7 +108,7 @@ namespace Content
   //    source.m_Targets.end() );
 
   //  // map target-set-name to target-set-id
-  //  M_u32 newTargetSetIds;
+  //  std::map< u32, u32 > newTargetSetIds;
 
   //  M_TargetSetNameToId::const_iterator targetSetIdsItr = source.m_TargetSetNameToId.begin();
   //  M_TargetSetNameToId::const_iterator targetSetIdsEnd = source.m_TargetSetNameToId.end();
@@ -118,7 +118,7 @@ namespace Content
   //    const std::string& sourceTargetSetName = targetSetIdsItr->first;
   //    const u32 sourceTargetSetId = targetSetIdsItr->second;
   //    m_TargetSetNameToId.insert( M_TargetSetNameToId::value_type( sourceTargetSetName, (u32)m_TargetSetNameToId.size() ) );
-  //    newTargetSetIds.insert( M_u32::value_type( sourceTargetSetId, m_TargetSetNameToId[sourceTargetSetName] ) );
+  //    newTargetSetIds.insert( std::map< u32, u32 >::value_type( sourceTargetSetId, m_TargetSetNameToId[sourceTargetSetName] ) );
   //  }
 
   //  // map target-set-id to target-ids
@@ -127,15 +127,15 @@ namespace Content
   //  for ( ; targetSetItr != targetSetEnd; ++targetSetItr )
   //  {
   //    const u32 sourceTargetSetId = targetSetItr->first;
-  //    const V_u32& sourceTargetIndicies = targetSetItr->second;
+  //    const std::vector< u32 >& sourceTargetIndicies = targetSetItr->second;
   //    
   //    const u32 numSourceTargetIndicies = (u32) sourceTargetIndicies.size();
   //    
   //    const u32 newTargetSetId = newTargetSetIds[sourceTargetSetId];
   //    Nocturnal::Insert<M_TargetSetIdToTargetIndex>::Result insert = 
-  //      m_TargetSetIdToTargetIndiciesMap.insert( M_TargetSetIdToTargetIndex::value_type( newTargetSetId, V_u32() ) );
+  //      m_TargetSetIdToTargetIndiciesMap.insert( M_TargetSetIdToTargetIndex::value_type( newTargetSetId, std::vector< u32 >() ) );
 
-  //    V_u32& newTargetIndicies = insert.first->second;
+  //    std::vector< u32 >& newTargetIndicies = insert.first->second;
   //    newTargetIndicies.reserve( newTargetIndicies.size() + numSourceTargetIndicies );
   //    
   //    for ( u32 sourceTargetIndex = 0; sourceTargetIndex < numSourceTargetIndicies; ++sourceTargetIndex )
@@ -144,7 +144,7 @@ namespace Content
   //      newTargetIndicies.push_back( newTargetIndex );
 
   //      // reverse lookup list
-  //      m_TargetIndexToTargetSetId.insert( M_u32::value_type( newTargetIndex, newTargetSetId ) );
+  //      m_TargetIndexToTargetSetId.insert( std::map< u32, u32 >::value_type( newTargetIndex, newTargetSetId ) );
   //    }
   //  }
 

@@ -85,7 +85,7 @@ namespace AssetBuilder
 
     }
 
-    virtual BuilderOptionsPtr ParseOptions( const V_string& options )
+    virtual BuilderOptionsPtr ParseOptions( const std::vector< std::string >& options )
     {
       return NULL;
     }

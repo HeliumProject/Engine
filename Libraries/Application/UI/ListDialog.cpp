@@ -8,7 +8,7 @@ using namespace Nocturnal;
 // desc = String to display in a static control above the list control.
 // msgs = List of strings to display in the list control.
 // 
-ListDialog::ListDialog( wxWindow* parent, const std::string& title, const std::string& desc, const V_string& msgs ) 
+ListDialog::ListDialog( wxWindow* parent, const std::string& title, const std::string& desc, const std::vector< std::string >& msgs ) 
 : wxDialog( parent, wxID_ANY, title.c_str(), wxDefaultPosition, wxSize( 360, 260 ), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 , m_Description( desc )
 {

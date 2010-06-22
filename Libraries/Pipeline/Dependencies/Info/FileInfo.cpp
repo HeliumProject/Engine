@@ -170,7 +170,7 @@ FileInfo::~FileInfo()
 
 
 /////////////////////////////////////////////////////////////////////////////
-bool FileInfo::AppendToSignature( CryptoPP::HashFilter* hashFilter, V_string& trace)
+bool FileInfo::AppendToSignature( CryptoPP::HashFilter* hashFilter, std::vector< std::string >& trace)
 {
 
     bool dirtyFile = false;

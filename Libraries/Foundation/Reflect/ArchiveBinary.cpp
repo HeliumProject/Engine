@@ -315,8 +315,8 @@ void ArchiveBinary::Write()
             i32 count = (int)m_Types.size();
             m_Stream->Write(&count); 
 
-            S_i32::iterator itr = m_Types.begin();
-            S_i32::iterator end = m_Types.end();
+            std::set< i32 >::iterator itr = m_Types.begin();
+            std::set< i32 >::iterator end = m_Types.end();
             for ( ; itr != end; ++itr )
             {
                 const Class* type = Reflect::Registry::GetInstance()->GetClass(*itr);
@@ -694,7 +694,7 @@ ElementPtr ArchiveBinary::Allocate()
     if (m_Cache.Create(shortName, element) && shortName != element->GetClass()->m_ShortName)
     {
         // map current short name name to LEGACY short name name so we can retrieve type information via a lookup later
-        Insert<M_string>::Result inserted = m_ShortNameMapping.insert( M_string::value_type (element->GetClass()->m_ShortName, shortName) );
+        Insert<std::map< std::string, std::string >>::Result inserted = m_ShortNameMapping.insert( std::map< std::string, std::string >::value_type (element->GetClass()->m_ShortName, shortName) );
 
         // check for insanity
         if ( !inserted.second && inserted.first->second != shortName )
@@ -881,7 +881,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
             else
             {
                 // our short name has changed so look up the legacy short name name given the short name of the current object
-                M_string::const_iterator shortName_found = m_ShortNameMapping.find( element->GetClass()->m_ShortName );
+                std::map< std::string, std::string >::const_iterator shortName_found = m_ShortNameMapping.find( element->GetClass()->m_ShortName );
 
                 // we should always find it, else its a bug/internal error
                 if ( shortName_found == m_ShortNameMapping.end() )

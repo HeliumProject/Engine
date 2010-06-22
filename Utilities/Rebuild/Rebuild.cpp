@@ -46,7 +46,7 @@ int g_RebuildTotals[REBUILD_CODE_COUNT] =
     0,
 };
 
-V_string g_RebuildResults[REBUILD_CODE_COUNT];
+std::vector< std::string > g_RebuildResults[REBUILD_CODE_COUNT];
 
 namespace Reflect
 {
@@ -343,8 +343,8 @@ int Main(int argc, const char** argv)
                 Log::Print(" %s: %d\n", g_RebuildStrings[i], g_RebuildTotals[i]);
                 if (i > 0)
                 {
-                    V_string::const_iterator itr = g_RebuildResults[i].begin();
-                    V_string::const_iterator end = g_RebuildResults[i].end();
+                    std::vector< std::string >::const_iterator itr = g_RebuildResults[i].begin();
+                    std::vector< std::string >::const_iterator end = g_RebuildResults[i].end();
                     for ( int count = 0; itr != end; ++itr, ++count )
                     {
                         Log::Print("  [%d]: %s\n", count, itr->c_str());

@@ -149,7 +149,7 @@ namespace Luna
     wxTextAttr              m_TitleTextAttr;
     wxTextAttr              m_ItalicTextAttr;
 
-    M_i32                   m_MenuItemToAssetType;
+    std::map< i32, i32 >                   m_MenuItemToAssetType;
 
     //
     // NavBar Menus

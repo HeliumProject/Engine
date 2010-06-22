@@ -170,7 +170,7 @@ namespace Nocturnal
   // NOTE: Return value is only valid if you have called ShowModal and the 
   // result was wxID_OK.
   // 
-  const S_string& FileDialog::GetFilePaths() const
+  const std::set< std::string >& FileDialog::GetFilePaths() const
   {
     // Only call this function when working with a dialog in multi-select mode
     NOC_ASSERT( IsMultipleSelectionEnabled() );
@@ -217,7 +217,7 @@ namespace Nocturnal
   //
   void FileDialog::AddFilter( const std::string& filter )
   {
-    V_string splitFilter;
+    std::vector< std::string > splitFilter;
     Tokenize( filter, splitFilter, "\\|" );
 
     if ( (int)splitFilter.size() % 2 != 0 )
@@ -237,9 +237,9 @@ namespace Nocturnal
     UpdateFilter();
   }
 
-  void FileDialog::AddFilters( const V_string& filters )
+  void FileDialog::AddFilters( const std::vector< std::string >& filters )
   {
-      for ( V_string::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+      for ( std::vector< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
       {
           AddFilter( *itr );
       }

@@ -54,7 +54,7 @@ ArrayNode::~ArrayNode()
 void ArrayNode::CreateChildren()
 {
   std::string value = GetValue();
-  V_string tokens;
+  std::vector< std::string > tokens;
   ::Tokenize( value, tokens, Reflect::s_ContainerItemDelimiter );
   for each ( const std::string& str in tokens )
   {

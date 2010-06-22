@@ -132,8 +132,8 @@ void Skin::Evaluate(GraphDirection direction)
 
           const PolygonPtr& polygon (*itr);
 
-          V_u32::const_iterator normalItr = polygon->m_Normals.begin();
-          V_u32::const_iterator normalEnd = polygon->m_Normals.end();
+          std::vector< u32 >::const_iterator normalItr = polygon->m_Normals.begin();
+          std::vector< u32 >::const_iterator normalEnd = polygon->m_Normals.end();
           for ( u32 j = 0; normalItr != normalEnd; ++normalItr, ++j )
           {
             if ( j > 2 )
@@ -167,8 +167,8 @@ void Skin::Evaluate(GraphDirection direction)
         {
           const PolygonPtr& polygon (*itr);
 
-          V_u32::const_iterator vertexItr = polygon->m_Vertices.begin();
-          V_u32::const_iterator vertexEnd = polygon->m_Vertices.end();
+          std::vector< u32 >::const_iterator vertexItr = polygon->m_Vertices.begin();
+          std::vector< u32 >::const_iterator vertexEnd = polygon->m_Vertices.end();
           for ( u32 j = 0; vertexItr != vertexEnd; ++vertexItr, ++j )
           {
             if ( j > 2 )
@@ -201,8 +201,8 @@ void Skin::Evaluate(GraphDirection direction)
         {
           const PolygonPtr& polygon (*itr);
 
-          V_u32::const_iterator normalItr = polygon->m_Normals.begin();
-          V_u32::const_iterator normalEnd = polygon->m_Normals.end();
+          std::vector< u32 >::const_iterator normalItr = polygon->m_Normals.begin();
+          std::vector< u32 >::const_iterator normalEnd = polygon->m_Normals.end();
           for ( u32 j = 0; normalItr != normalEnd; ++normalItr, ++j )
           {
             if ( j > 2 )

@@ -3,6 +3,8 @@
 #include "Platform/Platform.h"
 #include "Platform/Windows/Windows.h"
 
+#include <exception>
+
 using namespace Profile; 
 
 bool MemoryProfiler::s_Enabled = false;

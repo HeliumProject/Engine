@@ -27,7 +27,7 @@ namespace Inspect
         void          SetPath( const std::string& path );
 
         void          SetFilter( const std::string& filter );
-        void          SetFilter( const V_string& filter );
+        void          SetFilter( const std::vector< std::string >& filter );
         void          AddFilter( const std::string& filter );
 
         std::string   GetPath();
@@ -45,7 +45,7 @@ namespace Inspect
         std::string         m_Title;        // Caption on the title bar of the file browser dialog (defaults to "Open")
         std::string         m_Path;         // The path to start the file browser in, can contain file name
 
-        S_string            m_Filters;      // The filter for which file types to show in the file browser dialog (defaults to "All Files (*.*)|*.*")
+        std::set< std::string >            m_Filters;      // The filter for which file types to show in the file browser dialog (defaults to "All Files (*.*)|*.*")
     };
 
     typedef Nocturnal::SmartPtr<FileDialogButton> FileDialogButtonPtr;

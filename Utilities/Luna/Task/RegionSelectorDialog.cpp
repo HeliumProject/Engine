@@ -9,7 +9,7 @@ EVT_BUTTON( wxID_CANCEL, RegionSelectorDialog::OnCancel )
 EVT_BUTTON( wxID_CLOSE, RegionSelectorDialog::OnCancel )
 END_EVENT_TABLE()
 
-RegionSelectorDialog::RegionSelectorDialog( wxWindow* parent, const std::string& title, const std::string& msg, const S_string& regionNames, std::string& selectedRegion, int id, wxPoint pos, wxSize size, int style ) 
+RegionSelectorDialog::RegionSelectorDialog( wxWindow* parent, const std::string& title, const std::string& msg, const std::set< std::string >& regionNames, std::string& selectedRegion, int id, wxPoint pos, wxSize size, int style ) 
   : wxDialog( parent, id, title.c_str(), pos, size, style )
   , m_SelectedRegion( selectedRegion )
 {

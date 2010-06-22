@@ -196,9 +196,9 @@ static std::string PromptSaveAs( const DocumentPtr& file, wxWindow* window )
 
     Nocturnal::FileDialog saveDlg( window, "Save As...", defaultDir.c_str(), defaultFile.c_str(), "", Nocturnal::FileDialogStyles::DefaultSave );
     
-    S_string extensions;
+    std::set< std::string > extensions;
     Reflect::Archive::GetExtensions( extensions );
-    for ( S_string::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
+    for ( std::set< std::string >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
     {
         saveDlg.AddFilter( std::string( "Scene (*.scene." ) + *itr + ")|*.scene." + *itr );
     }

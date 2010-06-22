@@ -13,9 +13,9 @@ namespace Inspect
 {
     struct FilteredDropTargetArgs
     {
-        V_string m_Paths;
+        std::vector< std::string > m_Paths;
 
-        FilteredDropTargetArgs( const V_string& paths )
+        FilteredDropTargetArgs( const std::vector< std::string >& paths )
             : m_Paths( paths )
         {
         }

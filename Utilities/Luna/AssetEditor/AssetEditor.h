@@ -51,7 +51,7 @@ namespace Luna
     wxMenuItem* m_MenuItemOpenRecent;
     wxToolBar* m_MainToolBar;
     BrowserToolBar* m_BrowserToolBar;
-    M_i32 m_MenuItemToAssetType;
+    std::map< i32, i32 > m_MenuItemToAssetType;
     M_MenuToFileOption m_MenuItemToFilePathOption;
     AssetPreviewWindow* m_AssetPreviewWindow;
     bool m_PromptModifiedFiles;
@@ -110,7 +110,7 @@ namespace Luna
     bool ToClipboard( const Inspect::ReflectClipboardDataPtr& clipboardData );
     Inspect::ReflectClipboardDataPtr FromClipboard();
     void UpdateUIElements();
-    bool DoOpen( const S_string& files );
+    bool DoOpen( const std::set< std::string >& files );
     bool CanMoveSelectedItems( Luna::AssetNode*& commonParent );
     void PreviewSelectedItem();
 

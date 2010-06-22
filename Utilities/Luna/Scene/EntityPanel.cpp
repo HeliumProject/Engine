@@ -452,7 +452,7 @@ bool EntityPanel::OnEntityAssetChanging( const Inspect::ChangingArgs& args )
     if ( path.Exists() )
     {
         // Make sure the file has a reflect extension
-        S_string extensions;
+        std::set< std::string > extensions;
         Reflect::Archive::GetExtensions( extensions );
         if ( extensions.find( path.Extension() ) != extensions.end() )
         {
@@ -481,7 +481,7 @@ void EntityPanel::OnEntityAssetRefresh( Inspect::Button* button )
     // we did something like reexport an art class, while luna is still opened
     std::set< EntityAssetSet* > reloadQueue;     // entities we want to reload
 
-    S_string files;
+    std::set< std::string > files;
 
     OS_SelectableDumbPtr::Iterator selectionIter = m_Selection.Begin();
     OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
@@ -541,7 +541,7 @@ void EntityPanel::OnEntityAssetRefresh( Inspect::Button* button )
 
 void EntityPanel::OnEntityAssetEditAsset( Inspect::Button* button )
 {
-    S_string files;
+    std::set< std::string > files;
     OS_SelectableDumbPtr::Iterator selectionIter = m_Selection.Begin();
     OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
     for ( ; selectionIter != selectionEnd; ++selectionIter )
@@ -557,8 +557,8 @@ void EntityPanel::OnEntityAssetEditAsset( Inspect::Button* button )
         }
     }
 
-    S_string::const_iterator fileItr = files.begin();
-    S_string::const_iterator fileEnd = files.end();
+    std::set< std::string >::const_iterator fileItr = files.begin();
+    std::set< std::string >::const_iterator fileEnd = files.end();
     for ( ; fileItr != fileEnd; ++fileItr )
     {
 #pragma TODO( "Open the file for edit" )
@@ -598,7 +598,7 @@ void EntityPanel::OnEntityAssetView( Inspect::Button* button )
 
 void EntityPanel::OnEntityAssetRevisionHistory( Inspect::Button* button )
 {
-    S_string files;
+    std::set< std::string > files;
     SceneEditor* editor = wxGetApp().GetSceneEditor();
     OS_SelectableDumbPtr::Iterator selectionItr = m_Selection.Begin();
     OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
@@ -612,8 +612,8 @@ void EntityPanel::OnEntityAssetRevisionHistory( Inspect::Button* button )
         }
     }
 
-    S_string::const_iterator pathItr = files.begin();
-    S_string::const_iterator pathEnd = files.end();
+    std::set< std::string >::const_iterator pathItr = files.begin();
+    std::set< std::string >::const_iterator pathEnd = files.end();
     for ( ; pathItr != pathEnd; ++pathItr )
     {
         editor->RevisionHistory( *pathItr );

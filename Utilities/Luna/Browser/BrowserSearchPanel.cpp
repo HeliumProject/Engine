@@ -42,8 +42,8 @@ Filter::Filter( const std::string& name, const std::string& filters )
     {
         Tokenize( GetFilters(), m_Extensions, ";" );
 
-        S_string::iterator it = m_Extensions.begin();
-        S_string::iterator end = m_Extensions.end();
+        std::set< std::string >::iterator it = m_Extensions.begin();
+        std::set< std::string >::iterator end = m_Extensions.end();
         for ( ; it != end ; ++it )
         {
             std::string& extension = (*it);
@@ -226,7 +226,7 @@ void BrowserSearchPanel::OnCollectionManagerChanged( const Reflect::ElementChang
 //
 void BrowserSearchPanel::AddFilter( const char* filter )
 {
-    V_string splitFilter;
+    std::vector< std::string > splitFilter;
     Tokenize( filter, splitFilter, "\\|" );
 
     const size_t numTokens = splitFilter.size();
@@ -244,7 +244,7 @@ void BrowserSearchPanel::SetFilterIndex( const std::string& filter )
 {
     size_t index = 0;
 
-    V_string splitFilter;
+    std::vector< std::string > splitFilter;
     Tokenize( filter, splitFilter, "\\|" );
 
     if ( (int)splitFilter.size() % 2 != 0 )
@@ -351,7 +351,7 @@ void BrowserSearchPanel::PopulateForm()
     Freeze();
 
     // populate combo boxes: m_CreatedByComboBox, m_AssetTypeChoice
-    V_string tableData;
+    std::vector< std::string > tableData;
     u32 numAdded = m_BrowserFrame->GetBrowser()->GetCacheDB()->GetPopulateTableData( (u32)Asset::CacheDBColumnIDs::FileType, tableData );
     if ( numAdded > 0 )
     {
@@ -406,7 +406,7 @@ void BrowserSearchPanel::PopulateForm()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void BrowserSearchPanel::PopulateChoiceControl( wxControlWithItems* control, V_string& contents )
+void BrowserSearchPanel::PopulateChoiceControl( wxControlWithItems* control, std::vector< std::string >& contents )
 {
     control->Clear();
 
@@ -423,8 +423,8 @@ void BrowserSearchPanel::PopulateChoiceControl( wxControlWithItems* control, V_s
 
     // then insert the list
     std::sort( contents.begin(), contents.end(), SortChoices() );
-    V_string::const_iterator itr = contents.begin();
-    V_string::const_iterator end = contents.end();
+    std::vector< std::string >::const_iterator itr = contents.begin();
+    std::vector< std::string >::const_iterator end = contents.end();
     for ( ; itr != end ; ++itr )
     {
         const std::string& value = (*itr);
@@ -448,12 +448,12 @@ void BrowserSearchPanel::PopulateChoiceControl( wxControlWithItems* control, V_s
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void BrowserSearchPanel::PopulateFileTypeChoice( V_string& contents )
+void BrowserSearchPanel::PopulateFileTypeChoice( std::vector< std::string >& contents )
 {
     // then insert the list
     std::sort( contents.begin(), contents.end(), SortChoices() );
-    V_string::const_iterator itr = contents.begin();
-    V_string::const_iterator end = contents.end();
+    std::vector< std::string >::const_iterator itr = contents.begin();
+    std::vector< std::string >::const_iterator end = contents.end();
     for ( ; itr != end ; ++itr )
     {
         const std::string& value = (*itr);
@@ -477,7 +477,7 @@ void BrowserSearchPanel::PopulateFileTypeChoice( V_string& contents )
 void BrowserSearchPanel::PopulateCollectionsChoice()
 {
     u32 numAdded = 0;
-    V_string tableData;
+    std::vector< std::string > tableData;
     for ( M_AssetCollections::const_iterator itr = m_CollectionManager->GetCollections().begin(),
         end = m_CollectionManager->GetCollections().end(); itr != end; ++itr )
     {    
@@ -555,11 +555,11 @@ bool BrowserSearchPanel::ProcessForm()
     fieldStringValue.Trim(false); // trim white-space left
     if ( !fieldStringValue.empty() )
     {
-        V_string splitValue;
+        std::vector< std::string > splitValue;
         Tokenize( fieldStringValue.c_str(), splitValue, " " );
 
-        V_string::const_iterator itr = splitValue.begin();
-        V_string::const_iterator end = splitValue.end();
+        std::vector< std::string >::const_iterator itr = splitValue.begin();
+        std::vector< std::string >::const_iterator end = splitValue.end();
         for ( ; itr != end ; ++itr )
         {
             const std::string& value = (*itr);

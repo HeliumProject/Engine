@@ -39,7 +39,7 @@ namespace Luna
         AssetCollection( const std::string& name, const u32 flags = AssetCollectionFlags::Default );
         virtual ~AssetCollection(); 
 
-        static void GetFileFilters( V_string& filters );
+        static void GetFileFilters( std::vector< std::string >& filters );
 
         // Called when collections are added to/removed from a collection manager 
         // for one time setup and tear down.  Override as needed.

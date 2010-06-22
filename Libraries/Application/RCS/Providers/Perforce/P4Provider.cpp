@@ -85,8 +85,8 @@ void Provider::ThreadEntry()
       std::string cmd = m_Command->m_Command;
       std::vector< const char* > args;
 
-      V_string::const_iterator itr = m_Command->m_Arguments.begin();
-      V_string::const_iterator end = m_Command->m_Arguments.end();
+      std::vector< std::string >::const_iterator itr = m_Command->m_Arguments.begin();
+      std::vector< std::string >::const_iterator end = m_Command->m_Arguments.end();
       for ( ; itr != end; ++itr )
       {
         cmd += " " + *itr;

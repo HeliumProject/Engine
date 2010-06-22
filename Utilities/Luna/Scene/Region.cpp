@@ -147,9 +147,9 @@ void Region::NodeRemoved( const NodeChangeArgs& args )
   }
 }
 
-V_string::iterator insensitive_find(V_string& strings, const std::string& query)
+std::vector< std::string >::iterator insensitive_find(std::vector< std::string >& strings, const std::string& query)
 {
-  for(V_string::iterator itr = strings.begin(); itr != strings.end(); ++itr)
+  for(std::vector< std::string >::iterator itr = strings.begin(); itr != strings.end(); ++itr)
   {
     if(!stricmp(query.c_str(), (*itr).c_str()))
     {
@@ -162,7 +162,7 @@ V_string::iterator insensitive_find(V_string& strings, const std::string& query)
 void Region::RemoveSelfFromZone( const ZonePtr& zoneWrapper )
 {
   Content::ZonePtr zone = zoneWrapper->GetPackage<Content::Zone>(); 
-  V_string::iterator found = insensitive_find(zone->m_Regions, GetName()); 
+  std::vector< std::string >::iterator found = insensitive_find(zone->m_Regions, GetName()); 
   
   if(found != zone->m_Regions.end())
   {
@@ -175,7 +175,7 @@ void Region::RemoveSelfFromZone( const ZonePtr& zoneWrapper )
 void Region::AddSelfToZone( const ZonePtr& zoneWrapper )
 {
   Content::ZonePtr zone = zoneWrapper->GetPackage<Content::Zone>(); 
-  V_string::iterator found = insensitive_find(zone->m_Regions, GetName()); 
+  std::vector< std::string >::iterator found = insensitive_find(zone->m_Regions, GetName()); 
   
   if(found == zone->m_Regions.end())
   {

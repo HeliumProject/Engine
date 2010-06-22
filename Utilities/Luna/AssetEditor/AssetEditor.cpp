@@ -188,8 +188,8 @@ AssetEditor::AssetEditor()
     m_MenuNew->AppendSubMenu( shaderSubMenu, shaderBase->m_UIName.c_str() );
 
     // Populate the New asset menu
-    V_i32::const_iterator assetItr = Asset::g_AssetClassTypes.begin();
-    V_i32::const_iterator assetEnd = Asset::g_AssetClassTypes.end();
+    std::vector< i32 >::const_iterator assetItr = Asset::g_AssetClassTypes.begin();
+    std::vector< i32 >::const_iterator assetEnd = Asset::g_AssetClassTypes.end();
     for ( ; assetItr != assetEnd; ++assetItr )
     {
         const i32 typeID = (*assetItr);
@@ -209,7 +209,7 @@ AssetEditor::AssetEditor()
 
         // Map the menu item ID to the asset class ID so that when we get a menu item
         // callback, we know which type of asset to create.
-        m_MenuItemToAssetType.insert( M_i32::value_type( menuItem->GetId(), typeID ) );
+        m_MenuItemToAssetType.insert( std::map< i32, i32 >::value_type( menuItem->GetId(), typeID ) );
 
         // Connect a callback for when the menu item is selected.  No need to disconnect
         // this handler since the lifetime of this class is tied to the menu.
@@ -393,7 +393,7 @@ AssetEditor::AssetEditor()
 // 
 AssetEditor::~AssetEditor()
 {
-    V_string mruPaths;
+    std::vector< std::string > mruPaths;
     m_MRU->ToVector( mruPaths );
     GetAssetEditorPreferences()->GetMRU()->SetPaths( mruPaths );
     GetAssetEditorPreferences()->SavePreferences();
@@ -436,7 +436,7 @@ Luna::AssetManager* AssetEditor::GetAssetManager()
 // 
 bool AssetEditor::Open( const std::string& file )
 {
-    S_string fileList;
+    std::set< std::string > fileList;
     fileList.insert( file );
     return DoOpen( fileList );
 }
@@ -871,7 +871,7 @@ void AssetEditor::UpdateUIElements()
             Luna::AssetClass* asset = node->GetAssetClass();
             if ( asset )
             {
-                //V_string staticContentFiles;
+                //std::vector< std::string > staticContentFiles;
                 //::AssetManager::GetStaticContentFiles( asset->GetFileID(), staticContentFiles );
                 //if ( staticContentFiles.size() )
                 //{
@@ -953,11 +953,11 @@ void AssetEditor::UpdateUIElements()
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function to handle common code for opening one or more files.
 // 
-bool AssetEditor::DoOpen( const S_string& files )
+bool AssetEditor::DoOpen( const std::set< std::string >& files )
 {
     std::string errorList;
-    S_string::const_iterator fileItr = files.begin();
-    S_string::const_iterator fileEnd = files.end();
+    std::set< std::string >::const_iterator fileItr = files.begin();
+    std::set< std::string >::const_iterator fileEnd = files.end();
     for ( ; fileItr != fileEnd; ++fileItr )
     {
         wxBusyCursor wait;
@@ -1037,7 +1037,7 @@ void AssetEditor::PreviewSelectedItem()
     NOC_ASSERT( assetClass );
 
 #pragma TODO( "allow preview" )
-    //V_string staticContentFiles;
+    //std::vector< std::string > staticContentFiles;
     //::AssetManager::GetStaticContentFiles( assetClass->GetFileID(), staticContentFiles );
     //NOC_ASSERT( staticContentFiles.size() );
 
@@ -1091,7 +1091,7 @@ void AssetEditor::OnMenuOpen( wxMenuEvent& args )
 // 
 void AssetEditor::OnNewAsset( wxCommandEvent& args )
 {
-    M_i32::const_iterator found = m_MenuItemToAssetType.find( args.GetId() );
+    std::map< i32, i32 >::const_iterator found = m_MenuItemToAssetType.find( args.GetId() );
     NOC_ASSERT( found != m_MenuItemToAssetType.end() );
 
     const i32 assetTypeID = found->second;
@@ -1120,16 +1120,16 @@ void AssetEditor::OnOpen( wxCommandEvent& args )
 {
     Nocturnal::FileDialog browserDlg( this, "Open", "", "", "", Nocturnal::FileDialogStyles::DefaultOpen | Nocturnal::FileDialogStyles::Multiple );
 
-    S_string filters;
+    std::set< std::string > filters;
     Reflect::Archive::GetFileFilters( filters );
-    for ( S_string::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+    for ( std::set< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
     {
         browserDlg.AddFilter( (*itr) );
     }
 
     if ( browserDlg.ShowModal() == wxID_OK )
     {
-        const S_string& paths = browserDlg.GetFilePaths();
+        const std::set< std::string >& paths = browserDlg.GetFilePaths();
         DoOpen( paths );
     }
 }
@@ -1142,16 +1142,16 @@ void AssetEditor::OnFind( wxCommandEvent& args )
 {
     Nocturnal::FileDialog browserDlg( this, "Open", "", "", "", Nocturnal::FileDialogStyles::DefaultOpen | Nocturnal::FileDialogStyles::Multiple );
 
-    S_string filters;
+    std::set< std::string > filters;
     Reflect::Archive::GetFileFilters( filters );
-    for ( S_string::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+    for ( std::set< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
     {
         browserDlg.AddFilter( (*itr) );
     }
 
     if ( browserDlg.ShowModal() == wxID_OK )
     {
-        const S_string& paths = browserDlg.GetFilePaths();
+        const std::set< std::string >& paths = browserDlg.GetFilePaths();
         DoOpen( paths );
     }
 }

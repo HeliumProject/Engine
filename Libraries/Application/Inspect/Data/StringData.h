@@ -139,14 +139,14 @@ namespace Inspect
       return result;
     }
 
-    virtual bool SetAll(const V_string& values, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool SetAll(const std::vector< std::string >& values, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
     {
       bool result = false;
 
       if ( values.size() == m_Data.size() )
       {
-        V_string::const_iterator itr = values.begin();
-        V_string::const_iterator end = values.end();
+        std::vector< std::string >::const_iterator itr = values.begin();
+        std::vector< std::string >::const_iterator end = values.end();
         for ( size_t index = 0; itr != end; ++itr, ++index )
         {
           Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( *itr ) );
@@ -225,7 +225,7 @@ namespace Inspect
       s = stream.str();
     }
 
-    virtual void GetAll(V_string& s) const NOC_OVERRIDE
+    virtual void GetAll(std::vector< std::string >& s) const NOC_OVERRIDE
     {
       s.resize( m_Data.size() );
       std::vector<T*>::const_iterator itr = m_Data.begin();
@@ -345,14 +345,14 @@ namespace Inspect
       return result;
     }
 
-    virtual bool SetAll(const V_string& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool SetAll(const std::vector< std::string >& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
     {
       bool result = false;
 
       if ( s.size() == m_Properties.size() )
       {
-        V_string::const_iterator itr = s.begin();
-        V_string::const_iterator end = s.end();
+        std::vector< std::string >::const_iterator itr = s.begin();
+        std::vector< std::string >::const_iterator end = s.end();
         for ( size_t index = 0; itr != end; ++itr, ++index )
         {
           Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( *itr ) );
@@ -431,7 +431,7 @@ namespace Inspect
       }
     }
 
-    virtual void GetAll(V_string& s) const NOC_OVERRIDE
+    virtual void GetAll(std::vector< std::string >& s) const NOC_OVERRIDE
     {
       s.resize( m_Properties.size() );
       std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > >::const_iterator itr = m_Properties.begin();

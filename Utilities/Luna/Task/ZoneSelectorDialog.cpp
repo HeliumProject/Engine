@@ -19,7 +19,7 @@ EVT_BUTTON( wxID_CLOSE, ZoneSelectorDialog::OnCancel )
 EVT_BUTTON( ButtonIDs::All, ZoneSelectorDialog::OnAll )
 END_EVENT_TABLE()
 
-ZoneSelectorDialog::ZoneSelectorDialog( wxWindow* parent, const std::string& title, const std::string& msg, const V_string& zoneNames, S_u32& selectedZones, int id, wxPoint pos, wxSize size, int style ) 
+ZoneSelectorDialog::ZoneSelectorDialog( wxWindow* parent, const std::string& title, const std::string& msg, const std::vector< std::string >& zoneNames, std::set< u32 >& selectedZones, int id, wxPoint pos, wxSize size, int style ) 
   : wxDialog( parent, id, title.c_str(), pos, size, style )
   , m_SelectedZones( selectedZones )
   , m_NumZones( (u32)zoneNames.size() )

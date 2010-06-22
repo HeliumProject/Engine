@@ -552,7 +552,7 @@ void NavMesh::DrawSelectedVerts( IDirect3DDevice9* device, DrawArgs* args, const
   static float select_pointSize = 6.0f;
   device->SetRenderState( D3DRS_POINTSIZE, *( (DWORD*) &select_pointSize ) );
   device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
-  for (V_u32::const_iterator it = navMesh->m_selected_verts.begin(); it != navMesh->m_selected_verts.end(); ++it)
+  for (std::vector< u32 >::const_iterator it = navMesh->m_selected_verts.begin(); it != navMesh->m_selected_verts.end(); ++it)
   {
     device->DrawPrimitive( D3DPT_POINTLIST, (u32)vertices->GetBaseIndex() + *it, 1 );
   }
@@ -566,7 +566,7 @@ void NavMesh::DrawSelectedVerts( IDirect3DDevice9* device, DrawArgs* args, const
   {
     device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
     device->SetRenderState( D3DRS_POINTSIZE, *( (DWORD*) &marquee_pointSize ) );
-    for (V_u32::const_iterator it = navMesh->m_marquee_selected_verts.begin(); it != navMesh->m_marquee_selected_verts.end(); ++it)
+    for (std::vector< u32 >::const_iterator it = navMesh->m_marquee_selected_verts.begin(); it != navMesh->m_marquee_selected_verts.end(); ++it)
     {
       device->DrawPrimitive( D3DPT_POINTLIST, (u32)vertices->GetBaseIndex() + *it, 1 );
     }
@@ -591,7 +591,7 @@ void NavMesh::DrawToBeDeletedVerts( IDirect3DDevice9* device, DrawArgs* args, co
   static float delete_pointSize = 8.0f;
   device->SetRenderState( D3DRS_POINTSIZE, *( (DWORD*) &delete_pointSize ) );
   device->SetMaterial( &Luna::View::s_RedMaterial );
-  for (V_u32::const_iterator it = navMesh->m_to_be_deleted_verts.begin(); it != navMesh->m_to_be_deleted_verts.end(); ++it)
+  for (std::vector< u32 >::const_iterator it = navMesh->m_to_be_deleted_verts.begin(); it != navMesh->m_to_be_deleted_verts.end(); ++it)
   {
     device->DrawPrimitive( D3DPT_POINTLIST, (u32)vertices->GetBaseIndex() + *it, 1 );
   }
@@ -656,7 +656,7 @@ void NavMesh::DrawSelectedEdge( IDirect3DDevice9* device, DrawArgs* args, const 
   if (navMesh->m_marquee_selected_edges.size())
   {
     device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
-    for (V_u32::const_iterator it = navMesh->m_marquee_selected_edges.begin(); it != navMesh->m_marquee_selected_edges.end(); ++it)
+    for (std::vector< u32 >::const_iterator it = navMesh->m_marquee_selected_edges.begin(); it != navMesh->m_marquee_selected_edges.end(); ++it)
     {
       device->DrawIndexedPrimitive(D3DPT_LINELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + *(it)*2, 1 );
     }
@@ -743,7 +743,7 @@ void NavMesh::DrawSelectedTri( IDirect3DDevice9* device, DrawArgs* args, const S
   if (navMesh->m_marquee_selected_tris.size())
   {
     device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
-    for (V_u32::const_iterator it = navMesh->m_marquee_selected_tris.begin(); it != navMesh->m_marquee_selected_tris.end(); ++it)
+    for (std::vector< u32 >::const_iterator it = navMesh->m_marquee_selected_tris.begin(); it != navMesh->m_marquee_selected_tris.end(); ++it)
     {
       device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + data->m_WireframeVertexIndices.size() + (*it)*3, 1 );
     }
@@ -773,7 +773,7 @@ void NavMesh::DrawToBeDeletedTris( IDirect3DDevice9* device, DrawArgs* args, con
   {
     return;
   }
-  for (V_u32::const_iterator it = navMesh->m_to_be_deleted_tris.begin(); it != navMesh->m_to_be_deleted_tris.end(); ++it)
+  for (std::vector< u32 >::const_iterator it = navMesh->m_to_be_deleted_tris.begin(); it != navMesh->m_to_be_deleted_tris.end(); ++it)
   {
     device->SetMaterial( &Luna::View::s_RedMaterial );
     device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
@@ -952,7 +952,7 @@ bool NavMesh::ToggleMouseOverVertSelection()
 {
   if (m_mouse_over_vert != 0xFFFFFFFF)
   {
-    V_u32::iterator it = std::find(m_selected_verts.begin(), m_selected_verts.end(), m_mouse_over_vert);
+    std::vector< u32 >::iterator it = std::find(m_selected_verts.begin(), m_selected_verts.end(), m_mouse_over_vert);
     if (it != m_selected_verts.end())
     {
       m_selected_verts.erase(it);
@@ -977,7 +977,7 @@ void NavMesh::AddMouseOverVertToDeleteQueue()
 {
   if (m_mouse_over_vert != 0xFFFFFFFF)
   {
-    V_u32::iterator it = std::find(m_to_be_deleted_verts.begin(), m_to_be_deleted_verts.end(), m_mouse_over_vert);
+    std::vector< u32 >::iterator it = std::find(m_to_be_deleted_verts.begin(), m_to_be_deleted_verts.end(), m_mouse_over_vert);
     if (it != m_to_be_deleted_verts.end())
     {
        m_to_be_deleted_verts.erase(it);
@@ -991,7 +991,7 @@ void NavMesh::AddMouseOverTriToDeleteQueue()
 {
   if (m_mouse_over_tri != 0xFFFFFFFF)
   {
-    V_u32::iterator it = std::find(m_to_be_deleted_tris.begin(), m_to_be_deleted_tris.end(), m_mouse_over_tri);
+    std::vector< u32 >::iterator it = std::find(m_to_be_deleted_tris.begin(), m_to_be_deleted_tris.end(), m_mouse_over_tri);
     if (it != m_to_be_deleted_tris.end())
     {
       m_to_be_deleted_tris.erase(it);
@@ -1009,7 +1009,7 @@ bool NavMesh::ToggleMouseOverEdgeSelection()
     u32 edge_verts[2];
     edge_verts[0] = navMesh->m_WireframeVertexIndices[m_mouse_over_edge*2];
     edge_verts[1] = navMesh->m_WireframeVertexIndices[m_mouse_over_edge*2 + 1];
-    V_u32::iterator it = std::find(m_selected_verts.begin(), m_selected_verts.end(), edge_verts[0]);
+    std::vector< u32 >::iterator it = std::find(m_selected_verts.begin(), m_selected_verts.end(), edge_verts[0]);
     if (it != m_selected_verts.end())
     {
       m_selected_verts.erase(it);
@@ -1039,7 +1039,7 @@ bool NavMesh::ToggleMouseOverTriSelection()
 {
   if (m_mouse_over_tri != 0xFFFFFFFF)
   {
-    V_u32::iterator it = std::find(m_selected_tris.begin(), m_selected_tris.end(), m_mouse_over_tri);
+    std::vector< u32 >::iterator it = std::find(m_selected_tris.begin(), m_selected_tris.end(), m_mouse_over_tri);
     if (it != m_selected_tris.end())
     {
       m_selected_verts.clear();
@@ -1072,7 +1072,7 @@ void NavMesh::ChangeTriEdgeVertSelection()
       tri_verts[1] = navMesh->m_TriangleVertexIndices[m_selected_tris.at(i)*3+1];
       tri_verts[2] = navMesh->m_TriangleVertexIndices[m_selected_tris.at(i)*3+2];
       bool flush_selected_verts = false;
-      V_u32::iterator it = std::find(m_cached_selected_tris.begin(), m_cached_selected_tris.end(), m_selected_tris.at(i) );
+      std::vector< u32 >::iterator it = std::find(m_cached_selected_tris.begin(), m_cached_selected_tris.end(), m_selected_tris.at(i) );
       if (it != m_cached_selected_tris.end() && m_selected_verts.size() > 2)
       {
         for (u32 k=0; k<3; ++k)
@@ -1108,7 +1108,7 @@ void NavMesh::ChangeTriEdgeVertSelection()
       }
       if (flush_selected_verts)
       {
-        V_u32::iterator it = std::find(m_selected_verts.begin(), m_selected_verts.end(), tri_verts[0]);
+        std::vector< u32 >::iterator it = std::find(m_selected_verts.begin(), m_selected_verts.end(), tri_verts[0]);
         if (it != m_selected_verts.end())
         {
           m_selected_verts.erase(it);
@@ -1261,7 +1261,7 @@ Math::Vector3 NavMesh::GetMouseOverVertPosition()
 {
   if ( m_mouse_over_vert != 0xFFFFFFFF )
   {
-    V_u32::iterator it = std::find(m_selected_verts.begin(), m_selected_verts.end(), m_mouse_over_vert);
+    std::vector< u32 >::iterator it = std::find(m_selected_verts.begin(), m_selected_verts.end(), m_mouse_over_vert);
     if (it != m_selected_verts.end())
     {
       Content::Mesh* navMesh = GetPackage<Content::Mesh>();
@@ -1383,7 +1383,7 @@ void NavMesh::DeleteVert( const Math::Vector3& position )
   //ClearEditingState();
   Content::Mesh* navMesh = GetPackage<Content::Mesh>();
 
-  V_u32 temp_delete_queue;
+  std::vector< u32 > temp_delete_queue;
   if ( !m_selected_verts.empty() )
   {
     temp_delete_queue = m_selected_verts;
@@ -1409,7 +1409,7 @@ void NavMesh::SetSelectionMode( u32 mode )
   m_SelectionMode = mode; 
 }
 
-void NavMesh::GetMeshData( Math::V_Vector3& positions, V_u32& triVerts, V_u32& wireVerts )
+void NavMesh::GetMeshData( Math::V_Vector3& positions, std::vector< u32 >& triVerts, std::vector< u32 >& wireVerts )
 {
   Content::Mesh* navMesh = GetPackage<Content::Mesh>();
   positions = navMesh->m_Positions;
@@ -1417,7 +1417,7 @@ void NavMesh::GetMeshData( Math::V_Vector3& positions, V_u32& triVerts, V_u32& w
   wireVerts = navMesh->m_WireframeVertexIndices;
 }
 
-void NavMesh::UpdateMeshData( const Math::V_Vector3& positions, const V_u32& triVerts, const V_u32& wireVerts )
+void NavMesh::UpdateMeshData( const Math::V_Vector3& positions, const std::vector< u32 >& triVerts, const std::vector< u32 >& wireVerts )
 {
   Content::Mesh* navMesh = GetPackage<Content::Mesh>();
   navMesh->m_Positions = positions;
@@ -1448,7 +1448,7 @@ void NavMesh::GetMarqueeSelectedVerts(Math::Frustum& marquee_frustom, MarqueeSel
   {
     if (marquee_frustom.IntersectsPoint(*pos_iter))
     {
-      V_u32::iterator find_it = std::find(m_selected_verts.begin(), m_selected_verts.end(), i);
+      std::vector< u32 >::iterator find_it = std::find(m_selected_verts.begin(), m_selected_verts.end(), i);
       if (selection_mode != KRemovedFromPeeviousSElection)
       {
         if (find_it == m_selected_verts.end())
@@ -1477,7 +1477,7 @@ void NavMesh::GetMarqueeSelectedTris(Math::Frustum& marquee_frustom, MarqueeSele
   }
 
   Content::Mesh* navMesh = GetPackage<Content::Mesh>();
-  V_u32::const_iterator iter =  navMesh->m_TriangleVertexIndices.begin();
+  std::vector< u32 >::const_iterator iter =  navMesh->m_TriangleVertexIndices.begin();
   for (u32 tri_id=0; iter != navMesh->m_TriangleVertexIndices.end(); ++tri_id)
   {
     u32 vert_ids[3];
@@ -1495,7 +1495,7 @@ void NavMesh::GetMarqueeSelectedTris(Math::Frustum& marquee_frustom, MarqueeSele
     {
       //m_selected_tris.push_back( tri_id );
 
-      V_u32::iterator find_it = std::find(m_selected_tris.begin(), m_selected_tris.end(), tri_id);
+      std::vector< u32 >::iterator find_it = std::find(m_selected_tris.begin(), m_selected_tris.end(), tri_id);
       if (selection_mode != KRemovedFromPeeviousSElection)
       {
         if (find_it == m_selected_tris.end())
@@ -1524,7 +1524,7 @@ void NavMesh::GetMarqueeSelectedEdges(Math::Frustum& marquee_frustom, MarqueeSel
     m_marquee_selected_edges.clear();
   }
   Content::Mesh* navMesh = GetPackage<Content::Mesh>();
-  V_u32::const_iterator iter =  navMesh->m_WireframeVertexIndices.begin();
+  std::vector< u32 >::const_iterator iter =  navMesh->m_WireframeVertexIndices.begin();
   for (u32 edge_id=0; iter!=navMesh->m_WireframeVertexIndices.end(); ++edge_id)
   {
     u32 vert_ids[2];
@@ -1538,7 +1538,7 @@ void NavMesh::GetMarqueeSelectedEdges(Math::Frustum& marquee_frustom, MarqueeSel
     if (marquee_frustom.IntersectsSegment(v[0], v[1]))
     {
       //m_marquee_selected_edges.push_back(edge_id);
-      V_u32::iterator find_it = std::find(m_marquee_selected_edges.begin(), m_marquee_selected_edges.end(), edge_id);
+      std::vector< u32 >::iterator find_it = std::find(m_marquee_selected_edges.begin(), m_marquee_selected_edges.end(), edge_id);
       if (selection_mode != KRemovedFromPeeviousSElection)
       {
         if (find_it == m_marquee_selected_edges.end())
@@ -1563,7 +1563,7 @@ void NavMesh::SelectObtuseAngledTris()
   ClearEditingState();
 
   Content::Mesh* navMesh = GetPackage<Content::Mesh>();
-  V_u32::const_iterator iter =  navMesh->m_TriangleVertexIndices.begin();
+  std::vector< u32 >::const_iterator iter =  navMesh->m_TriangleVertexIndices.begin();
   for (u32 tri_id=0; iter != navMesh->m_TriangleVertexIndices.end(); ++tri_id)
   {
     u32 vert_ids[3];

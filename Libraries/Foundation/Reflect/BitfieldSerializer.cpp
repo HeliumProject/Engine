@@ -44,7 +44,7 @@ void BitfieldSerializer::Serialize(Archive& archive) const
         {
             i32 index = -1;
 
-            V_string strs;
+            std::vector< std::string > strs;
 
             if (m_Enumeration)
             {
@@ -55,8 +55,8 @@ void BitfieldSerializer::Serialize(Archive& archive) const
                 }
 
                 // search the map
-                V_string::const_iterator itr = strs.begin();
-                V_string::const_iterator end = strs.end();
+                std::vector< std::string >::const_iterator itr = strs.begin();
+                std::vector< std::string >::const_iterator end = strs.end();
                 for ( ; itr != end; ++itr )
                 {
                     index = static_cast<ArchiveBinary&>(archive).GetStrings().AssignIndex(*itr);
@@ -104,7 +104,7 @@ void BitfieldSerializer::Deserialize(Archive& archive)
             i32 index = -1;
             archive.GetInput().Read(&index); 
 
-            V_string strs;
+            std::vector< std::string > strs;
             while (index >= 0)
             {
                 strs.push_back(static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index));
@@ -114,8 +114,8 @@ void BitfieldSerializer::Deserialize(Archive& archive)
             }
 
             std::string str;
-            V_string::const_iterator itr = strs.begin();
-            V_string::const_iterator end = strs.end();
+            std::vector< std::string >::const_iterator itr = strs.begin();
+            std::vector< std::string >::const_iterator end = strs.end();
             for ( ; itr != end; ++itr )
             {
                 if (itr != strs.begin())

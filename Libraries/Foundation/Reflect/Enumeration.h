@@ -85,10 +85,10 @@ namespace Reflect
         //
 
         bool GetBitfieldValue(const std::string& str, u32& value) const;
-        bool GetBitfieldValue(const V_string& strs, u32& value) const;
+        bool GetBitfieldValue(const std::vector< std::string >& strs, u32& value) const;
 
         bool GetBitfieldString(const u32 value, std::string& str) const;
-        bool GetBitfieldStrings(const u32 value, V_string& strs) const;
+        bool GetBitfieldStrings(const u32 value, std::vector< std::string >& strs) const;
 
         inline static bool IsFlagSet(u32 value, u32 flag)
         {

@@ -394,7 +394,7 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
             {
                 zone = sceneItr->second->GetName();
 
-                V_string regionNames;
+                std::vector< std::string > regionNames;
                 TUID zoneId = sceneItr->second->GetID(); 
                 S_RegionDumbPtr::const_iterator regionItr = regionSet.begin();
                 S_RegionDumbPtr::const_iterator regionEnd = regionSet.end();
@@ -407,8 +407,8 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
                 }
 
                 std::sort( regionNames.begin(), regionNames.end() );
-                V_string::iterator regionNameItr = regionNames.begin();
-                V_string::iterator regionNameEnd = regionNames.end();
+                std::vector< std::string >::iterator regionNameItr = regionNames.begin();
+                std::vector< std::string >::iterator regionNameEnd = regionNames.end();
                 for ( ; regionNameItr != regionNameEnd; ++regionNameItr )
                 {
                     region = region + ( region.size() ? std::string( ", " ) : std::string( "" ) ) + *regionNameItr;

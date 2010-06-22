@@ -74,10 +74,10 @@ namespace Luna
 
   private:
     M_AssetCollections m_AssetCollections;
-    S_u64 m_DirtyCollectionHashes;
+    std::set< u64 > m_DirtyCollectionHashes;
 
     // This is what actually gets saved to disc
-    S_string m_CollectionFilePaths;
+    std::set< std::string > m_CollectionFilePaths;
 
   private:
     CollectionManagerSignature::Event m_CollectionAdded;

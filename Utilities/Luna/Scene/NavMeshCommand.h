@@ -16,19 +16,19 @@ namespace Luna
     u32 m_Mode;
     NavMeshPtr m_Mesh;
     Math::V_Vector3 m_OldPositions;
-    V_u32 m_SelectedVerts;
+    std::vector< u32 > m_SelectedVerts;
     Math::Matrix4 m_ManipulatorPos;
     Math::Vector3 m_RotationStartValue;
 
     // used for merging verts when we try to add
     bool m_Merged;
-    V_u32 m_TriAdded;
+    std::vector< u32 > m_TriAdded;
 
     // mesh cache
-    V_u32 m_WireframeVertexIndices;
-    V_u32 m_TriangleVertexIndices;
+    std::vector< u32 > m_WireframeVertexIndices;
+    std::vector< u32 > m_TriangleVertexIndices;
     Math::V_Vector3 m_Positions;
-    V_u32 m_SelectedTris;
+    std::vector< u32 > m_SelectedTris;
     u32 m_SelectedEdge;
 
     Math::Matrix4 m_CubeTransform;

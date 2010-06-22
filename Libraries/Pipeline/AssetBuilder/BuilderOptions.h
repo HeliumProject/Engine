@@ -103,9 +103,9 @@ namespace AssetBuilder
         bool        m_NoNewNav;
 
         V_tuid      m_Zones;
-        V_string    m_ZoneList;
+        std::vector< std::string >    m_ZoneList;
 
-        V_string    m_Regions;
+        std::vector< std::string >    m_Regions;
 
         bool        m_GameplayOnly;
         bool        m_PackAllRegions;

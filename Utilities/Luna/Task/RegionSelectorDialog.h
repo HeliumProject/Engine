@@ -18,7 +18,7 @@ namespace Luna
     std::string& m_SelectedRegion;
 
   public:
-    RegionSelectorDialog( wxWindow* parent, const std::string& title, const std::string& msg, const S_string& regionNames, std::string& selectedRegion, int id = -1, wxPoint pos = wxDefaultPosition, 
+    RegionSelectorDialog( wxWindow* parent, const std::string& title, const std::string& msg, const std::set< std::string >& regionNames, std::string& selectedRegion, int id = -1, wxPoint pos = wxDefaultPosition, 
       wxSize size = wxSize( -1, -1 ), int style = wxCAPTION );
     virtual ~RegionSelectorDialog();
 

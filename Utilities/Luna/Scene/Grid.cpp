@@ -422,14 +422,14 @@ void Grid::DeselectAllRows()
 // Returns a set of all the rows that are currently selected, in ascending 
 // order by row number.
 // 
-S_u32 Grid::GetSelectedRows() const
+std::set< u32 > Grid::GetSelectedRows() const
 {
   // NOTE: m_Grid->GetSelectedRows() only reports rows that are selected by clicking on the
   // row header (or calling SelectRows directly).  This does us no good since we don't have
   // row headers.  We have to calculate the row selection manually.
   //wxArrayInt selection = m_Grid->GetSelectedRows();
 
-  S_u32 selection;
+  std::set< u32 > selection;
   wxGridCellCoordsArray topLeftArray = m_Grid->GetSelectionBlockTopLeft();
   wxGridCellCoordsArray bottomRightArray = m_Grid->GetSelectionBlockBottomRight();
   NOC_ASSERT( topLeftArray.GetCount() == bottomRightArray.GetCount() );

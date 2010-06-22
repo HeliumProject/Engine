@@ -56,11 +56,11 @@ void CustomColors::Load( wxColourData& colorData, const std::string& info )
 {
   if ( !info.empty() )
   {
-    V_string colors;
+    std::vector< std::string > colors;
     Tokenize( info, colors, s_ColorDelimiter );
     
-    V_string::const_iterator colorItr = colors.begin();
-    V_string::const_iterator colorEnd = colors.end();
+    std::vector< std::string >::const_iterator colorItr = colors.begin();
+    std::vector< std::string >::const_iterator colorEnd = colors.end();
     for ( i32 colorIndex = 0; colorItr != colorEnd && colorIndex < NumColors; ++colorItr, ++colorIndex )
     {
       const std::string& colorStr = *colorItr;

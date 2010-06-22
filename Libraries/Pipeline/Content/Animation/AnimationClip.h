@@ -100,7 +100,7 @@ namespace Content
   {
   public:
     f32                  m_FrameTime;
-    V_f32                m_RegionWeights;
+    std::vector< f32 >                m_RegionWeights;
 
     FrameWrinkleMap()
       : m_FrameTime( 0.0f )

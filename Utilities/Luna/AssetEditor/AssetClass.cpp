@@ -290,7 +290,7 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
     }
   }
 
-  //V_string staticContentFiles;
+  //std::vector< std::string > staticContentFiles;
   //::AssetManager::GetStaticContentFiles( GetFileID(), staticContentFiles );
 
   //const bool canPreview = staticContentFiles.size() ? true : false;

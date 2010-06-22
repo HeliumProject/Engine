@@ -2,6 +2,7 @@
 #include "Platform/Types.h"
 #include "Platform/Windows/Windows.h"
 
+#include <vector>
 #include <sys/stat.h>
 
 const char Platform::PathSeparator = '\\';
@@ -45,7 +46,7 @@ bool Platform::IsAbsolute( const char* path )
     return false;
 }
 
-void SplitDirectories( const std::string& path, V_string& output )
+void SplitDirectories( const std::string& path, std::vector< std::string >& output )
 {
     std::string::size_type start = 0; 
     std::string::size_type end = 0; 
@@ -59,14 +60,14 @@ void SplitDirectories( const std::string& path, V_string& output )
 
 bool Platform::MakePath( const char* path )
 {
-    V_string directories;
+    std::vector< std::string > directories;
     SplitDirectories( path, directories );
 
     struct stat statInfo;
     std::string currentDirectory;
     currentDirectory.reserve( PLATFORM_PATH_MAX );
     currentDirectory = directories[ 0 ];
-    for( V_string::const_iterator itr = directories.begin() + 1, end = directories.end(); itr != end; ++itr )
+    for( std::vector< std::string >::const_iterator itr = directories.begin() + 1, end = directories.end(); itr != end; ++itr )
     {
         if ( ( (*currentDirectory.rbegin()) != ':' ) && ( stat( currentDirectory.c_str(), &statInfo ) != 0 ) )
         {

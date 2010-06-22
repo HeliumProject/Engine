@@ -413,7 +413,7 @@ bool Control::ReadData(std::string& str) const
   return false;
 }
 
-bool Control::ReadAll(V_string& strs) const
+bool Control::ReadAll(std::vector< std::string >& strs) const
 {
   StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
   if ( data )
@@ -456,12 +456,12 @@ bool Control::WriteData(const std::string& str, bool preview)
   return WriteTypedData(str, data, preview);
 }
 
-bool Control::WriteAll(const V_string& strs, bool preview)
+bool Control::WriteAll(const std::vector< std::string >& strs, bool preview)
 {
   StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
   if (data)
   {
-    V_string currentValues;
+    std::vector< std::string > currentValues;
     data->GetAll( currentValues );
 
     if ( strs == currentValues )
@@ -469,8 +469,8 @@ bool Control::WriteAll(const V_string& strs, bool preview)
       return true;
     }
 
-    Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< V_string >() );
-    serializer->ConnectData( const_cast< V_string* >( &strs ) );
+    Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< std::vector< std::string > >() );
+    serializer->ConnectData( const_cast< std::vector< std::string >* >( &strs ) );
     if ( !PreWrite( serializer, preview ) )
     {
       Read();

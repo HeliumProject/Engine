@@ -16,8 +16,8 @@ std::string Command::AsString()
   std::stringstream str;
   str << m_Command;
 
-  V_string::const_iterator itr = m_Arguments.begin();
-  V_string::const_iterator end = m_Arguments.end();
+  std::vector< std::string >::const_iterator itr = m_Arguments.begin();
+  std::vector< std::string >::const_iterator end = m_Arguments.end();
   for ( ; itr != end; ++itr )
   {
     str << " " << (*itr);

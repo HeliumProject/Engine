@@ -30,7 +30,7 @@ namespace Dependencies
         virtual bool IsMD5Valid();
         virtual void GenerateMD5();
         virtual bool WasModified();
-        virtual bool AppendToSignature( CryptoPP::HashFilter* hashFilter, V_string& trace );
+        virtual bool AppendToSignature( CryptoPP::HashFilter* hashFilter, std::vector< std::string >& trace );
         virtual void CacheCopy( DependencyInfo& rhs );
         virtual bool Exists();
 

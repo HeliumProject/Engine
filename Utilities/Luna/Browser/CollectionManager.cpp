@@ -47,10 +47,10 @@ void CollectionManager::PostDeserialize()
 {
     __super::PostDeserialize();
 
-    S_string copyCollectionFilePaths = m_CollectionFilePaths;
+    std::set< std::string > copyCollectionFilePaths = m_CollectionFilePaths;
 
     ClearCollectionMap();
-    for ( S_string::const_iterator itr = copyCollectionFilePaths.begin(), end = copyCollectionFilePaths.end(); itr != end; ++itr )
+    for ( std::set< std::string >::const_iterator itr = copyCollectionFilePaths.begin(), end = copyCollectionFilePaths.end(); itr != end; ++itr )
     {
         Nocturnal::Path collectionPath( *itr );
 
@@ -294,7 +294,7 @@ bool CollectionManager::SaveCollection( AssetCollection* collection, const std::
         && !outputFile.empty() )
     {
         // Only save dirty files
-        S_u64::iterator findCollection = m_DirtyCollectionHashes.find( collection->GetPath().Hash() );
+        std::set< u64 >::iterator findCollection = m_DirtyCollectionHashes.find( collection->GetPath().Hash() );
         if ( findCollection != m_DirtyCollectionHashes.end() )
         {
             result = AssetCollection::SaveTo( collection, outputFile );

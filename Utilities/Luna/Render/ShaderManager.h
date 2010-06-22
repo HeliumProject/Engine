@@ -196,8 +196,8 @@ namespace Render
     
     void SetShaderDefaultTexture( const char* shaderFilename, u32 textureIndex );
     void UpdateShaderTexture( const char* shaderFilename, u32 textureIndex, const Render::TextureSettings& settings );
-    void GetShaderFilenames( V_string& filenames );
-    void GetTextureFilenames( V_string& filenames );
+    void GetShaderFilenames( std::vector< std::string >& filenames );
+    void GetTextureFilenames( std::vector< std::string >& filenames );
     
     std::vector<Shader*>   m_loaded_shaders;
     std::vector<Texture*>  m_loaded_textures;

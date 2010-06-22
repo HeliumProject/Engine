@@ -232,7 +232,7 @@ void Panel::BuildPath(std::string& path)
   path += "|" + m_Text;
 }
 
-void Panel::GetExpanded(M_string& paths)
+void Panel::GetExpanded(std::map< std::string, std::string >& paths)
 {
   std::string path = GetPath();
 
@@ -253,7 +253,7 @@ void Panel::GetExpanded(M_string& paths)
   }
 }
 
-void Panel::SetExpanded(const M_string& paths)
+void Panel::SetExpanded(const std::map< std::string, std::string >& paths)
 {
   std::string path = GetPath();
 

@@ -296,7 +296,7 @@ namespace Reflect
         Cache m_Cache;
 
         // The types used
-        S_i32 m_Types;
+        std::set< i32 > m_Types;
 
         // The visitors to use
         V_ArchiveVisitor m_Visitors;

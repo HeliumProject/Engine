@@ -194,7 +194,7 @@ void Container::Realize(Container* parent)
     wxSizer* sizer = m_Window->GetSizer();
 
     V_Sizer sizerList;
-    V_i32 proportionList;
+    std::vector< i32 > proportionList;
     
     int proportionMultiplier = 1000;
     int remainingProportion = proportionMultiplier;

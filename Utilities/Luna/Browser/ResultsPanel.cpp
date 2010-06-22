@@ -98,7 +98,7 @@ void ResultsPanel::SetThumbnailSize( ThumbnailSize zoom )
 
 void ResultsPanel::SetResults( SearchResults* results )
 {
-  V_string unused;
+  std::vector< std::string > unused;
   ResultChangeArgs args;
 
   switch ( m_CurrentMode )
@@ -136,7 +136,7 @@ void ResultsPanel::SelectPath( const std::string& path )
   }
 }
 
-u32 ResultsPanel::GetSelectedPaths( V_string& paths, bool useForwardSlashes )
+u32 ResultsPanel::GetSelectedPaths( std::vector< std::string >& paths, bool useForwardSlashes )
 {
   switch ( m_CurrentMode )
   {
@@ -203,7 +203,7 @@ void ResultsPanel::OnThumbnailSelectionChanged( const ThumbnailSelectionArgs& ar
 
 void ResultsPanel::OnThumbnailHighlightChanged( const ThumbnailHighlightArgs& args )
 {
-  V_string unused;
+  std::vector< std::string > unused;
   ResultChangeArgs combinedArgs( m_ThumbnailView->GetSelectedPaths( unused ), args.m_HighlightPath );
   m_ResultsChanged.Raise( combinedArgs );
 }

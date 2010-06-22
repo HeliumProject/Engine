@@ -30,8 +30,8 @@ namespace Inspect
     static const char* s_MapKeyValDelim; 
 
   protected:
-    V_string m_Items;
-    V_string m_SelectedItems;
+    std::vector< std::string > m_Items;
+    std::vector< std::string > m_SelectedItems;
     bool m_Sorted;
     bool m_IsMap; // Is the data bound to this control acutally a std::map?
 
@@ -47,14 +47,14 @@ namespace Inspect
     void SetMap( bool isMap );
 
 
-    const V_string& GetItems();
-    void AddItems( const V_string& items );
+    const std::vector< std::string >& GetItems();
+    void AddItems( const std::vector< std::string >& items );
 
     void AddItem( const std::string& item );
     void RemoveItem( const std::string& item );
 
-    const V_string& GetSelectedItems();
-    void SetSelectedItems( const V_string& items );
+    const std::vector< std::string >& GetSelectedItems();
+    void SetSelectedItems( const std::vector< std::string >& items );
 
     std::string GetSelectedItems( const std::string delimiter );
     void SetSelectedItems( const std::string& delimitedList, const std::string& delimiter );
@@ -62,8 +62,8 @@ namespace Inspect
     void MoveSelectedItems( MoveDirection direction = MoveDirections::Up );
 
   protected:
-    std::string GetDelimitedList( const V_string& items, const std::string& delimiter );
-    void UpdateUI( const V_string& items );
+    std::string GetDelimitedList( const std::vector< std::string >& items, const std::string& delimiter );
+    void UpdateUI( const std::vector< std::string >& items );
     virtual bool Process(const std::string& key, const std::string& value) NOC_OVERRIDE;
   };
 

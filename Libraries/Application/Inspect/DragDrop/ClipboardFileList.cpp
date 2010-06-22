@@ -51,7 +51,7 @@ bool ClipboardFileList::AddFilePath( const std::string& file )
 {
   std::string clean = file;
   Nocturnal::Path::Normalize( clean );
-  Nocturnal::Insert< S_string >::Result inserted = m_Files.insert( clean );
+  Nocturnal::Insert< std::set< std::string > >::Result inserted = m_Files.insert( clean );
   m_IsDirty = inserted.second;
   return m_IsDirty;
 }
@@ -59,7 +59,7 @@ bool ClipboardFileList::AddFilePath( const std::string& file )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the list of file paths managed by this class.
 // 
-const S_string& ClipboardFileList::GetFilePaths() const
+const std::set< std::string >& ClipboardFileList::GetFilePaths() const
 {
   return m_Files;
 }

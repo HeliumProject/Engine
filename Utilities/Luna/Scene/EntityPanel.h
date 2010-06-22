@@ -499,9 +499,9 @@ namespace Luna
                             {
                                 std::string assetPath = Nocturnal::Path( entity->GetEntityAssetPath() ).Directory();
                                 Nocturnal::FileDialog dialog( NULL, "export children to file", assetPath.c_str(), wxEmptyString, "", Nocturnal::FileDialogStyles::DefaultSave );
-                                S_string filters;
+                                std::set< std::string > filters;
                                 Reflect::Archive::GetFileFilters( filters );
-                                for ( S_string::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+                                for ( std::set< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
                                 {
                                     dialog.AddFilter( *itr );
                                 }
@@ -628,9 +628,9 @@ namespace Luna
                             std::string filePath;
                             Nocturnal::FileDialog dialog( NULL, "import children to file", assetPath.c_str(), wxEmptyString, "", Nocturnal::FileDialogStyles::DefaultOpen );
 
-                            S_string filters;
+                            std::set< std::string > filters;
                             Reflect::Archive::GetFileFilters( filters );
-                            for ( S_string::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+                            for ( std::set< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
                             {
                                 dialog.AddFilter( *itr );
                             }

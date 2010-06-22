@@ -565,7 +565,7 @@ void Render::ShaderManager::UpdateShaderTexture( const char* shaderFilename, u32
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::ShaderManager::GetShaderFilenames( V_string& filenames )
+void Render::ShaderManager::GetShaderFilenames( std::vector< std::string >& filenames )
 {
   for( u32 i = 0; i < m_loaded_shaders.size(); ++i )
   {
@@ -574,7 +574,7 @@ void Render::ShaderManager::GetShaderFilenames( V_string& filenames )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Render::ShaderManager::GetTextureFilenames( V_string& filenames )
+void Render::ShaderManager::GetTextureFilenames( std::vector< std::string >& filenames )
 {
   for( u32 i = 0; i < m_loaded_textures.size(); ++i )
   {

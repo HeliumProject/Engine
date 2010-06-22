@@ -13,8 +13,8 @@ namespace Luna
   class LUNA_EDITOR_API MRUData : public Reflect::Element
   {
   private:
-    V_string m_Paths;
-    //TODO: V_string m_Icons;
+    std::vector< std::string > m_Paths;
+    //TODO: std::vector< std::string > m_Icons;
 
     // RTTI
   public:
@@ -28,8 +28,8 @@ namespace Luna
     MRUData();
     virtual ~MRUData();
 
-    const V_string& GetPaths() const;
-    void SetPaths( const V_string& paths );
+    const std::vector< std::string >& GetPaths() const;
+    void SetPaths( const std::vector< std::string >& paths );
   };
   typedef Nocturnal::SmartPtr< MRUData > MRUDataPtr;
 }

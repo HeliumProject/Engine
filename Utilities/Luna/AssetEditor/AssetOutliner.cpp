@@ -674,8 +674,8 @@ wxDragResult AssetOutliner::Drop( const Inspect::DragArgs& args )
     Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( fileList.ReferencesObject() )
     {
-      S_string::const_iterator fileItr = fileList->GetFilePaths().begin();
-      S_string::const_iterator fileEnd = fileList->GetFilePaths().end();
+      std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin();
+      std::set< std::string >::const_iterator fileEnd = fileList->GetFilePaths().end();
       for ( ; fileItr != fileEnd; ++fileItr )
       {
         m_AssetManager->GetAssetEditor()->Open( *fileItr );

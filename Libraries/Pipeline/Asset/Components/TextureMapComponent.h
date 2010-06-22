@@ -49,7 +49,7 @@ namespace Asset
     PostMipFilterType m_PostMipFilter;
     RunTimeFilter     m_TexFilter;
     float             m_MipBias;
-    V_i32             m_MipFilterPasses;
+    std::vector< i32 >             m_MipFilterPasses;
     bool              m_IsTextureDirty; // Not serialized - indicates if texture needs to be resent for real-time update
 
     TextureMapComponent( tuid fileID = Nocturnal::TUID::Null )

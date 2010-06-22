@@ -57,7 +57,7 @@ namespace Inspect
   protected:
     Control* m_Control;
 
-    V_string m_Items;
+    std::vector< std::string > m_Items;
     M_ContextMenuDelegate m_Delegates;
 
   public:
@@ -70,7 +70,7 @@ namespace Inspect
     void OnItem( wxCommandEvent& event );
 
   public:
-    virtual const V_string& GetItems()
+    virtual const std::vector< std::string >& GetItems()
     {
       return m_Items;
     }

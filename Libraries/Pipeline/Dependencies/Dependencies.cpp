@@ -161,7 +161,7 @@ bool DependencyGraph::IsUpToDate( const std::string& filePath )
 
 /////////////////////////////////////
 // Determines if a list of files are up to date
-bool DependencyGraph::AreUpToDate( const V_string &filePaths )
+bool DependencyGraph::AreUpToDate( const std::vector< std::string > &filePaths )
 {
     for each ( const std::string& filePath in filePaths )
     {
@@ -247,7 +247,7 @@ std::string DependencyGraph::GetFormatVersion( const std::string& typeName ) con
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void DependencyGraph::AppendFileToSignature( const DependencyInfoPtr& file, CryptoPP::HashFilter* hashFilter, V_string& trace)
+void DependencyGraph::AppendFileToSignature( const DependencyInfoPtr& file, CryptoPP::HashFilter* hashFilter, std::vector< std::string >& trace)
 {
     if ( file->AppendToSignature( hashFilter, trace ) )
     {
@@ -259,7 +259,7 @@ void DependencyGraph::AppendFileToSignature( const DependencyInfoPtr& file, Cryp
 /////////////////////////////////////////////////////////////////////////////
 // Used to get the list of ordered dependencies
 // 
-void DependencyGraph::GetOrderDependentFiles( const DependencyInfoPtr& outFile, FileGraph& fileGraph, V_string& orderDependentFiles, int curDepth )
+void DependencyGraph::GetOrderDependentFiles( const DependencyInfoPtr& outFile, FileGraph& fileGraph, std::vector< std::string >& orderDependentFiles, int curDepth )
 {
     if ( curDepth >= MAX_FILE_GRAPH_DEPTH )
     {
@@ -356,11 +356,11 @@ void DependencyGraph::CreateSignature( const DependencyInfoPtr& file )
 
     /////////////////////////////////////////////////
     // Append the ordered dependencies
-    V_string orderDependentFiles;
+    std::vector< std::string > orderDependentFiles;
     GetOrderDependentFiles( outFile, fileGraph, orderDependentFiles );
 
-    V_string::iterator itFilePath  = orderDependentFiles.begin();
-    V_string::iterator endFilePath = orderDependentFiles.end();
+    std::vector< std::string >::iterator itFilePath  = orderDependentFiles.begin();
+    std::vector< std::string >::iterator endFilePath = orderDependentFiles.end();
     for ( ; itFilePath != endFilePath ; ++itFilePath )
     {
         FileGraph::iterator findFile = fileGraph.find( *itFilePath );

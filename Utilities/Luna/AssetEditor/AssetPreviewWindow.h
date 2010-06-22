@@ -43,13 +43,13 @@ namespace Luna
 
     std::set< Luna::ShaderAsset* > m_ListenShaders;
     
-    S_string m_WatchMeshes;
-    S_string m_WatchShaders;
-    S_string m_WatchTextures;
+    std::set< std::string > m_WatchMeshes;
+    std::set< std::string > m_WatchShaders;
+    std::set< std::string > m_WatchTextures;
 
-    S_string m_ReloadMeshes;
-    S_string m_ReloadShaders;
-    S_string m_ReloadTextures;
+    std::set< std::string > m_ReloadMeshes;
+    std::set< std::string > m_ReloadShaders;
+    std::set< std::string > m_ReloadTextures;
     Nocturnal::FileChangedSignature::Delegate m_FileChangedDelegate;
     
     wxTimer m_FileWatcherTimer;

@@ -97,7 +97,7 @@ namespace Luna
     bool IsSelected( const std::string& name ) const;
     void SelectRow( u32 row, bool addToSelection );
     void DeselectAllRows();
-    S_u32 GetSelectedRows() const;
+    std::set< u32 > GetSelectedRows() const;
     void BeginBatch();
     void EndBatch();
 

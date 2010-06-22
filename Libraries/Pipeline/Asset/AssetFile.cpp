@@ -157,7 +157,7 @@ AssetClassPtr AssetFile::GetAssetClass( AssetFile* assetFile )
 /////////////////////////////////////////////////////////////////////////////
 void AssetFile::AddAttribute( const std::string& attrName, const std::string& attrValue, bool canAppend )
 {
-    Nocturnal::Insert<M_string>::Result inserted = m_Attributes.insert( M_string::value_type( attrName, attrValue ) );
+    Nocturnal::Insert<std::map< std::string, std::string >>::Result inserted = m_Attributes.insert( std::map< std::string, std::string >::value_type( attrName, attrValue ) );
     if ( !inserted.second && inserted.first->second != attrValue )
     {
         std::string& attributes = inserted.first->second;

@@ -39,7 +39,7 @@ namespace Dependencies
 
         void  UpdateOutputs( V_DependencyInfo &outputs );
 
-        bool  AreUpToDate( const V_string &filePaths );
+        bool  AreUpToDate( const std::vector< std::string > &filePaths );
         bool  AreUpToDate( const V_DependencyInfo &files );
         bool  IsUpToDate( const std::string& filePath );
 
@@ -101,7 +101,7 @@ namespace Dependencies
         inline bool WasDependencyRemoved( const std::string& outFilePath, const std::string& inFilePath );
         void        CacheCommitGraph( const DependencyInfoPtr file, bool useTransaction = true );
 
-        void        AppendFileToSignature( const DependencyInfoPtr& file, CryptoPP::HashFilter* hashFilter, V_string& trace );
-        void        GetOrderDependentFiles( const DependencyInfoPtr& outFile, FileGraph& fileGraph, V_string& orderDependentFiles, int curDepth = 0 );
+        void        AppendFileToSignature( const DependencyInfoPtr& file, CryptoPP::HashFilter* hashFilter, std::vector< std::string >& trace );
+        void        GetOrderDependentFiles( const DependencyInfoPtr& outFile, FileGraph& fileGraph, std::vector< std::string >& orderDependentFiles, int curDepth = 0 );
     };
 }

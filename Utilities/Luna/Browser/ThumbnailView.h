@@ -129,7 +129,7 @@ namespace Luna
         const SearchResults* GetResults() const;
 
         void SelectPath( const std::string& path );
-        u32 GetSelectedPaths( V_string& paths, bool useForwardSlashes = true );
+        u32 GetSelectedPaths( std::vector< std::string >& paths, bool useForwardSlashes = true );
         void GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders );
 
         std::string GetHighlightedPath() const;

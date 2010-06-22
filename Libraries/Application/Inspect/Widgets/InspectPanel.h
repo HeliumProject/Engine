@@ -106,10 +106,10 @@ namespace Inspect
 
   public:
     // builds a list of expanded panels
-    void GetExpanded(M_string& paths);
+    void GetExpanded(std::map< std::string, std::string >& paths);
 
     // sets expansion from paths
-    void SetExpanded(const M_string& paths);
+    void SetExpanded(const std::map< std::string, std::string >& paths);
 
     // return expanded state
     bool IsExpanded();

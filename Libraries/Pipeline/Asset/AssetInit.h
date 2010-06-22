@@ -10,5 +10,5 @@ namespace Asset
   void PIPELINE_API Cleanup();
 
   // List of all asset class type ids
-  extern PIPELINE_API V_i32 g_AssetClassTypes;
+  extern PIPELINE_API std::vector< i32 > g_AssetClassTypes;
 }

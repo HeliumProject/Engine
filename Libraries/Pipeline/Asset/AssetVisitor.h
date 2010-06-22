@@ -70,15 +70,15 @@ namespace Asset
     //
 
     // Elements
-    S_i32 m_ElementFilterTypes; // TODO: Add more element filters
+    std::set< i32 > m_ElementFilterTypes; // TODO: Add more element filters
     ElementHandlerLookup m_ElementHandlerLookup;
     bool HandleArtFileComponent( Reflect::Element* element );
 
     // Fields
-    S_i32 m_FieldFilterTypes;   // TODO: Add more field filters
+    std::set< i32 > m_FieldFilterTypes;   // TODO: Add more field filters
 
     // Files
-    //S_i32 m_FileFilterTypes;  // TODO: Determine if we need to add file filters
+    //std::set< i32 > m_FileFilterTypes;  // TODO: Determine if we need to add file filters
     FileHandlerLookup m_FileHandlerLookup;
     void HandleAssetFile( Reflect::Element* element, const Reflect::Field* field, AssetFile* assetFile );
     void HandleWorldFile( Reflect::Element* element, const Reflect::Field* field, AssetFile* assetFile );

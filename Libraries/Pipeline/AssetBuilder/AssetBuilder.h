@@ -62,9 +62,9 @@ namespace AssetBuilder
 
   // build assets
   PIPELINE_API void Build( Dependencies::DependencyGraph& graph, const Asset::AssetClassPtr& assetClass, const BuilderOptionsPtr& options = NULL );
-  PIPELINE_API void Build( Dependencies::DependencyGraph& graph, const Asset::AssetClassPtr& assetClass, const V_string& options );
+  PIPELINE_API void Build( Dependencies::DependencyGraph& graph, const Asset::AssetClassPtr& assetClass, const std::vector< std::string >& options );
   PIPELINE_API void Build( Dependencies::DependencyGraph& graph, Nocturnal::Path& path, const BuilderOptionsPtr& options = NULL );
-  PIPELINE_API void Build( Dependencies::DependencyGraph& graph, Nocturnal::Path& path, const V_string& options );
+  PIPELINE_API void Build( Dependencies::DependencyGraph& graph, Nocturnal::Path& path, const std::vector< std::string >& options );
   PIPELINE_API void Build( Dependencies::DependencyGraph& graph, const BuildJobPtr& job );
   PIPELINE_API void Build( Dependencies::DependencyGraph& graph, V_BuildJob& jobs, i32 nice = -1 );
   

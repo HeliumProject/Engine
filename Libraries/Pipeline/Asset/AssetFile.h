@@ -57,7 +57,7 @@ namespace Asset
     static AssetClassPtr GetAssetClass( AssetFile* assetFile );
 
     void AddAttribute( const std::string& attrName, const std::string& attrValue, bool canAppend = true );
-    const M_string& GetComponents() const { return m_Attributes; }
+    const std::map< std::string, std::string >& GetComponents() const { return m_Attributes; }
 
     void AddDependency( const Nocturnal::Path& path );
     void SetDependencies( const Nocturnal::S_Path& dependencies );
@@ -85,7 +85,7 @@ namespace Asset
     std::string   m_FileType;
     AssetType     m_AssetType;
     u64           m_Size;
-    M_string      m_Attributes;
+    std::map< std::string, std::string >      m_Attributes;
     Nocturnal::S_Path m_Dependencies;
     u64           m_RowID;
 

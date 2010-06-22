@@ -32,14 +32,14 @@ bool FilteredDropTarget::ValidateDrag( const Inspect::DragArgs& args )
         return true;
     }
 
-    V_string extensions;
+    std::vector< std::string > extensions;
     Tokenize( m_FileFilter, extensions, ";" );
     if ( extensions.empty() )
     {
         return true;
     }
 
-    for ( S_string::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
+    for ( std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
     {
         Nocturnal::Path path( *fileItr );
         if ( path.Get().empty() )
@@ -52,7 +52,7 @@ bool FilteredDropTarget::ValidateDrag( const Inspect::DragArgs& args )
             continue;
         }
 
-        for ( V_string::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
+        for ( std::vector< std::string >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
         {
             const std::string& extension = *itr;
             if ( WildcardMatch( extension.c_str(), path.c_str() ) )
@@ -77,7 +77,7 @@ wxDragResult FilteredDropTarget::DragOver( const Inspect::DragArgs& args )
 
 wxDragResult FilteredDropTarget::Drop( const Inspect::DragArgs& args )
 {
-    V_string validPaths;
+    std::vector< std::string > validPaths;
 
     if ( !ValidateDrag( args ) )
     {
@@ -90,13 +90,13 @@ wxDragResult FilteredDropTarget::Drop( const Inspect::DragArgs& args )
         return args.m_Default;
     }
 
-    V_string extensions;
+    std::vector< std::string > extensions;
     if ( !m_FileFilter.empty() )
     {
         Tokenize( m_FileFilter, extensions, ";" );
     }
 
-    for ( S_string::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
+    for ( std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
     {
         Nocturnal::Path path( *fileItr );
         if ( path.Get().empty() )
@@ -115,7 +115,7 @@ wxDragResult FilteredDropTarget::Drop( const Inspect::DragArgs& args )
         }
         else
         {
-            for ( V_string::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
+            for ( std::vector< std::string >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
             {
                 const std::string& extension = *itr;
                 if ( WildcardMatch( extension.c_str(), path.c_str() ) )

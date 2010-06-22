@@ -37,5 +37,5 @@ protected:
 
 private:
   FileDroppedSignature::Event m_DropEvent;
-  V_string                    m_FileExtensions;
+  std::vector< std::string >                    m_FileExtensions;
 };

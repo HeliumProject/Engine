@@ -65,7 +65,7 @@ namespace Debug
         bool            m_Fatal;
         std::string     m_Message;
         std::string     m_Callstack;
-        V_string        m_Threads;
+        std::vector< std::string >        m_Threads;
         std::string     m_State;
         std::string     m_Dump;
 

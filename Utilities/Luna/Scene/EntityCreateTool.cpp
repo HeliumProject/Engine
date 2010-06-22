@@ -25,7 +25,7 @@ using namespace Luna;
 bool EntityCreateTool::s_PointerVisible = true;
 bool EntityCreateTool::s_BoundsVisible = true;
 bool EntityCreateTool::s_GeometryVisible = false;
-V_string EntityCreateTool::s_RandomEntities;
+std::vector< std::string > EntityCreateTool::s_RandomEntities;
 
 LUNA_DEFINE_TYPE(Luna::EntityCreateTool);
 
@@ -208,7 +208,7 @@ void EntityCreateTool::CreateProperties()
     }
     m_Enumerator->Pop();
 
-    for ( V_string::iterator itr = s_RandomEntities.begin(), end = s_RandomEntities.end(); itr != end; ++itr )
+    for ( std::vector< std::string >::iterator itr = s_RandomEntities.begin(), end = s_RandomEntities.end(); itr != end; ++itr )
     {
         SetEntityAsset( *itr );
     }
@@ -324,7 +324,7 @@ void EntityCreateTool::OnDeleteClass( Inspect::Button* button )
         return;
     }
 
-    const V_string& selectedItems = m_RandomEntityList->GetSelectedItems();
+    const std::vector< std::string >& selectedItems = m_RandomEntityList->GetSelectedItems();
 
     V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
     while ( itr != m_RandomEntityInfo.end() )
@@ -332,8 +332,8 @@ void EntityCreateTool::OnDeleteClass( Inspect::Button* button )
         std::string currentName = (*itr).GetListName();
 
         bool deleteItem = false;
-        V_string::const_iterator itemItr = selectedItems.begin();
-        V_string::const_iterator itemEnd = selectedItems.end();
+        std::vector< std::string >::const_iterator itemItr = selectedItems.begin();
+        std::vector< std::string >::const_iterator itemEnd = selectedItems.end();
         for ( ; itemItr != itemEnd; ++itemItr )
         {
             if ( *itemItr == currentName )
@@ -421,11 +421,11 @@ void EntityCreateTool::OnModify( Inspect::Button* button )
         return;
     }
 
-    M_u64 selectedHashes;
+    std::map< u64, u64 > selectedHashes;
 
-    const V_string& selectedItems = m_RandomEntityList->GetSelectedItems();
-    V_string::const_iterator selectedItr = selectedItems.begin();
-    V_string::const_iterator selectedEnd = selectedItems.end();
+    const std::vector< std::string >& selectedItems = m_RandomEntityList->GetSelectedItems();
+    std::vector< std::string >::const_iterator selectedItr = selectedItems.begin();
+    std::vector< std::string >::const_iterator selectedEnd = selectedItems.end();
     for ( ; selectedItr != selectedEnd; ++selectedItr )
     {
         V_EntityRowInfo::iterator itr = m_RandomEntityInfo.begin();
@@ -477,7 +477,7 @@ void EntityCreateTool::OnEntityDropped( const Inspect::FilteredDropTargetArgs& a
     DropEntities( args.m_Paths, wxIsShiftDown() );
 }
 
-void EntityCreateTool::DropEntities( const V_string& entities, bool appendToList )
+void EntityCreateTool::DropEntities( const std::vector< std::string >& entities, bool appendToList )
 {
     m_Enumerator->GetContainer()->GetCanvas()->Freeze();
 
@@ -486,7 +486,7 @@ void EntityCreateTool::DropEntities( const V_string& entities, bool appendToList
         m_RandomEntityInfo.clear();
     }
 
-    for ( V_string::const_iterator itr = entities.begin(), end = entities.end(); itr != end; ++itr )
+    for ( std::vector< std::string >::const_iterator itr = entities.begin(), end = entities.end(); itr != end; ++itr )
     {
         AddEntityAsset( *itr );
     }

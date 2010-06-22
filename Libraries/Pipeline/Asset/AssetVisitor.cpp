@@ -65,9 +65,9 @@ AssetVisitor::AssetVisitor( M_AssetFiles* assetFiles, Asset::AssetClass* assetCl
     m_FieldFilterTypes.insert( (i32)Reflect::FieldFlags::Discard );
 
     // Files
-    S_string extensions;
+    std::set< std::string > extensions;
     Reflect::Archive::GetExtensions( extensions );
-    for ( S_string::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
+    for ( std::set< std::string >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
     {
         m_FileHandlerLookup.insert( FileHandlerLookup::value_type( *itr, &AssetVisitor::HandleAssetFile ) );
     }
@@ -214,8 +214,8 @@ bool AssetVisitor::HandleArtFileComponent( Reflect::Element* element )
 //
 bool AssetVisitor::VisitField( Reflect::Element* element, const Reflect::Field* field )
 {
-    S_i32::const_iterator filterItr = m_FieldFilterTypes.begin();
-    S_i32::const_iterator filterEnd = m_FieldFilterTypes.end();
+    std::set< i32 >::const_iterator filterItr = m_FieldFilterTypes.begin();
+    std::set< i32 >::const_iterator filterEnd = m_FieldFilterTypes.end();
     for ( ; filterItr != filterEnd; ++filterItr )
     {
         if ( Nocturnal::HasFlags<i32>( field->m_Flags, (*filterItr ) ) )

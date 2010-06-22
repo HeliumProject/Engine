@@ -150,7 +150,7 @@ namespace Dependencies
   }
 
   /////////////////////////////////////////////////////////////////////////////
-  bool DataInfo::AppendToSignature( CryptoPP::HashFilter* hashFilter, V_string& trace)
+  bool DataInfo::AppendToSignature( CryptoPP::HashFilter* hashFilter, std::vector< std::string >& trace)
   {
 
     bool dirtyFile = false;

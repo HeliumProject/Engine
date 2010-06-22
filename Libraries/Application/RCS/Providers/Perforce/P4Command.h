@@ -46,7 +46,7 @@ namespace Perforce
 
     Provider*         m_Provider;
     const char*       m_Command;
-    V_string          m_Arguments;
+    std::vector< std::string >          m_Arguments;
     int               m_ErrorCount;
     std::string       m_ErrorString;
   };

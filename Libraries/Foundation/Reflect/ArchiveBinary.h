@@ -83,7 +83,7 @@ namespace Reflect
         M_StrToClass m_ClassesByShortName;
 
         // Mapping from CURRENT short name to LEGACY short name
-        M_string m_ShortNameMapping;
+        std::map< std::string, std::string > m_ShortNameMapping;
 
         // File format version
         u32 m_Version;

@@ -342,15 +342,15 @@ namespace Content
     m_AddedHierarchyNodes.clear();
   }
 
-  bool Scene::HasDuplicateBangleIndexedExportNodes( V_string& duplicate_bangle_ids_info)
+  bool Scene::HasDuplicateBangleIndexedExportNodes( std::vector< std::string >& duplicate_bangle_ids_info)
   {
-    V_i32 bangle_indices;
+    std::vector< i32 > bangle_indices;
     bool res = false;
     for each( const DescriptorPtr& descriptor in m_ExportNodes )
     { 
       if (descriptor->m_ExportType == Content::ContentTypes::Bangle)
       {
-        V_i32::iterator ii = std::find(bangle_indices.begin(), bangle_indices.end(), descriptor->m_ContentNum);
+        std::vector< i32 >::iterator ii = std::find(bangle_indices.begin(), bangle_indices.end(), descriptor->m_ContentNum);
         if (ii == bangle_indices.end())
         {
           bangle_indices.push_back(descriptor->m_ContentNum);
@@ -1318,7 +1318,7 @@ namespace Content
   bool Scene::GetSkinVerts(u32 contentType, const std::map<Nocturnal::TUID, u32>& jointUidToId, const Nocturnal::TUID& rootUid, std::vector<t_SkinVerts>& skinVerts) const
   {
     u32         root_id = jointUidToId.find(rootUid)->second;
-    M_u32       mesh_id_to_skin_verts;
+    std::map< u32, u32 >       mesh_id_to_skin_verts;
     t_SkinVerts new_verts;
     size_t      total_num_weights = 0;
 
@@ -1339,7 +1339,7 @@ namespace Content
       }
 
 
-      M_u32::iterator it            = mesh_id_to_skin_verts.find(mesh_id);
+      std::map< u32, u32 >::iterator it            = mesh_id_to_skin_verts.find(mesh_id);
       u32             skin_verts_id = 0;
 
       if (it != mesh_id_to_skin_verts.end())
@@ -1936,7 +1936,7 @@ namespace Content
    {
 
      V_UVShell uvShells;
-     std::vector< V_u32 > triangleIndices;
+     std::vector< std::vector< u32 > > triangleIndices;
 
      GetUVShells( UVSetTypes::Lightmap, uvShells, triangleIndices );
 
@@ -1946,7 +1946,7 @@ namespace Content
      V_UVShell::iterator itor = uvShells.begin();
      V_UVShell::iterator end  = uvShells.end();
 
-     std::vector< V_u32 >::iterator indicesItor = triangleIndices.begin();
+     std::vector< std::vector< u32 > >::iterator indicesItor = triangleIndices.begin();
 
      // for each shell
      for( ; itor != end; ++itor, ++indicesItor )
@@ -1955,7 +1955,7 @@ namespace Content
 
        // for each shell that we haven't already checked
        V_UVShell::iterator itorInside = uvShells.begin() + shellIndex;      
-       std::vector< V_u32 >::iterator indicesInsideItor = triangleIndices.begin() + shellIndex; 
+       std::vector< std::vector< u32 > >::iterator indicesInsideItor = triangleIndices.begin() + shellIndex; 
 
        for( ; itorInside != end; ++itorInside, ++indicesInsideItor )
        {
@@ -2029,7 +2029,7 @@ namespace Content
    bool Scene::LightmapUVsOverlap() const
    {
      V_UVShell uvShells;
-     std::vector< V_u32 > triangleIndices;
+     std::vector< std::vector< u32 > > triangleIndices;
 
      GetUVShells( UVSetTypes::Lightmap, uvShells, triangleIndices );
 
@@ -2039,7 +2039,7 @@ namespace Content
      V_UVShell::iterator itor = uvShells.begin();
      V_UVShell::iterator end  = uvShells.end();
 
-     std::vector< V_u32 >::iterator indicesItor = triangleIndices.begin();
+     std::vector< std::vector< u32 > >::iterator indicesItor = triangleIndices.begin();
 
      bool overlap = false;
      // for each shell
@@ -2052,7 +2052,7 @@ namespace Content
 
        // for each shell that we haven't already checked
        V_UVShell::iterator itorInside = uvShells.begin() + shellIndex;      
-       std::vector< V_u32 >::iterator indicesInsideItor = triangleIndices.begin() + shellIndex; 
+       std::vector< std::vector< u32 > >::iterator indicesInsideItor = triangleIndices.begin() + shellIndex; 
 
        for( ; itorInside != end; ++itorInside, ++indicesInsideItor )
        {
@@ -2127,7 +2127,7 @@ namespace Content
    }
 
    // copy all specified uv's and indices into passed in containers
-   void Scene::GetUVShells( UVSetType set, V_UVShell& uvShells, std::vector< V_u32 >& triangleIndices ) const
+   void Scene::GetUVShells( UVSetType set, V_UVShell& uvShells, std::vector< std::vector< u32 > >& triangleIndices ) const
    {
      Content::V_Mesh::const_iterator itor = m_Meshes.begin();
      Content::V_Mesh::const_iterator end  = m_Meshes.end();
@@ -2156,7 +2156,7 @@ namespace Content
        if( !uvSet->empty() )
        {
          uvShells.push_back( Math::V_Vector2() );
-         triangleIndices.push_back( V_u32() );
+         triangleIndices.push_back( std::vector< u32 >() );
 
          uvShells.back() = *uvSet;
          triangleIndices.back() = (*itor)->m_TriangleVertexIndices;

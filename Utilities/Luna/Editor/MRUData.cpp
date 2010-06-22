@@ -28,12 +28,12 @@ MRUData::~MRUData()
 {
 }
 
-const V_string& MRUData::GetPaths() const
+const std::vector< std::string >& MRUData::GetPaths() const
 {
   return m_Paths;
 }
 
-void MRUData::SetPaths( const V_string& paths )
+void MRUData::SetPaths( const std::vector< std::string >& paths )
 {
   if ( paths != m_Paths )
   {

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "API.h"
+#include <set>
 
+#include "API.h"
 #include "Foundation/Atomic.h"
 
 namespace Reflect
@@ -45,11 +46,11 @@ namespace Reflect
     class FOUNDATION_API FindByTypeSetVisitor : public Visitor
     {
     public:
-        const S_i32& m_Types;
+        const std::set< i32 >& m_Types;
 
         V_Element& m_Found;
 
-        FindByTypeSetVisitor(const S_i32& types, V_Element& found);
+        FindByTypeSetVisitor(const std::set< i32 >& types, V_Element& found);
 
         virtual bool VisitElement(Element* element) NOC_OVERRIDE;
     };

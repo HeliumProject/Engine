@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "API.h"
 
 #include "Platform/Types.h"
@@ -54,7 +56,7 @@ namespace Reflect
     public:
         REFLECTION_BASE(ReflectionTypes::Invalid);
 
-        mutable M_string m_Properties;
+        mutable std::map< std::string, std::string > m_Properties;
 
         template<class T>
         inline void SetProperty( const std::string& key, const T& value )
@@ -93,7 +95,7 @@ namespace Reflect
         template<>
         inline bool GetProperty( const std::string& key, std::string& value ) const
         {
-            M_string::const_iterator found = m_Properties.find( key ); 
+            std::map< std::string, std::string >::const_iterator found = m_Properties.find( key ); 
             if ( found != m_Properties.end() )
             {
                 value = found->second;
@@ -105,7 +107,7 @@ namespace Reflect
 
         inline const std::string& GetProperty( const std::string& key ) const
         {
-            M_string::const_iterator found = m_Properties.find( key );
+            std::map< std::string, std::string >::const_iterator found = m_Properties.find( key );
             if ( found != m_Properties.end() )
             {
                 return found->second;

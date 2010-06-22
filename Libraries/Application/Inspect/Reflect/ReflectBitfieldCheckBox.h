@@ -36,7 +36,7 @@ namespace Inspect
   protected:
     virtual void SetDefaultAppearance( bool def ) NOC_OVERRIDE;
     bool WriteBitfield();
-    std::string BuildBitfieldString( V_string tokens, const std::string& delimiter );
+    std::string BuildBitfieldString( std::vector< std::string > tokens, const std::string& delimiter );
     void UpdateUI( CheckBoxStates::CheckBoxState state );
     CheckBoxState GetUIState() const;
   };

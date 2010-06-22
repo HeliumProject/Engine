@@ -79,7 +79,7 @@ void List::Read()
   // from data into ui
   if ( IsRealized() )
   {
-    const V_string& items = GetItems();
+    const std::vector< std::string >& items = GetItems();
 
     UpdateUI( items );
   }
@@ -166,7 +166,7 @@ void List::SetMap( bool isMap )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns a list of all the items (represented as strings).
 // 
-const V_string& List::GetItems()
+const std::vector< std::string >& List::GetItems()
 {
   if ( IsBound() )
   {
@@ -180,8 +180,8 @@ const V_string& List::GetItems()
       // This list is a map representation so it better have an even number of elemnts
       NOC_ASSERT( m_Items.size() % 2 == 0 );
 
-      V_string::iterator itr = m_Items.begin();
-      V_string::iterator previous = itr;
+      std::vector< std::string >::iterator itr = m_Items.begin();
+      std::vector< std::string >::iterator previous = itr;
       for ( ; itr != m_Items.end(); ++itr )
       {
         if ( previous != itr )
@@ -205,7 +205,7 @@ const V_string& List::GetItems()
 // Clears all the items out of the list (both the underlying data and the UI)
 // and adds the new items to the list.  
 // 
-void List::AddItems( const V_string& items )
+void List::AddItems( const std::vector< std::string >& items )
 {
   if ( IsBound() )
   {
@@ -294,8 +294,8 @@ void List::RemoveItem( const std::string& item )
   }
   else
   {
-    V_string::iterator itr = m_Items.begin();
-    V_string::iterator end = m_Items.end();
+    std::vector< std::string >::iterator itr = m_Items.begin();
+    std::vector< std::string >::iterator end = m_Items.end();
     for ( ; itr != end; ++itr )
     {
       const std::string& current = *itr;
@@ -317,7 +317,7 @@ void List::RemoveItem( const std::string& item )
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-const V_string& List::GetSelectedItems()
+const std::vector< std::string >& List::GetSelectedItems()
 {
   if ( IsRealized() )
   {
@@ -340,7 +340,7 @@ const V_string& List::GetSelectedItems()
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void List::SetSelectedItems( const V_string& items )
+void List::SetSelectedItems( const std::vector< std::string >& items )
 {
   if ( IsRealized() )
   {
@@ -351,8 +351,8 @@ void List::SetSelectedItems( const V_string& items )
 
     m_Window->Freeze();
     // Select each item in the list
-    V_string::const_iterator itr = items.begin();
-    V_string::const_iterator end = items.end();
+    std::vector< std::string >::const_iterator itr = items.begin();
+    std::vector< std::string >::const_iterator end = items.end();
     for ( ; itr < end; ++itr )
     {
       list->SetStringSelection( (*itr).c_str() );
@@ -388,8 +388,8 @@ std::string List::GetSelectedItems( const std::string delimiter )
   }
   else
   {
-    V_string::const_iterator itr = m_SelectedItems.begin();
-    V_string::const_iterator end = m_SelectedItems.end();
+    std::vector< std::string >::const_iterator itr = m_SelectedItems.begin();
+    std::vector< std::string >::const_iterator end = m_SelectedItems.end();
     for ( ; itr != end; ++itr )
     {
       if ( !items.empty() )
@@ -413,7 +413,7 @@ std::string List::GetSelectedItems( const std::string delimiter )
 // 
 void List::SetSelectedItems( const std::string& delimitedList, const std::string& delimiter )
 {
-  V_string items;
+  std::vector< std::string > items;
   ::Tokenize( delimitedList, items, delimiter );
   SetSelectedItems( items );
 }
@@ -421,10 +421,10 @@ void List::SetSelectedItems( const std::string& delimitedList, const std::string
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function to select one or more items.
 // 
-static inline void SetSelection( ListBox* list, const V_i32 indices )
+static inline void SetSelection( ListBox* list, const std::vector< i32 > indices )
 {
-  V_i32::const_iterator indexItr = indices.begin();
-  V_i32::const_iterator indexEnd = indices.end();
+  std::vector< i32 >::const_iterator indexItr = indices.begin();
+  std::vector< i32 >::const_iterator indexEnd = indices.end();
   for ( ; indexItr != indexEnd; ++indexItr )
   {
     list->Select( *indexItr );
@@ -437,8 +437,8 @@ static inline void SetSelection( ListBox* list, const V_i32 indices )
 void List::MoveSelectedItems( MoveDirection direction )
 {
   bool isDirty = false;
-  const V_string& selectedItems = GetSelectedItems();
-  V_i32 selectedItemIndices;
+  const std::vector< std::string >& selectedItems = GetSelectedItems();
+  std::vector< i32 > selectedItemIndices;
 
   const size_t numSelectedItems = selectedItems.size();
   if ( numSelectedItems > 0 )
@@ -497,12 +497,12 @@ void List::MoveSelectedItems( MoveDirection direction )
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-std::string List::GetDelimitedList( const V_string& items, const std::string& delimiter )
+std::string List::GetDelimitedList( const std::vector< std::string >& items, const std::string& delimiter )
 {
   std::string delimitedList;
 
-  V_string::const_iterator itr = items.begin();
-  V_string::const_iterator end = items.end();
+  std::vector< std::string >::const_iterator itr = items.begin();
+  std::vector< std::string >::const_iterator end = items.end();
   for ( ; itr != end; ++itr )
   {
     if ( !delimitedList.empty() )
@@ -531,7 +531,7 @@ std::string List::GetDelimitedList( const V_string& items, const std::string& de
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void List::UpdateUI( const V_string& items )
+void List::UpdateUI( const std::vector< std::string >& items )
 {
   if ( IsRealized() )
   {
@@ -540,8 +540,8 @@ void List::UpdateUI( const V_string& items )
     list->Freeze();
     list->Clear();
 
-    V_string::const_iterator itr = items.begin();
-    V_string::const_iterator end = items.end();
+    std::vector< std::string >::const_iterator itr = items.begin();
+    std::vector< std::string >::const_iterator end = items.end();
     for ( ; itr != end; ++itr )
     {
       list->Append( (*itr).c_str() );

@@ -156,7 +156,7 @@ bool WriteFile( const std::string& path, const std::string& data )
   return true;
 }
 
-bool WriteFile( const std::string& path, const V_string& data )
+bool WriteFile( const std::string& path, const std::vector< std::string >& data )
 {
   FILE* f = fopen( path.c_str(), "w" );
   if ( !f )
@@ -164,8 +164,8 @@ bool WriteFile( const std::string& path, const V_string& data )
     return false;
   }
 
-  V_string::const_iterator itr = data.begin();
-  V_string::const_iterator end = data.end();
+  std::vector< std::string >::const_iterator itr = data.begin();
+  std::vector< std::string >::const_iterator end = data.end();
   for ( ; itr != end; ++itr )
   {
     fprintf( f, "%s\n", itr->c_str() );

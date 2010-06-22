@@ -168,11 +168,11 @@ void ReflectArrayInterpreter::OnRemove( Button* button )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
-    const V_string& selectedItems = list->GetSelectedItems();
+    const std::vector< std::string >& selectedItems = list->GetSelectedItems();
     if ( !selectedItems.empty() )
     {
-      V_string::const_iterator itr = selectedItems.begin();
-      V_string::const_iterator end = selectedItems.end();
+      std::vector< std::string >::const_iterator itr = selectedItems.begin();
+      std::vector< std::string >::const_iterator end = selectedItems.end();
       list->Freeze();
       for ( ; itr != end; ++itr )
       {

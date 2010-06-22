@@ -33,7 +33,7 @@ void ContextMenuItemSet::PrependItem( const ContextMenuItemPtr& item )
 {
   if ( !ContextMenuItem::IsSeparator( item ) )
   {
-    Insert<S_string>::Result inserted = m_Labels.insert( item->GetLabel() );
+    Insert<std::set< std::string >>::Result inserted = m_Labels.insert( item->GetLabel() );
     NOC_ASSERT( inserted.second ); // Menu labels must be unique within a menu
   }
 
@@ -48,7 +48,7 @@ void ContextMenuItemSet::AppendItem( const ContextMenuItemPtr& item )
 {
   if ( !ContextMenuItem::IsSeparator( item ) )
   {
-    Insert<S_string>::Result inserted = m_Labels.insert( item->GetLabel() );
+    Insert<std::set< std::string >>::Result inserted = m_Labels.insert( item->GetLabel() );
     NOC_ASSERT( inserted.second ); // Menu labels must be unique within a menu
   }
 

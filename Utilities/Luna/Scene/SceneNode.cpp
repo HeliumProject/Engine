@@ -492,7 +492,7 @@ void SceneNode::CreatePanel(CreatePanelArgs& args)
 
 std::string SceneNode::GetMembership() const
 {
-  S_string layerNames;
+  std::set< std::string > layerNames;
   S_SceneNodeDumbPtr::const_iterator itr = m_Ancestors.begin();
   S_SceneNodeDumbPtr::const_iterator end = m_Ancestors.end();
   for ( ; itr != end; ++itr )
@@ -509,8 +509,8 @@ std::string SceneNode::GetMembership() const
   }
 
   std::string layers;
-  S_string::const_iterator layerItr = layerNames.begin();
-  S_string::const_iterator layerEnd = layerNames.end();
+  std::set< std::string >::const_iterator layerItr = layerNames.begin();
+  std::set< std::string >::const_iterator layerEnd = layerNames.end();
   for ( ; layerItr != layerEnd; ++layerItr )
   {
     if ( !layers.empty() )

@@ -169,7 +169,7 @@ bool SearchQuery::operator!=( const SearchQuery& rhs ) const
 ///////////////////////////////////////////////////////////////////////////////
 // The query->m_Search is filled out when provided.
 //
-bool TokenizeQuery( const std::string& queryString, V_string& tokens )
+bool TokenizeQuery( const std::string& queryString, std::vector< std::string >& tokens )
 {
     const boost::regex parseTokens( s_TokenizeQueryString, boost::regex::icase );
 
@@ -334,14 +334,14 @@ bool SearchQuery::ParseQueryString( const std::string& queryString, std::string&
         const boost::regex parseColumnQuery( s_ParseColumnName, boost::regex::icase );
 
         // parse once to tokenize then match again
-        V_string tokens;
+        std::vector< std::string > tokens;
         if ( TokenizeQuery( queryString, tokens ) )
         {
             std::string curToken;
             std::string currentValue;
 
             boost::smatch matchResults;
-            V_string::const_iterator tokenItr = tokens.begin(), tokenEnd = tokens.end();
+            std::vector< std::string >::const_iterator tokenItr = tokens.begin(), tokenEnd = tokens.end();
             for ( ; tokenItr != tokenEnd; ++tokenItr )
             {
                 curToken = *tokenItr;

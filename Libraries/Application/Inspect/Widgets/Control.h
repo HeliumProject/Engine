@@ -364,7 +364,7 @@ namespace Inspect
     virtual bool ReadData(std::string& str) const;
 
     // helper read call to get values of all bound data
-    virtual bool ReadAll(V_string& strs) const;
+    virtual bool ReadAll(std::vector< std::string >& strs) const;
 
     // callback when data changed, implements DataReference
     virtual void DataChanged(const DataChangedArgs& args);
@@ -419,7 +419,7 @@ namespace Inspect
     }
 
     // helper to write values to each bound data member separately
-    virtual bool WriteAll(const V_string& strs, bool preview = false);
+    virtual bool WriteAll(const std::vector< std::string >& strs, bool preview = false);
 
     // fires callback
     virtual void PostWrite();

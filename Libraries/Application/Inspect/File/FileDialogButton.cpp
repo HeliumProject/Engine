@@ -13,7 +13,7 @@ using namespace Inspect;
 FileDialogButton::FileDialogButton( const std::string& path )
 : m_Title( "Open" )
 {
-    Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( "All files (*.*)|*.*" ) );
+    Nocturnal::Insert<std::set< std::string >>::Result inserted = m_Filters.insert( std::set< std::string >::value_type( "All files (*.*)|*.*" ) );
 
     SetPath( path );
 }
@@ -71,8 +71,8 @@ bool FileDialogButton::Write()
         if ( !m_Filters.empty() )
         {
             filterStr = "";
-            S_string::iterator it = m_Filters.begin();
-            S_string::iterator itEnd = m_Filters.end();
+            std::set< std::string >::iterator it = m_Filters.begin();
+            std::set< std::string >::iterator itEnd = m_Filters.end();
             for ( ; it != itEnd ; ++it )
             {
                 filterStr += (*it);
@@ -109,22 +109,22 @@ void FileDialogButton::SetTitleBar( const std::string& title )
 void FileDialogButton::SetFilter( const std::string& filter )
 {
     m_Filters.clear();
-    Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( filter ) );
+    Nocturnal::Insert<std::set< std::string >>::Result inserted = m_Filters.insert( std::set< std::string >::value_type( filter ) );
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void FileDialogButton::SetFilter( const V_string& filter )
+void FileDialogButton::SetFilter( const std::vector< std::string >& filter )
 {
     m_Filters.clear();
 
-    V_string::const_iterator it = filter.begin();
-    V_string::const_iterator itEnd = filter.end();
+    std::vector< std::string >::const_iterator it = filter.begin();
+    std::vector< std::string >::const_iterator itEnd = filter.end();
     for ( ; it != itEnd ; ++it )
     {
-        Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( *it ) );
+        Nocturnal::Insert<std::set< std::string >>::Result inserted = m_Filters.insert( std::set< std::string >::value_type( *it ) );
     }
 }
 
@@ -133,7 +133,7 @@ void FileDialogButton::SetFilter( const V_string& filter )
 // 
 void FileDialogButton::AddFilter( const std::string& filter )
 {
-    Nocturnal::Insert<S_string>::Result inserted = m_Filters.insert( S_string::value_type( filter ) );
+    Nocturnal::Insert<std::set< std::string >>::Result inserted = m_Filters.insert( std::set< std::string >::value_type( filter ) );
 }
 
 

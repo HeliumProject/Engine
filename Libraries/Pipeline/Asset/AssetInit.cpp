@@ -66,7 +66,7 @@ using namespace Reflect;
 
 using namespace Asset;
 
-V_i32 Asset::g_AssetClassTypes;
+std::vector< i32 > Asset::g_AssetClassTypes;
 
 i32 g_AssetInitCount = 0;
 

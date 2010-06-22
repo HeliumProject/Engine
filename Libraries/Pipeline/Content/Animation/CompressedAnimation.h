@@ -34,34 +34,34 @@ namespace Content
     f32  m_BlendFactor;
 
     // The values in the animation
-    V_i16 m_TranslateX;
-    V_i16 m_TranslateY;
-    V_i16 m_TranslateZ;
+    std::vector< i16 > m_TranslateX;
+    std::vector< i16 > m_TranslateY;
+    std::vector< i16 > m_TranslateZ;
 
-    V_i16 m_RotateX;
-    V_i16 m_RotateY;
-    V_i16 m_RotateZ;
-    V_i16 m_RotateW;
+    std::vector< i16 > m_RotateX;
+    std::vector< i16 > m_RotateY;
+    std::vector< i16 > m_RotateZ;
+    std::vector< i16 > m_RotateW;
 
-    V_i16 m_ScaleX;
-    V_i16 m_ScaleY;
-    V_i16 m_ScaleZ;
+    std::vector< i16 > m_ScaleX;
+    std::vector< i16 > m_ScaleY;
+    std::vector< i16 > m_ScaleZ;
 
-    V_i16 m_BindTranslate;  // 3 elements: x, y, z
-    V_i16 m_MinTranslate;
-    V_i16 m_MaxTranslate;
-    V_i16 m_AvgTranslate;
-    V_u8  m_DiffTypeTranslate;
+    std::vector< i16 > m_BindTranslate;  // 3 elements: x, y, z
+    std::vector< i16 > m_MinTranslate;
+    std::vector< i16 > m_MaxTranslate;
+    std::vector< i16 > m_AvgTranslate;
+    std::vector< u8 >  m_DiffTypeTranslate;
 
-    V_i16 m_MinScale;
-    V_i16 m_MaxScale;
-    V_i16 m_AvgScale;
-    V_u8  m_DiffTypeScale;
+    std::vector< i16 > m_MinScale;
+    std::vector< i16 > m_MaxScale;
+    std::vector< i16 > m_AvgScale;
+    std::vector< u8 >  m_DiffTypeScale;
 
-    V_i16 m_MinRotate;
-    V_i16 m_MaxRotate;
-    V_i16 m_AvgRotate;
-    V_u8  m_DiffTypeRotate;
+    std::vector< i16 > m_MinRotate;
+    std::vector< i16 > m_MaxRotate;
+    std::vector< i16 > m_AvgRotate;
+    std::vector< u8 >  m_DiffTypeRotate;
 
     Nocturnal::TUID m_JointID;
 

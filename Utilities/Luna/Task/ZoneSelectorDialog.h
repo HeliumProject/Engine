@@ -15,11 +15,11 @@ namespace Luna
     wxButton* m_button3;
     wxButton* m_button1;
 
-    S_u32& m_SelectedZones;
+    std::set< u32 >& m_SelectedZones;
     u32 m_NumZones;
 
   public:
-    ZoneSelectorDialog( wxWindow* parent, const std::string& title, const std::string& msg, const V_string& zoneNames, S_u32& selectedZones, int id = -1, wxPoint pos = wxDefaultPosition, 
+    ZoneSelectorDialog( wxWindow* parent, const std::string& title, const std::string& msg, const std::vector< std::string >& zoneNames, std::set< u32 >& selectedZones, int id = -1, wxPoint pos = wxDefaultPosition, 
       wxSize size = wxSize( -1, -1 ), int style = wxCAPTION );
     virtual ~ZoneSelectorDialog();
 

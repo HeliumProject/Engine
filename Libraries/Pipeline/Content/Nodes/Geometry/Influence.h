@@ -10,10 +10,10 @@ namespace Content
   {
   public:
     // The object ID indices of the transforms that influence this vertex
-    V_u32 m_Objects;
+    std::vector< u32 > m_Objects;
 
     // The weights of the transforms that influence this vertex (CORRESPONDS TO objects)
-    V_f32 m_Weights;
+    std::vector< f32 > m_Weights;
 
     REFLECT_DECLARE_CLASS(Influence, Reflect::Element);
 

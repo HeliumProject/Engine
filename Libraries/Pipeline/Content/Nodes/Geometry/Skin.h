@@ -25,7 +25,7 @@ namespace Content
         Nocturnal::V_TUID m_InfluenceObjectIDs;
 
         // The influence to use for each vertex (CORRESPONDS TO m_Positions Indices in the referenced mesh)
-        V_u32 m_InfluenceIndices;
+        std::vector< u32 > m_InfluenceIndices;
 
         Skin ()
         {

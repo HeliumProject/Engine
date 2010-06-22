@@ -334,12 +334,12 @@ u64 CacheDB::FindAttributeRowID( const std::string& value )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-u32 CacheDB::GetComponentsTableData( V_string& tableData, bool* cancel )
+u32 CacheDB::GetComponentsTableData( std::vector< std::string >& tableData, bool* cancel )
 {
     u32 result = GetPopulateTableData( m_SelectAttributesHandle, tableData, cancel );
     if ( result > 0 )
     {
-        V_string::iterator itr = tableData.begin(), end = tableData.end();
+        std::vector< std::string >::iterator itr = tableData.begin(), end = tableData.end();
         for ( ; itr != end; ++itr )
         {
             std::string::size_type classNamePos = (*itr).rfind( ':' );
@@ -421,8 +421,8 @@ void CacheDB::InsertAssetAttributes( AssetFile* assetFile, bool* cancel )
     int execResult = SQLITE_OK;
     std::string validAttributeIDsStr;
 
-    M_string::const_iterator attrItr = assetFile->GetComponents().begin();
-    M_string::const_iterator attrEnd = assetFile->GetComponents().end();
+    std::map< std::string, std::string >::const_iterator attrItr = assetFile->GetComponents().begin();
+    std::map< std::string, std::string >::const_iterator attrEnd = assetFile->GetComponents().end();
     for ( ; attrItr != attrEnd; ++attrItr )
     {
         if ( CheckCancelQuery( cancel ) )
@@ -883,7 +883,7 @@ void CacheDB::InsertDependencies
 }
 
 /////////////////////////////////////////////////////////////////////////////
-u32 CacheDB::GetPopulateTableData( const CacheDBColumnID columnID, V_string& tableData, bool* cancel )
+u32 CacheDB::GetPopulateTableData( const CacheDBColumnID columnID, std::vector< std::string >& tableData, bool* cancel )
 {
     M_CacheDBColumns::const_iterator findColumn = m_CacheDBColumns.find( columnID );
     if ( findColumn != m_CacheDBColumns.end() )
@@ -938,7 +938,7 @@ u32 CacheDB::GetPopulateTableData( const SQL::StmtHandle stmt, M_CacheDBTableDat
 }
 
 /////////////////////////////////////////////////////////////////////////////
-u32 CacheDB::GetPopulateTableData( const SQL::StmtHandle stmt, V_string& tableData, bool* cancel )
+u32 CacheDB::GetPopulateTableData( const SQL::StmtHandle stmt, std::vector< std::string >& tableData, bool* cancel )
 {
     Platform::TakeMutex mutex ( m_Mutex );
 
@@ -1176,7 +1176,7 @@ void CacheDB::SelectAssetPathByHash( const u64 pathHash, std::string& path )
 //  std::string   m_AssetType;
 //  u64           m_Size;
 //  std::string   m_P4User;
-//  M_string      m_Attributes;
+//  std::map< std::string, std::string >      m_Attributes;
 //  S_tuid        m_Dependencies;
 //  u64           m_RowID;
 //  i32           m_P4LocalRevision;

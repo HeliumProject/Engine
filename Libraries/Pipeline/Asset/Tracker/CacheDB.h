@@ -40,7 +40,7 @@ namespace Asset
 
         const M_CacheDBColumns& GetDBColumns() const;
 
-        u32 GetPopulateTableData( const CacheDBColumnID columnID, V_string& tableData, bool* cancel = NULL ); 
+        u32 GetPopulateTableData( const CacheDBColumnID columnID, std::vector< std::string >& tableData, bool* cancel = NULL ); 
 
         u32 Search( const CacheDBQuery* search, Nocturnal::S_Path& assetFiles, bool* cancel = NULL );
 
@@ -52,7 +52,7 @@ namespace Asset
         void SelectAssetByHash( const u64 pathHash, AssetFile* assetFile );
 
         u64 FindAttributeRowID( const std::string& value );
-        u32 GetComponentsTableData( V_string& tableData, bool* cancel = NULL );
+        u32 GetComponentsTableData( std::vector< std::string >& tableData, bool* cancel = NULL );
 
         void GetAssetDependencies( const Nocturnal::Path& path, Nocturnal::S_Path& dependencies, bool reverse = false, u32 maxDepth = 0, u32 currDepth = 0, bool* cancel = NULL );
         void GetDependencyGraph( const Nocturnal::Path& path, M_AssetFiles* assetFiles, bool reverse = false, u32 maxDepth = 0, u32 currDepth = 0, bool* cancel = NULL );
@@ -82,7 +82,7 @@ namespace Asset
 
         // Used by UI to populate Choice boxes
         u32 GetPopulateTableData( const SQL::StmtHandle select, M_CacheDBTableData& tableData, bool* cancel = NULL );
-        u32 GetPopulateTableData( const SQL::StmtHandle select, V_string& tableData, bool* cancel = NULL );
+        u32 GetPopulateTableData( const SQL::StmtHandle select, std::vector< std::string >& tableData, bool* cancel = NULL );
 
     public:
         static const char* s_TrackerDBVersion;

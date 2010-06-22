@@ -64,7 +64,7 @@ namespace Luna
     virtual void CheckNodeType() NOC_OVERRIDE;
 
     // find all the valid configured type names
-    S_string GetValidConfiguredTypeNames();
+    std::set< std::string > GetValidConfiguredTypeNames();
 
     std::string GetConfiguredTypeName() const;
     void SetConfiguredTypeName( const std::string& type );

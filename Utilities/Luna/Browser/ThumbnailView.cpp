@@ -301,7 +301,7 @@ void ThumbnailView::SelectPath( const std::string& path )
 // Returns the number of items in paths.  If useForwardSlashes is false, 
 // backslashes will be used to build the paths.
 // 
-u32 ThumbnailView::GetSelectedPaths( V_string& paths, bool useForwardSlashes )
+u32 ThumbnailView::GetSelectedPaths( std::vector< std::string >& paths, bool useForwardSlashes )
 {
     paths.reserve( paths.size() + m_SelectedTiles.Size() );
 

@@ -18,6 +18,6 @@ namespace Nocturnal
     std::string m_Description;
 
   public:
-    ListDialog( wxWindow* parent, const std::string& title, const std::string& desc, const V_string& msgs );
+    ListDialog( wxWindow* parent, const std::string& title, const std::string& desc, const std::vector< std::string >& msgs );
   };
 }

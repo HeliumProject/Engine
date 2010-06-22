@@ -13,7 +13,7 @@ namespace Asset
 
     MipGenFilterType m_AlphaMipGenFilter;
     PostMipFilterType m_AlphaPostMipFilter;
-    V_i32 m_AlphaMipFilterPasses;
+    std::vector< i32 > m_AlphaMipFilterPasses;
 
     ColorMapComponent() 
       : m_AlphaMipGenFilter( MipGenFilterTypes::MIP_SINC )

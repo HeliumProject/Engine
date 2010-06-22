@@ -273,7 +273,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
-			RelativePathToProject=".\libraries\Platform\platform.vcproj"
+			RelativePathToProject=".\Platform\Platform.vcproj"
 		/>
 	</References>
 	<Files>
@@ -472,42 +472,6 @@
 		<Filter
 			Name="CommandLine"
 			>
-			<File
-				RelativePath=".\CommandLine\Option.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CommandLine\Processor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CommandLine\Processor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CommandLine\Verb.h"
-				>
-			</File>
-			<Filter
-				Name="Verbs"
-				>
-				<File
-					RelativePath=".\CommandLine\Verbs\FailTest.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CommandLine\Verbs\FailTest.h"
-					>
-				</File>
-				<File
-					RelativePath=".\CommandLine\Verbs\Help.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CommandLine\Verbs\Help.h"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Math"
@@ -1067,14 +1031,6 @@
 		</File>
 		<File
 			RelativePath=".\Atomic.h"
-			>
-		</File>
-		<File
-			RelativePath=".\CommandLine.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\CommandLine.h"
 			>
 		</File>
 		<File

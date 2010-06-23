@@ -1691,10 +1691,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Windows\String.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Windows\Thread.cpp"
 				>
 			</File>
@@ -1797,6 +1793,10 @@
 		</File>
 		<File
 			RelativePath=".\Stat.h"
+			>
+		</File>
+		<File
+			RelativePath=".\String.cpp"
 			>
 		</File>
 		<File

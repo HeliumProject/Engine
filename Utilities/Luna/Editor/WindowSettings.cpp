@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "WindowSettings.h"
 
-#include "Foundation/CommandLine.h"
+#include "Foundation/CommandLine/Utilities.h"
 
 #include <wx/aui/aui.h>
 #include <wx/display.h>

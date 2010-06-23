@@ -3,7 +3,7 @@
 #include "ExceptionReport.h"
 
 #include "Foundation/Version.h"
-#include "Foundation/CommandLine.h"
+#include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "Platform/Windows/Memory.h"

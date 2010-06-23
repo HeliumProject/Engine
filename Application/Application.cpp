@@ -22,7 +22,7 @@
 #include "Foundation/Version.h"
 #include "Foundation/Exception.h"
 #include "Foundation/Environment.h"
-#include "Foundation/CommandLine.h"
+#include "Foundation/CommandLine/Utilities.h"
 
 #include "Exception.h"
 #include "Exceptions.h"

@@ -17,7 +17,7 @@
 #include "Platform/Windows/Windows.h"
 
 #include "Foundation/Version.h"
-#include "Foundation/CommandLine.h"
+#include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/Environment.h"
 #include "Foundation/String/Utilities.h"
 #include "Foundation/InitializerStack.h"

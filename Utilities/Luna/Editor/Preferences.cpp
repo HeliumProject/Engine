@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Preferences.h"
 
-#include "Foundation/CommandLine.h"
+#include "Foundation/CommandLine/Utilities.h"
 
 using namespace Luna;
 

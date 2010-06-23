@@ -49,7 +49,7 @@ std::vector< std::string >          g_Regions;     // only for levels, which nee
 class RegionOption : public Nocturnal::CommandLine::Option
 {
 public:
-	V_string m_Regions;
+	std::vector< std::string > m_Regions;
 
 public:
 	RegionOption( const char* token, const char* usage = "<ARG>", const char* help = "" )
@@ -102,7 +102,7 @@ public:
 		return result;
 	}
 
-	const V_string GetRegions() const
+	const std::vector< std::string > GetRegions() const
 	{
 		return m_Regions;
 	}
@@ -119,7 +119,7 @@ protected:
 	//bool m_ImmortalWorker = false;
 	//bool m_Defaults = false;
 
-	RegionOption m_RegionOption; //V_string m_Regions; // only for levels, which need to view a single region
+	RegionOption m_RegionOption; //std::vector< std::string > m_Regions; // only for levels, which need to view a single region
 
 public:
 	BuildCommand()
@@ -347,7 +347,6 @@ void AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
 ///////////////////////////////////////////////////////////////////////////////
 bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const std::vector< std::string >& options )
 {
-<<<<<<< HEAD
     bool success = true;
 
     for ( std::set< Nocturnal::Path >::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
@@ -399,65 +398,11 @@ bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >
     }
 
     return success;
-=======
-	bool success = true;
-
-	for ( Nocturnal::S_Path::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
-	{
-		const Nocturnal::Path& path = (*itr);
-
-		AssetClassPtr assetClass;
-
-		if (Application::IsDebuggerPresent() && !g_All)
-		{
-			assetClass = AssetClass::LoadAssetClass( path );
-
-			if (assetClass.ReferencesObject())
-			{
-				AssetBuilder::Build( depGraph, assetClass, options );
-				Report( assetClass );
-			}
-			else
-			{
-				throw Nocturnal::Exception( "Unable to load asset '%s'", path.c_str() );
-			}
-		}
-		else
-		{
-			try
-			{
-				assetClass = AssetClass::LoadAssetClass( path );
-
-				if (assetClass.ReferencesObject())
-				{
-					AssetBuilder::Build( depGraph, assetClass, options );
-					Report( assetClass );
-				}
-				else
-				{
-					throw Nocturnal::Exception( "Unable to load asset '%s'", path.c_str() );
-				}
-			}
-			catch( const Nocturnal::Exception& ex )
-			{
-				if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
-				{
-					throw;
-				}
-				success = false;
-				Except( ex, assetClass );
-			}
-		}
-	}
-
-	return success;
->>>>>>> First pass at CommandLine parsing lib.
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const AssetBuilder::BuilderOptionsPtr& options )
 {
-<<<<<<< HEAD
     bool success = true;
 
     AssetBuilder::V_BuildJob jobs;
@@ -538,102 +483,15 @@ bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >
     }
 
     return success;
-=======
-	bool success = true;
-
-	AssetBuilder::V_BuildJob jobs;
-	V_AssetClass buildingAssets;
-
-	for ( Nocturnal::S_Path::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
-	{
-		const Nocturnal::Path& filePath = (*itr);
-
-		AssetClassPtr assetClass;
-
-		if (Application::IsDebuggerPresent() && !g_All)
-		{
-			assetClass = AssetClass::LoadAssetClass( filePath );
-
-			if (assetClass.ReferencesObject())
-			{
-				jobs.push_back( new AssetBuilder::BuildJob( &depGraph, assetClass, options, NULL, true ) );
-				buildingAssets.push_back( assetClass );
-			}
-			else
-			{
-				throw Nocturnal::Exception( "Unable to load asset '%s'", filePath.c_str() );
-			}
-		}
-		else
-		{
-			try
-			{
-				assetClass = AssetClass::LoadAssetClass( filePath );
-
-				if (assetClass.ReferencesObject())
-				{
-					jobs.push_back( new AssetBuilder::BuildJob( &depGraph, assetClass, options, NULL, true ) );
-					buildingAssets.push_back( assetClass );
-				}
-				else
-				{
-					throw Nocturnal::Exception( "Unable to locate asset '%s'", filePath.c_str() );
-				}
-			}
-			catch( const Nocturnal::Exception& ex )
-			{
-				if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
-				{
-					throw;
-				}
-				success = false;
-				Except( ex, assetClass );
-			}
-		}
-	}
-
-	if (Application::IsDebuggerPresent())
-	{
-		AssetBuilder::Build( depGraph, jobs );
-	}
-	else
-	{
-		try
-		{
-			AssetBuilder::Build( depGraph, jobs );
-		}
-		catch( const Nocturnal::Exception& ex )
-		{
-			if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
-			{
-				throw;
-			}
-			success = false;
-			Except( ex );
-		}
-	}
-
-	for ( V_AssetClass::const_iterator itr = buildingAssets.begin(), end = buildingAssets.end(); itr != end; ++itr )
-	{
-		Report( *itr );
-	}
-
-	return success;
->>>>>>> First pass at CommandLine parsing lib.
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 bool QueryAndBuildAssets(const std::vector< std::string >& options)
 { 
-<<<<<<< HEAD
     // get the asset files they want to build
     int maxMatches = g_NoMultiple ? 1 : (g_All ? -1 : MAX_MATCHES);
     std::set< Nocturnal::Path > possibleMatches;
-=======
-	// get the asset files they want to build
-	int maxMatches = g_NoMultiple ? 1 : (g_All ? -1 : MAX_MATCHES);
-	Nocturnal::S_Path possibleMatches;
->>>>>>> First pass at CommandLine parsing lib.
+
 #pragma TODO( "make this search the tracker" )
 	//    File::GlobalResolver().Find( g_SearchQuery, possibleMatches );
 
@@ -719,7 +577,6 @@ bool RunAsBuildWorker( Dependencies::DependencyGraph& depGraph )
 ///////////////////////////////////////////////////////////////////////////////
 int Main (int argc, const char** argv)
 {
-<<<<<<< HEAD
     bool success = true;
     g_GenerateReport = Nocturnal::GetCmdLineFlag("report");
 
@@ -738,86 +595,8 @@ int Main (int argc, const char** argv)
 
     AssetBuilder::AddAssetBuiltListener( AssetBuilder::AssetBuiltSignature::Delegate ( &AssetBuilt ) );
 
-    if ( !ParseProgramOptions( argc, argv ) )
-    {
-        return 1;
-    }
-
-    // fill out the options vector
-    std::vector< std::string > options;
-    for ( int i = 2; i < argc; ++i )
-    {
-        options.push_back( argv[ i ] );
-    }
-
-    if (g_Defaults)
-    {
-        Log::Bullet bullet ("Building default assets...\n");
-        //    success = BuildDefaultAssets(options);
-        return success ? 0 : 1;
-    }
-
-    if (Application::IsDebuggerPresent())
-    {
-        if (Nocturnal::GetCmdLineFlag( Worker::Args::Worker ))
-        {
-#pragma TODO( "Figure out how to handle dependency graphs with workers" )
-            //            success = RunAsBuildWorker();
-        }
-        else
-        {
-            success = QueryAndBuildAssets( options );
-        }
-    }
-    else
-    {
-        try
-        {
-            if (Nocturnal::GetCmdLineFlag( Worker::Args::Worker ))
-            {
-#pragma TODO( "Figure out how to handle dependency graphs with workers" )
-//                success = RunAsBuildWorker();        
-            }
-            else
-            {
-                success = QueryAndBuildAssets( options );
-            }
-        }
-        catch( const Nocturnal::Exception& ex )
-        {
-            if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
-            {
-                throw;
-            }
-            success = false;
-            Except( ex );
-        }
-    }
-
-    return success ? 0 : 1;
-=======
-	bool success = true;
-	g_GenerateReport = Nocturnal::GetCmdLineFlag("report");
-
-	// print physical memory
-	MEMORYSTATUSEX status;
-	memset(&status, 0, sizeof(status));
-	status.dwLength = sizeof(status);
-	::GlobalMemoryStatusEx(&status);
-	Log::Print("Physical Memory: %I64u M bytes total, %I64u M bytes available\n", status.ullTotalPhys >> 20, status.ullAvailPhys >> 20);
-
-	Nocturnal::InitializerStack initializerStack( true );
-	initializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-	initializerStack.Push( Content::Initialize, Content::Cleanup );
-	initializerStack.Push( Asset::Initialize, Asset::Cleanup );
-	initializerStack.Push( AssetBuilder::Initialize, AssetBuilder::Cleanup );
-
-	AssetBuilder::AddAssetBuiltListener( AssetBuilder::AssetBuiltSignature::Delegate ( &AssetBuilt ) );
-
-
-
 	// fill out the options vector
-	V_string options;
+	std::vector< std::string > options;
 	for ( int i = 2; i < argc; ++i )
 	{
 		options.push_back( argv[ i ] );
@@ -837,58 +616,64 @@ int Main (int argc, const char** argv)
 	}
 
 	success = buildCommand.Process( error );
-
-	//if ( !ParseProgramOptions( argc, argv ) )
-	//{
-	//	return 1;
-	//}
-
-//	if (g_Defaults)
-//	{
-//		Log::Bullet bullet ("Building default assets...\n");
-//		//    success = BuildDefaultAssets(options);
-//		return success ? 0 : 1;
-//	}
 //
-//	if (Application::IsDebuggerPresent())
-//	{
-//		if (Nocturnal::GetCmdLineFlag( Worker::Args::Worker ))
-//		{
+//    if ( !ParseProgramOptions( argc, argv ) )
+//    {
+//        return 1;
+//    }
+//
+//    // fill out the options vector
+//    std::vector< std::string > options;
+//    for ( int i = 2; i < argc; ++i )
+//    {
+//        options.push_back( argv[ i ] );
+//    }
+//
+//    if (g_Defaults)
+//    {
+//        Log::Bullet bullet ("Building default assets...\n");
+//        //    success = BuildDefaultAssets(options);
+//        return success ? 0 : 1;
+//    }
+//
+//    if (Application::IsDebuggerPresent())
+//    {
+//        if (Nocturnal::GetCmdLineFlag( Worker::Args::Worker ))
+//        {
 //#pragma TODO( "Figure out how to handle dependency graphs with workers" )
-//			//            success = RunAsBuildWorker();
-//		}
-//		else
-//		{
-//			success = QueryAndBuildAssets( options );
-//		}
-//	}
-//	else
-//	{
-//		try
-//		{
-//			if (Nocturnal::GetCmdLineFlag( Worker::Args::Worker ))
-//			{
+//            //            success = RunAsBuildWorker();
+//        }
+//        else
+//        {
+//            success = QueryAndBuildAssets( options );
+//        }
+//    }
+//    else
+//    {
+//        try
+//        {
+//            if (Nocturnal::GetCmdLineFlag( Worker::Args::Worker ))
+//            {
 //#pragma TODO( "Figure out how to handle dependency graphs with workers" )
-//				//                success = RunAsBuildWorker();        
-//			}
-//			else
-//			{
-//				success = QueryAndBuildAssets( options );
-//			}
-//		}
-//		catch( const Nocturnal::Exception& ex )
-//		{
-//			if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
-//			{
-//				throw;
-//			}
-//			success = false;
-//			Except( ex );
-//		}
-//	}
+////                success = RunAsBuildWorker();        
+//            }
+//            else
+//            {
+//                success = QueryAndBuildAssets( options );
+//            }
+//        }
+//        catch( const Nocturnal::Exception& ex )
+//        {
+//            if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
+//            {
+//                throw;
+//            }
+//            success = false;
+//            Except( ex );
+//        }
+//    }
 
-	return success ? 0 : 1;
->>>>>>> First pass at CommandLine parsing lib.
+    return success ? 0 : 1;
 }
 
 class BuildToolApp : public wxApp

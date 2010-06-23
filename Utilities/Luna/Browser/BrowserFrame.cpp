@@ -21,7 +21,7 @@
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Pipeline/Asset/Tracker/Tracker.h"
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Foundation/CommandLine.h"
+#include "Foundation/CommandLine/Utilities.h"
 #include "Editor/DocumentManager.h"
 #include "Application/RCS/RCS.h"
 #include "Scene/SceneManager.h"

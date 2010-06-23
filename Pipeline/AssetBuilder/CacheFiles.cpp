@@ -5,7 +5,7 @@
 #include "Application/Application.h"
 #include "Foundation/Log.h"
 #include "Foundation/Exception.h"
-#include "Foundation/CommandLine.h"
+#include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/Environment.h"
 #include "Foundation/String/Units.h"
 #include "Foundation/Version.h"

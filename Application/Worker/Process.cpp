@@ -5,7 +5,7 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/Exception.h"
-#include "Foundation/CommandLine.h"
+#include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/IPC/Pipe.h"
 
 #include "Application/Application.h"

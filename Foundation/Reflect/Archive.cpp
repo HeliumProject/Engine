@@ -14,7 +14,7 @@
 #include "Platform/Process.h"
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
-#include "Foundation/CommandLine.h"
+#include "Foundation/CommandLine/Utilities.h"
 
 using namespace Reflect;
 

@@ -9,7 +9,7 @@
 
 #include "Platform/Windows/Windows.h"
 
-#include "Foundation/CommandLine.h"
+#include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/Environment.h"
 #include "Foundation/Log.h"

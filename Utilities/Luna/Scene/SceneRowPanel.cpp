@@ -11,7 +11,7 @@
 #include "Zone.h"
 #include "Editor/ContextMenu.h"
 #include "Foundation/Boost/Regex.h" 
-#include "Foundation/CommandLine.h"
+#include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/Log.h"
 #include "Application/RCS/RCS.h"
 #include "Application/UI/ImageManager.h"

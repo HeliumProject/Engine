@@ -472,6 +472,58 @@
 		<Filter
 			Name="CommandLine"
 			>
+			<File
+				RelativePath=".\CommandLine\Command.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CommandLine\Command.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CommandLine\Flag.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CommandLine\Option.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CommandLine\Processor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CommandLine\Processor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CommandLine\Utilities.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CommandLine\Utilities.h"
+				>
+			</File>
+			<Filter
+				Name="Commands"
+				>
+				<File
+					RelativePath=".\CommandLine\Commands\FailTest.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CommandLine\Commands\FailTest.h"
+					>
+				</File>
+				<File
+					RelativePath=".\CommandLine\Commands\Help.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CommandLine\Commands\Help.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Math"

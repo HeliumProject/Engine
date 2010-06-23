@@ -15,7 +15,7 @@
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetExceptions.h"
 #include "Pipeline/Asset/Classes/StandardShaderAsset.h"
-#include "Foundation/CommandLine.h"
+#include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Natural.h"
 #include "Foundation/Log.h"

@@ -59,6 +59,7 @@ typedef int                     intptr;
 
 #include <string>
 #include <sstream>
+#include <strstream>
 
 #ifdef WIN32
 # include <tchar.h>
@@ -82,6 +83,12 @@ typedef std::wstring            tstring;
 typedef std::wstringstream      tstringstream;
 typedef std::wistringstream     tistringstream;
 typedef std::wostringstream     tostringstream;
+typedef std::wostream           tostream;
+typedef std::wistream           tistream;
+typedef std::wiostream          tiostream;
+typedef std::wifstream          tifstream;
+typedef std::wofstream          tofstream;
+typedef std::wfstream           tfstream;
 #define TXT(s) L##s
 #else
 typedef char                    tchar;
@@ -89,5 +96,11 @@ typedef std::string             tstring;
 typedef std::stringstream       tstringstream;
 typedef std::istringstream      tistringstream;
 typedef std::ostringstream      tostringstream;
+typedef std::ostream            tostream;
+typedef std::istream            tistream;
+typedef std::iostream           tiostream;
+typedef std::ifstream           tifstream;
+typedef std::ofstream           tofstream;
+typedef std::fstream            tfstream;
 #define TXT(s) s
 #endif

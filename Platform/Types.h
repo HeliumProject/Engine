@@ -60,6 +60,10 @@ typedef int                     intptr;
 #include <string>
 #include <sstream>
 
+#ifdef WIN32
+# include <tchar.h>
+#endif
+
 #ifdef _UNICODE
 # ifndef UNICODE
 #  define UNICODE

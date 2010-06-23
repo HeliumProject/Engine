@@ -1,8 +1,62 @@
-#########################################################
+########################################################################
 
-Heads up, folks, we are UNDER CONSTRUCTION at the moment.
-Thinks should be building soon.
+============
+AppFramework
+============
 
--Geoff
+Welcome!  AppFramework aims to be an open source game engine toolkit to
+help provide foundation technology and GUI tools for building game
+engines (not games per se).
 
-#########################################################
+This project was seeded by an open source project at Insomniac Games.
+
+http://nocturnal.insomniacgames.com
+
+================
+Third-party SDKs
+================
+
+For boost and wxWidgets you will need to download and build it manually.
+Download both source zips and place them into your tree like this:
+ 
+  SDK\boost\1.43\<boost files>
+  SDK\wxWidgets\2.8.11\<wxWidgets files>
+
+then, to build the appropriate configs run (from the project root dir):
+
+  build_boost.pl -v 1.43
+  build_wxWidgets.pl -v 2.8.11
+  
+using the correct version numbers (the versions you downloaded)
+
+=======
+Unicode
+=======
+
+Unicode is built via solution and project configurations (Debug Unicode
+and Release Unicode).  wxWidgets is signalled to compile and link via
+wxUSE_UNICODE which is specified in the Unicode.vsprops file.  This
+vsprops file is inherited only in Unicode project configurations.
+
+====
+DLLs
+====
+
+Most projects are configured to be built as static libs, but its a best
+practice to continue to use *_API macros to dllexport/dllimport symbols.
+
+Depending on how plugin support comes online we may have to put these
+macros back into play to build the DLLs we need to properly support code
+sharing in plugins and host applications.
+
+====================
+Platform Agnosticism
+====================
+
+We are moving toward a platform-agnostic toolkit from windows-only.  For
+the time being we are moving all platform-specific API calls into
+Platform.vcproj.
+
+-Geoff (AKA gorlak)
+
+########################################################################

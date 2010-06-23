@@ -140,7 +140,7 @@ namespace Nocturnal
             __super::SetMessage( msgFormat, msgArgs );
 
             // append system error information
-            m_Message += " (" + Platform::GetErrorString(m_ErrorCode) + ")";
+            m_Message += TXT(" (") + Platform::GetErrorString(m_ErrorCode) + TXT(")");
         }
     };
 }

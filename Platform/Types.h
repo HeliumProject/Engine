@@ -58,7 +58,13 @@ typedef int                     intptr;
 //
 
 #include <string>
+#include <fstream>
 #include <sstream>
+#include <strstream>
+
+#ifdef WIN32
+# include <tchar.h>
+#endif
 
 #ifdef _UNICODE
 # ifndef UNICODE
@@ -74,16 +80,22 @@ typedef int                     intptr;
 
 #ifdef UNICODE
 typedef wchar_t                 tchar;
-typedef std::wstring            tstring;
-typedef std::wstringstream      tstringstream;
-typedef std::wistringstream     tistringstream;
-typedef std::wostringstream     tostringstream;
 #define TXT(s) L##s
 #else
 typedef char                    tchar;
-typedef std::string             tstring;
-typedef std::stringstream       tstringstream;
-typedef std::istringstream      tistringstream;
-typedef std::ostringstream      tostringstream;
 #define TXT(s) s
 #endif
+
+typedef std::basic_string<tchar> tstring;
+
+typedef std::basic_istream<tchar, std::char_traits<tchar> > tistream;
+typedef std::basic_ostream<tchar, std::char_traits<tchar> > tostream;
+typedef std::basic_iostream<tchar, std::char_traits<tchar> > tiostream;
+
+typedef std::basic_ifstream<tchar, std::char_traits<tchar> > tifstream;
+typedef std::basic_ofstream<tchar, std::char_traits<tchar> > tofstream;
+typedef std::basic_fstream<tchar, std::char_traits<tchar> > tfstream;
+
+typedef std::basic_istringstream<tchar, std::char_traits<tchar>, std::allocator<tchar> > tistringstream;
+typedef std::basic_ostringstream<tchar, std::char_traits<tchar>, std::allocator<tchar> > tostringstream;
+typedef std::basic_stringstream<tchar, std::char_traits<tchar>, std::allocator<tchar> > tstringstream;

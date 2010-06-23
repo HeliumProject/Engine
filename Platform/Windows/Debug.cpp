@@ -4,6 +4,7 @@
 #include "Platform/Mutex.h"
 #include "Platform/Error.h"
 #include "Platform/Assert.h"
+#include "Platform/String.h"
 #include "Platform/Windows/Windows.h"
 
 #include <map>
@@ -580,27 +581,8 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
         cppClass = "Unknown";
       }
 
-      tchar name[MAX_PATH];
-
-#ifdef UNICODE
-      mbstowcs( name, cppClass, sizeof(name) );
-#else
-      strncpy( name, cppClass, sizeof(name) );
-#endif
-      args.m_CPPClass = name;
-
-#pragma TODO("Make Nocturnal::Exception not subclass std::exception")
-      const char* what = cppException->what();
-      size_t whatLength = strlen( what );
-      tchar* message = (tchar*)alloca( whatLength * sizeof( tchar ) );
-
-#ifdef UNICODE
-      mbstowcs( message, what, whatLength );
-#else
-      strncpy( message, cppClass, sizeof(message) );
-#endif
-
-      args.m_Message = message;
+      Platform::ConvertString( cppClass, args.m_CPPClass );
+      Platform::ConvertString( cppException->what(), args.m_Message );
     }
     else
     {

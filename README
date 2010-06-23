@@ -1,5 +1,17 @@
 ########################################################################
 
+============
+AppFramework
+============
+
+Welcome!  AppFramework aims to be an open source game engine toolkit to
+help provide foundation technology and GUI tools for building game
+engines (not games per se).
+
+This project was seeded by an open source project at Insomniac Games.
+
+http://nocturnal.insomniacgames.com
+
 ================
 Third-party SDKs
 ================

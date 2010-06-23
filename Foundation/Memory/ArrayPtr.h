@@ -19,7 +19,7 @@ namespace Nocturnal
     //  This class is probably only good for the simplest use cases.
     // 
     // example: 
-    //   ArrayPtr<char> array( new char(24) ); 
+    //   ArrayPtr<char> array( new char[24] ); 
     // 
 
     template <typename T>

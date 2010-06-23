@@ -15,8 +15,7 @@ namespace Nocturnal
             FailTest();
             virtual ~FailTest();
 
-			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) NOC_OVERRIDE;
-			virtual bool Process( std::string& error ) NOC_OVERRIDE;
+			virtual bool Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) NOC_OVERRIDE;
         };
     }
 }

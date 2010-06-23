@@ -17,50 +17,32 @@ Help::~Help()
 	m_Owner = NULL;
 }
 
-bool Help::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+bool Help::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
+	NOC_ASSERT( m_Owner );
+
 	if ( argsBegin == argsEnd )
 	{
-		//error = std::string( "Please specify a command." );
-		m_CommandName.clear();
-
-		return false;
+		Log::Print( m_Owner->Help().c_str() );
+		return true;
 	}
 	else
 	{
 		m_CommandName = (*argsBegin);
 		++argsBegin;
 
-		return true;
-	}
-
-    return false;
-}
-
-bool Help::Process( std::string& error )
-{
-	if ( m_Owner )
-	{
-		if ( m_CommandName.empty() )
+		const Command* command = m_Owner->GetCommand( m_CommandName );
+		if ( command )
 		{
-			Log::Print( m_Owner->Help().c_str() );
+			Log::Print( command->Help().c_str() );
 			return true;
 		}
 		else
 		{
-			const Command* command = m_Owner->GetCommand( m_CommandName );
-			if ( command )
-			{
-				Log::Print( command->Help().c_str() );
-				return true;
-			}
-			else
-			{
-				error = std::string( "No help for command: " ) + m_CommandName;
-				return false;
-			}
+			error = std::string( "No help for unknown command: " ) + m_CommandName;
+			return false;
 		}
 	}
 
-	return false;
+    return false;
 }

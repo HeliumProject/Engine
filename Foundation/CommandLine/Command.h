@@ -7,7 +7,6 @@
 
 #include "Foundation/API.h"
 #include "Foundation/CommandLine/Option.h"
-#include "Foundation/CommandLine/Flag.h"
 #include "Platform/Compiler.h"
 
 namespace Nocturnal
@@ -22,13 +21,16 @@ namespace Nocturnal
 			std::string m_ShortHelp;
 			mutable std::string m_Help;
 
-			Nocturnal::CommandLine::Flag m_HelpFlag;
-
-			M_StringToOptionDumbPtr m_Options;
+			OptionsMap m_OptionsMap;
 
         public:
 			Command( const char* token, const char* usage = "[OPTIONS]", const char* shortHelp = "" );
             virtual ~Command();
+
+			virtual bool Initialize( std::string& error )
+			{
+				return true;
+			}
 
             const std::string& Token() const
 			{
@@ -42,16 +44,7 @@ namespace Nocturnal
 
             virtual const std::string& Help() const;
 
-            bool RegisterOption( Option* option );
-            void UnregisterOption( Option* option );
-            void UnregisterOption( const std::string& token );
-            const Option* GetOption( const std::string& token );
-
-			virtual void RegisterOptions();
-
-			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
-			
-			virtual bool Process( std::string& error );
+			virtual bool Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) = 0;
         };
 
         typedef std::map< std::string, Command* > M_StringToCommandDumbPtr;

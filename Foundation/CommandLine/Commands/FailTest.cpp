@@ -12,14 +12,13 @@ FailTest::~FailTest()
 {
 }
 
-bool FailTest::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+bool FailTest::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
-    error = "failed due to test fail command";
-    return false;
-}
+	if ( !m_OptionsMap.ParseOptions( argsBegin, argsEnd, error ) )
+	{
+		return false;
+	}
 
-bool FailTest::Process( std::string& error )
-{
     error = "failed due to test fail command";
     return false;
 }

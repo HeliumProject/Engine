@@ -11,10 +11,9 @@
 #include "Foundation/Profile.h"
 #include "Foundation/Version.h"
 #include "Foundation/Exception.h"
-#include "Foundation/CommandLine/Command.h"
 #include "Foundation/CommandLine/Option.h"
-#include "Foundation/CommandLine/Flag.h"
 #include "Foundation/CommandLine/Utilities.h"
+#include "Foundation/CommandLine/Command.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/IPC/Connection.h"
@@ -32,100 +31,35 @@
 #include "Pipeline/Content/ContentInit.h"
 
 using namespace Asset;
+using namespace Nocturnal::CommandLine;
 
 #define MAX_MATCHES 20
 
 // globals
-std::string       g_SearchQuery;
-bool              g_All = false;
-bool              g_NoMultiple = false;
-bool              g_GenerateReport = false;
-bool              g_ImmortalWorker = false;
-bool              g_Defaults = false;
-std::vector< std::string >          g_Regions;     // only for levels, which need to view a single region
+bool g_ImmortalWorker = false;
 
 
-///////////////////////////////////////////////////////////////////////////////
-class RegionOption : public Nocturnal::CommandLine::Option
-{
-public:
-	std::vector< std::string > m_Regions;
-
-public:
-	RegionOption( const char* token, const char* usage = "<ARG>", const char* help = "" )
-		: Option( token, usage, help )
-	{
-	}
-
-	virtual ~RegionOption()
-	{
-	}
-
-	virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) NOC_OVERRIDE
-	{
-		bool result = false;
-
-		while ( argsBegin != argsEnd )
-		{
-			// stop looking once we get to the optional params
-			const std::string& arg = (*argsBegin);
-			if ( arg.length() >= 1 )
-			{
-				if ( arg[ 0 ] == '-' )
-				{
-					break;
-				}
-				else
-				{
-					m_Regions.push_back( arg );
-
-					if ( !m_Value.empty() )
-					{
-						m_Value += std::string( " " );
-					}
-
-					m_Value += arg;
-
-					++argsBegin;
-
-					result = true;
-				}
-			}
-		}
-
-		if ( !result )
-		{
-			error = std::string( "Must pass one (or more) regions to be built." );
-			return false;
-		}
-
-		return result;
-	}
-
-	const std::vector< std::string > GetRegions() const
-	{
-		return m_Regions;
-	}
-};
-
-class BuildCommand : public Nocturnal::CommandLine::Command
+class BuildCommand : public Command
 {
 protected:
 	std::string m_SearchQuery;
+	std::set< Nocturnal::Path > m_AssetPaths;
 
-	Nocturnal::CommandLine::Flag m_AllFlag; //bool m_All = false;
-	//bool m_NoMultiple = false;
-	//bool m_GenerateReport = false;
-	//bool m_ImmortalWorker = false;
-	//bool m_Defaults = false;
-
-	RegionOption m_RegionOption; //std::vector< std::string > m_Regions; // only for levels, which need to view a single region
+	bool m_HelpFlag;
+	bool m_AllFlag;
+	bool m_NoMultipleFlag;
+	bool m_GenerateReportFlag;
+	bool m_ForceFlag;
+	bool m_HaltOnErrorFlag;
+	bool m_DisableCacheFilesFlag;
+	bool m_SingleThreadFlag;
+	bool m_WorkerFlag;
+	std::string m_HackFileSpecOption;
+	std::vector< std::string> m_RegionOption;
 
 public:
 	BuildCommand()
 		: Command( "build", "<ASSET> [<ASSET> ...]", "Build assets" )
-		, m_AllFlag( "all", "build all assets matching the input spec" )
-		, m_RegionOption( "region", "<REGION> [<REGION> ...]", "only build the listed regions" )
 	{
 	}
 
@@ -133,195 +67,414 @@ public:
 	{
 	}
 
-	virtual void RegisterOptions() NOC_OVERRIDE
-	{
-		RegisterOption( &m_AllFlag );
-		RegisterOption( &m_RegionOption );
-		return __super::RegisterOptions();
-	}
+	///////////////////////////////////////////////////////////////////////////
+	static bool QueryAssetPaths( const std::string& searchQuery, bool noMultiple, bool all, std::set< Nocturnal::Path >& assetPaths )
+	{ 
+		// get the asset files they want to build
+		int maxMatches = noMultiple ? 1 : ( all ? -1 : MAX_MATCHES );
 
-	virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) NOC_OVERRIDE
-	{
-		if ( !__super::Parse( argsBegin, argsEnd, error ) )
+#pragma TODO( "make this search the tracker" )
+		//    File::GlobalResolver().Find( searchQuery, assetPaths );
+		if ( assetPaths.empty() )
 		{
 			return false;
+		}
+
+		if ( !all )
+		{
+#pragma TODO( "implement asset choosing" )
+			NOC_BREAK();
+			// determine which asset to build from the list
+			int assetIndex = -1; //File::DetermineAssetIndex( assetPaths, "build" );
+
+			if ( assetIndex == -1 )
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		return true;
 	}
 
-	virtual bool Process( std::string& error ) NOC_OVERRIDE
+	///////////////////////////////////////////////////////////////////////////////
+	void Except( const Nocturnal::Exception& ex, const Asset::AssetClassPtr& assetClass = NULL )
 	{
-		return false;
+		// Log all exceptions (they will be non-fatal) for debugging purposes.  If 
+		// you want to disable this functionality, look for Debug::ProcessException 
+		// in all of the builder code and comment it out.  We could also add a flag
+		// for this option if it becomes useful.
+		Debug::ProcessException( ex );
+
+		std::string type;
+		try
+		{
+			type = typeid(ex).name();
+
+			size_t pos = type.find_first_of(" ");
+			if (pos != std::string::npos && pos < type.length()-1)
+			{
+				type = type.substr( pos+1 );
+			}
+		}
+		catch ( const std::exception& ) // we catch std::exception here to handle call to typeid failing above
+		{
+			type = "Exception";
+		}
+
+		std::ostringstream message;
+		if (assetClass.ReferencesObject())
+		{
+			message << type << " while building '" << assetClass->GetFullName() << "': " << ex.what() << std::endl;
+		}
+		else
+		{
+			message << type << ": " << ex.what() << std::endl;
+		}
+
+		Log::Error( "%s", message.str().c_str() );
+
+		if ( m_GenerateReportFlag )
+		{
+			std::ostringstream subject;
+			subject << "Error Report: " << Nocturnal::GetCmdLine();
+
+			//    Windows::SendMail( subject.str(), message.str() );
+		}
 	}
 
+
+	///////////////////////////////////////////////////////////////////////////////
+	void Report(Asset::AssetClass* assetClass)
+	{
+		if (m_GenerateReportFlag && (Log::GetErrorCount() || Log::GetWarningCount()))
+		{
+			std::string line;
+			std::fstream file ( std::string( assetClass->GetBuiltDirectory() + "error.txt" ).c_str() );
+			if ( !file.fail() )
+			{
+				Platform::Print( Platform::ConsoleColors::White, stderr, "Warnings and Errors:\n" );
+				while ( !file.eof() )
+				{
+					std::getline( file, line );
+
+					Platform::ConsoleColor color = Platform::ConsoleColors::None;
+					if ( strncmp( "Error", line.c_str(), 5 ) == 0 )
+					{
+						color = Platform::ConsoleColors::Red;
+					}
+					else if ( strncmp( "Warning", line.c_str(), 7 ) == 0 )
+					{
+						color = Platform::ConsoleColors::Yellow;
+					}
+
+					Platform::Print( color, stderr, "%s\n", line.c_str() );
+				}
+			}
+		}
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const std::vector< std::string >& options )
+	{
+		bool success = true;
+
+		for ( std::set< Nocturnal::Path >::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
+		{
+			const Nocturnal::Path& path = (*itr);
+
+			AssetClassPtr assetClass;
+
+			if (Application::IsDebuggerPresent() && !m_AllFlag )
+			{
+				assetClass = AssetClass::LoadAssetClass( path );
+
+				if (assetClass.ReferencesObject())
+				{
+					AssetBuilder::Build( depGraph, assetClass, options );
+					Report( assetClass );
+				}
+				else
+				{
+					throw Nocturnal::Exception( "Unable to load asset '%s'", path.c_str() );
+				}
+			}
+			else
+			{
+				try
+				{
+					assetClass = AssetClass::LoadAssetClass( path );
+
+					if (assetClass.ReferencesObject())
+					{
+						AssetBuilder::Build( depGraph, assetClass, options );
+						Report( assetClass );
+					}
+					else
+					{
+						throw Nocturnal::Exception( "Unable to load asset '%s'", path.c_str() );
+					}
+				}
+				catch( const Nocturnal::Exception& ex )
+				{
+					if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
+					{
+						throw;
+					}
+					success = false;
+					Except( ex, assetClass );
+				}
+			}
+		}
+
+		return success;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const AssetBuilder::BuilderOptionsPtr& options )
+	{
+		bool success = true;
+
+		AssetBuilder::V_BuildJob jobs;
+		V_AssetClass buildingAssets;
+
+		for ( std::set< Nocturnal::Path >::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
+		{
+			const Nocturnal::Path& filePath = (*itr);
+
+			AssetClassPtr assetClass;
+
+			if (Application::IsDebuggerPresent() && !m_AllFlag)
+			{
+				assetClass = AssetClass::LoadAssetClass( filePath );
+
+				if (assetClass.ReferencesObject())
+				{
+					jobs.push_back( new AssetBuilder::BuildJob( &depGraph, assetClass, options, NULL, true ) );
+					buildingAssets.push_back( assetClass );
+				}
+				else
+				{
+					throw Nocturnal::Exception( "Unable to load asset '%s'", filePath.c_str() );
+				}
+			}
+			else
+			{
+				try
+				{
+					assetClass = AssetClass::LoadAssetClass( filePath );
+
+					if (assetClass.ReferencesObject())
+					{
+						jobs.push_back( new AssetBuilder::BuildJob( &depGraph, assetClass, options, NULL, true ) );
+						buildingAssets.push_back( assetClass );
+					}
+					else
+					{
+						throw Nocturnal::Exception( "Unable to locate asset '%s'", filePath.c_str() );
+					}
+				}
+				catch( const Nocturnal::Exception& ex )
+				{
+					if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
+					{
+						throw;
+					}
+					success = false;
+					Except( ex, assetClass );
+				}
+			}
+		}
+
+		if (Application::IsDebuggerPresent())
+		{
+			AssetBuilder::Build( depGraph, jobs );
+		}
+		else
+		{
+			try
+			{
+				AssetBuilder::Build( depGraph, jobs );
+			}
+			catch( const Nocturnal::Exception& ex )
+			{
+				if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
+				{
+					throw;
+				}
+				success = false;
+				Except( ex );
+			}
+		}
+
+		for ( V_AssetClass::const_iterator itr = buildingAssets.begin(), end = buildingAssets.end(); itr != end; ++itr )
+		{
+			Report( *itr );
+		}
+
+		return success;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	bool RunAsBuildWorker( Dependencies::DependencyGraph& depGraph )
+	{
+		bool success = true;
+
+		if (!Worker::Client::Initialize())
+		{
+			return false;
+		}
+
+		Log::Print("Waiting for build request...\n");
+
+		do
+		{
+			IPC::Message* msg = Worker::Client::Receive();
+
+			if (msg)
+			{
+				std::strstream stream ((char*)msg->GetData(), msg->GetSize());
+
+				AssetBuilder::BuildRequestPtr job = Reflect::ObjectCast<AssetBuilder::BuildRequest> (Reflect::Archive::FromStream(stream, Reflect::ArchiveTypes::Binary, Reflect::GetType<AssetBuilder::BuildRequest>()));
+
+				if (!job.ReferencesObject())
+				{
+#ifdef _DEBUG
+					MessageBoxA(NULL, "Unable to decode message from foreground!", "Error", MB_OK);
+					return false;
+#else
+					throw Nocturnal::Exception("Unable to decode message from foreground!");
+#endif
+				}
+
+				Log::Debug( "Building %d requested assets\n", job->m_Assets.size() );
+
+				success &= Build( depGraph, job->m_Assets, job->m_Options );
+
+				delete msg;
+
+				if (g_ImmortalWorker)
+				{
+					Worker::Client::Send(0);
+				}
+			}
+			else
+			{
+				NOC_BREAK();
+			}
+		}
+		while (g_ImmortalWorker);
+
+		return success;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	virtual bool Initialize( std::string& error )
+	{
+		bool result = true;
+
+		result &= m_OptionsMap.AddOption( new FlagOption( &m_HelpFlag, "h|help", "print command usage" ), error );
+		result &= m_OptionsMap.AddOption( new FlagOption( &m_AllFlag, "all", "build all assets matching the input spec" ), error );
+		result &= m_OptionsMap.AddOption( new FlagOption( &m_NoMultipleFlag, "nm|nomultiple", "asset must be unique, selection not necessary" ), error );
+		result &= m_OptionsMap.AddOption( new FlagOption( &m_GenerateReportFlag, "report", "report users suspected of causing problems" ), error );
+		result &= m_OptionsMap.AddOption( new FlagOption( &m_ForceFlag, "f|force", "force a build even if it's up to date" ), error );
+		result &= m_OptionsMap.AddOption( new FlagOption( &m_HaltOnErrorFlag, "halt_on_error", "errors should immediately halt the build" ), error );
+		result &= m_OptionsMap.AddOption( new FlagOption( &m_DisableCacheFilesFlag, "disable_cache_files", "disable upload/download via cache file storage" ), error );
+		result &= m_OptionsMap.AddOption( new FlagOption( &m_SingleThreadFlag, "single_thread", "disable processing using multiple threads" ), error );
+		result &= m_OptionsMap.AddOption( new FlagOption( &m_WorkerFlag, "worker", "disable processing using multiple threads" ), error );
+		result &= m_OptionsMap.AddOption( new SimpleOption<std::string>( &m_HackFileSpecOption, "hack_filespec", "<SPEC>", "invalidate the format version of a FileSpec" ), error );
+		result &= m_OptionsMap.AddOption( new SimpleOption<std::vector<std::string>>( &m_RegionOption, "region", "<REGION> [<REGION> ...]", "only build the listed regions" ), error );
+
+		return result;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	virtual bool Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) NOC_OVERRIDE
+	{
+		if ( !m_OptionsMap.ParseOptions( argsBegin, argsEnd, error ) )
+		{
+			return false;
+		}
+
+		if ( m_HelpFlag )
+		{
+			Log::Print( Help().c_str() );
+			return true;
+		}
+
+		if ( argsBegin != argsEnd )
+		{
+			const std::string& arg = (*argsBegin);
+			++argsBegin;
+
+			if ( arg.length() )
+			{
+				m_SearchQuery = arg;
+				argsBegin++;
+
+				Nocturnal::Path::Normalize( m_SearchQuery );
+			}
+		}
+
+		if ( m_SearchQuery.empty() )
+		{
+			error = std::string( "Please pass an asset to build." );
+			return false;
+		}
+
+		if ( !QueryAssetPaths( m_SearchQuery, m_NoMultipleFlag, m_AllFlag, m_AssetPaths ) )
+		{
+			return true;
+		}
+
+
+		bool success = true;
+
+		if ( Application::IsDebuggerPresent() )
+		{
+			if ( Nocturnal::GetCmdLineFlag( Worker::Args::Worker ) )
+			{
+#pragma TODO( "Figure out how to handle dependency graphs with workers" )
+				//success = RunAsBuildWorker();
+			}
+			else
+			{
+#pragma TODO( "instantiate the proper dependency graph and pass it in here" )
+				//success = Build( m_AssetPaths, options );
+			}
+		}
+		else
+		{
+			try
+			{
+				if ( Nocturnal::GetCmdLineFlag( Worker::Args::Worker ) )
+				{
+#pragma TODO( "Figure out how to handle dependency graphs with workers" )
+					//success = RunAsBuildWorker();        
+				}
+				else
+				{
+#pragma TODO( "instantiate the proper dependency graph and pass it in here" )
+					//success = Build( m_AssetPaths, options );
+				}
+			}
+			catch( const Nocturnal::Exception& ex )
+			{
+				if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
+				{
+					throw;
+				}
+				success = false;
+				Except( ex );
+			}
+		}
+
+		return success;
+	}
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-void PrintUsage()
-{
-	Log::Print( "Usage: buildtool asset [options]\n" );
-	Log::Print( "\n" );
-	Log::Print( "Basic Options:\n" );
-	Log::Print( "    -h[elp]              -- this help\n" );
-	Log::Print( "    -view                -- view the asset after building it\n" );
-	Log::Print( "\n" );
-	Log::Print( "Assets to Build:\n" );
-	Log::Print( " -region[s] <region list>     -- only build the listed regions\n" );
-	Log::Print( "    -defaults                 -- build all the default assets\n" );
-	Log::Print( " -nm|nomultiple               -- asset must be unique, selection not necessary\n" );
-	Log::Print( " -all                         -- build all assets matching the input spec\n" );
-	Log::Print( "\n" );
-	Log::Print( "Build System:\n" );
-	Log::Print( " -f[orce]|hack_all_filespecs  -- force a build even if it's up to date\n" );
-	Log::Print( " -hack_filespec <specname>    -- invalidate the format version of a FileSpec\n" );
-	Log::Print( " -disable_cache_files         -- disable upload/download via cache file storage\n" );
-	Log::Print( " -single_thread               -- disable processing using multiple threads\n" );
-	Log::Print( "\n" );
-	Log::Print( "Error Handling:\n" );
-	Log::Print( " -halt_on_error               -- errors should immediately halt the build\n" );
-	Log::Print( " -report                      -- report users suspected of causing problems\n" );
-	Log::Print( "\n" );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-bool ParseProgramOptions( int argc, const char** argv )
-{
-	if ( argc < 2 )
-	{
-		PrintUsage();
-
-		return false;
-	}
-
-	if ( !stricmp( argv[1], "-h" ) || !stricmp( argv[1], "-help" ) )
-	{
-		PrintUsage();
-
-		return false;
-	}
-
-	// search query (asset to build) must be the first command line argument
-	// it might be cooler if it was the last argument but that fucks up the buildserver and stuff
-	// not changing it for this tools release. (10/29/2008)
-	//
-	g_SearchQuery = argv[ 1 ];
-	Nocturnal::Path::Normalize( g_SearchQuery );
-
-	if ( !stricmp( g_SearchQuery.c_str(), "-defaults" ) )
-	{
-		g_Defaults = true;
-	}
-
-	for ( int arg = 2; arg < argc; ++arg )
-	{
-		if ( !stricmp( argv[ arg ], "-all" ) )
-		{
-			g_All = true;
-		}
-		else if ( !stricmp( argv[ arg ], "-nm" ) || !stricmp( argv[ arg ], "-nomultiple" ) )
-		{
-			g_NoMultiple = true;
-		}
-		else if ( !stricmp( argv[ arg ], "-defaults" ) )
-		{
-			g_Defaults = true;
-		}
-		else if ( !stricmp( argv[ arg ], "-regions" ) || !stricmp( argv[ arg ], "-region" ) )
-		{
-			// get list of regions
-			while ( arg + 1 < argc )
-			{
-				// stop looking once we get to the optional params
-				char c = argv[arg + 1][0];
-				if (c == '-')
-					break;
-
-				g_Regions.push_back( argv[ arg + 1 ] );
-				arg++;
-			}
-		}
-	}
-
-	return true;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void Except( const Nocturnal::Exception& ex, const Asset::AssetClassPtr& assetClass = NULL )
-{
-	// Log all exceptions (they will be non-fatal) for debugging purposes.  If 
-	// you want to disable this functionality, look for Debug::ProcessException 
-	// in all of the builder code and comment it out.  We could also add a flag
-	// for this option if it becomes useful.
-	Debug::ProcessException( ex );
-
-	std::string type;
-	try
-	{
-		type = typeid(ex).name();
-
-		size_t pos = type.find_first_of(" ");
-		if (pos != std::string::npos && pos < type.length()-1)
-		{
-			type = type.substr( pos+1 );
-		}
-	}
-	catch ( const std::exception& ) // we catch std::exception here to handle call to typeid failing above
-	{
-		type = "Exception";
-	}
-
-	std::ostringstream message;
-	if (assetClass.ReferencesObject())
-	{
-		message << type << " while building '" << assetClass->GetFullName() << "': " << ex.what() << std::endl;
-	}
-	else
-	{
-		message << type << ": " << ex.what() << std::endl;
-	}
-
-	Log::Error( "%s", message.str().c_str() );
-
-	if (g_GenerateReport)
-	{
-		std::ostringstream subject;
-		subject << "Error Report: " << Nocturnal::GetCmdLine();
-
-		//    Windows::SendMail( subject.str(), message.str() );
-	}
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void Report(Asset::AssetClass* assetClass)
-{
-	if (g_GenerateReport && (Log::GetErrorCount() || Log::GetWarningCount()))
-	{
-		std::string line;
-		std::fstream file ( std::string( assetClass->GetBuiltDirectory() + "error.txt" ).c_str() );
-		if ( !file.fail() )
-		{
-			Platform::Print( Platform::ConsoleColors::White, stderr, "Warnings and Errors:\n" );
-			while ( !file.eof() )
-			{
-				std::getline( file, line );
-
-				Platform::ConsoleColor color = Platform::ConsoleColors::None;
-				if ( strncmp( "Error", line.c_str(), 5 ) == 0 )
-				{
-					color = Platform::ConsoleColors::Red;
-				}
-				else if ( strncmp( "Warning", line.c_str(), 7 ) == 0 )
-				{
-					color = Platform::ConsoleColors::Yellow;
-				}
-
-				Platform::Print( color, stderr, "%s\n", line.c_str() );
-			}
-		}
-	}
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 void AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
@@ -345,259 +498,26 @@ void AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const std::vector< std::string >& options )
-{
-    bool success = true;
-
-    for ( std::set< Nocturnal::Path >::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
-    {
-        const Nocturnal::Path& path = (*itr);
-
-        AssetClassPtr assetClass;
-
-        if (Application::IsDebuggerPresent() && !g_All)
-        {
-            assetClass = AssetClass::LoadAssetClass( path );
-
-            if (assetClass.ReferencesObject())
-            {
-                AssetBuilder::Build( depGraph, assetClass, options );
-                Report( assetClass );
-            }
-            else
-            {
-                throw Nocturnal::Exception( "Unable to load asset '%s'", path.c_str() );
-            }
-        }
-        else
-        {
-            try
-            {
-                assetClass = AssetClass::LoadAssetClass( path );
-
-                if (assetClass.ReferencesObject())
-                {
-                    AssetBuilder::Build( depGraph, assetClass, options );
-                    Report( assetClass );
-                }
-                else
-                {
-                    throw Nocturnal::Exception( "Unable to load asset '%s'", path.c_str() );
-                }
-            }
-            catch( const Nocturnal::Exception& ex )
-            {
-                if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
-                {
-                    throw;
-                }
-                success = false;
-                Except( ex, assetClass );
-            }
-        }
-    }
-
-    return success;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const AssetBuilder::BuilderOptionsPtr& options )
-{
-    bool success = true;
-
-    AssetBuilder::V_BuildJob jobs;
-    V_AssetClass buildingAssets;
-
-    for ( std::set< Nocturnal::Path >::const_iterator itr = assets.begin(), end = assets.end(); itr != end; ++itr )
-    {
-        const Nocturnal::Path& filePath = (*itr);
-
-        AssetClassPtr assetClass;
-
-        if (Application::IsDebuggerPresent() && !g_All)
-        {
-            assetClass = AssetClass::LoadAssetClass( filePath );
-
-            if (assetClass.ReferencesObject())
-            {
-                jobs.push_back( new AssetBuilder::BuildJob( &depGraph, assetClass, options, NULL, true ) );
-                buildingAssets.push_back( assetClass );
-            }
-            else
-            {
-                throw Nocturnal::Exception( "Unable to load asset '%s'", filePath.c_str() );
-            }
-        }
-        else
-        {
-            try
-            {
-                assetClass = AssetClass::LoadAssetClass( filePath );
-
-                if (assetClass.ReferencesObject())
-                {
-                    jobs.push_back( new AssetBuilder::BuildJob( &depGraph, assetClass, options, NULL, true ) );
-                    buildingAssets.push_back( assetClass );
-                }
-                else
-                {
-                    throw Nocturnal::Exception( "Unable to locate asset '%s'", filePath.c_str() );
-                }
-            }
-            catch( const Nocturnal::Exception& ex )
-            {
-                if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
-                {
-                    throw;
-                }
-                success = false;
-                Except( ex, assetClass );
-            }
-        }
-    }
-
-    if (Application::IsDebuggerPresent())
-    {
-        AssetBuilder::Build( depGraph, jobs );
-    }
-    else
-    {
-        try
-        {
-            AssetBuilder::Build( depGraph, jobs );
-        }
-        catch( const Nocturnal::Exception& ex )
-        {
-            if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
-            {
-                throw;
-            }
-            success = false;
-            Except( ex );
-        }
-    }
-
-    for ( V_AssetClass::const_iterator itr = buildingAssets.begin(), end = buildingAssets.end(); itr != end; ++itr )
-    {
-        Report( *itr );
-    }
-
-    return success;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-bool QueryAndBuildAssets(const std::vector< std::string >& options)
-{ 
-    // get the asset files they want to build
-    int maxMatches = g_NoMultiple ? 1 : (g_All ? -1 : MAX_MATCHES);
-    std::set< Nocturnal::Path > possibleMatches;
-
-#pragma TODO( "make this search the tracker" )
-	//    File::GlobalResolver().Find( g_SearchQuery, possibleMatches );
-
-	if ( possibleMatches.empty() )
-	{
-		return false;
-	}
-
-	if ( !g_All )
-	{
-#pragma TODO( "implement asset choosing" )
-		NOC_BREAK();
-		//// determine which asset to build from the list
-		//int assetIndex = File::DetermineAssetIndex( possibleMatches, "build" );
-
-		//if ( assetIndex == -1 )
-		//{
-		//    return false;
-		//}
-
-		//return true;
-		return false;
-	}
-
-#pragma TODO( "instantiate the proper dependency graph and pass it in here" )
-	//    return Build( possibleMatches, options );
-	return false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-bool RunAsBuildWorker( Dependencies::DependencyGraph& depGraph )
-{
-	bool success = true;
-
-	if (!Worker::Client::Initialize())
-	{
-		return false;
-	}
-
-	Log::Print("Waiting for build request...\n");
-
-	do
-	{
-		IPC::Message* msg = Worker::Client::Receive();
-
-		if (msg)
-		{
-			std::strstream stream ((char*)msg->GetData(), msg->GetSize());
-
-			AssetBuilder::BuildRequestPtr job = Reflect::ObjectCast<AssetBuilder::BuildRequest> (Reflect::Archive::FromStream(stream, Reflect::ArchiveTypes::Binary, Reflect::GetType<AssetBuilder::BuildRequest>()));
-
-			if (!job.ReferencesObject())
-			{
-#ifdef _DEBUG
-				MessageBoxA(NULL, "Unable to decode message from foreground!", "Error", MB_OK);
-				return false;
-#else
-				throw Nocturnal::Exception("Unable to decode message from foreground!");
-#endif
-			}
-
-			Log::Debug( "Building %d requested assets\n", job->m_Assets.size() );
-
-			success &= Build( depGraph, job->m_Assets, job->m_Options );
-
-			delete msg;
-
-			if (g_ImmortalWorker)
-			{
-				Worker::Client::Send(0);
-			}
-		}
-		else
-		{
-			NOC_BREAK();
-		}
-	}
-	while (g_ImmortalWorker);
-
-	return success;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 int Main (int argc, const char** argv)
 {
-    bool success = true;
-    g_GenerateReport = Nocturnal::GetCmdLineFlag("report");
+	// print physical memory
+	MEMORYSTATUSEX status;
+	memset(&status, 0, sizeof(status));
+	status.dwLength = sizeof(status);
+	::GlobalMemoryStatusEx(&status);
+	Log::Print("Physical Memory: %I64u M bytes total, %I64u M bytes available\n", status.ullTotalPhys >> 20, status.ullAvailPhys >> 20);
 
-    // print physical memory
-    MEMORYSTATUSEX status;
-    memset(&status, 0, sizeof(status));
-    status.dwLength = sizeof(status);
-    ::GlobalMemoryStatusEx(&status);
-    Log::Print("Physical Memory: %I64u M bytes total, %I64u M bytes available\n", status.ullTotalPhys >> 20, status.ullAvailPhys >> 20);
+	Nocturnal::InitializerStack initializerStack( true );
+	initializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
+	initializerStack.Push( Content::Initialize, Content::Cleanup );
+	initializerStack.Push( Asset::Initialize, Asset::Cleanup );
+	initializerStack.Push( AssetBuilder::Initialize, AssetBuilder::Cleanup );
 
-    Nocturnal::InitializerStack initializerStack( true );
-    initializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-    initializerStack.Push( Content::Initialize, Content::Cleanup );
-    initializerStack.Push( Asset::Initialize, Asset::Cleanup );
-    initializerStack.Push( AssetBuilder::Initialize, AssetBuilder::Cleanup );
-
-    AssetBuilder::AddAssetBuiltListener( AssetBuilder::AssetBuiltSignature::Delegate ( &AssetBuilt ) );
+	AssetBuilder::AddAssetBuiltListener( AssetBuilder::AssetBuiltSignature::Delegate ( &AssetBuilt ) );
 
 	// fill out the options vector
 	std::vector< std::string > options;
-	for ( int i = 2; i < argc; ++i )
+	for ( int i = 1; i < argc; ++i )
 	{
 		options.push_back( argv[ i ] );
 	}
@@ -605,75 +525,26 @@ int Main (int argc, const char** argv)
 	std::string error; 
 
 	BuildCommand buildCommand;
-	buildCommand.RegisterOptions();
-	if ( !buildCommand.Parse( options.begin(), options.end(), error ) )
+	if ( !buildCommand.Initialize( error ) )
 	{
 		Log::Print( error.c_str() );
-		Log::Print( "\n" );
-		Log::Print( buildCommand.Help().c_str() );
-
-	    return 1;
+		return 1;
 	}
 
-	success = buildCommand.Process( error );
-//
-//    if ( !ParseProgramOptions( argc, argv ) )
-//    {
-//        return 1;
-//    }
-//
-//    // fill out the options vector
-//    std::vector< std::string > options;
-//    for ( int i = 2; i < argc; ++i )
-//    {
-//        options.push_back( argv[ i ] );
-//    }
-//
-//    if (g_Defaults)
-//    {
-//        Log::Bullet bullet ("Building default assets...\n");
-//        //    success = BuildDefaultAssets(options);
-//        return success ? 0 : 1;
-//    }
-//
-//    if (Application::IsDebuggerPresent())
-//    {
-//        if (Nocturnal::GetCmdLineFlag( Worker::Args::Worker ))
-//        {
-//#pragma TODO( "Figure out how to handle dependency graphs with workers" )
-//            //            success = RunAsBuildWorker();
-//        }
-//        else
-//        {
-//            success = QueryAndBuildAssets( options );
-//        }
-//    }
-//    else
-//    {
-//        try
-//        {
-//            if (Nocturnal::GetCmdLineFlag( Worker::Args::Worker ))
-//            {
-//#pragma TODO( "Figure out how to handle dependency graphs with workers" )
-////                success = RunAsBuildWorker();        
-//            }
-//            else
-//            {
-//                success = QueryAndBuildAssets( options );
-//            }
-//        }
-//        catch( const Nocturnal::Exception& ex )
-//        {
-//            if ( Nocturnal::GetCmdLineFlag( AssetBuilder::CommandArgs::HaltOnError ) )
-//            {
-//                throw;
-//            }
-//            success = false;
-//            Except( ex );
-//        }
-//    }
+	if ( !buildCommand.Process( options.begin(), options.end(), error ) )
+	{
+		if ( !error.empty() )
+		{
+			Log::Print( "Error: \n" );
+			Log::Print( error.c_str() );
+			Log::Print( "\n" );
+		}
+		Log::Print( buildCommand.Help().c_str() );
 
-    return success ? 0 : 1;
+		return 1;
+	}
+
+	return 0;
 }
 
 class BuildToolApp : public wxApp

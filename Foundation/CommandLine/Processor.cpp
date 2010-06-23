@@ -1,6 +1,10 @@
 #include "Processor.h"
 
+#include <iomanip>
+
 #include "Foundation/Log.h"
+#include "Foundation/CommandLine/Commands/Help.h"
+#include "Foundation/Container/Insert.h"
 
 using namespace Nocturnal::CommandLine;
 
@@ -8,22 +12,27 @@ Processor::Processor( const char* token, const char* usage, const char* shortHel
 : m_Token( token )
 , m_Usage( usage )
 , m_ShortHelp( shortHelp )
-, m_HelpFlag( "help", "print command usage" )
 {
-	m_HelpCommand.SetOwner( this );
 }
 
 Processor::~Processor()
 {
-	for ( M_StringToOptionDumbPtr::iterator argsBegin = m_Options.begin(), argsEnd = m_Options.end(); argsBegin != argsEnd; ++argsBegin )
-	{
-		delete (*argsBegin).second;
-	}
-
     for ( M_StringToCommandDumbPtr::iterator argsBegin = m_Commands.begin(), end = m_Commands.end(); argsBegin != end; ++argsBegin )
     {
         delete (*argsBegin).second;
     }
+}
+
+bool Processor::Initialize( std::string& error )
+{
+	bool result = true;
+	
+	m_HelpCommand.SetOwner( this );
+	result &= RegisterCommand( &m_HelpCommand, error );
+
+	result &= m_OptionsMap.AddOption( new FlagOption( &m_HelpFlag, "help", "print program usage" ), error );
+
+	return result;
 }
 
 const std::string& Processor::Help() const
@@ -31,69 +40,41 @@ const std::string& Processor::Help() const
 	if ( m_Help.empty() )
 	{
 		m_Help += m_ShortHelp + std::string( "\n" );
-		
-		m_Help += std::string( "\nUsage: " ) + m_Token + std::string( " " ) + m_Usage + std::string( "\n" );
 
+		// Usage
+		m_Help += std::string( "\nUsage: " ) + m_Token + m_OptionsMap.Usage() + std::string( " " ) + m_Usage + std::string( "\n" );
+
+		// Options
+		m_Help += std::string( "\n" ) + m_OptionsMap.Help();
+
+		// Commands
+		std::stringstream str;
+		
 		m_Help += std::string( "\nCommands:\n" );
 		for ( M_StringToCommandDumbPtr::const_iterator argsBegin = m_Commands.begin(), argsEnd = m_Commands.end(); argsBegin != argsEnd; ++argsBegin )
 		{
 			const Command* command = (*argsBegin).second;
-			m_Help += std::string( "  " ) + command->Token() + std::string( "\t" ) + command->ShortHelp() + std::string( "\n" );
+			//m_Help += std::string( "  " ) + command->Token() + std::string( "\t" ) + command->ShortHelp() + std::string( "\n" );
+			str << "  " << std::setfill(' ') << std::setw(18) << std::left << command->Token();// << " " << option->Usage();
+			str << " " << command->ShortHelp() << std::endl;
 		}
+
+		m_Help += str.str();
 	}
 	return m_Help;
 }
 
-bool Processor::RegisterOption( Option* option )
+bool Processor::RegisterCommand( Command* command, std::string& error )
 {
-	m_Options[ option->Token() ] = option;
-	return true;
-}
-
-void Processor::UnregisterOption( Option* option )
-{
-	m_Options.erase( option->Token() );
-	m_Help.clear();
-}
-
-void Processor::UnregisterOption( const std::string& token )
-{
-	m_Options.erase( token );
-	m_Help.clear();
-}
-
-const Option* Processor::GetOption( const std::string& token )
-{
-	Option* option = NULL;
-	M_StringToOptionDumbPtr::iterator optionsItr = m_Options.find( token );
-	if ( optionsItr != m_Options.end() )
+	Nocturnal::Insert< M_StringToCommandDumbPtr >::Result inserted = m_Commands.insert( M_StringToCommandDumbPtr::value_type( command->Token(), command ) );
+	if ( !inserted.second )
 	{
-		option = (*optionsItr).second;
+		error = std::string( "Failed to add command, token is not unique: " ) + command->Token();
+		return false;
 	}
-	return option;
-}
 
-void Processor::RegisterOptions()
-{
-	RegisterOption( &m_HelpFlag );
-}
-
-bool Processor::RegisterCommand( Command* command )
-{
-	m_Commands[ command->Token() ] = command;
+	m_Help.clear();
 	return true;
-}
-
-void Processor::UnregisterCommand( Command* command )
-{
-	m_Commands.erase( command->Token() );
-	m_Help.clear();
-}
-
-void Processor::UnregisterCommand( const std::string& token )
-{
-	m_Commands.erase( token );
-	m_Help.clear();
 }
 
 const Command* Processor::GetCommand( const std::string& token )
@@ -107,52 +88,41 @@ const Command* Processor::GetCommand( const std::string& token )
 	return command;
 }
 
-void Processor::RegisterCommands()
+bool Processor::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
-	RegisterCommand( &m_HelpCommand );
-}
+	if ( !m_OptionsMap.ParseOptions( argsBegin, argsEnd, error ) )
+	{
+		return false;
+	}
 
-bool Processor::Parse( const std::vector< std::string >& options, std::string& error )
-{
-	return Parse( options.begin(), options.end(), error );
-}
-
-bool Processor::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
-{
 	bool result = true;
 
 	while ( result && ( argsBegin != argsEnd ) )
 	{
-        const std::string& arg = (*argsBegin);
-        argsBegin++;
+		const std::string& arg = (*argsBegin);
 
-        if ( arg.length() >= 1 && arg[ 0 ] == '-' )
-        {
-            M_StringToOptionDumbPtr::const_iterator optionItr = m_Options.find( arg.substr( 1 ) );
-            if ( optionItr != m_Options.end() )
-            {
-                result &= (*optionItr).second->Parse( argsBegin, argsEnd, error );
-            }
-            else
-            {
-                error = std::string( "Unknown option: " ) + arg;
-                return false;
-            }
-        }
-        else
-        {
-            M_StringToCommandDumbPtr::iterator commandItr = m_Commands.find( arg );
-            if ( commandItr != m_Commands.end() )
-            {
-                result &= (*commandItr).second->Parse( argsBegin, argsEnd, error );
-            }
-            else
-            {
-                error = std::string( "Unknown command: " ) + arg + "\n\n";
-				return false;
-            }
-        }
-    }
+		if ( arg.length() < 1 )
+			continue;
+
+		if ( arg[ 0 ] == '-' )
+		{
+			error = std::string( "Unknown option, or option passed out of order: " ) + arg;
+			result = false;
+		}
+		else
+		{
+			M_StringToCommandDumbPtr::iterator commandItr = m_Commands.find( arg );
+			if ( commandItr != m_Commands.end() )
+			{
+				result &= (*commandItr).second->Process( argsBegin, argsEnd, error );
+			}
+			else
+			{
+				error = std::string( "Unknown commandline parameter: " ) + arg + "\n\n";
+				result = false;
+			}
+		}
+	}
 
     return result;
 }

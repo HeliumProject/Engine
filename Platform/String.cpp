@@ -1,17 +1,13 @@
 #include "Platform/String.h"
 
-#pragma TODO("Implement Error Checking")
-
 bool Platform::ConvertChar( char src, wchar_t& dest )
 {
-    mbtowc( &dest, &src, 1 );
-    return true;
+    return mbtowc( &dest, &src, 1 ) > 0;
 }
 
 bool Platform::ConvertChar( wchar_t src, char& dest )
 {
-    wctomb( &dest, src );
-    return true;
+    return wctomb( &dest, src ) > 0;
 }
 
 bool Platform::ConvertString( const std::string& src, std::wstring& dest )

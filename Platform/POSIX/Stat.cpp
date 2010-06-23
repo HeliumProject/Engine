@@ -1,6 +1,6 @@
 #include "Platform/Stat.h"
 
-bool Platform::StatPath( const char* path, Plaftorm::Stat& stat )
+bool Platform::StatPath( const tchar* path, Plaftorm::Stat& stat )
 {
     return false;
 }

@@ -15,8 +15,8 @@ namespace Platform
     PLATFORM_API bool InitializePipes();
     PLATFORM_API void CleanupPipes();
 
-    PLATFORM_API bool CreatePipe(const char* name, Pipe& pipe);
-    PLATFORM_API bool OpenPipe(const char* name, Pipe& pipe);
+    PLATFORM_API bool CreatePipe(const tchar* name, Pipe& pipe);
+    PLATFORM_API bool OpenPipe(const tchar* name, Pipe& pipe);
     PLATFORM_API void ClosePipe(Pipe& pipe);
 
     PLATFORM_API bool ConnectPipe(Pipe& pipe, Event& terminate);

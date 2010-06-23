@@ -124,7 +124,7 @@ int Platform::SelectSocket(int range, fd_set* read_set, fd_set* write_set, struc
 
 bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Event& terminate)
 {
-    i32 local_read = ::recv( socket, (char*)buffer, bytes, 0 );
+    i32 local_read = ::recv( socket, (tchar*)buffer, bytes, 0 );
 
     if (local_read < 0)
     {
@@ -138,7 +138,7 @@ bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Ev
 
 bool Platform::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, Event& terminate)
 {
-    i32 local_wrote = ::send( socket, (char*)buffer, bytes, 0 );
+    i32 local_wrote = ::send( socket, (tchar*)buffer, bytes, 0 );
 
     if (local_wrote < 0)
     {

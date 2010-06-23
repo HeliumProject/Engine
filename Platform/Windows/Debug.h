@@ -51,32 +51,32 @@ namespace Debug
             CPP
         };
 
-        static const char* Strings[] =
+        static const tchar* Strings[] =
         {
-            "SEH",
-            "C++",
+            TXT("SEH"),
+            TXT("C++"),
         };
     }
     typedef ExceptionTypes::ExceptionType ExceptionType;
 
     struct PLATFORM_API ExceptionArgs
     {
-        ExceptionType   m_Type;
-        bool            m_Fatal;
-        std::string     m_Message;
-        std::string     m_Callstack;
-        std::vector< std::string >        m_Threads;
-        std::string     m_State;
-        std::string     m_Dump;
+        ExceptionType       m_Type;
+        bool                m_Fatal;
+        tstring                 m_Message;
+        tstring                 m_Callstack;
+        std::vector< tstring >  m_Threads;
+        tstring                 m_State;
+        tstring                 m_Dump;
 
         // SEH-specific info
-        u32             m_SEHCode;
-        std::string     m_SEHClass;
-        std::string     m_SEHControlRegisters;
-        std::string     m_SEHIntegerRegisters;
+        u32                 m_SEHCode;
+        tstring                 m_SEHClass;
+        tstring                 m_SEHControlRegisters;
+        tstring                 m_SEHIntegerRegisters;
 
         // CPP-specific info
-        std::string     m_CPPClass;
+        tstring                 m_CPPClass;
 
         ExceptionArgs( ExceptionType type, bool fatal )
             : m_Type( type )
@@ -87,23 +87,23 @@ namespace Debug
     };
 
     // Init (need to specify the search paths to the pdbs if they aren't with the executables)
-    PLATFORM_API bool Initialize( const std::string& pdbPaths = "" );
+    PLATFORM_API bool Initialize( const tstring& pdbPaths = TXT("") );
     PLATFORM_API bool IsInitialized();
 
     // Query information from a bare address (should be pretty safe to call)
-    PLATFORM_API std::string GetSymbolInfo( uintptr adr, bool enumLoadedModules = true );
+    PLATFORM_API tstring GetSymbolInfo( uintptr adr, bool enumLoadedModules = true );
     PLATFORM_API std::exception* GetCxxException( uintptr addr );
 
     // Stack traces (capture with or without an explicit context, translate to string rep)
     PLATFORM_API bool GetStackTrace( std::vector<uintptr>& trace, unsigned omitFrames = 0 );
     PLATFORM_API bool GetStackTrace( LPCONTEXT context, std::vector<uintptr>& stack, unsigned omitFrames = 0 );
-    PLATFORM_API void TranslateStackTrace( const std::vector<uintptr>& trace, std::string& buffer );
+    PLATFORM_API void TranslateStackTrace( const std::vector<uintptr>& trace, tstring& buffer );
 
     // Query SEH exception pointers for full report, abbreviated name, or more details
-    PLATFORM_API std::string GetExceptionInfo( LPEXCEPTION_POINTERS info );
-    PLATFORM_API const char* GetExceptionClass( u32 exceptionCode );
+    PLATFORM_API tstring GetExceptionInfo( LPEXCEPTION_POINTERS info );
+    PLATFORM_API const tchar* GetExceptionClass( u32 exceptionCode );
     PLATFORM_API void GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args );
 
     // Core dumps (full dumps include process heaps)
-    PLATFORM_API std::string WriteDump( LPEXCEPTION_POINTERS info, bool full );
+    PLATFORM_API tstring WriteDump( LPEXCEPTION_POINTERS info, bool full );
 }

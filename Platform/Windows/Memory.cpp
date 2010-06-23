@@ -26,7 +26,7 @@ MemoryProfiler::~MemoryProfiler()
         GetMemoryStatus(&finish);
         intptr delta = finish.m_TotalCommit - s_Last.m_TotalCommit;
         intptr scope = finish.m_TotalCommit - m_Start.m_TotalCommit;
-        Platform::Print("Memory Commit: %u M bytes (Delta: %i K, %i K within scope)\n", (finish.m_TotalCommit) >> 20, (delta) >> 10, (scope) >> 10);
+        Platform::Print(TXT("Memory Commit: %u M bytes (Delta: %i K, %i K within scope)\n"), (finish.m_TotalCommit) >> 20, (delta) >> 10, (scope) >> 10);
         s_Last = finish;
     }
 }
@@ -73,7 +73,7 @@ void Profile::GetMemoryStatus(MemoryStatus* status)
     }
 }
 
-void Profile::GetMemoryStatus(char* buffer, size_t bufSize)
+void Profile::GetMemoryStatus(tchar* buffer, size_t bufSize)
 {
     MemoryStatus status;
     GetMemoryStatus(&status);
@@ -82,12 +82,12 @@ void Profile::GetMemoryStatus(char* buffer, size_t bufSize)
     {
         memset(buffer, 0, bufSize); 
 
-        _snprintf(buffer, bufSize,
-            "Memory:\n" \
-            "Total Reserved %iK bytes\n" \
-            "Total Commit   %iK bytes\n" \
-            "Total Free     %iK bytes\n" \
-            "Largest Free   %iK bytes\n" ,
+        _sntprintf(buffer, bufSize,
+            TXT("Memory:\n") \
+            TXT("Total Reserved %iK bytes\n") \
+            TXT("Total Commit   %iK bytes\n") \
+            TXT("Total Free     %iK bytes\n") \
+            TXT("Largest Free   %iK bytes\n") ,
             (status.m_TotalReserve >> 10),
             (status.m_TotalCommit >> 10),
             (status.m_TotalFree >> 10),

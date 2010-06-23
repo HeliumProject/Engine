@@ -38,7 +38,7 @@ bool Platform::InitializeSockets()
         int result = WSAStartup(MAKEWORD(2,2), &g_WSAData);
         if (result != NO_ERROR)
         {
-            Platform::Print("TCP Support: Error initializing socket layer (%d)\n", WSAGetLastError());
+            Platform::Print(TXT("TCP Support: Error initializing socket layer (%d)\n"), WSAGetLastError());
             return false;
         }
     }
@@ -53,7 +53,7 @@ void Platform::CleanupSockets()
         int result = WSACleanup();
         if (result != NO_ERROR)
         {
-            Platform::Print("TCP Support: Error cleaning up socket layer (%d)\n", WSAGetLastError());
+            Platform::Print(TXT("TCP Support: Error cleaning up socket layer (%d)\n"), WSAGetLastError());
         }
     }
 }
@@ -89,7 +89,7 @@ bool Platform::CreateSocket(Socket& socket)
     int result = ::WSAIoctl( socket, SIO_KEEPALIVE_VALS, &keepalive, sizeof( keepalive ), NULL, 0, &returned, NULL, NULL );
     if ( result == SOCKET_ERROR )
     {
-        Platform::Print( "TCP Support: Error setting keep alive on socket (%d)\n", WSAGetLastError() );
+        Platform::Print( TXT("TCP Support: Error setting keep alive on socket (%d)\n"), WSAGetLastError() );
     }
 
     return true;
@@ -108,7 +108,7 @@ bool Platform::BindSocket(Socket& socket, u16 port)
     service.sin_port = htons(port);
     if ( ::bind(socket, (sockaddr*)&service, sizeof(sockaddr_in) ) == SOCKET_ERROR )
     {
-        Platform::Print("TCP Support: Failed to bind socket (%d)\n", WSAGetLastError());
+        Platform::Print(TXT("TCP Support: Failed to bind socket (%d)\n"), WSAGetLastError());
         closesocket(socket);
         return false;
     }
@@ -120,7 +120,7 @@ bool Platform::ListenSocket(Socket& socket)
 {
     if ( ::listen(socket, SOMAXCONN) == SOCKET_ERROR)
     {
-        Platform::Print("TCP Support: Failed to listen socket (%d)\n", WSAGetLastError());
+        Platform::Print(TXT("TCP Support: Failed to listen socket (%d)\n"), WSAGetLastError());
         closesocket(socket);
         return false;
     }
@@ -155,7 +155,7 @@ bool Platform::ReadSocket(Socket& socket, void* buffer, u32 bytes, u32& read, Ev
     }
 
     WSABUF buf;
-    buf.buf = (char*)buffer;
+    buf.buf = (CHAR*)buffer;
     buf.len = bytes;
 
     DWORD flags = 0;
@@ -212,7 +212,7 @@ bool Platform::WriteSocket(Socket& socket, void* buffer, u32 bytes, u32& wrote, 
     }
 
     WSABUF buf;
-    buf.buf = (char*)buffer;
+    buf.buf = (CHAR*)buffer;
     buf.len = bytes;
 
     DWORD flags = 0;

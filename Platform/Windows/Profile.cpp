@@ -12,9 +12,9 @@
 
 using namespace Profile;
 
-void Platform::TraceFile::Open(const char* file)
+void Platform::TraceFile::Open(const tchar* file)
 {
-    m_FileHandle = fopen(file, "wb");
+    m_FileHandle = _tfopen(file, TXT("wb"));
 }
 
 void Platform::TraceFile::Close()
@@ -25,31 +25,31 @@ void Platform::TraceFile::Close()
     }
 }
 
-void Platform::TraceFile::Write(const char* data, int size)
+void Platform::TraceFile::Write(const tchar* data, int size)
 {
     if (m_FileHandle)
     {
-        fwrite(data, sizeof(char), size, m_FileHandle);
+        fwrite(data, sizeof(tchar), size, m_FileHandle);
     }
 }
 
-const char* Platform::TraceFile::GetFilePath()
+const tchar* Platform::TraceFile::GetFilePath()
 {
-    char buf[MAX_PATH];
+    tchar buf[MAX_PATH];
     GetModuleFileName(NULL, buf, MAX_PATH);
 
-    char modulename[MAX_PATH];
-    _splitpath(buf, NULL, NULL, modulename, NULL);
+    tchar modulename[MAX_PATH];
+    _tsplitpath(buf, NULL, NULL, modulename, NULL);
 
-    static char file[MAX_PATH];
-    const char* root = getenv( "NOC_Root" );
+    static tchar file[MAX_PATH];
+    const tchar* root = _tgetenv( TXT("NOC_Root") );
     if ( root )
     {
-        sprintf(file, "%s\\log\\profile_%s_%.5X_%.5X.bin", root, modulename, GetCurrentProcessId(), GetCurrentThreadId() );
+        _stprintf(file, TXT("%s\\log\\profile_%s_%.5X_%.5X.bin"), root, modulename, GetCurrentProcessId(), GetCurrentThreadId() );
     }
     else
     {
-        printf( "%s is not defined in the environment, cannot open profile output\n", "NOC_Root" );
+        _stprintf( TXT("%s is not defined in the environment, cannot open profile output\n"), TXT("NOC_Root") );
     }
 
     return file;
@@ -116,11 +116,11 @@ float Platform::TimeTaken(u64 start_time)
     return CyclesToMillis(time);
 }
 
-void Platform::ReportTime(const char* segment, u64 start_time, double& total_millis)
+void Platform::ReportTime(const tchar* segment, u64 start_time, double& total_millis)
 {
     u64 time = TimerGetClock() - start_time;
     double millis = CyclesToMillis(time);
-    Platform::Print("%s took %f ms\n", segment, millis);
+    Platform::Print(TXT("%s took %f ms\n"), segment, millis);
     total_millis += millis;
 }
 

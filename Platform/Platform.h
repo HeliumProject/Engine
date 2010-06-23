@@ -1,6 +1,7 @@
 #pragma once
 
 #include "API.h"
+#include "Types.h"
 #include "Assert.h"
 
 namespace Platform
@@ -17,17 +18,17 @@ namespace Platform
             Count,
         };
 
-        static const char* Strings[] = 
+        static const tchar* Strings[] = 
         {
-            "Windows",
-            "PlayStation3",
+            TXT("Windows"),
+            TXT("PlayStation3"),
         };
 
-        NOC_COMPILE_ASSERT( Platform::Types::Count == sizeof(Strings) / sizeof(const char*) );
+        NOC_COMPILE_ASSERT( Platform::Types::Count == sizeof(Strings) / sizeof(const tchar*) );
     }
     typedef Types::Type Type;
 
-    inline const char* GetTypeName(Type t)
+    inline const tchar* GetTypeName(Type t)
     {
         if (t >= 0 && t<Types::Count)
         {
@@ -40,6 +41,6 @@ namespace Platform
     }
 
     PLATFORM_API Type GetType();
-    PLATFORM_API void Print(const char* fmt, ...);
+    PLATFORM_API void Print(const tchar* fmt, ...);
     PLATFORM_API void Sleep(int millis);
 }

@@ -24,7 +24,7 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			UseOfMFC="0"
-			CharacterSet="2"
+			CharacterSet="0"
 			ManagedExtensions="0"
 			WholeProgramOptimization="0"
 			>
@@ -97,7 +97,7 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			UseOfMFC="0"
-			CharacterSet="2"
+			CharacterSet="0"
 			ManagedExtensions="0"
 			WholeProgramOptimization="0"
 			>
@@ -120,7 +120,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\Libraries;xpm;&quot;$(lua)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(TargetDir)&quot;"
+				AdditionalIncludeDirectories="..\..\;xpm;&quot;$(lua)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(TargetDir)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
@@ -172,7 +172,7 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			UseOfMFC="0"
-			CharacterSet="2"
+			CharacterSet="0"
 			ManagedExtensions="0"
 			WholeProgramOptimization="0"
 			>
@@ -243,7 +243,7 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
 			UseOfMFC="0"
-			CharacterSet="2"
+			CharacterSet="0"
 			ManagedExtensions="0"
 			WholeProgramOptimization="0"
 			>
@@ -265,7 +265,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\Libraries;xpm;&quot;$(lua)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(TargetDir)&quot;"
+				AdditionalIncludeDirectories="..\..\;xpm;&quot;$(lua)\src&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(TargetDir)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				WarningLevel="3"

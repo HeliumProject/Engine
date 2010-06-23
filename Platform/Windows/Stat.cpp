@@ -3,10 +3,10 @@
 #include "Platform/Windows/Windows.h"
 #include <sys/stat.h>
 
-bool Platform::StatPath( const char* path, Platform::Stat& stat )
+bool Platform::StatPath( const tchar* path, Platform::Stat& stat )
 {
     struct _stati64 windowsStats;
-    bool result = ( _stati64( path, &windowsStats ) == 0 );
+    bool result = ( _tstati64( path, &windowsStats ) == 0 );
 
     if ( result )
     {

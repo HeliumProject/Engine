@@ -14,13 +14,13 @@ void Platform::CleanupPipes()
 
 }
 
-bool Platform::CreatePipe(const char* name, Pipe& pipe)
+bool Platform::CreatePipe(const tchar* name, Pipe& pipe)
 {
     // not supported
     NOC_BREAK(); return false;
 }
 
-bool Platform::OpenPipe(const char* name, Pipe& pipe)
+bool Platform::OpenPipe(const tchar* name, Pipe& pipe)
 {
     if (cellFsOpen(name, CELL_FS_O_RDWR, &pipe, NULL, 0) != CELL_FS_OK)
     {

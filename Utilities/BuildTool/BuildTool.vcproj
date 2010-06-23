@@ -23,7 +23,7 @@
 			Name="Debug|Win32"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
 			<Tool
@@ -101,7 +101,7 @@
 			Name="Debug|x64"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
 			<Tool
@@ -123,7 +123,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..;..\..\..\..;..\..\libraries;$(boost);&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..\..\..;..\..\..\..;..\..\;$(boost);&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -180,7 +180,7 @@
 			Name="Release|Win32"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
 			<Tool
@@ -259,7 +259,7 @@
 			Name="Release|x64"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
 			<Tool
@@ -280,7 +280,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..;..\..\..\..;..\..\libraries;$(boost);&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories="..\..\..;..\..\..\..;..\..\;$(boost);&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				OpenMP="false"

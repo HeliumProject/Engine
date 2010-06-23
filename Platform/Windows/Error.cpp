@@ -9,7 +9,7 @@ u32 Platform::GetLastError()
     return ::GetLastError();
 }
 
-std::string Platform::GetErrorString( u32 errorOverride )
+tstring Platform::GetErrorString( u32 errorOverride )
 {
     // get the system error
     DWORD error = ( errorOverride != 0 ) ? errorOverride : ::GetLastError();
@@ -25,20 +25,20 @@ std::string Platform::GetErrorString( u32 errorOverride )
         NULL 
         );
 
-    std::string result;
+    tstring result;
 
     if (lpMsgBuf)
     {
-        result = (char*)lpMsgBuf;
+        result = (tchar*)lpMsgBuf;
 
         ::LocalFree( lpMsgBuf );
     }
     else
     {
-        result = "Unknown error (the error code could not be translated)";
+        result = TXT("Unknown error (the error code could not be translated)");
     }
 
-    // trim enter characters from message
+    // trim enter chracters from message
     while (!result.empty() && (*result.rbegin() == '\n' || *result.rbegin() == '\r'))
     {
         result.resize( result.size() - 1 );

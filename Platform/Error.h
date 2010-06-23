@@ -13,5 +13,5 @@ namespace Platform
 
     PLATFORM_API u32 GetLastError();
 
-    PLATFORM_API std::string GetErrorString( u32 errorOverride = 0 );
+    PLATFORM_API tstring GetErrorString( u32 errorOverride = 0 );
 }

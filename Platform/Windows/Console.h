@@ -1,8 +1,10 @@
 #pragma once
 
 #include <string>
+#include <stdio.h>
 
 #include "Platform/API.h"
+#include "Platform/Types.h"
 
 namespace Platform
 {
@@ -26,9 +28,9 @@ namespace Platform
     }
     typedef ConsoleColors::ConsoleColor ConsoleColor;    
 
-    PLATFORM_API void Print(ConsoleColor color, FILE* stream, const char* fmt, ...);
+    PLATFORM_API void Print(ConsoleColor color, FILE* stream, const tchar* fmt, ...);
 
-    PLATFORM_API void PrintArgs(ConsoleColor color, FILE* stream, const char* fmt, va_list args);
+    PLATFORM_API void PrintArgs(ConsoleColor color, FILE* stream, const tchar* fmt, va_list args);
 
-    PLATFORM_API void PrintString(ConsoleColor color, FILE* stream, const std::string& str);
+    PLATFORM_API void PrintString(ConsoleColor color, FILE* stream, const tstring& tstring);
 }

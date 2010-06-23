@@ -6,7 +6,7 @@
 
 using namespace Profile;
 
-void Platform::TraceFile::Open(const char* file)
+void Platform::TraceFile::Open(const tchar* file)
 {
 
 }
@@ -16,12 +16,12 @@ void Platform::TraceFile::Close()
 
 }
 
-void Platform::TraceFile::Write(const char* data, int size)
+void Platform::TraceFile::Write(const tchar* data, int size)
 {
 
 }
 
-const char* Platform::TraceFile::GetFilePath()
+const tchar* Platform::TraceFile::GetFilePath()
 {
     return NULL;
 }
@@ -45,7 +45,7 @@ float Platform::TimeTaken(u64 start_time)
     return CyclesToMillis(time);
 }
 
-void Platform::ReportTime(const char* segment, u64 start_time, double& total_millis)
+void Platform::ReportTime(const tchar* segment, u64 start_time, double& total_millis)
 {
     u64 time = TimerGetClock() - start_time;
     double millis = CyclesToMillis(time);

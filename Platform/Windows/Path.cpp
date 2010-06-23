@@ -5,19 +5,19 @@
 #include <vector>
 #include <sys/stat.h>
 
-const char Platform::PathSeparator = '\\';
+const tchar Platform::PathSeparator = '\\';
 
 #pragma comment( lib, "Version.lib" )
 
-bool Platform::GetFullPath( const char* path, std::string& fullPath )
+bool Platform::GetFullPath( const tchar* path, tstring& fullPath )
 {
-    char* full = new char[ PLATFORM_PATH_MAX ];
+    tchar* full = new tchar[ PLATFORM_PATH_MAX ];
     u32 result = ::GetFullPathName( path, PLATFORM_PATH_MAX, full, NULL );
 
     if ( result > PLATFORM_PATH_MAX )
     {
         delete full;
-        full = new char[ result ];
+        full = new tchar[ result ];
         result = ::GetFullPathName( path, result, full, NULL );
     }
 
@@ -32,9 +32,9 @@ bool Platform::GetFullPath( const char* path, std::string& fullPath )
     return true;
 }
 
-bool Platform::IsAbsolute( const char* path )
+bool Platform::IsAbsolute( const tchar* path )
 {
-    if ( strlen( path ) > 1 )
+    if ( _tcslen( path ) > 1 )
     {
         if ( path[ 1 ] == ':' )
             return true;
@@ -46,11 +46,11 @@ bool Platform::IsAbsolute( const char* path )
     return false;
 }
 
-void SplitDirectories( const std::string& path, std::vector< std::string >& output )
+void SplitDirectories( const tstring& path, std::vector< tstring >& output )
 {
-    std::string::size_type start = 0; 
-    std::string::size_type end = 0; 
-    while ( ( end = path.find( Platform::PathSeparator, start ) ) != std::string::npos )
+    tstring::size_type start = 0; 
+    tstring::size_type end = 0; 
+    while ( ( end = path.find( Platform::PathSeparator, start ) ) != tstring::npos )
     { 
         output.push_back( path.substr( start, end - start ) ); 
         start = end + 1;
@@ -58,18 +58,18 @@ void SplitDirectories( const std::string& path, std::vector< std::string >& outp
     output.push_back( path.substr( start ) ); 
 }
 
-bool Platform::MakePath( const char* path )
+bool Platform::MakePath( const tchar* path )
 {
-    std::vector< std::string > directories;
+    std::vector< tstring > directories;
     SplitDirectories( path, directories );
 
-    struct stat statInfo;
-    std::string currentDirectory;
+    struct _stati64 statInfo;
+    tstring currentDirectory;
     currentDirectory.reserve( PLATFORM_PATH_MAX );
     currentDirectory = directories[ 0 ];
-    for( std::vector< std::string >::const_iterator itr = directories.begin() + 1, end = directories.end(); itr != end; ++itr )
+    for( std::vector< tstring >::const_iterator itr = directories.begin() + 1, end = directories.end(); itr != end; ++itr )
     {
-        if ( ( (*currentDirectory.rbegin()) != ':' ) && ( stat( currentDirectory.c_str(), &statInfo ) != 0 ) )
+        if ( ( (*currentDirectory.rbegin()) != TXT(':') ) && ( _tstati64( currentDirectory.c_str(), &statInfo ) != 0 ) )
         {
             if ( !CreateDirectory( currentDirectory.c_str(), NULL ) )
             {
@@ -77,23 +77,23 @@ bool Platform::MakePath( const char* path )
             }
         }
 
-        currentDirectory += std::string( "\\" ) + *itr;
+        currentDirectory += tstring( TXT("\\") ) + *itr;
     }
 
     return true;
 }
 
-bool Platform::Copy( const char* source, const char* dest, bool overwrite )
+bool Platform::Copy( const tchar* source, const tchar* dest, bool overwrite )
 {
     return ( TRUE == ::CopyFile( source, dest, overwrite ? FALSE : TRUE ) );
 }
 
-bool Platform::Move( const char* source, const char* dest )
+bool Platform::Move( const tchar* source, const tchar* dest )
 {
     return ( TRUE == ::MoveFile( source, dest ) );
 }
 
-bool Platform::Delete( const char* path )
+bool Platform::Delete( const tchar* path )
 {
     return ( TRUE == ::DeleteFile( path ) );
 }
@@ -125,7 +125,7 @@ bool GetTranslationId(LPVOID lpData, UINT unBlockSize, WORD wLangId, DWORD &dwId
     return FALSE;
 }
 
-bool Platform::GetVersionInfo( const char* path, std::string& versionInfo )
+bool Platform::GetVersionInfo( const tchar* path, tstring& versionInfo )
 {
     DWORD	dwHandle;
     DWORD fileDataSize = GetFileVersionInfoSize( ( LPTSTR ) path, ( LPDWORD ) &dwHandle );
@@ -147,10 +147,10 @@ bool Platform::GetVersionInfo( const char* path, std::string& versionInfo )
         // catch default information
         LPVOID lpInfo;
         UINT unInfoLen;
-        VerQueryValue( fileData, "\\", &lpInfo, &unInfoLen );
+        VerQueryValue( fileData, TXT("\\"), &lpInfo, &unInfoLen );
 
         // find best matching language and codepage
-        VerQueryValue( fileData, "\\VarFile\\Translation", &lpInfo, &unInfoLen );
+        VerQueryValue( fileData, TXT("\\VarFile\\Translation"), &lpInfo, &unInfoLen );
 
         DWORD dwLangCode = 0;
         if ( !GetTranslationId(lpInfo, unInfoLen, GetUserDefaultLangID(), dwLangCode, FALSE ) )
@@ -168,11 +168,11 @@ bool Platform::GetVersionInfo( const char* path, std::string& versionInfo )
             }
         }
 
-        char key[64];
-        sprintf_s(
+        tchar key[64];
+        _sntprintf(
             key,
-            64,
-            "\\StringFile\\%04X%04X\\FileVersion",
+            sizeof(key),
+            TXT("\\StringFile\\%04X%04X\\FileVersion"),
             ( dwLangCode & 0x0000FFFF ),
             ( dwLangCode & 0xFFFF0000 ) >> 16 );
 

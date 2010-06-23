@@ -19,7 +19,7 @@ Thread::~Thread()
     }
 }
 
-bool Thread::Create(Entry entry, void* obj, const char* name, int priority)
+bool Thread::Create(Entry entry, void* obj, const tchar* name, int priority)
 {
     NOC_ASSERT( false );
     return true;

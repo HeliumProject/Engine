@@ -1,38 +1,38 @@
 #include "Platform/Path.h"
 
-const char Platform::PathSeparator = '/';
+const tchar Platform::PathSeparator = '/';
 
-bool Platform::GetFullPath( const char* path, std::string& fullPath )
+bool Platform::GetFullPath( const tchar* path, tstring& fullPath )
 {
     return false;
 }
 
-bool Platform::IsAbsolute( const char* path )
+bool Platform::IsAbsolute( const tchar* path )
 {
     return false;
 }
 
-bool Platform::MakePath( const char* path )
+bool Platform::MakePath( const tchar* path )
 {
     return false;
 }
 
-bool Platform::Copy( const char* source, const char* dest, bool overwrite )
+bool Platform::Copy( const tchar* source, const tchar* dest, bool overwrite )
 {
     return false;
 }
 
-bool Platform::Move( const char* source, const char* dest )
+bool Platform::Move( const tchar* source, const tchar* dest )
 {
     return false;
 }
 
-bool Platform::Delete( const char* path )
+bool Platform::Delete( const tchar* path )
 {
     return false;
 }
 
-bool Platform::GetVersionInfo( const char* path, std::string& versionInfo )
+bool Platform::GetVersionInfo( const tchar* path, tstring& versionInfo )
 {
     return false;
 }

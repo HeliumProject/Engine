@@ -861,7 +861,7 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
             std::string type = info.m_Archive.GetType() == Reflect::ArchiveTypes::XML ? "XML" : "Binary";
 
             std::ostringstream str;
-            str << verb << " " << type << " File: " << info.m_Archive.GetFile();
+            str << verb << " " << type << " File: " << info.m_Archive.GetPath();
             m_StatusChanged.Raise( str.str() );
             break;
         }
@@ -882,7 +882,7 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
                     std::string verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? "Opening" : "Saving";
 
                     std::ostringstream str;
-                    str << verb << ": " << info.m_Archive.GetFile() << " (" << m_Progress << "%)";
+                    str << verb << ": " << info.m_Archive.GetPath() << " (" << m_Progress << "%)";
                     m_StatusChanged.Raise( str.str() );
                 }
             }
@@ -895,7 +895,7 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
             std::string verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? "Opening" : "Saving";
 
             std::ostringstream str;
-            str << "Completed " << verb << ": " << info.m_Archive.GetFile();
+            str << "Completed " << verb << ": " << info.m_Archive.GetPath();
             m_StatusChanged.Raise( str.str() );
             break;
         }
@@ -903,7 +903,7 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
     case Reflect::ArchiveStates::PostProcessing:
         {
             std::ostringstream str;
-            str << "Processing: " << info.m_Archive.GetFile();
+            str << "Processing: " << info.m_Archive.GetPath();
             m_StatusChanged.Raise( str.str() );
             break;
         }

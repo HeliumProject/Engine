@@ -14,19 +14,19 @@
 
 using namespace Nocturnal;
 
-void Path::Init( const char* path )
+void Path::Init( const tchar* path )
 {
     m_Path = path;
 
     std::replace( m_Path.begin(), m_Path.end(), Platform::PathSeparator, s_InternalPathSeparator );
 }
 
-Path::Path( const char* path )
+Path::Path( const tchar* path )
 {
     Init( path );
 }
 
-Path::Path( const std::string& path )
+Path::Path( const tstring& path )
 {
     Init( path.c_str() );
 }
@@ -52,26 +52,26 @@ bool Path::operator<( const Path& rhs ) const
     return m_Path < rhs.m_Path;
 }
 
-void Path::Normalize( std::string& path )
+void Path::Normalize( tstring& path )
 {
     toLower( path );
     std::replace( path.begin(), path.end(), Platform::PathSeparator, s_InternalPathSeparator );
 }
 
-void Path::MakeNative( std::string& path )
+void Path::MakeNative( tstring& path )
 {
     std::replace( path.begin(), path.end(), s_InternalPathSeparator, Platform::PathSeparator );
 }
 
-void Path::GuaranteeSlash( std::string& path )
+void Path::GuaranteeSlash( tstring& path )
 {
     if ( !path.empty() && *path.rbegin() != '/' )
     {
-        path += "/";
+        path += TXT( "/" );
     }
 }
 
-bool Path::Exists( const std::string& path )
+bool Path::Exists( const tstring& path )
 {
     Path native( path );
     Platform::Stat stat;
@@ -83,12 +83,12 @@ bool Path::Stat( Platform::Stat& stat ) const
     return Platform::StatPath( Native().c_str(), stat );
 }
 
-bool Path::IsAbsolute( const std::string& path )
+bool Path::IsAbsolute( const tstring& path )
 {
     return Platform::IsAbsolute( path.c_str() );
 }
 
-bool Path::IsUnder( const std::string& location, const std::string& path )
+bool Path::IsUnder( const tstring& location, const tstring& path )
 {
     return ( path.find( location ) == 0 );
 }
@@ -215,7 +215,7 @@ bool Path::Create() const
         return false;
     }
 
-    FILE *f = fopen( Native().c_str(), "w" );
+    FILE *f = _tfopen( Native().c_str(), TXT( "w" ) );
 
     if ( !f )
     {
@@ -241,52 +241,52 @@ bool Path::Delete() const
     return Platform::Delete( Native().c_str() );
 }
 
-const std::string& Path::Get() const
+const tstring& Path::Get() const
 {
     return m_Path;
 }
 
-const std::string& Path::Set( const std::string& path )
+const tstring& Path::Set( const tstring& path )
 {
     Init( path.c_str() );
     return m_Path;
 }
 
-void Path::Split( std::string& directory, std::string& filename ) const
+void Path::Split( tstring& directory, tstring& filename ) const
 {
     directory = Directory();
     filename = Filename();
 }
 
-void Path::Split( std::string& directory, std::string& filename, std::string& extension ) const
+void Path::Split( tstring& directory, tstring& filename, tstring& extension ) const
 {
     Split( directory, filename );
     extension = Extension();
 }
 
-std::string Path::Basename() const
+tstring Path::Basename() const
 {
     return m_Path.substr( m_Path.rfind( '/' ) + 1, m_Path.rfind( '.' ) + 1 );
 }
 
-std::string Path::Filename() const
+tstring Path::Filename() const
 {
     return m_Path.substr( m_Path.rfind( '/' ) + 1 );
 }
 
-std::string Path::Directory() const
+tstring Path::Directory() const
 {
     return m_Path.substr( 0, m_Path.rfind( '/' ) + 1 );
 }
 
-std::string Path::Extension() const
+tstring Path::Extension() const
 {
     return m_Path.substr( m_Path.rfind( '.' ) + 1 );
 }
 
-std::string Path::FullExtension() const
+tstring Path::FullExtension() const
 {
-    std::string filename = Filename();
+    tstring filename = Filename();
     return filename.substr( filename.find_first_of( '.' ) + 1 );
 }
 
@@ -300,23 +300,23 @@ void Path::RemoveFullExtension()
     m_Path.erase( m_Path.find_first_of( '.', m_Path.find_last_of( '/' ) ) );
 }
 
-std::string Path::Native() const
+tstring Path::Native() const
 {
-    std::string native = m_Path;
+    tstring native = m_Path;
     Path::MakeNative( native );    
     return native;
 }
 
-std::string Path::Absolute() const
+tstring Path::Absolute() const
 {
-    std::string full;
+    tstring full;
     Platform::GetFullPath( Native().c_str(), full );
     return full;
 }
 
-std::string Path::Normalized() const
+tstring Path::Normalized() const
 {
-    std::string normalized = m_Path;
+    tstring normalized = m_Path;
     Path::Normalize( normalized );
     return normalized;
 }
@@ -326,12 +326,12 @@ u64 Path::Hash() const
     return Nocturnal::MurmurHash2( m_Path );
 }
 
-std::string Path::Signature()
+tstring Path::Signature()
 {
     return Nocturnal::MD5( m_Path );
 }
 
-void Path::ReplaceExtension( const std::string& newExtension )
+void Path::ReplaceExtension( const tstring& newExtension )
 {
     int offset = (int)m_Path.rfind( '.' );
     if ( offset >= 0 )
@@ -340,18 +340,18 @@ void Path::ReplaceExtension( const std::string& newExtension )
     }
     else
     {
-        m_Path += '.' + newExtension;
+        m_Path += TXT( "." ) + newExtension;
     }
 }
 
-void Path::ReplaceFullExtension( const std::string& newExtension )
+void Path::ReplaceFullExtension( const tstring& newExtension )
 {
     m_Path.replace( m_Path.find_first_of( '.', m_Path.find_last_of( '/' ) ) + 1, newExtension.length(), newExtension );
 }
 
 bool Path::Exists() const
 {
-    std::string absolute = Absolute();
+    tstring absolute = Absolute();
     Path::MakeNative( absolute );
     return Path::Exists( absolute );
 }
@@ -361,7 +361,7 @@ bool Path::IsAbsolute() const
     return Path::IsAbsolute( m_Path );
 }
 
-bool Path::IsUnder( const std::string& location )
+bool Path::IsUnder( const tstring& location )
 {
     return Path::IsUnder( location, m_Path );
 }
@@ -376,31 +376,31 @@ bool Path::empty() const
     return m_Path.empty();
 }
 
-const char* Path::c_str() const
+const tchar* Path::c_str() const
 {
     return m_Path.c_str();
 }
 
-std::string Path::FileCRC() const
+tstring Path::FileCRC() const
 {
     u32 crc = Nocturnal::FileCrc32( m_Path.c_str() );
 
-    std::stringstream str;
+    tstringstream str;
     str << std::hex << std::uppercase << crc;
     return str.str();
 }
 
-bool Path::VerifyFileCRC( const std::string& hash ) const
+bool Path::VerifyFileCRC( const tstring& hash ) const
 {
     return FileCRC().compare( hash ) == 0;
 }
 
-std::string Path::FileMD5() const
+tstring Path::FileMD5() const
 {
     return Nocturnal::FileMD5( m_Path.c_str() );
 }
 
-bool Path::VerifyFileMD5( const std::string& hash ) const
+bool Path::VerifyFileMD5( const tstring& hash ) const
 {
     return FileMD5().compare( hash ) == 0;
 }

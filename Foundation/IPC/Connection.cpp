@@ -21,15 +21,15 @@ namespace IPC
 // Debug printing
 //#define IPC_CONNECTION_DEBUG
 
-static const char* ConnectionStateNames[] = 
+static const tchar* ConnectionStateNames[] = 
 {
-    "Waiting",
-    "Active",
-    "Closed",
-    "Failed",
+    TXT( "Waiting" ),
+    TXT( "Active" ),
+    TXT( "Closed" ),
+    TXT( "Failed" ),
 };
 
-NOC_COMPILE_ASSERT( ConnectionStates::Count == (sizeof(ConnectionStateNames) / sizeof(const char*)) );
+NOC_COMPILE_ASSERT( ConnectionStates::Count == (sizeof(ConnectionStateNames) / sizeof(const tchar*)) );
 
 Connection::Connection()
 : m_Server (false)
@@ -47,9 +47,9 @@ Connection::~Connection()
 
 }
 
-bool Connection::Initialize(bool server, const char* name)
+bool Connection::Initialize(bool server, const tchar* name)
 {
-    strcpy(m_Name, name);
+    _tcscpy(m_Name, name);
     m_Server = server;
 
     if (server)
@@ -102,17 +102,17 @@ void Connection::SetState(ConnectionState state)
 #else
         if (m_State != ConnectionStates::Active && state == ConnectionStates::Active)
         {
-            Platform::Print("%s: Connected\n", m_Name);
+            Platform::Print( TXT( "%s: Connected\n" ), m_Name);
         }
 
         if (m_State == ConnectionStates::Active && state != ConnectionStates::Active)
         {
-            Platform::Print("%s: Disconnected\n", m_Name);
+            Platform::Print( TXT( "%s: Disconnected\n" ), m_Name);
         }
 
         if (m_State == ConnectionStates::Active && state == ConnectionStates::Waiting)
         {
-            Platform::Print("%S: Waiting for connection\n", m_Name);
+            Platform::Print( TXT( "%S: Waiting for connection\n" ), m_Name);
         }
 #endif
 
@@ -147,7 +147,7 @@ Message* Connection::CreateMessage(u32 id, u32 size, i32 trans, u32 type)
 
     if (!msg)
     {
-        Platform::Print("%s: Failed to create message (ID: %u, TRN: %u, Size: %u)\n", m_Name, id, trans, size);
+        Platform::Print( TXT( "%s: Failed to create message (ID: %u, TRN: %u, Size: %u)\n" ), m_Name, id, trans, size);
     }
 
     return msg;
@@ -350,17 +350,17 @@ void Connection::ConnectThread()
     SetState(ConnectionStates::Active);
 
     // report our remote platform type
-    Platform::Print("%s: Remote platform is '%s'\n", m_Name, Platform::GetTypeName(m_RemotePlatform));
+    Platform::Print( TXT( "%s: Remote platform is '%s'\n" ), m_Name, Platform::GetTypeName(m_RemotePlatform));
 
     // start read thread
-    if (!m_ReadThread.Create(&Platform::Thread::EntryHelper<Connection, &Connection::ReadThread>, this, "IPC Read Thread"))
+    if (!m_ReadThread.Create(&Platform::Thread::EntryHelper<Connection, &Connection::ReadThread>, this, TXT( "IPC Read Thread" )))
     {
         NOC_BREAK();
         return;
     }
 
     // start write thread
-    if (!m_WriteThread.Create(&Platform::Thread::EntryHelper<Connection, &Connection::WriteThread>, this, "IPC Write Thread"))
+    if (!m_WriteThread.Create(&Platform::Thread::EntryHelper<Connection, &Connection::WriteThread>, this, TXT( "IPC Write Thread" )))
     {
         NOC_BREAK();
         return;
@@ -423,7 +423,7 @@ bool Connection::ReadHostType()
 
     if (!Read(&byte, sizeof(byte)))
     {
-        Platform::Print("%s: Failed to read remote platform type!\n", m_Name);
+        Platform::Print( TXT( "%s: Failed to read remote platform type!\n" ), m_Name);
         return false;
     }
 
@@ -437,7 +437,7 @@ bool Connection::WriteHostType()
     u8 byte = (u8)Platform::GetType();
     if (!Write(&byte, sizeof(byte)))
     {
-        Platform::Print("%s: Failed to write remote Platform type!\n", m_Name);
+        Platform::Print( TXT( "%s: Failed to write remote Platform type!\n" ), m_Name);
         return false;
     }
 

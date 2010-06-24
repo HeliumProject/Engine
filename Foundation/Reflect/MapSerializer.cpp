@@ -383,7 +383,7 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Deserialize(Archive& a
 
     if (components.size() % 2 != 0)
     {
-        throw Reflect::DataFormatException("Unmatched map objects");
+        throw Reflect::DataFormatException( TXT( "Unmatched map objects" ) );
     }
 
     // if we are referring to a real field, clear its contents

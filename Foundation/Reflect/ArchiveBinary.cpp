@@ -70,7 +70,7 @@ void ArchiveBinary::Read()
     // fail on an empty input stream
     if ( m_Size == 0 )
     {
-        throw Reflect::StreamException("Input stream is empty");
+        throw Reflect::StreamException( TXT( "Input stream is empty" ) );
     }
 
     // setup visitors
@@ -93,7 +93,7 @@ void ArchiveBinary::Read()
 
     if(m_Version > CURRENT_VERSION)
     {
-        throw Reflect::StreamException("Input stream version is higher than what is supported (input: %d, current: %d)\n", m_Version, CURRENT_VERSION); 
+        throw Reflect::StreamException( TXT( "Input stream version is higher than what is supported (input: %d, current: %d)\n" ), m_Version, CURRENT_VERSION); 
     }
 
     // read and verify CRC
@@ -142,11 +142,11 @@ void ArchiveBinary::Read()
         {
             if (crc == CRC_INVALID)
             {
-                throw Reflect::ChecksumException( "Corruption detected, file was not successfully written (incomplete CRC)", current_crc, crc );
+                throw Reflect::ChecksumException( TXT( "Corruption detected, file was not successfully written (incomplete CRC)" ), current_crc, crc );
             }
             else
             {
-                throw Reflect::ChecksumException( "Corruption detected, crc is 0x%08x, should be 0x%08x", current_crc, crc);
+                throw Reflect::ChecksumException( TXT( "Corruption detected, crc is 0x%08x, should be 0x%08x" ), current_crc, crc);
             }
         }
 
@@ -206,7 +206,7 @@ void ArchiveBinary::Read()
 
         if (terminator != -1)
         {
-            throw Reflect::DataFormatException ("Error reading file, unterminated RTTI type block");
+            throw Reflect::DataFormatException( TXT( "Error reading file, unterminated RTTI type block" ) );
         }
     }
 
@@ -427,7 +427,7 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
     REFLECT_SCOPE_TIMER_INST( ("Serialize %s", element->GetClass()->m_ShortName.c_str()) );
 
     // use the string pool index for this type's short name
-    i32 index = m_Strings.AssignIndex(element->GetClass()->m_ShortName);
+    i32 index = m_Strings.Insert(element->GetClass()->m_ShortName);
     m_Stream->Write(&index); 
 
     // get and stub out the start offset where we are now (will become length after writing is done)
@@ -593,7 +593,7 @@ void ArchiveBinary::SerializeField(const ElementPtr& element, const Field* field
     if (!serializer.ReferencesObject())
     {
         // this should never happen, the type id in the rtti data is bogus
-        throw Reflect::TypeInformationException( "Invalid type id for field '%s'", field->m_Name.c_str() );
+        throw Reflect::TypeInformationException( TXT( "Invalid type id for field '%s'" ), field->m_Name.c_str() );
     }
 
     // set data pointer
@@ -684,7 +684,7 @@ ElementPtr ArchiveBinary::Allocate()
     {
         // we failed to find a type in the latent RTTI data, that is bad
         NOC_BREAK();
-        throw Reflect::TypeInformationException("Unable to locate type '%s'", str.c_str());
+        throw Reflect::TypeInformationException( TXT( "Unable to locate type '%s'" ), str.c_str());
     }
 
     // this is guaranteed to be our legacy short name name
@@ -699,7 +699,7 @@ ElementPtr ArchiveBinary::Allocate()
         // check for insanity
         if ( !inserted.second && inserted.first->second != shortName )
         {
-            throw Reflect::TypeInformationException("Overloaded shortName mapping for '%s', this is not supported", shortName.c_str());
+            throw Reflect::TypeInformationException( TXT( "Overloaded shortName mapping for '%s', this is not supported" ), shortName.c_str());
         }
     }
 
@@ -714,12 +714,12 @@ ElementPtr ArchiveBinary::Allocate()
             // if you see this, then data is being lost because:
             //  1 - a type was completely removed from the codebase
             //  2 - a type was not found because its type library is not registered
-            Debug("Unable to create object of type '%s', size %d, skipping...\n", str.c_str(), length);
+            Debug( TXT( "Unable to create object of type '%s', size %d, skipping...\n" ), str.c_str(), length);
         }
         else
         {
             NOC_BREAK();
-            throw Reflect::DataFormatException("Unable to create object, unknown type '%s'", str.c_str());
+            throw Reflect::DataFormatException( TXT( "Unable to create object, unknown type '%s'" ), str.c_str());
         }
     }
 
@@ -847,7 +847,7 @@ void ArchiveBinary::Deserialize(V_Element& elements, u32 flags)
 
         if (terminator != -1)
         {
-            throw Reflect::DataFormatException ("Unterminated element array block");
+            throw Reflect::DataFormatException( TXT( "Unterminated element array block" ) );
         }
     }
 
@@ -886,7 +886,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
                 // we should always find it, else its a bug/internal error
                 if ( shortName_found == m_ShortNameMapping.end() )
                 {
-                    throw Reflect::TypeInformationException("Unable to remap short name '%s'", element->GetClass()->m_ShortName.c_str());
+                    throw Reflect::TypeInformationException( TXT( "Unable to remap short name '%s'" ), element->GetClass()->m_ShortName.c_str());
                 }
 
                 // we throw if there is an internal error, so just dereference the result
@@ -895,7 +895,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
 
             if (type == NULL)
             {
-                Debug("Unable to resolve type from short name '%s'\n", element->GetClass()->m_ShortName.c_str());
+                Debug( TXT( "Unable to resolve type from short name '%s'\n" ), element->GetClass()->m_ShortName.c_str());
             }
 
             // while we haven't hit the terminator
@@ -930,7 +930,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
 
         if (terminator != -1)
         {
-            throw Reflect::DataFormatException ("Unterminated field array block");
+            throw Reflect::DataFormatException( TXT( "Unterminated field array block" ) );
         }
 }
 
@@ -993,7 +993,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
             if (!latent_serializer.ReferencesObject())
             {
                 // this should never happen, the type id read from the file is bogus
-                throw Reflect::TypeInformationException( "Invalid type id for field '%s'", latent_field->m_Name.c_str() );
+                throw Reflect::TypeInformationException( TXT( "Invalid type id for field '%s'" ), latent_field->m_Name.c_str() );
             }
 
             // keep in mind that m_SerializerID of latent field is the current type id that matches the latent short name
@@ -1024,7 +1024,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
                 if (!current_serializer.ReferencesObject())
                 {
                     // this should never happen, the type id in the rtti data is bogus
-                    throw Reflect::TypeInformationException( "Invalid type id for field '%s'", current_field->m_Name.c_str() );
+                    throw Reflect::TypeInformationException( TXT( "Invalid type id for field '%s'" ), current_field->m_Name.c_str() );
                 }
 
                 // process into temporary memory
@@ -1058,7 +1058,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
             }
             catch (Reflect::LogisticException& ex)
             {
-                Debug("Unable to deserialize %s::%s into component (%s), discarding\n", type->m_ShortName.c_str(), latent_field->m_Name.c_str(), ex.what());
+                Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_ShortName.c_str(), latent_field->m_Name.c_str(), ex.what());
             }
         }
     }
@@ -1068,7 +1068,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
         // attempt processing
         if (!element->ProcessComponent(component, latent_field->m_Name))
         {
-            Debug("%s did not process %s, discarding\n", element->GetClass()->m_ShortName.c_str(), component->GetClass()->m_ShortName.c_str());
+            Debug( TXT( "%s did not process %s, discarding\n" ), element->GetClass()->m_ShortName.c_str(), component->GetClass()->m_ShortName.c_str());
         }
     }
 }
@@ -1079,7 +1079,7 @@ void ArchiveBinary::SerializeComposite(const Composite* composite)
     Log::Debug(" Serializing %s (%d fields)\n", composite->m_ShortName.c_str(), composite->m_FieldIDToInfo.size());
 #endif
 
-    i32 string_index = m_Strings.AssignIndex(composite->m_ShortName);
+    i32 string_index = m_Strings.Insert(composite->m_ShortName);
     m_Stream->Write(&string_index); 
     m_Stream->Write(&composite->m_TypeID); 
 
@@ -1132,7 +1132,7 @@ bool ArchiveBinary::DeserializeComposite(Composite* composite)
 
     if (terminator != -1)
     {
-        throw Reflect::DataFormatException ("Error reading file, unterminated RTTI field block");
+        throw Reflect::DataFormatException( TXT( "Error reading file, unterminated RTTI field block" ) );
     }
 
     return !m_Stream->Fail();
@@ -1141,14 +1141,14 @@ bool ArchiveBinary::DeserializeComposite(Composite* composite)
 void ArchiveBinary::SerializeField(const Field* field)
 {
     // field name
-    i32 string_index = m_Strings.AssignIndex(field->m_Name);
+    i32 string_index = m_Strings.Insert(field->m_Name);
     m_Stream->Write(&string_index); 
 
     // field type id short name
     const Class* c = Registry::GetInstance()->GetClass(field->m_SerializerID);
     if (c != NULL)
     {
-        string_index = m_Strings.AssignIndex(c->m_ShortName);
+        string_index = m_Strings.Insert(c->m_ShortName);
     }
     else
     {

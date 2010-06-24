@@ -34,7 +34,7 @@ namespace IPC
     class FOUNDATION_API Connection
     {
     protected:
-        char              m_Name[256];          // friendly name for this connection
+        tchar              m_Name[256];          // friendly name for this connection
         bool              m_Server;             // are we the server side or the client side
         bool              m_Terminating;        // used by the closedown code to signal it wants the threads to terminate
         Platform::Event   m_Terminate;          // used to wake up sleeping threads for when we want to terminate
@@ -60,7 +60,7 @@ namespace IPC
         virtual ~Connection();
 
     protected:
-        bool Initialize(bool server, const char* name);
+        bool Initialize(bool server, const tchar* name);
 
     public:
         void Cleanup();

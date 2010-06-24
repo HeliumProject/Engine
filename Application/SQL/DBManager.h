@@ -18,7 +18,7 @@ namespace SQL
   class APPLICATION_API DBManager NOC_ABSTRACT
   {
   public:
-    DBManager( const char* friendlyName );
+    DBManager( const tchar* friendlyName );
     virtual ~DBManager();
 
     //virtual void        Open( const std::string& dbPath ) = 0;
@@ -62,11 +62,11 @@ namespace SQL
     virtual i64         GetLastInsertRowId() = 0;
 
     virtual int         GetLastErrCode() { return m_LastErrCode; }
-    virtual std::string GetLastErrMsg() { return m_LastErrMsg; }
+    virtual tstring GetLastErrMsg() { return m_LastErrMsg; }
 
-    const std::string&  GetDBFilename() const { return m_DBFile.Get(); }
+    const tstring&  GetDBFilename() const { return m_DBFile.Get(); }
     
-    const std::string&  GetFriendlyName() const { return m_FriendlyName; }
+    const tstring&  GetFriendlyName() const { return m_FriendlyName; }
 
     //
     // Dump DB
@@ -83,12 +83,12 @@ namespace SQL
     // Members
     //
 
-    std::string   m_FriendlyName;
+    tstring         m_FriendlyName;
     Nocturnal::Path m_DBFile;
-    bool          m_IsTransOpen;
-    int           m_NumStmtHandles;
-    int           m_LastErrCode;
-    std::string   m_LastErrMsg;
+    bool            m_IsTransOpen;
+    int             m_NumStmtHandles;
+    int             m_LastErrCode;
+    tstring         m_LastErrMsg;
 
     //
     // Transaction

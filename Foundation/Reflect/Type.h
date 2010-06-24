@@ -37,9 +37,9 @@ namespace Reflect
         // Fields
         //
 
-        std::string                   m_ShortName;          // the name of this type in the codebase, this is not necessarily unique (templates share the same short name)
-        std::string                   m_FullName;           // the fully qualified name of this type in the codebase (this is super-long if its a template type)
-        std::string                   m_UIName;             // the friendly name for the field, its optional (will use the short name if not specified)
+        std::string                       m_ShortName;          // the name of this type in the codebase, this is not necessarily unique (templates share the same short name)
+        std::string                       m_FullName;           // the fully qualified name of this type in the codebase (this is super-long if its a template type)
+        std::string                       m_UIName;             // the friendly name for the field, its optional (will use the short name if not specified)
 
         i32                           m_TypeID;             // the unique id of this type
         u32                           m_Size;               // the size of the object in bytes

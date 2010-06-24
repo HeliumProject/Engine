@@ -24,19 +24,19 @@ void BitfieldSerializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
+#ifdef REFLECT_XML_SUPPORT
             std::string str;
 
             if (m_Enumeration)
             {
                 if (!m_Enumeration->GetBitfieldString(m_Data.Get(), str))
                 {
-                    throw Reflect::TypeInformationException( "Unable to serialize bitfield '%s', value %d",
-                        m_Enumeration->m_ShortName.c_str(), m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), m_Enumeration->m_ShortName.c_str(), m_Data.Get() );
                 }
             }
 
-            archive.GetOutput() << str;
-
+            archive.GetStream() << str;
+#endif
             break;
         }
 
@@ -50,8 +50,7 @@ void BitfieldSerializer::Serialize(Archive& archive) const
             {
                 if (!m_Enumeration->GetBitfieldStrings(m_Data.Get(), strs))
                 {
-                    throw Reflect::TypeInformationException( "Unable to serialize bitfield '%s', value %d",
-                        m_Enumeration->m_ShortName.c_str(), m_Data.Get() );
+                    throw Reflect::TypeInformationException( TXT( "Unable to serialize bitfield '%s', value %d" ), m_Enumeration->m_ShortName.c_str(), m_Data.Get() );
                 }
 
                 // search the map
@@ -59,14 +58,14 @@ void BitfieldSerializer::Serialize(Archive& archive) const
                 std::vector< std::string >::const_iterator end = strs.end();
                 for ( ; itr != end; ++itr )
                 {
-                    index = static_cast<ArchiveBinary&>(archive).GetStrings().AssignIndex(*itr);
-                    archive.GetOutput().Write(&index); 
+                    index = static_cast<ArchiveBinary&>(archive).GetStrings().Insert(*itr);
+                    archive.GetStream().Write(&index); 
                 }
             }
 
             // term
             index = -1;
-            archive.GetOutput().Write(&index); 
+            archive.GetStream().Write(&index); 
 
             break;
         }
@@ -74,7 +73,7 @@ void BitfieldSerializer::Serialize(Archive& archive) const
 
     if (m_Enumeration == NULL)
     {
-        throw Reflect::TypeInformationException( "Missing type information" );
+        throw Reflect::TypeInformationException( TXT( "Missing type information" ) );
     }
 }
 
@@ -84,25 +83,26 @@ void BitfieldSerializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
+#ifdef REFLECT_XML_SUPPORT
             std::string buf;
-            archive.GetInput() >> buf;
+            archive.GetStream() >> buf;
 
             if (m_Enumeration && !m_Enumeration->GetBitfieldValue(buf, m_Data.Ref()))
             {
-                archive.Debug( "Unable to deserialize bitfield %s values '%s'\n", m_Enumeration->m_ShortName.c_str(), buf );
+                archive.Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), m_Enumeration->m_ShortName.c_str(), buf );
             }
             else
             {
                 m_String = buf;
             }
-
+#endif
             break;
         }
 
     case ArchiveTypes::Binary:
         {
             i32 index = -1;
-            archive.GetInput().Read(&index); 
+            archive.GetStream().Read(&index); 
 
             std::vector< std::string > strs;
             while (index >= 0)
@@ -110,7 +110,7 @@ void BitfieldSerializer::Deserialize(Archive& archive)
                 strs.push_back(static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index));
 
                 // read next index
-                archive.GetInput().Read(&index); 
+                archive.GetStream().Read(&index); 
             }
 
             std::string str;
@@ -126,7 +126,7 @@ void BitfieldSerializer::Deserialize(Archive& archive)
 
             if (m_Enumeration && !m_Enumeration->GetBitfieldValue(strs, m_Data.Ref()))
             {
-                archive.Debug( "Unable to deserialize bitfield %s values '%s'\n", m_Enumeration->m_ShortName.c_str(), str.c_str() );
+                archive.Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), m_Enumeration->m_ShortName.c_str(), str.c_str() );
             }
             else
             {
@@ -139,7 +139,7 @@ void BitfieldSerializer::Deserialize(Archive& archive)
 
     if (m_Enumeration == NULL)
     {
-        throw Reflect::TypeInformationException( "Missing type information" );
+        throw Reflect::TypeInformationException( TXT( "Missing type information" ) );
     }
 }
 

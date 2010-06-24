@@ -33,7 +33,7 @@ void Element::ToStream(std::iostream& stream, ArchiveType type) const
     Archive::ToStream(this, stream, type);
 }
 
-void Element::ToFile(const std::string& file, const VersionPtr& version) const
+void Element::ToFile(const tstring& file, const VersionPtr& version) const
 {
     Archive::ToFile(this, file, version);
 }

@@ -113,7 +113,7 @@ void Field::SetName(const std::string& name)
 
     if ( m_UIName.empty() )
     {
-        if (m_Name.substr(0, 2) == "m_")
+        if (m_Name.substr(0, 2) == "m_" )
         {
             m_UIName = m_Name.substr(2);
         }

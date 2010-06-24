@@ -19,24 +19,24 @@ namespace Application
     Debug::ExceptionArgs  m_Args;
 
     // Process State Information
-    std::string           m_UserName;
-    std::string           m_Computer;
-    std::string           m_ApplicationPath;
-    std::string           m_ApplicationName;
-    std::string           m_CmdLineArgs;
-    std::string           m_InheritedArgs;
-    std::string           m_AssetBranch;
-    std::string           m_CodeBranch;
-    std::string           m_ProjectName;
-    bool                  m_IsToolsBuilder;
-    bool                  m_IsSymbolBuilder;
-    std::string           m_ToolsVersion;
-    std::string           m_ToolsBuildConfig;
-    std::string           m_ToolsReleaseName;
-    u64                   m_MemTotalReserve;
-    u64                   m_MemTotalCommit;
-    u64                   m_MemTotalFree;
-    u64                   m_MemLargestFree;
-    std::string           m_Environment;
+    tstring  m_UserName;
+    tstring  m_Computer;
+    tstring  m_ApplicationPath;
+    tstring  m_ApplicationName;
+    tstring  m_CmdLineArgs;
+    tstring  m_InheritedArgs;
+    tstring  m_AssetBranch;
+    tstring  m_CodeBranch;
+    tstring  m_ProjectName;
+    bool     m_IsToolsBuilder;
+    bool     m_IsSymbolBuilder;
+    tstring  m_ToolsVersion;
+    tstring  m_ToolsBuildConfig;
+    tstring  m_ToolsReleaseName;
+    u64      m_MemTotalReserve;
+    u64      m_MemTotalCommit;
+    u64      m_MemTotalFree;
+    u64      m_MemLargestFree;
+    tstring  m_Environment;
   };
 }

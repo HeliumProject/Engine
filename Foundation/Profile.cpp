@@ -4,6 +4,7 @@
 #include "Platform/Assert.h"
 #include "Platform/Thread.h"
 #include "Platform/Platform.h"
+#include "Platform/Types.h"
 
 #include <stdarg.h>
 #include <string.h>
@@ -57,7 +58,7 @@ Accumulator::Accumulator()
 
 }
 
-Accumulator::Accumulator(const char* name)
+Accumulator::Accumulator(const tchar* name)
 : m_Hits (0)
 , m_TotalMillis (0.0f)
 , m_Index (-1)
@@ -65,15 +66,15 @@ Accumulator::Accumulator(const char* name)
     Init(name); 
 }
 
-Accumulator::Accumulator(const char* function, const char* name)
+Accumulator::Accumulator(const tchar* function, const tchar* name)
 : m_Hits (0)
 , m_TotalMillis (0.0f)
 , m_Index (-1)
 {
-    size_t temp = MIN( strlen(function), sizeof(m_Name)-1 );
+    size_t temp = MIN( _tcslen( function ), sizeof(m_Name)-1 );
     memcpy( m_Name, function, temp );
 
-    size_t temp2 = MIN( strlen(name), sizeof(m_Name) - 1 - temp );
+    size_t temp2 = MIN( _tcslen(name), sizeof(m_Name) - 1 - temp );
     memcpy( m_Name + temp, name, temp2 );
 
     m_Name[ temp + temp2 ] = '\0';
@@ -81,11 +82,11 @@ Accumulator::Accumulator(const char* function, const char* name)
     Init(NULL);
 }
 
-void Accumulator::Init(const char* name)
+void Accumulator::Init(const tchar* name)
 {
     if (name)
     {
-        strncpy(m_Name, name, sizeof(m_Name));
+        _tcsncpy(m_Name, name, sizeof(m_Name));
         m_Name[ sizeof(m_Name)-1] = '\0'; 
     }
     else
@@ -110,7 +111,7 @@ Accumulator::~Accumulator()
 
 void Accumulator::Report()
 {
-    Log::Profile("[%12.3f] [%8d] %s\n", m_TotalMillis, m_Hits, m_Name);
+    Log::Profile( TXT( "[%12.3f] [%8d] %s\n" ), m_TotalMillis, m_Hits, m_Name);
 }
 
 int CompareAccumulatorPtr( const void* ptr1, const void* ptr2 )
@@ -156,7 +157,7 @@ void Accumulator::ReportAll()
 
     if (totalTime > 0.f)
     {
-        Log::Profile("\nProfile Report:\n");
+        Log::Profile( TXT( "\nProfile Report:\n" ) );
 
         qsort( g_Accumulators, g_AccumulatorCount, sizeof(Accumulator*), &CompareAccumulatorPtr );
 
@@ -172,13 +173,13 @@ void Accumulator::ReportAll()
 
 Platform::ThreadLocalPointer g_ProfileContext;
 
-ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const char* desc)
+ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const tchar* desc)
 {
     NOC_ASSERT(func); 
     m_Description[0] = '\0'; 
     if(desc)
     {
-        strncpy(m_Description, desc, sizeof(m_Description)); 
+        _tcsncpy(m_Description, desc, sizeof(m_Description)); 
         m_Description[ sizeof(m_Description)-1 ] = '\0'; 
     }
 
@@ -213,10 +214,10 @@ ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const cha
     enter->m_Line       = line; 
     enter->m_StartTicks = m_StartTicks; 
 
-    strncpy(enter->m_Description, m_Description, sizeof(enter->m_Description)); 
+    _tcsncpy(enter->m_Description, m_Description, sizeof(enter->m_Description)); 
     enter->m_Description[ sizeof(enter->m_Description)-1] = 0; 
 
-    strncpy(enter->m_Function, func, sizeof(enter->m_Function)); 
+    _tcsncpy(enter->m_Function, func, sizeof(enter->m_Function)); 
     enter->m_Function[ sizeof(enter->m_Function)-1] = 0; 
 
     context->m_StackDepth++; 
@@ -237,7 +238,7 @@ ScopeTimer::~ScopeTimer()
 
     if ( m_Print && m_Description[0] != '\0' )
     {
-        Log::Profile("[%12.3f] %s\n", millis, m_Description);
+        Log::Profile( TXT( "[%12.3f] %s\n" ), millis, m_Description);
     }
 
 #if defined(PROFILE_INSTRUMENTATION)
@@ -303,7 +304,7 @@ void Context::FlushFile()
     enter->m_StackDepth       = 0; 
     enter->m_Line             = __LINE__;
     enter->m_StartTicks       = startTicks; 
-    strcpy(enter->m_Function, "Context::FlushFile"); 
+    _tcscpy(enter->m_Function, TXT( "Context::FlushFile" ) ); 
     enter->m_Description[0]   = 0; 
 
     // make a block end packet for end of packet
@@ -314,7 +315,7 @@ void Context::FlushFile()
     blockEnd->m_Header.m_Size    = sizeof(BlockEndPacket); 
 
     // we write the whole buffer, in large blocks
-    m_TraceFile.Write( (const char*) m_PacketBuffer, PROFILE_PACKET_BLOCK_SIZE); 
+    m_TraceFile.Write( (const tchar*) m_PacketBuffer, PROFILE_PACKET_BLOCK_SIZE); 
 
     // reset the packet buffer
     m_PacketBufferOffset = 0; 

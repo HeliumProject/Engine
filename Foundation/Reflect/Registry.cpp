@@ -27,14 +27,14 @@ static Registry* g_Instance = NULL;
 
 // profile interface
 #ifdef PROFILE_ACCUMULATION
-Profile::Accumulator Reflect::g_CloneAccum ("Reflect Clone");
-Profile::Accumulator Reflect::g_ParseAccum ("Reflect Parse");
-Profile::Accumulator Reflect::g_AuthorAccum ("Reflect Author");
-Profile::Accumulator Reflect::g_ChecksumAccum ("Reflect Checksum");
-Profile::Accumulator Reflect::g_PreSerializeAccum ("Reflect Serialize Pre-Process");
-Profile::Accumulator Reflect::g_PostSerializeAccum ("Reflect Serialize Post-Process");
-Profile::Accumulator Reflect::g_PreDeserializeAccum ("Reflect Deserialize Pre-Process");
-Profile::Accumulator Reflect::g_PostDeserializeAccum ("Reflect Deserialize Post-Process");
+Profile::Accumulator Reflect::g_CloneAccum ( TXT( "Reflect Clone" ) );
+Profile::Accumulator Reflect::g_ParseAccum ( TXT( "Reflect Parse" ) );
+Profile::Accumulator Reflect::g_AuthorAccum ( TXT( "Reflect Author" ) );
+Profile::Accumulator Reflect::g_ChecksumAccum ( TXT( "Reflect Checksum" ) );
+Profile::Accumulator Reflect::g_PreSerializeAccum ( TXT( "Reflect Serialize Pre-Process" ) );
+Profile::Accumulator Reflect::g_PostSerializeAccum ( TXT( "Reflect Serialize Post-Process" ) );
+Profile::Accumulator Reflect::g_PreDeserializeAccum ( TXT( "Reflect Deserialize Pre-Process" ) );
+Profile::Accumulator Reflect::g_PostDeserializeAccum ( TXT( "Reflect Deserialize Post-Process" ) );
 #endif
 
 template <class T>
@@ -97,7 +97,7 @@ void Reflect::Initialize()
         g_Instance->RegisterType(PointerSerializer::CreateClass("Pointer"));
         g_Instance->RegisterType(EnumerationSerializer::CreateClass("Enumeration"));
         g_Instance->RegisterType(BitfieldSerializer::CreateClass("Bitfield"));
-        g_Instance->RegisterType( PathSerializer::CreateClass( "PathSerializer" ) );
+        g_Instance->RegisterType( PathSerializer::CreateClass("PathSerializer"));
 
         // SimpleSerializer
         g_Instance->RegisterType(StringSerializer::CreateClass("String"));
@@ -160,7 +160,7 @@ void Reflect::Initialize()
         g_Instance->RegisterType(F32SetSerializer::CreateClass("F32Set"));
         g_Instance->RegisterType(GUIDSetSerializer::CreateClass("GUIDSet"));
         g_Instance->RegisterType(TUIDSetSerializer::CreateClass("TUIDSet"));
-        g_Instance->RegisterType( PathSetSerializer::CreateClass( "PathSet" ) );
+        g_Instance->RegisterType( PathSetSerializer::CreateClass("PathSet"));
 
         // MapSerializer
         g_Instance->RegisterType(MapSerializer::CreateClass("Map"));
@@ -279,7 +279,7 @@ Registry::Registry()
 
     if ( Profile::Settings::MemoryProfilingEnabled() )
     {
-        g_MemoryPool = Profile::Memory::CreatePool("Reflect Objects");
+        g_MemoryPool = Profile::Memory::CreatePool( TXT( "Reflect Objects" ) );
     }
 }
 
@@ -326,7 +326,7 @@ bool Registry::RegisterType(Type* type)
 
                     if (!shortNameResult.second && classType != shortNameResult.first->second)
                     {
-                        Log::Error("Re-registration of short name '%s' was attempted with different classType information\n", classType->m_ShortName.c_str());
+                        Log::Error( TXT( "Re-registration of short name '%s' was attempted with different classType information\n" ), classType->m_ShortName.c_str());
                         NOC_BREAK();
                         return false;
                     }
@@ -344,7 +344,7 @@ bool Registry::RegisterType(Type* type)
                         }
                         else
                         {
-                            Log::Error("Base class of '%s' is not a valid type\n", classType->m_ShortName.c_str());
+                            Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_ShortName.c_str());
                             NOC_BREAK();
                             return false;
                         }
@@ -355,7 +355,7 @@ bool Registry::RegisterType(Type* type)
             }
             else if (classType != idResult.first->second)
             {
-                Log::Error("Re-registration of classType '%s' was attempted with different classType information\n", classType->m_FullName.c_str());
+                Log::Error( TXT( "Re-registration of classType '%s' was attempted with different classType information\n" ), classType->m_FullName.c_str());
                 NOC_BREAK();
                 return false;
             }
@@ -374,7 +374,7 @@ bool Registry::RegisterType(Type* type)
 
                 if (!enumResult.second && enumeration != enumResult.first->second)
                 {
-                    Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_ShortName.c_str());
+                    Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_ShortName.c_str());
                     NOC_BREAK();
                     return false;
                 }
@@ -383,14 +383,14 @@ bool Registry::RegisterType(Type* type)
 
                 if (!enumResult.second && enumeration != enumResult.first->second)
                 {
-                    Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_ShortName.c_str());
+                    Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_ShortName.c_str());
                     NOC_BREAK();
                     return false;
                 }
             }
             else if (enumeration != idResult.first->second)
             {
-                Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_FullName.c_str());
+                Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_FullName.c_str());
                 NOC_BREAK();
                 return false;
             }
@@ -428,7 +428,7 @@ void Registry::UnregisterType(const Type* type)
                     }
                     else
                     {
-                        Log::Error("Base class of '%s' is not a valid type\n", classType->m_ShortName.c_str());
+                        Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_ShortName.c_str());
                         NOC_BREAK();
                     }
                 }
@@ -821,7 +821,7 @@ void Tracker::Dump()
     path += dir;
     path += name;
 
-    FILE* f = fopen( (path + "ReflectDump.log").c_str(), "w" );
+    FILE* f = _tfopen( (path + "ReflectDump.log").c_str(), "w" );
     if ( f != NULL )
     {
         typedef std::map< u32, std::pair< std::string, u32 > > ObjectLogger;
@@ -878,7 +878,7 @@ void Tracker::Dump()
             }
 
             char format[1024];
-            sprintf( format, "\nType: %%%ds, Count: %%d", max );
+            _stprintf( format, "\nType: %%%ds, Count: %%d", max );
 
             iter = ObjectLog.begin();
             for ( ; iter != end; ++iter )

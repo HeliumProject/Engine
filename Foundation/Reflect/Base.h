@@ -61,7 +61,7 @@ namespace Reflect
         template<class T>
         inline void SetProperty( const std::string& key, const T& value )
         {
-            std::ostringstream str;
+            tostringstream str;
             str << value;
 
             if ( !str.fail() )

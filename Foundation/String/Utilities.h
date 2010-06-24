@@ -7,7 +7,7 @@
 *  isNum
 *   - returns TRUE if specified character is a number
 ***********************************************************************************************************************/
-inline bool isNum(char c)
+inline bool isNum(tchar c)
 {
     return (c >= '0' && c <= '9');
 }
@@ -16,7 +16,7 @@ inline bool isNum(char c)
 *  isAlpha
 *   - returns TRUE if specified character is in alphabet
 ***********************************************************************************************************************/
-inline bool isAlpha(char c)
+inline bool isAlpha(tchar c)
 {
     return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 }
@@ -25,7 +25,7 @@ inline bool isAlpha(char c)
 *  isNumMod
 *   - returns TRUE if specified character is a numberic modifier character
 ***********************************************************************************************************************/
-inline bool isNumMod(char c)
+inline bool isNumMod(tchar c)
 {
     return ((c == '.') || (c == '-'));
 }
@@ -34,7 +34,7 @@ inline bool isNumMod(char c)
 *  isNumHex
 *   - returns TRUE if specified character is a hex character
 ***********************************************************************************************************************/
-inline bool isNumHex(char c)
+inline bool isNumHex(tchar c)
 {
     return (((c >= 'a') && (c <= 'f')) || ((c >= 'A') && (c <= 'F')));
 }
@@ -43,7 +43,7 @@ inline bool isNumHex(char c)
 *  isWS
 *   - returns TRUE if specified character is white space
 ***********************************************************************************************************************/
-inline bool isWS(char c)
+inline bool isWS(tchar c)
 {
     return ((c == ' ') || (c == ',') || (c == '\t') || (c == '\r') || (c == '\n'));
 }
@@ -52,7 +52,7 @@ inline bool isWS(char c)
 *  atoh
 *   - returns integer value of hex string
 ***********************************************************************************************************************/
-inline int atoh(std::string& s)
+inline int atoh(tstring& s)
 {
     int val = 0;
     for (int i = 2; (i < (int) s.size()) && (isNum(s[i]) || isNumHex(s[i])); i++) 
@@ -73,7 +73,7 @@ inline int atoh(std::string& s)
 *  toLower
 *   - makes all alpha characters in string lower case
 ***********************************************************************************************************************/
-inline void toLower(std::string &s)
+inline void toLower(tstring &s)
 {
     if ( !s.empty() )
     {
@@ -85,7 +85,7 @@ inline void toLower(std::string &s)
 *  toUpper
 *   - makes all alpha characters in string upper case
 ***********************************************************************************************************************/
-inline void toUpper(std::string &s)
+inline void toUpper(tstring &s)
 {
     if ( !s.empty() )
     {

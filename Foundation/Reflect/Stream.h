@@ -11,7 +11,7 @@ namespace Reflect
     {
     public: 
         Stream(); 
-        Stream(std::iostream* p_Stream, bool ownStream = false); 
+        Stream(std::iostream* stream, bool ownStream = false); 
         virtual ~Stream(); 
 
         // new custom interfaces
@@ -49,71 +49,53 @@ namespace Reflect
         Stream&         Flush(); 
         std::streamsize BytesAvailable(); 
 
-        // block reading and writing functions
-        // 
-        Stream& ReadBuffer(void* ptr, std::streamsize length)
-        {
-            return this->read( (char*) ptr, length); 
-        }
-
-        Stream& WriteBuffer(const void* ptr, std::streamsize length)
-        {
-            return this->write( (const char*)ptr, length); 
-        }
-
-
-        // templatized Read and Write, which pay attention to the 
-        // type of the pointer you're passing in and automatically choose the size
-        //
-        // u32 myInt; 
-        // m_Stream->Write(&myInt);        // good
-        // m_Stream->Write(myInt);         // bad, compile error
-        // m_Stream->Write((void*)&myInt); // bad, compile error
-        // 
-        template <typename T>
-        Stream& Read(T* ptr)
-        {
-            return this->read( (char*)ptr, sizeof(T)); 
-        }
+        Stream& WriteBuffer(const void* t, std::streamsize size); 
 
         template <typename T>
-        Stream& Write(T* ptr)
+        inline Stream& Write(const T* ptr)
         {
-            return this->write( (const char*)ptr, sizeof(T)); 
+            return WriteBuffer( ptr, sizeof(T)); 
         }
 
-        // returns our internal stream, only for specially problematic cases. 
-        std::iostream* GetInternal() { return m_Stream; }; 
+        Stream& ReadBuffer(void* t, std::streamsize size); 
+    
+        template <typename T>
+        inline Stream& Read(T* ptr)
+        {
+            return ReadBuffer( ptr, sizeof(T)); 
+        }
+
+        std::iostream* GetInternal()
+        {
+            return m_Stream;
+        } 
 
     protected: 
-        Stream& write(const char* t, std::streamsize size); 
-        Stream& read(char* t, std::streamsize size); 
-
-        std::iostream* m_Stream; 
-        bool           m_OwnStream; 
-
-
+        std::iostream*  m_Stream; 
+        bool            m_OwnStream; 
     };
 
-    template <class T> Stream& operator>>(Stream& stream, T& val)
+    template <class T>
+    Stream& operator>>(Stream& stream, T& val)
     {
-        *stream.GetInternal() >> val; 
+        *stream.GetInternal() >> val;
 
         if(stream.Fail() && !stream.Done())
         {
-            throw Reflect::StreamException("General read failure"); 
+            throw Reflect::StreamException( TXT( "General read failure" ) ); 
         }
 
         return stream; 
     }
 
-    template <class T> Stream& operator<<(Stream& stream, const T& val)
+    template <class T>
+    Stream& operator<<(Stream& stream, const T& val)
     {
         *stream.GetInternal() << val; 
 
         if(stream.Fail())
         {
-            throw Reflect::StreamException("General write failure"); 
+            throw Reflect::StreamException( TXT( "General write failure" ) ); 
         }
 
         return stream; 
@@ -121,12 +103,4 @@ namespace Reflect
 
     // pointer declaration. 
     typedef Nocturnal::SmartPtr<Stream> StreamPtr; 
-}
-
-namespace std
-{
-    inline void getline(Reflect::Stream& stream, std::string& output)
-    {
-        std::getline(*stream.GetInternal(), output); 
-    }
 }

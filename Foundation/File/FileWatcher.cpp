@@ -32,7 +32,7 @@ FileWatcher::~FileWatcher()
 {
 }
 
-bool FileWatcher::Add( const std::string& path, FileChangedSignature::Delegate& listener, bool watchSubtree )
+bool FileWatcher::Add( const tstring& path, FileChangedSignature::Delegate& listener, bool watchSubtree )
 {
     M_PathToFileWatch::const_iterator itr = m_Watches.find( path );
 
@@ -60,7 +60,7 @@ bool FileWatcher::Add( const std::string& path, FileChangedSignature::Delegate& 
     return true;
 }
 
-bool FileWatcher::Remove( const std::string& path, FileChangedSignature::Delegate& listener )
+bool FileWatcher::Remove( const tstring& path, FileChangedSignature::Delegate& listener )
 {
     m_Watches[ path ].m_Event.Remove( listener );
 

@@ -152,9 +152,9 @@ Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, con
 
 void Composite::Report() const
 {
-    static char buf[8192];
+    static tchar buf[8192];
 
-    _snprintf(buf, sizeof(buf), "Reflect Type ID: %3d, Size: %4d, Name: `%s`\n", m_TypeID, m_Size, m_FullName.c_str());
+    _sntprintf(buf, sizeof(buf), TXT( "Reflect Type ID: %3d, Size: %4d, Name: `%s`\n" ), m_TypeID, m_Size, m_FullName.c_str());
     buf[ sizeof(buf) - 1] = 0; 
 
     Log::Debug(Log::Levels::Verbose,  buf );
@@ -165,12 +165,12 @@ void Composite::Report() const
     for ( ; itr != end; ++itr )
     {
         computedSize += itr->second->m_Size;
-        Log::Debug(Log::Levels::Verbose, "  Field ID: %3d, Size %4d, Name: `%s`\n", itr->first, itr->second->m_Size, itr->second->m_Name.c_str());
+        Log::Debug(Log::Levels::Verbose, TXT( "  Field ID: %3d, Size %4d, Name: `%s`\n" ), itr->first, itr->second->m_Size, itr->second->m_Name.c_str());
     }
 
     if (computedSize != m_Size)
     {
-        Log::Debug(Log::Levels::Verbose, " %d bytes of hidden fields\n", m_Size - computedSize);
+        Log::Debug(Log::Levels::Verbose, TXT( " %d bytes of hidden fields\n" ), m_Size - computedSize);
     }
 }
 
@@ -193,21 +193,21 @@ bool Composite::HasType(i32 type) const
 
 std::string Composite::ShortenName(const std::string& fullName)
 {
-    if (fullName.find("<") != std::string::npos)
+    if (fullName.find( "<" ) != std::string::npos)
     {
         NOC_BREAK();
     }
     else
     {
         // look for last namespace operator
-        size_t offset = fullName.rfind(":");
+        size_t offset = fullName.rfind( ":" );
         if (offset != std::string::npos)
         {
             return fullName.substr(offset+1);
         }
 
         // look for the space after "struct " or "class "
-        offset = fullName.rfind(" ");
+        offset = fullName.rfind( " " );
         if (offset != std::string::npos)
         {
             return fullName.substr(offset+1);
@@ -329,7 +329,7 @@ void Composite::Copy( const Element* src, Element* dest )
 {
     if ( src == dest )
     {
-        throw Reflect::LogisticException( "Internal error (attempted to copy element %s into itself)", src->GetClass()->m_UIName.c_str() );
+        throw Reflect::LogisticException( TXT( "Internal error (attempted to copy element %s into itself)" ), src->GetClass()->m_UIName.c_str() );
     }
 
     // 
@@ -364,7 +364,7 @@ void Composite::Copy( const Element* src, Element* dest )
         {
             // This should be impossible... at the very least, Element is a common base class for both pointers.
             // This exeception means there's a bug in this function.
-            throw Reflect::TypeInformationException( "Internal error (could not find common base class for %s and %s)", srcType->m_UIName.c_str(), destType->m_UIName.c_str() );
+            throw Reflect::TypeInformationException( TXT( "Internal error (could not find common base class for %s and %s)" ), srcType->m_UIName.c_str(), destType->m_UIName.c_str() );
         }
     }
 

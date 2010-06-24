@@ -26,7 +26,7 @@ Platform::Mutex g_Mutex;
 
 DWORD g_MainThread = GetCurrentThreadId();
 
-typedef std::map<std::string, FILE*> M_Files;
+typedef std::map<tstring, FILE*> M_Files;
 
 class FileManager
 {
@@ -51,12 +51,12 @@ public:
         m_Files.clear();
     }
 
-    bool Opened(const std::string& fileName, FILE* handle)
+    bool Opened(const tstring& fileName, FILE* handle)
     {
         return m_Files.insert( M_Files::value_type (fileName, handle) ).second;
     }
 
-    FILE* Find(const std::string& fileName)
+    FILE* Find(const tstring& fileName)
     {
         M_Files::const_iterator found = m_Files.find(fileName.c_str());
         if (found != m_Files.end())
@@ -69,7 +69,7 @@ public:
         }
     }
 
-    void Close(const std::string& fileName)
+    void Close(const tstring& fileName)
     {
         M_Files::iterator found = m_Files.find( fileName );
         if (found != m_Files.end())
@@ -101,7 +101,7 @@ struct OutputFile
     }
 };
 
-typedef std::map< std::string, OutputFile > M_OutputFile;
+typedef std::map< tstring, OutputFile > M_OutputFile;
 M_OutputFile g_TraceFiles;
 
 u32 g_Streams = Streams::Normal | Streams::Warning | Streams::Error;
@@ -113,11 +113,11 @@ int g_Indent = 0;
 PrintingSignature::Event g_PrintingEvent;
 PrintedSignature::Event g_PrintedEvent;
 
-void Log::Statement::ApplyIndent( const char* string, std::string& output )
+void Log::Statement::ApplyIndent( const tchar* string, tstring& output )
 {
     if ( m_Indent > 0 )
     {
-        char m_IndentString[64] = "";
+        tchar m_IndentString[64] = TXT( "" );
         if(m_Indent >= sizeof(m_IndentString))
         {
             m_Indent = sizeof(m_IndentString)-1;
@@ -130,8 +130,8 @@ void Log::Statement::ApplyIndent( const char* string, std::string& output )
         m_IndentString[m_Indent] = '\0';
 
         // insert the indtent string after newlines and before non-newlines
-        const char* pos = string;
-        char previous = '\n';
+        const tchar* pos = string;
+        tchar previous = '\n';
         for ( ; *pos != '\0'; previous = *pos++ )
         {
             if ( *pos == '\r' )
@@ -145,7 +145,7 @@ void Log::Statement::ApplyIndent( const char* string, std::string& output )
                 output += m_IndentString;
             }
 
-            // copy the char to the statement
+            // copy the tchar to the statement
             output += *pos;
         }
     }
@@ -183,7 +183,7 @@ void Log::RemovePrintedListener(const PrintedSignature::Delegate& listener)
     g_PrintedEvent.Remove(listener);
 }
 
-void Redirect(const std::string& fileName, const char* str, bool stampNewLine = true )
+void Redirect(const tstring& fileName, const tchar* str, bool stampNewLine = true )
 {
     FILE* f = g_FileManager.Find(fileName);
     if (f)
@@ -211,7 +211,7 @@ void Redirect(const std::string& fileName, const char* str, bool stampNewLine = 
     }
 }
 
-bool AddFile( M_OutputFile& files, const std::string& fileName, Stream stream, u32 threadId, bool append )
+bool AddFile( M_OutputFile& files, const tstring& fileName, Stream stream, u32 threadId, bool append )
 {
     Platform::TakeMutex mutex (g_Mutex);
 
@@ -234,11 +234,11 @@ bool AddFile( M_OutputFile& files, const std::string& fileName, Stream stream, u
     {
         FILE* f = NULL;
 
-        if (fileName != "")
+        if (fileName != TXT( "" ))
         {
-            char *mode = append ? "at+" : "wt+";
+            tchar *mode = append ? TXT( "at+" ) : TXT( "wt+" );
 
-            f = fopen( fileName.c_str(), mode );
+            f = _tfopen( fileName.c_str(), mode );
         }
 
         if ( f )
@@ -256,7 +256,7 @@ bool AddFile( M_OutputFile& files, const std::string& fileName, Stream stream, u
     return false;
 }
 
-void RemoveFile( M_OutputFile& files, const std::string& fileName )
+void RemoveFile( M_OutputFile& files, const tstring& fileName )
 {
     Platform::TakeMutex mutex (g_Mutex);
 
@@ -273,12 +273,12 @@ void RemoveFile( M_OutputFile& files, const std::string& fileName )
     }
 }
 
-bool Log::AddTraceFile( const std::string& fileName, Stream stream, u32 threadId, bool append )
+bool Log::AddTraceFile( const tstring& fileName, Stream stream, u32 threadId, bool append )
 {
     return AddFile( g_TraceFiles, fileName, stream, threadId, append );
 }
 
-void Log::RemoveTraceFile( const std::string& fileName )
+void Log::RemoveTraceFile( const tstring& fileName )
 {
     RemoveFile( g_TraceFiles, fileName );
 }
@@ -387,7 +387,7 @@ void Log::UnlockMutex()
     g_Mutex.Unlock();
 }
 
-void Log::PrintString(const char* string, Stream stream, Level level, Color color, int indent, char* output, u32 outputSize)
+void Log::PrintString(const tchar* string, Stream stream, Level level, Color color, int indent, tchar* output, u32 outputSize)
 {
     Platform::TakeMutex mutex (g_Mutex);
 
@@ -477,7 +477,7 @@ void Log::PrintString(const char* string, Stream stream, Level level, Color colo
             // output to buffer
             if (output && outputSize > 0)
             {
-                strncpy( output, statement.m_String.c_str(), outputSize - 1 );
+                _tcsncpy( output, statement.m_String.c_str(), outputSize - 1 );
             }
         }
     }
@@ -505,28 +505,28 @@ void Log::PrintStatements(const V_Statement& statements, u32 streamFilter)
     }
 }
 
-void Log::PrintColor(Log::Color color, const char* fmt, ...)
+void Log::PrintColor(Log::Color color, const tchar* fmt, ...)
 {
     Platform::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), fmt, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
     PrintString(string, Streams::Normal, Levels::Default, color); 
     va_end(args); 
 }
 
-void Log::Print(const char *fmt,...) 
+void Log::Print(const tchar *fmt,...) 
 {
     Platform::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), fmt, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
 
@@ -534,14 +534,14 @@ void Log::Print(const char *fmt,...)
     va_end(args);      
 }
 
-void Log::Print(Level level, const char *fmt,...) 
+void Log::Print(Level level, const tchar *fmt,...) 
 {
     Platform::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), fmt, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
 
@@ -549,14 +549,14 @@ void Log::Print(Level level, const char *fmt,...)
     va_end(args);       
 }
 
-void Log::Debug(const char *fmt,...) 
+void Log::Debug(const tchar *fmt,...) 
 {
     Platform::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), fmt, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
 
@@ -564,14 +564,14 @@ void Log::Debug(const char *fmt,...)
     va_end(args);
 }
 
-void Log::Debug(Level level, const char *fmt,...) 
+void Log::Debug(Level level, const tchar *fmt,...) 
 {
     Platform::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), fmt, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
 
@@ -579,14 +579,14 @@ void Log::Debug(Level level, const char *fmt,...)
     va_end(args);
 }
 
-void Log::Profile(const char *fmt,...) 
+void Log::Profile(const tchar *fmt,...) 
 {
     Platform::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), fmt, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
 
@@ -594,14 +594,14 @@ void Log::Profile(const char *fmt,...)
     va_end(args);
 }
 
-void Log::Profile(Level level, const char *fmt,...) 
+void Log::Profile(Level level, const tchar *fmt,...) 
 {
     Platform::TakeMutex mutex (g_Mutex);
 
     va_list args;
     va_start(args, fmt); 
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), fmt, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
 
@@ -609,18 +609,18 @@ void Log::Profile(Level level, const char *fmt,...)
     va_end(args);
 }
 
-void Log::Warning(const char *fmt,...) 
+void Log::Warning(const tchar *fmt,...) 
 {
     Platform::TakeMutex mutex (g_Mutex);
 
-    static char format[MAX_PRINT_SIZE];
-    sprintf(format, "Warning (%d): ", ++g_WarningCount);
-    strcat(format, fmt);
+    static tchar format[MAX_PRINT_SIZE];
+    _stprintf(format, TXT( "Warning (%d): " ), ++g_WarningCount);
+    _tcscat(format, fmt);
 
     va_list args;
     va_start(args, fmt); 
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), format, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
 
@@ -628,25 +628,25 @@ void Log::Warning(const char *fmt,...)
     va_end(args);      
 }
 
-void Log::Warning(Level level, const char *fmt,...) 
+void Log::Warning(Level level, const tchar *fmt,...) 
 {
     Platform::TakeMutex mutex (g_Mutex);
 
-    static char format[MAX_PRINT_SIZE];
+    static tchar format[MAX_PRINT_SIZE];
     if (level == Levels::Default)
     {
-        sprintf(format, "Warning (%d): ", ++g_WarningCount);
+        _stprintf(format, TXT( "Warning (%d): " ), ++g_WarningCount);
     }
     else
     {
         format[0] = '\0';
     }
-    strcat(format, fmt);
+    _tcscat(format, fmt);
 
     va_list args;
     va_start(args, fmt); 
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), format, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
 
@@ -654,18 +654,18 @@ void Log::Warning(Level level, const char *fmt,...)
     va_end(args);      
 }
 
-void Log::Error(const char *fmt,...) 
+void Log::Error(const tchar *fmt,...) 
 {
     Platform::TakeMutex mutex (g_Mutex);
 
-    static char format[MAX_PRINT_SIZE];
-    sprintf(format, "Error (%d): ", ++g_ErrorCount);
-    strcat(format, fmt);
+    static tchar format[MAX_PRINT_SIZE];
+    _stprintf(format, TXT( "Error (%d): " ), ++g_ErrorCount);
+    _tcscat(format, fmt);
 
     va_list args;
     va_start(args, fmt); 
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), format, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
 
@@ -673,25 +673,25 @@ void Log::Error(const char *fmt,...)
     va_end(args);
 }
 
-void Log::Error(Level level, const char *fmt,...) 
+void Log::Error(Level level, const tchar *fmt,...) 
 {
     Platform::TakeMutex mutex (g_Mutex);
 
-    static char format[MAX_PRINT_SIZE];
+    static tchar format[MAX_PRINT_SIZE];
     if (level == Levels::Default)
     {
-        sprintf(format, "Error (%d): ", ++g_ErrorCount);
+        _stprintf(format, TXT( "Error (%d): " ), ++g_ErrorCount);
     }
     else
     {
         format[0] = '\0';
     }
-    strcat(format, fmt);
+    _tcscat(format, fmt);
 
     va_list args;
     va_start(args, fmt); 
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), format, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
 
@@ -699,15 +699,15 @@ void Log::Error(Level level, const char *fmt,...)
     va_end(args);
 }
 
-Log::Heading::Heading(const char *fmt, ...)
+Log::Heading::Heading(const tchar *fmt, ...)
 {
     Platform::TakeMutex mutex (g_Mutex);
 
     // do a basic print
     va_list args;
     va_start(args, fmt); 
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), fmt, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), fmt, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
 
@@ -726,9 +726,9 @@ Log::Heading::~Heading()
     UnIndent();
 }
 
-std::vector<std::string> g_OutlineState;
+std::vector<tstring> g_OutlineState;
 
-Log::Bullet::Bullet(const char *fmt, ...)
+Log::Bullet::Bullet(const tchar *fmt, ...)
 : m_Stream( Streams::Normal )
 , m_Level( Log::Levels::Default )
 , m_Valid( fmt != NULL )
@@ -744,7 +744,7 @@ Log::Bullet::Bullet(const char *fmt, ...)
     }
 }
 
-Log::Bullet::Bullet(Stream stream, Log::Level level, const char *fmt, ...)
+Log::Bullet::Bullet(Stream stream, Log::Level level, const tchar *fmt, ...)
 : m_Stream( stream )
 , m_Level( level )
 , m_Valid( fmt != NULL )
@@ -788,9 +788,9 @@ Log::Bullet::~Bullet()
     }
 }
 
-void Log::Bullet::CreateBullet(const char *fmt, va_list args)
+void Log::Bullet::CreateBullet(const tchar *fmt, va_list args)
 {
-    static char delims[] = { 'o', '*', '>', '-' };
+    static tchar delims[] = { 'o', '*', '>', '-' };
 
     // this gates the output to the console for streams and levels that the user did not elect to see on in the console
     bool print = ( ( g_Streams & m_Stream ) == m_Stream ) && ( m_Level <= g_Level );
@@ -808,7 +808,7 @@ void Log::Bullet::CreateBullet(const char *fmt, va_list args)
     }
 
     // build the format string
-    static char format[MAX_PRINT_SIZE];
+    static tchar format[MAX_PRINT_SIZE];
     if (g_Indent == 1)
     {
         format[0] = delims[ 0 ];
@@ -821,19 +821,19 @@ void Log::Bullet::CreateBullet(const char *fmt, va_list args)
         format[1] = ' ';
         format[2] = '\0';
     }
-    strcat(format, fmt);
+    _tcscat(format, fmt);
 
     // format the bullet string
-    static char string[MAX_PRINT_SIZE];
-    int size = _vsnprintf(string, sizeof(string), format, args);
+    static tchar string[MAX_PRINT_SIZE];
+    int size = _vsntprintf(string, sizeof(string), format, args);
     string[ sizeof(string) - 1] = 0; 
     NOC_ASSERT(size >= 0);
 
     // do the print and capture the output
-    static char output[MAX_PRINT_SIZE];
+    static tchar output[MAX_PRINT_SIZE];
     if (g_Indent == 1)
     {
-        PrintString( "\n", m_Stream, m_Level, Log::GetStreamColor( m_Stream ), -1, output, sizeof( output ) );
+        PrintString( TXT( "\n" ), m_Stream, m_Level, Log::GetStreamColor( m_Stream ), -1, output, sizeof( output ) );
     }
     PrintString( string, m_Stream, m_Level, Log::GetStreamColor( m_Stream ), -1, output, sizeof( output ) );
 
@@ -847,14 +847,14 @@ void Log::Bullet::CreateBullet(const char *fmt, va_list args)
     }
 }
 
-std::string Log::GetOutlineState()
+tstring Log::GetOutlineState()
 {
     Platform::TakeMutex mutex (g_Mutex);
 
-    std::string state;
+    tstring state;
 
-    std::vector<std::string>::const_iterator itr = g_OutlineState.begin();
-    std::vector<std::string>::const_iterator end = g_OutlineState.end();
+    std::vector<tstring>::const_iterator itr = g_OutlineState.begin();
+    std::vector<tstring>::const_iterator end = g_OutlineState.end();
     for ( ; itr != end; ++itr )
     {
         if ( itr == g_OutlineState.begin() )

@@ -158,6 +158,7 @@ void SimpleArraySerializer<T>::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
+#ifdef REFLECT_XML_SUPPORT
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
             xml.GetIndent().Push();
@@ -166,37 +167,38 @@ void SimpleArraySerializer<T>::Serialize(Archive& archive) const
             for (size_t i=0; i<m_Data->size(); i++)
             {
                 // indent
-                xml.GetIndent().Get(archive.GetOutput());
+                xml.GetIndent().Get(archive.GetStream());
 
                 // write
-                archive.GetOutput() << m_Data.Get()[i];
+                archive.GetStream() << m_Data.Get()[i];
 
                 // newline
-                archive.GetOutput() << "\n";
+                archive.GetStream() << "\n";
             }
 
             xml.GetIndent().Pop();
+#endif
             break;
         }
 
     case ArchiveTypes::Binary:
         {
             i32 count = (i32)m_Data->size();
-            archive.GetOutput().Write(&count); 
+            archive.GetStream().Write(&count); 
 
             if(count > 0)
             {
                 // current offset in stream... 
-                i32 offset       = (i32) archive.GetOutput().TellWrite(); 
+                i32 offset       = (i32) archive.GetStream().TellWrite(); 
                 i32 bytesWritten = 0; 
-                archive.GetOutput().Write(&bytesWritten); 
+                archive.GetStream().Write(&bytesWritten); 
 
                 const T& front = m_Data->front();
-                bytesWritten   = CompressToStream(archive.GetOutput(), (const char*) &front, sizeof(T) * count); 
+                bytesWritten   = CompressToStream(archive.GetStream(), (const char*) &front, sizeof(T) * count); 
 
-                archive.GetOutput().SeekWrite(offset, std::ios_base::beg); 
-                archive.GetOutput().Write(&bytesWritten); 
-                archive.GetOutput().SeekWrite(0, std::ios_base::end); 
+                archive.GetStream().SeekWrite(offset, std::ios_base::beg); 
+                archive.GetStream().Write(&bytesWritten); 
+                archive.GetStream().SeekWrite(0, std::ios_base::end); 
 
             }
             break;
@@ -214,27 +216,29 @@ void SimpleArraySerializer<T>::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
+#ifdef REFLECT_XML_SUPPORT
             T value;
-            archive.GetInput().SkipWhitespace(); 
+            archive.GetStream().SkipWhitespace(); 
 
-            while (!archive.GetInput().Done())
+            while (!archive.GetStream().Done())
             {
                 // read data
-                archive.GetInput() >> value;
+                archive.GetStream() >> value;
 
                 // copy onto vector
                 m_Data->push_back(value);
 
                 // read to next non-whitespace char
-                archive.GetInput().SkipWhitespace(); 
+                archive.GetStream().SkipWhitespace(); 
             }
+#endif
             break;
         }
 
     case ArchiveTypes::Binary:
         {
             i32 count = -1;
-            archive.GetInput().Read(&count); 
+            archive.GetStream().Read(&count); 
 
             m_Data->resize(count);
 
@@ -247,20 +251,20 @@ void SimpleArraySerializer<T>::Deserialize(Archive& archive)
                 if(archiveBinary->GetVersion() >= ArchiveBinary::FIRST_VERSION_WITH_ARRAY_COMPRESSION)
                 {
                     i32 inputBytes; 
-                    archive.GetInput().Read(&inputBytes); 
-                    i32 bytesInflated = DecompressFromStream(archive.GetInput(), 
+                    archive.GetStream().Read(&inputBytes); 
+                    i32 bytesInflated = DecompressFromStream(archive.GetStream(), 
                         inputBytes, 
                         (char*) &(m_Data->front()), 
                         sizeof(T) * count); 
 
                     if(bytesInflated != sizeof(T) * count)
                     {
-                        throw Reflect::StreamException("Compressed Array size mismatch"); 
+                        throw Reflect::StreamException( TXT( "Compressed Array size mismatch" ) ); 
                     }
                 }
                 else
                 {
-                    archive.GetInput().ReadBuffer(&(m_Data->front()), sizeof(T) * count );
+                    archive.GetStream().ReadBuffer(&(m_Data->front()), sizeof(T) * count );
                 }
             }
             break;
@@ -318,39 +322,41 @@ void StringArraySerializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
+#ifdef REFLECT_XML_SUPPORT
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
             xml.GetIndent().Push();
-            xml.GetIndent().Get(archive.GetOutput());
+            xml.GetIndent().Get(archive.GetStream());
 
             // start our CDATA section, this prevents XML from parsing its escapes in this cdata section
-            archive.GetOutput() << "<![CDATA[\n";
+            archive.GetStream() << "<![CDATA[\n";
 
             for (size_t i=0; i<m_Data->size(); i++)
             {
-                xml.GetIndent().Get(archive.GetOutput());
+                xml.GetIndent().Get(archive.GetStream());
 
                 // output the escape-code free character sequence between double qutoes
-                archive.GetOutput() << '\"' << m_Data.Get()[i].c_str() << '\"' << s_ContainerItemDelimiter;
+                archive.GetStream() << '\"' << m_Data.Get()[i].c_str() << '\"' << s_ContainerItemDelimiter;
             }
 
             // end our CDATA escape section
-            xml.GetIndent().Get(archive.GetOutput());
-            archive.GetOutput() << "]]>\n";
+            xml.GetIndent().Get(archive.GetStream());
+            archive.GetStream() << "]]>\n";
 
             xml.GetIndent().Pop();
+#endif
             break;
         }
 
     case ArchiveTypes::Binary:
         {
             i32 size = (i32)m_Data->size();
-            archive.GetOutput().Write(&size); 
+            archive.GetStream().Write(&size); 
 
             for (size_t i=0; i<m_Data->size(); i++)
             {
-                i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().AssignIndex(m_Data.Get()[i]);
-                archive.GetOutput().Write(&index); 
+                i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().Insert(m_Data.Get()[i]);
+                archive.GetStream().Write(&index); 
             }
 
             break;
@@ -366,13 +372,14 @@ void StringArraySerializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-            archive.GetInput().SkipWhitespace(); 
+#ifdef REFLECT_XML_SUPPORT
+            archive.GetStream().SkipWhitespace(); 
 
             std::string value;
 
-            while (!archive.GetInput().Done())
+            while (!archive.GetStream().Done())
             {
-                std::getline(archive.GetInput(), value); 
+                std::getline( *archive.GetStream().GetInternal(), value ); 
 
                 size_t start = value.find_first_of('\"');
                 size_t end = value.find_last_of('\"');
@@ -389,27 +396,28 @@ void StringArraySerializer::Deserialize(Archive& archive)
                 }
                 else
                 {
-                    start = value.find_first_not_of(" \t\n");
+                    start = value.find_first_not_of( TXT( " \t\n" ) );
 
                     if (start != std::string::npos)
                         m_Data->push_back(value.substr(start));
                 }
 
-                archive.GetInput().SkipWhitespace(); 
+                archive.GetStream().SkipWhitespace(); 
             }
+#endif
             break;
         }
 
     case ArchiveTypes::Binary:
         {
             i32 size = (i32)m_Data->size();
-            archive.GetInput().Read(&size); 
+            archive.GetStream().Read(&size); 
 
             m_Data->resize(size);
             for (i32 i=0; i<size; i++)
             {
                 i32 index;
-                archive.GetInput().Read(&index); 
+                archive.GetStream().Read(&index); 
                 m_Data.Ref()[i] = static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index);
             }
 

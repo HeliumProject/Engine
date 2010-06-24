@@ -8,26 +8,30 @@
 // helper functions for using boost::regex
 // 
 // some of these could be made template functions on their return types
-// and moved to std::strstream; if we did that we would need to decide what
+// and moved to tstringstream; if we did that we would need to decide what
 // kind of error semantics we want. currently this is just adopted from 
 // existing code that requires this functionality, and has WEAK error checking
 // to say the least. 
 // 
 // currently they are templated on their input result
 // good candidate result types are: 
-//   boost::smatch (when you match a std::string)
-//   boost::cmatch (when you match a const char*) 
+//   boost::smatch (when you match a tstring)
+//   boost::cmatch (when you match a const tchar*) 
 // 
 // this templatization should be transparent to the user, since 
 // cmatch and smatch are not ambiguous at all. 
 // 
 
+typedef boost::basic_regex<tchar, boost::regex_traits<tchar> > tregex;
+typedef boost::regex_token_iterator< const tchar*> tcregex_token_iterator;
+typedef boost::regex_token_iterator< tstring::const_iterator> tsregex_token_iterator;
+
 namespace Nocturnal
 {
     template <class MatchT>
-    inline std::string BoostMatchResultAsString( const boost::match_results<MatchT>& results, int i )
+    inline tstring BoostMatchResultAsString( const boost::match_results<MatchT>& results, int i )
     {
-        return std::string ( results[i].first, results[i].second ); 
+        return tstring ( results[i].first, results[i].second ); 
     }
 
     template <class T, class MatchT>

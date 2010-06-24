@@ -20,16 +20,16 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
 , m_MemTotalFree( 0 )
 , m_MemLargestFree( 0 )
 {
-  char buf[MAX_PATH];
+  tchar buf[MAX_PATH];
 
   m_UserName.clear();
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( "USERNAME", buf, MAX_PATH );
+  GetEnvironmentVariable( TXT( "USERNAME" ), buf, MAX_PATH );
   m_UserName = buf;
 
   m_Computer.clear();
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( "COMPUTERNAME", buf, MAX_PATH );
+  GetEnvironmentVariable( TXT( "COMPUTERNAME" ), buf, MAX_PATH );
   m_Computer = buf;
 
   m_ApplicationPath.clear();
@@ -46,7 +46,7 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
   {
     m_ApplicationName = processPath;
   }
-  toLower( m_ApplicationName );
+
   size_t firstDot = m_ApplicationName.find_last_of( '.' );
   m_ApplicationName = m_ApplicationName.substr( 0, firstDot );
 

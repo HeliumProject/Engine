@@ -8,43 +8,43 @@ using namespace Nocturnal;
 
 // the fully processed argc/argv data
 int            g_Argc = 0;
-const char**   g_Argv = NULL;
-char           g_CmdLine[ ARG_MAX ] = { '\0' };
-const char*    Nocturnal::CmdLineDelimiters = "-/";
+const tchar**   g_Argv = NULL;
+tchar           g_CmdLine[ ARG_MAX ] = { '\0' };
+const tchar*    Nocturnal::CmdLineDelimiters = TXT( "-/" );
 
-void Nocturnal::SetCmdLine( int argc, const char** argv )
+void Nocturnal::SetCmdLine( int argc, const tchar** argv )
 {
     for ( int i=0; i<argc; i++ )
     {
-        bool quote = strstr( argv[i], " " ) != NULL;
+        bool quote = _tcsstr( argv[i], TXT( " " ) ) != NULL;
 
         if ( quote )
         {
-            strncat( g_CmdLine, "\"", sizeof( g_CmdLine ) - strlen( g_CmdLine ) );
+            _tcsncat( g_CmdLine, TXT( "\"" ), sizeof( g_CmdLine ) - _tcslen( g_CmdLine ) );
         }
 
-        strncat( g_CmdLine, argv[ i ], sizeof( g_CmdLine ) - strlen( g_CmdLine ) );   
+        _tcsncat( g_CmdLine, argv[ i ], sizeof( g_CmdLine ) - _tcslen( g_CmdLine ) );   
 
         if ( quote )
         {
-            strncat( g_CmdLine, "\"", sizeof( g_CmdLine ) - strlen( g_CmdLine ) );
+            _tcsncat( g_CmdLine, TXT( "\"" ), sizeof( g_CmdLine ) - _tcslen( g_CmdLine ) );
         }
 
         if ( i+1 < argc )
         {
-            strncat( g_CmdLine, " ", sizeof( g_CmdLine ) - strlen( g_CmdLine ) );
+            _tcsncat( g_CmdLine, TXT( " " ), sizeof( g_CmdLine ) - _tcslen( g_CmdLine ) );
         }
     }
 
-    std::string inherited;
-    Nocturnal::GetEnvVar( "NOC_CMD_ARGS", inherited );
-    strncat( g_CmdLine, " ", sizeof( g_CmdLine ) - strlen( g_CmdLine ) );
-    strncat( g_CmdLine, inherited.c_str(), sizeof( g_CmdLine ) - strlen( g_CmdLine ) );
+    tstring inherited;
+    Nocturnal::GetEnvVar( TXT( "NOC_CMD_ARGS" ), inherited );
+    _tcsncat( g_CmdLine, TXT( " " ), sizeof( g_CmdLine ) - _tcslen( g_CmdLine ) );
+    _tcsncat( g_CmdLine, inherited.c_str(), sizeof( g_CmdLine ) - _tcslen( g_CmdLine ) );
 
     ProcessCmdLine( g_CmdLine, g_Argc, g_Argv );
 }
 
-const char* Nocturnal::GetCmdLine()
+const tchar* Nocturnal::GetCmdLine()
 {
     return g_CmdLine;
 }
@@ -56,11 +56,11 @@ void Nocturnal::ReleaseCmdLine()
     g_Argc = 0;
 }
 
-void Nocturnal::ProcessCmdLine(const char* command, int& argc, const char**& argv)
+void Nocturnal::ProcessCmdLine(const tchar* command, int& argc, const tchar**& argv)
 {
-    char* _argv;
+    tchar* _argv;
 
-    char a;
+    tchar a;
     unsigned len;
     unsigned i, j;
 
@@ -68,11 +68,11 @@ void Nocturnal::ProcessCmdLine(const char* command, int& argc, const char**& arg
     bool in_TEXT;
     bool in_SPACE;
 
-    len = (unsigned)strlen(command);
+    len = (unsigned)_tcslen(command);
     i = ((len+2)/2)*sizeof(void*) + sizeof(void*);
 
-    argv = (const char**)(new char**[i + (len+2)*sizeof(char)]);
-    _argv = (char*)(((unsigned char*)argv)+i);
+    argv = (const tchar**)(new tchar**[i + (len+2)*sizeof(tchar)]);
+    _argv = (tchar*)(((tchar*)argv)+i);
 
     argc = 0;
     argv[argc] = _argv;
@@ -145,21 +145,21 @@ void Nocturnal::ProcessCmdLine(const char* command, int& argc, const char**& arg
     argv[argc] = NULL;
 }
 
-const char** Nocturnal::GetCmdLine( int& argc )
+const tchar** Nocturnal::GetCmdLine( int& argc )
 {
     argc = g_Argc;
     return g_Argv;
 }
 
-const char* Nocturnal::GetCmdLineArg( const char* arg )
+const tchar* Nocturnal::GetCmdLineArg( const tchar* arg )
 {
-    int delims = (int)strlen( Nocturnal::CmdLineDelimiters );
+    int delims = (int)_tcslen( Nocturnal::CmdLineDelimiters );
 
     // for each arg
     for ( int i=0; i<g_Argc; ++i )
     {
         // this will be the arg w/o delims
-        const char* name = NULL;
+        const tchar* name = NULL;
 
         // for each delimiter
         for ( int j=0; j<delims; j++ )
@@ -181,7 +181,7 @@ const char* Nocturnal::GetCmdLineArg( const char* arg )
         }
 
         // if we have a valid arg, return the next one (if it exists)
-        if ( name && !stricmp(arg, name) )
+        if ( name && !_tcsicmp(arg, name) )
         {
             if ( i+1 < g_Argc )
             {
@@ -189,7 +189,7 @@ const char* Nocturnal::GetCmdLineArg( const char* arg )
             }
             else
             {
-                return "";
+                return TXT( "" );
             }
         }
     }
@@ -197,7 +197,7 @@ const char* Nocturnal::GetCmdLineArg( const char* arg )
     return NULL;
 }
 
-bool Nocturnal::GetCmdLineFlag( const char* arg )
+bool Nocturnal::GetCmdLineFlag( const tchar* arg )
 {
     bool explicitValue;
     if ( GetCmdLineArg( arg, explicitValue ) )

@@ -53,14 +53,14 @@ namespace Profile
         float m_TotalMillis; 
 
         i32   m_Index;
-        char  m_Name[MAX_DESCRIPTION];
+        tchar  m_Name[MAX_DESCRIPTION];
 
         Accumulator(); 
-        Accumulator(const char* name);
-        Accumulator (const char* function, const char* name);
+        Accumulator(const tchar* name);
+        Accumulator (const tchar* function, const tchar* name);
         ~Accumulator();
 
-        void Init(const char* name);
+        void Init(const tchar* name);
         void Report();
 
         static void ReportAll();
@@ -75,10 +75,10 @@ namespace Profile
     class FOUNDATION_API ScopeTimer
     {
     public: 
-        ScopeTimer(Accumulator* accum, const char* func, u32 line, const char* desc = NULL); 
+        ScopeTimer(Accumulator* accum, const char* func, u32 line, const tchar* desc = NULL); 
         ~ScopeTimer(); 
 
-        char         m_Description[MAX_DESCRIPTION]; 
+        tchar         m_Description[MAX_DESCRIPTION]; 
         u64          m_StartTicks; 
         Accumulator* m_Accum; 
         u32          m_UniqueID; 
@@ -110,8 +110,8 @@ namespace Profile
         u32    m_StackDepth; 
         u32    m_Line; 
         u64    m_StartTicks; 
-        char   m_Description[PROFILE_PACKET_STRING_BUFSIZE]; 
-        char   m_Function[PROFILE_PACKET_STRING_BUFSIZE]; 
+        tchar   m_Description[PROFILE_PACKET_STRING_BUFSIZE]; 
+        tchar   m_Function[PROFILE_PACKET_STRING_BUFSIZE]; 
     }; 
 
     struct ScopeExitPacket 

@@ -177,19 +177,19 @@ inline u64 hash64( u8* k, u32 length, u64 level)
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-inline std::string hash64( std::string in )
+inline tstring hash64( tstring in )
 {
     u8* bytes = (u8*)&(in[0]);
 
     u64 hash_val = hash64( bytes, (u32)in.size(), 0x123456789ABCDEFL );
 
-    std::string ret;
+    tstring ret;
     for (u32 i = 0; i < 16; i++)
     {
         u64 digit = (hash_val >> (i * 4)) & 0xF;
 
-        char buf[2];
-        sprintf( buf, "%x", digit);
+        tchar buf[2];
+        _stprintf( buf, "%x", digit);
         ret += buf;
     }
 

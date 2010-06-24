@@ -88,7 +88,7 @@ public:
 
       if (stream.fail())
       {
-        throw Application::Exception("Invalid version format '%s'", str.c_str());
+        throw Application::Exception( TXT( "Invalid version format '%s'" ), str.c_str());
       }
     }
   }
@@ -205,56 +205,51 @@ bool GetVersion(std::string filePath, std::string& versionString)
   return result;
 }
 
-void HandleResult(VersionResult result, std::string details)
+void HandleResult(VersionResult result, tstring details)
 {
-  char buf[256];
-  std::string message;
+  tstring message;
 
   switch (result)
   {
   case VersionResults::Project:
     {
-      sprintf(buf, "Your tools are for a different project. You cannot proceed using these tools.");
-      message = buf;
+      message = TXT( "Your tools are for a different project. You cannot proceed using these tools." );
       break;
     }
 
   case VersionResults::Compatible:
     {
-      sprintf(buf, "Your tools are not compatible anymore. Sorry, but you must update immediately.");
-      message = buf;
+      message = TXT( "Your tools are not compatible anymore. Sorry, but you must update immediately." );
       break;
     }
 
   case VersionResults::Feature:
     {
-      sprintf(buf, "The tools have been improved. You should update as soon as possible.");
-      message = buf;
+      message = TXT( "The tools have been improved. You should update as soon as possible." );
       break;
     }
 
   case VersionResults::Patch:
     {
-      sprintf(buf, "The tools have been updated. You should update when you get a chance.");
-      message = buf;
+      message = TXT( "The tools have been updated. You should update when you get a chance.");
       break;
     }
   }
 
   if (!details.empty())
   {
-    message += " (";
+    message += TXT( " (" );
     message += details;
-    message += ")";
+    message += TXT( ")" );
   }
 
   if (result > VersionResults::Feature)
   {
-    throw Application::CheckVersionException ( message.c_str() );
+    throw Application::CheckVersionException( message.c_str() );
   }
   else
   {
-    Log::Warning("%s\n", message.c_str());
+    Log::Warning( TXT( "%s\n" ), message.c_str());
   }
 }
 

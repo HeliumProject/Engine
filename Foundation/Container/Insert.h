@@ -6,7 +6,7 @@
 // This is a cross platform solution for microsofts _Pairib typedef,
 //  which is very convenient but not present in STLPort
 // 
-// typedef std::map<std::string, int> M_StrToInt;
+// typedef std::map<tstring, int> M_StrToInt;
 //
 // M_StrToInt m_Map;
 //

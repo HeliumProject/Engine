@@ -15,7 +15,7 @@ namespace Nocturnal
         {
 		protected:
 			Processor* m_Owner;
-			std::string m_CommandName;
+			tstring m_CommandName;
 
         public:
             Help( Processor* owner = NULL );
@@ -26,7 +26,7 @@ namespace Nocturnal
 				m_Owner = owner;
 			}
 
-			virtual bool Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) NOC_OVERRIDE;
+			virtual bool Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) NOC_OVERRIDE;
         };
     }
 }

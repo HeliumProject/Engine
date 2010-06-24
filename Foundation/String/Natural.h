@@ -40,27 +40,27 @@ misrepresented as being the original software.
 *
 */
 
-typedef char nat_char;
+typedef tchar nat_char;
 
 
 static inline int
 nat_isdigit(nat_char a)
 {
-    return isdigit((unsigned char) a);
+    return isdigit((unsigned tchar) a);
 }
 
 
 static inline int
 nat_isspace(nat_char a)
 {
-    return isspace((unsigned char) a);
+    return isspace((unsigned tchar) a);
 }
 
 
 static inline nat_char
 nat_toupper(nat_char a)
 {
-    return toupper((unsigned char) a);
+    return toupper((unsigned tchar) a);
 }
 
 
@@ -188,9 +188,9 @@ inline int strinatcmp(nat_char const *a, nat_char const *b)
 // Comparison algorithm for strings sorted using case insensitive natural 
 // ordering.  See strnatcmp.h for more information.
 // 
-struct CaseInsensitiveNatStrCmp : public std::binary_function< std::string, std::string, bool >
+struct CaseInsensitiveNatStrCmp : public std::binary_function< tstring, tstring, bool >
 {
-    bool operator( )( const std::string& str1, const std::string& str2 ) const
+    bool operator( )( const tstring& str1, const tstring& str2 ) const
     {
         return ( strinatcmp( str1.c_str(), str2.c_str() ) < 0 );
     }
@@ -201,9 +201,9 @@ struct CaseInsensitiveNatStrCmp : public std::binary_function< std::string, std:
 // Comparison algorithm for strings sorted using case sensitive natural 
 // ordering.  See strnatcmp.h for more information.
 // 
-struct CaseSensitiveNatStrCmp : public std::binary_function< std::string, std::string, bool >
+struct CaseSensitiveNatStrCmp : public std::binary_function< tstring, tstring, bool >
 {
-    bool operator( )( const std::string& str1, const std::string& str2 ) const
+    bool operator( )( const tstring& str1, const tstring& str2 ) const
     {
         return ( strnatcmp( str1.c_str(), str2.c_str() ) < 0 );
     }

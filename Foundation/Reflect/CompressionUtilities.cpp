@@ -19,8 +19,10 @@ namespace Reflect
 
             int ok = deflateInit(this, Z_DEFAULT_COMPRESSION); 
 
-            if(ok != Z_OK)
-                throw Nocturnal::Exception("zlib deflateInit error"); 
+            if( ok != Z_OK )
+            {
+                throw Nocturnal::Exception( TXT( "zlib deflateInit error" ) ); 
+            }
         }
 
         ~zlibOutputStream()
@@ -41,8 +43,10 @@ namespace Reflect
 
             int ok = inflateInit(this); 
 
-            if(ok != Z_OK)
-                throw Nocturnal::Exception("zlib inflateInit error"); 
+            if( ok != Z_OK )
+            {
+                throw Nocturnal::Exception( TXT( "zlib inflateInit error" ) ); 
+            }
         }
 
         ~zlibInputStream()
@@ -79,8 +83,10 @@ namespace Reflect
             // since we have a fixed size input, this is always Z_FINISH 
             int ret = deflate(&zStream, Z_FINISH); 
 
-            if(ret == Z_STREAM_ERROR)
-                throw Nocturnal::Exception("zlib error while compressing"); 
+            if( ret == Z_STREAM_ERROR )
+            {
+                throw Nocturnal::Exception( TXT( "zlib error while compressing" ) ); 
+            }
 
             int outputSize = compressBufferSize - zStream.avail_out; 
             reflectStream.WriteBuffer(compressBuffer, outputSize); 
@@ -137,12 +143,12 @@ namespace Reflect
             // happens when we get to the end of the input or output
             if(ret == Z_BUF_ERROR && zStream.avail_out == 0)
             {
-                throw Nocturnal::Exception("zlib decompression overflow"); 
+                throw Nocturnal::Exception( TXT( "zlib decompression overflow" ) ); 
             }
 
-            if(ret != Z_OK)
+            if( ret != Z_OK )
             {
-                throw Nocturnal::Exception("zlib error while decompressing"); 
+                throw Nocturnal::Exception( TXT( "zlib error while decompressing" ) ); 
             }
         }
 

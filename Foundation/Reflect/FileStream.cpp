@@ -5,11 +5,11 @@
 #include <fstream>
 #include <strstream>
 
-namespace Reflect
-{
-    FileStream::FileStream(const std::string& filename, bool write) : 
-m_Filename(filename), 
-m_OpenForWrite(write)
+using namespace Reflect;
+
+FileStream::FileStream(const tstring& filename, bool write)
+: m_Filename(filename)
+, m_OpenForWrite(write)
 {
 
 }
@@ -38,7 +38,7 @@ void FileStream::Open()
     if (!fstream->is_open())
     {
         delete fstream;
-        throw Reflect::StreamException ("Unable to open '%s' for %s", m_Filename.c_str(), m_OpenForWrite ? "write" : "read");
+        throw Reflect::StreamException( TXT( "Unable to open '%s' for %s" ) , m_Filename.c_str(), m_OpenForWrite ? "write" : "read");
     }
 
     m_Stream    = fstream; 
@@ -52,10 +52,8 @@ void FileStream::Close()
 
     if (fstream->is_open())
     {
-        throw Reflect::StreamException ("Unable to close '%s' after %s", m_Filename.c_str(), m_OpenForWrite ? "write" : "read");
+        throw Reflect::StreamException( TXT( "Unable to close '%s' after %s" ), m_Filename.c_str(), m_OpenForWrite ? "write" : "read");
     }
     // parent destructor will clean up the internal stream
     // 
-}
-
 }

@@ -34,7 +34,7 @@ namespace Nocturnal
     class PropertyException : public Nocturnal::Exception
     {
     public:
-        PropertyException( const char *msgFormat, ... )
+        PropertyException( const tchar *msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );

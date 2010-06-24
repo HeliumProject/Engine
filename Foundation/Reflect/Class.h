@@ -2,6 +2,8 @@
 
 #include "Composite.h"
 
+#include "Platform/String.h"
+
 namespace Reflect
 {
     class Field;
@@ -35,8 +37,8 @@ namespace Reflect
             info->m_TypeID = AssignTypeID();
             info->m_Size = sizeof(T);
 
-            info->m_ShortName = ( shortName.empty() ? ShortenName(typeid(T).name()) : shortName );
-            info->m_FullName = typeid(T).name();
+            info->m_ShortName = ( shortName.empty() ? ShortenName( typeid(T).name() ) : shortName );
+            info->m_FullName = typeid( T ).name();
             info->m_UIName = info->m_ShortName;
 
             info->m_Base = base;
@@ -121,7 +123,7 @@ namespace Reflect
             return Reflect::GetClass<D>();
         }
 
-        static Reflect::Class* CreateClass(const std::string& shortName = "")
+        static Reflect::Class* CreateClass(const std::string& shortName = "" )
         {
             return Reflect::Class::Create<D>(typeid(B).name(), shortName);
         }
@@ -178,7 +180,7 @@ namespace Reflect
     return Reflect::GetClass<__Class>();                                                                            \
 }                                                                                                                 \
     \
-    static Reflect::Class* CreateClass(const std::string& shortName = "")                                             \
+    static Reflect::Class* CreateClass(const std::string& shortName = "" )                                             \
 {                                                                                                                 \
     return Reflect::Class::Create<__Class>(typeid(__Base).name(), shortName, __Creator);                            \
 }

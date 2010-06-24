@@ -232,7 +232,12 @@ namespace Reflect
         }
 
         const Type* type = NULL;
-        Registry::GetInstance()->AtomicGetType( typeid( T ).name(), &type );
+        
+        std::string temp;
+        bool converted = Platform::ConvertString( typeid( T ).name(), temp );
+        NOC_ASSERT( converted ); // if you hit this, for some reason we couldn't convert your typename
+
+        Registry::GetInstance()->AtomicGetType( temp, &type );
         NOC_ASSERT(type); // if you hit this then your type is not registered
 
         if ( type )
@@ -258,7 +263,12 @@ namespace Reflect
         }
 
         const Type* type = NULL;
-        Registry::GetInstance()->AtomicGetType( typeid( T ).name(), &type );
+
+        std::string temp;
+        bool converted = Platform::ConvertString( typeid( T ).name(), temp );
+        NOC_ASSERT( converted ); // if you hit this, we couldn't convert your typename for some reason
+
+        Registry::GetInstance()->AtomicGetType( temp, &type );
         NOC_ASSERT(type); // if you hit this then your type is not registered
 
         if ( type )
@@ -307,7 +317,7 @@ namespace Reflect
     typedef void (*UnregisterFunc)();
 
     template<class T>
-    inline UnregisterFunc RegisterClass(const std::string& shortName = "")
+    inline UnregisterFunc RegisterClass(const std::string& shortName = TXT( "" ))
     {
         // create the type information and register it with the registry
         if ( Reflect::Registry::GetInstance()->RegisterType( T::CreateClass( shortName ) ) )
@@ -330,7 +340,7 @@ namespace Reflect
     typedef void EnumerateEnumerationFunc( Reflect::Enumeration* info );
 
     template<class T>
-    inline UnregisterFunc RegisterEnumeration(EnumerateEnumerationFunc enumerate, const std::string& shortName = "")
+    inline UnregisterFunc RegisterEnumeration(EnumerateEnumerationFunc enumerate, const std::string& shortName = TXT( "" ))
     {
         Reflect::Enumeration* info = Reflect::Enumeration::Create<T>( shortName );
 

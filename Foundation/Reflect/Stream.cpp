@@ -5,8 +5,8 @@
 
 using namespace Reflect;
 
-Profile::Accumulator g_StreamWrite("Reflect Stream Write");
-Profile::Accumulator g_StreamRead("Reflect Stream Read"); 
+Profile::Accumulator g_StreamWrite( TXT( "Reflect Stream Write" ) );
+Profile::Accumulator g_StreamRead( TXT( "Reflect Stream Read" ) ); 
 
 Stream::Stream()
 : m_Stream(NULL)
@@ -15,8 +15,8 @@ Stream::Stream()
 
 }
 
-Stream::Stream(std::iostream* p_Stream, bool ownStream) : 
-m_Stream(p_Stream), 
+Stream::Stream(std::iostream* stream, bool ownStream) : 
+m_Stream(stream), 
 m_OwnStream(ownStream)
 {
 
@@ -74,29 +74,29 @@ std::streamsize Stream::BytesRead() const
     return m_Stream->gcount(); 
 }
 
-Stream& Stream::write(const char* t, std::streamsize size)
+Stream& Stream::WriteBuffer(const void* t, std::streamsize size)
 {
     PROFILE_SCOPE_ACCUM(g_StreamWrite); 
 
-    m_Stream->write(t, size); 
+    m_Stream->write((const char*)t, size); 
 
     if (m_Stream->fail())
     {
-        throw Reflect::StreamException("General write failure"); 
+        throw Reflect::StreamException( TXT( "General write failure") ); 
     }
 
     return *this; 
 }
 
-Stream& Stream::read(char* t, std::streamsize size)
+Stream& Stream::ReadBuffer(void* t, std::streamsize size)
 {
     PROFILE_SCOPE_ACCUM(g_StreamRead); 
 
-    m_Stream->read(t, size); 
+    m_Stream->read((char*)t, size); 
 
     if (m_Stream->fail() && !m_Stream->eof())
     {
-        throw Reflect::StreamException("General read failure"); 
+        throw Reflect::StreamException( TXT( "General read failure" ) ); 
     }
 
     return *this; 
@@ -106,7 +106,6 @@ bool Stream::Fail(void)
 {
     return m_Stream->fail(); 
 }
-
 
 bool Stream::Done()
 {

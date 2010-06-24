@@ -222,7 +222,7 @@ void SimpleSetSerializer<DataT, DataSer>::Deserialize(Archive& archive)
         DataSer* data = ObjectCast<DataSer>(*itr);
         if (!data)
         {
-            throw LogisticException("Set value type has changed, this is unpossible");
+            throw LogisticException( TXT( "Set value type has changed, this is unpossible" ) );
         }
 
         m_Data->insert(data->m_Data.Get());

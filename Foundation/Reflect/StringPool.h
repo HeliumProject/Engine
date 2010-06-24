@@ -38,14 +38,20 @@ namespace Reflect
     class FOUNDATION_API StringPool
     {
     public:
-        typedef stdext::hash_map<std::string, int> M_StringToIndex; 
+        typedef stdext::hash_map<std::string, int> M_StringToIndex;
+        typedef stdext::hash_map<std::wstring, int> M_WideStringToIndex;
 
-        std::vector<std::string> m_Strings;
-        M_StringToIndex          m_Indices; 
+        M_StringToIndex             m_Indices; 
+        std::vector< std::string >  m_Strings;
 
-        int GetIndex(const std::string& str);
-        int AssignIndex(const std::string& str);
-        const std::string& GetString(int index);
+        M_WideStringToIndex         m_WideIndices; 
+        std::vector< std::wstring > m_WideStrings;
+
+        int Insert( const std::string& str );
+        int Insert( const std::wstring& str );
+
+        const std::string& GetString( const int index );
+        const std::wstring& GetWideString( const int index );
 
         void Serialize    (ArchiveBinary* archive); 
         void Deserialize  (ArchiveBinary* archive); 

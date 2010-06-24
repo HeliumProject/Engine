@@ -13,7 +13,7 @@ namespace Profile
 
     struct MemoryPool
     {
-        const char* m_Name;
+        const tchar* m_Name;
         u32         m_Count;
         u64         m_Size;
         u64         m_Previous;
@@ -53,7 +53,7 @@ namespace Profile
         static bool Initialize();
         static void Cleanup();
 
-        static MemoryPoolHandle CreatePool(const char* name);
+        static MemoryPoolHandle CreatePool(const tchar* name);
 
         static void Allocate(MemoryPoolHandle pool, u32 size);
         static void Deallocate(MemoryPoolHandle pool, u32 size);

@@ -58,9 +58,9 @@ void TUID::ToGUID( Nocturnal::GUID& id ) const
     }
 }
 
-void TUID::ToString(std::string& id) const
+void TUID::ToString(tstring& id) const
 {
-    std::ostringstream str;
+    tostringstream str;
     str << TUID::HexFormat << m_ID;
     id = str.str();
 }
@@ -91,10 +91,10 @@ void TUID::FromGUID( const Nocturnal::GUID& id )
     }
 }
 
-bool TUID::FromString( const std::string& str )
+bool TUID::FromString( const tstring& str )
 {
-    std::stringstream stream;
-    std::string::const_iterator alphaIt = std::find_if( str.begin(), str.end(), isAlpha );
+    tstringstream stream;
+    tstring::const_iterator alphaIt = std::find_if( str.begin(), str.end(), isAlpha );
 
     if ( alphaIt != str.end() )
     {
@@ -106,7 +106,7 @@ bool TUID::FromString( const std::string& str )
         else
         {
             // this is icky, pretend that they entered a hex tuid without the prefix
-            std::string prefixedStr = std::string( "0x" ) + str;
+            tstring prefixedStr = tstring( TXT( "0x" ) ) + str;
 
             stream << prefixedStr;
             stream >> std::hex >> m_ID;
@@ -146,7 +146,7 @@ void TUID::Generate( tuid& uid )
         DWORD status = GetAdaptersInfo( adapterInfo, &bufLength );
         if ( status != ERROR_SUCCESS )
         {
-            throw Nocturnal::Exception( "Could not get network adapter info to seed TUID generation." );
+            throw Nocturnal::Exception( TXT( "Could not get network adapter info to seed TUID generation." ) );
         }
 
         // cache the appropriate bits
@@ -170,7 +170,7 @@ void TUID::Generate( tuid& uid )
     BOOL result = QueryPerformanceCounter( &ticks );
     if ( !result )
     {
-        throw Nocturnal::Exception( "Could not obtain performance counter ticks to generate TUID." );
+        throw Nocturnal::Exception( TXT( "Could not obtain performance counter ticks to generate TUID." ) );
     }
     timeBits = ticks.LowPart;
     timeBits = timeBits << 32; // shift left

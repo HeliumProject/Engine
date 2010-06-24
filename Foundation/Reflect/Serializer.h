@@ -348,7 +348,7 @@ namespace Reflect
         //
 
         // data serialization (extract to smart buffer)
-        virtual void Serialize (const Nocturnal::BasicBufferPtr& buffer, const char* debugStr) const
+        virtual void Serialize (const Nocturnal::BasicBufferPtr& buffer, const tchar* debugStr) const
         {
             NOC_BREAK();
         }

@@ -367,6 +367,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug Unicode|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			CharacterSet="1"

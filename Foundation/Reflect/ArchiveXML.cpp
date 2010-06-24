@@ -47,7 +47,7 @@ void ArchiveXML::Read()
     // fail on an empty input stream
     if ( size == 0 )
     {
-        throw Reflect::StreamException("Input stream is empty");
+        throw Reflect::StreamException( TXT( "Input stream is empty" ) );
     }
 
     // setup visitors
@@ -63,7 +63,7 @@ void ArchiveXML::Read()
     {
         m_Progress = (int)(((float)(step++ * buffer_size) / (float)size) * 100.0f);
 
-        char* pszBuffer = (char*)GetBuffer(buffer_size); // REQUEST
+        tchar* pszBuffer = (tchar*)GetBuffer(buffer_size); // REQUEST
         NOC_ASSERT(pszBuffer != NULL);
 
         m_Stream->ReadBuffer(pszBuffer, buffer_size);
@@ -71,7 +71,7 @@ void ArchiveXML::Read()
         int last_read = static_cast<int>(m_Stream->BytesRead());
         if (!ParseBuffer( last_read, last_read == 0 ))
         {
-            throw Reflect::DataFormatException ("XML parsing failure, buffer contents:\n%s", (const char*)pszBuffer);
+            throw Reflect::DataFormatException( TXT( "XML parsing failure, buffer contents:\n%s" ), (const tchar*)pszBuffer);
         }
     }
 
@@ -241,7 +241,7 @@ void ArchiveXML::SerializeField(const ElementPtr& element, const Field* field)
     if (!serializer.ReferencesObject())
     {
         // this should never happen, the type id in the rtti data is bogus
-        throw Reflect::TypeInformationException( "Invalid type id for field '%s'", field->m_Name.c_str() );
+        throw Reflect::TypeInformationException( TXT( "Invalid type id for field '%s'" ), field->m_Name.c_str() );
     }
     else
     {
@@ -345,7 +345,7 @@ void ArchiveXML::Deserialize(ElementPtr& element)
     {
         // xml doesn't work this way
         NOC_BREAK();
-        throw Reflect::LogisticException("Internal Error: Missing element");
+        throw Reflect::LogisticException( TXT( "Internal Error: Missing element" ) );
     }
 }
 
@@ -378,15 +378,15 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
         return;
     }
 
-    if (!strcmp(pszName, "Reflect"))
+    if ( !_tcscmp(pszName, TXT( "Reflect" ) ) )
     {
-        if ( papszAttrs[0] && papszAttrs[1] && papszAttrs[0] && _stricmp(papszAttrs[0], "FileFormatVersion") == 0 )
+        if ( papszAttrs[0] && papszAttrs[1] && papszAttrs[0] && _tcsicmp(papszAttrs[0], TXT( "FileFormatVersion" ) ) == 0 )
         {
-            std::istrstream str ( papszAttrs[1] );
+            tistringstream str ( papszAttrs[1] );
             str >> m_Version;
             if (str.fail())
             {
-                throw Reflect::DataFormatException ("Unable to read file format version");
+                throw Reflect::DataFormatException( TXT( "Unable to read file format version" ) );
             }
         }
         else
@@ -397,7 +397,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
         return;
     }
 
-    if (!strcmp(pszName, "Append"))
+    if (!_tcscmp(pszName, TXT( "Append" )))
     {
         m_Target = &m_Append;
         return;
@@ -407,35 +407,37 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     // Find element type
     //
 
-    const char* elementType = NULL;
+    std::string elementType;
 
     if ( m_Version < FIRST_VERSION_WITH_NAMESPACE_SUPPORT )
     {
-        elementType = pszName;
+        bool converted = Platform::ConvertString( pszName, elementType );
+        NOC_ASSERT( converted );
     }
 
-    if ( elementType == NULL )
+    if ( elementType.empty() )
     {
         for (int i=0; papszAttrs[i]; i+=2)
         {
-            if ( !strcmp( papszAttrs[i], "Type" ) )
+            if ( !_tcscmp( papszAttrs[i], TXT( "Type" ) ) )
             {
-                elementType = papszAttrs[i+1];
+                bool converted = Platform::ConvertString( papszAttrs[ i + 1 ], elementType );
+                NOC_ASSERT( converted );
             }
         }
     }
 
-    if ( elementType == NULL )
+    if ( elementType.empty() )
     {
         NOC_BREAK();
-        throw Reflect::DataFormatException("Unable to find element type attribute");
+        throw Reflect::DataFormatException( TXT( "Unable to find element type attribute" ) );
     }
 
     // 
     // We use a stack to track the state of parsing, this will be the new state
     //
 
-    ParsingStatePtr newState = new ParsingState (elementType);
+    ParsingStatePtr newState = new ParsingState (elementType.c_str());
     ParsingStatePtr topState = m_StateStack.empty() ? NULL : m_StateStack.top();
 
     //
@@ -454,10 +456,10 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
         if ( parentTypeDefinition )
         {
             // look for the field name in the attributes
-            const char* fieldName = NULL;
+            const tchar* fieldName = NULL;
             for (int i=0; papszAttrs[i]; i+=2)
             {
-                if ( !strcmp( papszAttrs[i], "Name" ) )
+                if ( !_tcscmp( papszAttrs[i], TXT( "Name" ) ) )
                 {
                     fieldName = papszAttrs[i+1];
                 }
@@ -465,7 +467,10 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
             if ( fieldName )
             {
-                newState->m_Field = parentTypeDefinition->FindFieldByName( fieldName );
+                std::string temp;
+                bool converted = Platform::ConvertString( fieldName, temp );
+                NOC_ASSERT( converted );
+                newState->m_Field = parentTypeDefinition->FindFieldByName( temp );
             }
 
             // we have found a fieldinfo into our parent's definition
@@ -511,7 +516,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
 
         if (newState->m_Element == NULL)
         {
-            Debug("Unable to create element with short name: %s\n", elementType);
+            Debug( TXT( "Unable to create element with short name: %s\n" ), elementType);
         }
     }
 
@@ -549,7 +554,11 @@ void ArchiveXML::OnCharacterData(const XML_Char *pszData, int nLength)
     ParsingStatePtr topState = m_StateStack.empty() ? NULL : m_StateStack.top();
     if ( topState && topState->m_Element )
     {
-        topState->m_Buffer.append(pszData, nLength);
+        std::string temp;
+        bool converted = Platform::ConvertString( pszData, temp );
+        NOC_ASSERT( converted );
+
+        topState->m_Buffer.append( temp.c_str(), temp.length() );
     }
 }
 
@@ -560,12 +569,12 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
         return;
     }
 
-    if (!strcmp(pszName, "Reflect"))
+    if (!_tcscmp(pszName, TXT( "Reflect" ) ))
     {
         return;
     }
 
-    if (!strcmp(pszName, "Append"))
+    if (!_tcscmp(pszName, TXT( "Append" ) ))
     {
         return;
     }
@@ -641,7 +650,7 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
                     // we are a component, so send us up to be processed by container
                     if (container && !container->ProcessComponent(topState->m_Element, topState->m_Field->m_Name))
                     {
-                        Debug("%s did not process %s, discarding\n", container->GetClass()->m_ShortName.c_str(), topState->m_Element->GetClass()->m_ShortName.c_str());
+                        Debug( TXT( "%s did not process %s, discarding\n" ), container->GetClass()->m_ShortName.c_str(), topState->m_Element->GetClass()->m_ShortName.c_str());
                     }
                 }
             }

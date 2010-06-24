@@ -60,18 +60,20 @@ void TypeIDSerializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
+#ifdef REFLECT_XML_SUPPORT
             if ( type )
             {
-                archive.GetOutput() << "<![CDATA[" << type->m_ShortName << "]]>";
+                archive.GetStream() << "<![CDATA[" << type->m_ShortName << "]]>";
             }
+#endif
 
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().AssignIndex( type ? type->m_ShortName : "" );
-            archive.GetOutput().Write(&index); 
+            i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().Insert( type ? type->m_ShortName : "" );
+            archive.GetStream().Write(&index); 
             break;
         }
     }
@@ -85,16 +87,18 @@ void TypeIDSerializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-            std::streamsize size = archive.GetInput().BytesAvailable(); 
+#ifdef REFLECT_XML_SUPPORT
+            std::streamsize size = archive.GetStream().BytesAvailable(); 
             str.resize( (size_t) size );
-            archive.GetInput().ReadBuffer(const_cast<char*>(str.c_str()), size);
+            archive.GetStream().ReadBuffer(const_cast<char*>(str.c_str()), size);
+#endif
             break;
         }
 
     case ArchiveTypes::Binary:
         {
             i32 index;
-            archive.GetInput().Read(&index); 
+            archive.GetStream().Read(&index); 
             str = static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index);
             break;
         }

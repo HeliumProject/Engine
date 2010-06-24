@@ -3,6 +3,7 @@
 #include "Application/API.h"
 #include "DBManager.h"
 #include "Foundation/Exception.h"
+#include "Platform/String.h"
 
 namespace SQL
 {
@@ -24,13 +25,16 @@ namespace SQL
       m_ErrorCode = dbManager->GetLastErrCode();
       m_Message = dbManager->GetLastErrMsg();
 
-      m_Message += "\n  Database: ";
+      m_Message += TXT( "\n  Database: " );
       m_Message += dbManager->GetDBFilename();
-      m_Message += "\n  Function: ";
-      m_Message += function;
+      m_Message += TXT( "\n  Function: " );
+      
+      tstring functionName;
+      bool converted = Platform::ConvertString( function, functionName );
+      m_Message += functionName;
     }
 
-    DBManagerException( DBManager* dbManager, const char* function, const char *msgFormat, ... )
+    DBManagerException( DBManager* dbManager, const char* function, const tchar *msgFormat, ... )
     {
       m_ErrorCode = dbManager->GetLastErrCode();
       m_Message = dbManager->GetLastErrMsg();
@@ -48,7 +52,7 @@ namespace SQL
         va_end( msgArgs );
 
 
-        m_Message += "; ";
+        m_Message += TXT( "; " );
         m_Message += msgBuffer;
       }
 

@@ -33,7 +33,7 @@ using namespace Nocturnal;
     AddDebugInfo(blockType, blockSize, dbgStr, args, 1);\
 }
 
-static char g_DebugString[2048];
+static tchar g_DebugString[2048];
 
 #else
 
@@ -51,13 +51,13 @@ bool BasicBuffer::IsDebugInfoEnabled()
 #endif
 }
 
-void BasicBuffer::AddDebugInfo(BasicBufferDebugInfo::BlockType blockType, unsigned int blockSize, const char *dbgStr, va_list argptr, char ignore_next)
+void BasicBuffer::AddDebugInfo(BasicBufferDebugInfo::BlockType blockType, unsigned int blockSize, const tchar *dbgStr, va_list argptr, tchar ignore_next)
 {
 #if BASIC_BUFFER_DEBUG_INFO
     BasicBufferDebugInfo debug_info;
-    char* dbg_str;
+    tchar* dbg_str;
 
-    static char s_ignore_next = 0;
+    static tchar s_ignore_next = 0;
 
     if ( s_ignore_next )
     {
@@ -72,7 +72,7 @@ void BasicBuffer::AddDebugInfo(BasicBufferDebugInfo::BlockType blockType, unsign
 
     if ( dbgStr )
     {
-        static char prtbuf[2048];
+        static tchar prtbuf[2048];
         vsprintf(prtbuf, dbgStr, argptr);
         dbg_str = prtbuf;
     }
@@ -98,25 +98,25 @@ void BasicBuffer::DumpDebugInfo(FILE* file)
 
         for (BasicBufferDebugInfoVector::iterator i=m_DebugInfo.begin(); i!=m_DebugInfo.end(); i++)
         {
-            char* blockTypeStr = NULL;
+            tchar* blockTypeStr = NULL;
 
             switch(i->m_BlockType)
             {
-            case BasicBufferDebugInfo::BLOCK_TYPE_BUFFER:  blockTypeStr = "Buffer"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_I8:      blockTypeStr = "i8"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_U8:      blockTypeStr = "u8"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_I16:     blockTypeStr = "i16"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_U16:     blockTypeStr = "u16"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_I32:     blockTypeStr = "i32"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_U32:     blockTypeStr = "u32"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_I64:     blockTypeStr = "i64"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_U64:     blockTypeStr = "u64"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_F32:     blockTypeStr = "f32"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_F64:     blockTypeStr = "f64"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_RESERVE: blockTypeStr = "Reserve"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_POINTER: blockTypeStr = "Pointer"; break;
-            case BasicBufferDebugInfo::BLOCK_TYPE_OFFSET:  blockTypeStr = "Offset"; break;
-            default:                                       blockTypeStr = "Unknown"; break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_BUFFER:  blockTypeStr = TXT( "Buffer" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_I8:      blockTypeStr = TXT( "i8" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_U8:      blockTypeStr = TXT( "u8" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_I16:     blockTypeStr = TXT( "i16" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_U16:     blockTypeStr = TXT( "u16" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_I32:     blockTypeStr = TXT( "i32" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_U32:     blockTypeStr = TXT( "u32" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_I64:     blockTypeStr = TXT( "i64" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_U64:     blockTypeStr = TXT( "u64" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_F32:     blockTypeStr = TXT( "f32" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_F64:     blockTypeStr = TXT( "f64" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_RESERVE: blockTypeStr = TXT( "Reserve" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_POINTER: blockTypeStr = TXT( "Pointer" ); break;
+            case BasicBufferDebugInfo::BLOCK_TYPE_OFFSET:  blockTypeStr = TXT( "Offset" ); break;
+            default:                                       blockTypeStr = TXT( "Unknown" ); break;
             }
 
             fprintf(file, "Block Label   : %s\n", i->m_DebugString.c_str());
@@ -204,7 +204,7 @@ void BasicBuffer::DumpDebugInfo(FILE* file)
     }
 }
 
-u32 BasicBuffer::AddBuffer( const u8* buffer, u32 size, const char* dbgStr, ... )
+u32 BasicBuffer::AddBuffer( const u8* buffer, u32 size, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO(BasicBufferDebugInfo::BLOCK_TYPE_BUFFER, size);
 
@@ -236,17 +236,17 @@ u32 BasicBuffer::AddBuffer( const SmartBufferPtr& buffer, bool add_fixups )
     return return_val;
 }
 
-u32 BasicBuffer::AddFile( const std::string& filename )
+u32 BasicBuffer::AddFile( const tstring& filename )
 {
     return AddFile( filename.c_str() );
 }
 
-u32 BasicBuffer::AddFile( const char* filename )
+u32 BasicBuffer::AddFile( const tchar* filename )
 {
-    FILE *pfile = fopen( filename, "rb" );
+    FILE *pfile = _tfopen( filename, TXT( "rb" ) );
     if ( pfile == NULL )
     {
-        throw Nocturnal::Exception( "Could not open file '%s' to add to membuf '%s'.", filename, m_Name.c_str() );
+        throw Nocturnal::Exception( TXT( "Could not open file '%s' to add to membuf '%s'." ), filename, m_Name.c_str() );
     }
 
     fseek(pfile,0,SEEK_END);
@@ -255,7 +255,7 @@ u32 BasicBuffer::AddFile( const char* filename )
 
     if(filesize == -1)
     {
-        throw Nocturnal::Exception("Could not get file size for file '%s' to add to membuf '%s'.", filename, m_Name.c_str() );
+        throw Nocturnal::Exception( TXT( "Could not get file size for file '%s' to add to membuf '%s'." ), filename, m_Name.c_str() );
     }
 
     if ( (filesize + m_Size) > m_Capacity )
@@ -264,7 +264,7 @@ u32 BasicBuffer::AddFile( const char* filename )
     size_t file_read = fread( m_Data + m_Size, 1, filesize, pfile );
     if(file_read != (size_t)filesize)
     {
-        Log::Warning("Could not read entire file '%s' to add to membuf '%s'.\n", filename, m_Name.c_str() );
+        Log::Warning( TXT( "Could not read entire file '%s' to add to membuf '%s'.\n" ), filename, m_Name.c_str() );
     }
 
     fclose(pfile);
@@ -273,21 +273,21 @@ u32 BasicBuffer::AddFile( const char* filename )
     return m_Size - (u32)file_read;
 }
 
-u32 BasicBuffer::AddI8( i8 val, const char* dbgStr, ... )
+u32 BasicBuffer::AddI8( i8 val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I8, 1);
 
     return AddBuffer( (u8*)&val, sizeof( i8 ) );
 }
 
-u32 BasicBuffer::AddU8( u8 val, const char* dbgStr, ... )
+u32 BasicBuffer::AddU8( u8 val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_U8, 1);
 
     return AddBuffer( (u8*)&val, sizeof( u8 ) );
 }
 
-u32 BasicBuffer::AddU16( u16 val, const char* dbgStr, ... )
+u32 BasicBuffer::AddU16( u16 val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_U16, 2);
 
@@ -295,7 +295,7 @@ u32 BasicBuffer::AddU16( u16 val, const char* dbgStr, ... )
     return AddBuffer( (u8*)&val, sizeof( u16 ) );
 }
 
-u32 BasicBuffer::AddI16( i16 val, const char* dbgStr, ... )
+u32 BasicBuffer::AddI16( i16 val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I16, 2);
 
@@ -303,7 +303,7 @@ u32 BasicBuffer::AddI16( i16 val, const char* dbgStr, ... )
     return AddBuffer( (u8*)&val, sizeof( i16 ) );
 }
 
-u32 BasicBuffer::AddI32( i32 val, const char* dbgStr, ... )
+u32 BasicBuffer::AddI32( i32 val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I32, 4);
 
@@ -311,7 +311,7 @@ u32 BasicBuffer::AddI32( i32 val, const char* dbgStr, ... )
     return AddBuffer( (u8*)&val, sizeof( i32 ) );
 }
 
-u32 BasicBuffer::AddU32( u32 val, const char* dbgStr, ... )
+u32 BasicBuffer::AddU32( u32 val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_U32, 4);
 
@@ -319,7 +319,7 @@ u32 BasicBuffer::AddU32( u32 val, const char* dbgStr, ... )
     return AddBuffer( (u8*)&val, sizeof( u32 ) );
 }
 
-u32 BasicBuffer::AddI64( i64 val, const char* dbgStr, ... )
+u32 BasicBuffer::AddI64( i64 val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I64, 8);
 
@@ -327,7 +327,7 @@ u32 BasicBuffer::AddI64( i64 val, const char* dbgStr, ... )
     return AddBuffer( (u8*)&val, sizeof( i64 ) );
 }
 
-u32 BasicBuffer::AddU64( u64 val, const char* dbgStr, ... )
+u32 BasicBuffer::AddU64( u64 val, const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_U64, 8);
 
@@ -335,7 +335,7 @@ u32 BasicBuffer::AddU64( u64 val, const char* dbgStr, ... )
     return AddBuffer( (u8*)&val, sizeof( u64 ) );
 }
 
-u32 BasicBuffer::AddF16( f32 val, const char* dbgStr, ... )
+u32 BasicBuffer::AddF16( f32 val, const tchar* dbgStr, ... )
 {
     i16 half = ::Math::FloatToHalf( val );
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I16, 2);
@@ -344,7 +344,7 @@ u32 BasicBuffer::AddF16( f32 val, const char* dbgStr, ... )
     return AddBuffer( (u8*)&half, sizeof( i16 ) );
 }
 
-u32 BasicBuffer::AddF32( f32 val, const char* dbgStr, ... )
+u32 BasicBuffer::AddF32( f32 val, const tchar* dbgStr, ... )
 {
     u32 i = *(reinterpret_cast<u32 *>(&val));
 
@@ -365,7 +365,7 @@ u32 BasicBuffer::AddF32( f32 val, const char* dbgStr, ... )
     return AddU32( i );
 }
 
-u32 BasicBuffer::AddF64( f64 val, const char* dbgStr, ... )
+u32 BasicBuffer::AddF64( f64 val, const tchar* dbgStr, ... )
 {
     u64 i = *(reinterpret_cast<u64 *>(&val));
 
@@ -385,7 +385,7 @@ u32 BasicBuffer::AddF64( f64 val, const char* dbgStr, ... )
     return AddU64( i );
 }
 
-u32 BasicBuffer::AddVector3( const Math::Vector3& v, const char* debugStr )
+u32 BasicBuffer::AddVector3( const Math::Vector3& v, const tchar* debugStr )
 {
     u32 ret = AddF32(v.x, debugStr);
     AddF32(v.y, debugStr);
@@ -393,7 +393,7 @@ u32 BasicBuffer::AddVector3( const Math::Vector3& v, const char* debugStr )
     return ret;
 }
 
-u32 BasicBuffer::AddVector4( const Math::Vector4& v, const char* debugStr )
+u32 BasicBuffer::AddVector4( const Math::Vector4& v, const tchar* debugStr )
 {
     u32 ret = AddF32(v.x, debugStr);
     AddF32(v.y, debugStr);
@@ -402,7 +402,7 @@ u32 BasicBuffer::AddVector4( const Math::Vector4& v, const char* debugStr )
     return ret;
 }
 
-u32 BasicBuffer::AddVector4( const Math::Vector3& v, f32 w, const char* debugStr )
+u32 BasicBuffer::AddVector4( const Math::Vector3& v, f32 w, const tchar* debugStr )
 {
     u32 ret = AddF32(v.x, debugStr);
     AddF32(v.y, debugStr);
@@ -411,7 +411,7 @@ u32 BasicBuffer::AddVector4( const Math::Vector3& v, f32 w, const char* debugStr
     return ret;
 }
 
-u32 BasicBuffer::AddVector4( f32 x, f32 y, f32 z, f32 w, const char* debugStr )
+u32 BasicBuffer::AddVector4( f32 x, f32 y, f32 z, f32 w, const tchar* debugStr )
 {
     u32 ret = AddF32(x, debugStr);
     AddF32(y, debugStr);
@@ -534,7 +534,7 @@ void BasicBuffer::SetCapacity(u32 capacity)
     }  
 }
 
-SmartBuffer::Location BasicBuffer::Reserve(u32 size, const char* dbgStr, ...)
+SmartBuffer::Location BasicBuffer::Reserve(u32 size, const tchar* dbgStr, ...)
 {
     ADD_DEBUG_INFO(BasicBufferDebugInfo::BLOCK_TYPE_RESERVE, size);
 
@@ -552,7 +552,7 @@ SmartBuffer::Location BasicBuffer::Reserve(u32 size, const char* dbgStr, ...)
     return return_val;
 }
 
-void BasicBuffer::Reserve(Location& loc, u32 size, const char* dbgStr, ...)
+void BasicBuffer::Reserve(Location& loc, u32 size, const tchar* dbgStr, ...)
 {
 #if BASIC_BUFFER_DEBUG_INFO
     {
@@ -570,7 +570,7 @@ void BasicBuffer::Reserve(Location& loc, u32 size, const char* dbgStr, ...)
     loc = Reserve(size, dbgStr);
 }
 
-SmartBuffer::Location BasicBuffer::ReservePointer(u32 size, const char* dbgStr, ... )
+SmartBuffer::Location BasicBuffer::ReservePointer(u32 size, const tchar* dbgStr, ... )
 {
     if (size==0)
     {
@@ -588,7 +588,7 @@ SmartBuffer::Location BasicBuffer::ReservePointer(u32 size, const char* dbgStr, 
     return Reserve( size );
 }
 
-void BasicBuffer::ReservePointer(SmartBuffer::Location& loc, u32 size, const char* dbgStr, ... )
+void BasicBuffer::ReservePointer(SmartBuffer::Location& loc, u32 size, const tchar* dbgStr, ... )
 {
 #if BASIC_BUFFER_DEBUG_INFO
     {
@@ -606,14 +606,14 @@ void BasicBuffer::ReservePointer(SmartBuffer::Location& loc, u32 size, const cha
     loc = ReservePointer(size, dbgStr);
 }
 
-SmartBuffer::Location BasicBuffer::ReserveOffset( const char* dbgStr, ... )
+SmartBuffer::Location BasicBuffer::ReserveOffset( const tchar* dbgStr, ... )
 {
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_OFFSET, 4);
 
     return Reserve( 4 );
 }
 
-void BasicBuffer::ReserveOffset(SmartBuffer::Location& loc, const char* dbgStr, ... )
+void BasicBuffer::ReserveOffset(SmartBuffer::Location& loc, const tchar* dbgStr, ... )
 {
 #if BASIC_BUFFER_DEBUG_INFO
     {

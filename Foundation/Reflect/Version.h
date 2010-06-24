@@ -7,13 +7,13 @@ namespace Reflect
     class FOUNDATION_API Version : public ConcreteInheritor<Version, Element>
     {
     public:
-        std::string m_Source;
-        std::string m_SourceVersion;
+        tstring m_Source;
+        tstring m_SourceVersion;
 
         static void EnumerateClass( Reflect::Compositor<Version>& comp );
 
         Version ();
-        Version(const char* source, const char* sourceVersion);
+        Version(const tchar* source, const tchar* sourceVersion);
 
         virtual bool IsCurrent();
 

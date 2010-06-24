@@ -8,6 +8,7 @@
 #include <sys/stat.h>
 
 #include "Platform/Assert.h"
+#include "Platform/String.h"
 #include "Foundation/Version.h"
 
 #include "Platform/Windows/Windows.h"
@@ -57,23 +58,27 @@ void Debug::ProcessException(const std::exception& exception, bool print, bool f
 
   ExceptionArgs args( ExceptionTypes::CPP, fatal );
 
-  const char* cppClass = NULL;
+  tstring cppClass = TXT( "Unknown" );
   try
   {
-    cppClass = typeid(exception).name();
+      std::string c = typeid(exception).name();
+      bool converted = Platform::ConvertString( c, cppClass );
+      NOC_ASSERT( converted );
   }
   catch (const std::bad_typeid&)
   {
-    cppClass = "Unknown";
   }
 
-  args.m_Message = exception.what();
+  std::string what = exception.what();
+  bool converted = Platform::ConvertString( what, args.m_Message );
+  NOC_ASSERT( converted );
+
   args.m_CPPClass = cppClass;
   args.m_State = Log::GetOutlineState();
 
   if (print)
   {
-    Platform::Print(Platform::ConsoleColors::Red, stderr, "An exception has occurred\nType:    C++ Exception\n Class:   %s\n Message: %s\n", args.m_CPPClass.c_str(), args.m_Message.c_str() );
+    Platform::Print(Platform::ConsoleColors::Red, stderr, TXT( "An exception has occurred\nType:    C++ Exception\n Class:   %s\n Message: %s\n" ), args.m_CPPClass.c_str(), args.m_Message.c_str() );
   }
 
   if ( g_ExceptionOccurred.Valid() )
@@ -118,7 +123,7 @@ u32 Debug::ProcessException(LPEXCEPTION_POINTERS info, u32 ret_code, bool print,
  
     if ( print )
     {
-      Platform::Print( Platform::ConsoleColors::Red, stderr, "%s", GetExceptionInfo( info ).c_str() );
+      Platform::Print( Platform::ConsoleColors::Red, stderr, TXT( "%s" ), GetExceptionInfo( info ).c_str() );
     }
 
     bool full = getenv( "NOC_CRASH_FULL_DUMP" ) != NULL;

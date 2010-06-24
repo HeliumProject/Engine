@@ -3,7 +3,7 @@
 #include "Platform/API.h"
 #include "Platform/Types.h"
 
-#define IPC_PIPE_ROOT ""
+#define IPC_PIPE_ROOT TXT( "" )
 
 namespace Platform
 {

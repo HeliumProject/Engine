@@ -19,7 +19,7 @@ Reflect::Version::Version()
     DetectVersion();
 }
 
-Reflect::Version::Version(const char* source, const char* sourceVersion)
+Reflect::Version::Version(const tchar* source, const tchar* sourceVersion)
 : m_Source (source)
 , m_SourceVersion (sourceVersion)
 {
@@ -39,7 +39,7 @@ bool Reflect::Version::ConvertToInts( int* ints )
     {
         return_val = true;
 
-        std::string digit;
+        tstring digit;
         int tmp;
 
         size_t cur = 0, mark = -1;
@@ -56,7 +56,7 @@ bool Reflect::Version::ConvertToInts( int* ints )
 
             digit = m_SourceVersion.substr( cur, mark - cur );
 
-            if ( 1 == sscanf( digit.c_str(), "%d", &tmp) )
+            if ( 1 == _stscanf( digit.c_str(), TXT( "%d" ), &tmp) )
             {
                 ints[i] = tmp;
             }
@@ -77,7 +77,7 @@ void Reflect::Version::DetectVersion()
 {
     HMODULE moduleHandle = GetModuleHandle( NULL );
 
-    char exeFilename[ MAX_PATH + 1 ];
+    tchar exeFilename[ MAX_PATH + 1 ];
     GetModuleFileName( moduleHandle, exeFilename, MAX_PATH );
 
     m_Source = exeFilename;

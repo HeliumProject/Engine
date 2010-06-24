@@ -5,6 +5,7 @@
 #include "Foundation/API.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/String/Utilities.h"
+#include "Platform/String.h"
 
 namespace Platform
 {
@@ -13,28 +14,28 @@ namespace Platform
 
 namespace Nocturnal
 {
-    const static char s_InternalPathSeparator = '/';
+    const static tchar s_InternalPathSeparator = '/';
 
     class FOUNDATION_API Path : public Nocturnal::RefCountBase< Path >
     {
     private:
 
-        std::string m_Path;
+        tstring m_Path;
 
-        void Init( const char* path );
-
-    public:
-        static void Normalize( std::string& path );
-        static void MakeNative( std::string& path );
-        static void GuaranteeSlash( std::string& path );
-
-        static bool Exists( const std::string& path );
-        static bool IsAbsolute( const std::string& path );
-        static bool IsUnder( const std::string& location, const std::string& path );
+        void Init( const tchar* path );
 
     public:
-        Path( const char* path );
-        Path( const std::string& path = "" );
+        static void Normalize( tstring& path );
+        static void MakeNative( tstring& path );
+        static void GuaranteeSlash( tstring& path );
+
+        static bool Exists( const tstring& path );
+        static bool IsAbsolute( const tstring& path );
+        static bool IsUnder( const tstring& location, const tstring& path );
+
+    public:
+        Path( const tchar* path );
+        Path( const tstring& path = TXT( "" ) );
         Path( const Path& path );
 
         Path& operator=( const Path& rhs );
@@ -42,32 +43,32 @@ namespace Nocturnal
 
         bool operator<( const Path& rhs ) const;
 
-        const std::string& Get() const;
-        const std::string& Set( const std::string& path );
+        const tstring& Get() const;
+        const tstring& Set( const tstring& path );
 
-        void Split( std::string& directory, std::string& filename ) const;
-        void Split( std::string& directory, std::string& filename, std::string& extension ) const;
+        void Split( tstring& directory, tstring& filename ) const;
+        void Split( tstring& directory, tstring& filename, tstring& extension ) const;
 
-        std::string Basename() const;
-        std::string Filename() const;
-        std::string Directory() const;
+        tstring Basename() const;
+        tstring Filename() const;
+        tstring Directory() const;
 
-        std::string Extension() const;
-        std::string FullExtension() const;
+        tstring Extension() const;
+        tstring FullExtension() const;
         void RemoveExtension();
         void RemoveFullExtension();
 
-        std::string Native() const;
-        std::string Absolute() const;
-        std::string Normalized() const;
+        tstring Native() const;
+        tstring Absolute() const;
+        tstring Normalized() const;
 
         u64 Hash() const;
-        std::string Signature();
+        tstring Signature();
 
         bool Exists() const;
         bool Stat( Platform::Stat& stat ) const;
         bool IsAbsolute() const;
-        bool IsUnder( const std::string& location );
+        bool IsUnder( const tstring& location );
         bool IsFile() const;
         bool IsDirectory() const;
         bool Writable() const;
@@ -84,39 +85,44 @@ namespace Nocturnal
         bool Move( const Nocturnal::Path& target ) const;
         bool Delete() const;
 
-        std::string FileCRC() const;
-        bool VerifyFileCRC( const std::string& hash ) const;
+        tstring FileCRC() const;
+        bool VerifyFileCRC( const tstring& hash ) const;
 
-        std::string FileMD5() const;
-        bool VerifyFileMD5( const std::string& hash ) const;
+        tstring FileMD5() const;
+        bool VerifyFileMD5( const tstring& hash ) const;
 
 
     public:
 
-        void ReplaceExtension( const std::string& newExtension );
-        void ReplaceFullExtension( const std::string& newExtension );
+        void ReplaceExtension( const tstring& newExtension );
+        void ReplaceFullExtension( const tstring& newExtension );
 
     public:
 
         size_t length() const;
         bool empty() const;
-        const char* c_str() const;
-        operator const char*() const
+        const tchar* c_str() const;
+        operator const tchar*() const
         {
             return c_str();
         }
-        operator const std::string&() const
+        operator const tstring&() const
         {
             return m_Path;
         }
 
         friend FOUNDATION_API std::ostream& operator<<( std::ostream& outStream, const Path& p );
         friend FOUNDATION_API std::istream& operator>>( std::istream& inStream, Path& p );
+        friend FOUNDATION_API std::wostream& operator<<( std::wostream& outStream, const Path& p );
+        friend FOUNDATION_API std::wistream& operator>>( std::wistream& inStream, Path& p );
     };
 
     inline std::ostream& operator<<( std::ostream& outStream, const Path& p )
     {
-        outStream << p.c_str();
+        std::string narrowPath;
+        bool converted = Platform::ConvertString( p.Get(), narrowPath );
+        NOC_ASSERT( converted );
+        outStream << narrowPath.c_str();
 
         return outStream;
     }
@@ -127,7 +133,34 @@ namespace Nocturnal
         std::streamsize size = inStream.rdbuf()->in_avail();
         buf.resize( (size_t) size );
         inStream.read( const_cast<char*>( buf.c_str() ), size );
-        p.Set( buf );
+        
+        tstring temp;
+        bool converted = Platform::ConvertString( buf, temp );
+        NOC_ASSERT( converted );
+
+        p.Set( temp );
+
+        return inStream;
+    }
+    inline std::wostream& operator<<( std::wostream& outStream, const Path& p )
+    {
+        outStream << p.Get();
+
+        return outStream;
+    }
+
+    inline std::wistream& operator>>( std::wistream& inStream, Path& p )
+    {
+        std::wstring buf;
+        std::streamsize size = inStream.rdbuf()->in_avail();
+        buf.resize( (size_t) size );
+        inStream.read( const_cast<wchar_t*>( buf.c_str() ), size );
+
+        tstring temp;
+        bool converted = Platform::ConvertString( buf, temp );
+        NOC_ASSERT( converted );
+
+        p.Set( temp );
 
         return inStream;
     }

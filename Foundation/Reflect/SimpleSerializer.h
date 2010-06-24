@@ -42,7 +42,7 @@ namespace Reflect
         virtual bool Set(const Serializer* src, u32 flags = 0) NOC_OVERRIDE;
         virtual bool Equals(const Serializer* s) const NOC_OVERRIDE;
 
-        virtual void Serialize(const Nocturnal::BasicBufferPtr& buffer, const char* debugStr) const NOC_OVERRIDE;
+        virtual void Serialize(const Nocturnal::BasicBufferPtr& buffer, const tchar* debugStr) const NOC_OVERRIDE;
         virtual void Serialize(Archive& archive) const NOC_OVERRIDE;
         virtual void Deserialize(Archive& archive) NOC_OVERRIDE;
 

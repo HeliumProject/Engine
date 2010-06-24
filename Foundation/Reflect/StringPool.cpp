@@ -15,56 +15,74 @@ using Nocturnal::ArrayPtr;
 
 using namespace Reflect;
 
-Profile::Accumulator g_StringPoolSerialize("Reflect String Pool Serialize"); 
-Profile::Accumulator g_StringPoolDeserialize("Reflect String Pool Deserialize"); 
-Profile::Accumulator g_StringPoolLookup("Reflect String Pool Lookup"); 
-Profile::Accumulator g_StringPoolInsert("Reflect String Pool Insert"); 
+Profile::Accumulator g_StringPoolSerialize( TXT( "Reflect String Pool Serialize") ); 
+Profile::Accumulator g_StringPoolDeserialize( TXT( "Reflect String Pool Deserialize") ); 
+Profile::Accumulator g_StringPoolLookup( TXT( "Reflect String Pool Lookup") ); 
+Profile::Accumulator g_StringPoolInsert( TXT( "Reflect String Pool Insert") ); 
 
-int StringPool::GetIndex(const std::string& str)
+int StringPool::Insert( const std::string& str )
 {
-    PROFILE_SCOPE_ACCUM(g_StringPoolLookup); 
+    PROFILE_SCOPE_ACCUM(g_StringPoolInsert); 
 
-    M_StringToIndex::iterator found = m_Indices.find(str);
-
-    if (found != m_Indices.end())
+    M_StringToIndex::iterator found = m_Indices.find( str );
+    if ( found != m_Indices.end() )
     {
         return found->second;
     }
-    else
-    {
-        return -1;
-    }
-}
 
-int StringPool::AssignIndex(const std::string& str)
-{
-    int index = GetIndex(str);
-
-    if (index < 0)
-    {
-        PROFILE_SCOPE_ACCUM(g_StringPoolInsert); 
-
-        index = (int)m_Strings.size();
-        m_Indices.insert( M_StringToIndex::value_type(str, index));
-        m_Strings.push_back(str);
-    }
+    int index = (int)m_Strings.size();
+    m_Indices.insert( M_StringToIndex::value_type(str, index));
+    m_Strings.push_back(str);
 
     return index;
 }
 
-const std::string& StringPool::GetString(int index)
+int StringPool::Insert( const std::wstring& str )
+{
+    PROFILE_SCOPE_ACCUM(g_StringPoolInsert); 
+
+    M_WideStringToIndex::iterator found = m_WideIndices.find( str );
+    if ( found != m_WideIndices.end() )
+    {
+        return found->second;
+    }
+
+    int index = (int)m_WideStrings.size();
+    m_WideIndices.insert( M_WideStringToIndex::value_type( str, index ) );
+    m_WideStrings.push_back( str );
+
+    return index;
+}
+
+const std::string& StringPool::GetString( const int index )
 {
     PROFILE_SCOPE_ACCUM(g_StringPoolLookup); 
 
-    NOC_ASSERT(index >=0 && index < (int)m_Strings.size());
+    if( index < 0 || index >= (int)m_Strings.size() )
+    {
+        throw Reflect::LogisticException( TXT( "String index out of range in StringPool" ) );
+    }
+
     return m_Strings[ index ];
+}
+
+const std::wstring& StringPool::GetWideString( const int index )
+{
+    PROFILE_SCOPE_ACCUM(g_StringPoolLookup); 
+
+    if( index < 0 || index >= (int)m_WideStrings.size() )
+    {
+        throw Reflect::LogisticException( TXT( "Wide string index out of range in StringPool" ) );
+    }
+
+    return m_WideStrings[ index ];
 }
 
 void StringPool::Serialize(ArchiveBinary* archive)
 {
     PROFILE_SCOPE_ACCUM(g_StringPoolSerialize); 
 
-    Reflect::Stream& stream = archive->GetOutput(); 
+    Reflect::Stream& stream = archive->GetStream(); 
 
     NOC_ASSERT(m_Strings.size() == m_Indices.size());
     return SerializeCompressed(stream); 
@@ -74,7 +92,7 @@ void StringPool::Deserialize(ArchiveBinary* archive)
 {
     PROFILE_SCOPE_ACCUM(g_StringPoolDeserialize); 
 
-    Reflect::Stream& stream = archive->GetInput(); 
+    Reflect::Stream& stream = archive->GetStream(); 
 
     if(archive->GetVersion() >= ArchiveBinary::FIRST_VERSION_WITH_STRINGPOOL_COMPRESSION)
     {
@@ -161,12 +179,12 @@ void StringPool::SerializeCompressed(Reflect::Stream& stream)
     stream.Write(&compressedSize); 
 
     // serialize the strings to a temp buffer
-    std::strstream memoryStream; 
+    std::stringstream memoryStream; 
     Reflect::Stream tempStream(&memoryStream, false); 
     SerializeDirect(tempStream); 
 
     // get the pointer
-    const char* stringBuff = memoryStream.str(); 
+    const char* stringBuff = memoryStream.str().c_str();
 
     // we own that buffer now... 
     ArrayPtr<const char> helper(stringBuff); 
@@ -196,10 +214,10 @@ void StringPool::DeserializeCompressed(Reflect::Stream& stream)
 
     if(inflatedSize != originalSize)
     {
-        throw Reflect::StreamException("StringPool failed to read compressed data"); 
+        throw Reflect::StreamException( TXT( "StringPool failed to read compressed data" ) ); 
     }
 
-    std::strstream memoryStream(originalData, originalSize); 
+    std::stringstream memoryStream(originalData, originalSize); 
     Reflect::Stream tempStream(&memoryStream, false); 
 
     DeserializeDirect(tempStream); 

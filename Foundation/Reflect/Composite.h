@@ -43,8 +43,8 @@ namespace Reflect
     public:
         REFLECTION_TYPE( ReflectionTypes::Composite );
 
-        std::string           m_Base;               // the base type name
-        std::set<std::string> m_Derived;            // the derived type names
+        std::string               m_Base;               // the base type name
+        std::set<std::string>     m_Derived;            // the derived type names
 
         CompositeEnumerator   m_Enumerator;         // the function to enumerate this type
         bool                  m_Enumerated;         // flag if we are enumerated

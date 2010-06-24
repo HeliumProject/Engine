@@ -18,7 +18,7 @@ OptionsMap::~OptionsMap()
 	m_Options.clear();
 }
 
-const std::string& OptionsMap::Usage() const
+const tstring& OptionsMap::Usage() const
 {
 	if ( m_Usage.empty() )
 	{
@@ -26,32 +26,32 @@ const std::string& OptionsMap::Usage() const
 		{
 			const Option* option = (*argsBegin);
 
-			m_Usage += std::string( " [-" ) + option->Token();
+			m_Usage += tstring( TXT( " [-" ) ) + option->Token();
 
 			if ( !option->Usage().empty() )
 			{
-				m_Usage += std::string( " " ) + option->Usage();
+				m_Usage += tstring( TXT( " " ) ) + option->Usage();
 			}
-			m_Usage += std::string( "]" );
+			m_Usage += tstring( TXT( "]" ) );
 		}
 	}
 	return m_Usage;
 }
 
-const std::string& OptionsMap::Help() const
+const tstring& OptionsMap::Help() const
 {
 	if ( m_Help.empty() )
 	{
-		m_Help += std::string( "Options:\n" );
+		m_Help += tstring( TXT( "Options:\n" ) );
 
-		std::stringstream str;
+		tstringstream str;
 		
 		for ( V_OptionPtr::const_iterator argsBegin = m_Options.begin(), argsEnd = m_Options.end(); argsBegin != argsEnd; ++argsBegin )
 		{
 			const Option* option = (*argsBegin);
-			// m_Help += std::string( "  " ) + option->Token() + std::string( " " ) + option->Usage() + std::string( "\t" ) + option->Help() + std::string( "\n" );
-			str << "  -" << std::setfill(' ') << std::setw(18) << std::left << option->Token();// << " " << option->Usage();
-			str << " " << option->Help() << std::endl;
+			// m_Help += tstring( "  " ) + option->Token() + tstring( " " ) + option->Usage() + tstring( "\t" ) + option->Help() + tstring( "\n" );
+			str << TXT( "  -" ) << std::setfill( TXT( ' ' ) ) << std::setw(18) << std::left << option->Token();// << " " << option->Usage();
+			str << TXT( " " ) << option->Help() << std::endl;
 		}
 
 		m_Help += str.str();
@@ -59,16 +59,16 @@ const std::string& OptionsMap::Help() const
 	return m_Help;
 }
 
-bool OptionsMap::AddOption( const OptionPtr& option, std::string& error )
+bool OptionsMap::AddOption( const OptionPtr& option, tstring& error )
 {
-	std::set< std::string > tokens;
-	Tokenize( option->Token(), tokens, "\\|" );
-	for ( std::set< std::string >::const_iterator tokensItr = tokens.begin(), tokensEnd = tokens.end(); tokensItr != tokensEnd; ++tokensItr )
+	std::set< tstring > tokens;
+	Tokenize( option->Token(), tokens, TXT( "\\|" ) );
+	for ( std::set< tstring >::const_iterator tokensItr = tokens.begin(), tokensEnd = tokens.end(); tokensItr != tokensEnd; ++tokensItr )
 	{
 		Nocturnal::Insert< M_StringToOptionPtr >::Result inserted = m_OptionsMap.insert( M_StringToOptionPtr::value_type( (*tokensItr), option ) );
 		if ( !inserted.second )
 		{
-			error = std::string( "Failed to add option, token is not unique: " ) + (*tokensItr);
+			error = tstring( TXT( "Failed to add option, token is not unique: " ) ) + (*tokensItr);
 			return false;
 		}
 	}
@@ -79,13 +79,13 @@ bool OptionsMap::AddOption( const OptionPtr& option, std::string& error )
 	return true;
 }
 
-bool OptionsMap::ParseOptions( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+bool OptionsMap::ParseOptions( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
 {
 	bool result = true;
 
 	while ( result && ( argsBegin != argsEnd ) )
 	{
-		const std::string& arg = (*argsBegin);
+		const tstring& arg = (*argsBegin);
 
 		if ( arg.length() >= 1 && arg[ 0 ] == '-' )
 		{
@@ -97,7 +97,7 @@ bool OptionsMap::ParseOptions( std::vector< std::string >::const_iterator& argsB
 			}
 			else
 			{
-				error = std::string( "Unknown option: " ) + arg;
+				error = tstring( TXT( "Unknown option: " ) ) + arg;
 				result = false;
 			}
 		}

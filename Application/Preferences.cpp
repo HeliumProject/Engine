@@ -4,14 +4,14 @@
 
 bool Application::GetPreferencesDirectory( Nocturnal::Path& preferencesDirectory )
 {
-    std::string prefDirectory;
+    tstring prefDirectory;
 
-    if ( !Nocturnal::GetEnvVar( "APPDATA", prefDirectory ) )
+    if ( !Nocturnal::GetEnvVar( TXT( "APPDATA" ), prefDirectory ) )
     {
         return false;
     }
 
-    prefDirectory += "/Nocturnal/";
+    prefDirectory += TXT( "/Nocturnal/" );
     
     preferencesDirectory.Set( prefDirectory );
     return true;

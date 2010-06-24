@@ -65,20 +65,22 @@ void SimpleSerializer<T>::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
-            archive.GetOutput() << m_Data.Get();
+#ifdef REFLECT_XML_SUPPORT
+            archive.GetStream() << m_Data.Get();
+#endif
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            archive.GetOutput().Write(m_Data.Ptr()); 
+            archive.GetStream().Write(m_Data.Ptr()); 
             break;
         }
     }
 }
 
 template <class T>
-void SimpleSerializer<T>::Serialize(const Nocturnal::BasicBufferPtr& buffer, const char* debugStr) const
+void SimpleSerializer<T>::Serialize(const Nocturnal::BasicBufferPtr& buffer, const tchar* debugStr) const
 {
     T val = m_Data.Get();
 
@@ -104,13 +106,15 @@ void SimpleSerializer<T>::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-            archive.GetInput() >> m_Data.Ref();
+#ifdef REFLECT_XML_SUPPORT
+            archive.GetStream() >> m_Data.Ref();
+#endif
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            archive.GetInput().Read(m_Data.Ptr()); 
+            archive.GetStream().Read(m_Data.Ptr()); 
             break;
         }
     }
@@ -144,14 +148,16 @@ void StringSerializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
-            archive.GetOutput() << "<![CDATA[" << m_Data.Get() << "]]>";
+#ifdef REFLECT_XML_SUPPORT
+            archive.GetStream() << "<![CDATA[" << m_Data.Get() << "]]>";
+#endif
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().AssignIndex(m_Data.Get());
-            archive.GetOutput().Write(&index); 
+            i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().Insert(m_Data.Get());
+            archive.GetStream().Write(&index); 
             break;
         }
     }
@@ -165,16 +171,18 @@ void StringSerializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-            std::streamsize size = archive.GetInput().BytesAvailable(); 
+#ifdef REFLECT_XML_SUPPORT
+            std::streamsize size = archive.GetStream().BytesAvailable(); 
             m_Data->resize( (size_t) size);
-            archive.GetInput().ReadBuffer(const_cast<char*>(m_Data->c_str()), size);
+            archive.GetStream().ReadBuffer(const_cast<char*>(m_Data->c_str()), size);
+#endif
             break;
         }
 
     case ArchiveTypes::Binary:
         {
             i32 index;
-            archive.GetInput().Read(&index); 
+            archive.GetStream().Read(&index); 
             m_Data.Set( static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index) );
             break;
         }
@@ -211,14 +219,16 @@ void U8Serializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
+#ifdef REFLECT_XML_SUPPORT
             u16 tmp = m_Data.Get();
-            archive.GetOutput() << tmp;
+            archive.GetStream() << tmp;
+#endif
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            archive.GetOutput().Write(m_Data.Ptr()); 
+            archive.GetStream().Write(m_Data.Ptr()); 
             break;
         }
     }
@@ -231,17 +241,18 @@ void U8Serializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
+#ifdef REFLECT_XML_SUPPORT
             u16 tmp;
-
-            archive.GetInput() >> tmp;
+            archive.GetStream() >> tmp;
             m_Data.Set( (unsigned char)tmp );
+#endif
 
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            archive.GetInput().Read(m_Data.Ptr()); 
+            archive.GetStream().Read(m_Data.Ptr()); 
             break;
         }
     }
@@ -278,14 +289,16 @@ void I8Serializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
+#ifdef REFLECT_XML_SUPPORT
             i16 tmp = m_Data.Get();
-            archive.GetOutput() << tmp;
+            archive.GetStream() << tmp;
+#endif
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            archive.GetOutput().Write(m_Data.Ptr()); 
+            archive.GetStream().Write(m_Data.Ptr()); 
             break;
         }
     }
@@ -298,17 +311,18 @@ void I8Serializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
+#ifdef REFLECT_XML_SUPPORT
             i16 tmp;
-
-            archive.GetInput() >> tmp;
-            m_Data.Set( (unsigned char)tmp );
+            archive.GetStream() >> tmp;
+            m_Data.Set( (char)tmp );
+#endif
 
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            archive.GetInput().Read(m_Data.Ptr()); 
+            archive.GetStream().Read(m_Data.Ptr()); 
             break;
         }
     }

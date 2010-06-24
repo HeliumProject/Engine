@@ -93,3 +93,5 @@ namespace Reflect
 
 // track the create/delete stacks of tracked objects
 //#define REFLECT_OBJECT_STACK_TRACKING
+
+//#define REFLECT_XML_SUPPORT

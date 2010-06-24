@@ -88,9 +88,9 @@ namespace Nocturnal
 
     public:
         u32 ComputeSize() const;
-        bool WriteToFile( const char* filename ) const;
-        bool WriteToStream( std::ostream& strm ) const;
-        bool ReadFromFile( const char* filename );
-        bool ReadFromStream( std::istream& strm );
+        bool WriteToFile( const tchar* filename ) const;
+        bool WriteToStream( tostream& strm ) const;
+        bool ReadFromFile( const tchar* filename );
+        bool ReadFromStream( tistream& strm );
     };
 }

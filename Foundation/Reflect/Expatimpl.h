@@ -141,7 +141,7 @@ public:
         //
 
         if (nLength < 0)
-            nLength = (int) strlen (pszBuffer);
+            nLength = (int) _tcslen (pszBuffer);
 
         //
         // Invoke the parser

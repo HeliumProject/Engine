@@ -75,7 +75,7 @@ namespace Reflect
         // Element data
         //
 
-        void AddElement(u32 value, const std::string& name, std::string label = "");
+        void AddElement(u32 value, const std::string& name, std::string label = "" );
 
         bool GetElementValue(const std::string& label, u32& value) const;
         bool GetElementLabel(const u32 value, std::string& label) const;

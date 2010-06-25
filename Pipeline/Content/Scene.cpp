@@ -5,6 +5,7 @@
 #include "Foundation/Version.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Utilities.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 #include "Application/RCS/RCS.h"
 #include "Foundation/TUID.h"
@@ -173,7 +174,7 @@ namespace Content
 
   void Scene::LoadXML( const std::string& xml, Reflect::V_Element& elements, Reflect::StatusHandler* status )
   {
-    Archive::FromXML( xml, elements, status );
+    ArchiveXML::FromString( xml, elements, status );
     PostLoad( elements );
   }
 

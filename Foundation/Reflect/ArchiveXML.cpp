@@ -1,13 +1,18 @@
+#include "ArchiveXML.h"
+
 #include "Element.h"
 #include "Registry.h"
 #include "Serializers.h"
-#include "ArchiveXML.h"
 
 #include "Foundation/Log.h"
 
 #include <strstream>
+#include <expat.h>
 
 using namespace Reflect;
+
+char Indent<char>::m_Space = ' ';
+wchar_t Indent<wchar_t>::m_Space = L' ';
 
 // uncomment to display parse stack progress
 //#define REFLECT_DISPLAY_PARSE_STACK
@@ -21,10 +26,65 @@ ArchiveXML::ArchiveXML(StatusHandler* status)
 , m_Version (CURRENT_VERSION)
 , m_Target (&m_Spool)
 {
-    if (m_p != NULL)
+    m_Parser = XML_ParserCreate_MM (NULL, NULL, NULL);
+
+    // set the user data used in callbacks
+    XML_SetUserData(m_Parser, (void*)this);
+
+    // attach callbacks, will call back to 'this' via user data pointer
+    XML_SetStartElementHandler(m_Parser, &StartElementHandler);
+    XML_SetEndElementHandler(m_Parser, &EndElementHandler);
+    XML_SetCharacterDataHandler(m_Parser, &CharacterDataHandler);
+}
+
+ArchiveXML::~ArchiveXML()
+{
+    XML_ParserFree( m_Parser );
+    m_Parser = NULL;
+}
+
+void ArchiveXML::OpenFile( const tstring& file, bool write )
+{
+    m_Path.Set( file );
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    Debug("Opening file '%s'\n", file.c_str());
+#endif
+
+    Reflect::TCharStreamPtr stream = new FileStream<tchar>(file, write);
+    OpenStream( stream, write );
+}
+
+void ArchiveXML::OpenStream( TCharStream* stream, bool write )
+{
+    // save the mode here, so that we safely refer to it later.
+    m_Mode = (write) ? ArchiveModes::Write : ArchiveModes::Read; 
+
+    // open the stream, this is "our interface" 
+    stream->Open(); 
+
+    // Set precision
+    stream->SetPrecision(32);
+
+    // Setup stream
+    m_Stream = stream; 
+
+    // Header
+    if (write)
     {
-        XML_ParserReset(m_p, NULL);
+        Start();
     }
+}
+
+void ArchiveXML::Close()
+{
+    if (m_Mode == ArchiveModes::Write)
+    {
+        Finish(); 
+    }
+
+    m_Stream->Close(); 
+    m_Stream = NULL; 
 }
 
 void ArchiveXML::Read()
@@ -53,9 +113,6 @@ void ArchiveXML::Read()
     // setup visitors
     PreDeserialize();
 
-    // create the Archive 
-    Create();
-
     // while there is data, parse buffer
     long step = 0;
     const unsigned buffer_size = 4096;
@@ -63,13 +120,13 @@ void ArchiveXML::Read()
     {
         m_Progress = (int)(((float)(step++ * buffer_size) / (float)size) * 100.0f);
 
-        tchar* pszBuffer = (tchar*)GetBuffer(buffer_size); // REQUEST
+        tchar* pszBuffer = (tchar*)XML_GetBuffer(m_Parser, buffer_size); // REQUEST
         NOC_ASSERT(pszBuffer != NULL);
 
         m_Stream->ReadBuffer(pszBuffer, buffer_size);
 
         int last_read = static_cast<int>(m_Stream->BytesRead());
-        if (!ParseBuffer( last_read, last_read == 0 ))
+        if (!XML_ParseBuffer(m_Parser, last_read, last_read == 0) != 0)
         {
             throw Reflect::DataFormatException( TXT( "XML parsing failure, buffer contents:\n%s" ), (const tchar*)pszBuffer);
         }
@@ -364,13 +421,6 @@ void ArchiveXML::Deserialize(V_Element& elements, u32 flags)
     }
 }
 
-void ArchiveXML::OnPostCreate()
-{
-    EnableStartElementHandler();
-    EnableEndElementHandler();
-    EnableCharacterDataHandler();
-}
-
 void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszAttrs)
 {
     if (m_Abort)
@@ -599,10 +649,10 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
         {
             Serializer* serializer = DangerousCast<Serializer>(topState->m_Element);
 
-            std::stringstream stream (topState->m_Buffer);
+            tstringstream stream (topState->m_Buffer);
 
             ArchiveXML xml (m_Status);
-            xml.m_Stream = new Reflect::Stream(&stream); 
+            xml.m_Stream = new Reflect::TCharStream (&stream); 
             xml.m_Components = topState->m_Components;
             serializer->Deserialize(xml);
         }
@@ -678,4 +728,63 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
             m_Abort |= info.m_Abort;
         }
     }
+}
+
+void ArchiveXML::ToString(const ElementPtr& element, std::string& xml, StatusHandler* status)
+{
+    V_Element elements(1);
+    elements[0] = element;
+    return ToString( elements, xml, status );
+}
+
+ElementPtr ArchiveXML::FromString(const std::string& xml, int searchType, StatusHandler* status)
+{
+    if (searchType == Reflect::ReservedTypes::Any)
+    {
+        searchType = Reflect::GetType<Element>();
+    }
+
+    ArchiveXML archive (status);
+    archive.m_SearchType = searchType;
+
+    std::stringstream strStream;
+    strStream << "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\""<<ArchiveXML::CURRENT_VERSION<<"\">" << xml << "</Reflect>";
+    archive.m_Stream = new Reflect::TCharStream(&strStream); 
+    archive.Read();
+
+    V_Element::iterator itr = archive.m_Spool.begin();
+    V_Element::iterator end = archive.m_Spool.end();
+    for ( ; itr != end; ++itr )
+    {
+        if ((*itr)->HasType(searchType))
+        {
+            return *itr;
+        }
+    }
+
+    return NULL;
+}
+
+void ArchiveXML::ToString(const V_Element& elements, std::string& xml, StatusHandler* status)
+{
+    ArchiveXML archive (status);
+    std::stringstream strStream;
+
+    archive.m_Stream = new Reflect::TCharStream(&strStream); 
+    archive.m_Spool  = elements;
+    archive.Write();
+
+    xml = strStream.str();
+}
+
+void ArchiveXML::FromString(const std::string& xml, V_Element& elements, StatusHandler* status)
+{
+    ArchiveXML archive (status);
+    std::stringstream strStream;
+    strStream << "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\""<<ArchiveXML::CURRENT_VERSION<<"\">" << xml << "</Reflect>";
+
+    archive.m_Stream = new Reflect::TCharStream(&strStream); 
+    archive.Read();
+
+    elements = archive.m_Spool;
 }

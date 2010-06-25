@@ -4,6 +4,9 @@
 #include "Version.h"
 #include "Serializers.h"
 
+#include "ArchiveXML.h"
+#include "ArchiveBinary.h"
+
 using namespace Reflect;
 
 REFLECT_DEFINE_ABSTRACT( Element );
@@ -25,12 +28,12 @@ bool Element::ProcessComponent(ElementPtr element, const std::string& fieldName)
 
 void Element::ToXML(std::string& xml) const
 {
-    Archive::ToXML(this, xml);
+    ArchiveXML::ToString(this, xml);
 }
 
-void Element::ToStream(std::iostream& stream, ArchiveType type) const
+void Element::ToBinary(std::iostream& stream) const
 {
-    Archive::ToStream(this, stream, type);
+    ArchiveBinary::ToStream(this, stream);
 }
 
 void Element::ToFile(const tstring& file, const VersionPtr& version) const

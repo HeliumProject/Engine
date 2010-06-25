@@ -42,6 +42,7 @@
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Foundation/Container/Insert.h" 
+#include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Log.h"
 #include "Pipeline/Content/ContentVersion.h"
 #include "Editor/MRUData.h"
@@ -1714,7 +1715,7 @@ void SceneEditor::OnExport(wxCommandEvent& event)
 
                         try
                         {
-                            Reflect::Archive::ToXML( elements, xml, m_SceneManager.GetCurrentScene() );
+                            Reflect::ArchiveXML::ToString( elements, xml, m_SceneManager.GetCurrentScene() );
                         }
                         catch ( Nocturnal::Exception& ex )
                         {
@@ -2972,7 +2973,7 @@ void SceneEditor::OnPasteTransform(wxCommandEvent& event)
         }
 
         Reflect::V_Element elements;
-        Reflect::Archive::FromXML( xml, elements );
+        Reflect::ArchiveXML::FromString( xml, elements );
 
         Reflect::V_Element::const_iterator itr = elements.begin();
         Reflect::V_Element::const_iterator end = elements.end();

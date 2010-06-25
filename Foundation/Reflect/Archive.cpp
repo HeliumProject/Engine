@@ -8,7 +8,6 @@
 
 #include "ArchiveXML.h"
 #include "ArchiveBinary.h"
-#include "FileStream.h" 
 
 #include "Platform/Mutex.h"
 #include "Platform/Process.h"
@@ -135,7 +134,6 @@ Archive::Archive(StatusHandler* status)
 , m_SearchType (Reflect::ReservedTypes::Invalid)
 , m_Abort (false)
 , m_Mode (ArchiveModes::Read)
-, m_Stream (NULL)
 {
 
 }
@@ -204,22 +202,6 @@ void Archive::Debug(const tchar* fmt, ...)
     }
 }
 
-Archive* Archive::GetArchive(const tstring& file, StatusHandler* handler)
-{
-    if ( file.empty() )
-    {
-        throw Reflect::StreamException( TXT( "File path is empty" ) );
-    }
-
-    Reflect::ArchiveType archiveType;
-    if ( GetFileType( file, archiveType ) )
-    {
-        return GetArchive( archiveType, handler);
-    }
-
-    return NULL;
-}
-
 Archive* Archive::GetArchive(ArchiveType type, StatusHandler* handler)
 {
     switch (type)
@@ -237,48 +219,20 @@ Archive* Archive::GetArchive(ArchiveType type, StatusHandler* handler)
     return NULL;
 }
 
-void Archive::OpenFile( const tstring& file, bool write )
+Archive* Archive::GetArchive(const tstring& file, StatusHandler* handler)
 {
-    m_Path.Set( file );
-
-#ifdef REFLECT_ARCHIVE_VERBOSE
-    Debug("Opening file '%s'\n", file.c_str());
-#endif
-
-    Reflect::StreamPtr stream = new FileStream(file, write); 
-    OpenStream( stream, write );
-}
-
-void Archive::OpenStream( const StreamPtr& stream, bool write )
-{
-    // save the mode here, so that we safely refer to it later.
-    m_Mode = (write) ? ArchiveModes::Write : ArchiveModes::Read; 
-
-    // open the stream, this is "our interface" 
-    stream->Open(); 
-
-    // Set precision
-    stream->SetPrecision(32);
-
-    // Setup stream
-    m_Stream = stream; 
-
-    // Header
-    if (write)
+    if ( file.empty() )
     {
-        Start();
-    }
-}
-
-void Archive::Close()
-{
-    if (m_Mode == ArchiveModes::Write)
-    {
-        Finish(); 
+        throw Reflect::StreamException( TXT( "File path is empty" ) );
     }
 
-    m_Stream->Close(); 
-    m_Stream = NULL; 
+    Reflect::ArchiveType archiveType;
+    if ( GetFileType( file, archiveType ) )
+    {
+        return GetArchive( archiveType, handler);
+    }
+
+    return NULL;
 }
 
 void Archive::PreSerialize()
@@ -452,138 +406,6 @@ bool Archive::TryElementCallback( Element* element, ElementCallback callback )
     }
 
     return true;
-}
-
-void Archive::ToXML(const ElementPtr& element, std::string& xml, StatusHandler* status)
-{
-    V_Element elements(1);
-    elements[0] = element;
-    return ToXML( elements, xml, status );
-}
-
-ElementPtr Archive::FromXML(const std::string& xml, int searchType, StatusHandler* status)
-{
-    if (searchType == Reflect::ReservedTypes::Any)
-    {
-        searchType = Reflect::GetType<Element>();
-    }
-
-    ArchiveXML archive (status);
-    archive.m_SearchType = searchType;
-
-    std::stringstream strStream;
-    strStream << "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\""<<ArchiveXML::CURRENT_VERSION<<"\">" << xml << "</Reflect>";
-    archive.m_Stream = new Reflect::Stream(&strStream); 
-    archive.Read();
-
-    V_Element::iterator itr = archive.m_Spool.begin();
-    V_Element::iterator end = archive.m_Spool.end();
-    for ( ; itr != end; ++itr )
-    {
-        if ((*itr)->HasType(searchType))
-        {
-            return *itr;
-        }
-    }
-
-    return NULL;
-}
-
-void Archive::ToXML(const V_Element& elements, std::string& xml, StatusHandler* status)
-{
-    ArchiveXML archive (status);
-    std::stringstream strStream;
-
-    archive.m_Stream = new Reflect::Stream(&strStream); 
-    archive.m_Spool  = elements;
-    archive.Write();
-
-    xml = strStream.str();
-}
-
-void Archive::FromXML(const std::string& xml, V_Element& elements, StatusHandler* status)
-{
-    ArchiveXML archive (status);
-    std::stringstream strStream;
-    strStream << "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\""<<ArchiveXML::CURRENT_VERSION<<"\">" << xml << "</Reflect>";
-
-    archive.m_Stream = new Reflect::Stream(&strStream); 
-    archive.Read();
-
-    elements = archive.m_Spool;
-}
-
-void Archive::ToStream(const ElementPtr& element, std::iostream& stream, ArchiveType type, StatusHandler* status)
-{
-    V_Element elements(1);
-    elements[0] = element;
-    ToStream( elements, stream, type, status );
-}
-
-ElementPtr Archive::FromStream(std::iostream& stream, ArchiveType type, int searchType, StatusHandler* status)
-{
-    if (searchType == Reflect::ReservedTypes::Any)
-    {
-        searchType = Reflect::GetType<Element>();
-    }
-
-    std::auto_ptr<Archive> archive (GetArchive(type, status));
-    archive->m_SearchType = searchType;
-
-    Reflect::StreamPtr reflectStream = new Reflect::Stream(&stream); 
-    archive->OpenStream( reflectStream, false );
-    archive->Read();
-    archive->Close(); 
-
-    V_Element::iterator itr = archive->m_Spool.begin();
-    V_Element::iterator end = archive->m_Spool.end();
-    for ( ; itr != end; ++itr )
-    {
-        if ((*itr)->HasType(searchType))
-        {
-            return *itr;
-        }
-    }
-
-    return NULL;
-}
-
-void Archive::ToStream(const V_Element& elements, std::iostream& stream, ArchiveType type, StatusHandler* status)
-{
-    std::auto_ptr<Archive> archive (GetArchive(type, status));
-
-    // fix the spool
-    archive->m_Spool.clear();
-    archive->m_Spool.reserve( elements.size() );
-
-    V_Element::const_iterator iter = elements.begin();
-    V_Element::const_iterator end  = elements.end();
-    for ( ; iter != end; ++iter )
-    {
-        if ( !(*iter)->HasType(Reflect::GetType<Version>()) )
-        {
-            archive->m_Spool.push_back( (*iter) );
-        }
-    }
-
-    Reflect::StreamPtr reflectStream = new Reflect::Stream(&stream); 
-
-    archive->OpenStream( reflectStream, true );
-    archive->Write();   
-    archive->Close(); 
-}
-
-void Archive::FromStream(std::iostream& stream, ArchiveType type, V_Element& elements, StatusHandler* status)
-{
-    std::auto_ptr<Archive> archive (GetArchive(type, status));
-
-    Reflect::StreamPtr reflectStream = new Reflect::Stream(&stream); 
-
-    archive->OpenStream( reflectStream, false );
-    archive->Read();
-    archive->Close(); 
-
-    elements = archive->m_Spool;
 }
 
 void Archive::ToFile(const ElementPtr& element, const tstring& file)

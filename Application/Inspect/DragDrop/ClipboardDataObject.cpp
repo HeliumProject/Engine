@@ -1,4 +1,5 @@
 #include "ClipboardDataObject.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 #include "Application/Inspect/DragDrop/ClipboardDataWrapper.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include <sstream>
@@ -119,9 +120,7 @@ ReflectClipboardDataPtr ClipboardDataObject::FromBuffer()
 
   if ( GetDataSize() > 0 )
   {
-    std::strstream stream( (char*)( GetData() ), static_cast< std::streamsize >( GetDataSize() ) );
-    
-    ClipboardDataWrapperPtr wrapper = Reflect::ObjectCast< ClipboardDataWrapper >( Reflect::Archive::FromStream( stream, Reflect::ArchiveTypes::XML, Reflect::GetType< ClipboardDataWrapper >() ) );
+    ClipboardDataWrapperPtr wrapper = Reflect::ObjectCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( (const char*)GetData(), Reflect::GetType< ClipboardDataWrapper >() ) );
     if ( wrapper.ReferencesObject() )
     {
       data = wrapper->m_Data;
@@ -142,7 +141,8 @@ bool ClipboardDataObject::ToBuffer( ReflectClipboardData* data )
   ClipboardDataWrapperPtr wrapper = new ClipboardDataWrapper();
   wrapper->m_Data = data;
 
-  Reflect::Archive::ToStream( wrapper, stream, Reflect::ArchiveTypes::XML );
+  std::string xml;
+  Reflect::ArchiveXML::ToString( wrapper, xml );
 
-  return SetData( stream.str().size(), (const char*)( stream.str().c_str() ) );
+  return SetData( xml.size(), (const char*)( xml.c_str() ) );
 }

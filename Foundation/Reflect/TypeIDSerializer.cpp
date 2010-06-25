@@ -72,8 +72,10 @@ void TypeIDSerializer::Serialize(Archive& archive) const
 
     case ArchiveTypes::Binary:
         {
-            i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().Insert( type ? type->m_ShortName : "" );
-            archive.GetStream().Write(&index); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            i32 index = binary.GetStrings().Insert( type ? type->m_ShortName : "" );
+            binary.GetStream().Write(&index); 
             break;
         }
     }
@@ -97,9 +99,11 @@ void TypeIDSerializer::Deserialize(Archive& archive)
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             i32 index;
-            archive.GetStream().Read(&index); 
-            str = static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index);
+            binary.GetStream().Read(&index); 
+            str = binary.GetStrings().GetString(index);
             break;
         }
     }

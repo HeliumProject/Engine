@@ -7,7 +7,7 @@
 
 #include "Foundation/Version.h"
 #include "Foundation/Container/Insert.h" 
-
+#include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/Log.h"
 
@@ -1214,7 +1214,7 @@ bool Scene::ExportXML( std::string& xml, const ExportArgs& args )
     {
         try
         {
-            Reflect::Archive::ToXML( spool, xml, this );
+            Reflect::ArchiveXML::ToString( spool, xml, this );
         }
         catch ( Nocturnal::Exception& ex )
         {

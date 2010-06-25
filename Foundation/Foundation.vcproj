@@ -1167,27 +1167,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Reflect\Expatimpl.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Reflect\Field.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Reflect\Field.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Reflect\FileStream.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Reflect\FileStream.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Reflect\Indent.cpp"
 				>
 			</File>
 			<File

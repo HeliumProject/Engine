@@ -70,10 +70,13 @@ void PathSerializer::Serialize( Archive& archive ) const
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             // get string pool index
-            i32 index = static_cast< ArchiveBinary& >( archive ).GetStrings().Insert( data );
+            i32 index = binary.GetStrings().Insert( data );
+
             // write that index
-            archive.GetStream().Write( &index ); 
+            binary.GetStream().Write( &index ); 
             break;
         }
     }
@@ -97,16 +100,15 @@ void PathSerializer::Deserialize( Archive& archive )
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             i32 index = -1;
-            archive.GetStream().Read( &index ); 
+            binary.GetStream().Read( &index ); 
 
             if ( index >= 0 )
             {
-#ifdef UNICODE
-                const tstring& str (static_cast< ArchiveBinary& >( archive ).GetStrings().GetWideString( index ) );
-#else
-                const std::string& str (static_cast< ArchiveBinary& >( archive ).GetStrings().GetString( index ) );
-#endif
+                const tstring& str ( binary.GetStrings().GetString( index ) );
+
                 m_Data.Ref().Set( str );
             }
 

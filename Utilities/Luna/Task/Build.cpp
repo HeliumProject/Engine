@@ -29,6 +29,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/IPC/Connection.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Exception.h"
 
 using namespace AssetBuilder;
@@ -149,7 +150,7 @@ bool BuildEntry( const std::set< Nocturnal::Path >& assets, AssetBuilder::Builde
 
     try
     {
-        Reflect::Archive::ToStream( req, stream, Reflect::ArchiveTypes::Binary );
+        Reflect::ArchiveBinary::ToStream( req, stream );
     }
     catch ( Nocturnal::Exception& ex )
     {
@@ -191,7 +192,7 @@ bool BuildEntry( const std::set< Nocturnal::Path >& assets, AssetBuilder::Builde
         {
             std::strstream stream ((char*)msg->GetData(), msg->GetSize());
 
-            AssetBuilder::AssetBuiltArgsPtr assetBuiltArgs = Reflect::ObjectCast<AssetBuilder::AssetBuiltArgs> (Reflect::Archive::FromStream(stream, Reflect::ArchiveTypes::Binary, Reflect::GetType<AssetBuilder::AssetBuiltArgs>()));
+            AssetBuilder::AssetBuiltArgsPtr assetBuiltArgs = Reflect::ObjectCast<AssetBuilder::AssetBuiltArgs> (Reflect::ArchiveBinary::FromStream(stream, Reflect::GetType<AssetBuilder::AssetBuiltArgs>()));
             if ( assetBuiltArgs.ReferencesObject() )
             {
                 g_AssetBuiltEvent.Raise( assetBuiltArgs );

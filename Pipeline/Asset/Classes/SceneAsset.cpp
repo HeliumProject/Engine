@@ -1,8 +1,9 @@
 #include "SceneAsset.h"
 
+#include "Foundation/Reflect/ArchiveBinary.h"
+
 #include "Pipeline/Asset/AssetTemplate.h"
 #include "Pipeline/Asset/Components/DependenciesComponent.h"
-
 #include "Pipeline/Component/ComponentHandle.h"
 
 using namespace Asset;
@@ -36,7 +37,7 @@ void SceneAsset::EnumerateClass( Reflect::Compositor<SceneAsset>& comp )
   assetTemplates.push_back( classTemplate );
 
   std::stringstream stream;
-  Reflect::Archive::ToStream( assetTemplates, stream, Reflect::ArchiveTypes::Binary );
+  Reflect::ArchiveBinary::ToStream( assetTemplates, stream );
   comp.GetComposite().SetProperty( AssetProperties::AssetTemplates, stream.str() );
 }
 

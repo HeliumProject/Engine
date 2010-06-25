@@ -43,8 +43,8 @@ void BitfieldSerializer::Serialize(Archive& archive) const
     case ArchiveTypes::Binary:
         {
             i32 index = -1;
-
             std::vector< std::string > strs;
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
             if (m_Enumeration)
             {
@@ -58,14 +58,14 @@ void BitfieldSerializer::Serialize(Archive& archive) const
                 std::vector< std::string >::const_iterator end = strs.end();
                 for ( ; itr != end; ++itr )
                 {
-                    index = static_cast<ArchiveBinary&>(archive).GetStrings().Insert(*itr);
-                    archive.GetStream().Write(&index); 
+                    index = binary.GetStrings().Insert(*itr);
+                    binary.GetStream().Write(&index); 
                 }
             }
 
             // term
             index = -1;
-            archive.GetStream().Write(&index); 
+            binary.GetStream().Write(&index); 
 
             break;
         }
@@ -101,16 +101,18 @@ void BitfieldSerializer::Deserialize(Archive& archive)
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             i32 index = -1;
-            archive.GetStream().Read(&index); 
+            binary.GetStream().Read(&index); 
 
             std::vector< std::string > strs;
             while (index >= 0)
             {
-                strs.push_back(static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index));
+                strs.push_back(binary.GetStrings().GetString(index));
 
                 // read next index
-                archive.GetStream().Read(&index); 
+                binary.GetStream().Read(&index); 
             }
 
             std::string str;

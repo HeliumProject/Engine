@@ -5,6 +5,10 @@
 	Name="SDK"
 	InheritedPropertySheets=".\Root.vsprops"
 	>
+	<Tool
+		Name="VCCLCompilerTool"
+		PreprocessorDefinitions="XML_STATIC=1"
+	/>
 	<UserMacro
 		Name="boost"
 		Value="$(SolutionDir)SDK\boost\1.43"

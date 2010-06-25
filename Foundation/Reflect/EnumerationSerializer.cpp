@@ -79,7 +79,8 @@ void EnumerationSerializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
-#ifdef REFLECT_XML_SUPPORT
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
             std::string label;
 
             if (m_Enumeration)
@@ -91,13 +92,14 @@ void EnumerationSerializer::Serialize(Archive& archive) const
             }
 
             // store corresponding string
-            archive.GetStream() << label;
-#endif
+            xml.GetStream() << label;
             break;
         }
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             std::string label;
 
             if (m_Enumeration)
@@ -109,10 +111,10 @@ void EnumerationSerializer::Serialize(Archive& archive) const
             }
 
             // get string pool index
-            i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().Insert(label);
+            i32 index = binary.GetStrings().Insert(label);
 
             // write that index
-            archive.GetStream().Write(&index); 
+            binary.GetStream().Write(&index); 
 
             break;
         }
@@ -151,16 +153,18 @@ void EnumerationSerializer::Deserialize(Archive& archive)
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             i32 index = -1;
-            archive.GetStream().Read(&index); 
+            binary.GetStream().Read(&index); 
 
             if (index >= 0)
             {
-                const std::string& str (static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index));
+                const std::string& str (binary.GetStrings().GetString(index));
 
                 if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
                 {
-                    archive.Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_ShortName.c_str(), str.c_str() );
+                    binary.Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_ShortName.c_str(), str.c_str() );
                 }
                 else
                 {

@@ -24,6 +24,7 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/IPC/Connection.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Exception.h"
 
 #include <strstream>
@@ -147,7 +148,7 @@ bool Export( const S_tuid& assetIDs, bool recurse, const std::string& stateTrack
   std::stringstream stream;
   try
   {
-    Reflect::Archive::ToStream( job, stream, Reflect::ArchiveTypes::Binary );
+    Reflect::ArchiveBinary::ToStream( job, stream );
   }
   catch ( Nocturnal::Exception& ex )
   {

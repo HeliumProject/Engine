@@ -1,7 +1,8 @@
+#include "ArchiveBinary.h"
+
 #include "Element.h"
 #include "Registry.h"
 #include "Serializers.h"
-#include "ArchiveBinary.h"
 
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Checksum/CRC32.h"
@@ -48,6 +49,50 @@ ArchiveBinary::ArchiveBinary (StatusHandler* status)
 , m_Skip (false)
 {
 
+}
+
+void ArchiveBinary::OpenFile( const tstring& file, bool write )
+{
+    m_Path.Set( file );
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+    Debug("Opening file '%s'\n", file.c_str());
+#endif
+
+    Reflect::CharStreamPtr stream = new FileStream<char>(file, write); 
+    OpenStream( stream, write );
+}
+
+void ArchiveBinary::OpenStream( CharStream* stream, bool write )
+{
+    // save the mode here, so that we safely refer to it later.
+    m_Mode = (write) ? ArchiveModes::Write : ArchiveModes::Read; 
+
+    // open the stream, this is "our interface" 
+    stream->Open(); 
+
+    // Set precision
+    stream->SetPrecision(32);
+
+    // Setup stream
+    m_Stream = stream; 
+
+    // Header
+    if (write)
+    {
+        Start();
+    }
+}
+
+void ArchiveBinary::Close()
+{
+    if (m_Mode == ArchiveModes::Write)
+    {
+        Finish(); 
+    }
+
+    m_Stream->Close(); 
+    m_Stream = NULL; 
 }
 
 void ArchiveBinary::Read()
@@ -1204,4 +1249,75 @@ bool ArchiveBinary::DeserializeField(Field* field)
     }
 
     return !m_Stream->Fail();
+}
+
+void ArchiveBinary::ToStream(const ElementPtr& element, std::iostream& stream, StatusHandler* status)
+{
+    V_Element elements(1);
+    elements[0] = element;
+    ToStream( elements, stream, status );
+}
+
+ElementPtr ArchiveBinary::FromStream(std::iostream& stream, int searchType, StatusHandler* status)
+{
+    if (searchType == Reflect::ReservedTypes::Any)
+    {
+        searchType = Reflect::GetType<Element>();
+    }
+
+    ArchiveBinary archive ( status );
+    archive.m_SearchType = searchType;
+
+    Reflect::CharStreamPtr charStream = new Reflect::Stream<char>( &stream ); 
+    archive.OpenStream( charStream, false );
+    archive.Read();
+    archive.Close(); 
+
+    V_Element::iterator itr = archive.m_Spool.begin();
+    V_Element::iterator end = archive.m_Spool.end();
+    for ( ; itr != end; ++itr )
+    {
+        if ((*itr)->HasType(searchType))
+        {
+            return *itr;
+        }
+    }
+
+    return NULL;
+}
+
+void ArchiveBinary::ToStream(const V_Element& elements, std::iostream& stream, StatusHandler* status)
+{
+    ArchiveBinary archive ( status );
+
+    // fix the spool
+    archive.m_Spool.clear();
+    archive.m_Spool.reserve( elements.size() );
+
+    V_Element::const_iterator iter = elements.begin();
+    V_Element::const_iterator end  = elements.end();
+    for ( ; iter != end; ++iter )
+    {
+        if ( !(*iter)->HasType(Reflect::GetType<Version>()) )
+        {
+            archive.m_Spool.push_back( (*iter) );
+        }
+    }
+
+    Reflect::CharStreamPtr charStream = new Reflect::Stream<char>(&stream); 
+    archive.OpenStream( charStream, true );
+    archive.Write();   
+    archive.Close(); 
+}
+
+void ArchiveBinary::FromStream(std::iostream& stream, V_Element& elements, StatusHandler* status)
+{
+    ArchiveBinary archive (status);
+
+    Reflect::CharStreamPtr charStream = new Reflect::Stream<char>(&stream); 
+    archive.OpenStream( charStream, false );
+    archive.Read();
+    archive.Close(); 
+
+    elements = archive.m_Spool;
 }

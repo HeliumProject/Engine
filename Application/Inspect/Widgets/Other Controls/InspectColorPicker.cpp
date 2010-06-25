@@ -99,9 +99,14 @@ void ColorPicker::Read()
 {
   if ( IsBound() && IsRealized() )
   {
-    std::string str;
-    ReadData( str );
-    std::stringstream stream( str );
+    tstring str;
+      ReadData( str );
+
+    std::string temp;
+      bool converted = Platform::ConvertString( str, temp );
+      NOC_ASSERT( converted );
+
+    std::stringstream stream( temp );
 
     if (m_Alpha)
     {
@@ -150,7 +155,11 @@ bool ColorPicker::Write()
       stream << m_Color3;
     }
 
-    WriteData( stream.str() );
+    tstring temp;
+    bool converted = Platform::ConvertString( stream.str(), temp );
+    NOC_ASSERT( converted );
+
+    WriteData( temp );
 
     result = true;
   }
@@ -181,7 +190,11 @@ void ColorPicker::SetColor3( const Math::Color3& color )
       std::stringstream stream;
       stream << m_Color3;
 
-      WriteData( stream.str() );
+      tstring temp;
+      bool converted = Platform::ConvertString( stream.str(), temp );
+      NOC_ASSERT( converted );
+
+      WriteData( temp );
     }
 
     static_cast<StdColorPickerWindow*>(GetWindow())->m_ColorPicker->SetColour( wxColour ( m_Color3.r, m_Color3.g, m_Color3.b ) );
@@ -198,9 +211,14 @@ const Math::Color3& ColorPicker::GetColor3() const
   {
     if ( IsBound() )
     {
-      std::string str;
+      tstring str;
       ReadData( str );
-      std::stringstream stream( str );
+
+      std::string temp;
+      bool converted = Platform::ConvertString( str, temp );
+      NOC_ASSERT( converted );
+
+      std::stringstream stream( temp );
       stream >> (Math::Color3)m_Color3;
     }
   }
@@ -222,7 +240,12 @@ void ColorPicker::SetColor4( const Math::Color4& color )
     {
       std::stringstream stream;
       stream << m_Color4;
-      WriteData( stream.str() );
+
+      tstring temp;
+      bool converted = Platform::ConvertString( stream.str(), temp );
+      NOC_ASSERT( converted );
+
+      WriteData( temp );
     }
 
     static_cast<StdColorPickerWindow*>(GetWindow())->m_ColorPicker->SetColour( wxColour ( m_Color4.r, m_Color4.g, m_Color4.b, m_Color4.a ) );
@@ -239,9 +262,14 @@ const Math::Color4& ColorPicker::GetColor4() const
   {
     if ( IsBound() )
     {
-      std::string str;
+      tstring str;
       ReadData( str );
-      std::stringstream stream( str );
+
+      std::string temp;
+      bool converted = Platform::ConvertString( str, temp );
+      NOC_ASSERT( converted );
+
+      std::stringstream stream( temp );
 
       stream >> (Math::Color4)m_Color4;
     }

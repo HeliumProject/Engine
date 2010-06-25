@@ -8,7 +8,7 @@ using namespace Inspect;
 
 const i32 CHECKBOXWIDTH = 16;
 const i32 CHECKBOXHEIGHT = 22;
-static const char* CHECKBOX_DEFAULT_INDICATOR = "*";
+static const tchar* CHECKBOX_DEFAULT_INDICATOR = TXT( "*" );
 
 class StdCheckBox : public wxCheckBox
 {
@@ -18,7 +18,7 @@ public:
   bool m_Override;
 
   StdCheckBox (wxWindow* parent, CheckBox* cb)
-    : wxCheckBox (parent, wxID_ANY, "")
+    : wxCheckBox (parent, wxID_ANY, wxT( "" ) )
     , m_CheckBox (cb)
     , m_Override (false)
   {
@@ -96,7 +96,7 @@ bool CheckBox::Write()
     
     if ( IsBound() )
     {
-      std::string str ( m_State ? "1" : "0" );
+      tstring str ( m_State ? TXT( "1" ) : TXT( "0" ) );
       return WriteData( str );
     }
 
@@ -111,9 +111,9 @@ bool CheckBox::GetChecked()
   // If we have data, use it (otherwise, just use the state)
   if ( IsBound() )
   {
-    std::string str;
+    tstring str;
     ReadData( str );
-    m_State = atoi( str.c_str() ) != 0;
+    m_State = _tstoi( str.c_str() ) != 0;
   }
 
   return m_State;
@@ -127,7 +127,7 @@ void CheckBox::SetChecked( bool checked )
   // if we have data, write to it
   if ( IsBound() )
   {
-    WriteData( m_State ? "1" : "0" );
+    WriteData( m_State ? TXT( "1" ) : TXT( "0" ) );
   }
 
   UpdateUI( m_State );
@@ -137,10 +137,10 @@ void CheckBox::SetDefaultAppearance( bool def )
 {
   if ( IsRealized() )
   {
-    std::string label;
+    tstring label;
     if ( def )
     {
-      label = "*";
+      label = TXT( "*" );
     }
 
     StdCheckBoxWindow* window = (StdCheckBoxWindow*) m_Window;

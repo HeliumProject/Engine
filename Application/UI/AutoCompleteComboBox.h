@@ -13,13 +13,13 @@ namespace Nocturnal
     {
     public:
         AutoCompleteComboBox( wxWindow* parent, wxWindowID id, 
-            const wxString& value = "",
+            const wxString& value = wxT( "" ),
             const wxPoint& pos = wxDefaultPosition, 
             const wxSize& size = wxDefaultSize,
             int n = 0, const wxString choices[] = NULL,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = "autoCompleteComboBox" );
+            const wxString& name = wxT( "autoCompleteComboBox" ) );
 
         AutoCompleteComboBox( wxWindow* parent, wxWindowID id, 
             const wxString& value, 
@@ -28,7 +28,7 @@ namespace Nocturnal
             const wxArrayString& choices,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = "autoCompleteComboBox" );
+            const wxString& name = wxT( "autoCompleteComboBox" ) );
 
         virtual ~AutoCompleteComboBox();
 

@@ -12,9 +12,9 @@ namespace Inspect
 
   struct EditFilePathArgs
   {
-    std::string m_File;
+    tstring m_File;
 
-    EditFilePathArgs( const std::string& file )
+    EditFilePathArgs( const tstring& file )
       : m_File( file )
     {
 

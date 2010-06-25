@@ -12,7 +12,7 @@ using namespace Inspect;
 
 const i32 CHECKBOXWIDTH = 16;
 const i32 CHECKBOXHEIGHT = 22;
-static const char* CHECKBOX_DEFAULT_INDICATOR = "*";
+static const tchar* CHECKBOX_DEFAULT_INDICATOR = TXT( "*" );
 
 class CustomCheckBox : public wxCheckBox
 {
@@ -22,7 +22,7 @@ public:
   bool m_Override;
 
   CustomCheckBox( wxWindow* parent, ReflectBitfieldCheckBox* cb )
-    : wxCheckBox( parent, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxCHK_3STATE )
+    : wxCheckBox( parent, wxID_ANY, TXT( "" ), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE )
     , m_CheckBox( cb )
     , m_Override( false )
   {
@@ -109,18 +109,18 @@ CheckBoxStates::CheckBoxState ReflectBitfieldCheckBox::GetChecked()
   // If we have data, use it (otherwise, just use the state)
   if ( IsBound() && !m_BitfieldString.empty() )
   {
-    std::vector< std::string > strs;
+    std::vector< tstring > strs;
     ReadAll( strs );
 
     bool previous = false;
-    const std::vector< std::string >::const_iterator strBegin = strs.begin();
-    std::vector< std::string >::const_iterator strItr = strBegin;
-    const std::vector< std::string >::const_iterator strEnd = strs.end();
+    const std::vector< tstring >::const_iterator strBegin = strs.begin();
+    std::vector< tstring >::const_iterator strItr = strBegin;
+    const std::vector< tstring >::const_iterator strEnd = strs.end();
     for ( ; strItr != strEnd; ++strItr )
     {
 #pragma TODO( "There should be a version of Tokenize that builds sets instead of vectors to make all these searches faster" )
-      std::vector< std::string > tokens;
-      ::Tokenize( *strItr, tokens, "\\|" );
+      std::vector< tstring > tokens;
+      ::Tokenize( *strItr, tokens, TXT( "\\|" ) );
       bool found = std::find( tokens.begin(), tokens.end(), m_BitfieldString ) != tokens.end();
       m_State = found ? CheckBoxStates::Checked : CheckBoxStates::Unchecked;
 
@@ -152,7 +152,7 @@ void ReflectBitfieldCheckBox::SetChecked( CheckBoxStates::CheckBoxState checked 
   UpdateUI( m_State );
 }
 
-void ReflectBitfieldCheckBox::SetBitfieldString( const std::string& value )
+void ReflectBitfieldCheckBox::SetBitfieldString( const tstring& value )
 {
   m_BitfieldString = value;
 }
@@ -166,8 +166,8 @@ bool ReflectBitfieldCheckBox::IsDefault() const
   }
   else
   {
-    std::vector< std::string > tokens;
-    ::Tokenize( m_Default, tokens, "\\|" );
+    std::vector< tstring > tokens;
+    ::Tokenize( m_Default, tokens, TXT( "\\|" ) );
     bool shouldBeChecked = std::find( tokens.begin(), tokens.end(), m_BitfieldString ) != tokens.end();
     switch ( GetUIState() )
     {
@@ -192,7 +192,7 @@ void ReflectBitfieldCheckBox::SetDefaultAppearance( bool def )
 {
   if ( IsRealized() )
   {
-    std::string label;
+    tstring label;
     if ( def )
     {
       label = CHECKBOX_DEFAULT_INDICATOR;
@@ -215,28 +215,28 @@ bool ReflectBitfieldCheckBox::WriteBitfield()
   {
     if ( m_State != CheckBoxStates::Tristate )
     {
-      std::vector< std::string > newVals;
-      std::vector< std::string > strs;
+      std::vector< tstring > newVals;
+      std::vector< tstring > strs;
       ReadAll( strs );
 
-      std::vector< std::string >::const_iterator strItr = strs.begin();
-      std::vector< std::string >::const_iterator strEnd = strs.end();
+      std::vector< tstring >::const_iterator strItr = strs.begin();
+      std::vector< tstring >::const_iterator strEnd = strs.end();
       for ( ; strItr != strEnd; ++strItr )
       {
-        const std::string& current = *strItr;
-        std::string newVal = current;
-        std::vector< std::string > tokens;
-        ::Tokenize( current, tokens, "\\|" );
-        std::vector< std::string >::iterator foundItr = std::find( tokens.begin(), tokens.end(), m_BitfieldString );
+        const tstring& current = *strItr;
+        tstring newVal = current;
+        std::vector< tstring > tokens;
+        ::Tokenize( current, tokens, TXT( "\\|" ) );
+        std::vector< tstring >::iterator foundItr = std::find( tokens.begin(), tokens.end(), m_BitfieldString );
         if ( ( m_State == CheckBoxStates::Checked ) && ( foundItr == tokens.end() ) )
         {
           tokens.push_back( m_BitfieldString );
-          newVals.push_back( BuildBitfieldString( tokens, "|" ) );
+          newVals.push_back( BuildBitfieldString( tokens, TXT( "|" ) ) );
         }
         else if ( ( m_State == CheckBoxStates::Unchecked ) && ( foundItr != tokens.end() ) )
         {
           tokens.erase( foundItr );
-          newVals.push_back( BuildBitfieldString( tokens, "|" ) );
+          newVals.push_back( BuildBitfieldString( tokens, TXT( "|" ) ) );
         }
         else
         {
@@ -255,11 +255,11 @@ bool ReflectBitfieldCheckBox::WriteBitfield()
   return dataWasUpdated;
 }
 
-std::string ReflectBitfieldCheckBox::BuildBitfieldString( std::vector< std::string > tokens, const std::string& delimiter )
+tstring ReflectBitfieldCheckBox::BuildBitfieldString( std::vector< tstring > tokens, const tstring& delimiter )
 {
-  std::string result;
-  std::vector< std::string >::const_iterator itr = tokens.begin();
-  std::vector< std::string >::const_iterator end = tokens.end();
+  tstring result;
+  std::vector< tstring >::const_iterator itr = tokens.begin();
+  std::vector< tstring >::const_iterator end = tokens.end();
   for ( ; itr != end; ++itr )
   {
     if ( !result.empty() )

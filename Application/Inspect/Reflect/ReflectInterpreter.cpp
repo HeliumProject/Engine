@@ -63,7 +63,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
   // parse
   ContainerPtr scriptOutput = m_Container->GetCanvas()->Create<Container>(this);
 
-  std::string typeInfoUI;
+  tstring typeInfoUI;
   typeInfo->GetProperty( "UIScript", typeInfoUI );
   bool result = Script::Parse(typeInfoUI, this, parent->GetCanvas(), scriptOutput);
 
@@ -78,7 +78,9 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
       Label* label = Reflect::ObjectCast<Label>( *itr );
       if (label)
       {
-        labelText = label->GetText();
+          bool converted = Platform::ConvertString( label->GetText(), labelText );
+          NOC_ASSERT( converted );
+            
         if ( !labelText.empty() )
         {
           break;
@@ -115,7 +117,11 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
     }
   }
 
-  panel->SetText( labelText );
+  tstring temp;
+  bool converted = Platform::ConvertString( labelText, temp );
+  NOC_ASSERT( converted );
+
+  panel->SetText( temp );
 
   M_Panel panelsMap;
   panelsMap.insert( std::make_pair("", panel) );
@@ -145,7 +151,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
       bool groupExpanded = false;
       field->GetProperty( "UIGroupExpanded", groupExpanded );
 
-      std::string fieldUIGroup;
+      tstring fieldUIGroup;
       field->GetProperty( "UIGroup", fieldUIGroup );
       if ( !fieldUIGroup.empty() )
       {
@@ -157,27 +163,27 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
           panelsMap.insert( std::make_pair(fieldUIGroup, newPanel) );
 
           PanelPtr parent;
-          std::string groupName;
-          size_t idx = fieldUIGroup.find_last_of( "/" );
-          if ( idx != std::string::npos )
+          tstring groupName;
+          size_t idx = fieldUIGroup.find_last_of( TXT( "/" ) );
+          if ( idx != tstring::npos )
           {
-            std::string parentName = fieldUIGroup.substr( 0, idx );
+            tstring parentName = fieldUIGroup.substr( 0, idx );
             groupName = fieldUIGroup.substr( idx+1 );
             if ( panelsMap.find( parentName ) == panelsMap.end() )
             {          
               parent = m_Container->GetCanvas()->Create<Panel>(this);
 
               // create the parent hierarchy since it hasn't already been made
-              std::string currentParent = parentName;
+              tstring currentParent = parentName;
               for (;;)
               {
-                idx = currentParent.find_last_of( "/" );
-                if ( idx == std::string::npos )
+                idx = currentParent.find_last_of( TXT( "/" ) );
+                if ( idx == tstring::npos )
                 {
                   // no more parents so we add it to the root
                   panelsMap.insert( std::make_pair(currentParent, parent) );
                   parent->SetText( currentParent );
-                  panelsMap[""]->AddControl( parent );
+                  panelsMap[ TXT( "" ) ]->AddControl( parent );
                   break;
                 }
                 else
@@ -205,7 +211,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
           }
           else
           {
-            parent = panelsMap[""];
+            parent = panelsMap[ TXT( "" )];
             groupName = fieldUIGroup;
           }
           newPanel->SetText( groupName );
@@ -220,7 +226,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
       }
       else
       {
-        panel = panelsMap[""];
+        panel = panelsMap[ TXT( "" )];
       }
 
 
@@ -304,7 +310,11 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
           {
             PanelPtr childPanel = panel->GetCanvas()->Create<Panel>( this );
 
-            childPanel->SetText( field->m_UIName );
+               tstring temp;
+              bool converted = Platform::ConvertString( field->m_UIName, temp );
+              NOC_ASSERT( converted );
+
+              childPanel->SetText( temp );
 
             V_Element::const_iterator elementItr = elements->begin();
             V_Element::const_iterator elementEnd = elements->end();
@@ -339,7 +349,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
   }
 
   // Make sure we have the base panel
-  panel = panelsMap[""];
+  panel = panelsMap[TXT( "" )];
 
   if (parent == m_Container)
   {

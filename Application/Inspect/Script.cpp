@@ -17,9 +17,9 @@ using namespace Inspect;
 // #define INSPECT_DEBUG_SCRIPT_COMPILE
 
 // L strings
-#define LS_REGEX_DELIM_BEGIN "UI\\[\\.\\["
-#define LS_REGEX_DELIM_END "\\]\\.\\]"
-#define LS_WHITESPACE " \t\n"
+#define LS_REGEX_DELIM_BEGIN TXT( "UI\\[\\.\\[" )
+#define LS_REGEX_DELIM_END TXT( "\\]\\.\\]" )
+#define LS_WHITESPACE TXT( " \t\n" )
 
 // L chars
 #define LC_COMMENT "#"
@@ -29,7 +29,7 @@ using namespace Inspect;
 // Control Registry
 //
 
-typedef std::map<std::string, int> M_ControlType;
+typedef std::map<tstring, int> M_ControlType;
 
 M_ControlType g_ControlTypeMap;
 
@@ -47,20 +47,20 @@ void Script::Initialize()
 
   struct ControlEntry
   {
-    const char* name;
+    const tchar* name;
     int type;
   };
 
   const ControlEntry controls[] =
   {
-    {"label",       Reflect::GetType<Label>()},
-    {"value",       Reflect::GetType<Value>()},
-    {"slider",      Reflect::GetType<Slider>()},
-    {"check",       Reflect::GetType<CheckBox>()},
-    {"color",       Reflect::GetType<ColorPicker>()},
-    {"choice",      Reflect::GetType<Choice>()},
-    {"combo",       Reflect::GetType<Choice>()},
-    {"list",        Reflect::GetType<List>()},
+    { TXT( "label" ),       Reflect::GetType<Label>()},
+    { TXT( "value" ),       Reflect::GetType<Value>()},
+    { TXT( "slider" ),      Reflect::GetType<Slider>()},
+    { TXT( "check" ),       Reflect::GetType<CheckBox>()},
+    { TXT( "color" ),       Reflect::GetType<ColorPicker>()},
+    { TXT( "choice" ),      Reflect::GetType<Choice>()},
+    { TXT( "combo" ),       Reflect::GetType<Choice>()},
+    { TXT( "list" ),        Reflect::GetType<List>()},
   };
 
   int size = sizeof(controls)/sizeof(controls[0]);
@@ -75,7 +75,7 @@ void Script::Cleanup()
   g_ControlTypeMap.clear();
 }
 
-bool Script::PreProcess(std::string& script)
+bool Script::PreProcess(tstring& script)
 {
   INSPECT_SCOPE_TIMER( ("Attributes Script Pre-Processing") );
 
@@ -91,7 +91,7 @@ bool Script::PreProcess(std::string& script)
   // Check for L code
   //
 
-  const boost::regex cfPattern ( ".*"LS_REGEX_DELIM_BEGIN".*"LS_REGEX_DELIM_END".*" ); 
+  const boost::regex cfPattern ( TXT( ".*" ) LS_REGEX_DELIM_BEGIN TXT( ".*" ) LS_REGEX_DELIM_END TXT( ".*" ) );
 
   boost::smatch matchResult; 
   if(!boost::regex_search(script, matchResult, cfPattern))
@@ -106,15 +106,15 @@ bool Script::PreProcess(std::string& script)
   // the .* at the end of this secretly culls the rest of the string for you
   // including comments and additional UI[.[ (.*) ].] 
   // 
-  const boost::regex cfStartEndPattern ( ".*"LS_REGEX_DELIM_BEGIN"(.*)"LS_REGEX_DELIM_END".*"); 
-  script = boost::regex_replace(script, cfStartEndPattern, "$1"); 
+  const boost::regex cfStartEndPattern ( TXT( ".*" ) LS_REGEX_DELIM_BEGIN TXT( "(.*)" ) LS_REGEX_DELIM_END TXT( ".*" ) ); 
+  script = boost::regex_replace(script, cfStartEndPattern, TXT( "$1" ) ); 
 
   //
   // Cull comments
   //
   
-  const boost::regex cfCommentPattern ( LC_COMMENT".*\n" ); 
-  script = boost::regex_replace(script, cfCommentPattern, "\n"); 
+  const boost::regex cfCommentPattern ( LC_COMMENT TXT( ".*\n" ) ); 
+  script = boost::regex_replace(script, cfCommentPattern, TXT( "\n" ) ); 
 
   //
   // Debug
@@ -127,68 +127,68 @@ bool Script::PreProcess(std::string& script)
   return true;
 }
 
-void Script::ParseAttributes(std::string& attributes, Control* control)
+void Script::ParseAttributes(tstring& attributes, Control* control)
 {
 
 
   INSPECT_SCOPE_TIMER( ("Attributes Script Attribute Processing") );
   
   size_t pos = 0;
-  size_t end = std::string::npos;
+  size_t end = tstring::npos;
 
-  while (pos < attributes.length() && pos != std::string::npos)
+  while (pos < attributes.length() && pos != tstring::npos)
   {
     // eat ws
     pos = attributes.find_first_not_of(LS_WHITESPACE, pos);
 
     // the rest is WS, abort
-    if (pos == std::string::npos)
+    if (pos == tstring::npos)
       break;
 
     // search for end of keyword
-    end = attributes.find_first_of(LS_WHITESPACE"=", pos);
+    end = attributes.find_first_of(LS_WHITESPACE TXT( "=" ), pos);
 
     // we have no symbol term, just abort
-    if (end == std::string::npos)
+    if (end == tstring::npos)
       break;
 
     // copy just our symbol into a string
-    std::string key (attributes.data() + pos, end - pos);
+    tstring key (attributes.data() + pos, end - pos);
 
-    // next char
+    // next tchar
     pos = end+1;
 
     // eat ws
     pos = attributes.find_first_not_of(LS_WHITESPACE, pos);
 
     // the rest is WS, abort
-    if (pos == std::string::npos)
+    if (pos == tstring::npos)
       break;
 
     // see if the value is directly quoted
-    size_t startQuote = attributes.find_first_of("\"", pos);
-    size_t endQuote = attributes.find_first_of("\"", startQuote+1);
+    size_t startQuote = attributes.find_first_of( TXT( "\"" ), pos);
+    size_t endQuote = attributes.find_first_of( TXT( "\"" ), startQuote+1);
 
     // search for end of keyword
-    end = attributes.find_first_of(";", pos);
+    end = attributes.find_first_of( TXT( ";" ), pos);
 
     // if the semi is in the quote
-    if (startQuote != std::string::npos && endQuote != std::string::npos && startQuote < end && end < endQuote)
+    if (startQuote != tstring::npos && endQuote != tstring::npos && startQuote < end && end < endQuote)
     {
       // search for end of value not quoted
-      end = attributes.find_first_of(";", endQuote);
+      end = attributes.find_first_of( TXT( ";" ), endQuote);
     }
 
     // we have no symbol term, just abort
-    if (end == std::string::npos)
+    if (end == tstring::npos)
     {
       end = attributes.length();
     }
 
     // copy just our symbol into a string
-    std::string value (attributes.data() + pos, end - pos);
+    tstring value (attributes.data() + pos, end - pos);
 
-    // next char
+    // next tchar
     pos = end+1;
 
     // trim quoted values
@@ -196,7 +196,7 @@ void Script::ParseAttributes(std::string& attributes, Control* control)
       size_t start = value.find_first_of('\"');
       size_t finish = value.find_last_of('\"');
 
-      if (start != std::string::npos)
+      if (start != tstring::npos)
       {
         if (start == finish)
         {
@@ -214,34 +214,34 @@ void Script::ParseAttributes(std::string& attributes, Control* control)
   }
 }
 
-bool Script::Parse(const std::string& script, Interpreter* interpreter, Canvas* canvas, Container* output, u32 fieldFlags)
+bool Script::Parse(const tstring& script, Interpreter* interpreter, Canvas* canvas, Container* output, u32 fieldFlags)
 {
   INSPECT_SCOPE_TIMER( ("Attributes Script Parsing") );
 
   // make working copy
-  std::string str = script;
+  tstring str = script;
 
   // remove delimiters and exterior string data
   if (!PreProcess(str))
     return false;
 
   size_t pos = 0;
-  size_t end = std::string::npos;
+  size_t end = tstring::npos;
 
-  while (pos < str.length() && pos != std::string::npos)
+  while (pos < str.length() && pos != tstring::npos)
   {
     // eat ws
     pos = str.find_first_not_of(LS_WHITESPACE, pos);
 
     // the rest is WS, abort
-    if (pos == std::string::npos)
+    if (pos == tstring::npos)
       break;
 
     // search for end of keyword
-    end = str.find_first_of(LS_WHITESPACE"{", pos);
+    end = str.find_first_of(LS_WHITESPACE TXT( "{" ), pos);
 
     // we have no symbol term, just abort
-    if (end == std::string::npos)
+    if (end == tstring::npos)
       break;
 
     // this shouldn't happen
@@ -249,7 +249,7 @@ bool Script::Parse(const std::string& script, Interpreter* interpreter, Canvas* 
       break;
     
     // copy just our symbol into a string
-    std::string symbol (str.data() + pos, end - pos);
+    tstring symbol (str.data() + pos, end - pos);
 
 
     //
@@ -260,7 +260,7 @@ bool Script::Parse(const std::string& script, Interpreter* interpreter, Canvas* 
 
     if (i == g_ControlTypeMap.end())
     {
-      Log::Warning("Undefined script symbol \"%s\"\n", symbol.c_str());
+      Log::Warning( TXT( "Undefined script symbol \"%s\"\n" ), symbol.c_str());
       return false;
     }
 
@@ -277,7 +277,7 @@ bool Script::Parse(const std::string& script, Interpreter* interpreter, Canvas* 
 
     if (control == NULL)
     {
-      Log::Warning("Unable to construct control \"%s\"\n", symbol.c_str());
+      Log::Warning( TXT( "Unable to construct control \"%s\"\n" ), symbol.c_str());
       return false;
     }
 
@@ -293,11 +293,11 @@ bool Script::Parse(const std::string& script, Interpreter* interpreter, Canvas* 
     end = str.find_first_of('}', pos);
 
 
-    if (pos != std::string::npos && 
-        end != std::string::npos &&
+    if (pos != tstring::npos && 
+        end != tstring::npos &&
         pos < end && pos+1 != end)
     {
-      ParseAttributes(std::string (str.data() + pos + 1, end - pos - 1), control);
+      ParseAttributes(tstring (str.data() + pos + 1, end - pos - 1), control);
     }
 
 

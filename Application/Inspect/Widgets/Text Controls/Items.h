@@ -12,16 +12,16 @@ namespace Inspect
   // Items control (base class for comboboxes and listboxes)
   //
 
-  const static char ITEMS_ATTR_ITEM[]      = "item";
-  const static char ITEMS_ATTR_ITEM_DELIM  = '|';
-  const static char ITEMS_ATTR_REQUIRED[]  = "required";
-  const static char ITEMS_ATTR_PREFIX[]    = "prefix";
+  const static tchar ITEMS_ATTR_ITEM[]      = TXT( "item" );
+  const static tchar ITEMS_ATTR_ITEM_DELIM  = TXT( '|' );
+  const static tchar ITEMS_ATTR_REQUIRED[]  = TXT( "required" );
+  const static tchar ITEMS_ATTR_PREFIX[]    = TXT( "prefix" );
 
   class APPLICATION_API Items : public Reflect::AbstractInheritor<Items, Control>
   {
   protected:
-    std::string m_Value;
-    std::string m_Prefix;
+    tstring m_Value;
+    tstring m_Prefix;
     V_Item m_Items;
     V_Item m_Statics;
     bool m_Required;
@@ -31,7 +31,7 @@ namespace Inspect
     Items();
 
   protected:
-    virtual bool Process(const std::string& key, const std::string& value) NOC_OVERRIDE;
+    virtual bool Process(const tstring& key, const tstring& value) NOC_OVERRIDE;
 
     virtual void SetDefaultAppearance(bool def) NOC_OVERRIDE;
 
@@ -48,11 +48,11 @@ namespace Inspect
     virtual void SetItems(const V_Item& items);
 
     // get the value of an entry data
-    virtual std::string GetValue();
-    virtual void SetValue(const std::string& data);
+    virtual tstring GetValue();
+    virtual void SetValue(const tstring& data);
 
     // query item membership
-    virtual bool Contains(const std::string& data);
+    virtual bool Contains(const tstring& data);
 
     // set the highlight state
     virtual void SetHighlight(bool highlighted);

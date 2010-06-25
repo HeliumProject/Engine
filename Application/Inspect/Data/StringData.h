@@ -11,7 +11,7 @@ namespace Inspect
   // Base class for all string-translated data types
   //
 
-  class StringData : public DataTemplate< std::string >
+    class StringData : public DataTemplate< std::string >
   {
   public:
     INSPECT_TYPE( DataTypes::String );
@@ -123,8 +123,8 @@ namespace Inspect
       Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( s ) );
       if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
       {
-        std::string newValue;
-        Reflect::Serializer::GetValue< std::string >( serializer, newValue);
+          std::string newValue;
+          Reflect::Serializer::GetValue< std::string >( serializer, newValue);
         std::vector<T*>::iterator itr = m_Data.begin();
         std::vector<T*>::iterator end = m_Data.end();
         for ( ; itr != end; ++itr )
@@ -152,8 +152,8 @@ namespace Inspect
           Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( *itr ) );
           if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
           {
-            std::string newValue;
-            Reflect::Serializer::GetValue< std::string >( serializer, newValue );
+              std::string newValue;
+              Reflect::Serializer::GetValue< std::string >( serializer, newValue );
             Extract<T>( std::stringstream ( newValue ), m_Data[ index ] );
             result = true;
           }

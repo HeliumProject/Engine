@@ -2,6 +2,7 @@
 #include "P4Tags.h"
 
 #include "Foundation/Log.h"
+#include "Platform/String.h"
 
 using namespace Perforce;
 
@@ -9,14 +10,33 @@ void OpenedCommand::OutputStat( StrDict* dict )
 {
   RCS::File file;
 
-  file.m_DepotPath = dict->GetVar( g_DepotFileTag )->Text();
-  file.m_LocalPath = dict->GetVar( g_ClientFileTag )->Text();
+  bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), file.m_DepotPath );
+  NOC_ASSERT( converted );
+
+  converted = Platform::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), file.m_LocalPath );
+  NOC_ASSERT( converted );
+
   file.m_LocalRevision = dict->GetVar( g_RevisionTag )->Atoi();
-  file.m_Operation = GetOperationEnum( dict->GetVar( g_ActionTag )->Text() );
+  
+  tstring actionString;
+  converted = Platform::ConvertString( dict->GetVar( g_ActionTag )->Text(), actionString );
+  NOC_ASSERT( converted );
+
+  file.m_Operation = GetOperationEnum( actionString );
+
   file.m_ChangesetId = dict->GetVar( g_ChangeTag )->Atoi();
-  file.m_FileType = GetFileType( dict->GetVar( g_TypeTag )->Text() );
-  file.m_Username = dict->GetVar( g_UserTag )->Text();
-  file.m_Client = dict->GetVar( g_ClientTag )->Text();
+  
+  tstring fileType;
+  converted = Platform::ConvertString( dict->GetVar( g_TypeTag )->Text(), fileType );
+  NOC_ASSERT( converted );
+
+  file.m_FileType = GetFileType( fileType );
+
+  converted = Platform::ConvertString( dict->GetVar( g_UserTag )->Text(), file.m_Username );
+  NOC_ASSERT( converted );
+
+  converted = Platform::ConvertString( dict->GetVar( g_ClientTag )->Text(), file.m_Client );
+  NOC_ASSERT( converted );
 
   m_FileList->push_back( file );
 }
@@ -48,7 +68,8 @@ void SubmitCommand::OutputStat( StrDict* dict )
     StrPtr* depotFile = dict->GetVar( g_DepotFileTag, i );
     if ( depotFile )
     {
-      file->m_DepotPath = depotFile->Text();
+        bool converted = Platform::ConvertString( depotFile->Text(), file->m_DepotPath );
+        NOC_ASSERT( converted );
     }
 
     StrPtr* revision = dict->GetVar( g_RevisionTag );
@@ -60,7 +81,11 @@ void SubmitCommand::OutputStat( StrDict* dict )
     StrPtr* action = dict->GetVar( g_ActionTag );
     if ( action )
     {
-      file->m_Operation = GetOperationEnum( action->Text() );
+        tstring actionString;
+        bool converted = Platform::ConvertString( action->Text(), actionString );
+        NOC_ASSERT( converted );
+
+        file->m_Operation = GetOperationEnum( actionString );
     }
   }
 }
@@ -72,28 +97,41 @@ void RevertCommand::OutputStat( StrDict* dict )
     return;
   }
 
-  m_File->m_DepotPath = dict->GetVar( g_DepotFileTag )->Text();
-  m_File->m_LocalPath = dict->GetVar( g_ClientFileTag )->Text();
+  bool converted = Platform::ConvertString( dict->GetVar( g_DepotFileTag )->Text(), m_File->m_DepotPath );
+  NOC_ASSERT( converted );
+
+  converted = Platform::ConvertString( dict->GetVar( g_ClientFileTag )->Text(), m_File->m_LocalPath );
+  NOC_ASSERT( converted );
+
   m_File->m_LocalRevision = dict->GetVar( g_HaveRevTag )->Atoi();
-  m_File->m_Operation = GetOperationEnum( dict->GetVar( g_OldActionTag )->Text() );
+  
+  tstring actionString;
+  converted = Platform::ConvertString( dict->GetVar( g_OldActionTag )->Text(), actionString );
+  NOC_ASSERT( converted );
+
+  m_File->m_Operation = GetOperationEnum( actionString );
 }
 
 void CreateChangelistCommand::InputData( StrBuf *buf, Error *e )
 {
-  std::string spec;
-  spec  = "Change: new\n\n";
-  spec += "Client: ";
-  spec += m_Provider->m_ClientName + "\n\n";
-  spec += "User: ";
-  spec += m_Provider->m_UserName + "\n\n";
-  spec += "Description:\n\t";
+  tstring spec;
+  spec  = TXT( "Change: new\n\n" );
+  spec += TXT( "Client: " );
+  spec += m_Provider->m_ClientName + TXT( "\n\n" );
+  spec += TXT( "User: " );
+  spec += m_Provider->m_UserName + TXT( "\n\n" );
+  spec += TXT( "Description:\n\t" );
   spec += m_Changeset->m_Description;
-  buf->Set( spec.c_str() );
+
+  std::string narrowSpec;
+  bool converted = Platform::ConvertString( spec, narrowSpec );
+  NOC_ASSERT( converted );
+  buf->Set( narrowSpec.c_str() );
 }
 
 void CreateChangelistCommand::Run()
 {
-  AddArg( "-i" );
+  AddArg( TXT( "-i" ) );
   Command::Run();
 }
 
@@ -102,17 +140,17 @@ void CreateChangelistCommand::OutputInfo( char level, const char* data )
 {
   if ( sscanf_s( data, "Change %d", &m_Changeset->m_Id ) != 1 )
   {
-    Log::Error( "Could not parse perforce changelist creation message:\n\n %s\n\nPlease contact support with this error message.\n" );
+    Log::Error( TXT( "Could not parse perforce changelist creation message:\n\n %s\n\nPlease contact support with this error message.\n" ) );
     m_ErrorCount++;
   }
 }
 
 void GetChangelistsCommand::Run()
 {
-  AddArg( "-c" );
+  AddArg( TXT( "-c" ) );
   AddArg( m_Provider->m_ClientName );
-  AddArg( "-s" );
-  AddArg( "pending" );
+  AddArg( TXT( "-s" ) );
+  AddArg( TXT( "pending" ) );
 
   Command::Run();
 }
@@ -122,7 +160,9 @@ void GetChangelistsCommand::OutputStat( StrDict* dict )
   RCS::Changeset changeset;
 
   changeset.m_Id = dict->GetVar( g_ChangeTag )->Atoi();
-  changeset.m_Description = dict->GetVar( g_DescriptionTag )->Text();
+  
+  bool converted = Platform::ConvertString( dict->GetVar( g_DescriptionTag )->Text(), changeset.m_Description );
+  NOC_ASSERT( converted );
 
   m_Changesets->push_back( changeset );
 }

@@ -22,7 +22,7 @@ using namespace Inspect;
 
 FileInterpreter::FileInterpreter (Container* container)
 : ReflectFieldInterpreter (container)
-, m_FileFilter( "" )
+, m_FileFilter( TXT( "" ) )
 {
 
 }
@@ -54,7 +54,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
     //
     // Parse
     //
-    std::string fieldUI;
+    tstring fieldUI;
     field->GetProperty( "UIScript", fieldUI );
     bool result = Script::Parse(fieldUI, this, parent->GetCanvas(), group, field->m_Flags);
 
@@ -106,7 +106,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                     // File edit button
                     ActionPtr editButton = m_Container->GetCanvas()->Create<Action>(this);
                     editButton->AddListener( ActionSignature::Delegate ( this, &FileInterpreter::Edit ) );
-                    editButton->SetText("Edit");
+                    editButton->SetText( TXT( "Edit" ) );
                     group->AddControl( editButton );
                 }
 
@@ -114,7 +114,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                 {
                     // File refresh button
                     ButtonPtr refreshButton = m_Container->GetCanvas()->Create<Button>(this);
-                    refreshButton->SetText("Reload");
+                    refreshButton->SetText( TXT( "Reload" ) );
                     group->AddControl( refreshButton );
                 }
             }
@@ -149,7 +149,11 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
     if (label == NULL)
     {
         label = group->GetCanvas()->Create<Label>(this);
-        label->SetText( field->m_UIName );
+        tstring temp;
+        bool converted = Platform::ConvertString( field->m_UIName, temp );
+        NOC_ASSERT( converted );
+
+        label->SetText( temp );
 
         group->InsertControl(0, label);
     }
@@ -210,7 +214,10 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
         *field->m_Default >> outStream;
 
-        group->SetDefault(outStream.str());
+        tstring temp;
+        bool converted = Platform::ConvertString( outStream.str().c_str(), temp );
+        NOC_ASSERT( converted );
+        group->SetDefault( temp );
     }
 
     //
@@ -229,7 +236,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
 bool FileInterpreter::DataChanging( DataChangingArgs& args )
 {
-    std::string text;
+    tstring text;
     Reflect::Serializer::GetValue( args.m_NewValue, text );
 
     if ( !text.empty() )
@@ -241,7 +248,7 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
             return true;
         }
 
-        std::string dir;
+        tstring dir;
         if ( path.IsDirectory() )
         {
             dir = path.Get();
@@ -250,9 +257,9 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
         // case 1: the path is right but the file is wrong
         if ( dir.empty() )
         {
-            char drive[MAX_PATH], folder[MAX_PATH], file[MAX_PATH], ext[MAX_PATH];
-            _splitpath(text.c_str(), drive, folder, file, ext);
-            std::ostringstream directory;
+            tchar drive[MAX_PATH], folder[MAX_PATH], file[MAX_PATH], ext[MAX_PATH];
+            _tsplitpath(text.c_str(), drive, folder, file, ext);
+            tostringstream directory;
             directory << drive << folder;
             if ( Nocturnal::Path( directory.str() ).Exists() )
             {
@@ -263,15 +270,15 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
         // case 2: get as close as we can to a valid directory
         if (dir.empty())
         {
-            std::string temp;
-            const char* token = strtok(&temp[0], "/");
+            tstring temp;
+            const tchar* token = _tcstok(&temp[0], TXT( "/" ) );
             while (token)
             {
-                temp = temp + token + "/";
-                if ((strlen(token) == 2 && token[1] == ':') || Nocturnal::Path( temp ).Exists() )
+                temp = temp + token + TXT( "/" );
+                if ((_tcslen(token) == 2 && token[1] == ':') || Nocturnal::Path( temp ).Exists() )
                 {
-                    dir = dir + token + "/";
-                    token = strtok(NULL, "/");
+                    dir = dir + token + TXT( "/" );
+                    token = _tcstok(NULL, TXT( "/" ) );
                 }
                 else
                 {
@@ -294,7 +301,7 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
 
         if ( dialog.ShowModal() == wxID_OK )
         {
-            Reflect::Serializer::SetValue< std::string >( args.m_NewValue, dialog.GetPath().c_str() );
+            Reflect::Serializer::SetValue< tstring >( args.m_NewValue, dialog.GetPath().c_str() );
         }
     }
 
@@ -310,7 +317,11 @@ void FileInterpreter::Edit( Button* button )
 
     if ( !str.empty() )
     {
-        g_EditFilePath.Raise( EditFilePathArgs( str ) );
+        tstring temp;
+        bool converted = Platform::ConvertString( str, temp );
+        NOC_ASSERT( converted );
+
+        g_EditFilePath.Raise( EditFilePathArgs( temp ) );
     }
 }
 

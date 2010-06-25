@@ -715,58 +715,6 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Dependencies"
-			>
-			<File
-				RelativePath=".\Dependencies\Dependencies.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Dependencies\Dependencies.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Dependencies\DependenciesExceptions.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Dependencies\GraphDB.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Dependencies\GraphDB.h"
-				>
-			</File>
-			<Filter
-				Name="Info"
-				>
-				<File
-					RelativePath=".\Dependencies\Info\DataInfo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Dependencies\Info\DataInfo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Dependencies\Info\DependencyInfo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Dependencies\Info\DependencyInfo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Dependencies\Info\FileInfo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Dependencies\Info\FileInfo.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
 			Name="Content"
 			>
 			<File
@@ -1562,46 +1510,6 @@
 				</File>
 				<File
 					RelativePath=".\Asset\Manifests\SceneManifest.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Tracker"
-				>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDB-1.sql.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDB.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDB.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDBColumn.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDBColumn.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDBQuery.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDBQuery.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\Tracker.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\Tracker.h"
 					>
 				</File>
 			</Filter>

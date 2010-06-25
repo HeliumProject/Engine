@@ -8,7 +8,6 @@
 #include <sys/stat.h>
 
 #include "Platform/Assert.h"
-#include "Platform/String.h"
 #include "Foundation/Version.h"
 
 #include "Platform/Windows/Windows.h"
@@ -58,22 +57,22 @@ void Debug::ProcessException(const std::exception& exception, bool print, bool f
 
   ExceptionArgs args( ExceptionTypes::CPP, fatal );
 
-  tstring cppClass = TXT( "Unknown" );
+  const char* cppClass = NULL;
   try
   {
-      std::string c = typeid(exception).name();
-      bool converted = Platform::ConvertString( c, cppClass );
-      NOC_ASSERT( converted );
+    cppClass = typeid(exception).name();
   }
   catch (const std::bad_typeid&)
   {
+    cppClass = "Unknown";
   }
 
-  std::string what = exception.what();
-  bool converted = Platform::ConvertString( what, args.m_Message );
+  bool converted = Platform::ConvertString( exception.what(), args.m_Message );
   NOC_ASSERT( converted );
 
-  args.m_CPPClass = cppClass;
+  converted = Platform::ConvertString( cppClass, args.m_CPPClass );
+  NOC_ASSERT( converted );
+
   args.m_State = Log::GetOutlineState();
 
   if (print)

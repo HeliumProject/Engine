@@ -12,7 +12,7 @@ namespace Inspect
   public:
     Group* m_Group;
 
-    PanelOutline( wxWindow* parent, Group* group, const char* name );
+    PanelOutline( wxWindow* parent, Group* group, const tchar* name );
     void OnPaint( wxPaintEvent& args );
     
     DECLARE_EVENT_TABLE();

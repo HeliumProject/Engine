@@ -36,8 +36,8 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
   m_ApplicationName.clear();
   GetModuleFileName( NULL, buf, MAX_PATH );
   m_ApplicationPath = buf;
-  std::string processPath = buf;
-  size_t idx = processPath.find_last_of( "\\" );
+  tstring processPath = buf;
+  size_t idx = processPath.find_last_of( TXT( "\\" ) );
   if ( idx != processPath.npos )
   {
     m_ApplicationName = processPath.substr( idx+1 );
@@ -53,14 +53,14 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
   m_CmdLineArgs.clear();
   {
     int cmdArgc;
-    const char** cmdArgv = Nocturnal::GetCmdLine( cmdArgc );
+    const tchar** cmdArgv = Nocturnal::GetCmdLine( cmdArgc );
     if ( cmdArgc > 1 )
     {
       for ( int i = 1; i < cmdArgc; ++i )
       {
         if ( !m_CmdLineArgs.empty() )
         {
-          m_CmdLineArgs += " ";
+          m_CmdLineArgs += TXT( " " );
         }
         m_CmdLineArgs += cmdArgv[i];
       }
@@ -69,34 +69,34 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
 
   m_InheritedArgs.clear();
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( "NOC_CMD_ARGS", buf, MAX_PATH );
+  GetEnvironmentVariable( TXT( "NOC_CMD_ARGS" ), buf, MAX_PATH );
   m_InheritedArgs = buf;
   if ( m_InheritedArgs.empty() )
   {
-    m_InheritedArgs = "";
+    m_InheritedArgs = TXT( "" );
   }
 
   m_AssetBranch.clear();
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( "NOC_ASSETS_BRANCH_NAME", buf, MAX_PATH );
+  GetEnvironmentVariable( TXT( "NOC_ASSETS_BRANCH_NAME" ), buf, MAX_PATH );
   m_AssetBranch = buf;
   Nocturnal::Path::Normalize( m_AssetBranch );
 
   m_CodeBranch.clear();
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( "NOC_CODE_BRANCH_NAME", buf, MAX_PATH );
+  GetEnvironmentVariable( TXT( "NOC_CODE_BRANCH_NAME" ), buf, MAX_PATH );
   m_CodeBranch = buf;
   Nocturnal::Path::Normalize( m_CodeBranch );
 
   m_ProjectName.clear();
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( "NOC_PROJECT_NAME", buf, MAX_PATH );
+  GetEnvironmentVariable( TXT( "NOC_PROJECT_NAME" ), buf, MAX_PATH );
   m_ProjectName = buf;
 
   m_IsToolsBuilder = false;
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( "NOC_TOOLS_BUILDER", buf, MAX_PATH );
-  if ( stricmp( buf, "1" ) == 0 )
+  GetEnvironmentVariable( TXT( "NOC_TOOLS_BUILDER" ), buf, MAX_PATH );
+  if ( _tcsicmp( buf, TXT( "1" ) ) == 0 )
   {
     m_IsToolsBuilder = true;
   }
@@ -107,8 +107,8 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
 
   m_IsSymbolBuilder = false;
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( "NOC_SYMBOL_MODE", buf, MAX_PATH );
-  if ( stricmp( buf, "BUILD" ) == 0 )
+  GetEnvironmentVariable( TXT( "NOC_SYMBOL_MODE" ), buf, MAX_PATH );
+  if ( _tcsicmp( buf, TXT( "BUILD" ) ) == 0 )
   {
     m_IsSymbolBuilder = true;
   }
@@ -120,14 +120,14 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
   m_ToolsVersion = NOCTURNAL_VERSION_STRING;
 
 #ifdef DEBUG
-  m_ToolsBuildConfig = "Debug";
+  m_ToolsBuildConfig = TXT( "Debug" );
 #else
-  m_ToolsBuildConfig = "Release";
+  m_ToolsBuildConfig = TXT( "Release" );
 #endif
 
   m_ToolsReleaseName.clear();
   ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( "NOC_TOOLS_RELEASE_NAME", buf, MAX_PATH );
+  GetEnvironmentVariable( TXT( "NOC_TOOLS_RELEASE_NAME" ), buf, MAX_PATH );
   m_ToolsReleaseName = buf;
 
   // Memory
@@ -140,16 +140,16 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
 
   m_Environment.clear();
   // Get a pointer to the environment block. 
-  const char* env = (const char*)::GetEnvironmentStrings();
+  const tchar* env = (const tchar*)::GetEnvironmentStrings();
   if ( env )
   {
     // Variable strings are separated by NULL byte, and the block is terminated by a NULL byte. 
-    for (const char* var = (const char*)env; *var; var++) 
+    for (const tchar* var = (const tchar*)env; *var; var++) 
     {
       if (*var != '=')
       {
         m_Environment += var;
-        m_Environment += "\n";
+        m_Environment += TXT( "\n" );
       }
 
       while (*var)
@@ -158,6 +158,6 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
       }
     }
 
-    ::FreeEnvironmentStrings((char*)env);
+    ::FreeEnvironmentStrings((tchar*)env);
   }
 }

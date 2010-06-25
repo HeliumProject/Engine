@@ -8,7 +8,7 @@ namespace Perforce
   {
   public:
     GetChangelistsCommand( Provider* provider, RCS::V_Changeset* changesets )
-      : Command ( provider, "changes" )
+      : Command ( provider, TXT( "changes" ) )
       , m_Changesets( changesets )
     {
     }
@@ -24,7 +24,7 @@ namespace Perforce
   {
   public:
     CreateChangelistCommand( Provider* provider, RCS::Changeset* changeset )
-      : Command ( provider, "change" )
+      : Command ( provider, TXT( "change" ) )
       , m_Changeset( changeset )
     {
     }
@@ -41,7 +41,7 @@ namespace Perforce
   {
   public:
     DeleteChangelistCommand( Provider* provider )
-      : Command ( provider, "change" )
+      : Command ( provider, TXT( "change" ) )
       , m_Changelist ( RCS::InvalidChangesetId )
     {
     }
@@ -59,7 +59,7 @@ namespace Perforce
   {
   public:
     OpenedCommand( Provider* provider, RCS::V_File* files )
-      : Command ( provider, "opened" )
+      : Command ( provider, TXT( "opened" ) )
       , m_FileList( files )
     {
     }
@@ -73,7 +73,7 @@ namespace Perforce
   {
   public:
     SubmitCommand( Provider* provider, RCS::Changeset* changeset = NULL )
-      : Command ( provider, "submit" )
+      : Command ( provider, TXT( "submit" ) )
       , m_Changeset( changeset )
     {
     }
@@ -87,7 +87,7 @@ namespace Perforce
   {
   public:
     RevertCommand( Provider* provider, RCS::File* file = NULL )
-      : Command ( provider, "revert" )
+      : Command ( provider, TXT( "revert" ) )
       , m_File ( file )
     {
     }

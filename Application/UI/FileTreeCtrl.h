@@ -51,7 +51,7 @@ namespace Nocturnal
   public:
 
     FileTreeCtrl();
-    FileTreeCtrl( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTR_HAS_BUTTONS, const wxValidator& validator = wxDefaultValidator, const wxString& name = "listCtrl" );
+    FileTreeCtrl( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTR_HAS_BUTTONS, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxT( "listCtrl" ) );
     virtual ~FileTreeCtrl();
 
     virtual int OnCompareItems( const wxTreeItemId& lhsItem, const wxTreeItemId& rhsItem );

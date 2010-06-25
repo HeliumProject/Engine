@@ -20,18 +20,18 @@ namespace Application
 
   struct APPLICATION_API Args
   {
-    static const char* Script;
-    static const char* Attach;
-    static const char* Profile;
-    static const char* Memory;
-    static const char* Verbose;
-    static const char* Extreme;
-    static const char* Debug;
+    static const tchar* Script;
+    static const tchar* Attach;
+    static const tchar* Profile;
+    static const tchar* Memory;
+    static const tchar* Verbose;
+    static const tchar* Extreme;
+    static const tchar* Debug;
 
 #ifdef _DEBUG
-    static const char* DisableDebugHeap;
-    static const char* DisableLeakCheck;
-    static const char* CheckHeap;
+    static const tchar* DisableDebugHeap;
+    static const tchar* DisableLeakCheck;
+    static const tchar* CheckHeap;
 #endif
   };
 
@@ -46,7 +46,7 @@ namespace Application
   //  * Perform version checking (to validate execution)
   //  * Initialize Console printing system
   //  * Inherit automatic command line args from the environment
-  APPLICATION_API void Startup( int argc = 0, const char** argv = NULL, bool checkVersion = true );
+  APPLICATION_API void Startup( int argc = 0, const tchar** argv = NULL, bool checkVersion = true );
 
   // Shutdown your application
   //  * Cleans up global initializer stack to release memory so its not reported as memory leaks
@@ -114,7 +114,7 @@ namespace Application
   //  }
   //
 
-  APPLICATION_API int StandardMain( int (*main)(int argc, const char** argv), int argc, const char** argv, bool checkVersion = true );
+  APPLICATION_API int StandardMain( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv, bool checkVersion = true );
 
   //
   // Main wrappers for windows applications

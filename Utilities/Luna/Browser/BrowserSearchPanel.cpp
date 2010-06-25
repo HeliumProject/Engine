@@ -2,7 +2,6 @@
 #include "BrowserSearchPanel.h"
 
 #include "Browser.h"
-#include "BrowserSearchDatabase.h"
 #include "CollectionManager.h"
 
 #include "Pipeline/Asset/Tracker/CacheDB.h"
@@ -764,12 +763,6 @@ bool BrowserSearchPanel::ProcessForm()
     }
 
     m_BrowserFrame->Search( queryString, collection );
-
-    // save a query that is entered through the advanced search wizard
-    if( !queryString.empty() )
-    {
-        BrowserSearchDatabase::UpdateSearchEvents( queryString );
-    }
 
     return true;
 }

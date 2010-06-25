@@ -33,7 +33,7 @@ namespace Nocturnal
 
   public:
     SortableListView();
-    SortableListView( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator, const wxString& name = "SortableListView" );
+    SortableListView( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxT( "SortableListView" ) );
     virtual ~SortableListView();
     bool IsSortingEnabled() const;
     void EnableSorting( bool enable = true );

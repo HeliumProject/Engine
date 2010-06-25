@@ -8,7 +8,7 @@ namespace Perforce
   {
   public:
     SyncCommand( Provider* provider, RCS::File* file = NULL, const u64 timestamp = 0 )
-      : Command ( provider, "sync" )
+      : Command ( provider, TXT( "sync" ) )
       , m_File ( file )
       , m_SyncTime( timestamp )
     {
@@ -26,7 +26,7 @@ namespace Perforce
   class OpenCommand : public Command
   {
   public:
-    OpenCommand( Provider* provider, const char* command = "", RCS::File* file = NULL )
+    OpenCommand( Provider* provider, const tchar* command = TXT( "" ), RCS::File* file = NULL )
       : Command ( provider, command )
       , m_File ( file )
     {
@@ -44,7 +44,7 @@ namespace Perforce
   {
   public:
     IntegrateCommand( Provider* provider, RCS::File* source, RCS::File* dest )
-      : Command( provider, "integrate" )
+      : Command( provider, TXT( "integrate" ) )
       , m_Source( source )
       , m_Dest( dest )
     {

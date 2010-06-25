@@ -50,7 +50,7 @@ namespace Inspect
     virtual void Bind(const DataPtr& data) NOC_OVERRIDE;
 
     // sets default data
-    virtual void SetDefault(const std::string& def) NOC_OVERRIDE;
+    virtual void SetDefault(const tstring& def) NOC_OVERRIDE;
 
     // realize control
     virtual void Realize(Container* parent) NOC_OVERRIDE;

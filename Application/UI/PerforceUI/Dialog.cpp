@@ -9,7 +9,7 @@ Dialog::Dialog
  wxWindow* parent,
  int id,
  int changelistNumber,
- const std::string& description,
+ const tstring& description,
  wxString title
  )
  : wxDialog( parent, id, title, wxDefaultPosition, wxSize( 560,410 ), wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX )

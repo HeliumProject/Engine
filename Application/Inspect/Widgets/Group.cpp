@@ -4,7 +4,7 @@
 
 using namespace Inspect;
 
-PanelOutline::PanelOutline( wxWindow* parent, Group* group, const char* name )
+PanelOutline::PanelOutline( wxWindow* parent, Group* group, const tchar* name )
 : wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, name )
 , m_Group( group )
 {
@@ -53,7 +53,7 @@ void Group::Realize(Container* parent)
 
 
   INSPECT_SCOPE_TIMER( ("") );
-  m_Window = new PanelOutline (Control::Cast<wxWindow>(parent), this, "Group's PanelOutline");
+  m_Window = new PanelOutline (Control::Cast<wxWindow>(parent), this, TXT( "Group's PanelOutline" ) );
   m_Window->SetSizer( new wxBoxSizer (wxVERTICAL) );
   wxSizer* sizer = m_Window->GetSizer();
 

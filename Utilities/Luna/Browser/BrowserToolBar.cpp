@@ -1,7 +1,6 @@
 #include "Precompile.h"
 
 #include "Browser.h"
-#include "BrowserSearchDatabase.h"
 #include "BrowserToolBar.h"
 
 #include "Platform/Assert.h"

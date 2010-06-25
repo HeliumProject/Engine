@@ -4,12 +4,12 @@
 
 using namespace RCS;
 
-std::string RCS::GetChangesetIdAsString( const u64 changesetId )
+tstring RCS::GetChangesetIdAsString( const u64 changesetId )
 {
-  std::stringstream str;
+  tstringstream str;
   if ( changesetId == DefaultChangesetId )
   {
-    str << "default";
+    str << TXT( "default" );
   }
   else
   {

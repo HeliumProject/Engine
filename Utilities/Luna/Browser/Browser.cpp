@@ -3,7 +3,6 @@
 
 #include "BrowserFrame.h"
 #include "BrowserSearch.h"
-#include "BrowserSearchDatabase.h"
 #include "BrowserPreferences.h"
 #include "CollectionManager.h"
 #include "SearchHistory.h"

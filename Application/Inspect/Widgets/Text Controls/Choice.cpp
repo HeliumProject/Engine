@@ -76,10 +76,10 @@ Choice::Choice()
 , m_EnableAdds (false)
 {
   m_ContextMenu = new ContextMenu (this);
-  m_ContextMenu->AddItem("Set To Default", ContextMenuSignature::Delegate(this, &Choice::SetToDefault));
+  m_ContextMenu->AddItem( TXT( "Set To Default" ), ContextMenuSignature::Delegate(this, &Choice::SetToDefault));
 }
 
-bool Choice::Process(const std::string& key, const std::string& value)
+bool Choice::Process(const tstring& key, const tstring& value)
 {
   if (__super::Process(key, value))
     return true;
@@ -167,7 +167,7 @@ void Choice::SetEnableAdds(bool enabled)
   m_EnableAdds = enabled; 
 }
 
-std::string Choice::GetValue()
+tstring Choice::GetValue()
 {
   if ( IsRealized() )
   {
@@ -193,7 +193,7 @@ std::string Choice::GetValue()
   }
 }
 
-void Choice::SetValue(const std::string& data)
+void Choice::SetValue(const tstring& data)
 {
   m_Value = data;
 
@@ -243,7 +243,7 @@ void Choice::Read()
 {
   if ( IsBound() && IsRealized() )
   {
-    std::string str;
+    tstring str;
     ReadData(str);
 
     SetOverride( true );
@@ -260,7 +260,7 @@ bool Choice::Write()
   {
     ComboBox* comboBox = Control::Cast< ComboBox >( this );
 
-    std::string value = GetValue(); 
+    tstring value = GetValue(); 
     bool shouldWrite = m_EnableAdds ? true : Contains(value); 
     
     bool result = false; 

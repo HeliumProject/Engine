@@ -2340,14 +2340,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserSearchDatabase.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Browser\BrowserSearchDatabase.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Browser\BrowserSearchEnvironment.cpp"
 				>
 			</File>

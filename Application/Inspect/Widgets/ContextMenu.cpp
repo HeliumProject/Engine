@@ -34,11 +34,11 @@ void ContextMenu::OnShow( wxContextMenuEvent& event )
 {
   wxMenu menu;
 
-  std::vector< std::string >::const_iterator itr = m_Items.begin();
-  std::vector< std::string >::const_iterator end = m_Items.end();
+  std::vector< tstring >::const_iterator itr = m_Items.begin();
+  std::vector< tstring >::const_iterator end = m_Items.end();
   for ( i32 count = 0; itr != end; ++itr, ++count )
   {
-    if ( *itr == "-" )
+    if ( *itr == TXT( "-" ) )
     {
       menu.AppendSeparator();
     }
@@ -55,7 +55,7 @@ void ContextMenu::OnShow( wxContextMenuEvent& event )
 
 void ContextMenu::OnItem( wxCommandEvent& event )
 {
-  const std::string& item ( m_Items[ event.GetId() - wxID_HIGHEST ] );
+  const tstring& item ( m_Items[ event.GetId() - wxID_HIGHEST ] );
 
   M_ContextMenuDelegate::iterator found = m_Delegates.find(item);
 
@@ -65,7 +65,7 @@ void ContextMenu::OnItem( wxCommandEvent& event )
   }
 }
 
-void ContextMenu::AddItem(const std::string& item, ContextMenuSignature::Delegate delegate)
+void ContextMenu::AddItem(const tstring& item, ContextMenuSignature::Delegate delegate)
 {
   M_ContextMenuDelegate::iterator found = m_Delegates.find(item);
 
@@ -82,5 +82,5 @@ void ContextMenu::AddItem(const std::string& item, ContextMenuSignature::Delegat
 
 void ContextMenu::AddSeperator()
 {
-  m_Items.push_back("-");
+  m_Items.push_back( TXT( "-" ) );
 }

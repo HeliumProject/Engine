@@ -28,9 +28,9 @@ namespace Inspect
   // the delegate for connecting an enumerated type's values
   struct ChoiceEnumerateArgs : public ChoiceArgs
   {
-    std::string m_Enumeration;
+    tstring m_Enumeration;
 
-    ChoiceEnumerateArgs(Choice* choice, const std::string& enumeration)
+    ChoiceEnumerateArgs(Choice* choice, const tstring& enumeration)
       : ChoiceArgs (choice)
       , m_Enumeration (enumeration)
     {
@@ -44,14 +44,14 @@ namespace Inspect
   // Choice control (base class for comboboxes and listboxes)
   //
 
-  const static char CHOICE_ATTR_ENUM[]      = "enum";
-  const static char CHOICE_ATTR_SORTED[]    = "sorted";
-  const static char CHOICE_ATTR_DROPDOWN[]  = "dropdown";
+  const static tchar CHOICE_ATTR_ENUM[]      = TXT( "enum" );
+  const static tchar CHOICE_ATTR_SORTED[]    = TXT( "sorted" );
+  const static tchar CHOICE_ATTR_DROPDOWN[]  = TXT( "dropdown" );
 
   class APPLICATION_API Choice : public Reflect::ConcreteInheritor<Choice, Items>
   {
   protected:
-    std::string m_Enum;
+    tstring m_Enum;
     bool m_Sorted;
     bool m_DropDown;
     bool m_EnableAdds; 
@@ -60,7 +60,7 @@ namespace Inspect
     Choice();
 
   protected:
-    virtual bool Process(const std::string& key, const std::string& value) NOC_OVERRIDE;
+    virtual bool Process(const tstring& key, const tstring& value) NOC_OVERRIDE;
 
     virtual void SetOverride(bool isOverride);
 
@@ -73,8 +73,8 @@ namespace Inspect
     virtual void SetDropDown(bool dropDown);
     virtual void SetEnableAdds(bool enabled); 
 
-    virtual std::string GetValue() NOC_OVERRIDE;
-    virtual void SetValue(const std::string& data) NOC_OVERRIDE;
+    virtual tstring GetValue() NOC_OVERRIDE;
+    virtual void SetValue(const tstring& data) NOC_OVERRIDE;
 
     virtual void Realize(Container* parent) NOC_OVERRIDE;
       

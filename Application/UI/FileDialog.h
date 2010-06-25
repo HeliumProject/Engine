@@ -43,7 +43,7 @@ namespace Nocturnal
 
   /////////////////////////////////////////////////////////////////////////////
 
-  typedef Nocturnal::OrderedSet< std::string > OS_string;
+  typedef Nocturnal::OrderedSet< tstring > OS_string;
 
   class APPLICATION_API FileDialog: public wxFileDialog
   {
@@ -55,7 +55,7 @@ namespace Nocturnal
 
   protected:
 
-    std::set< std::string >                m_Files;
+    std::set< tstring >                m_Files;
 
 
   public:
@@ -79,13 +79,13 @@ namespace Nocturnal
 
     virtual wxString GetPath() const NOC_OVERRIDE;
     virtual void GetPaths( wxArrayString& paths ) const NOC_OVERRIDE;
-    virtual const std::string& GetFilePath() const;
-    virtual const std::set< std::string >& GetFilePaths() const;
+    virtual const tstring& GetFilePath() const;
+    virtual const std::set< tstring >& GetFilePaths() const;
 
-    void SetFilter( const std::string& filter );
-    void SetFilterIndex( const std::string& filter );
-    void AddFilter( const std::string& filter );
-    void AddFilters( const std::vector< std::string >& filters );
+    void SetFilter( const tstring& filter );
+    void SetFilterIndex( const tstring& filter );
+    void AddFilter( const tstring& filter );
+    void AddFilters( const std::vector< tstring >& filters );
 
   protected:
     void OnOkButtonClicked( wxCommandEvent& evt );

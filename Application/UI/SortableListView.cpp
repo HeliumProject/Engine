@@ -10,22 +10,22 @@ using namespace Nocturnal;
 
 IMPLEMENT_DYNAMIC_CLASS( SortableListView, ListView )
 
-typedef std::map< i32, std::string > M_i32ToString;
+typedef std::map< i32, tstring > M_i32ToString;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Structure for passing additional information into the static sort function.
 // 
 struct SortData
 {
-  SortableListView* m_List;
-  i32 m_Column;
-  M_i32ToString m_Cache;
+    SortableListView* m_List;
+    i32 m_Column;
+    M_i32ToString m_Cache;
 
-  SortData( SortableListView* list, i32 column )
-  : m_List( list )
-  , m_Column( column )
-  {
-  }
+    SortData( SortableListView* list, i32 column )
+        : m_List( list )
+        , m_Column( column )
+    {
+    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -33,37 +33,37 @@ struct SortData
 // specified sort data.  If the string for the specified item is not found
 // in the cache, the list view is searched and the string is then cached.
 // 
-const std::string& StringLookup( long item, SortData* data )
+const tstring& StringLookup( long item, SortData* data )
 {
-  static const std::string empty;
-  const std::string* text = &empty;
+    static const tstring empty;
+    const tstring* text = &empty;
 
-  // Check the cache for the string
-  M_i32ToString::iterator found = data->m_Cache.find( item );
-  if ( found != data->m_Cache.end() )
-  {
-    // The string was in the cache, just return it
-    text = &(found->second);
-  }
-  else
-  {
-    // Cache miss.  Look for the item in the list control.
-    const long itemId = data->m_List->FindItem( -1, item );
-    if ( itemId >= 0 )
+    // Check the cache for the string
+    M_i32ToString::iterator found = data->m_Cache.find( item );
+    if ( found != data->m_Cache.end() )
     {
-      // The item was found in the list control
-      wxListItem info;
-      info.SetMask( wxLIST_MASK_TEXT );
-      info.SetId( itemId );
-      info.SetColumn( data->m_Column );
-      const char* temp = data->m_List->GetItem( info ) ? info.GetText().c_str() : "";
-
-      // Cache the value so that the lookup is faster next time
-      Insert<M_i32ToString>::Result inserted = data->m_Cache.insert( M_i32ToString::value_type( item, std::string( temp ) ) );
-      text = &( inserted.first->second );
+        // The string was in the cache, just return it
+        text = &(found->second);
     }
-  }
-  return *text;
+    else
+    {
+        // Cache miss.  Look for the item in the list control.
+        const long itemId = data->m_List->FindItem( -1, item );
+        if ( itemId >= 0 )
+        {
+            // The item was found in the list control
+            wxListItem info;
+            info.SetMask( wxLIST_MASK_TEXT );
+            info.SetId( itemId );
+            info.SetColumn( data->m_Column );
+            const tchar* temp = data->m_List->GetItem( info ) ? info.GetText().c_str() : TXT( "" );
+
+            // Cache the value so that the lookup is faster next time
+            Insert<M_i32ToString>::Result inserted = data->m_Cache.insert( M_i32ToString::value_type( item, tstring( temp ) ) );
+            text = &( inserted.first->second );
+        }
+    }
+    return *text;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,24 +73,24 @@ const std::string& StringLookup( long item, SortData* data )
 // 
 int wxCALLBACK LazyMapCompareFunction( long item1, long item2, long sortData )
 {
-  SortData* data = static_cast< SortData* >( wxUIntToPtr( sortData ) );
-  if ( data )
-  {
-    const std::string& text1 = StringLookup( item1, data );
-    const std::string& text2 = StringLookup( item2, data );
-
-    switch ( data->m_List->GetSortMethod() )
+    SortData* data = static_cast< SortData* >( wxUIntToPtr( sortData ) );
+    if ( data )
     {
-    case ListViewSortMethods::Normal:
-      return stricmp( text1.c_str(), text2.c_str() );
-      break;
+        const tstring& text1 = StringLookup( item1, data );
+        const tstring& text2 = StringLookup( item2, data );
 
-    case ListViewSortMethods::Natural:
-      return strinatcmp( text1.c_str(), text2.c_str() );
-      break;
+        switch ( data->m_List->GetSortMethod() )
+        {
+        case ListViewSortMethods::Normal:
+            return _tcsicmp( text1.c_str(), text2.c_str() );
+            break;
+
+        case ListViewSortMethods::Natural:
+            return strinatcmp( text1.c_str(), text2.c_str() );
+            break;
+        }
     }
-  }
-  return 0;
+    return 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -101,41 +101,41 @@ int wxCALLBACK LazyMapCompareFunction( long item1, long item2, long sortData )
 // 
 int wxCALLBACK SlowCompareFunction( long item1, long item2, long sortData )
 {
-  SortData* data = static_cast< SortData* >( wxUIntToPtr( sortData ) );
-  if ( data )
-  {
-    const long itemId1 = data->m_List->FindItem( -1, item1 );
-    if ( itemId1 >= 0 )
+    SortData* data = static_cast< SortData* >( wxUIntToPtr( sortData ) );
+    if ( data )
     {
-      const long itemId2 = data->m_List->FindItem( -1, item2 );
-      if ( itemId2 >= 0 )
-      {
-        wxListItem info1;
-        info1.SetMask( wxLIST_MASK_TEXT );
-        info1.SetId( itemId1 );
-        info1.SetColumn( data->m_Column );
-        const char* text1 = data->m_List->GetItem( info1 ) ? info1.GetText().c_str() : "";
-
-        wxListItem info2;
-        info2.SetMask( wxLIST_MASK_TEXT );
-        info2.SetId( itemId2 );
-        info2.SetColumn( data->m_Column );
-        const char* text2 = data->m_List->GetItem( info2 ) ? info2.GetText().c_str() : "";
-
-        switch ( data->m_List->GetSortMethod() )
+        const long itemId1 = data->m_List->FindItem( -1, item1 );
+        if ( itemId1 >= 0 )
         {
-        case ListViewSortMethods::Normal:
-          return stricmp( text1, text2 );
-          break;
+            const long itemId2 = data->m_List->FindItem( -1, item2 );
+            if ( itemId2 >= 0 )
+            {
+                wxListItem info1;
+                info1.SetMask( wxLIST_MASK_TEXT );
+                info1.SetId( itemId1 );
+                info1.SetColumn( data->m_Column );
+                const tchar* text1 = data->m_List->GetItem( info1 ) ? info1.GetText().c_str() : TXT( "" );
 
-        case ListViewSortMethods::Natural:
-          return strinatcmp( text1, text2 );
-          break;
+                wxListItem info2;
+                info2.SetMask( wxLIST_MASK_TEXT );
+                info2.SetId( itemId2 );
+                info2.SetColumn( data->m_Column );
+                const tchar* text2 = data->m_List->GetItem( info2 ) ? info2.GetText().c_str() : TXT( "" );
+
+                switch ( data->m_List->GetSortMethod() )
+                {
+                case ListViewSortMethods::Normal:
+                    return _tcsicmp( text1, text2 );
+                    break;
+
+                case ListViewSortMethods::Natural:
+                    return strinatcmp( text1, text2 );
+                    break;
+                }
+            }
         }
-      }
     }
-  }
-  return 0;
+    return 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -169,7 +169,7 @@ SortableListView::~SortableListView()
 // 
 bool SortableListView::IsSortingEnabled() const
 {
-  return m_IsSortingEnabled;
+    return m_IsSortingEnabled;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -178,7 +178,7 @@ bool SortableListView::IsSortingEnabled() const
 // 
 void SortableListView::EnableSorting( bool enable )
 {
-  m_IsSortingEnabled = enable;
+    m_IsSortingEnabled = enable;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -186,7 +186,7 @@ void SortableListView::EnableSorting( bool enable )
 // 
 void SortableListView::SetSortMethod( ListViewSortMethods::ListViewSortMethod method )
 {
-  m_SortMethod = method;
+    m_SortMethod = method;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -194,7 +194,7 @@ void SortableListView::SetSortMethod( ListViewSortMethods::ListViewSortMethod me
 // 
 ListViewSortMethods::ListViewSortMethod SortableListView::GetSortMethod() const
 {
-  return m_SortMethod;
+    return m_SortMethod;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -203,11 +203,11 @@ ListViewSortMethods::ListViewSortMethod SortableListView::GetSortMethod() const
 // 
 bool SortableListView::SortItems( long whichColumn )
 {
-  bool wasSorted = false;
-  if ( IsSortingEnabled() )
-  {
-    SortData data( this, whichColumn );
-    wasSorted = __super::SortItems( &LazyMapCompareFunction, wxPtrToUInt( &data ) );
-  }
-  return wasSorted;
+    bool wasSorted = false;
+    if ( IsSortingEnabled() )
+    {
+        SortData data( this, whichColumn );
+        wasSorted = __super::SortItems( &LazyMapCompareFunction, wxPtrToUInt( &data ) );
+    }
+    return wasSorted;
 }

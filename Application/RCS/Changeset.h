@@ -11,10 +11,10 @@ namespace RCS
   {
   public:
     u64                m_Id;
-    std::string        m_Description;
+    tstring            m_Description;
     V_File             m_Files;
 
-    Changeset( const std::string& description = std::string( "" ), int changesetId = DefaultChangesetId )
+    Changeset( const tstring& description = TXT( "" ), int changesetId = DefaultChangesetId )
       : m_Id( changesetId )
       , m_Description( description )
     {

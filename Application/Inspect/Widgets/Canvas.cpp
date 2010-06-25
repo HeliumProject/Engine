@@ -235,7 +235,7 @@ void Canvas::Realize(Container* parent)
   wxTreeItemId root = treeWndCtrl->GetRootItem();
   if ( root == Nocturnal::TreeWndCtrlItemIdInvalid )
   {
-    root = treeWndCtrl->AddRoot( "Canvas Root" );
+    root = treeWndCtrl->AddRoot( TXT( "Canvas Root" ) );
   }
 
   V_Control::const_iterator itr = m_Controls.begin();
@@ -271,7 +271,7 @@ void Canvas::Realize(Container* parent)
 // Returns true if the specified panel should be expanded, and false if it
 // should be collapsed.
 // 
-Canvas::ExpandState Canvas::GetPanelExpandState( const std::string& panelName ) const
+Canvas::ExpandState Canvas::GetPanelExpandState( const tstring& panelName ) const
 {
   ExpandState state = Default;
   M_ExpandState::const_iterator found = m_PanelExpandState.find( panelName );
@@ -288,7 +288,7 @@ Canvas::ExpandState Canvas::GetPanelExpandState( const std::string& panelName ) 
 // state can be stored between calls to layout the UI.  Call this function
 // when the user expands or collapses a panel to update the list.
 // 
-void Canvas::SetPanelExpandState( const std::string& panelName, Canvas::ExpandState state )
+void Canvas::SetPanelExpandState( const tstring& panelName, Canvas::ExpandState state )
 {
   M_ExpandState::iterator found = m_PanelExpandState.find( panelName );
   bool isExpanded = false;

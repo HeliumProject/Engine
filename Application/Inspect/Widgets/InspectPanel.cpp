@@ -25,7 +25,7 @@ Panel::~Panel()
   Clear();
 }
 
-bool Panel::Process(const std::string& key, const std::string& value)
+bool Panel::Process(const tstring& key, const tstring& value)
 {
   if ( __super::Process( key, value ) )
     return true;
@@ -162,7 +162,7 @@ void Panel::RefreshControls()
   else
   {
     treeWndCtrl = new Nocturnal::TreeWndCtrl( m_Parent->GetWindow() );
-    treeWndCtrl->AddRoot( "Panel Root (hidden)" );
+    treeWndCtrl->AddRoot( TXT( "Panel Root (hidden)" ) );
     treeWndCtrl->SetHideRoot( true );
     treeWndCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
     treeWndCtrl->SetStateImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
@@ -172,8 +172,8 @@ void Panel::RefreshControls()
   m_Window = treeWndCtrl;
   treeWndCtrl->Freeze();
   
-  int collapsedIndex = Nocturnal::GlobalImageManager().GetImageIndex( "ms_folder_closed.png" );
-  int expandedIndex = Nocturnal::GlobalImageManager().GetImageIndex( "ms_folder_open.png" );
+  int collapsedIndex = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "ms_folder_closed.png" ) );
+  int expandedIndex = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "ms_folder_open.png" ) );
 
   wxTreeItemId item = m_ItemData.GetId();
   if ( m_ShowTreeNode )
@@ -212,7 +212,7 @@ void Panel::RefreshControls()
   m_RefreshControls = false;
 }
 
-std::string Panel::GetPath()
+tstring Panel::GetPath()
 {
   if ( m_Path.empty() )
   {
@@ -222,19 +222,19 @@ std::string Panel::GetPath()
   return m_Path;
 }
 
-void Panel::BuildPath(std::string& path)
+void Panel::BuildPath(tstring& path)
 {
   if (m_Parent != NULL && m_Parent->HasType(Reflect::GetType<Panel>()))
   {
     static_cast<Panel*>(m_Parent)->BuildPath(path);
   }
 
-  path += "|" + m_Text;
+  path += TXT( "|" ) + m_Text;
 }
 
-void Panel::GetExpanded(std::map< std::string, std::string >& paths)
+void Panel::GetExpanded(std::map< tstring, tstring >& paths)
 {
-  std::string path = GetPath();
+  tstring path = GetPath();
 
   if (m_Expanded)
   {
@@ -253,9 +253,9 @@ void Panel::GetExpanded(std::map< std::string, std::string >& paths)
   }
 }
 
-void Panel::SetExpanded(const std::map< std::string, std::string >& paths)
+void Panel::SetExpanded(const std::map< tstring, tstring >& paths)
 {
-  std::string path = GetPath();
+  tstring path = GetPath();
 
   if ( paths.find(path) != paths.end() )
   {
@@ -475,7 +475,7 @@ void Panel::Read()
   __super::Read();
 }
 
-void Panel::SetText(const std::string& text)
+void Panel::SetText(const tstring& text)
 {
   m_Text = text;
 
@@ -495,7 +495,7 @@ void Panel::SetText(const std::string& text)
   }
 }
 
-const std::string& Panel::GetText() const
+const tstring& Panel::GetText() const
 {
   return m_Text;
 }

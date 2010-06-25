@@ -13,7 +13,7 @@ Items::Items()
 
 }
 
-bool Items::Process(const std::string& key, const std::string& value)
+bool Items::Process(const tstring& key, const tstring& value)
 {
   if (__super::Process(key, value))
     return true;
@@ -35,7 +35,7 @@ bool Items::Process(const std::string& key, const std::string& value)
   {
     size_t delim = value.find_first_of(ITEMS_ATTR_ITEM_DELIM);
 
-    if (delim != std::string::npos)
+    if (delim != tstring::npos)
     {
       m_Statics.push_back(Item (value.substr(0, delim), value.substr(delim+1)));
     }
@@ -116,7 +116,7 @@ void Items::SetItems(const V_Item& items)
           itr->m_Key = itr->m_Key.substr(m_Prefix.length());
         }
 
-        Control::Cast<wxControlWithItems>(this)->Append(itr->m_Key.c_str(), const_cast<std::string*>(&itr->m_Data));
+        Control::Cast<wxControlWithItems>(this)->Append(itr->m_Key.c_str(), const_cast<tstring*>(&itr->m_Data));
       }
 
       m_Window->Thaw();
@@ -128,9 +128,9 @@ void Items::SetItems(const V_Item& items)
   }
 }
 
-std::string Items::GetValue()
+tstring Items::GetValue()
 {
-  static std::string empty;
+  static tstring empty;
 
   if ( IsRealized() )
   {
@@ -139,7 +139,7 @@ std::string Items::GetValue()
     int selection = cwi->GetSelection();
     if ( selection != wxNOT_FOUND )
     {
-      return *static_cast<const std::string*>( cwi->GetClientData( selection ) );
+      return *static_cast<const tstring*>( cwi->GetClientData( selection ) );
     }
   }
   else
@@ -150,7 +150,7 @@ std::string Items::GetValue()
   return empty;
 }
 
-void Items::SetValue(const std::string& data)
+void Items::SetValue(const tstring& data)
 {
   m_Value = data;
 
@@ -172,7 +172,7 @@ void Items::SetValue(const std::string& data)
   }
 }
 
-bool Items::Contains(const std::string& item)
+bool Items::Contains(const tstring& item)
 {
   if ( IsRealized() )
   {

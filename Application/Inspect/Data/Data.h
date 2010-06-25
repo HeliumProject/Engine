@@ -16,8 +16,8 @@ namespace Inspect
   // Constants
   //
 
-  const char UNDEF_VALUE_STRING[] = "Undef";
-  const char MULTI_VALUE_STRING[] = "Multi";
+  const tchar UNDEF_VALUE_STRING[] = TXT( "Undef" );
+  const tchar MULTI_VALUE_STRING[] = TXT( "Multi" );
 
 
   //
@@ -44,7 +44,7 @@ namespace Inspect
   template<>
   inline void Extract(std::istream& stream, std::string* val)
   {
-    std::streamsize size = stream.rdbuf()->in_avail();
+      std::streamsize size = stream.rdbuf()->in_avail();
     if ( size == 0 )
     {
       val->clear();

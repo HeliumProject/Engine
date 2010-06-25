@@ -29,7 +29,10 @@ void ParametricKeyInterpreter::InterpretField( const Reflect::Field* field, cons
   // Validation is complete, create the UI
   PanelPtr panel = m_Container->GetCanvas()->Create<Panel>( this );
   parent->AddControl( panel );
-  panel->SetText( field->m_UIName );
+  tstring temp;
+  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  NOC_ASSERT( converted );
+  panel->SetText( temp );
 
   // get the field field for this data
   const Reflect::M_FieldIDToInfo::const_iterator foundField = field->m_Type->m_FieldIDToInfo.find( field->m_FieldID );

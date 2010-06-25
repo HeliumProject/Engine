@@ -22,7 +22,7 @@ ImageViewPanel::~ImageViewPanel()
   Disconnect( wxEVT_ERASE_BACKGROUND, wxEraseEventHandler( ImageViewPanel::OnEraseBackground ) );
 }
 
-void ImageViewPanel::SetImage( const std::string& path, const ImageViewPanelFlag flags )
+void ImageViewPanel::SetImage( const tstring& path, const ImageViewPanelFlag flags )
 {
   m_Bitmap.LoadFile( path, wxBITMAP_TYPE_ANY );
 

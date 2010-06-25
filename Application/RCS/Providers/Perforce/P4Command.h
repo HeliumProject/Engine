@@ -9,6 +9,7 @@
 
 #include "P4Provider.h"
 #include "P4Exceptions.h"
+#include "Platform/String.h"
 #include "Platform/Thread.h"
 #include "Foundation/Timer.h"
 #include "Application/RCS/RCSTypes.h"
@@ -20,7 +21,7 @@ namespace Perforce
   class Command : public ClientUser
   {
   public:
-    Command( Provider* provider, const char* command = "" )
+    Command( Provider* provider, const tchar* command = TXT( "" ) )
       : m_Provider( provider )
       , m_Command( command )
       , m_ErrorCount( 0 )
@@ -30,6 +31,13 @@ namespace Perforce
 
     virtual void Run();
 
+    void AddArg( const tstring& arg )
+    {
+        std::string narrowArg;
+        bool converted = Platform::ConvertString( arg, narrowArg );
+        NOC_ASSERT( converted );
+        AddArg( narrowArg );
+    }
     void AddArg( const std::string& arg )
     {
       m_Arguments.push_back( arg.c_str() );
@@ -44,46 +52,46 @@ namespace Perforce
 
     std::string AsString();
 
-    Provider*         m_Provider;
-    const char*       m_Command;
-    std::vector< std::string >          m_Arguments;
-    int               m_ErrorCount;
-    std::string       m_ErrorString;
+    Provider*              m_Provider;
+    const tchar*           m_Command;
+    std::vector< std::string > m_Arguments;
+    int                    m_ErrorCount;
+    tstring                m_ErrorString;
   };
 
 
   //
   // Translate string to enum
   //
-  inline RCS::Operation GetOperationEnum( const std::string &operation )
+  inline RCS::Operation GetOperationEnum( const tstring &operation )
   {
-    if( operation == "add" )
+    if( operation == TXT( "add" ) )
       return RCS::Operations::Add;
-    else if( operation == "move/add" )
+    else if( operation == TXT( "move/add" ) )
       return RCS::Operations::Add;
-    else if( operation == "delete" )
+    else if( operation == TXT( "delete" ) )
       return RCS::Operations::Delete;
-    else if( operation == "move/delete" )
+    else if( operation == TXT( "move/delete" ) )
       return RCS::Operations::Delete;
-    else if( operation == "edit" )
+    else if( operation == TXT( "edit" ) )
       return RCS::Operations::Edit;
-    else if( operation == "branch" )
+    else if( operation == TXT( "branch" ) )
       return RCS::Operations::Branch;
-    else if( operation == "integrate" )
+    else if( operation == TXT( "integrate" ) )
       return RCS::Operations::Integrate;
-    else if( operation == "" )
+    else if( operation == TXT( "" ) )
       return RCS::Operations::None;
 
     return RCS::Operations::Unknown;
   }
 
-  inline RCS::FileType GetFileType( const std::string& fileType )
+  inline RCS::FileType GetFileType( const tstring& fileType )
   {
-    if ( fileType.find( "binary" ) != std::string::npos )
+    if ( fileType.find( TXT( "binary" ) ) != tstring::npos )
     {
       return RCS::FileTypes::Binary;
     }
-    else if ( fileType.find( "text" ) != std::string::npos )
+    else if ( fileType.find( TXT( "text" ) ) != tstring::npos )
     {
       return RCS::FileTypes::Text;
     }
@@ -97,12 +105,12 @@ namespace Perforce
     return GetOperationEnum( Nocturnal::BoostMatchResultAsString( results, i ) );
   }
 
-  inline void SetFlags( const std::string& flags, RCS::File* info )
+  inline void SetFlags( const tstring& flags, RCS::File* info )
   {
     info->m_Flags = 0;
-    if ( flags.find_first_of( "l" ) != flags.npos )
+    if ( flags.find_first_of( TXT( "l" ) ) != flags.npos )
       info->m_Flags |= RCS::FileFlags::Locking;
-    if ( flags.find_first_of( "S" ) != flags.npos )
+    if ( flags.find_first_of( TXT( "S" ) ) != flags.npos )
       info->m_Flags |= RCS::FileFlags::HeadOnly;
   }
 }

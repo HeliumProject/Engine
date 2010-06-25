@@ -50,10 +50,10 @@ namespace PerforceUI
     Panel( wxWindow* parent, 
       int id = wxID_ANY,
       int changelist = RCS::DefaultChangesetId,
-      const std::string& description = std::string( "" ),
+      const tstring& description = TXT( "" ),
       const PanelStyle panelStyle = PanelStyles::Default,
-      const std::string& title = std::string( "" ),
-      const std::string& titleDescription = std::string( "" ) );
+      const tstring& title = TXT( "" ),
+      const tstring& titleDescription = TXT( "" ) );
 
     virtual ~Panel();
 
@@ -65,14 +65,14 @@ namespace PerforceUI
     const int GetChangesetId() const { return m_Changeset.m_Id; }
     void SetChangeset( const RCS::Changeset& changeset, bool getFiles = false );
 
-    const std::string& GetChangeDescription() const { return m_Changeset.m_Description; }
-    void SetChangeDescription( const std::string& description = std::string("") );
+    const tstring& GetChangeDescription() const { return m_Changeset.m_Description; }
+    void SetChangeDescription( const tstring& description = TXT("") );
 
-    const std::vector< std::string >& GetFileList() const { return m_FilePaths; }
-    void SetFileList( const std::vector< std::string >& filePaths );
+    const std::vector< tstring >& GetFileList() const { return m_FilePaths; }
+    void SetFileList( const std::vector< tstring >& filePaths );
 
-    const std::string& GetJobStatus() const { return m_JobStatus; }
-    void SetJobStatus( const std::string& jobStatus = std::string("") );
+    const tstring& GetJobStatus() const { return m_JobStatus; }
+    void SetJobStatus( const tstring& jobStatus = TXT( "" ) );
 
     const Action GetAction() const { return m_Action; }
     void SetAction( const Action action ) { m_Action = action; }
@@ -80,17 +80,17 @@ namespace PerforceUI
     bool GetReopenFiles() const { return m_ReopenFiles; }
     void SetReopenFiles( bool reopenFiles = true );
 
-    const std::string& GetTitle() const { return m_Title; }
-    void SetTitle( const std::string& title = std::string("") );
+    const tstring& GetTitle() const { return m_Title; }
+    void SetTitle( const tstring& title = TXT( "" ) );
 
-    const std::string& GetTitleDescription() const { return m_TitleDescription; }
-    void SetTitleDescription( const std::string& titleDescription = std::string("") );
-
-
-    bool IsFileSelected( const std::string& depotPath );
+    const tstring& GetTitleDescription() const { return m_TitleDescription; }
+    void SetTitleDescription( const tstring& titleDescription = TXT( "" ) );
 
 
-    void ShowTitle( const std::string& title = std::string(""), const std::string& description = std::string("") );
+    bool IsFileSelected( const tstring& depotPath );
+
+
+    void ShowTitle( const tstring& title = TXT(""), const tstring& description = TXT("") );
     void HideTitle();
 
     void ShowJobStatus( bool show = true );
@@ -129,7 +129,7 @@ namespace PerforceUI
     virtual void OnHelpButtonClick( wxCommandEvent& event );
 
   private:
-    typedef std::map< std::string, int > M_FileItemTable;
+    typedef std::map< tstring, int > M_FileItemTable;
 
     //
     // Members
@@ -137,16 +137,16 @@ namespace PerforceUI
 
     PanelStyle    m_PanelStyle;
 
-    std::string           m_Title;
-    std::string           m_TitleDescription;
+    tstring           m_Title;
+    tstring           m_TitleDescription;
 
     RCS::Changeset    m_Changeset;
 
-    std::string           m_DateTime;
+    tstring           m_DateTime;
 
-    std::string           m_JobStatus;
+    tstring           m_JobStatus;
 
-    std::vector< std::string >              m_FilePaths;
+    std::vector< tstring >              m_FilePaths;
 
     bool                  m_ReopenFiles;
     Action                m_Action;

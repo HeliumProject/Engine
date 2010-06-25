@@ -37,7 +37,7 @@ namespace Nocturnal
     template <class T, class MatchT>
     inline T BoostMatchResult( const boost::match_results<MatchT>& results, int i )
     {
-        std::istringstream str ( BoostMatchResultAsString<MatchT>(results, i) );
+        tistringstream str ( BoostMatchResultAsString<MatchT>(results, i) );
 
         T result;
         str >> result;

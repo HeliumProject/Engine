@@ -33,24 +33,24 @@ static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
       Debug::GetExceptionDetails( args.m_Info, exArgs ); 
 
       // dump args.m_Info to console
-      Platform::Print(Platform::ConsoleColors::Red, stderr, "%s", Debug::GetExceptionInfo(args.m_Info).c_str());
+      Platform::Print(Platform::ConsoleColors::Red, stderr, TXT( "%s" ), Debug::GetExceptionInfo(args.m_Info).c_str());
 
       // display result
-      std::string message ("A break point was triggered in the application:\n\n");
+      tstring message( TXT( "A break point was triggered in the application:\n\n" ) );
       message += Debug::GetSymbolInfo( args.m_Info->ContextRecord->IPREG );
-      message += std::string ("\n\nWhat do you wish to do?");
+      message += TXT("\n\nWhat do you wish to do?");
 
-      const char* nothing = "Let the OS handle this as an exception";
-      const char* thisOnce = "Skip this break point once";
-      const char* thisDisable = "Skip this break point and disable it";
-      const char* allDisable = "Skip all break points";
+      const tchar* nothing = TXT( "Let the OS handle this as an exception" );
+      const tchar* thisOnce = TXT( "Skip this break point once" );
+      const tchar* thisDisable = TXT( "Skip this break point and disable it" );
+      const tchar* allDisable = TXT( "Skip all break points" );
 
       wxArrayString choices;
       choices.Add(nothing);
       choices.Add(thisOnce);
       choices.Add(thisDisable);
       choices.Add(allDisable);
-      wxString choice = ::wxGetSingleChoice( message.c_str(), "Break Point Triggered", choices );
+      wxString choice = ::wxGetSingleChoice( message.c_str(), TXT( "Break Point Triggered" ), choices );
 
       if (choice == nothing)
       {

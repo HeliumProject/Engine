@@ -12,7 +12,7 @@ namespace Nocturnal
   /////////////////////////////////////////////////////////////////////////////
   /// DummyWindow
   /////////////////////////////////////////////////////////////////////////////
-  static const char* s_DummyWindowName = "DummyWindowThread";
+  static const tchar* s_DummyWindowName = TXT( "DummyWindowThread" );
 
   // Custom wxEventTypes for the Thread to fire.
   DEFINE_EVENT_TYPE( nocEVT_BEGIN_THREAD )
@@ -22,7 +22,7 @@ namespace Nocturnal
   class DummyWindow : public wxFrame
   {
   public:
-    DummyWindow( const char* name = NULL )
+    DummyWindow( const tchar* name = NULL )
       : wxFrame( NULL, wxID_ANY, s_DummyWindowName, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, s_DummyWindowName )
     {
       Hide();
@@ -30,7 +30,7 @@ namespace Nocturnal
       if ( name )
       {
         wxString newName( s_DummyWindowName );
-        newName += "-";
+        newName += TXT( "-" );
         newName += name;
         SetName( newName );
         SetTitle( newName );
@@ -135,16 +135,16 @@ namespace Nocturnal
 /////////////////////////////////////////////////////////////////////////////
 /// ThreadMechanism
 /////////////////////////////////////////////////////////////////////////////
-ThreadMechanism::ThreadMechanism( const std::string& evenPrefix )
+ThreadMechanism::ThreadMechanism( const tstring& evenPrefix )
 : m_StopThread( true )
 , m_CurrentThreadID( -1 )
 , m_DummyWindow( NULL )
 {
-  std::string eventName;
-  eventName = evenPrefix + "BeginEvent";
+  tstring eventName;
+  eventName = evenPrefix + TXT( "BeginEvent" );
   m_ThreadInitializedEvent = ::CreateEvent( NULL, TRUE, TRUE, eventName.c_str() );
   
-  eventName = evenPrefix + "EndEvent";
+  eventName = evenPrefix + TXT( "EndEvent" );
   m_EndThreadEvent = ::CreateEvent( NULL, TRUE, TRUE, eventName.c_str() );
 }
 
@@ -183,7 +183,7 @@ bool ThreadMechanism::StartThread()
   ++m_CurrentThreadID;
 
   NOC_ASSERT( !m_DummyWindow );
-  m_DummyWindow = new DummyWindow( "ThreadMechanism" );
+  m_DummyWindow = new DummyWindow( TXT( "ThreadMechanism" ) );
   m_DummyWindow->Connect( m_DummyWindow->GetId(), nocEVT_BEGIN_THREAD, wxCommandEventHandler( DummyWindow::OnBeginThread ), NULL, m_DummyWindow );
   m_DummyWindow->Connect( m_DummyWindow->GetId(), nocEVT_UPDATE_THREAD, wxCommandEventHandler( DummyWindow::OnThreadUpdate ), NULL, m_DummyWindow );
   m_DummyWindow->Connect( m_DummyWindow->GetId(), nocEVT_END_THREAD, wxCommandEventHandler( DummyWindow::OnEndThread ), NULL, m_DummyWindow );

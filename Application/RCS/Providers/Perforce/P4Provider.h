@@ -47,10 +47,10 @@ namespace Perforce
 
   struct MessageArgs
   {
-    std::string m_Message;
-    std::string m_Title;
+    tstring m_Message;
+    tstring m_Title;
 
-    MessageArgs( const std::string& message, const std::string& title )
+    MessageArgs( const tstring& message, const tstring& title )
       : m_Message( message )
       , m_Title( title )
     {
@@ -93,7 +93,7 @@ namespace Perforce
     virtual void Sync( RCS::File& file, const u64 timestamp = 0 ) NOC_OVERRIDE;
 
     virtual void GetInfo( RCS::File& file, const RCS::GetInfoFlag flags = RCS::GetInfoFlags::Default ) NOC_OVERRIDE;
-    virtual void GetInfo( const std::string& folder, RCS::V_File& files, bool recursive = false, u32 fileData = RCS::FileData::All, u32 actionData = RCS::ActionData::All ) NOC_OVERRIDE;
+    virtual void GetInfo( const tstring& folder, RCS::V_File& files, bool recursive = false, u32 fileData = RCS::FileData::All, u32 actionData = RCS::ActionData::All ) NOC_OVERRIDE;
 
     virtual void Add( RCS::File& file ) NOC_OVERRIDE;
     virtual void Edit( RCS::File& file ) NOC_OVERRIDE;
@@ -124,8 +124,8 @@ namespace Perforce
 
     bool                  m_Abort;
     ClientApi             m_Client;
-    std::string           m_UserName;
-    std::string           m_ClientName;
+    tstring               m_UserName;
+    tstring               m_ClientName;
 
   private:
     // transaction thread

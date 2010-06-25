@@ -7,7 +7,7 @@
 
 namespace Inspect
 {
-  const static char LABEL_ATTR_TEXT[] = "text";
+  const static tchar LABEL_ATTR_TEXT[] = TXT( "text" );
 
   class APPLICATION_API Label : public Reflect::ConcreteInheritor<Label, Control>
   {
@@ -20,22 +20,22 @@ namespace Inspect
     Label();
 
   protected:
-    virtual bool Process(const std::string& key, const std::string& value);
+    virtual bool Process(const tstring& key, const tstring& value);
 
   public:
     virtual void Realize(Container* parent);
 
     virtual void Read();
 
-    void SetText( const std::string& text );
-    std::string GetText() const;
+    void SetText( const tstring& text );
+    tstring GetText() const;
 
     void SetAutoToolTip( bool enable );
-    virtual void SetToolTip( const std::string& toolTip ) NOC_OVERRIDE;
-    virtual bool TrimString(std::string& str, int width) NOC_OVERRIDE;
+    virtual void SetToolTip( const tstring& toolTip ) NOC_OVERRIDE;
+    virtual bool TrimString(tstring& str, int width) NOC_OVERRIDE;
 
   private:
-    void UpdateUI( const std::string& text );
+    void UpdateUI( const tstring& text );
   };
 
   typedef Nocturnal::SmartPtr<Label> LabelPtr;

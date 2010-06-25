@@ -2,7 +2,7 @@
 
 #include "Foundation/String/Tokenize.h"
 
-FileDropTarget::FileDropTarget(const std::string& extensions, const std::string& delims)
+FileDropTarget::FileDropTarget(const tstring& extensions, const tstring& delims)
 {
   Tokenize( extensions, m_FileExtensions, delims );
 }

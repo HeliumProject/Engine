@@ -23,9 +23,9 @@ namespace Worker
 
   struct APPLICATION_API Args
   {
-    static const char* Worker;
-    static const char* Debug;
-    static const char* Wait;
+    static const tchar* Worker;
+    static const tchar* Debug;
+    static const tchar* Wait;
   };
 
 #pragma warning ( disable: 4200 )
@@ -44,7 +44,7 @@ namespace Worker
   {
   private:
     // the file to execute
-    std::string m_Executable;
+    tstring m_Executable;
 
     // the process handle
     void* m_Handle;
@@ -60,13 +60,13 @@ namespace Worker
 
   public:
     // process tracking support
-    static Process* Create( const std::string& executable );
+    static Process* Create( const tstring& executable );
     static void Release( Process*& worker );
     static void ReleaseAll();
 
   private:
     // protect constructor so all worker processes are tracked
-    Process(const std::string& executable);
+    Process(const tstring& executable);
     
   public:
     // will destroy process if its not over or killed

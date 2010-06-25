@@ -51,9 +51,9 @@ namespace Inspect
 
   struct SelectLinkArgs
   {
-    const std::string& m_ID;
+    const tstring& m_ID;
 
-    SelectLinkArgs(const std::string& id)
+    SelectLinkArgs(const tstring& id)
       : m_ID (id)
     {
 
@@ -150,7 +150,7 @@ namespace Inspect
 
     void Add(Control* control);
     void Push(Container* container);
-    Panel* PushPanel(const std::string& name, bool expanded = false);
+    Panel* PushPanel(const tstring& name, bool expanded = false);
     Container* PushContainer();
     Container* Pop( bool setParent = true );
     Container* Top();
@@ -160,7 +160,7 @@ namespace Inspect
     // Label (no data binding)
     //
 
-    Label* AddLabel(const std::string& name);
+    Label* AddLabel(const tstring& name);
 
 
     //

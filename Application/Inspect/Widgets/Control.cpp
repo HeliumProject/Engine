@@ -8,7 +8,7 @@
 using namespace Inspect;
 
 #ifdef PROFILE_ACCUMULATION
-Profile::Accumulator Inspect::g_RealizeAccumulator( "Inspect Realize Accumulator" );
+Profile::Accumulator Inspect::g_RealizeAccumulator( TXT( "Inspect Realize Accumulator" ) );
 #endif
 
 Control::Control()
@@ -93,7 +93,7 @@ bool Control::IsBound() const
   return m_BoundData.ReferencesObject();
 }
 
-void Control::SetDefault(const std::string& def)
+void Control::SetDefault(const tstring& def)
 {
   m_Default = def;
 }
@@ -120,9 +120,12 @@ bool Control::IsDefault() const
   StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
   if ( data )
   {
-    std::string val;
+      std::string val;
     data->Get(val);
-    return m_Default == val;
+    std::string temp;
+    bool converted = Platform::ConvertString( m_Default, temp );
+    NOC_ASSERT( converted );
+    return temp == val;
   }
 
   NOC_BREAK(); // you need to NOC_OVERRIDE this, your control is using custom data
@@ -135,7 +138,7 @@ void Control::SetDefaultAppearance(bool def)
 }
 
 
-bool Control::Process(const std::string& key, const std::string& value)
+bool Control::Process(const tstring& key, const tstring& value)
 {
   if ( key == ATTR_TOOLTIP )
   {
@@ -240,7 +243,7 @@ void Control::SetDropTarget(wxDropTarget* dropTarget)
   }
 }
 
-int Control::GetStringWidth(const std::string& str)
+int Control::GetStringWidth(const tstring& str)
 {
   wxClientDC dc (m_Window);
 
@@ -251,7 +254,7 @@ int Control::GetStringWidth(const std::string& str)
   return x;
 }
 
-bool Control::TrimString(std::string& str, int width)
+bool Control::TrimString(tstring& str, int width)
 {
   wxClientDC dc (m_Window);
 
@@ -267,7 +270,7 @@ bool Control::TrimString(std::string& str, int width)
   size_t count = str.size();
   for ( size_t i = count; i>0; i-- )
   {
-    wxStr = (str.substr(0, i-1) + "...").c_str();
+    wxStr = (str.substr(0, i-1) + TXT( "..." ) ).c_str();
 
     dc.GetTextExtent(wxStr, &x, &y, NULL, NULL, &m_Window->GetFont());
 
@@ -278,7 +281,7 @@ bool Control::TrimString(std::string& str, int width)
     }
   }
 
-  str = "...";
+  str = TXT( "..." );
   return true;
 }
 
@@ -399,13 +402,16 @@ void Control::Read()
   SetDefaultAppearance(IsDefault());
 }
 
-bool Control::ReadData(std::string& str) const
+bool Control::ReadData(tstring& str) const
 {
   StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
   if (data)
   {
     str.clear();
-    data->Get( str );
+    std::string temp;
+    data->Get( temp );
+    bool converted = Platform::ConvertString( temp, str );
+    NOC_ASSERT( converted );
     return true;
   }
 
@@ -413,13 +419,22 @@ bool Control::ReadData(std::string& str) const
   return false;
 }
 
-bool Control::ReadAll(std::vector< std::string >& strs) const
+bool Control::ReadAll(std::vector< tstring >& strs) const
 {
   StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
   if ( data )
   {
     strs.clear();
-    data->GetAll( strs );
+    std::vector< std::string > temp;
+    data->GetAll( temp );
+
+    for ( std::vector< std::string >::const_iterator itr = temp.begin(), end = temp.end(); itr != end; ++itr )
+    {
+        tstring t;
+        bool converted = Platform::ConvertString( (*itr), t );
+        NOC_ASSERT( converted );
+        strs.push_back( t );
+    }
     return true;
   }
 
@@ -449,28 +464,37 @@ bool Control::Write()
   return true;
 }
 
-bool Control::WriteData(const std::string& str, bool preview)
+bool Control::WriteData(const tstring& str, bool preview)
 {
   StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
 
   return WriteTypedData(str, data, preview);
 }
 
-bool Control::WriteAll(const std::vector< std::string >& strs, bool preview)
+bool Control::WriteAll(const std::vector< tstring >& strs, bool preview)
 {
   StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
   if (data)
   {
-    std::vector< std::string > currentValues;
+      std::vector< std::string > currentValues;
     data->GetAll( currentValues );
 
-    if ( strs == currentValues )
+    std::vector< tstring > curValues;
+    for ( std::vector< std::string >::const_iterator itr = currentValues.begin(), end = currentValues.end(); itr != end; ++itr )
+    {
+        tstring temp;
+        bool converted = Platform::ConvertString( (*itr), temp );
+        NOC_ASSERT( converted );
+        curValues.push_back( temp );
+    }
+
+    if ( strs == curValues )
     {
       return true;
     }
 
-    Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< std::vector< std::string > >() );
-    serializer->ConnectData( const_cast< std::vector< std::string >* >( &strs ) );
+    Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< std::vector< tstring > >() );
+    serializer->ConnectData( const_cast< std::vector< tstring >* >( &strs ) );
     if ( !PreWrite( serializer, preview ) )
     {
       Read();
@@ -478,7 +502,17 @@ bool Control::WriteAll(const std::vector< std::string >& strs, bool preview)
     }
 
     m_Writing = true;
-    bool result = data->SetAll( strs );
+
+    currentValues.clear();
+    for ( std::vector< tstring >::const_iterator itr = strs.begin(), end = strs.end(); itr != end; ++itr )
+    {
+        std::string temp;
+        bool converted = Platform::ConvertString( (*itr), temp );
+        NOC_ASSERT( converted );
+        currentValues.push_back( temp );
+    }
+
+    bool result = data->SetAll( currentValues );
     m_Writing = false;
 
     if (result)
@@ -506,12 +540,12 @@ void Control::PostWrite()
   Read();
 }
 
-const std::string& Control::GetToolTip()
+const tstring& Control::GetToolTip()
 {
   return m_ToolTip;
 }
 
-void Control::SetToolTip( const std::string& toolTip )
+void Control::SetToolTip( const tstring& toolTip )
 {
   m_ToolTip = toolTip;
 

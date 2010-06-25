@@ -27,7 +27,7 @@ namespace Inspect
     void OnDrop( const Inspect::FilteredDropTargetArgs& args );
 
   protected:
-      std::string m_FileFilter;
+      tstring m_FileFilter;
 
   private:
     Inspect::Value* m_Value;

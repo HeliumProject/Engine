@@ -7,7 +7,7 @@
 using namespace Inspect;
 
 // Unique identifier for this type of clipboard data.
-static const char* s_Format = "Luna/ClipboardData";
+static const tchar* s_Format = TXT( "Luna/ClipboardData" );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
@@ -144,5 +144,5 @@ bool ClipboardDataObject::ToBuffer( ReflectClipboardData* data )
 
   Reflect::Archive::ToStream( wrapper, stream, Reflect::ArchiveTypes::XML );
 
-  return SetData( stream.str().size(), (const char*)( stream.str().c_str() ) );
+  return SetData( stream.str().size(), (const tchar*)( stream.str().c_str() ) );
 }

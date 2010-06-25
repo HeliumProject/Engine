@@ -14,15 +14,15 @@ namespace Inspect
 
   struct Item
   {
-    std::string m_Key;
-    std::string m_Data;
+    tstring m_Key;
+    tstring m_Data;
 
     Item()
     {
 
     }
 
-    Item(const std::string& key, const std::string& data)
+    Item(const tstring& key, const tstring& data)
     {
       m_Key = key;
       m_Data = data;

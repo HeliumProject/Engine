@@ -58,18 +58,18 @@ bool Client::Initialize()
   IPC::PipeConnection* connection = new IPC::PipeConnection ();
 
   // init pipe connection with this process' process id (hex)
-  std::ostringstream stream;
+  tostringstream stream;
 
   if (Nocturnal::GetCmdLineFlag( Worker::Args::Debug ))
   {
-    stream << "worker_debug";
+    stream << TXT( "worker_debug" );
   }
   else
   {
-    stream << "worker_" << std::hex << GetProcessId(GetCurrentProcess());
+    stream << TXT( "worker_" ) << std::hex << GetProcessId(GetCurrentProcess());
   }
 
-  connection->Initialize(false, "Worker Process Connection", stream.str().c_str());
+  connection->Initialize(false, TXT( "Worker Process Connection" ), stream.str().c_str());
 
   // setup global connection
   g_Connection = connection;
@@ -91,7 +91,7 @@ bool Client::Initialize()
   // error out with an exception if we didnt' connect
   if (g_Connection->GetState() != IPC::ConnectionStates::Active)
   {
-    Log::Error("Timeout connecting to manager process");
+    Log::Error( TXT( "Timeout connecting to manager process" ) );
     return false;
   }
 

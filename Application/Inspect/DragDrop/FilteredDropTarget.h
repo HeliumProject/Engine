@@ -13,9 +13,9 @@ namespace Inspect
 {
     struct FilteredDropTargetArgs
     {
-        std::vector< std::string > m_Paths;
+        std::vector< tstring > m_Paths;
 
-        FilteredDropTargetArgs( const std::vector< std::string >& paths )
+        FilteredDropTargetArgs( const std::vector< tstring >& paths )
             : m_Paths( paths )
         {
         }
@@ -25,7 +25,7 @@ namespace Inspect
     class APPLICATION_API FilteredDropTarget : public DropTarget
     {
     public:
-        FilteredDropTarget( const std::string& filter = "" );
+        FilteredDropTarget( const tstring& filter = TXT( "" ) );
         virtual ~FilteredDropTarget();
 
         bool ValidateDrag( const Inspect::DragArgs& args );
@@ -36,7 +36,7 @@ namespace Inspect
         void RemoveDroppedListener( const FilteredDropTargetSignature::Delegate& d );
 
     protected:
-        std::string m_FileFilter;
+        tstring m_FileFilter;
 
     private:
         FilteredDropTargetSignature::Event m_Dropped;

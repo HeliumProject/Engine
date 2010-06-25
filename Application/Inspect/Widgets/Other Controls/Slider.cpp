@@ -124,7 +124,7 @@ bool Slider::Write()
     m_CurrentValue = GetUIValue();
 
     // Write the value back into the data
-    std::ostringstream str;
+    tostringstream str;
     str << m_CurrentValue;
     result = WriteData( str.str(), m_Tracking );
   }
@@ -169,11 +169,11 @@ float Slider::GetValue()
 {
   if ( IsBound() )
   {
-    std::string str;
+    tstring str;
     ReadData( str );
     if ( str != MULTI_VALUE_STRING && str != UNDEF_VALUE_STRING )
     {
-      m_CurrentValue = static_cast< float >( atof( str.c_str() ) );
+      m_CurrentValue = static_cast< float >( _tstof( str.c_str() ) );
     }
   }
 
@@ -191,7 +191,7 @@ void Slider::SetValue(float value)
   // If we have a data pointer, update it
   if ( IsBound() )
   {
-    std::ostringstream str;
+    tostringstream str;
     str << m_CurrentValue;
     WriteData( str.str() );
   }
@@ -238,19 +238,19 @@ void Slider::SetAutoAdjustMinMax( bool autoAdjust )
 ///////////////////////////////////////////////////////////////////////////////
 // Process script commands.
 // 
-bool Slider::Process( const std::string& key, const std::string& value )
+bool Slider::Process( const tstring& key, const tstring& value )
 {
   if (__super::Process(key, value))
     return true;
 
   if (key == SLIDER_ATTR_MIN)
   {
-    SetRangeMin( static_cast< float >( atof( value.c_str() ) ) );
+    SetRangeMin( static_cast< float >( _tstof( value.c_str() ) ) );
     return true;
   }
   else if (key == SLIDER_ATTR_MAX)
   {
-    SetRangeMax( static_cast< float >( atof( value.c_str() ) ) );
+    SetRangeMax( static_cast< float >( _tstof( value.c_str() ) ) );
     return true;
   }
 

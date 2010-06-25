@@ -38,7 +38,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
   // Parse
   //
 
-  std::string fieldUI;
+  tstring fieldUI;
   field->GetProperty( "UIScript", fieldUI );
   bool result = Script::Parse(fieldUI, this, parent->GetCanvas(), group, field->m_Flags);
 
@@ -58,8 +58,11 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
       for ( size_t index=0; itr != end; ++itr, ++index )
       {
         Item& item = items[index];
-        item.m_Key = (*itr)->m_Label.c_str();
-        item.m_Data = (*itr)->m_Label.c_str();
+        bool converted = Platform::ConvertString( (*itr)->m_Label.c_str(), item.m_Key );
+        NOC_ASSERT( converted );
+
+        converted = Platform::ConvertString( (*itr)->m_Label.c_str(), item.m_Data );
+        NOC_ASSERT( converted );
       }
 
       choice->SetItems( items );
@@ -107,7 +110,12 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
   if (label == NULL)
   {
     label = group->GetCanvas()->Create<Label>(this);
-    label->SetText( field->m_UIName );
+
+    tstring temp;
+    bool converted = Platform::ConvertString( field->m_UIName, temp );
+    NOC_ASSERT( converted );
+
+   label->SetText( temp );
 
     group->InsertControl(0, label);
   }
@@ -150,7 +158,11 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
     *field->m_Default >> outStream;
 
-    group->SetDefault(outStream.str());
+    tstring temp;
+    bool converted = Platform::ConvertString( outStream.str().c_str(), temp );
+    NOC_ASSERT( converted );
+
+    group->SetDefault( temp );
   }
 
   //

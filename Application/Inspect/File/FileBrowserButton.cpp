@@ -9,12 +9,12 @@ using namespace Inspect;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-FileBrowserButton::FileBrowserButton( const std::string& startPath )
-: m_Title( "Open" )
+FileBrowserButton::FileBrowserButton( const tstring& startPath )
+: m_Title( TXT( "Open" ) )
 {
-    SetIcon( "magnify_16.png" );
+    SetIcon( TXT( "magnify_16.png" ) );
 
-    Nocturnal::Insert<std::set< std::string >>::Result inserted = m_Filters.insert( std::set< std::string >::value_type( "All files (*.*)|*.*" ) );
+    Nocturnal::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( TXT( "All files (*.*)|*.*" ) ) );
 
     SetPath( startPath );
 }
@@ -42,13 +42,13 @@ void FileBrowserButton::Realize( Inspect::Container* parent )
 // 
 void FileBrowserButton::Read()
 {
-    std::string path = GetPath();
+    tstring path = GetPath();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Wrapper around Control::ReadData that cleans the file path returned
 //
-void FileBrowserButton::ReadPathData( std::string& path ) const
+void FileBrowserButton::ReadPathData( tstring& path ) const
 {
     ReadData( path );
     if ( !path.empty() )
@@ -69,16 +69,16 @@ bool FileBrowserButton::Write()
     // Show the file dialog and write the data back to the control.
     if ( IsBound() )
     {
-        std::string filterStr = "All files (*.*)|*.*";
+        tstring filterStr = TXT( "All files (*.*)|*.*" );
         if ( !m_Filters.empty() )
         {
-            filterStr = "";
-            std::set< std::string >::iterator it = m_Filters.begin();
-            std::set< std::string >::iterator itEnd = m_Filters.end();
+            filterStr = TXT( "" );
+            std::set< tstring >::iterator it = m_Filters.begin();
+            std::set< tstring >::iterator itEnd = m_Filters.end();
             for ( ; it != itEnd ; ++it )
             {
                 filterStr += (*it);
-                filterStr += "|";
+                filterStr += TXT( "|" );
             }
             filterStr.erase( filterStr.size() - 1 );
         }
@@ -92,7 +92,7 @@ bool FileBrowserButton::Write()
 
         //if ( fileBrowser.ShowModal() == wxID_OK )
         //{
-        //  std::string path = fileBrowser.GetPath().c_str();
+        //  tstring path = fileBrowser.GetPath().c_str();
         //  result = WriteData( path );
         //}
     }
@@ -103,7 +103,7 @@ bool FileBrowserButton::Write()
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void FileBrowserButton::SetTitleBar( const std::string& title )
+void FileBrowserButton::SetTitleBar( const tstring& title )
 {
     m_Title = title;
 }
@@ -111,41 +111,41 @@ void FileBrowserButton::SetTitleBar( const std::string& title )
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void FileBrowserButton::SetFilter( const std::string& filter )
+void FileBrowserButton::SetFilter( const tstring& filter )
 {
     m_Filters.clear();
-    Nocturnal::Insert<std::set< std::string >>::Result inserted = m_Filters.insert( std::set< std::string >::value_type( filter ) );
+    Nocturnal::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( filter ) );
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void FileBrowserButton::SetFilter( const std::vector< std::string >& filter )
+void FileBrowserButton::SetFilter( const std::vector< tstring >& filter )
 {
     m_Filters.clear();
 
-    std::vector< std::string >::const_iterator it = filter.begin();
-    std::vector< std::string >::const_iterator itEnd = filter.end();
+    std::vector< tstring >::const_iterator it = filter.begin();
+    std::vector< tstring >::const_iterator itEnd = filter.end();
     for ( ; it != itEnd ; ++it )
     {
-        Nocturnal::Insert<std::set< std::string >>::Result inserted = m_Filters.insert( std::set< std::string >::value_type( *it ) );
+        Nocturnal::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( *it ) );
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void FileBrowserButton::AddFilter( const std::string& filter )
+void FileBrowserButton::AddFilter( const tstring& filter )
 {
-    Nocturnal::Insert<std::set< std::string >>::Result inserted = m_Filters.insert( std::set< std::string >::value_type( filter ) );
+    Nocturnal::Insert<std::set< tstring >>::Result inserted = m_Filters.insert( std::set< tstring >::value_type( filter ) );
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-std::string FileBrowserButton::GetPath()
+tstring FileBrowserButton::GetPath()
 {
     if ( IsBound() )
     {
@@ -159,7 +159,7 @@ std::string FileBrowserButton::GetPath()
 // Sets the path that the file browser will initally start at.  Can be a full
 // path to a file, or just a file.
 // 
-void FileBrowserButton::SetPath( const std::string& path )
+void FileBrowserButton::SetPath( const tstring& path )
 {
     m_Path = path;
     Nocturnal::Path::Normalize( m_Path );
@@ -173,7 +173,7 @@ void FileBrowserButton::SetPath( const std::string& path )
 // Called before the button is realized.  Stores the attributes specific to 
 // this button.
 // 
-bool FileBrowserButton::Process(const std::string& key, const std::string& value)
+bool FileBrowserButton::Process(const tstring& key, const tstring& value)
 {
     bool wasHandled = false;
 

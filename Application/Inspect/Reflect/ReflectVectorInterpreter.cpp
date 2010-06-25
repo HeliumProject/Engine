@@ -28,7 +28,12 @@ void ReflectVectorInterpreter::InterpretField(const Field* field, const std::vec
   // create the label
   LabelPtr label = parent->GetCanvas()->Create<Label>( this );
   container->AddControl( label );
-  label->SetText( field->m_UIName );
+
+  tstring temp;
+  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  NOC_ASSERT( converted );
+
+  label->SetText( temp );
 
   // compute dimensions
   int dimensions = 2;

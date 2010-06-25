@@ -36,7 +36,7 @@ ColorPicker::~ColorPicker()
 // can store custom colors on this dialog.  This function returns a string 
 // representation of the custom colors that can later be loaded back.
 // 
-bool ColorPicker::SaveCustomColors( std::string& colors )
+bool ColorPicker::SaveCustomColors( tstring& colors )
 {
   bool isOk = false;
   wxGenericColourButton* picker = wxDynamicCast( GetPickerCtrl(), wxGenericColourButton );
@@ -55,7 +55,7 @@ bool ColorPicker::SaveCustomColors( std::string& colors )
 ///////////////////////////////////////////////////////////////////////////////
 // Loads custom colors previously created by the SaveCustomColors function.
 // 
-bool ColorPicker::LoadCustomColors( const std::string& colors )
+bool ColorPicker::LoadCustomColors( const tstring& colors )
 {
   bool isOk = false;
   wxGenericColourButton* picker = wxDynamicCast( GetPickerCtrl(), wxGenericColourButton );
@@ -75,7 +75,7 @@ bool ColorPicker::LoadCustomColors( const std::string& colors )
 // If enable is true, custom colors will be automatically saved to the specfied
 // registry location/key any time the user updates them.
 // 
-void ColorPicker::EnableAutoSaveCustomColors( bool enable, const std::string& key, const std::string& registryLocation )
+void ColorPicker::EnableAutoSaveCustomColors( bool enable, const tstring& key, const tstring& registryLocation )
 {
   m_AutoSaveCustomColors = enable;
 
@@ -110,7 +110,7 @@ void ColorPicker::OnButtonClick( wxCommandEvent& args )
   wxGenericColourButton* picker = wxDynamicCast( GetPickerCtrl(), wxGenericColourButton );
   if ( picker )
   {
-    std::string colors;
+    tstring colors;
     if ( m_AutoSaveCustomColors )
     {
       // Load custom colors from registry

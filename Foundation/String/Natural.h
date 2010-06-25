@@ -46,21 +46,21 @@ typedef tchar nat_char;
 static inline int
 nat_isdigit(nat_char a)
 {
-    return isdigit((unsigned tchar) a);
+    return isdigit((tchar) a);
 }
 
 
 static inline int
 nat_isspace(nat_char a)
 {
-    return isspace((unsigned tchar) a);
+    return isspace((tchar) a);
 }
 
 
 static inline nat_char
 nat_toupper(nat_char a)
 {
-    return toupper((unsigned tchar) a);
+    return toupper((tchar) a);
 }
 
 

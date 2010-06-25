@@ -192,7 +192,7 @@ namespace Nocturnal
 
             default:
                 {
-                    throw PropertyException ("StaticProperty has no compatible get function");
+                    throw PropertyException( TXT( "StaticProperty has no compatible get function" ) );
                 }
             }
         }
@@ -215,7 +215,7 @@ namespace Nocturnal
 
             default:
                 {
-                    throw PropertyException ("StaticProperty has no compatible get function");
+                    throw PropertyException( TXT( "StaticProperty has no compatible get function" ) );
                 }
             }
         }

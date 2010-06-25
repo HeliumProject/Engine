@@ -36,7 +36,11 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
 
   // create the panel
   PanelPtr panel = m_Container->GetCanvas()->Create<Panel>(this);
-  panel->SetText( field->m_UIName );
+  
+  tstring temp;
+  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  panel->SetText( temp );
+
   panel->SetExpanded( true );
   parent->AddControl(panel);
 
@@ -51,11 +55,18 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
 
     LabelPtr label = m_Container->GetCanvas()->Create<Label>( this );
     row->AddControl( label );
-    label->SetText( enumItr->first );
+
+    tstring temp;
+    bool converted = Platform::ConvertString( enumItr->first, temp );
+    NOC_ASSERT( converted );
+    label->SetText( temp );
 
     BitfieldCheckBoxPtr checkbox = m_Container->GetCanvas()->Create<ReflectBitfieldCheckBox>( this );
     row->AddControl( checkbox );
-    checkbox->SetBitfieldString( enumItr->first );
+
+    converted = Platform::ConvertString( enumItr->first, temp );
+    NOC_ASSERT( converted );
+    checkbox->SetBitfieldString( temp );
     checkbox->SetReadOnly( readOnly );
   }
 
@@ -77,6 +88,9 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
   {
     std::stringstream outStream;
     *field->m_Default >> outStream;
-    panel->SetDefault(outStream.str());
+    tstring temp;
+    bool converted = Platform::ConvertString( outStream.str(), temp );
+    NOC_ASSERT( converted );
+    panel->SetDefault( temp );
   }
 }

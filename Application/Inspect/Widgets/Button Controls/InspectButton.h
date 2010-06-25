@@ -7,7 +7,7 @@
 
 namespace Inspect
 {
-  const static char BUTTON_ATTR_TEXT[] = "text";
+  const static tchar BUTTON_ATTR_TEXT[] = TXT( "text" );
 
   ///////////////////////////////////////////////////////////////////////////
   // 
@@ -16,23 +16,23 @@ namespace Inspect
   {
   protected:
     // Label on the button
-    std::string m_Text;
+    tstring m_Text;
 
     // Icon for the button
-    std::string m_Icon;
+    tstring m_Icon;
 
   public:
     Button();
 
   protected:
-    virtual bool Process( const std::string& key, const std::string& value );
+    virtual bool Process( const tstring& key, const tstring& value );
 
   public:
     virtual void Realize( Container* parent );
     virtual bool Write();
 
-    virtual void SetText( const std::string& text );
-    virtual void SetIcon( const std::string& icon );
+    virtual void SetText( const tstring& text );
+    virtual void SetIcon( const tstring& icon );
   };
 
   typedef Nocturnal::SmartPtr<Button> ButtonPtr;

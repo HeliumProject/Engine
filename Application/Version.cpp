@@ -52,7 +52,7 @@ public:
 
   }
 
-  Version(const std::string& str)
+  Version(const tstring& str)
     : m_Ignore (false)
     , m_Project (0)
     , m_Compatible (0)
@@ -67,16 +67,16 @@ public:
     return m_Ignore;
   }
 
-  void FromString(const std::string& str)
+  void FromString(const tstring& str)
   {
-    if (!_stricmp(str.c_str(), "ignore"))
+    if (!_tcsicmp(str.c_str(), TXT( "ignore" ) ) )
     {
       m_Ignore = true;
     }
     else
     {
-      char temp;
-      std::istringstream stream (str);
+      tchar temp;
+      tistringstream stream (str);
 
       stream >> m_Project;
       stream >> temp;
@@ -93,16 +93,16 @@ public:
     }
   }
 
-  std::string IntoString()
+  tstring IntoString()
   {
-    std::ostringstream str;
+    tostringstream str;
 
     str << m_Project;
-    str << ".";
+    str << TXT( "." );
     str << m_Compatible;
-    str << ".";
+    str << TXT( "." );
     str << m_Feature;
-    str << ".";
+    str << TXT( "." );
     str << m_Patch;
 
     return str.str();
@@ -139,10 +139,10 @@ public:
   }
 };
 
-char* CleanStr(char* buff)
+tchar* CleanStr(tchar* buff)
 {
   int i,j;
-  j = (int)strlen(buff);
+  j = (int)_tcslen(buff);
   for( ;j > 0; j--)
   {
     if ((buff[j-1]!=' ')&&(buff[j-1]!='\t')&&(buff[j-1]!=0xa)&&(buff[j-1]!=0xd))
@@ -157,19 +157,19 @@ char* CleanStr(char* buff)
   return &buff[i];
 }
 
-bool GetVersion(const std::string& filePath, Version& version)
+bool GetVersion(const tstring& filePath, Version& version)
 {
   FILE *f = NULL;
 
   bool result = false;
-  f = fopen(filePath.c_str(), "r");
+  f = _tfopen(filePath.c_str(), TXT( "r" ) );
 
   if (f)
   {
-    char buff[128];
+    tchar buff[128];
     buff[0] = 0;
 
-    if ( fgets(buff,sizeof(buff)-1,f) )
+    if ( _fgetts(buff,sizeof(buff)-1,f) )
     {
       version = Version ( CleanStr(buff) );
       result = true;
@@ -181,19 +181,19 @@ bool GetVersion(const std::string& filePath, Version& version)
   return result;
 }
 
-bool GetVersion(std::string filePath, std::string& versionString)
+bool GetVersion(tstring filePath, tstring& versionString)
 {
   FILE *f = NULL;
 
   bool result = false;
-  f = fopen(filePath.c_str(), "r");
+  f = _tfopen(filePath.c_str(), TXT( "r" ) );
 
   if(f)
   {
-    char buff[128];
+    tchar buff[128];
     buff[0] = 0;
 
-    if( fgets(buff,sizeof(buff)-1,f) )
+    if( _fgetts(buff,sizeof(buff)-1,f) )
     {
       versionString = CleanStr(buff);
       result = true;
@@ -301,6 +301,6 @@ void Application::CheckVersion()
   //// mainline version check, local to network
   //if (result != VersionResults::Match)
   //{
-  //  HandleResult(result, std::string("local: ") + localVersion.IntoString() + " != " + "network: " + networkVersion.IntoString());
+  //  HandleResult(result, tstring("local: ") + localVersion.IntoString() + " != " + "network: " + networkVersion.IntoString());
   //}
 }

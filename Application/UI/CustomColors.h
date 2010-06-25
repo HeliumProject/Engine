@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Application/API.h"
+#include "Platform/Types.h"
 
 #include <string>
 
@@ -20,12 +21,12 @@ namespace Nocturnal
     };
 
     // Gets the location where custom colors should be saved in the registry by default.
-    APPLICATION_API std::string GetDefaultRegistryKey();
+    APPLICATION_API tstring GetDefaultRegistryKey();
 
     // Converts the custom colors located in colorData into a string that can be loaded later.
-    APPLICATION_API std::string Save( wxColourData& colorData );
+    APPLICATION_API tstring Save( wxColourData& colorData );
 
     // Loads custom colors (from a string that was previously made with Save) into colorData.
-    APPLICATION_API void Load( wxColourData& colorData, const std::string& info );
+    APPLICATION_API void Load( wxColourData& colorData, const tstring& info );
   }
 }

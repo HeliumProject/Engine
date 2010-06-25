@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Application/API.h"
+#include "Platform/Types.h"
 
 #include <wx/wx.h>
 
@@ -21,9 +22,9 @@ namespace Nocturnal
   typedef MessageDialogIcons::MessageDialogIcon MessageDialogIcon;
 
 
-  APPLICATION_API void MessageDialog( wxWindow* parent, const char* msgFormat, ... );
-  APPLICATION_API void MessageDialog( wxWindow* parent, const MessageDialogIcon status, const char* msgFormat, ... );
-  APPLICATION_API void MessageDialog( wxWindow* parent, const MessageDialogIcon status, long style, const char* msgFormat, ... );
-  APPLICATION_API void MessageDialog( wxWindow* parent, const char* msgFormat, va_list statusArgs, const MessageDialogIcon status = MessageDialogIcons::Info, long style = wxOK | wxSTAY_ON_TOP );
+  APPLICATION_API void MessageDialog( wxWindow* parent, const tchar* msgFormat, ... );
+  APPLICATION_API void MessageDialog( wxWindow* parent, const MessageDialogIcon status, const tchar* msgFormat, ... );
+  APPLICATION_API void MessageDialog( wxWindow* parent, const MessageDialogIcon status, long style, const tchar* msgFormat, ... );
+  APPLICATION_API void MessageDialog( wxWindow* parent, const tchar* msgFormat, va_list statusArgs, const MessageDialogIcon status = MessageDialogIcons::Info, long style = wxOK | wxSTAY_ON_TOP );
 
 } // namespace Nocturnal

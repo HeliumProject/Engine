@@ -4,7 +4,7 @@
 
 #include "Pipeline/Component/ComponentCollection.h"
 #include "Foundation/CommandLine/Utilities.h"
-#include "Foundation/Reflect/Archive.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
 
 #include <boost/regex.hpp> 
 
@@ -136,7 +136,7 @@ void AssetTemplate::GetAssetTemplates( const i32 typeID, Reflect::V_Element& ass
   if ( !assetTemplatesStr.empty() )
   {
     std::stringstream stream( assetTemplatesStr );
-    Reflect::Archive::FromStream( stream, Reflect::ArchiveTypes::Binary, assetTemplates );
+    Reflect::ArchiveBinary::FromStream( stream, assetTemplates );
   }
   else
   {

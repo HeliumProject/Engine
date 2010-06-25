@@ -54,7 +54,7 @@ int StringPool::Insert( const std::wstring& str )
     return index;
 }
 
-const std::string& StringPool::GetString( const int index )
+const std::string& StringPool::GetCharString( const int index )
 {
     PROFILE_SCOPE_ACCUM(g_StringPoolLookup); 
 
@@ -82,7 +82,7 @@ void StringPool::Serialize(ArchiveBinary* archive)
 {
     PROFILE_SCOPE_ACCUM(g_StringPoolSerialize); 
 
-    Reflect::Stream& stream = archive->GetStream(); 
+    Reflect::CharStream& stream = archive->GetStream(); 
 
     NOC_ASSERT(m_Strings.size() == m_Indices.size());
     return SerializeCompressed(stream); 
@@ -92,7 +92,7 @@ void StringPool::Deserialize(ArchiveBinary* archive)
 {
     PROFILE_SCOPE_ACCUM(g_StringPoolDeserialize); 
 
-    Reflect::Stream& stream = archive->GetStream(); 
+    Reflect::CharStream& stream = archive->GetStream(); 
 
     if(archive->GetVersion() >= ArchiveBinary::FIRST_VERSION_WITH_STRINGPOOL_COMPRESSION)
     {
@@ -106,7 +106,7 @@ void StringPool::Deserialize(ArchiveBinary* archive)
     NOC_ASSERT(m_Strings.size() == m_Indices.size());
 }
 
-void StringPool::SerializeDirect(Reflect::Stream& stream)
+void StringPool::SerializeDirect(CharStream& stream)
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
     Log::Debug("Serializing %d strings\n", m_Strings.size());
@@ -134,7 +134,7 @@ void StringPool::SerializeDirect(Reflect::Stream& stream)
     stream.Write(&size); 
 }
 
-void StringPool::DeserializeDirect(Reflect::Stream& stream)
+void StringPool::DeserializeDirect(CharStream& stream)
 {
     i32 size;
     stream.Read(&size);
@@ -164,10 +164,9 @@ void StringPool::DeserializeDirect(Reflect::Stream& stream)
 
     stream.Read(&size); 
     NOC_ASSERT(size == -1);
-
 }
 
-void StringPool::SerializeCompressed(Reflect::Stream& stream)
+void StringPool::SerializeCompressed(CharStream& stream)
 {
     // in bytes... 
     u32 originalSize = 0; 
@@ -180,7 +179,7 @@ void StringPool::SerializeCompressed(Reflect::Stream& stream)
 
     // serialize the strings to a temp buffer
     std::stringstream memoryStream; 
-    Reflect::Stream tempStream(&memoryStream, false); 
+    Reflect::CharStream tempStream(&memoryStream, false); 
     SerializeDirect(tempStream); 
 
     // get the pointer
@@ -199,7 +198,7 @@ void StringPool::SerializeCompressed(Reflect::Stream& stream)
     stream.SeekWrite(0, std::ios_base::end); 
 }
 
-void StringPool::DeserializeCompressed(Reflect::Stream& stream)
+void StringPool::DeserializeCompressed(CharStream& stream)
 {
     u32 originalSize = 0; 
     u32 compressedSize = 0; 
@@ -218,7 +217,7 @@ void StringPool::DeserializeCompressed(Reflect::Stream& stream)
     }
 
     std::stringstream memoryStream(originalData, originalSize); 
-    Reflect::Stream tempStream(&memoryStream, false); 
+    Reflect::CharStream tempStream(&memoryStream, false); 
 
     DeserializeDirect(tempStream); 
 }

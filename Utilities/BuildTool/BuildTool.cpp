@@ -17,6 +17,7 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/IPC/Connection.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/String/Utilities.h"
 
 #include "Application/RCS/RCS.h"
@@ -336,7 +337,7 @@ public:
 			{
 				std::strstream stream ((char*)msg->GetData(), msg->GetSize());
 
-				AssetBuilder::BuildRequestPtr job = Reflect::ObjectCast<AssetBuilder::BuildRequest> (Reflect::Archive::FromStream(stream, Reflect::ArchiveTypes::Binary, Reflect::GetType<AssetBuilder::BuildRequest>()));
+				AssetBuilder::BuildRequestPtr job = Reflect::ObjectCast<AssetBuilder::BuildRequest> (Reflect::ArchiveBinary::FromStream(stream, Reflect::GetType<AssetBuilder::BuildRequest>()));
 
 				if (!job.ReferencesObject())
 				{
@@ -485,7 +486,7 @@ void AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
 
 		try
 		{
-			Reflect::Archive::ToStream( args, stream, Reflect::ArchiveTypes::Binary );
+			Reflect::ArchiveBinary::ToStream( args, stream );
 		}
 		catch ( Nocturnal::Exception& ex )
 		{

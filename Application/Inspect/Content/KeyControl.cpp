@@ -1,6 +1,6 @@
 #include "KeyControl.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 #include "Application/Inspect/Content/KeyClipboardData.h"
-
 #include "Application/UI/CustomColors.h"
 #include "Application/UI/RegistryConfig.h"
 
@@ -10,8 +10,6 @@
 #include <wx/msgdlg.h>
 #include <wx/settings.h>
 #include <wx/clipbrd.h>
-
-#include "Platform/Windows/Windows.h"
 
 using namespace Inspect;
 using namespace Nocturnal;
@@ -298,7 +296,7 @@ bool KeyControl::ToClipboard( const V_KeyPtr& keys )
   std::string xml;
   try
   {
-    Reflect::Archive::ToXML( clipboardData, xml );
+    Reflect::ArchiveXML::ToString( clipboardData, xml );
   }
   catch ( const Nocturnal::Exception& e )
   {
@@ -348,7 +346,7 @@ bool KeyControl::FromClipboard( V_KeyPtr& keys )
   KeyClipboardDataPtr clipboardData;
   try
   {
-    Reflect::Archive::FromXML( xml, spool );
+    Reflect::ArchiveXML::FromString( xml, spool );
   }
   catch ( const Nocturnal::Exception& )
   {

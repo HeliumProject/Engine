@@ -50,17 +50,25 @@ namespace Reflect
         int Insert( const std::string& str );
         int Insert( const std::wstring& str );
 
-        const std::string& GetString( const int index );
+        const std::string& GetCharString( const int index );
         const std::wstring& GetWideString( const int index );
 
-        void Serialize    (ArchiveBinary* archive); 
-        void Deserialize  (ArchiveBinary* archive); 
+        const tstring& GetString( const int index )
+        {
+#ifdef UNICODE
+            return GetWideString( index );
+#else
+            return GetCharString( index );
+#endif
+        }
 
-    private: 
-        void SerializeDirect(Reflect::Stream& stream); 
-        void SerializeCompressed(Reflect::Stream& stream); 
+        void Serialize(ArchiveBinary* archive); 
+        void Deserialize(ArchiveBinary* archive); 
 
-        void DeserializeDirect(Stream& stream); 
-        void DeserializeCompressed(Stream& stream); 
+        void SerializeDirect(CharStream& stream); 
+        void DeserializeDirect(CharStream& stream); 
+
+        void SerializeCompressed(CharStream& stream); 
+        void DeserializeCompressed(CharStream& stream); 
     };
 }

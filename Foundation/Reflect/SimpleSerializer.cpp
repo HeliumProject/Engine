@@ -73,7 +73,9 @@ void SimpleSerializer<T>::Serialize(Archive& archive) const
 
     case ArchiveTypes::Binary:
         {
-            archive.GetStream().Write(m_Data.Ptr()); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            binary.GetStream().Write(m_Data.Ptr()); 
             break;
         }
     }
@@ -114,7 +116,9 @@ void SimpleSerializer<T>::Deserialize(Archive& archive)
 
     case ArchiveTypes::Binary:
         {
-            archive.GetStream().Read(m_Data.Ptr()); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            binary.GetStream().Read(m_Data.Ptr()); 
             break;
         }
     }
@@ -156,8 +160,10 @@ void StringSerializer::Serialize(Archive& archive) const
 
     case ArchiveTypes::Binary:
         {
-            i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().Insert(m_Data.Get());
-            archive.GetStream().Write(&index); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            i32 index = binary.GetStrings().Insert(m_Data.Get());
+            binary.GetStream().Write(&index); 
             break;
         }
     }
@@ -181,9 +187,11 @@ void StringSerializer::Deserialize(Archive& archive)
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             i32 index;
-            archive.GetStream().Read(&index); 
-            m_Data.Set( static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index) );
+            binary.GetStream().Read(&index); 
+            m_Data.Set( binary.GetStrings().GetString(index) );
             break;
         }
     }
@@ -228,7 +236,9 @@ void U8Serializer::Serialize(Archive& archive) const
 
     case ArchiveTypes::Binary:
         {
-            archive.GetStream().Write(m_Data.Ptr()); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            binary.GetStream().Write(m_Data.Ptr()); 
             break;
         }
     }
@@ -252,7 +262,9 @@ void U8Serializer::Deserialize(Archive& archive)
 
     case ArchiveTypes::Binary:
         {
-            archive.GetStream().Read(m_Data.Ptr()); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+            
+            binary.GetStream().Read(m_Data.Ptr()); 
             break;
         }
     }
@@ -298,7 +310,9 @@ void I8Serializer::Serialize(Archive& archive) const
 
     case ArchiveTypes::Binary:
         {
-            archive.GetStream().Write(m_Data.Ptr()); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            binary.GetStream().Write(m_Data.Ptr()); 
             break;
         }
     }
@@ -322,7 +336,9 @@ void I8Serializer::Deserialize(Archive& archive)
 
     case ArchiveTypes::Binary:
         {
-            archive.GetStream().Read(m_Data.Ptr()); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            binary.GetStream().Read(m_Data.Ptr()); 
             break;
         }
     }

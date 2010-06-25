@@ -8,6 +8,12 @@
 
 #pragma comment( lib, "rpcrt4.lib" )
 
+#ifdef UNICODE
+# define RPC_TSTR RPC_WSTR
+#else
+# define RPC_TSTR RPC_CSTR
+#endif
+
 using namespace Nocturnal;
 
 const Nocturnal::GUID Nocturnal::GUID::Null;
@@ -112,11 +118,11 @@ void Nocturnal::GUID::ToString(tstring& id) const
 {
     tchar* l_pszString;
 
-    UuidToString((UUID*)(this), &l_pszString);
+    UuidToString((UUID*)(this), (RPC_TSTR*)&l_pszString);
 
     id = reinterpret_cast<tchar *>(l_pszString);
 
-    RpcStringFree(&l_pszString);
+    RpcStringFree((RPC_TSTR*)&l_pszString);
 }
 
 void Nocturnal::GUID::FromTUID( tuid id )
@@ -129,7 +135,7 @@ bool Nocturnal::GUID::FromString(const tstring& id)
 {
     GUID uid;
 
-    if (RPC_S_OK == UuidFromString((tchar *)id.data(), reinterpret_cast<UUID*>(&uid)))
+    if (RPC_S_OK == UuidFromString((RPC_TSTR)id.data(), reinterpret_cast<UUID*>(&uid)))
     {
         (*this)=uid;
         return true;

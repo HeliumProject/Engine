@@ -87,9 +87,9 @@ namespace Reflect
 
     public:
         // Serialize to a particular data target, just works on this
-        void                        ToXML (std::string& xml) const;
-        void                        ToStream (std::iostream& stream, ArchiveType type) const;
-        void                        ToFile (const tstring& file, const VersionPtr& version = NULL) const;
+        void                        ToXML(std::string& xml) const;
+        void                        ToBinary(std::iostream& stream) const;
+        void                        ToFile(const tstring& file, const VersionPtr& version = NULL) const;
 
         // Callbacks are executed at the appropriate time by the archive and cloning APIs
         virtual void                PreSerialize() { }

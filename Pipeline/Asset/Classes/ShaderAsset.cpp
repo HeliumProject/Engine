@@ -1,6 +1,9 @@
 #include "ShaderAsset.h"
-#include "Pipeline/Asset/AssetExceptions.h" 
 
+#include "Foundation/Log.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
+
+#include "Pipeline/Asset/AssetExceptions.h" 
 #include "Pipeline/Asset/AssetTemplate.h"
 #include "Pipeline/Asset/Components/ColorMapComponent.h"
 #include "Pipeline/Asset/Components/StandardColorMapComponent.h"
@@ -8,9 +11,7 @@
 #include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
 #include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
 #include "Pipeline/Asset/Components/TextureMapComponent.h"
-
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Foundation/Log.h"
 
 using namespace Asset;
 
@@ -46,7 +47,7 @@ void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
     assetTemplates.push_back( shaderTemplate );
 
     std::stringstream stream;
-    Reflect::Archive::ToStream( assetTemplates, stream, Reflect::ArchiveTypes::Binary );
+    Reflect::ArchiveBinary::ToStream( assetTemplates, stream );
     comp.GetComposite().SetProperty( AssetProperties::AssetTemplates, stream.str() );
 }
 

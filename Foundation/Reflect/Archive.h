@@ -12,7 +12,6 @@
 #include "Class.h"
 #include "StringPool.h"
 #include "Exceptions.h"
-#include "Indent.h"
 #include "Stream.h" 
 
 #include "Platform/Assert.h"
@@ -272,9 +271,6 @@ namespace Reflect
     class FOUNDATION_API Archive
     {
     protected:
-        // The current indentation state
-        Indent m_Indent;
-
         // The number of bytes Parsed so far
         unsigned m_Progress;
 
@@ -289,9 +285,6 @@ namespace Reflect
 
         // The mode
         ArchiveMode m_Mode;
-
-        // The stream to use
-        StreamPtr m_Stream;
 
         // The cache of serializers
         Cache m_Cache;
@@ -308,10 +301,6 @@ namespace Reflect
         // The abort status
         bool m_Abort;
 
-        //
-        // Implementation
-        //
-
     protected:
         Archive (StatusHandler* status = NULL);
 
@@ -323,12 +312,6 @@ namespace Reflect
         const Nocturnal::Path& GetPath() const
         {
             return m_Path;
-        }
-
-        // Stream access
-        Stream& GetStream()
-        {
-            return *m_Stream;
         }
 
         // Cache access
@@ -347,6 +330,10 @@ namespace Reflect
 
         // Get the type of this archive
         virtual ArchiveType GetType() const = 0;
+
+        // File Open/Close
+        virtual void OpenFile(const tstring& file, bool write = false) = 0;
+        virtual void Close() = 0; 
 
         // Begins parsing the InputStream
         virtual void Read() = 0;
@@ -373,13 +360,9 @@ namespace Reflect
 
         // Opens a file
     protected:
-        void OpenFile(const tstring& file, bool write = false);
-        void OpenStream(const StreamPtr& stream, bool write = false);
-        void Close(); 
-
         // Get parser for a file
-        static Archive* GetArchive(const tstring& file, StatusHandler* handler = NULL);
         static Archive* GetArchive(ArchiveType type, StatusHandler* handler = NULL);
+        static Archive* GetArchive(const tstring& file, StatusHandler* handler = NULL);
 
         //
         // Serialization
@@ -413,7 +396,6 @@ namespace Reflect
                 filters.insert( filter );
             }
         }
-
 
         //
         // Event API
@@ -472,24 +454,8 @@ namespace Reflect
 
 
         //
-        // Spooling API
+        // Serialize/Deserialize API
         //
-
-        // Reading and writing single element from string data
-        static void       ToXML(const ElementPtr& element, std::string& xml, StatusHandler* status = NULL);
-        static ElementPtr FromXML(const std::string& xml, int searchType = Reflect::ReservedTypes::Any, StatusHandler* status = NULL);
-
-        // Reading and writing multiple elements from string data
-        static void       ToXML(const V_Element& elements, std::string& xml, StatusHandler* status = NULL);
-        static void       FromXML(const std::string& xml, V_Element& elements, StatusHandler* status = NULL);
-
-        // Reading and writing single element from a file
-        static void       ToStream(const ElementPtr& element, std::iostream& stream, ArchiveType type, StatusHandler* status = NULL);
-        static ElementPtr FromStream(std::iostream& stream, ArchiveType type, int searchType = Reflect::ReservedTypes::Any, StatusHandler* status = NULL);
-
-        // Reading and writing multiple elements from a file
-        static void       ToStream(const V_Element& elements, std::iostream& stream, ArchiveType type, StatusHandler* status = NULL);
-        static void       FromStream(std::iostream& stream, ArchiveType type, V_Element& elements, StatusHandler* status = NULL);
 
         // Reading and writing single element from a file
         static void       ToFile(const ElementPtr& element, const tstring& file);

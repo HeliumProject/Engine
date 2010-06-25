@@ -33,14 +33,14 @@ namespace Perforce
 
     void AddArg( const tstring& arg )
     {
+#ifdef UNICODE
         std::string narrowArg;
         bool converted = Platform::ConvertString( arg, narrowArg );
         NOC_ASSERT( converted );
         AddArg( narrowArg );
-    }
-    void AddArg( const std::string& arg )
-    {
-      m_Arguments.push_back( arg.c_str() );
+#else
+        m_Arguments.push_back( arg.c_str() );
+#endif
     }
     void AddArg( const char* arg )
     {

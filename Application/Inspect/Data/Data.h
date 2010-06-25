@@ -25,13 +25,13 @@ namespace Inspect
   //
 
   template<class T>
-  inline void Extract(std::istream& stream, T* val)
+  inline void Extract(tistream& stream, T* val)
   {
     stream >> *val;
   }
 
   template<class T>
-  inline void Insert(std::ostream& stream, const T* val)
+  inline void Insert(tostream& stream, const T* val)
   {
     stream << *val;
   }
@@ -42,7 +42,7 @@ namespace Inspect
   //
 
   template<>
-  inline void Extract(std::istream& stream, std::string* val)
+  inline void Extract(tistream& stream, tstring* val)
   {
       std::streamsize size = stream.rdbuf()->in_avail();
     if ( size == 0 )
@@ -52,7 +52,7 @@ namespace Inspect
     else
     {
       val->resize( size );
-      stream.read( const_cast< char* >( val->c_str() ), size );
+      stream.read( const_cast< tchar* >( val->c_str() ), size );
     }
   }
 
@@ -62,7 +62,7 @@ namespace Inspect
   //
 
   template<>
-  inline void Extract(std::istream& stream, u8* val)
+  inline void Extract(tistream& stream, u8* val)
   {
     u16 tmp;
     stream >> tmp;
@@ -74,14 +74,14 @@ namespace Inspect
   }
 
   template<>
-  inline void Insert(std::ostream& stream, const u8* val)
+  inline void Insert(tostream& stream, const u8* val)
   {
     u16 tmp = *val;
     stream << tmp;
   }
 
   template<>
-  inline void Extract(std::istream& stream, i8* val)
+  inline void Extract(tistream& stream, i8* val)
   {
     i16 tmp;
     stream >> tmp;
@@ -93,7 +93,7 @@ namespace Inspect
   }
 
   template<>
-  inline void Insert(std::ostream& stream, const i8* val)
+  inline void Insert(tostream& stream, const i8* val)
   {
     i16 tmp = *val;
     stream << tmp;
@@ -105,14 +105,14 @@ namespace Inspect
   //
 
   template<>
-  inline void Insert(std::ostream& stream, const f32* val)
+  inline void Insert(tostream& stream, const f32* val)
   {
     f32 tmp = *val;
     stream << std::fixed << std::setprecision(6) << tmp;
   }
 
   template<>
-  inline void Insert(std::ostream& stream, const f64* val)
+  inline void Insert(tostream& stream, const f64* val)
   {
     f64 tmp = *val;
     stream << std::fixed << std::setprecision(6) << tmp;
@@ -124,13 +124,13 @@ namespace Inspect
   //
 
   template<>
-  inline void Extract(std::istream& stream, Reflect::Serializer* val)
+  inline void Extract(tistream& stream, Reflect::Serializer* val)
   {
     stream >> *val;
   }
 
   template<>
-  inline void Insert(std::ostream& stream, const Reflect::Serializer* val)
+  inline void Insert(tostream& stream, const Reflect::Serializer* val)
   {
     stream << *val;
   }
@@ -141,13 +141,13 @@ namespace Inspect
   //
 
   template<>
-  inline void Extract(std::istream& stream, Nocturnal::Void* val)
+  inline void Extract(tistream& stream, Nocturnal::Void* val)
   {
 
   }
 
   template<>
-  inline void Insert(std::ostream& stream, const Nocturnal::Void* val)
+  inline void Insert(tostream& stream, const Nocturnal::Void* val)
   {
 
   }

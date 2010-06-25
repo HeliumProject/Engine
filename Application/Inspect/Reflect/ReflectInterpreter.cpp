@@ -64,7 +64,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
   ContainerPtr scriptOutput = m_Container->GetCanvas()->Create<Container>(this);
 
   tstring typeInfoUI;
-  typeInfo->GetProperty( "UIScript", typeInfoUI );
+  typeInfo->GetProperty( TXT( "UIScript" ), typeInfoUI );
   bool result = Script::Parse(typeInfoUI, this, parent->GetCanvas(), scriptOutput);
 
   // compute panel label
@@ -124,7 +124,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
   panel->SetText( temp );
 
   M_Panel panelsMap;
-  panelsMap.insert( std::make_pair("", panel) );
+  panelsMap.insert( std::make_pair( TXT( "" ), panel) );
 
   // don't bother including Element's fields
   int offset = Reflect::GetClass<Element>()->m_LastFieldID;
@@ -149,10 +149,10 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
       // 
 
       bool groupExpanded = false;
-      field->GetProperty( "UIGroupExpanded", groupExpanded );
+      field->GetProperty( TXT( "UIGroupExpanded" ), groupExpanded );
 
       tstring fieldUIGroup;
-      field->GetProperty( "UIGroup", fieldUIGroup );
+      field->GetProperty( TXT( "UIGroup" ), fieldUIGroup );
       if ( !fieldUIGroup.empty() )
       {
         M_Panel::iterator itr = panelsMap.find( fieldUIGroup );

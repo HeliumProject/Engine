@@ -120,12 +120,9 @@ bool Control::IsDefault() const
   StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
   if ( data )
   {
-      std::string val;
+    tstring val;
     data->Get(val);
-    std::string temp;
-    bool converted = Platform::ConvertString( m_Default, temp );
-    NOC_ASSERT( converted );
-    return temp == val;
+    return m_Default == val;
   }
 
   NOC_BREAK(); // you need to NOC_OVERRIDE this, your control is using custom data
@@ -408,10 +405,7 @@ bool Control::ReadData(tstring& str) const
   if (data)
   {
     str.clear();
-    std::string temp;
-    data->Get( temp );
-    bool converted = Platform::ConvertString( temp, str );
-    NOC_ASSERT( converted );
+    data->Get( str );
     return true;
   }
 
@@ -425,16 +419,7 @@ bool Control::ReadAll(std::vector< tstring >& strs) const
   if ( data )
   {
     strs.clear();
-    std::vector< std::string > temp;
-    data->GetAll( temp );
-
-    for ( std::vector< std::string >::const_iterator itr = temp.begin(), end = temp.end(); itr != end; ++itr )
-    {
-        tstring t;
-        bool converted = Platform::ConvertString( (*itr), t );
-        NOC_ASSERT( converted );
-        strs.push_back( t );
-    }
+    data->GetAll( strs );
     return true;
   }
 
@@ -476,19 +461,10 @@ bool Control::WriteAll(const std::vector< tstring >& strs, bool preview)
   StringData* data = CastData<StringData, DataTypes::String>( m_BoundData );
   if (data)
   {
-      std::vector< std::string > currentValues;
+    std::vector< tstring > currentValues;
     data->GetAll( currentValues );
 
-    std::vector< tstring > curValues;
-    for ( std::vector< std::string >::const_iterator itr = currentValues.begin(), end = currentValues.end(); itr != end; ++itr )
-    {
-        tstring temp;
-        bool converted = Platform::ConvertString( (*itr), temp );
-        NOC_ASSERT( converted );
-        curValues.push_back( temp );
-    }
-
-    if ( strs == curValues )
+    if ( strs == currentValues )
     {
       return true;
     }
@@ -503,16 +479,7 @@ bool Control::WriteAll(const std::vector< tstring >& strs, bool preview)
 
     m_Writing = true;
 
-    currentValues.clear();
-    for ( std::vector< tstring >::const_iterator itr = strs.begin(), end = strs.end(); itr != end; ++itr )
-    {
-        std::string temp;
-        bool converted = Platform::ConvertString( (*itr), temp );
-        NOC_ASSERT( converted );
-        currentValues.push_back( temp );
-    }
-
-    bool result = data->SetAll( currentValues );
+    bool result = data->SetAll( strs );
     m_Writing = false;
 
     if (result)

@@ -39,7 +39,7 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
   //
 
   tstring fieldUI;
-  field->GetProperty( "UIScript", fieldUI );
+  field->GetProperty( TXT( "UIScript" ), fieldUI );
   bool result = Script::Parse(fieldUI, this, parent->GetCanvas(), group, field->m_Flags);
 
   if (!result)

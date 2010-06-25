@@ -56,35 +56,35 @@ namespace Reflect
     public:
         REFLECTION_BASE(ReflectionTypes::Invalid);
 
-        mutable std::map< std::string, std::string > m_Properties;
+        mutable std::map< tstring, tstring > m_Properties;
 
         template<class T>
-        inline void SetProperty( const std::string& key, const T& value )
+        inline void SetProperty( const tstring& key, const T& value )
         {
             tostringstream str;
             str << value;
 
             if ( !str.fail() )
             {
-                SetProperty<std::string>( key, str.str() );
+                SetProperty<tstring>( key, str.str() );
             }
         }
 
         template<>
-        inline void SetProperty( const std::string& key, const std::string& value )
+        inline void SetProperty( const tstring& key, const tstring& value )
         {
             m_Properties[key] = value;
         }
 
         template<class T>
-        inline bool GetProperty( const std::string& key, T& value ) const
+        inline bool GetProperty( const tstring& key, T& value ) const
         {
-            std::string strValue;
-            bool result = GetProperty<std::string>( key, strValue );
+            tstring strValue;
+            bool result = GetProperty<tstring>( key, strValue );
 
             if ( result )
             {
-                std::istringstream str( strValue );
+                tistringstream str( strValue );
                 str >> value;
                 return !str.fail();
             }
@@ -93,9 +93,9 @@ namespace Reflect
         }
 
         template<>
-        inline bool GetProperty( const std::string& key, std::string& value ) const
+        inline bool GetProperty( const tstring& key, tstring& value ) const
         {
-            std::map< std::string, std::string >::const_iterator found = m_Properties.find( key ); 
+            std::map< tstring, tstring >::const_iterator found = m_Properties.find( key ); 
             if ( found != m_Properties.end() )
             {
                 value = found->second;
@@ -105,15 +105,15 @@ namespace Reflect
             return false;
         }
 
-        inline const std::string& GetProperty( const std::string& key ) const
+        inline const tstring& GetProperty( const tstring& key ) const
         {
-            std::map< std::string, std::string >::const_iterator found = m_Properties.find( key );
+            std::map< tstring, tstring >::const_iterator found = m_Properties.find( key );
             if ( found != m_Properties.end() )
             {
                 return found->second;
             }
 
-            static std::string empty;
+            static tstring empty;
             return empty;
         }
     }; 

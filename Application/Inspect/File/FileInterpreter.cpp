@@ -55,7 +55,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
     // Parse
     //
     tstring fieldUI;
-    field->GetProperty( "UIScript", fieldUI );
+    field->GetProperty( TXT( "UIScript" ), fieldUI );
     bool result = Script::Parse(fieldUI, this, parent->GetCanvas(), group, field->m_Flags);
 
     if (!result)
@@ -78,7 +78,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                     // File dialog button
                     fileDialogButton = m_Container->GetCanvas()->Create<FileDialogButton>(this);
 
-                    field->GetProperty( "FileFilter", m_FileFilter );
+                    field->GetProperty( TXT( "FileFilter" ), m_FileFilter );
 
                     if ( !m_FileFilter.empty() )
                     {
@@ -312,16 +312,12 @@ void FileInterpreter::Edit( Button* button )
 {
     StringData* data = static_cast<StringData*>(button->GetData().Ptr());
 
-    std::string str;
+    tstring str;
     data->Get( str );
 
     if ( !str.empty() )
     {
-        tstring temp;
-        bool converted = Platform::ConvertString( str, temp );
-        NOC_ASSERT( converted );
-
-        g_EditFilePath.Raise( EditFilePathArgs( temp ) );
+        g_EditFilePath.Raise( EditFilePathArgs( str ) );
     }
 }
 

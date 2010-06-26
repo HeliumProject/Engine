@@ -24,9 +24,9 @@ void BitfieldSerializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
-            tstring str;
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
+            tstring str;
             if (m_Enumeration)
             {
                 if (!m_Enumeration->GetBitfieldString(m_Data.Get(), str))
@@ -82,19 +82,18 @@ void BitfieldSerializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-#ifdef REFLECT_XML_SUPPORT
-            std::string buf;
-            archive.GetStream() >> buf;
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
+            tstring buf;
+            xml.GetStream() >> buf;
             if (m_Enumeration && !m_Enumeration->GetBitfieldValue(buf, m_Data.Ref()))
             {
-                archive.Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), m_Enumeration->m_ShortName.c_str(), buf );
+                xml.Debug( TXT( "Unable to deserialize bitfield %s values '%s'\n" ), m_Enumeration->m_ShortName.c_str(), buf );
             }
             else
             {
                 m_String = buf;
             }
-#endif
             break;
         }
 

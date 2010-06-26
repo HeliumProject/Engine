@@ -60,12 +60,12 @@ void TypeIDSerializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
-#ifdef REFLECT_XML_SUPPORT
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
             if ( type )
             {
-                archive.GetStream() << "<![CDATA[" << type->m_ShortName << "]]>";
+                xml.GetStream() << "<![CDATA[" << type->m_ShortName << "]]>";
             }
-#endif
 
             break;
         }
@@ -89,11 +89,11 @@ void TypeIDSerializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-#ifdef REFLECT_XML_SUPPORT
-            std::streamsize size = archive.GetStream().BytesAvailable(); 
-            str.resize( (size_t) size );
-            archive.GetStream().ReadBuffer(const_cast<char*>(str.c_str()), size);
-#endif
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
+            std::streamsize size = xml.GetStream().ElementsAvailable(); 
+            str.resize( (size_t)size );
+            xml.GetStream().ReadBuffer(const_cast<tchar*>(str.c_str()), size);
             break;
         }
 

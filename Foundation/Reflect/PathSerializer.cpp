@@ -62,9 +62,9 @@ void PathSerializer::Serialize( Archive& archive ) const
     {
     case ArchiveTypes::XML:
         {
-#ifdef REFLECT_XML_SUPPORT
-            archive.GetStream() << data;
-#endif
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
+            xml.GetStream() << data;
             break;
         }
 
@@ -88,13 +88,13 @@ void PathSerializer::Deserialize( Archive& archive )
     {
     case ArchiveTypes::XML:
         {
-#ifdef REFLECT_XML_SUPPORT
-            std::string buf;
-            std::streamsize size = archive.GetStream().BytesAvailable(); 
-            buf.resize( (size_t) size);
-            archive.GetStream().ReadBuffer( const_cast<char*>( buf.c_str() ), size );
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
+            tstring buf;
+            std::streamsize size = xml.GetStream().ElementsAvailable(); 
+            buf.resize( (size_t)size );
+            xml.GetStream().ReadBuffer( const_cast<tchar*>( buf.c_str() ), size );
             m_Data.Ref().Set( buf );
-#endif
             break;
         }
 

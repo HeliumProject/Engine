@@ -172,7 +172,7 @@ void ArchiveBinary::Read()
             m_Stream->ReadBuffer(block, CRC_BLOCK_SIZE);
 
             // how much we got
-            u32 got = (u32) m_Stream->BytesRead();
+            u32 got = (u32) m_Stream->ElementsRead();
 
             // crc block
             current_crc = Nocturnal::Crc32(current_crc, block, got);
@@ -414,7 +414,7 @@ void ArchiveBinary::Write()
             m_Stream->ReadBuffer(block, CRC_BLOCK_SIZE);
 
             // how much we got
-            u32 got = (u32) m_Stream->BytesRead();
+            u32 got = (u32) m_Stream->ElementsRead();
 
             // crc block
             crc = Nocturnal::Crc32(crc, block, got);

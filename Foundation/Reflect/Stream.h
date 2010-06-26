@@ -77,12 +77,12 @@ namespace Reflect
             return m_Stream->tellp(); 
         }
 
-        std::streamsize BytesRead()
+        std::streamsize ElementsRead()
         {
             return m_Stream->gcount(); 
         }
 
-        std::streamsize BytesAvailable()
+        std::streamsize ElementsAvailable()
         {
             return m_Stream->rdbuf()->in_avail();
         }

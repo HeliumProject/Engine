@@ -82,7 +82,6 @@ void EnumerationSerializer::Serialize(Archive& archive) const
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
             tstring label;
-
             if (m_Enumeration)
             {
                 if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
@@ -132,22 +131,21 @@ void EnumerationSerializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-#ifdef REFLECT_XML_SUPPORT
-            std::string buf;
-            archive.GetStream() >> buf;
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
+            tstring buf;
+            xml.GetStream() >> buf;
             if (!buf.empty())
             {
                 if (m_Enumeration && !m_Enumeration->GetElementValue(buf, m_Data.Ref()))
                 {
-                    archive.Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_ShortName.c_str(), buf.c_str() );
+                    xml.Debug( TXT( "Unable to deserialize %s::%s, discarding\n" ), m_Enumeration->m_ShortName.c_str(), buf.c_str() );
                 }
                 else
                 {
                     m_String = buf;
                 }
             }
-#endif
             break;
         }
 

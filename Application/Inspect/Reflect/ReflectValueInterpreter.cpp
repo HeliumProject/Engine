@@ -154,15 +154,11 @@ void ReflectValueInterpreter::InterpretField(const Field* field, const std::vect
 
   if (field->m_Default != NULL)
   {
-    std::stringstream outStream;
+    tstringstream outStream;
 
     *field->m_Default >> outStream;
 
-    tstring temp;
-    bool converted = Platform::ConvertString( outStream.str().c_str(), temp );
-    NOC_ASSERT( converted );
-
-    group->SetDefault( temp );
+    group->SetDefault( outStream.str() );
   }
 
   //

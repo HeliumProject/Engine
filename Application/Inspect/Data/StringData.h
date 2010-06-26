@@ -172,7 +172,7 @@ namespace Inspect
     virtual void Get(tstring& s) const NOC_OVERRIDE
     {
       T* value = NULL;
-      std::stringstream stream;
+      tstringstream stream;
 
       //
       // Scan for equality

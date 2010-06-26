@@ -68,7 +68,7 @@ void ReflectInterpreter::InterpretType(const std::vector<Reflect::Element*>& ins
   bool result = Script::Parse(typeInfoUI, this, parent->GetCanvas(), scriptOutput);
 
   // compute panel label
-  std::string labelText;
+  tstring labelText;
   if (result)
   {
     V_Control::const_iterator itr = scriptOutput->GetControls().begin();

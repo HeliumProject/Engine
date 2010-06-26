@@ -125,7 +125,7 @@ void ArchiveXML::Read()
 
         m_Stream->ReadBuffer(pszBuffer, buffer_size);
 
-        int last_read = static_cast<int>(m_Stream->BytesRead());
+        int last_read = static_cast<int>(m_Stream->ElementsRead());
         if (!XML_ParseBuffer(m_Parser, last_read, last_read == 0) != 0)
         {
             throw Reflect::DataFormatException( TXT( "XML parsing failure, buffer contents:\n%s" ), (const tchar*)pszBuffer);

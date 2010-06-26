@@ -37,7 +37,7 @@ namespace Perforce
         std::string narrowArg;
         bool converted = Platform::ConvertString( arg, narrowArg );
         NOC_ASSERT( converted );
-        AddArg( narrowArg );
+        AddArg( narrowArg.c_str() );
 #else
         m_Arguments.push_back( arg.c_str() );
 #endif

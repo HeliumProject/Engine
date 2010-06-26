@@ -19,7 +19,7 @@ static u32 g_InitThread = GetCurrentThreadId();
 WaitSignature::Delegate Perforce::g_ShowWaitDialog;
 MessageSignature::Delegate Perforce::g_ShowWarningDialog;
 
-Profile::Accumulator g_CommandAccum( TXT( "Perforce Commands" ) );
+Profile::Accumulator g_CommandAccum( "Perforce Commands" );
 
 #ifdef _DEBUG
 //#define PERFORCE_DEBUG_CONNECT
@@ -102,8 +102,8 @@ void Provider::ThreadEntry()
             }
 
             {
-                tchar print[512];
-                _sntprintf(print, sizeof(print), TXT( "Command 'p4 %s'" ), cmd.c_str());
+                char print[512];
+                _snprintf(print, sizeof(print), "Command 'p4 %s'", cmd.c_str());
                 PROFILE_SCOPE_ACCUM_VERBOSE( g_CommandAccum, print );
                 Log::Debug( TXT( "%s\n" ), print);
                 m_Client.Run( cmd.c_str(), m_Command );
@@ -489,7 +489,7 @@ void Provider::Revert( RCS::File& file, bool revertUnchangedOnly )
     bool converted = Platform::ConvertString( file.m_LocalPath, narrowPath );
     NOC_ASSERT( converted );
 
-    command.AddArg( narrowPath );
+    command.AddArg( narrowPath.c_str() );
 
     command.Run();
 }

@@ -102,10 +102,8 @@ void Reflect::Initialize()
         // SimpleSerializer
         g_Instance->RegisterType(StringSerializer::CreateClass("String"));
         g_Instance->RegisterType(BoolSerializer::CreateClass("Bool"));
-#ifndef UNICODE
         g_Instance->RegisterType(U8Serializer::CreateClass("U8"));
         g_Instance->RegisterType(I8Serializer::CreateClass("I8"));
-#endif
         g_Instance->RegisterType(U16Serializer::CreateClass("U16"));
         g_Instance->RegisterType(I16Serializer::CreateClass("I16"));
         g_Instance->RegisterType(U32Serializer::CreateClass("U32"));
@@ -131,10 +129,8 @@ void Reflect::Initialize()
         g_Instance->RegisterType(ArraySerializer::CreateClass("Array"));
         g_Instance->RegisterType(StringArraySerializer::CreateClass("StringArray"));
         g_Instance->RegisterType(BoolArraySerializer::CreateClass("BoolArray"));
-#ifndef UNICODE
         g_Instance->RegisterType(U8ArraySerializer::CreateClass("U8Array"));
         g_Instance->RegisterType(I8ArraySerializer::CreateClass("I8Array"));
-#endif
         g_Instance->RegisterType(U16ArraySerializer::CreateClass("U16Array"));
         g_Instance->RegisterType(I16ArraySerializer::CreateClass("I16Array"));
         g_Instance->RegisterType(U32ArraySerializer::CreateClass("U32Array"));

@@ -52,10 +52,8 @@ namespace Reflect
 
     typedef SimpleSerializer<tstring> StringSerializer;                       REFLECT_SPECIALIZE_SERIALIZER( StringSerializer );
     typedef SimpleSerializer<bool> BoolSerializer;                            REFLECT_SPECIALIZE_SERIALIZER( BoolSerializer );
-#ifndef UNICODE
     typedef SimpleSerializer<u8> U8Serializer;                                REFLECT_SPECIALIZE_SERIALIZER( U8Serializer );
     typedef SimpleSerializer<i8> I8Serializer;                                REFLECT_SPECIALIZE_SERIALIZER( I8Serializer );
-#endif
     typedef SimpleSerializer<u16> U16Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( U16Serializer );
     typedef SimpleSerializer<i16> I16Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( I16Serializer );
     typedef SimpleSerializer<u32> U32Serializer;                              REFLECT_SPECIALIZE_SERIALIZER( U32Serializer );

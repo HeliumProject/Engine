@@ -191,6 +191,130 @@ namespace Reflect
         return stream; 
     }
 
+    //
+    // Specializations
+    //
+
+    template <>
+    inline Stream<wchar_t>& operator>>(Stream<wchar_t>& stream, u8& val)
+    {
+        u16 temp;
+        stream.GetInternal() >> temp;
+        
+        if(stream.Fail() && !stream.Done())
+        {
+            throw Reflect::StreamException( TXT( "General read failure" ) ); 
+        }
+
+        val = (u8)temp;
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<wchar_t>& operator<<(Stream<wchar_t>& stream, const u8& val)
+    {
+        u16 temp = val;
+        stream.GetInternal() << temp; 
+
+        if(stream.Fail())
+        {
+            throw Reflect::StreamException( TXT( "General write failure" ) ); 
+        }
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<char>& operator>>(Stream<char>& stream, u8& val)
+    {
+        u16 temp;
+        stream.GetInternal() >> temp;
+        
+        if(stream.Fail() && !stream.Done())
+        {
+            throw Reflect::StreamException( TXT( "General read failure" ) ); 
+        }
+
+        val = (u8)temp;
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<char>& operator<<(Stream<char>& stream, const u8& val)
+    {
+        u16 temp = val;
+        stream.GetInternal() << temp; 
+
+        if(stream.Fail())
+        {
+            throw Reflect::StreamException( TXT( "General write failure" ) ); 
+        }
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<wchar_t>& operator>>(Stream<wchar_t>& stream, i8& val)
+    {
+        u16 temp;
+        stream.GetInternal() >> temp;
+        
+        if(stream.Fail() && !stream.Done())
+        {
+            throw Reflect::StreamException( TXT( "General read failure" ) ); 
+        }
+
+        val = (i8)temp;
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<wchar_t>& operator<<(Stream<wchar_t>& stream, const i8& val)
+    {
+        u16 temp = val;
+        stream.GetInternal() << temp; 
+
+        if(stream.Fail())
+        {
+            throw Reflect::StreamException( TXT( "General write failure" ) ); 
+        }
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<char>& operator>>(Stream<char>& stream, i8& val)
+    {
+        u16 temp;
+        stream.GetInternal() >> temp;
+        
+        if(stream.Fail() && !stream.Done())
+        {
+            throw Reflect::StreamException( TXT( "General read failure" ) ); 
+        }
+
+        val = (i8)temp;
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<char>& operator<<(Stream<char>& stream, const i8& val)
+    {
+        u16 temp = val;
+        stream.GetInternal() << temp; 
+
+        if(stream.Fail())
+        {
+            throw Reflect::StreamException( TXT( "General write failure" ) ); 
+        }
+
+        return stream; 
+    }
+
     typedef Stream<char> CharStream;
     typedef Stream<wchar_t> WCharStream;
     typedef Stream<tchar> TCharStream;

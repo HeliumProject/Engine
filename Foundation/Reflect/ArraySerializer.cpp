@@ -12,7 +12,7 @@ REFLECT_DEFINE_ABSTRACT(ArraySerializer)
 // 
 // String tokenizer adapted from:
 // http://www.oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
-template< typename T >
+template< typename T, typename I >
 void Tokenize( const tstring& str, std::vector< T >& tokens, const tstring& delimiters )
 {
     // Skip delimiters at beginning.
@@ -20,7 +20,7 @@ void Tokenize( const tstring& str, std::vector< T >& tokens, const tstring& deli
     // Find first "non-delimiter".
     tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-    T temp;
+    I temp;
     while ( tstring::npos != pos || tstring::npos != lastPos )
     {
         // Found a token, convert it to the proper type for our vector
@@ -29,7 +29,7 @@ void Tokenize( const tstring& str, std::vector< T >& tokens, const tstring& deli
         if ( !stream.fail() )
         {
             // Add the token to the vector
-            tokens.push_back( temp );
+            tokens.push_back( (T)temp );
         }
         else
         {
@@ -45,7 +45,7 @@ void Tokenize( const tstring& str, std::vector< T >& tokens, const tstring& deli
 // Explicit implementation for strings, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
 template<>
-inline void Tokenize( const tstring& str, std::vector< tstring >& tokens, const tstring& delimiters )
+inline void Tokenize<tstring, tstring>( const tstring& str, std::vector< tstring >& tokens, const tstring& delimiters )
 {
     // Skip delimiters at beginning.
     tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
@@ -300,17 +300,16 @@ tistream& SimpleArraySerializer<T>::operator<< (tistream& stream)
         tstring str;
         std::streamsize size = stream.rdbuf()->in_avail();
         str.resize( (size_t) size );
-        stream.read(const_cast< tchar* >( str.c_str() ), size );
+        stream.read( const_cast< tchar* >( str.c_str() ), size );
 
-        Tokenize( str, m_Data.Ref(), s_ContainerItemDelimiter );
+        Tokenize<T, T>( str, m_Data.Ref(), s_ContainerItemDelimiter );
     }
     return stream;
-}  
+}
 
 //
 // Specializations
 //
-
 
 // keep reading the string until we run out of buffer
 template <>
@@ -429,12 +428,52 @@ void StringArraySerializer::Deserialize(Archive& archive)
     }
 }
 
+#ifdef UNICODE
+
+//
+// When unicode is active the XML streams are made of wchar_t, and C++ stdlib won't do the conversion for u8/i8
+//  So we explicitly specialize some functions to to the conversion via a u16/i16
+//
+
+template <>
+tistream& SimpleArraySerializer<u8>::operator<< (tistream& stream)
+{
+    m_Data->clear();
+
+    if (!TranslateInput( stream ))
+    {
+        tstring str;
+        std::streamsize size = stream.rdbuf()->in_avail();
+        str.resize( (size_t) size );
+        stream.read(const_cast< tchar* >( str.c_str() ), size );
+
+        Tokenize<u8, u16>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    }
+    return stream;
+}
+
+template <>
+tistream& SimpleArraySerializer<i8>::operator<< (tistream& stream)
+{
+    m_Data->clear();
+
+    if (!TranslateInput( stream ))
+    {
+        tstring str;
+        std::streamsize size = stream.rdbuf()->in_avail();
+        str.resize( (size_t) size );
+        stream.read(const_cast< tchar* >( str.c_str() ), size );
+
+        Tokenize<i8, i16>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    }
+    return stream;
+}
+#endif // UNICODE
+
 template SimpleArraySerializer<tstring>;
 template SimpleArraySerializer<bool>;
-#ifndef UNICODE
 template SimpleArraySerializer<u8>;
 template SimpleArraySerializer<i8>;
-#endif
 template SimpleArraySerializer<u16>;
 template SimpleArraySerializer<i16>;
 template SimpleArraySerializer<u32>;

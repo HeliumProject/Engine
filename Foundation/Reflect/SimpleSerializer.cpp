@@ -219,7 +219,6 @@ tistream& StringSerializer::operator<< (tistream& stream)
     return stream;
 }
 
-#ifndef UNICODE
 // this is a char, we must treat it as a number
 template <>
 void U8Serializer::Serialize(Archive& archive) const
@@ -365,14 +364,11 @@ tistream& I8Serializer::operator<< (tistream& stream)
     }
     return stream;
 }
-#endif
 
 template SimpleSerializer<tstring>;
 template SimpleSerializer<bool>;
-#ifndef UNICODE
 template SimpleSerializer<u8>;
 template SimpleSerializer<i8>;
-#endif
 template SimpleSerializer<u16>;
 template SimpleSerializer<i16>;
 template SimpleSerializer<u32>;

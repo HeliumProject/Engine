@@ -210,8 +210,7 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
 
     if (field->m_Default != NULL)
     {
-        std::stringstream outStream;
-
+        tstringstream outStream;
         *field->m_Default >> outStream;
 
         tstring temp;

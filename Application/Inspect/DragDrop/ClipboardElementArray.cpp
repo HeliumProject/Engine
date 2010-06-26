@@ -51,11 +51,7 @@ ClipboardElementArray::~ClipboardElementArray()
 // 
 i32 ClipboardElementArray::GetCommonBaseTypeID() const
 {
-    std::string temp;
-    bool converted = Platform::ConvertString( m_CommonBaseClass, temp );
-    NOC_ASSERT( converted );
-
-  return Reflect::Registry::GetInstance()->GetClass( temp )->m_TypeID;
+  return Reflect::Registry::GetInstance()->GetClass( m_CommonBaseClass )->m_TypeID;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

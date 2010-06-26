@@ -100,13 +100,8 @@ void ColorPicker::Read()
   if ( IsBound() && IsRealized() )
   {
     tstring str;
-      ReadData( str );
-
-    std::string temp;
-      bool converted = Platform::ConvertString( str, temp );
-      NOC_ASSERT( converted );
-
-    std::stringstream stream( temp );
+    ReadData( str );
+    tstringstream stream( str );
 
     if (m_Alpha)
     {
@@ -144,7 +139,7 @@ bool ColorPicker::Write()
 
   if ( IsBound() )
   {
-    std::stringstream stream;
+    tstringstream stream;
 
     if ( m_Alpha )
     {
@@ -155,11 +150,7 @@ bool ColorPicker::Write()
       stream << m_Color3;
     }
 
-    tstring temp;
-    bool converted = Platform::ConvertString( stream.str(), temp );
-    NOC_ASSERT( converted );
-
-    WriteData( temp );
+    WriteData( stream.str() );
 
     result = true;
   }
@@ -187,14 +178,9 @@ void ColorPicker::SetColor3( const Math::Color3& color )
 
     if ( IsBound() )
     {
-      std::stringstream stream;
+      tstringstream stream;
       stream << m_Color3;
-
-      tstring temp;
-      bool converted = Platform::ConvertString( stream.str(), temp );
-      NOC_ASSERT( converted );
-
-      WriteData( temp );
+      WriteData( stream.str() );
     }
 
     static_cast<StdColorPickerWindow*>(GetWindow())->m_ColorPicker->SetColour( wxColour ( m_Color3.r, m_Color3.g, m_Color3.b ) );
@@ -213,12 +199,7 @@ const Math::Color3& ColorPicker::GetColor3() const
     {
       tstring str;
       ReadData( str );
-
-      std::string temp;
-      bool converted = Platform::ConvertString( str, temp );
-      NOC_ASSERT( converted );
-
-      std::stringstream stream( temp );
+      tstringstream stream( str );
       stream >> (Math::Color3)m_Color3;
     }
   }
@@ -238,14 +219,9 @@ void ColorPicker::SetColor4( const Math::Color4& color )
 
     if ( IsBound() )
     {
-      std::stringstream stream;
+      tstringstream stream;
       stream << m_Color4;
-
-      tstring temp;
-      bool converted = Platform::ConvertString( stream.str(), temp );
-      NOC_ASSERT( converted );
-
-      WriteData( temp );
+      WriteData( stream.str() );
     }
 
     static_cast<StdColorPickerWindow*>(GetWindow())->m_ColorPicker->SetColour( wxColour ( m_Color4.r, m_Color4.g, m_Color4.b, m_Color4.a ) );
@@ -264,13 +240,7 @@ const Math::Color4& ColorPicker::GetColor4() const
     {
       tstring str;
       ReadData( str );
-
-      std::string temp;
-      bool converted = Platform::ConvertString( str, temp );
-      NOC_ASSERT( converted );
-
-      std::stringstream stream( temp );
-
+      tstringstream stream( str );
       stream >> (Math::Color4)m_Color4;
     }
   }

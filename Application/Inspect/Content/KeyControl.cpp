@@ -293,7 +293,7 @@ bool KeyControl::ToClipboard( const V_KeyPtr& keys )
 {
   KeyClipboardDataPtr clipboardData = new KeyClipboardData();
   clipboardData->m_Keys = keys;
-  std::string xml;
+  tstring xml;
   try
   {
     Reflect::ArchiveXML::ToString( clipboardData, xml );
@@ -324,7 +324,7 @@ bool KeyControl::ToClipboard( const V_KeyPtr& keys )
 // 
 bool KeyControl::FromClipboard( V_KeyPtr& keys )
 {
-    std::string xml;
+    tstring xml;
     if (wxTheClipboard->Open())
     {
         if (wxTheClipboard->IsSupported( wxDF_TEXT ))

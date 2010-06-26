@@ -9,6 +9,7 @@
 #include "Application/Inspect/Widgets/Text Controls/Value.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/Boost/Regex.h"
 
 #include <boost/regex.hpp> 
 
@@ -22,7 +23,7 @@ using namespace Inspect;
 #define LS_WHITESPACE TXT( " \t\n" )
 
 // L chars
-#define LC_COMMENT "#"
+#define LC_COMMENT TXT( "#" )
 
 
 //
@@ -84,16 +85,16 @@ bool Script::PreProcess(tstring& script)
   //
 
 #ifdef INSPECT_DEBUG_SCRIPT_COMPILE
-  Log::Debug("Pre-preprocessed:\n\n%s\n\n", script.c_str());
+  Log::Debug(TXT("Pre-preprocessed:\n\n%s\n\n"), script.c_str());
 #endif
 
   //
   // Check for L code
   //
 
-  const boost::regex cfPattern ( TXT( ".*" ) LS_REGEX_DELIM_BEGIN TXT( ".*" ) LS_REGEX_DELIM_END TXT( ".*" ) );
+  const tregex cfPattern ( TXT( ".*" ) LS_REGEX_DELIM_BEGIN TXT( ".*" ) LS_REGEX_DELIM_END TXT( ".*" ) );
 
-  boost::smatch matchResult; 
+  tsmatch matchResult; 
   if(!boost::regex_search(script, matchResult, cfPattern))
   {
     return false; 
@@ -106,14 +107,14 @@ bool Script::PreProcess(tstring& script)
   // the .* at the end of this secretly culls the rest of the string for you
   // including comments and additional UI[.[ (.*) ].] 
   // 
-  const boost::regex cfStartEndPattern ( TXT( ".*" ) LS_REGEX_DELIM_BEGIN TXT( "(.*)" ) LS_REGEX_DELIM_END TXT( ".*" ) ); 
+  const tregex cfStartEndPattern ( TXT( ".*" ) LS_REGEX_DELIM_BEGIN TXT( "(.*)" ) LS_REGEX_DELIM_END TXT( ".*" ) ); 
   script = boost::regex_replace(script, cfStartEndPattern, TXT( "$1" ) ); 
 
   //
   // Cull comments
   //
   
-  const boost::regex cfCommentPattern ( LC_COMMENT TXT( ".*\n" ) ); 
+  const tregex cfCommentPattern ( LC_COMMENT TXT( ".*\n" ) ); 
   script = boost::regex_replace(script, cfCommentPattern, TXT( "\n" ) ); 
 
   //
@@ -121,7 +122,7 @@ bool Script::PreProcess(tstring& script)
   //
 
 #ifdef INSPECT_DEBUG_SCRIPT_COMPILE
-  Log::Debug("Post-preprocessed:\n\n%s\n\n\n\n", script.c_str());
+  Log::Debug(TXT("Post-preprocessed:\n\n%s\n\n\n\n"), script.c_str());
 #endif
 
   return true;
@@ -129,8 +130,6 @@ bool Script::PreProcess(tstring& script)
 
 void Script::ParseAttributes(tstring& attributes, Control* control)
 {
-
-
   INSPECT_SCOPE_TIMER( ("Attributes Script Attribute Processing") );
   
   size_t pos = 0;

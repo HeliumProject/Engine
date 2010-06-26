@@ -8,7 +8,7 @@
 using namespace Inspect;
 
 #ifdef PROFILE_ACCUMULATION
-Profile::Accumulator Inspect::g_RealizeAccumulator( TXT( "Inspect Realize Accumulator" ) );
+Profile::Accumulator Inspect::g_RealizeAccumulator( "Inspect Realize Accumulator" );
 #endif
 
 Control::Control()
@@ -527,11 +527,9 @@ void Control::SetToolTip( const tstring& toolTip )
 void Control::PrintLayout()
 {
   if (m_Window)
-    Log::Print("%p Type: '%s'\n  Size: (%d/%d, %d/%d) Position: (%d/%d, %d/%d)\n", this, typeid(*this).name(),
-    m_Size.x, m_Window->GetSize().x,
-    m_Size.y, m_Window->GetSize().y,
-    m_Position.x, m_Window->GetPosition().x,
-    m_Position.y, m_Window->GetPosition().y );
+    Log::Print(TXT("%p Type: '%s'\n  Size: (%d/%d) Position: (%d/%d)\n"), this, typeid(*this).name(),
+    m_Window->GetSize().x, m_Window->GetSize().x,
+    m_Window->GetSize().y, m_Window->GetSize().y );
 }
 
 #endif

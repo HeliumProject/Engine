@@ -86,11 +86,8 @@ void ReflectBitfieldInterpreter::InterpretField(const Field* field, const std::v
   // setup the default value
   if (field->m_Default != NULL)
   {
-    std::stringstream outStream;
+    tstringstream outStream;
     *field->m_Default >> outStream;
-    tstring temp;
-    bool converted = Platform::ConvertString( outStream.str(), temp );
-    NOC_ASSERT( converted );
-    panel->SetDefault( temp );
+    panel->SetDefault( outStream.str() );
   }
 }

@@ -120,7 +120,7 @@ ReflectClipboardDataPtr ClipboardDataObject::FromBuffer()
 
   if ( GetDataSize() > 0 )
   {
-    ClipboardDataWrapperPtr wrapper = Reflect::ObjectCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( (const char*)GetData(), Reflect::GetType< ClipboardDataWrapper >() ) );
+    ClipboardDataWrapperPtr wrapper = Reflect::ObjectCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( (const tchar*)GetData(), Reflect::GetType< ClipboardDataWrapper >() ) );
     if ( wrapper.ReferencesObject() )
     {
       data = wrapper->m_Data;
@@ -141,8 +141,8 @@ bool ClipboardDataObject::ToBuffer( ReflectClipboardData* data )
   ClipboardDataWrapperPtr wrapper = new ClipboardDataWrapper();
   wrapper->m_Data = data;
 
-  std::string xml;
+  tstring xml;
   Reflect::ArchiveXML::ToString( wrapper, xml );
 
-  return SetData( xml.size(), (const char*)( xml.c_str() ) );
+  return SetData( xml.size(), (const tchar*)( xml.c_str() ) );
 }

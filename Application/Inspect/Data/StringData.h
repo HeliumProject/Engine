@@ -61,7 +61,7 @@ namespace Inspect
       {
         tstring newValue;
         Reflect::Serializer::GetValue< tstring >( serializer, newValue );
-        Extract< T >( std::stringstream ( newValue ), m_Data );
+        Extract< T >( tstringstream ( newValue ), m_Data );
         m_Changed.Raise( this, emitter );
         result = true;
       }
@@ -71,7 +71,7 @@ namespace Inspect
 
     virtual void Get(tstring& s) const NOC_OVERRIDE
     {
-      std::stringstream stream;
+      tstringstream stream;
       Insert<T>(stream, m_Data);
       s = stream.str();
     }
@@ -233,7 +233,7 @@ namespace Inspect
       for ( size_t index = 0; itr != end; ++itr, ++index )
       {
         T* value = *itr;
-        std::stringstream stream;
+        tstringstream stream;
         Insert<T>( stream, value );
         s[ index ] = stream.str();
       }
@@ -276,7 +276,7 @@ namespace Inspect
         T value;
         tstring newValue;
         Reflect::Serializer::GetValue< tstring >( serializer, newValue );
-        Extract< T >( std::stringstream( newValue ), &value );
+        Extract< T >( tstringstream( newValue ), &value );
         m_Property->Set( value );
         m_Changed.Raise( this, emitter );
         result = true;
@@ -287,7 +287,7 @@ namespace Inspect
 
     virtual void Get(tstring& s) const NOC_OVERRIDE
     {
-      std::stringstream stream;
+      tstringstream stream;
       T val = m_Property->Get();
       Insert<T>( stream, &val );
       s = stream.str();
@@ -334,7 +334,7 @@ namespace Inspect
         std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > >::iterator end = m_Properties.end();
         for ( ; itr != end; ++itr )
         {
-          Extract<T>( std::stringstream ( newValue ), &value );
+          Extract<T>( tstringstream ( newValue ), &value );
           (*itr)->Set( value );
           result = true;
         }
@@ -361,7 +361,7 @@ namespace Inspect
             T value;
             tstring newValue;
             Reflect::Serializer::GetValue< tstring >( serializer, newValue );
-            Extract<T>( std::stringstream ( newValue ), &value );
+            Extract<T>( tstringstream ( newValue ), &value );
             m_Properties[ index ]->Set(value);
             result = true;
           }
@@ -379,7 +379,7 @@ namespace Inspect
 
     virtual void Get(tstring& s) const NOC_OVERRIDE
     {
-      std::stringstream stream;
+      tstringstream stream;
 
       //
       // Scan for equality
@@ -399,7 +399,7 @@ namespace Inspect
         else
         {
           T val = (*itr)->Get();
-          std::stringstream temp;
+          tstringstream temp;
           Insert<T>( temp, &val );
 
           if (temp.str() != stream.str())
@@ -439,7 +439,7 @@ namespace Inspect
       for ( size_t index = 0 ; itr != end; ++itr, ++index )
       {
         T val = (*itr)->Get();
-        std::stringstream stream;
+        tstringstream stream;
         Insert<T>( stream, &val );
         s[ index ] = stream.str();
       }

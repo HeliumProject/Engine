@@ -7,7 +7,7 @@ REFLECT_DEFINE_ABSTRACT( TextureMapComponent );
 
 void TextureMapComponent::EnumerateClass( Reflect::Compositor<TextureMapComponent>& comp )
 {
-  comp.GetComposite().m_UIName = "Texture Map";
+  comp.GetComposite().m_UIName = TXT( "Texture Map" );
 
   Reflect::EnumerationField* enumReductionRatio = comp.AddEnumerationField( &TextureMapComponent::m_ReductionRatio, "m_ReductionRatio", AssetFlags::RealTimeUpdateable );
   Reflect::EnumerationField* enumMipGenFilter = comp.AddEnumerationField( &TextureMapComponent::m_MipGenFilter, "m_MipGenFilter", AssetFlags::RealTimeUpdateable );
@@ -20,7 +20,7 @@ void TextureMapComponent::EnumerateClass( Reflect::Compositor<TextureMapComponen
 }
 
 
-const std::string TextureMapComponent::s_FileFilter = "*.tga;*.png;*.bmp";
+const tstring TextureMapComponent::s_FileFilter = TXT( "*.tga;*.png;*.bmp" );
 
 Component::ComponentCategoryType TextureMapComponent::GetCategoryType() const
 {
@@ -55,7 +55,7 @@ bool TextureMapComponent::ShouldRebuildTexture( const TextureMapComponent* oldAt
 //  }
 //}
 
-const std::string& TextureMapComponent::GetFileFilter() const
+const tstring& TextureMapComponent::GetFileFilter() const
 {
   return s_FileFilter;
 }

@@ -26,9 +26,9 @@ void SceneNode::PostLoad( Reflect::V_Element& elements )
   // Override if your node needs to do something
 }
 
-bool SceneNode::ProcessComponent(ElementPtr element, const std::string& fieldName)
+bool SceneNode::ProcessComponent(ElementPtr element, const tstring& fieldName)
 {
-  if ( fieldName == "m_Name" )
+  if ( fieldName == TXT( "m_Name" ) )
   {
     Serializer::GetValue( Reflect::TryCast<Serializer>(element), m_DefaultName );
     Serializer::GetValue( Reflect::TryCast<Serializer>(element), m_GivenName );
@@ -39,11 +39,11 @@ bool SceneNode::ProcessComponent(ElementPtr element, const std::string& fieldNam
   return __super::ProcessComponent( element, fieldName );
 }
 
-bool SceneNode::ValidateCompatible( const ComponentPtr& component, std::string& error ) const
+bool SceneNode::ValidateCompatible( const ComponentPtr& component, tstring& error ) const
 {
   if ( component->GetComponentUsage() == ComponentUsages::Class )
   {
-    error = component->GetClass()->m_UIName + " is a class component, so it cannot be added to an instance.";
+    error = component->GetClass()->m_UIName + TXT( " is a class component, so it cannot be added to an instance." );
     return false;
   }
 

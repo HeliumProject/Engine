@@ -10,16 +10,16 @@ namespace Content
   //  1 leye_blink
   //  2 reye_open   -> reye
   //  3 reye_blink
-  static inline void DetermineTargetSetName( const std::string& targetName, std::string& targetSetName )
+  static inline void DetermineTargetSetName( const tstring& targetName, tstring& targetSetName )
   {
-    static const char* s_DefaultMorphTargetSetName = "@default_set";
+    static const tchar* s_DefaultMorphTargetSetName = TXT( "@default_set" );
 
 #pragma TODO("We need a better way to group morph target sets, either to group targets under a set node in maya, or specify it in an attribute")
     //j    targetSetName = targetName;
     //j    toLower( targetSetName );
     //j
-    //j    std::string::size_type delimiterPos = targetSetName.rfind( '_' );
-    //j    if ( delimiterPos != std::string::npos )
+    //j    tstring::size_type delimiterPos = targetSetName.rfind( '_' );
+    //j    if ( delimiterPos != tstring::npos )
     //j    {
     //j      targetSetName.erase( delimiterPos );
     //j    }
@@ -65,7 +65,7 @@ namespace Content
         //
         // Add to Target Set
         //
-        std::string targetSetName;
+        tstring targetSetName;
         DetermineTargetSetName( newMorphTarget->m_Name, targetSetName );
 
         // insert the target set name and create an id (or get the existing one)
@@ -115,7 +115,7 @@ namespace Content
   //  for ( ; targetSetIdsItr != targetSetIdsEnd; ++targetSetIdsItr )
   //  {
   //    // insert the target set name and create an id (or get the existing one)
-  //    const std::string& sourceTargetSetName = targetSetIdsItr->first;
+  //    const tstring& sourceTargetSetName = targetSetIdsItr->first;
   //    const u32 sourceTargetSetId = targetSetIdsItr->second;
   //    m_TargetSetNameToId.insert( M_TargetSetNameToId::value_type( sourceTargetSetName, (u32)m_TargetSetNameToId.size() ) );
   //    newTargetSetIds.insert( std::map< u32, u32 >::value_type( sourceTargetSetId, m_TargetSetNameToId[sourceTargetSetName] ) );

@@ -115,7 +115,7 @@ void CompressedAnimation::EnumerateClass( Reflect::Compositor<CompressedAnimatio
     diffType = ( diff == 0 ) ? 0 : ( diff > 255 ) ? 1 : 2;
   }
 
-  void CompressedAnimation::Compress(const std::string& jt_name,  const AnimationPtr& uncompressedAnimation, const Math::Vector3& bindTranslate )
+  void CompressedAnimation::Compress(const tstring& jt_name,  const AnimationPtr& uncompressedAnimation, const Math::Vector3& bindTranslate )
   {
     // copy over their blend factor for convenience
     m_BlendFactor = uncompressedAnimation->m_BlendFactor;
@@ -151,7 +151,7 @@ void CompressedAnimation::EnumerateClass( Reflect::Compositor<CompressedAnimatio
 
     if ( autoCompressionReduction )
     {
-      Log::Warning( "Joint '%s' transform exceeded range, compression automatically reduced to: %d\n", jt_name.c_str(), m_TranslateScale - compressionReductionAmount );
+      Log::Warning( TXT( "Joint '%s' transform exceeded range, compression automatically reduced to: %d\n" ), jt_name.c_str(), m_TranslateScale - compressionReductionAmount );
     }
 
     m_ExceededRangeOnBindConversion = !status;

@@ -16,8 +16,8 @@ namespace Content
     public:
         Nocturnal::Path m_Path;
 
-        std::vector< std::string > m_Modes;
-        std::vector< std::string > m_Regions;
+        std::vector< tstring > m_Modes;
+        std::vector< tstring > m_Regions;
 
         bool m_Active;
         bool m_Interactive;

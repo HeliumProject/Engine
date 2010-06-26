@@ -21,10 +21,10 @@ namespace Asset
 
     static void TextureWrapModeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Wrap, "Wrap");
-      info->AddElement(Mirror, "Mirror");
-      info->AddElement(Clamp, "Clamp");
-      info->AddElement(Border, "Border");
+      info->AddElement(Wrap, TXT( "Wrap" ) );
+      info->AddElement(Mirror, TXT( "Mirror" ) );
+      info->AddElement(Clamp, TXT( "Clamp" ) );
+      info->AddElement(Border, TXT( "Border" ) );
     }
   }
 
@@ -60,25 +60,25 @@ namespace Asset
 
     static void TextureColorFormatEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(UNKNOWN, "UNKNOWN");
-      info->AddElement(ARGB8888, "ARGB8888");
-      info->AddElement(ARGB4444, "ARGB4444");
-      info->AddElement(ARGB1555, "ARGB1555");
-      info->AddElement(RGB565, "RGB565");
-      info->AddElement(A8, "A8");
-      info->AddElement(L8, "L8");
-      info->AddElement(AL88, "AL88");
-      info->AddElement(DXT1, "DXT1");
-      info->AddElement(DXT3, "DXT3");
-      info->AddElement(DXT5, "DXT5");
-      info->AddElement(DUDV, "DUDV");
-      info->AddElement(F32, "F32");
-      info->AddElement(F32F32, "F32F32");
-      info->AddElement(FLOATMAP, "FLOATMAP");
-      info->AddElement(F16, "F16");
-      info->AddElement(F16F16, "F16F16");
-      info->AddElement(HALFMAP, "HALFMAP");
-      info->AddElement(RGBE, "RGBE");
+      info->AddElement(UNKNOWN, TXT( "UNKNOWN" ) );
+      info->AddElement(ARGB8888, TXT( "ARGB8888" ) );
+      info->AddElement(ARGB4444, TXT( "ARGB4444" ) );
+      info->AddElement(ARGB1555, TXT( "ARGB1555" ) );
+      info->AddElement(RGB565, TXT( "RGB565" ) );
+      info->AddElement(A8, TXT( "A8" ) );
+      info->AddElement(L8, TXT( "L8" ) );
+      info->AddElement(AL88, TXT( "AL88" ) );
+      info->AddElement(DXT1, TXT( "DXT1" ) );
+      info->AddElement(DXT3, TXT( "DXT3" ) );
+      info->AddElement(DXT5, TXT( "DXT5" ) );
+      info->AddElement(DUDV, TXT( "DUDV" ) );
+      info->AddElement(F32, TXT( "F32" ) );
+      info->AddElement(F32F32, TXT( "F32F32" ) );
+      info->AddElement(FLOATMAP, TXT( "FLOATMAP" ) );
+      info->AddElement(F16, TXT( "F16" ) );
+      info->AddElement(F16F16, TXT( "F16F16" ) );
+      info->AddElement(HALFMAP, TXT( "HALFMAP" ) );
+      info->AddElement(RGBE, TXT( "RGBE" ) );
     }
   }
   typedef TextureColorFormats::TextureColorFormat TextureColorFormat;
@@ -100,13 +100,13 @@ namespace Asset
     NOC_COMPILE_ASSERT( RTF_COUNT == Nocturnal::FILTER_COUNT );
     static void RunTimeFilterEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(RTF_POINT, "RTF_POINT", "POINT");
-      info->AddElement(RTF_BILINEAR, "RTF_BILINEAR", "BILINEAR");
-      info->AddElement(RTF_TRILINEAR, "RTF_TRILINEAR", "TRILINEAR");
-      info->AddElement(RTF_ANISO2_BI, "RTF_ANISO2_BI", "ANISO2_BI");
-      info->AddElement(RTF_ANISO2_TRI, "RTF_ANISO2_TRI", "ANISO2_TRI");
-      info->AddElement(RTF_ANISO4_BI, "RTF_ANISO4_BI", "ANISO4_BI");
-      info->AddElement(RTF_ANISO4_TRI, "RTF_ANISO4_TRI", "ANISO4_TRI");
+      info->AddElement(RTF_POINT, TXT( "RTF_POINT" ), TXT( "POINT" ) );
+      info->AddElement(RTF_BILINEAR, TXT( "RTF_BILINEAR" ), TXT( "BILINEAR" ) );
+      info->AddElement(RTF_TRILINEAR, TXT( "RTF_TRILINEAR" ), TXT( "TRILINEAR" ) );
+      info->AddElement(RTF_ANISO2_BI, TXT( "RTF_ANISO2_BI" ), TXT( "ANISO2_BI" ) );
+      info->AddElement(RTF_ANISO2_TRI, TXT( "RTF_ANISO2_TRI" ), TXT( "ANISO2_TRI" ) );
+      info->AddElement(RTF_ANISO4_BI, TXT( "RTF_ANISO4_BI" ), TXT( "ANISO4_BI" ) );
+      info->AddElement(RTF_ANISO4_TRI, TXT( "RTF_ANISO4_TRI" ), TXT( "ANISO4_TRI" ) );
     }
   }
   typedef RunTimeFilters::RunTimeFilter RunTimeFilter;
@@ -122,9 +122,9 @@ namespace Asset
     };
     static void ReductionRatioEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(ONE_ONE, "ONE_ONE");
-      info->AddElement(ONE_HALF, "ONE_HALF");
-      info->AddElement(ONE_FOURTH, "ONE_FOURTH");
+      info->AddElement(ONE_ONE, TXT( "ONE_ONE" ) );
+      info->AddElement(ONE_HALF, TXT( "ONE_HALF" ) );
+      info->AddElement(ONE_FOURTH, TXT( "ONE_FOURTH" ) );
     }
   }
   typedef ReductionRatios::ReductionRatio ReductionRatio;
@@ -151,17 +151,17 @@ namespace Asset
 
     static void MipGenFilterTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(MIP_NONE, "MIP_NONE", "NONE");
-      info->AddElement(MIP_POINT, "MIP_POINT", "POINT");
-      info->AddElement(MIP_BOX, "MIP_BOX", "BOX");
-      info->AddElement(MIP_TRIANGLE, "MIP_TRIANGLE", "TRIANGLE");
-      info->AddElement(MIP_QUADRATIC, "MIP_QUADRATIC", "QUADRATIC");
-      info->AddElement(MIP_CUBIC, "MIP_CUBIC", "CUBIC");
-      info->AddElement(MIP_MITCHELL, "MIP_MITCHELL", "MITCHELL");
-      info->AddElement(MIP_GAUSSIAN, "MIP_GAUSSIAN", "GAUSSIAN");
-      info->AddElement(MIP_SINC, "MIP_SINC", "SINC");
-      info->AddElement(MIP_KAISER, "MIP_KAISER", "KAISER");
-      info->AddElement(MIP_POINT_COMPOSITE, "MIP_POINT_COMPOSITE", "POINT_COMPOSITE");
+      info->AddElement(MIP_NONE, TXT( "MIP_NONE" ), TXT( "NONE" ) );
+      info->AddElement(MIP_POINT, TXT( "MIP_POINT" ), TXT( "POINT" ) );
+      info->AddElement(MIP_BOX, TXT( "MIP_BOX" ), TXT( "BOX" ) );
+      info->AddElement(MIP_TRIANGLE, TXT( "MIP_TRIANGLE" ), TXT( "TRIANGLE" ) );
+      info->AddElement(MIP_QUADRATIC, TXT( "MIP_QUADRATIC" ), TXT( "QUADRATIC" ) );
+      info->AddElement(MIP_CUBIC, TXT( "MIP_CUBIC" ), TXT( "CUBIC" ) );
+      info->AddElement(MIP_MITCHELL, TXT( "MIP_MITCHELL" ), TXT( "MITCHELL" ) );
+      info->AddElement(MIP_GAUSSIAN, TXT( "MIP_GAUSSIAN" ), TXT( "GAUSSIAN" ) );
+      info->AddElement(MIP_SINC, TXT( "MIP_SINC" ), TXT( "SINC" ) );
+      info->AddElement(MIP_KAISER, TXT( "MIP_KAISER" ), TXT( "KAISER" ) );
+      info->AddElement(MIP_POINT_COMPOSITE, TXT( "MIP_POINT_COMPOSITE" ), TXT( "POINT_COMPOSITE" ) );
     }
   }
   typedef MipGenFilterTypes::MipGenFilterType MipGenFilterType;
@@ -188,17 +188,17 @@ namespace Asset
 
     static void PostMipFilterTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(POST_NOCHANGE, "POST_NOCHANGE", "NO_CHANGE");
-      info->AddElement(POST_LIGHTER, "POST_LIGHTER", "LIGHTER");
-      info->AddElement(POST_DARKER, "POST_DARKER", "DARKER");
-      info->AddElement(POST_MORE_CONTRAST, "POST_MORE_CONTRAST", "MORE_CONTRAST");
-      info->AddElement(POST_LESS_CONTRAST, "POST_LESS_CONTRAST", "LESS_CONTRAST");
-      info->AddElement(POST_SMOOTH, "POST_SMOOTH", "SMOOTH");
-      info->AddElement(POST_SHARPEN_GRADUAL, "POST_SHARPEN_GRADUAL", "SHARPEN_GRADUAL");
-      info->AddElement(POST_SHARPEN1X, "POST_SHARPEN1X", "SHARPEN1X");
-      info->AddElement(POST_SHARPEN2X, "POST_SHARPEN2X", "SHARPEN2X");
-      info->AddElement(POST_SHARPEN3X, "POST_SHARPEN3X", "SHARPEN3X");
-      info->AddElement(POST_HIGH_PASS, "POST_HIGH_PASS", "HIGH_PASS");
+      info->AddElement(POST_NOCHANGE, TXT( "POST_NOCHANGE" ), TXT( "NO_CHANGE" ) );
+      info->AddElement(POST_LIGHTER, TXT( "POST_LIGHTER" ), TXT( "LIGHTER" ) );
+      info->AddElement(POST_DARKER, TXT( "POST_DARKER" ), TXT( "DARKER" ) );
+      info->AddElement(POST_MORE_CONTRAST, TXT( "POST_MORE_CONTRAST" ), TXT( "MORE_CONTRAST" ) );
+      info->AddElement(POST_LESS_CONTRAST, TXT( "POST_LESS_CONTRAST" ), TXT( "LESS_CONTRAST" ) );
+      info->AddElement(POST_SMOOTH, TXT( "POST_SMOOTH" ), TXT( "SMOOTH" ) );
+      info->AddElement(POST_SHARPEN_GRADUAL, TXT( "POST_SHARPEN_GRADUAL" ), TXT( "SHARPEN_GRADUAL" ) );
+      info->AddElement(POST_SHARPEN1X, TXT( "POST_SHARPEN1X" ), TXT( "SHARPEN1X" ) );
+      info->AddElement(POST_SHARPEN2X, TXT( "POST_SHARPEN2X" ), TXT( "SHARPEN2X" ) );
+      info->AddElement(POST_SHARPEN3X, TXT( "POST_SHARPEN3X" ), TXT( "SHARPEN3X" ) );
+      info->AddElement(POST_HIGH_PASS, TXT( "POST_HIGH_PASS" ), TXT( "HIGH_PASS" ) );
     }
   }
   typedef PostMipFilterTypes::PostMipFilterType PostMipFilterType;

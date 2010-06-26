@@ -20,8 +20,8 @@ typedef std::vector< tuid > V_tuid;
 typedef std::map< tuid, tuid > M_tuid;
 typedef std::map< tuid, u32 > M_tuidu32;
 
-#define TUID_HEX_FORMAT "0x%016I64X"
-#define TUID_INT_FORMAT "%I64u"
+#define TUID_HEX_FORMAT TXT( "0x%016I64X" )
+#define TUID_INT_FORMAT TXT( "%I64u" )
 
 namespace Nocturnal
 {

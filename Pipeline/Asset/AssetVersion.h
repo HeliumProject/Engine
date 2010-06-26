@@ -13,8 +13,8 @@ namespace Asset
   class PIPELINE_API AssetVersion : public Reflect::Version
   {
   public:
-    std::string m_AssetVersion;
-    static const char* ASSET_VERSION;
+    tstring m_AssetVersion;
+    static const tchar* ASSET_VERSION;
 
     REFLECT_DECLARE_CLASS(AssetVersion, Reflect::Version)
 

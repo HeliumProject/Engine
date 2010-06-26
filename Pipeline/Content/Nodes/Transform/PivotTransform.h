@@ -53,7 +53,7 @@ namespace Content
 
     static void EnumerateClass( Reflect::Compositor<PivotTransform>& comp );
 
-    virtual bool ProcessComponent(Reflect::ElementPtr element, const std::string& memberName) NOC_OVERRIDE;
+    virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& memberName) NOC_OVERRIDE;
     virtual void ResetTransform() NOC_OVERRIDE;
   };
 

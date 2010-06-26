@@ -19,9 +19,9 @@ namespace Content
 
     static void LensFlareTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Disabled ,       "Disabled");
-      info->AddElement(Vortex ,         "Vortex");
-      info->AddElement(VortexNoTrail ,  "Vortex No Trail");
+      info->AddElement(Disabled ,       TXT( "Disabled" ) );
+      info->AddElement(Vortex ,         TXT( "Vortex" ) );
+      info->AddElement(VortexNoTrail ,  TXT( "Vortex No Trail" ) );
     }
   }
   typedef LensFlareTypes::LensFlareType LensFlareType;
@@ -45,18 +45,18 @@ namespace Content
     };
     static void LightTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Point, "Point");
-      info->AddElement(Spot, "Spot");
-      info->AddElement(Directional, "Directional");
-      info->AddElement(LightingVolume, "LightingVolume");
-      info->AddElement(LightingEnvironment, "LightingEnvironment");
-      info->AddElement(Sun, "Sun");
-      info->AddElement(Portal, "Portal");
-      info->AddElement(AmbientDirectionals, "AmbientDirectionals");
-      info->AddElement(CubeMapProbe, "CubeMapProbe");
-      info->AddElement(Ambient, "Ambient");
-      info->AddElement(AmbientVolume, "AmbientVolume");
-      info->AddElement(SunShadow, "SunShadow");
+      info->AddElement(Point, TXT( "Point" ) );
+      info->AddElement(Spot, TXT( "Spot" ) );
+      info->AddElement(Directional, TXT( "Directional" ) );
+      info->AddElement(LightingVolume, TXT( "LightingVolume" ) );
+      info->AddElement(LightingEnvironment, TXT( "LightingEnvironment" ) );
+      info->AddElement(Sun, TXT( "Sun" ) );
+      info->AddElement(Portal, TXT( "Portal" ) );
+      info->AddElement(AmbientDirectionals, TXT( "AmbientDirectionals" ) );
+      info->AddElement(CubeMapProbe, TXT( "CubeMapProbe" ) );
+      info->AddElement(Ambient, TXT( "Ambient" ) );
+      info->AddElement(AmbientVolume, TXT( "AmbientVolume" ) );
+      info->AddElement(SunShadow, TXT( "SunShadow" ) );
     }
   };
   typedef LightTypes::LightType LightType;
@@ -71,9 +71,9 @@ namespace Content
     };
     static void LightRenderTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Baked, "Baked");
-      info->AddElement(RealTime, "RealTime");
-      info->AddElement(LightmapOnly, "LightmapOnly");
+      info->AddElement(Baked, TXT( "Baked" ) );
+      info->AddElement(RealTime, TXT( "RealTime" ) );
+      info->AddElement(LightmapOnly, TXT( "LightmapOnly" ) );
     }
   };
   typedef LightRenderTypes::LightRenderType LightRenderType;

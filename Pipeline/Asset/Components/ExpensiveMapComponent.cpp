@@ -6,7 +6,7 @@ REFLECT_DEFINE_ABSTRACT( ExpensiveMapComponent );
 
 void ExpensiveMapComponent::EnumerateClass( Reflect::Compositor<ExpensiveMapComponent>& comp )
 {
-  comp.GetComposite().m_UIName = "Expensive Map (Base)";
+  comp.GetComposite().m_UIName = TXT( "Expensive Map (Base)" );
 
   Reflect::EnumerationField* enumIncanMipGenFilter = comp.AddEnumerationField( &ExpensiveMapComponent::m_IncanMipGenFilter, "m_IncanMipGenFilter", AssetFlags::RealTimeUpdateable );
   Reflect::EnumerationField* enumIncanPostMipFilter = comp.AddEnumerationField( &ExpensiveMapComponent::m_IncanPostMipFilter, "m_IncanPostMipFilter", AssetFlags::RealTimeUpdateable );

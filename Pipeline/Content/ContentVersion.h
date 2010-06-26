@@ -13,8 +13,8 @@ namespace Content
   class PIPELINE_API ContentVersion : public Reflect::Version
   {
   public:
-    std::string m_ContentVersion;
-    static const char* CONTENT_VERSION;
+    tstring m_ContentVersion;
+    static const tchar* CONTENT_VERSION;
 
     REFLECT_DECLARE_CLASS(ContentVersion, Reflect::Version)
 
@@ -22,7 +22,7 @@ namespace Content
 
     ContentVersion();
 
-    ContentVersion(const char* source, const char* sourceVersion);
+    ContentVersion(const tchar* source, const tchar* sourceVersion);
 
     virtual bool IsCurrent();
   };

@@ -18,10 +18,10 @@ namespace Asset
     };
     static void GlossParaIncanTexFormatEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(GPI_DXT, "GPI_DXT", "DXT");
-      info->AddElement(GPI_RGB565, "GPI_RGB565", "RGB565");
-      info->AddElement(GPI_ARGB4444, "GPI_ARGB4444", "ARGB4444");
-      info->AddElement(GPI_ARGB8888, "GPI_ARGB8888", "ARGB8888");
+      info->AddElement(GPI_DXT, TXT( "GPI_DXT" ), TXT( "DXT" ) );
+      info->AddElement(GPI_RGB565, TXT( "GPI_RGB565" ), TXT( "RGB565" ) );
+      info->AddElement(GPI_ARGB4444, TXT( "GPI_ARGB4444" ), TXT( "ARGB4444" ) );
+      info->AddElement(GPI_ARGB8888, TXT( "GPI_ARGB8888" ), TXT( "ARGB8888" ) );
     }
   }
   typedef GlossParaIncanTexFormats::GlossParaIncanTexFormat GlossParaIncanTexFormat;
@@ -38,10 +38,10 @@ namespace Asset
     };
     static void CubeSpecTypeFormatEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(CST_VERY_BROAD, "CST_VERY_BROAD", "VERY_BROAD");
-      info->AddElement(CST_MEDIUM_BROAD, "CST_MEDIUM_BROAD", "MEDIUM_BROAD");
-      info->AddElement(CST_MEDIUM_TIGHT, "CST_MEDIUM_TIGHT", "MEDIUM_TIGHT");
-      info->AddElement(CST_VERY_TIGHT, "CST_VERY_TIGHT", "VERY_TIGHT");
+      info->AddElement(CST_VERY_BROAD, TXT( "CST_VERY_BROAD" ), TXT( "VERY_BROAD" ) );
+      info->AddElement(CST_MEDIUM_BROAD, TXT( "CST_MEDIUM_BROAD" ), TXT( "MEDIUM_BROAD" ) );
+      info->AddElement(CST_MEDIUM_TIGHT, TXT( "CST_MEDIUM_TIGHT" ), TXT( "MEDIUM_TIGHT" ) );
+      info->AddElement(CST_VERY_TIGHT, TXT( "CST_VERY_TIGHT" ), TXT( "VERY_TIGHT" ) );
     }
   }
   typedef CubeSpecTypeFormats::CubeSpecTypeFormat CubeSpecTypeFormat;
@@ -96,7 +96,7 @@ namespace Asset
 
     virtual ~StandardExpensiveMapComponent() {}
 
-    virtual bool ProcessComponent(Reflect::ElementPtr element, const std::string& fieldName) NOC_OVERRIDE;
+    virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& fieldName) NOC_OVERRIDE;
 
     virtual bool ShouldRebuildTexture( const TextureMapComponent* oldAttrib ) const NOC_OVERRIDE;
 

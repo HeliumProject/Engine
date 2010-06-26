@@ -882,9 +882,9 @@ MipSet* Texture::LoadDDSToMipSet(const void* ddsadr)
 }
 
 //Write DDS file
-bool Nocturnal::MipSet::WriteDDS(const char* fname) const
+bool Nocturnal::MipSet::WriteDDS(const tchar* fname) const
 {
-  FILE * file = fopen(fname, "wb");
+  FILE * file = _tfopen(fname, TXT( "wb" ));
   if (!file)
   {
     return false;
@@ -973,7 +973,7 @@ bool Nocturnal::MipSet::WriteDDS(const char* fname) const
 }
 
 //Write DDS file
-bool Nocturnal::Texture::WriteDDS(const char* fname, bool convert_to_srgb, Nocturnal::OutputColorFormat output_fmt) const
+bool Nocturnal::Texture::WriteDDS(const tchar* fname, bool convert_to_srgb, Nocturnal::OutputColorFormat output_fmt) const
 {
   //If we don't sepecify an output format, pick a suitable one
   if(output_fmt == Nocturnal::OUTPUT_CF_UNKNOWN)

@@ -6,7 +6,7 @@ REFLECT_DEFINE_CLASS( ArtFileComponent );
 
 void ArtFileComponent::EnumerateClass( Reflect::Compositor<ArtFileComponent>& comp )
 {
-  comp.GetComposite().m_UIName = "Art File";
+  comp.GetComposite().m_UIName = TXT( "Art File" );
   comp.GetComposite().SetProperty( AssetProperties::ShortDescription, "Contains a reference to a Maya file (.mb) which contains the art (geometry, animation, etc.) for an entity in the game." );
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "All instances of an entity will utilize the same Maya file to represent their geometry in-game.  In addition to entities, Animation Clips and Animation Sets can also be associated with Maya files." );
   comp.GetComposite().SetProperty( AssetProperties::SmallIcon, "attribute_artfile_16.png" );
@@ -19,14 +19,14 @@ void ArtFileComponent::EnumerateClass( Reflect::Compositor<ArtFileComponent>& co
   Reflect::Field* fieldMaxima = comp.AddField( &ArtFileComponent::m_Maxima, "m_Maxima" );
 }
 
-const std::string ArtFileComponent::s_FileFilter = "*.fbx";
+const tstring ArtFileComponent::s_FileFilter = TXT( "*.fbx" );
 
 Component::ComponentUsage ArtFileComponent::GetComponentUsage() const
 {
   return Component::ComponentUsages::Class;
 }
 
-const std::string& ArtFileComponent::GetFileFilter() const
+const tstring& ArtFileComponent::GetFileFilter() const
 {
   return s_FileFilter;
 }

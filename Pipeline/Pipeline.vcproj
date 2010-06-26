@@ -554,13 +554,6 @@
 			RelativePathToProject=".\SDK\Crypto++\5.6.0\Crypto++.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\Application\Application.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{F3DB1BFC-9BD1-443F-965A-E05E9D95E6AB}"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"
 			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
 		/>

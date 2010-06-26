@@ -17,9 +17,9 @@ namespace Asset
     };
     static void DetailTexFormatEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(D_DXT5, "D_DXT5", "DXT5");
-      info->AddElement(D_ARGB4444, "D_ARGB4444", "ARGB4444");
-      info->AddElement(D_ARGB8888, "D_ARGB8888", "ARGB8888");
+      info->AddElement(D_DXT5, TXT( "D_DXT5" ), TXT( "DXT5" ) );
+      info->AddElement(D_ARGB4444, TXT( "D_ARGB4444" ), TXT( "ARGB4444" ) );
+      info->AddElement(D_ARGB8888, TXT( "D_ARGB8888" ), TXT( "ARGB8888" ) );
     }
   }
   typedef DetailTexFormats::DetailTexFormat DetailTexFormat;

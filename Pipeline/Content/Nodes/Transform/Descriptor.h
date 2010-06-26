@@ -31,12 +31,12 @@ namespace Content
     };
     static void GeometrySimulationEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Off, "Off");
-      info->AddElement(Glass, "Glass");
-      info->AddElement(Plaster, "Plaster");
-      info->AddElement(Brick, "Brick");
-      info->AddElement(Metal, "Metal");
-      info->AddElement(Flex, "Flex");
+      info->AddElement(Off, TXT( "Off" ) );
+      info->AddElement(Glass, TXT( "Glass" ) );
+      info->AddElement(Plaster, TXT( "Plaster" ) );
+      info->AddElement(Brick, TXT( "Brick" ) );
+      info->AddElement(Metal, TXT( "Metal" ) );
+      info->AddElement(Flex, TXT( "Flex" ) );
     }
   }
   typedef GeometrySimulations::GeometrySimulation GeometrySimulation;

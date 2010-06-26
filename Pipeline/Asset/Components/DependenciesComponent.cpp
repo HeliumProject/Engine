@@ -8,7 +8,7 @@ REFLECT_DEFINE_CLASS( DependenciesComponent );
 
 void DependenciesComponent::EnumerateClass( Reflect::Compositor<DependenciesComponent>& comp )
 {
-  comp.GetComposite().m_UIName = "Dependencies";
+  comp.GetComposite().m_UIName = TXT( "Dependencies" );
   comp.GetComposite().SetProperty( AssetProperties::ShortDescription, "Allows for specifying other assets which are necessary for the current asset." );
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "This attribute allows for specifying other assets which are necessary for the given asset to function properly.  Often, this can be used on assets like levels to list entities that are needed but that can't be found via normal inclusion rules." );
 

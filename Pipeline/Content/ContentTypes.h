@@ -90,34 +90,34 @@ namespace Content
 
     static void ContentTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Null, "Null");
-      info->AddElement(Default, "Default");
-      info->AddElement(Geometry, "Geometry");
-      info->AddElement(Skeleton, "Skeleton");
-      info->AddElement(Bangle, "Bangle");
-      info->AddElement(HighResCollision, "HighResCollision");
-      info->AddElement(LowResCollision, "LowResCollision");
-      info->AddElement(Pathfinding, "Pathfinding");
-      info->AddElement(LowResPathfinding, "LowResPathfinding");
-      info->AddElement(LightMapped, "LightMapped");
-      info->AddElement(VertexLit, "VertexLit");
-      info->AddElement(Overlay, "Overlay");
-      info->AddElement(PreShell, "PreShell");
-      info->AddElement(BloomPreShell, "BloomPreShell");
-      info->AddElement(PostShell, "PostShell");
-      info->AddElement(BloomPostShell, "BloomPostShell");
-      info->AddElement(Foliage, "Foliage");
-      info->AddElement(FragmentGroup, "FragmentGroup");
-      info->AddElement(MonitorCam, "MonitorCam");
-      info->AddElement(Water, "Water");
-      info->AddElement(RisingWater, "RisingWater");
-      info->AddElement(WrinkleMap, "WrinkleMap");
-      info->AddElement(Destruction, "Destruction");
-      info->AddElement(Debris, "Debris");
-      info->AddElement(Glue, "Glue");
-      info->AddElement(Pins, "Pins");
-      info->AddElement(NavMeshHiRes, "NavMeshHiRes");
-      info->AddElement(NavMeshLowRes, "NavMeshLowRes");
+      info->AddElement(Null, TXT( "Null" ) );
+      info->AddElement(Default, TXT( "Default" ) );
+      info->AddElement(Geometry, TXT( "Geometry" ) );
+      info->AddElement(Skeleton, TXT( "Skeleton" ) );
+      info->AddElement(Bangle, TXT( "Bangle" ) );
+      info->AddElement(HighResCollision, TXT( "HighResCollision" ) );
+      info->AddElement(LowResCollision, TXT( "LowResCollision" ) );
+      info->AddElement(Pathfinding, TXT( "Pathfinding" ) );
+      info->AddElement(LowResPathfinding, TXT( "LowResPathfinding" ) );
+      info->AddElement(LightMapped, TXT( "LightMapped" ) );
+      info->AddElement(VertexLit, TXT( "VertexLit" ) );
+      info->AddElement(Overlay, TXT( "Overlay" ) );
+      info->AddElement(PreShell, TXT( "PreShell" ) );
+      info->AddElement(BloomPreShell, TXT( "BloomPreShell" ) );
+      info->AddElement(PostShell, TXT( "PostShell" ) );
+      info->AddElement(BloomPostShell, TXT( "BloomPostShell" ) );
+      info->AddElement(Foliage, TXT( "Foliage" ) );
+      info->AddElement(FragmentGroup, TXT( "FragmentGroup" ) );
+      info->AddElement(MonitorCam, TXT( "MonitorCam" ) );
+      info->AddElement(Water, TXT( "Water" ) );
+      info->AddElement(RisingWater, TXT( "RisingWater" ) );
+      info->AddElement(WrinkleMap, TXT( "WrinkleMap" ) );
+      info->AddElement(Destruction, TXT( "Destruction" ) );
+      info->AddElement(Debris, TXT( "Debris" ) );
+      info->AddElement(Glue, TXT( "Glue" ) );
+      info->AddElement(Pins, TXT( "Pins" ) );
+      info->AddElement(NavMeshHiRes, TXT( "NavMeshHiRes" ) );
+      info->AddElement(NavMeshLowRes, TXT( "NavMeshLowRes" ) );
     }
   } // namespace ContentTypes
 

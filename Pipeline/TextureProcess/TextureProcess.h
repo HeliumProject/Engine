@@ -72,8 +72,8 @@ namespace TextureProcess
     }
 
     // input data
-    std::string                     m_enum;
-    std::string                     m_texture_file;
+    tstring                     m_enum;
+    tstring                     m_texture_file;
     Nocturnal::OutputColorFormat           m_output_format;
     Nocturnal::PostMipImageFilter          m_post_filter;
     float                           m_relscale_x;
@@ -174,6 +174,6 @@ namespace TextureProcess
     //  Writes the debug text file with the filenames, compression settings, etc.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool WriteDebugFile( const std::string& debug_file );
+    bool WriteDebugFile( const tstring& debug_file );
   };
 }

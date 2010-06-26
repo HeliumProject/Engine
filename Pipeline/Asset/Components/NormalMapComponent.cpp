@@ -6,7 +6,7 @@ REFLECT_DEFINE_ABSTRACT( NormalMapComponent );
 
 void NormalMapComponent::EnumerateClass( Reflect::Compositor<NormalMapComponent>& comp )
 {
-  comp.GetComposite().m_UIName = "Normal Map (Base)";
+  comp.GetComposite().m_UIName = TXT( "Normal Map (Base)" );
 }
 
 

@@ -21,10 +21,10 @@
 using namespace Nocturnal;
 
 //-----------------------------------------------------------------------------
-char* Texture::p_volume_identifier_strings[VOLUME_NUM_IDENTIFIERS] =
+tchar* Texture::p_volume_identifier_strings[VOLUME_NUM_IDENTIFIERS] =
 {
-  "_anim_",
-  "_volume_",
+  TXT( "_anim_" ),
+  TXT( "_volume_" ),
 };
 
 //-----------------------------------------------------------------------------
@@ -178,7 +178,7 @@ void Texture::ConvertGrayScale()
 }
 
 //-----------------------------------------------------------------------------
-bool Texture::WriteRAW(const char* fname, void* data, u32 size, u32 face, bool convert_to_srgb) const
+bool Texture::WriteRAW(const tchar* fname, void* data, u32 size, u32 face, bool convert_to_srgb) const
 {
   // size must be a multiple of 4
   NOC_ASSERT( (size&3)==0 );
@@ -190,7 +190,7 @@ bool Texture::WriteRAW(const char* fname, void* data, u32 size, u32 face, bool c
     return false;
   }
 
-  FILE * textureFile = fopen(fname, "wb");
+  FILE * textureFile = _tfopen(fname, TXT( "wb" ) );
   if (!textureFile)
   {
     return false;
@@ -229,10 +229,14 @@ bool Texture::WriteRAW(const char* fname, void* data, u32 size, u32 face, bool c
 }
 
 //-----------------------------------------------------------------------------
-Texture* Texture::LoadTIFF(const char* fname, bool convert_to_linear)
+Texture* Texture::LoadTIFF(const tchar* fname, bool convert_to_linear)
 {
-  char error[1024];
-  TIFF* tiff = TIFFOpen(fname, "r");
+  TIFF* tiff = NULL;
+#ifdef UNICODE
+  tiff = TIFFOpenW( fname, "r" );
+#else
+  tiff = TIFFOpen(fname, "r");
+#endif
   TIFFRGBAImage img;
 
   if (tiff == 0)
@@ -240,12 +244,13 @@ Texture* Texture::LoadTIFF(const char* fname, bool convert_to_linear)
 
   Texture* result = 0;
 
+  char error[1024];
   if (TIFFRGBAImageOK(tiff, error))
   {
     // any code that gets to here always create a 32bit RGBA texture
     if (TIFFRGBAImageBegin(&img, tiff, 0, error) == 0)
     {
-      Log::Warning("TIFFRGBAImageBegin: %s\n", error);
+      Log::Warning( TXT( "TIFFRGBAImageBegin: %s\n" ), error);
       TIFFClose(tiff);
       return 0;
     }
@@ -511,21 +516,21 @@ static int SortAnimFiles( const void *p_a, const void *p_b )
   const WIN32_FIND_DATA *p_file_a = (WIN32_FIND_DATA*)p_a;
   const WIN32_FIND_DATA *p_file_b = (WIN32_FIND_DATA*)p_b;
 
-  return(stricmp(p_file_a->cFileName, p_file_b->cFileName));
+  return(_tcsicmp(p_file_a->cFileName, p_file_b->cFileName));
 }
 
 //-----------------------------------------------------------------------------
-Texture* Texture::LoadFile( const char* p_path, bool convert_to_linear, LoadRAWInfo* info )
+Texture* Texture::LoadFile( const tchar* p_path, bool convert_to_linear, LoadRAWInfo* info )
 {
-  char p_filename[256];
-  char p_ext[256];
-  _splitpath(p_path, 0, 0, p_filename, p_ext);
+  tchar p_filename[256];
+  tchar p_ext[256];
+  _tsplitpath(p_path, 0, 0, p_filename, p_ext);
 
   // Check for the file being a proxy for an animated texture
   bool is_volume_texture_set = false;
   for(u32 id_index = 0; id_index < VOLUME_NUM_IDENTIFIERS; id_index++)
   {
-    if(strstr(p_filename, p_volume_identifier_strings[id_index]) == p_filename)
+    if(_tcsstr(p_filename, p_volume_identifier_strings[id_index]) == p_filename)
     {
       is_volume_texture_set = true;
       break;
@@ -539,19 +544,19 @@ Texture* Texture::LoadFile( const char* p_path, bool convert_to_linear, LoadRAWI
   //
   // The selected texture is a proxy for an animated sequence to make into a volume texture
 
-  char old_dir[MAX_PATH];
+  tchar old_dir[MAX_PATH];
   if(GetCurrentDirectory(MAX_PATH, old_dir) == 0)
   {
     return NULL;
   }
 
-  char anim_folder[MAX_PATH];
+  tchar anim_folder[MAX_PATH];
   Texture* p_anim_texture = NULL;
   u32 curr_depth = 0;
 
   // Truncate the file extension to get the folder name
-  strcpy(anim_folder, p_path);
-  char *p_ext_start = strstr(anim_folder, p_ext);
+  _tcscpy(anim_folder, p_path);
+  tchar *p_ext_start = _tcsstr(anim_folder, p_ext);
   if(!p_ext_start)
   {
     return NULL;
@@ -653,10 +658,10 @@ Texture* Texture::LoadFile( const char* p_path, bool convert_to_linear, LoadRAWI
 }
 
 //-----------------------------------------------------------------------------
-Texture* Texture::LoadSingleFile(const char* filename, bool convert_to_linear, LoadRAWInfo* info)
+Texture* Texture::LoadSingleFile(const tchar* filename, bool convert_to_linear, LoadRAWInfo* info)
 {
   FILE* f;
-  f = fopen(filename,"rb");
+  f = _tfopen(filename,TXT( "rb" ) );
 
   if (f==0)
     return 0;
@@ -676,24 +681,24 @@ Texture* Texture::LoadSingleFile(const char* filename, bool convert_to_linear, L
   if (size<=0)
     return 0;
 
-  char ext[256];
-  _splitpath(filename, 0, 0, 0, ext);
+  tchar ext[256];
+  _tsplitpath(filename, 0, 0, 0, ext);
 
   Texture* result = 0;
 
-  if (_stricmp(ext,".bmp")==0)
+  if (_tcsicmp(ext,TXT(".bmp"))==0)
   {
     result = LoadBMP(data, convert_to_linear);
   }
-  else if (_stricmp(ext,".tga")==0)
+  else if (_tcsicmp(ext,TXT(".tga"))==0)
   {
     result = LoadTGA(data, convert_to_linear);
   }
-  else if ((_stricmp(ext,".jpg")==0) || (_stricmp(ext,".jpeg")==0))
+  else if ((_tcsicmp(ext,TXT(".jpg"))==0) || (_tcsicmp(ext,TXT(".jpeg"))==0))
   {
     result =  LoadJPG(data, convert_to_linear);
   }
-  else if ((_stricmp(ext,".tif")==0) || (_stricmp(ext,".tiff")==0))
+  else if ((_tcsicmp(ext,TXT(".tif"))==0) || (_tcsicmp(ext,TXT(".tiff"))==0))
   {
     // TIFFS Cannot be loaded from memory, delete the copy we
     // just loaded and pass the filename to the loader function
@@ -701,7 +706,7 @@ Texture* Texture::LoadSingleFile(const char* filename, bool convert_to_linear, L
     data = 0;
     result =  LoadTIFF(filename, convert_to_linear);
   }
-  else if (_stricmp(ext,".raw")==0)
+  else if (_tcsicmp(ext,TXT( ".raw" ) )==0)
   {
     if (info)
     {
@@ -713,15 +718,15 @@ Texture* Texture::LoadSingleFile(const char* filename, bool convert_to_linear, L
       // Do nothing as the default return code is zero
     }
   }
-  else if (_stricmp(ext,".pfm")==0)
+  else if (_tcsicmp(ext, TXT( ".pfm" ) )==0)
   {
     result = LoadPFM(data);
   }
-  else if (_stricmp(ext,".hdr")==0)
+  else if (_tcsicmp(ext,TXT( ".hdr" ) )==0)
   {
     result = LoadHDR(data);
   }
-  else if (_stricmp(ext,".dds")==0)
+  else if (_tcsicmp(ext,TXT( ".dds" ) )==0)
   {
     result = LoadDDS(data, convert_to_linear);
   }
@@ -2074,15 +2079,13 @@ MipSet* Texture::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet:
 
         if(force_to_dxt1 == 1)
         {
-          Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose,
-            "Forced DXT5 to DXT1 - setting alpha channel to 1.\n");
+          Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose, TXT( "Forced DXT5 to DXT1 - setting alpha channel to 1.\n" ) );
 
           dxtOptions.m_mips->m_runtime.m_alpha_channel = Nocturnal::COLOR_CHANNEL_FORCE_ONE;
         }
         if(force_to_dxt1 == 2)
         {
-          Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose,
-            "Forced DXT5 to DXT1 - setting alpha channel to 0.\n");
+          Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose, TXT( "Forced DXT5 to DXT1 - setting alpha channel to 0.\n" ) );
 
           dxtOptions.m_mips->m_runtime.m_alpha_channel = Nocturnal::COLOR_CHANNEL_FORCE_ZERO;
         }
@@ -2121,8 +2124,7 @@ MipSet* Texture::GenerateMipSet(const MipGenOptions** options_rgb, const MipSet:
 
         if(force_to_swizzled_dxt1)
         {
-          Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose,
-            "Swizzled alpha only texture to DXT1\n");
+          Log::Bullet bullet ( Log::Streams::Normal, Log::Levels::Verbose, TXT( "Swizzled alpha only texture to DXT1\n" ) );
 
           u32 depth = (m_Depth == 0) ? 1 : m_Depth;
           u32 channel_size = m_Width * m_Height * depth * sizeof(f32);

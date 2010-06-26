@@ -11,19 +11,19 @@ namespace Asset
   class PIPELINE_API AssetTypeInfo
   {
   public:
-    std::string               m_Name;
-    std::string               m_Builder;
+    tstring               m_Name;
+    tstring               m_Builder;
 
-    std::string               m_IconFilename;
+    tstring               m_IconFilename;
     u32                       m_TypeColor;
 
     AssetTypeInfo (
-      const std::string& name = std::string( "" ),
-      const std::string& builder = std::string( "" ),
-      const std::string& iconFilename = std::string( "null_16.png" ),
+      const tstring& name = TXT( "" ),
+      const tstring& builder = TXT( "" ),
+      const tstring& iconFilename = TXT( "null_16.png" ),
       const u32 typeColor = 0 );
 
-    bool IsValid() const { return ( !m_Name.empty() || m_Name.compare( "Null" ) == 0 ); }
+    bool IsValid() const { return ( !m_Name.empty() || m_Name.compare( TXT( "Null" ) ) == 0 ); }
   };
 
   // Defines a map of asset type to the structure that defines them.
@@ -34,8 +34,8 @@ namespace Asset
 
   PIPELINE_API const AssetTypeInfo& GetAssetTypeInfo( const AssetType assetType, bool noFail = true );
 
-  PIPELINE_API const std::string& GetAssetTypeName( const AssetType assetType );
-  PIPELINE_API const std::string& GetAssetTypeBuilder( const AssetType assetType );
-  PIPELINE_API const std::string& GetAssetTypeIcon( const AssetType assetType );
+  PIPELINE_API const tstring& GetAssetTypeName( const AssetType assetType );
+  PIPELINE_API const tstring& GetAssetTypeBuilder( const AssetType assetType );
+  PIPELINE_API const tstring& GetAssetTypeIcon( const AssetType assetType );
   PIPELINE_API u32 GetAssetTypeColor( const AssetType assetType );
 }

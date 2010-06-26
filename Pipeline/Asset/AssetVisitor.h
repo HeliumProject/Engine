@@ -33,7 +33,7 @@ namespace Asset
   typedef std::map< i32, ElementHandlerFunc > ElementHandlerLookup;
 
   typedef void (AssetVisitor::*FileHandlerFunc)( Reflect::Element* element, const Reflect::Field* field, AssetFile* assetFile );
-  typedef std::map< std::string, FileHandlerFunc > FileHandlerLookup;
+  typedef std::map< tstring, FileHandlerFunc > FileHandlerLookup;
 
   /////////////////////////////////////////////////////////////////////////////
   class PIPELINE_API AssetVisitor : public Reflect::Visitor

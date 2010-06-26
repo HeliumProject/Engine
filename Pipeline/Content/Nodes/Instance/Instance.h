@@ -23,7 +23,7 @@ namespace Content
 
   public:
     // The overidden type of the node
-    std::string m_ConfiguredType;
+    tstring m_ConfiguredType;
 
     // Visibility preferences for this instance
     bool  m_Solid;

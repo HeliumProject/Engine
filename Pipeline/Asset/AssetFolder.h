@@ -15,14 +15,14 @@ namespace Asset
       Nocturnal::Path m_FullPath;
 
   public:
-    AssetFolder( const std::string& fullPath );
+    AssetFolder( const tstring& fullPath );
 
-    inline const std::string& AssetFolder::GetFullPath() const
+    inline const tstring& AssetFolder::GetFullPath() const
     {
       return m_FullPath;
     }
 
-    inline const std::string& AssetFolder::GetShortName() const
+    inline const tstring& AssetFolder::GetShortName() const
     {
       return m_Directory;
     }

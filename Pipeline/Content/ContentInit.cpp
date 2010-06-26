@@ -113,7 +113,7 @@ namespace Content
 
       g_InitializerStack.Push( Reflect::RegisterEnumeration<CollisionShapes::CollisionShape>( &CollisionShapes::CollisionShapeEnumerateEnumeration, "CollisionShape" ) );
       g_InitializerStack.Push( Reflect::RegisterClass<CollisionPrimitive>( "CollisionPrimitive" ) );
-      Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass<CollisionPrimitive>(), "CollisionVolume" );
+      Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass<CollisionPrimitive>(), TXT( "CollisionVolume" ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<Influence>( "Influence" ) );
       g_InitializerStack.Push( Reflect::RegisterClass<Skin>( "Skin" ) );

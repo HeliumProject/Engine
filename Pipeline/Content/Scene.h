@@ -94,7 +94,7 @@ namespace Content
 
 
     // enable reference counting
-    std::string          m_FilePath;
+    tstring          m_FilePath;
 
     // stores hierarchy info for the scene
     MM_HierarchyNode     m_Hierarchy;
@@ -120,7 +120,7 @@ namespace Content
 
     Scene();
     Scene( tuid fileID );
-    Scene( const std::string &filePath );
+    Scene( const tstring &filePath );
 
     //
     //  Resets the Scene
@@ -130,9 +130,9 @@ namespace Content
     //
     // Load a content file into the Scene
     //
-    void Load( const std::string& filePath );
-    void Load( const std::string &filePath, Reflect::V_Element& elements, Reflect::StatusHandler* status = NULL );
-    void LoadXML( const std::string& xml, Reflect::V_Element& elements, Reflect::StatusHandler* status = NULL );
+    void Load( const tstring& filePath );
+    void Load( const tstring &filePath, Reflect::V_Element& elements, Reflect::StatusHandler* status = NULL );
+    void LoadXML( const tstring& xml, Reflect::V_Element& elements, Reflect::StatusHandler* status = NULL );
 
   private:
     void PostLoad( Reflect::V_Element& elements );
@@ -142,7 +142,7 @@ namespace Content
     //
   public:
     void Serialize();
-    void Serialize( const std::string& filePath );
+    void Serialize( const tstring& filePath );
 
     //
     // Resolve shader object for a given tri in a given mesh
@@ -163,7 +163,7 @@ namespace Content
     void GetJointsFromClip( const AnimationClipPtr& clip, V_JointTransform& joints );
     u32  GetNumValidJointAnimations( u32 clipIndex = 0 ) const;
     u32  GetNumValidJointAnimations( const Nocturnal::S_TUID& jointList, u32 clipIndex = 0 ) const;
-    void GetJointMismatchReport( std::vector< std::string > &mismatchMessages, u32 clipIndex = 0 ) const;
+    void GetJointMismatchReport( std::vector< tstring > &mismatchMessages, u32 clipIndex = 0 ) const;
 
     void CalculateJointBoundingVolumes();
     bool GetBSpheresForJoint          (std::vector<t_BsphereId>& bspheres, const Nocturnal::TUID& jointID, Content::ContentType contentType ) const;
@@ -296,7 +296,7 @@ namespace Content
     void UpdateHierarchy();
 
   public:
-    bool HasDuplicateBangleIndexedExportNodes( std::vector< std::string >& duplicate_bangle_ids_info);
+    bool HasDuplicateBangleIndexedExportNodes( std::vector< tstring >& duplicate_bangle_ids_info);
     void Optimize();
 
   private:

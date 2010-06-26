@@ -14,7 +14,7 @@ void AssetFolder::EnumerateClass( Reflect::Compositor<AssetFolder>& comp )
 ///////////////////////////////////////////////////////////////////////////////
 // Ctor
 //
-AssetFolder::AssetFolder( const std::string& fullPath )
+AssetFolder::AssetFolder( const tstring& fullPath )
 : m_FullPath( fullPath )
 {
     m_Directory.Set( m_FullPath.Directory() );

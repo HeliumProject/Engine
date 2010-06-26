@@ -25,13 +25,13 @@ namespace Asset
   class PIPELINE_API AssetTemplate : public Reflect::Element
   {
   public:
-    std::string   m_Name;               // was m_Title
-    std::string   m_Description;
-    std::string   m_FileFilter;
+    tstring   m_Name;               // was m_Title
+    tstring   m_Description;
+    tstring   m_FileFilter;
 
     bool          m_DefaultAddSubDir;
     bool          m_ShowSubDirCheckbox;
-    std::string   m_DefaultFormat;
+    tstring   m_DefaultFormat;
 
     Component::ComponentCollectionPtr m_RequiredComponents;
     Component::ComponentCollectionPtr m_OptionalComponents;

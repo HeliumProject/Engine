@@ -12,7 +12,7 @@ REFLECT_DEFINE_CLASS( SceneAsset );
 
 void SceneAsset::EnumerateClass( Reflect::Compositor<SceneAsset>& comp )
 {
-  comp.GetComposite().m_UIName = "Scene";
+  comp.GetComposite().m_UIName = TXT( "Scene" );
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A level groups together various zones to make a level in the game.  The level asset will be associated with a world file (*.world.rb), which is the file that can be edited in the Scene Editor." );
   comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.level.*" );
 
@@ -36,18 +36,18 @@ void SceneAsset::EnumerateClass( Reflect::Compositor<SceneAsset>& comp )
   classTemplate->AddOptionalComponent( Reflect::GetType< Asset::DependenciesComponent >() );
   assetTemplates.push_back( classTemplate );
 
-  std::stringstream stream;
+  tstringstream stream;
   Reflect::ArchiveBinary::ToStream( assetTemplates, stream );
   comp.GetComposite().SetProperty( AssetProperties::AssetTemplates, stream.str() );
 }
 
 
-bool SceneAsset::ProcessComponent(Reflect::ElementPtr element, const std::string& fieldName)
+bool SceneAsset::ProcessComponent(Reflect::ElementPtr element, const tstring& fieldName)
 {
   return __super::ProcessComponent( element, fieldName );
 }
 
-bool SceneAsset::ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const
+bool SceneAsset::ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const
 {
   if ( attr->HasType( Reflect::GetType<DependenciesComponent>() ) )
   {

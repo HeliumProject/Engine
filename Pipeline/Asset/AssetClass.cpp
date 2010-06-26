@@ -19,7 +19,7 @@
 using namespace Reflect;
 using namespace Asset;
 
-std::string AssetClass::s_BaseBuiltDirectory = "";
+tstring AssetClass::s_BaseBuiltDirectory = TXT( "" );
 
 REFLECT_DEFINE_ABSTRACT( AssetClass );
 
@@ -33,7 +33,7 @@ AssetClass::AssetClass()
 {
 }
 
-AssetClassPtr AssetClass::LoadAssetClass( const char* path )
+AssetClassPtr AssetClass::LoadAssetClass( const tchar* path )
 {
     AssetClassPtr assetClass = NULL;
     try
@@ -46,7 +46,7 @@ AssetClassPtr AssetClass::LoadAssetClass( const char* path )
     }
     catch ( const Nocturnal::Exception& exception )
     {
-        Log::Warning( "%s\n", exception.what() );
+        Log::Warning( TXT( "%s\n" ), exception.what() );
     }
 
     // success
@@ -67,37 +67,37 @@ Nocturnal::Path AssetClass::GetDataDir()
 Nocturnal::Path AssetClass::GetBuiltDirectory()
 {
 #pragma TODO( "make human-readable built directories" )
-    std::stringstream str;
+    tstringstream str;
     str << TUID_HEX_FORMAT << m_Path.Hash();
-    Nocturnal::Path builtDirectory( s_BaseBuiltDirectory + std::string( "/" ) + str.str() );
+    Nocturnal::Path builtDirectory( s_BaseBuiltDirectory + TXT( "/" ) + str.str() );
     return builtDirectory;
 }
 
-std::string AssetClass::GetFullName() const
+tstring AssetClass::GetFullName() const
 {
 #pragma TODO( "break out some settings stuff for the asset root" )
     return m_Path.Filename();
 }
 
-std::string AssetClass::GetShortName() const
+tstring AssetClass::GetShortName() const
 {
     return m_Path.Basename();
 }
 
 #pragma TODO( "implement AssetType info lookup functions" )
-std::string AssetClass::GetAssetTypeName( const AssetType assetType )
+tstring AssetClass::GetAssetTypeName( const AssetType assetType )
 {
-    return "";
+    return TXT( "" );
 }
 
-std::string AssetClass::GetAssetTypeBuilder( const AssetType AssetType )
+tstring AssetClass::GetAssetTypeBuilder( const AssetType AssetType )
 {
-    return "";
+    return TXT( "" );
 }
 
-std::string AssetClass::GetAssetTypeIcon( const AssetType AssetType )
+tstring AssetClass::GetAssetTypeIcon( const AssetType AssetType )
 {
-    return "";
+    return TXT( "" );
 }
 
 
@@ -129,17 +129,17 @@ void AssetClass::Serialize( const AssetVersionPtr &version )
 // to the user.  This function is intended to be used by the UI to make sure
 // that an asset is valid before it is built (validation is done during save).
 // 
-bool AssetClass::ValidateClass( std::string& error ) const
+bool AssetClass::ValidateClass( tstring& error ) const
 {
     error.clear();
     return true;
 }
 
-bool AssetClass::ValidateCompatible( const Component::ComponentPtr &component, std::string& error ) const
+bool AssetClass::ValidateCompatible( const Component::ComponentPtr &component, tstring& error ) const
 {
     if ( component->GetComponentUsage() == Component::ComponentUsages::Instance )
     {
-        error = "The " + component->GetClass()->m_UIName + " component can only be added to an instance of an asset.";
+        error = TXT( "The " ) + component->GetClass()->m_UIName + TXT( " component can only be added to an instance of an asset." );
         return false;
     }
 

@@ -23,7 +23,7 @@ namespace Asset
     virtual const Nocturnal::Path& GetPath() const;
     virtual void SetPath( const Nocturnal::Path& path );
 
-    virtual const std::string& GetFileFilter() const = 0;
+    virtual const tstring& GetFileFilter() const = 0;
 
     REFLECT_DECLARE_ABSTRACT( FileBackedComponent, ComponentBase );
 

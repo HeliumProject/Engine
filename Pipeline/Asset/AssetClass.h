@@ -56,7 +56,7 @@ namespace Asset
         Nocturnal::Path m_Path;
 
         // description of this asset
-        std::string m_Description;
+        tstring m_Description;
 
         //
         // RTTI
@@ -74,13 +74,13 @@ namespace Asset
     public:
         AssetClass();
 
-        static void SetBaseBuiltDirectory( const std::string& path )
+        static void SetBaseBuiltDirectory( const tstring& path )
         {
             s_BaseBuiltDirectory = path;
         }
 
-        static AssetClassPtr LoadAssetClass( const char* path );
-        static AssetClassPtr LoadAssetClass( const std::string& path )
+        static AssetClassPtr LoadAssetClass( const tchar* path );
+        static AssetClassPtr LoadAssetClass( const tstring& path )
         {
             return LoadAssetClass( path.c_str() );
         }
@@ -96,7 +96,7 @@ namespace Asset
         }
 
         template <class T>
-        static Nocturnal::SmartPtr<T> LoadAssetClass( const std::string& path )
+        static Nocturnal::SmartPtr<T> LoadAssetClass( const tstring& path )
         {
             return Reflect::TryCast<T>( LoadAssetClass( path.c_str() ) );
         }
@@ -121,24 +121,24 @@ namespace Asset
         Nocturnal::Path GetBuiltDirectory();
 
         // x:\rcf\assets\entities\fruitBasketFromHell\appleSuccubus.entity.rb -> entities\fruitBasketFromHell\appleSuccubus.entity.rb
-        std::string GetFullName() const;
+        tstring GetFullName() const;
 
         // x:\rcf\assets\entities\fruitBasketFromHell\appleSuccubus.entity.rb -> appleSuccubus
-        std::string GetShortName() const;
+        tstring GetShortName() const;
 
-        const std::string& GetDescription() const
+        const tstring& GetDescription() const
         {
             return m_Description;
         }
-        void SetDescription( const std::string& description )
+        void SetDescription( const tstring& description )
         {
             m_Description = description;
         }
     
         // AssetTypeInfo funcitons
-        static std::string GetAssetTypeName( const AssetType assetType );
-        static std::string GetAssetTypeBuilder( const AssetType AssetType );
-        static std::string GetAssetTypeIcon( const AssetType AssetType );
+        static tstring GetAssetTypeName( const AssetType assetType );
+        static tstring GetAssetTypeBuilder( const AssetType AssetType );
+        static tstring GetAssetTypeIcon( const AssetType AssetType );
 
         // configure this instance as the default instance of the derived class
         virtual void MakeDefault() {}
@@ -156,10 +156,10 @@ namespace Asset
         virtual void RemoveComponent( i32 typeID ) NOC_OVERRIDE;
 
         // Returns true by default. Override to specify more stringent requirements on the asset.
-        virtual bool ValidateClass( std::string& error ) const;
+        virtual bool ValidateClass( tstring& error ) const;
 
         // validate the incoming attribute as ok to consume
-        virtual bool ValidateCompatible( const Component::ComponentPtr &component, std::string& error ) const NOC_OVERRIDE;
+        virtual bool ValidateCompatible( const Component::ComponentPtr &component, tstring& error ) const NOC_OVERRIDE;
 
         // callback when this AssetClass has finished loading off disk
         virtual void LoadFinished();
@@ -176,7 +176,7 @@ namespace Asset
         // classify the asset based on its type and its attributes
         AssetType GetAssetType() const;
 
-        static std::string s_BaseBuiltDirectory;
+        static tstring s_BaseBuiltDirectory;
 
         // 
         // Listeners

@@ -1,6 +1,6 @@
 #include "AssetVersion.h"
 
-const char* Asset::AssetVersion::ASSET_VERSION = "1";
+const tchar* Asset::AssetVersion::ASSET_VERSION = TXT( "1" );
 
 using namespace Asset;
 

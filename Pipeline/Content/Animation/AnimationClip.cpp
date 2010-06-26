@@ -49,7 +49,7 @@ CompressedAnimationPtr AnimationClip::GetCompressedAnimationForJoint( const Noct
 void AnimationClip::Associate( const Nocturnal::TUID& jointID, const AnimationPtr& animation, bool overWrite )
 {
   if ( m_JointAnimationMap.size() && animation->TotalSamples() != m_JointAnimationMap.begin()->second->TotalSamples() )
-    throw Nocturnal::Exception( "Cannot add an animation to an animation clip that has a different number of samples!" );
+    throw Nocturnal::Exception( TXT( "Cannot add an animation to an animation clip that has a different number of samples!" ) );
 
   M_Animation::iterator findItor = m_JointAnimationMap.find( jointID );
   if( findItor != m_JointAnimationMap.end() )
@@ -96,18 +96,18 @@ void AnimationClip::ApplyParentTransforms( const Content::Scene& scene, const No
 
   if ( !targetJoint.ReferencesObject() )
   {
-    std::string targetJointGuid;
+    tstring targetJointGuid;
     targetJointId.ToString( targetJointGuid );
-    throw MissingJointException( targetJointGuid, "Content Scene" );
+    throw MissingJointException( targetJointGuid, TXT( "Content Scene" ) );
   }
 
   Content::AnimationPtr jointAnimation = m_JointAnimationMap[ targetJointId ];
 
   if ( !jointAnimation.ReferencesObject() )
   {
-    std::string targetJointGuid;
+    tstring targetJointGuid;
     targetJointId.ToString( targetJointGuid );
-    throw MissingJointException( targetJointGuid, "Animation Map" );
+    throw MissingJointException( targetJointGuid, TXT( "Animation Map" ) );
   }
 
   Content::JointTransformPtr parentJoint = scene.Get< Content::JointTransform >( targetJoint->m_ParentID );
@@ -137,18 +137,18 @@ void AnimationClip::ApplyInverseParentTransforms( const Content::Scene& scene, c
 
   if ( !targetJoint.ReferencesObject() )
   {
-    std::string targetJointGuid;
+    tstring targetJointGuid;
     targetJointId.ToString( targetJointGuid );
-    throw MissingJointException( targetJointGuid, "Content Scene" );
+    throw MissingJointException( targetJointGuid, TXT( "Content Scene" ) );
   }
 
   Content::AnimationPtr jointAnimation = m_JointAnimationMap[ targetJointId ];
 
   if ( !jointAnimation.ReferencesObject() )
   {
-    std::string targetJointGuid;
+    tstring targetJointGuid;
     targetJointId.ToString( targetJointGuid );
-    throw MissingJointException( targetJointGuid, "Animation Map" );
+    throw MissingJointException( targetJointGuid, TXT( "Animation Map" ) );
   }
 
   V_Animation parentStack;
@@ -187,14 +187,14 @@ void AnimationClip::ConvertToWorldSpace(const Content::Scene& scene, JointOrderi
 
     if ( !targetJoint.ReferencesObject() )
     {
-      std::string targetJointGuid;
+      tstring targetJointGuid;
       jt_tuid->ToString( targetJointGuid );
       throw MissingJointException( targetJointGuid, "Content Scene" );
     }
     Content::AnimationPtr jointAnimation = m_JointAnimationMap[ *jt_tuid ];
     if ( !jointAnimation.ReferencesObject() )
     {
-      std::string targetJointGuid;
+      tstring targetJointGuid;
       jt_tuid->ToString( targetJointGuid );
       throw MissingJointException( targetJointGuid, "joint animation data.  That means we have no animation data for this joint, which may mean this animation needs to be re-exported." );
     }
@@ -271,9 +271,9 @@ void AnimationClip::ConvertToWorldSpace(const Content::Scene& scene, JointOrderi
   Content::AnimationPtr jointAnimation = m_JointAnimationMap[ rootId ];
   if (!jointAnimation.ReferencesObject())
   {
-    std::string targetJointGuid;
+    tstring targetJointGuid;
     rootId.ToString( targetJointGuid );
-    throw MissingJointException( targetJointGuid, "joint animation data.  That means we have no animation data for this joint, which may mean this animation needs to be re-exported." );
+    throw MissingJointException( targetJointGuid, TXT( "joint animation data.  That means we have no animation data for this joint, which may mean this animation needs to be re-exported." ) );
   }
 
   u32 numSamples = jointAnimation->TotalSamples();
@@ -294,9 +294,9 @@ void AnimationClip::ConvertToWorldSpace(const Content::Scene& scene, JointOrderi
 
       if ( !targetJoint.ReferencesObject() )
       {
-        std::string targetJointGuid;
+        tstring targetJointGuid;
         it->ToString( targetJointGuid );
-        throw MissingJointException( targetJointGuid, "Content Scene" );
+        throw MissingJointException( targetJointGuid, TXT( "Content Scene" ) );
       }
 
       Nocturnal::TUID masterId = joint_ordering->GetMasterJoint( *it );
@@ -304,7 +304,7 @@ void AnimationClip::ConvertToWorldSpace(const Content::Scene& scene, JointOrderi
       Content::AnimationPtr jointAnimation = m_JointAnimationMap[ masterId ];
       if ( !jointAnimation.ReferencesObject() )
       {
-        std::string targetJointGuid;
+        tstring targetJointGuid;
         it->ToString( targetJointGuid );
         //throw MissingJointException( targetJointGuid, m_Name.c_str() );
 
@@ -403,16 +403,16 @@ void AnimationClip::RemoveTransform( const Nocturnal::TUID& targetJointId, const
 {
   if ( m_JointAnimationMap.find( referenceJointId ) == m_JointAnimationMap.end() )
   {
-    std::string referenceJointGuid;
+    tstring referenceJointGuid;
     referenceJointId.ToString( referenceJointGuid );
-    throw MissingJointException( referenceJointGuid, "Animation Map" );
+    throw MissingJointException( referenceJointGuid, TXT( "Animation Map" ) );
   }
 
   if ( m_JointAnimationMap.find( targetJointId ) == m_JointAnimationMap.end() )
   {
-    std::string targetJointGuid;
+    tstring targetJointGuid;
     targetJointId.ToString( targetJointGuid );
-    throw MissingJointException( targetJointGuid, "Animation Map" );
+    throw MissingJointException( targetJointGuid, TXT( "Animation Map" ) );
   }
 
   const Content::AnimationPtr& referenceAnim = m_JointAnimationMap[ referenceJointId ];
@@ -441,9 +441,9 @@ void AnimationClip::CalculateLinearDistancePerFrame( const Nocturnal::TUID &refe
 {
   if ( m_JointAnimationMap.find( referenceJointId ) == m_JointAnimationMap.end() )
   {
-    std::string referenceJointGuid;
+    tstring referenceJointGuid;
     referenceJointId.ToString( referenceJointGuid );
-    throw MissingJointException( referenceJointGuid, "Content Scene" );
+    throw MissingJointException( referenceJointGuid, TXT( "Content Scene" ) );
   }
 
   const Content::AnimationPtr& referenceAnim = m_JointAnimationMap[ referenceJointId ];
@@ -456,9 +456,9 @@ void AnimationClip::RemoveFirstFrameTransform( const Nocturnal::TUID &targetJoin
 {
   if ( m_JointAnimationMap.find( targetJointId ) == m_JointAnimationMap.end() )
   {
-    std::string targetJointGuid;
+    tstring targetJointGuid;
     targetJointId.ToString( targetJointGuid );
-    throw MissingJointException( targetJointGuid, "Animation Map" );
+    throw MissingJointException( targetJointGuid, TXT( "Animation Map" ) );
   }
 
   const Content::AnimationPtr& targetAnim = m_JointAnimationMap[ targetJointId ];
@@ -470,9 +470,9 @@ void AnimationClip::RemoveRotTrans( const Nocturnal::TUID& targetJointId, Math::
 {
   if ( m_JointAnimationMap.find( targetJointId ) == m_JointAnimationMap.end() )
   {
-    std::string targetJointGuid;
+    tstring targetJointGuid;
     targetJointId.ToString( targetJointGuid );
-    throw MissingJointException( targetJointGuid, "Animation Map" );
+    throw MissingJointException( targetJointGuid, TXT( "Animation Map" ) );
   }
 
   const Content::AnimationPtr& targetAnim = m_JointAnimationMap[ targetJointId ];
@@ -502,7 +502,7 @@ void AnimationClip::DumpAnims( const JointOrderingPtr& jointOrdering )
 {
   for ( u32 frame = 0; frame < WindowSamples(); ++frame )
   {
-    Log::Print( "Frame %d:\n", frame );
+    Log::Print( TXT( "Frame %d:\n" ), frame );
 
     u32 jointIndex = 0;
     Nocturnal::V_TUID::iterator it = jointOrdering->m_JointOrdering.begin();
@@ -513,17 +513,17 @@ void AnimationClip::DumpAnims( const JointOrderingPtr& jointOrdering )
       
       Animation* anim = m_JointAnimationMap[ id ];
 
-      Log::Print( "Joint %d ["TUID_HEX_FORMAT"]\n", jointIndex, id );
-      Log::Print( "\tq: %f %f %f %f\n", anim->m_Rotate[frame][0]
+      Log::Print( TXT( "Joint %d [" )TUID_HEX_FORMAT TXT( "]\n" ), jointIndex, id );
+      Log::Print( TXT( "\tq: %f %f %f %f\n" ), anim->m_Rotate[frame][0]
                                        , anim->m_Rotate[frame][1]
                                        , anim->m_Rotate[frame][2]
                                        , anim->m_Rotate[frame][3]);
 
-      Log::Print( "\ts: %f %f %f\n", anim->m_Scale[frame].x
+      Log::Print( TXT( "\ts: %f %f %f\n" ), anim->m_Scale[frame].x
                                        , anim->m_Scale[frame].y
                                        , anim->m_Scale[frame].z );
 
-      Log::Print( "\tt: %f %f %f\n", anim->m_Translate[frame].x
+      Log::Print( TXT( "\tt: %f %f %f\n" ), anim->m_Translate[frame].x
                                        , anim->m_Translate[frame].y
                                        , anim->m_Translate[frame].z );
       
@@ -548,9 +548,9 @@ void AnimationClip::ConvertToAdditiveBlend( const Content::Scene& scene, const J
 
     if ( !joint.ReferencesObject() )
     {
-      std::string jointGuid;
+      tstring jointGuid;
       (*itor).first.ToString( jointGuid );
-      throw Nocturnal::Exception( "Joint [%s (%s)] not present in bind scene!\n", GetName().c_str(), jointGuid.c_str() );
+      throw Nocturnal::Exception( TXT( "Joint [%s (%s)] not present in bind scene!\n" ), GetName().c_str(), jointGuid.c_str() );
     }
 
     Content::Animation* anim = itor->second;
@@ -572,7 +572,7 @@ void AnimationClip::ConvertToAdditiveBlend( const Content::Scene& scene, const J
       }
       else
       {
-        Log::Warning("Additive Clip has reference frame out of range: ref %d, max %d\n", reference_frame, anim->WindowSamples()); 
+        Log::Warning( TXT( "Additive Clip has reference frame out of range: ref %d, max %d\n" ), reference_frame, anim->WindowSamples()); 
       }
     }
 
@@ -625,9 +625,9 @@ u32 AnimationClip::CompressAnimations( const Content::Scene& scene, const Animat
     if ( !joint.ReferencesObject() )
     {
       missingJoints++;
-      std::string jointGuid;
+      tstring jointGuid;
       (*itor).first.ToString( jointGuid );
-      Log::Print(Log::Levels::Verbose,  "Joint [%s (%s)] not present in bind scene!\n", GetName().c_str(), jointGuid.c_str() );
+      Log::Print(Log::Levels::Verbose,  TXT( "Joint [%s (%s)] not present in bind scene!\n" ), GetName().c_str(), jointGuid.c_str() );
       continue;
     }
 
@@ -637,9 +637,9 @@ u32 AnimationClip::CompressAnimations( const Content::Scene& scene, const Animat
     m_JointCompressedAnimationMap.insert( std::make_pair< Nocturnal::TUID, CompressedAnimationPtr >( (*itor).first, compressed ) );
     if ( !handledJoints.insert( (*itor).first ).second )
     {
-      std::string jointGuid;
+      tstring jointGuid;
       (*itor).first.ToString( jointGuid );
-      throw Nocturnal::Exception( "Already compressed data for joint [%s]!", jointGuid );
+      throw Nocturnal::Exception( TXT( "Already compressed data for joint [%s]!" ), jointGuid );
     }
   }
 
@@ -682,12 +682,12 @@ void AnimationClip::ExtractCinematicRootOffset( const Content::Scene  & scene,
       parentMat = cineRootParent->m_GlobalTransform;
     }
 
-    Log::Print("cinematic root joint is named %s\n", cineRoot->GetName().c_str() );
+    Log::Print( TXT( "cinematic root joint is named %s\n" ), cineRoot->GetName().c_str() );
 
     M_Animation::const_iterator animIt = m_JointAnimationMap.find( cineRoot->m_ID );
     if ( animIt == m_JointAnimationMap.end() )
     {
-      throw Nocturnal::Exception( "Could not find animation for joint %s!", cineRoot->GetName().c_str() );
+      throw Nocturnal::Exception( TXT( "Could not find animation for joint %s!" ), cineRoot->GetName().c_str() );
     }
 
     Content::Animation & rootAnimation = *animIt->second;
@@ -773,17 +773,17 @@ void AnimationClip::ConvertToParentLocalSpace(const Content::Scene& scene, const
     M_Animation::iterator animIt = m_JointAnimationMap.find( joint->m_ID );
     if ( animIt == m_JointAnimationMap.end() )
     {
-      std::string jointGuid;
+      tstring jointGuid;
       joint->m_ID.ToString( jointGuid );
-      throw Nocturnal::Exception( "Could not find animation for joint [%s] [%s]!\n", GetName().c_str(), jointGuid.c_str() );
+      throw Nocturnal::Exception( TXT( "Could not find animation for joint [%s] [%s]!\n" ), GetName().c_str(), jointGuid.c_str() );
     }
 
     M_Animation::iterator parentAnimIt = m_JointAnimationMap.find( joint->m_ParentID );
     if ( parentAnimIt == m_JointAnimationMap.end() )
     {
-      std::string jointGuid;
+      tstring jointGuid;
       joint->m_ParentID.ToString( jointGuid );
-      throw Nocturnal::Exception( "Could not find animation for joint [%s] [%s]!\n", GetName().c_str(), jointGuid.c_str() );
+      throw Nocturnal::Exception( TXT( "Could not find animation for joint [%s] [%s]!\n" ), GetName().c_str(), jointGuid.c_str() );
     }
 
     Animation* anim = animIt->second;

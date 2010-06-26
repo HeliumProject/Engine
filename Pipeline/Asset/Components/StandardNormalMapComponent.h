@@ -14,8 +14,8 @@ namespace Asset
     };
     static void NormalTexFormatEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(NM_DXT5, "NM_DXT5", "DXT5");
-      info->AddElement(NM_AL88, "NM_AL88", "AL88");
+      info->AddElement(NM_DXT5, TXT( "NM_DXT5" ), TXT( "DXT5" ) );
+      info->AddElement(NM_AL88, TXT( "NM_AL88" ), TXT( "AL88" ) );
     }
   }
   typedef NormalTexFormats::NormalTexFormat NormalTexFormat;

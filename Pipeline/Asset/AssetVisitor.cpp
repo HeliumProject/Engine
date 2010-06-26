@@ -13,7 +13,6 @@
 #include "Pipeline/Content/Scene.h"
 #include "Pipeline/Content/Nodes/Region.h"
 #include "Pipeline/Content/Nodes/Zone.h"
-#include "Application/RCS/RCS.h"
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Class.h"
 #include "Foundation/Reflect/Field.h"
@@ -65,9 +64,9 @@ AssetVisitor::AssetVisitor( M_AssetFiles* assetFiles, Asset::AssetClass* assetCl
     m_FieldFilterTypes.insert( (i32)Reflect::FieldFlags::Discard );
 
     // Files
-    std::set< std::string > extensions;
+    std::set< tstring > extensions;
     Reflect::Archive::GetExtensions( extensions );
-    for ( std::set< std::string >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
+    for ( std::set< tstring >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
     {
         m_FileHandlerLookup.insert( FileHandlerLookup::value_type( *itr, &AssetVisitor::HandleAssetFile ) );
     }
@@ -147,11 +146,11 @@ bool AssetVisitor::HandleArtFileComponent( Reflect::Element* element )
         Asset::ArtFileComponent* attribute = Reflect::AssertCast< Asset::ArtFileComponent >(element);
 
         Nocturnal::Path filePath = attribute->GetPath();
-        std::string artFile = filePath.Get();
+        tstring artFile = filePath.Get();
 
         if ( !artFile.empty() )
         {
-            const std::string& attrName = Reflect::Registry::GetInstance()->GetClass( element->GetType() )->m_FullName;
+            const tstring& attrName = Reflect::Registry::GetInstance()->GetClass( element->GetType() )->m_FullName;
             assetFile->AddAttribute( attrName, artFile, false );
 
             if ( Nocturnal::Path( artFile ).Exists() )
@@ -163,7 +162,7 @@ bool AssetVisitor::HandleArtFileComponent( Reflect::Element* element )
                 }
                 catch ( const Nocturnal::Exception& ex )
                 {
-                    Log::Warning( "%s\n", ex.what() );
+                    Log::Warning( TXT( "%s\n" ), ex.what() );
                 }
 
                 if (manifest.ReferencesObject())
@@ -432,7 +431,7 @@ void AssetVisitor::HandleWorldFile( Reflect::Element* element, const Reflect::Fi
 
         const Content::ZonePtr& zone = (*itrZone);
 
-        std::string zoneFilePath = zone->GetFilePath();
+        tstring zoneFilePath = zone->GetFilePath();
         File::ManagedFilePtr file = File::GlobalManager().GetManagedFile( zoneFilePath );
 
         if ( file )
@@ -477,7 +476,7 @@ void AssetVisitor::HandleWorldFile( Reflect::Element* element, const Reflect::Fi
 
         const Content::RegionPtr& region = (*itrRegion);
 
-        //std::string regionName = region->GetName()
+        //tstring regionName = region->GetName()
         //toLower( regionName );
 
         Nocturnal::Insert<M_RegionToZone>::Result inserted = regionToZones.insert( M_RegionToZone::value_type( region, Content::V_Zone() ) ); 
@@ -563,7 +562,7 @@ void AssetVisitor::HandleMayaFile( Reflect::Element* element, const Reflect::Fie
     Component::ComponentViewer< ArtFileComponent > model ( assetClass );
     if ( model.Valid() )
     {
-        std::string artFile;
+        tstring artFile;
         try
         {
             artFile = model->GetFilePath();
@@ -574,7 +573,7 @@ void AssetVisitor::HandleMayaFile( Reflect::Element* element, const Reflect::Fie
 
         if (!artFile.empty())
         {
-            std::string assetManifestFile = artFile;
+            tstring assetManifestFile = artFile;
 
             if (FileSystem::Exists(assetManifestFile))
             {

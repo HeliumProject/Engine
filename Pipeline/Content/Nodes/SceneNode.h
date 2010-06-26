@@ -25,10 +25,10 @@ namespace Content
     Nocturnal::TUID m_ID;
 
     // A generated name of the node
-    std::string m_DefaultName;
+    tstring m_DefaultName;
 
     // A user created name (can be empty)
-    std::string m_GivenName;
+    tstring m_GivenName;
 
     // Should the name change when the object does?
     bool m_UseGivenName;
@@ -60,12 +60,12 @@ namespace Content
     virtual void PostLoad( Reflect::V_Element& elements );
 
     // migrate m_Name
-    virtual bool ProcessComponent( Reflect::ElementPtr element, const std::string& fieldName ) NOC_OVERRIDE;
+    virtual bool ProcessComponent( Reflect::ElementPtr element, const tstring& fieldName ) NOC_OVERRIDE;
 
     // invalidates class attributes
-    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const NOC_OVERRIDE;
+    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const NOC_OVERRIDE;
 
-    const std::string& GetName() const
+    const tstring& GetName() const
     {
       return (!m_GivenName.empty() && m_UseGivenName) ? m_GivenName : m_DefaultName;
     }

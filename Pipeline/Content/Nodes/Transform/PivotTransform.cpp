@@ -20,9 +20,9 @@ void PivotTransform::EnumerateClass( Reflect::Compositor<PivotTransform>& comp )
 }
 
 
-bool PivotTransform::ProcessComponent(ElementPtr element, const std::string& memberName)
+bool PivotTransform::ProcessComponent(ElementPtr element, const tstring& memberName)
 {
-  if (memberName == "m_LockPivots")
+  if (memberName == TXT( "m_LockPivots" ) )
   {
     Serializer::GetValue( AssertCast<Serializer>(element), m_SnapPivots);
     return true;

@@ -35,7 +35,7 @@ namespace Nocturnal
     // Reads input file and initializes output to be of xres by yres resolution. If xres or yres is zero, use corresponding
     // resolution from input. The filter width is specified by width and flags specify if the output should be
     // normalized for normals, etc.
-    ImageFilter(const char* inputfile, const char* outputfile, unsigned int xres, unsigned int yres, unsigned int width, unsigned int flags);
+    ImageFilter(const tchar* inputfile, const tchar* outputfile, unsigned int xres, unsigned int yres, unsigned int width, unsigned int flags);
 
     virtual ~ImageFilter(void);
 
@@ -62,7 +62,7 @@ namespace Nocturnal
     // filtering operation.
     virtual Math::Vector4 generateFilteredPixel(unsigned int x, unsigned int y) = NULL;
 
-    const char*       outputPath;         // file to write output image to
+    const tchar*       outputPath;         // file to write output image to
   };
 
 
@@ -77,7 +77,7 @@ namespace Nocturnal
     // Reads input file and initializes output to be of xres by yres resolution. If xres or yres is zero, use corresponding
     // resolution from input. The filter width is specified by width and flags specify if the output should be
     // normalized for normals, etc.
-    FillImageFilter(const char* inputfile, const char* outputfile, unsigned int xres, unsigned int yres,
+    FillImageFilter(const tchar* inputfile, const tchar* outputfile, unsigned int xres, unsigned int yres,
       unsigned int width, unsigned int flags) : ImageFilter(inputfile, outputfile, xres, yres, width, flags) {}
 
     virtual ~FillImageFilter(void) {}
@@ -103,7 +103,7 @@ namespace Nocturnal
     // Reads input file and initializes output to be of xres by yres resolution. If xres or yres is zero, use corresponding
     // resolution from input. The filter width is specified by width and flags specify if the output should be
     // normalized for normals, etc.
-    BoxImageFilter(const char* inputfile, const char* outputfile, unsigned int xres, unsigned int yres,
+    BoxImageFilter(const tchar* inputfile, const tchar* outputfile, unsigned int xres, unsigned int yres,
       unsigned int width, unsigned int flags);
 
     virtual ~BoxImageFilter(void);

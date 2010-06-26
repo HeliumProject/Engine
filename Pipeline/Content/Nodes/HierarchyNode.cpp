@@ -13,9 +13,9 @@ void HierarchyNode::EnumerateClass( Reflect::Compositor<HierarchyNode>& comp )
 }
 
 
-bool HierarchyNode::ProcessComponent(ElementPtr element, const std::string& memberName)
+bool HierarchyNode::ProcessComponent(ElementPtr element, const tstring& memberName)
 {
-  if (memberName == "m_Visible")
+  if (memberName == TXT( "m_Visible" ) )
   {
     if ( Serializer::GetValue( AssertCast<Serializer>(element), m_Hidden ) )
     {

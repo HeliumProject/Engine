@@ -394,7 +394,7 @@ bool Nocturnal::DXTGenerateMipSet(const Texture* top_mip, DXTOptions* dxt_option
   if ((c_mip_gen_opts[Texture::R] == NULL)  || (c_mip_gen_opts[Texture::G] == NULL)  ||
       (c_mip_gen_opts[Texture::B] == NULL)  || (c_mip_gen_opts[Texture::A] == NULL))
   {
-    throw Nocturnal::Exception("MipGenOptions missing during MipSet generation (DXTGenerateMipSet)");
+    throw Nocturnal::Exception( TXT( "MipGenOptions missing during MipSet generation (DXTGenerateMipSet)" ) );
   }
 
   PROFILE_SCOPE_ACCUM(g_MipGenAccum);

@@ -10,18 +10,18 @@ namespace Component
   class InvalidComponentCollectionException : public Nocturnal::Exception
   {
   public:
-    InvalidComponentCollectionException() : Exception( "Trying to operate on an invalid attribute collection!" ) {}
+    InvalidComponentCollectionException() : Exception( TXT( "Trying to operate on an invalid attribute collection!" ) ) {}
   };
 
   class MissingComponentException : public Nocturnal::Exception
   {
   public:
-    MissingComponentException( const char* typeName ) : Exception( "Trying to access a non-existent attribute of type '%s'", typeName ) {}
+    MissingComponentException( const char* typeName ) : Exception( TXT( "Trying to access a non-existent attribute of type '%s'" ), typeName ) {}
   };
 
   class DisabledComponentException : public Nocturnal::Exception
   {
   public:
-    DisabledComponentException( const char* typeName ) : Exception( "Trying to access a disabled attribute of type '%s'", typeName ) {}
+    DisabledComponentException( const char* typeName ) : Exception( TXT( "Trying to access a disabled attribute of type '%s'" ), typeName ) {}
   };
 }

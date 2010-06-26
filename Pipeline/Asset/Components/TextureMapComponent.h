@@ -27,13 +27,13 @@ namespace Asset
     };
     static void AlphaTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(ALPHA_OPAQUE, "ALPHA_OPAQUE", "OPAQUE");
-      info->AddElement(ALPHA_OVERLAY, "ALPHA_OVERLAY", "OVERLAY");
-      info->AddElement(ALPHA_ADDITIVE, "ALPHA_ADDITIVE", "ADDITIVE");
-      info->AddElement(ALPHA_SCUNGE, "ALPHA_SCUNGE", "SCUNGE");
-      info->AddElement(ALPHA_CUTOUT, "ALPHA_CUTOUT", "CUTOUT");
-      info->AddElement(ALPHA_SOFT_EDGE, "ALPHA_SOFT_EDGE", "SOFT_EDGE");
-      info->AddElement(ALPHA_BLENDED, "ALPHA_BLENDED", "BLENDED");
+      info->AddElement(ALPHA_OPAQUE, TXT( "ALPHA_OPAQUE" ), TXT( "OPAQUE" ) );
+      info->AddElement(ALPHA_OVERLAY, TXT( "ALPHA_OVERLAY" ), TXT( "OVERLAY" ) );
+      info->AddElement(ALPHA_ADDITIVE, TXT( "ALPHA_ADDITIVE" ), TXT( "ADDITIVE" ) );
+      info->AddElement(ALPHA_SCUNGE, TXT( "ALPHA_SCUNGE" ), TXT( "SCUNGE" ) );
+      info->AddElement(ALPHA_CUTOUT, TXT( "ALPHA_CUTOUT" ), TXT( "CUTOUT" ) );
+      info->AddElement(ALPHA_SOFT_EDGE, TXT( "ALPHA_SOFT_EDGE" ), TXT( "SOFT_EDGE" ) );
+      info->AddElement(ALPHA_BLENDED, TXT( "ALPHA_BLENDED" ), TXT( "BLENDED" ) );
     }
   }
   typedef AlphaTypes::AlphaType AlphaType;
@@ -41,7 +41,7 @@ namespace Asset
   class PIPELINE_API TextureMapComponent NOC_ABSTRACT : public FileBackedComponent
   {
   private:
-      static const std::string s_FileFilter;
+      static const tstring s_FileFilter;
 
   public:
     ReductionRatio    m_ReductionRatio;
@@ -67,7 +67,7 @@ namespace Asset
     virtual Component::ComponentCategoryType GetCategoryType() const NOC_OVERRIDE;
     virtual bool ShouldRebuildTexture( const TextureMapComponent* oldAttrib ) const;
 
-    virtual const std::string& GetFileFilter() const NOC_OVERRIDE;
+    virtual const tstring& GetFileFilter() const NOC_OVERRIDE;
 
     bool IsTextureDirty() const;
     void SetTextureDirty( bool dirty = true );

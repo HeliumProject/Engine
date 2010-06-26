@@ -29,7 +29,7 @@ using namespace Nocturnal::ES;
 
 typedef i32 RecordCount;
 
-static const char* s_HandledEventsFilename = "handled_events.txt";
+static const tchar* s_HandledEventsFilename = TXT( "handled_events.txt" );
 
 
 struct SortEvents
@@ -43,18 +43,18 @@ struct SortEvents
 /////////////////////////////////////////////////////////////////////////////
 // Default constructor
 //
-EventSystem::EventSystem( const std::string &rootDirPath, bool writeBinaryFormat )
+EventSystem::EventSystem( const tstring &rootDirPath, bool writeBinaryFormat )
 : m_RootDirPath( rootDirPath )
 , m_WriteBinaryFormat( writeBinaryFormat )
 {
     m_RootDirPath.MakePath();
-    m_HandledEventsFile.Set( m_RootDirPath.Get() + '/' + s_HandledEventsFilename );
+    m_HandledEventsFile.Set( m_RootDirPath.Get() + TXT( "/" ) + s_HandledEventsFilename );
 }
 
 
-void EventSystem::CreateEventsFilePath( std::string& eventsFilePath )
+void EventSystem::CreateEventsFilePath( tstring& eventsFilePath )
 {
-    std::string fileName = std::string( getenv("USERNAME") ) + '-' + getenv("COMPUTERNAME") + ".event." + ( m_WriteBinaryFormat ? "dat" : "txt" );
+    tstring fileName = tstring( _tgetenv( TXT( "USERNAME" ) ) ) + TXT( '-' ) + _tgetenv( TXT( "COMPUTERNAME" ) ) + TXT( ".event." ) + ( m_WriteBinaryFormat ? TXT( "dat" ) : TXT( "txt" ) );
 
     eventsFilePath = m_RootDirPath.Get() + fileName;
     Nocturnal::Path::Normalize( eventsFilePath );
@@ -72,7 +72,7 @@ EventSystem::~EventSystem( )
 /////////////////////////////////////////////////////////////////////////////
 // Creates a new event record
 //
-EventPtr EventSystem::CreateEvent( const std::string &eventData, const std::string& username )
+EventPtr EventSystem::CreateEvent( const tstring &eventData, const tstring& username )
 {
     // get the current time
     __timeb64 now;
@@ -115,7 +115,7 @@ void EventSystem::GetUnhandledEvents( V_EventPtr &listOfEvents )
         std::ifstream handledEventsFile( m_HandledEventsFile.c_str() );
         if ( !handledEventsFile.is_open() )
         {
-            throw Exception( "Could not open handled events file for read: %s", m_HandledEventsFile.c_str() );
+            throw Exception( TXT( "Could not open handled events file for read: %s" ), m_HandledEventsFile.c_str() );
         }
 
         tuid tempEventId;
@@ -153,7 +153,7 @@ void EventSystem::GetEvents( V_EventPtr& listOfEvents, bool sorted )
 {
     // Binary events
     std::set< Nocturnal::Path > datEventFiles;
-    Nocturnal::Directory::GetFiles( m_RootDirPath, datEventFiles, "*.event.dat", true );
+    Nocturnal::Directory::GetFiles( m_RootDirPath, datEventFiles, TXT( "*.event.dat" ), true );
 
     std::set< Nocturnal::Path >::iterator itr = datEventFiles.begin();
     std::set< Nocturnal::Path >::iterator end = datEventFiles.end();
@@ -166,7 +166,7 @@ void EventSystem::GetEvents( V_EventPtr& listOfEvents, bool sorted )
 
     // Text events
     std::set< Nocturnal::Path > txtEventFiles;
-    Nocturnal::Directory::GetFiles( m_RootDirPath, txtEventFiles, "*.event.txt", true );
+    Nocturnal::Directory::GetFiles( m_RootDirPath, txtEventFiles, TXT( "*.event.txt" ), true );
 
     itr = txtEventFiles.begin();
     end = txtEventFiles.end();
@@ -184,32 +184,32 @@ void EventSystem::GetEvents( V_EventPtr& listOfEvents, bool sorted )
 }
 
 
-void EventSystem::ReadEventsFile( const std::string& eventsFile, V_EventPtr& listOfEvents, bool sorted )
+void EventSystem::ReadEventsFile( const tstring& eventsFile, V_EventPtr& listOfEvents, bool sorted )
 {
     Nocturnal::Path path( eventsFile );
-    if ( path.Extension() == "dat" )
+    if ( path.Extension() == TXT( "dat" ) )
     {
         ReadBinaryEventsFile( eventsFile, listOfEvents, sorted );
     }
-    else if ( path.Extension() == "txt" )
+    else if ( path.Extension() == TXT( "txt" ) )
     {
         ReadTextEventsFile( eventsFile, listOfEvents, sorted );
     }
     else
     {
-        throw Exception( "Unknown file type of file: %s", eventsFile.c_str() );
+        throw Exception( TXT( "Unknown file type of file: %s" ), eventsFile.c_str() );
     }
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // Gets the list of all events in eventsDirPath.
 //
-void EventSystem::ReadBinaryEventsFile( const std::string& eventsFile, V_EventPtr& listOfEvents, bool sorted )
+void EventSystem::ReadBinaryEventsFile( const tstring& eventsFile, V_EventPtr& listOfEvents, bool sorted )
 {
     std::ifstream recordsFile( eventsFile.c_str(), std::ios::in | std::ios::binary ); 
     if ( !recordsFile.is_open() )
     {
-        throw Exception( "Could not open events file for reading: %s", eventsFile.c_str() );
+        throw Exception( TXT( "Could not open events file for reading: %s" ), eventsFile.c_str() );
     }
 
     // read in the recordCount for this file
@@ -217,7 +217,7 @@ void EventSystem::ReadBinaryEventsFile( const std::string& eventsFile, V_EventPt
     if ( recordsFile.read( ( char * ) &recordCount, sizeof( RecordCount ) ).fail() )
     {
         recordsFile.close();
-        throw Exception( "Could not read events file: %s", eventsFile.c_str() );
+        throw Exception( TXT( "Could not read events file: %s" ), eventsFile.c_str() );
     }
 
     // resize the listOfEvents first and then insert into it to save time
@@ -238,24 +238,24 @@ void EventSystem::ReadBinaryEventsFile( const std::string& eventsFile, V_EventPt
         isReadOk = isReadOk && !recordsFile.read( ( char * ) &created, sizeof( created ) ).fail();
 
         // no errors yet, read the event computerName
-        std::string username;
+        tstring username;
         int userClientNameLength;
         isReadOk = isReadOk && !recordsFile.read( ( char * ) &userClientNameLength, sizeof( userClientNameLength ) ).fail();
         if ( isReadOk && userClientNameLength > 0 )
         {
             username.resize( userClientNameLength );
-            std::string::iterator eventComputerNameBegin = username.begin();
+            tstring::iterator eventComputerNameBegin = username.begin();
             isReadOk = isReadOk && !recordsFile.read( ( char * ) &(*eventComputerNameBegin), userClientNameLength ).fail();
         }
 
         // no errors yet, read the event data
-        std::string data;
+        tstring data;
         int eventLength;
         isReadOk = isReadOk && !recordsFile.read( ( char * ) &eventLength, sizeof( eventLength ) ).fail();
         if ( isReadOk && eventLength > 0 )
         {
             data.resize( eventLength );
-            std::string::iterator eventDataBegin = data.begin();
+            tstring::iterator eventDataBegin = data.begin();
             isReadOk = isReadOk && !recordsFile.read( ( char * ) &(*eventDataBegin), eventLength ).fail();
         }
 
@@ -266,7 +266,7 @@ void EventSystem::ReadBinaryEventsFile( const std::string& eventsFile, V_EventPt
             // remove extra elements added to listOfEvents in the above resize
             listOfEvents.resize( itCurrentEvent - listOfEvents.begin() - 1 ); // FIXME test for obo (-1)
 
-            throw Exception( "Errors occurred while reading events file: %s", eventsFile.c_str() );
+            throw Exception( TXT( "Errors occurred while reading events file: %s" ), eventsFile.c_str() );
         }
 
         (*itCurrentEvent) = new Event( id, created, username, data );
@@ -283,36 +283,19 @@ void EventSystem::ReadBinaryEventsFile( const std::string& eventsFile, V_EventPt
 /////////////////////////////////////////////////////////////////////////////
 // Gets the list of all events in eventsDirPath.
 //
-void EventSystem::ReadTextEventsFile( const std::string& eventsFile, V_EventPtr& listOfEvents, bool sorted )
+void EventSystem::ReadTextEventsFile( const tstring& eventsFile, V_EventPtr& listOfEvents, bool sorted )
 {
     // Open the file for read
-    std::ifstream recordsFile( eventsFile.c_str(), std::ios::in );
+    tifstream recordsFile( eventsFile.c_str(), std::ios::in );
     if ( !recordsFile.is_open() )
     {
-        throw Exception( "Could not open events file for reading: %s", eventsFile.c_str() );
+        throw Exception( TXT( "Could not open events file for reading: %s" ), eventsFile.c_str() );
         return;
     }
 
-    // read in the recordCount for this file
-    //int recordCount = 0;
-    //std::string recordCountStr;
-    //if ( std::getline( recordsFile, recordCountStr ).fail() )
-    //{
-    //  recordsFile.close();
-    //  throw Exception( "Could not read events file: %s", eventsFile.c_str() );
-    //}
-    //recordCount = atoi( recordCountStr.c_str() );
-
-    // resize the listOfEvents first and then insert into it to save time
-    //size_t loeOffset = listOfEvents.size();
-    //listOfEvents.resize( loeOffset + recordCount );
-
     // read the events
     bool isReadOk = true;
-    std::string line;
-    //V_EventPtr::iterator itCurrentEvent = listOfEvents.begin() + loeOffset;
-    //V_EventPtr::iterator itEndEvents = listOfEvents.end();
-    //for (  ; itCurrentEvent != itEndEvents ; ++itCurrentEvent )
+    tstring line;
     while ( isReadOk && recordsFile.good() && !std::getline( recordsFile, line ).fail() )
     {
         if ( line.empty() )
@@ -340,12 +323,12 @@ void EventSystem::ReadTextEventsFile( const std::string& eventsFile, V_EventPtr&
             // remove extra elements added to listOfEvents in the above resize
             //listOfEvents.resize( itCurrentEvent - listOfEvents.begin() - 1 );
             recordsFile.close();
-            throw Exception( "Could not parse text event: %s", line.c_str() );
+            throw Exception( TXT( "Could not parse text event: %s" ), line.c_str() );
         }
 
         tuid id = ( tuid ) Nocturnal::BoostMatchResult<tuid>(eventResultAttr, 1); 
         u64 created = ( u64 ) Nocturnal::BoostMatchResult<u64>(eventResultAttr, 2); 
-        std::string username = Nocturnal::BoostMatchResultAsString(eventResultAttr, 3); 
+        tstring username = Nocturnal::BoostMatchResultAsString(eventResultAttr, 3); 
         i32 eventLength = ( i32 ) Nocturnal::BoostMatchResult<i32>(eventResultAttr, 4); 
 
         /////////////////////////////////////////////
@@ -353,12 +336,12 @@ void EventSystem::ReadTextEventsFile( const std::string& eventsFile, V_EventPtr&
         // <data string>
 
         // no errors yet, read the event data
-        std::string data;
+        tstring data;
         if ( isReadOk && eventLength > 0 )
         {
             data.resize( eventLength );
-            std::string::iterator eventDataBegin = data.begin();
-            isReadOk = isReadOk && !recordsFile.read( ( char * ) &(*eventDataBegin), eventLength ).fail();
+            tstring::iterator eventDataBegin = data.begin();
+            isReadOk = isReadOk && !recordsFile.read( ( tchar * ) &(*eventDataBegin), eventLength ).fail();
         }
 
         if ( !isReadOk )
@@ -366,7 +349,7 @@ void EventSystem::ReadTextEventsFile( const std::string& eventsFile, V_EventPtr&
             // remove extra elements added to listOfEvents in the above resize
             //listOfEvents.resize( itCurrentEvent - listOfEvents.begin() - 1 );
             recordsFile.close();
-            throw Exception( "Errors occurred while reading events file: %s", eventsFile.c_str() );
+            throw Exception( TXT( "Errors occurred while reading events file: %s" ), eventsFile.c_str() );
         }
 
         //(*itCurrentEvent) = new Event( id, created, username, data );
@@ -380,7 +363,7 @@ void EventSystem::ReadTextEventsFile( const std::string& eventsFile, V_EventPtr&
     if ( !isReadOk )
     {
         recordsFile.close();
-        throw Exception( "Errors occurred while reading events file: %s", eventsFile.c_str() );
+        throw Exception( TXT( "Errors occurred while reading events file: %s" ), eventsFile.c_str() );
     }
 
     if (sorted)
@@ -396,25 +379,25 @@ void EventSystem::ReadTextEventsFile( const std::string& eventsFile, V_EventPtr&
 /////////////////////////////////////////////////////////////////////////////
 // Writes a list of events to the event file.
 //
-void EventSystem::WriteEventsFile( const std::string& eventsFile, const V_EventPtr& listOfEvents )
+void EventSystem::WriteEventsFile( const tstring& eventsFile, const V_EventPtr& listOfEvents )
 {
     Nocturnal::Path path( eventsFile );
-    if ( path.Extension() == "dat" )
+    if ( path.Extension() == TXT( "dat" ) )
     {
         WriteBinaryEventsFile( eventsFile, listOfEvents );
     }
-    else if ( path.Extension() == "txt" )
+    else if ( path.Extension() == TXT( "txt" ) )
     {
         WriteTextEventsFile( eventsFile, listOfEvents );
     }
     else
     {
-        throw Exception( "Unknown file type of file: %s", eventsFile.c_str() );
+        throw Exception( TXT( "Unknown file type of file: %s" ), eventsFile.c_str() );
     }
 }
 
 
-void EventSystem::WriteBinaryEventsFile( const std::string& eventsFile, const V_EventPtr& listOfEvents )
+void EventSystem::WriteBinaryEventsFile( const tstring& eventsFile, const V_EventPtr& listOfEvents )
 {
     if ( listOfEvents.empty() )
     {
@@ -425,17 +408,17 @@ void EventSystem::WriteBinaryEventsFile( const std::string& eventsFile, const V_
     // make sure it's not read only
     if ( path.Exists() && !path.Writable() )
     {
-        throw Exception( "[%s] is read-only!", eventsFile.c_str() );
+        throw Exception( TXT( "[%s] is read-only!" ), eventsFile.c_str() );
     }
 
     // Open the record file for append and add the new record
     RecordCount recordCount = 0;
-    std::fstream recordsFile( eventsFile.c_str(), std::ios::in | std::ios::out |std::ios::binary );
+    tfstream recordsFile( eventsFile.c_str(), std::ios::in | std::ios::out |std::ios::binary );
     if ( !recordsFile.fail() )
     {
         // read and increment the recordCount
         recordsFile.seekg( 0, std::ios::beg );
-        recordsFile.read( ( char * ) &recordCount, sizeof( RecordCount ) );
+        recordsFile.read( ( tchar * ) &recordCount, sizeof( RecordCount ) );
         recordsFile.clear();
     }
     else
@@ -452,7 +435,7 @@ void EventSystem::WriteBinaryEventsFile( const std::string& eventsFile, const V_
 
     // write the recordCount
     isWriteOk = isWriteOk && !recordsFile.seekp( 0, std::ios::beg ).fail();
-    isWriteOk = isWriteOk && !recordsFile.write( ( char * ) &recordCount, sizeof( RecordCount ) ).fail();
+    isWriteOk = isWriteOk && !recordsFile.write( ( tchar * ) &recordCount, sizeof( RecordCount ) ).fail();
 
     // Append the event to the end of the file
     isWriteOk = isWriteOk && !recordsFile.seekp( 0, std::ios::end ).fail();
@@ -463,27 +446,27 @@ void EventSystem::WriteBinaryEventsFile( const std::string& eventsFile, const V_
             break;
         }
 
-        isWriteOk = isWriteOk && !recordsFile.write( ( char * ) &event->m_Id, sizeof( event->m_Id ) ).fail();
-        isWriteOk = isWriteOk && !recordsFile.write( ( char * ) &event->m_Created, sizeof( event->m_Created ) ).fail();
+        isWriteOk = isWriteOk && !recordsFile.write( ( tchar * ) &event->m_Id, sizeof( event->m_Id ) ).fail();
+        isWriteOk = isWriteOk && !recordsFile.write( ( tchar * ) &event->m_Created, sizeof( event->m_Created ) ).fail();
 
         int userClientNameLength = ( int ) event->m_Username.length();
-        isWriteOk = isWriteOk && !recordsFile.write( ( char * ) &userClientNameLength, sizeof( userClientNameLength ) ).fail();
+        isWriteOk = isWriteOk && !recordsFile.write( ( tchar * ) &userClientNameLength, sizeof( userClientNameLength ) ).fail();
         isWriteOk = isWriteOk && !recordsFile.write( event->m_Username.c_str(), userClientNameLength ).fail();
 
         int dataLength = ( int ) event->m_Data.length();
-        isWriteOk = isWriteOk && !recordsFile.write( ( char * ) &dataLength, sizeof( dataLength ) ).fail();
+        isWriteOk = isWriteOk && !recordsFile.write( ( tchar * ) &dataLength, sizeof( dataLength ) ).fail();
         isWriteOk = isWriteOk && !recordsFile.write( event->m_Data.c_str(), dataLength ).fail();
     }
 
     // write errors occurred
     if ( !isWriteOk )
     {
-        throw Exception( "Could not write to file: %s", eventsFile.c_str() );
+        throw Exception( TXT( "Could not write to file: %s" ), eventsFile.c_str() );
     }
 }
 
 
-void EventSystem::WriteTextEventsFile( const std::string& eventsFile, const V_EventPtr& listOfEvents )
+void EventSystem::WriteTextEventsFile( const tstring& eventsFile, const V_EventPtr& listOfEvents )
 {
     if ( listOfEvents.empty() )
     {
@@ -493,40 +476,40 @@ void EventSystem::WriteTextEventsFile( const std::string& eventsFile, const V_Ev
     Nocturnal::Path path( eventsFile );
     if ( path.Exists() && !path.Writable() )
     {
-        throw Exception( "[%s] is read-only!", eventsFile.c_str() );
+        throw Exception( TXT( "[%s] is read-only!" ), eventsFile.c_str() );
     }
 
     // open file for write, 
-    std::ofstream recordsFile( eventsFile.c_str(), std::ios::out );
+    tofstream recordsFile( eventsFile.c_str(), std::ios::out );
     if ( !recordsFile.is_open() )
     {
-        throw Exception( "Could not write to text file: %s", eventsFile.c_str() );
+        throw Exception( TXT( "Could not write to text file: %s" ), eventsFile.c_str() );
     }
 
     // if this is a new file, write the header
     if ( path.Size() == 0 )
     {
-        std::stringstream headerTextStr;
-        headerTextStr << "#------------------------------------------------------------" << std::endl;
-        headerTextStr << "# " << std::endl;
-        headerTextStr << "#                 *** DO NOT EDIT THIS FILE ***              " << std::endl;
-        headerTextStr << "# " << std::endl;
-        headerTextStr << "# This file was generated by the EventSystem and should NOT " << std::endl;
-        headerTextStr << "# be edited by hand. " << std::endl;
-        headerTextStr << "# " << std::endl;
-        headerTextStr << "# Doing so may result in data loss and/or file corruption!" << std::endl;
-        headerTextStr << "# " << std::endl;
-        headerTextStr << "#------------------------------------------------------------" << std::endl;
+        tstringstream headerTextStr;
+        headerTextStr << TXT( "#------------------------------------------------------------" ) << std::endl;
+        headerTextStr << TXT( "# " ) << std::endl;
+        headerTextStr << TXT( "#                 *** DO NOT EDIT THIS FILE ***              " ) << std::endl;
+        headerTextStr << TXT( "# " ) << std::endl;
+        headerTextStr << TXT( "# This file was generated by the EventSystem and should NOT " ) << std::endl;
+        headerTextStr << TXT( "# be edited by hand. " ) << std::endl;
+        headerTextStr << TXT( "# " ) << std::endl;
+        headerTextStr << TXT( "# Doing so may result in data loss and/or file corruption!" ) << std::endl;
+        headerTextStr << TXT( "# " ) << std::endl;
+        headerTextStr << TXT( "#------------------------------------------------------------" ) << std::endl;
 
         int headerTextStrLength = ( int ) headerTextStr.str().length();
 
         if ( recordsFile.write( headerTextStr.str().c_str(), headerTextStrLength ).fail() )
         {
-            throw Exception( "Could not write to file: %s", eventsFile.c_str() );
+            throw Exception( TXT( "Could not write to file: %s" ), eventsFile.c_str() );
         }
     }
 
-    char timePrint[TIME_SIZE];
+    tchar timePrint[TIME_SIZE];
 
     // Write out the events
     bool isWriteOk = true;
@@ -535,20 +518,20 @@ void EventSystem::WriteTextEventsFile( const std::string& eventsFile, const V_Ev
         if ( !isWriteOk )
         {
             recordsFile.close();
-            throw Exception( "Could not write to file: %s", eventsFile.c_str() );
+            throw Exception( TXT( "Could not write to file: %s" ), eventsFile.c_str() );
         }
 
         // build the event string
-        std::stringstream eventTextStr;
+        tstringstream eventTextStr;
 
         // Event: <string created>|<i64 id>|<i64 created>|<string username>|<int data string size>
-        eventTextStr << "Event: " ;
+        eventTextStr << TXT( "Event: " );
 
         // try to get a printer friendly version of the dates
         __time64_t eventCreated  = ( __time64_t ) ( event->m_Created / 1000 );
-        if ( _ctime64_s( timePrint, TIME_SIZE, &eventCreated ) == 0 )
+        if ( _tctime64_s( timePrint, TIME_SIZE, &eventCreated ) == 0 )
         {
-            std::string timePrintStr( timePrint );
+            tstring timePrintStr( timePrint );
             timePrintStr.erase( 24, 2 );
             eventTextStr << timePrintStr;
         }
@@ -557,12 +540,12 @@ void EventSystem::WriteTextEventsFile( const std::string& eventsFile, const V_Ev
             eventTextStr << eventCreated;
         }
 
-        eventTextStr << "|" << event->m_Id << "|" << event->m_Created << "|" << event->m_Username << "|" << event->m_Data.length() << std::endl;
+        eventTextStr << TXT( "|" ) << event->m_Id << TXT( "|" ) << event->m_Created << TXT( "|" ) << event->m_Username << TXT( "|" ) << event->m_Data.length() << std::endl;
 
         // <data string>
         eventTextStr << event->m_Data << std::endl;
 
-        eventTextStr << "#------------------------------------------------------------" << std::endl;
+        eventTextStr << TXT( "#------------------------------------------------------------" ) << std::endl;
 
         // write out the event
         int eventTextStrLength = ( int ) eventTextStr.str().length();
@@ -573,7 +556,7 @@ void EventSystem::WriteTextEventsFile( const std::string& eventsFile, const V_Ev
     // write errors occurred
     if ( !isWriteOk )
     {
-        throw Exception( "Could not write to file: %s", eventsFile.c_str() );
+        throw Exception( TXT( "Could not write to file: %s" ), eventsFile.c_str() );
     }
 }
 
@@ -590,13 +573,13 @@ void EventSystem::WriteHandledEvents( const V_EventPtr& listOfEvents )
 
     if ( m_HandledEventsFile.Exists() && !m_HandledEventsFile.Writable() )
     {
-        throw Exception( "[%s] is read-only!", m_HandledEventsFile.c_str() );
+        throw Exception( TXT( "[%s] is read-only!" ), m_HandledEventsFile.c_str() );
     }
 
     std::ofstream handledEventsFile( m_HandledEventsFile.c_str(), std::ios::app );
     if ( !handledEventsFile.is_open() )
     {
-        throw Exception( "Could not open file: %s", m_HandledEventsFile.c_str() );
+        throw Exception( TXT( "Could not open file: %s" ), m_HandledEventsFile.c_str() );
     }
 
     for each ( const EventPtr& event in listOfEvents )
@@ -616,7 +599,7 @@ void EventSystem::FlushHandledEvents()
     {
         if ( !m_HandledEventsFile.Delete() )
         {
-            throw PlatformException( "Could not delete handled events file: %s", m_HandledEventsFile.c_str() );
+            throw PlatformException( TXT( "Could not delete handled events file: %s" ), m_HandledEventsFile.c_str() );
         }
     }
 }
@@ -633,13 +616,13 @@ bool EventSystem::HandleEventsFileExists()
 /////////////////////////////////////////////////////////////////////////////
 // Dumps the event.dat file to a human readable event.txt file
 // 
-void EventSystem::DumpEventsToTextFile( const std::string& datFile, const std::string& txtFile )
+void EventSystem::DumpEventsToTextFile( const tstring& datFile, const tstring& txtFile )
 {
     Nocturnal::Path path( datFile );
     // setup the input file
     if ( !path.Exists() )
     {
-        throw Exception( "Input events file [%s] doesn't exist!", datFile.c_str() );
+        throw Exception( TXT( "Input events file [%s] doesn't exist!" ), datFile.c_str() );
     }
 
     // set up the output file
@@ -647,7 +630,7 @@ void EventSystem::DumpEventsToTextFile( const std::string& datFile, const std::s
     if ( outputPath.empty() )
     {
         outputPath.Set( datFile );
-        outputPath.ReplaceExtension( "txt" );
+        outputPath.ReplaceExtension( TXT( "txt" ) );
     }
 
     outputPath.Create();
@@ -662,13 +645,13 @@ void EventSystem::DumpEventsToTextFile( const std::string& datFile, const std::s
 /////////////////////////////////////////////////////////////////////////////
 // Loads the event.dat file from the event.txt file
 //
-void EventSystem::LoadEventsFromTextFile( const std::string& txtFile, const std::string& datFile )
+void EventSystem::LoadEventsFromTextFile( const tstring& txtFile, const tstring& datFile )
 {
     Nocturnal::Path path( txtFile );
     // setup the input file
     if ( !path.Exists() )
     {
-        throw Exception( "Input text events file [%s] doesn't exist!", txtFile.c_str() );
+        throw Exception( TXT( "Input text events file [%s] doesn't exist!" ), txtFile.c_str() );
     }
 
     // setup the output file
@@ -676,13 +659,13 @@ void EventSystem::LoadEventsFromTextFile( const std::string& txtFile, const std:
     if ( cleanEventsFile.Get().empty() )
     {
         cleanEventsFile.Set( txtFile );
-        cleanEventsFile.ReplaceExtension( "event.dat" );
+        cleanEventsFile.ReplaceExtension( TXT( "event.dat" ) );
     }
     cleanEventsFile.Create();
 
     if ( !cleanEventsFile.Writable() )
     {
-        throw Exception( "Output events file [%s] is read-only!", cleanEventsFile.c_str() );
+        throw Exception( TXT( "Output events file [%s] is read-only!" ), cleanEventsFile.c_str() );
     }
 
     // read the events
@@ -697,13 +680,13 @@ void EventSystem::LoadEventsFromTextFile( const std::string& txtFile, const std:
 // Deletes the user's current event's file and re-populates it with 
 // the given list of events.
 //
-void EventSystem::StompEventsFile( const std::string& eventsFile, const V_EventPtr& listOfEvents )
+void EventSystem::StompEventsFile( const tstring& eventsFile, const V_EventPtr& listOfEvents )
 {
     Nocturnal::Path path( eventsFile );
     // make sure it's not read only
     if ( !path.Writable() )
     {
-        throw Exception( "Could not write to events, file is read-only: %s", eventsFile.c_str() );
+        throw Exception( TXT( "Could not write to events, file is read-only: %s" ), eventsFile.c_str() );
     }
 
     // Open the record file and truncate to clear its contents
@@ -711,7 +694,7 @@ void EventSystem::StompEventsFile( const std::string& eventsFile, const V_EventP
         std::ofstream recordsFile( eventsFile.c_str(), std::ios::out | std::ios::binary | std::ios::trunc );
         if ( !recordsFile.is_open() )
         {
-            throw Exception( "Could not open events file for write: %s", eventsFile.c_str() );
+            throw Exception( TXT( "Could not open events file for write: %s" ), eventsFile.c_str() );
         }
 
         bool isWriteOk = true;
@@ -726,7 +709,7 @@ void EventSystem::StompEventsFile( const std::string& eventsFile, const V_EventP
         {
             recordsFile.close();
 
-            throw Exception( "Could not write to events file: %s", eventsFile.c_str() );
+            throw Exception( TXT( "Could not write to events file: %s" ), eventsFile.c_str() );
         }
 
         recordsFile.close();

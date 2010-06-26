@@ -4,7 +4,6 @@
 #include "Browser.h"
 #include "CollectionManager.h"
 
-#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Container/Insert.h" 
@@ -349,52 +348,12 @@ void BrowserSearchPanel::PopulateForm()
 
     Freeze();
 
-    // populate combo boxes: m_CreatedByComboBox, m_AssetTypeChoice
-    std::vector< std::string > tableData;
-    u32 numAdded = m_BrowserFrame->GetBrowser()->GetCacheDB()->GetPopulateTableData( (u32)Asset::CacheDBColumnIDs::FileType, tableData );
-    if ( numAdded > 0 )
-    {
-        PopulateFileTypeChoice( tableData );
-    }
-    else
-    {
-        m_FileTypeChoice->Enable( false );
-    }
-
-    tableData.clear();
-    numAdded = m_BrowserFrame->GetBrowser()->GetCacheDB()->GetPopulateTableData( (u32)Asset::CacheDBColumnIDs::P4User, tableData );
-    if ( numAdded > 0 )
-    {
-        PopulateChoiceControl( (wxControlWithItems*) m_CreatedByComboBox, tableData );
-    }
-    else
-    {
-        m_CreatedByComboBox->Enable( false );
-    }
-
-    tableData.clear();
-    numAdded = m_BrowserFrame->GetBrowser()->GetCacheDB()->GetPopulateTableData( (u32)Asset::CacheDBColumnIDs::AssetType, tableData );
-    if ( numAdded > 0 )
-    {
-        PopulateChoiceControl( (wxControlWithItems*) m_AssetTypeChoice, tableData );
-    }
-    else
-    {
-        m_AssetTypeChoice->Enable( false );
-    }
-
-
-    tableData.clear();
-    numAdded = m_BrowserFrame->GetBrowser()->GetCacheDB()->GetComponentsTableData( tableData );
-    if ( numAdded > 0 )
-    {
-        PopulateChoiceControl( (wxControlWithItems*) m_ComponentNameChoice, tableData );
-    }
-    else
-    {
-        m_ComponentNameChoice->Enable( false );
-        m_ComponentValueTextCtrl->Enable( false );
-    }
+#pragma TODO( "reimplement without CacheDB" )
+    m_FileTypeChoice->Enable( false );
+    m_CreatedByComboBox->Enable( false );
+    m_AssetTypeChoice->Enable( false );
+    m_ComponentNameChoice->Enable( false );
+    m_ComponentValueTextCtrl->Enable( false );
 
     // populate from MRU: m_FolderChoice
     m_FieldMRU->PopulateControl( (wxControlWithItems*) m_FolderChoice, "m_FolderChoice", "" );
@@ -567,9 +526,7 @@ bool BrowserSearchPanel::ProcessForm()
             bool isPath = true; //( cleanFieldValue.find( '/' ) != std::string::npos ) ? true : false; 
 
             queryString += queryString.empty() ? "" : " ";
-            queryString += isPath 
-                ? Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::Path )
-                : Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::Name );
+            queryString += isPath ? "path" : "name";
             queryString += ":";
             queryString += cleanFieldValue;
             queryString += "";
@@ -588,9 +545,7 @@ bool BrowserSearchPanel::ProcessForm()
         bool needsQuotes = ( cleanFieldValue.find( ' ' ) != std::string::npos ) ? true : false;
 
         queryString += queryString.empty() ? "" : " ";
-        queryString += isPath 
-            ? Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::Path )
-            : Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::Name );
+        queryString += isPath ? "path" : "name";
         queryString += ":";
         queryString += needsQuotes ? "\"" : "";
         queryString += cleanFieldValue;
@@ -610,7 +565,7 @@ bool BrowserSearchPanel::ProcessForm()
         if ( foundFilter != NULL && !foundFilter->GetExtensions().empty() )
         {
             queryString += queryString.empty() ? "" : " ";
-            queryString += Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::FileType ) + ":";
+            queryString += "fileType:";
             queryString += "\"*";
             queryString += *(foundFilter->GetExtensions().begin());
             queryString += "\"";
@@ -638,7 +593,7 @@ bool BrowserSearchPanel::ProcessForm()
             bool needsQuotes = ( cleanFieldValue.find( ' ' ) != std::string::npos ) ? true : false;
 
             queryString += queryString.empty() ? "" : " ";
-            queryString += Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::Path ) + ":";
+            queryString += "path:";
             queryString += needsQuotes ? "\"" : "";
             queryString += cleanFieldValue;
             queryString += "*\"";
@@ -655,7 +610,7 @@ bool BrowserSearchPanel::ProcessForm()
         && _stricmp( fieldStringValue.c_str(), s_CreatedByDefaultText  ) != 0 )
     {
         queryString += queryString.empty() ? "" : " ";
-        queryString += Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::P4User ) + ":";
+        queryString += "rcsUser:";
         queryString += fieldStringValue.c_str();
         queryString += "";
     }
@@ -672,7 +627,7 @@ bool BrowserSearchPanel::ProcessForm()
         bool needsQuotes = ( fieldStringValue.find( ' ' ) != -1 ) ? true : false;
 
         queryString += queryString.empty() ? "" : " ";
-        queryString += Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::AssetType ) + ":";
+        queryString += "assetType:";
         queryString += needsQuotes ? "\"" : "";
         queryString += fieldStringValue.c_str();
         queryString += needsQuotes ? "\"" : "";
@@ -687,7 +642,7 @@ bool BrowserSearchPanel::ProcessForm()
         && _stricmp( fieldStringValue.c_str(), s_FileIDDefaultText  ) != 0 )
     {
         queryString += queryString.empty() ? "" : " ";
-        queryString += Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::FileID ) + ":";
+        queryString += "pathHash:";
         queryString += fieldStringValue.c_str();
         queryString += "";
     }
@@ -737,7 +692,7 @@ bool BrowserSearchPanel::ProcessForm()
         bool needsQuotes = ( cleanFieldValue.find( ' ' ) != std::string::npos ) ? true : false;
 
         queryString += queryString.empty() ? "" : " ";
-        queryString += Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::Level ) + ":";
+        queryString += "level:";
         queryString += needsQuotes ? "\"" : "";
         queryString += cleanFieldValue;
         queryString += needsQuotes ? "\"" : "";
@@ -756,7 +711,7 @@ bool BrowserSearchPanel::ProcessForm()
         bool needsQuotes = ( cleanFieldValue.find( ' ' ) != std::string::npos ) ? true : false;
 
         queryString += queryString.empty() ? "" : " ";
-        queryString += Asset::CacheDBColumnIDs::Column( Asset::CacheDBColumnIDs::Shader ) + ":";
+        queryString += "shader:";
         queryString += needsQuotes ? "\"" : "" ;
         queryString += cleanFieldValue;
         queryString += needsQuotes ? "\"" : "" ;

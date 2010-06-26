@@ -1187,62 +1187,6 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="AssetBuilder"
-			>
-			<File
-				RelativePath=".\AssetBuilder\AssetBuilder.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\AssetBuilder.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\AssetBuilderExceptions.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\BuilderInterface.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\BuilderInterface.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\BuilderOptions.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\BuilderOptions.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\BuilderStats.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\BuilderStats.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\CacheFiles.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\CacheFiles.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\CacheFileStats.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\CacheFileStats.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Asset"
 			>
 			<File

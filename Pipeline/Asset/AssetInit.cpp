@@ -7,7 +7,6 @@
 #include "Pipeline/Asset/AssetFolder.h"
 #include "Pipeline/Asset/AssetTemplate.h"
 #include "Pipeline/Asset/AssetVersion.h"
-#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Pipeline/Asset/Components/ColorMapComponent.h"
 #include "Pipeline/Asset/Components/DependenciesComponent.h"
 #include "Pipeline/Asset/Components/DetailMapComponent.h"

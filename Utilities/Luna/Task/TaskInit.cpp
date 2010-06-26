@@ -1,11 +1,9 @@
 #include "Precompile.h"
 #include "TaskInit.h"
 
-#include "Build.h"
 #include "Export.h"
 
 #include "Pipeline/Asset/AssetInit.h"
-#include "Pipeline/AssetBuilder/AssetBuilder.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
 
@@ -19,7 +17,6 @@ void Luna::TaskInitialize()
   if ( ++g_InitCount == 1 )
   {
     g_InitializerStack.Push( Asset::Initialize, Asset::Cleanup );
-    g_InitializerStack.Push( Build::Initialize, Build::Cleanup );
     g_InitializerStack.Push( Export::Initialize, Export::Cleanup );
   }
 }

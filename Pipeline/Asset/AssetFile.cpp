@@ -37,25 +37,12 @@ AssetFile::~AssetFile()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-AssetFilePtr AssetFile::FindAssetFile( const std::string& filePath, CacheDB* cache )
+AssetFilePtr AssetFile::CreateAssetFile( const std::string& filePath )
 {
     NOC_ASSERT( !filePath.empty() );
 
     Nocturnal::Path path( filePath );
-
-    AssetFilePtr assetFile = NULL;
-
-    if ( cache )
-    {
-        // select the file from the cache
-        cache->SelectAssetByHash( path.Hash(), assetFile );
-    }
-
-    if ( !assetFile )
-    {
-        assetFile = new AssetFile( path );
-    }
-
+    AssetFilePtr assetFile = new AssetFile( path );
     return assetFile;
 }
 

@@ -52,32 +52,6 @@ BrowserStatusBar::~BrowserStatusBar()
     Disconnect( m_ProgressTimer.GetId(), wxEVT_TIMER, wxTimerEventHandler( BrowserStatusBar::OnTimer ), NULL, this );
 }
 
-void BrowserStatusBar::UpdateTrackerStatus( bool inProgress )
-{
-    m_ProgressTimer.Start( s_ProgressMiliseconds );
-
-    if ( inProgress )
-    {
-        m_Throbber->Play();
-        m_Throbber->Show();
-        m_Throbber->SetToolTip( s_TooltipInProgress );
-        std::string label( m_InitialIndexingCompleted ? s_TrackingUpdating : s_TrackingInProgress );
-        label += m_PercentComplete;
-        m_Message->SetLabel( label );
-        m_Message->SetToolTip( s_TooltipInProgress );
-        m_Message->Show();
-    }
-    else
-    {
-        m_Throbber->Stop();
-        m_Throbber->Hide();
-        m_Throbber->SetToolTip( m_IndexingFailed ? s_TooltipFailed : s_TooltipComplete );
-        m_Message->SetLabel( m_IndexingFailed ? s_TrackingFailed : s_TrackingComplete );
-        m_Message->SetToolTip( m_IndexingFailed ? s_TooltipFailed : s_TooltipComplete );
-        m_Message->Show();
-    }
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // Trims the specified string to the width (in pixels) requested.  The string
 // will be prefixed with "...".
@@ -211,43 +185,5 @@ void BrowserStatusBar::OnSize( wxSizeEvent& args )
 
 void BrowserStatusBar::OnTimer( wxTimerEvent& args )
 {
-    Asset::Tracker* assetTracker = wxGetApp().GetAssetTracker();
-
-    if ( !assetTracker )
-    {
-        return;
-    }
-
-    m_IndexingFailed = assetTracker->DidIndexingFail();
-    if ( m_IndexingFailed )
-    {
-        UpdateTrackerStatus( false );
-    }
-    else
-    {
-        u32 total = assetTracker->GetTrackingTotal();
-        if ( total ) 
-        {
-            u32 currProgress = assetTracker->GetTrackingProgress();
-            u32 percentComplete = (u32)(((f32)currProgress/(f32)total) * 100);
-
-            std::stringstream ss;
-            ss << percentComplete << "%";
-
-            std::string newPercentage;
-            newPercentage = ss.str();
-            if ( newPercentage != m_PercentComplete )
-            {
-                m_InitialIndexingCompleted = assetTracker->InitialIndexingCompleted();
-                m_PercentComplete = newPercentage;
-                UpdateTrackerStatus( assetTracker->IsTracking() );
-            }
-        }
-        else
-        {
-            m_PercentComplete = "100%";
-            UpdateTrackerStatus( false );
-        }
-    }
 }
 

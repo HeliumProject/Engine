@@ -2,7 +2,6 @@
 
 #include "Pipeline/API.h"
 #include "AssetClass.h"
-#include "Pipeline/Asset/Tracker/CacheDB.h"
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Memory/SmartPtr.h"
@@ -27,7 +26,7 @@ namespace Asset
     AssetFile( Nocturnal::Path& path );
     virtual ~AssetFile();
 
-    static AssetFilePtr FindAssetFile( const std::string& path, CacheDB* cache = NULL );
+    static AssetFilePtr CreateAssetFile( const std::string& path );
 
   public:
     std::string GetFilePath()

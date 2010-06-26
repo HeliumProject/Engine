@@ -58,7 +58,7 @@ namespace Luna
     BrowserFrame( Browser* browser, BrowserSearch* browserSearch, SearchHistory* searchHistory, wxWindow* parent = NULL );
     virtual ~BrowserFrame();
 
-    void Search( const std::string& queryString, const AssetCollection* collection = NULL, const std::string& selectPath = std::string("") );
+    void Search( const std::string& queryString, const AssetCollection* collection = NULL );
 
     void GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders );
 

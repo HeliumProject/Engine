@@ -3,7 +3,6 @@
 #include "Platform/Compiler.h"
 #include "Foundation/InitializerStack.h"
 
-#include "Pipeline/Asset/Tracker/Tracker.h"
 #include "Editor/DocumentManager.h"
 #include "Scene/SceneEditor.h"
 
@@ -25,11 +24,6 @@ namespace Luna
 
         std::string ShowFileBrowser();
 
-        Asset::Tracker* GetAssetTracker()
-        {
-            return m_AssetTracker;
-        }
-
         DocumentManager* GetDocumentManager()
         {
             return m_DocumentManager;
@@ -46,7 +40,6 @@ namespace Luna
 
     protected:
         Nocturnal::InitializerStack m_InitializerStack;
-        Asset::Tracker* m_AssetTracker;
         DocumentManager* m_DocumentManager;
         SceneEditor* m_SceneEditor;
     };

@@ -9,8 +9,6 @@
 #include "Application/Inspect/Reflect/InspectReflectInit.h"
 #include "Application/Inspect/Reflect/ReflectInterpreter.h"
 
-#include "Pipeline/Dependencies/Dependencies.h"
-
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Pipeline/Component/ComponentHandle.h"

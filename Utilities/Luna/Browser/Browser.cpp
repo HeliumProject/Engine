@@ -10,7 +10,6 @@
 
 #include "Pipeline/Asset/AssetFolder.h"
 #include "Pipeline/Asset/AssetFile.h"
-#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Foundation/Environment.h"
 #include "Foundation/Exception.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
@@ -44,8 +43,6 @@ void Browser::Initialize()
 
     s_InitializerStack.Push( Reflect::RegisterClass<BrowserPreferences>( "BrowserPreferences" ) );
 
-    s_InitializerStack.Push( Luna::BrowserSearchDatabase::Initialize, Luna::BrowserSearchDatabase::Cleanup );
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -69,9 +66,6 @@ Browser::Browser( const std::string& rootDirectory, const std::string& configDir
 , m_HasFrame( false )
 , m_BrowserPreferences( new BrowserPreferences() )
 {
-    Nocturnal::Path dbFilepath( m_RootDirectory + "/.tracker/cache.db" );
-    m_CacheDB = new Asset::CacheDB( "LunaBrowser-AssetCacheDB", dbFilepath.Get(), m_ConfigDirectory, SQLITE_OPEN_READONLY );
-
     InitializePreferences();
 
     // Create the one and only BrowserSearch
@@ -93,7 +87,6 @@ Browser::~Browser()
     m_HasFrame = false;
     m_BrowserSearch = NULL;
     m_SearchHistory = NULL;
-    m_CacheDB = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,6 @@
 #include "BrowserEvents.h"
 #include "SearchQuery.h"
 
-#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
 #include "Platform/Mutex.h"
@@ -48,7 +47,6 @@ namespace Luna
 
         std::string       m_RootDirectory;
         std::string       m_ConfigDirectory;
-        Asset::CacheDBPtr m_CacheDB;
 
         // SearchResults and Status
         // DO NO CHANGE OR ACCESS outside of m_SearchResultsMutex

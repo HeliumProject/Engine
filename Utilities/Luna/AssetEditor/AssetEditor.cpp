@@ -25,7 +25,6 @@
 #include "Foundation/File/Path.h"
 
 #include "Foundation/Log.h"
-#include "Task/Build.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 #include "Editor/ContextMenu.h"
 #include "Editor/EditorInfo.h"
@@ -1427,7 +1426,9 @@ void AssetEditor::OnBuild( wxCommandEvent& args )
             {
                 assetFiles.insert( (*itr)->GetPath() );
             }
-            Luna::BuildAssets( assetFiles, this, NULL, showOptions );
+            NOC_BREAK();
+#pragma TODO( "Figure out how to handle the idea of 'building'" )
+//            Luna::BuildAssets( assetFiles, this, NULL, showOptions );
         }
     }
 }

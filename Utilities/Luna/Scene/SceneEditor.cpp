@@ -49,7 +49,6 @@
 #include "Application/Inspect/Widgets/Control.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
-#include "Task/Build.h"
 #include "Application/UI/FileDialog.h"
 #include "Application/UI/ImageManager.h"
 #include "Application/UI/SortTreeCtrl.h"
@@ -967,45 +966,6 @@ CameraMode SceneEditor::SceneEditorIDToCameraMode( SceneEditorID id )
     RM_CamModeToSceneID::M_BToA::const_iterator found = s_CameraModeToSceneID.BToA().find( id );
     NOC_ASSERT( found != s_CameraModeToSceneID.BToA().end() );
     return *found->second;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Build all assets that are currently loaded.
-// 
-void SceneEditor::BuildAllLoadedAssets()
-{
-    std::set< Nocturnal::Path > assets;
-
-    // hand over the current level's referenced stuff.
-    Asset::SceneAsset* currentLevel = m_SceneManager.GetCurrentLevel();
-
-    // iterate over every entity instance, adding them to the viewers' scene
-    const M_SceneSmartPtr& scenes = m_SceneManager.GetScenes();
-
-    for each ( const M_SceneSmartPtr::value_type& val in scenes )
-    {
-        ScenePtr scene = val.second;
-
-        V_EntityDumbPtr entities;
-
-        scene->GetAll< Luna::Entity>( entities );
-
-        for each ( const EntityPtr entity in entities )
-        {
-            if ( !entity->IsTransient() )
-            {
-                assets.insert( entity->GetClassSet()->GetEntityAssetPath() );
-            }
-        }
-    }
-
-    std::string error;
-    if ( !wxGetApp().GetDocumentManager()->SaveAll( error ) )
-    {
-#pragma TODO( "Pop up error modal" )
-        NOC_BREAK();
-    }
-    BuildAssets( assets, this );
 }
 
 void SceneEditor::OnEraseBackground(wxEraseEvent& event)

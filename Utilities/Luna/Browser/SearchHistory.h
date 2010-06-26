@@ -46,7 +46,7 @@ namespace Luna
 
     void SetBrowserSearch( BrowserSearch* browserSearch );
 
-    void RunNewQuery( const std::string& queryString, const AssetCollection* collection = NULL, const std::string& selectPath = std::string("") );
+    void RunNewQuery( const std::string& queryString, const AssetCollection* collection = NULL );
     bool RunCurrentQuery();
 
     //

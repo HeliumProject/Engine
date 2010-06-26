@@ -5,7 +5,6 @@
 
 #include "Application/Application.h"
 #include "AssetEditor/AssetInit.h"
-#include "Pipeline/Asset/Tracker/Tracker.h"
 #include "Browser/Browser.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Log.h"
@@ -40,7 +39,6 @@ namespace Luna
 
 LunaApp::LunaApp()
 : wxApp()
-, m_AssetTracker( NULL )
 , m_DocumentManager( new DocumentManager() )
 , m_SceneEditor( NULL )
 {
@@ -48,11 +46,6 @@ LunaApp::LunaApp()
 
 LunaApp::~LunaApp()
 {
-    if ( m_AssetTracker )
-    {
-        delete m_AssetTracker;
-    }
-
     if ( m_DocumentManager )
     {
         delete m_DocumentManager;
@@ -181,12 +174,6 @@ int LunaApp::OnExit()
 {
   // Save preferences
     ::Luna::GetApplicationPreferences()->SavePreferences();
-
-  if ( m_AssetTracker )
-  {
-      m_AssetTracker->StopThread();
-      delete m_AssetTracker;
-  }
 
   Nocturnal::ImageManagerCleanup();
 

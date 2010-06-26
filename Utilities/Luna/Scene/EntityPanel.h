@@ -95,8 +95,6 @@ namespace Luna
         void OnEntityAssetRefresh( Inspect::Button* button );
         void OnEntityAssetEditAsset( Inspect::Button* button );
         void OnEntityAssetEditArt( Inspect::Button* button );
-        void OnEntityAssetBuild( Inspect::Button* button );
-        void OnEntityAssetView( Inspect::Button* button );
         void OnEntityAssetRevisionHistory( Inspect::Button* button );
         void OnEntityAssetDrop( const Inspect::FilteredDropTargetArgs& args );
         void OnCubeMapEditAsset( Inspect::Button* button );

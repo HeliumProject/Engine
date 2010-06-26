@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib"
+				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(DirectX)\lib\x86&quot;"
 				IgnoreDefaultLibraryNames=""
@@ -157,7 +157,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib"
+				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;;&quot;$(DirectX)\lib\x64&quot;"
 				IgnoreDefaultLibraryNames=""
@@ -242,7 +242,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib"
+				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(DirectX)\lib\x86&quot;"
 				IgnoreDefaultLibraryNames=""
@@ -327,7 +327,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib"
+				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;;&quot;$(DirectX)\lib\x64&quot;"
 				IgnoreDefaultLibraryNames=""
@@ -416,7 +416,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib"
+				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(DirectX)\lib\x86&quot;"
 				IgnoreDefaultLibraryNames=""
@@ -504,7 +504,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib"
+				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;;&quot;$(DirectX)\lib\x64&quot;"
 				IgnoreDefaultLibraryNames=""
@@ -589,7 +589,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib"
+				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(DirectX)\lib\x86&quot;"
 				IgnoreDefaultLibraryNames=""
@@ -674,7 +674,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib"
+				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;;&quot;$(DirectX)\lib\x64&quot;"
 				IgnoreDefaultLibraryNames=""
@@ -1039,14 +1039,6 @@
 		<Filter
 			Name="Task"
 			>
-			<File
-				RelativePath=".\Task\Build.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Task\Build.h"
-				>
-			</File>
 			<File
 				RelativePath=".\Task\Export.cpp"
 				>

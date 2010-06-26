@@ -15,7 +15,7 @@ void ReflectClipboardData::EnumerateClass( Reflect::Compositor<ReflectClipboardD
 // 
 void ReflectClipboardData::InitializeType()
 {
-  Reflect::RegisterClass< ReflectClipboardData >( "ReflectClipboardData" );
+  Reflect::RegisterClass< ReflectClipboardData >( TXT( "ReflectClipboardData" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

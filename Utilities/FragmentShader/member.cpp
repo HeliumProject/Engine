@@ -222,22 +222,22 @@ Member::ToString() const
 	switch (m_type)
 	{
 	case Int:
-		value.Printf("%d", *m_int);
+		value.Printf( wxT( "%d" ), *m_int);
 		break;
 	case Bool:
-		value = *m_bool ? "true" : "false";
+		value = *m_bool ? wxT( "true" ) : wxT( "false" );
 		break;
 	case Double:
-		value.Printf("%g", *m_double);
+		value.Printf( wxT( "%g" ), *m_double);
 		break;
 	case String:
 		value = *m_string;
 		break;
 	case Color:
-		value.Printf("0x%.2x%.2x%.2x%.2x", m_color->Red(), m_color->Green(), m_color->Blue(), m_color->Alpha());
+		value.Printf( wxT( "0x%.2x%.2x%.2x%.2x" ), m_color->Red(), m_color->Green(), m_color->Blue(), m_color->Alpha());
 		break;
 	case Rect:
-		value.Printf(wxT("%d, %d, %d, %d"),m_rect->GetLeft(), m_rect->GetTop(), m_rect->GetRight(), m_rect->GetBottom());
+		value.Printf(wxT( "%d, %d, %d, %d" ),m_rect->GetLeft(), m_rect->GetTop(), m_rect->GetRight(), m_rect->GetBottom());
 		break;
 	}
 	return value;

@@ -31,9 +31,9 @@ void InspectContent::Initialize()
     g_InitializerStack.Push( Inspect::Initialize, InspectReflect::Cleanup );
     g_InitializerStack.Push( InspectReflect::Initialize, Inspect::Cleanup );
 
-    g_InitializerStack.Push( Reflect::RegisterClass<ParametricKeyControl>( "InspectParametricKeyControl" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<Key>( "InspectKey" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<KeyClipboardData>( "InspectKeyClipboardData" ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<ParametricKeyControl>( TXT( "InspectParametricKeyControl" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Key>( TXT( "InspectKey" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<KeyClipboardData>( TXT( "InspectKeyClipboardData" ) ) );
 
     //ReflectFieldInterpreterFactory::Register<ParametricKeyInterpreter>( Reflect::GetType<Reflect::ElementArraySerializer>(), Content::ContentFlags::ParametricKey );
   }

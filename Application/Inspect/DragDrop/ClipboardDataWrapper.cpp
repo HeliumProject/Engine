@@ -15,7 +15,7 @@ void ClipboardDataWrapper::EnumerateClass( Reflect::Compositor<ClipboardDataWrap
 // 
 void ClipboardDataWrapper::InitializeType()
 {
-  Reflect::RegisterClass< ClipboardDataWrapper >( "ClipboardDataWrapper" );
+  Reflect::RegisterClass< ClipboardDataWrapper >( TXT( "ClipboardDataWrapper" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

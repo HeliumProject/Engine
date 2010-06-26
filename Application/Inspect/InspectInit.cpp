@@ -28,24 +28,24 @@ void Inspect::Initialize()
 {
   if ( ++g_InitCount == 1 )
   {
-    g_InitializerStack.Push( Reflect::RegisterClass<Control>( "InspectControl" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<Container>( "InspectContainer" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<Group>( "InspectGroup" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<Panel>( "InspectPanel" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<Canvas>( "InspectCanvas" ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Control>( TXT( "InspectControl" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Container>( TXT( "InspectContainer" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Group>( TXT( "InspectGroup" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Panel>( TXT( "InspectPanel" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Canvas>( TXT( "InspectCanvas" ) ) );
 
-    g_InitializerStack.Push( Reflect::RegisterClass<Button>( "InspectButton" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<Action>( "InspectAction" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<CheckBox>( "InspectCheckBox" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<CheckList>( "InspectCheckList" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<ColorPicker>( "InspectColorPicker" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<Label>( "InspectLabel" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<List>( "InspectList" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<Slider>( "InspectSlider" ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Button>( TXT( "InspectButton" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Action>( TXT( "InspectAction" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<CheckBox>( TXT( "InspectCheckBox" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<CheckList>( TXT( "InspectCheckList" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<ColorPicker>( TXT( "InspectColorPicker" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Label>( TXT( "InspectLabel" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<List>( TXT( "InspectList" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Slider>( TXT( "InspectSlider" ) ) );
 
-    g_InitializerStack.Push( Reflect::RegisterClass<Items>( "InspectItems" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<Choice>( "InspectChoice" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<Value>( "InspectValue" ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Items>( TXT( "InspectItems" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Choice>( TXT( "InspectChoice" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<Value>( TXT( "InspectValue" ) ) );
 
     g_InitializerStack.Push( Script::Initialize, Script::Cleanup );
 

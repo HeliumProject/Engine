@@ -17,9 +17,9 @@ bool g_RCS = false;
 bool g_XML = false;
 bool g_Binary = false;
 bool g_Verify = false;
-std::string g_Batch = "";
-std::string g_Input = "";
-std::string g_Output = "";
+tstring g_Batch = TXT( "" );
+tstring g_Input = TXT( "" );
+tstring g_Output = TXT( "" );
 
 enum RebuildCodes
 {
@@ -46,14 +46,14 @@ int g_RebuildTotals[REBUILD_CODE_COUNT] =
     0,
 };
 
-std::vector< std::string > g_RebuildResults[REBUILD_CODE_COUNT];
+std::vector< tstring > g_RebuildResults[REBUILD_CODE_COUNT];
 
 namespace Reflect
 {
     FOUNDATION_API extern bool g_OverrideCRC;
 }
 
-int ProcessFile(const std::string& input, const std::string& output)
+int ProcessFile(const tstring& input, const tstring& output)
 {
     //
     // Verify only
@@ -77,13 +77,13 @@ int ProcessFile(const std::string& input, const std::string& output)
             }
             catch (Nocturnal::Exception& ex)
             {
-                Log::Error("Verify FAILED: %s\n", ex.what());
+                Log::Error( TXT( "Verify FAILED: %s\n" ), ex.what());
                 return REBUILD_BAD_READ;
             }
         }
 
-        Log::Print("\n" );
-        Log::Print("Verified OK\n");
+        Log::Print( TXT( "\n" ) );
+        Log::Print( TXT( "Verified OK\n" ) );
         return REBUILD_SUCCESS;
     }
 
@@ -108,7 +108,7 @@ int ProcessFile(const std::string& input, const std::string& output)
         }
         catch (Nocturnal::Exception& ex)
         {
-            Log::Error("%s\n", ex.what());
+            Log::Error( TXT( "%s\n" ), ex.what());
             return REBUILD_BAD_READ;
         }
     }
@@ -135,7 +135,7 @@ int ProcessFile(const std::string& input, const std::string& output)
         version = new Version ();
     }
 
-    version->m_Source = "rebuild";
+    version->m_Source = TXT( "rebuild" );
     version->m_SourceVersion = NOCTURNAL_VERSION_STRING;
 
 
@@ -158,7 +158,7 @@ int ProcessFile(const std::string& input, const std::string& output)
             }
             catch (RCS::Exception& ex)
             {
-                Log::Error("%s\n", ex.what());
+                Log::Error( TXT( "%s\n" ), ex.what());
                 return REBUILD_BAD_WRITE;
             }
         }
@@ -178,7 +178,7 @@ int ProcessFile(const std::string& input, const std::string& output)
         }
         catch (Nocturnal::Exception& ex)
         {
-            Log::Error("%s\n", ex.what());
+            Log::Error( TXT( "%s\n" ), ex.what());
             return REBUILD_BAD_WRITE;
         }
     }
@@ -206,49 +206,49 @@ int ProcessFile(const std::string& input, const std::string& output)
             }
             catch (Nocturnal::Exception& ex)
             {
-                Log::Print("Verify FAILED: %s\n", ex.what());
+                Log::Print( TXT( "Verify FAILED: %s\n" ), ex.what());
                 return REBUILD_BAD_WRITE;
             }
         }
     }
 
-    Log::Print("\n" );
-    Log::Print("Verified OK\n");
+    Log::Print( TXT( "\n" ) );
+    Log::Print( TXT( "Verified OK\n" ) );
     return REBUILD_SUCCESS;
 }
 
-int Main(int argc, const char** argv)
+int Main(int argc, const tchar** argv)
 {
     if ( argc < 2 )
     {
-        Log::Print("rebuild - Update Utility for Insomniac Games Reflect File Format\n\n");
-        Log::Print(" rebuild <input> [output]\n\n");
+        Log::Print( TXT( "rebuild - Update Utility for Insomniac Games Reflect File Format\n\n" ) );
+        Log::Print( TXT( " rebuild <input> [output]\n\n" ) );
         return REBUILD_BAD_INPUT;
     }
 
     for ( int i=1; i<argc; ++i )
     {
-        if ( !stricmp(argv[i], "-crc") )
+        if ( !_tcsicmp(argv[i], TXT( "-crc" ) ) )
         {
             Reflect::g_OverrideCRC = true;
         }
-        else if ( !stricmp(argv[i], "-rcs") )
+        else if ( !_tcsicmp(argv[i], TXT( "-rcs" ) ) )
         {
             g_RCS = true;
         }
-        else if ( !stricmp(argv[i], "-xml") )
+        else if ( !_tcsicmp(argv[i], TXT( "-xml" ) ) )
         {
             g_XML = true;
         }
-        else if ( !stricmp(argv[i], "-binary") )
+        else if ( !_tcsicmp(argv[i], TXT( "-binary" ) ) )
         {
             g_Binary = true;
         }
-        else if ( !stricmp(argv[i], "-verify") )
+        else if ( !_tcsicmp(argv[i], TXT( "-verify" ) ) )
         {
             g_Verify = true;
         }
-        else if ( !stricmp(argv[i], "-batch") && i+1 < argc )
+        else if ( !_tcsicmp(argv[i], TXT( "-batch" ) ) && i+1 < argc )
         {
             g_Batch = argv[++i];
         }
@@ -282,22 +282,22 @@ int Main(int argc, const char** argv)
     }
     else
     {
-        std::fstream batchfile;
+        tfstream batchfile;
         batchfile.open(g_Batch.c_str(), std::ios_base::in);
 
         if (!batchfile.is_open())
         {
-            Log::Error( "Unable to open file '%s' for read\n", g_Batch.c_str() );
+            Log::Error( TXT( "Unable to open file '%s' for read\n" ), g_Batch.c_str() );
         }
         else
         {
             while (!batchfile.eof())
             {       
-                std::string line, input, output;
+                tstring line, input, output;
                 std::getline(batchfile, line);
 
                 size_t off = line.find_first_of('|');
-                if ( off != std::string::npos )
+                if ( off != tstring::npos )
                 {
                     input = line.substr(0, off);
                     output = line.substr(off+1);
@@ -315,12 +315,12 @@ int Main(int argc, const char** argv)
                 {
                     if (g_XML)
                     {
-                        outputPath.ReplaceExtension( "xml" );
+                        outputPath.ReplaceExtension( TXT( "xml" ) );
                     }
 
                     if (g_Binary)
                     {
-                        outputPath.ReplaceExtension( "rb" );
+                        outputPath.ReplaceExtension( TXT( "rb" ) );
                     }
 
                     // do work
@@ -337,17 +337,17 @@ int Main(int argc, const char** argv)
 
             batchfile.close();
 
-            Log::Print("Rebuild Report:\n");
+            Log::Print( TXT( "Rebuild Report:\n" ) );
             for (int i=0; i<REBUILD_CODE_COUNT; i++)
             {
-                Log::Print(" %s: %d\n", g_RebuildStrings[i], g_RebuildTotals[i]);
+                Log::Print( TXT( " %s: %d\n" ), g_RebuildStrings[i], g_RebuildTotals[i]);
                 if (i > 0)
                 {
-                    std::vector< std::string >::const_iterator itr = g_RebuildResults[i].begin();
-                    std::vector< std::string >::const_iterator end = g_RebuildResults[i].end();
+                    std::vector< tstring >::const_iterator itr = g_RebuildResults[i].begin();
+                    std::vector< tstring >::const_iterator end = g_RebuildResults[i].end();
                     for ( int count = 0; itr != end; ++itr, ++count )
                     {
-                        Log::Print("  [%d]: %s\n", count, itr->c_str());
+                        Log::Print( TXT( "  [%d]: %s\n" ), count, itr->c_str());
                     }
                 }
             }
@@ -362,7 +362,7 @@ int Main(int argc, const char** argv)
     return result;
 }
 
-int main(int argc, const char** argv)
+int main(int argc, const tchar** argv)
 {
     return Application::StandardMain( &Main, argc, argv );
 }

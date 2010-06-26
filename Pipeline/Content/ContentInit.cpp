@@ -78,95 +78,95 @@ namespace Content
       g_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
       g_InitializerStack.Push( Component::Initialize, Component::Cleanup );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<ContentVersion>( "ContentVersion" ) );
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<ContentTypes::ContentType>( &ContentTypes::ContentTypeEnumerateEnumeration, "ContentType" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<ContentVersion>( TXT( "ContentVersion" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterEnumeration<ContentTypes::ContentType>( &ContentTypes::ContentTypeEnumerateEnumeration, TXT( "ContentType" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<SceneNode>( "SceneNode" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<HierarchyNode>( "HierarchyNode" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Hierarchy>( "Hierarchy" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<SceneNode>( TXT( "SceneNode" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<HierarchyNode>( TXT( "HierarchyNode" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Hierarchy>( TXT( "Hierarchy" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<Transform>( "Transform" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<PivotTransform>( "PivotTransform" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<JointTransform>( "JointTransform" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Transform>( TXT( "Transform" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<PivotTransform>( TXT( "PivotTransform" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<JointTransform>( TXT( "JointTransform" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<Instance>( "Instance" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Instance>( TXT( "Instance" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<VolumeShapes::VolumeShape>( &VolumeShapes::VolumeShapeEnumerateEnumeration, "VolumeShape" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Volume>( "Volume" ) );
+      g_InitializerStack.Push( Reflect::RegisterEnumeration<VolumeShapes::VolumeShape>( &VolumeShapes::VolumeShapeEnumerateEnumeration, TXT( "VolumeShape" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Volume>( TXT( "Volume" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<LocatorShapes::LocatorShape>( &LocatorShapes::LocatorShapeEnumerateEnumeration, "LocatorShape" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Locator>( "Locator" ) );
+      g_InitializerStack.Push( Reflect::RegisterEnumeration<LocatorShapes::LocatorShape>( &LocatorShapes::LocatorShapeEnumerateEnumeration, TXT( "LocatorShape" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Locator>( TXT( "Locator" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<Camera>( "Camera" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Camera>( TXT( "Camera" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<Layer>( "Layer" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Zone>( "Zone" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Region>( "Region" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Layer>( TXT( "Layer" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Zone>( TXT( "Zone" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Region>( TXT( "Region" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<MorphTargetDelta>( "MorphTargetDelta" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<MorphTarget>( "MorphTarget" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<MorphTargetDelta>( TXT( "MorphTargetDelta" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<MorphTarget>( TXT( "MorphTarget" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<Mesh::MeshOriginType>( &Mesh::MeshOriginTypeEnumeration, "MeshOriginType" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Mesh>( "Mesh" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Shader>( "Shader" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Effector>( "Effector" ) );
+      g_InitializerStack.Push( Reflect::RegisterEnumeration<Mesh::MeshOriginType>( &Mesh::MeshOriginTypeEnumeration, TXT( "MeshOriginType" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Mesh>( TXT( "Mesh" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Shader>( TXT( "Shader" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Effector>( TXT( "Effector" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<CollisionShapes::CollisionShape>( &CollisionShapes::CollisionShapeEnumerateEnumeration, "CollisionShape" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<CollisionPrimitive>( "CollisionPrimitive" ) );
+      g_InitializerStack.Push( Reflect::RegisterEnumeration<CollisionShapes::CollisionShape>( &CollisionShapes::CollisionShapeEnumerateEnumeration, TXT( "CollisionShape" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<CollisionPrimitive>( TXT( "CollisionPrimitive" ) ) );
       Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass<CollisionPrimitive>(), TXT( "CollisionVolume" ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<Influence>( "Influence" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Skin>( "Skin" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Influence>( TXT( "Influence" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Skin>( TXT( "Skin" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<Point>( "Point" ) );
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<CurveTypes::CurveType>( &CurveTypes::CurveTypeEnumerateEnumeration, "CurveType" ) );
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<ControlPointLabels::ControlPointLabel>( &ControlPointLabels::ControlPointLabelEnumerateEnumeration, "ControlPointLabel" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Curve>( "Curve" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Point>( TXT( "Point" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterEnumeration<CurveTypes::CurveType>( &CurveTypes::CurveTypeEnumerateEnumeration, TXT( "CurveType" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterEnumeration<ControlPointLabels::ControlPointLabel>( &ControlPointLabels::ControlPointLabelEnumerateEnumeration, TXT( "ControlPointLabel" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Curve>( TXT( "Curve" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<MorphTargetWeight>( "MorphTargetWeight" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<FrameMorphTargets>( "FrameMorphTargets" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<FrameWrinkleMap>( "FrameWrinkleMap" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<MorphTargetWeight>( TXT( "MorphTargetWeight" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<FrameMorphTargets>( TXT( "FrameMorphTargets" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<FrameWrinkleMap>( TXT( "FrameWrinkleMap" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<CompressedAnimation>( "CompressedAnimation" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<CompressedAnimation>( TXT( "CompressedAnimation" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<Animation>( "Animation" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<AnimationClip>( "AnimationClip" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Animation>( TXT( "Animation" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<AnimationClip>( TXT( "AnimationClip" ) ) );
 
       // descriptor
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<GeometrySimulations::GeometrySimulation>( &GeometrySimulations::GeometrySimulationEnumerateEnumeration, "GeometrySimulation" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Descriptor>( "Descriptor" ) );
+      g_InitializerStack.Push( Reflect::RegisterEnumeration<GeometrySimulations::GeometrySimulation>( &GeometrySimulations::GeometrySimulationEnumerateEnumeration, TXT( "GeometrySimulation" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Descriptor>( TXT( "Descriptor" ) ) );
 
       // area light sources
-      g_InitializerStack.Push( Reflect::RegisterClass<AreaLight>( "AreaLight" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<RadiusLight>( "RadiusLight" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<SphereLight>( "SphereLight" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<RectangleLight>( "RectangleLight" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<CylinderLight>( "CylinderLight" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<DiscLight>( "DiscLight" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<AreaLight>( TXT( "AreaLight" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<RadiusLight>( TXT( "RadiusLight" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<SphereLight>( TXT( "SphereLight" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<RectangleLight>( TXT( "RectangleLight" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<CylinderLight>( TXT( "CylinderLight" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<DiscLight>( TXT( "DiscLight" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<ParametricKey>( "ParametricKey" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<ParametricColorKey>( "ParametricColorKey" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<ParametricIntensityKey>( "ParametricIntensityKey" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<ParametricKey>( TXT( "ParametricKey" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<ParametricColorKey>( TXT( "ParametricColorKey" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<ParametricIntensityKey>( TXT( "ParametricIntensityKey" ) ) );
 
       // lights
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<LightTypes::LightType>( &LightTypes::LightTypeEnumerateEnumeration, "LightType" ) );
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<LightRenderTypes::LightRenderType>( &LightRenderTypes::LightRenderTypeEnumerateEnumeration, "LightRenderType" ) );
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<LensFlareTypes::LensFlareType>( &LensFlareTypes::LensFlareTypeEnumerateEnumeration, "LensFlareType" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Light>( "Light" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<SpotLight>( "SpotLight" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<PointLight>( "PointLight" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<DirectionalLight>( "DirectionalLight" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<ShadowDirection>( "ShadowDirection" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<SunLight>( "SunLight" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<PortalLight>( "PortalLight" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<AmbientLight>( "AmbientLight" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<AmbientVolumeLight>( "AmbientVolumeLight" ) );
+      g_InitializerStack.Push( Reflect::RegisterEnumeration<LightTypes::LightType>( &LightTypes::LightTypeEnumerateEnumeration, TXT( "LightType" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterEnumeration<LightRenderTypes::LightRenderType>( &LightRenderTypes::LightRenderTypeEnumerateEnumeration, TXT( "LightRenderType" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterEnumeration<LensFlareTypes::LensFlareType>( &LensFlareTypes::LensFlareTypeEnumerateEnumeration, TXT( "LensFlareType" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<Light>( TXT( "Light" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<SpotLight>( TXT( "SpotLight" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<PointLight>( TXT( "PointLight" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<DirectionalLight>( TXT( "DirectionalLight" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<ShadowDirection>( TXT( "ShadowDirection" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<SunLight>( TXT( "SunLight" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<PortalLight>( TXT( "PortalLight" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<AmbientLight>( TXT( "AmbientLight" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<AmbientVolumeLight>( TXT( "AmbientVolumeLight" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<JointOrdering>( "JointOrdering" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<JointOrdering>( TXT( "JointOrdering" ) ) );
 
       // Visibility
-      g_InitializerStack.Push( Reflect::RegisterClass<NodeVisibility>( "NodeVisibility" ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<SceneVisibility>( "SceneVisibility" ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<NodeVisibility>( TXT( "NodeVisibility" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<SceneVisibility>( TXT( "SceneVisibility" ) ) );
     }
   }
 

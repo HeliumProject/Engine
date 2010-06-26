@@ -40,7 +40,7 @@ using namespace Reflect;
   Nocturnal::Insert<M_AssetTypeInfo>::Result et_inserted;
 
 #define ASSET_REGISTER_ENGINETYPE( __AssetTypeName )                           \
-  et_inserted = g_AssetTypeInfos.insert( M_AssetTypeInfo::value_type( AssetTypes::__AssetTypeName, AssetTypeInfo( #__AssetTypeName, #__AssetTypeName"Builder.dll" ) ) );
+  et_inserted = g_AssetTypeInfos.insert( M_AssetTypeInfo::value_type( AssetTypes::__AssetTypeName, AssetTypeInfo( #__AssetTypeName, #__AssetTypeName"Builder.dll" ) ) ) );
 
 #define _ASSET_REGISTER_ENGINETYPE_SET_MEMBER( __MemberName, __Value )          \
   if ( et_inserted.second ) et_inserted.first->second.__MemberName = __Value;
@@ -83,44 +83,44 @@ void Asset::Initialize()
     // Numbered asset conversion
     //
 
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ExporterJob>( "ExporterJob" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<ExporterJob>( TXT( "ExporterJob" ) ) );
 
 
     //
     // Enums
     //
 
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<RunTimeFilters::RunTimeFilter>( &RunTimeFilters::RunTimeFilterEnumerateEnumeration, "RunTimeFilter" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<WrapModes::WrapMode>( &WrapModes::WrapModeEnumerateEnumeration, "WrapMode" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<AlphaTypes::AlphaType>( &AlphaTypes::AlphaTypeEnumerateEnumeration, "AlphaType" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<WetSurfaceTypes::WetSurfaceType>( &WetSurfaceTypes::WetSurfaceTypeEnumerateEnumeration, "WetSurfaceType" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<MipGenFilterTypes::MipGenFilterType>( &MipGenFilterTypes::MipGenFilterTypeEnumerateEnumeration, "MipGenFilterType" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<PostMipFilterTypes::PostMipFilterType>( &PostMipFilterTypes::PostMipFilterTypeEnumerateEnumeration, "PostMipFilterType" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<ReductionRatios::ReductionRatio>( &ReductionRatios::ReductionRatioEnumerateEnumeration, "ReductionRatio" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<ColorTexFormats::ColorTexFormat>( &ColorTexFormats::ColorTexFormatEnumerateEnumeration, "ColorTexFormat" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<NormalTexFormats::NormalTexFormat>( &NormalTexFormats::NormalTexFormatEnumerateEnumeration, "NormalTexFormat" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<GlossParaIncanTexFormats::GlossParaIncanTexFormat>( &GlossParaIncanTexFormats::GlossParaIncanTexFormatEnumerateEnumeration, "GlossParaIncanTexFormat" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<CubeSpecTypeFormats::CubeSpecTypeFormat>( &CubeSpecTypeFormats::CubeSpecTypeFormatEnumerateEnumeration, "CubeSpecTypeFormat" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<DetailTexFormats::DetailTexFormat>( &DetailTexFormats::DetailTexFormatEnumerateEnumeration, "DetailTexFormat" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<Asset::AssetType>( &AssetTypes::AssetTypeEnumerateEnumeration, "AssetType" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<RunTimeFilters::RunTimeFilter>( &RunTimeFilters::RunTimeFilterEnumerateEnumeration, TXT( "RunTimeFilter" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<WrapModes::WrapMode>( &WrapModes::WrapModeEnumerateEnumeration, TXT( "WrapMode" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<AlphaTypes::AlphaType>( &AlphaTypes::AlphaTypeEnumerateEnumeration, TXT( "AlphaType" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<WetSurfaceTypes::WetSurfaceType>( &WetSurfaceTypes::WetSurfaceTypeEnumerateEnumeration, TXT( "WetSurfaceType" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<MipGenFilterTypes::MipGenFilterType>( &MipGenFilterTypes::MipGenFilterTypeEnumerateEnumeration, TXT( "MipGenFilterType" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<PostMipFilterTypes::PostMipFilterType>( &PostMipFilterTypes::PostMipFilterTypeEnumerateEnumeration, TXT( "PostMipFilterType" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<ReductionRatios::ReductionRatio>( &ReductionRatios::ReductionRatioEnumerateEnumeration, TXT( "ReductionRatio" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<ColorTexFormats::ColorTexFormat>( &ColorTexFormats::ColorTexFormatEnumerateEnumeration, TXT( "ColorTexFormat" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<NormalTexFormats::NormalTexFormat>( &NormalTexFormats::NormalTexFormatEnumerateEnumeration, TXT( "NormalTexFormat" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<GlossParaIncanTexFormats::GlossParaIncanTexFormat>( &GlossParaIncanTexFormats::GlossParaIncanTexFormatEnumerateEnumeration, TXT( "GlossParaIncanTexFormat" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<CubeSpecTypeFormats::CubeSpecTypeFormat>( &CubeSpecTypeFormats::CubeSpecTypeFormatEnumerateEnumeration, TXT( "CubeSpecTypeFormat" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<DetailTexFormats::DetailTexFormat>( &DetailTexFormats::DetailTexFormatEnumerateEnumeration, TXT( "DetailTexFormat" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<Asset::AssetType>( &AssetTypes::AssetTypeEnumerateEnumeration, TXT( "AssetType" ) ) );
 
     //
     // Basic Types
     //
 
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetTemplate>( "AssetTemplate" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetVersion>( "AssetVersion" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetClass>( "AssetClass" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetFile>( "AssetFile" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetFolder>( "AssetFolder" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ShaderAsset>( "ShaderAsset" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<FileBackedComponent>( "FileBackedComponent" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<Entity>( "Entity" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetTemplate>( TXT( "AssetTemplate" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetVersion>( TXT( "AssetVersion" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetClass>( TXT( "AssetClass" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetFile>( TXT( "AssetFile" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetFolder>( TXT( "AssetFolder" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<ShaderAsset>( TXT( "ShaderAsset" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<FileBackedComponent>( TXT( "FileBackedComponent" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<Entity>( TXT( "Entity" ) ) );
 
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ManifestVersion>( "ManifestVersion" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetManifest>( "AssetManifest" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<EntityManifest>( "EntityManifest" ) ); Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass< EntityManifest >(), TXT( "AssetManifest" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<SceneManifest>( "SceneManifest" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<ManifestVersion>( TXT( "ManifestVersion" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetManifest>( TXT( "AssetManifest" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<EntityManifest>( TXT( "EntityManifest" ) ) ); Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass< EntityManifest >(), TXT( "AssetManifest" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<SceneManifest>( TXT( "SceneManifest" ) ) );
 
 
     //
@@ -128,28 +128,28 @@ void Asset::Initialize()
     //
 
     // texture
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<TextureWrapModes::TextureWrapMode>( &TextureWrapModes::TextureWrapModeEnumerateEnumeration, "TextureWrapMode" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<TextureColorFormats::TextureColorFormat>( &TextureColorFormats::TextureColorFormatEnumerateEnumeration, "TextureColorFormat" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<TextureWrapModes::TextureWrapMode>( &TextureWrapModes::TextureWrapModeEnumerateEnumeration, TXT( "TextureWrapMode" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<TextureColorFormats::TextureColorFormat>( &TextureColorFormats::TextureColorFormatEnumerateEnumeration, TXT( "TextureColorFormat" ) ) );
 
     //
     // Asset Attributes
     //
 
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<DependenciesComponent>( "DependenciesComponent" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<DependenciesComponent>( TXT( "DependenciesComponent" ) ) );
     Component::ComponentCategories::GetInstance()->Categorize( new DependenciesComponent );
 
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<TextureMapComponent>( "TextureMapComponent" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ColorMapComponent>( "ColorMapComponent" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<NormalMapComponent>( "NormalMapComponent" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ExpensiveMapComponent>( "ExpensiveMapComponent" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<DetailMapComponent>( "DetailMapComponent" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardColorMapComponent>( "StandardColorMapComponent" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<TextureMapComponent>( TXT( "TextureMapComponent" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<ColorMapComponent>( TXT( "ColorMapComponent" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<NormalMapComponent>( TXT( "NormalMapComponent" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<ExpensiveMapComponent>( TXT( "ExpensiveMapComponent" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<DetailMapComponent>( TXT( "DetailMapComponent" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardColorMapComponent>( TXT( "StandardColorMapComponent" ) ) );
     Component::ComponentCategories::GetInstance()->Categorize( new StandardColorMapComponent );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardNormalMapComponent>( "StandardNormalMapComponent" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardNormalMapComponent>( TXT( "StandardNormalMapComponent" ) ) );
     Component::ComponentCategories::GetInstance()->Categorize( new StandardNormalMapComponent );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardExpensiveMapComponent>( "StandardExpensiveMapComponent" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardExpensiveMapComponent>( TXT( "StandardExpensiveMapComponent" ) ) );
     Component::ComponentCategories::GetInstance()->Categorize( new StandardExpensiveMapComponent );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardDetailMapComponent>( "StandardDetailMapComponent" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardDetailMapComponent>( TXT( "StandardDetailMapComponent" ) ) );
     Component::ComponentCategories::GetInstance()->Categorize( new StandardDetailMapComponent );
 
     //
@@ -157,20 +157,20 @@ void Asset::Initialize()
     //
 
     // appearance
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ArtFileComponent>( "ArtFileComponent" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<ArtFileComponent>( TXT( "ArtFileComponent" ) ) );
     Component::ComponentCategories::GetInstance()->Categorize( new ArtFileComponent );
 
     //
     // Asset classes
     //
 
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<EntityAsset>( "EntityAsset" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<EntityAsset>( TXT( "EntityAsset" ) ) );
     g_AssetClassTypes.push_back( Reflect::GetType<EntityAsset>() );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<SceneAsset>( "SceneAsset" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<SceneAsset>( TXT( "SceneAsset" ) ) );
     g_AssetClassTypes.push_back( Reflect::GetType<SceneAsset>() );
 
     // Shaders
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardShaderAsset>( "StandardShaderAsset" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardShaderAsset>( TXT( "StandardShaderAsset" ) ) );
     g_AssetClassTypes.push_back( Reflect::GetType<StandardShaderAsset>() );
 
 
@@ -191,18 +191,18 @@ void Asset::Initialize()
 
       // Level
       ASSET_REGISTER_ENGINETYPE( Level );
-      ASSET_REGISTER_ENGINETYPE_ICONFILENAME( "enginetype_level_16.png" );
+      ASSET_REGISTER_ENGINETYPE_ICONFILENAME( TXT( "enginetype_level_16.png" ) );
       ASSET_REGISTER_ENGINETYPE_TYPECOLOR_ARGB( 0xff, 142, 234, 251 );
 
       // Shader
       ASSET_REGISTER_ENGINETYPE( Shader );
-      ASSET_REGISTER_ENGINETYPE_ICONFILENAME( "enginetype_shader_16.png" );
+      ASSET_REGISTER_ENGINETYPE_ICONFILENAME( TXT( "enginetype_shader_16.png" ) );
       ASSET_REGISTER_ENGINETYPE_TYPECOLOR_ARGB( 0xff, 57, 143, 202 );
 
       // TexturePack
       ASSET_REGISTER_ENGINETYPE( TexturePack );
-      ASSET_REGISTER_ENGINETYPE_BUILDERDLL( "TexturePackBuilder.dll" );
-      ASSET_REGISTER_ENGINETYPE_ICONFILENAME( "enginetype_texturepack_16.png" );
+      ASSET_REGISTER_ENGINETYPE_BUILDERDLL( TXT( "TexturePackBuilder.dll" ) );
+      ASSET_REGISTER_ENGINETYPE_ICONFILENAME( TXT( "enginetype_texturepack_16.png" ) );
       ASSET_REGISTER_ENGINETYPE_TYPECOLOR_ARGB( 0xff, 164, 93, 163 );
     }
 
@@ -210,7 +210,7 @@ void Asset::Initialize()
     //
     // Enums
     //
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<Asset::AssetTypes::AssetType>( &Asset::AssetTypes::AssetTypeEnumerateEnumeration, "AssetType" ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<Asset::AssetTypes::AssetType>( &Asset::AssetTypes::AssetTypeEnumerateEnumeration, TXT( "AssetType" ) ) );
 */
     // Above is for supporting engine types
     ///////////////////////////////////////////////////////////////

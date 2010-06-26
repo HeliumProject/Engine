@@ -59,7 +59,8 @@ namespace Reflect
             info->m_TypeID = AssignTypeID();
             info->m_Size = sizeof(T);
             info->m_ShortName = name;
-            info->m_FullName = typeid(T).name();
+            bool converted = Platform::ConvertString( typeid(T).name(), info->m_FullName );
+            NOC_ASSERT( converted );
             info->m_UIName = info->m_ShortName;
 
             return info;

@@ -44,7 +44,7 @@ SunLight::SunLight(Luna::Scene* scene, Content::SunLight* light)
 
 i32 SunLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
 }
 
 std::string SunLight::GetApplicationTypeName() const

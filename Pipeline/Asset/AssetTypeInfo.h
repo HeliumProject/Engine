@@ -20,7 +20,7 @@ namespace Asset
     AssetTypeInfo (
       const std::string& name = std::string( "" ),
       const std::string& builder = std::string( "" ),
-      const std::string& iconFilename = std::string( "null_16.png" ),
+      const std::string& iconFilename = std::string( "null.png" ),
       const u32 typeColor = 0 );
 
     bool IsValid() const { return ( !m_Name.empty() || m_Name.compare( "Null" ) == 0 ); }

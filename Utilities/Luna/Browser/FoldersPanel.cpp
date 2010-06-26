@@ -319,7 +319,7 @@ void FoldersPanel::OnTreeItemMenu( wxTreeEvent& event )
   //  newMenu->Enable( ID_NewFolder, inFolder );
 
   //  wxMenuItem* menuItem = new wxMenuItem( &menu, ID_New, BrowserMenu::Label( ID_New ), BrowserMenu::Label( ID_New ), wxITEM_NORMAL, newMenu );
-  //  menuItem->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "new_file_16.png" ) );
+  //  menuItem->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "new_file.png" ) );
   //  menu.Append( menuItem );
   //  menuItem->Enable( inFolder );
   //}

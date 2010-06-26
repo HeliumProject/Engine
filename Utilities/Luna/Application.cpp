@@ -27,11 +27,21 @@
 #include "Application/UI/DebugUI/DebugUI.h"
 #include "Application/UI/PerforceUI/PerforceUI.h"
 
+
+#include "Foundation/CommandLine/Option.h"
+#include "Foundation/CommandLine/Command.h"
+#include "Foundation/CommandLine/Commands/Help.h"
+#include "Foundation/CommandLine/Processor.h"
+
+#include "Commands/BuildCommand.h"
+#include "Commands/RebuildCommand.h"
+
 #include <wx/cmdline.h>
 #include <wx/splash.h>
 
 using namespace Luna;
 using namespace Nocturnal;
+using namespace Nocturnal::CommandLine;
 
 namespace Luna
 {
@@ -60,110 +70,96 @@ LunaApp::~LunaApp()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Called from OnInit.  Adds the command line description to the parser.
-// 
-void LunaApp::OnInitCmdLine( wxCmdLineParser& parser )
-{
-  SetVendorName( "Nocturnal" );
-
-  parser.SetLogo( wxT( "Luna (c) 2010 - Nocturnal\n" ) );
-
-  parser.AddSwitch( "pipe", "Pipe",               "Use pipe for console connection" ); 
-  parser.AddSwitch( "disable_tracker", "DisableTracker", "Disable Asset Tracker" );
-
-  parser.AddSwitch( WindowSettings::s_Reset, WindowSettings::s_ResetLong, "Reset all window positions (other prefs/mru will remain)" );
-  parser.AddSwitch( Preferences::s_ResetPreferences, Preferences::s_ResetPreferencesLong, "Resets all preferences for all of Luna" );
-
-  parser.AddSwitch( Worker::Args::Debug,      "Debug",                "Debug use of background processes" );
-  parser.AddSwitch( Worker::Args::Wait,       "Wait",                 "Wait forever for background processes" );
-  parser.AddSwitch( Application::Args::Script,   "Script",               "Omit prefix and suffix in console output" );
-  parser.AddSwitch( Application::Args::Attach,   "Attach",               "Wait for a debugger to attach to the process on startup" );
-  parser.AddSwitch( Application::Args::Profile,  "Profile",              "Enable profile output to the console windows" );
-  parser.AddSwitch( Application::Args::Memory,   "Memory",               "Profile and report memory usage to the console" );
-  parser.AddSwitch( Application::Args::Verbose,  "Verbose",              "Output a verbose level of console output" );
-  parser.AddSwitch( Application::Args::Extreme,  "Extreme",              "Output an extremely verbose level of console output" );
-  parser.AddSwitch( Application::Args::Debug,    "Debug",                "Output debug console output" );
-
-  __super::OnInitCmdLine( parser );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Called after OnInitCmdLine.  The base class handles the /help command line
 // switch and exits.  If we get this far, we need to parse the command line
 // and determine what mode to launch the app in.
 // 
-bool LunaApp::OnCmdLineParsed( wxCmdLineParser& parser )
+bool LunaApp::OnInit()
 {
-  wxArtProvider::Push( new ::Luna::ArtProvider() );
+    wxArtProvider::Push( new ::Luna::ArtProvider() );
 
-  // don't spend a lot of time updating idle events for windows that don't need it
-  wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );
-  wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
+    SetVendorName( "Nocturnal" );
 
-  {
-    Log::Bullet initialize ("Initializing\n");
+    //SetLogo( wxT( "Luna (c) 2010 - Nocturnal\n" ) );
 
-    m_InitializerStack.Push( PerforceUI::Initialize, PerforceUI::Cleanup );
+    // don't spend a lot of time updating idle events for windows that don't need it
+    wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );
+    wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
 
-    {
-      Log::Bullet modules ("Modules:\n");
+    char module[MAX_PATH];
+    GetModuleFileName( 0, module, MAX_PATH );
 
-      {
-        Log::Bullet bullet ("Core...\n");
-        m_InitializerStack.Push( CoreInitialize, CoreCleanup );
-      }
+    Nocturnal::Path exePath( module );
+    Nocturnal::Path iconFolder( exePath.Directory() + "Icons/" );
 
-      {
-        Log::Bullet bullet ("Editor...\n");
-        m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
-        m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
-        m_InitializerStack.Push( AppPreferences::InitializeType, AppPreferences::CleanupType );
-        m_InitializerStack.Push( EditorInitialize, EditorCleanup );
-      }
-
-      {
-        Log::Bullet bullet ("Task...\n");
-        m_InitializerStack.Push( TaskInitialize, TaskCleanup );
-      }
-
-      {
-        Log::Bullet vault ("Asset Vault...\n");
-        m_InitializerStack.Push( Browser::Initialize, Browser::Cleanup );
-      }
-
-      {
-        Log::Bullet bullet ("Asset Editor...\n");
-        m_InitializerStack.Push( LunaAsset::InitializeModule, LunaAsset::CleanupModule );
-      }
-
-      {
-        Log::Bullet bullet ("Scene Editor...\n");
-        m_InitializerStack.Push( SceneInitialize, SceneCleanup );
-      }
-    }
+    Nocturnal::ImageManagerInit( iconFolder.Get(), "" );
+    Nocturnal::GlobalImageManager().LoadGuiArt();
 
     {
-      Log::Bullet systems ("Systems:\n");
+        Log::Bullet initialize ("Initializing\n");
 
-      {
-        Log::Bullet vault ("Asset Tracker...\n");
-        GetAppPreferences()->UseTracker( false ); //!parser.Found( "disable_tracker" ) );
-      }
+        m_InitializerStack.Push( PerforceUI::Initialize, PerforceUI::Cleanup );
+
+        {
+            Log::Bullet modules ("Modules:\n");
+
+            {
+                Log::Bullet bullet ("Core...\n");
+                m_InitializerStack.Push( CoreInitialize, CoreCleanup );
+            }
+
+            {
+                Log::Bullet bullet ("Editor...\n");
+                m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
+                m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
+                m_InitializerStack.Push( AppPreferences::InitializeType, AppPreferences::CleanupType );
+                m_InitializerStack.Push( EditorInitialize, EditorCleanup );
+            }
+
+            {
+                Log::Bullet bullet ("Task...\n");
+                m_InitializerStack.Push( TaskInitialize, TaskCleanup );
+            }
+
+            {
+                Log::Bullet vault ("Asset Vault...\n");
+                m_InitializerStack.Push( Browser::Initialize, Browser::Cleanup );
+            }
+
+            {
+                Log::Bullet bullet ("Asset Editor...\n");
+                m_InitializerStack.Push( LunaAsset::InitializeModule, LunaAsset::CleanupModule );
+            }
+
+            {
+                Log::Bullet bullet ("Scene Editor...\n");
+                m_InitializerStack.Push( SceneInitialize, SceneCleanup );
+            }
+        }
+
+        {
+            Log::Bullet systems ("Systems:\n");
+
+            {
+                Log::Bullet vault ("Asset Tracker...\n");
+                GetAppPreferences()->UseTracker( false ); //!parser.Found( "disable_tracker" ) );
+            }
+        }
     }
-  }
 
-  Log::Print("\n"); 
+    Log::Print("\n"); 
 
-  if ( Log::GetErrorCount() )
-  {
-    std::stringstream str;
-    str << "There were errors during startup, use Luna with caution.";
-    wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
-  }
+    if ( Log::GetErrorCount() )
+    {
+        std::stringstream str;
+        str << "There were errors during startup, use Luna with caution.";
+        wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
+    }
 
-  GetSceneEditor()->Show();
+    GetSceneEditor()->Show();
 
-  return __super::OnCmdLineParsed( parser );
+    //return __super::OnCmdLineParsed( parser );
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -171,7 +167,7 @@ bool LunaApp::OnCmdLineParsed( wxCmdLineParser& parser )
 // 
 int LunaApp::OnRun()
 {
-  return __super::OnRun();
+    return __super::OnRun();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -179,38 +175,167 @@ int LunaApp::OnRun()
 // 
 int LunaApp::OnExit()
 {
-  // Save preferences
+    // Save preferences
     ::Luna::GetApplicationPreferences()->SavePreferences();
 
-  if ( m_AssetTracker )
-  {
-      m_AssetTracker->StopThread();
-      delete m_AssetTracker;
-  }
+    if ( m_AssetTracker )
+    {
+        m_AssetTracker->StopThread();
+        delete m_AssetTracker;
+    }
 
-  Nocturnal::ImageManagerCleanup();
+    Nocturnal::ImageManagerCleanup();
 
-  m_InitializerStack.Cleanup();
+    m_InitializerStack.Cleanup();
 
-  return __super::OnExit();
+    return __super::OnExit();
 }
 
-std::string LunaApp::ShowFileBrowser()
+/////////////////////////////////////////////////////////////////////////////////
+int Main ( int argc, const char** argv )
 {
-    NOC_BREAK();
-#pragma TODO( "Reimplent to use the Vault" )
-  return "";
+	// print physical memory
+	MEMORYSTATUSEX status;
+	memset(&status, 0, sizeof(status));
+	status.dwLength = sizeof(status);
+	::GlobalMemoryStatusEx(&status);
+	Log::Print("Physical Memory: %I64u M bytes total, %I64u M bytes available\n", status.ullTotalPhys >> 20, status.ullAvailPhys >> 20);
+
+	// fill out the options vector
+	std::vector< std::string > options;
+	for ( int i = 1; i < argc; ++i )
+	{
+		options.push_back( argv[ i ] );
+	}
+    std::vector< std::string >::const_iterator& argsBegin = options.begin(), argsEnd = options.end();
+
+    bool success = true;
+	std::string error; 
+
+
+    Processor processor( "luna", "[COMMAND <ARGS>]", "Luna (c) 2010 - Nocturnal" );
+
+    BuildCommand buildCommand;
+    success &= buildCommand.Initialize( error );
+    success &= processor.RegisterCommand( &buildCommand, error );
+
+    RebuildCommand rebuildCommand;
+    success &= rebuildCommand.Initialize( error );
+    success &= processor.RegisterCommand( &rebuildCommand, error );
+
+    Nocturnal::CommandLine::Help helpCommand;
+    helpCommand.SetOwner( &processor );
+    success &= helpCommand.Initialize( error );
+    success &= processor.RegisterCommand( &helpCommand, error );
+
+    //success &= processor.AddOption( new FlagOption(  , "pipe", "use pipe for console connection" ), error ); 
+    //success &= processor.AddOption( new FlagOption(  , "disable_tracker", "disable Asset Tracker" ), error );
+    //
+    //success &= processor.AddOption( new FlagOption(  , WindowSettings::s_Reset, "reset all window positions" ), error );
+    //success &= processor.AddOption( new FlagOption(  , Preferences::s_ResetPreferences, "resets all preferences for all of Luna" ), error );
+    //
+    //success &= processor.AddOption( new FlagOption(  , Worker::Args::Debug, "debug use of background processes" ), error );
+    //success &= processor.AddOption( new FlagOption(  , Worker::Args::Wait, "wait forever for background processes" ), error );
+
+    bool scriptFlag = false;
+    success &= processor.AddOption( new FlagOption( &scriptFlag, Application::Args::Script, "omit prefix and suffix in console output" ), error );
+    
+    bool attachFlag = false;
+    success &= processor.AddOption( new FlagOption( &attachFlag, Application::Args::Attach, "wait for a debugger to attach to the process on startup" ), error );
+    
+    bool profileFlag = false;
+    success &= processor.AddOption( new FlagOption( &profileFlag, Application::Args::Profile, "enable profile output to the console windows" ), error );
+    
+    bool memoryFlag = false;
+    success &= processor.AddOption( new FlagOption( &memoryFlag, Application::Args::Memory, "profile and report memory usage to the console" ), error );
+    
+    bool vreboseFlag = false;
+    success &= processor.AddOption( new FlagOption( &vreboseFlag, Application::Args::Verbose, "output a verbose level of console output" ), error );
+    
+    bool extremeFlag = false;
+    success &= processor.AddOption( new FlagOption( &extremeFlag, Application::Args::Extreme, "output an extremely verbose level of console output" ), error );
+    
+    bool debugFlag = false;
+    success &= processor.AddOption( new FlagOption( &debugFlag, Application::Args::Debug, "output debug console output" ), error );
+    
+    int nice = 0;
+    success &= processor.AddOption( new SimpleOption<int>( &nice , "nice", "<NUM>", "number of processors to nice (for other processes)" ), error );
+    
+    bool helpFlag;
+    success &= processor.AddOption( new FlagOption( &helpFlag, "help", "print program usage" ), error );
+
+    success &= processor.ParseOptions( argsBegin, argsEnd, error );
+
+	if ( success )
+	{
+        if ( helpFlag )
+        {
+            Log::Print( "\nPrinting help for Luna...\n" );
+            Log::Print( processor.Help().c_str() );
+            Log::Print( "\n" );
+            success = true;
+        }
+        else if ( argsBegin != argsEnd )
+        {
+            while ( success && ( argsBegin != argsEnd ) )
+            {
+                const std::string& arg = (*argsBegin);
+                ++argsBegin;
+
+                if ( arg.length() < 1 )
+                {
+                    continue;
+                }
+
+                if ( arg[ 0 ] == '-' )
+                {
+                    error = std::string( "Unknown option, or option passed out of order: " ) + arg;
+                    success = false;
+                }
+                else
+                {
+                    Command* command = processor.GetCommand( arg );
+                    if ( command )
+                    {
+                        success = command->Process( argsBegin, argsEnd, error );
+                    }
+                    else
+                    {
+                        error = std::string( "Unknown commandline parameter: " ) + arg + "\n\n";
+                        success = false;
+                    }
+                }
+            }
+        }
+        else
+        {
+            buildCommand.Cleanup();
+            rebuildCommand.Cleanup();
+
+            ::FreeConsole();
+            return Application::StandardWinMain( &wxEntry );
+        }
+    }
+
+    buildCommand.Cleanup();
+    rebuildCommand.Cleanup();
+
+    if ( !success && !error.empty() )
+    {
+        Log::Error( "%s\n", error.c_str() );
+    }
+
+    return success ? 0 : 1;
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // Main entry point for the application.
 //
-int main()
+int main( int argc, const char** argv )
 {
-  Nocturnal::InitializerStack initializerStack( true );
+    Nocturnal::InitializerStack initializerStack( true );
+    initializerStack.Push( &DebugUI::Initialize, &DebugUI::Cleanup );
 
-  initializerStack.Push( &DebugUI::Initialize, &DebugUI::Cleanup );
-
-  return Application::StandardWinMain( &wxEntry );
+    return Application::StandardMain( &Main, argc, argv );
 }

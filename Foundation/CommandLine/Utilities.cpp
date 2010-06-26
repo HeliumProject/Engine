@@ -1,5 +1,6 @@
 #include "Utilities.h"
 #include "Foundation/Environment.h"
+#include "Platform/Assert.h"
 
 using namespace Nocturnal;
 
@@ -197,6 +198,7 @@ const char* Nocturnal::GetCmdLineArg( const char* arg )
     return NULL;
 }
 
+#pragma TODO ( "Deprecate Nocturnal::GetCmdLineFlag. All commandline options should be defined and parsed once in the application, we shouldn't be parsing the entire commandline everytime! " )
 bool Nocturnal::GetCmdLineFlag( const char* arg )
 {
     bool explicitValue;

@@ -57,7 +57,7 @@ void HierarchyOutliner::AddHierarchyNodes()
     RecurseAddHierarchyNode( m_CurrentScene->GetRoot() );
 
     // The root item gets a special icon
-    i32 image = Nocturnal::GlobalImageManager().GetImageIndex( "world_16.png" );
+    i32 image = Nocturnal::GlobalImageManager().GetImageIndex( "world.png" );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Normal );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Expanded );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Selected );

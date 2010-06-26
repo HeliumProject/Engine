@@ -32,6 +32,10 @@ namespace Nocturnal
 				return true;
 			}
 
+            virtual void Cleanup()
+            {
+            }
+
             const std::string& Token() const
 			{
 				return m_Token;
@@ -43,6 +47,9 @@ namespace Nocturnal
 			}
 
             virtual const std::string& Help() const;
+
+            bool AddOption( const OptionPtr& option, std::string& error );
+            bool ParseOptions( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
 
 			virtual bool Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) = 0;
         };

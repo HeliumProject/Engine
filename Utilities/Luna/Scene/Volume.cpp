@@ -55,7 +55,7 @@ Volume::~Volume()
 
 i32 Volume::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "volume_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "volume.png" );
 }
 
 std::string Volume::GetApplicationTypeName() const

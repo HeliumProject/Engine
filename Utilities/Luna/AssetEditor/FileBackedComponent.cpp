@@ -113,7 +113,7 @@ void FileBackedComponent::PopulateContextMenu( ContextMenuItemSet& menu )
     menu.AppendItem( menuItem );
 
 
-    wxBitmap finderIcon = Nocturnal::GlobalImageManager().GetBitmap( "magnify_16.png" );
+    wxBitmap finderIcon = Nocturnal::GlobalImageManager().GetBitmap( "actions/system-search.png" );
     menuItem = new ContextMenuItem( "Change File Path (Asset Finder)", "Change this file's path using the Asset Finder", finderIcon );
     menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedComponent::OnChangePathFinder ) );
     menuItem->Enable( numSelected == 1 );

@@ -56,7 +56,7 @@ PointLight::~PointLight()
 
 i32 PointLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
 }
 
 std::string PointLight::GetApplicationTypeName() const

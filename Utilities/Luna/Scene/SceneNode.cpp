@@ -378,7 +378,7 @@ void SceneNode::Evaluate(GraphDirection direction)
 
 i32 SceneNode::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "null_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "null.png" );
 }
 
 std::string SceneNode::GetApplicationTypeName() const

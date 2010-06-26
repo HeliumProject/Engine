@@ -119,7 +119,7 @@ void EntityAssetOutliner::AddEntityAssetSet( Luna::EntityAssetSet* classSet )
     bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
     m_TreeCtrl->DisableSorting();
 
-    const i32 image = Nocturnal::GlobalImageManager().GetImageIndex( "folder_16.png" );
+    const i32 image = Nocturnal::GlobalImageManager().GetImageIndex( "folder.png" );
     wxTreeItemId classItem = AddItem( m_InvisibleRoot, 
                                       classSet->GetName(), 
                                       image, 

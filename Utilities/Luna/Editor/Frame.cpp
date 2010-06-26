@@ -6,7 +6,6 @@
 #include <wx/config.h>
 
 #include "Application/Application.h"
-#include "Foundation/Environment.h"
 #include "Foundation/String/Utilities.h"
 
 
@@ -42,7 +41,7 @@ Frame::Frame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPo
   // tell wxAuiManager to manage this frame
   m_FrameManager.SetFrame( this ); 
 
-  SetTitle( GetEShellTitle( title.c_str() ).c_str() );
+  SetTitle( title.c_str() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,41 +60,6 @@ Frame::~Frame()
 void Frame::PostCommand( const Undo::CommandPtr& command )
 {
   m_CommandQueue.Push( command );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Create the Luna frame title from the EvnShell settings
-//
-std::string Frame::GetEShellTitle( const std::string& title, const std::string& extra )
-{
-  std::string windowTitle;
-  GetEShellTitle( windowTitle, title, extra );
-  return windowTitle;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Create the Luna frame title from the EvnShell settings
-//
-void Frame::GetEShellTitle( std::string& windowTitle, const std::string& title, const std::string& extra )
-{
-  windowTitle.clear();
-
-  if ( !title.empty() )
-  {
-    windowTitle += title;
-    windowTitle += " - ";
-  }
-
-  std::string eshellTitle;
-  Nocturnal::GetEnvVar( "ESHELL_TITLE", eshellTitle );
-  windowTitle += eshellTitle;
-
-  // if there is extra stuff tack it on
-  if ( !extra.empty() )
-  {
-    windowTitle += ": ";
-    windowTitle += extra;
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

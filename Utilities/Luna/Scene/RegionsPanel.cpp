@@ -62,8 +62,8 @@ RegionsPanel::RegionsPanel( SceneEditor* editor, Luna::SceneManager* manager, wx
 
   m_RegionTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() ); 
 
-  m_RegionIcon = Nocturnal::GlobalImageManager().GetImageIndex( "region_16.png" );
-  m_ZoneIcon   = Nocturnal::GlobalImageManager().GetImageIndex( "zone_16.png" ); 
+  m_RegionIcon = Nocturnal::GlobalImageManager().GetImageIndex( "region.png" );
+  m_ZoneIcon   = Nocturnal::GlobalImageManager().GetImageIndex( "zone.png" ); 
 
   InitTree();
 }

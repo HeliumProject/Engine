@@ -4425,6 +4425,26 @@
 				</Filter>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Commands"
+			>
+			<File
+				RelativePath=".\Commands\BuildCommand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Commands\BuildCommand.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Commands\RebuildCommand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Commands\RebuildCommand.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>

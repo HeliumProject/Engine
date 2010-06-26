@@ -9,7 +9,6 @@
 
 #include "Foundation/Version.h"
 #include "Foundation/CommandLine/Utilities.h"
-#include "Foundation/Environment.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Log.h"
 #include "Foundation/Exception.h"

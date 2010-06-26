@@ -33,7 +33,7 @@ void ContainerNode::CleanupType()
 ContainerNode::ContainerNode( Luna::AssetManager* assetManager, Reflect::Element* element, const Reflect::Field* field )
 : Luna::FieldNode( assetManager, element, field )
 {
-  SetIcon( "folder_blue_16.png" );
+  SetIcon( "folder_blue.png" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -57,7 +57,7 @@ AmbientVolumeLight::~AmbientVolumeLight()
 
 i32 AmbientVolumeLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
 }
 
 std::string AmbientVolumeLight::GetApplicationTypeName() const

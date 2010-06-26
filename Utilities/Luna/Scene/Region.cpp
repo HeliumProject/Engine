@@ -38,7 +38,7 @@ Region::~Region()
 
 i32 Region::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "region_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "region.png" );
 }
 
 std::string Region::GetApplicationTypeName() const

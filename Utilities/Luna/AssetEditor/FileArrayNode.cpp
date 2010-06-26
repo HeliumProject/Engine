@@ -66,7 +66,7 @@ FileArrayNode::FileArrayNode( Luna::AssetManager* assetManager, Reflect::Element
     contextMenu.AppendSeparator();
     contextMenu.AppendItem( menuItem );
 
-    menuItem = new ContextMenuItem( "Add file (Asset Finder)", "Add a new file to this list using the Asset Finder", Nocturnal::GlobalImageManager().GetBitmap( "magnify_16.png" ) );
+    menuItem = new ContextMenuItem( "Add file (Asset Finder)", "Add a new file to this list using the Asset Finder", Nocturnal::GlobalImageManager().GetBitmap( "actions/system-search.png" ) );
     menuItem->Disable();
     contextMenu.AppendItem( menuItem );
 }

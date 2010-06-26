@@ -18,12 +18,9 @@ namespace Luna
         LunaApp();
         ~LunaApp();
 
-        virtual void  OnInitCmdLine( wxCmdLineParser& parser ) NOC_OVERRIDE;
-        virtual bool  OnCmdLineParsed( wxCmdLineParser& parser ) NOC_OVERRIDE;
+        virtual bool  OnInit() NOC_OVERRIDE;
         virtual int   OnRun() NOC_OVERRIDE;
         virtual int   OnExit() NOC_OVERRIDE;
-
-        std::string ShowFileBrowser();
 
         Asset::Tracker* GetAssetTracker()
         {

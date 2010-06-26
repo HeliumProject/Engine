@@ -9,7 +9,7 @@ void StandardColorMapComponent::EnumerateClass( Reflect::Compositor<StandardColo
   comp.GetComposite().m_UIName = "Color Map";
   comp.GetComposite().SetProperty( AssetProperties::ShortDescription, "Also known as a Base Map." );
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "Specifies the base map texture for a shader.  All shaders are required to have some sort of color map texture." );
-  comp.GetComposite().SetProperty( AssetProperties::SmallIcon, "attribute_colormap_16.png" );
+  comp.GetComposite().SetProperty( AssetProperties::SmallIcon, "attribute_colormap.png" );
 
   Reflect::EnumerationField* enumTexFormat = comp.AddEnumerationField( &StandardColorMapComponent::m_TexFormat, "m_TexFormat", AssetFlags::RealTimeUpdateable );
   Reflect::Field* fieldAmbOccScale = comp.AddField( &StandardColorMapComponent::m_AmbOccScale, "m_AmbOccScale", AssetFlags::RealTimeUpdateable );

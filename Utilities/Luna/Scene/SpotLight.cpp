@@ -58,7 +58,7 @@ SpotLight::~SpotLight()
 
 i32 SpotLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
 }
 
 std::string SpotLight::GetApplicationTypeName() const

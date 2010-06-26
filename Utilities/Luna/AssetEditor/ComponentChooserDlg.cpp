@@ -49,10 +49,10 @@ ComponentChooserDlg::ComponentChooserDlg( AssetEditor* editor, const wxPoint& po
   wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
   m_Toolbar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_HORIZONTAL, "AddComponentToolbar" );
-  m_Toolbar->AddTool( AssetEditorIDs::AddComponent, wxT("Add"), Nocturnal::GlobalImageManager().GetBitmap( "add_16.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Add the selected attribute to the current asset."), wxT("") );
+  m_Toolbar->AddTool( AssetEditorIDs::AddComponent, wxT("Add"), Nocturnal::GlobalImageManager().GetBitmap( "actions/list-add.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Add the selected attribute to the current asset."), wxT("") );
   //TODO: Implement Help button
-	//m_Toolbar->AddTool( AssetEditorIDs::ComponentHelp, wxT("Help"), Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Display additional information in the Browser."), wxT("") );
-	m_Toolbar->AddTool( AssetEditorIDs::ChangeComponentView, wxT("View"), Nocturnal::GlobalImageManager().GetBitmap( "downarrow_16.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Change the attribute view."), wxT("") );
+	//m_Toolbar->AddTool( AssetEditorIDs::ComponentHelp, wxT("Help"), Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Display additional information in the Browser."), wxT("") );
+	m_Toolbar->AddTool( AssetEditorIDs::ChangeComponentView, wxT("View"), Nocturnal::GlobalImageManager().GetBitmap( "actions/go-down.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Change the attribute view."), wxT("") );
 	m_Toolbar->Realize();
   mainSizer->Add( m_Toolbar, 0, wxALL|wxEXPAND, 2 );
 	
@@ -214,7 +214,7 @@ void ComponentChooserDlg::SetDescription( const std::string& desc, ComponentChoo
     break;
 
   case IconError:
-    m_Panel->m_Icon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "error_32.png" ) );
+    m_Panel->m_Icon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "error.png", Nocturnal::IconSizes::Size32 ) );
     m_Panel->m_Icon->Show();
     break;
   }

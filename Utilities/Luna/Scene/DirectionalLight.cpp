@@ -43,7 +43,7 @@ DirectionalLight::DirectionalLight(Luna::Scene* scene, Content::DirectionalLight
 
 i32 DirectionalLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
 }
 
 std::string DirectionalLight::GetApplicationTypeName() const

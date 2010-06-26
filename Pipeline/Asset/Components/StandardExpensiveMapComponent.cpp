@@ -9,7 +9,7 @@ void StandardExpensiveMapComponent::EnumerateClass( Reflect::Compositor<Standard
   comp.GetComposite().m_UIName = "Expensive Map";
   comp.GetComposite().SetProperty( AssetProperties::ShortDescription, "Settings for Gloss, Parallax, and Incandescent Maps." );
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "As the name indicates, this map contains more data and is more expensive in terms of calculations and memory usage." );
-  comp.GetComposite().SetProperty( AssetProperties::SmallIcon, "attribute_expensivemap_16.png" );
+  comp.GetComposite().SetProperty( AssetProperties::SmallIcon, "attribute_expensivemap.png" );
 
   Reflect::EnumerationField* enumTexFormat = comp.AddEnumerationField( &StandardExpensiveMapComponent::m_TexFormat, "m_TexFormat", AssetFlags::RealTimeUpdateable );
 

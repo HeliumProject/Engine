@@ -140,7 +140,7 @@ NavMesh::~NavMesh()
 
 i32 NavMesh::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "mesh_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "mesh.png" );
 }
 
 std::string NavMesh::GetApplicationTypeName() const
@@ -838,7 +838,7 @@ void NavMesh::CreatePanel( CreatePanelArgs& args )
     {
       args.m_Enumerator->AddLabel( "Reverse Control Points" );
       Inspect::Action* button = args.m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( &Curve::OnReverseControlPoints ) );
-      button->SetIcon( "reverse_16.png" );
+      button->SetIcon( "reverse.png" );
       button->SetClientData( new SelectionDataObject( args.m_Selection ) );
     }
     args.m_Enumerator->Pop();

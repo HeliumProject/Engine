@@ -15,7 +15,6 @@
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetExceptions.h"
 #include "Pipeline/Asset/Classes/StandardShaderAsset.h"
-#include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Natural.h"
 #include "Foundation/Log.h"
@@ -232,7 +231,7 @@ std::string AssetClass::GetIcon() const
   
   if ( icon.empty() )
   {
-    icon = "null_16.png"; 
+    icon = "null.png"; 
   }
 
   return icon;
@@ -272,8 +271,6 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
   const bool isShader = assetPkg->HasType( Reflect::GetType< Asset::ShaderAsset >() );
   const bool isLevel = assetPkg->GetAssetType() == Asset::AssetTypes::Level;
 
-  const bool isUserAssetAdmin = Nocturnal::GetCmdLineFlag( "asset_admin" );
-
   bool areAssetsLocked = true;
   const char* networkLockAssetsPath = getenv( "NOC_NETWORK_LOCK_ASSETS_FILE" );
   if ( networkLockAssetsPath != NULL )
@@ -298,17 +295,17 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
   //  ? "Preview the asset in the preview panel."
   //  : "This asset cannot be previewed in the preview panel.";
 
-  const bool canDuplicate = ( numSelected == 1 ) && ( isUserAssetAdmin || ( !areAssetsLocked && ( isShader ) ) );
+  const bool canDuplicate = ( numSelected == 1 ) && ( isShader && !areAssetsLocked );
   std::string duplicateToolTip = canDuplicate 
     ? "Create a copy of this asset using the Asset Manager wizard."
     : "Duplicating assets is not allowed or not available at this time.";
 
-  const bool canRename = ( numSelected == 1 ) && ( isUserAssetAdmin || ( !isLevel && !areAssetsLocked ) );
+  const bool canRename = ( numSelected == 1 ) && ( !isLevel && !areAssetsLocked ) ;
   std::string renameToolTip = canRename 
     ? "Rename or Move this asset using the Asset Manager wizard."
     : "Renaming assets is not allowed or not available at this time.";
 
-  const bool canDelete = ( numSelected == 1 ) && ( isUserAssetAdmin || ( !isLevel && !areAssetsLocked ) );
+  const bool canDelete = ( numSelected == 1 ) && ( !isLevel && !areAssetsLocked );
   std::string deleteToolTip = canDelete 
     ? "Delete this asset using the Asset Manager wizard."
     : "Deleting assets is not allowed or not available at this time.";
@@ -324,7 +321,7 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
   menu.AppendItem( menuItem );
 
   menu.AppendSeparator();
-  menuItem = new ContextMenuItem( "Save", "Save selected Asset(s)", Nocturnal::GlobalImageManager().GetBitmap( "save_16.png" ) );
+  menuItem = new ContextMenuItem( "Save", "Save selected Asset(s)", Nocturnal::GlobalImageManager().GetBitmap( "save.png" ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( &Luna::OnSaveSelectedAssets ), clientData );
   menu.AppendItem( menuItem );
   menu.AppendSeparator();

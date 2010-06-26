@@ -14,7 +14,7 @@ FailTest::~FailTest()
 
 bool FailTest::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
-	if ( !m_OptionsMap.ParseOptions( argsBegin, argsEnd, error ) )
+	if ( !ParseOptions( argsBegin, argsEnd, error ) )
 	{
 		return false;
 	}

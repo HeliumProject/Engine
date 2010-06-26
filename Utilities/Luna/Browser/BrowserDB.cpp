@@ -12,7 +12,6 @@
 #include "Console/Console.h"
 #include "Common/Boost/Regex.h"
 #include "Common/String/Utilities.h"
-#include "Common/Environment.h"
 #include "File/Manager.h"
 #include "Finder/Finder.h"
 #include "Finder/ProjectSpecs.h"

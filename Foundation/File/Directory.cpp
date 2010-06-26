@@ -80,7 +80,7 @@ bool Directory::Open(const std::string &path, const std::string &spec /* = "" */
 
 void Directory::GetFiles( const std::string& path, std::set< Nocturnal::Path >& paths, const std::string& spec, bool recursive )
 {
-    for ( Directory dir( path ); !dir.IsDone(); dir.Next() )
+    for ( Directory dir( path, spec, DirectoryFlags::SkipDirectories ); !dir.IsDone(); dir.Next() )
     {
         const DirectoryItem& item = dir.GetItem();
         paths.insert( Nocturnal::Path( item.m_Path ) );
@@ -88,12 +88,9 @@ void Directory::GetFiles( const std::string& path, std::set< Nocturnal::Path >& 
 
     if ( recursive )
     {
-        for ( Directory dir ( path, "*.*", DirectoryFlags::SkipFiles ); !dir.IsDone(); dir.Next() )
+        for ( Directory dir ( path, "*", DirectoryFlags::SkipFiles ); !dir.IsDone(); dir.Next() )
         {
-            if ( dir.GetItem().m_Flags & DirectoryItemFlags::Directory )
-            {
-                GetFiles( dir.GetItem().m_Path, paths, spec, recursive );
-            }
+            GetFiles( dir.GetItem().m_Path, paths, spec, recursive );
         }
     }
 }

@@ -25,6 +25,8 @@ namespace Nocturnal
     enum IconSize
     {
       Size16,
+      Size22,
+      Size24,
       Size32,
       Size64,
       Size128,
@@ -63,11 +65,11 @@ namespace Nocturnal
     //
 
     // will attempt to call GetBitmapLoadType if wxBITMAP_TYPE_ANY is passed in
-    const wxBitmap& GetBitmap( const std::string& fileName, long type = wxBITMAP_TYPE_ANY );
+    const wxBitmap& GetBitmap( const std::string& fileName, const IconSize size = IconSizes::Size16, long type = wxBITMAP_TYPE_ANY );
     const wxBitmap& GetScaledBitmap( const std::string& fileName, int maxSize, long type = wxBITMAP_TYPE_ANY );
 
     // assuming that fileName points to an animated GIF, this function returns the corresponding animation
-    const wxAnimation& GetAnimation( const std::string& fileName, wxAnimationType type = wxANIMATION_TYPE_GIF );
+    const wxAnimation& GetAnimation( const std::string& fileName, const IconSize size = IconSizes::Size16, wxAnimationType type = wxANIMATION_TYPE_GIF );
 
     //
     // wxImageList collection(s)
@@ -77,12 +79,12 @@ namespace Nocturnal
 
     bool LoadGuiArt( const IconSize size = IconSizes::Size16 );
     bool LoadImage( const std::string& fileName, const IconSize size = IconSizes::Size16 );
-    int GetImageIndex( const std::string& fileName );
+    int GetImageIndex( const std::string& fileName, const IconSize size = IconSizes::Size16 );
 
     const std::string& GetNameFromImageIndex( i32 index ) const;
 
     long GetBitmapLoadType( const std::string& fileName );
-    void GetFullImagePath( const std::string& partialPath, std::string& fullPath );
+    void GetFullImagePath( const std::string& partialPath, std::string& fullPath, const IconSize size = IconSizes::Size16 );
 
   private:
     //

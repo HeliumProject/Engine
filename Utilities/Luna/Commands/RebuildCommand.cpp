@@ -1,3 +1,7 @@
+#include "Precompile.h"
+
+#include "RebuildCommand.h"
+
 #include "Foundation/Exception.h"
 #include "Application/Application.h"
 #include "Platform/Windows/Windows.h"
@@ -11,26 +15,19 @@
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Version.h"
 
+#include "Foundation/CommandLine/Option.h"
+#include "Foundation/CommandLine/Command.h"
+
+using namespace Luna;
+using namespace Nocturnal::CommandLine;
 using namespace Reflect;
 
-bool g_RCS = false;
-bool g_XML = false;
-bool g_Binary = false;
-bool g_Verify = false;
-std::string g_Batch = "";
-std::string g_Input = "";
-std::string g_Output = "";
-
-enum RebuildCodes
+namespace Reflect
 {
-    REBUILD_SUCCESS = 0,
-    REBUILD_BAD_INPUT,
-    REBUILD_BAD_READ,
-    REBUILD_BAD_WRITE,
-    REBUILD_CODE_COUNT,
-};
+    FOUNDATION_API extern bool g_OverrideCRC;
+}
 
-const char* g_RebuildStrings[REBUILD_CODE_COUNT] = 
+const char* RebuildCommand::m_RebuildStrings[REBUILD_CODE_COUNT] = 
 {
     "Success",
     "Bad Input",
@@ -38,28 +35,191 @@ const char* g_RebuildStrings[REBUILD_CODE_COUNT] =
     "Bad Write",
 };
 
-int g_RebuildTotals[REBUILD_CODE_COUNT] =
-{
-    0,
-    0,
-    0,
-    0,
-};
 
-std::vector< std::string > g_RebuildResults[REBUILD_CODE_COUNT];
-
-namespace Reflect
+RebuildCommand::RebuildCommand()
+: Command( "rebuild", "[<INPUT>] [<OUTPUT>]", "Convertion utility for Nocturnal Reflect file format" )
+, m_HelpFlag( false )
+, m_RCS( false )
+, m_XML( false )
+, m_Binary( false )
+, m_Verify( false )
 {
-    FOUNDATION_API extern bool g_OverrideCRC;
+    for( int index = 0; index <= REBUILD_CODE_COUNT; ++index )	
+    {
+        m_RebuildTotals[index] = 0;
+    }
 }
 
-int ProcessFile(const std::string& input, const std::string& output)
+RebuildCommand::~RebuildCommand()
+{
+}
+
+bool RebuildCommand::Initialize( std::string& error ) 
+{
+    bool result = true;
+
+    result &= AddOption( new FlagOption( &Reflect::g_OverrideCRC, "crc", "override crc" ), error );
+    result &= AddOption( new FlagOption( &m_RCS, "rcs", "user rcs" ), error );
+    result &= AddOption( new FlagOption( &m_XML, "xml", "" ), error );
+    result &= AddOption( new FlagOption( &m_Binary, "binary", "" ), error );
+    result &= AddOption( new FlagOption( &m_Verify, "verify", "" ), error );
+    result &= AddOption( new SimpleOption<std::string>( &m_Batch, "batch", "<FILE>", "parse batch file" ), error );
+    result &= AddOption( new FlagOption( &m_HelpFlag, "h|help", "print command usage" ), error );
+
+    return result;
+}
+
+void RebuildCommand::Cleanup()
+{
+    m_InitializerStack.Cleanup();
+}
+
+bool RebuildCommand::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+{
+    if ( !ParseOptions( argsBegin, argsEnd, error ) )
+    {
+        return false;
+    }
+
+    if ( m_HelpFlag )
+    {
+        Log::Print( Help().c_str() );
+        return true;
+    }
+
+    if ( ( m_Batch.empty() && argsBegin == argsEnd )
+        || ( !m_Batch.empty() && argsBegin != argsEnd ) )
+    {
+        error = "Must supply either an input file OR batch file, but not both.";
+        return false;
+    }
+
+    while ( argsBegin != argsEnd )
+    {
+        const std::string& arg = (*argsBegin);
+        ++argsBegin;
+
+        if ( arg.length() )
+        {
+            if ( m_Input.empty() )
+            {
+                m_Input = arg;
+                Nocturnal::Path::Normalize( m_Input );
+            }
+            else if ( m_Output.empty() )
+            {
+                m_Output = arg;
+                Nocturnal::Path::Normalize( m_Output );
+            }
+        }
+    }
+
+
+    int result = REBUILD_SUCCESS;
+
+    m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
+
+#pragma TODO("Need to init modules here -Geoff")
+
+    if ( m_Batch.empty() && !m_Input.empty() )
+    {
+        if ( m_Output.empty() )
+        {
+            m_Output = m_Input;
+        }
+        result = ProcessFile( m_Input, m_Output );
+    }
+    else
+    {
+        std::fstream batchfile;
+        batchfile.open(m_Batch.c_str(), std::ios_base::in);
+
+        if (!batchfile.is_open())
+        {
+            error = std::string( "Unable to open file for read: " ) + m_Batch;
+            return false;
+        }
+        else
+        {
+            while (!batchfile.eof())
+            {       
+                std::string line, input, output;
+                std::getline(batchfile, line);
+
+                size_t off = line.find_first_of('|');
+                if ( off != std::string::npos )
+                {
+                    input = line.substr(0, off);
+                    output = line.substr(off+1);
+                }
+                else
+                {
+                    input = line;
+                    output = line;
+                }
+
+                Nocturnal::Path inputPath( input );
+                Nocturnal::Path outputPath( output );
+
+                if (!input.empty() && inputPath.Exists() )
+                {
+                    if (m_XML)
+                    {
+                        outputPath.ReplaceExtension( "xml" );
+                    }
+
+                    if (m_Binary)
+                    {
+                        outputPath.ReplaceExtension( "rb" );
+                    }
+
+                    // do work
+                    int code = ProcessFile(inputPath.Get(), outputPath.Get());
+
+                    // verify result code
+                    NOC_ASSERT(code >= 0 && code < REBUILD_CODE_COUNT);
+
+                    // store result
+                    m_RebuildTotals[code]++;
+                    m_RebuildResults[code].push_back(outputPath.Get());
+                }
+            }
+
+            batchfile.close();
+
+            Log::Print("Rebuild Report:\n");
+            for (int i=0; i<REBUILD_CODE_COUNT; i++)
+            {
+                Log::Print(" %s: %d\n", m_RebuildStrings[i], m_RebuildTotals[i]);
+                if (i > 0)
+                {
+                    std::vector< std::string >::const_iterator itr = m_RebuildResults[i].begin();
+                    std::vector< std::string >::const_iterator end = m_RebuildResults[i].end();
+                    for ( int count = 0; itr != end; ++itr, ++count )
+                    {
+                        Log::Print("  [%d]: %s\n", count, itr->c_str());
+                    }
+                }
+            }
+
+            if (result != 0)
+            {
+                result = -1;
+            }
+        }
+    }
+
+    return result == REBUILD_SUCCESS;
+}
+
+
+int RebuildCommand::ProcessFile(const std::string& input, const std::string& output)
 {
     //
     // Verify only
     //
 
-    if (input == output && (g_Verify && !g_XML && !g_Binary))
+    if (input == output && (m_Verify && !m_XML && !m_Binary))
     {
         V_Element elements;
 
@@ -147,7 +307,7 @@ int ProcessFile(const std::string& input, const std::string& output)
     Nocturnal::Path absolute( output );
     absolute.Set( absolute.Absolute() );
 
-    if (g_RCS)
+    if (m_RCS)
     {
         if (RCS::PathIsManaged( absolute ))
         {
@@ -188,7 +348,7 @@ int ProcessFile(const std::string& input, const std::string& output)
     // Verify output
     //
 
-    if (g_Verify)
+    if (m_Verify)
     {
         if ( Application::IsDebuggerPresent() )
         {
@@ -217,152 +377,3 @@ int ProcessFile(const std::string& input, const std::string& output)
     return REBUILD_SUCCESS;
 }
 
-int Main(int argc, const char** argv)
-{
-    if ( argc < 2 )
-    {
-        Log::Print("rebuild - Update Utility for Insomniac Games Reflect File Format\n\n");
-        Log::Print(" rebuild <input> [output]\n\n");
-        return REBUILD_BAD_INPUT;
-    }
-
-    for ( int i=1; i<argc; ++i )
-    {
-        if ( !stricmp(argv[i], "-crc") )
-        {
-            Reflect::g_OverrideCRC = true;
-        }
-        else if ( !stricmp(argv[i], "-rcs") )
-        {
-            g_RCS = true;
-        }
-        else if ( !stricmp(argv[i], "-xml") )
-        {
-            g_XML = true;
-        }
-        else if ( !stricmp(argv[i], "-binary") )
-        {
-            g_Binary = true;
-        }
-        else if ( !stricmp(argv[i], "-verify") )
-        {
-            g_Verify = true;
-        }
-        else if ( !stricmp(argv[i], "-batch") && i+1 < argc )
-        {
-            g_Batch = argv[++i];
-        }
-        else 
-        {
-            if ( g_Input.empty() )
-            {
-                g_Input = argv[i];
-            }
-            else if ( g_Output.empty() )
-            {
-                g_Output = argv[i];
-            }
-        }
-    }
-
-    int result = REBUILD_SUCCESS;
-
-    Nocturnal::InitializerStack initializerStack( true );
-    initializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-
-#pragma TODO("Need to init modules here -Geoff")
-
-    if ( g_Batch.empty() && !g_Input.empty() )
-    {
-        if ( g_Output.empty() )
-        {
-            g_Output = g_Input;
-        }
-        result = ProcessFile( g_Input, g_Output );
-    }
-    else
-    {
-        std::fstream batchfile;
-        batchfile.open(g_Batch.c_str(), std::ios_base::in);
-
-        if (!batchfile.is_open())
-        {
-            Log::Error( "Unable to open file '%s' for read\n", g_Batch.c_str() );
-        }
-        else
-        {
-            while (!batchfile.eof())
-            {       
-                std::string line, input, output;
-                std::getline(batchfile, line);
-
-                size_t off = line.find_first_of('|');
-                if ( off != std::string::npos )
-                {
-                    input = line.substr(0, off);
-                    output = line.substr(off+1);
-                }
-                else
-                {
-                    input = line;
-                    output = line;
-                }
-
-                Nocturnal::Path inputPath( input );
-                Nocturnal::Path outputPath( output );
-
-                if (!input.empty() && inputPath.Exists() )
-                {
-                    if (g_XML)
-                    {
-                        outputPath.ReplaceExtension( "xml" );
-                    }
-
-                    if (g_Binary)
-                    {
-                        outputPath.ReplaceExtension( "rb" );
-                    }
-
-                    // do work
-                    int code = ProcessFile(inputPath.Get(), outputPath.Get());
-
-                    // verify result code
-                    NOC_ASSERT(code >= 0 && code < REBUILD_CODE_COUNT);
-
-                    // store result
-                    g_RebuildTotals[code]++;
-                    g_RebuildResults[code].push_back(outputPath.Get());
-                }
-            }
-
-            batchfile.close();
-
-            Log::Print("Rebuild Report:\n");
-            for (int i=0; i<REBUILD_CODE_COUNT; i++)
-            {
-                Log::Print(" %s: %d\n", g_RebuildStrings[i], g_RebuildTotals[i]);
-                if (i > 0)
-                {
-                    std::vector< std::string >::const_iterator itr = g_RebuildResults[i].begin();
-                    std::vector< std::string >::const_iterator end = g_RebuildResults[i].end();
-                    for ( int count = 0; itr != end; ++itr, ++count )
-                    {
-                        Log::Print("  [%d]: %s\n", count, itr->c_str());
-                    }
-                }
-            }
-
-            if (result != 0)
-            {
-                result = -1;
-            }
-        }
-    }
-
-    return result;
-}
-
-int main(int argc, const char** argv)
-{
-    return Application::StandardMain( &Main, argc, argv );
-}

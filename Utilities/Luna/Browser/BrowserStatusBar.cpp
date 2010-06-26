@@ -28,7 +28,7 @@ BrowserStatusBar::BrowserStatusBar( wxWindow *parent )
 , m_IndexingFailed( false )
 , m_CurrentStatus( "Done" )
 , m_StatusText( new wxStaticText( this, wxID_ANY, "Done" ) )
-, m_Throbber( new wxAnimationCtrl( this, wxID_ANY, Nocturnal::GlobalImageManager().GetAnimation( "throbber_16.gif" ) ) )
+, m_Throbber( new wxAnimationCtrl( this, wxID_ANY, Nocturnal::GlobalImageManager().GetAnimation( "animation/process-working.png" ) ) )
 , m_Message( new wxStaticText( this, wxID_ANY, s_TrackingInProgress ) )
 {
     static const int widths[ FieldCount ] = { -1, 150 };

@@ -260,31 +260,31 @@ void EntityPanel::CreateClassActions()
         m_Enumerator->AddLabel( "Class Actions" );
 
         Inspect::Action* refreshButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRefresh ) );
-        refreshButton->SetIcon( "refresh_16.png" );
+        refreshButton->SetIcon( "actions/view-refresh.png" );
         refreshButton->SetToolTip( "Refresh" );
 
         bool singular = m_Selection.Size() == 1;
 
         Inspect::Action* lunaButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetEditAsset ) );
-        lunaButton->SetIcon( "asset_editor_16.png" );
+        lunaButton->SetIcon( "asset_editor.png" );
         lunaButton->SetToolTip( "Edit this entity class in Luna's Asset Editor" );
 
         Inspect::Action* mayaButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetEditArt ) );
-        mayaButton->SetIcon( "maya_16.png" );
+        mayaButton->SetIcon( "maya.png" );
         mayaButton->SetEnabled( singular );
         mayaButton->SetToolTip( "Edit this entity class's art in Maya" );
 
         Inspect::Action* buildButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetBuild ) );
-        buildButton->SetIcon( "build_16.png" );
+        buildButton->SetIcon( "build.png" );
         buildButton->SetToolTip( "Build this entity class's data into the game (Shift-click for build options)" );
 
         Inspect::Action* viewButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetView ) );
-        viewButton->SetIcon( "view_16.png" );
+        viewButton->SetIcon( "view.png" );
         viewButton->SetEnabled( singular );
         viewButton->SetToolTip( "View this entity class in the appropriate viewer" );
 
         Inspect::Action* historyButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRevisionHistory ) );
-        historyButton->SetIcon( "p4_16.png" );
+        historyButton->SetIcon( "p4.png" );
         historyButton->SetToolTip( "Display revision history for this file in Perforce." );
 
         bool buildable = true;

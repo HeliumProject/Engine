@@ -1,8 +1,6 @@
 #include "Precompile.h"
 #include "Preferences.h"
 
-#include "Foundation/CommandLine/Utilities.h"
-
 using namespace Luna;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -28,7 +26,7 @@ std::string Luna::PathToLabel( const Nocturnal::Path& path, const FilePathOption
 
         case FilePathOptions::PartialPath:
             //FileSystem::StripPrefix( Finder::ProjectAssets(), filePath );
-#pragma TODO( "Make this aware of the project root somehow" )
+#pragma TODO( "Make this aware of the project root somehow, maybe the application/program options" )
             break;
 
         case FilePathOptions::FullPath:
@@ -97,23 +95,25 @@ void Preferences::LoadPreferences()
 {
     static bool promptReset = true;
     static bool resetPrefs = false;
-    if ( Nocturnal::GetCmdLineFlag( Preferences::s_ResetPreferences ) )
-    {
-        if ( promptReset )
-        {
-            promptReset = false;
 
-            if ( wxYES == wxMessageBox( "Are you sure that you want to reset all of your preferences?  This includes window positions and your 'most recently used' file list.", "Reset All Preferences?", wxCENTER | wxYES_NO ) )
-            {
-                resetPrefs = true;
-            }
-        }
+#pragma TODO ("Shouldn't be using the command line here, it should be an option IN luna to reset prefs")
+    //if ( Nocturnal::GetCmdLineFlag( Preferences::s_ResetPreferences ) )
+    //{
+    //    if ( promptReset )
+    //    {
+    //        promptReset = false;
 
-        if ( resetPrefs )
-        {
-            return;
-        }
-    }
+    //        if ( wxYES == wxMessageBox( "Are you sure that you want to reset all of your preferences?  This includes window positions and your 'most recently used' file list.", "Reset All Preferences?", wxCENTER | wxYES_NO ) )
+    //        {
+    //            resetPrefs = true;
+    //        }
+    //    }
+
+    //    if ( resetPrefs )
+    //    {
+    //        return;
+    //    }
+    //}
 
     std::string path = GetPreferencesPath();
     if ( !LoadFromFile( path ) )

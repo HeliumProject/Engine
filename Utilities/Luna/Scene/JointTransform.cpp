@@ -50,7 +50,7 @@ JointTransform::~JointTransform()
 
 i32 JointTransform::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "joint_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "joint.png" );
 }
 
 std::string JointTransform::GetApplicationTypeName() const

@@ -18,31 +18,41 @@ namespace Nocturnal
   
   int g_InitCount = 0;
 
-  const int g_IconSizes[IconSizes::Count] = { 16, 32, 64, 128 };
+  const int g_IconSizes[IconSizes::Count] = { 16, 22, 24, 32, 64, 128 };
   
-  const char* g_IconSizeSpecs[IconSizes::Count] = 
+  const char* g_IconSizeFolders[IconSizes::Count] = 
   { 
-    "*_16.png",
-    "*_32.png",
-    "*_64.png",
-    "*_128.png",
+    "16x16",
+    "22x22",
+    "24x24",
+    "32x32",
+    "64x64",
+    "128x128",
   };
 
   IconSize GetIconSize( const std::string& fileName )
   {
-    if ( fileName.find( "16" ) )
+    if ( fileName.find( "16x16" ) )
     {
       return IconSizes::Size16;
     }
-    else if ( fileName.find( "32" ) )
+    else if ( fileName.find( "22x22" ) )
+    {
+      return IconSizes::Size22;
+    }
+    else if ( fileName.find( "24x24" ) )
+    {
+      return IconSizes::Size24;
+    }
+    else if ( fileName.find( "32x32" ) )
     {
       return IconSizes::Size32;
     }
-    else if ( fileName.find( "64" ) )
+    else if ( fileName.find( "64x64" ) )
     {
       return IconSizes::Size64;
     }
-    else if ( fileName.find( "128" ) )
+    else if ( fileName.find( "128x128" ) )
     {
       return IconSizes::Size128;
     }
@@ -141,7 +151,7 @@ namespace Nocturnal
   ///////////////////////////////////////////////////////////////////////////////
   // Gets the full path to an image file from a relative path
   // 
-  void ImageManager::GetFullImagePath( const std::string& partialPath, std::string& fullPath )
+  void ImageManager::GetFullImagePath( const std::string& partialPath, std::string& fullPath, const IconSize size )
   {
     // they may have passed in a full path
     if ( partialPath.length() > 1 && partialPath[1] == ':' )
@@ -152,13 +162,13 @@ namespace Nocturnal
     {
       if ( !m_ThemeFolder.empty() )
       {
-          fullPath = Nocturnal::Path( m_ThemeFolder + '/' + partialPath ).Get();
+          fullPath = Nocturnal::Path( m_ThemeFolder + '/' + g_IconSizeFolders[size] + '/' + partialPath ).Get();
       }
 
       // then use the default path
       if ( !Nocturnal::Path( fullPath ).Exists() )
       {
-          fullPath = Nocturnal::Path( m_DefaultFolder + '/' + partialPath ).Get();
+          fullPath = Nocturnal::Path( m_DefaultFolder + '/' + g_IconSizeFolders[size] + '/' + partialPath ).Get();
       }
     }
   }
@@ -170,7 +180,7 @@ namespace Nocturnal
   // with that name has not yet been loaded, it will be loaded by calling this
   // function.
   // 
-  const wxBitmap& ImageManager::GetBitmap( const std::string& fileName, long type )
+  const wxBitmap& ImageManager::GetBitmap( const std::string& fileName, const IconSize size, long type )
   {
     long tryType = type;
     if ( tryType == wxBITMAP_TYPE_ANY )
@@ -190,7 +200,7 @@ namespace Nocturnal
     }
 
     std::string fullPath;
-    GetFullImagePath( fileName, fullPath );
+    GetFullImagePath( fileName, fullPath, size );
     if ( !Nocturnal::Path( fullPath ).Exists() )
     {
       Log::Warning( "Bitmap file does not exist %s\n", fullPath.c_str() );
@@ -244,7 +254,7 @@ namespace Nocturnal
       }
     }
 
-    const wxBitmap& origBitmap = GetBitmap( fileName, type );
+    const wxBitmap& origBitmap = GetBitmap( fileName, IconSizes::Size16, type );
     if ( !origBitmap.IsOk() )
     {
       return origBitmap;
@@ -291,7 +301,7 @@ namespace Nocturnal
 
   }
 
-  const wxAnimation& ImageManager::GetAnimation( const std::string& fileName, wxAnimationType type )
+  const wxAnimation& ImageManager::GetAnimation( const std::string& fileName, const IconSize size, wxAnimationType type )
   {
     M_Animation::iterator found = m_Animations.find( fileName );
     if ( found != m_Animations.end() )
@@ -300,7 +310,7 @@ namespace Nocturnal
     }
 
     std::string fullPath;
-    GetFullImagePath( fileName, fullPath );
+    GetFullImagePath( fileName, fullPath, size );
     if ( !Nocturnal::Path( fullPath ).Exists() )
     {
       Log::Warning( "Animated image file does not exist %s\n", fullPath.c_str() );
@@ -366,8 +376,12 @@ namespace Nocturnal
   {
     bool isOk = true;
 
+    std::string iconFolder( m_DefaultFolder );
+    iconFolder += g_IconSizeFolders[size];
+    Nocturnal::Path::GuaranteeSlash( iconFolder );
+
     std::set< Nocturnal::Path > artFiles;
-    Nocturnal::Directory::GetFiles( m_DefaultFolder, artFiles, g_IconSizeSpecs[size], true );
+    Nocturnal::Directory::GetFiles( iconFolder, artFiles, "*.png", true );
 
     const int numImages = static_cast< int >( artFiles.size() );
     if ( numImages > 0 )
@@ -377,9 +391,7 @@ namespace Nocturnal
       std::set< Nocturnal::Path >::const_iterator fileEnd = artFiles.end();
       for ( ; fileItr != fileEnd; ++fileItr )
       {
-        std::string currentFile;
-        GetFullImagePath( (*fileItr).Get(), currentFile );
-        isOk = LoadImage(currentFile, size);
+        isOk = LoadImage( (*fileItr).Get(), size);
       }
     }
     else
@@ -419,22 +431,20 @@ namespace Nocturnal
   // specified name.  If the file does not exist, -1 is returned.  No information
   // is provided about which image list this index belongs to, but that should
   // should be obvious because of our naming conventions.  Image lists must contain
-  // images that are all the same size and we name our images with _16, _32, etc.
-  // at the end of the name to indicate the dimensions of the image.  So if you 
-  // request "foo_16.png", it should be in the image list returned by 
-  // GetGuiImageList.
+  // images that are all the same size. So if you request "foo.png" with Size16,
+  // it should be in the image list returned by GetGuiImageList.
   // 
   // fileName is not the full path, but it does include the extension
-  // example: "foo_16.png"
+  // example: "foo.png"
   // 
-  int ImageManager::GetImageIndex( const std::string& fileName )
+  int ImageManager::GetImageIndex( const std::string& fileName, const IconSize size )
   {
     int index = -1;
 
     if ( !fileName.empty() )
     {
       std::string fullPath;
-      GetFullImagePath( fileName, fullPath );
+      GetFullImagePath( fileName, fullPath, size );
       M_StrI32::const_iterator found = m_PathNameToIndex.find( fullPath );
       if ( found != m_PathNameToIndex.end() )
       {
@@ -442,7 +452,7 @@ namespace Nocturnal
       }
       else
       {
-        if (!LoadImage( fullPath, GetIconSize( fileName ) ))
+        if (!LoadImage( fullPath, size ))
         {
           m_PathNameToIndex[ fullPath ] = -1;
         }

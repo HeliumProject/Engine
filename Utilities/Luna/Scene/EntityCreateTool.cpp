@@ -137,27 +137,27 @@ void EntityCreateTool::CreateProperties()
             m_FileButtonAdd = m_Enumerator->AddFileDialogButton< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
             m_BrowserButtonAdd = m_Enumerator->AddFileBrowserButton< std::string >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, std::string> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
 
-            m_FileButtonAdd->SetIcon( "ellipses_add_16.png" );
-            m_BrowserButtonAdd->SetIcon( "magnify_add_16.png" );
+            m_FileButtonAdd->SetIcon( "ellipses_add.png" );
+            m_BrowserButtonAdd->SetIcon( "magnify_add.png" );
 
             Inspect::Action* modifyButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnModify ) );
             modifyButton->SetToolTip( "Modify" );
-            modifyButton->SetIcon( "percent_16.png" );
+            modifyButton->SetIcon( "percent.png" );
             modifyButton->SetClientData( this );
 
             Inspect::Action* normalizeButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnNormalize ) );
             normalizeButton->SetToolTip( "Normalize" );
-            normalizeButton->SetIcon( "normalize_16.png" );
+            normalizeButton->SetIcon( "normalize.png" );
             normalizeButton->SetClientData( this );
 
             Inspect::Action* deleteButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnDeleteClass ) );
             deleteButton->SetToolTip( "Delete" );
-            deleteButton->SetIcon( "remove_16.png" );
+            deleteButton->SetIcon( "actions/list-remove.png" );
             deleteButton->SetClientData( this );
 
             Inspect::Action*  clearButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnClear ) );
             clearButton->SetToolTip( "Clear" );
-            clearButton->SetIcon( "delete_16.png" );
+            clearButton->SetIcon( "delete.png" );
             clearButton->SetClientData( this );
 
             std::string filter;

@@ -37,7 +37,7 @@ ComponentContainer::ComponentContainer( Luna::AssetManager* assetManager, Luna::
 , m_Asset( assetClass )
 {
   SetName( "Components" );
-  SetIcon( "component_components_16.png" );
+  SetIcon( "component_components.png" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

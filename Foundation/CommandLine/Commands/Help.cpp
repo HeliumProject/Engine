@@ -7,7 +7,7 @@ using namespace Nocturnal;
 using namespace Nocturnal::CommandLine;
 
 Help::Help( Processor* owner )
-: Command( "help", "<COMMAND>", "Displays the help for the command (or application if no command specified)" )
+: Command( "help", "<COMMAND>", "displays the help for the command (or application)" )
 , m_Owner( owner )
 {
 }
@@ -23,7 +23,9 @@ bool Help::Process( std::vector< std::string >::const_iterator& argsBegin, const
 
 	if ( argsBegin == argsEnd )
 	{
-		Log::Print( m_Owner->Help().c_str() );
+        Log::Print( "\nPrinting help for Luna...\n" );
+        Log::Print( m_Owner->Help().c_str() );
+        Log::Print( "\n" );
 		return true;
 	}
 	else
@@ -34,7 +36,9 @@ bool Help::Process( std::vector< std::string >::const_iterator& argsBegin, const
 		const Command* command = m_Owner->GetCommand( m_CommandName );
 		if ( command )
 		{
-			Log::Print( command->Help().c_str() );
+            Log::Print( "\nGetting help for command: %s...\n", m_CommandName.c_str() );
+            Log::Print( command->Help().c_str() );
+            Log::Print( "\n" );
 			return true;
 		}
 		else

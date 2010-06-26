@@ -191,7 +191,7 @@ void AssetReferenceNode::Load()
         else
         {
             SetName( "Error loading: " + m_AssetPath.Get() );
-            SetIcon( "enginetype_unknown_16.png" );
+            SetIcon( "enginetype_unknown.png" );
         }
     }
 }
@@ -328,7 +328,7 @@ void AssetReferenceNode::PreShowContextMenu()
             contextMenu.AppendItem( menuItem );
 
 
-            wxBitmap finderIcon = Nocturnal::GlobalImageManager().GetBitmap( "magnify_16.png" );
+            wxBitmap finderIcon = Nocturnal::GlobalImageManager().GetBitmap( "actions/system-search.png" );
             menuItem = new ContextMenuItem( "Change File Path (Asset Finder)", "Change this file's path using the Asset Finder", finderIcon );
             menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnChangePathFinder ) );
             menuItem->Enable( numSelected == 1 );
@@ -567,7 +567,7 @@ std::string AssetReferenceNode::MakeIcon() const
         }
         else
         {
-            icon = "asset_reference_16.png";
+            icon = "asset_reference.png";
         }
     }
     return icon;

@@ -1,8 +1,6 @@
 #include "Precompile.h"
 #include "WindowSettings.h"
 
-#include "Foundation/CommandLine/Utilities.h"
-
 #include <wx/aui/aui.h>
 #include <wx/display.h>
 
@@ -13,13 +11,13 @@ REFLECT_DEFINE_CLASS( WindowSettings )
 
 void WindowSettings::EnumerateClass( Reflect::Compositor<WindowSettings>& comp )
 {
-  Reflect::Field* fieldVersion = comp.AddField( &WindowSettings::m_Version, "m_Version" );
-  Reflect::Field* fieldDockingState = comp.AddField( &WindowSettings::m_DockingState, "m_DockingState" );
-  Reflect::Field* fieldIsMaximized = comp.AddField( &WindowSettings::m_IsMaximized, "m_IsMaximized" );
-  Reflect::Field* fieldPosX = comp.AddField( &WindowSettings::m_PosX, "m_PosX" );
-  Reflect::Field* fieldPosY = comp.AddField( &WindowSettings::m_PosY, "m_PosY" );
-  Reflect::Field* fieldWidth = comp.AddField( &WindowSettings::m_Width, "m_Width" );
-  Reflect::Field* fieldHeight = comp.AddField( &WindowSettings::m_Height, "m_Height" );
+    Reflect::Field* fieldVersion = comp.AddField( &WindowSettings::m_Version, "m_Version" );
+    Reflect::Field* fieldDockingState = comp.AddField( &WindowSettings::m_DockingState, "m_DockingState" );
+    Reflect::Field* fieldIsMaximized = comp.AddField( &WindowSettings::m_IsMaximized, "m_IsMaximized" );
+    Reflect::Field* fieldPosX = comp.AddField( &WindowSettings::m_PosX, "m_PosX" );
+    Reflect::Field* fieldPosY = comp.AddField( &WindowSettings::m_PosY, "m_PosY" );
+    Reflect::Field* fieldWidth = comp.AddField( &WindowSettings::m_Width, "m_Width" );
+    Reflect::Field* fieldHeight = comp.AddField( &WindowSettings::m_Height, "m_Height" );
 }
 
 // Statics
@@ -32,7 +30,7 @@ const char* WindowSettings::s_ResetLong = "ResetWindowSettings";
 // 
 void WindowSettings::InitializeType()
 {
-  Reflect::RegisterClass<WindowSettings>( "WindowSettings" );
+    Reflect::RegisterClass<WindowSettings>( "WindowSettings" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,7 +38,7 @@ void WindowSettings::InitializeType()
 // 
 void WindowSettings::CleanupType()
 {
-  Reflect::UnregisterClass<WindowSettings>();
+    Reflect::UnregisterClass<WindowSettings>();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,18 +47,19 @@ void WindowSettings::CleanupType()
 // 
 void WindowSettings::CheckWindowSettings( WindowSettingsPtr& settings, const std::string& version )
 {
-  if ( !settings )
-  {
-    settings = new WindowSettings( version );
-  }
-  else if ( settings->GetCurrentVersion() != version )
-  {
-    settings = new WindowSettings( version );
-  }
-  else if ( Nocturnal::GetCmdLineFlag( s_Reset ) )
-  {
-    settings = new WindowSettings( version );
-}
+    if ( !settings )
+    {
+        settings = new WindowSettings( version );
+    }
+    else if ( settings->GetCurrentVersion() != version )
+    {
+        settings = new WindowSettings( version );
+    }
+#pragma TODO ("Shouldn't be using the command line here, it should be an option IN luna to reset prefs")
+    //else if ( Nocturnal::GetCmdLineFlag( s_Reset ) )
+    //{
+    //    settings = new WindowSettings( version );
+    //}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -68,45 +67,45 @@ void WindowSettings::CheckWindowSettings( WindowSettingsPtr& settings, const std
 // 
 bool WindowSettings::ValidatePositionAndSize( wxPoint pos, wxSize size )
 {
-  // If you have a default x position, y must match and vice versa
-  if ( pos.x == wxDefaultPosition.x && pos.y != wxDefaultPosition.y || pos.x != wxDefaultPosition.x && pos.y == wxDefaultPosition.y )
-  {
-    return false;
-  }
-
-  // If you have a default width, height must match and vice versa
-  if ( size.x == wxDefaultSize.x && size.y != wxDefaultSize.y || size.x != wxDefaultSize.x && size.y == wxDefaultSize.y )
-  {
-    return false;
-  }
-
-  // Make sure each of the four corners of the window lie within one of the 
-  // currently connected displays.
-  if ( pos != wxDefaultPosition )
-  {
-    if ( wxDisplay::GetFromPoint( pos ) == wxNOT_FOUND )
+    // If you have a default x position, y must match and vice versa
+    if ( pos.x == wxDefaultPosition.x && pos.y != wxDefaultPosition.y || pos.x != wxDefaultPosition.x && pos.y == wxDefaultPosition.y )
     {
-      return false;
+        return false;
     }
 
-    if ( size != wxDefaultSize )
+    // If you have a default width, height must match and vice versa
+    if ( size.x == wxDefaultSize.x && size.y != wxDefaultSize.y || size.x != wxDefaultSize.x && size.y == wxDefaultSize.y )
     {
-      if ( wxDisplay::GetFromPoint( pos + wxPoint( size.x, 0 ) ) == wxNOT_FOUND )
-      {
         return false;
-      }
-      else if ( wxDisplay::GetFromPoint( pos + wxPoint( 0, size.y ) ) == wxNOT_FOUND )
-      {
-        return false;
-      }
-      else if ( wxDisplay::GetFromPoint( pos + wxPoint( size.x, size.y ) ) == wxNOT_FOUND )
-      {
-        return false;
-      }
     }
-  }
 
-  return true;
+    // Make sure each of the four corners of the window lie within one of the 
+    // currently connected displays.
+    if ( pos != wxDefaultPosition )
+    {
+        if ( wxDisplay::GetFromPoint( pos ) == wxNOT_FOUND )
+        {
+            return false;
+        }
+
+        if ( size != wxDefaultSize )
+        {
+            if ( wxDisplay::GetFromPoint( pos + wxPoint( size.x, 0 ) ) == wxNOT_FOUND )
+            {
+                return false;
+            }
+            else if ( wxDisplay::GetFromPoint( pos + wxPoint( 0, size.y ) ) == wxNOT_FOUND )
+            {
+                return false;
+            }
+            else if ( wxDisplay::GetFromPoint( pos + wxPoint( size.x, size.y ) ) == wxNOT_FOUND )
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 
@@ -135,7 +134,7 @@ WindowSettings::~WindowSettings()
 // 
 const std::string& WindowSettings::GetCurrentVersion() const
 {
-  return m_Version;
+    return m_Version;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -144,27 +143,27 @@ const std::string& WindowSettings::GetCurrentVersion() const
 // 
 void WindowSettings::SetFromWindow( const wxWindow* window, wxAuiManager* manager )
 {
-  wxTopLevelWindow* tlw = wxDynamicCast( window, wxTopLevelWindow );
-  if ( tlw )
-  {
-    SetMaximized( tlw->IsMaximized() );
-  }
-  else
-  {
-    SetMaximized( false );
-  }
+    wxTopLevelWindow* tlw = wxDynamicCast( window, wxTopLevelWindow );
+    if ( tlw )
+    {
+        SetMaximized( tlw->IsMaximized() );
+    }
+    else
+    {
+        SetMaximized( false );
+    }
 
-  if ( !IsMaximized() && ValidatePositionAndSize( window->GetPosition(), window->GetSize()) )
-  {
-    // Only store position/size if not maximized, and only if valid
-    SetPosition( window->GetPosition() );
-    SetSize( window->GetSize() );
-  }
+    if ( !IsMaximized() && ValidatePositionAndSize( window->GetPosition(), window->GetSize()) )
+    {
+        // Only store position/size if not maximized, and only if valid
+        SetPosition( window->GetPosition() );
+        SetSize( window->GetSize() );
+    }
 
-  if ( manager )
-  {
-    SetDockingState( manager->SavePerspective().c_str() );
-  }
+    if ( manager )
+    {
+        SetDockingState( manager->SavePerspective().c_str() );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -173,30 +172,30 @@ void WindowSettings::SetFromWindow( const wxWindow* window, wxAuiManager* manage
 // 
 void WindowSettings::ApplyToWindow( wxWindow* window, wxAuiManager* manager, bool updateAui )
 {
-  wxTopLevelWindow* tlw = wxDynamicCast( window, wxTopLevelWindow );
-  
-  if ( tlw )
-  {
-    tlw->Maximize( IsMaximized() );
-  }
+    wxTopLevelWindow* tlw = wxDynamicCast( window, wxTopLevelWindow );
 
-  if ( !tlw || !IsMaximized() )
-  {
-    if ( ValidatePositionAndSize( GetPosition(), GetSize() ) )
+    if ( tlw )
     {
-    window->SetPosition( GetPosition() );
-    window->SetSize( GetSize() );
-  }
-  }
-
-  if ( manager )
-  {
-    manager->LoadPerspective( GetDockingState().c_str() );
-    if ( updateAui )
-    {
-      manager->Update();
+        tlw->Maximize( IsMaximized() );
     }
-  }
+
+    if ( !tlw || !IsMaximized() )
+    {
+        if ( ValidatePositionAndSize( GetPosition(), GetSize() ) )
+        {
+            window->SetPosition( GetPosition() );
+            window->SetSize( GetSize() );
+        }
+    }
+
+    if ( manager )
+    {
+        manager->LoadPerspective( GetDockingState().c_str() );
+        if ( updateAui )
+        {
+            manager->Update();
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -204,7 +203,7 @@ void WindowSettings::ApplyToWindow( wxWindow* window, wxAuiManager* manager, boo
 // 
 const Reflect::Field* WindowSettings::PositionX() const
 {
-  return GetClass()->FindField( &WindowSettings::m_PosX );
+    return GetClass()->FindField( &WindowSettings::m_PosX );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -212,7 +211,7 @@ const Reflect::Field* WindowSettings::PositionX() const
 // 
 const Reflect::Field* WindowSettings::PositionY() const
 {
-  return GetClass()->FindField( &WindowSettings::m_PosY );
+    return GetClass()->FindField( &WindowSettings::m_PosY );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -220,7 +219,7 @@ const Reflect::Field* WindowSettings::PositionY() const
 // 
 wxPoint WindowSettings::GetPosition() const
 {
-  return wxPoint( m_PosX, m_PosY );
+    return wxPoint( m_PosX, m_PosY );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -228,8 +227,8 @@ wxPoint WindowSettings::GetPosition() const
 // 
 void WindowSettings::SetPosition( i32 x, i32 y )
 {
-  Set( PositionX(), x );
-  Set( PositionY(), y );
+    Set( PositionX(), x );
+    Set( PositionY(), y );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -237,7 +236,7 @@ void WindowSettings::SetPosition( i32 x, i32 y )
 // 
 const Reflect::Field* WindowSettings::Width() const
 {
-  return GetClass()->FindField( &WindowSettings::m_Width );
+    return GetClass()->FindField( &WindowSettings::m_Width );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -245,7 +244,7 @@ const Reflect::Field* WindowSettings::Width() const
 // 
 const Reflect::Field* WindowSettings::Height() const
 {
-  return GetClass()->FindField( &WindowSettings::m_Height );
+    return GetClass()->FindField( &WindowSettings::m_Height );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -253,7 +252,7 @@ const Reflect::Field* WindowSettings::Height() const
 // 
 wxSize WindowSettings::GetSize() const
 {
-  return wxSize( m_Width, m_Height );
+    return wxSize( m_Width, m_Height );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -261,8 +260,8 @@ wxSize WindowSettings::GetSize() const
 // 
 void WindowSettings::SetSize( i32 width, i32 height )
 {
-  Set( Width(), width );
-  Set( Height(), height );
+    Set( Width(), width );
+    Set( Height(), height );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -270,7 +269,7 @@ void WindowSettings::SetSize( i32 width, i32 height )
 // 
 const Reflect::Field* WindowSettings::Maximized() const
 {
-  return GetClass()->FindField( &WindowSettings::m_IsMaximized );
+    return GetClass()->FindField( &WindowSettings::m_IsMaximized );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -278,7 +277,7 @@ const Reflect::Field* WindowSettings::Maximized() const
 // 
 bool WindowSettings::IsMaximized() const
 {
-  return m_IsMaximized;
+    return m_IsMaximized;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -286,7 +285,7 @@ bool WindowSettings::IsMaximized() const
 // 
 void WindowSettings::SetMaximized( bool maximized )
 {
-  Set( Maximized(), maximized );
+    Set( Maximized(), maximized );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -294,7 +293,7 @@ void WindowSettings::SetMaximized( bool maximized )
 // 
 const Reflect::Field* WindowSettings::DockingState() const
 {
-  return GetClass()->FindField( &WindowSettings::m_DockingState );
+    return GetClass()->FindField( &WindowSettings::m_DockingState );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -302,7 +301,7 @@ const Reflect::Field* WindowSettings::DockingState() const
 // 
 const std::string& WindowSettings::GetDockingState() const
 {
-  return m_DockingState;
+    return m_DockingState;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -310,5 +309,5 @@ const std::string& WindowSettings::GetDockingState() const
 // 
 void WindowSettings::SetDockingState( const std::string& state )
 {
-  Set( DockingState(), state );
+    Set( DockingState(), state );
 }

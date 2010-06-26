@@ -19,30 +19,18 @@ Processor::~Processor()
 {
     for ( M_StringToCommandDumbPtr::iterator argsBegin = m_Commands.begin(), end = m_Commands.end(); argsBegin != end; ++argsBegin )
     {
-        delete (*argsBegin).second;
+        (*argsBegin).second = NULL;
     }
-}
-
-bool Processor::Initialize( std::string& error )
-{
-	bool result = true;
-	
-	m_HelpCommand.SetOwner( this );
-	result &= RegisterCommand( &m_HelpCommand, error );
-
-	result &= m_OptionsMap.AddOption( new FlagOption( &m_HelpFlag, "help", "print program usage" ), error );
-
-	return result;
 }
 
 const std::string& Processor::Help() const
 {
 	if ( m_Help.empty() )
 	{
-		m_Help += m_ShortHelp + std::string( "\n" );
-
 		// Usage
 		m_Help += std::string( "\nUsage: " ) + m_Token + m_OptionsMap.Usage() + std::string( " " ) + m_Usage + std::string( "\n" );
+
+        m_Help += std::string( "\n" ) + m_ShortHelp + std::string( "\n" );
 
 		// Options
 		m_Help += std::string( "\n" ) + m_OptionsMap.Help();
@@ -64,6 +52,16 @@ const std::string& Processor::Help() const
 	return m_Help;
 }
 
+bool Processor::AddOption( const OptionPtr& option, std::string& error )
+{
+	return m_OptionsMap.AddOption( option, error );
+}
+
+bool Processor::ParseOptions( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+{
+    return m_OptionsMap.ParseOptions( argsBegin, argsEnd, error );
+}
+
 bool Processor::RegisterCommand( Command* command, std::string& error )
 {
 	Nocturnal::Insert< M_StringToCommandDumbPtr >::Result inserted = m_Commands.insert( M_StringToCommandDumbPtr::value_type( command->Token(), command ) );
@@ -77,7 +75,7 @@ bool Processor::RegisterCommand( Command* command, std::string& error )
 	return true;
 }
 
-const Command* Processor::GetCommand( const std::string& token )
+Command* Processor::GetCommand( const std::string& token )
 {
 	Command* command = NULL;
 	M_StringToCommandDumbPtr::iterator commandsItr = m_Commands.find( token );
@@ -90,7 +88,7 @@ const Command* Processor::GetCommand( const std::string& token )
 
 bool Processor::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
 {
-	if ( !m_OptionsMap.ParseOptions( argsBegin, argsEnd, error ) )
+	if ( !ParseOptions( argsBegin, argsEnd, error ) )
 	{
 		return false;
 	}
@@ -100,6 +98,7 @@ bool Processor::Process( std::vector< std::string >::const_iterator& argsBegin, 
 	while ( result && ( argsBegin != argsEnd ) )
 	{
 		const std::string& arg = (*argsBegin);
+        ++argsBegin;
 
 		if ( arg.length() < 1 )
 			continue;

@@ -30,7 +30,7 @@ Point::~Point()
 
 i32 Point::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "point_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "point.png" );
 }
 
 std::string Point::GetApplicationTypeName() const

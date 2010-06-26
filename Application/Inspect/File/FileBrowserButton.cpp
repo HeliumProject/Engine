@@ -12,7 +12,7 @@ using namespace Inspect;
 FileBrowserButton::FileBrowserButton( const std::string& startPath )
 : m_Title( "Open" )
 {
-    SetIcon( "magnify_16.png" );
+    SetIcon( "actions/system-search.png" );
 
     Nocturnal::Insert<std::set< std::string >>::Result inserted = m_Filters.insert( std::set< std::string >::value_type( "All files (*.*)|*.*" ) );
 

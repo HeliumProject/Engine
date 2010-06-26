@@ -20,14 +20,24 @@ const std::string& Command::Help() const
 {
 	if ( m_Help.empty() )
 	{
-		m_Help += m_ShortHelp + std::string( "\n" );
-
 		// Usage
 		m_Help += std::string( "\nUsage: " ) + m_Token + m_OptionsMap.Usage() + std::string( " " ) + m_Usage + std::string( "\n" );
+
+        m_Help += std::string( "\n" ) + m_ShortHelp + std::string( "\n" );
 
 		// Options
 		m_Help += std::string( "\n" ) + m_OptionsMap.Help();
 	}
 	return m_Help;
+}
+
+bool Command::AddOption( const OptionPtr& option, std::string& error )
+{
+	return m_OptionsMap.AddOption( option, error );
+}
+
+bool Command::ParseOptions( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+{
+    return m_OptionsMap.ParseOptions( argsBegin, argsEnd, error );
 }
 

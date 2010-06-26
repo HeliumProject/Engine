@@ -51,7 +51,7 @@ PortalLight::~PortalLight()
 
 i32 PortalLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
 }
 
 std::string PortalLight::GetApplicationTypeName() const

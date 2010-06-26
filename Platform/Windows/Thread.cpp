@@ -60,6 +60,11 @@ void Thread::Close()
 
 Thread::Return Thread::Wait(u32 timeout)
 {
+    if ( !Valid() )
+    {
+        return 0;
+    }
+
     DWORD result = ::WaitForSingleObject(m_Handle, timeout);
 
     if ( timeout != 0xffffffff && result == WAIT_TIMEOUT )

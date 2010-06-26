@@ -18,7 +18,6 @@
 #include "Platform/Types.h"
 #include "Foundation/File/Directory.h"
 #include "Foundation/String/Utilities.h"
-#include "Foundation/Environment.h"
 #include "Foundation/Log.h"
 
 using namespace Nocturnal::ES;

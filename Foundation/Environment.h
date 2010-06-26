@@ -67,4 +67,6 @@ namespace Nocturnal
     }
 
     FOUNDATION_API bool GetEnvFlag( const std::string &envVarName );
+
+#pragma deprecated( GetEnvVar, GetEnvFlag )  // All commandline options should be defined and parsed once in the application, we shouldn't be parsing the entire commandline everytime! 
 }

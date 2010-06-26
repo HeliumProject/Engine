@@ -41,7 +41,7 @@ PivotTransform::PivotTransform(Luna::Scene* scene, Content::PivotTransform* pivo
 
 i32 PivotTransform::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "transform_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "transform.png" );
 }
 
 std::string PivotTransform::GetApplicationTypeName() const

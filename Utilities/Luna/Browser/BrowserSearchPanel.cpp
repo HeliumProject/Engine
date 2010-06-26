@@ -66,12 +66,12 @@ BrowserSearchPanel::BrowserSearchPanel( BrowserFrame* browserFrame, wxWindow* pa
     m_GoButton->SetId( BrowserMenu::AdvancedSearchGo );
     m_CancelButton->SetId( BrowserMenu::AdvancedSearchCancel );
 
-    m_WordsHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
-    m_PhraseHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
-    m_FileIDHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
-    m_ComponentHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
-    m_LevelHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
-    m_ShaderHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "help_16.png" ) );
+    m_WordsHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ) );
+    m_PhraseHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ) );
+    m_FileIDHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ) );
+    m_ComponentHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ) );
+    m_LevelHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ) );
+    m_ShaderHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ) );
 
     m_DefaultFieldText.insert( std::make_pair( m_CollectionChoice->GetId(), s_CollectionDefaultText ) );
     m_DefaultFieldText.insert( std::make_pair( m_FileTypeChoice->GetId(), s_FileTypeDefaultText ) );

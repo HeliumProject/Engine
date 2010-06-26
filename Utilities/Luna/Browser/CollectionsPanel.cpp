@@ -75,14 +75,14 @@ CollectionsPanel::CollectionsPanel( BrowserFrame* browserFrame )
     m_MyCollectionsTreeCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
     m_TempCollectionsTreeCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
 
-    m_ContainerImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( "folder_16.png" );
-    m_DependencyImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( "chart_organisation_16.png" );
-    m_UsageImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( "chart_organisation_reverse_16.png" );
+    m_ContainerImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( "folder.png" );
+    m_DependencyImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( "chart_organisation.png" );
+    m_UsageImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( "chart_organisation_reverse.png" );
 
     m_MyCollectionsToolBar->SetToolBitmapSize( wxSize( 16, 16 ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewCollection, "", Nocturnal::GlobalImageManager().GetBitmap( "folder_add_16.png" ), BrowserMenu::Label( ID_NewCollection ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, "", Nocturnal::GlobalImageManager().GetBitmap( "chart_organisation_add_16.png" ), BrowserMenu::Label( ID_NewDependencyCollection ) + " - Files this asset depends on." );
-    m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, "", Nocturnal::GlobalImageManager().GetBitmap( "chart_organisation_reverse_add_16.png" ), BrowserMenu::Label( ID_NewUsageCollection ) + " - Files that use this asset." );
+    m_MyCollectionsToolBar->AddTool( ID_NewCollection, "", Nocturnal::GlobalImageManager().GetBitmap( "folder_add.png" ), BrowserMenu::Label( ID_NewCollection ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, "", Nocturnal::GlobalImageManager().GetBitmap( "chart_organisation_add.png" ), BrowserMenu::Label( ID_NewDependencyCollection ) + " - Files this asset depends on." );
+    m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, "", Nocturnal::GlobalImageManager().GetBitmap( "chart_organisation_reverse_add.png" ), BrowserMenu::Label( ID_NewUsageCollection ) + " - Files that use this asset." );
     m_MyCollectionsToolBar->Realize();
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );

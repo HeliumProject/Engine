@@ -87,7 +87,7 @@ Curve::~Curve()
 
 i32 Curve::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "curve_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "curve.png" );
 }
 
 std::string Curve::GetApplicationTypeName() const
@@ -1061,7 +1061,7 @@ void Curve::CreatePanel( CreatePanelArgs& args )
     {
       args.m_Enumerator->AddLabel( "Reverse Control Points" );
       Inspect::Action* button = args.m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( &Curve::OnReverseControlPoints ) );
-      button->SetIcon( "reverse_16.png" );
+      button->SetIcon( "reverse.png" );
       button->SetClientData( new SelectionDataObject( args.m_Selection ) );
     }
     args.m_Enumerator->Pop();

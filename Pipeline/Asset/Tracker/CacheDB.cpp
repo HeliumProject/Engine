@@ -12,7 +12,6 @@
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 
 #include "Foundation/Boost/Regex.h"
-#include "Foundation/Environment.h"
 #include "Foundation/Exception.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/String/Utilities.h"

@@ -130,20 +130,20 @@ ThumbnailView::ThumbnailView( const std::string& thumbnailDirectory, BrowserFram
 
     IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
 
-    InsertFileTypeIcon( device, m_FileTypeIcons, "*.entity.*", "moon_16.png" );
-    InsertFileTypeIcon( device, m_FileTypeIcons, "*.scene.*", "enginetype_level_16.png" );
-    InsertFileTypeIcon( device, m_FileTypeIcons, "*.shader.*", "enginetype_shader_16.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, "*.entity.*", "moon.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, "*.scene.*", "enginetype_level.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, "*.shader.*", "enginetype_shader.png" );
 
-    InsertFileTypeIcon( device, m_FileTypeIcons, "*.fbx", "maya_16.png" );
-    InsertFileTypeIcon( device, m_FileTypeIcons, "*.rb", "moon_16.png" );
-    InsertFileTypeIcon( device, m_FileTypeIcons, "*.tga", "fileType_tga_16.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, "*.fbx", "maya.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, "*.rb", "moon.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, "*.tga", "fileType_tga.png" );
 
 
     // Populate the AssetTypes lookup texture
     for ( i32 index = 0; index < Asset::AssetTypes::Count; ++index )
     {
         const std::string& icon = Asset::GetAssetTypeIcon( (Asset::AssetType) index );
-        if ( icon != "null_16.png" )
+        if ( icon != "null.png" )
         {
 #pragma TODO( "reimplement icons as resources" )
             std::string file = icon;
@@ -1108,7 +1108,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             //newMenu->Enable( ID_NewFolder, inFolder );
 
             wxMenuItem* menuItem = new wxMenuItem( &menu, ID_New, BrowserMenu::Label( ID_New ), BrowserMenu::Label( ID_New ), wxITEM_NORMAL, newMenu );
-            menuItem->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "new_file_16.png" ) );
+            menuItem->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "new_file.png" ) );
             menu.Append( menuItem );
             menuItem->Enable( inFolder );
         }

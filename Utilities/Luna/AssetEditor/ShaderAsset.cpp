@@ -115,10 +115,10 @@ std::string ShaderAsset::GetIcon() const
 {
     const i32 typeID = GetPackage< Asset::ShaderAsset >()->GetType();
 
-    std::string icon( "enginetype_shader_16.png" );
+    std::string icon( "enginetype_shader.png" );
     if ( typeID != Reflect::GetType< Asset::StandardShaderAsset >() )
     {
-        icon = "enginetype_custom_shader_16.png";
+        icon = "enginetype_custom_shader.png";
     }
 
     return icon;

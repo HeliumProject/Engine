@@ -78,7 +78,7 @@ Mesh::~Mesh()
 
 i32 Mesh::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "mesh_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "mesh.png" );
 }
 
 std::string Mesh::GetApplicationTypeName() const

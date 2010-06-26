@@ -73,9 +73,9 @@ TaskOutputWindow::TaskOutputWindow( wxWindow* parent, const std::string& title, 
 
   wxIconBundle iconBundle;
   wxIcon tempIcon;
-  tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "build_32.png" ) );
+  tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "build.png", Nocturnal::IconSizes::Size32 ) );
   iconBundle.AddIcon( tempIcon );
-  tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "build_16.png" ) );
+  tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "build.png" ) );
   iconBundle.AddIcon( tempIcon );
   SetIcons( iconBundle );
 

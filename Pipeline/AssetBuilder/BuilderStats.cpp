@@ -8,7 +8,6 @@
 
 #include "Foundation/Environment.h"
 #include "Foundation/Version.h"
-#include "Foundation/Environment.h"
 #include "Platform/Mutex.h"
 
 // max storage size for a query string

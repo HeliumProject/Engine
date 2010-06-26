@@ -86,10 +86,6 @@ void LunaAsset::InitializeModule()
     g_InitializerStack.Push( Luna::ComponentContainer::InitializeType, Luna::ComponentContainer::CleanupType );
     g_InitializerStack.Push( Luna::ComponentNode::InitializeType, Luna::ComponentNode::CleanupType );
     g_InitializerStack.Push( AssetDocument::InitializeType, AssetDocument::CleanupType );
-
-    Nocturnal::ImageManagerInit( "", "" );
-
-    Nocturnal::GlobalImageManager().LoadGuiArt();
   }
 }
 
@@ -102,7 +98,5 @@ void LunaAsset::CleanupModule()
   if ( --g_InitCount == 0 )
   {
     g_InitializerStack.Cleanup();
-
-    Nocturnal::ImageManagerCleanup();
   }
 }

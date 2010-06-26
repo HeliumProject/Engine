@@ -3,7 +3,7 @@
 #include "AssetFlags.h"
 
 #include "Pipeline/Component/ComponentCollection.h"
-#include "Foundation/CommandLine/Utilities.h"
+
 #include "Foundation/Reflect/Archive.h"
 
 #include <boost/regex.hpp> 

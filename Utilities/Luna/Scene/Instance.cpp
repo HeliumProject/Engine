@@ -48,7 +48,7 @@ void Instance::Unpack()
 
 i32 Instance::GetImageIndex() const
 {
-  i32 image = Nocturnal::GlobalImageManager().GetImageIndex( "null_16.png" );
+  i32 image = Nocturnal::GlobalImageManager().GetImageIndex( "null.png" );
 
   if ( GetNodeType() )
   {

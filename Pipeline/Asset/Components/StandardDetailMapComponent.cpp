@@ -9,7 +9,7 @@ void StandardDetailMapComponent::EnumerateClass( Reflect::Compositor<StandardDet
   comp.GetComposite().m_UIName = "Detail Map";
   comp.GetComposite().SetProperty( AssetProperties::ShortDescription, "Provides finer details on a shader." );
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "Specifies a texture to show when very close to a particular shader." );
-  comp.GetComposite().SetProperty( AssetProperties::SmallIcon, "attribute_detailmap_16.png" );
+  comp.GetComposite().SetProperty( AssetProperties::SmallIcon, "attribute_detailmap.png" );
 
   Reflect::EnumerationField* enumTexFormat = comp.AddEnumerationField( &StandardDetailMapComponent::m_TexFormat, "m_TexFormat", AssetFlags::RealTimeUpdateable );
 

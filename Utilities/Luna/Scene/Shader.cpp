@@ -37,7 +37,7 @@ Shader::Shader( Luna::Scene* scene, Content::Shader* shader )
 
 i32 Shader::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "shader_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "shader.png" );
 }
 
 std::string Shader::GetApplicationTypeName() const

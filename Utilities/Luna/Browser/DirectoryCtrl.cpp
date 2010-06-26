@@ -56,7 +56,7 @@ DirectoryCtrl::DirectoryCtrl
         break;
 
       case DirectoryCtrlIconTypes::InsomniacMoon:
-        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( "moon_16.png" ) );
+        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( "moon.png" ) );
         break;
 
       // We should not be using these anyway - if we are, setup a proper icon for them above
@@ -69,7 +69,7 @@ DirectoryCtrl::DirectoryCtrl
       case DirectoryCtrlIconTypes::Executable:
       case DirectoryCtrlIconTypes::Error:
       default:
-        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( "error_16.png" ) );
+        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( "error.png" ) );
         break;
     }
   }

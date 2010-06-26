@@ -5,7 +5,6 @@
 #include "Fixup.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/SmartBuffer/SmartLoader.h"
 
 #include <iostream>

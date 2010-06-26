@@ -37,7 +37,7 @@ Zone::~Zone()
 
 i32 Zone::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "zone_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "zone.png" );
 }
 
 std::string Zone::GetApplicationTypeName() const

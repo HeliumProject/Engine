@@ -91,7 +91,7 @@ void Light::Delete()
 
 i32 Light::GetImageIndex() const
 {
-    return Nocturnal::GlobalImageManager().GetImageIndex( "light_16.png" );
+    return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
 }
 
 std::string Light::GetApplicationTypeName() const

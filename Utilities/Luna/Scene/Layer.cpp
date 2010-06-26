@@ -53,7 +53,7 @@ Layer::~Layer()
 // 
 i32 Layer::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "layer_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "layer.png" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -18,7 +18,6 @@
 
 #include "Foundation/Version.h"
 #include "Foundation/CommandLine/Utilities.h"
-#include "Foundation/Environment.h"
 #include "Foundation/String/Utilities.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Log.h"
@@ -130,7 +129,10 @@ void AssetBuilder::Initialize()
         Nocturnal::GetCmdLineArg( "nice", g_NiceCount );
 
         // resort to single thread if we get a flag from env or cmd line
-        if ( Nocturnal::GetEnvFlag( "IG_ASSET_BUILDER_SINGLE_THREAD" ) || Nocturnal::GetCmdLineFlag( "single_thread" ) )
+
+#pragma TODO ( "All options should be defined and parsed once in the application, we shouldn't be parsing the commandline or environment here" )
+        //if ( Nocturnal::GetEnvFlag( "IG_ASSET_BUILDER_SINGLE_THREAD" ) || Nocturnal::GetCmdLineFlag( "single_thread" ) )
+        if ( false )
         {
             g_NiceCount = 0;
             g_ThreadCount = 1;

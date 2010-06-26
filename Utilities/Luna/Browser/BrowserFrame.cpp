@@ -21,7 +21,6 @@
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Pipeline/Asset/Tracker/Tracker.h"
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Foundation/CommandLine/Utilities.h"
 #include "Editor/DocumentManager.h"
 #include "Application/RCS/RCS.h"
 #include "Scene/SceneManager.h"
@@ -141,10 +140,10 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
     wxIconBundle iconBundle;
 
     wxIcon tempIcon;
-    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "vault_16.png" ) );
+    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "vault.png" ) );
     iconBundle.AddIcon( tempIcon );
 
-    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "vault_32.png" ) );
+    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "vault.png", Nocturnal::IconSizes::Size32 ) );
     iconBundle.AddIcon( tempIcon );
 
     SetIcons( iconBundle );

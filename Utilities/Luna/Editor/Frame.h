@@ -33,13 +33,6 @@ namespace Luna
 
     void PostCommand( const Undo::CommandPtr& command );
 
-    //
-    // EnvShell settings
-    //
-
-    static void GetEShellTitle( std::string& windowTitle, const std::string& title, const std::string& extra );
-    static std::string GetEShellTitle( const std::string& title = std::string( "" ), const std::string& extra = std::string( "" ) );
-
     virtual const std::string& GetPreferencePrefix() const = 0;
     virtual std::string PrefixPreferenceKey( const std::string& key ) const;
 

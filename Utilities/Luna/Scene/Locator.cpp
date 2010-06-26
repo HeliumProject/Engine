@@ -52,7 +52,7 @@ Locator::~Locator()
 
 i32 Locator::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "locator_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "locator.png" );
 }
 
 std::string Locator::GetApplicationTypeName() const

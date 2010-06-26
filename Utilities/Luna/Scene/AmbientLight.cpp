@@ -43,7 +43,7 @@ AmbientLight::AmbientLight(Luna::Scene* scene, Content::AmbientLight* light)
 
 i32 AmbientLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light_16.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
 }
 
 std::string AmbientLight::GetApplicationTypeName() const

@@ -315,9 +315,9 @@ void EventSystem::ReadTextEventsFile( const tstring& eventsFile, V_EventPtr& lis
         //
         // Example:
         // "Event: Thu Mar 27 14:16:19 2008|7301583699290099363|1206652579300|rachel-RMARK_PC|35"
-        const boost::regex s_EventTextFileStringPattern( "^\\s*Event\\:\\s*.*?\\|(\\d+)\\|(\\d*)\\|(.*?)\\|(\\d+)\\s*$" );
+        const tregex s_EventTextFileStringPattern( TXT("^\\s*Event\\:\\s*.*?\\|(\\d+)\\|(\\d*)\\|(.*?)\\|(\\d+)\\s*$") );
 
-        boost::cmatch eventResultAttr; 
+        tcmatch eventResultAttr; 
         if ( !boost::regex_match(line.c_str(), eventResultAttr, s_EventTextFileStringPattern))
         {
             // remove extra elements added to listOfEvents in the above resize

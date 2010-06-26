@@ -44,7 +44,7 @@
 #include "Pipeline/Content/Nodes/Lights/DirectionalLight.h"
 #include "Pipeline/Content/Nodes/Lights/ShadowDirection.h"
 #include "Pipeline/Content/Nodes/Lights/SunLight.h"
-#include "Pipeline/Content/Nodes/Lights/AreaLights/AreaLight.h""
+#include "Pipeline/Content/Nodes/Lights/AreaLights/AreaLight.h"
 #include "Pipeline/Content/Nodes/Lights/AreaLights/RadiusLight.h"
 #include "Pipeline/Content/Nodes/Lights/AreaLights/SphereLight.h"
 #include "Pipeline/Content/Nodes/Lights/AreaLights/RectangleLight.h"

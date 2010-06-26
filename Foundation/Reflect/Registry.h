@@ -318,7 +318,7 @@ namespace Reflect
     typedef void (*UnregisterFunc)();
 
     template<class T>
-    inline UnregisterFunc RegisterClass(const std::string& shortName = TXT( "" ))
+    inline UnregisterFunc RegisterClass(const tstring& shortName = TXT( "" ))
     {
         // create the type information and register it with the registry
         if ( Reflect::Registry::GetInstance()->RegisterType( T::CreateClass( shortName ) ) )
@@ -341,7 +341,7 @@ namespace Reflect
     typedef void EnumerateEnumerationFunc( Reflect::Enumeration* info );
 
     template<class T>
-    inline UnregisterFunc RegisterEnumeration(EnumerateEnumerationFunc enumerate, const std::string& shortName = TXT( "" ))
+    inline UnregisterFunc RegisterEnumeration(EnumerateEnumerationFunc enumerate, const tstring& shortName = TXT( "" ))
     {
         Reflect::Enumeration* info = Reflect::Enumeration::Create<T>( shortName );
 

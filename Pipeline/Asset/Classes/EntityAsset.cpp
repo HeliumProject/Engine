@@ -2,7 +2,7 @@
 
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetExceptions.h"
-#include "Foundation/Reflect/ArchiveBinary.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Element.h"
 #include "Foundation/Reflect/Version.h"
 
@@ -57,9 +57,9 @@ void EntityAsset::EnumerateClass( Reflect::Compositor<EntityAsset>& comp )
     uniqueTemplate->AddRequiredComponent( Reflect::GetType< Asset::ArtFileComponent >() );
     assetTemplates.push_back( uniqueTemplate );
 
-    tstringstream stream;
-    Reflect::ArchiveBinary::ToStream( assetTemplates, stream );
-    comp.GetComposite().SetProperty( AssetProperties::AssetTemplates, stream.str() );
+    tstring str;
+    Reflect::ArchiveXML::ToString( assetTemplates, str );
+    comp.GetComposite().SetProperty( AssetProperties::AssetTemplates, str );
 }
 
 EntityAsset::EntityAsset()

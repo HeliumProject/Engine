@@ -70,8 +70,8 @@ namespace Nocturnal
             return base << TXT( "0x" ) << std::setfill( TXT( '0' ) ) << std::setw(16) << std::right << std::hex << std::uppercase;
         }
 
-        friend FOUNDATION_API std::ostream& operator<<(std::ostream& stream, const TUID& id);
-        friend FOUNDATION_API std::istream& operator>>(std::istream& stream, TUID& id);
+        friend FOUNDATION_API tostream& operator<<( tostream& stream, const TUID& id );
+        friend FOUNDATION_API tistream& operator>>( tistream& stream, TUID& id );
     };
 
     inline TUID::TUID()

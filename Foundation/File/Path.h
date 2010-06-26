@@ -19,7 +19,6 @@ namespace Nocturnal
     class FOUNDATION_API Path : public Nocturnal::RefCountBase< Path >
     {
     private:
-
         tstring m_Path;
 
         void Init( const tchar* path );
@@ -111,56 +110,25 @@ namespace Nocturnal
             return m_Path;
         }
 
-        friend FOUNDATION_API std::ostream& operator<<( std::ostream& outStream, const Path& p );
-        friend FOUNDATION_API std::istream& operator>>( std::istream& inStream, Path& p );
+        friend FOUNDATION_API tostream& operator<<( tostream& outStream, const Path& p );
+        friend FOUNDATION_API tistream& operator>>( tistream& inStream, Path& p );
         friend FOUNDATION_API std::wostream& operator<<( std::wostream& outStream, const Path& p );
         friend FOUNDATION_API std::wistream& operator>>( std::wistream& inStream, Path& p );
     };
 
-    inline std::ostream& operator<<( std::ostream& outStream, const Path& p )
+    inline tostream& operator<<( tostream& outStream, const Path& p )
     {
-        std::string narrowPath;
-        bool converted = Platform::ConvertString( p.Get(), narrowPath );
-        NOC_ASSERT( converted );
-        outStream << narrowPath.c_str();
-
-        return outStream;
+        return outStream << p.Get();
     }
 
-    inline std::istream& operator>>( std::istream& inStream, Path& p )
+    inline tistream& operator>>( tistream& inStream, Path& p )
     {
-        std::string buf;
+        tstring str;
         std::streamsize size = inStream.rdbuf()->in_avail();
-        buf.resize( (size_t) size );
-        inStream.read( const_cast<char*>( buf.c_str() ), size );
-        
-        tstring temp;
-        bool converted = Platform::ConvertString( buf, temp );
-        NOC_ASSERT( converted );
+        str.resize( (size_t) size );
+        inStream.read( const_cast<tchar*>( str.c_str() ), size );
 
-        p.Set( temp );
-
-        return inStream;
-    }
-    inline std::wostream& operator<<( std::wostream& outStream, const Path& p )
-    {
-        outStream << p.Get();
-
-        return outStream;
-    }
-
-    inline std::wistream& operator>>( std::wistream& inStream, Path& p )
-    {
-        std::wstring buf;
-        std::streamsize size = inStream.rdbuf()->in_avail();
-        buf.resize( (size_t) size );
-        inStream.read( const_cast<wchar_t*>( buf.c_str() ), size );
-
-        tstring temp;
-        bool converted = Platform::ConvertString( buf, temp );
-        NOC_ASSERT( converted );
-
-        p.Set( temp );
+        p.Set( str );
 
         return inStream;
     }

@@ -15,8 +15,8 @@
 using namespace Nocturnal;
 
 #ifdef PROFILE_ACCUMULATION
-Profile::Accumulator BufferSerializer::s_ReadAccum ( TXT( "BufferSerializer Data Read" ) );
-Profile::Accumulator BufferSerializer::s_WriteAccum ( TXT( "BufferSerializer Data Write" ) );
+Profile::Accumulator BufferSerializer::s_ReadAccum ( "BufferSerializer Data Read" );
+Profile::Accumulator BufferSerializer::s_WriteAccum ( "BufferSerializer Data Write" );
 #endif
 
 BufferSerializer::BufferSerializer()
@@ -182,7 +182,8 @@ bool BufferSerializer::WriteToFile( const tchar* filename ) const
 
     tchar print[512];
     _sntprintf(print, sizeof(print) / sizeof( tchar ), TXT( "Writing '%s'" ), filename);
-    PROFILE_SCOPE_ACCUM_VERBOSE(s_WriteAccum, print);
+#pragma TODO("Profiler support for wide strings")
+    PROFILE_SCOPE_ACCUM_VERBOSE(s_WriteAccum, ""/*print*/);
     Log::Debug( TXT( "%s\n" ), print);
 
     tofstream strm( filename, std::ios::out | std::ios::binary );
@@ -411,7 +412,8 @@ bool BufferSerializer::ReadFromFile( const tchar* filename )
 
     tchar print[512];
     _sntprintf(print, sizeof(print) / sizeof( tchar ), TXT( "Reading '%s'" ), filename);
-    PROFILE_SCOPE_ACCUM_VERBOSE(s_ReadAccum, print);
+#pragma TODO("Profiler support for wide strings")
+    PROFILE_SCOPE_ACCUM_VERBOSE(s_ReadAccum, ""/*print*/);
     Log::Debug( TXT( "%s\n" ), print);
 
     tifstream strm( filename, std::ios::in | std::ios::binary );

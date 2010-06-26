@@ -53,10 +53,10 @@ namespace Reflect
         REFLECTION_BASE( ReflectionTypes::Field );
 
         const Composite*    m_Type;         // the type we are a field of
-        std::string         m_Name;         // name of this field
-        std::string         m_UIName;       // friendly name
+        tstring             m_Name;         // name of this field
+        tstring             m_UIName;       // friendly name
         u32                 m_Size;         // the size of this field
-        uintptr    m_Offset;       // the offset to the field
+        uintptr             m_Offset;       // the offset to the field
         u32                 m_Flags;        // flags for special behavior
         i32                 m_FieldID;      // the unique id of this field
         i32                 m_SerializerID; // type id of the serializer to use
@@ -81,13 +81,13 @@ namespace Reflect
         bool SetDefaultValue (Element* instance) const;
 
         // set the name (and UI name if its not set)
-        void SetName(const std::string& name);
+        void SetName(const tstring& name);
     };
 
     typedef Nocturnal::SmartPtr< Field > FieldPtr;
     typedef Nocturnal::SmartPtr< const Field > ConstFieldPtr;
     typedef std::map< i32,          ConstFieldPtr > M_FieldIDToInfo;
-    typedef std::map< std::string,  ConstFieldPtr > M_FieldNameToInfo;
+    typedef std::map< tstring,      ConstFieldPtr > M_FieldNameToInfo;
     typedef std::map< u32,          ConstFieldPtr > M_FieldOffsetToInfo;
 
     //

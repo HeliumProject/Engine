@@ -56,8 +56,8 @@ namespace Nocturnal
         // Generates a unique ID
         static void Generate( GUID& uid );
 
-        friend FOUNDATION_API std::ostream& operator<<( std::ostream& stream, const GUID& id );
-        friend FOUNDATION_API std::istream& operator>>( std::istream& stream, GUID& id );
+        friend FOUNDATION_API tostream& operator<<( tostream& stream, const GUID& id );
+        friend FOUNDATION_API tistream& operator>>( tistream& stream, GUID& id );
     };
 
     FOUNDATION_API inline tostream& operator<<( tostream& stream, const GUID& id )

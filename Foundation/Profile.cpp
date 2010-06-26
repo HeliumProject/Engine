@@ -58,7 +58,7 @@ Accumulator::Accumulator()
 
 }
 
-Accumulator::Accumulator(const tchar* name)
+Accumulator::Accumulator(const char* name)
 : m_Hits (0)
 , m_TotalMillis (0.0f)
 , m_Index (-1)
@@ -66,15 +66,15 @@ Accumulator::Accumulator(const tchar* name)
     Init(name); 
 }
 
-Accumulator::Accumulator(const tchar* function, const tchar* name)
+Accumulator::Accumulator(const char* function, const char* name)
 : m_Hits (0)
 , m_TotalMillis (0.0f)
 , m_Index (-1)
 {
-    size_t temp = MIN( _tcslen( function ), sizeof(m_Name)-1 );
+    size_t temp = MIN( strlen( function ), sizeof(m_Name)-1 );
     memcpy( m_Name, function, temp );
 
-    size_t temp2 = MIN( _tcslen(name), sizeof(m_Name) - 1 - temp );
+    size_t temp2 = MIN( strlen(name), sizeof(m_Name) - 1 - temp );
     memcpy( m_Name + temp, name, temp2 );
 
     m_Name[ temp + temp2 ] = '\0';
@@ -82,11 +82,11 @@ Accumulator::Accumulator(const tchar* function, const tchar* name)
     Init(NULL);
 }
 
-void Accumulator::Init(const tchar* name)
+void Accumulator::Init(const char* name)
 {
     if (name)
     {
-        _tcsncpy(m_Name, name, sizeof(m_Name));
+        strncpy(m_Name, name, sizeof(m_Name));
         m_Name[ sizeof(m_Name)-1] = '\0'; 
     }
     else
@@ -173,13 +173,13 @@ void Accumulator::ReportAll()
 
 Platform::ThreadLocalPointer g_ProfileContext;
 
-ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const tchar* desc)
+ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const char* desc)
 {
     NOC_ASSERT(func); 
     m_Description[0] = '\0'; 
     if(desc)
     {
-        _tcsncpy(m_Description, desc, sizeof(m_Description)); 
+        strncpy(m_Description, desc, sizeof(m_Description)); 
         m_Description[ sizeof(m_Description)-1 ] = '\0'; 
     }
 
@@ -214,10 +214,10 @@ ScopeTimer::ScopeTimer(Accumulator* accum, const char* func, u32 line, const tch
     enter->m_Line       = line; 
     enter->m_StartTicks = m_StartTicks; 
 
-    _tcsncpy(enter->m_Description, m_Description, sizeof(enter->m_Description)); 
+    strncpy(enter->m_Description, m_Description, sizeof(enter->m_Description)); 
     enter->m_Description[ sizeof(enter->m_Description)-1] = 0; 
 
-    _tcsncpy(enter->m_Function, func, sizeof(enter->m_Function)); 
+    strncpy(enter->m_Function, func, sizeof(enter->m_Function)); 
     enter->m_Function[ sizeof(enter->m_Function)-1] = 0; 
 
     context->m_StackDepth++; 
@@ -304,7 +304,7 @@ void Context::FlushFile()
     enter->m_StackDepth       = 0; 
     enter->m_Line             = __LINE__;
     enter->m_StartTicks       = startTicks; 
-    _tcscpy(enter->m_Function, TXT( "Context::FlushFile" ) ); 
+    strcpy( enter->m_Function, "Context::FlushFile" ); 
     enter->m_Description[0]   = 0; 
 
     // make a block end packet for end of packet

@@ -469,7 +469,7 @@ namespace Reflect
 
         // Get all elements of the specified type in the archive ( not optimal if you need to get lots of different types at once )
         template< class T >
-        static void FromFile( const std::string& file, std::vector< Nocturnal::SmartPtr<T> >& elements, StatusHandler* status = NULL )
+        static void FromFile( const tstring& file, std::vector< Nocturnal::SmartPtr<T> >& elements, StatusHandler* status = NULL )
         {
             V_Element archiveElements;
             FromFile( file, archiveElements, status );
@@ -491,7 +491,7 @@ namespace Reflect
 
         // Fancy template version
         template <class T>
-        static Nocturnal::SmartPtr<T> FromFile(const std::string& file, StatusHandler* status = NULL)
+        static Nocturnal::SmartPtr<T> FromFile(const tstring& file, StatusHandler* status = NULL)
         {
             ElementPtr found = FromFile(file, Reflect::GetType<T>(), status);
 

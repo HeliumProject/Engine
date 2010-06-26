@@ -2,9 +2,10 @@
 
 #include "Serializer.h" 
 #include "ArchiveBinary.h" 
-#include "CompressionUtilities.h" 
+#include "Compression.h" 
 
 #include "Platform/Assert.h"
+#include "Platform/String.h"
 #include "Foundation/Memory/ArrayPtr.h" 
 #include "Foundation/Log.h"
 
@@ -15,24 +16,24 @@ using Nocturnal::ArrayPtr;
 
 using namespace Reflect;
 
-Profile::Accumulator g_StringPoolSerialize( TXT( "Reflect String Pool Serialize") ); 
-Profile::Accumulator g_StringPoolDeserialize( TXT( "Reflect String Pool Deserialize") ); 
-Profile::Accumulator g_StringPoolLookup( TXT( "Reflect String Pool Lookup") ); 
-Profile::Accumulator g_StringPoolInsert( TXT( "Reflect String Pool Insert") ); 
+Profile::Accumulator g_StringPoolSerialize( "Reflect String Pool Serialize"); 
+Profile::Accumulator g_StringPoolDeserialize( "Reflect String Pool Deserialize"); 
+Profile::Accumulator g_StringPoolLookup( "Reflect String Pool Lookup"); 
+Profile::Accumulator g_StringPoolInsert( "Reflect String Pool Insert"); 
 
 int StringPool::Insert( const std::string& str )
 {
     PROFILE_SCOPE_ACCUM(g_StringPoolInsert); 
 
-    M_StringToIndex::iterator found = m_Indices.find( str );
-    if ( found != m_Indices.end() )
+    M_CharStringToIndex::iterator found = m_CharIndices.find( str );
+    if ( found != m_CharIndices.end() )
     {
         return found->second;
     }
 
-    int index = (int)m_Strings.size();
-    m_Indices.insert( M_StringToIndex::value_type(str, index));
-    m_Strings.push_back(str);
+    int index = (int)m_CharStrings.size();
+    m_CharIndices.insert( M_CharStringToIndex::value_type(str, index));
+    m_CharStrings.push_back(str);
 
     return index;
 }
@@ -48,34 +49,41 @@ int StringPool::Insert( const std::wstring& str )
     }
 
     int index = (int)m_WideStrings.size();
+
     m_WideIndices.insert( M_WideStringToIndex::value_type( str, index ) );
     m_WideStrings.push_back( str );
 
     return index;
 }
 
-const std::string& StringPool::GetCharString( const int index )
+tstring StringPool::GetString( int index )
 {
     PROFILE_SCOPE_ACCUM(g_StringPoolLookup); 
 
-    if( index < 0 || index >= (int)m_Strings.size() )
+    tstring result;
+
+    if ( index >= 0 )
     {
-        throw Reflect::LogisticException( TXT( "String index out of range in StringPool" ) );
+        if( index >= (int)m_CharStrings.size() )
+        {
+            throw Reflect::LogisticException( TXT( "String index out of range in StringPool" ) );
+        }
+
+        Platform::ConvertString( m_CharStrings[ index ], result );
+    }
+    else
+    {
+        index &= 0xEFFFFFFF; // make out the high bit
+
+        if( index < 0 || index >= (int)m_WideStrings.size() )
+        {
+            throw Reflect::LogisticException( TXT( "Wide string index out of range in StringPool" ) );
+        }
+
+        Platform::ConvertString( m_WideStrings[ index ], result );
     }
 
-    return m_Strings[ index ];
-}
-
-const std::wstring& StringPool::GetWideString( const int index )
-{
-    PROFILE_SCOPE_ACCUM(g_StringPoolLookup); 
-
-    if( index < 0 || index >= (int)m_WideStrings.size() )
-    {
-        throw Reflect::LogisticException( TXT( "Wide string index out of range in StringPool" ) );
-    }
-
-    return m_WideStrings[ index ];
+    return result;
 }
 
 void StringPool::Serialize(ArchiveBinary* archive)
@@ -84,7 +92,7 @@ void StringPool::Serialize(ArchiveBinary* archive)
 
     Reflect::CharStream& stream = archive->GetStream(); 
 
-    NOC_ASSERT(m_Strings.size() == m_Indices.size());
+    NOC_ASSERT(m_CharStrings.size() == m_CharIndices.size());
     return SerializeCompressed(stream); 
 }
 
@@ -103,27 +111,27 @@ void StringPool::Deserialize(ArchiveBinary* archive)
         return DeserializeDirect(stream); 
     }
 
-    NOC_ASSERT(m_Strings.size() == m_Indices.size());
+    NOC_ASSERT(m_CharStrings.size() == m_CharIndices.size());
 }
 
 void StringPool::SerializeDirect(CharStream& stream)
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug("Serializing %d strings\n", m_Strings.size());
+    Log::Debug(TXT("Serializing %d strings\n"), m_CharStrings.size());
 #endif
 
-    i32 size = (i32)m_Strings.size();
+    i32 size = (i32)m_CharStrings.size();
     stream.Write(&size); 
 
-    std::vector<std::string>::iterator itr = m_Strings.begin();
-    std::vector<std::string>::iterator end = m_Strings.end();
+    std::vector<std::string>::iterator itr = m_CharStrings.begin();
+    std::vector<std::string>::iterator end = m_CharStrings.end();
     for ( int index=0; itr != end; ++itr, ++index )
     {
         size = (i32)itr->length();
         const std::string& str (*itr);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-        Log::Debug(" [%d] : %s\n", index, str.c_str());
+        Log::Debug(TXT(" [%d] : %s\n"), index, str.c_str());
 #endif
 
         stream.Write(&size); 
@@ -140,25 +148,25 @@ void StringPool::DeserializeDirect(CharStream& stream)
     stream.Read(&size);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug("Deserializing %d strings\n", size);
+    Log::Debug(TXT("Deserializing %d strings\n"), size);
 #endif
 
-    m_Strings.resize(size);
+    m_CharStrings.resize(size);
     for (i32 i=0; i<size; ++i)
     {
         i32 string_size;
         stream.Read(&string_size); 
 
         // read the bytes directly into the string
-        std::string& outputString = m_Strings[i]; 
+        std::string& outputString = m_CharStrings[i]; 
         outputString.resize(string_size); 
         stream.ReadBuffer(&outputString[0], string_size); 
 
         // log the index
-        m_Indices[outputString] = i; 
+        m_CharIndices[outputString] = i; 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-        Log::Debug(" [%d] : %s\n", i, outputString.c_str());
+        Log::Debug(TXT(" [%d] : %s\n"), i, outputString.c_str());
 #endif
     }
 

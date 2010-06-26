@@ -213,8 +213,8 @@ namespace Math
 
         Matrix4&              RowScale( const Vector4& scaleVector );
 
-        friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Matrix4& vector);
-        friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Matrix4& vector);
+        friend FOUNDATION_API tostream& operator<<(tostream& outStream, const Matrix4& vector);
+        friend FOUNDATION_API tistream& operator>>(tistream& inStream, Matrix4& vector);
         friend class FOUNDATION_API Matrix3;
     };
 
@@ -554,7 +554,7 @@ namespace Math
             (m[0][2]*n[0]) + (m[1][2]*n[1]) + (m[2][2]*n[2]));
     }
 
-    inline std::ostream& operator<<(std::ostream& outStream, const Matrix4& matrix)
+    inline tostream& operator<<(tostream& outStream, const Matrix4& matrix)
     {
         outStream << matrix.x.x << ", " << matrix.x.y << ", " << matrix.x.z << ", " << matrix.x.w << ", ";
         outStream << matrix.y.x << ", " << matrix.y.y << ", " << matrix.y.z << ", " << matrix.y.w << ", ";
@@ -564,7 +564,7 @@ namespace Math
         return outStream;
     }
 
-    inline std::istream& operator>>(std::istream& inStream, Matrix4& matrix)
+    inline tistream& operator>>(tistream& inStream, Matrix4& matrix)
     {
         inStream >> matrix.x.x;
         inStream.ignore();

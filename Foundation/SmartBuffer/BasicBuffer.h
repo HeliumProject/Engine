@@ -112,9 +112,9 @@ namespace Nocturnal
         u32 AddF32(f32 val, const tchar* dbgStr = NULL, ...);
         u32 AddF64(f64 val, const tchar* dbgStr = NULL, ...);
 
-        u32 AddVector3( const ::Math::Vector3& v, const tchar* debugStr = NULL);
-        u32 AddVector4( const ::Math::Vector4& v, const tchar* debugStr = NULL);
-        u32 AddVector4( const ::Math::Vector3& v, f32 w, const tchar* debugStr = NULL);
+        u32 AddVector3( const Math::Vector3& v, const tchar* debugStr = NULL);
+        u32 AddVector4( const Math::Vector4& v, const tchar* debugStr = NULL);
+        u32 AddVector4( const Math::Vector3& v, f32 w, const tchar* debugStr = NULL);
         u32 AddVector4( f32 x, f32 y, f32 z, f32 w, const tchar* debugStr = NULL);
 
         void AddAtLocI8(i8 val, const Location& destination);

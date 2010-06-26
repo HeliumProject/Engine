@@ -7,7 +7,7 @@ namespace Reflect
     // Delimiter to use when representing the data in the container as a 
     // single string.  If your data contains this delimiter naturally, the
     // string representation may not show up properly.
-    static const char* s_ContainerItemDelimiter = "\n";
+    static const tchar* s_ContainerItemDelimiter = TXT("\n");
 
     class FOUNDATION_API ContainerSerializer : public Serializer
     {

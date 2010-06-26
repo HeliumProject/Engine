@@ -70,8 +70,8 @@ namespace Math
         Vector3           Cross (const Vector3& v) const;
         void              Clamp ( const Vector3 &min, const Vector3 &max );
 
-        friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Vector3& vector);
-        friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Vector3& vector);
+        friend FOUNDATION_API tostream& operator<<(tostream& outStream, const Vector3& vector);
+        friend FOUNDATION_API tistream& operator>>(tistream& inStream, Vector3& vector);
     };
 
     typedef std::vector< Vector3 > V_Vector3;
@@ -131,14 +131,14 @@ namespace Math
         z = z < min.z ? min.z : ( z > max.z ) ? max.z : z; 
     }
 
-    inline std::ostream& operator<<(std::ostream& outStream, const Vector3& vector)
+    inline tostream& operator<<(tostream& outStream, const Vector3& vector)
     {
         outStream << vector.x << ", " << vector.y << ", " << vector.z;
 
         return outStream;
     }
 
-    inline std::istream& operator>>(std::istream& inStream, Vector3& vector)
+    inline tistream& operator>>(tistream& inStream, Vector3& vector)
     {
         inStream >> vector.x;
         inStream.ignore();

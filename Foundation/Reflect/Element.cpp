@@ -21,12 +21,12 @@ Element::Element()
 
 }
 
-bool Element::ProcessComponent(ElementPtr element, const std::string& fieldName)
+bool Element::ProcessComponent(ElementPtr element, const tstring& fieldName)
 {
     return false; // incurs data loss
 }
 
-void Element::ToXML(std::string& xml) const
+void Element::ToXML(tstring& xml) const
 {
     ArchiveXML::ToString(this, xml);
 }

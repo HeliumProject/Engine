@@ -8,24 +8,22 @@
 #include "API.h"
 #include "Stream.h" 
 
-/*
-
-String Pool Binary Format:
-
-struct String
-{
-i32 size;           // string length
-char[] data;        // characters
-};
-
-struct StringPool
-{
-i32 count;          // string count
-String[] strings;   // string data
-i32 term;           // -1
-};
-
-*/
+//
+//  String Pool Binary Format:
+//
+//  struct String
+//  {
+//      i32 size;           // string length
+//      char[] data;        // characters
+//  };
+//
+//  struct StringPool
+//  {
+//      i32 count;          // string count
+//      String[] strings;   // string data
+//      i32 term;           // -1
+//  };
+//
 
 namespace Reflect
 {
@@ -38,11 +36,11 @@ namespace Reflect
     class FOUNDATION_API StringPool
     {
     public:
-        typedef stdext::hash_map<std::string, int> M_StringToIndex;
+        typedef stdext::hash_map<std::string, int> M_CharStringToIndex;
         typedef stdext::hash_map<std::wstring, int> M_WideStringToIndex;
 
-        M_StringToIndex             m_Indices; 
-        std::vector< std::string >  m_Strings;
+        M_CharStringToIndex         m_CharIndices; 
+        std::vector< std::string >  m_CharStrings;
 
         M_WideStringToIndex         m_WideIndices; 
         std::vector< std::wstring > m_WideStrings;
@@ -50,17 +48,7 @@ namespace Reflect
         int Insert( const std::string& str );
         int Insert( const std::wstring& str );
 
-        const std::string& GetCharString( const int index );
-        const std::wstring& GetWideString( const int index );
-
-        const tstring& GetString( const int index )
-        {
-#ifdef UNICODE
-            return GetWideString( index );
-#else
-            return GetCharString( index );
-#endif
-        }
+        tstring GetString( int index );
 
         void Serialize(ArchiveBinary* archive); 
         void Deserialize(ArchiveBinary* archive); 

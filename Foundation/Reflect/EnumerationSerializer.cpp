@@ -81,7 +81,7 @@ void EnumerationSerializer::Serialize(Archive& archive) const
         {
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            std::string label;
+            tstring label;
 
             if (m_Enumeration)
             {
@@ -100,7 +100,7 @@ void EnumerationSerializer::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            std::string label;
+            tstring label;
 
             if (m_Enumeration)
             {
@@ -160,7 +160,7 @@ void EnumerationSerializer::Deserialize(Archive& archive)
 
             if (index >= 0)
             {
-                const std::string& str (binary.GetStrings().GetString(index));
+                const tstring& str (binary.GetStrings().GetString(index));
 
                 if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
                 {
@@ -182,11 +182,11 @@ void EnumerationSerializer::Deserialize(Archive& archive)
     }
 }
 
-std::ostream& EnumerationSerializer::operator >> (std::ostream& stream) const
+tostream& EnumerationSerializer::operator>> (tostream& stream) const
 {
     bool set = false;
 
-    std::string label;
+    tstring label;
     if (!m_Enumeration->GetElementLabel(m_Data.Get(), label))
     {
         // something is amiss, we should be guaranteed serialization of enum elements
@@ -198,9 +198,9 @@ std::ostream& EnumerationSerializer::operator >> (std::ostream& stream) const
     return stream;
 }
 
-std::istream& EnumerationSerializer::operator << (std::istream& stream)
+tistream& EnumerationSerializer::operator<< (tistream& stream)
 {
-    std::string buf;
+    tstring buf;
     stream >> buf;
 
     if (!buf.empty())

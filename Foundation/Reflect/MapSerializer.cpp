@@ -10,25 +10,25 @@ REFLECT_DEFINE_ABSTRACT(MapSerializer)
 // str should contain a string with map element separated by the specified delimiters argument.
 // str will be parsed into key-value pairs and each pair will be inserted into tokens.
 template< typename TKey, typename TVal >
-inline void Tokenize( const std::string& str, std::map< TKey, TVal >& tokens, const std::string& delimiters )
+inline void Tokenize( const tstring& str, std::map< TKey, TVal >& tokens, const tstring& delimiters )
 {
     // Skip delimiters at beginning.
-    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
     // Find first "non-delimiter".
-    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-    while ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( tstring::npos != pos || tstring::npos != lastPos )
     {
-        std::stringstream kStream( str.substr( lastPos, pos - lastPos ) );
+        tstringstream kStream( str.substr( lastPos, pos - lastPos ) );
 
         // Skip delimiters.  Note the "not_of"
         lastPos = str.find_first_not_of( delimiters, pos );
         // Find next "non-delimiter"
         pos = str.find_first_of( delimiters, lastPos );
 
-        if ( std::string::npos != pos || std::string::npos != lastPos )
+        if ( tstring::npos != pos || tstring::npos != lastPos )
         {
-            std::stringstream vStream( str.substr( lastPos, pos - lastPos ) );
+            tstringstream vStream( str.substr( lastPos, pos - lastPos ) );
 
             // At this point, we have the key and value.  Build the map entry.
             // Note that the stream operator stops at spaces.
@@ -56,23 +56,23 @@ inline void Tokenize( const std::string& str, std::map< TKey, TVal >& tokens, co
 // Partial specialization for strings as TVal, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
 template< typename TKey, typename TVal >
-inline void Tokenize( const std::string& str, std::map< TKey, std::string >& tokens, const std::string& delimiters )
+inline void Tokenize( const tstring& str, std::map< TKey, tstring >& tokens, const tstring& delimiters )
 {
     // Skip delimiters at beginning.
-    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
     // Find first "non-delimiter".
-    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-    while ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( tstring::npos != pos || tstring::npos != lastPos )
     {
-        std::stringstream kStream( str.substr( lastPos, pos - lastPos ) );
+        tstringstream kStream( str.substr( lastPos, pos - lastPos ) );
 
         // Skip delimiters.  Note the "not_of"
         lastPos = str.find_first_not_of( delimiters, pos );
         // Find next "non-delimiter"
         pos = str.find_first_of( delimiters, lastPos );
 
-        if ( std::string::npos != pos || std::string::npos != lastPos )
+        if ( tstring::npos != pos || tstring::npos != lastPos )
         {
             // At this point, we have the key and value.  Build the map entry.
             TKey k;
@@ -97,25 +97,25 @@ inline void Tokenize( const std::string& str, std::map< TKey, std::string >& tok
 // Partial specialization for strings as TKey, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
 template< typename TKey, typename TVal >
-inline void Tokenize( const std::string& str, std::map< std::string, TVal >& tokens, const std::string& delimiters )
+inline void Tokenize( const tstring& str, std::map< tstring, TVal >& tokens, const tstring& delimiters )
 {
     // Skip delimiters at beginning.
-    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
     // Find first "non-delimiter".
-    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-    while ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( tstring::npos != pos || tstring::npos != lastPos )
     {
-        std::string key( str.substr( lastPos, pos - lastPos ) );
+        tstring key( str.substr( lastPos, pos - lastPos ) );
 
         // Skip delimiters.  Note the "not_of"
         lastPos = str.find_first_not_of( delimiters, pos );
         // Find next "non-delimiter"
         pos = str.find_first_of( delimiters, lastPos );
 
-        if ( std::string::npos != pos || std::string::npos != lastPos )
+        if ( tstring::npos != pos || tstring::npos != lastPos )
         {
-            std::stringstream vStream( str.substr( lastPos, pos - lastPos ) );
+            tstringstream vStream( str.substr( lastPos, pos - lastPos ) );
 
             // At this point, we have the key and value.  Build the map entry.
             TVal v;
@@ -140,26 +140,26 @@ inline void Tokenize( const std::string& str, std::map< std::string, TVal >& tok
 // Explicit implementation for strings, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
 template< typename TKey, typename TVal >
-inline void Tokenize( const std::string& str, std::map< std::string, std::string >& tokens, const std::string& delimiters )
+inline void Tokenize( const tstring& str, std::map< tstring, tstring >& tokens, const tstring& delimiters )
 {
     // Skip delimiters at beginning.
-    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
     // Find first "non-delimiter".
-    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-    while ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( tstring::npos != pos || tstring::npos != lastPos )
     {
-        std::string key( str.substr( lastPos, pos - lastPos ) );
+        tstring key( str.substr( lastPos, pos - lastPos ) );
 
         // Skip delimiters.  Note the "not_of"
         lastPos = str.find_first_not_of( delimiters, pos );
         // Find next "non-delimiter"
         pos = str.find_first_of( delimiters, lastPos );
 
-        if ( std::string::npos != pos || std::string::npos != lastPos )
+        if ( tstring::npos != pos || tstring::npos != lastPos )
         {
             // At this point, we have the key and value.  Build the map entry.
-            tokens.insert( std::map< std::string, std::string >::value_type( key, str.substr( lastPos, pos - lastPos ) ) );
+            tokens.insert( std::map< tstring, tstring >::value_type( key, str.substr( lastPos, pos - lastPos ) ) );
 
             // Skip delimiters.  Note the "not_of"
             lastPos = str.find_first_not_of( delimiters, pos );
@@ -404,7 +404,7 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::Deserialize(Archive& a
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
-std::ostream& SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::operator >> (std::ostream& stream) const
+tostream& SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::operator>> (tostream& stream) const
 {
     if (!TranslateOutput( stream ))
     {
@@ -425,38 +425,38 @@ std::ostream& SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::operator >> (
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
-std::istream& SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::operator << (std::istream& stream)
+tistream& SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::operator<< (tistream& stream)
 {
     m_Data->clear();
 
     if (!TranslateInput( stream ))
     {
-        std::string str;
+        tstring str;
         std::streamsize size = stream.rdbuf()->in_avail();
         str.resize( (size_t) size);
-        stream.read( const_cast< char* >( str.c_str() ), size );
+        stream.read( const_cast< tchar* >( str.c_str() ), size );
 
         Tokenize< KeyT, ValueT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
     }
     return stream;
 }  
 
-template SimpleMapSerializer<std::string, StringSerializer, std::string, StringSerializer>;
-template SimpleMapSerializer<std::string, StringSerializer, bool, BoolSerializer>;
-template SimpleMapSerializer<std::string, StringSerializer, u32, U32Serializer>;
-template SimpleMapSerializer<std::string, StringSerializer, i32, I32Serializer>;
+template SimpleMapSerializer<tstring, StringSerializer, tstring, StringSerializer>;
+template SimpleMapSerializer<tstring, StringSerializer, bool, BoolSerializer>;
+template SimpleMapSerializer<tstring, StringSerializer, u32, U32Serializer>;
+template SimpleMapSerializer<tstring, StringSerializer, i32, I32Serializer>;
 
-template SimpleMapSerializer<u32, U32Serializer, std::string, StringSerializer>;
+template SimpleMapSerializer<u32, U32Serializer, tstring, StringSerializer>;
 template SimpleMapSerializer<u32, U32Serializer, u32, U32Serializer>;
 template SimpleMapSerializer<u32, U32Serializer, i32, I32Serializer>;
 template SimpleMapSerializer<u32, U32Serializer, u64, U64Serializer>;
 
-template SimpleMapSerializer<i32, I32Serializer, std::string, StringSerializer>;
+template SimpleMapSerializer<i32, I32Serializer, tstring, StringSerializer>;
 template SimpleMapSerializer<i32, I32Serializer, u32, U32Serializer>;
 template SimpleMapSerializer<i32, I32Serializer, i32, I32Serializer>;
 template SimpleMapSerializer<i32, I32Serializer, u64, U64Serializer>;
 
-template SimpleMapSerializer<u64, U64Serializer, std::string, StringSerializer>;
+template SimpleMapSerializer<u64, U64Serializer, tstring, StringSerializer>;
 template SimpleMapSerializer<u64, U64Serializer, u32, U32Serializer>;
 template SimpleMapSerializer<u64, U64Serializer, u64, U64Serializer>;
 template SimpleMapSerializer<u64, U64Serializer, Math::Matrix4, Matrix4Serializer>;

@@ -1,4 +1,4 @@
-#include "CompressionUtilities.h" 
+#include "Compression.h" 
 #include "Exceptions.h" 
 
 #include <zlib.h> 

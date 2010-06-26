@@ -25,7 +25,7 @@ namespace Reflect
         bool Create(int type, ElementPtr& element);
 
         // creator
-        bool Create(const std::string& shortName, ElementPtr& element);
+        bool Create(const tstring& shortName, ElementPtr& element);
 
         // push into free list
         void Free(ElementPtr element);

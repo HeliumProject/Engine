@@ -27,8 +27,8 @@ namespace Reflect
         virtual void Serialize( Archive& archive ) const NOC_OVERRIDE;
         virtual void Deserialize( Archive& archive ) NOC_OVERRIDE;
 
-        virtual std::ostream& operator >> (std::ostream& stream) const NOC_OVERRIDE;
-        virtual std::istream& operator << (std::istream& stream) NOC_OVERRIDE;
+        virtual tostream& operator>> (tostream& stream) const NOC_OVERRIDE;
+        virtual tistream& operator<< (tistream& stream) NOC_OVERRIDE;
     };
 
     typedef Nocturnal::SmartPtr< PathSerializer > PathSerializerPtr;

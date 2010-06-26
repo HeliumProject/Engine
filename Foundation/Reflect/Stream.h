@@ -103,7 +103,7 @@ namespace Reflect
         {
             PROFILE_SCOPE_ACCUM(g_StreamRead); 
 
-            m_Stream->read((char*)t, size); 
+            m_Stream->read((C*)t, size); 
 
             if (m_Stream->fail() && !m_Stream->eof())
             {
@@ -116,14 +116,14 @@ namespace Reflect
         template <typename T>
         inline Stream& Read(T* ptr)
         {
-            return ReadBuffer( ptr, sizeof(T)); 
+            return ReadBuffer( ptr, sizeof(T) ); 
         }
 
         Stream& WriteBuffer(const void* t, std::streamsize size)
         {
             PROFILE_SCOPE_ACCUM(g_StreamWrite); 
 
-            m_Stream->write((const char*)t, size); 
+            m_Stream->write((const C*)t, size); 
 
             if (m_Stream->fail())
             {
@@ -136,7 +136,7 @@ namespace Reflect
         template <typename T>
         inline Stream& Write(const T* ptr)
         {
-            return WriteBuffer( ptr, sizeof(T)); 
+            return WriteBuffer( ptr, sizeof(T) ); 
         }
     
         Stream& Flush()

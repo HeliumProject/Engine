@@ -431,7 +431,8 @@ ElementPtr Archive::FromFile(const tstring& file, int searchType, StatusHandler*
 
     tchar print[512];
     _sntprintf(print, sizeof(print), TXT( "Parsing '%s'" ), file.c_str());
-    PROFILE_SCOPE_ACCUM_VERBOSE(g_ParseAccum, print);
+#pragma TODO("Profiler support for wide strings")
+    PROFILE_SCOPE_ACCUM_VERBOSE(g_ParseAccum, ""/*print*/);
 
     std::auto_ptr<Archive> archive (GetArchive(file, status));
     archive->m_SearchType = searchType;
@@ -489,7 +490,8 @@ void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr 
 
     tchar print[512];
     _sntprintf(print, sizeof(print), TXT( "Authoring '%s'" ), file.c_str());
-    PROFILE_SCOPE_ACCUM_VERBOSE(g_AuthorAccum, print);
+#pragma TODO("Profiler support for wide strings")
+    PROFILE_SCOPE_ACCUM_VERBOSE(g_AuthorAccum, ""/*print*/);
 
     std::auto_ptr<Archive> archive (GetArchive(file, status));
     archive->Debug( TXT( "%s\n" ), print);
@@ -591,7 +593,8 @@ void Archive::FromFile(const tstring& file, V_Element& elements, StatusHandler* 
 
     tchar print[512];
     _sntprintf(print, sizeof(print), TXT( "Parsing '%s'" ), file.c_str());
-    PROFILE_SCOPE_ACCUM_VERBOSE(g_ParseAccum, print);
+#pragma TODO("Profiler support for wide strings")
+    PROFILE_SCOPE_ACCUM_VERBOSE(g_ParseAccum, ""/*print*/);
 
     std::auto_ptr<Archive> archive (GetArchive(file, status));
     archive->Debug( TXT( "%s\n" ), print);

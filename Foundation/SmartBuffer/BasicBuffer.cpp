@@ -337,7 +337,7 @@ u32 BasicBuffer::AddU64( u64 val, const tchar* dbgStr, ... )
 
 u32 BasicBuffer::AddF16( f32 val, const tchar* dbgStr, ... )
 {
-    i16 half = ::Math::FloatToHalf( val );
+    i16 half = Math::FloatToHalf( val );
     ADD_DEBUG_INFO_SKIP(BasicBufferDebugInfo::BLOCK_TYPE_I16, 2);
 
     half = ConvertEndian(half,IsPlatformBigEndian());

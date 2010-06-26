@@ -32,21 +32,37 @@ namespace Reflect
         template<class T>
         static Class* Create(const std::string& base = "", const std::string& shortName = "", CreateObjectFunc creator = NULL)
         {
+            tstring convertedBase;
+            {
+                bool converted = Platform::ConvertString( base, convertedBase );
+                NOC_ASSERT( converted );
+            }
+
+            tstring convertedShortName;
+            {
+                bool converted = Platform::ConvertString( shortName, convertedShortName );
+                NOC_ASSERT( converted );
+            }
+
+            tstring convertedRTTIName;
+            {
+                bool converted = Platform::ConvertString( typeid(T).name(), convertedRTTIName );
+                NOC_ASSERT( converted );
+            }
+
             Class* info = Class::Create();
 
             info->m_TypeID = AssignTypeID();
             info->m_Size = sizeof(T);
-
-            info->m_ShortName = ( shortName.empty() ? ShortenName( typeid(T).name() ) : shortName );
-            info->m_FullName = typeid( T ).name();
+            info->m_ShortName = convertedShortName.empty() ? ShortenName( convertedRTTIName ) : convertedShortName;
+            info->m_FullName = convertedRTTIName;
             info->m_UIName = info->m_ShortName;
-
-            info->m_Base = base;
+            info->m_Base = convertedBase;
             info->m_Create = creator;
 
             // c++ can give us the address of base class static functions, so check each base class
             bool baseEnumerator = false;
-            std::string baseName = info->m_Base;
+            tstring baseName = info->m_Base;
             while ( !baseEnumerator && !baseName.empty() )
             {
                 const Reflect::Composite* base = Reflect::Registry::GetInstance()->GetClass( baseName );

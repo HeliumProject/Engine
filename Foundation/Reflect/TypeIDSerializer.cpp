@@ -74,7 +74,7 @@ void TypeIDSerializer::Serialize(Archive& archive) const
         {
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
-            i32 index = binary.GetStrings().Insert( type ? type->m_ShortName : "" );
+            i32 index = binary.GetStrings().Insert( type ? type->m_ShortName : TXT("") );
             binary.GetStream().Write(&index); 
             break;
         }
@@ -83,7 +83,7 @@ void TypeIDSerializer::Serialize(Archive& archive) const
 
 void TypeIDSerializer::Deserialize(Archive& archive)
 {
-    std::string str;
+    tstring str;
 
     switch (archive.GetType())
     {

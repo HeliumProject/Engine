@@ -24,8 +24,8 @@ void BitfieldSerializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
-#ifdef REFLECT_XML_SUPPORT
-            std::string str;
+            tstring str;
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
             if (m_Enumeration)
             {
@@ -35,15 +35,14 @@ void BitfieldSerializer::Serialize(Archive& archive) const
                 }
             }
 
-            archive.GetStream() << str;
-#endif
+            xml.GetStream() << str;
             break;
         }
 
     case ArchiveTypes::Binary:
         {
             i32 index = -1;
-            std::vector< std::string > strs;
+            std::vector< tstring > strs;
             ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
 
             if (m_Enumeration)
@@ -54,8 +53,8 @@ void BitfieldSerializer::Serialize(Archive& archive) const
                 }
 
                 // search the map
-                std::vector< std::string >::const_iterator itr = strs.begin();
-                std::vector< std::string >::const_iterator end = strs.end();
+                std::vector< tstring >::const_iterator itr = strs.begin();
+                std::vector< tstring >::const_iterator end = strs.end();
                 for ( ; itr != end; ++itr )
                 {
                     index = binary.GetStrings().Insert(*itr);
@@ -106,7 +105,7 @@ void BitfieldSerializer::Deserialize(Archive& archive)
             i32 index = -1;
             binary.GetStream().Read(&index); 
 
-            std::vector< std::string > strs;
+            std::vector< tstring > strs;
             while (index >= 0)
             {
                 strs.push_back(binary.GetStrings().GetString(index));
@@ -115,13 +114,15 @@ void BitfieldSerializer::Deserialize(Archive& archive)
                 binary.GetStream().Read(&index); 
             }
 
-            std::string str;
-            std::vector< std::string >::const_iterator itr = strs.begin();
-            std::vector< std::string >::const_iterator end = strs.end();
+            tstring str;
+            std::vector< tstring >::const_iterator itr = strs.begin();
+            std::vector< tstring >::const_iterator end = strs.end();
             for ( ; itr != end; ++itr )
             {
                 if (itr != strs.begin())
-                    str += "|";
+                {
+                    str += TXT("|");
+                }
 
                 str += *itr;
             }
@@ -145,9 +146,9 @@ void BitfieldSerializer::Deserialize(Archive& archive)
     }
 }
 
-std::ostream& BitfieldSerializer::operator >> (std::ostream& stream) const
+tostream& BitfieldSerializer::operator>> (tostream& stream) const
 {
-    std::string str;
+    tstring str;
     if (!m_Enumeration->GetBitfieldString(m_Data.Get(), str))
     {
         // something is amiss, we should be guaranteed serialization of enum elements
@@ -159,9 +160,9 @@ std::ostream& BitfieldSerializer::operator >> (std::ostream& stream) const
     return stream;
 }
 
-std::istream& BitfieldSerializer::operator << (std::istream& stream)
+tistream& BitfieldSerializer::operator<< (tistream& stream)
 {
-    std::string buf;
+    tstring buf;
     stream >> buf;
     m_Enumeration->GetBitfieldValue(buf, m_Data.Ref());
 

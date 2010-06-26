@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Indent.h"
 #include "Archive.h"
 
 //  
@@ -58,7 +59,7 @@ namespace Reflect
     //
 
     typedef std::map< int, Nocturnal::SmartPtr<const Class> > M_IDToClass;
-    typedef std::map< std::string, Nocturnal::SmartPtr<const Class> > M_StrToClass;
+    typedef std::map< tstring, Nocturnal::SmartPtr<const Class> > M_StrToClass;
 
     class FOUNDATION_API ArchiveBinary : public Archive
     {
@@ -74,6 +75,9 @@ namespace Reflect
         // The stream to use
         CharStreamPtr m_Stream;
 
+        // Indent helper
+        Indent<tchar> m_Indent;
+
         // The strings to cache for binary modes
         StringPool m_Strings;
 
@@ -84,7 +88,7 @@ namespace Reflect
         M_StrToClass m_ClassesByShortName;
 
         // Mapping from CURRENT short name to LEGACY short name
-        std::map< std::string, std::string > m_ShortNameMapping;
+        std::map< tstring, tstring > m_ShortNameMapping;
 
         // File format version
         u32 m_Version;

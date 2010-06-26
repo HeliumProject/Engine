@@ -71,8 +71,8 @@ namespace Math
 
         void Clamp ( const Color3 &min, const Color3 &mar );
 
-        friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Color3& color);
-        friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Color3& color);
+        friend FOUNDATION_API tostream& operator<<(tostream& outStream, const Color3& color);
+        friend FOUNDATION_API tistream& operator>>(tistream& inStream, Color3& color);
     };
 
     typedef std::vector< Color3 > V_Color3;
@@ -85,21 +85,22 @@ namespace Math
         b = b < min.b ? min.b : ( b > mar.b ) ? mar.b : b; 
     }
 
-    inline std::ostream& operator<<(std::ostream& outStream, const Color3& color)
+    inline tostream& operator<<(tostream& outStream, const Color3& color)
     {
         outStream << (u16)color.r << ", " << (u16)color.g << ", " << (u16)color.b;
 
         return outStream;
     }
 
-    inline std::istream& operator>>(std::istream& inStream, Color3& color)
+    inline tistream& operator>>(tistream& inStream, Color3& color)
     {
         u32 r = 0;
         u32 g = 0;
         u32 b = 0;
-        std::string line;
+        tstring line;
         std::getline( inStream, line );
-        if (3 == sscanf( line.c_str(), "%u, %u, %u", &r, &g, &b))
+
+        if (3 == _stscanf( line.c_str(), TXT("%u, %u, %u"), &r, &g, &b))
         {
             color.r = (u8)r;
             color.g = (u8)g;

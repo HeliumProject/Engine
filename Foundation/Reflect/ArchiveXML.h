@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Indent.h"
 #include "Archive.h"
 
 struct XML_ParserStruct;
@@ -7,62 +8,6 @@ typedef struct XML_ParserStruct *XML_Parser;
 
 namespace Reflect
 {
-    template< class C >
-    class Indent
-    {
-    private:
-        static C m_Space;
-
-        // Indent spacing
-        unsigned int m_Indent;
-
-    public:
-        Indent()
-            : m_Indent (0)
-        {
-
-        }
-
-        void Push()
-        {
-            m_Indent++;
-        }
-
-        void Pop()
-        {
-            if (m_Indent > 0)
-                m_Indent--;
-        }
-
-        void Get(Stream<C>& stream)
-        {
-            if (m_Indent > 0)
-            {
-                int indent = m_Indent;
-
-                while(indent > 0)
-                {
-                    stream << m_Space;
-                    indent--;
-                }
-            }
-        }
-
-        void Get(FILE* file)
-        {
-            if (file != NULL && m_Indent > 0)
-            {
-                int indent = m_Indent;
-
-                while(indent > 0)
-                {
-                    fputc( m_Space, file );
-                    indent--;
-                }
-            }
-        }
-    };
-
     //
     // XML Archive Class
     //
@@ -81,10 +26,10 @@ namespace Reflect
         {
         public:
             // the name of the short name being processed
-            std::string m_ShortName;
+            tstring m_ShortName;
 
             // the cdata section for xml files
-            std::string m_Buffer;
+            tstring m_Buffer;
 
             // the current serializing field
             const Field* m_Field;
@@ -103,7 +48,7 @@ namespace Reflect
                 kField  = 0x1 << 0,
             };
 
-            ParsingState(const char* shortName)
+            ParsingState(const tchar* shortName)
                 : m_ShortName (shortName)
                 , m_Field (NULL) 
                 , m_Flags (0)
@@ -133,8 +78,10 @@ namespace Reflect
         // The stream to use
         TCharStreamPtr m_Stream;
 
+#ifdef REFLECT_ARCHIVE_VERBOSE
         // Indent helper
         Indent<tchar> m_Indent;
+#endif
 
         // File format version
         u32 m_Version;
@@ -143,7 +90,7 @@ namespace Reflect
         std::stack<ParsingStatePtr> m_StateStack;
 
         // The current name of the serializing field
-        std::stack<std::string> m_FieldNames;
+        std::stack<tstring> m_FieldNames;
 
         // The current collection of components
         V_Element m_Components;
@@ -244,12 +191,12 @@ namespace Reflect
 
     public:
         // Reading and writing single element from string data
-        static void       ToString(const ElementPtr& element, std::string& xml, StatusHandler* status = NULL);
-        static ElementPtr FromString(const std::string& xml, int searchType = Reflect::ReservedTypes::Any, StatusHandler* status = NULL);
+        static void       ToString(const ElementPtr& element, tstring& xml, StatusHandler* status = NULL);
+        static ElementPtr FromString(const tstring& xml, int searchType = Reflect::ReservedTypes::Any, StatusHandler* status = NULL);
 
         // Reading and writing multiple elements from string data
-        static void       ToString(const V_Element& elements, std::string& xml, StatusHandler* status = NULL);
-        static void       FromString(const std::string& xml, V_Element& elements, StatusHandler* status = NULL);
+        static void       ToString(const V_Element& elements, tstring& xml, StatusHandler* status = NULL);
+        static void       FromString(const tstring& xml, V_Element& elements, StatusHandler* status = NULL);
 
     };
 }

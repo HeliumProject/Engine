@@ -166,8 +166,8 @@ namespace Math
         static Matrix3        RotateY (f32 theta);
         static Matrix3        RotateZ (f32 theta);
 
-        friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Matrix3& vector);
-        friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Matrix3& vector);
+        friend FOUNDATION_API tostream& operator<<(tostream& outStream, const Matrix3& vector);
+        friend FOUNDATION_API tistream& operator>>(tistream& inStream, Matrix3& vector);
         friend class FOUNDATION_API Matrix4;
     };
 
@@ -393,7 +393,7 @@ namespace Math
         return *this;
     }
 
-    inline std::ostream& operator<<(std::ostream& outStream, const Matrix3& matrix)
+    inline tostream& operator<<(tostream& outStream, const Matrix3& matrix)
     {
         outStream << matrix.x.x << ", " << matrix.x.y << ", " << matrix.x.z << ", ";
         outStream << matrix.y.x << ", " << matrix.y.y << ", " << matrix.y.z << ", ";
@@ -402,7 +402,7 @@ namespace Math
         return outStream;
     }
 
-    inline std::istream& operator>>(std::istream& inStream, Matrix3& matrix)
+    inline tistream& operator>>(tistream& inStream, Matrix3& matrix)
     {
         inStream >> matrix.x.x;
         inStream.ignore();

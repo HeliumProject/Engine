@@ -1,5 +1,5 @@
 #include "ArraySerializer.h"
-#include "CompressionUtilities.h" 
+#include "Compression.h" 
 #include "ArchiveBinary.h"
 #include "ArchiveXML.h"
 
@@ -13,18 +13,18 @@ REFLECT_DEFINE_ABSTRACT(ArraySerializer)
 // String tokenizer adapted from:
 // http://www.oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
 template< typename T >
-void Tokenize( const std::string& str, std::vector< T >& tokens, const std::string& delimiters )
+void Tokenize( const tstring& str, std::vector< T >& tokens, const tstring& delimiters )
 {
     // Skip delimiters at beginning.
-    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
     // Find first "non-delimiter".
-    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
 
     T temp;
-    while ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( tstring::npos != pos || tstring::npos != lastPos )
     {
         // Found a token, convert it to the proper type for our vector
-        std::stringstream stream (str.substr( lastPos, pos - lastPos ));
+        tstringstream stream (str.substr( lastPos, pos - lastPos ));
         stream >> temp; // NOTE: Stream operator stops at spaces!
         if ( !stream.fail() )
         {
@@ -45,14 +45,14 @@ void Tokenize( const std::string& str, std::vector< T >& tokens, const std::stri
 // Explicit implementation for strings, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
 template<>
-inline void Tokenize( const std::string& str, std::vector< std::string >& tokens, const std::string& delimiters )
+inline void Tokenize( const tstring& str, std::vector< tstring >& tokens, const tstring& delimiters )
 {
     // Skip delimiters at beginning.
-    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
     // Find first "non-delimiter".
-    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-    while ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( tstring::npos != pos || tstring::npos != lastPos )
     {
         // Add the token to the vector
         tokens.push_back( str.substr( lastPos, pos - lastPos ) );
@@ -158,7 +158,6 @@ void SimpleArraySerializer<T>::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
-#ifdef REFLECT_XML_SUPPORT
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
             xml.GetIndent().Push();
@@ -167,17 +166,16 @@ void SimpleArraySerializer<T>::Serialize(Archive& archive) const
             for (size_t i=0; i<m_Data->size(); i++)
             {
                 // indent
-                xml.GetIndent().Get(archive.GetStream());
+                xml.GetIndent().Get(xml.GetStream());
 
                 // write
-                archive.GetStream() << m_Data.Get()[i];
+                xml.GetStream() << m_Data.Get()[i];
 
                 // newline
-                archive.GetStream() << "\n";
+                xml.GetStream() << "\n";
             }
 
             xml.GetIndent().Pop();
-#endif
             break;
         }
 
@@ -218,22 +216,22 @@ void SimpleArraySerializer<T>::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-#ifdef REFLECT_XML_SUPPORT
-            T value;
-            archive.GetStream().SkipWhitespace(); 
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            while (!archive.GetStream().Done())
+            T value;
+            xml.GetStream().SkipWhitespace(); 
+
+            while (!xml.GetStream().Done())
             {
                 // read data
-                archive.GetStream() >> value;
+                xml.GetStream() >> value;
 
                 // copy onto vector
                 m_Data->push_back(value);
 
                 // read to next non-whitespace char
-                archive.GetStream().SkipWhitespace(); 
+                xml.GetStream().SkipWhitespace(); 
             }
-#endif
             break;
         }
 
@@ -273,7 +271,7 @@ void SimpleArraySerializer<T>::Deserialize(Archive& archive)
 }
 
 template < class T >
-std::ostream& SimpleArraySerializer<T>::operator >> (std::ostream& stream) const
+tostream& SimpleArraySerializer<T>::operator>> (tostream& stream) const
 {
     if (!TranslateOutput( stream ))
     {
@@ -293,16 +291,16 @@ std::ostream& SimpleArraySerializer<T>::operator >> (std::ostream& stream) const
 }
 
 template < class T >
-std::istream& SimpleArraySerializer<T>::operator << (std::istream& stream)
+tistream& SimpleArraySerializer<T>::operator<< (tistream& stream)
 {
     m_Data->clear();
 
     if (!TranslateInput( stream ))
     {
-        std::string str;
+        tstring str;
         std::streamsize size = stream.rdbuf()->in_avail();
-        str.resize( (size_t) size);
-        stream.read(const_cast< char* >( str.c_str() ), size );
+        str.resize( (size_t) size );
+        stream.read(const_cast< tchar* >( str.c_str() ), size );
 
         Tokenize( str, m_Data.Ref(), s_ContainerItemDelimiter );
     }
@@ -372,14 +370,14 @@ void StringArraySerializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-#ifdef REFLECT_XML_SUPPORT
-            archive.GetStream().SkipWhitespace(); 
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            std::string value;
+            xml.GetStream().SkipWhitespace(); 
+            tstring value;
 
-            while (!archive.GetStream().Done())
+            while (!xml.GetStream().Done())
             {
-                std::getline( *archive.GetStream().GetInternal(), value ); 
+                std::getline( xml.GetStream().GetInternal(), value ); 
 
                 size_t start = value.find_first_of('\"');
                 size_t end = value.find_last_of('\"');
@@ -389,10 +387,14 @@ void StringArraySerializer::Deserialize(Archive& archive)
                 {
                     // if all we have are open/close quotes, push a blank string
                     if (start == end-1)
-                        m_Data->push_back(std::string ());
+                    {
+                        m_Data->push_back(tstring ());
+                    }
                     // else we have some non-null string data
                     else
+                    {
                         m_Data->push_back(value.substr(start + 1, end - start - 1));
+                    }
                 }
                 else
                 {
@@ -402,9 +404,8 @@ void StringArraySerializer::Deserialize(Archive& archive)
                         m_Data->push_back(value.substr(start));
                 }
 
-                archive.GetStream().SkipWhitespace(); 
+                xml.GetStream().SkipWhitespace(); 
             }
-#endif
             break;
         }
 
@@ -428,10 +429,12 @@ void StringArraySerializer::Deserialize(Archive& archive)
     }
 }
 
-template SimpleArraySerializer<std::string>;
+template SimpleArraySerializer<tstring>;
 template SimpleArraySerializer<bool>;
+#ifndef UNICODE
 template SimpleArraySerializer<u8>;
 template SimpleArraySerializer<i8>;
+#endif
 template SimpleArraySerializer<u16>;
 template SimpleArraySerializer<i16>;
 template SimpleArraySerializer<u32>;

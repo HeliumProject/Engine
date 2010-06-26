@@ -48,7 +48,7 @@ void ArchiveXML::OpenFile( const tstring& file, bool write )
     m_Path.Set( file );
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Debug("Opening file '%s'\n", file.c_str());
+    Debug(TXT("Opening file '%s'\n"), file.c_str());
 #endif
 
     Reflect::TCharStreamPtr stream = new FileStream<tchar>(file, write);
@@ -232,7 +232,7 @@ void ArchiveXML::Serialize(const ElementPtr& element)
 
 void ArchiveXML::Serialize(const V_Element& elements, u32 flags)
 {
-    m_FieldNames.push(std::string ());
+    m_FieldNames.push( tstring () );
 
     V_Element::const_iterator itr = elements.begin();
     V_Element::const_iterator end = elements.end();
@@ -457,7 +457,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
     // Find element type
     //
 
-    std::string elementType;
+    tstring elementType;
 
     if ( m_Version < FIRST_VERSION_WITH_NAMESPACE_SUPPORT )
     {
@@ -515,13 +515,7 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
                 }
             }
 
-            if ( fieldName )
-            {
-                std::string temp;
-                bool converted = Platform::ConvertString( fieldName, temp );
-                NOC_ASSERT( converted );
-                newState->m_Field = parentTypeDefinition->FindFieldByName( temp );
-            }
+            newState->m_Field = parentTypeDefinition->FindFieldByName( fieldName );
 
             // we have found a fieldinfo into our parent's definition
             if (newState->m_Field != NULL)
@@ -604,11 +598,7 @@ void ArchiveXML::OnCharacterData(const XML_Char *pszData, int nLength)
     ParsingStatePtr topState = m_StateStack.empty() ? NULL : m_StateStack.top();
     if ( topState && topState->m_Element )
     {
-        std::string temp;
-        bool converted = Platform::ConvertString( pszData, temp );
-        NOC_ASSERT( converted );
-
-        topState->m_Buffer.append( temp.c_str(), temp.length() );
+        topState->m_Buffer.append( pszData, nLength );
     }
 }
 
@@ -730,14 +720,14 @@ void ArchiveXML::OnEndElement(const XML_Char *pszName)
     }
 }
 
-void ArchiveXML::ToString(const ElementPtr& element, std::string& xml, StatusHandler* status)
+void ArchiveXML::ToString(const ElementPtr& element, tstring& xml, StatusHandler* status)
 {
     V_Element elements(1);
     elements[0] = element;
     return ToString( elements, xml, status );
 }
 
-ElementPtr ArchiveXML::FromString(const std::string& xml, int searchType, StatusHandler* status)
+ElementPtr ArchiveXML::FromString(const tstring& xml, int searchType, StatusHandler* status)
 {
     if (searchType == Reflect::ReservedTypes::Any)
     {
@@ -747,7 +737,7 @@ ElementPtr ArchiveXML::FromString(const std::string& xml, int searchType, Status
     ArchiveXML archive (status);
     archive.m_SearchType = searchType;
 
-    std::stringstream strStream;
+    tstringstream strStream;
     strStream << "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\""<<ArchiveXML::CURRENT_VERSION<<"\">" << xml << "</Reflect>";
     archive.m_Stream = new Reflect::TCharStream(&strStream); 
     archive.Read();
@@ -765,10 +755,10 @@ ElementPtr ArchiveXML::FromString(const std::string& xml, int searchType, Status
     return NULL;
 }
 
-void ArchiveXML::ToString(const V_Element& elements, std::string& xml, StatusHandler* status)
+void ArchiveXML::ToString(const V_Element& elements, tstring& xml, StatusHandler* status)
 {
     ArchiveXML archive (status);
-    std::stringstream strStream;
+    tstringstream strStream;
 
     archive.m_Stream = new Reflect::TCharStream(&strStream); 
     archive.m_Spool  = elements;
@@ -777,10 +767,10 @@ void ArchiveXML::ToString(const V_Element& elements, std::string& xml, StatusHan
     xml = strStream.str();
 }
 
-void ArchiveXML::FromString(const std::string& xml, V_Element& elements, StatusHandler* status)
+void ArchiveXML::FromString(const tstring& xml, V_Element& elements, StatusHandler* status)
 {
     ArchiveXML archive (status);
-    std::stringstream strStream;
+    tstringstream strStream;
     strStream << "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\""<<ArchiveXML::CURRENT_VERSION<<"\">" << xml << "</Reflect>";
 
     archive.m_Stream = new Reflect::TCharStream(&strStream); 

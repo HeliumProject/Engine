@@ -55,8 +55,8 @@ namespace Math
 
         f32               Dot (const Vector2& v) const { return (x * v.x + y * v.y); }
 
-        friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Vector2& v);
-        friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Vector2& v);
+        friend FOUNDATION_API tostream& operator<<(tostream& outStream, const Vector2& v);
+        friend FOUNDATION_API tistream& operator>>(tistream& inStream, Vector2& v);
     };
 
     typedef std::vector< Vector2 > V_Vector2;
@@ -96,14 +96,14 @@ namespace Math
         return result.Normalize();
     }
 
-    inline std::ostream& operator<<(std::ostream& outStream, const Vector2& vector)
+    inline tostream& operator<<(tostream& outStream, const Vector2& vector)
     {
         outStream << vector.x << ", " << vector.y;
 
         return outStream;
     }
 
-    inline std::istream& operator>>(std::istream& inStream, Vector2& vector)
+    inline tistream& operator>>(tistream& inStream, Vector2& vector)
     {
         inStream >> vector.x;
         inStream.ignore();

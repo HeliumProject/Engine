@@ -5,5 +5,5 @@
 
 using namespace Reflect;
 
-Profile::Accumulator Reflect::g_StreamWrite( TXT( "Reflect Stream Write" ) );
-Profile::Accumulator Reflect::g_StreamRead( TXT( "Reflect Stream Read" ) ); 
+Profile::Accumulator Reflect::g_StreamWrite( "Reflect Stream Write" );
+Profile::Accumulator Reflect::g_StreamRead( "Reflect Stream Read" ); 

@@ -92,7 +92,7 @@ void SimpleSerializer<T>::Serialize(const Nocturnal::BasicBufferPtr& buffer, con
 }
 
 template <class T>
-std::ostream& SimpleSerializer<T>::operator >> (std::ostream& stream) const
+tostream& SimpleSerializer<T>::operator>> (tostream& stream) const
 {
     if (!TranslateOutput( stream ))
     {
@@ -125,7 +125,7 @@ void SimpleSerializer<T>::Deserialize(Archive& archive)
 }
 
 template <class T>
-std::istream& SimpleSerializer<T>::operator << (std::istream& stream)
+tistream& SimpleSerializer<T>::operator<< (tistream& stream)
 {
     if (!TranslateInput( stream ))
     {
@@ -198,7 +198,7 @@ void StringSerializer::Deserialize(Archive& archive)
 }
 
 template<>
-std::ostream& StringSerializer::operator >> (std::ostream& stream) const
+tostream& StringSerializer::operator>> (tostream& stream) const
 {
     if (!TranslateOutput( stream ))
     {
@@ -208,17 +208,18 @@ std::ostream& StringSerializer::operator >> (std::ostream& stream) const
 }
 
 template<>
-std::istream& StringSerializer::operator << (std::istream& stream)
+tistream& StringSerializer::operator<< (tistream& stream)
 {
     if (!TranslateInput( stream ))
     {
         std::streamsize size = stream.rdbuf()->in_avail();
         m_Data->resize( (size_t) size);
-        stream.read(const_cast<char*>(m_Data.Get().c_str()), size);
+        stream.read(const_cast<tchar*>(m_Data.Get().c_str()), size);
     }
     return stream;
 }
 
+#ifndef UNICODE
 // this is a char, we must treat it as a number
 template <>
 void U8Serializer::Serialize(Archive& archive) const
@@ -271,7 +272,7 @@ void U8Serializer::Deserialize(Archive& archive)
 }
 
 template<>
-std::ostream& U8Serializer::operator >> (std::ostream& stream) const
+tostream& U8Serializer::operator>> (tostream& stream) const
 {
     if (!TranslateOutput( stream ))
     {
@@ -282,7 +283,7 @@ std::ostream& U8Serializer::operator >> (std::ostream& stream) const
 }
 
 template<>
-std::istream& U8Serializer::operator << (std::istream& stream)
+tistream& U8Serializer::operator<< (tistream& stream)
 {
     if (!TranslateInput( stream ))
     {
@@ -345,7 +346,7 @@ void I8Serializer::Deserialize(Archive& archive)
 }
 
 template<>
-std::ostream& I8Serializer::operator >> (std::ostream& stream) const
+tostream& I8Serializer::operator>> (tostream& stream) const
 {
     if (!TranslateOutput( stream ))
     {
@@ -356,7 +357,7 @@ std::ostream& I8Serializer::operator >> (std::ostream& stream) const
 }
 
 template<>
-std::istream& I8Serializer::operator << (std::istream& stream)
+tistream& I8Serializer::operator<< (tistream& stream)
 {
     if (!TranslateInput( stream ))
     {
@@ -366,10 +367,14 @@ std::istream& I8Serializer::operator << (std::istream& stream)
     }
     return stream;
 }
+#endif
 
+template SimpleSerializer<tstring>;
 template SimpleSerializer<bool>;
+#ifndef UNICODE
 template SimpleSerializer<u8>;
 template SimpleSerializer<i8>;
+#endif
 template SimpleSerializer<u16>;
 template SimpleSerializer<i16>;
 template SimpleSerializer<u32>;
@@ -378,7 +383,6 @@ template SimpleSerializer<u64>;
 template SimpleSerializer<i64>;
 template SimpleSerializer<f32>;
 template SimpleSerializer<f64>;
-template SimpleSerializer<std::string>;
 template SimpleSerializer<Nocturnal::GUID>;
 template SimpleSerializer<Nocturnal::TUID>;
 

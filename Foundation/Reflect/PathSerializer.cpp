@@ -117,10 +117,10 @@ void PathSerializer::Deserialize( Archive& archive )
     }
 }
 
-std::ostream& PathSerializer::operator >>( std::ostream& stream ) const
+tostream& PathSerializer::operator>>( tostream& stream ) const
 {
     tstring path = m_Data.Get().Get();
-    std::string temp;
+    tstring temp;
     bool converted = Platform::ConvertString( path, temp );
     NOC_ASSERT( converted );
 
@@ -128,20 +128,16 @@ std::ostream& PathSerializer::operator >>( std::ostream& stream ) const
     return stream;
 }
 
-std::istream& PathSerializer::operator <<( std::istream& stream )
+tistream& PathSerializer::operator<<( tistream& stream )
 {
-    std::string buf;
+    tstring str;
     std::streamsize size = stream.rdbuf()->in_avail();
-    buf.resize( (size_t) size);
-    stream.read( const_cast<char*>( buf.c_str() ), size );
+    str.resize( (size_t) size );
+    stream.read( const_cast<tchar*>( str.c_str() ), size );
 
-    if ( !buf.empty() )
+    if ( !str.empty() )
     {
-        tstring path;
-        bool converted = Platform::ConvertString( buf, path );
-        NOC_ASSERT( converted );
-
-        m_Data.Ref().Set( path );
+        m_Data.Ref().Set( str );
 
         if ( m_Instance && m_Field && m_Field->m_Type->GetReflectionType() == ReflectionTypes::Class )
         {

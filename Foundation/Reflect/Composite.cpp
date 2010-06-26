@@ -25,21 +25,27 @@ Composite::~Composite()
 
 Reflect::Field* Composite::AddField(Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, i32 flags)
 {
+    tstring convertedName;
+    {
+        bool converted = Platform::ConvertString( name, convertedName );
+        NOC_ASSERT( converted );
+    }
+
     NOC_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end()); 
 
     // if you are here, maybe you repeated a field variable name twice in the class or its inheritance hierarchy?
-    NOC_ASSERT(m_FieldNameToInfo.find( name ) == m_FieldNameToInfo.end());
+    NOC_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
 
     Field* fieldInfo = Field::Create( this );
 
-    fieldInfo->SetName(name);
+    fieldInfo->SetName( convertedName );
     fieldInfo->m_Size = size;
     fieldInfo->m_Offset = offset;
     fieldInfo->m_Flags = flags;
     fieldInfo->m_FieldID = m_NextFieldID;
     fieldInfo->m_SerializerID = serializerID;
 
-    m_FieldNameToInfo[name] = fieldInfo;
+    m_FieldNameToInfo[convertedName] = fieldInfo;
     m_FieldIDToInfo[m_NextFieldID] = fieldInfo;
     m_FieldOffsetToInfo[offset] = fieldInfo;
 
@@ -65,14 +71,20 @@ Reflect::Field* Composite::AddField(Element& instance, const std::string& name, 
 
 Reflect::ElementField* Composite::AddElementField(Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, i32 typeID, i32 flags)
 {
+    tstring convertedName;
+    {
+        bool converted = Platform::ConvertString( name, convertedName );
+        NOC_ASSERT( converted );
+    }
+
     NOC_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end());
 
     // if you are here, maybe you repeated a field variable name twice in the class or its inheritance hierarchy?
-    NOC_ASSERT(m_FieldNameToInfo.find( name ) == m_FieldNameToInfo.end());
+    NOC_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
 
     ElementField* fieldInfo = ElementField::Create( this );
 
-    fieldInfo->SetName(name);
+    fieldInfo->SetName( convertedName );
     fieldInfo->m_Size = size;
     fieldInfo->m_Offset = offset;
     fieldInfo->m_Flags = flags;
@@ -80,7 +92,7 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
     fieldInfo->m_SerializerID = serializerID < 0 ? GetType<PointerSerializer>() : serializerID;
     fieldInfo->m_TypeID = typeID;
 
-    m_FieldNameToInfo[name] = fieldInfo;
+    m_FieldNameToInfo[convertedName] = fieldInfo;
     m_FieldIDToInfo[m_NextFieldID] = fieldInfo;
     m_FieldOffsetToInfo[offset] = fieldInfo;
 
@@ -106,27 +118,39 @@ Reflect::ElementField* Composite::AddElementField(Element& instance, const std::
 
 Reflect::EnumerationField* Composite::AddEnumerationField(Element& instance, const std::string& name, const u32 offset, u32 size, i32 serializerID, const std::string& enumName, i32 flags)
 {
+    tstring convertedName;
+    {
+        bool converted = Platform::ConvertString( name, convertedName );
+        NOC_ASSERT( converted );
+    }
+
+    tstring convertedEnumName;
+    {
+        bool converted = Platform::ConvertString( enumName, convertedEnumName );
+        NOC_ASSERT( converted );
+    }
+
     NOC_ASSERT(m_FieldIDToInfo.find( m_NextFieldID ) == m_FieldIDToInfo.end());
 
     // if you are here, maybe you repeated a field variable name twice in the class or its inheritance hierarchy?
-    NOC_ASSERT(m_FieldNameToInfo.find( name ) == m_FieldNameToInfo.end());
+    NOC_ASSERT(m_FieldNameToInfo.find( convertedName ) == m_FieldNameToInfo.end());
 
     // fetch the enumeration from the registry, it should already be registered by now
-    const Enumeration* enumField = Reflect::Registry::GetInstance()->GetEnumeration(enumName);
+    const Enumeration* enumField = Reflect::Registry::GetInstance()->GetEnumeration(convertedEnumName);
 
     // if you hit this, then you need to make sure you register your enums before you register elements that use them
     NOC_ASSERT(enumField != NULL);
 
     EnumerationField* fieldInfo = EnumerationField::Create (this, enumField);
 
-    fieldInfo->SetName(name);
+    fieldInfo->SetName( convertedName );
     fieldInfo->m_Size = size;
     fieldInfo->m_Offset = offset;
     fieldInfo->m_Flags = flags;
     fieldInfo->m_FieldID = m_NextFieldID;
     fieldInfo->m_SerializerID = serializerID;
 
-    m_FieldNameToInfo[name] = fieldInfo;
+    m_FieldNameToInfo[convertedName] = fieldInfo;
     m_FieldIDToInfo[m_NextFieldID] = fieldInfo;
     m_FieldOffsetToInfo[offset] = fieldInfo;
 
@@ -191,23 +215,23 @@ bool Composite::HasType(i32 type) const
     return false;
 }
 
-std::string Composite::ShortenName(const std::string& fullName)
+tstring Composite::ShortenName(const tstring& fullName)
 {
-    if (fullName.find( "<" ) != std::string::npos)
+    if (fullName.find( TXT("<") ) != tstring::npos)
     {
         NOC_BREAK();
     }
     else
     {
         // look for last namespace operator
-        size_t offset = fullName.rfind( ":" );
+        size_t offset = fullName.rfind( TXT(":") );
         if (offset != std::string::npos)
         {
             return fullName.substr(offset+1);
         }
 
         // look for the space after "struct " or "class "
-        offset = fullName.rfind( " " );
+        offset = fullName.rfind( TXT(" ") );
         if (offset != std::string::npos)
         {
             return fullName.substr(offset+1);
@@ -217,7 +241,7 @@ std::string Composite::ShortenName(const std::string& fullName)
     return fullName;
 }
 
-const Field* Composite::FindFieldByName(const std::string& name) const
+const Field* Composite::FindFieldByName(const tstring& name) const
 {
     M_FieldNameToInfo::const_iterator iter = m_FieldNameToInfo.find( name );
 

@@ -56,7 +56,7 @@ void ArchiveBinary::OpenFile( const tstring& file, bool write )
     m_Path.Set( file );
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Debug("Opening file '%s'\n", file.c_str());
+    Debug(TXT("Opening file '%s'\n"), file.c_str());
 #endif
 
     Reflect::CharStreamPtr stream = new FileStream<char>(file, write); 
@@ -230,7 +230,7 @@ void ArchiveBinary::Read()
         NOC_ASSERT(type_count >= 0);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-        Debug("Deserializing %d types\n", type_count);
+        Debug(TXT("Deserializing %d types\n"), type_count);
 #endif
 
         m_ClassesByID.clear();
@@ -354,7 +354,7 @@ void ArchiveBinary::Write()
 
         {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-            Debug("Serializing %d types\n", m_Types.size());
+            Debug(TXT("Serializing %d types\n"), m_Types.size());
 #endif
 
             i32 count = (int)m_Types.size();
@@ -481,7 +481,7 @@ void ArchiveBinary::Serialize(const ElementPtr& element)
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Debug("Serializing %s (type %d)\n", element->GetClass()->m_ShortName.c_str(), element->GetType());
+    Debug(TXT("Serializing %s (type %d)\n"), element->GetClass()->m_ShortName.c_str(), element->GetType());
     m_Indent.Push();
 #endif
 
@@ -561,7 +561,7 @@ void ArchiveBinary::Serialize(const V_Element& elements, u32 flags)
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
     m_Indent.Get(stdout);
-    Debug("Serializing %d elements\n", elements.size());
+    Debug(TXT("Serializing %d elements\n"), elements.size());
     m_Indent.Push();
 #endif
 
@@ -678,7 +678,7 @@ void ArchiveBinary::SerializeField(const ElementPtr& element, const Field* field
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
         m_Indent.Get(stdout);
-        Debug("Serializing field %s (field id %d)\n", field->m_Name.c_str(), field->m_FieldID);
+        Debug(TXT("Serializing field %s (field id %d)\n"), field->m_Name.c_str(), field->m_FieldID);
         m_Indent.Push();
 #endif
 
@@ -705,7 +705,7 @@ ElementPtr ArchiveBinary::Allocate()
     // read type string
     i32 index = -1;
     m_Stream->Read(&index); 
-    const std::string& str = m_Strings.GetString(index);
+    const tstring& str = m_Strings.GetString(index);
 
     // read length info if we have it
     u32 length = 0;
@@ -733,13 +733,13 @@ ElementPtr ArchiveBinary::Allocate()
     }
 
     // this is guaranteed to be our legacy short name name
-    const std::string& shortName (found->second->m_ShortName);
+    const tstring& shortName (found->second->m_ShortName);
 
     // allocate instance by short name and remap the new and different short name to the legacy short name name for later lookup
     if (m_Cache.Create(shortName, element) && shortName != element->GetClass()->m_ShortName)
     {
         // map current short name name to LEGACY short name name so we can retrieve type information via a lookup later
-        Insert<std::map< std::string, std::string >>::Result inserted = m_ShortNameMapping.insert( std::map< std::string, std::string >::value_type (element->GetClass()->m_ShortName, shortName) );
+        Insert<std::map< tstring, tstring >>::Result inserted = m_ShortNameMapping.insert( std::map< tstring, tstring >::value_type (element->GetClass()->m_ShortName, shortName) );
 
         // check for insanity
         if ( !inserted.second && inserted.first->second != shortName )
@@ -792,7 +792,7 @@ void ArchiveBinary::Deserialize(ElementPtr& element)
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
         m_Indent.Get(stdout);
-        Debug("Deserializing %s (type %d)\n", element->GetClass()->m_ShortName.c_str(), element->GetType());
+        Debug(TXT("Deserializing %s (type %d)\n"), element->GetClass()->m_ShortName.c_str(), element->GetType());
         m_Indent.Push();
 #endif
 
@@ -843,8 +843,8 @@ void ArchiveBinary::Deserialize(V_Element& elements, u32 flags)
     REFLECT_SCOPE_TIMER_INST( "" )
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-        m_Indent.Get(stdout);
-    Debug("Deserializing %d elements\n", element_count);
+    m_Indent.Get(stdout);
+    Debug(TXT("Deserializing %d elements\n"), element_count);
     m_Indent.Push();
 #endif
 
@@ -926,7 +926,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
             else
             {
                 // our short name has changed so look up the legacy short name name given the short name of the current object
-                std::map< std::string, std::string >::const_iterator shortName_found = m_ShortNameMapping.find( element->GetClass()->m_ShortName );
+                std::map< tstring, tstring >::const_iterator shortName_found = m_ShortNameMapping.find( element->GetClass()->m_ShortName );
 
                 // we should always find it, else its a bug/internal error
                 if ( shortName_found == m_ShortNameMapping.end() )
@@ -956,7 +956,7 @@ void ArchiveBinary::DeserializeFields(const ElementPtr& element)
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
                     m_Indent.Get(stdout);
-                    Debug("Deserializing field %s (field id %d)\n", field_found->second->m_Name.c_str(), field_id);
+                    Debug(TXT("Deserializing field %s (field id %d)\n"), field_found->second->m_Name.c_str(), field_id);
                     m_Indent.Push();
 #endif
 
@@ -1121,7 +1121,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
 void ArchiveBinary::SerializeComposite(const Composite* composite)
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug(" Serializing %s (%d fields)\n", composite->m_ShortName.c_str(), composite->m_FieldIDToInfo.size());
+    Log::Debug(TXT(" Serializing %s (%d fields)\n"), composite->m_ShortName.c_str(), composite->m_FieldIDToInfo.size());
 #endif
 
     i32 string_index = m_Strings.Insert(composite->m_ShortName);
@@ -1154,7 +1154,7 @@ bool ArchiveBinary::DeserializeComposite(Composite* composite)
     m_Stream->Read(&field_count); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug(" Deserializing %s (%d fields)\n", composite->m_ShortName.c_str(), field_count);
+    Log::Debug(TXT(" Deserializing %s (%d fields)\n"), composite->m_ShortName.c_str(), field_count);
 #endif
 
     for ( i32 i=0; i<field_count; ++i )
@@ -1202,7 +1202,7 @@ void ArchiveBinary::SerializeField(const Field* field)
     m_Stream->Write(&string_index); 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug("  Serializing %s (short name %s)\n", c->m_FullName.c_str(), c->m_ShortName.c_str());
+    Log::Debug(TXT("  Serializing %s (short name %s)\n"), c->m_FullName.c_str(), c->m_ShortName.c_str());
 #endif
 }
 
@@ -1230,7 +1230,7 @@ bool ArchiveBinary::DeserializeField(Field* field)
     m_Stream->Read(&string_index); 
     if (string_index >= 0)
     {
-        const std::string& str (m_Strings.GetString(string_index));
+        const tstring& str (m_Strings.GetString(string_index));
 
         const Class* c = Registry::GetInstance()->GetClass(str);
 
@@ -1244,7 +1244,7 @@ bool ArchiveBinary::DeserializeField(Field* field)
         }
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-        Log::Debug("  Deserializing %s (short name %s)\n", c->m_FullName.c_str(), str.c_str());
+        Log::Debug(TXT("  Deserializing %s (short name %s)\n"), c->m_FullName.c_str(), str.c_str());
 #endif
     }
 

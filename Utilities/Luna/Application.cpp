@@ -9,7 +9,7 @@
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Log.h"
 #include "Core/CoreInit.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Editor/ApplicationPreferences.h"
 #include "Editor/Editor.h"
 #include "Editor/EditorInit.h"

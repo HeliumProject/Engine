@@ -2,7 +2,7 @@
 
 #include "RebuildCommand.h"
 
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Application/Application.h"
 #include "Platform/Windows/Windows.h"
 
@@ -237,7 +237,7 @@ int RebuildCommand::ProcessFile(const std::string& input, const std::string& out
             }
             catch (Nocturnal::Exception& ex)
             {
-                Log::Error("Verify FAILED: %s\n", ex.what());
+                Log::Error("Verify FAILED: %s\n", ex.What());
                 return REBUILD_BAD_READ;
             }
         }
@@ -268,7 +268,7 @@ int RebuildCommand::ProcessFile(const std::string& input, const std::string& out
         }
         catch (Nocturnal::Exception& ex)
         {
-            Log::Error("%s\n", ex.what());
+            Log::Error("%s\n", ex.What());
             return REBUILD_BAD_READ;
         }
     }
@@ -318,7 +318,7 @@ int RebuildCommand::ProcessFile(const std::string& input, const std::string& out
             }
             catch (RCS::Exception& ex)
             {
-                Log::Error("%s\n", ex.what());
+                Log::Error("%s\n", ex.What());
                 return REBUILD_BAD_WRITE;
             }
         }
@@ -338,7 +338,7 @@ int RebuildCommand::ProcessFile(const std::string& input, const std::string& out
         }
         catch (Nocturnal::Exception& ex)
         {
-            Log::Error("%s\n", ex.what());
+            Log::Error("%s\n", ex.What());
             return REBUILD_BAD_WRITE;
         }
     }
@@ -366,7 +366,7 @@ int RebuildCommand::ProcessFile(const std::string& input, const std::string& out
             }
             catch (Nocturnal::Exception& ex)
             {
-                Log::Print("Verify FAILED: %s\n", ex.what());
+                Log::Print("Verify FAILED: %s\n", ex.What());
                 return REBUILD_BAD_WRITE;
             }
         }

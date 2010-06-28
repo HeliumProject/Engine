@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/Compiler.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 namespace Application
 {

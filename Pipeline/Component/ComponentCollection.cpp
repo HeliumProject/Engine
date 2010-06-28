@@ -115,11 +115,11 @@ void ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
   {
     if ( error.empty() )
     {
-      throw Component::Exception( TXT( "Component '%s' is not valid for collection '%s'" ), component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str() );
+      throw Nocturnal::Exception( TXT( "Component '%s' is not valid for collection '%s'" ), component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str() );
     }
     else
     {
-      throw Component::Exception( TXT( "Component '%s' is not valid for collection '%s': %s" ), component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str(), error.c_str() );
+      throw Nocturnal::Exception( TXT( "Component '%s' is not valid for collection '%s': %s" ), component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str(), error.c_str() );
     }
   }
 

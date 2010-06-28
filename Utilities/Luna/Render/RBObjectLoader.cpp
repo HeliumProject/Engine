@@ -33,7 +33,7 @@ u32 Content::RBObjectLoader::ParseFile( const char* filename, bool winding )
   }
   catch( Nocturnal::Exception& e )
   {
-    Log::Warning( e.what() );
+    Log::Warning( e.What() );
     m_parse_error = Render::PARSE_FILE_FAILED;
     return Render::PARSE_FILE_FAILED;
   }

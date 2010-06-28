@@ -376,7 +376,7 @@ namespace Luna
                             {
                                 std::stringstream stream;
                                 stream << "Unable to export objects of type " << Reflect::GetClass< ContentClass >()->m_ShortName.c_str() 
-                                    << " from Luna Scene Editor: " << e.what();
+                                    << " from Luna Scene Editor: " << e.What();
                                 ::MessageBox( NULL, stream.str().c_str(), "Export Objects", MB_OK );   
                                 continue;
                             }
@@ -596,7 +596,7 @@ namespace Luna
                             {
                                 std::stringstream stream;
                                 stream << "Unable to export objects of type " << Reflect::GetClass< ContentClass >()->m_ShortName.c_str() 
-                                    << " from Luna Scene Editor: " << e.what();
+                                    << " from Luna Scene Editor: " << e.What();
                                 ::MessageBox( NULL, stream.str().c_str(), "Export Objects", MB_OK );   
                                 continue;
                             }

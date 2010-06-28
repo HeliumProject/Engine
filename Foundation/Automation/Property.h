@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 namespace Nocturnal

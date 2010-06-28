@@ -150,7 +150,7 @@ void Queue::Undo()
     catch ( const Undo::Exception& e )
     {
       Log::Warning( TXT( "Invalid undo command has been removed from the stack.\n" ) );
-      Log::Warning( TXT( "%s\n" ), e.what() );
+      Log::Warning( TXT( "%s\n" ), e.What() );
     }
   }
 
@@ -187,7 +187,7 @@ void Queue::Redo()
     catch ( const Undo::Exception& e )
     {
       Log::Warning( TXT( "Removing invalid command from undo stack.\n" ) );
-      Log::Warning( TXT( "%s\n" ), e.what() );
+      Log::Warning( TXT( "%s\n" ), e.What() );
     }
   }
 

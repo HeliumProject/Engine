@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 namespace Undo
 {

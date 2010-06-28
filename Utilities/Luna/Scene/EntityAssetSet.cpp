@@ -107,7 +107,7 @@ void EntityAssetSet::LoadAssetClass()
                     }
                     catch ( const Reflect::Exception& e )
                     {
-                        Log::Error("Error loading %s (%s)\n", m_ArtFile.c_str(), e.what());
+                        Log::Error("Error loading %s (%s)\n", m_ArtFile.c_str(), e.What());
                     }
 
                     if (m_Manifest.ReferencesObject())

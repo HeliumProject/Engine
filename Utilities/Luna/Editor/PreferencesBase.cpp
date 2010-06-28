@@ -82,7 +82,7 @@ bool PreferencesBase::LoadFromFile( const std::string& path )
         }
         catch ( const Nocturnal::Exception& e )
         {
-            Log::Error( "Failed to load preferences from %s: %s\n", path.c_str(), e.what() );
+            Log::Error( "Failed to load preferences from %s: %s\n", path.c_str(), e.What() );
         }
     }
 

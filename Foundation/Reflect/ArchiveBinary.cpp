@@ -1103,7 +1103,7 @@ void ArchiveBinary::DeserializeField(const ElementPtr& element, const Field* lat
             }
             catch (Reflect::LogisticException& ex)
             {
-                Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_ShortName.c_str(), latent_field->m_Name.c_str(), ex.what());
+                Debug( TXT( "Unable to deserialize %s::%s into component (%s), discarding\n" ), type->m_ShortName.c_str(), latent_field->m_Name.c_str(), ex.What());
             }
         }
     }

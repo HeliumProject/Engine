@@ -4,6 +4,7 @@
 
 #include "Platform/API.h"
 #include "Platform/Types.h"
+#include "Platform/Exception.h"
 
 #if defined(_M_IX86)
 # define IMAGE_FILE_ARCH IMAGE_FILE_MACHINE_I386
@@ -61,16 +62,16 @@ namespace Debug
 
     struct PLATFORM_API ExceptionArgs
     {
-        ExceptionType       m_Type;
-        bool                m_Fatal;
+        ExceptionType           m_Type;
+        bool                    m_Fatal;
         tstring                 m_Message;
         tstring                 m_Callstack;
         std::vector< tstring >  m_Threads;
         tstring                 m_State;
-        tstring                     m_Dump;
+        tstring                 m_Dump;
 
         // SEH-specific info
-        u32                 m_SEHCode;
+        u32                     m_SEHCode;
         tstring                 m_SEHClass;
         tstring                 m_SEHControlRegisters;
         tstring                 m_SEHIntegerRegisters;
@@ -92,7 +93,8 @@ namespace Debug
 
     // Query information from a bare address (should be pretty safe to call)
     PLATFORM_API tstring GetSymbolInfo( uintptr adr, bool enumLoadedModules = true );
-    PLATFORM_API std::exception* GetCxxException( uintptr addr );
+    PLATFORM_API Nocturnal::Exception* GetNocturnalException( uintptr addr );
+    PLATFORM_API std::exception* GetStandardException( uintptr addr );
 
     // Stack traces (capture with or without an explicit context, translate to string rep)
     PLATFORM_API bool GetStackTrace( std::vector<uintptr>& trace, unsigned omitFrames = 0 );

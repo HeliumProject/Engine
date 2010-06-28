@@ -1,6 +1,6 @@
 #include "WorkerThreadDialog.h"
 #include "DialogWorkerThread.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Platform/Windows/Windows.h"
 
 using namespace Nocturnal;

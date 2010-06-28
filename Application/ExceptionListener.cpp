@@ -1,6 +1,6 @@
 #include "Platform/Windows/Windows.h"
 #include "Platform/Windows/Console.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 #include "Application.h"
 #include "ExceptionListener.h"
@@ -10,7 +10,7 @@
 #include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Log.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 #include <time.h>
 #include <sstream>
@@ -191,7 +191,7 @@ static void ProcessException( const Debug::ExceptionArgs& args )
   }
   catch ( Nocturnal::Exception& ex )
   {
-    Platform::Print(Platform::ConsoleColors::Red, stderr, TXT( "%s\n" ), ex.what() );
+    Platform::Print(Platform::ConsoleColors::Red, stderr, TXT( "%s\n" ), ex.What() );
   }
 }
 

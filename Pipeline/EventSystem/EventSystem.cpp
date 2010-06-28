@@ -1,5 +1,5 @@
 #include "Platform/Windows/Windows.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #undef CreateEvent
 
 #include "EventSystem.h"

@@ -1,6 +1,6 @@
 #include "ImageManager.h"
 
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/File/Directory.h"
 #include "Foundation/File/Path.h"

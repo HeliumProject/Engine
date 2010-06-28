@@ -27,7 +27,7 @@
 #include "Application/UI/Button.h"
 #include "Application/UI/ImageManager.h"
 #include "Application/UI/MenuButton.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Platform/Process.h"
 
 #include <wx/clipbrd.h>
@@ -676,7 +676,7 @@ void BrowserFrame::OnSync( wxCommandEvent& event )
         }
         catch ( const Nocturnal::Exception& e )
         {
-            wxMessageBox( e.what(), "Sync Failed!", wxCENTER | wxICON_ERROR | wxOK, this );
+            wxMessageBox( e.What(), "Sync Failed!", wxCENTER | wxICON_ERROR | wxOK, this );
         }
     }
 
@@ -695,7 +695,7 @@ void BrowserFrame::OnSync( wxCommandEvent& event )
         }
         catch ( const Nocturnal::Exception& e )
         {
-            wxMessageBox( e.what(), "Sync Failed!", wxCENTER | wxICON_ERROR | wxOK, this );
+            wxMessageBox( e.What(), "Sync Failed!", wxCENTER | wxICON_ERROR | wxOK, this );
         }
     }
 }
@@ -730,7 +730,7 @@ void BrowserFrame::OnCheckOut( wxCommandEvent& event )
         }
         catch ( const Nocturnal::Exception& e )
         {
-            wxMessageBox( e.what(), "Check Out Failed!", wxCENTER | wxICON_ERROR | wxOK, this );
+            wxMessageBox( e.What(), "Check Out Failed!", wxCENTER | wxICON_ERROR | wxOK, this );
         }
     }
 
@@ -749,7 +749,7 @@ void BrowserFrame::OnCheckOut( wxCommandEvent& event )
         }
         catch ( const Nocturnal::Exception& e )
         {
-            wxMessageBox( e.what(), "Check Out Failed!", wxCENTER | wxICON_ERROR | wxOK, this );
+            wxMessageBox( e.What(), "Check Out Failed!", wxCENTER | wxICON_ERROR | wxOK, this );
         }
     }
 }

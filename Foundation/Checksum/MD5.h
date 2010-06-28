@@ -486,7 +486,7 @@ inline void md5_finish(md5_state_t *pms, md5_byte_t digest[16])
 
 /* End Copyright (C) 1999, 2002 Aladdin Enterprises, begin Nocturnal open source */
 
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 namespace Nocturnal
 {

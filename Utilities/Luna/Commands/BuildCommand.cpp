@@ -13,7 +13,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Version.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/CommandLine/Option.h"
 #include "Foundation/CommandLine/Command.h"
 #include "Foundation/CommandLine/Utilities.h"
@@ -184,7 +184,7 @@ void BuildCommand::AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
     //    }
     //    catch ( Nocturnal::Exception& ex )
     //    {
-    //        Log::Error( "%s\n", ex.what() );
+    //        Log::Error( "%s\n", ex.What() );
     //        return;
     //    }
 
@@ -251,11 +251,11 @@ void BuildCommand::Except( const Nocturnal::Exception& ex, const Asset::AssetCla
     std::ostringstream message;
     if (assetClass.ReferencesObject())
     {
-        message << type << " while building '" << assetClass->GetFullName() << "': " << ex.what() << std::endl;
+        message << type << " while building '" << assetClass->GetFullName() << "': " << ex.What() << std::endl;
     }
     else
     {
-        message << type << ": " << ex.what() << std::endl;
+        message << type << ": " << ex.What() << std::endl;
     }
 
     Log::Error( "%s", message.str().c_str() );

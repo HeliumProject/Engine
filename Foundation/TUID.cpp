@@ -1,7 +1,7 @@
 #include "TUID.h"
 #include "GUID.h"
 
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/Memory/Endian.h"
 #include "Platform/Windows/Windows.h"
 

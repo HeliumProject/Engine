@@ -6,7 +6,7 @@
 
 #include "Pipeline/Asset/AssetFile.h"
 #include "Pipeline/Asset/AssetFolder.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/File/Directory.h"

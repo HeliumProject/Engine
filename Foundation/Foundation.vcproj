@@ -1352,10 +1352,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Exception.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Flags.h"
 			>
 		</File>

@@ -51,7 +51,7 @@ void Document::UpdateFileInfo()
             catch ( Nocturnal::Exception& ex )
             {
                 std::stringstream str;
-                str << "Unable to get info for '" << m_Path.Get() << "': " << ex.what();
+                str << "Unable to get info for '" << m_Path.Get() << "': " << ex.What();
                 wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
             }
 

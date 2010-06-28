@@ -1,12 +1,10 @@
 #pragma once
 
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/TUID.h"
 
 namespace Component
 {
-  DEFINE_EXCEPTION_CLASS
-
   class InvalidComponentCollectionException : public Nocturnal::Exception
   {
   public:

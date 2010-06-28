@@ -1,5 +1,5 @@
 #include "Platform/Windows/Windows.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 #include "Directory.h"
 

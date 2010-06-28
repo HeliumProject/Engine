@@ -55,7 +55,7 @@ int SubmitChangesDialog::ShowModal()
   catch ( Nocturnal::Exception& ex )
   {
     std::stringstream str;
-    str << "Unable to get opened files: " << ex.what();
+    str << "Unable to get opened files: " << ex.What();
     wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
     return result;
   }

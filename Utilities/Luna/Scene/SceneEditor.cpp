@@ -1343,7 +1343,7 @@ bool SceneEditor::DoOpen( const std::string& path )
             }
             catch ( const Nocturnal::Exception& ex )
             {
-                error = ex.what();
+                error = ex.What();
             }
 
             if ( opened )
@@ -1661,7 +1661,7 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                         catch ( Nocturnal::Exception& ex )
                         {
                             std::ostringstream str;
-                            str << "Failed to generate file '" << file << "': " << ex.what();
+                            str << "Failed to generate file '" << file << "': " << ex.What();
                             wxMessageBox( str.str(), "Error", wxOK|wxCENTRE|wxICON_ERROR );
                             result = false;
                         }
@@ -1680,7 +1680,7 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                         catch ( Nocturnal::Exception& ex )
                         {
                             std::ostringstream str;
-                            str << "Failed to generate xml: " << ex.what();
+                            str << "Failed to generate xml: " << ex.What();
                             wxMessageBox( str.str(), "Error", wxOK|wxCENTRE|wxICON_ERROR );
                             result = false;
                         }

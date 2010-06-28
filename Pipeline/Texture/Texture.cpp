@@ -2,7 +2,7 @@
 #include "Pipeline/Texture/Utilities/Swizzle.h"
 #include "Pipeline/Texture/Image/Formats/DXT.h"
 
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 #include "Foundation/Profile.h"
 #include "Foundation/Log.h"

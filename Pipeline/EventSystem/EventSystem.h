@@ -4,7 +4,6 @@
 
 #include "Pipeline/API.h"
 #include "EventSystemEvent.h"
-#include "EventSystemExceptions.h"
 
 #include "Platform/Types.h"
 #include "Foundation/File/Path.h"

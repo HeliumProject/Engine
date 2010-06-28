@@ -30,7 +30,7 @@ namespace Nocturnal
     TXT( "128x128" ),
   };
 
-  IconSize GetIconSize( const std::string& fileName )
+  IconSize GetIconSize( const tstring& fileName )
   {
     if ( fileName.find( TXT( "16x16" ) ) )
     {
@@ -162,13 +162,13 @@ namespace Nocturnal
         {
             if ( !m_ThemeFolder.empty() )
             {
-                fullPath = Nocturnal::Path( m_ThemeFolder + '/' + g_IconSizeFolders[size] + '/' + partialPath ).Get();
+                fullPath = Nocturnal::Path( m_ThemeFolder + TXT( "/" ) + g_IconSizeFolders[size] + TXT( "/" ) + partialPath ).Get();
             }
 
             // then use the default path
             if ( !Nocturnal::Path( fullPath ).Exists() )
             {
-                fullPath = Nocturnal::Path( m_DefaultFolder + '/' + g_IconSizeFolders[size] + '/' + partialPath ).Get();
+                fullPath = Nocturnal::Path( m_DefaultFolder + TXT( "/" ) + g_IconSizeFolders[size] + TXT( "/" ) + partialPath ).Get();
             }
         }
     }

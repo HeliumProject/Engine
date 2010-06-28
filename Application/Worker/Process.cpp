@@ -89,14 +89,6 @@ bool Process::Start(int timeout)
     {
         str += TXT( " " );
         str += Nocturnal::CmdLineDelimiters[0];
-        str += Worker::Args::Worker;
-    }
-
-    // make our worker wait forever is we were asked to
-    if (Nocturnal::GetCmdLineFlag( Worker::Args::Wait ))
-    {
-        str += " ";
-        str += Nocturnal::CmdLineDelimiters[0];
         str += Worker::Args::Wait;
         timeout = -1;
     }
@@ -142,18 +134,6 @@ bool Process::Start(int timeout)
         }
 
         connection->Initialize(true, TXT( "Worker Process Connection" ), stream.str().c_str());
-
-        // init pipe connection with background process' process id (hex)
-        if (Nocturnal::GetCmdLineFlag( Worker::Args::Debug ))
-        {
-            stream << "worker_debug";
-        }
-        else
-        {
-            stream << "worker_" << std::hex << GetProcessId( m_Handle );
-        }
-
-        connection->Initialize(true, "Worker Process Connection", stream.str().c_str());
 
         // setup global connection
         m_Connection = connection;

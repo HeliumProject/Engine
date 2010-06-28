@@ -4454,6 +4454,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Commands\ProfileDumpCommand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Commands\ProfileDumpCommand.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Commands\RebuildCommand.cpp"
 				>
 			</File>

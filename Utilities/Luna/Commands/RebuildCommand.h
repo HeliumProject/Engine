@@ -51,7 +51,5 @@ namespace Luna
 
     private:
         int ProcessFile(const std::string& input, const std::string& output);
-
-
     };
 }

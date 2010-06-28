@@ -18,7 +18,7 @@ void ClipboardFileList::EnumerateClass( Reflect::Compositor<ClipboardFileList>& 
 // 
 void ClipboardFileList::InitializeType()
 {
-  Reflect::RegisterClass<ClipboardFileList>( "ClipboardFileList" );
+  Reflect::RegisterClass<ClipboardFileList>( TXT( "ClipboardFileList" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

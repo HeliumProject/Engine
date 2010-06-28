@@ -16,12 +16,12 @@ namespace Component
   class MissingComponentException : public Nocturnal::Exception
   {
   public:
-    MissingComponentException( const char* typeName ) : Exception( TXT( "Trying to access a non-existent attribute of type '%s'" ), typeName ) {}
+    MissingComponentException( const tchar* typeName ) : Exception( TXT( "Trying to access a non-existent attribute of type '%s'" ), typeName ) {}
   };
 
   class DisabledComponentException : public Nocturnal::Exception
   {
   public:
-    DisabledComponentException( const char* typeName ) : Exception( TXT( "Trying to access a disabled attribute of type '%s'" ), typeName ) {}
+    DisabledComponentException( const tchar* typeName ) : Exception( TXT( "Trying to access a disabled attribute of type '%s'" ), typeName ) {}
   };
 }

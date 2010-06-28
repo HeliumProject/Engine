@@ -30,17 +30,11 @@ namespace Reflect
         static Class* Create();
 
         template<class T>
-        static Class* Create(const std::string& base = "", const std::string& shortName = "", CreateObjectFunc creator = NULL)
+        static Class* Create(const std::string& base = "", const tstring& shortName = TXT( "" ), CreateObjectFunc creator = NULL)
         {
             tstring convertedBase;
             {
                 bool converted = Platform::ConvertString( base, convertedBase );
-                NOC_ASSERT( converted );
-            }
-
-            tstring convertedShortName;
-            {
-                bool converted = Platform::ConvertString( shortName, convertedShortName );
                 NOC_ASSERT( converted );
             }
 
@@ -54,7 +48,7 @@ namespace Reflect
 
             info->m_TypeID = AssignTypeID();
             info->m_Size = sizeof(T);
-            info->m_ShortName = convertedShortName.empty() ? ShortenName( convertedRTTIName ) : convertedShortName;
+            info->m_ShortName = shortName.empty() ? ShortenName( convertedRTTIName ) : shortName;
             info->m_FullName = convertedRTTIName;
             info->m_UIName = info->m_ShortName;
             info->m_Base = convertedBase;
@@ -139,7 +133,7 @@ namespace Reflect
             return Reflect::GetClass<D>();
         }
 
-        static Reflect::Class* CreateClass(const std::string& shortName = "" )
+        static Reflect::Class* CreateClass(const tstring& shortName = TXT( "" ) )
         {
             return Reflect::Class::Create<D>(typeid(B).name(), shortName);
         }
@@ -158,7 +152,7 @@ namespace Reflect
             return new D;
         }
 
-        static Reflect::Class* CreateClass(const std::string& shortName = "")
+        static Reflect::Class* CreateClass(const tstring& shortName = TXT( "" ) )
         {
             return Reflect::Class::Create<D>(typeid(B).name(), shortName, &CreateObject);
         }
@@ -196,7 +190,7 @@ namespace Reflect
     return Reflect::GetClass<__Class>();                                                                            \
 }                                                                                                                 \
     \
-    static Reflect::Class* CreateClass(const std::string& shortName = "" )                                             \
+    static Reflect::Class* CreateClass(const tstring& shortName = TXT( "" ) )                                             \
 {                                                                                                                 \
     return Reflect::Class::Create<__Class>(typeid(__Base).name(), shortName, __Creator);                            \
 }

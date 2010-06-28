@@ -295,7 +295,10 @@ namespace Reflect
         }
 
         const Type* type = NULL;
-        Registry::GetInstance()->AtomicGetType( typeid( T ).name(), &type );
+        tstring name;
+        bool converted = Platform::ConvertString( typeid( T ).name(), name );
+        NOC_ASSERT( converted );
+        Registry::GetInstance()->AtomicGetType( name, &type );
         NOC_ASSERT(type); // if you hit this then your type is not registered
 
         if ( type )

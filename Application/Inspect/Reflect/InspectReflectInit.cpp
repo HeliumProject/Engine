@@ -30,10 +30,10 @@ void InspectReflect::Initialize()
   {
     g_IntializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
 
-    g_IntializerStack.Push( Reflect::RegisterClass<ClientDataControl>( "InspectClientDataControl" ) );
-    g_IntializerStack.Push( Reflect::RegisterClass<ClientDataFilter>( "InspectClientDataFilter" ) );
+    g_IntializerStack.Push( Reflect::RegisterClass<ClientDataControl>( TXT( "InspectClientDataControl" ) ) );
+    g_IntializerStack.Push( Reflect::RegisterClass<ClientDataFilter>( TXT( "InspectClientDataFilter" ) ) );
 
-    g_IntializerStack.Push( Reflect::RegisterClass<ReflectBitfieldCheckBox>( "InspectReflectBitfieldCheckBox" ) );
+    g_IntializerStack.Push( Reflect::RegisterClass<ReflectBitfieldCheckBox>( TXT( "InspectReflectBitfieldCheckBox" ) ) );
 
     // scalars
     ReflectFieldInterpreterFactory::Register<ReflectBitfieldInterpreter>( Reflect::GetType<Reflect::BitfieldSerializer>() );

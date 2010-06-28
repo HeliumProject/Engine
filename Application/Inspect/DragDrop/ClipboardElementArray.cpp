@@ -17,7 +17,7 @@ void ClipboardElementArray::EnumerateClass( Reflect::Compositor<ClipboardElement
 // 
 void ClipboardElementArray::InitializeType()
 {
-  Reflect::RegisterClass< ClipboardElementArray >( "ClipboardElementArray" );
+  Reflect::RegisterClass< ClipboardElementArray >( TXT( "ClipboardElementArray" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

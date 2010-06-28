@@ -23,9 +23,9 @@ bool Help::Process( std::vector< tstring >::const_iterator& argsBegin, const std
 
 	if ( argsBegin == argsEnd )
 	{
-        Log::Print( "\nPrinting help for Luna...\n" );
+        Log::Print( TXT( "\nPrinting help for Luna...\n" ) );
         Log::Print( m_Owner->Help().c_str() );
-        Log::Print( "\n" );
+        Log::Print( TXT( "\n" ) );
 		return true;
 	}
 	else
@@ -36,9 +36,9 @@ bool Help::Process( std::vector< tstring >::const_iterator& argsBegin, const std
 		const Command* command = m_Owner->GetCommand( m_CommandName );
 		if ( command )
 		{
-            Log::Print( "\nGetting help for command: %s...\n", m_CommandName.c_str() );
+            Log::Print( TXT( "\nGetting help for command: %s...\n" ), m_CommandName.c_str() );
             Log::Print( command->Help().c_str() );
-            Log::Print( "\n" );
+            Log::Print( TXT( "\n" ) );
 			return true;
 		}
 		else

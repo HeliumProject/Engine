@@ -199,7 +199,7 @@ namespace LuaUtil
 	static int
 	Panic(lua_State *L)
 	{
-		wxMessageBox(lua_tostring(L, -1), "Lua panic!");
+		wxMessageBox(lua_tostring(L, -1), wxT( "Lua panic!" ) );
 		THROW("%s", lua_tostring(L, -1));
 	}
 

@@ -61,8 +61,8 @@ sub BuildConfig
   }
 
   Do( "bootstrap" );
-  Do( "bjam $target" );
-  
+  Do( "bjam -j$ENV{NUMBER_OF_PROCESSORS} $target" );
+
   my $target;
   if ( $ENV{PATH} =~ /VC\\BIN\\amd64;/i )
   {

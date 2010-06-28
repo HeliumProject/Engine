@@ -33,6 +33,7 @@
 #include "Foundation/CommandLine/Processor.h"
 
 //#include "Commands/BuildCommand.h"
+#include "Commands/ProfileDumpCommand.h"
 #include "Commands/RebuildCommand.h"
 
 #include <wx/cmdline.h>
@@ -205,6 +206,10 @@ int Main ( int argc, const char** argv )
     //BuildCommand buildCommand;
     //success &= buildCommand.Initialize( error );
     //success &= processor.RegisterCommand( &buildCommand, error );
+
+    ProfileDumpCommand profileDumpCommand;
+    success &= profileDumpCommand.Initialize( error );
+    success &= processor.RegisterCommand( &profileDumpCommand, error );
 
     RebuildCommand rebuildCommand;
     success &= rebuildCommand.Initialize( error );

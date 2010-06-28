@@ -16,15 +16,15 @@ namespace Luna
   class LUNA_EDITOR_API WindowSettings : public PreferencesBase
   {
   public:
-    static const char* s_Reset;
-    static const char* s_ResetLong;
+    static const tchar* s_Reset;
+    static const tchar* s_ResetLong;
 
   private:
     // Used to invalidate older values for a particular instance of this class
-    std::string m_Version;
+    tstring m_Version;
 
     // String (wxWidgets AUI) representing docking state of all child panels 
-    std::string m_DockingState;
+    tstring m_DockingState;
 
     bool m_IsMaximized;
 
@@ -45,13 +45,13 @@ namespace Luna
   public:
     static void InitializeType();
     static void CleanupType();
-    static void CheckWindowSettings( WindowSettingsPtr& settings, const std::string& version );
+    static void CheckWindowSettings( WindowSettingsPtr& settings, const tstring& version );
     static bool ValidatePositionAndSize( wxPoint pos, wxSize size );
 
-    WindowSettings( const std::string& version = "", wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
+    WindowSettings( const tstring& version = TXT( "" ), wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
     virtual ~WindowSettings();
 
-    virtual const std::string& GetCurrentVersion() const NOC_OVERRIDE;
+    virtual const tstring& GetCurrentVersion() const NOC_OVERRIDE;
 
     void SetFromWindow( const wxWindow* window, wxAuiManager* manager = NULL );
     void ApplyToWindow( wxWindow* window, wxAuiManager* manager = NULL, bool updateAui = false );
@@ -73,7 +73,7 @@ namespace Luna
     void SetMaximized( bool maximized );
 
     const Reflect::Field* DockingState() const;
-    const std::string& GetDockingState() const;
-    void SetDockingState( const std::string& state );
+    const tstring& GetDockingState() const;
+    void SetDockingState( const tstring& state );
   };
 }

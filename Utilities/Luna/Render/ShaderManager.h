@@ -10,7 +10,7 @@ namespace Render
   class Texture
   {
   public:
-    Texture(const char* fname);
+    Texture(const tchar* fname);
     ~Texture();
 
     u32 IncrementUsage()
@@ -28,7 +28,7 @@ namespace Render
       return m_load_count;
     }
 
-    std::string         m_filename;
+    tstring         m_filename;
     u64                 m_timestamp;
     u32                 m_crc;
 
@@ -66,7 +66,7 @@ namespace Render
   class TextureSettings
   {
   public:
-    std::string m_Path;
+    tstring m_Path;
     D3DFORMAT   m_Format;
     u32         m_Levels;
     u32         m_WrapU;
@@ -76,20 +76,13 @@ namespace Render
     float       m_MipBias;
 
     TextureSettings()
-      : m_Path( "" )
-      , m_Format( D3DFMT_UNKNOWN )
-      , m_Levels( 0 )
-      , m_WrapU( D3DTADDRESS_CLAMP )
-      , m_WrapV( D3DTADDRESS_CLAMP )
-      , m_Filter( Render::Texture::FILTER_LINEAR )
-      , m_Anisotropy( 0 )
-      , m_MipBias( 0.0f )
     {
+        Clear();
     }
 
     void Clear()
     {
-      m_Path = "";
+      m_Path = TXT( "" );
       m_Format = D3DFMT_UNKNOWN;
       m_Levels = 0;
       m_WrapU = m_WrapV = D3DTADDRESS_CLAMP;
@@ -106,7 +99,7 @@ namespace Render
   class Shader
   {
   public:
-    Shader(class ShaderManager* sd, const char* fname);
+    Shader(class ShaderManager* sd, const tchar* fname);
     ~Shader();
 
     u32 IncrementUsage()
@@ -127,7 +120,7 @@ namespace Render
     // replace a texture in the shader
     void ReplaceTexture(u32 texture_handle, u32 texture_slot);
 
-    std::string   m_filename;
+    tstring   m_filename;
     u64           m_timestamp;
     u32           m_crc;
     u32           m_load_count;
@@ -170,34 +163,34 @@ namespace Render
    
   private:
     u32 AddShader(Shader* sh); // assign a new shader to a handle
-    u32 LoadNewShader(const char* fname, ShaderLoaderPtr loader = NULL);
+    u32 LoadNewShader(const tchar* fname, ShaderLoaderPtr loader = NULL);
 
   public:
     // return the handle to the specified shader, the handle returned will either be new or it will
     // be the handle of an existing copy of that shader.
-    u32 LoadShader(const char* fname, bool inc=false, ShaderLoaderPtr loader = NULL);
+    u32 LoadShader(const tchar* fname, bool inc=false, ShaderLoaderPtr loader = NULL);
 
     // return the handle of the shader with the given name (0xffffffff if it cannot be found)
-    u32 FindShader(const char* fname);
+    u32 FindShader(const tchar* fname);
 
     // Duplicate an existing shader (to create an empty shader duplicate the default)
-    u32 DuplicateShader(u32 handle, const char* new_shader);
+    u32 DuplicateShader(u32 handle, const tchar* new_shader);
 
     // load a single texture, get the handle
-    u32 LoadTexture(const char* fname,D3DFORMAT fmt,u32 levels=0,bool inc=false);
+    u32 LoadTexture(const tchar* fname,D3DFORMAT fmt,u32 levels=0,bool inc=false);
     bool LoadTextureWithSettings(const Render::TextureSettings& textureSettings, Render::Shader* shader, u32 sampler);
     void UpdateTextureSettings(u32 handle, const Render::TextureSettings& textureSettings);
-    bool ReloadTexture( const char* fname );
+    bool ReloadTexture( const tchar* fname );
 
     // return the handle of the texture with the given name (0xffffffff if it cannot be found)
-    u32 FindTexture(const char* fname);
+    u32 FindTexture(const tchar* fname);
     Texture* ResolveTexture(u32 handle);
     Shader* ResolveShader(u32 handle);
     
-    void SetShaderDefaultTexture( const char* shaderFilename, u32 textureIndex );
-    void UpdateShaderTexture( const char* shaderFilename, u32 textureIndex, const Render::TextureSettings& settings );
-    void GetShaderFilenames( std::vector< std::string >& filenames );
-    void GetTextureFilenames( std::vector< std::string >& filenames );
+    void SetShaderDefaultTexture( const tchar* shaderFilename, u32 textureIndex );
+    void UpdateShaderTexture( const tchar* shaderFilename, u32 textureIndex, const Render::TextureSettings& settings );
+    void GetShaderFilenames( std::vector< tstring >& filenames );
+    void GetTextureFilenames( std::vector< tstring >& filenames );
     
     std::vector<Shader*>   m_loaded_shaders;
     std::vector<Texture*>  m_loaded_textures;

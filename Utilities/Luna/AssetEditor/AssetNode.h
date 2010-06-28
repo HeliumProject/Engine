@@ -31,10 +31,10 @@ namespace Luna
   struct NodeNameChangeArgs
   {
     Luna::AssetNode* m_Node;
-    std::string m_OldName;
-    std::string m_NewName;
+    tstring m_OldName;
+    tstring m_NewName;
 
-    NodeNameChangeArgs( Luna::AssetNode* node, const std::string& oldName, const std::string& newName )
+    NodeNameChangeArgs( Luna::AssetNode* node, const tstring& oldName, const tstring& newName )
       : m_Node( node )
       , m_OldName( oldName )
       , m_NewName( newName )
@@ -156,8 +156,8 @@ namespace Luna
   {
   private:
     Luna::AssetManager* m_AssetManager;
-    std::string m_Name;
-    std::string m_Icon;
+    tstring m_Name;
+    tstring m_Icon;
     u32 m_Style; // LabelStyle
     Luna::AssetNode* m_Parent;
     OS_AssetNodeSmartPtr m_Children;
@@ -177,12 +177,12 @@ namespace Luna
 
     inline Luna::AssetManager* GetAssetManager() const { return m_AssetManager; }
 
-    const std::string& GetName() const;
-    void SetName( const std::string& name );
+    const tstring& GetName() const;
+    void SetName( const tstring& name );
 
     i32 GetIconIndex() const;
-    const std::string& GetIcon() const;
-    void SetIcon( const std::string& icon );
+    const tstring& GetIcon() const;
+    void SetIcon( const tstring& icon );
 
     u32 GetStyle() const;
     void SetStyle( u32 style );

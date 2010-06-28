@@ -18,7 +18,7 @@ void PreferencesBase::EnumerateClass( Reflect::Compositor<PreferencesBase>& comp
 // 
 void PreferencesBase::InitializeType()
 {
-    Reflect::RegisterClass<PreferencesBase>( "PreferencesBase" );
+    Reflect::RegisterClass<PreferencesBase>( TXT( "PreferencesBase" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ void PreferencesBase::PreSerialize()
 // the file could not be loaded (or the version was old), this function will 
 // return false, and any values you query will be at the default settings.
 // 
-bool PreferencesBase::LoadFromFile( const std::string& path )
+bool PreferencesBase::LoadFromFile( const tstring& path )
 {
     Nocturnal::Path file( path );
     if ( file.Exists() )
@@ -82,7 +82,7 @@ bool PreferencesBase::LoadFromFile( const std::string& path )
         }
         catch ( const Nocturnal::Exception& e )
         {
-            Log::Error( "Failed to load preferences from %s: %s\n", path.c_str(), e.What() );
+            Log::Error( TXT( "Failed to load preferences from %s: %s\n" ), path.c_str(), e.What() );
         }
     }
 
@@ -92,7 +92,7 @@ bool PreferencesBase::LoadFromFile( const std::string& path )
 ///////////////////////////////////////////////////////////////////////////////
 // Save the preferences to the specified file on disc.
 // 
-bool PreferencesBase::SaveToFile( const std::string& path, std::string& error, Reflect::VersionPtr version )
+bool PreferencesBase::SaveToFile( const tstring& path, tstring& error, Reflect::VersionPtr version )
 {
     bool result = false;
 
@@ -103,8 +103,8 @@ bool PreferencesBase::SaveToFile( const std::string& path, std::string& error, R
     }
     catch ( const Reflect::Exception& e )
     {
-        error = "Unable to save preferences to " + path;
-        error += " [" + e.Get() + "]";
+        error = TXT( "Unable to save preferences to " ) + path;
+        error += TXT( " [" ) + e.Get() + TXT( "]" );
     }
 
     return result;

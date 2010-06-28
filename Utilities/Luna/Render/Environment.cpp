@@ -3,7 +3,7 @@
 
 #include "Misc.h"
 
-Render::Environment::Environment(const char* fname)
+Render::Environment::Environment(const tchar* fname)
 {
   m_load_count = 0;
   m_filename = fname;

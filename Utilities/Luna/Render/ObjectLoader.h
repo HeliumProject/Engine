@@ -19,7 +19,7 @@ namespace Render
     virtual ~ObjectLoader();
 
     // returns of the above error codes, error code is also put in m_parse_error
-    virtual u32 ParseFile( const char* filename,bool winding=false ) = 0;
+    virtual u32 ParseFile( const tchar* filename,bool winding=false ) = 0;
     virtual u32 GetNumFragments( int bangleIndex = -1 );
 
     void Compile(bool flip=false);

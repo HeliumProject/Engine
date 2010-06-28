@@ -2,6 +2,7 @@
 #include "XMLShaderLoader.h"
 #include "ShaderManager.h"
 
+#include "Foundation/Log.h"
 #include "Foundation/File/Path.h"
 
 #include <d3d9.h>
@@ -13,21 +14,21 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 u32 TextureAddressModes(const char* text)
 {
-  if (_stricmp(text,"wrap")==0)
+  if (_stricmp(text, "wrap" )==0)
   {
     return (u32)D3DTADDRESS_WRAP;
   }
-  else if (_stricmp(text,"mirror")==0)
+  else if (_stricmp(text, "mirror" )==0)
   {
     return (u32)D3DTADDRESS_MIRROR;
   }
-  else if (_stricmp(text,"clamp")==0)
+  else if (_stricmp(text, "clamp" )==0)
   {
     return (u32)D3DTADDRESS_CLAMP;
   }
   else
   {
-    printf("'%s' is an unknown texture wrap mode, defaulting to 'wrap'\n",text);
+      Log::Warning( TXT( "'%s' is an unknown texture wrap mode, defaulting to 'wrap'\n" ) ,text);
   }
 
   return (u32)D3DTADDRESS_WRAP;
@@ -36,21 +37,21 @@ u32 TextureAddressModes(const char* text)
 ////////////////////////////////////////////////////////////////////////////////////////////////
 u32 TextureFilterMode(const char* text)
 {
-  if (_stricmp(text,"point")==0)
+  if (_stricmp(text, "point" )==0)
   {
     return Render::Texture::FILTER_POINT;
   }
-  else if (_stricmp(text,"linear")==0)
+  else if (_stricmp(text, "linear" )==0)
   {
     return Render::Texture::FILTER_LINEAR;
   }
-  else if (_stricmp(text,"anisotropic")==0)
+  else if (_stricmp(text, "anisotropic" )==0)
   {
     return Render::Texture::FILTER_ANISOTROPIC;
   }
   else
   {
-    printf("'%s' is an unknown texture filter mode, defaulting to 'linear'\n",text);
+      Log::Warning( TXT( "'%s' is an unknown texture filter mode, defaulting to 'linear'\n" ),text);
   }
 
   return Render::Texture::FILTER_LINEAR;
@@ -65,7 +66,7 @@ bool LoadColor(const TiXmlElement* node,float* col)
   col[3]=1.0f;
 
   float f;
-  if (node->QueryFloatAttribute("red",&f)==TIXML_SUCCESS)
+  if (node->QueryFloatAttribute( "red",&f)==TIXML_SUCCESS)
   {
     col[0]=f;
   }
@@ -179,17 +180,22 @@ bool LoadParallaxSettings(const TiXmlElement* node,Render::Shader* shader)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-bool ParseXMLTextureSettings( const TiXmlElement* node, const char* baseDirectory, Render::TextureSettings& textureSettings )
+bool ParseXMLTextureSettings( const TiXmlElement* node, const tchar* baseDirectory, Render::TextureSettings& textureSettings )
 {
   textureSettings.m_Path = baseDirectory;
 
   const char* tres = node->Attribute("filename");
   if (tres)
-    textureSettings.m_Path += tres;
+  {
+      tstring temp;
+      bool converted = Platform::ConvertString( tres, temp );
+      NOC_ASSERT( converted );
+        textureSettings.m_Path += temp;
+  }
   else
   {
     // must have a filaname
-    printf("A texture node number have a 'filename' attribute\n");
+      Log::Error( TXT( "A texture node number have a 'filename' attribute\n" ) );
     return false;
   }
 
@@ -230,7 +236,7 @@ bool ParseXMLTextureSettings( const TiXmlElement* node, const char* baseDirector
     }
     else
     {
-      printf("'%s' is an unkown texture format, picking based on the file\n");
+        Log::Warning( TXT( "'%s' is an unkown texture format, picking based on the file\n" ), tres);
       textureSettings.m_Format =D3DFMT_UNKNOWN;
     }
   }
@@ -283,20 +289,24 @@ bool ParseXMLTextureSettings( const TiXmlElement* node, const char* baseDirector
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Render::Shader* Render::XMLShaderLoader::ParseFile( const char* fname, ShaderManager* db )
+Render::Shader* Render::XMLShaderLoader::ParseFile( const tchar* fname, ShaderManager* db )
 {
   Render::Shader* sh = new Render::Shader(db,fname);
 
-  struct stat s;
-  if ( stat( fname, &s ) < 0 )
+  struct _stat64i32 s;
+  if ( _tstat( fname, &s ) < 0 )
   {
     return sh;
   }
 
-  TiXmlDocument shader(fname);
+  std::string temp;
+  bool converted = Platform::ConvertString( fname, temp );
+  NOC_ASSERT( converted );
+
+  TiXmlDocument shader( temp.c_str() );
   if (!shader.LoadFile())
   {
-    printf("Failed to load shader file '%s': '%s' at line: %d, column: %d\n", fname, shader.ErrorDesc(), shader.ErrorRow(),shader.ErrorCol());
+      Log::Error( TXT( "Failed to load shader file '%s': '%s' at line: %d, column: %d\n" ), fname, shader.ErrorDesc(), shader.ErrorRow(),shader.ErrorCol());
     return sh;
   }
 
@@ -304,13 +314,13 @@ Render::Shader* Render::XMLShaderLoader::ParseFile( const char* fname, ShaderMan
   if (_stricmp(root->Value(),"shader")!=0)
   {
     // this is not a texture pack
-    printf("Top level tag of 'shader' not found\n");
+      Log::Error( TXT( "Top level tag of 'shader' not found\n" ) );
     return sh;
   }
 
   TextureSettings settings;
   Nocturnal::Path shaderPath( fname );
-  std::string shaderDirectory = shaderPath.Directory();
+  tstring shaderDirectory = shaderPath.Directory();
 
 	for (const TiXmlElement* n = root->FirstChildElement(); n != 0; n = n->NextSiblingElement()) 
 	{

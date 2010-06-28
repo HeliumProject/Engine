@@ -24,7 +24,6 @@ namespace Application
     tstring  m_ApplicationPath;
     tstring  m_ApplicationName;
     tstring  m_CmdLineArgs;
-    tstring  m_InheritedArgs;
     tstring  m_AssetBranch;
     tstring  m_CodeBranch;
     tstring  m_ProjectName;

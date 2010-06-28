@@ -21,8 +21,8 @@ void WindowSettings::EnumerateClass( Reflect::Compositor<WindowSettings>& comp )
 }
 
 // Statics
-const char* WindowSettings::s_Reset = "resetWin";
-const char* WindowSettings::s_ResetLong = "ResetWindowSettings";
+const tchar* WindowSettings::s_Reset = TXT( "resetWin" );
+const tchar* WindowSettings::s_ResetLong = TXT( "ResetWindowSettings" );
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ const char* WindowSettings::s_ResetLong = "ResetWindowSettings";
 // 
 void WindowSettings::InitializeType()
 {
-    Reflect::RegisterClass<WindowSettings>( "WindowSettings" );
+    Reflect::RegisterClass<WindowSettings>( TXT( "WindowSettings" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -45,7 +45,7 @@ void WindowSettings::CleanupType()
 // Checks the window settings against the provided version number and recreates 
 // the window settings if necessary.
 // 
-void WindowSettings::CheckWindowSettings( WindowSettingsPtr& settings, const std::string& version )
+void WindowSettings::CheckWindowSettings( WindowSettingsPtr& settings, const tstring& version )
 {
     if ( !settings )
     {
@@ -112,7 +112,7 @@ bool WindowSettings::ValidatePositionAndSize( wxPoint pos, wxSize size )
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-WindowSettings::WindowSettings( const std::string& version, wxPoint pos, wxSize size )
+WindowSettings::WindowSettings( const tstring& version, wxPoint pos, wxSize size )
 : m_Version( version )
 , m_IsMaximized( false )
 , m_PosX( pos.x )
@@ -132,7 +132,7 @@ WindowSettings::~WindowSettings()
 ///////////////////////////////////////////////////////////////////////////////
 // Get the version of these settings.
 // 
-const std::string& WindowSettings::GetCurrentVersion() const
+const tstring& WindowSettings::GetCurrentVersion() const
 {
     return m_Version;
 }
@@ -299,7 +299,7 @@ const Reflect::Field* WindowSettings::DockingState() const
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the docking state of child windows (see wxAuiManager).
 // 
-const std::string& WindowSettings::GetDockingState() const
+const tstring& WindowSettings::GetDockingState() const
 {
     return m_DockingState;
 }
@@ -307,7 +307,7 @@ const std::string& WindowSettings::GetDockingState() const
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the docking state values from an wxAuiManager.
 // 
-void WindowSettings::SetDockingState( const std::string& state )
+void WindowSettings::SetDockingState( const tstring& state )
 {
     Set( DockingState(), state );
 }

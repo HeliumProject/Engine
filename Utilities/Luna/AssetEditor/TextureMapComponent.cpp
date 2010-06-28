@@ -13,7 +13,7 @@ LUNA_DEFINE_TYPE( Luna::TextureMapComponent );
 // 
 void TextureMapComponent::InitializeType()
 {
-  Reflect::RegisterClass<Luna::TextureMapComponent>( "Luna::TextureMapComponent" );
+  Reflect::RegisterClass<Luna::TextureMapComponent>( TXT( "Luna::TextureMapComponent" ) );
   PersistentDataFactory::GetInstance()->Register( Reflect::GetType< Asset::TextureMapComponent >(), &TextureMapComponent::CreateTextureMapComponent );
 }
 

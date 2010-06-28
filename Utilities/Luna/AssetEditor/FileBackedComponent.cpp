@@ -22,7 +22,7 @@ LUNA_DEFINE_TYPE( Luna::FileBackedComponent );
 // 
 void FileBackedComponent::InitializeType()
 {
-    Reflect::RegisterClass<Luna::FileBackedComponent>( "Luna::FileBackedComponent" );
+    Reflect::RegisterClass<Luna::FileBackedComponent>( TXT( "Luna::FileBackedComponent" ) );
     PersistentDataFactory::GetInstance()->Register( Reflect::GetType< Asset::FileBackedComponent >(), &Luna::FileBackedComponent::CreateFileBackedComponent );
 }
 
@@ -68,15 +68,15 @@ FileBackedComponent::~FileBackedComponent()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the name of this attribute.
 // 
-std::string FileBackedComponent::GetName() const
+tstring FileBackedComponent::GetName() const
 {
     const Asset::FileBackedComponent* package = GetPackage< Asset::FileBackedComponent >();
-    std::string name = package->GetClass()->m_UIName;
+    tstring name = package->GetClass()->m_UIName;
 
     FilePathOptions::FilePathOption filePathOption = FilePathOptions::PartialPath;
     GetAssetEditorPreferences()->GetEnum( GetAssetEditorPreferences()->FilePathOption(), filePathOption );
 
-    name += ": " + Luna::PathToLabel( package->GetPath(), filePathOption );
+    name += TXT( ": " ) + Luna::PathToLabel( package->GetPath(), filePathOption );
     return name;
 }
 
@@ -113,7 +113,7 @@ void FileBackedComponent::PopulateContextMenu( ContextMenuItemSet& menu )
     menu.AppendItem( menuItem );
 
 
-    wxBitmap finderIcon = Nocturnal::GlobalImageManager().GetBitmap( "actions/system-search.png" );
+    wxBitmap finderIcon = Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/system-search.png" ) ) ;
     menuItem = new ContextMenuItem( "Change File Path (Asset Finder)", "Change this file's path using the Asset Finder", finderIcon );
     menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedComponent::OnChangePathFinder ) );
     menuItem->Enable( numSelected == 1 );
@@ -123,13 +123,13 @@ void FileBackedComponent::PopulateContextMenu( ContextMenuItemSet& menu )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the string path representation of the file backing this node.
 // 
-std::string FileBackedComponent::GetFilePath() const
+tstring FileBackedComponent::GetFilePath() const
 {
     const Asset::FileBackedComponent* pkg = GetPackage< Asset::FileBackedComponent >();
     return pkg->GetPath().Get();
 }
 
-void FileBackedComponent::SetFilePath( const std::string& path )
+void FileBackedComponent::SetFilePath( const tstring& path )
 {
     Asset::FileBackedComponent* pkg = GetPackage< Asset::FileBackedComponent >();
     Nocturnal::Path filePath( path );
@@ -178,21 +178,21 @@ void FileBackedComponent::OnOpen( const ContextMenuArgsPtr& args )
 // 
 void FileBackedComponent::OnChangePath( const ContextMenuArgsPtr& args )
 {
-    Nocturnal::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path" );
+    Nocturnal::FileDialog dialog( GetAssetManager()->GetAssetEditor(), TXT( "Change File Path" ) );
 
-    std::string currentPath = GetFilePath();
+    tstring currentPath = GetFilePath();
     if ( !currentPath.empty() )
     {
         dialog.SetPath( currentPath.c_str() );
     }
 
     const Asset::FileBackedComponent* pkg = GetPackage< Asset::FileBackedComponent >();
-    const std::string& filter = pkg->GetFileFilter();
+    const tstring& filter = pkg->GetFileFilter();
     dialog.SetFilter( filter );
 
     if ( dialog.ShowModal() == wxID_OK )
     {
-        args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::FileBackedComponent, std::string >( this, &Luna::FileBackedComponent::GetFilePath, &Luna::FileBackedComponent::SetFilePath ), dialog.GetFilePath() ) );
+        args->GetBatch()->Push( new Undo::PropertyCommand< tstring >( new Nocturnal::MemberProperty< Luna::FileBackedComponent, tstring >( this, &Luna::FileBackedComponent::GetFilePath, &Luna::FileBackedComponent::SetFilePath ), dialog.GetFilePath() ) );
         GetAssetManager()->GetSelection().Refresh();
     }
 }
@@ -213,13 +213,13 @@ void FileBackedComponent::OnChangePathFinder( const ContextMenuArgsPtr& args )
     //    dialog.SetFilter( *spec );
     //}
 
-    //std::string currentPath = GetFilePath();
+    //tstring currentPath = GetFilePath();
 
     //if ( dialog.ShowModal() == wxID_OK )
     //{
     //    if ( currentPath != dialog.GetPath() )
     //    {
-    //        args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::FileBackedComponent, std::string >( this, &Luna::FileBackedComponent::GetFilePath, &Luna::FileBackedComponent::SetFilePath ), dialog.GetPath() ) );
+    //        args->GetBatch()->Push( new Undo::PropertyCommand< tstring >( new Nocturnal::MemberProperty< Luna::FileBackedComponent, tstring >( this, &Luna::FileBackedComponent::GetFilePath, &Luna::FileBackedComponent::SetFilePath ), dialog.GetPath() ) );
     //        GetAssetManager()->GetSelection().Refresh();
     //    }
     //}

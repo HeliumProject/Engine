@@ -22,13 +22,13 @@ namespace Luna
   class PreviewWindow : public wxWindow
   {
   public:
-    PreviewWindow( wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = "Luna::PreviewWindow" );
+    PreviewWindow( wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = wxT( "Luna::PreviewWindow" ) );
     virtual ~PreviewWindow();
 
-    bool LoadScene( const std::string& path );
+    bool LoadScene( const tstring& path );
     void ClearScene();
     
-    virtual bool SaveScreenShotAs( const std::string& path );
+    virtual bool SaveScreenShotAs( const tstring& path );
 
     virtual void DisplayReferenceAxis( bool display );
 

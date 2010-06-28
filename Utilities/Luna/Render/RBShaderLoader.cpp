@@ -2,6 +2,8 @@
 #include "RBShaderLoader.h"
 #include "ShaderManager.h"
 
+#include "Foundation/Log.h"
+
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 
@@ -164,12 +166,12 @@ Content::RBShaderLoader::~RBShaderLoader()
 
 }
 
-Render::Shader* Content::RBShaderLoader::ParseFile( const char* fname, Render::ShaderManager* db )
+Render::Shader* Content::RBShaderLoader::ParseFile( const tchar* fname, Render::ShaderManager* db )
 {
     Asset::ShaderAssetPtr shaderClass = Asset::AssetClass::LoadAssetClass< Asset::ShaderAsset >( fname );
     if ( !shaderClass.ReferencesObject() )
     {
-        printf( "WARNING: Could not load shader '%s'.\n", fname );
+        Log::Warning( TXT( "Could not load shader '%s'.\n" ), fname );
         return NULL;
     }
 
@@ -203,23 +205,23 @@ Render::Shader* Content::RBShaderLoader::ParseFile( const char* fname, Render::S
     else
     {
         settings.m_Format = D3DFMT_UNKNOWN;
-        settings.m_Path = "@@base";
+        settings.m_Path = TXT( "@@base" );
     }
 
     UpdateShaderColorMap(sh, colorMap);
 
     if( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_BASE_MAP ) )
     {
-        if ( settings.m_Path != "@@base" )
+        if ( settings.m_Path != TXT( "@@base" ) )
         {
-            printf( "WARNING: Could not load base map '%s', loading default.\n", settings.m_Path.c_str() );
+            Log::Warning( TXT( "Could not load base map '%s', loading default.\n" ), settings.m_Path.c_str() );
             settings.Clear();
             settings.m_Format = D3DFMT_UNKNOWN;
-            settings.m_Path = "@@base";
+            settings.m_Path = TXT( "@@base" );
 
             if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_BASE_MAP ) )
             {
-                printf( "ERROR: Could not load default base map.\n" );
+                Log::Error( TXT( "Could not load default base map.\n" ) );
                 hadError = true;
             }
         }
@@ -243,23 +245,23 @@ Render::Shader* Content::RBShaderLoader::ParseFile( const char* fname, Render::S
     else
     {
         settings.m_Format = D3DFMT_UNKNOWN;
-        settings.m_Path = "@@normal";
+        settings.m_Path = TXT( "@@normal" );
     }
 
     UpdateShaderNormalMap( sh, normalMap );
 
     if( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_NORMAL_MAP ) )
     {
-        if ( settings.m_Path != "@@normal" )
+        if ( settings.m_Path != TXT( "@@normal" ) )
         {
-            printf( "WARNING: Could not load normal map '%s', loading default.\n", settings.m_Path.c_str() );
+            Log::Warning( TXT( "Could not load normal map '%s', loading default.\n" ), settings.m_Path.c_str() );
             settings.Clear();
             settings.m_Format = D3DFMT_UNKNOWN;
-            settings.m_Path = "@@normal";
+            settings.m_Path = TXT( "@@normal" );
 
             if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_NORMAL_MAP ) )
             {
-                printf( "ERROR: Could not load default normal map.\n" );
+                Log::Error( TXT( "Could not load default normal map.\n" ) );
                 hadError = true;
             }
         }
@@ -299,26 +301,26 @@ Render::Shader* Content::RBShaderLoader::ParseFile( const char* fname, Render::S
         else
         {
             UpdateShaderExpensiveMap( sh, 0 );
-            printf( "WARNING: Could not load expensive map '%s', loading defaults.\n", settings.m_Path.c_str() );
+            Log::Warning( TXT( "Could not load expensive map '%s', loading defaults.\n" ), settings.m_Path.c_str() );
             settings.Clear();
             settings.m_Format = D3DFMT_UNKNOWN;
 
-            settings.m_Path = "@@gloss";
+            settings.m_Path = TXT( "@@gloss" );
             if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_GLOSS_MAP ) )
             {
-                printf( "ERROR: Could not load default gloss map.\n" );
+                Log::Error( TXT( "Could not load default gloss map.\n" ) );
                 hadError = true;
             }
-            settings.m_Path = "@@parallax";
+            settings.m_Path = TXT( "@@parallax" );
             if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_PARALLAX_MAP ) )
             {
-                printf( "ERROR: Could not load default parallax map.\n" );
+                Log::Error( TXT( "Could not load default parallax map.\n" ) );
                 hadError = true;
             }
-            settings.m_Path = "@@incan";
+            settings.m_Path = TXT( "@@incan" );
             if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_INCAN_MAP ) )
             {
-                printf( "ERROR: Could not load default incan map.\n" );
+                Log::Error( TXT( "Could not load default incan map.\n" ) );
                 hadError = true;
             }
         }
@@ -330,22 +332,22 @@ Render::Shader* Content::RBShaderLoader::ParseFile( const char* fname, Render::S
         settings.Clear();
         settings.m_Format = D3DFMT_UNKNOWN;
 
-        settings.m_Path = "@@gloss";
+        settings.m_Path = TXT( "@@gloss" );
         if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_GLOSS_MAP ) )
         {
-            printf( "ERROR: Could not load default gloss map.\n" );
+            Log::Error( TXT( "Could not load default gloss map.\n" ) );
             hadError = true;
         }
-        settings.m_Path = "@@parallax";
+        settings.m_Path = TXT( "@@parallax" );
         if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_PARALLAX_MAP ) )
         {
-            printf( "ERROR: Could not load default parallax map.\n" );
+            Log::Error( TXT( "Could not load default parallax map.\n" ) );
             hadError = true;
         }
-        settings.m_Path = "@@incan";
+        settings.m_Path = TXT( "@@incan" );
         if ( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_INCAN_MAP ) )
         {
-            printf( "ERROR: Could not load default incan map.\n" );
+            Log::Error( TXT( "Could not load default incan map.\n" ) );
             hadError = true;
         }
     }
@@ -394,7 +396,7 @@ void Content::RBShaderLoader::SetColorFormat( Render::TextureSettings* settings,
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Content::RBShaderLoader::UpdateShaderClass(Render::ShaderManager* db, const char* shaderFilename, u32 alphaMode)
+void Content::RBShaderLoader::UpdateShaderClass(Render::ShaderManager* db, const tchar* shaderFilename, u32 alphaMode)
 {
     u32 shaderHandle = db->FindShader( shaderFilename );
     if ( shaderHandle == 0xffffffff )

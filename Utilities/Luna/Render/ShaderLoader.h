@@ -14,7 +14,7 @@ namespace Render
     ShaderLoader();
     virtual ~ShaderLoader();
 
-    virtual Shader* ParseFile( const char* filename, ShaderManager* db ) = 0;
+    virtual Shader* ParseFile( const tchar* filename, ShaderManager* db ) = 0;
   };
 
   typedef Nocturnal::SmartPtr<ShaderLoader> ShaderLoaderPtr;

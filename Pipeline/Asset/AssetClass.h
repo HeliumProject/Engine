@@ -90,7 +90,7 @@ namespace Asset
         }
 
         template <class T>
-        static Nocturnal::SmartPtr<T> LoadAssetClass( const char* path )
+        static Nocturnal::SmartPtr<T> LoadAssetClass( const tchar* path )
         {
             return Reflect::TryCast<T>( LoadAssetClass( path ) );
         }

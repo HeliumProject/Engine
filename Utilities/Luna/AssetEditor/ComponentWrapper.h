@@ -59,15 +59,15 @@ namespace Luna
     virtual ~ComponentWrapper();
     void SetAssetClass( Luna::AssetClass* asset );
     Luna::AssetClass* GetAssetClass() const;
-    virtual std::string GetName() const;
+    virtual tstring GetName() const;
     i32 GetSlot() const;
-    virtual const std::string& GetIcon() const;
+    virtual const tstring& GetIcon() const;
     virtual void CreateChildren( Luna::AssetNode* parentNode );
     virtual void PopulateContextMenu( ContextMenuItemSet& menu );
     virtual void ConnectProperties( EnumerateElementArgs& args ); 
     virtual Undo::CommandPtr OverwriteSettings( Component::ComponentBase* src );
 
-    static const std::string& GetComponentIcon(const Component::ComponentBase* attribute); 
+    static const tstring& GetComponentIcon(const Component::ComponentBase* attribute); 
 
     // Listeners
   protected:

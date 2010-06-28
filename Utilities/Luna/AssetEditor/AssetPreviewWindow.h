@@ -15,10 +15,10 @@ namespace Luna
   class AssetPreviewWindow : public PreviewWindow
   {
   public:
-    AssetPreviewWindow( AssetManager* manager, wxWindow *parent, wxWindowID winid = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL | wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = "Luna::AssetPreviewWindow" );
+    AssetPreviewWindow( AssetManager* manager, wxWindow *parent, wxWindowID winid = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL | wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = wxT( "Luna::AssetPreviewWindow" ) );
     virtual ~AssetPreviewWindow();
 
-    void SetupScene( std::string meshPath );
+    void SetupScene( tstring meshPath );
     void RemoveScene();
   
     virtual void DisplayReferenceAxis( bool display ) NOC_OVERRIDE;
@@ -43,13 +43,13 @@ namespace Luna
 
     std::set< Luna::ShaderAsset* > m_ListenShaders;
     
-    std::set< std::string > m_WatchMeshes;
-    std::set< std::string > m_WatchShaders;
-    std::set< std::string > m_WatchTextures;
+    std::set< tstring > m_WatchMeshes;
+    std::set< tstring > m_WatchShaders;
+    std::set< tstring > m_WatchTextures;
 
-    std::set< std::string > m_ReloadMeshes;
-    std::set< std::string > m_ReloadShaders;
-    std::set< std::string > m_ReloadTextures;
+    std::set< tstring > m_ReloadMeshes;
+    std::set< tstring > m_ReloadShaders;
+    std::set< tstring > m_ReloadTextures;
     Nocturnal::FileChangedSignature::Delegate m_FileChangedDelegate;
     
     wxTimer m_FileWatcherTimer;

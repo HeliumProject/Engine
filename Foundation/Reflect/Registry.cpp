@@ -7,6 +7,7 @@
 # include "Platform/Windows/Debug.h"
 #endif
 
+#include "Platform/Atomic.h"
 #include "Platform/Windows/Windows.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/Log.h"
@@ -496,22 +497,12 @@ const Type* Registry::GetType(const tstring& str) const
 
 void Registry::AtomicGetType(int id, const Type** addr) const
 {
-#pragma TODO("Move into Platform as AtomicExchange")
-#ifdef _WIN64
-    InterlockedExchange64( (volatile LONGLONG*)addr, (LONGLONG)(uintptr)GetType(id) );
-#else
-    InterlockedExchange( (volatile LONG*)addr, (LONG)(uintptr)GetType(id) );
-#endif
+    Platform::AtomicExchange( (intptr*)addr, (intptr)GetType(id) );
 }
 
 void Registry::AtomicGetType(const tstring& str, const Type** addr) const
 {
-#pragma TODO("Move into Platform as AtomicExchange")
-#ifdef _WIN64
-    InterlockedExchange64( (volatile LONGLONG*)addr, (LONGLONG)(uintptr)GetType(str) );
-#else
-    InterlockedExchange( (volatile LONG*)addr, (LONG)(uintptr)GetType(str) );
-#endif
+    Platform::AtomicExchange( (intptr*)addr, (intptr)GetType(str) );
 }
 
 ObjectPtr Registry::CreateInstance(int id) const

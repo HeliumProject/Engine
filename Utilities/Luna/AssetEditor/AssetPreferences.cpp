@@ -25,23 +25,23 @@ void AssetPreferences::EnumerateClass( Reflect::Compositor<AssetPreferences>& co
 AssetPreferencesPtr g_AssetEditorPreferences = NULL;
 
 // Increment this value to invalidate all previously saved preferences
-const static std::string s_PreferencesVersion( "1" );
+const static tstring s_PreferencesVersion( TXT( "1" ) );
 
 // Increment this value to invalidate just the window settings for the Asset Editor
-const static std::string s_WindowSettingsVersion( "5" );
+const static tstring s_WindowSettingsVersion( TXT( "5" ) );
 
 // Increment this value to invalidate just the window settings for the Anim Group dialog
-const static std::string s_AnimGroupDlgVersion( "1" );
+const static tstring s_AnimGroupDlgVersion( TXT( "1" ) );
 
 // Increment this value to invalidate just the window settings for the Anim Group dialog
-const static std::string s_ComponentChooserDlgVersion( "1" );
+const static tstring s_ComponentChooserDlgVersion( TXT( "1" ) );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static initialization.
 // 
 void AssetPreferences::InitializeType()
 {
-  Reflect::RegisterClass<AssetPreferences>( "AssetPreferences" );
+  Reflect::RegisterClass<AssetPreferences>( TXT( "AssetPreferences" ) );
 
   g_AssetEditorPreferences = new AssetPreferences();
   g_AssetEditorPreferences->LoadPreferences();
@@ -64,7 +64,7 @@ AssetPreferences* Luna::GetAssetEditorPreferences()
 {
   if ( !g_AssetEditorPreferences.ReferencesObject() )
   {
-    throw Nocturnal::Exception( "AssetEditorPreferences is not initialized, must call AssetPreferences::InitializeType first." );
+    throw Nocturnal::Exception( TXT( "AssetEditorPreferences is not initialized, must call AssetPreferences::InitializeType first." ) );
   }
 
   return g_AssetEditorPreferences;
@@ -77,7 +77,7 @@ AssetPreferences::AssetPreferences()
 : m_AssetEditorWindowSettings( new WindowSettings( s_WindowSettingsVersion ) )
 , m_AnimGroupDlgWindowSettings( new WindowSettings( s_AnimGroupDlgVersion ) )
 , m_ComponentChooserDlgWindowSettings( new WindowSettings( s_ComponentChooserDlgVersion, wxDefaultPosition, wxSize( 700, 400 ) ) )
-, m_ComponentChooserTab( "" )
+, m_ComponentChooserTab( TXT( "" ) )
 , m_FilePathOption( FilePathOptions::PartialPath )
 , m_MRU( new MRUData() )
 , m_DisplayPreviewAxis( false )
@@ -107,7 +107,7 @@ void AssetPreferences::PostDeserialize()
 // separate aspects of the preferences.  See the globals section at the top
 // of this file.
 // 
-const std::string& AssetPreferences::GetCurrentVersion() const 
+const tstring& AssetPreferences::GetCurrentVersion() const 
 {
   return s_PreferencesVersion;
 }
@@ -115,10 +115,10 @@ const std::string& AssetPreferences::GetCurrentVersion() const
 ///////////////////////////////////////////////////////////////////////////////
 // Load preferences.
 // 
-std::string AssetPreferences::GetPreferencesPath() const
+tstring AssetPreferences::GetPreferencesPath() const
 {
 #pragma TODO( "reimplement" )
-  return "";
+  return TXT( "" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

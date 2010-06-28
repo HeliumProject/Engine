@@ -17,7 +17,7 @@ namespace Render
   class Environment
   {
   public:
-    std::string               m_filename;       
+    tstring               m_filename;       
     u32                       m_crc;            // crc of the filename
     u64                       m_timestamp;      // -1 if the mesh is a local mesh
     u32                       m_load_count;
@@ -31,7 +31,7 @@ namespace Render
     float                     m_env_scale;
     float                     m_env_bias;
 
-    Environment(const char* name);
+    Environment(const tchar* name);
     ~Environment();
 
     u32 DecrementUsage()

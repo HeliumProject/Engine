@@ -32,14 +32,14 @@ END_EVENT_TABLE()
 AssetOutliner::AssetOutliner( AssetEditor* editor, const wxPoint& pos, const wxSize& size )
 : m_Editor( editor )
 , m_AssetManager( editor->GetAssetManager() )
-, m_TreeControl( new Nocturnal::SortTreeCtrl( editor, AssetEditorIDs::AssetOutlinerTreeControl, pos, size, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_MULTIPLE | wxTR_HIDE_ROOT, wxDefaultValidator, "AssetEditorOutliner" ) )
+, m_TreeControl( new Nocturnal::SortTreeCtrl( editor, AssetEditorIDs::AssetOutlinerTreeControl, pos, size, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_MULTIPLE | wxTR_HIDE_ROOT, wxDefaultValidator, TXT( "AssetEditorOutliner" ) ) )
 , m_FreezeSelection( false )
 , m_DragOriginatedHere( false )
 {
   // We want this tree to have multiple root items, but Windows does not allow this.
   // So, there will be an invisible root item, that will not be shown, effectively
   // making any items that are direct children of it appear to be root items.
-  m_TreeControl->AddRoot( "INVISIBLE_ROOT_ITEM" );
+  m_TreeControl->AddRoot( TXT( "INVISIBLE_ROOT_ITEM" ) );
   m_TreeControl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
 
   // This class will handle all the events for the tree control.

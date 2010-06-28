@@ -1,6 +1,8 @@
 #include "Precompile.h"
 #include "OBJObjectLoader.h"
 
+#include "Foundation/Log.h"
+
 #include <map>
 #include <set>
 
@@ -21,25 +23,25 @@ static void ObjError(FILE* fp, int fpos, int currpos,const char* error)
 {
   char buf[BUF_SIZE];
 
-  printf("WARNING: %s [file offset = %d]\n",error,fpos);
+  Log::Warning( TXT( "%s [file offset = %d]\n" ),error,fpos);
   fseek(fp,fpos,SEEK_SET);
   for (int rr=0;rr<128;rr++)
   {
     int c = getc(fp);
-    printf("%c",c);
+    Log::Print( TXT( "%c" ),c);
   }
-  printf("\n\n");
+  Log::Print( TXT( "\n\n" ) );
   fseek(fp,currpos,SEEK_SET);
   skipLine( buf, BUF_SIZE, fp);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-u32 Render::OBJObjectLoader::ParseFile(const char* fname, bool winding)
+u32 Render::OBJObjectLoader::ParseFile(const tchar* fname, bool winding)
 {
   //winding = true;
   FILE *fp;
 
-  fp = fopen( fname, "rb");
+  fp = _tfopen( fname, TXT( "rb" ) );
   if (!fp) 
   {
     m_parse_error = PARSE_FILE_FAILED;
@@ -148,8 +150,8 @@ u32 Render::OBJObjectLoader::ParseFile(const char* fname, bool winding)
       case 'u':
         if (strncmp(buf,"usemtl",6)==0)
         {
-          char shader_name[256];
-          fscanf( fp, "%s", shader_name);
+          tchar shader_name[256];
+          _ftscanf( fp, TXT( "%s" ) , shader_name);
 
           // got through the shader array and see if this shader already exists, if it does use the same frag ID
           fragid = 0xffffffff;
@@ -180,7 +182,7 @@ u32 Render::OBJObjectLoader::ParseFile(const char* fname, bool winding)
         if (fragid==0xffffffff)
         {
           ShaderFrag frag;
-          frag.m_shader = "default";
+          frag.m_shader = TXT( "default" );
           m_fragments.push_back(frag);
           fragid = (u32)m_fragments.size()-1;
         }

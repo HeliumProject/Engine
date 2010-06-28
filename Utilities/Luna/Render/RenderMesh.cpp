@@ -4,7 +4,7 @@
 #include "Misc.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-Render::Mesh::Mesh(const char* name)
+Render::Mesh::Mesh(const tchar* name)
 {
   m_filename = name;
   m_crc = StringHashDJB2(name);

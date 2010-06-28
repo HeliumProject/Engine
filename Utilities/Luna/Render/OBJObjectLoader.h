@@ -17,6 +17,6 @@ namespace Render
   class OBJObjectLoader : public ObjectLoader
   {
   public:
-    u32 ParseFile(const char* fname, bool winding = false);
+    u32 ParseFile(const tchar* fname, bool winding = false);
   };
 }

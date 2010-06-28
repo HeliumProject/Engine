@@ -26,12 +26,12 @@ namespace Luna
     FileBackedComponent( Asset::FileBackedComponent* attribute, Luna::AssetManager* assetManager );
   public:
     virtual ~FileBackedComponent();
-    virtual std::string GetName() const NOC_OVERRIDE;
+    virtual tstring GetName() const NOC_OVERRIDE;
     virtual void PopulateContextMenu( ContextMenuItemSet& menu ) NOC_OVERRIDE;
     Nocturnal::Path& GetPath() const;
     void SetPath( Nocturnal::Path& path );
-    std::string GetFilePath() const;
-    void SetFilePath( const std::string& path );
+    tstring GetFilePath() const;
+    void SetFilePath( const tstring& path );
 
   protected:
     void OnElementChanged( const Reflect::ElementChangeArgs& args );

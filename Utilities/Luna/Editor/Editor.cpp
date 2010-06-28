@@ -45,7 +45,7 @@ EditorTypes::EditorType Editor::GetEditorType() const
 ///////////////////////////////////////////////////////////////////////////////
 // Used by Frame::PrefixPreferenceKey
 //
-const std::string& Editor::GetPreferencePrefix() const
+const tstring& Editor::GetPreferencePrefix() const
 {
   if ( m_PreferencePrefix.empty() )
   {
@@ -61,29 +61,29 @@ const std::string& Editor::GetPreferencePrefix() const
 // checking is performed and messages are displayed as modal dialogs to this
 // editor.
 //
-void Editor::RevisionHistory( const std::string& path )
+void Editor::RevisionHistory( const tstring& path )
 {
   if ( path.empty() )
   {
     return;
   }
 
-  std::string clean( path );
+  tstring clean( path );
   Nocturnal::Path::Normalize( clean );
   if ( !RCS::PathIsManaged( clean ) )
   {
-    std::string msg = std::string( "The path '" ) + clean + "' is not under revision control. Unable to display revision history.";
+    tstring msg = tstring( "The path '" ) + clean + "' is not under revision control. Unable to display revision history.";
     wxMessageBox( msg.c_str(), "Warning", wxCENTER | wxICON_WARNING | wxOK, this );
     return;
   }
 
-  std::string win32Name( clean );
+  tstring win32Name( clean );
   Nocturnal::Path::MakeNative( win32Name );
-  std::string command = std::string( "p4win.exe -H \"" ) + win32Name + std::string( "\"" );
+  tstring command = tstring( "p4win.exe -H \"" ) + win32Name + tstring( "\"" );
 
   if ( Platform::Execute( command ) == -1 )
   {
-    std::string error = Platform::GetErrorString();
+    tstring error = Platform::GetErrorString();
     error += "\nMake sure that you have p4win properly installed.";
     wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
     return;

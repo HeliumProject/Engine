@@ -13,7 +13,7 @@ LUNA_DEFINE_TYPE( Document );
 
 void Document::InitializeType()
 {
-    Reflect::RegisterClass<Document>( "Document" );
+    Reflect::RegisterClass<Document>( TXT( "Document" ) );
 }
 
 void Document::CleanupType()
@@ -24,7 +24,7 @@ void Document::CleanupType()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-Document::Document( const std::string& path, const std::string& name )
+Document::Document( const tstring& path, const tstring& name )
 : m_Name( name )
 , m_IsModified( false )
 , m_AllowChanges( false )
@@ -50,9 +50,9 @@ void Document::UpdateFileInfo()
             }
             catch ( Nocturnal::Exception& ex )
             {
-                std::stringstream str;
-                str << "Unable to get info for '" << m_Path.Get() << "': " << ex.What();
-                wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
+                tstringstream str;
+                str << TXT( "Unable to get info for '" ) << m_Path.Get() << TXT( "': " ) << ex.What();
+                wxMessageBox( str.str().c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
             }
 
             m_Revision = rcsFile.m_LocalRevision;
@@ -84,10 +84,10 @@ const Nocturnal::Path& Document::GetPath() const
 // Sets the path to this file.  The name of the file is also updated.  Notifies
 // any interested listeners about this event.
 // 
-void Document::SetFilePath( const std::string& newFilePath, const std::string& newName )
+void Document::SetFilePath( const tstring& newFilePath, const tstring& newName )
 {
-    std::string oldFilePath = m_Path.Get();
-    std::string oldFileName = m_Name;
+    tstring oldFilePath = m_Path.Get();
+    tstring oldFileName = m_Name;
 
     m_Path.Set( newFilePath );
     UpdateFileInfo();
@@ -100,7 +100,7 @@ void Document::SetFilePath( const std::string& newFilePath, const std::string& n
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the friendly name of the file.
 // 
-const std::string& Document::GetFileName() const
+const tstring& Document::GetFileName() const
 {
     return m_Name;
 }

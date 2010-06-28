@@ -1,9 +1,11 @@
 #pragma once
 
+#include "Platform/Types.h"
+
 namespace Luna
 {
   // Function pointer for a file creation callback.
-  typedef bool (*CreateFileCallback)( const std::string& path, std::string& error );
+  typedef bool (*CreateFileCallback)( const tstring& path, tstring& error );
 
   // Forwards
   class PromptNewExistingPanel;
@@ -19,17 +21,17 @@ namespace Luna
   private:
     PromptNewExistingPanel* m_Panel;
     CreateFileCallback m_CreateFileCallback;
-    std::string m_FileFilter;
+    tstring m_FileFilter;
     
   public:
-    PromptNewExistingDlg( wxWindow* parent, CreateFileCallback callback, const std::string& title, const std::string& desc, const std::string& createLabel, const std::string& existingLabel );
+    PromptNewExistingDlg( wxWindow* parent, CreateFileCallback callback, const tstring& title, const tstring& desc, const tstring& createLabel, const tstring& existingLabel );
     virtual ~PromptNewExistingDlg();
     virtual int ShowModal();
-    void SetFileFilter( const std::string& filter );
-    void SetNewFile( const std::string& file );
-    void SetExistingFile( const std::string& file );
+    void SetFileFilter( const tstring& filter );
+    void SetNewFile( const tstring& file );
+    void SetExistingFile( const tstring& file );
 
-    std::string GetFilePath() const;
+    tstring GetFilePath() const;
 
   private:
     void UpdateEnableState();

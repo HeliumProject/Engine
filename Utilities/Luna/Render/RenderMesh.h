@@ -14,7 +14,7 @@ namespace Render
   public:
     ShaderFrag()
       : m_Id( 0 )
-      , m_shader( "" )
+      , m_shader( TXT( "" ) )
       , m_shader_loader( NULL )
       , m_bangle_index( 0 )
     {
@@ -25,7 +25,7 @@ namespace Render
     }
 
     u64                 m_Id;
-    std::string         m_shader;
+    tstring         m_shader;
     ShaderLoaderPtr     m_shader_loader;
 
     std::vector<u32>    m_pIndex;
@@ -51,10 +51,10 @@ namespace Render
   class Mesh
   {
   public:
-    Mesh( const char* name );
+    Mesh( const tchar* name );
     virtual ~Mesh();
 
-    std::string               m_filename;       
+    tstring               m_filename;       
     u32                       m_crc;            // crc of the filename
     u64                       m_timestamp;      // -1 if the mesh is a local mesh
     u32                       m_load_count;

@@ -56,27 +56,27 @@ PreviewWindow::PreviewWindow( wxWindow *parent, wxWindowID id, const wxPoint& po
   }
 
   // Context menu
-  wxMenuItem* current = m_ContextMenu.Append( wxID_ANY, "Frame" );
+  wxMenuItem* current = m_ContextMenu.Append( wxID_ANY, wxT( "Frame" ) );
   Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PreviewWindow::OnFrame ), NULL, this );
   
-  current = m_ContextMenu.Append( wxID_ANY, "Bangles..." );
+  current = m_ContextMenu.Append( wxID_ANY, wxT( "Bangles..." ) );
   Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PreviewWindow::OnBangles ), NULL, this );
 
   m_AxisSubMenu = new wxMenu();
-  current = m_AxisSubMenu->Append( wxID_ANY, "On", wxEmptyString, wxITEM_CHECK );
+  current = m_AxisSubMenu->Append( wxID_ANY, wxT( "On" ), wxEmptyString, wxITEM_CHECK );
   m_AxisOnMenuID = current->GetId();
   Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PreviewWindow::OnChangeAxisDisplay ), NULL, this );
-  current = m_AxisSubMenu->Append( wxID_ANY, "Off", wxEmptyString, wxITEM_CHECK );
+  current = m_AxisSubMenu->Append( wxID_ANY, wxT( "Off" ), wxEmptyString, wxITEM_CHECK );
   m_AxisOffMenuID = current->GetId();
   Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PreviewWindow::OnChangeAxisDisplay ), NULL, this );
-  m_ContextMenu.AppendSubMenu( m_AxisSubMenu, "Axis" );
+  m_ContextMenu.AppendSubMenu( m_AxisSubMenu, wxT( "Axis" ) );
 
   wxMenu* screenShotSubMenu = new wxMenu();
-  current = screenShotSubMenu->Append( wxID_ANY, "Save to file..." );
+  current = screenShotSubMenu->Append( wxID_ANY, wxT( "Save to file..." ) );
   Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PreviewWindow::OnScreenShotToFile ), NULL, this );
-  m_ContextMenu.AppendSubMenu( screenShotSubMenu, "Screenshot" );
+  m_ContextMenu.AppendSubMenu( screenShotSubMenu, wxT( "Screenshot" ) );
 
-  m_BangleWindow = new BangleWindow( this, wxID_ANY, "Bangles" );
+  m_BangleWindow = new BangleWindow( this, wxID_ANY, wxT( "Bangles" ) );
   m_BangleWindow->Hide();
 }
 
@@ -102,7 +102,7 @@ PreviewWindow::~PreviewWindow()
 ///////////////////////////////////////////////////////////////////////////////
 // Display the specified mesh.  Path should point to a static content file.
 // 
-bool PreviewWindow::LoadScene( const std::string& path )
+bool PreviewWindow::LoadScene( const tstring& path )
 {
   NOC_ASSERT( m_MeshHandle == s_InvalidMesh );
   
@@ -137,7 +137,7 @@ bool PreviewWindow::LoadScene( const std::string& path )
         scene->m_render_wireframe = false;
         scene->m_render_env_cube = false;
 
-        scene->SetEnvironmentHandle( scene->LoadEnvironment( "@@default", 0x40404040 ) );
+        scene->SetEnvironmentHandle( scene->LoadEnvironment( TXT( "@@default" ), 0x40404040 ) );
         scene->SetMeshHandle( meshHandle );
         D3DXMatrixIdentity( &scene->m_worldmat );
         scene->m_render_reference_grid = m_DisplayAxis;
@@ -150,7 +150,7 @@ bool PreviewWindow::LoadScene( const std::string& path )
         m_BangleScenes.insert( std::make_pair( itr->first, bangleScene ) );
       }
 
-      m_Scene->SetEnvironmentHandle( m_Scene->LoadEnvironment( "@@default", 0x40404040 ) );
+      m_Scene->SetEnvironmentHandle( m_Scene->LoadEnvironment( TXT( "@@default" ), 0x40404040 ) );
       
       m_Scene->SetMeshHandle( m_MeshHandle );
       D3DXMatrixIdentity( &m_Scene->m_worldmat );
@@ -189,7 +189,7 @@ void PreviewWindow::ClearScene()
 // Saves a screenshot to the specified location.  Returns true if the screenshot
 // was saved.
 // 
-bool PreviewWindow::SaveScreenShotAs( const std::string& path )
+bool PreviewWindow::SaveScreenShotAs( const tstring& path )
 {
   if ( RenderScene() )
   {
@@ -511,7 +511,7 @@ void PreviewWindow::OnScreenShotToFile( wxCommandEvent& args )
 
   if ( dialog.ShowModal() == wxID_OK )
   {
-    std::string path = dialog.GetPath();
+    tstring path = dialog.GetPath();
     if ( !path.empty() )
     {
       SaveScreenShotAs( path );

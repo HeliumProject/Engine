@@ -4,7 +4,7 @@
 #include <algorithm>
 
 #include "Platform/Assert.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 #include "API.h"

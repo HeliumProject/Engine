@@ -363,7 +363,7 @@ bool ComponentChooserDlg::ValidateComponent( const Component::ComponentPtr& attr
     catch ( const Nocturnal::Exception& exception )
     {
       isValid = false;
-      message = exception.what();
+      message = exception.What();
     }
   }
   else

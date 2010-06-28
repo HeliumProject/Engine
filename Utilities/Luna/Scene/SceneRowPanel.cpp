@@ -634,7 +634,7 @@ void SceneRowPanel::Rename( const ContextMenuArgsPtr& args )
         catch( const Nocturnal::Exception& ex )
         {    
             std::string error = "Some files could not be submitted; ";
-            error += ex.what();
+            error += ex.What();
             wxMessageBox( error, "Error", wxCENTER | wxICON_ERROR | wxOK, GetParent() );
         }
 

@@ -1760,6 +1760,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Exception.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Mutex.h"
 			>
 		</File>

@@ -17,7 +17,7 @@
 #include "Tool.h"
 
 #include "Pipeline/Asset/AssetType.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Editor/Orientation.h"
 
 using namespace Math;

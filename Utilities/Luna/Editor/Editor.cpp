@@ -6,7 +6,7 @@
 #include "Application/RCS/RCS.h"
 #include "Application/UI/FileDialog.h"
 #include "Platform/Process.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 // Using
 using namespace Luna;

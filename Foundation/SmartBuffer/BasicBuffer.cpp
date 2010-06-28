@@ -1,7 +1,7 @@
 #include "BasicBuffer.h"
 #include "Fixup.h"
 
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/Log.h"
 
 #include "Foundation/Math/Vector3.h"

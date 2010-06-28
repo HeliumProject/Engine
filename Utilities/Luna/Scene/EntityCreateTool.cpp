@@ -119,7 +119,7 @@ Luna::TransformPtr EntityCreateTool::CreateNode()
     }
     catch ( const Nocturnal::Exception& ex )
     {
-        Log::Error( "%s\n", ex.what() );
+        Log::Error( "%s\n", ex.What() );
     }
 
     return NULL;

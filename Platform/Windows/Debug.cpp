@@ -234,7 +234,30 @@ tstring Debug::GetSymbolInfo(uintptr adr, bool enumLoadedModules)
   }
 }
 
-std::exception* Debug::GetCxxException(uintptr addr)
+Nocturnal::Exception* Debug::GetNocturnalException(uintptr addr)
+{
+  Nocturnal::Exception* cppException = (Nocturnal::Exception*)addr;
+
+  __try
+  {
+    // if its non-null
+    if (cppException)
+    {
+      // this will explode if the address isn't really a c++ exception (std::exception)
+      cppException->What();
+    }
+
+    // i guess we lived!
+    return cppException;
+  }
+  __except(EXCEPTION_EXECUTE_HANDLER)
+  {
+    // uh oh, somebody is throwing register types or another root struct or class
+    return NULL;
+  }
+}
+
+std::exception* Debug::GetStandardException(uintptr addr)
 {
   std::exception* cppException = (std::exception*)addr;
 
@@ -568,25 +591,45 @@ void Debug::GetExceptionDetails( LPEXCEPTION_POINTERS info, ExceptionArgs& args 
   {
     args.m_Type = ExceptionTypes::CPP;
 
-    std::exception* cppException = GetCxxException(info->ExceptionRecord->ExceptionInformation[1]);
-    if (cppException)
+    Nocturnal::Exception* nocturnalException = GetNocturnalException(info->ExceptionRecord->ExceptionInformation[1]);
+    if (nocturnalException)
     {
       const char* cppClass = NULL;
       try
       {
-        cppClass = typeid(*cppException).name();
+        cppClass = typeid(*nocturnalException).name();
       }
-      catch (const std::__non_rtti_object&)
+      catch (...)
       {
         cppClass = "Unknown";
       }
 
       Platform::ConvertString( cppClass, args.m_CPPClass );
-      Platform::ConvertString( cppException->what(), args.m_Message );
+      Platform::ConvertString( nocturnalException->What(), args.m_Message );
     }
     else
     {
-      args.m_Message = TXT("Thrown object is not a std::exception");
+        std::exception* standardException = GetStandardException(info->ExceptionRecord->ExceptionInformation[1]);
+        if (standardException)
+        {
+          const char* cppClass = NULL;
+          try
+          {
+            cppClass = typeid(*standardException).name();
+          }
+          catch (...)
+          {
+              cppClass = "Unknown";
+          }
+
+          Platform::ConvertString( cppClass, args.m_CPPClass );
+          Platform::ConvertString( standardException->what(), args.m_Message );
+        }
+    }
+    
+    if ( args.m_CPPClass.empty() && args.m_Message.empty() )
+    {
+      args.m_Message = TXT("Thrown object is not a known type of C++ exception");
     }
 
     info->ContextRecord->IPREG = (DWORD)info->ExceptionRecord->ExceptionInformation[2];

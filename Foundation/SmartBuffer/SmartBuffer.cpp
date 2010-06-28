@@ -2,7 +2,7 @@
 #include "Fixup.h"
 
 #include "Platform/Assert.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/Log.h"
 #include "Platform/Windows/Windows.h"
 

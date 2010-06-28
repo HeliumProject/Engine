@@ -2,7 +2,7 @@
 
 #include "Platform/Windows/Windows.h"
 #include "Foundation/Profile.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/Log.h"
 
 #include <squish.h>

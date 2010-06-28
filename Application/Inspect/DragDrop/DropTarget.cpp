@@ -1,6 +1,6 @@
 #include "DropTarget.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 using namespace Inspect;
 

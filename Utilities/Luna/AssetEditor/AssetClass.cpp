@@ -204,7 +204,7 @@ const std::string& AssetClass::GetName() const
     }
     catch ( Nocturnal::Exception& e )
     {
-      Log::Error( "Unable to get asset name: %s\n", e.what() );
+      Log::Error( "Unable to get asset name: %s\n", e.What() );
       NOC_BREAK();
     }
   }
@@ -608,9 +608,9 @@ bool AssetClass::AddComponent( const Luna::ComponentWrapperPtr& component, bool 
     {
       package->SetComponent( component->GetPackage< Component::ComponentBase >() );
     }
-    catch ( const Asset::Exception& e )
+    catch ( const Nocturnal::Exception& e )
     {
-      Log::Error( "%s\n", e.what() );
+      Log::Error( "%s\n", e.What() );
       return false;
     }
   }

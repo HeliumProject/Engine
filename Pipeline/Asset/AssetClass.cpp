@@ -46,7 +46,7 @@ AssetClassPtr AssetClass::LoadAssetClass( const tchar* path )
     }
     catch ( const Nocturnal::Exception& exception )
     {
-        Log::Warning( TXT( "%s\n" ), exception.what() );
+        Log::Warning( TXT( "%s\n" ), exception.What() );
     }
 
     // success

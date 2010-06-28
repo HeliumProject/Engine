@@ -578,10 +578,6 @@
 				RelativePath=".\EventSystem\EventSystemEvent.h"
 				>
 			</File>
-			<File
-				RelativePath=".\EventSystem\EventSystemExceptions.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="TextureProcess"

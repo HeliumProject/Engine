@@ -3,7 +3,7 @@
 #include "Process.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/IPC/Pipe.h"
 

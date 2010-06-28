@@ -51,6 +51,55 @@ int Debug::GetExceptionBehavior()
   return EXCEPTION_CONTINUE_SEARCH;
 }
 
+void Debug::ProcessException(const Nocturnal::Exception& exception, bool print, bool fatal)
+{
+  SetUnhandledExceptionFilter( NULL );
+
+  ExceptionArgs args( ExceptionTypes::CPP, fatal );
+
+  const char* cppClass = NULL;
+  try
+  {
+    cppClass = typeid(exception).name();
+  }
+  catch (...)
+  {
+    cppClass = "Unknown";
+  }
+
+  bool converted = Platform::ConvertString( exception.What(), args.m_Message );
+  NOC_ASSERT( converted );
+
+  converted = Platform::ConvertString( cppClass, args.m_CPPClass );
+  NOC_ASSERT( converted );
+
+  args.m_State = Log::GetOutlineState();
+
+  if (print)
+  {
+    Platform::Print(Platform::ConsoleColors::Red, stderr, TXT( "An exception has occurred\nType:    C++ Exception\n Class:   %s\n Message: %s\n" ), args.m_CPPClass.c_str(), args.m_Message.c_str() );
+  }
+
+  if ( g_ExceptionOccurred.Valid() )
+  {
+    g_ExceptionOccurred.Invoke( args );
+  }
+
+  if ( fatal )
+  {
+    if ( g_Terminating.Count() )
+    {
+      g_Terminating.Raise( TerminateArgs () );
+    }
+
+    EnableExceptionFilter( false );
+  }
+  else if ( g_EnableExceptionFilter )
+  {
+    SetUnhandledExceptionFilter( &ProcessFilteredException );
+  }
+}
+
 void Debug::ProcessException(const std::exception& exception, bool print, bool fatal)
 {
   SetUnhandledExceptionFilter( NULL );
@@ -62,7 +111,7 @@ void Debug::ProcessException(const std::exception& exception, bool print, bool f
   {
     cppClass = typeid(exception).name();
   }
-  catch (const std::bad_typeid&)
+  catch (...)
   {
     cppClass = "Unknown";
   }

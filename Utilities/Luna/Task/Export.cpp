@@ -23,7 +23,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/IPC/Connection.h"
 #include "Foundation/Reflect/ArchiveBinary.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 #include <strstream>
 
@@ -150,7 +150,7 @@ bool Export( const S_tuid& assetIDs, bool recurse, const std::string& stateTrack
   }
   catch ( Nocturnal::Exception& ex )
   {
-    Log::Error( "%s\n", ex.what() );
+    Log::Error( "%s\n", ex.What() );
     return false;
   }
 

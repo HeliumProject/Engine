@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/Types.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 #include <stdio.h>
 

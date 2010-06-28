@@ -358,7 +358,7 @@ Undo::CommandPtr Scene::ImportFile( const std::string& file, ImportAction action
     }
     catch ( const Nocturnal::Exception& exception )
     {
-        Log::Error( "%s\n", exception.what() );
+        Log::Error( "%s\n", exception.What() );
         success = false;
     }
 
@@ -413,7 +413,7 @@ Undo::CommandPtr Scene::ImportXML( const std::string& xml, u32 importFlags, Luna
     }
     catch ( Nocturnal::Exception& exception )
     {
-        Log::Error( "%s\n", exception.what() );
+        Log::Error( "%s\n", exception.What() );
         success = false;
     }
 
@@ -1161,7 +1161,7 @@ bool Scene::ExportFile( const std::string& file, const ExportArgs& args )
         catch ( Nocturnal::Exception& ex )
         {
             std::ostringstream str;
-            str << "Failed to write file " << file << ": " << ex.what();
+            str << "Failed to write file " << file << ": " << ex.What();
             wxMessageBox( str.str(), "Error", wxOK|wxCENTRE|wxICON_ERROR );
             result = false;
         }
@@ -1219,7 +1219,7 @@ bool Scene::ExportXML( std::string& xml, const ExportArgs& args )
         catch ( Nocturnal::Exception& ex )
         {
             std::ostringstream str;
-            str << "Failed to generate xml: " << ex.what();
+            str << "Failed to generate xml: " << ex.What();
             wxMessageBox( str.str(), "Error", wxOK|wxCENTRE|wxICON_ERROR );
             result = false;
         }

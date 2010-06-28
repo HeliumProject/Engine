@@ -309,7 +309,7 @@ Project::Save(const wxString& filename)
     }
     catch ( const Nocturnal::Exception& e )
     {
-      Log::Error("Error Saving Graphshader <%s>: %s", filename.c_str(), e.what());
+      Log::Error("Error Saving Graphshader <%s>: %s", filename.c_str(), e.What());
       return;
     }
   }

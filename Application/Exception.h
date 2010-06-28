@@ -7,7 +7,7 @@
 #include "Platform/Windows/Debug.h"
 
 #include "Foundation/API.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/Automation/Event.h"
 
 namespace Debug
@@ -66,6 +66,11 @@ namespace Debug
 
   // get environment-driven handling behavior
   FOUNDATION_API int GetExceptionBehavior();
+
+  // prepare and dispatch a report for a C++ exception
+  FOUNDATION_API void ProcessException( const Nocturnal::Exception& ex,
+                                   bool print = false,
+                                   bool fatal = false );
 
   // prepare and dispatch a report for a C++ exception
   FOUNDATION_API void ProcessException( const std::exception& ex,

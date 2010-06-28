@@ -4,7 +4,7 @@
 #include "Pipeline/Asset/AssetFile.h"
 #include "Pipeline/Asset/AssetFolder.h"
 #include "Pipeline/Asset/AssetTypeInfo.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 using namespace Luna;
 

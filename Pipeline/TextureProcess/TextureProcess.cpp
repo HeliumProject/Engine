@@ -16,7 +16,7 @@
 #include "Platform/Windows/Windows.h"
 #include "Platform/Types.h"
 #include "Foundation/String/Utilities.h"
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 #include "Foundation/Checksum/CRC32.h"
 
 #include "Foundation/Log.h"

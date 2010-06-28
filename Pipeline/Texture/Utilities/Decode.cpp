@@ -1,7 +1,7 @@
 #include "Decode.h"
 #include "Pipeline/Texture/Image/Formats/DXT.h"
 
-#include "Foundation/Exception.h"
+#include "Platform/Exception.h"
 
 #include <squish.h>
 

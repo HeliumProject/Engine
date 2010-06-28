@@ -162,7 +162,7 @@ bool AssetVisitor::HandleArtFileComponent( Reflect::Element* element )
                 }
                 catch ( const Nocturnal::Exception& ex )
                 {
-                    Log::Warning( TXT( "%s\n" ), ex.what() );
+                    Log::Warning( TXT( "%s\n" ), ex.What() );
                 }
 
                 if (manifest.ReferencesObject())
@@ -584,7 +584,7 @@ void AssetVisitor::HandleMayaFile( Reflect::Element* element, const Reflect::Fie
                 }
                 catch ( const Nocturnal::Exception& ex )
                 {
-                    Log::Warning( "%s\n", ex.what() );
+                    Log::Warning( "%s\n", ex.What() );
                 }
 
                 if (manifest.ReferencesObject())

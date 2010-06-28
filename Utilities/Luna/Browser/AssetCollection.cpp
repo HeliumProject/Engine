@@ -308,7 +308,7 @@ AssetCollectionPtr AssetCollection::LoadFrom( const Nocturnal::Path& path )
     }
     catch ( const Nocturnal::Exception& ex )
     {
-        Log::Error( "Unable to read asset collection from file %s; Reason: %s.\n", path.c_str(), ex.what() );
+        Log::Error( "Unable to read asset collection from file %s; Reason: %s.\n", path.c_str(), ex.What() );
         return NULL;
     }
 

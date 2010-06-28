@@ -115,7 +115,7 @@ bool DocumentManager::IsUpToDate( Document* document ) const
             catch ( Nocturnal::Exception& ex )
             {
                 std::stringstream str;
-                str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.what();
+                str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.What();
                 wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
             }
 
@@ -433,7 +433,7 @@ bool DocumentManager::IsCheckedOut( Document* document ) const
         catch ( Nocturnal::Exception& ex )
         {
             std::stringstream str;
-            str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.what();
+            str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.What();
             wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
         }
 
@@ -478,7 +478,7 @@ bool DocumentManager::CheckOut( Document* document ) const
     catch ( Nocturnal::Exception& ex )
     {
         std::stringstream str;
-        str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.what();
+        str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.What();
         wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
         return false;
     }
@@ -513,7 +513,7 @@ bool DocumentManager::CheckOut( Document* document ) const
     catch ( Nocturnal::Exception& ex )
     {
         std::stringstream str;
-        str << "Unable to open '" << document->GetFilePath() << "': " << ex.what();
+        str << "Unable to open '" << document->GetFilePath() << "': " << ex.What();
         wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
         return false;
     }
@@ -573,7 +573,7 @@ bool DocumentManager::QueryAdd( Document* document ) const
                 catch ( Nocturnal::Exception& ex )
                 {
                     std::stringstream str;
-                    str << "Unable to open '" << document->GetFilePath() << "': " << ex.what();
+                    str << "Unable to open '" << document->GetFilePath() << "': " << ex.What();
                     wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
                     isOk = false;
                 }
@@ -599,7 +599,7 @@ bool DocumentManager::QueryOpen( Document* document ) const
         catch ( Nocturnal::Exception& ex )
         {
             std::stringstream str;
-            str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.what();
+            str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.What();
             wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
         }
 

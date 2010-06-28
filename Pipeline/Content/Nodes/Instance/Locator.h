@@ -14,8 +14,8 @@ namespace Content
     };
     static void LocatorShapeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Cross, "Cross");
-      info->AddElement(Cube, "Cube");
+      info->AddElement(Cross, TXT( "Cross" ) );
+      info->AddElement(Cube, TXT( "Cube" ) );
     }
   }
 

@@ -6,3 +6,6 @@ Built/*
 SDK/boost/*
 SDK/wxWidgets/*
 SDK/Crypto++/5.6.0/adhoc.cpp.copied
+BASE.*
+LOCAL.*
+REMOTE.*

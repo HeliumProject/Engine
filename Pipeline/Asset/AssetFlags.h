@@ -38,11 +38,11 @@ namespace Asset
     
   namespace AssetProperties
   {
-    static const char* ShortDescription  = "ShortDescription";
-    static const char* LongDescription   = "ShortDescription";
-    static const char* SmallIcon         = "SmallIcon";
-    static const char* RootFolderSpec    = "RootFolderSpec";
-    static const char* FileFilter        = "FileFilter";
-    static const char* AssetTemplates    = "AssetTemplates";
+    static const tchar* ShortDescription  = TXT( "ShortDescription" );
+    static const tchar* LongDescription   = TXT( "ShortDescription" );
+    static const tchar* SmallIcon         = TXT( "SmallIcon" );
+    static const tchar* RootFolderSpec    = TXT( "RootFolderSpec" );
+    static const tchar* FileFilter        = TXT( "FileFilter" );
+    static const tchar* AssetTemplates    = TXT( "AssetTemplates" );
   }
 }

@@ -7,7 +7,6 @@
 #include "SearchQuery.h"
 #include "SearchResults.h"
 #include "SearchHistory.h"
-#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
 #include "Foundation/InitializerStack.h"
@@ -18,9 +17,6 @@
 //
 namespace Asset
 {
-    class CacheDB;
-    typedef Nocturnal::SmartPtr< CacheDB > CacheDBPtr;
-
     class SearchResults;
     typedef Nocturnal::SmartPtr< SearchResults > SearchResultsPtr;
 }
@@ -55,8 +51,6 @@ namespace Luna
         void InitializePreferences();
         BrowserPreferences* GetBrowserPreferences();
 
-        Asset::CacheDB* GetCacheDB() { return m_CacheDB; }
-
         friend class BrowserFrame;
 
     protected:
@@ -71,7 +65,6 @@ namespace Luna
     private:
         std::string           m_RootDirectory;
         std::string           m_ConfigDirectory;
-        Asset::CacheDBPtr     m_CacheDB;
         BrowserSearchPtr      m_BrowserSearch;
         BrowserFrame*         m_BrowserFrame;
         bool                  m_HasFrame;

@@ -68,29 +68,30 @@ namespace Math
             va = a / 255.0f;
         }
 
-        friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Color4& color);
-        friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Color4& color);
+        friend FOUNDATION_API tostream& operator<<(tostream& outStream, const Color4& color);
+        friend FOUNDATION_API tistream& operator>>(tistream& inStream, Color4& color);
     };
 
     typedef std::vector< Color4 > V_Color4;
     typedef std::vector< V_Color4 > VV_Color4;
 
-    inline std::ostream& operator<<(std::ostream& outStream, const Color4& color)
+    inline tostream& operator<<(tostream& outStream, const Color4& color)
     {
         outStream << (u16)color.r << ", " << (u16)color.g << ", " << (u16)color.b << ", " << (u16)color.a;
 
         return outStream;
     }
 
-    inline std::istream& operator>>(std::istream& inStream, Color4& color)
+    inline tistream& operator>>(tistream& inStream, Color4& color)
     {
         u32 r = 0;
         u32 g = 0;
         u32 b = 0;
         u32 a = 0;
-        std::string line;
+        
+        tstring line;
         std::getline( inStream, line );
-        if (4 == sscanf( line.c_str(), "%u, %u, %u, %u", &r, &g, &b, &a))
+        if (4 == _stscanf( line.c_str(), TXT("%u, %u, %u, %u"), &r, &g, &b, &a))
         {
             color.r = (u8)r;
             color.g = (u8)g;

@@ -53,26 +53,26 @@ void PerforceWaitTimer::Notify()
     int min = time % 60; time /= 60;
     int hour = time;
 
-    char buf[256];
+    tchar buf[256];
     if (hour > 0)
     {
-      sprintf(buf, "Waiting for Perforce... %d:%02d:%02d hours", hour, min, sec);
+      _stprintf(buf, TXT( "Waiting for Perforce... %d:%02d:%02d hours" ), hour, min, sec);
     }
     else
     {
       if (min > 0)
       {
-        sprintf(buf, "Waiting for Perforce... %d:%02d minutes", min, sec);
+        _stprintf(buf, TXT( "Waiting for Perforce... %d:%02d minutes" ), min, sec);
       }
       else
       {
         if (sec > 0)
         {
-          sprintf(buf, "Waiting for Perforce... %d seconds", sec);
+          _stprintf(buf, TXT( "Waiting for Perforce... %d seconds" ), sec);
         }
         else
         {
-          sprintf(buf, "Waiting for Perforce...", sec);
+          _stprintf(buf, TXT( "Waiting for Perforce..." ), sec);
         }
       }
     }

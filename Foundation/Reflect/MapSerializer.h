@@ -64,32 +64,32 @@ namespace Reflect
         virtual void Serialize(Archive& archive) const NOC_OVERRIDE;
         virtual void Deserialize(Archive& archive) NOC_OVERRIDE;
 
-        virtual std::ostream& operator >> (std::ostream& stream) const NOC_OVERRIDE;
-        virtual std::istream& operator << (std::istream& stream) NOC_OVERRIDE;
+        virtual tostream& operator>> (tostream& stream) const NOC_OVERRIDE;
+        virtual tistream& operator<< (tistream& stream) NOC_OVERRIDE;
     };
 
-    typedef SimpleMapSerializer<std::string, StringSerializer, std::string, StringSerializer> StringStringMapSerializer;      REFLECT_SPECIALIZE_SERIALIZER(StringStringMapSerializer);
-    typedef SimpleMapSerializer<std::string, StringSerializer, bool, BoolSerializer> StringBoolMapSerializer;                 REFLECT_SPECIALIZE_SERIALIZER(StringBoolMapSerializer);
-    typedef SimpleMapSerializer<std::string, StringSerializer, u32, U32Serializer> StringU32MapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(StringU32MapSerializer);
-    typedef SimpleMapSerializer<std::string, StringSerializer, i32, I32Serializer> StringI32MapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(StringI32MapSerializer);
+    typedef SimpleMapSerializer<tstring, StringSerializer, tstring, StringSerializer> StringStringMapSerializer;                REFLECT_SPECIALIZE_SERIALIZER(StringStringMapSerializer);
+    typedef SimpleMapSerializer<tstring, StringSerializer, bool, BoolSerializer> StringBoolMapSerializer;                       REFLECT_SPECIALIZE_SERIALIZER(StringBoolMapSerializer);
+    typedef SimpleMapSerializer<tstring, StringSerializer, u32, U32Serializer> StringU32MapSerializer;                          REFLECT_SPECIALIZE_SERIALIZER(StringU32MapSerializer);
+    typedef SimpleMapSerializer<tstring, StringSerializer, i32, I32Serializer> StringI32MapSerializer;                          REFLECT_SPECIALIZE_SERIALIZER(StringI32MapSerializer);
 
-    typedef SimpleMapSerializer<u32, U32Serializer, std::string, StringSerializer> U32StringMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(U32StringMapSerializer);
-    typedef SimpleMapSerializer<u32, U32Serializer, u32, U32Serializer> U32U32MapSerializer;                                  REFLECT_SPECIALIZE_SERIALIZER(U32U32MapSerializer);
-    typedef SimpleMapSerializer<u32, U32Serializer, i32, I32Serializer> U32I32MapSerializer;                                  REFLECT_SPECIALIZE_SERIALIZER(U32I32MapSerializer);
-    typedef SimpleMapSerializer<u32, U32Serializer, u64, U64Serializer> U32U64MapSerializer;                                  REFLECT_SPECIALIZE_SERIALIZER(U32U64MapSerializer);
+    typedef SimpleMapSerializer<u32, U32Serializer, tstring, StringSerializer> U32StringMapSerializer;                          REFLECT_SPECIALIZE_SERIALIZER(U32StringMapSerializer);
+    typedef SimpleMapSerializer<u32, U32Serializer, u32, U32Serializer> U32U32MapSerializer;                                    REFLECT_SPECIALIZE_SERIALIZER(U32U32MapSerializer);
+    typedef SimpleMapSerializer<u32, U32Serializer, i32, I32Serializer> U32I32MapSerializer;                                    REFLECT_SPECIALIZE_SERIALIZER(U32I32MapSerializer);
+    typedef SimpleMapSerializer<u32, U32Serializer, u64, U64Serializer> U32U64MapSerializer;                                    REFLECT_SPECIALIZE_SERIALIZER(U32U64MapSerializer);
 
-    typedef SimpleMapSerializer<i32, I32Serializer, std::string, StringSerializer> I32StringMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(I32StringMapSerializer);
-    typedef SimpleMapSerializer<i32, I32Serializer, u32, U32Serializer> I32U32MapSerializer;                                  REFLECT_SPECIALIZE_SERIALIZER(I32U32MapSerializer);
-    typedef SimpleMapSerializer<i32, I32Serializer, i32, I32Serializer> I32I32MapSerializer;                                  REFLECT_SPECIALIZE_SERIALIZER(I32I32MapSerializer);
-    typedef SimpleMapSerializer<i32, I32Serializer, u64, U64Serializer> I32U64MapSerializer;                                  REFLECT_SPECIALIZE_SERIALIZER(I32U64MapSerializer);
+    typedef SimpleMapSerializer<i32, I32Serializer, tstring, StringSerializer> I32StringMapSerializer;                          REFLECT_SPECIALIZE_SERIALIZER(I32StringMapSerializer);
+    typedef SimpleMapSerializer<i32, I32Serializer, u32, U32Serializer> I32U32MapSerializer;                                    REFLECT_SPECIALIZE_SERIALIZER(I32U32MapSerializer);
+    typedef SimpleMapSerializer<i32, I32Serializer, i32, I32Serializer> I32I32MapSerializer;                                    REFLECT_SPECIALIZE_SERIALIZER(I32I32MapSerializer);
+    typedef SimpleMapSerializer<i32, I32Serializer, u64, U64Serializer> I32U64MapSerializer;                                    REFLECT_SPECIALIZE_SERIALIZER(I32U64MapSerializer);
 
-    typedef SimpleMapSerializer<u64, U64Serializer, std::string, StringSerializer> U64StringMapSerializer;                    REFLECT_SPECIALIZE_SERIALIZER(U64StringMapSerializer);
-    typedef SimpleMapSerializer<u64, U64Serializer, u32, U32Serializer> U64U32MapSerializer;                                  REFLECT_SPECIALIZE_SERIALIZER(U64U32MapSerializer);
-    typedef SimpleMapSerializer<u64, U64Serializer, u64, U64Serializer> U64U64MapSerializer;                                  REFLECT_SPECIALIZE_SERIALIZER(U64U64MapSerializer);
-    typedef SimpleMapSerializer<u64, U64Serializer, ::Math::Matrix4, Matrix4Serializer> U64Matrix4MapSerializer;              REFLECT_SPECIALIZE_SERIALIZER(U64Matrix4MapSerializer);
+    typedef SimpleMapSerializer<u64, U64Serializer, tstring, StringSerializer> U64StringMapSerializer;                          REFLECT_SPECIALIZE_SERIALIZER(U64StringMapSerializer);
+    typedef SimpleMapSerializer<u64, U64Serializer, u32, U32Serializer> U64U32MapSerializer;                                    REFLECT_SPECIALIZE_SERIALIZER(U64U32MapSerializer);
+    typedef SimpleMapSerializer<u64, U64Serializer, u64, U64Serializer> U64U64MapSerializer;                                    REFLECT_SPECIALIZE_SERIALIZER(U64U64MapSerializer);
+    typedef SimpleMapSerializer<u64, U64Serializer, Math::Matrix4, Matrix4Serializer> U64Matrix4MapSerializer;                  REFLECT_SPECIALIZE_SERIALIZER(U64Matrix4MapSerializer);
 
-    typedef SimpleMapSerializer<Nocturnal::GUID, GUIDSerializer, u32, U32Serializer> GUIDU32MapSerializer;                     REFLECT_SPECIALIZE_SERIALIZER(GUIDU32MapSerializer);
-    typedef SimpleMapSerializer<Nocturnal::GUID, GUIDSerializer, ::Math::Matrix4, Matrix4Serializer> GUIDMatrix4MapSerializer; REFLECT_SPECIALIZE_SERIALIZER(GUIDMatrix4MapSerializer);
-    typedef SimpleMapSerializer<Nocturnal::TUID, TUIDSerializer, u32, U32Serializer> TUIDU32MapSerializer;                     REFLECT_SPECIALIZE_SERIALIZER(TUIDU32MapSerializer);
-    typedef SimpleMapSerializer<Nocturnal::TUID, TUIDSerializer, ::Math::Matrix4, Matrix4Serializer> TUIDMatrix4MapSerializer; REFLECT_SPECIALIZE_SERIALIZER(TUIDMatrix4MapSerializer);
+    typedef SimpleMapSerializer<Nocturnal::GUID, GUIDSerializer, u32, U32Serializer> GUIDU32MapSerializer;                      REFLECT_SPECIALIZE_SERIALIZER(GUIDU32MapSerializer);
+    typedef SimpleMapSerializer<Nocturnal::GUID, GUIDSerializer, Math::Matrix4, Matrix4Serializer> GUIDMatrix4MapSerializer;    REFLECT_SPECIALIZE_SERIALIZER(GUIDMatrix4MapSerializer);
+    typedef SimpleMapSerializer<Nocturnal::TUID, TUIDSerializer, u32, U32Serializer> TUIDU32MapSerializer;                      REFLECT_SPECIALIZE_SERIALIZER(TUIDU32MapSerializer);
+    typedef SimpleMapSerializer<Nocturnal::TUID, TUIDSerializer, Math::Matrix4, Matrix4Serializer> TUIDMatrix4MapSerializer;    REFLECT_SPECIALIZE_SERIALIZER(TUIDMatrix4MapSerializer);
 }

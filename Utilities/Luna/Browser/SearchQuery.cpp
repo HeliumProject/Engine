@@ -3,7 +3,6 @@
 
 #include "Browser.h"
 
-#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/Checksum/MD5.h"
@@ -74,14 +73,12 @@ void SearchQuery::EnumerateClass( Reflect::Compositor<SearchQuery>& comp )
 ///////////////////////////////////////////////////////////////////////////////
 SearchQuery::SearchQuery()
 : m_SearchType( SearchTypes::DBSearch )
-, m_Search( NULL )
 {
 
 }
 
 SearchQuery::~SearchQuery()
 {
-    m_Search = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,20 +100,12 @@ void SearchQuery::SetQueryString( const std::string& queryString )
     // Set the QueryString
     m_QueryString = queryString;
 
-    m_Search = NULL;
-
     std::string errors;
     if ( !ParseQueryString( m_QueryString, errors, this ) )
     {
         Log::Warning( "Errors occurred while parsing the query string: %s\n  %s\n", m_QueryString.c_str(), errors.c_str() );
         return;
     }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void SearchQuery::SetSelectPath( const std::string& selectPath )
-{
-    m_SelectPath = selectPath;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -191,59 +180,6 @@ bool TokenizeQuery( const std::string& queryString, std::vector< std::string >& 
     return !tokens.empty();
 }
 
-bool ParseColumnID( const std::string& token, Asset::S_CacheDBColumnID& columnIDs )
-{
-    bool result = false;
-
-    std::string cleanToken( token );
-    toLower( cleanToken );
-
-    // levels and shaders are special cases
-    if ( cleanToken == "level" || cleanToken == "levels" )
-    {
-        columnIDs.insert( Asset::CacheDBColumnIDs::Level );
-        result = true;
-    }
-    else if ( cleanToken == "shader" || cleanToken == "shaders" )
-    {
-        columnIDs.insert( Asset::CacheDBColumnIDs::Shader );
-        result = true;
-    }
-    else
-    {
-        std::string phraseWhere;
-        int count = 0;
-        //Asset::M_CacheDBColumns::const_iterator colItr = GlobalBrowser().GetCacheDB()->GetDBColumns().begin();
-        //Asset::M_CacheDBColumns::const_iterator colEnd = GlobalBrowser().GetCacheDB()->GetDBColumns().end();
-        //for ( ; colItr != colEnd; ++colItr )
-        //{
-        //    Asset::CacheDBColumn* cacheDBColumn = ( *colItr ).second;
-
-        //    if ( cacheDBColumn->m_ColumnAliases.find( cleanToken ) != cacheDBColumn->m_ColumnAliases.end() )
-        //    {
-        //        columnIDs.insert( ( *colItr ).first );
-        //        result = true;
-        //    }
-        //}
-    }
-
-    return result;
-}
-
-bool ParseComponentRowID( const std::string& token, u64& rowID )
-{
-    bool result = false;
-
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-    //rowID = GlobalBrowser().GetCacheDB()->FindComponentRowID( token );
-    //if ( rowID > 0 )
-    //{
-    //    result = true;
-    //}
-
-    return result;
-}
-
 bool ParseCollectionName( const std::string& token, boost::smatch& matchResults, std::string& collectionName, std::string& errors )
 {
     const boost::regex parseCollectionName( s_ParseCollectionName, boost::regex::icase );
@@ -314,9 +250,6 @@ bool SearchQuery::ParseQueryString( const std::string& queryString, std::string&
             if ( query )
             {
                 query->m_SearchType = SearchTypes::File;
-
-                Nocturnal::Path::Normalize( query->m_QueryString );
-                query->m_SelectPath = query->m_QueryString;
             }
             return true;
         }
@@ -386,76 +319,6 @@ bool SearchQuery::ParseQueryString( const std::string& queryString, std::string&
                             return false;
                         }
                     }
-
-                    //-------------------------------------------
-                    // Column Query
-                    Asset::S_CacheDBColumnID columnIDs;
-                    if ( ParseColumnID( columnAlias, columnIDs ) )
-                    {
-                        if ( !ParsePhrase( curToken, matchResults, currentValue, errors )  )
-                        {
-                            // a phrase is expected
-                            return false;
-                        }
-
-                        if ( query )
-                        {
-                            if ( !query->m_Search )
-                            {
-                                query->m_Search = new Asset::CacheDBQuery();
-                            }
-
-                            if ( columnIDs.size() == 1 )
-                            {
-                                Asset::CacheDBColumnExpr* columnExpr = dynamic_cast<Asset::CacheDBColumnExpr*>( query->m_Search->AddExprs( new Asset::CacheDBColumnExpr() ) );
-                                columnExpr->SetColumnID( *columnIDs.begin() );
-                                columnExpr->SetPhrase( currentValue );
-                            }
-                            else if ( columnIDs.size() > 1 )
-                            {
-                                Asset::CacheDBQueryPtr subQuery = new Asset::CacheDBQuery();
-                                subQuery->SetBinaryOperator( SQL::BinaryOperators::Or );
-
-                                Asset::S_CacheDBColumnID::const_iterator itr = columnIDs.begin(), end = columnIDs.end(); 
-                                for ( ; itr != end; ++itr )
-                                {
-                                    Asset::CacheDBColumnExpr* columnExpr = dynamic_cast<Asset::CacheDBColumnExpr*>( subQuery->AddExprs( new Asset::CacheDBColumnExpr() ) );
-                                    columnExpr->SetColumnID( *itr );
-                                    columnExpr->SetPhrase( currentValue );
-                                }
-
-                                query->m_Search->AddExprs( subQuery );
-                            }
-                        }
-
-                        continue;
-                    }
-
-                    //-------------------------------------------
-                    // Component Query
-                    u64 attrRowID;
-                    if ( ParseComponentRowID( columnAlias, attrRowID ) )
-                    {
-                        if ( !ParsePhrase( curToken, matchResults, currentValue, errors )  )
-                        {
-                            // a phrase is expected
-                            return false;
-                        }
-
-                        if ( query )
-                        {
-                            if ( !query->m_Search )
-                            {
-                                query->m_Search = new Asset::CacheDBQuery();
-                            }
-
-                            Asset::CacheDBComponentExpr* attrExpr = dynamic_cast<Asset::CacheDBComponentExpr*>( query->m_Search->AddExprs( new Asset::CacheDBComponentExpr() ) );
-                            attrExpr->SetComponentRowID( attrRowID );
-                            attrExpr->SetPhrase( currentValue );
-                        }
-
-                        continue;
-                    }
                 }
 
                 //-------------------------------------------
@@ -463,17 +326,6 @@ bool SearchQuery::ParseQueryString( const std::string& queryString, std::string&
                 if ( ParsePhrase( curToken, matchResults, currentValue, errors )  )
                 {
                     NOC_ASSERT( !currentValue.empty() );
-
-                    if ( query )
-                    {
-                        if ( !query->m_Search )
-                        {
-                            query->m_Search = new Asset::CacheDBQuery();
-                        }
-
-                        Asset::CacheDBPhraseExpr* attrExpr = dynamic_cast<Asset::CacheDBPhraseExpr*>( query->m_Search->AddExprs( new Asset::CacheDBPhraseExpr() ) );
-                        attrExpr->SetPhrase( currentValue );
-                    }
 
                     continue;
                 }

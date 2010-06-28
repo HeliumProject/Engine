@@ -39,9 +39,9 @@ namespace Reflect
     struct TranslateInputEventArgs : TranslateEventArgs
     {
         // the stream to read from
-        std::istream& m_Stream;
+        tistream& m_Stream;
 
-        TranslateInputEventArgs( Serializer* serializer, std::istream& stream )
+        TranslateInputEventArgs( Serializer* serializer, tistream& stream )
             : TranslateEventArgs (serializer)
             , m_Stream (stream)
         {
@@ -53,9 +53,9 @@ namespace Reflect
     struct TranslateOutputEventArgs : TranslateEventArgs
     {
         // the stream to write to
-        std::ostream& m_Stream;
+        tostream& m_Stream;
 
-        TranslateOutputEventArgs( Serializer* serializer, std::ostream& stream )
+        TranslateOutputEventArgs( Serializer* serializer, tostream& stream )
             : TranslateEventArgs (serializer)
             , m_Stream (stream)
         {
@@ -348,7 +348,7 @@ namespace Reflect
         //
 
         // data serialization (extract to smart buffer)
-        virtual void Serialize (const Nocturnal::BasicBufferPtr& buffer, const char* debugStr) const
+        virtual void Serialize (const Nocturnal::BasicBufferPtr& buffer, const tchar* debugStr) const
         {
             NOC_BREAK();
         }
@@ -360,14 +360,14 @@ namespace Reflect
         virtual void Deserialize(Archive& archive) = 0;
 
         // text serialization (extract to text stream)
-        virtual std::ostream& operator >> (std::ostream& stream) const
+        virtual tostream& operator>> (tostream& stream) const
         { 
             NOC_BREAK(); 
             return stream; 
         }
 
         // text deserialization (insert from text stream)
-        virtual std::istream& operator << (std::istream& stream)
+        virtual tistream& operator<< (tistream& stream)
         { 
             NOC_BREAK(); 
             return stream; 
@@ -403,8 +403,8 @@ namespace Reflect
         }
 
     protected:
-        bool TranslateOutput( std::ostream& stream ) const;
-        bool TranslateInput( std::istream& stream );
+        bool TranslateOutput( tostream& stream ) const;
+        bool TranslateInput( tistream& stream );
     };
 
 
@@ -412,12 +412,12 @@ namespace Reflect
     // These are the global entry points for our virtual insert an extract functions
     //
 
-    inline std::ostream& operator << (std::ostream& stream, const Serializer& s)
+    inline tostream& operator<< (tostream& stream, const Serializer& s)
     {
         return s >> stream;
     }
 
-    inline std::istream& operator >> (std::istream& stream, Serializer& s)
+    inline tistream& operator>> (tistream& stream, Serializer& s)
     {
         return s << stream;
     }

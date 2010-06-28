@@ -115,12 +115,12 @@ namespace Nocturnal
         return Crc32(0xffffffff, data, count);
     }
 
-    inline u32 FileCrc32(const std::string& filePath, u32 packetSize = 4096)
+    inline u32 FileCrc32(const tstring& filePath, u32 packetSize = 4096)
     {
-        FILE* f = fopen(filePath.c_str(),"rb");
+        FILE* f = _tfopen(filePath.c_str(), TXT( "rb" ) );
         if (f==0)
         {
-            throw Nocturnal::Exception("Unable to open %s for read", filePath.c_str());
+            throw Nocturnal::Exception( TXT( "Unable to open %s for read" ), filePath.c_str());
         }
 
         fseek(f,0,SEEK_END);

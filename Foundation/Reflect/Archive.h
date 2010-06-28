@@ -12,12 +12,12 @@
 #include "Class.h"
 #include "StringPool.h"
 #include "Exceptions.h"
-#include "Indent.h"
 #include "Stream.h" 
 
 #include "Platform/Assert.h"
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Log.h" 
+#include "Foundation/File/Path.h"
 
 #include "Foundation/Atomic.h"
 
@@ -53,7 +53,7 @@ namespace Reflect
 
         int m_Action;
         int m_Progress;
-        std::string m_DestinationFile;
+        tstring m_DestinationFile;
 
         bool m_Abort;
 
@@ -107,8 +107,8 @@ namespace Reflect
     public:
         virtual void ArchiveStatus( StatusInfo& info );
         virtual void ArchiveException( ExceptionInfo& info );
-        virtual void ArchiveWarning( const std::string& warning );
-        virtual void ArchiveDebug( const std::string& debug );
+        virtual void ArchiveWarning( const tstring& warning );
+        virtual void ArchiveDebug( const tstring& debug );
     };
 
     class FOUNDATION_API PrintStatus : public StatusHandler
@@ -129,8 +129,8 @@ namespace Reflect
         }
 
         virtual void ArchiveStatus(StatusInfo& info) NOC_OVERRIDE;
-        virtual void ArchiveWarning(const std::string& warning) NOC_OVERRIDE;
-        virtual void ArchiveDebug(const std::string& debug) NOC_OVERRIDE;
+        virtual void ArchiveWarning(const tstring& warning) NOC_OVERRIDE;
+        virtual void ArchiveDebug(const tstring& debug) NOC_OVERRIDE;
     };
 
 
@@ -149,17 +149,17 @@ namespace Reflect
     typedef ArchiveTypes::ArchiveType ArchiveType;
 
     // must line up with enum above
-    const static char* s_ArchiveExtensions[] =
+    const static tchar* s_ArchiveExtensions[] =
     {
-        "rb",    // Binary
-        "xml"    // XML
+        TXT( "rb" ),    // Binary
+        TXT( "xml" )    // XML
     };
 
     // must line up with archive type enum
-    const static char* s_ArchiveDescriptions[] =
+    const static tchar* s_ArchiveDescriptions[] =
     {
-        "Binary Reflect File",
-        "XML Reflect File"
+        TXT( "Binary Reflect File" ),
+        TXT( "XML Reflect File" )
     };
 
     namespace ArchiveModes
@@ -218,10 +218,10 @@ namespace Reflect
 
     struct FileAccessArgs
     {
-        const std::string& m_File;
+        const tstring& m_File;
         FileOperation m_Operation;
 
-        FileAccessArgs( const std::string& file, FileOperation operation )
+        FileAccessArgs( const tstring& file, FileOperation operation )
             : m_File (file)
             , m_Operation (operation)
         {
@@ -271,9 +271,6 @@ namespace Reflect
     class FOUNDATION_API Archive
     {
     protected:
-        // The current indentation state
-        Indent m_Indent;
-
         // The number of bytes Parsed so far
         unsigned m_Progress;
 
@@ -281,16 +278,13 @@ namespace Reflect
         StatusHandler* m_Status;
 
         // The file we are working with
-        std::string m_File;
+        Nocturnal::Path m_Path;
 
         // The array of elements that we've found
         V_Element m_Spool;
 
         // The mode
         ArchiveMode m_Mode;
-
-        // The stream to use
-        StreamPtr m_Stream;
 
         // The cache of serializers
         Cache m_Cache;
@@ -307,10 +301,6 @@ namespace Reflect
         // The abort status
         bool m_Abort;
 
-        //
-        // Implementation
-        //
-
     protected:
         Archive (StatusHandler* status = NULL);
 
@@ -319,21 +309,9 @@ namespace Reflect
 
     public:
         // File access
-        const std::string& GetFile() const
+        const Nocturnal::Path& GetPath() const
         {
-            return m_File;
-        }
-
-        // Stream access
-        Stream& GetInput()
-        {
-            return *m_Stream;
-        }
-
-        // Stream access
-        Stream& GetOutput()
-        {
-            return *m_Stream;
+            return m_Path;
         }
 
         // Cache access
@@ -348,10 +326,14 @@ namespace Reflect
         }
 
         // Peek the type of file
-        static bool GetFileType( const std::string& file, ArchiveType& type );
+        static bool GetFileType( const tstring& file, ArchiveType& type );
 
         // Get the type of this archive
         virtual ArchiveType GetType() const = 0;
+
+        // File Open/Close
+        virtual void OpenFile(const tstring& file, bool write = false) = 0;
+        virtual void Close() = 0; 
 
         // Begins parsing the InputStream
         virtual void Read() = 0;
@@ -366,10 +348,10 @@ namespace Reflect
         virtual void Finish() = 0;
 
         // Emit a warning
-        void Warning(const char* fmt, ...);
+        void Warning(const tchar* fmt, ...);
 
         // Emit an debug
-        void Debug(const char* fmt, ...);
+        void Debug(const tchar* fmt, ...);
 
 
         //
@@ -378,13 +360,9 @@ namespace Reflect
 
         // Opens a file
     protected:
-        void OpenFile(const std::string& file, bool write = false);
-        void OpenStream(const StreamPtr& stream, bool write = false);
-        void Close(); 
-
         // Get parser for a file
-        static Archive* GetArchive(const std::string& file, StatusHandler* handler = NULL);
         static Archive* GetArchive(ArchiveType type, StatusHandler* handler = NULL);
+        static Archive* GetArchive(const tstring& file, StatusHandler* handler = NULL);
 
         //
         // Serialization
@@ -396,13 +374,13 @@ namespace Reflect
         virtual void Deserialize(V_Element& elements, u32 flags = 0) = 0;
 
     public:
-        static const char* GetExtension( ArchiveType t )
+        static const tchar* GetExtension( ArchiveType t )
         {
             NOC_ASSERT( t < sizeof( s_ArchiveExtensions ) );
             return s_ArchiveExtensions[ t ];
         }
 
-        static void GetExtensions( std::set< std::string>& extensions )
+        static void GetExtensions( std::set< tstring >& extensions )
         {
             for ( int i = 0; i < sizeof( s_ArchiveExtensions ); ++i )
             {
@@ -410,15 +388,14 @@ namespace Reflect
             }
         }
 
-        static void GetFileFilters( std::set< std::string > filters )
+        static void GetFileFilters( std::set< tstring > filters )
         {
             for ( int i = 0; i < sizeof( s_ArchiveExtensions ); ++i )
             {
-                std::string filter = std::string( s_ArchiveDescriptions[ i ] ) + " (*." + s_ArchiveExtensions[ i ] + ")|*." + s_ArchiveExtensions[ i ];
+                tstring filter = tstring( s_ArchiveDescriptions[ i ] ) + TXT( " (*." ) + s_ArchiveExtensions[ i ] + TXT( ")|*." ) + s_ArchiveExtensions[ i ];
                 filters.insert( filter );
             }
         }
-
 
         //
         // Event API
@@ -477,38 +454,22 @@ namespace Reflect
 
 
         //
-        // Spooling API
+        // Serialize/Deserialize API
         //
 
-        // Reading and writing single element from string data
-        static void       ToXML(const ElementPtr& element, std::string& xml, StatusHandler* status = NULL);
-        static ElementPtr FromXML(const std::string& xml, int searchType = Reflect::ReservedTypes::Any, StatusHandler* status = NULL);
-
-        // Reading and writing multiple elements from string data
-        static void       ToXML(const V_Element& elements, std::string& xml, StatusHandler* status = NULL);
-        static void       FromXML(const std::string& xml, V_Element& elements, StatusHandler* status = NULL);
-
         // Reading and writing single element from a file
-        static void       ToStream(const ElementPtr& element, std::iostream& stream, ArchiveType type, StatusHandler* status = NULL);
-        static ElementPtr FromStream(std::iostream& stream, ArchiveType type, int searchType = Reflect::ReservedTypes::Any, StatusHandler* status = NULL);
+        static void       ToFile(const ElementPtr& element, const tstring& file);
+        static void       ToFile(const ElementPtr& element, const tstring& file, VersionPtr version, StatusHandler* status = NULL);
+        static ElementPtr FromFile(const tstring& file, int searchType = Reflect::ReservedTypes::Any, StatusHandler* status = NULL);
 
         // Reading and writing multiple elements from a file
-        static void       ToStream(const V_Element& elements, std::iostream& stream, ArchiveType type, StatusHandler* status = NULL);
-        static void       FromStream(std::iostream& stream, ArchiveType type, V_Element& elements, StatusHandler* status = NULL);
-
-        // Reading and writing single element from a file
-        static void       ToFile(const ElementPtr& element, const std::string& file);
-        static void       ToFile(const ElementPtr& element, const std::string& file, VersionPtr version, StatusHandler* status = NULL);
-        static ElementPtr FromFile(const std::string& file, int searchType = Reflect::ReservedTypes::Any, StatusHandler* status = NULL);
-
-        // Reading and writing multiple elements from a file
-        static void       ToFile(const V_Element& elements, const std::string& file);
-        static void       ToFile(const V_Element& elements, const std::string& file, VersionPtr version, StatusHandler* status = NULL);
-        static void       FromFile(const std::string& file, V_Element& elements, StatusHandler* status = NULL);
+        static void       ToFile(const V_Element& elements, const tstring& file);
+        static void       ToFile(const V_Element& elements, const tstring& file, VersionPtr version, StatusHandler* status = NULL);
+        static void       FromFile(const tstring& file, V_Element& elements, StatusHandler* status = NULL);
 
         // Get all elements of the specified type in the archive ( not optimal if you need to get lots of different types at once )
         template< class T >
-        static void FromFile( const std::string& file, std::vector< Nocturnal::SmartPtr<T> >& elements, StatusHandler* status = NULL )
+        static void FromFile( const tstring& file, std::vector< Nocturnal::SmartPtr<T> >& elements, StatusHandler* status = NULL )
         {
             V_Element archiveElements;
             FromFile( file, archiveElements, status );
@@ -530,7 +491,7 @@ namespace Reflect
 
         // Fancy template version
         template <class T>
-        static Nocturnal::SmartPtr<T> FromFile(const std::string& file, StatusHandler* status = NULL)
+        static Nocturnal::SmartPtr<T> FromFile(const tstring& file, StatusHandler* status = NULL)
         {
             ElementPtr found = FromFile(file, Reflect::GetType<T>(), status);
 

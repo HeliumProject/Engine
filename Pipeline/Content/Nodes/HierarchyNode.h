@@ -50,7 +50,7 @@ namespace Content
 
         static void EnumerateClass( Reflect::Compositor<HierarchyNode>& comp );
 
-        virtual bool ProcessComponent(Reflect::ElementPtr element, const std::string& memberName) NOC_OVERRIDE;
+        virtual bool ProcessComponent(Reflect::ElementPtr element, const tstring& memberName) NOC_OVERRIDE;
     };
 
     typedef Nocturnal::SmartPtr<HierarchyNode> HierarchyNodePtr;

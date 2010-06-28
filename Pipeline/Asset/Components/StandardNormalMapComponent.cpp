@@ -6,14 +6,14 @@ REFLECT_DEFINE_CLASS( StandardNormalMapComponent );
 
 void StandardNormalMapComponent::EnumerateClass( Reflect::Compositor<StandardNormalMapComponent>& comp )
 {
-  comp.GetComposite().m_UIName = "Normal Map";
-  comp.GetComposite().SetProperty( AssetProperties::ShortDescription, "Normal (bump) map settings." );
-  comp.GetComposite().SetProperty( AssetProperties::LongDescription, "Enhances details on a shader without requiring more polygons on the model." );
-  comp.GetComposite().SetProperty( AssetProperties::SmallIcon, "attribute_normalmap.png" );
+  comp.GetComposite().m_UIName = TXT( "Normal Map" );
+  comp.GetComposite().SetProperty( AssetProperties::ShortDescription, TXT( "Normal (bump) map settings." ) );
+  comp.GetComposite().SetProperty( AssetProperties::LongDescription, TXT( "Enhances details on a shader without requiring more polygons on the model." ) );
+  comp.GetComposite().SetProperty( AssetProperties::SmallIcon, TXT( "attribute_normalmap.png" ) );
 
   Reflect::EnumerationField* enumTexFormat  = comp.AddEnumerationField( &StandardNormalMapComponent::m_TexFormat, "m_TexFormat",        AssetFlags::RealTimeUpdateable );
   Reflect::Field* fieldNormalMapScale       = comp.AddField( &StandardNormalMapComponent::m_NormalMapScale,       "m_NormalMapScale",   AssetFlags::RealTimeUpdateable );
-  fieldNormalMapScale->SetProperty( "UIScript", "UI[.[slider{min=1.0; max=16.0} value{}].]" );
+  fieldNormalMapScale->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=1.0; max=16.0} value{}].]" ) );
 }
 
 

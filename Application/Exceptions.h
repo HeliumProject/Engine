@@ -8,7 +8,7 @@ namespace Application
   class Exception : public Nocturnal::Exception
   {
   public:
-    Exception( const char *msgFormat, ... )
+    Exception( const tchar *msgFormat, ... )
     {
       va_list msgArgs;
       va_start( msgArgs, msgFormat );
@@ -25,7 +25,7 @@ namespace Application
   class CheckVersionException : public Application::Exception
   {
   public:
-    CheckVersionException( const char* msg )
+    CheckVersionException( const tchar* msg )
       : Application::Exception( msg )
     {
     }

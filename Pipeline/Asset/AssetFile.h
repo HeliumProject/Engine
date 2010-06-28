@@ -2,7 +2,6 @@
 
 #include "Pipeline/API.h"
 #include "AssetClass.h"
-#include "Pipeline/Asset/Tracker/CacheDB.h"
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Memory/SmartPtr.h"
@@ -27,10 +26,10 @@ namespace Asset
     AssetFile( Nocturnal::Path& path );
     virtual ~AssetFile();
 
-    static AssetFilePtr FindAssetFile( const std::string& path, CacheDB* cache = NULL );
+    static AssetFilePtr CreateAssetFile( const tstring& path );
 
   public:
-    std::string GetFilePath()
+    tstring GetFilePath()
     {
         return m_Path.Get();
     }
@@ -44,20 +43,20 @@ namespace Asset
         return m_Path;
     }
 
-    const std::string& GetShortName();
-    const std::string& GetFileFilter();
-    const std::string& GetExtension();
-    const std::string& GetFileType();
+    const tstring& GetShortName();
+    const tstring& GetFileFilter();
+    const tstring& GetExtension();
+    const tstring& GetFileType();
     
     u64 GetSize();
-    const std::string& GetRCSUser();
+    const tstring& GetRCSUser();
 
     AssetType GetAssetType();
 
     static AssetClassPtr GetAssetClass( AssetFile* assetFile );
 
-    void AddAttribute( const std::string& attrName, const std::string& attrValue, bool canAppend = true );
-    const std::map< std::string, std::string >& GetComponents() const { return m_Attributes; }
+    void AddAttribute( const tstring& attrName, const tstring& attrValue, bool canAppend = true );
+    const std::map< tstring, tstring >& GetComponents() const { return m_Attributes; }
 
     void AddDependency( const Nocturnal::Path& path );
     void SetDependencies( const std::set< Nocturnal::Path >& dependencies );
@@ -79,13 +78,13 @@ namespace Asset
   private:
       Nocturnal::Path m_Path;
 
-    std::string   m_ShortName;
-    std::string   m_FileFilter;
-    std::string   m_Extension;
-    std::string   m_FileType;
+    tstring   m_ShortName;
+    tstring   m_FileFilter;
+    tstring   m_Extension;
+    tstring   m_FileType;
     AssetType     m_AssetType;
     u64           m_Size;
-    std::map< std::string, std::string >      m_Attributes;
+    std::map< tstring, tstring >      m_Attributes;
     std::set< Nocturnal::Path > m_Dependencies;
     u64           m_RowID;
 

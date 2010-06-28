@@ -8,7 +8,7 @@ namespace RCS
   class Exception : public Nocturnal::Exception
   {
   public:
-    Exception( const char *msgFormat, ... )
+    Exception( const tchar *msgFormat, ... )
     {
       va_list msgArgs;
       va_start( msgArgs, msgFormat );
@@ -23,12 +23,12 @@ namespace RCS
   class FileInUseException : public RCS::Exception
   {
   public:
-    FileInUseException( const char *path, const char *username ) : Exception( "File '%s' is currently in use by '%s'.", path, username) {}
+    FileInUseException( const tchar *path, const tchar *username ) : Exception( TXT( "File '%s' is currently in use by '%s'." ), path, username) {}
   };
 
   class FileOutOfDateException : public RCS::Exception
   {
   public:
-    FileOutOfDateException( const char *path, const int curRev, const int headRev ) : Exception( "File '%s' is not up to date (local revision: %d / remote revision: %d).  Please sync the file to resolve this error.", path, curRev, headRev ) {}
+    FileOutOfDateException( const tchar *path, const int curRev, const int headRev ) : Exception( TXT( "File '%s' is not up to date (local revision: %d / remote revision: %d).  Please sync the file to resolve this error." ), path, curRev, headRev ) {}
   };
 }

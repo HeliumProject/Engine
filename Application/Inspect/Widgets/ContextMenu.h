@@ -21,9 +21,9 @@ namespace Inspect
   {
     Control* m_Control;
 
-    const std::string& m_Item;
+    const tstring& m_Item;
 
-    ContextMenuEventArgs(Control* control, const std::string& item)
+    ContextMenuEventArgs(Control* control, const tstring& item)
       : m_Control (control)
       , m_Item (item)
     {
@@ -35,7 +35,7 @@ namespace Inspect
   typedef Nocturnal::Signature<void, const ContextMenuEventArgs&> ContextMenuSignature;
 
   // container for each delegate of each context menu item
-  typedef std::map<std::string, ContextMenuSignature::Delegate> M_ContextMenuDelegate;
+  typedef std::map<tstring, ContextMenuSignature::Delegate> M_ContextMenuDelegate;
 
 
   //
@@ -58,7 +58,7 @@ namespace Inspect
   protected:
     Control* m_Control;
 
-    std::vector< std::string > m_Items;
+    std::vector< tstring > m_Items;
     M_ContextMenuDelegate m_Delegates;
 
   public:
@@ -71,7 +71,7 @@ namespace Inspect
     void OnItem( wxCommandEvent& event );
 
   public:
-    virtual const std::vector< std::string >& GetItems()
+    virtual const std::vector< tstring >& GetItems()
     {
       return m_Items;
     }
@@ -89,7 +89,7 @@ namespace Inspect
     // event to add dynamic context menus items to the menu instance
     LSetupContextMenuSignature::Event m_SetupContextMenuEvent;
 
-    virtual void AddItem(const std::string& item, ContextMenuSignature::Delegate delegate);
+    virtual void AddItem(const tstring& item, ContextMenuSignature::Delegate delegate);
     virtual void AddSeperator();
   };
 

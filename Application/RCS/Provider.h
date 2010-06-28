@@ -24,7 +24,7 @@ namespace RCS
     virtual void Sync( RCS::File& file, const u64 timestamp = 0 ) = 0;
     
     virtual void GetInfo( RCS::File& file, const GetInfoFlag flags = GetInfoFlags::Default ) = 0;
-    virtual void GetInfo( const std::string& folder, RCS::V_File& files, bool recursive = false, u32 fileData = FileData::All, u32 actionData = ActionData::All ) = 0;
+    virtual void GetInfo( const tstring& folder, RCS::V_File& files, bool recursive = false, u32 fileData = FileData::All, u32 actionData = ActionData::All ) = 0;
 
     virtual void Add( RCS::File& file ) = 0;
     virtual void Edit( RCS::File& file ) = 0;

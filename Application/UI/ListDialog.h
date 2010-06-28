@@ -15,9 +15,9 @@ namespace Nocturnal
     wxStaticText* m_StaticText;
     SortableListView* m_MsgList;
     wxButton* m_OK;
-    std::string m_Description;
+    tstring m_Description;
 
   public:
-    ListDialog( wxWindow* parent, const std::string& title, const std::string& desc, const std::vector< std::string >& msgs );
+    ListDialog( wxWindow* parent, const tstring& title, const tstring& desc, const std::vector< tstring >& msgs );
   };
 }

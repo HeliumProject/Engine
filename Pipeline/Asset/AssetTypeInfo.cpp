@@ -1,7 +1,7 @@
 #include "AssetTypeInfo.h"
 #include "Pipeline/Asset/AssetExceptions.h"
 
-static const char* s_DefaultIconFilename = "null.png";
+static const tchar* s_DefaultIconFilename = TXT( "null.png" );
 
 using namespace Asset;
 
@@ -10,9 +10,9 @@ M_AssetTypeInfo Asset::g_AssetTypeInfos;
 
 AssetTypeInfo::AssetTypeInfo
 (
- const std::string& name,
- const std::string& builder,
- const std::string& iconFilename,
+ const tstring& name,
+ const tstring& builder,
+ const tstring& iconFilename,
  const u32 typeColor
  )
 : m_Name( name )
@@ -30,7 +30,7 @@ const AssetTypeInfo& Asset::GetAssetTypeInfo( const AssetType AssetType, bool no
   {
     if ( AssetType == AssetTypes::Null ) 
     {
-      static const AssetTypeInfo defaultAssetTypeInfo( "Null", "", s_DefaultIconFilename );
+      static const AssetTypeInfo defaultAssetTypeInfo( TXT( "Null" ), TXT( "" ), s_DefaultIconFilename );
       return defaultAssetTypeInfo;
     }
     else if ( noFail )
@@ -47,19 +47,19 @@ const AssetTypeInfo& Asset::GetAssetTypeInfo( const AssetType AssetType, bool no
   return found->second;
 }
 
-const std::string& Asset::GetAssetTypeName( const AssetType assetType )
+const tstring& Asset::GetAssetTypeName( const AssetType assetType )
 {
   const AssetTypeInfo& assetTypeInfo = GetAssetTypeInfo( assetType );
   return assetTypeInfo.m_Name;
 }
 
-const std::string& Asset::GetAssetTypeBuilder( const AssetType assetType )
+const tstring& Asset::GetAssetTypeBuilder( const AssetType assetType )
 {
   const AssetTypeInfo& assetTypeInfo = GetAssetTypeInfo( assetType );
   return assetTypeInfo.m_Builder;
 }
 
-const std::string& Asset::GetAssetTypeIcon( const AssetType assetType )
+const tstring& Asset::GetAssetTypeIcon( const AssetType assetType )
 {
   const AssetTypeInfo& assetTypeInfo = GetAssetTypeInfo( assetType );
   return assetTypeInfo.m_IconFilename;

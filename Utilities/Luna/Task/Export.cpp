@@ -9,8 +9,6 @@
 #include "Application/Inspect/Reflect/InspectReflectInit.h"
 #include "Application/Inspect/Reflect/ReflectInterpreter.h"
 
-#include "Pipeline/Dependencies/Dependencies.h"
-
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Pipeline/Component/ComponentHandle.h"
@@ -24,6 +22,7 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/IPC/Connection.h"
+#include "Foundation/Reflect/ArchiveBinary.h"
 #include "Foundation/Exception.h"
 
 #include <strstream>
@@ -147,7 +146,7 @@ bool Export( const S_tuid& assetIDs, bool recurse, const std::string& stateTrack
   std::stringstream stream;
   try
   {
-    Reflect::Archive::ToStream( job, stream, Reflect::ArchiveTypes::Binary );
+    Reflect::ArchiveBinary::ToStream( job, stream );
   }
   catch ( Nocturnal::Exception& ex )
   {

@@ -20,8 +20,8 @@ typedef std::vector< tuid > V_tuid;
 typedef std::map< tuid, tuid > M_tuid;
 typedef std::map< tuid, u32 > M_tuidu32;
 
-#define TUID_HEX_FORMAT "0x%016I64X"
-#define TUID_INT_FORMAT "%I64u"
+#define TUID_HEX_FORMAT TXT( "0x%016I64X" )
+#define TUID_INT_FORMAT TXT( "%I64u" )
 
 namespace Nocturnal
 {
@@ -44,7 +44,7 @@ namespace Nocturnal
         TUID(); // Null ID
         TUID( tuid id );
         TUID( const TUID &id );
-        TUID( const std::string& id );
+        TUID( const tstring& id );
 
         TUID& operator=( const TUID &rhs );
         bool operator==( const TUID &rhs ) const;
@@ -56,8 +56,8 @@ namespace Nocturnal
         // Interop with tuid
         operator tuid() const;
 
-        void ToString(std::string& id) const;
-        bool FromString( const std::string& str );
+        void ToString(tstring& id) const;
+        bool FromString( const tstring& str );
 
         void ToGUID(GUID& id) const;
         void FromGUID(const GUID& id);
@@ -65,13 +65,13 @@ namespace Nocturnal
         // Resets the ID to be the null ID
         void Reset();
 
-        static inline std::ostream& HexFormat( std::ostream& base )
+        static inline tostream& HexFormat( tostream& base )
         {
-            return base << "0x" << std::setfill('0') << std::setw(16) << std::right << std::hex << std::uppercase;
+            return base << TXT( "0x" ) << std::setfill( TXT( '0' ) ) << std::setw(16) << std::right << std::hex << std::uppercase;
         }
 
-        friend FOUNDATION_API std::ostream& operator<<(std::ostream& stream, const TUID& id);
-        friend FOUNDATION_API std::istream& operator>>(std::istream& stream, TUID& id);
+        friend FOUNDATION_API tostream& operator<<( tostream& stream, const TUID& id );
+        friend FOUNDATION_API tistream& operator>>( tistream& stream, TUID& id );
     };
 
     inline TUID::TUID()
@@ -92,7 +92,7 @@ namespace Nocturnal
 
     }
 
-    inline TUID::TUID( const std::string& id )
+    inline TUID::TUID( const tstring& id )
     {
         FromString( id );
     }
@@ -138,17 +138,17 @@ namespace Nocturnal
         m_ID = 0x0;
     }
 
-    FOUNDATION_API inline std::ostream& operator<<(std::ostream& stream, const TUID& id)
+    FOUNDATION_API inline tostream& operator<<(tostream& stream, const TUID& id)
     {
-        std::string s;
+        tstring s;
         id.ToString(s);
         stream << s;
         return stream;
     }
 
-    FOUNDATION_API inline std::istream& operator>>(std::istream& stream, TUID& id)
+    FOUNDATION_API inline tistream& operator>>(tistream& stream, TUID& id)
     {
-        std::string s;
+        tstring s;
         stream >> s;
         id.FromString(s.c_str());
         return stream;

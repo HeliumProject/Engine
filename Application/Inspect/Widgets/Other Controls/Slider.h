@@ -7,8 +7,8 @@
 
 namespace Inspect
 {
-  const static char SLIDER_ATTR_MIN[] = "min";
-  const static char SLIDER_ATTR_MAX[] = "max";
+  const static tchar SLIDER_ATTR_MIN[] = TXT( "min" );
+  const static tchar SLIDER_ATTR_MAX[] = TXT( "max" );
 
   class APPLICATION_API Slider : public Reflect::ConcreteInheritor<Slider, Control>
   {
@@ -35,7 +35,7 @@ namespace Inspect
     virtual void SetAutoAdjustMinMax( bool autoAdjust );
 
   protected:
-    virtual bool Process( const std::string& key, const std::string& value );
+    virtual bool Process( const tstring& key, const tstring& value );
     void SetUIValue( float value );
     float GetUIValue() const;
   };

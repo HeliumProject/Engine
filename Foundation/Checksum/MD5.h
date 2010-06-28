@@ -490,7 +490,7 @@ inline void md5_finish(md5_state_t *pms, md5_byte_t digest[16])
 
 namespace Nocturnal
 {
-    inline std::string MD5(const void* data, u32 count)
+    inline tstring MD5(const void* data, u32 count)
     {
         md5_state_t state;
         md5_init(&state);
@@ -500,26 +500,26 @@ namespace Nocturnal
         md5_byte_t digest[16];
         md5_finish(&state, digest);
 
-        char hex_output[16*2 + 1];
+        tchar hex_output[16*2 + 1];
         for (int di = 0; di < 16; ++di)
         {
-            sprintf(hex_output + di * 2, "%02X", digest[di]);
+            _stprintf(hex_output + di * 2, TXT( "%02X" ), digest[di]);
         }
 
         return hex_output;
     }
 
-    inline std::string MD5(const std::string& data)
+    inline tstring MD5(const tstring& data)
     {
         return MD5( data.data(), (u32)data.length() );
     }
 
-    inline std::string FileMD5(const std::string& filePath, u32 packetSize = 4096)
+    inline tstring FileMD5(const tstring& filePath, u32 packetSize = 4096)
     {
-        FILE* f = fopen(filePath.c_str(),"rb");
+        FILE* f = _tfopen(filePath.c_str(), TXT( "rb" ) );
         if (f==0)
         {
-            throw Nocturnal::Exception("Unable to open %s for read", filePath.c_str());
+            throw Nocturnal::Exception( TXT( "Unable to open %s for read" ), filePath.c_str());
         }
 
         fseek(f,0,SEEK_END);
@@ -542,10 +542,10 @@ namespace Nocturnal
         md5_byte_t digest[16];
         md5_finish(&state, digest);
 
-        char hex_output[16*2 + 1];
+        tchar hex_output[16*2 + 1];
         for (int di = 0; di < 16; ++di)
         {
-            sprintf(hex_output + di * 2, "%02X", digest[di]);
+            _stprintf(hex_output + di * 2, TXT( "%02X" ), digest[di]);
         }
 
         return hex_output;

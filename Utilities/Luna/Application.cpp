@@ -5,7 +5,6 @@
 
 #include "Application/Application.h"
 #include "AssetEditor/AssetInit.h"
-#include "Pipeline/Asset/Tracker/Tracker.h"
 #include "Browser/Browser.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Log.h"
@@ -33,7 +32,7 @@
 #include "Foundation/CommandLine/Commands/Help.h"
 #include "Foundation/CommandLine/Processor.h"
 
-#include "Commands/BuildCommand.h"
+//#include "Commands/BuildCommand.h"
 #include "Commands/RebuildCommand.h"
 
 #include <wx/cmdline.h>
@@ -50,7 +49,6 @@ namespace Luna
 
 LunaApp::LunaApp()
 : wxApp()
-, m_AssetTracker( NULL )
 , m_DocumentManager( new DocumentManager() )
 , m_SceneEditor( NULL )
 {
@@ -58,11 +56,6 @@ LunaApp::LunaApp()
 
 LunaApp::~LunaApp()
 {
-    if ( m_AssetTracker )
-    {
-        delete m_AssetTracker;
-    }
-
     if ( m_DocumentManager )
     {
         delete m_DocumentManager;
@@ -178,12 +171,6 @@ int LunaApp::OnExit()
     // Save preferences
     ::Luna::GetApplicationPreferences()->SavePreferences();
 
-    if ( m_AssetTracker )
-    {
-        m_AssetTracker->StopThread();
-        delete m_AssetTracker;
-    }
-
     Nocturnal::ImageManagerCleanup();
 
     m_InitializerStack.Cleanup();
@@ -215,9 +202,9 @@ int Main ( int argc, const char** argv )
 
     Processor processor( "luna", "[COMMAND <ARGS>]", "Luna (c) 2010 - Nocturnal" );
 
-    BuildCommand buildCommand;
-    success &= buildCommand.Initialize( error );
-    success &= processor.RegisterCommand( &buildCommand, error );
+    //BuildCommand buildCommand;
+    //success &= buildCommand.Initialize( error );
+    //success &= processor.RegisterCommand( &buildCommand, error );
 
     RebuildCommand rebuildCommand;
     success &= rebuildCommand.Initialize( error );
@@ -262,7 +249,7 @@ int Main ( int argc, const char** argv )
     success &= processor.AddOption( new SimpleOption<int>( &nice , "nice", "<NUM>", "number of processors to nice (for other processes)" ), error );
     
     bool helpFlag;
-    success &= processor.AddOption( new FlagOption( &helpFlag, "help", "print program usage" ), error );
+    success &= processor.AddOption( new FlagOption( &helpFlag, "h|help", "print program usage" ), error );
 
     success &= processor.ParseOptions( argsBegin, argsEnd, error );
 
@@ -309,7 +296,7 @@ int Main ( int argc, const char** argv )
         }
         else
         {
-            buildCommand.Cleanup();
+            //buildCommand.Cleanup();
             rebuildCommand.Cleanup();
 
             ::FreeConsole();
@@ -317,7 +304,7 @@ int Main ( int argc, const char** argv )
         }
     }
 
-    buildCommand.Cleanup();
+    //buildCommand.Cleanup();
     rebuildCommand.Cleanup();
 
     if ( !success && !error.empty() )

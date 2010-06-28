@@ -44,8 +44,8 @@ namespace Nocturnal
         void ToTUID( tuid& id ) const;
         void FromTUID( tuid id );
 
-        void ToString( std::string& id ) const;
-        bool FromString( const std::string& id );
+        void ToString( tstring& id ) const;
+        bool FromString( const tstring& id );
 
         // Resets the ID to be kNullID
         void Reset();
@@ -56,21 +56,21 @@ namespace Nocturnal
         // Generates a unique ID
         static void Generate( GUID& uid );
 
-        friend FOUNDATION_API std::ostream& operator<<( std::ostream& stream, const GUID& id );
-        friend FOUNDATION_API std::istream& operator>>( std::istream& stream, GUID& id );
+        friend FOUNDATION_API tostream& operator<<( tostream& stream, const GUID& id );
+        friend FOUNDATION_API tistream& operator>>( tistream& stream, GUID& id );
     };
 
-    FOUNDATION_API inline std::ostream& operator<<( std::ostream& stream, const GUID& id )
+    FOUNDATION_API inline tostream& operator<<( tostream& stream, const GUID& id )
     {
-        std::string s;
+        tstring s;
         id.ToString( s );
         stream << s;
         return stream;
     }
 
-    FOUNDATION_API inline std::istream& operator>>( std::istream& stream, GUID& id )
+    FOUNDATION_API inline tistream& operator>>( tistream& stream, GUID& id )
     {
-        std::string s;
+        tstring s;
         stream >> s;
         id.FromString( s.c_str() );
         return stream;

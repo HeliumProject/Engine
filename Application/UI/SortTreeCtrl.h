@@ -32,7 +32,7 @@ namespace Nocturnal
     static const int InvalidItemId = 0;
     
     SortTreeCtrl();
-    SortTreeCtrl( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTR_HAS_BUTTONS, const wxValidator& validator = wxDefaultValidator, const wxString& name = "listCtrl" );
+    SortTreeCtrl( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTR_HAS_BUTTONS, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxT( "listCtrl" ) );
     virtual ~SortTreeCtrl();
 
     bool IsSortingEnabled() const;

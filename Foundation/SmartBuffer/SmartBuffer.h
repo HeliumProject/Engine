@@ -62,7 +62,7 @@ namespace Nocturnal
         static Profile::MemoryPoolHandle s_DataPool;
 
     protected:
-        std::string     m_Name;
+        tstring     m_Name;
         u32             m_Type;
         u8*             m_Data;
         u32             m_Size;

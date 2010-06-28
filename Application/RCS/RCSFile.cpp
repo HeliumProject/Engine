@@ -32,7 +32,7 @@ void File::Add( const OpenFlag flags, const u64 changesetId )
 
   if ( ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) || IsLocking() ) && IsCheckedOutBySomeoneElse() )
   {
-    std::string usernames;
+    tstring usernames;
     GetOpenedByUsers( usernames );
     throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
   }
@@ -53,7 +53,7 @@ void File::Edit( const OpenFlag flags, const u64 changesetId )
 
   if ( ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) || IsLocking() ) && IsCheckedOutBySomeoneElse() )
   {
-    std::string usernames;
+    tstring usernames;
     GetOpenedByUsers( usernames );
     throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
   }
@@ -67,7 +67,7 @@ void File::Edit( const OpenFlag flags, const u64 changesetId )
 
     if ( m_LocalRevision <= 0 && m_LocalRevision != m_HeadRevision && !HeadDeleted() )
     {
-      throw Exception( "File '%s' cannot be opened for edit because you do not have the file synced.", m_LocalPath.c_str() );
+      throw Exception( TXT( "File '%s' cannot be opened for edit because you do not have the file synced." ), m_LocalPath.c_str() );
     }
   }
 
@@ -82,7 +82,7 @@ void File::Delete( const OpenFlag flags, const u64 changesetId )
 
   if ( !ExistsInDepot() )
   {
-    throw Exception( "File '%s' does not exist in revision control.", m_LocalPath.c_str() );
+    throw Exception( TXT( "File '%s' does not exist in revision control." ), m_LocalPath.c_str() );
   }
 
   if ( IsCheckedOutByMe() && m_Operation == Operations::Delete )
@@ -92,7 +92,7 @@ void File::Delete( const OpenFlag flags, const u64 changesetId )
 
   if ( ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) || IsLocking() ) && ( IsCheckedOutBySomeoneElse() ) )
   {
-    std::string usernames;
+    tstring usernames;
     GetOpenedByUsers( usernames );
     throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
   }
@@ -108,7 +108,7 @@ void File::Reopen( const Changeset& changeset, const OpenFlag flags )
   GetInfo();
   if ( !IsCheckedOutByMe() )
   {
-    throw Exception( "%s is not currently checked out.", m_LocalPath.c_str() );
+    throw Exception( TXT( "%s is not currently checked out." ), m_LocalPath.c_str() );
   }
 
   m_ChangesetId = changeset.m_Id;
@@ -129,7 +129,7 @@ void File::Copy( File& target, const OpenFlag flags, const u64 changesetId )
 
   if ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) && target.IsCheckedOutBySomeoneElse() )
   {
-    std::string targetUsernames;
+    tstring targetUsernames;
     target.GetOpenedByUsers( targetUsernames );
     throw FileInUseException( target.m_LocalPath.c_str(), targetUsernames.c_str() );
   }
@@ -153,20 +153,20 @@ void File::Rename( File& target, const OpenFlag flags, const u64 changesetId )
     }
 
     // else, we have a problem
-    throw Exception( "Cannot rename the deleted file '%s'.", m_LocalPath.c_str() );
+    throw Exception( TXT( "Cannot rename the deleted file '%s'." ), m_LocalPath.c_str() );
   }
 
   if ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive )
   {
     if (  IsCheckedOutBySomeoneElse() )
     {
-      std::string usernames;
+      tstring usernames;
       GetOpenedByUsers( usernames );
       throw FileInUseException( m_LocalPath.c_str(), usernames.c_str() );
     }
     else if ( target.IsCheckedOutBySomeoneElse() )
     {
-      std::string targetUsernames;
+      tstring targetUsernames;
       target.GetOpenedByUsers( targetUsernames );
       throw FileInUseException( target.m_LocalPath.c_str(), targetUsernames.c_str() );
     }
@@ -208,7 +208,7 @@ void File::Revert( const OpenFlag flags )
 // effect.  Basically, we want to guarantee that there's
 // a file at that location on disk when this returns OK.
 //
-static void _EnsureExistence( const std::string &path )
+static void _EnsureExistence( const tstring &path )
 {
   Nocturnal::Path file( path );
 
@@ -223,7 +223,7 @@ void File::Open( const OpenFlag flags, const u64 changesetId )
 {
   if ( !PathIsManaged( m_LocalPath ) )
   {
-    Log::Warning( Log::Levels::Verbose,  "Attempted to Open unmanaged path (not opening in RCS, but ensuring file existence): %s\n", m_LocalPath.c_str() );
+    Log::Warning( Log::Levels::Verbose, TXT( "Attempted to Open unmanaged path (not opening in RCS, but ensuring file existence): %s\n" ), m_LocalPath.c_str() );
     _EnsureExistence( m_LocalPath );
     return;
   }
@@ -266,16 +266,16 @@ void File::Open( const OpenFlag flags, const u64 changesetId )
 
 bool File::QueryOpen( const OpenFlag flags, const u64 changesetId )
 {
-  std::string message;
+  tstring message;
 
   GetInfo();
 
   if ( !ExistsInDepot() )
   {
     message = m_LocalPath;
-    message += " doesn't exist in revision control, do you want to create it?";
+    message += TXT( " doesn't exist in revision control, do you want to create it?" );
 
-    if ( IDYES == ::MessageBox( GetActiveWindow(), message.c_str(), "Check Out?", MB_YESNO | MB_ICONEXCLAMATION ) )
+    if ( IDYES == ::MessageBox( GetActiveWindow(), message.c_str(), TXT( "Check Out?" ), MB_YESNO | MB_ICONEXCLAMATION ) )
     {
       Open( flags, changesetId );
     }
@@ -290,12 +290,12 @@ bool File::QueryOpen( const OpenFlag flags, const u64 changesetId )
 
   if ( ( ( flags & OpenFlags::Exclusive ) == OpenFlags::Exclusive ) && IsCheckedOutBySomeoneElse() )
   {
-    std::string usernames;
+    tstring usernames;
     GetOpenedByUsers( usernames );
-    message = m_LocalPath + std::string( " is already checked out by " ) + usernames + ", do you still wish to open the file?";
+    message = m_LocalPath + TXT( " is already checked out by " ) + usernames + TXT( ", do you still wish to open the file?" );
 
     // here, the user has basically overridden the exlusivity setting, so we just try to Open it
-    if ( IDYES == ::MessageBox( GetActiveWindow(), message.c_str(), "Checked Out", MB_YESNO | MB_ICONEXCLAMATION ) )
+    if ( IDYES == ::MessageBox( GetActiveWindow(), message.c_str(), TXT( "Checked Out" ), MB_YESNO | MB_ICONEXCLAMATION ) )
     {
       Open( OpenFlags::Default, changesetId );
       return true;
@@ -306,11 +306,11 @@ bool File::QueryOpen( const OpenFlag flags, const u64 changesetId )
     }
   }
 
-  message = std::string( "Do you wish to check out " ) + m_LocalPath + std::string( "?" );
+  message = tstring( TXT( "Do you wish to check out " ) ) + m_LocalPath + TXT( "?" );
 
   // here, if someone's checked it out in the interim, and they were supposed to be exlusively doing it,
   // we want to let Open() fail, so we give it the exlusive flag
-  if ( IDYES == ::MessageBox( GetActiveWindow(), message.c_str(), "Check Out?", MB_YESNO | MB_ICONEXCLAMATION ) )
+  if ( IDYES == ::MessageBox( GetActiveWindow(), message.c_str(), TXT( "Check Out?" ), MB_YESNO | MB_ICONEXCLAMATION ) )
   {
     Open( flags, changesetId );
     return true;
@@ -323,7 +323,7 @@ bool File::QueryOpen( const OpenFlag flags, const u64 changesetId )
   return false;
 }
 
-void File::Commit( const std::string& description )
+void File::Commit( const tstring& description )
 {
   Changeset changeset;
   changeset.m_Description = description;
@@ -334,7 +334,7 @@ void File::Commit( const std::string& description )
 }
 
 // Was: GetLastUser
-void File::GetCreatedByUser( std::string& username )
+void File::GetCreatedByUser( tstring& username )
 {
   if ( m_Revisions.empty() )
   {
@@ -347,7 +347,7 @@ void File::GetCreatedByUser( std::string& username )
   }
 }
 
-void File::GetLastModifiedByUser( std::string& username )
+void File::GetLastModifiedByUser( tstring& username )
 {
   if ( m_Revisions.empty() )
   {
@@ -361,9 +361,9 @@ void File::GetLastModifiedByUser( std::string& username )
 }
 
 // Was: GetOtherUsers
-void File::GetOpenedByUsers( std::string& usernames )
+void File::GetOpenedByUsers( tstring& usernames )
 {
-  usernames = "";
+  usernames = TXT( "" );
 
   if ( m_Actions.empty() )
   {
@@ -377,7 +377,7 @@ void File::GetOpenedByUsers( std::string& usernames )
       usernames += (*itr)->m_Username;
       if ( itr + 1 != end )
       {
-        usernames += ", ";
+        usernames += TXT( ", " );
       }
     }
   }

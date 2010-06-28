@@ -13,9 +13,9 @@
 
 using namespace Worker;
 
-const char* Worker::Args::Worker  = "worker";
-const char* Worker::Args::Debug   = "worker_debug";
-const char* Worker::Args::Wait    = "worker_wait";
+const tchar* Worker::Args::Worker  = TXT( "worker" );
+const tchar* Worker::Args::Debug   = TXT( "worker_debug" );
+const tchar* Worker::Args::Wait    = TXT( "worker_wait" );
 
 // the worker processes for a master application
 std::set< Nocturnal::SmartPtr< Worker::Process > > g_Workers;
@@ -34,7 +34,7 @@ static void ShutdownListener(const Application::ShutdownArgs& args)
     Process::ReleaseAll();
 }
 
-Process* Process::Create( const std::string& executable )
+Process* Process::Create( const tstring& executable )
 {
     static bool firstCreate = true;
 
@@ -63,7 +63,7 @@ void Process::ReleaseAll()
     g_Workers.clear();
 }
 
-Process::Process(const std::string& executable)
+Process::Process(const tstring& executable)
 : m_Executable (executable)
 , m_Handle (NULL)
 , m_Connection (NULL)
@@ -79,10 +79,18 @@ Process::~Process()
 
 bool Process::Start(int timeout)
 {
-    std::string str = m_Executable;
-    str += " ";
+    tstring str = m_Executable;
+    str += TXT( " " );
     str += Nocturnal::CmdLineDelimiters[0];
     str += Worker::Args::Worker;
+
+    // make our worker wait forever is we were asked to
+    if (Nocturnal::GetCmdLineFlag( Worker::Args::Wait ))
+    {
+        str += TXT( " " );
+        str += Nocturnal::CmdLineDelimiters[0];
+        str += Worker::Args::Worker;
+    }
 
     // make our worker wait forever is we were asked to
     if (Nocturnal::GetCmdLineFlag( Worker::Args::Wait ))
@@ -111,7 +119,7 @@ bool Process::Start(int timeout)
     // Start the child process.
     if( !Nocturnal::GetCmdLineFlag( Worker::Args::Debug ) && !::CreateProcess( NULL, (LPTSTR) str.c_str(), NULL, NULL, FALSE, flags, NULL, NULL, &startupInfo, &procInfo ) )
     {
-        throw Nocturnal::Exception ( "Failed to run '%s' (%s)\n", str.c_str(), Platform::GetErrorString().c_str() );
+        throw Nocturnal::Exception( TXT( "Failed to run '%s' (%s)\n" ), str.c_str(), Platform::GetErrorString().c_str() );
     }
     else
     {
@@ -122,8 +130,20 @@ bool Process::Start(int timeout)
         IPC::PipeConnection* connection = new IPC::PipeConnection ();
 
         // init pipe connection with background process' process id (hex)
-        std::ostringstream stream;
+        tostringstream stream;
 
+        if (Nocturnal::GetCmdLineFlag( Worker::Args::Debug ))
+        {
+            stream << TXT( "worker_debug" );
+        }
+        else
+        {
+            stream << TXT( "worker_" ) << std::hex << GetProcessId( m_Handle );
+        }
+
+        connection->Initialize(true, TXT( "Worker Process Connection" ), stream.str().c_str());
+
+        // init pipe connection with background process' process id (hex)
         if (Nocturnal::GetCmdLineFlag( Worker::Args::Debug ))
         {
             stream << "worker_debug";

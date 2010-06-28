@@ -6,7 +6,7 @@ REFLECT_DEFINE_ABSTRACT( ColorMapComponent );
 
 void ColorMapComponent::EnumerateClass( Reflect::Compositor<ColorMapComponent>& comp )
 {
-  comp.GetComposite().m_UIName = "Color Map (Base)";
+  comp.GetComposite().m_UIName = TXT( "Color Map (Base)" );
 
   Reflect::EnumerationField* enumAlphaMipGenFilter = comp.AddEnumerationField( &ColorMapComponent::m_AlphaMipGenFilter, "m_AlphaMipGenFilter", AssetFlags::RealTimeUpdateable );
   Reflect::EnumerationField* enumAlphaPostMipFilter = comp.AddEnumerationField( &ColorMapComponent::m_AlphaPostMipFilter, "m_AlphaPostMipFilter", AssetFlags::RealTimeUpdateable );

@@ -7,7 +7,7 @@ using namespace Nocturnal;
 using namespace Nocturnal::CommandLine;
 
 Help::Help( Processor* owner )
-: Command( "help", "<COMMAND>", "displays the help for the command (or application)" )
+: Command( TXT( "help" ), TXT( "<COMMAND>" ), TXT( "Displays the help for the command (or application)" ) )
 , m_Owner( owner )
 {
 }
@@ -17,7 +17,7 @@ Help::~Help()
 	m_Owner = NULL;
 }
 
-bool Help::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+bool Help::Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
 {
 	NOC_ASSERT( m_Owner );
 
@@ -43,7 +43,7 @@ bool Help::Process( std::vector< std::string >::const_iterator& argsBegin, const
 		}
 		else
 		{
-			error = std::string( "No help for unknown command: " ) + m_CommandName;
+			error = tstring( TXT( "No help for unknown command: " ) ) + m_CommandName;
 			return false;
 		}
 	}

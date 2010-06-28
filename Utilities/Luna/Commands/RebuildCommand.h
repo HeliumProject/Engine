@@ -6,7 +6,6 @@
 #include "Foundation/CommandLine/Command.h"
 #include "Foundation/File/Path.h"
 
-#include "Pipeline/AssetBuilder/AssetBuilder.h"
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Content/ContentInit.h"

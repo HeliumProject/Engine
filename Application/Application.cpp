@@ -28,18 +28,18 @@
 #include "ExceptionListener.h"
 #include "Version.h"
 
-const char* Application::Args::Script = "script";
-const char* Application::Args::Attach = "attach";
-const char* Application::Args::Profile = "profile";
-const char* Application::Args::Memory = "memory";
-const char* Application::Args::Verbose = "verbose";
-const char* Application::Args::Extreme = "extreme";
-const char* Application::Args::Debug = "debug";
+const tchar* Application::Args::Script = TXT( "script" );
+const tchar* Application::Args::Attach = TXT( "attach" );
+const tchar* Application::Args::Profile = TXT( "profile" );
+const tchar* Application::Args::Memory = TXT( "memory" );
+const tchar* Application::Args::Verbose = TXT( "verbose" );
+const tchar* Application::Args::Extreme = TXT( "extreme" );
+const tchar* Application::Args::Debug = TXT( "debug" );
 
 #ifdef _DEBUG
-const char* Application::Args::DisableDebugHeap = "no_debug_heap";
-const char* Application::Args::DisableLeakCheck = "no_leak_check";
-const char* Application::Args::CheckHeap = "check_heap";
+const tchar* Application::Args::DisableDebugHeap = TXT( "no_debug_heap" );
+const tchar* Application::Args::DisableLeakCheck = TXT( "no_leak_check" );
+const tchar* Application::Args::CheckHeap = TXT( "check_heap" );
 #endif
 
 using namespace Application;
@@ -58,7 +58,7 @@ bool g_ShutdownStarted = false;
 bool g_ShutdownComplete = false;
 
 // default to these streams for trace files, it is up to the app to ask for these, when creating a TraceFile
-std::vector< std::string > g_TraceFiles;
+std::vector< tstring > g_TraceFiles;
 Log::Stream g_TraceStreams  = Log::Streams::Normal | Log::Streams::Warning | Log::Streams::Error; 
 
 // so you can set _crtBreakAlloc in the debugger (expression evaluator doesn't like it)
@@ -69,7 +69,7 @@ namespace Application
 }
 #endif //_DEBUG
 
-void Application::Startup( int argc, const char** argv, bool checkVersion )
+void Application::Startup( int argc, const tchar** argv, bool checkVersion )
 {
   if ( ++g_InitCount == 1 )
   {
@@ -95,7 +95,7 @@ void Application::Startup( int argc, const char** argv, bool checkVersion )
     {
       i32 timeout = 300; // 5min
 
-      Log::Print("Waiting %d minutes for debugger to attach...\n", timeout / 60);
+      Log::Print( TXT( "Waiting %d minutes for debugger to attach...\n" ), timeout / 60);
 
       while ( !Application::IsDebuggerPresent() && timeout-- )
       {
@@ -104,7 +104,7 @@ void Application::Startup( int argc, const char** argv, bool checkVersion )
 
       if ( Application::IsDebuggerPresent() )
       {
-        Log::Print("Debugger attached\n");
+        Log::Print( TXT( "Debugger attached\n" ) );
         NOC_ISSUE_BREAK();
       }
     }
@@ -137,16 +137,16 @@ void Application::Startup( int argc, const char** argv, bool checkVersion )
       //
       // Print project and version info
       //
-      char module[MAX_PATH];
+      tchar module[MAX_PATH];
       GetModuleFileName( 0, module, MAX_PATH );
 
-      char name[MAX_PATH];
-      _splitpath( module, NULL, NULL, name, NULL );
+      tchar name[MAX_PATH];
+      _tsplitpath( module, NULL, NULL, name, NULL );
 
-      Log::Print( "Running %s\n", name );
-      Log::Print( "Version: " NOCTURNAL_VERSION_STRING "\n" );
-      Log::Print( "Current Time: %s", ctime( &g_StartTime.time ) );
-      Log::Print( "Command Line: %s\n", Nocturnal::GetCmdLine() );
+      Log::Print( TXT( "Running %s\n" ), name );
+      Log::Print( TXT( "Version: " ) NOCTURNAL_VERSION_STRING TXT( "\n" ) );
+      Log::Print( TXT( "Current Time: %s" ), ctime( &g_StartTime.time ) );
+      Log::Print( TXT( "Command Line: %s\n" ), Nocturnal::GetCmdLine() );
     }
 
 
@@ -180,15 +180,15 @@ void Application::Startup( int argc, const char** argv, bool checkVersion )
         // if the returned pointer is NULL, exit.
         if (env)
         {
-          Log::Debug("\n");
-          Log::Debug("Environment:\n");
+          Log::Debug( TXT( "\n" ) );
+          Log::Debug( TXT( "Environment:\n" ) );
 
           // variable strings are separated by NULL byte, and the block is terminated by a NULL byte. 
           for (const char* var = (const char*)env; *var; var++) 
           {
             if (*var != '=') // WTF?
             {
-              Log::Debug(" %s\n", var);
+              Log::Debug( TXT( " %s\n" ), var );
             }
 
             while (*var)
@@ -197,7 +197,7 @@ void Application::Startup( int argc, const char** argv, bool checkVersion )
             }
           }
 
-          FreeEnvironmentStrings((char*)env);
+          FreeEnvironmentStrings((tchar*)env);
         }
       }
     }
@@ -235,7 +235,7 @@ void Application::Startup( int argc, const char** argv, bool checkVersion )
     const char* inherited = getenv( "NOC_CMD_ARGS" );
     if ( inherited )
     {
-      Log::Print("Inheriting Args: %s\n", inherited);
+      Log::Print( TXT( "Inheriting Args: %s\n" ), inherited);
     }
 
 
@@ -288,11 +288,11 @@ int Application::Shutdown( int code )
       //
       // Print time usage
       //
-      Log::Print( "\n" );
+      Log::Print( TXT( "\n" ) );
 
       _timeb endTime;
       _ftime(&endTime); 
-      Log::Print( "Current Time: %s", ctime( &endTime.time ) );
+      Log::Print( TXT( "Current Time: %s" ), ctime( &endTime.time ) );
 
       int time = (int) (((endTime.time*1000) + endTime.millitm) - ((g_StartTime.time*1000) +  g_StartTime.millitm));
       int milli = time % 1000; time /= 1000;
@@ -302,25 +302,25 @@ int Application::Shutdown( int code )
 
       if (hour > 0)
       {
-        Log::Print("Execution Time: %d:%02d:%02d.%02d hours\n", hour, min, sec, milli);
+        Log::Print( TXT( "Execution Time: %d:%02d:%02d.%02d hours\n" ), hour, min, sec, milli);
       }
       else
       {
         if (min > 0)
         {
-          Log::Print("Execution Time: %d:%02d.%02d minutes\n", min, sec, milli);
+          Log::Print( TXT( "Execution Time: %d:%02d.%02d minutes\n" ), min, sec, milli);
         }
         else
         {
           if (sec > 0)
           {
-            Log::Print("Execution Time: %d.%02d seconds\n", sec, milli);
+            Log::Print( TXT( "Execution Time: %d.%02d seconds\n" ), sec, milli);
           }
           else
           {
             if (milli > 0)
             {
-              Log::Print("Execution Time: %02d milliseconds\n", milli);
+              Log::Print( TXT( "Execution Time: %02d milliseconds\n" ), milli);
             }
           }
         }
@@ -330,14 +330,14 @@ int Application::Shutdown( int code )
       //
       // Print general success or failure, depends on the result code
       //
-      char module[MAX_PATH];
+      tchar module[MAX_PATH];
       GetModuleFileName( 0, module, MAX_PATH );
 
-      char name[MAX_PATH];
-      _splitpath( module, NULL, NULL, name, NULL );
+      tchar name[MAX_PATH];
+      _tsplitpath( module, NULL, NULL, name, NULL );
 
-      Log::Print( "%s: ", name );
-      Log::PrintString( code ? "Failed" : "Succeeeded", Log::Streams::Normal, Log::Levels::Default, code ? Log::Colors::Red : Log::Colors::Green );
+      Log::Print( TXT( "%s: " ), name );
+      Log::PrintString( code ? TXT( "Failed" ) : TXT( "Succeeeded" ), Log::Streams::Normal, Log::Levels::Default, code ? Log::Colors::Red : Log::Colors::Green );
 
 
       //
@@ -346,29 +346,29 @@ int Application::Shutdown( int code )
 
       if (Log::GetWarningCount() || Log::GetErrorCount())
       {
-        Log::Print(" with");
+        Log::Print( TXT( " with" ) );
       }
 
       if (Log::GetErrorCount())
       {
-        char buf[80];
-        sprintf(buf, " %d error%s", Log::GetErrorCount(), Log::GetErrorCount() > 1 ? "s" : "");
+        tchar buf[80];
+        _stprintf( buf, TXT( " %d error%s" ), Log::GetErrorCount(), Log::GetErrorCount() > 1 ? TXT( "s" ) : TXT( "" ) );
         Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, Log::Colors::Red );
       }
 
       if (Log::GetWarningCount() && Log::GetErrorCount())
       {
-        Log::Print(" and");
+        Log::Print( TXT( " and" ) );
       }
 
       if (Log::GetWarningCount())
       {
-        char buf[80];
-        sprintf(buf, " %d warning%s", Log::GetWarningCount(), Log::GetWarningCount() > 1 ? "s" : "");
+        tchar buf[80];
+        _stprintf(buf, TXT( " %d warning%s" ), Log::GetWarningCount(), Log::GetWarningCount() > 1 ? TXT( "s" ) : TXT( "" ) );
         Log::PrintString( buf, Log::Streams::Normal, Log::Levels::Default, Log::Colors::Yellow );
       }
 
-      Log::Print("\n");
+      Log::Print( TXT( "\n" ) );
     }
 
 
@@ -426,32 +426,31 @@ Log::Stream Application::GetTraceStreams()
 
 void Application::InitializeStandardTraceFiles()
 {
-  char module[MAX_PATH];
+  tchar module[MAX_PATH];
   GetModuleFileName( 0, module, MAX_PATH );
 
-  char drive[MAX_PATH];
-  char dir[MAX_PATH];
-  char name[MAX_PATH];
-  _splitpath( module, drive, dir, name, NULL );
+  tchar drive[MAX_PATH];
+  tchar dir[MAX_PATH];
+  tchar name[MAX_PATH];
+  _tsplitpath( module, drive, dir, name, NULL );
 
-  std::string path = drive;
+  tstring path = drive;
   path += dir;
   path += name;
 
-  g_TraceFiles.push_back( path + ".log" );
+  g_TraceFiles.push_back( path + TXT( ".log" ) );
   Log::AddTraceFile( g_TraceFiles.back(), Application::GetTraceStreams() );
 
-  g_TraceFiles.push_back( path + "Warnings.log" );
+  g_TraceFiles.push_back( path + TXT( "Warnings.log" ) );
   Log::AddTraceFile( g_TraceFiles.back(), Log::Streams::Warning );
 
-  g_TraceFiles.push_back( path + "Errors.log" );
+  g_TraceFiles.push_back( path + TXT( "Errors.log" ) );
   Log::AddTraceFile( g_TraceFiles.back(), Log::Streams::Error );
 }
 
 void Application::CleanupStandardTraceFiles()
 {
-  for ( std::vector< std::string >::const_iterator itr = g_TraceFiles.begin(), 
-    end = g_TraceFiles.begin(); itr != end; ++itr )
+  for ( std::vector< tstring >::const_iterator itr = g_TraceFiles.begin(), end = g_TraceFiles.begin(); itr != end; ++itr )
   {
     Log::RemoveTraceFile( *itr );
   }
@@ -523,7 +522,7 @@ static Platform::Thread::Return StandardThreadTryCatch( Platform::Thread::Entry 
     }
     catch ( const Nocturnal::Exception& ex )
     {
-      Log::Error( "%s\n", ex.what() );
+      Log::Error( TXT( "%s\n" ), ex.what() );
 
       ::ExitProcess( -1 );
     }
@@ -563,7 +562,7 @@ Platform::Thread::Return Application::StandardThread( Platform::Thread::Entry en
   }
 }
 
-static int StandardMainTryExcept( int (*main)(int argc, const char** argv), int argc, const char** argv )
+static int StandardMainTryExcept( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
 {
   if (Application::IsDebuggerPresent())
   {
@@ -584,7 +583,7 @@ static int StandardMainTryExcept( int (*main)(int argc, const char** argv), int 
   }
 }
 
-static int StandardMainTryCatch( int (*main)(int argc, const char** argv), int argc, const char** argv )
+static int StandardMainTryCatch( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
 {
   if ( Application::IsDebuggerPresent() )
   {
@@ -600,7 +599,7 @@ static int StandardMainTryCatch( int (*main)(int argc, const char** argv), int a
     }
     catch ( const Nocturnal::Exception& ex )
     {
-      Log::Error( "%s\n", ex.what() );
+      Log::Error( TXT( "%s\n" ), ex.what() );
 
       ::ExitProcess( -1 );
     }
@@ -609,7 +608,7 @@ static int StandardMainTryCatch( int (*main)(int argc, const char** argv), int a
   }
 }
 
-static int StandardMainEntry( int (*main)(int argc, const char** argv), int argc, const char** argv, bool checkVersion )
+static int StandardMainEntry( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv, bool checkVersion )
 {
   int result = 0; 
 
@@ -619,7 +618,7 @@ static int StandardMainEntry( int (*main)(int argc, const char** argv), int argc
   }
   catch ( const Application::CheckVersionException& ex )
   {
-    Log::Error( "%s\n", ex.what() );
+    Log::Error( TXT( "%s\n" ), ex.what() );
     result = 1;
   }
 
@@ -631,7 +630,7 @@ static int StandardMainEntry( int (*main)(int argc, const char** argv), int argc
   return Application::Shutdown( result );
 }
 
-int Application::StandardMain( int (*main)(int argc, const char** argv), int argc, const char** argv, bool checkVersion )
+int Application::StandardMain( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv, bool checkVersion )
 {
   if (Application::IsDebuggerPresent())
   {
@@ -658,7 +657,7 @@ int Application::StandardMain( int (*main)(int argc, const char** argv), int arg
   }
 }
 
-static int StandardWinMainTryExcept( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
+static int StandardWinMainTryExcept( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd)
 {
   if (Application::IsDebuggerPresent())
   {
@@ -679,7 +678,7 @@ static int StandardWinMainTryExcept( int (*winMain)( HINSTANCE hInstance, HINSTA
   }
 }
 
-static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
+static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd)
 {
   if ( Application::IsDebuggerPresent() )
   {
@@ -695,8 +694,8 @@ static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTAN
     }
     catch ( const Nocturnal::Exception& ex )
     {
-      Log::Error( "%s\n", ex.what() );
-      MessageBox(NULL, ex.what(), "Error", MB_OK|MB_ICONEXCLAMATION);
+      Log::Error( TXT( "%s\n" ) , ex.what() );
+      MessageBox(NULL, ex.What(), TXT( "Error" ), MB_OK|MB_ICONEXCLAMATION);
 
       ::ExitProcess( -1 );
     }
@@ -705,10 +704,10 @@ static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTAN
   }
 }
 
-static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd, bool checkVersion )
+static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd, bool checkVersion )
 {
   int argc = 0;
-  const char** argv = NULL;
+  const tchar** argv = NULL;
   Nocturnal::ProcessCmdLine( lpCmdLine, argc, argv );
 
   int result = 0;
@@ -720,8 +719,8 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
   catch ( const Application::CheckVersionException& ex )
   {
     result = 1;
-    Log::Error( "%s\n", ex.what() );
-    MessageBox(NULL, ex.what(), "Fatal Error", MB_OK|MB_ICONEXCLAMATION);
+    Log::Error( TXT( "%s\n" ), ex.what() );
+    MessageBox(NULL, ex.What(), TXT( "Fatal Error" ), MB_OK|MB_ICONEXCLAMATION);
   }
 
   if ( result == 0 )
@@ -736,7 +735,7 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
   return result;
 }
 
-int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd, bool checkVersion )
+int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd, bool checkVersion )
 {
   if (Application::IsDebuggerPresent())
   {

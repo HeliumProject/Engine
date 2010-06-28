@@ -7,7 +7,6 @@
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "Application/RCS/RCS.h"
 
 using namespace Asset;
 
@@ -37,35 +36,22 @@ AssetFile::~AssetFile()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-AssetFilePtr AssetFile::FindAssetFile( const std::string& filePath, CacheDB* cache )
+AssetFilePtr AssetFile::CreateAssetFile( const tstring& filePath )
 {
     NOC_ASSERT( !filePath.empty() );
 
     Nocturnal::Path path( filePath );
-
-    AssetFilePtr assetFile = NULL;
-
-    if ( cache )
-    {
-        // select the file from the cache
-        cache->SelectAssetByHash( path.Hash(), assetFile );
-    }
-
-    if ( !assetFile )
-    {
-        assetFile = new AssetFile( path );
-    }
-
+    AssetFilePtr assetFile = new AssetFile( path );
     return assetFile;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void AssetFile::Init()
 {
-    m_ShortName               = "";
-    m_FileFilter              = "";
-    m_Extension               = "";
-    m_FileType                = "";
+    m_ShortName               = TXT( "" );
+    m_FileFilter              = TXT( "" );
+    m_Extension               = TXT( "" );
+    m_FileType                = TXT( "" );
     m_AssetType               = Asset::AssetTypes::Null;
     m_Size                    = 0;
     m_Attributes.clear();
@@ -74,7 +60,7 @@ void AssetFile::Init()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-const std::string& AssetFile::GetShortName()
+const tstring& AssetFile::GetShortName()
 {
     if ( m_ShortName.empty() )
     {
@@ -86,18 +72,18 @@ const std::string& AssetFile::GetShortName()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-const std::string& AssetFile::GetFileFilter()
+const tstring& AssetFile::GetFileFilter()
 {
     if ( m_FileFilter.empty() )
     {
-        m_FileFilter = std::string( "*." ) + Nocturnal::Path( GetFilePath() ).Extension();
+        m_FileFilter = tstring( TXT( "*." ) ) + Nocturnal::Path( GetFilePath() ).Extension();
     }
     return m_FileFilter;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // Gets and caches the file extension
-const std::string& AssetFile::GetExtension()
+const tstring& AssetFile::GetExtension()
 {
     if ( m_Extension.empty() )
     {
@@ -108,7 +94,7 @@ const std::string& AssetFile::GetExtension()
 
 /////////////////////////////////////////////////////////////////////////////
 // Gets and caches the file type
-const std::string& AssetFile::GetFileType()
+const tstring& AssetFile::GetFileType()
 {
     if ( m_FileType.empty() )
     {
@@ -121,7 +107,7 @@ const std::string& AssetFile::GetFileType()
 
         if ( m_FileType.empty() )
         {
-            m_FileType = "Unknown";
+            m_FileType = TXT( "Unknown" );
         }
         else
         {
@@ -155,16 +141,16 @@ AssetClassPtr AssetFile::GetAssetClass( AssetFile* assetFile )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void AssetFile::AddAttribute( const std::string& attrName, const std::string& attrValue, bool canAppend )
+void AssetFile::AddAttribute( const tstring& attrName, const tstring& attrValue, bool canAppend )
 {
-    Nocturnal::Insert<std::map< std::string, std::string >>::Result inserted = m_Attributes.insert( std::map< std::string, std::string >::value_type( attrName, attrValue ) );
+    Nocturnal::Insert<std::map< tstring, tstring >>::Result inserted = m_Attributes.insert( std::map< tstring, tstring >::value_type( attrName, attrValue ) );
     if ( !inserted.second && inserted.first->second != attrValue )
     {
-        std::string& attributes = inserted.first->second;
-        if ( canAppend && attributes.find( attrValue ) == std::string::npos )
+        tstring& attributes = inserted.first->second;
+        if ( canAppend && attributes.find( attrValue ) == tstring::npos )
         {
             // append it to the existing one
-            attributes += attributes.empty() ? "" : ", ";
+            attributes += attributes.empty() ? TXT( "" ) : TXT( ", " );
             attributes += attrValue;
         }
         else

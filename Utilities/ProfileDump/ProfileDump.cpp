@@ -11,8 +11,8 @@ int main(int argc, const char** argv)
 {
   if(argc != 2)
   {
-    Log::Print("Usage:\n"); 
-    Log::Print("ProfileDump.exe filename.bin\n"); 
+    Log::Print( TXT( "Usage:\n" ) ); 
+    Log::Print( TXT( "ProfileDump.exe filename.bin\n" ) ); 
     exit(1); 
   }
   
@@ -22,7 +22,7 @@ int main(int argc, const char** argv)
   FILE* file = fopen(filename, "rb"); 
   if(!file)
   {
-    Log::Print("Unable to open %s for reading!\n", filename); 
+    Log::Print( TXT( "Unable to open %s for reading!\n" ), filename); 
     exit(1); 
   }
 
@@ -34,12 +34,12 @@ int main(int argc, const char** argv)
 
   if( filesize % PROFILE_PACKET_BLOCK_SIZE != 0)
   {
-    Log::Print("File %s is of the wrong size (not a multiple of PROFILE_PACKET_BLOCK_SIZE %d)\n", 
+    Log::Print( TXT( "File %s is of the wrong size (not a multiple of PROFILE_PACKET_BLOCK_SIZE %d)\n" ), 
                    filename, PROFILE_PACKET_BLOCK_SIZE); 
   }
   else
   {
-    Log::Print("File %s has %d blocks\n", filename, blockCount); 
+    Log::Print( TXT( "File %s has %d blocks\n" ), filename, blockCount); 
   }
 
   char* buffer = new char[PROFILE_PACKET_BLOCK_SIZE]; 
@@ -50,11 +50,11 @@ int main(int argc, const char** argv)
 
     if(bytesRead != PROFILE_PACKET_BLOCK_SIZE)
     {
-      Log::Print("Error reading block %d from file\n", i); 
+      Log::Print( TXT( "Error reading block %d from file\n" ), i); 
       exit(1); 
     }
 
-    Log::Print("Block %d\n", i); 
+    Log::Print( TXT( "Block %d\n" ), i); 
     ParseAndPrintBlock(buffer); 
   }
 
@@ -69,7 +69,7 @@ void PrintIndent()
 {
   for(u32 i = 0; i < g_Indent; ++i)
   {
-    Log::Print(" "); 
+    Log::Print( TXT( " " ) ); 
   }
 }
 
@@ -92,11 +92,11 @@ void ParseAndPrintBlock(char* buffer)
 
     if(cmd <= PROFILE_CMD_BLOCK_END)
     {
-      Log::Print("%s:", packet_names[cmd]); 
+      Log::Print( TXT( "%s:" ), packet_names[cmd]); 
     }
     else
     {
-      Log::Error("UNKNOWN PROFILE TAG: 0x%.2x\n", cmd); 
+      Log::Error( TXT( "UNKNOWN PROFILE TAG: 0x%.2x\n" ), cmd); 
       exit(1); 
     }
 
@@ -105,19 +105,19 @@ void ParseAndPrintBlock(char* buffer)
     case PROFILE_CMD_SCOPE_ENTER: 
       g_Indent++; 
       PrintIndent(); 
-      Log::Print("%s %d\n", 
+      Log::Print( TXT( "%s %d\n" ), 
                      uberPacket->m_ScopeEnter.m_Function, 
                      uberPacket->m_ScopeEnter.m_Line); 
       
       break; 
     case PROFILE_CMD_SCOPE_EXIT:
       PrintIndent(); 
-      Log::Print("%lld\n", uberPacket->m_ScopeExitPacket.m_Duration); 
+      Log::Print( TXT( "%lld\n" ), uberPacket->m_ScopeExitPacket.m_Duration); 
       g_Indent--; 
       break; 
 
     default:
-      Log::Print("\n"); 
+      Log::Print( TXT( "\n" ) );
     }
 
     if(cmd == PROFILE_CMD_BLOCK_END)

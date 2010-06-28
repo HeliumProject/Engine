@@ -13,7 +13,7 @@ REFLECT_DEFINE_CLASS( StandardShaderAsset );
 
 void StandardShaderAsset::EnumerateClass( Reflect::Compositor<StandardShaderAsset>& comp )
 {
-  comp.GetComposite().m_UIName = "Shader (Standard)";
+  comp.GetComposite().m_UIName = TXT( "Shader (Standard)" );
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "A shader manages a group of textures that can be applied to an entity." );
   comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.shader.*" );
 
@@ -48,7 +48,7 @@ void StandardShaderAsset::EnumerateClass( Reflect::Compositor<StandardShaderAsse
     }
   }
 
-  bool StandardShaderAsset::ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const
+  bool StandardShaderAsset::ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const
   {
     bool isValid = false;
   
@@ -61,8 +61,8 @@ void StandardShaderAsset::EnumerateClass( Reflect::Compositor<StandardShaderAsse
       
       if ( !isValid )
       {
-        error = "Only standard texture maps are allowed on a standard shader (";
-        error += attr->GetClass()->m_UIName + " is not valid).";
+        error = TXT( "Only standard texture maps are allowed on a standard shader (" );
+        error += attr->GetClass()->m_UIName + TXT( " is not valid)." );
       }
     }
 

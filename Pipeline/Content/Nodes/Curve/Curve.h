@@ -20,9 +20,9 @@ namespace Content
 
     static void CurveTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Linear, "Linear");
-      info->AddElement(BSpline, "BSpline");
-      info->AddElement(CatmullRom, "CatmullRom");
+      info->AddElement(Linear, TXT( "Linear" ) );
+      info->AddElement(BSpline, TXT( "BSpline" ) );
+      info->AddElement(CatmullRom, TXT( "CatmullRom" ) );
     }
   }
 
@@ -39,9 +39,9 @@ namespace Content
 
     static void ControlPointLabelEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement( None, "None" );
-      info->AddElement( CurveAndIndex, "Curve and Index" );
-      info->AddElement( IndexOnly, "Index only" );
+      info->AddElement( None, TXT( "None" ) );
+      info->AddElement( CurveAndIndex, TXT( "Curve and Index" ) );
+      info->AddElement( IndexOnly, TXT( "Index only" ) );
     }
   }
   typedef ControlPointLabels::ControlPointLabel ControlPointLabel;

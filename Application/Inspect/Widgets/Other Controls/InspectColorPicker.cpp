@@ -99,9 +99,9 @@ void ColorPicker::Read()
 {
   if ( IsBound() && IsRealized() )
   {
-    std::string str;
+    tstring str;
     ReadData( str );
-    std::stringstream stream( str );
+    tstringstream stream( str );
 
     if (m_Alpha)
     {
@@ -139,7 +139,7 @@ bool ColorPicker::Write()
 
   if ( IsBound() )
   {
-    std::stringstream stream;
+    tstringstream stream;
 
     if ( m_Alpha )
     {
@@ -178,9 +178,8 @@ void ColorPicker::SetColor3( const Math::Color3& color )
 
     if ( IsBound() )
     {
-      std::stringstream stream;
+      tstringstream stream;
       stream << m_Color3;
-
       WriteData( stream.str() );
     }
 
@@ -198,9 +197,9 @@ const Math::Color3& ColorPicker::GetColor3() const
   {
     if ( IsBound() )
     {
-      std::string str;
+      tstring str;
       ReadData( str );
-      std::stringstream stream( str );
+      tstringstream stream( str );
       stream >> (Math::Color3)m_Color3;
     }
   }
@@ -220,7 +219,7 @@ void ColorPicker::SetColor4( const Math::Color4& color )
 
     if ( IsBound() )
     {
-      std::stringstream stream;
+      tstringstream stream;
       stream << m_Color4;
       WriteData( stream.str() );
     }
@@ -239,10 +238,9 @@ const Math::Color4& ColorPicker::GetColor4() const
   {
     if ( IsBound() )
     {
-      std::string str;
+      tstring str;
       ReadData( str );
-      std::stringstream stream( str );
-
+      tstringstream stream( str );
       stream >> (Math::Color4)m_Color4;
     }
   }

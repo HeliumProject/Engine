@@ -20,7 +20,7 @@ namespace Asset
     S_tuid m_AssetIds;
     bool   m_Recursive;
     bool   m_SetupLighting;
-    std::string m_StateTrackerFile;
+    tstring m_StateTrackerFile;
     
 
     ExporterJob()

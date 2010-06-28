@@ -26,8 +26,8 @@ namespace Asset
     };
     static void WrapModeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(UV_WRAP, "UV_WRAP", "WRAP");
-      info->AddElement(UV_CLAMP, "UV_CLAMP", "CLAMP");
+      info->AddElement(UV_WRAP, TXT( "UV_WRAP" ), TXT( "WRAP" ) );
+      info->AddElement(UV_CLAMP, TXT( "UV_CLAMP" ), TXT( "CLAMP" ) );
     }
   }
   typedef WrapModes::WrapMode WrapMode;
@@ -49,14 +49,14 @@ namespace Asset
 
     static void WetSurfaceTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(WET_SURFACE_NONE,     "WET_SURFACE_NONE",        "None");
-      info->AddElement(WET_SURFACE_SKIN,     "WET_SURFACE_SKIN",        "Skin");
-      info->AddElement(WET_SURFACE_DIRT,     "WET_SURFACE_DIRT",        "Dirt");
-      info->AddElement(WET_SURFACE_CLOTH,    "WET_SURFACE_CLOTH",       "Cloth");
-      info->AddElement(WET_SURFACE_BRICK,    "WET_SURFACE_BRICK",       "Brick");
-      info->AddElement(WET_SURFACE_FOLIAGE,  "WET_SURFACE_FOLIAGE",     "Foliage");
-      info->AddElement(WET_SURFACE_GUN,      "WET_SURFACE_GUN",         "Gun");
-      info->AddElement(WET_SURFACE_METAL,    "WET_SURFACE_METAL",       "Metal");
+      info->AddElement(WET_SURFACE_NONE,     TXT( "WET_SURFACE_NONE" ),        TXT( "None" ) );
+      info->AddElement(WET_SURFACE_SKIN,     TXT( "WET_SURFACE_SKIN" ),        TXT( "Skin" ) );
+      info->AddElement(WET_SURFACE_DIRT,     TXT( "WET_SURFACE_DIRT" ),        TXT( "Dirt" ) );
+      info->AddElement(WET_SURFACE_CLOTH,    TXT( "WET_SURFACE_CLOTH" ),       TXT( "Cloth" ) );
+      info->AddElement(WET_SURFACE_BRICK,    TXT( "WET_SURFACE_BRICK" ),       TXT( "Brick" ) );
+      info->AddElement(WET_SURFACE_FOLIAGE,  TXT( "WET_SURFACE_FOLIAGE" ),     TXT( "Foliage" ) );
+      info->AddElement(WET_SURFACE_GUN,      TXT( "WET_SURFACE_GUN" ),         TXT( "Gun" ) );
+      info->AddElement(WET_SURFACE_METAL,    TXT( "WET_SURFACE_METAL" ),       TXT( "Metal" ) );
    }
   }
   typedef WetSurfaceTypes::WetSurfaceType WetSurfaceType;
@@ -87,9 +87,9 @@ namespace Asset
     // be attached to.  Override as required.
     virtual void GetAllowableAssetTypes( S_AssetType& assetTypes ) const;
 
-    virtual bool ValidateClass( std::string& error ) const NOC_OVERRIDE;
+    virtual bool ValidateClass( tstring& error ) const NOC_OVERRIDE;
 
-    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const NOC_OVERRIDE;
+    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const NOC_OVERRIDE;
 
     virtual bool IsBuildable() const NOC_OVERRIDE;
 

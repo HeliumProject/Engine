@@ -2,7 +2,7 @@
 
 using namespace Nocturnal;
 
-Handle::Handle( const std::string& path, const char* mode )
+Handle::Handle( const tstring& path, const tchar* mode )
 : m_Path( path )
 , m_Mode( mode )
 , m_FileHandle( NULL )
@@ -21,7 +21,7 @@ bool Handle::Open()
 
     if ( m_FileHandle == NULL )
     {
-        m_FileHandle = fopen( m_Path.c_str(), m_Mode );
+        m_FileHandle = _tfopen( m_Path.c_str(), m_Mode );
     }
 
     return IsValid();

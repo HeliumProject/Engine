@@ -18,9 +18,9 @@ namespace Nocturnal
   // Arguements and events for changes to the MRU.
   struct MRUArgs
   {
-    std::string m_Item;
+    tstring m_Item;
     
-    MRUArgs( const std::string& item )
+    MRUArgs( const tstring& item )
       : m_Item( item )
     {
     }
@@ -33,7 +33,7 @@ namespace Nocturnal
   // the registry.  In order to be useful, a piece of UI would need to display
   // the MRU and allow choosing items.
   // 
-  class APPLICATION_API MenuMRU : public MRU< std::string >
+  class APPLICATION_API MenuMRU : public MRU< tstring >
   {
   public:
     MenuMRU( i32 maxItems, wxWindow* owner );

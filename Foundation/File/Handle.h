@@ -12,7 +12,7 @@ namespace Nocturnal
     class FOUNDATION_API Handle : public Nocturnal::RefCountBase< Handle >
     {
     public:
-        Handle( const std::string& path, const char* mode = "r" );
+        Handle( const tstring& path, const tchar* mode = TXT( "r" ) );
 
         virtual ~Handle()
         {
@@ -28,12 +28,12 @@ namespace Nocturnal
         bool Open();
         void Close();
 
-        const std::string& GetPath() const
+        const tstring& GetPath() const
         {
             return m_Path;
         }
 
-        const char* GetMode() const
+        const tchar* GetMode() const
         {
             return m_Mode;
         }
@@ -45,8 +45,8 @@ namespace Nocturnal
 
     private:
         u32  m_OpenCount;
-        std::string m_Path;
-        const char* m_Mode;
+        tstring m_Path;
+        const tchar* m_Mode;
         FILE* m_FileHandle;
     };
 

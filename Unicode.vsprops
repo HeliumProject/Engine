@@ -6,6 +6,6 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		PreprocessorDefinitions="wxUSE_UNICODE=1"
+		PreprocessorDefinitions="wxUSE_UNICODE=1;XML_UNICODE_WCHAR_T=1"
 	/>
 </VisualStudioPropertySheet>

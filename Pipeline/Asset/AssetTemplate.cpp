@@ -4,7 +4,7 @@
 
 #include "Pipeline/Component/ComponentCollection.h"
 
-#include "Foundation/Reflect/Archive.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
 #include <boost/regex.hpp> 
 
@@ -31,8 +31,8 @@ void AssetTemplate::EnumerateClass( Reflect::Compositor<AssetTemplate>& comp )
 // Constructor
 // 
 AssetTemplate::AssetTemplate( const Reflect::Composite* composite )
-: m_Name( "Asset" )
-, m_Description( "Default Description - Ask a tools programmer to add more useful info here!" )
+: m_Name( TXT( "Asset" ) )
+, m_Description( TXT( "Default Description - Ask a tools programmer to add more useful info here!" ) )
 , m_DefaultAddSubDir( false )
 , m_ShowSubDirCheckbox( false )
 , m_RequiredComponents( new Component::ComponentCollection() )
@@ -131,12 +131,11 @@ void AssetTemplate::GetAssetTemplates( const i32 typeID, Reflect::V_Element& ass
 {
   assetTemplates.clear();
 
-  std::string assetTemplatesStr = Reflect::Registry::GetInstance()->GetClass( typeID )->GetProperty( AssetProperties::AssetTemplates );
+  tstring assetTemplatesStr = Reflect::Registry::GetInstance()->GetClass( typeID )->GetProperty( AssetProperties::AssetTemplates );
 
   if ( !assetTemplatesStr.empty() )
   {
-    std::stringstream stream( assetTemplatesStr );
-    Reflect::Archive::FromStream( stream, Reflect::ArchiveTypes::Binary, assetTemplates );
+    Reflect::ArchiveXML::FromString( assetTemplatesStr, assetTemplates );
   }
   else
   {

@@ -6,7 +6,6 @@
 
 #include "Pipeline/Asset/AssetFile.h"
 #include "Pipeline/Asset/AssetFolder.h"
-#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Foundation/Exception.h"
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Container/Insert.h"
@@ -169,9 +168,6 @@ BrowserSearch::BrowserSearch( const std::string& rootDirectory, const std::strin
 , m_CurrentSearchID( -1 )
 , m_CurrentSearchQuery( NULL )
 {
-    Nocturnal::Path dbFilepath( m_RootDirectory + "/.tracker/cache.db" );
-    m_CacheDB = new Asset::CacheDB( "LunaBrowserSearch-AssetCacheDB", dbFilepath.Get(), m_ConfigDirectory, SQLITE_OPEN_READONLY );
-
     m_SearchInitializedEvent = ::CreateEvent( NULL, TRUE, TRUE, "BrowserBeginSearchEvent" );
     m_EndSearchEvent = ::CreateEvent( NULL, TRUE, TRUE, "BrowserEndSearchEvent" );
 }
@@ -355,7 +351,6 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
     {
         std::set< Nocturnal::Path > assetFiles;
 
-        Asset::CacheDBQuery* search = m_CurrentSearchQuery->GetCacheDBQuery();
         AssetCollection* collection = m_CurrentSearchQuery->GetCollection();    
 
         // Empty collection
@@ -363,51 +358,6 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
         {
             SearchThreadLeave( searchID );
             return;
-        }
-        // Both collection and search
-        else if ( collection && search )
-        {
-            std::set< Nocturnal::Path > searchFiles;
-            m_CacheDB->Search( search, searchFiles, &m_StopSearching );
-            if ( searchFiles.empty() )
-            {
-                SearchThreadLeave( searchID );
-                return;
-            }
-
-            std::set< Nocturnal::Path > collections = collection->GetAssetPaths();
-
-            // filter by collection
-            if ( collections.size() > searchFiles.size() )
-            {
-                for ( std::set< Nocturnal::Path >::iterator itr = searchFiles.begin(), end = searchFiles.end(); itr != end; ++itr )
-                {
-                    if ( collections.find( *itr ) != collections.end() )
-                    {
-                        assetFiles.insert( *itr );
-                    }
-                }
-            }
-            else
-            {
-                for ( std::set< Nocturnal::Path >::iterator itr = collections.begin(), end = collections.end(); itr != end; ++itr )
-                {
-                    if ( searchFiles.find( *itr ) != searchFiles.end() )
-                    {
-                        assetFiles.insert( *itr );
-                    }
-                }
-            }
-        }
-        // Just the Search
-        else if ( search )
-        {
-            m_CacheDB->Search( search, assetFiles, &m_StopSearching );
-            if ( assetFiles.empty() )
-            {
-                SearchThreadLeave( searchID );
-                return;
-            }
         }
         // Just the collection 
         else if ( collection )
@@ -487,8 +437,6 @@ inline void BrowserSearch::SearchThreadLeave( i32 searchID )
         m_DummyWindow = NULL;
     }
 
-    m_CacheDB->Close();
-
     // Main thread is deadlocked until SearchThread sets this event
     ::SetEvent( m_EndSearchEvent );
 }
@@ -502,7 +450,7 @@ bool BrowserSearch::FoundAssetFile( const std::string& path )
 { 
     Platform::TakeMutex mutex (m_SearchResultsMutex);
 
-    Asset::AssetFilePtr assetFile = Asset::AssetFile::FindAssetFile( path );
+    Asset::AssetFilePtr assetFile = Asset::AssetFile::CreateAssetFile( path );
     if ( assetFile 
         && m_FoundFiles.find( assetFile->GetPath() ) == m_FoundFiles.end()
         && m_SearchResults->AddFile( assetFile ) )
@@ -520,7 +468,7 @@ u32 BrowserSearch::FoundAssetFiles( const std::set< Nocturnal::Path >& assetFile
 
     for ( std::set< Nocturnal::Path >::const_iterator itr = assetFileRefs.begin(), end = assetFileRefs.end(); itr != end; ++itr )
     {
-        Asset::AssetFilePtr assetFile = Asset::AssetFile::FindAssetFile( (*itr).Get() );
+        Asset::AssetFilePtr assetFile = Asset::AssetFile::CreateAssetFile( (*itr).Get() );
         if ( assetFile 
             && m_FoundFiles.find( assetFile->GetPath() ) == m_FoundFiles.end()
             && m_SearchResults->AddFile( assetFile ) )

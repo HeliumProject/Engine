@@ -4,7 +4,7 @@ using namespace Nocturnal;
 using namespace Nocturnal::CommandLine;
 
 FailTest::FailTest()
-: Command( "fail", "", "This command causes the application to fail. This is strictly for testing purposes." )
+: Command( TXT( "fail" ), TXT( "" ), TXT( "This command causes the application to fail. This is strictly for testing purposes." ) )
 {
 }
 
@@ -12,13 +12,13 @@ FailTest::~FailTest()
 {
 }
 
-bool FailTest::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+bool FailTest::Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
 {
 	if ( !ParseOptions( argsBegin, argsEnd, error ) )
 	{
 		return false;
 	}
 
-    error = "failed due to test fail command";
+    error = TXT( "failed due to test fail command" );
     return false;
 }

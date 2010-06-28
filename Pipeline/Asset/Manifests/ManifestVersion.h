@@ -14,8 +14,8 @@ namespace Asset
   class PIPELINE_API ManifestVersion : public Reflect::Version
   {
   public:
-    std::string m_ManifestVersion;
-    static const char* MANIFEST_VERSION;
+    tstring m_ManifestVersion;
+    static const tchar* MANIFEST_VERSION;
 
     REFLECT_DECLARE_CLASS(ManifestVersion, Reflect::Version);
 
@@ -23,7 +23,7 @@ namespace Asset
 
     ManifestVersion();
 
-    ManifestVersion(const char* source, const char* sourceVersion);
+    ManifestVersion(const tchar* source, const tchar* sourceVersion);
 
     virtual bool IsCurrent();
   };

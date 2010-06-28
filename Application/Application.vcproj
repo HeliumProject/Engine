@@ -1591,86 +1591,6 @@
 				</Filter>
 			</Filter>
 		</Filter>
-		<Filter
-			Name="SQL"
-			>
-			<File
-				RelativePath=".\SQL\DBManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SQL\DBManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SQL\SQL.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SQL\SQLExceptions.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SQL\Statement.h"
-				>
-			</File>
-			<Filter
-				Name="MySQL"
-				>
-				<File
-					RelativePath=".\SQL\MySQL\MySQL.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SQL\MySQL\MySQL.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SQL\MySQL\MySQLDB.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SQL\MySQL\MySQLDB.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SQL\MySQL\MySQLStmt.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SQL\MySQL\MySQLStmt.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="SQLite"
-				>
-				<File
-					RelativePath=".\SQL\SQLite\SQLite.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SQL\SQLite\SQLite.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SQL\SQLite\SQLiteDB.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SQL\SQLite\SQLiteDB.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SQL\SQLite\SQLiteStmt.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SQL\SQLite\SQLiteStmt.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>
@@ -1689,14 +1609,6 @@
 		</File>
 		<File
 			RelativePath=".\Exception.h"
-			>
-		</File>
-		<File
-			RelativePath=".\ExceptionDB.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ExceptionDB.h"
 			>
 		</File>
 		<File

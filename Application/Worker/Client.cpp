@@ -57,20 +57,19 @@ bool Client::Initialize()
 {
     IPC::PipeConnection* connection = new IPC::PipeConnection ();
 
-    // init pipe connection with this process' process id (hex)
-    std::ostringstream stream;
+  // init pipe connection with this process' process id (hex)
+  tostringstream stream;
 
-#pragma TODO( "All command line options should be defined and parsed once in the application, we shouldn't be parsing the commandline every time! " )
-    if (Nocturnal::GetCmdLineFlag( Worker::Args::Debug ))
-    {
-        stream << "worker_debug";
-    }
-    else
-    {
-        stream << "worker_" << std::hex << GetProcessId(GetCurrentProcess());
-    }
+  if (Nocturnal::GetCmdLineFlag( Worker::Args::Debug ))
+  {
+    stream << TXT( "worker_debug" );
+  }
+  else
+  {
+    stream << TXT( "worker_" ) << std::hex << GetProcessId(GetCurrentProcess());
+  }
 
-    connection->Initialize(false, "Worker Process Connection", stream.str().c_str());
+  connection->Initialize(false, TXT( "Worker Process Connection" ), stream.str().c_str());
 
     // setup global connection
     g_Connection = connection;
@@ -90,12 +89,12 @@ bool Client::Initialize()
         Sleep( 1 );
     }
 
-    // error out with an exception if we didnt' connect
-    if (g_Connection->GetState() != IPC::ConnectionStates::Active)
-    {
-        Log::Error("Timeout connecting to manager process");
-        return false;
-    }
+  // error out with an exception if we didnt' connect
+  if (g_Connection->GetState() != IPC::ConnectionStates::Active)
+  {
+    Log::Error( TXT( "Timeout connecting to manager process" ) );
+    return false;
+  }
 
     // hook up our handler to Console
     Log::AddPrintedListener( Log::PrintedSignature::Delegate (&PrintedListener) );

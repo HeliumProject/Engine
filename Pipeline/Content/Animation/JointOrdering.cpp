@@ -50,9 +50,9 @@ void JointOrdering::EnumerateClass( Reflect::Compositor<JointOrdering>& comp )
 
     if ( jointIt == m_LocalToMasterMap.end() )
     {
-      std::string localJointGuid;
+      tstring localJointGuid;
       localJoint.ToString( localJointGuid );
-      throw MissingJointException( localJointGuid, "could not find master joint for this local joint." );
+      throw MissingJointException( localJointGuid, TXT( "could not find master joint for this local joint." ) );
     }  
 
     return jointIt->second;
@@ -64,9 +64,9 @@ void JointOrdering::EnumerateClass( Reflect::Compositor<JointOrdering>& comp )
 
     if ( jointIt == m_MasterToLocalMap.end() )
     {
-      std::string masterJointGuid;
+      tstring masterJointGuid;
       masterJoint.ToString( masterJointGuid );
-      throw MissingJointException( masterJointGuid, "could not find local joint for this master joint." );
+      throw MissingJointException( masterJointGuid, TXT( "could not find local joint for this master joint." ) );
     }  
 
     return jointIt->second;

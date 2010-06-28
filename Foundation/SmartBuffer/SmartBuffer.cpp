@@ -17,7 +17,7 @@ Profile::MemoryPoolHandle SmartBuffer::s_ObjectPool;
 Profile::MemoryPoolHandle SmartBuffer::s_DataPool;
 
 SmartBuffer::SmartBuffer()
-: m_Name( "Unknown SmartBuffer" )
+: m_Name( TXT( "Unknown SmartBuffer" ) )
 , m_Type ( -1 )
 , m_Size( 0 )
 , m_MaxSize( 0 )
@@ -66,8 +66,8 @@ void* SmartBuffer::operator new (size_t bytes)
     static bool initialized = false;
     if (!initialized)
     {
-        s_ObjectPool = Profile::Memory::CreatePool("SmartBuffer Objects");
-        s_DataPool = Profile::Memory::CreatePool("SmartBuffer Data");
+        s_ObjectPool = Profile::Memory::CreatePool( TXT( "SmartBuffer Objects" ) );
+        s_DataPool = Profile::Memory::CreatePool( TXT( "SmartBuffer Data" ) );
         initialized = true;
     }
 
@@ -169,7 +169,7 @@ void SmartBuffer::SetVirtual(u32 size)
     m_Data = (u8*)::VirtualAlloc(0,size,MEM_RESERVE,PAGE_READWRITE);
     if (m_Data==0)
     {
-        throw Nocturnal::Exception("Out of virtual memory.");
+        throw Nocturnal::Exception( TXT( "Out of virtual memory." ) );
     }
 
     Profile::Memory::Allocate( s_DataPool, size );
@@ -191,7 +191,7 @@ void SmartBuffer::GrowBy(u32 size)
         {
             if ( m_Size + size > m_MaxSize )
             {
-                throw Nocturnal::Exception("Too much memory in virtual SmartBuffer");
+                throw Nocturnal::Exception( TXT( "Too much memory in virtual SmartBuffer" ) );
             }
 
             // calculate how may new bytes we need to allocate and align that to a page boundary
@@ -210,7 +210,7 @@ void SmartBuffer::GrowBy(u32 size)
         {
             if ( m_MaxSize && m_Size + size > m_MaxSize )
             {
-                throw Nocturnal::Exception("Exceeded max size of SmartBuffer (id 0x%x)", m_Type);
+                throw Nocturnal::Exception( TXT( "Exceeded max size of SmartBuffer (id 0x%x)" ), m_Type);
             }
 
             u32 difference = m_Size + size - m_Capacity;
@@ -224,11 +224,11 @@ void SmartBuffer::GrowBy(u32 size)
             {
                 if (!m_Name.empty())
                 {
-                    throw Nocturnal::Exception("Could not allocate %d bytes for '%s' (id 0x%x).", difference, m_Name.c_str(), m_Type);
+                    throw Nocturnal::Exception( TXT( "Could not allocate %d bytes for '%s' (id 0x%x)." ), difference, m_Name.c_str(), m_Type);
                 }
                 else
                 {
-                    throw Nocturnal::Exception("Could not allocate %d bytes (id 0x%x).", difference, m_Type);
+                    throw Nocturnal::Exception( TXT( "Could not allocate %d bytes (id 0x%x)." ), difference, m_Type);
                 }
             }
 

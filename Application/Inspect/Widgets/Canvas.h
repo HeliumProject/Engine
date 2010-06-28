@@ -9,7 +9,7 @@
 namespace Inspect
 {
   // Typedefs
-  typedef std::map< std::string, bool > M_ExpandState;
+  typedef std::map< tstring, bool > M_ExpandState;
 
 
   //
@@ -26,7 +26,7 @@ namespace Inspect
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxScrolledWindowStyle,
-                 const wxString& name = "CanvasWindow",
+                 const wxString& name = wxT( "CanvasWindow" ),
                  int treeStyle = ( wxTR_ALL_LINES | wxTR_HIDE_ROOT ),
                  unsigned int columnSize = WXTWC_DEFAULT_COLUMN_SIZE,
                  wxBitmap expandedBitmap = Nocturnal::TreeWndCtrlDefaultExpand,
@@ -153,8 +153,8 @@ namespace Inspect
     // Expansion State
     //
 
-    ExpandState GetPanelExpandState( const std::string& panelName ) const;
-    void SetPanelExpandState( const std::string& panelName, ExpandState state );
+    ExpandState GetPanelExpandState( const tstring& panelName ) const;
+    void SetPanelExpandState( const tstring& panelName, ExpandState state );
 
 
     //

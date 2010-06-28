@@ -21,8 +21,6 @@ namespace Luna
     BrowserStatusBar( wxWindow *parent );
     virtual ~BrowserStatusBar();
 
-    void UpdateTrackerStatus( bool inProgress );
-
     virtual void SetStatusText( const wxString& strText, int nField = 0 ) NOC_OVERRIDE;
 
   protected:

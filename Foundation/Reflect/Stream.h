@@ -7,126 +7,382 @@
 
 namespace Reflect
 {
-    class FOUNDATION_API Stream : public Nocturnal::RefCountBase<Stream>
+    extern Profile::Accumulator g_StreamWrite;
+    extern Profile::Accumulator g_StreamRead; 
+
+    //
+    // Stream object, read and write data to/from a buffer
+    //
+
+    template< class C >
+    class Stream : public Nocturnal::RefCountBase< Stream< C > >
     {
     public: 
-        Stream(); 
-        Stream(std::iostream* p_Stream, bool ownStream = false); 
-        virtual ~Stream(); 
-
-        // new custom interfaces
-
-        // virtual Open call so that derived classes can do special work
-        // that may throw an exception (which we don't want to do in a 
-        // constructor) 
-        // 
-        virtual void    Open(); 
-
-        // virtual Close so that derived classes can clean up and be 
-        // able to throw without doing all that work in the destructor
-        // 
-        virtual void    Close(); 
-
-        // skip to the next whitespace character on the input stream. 
-        // 
-        void            SkipWhitespace(); 
-
-        // implementation of std::stream interfaces 
-
-        Stream& SeekWrite(std::streamoff offset, std::ios_base::seekdir dir); 
-        Stream& SeekRead(std::streamoff offset, std::ios_base::seekdir dir); 
-
-        std::streampos TellWrite(); 
-        std::streampos TellRead(); 
-
-        std::streamsize BytesRead() const; 
-
-        bool    Fail(void); 
-        bool    Done(); 
-        void    Clear(); 
-        void    SetPrecision(int p);
-
-        Stream&         Flush(); 
-        std::streamsize BytesAvailable(); 
-
-        // block reading and writing functions
-        // 
-        Stream& ReadBuffer(void* ptr, std::streamsize length)
+        Stream()
+            : m_Stream( NULL )
+            , m_OwnStream( false )
         {
-            return this->read( (char*) ptr, length); 
+
         }
 
-        Stream& WriteBuffer(const void* ptr, std::streamsize length)
+        Stream( std::basic_iostream< C, std::char_traits<C> >* stream, bool ownStream = false )
+            : m_Stream( stream )
+            , m_OwnStream( ownStream )
         {
-            return this->write( (const char*)ptr, length); 
+
         }
 
+        virtual ~Stream()
+        {
+            if ( m_OwnStream )
+            {
+                delete m_Stream; 
+                m_Stream    = NULL; 
+                m_OwnStream = false; 
+            }
+        }
 
-        // templatized Read and Write, which pay attention to the 
-        // type of the pointer you're passing in and automatically choose the size
-        //
-        // u32 myInt; 
-        // m_Stream->Write(&myInt);        // good
-        // m_Stream->Write(myInt);         // bad, compile error
-        // m_Stream->Write((void*)&myInt); // bad, compile error
-        // 
+        virtual void Open()
+        {
+
+        }
+
+        virtual void Close()
+        {
+
+        }
+
+        void Clear()
+        {
+            m_Stream->clear(); 
+        }
+
+        void SetPrecision(int p)
+        {
+            m_Stream->precision(p); 
+        }
+
+        void SkipWhitespace()
+        {
+            *m_Stream >> std::ws; 
+        }
+
+        std::streampos TellRead()
+        {
+            return m_Stream->tellg(); 
+        }
+
+        std::streampos TellWrite()
+        {
+            return m_Stream->tellp(); 
+        }
+
+        std::streamsize ElementsRead()
+        {
+            return m_Stream->gcount(); 
+        }
+
+        std::streamsize ElementsAvailable()
+        {
+            return m_Stream->rdbuf()->in_avail();
+        }
+
+        Stream& SeekRead(std::streamoff offset, std::ios_base::seekdir dir)
+        {
+            m_Stream->seekg(offset, dir); 
+            return *this; 
+        }
+
+        Stream& SeekWrite(std::streamoff offset, std::ios_base::seekdir dir)
+        {
+            m_Stream->seekp(offset, dir); 
+            return *this; 
+        }
+
+        Stream& ReadBuffer(void* t, std::streamsize size)
+        {
+            PROFILE_SCOPE_ACCUM(g_StreamRead); 
+
+            m_Stream->read((C*)t, size); 
+
+            if (m_Stream->fail() && !m_Stream->eof())
+            {
+                throw Reflect::StreamException( TXT( "General read failure" ) ); 
+            }
+
+            return *this; 
+        }
+
         template <typename T>
-        Stream& Read(T* ptr)
+        inline Stream& Read(T* ptr)
         {
-            return this->read( (char*)ptr, sizeof(T)); 
+            return ReadBuffer( ptr, sizeof(T) ); 
+        }
+
+        Stream& WriteBuffer(const void* t, std::streamsize size)
+        {
+            PROFILE_SCOPE_ACCUM(g_StreamWrite); 
+
+            m_Stream->write((const C*)t, size); 
+
+            if (m_Stream->fail())
+            {
+                throw Reflect::StreamException( TXT( "General write failure") ); 
+            }
+
+            return *this; 
         }
 
         template <typename T>
-        Stream& Write(T* ptr)
+        inline Stream& Write(const T* ptr)
         {
-            return this->write( (const char*)ptr, sizeof(T)); 
+            return WriteBuffer( ptr, sizeof(T) ); 
+        }
+    
+        Stream& Flush()
+        {
+            m_Stream->flush(); 
+            return *this; 
         }
 
-        // returns our internal stream, only for specially problematic cases. 
-        std::iostream* GetInternal() { return m_Stream; }; 
+        bool Fail()
+        {
+            return m_Stream->fail(); 
+        }
+
+        bool Done()
+        {
+            return m_Stream->eof(); 
+        }
+
+        std::basic_iostream< C, std::char_traits<C> >& GetInternal()
+        {
+            return *m_Stream;
+        } 
 
     protected: 
-        Stream& write(const char* t, std::streamsize size); 
-        Stream& read(char* t, std::streamsize size); 
-
-        std::iostream* m_Stream; 
-        bool           m_OwnStream; 
-
-
+        std::basic_iostream< C, std::char_traits<C> >*  m_Stream; 
+        bool                                            m_OwnStream; 
     };
 
-    template <class T> Stream& operator>>(Stream& stream, T& val)
+    template <class T, class C>
+    Stream<C>& operator>>(Stream<C>& stream, T& val)
     {
-        *stream.GetInternal() >> val; 
+        stream.GetInternal() >> val;
 
         if(stream.Fail() && !stream.Done())
         {
-            throw Reflect::StreamException("General read failure"); 
+            throw Reflect::StreamException( TXT( "General read failure" ) ); 
         }
 
         return stream; 
     }
 
-    template <class T> Stream& operator<<(Stream& stream, const T& val)
+    template <class T, class C>
+    Stream<C>& operator<<(Stream<C>& stream, const T& val)
     {
-        *stream.GetInternal() << val; 
+        stream.GetInternal() << val; 
 
         if(stream.Fail())
         {
-            throw Reflect::StreamException("General write failure"); 
+            throw Reflect::StreamException( TXT( "General write failure" ) ); 
         }
 
         return stream; 
     }
 
-    // pointer declaration. 
-    typedef Nocturnal::SmartPtr<Stream> StreamPtr; 
-}
+    //
+    // Specializations
+    //
 
-namespace std
-{
-    inline void getline(Reflect::Stream& stream, std::string& output)
+    template <>
+    inline Stream<wchar_t>& operator>>(Stream<wchar_t>& stream, u8& val)
     {
-        std::getline(*stream.GetInternal(), output); 
+        u16 temp;
+        stream.GetInternal() >> temp;
+        
+        if(stream.Fail() && !stream.Done())
+        {
+            throw Reflect::StreamException( TXT( "General read failure" ) ); 
+        }
+
+        val = (u8)temp;
+
+        return stream; 
     }
+
+    template <>
+    inline Stream<wchar_t>& operator<<(Stream<wchar_t>& stream, const u8& val)
+    {
+        u16 temp = val;
+        stream.GetInternal() << temp; 
+
+        if(stream.Fail())
+        {
+            throw Reflect::StreamException( TXT( "General write failure" ) ); 
+        }
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<char>& operator>>(Stream<char>& stream, u8& val)
+    {
+        u16 temp;
+        stream.GetInternal() >> temp;
+        
+        if(stream.Fail() && !stream.Done())
+        {
+            throw Reflect::StreamException( TXT( "General read failure" ) ); 
+        }
+
+        val = (u8)temp;
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<char>& operator<<(Stream<char>& stream, const u8& val)
+    {
+        u16 temp = val;
+        stream.GetInternal() << temp; 
+
+        if(stream.Fail())
+        {
+            throw Reflect::StreamException( TXT( "General write failure" ) ); 
+        }
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<wchar_t>& operator>>(Stream<wchar_t>& stream, i8& val)
+    {
+        u16 temp;
+        stream.GetInternal() >> temp;
+        
+        if(stream.Fail() && !stream.Done())
+        {
+            throw Reflect::StreamException( TXT( "General read failure" ) ); 
+        }
+
+        val = (i8)temp;
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<wchar_t>& operator<<(Stream<wchar_t>& stream, const i8& val)
+    {
+        u16 temp = val;
+        stream.GetInternal() << temp; 
+
+        if(stream.Fail())
+        {
+            throw Reflect::StreamException( TXT( "General write failure" ) ); 
+        }
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<char>& operator>>(Stream<char>& stream, i8& val)
+    {
+        u16 temp;
+        stream.GetInternal() >> temp;
+        
+        if(stream.Fail() && !stream.Done())
+        {
+            throw Reflect::StreamException( TXT( "General read failure" ) ); 
+        }
+
+        val = (i8)temp;
+
+        return stream; 
+    }
+
+    template <>
+    inline Stream<char>& operator<<(Stream<char>& stream, const i8& val)
+    {
+        u16 temp = val;
+        stream.GetInternal() << temp; 
+
+        if(stream.Fail())
+        {
+            throw Reflect::StreamException( TXT( "General write failure" ) ); 
+        }
+
+        return stream; 
+    }
+
+    typedef Stream<char> CharStream;
+    typedef Stream<wchar_t> WCharStream;
+    typedef Stream<tchar> TCharStream;
+
+    // pointer declaration. 
+    typedef Nocturnal::SmartPtr< Stream<char> >     CharStreamPtr; 
+    typedef Nocturnal::SmartPtr< Stream<wchar_t> >  WCharStreamPtr; 
+    typedef Nocturnal::SmartPtr< Stream<tchar> >    TCharStreamPtr;
+
+    //
+    // FileStream, a stream object backed by file data
+    //
+
+    template< class C >
+    class FileStream : public Stream< C >
+    {
+    public: 
+        FileStream(const tstring& filename, bool write)
+            : m_Filename(filename)
+            , m_OpenForWrite(write)
+        {
+
+        }
+
+        ~FileStream()
+        {
+
+        }
+
+        virtual void Open() NOC_OVERRIDE
+        {
+            // deal with the mode bits.. 
+            int fmode = std::ios_base::binary;
+            if (m_OpenForWrite)
+            {
+                fmode |= std::ios_base::in | std::ios_base::out | std::ios_base::trunc;
+            }
+            else
+            {
+                fmode |= std::ios_base::in;
+            }
+
+            std::basic_fstream< C, std::char_traits< C > >* fstream = new std::basic_fstream< C, std::char_traits< C > >(); 
+
+            fstream->open(m_Filename.c_str(), fmode);
+            if (!fstream->is_open())
+            {
+                delete fstream;
+                throw Reflect::StreamException( TXT( "Unable to open '%s' for %s" ) , m_Filename.c_str(), m_OpenForWrite ? "write" : "read");
+            }
+
+            m_Stream    = fstream; 
+            m_OwnStream = true; 
+        }
+
+        virtual void Close() NOC_OVERRIDE
+        {
+            std::basic_fstream< C, std::char_traits< C > >* fstream = static_cast< std::basic_fstream< C, std::char_traits< C > > *>( &GetInternal() );
+
+            fstream->close();
+            if (fstream->is_open())
+            {
+                throw Reflect::StreamException( TXT( "Unable to close '%s' after %s" ), m_Filename.c_str(), m_OpenForWrite ? "write" : "read");
+            }
+        }
+
+    protected: 
+        tstring     m_Filename; 
+        bool        m_OpenForWrite; 
+    };
 }

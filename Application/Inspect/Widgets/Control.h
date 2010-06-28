@@ -16,9 +16,9 @@ namespace Inspect
   // the scroll increment in pixels
   const static int SCROLL_INCREMENT = 8;
 
-  const static char ATTR_VALUE_TRUE[] = "true";
-  const static char ATTR_VALUE_FALSE[] = "false";
-  const static char ATTR_TOOLTIP[] = "tooltip";
+  const static tchar ATTR_VALUE_TRUE[] = TXT( "true" );
+  const static tchar ATTR_VALUE_FALSE[] = TXT( "false" );
+  const static tchar ATTR_TOOLTIP[] = TXT( "tooltip" );
 
 #ifdef PROFILE_ACCUMULATION
   APPLICATION_API extern Profile::Accumulator g_RealizeAccumulator;
@@ -31,15 +31,15 @@ namespace Inspect
   class APPLICATION_API ControlAttribute
   {
   public:
-    std::string m_Key;
-    std::string m_Value;
+    tstring m_Key;
+    tstring m_Value;
 
     ControlAttribute ()
     {
 
     }
 
-    ControlAttribute (const std::string& key, const std::string& value)
+    ControlAttribute (const tstring& key, const tstring& value)
     {
       m_Key = key;
       m_Value = value;
@@ -73,7 +73,7 @@ namespace Inspect
     bool m_Writing;
 
     // the default value
-    std::string m_Default;
+    tstring m_Default;
 
     // client-configurable data
     Reflect::ObjectPtr m_ClientData;
@@ -109,7 +109,7 @@ namespace Inspect
     bool m_Realized;
 
     // the tool tip for this control
-    std::string m_ToolTip;
+    tstring m_ToolTip;
 
 
     //
@@ -187,7 +187,7 @@ namespace Inspect
     //
 
     // sets default data
-    virtual void SetDefault(const std::string& def);
+    virtual void SetDefault(const tstring& def);
 
     // sets data back to default
     virtual bool SetDefault();
@@ -204,7 +204,7 @@ namespace Inspect
     //
 
     // process individual attribute key
-    virtual bool Process(const std::string& key, const std::string& value);
+    virtual bool Process(const tstring& key, const tstring& value);
 
 
     //
@@ -288,14 +288,14 @@ namespace Inspect
     // String
     //
 
-    int GetStringWidth(const std::string& str);
-    virtual bool TrimString(std::string& str, int width);
+    int GetStringWidth(const tstring& str);
+    virtual bool TrimString(tstring& str, int width);
 
     //
     // Tool Tip
     //
-    const std::string& GetToolTip();
-    virtual void SetToolTip( const std::string& toolTip );
+    const tstring& GetToolTip();
+    virtual void SetToolTip( const tstring& toolTip );
 
 
     //
@@ -361,10 +361,10 @@ namespace Inspect
     virtual void Read();
 
     // helper read call for string based controls
-    virtual bool ReadData(std::string& str) const;
+    virtual bool ReadData(tstring& str) const;
 
     // helper read call to get values of all bound data
-    virtual bool ReadAll(std::vector< std::string >& strs) const;
+    virtual bool ReadAll(std::vector< tstring >& strs) const;
 
     // callback when data changed, implements DataReference
     virtual void DataChanged(const DataChangedArgs& args);
@@ -381,7 +381,7 @@ namespace Inspect
     virtual bool Write();
 
     // helper write call for string based controls
-    bool WriteData(const std::string& str, bool preview = false);
+    bool WriteData(const tstring& str, bool preview = false);
 
     template<class T>
     bool WriteTypedData(const T& val, const typename DataTemplate<T>::Ptr& data, bool preview = false)
@@ -419,7 +419,7 @@ namespace Inspect
     }
 
     // helper to write values to each bound data member separately
-    virtual bool WriteAll(const std::vector< std::string >& strs, bool preview = false);
+    virtual bool WriteAll(const std::vector< tstring >& strs, bool preview = false);
 
     // fires callback
     virtual void PostWrite();

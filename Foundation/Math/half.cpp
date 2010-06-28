@@ -226,7 +226,7 @@ namespace Math
     // Functions to print the bit-layout of
     // floats and Halfs, mostly for debugging
     //---------------------------------------
-    void Half::createBitString(char c[19], Half h)
+    void Half::createBitString(tchar c[19], Half h)
     {
         u16 b = h.bits();
 
@@ -240,7 +240,7 @@ namespace Math
     }
 
 
-    void Half::createBitString(char c[35], f32 f)
+    void Half::createBitString(tchar c[35], f32 f)
     {
         Half::uif x;
         x.f = f;

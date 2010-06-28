@@ -116,9 +116,7 @@ namespace Reflect
     {
         if ( base != NULL && !base->HasType(GetClass<__Derived>()->m_TypeID) )
         {
-            throw CastException ( "Object of type '%s' cannot be cast to type '%s'",
-                base->GetClass()->m_ShortName.c_str(),
-                GetClass<__Derived>()->m_ShortName.c_str() );
+            throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_ShortName.c_str(), GetClass<__Derived>()->m_ShortName.c_str() );
         }
 
         return DangerousCast<__Derived>(base);
@@ -129,9 +127,7 @@ namespace Reflect
     {
         if ( base != NULL && !base->HasType(GetClass<__Derived>()->m_TypeID) )
         {
-            throw CastException ( "Object of type '%s' cannot be cast to type '%s'",
-                base->GetClass()->m_ShortName.c_str(),
-                GetClass<__Derived>()->m_ShortName.c_str() );
+            throw CastException ( TXT( "Object of type '%s' cannot be cast to type '%s'" ), base->GetClass()->m_ShortName.c_str(), GetClass<__Derived>()->m_ShortName.c_str() );
         }
 
         return ConstDangerousCast<__Derived>(base);

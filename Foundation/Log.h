@@ -88,12 +88,12 @@ namespace Log
 
     struct FOUNDATION_API Statement
     {
-        std::string m_String;
+        tstring m_String;
         Stream      m_Stream;
         Level       m_Level;
         int         m_Indent;
 
-        Statement( const std::string& string, Stream stream = Streams::Normal, Level level = Levels::Default, int indent = 0 )
+        Statement( const tstring& string, Stream stream = Streams::Normal, Level level = Levels::Default, int indent = 0 )
             : m_String( string )
             , m_Stream( stream )
             , m_Level( level )
@@ -104,12 +104,12 @@ namespace Log
 
         void ApplyIndent()
         {
-            std::string indented;
+            tstring indented;
             ApplyIndent( m_String.c_str(), indented );
             m_String = indented;
         }
 
-        void ApplyIndent( const char* string, std::string& output );
+        void ApplyIndent( const tchar* string, tstring& output );
     };
 
     typedef std::vector< Statement > V_Statement;
@@ -164,17 +164,17 @@ namespace Log
     //
 
     // the trace file gets everything Console delivers to the console and more
-    FOUNDATION_API bool AddTraceFile( const std::string& fileName, Stream stream, u32 threadId = -1, bool append = false );
-    FOUNDATION_API void RemoveTraceFile( const std::string& fileName );
+    FOUNDATION_API bool AddTraceFile( const tstring& fileName, Stream stream, u32 threadId = -1, bool append = false );
+    FOUNDATION_API void RemoveTraceFile( const tstring& fileName );
 
-    template <bool (*AddFunc)(const std::string& fileName, Stream stream, u32 threadId, bool append), void (*RemoveFunc)(const std::string& fileName)>
+    template <bool (*AddFunc)(const tstring& fileName, Stream stream, u32 threadId, bool append), void (*RemoveFunc)(const tstring& fileName)>
     class FileHandle
     {
     private:
-        std::string m_File;
+        tstring m_File;
 
     public:
-        FileHandle(const std::string& file, Stream stream, u32 threadId = -1, bool append = false )
+        FileHandle(const tstring& file, Stream stream, u32 threadId = -1, bool append = false )
             : m_File (file)
         {
             if (!m_File.empty())
@@ -191,7 +191,7 @@ namespace Log
             }
         }
 
-        const std::string& GetFile()
+        const tstring& GetFile()
         {
             return m_File;
         }
@@ -243,12 +243,12 @@ namespace Log
     //
 
     // main printing function used by all prototypes
-    FOUNDATION_API void PrintString(const char* string,                // the string to print
+    FOUNDATION_API void PrintString(const tchar* string,                // the string to print
         Stream stream = Streams::Normal,   // the stream its going into
         Level level = Levels::Default,     // the verbosity level
         Color color = Colors::Auto,        // the color to use (None for auto)
         int indent = -1,                   // the amount to indent
-        char* output = NULL,               // the buffer to copy the result string to
+        tchar* output = NULL,               // the buffer to copy the result string to
         u32 outputSize = 0);               // the size of the output buffer
 
     // print a persisted print statment
@@ -258,27 +258,27 @@ namespace Log
     FOUNDATION_API void PrintStatements(const V_Statement& statements, u32 streams = Streams::All);
 
     // simple way to print a particular color
-    FOUNDATION_API void PrintColor(Color color, const char* fmt, ...);
+    FOUNDATION_API void PrintColor(Color color, const tchar* fmt, ...);
 
     // make a print statement
-    FOUNDATION_API void Print(const char *fmt,...);
-    FOUNDATION_API void Print(Level level, const char *fmt,...);
+    FOUNDATION_API void Print(const tchar *fmt,...);
+    FOUNDATION_API void Print(Level level, const tchar *fmt,...);
 
     // make a debug-only statement
-    FOUNDATION_API void Debug(const char *fmt,...);
-    FOUNDATION_API void Debug(Level level, const char *fmt,...);
+    FOUNDATION_API void Debug(const tchar *fmt,...);
+    FOUNDATION_API void Debug(Level level, const tchar *fmt,...);
 
     // make a profile-only statement
-    FOUNDATION_API void Profile(const char *fmt,...);
-    FOUNDATION_API void Profile(Level level, const char *fmt,...);
+    FOUNDATION_API void Profile(const tchar *fmt,...);
+    FOUNDATION_API void Profile(Level level, const tchar *fmt,...);
 
     // warn the user, increments warning count
-    FOUNDATION_API void Warning(const char *fmt,...);
-    FOUNDATION_API void Warning(Level level, const char *fmt,...);
+    FOUNDATION_API void Warning(const tchar *fmt,...);
+    FOUNDATION_API void Warning(Level level, const tchar *fmt,...);
 
     // give an error, increments error count
-    FOUNDATION_API void Error(const char *fmt,...);
-    FOUNDATION_API void Error(Level level, const char *fmt,...);
+    FOUNDATION_API void Error(const tchar *fmt,...);
+    FOUNDATION_API void Error(Level level, const tchar *fmt,...);
 
     // stack-based indention helper object indents all output while on the stack
     class FOUNDATION_API Indentation
@@ -299,7 +299,7 @@ namespace Log
     class FOUNDATION_API Heading
     {
     public:
-        Heading(const char *fmt, ...);
+        Heading(const tchar *fmt, ...);
         ~Heading();
     };
 
@@ -312,17 +312,17 @@ namespace Log
         bool   m_Valid;
 
     public:
-        Bullet(const char *fmt, ...);
-        Bullet(Stream stream, Level level, const char *fmt, ...);
+        Bullet(const tchar *fmt, ...);
+        Bullet(Stream stream, Level level, const tchar *fmt, ...);
 
         ~Bullet();
 
     private:
-        void CreateBullet(const char *fmt, va_list args );
+        void CreateBullet(const tchar *fmt, va_list args );
     };
 
     // grab the path to the current bullet
-    FOUNDATION_API std::string GetOutlineState();
+    FOUNDATION_API tstring GetOutlineState();
 
     class FOUNDATION_API Listener
     {

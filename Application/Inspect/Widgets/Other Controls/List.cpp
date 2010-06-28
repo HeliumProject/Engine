@@ -6,7 +6,7 @@
 using namespace Reflect;
 using namespace Inspect;
 
-const char* List::s_MapKeyValDelim = ", "; 
+const tchar* List::s_MapKeyValDelim = TXT( ", " ); 
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -79,7 +79,7 @@ void List::Read()
   // from data into ui
   if ( IsRealized() )
   {
-    const std::vector< std::string >& items = GetItems();
+    const std::vector< tstring >& items = GetItems();
 
     UpdateUI( items );
   }
@@ -96,31 +96,35 @@ bool List::Write()
 
   if ( IsRealized() )
   {
-    std::string delimited;
+    tstring delimited;
     ListBox* list = Control::Cast< ListBox >( this );
     const i32 total = list->GetCount();
     m_Items.clear();
     m_Items.resize( total );
 
+tstring temp;
+bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+NOC_ASSERT( converted );
+
     for ( i32 index = 0; index < total; ++index )
     {
       if ( !delimited.empty() )
       {
-        delimited += Reflect::s_ContainerItemDelimiter;
+        delimited += temp;
       }
 
-      const std::string val = list->GetString( index ).c_str();
+      const tstring val = list->GetString( index ).c_str();
 
       if ( m_IsMap )
       {
-        std::string::size_type pos = val.find( s_MapKeyValDelim );
+        tstring::size_type pos = val.find( s_MapKeyValDelim );
 
         // This is suppose to be a map, there better be a key-value pair
-        NOC_ASSERT( pos != std::string::npos );
-        if ( std::string::npos != pos )
+        NOC_ASSERT( pos != tstring::npos );
+        if ( tstring::npos != pos )
         {
-          delimited += val.substr( 0, pos ) + Reflect::s_ContainerItemDelimiter;
-          delimited += val.substr( pos + strlen( s_MapKeyValDelim ) );
+          delimited += val.substr( 0, pos ) + temp;
+          delimited += val.substr( pos + _tcslen( s_MapKeyValDelim ) );
         }
       }
       else
@@ -166,22 +170,27 @@ void List::SetMap( bool isMap )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns a list of all the items (represented as strings).
 // 
-const std::vector< std::string >& List::GetItems()
+const std::vector< tstring >& List::GetItems()
 {
   if ( IsBound() )
   {
     m_Items.clear();
-    std::string str;
+    tstring str;
     ReadData( str );
-    ::Tokenize( str, m_Items, Reflect::s_ContainerItemDelimiter );
+
+tstring temp;
+bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+NOC_ASSERT( converted );
+
+    ::Tokenize( str, m_Items, temp );
 
     if ( m_IsMap )
     {
       // This list is a map representation so it better have an even number of elemnts
       NOC_ASSERT( m_Items.size() % 2 == 0 );
 
-      std::vector< std::string >::iterator itr = m_Items.begin();
-      std::vector< std::string >::iterator previous = itr;
+      std::vector< tstring >::iterator itr = m_Items.begin();
+      std::vector< tstring >::iterator previous = itr;
       for ( ; itr != m_Items.end(); ++itr )
       {
         if ( previous != itr )
@@ -205,11 +214,15 @@ const std::vector< std::string >& List::GetItems()
 // Clears all the items out of the list (both the underlying data and the UI)
 // and adds the new items to the list.  
 // 
-void List::AddItems( const std::vector< std::string >& items )
+void List::AddItems( const std::vector< tstring >& items )
 {
   if ( IsBound() )
   {
-    std::string str = GetDelimitedList( items, Reflect::s_ContainerItemDelimiter );
+tstring temp;
+bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+NOC_ASSERT( converted );
+
+    tstring str = GetDelimitedList( items, temp );
     WriteData( str );
   }
   else
@@ -226,23 +239,27 @@ void List::AddItems( const std::vector< std::string >& items )
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void List::AddItem( const std::string& item )
+void List::AddItem( const tstring& item )
 {
   if ( IsBound() )
   {
-    std::string str;
+    tstring str;
     ReadData( str );
+
+tstring temp;
+bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+NOC_ASSERT( converted );
 
     if ( !str.empty() )
     {
-      str += Reflect::s_ContainerItemDelimiter;
+      str += temp;
     }
     str += item;
 
     WriteData( str );
 
     m_Items.clear();
-    ::Tokenize( str, m_Items, s_ContainerItemDelimiter );
+    ::Tokenize( str, m_Items, temp );
   }
   else
   {
@@ -255,24 +272,28 @@ void List::AddItem( const std::string& item )
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void List::RemoveItem( const std::string& item )
+void List::RemoveItem( const tstring& item )
 {
   bool uiNeedsUpdate = false;
 
   if ( IsBound() )
   {
-    std::string delimited;
+    tstring delimited;
     ReadData( delimited );
 
+tstring temp;
+bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+NOC_ASSERT( converted );
+
     // Search for item + delimiter
-    std::string search = item + Reflect::s_ContainerItemDelimiter;
-    std::string::size_type pos = delimited.find( search );
-    if ( pos == std::string::npos )
+    tstring search = item + temp;
+    tstring::size_type pos = delimited.find( search );
+    if ( pos == tstring::npos )
     {
       // Not found, search for delimiter + item
-      search = Reflect::s_ContainerItemDelimiter + item;
+      search = temp + item;
       pos = delimited.find( search );
-      if ( pos == std::string::npos )
+      if ( pos == tstring::npos )
       {
         // Not found, search for the item with no delimiter (this would occur if the
         // item we are removing is the only item in the list).
@@ -282,23 +303,23 @@ void List::RemoveItem( const std::string& item )
     }
     
     // If we found the item to remove, take it out of the string
-    if ( pos != std::string::npos )
+    if ( pos != tstring::npos )
     {
-      delimited.replace( pos, search.size(), "" );
+      delimited.replace( pos, search.size(), TXT( "" ) );
       WriteData( delimited );
 
       m_Items.clear();
-      ::Tokenize( delimited, m_Items, Reflect::s_ContainerItemDelimiter );
+      ::Tokenize( delimited, m_Items, temp );
       uiNeedsUpdate = true;
     }
   }
   else
   {
-    std::vector< std::string >::iterator itr = m_Items.begin();
-    std::vector< std::string >::iterator end = m_Items.end();
+    std::vector< tstring >::iterator itr = m_Items.begin();
+    std::vector< tstring >::iterator end = m_Items.end();
     for ( ; itr != end; ++itr )
     {
-      const std::string& current = *itr;
+      const tstring& current = *itr;
       if ( current == item )
       {
         m_Items.erase( itr );
@@ -317,7 +338,7 @@ void List::RemoveItem( const std::string& item )
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-const std::vector< std::string >& List::GetSelectedItems()
+const std::vector< tstring >& List::GetSelectedItems()
 {
   if ( IsRealized() )
   {
@@ -340,7 +361,7 @@ const std::vector< std::string >& List::GetSelectedItems()
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void List::SetSelectedItems( const std::vector< std::string >& items )
+void List::SetSelectedItems( const std::vector< tstring >& items )
 {
   if ( IsRealized() )
   {
@@ -351,8 +372,8 @@ void List::SetSelectedItems( const std::vector< std::string >& items )
 
     m_Window->Freeze();
     // Select each item in the list
-    std::vector< std::string >::const_iterator itr = items.begin();
-    std::vector< std::string >::const_iterator end = items.end();
+    std::vector< tstring >::const_iterator itr = items.begin();
+    std::vector< tstring >::const_iterator end = items.end();
     for ( ; itr < end; ++itr )
     {
       list->SetStringSelection( (*itr).c_str() );
@@ -368,9 +389,9 @@ void List::SetSelectedItems( const std::vector< std::string >& items )
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-std::string List::GetSelectedItems( const std::string delimiter )
+tstring List::GetSelectedItems( const tstring delimiter )
 {
-  std::string items;
+  tstring items;
 
   if ( IsRealized() )
   {
@@ -388,8 +409,8 @@ std::string List::GetSelectedItems( const std::string delimiter )
   }
   else
   {
-    std::vector< std::string >::const_iterator itr = m_SelectedItems.begin();
-    std::vector< std::string >::const_iterator end = m_SelectedItems.end();
+    std::vector< tstring >::const_iterator itr = m_SelectedItems.begin();
+    std::vector< tstring >::const_iterator end = m_SelectedItems.end();
     for ( ; itr != end; ++itr )
     {
       if ( !items.empty() )
@@ -411,9 +432,9 @@ std::string List::GetSelectedItems( const std::string delimiter )
 // NOTE: This function is slower than calling the other SetSelectedItems function
 // above.  It's just provided for convenience.
 // 
-void List::SetSelectedItems( const std::string& delimitedList, const std::string& delimiter )
+void List::SetSelectedItems( const tstring& delimitedList, const tstring& delimiter )
 {
-  std::vector< std::string > items;
+  std::vector< tstring > items;
   ::Tokenize( delimitedList, items, delimiter );
   SetSelectedItems( items );
 }
@@ -437,7 +458,7 @@ static inline void SetSelection( ListBox* list, const std::vector< i32 > indices
 void List::MoveSelectedItems( MoveDirection direction )
 {
   bool isDirty = false;
-  const std::vector< std::string >& selectedItems = GetSelectedItems();
+  const std::vector< tstring >& selectedItems = GetSelectedItems();
   std::vector< i32 > selectedItemIndices;
 
   const size_t numSelectedItems = selectedItems.size();
@@ -447,13 +468,13 @@ void List::MoveSelectedItems( MoveDirection direction )
     const size_t numItems = m_Items.size();
     for ( size_t itemIndex = 0; itemIndex < numItems; ++itemIndex )
     {
-      std::string& current = m_Items[itemIndex];
+      tstring& current = m_Items[itemIndex];
       if ( current == selectedItems[currentSelection] )
       {
         // Move the item up in the list if possible.
         if ( direction == MoveDirections::Up && itemIndex > 0 )
         {
-          std::string temp = m_Items[itemIndex-1];
+          tstring temp = m_Items[itemIndex-1];
           m_Items[itemIndex-1] = m_Items[itemIndex];
           m_Items[itemIndex] = temp;
           isDirty = true;
@@ -461,7 +482,7 @@ void List::MoveSelectedItems( MoveDirection direction )
         }
         else if ( direction == MoveDirections::Down && itemIndex + 1 < numItems )
         {
-          std::string temp = m_Items[itemIndex+1];
+          tstring temp = m_Items[itemIndex+1];
           m_Items[itemIndex+1] = m_Items[itemIndex];
           m_Items[itemIndex] = temp;
           isDirty = true;
@@ -497,12 +518,16 @@ void List::MoveSelectedItems( MoveDirection direction )
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-std::string List::GetDelimitedList( const std::vector< std::string >& items, const std::string& delimiter )
+tstring List::GetDelimitedList( const std::vector< tstring >& items, const tstring& delimiter )
 {
-  std::string delimitedList;
+  tstring delimitedList;
 
-  std::vector< std::string >::const_iterator itr = items.begin();
-  std::vector< std::string >::const_iterator end = items.end();
+tstring temp;
+bool converted = Platform::ConvertString( Reflect::s_ContainerItemDelimiter, temp );
+NOC_ASSERT( converted );
+
+  std::vector< tstring >::const_iterator itr = items.begin();
+  std::vector< tstring >::const_iterator end = items.end();
   for ( ; itr != end; ++itr )
   {
     if ( !delimitedList.empty() )
@@ -512,11 +537,11 @@ std::string List::GetDelimitedList( const std::vector< std::string >& items, con
     if ( m_IsMap )
     {
       // Replace our delimiters with the appropriate ones for the container
-      std::string::size_type pos = ( *itr ).find_first_of( s_MapKeyValDelim );
-      std::string::size_type lastPos = ( *itr ).find_first_not_of( s_MapKeyValDelim, pos );
-      if ( pos != std::string::npos )
+      tstring::size_type pos = ( *itr ).find_first_of( s_MapKeyValDelim );
+      tstring::size_type lastPos = ( *itr ).find_first_not_of( s_MapKeyValDelim, pos );
+      if ( pos != tstring::npos )
       {
-        delimitedList += ( *itr ).substr( 0, pos ) + Reflect::s_ContainerItemDelimiter + ( *itr ).substr( lastPos );
+          delimitedList += ( *itr ).substr( 0, pos ) + temp + ( *itr ).substr( lastPos );
       }
     }
     else
@@ -531,7 +556,7 @@ std::string List::GetDelimitedList( const std::vector< std::string >& items, con
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-void List::UpdateUI( const std::vector< std::string >& items )
+void List::UpdateUI( const std::vector< tstring >& items )
 {
   if ( IsRealized() )
   {
@@ -540,8 +565,8 @@ void List::UpdateUI( const std::vector< std::string >& items )
     list->Freeze();
     list->Clear();
 
-    std::vector< std::string >::const_iterator itr = items.begin();
-    std::vector< std::string >::const_iterator end = items.end();
+    std::vector< tstring >::const_iterator itr = items.begin();
+    std::vector< tstring >::const_iterator end = items.end();
     for ( ; itr != end; ++itr )
     {
       list->Append( (*itr).c_str() );
@@ -553,7 +578,7 @@ void List::UpdateUI( const std::vector< std::string >& items )
 ///////////////////////////////////////////////////////////////////////////////
 // Process script commands defining how this list box should behave.
 // 
-bool List::Process(const std::string& key, const std::string& value)
+bool List::Process(const tstring& key, const tstring& value)
 {
   if (__super::Process(key, value))
     return true;

@@ -9,7 +9,7 @@ struct FileDroppedArgs
 {
   Nocturnal::Path m_Path;
 
-  FileDroppedArgs( const std::string& path = "" )
+  FileDroppedArgs( const tstring& path = TXT( "" ) )
     : m_Path( path )
   {
   }
@@ -20,7 +20,7 @@ typedef std::set< FileDroppedSignature::Delegate > S_FileDroppedSignature;
 class FileDropTarget : public wxFileDropTarget
 {
 public:
-  FileDropTarget(const std::string& extensions, const std::string& delims = ",");
+  FileDropTarget(const tstring& extensions, const tstring& delims = TXT( "," ) );
 
   void AddListener( FileDroppedSignature::Delegate& listener )
   {
@@ -37,5 +37,5 @@ protected:
 
 private:
   FileDroppedSignature::Event m_DropEvent;
-  std::vector< std::string >                    m_FileExtensions;
+  std::vector< tstring >                    m_FileExtensions;
 };

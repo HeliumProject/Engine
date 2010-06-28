@@ -75,7 +75,7 @@ void Changeset::Reopen( File& file, const OpenFlag flags ) const
   file.GetInfo();
   if ( !file.IsCheckedOutByMe() )
   {
-    throw Exception( "%s is not currently checked out.", file.m_LocalPath.c_str() );
+    throw Exception( TXT( "%s is not currently checked out." ), file.m_LocalPath.c_str() );
   }
 
   file.m_ChangesetId = m_Id;

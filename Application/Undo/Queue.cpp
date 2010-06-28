@@ -32,7 +32,7 @@ void Queue::Reset()
 
 void Queue::Print() const
 {
-  Log::Print("Max: %d\tUndo Length:\t%d\tRedo Length:\t%d\n", GetMaxLength(), m_Undo.size(), m_Redo.size() );
+  Log::Print( TXT( "Max: %d\tUndo Length:\t%d\tRedo Length:\t%d\n" ), GetMaxLength(), m_Undo.size(), m_Redo.size() );
 }
 
 bool Queue::IsActive() const
@@ -149,8 +149,8 @@ void Queue::Undo()
     }
     catch ( const Undo::Exception& e )
     {
-      Log::Warning( "Invalid undo command has been removed from the stack.\n" );
-      Log::Warning( "%s\n", e.what() );
+      Log::Warning( TXT( "Invalid undo command has been removed from the stack.\n" ) );
+      Log::Warning( TXT( "%s\n" ), e.what() );
     }
   }
 
@@ -186,8 +186,8 @@ void Queue::Redo()
     }
     catch ( const Undo::Exception& e )
     {
-      Log::Warning( "Removing invalid command from undo stack.\n" );
-      Log::Warning( "%s\n", e.what() );
+      Log::Warning( TXT( "Removing invalid command from undo stack.\n" ) );
+      Log::Warning( TXT( "%s\n" ), e.what() );
     }
   }
 

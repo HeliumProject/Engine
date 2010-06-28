@@ -25,9 +25,9 @@ namespace RCS
   APPLICATION_API Provider* GetProvider();
 
   // Note: if you are passing in a directory, make sure it ends in a slash.
-  APPLICATION_API void SetManagedPaths( const std::vector< std::string >& paths );
-  APPLICATION_API void SetIgnoredPaths( const std::vector< std::string >& paths );
-  APPLICATION_API bool PathIsManaged( const std::string& path );
+  APPLICATION_API void SetManagedPaths( const std::vector< tstring >& paths );
+  APPLICATION_API void SetIgnoredPaths( const std::vector< tstring >& paths );
+  APPLICATION_API bool PathIsManaged( const tstring& path );
 
   APPLICATION_API void SetSyncTimestamp( const u64 timestamp = 0 );
   APPLICATION_API u64  GetSyncTimestamp();
@@ -38,5 +38,5 @@ namespace RCS
   APPLICATION_API bool IsValidChangeset( const RCS::Changeset& changeset );
 
   APPLICATION_API void GetInfo( V_File& files, const GetInfoFlag flags = GetInfoFlags::Default );
-  APPLICATION_API void GetInfo( const std::string& folder, V_File& files, bool recursive = false, u32 fileData = FileData::All, u32 actionData = ActionData::All );
+  APPLICATION_API void GetInfo( const tstring& folder, V_File& files, bool recursive = false, u32 fileData = FileData::All, u32 actionData = ActionData::All );
 }

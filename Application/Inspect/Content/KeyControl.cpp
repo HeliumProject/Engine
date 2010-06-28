@@ -1,6 +1,6 @@
 #include "KeyControl.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 #include "Application/Inspect/Content/KeyClipboardData.h"
-
 #include "Application/UI/CustomColors.h"
 #include "Application/UI/RegistryConfig.h"
 
@@ -10,8 +10,6 @@
 #include <wx/msgdlg.h>
 #include <wx/settings.h>
 #include <wx/clipbrd.h>
-
-#include "Platform/Windows/Windows.h"
 
 using namespace Inspect;
 using namespace Nocturnal;
@@ -33,20 +31,20 @@ static const f32 s_Border = 5.0f; // Decrease control width by this amount
 static const i32 s_Range = 2;     // Number of pixels you have to be within when clicking a key
 
 // Context menu strings
-static const char* s_CutKey = "Cut Key";
-static const char* s_CopyKey = "Copy Key";
-static const char* s_CopyAllKeys = "Copy All Keys";
-static const char* s_PasteKeys = "Paste Keys";
-static const char* s_ClobberKeys = "Paste Keys (clobber)";
-static const char* s_DeleteKey = "Delete Key";
-static const char* s_DeleteAllKeys = "Delete All Keys";
+static const tchar* s_CutKey = TXT( "Cut Key" );
+static const tchar* s_CopyKey = TXT( "Copy Key" );
+static const tchar* s_CopyAllKeys = TXT( "Copy All Keys" );
+static const tchar* s_PasteKeys = TXT( "Paste Keys" );
+static const tchar* s_ClobberKeys = TXT( "Paste Keys (clobber)" );
+static const tchar* s_DeleteKey = TXT( "Delete Key" );
+static const tchar* s_DeleteAllKeys = TXT( "Delete All Keys" );
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
 KeyControl::KeyControl( wxWindow* parent )
-: wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, "KeyControl Panel")
+: wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxT( "KeyControl Panel" ) )
 , m_KeyArray( new KeyArray() )
 , m_DraggingKey( Key::InvalidKey )
 , m_DragOffset( 0 )
@@ -173,8 +171,8 @@ bool KeyControl::EditKey( u32 index )
     Math::Color3 initialColor = key->GetColor();
 
     // Restore custom colors from the registry
-    std::string info;
-    RegistryConfig::GetInstance()->Read( "", CustomColors::GetDefaultRegistryKey(), info );
+    tstring info;
+    RegistryConfig::GetInstance()->Read( TXT( "" ), CustomColors::GetDefaultRegistryKey(), info );
 
     // Show the dialog
     wxColourData colorData;
@@ -192,7 +190,7 @@ bool KeyControl::EditKey( u32 index )
 
     // Save custom colors to the registry
     info = CustomColors::Save( dlg.GetColourData() );
-    RegistryConfig::GetInstance()->Write( "", CustomColors::GetDefaultRegistryKey(), info );
+    RegistryConfig::GetInstance()->Write( TXT( "" ), CustomColors::GetDefaultRegistryKey(), info );
   }
 
   return ok;
@@ -266,20 +264,20 @@ void KeyControl::DrawKey( wxDC& dc, float location, bool selected ) const
   const wxSize size = GetSize();
   i32 pos = GetPos( location );
 
-  wxPen fillPen( wxColor( "BLACK" ), 3 );
+  wxPen fillPen( wxColor( wxT( "BLACK" ) ), 3 );
   dc.SetPen( fillPen );
   dc.DrawLine( pos, 0, pos, size.y );
 
   if ( selected )
   {
-    dc.SetPen( wxPen( wxColor( "YELLOW" ), 1, wxDOT ) );
+    dc.SetPen( wxPen( wxColor( wxT( "YELLOW" ) ), 1, wxDOT ) );
     dc.DrawLine( pos - 1,  0,  pos - 1,  size.y );
     dc.DrawLine( pos,      1,  pos,      size.y );
     dc.DrawLine( pos + 1,  2,  pos + 1,  size.y );
   }
   else
   {
-    wxPen dotPen( wxColor( "WHITE" ), 1, wxDOT );
+    wxPen dotPen( wxColor( wxT( "WHITE" ) ), 1, wxDOT );
     dotPen.SetJoin( wxJOIN_MITER );
     dc.SetPen( dotPen );
     dc.DrawLine( pos - 1,  0,  pos - 1,  size.y );
@@ -295,21 +293,25 @@ bool KeyControl::ToClipboard( const V_KeyPtr& keys )
 {
   KeyClipboardDataPtr clipboardData = new KeyClipboardData();
   clipboardData->m_Keys = keys;
-  std::string xml;
+  tstring xml;
   try
   {
-    Reflect::Archive::ToXML( clipboardData, xml );
+    Reflect::ArchiveXML::ToString( clipboardData, xml );
   }
   catch ( const Nocturnal::Exception& e )
   {
-    std::string error = "Failed to copy keys to clipboard: " + e.Get();
-    wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
+    tstring error = TXT( "Failed to copy keys to clipboard: " ) + e.Get();
+    wxMessageBox( error.c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
     return false;
   }
   
   if ( wxTheClipboard->Open() )
   {
-      wxTheClipboard->SetData( new wxTextDataObject( xml ) );
+      tstring temp;
+      bool converted = Platform::ConvertString( xml, temp );
+      NOC_ASSERT( converted );
+
+      wxTheClipboard->SetData( new wxTextDataObject( temp ) );
       wxTheClipboard->Close();
   }
 
@@ -322,14 +324,15 @@ bool KeyControl::ToClipboard( const V_KeyPtr& keys )
 // 
 bool KeyControl::FromClipboard( V_KeyPtr& keys )
 {
-    std::string xml;
+    tstring xml;
     if (wxTheClipboard->Open())
     {
         if (wxTheClipboard->IsSupported( wxDF_TEXT ))
         {
             wxTextDataObject data;
             wxTheClipboard->GetData( data );
-            xml = data.GetText();
+            bool converted = Platform::ConvertString( data.GetText().c_str(), xml );
+            NOC_ASSERT( converted );
         }  
         wxTheClipboard->Close();
     }
@@ -343,7 +346,7 @@ bool KeyControl::FromClipboard( V_KeyPtr& keys )
   KeyClipboardDataPtr clipboardData;
   try
   {
-    Reflect::Archive::FromXML( xml, spool );
+    Reflect::ArchiveXML::FromString( xml, spool );
   }
   catch ( const Nocturnal::Exception& )
   {

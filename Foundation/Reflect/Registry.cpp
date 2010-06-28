@@ -24,30 +24,30 @@ static Registry* g_Instance = NULL;
 
 // profile interface
 #ifdef PROFILE_ACCUMULATION
-Profile::Accumulator Reflect::g_CloneAccum ("Reflect Clone");
-Profile::Accumulator Reflect::g_ParseAccum ("Reflect Parse");
-Profile::Accumulator Reflect::g_AuthorAccum ("Reflect Author");
-Profile::Accumulator Reflect::g_ChecksumAccum ("Reflect Checksum");
-Profile::Accumulator Reflect::g_PreSerializeAccum ("Reflect Serialize Pre-Process");
-Profile::Accumulator Reflect::g_PostSerializeAccum ("Reflect Serialize Post-Process");
-Profile::Accumulator Reflect::g_PreDeserializeAccum ("Reflect Deserialize Pre-Process");
-Profile::Accumulator Reflect::g_PostDeserializeAccum ("Reflect Deserialize Post-Process");
+Profile::Accumulator Reflect::g_CloneAccum ( "Reflect Clone" );
+Profile::Accumulator Reflect::g_ParseAccum ( "Reflect Parse" );
+Profile::Accumulator Reflect::g_AuthorAccum ( "Reflect Author" );
+Profile::Accumulator Reflect::g_ChecksumAccum ( "Reflect Checksum" );
+Profile::Accumulator Reflect::g_PreSerializeAccum ( "Reflect Serialize Pre-Process" );
+Profile::Accumulator Reflect::g_PostSerializeAccum ( "Reflect Serialize Post-Process" );
+Profile::Accumulator Reflect::g_PreDeserializeAccum ( "Reflect Deserialize Pre-Process" );
+Profile::Accumulator Reflect::g_PostDeserializeAccum ( "Reflect Deserialize Post-Process" );
 #endif
 
 template <class T>
 struct CaseInsensitiveCompare
 {
-    const std::string& value;
+    const tstring& value;
 
-    CaseInsensitiveCompare(const std::string& str)
+    CaseInsensitiveCompare(const tstring& str)
         : value (str)
     {
 
     }
 
-    bool operator()(const std::pair<const std::string, T> &rhs)
+    bool operator()(const std::pair<const tstring, T> &rhs)
     {
-        return stricmp(rhs.first.c_str(), value.c_str()) == 0;
+        return _tcsicmp(rhs.first.c_str(), value.c_str()) == 0;
     }
 };
 
@@ -94,7 +94,7 @@ void Reflect::Initialize()
         g_Instance->RegisterType(PointerSerializer::CreateClass("Pointer"));
         g_Instance->RegisterType(EnumerationSerializer::CreateClass("Enumeration"));
         g_Instance->RegisterType(BitfieldSerializer::CreateClass("Bitfield"));
-        g_Instance->RegisterType( PathSerializer::CreateClass( "PathSerializer" ) );
+        g_Instance->RegisterType( PathSerializer::CreateClass("PathSerializer"));
 
         // SimpleSerializer
         g_Instance->RegisterType(StringSerializer::CreateClass("String"));
@@ -157,7 +157,7 @@ void Reflect::Initialize()
         g_Instance->RegisterType(F32SetSerializer::CreateClass("F32Set"));
         g_Instance->RegisterType(GUIDSetSerializer::CreateClass("GUIDSet"));
         g_Instance->RegisterType(TUIDSetSerializer::CreateClass("TUIDSet"));
-        g_Instance->RegisterType( PathSetSerializer::CreateClass( "PathSet" ) );
+        g_Instance->RegisterType( PathSetSerializer::CreateClass("PathSet"));
 
         // MapSerializer
         g_Instance->RegisterType(MapSerializer::CreateClass("Map"));
@@ -210,17 +210,6 @@ void Reflect::Initialize()
         //
 
         Serializer::Initialize();
-
-        //
-        // Legacy support for GUID
-        //
-
-        g_Instance->AliasType( Reflect::GetClass<GUIDSerializer>(), "UID" );
-        g_Instance->AliasType( Reflect::GetClass<GUIDArraySerializer>(), "UIDArray" );
-        g_Instance->AliasType( Reflect::GetClass<GUIDSetSerializer>(), "UIDSet" );
-        g_Instance->AliasType( Reflect::GetClass<GUIDU32MapSerializer>(), "UIDU32Map" );
-        g_Instance->AliasType( Reflect::GetClass<GUIDMatrix4MapSerializer>(), "UIDMatrix4Map" );
-        g_Instance->AliasType( Reflect::GetClass<GUIDElementMapSerializer>(), "UIDElementMap" );
     }
 
 #ifdef REFLECT_DEBUG_INIT_AND_CLEANUP
@@ -276,7 +265,7 @@ Registry::Registry()
 
     if ( Profile::Settings::MemoryProfilingEnabled() )
     {
-        g_MemoryPool = Profile::Memory::CreatePool("Reflect Objects");
+        g_MemoryPool = Profile::Memory::CreatePool( TXT( "Reflect Objects" ) );
     }
 }
 
@@ -323,7 +312,7 @@ bool Registry::RegisterType(Type* type)
 
                     if (!shortNameResult.second && classType != shortNameResult.first->second)
                     {
-                        Log::Error("Re-registration of short name '%s' was attempted with different classType information\n", classType->m_ShortName.c_str());
+                        Log::Error( TXT( "Re-registration of short name '%s' was attempted with different classType information\n" ), classType->m_ShortName.c_str());
                         NOC_BREAK();
                         return false;
                     }
@@ -341,7 +330,7 @@ bool Registry::RegisterType(Type* type)
                         }
                         else
                         {
-                            Log::Error("Base class of '%s' is not a valid type\n", classType->m_ShortName.c_str());
+                            Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_ShortName.c_str());
                             NOC_BREAK();
                             return false;
                         }
@@ -352,7 +341,7 @@ bool Registry::RegisterType(Type* type)
             }
             else if (classType != idResult.first->second)
             {
-                Log::Error("Re-registration of classType '%s' was attempted with different classType information\n", classType->m_FullName.c_str());
+                Log::Error( TXT( "Re-registration of classType '%s' was attempted with different classType information\n" ), classType->m_FullName.c_str());
                 NOC_BREAK();
                 return false;
             }
@@ -371,7 +360,7 @@ bool Registry::RegisterType(Type* type)
 
                 if (!enumResult.second && enumeration != enumResult.first->second)
                 {
-                    Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_ShortName.c_str());
+                    Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_ShortName.c_str());
                     NOC_BREAK();
                     return false;
                 }
@@ -380,14 +369,14 @@ bool Registry::RegisterType(Type* type)
 
                 if (!enumResult.second && enumeration != enumResult.first->second)
                 {
-                    Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_ShortName.c_str());
+                    Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_ShortName.c_str());
                     NOC_BREAK();
                     return false;
                 }
             }
             else if (enumeration != idResult.first->second)
             {
-                Log::Error("Re-registration of enumeration '%s' was attempted with different type information\n", enumeration->m_FullName.c_str());
+                Log::Error( TXT( "Re-registration of enumeration '%s' was attempted with different type information\n" ), enumeration->m_FullName.c_str());
                 NOC_BREAK();
                 return false;
             }
@@ -425,7 +414,7 @@ void Registry::UnregisterType(const Type* type)
                     }
                     else
                     {
-                        Log::Error("Base class of '%s' is not a valid type\n", classType->m_ShortName.c_str());
+                        Log::Error( TXT( "Base class of '%s' is not a valid type\n" ), classType->m_ShortName.c_str());
                         NOC_BREAK();
                     }
                 }
@@ -447,14 +436,14 @@ void Registry::UnregisterType(const Type* type)
     }
 }
 
-void Registry::AliasType(const Type* type, const std::string& alias)
+void Registry::AliasType(const Type* type, const tstring& alias)
 {
     NOC_ASSERT( IsInitThread() );
 
     m_TypesByAlias.insert(M_StrToType::value_type (alias, type));
 }
 
-void Registry::UnAliasType(const Type* type, const std::string& alias)
+void Registry::UnAliasType(const Type* type, const tstring& alias)
 {
     NOC_ASSERT( IsInitThread() );
 
@@ -479,7 +468,7 @@ const Type* Registry::GetType(int id) const
     }
 }
 
-const Type* Registry::GetType(const std::string& str) const
+const Type* Registry::GetType(const tstring& str) const
 {
     M_StrToType::const_iterator found = m_TypesByAlias.find(str);
 
@@ -507,6 +496,7 @@ const Type* Registry::GetType(const std::string& str) const
 
 void Registry::AtomicGetType(int id, const Type** addr) const
 {
+#pragma TODO("Move into Platform as AtomicExchange")
 #ifdef _WIN64
     InterlockedExchange64( (volatile LONGLONG*)addr, (LONGLONG)(uintptr)GetType(id) );
 #else
@@ -514,8 +504,9 @@ void Registry::AtomicGetType(int id, const Type** addr) const
 #endif
 }
 
-void Registry::AtomicGetType(const std::string& str, const Type** addr) const
+void Registry::AtomicGetType(const tstring& str, const Type** addr) const
 {
+#pragma TODO("Move into Platform as AtomicExchange")
 #ifdef _WIN64
     InterlockedExchange64( (volatile LONGLONG*)addr, (LONGLONG)(uintptr)GetType(str) );
 #else
@@ -549,7 +540,7 @@ ObjectPtr Registry::CreateInstance(const Class* type) const
     }
 }
 
-ObjectPtr Registry::CreateInstance(const std::string& str) const
+ObjectPtr Registry::CreateInstance(const tstring& str) const
 {
     M_StrToType::const_iterator type = m_TypesByName.find(str);
 
@@ -618,7 +609,7 @@ void Registry::TrackDump()
     m_Tracker.Dump();
 }
 
-const std::string& StackRecord::Convert()
+const tstring& StackRecord::Convert()
 {
     if ( !m_Converted )
     {
@@ -646,14 +637,14 @@ CreationRecord::CreationRecord(uintptr ptr)
 
 void CreationRecord::Dump(FILE* f)
 {
-    fprintf(f, "\n\n");
-    fprintf(f, "Addr: %p\n", m_Address);
-    fprintf(f, "Name: %s\n", m_ShortName.c_str());
-    fprintf(f, "Type: %i\n", m_Type);
+    _ftprintf(f, TXT("\n\n"));
+    _ftprintf(f, TXT("Addr: %p\n"), m_Address);
+    _ftprintf(f, TXT("Name: %s\n"), m_ShortName.c_str());
+    _ftprintf(f, TXT("Type: %i\n"), m_Type);
 
 #ifdef REFLECT_OBJECT_STACK_TRACKING
-    fprintf(f, "Create Stack:\n%s\n", m_CreateStack.ReferencesObject() ? m_CreateStack->Convert().c_str() : "<none>" );
-    fprintf(f, "Delete Stack:\n%s\n", m_DeleteStack.ReferencesObject() ? m_DeleteStack->Convert().c_str() : "<none>" );
+    _ftprintf(f, TXT("Create Stack:\n%s\n"), m_CreateStack.ReferencesObject() ? m_CreateStack->Convert().c_str() : TXT("<none>") );
+    _ftprintf(f, TXT("Delete Stack:\n%s\n"), m_DeleteStack.ReferencesObject() ? m_DeleteStack->Convert().c_str() : TXT("<none>") );
 #endif
 }
 
@@ -806,23 +797,23 @@ void Tracker::Dump()
 {
     Platform::TakeMutex mutex (g_TrackerMutex);
 
-    char module[MAX_PATH];
+    tchar module[MAX_PATH];
     GetModuleFileName( 0, module, MAX_PATH );
 
-    char drive[MAX_PATH];
-    char dir[MAX_PATH];
-    char name[MAX_PATH];
-    _splitpath( module, drive, dir, name, NULL );
+    tchar drive[MAX_PATH];
+    tchar dir[MAX_PATH];
+    tchar name[MAX_PATH];
+    _tsplitpath( module, drive, dir, name, NULL );
 
-    std::string path = drive;
+    tstring path = drive;
     path += dir;
     path += name;
 
-    FILE* f = fopen( (path + "ReflectDump.log").c_str(), "w" );
+    FILE* f = _tfopen( (path + TXT("ReflectDump.log")).c_str(), TXT("w") );
     if ( f != NULL )
     {
-        typedef std::map< u32, std::pair< std::string, u32 > > ObjectLogger;
-        ObjectLogger ObjectLog;
+        typedef std::map< u32, std::pair< tstring, u32 > > ObjectLogger;
+        ObjectLogger objectLog;
 
         {
             M_CreationRecord::iterator c_current = m_CreatedObjects.begin();
@@ -832,11 +823,10 @@ void Tracker::Dump()
             {
                 (*c_current).second.Dump( f );
 
-                ObjectLogger::iterator iter = ObjectLog.find( (*c_current).second.m_Type );
-                if ( iter == ObjectLog.end() )
+                ObjectLogger::iterator iter = objectLog.find( (*c_current).second.m_Type );
+                if ( iter == objectLog.end() )
                 {
-                    ObjectLog.insert( ObjectLogger::value_type( (*c_current).second.m_Type, 
-                        std::pair< std::string, u32 >( (*c_current).second.m_ShortName, 1 ) ) );
+                    objectLog.insert( ObjectLogger::value_type( (*c_current).second.m_Type, std::pair< tstring, u32 >( (*c_current).second.m_ShortName, 1 ) ) );
                 }
                 else
                 {
@@ -851,11 +841,10 @@ void Tracker::Dump()
 
             for ( ; d_current != d_end; ++d_current)
             {
-                ObjectLogger::iterator iter = ObjectLog.find( (*d_current).second.m_Type );
-                if ( iter == ObjectLog.end() )
+                ObjectLogger::iterator iter = objectLog.find( (*d_current).second.m_Type );
+                if ( iter == objectLog.end() )
                 {
-                    ObjectLog.insert( ObjectLogger::value_type( (*d_current).second.m_Type, 
-                        std::pair< std::string, u32 >( (*d_current).second.m_ShortName, 1 ) ) );
+                    objectLog.insert( ObjectLogger::value_type( (*d_current).second.m_Type, std::pair< tstring, u32 >( (*d_current).second.m_ShortName, 1 ) ) );
                 }
                 else
                 {
@@ -866,21 +855,21 @@ void Tracker::Dump()
 
         {
             size_t max = 0;
-            ObjectLogger::iterator iter = ObjectLog.begin();  
-            ObjectLogger::iterator end = ObjectLog.end();  
+            ObjectLogger::iterator iter = objectLog.begin();  
+            ObjectLogger::iterator end = objectLog.end();  
 
             for ( ; iter != end; ++iter )
             {
                 max = std::max( (*iter).second.first.length(), max );
             }
 
-            char format[1024];
-            sprintf( format, "\nType: %%%ds, Count: %%d", max );
+            tchar format[1024];
+            _stprintf( format, TXT("\nType: %%%ds, Count: %%d"), max );
 
-            iter = ObjectLog.begin();
+            iter = objectLog.begin();
             for ( ; iter != end; ++iter )
             {
-                fprintf( f, format, (*iter).second.first.c_str(), (*iter).second.second );
+                _ftprintf( f, format, (*iter).second.first.c_str(), (*iter).second.second );
             }
         }
 

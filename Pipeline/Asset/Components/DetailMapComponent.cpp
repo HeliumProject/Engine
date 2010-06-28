@@ -6,7 +6,7 @@ REFLECT_DEFINE_ABSTRACT( DetailMapComponent );
 
 void DetailMapComponent::EnumerateClass( Reflect::Compositor<DetailMapComponent>& comp )
 {
-  comp.GetComposite().m_UIName = "Detail Map (Base)";
+  comp.GetComposite().m_UIName = TXT( "Detail Map (Base)" );
 }
 
 

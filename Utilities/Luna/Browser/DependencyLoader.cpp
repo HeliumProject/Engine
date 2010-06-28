@@ -35,11 +35,6 @@ void DependencyLoader::ThreadProc( i32 threadID )
 {
     ThreadEnter( threadID );
 
-    Nocturnal::Path cacheDBFilepath( m_RootDirectory + "/.tracker/cache.db" );
-    Asset::CacheDBPtr cacheDB = new Asset::CacheDB( "LunaBrowserDependencyLoader-AssetCacheDB", cacheDBFilepath.Get(), m_ConfigDirectory );
-
-    cacheDB->GetAssetDependencies( m_Collection->GetRoot(), m_AssetPaths, m_Collection->IsReverse(), m_Collection->GetRecursionDepthForLoad(), 0, &m_StopThread );
-
     if ( CheckThreadLeave( threadID ) )
     {
         return;

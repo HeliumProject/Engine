@@ -18,12 +18,12 @@ namespace Content
     };
     static void CollisionShapeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Cube, "Cube");
-      info->AddElement(Cylinder, "Cylinder");
-      info->AddElement(Sphere, "Sphere");
-      info->AddElement(Capsule, "Capsule");
-      info->AddElement(CapsuleChild, "CapsuleChild");
-      info->AddElement(CylinderChild, "CylinderChild");
+      info->AddElement(Cube, TXT( "Cube" ) );
+      info->AddElement(Cylinder, TXT( "Cylinder" ) );
+      info->AddElement(Sphere, TXT( "Sphere" ) );
+      info->AddElement(Capsule, TXT( "Capsule" ) );
+      info->AddElement(CapsuleChild, TXT( "CapsuleChild" ) );
+      info->AddElement(CylinderChild, TXT( "CylinderChild" ) );
     }
   }
 

@@ -70,8 +70,8 @@ namespace Math
 
         void              Transform (const Matrix4& m);
 
-        friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Vector4& vector);
-        friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Vector4& vector);
+        friend FOUNDATION_API tostream& operator<<(tostream& outStream, const Vector4& vector);
+        friend FOUNDATION_API tistream& operator>>(tistream& inStream, Vector4& vector);
     };
 
     typedef std::vector< Vector4 > V_Vector4;
@@ -122,14 +122,14 @@ namespace Math
         return Vector4 (y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x, 0);
     }
 
-    inline std::ostream& operator<<(std::ostream& outStream, const Vector4& vector)
+    inline tostream& operator<<(tostream& outStream, const Vector4& vector)
     {
         outStream << vector.x << ", " << vector.y << ", " << vector.z << ", " << vector.w;
 
         return outStream;
     }
 
-    inline std::istream& operator>>(std::istream& inStream, Vector4& vector)
+    inline tistream& operator>>(tistream& inStream, Vector4& vector)
     {
         inStream >> vector.x;
         inStream.ignore();

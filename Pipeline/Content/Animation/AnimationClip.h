@@ -137,7 +137,7 @@ namespace Content
   public:
 
     Nocturnal::TUID        m_SkeletonID;
-    std::string           m_ActorName;
+    tstring           m_ActorName;
     M_Animation           m_JointAnimationMap;
     M_CompressedAnimation m_JointCompressedAnimationMap;
 
@@ -162,7 +162,7 @@ namespace Content
     f32                   m_LinearDistancePerFrame;
 
     AnimationClip()
-      : m_ActorName( "" )
+      : m_ActorName( TXT( "" ) )
       , m_StartFrame( 0 )
       , m_EndFrame( 0 )
       , m_Rate( 30 )

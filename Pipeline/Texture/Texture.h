@@ -61,7 +61,7 @@ namespace Nocturnal
 
       VOLUME_NUM_IDENTIFIERS = 2,
     };
-    static char* p_volume_identifier_strings[VOLUME_NUM_IDENTIFIERS];
+    static tchar* p_volume_identifier_strings[VOLUME_NUM_IDENTIFIERS];
 
     struct LoadRAWInfo
     {
@@ -177,7 +177,7 @@ namespace Nocturnal
     // which face (cubemap) or slice (volume map) is written.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool WriteTGA(const char* fname, u32 face, bool convert_to_srgb) const;
+    bool WriteTGA(const tchar* fname, u32 face, bool convert_to_srgb) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -187,7 +187,7 @@ namespace Nocturnal
     // which face (cubemap) or slice (volume map) is written.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool WriteRAW(const char* fname, void* data, u32 size, u32 face, bool convert_to_srgb) const;
+    bool WriteRAW(const tchar* fname, void* data, u32 size, u32 face, bool convert_to_srgb) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -198,7 +198,7 @@ namespace Nocturnal
     // for m_NativeFormat
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool WriteDDS(const char* fname, bool convert_to_srgb, OutputColorFormat output_fmt = OUTPUT_CF_UNKNOWN) const;
+    bool WriteDDS(const tchar* fname, bool convert_to_srgb, OutputColorFormat output_fmt = OUTPUT_CF_UNKNOWN) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -760,7 +760,7 @@ namespace Nocturnal
     // Load a TIFF file as a 2D image
     // NOTE: TIFF files cannot currently be loaded from memory
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    static Texture* LoadTIFF(const char* filename, bool convert_to_linear);
+    static Texture* LoadTIFF(const tchar* filename, bool convert_to_linear);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Load a file based on file extension, the returned texture could be 2D, volume or cube depending
@@ -768,12 +768,12 @@ namespace Nocturnal
     // If the file name begins with "ANIM_", a volume texture will be constructed from the image
     // files in the sibling subfolder with the same name as the file without the extension.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    static Texture* LoadFile(const char* p_path, bool convert_to_linear, LoadRAWInfo* raw_info);
+    static Texture* LoadFile(const tchar* p_path, bool convert_to_linear, LoadRAWInfo* raw_info);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // LoadFile without the checking for "ANIM_" volume textures.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    static Texture* LoadSingleFile(const char* filename, bool convert_to_linear, LoadRAWInfo* raw_info);
+    static Texture* LoadSingleFile(const tchar* filename, bool convert_to_linear, LoadRAWInfo* raw_info);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //

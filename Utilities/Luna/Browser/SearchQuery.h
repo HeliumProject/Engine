@@ -3,7 +3,6 @@
 #include "AssetCollection.h"
 #include "DependencyCollection.h"
 
-#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
@@ -58,11 +57,6 @@ namespace Luna
         return m_QueryPath;
     }
 
-    const std::string& GetSelectPath() { return m_SelectPath; }
-    void SetSelectPath( const std::string& selectPath );
-
-    Asset::CacheDBQuery* GetCacheDBQuery() const { return m_Search; }
-
     void SetCollection( const AssetCollection* collection );
     AssetCollection* GetCollection();
     const Nocturnal::Path& GetCollectionPath() const
@@ -87,10 +81,6 @@ namespace Luna
     std::string             m_QueryString;
     Nocturnal::Path      m_QueryPath;
     Nocturnal::Path      m_CollectionPath;
-
-    // Cache
-    Asset::CacheDBQueryPtr  m_Search;
-    std::string             m_SelectPath; // only used by view to select a path after search has completed
 
     friend class SearchHistory;
   };

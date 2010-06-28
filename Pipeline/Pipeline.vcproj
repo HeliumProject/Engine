@@ -554,13 +554,6 @@
 			RelativePathToProject=".\SDK\Crypto++\5.6.0\Crypto++.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\Application\Application.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{F3DB1BFC-9BD1-443F-965A-E05E9D95E6AB}"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"
 			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
 		/>
@@ -710,58 +703,6 @@
 				</File>
 				<File
 					RelativePath=".\Texture\Utilities\Swizzle.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="Dependencies"
-			>
-			<File
-				RelativePath=".\Dependencies\Dependencies.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Dependencies\Dependencies.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Dependencies\DependenciesExceptions.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Dependencies\GraphDB.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Dependencies\GraphDB.h"
-				>
-			</File>
-			<Filter
-				Name="Info"
-				>
-				<File
-					RelativePath=".\Dependencies\Info\DataInfo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Dependencies\Info\DataInfo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Dependencies\Info\DependencyInfo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Dependencies\Info\DependencyInfo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Dependencies\Info\FileInfo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Dependencies\Info\FileInfo.h"
 					>
 				</File>
 			</Filter>
@@ -1239,62 +1180,6 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="AssetBuilder"
-			>
-			<File
-				RelativePath=".\AssetBuilder\AssetBuilder.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\AssetBuilder.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\AssetBuilderExceptions.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\BuilderInterface.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\BuilderInterface.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\BuilderOptions.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\BuilderOptions.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\BuilderStats.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\BuilderStats.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\CacheFiles.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\CacheFiles.h"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\CacheFileStats.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\AssetBuilder\CacheFileStats.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Asset"
 			>
 			<File
@@ -1562,46 +1447,6 @@
 				</File>
 				<File
 					RelativePath=".\Asset\Manifests\SceneManifest.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Tracker"
-				>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDB-1.sql.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDB.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDB.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDBColumn.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDBColumn.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDBQuery.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\CacheDBQuery.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\Tracker.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Tracker\Tracker.h"
 					>
 				</File>
 			</Filter>

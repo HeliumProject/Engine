@@ -7,7 +7,7 @@ namespace Nocturnal
   class PIPELINE_API DilationFilter : public ImageFilter
   {
   public:
-    DilationFilter(const char* inputfile, const char* outputfile, unsigned int xres, unsigned int yres, unsigned int flags, bool smoothSeams);
+    DilationFilter(const tchar* inputfile, const tchar* outputfile, unsigned int xres, unsigned int yres, unsigned int flags, bool smoothSeams);
 
     virtual ~DilationFilter(void) {}
 

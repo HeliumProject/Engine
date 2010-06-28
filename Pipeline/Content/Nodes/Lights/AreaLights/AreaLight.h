@@ -20,11 +20,11 @@ namespace Content
     };
     static void AreaLightTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(None, "None");
-      info->AddElement(Sphere, "Sphere");
-      info->AddElement(Rectangle, "Rectangle");
-      info->AddElement(Cylinder, "Cylinder");
-      info->AddElement(Disc, "Disc");
+      info->AddElement(None, TXT( "None" ) );
+      info->AddElement(Sphere, TXT( "Sphere" ) );
+      info->AddElement(Rectangle, TXT( "Rectangle" ) );
+      info->AddElement(Cylinder, TXT( "Cylinder" ) );
+      info->AddElement(Disc, TXT( "Disc" ) );
     }
   };
 

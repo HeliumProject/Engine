@@ -21,7 +21,7 @@ namespace Inspect
   private:
     // translate array of TUIDs to file path and back
     void TranslateInputTUIDContainer( Reflect::TranslateInputEventArgs& args );
-    void TranslateOutputTUID( std::string& path, const u64& fileId );
+    void TranslateOutputTUID( tstring& path, const u64& fileId );
     void TranslateOutputTUIDContainer( Reflect::TranslateOutputEventArgs& args );
 
     // callbacks
@@ -36,7 +36,7 @@ namespace Inspect
     void OnDrop( const Inspect::FilteredDropTargetArgs& args );
 
   private:
-      std::string m_FileFilter;
+      tstring m_FileFilter;
     Inspect::List* m_List;
   };
 

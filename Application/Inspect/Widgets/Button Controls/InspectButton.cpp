@@ -65,7 +65,7 @@ END_EVENT_TABLE()
 // Constructor
 // 
 Button::Button()
-: m_Text( "..." )
+: m_Text( TXT( "..." ) )
 {
   m_FixedWidth = true;
 }
@@ -73,7 +73,7 @@ Button::Button()
 ///////////////////////////////////////////////////////////////////////////////
 // Processes any attributes specific to the button.
 // 
-bool Button::Process(const std::string& key, const std::string& value)
+bool Button::Process(const tstring& key, const tstring& value)
 {
   bool handled = false;
   if ( key == BUTTON_ATTR_TEXT )
@@ -150,7 +150,7 @@ bool Inspect::Button::Write()
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the label on this button.
 // 
-void Button::SetText(const std::string& text)
+void Button::SetText(const tstring& text)
 {
   if ( IsRealized() )
   {
@@ -171,7 +171,7 @@ void Button::SetText(const std::string& text)
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the label on this button.
 // 
-void Button::SetIcon(const std::string& icon)
+void Button::SetIcon(const tstring& icon)
 {
   if ( IsRealized() )
   {

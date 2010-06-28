@@ -41,7 +41,7 @@ namespace Component
     {
       if (!Valid())
       {
-        const char* attributeTypeName = "Unknown";
+        const tchar* attributeTypeName = TXT("Unknown");
         const Reflect::Class* attributeClass = Reflect::GetClass< ComponentType >();
         if ( attributeClass )
         {

@@ -16,7 +16,7 @@ namespace IPC
     class FOUNDATION_API TCPConnection : public Connection
     {
     private:
-        char              m_IP[64];                       // ip of the server
+        tchar             m_IP[64];                       // ip of the server
 
         u16               m_ReadPort;                     // port number for read operations
         Platform::Socket  m_ReadSocket;                   // socket used for read operations
@@ -29,7 +29,7 @@ namespace IPC
         virtual ~TCPConnection();
 
     public:
-        bool Initialize(bool server, const char* name, const char* server_ip, const u16 server_port_no);
+        bool Initialize(bool server, const tchar* name, const tchar* server_ip, const u16 server_port_no);
 
     protected:
         void ServerThread();

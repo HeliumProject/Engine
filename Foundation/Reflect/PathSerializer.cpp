@@ -56,22 +56,27 @@ bool PathSerializer::Equals( const Serializer* s ) const
 
 void PathSerializer::Serialize( Archive& archive ) const
 {
-    std::string data = m_Data.Get().Get();
+    tstring data = m_Data.Get().Get();
 
     switch ( archive.GetType() )
     {
     case ArchiveTypes::XML:
         {
-            archive.GetOutput() << data;
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
+            xml.GetStream() << data;
             break;
         }
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             // get string pool index
-            i32 index = static_cast< ArchiveBinary& >( archive ).GetStrings().AssignIndex( data );
+            i32 index = binary.GetStrings().Insert( data );
+
             // write that index
-            archive.GetOutput().Write( &index ); 
+            binary.GetStream().Write( &index ); 
             break;
         }
     }
@@ -83,22 +88,27 @@ void PathSerializer::Deserialize( Archive& archive )
     {
     case ArchiveTypes::XML:
         {
-            std::string buf;
-            std::streamsize size = archive.GetInput().BytesAvailable(); 
-            buf.resize( (size_t) size);
-            archive.GetInput().ReadBuffer( const_cast<char*>( buf.c_str() ), size );
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
+            tstring buf;
+            std::streamsize size = xml.GetStream().ElementsAvailable(); 
+            buf.resize( (size_t)size );
+            xml.GetStream().ReadBuffer( const_cast<tchar*>( buf.c_str() ), size );
             m_Data.Ref().Set( buf );
             break;
         }
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             i32 index = -1;
-            archive.GetInput().Read( &index ); 
+            binary.GetStream().Read( &index ); 
 
             if ( index >= 0 )
             {
-                const std::string& str (static_cast< ArchiveBinary& >( archive ).GetStrings().GetString( index ) );
+                const tstring& str ( binary.GetStrings().GetString( index ) );
+
                 m_Data.Ref().Set( str );
             }
 
@@ -107,22 +117,27 @@ void PathSerializer::Deserialize( Archive& archive )
     }
 }
 
-std::ostream& PathSerializer::operator >>( std::ostream& stream ) const
+tostream& PathSerializer::operator>>( tostream& stream ) const
 {
-    stream << m_Data.Get().Get();
+    tstring path = m_Data.Get().Get();
+    tstring temp;
+    bool converted = Platform::ConvertString( path, temp );
+    NOC_ASSERT( converted );
+
+    stream << temp;
     return stream;
 }
 
-std::istream& PathSerializer::operator <<( std::istream& stream )
+tistream& PathSerializer::operator<<( tistream& stream )
 {
-    std::string buf;
+    tstring str;
     std::streamsize size = stream.rdbuf()->in_avail();
-    buf.resize( (size_t) size);
-    stream.read( const_cast<char*>( buf.c_str() ), size );
+    str.resize( (size_t) size );
+    stream.read( const_cast<tchar*>( str.c_str() ), size );
 
-    if ( !buf.empty() )
+    if ( !str.empty() )
     {
-        m_Data.Ref().Set( buf );
+        m_Data.Ref().Set( str );
 
         if ( m_Instance && m_Field && m_Field->m_Type->GetReflectionType() == ReflectionTypes::Class )
         {

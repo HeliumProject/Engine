@@ -15,8 +15,8 @@ namespace Content
     static void VolumeLightTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
 
-      info->AddElement(Sphere, "Sphere");
-      info->AddElement(Cuboid, "Cuboid");
+      info->AddElement(Sphere, TXT( "Sphere" ) );
+      info->AddElement(Cuboid, TXT( "Cuboid" ) );
     }
   };
 

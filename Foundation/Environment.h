@@ -15,13 +15,13 @@ namespace Nocturnal
     //
 
     template<class T>
-    inline bool GetEnvVar( const std::string& envVarName, T& envVarValue )
+    inline bool GetEnvVar( const tstring& envVarName, T& envVarValue )
     {
-        char* envVarSetting = getenv( envVarName.c_str() );
+        tchar* envVarSetting = _tgetenv( envVarName.c_str() );
 
         if ( envVarSetting )
         {
-            std::strstream str ( envVarSetting, (std::streamsize)strlen( envVarSetting ) );
+            tstringstream str ( envVarSetting, (std::streamsize)_tcslen( envVarSetting ) );
             str >> envVarValue;
             return !str.fail();
         }
@@ -30,9 +30,9 @@ namespace Nocturnal
     }
 
     template<>
-    inline bool GetEnvVar( const std::string& envVarName, std::string& envVarValue )
+    inline bool GetEnvVar( const tstring& envVarName, tstring& envVarValue )
     {
-        char *envVarSetting = getenv( envVarName.c_str() );
+        tchar *envVarSetting = _tgetenv( envVarName.c_str() );
 
         if ( envVarSetting )
         {
@@ -44,19 +44,19 @@ namespace Nocturnal
     }
 
     template<>
-    inline bool GetEnvVar( const std::string& envVarName, bool& envVarValue )
+    inline bool GetEnvVar( const tstring& envVarName, bool& envVarValue )
     {
-        char *envVarSetting = getenv( envVarName.c_str() );
+        tchar *envVarSetting = _tgetenv( envVarName.c_str() );
 
         if ( envVarSetting )
         {
-            if ( !stricmp( envVarSetting, "false" ) || !stricmp( envVarSetting, "0" ) )
+            if ( !_tcsicmp( envVarSetting, TXT( "false" ) ) || !_tcsicmp( envVarSetting, TXT( "0" ) ) )
             {
                 envVarValue = false;
                 return true;
             }
 
-            if ( !stricmp( envVarSetting, "true" ) || !stricmp( envVarSetting, "1" ) )
+            if ( !_tcsicmp( envVarSetting, TXT( "true" ) ) || !_tcsicmp( envVarSetting, TXT( "1" ) ) )
             {
                 envVarValue = true;
                 return true;
@@ -66,7 +66,7 @@ namespace Nocturnal
         return false;
     }
 
-    FOUNDATION_API bool GetEnvFlag( const std::string &envVarName );
+    FOUNDATION_API bool GetEnvFlag( const tstring &envVarName );
 
 #pragma deprecated( GetEnvVar, GetEnvFlag )  // All commandline options should be defined and parsed once in the application, we shouldn't be parsing the entire commandline everytime! 
 }

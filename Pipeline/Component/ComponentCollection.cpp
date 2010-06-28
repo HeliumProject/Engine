@@ -110,27 +110,27 @@ void ComponentCollection::SetComponent(const ComponentPtr& component, bool valid
   }
 
   // this will prevent inappropriate attributes from being added by throwing an exception
-  std::string error;
+  tstring error;
   if ( validate && !ValidateComponent( component, error ) )
   {
     if ( error.empty() )
     {
-      throw Component::Exception( "Component '%s' is not valid for collection '%s'", component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str() );
+      throw Component::Exception( TXT( "Component '%s' is not valid for collection '%s'" ), component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str() );
     }
     else
     {
-      throw Component::Exception( "Component '%s' is not valid for collection '%s': %s", component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str(), error.c_str() );
+      throw Component::Exception( TXT( "Component '%s' is not valid for collection '%s': %s" ), component->GetClass()->m_ShortName.c_str(), GetClass()->m_ShortName.c_str(), error.c_str() );
     }
   }
 
   // Event args
   ComponentCollectionChanged args ( this, component );
 
-  // Set the attribute and connect the collection
+  // Set the component and connect the collection
   m_Components[ component->GetSlot() ] = component;
   component->SetCollection( this );
 
-  // Start caring about change to the attribute
+  // Start caring about change to the component
   component->AddChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
 
   // Raise event
@@ -148,7 +148,7 @@ void ComponentCollection::RemoveComponent(i32 slotID)
     return;
   }
 
-  // Hold a pointer to the attribute so that it doesn't get deleted immediately
+  // Hold a pointer to the component so that it doesn't get deleted immediately
   // when it's removed from the collection (so that listeners can inspect its
   // values in callbacks).
   Component::ComponentPtr component = found->second;
@@ -156,10 +156,10 @@ void ComponentCollection::RemoveComponent(i32 slotID)
   // Event args
   ComponentCollectionChanged args ( this, component ); 
 
-  // Stop caring about changes to the attribute
+  // Stop caring about changes to the component
   component->RemoveChangedListener( ElementChangeSignature::Delegate::Create<ComponentCollection, void (ComponentCollection::*)( const Reflect::ElementChangeArgs& )> ( this, &ComponentCollection::ComponentChanged ) );
 
-  // Remove attribute and reset collection pointer
+  // Remove component and reset collection pointer
   m_Components.erase( found );
   component->SetCollection( NULL );
 
@@ -175,24 +175,24 @@ bool ComponentCollection::ContainsComponent( i32 slotID ) const
   return ComponentCollection::GetComponent( slotID ).ReferencesObject();
 }
 
-bool ComponentCollection::ValidateComponent( const ComponentPtr &component, std::string& error ) const
+bool ComponentCollection::ValidateComponent( const ComponentPtr &component, tstring& error ) const
 {
   NOC_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
 
   // Check for duplicates.
   if ( ContainsComponent( component->GetSlot() ) )
   {
-    error = "The attribute '" + component->GetClass()->m_UIName + "' is a duplicate (an attribute already occupies that slot in the collection).";
+    error = tstring( TXT( "The component '" ) )+ component->GetClass()->m_UIName + TXT( "' is a duplicate (a component already occupies that slot in the collection)." );
     return false;
   }
 
-  // Check to make sure this type of collection accepts this type of attribute.
+  // Check to make sure this type of collection accepts this type of component.
   if ( !ValidateCompatible( component, error ) )
   {
     return false;
   }
 
-  // Check to make sure that each attribute already within the collection is valid with the new one.
+  // Check to make sure that each component already within the collection is valid with the new one.
   M_Component::const_iterator itr = m_Components.begin();
   M_Component::const_iterator end = m_Components.end();
   for ( ; itr != end; ++itr )
@@ -207,13 +207,13 @@ bool ComponentCollection::ValidateComponent( const ComponentPtr &component, std:
   return true;
 }
 
-bool ComponentCollection::ValidateCompatible( const ComponentPtr& component, std::string& error ) const
+bool ComponentCollection::ValidateCompatible( const ComponentPtr& component, tstring& error ) const
 {
   NOC_ASSERT( component->GetSlot() != Reflect::ReservedTypes::Invalid );
 
   if ( component->GetComponentBehavior() == ComponentBehaviors::Exclusive )
   {
-    error = component->GetClass()->m_UIName + " cannot be added to a " + GetClass()->m_UIName + " because it is an exclusive attribute.";
+    error = component->GetClass()->m_UIName + TXT( " cannot be added to a " ) + GetClass()->m_UIName + TXT( " because it is an exclusive component." );
     return false;
   }
 
@@ -248,16 +248,16 @@ void ComponentCollection::ComponentChanged( const ComponentBase* component )
   ComponentCollectionChanged changed(this, component); 
   m_SingleComponentChanged.Raise(changed);
 
-  // For now, changing an attribute will fire that the collection itself has changed.
-  // This is because the Luna Scene UI exposes attribute members as part of the collection,
-  // an there is not a persistent object wrapping the attribute.  Therefore, changes to the
-  // attribute can only be detected on the collection itself.
+  // For now, changing an component will fire that the collection itself has changed.
+  // This is because the Luna Scene UI exposes component members as part of the collection,
+  // an there is not a persistent object wrapping the component.  Therefore, changes to the
+  // component can only be detected on the collection itself.
   RaiseChanged( GetClass()->FindField( &ComponentCollection::m_Components ) );
 }
 
-bool ComponentCollection::ProcessComponent(ElementPtr element, const std::string& fieldName)
+bool ComponentCollection::ProcessComponent(ElementPtr element, const tstring& fieldName)
 {
-  if ( fieldName == "m_Components" )
+  if ( fieldName == TXT( "m_Components" ) )
   {
     V_Component attributes;
     Serializer::GetValue( Reflect::AssertCast<Reflect::Serializer>( element ), (V_Element&)attributes );
@@ -284,7 +284,7 @@ void ComponentCollection::PreSerialize()
 {
   __super::PreSerialize();
 
-  // if you hit this somehow we inserted something into the attribute collection with the invalid type id, there is a bug somewhere
+  // if you hit this somehow we inserted something into the component collection with the invalid type id, there is a bug somewhere
   NOC_ASSERT( m_Components.find( Reflect::ReservedTypes::Invalid ) == m_Components.end() ); 
 
   // this *must* be junk
@@ -317,21 +317,21 @@ void ComponentCollection::CopyTo(const Reflect::ElementPtr& destination)
     // Remove all attributes, we're going to bring them over manually
     destCollection->Clear(); 
 
-    // For each attribute in this attribute collection
+    // For each component in this component collection
     Reflect::Registry* registry = Reflect::Registry::GetInstance();
     M_Component::const_iterator attrItr = m_Components.begin();
     M_Component::const_iterator attrEnd = m_Components.end();
     for ( ; attrItr != attrEnd; ++attrItr )
     {
-      // Create a new copy of the attribute and try to add it to the destination
+      // Create a new copy of the component and try to add it to the destination
       const ComponentPtr& attrib = attrItr->second;
       ComponentPtr destAttrib = Reflect::AssertCast< ComponentBase >( registry->CreateInstance( attrib->GetClass() ) );
       if ( !CopyComponentTo( *destCollection, destAttrib, attrib ) )
       {
         // Component could not be added to the destination collection, check sibling classes
-        const std::set<std::string>& derived = ( registry->GetClass( attrib->GetClass()->m_Base ) )->m_Derived;
-        std::set<std::string>::const_iterator derivedItr = derived.begin();
-        std::set<std::string>::const_iterator derivedEnd = derived.end();
+        const std::set<tstring>& derived = ( registry->GetClass( attrib->GetClass()->m_Base ) )->m_Derived;
+        std::set<tstring>::const_iterator derivedItr = derived.begin();
+        std::set<tstring>::const_iterator derivedEnd = derived.end();
         for ( ; derivedItr != derivedEnd; ++derivedItr )
         {
           const Reflect::Class* currentType = Reflect::Registry::GetInstance()->GetClass(*derivedItr);
@@ -357,9 +357,9 @@ bool ComponentCollection::CopyComponentTo( ComponentCollection& destCollection, 
   bool inserted = false;
   Reflect::Registry* registry = Reflect::Registry::GetInstance();
 
-  std::string unused;
-  // If there is already an attribute in the destination slot, or the
-  // attribute is not in the destination, but is allowed to be...
+  tstring unused;
+  // If there is already an component in the destination slot, or the
+  // component is not in the destination, but is allowed to be...
   if ( destCollection.ValidateComponent( destAttrib, unused ) )
   {
     // Component can be added to the destination collection, so do it!

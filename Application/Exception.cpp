@@ -67,13 +67,17 @@ void Debug::ProcessException(const std::exception& exception, bool print, bool f
     cppClass = "Unknown";
   }
 
-  args.m_Message = exception.what();
-  args.m_CPPClass = cppClass;
+  bool converted = Platform::ConvertString( exception.what(), args.m_Message );
+  NOC_ASSERT( converted );
+
+  converted = Platform::ConvertString( cppClass, args.m_CPPClass );
+  NOC_ASSERT( converted );
+
   args.m_State = Log::GetOutlineState();
 
   if (print)
   {
-    Platform::Print(Platform::ConsoleColors::Red, stderr, "An exception has occurred\nType:    C++ Exception\n Class:   %s\n Message: %s\n", args.m_CPPClass.c_str(), args.m_Message.c_str() );
+    Platform::Print(Platform::ConsoleColors::Red, stderr, TXT( "An exception has occurred\nType:    C++ Exception\n Class:   %s\n Message: %s\n" ), args.m_CPPClass.c_str(), args.m_Message.c_str() );
   }
 
   if ( g_ExceptionOccurred.Valid() )
@@ -118,7 +122,7 @@ u32 Debug::ProcessException(LPEXCEPTION_POINTERS info, u32 ret_code, bool print,
  
     if ( print )
     {
-      Platform::Print( Platform::ConsoleColors::Red, stderr, "%s", GetExceptionInfo( info ).c_str() );
+      Platform::Print( Platform::ConsoleColors::Red, stderr, TXT( "%s" ), GetExceptionInfo( info ).c_str() );
     }
 
     bool full = getenv( "NOC_CRASH_FULL_DUMP" ) != NULL;

@@ -28,16 +28,16 @@
 #include "Application/Worker/Process.h"
 #include "Application/Application.h"
 
-#include "Pipeline/AssetBuilder/AssetBuilder.h"
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Content/ContentInit.h"
 
 using namespace Asset;
-using namespace Luna;
 using namespace Nocturnal::CommandLine;
 
 #define MAX_MATCHES 20
+
+/*
 
 // globals
 bool g_ImmortalWorker = false;
@@ -494,3 +494,4 @@ bool BuildCommand::RunAsBuildWorker( Dependencies::DependencyGraph& depGraph )
     return success;
 }
 
+*/

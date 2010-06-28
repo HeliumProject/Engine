@@ -189,9 +189,6 @@ namespace Luna
       return m_TreeSortTimer;
     }
 
-
-    void BuildAllLoadedAssets();
-
     wxToolBar* GetNavToolBar() { return m_NavToolBar; }
 
     //

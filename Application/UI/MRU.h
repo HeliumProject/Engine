@@ -11,7 +11,7 @@ namespace Nocturnal
 {
   static const int DefaultMaxCount = 20;
 
-  typedef Nocturnal::OrderedSet< std::string > OS_string;
+  typedef Nocturnal::OrderedSet< tstring > OS_string;
 
   /////////////////////////////////////////////////////////////////////////////
   // Ordered set of strings used by MRU to store resently searched strings
@@ -90,7 +90,7 @@ namespace Nocturnal
   };
 
   // A set of Ordered strings
-  typedef APPLICATION_API MRU< std::string > ManagedStringSet;
+  typedef APPLICATION_API MRU< tstring > ManagedStringSet;
   typedef APPLICATION_API Nocturnal::SmartPtr< ManagedStringSet > ManagedStringSetPtr;
 
 }

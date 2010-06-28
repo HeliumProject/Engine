@@ -30,7 +30,7 @@ namespace Content
     public:
         void Add(const UidBsphere_t& t_)
         {
-            //std::string str;
+            //tstring str;
             //t_.m_id.ToString(str);
 
             //printf("UidBsphereList::Add - '%s' - %f %f %f %f", str.c_str(), t_.m_bsphere.m_Center.x, t_.m_bsphere.m_Center.y, t_.m_bsphere.m_Center.z, t_.m_bsphere.m_Radius);

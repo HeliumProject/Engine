@@ -322,7 +322,7 @@ Texture* Texture::LoadTGA(const void* filedata, bool convert_to_linear)
 
 
 //-----------------------------------------------------------------------------
-bool Texture::WriteTGA(const char* fname, u32 face, bool convert_to_srgb) const
+bool Texture::WriteTGA(const tchar* fname, u32 face, bool convert_to_srgb) const
 {
   const f32* r = GetFacePtr(face, R);
 
@@ -331,7 +331,7 @@ bool Texture::WriteTGA(const char* fname, u32 face, bool convert_to_srgb) const
     return false;
   }
 
-  FILE * textureFile = fopen(fname, "wb");
+  FILE * textureFile = _tfopen(fname, TXT( "wb" ));
   if (!textureFile)
   {
     return false;

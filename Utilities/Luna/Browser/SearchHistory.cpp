@@ -61,7 +61,7 @@ void SearchHistory::SetBrowserSearch( BrowserSearch* browserSearch )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void SearchHistory::RunNewQuery( const std::string& queryString, const AssetCollection* collection, const std::string& selectPath )
+void SearchHistory::RunNewQuery( const std::string& queryString, const AssetCollection* collection )
 {
   NOC_ASSERT( m_BrowserSearch );
 
@@ -77,11 +77,6 @@ void SearchHistory::RunNewQuery( const std::string& queryString, const AssetColl
   {
     query->SetCollection( collection );
   }
-
-  if ( !selectPath.empty() )
-  {
-    query->SetSelectPath( selectPath );
-  }  
   
   PushHistory( query );
   PushMRU( query );

@@ -1,6 +1,9 @@
 #include "ShaderAsset.h"
-#include "Pipeline/Asset/AssetExceptions.h" 
 
+#include "Foundation/Log.h"
+#include "Foundation/Reflect/ArchiveXML.h"
+
+#include "Pipeline/Asset/AssetExceptions.h" 
 #include "Pipeline/Asset/AssetTemplate.h"
 #include "Pipeline/Asset/Components/ColorMapComponent.h"
 #include "Pipeline/Asset/Components/StandardColorMapComponent.h"
@@ -8,9 +11,7 @@
 #include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
 #include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
 #include "Pipeline/Asset/Components/TextureMapComponent.h"
-
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Foundation/Log.h"
 
 using namespace Asset;
 
@@ -18,7 +19,7 @@ REFLECT_DEFINE_ABSTRACT( ShaderAsset );
 
 void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
 {
-    comp.GetComposite().m_UIName = "Shader";
+    comp.GetComposite().m_UIName = TXT( "Shader" );
     comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.shader.*" );
 
     Reflect::Field* fieldDoubleSided = comp.AddField( &ShaderAsset::m_DoubleSided, "m_DoubleSided", AssetFlags::RealTimeUpdateable );
@@ -45,9 +46,9 @@ void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
 
     assetTemplates.push_back( shaderTemplate );
 
-    std::stringstream stream;
-    Reflect::Archive::ToStream( assetTemplates, stream, Reflect::ArchiveTypes::Binary );
-    comp.GetComposite().SetProperty( AssetProperties::AssetTemplates, stream.str() );
+    tstring str;
+    Reflect::ArchiveXML::ToString( assetTemplates, str );
+    comp.GetComposite().SetProperty( AssetProperties::AssetTemplates, str );
 }
 
 
@@ -63,29 +64,29 @@ void ShaderAsset::GetAllowableAssetTypes( S_AssetType& assetTypes ) const
 //    assetTypes.insert( AssetTypes::Example );
 }
 
-bool ShaderAsset::ValidateClass( std::string& error ) const
+bool ShaderAsset::ValidateClass( tstring& error ) const
 {
     TextureMapComponent* colorMap = Reflect::ObjectCast< Asset::TextureMapComponent >( GetComponent( Reflect::GetType< ColorMapComponent >() ) );
     if ( !colorMap )
     {
-        error = "Shader '" + GetShortName() + "' does not have a Color Map attribute. This shader will not build!";
+        error = tstring( TXT( "Shader '" ) ) + GetShortName() + TXT( "' does not have a Color Map attribute. This shader will not build!" );
         return false;
     }
     else if ( !colorMap->GetPath().Exists() )
     {
-        error = "Shader '" + GetShortName() + "' does not have a Color Map texture specified. This shader will not build! Click on the Color Map attribute and select a valid file to use as the texture.";
+        error = tstring( TXT( "Shader '" ) ) + GetShortName() + TXT( "' does not have a Color Map texture specified. This shader will not build! Click on the Color Map attribute and select a valid file to use as the texture." );
         return false;
     }
     else if ( !colorMap->m_Enabled )
     {
-        error = "Shader '" + GetShortName() + "' has its Color Map attribute disabled.  This shader will not build! Please enable the Color Map on this shader.";
+        error = tstring( TXT( "Shader '" ) ) + GetShortName() + TXT( "' has its Color Map attribute disabled.  This shader will not build! Please enable the Color Map on this shader." );
         return false;
     }
 
     return __super::ValidateClass( error );
 }
 
-bool ShaderAsset::ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const
+bool ShaderAsset::ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const
 {
     if ( attr->HasType( Reflect::GetType<TextureMapComponent>() ) )
     {

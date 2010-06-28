@@ -7,7 +7,7 @@
 
 using namespace Nocturnal;
 
-typedef std::map< i32, std::string> M_MenuItemIDToString;
+typedef std::map< i32, tstring> M_MenuItemIDToString;
 
 class MenuMRUEvtHandler : public wxEvtHandler
 {
@@ -54,7 +54,7 @@ public:
     OS_string::ReverseIterator mruEnd = items.ReverseEnd();
     for ( ; mruItr != mruEnd; ++mruItr )
     {
-      const std::string& item = *mruItr;
+      const tstring& item = *mruItr;
 
       wxMenuItem* menuItem = menu->Append( wxID_ANY, item.c_str() );
       Connect( menuItem->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MenuMRUEvtHandler::OnMRUMenuItem ), NULL, this );
@@ -78,7 +78,7 @@ public:
 // maxItems - The total number of items to maintain in the list.
 // 
 MenuMRU::MenuMRU( i32 maxItems, wxWindow* owner )
-: MRU< std::string >( maxItems )
+: MRU< tstring >( maxItems )
 , m_Owner( owner )
 {
   m_MenuMRUEvtHandler = new MenuMRUEvtHandler();
@@ -104,13 +104,13 @@ MenuMRU::~MenuMRU()
 // 
 void MenuMRU::RemoveInvalidItems( bool tuidRequired )
 {
-  std::set< std::string > remove; // Lame, we should fix this
+  std::set< tstring > remove; // Lame, we should fix this
   OS_OrderedTypeSet::Iterator mruItr = m_OrderedSet.Begin();
   OS_OrderedTypeSet::Iterator mruEnd = m_OrderedSet.End();
 
   for ( ; mruItr != mruEnd; ++mruItr )
   {
-    const std::string& current = *mruItr;
+    const tstring& current = *mruItr;
 
     // Empty file paths are not allowed
     if ( current.empty() )
@@ -151,8 +151,8 @@ void MenuMRU::RemoveInvalidItems( bool tuidRequired )
   }
 
   // Remove all the bad items
-  std::set< std::string >::const_iterator removeItr = remove.begin();
-  std::set< std::string >::const_iterator removeEnd = remove.end();
+  std::set< tstring >::const_iterator removeItr = remove.begin();
+  std::set< tstring >::const_iterator removeEnd = remove.end();
   for ( ; removeItr != removeEnd; ++removeItr )
   {
     Remove( *removeItr );

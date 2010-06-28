@@ -37,7 +37,7 @@ m_dirty(true),
 m_bitmapPoint(0, 0),
 m_textPoint(0, 0),
 m_item(TreeWndCtrlItemIdInvalid),
-m_text(""),
+m_text( wxT( "" ) ),
 m_treeWndCtrl(NULL)
 {
 }

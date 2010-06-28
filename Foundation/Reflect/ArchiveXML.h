@@ -1,9 +1,10 @@
 #pragma once
 
+#include "Indent.h"
 #include "Archive.h"
 
-#define XML_STATIC
-#include "expatimpl.h"
+struct XML_ParserStruct;
+typedef struct XML_ParserStruct *XML_Parser;
 
 namespace Reflect
 {
@@ -11,7 +12,7 @@ namespace Reflect
     // XML Archive Class
     //
 
-    class FOUNDATION_API ArchiveXML : public Archive, public CExpatImpl <ArchiveXML>
+    class FOUNDATION_API ArchiveXML : public Archive
     {
     public: 
         static const u32 CURRENT_VERSION; 
@@ -19,18 +20,16 @@ namespace Reflect
         static const u32 FIRST_VERSION_WITH_NAMESPACE_SUPPORT;
 
     private:
-        template <class _T>
-        friend class CExpatImpl;
         friend class Archive;
 
         class ParsingState : public Nocturnal::RefCountBase<ParsingState>
         {
         public:
             // the name of the short name being processed
-            std::string m_ShortName;
+            tstring m_ShortName;
 
             // the cdata section for xml files
-            std::string m_Buffer;
+            tstring m_Buffer;
 
             // the current serializing field
             const Field* m_Field;
@@ -49,7 +48,7 @@ namespace Reflect
                 kField  = 0x1 << 0,
             };
 
-            ParsingState(const char* shortName)
+            ParsingState(const tchar* shortName)
                 : m_ShortName (shortName)
                 , m_Field (NULL) 
                 , m_Flags (0)
@@ -73,6 +72,17 @@ namespace Reflect
 
         typedef Nocturnal::SmartPtr<ParsingState> ParsingStatePtr;
 
+        // The expat parser object
+        XML_Parser m_Parser;
+
+        // The stream to use
+        TCharStreamPtr m_Stream;
+
+#ifdef REFLECT_ARCHIVE_VERBOSE
+        // Indent helper
+        Indent<tchar> m_Indent;
+#endif
+
         // File format version
         u32 m_Version;
 
@@ -80,7 +90,7 @@ namespace Reflect
         std::stack<ParsingStatePtr> m_StateStack;
 
         // The current name of the serializing field
-        std::stack<std::string> m_FieldNames;
+        std::stack<tstring> m_FieldNames;
 
         // The current collection of components
         V_Element m_Components;
@@ -92,11 +102,26 @@ namespace Reflect
         V_Element* m_Target;
 
     private:
-        ArchiveXML (StatusHandler* status = NULL);
+        ArchiveXML(StatusHandler* status = NULL);
+        ~ArchiveXML();
+
+    public:
+        // Stream access
+        TCharStream& GetStream()
+        {
+            return *m_Stream;
+        }
 
     protected:
         // The type
-        virtual ArchiveType GetType() const { return ArchiveTypes::XML; }
+        virtual ArchiveType GetType() const
+        {
+            return ArchiveTypes::XML;
+        }
+
+        virtual void OpenFile(const tstring& file, bool write = false);
+        void OpenStream(TCharStream* stream, bool write = false);
+        virtual void Close(); 
 
         // Begins parsing the InputStream
         virtual void Read();
@@ -112,7 +137,7 @@ namespace Reflect
 
     public:
         // Access indentation
-        Indent& GetIndent()
+        Indent<tchar>& GetIndent()
         {
             return m_Indent;
         }
@@ -137,16 +162,41 @@ namespace Reflect
         virtual void Deserialize(V_Element& elements, u32 flags = 0);
 
     private:
-        // Registers required callbacks with ExpatImpl
-        void OnPostCreate();
+        static void StartElementHandler(void *pUserData, const tchar* pszName, const tchar **papszAttrs)
+        {
+            ArchiveXML *archive = (ArchiveXML *)pUserData;
+            archive->OnStartElement(pszName, papszAttrs);
+        }
+
+        static void EndElementHandler(void *pUserData, const tchar* pszName)
+        {
+            ArchiveXML *archive = (ArchiveXML *)pUserData;
+            archive->OnEndElement(pszName);
+        }
+
+        static void CharacterDataHandler(void *pUserData, const tchar* pszData, int nLength)
+        {
+            ArchiveXML *archive = (ArchiveXML *)pUserData;
+            archive->OnCharacterData(pszData, nLength);
+        }
 
         // Called on <element>
-        void OnStartElement(const XML_Char *pszName, const XML_Char **papszAttrs);
+        void OnStartElement(const tchar *pszName, const tchar **papszAttrs);
 
         // Called between <element> and </element>
-        void OnCharacterData(const XML_Char *pszData, int nLength);
+        void OnCharacterData(const tchar *pszData, int nLength);
 
         // Called after </element>
-        void OnEndElement(const XML_Char *pszName);
+        void OnEndElement(const tchar *pszName);
+
+    public:
+        // Reading and writing single element from string data
+        static void       ToString(const ElementPtr& element, tstring& xml, StatusHandler* status = NULL);
+        static ElementPtr FromString(const tstring& xml, int searchType = Reflect::ReservedTypes::Any, StatusHandler* status = NULL);
+
+        // Reading and writing multiple elements from string data
+        static void       ToString(const V_Element& elements, tstring& xml, StatusHandler* status = NULL);
+        static void       FromString(const tstring& xml, V_Element& elements, StatusHandler* status = NULL);
+
     };
 }

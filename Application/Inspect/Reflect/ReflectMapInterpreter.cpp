@@ -34,7 +34,12 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
   // create the panel
   PanelPtr panel = m_Container->GetCanvas()->Create<Panel>( this );
   parent->AddControl( panel );
-  panel->SetText( field->m_UIName );
+
+  tstring temp;
+  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  NOC_ASSERT( converted );
+
+  panel->SetText( temp );
 
   // create the serializers
   std::vector< Reflect::Element* >::const_iterator itr = instances.begin();
@@ -65,19 +70,19 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
 
     ActionPtr buttonAdd = parent->GetCanvas()->Create<Action>( this );
     buttonContainer->AddControl( buttonAdd );
-    buttonAdd->SetText( "Add" );
+    buttonAdd->SetText( TXT( "Add" ) );
     buttonAdd->AddListener( ActionSignature::Delegate ( this, &ReflectMapInterpreter::OnAdd ) );
     buttonAdd->SetClientData( new ClientDataControl( list ) );
 
     ActionPtr buttonRemove = parent->GetCanvas()->Create<Action>( this );
     buttonContainer->AddControl( buttonRemove );
-    buttonRemove->SetText( "Remove" );
+    buttonRemove->SetText( TXT( "Remove" ) );
     buttonRemove->AddListener( ActionSignature::Delegate ( this, &ReflectMapInterpreter::OnRemove ) );
     buttonRemove->SetClientData( new ClientDataControl( list ) );
 
     ActionPtr buttonEdit = parent->GetCanvas()->Create<Action>( this );
     buttonContainer->AddControl( buttonEdit );
-    buttonEdit->SetText( "Edit" );
+    buttonEdit->SetText( TXT( "Edit" ) );
     buttonEdit->AddListener( ActionSignature::Delegate ( this, &ReflectMapInterpreter::OnEdit ) );
     buttonEdit->SetClientData( new ClientDataControl( list ) );
   }
@@ -94,16 +99,16 @@ void ReflectMapInterpreter::InterpretField( const Reflect::Field* field, const s
 // Runs the dialog for editing a key-value pair.  Returns a string that is the
 // new item formed by concatenating and delimiting the key and value.
 // 
-std::string RunDialog( wxWindow* parent, const std::string& initialKey = "", const std::string& initialVal = "" )
+tstring RunDialog( wxWindow* parent, const tstring& initialKey = TXT( "" ), const tstring& initialVal = TXT( "" ) )
 {
-  std::string result;
-  ReflectMapEntryDialog dlg( parent, wxID_ANY, "" );
+  tstring result;
+  ReflectMapEntryDialog dlg( parent, wxID_ANY, TXT( "" ) );
   dlg.m_Key->SetValue( initialKey );
   dlg.m_Value->SetValue( initialVal );
   if ( dlg.ShowModal() == wxID_OK && !dlg.m_Key->GetValue().empty() && !dlg.m_Value->GetValue().empty() )
   {
-    std::string key( dlg.m_Key->GetValue() );
-    std::string value( dlg.m_Value->GetValue() );
+    tstring key( dlg.m_Key->GetValue() );
+    tstring value( dlg.m_Value->GetValue() );
     result = key + List::s_MapKeyValDelim + value;
   }
   return result;
@@ -122,22 +127,22 @@ void ReflectMapInterpreter::OnAdd( Button* button )
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
 
-    std::string result = RunDialog( button->GetCanvas()->GetControl() );
+    tstring result = RunDialog( button->GetCanvas()->GetControl() );
 
     if ( !result.empty() )
     {
       bool warn = false;
-      const std::string editedKey = result.substr( 0, result.find_first_of( List::s_MapKeyValDelim ) );
-      std::vector< std::string > items;
+      const tstring editedKey = result.substr( 0, result.find_first_of( List::s_MapKeyValDelim ) );
+      std::vector< tstring > items;
       items.push_back( result );
 
-      std::vector< std::string >::const_iterator itr = list->GetItems().begin();
-      std::vector< std::string >::const_iterator end = list->GetItems().end();
+      std::vector< tstring >::const_iterator itr = list->GetItems().begin();
+      std::vector< tstring >::const_iterator end = list->GetItems().end();
       for ( ; itr != end; ++itr )
       {
-        const std::string& item ( *itr );
+        const tstring& item ( *itr );
 
-        const std::string key = item.substr( 0, item.find_first_of( List::s_MapKeyValDelim ) );
+        const tstring key = item.substr( 0, item.find_first_of( List::s_MapKeyValDelim ) );
         if ( key == editedKey )
         {
           warn = true;
@@ -151,8 +156,8 @@ void ReflectMapInterpreter::OnAdd( Button* button )
       bool cancel = warn;
       if ( warn )
       {
-        std::string msg = "There is already an item with key '" + editedKey + "'.  Would you like to replace this value?";
-        cancel = ( wxMessageBox( msg.c_str(), "Replace?", wxCENTER | wxICON_QUESTION | wxYES_NO ) != wxYES );
+        tstring msg = tstring( TXT( "There is already an item with key '" ) ) + editedKey + TXT( "'.  Would you like to replace this value?" );
+        cancel = ( wxMessageBox( msg.c_str(), TXT( "Replace?" ), wxCENTER | wxICON_QUESTION | wxYES_NO ) != wxYES );
       }
 
       if ( !cancel )
@@ -175,19 +180,19 @@ void ReflectMapInterpreter::OnRemove( Button* button )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
-    const std::vector< std::string >& selectedItems = list->GetSelectedItems();
+    const std::vector< tstring >& selectedItems = list->GetSelectedItems();
     if ( selectedItems.size() > 0 )
     {
-      std::vector< std::string >::const_iterator selBegin = selectedItems.begin();
-      std::vector< std::string >::const_iterator selEnd = selectedItems.end();
+      std::vector< tstring >::const_iterator selBegin = selectedItems.begin();
+      std::vector< tstring >::const_iterator selEnd = selectedItems.end();
 
-      std::vector< std::string > items;
-      std::vector< std::string >::const_iterator itr = list->GetItems().begin();
-      std::vector< std::string >::const_iterator end = list->GetItems().end();
+      std::vector< tstring > items;
+      std::vector< tstring >::const_iterator itr = list->GetItems().begin();
+      std::vector< tstring >::const_iterator end = list->GetItems().end();
       for ( ; itr != end; ++itr )
       {
-        const std::string& item ( *itr );
-        std::vector< std::string >::const_iterator found = std::find( selBegin, selEnd, item );
+        const tstring& item ( *itr );
+        std::vector< tstring >::const_iterator found = std::find( selBegin, selEnd, item );
         if ( found == selEnd )
         {
           items.push_back( item );
@@ -216,28 +221,28 @@ void ReflectMapInterpreter::OnEdit( Button* button )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
-    const std::vector< std::string >& selected = list->GetSelectedItems();
+    const std::vector< tstring >& selected = list->GetSelectedItems();
     if ( selected.size() == 1 )
     {
-      std::string key;
-      std::string val;
-      std::string::size_type pos = selected[0].find_first_of( List::s_MapKeyValDelim );
-      if ( pos != std::string::npos )
+      tstring key;
+      tstring val;
+      tstring::size_type pos = selected[0].find_first_of( List::s_MapKeyValDelim );
+      if ( pos != tstring::npos )
       {
         key = selected[0].substr( 0, pos );
-        val = selected[0].substr( pos + strlen( List::s_MapKeyValDelim ) );
+        val = selected[0].substr( pos + _tcslen( List::s_MapKeyValDelim ) );
       }
-      std::string result = RunDialog( button->GetCanvas()->GetControl(), key, val );
+      tstring result = RunDialog( button->GetCanvas()->GetControl(), key, val );
 
       if ( !result.empty() )
       {
-        std::vector< std::string > newList;
+        std::vector< tstring > newList;
 
-        std::vector< std::string >::const_iterator itr = list->GetItems().begin();
-        std::vector< std::string >::const_iterator end = list->GetItems().end();
+        std::vector< tstring >::const_iterator itr = list->GetItems().begin();
+        std::vector< tstring >::const_iterator end = list->GetItems().end();
         for ( ; itr != end; ++itr )
         {
-          const std::string& item ( *itr );
+          const tstring& item ( *itr );
 
           if ( item == selected[0] )
           {

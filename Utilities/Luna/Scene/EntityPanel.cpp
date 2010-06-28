@@ -6,7 +6,6 @@
 
 #include "Application/Inspect/Widgets/Text Controls/Value.h"
 #include "Application/Inspect/Widgets/Button Controls/InspectButton.h"
-#include "Task/Build.h"
 
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Component/ComponentHandle.h"
@@ -274,47 +273,9 @@ void EntityPanel::CreateClassActions()
         mayaButton->SetEnabled( singular );
         mayaButton->SetToolTip( "Edit this entity class's art in Maya" );
 
-        Inspect::Action* buildButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetBuild ) );
-        buildButton->SetIcon( "build.png" );
-        buildButton->SetToolTip( "Build this entity class's data into the game (Shift-click for build options)" );
-
-        Inspect::Action* viewButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetView ) );
-        viewButton->SetIcon( "view.png" );
-        viewButton->SetEnabled( singular );
-        viewButton->SetToolTip( "View this entity class in the appropriate viewer" );
-
         Inspect::Action* historyButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRevisionHistory ) );
         historyButton->SetIcon( "p4.png" );
         historyButton->SetToolTip( "Display revision history for this file in Perforce." );
-
-        bool buildable = true;
-        bool viewable = true;
-
-        V_EntitySmartPtr::const_iterator itr = m_Entities.begin();
-        V_EntitySmartPtr::const_iterator end = m_Entities.end();
-        for ( ; itr != end; ++itr )
-        {
-            // get the entity
-            const Luna::Entity* entity = *itr;
-
-            // get the entity class
-            Asset::EntityAsset* entityClass = entity->GetClassSet()->GetEntityAsset();
-
-            if (entityClass && entityClass->GetAssetType() != Asset::AssetTypes::Null)
-            {
-                buildable &= entityClass->IsBuildable();
-                viewable &= entityClass->IsViewable();
-            }
-            else
-            {
-                buildable = false;
-                viewable = false;
-            }
-        }
-
-        buildButton->SetEnabled( buildable );
-        viewButton->SetEnabled( singular && viewable );
-
     }
     m_Enumerator->Pop();
 }
@@ -566,33 +527,7 @@ void EntityPanel::OnEntityAssetEditAsset( Inspect::Button* button )
     }
 }
 
-void EntityPanel::OnEntityAssetBuild( Inspect::Button* button )
-{
-    std::set< Nocturnal::Path > assets;
-
-    OS_SelectableDumbPtr::Iterator selectionIter = m_Selection.Begin();
-    OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
-    for (; selectionIter != selectionEnd; ++selectionIter )
-    {
-        Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *selectionIter );
-        assets.insert( entity->GetClassSet()->GetEntityAssetPath() );
-    }
-
-    bool showOptions = wxIsShiftDown();
-    std::string error;
-    if ( !wxGetApp().GetDocumentManager()->SaveAll( error ) )
-    {
-#pragma TODO( "Pop up an error modal" )
-        NOC_BREAK();
-    }
-    Luna::BuildAssets( assets, wxGetApp().GetSceneEditor(), NULL, showOptions );
-}
-
 void EntityPanel::OnEntityAssetEditArt( Inspect::Button* button )
-{
-}
-
-void EntityPanel::OnEntityAssetView( Inspect::Button* button )
 {
 }
 

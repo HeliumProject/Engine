@@ -51,7 +51,7 @@ namespace Nocturnal
             m_Size = 0x0;
         }
 
-        std::string         m_Path;
+        tstring         m_Path;
         u64                 m_CreateTime;
         u64                 m_ModTime;
         u64                 m_Size;
@@ -62,7 +62,7 @@ namespace Nocturnal
     {
     public:
         Directory();
-        Directory(const std::string &path, const std::string &spec = "*.*", u32 flags = DirectoryFlags::Default);
+        Directory(const tstring &path, const tstring &spec = TXT( "*.*" ), u32 flags = DirectoryFlags::Default);
         ~Directory();
 
         bool IsDone();
@@ -70,17 +70,17 @@ namespace Nocturnal
         const DirectoryItem& GetItem();
 
         void Reset();
-        bool Open(const std::string &path, const std::string &spec = "*.*", u32 flags = DirectoryFlags::Default);
+        bool Open(const tstring &path, const tstring &spec = TXT( "*.*" ), u32 flags = DirectoryFlags::Default);
 
-        static void GetFiles( const std::string& path, std::set< Nocturnal::Path >& paths, const std::string& spec = "*.*", bool recursive = false );
-        void GetFiles( std::set< Nocturnal::Path >& paths, const std::string& spec = "*.*", bool recursive = false );
+        static void GetFiles( const tstring& path, std::set< Nocturnal::Path >& paths, const tstring& spec = TXT( "*.*" ), bool recursive = false );
+        void GetFiles( std::set< Nocturnal::Path >& paths, const tstring& spec = TXT( "*.*" ), bool recursive = false );
 
     private:
-        bool Find(const std::string& query = "");
+        bool Find(const tstring& query = TXT( "" ));
         void Close();
 
-        std::string         m_Path;
-        std::string         m_Spec;
+        tstring         m_Path;
+        tstring         m_Spec;
         u32                 m_Flags;
         DirectoryHandle     m_Handle;
         DirectoryItem       m_Item;
@@ -89,5 +89,5 @@ namespace Nocturnal
 
     typedef Nocturnal::Signature<void, const DirectoryItem&> DirectoryItemSignature;
 
-    FOUNDATION_API void RecurseDirectories( DirectoryItemSignature::Delegate delegate, const std::string &path, const std::string &spec = "*.*", u32 flags = DirectoryFlags::Default);
+    FOUNDATION_API void RecurseDirectories( DirectoryItemSignature::Delegate delegate, const tstring &path, const tstring &spec = TXT( "*.*" ), u32 flags = DirectoryFlags::Default);
 }

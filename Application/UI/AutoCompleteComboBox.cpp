@@ -177,7 +177,7 @@ namespace Nocturnal
 
   int AutoCompleteComboBox::DoAppend( const wxString& item )
   {
-    m_Choices.push_back( std::string( item ) );
+    m_Choices.push_back( tstring( item ) );
 
     if ( !(GetWindowStyle() & wxCB_SORT) )
     {
@@ -189,7 +189,7 @@ namespace Nocturnal
 
   int AutoCompleteComboBox::DoInsert( const wxString& item, unsigned int pos )
   {
-    m_Choices.push_back( std::string( item ) );
+    m_Choices.push_back( tstring( item ) );
 
     if ( !(GetWindowStyle() & wxCB_SORT) )
     {
@@ -211,7 +211,7 @@ namespace Nocturnal
 
       //test against the subset of the given choice 
       //case insensitivity in the search
-      if( stricmp( value.c_str(), choice.substr( 0, value.size() ).c_str() ) == 0 )
+      if( _tcsicmp( value.c_str(), choice.substr( 0, value.size() ).c_str() ) == 0 )
       {
         m_Matches.push_back( choice );
       }

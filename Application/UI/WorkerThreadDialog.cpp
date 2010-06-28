@@ -30,7 +30,7 @@ void WorkerThreadDialog::InitThread( DialogWorkerThread* thread )
 {
   if ( m_Thread )
   {
-    throw Nocturnal::Exception( "You cannot change threads on a WorkerThreadDialog." );
+    throw Nocturnal::Exception( TXT( "You cannot change threads on a WorkerThreadDialog." ) );
   }
 
   m_Thread = thread;
@@ -45,7 +45,7 @@ int WorkerThreadDialog::ShowModal()
 {
   if ( !m_Thread )
   {
-    throw Nocturnal::Exception( "You must call InitThread before calling WorkerThreadDialog::ShowModal." );
+    throw Nocturnal::Exception( TXT( "You must call InitThread before calling WorkerThreadDialog::ShowModal." ) );
   }
 
   m_Thread->Create();

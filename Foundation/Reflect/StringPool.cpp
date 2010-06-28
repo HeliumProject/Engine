@@ -2,9 +2,10 @@
 
 #include "Serializer.h" 
 #include "ArchiveBinary.h" 
-#include "CompressionUtilities.h" 
+#include "Compression.h" 
 
 #include "Platform/Assert.h"
+#include "Platform/String.h"
 #include "Foundation/Memory/ArrayPtr.h" 
 #include "Foundation/Log.h"
 
@@ -15,58 +16,83 @@ using Nocturnal::ArrayPtr;
 
 using namespace Reflect;
 
-Profile::Accumulator g_StringPoolSerialize("Reflect String Pool Serialize"); 
-Profile::Accumulator g_StringPoolDeserialize("Reflect String Pool Deserialize"); 
-Profile::Accumulator g_StringPoolLookup("Reflect String Pool Lookup"); 
-Profile::Accumulator g_StringPoolInsert("Reflect String Pool Insert"); 
+Profile::Accumulator g_StringPoolSerialize( "Reflect String Pool Serialize"); 
+Profile::Accumulator g_StringPoolDeserialize( "Reflect String Pool Deserialize"); 
+Profile::Accumulator g_StringPoolLookup( "Reflect String Pool Lookup"); 
+Profile::Accumulator g_StringPoolInsert( "Reflect String Pool Insert"); 
 
-int StringPool::GetIndex(const std::string& str)
+int StringPool::Insert( const std::string& str )
 {
-    PROFILE_SCOPE_ACCUM(g_StringPoolLookup); 
+    PROFILE_SCOPE_ACCUM(g_StringPoolInsert); 
 
-    M_StringToIndex::iterator found = m_Indices.find(str);
-
-    if (found != m_Indices.end())
+    M_CharStringToIndex::iterator found = m_CharIndices.find( str );
+    if ( found != m_CharIndices.end() )
     {
         return found->second;
     }
-    else
-    {
-        return -1;
-    }
-}
 
-int StringPool::AssignIndex(const std::string& str)
-{
-    int index = GetIndex(str);
-
-    if (index < 0)
-    {
-        PROFILE_SCOPE_ACCUM(g_StringPoolInsert); 
-
-        index = (int)m_Strings.size();
-        m_Indices.insert( M_StringToIndex::value_type(str, index));
-        m_Strings.push_back(str);
-    }
+    int index = (int)m_CharStrings.size();
+    m_CharIndices.insert( M_CharStringToIndex::value_type(str, index));
+    m_CharStrings.push_back(str);
 
     return index;
 }
 
-const std::string& StringPool::GetString(int index)
+int StringPool::Insert( const std::wstring& str )
+{
+    PROFILE_SCOPE_ACCUM(g_StringPoolInsert); 
+
+    M_WideStringToIndex::iterator found = m_WideIndices.find( str );
+    if ( found != m_WideIndices.end() )
+    {
+        return found->second;
+    }
+
+    int index = (int)m_WideStrings.size();
+
+    m_WideIndices.insert( M_WideStringToIndex::value_type( str, index ) );
+    m_WideStrings.push_back( str );
+
+    return index;
+}
+
+tstring StringPool::GetString( int index )
 {
     PROFILE_SCOPE_ACCUM(g_StringPoolLookup); 
 
-    NOC_ASSERT(index >=0 && index < (int)m_Strings.size());
-    return m_Strings[ index ];
+    tstring result;
+
+    if ( index >= 0 )
+    {
+        if( index >= (int)m_CharStrings.size() )
+        {
+            throw Reflect::LogisticException( TXT( "String index out of range in StringPool" ) );
+        }
+
+        Platform::ConvertString( m_CharStrings[ index ], result );
+    }
+    else
+    {
+        index &= 0xEFFFFFFF; // make out the high bit
+
+        if( index < 0 || index >= (int)m_WideStrings.size() )
+        {
+            throw Reflect::LogisticException( TXT( "Wide string index out of range in StringPool" ) );
+        }
+
+        Platform::ConvertString( m_WideStrings[ index ], result );
+    }
+
+    return result;
 }
 
 void StringPool::Serialize(ArchiveBinary* archive)
 {
     PROFILE_SCOPE_ACCUM(g_StringPoolSerialize); 
 
-    Reflect::Stream& stream = archive->GetOutput(); 
+    Reflect::CharStream& stream = archive->GetStream(); 
 
-    NOC_ASSERT(m_Strings.size() == m_Indices.size());
+    NOC_ASSERT(m_CharStrings.size() == m_CharIndices.size());
     return SerializeCompressed(stream); 
 }
 
@@ -74,7 +100,7 @@ void StringPool::Deserialize(ArchiveBinary* archive)
 {
     PROFILE_SCOPE_ACCUM(g_StringPoolDeserialize); 
 
-    Reflect::Stream& stream = archive->GetInput(); 
+    Reflect::CharStream& stream = archive->GetStream(); 
 
     if(archive->GetVersion() >= ArchiveBinary::FIRST_VERSION_WITH_STRINGPOOL_COMPRESSION)
     {
@@ -85,27 +111,27 @@ void StringPool::Deserialize(ArchiveBinary* archive)
         return DeserializeDirect(stream); 
     }
 
-    NOC_ASSERT(m_Strings.size() == m_Indices.size());
+    NOC_ASSERT(m_CharStrings.size() == m_CharIndices.size());
 }
 
-void StringPool::SerializeDirect(Reflect::Stream& stream)
+void StringPool::SerializeDirect(CharStream& stream)
 {
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug("Serializing %d strings\n", m_Strings.size());
+    Log::Debug(TXT("Serializing %d strings\n"), m_CharStrings.size());
 #endif
 
-    i32 size = (i32)m_Strings.size();
+    i32 size = (i32)m_CharStrings.size();
     stream.Write(&size); 
 
-    std::vector<std::string>::iterator itr = m_Strings.begin();
-    std::vector<std::string>::iterator end = m_Strings.end();
+    std::vector<std::string>::iterator itr = m_CharStrings.begin();
+    std::vector<std::string>::iterator end = m_CharStrings.end();
     for ( int index=0; itr != end; ++itr, ++index )
     {
         size = (i32)itr->length();
         const std::string& str (*itr);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-        Log::Debug(" [%d] : %s\n", index, str.c_str());
+        Log::Debug(TXT(" [%d] : %s\n"), index, str.c_str());
 #endif
 
         stream.Write(&size); 
@@ -116,40 +142,39 @@ void StringPool::SerializeDirect(Reflect::Stream& stream)
     stream.Write(&size); 
 }
 
-void StringPool::DeserializeDirect(Reflect::Stream& stream)
+void StringPool::DeserializeDirect(CharStream& stream)
 {
     i32 size;
     stream.Read(&size);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-    Log::Debug("Deserializing %d strings\n", size);
+    Log::Debug(TXT("Deserializing %d strings\n"), size);
 #endif
 
-    m_Strings.resize(size);
+    m_CharStrings.resize(size);
     for (i32 i=0; i<size; ++i)
     {
         i32 string_size;
         stream.Read(&string_size); 
 
         // read the bytes directly into the string
-        std::string& outputString = m_Strings[i]; 
+        std::string& outputString = m_CharStrings[i]; 
         outputString.resize(string_size); 
         stream.ReadBuffer(&outputString[0], string_size); 
 
         // log the index
-        m_Indices[outputString] = i; 
+        m_CharIndices[outputString] = i; 
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
-        Log::Debug(" [%d] : %s\n", i, outputString.c_str());
+        Log::Debug(TXT(" [%d] : %s\n"), i, outputString.c_str());
 #endif
     }
 
     stream.Read(&size); 
     NOC_ASSERT(size == -1);
-
 }
 
-void StringPool::SerializeCompressed(Reflect::Stream& stream)
+void StringPool::SerializeCompressed(CharStream& stream)
 {
     // in bytes... 
     u32 originalSize = 0; 
@@ -161,12 +186,12 @@ void StringPool::SerializeCompressed(Reflect::Stream& stream)
     stream.Write(&compressedSize); 
 
     // serialize the strings to a temp buffer
-    std::strstream memoryStream; 
-    Reflect::Stream tempStream(&memoryStream, false); 
+    std::stringstream memoryStream; 
+    Reflect::CharStream tempStream(&memoryStream, false); 
     SerializeDirect(tempStream); 
 
     // get the pointer
-    const char* stringBuff = memoryStream.str(); 
+    const char* stringBuff = memoryStream.str().c_str();
 
     // we own that buffer now... 
     ArrayPtr<const char> helper(stringBuff); 
@@ -181,7 +206,7 @@ void StringPool::SerializeCompressed(Reflect::Stream& stream)
     stream.SeekWrite(0, std::ios_base::end); 
 }
 
-void StringPool::DeserializeCompressed(Reflect::Stream& stream)
+void StringPool::DeserializeCompressed(CharStream& stream)
 {
     u32 originalSize = 0; 
     u32 compressedSize = 0; 
@@ -196,11 +221,11 @@ void StringPool::DeserializeCompressed(Reflect::Stream& stream)
 
     if(inflatedSize != originalSize)
     {
-        throw Reflect::StreamException("StringPool failed to read compressed data"); 
+        throw Reflect::StreamException( TXT( "StringPool failed to read compressed data" ) ); 
     }
 
-    std::strstream memoryStream(originalData, originalSize); 
-    Reflect::Stream tempStream(&memoryStream, false); 
+    std::stringstream memoryStream(originalData, originalSize); 
+    Reflect::CharStream tempStream(&memoryStream, false); 
 
     DeserializeDirect(tempStream); 
 }

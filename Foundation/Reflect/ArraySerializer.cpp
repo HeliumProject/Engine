@@ -1,5 +1,5 @@
 #include "ArraySerializer.h"
-#include "CompressionUtilities.h" 
+#include "Compression.h" 
 #include "ArchiveBinary.h"
 #include "ArchiveXML.h"
 
@@ -12,24 +12,24 @@ REFLECT_DEFINE_ABSTRACT(ArraySerializer)
 // 
 // String tokenizer adapted from:
 // http://www.oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
-template< typename T >
-void Tokenize( const std::string& str, std::vector< T >& tokens, const std::string& delimiters )
+template< typename T, typename I >
+void Tokenize( const tstring& str, std::vector< T >& tokens, const tstring& delimiters )
 {
     // Skip delimiters at beginning.
-    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
     // Find first "non-delimiter".
-    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-    T temp;
-    while ( std::string::npos != pos || std::string::npos != lastPos )
+    I temp;
+    while ( tstring::npos != pos || tstring::npos != lastPos )
     {
         // Found a token, convert it to the proper type for our vector
-        std::stringstream stream (str.substr( lastPos, pos - lastPos ));
+        tstringstream stream (str.substr( lastPos, pos - lastPos ));
         stream >> temp; // NOTE: Stream operator stops at spaces!
         if ( !stream.fail() )
         {
             // Add the token to the vector
-            tokens.push_back( temp );
+            tokens.push_back( (T)temp );
         }
         else
         {
@@ -45,14 +45,14 @@ void Tokenize( const std::string& str, std::vector< T >& tokens, const std::stri
 // Explicit implementation for strings, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
 template<>
-inline void Tokenize( const std::string& str, std::vector< std::string >& tokens, const std::string& delimiters )
+inline void Tokenize<tstring, tstring>( const tstring& str, std::vector< tstring >& tokens, const tstring& delimiters )
 {
     // Skip delimiters at beginning.
-    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
     // Find first "non-delimiter".
-    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-    while ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( tstring::npos != pos || tstring::npos != lastPos )
     {
         // Add the token to the vector
         tokens.push_back( str.substr( lastPos, pos - lastPos ) );
@@ -166,13 +166,13 @@ void SimpleArraySerializer<T>::Serialize(Archive& archive) const
             for (size_t i=0; i<m_Data->size(); i++)
             {
                 // indent
-                xml.GetIndent().Get(archive.GetOutput());
+                xml.GetIndent().Get(xml.GetStream());
 
                 // write
-                archive.GetOutput() << m_Data.Get()[i];
+                xml.GetStream() << m_Data.Get()[i];
 
                 // newline
-                archive.GetOutput() << "\n";
+                xml.GetStream() << "\n";
             }
 
             xml.GetIndent().Pop();
@@ -181,22 +181,24 @@ void SimpleArraySerializer<T>::Serialize(Archive& archive) const
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             i32 count = (i32)m_Data->size();
-            archive.GetOutput().Write(&count); 
+            binary.GetStream().Write(&count); 
 
             if(count > 0)
             {
                 // current offset in stream... 
-                i32 offset       = (i32) archive.GetOutput().TellWrite(); 
+                i32 offset       = (i32) binary.GetStream().TellWrite(); 
                 i32 bytesWritten = 0; 
-                archive.GetOutput().Write(&bytesWritten); 
+                binary.GetStream().Write(&bytesWritten); 
 
                 const T& front = m_Data->front();
-                bytesWritten   = CompressToStream(archive.GetOutput(), (const char*) &front, sizeof(T) * count); 
+                bytesWritten   = CompressToStream(binary.GetStream(), (const char*) &front, sizeof(T) * count); 
 
-                archive.GetOutput().SeekWrite(offset, std::ios_base::beg); 
-                archive.GetOutput().Write(&bytesWritten); 
-                archive.GetOutput().SeekWrite(0, std::ios_base::end); 
+                binary.GetStream().SeekWrite(offset, std::ios_base::beg); 
+                binary.GetStream().Write(&bytesWritten); 
+                binary.GetStream().SeekWrite(0, std::ios_base::end); 
 
             }
             break;
@@ -214,27 +216,31 @@ void SimpleArraySerializer<T>::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-            T value;
-            archive.GetInput().SkipWhitespace(); 
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            while (!archive.GetInput().Done())
+            T value;
+            xml.GetStream().SkipWhitespace(); 
+
+            while (!xml.GetStream().Done())
             {
                 // read data
-                archive.GetInput() >> value;
+                xml.GetStream() >> value;
 
                 // copy onto vector
                 m_Data->push_back(value);
 
                 // read to next non-whitespace char
-                archive.GetInput().SkipWhitespace(); 
+                xml.GetStream().SkipWhitespace(); 
             }
             break;
         }
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             i32 count = -1;
-            archive.GetInput().Read(&count); 
+            binary.GetStream().Read(&count); 
 
             m_Data->resize(count);
 
@@ -247,20 +253,16 @@ void SimpleArraySerializer<T>::Deserialize(Archive& archive)
                 if(archiveBinary->GetVersion() >= ArchiveBinary::FIRST_VERSION_WITH_ARRAY_COMPRESSION)
                 {
                     i32 inputBytes; 
-                    archive.GetInput().Read(&inputBytes); 
-                    i32 bytesInflated = DecompressFromStream(archive.GetInput(), 
-                        inputBytes, 
-                        (char*) &(m_Data->front()), 
-                        sizeof(T) * count); 
-
+                    binary.GetStream().Read(&inputBytes); 
+                    i32 bytesInflated = DecompressFromStream(binary.GetStream(), inputBytes, (char*) &(m_Data->front()), sizeof(T) * count); 
                     if(bytesInflated != sizeof(T) * count)
                     {
-                        throw Reflect::StreamException("Compressed Array size mismatch"); 
+                        throw Reflect::StreamException( TXT( "Compressed Array size mismatch" ) ); 
                     }
                 }
                 else
                 {
-                    archive.GetInput().ReadBuffer(&(m_Data->front()), sizeof(T) * count );
+                    binary.GetStream().ReadBuffer(&(m_Data->front()), sizeof(T) * count );
                 }
             }
             break;
@@ -269,7 +271,7 @@ void SimpleArraySerializer<T>::Deserialize(Archive& archive)
 }
 
 template < class T >
-std::ostream& SimpleArraySerializer<T>::operator >> (std::ostream& stream) const
+tostream& SimpleArraySerializer<T>::operator>> (tostream& stream) const
 {
     if (!TranslateOutput( stream ))
     {
@@ -289,26 +291,25 @@ std::ostream& SimpleArraySerializer<T>::operator >> (std::ostream& stream) const
 }
 
 template < class T >
-std::istream& SimpleArraySerializer<T>::operator << (std::istream& stream)
+tistream& SimpleArraySerializer<T>::operator<< (tistream& stream)
 {
     m_Data->clear();
 
     if (!TranslateInput( stream ))
     {
-        std::string str;
+        tstring str;
         std::streamsize size = stream.rdbuf()->in_avail();
-        str.resize( (size_t) size);
-        stream.read(const_cast< char* >( str.c_str() ), size );
+        str.resize( (size_t) size );
+        stream.read( const_cast< tchar* >( str.c_str() ), size );
 
-        Tokenize( str, m_Data.Ref(), s_ContainerItemDelimiter );
+        Tokenize<T, T>( str, m_Data.Ref(), s_ContainerItemDelimiter );
     }
     return stream;
-}  
+}
 
 //
 // Specializations
 //
-
 
 // keep reading the string until we run out of buffer
 template <>
@@ -321,22 +322,22 @@ void StringArraySerializer::Serialize(Archive& archive) const
             ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
             xml.GetIndent().Push();
-            xml.GetIndent().Get(archive.GetOutput());
+            xml.GetIndent().Get(xml.GetStream());
 
             // start our CDATA section, this prevents XML from parsing its escapes in this cdata section
-            archive.GetOutput() << "<![CDATA[\n";
+            xml.GetStream() << TXT("<![CDATA[\n");
 
             for (size_t i=0; i<m_Data->size(); i++)
             {
-                xml.GetIndent().Get(archive.GetOutput());
+                xml.GetIndent().Get(xml.GetStream());
 
                 // output the escape-code free character sequence between double qutoes
-                archive.GetOutput() << '\"' << m_Data.Get()[i].c_str() << '\"' << s_ContainerItemDelimiter;
+                xml.GetStream() << TXT('\"') << m_Data.Get()[i].c_str() << TXT('\"') << s_ContainerItemDelimiter;
             }
 
             // end our CDATA escape section
-            xml.GetIndent().Get(archive.GetOutput());
-            archive.GetOutput() << "]]>\n";
+            xml.GetIndent().Get(xml.GetStream());
+            xml.GetStream() << TXT("]]>\n");
 
             xml.GetIndent().Pop();
             break;
@@ -344,13 +345,15 @@ void StringArraySerializer::Serialize(Archive& archive) const
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             i32 size = (i32)m_Data->size();
-            archive.GetOutput().Write(&size); 
+            binary.GetStream().Write(&size); 
 
             for (size_t i=0; i<m_Data->size(); i++)
             {
-                i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().AssignIndex(m_Data.Get()[i]);
-                archive.GetOutput().Write(&index); 
+                i32 index = binary.GetStrings().Insert(m_Data.Get()[i]);
+                binary.GetStream().Write(&index); 
             }
 
             break;
@@ -366,13 +369,14 @@ void StringArraySerializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-            archive.GetInput().SkipWhitespace(); 
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
 
-            std::string value;
+            xml.GetStream().SkipWhitespace(); 
+            tstring value;
 
-            while (!archive.GetInput().Done())
+            while (!xml.GetStream().Done())
             {
-                std::getline(archive.GetInput(), value); 
+                std::getline( xml.GetStream().GetInternal(), value ); 
 
                 size_t start = value.find_first_of('\"');
                 size_t end = value.find_last_of('\"');
@@ -382,35 +386,41 @@ void StringArraySerializer::Deserialize(Archive& archive)
                 {
                     // if all we have are open/close quotes, push a blank string
                     if (start == end-1)
-                        m_Data->push_back(std::string ());
+                    {
+                        m_Data->push_back(tstring ());
+                    }
                     // else we have some non-null string data
                     else
+                    {
                         m_Data->push_back(value.substr(start + 1, end - start - 1));
+                    }
                 }
                 else
                 {
-                    start = value.find_first_not_of(" \t\n");
+                    start = value.find_first_not_of( TXT( " \t\n" ) );
 
                     if (start != std::string::npos)
                         m_Data->push_back(value.substr(start));
                 }
 
-                archive.GetInput().SkipWhitespace(); 
+                xml.GetStream().SkipWhitespace(); 
             }
             break;
         }
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             i32 size = (i32)m_Data->size();
-            archive.GetInput().Read(&size); 
+            binary.GetStream().Read(&size); 
 
             m_Data->resize(size);
             for (i32 i=0; i<size; i++)
             {
                 i32 index;
-                archive.GetInput().Read(&index); 
-                m_Data.Ref()[i] = static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index);
+                binary.GetStream().Read(&index); 
+                m_Data.Ref()[i] = binary.GetStrings().GetString(index);
             }
 
             break;
@@ -418,7 +428,49 @@ void StringArraySerializer::Deserialize(Archive& archive)
     }
 }
 
-template SimpleArraySerializer<std::string>;
+#ifdef UNICODE
+
+//
+// When unicode is active the XML streams are made of wchar_t, and C++ stdlib won't do the conversion for u8/i8
+//  So we explicitly specialize some functions to to the conversion via a u16/i16
+//
+
+template <>
+tistream& SimpleArraySerializer<u8>::operator<< (tistream& stream)
+{
+    m_Data->clear();
+
+    if (!TranslateInput( stream ))
+    {
+        tstring str;
+        std::streamsize size = stream.rdbuf()->in_avail();
+        str.resize( (size_t) size );
+        stream.read(const_cast< tchar* >( str.c_str() ), size );
+
+        Tokenize<u8, u16>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    }
+    return stream;
+}
+
+template <>
+tistream& SimpleArraySerializer<i8>::operator<< (tistream& stream)
+{
+    m_Data->clear();
+
+    if (!TranslateInput( stream ))
+    {
+        tstring str;
+        std::streamsize size = stream.rdbuf()->in_avail();
+        str.resize( (size_t) size );
+        stream.read(const_cast< tchar* >( str.c_str() ), size );
+
+        Tokenize<i8, i16>( str, m_Data.Ref(), s_ContainerItemDelimiter );
+    }
+    return stream;
+}
+#endif // UNICODE
+
+template SimpleArraySerializer<tstring>;
 template SimpleArraySerializer<bool>;
 template SimpleArraySerializer<u8>;
 template SimpleArraySerializer<i8>;

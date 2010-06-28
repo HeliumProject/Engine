@@ -15,30 +15,30 @@ namespace Nocturnal
     //
 
     // std delims
-    FOUNDATION_API extern const char* CmdLineDelimiters;
+    FOUNDATION_API extern const tchar* CmdLineDelimiters;
 
     // get/set the command line
-    FOUNDATION_API void SetCmdLine( int argc, const char** argv );
-    FOUNDATION_API const char* GetCmdLine();
+    FOUNDATION_API void SetCmdLine( int argc, const tchar** argv );
+    FOUNDATION_API const tchar* GetCmdLine();
     FOUNDATION_API void ReleaseCmdLine();
 
     // convert from flat string to argc/argv
-    FOUNDATION_API void ProcessCmdLine(const char* command, int& argc, const char**& argv);
+    FOUNDATION_API void ProcessCmdLine(const tchar* command, int& argc, const tchar**& argv);
 
     // get an arg by index
-    FOUNDATION_API const char** GetCmdLine( int& argc );
+    FOUNDATION_API const tchar** GetCmdLine( int& argc );
 
     // get an arg by string
-    FOUNDATION_API const char* GetCmdLineArg( const char* arg );
+    FOUNDATION_API const tchar* GetCmdLineArg( const tchar* arg );
 
     template<class T>
-    inline bool GetCmdLineArg( const std::string& cmdArgName, T& cmdArgValue )
+    inline bool GetCmdLineArg( const tstring& cmdArgName, T& cmdArgValue )
     {
-        const char* cmdArgSetting = GetCmdLineArg( cmdArgName.c_str() );
+        const tchar* cmdArgSetting = GetCmdLineArg( cmdArgName.c_str() );
 
         if ( cmdArgSetting )
         {
-            std::istrstream str ( cmdArgSetting, (std::streamsize)strlen( cmdArgSetting ) );
+            std::istrstream str ( cmdArgSetting, (std::streamsize)_tcslen( cmdArgSetting ) );
             str >> cmdArgValue;
             return !str.fail();
         }
@@ -47,9 +47,9 @@ namespace Nocturnal
     }
 
     template<>
-    inline bool GetCmdLineArg( const std::string& cmdArgName, std::string& cmdArgValue )
+    inline bool GetCmdLineArg( const tstring& cmdArgName, tstring& cmdArgValue )
     {
-        const char *cmdArgSetting = GetCmdLineArg( cmdArgName.c_str() );
+        const tchar *cmdArgSetting = GetCmdLineArg( cmdArgName.c_str() );
 
         if ( cmdArgSetting )
         {
@@ -61,19 +61,19 @@ namespace Nocturnal
     }
 
     template<>
-    inline bool GetCmdLineArg( const std::string& cmdArgName, bool& cmdArgValue )
+    inline bool GetCmdLineArg( const tstring& cmdArgName, bool& cmdArgValue )
     {
-        const char *cmdArgSetting = GetCmdLineArg( cmdArgName.c_str() );
+        const tchar *cmdArgSetting = GetCmdLineArg( cmdArgName.c_str() );
 
         if ( cmdArgSetting )
         {
-            if ( !stricmp( cmdArgSetting, "false" ) || !stricmp( cmdArgSetting, "0" ) )
+            if ( !_tcsicmp( cmdArgSetting, TXT( "false" ) ) || !_tcsicmp( cmdArgSetting, TXT( "0" ) ) )
             {
                 cmdArgValue = false;
                 return true;
             }
 
-            if ( !stricmp( cmdArgSetting, "true" ) || !stricmp( cmdArgSetting, "1" ) )
+            if ( !_tcsicmp( cmdArgSetting, TXT( "true" ) ) || !_tcsicmp( cmdArgSetting, TXT( "1" ) ) )
             {
                 cmdArgValue = true;
                 return true;
@@ -83,6 +83,6 @@ namespace Nocturnal
         return false;
     }
 
-    FOUNDATION_API bool GetCmdLineFlag( const char* arg );
+    FOUNDATION_API bool GetCmdLineFlag( const tchar* arg );
 #pragma deprecated( GetCmdLineFlag )  // All commandline options should be defined and parsed once in the application, we shouldn't be parsing the entire commandline everytime! 
 }

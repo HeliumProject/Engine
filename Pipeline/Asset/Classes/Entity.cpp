@@ -7,7 +7,6 @@
 
 #include "Foundation/Log.h"
 #include "Pipeline/Content/Scene.h"
-#include "Application/RCS/RCS.h"
 
 using namespace Asset;
 using namespace Component;
@@ -23,7 +22,7 @@ void Entity::EnumerateClass( Reflect::Compositor<Entity>& comp )
     Reflect::Field* fieldShowGeometry = comp.AddField( &Entity::m_ShowGeometry, "m_ShowGeometry" );
 }
 
-Entity::Entity( const std::string& assetPath )
+Entity::Entity( const tstring& assetPath )
 : m_ShowPointer (true)
 , m_ShowBounds (true)
 , m_ShowGeometry (false)
@@ -36,7 +35,7 @@ EntityAssetPtr Entity::GetEntityAsset() const
     return AssetClass::LoadAssetClass< EntityAsset >( m_Path );
 }
 
-std::string Entity::GetEntityAssetPath()
+tstring Entity::GetEntityAssetPath()
 {
     return m_Path.Get();
 }

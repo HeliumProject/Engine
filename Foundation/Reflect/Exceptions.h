@@ -21,7 +21,7 @@ namespace Reflect
     class CastException : public Reflect::Exception
     {
     public:
-        CastException( const char *msgFormat, ... )
+        CastException( const tchar *msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );
@@ -40,7 +40,7 @@ namespace Reflect
     class LogisticException : public Reflect::Exception
     {
     public:
-        LogisticException( const char *msgFormat, ... )
+        LogisticException( const tchar *msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );
@@ -59,7 +59,7 @@ namespace Reflect
     class TypeInformationException : public Reflect::LogisticException
     {
     public:
-        TypeInformationException( const char *msgFormat, ... )
+        TypeInformationException( const tchar *msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );
@@ -78,7 +78,7 @@ namespace Reflect
     class DataFormatException : public Reflect::LogisticException
     {
     public:
-        DataFormatException( const char *msgFormat, ... )
+        DataFormatException( const tchar* msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );
@@ -97,7 +97,7 @@ namespace Reflect
     class StreamException : public Reflect::Exception
     {
     public:
-        StreamException( const char *msgFormat, ... )
+        StreamException( const tchar* msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );
@@ -116,7 +116,7 @@ namespace Reflect
     class ChecksumException : public Reflect::StreamException
     {
     public:
-        ChecksumException( const char *msgFormat, ... )
+        ChecksumException( const tchar* msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );

@@ -30,7 +30,7 @@ bool Profile::Settings::MemoryProfilingEnabled()
     return g_MemoryProfilingEnabled;
 }
 
-static const char* MemoryUnitConvert(f32& size)
+static const tchar* MemoryUnitConvert(f32& size)
 {
     if (size > 1 << 10)
     {
@@ -39,23 +39,23 @@ static const char* MemoryUnitConvert(f32& size)
             if (size > 1 << 30)
             {
                 size /= (float)(1 << 30);
-                return "g";
+                return TXT( "g" );
             }
             else
             {
                 size /= (float)(1 << 20);
-                return "m";
+                return TXT( "m" );
             }
         }
         else
         {
             size /= (float)(1 << 10);
-            return "k";
+            return TXT( "k" );
         }
     }
     else
     {
-        return "b";
+        return TXT( "b" );
     }
 }
 
@@ -86,22 +86,22 @@ static Platform::Thread::Return MemoryReportThread(Platform::Thread::Param)
             oldTotal = total;
 
             float accountedFor = total > 0 ? ((float)profiled / (float)total * 100.f) : 0.f;
-            const char* profiledUnits = MemoryUnitConvert(profiled);
-            const char* totalUnits = MemoryUnitConvert(total);
+            const tchar* profiledUnits = MemoryUnitConvert(profiled);
+            const tchar* totalUnits = MemoryUnitConvert(total);
 
-            Log::Profile("Memory - Profiled: %.2f%s / Committed: %.2f%s / Accounted for: %.2f%%\n", profiled, profiledUnits, total, totalUnits, accountedFor);
+            Log::Profile( TXT( "Memory - Profiled: %.2f%s / Committed: %.2f%s / Accounted for: %.2f%%\n" ), profiled, profiledUnits, total, totalUnits, accountedFor);
 
             for (u32 i=0; i<g_MemoryPoolCount; i++)
             {
                 f32 size = (f32)g_MemoryPools[i].m_Size;
-                const char* sizeUnits = MemoryUnitConvert( size );
+                const tchar* sizeUnits = MemoryUnitConvert( size );
 
                 f32 delta = (f32)abs64(g_MemoryPools[i].m_Size - g_MemoryPools[i].m_Previous);
-                const char* deltaUnits = MemoryUnitConvert( delta );
+                const tchar* deltaUnits = MemoryUnitConvert( delta );
 
-                char sign = ((i64)g_MemoryPools[i].m_Size - (i64)g_MemoryPools[i].m_Previous) >= 0 ? '+' : '-';
+                tchar sign = ((i64)g_MemoryPools[i].m_Size - (i64)g_MemoryPools[i].m_Previous) >= 0 ? '+' : '-';
 
-                Log::Profile(" %-30s: [%7d] %.2f%s (%c%.2f%s)\n", g_MemoryPools[i].m_Name, g_MemoryPools[i].m_Count, size, sizeUnits, sign, delta, deltaUnits );
+                Log::Profile( TXT( " %-30s: [%7d] %.2f%s (%c%.2f%s)\n" ), g_MemoryPools[i].m_Name, g_MemoryPools[i].m_Count, size, sizeUnits, sign, delta, deltaUnits );
 
                 g_MemoryPools[i].m_Previous = g_MemoryPools[i].m_Size;
             }
@@ -128,7 +128,7 @@ bool Memory::Initialize()
         g_MemoryProfilingEnabled = true;
         g_MemoryReportThreadTerminate = false;
 
-        if (!g_MemoryReportThread.Create( &MemoryReportThread, NULL, "Profile Memory Report Thread" ))
+        if (!g_MemoryReportThread.Create( &MemoryReportThread, NULL, TXT( "Profile Memory Report Thread" ) ))
         {
             NOC_BREAK();
         }
@@ -150,7 +150,7 @@ void Memory::Cleanup()
 }
 
 //static
-MemoryPoolHandle Memory::CreatePool(const char* name)
+MemoryPoolHandle Memory::CreatePool(const tchar* name)
 {
     MemoryPoolHandle pool;
 

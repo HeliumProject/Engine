@@ -21,7 +21,7 @@ namespace Asset
 
     virtual void PostDeserialize() NOC_OVERRIDE;
 
-    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, std::string& error ) const NOC_OVERRIDE;
+    virtual bool ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const NOC_OVERRIDE;
 
     virtual bool IsCinematicShader() const NOC_OVERRIDE;
 

@@ -32,7 +32,10 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
   parent->AddControl( labelContainer );
   LabelPtr label = labelContainer->GetCanvas()->Create<Label>(this);
   labelContainer->AddControl( label );
-  label->SetText( field->m_UIName );
+  tstring temp;
+  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  NOC_ASSERT( converted );
+  label->SetText( temp );
 
   // create the list view
   ContainerPtr listContainer = m_Container->GetCanvas()->Create<Container>(this);
@@ -94,9 +97,9 @@ void ReflectArrayInterpreter::InterpretField(const Field* field, const std::vect
   // setup the default value
   if (field->m_Default != NULL)
   {
-    std::stringstream outStream;
+    tstringstream outStream;
     *field->m_Default >> outStream;
-    list->SetDefault(outStream.str());
+    list->SetDefault( outStream.str() );
   }
 }
 
@@ -105,7 +108,7 @@ ActionPtr ReflectArrayInterpreter::AddAddButton( List* list )
   ActionPtr addButton = m_Container->GetCanvas()->Create<Action>(this);
   addButton->AddListener( ActionSignature::Delegate ( &ReflectArrayInterpreter::OnAdd ) );
   addButton->SetClientData( new ClientDataControl( list ) );
-  addButton->SetText( "Add" );
+  addButton->SetText( TXT( "Add" ) );
 
   return addButton;
 }
@@ -113,7 +116,7 @@ ActionPtr ReflectArrayInterpreter::AddAddButton( List* list )
 ActionPtr ReflectArrayInterpreter::AddRemoveButton( List* list )
 {
   ActionPtr removeButton = m_Container->GetCanvas()->Create<Action>(this);
-  removeButton->SetText( "Remove" );
+  removeButton->SetText( TXT( "Remove" ) );
   removeButton->AddListener( ActionSignature::Delegate ( &ReflectArrayInterpreter::OnRemove ) );
   removeButton->SetClientData( new ClientDataControl( list ) );
   
@@ -123,7 +126,7 @@ ActionPtr ReflectArrayInterpreter::AddRemoveButton( List* list )
 ActionPtr ReflectArrayInterpreter::AddMoveUpButton( List* list )
 {
   ActionPtr upButton = m_Container->GetCanvas()->Create<Action>(this);
-  upButton->SetIcon( "actions/go-up.png" );
+  upButton->SetIcon( TXT( "actions/go-up.png" ) );
   upButton->AddListener( ActionSignature::Delegate ( &ReflectArrayInterpreter::OnMoveUp ) );
   upButton->SetClientData( new ClientDataControl( list ) );
   
@@ -133,7 +136,7 @@ ActionPtr ReflectArrayInterpreter::AddMoveUpButton( List* list )
 ActionPtr ReflectArrayInterpreter::AddMoveDownButton( List* list )
 {
   ActionPtr downButton = m_Container->GetCanvas()->Create<Action>(this);
-  downButton->SetIcon( "actions/go-down.png" );
+  downButton->SetIcon( TXT( "actions/go-down.png" ) );
   downButton->AddListener( ActionSignature::Delegate ( &ReflectArrayInterpreter::OnMoveDown ) );
   downButton->SetClientData( new ClientDataControl( list ) );
   
@@ -146,10 +149,10 @@ void ReflectArrayInterpreter::OnAdd( Button* button )
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
-    wxTextEntryDialog dlg( button->GetCanvas()->GetControl(), "", "Add" );
+    wxTextEntryDialog dlg( button->GetCanvas()->GetControl(), TXT( "" ), TXT( "Add" ) );
     if ( dlg.ShowModal() == wxID_OK )
     {
-      std::string input = dlg.GetValue().c_str();
+      tstring input = dlg.GetValue().c_str();
       if ( !input.empty() )
       {
         List* list = static_cast< List* >( data->m_Control );
@@ -168,15 +171,15 @@ void ReflectArrayInterpreter::OnRemove( Button* button )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
-    const std::vector< std::string >& selectedItems = list->GetSelectedItems();
+    const std::vector< tstring >& selectedItems = list->GetSelectedItems();
     if ( !selectedItems.empty() )
     {
-      std::vector< std::string >::const_iterator itr = selectedItems.begin();
-      std::vector< std::string >::const_iterator end = selectedItems.end();
+      std::vector< tstring >::const_iterator itr = selectedItems.begin();
+      std::vector< tstring >::const_iterator end = selectedItems.end();
       list->Freeze();
       for ( ; itr != end; ++itr )
       {
-        const std::string& selection = *itr;
+        const tstring& selection = *itr;
         list->RemoveItem( selection );
       }
       list->Thaw();

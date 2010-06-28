@@ -6,7 +6,7 @@ REFLECT_DEFINE_CLASS( StandardColorMapComponent );
 
 void StandardColorMapComponent::EnumerateClass( Reflect::Compositor<StandardColorMapComponent>& comp )
 {
-  comp.GetComposite().m_UIName = "Color Map";
+  comp.GetComposite().m_UIName = TXT( "Color Map" );
   comp.GetComposite().SetProperty( AssetProperties::ShortDescription, "Also known as a Base Map." );
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "Specifies the base map texture for a shader.  All shaders are required to have some sort of color map texture." );
   comp.GetComposite().SetProperty( AssetProperties::SmallIcon, "attribute_colormap.png" );

@@ -289,11 +289,12 @@
 		</Configuration>
 		<Configuration
 			Name="Debug Unicode|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
+			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
 			<Tool
@@ -359,7 +360,7 @@
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -423,7 +424,7 @@
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
+			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>
 			<Tool
@@ -492,7 +493,7 @@
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
+			CharacterSet="0"
 			WholeProgramOptimization="1"
 			>
 			<Tool

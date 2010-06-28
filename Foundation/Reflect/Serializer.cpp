@@ -313,7 +313,7 @@ bool Serializer::CastValue(const Serializer* src, Serializer* dest, u32 flags)
     return false;
 }
 
-bool Serializer::TranslateOutput( std::ostream& stream ) const
+bool Serializer::TranslateOutput( tostream& stream ) const
 {
     if (m_TranslateOutput.Valid())
     {
@@ -329,7 +329,7 @@ bool Serializer::TranslateOutput( std::ostream& stream ) const
     }
 }
 
-bool Serializer::TranslateInput( std::istream& stream )
+bool Serializer::TranslateInput( tistream& stream )
 {
     if (m_TranslateInput.Valid())
     {

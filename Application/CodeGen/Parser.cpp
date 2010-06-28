@@ -35,22 +35,27 @@ bool Parser::Parse( const std::string& file )
     return false;
   }
 
-  Nocturnal::Path path( m_File );
+  tstring filename;
+  bool converted = Platform::ConvertString( m_File, filename );
+  NOC_ASSERT( converted );
+
+  Nocturnal::Path path( filename );
   if ( !path.Exists() )
   {
-    m_LastError = "File does not exist: " + m_File;
+    m_LastError = std::string( "File does not exist: " ) + m_File;
     return false;
   }
 
   TiXmlDocument doc;
+
   if ( !doc.LoadFile( m_File.c_str() ) )
   {
-    m_LastError = "File is not a valid XML document: " + m_File;
+    m_LastError = std::string( "File is not a valid XML document: " ) + m_File;
     return false;
   }
 
   TiXmlElement* firstElement = doc.FirstChildElement();
-  if ( firstElement && std::string( firstElement->Value() ) == "CodeGen" )
+  if ( firstElement && firstElement->Value() == "CodeGen" )
   {
     for ( TiXmlElement* current = firstElement->FirstChildElement(); current != NULL; current = current->NextSiblingElement() )
     {
@@ -61,7 +66,7 @@ bool Parser::Parse( const std::string& file )
       }
       else
       {
-        m_LastError = "Unexpected tag '" + value + "' while parsing '" + m_File + "'.";
+        m_LastError = std::string( "Unexpected tag '" ) + value + "' while parsing '" + m_File + "'.";
         return false;
       }
     }

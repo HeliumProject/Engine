@@ -40,7 +40,7 @@ const ComponentCategoryPtr& ComponentCategories::GetCategory( ComponentCategoryT
   
   if ( found == m_Categories.end() )
   {
-    throw Nocturnal::Exception( "There is no category with that type" );
+    throw Nocturnal::Exception( TXT( "There is no category with that type" ) );
   }
 
   return found->second;
@@ -56,6 +56,6 @@ void ComponentCategories::Categorize( const ComponentPtr& attribute )
   }
   else
   {
-    throw Nocturnal::Exception( "Component '%s' could not be categorized.", attribute->GetClass()->m_ShortName.c_str() );
+    throw Nocturnal::Exception( TXT( "Component '%s' could not be categorized." ), attribute->GetClass()->m_ShortName.c_str() );
   }
 }

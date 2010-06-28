@@ -29,7 +29,7 @@ namespace Nocturnal
             h *= m; 
         }
 
-        const unsigned char * data2 = (const unsigned char*)data;
+        const unsigned char* data2 = (const unsigned char*)data;
 
         switch(len & 7)
         {
@@ -50,7 +50,7 @@ namespace Nocturnal
         return h;
     }
 
-    inline u64 MurmurHash2( const std::string& data )
+    inline u64 MurmurHash2( const tstring& data )
     {
         return MurmurHash64A( data.data(), (u64)data.length(), 42 );
     }

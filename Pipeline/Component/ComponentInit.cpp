@@ -24,9 +24,9 @@ void Component::Initialize()
 
 //    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentCollection>( "ComponentCollection" ) );
 
-    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentBase>( "ComponentBase" ) );
-    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentCollection>( "ComponentCollection" ) );
-    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentCategory>( "ComponentCategory" ) );
+    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentBase>( TXT("ComponentBase") ) );
+    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentCollection>( TXT("ComponentCollection") ) );
+    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentCategory>( TXT("ComponentCategory") ) );
 
     ComponentCategories::Initialize();
   }

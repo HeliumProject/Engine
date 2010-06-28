@@ -65,7 +65,7 @@ namespace Nocturnal
             BLOCK_TYPE_OFFSET,
         };
 
-        std::string     m_DebugString;
+        tstring     m_DebugString;
         unsigned int    m_FileSize;
         unsigned int    m_BlockSize;
         BlockType       m_BlockType;
@@ -87,35 +87,35 @@ namespace Nocturnal
 
     public:
         static bool IsDebugInfoEnabled();
-        void AddDebugInfo(BasicBufferDebugInfo::BlockType blockType, unsigned int blockSize, const char *dbgStr, va_list argptr, char ignore_next);
+        void AddDebugInfo(BasicBufferDebugInfo::BlockType blockType, unsigned int blockSize, const tchar *dbgStr, va_list argptr, tchar ignore_next);
         void DumpDebugInfo(FILE* file);
 
-        u32 AddBuffer( const u8* buffer, u32 size, const char* dbgStr = NULL, ... );
+        u32 AddBuffer( const u8* buffer, u32 size, const tchar* dbgStr = NULL, ... );
         u32 AddBuffer( const SmartBufferPtr& buffer,bool add_fixups );
 
-        u32 AddFile( const char* filename );
-        u32 AddFile( const std::string& filename );
+        u32 AddFile( const tchar* filename );
+        u32 AddFile( const tstring& filename );
 
-        u32 AddI8(i8 val, const char* dbgStr = NULL, ...);
-        u32 AddU8(u8 val, const char* dbgStr = NULL, ...);
+        u32 AddI8(i8 val, const tchar* dbgStr = NULL, ...);
+        u32 AddU8(u8 val, const tchar* dbgStr = NULL, ...);
 
-        u32 AddI16(i16 val, const char* dbgStr = NULL, ...);
-        u32 AddU16(u16 val, const char* dbgStr = NULL, ...);
+        u32 AddI16(i16 val, const tchar* dbgStr = NULL, ...);
+        u32 AddU16(u16 val, const tchar* dbgStr = NULL, ...);
 
-        u32 AddI32(i32 val, const char* dbgStr = NULL, ...);
-        u32 AddU32(u32 val, const char* dbgStr = NULL, ...);
+        u32 AddI32(i32 val, const tchar* dbgStr = NULL, ...);
+        u32 AddU32(u32 val, const tchar* dbgStr = NULL, ...);
 
-        u32 AddI64(i64 val, const char* dbgStr = NULL, ...);
-        u32 AddU64(u64 val, const char* dbgStr = NULL, ...);
+        u32 AddI64(i64 val, const tchar* dbgStr = NULL, ...);
+        u32 AddU64(u64 val, const tchar* dbgStr = NULL, ...);
 
-        u32 AddF16(f32 val, const char* dbgStr = NULL, ...);
-        u32 AddF32(f32 val, const char* dbgStr = NULL, ...);
-        u32 AddF64(f64 val, const char* dbgStr = NULL, ...);
+        u32 AddF16(f32 val, const tchar* dbgStr = NULL, ...);
+        u32 AddF32(f32 val, const tchar* dbgStr = NULL, ...);
+        u32 AddF64(f64 val, const tchar* dbgStr = NULL, ...);
 
-        u32 AddVector3( const ::Math::Vector3& v, const char* debugStr = NULL);
-        u32 AddVector4( const ::Math::Vector4& v, const char* debugStr = NULL);
-        u32 AddVector4( const ::Math::Vector3& v, f32 w, const char* debugStr = NULL);
-        u32 AddVector4( f32 x, f32 y, f32 z, f32 w, const char* debugStr = NULL);
+        u32 AddVector3( const Math::Vector3& v, const tchar* debugStr = NULL);
+        u32 AddVector4( const Math::Vector4& v, const tchar* debugStr = NULL);
+        u32 AddVector4( const Math::Vector3& v, f32 w, const tchar* debugStr = NULL);
+        u32 AddVector4( f32 x, f32 y, f32 z, f32 w, const tchar* debugStr = NULL);
 
         void AddAtLocI8(i8 val, const Location& destination);
         void AddAtLocU8(u8 val, const Location& destination);
@@ -148,18 +148,18 @@ namespace Nocturnal
         void SetCapacity(u32 capacity);
 
         /// Reserves 'size' space in the buffer and returns a Location object, advances the write location
-        Location Reserve(u32 size, const char* dbgStr = NULL, ...);
-        void Reserve(Location& loc, u32 size, const char* dbgStr = NULL, ...);
+        Location Reserve(u32 size, const tchar* dbgStr = NULL, ...);
+        void Reserve(Location& loc, u32 size, const tchar* dbgStr = NULL, ...);
 
         /// Reserves space for a pointer in the buffer and returns a Location object, advances the write location
         // if size is zero an automatically sized pointer is reserved based on the platform otherwise size
         // must be 4 or 8 and in either case a pointer of this size will be created
-        Location ReservePointer(u32 size, const char* dbgStr = NULL, ... );
-        void ReservePointer(Location& loc, u32 size, const char* dbgStr = NULL, ... );
+        Location ReservePointer(u32 size, const tchar* dbgStr = NULL, ... );
+        void ReservePointer(Location& loc, u32 size, const tchar* dbgStr = NULL, ... );
 
         /// Reserves space for an offset in the buffer and returns a Location object, advances the write location
-        Location ReserveOffset(const char* dbgStr = NULL, ... );
-        void ReserveOffset(Location& loc, const char* dbgStr = NULL, ... );
+        Location ReserveOffset(const tchar* dbgStr = NULL, ... );
+        void ReserveOffset(Location& loc, const tchar* dbgStr = NULL, ... );
 
         /// At the current offset write a pointer to the destination, advances the write location
         void WritePointer( const Location& destination );

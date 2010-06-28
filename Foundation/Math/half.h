@@ -493,8 +493,8 @@ namespace Math
             f32		f;
         };
 
-        static void	createBitString(char c[19], Half h);
-        static void	createBitString(char c[35], f32 f);
+        static void	createBitString(tchar c[19], Half h);
+        static void	createBitString(tchar c[35], f32 f);
 
         static const uif _toFloat[1 << 16];
         static const u16	_eLut[1 << 9];

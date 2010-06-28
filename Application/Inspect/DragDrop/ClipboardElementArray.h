@@ -14,7 +14,7 @@ namespace Inspect
   class APPLICATION_API ClipboardElementArray : public ReflectClipboardData
   {
   public:
-    std::string m_CommonBaseClass;
+    tstring m_CommonBaseClass;
     Reflect::V_Element m_Elements;
 
   public:

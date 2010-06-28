@@ -28,27 +28,27 @@ namespace Content
     return validJointAnimations;
   }
 
-  void Scene::GetJointMismatchReport( std::vector< std::string > &mismatchMessages, u32 clipIndex ) const
+  void Scene::GetJointMismatchReport( std::vector< tstring > &mismatchMessages, u32 clipIndex ) const
   {
     std::set< Nocturnal::TUID > animatedJoints;
 
     M_Animation::iterator itr = m_AnimationClips[ clipIndex ]->m_JointAnimationMap.begin();
     M_Animation::iterator end = m_AnimationClips[ clipIndex ]->m_JointAnimationMap.end();
     
-    std::string jointIdAsString;
+    tstring jointIdAsString;
     for( ; itr != end; ++itr )
     {
       if ( m_JointIds.find( (*itr).first ) == m_JointIds.end() )
       {
         (*itr).first.ToString( jointIdAsString );
-        mismatchMessages.push_back( std::string( "joint id [" ) + jointIdAsString + "] not found in scene!" );
+        mismatchMessages.push_back( tstring( TXT( "joint id [" ) ) + jointIdAsString + TXT( "] not found in scene!" ) );
         continue;
       }
 
       if ( (*itr).second->WindowSamples() == 0 )
       {
        (*itr).first.ToString( jointIdAsString );
-        mismatchMessages.push_back( std::string( "joint id [" ) + jointIdAsString + "] has no samples!" );
+        mismatchMessages.push_back( tstring( TXT( "joint id [" ) ) + jointIdAsString + TXT( "] has no samples!" ) );
       }
 
       animatedJoints.insert( (*itr).first );
@@ -59,7 +59,7 @@ namespace Content
       if ( animatedJoints.find( jointId ) == animatedJoints.end() )
       {
         jointId.ToString( jointIdAsString );
-        mismatchMessages.push_back( std::string( "joint id [" ) + jointIdAsString + "] was not animated!" );
+        mismatchMessages.push_back( tstring( TXT( "joint id [" ) ) + jointIdAsString + TXT( "] was not animated!" ) );
       }
     }
   }

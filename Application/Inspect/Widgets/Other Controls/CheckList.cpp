@@ -8,7 +8,7 @@
 using namespace Reflect;
 using namespace Inspect;
 
-typedef std::map< std::string, bool > M_strbool;
+typedef std::map< tstring, bool > M_strbool;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Local class wrapping the wxCheckListBox (a list box with check marks next

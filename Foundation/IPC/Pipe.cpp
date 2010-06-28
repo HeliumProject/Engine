@@ -25,7 +25,7 @@ PipeConnection::~PipeConnection()
     Cleanup();
 }
 
-bool PipeConnection::Initialize(bool server, const char* name, const char* pipe_name, const char* server_name)
+bool PipeConnection::Initialize(bool server, const tchar* name, const tchar* pipe_name, const tchar* server_name)
 {
     if (!Connection::Initialize(server, name))
     {
@@ -34,33 +34,33 @@ bool PipeConnection::Initialize(bool server, const char* name, const char* pipe_
 
     if (pipe_name && pipe_name[0] != '\0')
     {
-        strcpy(m_PipeName, pipe_name);
+        _tcscpy(m_PipeName, pipe_name);
     }
 
     if (server_name && server_name[0] != '\0')
     {
-        strcpy(m_ServerName, server_name);
+        _tcscpy(m_ServerName, server_name);
     }
 
     if (server)
     {
         // a server cannot be on a remote machine so we simply ignore the server name
-        sprintf(m_ReadName,"\\\\.\\pipe\\%s_%s", m_PipeName, "server_read");
-        sprintf(m_WriteName,"\\\\.\\pipe\\%s_%s", m_PipeName, "client_read");
+        _stprintf(m_ReadName, TXT( "\\\\.\\pipe\\%s_%s" ), m_PipeName, "server_read");
+        _stprintf(m_WriteName, TXT( "\\\\.\\pipe\\%s_%s" ), m_PipeName, "client_read");
     }
     else
     {
         // if the server name is null then create the pipe on the local machine, if a server name
         // is specified then it names the remote machine on which to connect to.
-        if (server_name && strlen(server_name) != 0)
+        if (server_name && _tcslen(server_name) != 0)
         {
-            sprintf(m_ReadName, IPC_PIPE_ROOT"\\\\%s\\pipe\\%s_%s", m_ServerName, m_PipeName, "client_read");
-            sprintf(m_WriteName, IPC_PIPE_ROOT"\\\\%s\\pipe\\%s_%s", m_ServerName, m_PipeName, "server_read");
+            _stprintf(m_ReadName, IPC_PIPE_ROOT TXT( "\\\\%s\\pipe\\%s_%s" ), m_ServerName, m_PipeName, "client_read");
+            _stprintf(m_WriteName, IPC_PIPE_ROOT TXT( "\\\\%s\\pipe\\%s_%s" ), m_ServerName, m_PipeName, "server_read");
         }
         else
         {
-            sprintf(m_ReadName, IPC_PIPE_ROOT"\\\\.\\pipe\\%s_%s", m_PipeName, "client_read");
-            sprintf(m_WriteName, IPC_PIPE_ROOT"\\\\.\\pipe\\%s_%s", m_PipeName, "server_read");
+            _stprintf(m_ReadName, IPC_PIPE_ROOT TXT( "\\\\.\\pipe\\%s_%s" ), m_PipeName, "client_read");
+            _stprintf(m_WriteName, IPC_PIPE_ROOT TXT( "\\\\.\\pipe\\%s_%s" ), m_PipeName, "server_read");
         }
     }
 
@@ -68,9 +68,9 @@ bool PipeConnection::Initialize(bool server, const char* name, const char* pipe_
 
     Platform::Thread::Entry serverEntry = Platform::Thread::EntryHelper<PipeConnection, &PipeConnection::ServerThread>;
     Platform::Thread::Entry clientEntry = Platform::Thread::EntryHelper<PipeConnection, &PipeConnection::ClientThread>;
-    if (!m_ConnectThread.Create(server ? serverEntry : clientEntry, this, "IPC Connection Thread"))
+    if (!m_ConnectThread.Create(server ? serverEntry : clientEntry, this, TXT( "IPC Connection Thread" ) ))
     {
-        Platform::Print("%s: Failed to create connect thread\n", m_Name);
+        Platform::Print( TXT( "%s: Failed to create connect thread\n" ), m_Name);
         SetState(ConnectionStates::Failed);
         return false;  
     }
@@ -80,7 +80,7 @@ bool PipeConnection::Initialize(bool server, const char* name, const char* pipe_
 
 void PipeConnection::ServerThread()
 {
-    Platform::Print("%s: Starting pipe server '%s'\n", m_Name, m_PipeName);
+    Platform::Print( TXT( "%s: Starting pipe server '%s'\n" ), m_Name, m_PipeName);
 
     // while the server is still running, cycle through connections
     while (!m_Terminating)
@@ -97,7 +97,7 @@ void PipeConnection::ServerThread()
             return;
         }
 
-        Platform::Print("%s: Ready for client\n", m_Name, m_PipeName);
+        Platform::Print( TXT( "%s: Ready for client\n" ), m_Name, m_PipeName);
 
         // wait for the connection
         while (!m_Terminating)
@@ -136,16 +136,16 @@ void PipeConnection::ServerThread()
         }
     }
 
-    Platform::Print("%s: Stopping pipe server '%s'\n", m_Name, m_PipeName);
+    Platform::Print( TXT( "%s: Stopping pipe server '%s'\n" ), m_Name, m_PipeName);
 }
 
 void PipeConnection::ClientThread()
 {
-    Platform::Print("%s: Starting pipe client '%s'\n", m_Name, m_PipeName);
+    Platform::Print( TXT( "%s: Starting pipe client '%s'\n" ), m_Name, m_PipeName);
 
     while (!m_Terminating)
     {
-        Platform::Print("%s: Ready for server\n", m_Name, m_PipeName);
+        Platform::Print( TXT( "%s: Ready for server\n" ), m_Name, m_PipeName);
 
         // wait for write pipe creation
         while (!m_Terminating)
@@ -180,7 +180,7 @@ void PipeConnection::ClientThread()
         }
     }
 
-    Platform::Print("%s: Stopping pipe client '%s'\n", m_Name, m_PipeName);
+    Platform::Print( TXT( "%s: Stopping pipe client '%s'\n" ), m_Name, m_PipeName);
 }
 
 bool PipeConnection::ReadMessage(Message** msg)

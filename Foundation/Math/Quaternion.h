@@ -90,8 +90,8 @@ namespace Math
         f32                   Dot ( const Quaternion& q2 ) const;
         bool                  Equal( const Quaternion &q2, f32 error = 0.0f ) const;
 
-        friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const Quaternion& quaternion);
-        friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, Quaternion& quaternion);
+        friend FOUNDATION_API tostream& operator<<(tostream& outStream, const Quaternion& quaternion);
+        friend FOUNDATION_API tistream& operator>>(tistream& inStream, Quaternion& quaternion);
     };
 
     inline bool Quaternion::Equal( const Quaternion& q2, f32 error ) const
@@ -197,14 +197,14 @@ namespace Math
         return ( ( values.x * q2.values.x ) + ( values.y * q2.values.y ) + ( values.z * q2.values.z ) + ( values.w * q2.values.w ) );
     }
 
-    inline std::ostream& operator<<(std::ostream& outStream, const Quaternion& quaternion)
+    inline tostream& operator<<(tostream& outStream, const Quaternion& quaternion)
     {
         outStream << quaternion.values;
 
         return outStream;
     }
 
-    inline std::istream& operator>>(std::istream& inStream, Quaternion& quaternion)
+    inline tistream& operator>>(tistream& inStream, Quaternion& quaternion)
     {
         inStream >> quaternion.values;
 

@@ -25,7 +25,7 @@ ImageFilter::ImageFilter(unsigned int width, unsigned int flags)
 // resolution from input. The filter width is specified by width and flags specify if the output should be
 // normalized for normals, etc.
 
-ImageFilter::ImageFilter(const char* inputfile, const char* outputfile, unsigned int xres, unsigned int yres, unsigned int width, unsigned int flags)
+ImageFilter::ImageFilter(const tchar* inputfile, const tchar* outputfile, unsigned int xres, unsigned int yres, unsigned int width, unsigned int flags)
 : output(NULL)
 , filterWidth(width)
 , opFlags(flags)
@@ -267,7 +267,7 @@ void FillImageFilter::accumulateSamples(int basex, int basey, int yoffset, int a
 
 // Creates arrays for holding the stamp which is in the filter base
 
-BoxImageFilter::BoxImageFilter(const char* inputfile, const char* outputfile, unsigned int xres, unsigned int yres, unsigned int width, unsigned int flags)
+BoxImageFilter::BoxImageFilter(const tchar* inputfile, const tchar* outputfile, unsigned int xres, unsigned int yres, unsigned int width, unsigned int flags)
 : ImageFilter (inputfile, outputfile, xres, yres, width, flags)
 {
   numRows = width * 2 - 1;

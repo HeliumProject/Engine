@@ -7,7 +7,7 @@ namespace Undo
   class Exception : public Nocturnal::Exception
   {
   public:
-    Exception( const char *msgFormat, ... )
+    Exception( const tchar *msgFormat, ... )
     {
       va_list msgArgs;
       va_start( msgArgs, msgFormat );

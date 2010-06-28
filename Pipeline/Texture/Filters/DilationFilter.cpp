@@ -41,7 +41,7 @@ const double g_GaussianWeights[] =
 
 NOC_COMPILE_ASSERT( sizeof(g_GaussianWeights)/sizeof(g_GaussianWeights[0]) == FILTER_RADIUS_PER_PASS + 1 );
 
-DilationFilter::DilationFilter(const char* inputfile, const char* outputfile, unsigned int xres, unsigned int yres, unsigned int flags, bool smoothSeams) : ImageFilter(1, flags), m_smoothSeams(smoothSeams)
+DilationFilter::DilationFilter(const tchar* inputfile, const tchar* outputfile, unsigned int xres, unsigned int yres, unsigned int flags, bool smoothSeams) : ImageFilter(1, flags), m_smoothSeams(smoothSeams)
 {
   ImageFilter::outputPath = outputfile;
 

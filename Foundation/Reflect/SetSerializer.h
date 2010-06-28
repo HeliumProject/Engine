@@ -51,15 +51,15 @@ namespace Reflect
         virtual void Serialize(Archive& archive) const NOC_OVERRIDE;
         virtual void Deserialize(Archive& archive) NOC_OVERRIDE;
 
-        virtual std::ostream& operator >> (std::ostream& stream) const NOC_OVERRIDE;
-        virtual std::istream& operator << (std::istream& stream) NOC_OVERRIDE;
+        virtual tostream& operator>> (tostream& stream) const NOC_OVERRIDE;
+        virtual tistream& operator<< (tistream& stream) NOC_OVERRIDE;
     };
 
-    typedef SimpleSetSerializer<std::string, StringSerializer> StringSetSerializer;      REFLECT_SPECIALIZE_SERIALIZER( StringSetSerializer );
-    typedef SimpleSetSerializer<u32, U32Serializer> U32SetSerializer;                    REFLECT_SPECIALIZE_SERIALIZER( U32SetSerializer );
-    typedef SimpleSetSerializer<u64, U64Serializer> U64SetSerializer;                    REFLECT_SPECIALIZE_SERIALIZER( U64SetSerializer );
-    typedef SimpleSetSerializer<f32, F32Serializer> F32SetSerializer;                    REFLECT_SPECIALIZE_SERIALIZER( F32SetSerializer );
-    typedef SimpleSetSerializer<Nocturnal::GUID, GUIDSerializer> GUIDSetSerializer; REFLECT_SPECIALIZE_SERIALIZER( GUIDSetSerializer );
-    typedef SimpleSetSerializer<Nocturnal::TUID, TUIDSerializer> TUIDSetSerializer; REFLECT_SPECIALIZE_SERIALIZER( TUIDSetSerializer );
-    typedef SimpleSetSerializer< Nocturnal::Path, PathSerializer > PathSetSerializer;    REFLECT_SPECIALIZE_SERIALIZER( PathSetSerializer );
+    typedef SimpleSetSerializer<tstring, StringSerializer> StringSetSerializer;         REFLECT_SPECIALIZE_SERIALIZER( StringSetSerializer );
+    typedef SimpleSetSerializer<u32, U32Serializer> U32SetSerializer;                   REFLECT_SPECIALIZE_SERIALIZER( U32SetSerializer );
+    typedef SimpleSetSerializer<u64, U64Serializer> U64SetSerializer;                   REFLECT_SPECIALIZE_SERIALIZER( U64SetSerializer );
+    typedef SimpleSetSerializer<f32, F32Serializer> F32SetSerializer;                   REFLECT_SPECIALIZE_SERIALIZER( F32SetSerializer );
+    typedef SimpleSetSerializer<Nocturnal::GUID, GUIDSerializer> GUIDSetSerializer;     REFLECT_SPECIALIZE_SERIALIZER( GUIDSetSerializer );
+    typedef SimpleSetSerializer<Nocturnal::TUID, TUIDSerializer> TUIDSetSerializer;     REFLECT_SPECIALIZE_SERIALIZER( TUIDSetSerializer );
+    typedef SimpleSetSerializer<Nocturnal::Path, PathSerializer> PathSetSerializer;     REFLECT_SPECIALIZE_SERIALIZER( PathSetSerializer );
 }

@@ -26,25 +26,25 @@ namespace Nocturnal
         class PIPELINE_API EventSystem : public Nocturnal::RefCountBase< EventSystem >
         {
         public:
-            EventSystem( const std::string& rootDirPath, bool writeBinaryFormat );
+            EventSystem( const tstring& rootDirPath, bool writeBinaryFormat );
             ~EventSystem();
 
-            EventPtr CreateEvent( const std::string& eventData, const std::string& username );
+            EventPtr CreateEvent( const tstring& eventData, const tstring& username );
 
             void GetUnhandledEvents( V_EventPtr& listOfEvents );
             void GetUnhandledEvents( V_EventPtr& listOfEvents, S_tuid& handledEventIDs );
-            void ReadEventsFile( const std::string& eventsFilename, V_EventPtr& listOfEvents, bool sorted = false );
+            void ReadEventsFile( const tstring& eventsFilename, V_EventPtr& listOfEvents, bool sorted = false );
 
-            void CreateEventsFilePath( std::string& userEventsFile );
-            void WriteEventsFile( const std::string& eventsFilename, const V_EventPtr& listOfEvents );
+            void CreateEventsFilePath( tstring& userEventsFile );
+            void WriteEventsFile( const tstring& eventsFilename, const V_EventPtr& listOfEvents );
 
             void WriteHandledEvents( const V_EventPtr& listOfEvents );
             void FlushHandledEvents();
             bool HandleEventsFileExists();
 
-            void DumpEventsToTextFile( const std::string& datFile = std::string( "" ), const std::string& txtFile = std::string( "" ) );
-            void LoadEventsFromTextFile( const std::string& txtFile = std::string( "" ), const std::string& datFile = std::string( "" ) );
-            void StompEventsFile( const std::string& eventsFile, const V_EventPtr& listOfEvents );
+            void DumpEventsToTextFile( const tstring& datFile = TXT( "" ), const tstring& txtFile = TXT( "" ) );
+            void LoadEventsFromTextFile( const tstring& txtFile = TXT( "" ), const tstring& datFile = TXT( "" ) );
+            void StompEventsFile( const tstring& eventsFile, const V_EventPtr& listOfEvents );
 
         private:
             Nocturnal::Path m_RootDirPath;
@@ -53,11 +53,11 @@ namespace Nocturnal
 
             void GetEvents( V_EventPtr& listOfEvents, bool sorted = false );
 
-            void ReadBinaryEventsFile( const std::string& eventsFilename, V_EventPtr& listOfEvents, bool sorted = false );
-            void ReadTextEventsFile( const std::string& eventsFilename, V_EventPtr& listOfEvents, bool sorted = false );
+            void ReadBinaryEventsFile( const tstring& eventsFilename, V_EventPtr& listOfEvents, bool sorted = false );
+            void ReadTextEventsFile( const tstring& eventsFilename, V_EventPtr& listOfEvents, bool sorted = false );
 
-            void WriteBinaryEventsFile( const std::string& eventsFilename, const V_EventPtr& listOfEvents );
-            void WriteTextEventsFile( const std::string& eventsFilename, const V_EventPtr& listOfEvents );
+            void WriteBinaryEventsFile( const tstring& eventsFilename, const V_EventPtr& listOfEvents );
+            void WriteTextEventsFile( const tstring& eventsFilename, const V_EventPtr& listOfEvents );
         };
     }
 }

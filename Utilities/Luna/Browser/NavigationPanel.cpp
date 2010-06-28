@@ -6,8 +6,6 @@
 #include "Application/UI/ImageManager.h"
 #include "Application/UI/MenuButton.h"
 
-#include "BrowserSearchDatabase.h"
-
 using namespace Luna;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -234,12 +232,6 @@ void NavigationPanel::OnNavBarTextEnter( wxCommandEvent& event )
     return;
   
   m_BrowserFrame->Search( GetNavBarValue().c_str() ); 
-
-   // store the results from entering a search in the navigation bar
-  if( !GetNavBarValue().empty() )
-  {
-    BrowserSearchDatabase::UpdateSearchEvents( GetNavBarValue().c_str() );
-}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -248,12 +240,6 @@ void NavigationPanel::OnGoButtonClick( wxCommandEvent& event )
   event.Skip();
   
   m_BrowserFrame->Search( GetNavBarValue().c_str() );
-
-  // store the results from entering a search in the navigation bar
-  if( !GetNavBarValue().empty() )
-  {
-    BrowserSearchDatabase::UpdateSearchEvents( GetNavBarValue().c_str() );
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

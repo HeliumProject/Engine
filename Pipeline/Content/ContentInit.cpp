@@ -44,7 +44,7 @@
 #include "Pipeline/Content/Nodes/Lights/DirectionalLight.h"
 #include "Pipeline/Content/Nodes/Lights/ShadowDirection.h"
 #include "Pipeline/Content/Nodes/Lights/SunLight.h"
-#include "Pipeline/Content/Nodes/Lights/AreaLights/AreaLight.h""
+#include "Pipeline/Content/Nodes/Lights/AreaLights/AreaLight.h"
 #include "Pipeline/Content/Nodes/Lights/AreaLights/RadiusLight.h"
 #include "Pipeline/Content/Nodes/Lights/AreaLights/SphereLight.h"
 #include "Pipeline/Content/Nodes/Lights/AreaLights/RectangleLight.h"
@@ -113,7 +113,7 @@ namespace Content
 
       g_InitializerStack.Push( Reflect::RegisterEnumeration<CollisionShapes::CollisionShape>( &CollisionShapes::CollisionShapeEnumerateEnumeration, "CollisionShape" ) );
       g_InitializerStack.Push( Reflect::RegisterClass<CollisionPrimitive>( "CollisionPrimitive" ) );
-      Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass<CollisionPrimitive>(), "CollisionVolume" );
+      Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass<CollisionPrimitive>(), TXT( "CollisionVolume" ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<Influence>( "Influence" ) );
       g_InitializerStack.Push( Reflect::RegisterClass<Skin>( "Skin" ) );

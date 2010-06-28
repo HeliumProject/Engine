@@ -5,12 +5,11 @@
 #include "Foundation/Version.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Utilities.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
-#include "Application/RCS/RCS.h"
 #include "Foundation/TUID.h"
 #include "Foundation/Log.h"
 
-#include "Application/Application.h"
 #include "Foundation/Math/EulerAngles.h"
 #include "Foundation/Math/AlignedBox.h"
 #include "Foundation/Math/Line.h"
@@ -40,7 +39,7 @@ namespace Content
 
   }
 
-  Scene::Scene( const std::string &filePath )
+  Scene::Scene( const tstring &filePath )
     : m_MorphTargetData( new MorphTargetData() )
   {
     Load( filePath );
@@ -158,22 +157,22 @@ namespace Content
     m_NodeAddedSignature.Raise( NodeAddedArgs( *node ) );
   }
 
-  void Scene::Load( const std::string &filePath )
+  void Scene::Load( const tstring &filePath )
   {
     Reflect::V_Element elements;
     Load( filePath, elements );
   }
 
-  void Scene::Load( const std::string &filePath, Reflect::V_Element& elements, Reflect::StatusHandler* status )
+  void Scene::Load( const tstring &filePath, Reflect::V_Element& elements, Reflect::StatusHandler* status )
   {
     m_FilePath = filePath;
     Archive::FromFile( filePath, elements, status );
     PostLoad( elements );
   }
 
-  void Scene::LoadXML( const std::string& xml, Reflect::V_Element& elements, Reflect::StatusHandler* status )
+  void Scene::LoadXML( const tstring& xml, Reflect::V_Element& elements, Reflect::StatusHandler* status )
   {
-    Archive::FromXML( xml, elements, status );
+    ArchiveXML::FromString( xml, elements, status );
     PostLoad( elements );
   }
 
@@ -223,11 +222,8 @@ namespace Content
     Serialize( m_FilePath );
   }
 
-  void Scene::Serialize( const std::string& filePath )
+  void Scene::Serialize( const tstring& filePath )
   {
-    RCS::File rcsFile( filePath );
-    rcsFile.Open();
-
     V_Element elements;
 
     M_DependencyNode::const_iterator itr = m_DependencyNodes.begin();
@@ -342,7 +338,7 @@ namespace Content
     m_AddedHierarchyNodes.clear();
   }
 
-  bool Scene::HasDuplicateBangleIndexedExportNodes( std::vector< std::string >& duplicate_bangle_ids_info)
+  bool Scene::HasDuplicateBangleIndexedExportNodes( std::vector< tstring >& duplicate_bangle_ids_info)
   {
     std::vector< i32 > bangle_indices;
     bool res = false;
@@ -357,8 +353,8 @@ namespace Content
         }
         else
         {
-          std::ostringstream str; 
-          str << descriptor->m_GivenName << " has duplicate bangle id " << descriptor->m_ContentNum<<"\n";
+          tostringstream str; 
+          str << descriptor->m_GivenName << TXT( " has duplicate bangle id " ) << descriptor->m_ContentNum<< TXT( "\n" );
           duplicate_bangle_ids_info.push_back(str.str());
           res = true;
         }
@@ -707,7 +703,7 @@ namespace Content
     printf("%5d joints\n", m_JointIds.size());
     for(Nocturnal::S_TUID::const_iterator ijoint = m_JointIds.begin(); ijoint != m_JointIds.end(); ++ijoint)
     {
-      std::string joint_str;
+      tstring joint_str;
       ijoint->ToString(joint_str);
 
       JointTransform* joint = Get< JointTransform >(*ijoint);
@@ -723,7 +719,7 @@ namespace Content
 //    {
 //      const igSuperJointArray* bindJoints = m_Processor.GetEngineScene().GetSuperJointArray();
 //
-//      std::string joint_str;
+//      tstring joint_str;
 //      ijoint->ToString(joint_str);
 //
 //      JointTransform* joint = Get< JointTransform >(joint_id);
@@ -778,7 +774,7 @@ namespace Content
             f32                 weight          = influence->m_Weights[inf];
             const Nocturnal::TUID& weight_joint_id = skin->m_InfluenceObjectIDs[influence->m_Objects[inf]];
 
-            std::string weight_joint_str;
+            tstring weight_joint_str;
             weight_joint_id.ToString(weight_joint_str);
 
             printf("$$$%5d '%s' %f\n", inf, weight_joint_str.c_str(), weight);
@@ -874,7 +870,7 @@ namespace Content
 
         #ifdef DO_BSPHERE_DUMP
         {
-          std::string joint_str;
+          tstring joint_str;
           joint_id.ToString(joint_str);
 
           JointTransform* joint = Get< JointTransform >(joint_id);
@@ -932,7 +928,7 @@ namespace Content
 
         #ifdef DO_BSPHERE_DUMP
         {
-          std::string joint_str;
+          tstring joint_str;
           joint_id.ToString(joint_str);
 
           JointTransform* joint = Get< JointTransform >(joint_id);
@@ -1007,7 +1003,7 @@ namespace Content
           const Nocturnal::TUID&  joint_id  = uid_id.first;
           u64                  mesh_id   = uid_id.second;
 
-          std::string joint_str;
+          tstring joint_str;
           joint_id.ToString(joint_str);
 
           JointTransform* joint = Get< JointTransform >(joint_id);
@@ -1045,7 +1041,7 @@ namespace Content
             const Math::BoundingVolumeGenerator::BSphere& bsphere = bspheres[ibsphere].first;
             u64                                           mesh_id = bspheres[ibsphere].second;
 
-            std::string joint_str;
+            tstring joint_str;
             joint_id.ToString(joint_str);
 
             JointTransform* joint = Get< JointTransform >(joint_id);
@@ -1096,7 +1092,7 @@ namespace Content
       {
         Nocturnal::TUID joint_id = *ijoint;
 
-        std::string joint_str;
+        tstring joint_str;
         joint_id.ToString(joint_str);
 
         JointTransform* joint = Get< JointTransform >(joint_id);
@@ -1224,7 +1220,7 @@ namespace Content
 
           #ifdef DO_BSPHERE_DUMP
           {
-            std::string joint_str;
+            tstring joint_str;
             joint_id.ToString(joint_str);
 
             JointTransform* joint = Get< JointTransform >(joint_id);
@@ -1395,7 +1391,7 @@ namespace Content
             
             if ( indexIt == jointUidToId.end() )
             {
-              std::string jointStr;
+              tstring jointStr;
               joint_id.ToString( jointStr );
               continue;
             }
@@ -1565,7 +1561,7 @@ namespace Content
     {
       if ( requiredJoints.find( joint ) == requiredJoints.end() )
       {
-        Log::Debug( Log::Levels::Extreme, "Joint not required: %s\n", joint->GetName().c_str() );
+        Log::Debug( Log::Levels::Extreme, TXT( "Joint not required: %s\n" ), joint->GetName().c_str() );
       }
     }
   }
@@ -1595,7 +1591,7 @@ namespace Content
         
         if( itor == upper )
         {
-          std::string idStr;
+          tstring idStr;
           shaderID.ToString(idStr);
           MeshPtr newMesh = new Mesh( mesh->m_ID );
           newMesh->m_DefaultName = idStr;
@@ -1658,7 +1654,7 @@ namespace Content
         }
       }
 
-      Log::Print( "Removing Mesh: %s\n", mesh->GetName().c_str() );
+      Log::Print( TXT( "Removing Mesh: %s\n" ), mesh->GetName().c_str() );
       Remove( mesh );
     }
       
@@ -1670,7 +1666,7 @@ namespace Content
     M_ShaderMesh::iterator end = meshesByShader.end();
     for( ; itor != end; ++itor )
     {
-      Log::Print( "Adding MergedMesh: %s\n", itor->second->GetName().c_str() );
+      Log::Print( TXT( "Adding MergedMesh: %s\n" ), itor->second->GetName().c_str() );
       Add( itor->second );
     }
     Update();

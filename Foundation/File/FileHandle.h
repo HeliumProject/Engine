@@ -13,7 +13,7 @@ namespace Nocturnal
     class FileOperationException : public Nocturnal::Exception
     {
     public:
-        FileOperationException( const char *msgFormat, ... ) : Exception()
+        FileOperationException( const tchar *msgFormat, ... ) : Exception()
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );
@@ -38,7 +38,7 @@ namespace Nocturnal
     class FOUNDATION_API FileHandle : public Nocturnal::RefCountBase< FileHandle >
     {
     public:
-        FileHandle( const std::string& path, const char* mode = "r" );
+        FileHandle( const tstring& path, const tchar* mode = TXT( "r" ) );
 
         virtual ~FileHandle()
         {
@@ -65,7 +65,7 @@ namespace Nocturnal
             return m_Path;
         }
 
-        const char* GetMode() const
+        const tchar* GetMode() const
         {
             return m_Mode;
         }
@@ -78,7 +78,7 @@ namespace Nocturnal
     private:
         u32  m_OpenCount;
         Path m_Path;
-        const char* m_Mode;
+        const tchar* m_Mode;
         FILE* m_FileHandle;
     };
 

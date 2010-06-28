@@ -16,18 +16,18 @@ namespace Nocturnal
         class FOUNDATION_API Command
         {
         protected:
-			std::string m_Token;
-			std::string m_Usage;
-			std::string m_ShortHelp;
-			mutable std::string m_Help;
+			tstring m_Token;
+			tstring m_Usage;
+			tstring m_ShortHelp;
+			mutable tstring m_Help;
 
 			OptionsMap m_OptionsMap;
 
         public:
-			Command( const char* token, const char* usage = "[OPTIONS]", const char* shortHelp = "" );
+			Command( const tchar* token, const tchar* usage = TXT( "[OPTIONS]" ), const tchar* shortHelp = TXT( "" ) );
             virtual ~Command();
 
-			virtual bool Initialize( std::string& error )
+			virtual bool Initialize( tstring& error )
 			{
 				return true;
 			}
@@ -36,24 +36,24 @@ namespace Nocturnal
             {
             }
 
-            const std::string& Token() const
+            const tstring& Token() const
 			{
 				return m_Token;
 			}
 
-			const std::string& ShortHelp() const
+			const tstring& ShortHelp() const
 			{
 				return m_ShortHelp;
 			}
 
-            virtual const std::string& Help() const;
+            virtual const tstring& Help() const;
 
-            bool AddOption( const OptionPtr& option, std::string& error );
-            bool ParseOptions( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
+            bool AddOption( const OptionPtr& option, tstring& error );
+            bool ParseOptions( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error );
 
-			virtual bool Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) = 0;
+			virtual bool Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) = 0;
         };
 
-        typedef std::map< std::string, Command* > M_StringToCommandDumbPtr;
+        typedef std::map< tstring, Command* > M_StringToCommandDumbPtr;
     }
 }

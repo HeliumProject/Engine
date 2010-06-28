@@ -74,7 +74,7 @@ namespace Content
     bool m_ExceededRangeOnScaleConversion;
     bool m_ExceededRangeOnRotationConversion;
 
-    void Compress( const std::string& jt_name, const AnimationPtr& uncompressedAnimation, const Math::Vector3& bindTranslate );
+    void Compress( const tstring& jt_name, const AnimationPtr& uncompressedAnimation, const Math::Vector3& bindTranslate );
 
     u32 NumSamples() const;
     bool HasMotion() const { return m_HasMotion; }

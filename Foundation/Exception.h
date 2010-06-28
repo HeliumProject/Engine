@@ -28,7 +28,7 @@ namespace Nocturnal
     class Exception : public std::exception
     {
     protected:
-        mutable std::string m_Message;
+        mutable tstring m_Message;
 
     protected:
         Exception()
@@ -37,7 +37,7 @@ namespace Nocturnal
         }
 
     public:
-        Exception( const char *msgFormat, ... )
+        Exception( const tchar *msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );
@@ -49,17 +49,17 @@ namespace Nocturnal
         // These accessors are thow that re-throw blocks can amend the exception message
         //
 
-        std::string& Get()
+        tstring& Get()
         {
             return m_Message;
         }
 
-        const std::string& Get() const
+        const tstring& Get() const
         {
             return m_Message;
         }
 
-        void Set(const std::string& message)
+        void Set(const tstring& message)
         {
             m_Message = message;
         }
@@ -68,13 +68,13 @@ namespace Nocturnal
         // This allow operation with std::exception case statements
         //
 
-        virtual const char* what() const
+        virtual const tchar* What() const
         {
             return m_Message.c_str();
         }
 
     protected:
-        void SetMessage( const char* msgFormat, ... )
+        void SetMessage( const tchar* msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );
@@ -82,11 +82,11 @@ namespace Nocturnal
             va_end( msgArgs );
         }
 
-        void SetMessage( const char* msgFormat, va_list msgArgs )
+        void SetMessage( const tchar* msgFormat, va_list msgArgs )
         {
-            char msgBuffer[ERROR_STRING_BUF_SIZE];
+            tchar msgBuffer[ERROR_STRING_BUF_SIZE];
 
-            vsnprintf( msgBuffer, sizeof(msgBuffer), msgFormat, msgArgs );
+            _vsntprintf( msgBuffer, sizeof(msgBuffer), msgFormat, msgArgs );
             msgBuffer[sizeof(msgBuffer) - 1] = 0; 
 
             m_Message = msgBuffer;
@@ -111,7 +111,7 @@ namespace Nocturnal
         }
 
     public:
-        PlatformException( const char *msgFormat, ... )
+        PlatformException( const tchar *msgFormat, ... )
             : m_ErrorCode( Platform::GetLastError() )
         {
             va_list msgArgs;
@@ -120,7 +120,7 @@ namespace Nocturnal
             va_end( msgArgs );
         }
 
-        PlatformException( u32 error, const char *msgFormat, ... )
+        PlatformException( u32 error, const tchar *msgFormat, ... )
             : m_ErrorCode( error )
         {
             va_list msgArgs;
@@ -135,12 +135,12 @@ namespace Nocturnal
         }
 
     protected:
-        virtual void SetMessage( const char *msgFormat, va_list msgArgs )
+        virtual void SetMessage( const tchar *msgFormat, va_list msgArgs )
         {
             __super::SetMessage( msgFormat, msgArgs );
 
             // append system error information
-            m_Message += TXT(" (") + Platform::GetErrorString(m_ErrorCode) + TXT(")");
+            m_Message += TXT( " (" ) + Platform::GetErrorString(m_ErrorCode) + TXT( ")" );
         }
     };
 }
@@ -154,7 +154,7 @@ protected: \
     \
 } \
 public: \
-    Exception( const char *msgFormat, ... ) \
+    Exception( const tchar *msgFormat, ... ) \
 { \
     va_list msgArgs; \
     va_start( msgArgs, msgFormat ); \

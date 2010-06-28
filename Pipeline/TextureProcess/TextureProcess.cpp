@@ -42,17 +42,17 @@ Nocturnal::PostMipImageFilter  TextureProcess::g_DefaultPostMipFilter  = Nocturn
 ////////////////////////////////////////////////////////////////////////////////////////////////
 bool TextureProcess::Bank::LoadImages()
 {
-  Log::Bullet bullet ("Loading...\n");
+  Log::Bullet bullet( TXT( "Loading...\n" ) );
 
   u32 c=0;
   for (V_Definition::iterator i=m_textures.begin();i!=m_textures.end();++i)
   {
-    std::string filename = (*i)->m_texture_file;
-    size_t pos = filename.find_last_of("\\/");
-    if (pos != std::string::npos)
+    tstring filename = (*i)->m_texture_file;
+    size_t pos = filename.find_last_of( TXT( "\\/" ) );
+    if (pos != tstring::npos)
       filename = filename.substr(pos+1);
 
-    Log::Print( Log::Levels::Verbose, "[%d] : %s", c, filename.c_str());
+    Log::Print( Log::Levels::Verbose, TXT( "[%d] : %s" ), c, filename.c_str());
 
     bool convert_to_linear = (*i)->m_is_normal_map ? false : true;
     Nocturnal::Texture* tex = Nocturnal::Texture::LoadFile((*i)->m_texture_file.c_str(), convert_to_linear, NULL);
@@ -68,21 +68,21 @@ bool TextureProcess::Bank::LoadImages()
         tex->m_NativeFormat = Nocturnal::CF_ARGB8888;
       }
 
-      char* type[] = {"2D TEXTURE","CUBE MAP","VOLUME TEXTURE"};
+      tchar* type[] = { TXT( "2D TEXTURE" ), TXT( "CUBE MAP") , TXT( "VOLUME TEXTURE" ) };
       if (tex->Type()==Nocturnal::Texture::VOLUME)
       {
-        Log::Print( Log::Levels::Verbose, "%s %d x %d x %d\n",type[tex->Type()],tex->m_Width,tex->m_Height,tex->m_Depth);
+        Log::Print( Log::Levels::Verbose, TXT( "%s %d x %d x %d\n" ),type[tex->Type()],tex->m_Width,tex->m_Height,tex->m_Depth);
       }
       else
       {
-        Log::Print( Log::Levels::Verbose, "%s %d x %d\n",type[tex->Type()],tex->m_Width,tex->m_Height);
+        Log::Print( Log::Levels::Verbose, TXT( "%s %d x %d\n" ),type[tex->Type()],tex->m_Width,tex->m_Height);
       }
 
       (*i)->m_texture = tex;
     }
     else
     {
-      Log::Warning("Failed to load '%s'\n",(*i)->m_texture_file.c_str());
+      Log::Warning( TXT( "Failed to load '%s'\n" ),(*i)->m_texture_file.c_str());
       return false;
     }
     c++;
@@ -108,7 +108,7 @@ inline bool IsOne(float v)
 
 bool TextureProcess::Bank::AdjustImages()
 {
-  Log::Bullet bullet ("Adjusting...\n");
+  Log::Bullet bullet( TXT( "Adjusting...\n" ) );
 
   // relative scale should be done before the power of 2 restriction...
   for (V_Definition::iterator i=m_textures.begin();i!=m_textures.end();i++)
@@ -123,7 +123,7 @@ bool TextureProcess::Bank::AdjustImages()
         Nocturnal::Texture* new_tex = (*i)->m_texture->RelativeScaleImage((*i)->m_relscale_x, (*i)->m_relscale_y, (*i)->m_texture->m_NativeFormat, Nocturnal::MIP_FILTER_CUBIC);
         if (new_tex)
         {
-          throw Nocturnal::Exception("Failed to rescale, aborting");
+          throw Nocturnal::Exception( TXT( "Failed to rescale, aborting" ) );
         }
         delete (*i)->m_texture;
         (*i)->m_texture = new_tex;
@@ -140,12 +140,12 @@ bool TextureProcess::Bank::AdjustImages()
       if ( !Math::IsPowerOfTwo((*i)->m_texture->m_Width) || !Math::IsPowerOfTwo((*i)->m_texture->m_Height) )
       {
         // this texture is not a power of 2 so rescale it to fix it
-        Log::Warning("Rescaling texture '%s', it is not a power of 2 (%d x %d)\n",(*i)->m_texture_file.c_str(),(*i)->m_texture->m_Width,(*i)->m_texture->m_Height);
+        Log::Warning( TXT( "Rescaling texture '%s', it is not a power of 2 (%d x %d)\n" ),(*i)->m_texture_file.c_str(),(*i)->m_texture->m_Width,(*i)->m_texture->m_Height);
 
         Nocturnal::Texture* new_tex = (*i)->m_texture->ScaleUpNextPowerOfTwo((*i)->m_texture->m_NativeFormat,Nocturnal::MIP_FILTER_CUBIC);
         if (!new_tex)
         {
-          throw Nocturnal::Exception("Failed to rescale, aborting");
+          throw Nocturnal::Exception( TXT( "Failed to rescale, aborting" ) );
         }
         delete (*i)->m_texture;
         (*i)->m_texture = new_tex;
@@ -154,8 +154,8 @@ bool TextureProcess::Bank::AdjustImages()
 
     if ((*i)->m_texture == NULL)
     {
-      char buf[120];
-      sprintf(buf, "Texture %s has no pixel data, file may be missing or corrupted", (*i)->m_texture_file.c_str());
+      tchar buf[120];
+      _stprintf(buf, TXT( "Texture %s has no pixel data, file may be missing or corrupted" ), (*i)->m_texture_file.c_str());
       throw Nocturnal::Exception(buf);
     }
   }
@@ -173,7 +173,7 @@ bool TextureProcess::Bank::AdjustImages()
 ////////////////////////////////////////////////////////////////////////////////////////////////
 bool TextureProcess::Bank::CompressImages()
 {
-  Log::Bullet bullet ("Compressing...\n");
+  Log::Bullet bullet( TXT( "Compressing...\n" ) );
 
   u32 count=0;
   for (V_Definition::iterator i=m_textures.begin();i!=m_textures.end();i++)
@@ -215,14 +215,14 @@ bool TextureProcess::Bank::CompressImages()
 
       if (!mips)
       {
-        throw Nocturnal::Exception("Failed to generate mips, aborting");
+        throw Nocturnal::Exception( TXT( "Failed to generate mips, aborting" ) );
       }
 
       u32 size = 0;
       for (u32 level=0; level<mips->m_levels_used; level++)
         size += mips->m_datasize[level];
 
-      Log::Print( Log::Levels::Verbose, "%8.02f kb used by '%s'\n", (float)(size) / 1024.f, (*i)->m_texture_file.c_str() );
+      Log::Print( Log::Levels::Verbose, TXT( "%8.02f kb used by '%s'\n" ), (float)(size) / 1024.f, (*i)->m_texture_file.c_str() );
 
       (*i)->m_mips = mips;
     }
@@ -276,21 +276,21 @@ bool TextureProcess::Bank::Pack()
   return true;
 }
 
-bool Bank::WriteDebugFile( const std::string& debug_file )
+bool Bank::WriteDebugFile( const tstring& debug_file )
 {
   if ( debug_file.empty() )
   {
     return true;
   }
 
-  FILE* f = fopen( debug_file.c_str(), "w" );
+  FILE* f = _tfopen( debug_file.c_str(), TXT( "w" ) );
   if ( !f )
   {
-    Log::Warning( "Failed to open '%s' for write.\n", debug_file.c_str() );
+    Log::Warning( TXT( "Failed to open '%s' for write.\n" ), debug_file.c_str() );
     return false;
   }
 
-  char* type[] = {"2D TEXTURE","CUBE MAP","VOLUME TEXTURE"};
+  tchar* type[] = { TXT( "2D TEXTURE" ), TXT( "CUBE MAP" ), TXT( "VOLUME TEXTURE" )};
 
   V_Definition::iterator it = m_textures.begin();
   V_Definition::iterator end = m_textures.end();

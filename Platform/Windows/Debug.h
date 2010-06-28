@@ -67,7 +67,7 @@ namespace Debug
         tstring                 m_Callstack;
         std::vector< tstring >  m_Threads;
         tstring                 m_State;
-        tstring                 m_Dump;
+        tstring                     m_Dump;
 
         // SEH-specific info
         u32                 m_SEHCode;

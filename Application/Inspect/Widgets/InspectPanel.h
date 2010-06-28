@@ -27,7 +27,7 @@ namespace Inspect
     bool m_IgnoreToggle;
   };
   
-  const static char PANEL_ATTR_TEXT[] = "text";
+  const static tchar PANEL_ATTR_TEXT[] = TXT( "text" );
   
   //
   // Contains other controls and distributes layout logic
@@ -40,10 +40,10 @@ namespace Inspect
     PanelItemData m_ItemData;
 
     // the title of the panel
-    std::string m_Text;
+    tstring m_Text;
 
     // the path of the panel
-    std::string m_Path;
+    tstring m_Path;
 
     // expanded state of the panel
     bool m_Expanded;
@@ -75,7 +75,7 @@ namespace Inspect
 
   protected:
     // process
-    virtual bool Process(const std::string& key, const std::string& value);
+    virtual bool Process(const tstring& key, const tstring& value);
 
   public:
     virtual wxWindow* GetContextWindow() NOC_OVERRIDE;
@@ -94,11 +94,11 @@ namespace Inspect
     
     void RefreshControls();
 
-    std::string GetPath();
+    tstring GetPath();
 
   protected:
     // build the path of titles to this panel
-    void BuildPath(std::string& path);
+    void BuildPath(tstring& path);
     
     void SetItemExpanded(bool expanded);
     
@@ -106,10 +106,10 @@ namespace Inspect
 
   public:
     // builds a list of expanded panels
-    void GetExpanded(std::map< std::string, std::string >& paths);
+    void GetExpanded(std::map< tstring, tstring >& paths);
 
     // sets expansion from paths
-    void SetExpanded(const std::map< std::string, std::string >& paths);
+    void SetExpanded(const std::map< tstring, tstring >& paths);
 
     // return expanded state
     bool IsExpanded();
@@ -146,9 +146,9 @@ namespace Inspect
 
     virtual void Read();
 
-    virtual void SetText(const std::string& text);
+    virtual void SetText(const tstring& text);
 
-    const std::string& GetText() const;
+    const tstring& GetText() const;
 
     friend class APPLICATION_API Canvas;
   };

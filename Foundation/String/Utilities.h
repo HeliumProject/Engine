@@ -3,68 +3,70 @@
 #include <string>
 #include <algorithm>
 
+#include "Platform/Types.h"
+
 /***********************************************************************************************************************
 *  isNum
 *   - returns TRUE if specified character is a number
 ***********************************************************************************************************************/
-inline bool isNum(char c)
+inline bool isNum(tchar c)
 {
-    return (c >= '0' && c <= '9');
+    return (c >= TXT('0') && c <= TXT('9'));
 }
 
 /***********************************************************************************************************************
 *  isAlpha
 *   - returns TRUE if specified character is in alphabet
 ***********************************************************************************************************************/
-inline bool isAlpha(char c)
+inline bool isAlpha(tchar c)
 {
-    return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
+    return ((c >= TXT('a') && c <= TXT('z')) || (c >= TXT('A') && c <= TXT('Z')));
 }
 
 /***********************************************************************************************************************
 *  isNumMod
 *   - returns TRUE if specified character is a numberic modifier character
 ***********************************************************************************************************************/
-inline bool isNumMod(char c)
+inline bool isNumMod(tchar c)
 {
-    return ((c == '.') || (c == '-'));
+    return ((c == TXT('.')) || (c == TXT('-')));
 }
 
 /***********************************************************************************************************************
 *  isNumHex
 *   - returns TRUE if specified character is a hex character
 ***********************************************************************************************************************/
-inline bool isNumHex(char c)
+inline bool isNumHex(tchar c)
 {
-    return (((c >= 'a') && (c <= 'f')) || ((c >= 'A') && (c <= 'F')));
+    return (((c >= TXT('a')) && (c <= TXT('f'))) || ((c >= TXT('A')) && (c <= TXT('F'))));
 }
 
 /***********************************************************************************************************************
 *  isWS
 *   - returns TRUE if specified character is white space
 ***********************************************************************************************************************/
-inline bool isWS(char c)
+inline bool isWS(tchar c)
 {
-    return ((c == ' ') || (c == ',') || (c == '\t') || (c == '\r') || (c == '\n'));
+    return ((c == TXT(' ')) || (c == TXT(',')) || (c == TXT('\t')) || (c == TXT('\r')) || (c == TXT('\n')));
 }
 
 /***********************************************************************************************************************
 *  atoh
 *   - returns integer value of hex string
 ***********************************************************************************************************************/
-inline int atoh(std::string& s)
+inline int atoh(tstring& s)
 {
     int val = 0;
     for (int i = 2; (i < (int) s.size()) && (isNum(s[i]) || isNumHex(s[i])); i++) 
     {
         val = (val*16);
-        if (s[i] >= 'a')
-            val += 10 + s[i] - 'a';
+        if (s[i] >= TXT('a'))
+            val += 10 + s[i] - TXT('a');
         else
-            if (s[i] >= 'A')
-                val += 10 + s[i] - 'A';
+            if (s[i] >= TXT('A'))
+                val += 10 + s[i] - TXT('A');
             else
-                val += s[i] - '0';
+                val += s[i] - TXT('0');
     }
     return val;
 }
@@ -73,7 +75,7 @@ inline int atoh(std::string& s)
 *  toLower
 *   - makes all alpha characters in string lower case
 ***********************************************************************************************************************/
-inline void toLower(std::string &s)
+inline void toLower(tstring &s)
 {
     if ( !s.empty() )
     {
@@ -85,7 +87,7 @@ inline void toLower(std::string &s)
 *  toUpper
 *   - makes all alpha characters in string upper case
 ***********************************************************************************************************************/
-inline void toUpper(std::string &s)
+inline void toUpper(tstring &s)
 {
     if ( !s.empty() )
     {

@@ -62,8 +62,8 @@ namespace Math
         void ToLinearFloat( f32& r, f32& g, f32& b, f32& a );
         void Clamp ( const HDRColor4 &min, const HDRColor4 &mar );
 
-        friend FOUNDATION_API std::ostream& operator<<(std::ostream& outStream, const HDRColor4& color);
-        friend FOUNDATION_API std::istream& operator>>(std::istream& inStream, HDRColor4& color);
+        friend FOUNDATION_API tostream& operator<<(tostream& outStream, const HDRColor4& color);
+        friend FOUNDATION_API tistream& operator>>(tistream& inStream, HDRColor4& color);
     };
 
     typedef std::vector< HDRColor4 > V_HDRColor4;
@@ -113,23 +113,24 @@ namespace Math
         a = a < min.a ? min.a : ( a > mar.a ) ? mar.a : a;
     }
 
-    inline std::ostream& operator<<(std::ostream& outStream, const HDRColor4& color)
+    inline tostream& operator<<(tostream& outStream, const HDRColor4& color)
     {
         outStream << (u16)color.r << ", " << (u16)color.g << ", " << (u16)color.b << ", " << (u16)color.b << ", " << color.s;
 
         return outStream;
     }
 
-    inline std::istream& operator>>(std::istream& inStream, HDRColor4& color)
+    inline tistream& operator>>(tistream& inStream, HDRColor4& color)
     {
         u32 r = 0;
         u32 g = 0;
         u32 b = 0;
         u32 a = 0;
         f32 s = 0.f;
-        std::string line;
+
+        tstring line;
         std::getline( inStream, line );
-        if (4 == sscanf( line.c_str(), "%u, %u, %u, &u, %f", &r, &g, &b, &a, &s))
+        if (4 == _stscanf( line.c_str(), TXT("%u, %u, %u, &u, %f"), &r, &g, &b, &a, &s))
         {
             color.r = (u8)r;
             color.g = (u8)g;

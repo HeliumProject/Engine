@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Application/API.h"
+#include "Platform/Types.h"
 
 #include <wx/panel.h>
 #include <wx/bitmap.h>
@@ -24,10 +25,10 @@ namespace Nocturnal
   class APPLICATION_API ImageViewPanel : public wxPanel
   {
   public:
-    ImageViewPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name = "ImageViewPanel" );
+    ImageViewPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name = wxT( "ImageViewPanel" ) );
     virtual ~ImageViewPanel();
 
-    void SetImage( const std::string& path, const ImageViewPanelFlag flags = ImageViewPanelFlags::Default );
+    void SetImage( const tstring& path, const ImageViewPanelFlag flags = ImageViewPanelFlags::Default );
     void ClearImage();
 
   private:

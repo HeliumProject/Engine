@@ -36,7 +36,7 @@ namespace Nocturnal
   class APPLICATION_API ThreadMechanism
   {
   public:
-    ThreadMechanism( const std::string& evenPrefix = std::string( "ThreadMechanism" ) );
+    ThreadMechanism( const tstring& evenPrefix = TXT( "ThreadMechanism" ) );
     virtual ~ThreadMechanism();
   
     bool StartThread();

@@ -161,7 +161,7 @@ void Container::Bind(const DataPtr& data)
   }
 }
 
-void Container::SetDefault(const std::string& def)
+void Container::SetDefault(const tstring& def)
 {
   V_Control::iterator itr = m_Controls.begin();
   V_Control::iterator end = m_Controls.end();

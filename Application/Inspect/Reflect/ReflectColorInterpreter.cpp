@@ -22,7 +22,13 @@ void ReflectColorInterpreter::InterpretField( const Field* field, const std::vec
   parent->AddControl( container );
 
   LabelPtr label = parent->GetCanvas()->Create<Label>( this );
-  label->SetText( field->m_UIName );
+
+  tstring temp;
+  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  NOC_ASSERT( converted );
+
+  label->SetText( temp );
+
   container->AddControl( label );
 
   bool color3 = field->m_SerializerID == Reflect::GetType<Color3Serializer>() || field->m_SerializerID == Reflect::GetType<HDRColor3Serializer>();

@@ -15,7 +15,7 @@ namespace Inspect
   //
 
   // Not supported for now (data is an std::map< string, bool > so it is sorted already)
-  //const static char CHECK_LIST_ATTR_SORTED[]    = "sorted";
+  //const static tchar CHECK_LIST_ATTR_SORTED[]    = TXT( "sorted" );
 
   class APPLICATION_API CheckList : public Reflect::ConcreteInheritor<CheckList, Control>
   {

@@ -14,7 +14,7 @@ RegistryConfig::RegistryConfig()
   // All registry entries will be grouped in: VendorName/Application/ProjectName.
   // For example: Insomniac Games/Tool/Project
 #pragma TODO( "Old Project-name reference!" )
-  m_Config->SetPath( "Unknown" );
+  m_Config->SetPath( TXT( "Unknown" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@ RegistryConfig* RegistryConfig::GetInstance()
 // The relativePath parameter should be separated by forward-slashes, but not 
 // start with one.  Example: Foo/Bar
 // 
-bool RegistryConfig::Read( const std::string& relativePath, const std::string& key, std::string& value )
+bool RegistryConfig::Read( const tstring& relativePath, const tstring& key, tstring& value )
 {
   bool wasRead = false;
 
@@ -71,7 +71,7 @@ bool RegistryConfig::Read( const std::string& relativePath, const std::string& k
 // The relativePath parameter should be separated by forward-slashes, but not 
 // start with one.  Example: Foo/Bar
 // 
-bool RegistryConfig::Write( const std::string& relativePath, const std::string& key, const std::string& value )
+bool RegistryConfig::Write( const tstring& relativePath, const tstring& key, const tstring& value )
 {
   wxString oldPath = m_Config->GetPath();
 

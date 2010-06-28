@@ -20,7 +20,7 @@ namespace Inspect
   {
   private:
     CheckBoxState m_State;
-    std::string m_BitfieldString;
+    tstring m_BitfieldString;
 
   public:
     ReflectBitfieldCheckBox();
@@ -30,13 +30,13 @@ namespace Inspect
     virtual bool Write() NOC_OVERRIDE;
     virtual CheckBoxState GetChecked();
     virtual void SetChecked( CheckBoxState checked );
-    void SetBitfieldString( const std::string& value );
+    void SetBitfieldString( const tstring& value );
     virtual bool IsDefault() const NOC_OVERRIDE;
 
   protected:
     virtual void SetDefaultAppearance( bool def ) NOC_OVERRIDE;
     bool WriteBitfield();
-    std::string BuildBitfieldString( std::vector< std::string > tokens, const std::string& delimiter );
+    tstring BuildBitfieldString( std::vector< tstring > tokens, const tstring& delimiter );
     void UpdateUI( CheckBoxStates::CheckBoxState state );
     CheckBoxState GetUIState() const;
   };

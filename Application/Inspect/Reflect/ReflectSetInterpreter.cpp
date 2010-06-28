@@ -32,7 +32,12 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
   // create the panel
   PanelPtr panel = m_Container->GetCanvas()->Create<Panel>( this );
   parent->AddControl( panel );
-  panel->SetText( field->m_UIName );
+
+  tstring temp;
+  bool converted = Platform::ConvertString( field->m_UIName, temp );
+  NOC_ASSERT( converted );
+
+  panel->SetText( temp );
 
   // create the serializers
   std::vector< Reflect::Element* >::const_iterator itr = instances.begin();
@@ -60,13 +65,13 @@ void ReflectSetInterpreter::InterpretField( const Reflect::Field* field, const s
 
     ActionPtr buttonAdd = parent->GetCanvas()->Create<Action>( this );
     buttonContainer->AddControl( buttonAdd );
-    buttonAdd->SetText( "Add" );
+    buttonAdd->SetText( TXT( "Add" ) );
     buttonAdd->AddListener( ActionSignature::Delegate ( this, &ReflectSetInterpreter::OnAdd ) );
     buttonAdd->SetClientData( new ClientDataControl( list ) );
 
     ActionPtr buttonRemove = parent->GetCanvas()->Create<Action>( this );
     buttonContainer->AddControl( buttonRemove );
-    buttonRemove->SetText( "Remove" );
+    buttonRemove->SetText( TXT( "Remove" ) );
     buttonRemove->AddListener( ActionSignature::Delegate ( this, &ReflectSetInterpreter::OnRemove ) );
     buttonRemove->SetClientData( new ClientDataControl( list ) );
   }
@@ -89,15 +94,15 @@ void ReflectSetInterpreter::OnAdd( Button* button )
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
-    wxTextEntryDialog dlg( m_Container->GetCanvas()->GetControl(), "", "Add" );
+    wxTextEntryDialog dlg( m_Container->GetCanvas()->GetControl(), TXT( "" ), TXT( "Add" ) );
     if ( dlg.ShowModal() == wxID_OK )
     {
-      std::string input = dlg.GetValue().c_str();
+      tstring input = dlg.GetValue().c_str();
       if ( !input.empty() )
       {
         List* list = static_cast< List* >( data->m_Control );
 
-        std::vector< std::string > items = list->GetItems();
+        std::vector< tstring > items = list->GetItems();
         items.push_back( input );
 
         std::sort( items.begin(), items.end() );
@@ -121,20 +126,20 @@ void ReflectSetInterpreter::OnRemove( Button* button )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
-    const std::vector< std::string >& selectedItems = list->GetSelectedItems();
+    const std::vector< tstring >& selectedItems = list->GetSelectedItems();
     if ( selectedItems.size() > 0 )
     {
-      std::vector< std::string >::const_iterator selBegin = selectedItems.begin();
-      std::vector< std::string >::const_iterator selEnd = selectedItems.end();
+      std::vector< tstring >::const_iterator selBegin = selectedItems.begin();
+      std::vector< tstring >::const_iterator selEnd = selectedItems.end();
 
-      std::vector< std::string > items;
-      std::vector< std::string >::const_iterator itr = list->GetItems().begin();
-      std::vector< std::string >::const_iterator end = list->GetItems().end();
+      std::vector< tstring > items;
+      std::vector< tstring >::const_iterator itr = list->GetItems().begin();
+      std::vector< tstring >::const_iterator end = list->GetItems().end();
       for ( ; itr != end; ++itr )
       {
-        const std::string& item ( *itr );
+        const tstring& item ( *itr );
 
-        std::vector< std::string >::const_iterator found = std::find( selBegin, selEnd, item );
+        std::vector< tstring >::const_iterator found = std::find( selBegin, selEnd, item );
         if ( found == selEnd )
         {
           items.push_back( item );

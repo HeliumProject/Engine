@@ -10,11 +10,11 @@
 // a bug or flaw in it somewhere?
 //
 
-inline bool WildcardMatch(const char *String1,const char *String2)
+inline bool WildcardMatch(const tchar *String1,const tchar *String2)
 {
     bool    bStar = false;
     /* Set to true when processing a wildcard * in String1 */
-    char   *StarPos;	
+    tchar   *StarPos;	
     /* Set this to the text just after the
     last star, so we can resurrect String1
     when we find that String2 isnt matching
@@ -40,7 +40,7 @@ inline bool WildcardMatch(const char *String1,const char *String2)
             {
                 String1++;
                 bStar = true;
-                StarPos = (char *)String1;
+                StarPos = (tchar *)String1;
                 break;
             }
 

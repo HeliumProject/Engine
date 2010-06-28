@@ -17,12 +17,12 @@ namespace Nocturnal
         class FOUNDATION_API Option : public Nocturnal::RefCountBase< Option >
         {
 		protected:
-			std::string m_Token;
-			std::string m_Usage;
-			std::string m_Help;
+			tstring m_Token;
+			tstring m_Usage;
+			tstring m_Help;
 
         public:
-			Option( const char* token, const char* usage = "<ARG>", const char* help = "" )
+			Option( const tchar* token, const tchar* usage = TXT( "<ARG>" ), const tchar* help = TXT( "" ) )
 				: m_Token( token )
 				, m_Usage( usage )
 				, m_Help( help )
@@ -33,27 +33,26 @@ namespace Nocturnal
             {
             }
 
-			virtual const std::string& Token() const
+			virtual const tstring& Token() const
 			{
 				return m_Token;
 			}
 
-			virtual const std::string& Usage() const
+			virtual const tstring& Usage() const
 			{
 				return m_Usage;
 			}
 
-			virtual const std::string& Help() const
+			virtual const tstring& Help() const
 			{
 				return m_Help;
 			}
 	
-			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) = 0;
+			virtual bool Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) = 0;
 		};
 		typedef Nocturnal::SmartPtr< Option > OptionPtr;
 		typedef std::vector< OptionPtr > V_OptionPtr;
-		typedef std::map< std::string, OptionPtr > M_StringToOptionPtr;
-
+		typedef std::map< tstring, OptionPtr > M_StringToOptionPtr;
 
 		///////////////////////////////////////////////////////////////////////
 		template <class T>
@@ -63,7 +62,7 @@ namespace Nocturnal
 			T* m_Data;
 
 		public:
-			SimpleOption( T* data, const char* token, const char* usage = "<ARG>", const char* help = "" )
+			SimpleOption( T* data, const tchar* token, const tchar* usage = TXT( "<ARG>" ), const tchar* help = TXT( "" ) )
 				: Option( token, usage, help )
 				, m_Data( data )
 			{
@@ -73,11 +72,11 @@ namespace Nocturnal
 			{
 			}
 
-			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) NOC_OVERRIDE
+			virtual bool Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) NOC_OVERRIDE
 			{
 				if ( argsBegin != argsEnd )
 				{
-					const std::string& arg = (*argsBegin);
+					const tstring& arg = (*argsBegin);
 					++argsBegin;
 
 					std::istringstream str ( arg );
@@ -86,14 +85,14 @@ namespace Nocturnal
 					return str.fail();
 				}
 				
-				error = std::string( "Missing parameter for option: " ) + m_Token;
+				error = tstring( "Missing parameter for option: " ) + m_Token;
 				return false;
 			}
 
 		};
 
 		template <>
-		bool SimpleOption<std::string>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+		bool SimpleOption<tstring>::Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
 		{
 			if ( argsBegin != argsEnd )
 			{
@@ -105,24 +104,24 @@ namespace Nocturnal
 				return true;
 			}
 
-			error = std::string( "Missing parameter for option: " ) + m_Token;
+			error = tstring( TXT( "Missing parameter for option: " ) ) + m_Token;
 			return false;
 		}
 
 		template <>
-		bool SimpleOption<bool>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+		bool SimpleOption<bool>::Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
 		{
 			// TODO: use in_avail
 			if ( argsBegin != argsEnd )
 			{
-				const std::string& arg = (*argsBegin);
+				const tstring& arg = (*argsBegin);
 				++argsBegin;
 
-				if ( stricmp( arg.c_str(), "false" ) == 0 || stricmp( arg.c_str(), "0" ) == 0 )
+				if ( _tcsicmp( arg.c_str(), TXT( "false" ) ) == 0 || _tcsicmp( arg.c_str(), TXT( "0" ) ) == 0 )
 				{
 					*m_Data = false;
 				}
-				else if ( stricmp( arg.c_str(), "true" ) == 0 || stricmp( arg.c_str(), "1" ) == 0 )
+				else if ( _tcsicmp( arg.c_str(), TXT( "true" ) ) == 0 || _tcsicmp( arg.c_str(), TXT( "1" ) ) == 0 )
 				{
 					*m_Data = true;
 				}
@@ -130,12 +129,12 @@ namespace Nocturnal
 				return true;
 			}
 
-			error = std::string( "Missing parameter for option: " ) + m_Token;
+			error = tstring( TXT( "Missing parameter for option: " ) ) + m_Token;
 			return false;
 		}
 
 		template <>
-		bool SimpleOption<std::vector< std::string >>::Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) NOC_OVERRIDE
+		bool SimpleOption<std::vector< tstring >>::Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) NOC_OVERRIDE
 		{
 			// tokenize and push_back via m_Data
 			bool result = false;
@@ -143,7 +142,7 @@ namespace Nocturnal
 			while ( argsBegin != argsEnd )
 			{
 				// stop looking once we get to the optional params
-				const std::string& arg = (*argsBegin);
+				const tstring& arg = (*argsBegin);
 
 				if ( arg.length() >= 1 )
 				{
@@ -165,7 +164,7 @@ namespace Nocturnal
 
 			if ( !result || (*m_Data).empty() )
 			{
-				error = std::string( "Must pass one or more arguments to the option: " ) + m_Token;
+				error = tstring( TXT( "Must pass one or more arguments to the option: " ) ) + m_Token;
 				return false;
 			}
 
@@ -180,8 +179,8 @@ namespace Nocturnal
 			bool* m_Data;
 
 		public:
-			FlagOption( bool* data, const char* token, const char* help = "" )
-				: SimpleOption( data, token, "", help )
+			FlagOption( bool* data, const tchar* token, const tchar* help = TXT( "" ) )
+				: SimpleOption( data, token, TXT( "" ), help )
 				, m_Data( data )
 			{
 				*m_Data = false;
@@ -191,7 +190,7 @@ namespace Nocturnal
             {
             }
 
-			virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) NOC_OVERRIDE
+			virtual bool Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) NOC_OVERRIDE
 			{
 				*m_Data = true;
 				return true;
@@ -199,16 +198,15 @@ namespace Nocturnal
 
         };
 
-
 		///////////////////////////////////////////////////////////////////////
-		//class FOUNDATION_API DelimitedListOption : public SimpleOption< std::vector< std::string > >
+		//class FOUNDATION_API DelimitedListOption : public SimpleOption< std::vector< tstring > >
 		//{
 		//protected:
-		//	std::vector< std::string >* m_Data;
-		//	std::string m_Delimiter;
+		//	std::vector< tstring >* m_Data;
+		//	tstring m_Delimiter;
 
 		//public:
-		//	DelimitedListOption( std::vector< std::string >* data, const char* token, const char* usage = "<ARG> [<ARG> ...]", const char* help = "", const char* delimiter = " " )
+		//	DelimitedListOption( std::vector< tstring >* data, const char* token, const char* usage = "<ARG> [<ARG> ...]", const char* help = "", const char* delimiter = " " )
 		//		: SimpleOption( data, token, usage, help )
 		//		, m_Delimiter( delimiter )
 		//	{
@@ -218,7 +216,7 @@ namespace Nocturnal
 		//	{
 		//	}
 
-		//	virtual bool Parse( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) NOC_OVERRIDE
+		//	virtual bool Parse( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) NOC_OVERRIDE
 		//	{
 		//		// tokenize and push_back via m_Data
 		//		bool result = false;
@@ -226,7 +224,7 @@ namespace Nocturnal
 		//		while ( argsBegin != argsEnd )
 		//		{
 		//			// stop looking once we get to the optional params
-		//			const std::string& arg = (*argsBegin);
+		//			const tstring& arg = (*argsBegin);
 
 		//			if ( arg.length() >= 1 )
 		//			{
@@ -248,7 +246,7 @@ namespace Nocturnal
 
 		//		if ( !result || (*m_Data).empty() )
 		//		{
-		//			error = std::string( "Must pass one (or more) argument to the option: " ) + m_Token;
+		//			error = tstring( "Must pass one (or more) argument to the option: " ) + m_Token;
 		//			return false;
 		//		}
 
@@ -260,8 +258,8 @@ namespace Nocturnal
 		class FOUNDATION_API OptionsMap
 		{
 		public:
-			mutable std::string m_Usage;
-			mutable std::string m_Help;
+			mutable tstring m_Usage;
+			mutable tstring m_Help;
 
 			M_StringToOptionPtr m_OptionsMap;
 			V_OptionPtr m_Options;
@@ -270,11 +268,11 @@ namespace Nocturnal
 			OptionsMap();
 			virtual ~OptionsMap();
 
-			const std::string& Usage() const;
-		    const std::string& Help() const;
+			const tstring& Usage() const;
+		    const tstring& Help() const;
 
-			bool AddOption( const OptionPtr& option, std::string& error );
-			bool ParseOptions( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error );
+			bool AddOption( const OptionPtr& option, tstring& error );
+			bool ParseOptions( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error );
 		};
     }
 }

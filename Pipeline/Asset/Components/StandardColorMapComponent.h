@@ -15,9 +15,9 @@ namespace Asset
     };
     static void ColorTexFormatEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(CA_DXT5, "CA_DXT5", "DXT5");
-      info->AddElement(CA_4444, "CA_4444", "ARGB4444");
-      info->AddElement(CA_8888, "CA_8888", "ARGB8888");
+      info->AddElement(CA_DXT5, TXT( "CA_DXT5" ), TXT( "DXT5" ) );
+      info->AddElement(CA_4444, TXT( "CA_4444" ), TXT( "ARGB4444" ) );
+      info->AddElement(CA_8888, TXT( "CA_8888" ), TXT( "ARGB8888" ) );
     }
   }
   typedef ColorTexFormats::ColorTexFormat ColorTexFormat;

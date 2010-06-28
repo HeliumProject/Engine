@@ -16,10 +16,10 @@ namespace Content
     };
     static void VolumeShapeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Cube, "Cube");
-      info->AddElement(Cylinder, "Cylinder");
-      info->AddElement(Sphere, "Sphere");
-      info->AddElement(Capsule, "Capsule");
+      info->AddElement(Cube, TXT( "Cube" ) );
+      info->AddElement(Cylinder, TXT( "Cylinder" ) );
+      info->AddElement(Sphere, TXT( "Sphere" ) );
+      info->AddElement(Capsule, TXT( "Capsule" ) );
     }
   }
 

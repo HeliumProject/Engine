@@ -65,20 +65,24 @@ void SimpleSerializer<T>::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
-            archive.GetOutput() << m_Data.Get();
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
+            xml.GetStream() << m_Data.Get();
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            archive.GetOutput().Write(m_Data.Ptr()); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            binary.GetStream().Write(m_Data.Ptr()); 
             break;
         }
     }
 }
 
 template <class T>
-void SimpleSerializer<T>::Serialize(const Nocturnal::BasicBufferPtr& buffer, const char* debugStr) const
+void SimpleSerializer<T>::Serialize(const Nocturnal::BasicBufferPtr& buffer, const tchar* debugStr) const
 {
     T val = m_Data.Get();
 
@@ -88,7 +92,7 @@ void SimpleSerializer<T>::Serialize(const Nocturnal::BasicBufferPtr& buffer, con
 }
 
 template <class T>
-std::ostream& SimpleSerializer<T>::operator >> (std::ostream& stream) const
+tostream& SimpleSerializer<T>::operator>> (tostream& stream) const
 {
     if (!TranslateOutput( stream ))
     {
@@ -104,20 +108,24 @@ void SimpleSerializer<T>::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-            archive.GetInput() >> m_Data.Ref();
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+            
+            xml.GetStream() >> m_Data.Ref();
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            archive.GetInput().Read(m_Data.Ptr()); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            binary.GetStream().Read(m_Data.Ptr()); 
             break;
         }
     }
 }
 
 template <class T>
-std::istream& SimpleSerializer<T>::operator << (std::istream& stream)
+tistream& SimpleSerializer<T>::operator<< (tistream& stream)
 {
     if (!TranslateInput( stream ))
     {
@@ -144,14 +152,18 @@ void StringSerializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
-            archive.GetOutput() << "<![CDATA[" << m_Data.Get() << "]]>";
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
+            xml.GetStream() << "<![CDATA[" << m_Data.Get() << "]]>";
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().AssignIndex(m_Data.Get());
-            archive.GetOutput().Write(&index); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            i32 index = binary.GetStrings().Insert(m_Data.Get());
+            binary.GetStream().Write(&index); 
             break;
         }
     }
@@ -165,24 +177,28 @@ void StringSerializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
-            std::streamsize size = archive.GetInput().BytesAvailable(); 
-            m_Data->resize( (size_t) size);
-            archive.GetInput().ReadBuffer(const_cast<char*>(m_Data->c_str()), size);
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
+            std::streamsize size = xml.GetStream().ElementsAvailable(); 
+            m_Data->resize( (size_t)size );
+            xml.GetStream().ReadBuffer(const_cast<tchar*>(m_Data->c_str()), size);
             break;
         }
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             i32 index;
-            archive.GetInput().Read(&index); 
-            m_Data.Set( static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index) );
+            binary.GetStream().Read(&index); 
+            m_Data.Set( binary.GetStrings().GetString(index) );
             break;
         }
     }
 }
 
 template<>
-std::ostream& StringSerializer::operator >> (std::ostream& stream) const
+tostream& StringSerializer::operator>> (tostream& stream) const
 {
     if (!TranslateOutput( stream ))
     {
@@ -192,13 +208,13 @@ std::ostream& StringSerializer::operator >> (std::ostream& stream) const
 }
 
 template<>
-std::istream& StringSerializer::operator << (std::istream& stream)
+tistream& StringSerializer::operator<< (tistream& stream)
 {
     if (!TranslateInput( stream ))
     {
         std::streamsize size = stream.rdbuf()->in_avail();
         m_Data->resize( (size_t) size);
-        stream.read(const_cast<char*>(m_Data.Get().c_str()), size);
+        stream.read(const_cast<tchar*>(m_Data.Get().c_str()), size);
     }
     return stream;
 }
@@ -211,14 +227,18 @@ void U8Serializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
             u16 tmp = m_Data.Get();
-            archive.GetOutput() << tmp;
+            xml.GetStream() << tmp;
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            archive.GetOutput().Write(m_Data.Ptr()); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            binary.GetStream().Write(m_Data.Ptr()); 
             break;
         }
     }
@@ -231,24 +251,26 @@ void U8Serializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
             u16 tmp;
-
-            archive.GetInput() >> tmp;
+            xml.GetStream() >> tmp;
             m_Data.Set( (unsigned char)tmp );
-
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            archive.GetInput().Read(m_Data.Ptr()); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            binary.GetStream().Read(m_Data.Ptr()); 
             break;
         }
     }
 }
 
 template<>
-std::ostream& U8Serializer::operator >> (std::ostream& stream) const
+tostream& U8Serializer::operator>> (tostream& stream) const
 {
     if (!TranslateOutput( stream ))
     {
@@ -259,7 +281,7 @@ std::ostream& U8Serializer::operator >> (std::ostream& stream) const
 }
 
 template<>
-std::istream& U8Serializer::operator << (std::istream& stream)
+tistream& U8Serializer::operator<< (tistream& stream)
 {
     if (!TranslateInput( stream ))
     {
@@ -278,14 +300,18 @@ void I8Serializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
             i16 tmp = m_Data.Get();
-            archive.GetOutput() << tmp;
+            xml.GetStream() << tmp;
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            archive.GetOutput().Write(m_Data.Ptr()); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            binary.GetStream().Write(m_Data.Ptr()); 
             break;
         }
     }
@@ -298,24 +324,26 @@ void I8Serializer::Deserialize(Archive& archive)
     {
     case ArchiveTypes::XML:
         {
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
             i16 tmp;
-
-            archive.GetInput() >> tmp;
-            m_Data.Set( (unsigned char)tmp );
-
+            xml.GetStream() >> tmp;
+            m_Data.Set( (char)tmp );
             break;
         }
 
     case ArchiveTypes::Binary:
         {
-            archive.GetInput().Read(m_Data.Ptr()); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            binary.GetStream().Read(m_Data.Ptr()); 
             break;
         }
     }
 }
 
 template<>
-std::ostream& I8Serializer::operator >> (std::ostream& stream) const
+tostream& I8Serializer::operator>> (tostream& stream) const
 {
     if (!TranslateOutput( stream ))
     {
@@ -326,7 +354,7 @@ std::ostream& I8Serializer::operator >> (std::ostream& stream) const
 }
 
 template<>
-std::istream& I8Serializer::operator << (std::istream& stream)
+tistream& I8Serializer::operator<< (tistream& stream)
 {
     if (!TranslateInput( stream ))
     {
@@ -337,6 +365,7 @@ std::istream& I8Serializer::operator << (std::istream& stream)
     return stream;
 }
 
+template SimpleSerializer<tstring>;
 template SimpleSerializer<bool>;
 template SimpleSerializer<u8>;
 template SimpleSerializer<i8>;
@@ -348,7 +377,6 @@ template SimpleSerializer<u64>;
 template SimpleSerializer<i64>;
 template SimpleSerializer<f32>;
 template SimpleSerializer<f64>;
-template SimpleSerializer<std::string>;
 template SimpleSerializer<Nocturnal::GUID>;
 template SimpleSerializer<Nocturnal::TUID>;
 

@@ -7,10 +7,10 @@
 
 namespace Inspect
 {
-  const static char TEXTBOX_ATTR_REQUIRED[] = "required";
-  const static char TEXTBOX_ATTR_JUSTIFY[] = "justify";
-  const static char TEXTBOX_ATTR_JUSTIFY_LEFT[] = "left";
-  const static char TEXTBOX_ATTR_JUSTIFY_RIGHT[] = "right";
+  const static tchar TEXTBOX_ATTR_REQUIRED[] = TXT( "required" );
+  const static tchar TEXTBOX_ATTR_JUSTIFY[] = TXT( "justify" );
+  const static tchar TEXTBOX_ATTR_JUSTIFY_LEFT[] = TXT( "left" );
+  const static tchar TEXTBOX_ATTR_JUSTIFY_RIGHT[] = TXT( "right" );
 
   class APPLICATION_API Value : public Reflect::ConcreteInheritor<Value, Control>
   {
@@ -24,7 +24,7 @@ namespace Inspect
     Value();
 
   protected:
-    virtual bool Process(const std::string& key, const std::string& value) NOC_OVERRIDE;
+    virtual bool Process(const tstring& key, const tstring& value) NOC_OVERRIDE;
 
     virtual void SetDefaultAppearance(bool def) NOC_OVERRIDE;
 
@@ -37,8 +37,8 @@ namespace Inspect
 
     virtual bool Write() NOC_OVERRIDE;
 
-    void GetText(std::string& text);
-    void SetText(const std::string& text);
+    void GetText(tstring& text);
+    void SetText(const tstring& text);
 
     Justify GetJustification() const;
     void SetJustification( Justify justification );
@@ -47,12 +47,12 @@ namespace Inspect
     virtual void SetReadOnly(bool readOnly) NOC_OVERRIDE;
 
   private:
-    void UpdateUI( const std::string& text );
+    void UpdateUI( const tstring& text );
 
   protected:
     bool m_Required;
     Justify m_Justify;
-    std::string m_Text;
+    tstring m_Text;
     bool m_Highlight;
   };
 

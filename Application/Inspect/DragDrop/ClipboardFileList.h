@@ -12,7 +12,7 @@ namespace Inspect
   class APPLICATION_API ClipboardFileList : public ReflectClipboardData
   {
   private:
-    std::set< std::string > m_Files;
+    std::set< tstring > m_Files;
 
     // These members are not serialized
     bool m_IsDirty;
@@ -27,8 +27,8 @@ namespace Inspect
     ClipboardFileList();
     virtual ~ClipboardFileList();
 
-    bool AddFilePath( const std::string& file );
-    const std::set< std::string >& GetFilePaths() const;
+    bool AddFilePath( const tstring& file );
+    const std::set< tstring >& GetFilePaths() const;
 
     virtual bool Merge( const ReflectClipboardData* source ) NOC_OVERRIDE;
 

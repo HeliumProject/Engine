@@ -9,7 +9,6 @@
 #include "HierarchyChangeToken.h"
 #include "PersistentDataFactory.h"
 
-#include "Pipeline/AssetBuilder/AssetBuilder.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
 #include "Editor/DocumentManager.h"
@@ -836,16 +835,4 @@ bool Luna::AssetManager::UndoingOrRedoing( const Undo::QueueChangeArgs& args )
         }
     }
     return allow;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when an asset is built
-// 
-void Luna::AssetManager::AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
-{
-    Luna::AssetClass* assetClassPtr  = FindAsset( args->m_AssetId );
-    if(assetClassPtr)
-    {
-        assetClassPtr->BuildFinished();
-    }
 }

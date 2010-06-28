@@ -60,9 +60,11 @@ void TypeIDSerializer::Serialize(Archive& archive) const
     {
     case ArchiveTypes::XML:
         {
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
             if ( type )
             {
-                archive.GetOutput() << "<![CDATA[" << type->m_ShortName << "]]>";
+                xml.GetStream() << "<![CDATA[" << type->m_ShortName << "]]>";
             }
 
             break;
@@ -70,8 +72,10 @@ void TypeIDSerializer::Serialize(Archive& archive) const
 
     case ArchiveTypes::Binary:
         {
-            i32 index = static_cast<ArchiveBinary&>(archive).GetStrings().AssignIndex( type ? type->m_ShortName : "" );
-            archive.GetOutput().Write(&index); 
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
+            i32 index = binary.GetStrings().Insert( type ? type->m_ShortName : TXT("") );
+            binary.GetStream().Write(&index); 
             break;
         }
     }
@@ -79,23 +83,27 @@ void TypeIDSerializer::Serialize(Archive& archive) const
 
 void TypeIDSerializer::Deserialize(Archive& archive)
 {
-    std::string str;
+    tstring str;
 
     switch (archive.GetType())
     {
     case ArchiveTypes::XML:
         {
-            std::streamsize size = archive.GetInput().BytesAvailable(); 
-            str.resize( (size_t) size );
-            archive.GetInput().ReadBuffer(const_cast<char*>(str.c_str()), size);
+            ArchiveXML& xml (static_cast<ArchiveXML&>(archive));
+
+            std::streamsize size = xml.GetStream().ElementsAvailable(); 
+            str.resize( (size_t)size );
+            xml.GetStream().ReadBuffer(const_cast<tchar*>(str.c_str()), size);
             break;
         }
 
     case ArchiveTypes::Binary:
         {
+            ArchiveBinary& binary (static_cast<ArchiveBinary&>(archive));
+
             i32 index;
-            archive.GetInput().Read(&index); 
-            str = static_cast<ArchiveBinary&>(archive).GetStrings().GetString(index);
+            binary.GetStream().Read(&index); 
+            str = binary.GetStrings().GetString(index);
             break;
         }
     }

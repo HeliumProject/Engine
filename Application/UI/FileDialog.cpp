@@ -93,7 +93,7 @@ namespace Nocturnal
         }
       }
 
-      // Cache as std::string
+      // Cache as tstring
       const size_t num = paths.Count();
       for ( size_t index = 0; index < num; ++index )
       {
@@ -115,18 +115,18 @@ namespace Nocturnal
 
   /////////////////////////////////////////////////////////////////////////////
   // Overridden to clean the path before returning it.  Call GetFilePath to work
-  // with std::string instead.
+  // with tstring instead.
   // 
   wxString FileDialog::GetPath() const
   {
-    std::string path( __super::GetPath().c_str() );
+    tstring path( __super::GetPath().c_str() );
     Nocturnal::Path::Normalize( path );
     return path.c_str();
   }
 
   /////////////////////////////////////////////////////////////////////////////
   // Overridden to clean the paths before returning them.  Call GetFilePaths to 
-  // work with std::string instead.
+  // work with tstring instead.
   // 
   void FileDialog::GetPaths( wxArrayString& paths ) const
   {
@@ -135,7 +135,7 @@ namespace Nocturnal
     size_t count = paths.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        std::string file = paths[ n ].c_str();
+        tstring file = paths[ n ].c_str();
       Nocturnal::Path::Normalize( file );
       paths[n] = file.c_str();
     }
@@ -149,12 +149,12 @@ namespace Nocturnal
   // NOTE: Return value is only valid if you have called ShowModal and the 
   // result was wxID_OK.
   // 
-  const std::string& FileDialog::GetFilePath() const
+  const tstring& FileDialog::GetFilePath() const
   {
     // Only call this function when working with a dialog in single-select mode
     NOC_ASSERT( !IsMultipleSelectionEnabled() );
 
-    static const std::string empty;
+    static const tstring empty;
     if ( !m_Files.empty() )
     {
       return *m_Files.begin();
@@ -170,7 +170,7 @@ namespace Nocturnal
   // NOTE: Return value is only valid if you have called ShowModal and the 
   // result was wxID_OK.
   // 
-  const std::set< std::string >& FileDialog::GetFilePaths() const
+  const std::set< tstring >& FileDialog::GetFilePaths() const
   {
     // Only call this function when working with a dialog in multi-select mode
     NOC_ASSERT( IsMultipleSelectionEnabled() );
@@ -180,7 +180,7 @@ namespace Nocturnal
 
 
   /////////////////////////////////////////////////////////////////////////////
-  void FileDialog::SetFilter( const std::string& filter )
+  void FileDialog::SetFilter( const tstring& filter )
   {
     m_Filters.Clear();
     AddFilter( filter );
@@ -188,14 +188,14 @@ namespace Nocturnal
 
 
   /////////////////////////////////////////////////////////////////////////////
-  void FileDialog::SetFilterIndex( const std::string& filter )
+  void FileDialog::SetFilterIndex( const tstring& filter )
   {
     i32 index = 0;
     OS_string::Iterator itr = m_Filters.Begin();
     OS_string::Iterator end = m_Filters.End();
     for ( i32 count = 0; itr != end; ++itr, ++count )
     {
-      const std::string& current = *itr;
+      const tstring& current = *itr;
       if ( current == filter )
       {
         index = count;
@@ -215,10 +215,10 @@ namespace Nocturnal
   //  "BMP and GIF files (*.bmp;*.gif)" -> "*.bmp;*.gif"
   //  "PNG files (*.png)" -> "*.png"
   //
-  void FileDialog::AddFilter( const std::string& filter )
+  void FileDialog::AddFilter( const tstring& filter )
   {
-    std::vector< std::string > splitFilter;
-    Tokenize( filter, splitFilter, "\\|" );
+    std::vector< tstring > splitFilter;
+    Tokenize( filter, splitFilter, TXT( "\\|" ) );
 
     if ( (int)splitFilter.size() % 2 != 0 )
       return; // error
@@ -226,10 +226,10 @@ namespace Nocturnal
     int numFilters = (int)splitFilter.size() / 2;
     for ( int i = 0; i < (int)splitFilter.size() ; i+=2 )
     {
-      std::string display = splitFilter.at( i );
-      std::string mask    = splitFilter.at( i+1 );
+      tstring display = splitFilter.at( i );
+      tstring mask    = splitFilter.at( i+1 );
 
-      display += "|" + mask;
+      display += TXT( "|" ) + mask;
 
       bool inserted = m_Filters.Append( display ); 
     }
@@ -237,9 +237,9 @@ namespace Nocturnal
     UpdateFilter();
   }
 
-  void FileDialog::AddFilters( const std::vector< std::string >& filters )
+  void FileDialog::AddFilters( const std::vector< tstring >& filters )
   {
-      for ( std::vector< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+      for ( std::vector< tstring >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
       {
           AddFilter( *itr );
       }
@@ -250,10 +250,10 @@ namespace Nocturnal
   {
     if ( m_Style & FileDialogStyles::ShowAllFilesFilter )
     {
-      bool inserted = m_Filters.Append( "All files (*.*)|*.*" );
+      bool inserted = m_Filters.Append( TXT( "All files (*.*)|*.*" ) );
     }
 
-    std::string filterStr = "";
+    tstring filterStr = TXT( "" );
     if ( !m_Filters.Empty() )
     {
       OS_string::Iterator it = m_Filters.Begin();
@@ -262,7 +262,7 @@ namespace Nocturnal
       {
         if ( !filterStr.empty() )
         {
-          filterStr += "|";
+          filterStr += TXT( "|" );
         }
         filterStr += (*it);
       }

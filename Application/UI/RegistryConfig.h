@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Application/API.h"
+#include "Platform/Types.h"
 
 #include <string>
 
@@ -25,7 +26,7 @@ namespace Nocturnal
     virtual ~RegistryConfig();
 
     static RegistryConfig* GetInstance();
-    bool Read( const std::string& relativePath, const std::string& key, std::string& value );
-    bool Write( const std::string& relativePath, const std::string& key, const std::string& value );
+    bool Read( const tstring& relativePath, const tstring& key, tstring& value );
+    bool Write( const tstring& relativePath, const tstring& key, const tstring& value );
   };
 }

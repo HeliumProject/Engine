@@ -27,10 +27,10 @@ namespace RCS
     time_t       m_Time;
     u64          m_Size;
 
-    std::string  m_Username;
-    std::string  m_Client;
-    std::string  m_Digest;
-    std::string  m_Description;
+    tstring  m_Username;
+    tstring  m_Client;
+    tstring  m_Digest;
+    tstring  m_Description;
 
     V_FilePtr m_IntegrationTargets;
     V_FilePtr m_IntegrationOrigins;
@@ -42,10 +42,10 @@ namespace RCS
       , m_FileType( FileTypes::Unknown )
       , m_Time( 0 )
       , m_Size( 0 )
-      , m_Username( "" )
-      , m_Client( "" )
-      , m_Digest( "" )
-      , m_Description( "" )
+      , m_Username( TXT( "" ) )
+      , m_Client( TXT( "" ) )
+      , m_Digest( TXT( "" ) )
+      , m_Description( TXT( "" ) )
     {
     }
   };
@@ -81,15 +81,15 @@ namespace RCS
     u32           m_ActionData;
 
     Operation     m_Operation;
-    std::string   m_Username;
-    std::string   m_Client;
+    tstring       m_Username;
+    tstring       m_Client;
     u32           m_ChangesetId;
 
     Action( u32 data = ActionData::All )
       : m_ActionData ( data )
       , m_Operation( Operations::None )
-      , m_Username( "" )
-      , m_Client( "" )
+      , m_Username( TXT( "" ) )
+      , m_Client( TXT( "" ) )
       , m_ChangesetId( DefaultChangesetId )
     {
     }
@@ -140,9 +140,9 @@ namespace RCS
     u32           m_FileData;
     u32           m_ActionData;
 
-    std::string   m_DepotPath;
-    std::string   m_LocalPath;
-    std::string   m_Digest;
+    tstring       m_DepotPath;
+    tstring       m_LocalPath;
+    tstring       m_Digest;
 
     u64           m_Size;
 
@@ -156,8 +156,8 @@ namespace RCS
     time_t        m_HeadTime;
     time_t        m_HeadModTime;
 
-    std::string   m_Username;
-    std::string   m_Client;
+    tstring       m_Username;
+    tstring       m_Client;
 
     u64           m_ChangesetId;
 
@@ -168,12 +168,12 @@ namespace RCS
 
     bool          m_Exclusive;
 
-    File( const std::string& localPath = std::string( "" ), u32 fileData = FileData::All, u32 actionData = ActionData::All )
+    File( const tstring& localPath = TXT( "" ), u32 fileData = FileData::All, u32 actionData = ActionData::All )
       : m_FileData ( fileData )
       , m_ActionData ( actionData )
-      , m_DepotPath( "" )
+      , m_DepotPath( TXT( "" ) )
       , m_LocalPath( localPath )
-      , m_Digest( "" )
+      , m_Digest( TXT( "" ) )
       , m_Size( 0 )
       , m_Operation( Operations::None )
       , m_State( FileStates::Unknown )
@@ -182,8 +182,8 @@ namespace RCS
       , m_HeadRevision( -1 )
       , m_HeadTime( 0 )
       , m_HeadModTime( 0 )
-      , m_Username( "" )
-      , m_Client( "" )
+      , m_Username( TXT( "" ) )
+      , m_Client( TXT( "" ) )
       , m_ChangesetId( DefaultChangesetId )
       , m_FileType( FileTypes::Text )
       , m_Exclusive( false )
@@ -216,11 +216,11 @@ namespace RCS
     void Copy( RCS::File& target, const OpenFlag flags = OpenFlags::Default, const u64 changesetId = DefaultChangesetId );
     void Rename( RCS::File& target, const OpenFlag flags = OpenFlags::Default, const u64 changesetId = DefaultChangesetId );
 
-    void Commit( const std::string& description );
+    void Commit( const tstring& description );
 
-    void GetCreatedByUser( std::string& username );
-    void GetLastModifiedByUser( std::string& username );
-    void GetOpenedByUsers( std::string& usernames );
+    void GetCreatedByUser( tstring& username );
+    void GetLastModifiedByUser( tstring& username );
+    void GetOpenedByUsers( tstring& usernames );
 
     inline bool ExistsInDepot() const
     {

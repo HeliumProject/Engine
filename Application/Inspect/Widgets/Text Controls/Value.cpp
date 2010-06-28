@@ -75,10 +75,10 @@ Value::Value()
 , m_Highlight( false )
 {
   m_ContextMenu = new ContextMenu (this);
-  m_ContextMenu->AddItem("Set To Default", ContextMenuSignature::Delegate(this, &Value::SetToDefault));
+  m_ContextMenu->AddItem( TXT( "Set To Default" ), ContextMenuSignature::Delegate(this, &Value::SetToDefault));
 }
 
-bool Value::Process(const std::string& key, const std::string& value)
+bool Value::Process(const tstring& key, const tstring& value)
 {
   if (__super::Process(key, value))
     return true;
@@ -177,7 +177,7 @@ bool Value::Write()
   return result;
 }
 
-void Value::GetText(std::string& text)
+void Value::GetText(tstring& text)
 {
   if ( IsBound() )
   {
@@ -187,7 +187,7 @@ void Value::GetText(std::string& text)
   text = m_Text;
 }
 
-void Value::SetText(const std::string& text)
+void Value::SetText(const tstring& text)
 {
   m_Text = text;
 
@@ -272,7 +272,7 @@ void Value::SetReadOnly(bool readOnly)
   }
 }
 
-void Value::UpdateUI( const std::string& text )
+void Value::UpdateUI( const tstring& text )
 {
   if ( IsRealized() )
   {

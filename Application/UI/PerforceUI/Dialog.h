@@ -15,7 +15,7 @@ namespace PerforceUI
     Dialog( wxWindow* parent,
       int id = wxID_ANY,
       int changelistNumber = RCS::DefaultChangesetId,
-      const std::string& description = std::string( "" ),
+      const tstring& description = TXT( "" ),
       wxString title = wxT("Perforce Change Specification") );
 
     virtual ~Dialog();

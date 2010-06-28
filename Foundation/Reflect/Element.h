@@ -72,13 +72,13 @@ namespace Reflect
         static void EnumerateClass( Reflect::Compositor<Element>& comp );
 
         // Returns the string to use as the title of this element in UI (uses the UI name of the type info by default)
-        virtual const std::string&  GetTitle() const { return GetClass()->m_UIName; }
+        virtual const tstring&      GetTitle() const { return GetClass()->m_UIName; }
 
         // Specifies if the value is directly between the start and end short name
         virtual bool                IsCompact() const { return false; }
 
         // This the process callback for sub and primitive elements to have thier data be aggregated into the parent instance
-        virtual bool                ProcessComponent(ElementPtr element, const std::string& fieldName);
+        virtual bool                ProcessComponent(ElementPtr element, const tstring& fieldName);
 
 
         //
@@ -87,9 +87,9 @@ namespace Reflect
 
     public:
         // Serialize to a particular data target, just works on this
-        void                        ToXML (std::string& xml) const;
-        void                        ToStream (std::iostream& stream, ArchiveType type) const;
-        void                        ToFile (const std::string& file, const VersionPtr& version = NULL) const;
+        void                        ToXML(tstring& xml) const;
+        void                        ToBinary(std::iostream& stream) const;
+        void                        ToFile(const tstring& file, const VersionPtr& version = NULL) const;
 
         // Callbacks are executed at the appropriate time by the archive and cloning APIs
         virtual void                PreSerialize() { }

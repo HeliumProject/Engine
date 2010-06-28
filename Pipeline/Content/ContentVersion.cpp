@@ -1,6 +1,6 @@
 #include "ContentVersion.h"
 
-const char* Content::ContentVersion::CONTENT_VERSION = "5";
+const tchar* Content::ContentVersion::CONTENT_VERSION = TXT( "5" );
 
 using namespace Reflect;
 using namespace Content;
@@ -18,7 +18,7 @@ Content::ContentVersion::ContentVersion()
   m_ContentVersion = CONTENT_VERSION;
 }
 
-Content::ContentVersion::ContentVersion(const char* source, const char* sourceVersion)
+Content::ContentVersion::ContentVersion(const tchar* source, const tchar* sourceVersion)
 : Version (source, sourceVersion)
 {
   m_ContentVersion = CONTENT_VERSION;

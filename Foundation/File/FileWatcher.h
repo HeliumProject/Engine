@@ -25,12 +25,12 @@ namespace Nocturnal
 
     struct FOUNDATION_API FileChangedArgs
     {
-        std::string   m_Path;
+        tstring   m_Path;
         FileOperation m_Operation;
-        std::string   m_OldPath;
+        tstring   m_OldPath;
 
 
-        FileChangedArgs( const std::string& path, const FileOperation operation = FileOperations::Unknown, const std::string& oldPath = "" )
+        FileChangedArgs( const tstring& path, const FileOperation operation = FileOperations::Unknown, const tstring& oldPath = TXT( "" ) )
             : m_Path( path )
             , m_Operation( operation )
             , m_OldPath( oldPath )
@@ -55,7 +55,7 @@ namespace Nocturnal
         }
     };
 
-    typedef std::map< std::string, FileWatch > M_PathToFileWatch;
+    typedef std::map< tstring, FileWatch > M_PathToFileWatch;
 
     typedef void* HANDLE;
 
@@ -68,8 +68,8 @@ namespace Nocturnal
         FileWatcher();
         ~FileWatcher();
 
-        bool Add( const std::string& path, FileChangedSignature::Delegate& listener, bool watchSubtree = false  );
-        bool Remove( const std::string& path, FileChangedSignature::Delegate& listener );
+        bool Add( const tstring& path, FileChangedSignature::Delegate& listener, bool watchSubtree = false  );
+        bool Remove( const tstring& path, FileChangedSignature::Delegate& listener );
         bool Watch( int timeout = 0xFFFFFFFF );
     };
 }

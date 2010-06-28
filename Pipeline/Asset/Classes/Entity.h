@@ -18,10 +18,10 @@ namespace Asset
         static void EnumerateClass( Reflect::Compositor<Entity>& comp );
 
     public:
-        Entity( const std::string& assetPath = "" );
+        Entity( const tstring& assetPath = TXT( "" ) );
 
         // get the path to the class
-        std::string GetEntityAssetPath();
+        tstring GetEntityAssetPath();
 
         // helper to find the entity class
         Asset::EntityAssetPtr GetEntityAsset() const;

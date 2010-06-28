@@ -34,7 +34,7 @@ namespace Nocturnal
     class PropertyException : public Nocturnal::Exception
     {
     public:
-        PropertyException( const char *msgFormat, ... )
+        PropertyException( const tchar *msgFormat, ... )
         {
             va_list msgArgs;
             va_start( msgArgs, msgFormat );
@@ -192,7 +192,7 @@ namespace Nocturnal
 
             default:
                 {
-                    throw PropertyException ("StaticProperty has no compatible get function");
+                    throw PropertyException( TXT( "StaticProperty has no compatible get function" ) );
                 }
             }
         }
@@ -215,7 +215,7 @@ namespace Nocturnal
 
             default:
                 {
-                    throw PropertyException ("StaticProperty has no compatible get function");
+                    throw PropertyException( TXT( "StaticProperty has no compatible get function" ) );
                 }
             }
         }
@@ -349,7 +349,7 @@ namespace Nocturnal
         {
             if (m_Target == NULL)
             {
-                throw PropertyException ("MemberProperty has no target");
+                throw PropertyException( TXT( "MemberProperty has no target" ) );
             }
 
             switch(m_GetterType)
@@ -373,7 +373,7 @@ namespace Nocturnal
 
             default:
                 {
-                    throw PropertyException ("MemberProperty has no compatible get function");
+                    throw PropertyException( TXT( "MemberProperty has no compatible get function" ) );
                 }
             }
         }
@@ -382,7 +382,7 @@ namespace Nocturnal
         {
             if (m_Target == NULL)
             {
-                throw PropertyException ("MemberProperty has no target");
+                throw PropertyException( TXT( "MemberProperty has no target" ) );
             }
 
             switch (m_SetterType)
@@ -401,7 +401,7 @@ namespace Nocturnal
 
             default:
                 {
-                    throw PropertyException ("MemberProperty has no compatible set function");
+                    throw PropertyException( TXT( "MemberProperty has no compatible set function" ) );
                 }
             }
         }

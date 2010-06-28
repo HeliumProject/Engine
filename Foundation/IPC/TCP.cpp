@@ -2,6 +2,7 @@
 #include "TCP.h"
 
 #include "Platform/Assert.h"
+#include "Platform/String.h"
 #include "Foundation/Memory/Endian.h"
 
 #include <string.h>
@@ -29,7 +30,7 @@ TCPConnection::~TCPConnection()
     Cleanup();
 }
 
-bool TCPConnection::Initialize(bool server, const char* name, const char* server_ip, const u16 server_port)
+bool TCPConnection::Initialize(bool server, const tchar* name, const tchar* server_ip, const u16 server_port)
 {
     if (!Connection::Initialize( server, name ))
     {
@@ -38,7 +39,7 @@ bool TCPConnection::Initialize(bool server, const char* name, const char* server
 
     if (server_ip)
     {
-        strcpy(m_IP, server_ip);
+        _tcscpy(m_IP, server_ip);
     }
 
     if (server)
@@ -56,9 +57,9 @@ bool TCPConnection::Initialize(bool server, const char* name, const char* server
 
     Platform::Thread::Entry serverEntry = Platform::Thread::EntryHelper<TCPConnection, &TCPConnection::ServerThread>;
     Platform::Thread::Entry clientEntry = Platform::Thread::EntryHelper<TCPConnection, &TCPConnection::ClientThread>;
-    if (!m_ConnectThread.Create(server ? serverEntry : clientEntry, this, "IPC Connection Thread"))
+    if (!m_ConnectThread.Create(server ? serverEntry : clientEntry, this, TXT( "IPC Connection Thread" )))
     {
-        Platform::Print("%s: Failed to create connect thread\n", m_Name);
+        Platform::Print( TXT( "%s: Failed to create connect thread\n" ), m_Name);
         SetState(ConnectionStates::Failed);
         return false;  
     }
@@ -70,7 +71,7 @@ void TCPConnection::ServerThread()
 {
     Platform::InitializeSockets();
 
-    Platform::Print("%s: Starting TCP server (ports %d, %d)\n", m_Name, m_ReadPort, m_WritePort);
+    Platform::Print( TXT( "%s: Starting TCP server (ports %d, %d)\n" ), m_Name, m_ReadPort, m_WritePort);
 
     Platform::Socket server_read_socket = 0;
     if (!Platform::CreateSocket(server_read_socket))
@@ -105,7 +106,7 @@ void TCPConnection::ServerThread()
     // while the server is still running, cycle through connections
     while (!m_Terminating)
     {
-        Platform::Print("%s: Ready for client\n", m_Name);
+        Platform::Print( TXT( "%s: Ready for client\n" ), m_Name);
 
         // wait for a connection
         while (!m_Terminating)
@@ -158,7 +159,7 @@ void TCPConnection::ServerThread()
             result = setsockopt(m_ReadSocket, SOL_SOCKET, SO_SNDBUF, (const char*)&buf_size, size_size);
             result = setsockopt(m_WriteSocket, SOL_SOCKET, SO_RCVBUF, (const char*)&buf_size, size_size);
             result = setsockopt(m_WriteSocket, SOL_SOCKET, SO_SNDBUF, (const char*)&buf_size, size_size);
-            Platform::Print("%s: Accepted connection (%dk/%dk)\n", m_Name, IPC_TCP_BUFFER_SIZE >> 10, IPC_TCP_BUFFER_SIZE >> 10);
+            Platform::Print( TXT( "%s: Accepted connection (%dk/%dk)\n" ), m_Name, IPC_TCP_BUFFER_SIZE >> 10, IPC_TCP_BUFFER_SIZE >> 10);
 
 #ifdef IPC_TCP_NO_DELAY
             int flag = 1;
@@ -180,7 +181,7 @@ void TCPConnection::ServerThread()
     Platform::CloseSocket(server_read_socket);
     Platform::CloseSocket(server_write_socket);
 
-    Platform::Print("%s: Stopping TCP server (ports %d, %d)\n", m_Name, m_ReadPort, m_WritePort);
+    Platform::Print( TXT( "%s: Stopping TCP server (ports %d, %d)\n" ), m_Name, m_ReadPort, m_WritePort);
 
     CleanupThread();
 
@@ -191,26 +192,29 @@ void TCPConnection::ClientThread()
 {
     Platform::InitializeSockets();
 
-    Platform::Print("%s: Starting TCP client (%s: %d, %d)\n", m_Name, m_IP, m_ReadPort, m_WritePort);
+    Platform::Print( TXT( "%s: Starting TCP client (%s: %d, %d)\n" ), m_Name, m_IP, m_ReadPort, m_WritePort);
 
-    const char* ip = m_IP;
-    Platform::Print("%s: Resolving '%s'\n", m_Name, ip);
-    hostent* hostInfo = gethostbyname(ip);
+    std::string ip;
+    bool converted = Platform::ConvertString( m_IP, ip );
+    NOC_ASSERT( converted );
+
+    Platform::Print( TXT( "%s: Resolving '%s'\n" ), m_Name, ip.c_str());
+    hostent* hostInfo = gethostbyname(ip.c_str());
     if ( hostInfo )
     {
         sockaddr_in sockAddr;
         memcpy(&sockAddr.sin_addr, hostInfo->h_addr, hostInfo->h_length);
         ip = inet_ntoa(sockAddr.sin_addr);
-        Platform::Print("%s: IP is '%s'\n", m_Name, ip);
+        Platform::Print( TXT( "%s: IP is '%s'\n" ), m_Name, ip.c_str());
     }
 
     sockaddr_in client_service;
     client_service.sin_family = AF_INET;
-    client_service.sin_addr.s_addr = inet_addr(ip);
+    client_service.sin_addr.s_addr = inet_addr(ip.c_str());
 
     while (!m_Terminating)
     {
-        Platform::Print("%s: Ready for server\n", m_Name);
+        Platform::Print( TXT( "%s: Ready for server\n" ), m_Name);
 
         bool socketsCreated = false;
 
@@ -258,7 +262,7 @@ void TCPConnection::ClientThread()
             result = setsockopt(m_ReadSocket, SOL_SOCKET, SO_SNDBUF, (const char*)&buf_size, size_size);
             result = setsockopt(m_WriteSocket, SOL_SOCKET, SO_RCVBUF, (const char*)&buf_size, size_size);
             result = setsockopt(m_WriteSocket, SOL_SOCKET, SO_SNDBUF, (const char*)&buf_size, size_size);
-            Platform::Print("%s: Connection established (%dk/%dk)\n", m_Name, IPC_TCP_BUFFER_SIZE / 1024, IPC_TCP_BUFFER_SIZE / 1024);
+            Platform::Print( TXT( "%s: Connection established (%dk/%dk)\n" ), m_Name, IPC_TCP_BUFFER_SIZE / 1024, IPC_TCP_BUFFER_SIZE / 1024);
 
 #ifdef IPC_TCP_NO_DELAY
             int flag = 1;
@@ -283,7 +287,7 @@ void TCPConnection::ClientThread()
         }
     }
 
-    Platform::Print("%s: Stopping TCP client (%s: %d, %d)\n", m_Name, m_IP, m_ReadPort, m_WritePort);
+    Platform::Print( TXT( "%s: Stopping TCP client (%s: %d, %d)\n" ), m_Name, m_IP, m_ReadPort, m_WritePort);
 
     CleanupThread();
 
@@ -326,7 +330,7 @@ bool TCPConnection::ReadMessage(Message** msg)
     // out of memory condition
     if ( message == NULL )
     {
-        Platform::Print("%s: Failed to allocate memory for message\n", m_Name);
+        Platform::Print( TXT( "%s: Failed to allocate memory for message\n" ), m_Name);
         return false;
     }
 
@@ -335,7 +339,7 @@ bool TCPConnection::ReadMessage(Message** msg)
     // out of memory condition #2
     if ( m_ReadHeader.m_Size > 0 && data == NULL )
     {
-        Platform::Print("%s: Failed to allocate memory for message data\n", m_Name);
+        Platform::Print( TXT( "%s: Failed to allocate memory for message data\n" ), m_Name);
         delete message;
         return false;
     }

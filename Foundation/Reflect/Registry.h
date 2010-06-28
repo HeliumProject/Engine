@@ -24,7 +24,7 @@ namespace Reflect
     {
     public:
         std::vector<uintptr>    m_Stack;
-        std::string             m_String;
+        tstring                 m_String;
         bool                    m_Converted;
 
         StackRecord()
@@ -33,7 +33,7 @@ namespace Reflect
             m_Stack.reserve( 30 );
         }
 
-        const std::string& Convert();  
+        const tstring& Convert();  
     };
 
     typedef Nocturnal::SmartPtr< StackRecord > StackRecordPtr;
@@ -48,15 +48,14 @@ namespace Reflect
     class CreationRecord
     {
     public:
-        uintptr    m_Address;
-        std::string         m_ShortName;
-        int                 m_Type;
+        uintptr         m_Address;
+        tstring         m_ShortName;
+        int             m_Type;
 
         StackRecordPtr m_CreateStack;
         StackRecordPtr m_DeleteStack;
 
         CreationRecord();
-
         CreationRecord(uintptr ptr);
 
         void Dump(FILE* f);
@@ -103,7 +102,7 @@ namespace Reflect
 
     // Registry containers
     typedef std::map< int, Nocturnal::SmartPtr<Type> > M_IDToType;
-    typedef std::map< std::string, Nocturnal::SmartPtr<Type> > M_StrToType;
+    typedef std::map< tstring, Nocturnal::SmartPtr<Type> > M_StrToType;
 
     // Profile interface
 #ifdef PROFILE_ACCUMULATION
@@ -158,23 +157,23 @@ namespace Reflect
         void UnregisterType (const Type* type);
 
         // give a type an alias (for legacy considerations)
-        void AliasType (const Type* type, const std::string& alias);
-        void UnAliasType (const Type* type, const std::string& alias);
+        void AliasType (const Type* type, const tstring& alias);
+        void UnAliasType (const Type* type, const tstring& alias);
 
         // retrieves type info
         const Type* GetType(int id) const;
-        const Type* GetType(const std::string& str) const;
+        const Type* GetType(const tstring& str) const;
 
         // for threading safely
         void AtomicGetType(int id, const Type** addr) const;
-        void AtomicGetType(const std::string& str, const Type** addr) const;
+        void AtomicGetType(const tstring& str, const Type** addr) const;
 
         // class lookup
         inline const Class* GetClass(i32 id) const
         {
             return ReflectionCast<const Class>(GetType( id ));
         }
-        inline const Class* GetClass(const std::string& str) const
+        inline const Class* GetClass(const tstring& str) const
         {
             return ReflectionCast<const Class>(GetType( str ));
         }
@@ -184,7 +183,7 @@ namespace Reflect
         {
             return ReflectionCast<const Enumeration>(GetType( id ));
         }
-        inline const Enumeration* GetEnumeration(const std::string& str) const
+        inline const Enumeration* GetEnumeration(const tstring& str) const
         {
             return ReflectionCast<const Enumeration>(GetType( str ));
         }
@@ -192,7 +191,7 @@ namespace Reflect
         // create instances of classes
         ObjectPtr CreateInstance(int id) const;
         ObjectPtr CreateInstance(const Class* type) const;
-        ObjectPtr CreateInstance(const std::string& str) const;
+        ObjectPtr CreateInstance(const tstring& str) const;
 
         template<class T>
         Nocturnal::SmartPtr< T > CreateInstance()
@@ -232,7 +231,12 @@ namespace Reflect
         }
 
         const Type* type = NULL;
-        Registry::GetInstance()->AtomicGetType( typeid( T ).name(), &type );
+        
+        tstring temp;
+        bool converted = Platform::ConvertString( typeid( T ).name(), temp );
+        NOC_ASSERT( converted ); // if you hit this, for some reason we couldn't convert your typename
+
+        Registry::GetInstance()->AtomicGetType( temp, &type );
         NOC_ASSERT(type); // if you hit this then your type is not registered
 
         if ( type )
@@ -258,7 +262,14 @@ namespace Reflect
         }
 
         const Type* type = NULL;
-        Registry::GetInstance()->AtomicGetType( typeid( T ).name(), &type );
+
+        tstring convertedName;
+        {
+            bool converted = Platform::ConvertString( typeid( T ).name(), convertedName );
+            NOC_ASSERT( converted );
+        }
+
+        Registry::GetInstance()->AtomicGetType( convertedName, &type );
         NOC_ASSERT(type); // if you hit this then your type is not registered
 
         if ( type )
@@ -307,7 +318,7 @@ namespace Reflect
     typedef void (*UnregisterFunc)();
 
     template<class T>
-    inline UnregisterFunc RegisterClass(const std::string& shortName = "")
+    inline UnregisterFunc RegisterClass(const tstring& shortName = TXT( "" ))
     {
         // create the type information and register it with the registry
         if ( Reflect::Registry::GetInstance()->RegisterType( T::CreateClass( shortName ) ) )
@@ -330,7 +341,7 @@ namespace Reflect
     typedef void EnumerateEnumerationFunc( Reflect::Enumeration* info );
 
     template<class T>
-    inline UnregisterFunc RegisterEnumeration(EnumerateEnumerationFunc enumerate, const std::string& shortName = "")
+    inline UnregisterFunc RegisterEnumeration(EnumerateEnumerationFunc enumerate, const tstring& shortName = TXT( "" ))
     {
         Reflect::Enumeration* info = Reflect::Enumeration::Create<T>( shortName );
 

@@ -11,7 +11,7 @@ namespace Inspect
   // Base class for all string-translated data types
   //
 
-  class StringData : public DataTemplate< std::string >
+  class StringData : public DataTemplate< tstring >
   {
   public:
     INSPECT_TYPE( DataTypes::String );
@@ -52,16 +52,16 @@ namespace Inspect
       }
     }
 
-    virtual bool Set(const std::string& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool Set(const tstring& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
     {
       bool result = false;
 
-      Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< std::string >( s ) );
+      Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< tstring >( s ) );
       if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
       {
-        std::string newValue;
-        Reflect::Serializer::GetValue< std::string >( serializer, newValue );
-        Extract< T >( std::stringstream ( newValue ), m_Data );
+        tstring newValue;
+        Reflect::Serializer::GetValue< tstring >( serializer, newValue );
+        Extract< T >( tstringstream ( newValue ), m_Data );
         m_Changed.Raise( this, emitter );
         result = true;
       }
@@ -69,9 +69,9 @@ namespace Inspect
       return result;
     }
 
-    virtual void Get(std::string& s) const NOC_OVERRIDE
+    virtual void Get(tstring& s) const NOC_OVERRIDE
     {
-      std::stringstream stream;
+      tstringstream stream;
       Insert<T>(stream, m_Data);
       s = stream.str();
     }
@@ -116,46 +116,46 @@ namespace Inspect
       }
     }
 
-    virtual bool Set(const std::string& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool Set(const tstring& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
     {
       bool result = false;
 
       Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( s ) );
       if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
       {
-        std::string newValue;
-        Reflect::Serializer::GetValue< std::string >( serializer, newValue);
-        std::vector<T*>::iterator itr = m_Data.begin();
-        std::vector<T*>::iterator end = m_Data.end();
-        for ( ; itr != end; ++itr )
-        {
-          Extract<T>( std::stringstream ( newValue ), *itr );
-          result = true;
-        }
+          tstring newValue;
+          Reflect::Serializer::GetValue< tstring >( serializer, newValue );
+          std::vector<T*>::iterator itr = m_Data.begin();
+          std::vector<T*>::iterator end = m_Data.end();
+          for ( ; itr != end; ++itr )
+          {
+              Extract<T>( tstringstream( newValue ), *itr );
+              result = true;
+          }
 
-        m_Changed.Raise( this, emitter );
+          m_Changed.Raise( this, emitter );
       }
 
       return result;
     }
 
-    virtual bool SetAll(const std::vector< std::string >& values, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool SetAll(const std::vector< tstring >& values, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
     {
       bool result = false;
 
       if ( values.size() == m_Data.size() )
       {
-        std::vector< std::string >::const_iterator itr = values.begin();
-        std::vector< std::string >::const_iterator end = values.end();
+        std::vector< tstring >::const_iterator itr = values.begin();
+        std::vector< tstring >::const_iterator end = values.end();
         for ( size_t index = 0; itr != end; ++itr, ++index )
         {
           Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( *itr ) );
           if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
           {
-            std::string newValue;
-            Reflect::Serializer::GetValue< std::string >( serializer, newValue );
-            Extract<T>( std::stringstream ( newValue ), m_Data[ index ] );
-            result = true;
+              tstring newValue;
+              Reflect::Serializer::GetValue< tstring >( serializer, newValue );
+              Extract<T>( tstringstream ( newValue ), m_Data[ index ] );
+              result = true;
           }
         }
 
@@ -169,10 +169,10 @@ namespace Inspect
       return result;
     }
 
-    virtual void Get(std::string& s) const NOC_OVERRIDE
+    virtual void Get(tstring& s) const NOC_OVERRIDE
     {
       T* value = NULL;
-      std::stringstream stream;
+      tstringstream stream;
 
       //
       // Scan for equality
@@ -225,7 +225,7 @@ namespace Inspect
       s = stream.str();
     }
 
-    virtual void GetAll(std::vector< std::string >& s) const NOC_OVERRIDE
+    virtual void GetAll(std::vector< tstring >& s) const NOC_OVERRIDE
     {
       s.resize( m_Data.size() );
       std::vector<T*>::const_iterator itr = m_Data.begin();
@@ -233,7 +233,7 @@ namespace Inspect
       for ( size_t index = 0; itr != end; ++itr, ++index )
       {
         T* value = *itr;
-        std::stringstream stream;
+        tstringstream stream;
         Insert<T>( stream, value );
         s[ index ] = stream.str();
       }
@@ -266,7 +266,7 @@ namespace Inspect
 
     }
 
-    virtual bool Set(const std::string& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool Set(const tstring& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
     {
       bool result = false;
 
@@ -274,9 +274,9 @@ namespace Inspect
       if ( m_Changing.RaiseWithReturn( DataChangingArgs ( this, serializer ) ) )
       {
         T value;
-        std::string newValue;
-        Reflect::Serializer::GetValue< std::string >( serializer, newValue );
-        Extract< T >( std::stringstream( newValue ), &value );
+        tstring newValue;
+        Reflect::Serializer::GetValue< tstring >( serializer, newValue );
+        Extract< T >( tstringstream( newValue ), &value );
         m_Property->Set( value );
         m_Changed.Raise( this, emitter );
         result = true;
@@ -285,9 +285,9 @@ namespace Inspect
       return result;
     }
 
-    virtual void Get(std::string& s) const NOC_OVERRIDE
+    virtual void Get(tstring& s) const NOC_OVERRIDE
     {
-      std::stringstream stream;
+      tstringstream stream;
       T val = m_Property->Get();
       Insert<T>( stream, &val );
       s = stream.str();
@@ -320,21 +320,21 @@ namespace Inspect
 
     }
 
-    virtual bool Set(const std::string& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool Set(const tstring& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
     {
       bool result = false;
 
-      Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< std::string >( s ) );
+      Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create< tstring >( s ) );
       if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
       {
-        std::string newValue;
-        Reflect::Serializer::GetValue< std::string >( serializer, newValue );
+        tstring newValue;
+        Reflect::Serializer::GetValue< tstring >( serializer, newValue );
         T value;
         std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > >::iterator itr = m_Properties.begin();
         std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > >::iterator end = m_Properties.end();
         for ( ; itr != end; ++itr )
         {
-          Extract<T>( std::stringstream ( newValue ), &value );
+          Extract<T>( tstringstream ( newValue ), &value );
           (*itr)->Set( value );
           result = true;
         }
@@ -345,23 +345,23 @@ namespace Inspect
       return result;
     }
 
-    virtual bool SetAll(const std::vector< std::string >& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
+    virtual bool SetAll(const std::vector< tstring >& s, const DataChangedSignature::Delegate& emitter = NULL) NOC_OVERRIDE
     {
       bool result = false;
 
       if ( s.size() == m_Properties.size() )
       {
-        std::vector< std::string >::const_iterator itr = s.begin();
-        std::vector< std::string >::const_iterator end = s.end();
+        std::vector< tstring >::const_iterator itr = s.begin();
+        std::vector< tstring >::const_iterator end = s.end();
         for ( size_t index = 0; itr != end; ++itr, ++index )
         {
           Reflect::SerializerPtr serializer = Reflect::AssertCast< Reflect::Serializer >( Reflect::Serializer::Create( *itr ) );
           if ( m_Changing.RaiseWithReturn( DataChangingArgs( this, serializer ) ) )
           {
             T value;
-            std::string newValue;
-            Reflect::Serializer::GetValue< std::string >( serializer, newValue );
-            Extract<T>( std::stringstream ( newValue ), &value );
+            tstring newValue;
+            Reflect::Serializer::GetValue< tstring >( serializer, newValue );
+            Extract<T>( tstringstream ( newValue ), &value );
             m_Properties[ index ]->Set(value);
             result = true;
           }
@@ -377,9 +377,9 @@ namespace Inspect
       return result;
     }
 
-    virtual void Get(std::string& s) const NOC_OVERRIDE
+    virtual void Get(tstring& s) const NOC_OVERRIDE
     {
-      std::stringstream stream;
+      tstringstream stream;
 
       //
       // Scan for equality
@@ -399,7 +399,7 @@ namespace Inspect
         else
         {
           T val = (*itr)->Get();
-          std::stringstream temp;
+          tstringstream temp;
           Insert<T>( temp, &val );
 
           if (temp.str() != stream.str())
@@ -431,7 +431,7 @@ namespace Inspect
       }
     }
 
-    virtual void GetAll(std::vector< std::string >& s) const NOC_OVERRIDE
+    virtual void GetAll(std::vector< tstring >& s) const NOC_OVERRIDE
     {
       s.resize( m_Properties.size() );
       std::vector< Nocturnal::SmartPtr< Nocturnal::Property<T> > >::const_iterator itr = m_Properties.begin();
@@ -439,7 +439,7 @@ namespace Inspect
       for ( size_t index = 0 ; itr != end; ++itr, ++index )
       {
         T val = (*itr)->Get();
-        std::stringstream stream;
+        tstringstream stream;
         Insert<T>( stream, &val );
         s[ index ] = stream.str();
       }

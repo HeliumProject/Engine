@@ -21,24 +21,24 @@ u32 GetWin32MoveMethod( FileOffset offsetType )
     return 0;
 }
 
-const char* GetWin32MoveMethodStr( FileOffset offsetType )
+const tchar* GetWin32MoveMethodStr( FileOffset offsetType )
 {
     switch( offsetType )
     {
     case FileOffsets::Beginning:
-        return "beginning";
+        return TXT( "beginning" );
 
     case FileOffsets::Current:
-        return "current";
+        return TXT( "current" );
 
     case FileOffsets::End:
-        return "end";
+        return TXT( "end" );
     }
 
     return NULL;
 }
 
-FileHandle::FileHandle( const std::string& path, const char* mode )
+FileHandle::FileHandle( const tstring& path, const tchar* mode )
 : m_Mode( mode )
 , m_FileHandle( NULL )
 , m_OpenCount( 0 )
@@ -57,7 +57,7 @@ bool FileHandle::Open()
 
     if ( m_FileHandle == NULL )
     {
-        m_FileHandle = fopen( m_Path.c_str(), m_Mode );
+        m_FileHandle = _tfopen( m_Path.c_str(), m_Mode );
     }
 
     return IsValid();
@@ -78,7 +78,7 @@ u32 FileHandle::Read( u8* buffer, size_t amount )
 
     if ( !::ReadFile( m_FileHandle, buffer, (DWORD)amount, &read, NULL ) )
     {
-        throw FileOperationException( "Unable to read %d bytes from %s", amount, m_Path.c_str() );
+        throw FileOperationException( TXT( "Unable to read %d bytes from %s" ), amount, m_Path.c_str() );
     }
 
     return read;
@@ -91,7 +91,7 @@ void FileHandle::Write( u8* buffer, size_t amount )
     // NOTE that we throw if we don't succeed writing the specified amount, which is different than read
     if ( !::WriteFile( m_FileHandle, buffer, (DWORD)amount, &written, NULL ) || written != amount )
     {
-        throw FileOperationException( "Unable to write %d bytes from %s", written, m_Path.c_str() );
+        throw FileOperationException( TXT( "Unable to write %d bytes from %s" ), written, m_Path.c_str() );
     }
 }
 
@@ -105,7 +105,7 @@ void FileHandle::Seek( FileLocation location, FileOffset offsetType )
 
     if ( !::SetFilePointerEx( m_FileHandle, loc, &newLoc, GetWin32MoveMethod( offsetType ) ) )
     {
-        throw FileOperationException( "Unable to seek %I64d bytes from %s location in %s", location, GetWin32MoveMethodStr( offsetType ), m_Path.c_str() );
+        throw FileOperationException( TXT( "Unable to seek %I64d bytes from %s location in %s" ), location, GetWin32MoveMethodStr( offsetType ), m_Path.c_str() );
     }
 }
 
@@ -119,7 +119,7 @@ FileLocation FileHandle::Tell()
 
     if ( !::SetFilePointerEx( m_FileHandle, zero, &loc, FILE_CURRENT ) )
     {
-        throw FileOperationException( "Unable to determine location in %s", m_Path.c_str() );
+        throw FileOperationException( TXT( "Unable to determine location in %s" ), m_Path.c_str() );
     }
 
     return loc.QuadPart;

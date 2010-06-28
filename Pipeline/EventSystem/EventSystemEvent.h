@@ -21,8 +21,8 @@ namespace Nocturnal
                 (
                 const tuid id = TUID::Null,
                 u64 created = 0,
-                const std::string& username = std::string( "" ),
-                const std::string& data = std::string( "" )
+                const tstring& username = TXT( "" ),
+                const tstring& data = TXT( "" )
                 )
                 : m_Id( id )
                 , m_Created( created )
@@ -36,13 +36,13 @@ namespace Nocturnal
                 return m_Id != TUID::Null;
             }
 
-            std::string Dump() const;
+            tstring Dump() const;
 
         public:
             tuid          m_Id;       // Events's unique id
             u64           m_Created;  // time of Event record creation
-            std::string   m_Username; // username@computer
-            std::string   m_Data;           
+            tstring   m_Username; // username@computer
+            tstring   m_Data;           
         };
 
         typedef Nocturnal::SmartPtr< Event > EventPtr;

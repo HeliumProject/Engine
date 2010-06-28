@@ -7,7 +7,6 @@
 #include "Pipeline/Asset/AssetFolder.h"
 #include "Pipeline/Asset/AssetTemplate.h"
 #include "Pipeline/Asset/AssetVersion.h"
-#include "Pipeline/Asset/Tracker/CacheDB.h"
 #include "Pipeline/Asset/Components/ColorMapComponent.h"
 #include "Pipeline/Asset/Components/DependenciesComponent.h"
 #include "Pipeline/Asset/Components/DetailMapComponent.h"
@@ -120,7 +119,7 @@ void Asset::Initialize()
 
     g_AssetInitializerStack.Push( Reflect::RegisterClass<ManifestVersion>( "ManifestVersion" ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetManifest>( "AssetManifest" ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<EntityManifest>( "EntityManifest" ) ); Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass< EntityManifest >(), "AssetManifest" );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<EntityManifest>( "EntityManifest" ) ); Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass< EntityManifest >(), TXT( "AssetManifest" ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<SceneManifest>( "SceneManifest" ) );
 
 

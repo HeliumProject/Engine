@@ -8,7 +8,6 @@
 
 #include "ArchiveXML.h"
 #include "ArchiveBinary.h"
-#include "FileStream.h" 
 
 #include "Platform/Mutex.h"
 #include "Platform/Process.h"
@@ -31,14 +30,14 @@ void StatusHandler::ArchiveException( ExceptionInfo& info )
     // by default we cannot handle any exception
 }
 
-void StatusHandler::ArchiveWarning(const std::string& warning)
+void StatusHandler::ArchiveWarning(const tstring& warning)
 {
-    Log::Warning("%s", warning.c_str());
+    Log::Warning( TXT( "%s" ), warning.c_str());
 }
 
-void StatusHandler::ArchiveDebug(const std::string& debug)
+void StatusHandler::ArchiveDebug(const tstring& debug)
 {
-    Log::Debug("%s", debug.c_str());
+    Log::Debug( TXT( "%s" ), debug.c_str());
 }
 
 void PrintStatus::ArchiveStatus(StatusInfo& info)
@@ -52,26 +51,24 @@ void PrintStatus::ArchiveStatus(StatusInfo& info)
             const char* verb = info.m_Archive.GetMode() == ArchiveModes::Read ? "Reading" : "Writing";
             const char* type = info.m_Archive.GetType() == ArchiveTypes::XML ? "XML" : "Binary";
 
-            if (info.m_Archive.GetFile().empty())
+            if (info.m_Archive.GetPath().empty())
             {
-                m_Bullet.reset( new Log::Bullet ("%s %s stream\n", verb, type) );
+                m_Bullet.reset( new Log::Bullet( TXT( "%s %s stream\n" ), verb, type) );
             }
             else
             {
-                m_Bullet.reset( new Log::Bullet ("%s %s file '%s'\n", verb, type, info.m_Archive.GetFile().c_str()) );
+                m_Bullet.reset( new Log::Bullet( TXT( "%s %s file '%s'\n" ), verb, type, info.m_Archive.GetPath().c_str()) );
 
                 if (info.m_Archive.GetMode() == ArchiveModes::Read)
                 {
-                    struct stat st;
-                    stat(info.m_Archive.GetFile().c_str(), &st);
-
-                    if (st.st_size > 1000)
+                    u64 size = info.m_Archive.GetPath().Size();
+                    if ( size > 1000)
                     {
-                        Log::Bullet bullet ("Size: %dk\n", st.st_size / 1000);
+                        Log::Bullet bullet( TXT( "Size: %dk\n" ),  size / 1000);
                     }
                     else
                     {
-                        Log::Bullet bullet ("Size: %d\n", st.st_size);
+                        Log::Bullet bullet( TXT( "Size: %d\n" ), size );
                     }
                 }
             }
@@ -83,39 +80,39 @@ void PrintStatus::ArchiveStatus(StatusInfo& info)
 
     case Reflect::ArchiveStates::PostProcessing:
         {
-            Log::Bullet bullet ("Processing...\n");
+            Log::Bullet bullet( TXT( "Processing...\n" ) );
             break;
         }
 
     case Reflect::ArchiveStates::Complete:
         {
-            Log::Bullet bullet ("Completed in %.2f ms\n", Platform::CyclesToMillis(Platform::TimerGetClock() - m_Timer));
+            Log::Bullet bullet( TXT( "Completed in %.2f ms\n" ), Platform::CyclesToMillis(Platform::TimerGetClock() - m_Timer));
             break;
         }
 
     case Reflect::ArchiveStates::Publishing:
         {
-            Log::Bullet bullet ("Publishing to %s\n", info.m_DestinationFile.c_str());
+            Log::Bullet bullet( TXT( "Publishing to %s\n" ), info.m_DestinationFile.c_str());
             break;
         }
     }
 }
 
-void PrintStatus::ArchiveWarning(const std::string& warning)
+void PrintStatus::ArchiveWarning(const tstring& warning)
 {
     if (m_Progress >= 0 && !m_Start)
     {
-        Log::Warning("\n");
+        Log::Warning( TXT( "\n" ) );
         m_Start = true;
     }
     __super::ArchiveWarning( warning );
 }
 
-void PrintStatus::ArchiveDebug(const std::string& debug)
+void PrintStatus::ArchiveDebug(const tstring& debug)
 {
     if (m_Progress >= 0 && !m_Start)
     {
-        Log::Debug("\n");
+        Log::Debug( TXT( "\n" ) );
         m_Start = true;
     }
     __super::ArchiveDebug( debug );
@@ -136,7 +133,6 @@ Archive::Archive(StatusHandler* status)
 , m_SearchType (Reflect::ReservedTypes::Invalid)
 , m_Abort (false)
 , m_Mode (ArchiveModes::Read)
-, m_Stream (NULL)
 {
 
 }
@@ -146,10 +142,10 @@ Archive::~Archive()
 
 }
 
-bool Archive::GetFileType( const std::string& file, ArchiveType& type )
+bool Archive::GetFileType( const tstring& file, ArchiveType& type )
 {
     Nocturnal::Path filePath( file );
-    std::string ext = filePath.Extension();
+    tstring ext = filePath.Extension();
 
     if ( ext == Archive::GetExtension( ArchiveTypes::XML ) )
     {
@@ -165,13 +161,13 @@ bool Archive::GetFileType( const std::string& file, ArchiveType& type )
     return false;
 }
 
-void Archive::Warning(const char* fmt, ...)
+void Archive::Warning(const tchar* fmt, ...)
 {
-    static char buff[512];
+    static tchar buff[512];
 
     va_list args;
     va_start(args, fmt); 
-    int size = _vsnprintf(buff, sizeof(buff), fmt, args);
+    int size = _vsntprintf(buff, sizeof(buff), fmt, args);
     buff[ sizeof(buff) - 1] = 0; 
     va_end(args);      
 
@@ -181,17 +177,17 @@ void Archive::Warning(const char* fmt, ...)
     }
     else
     {
-        Log::Warning("%s", buff);
+        Log::Warning( TXT( "%s" ), buff);
     }
 }
 
-void Archive::Debug(const char* fmt, ...)
+void Archive::Debug(const tchar* fmt, ...)
 {
-    static char buff[512];
+    static tchar buff[512];
 
     va_list args;
     va_start(args, fmt); 
-    int size = _vsnprintf(buff, sizeof(buff), fmt, args);
+    int size = _vsntprintf(buff, sizeof(buff), fmt, args);
     buff[ sizeof(buff)-1] = 0; 
     va_end(args);      
 
@@ -201,24 +197,8 @@ void Archive::Debug(const char* fmt, ...)
     }
     else
     {
-        Log::Debug("%s", buff);
+        Log::Debug( TXT( "%s" ), buff);
     }
-}
-
-Archive* Archive::GetArchive(const std::string& file, StatusHandler* handler)
-{
-    if ( file.empty() )
-    {
-        throw Reflect::StreamException( "File path is empty" );
-    }
-
-    Reflect::ArchiveType archiveType;
-    if ( GetFileType( file, archiveType ) )
-    {
-        return GetArchive( archiveType, handler);
-    }
-
-    return NULL;
 }
 
 Archive* Archive::GetArchive(ArchiveType type, StatusHandler* handler)
@@ -232,54 +212,26 @@ Archive* Archive::GetArchive(ArchiveType type, StatusHandler* handler)
         return new ArchiveXML (handler);
 
     default:
-        throw Reflect::StreamException( "Unknown archive type" );
+        throw Reflect::StreamException( TXT( "Unknown archive type" ) );
     }
 
     return NULL;
 }
 
-void Archive::OpenFile( const std::string& file, bool write )
+Archive* Archive::GetArchive(const tstring& file, StatusHandler* handler)
 {
-    m_File = file;
-
-#ifdef REFLECT_ARCHIVE_VERBOSE
-    Debug("Opening file '%s'\n", file.c_str());
-#endif
-
-    Reflect::StreamPtr stream = new FileStream(file, write); 
-    OpenStream( stream, write );
-}
-
-void Archive::OpenStream( const StreamPtr& stream, bool write )
-{
-    // save the mode here, so that we safely refer to it later.
-    m_Mode = (write) ? ArchiveModes::Write : ArchiveModes::Read; 
-
-    // open the stream, this is "our interface" 
-    stream->Open(); 
-
-    // Set precision
-    stream->SetPrecision(32);
-
-    // Setup stream
-    m_Stream = stream; 
-
-    // Header
-    if (write)
+    if ( file.empty() )
     {
-        Start();
-    }
-}
-
-void Archive::Close()
-{
-    if (m_Mode == ArchiveModes::Write)
-    {
-        Finish(); 
+        throw Reflect::StreamException( TXT( "File path is empty" ) );
     }
 
-    m_Stream->Close(); 
-    m_Stream = NULL; 
+    Reflect::ArchiveType archiveType;
+    if ( GetFileType( file, archiveType ) )
+    {
+        return GetArchive( archiveType, handler);
+    }
+
+    return NULL;
 }
 
 void Archive::PreSerialize()
@@ -455,151 +407,19 @@ bool Archive::TryElementCallback( Element* element, ElementCallback callback )
     return true;
 }
 
-void Archive::ToXML(const ElementPtr& element, std::string& xml, StatusHandler* status)
-{
-    V_Element elements(1);
-    elements[0] = element;
-    return ToXML( elements, xml, status );
-}
-
-ElementPtr Archive::FromXML(const std::string& xml, int searchType, StatusHandler* status)
-{
-    if (searchType == Reflect::ReservedTypes::Any)
-    {
-        searchType = Reflect::GetType<Element>();
-    }
-
-    ArchiveXML archive (status);
-    archive.m_SearchType = searchType;
-
-    std::stringstream strStream;
-    strStream << "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\""<<ArchiveXML::CURRENT_VERSION<<"\">" << xml << "</Reflect>";
-    archive.m_Stream = new Reflect::Stream(&strStream); 
-    archive.Read();
-
-    V_Element::iterator itr = archive.m_Spool.begin();
-    V_Element::iterator end = archive.m_Spool.end();
-    for ( ; itr != end; ++itr )
-    {
-        if ((*itr)->HasType(searchType))
-        {
-            return *itr;
-        }
-    }
-
-    return NULL;
-}
-
-void Archive::ToXML(const V_Element& elements, std::string& xml, StatusHandler* status)
-{
-    ArchiveXML archive (status);
-    std::stringstream strStream;
-
-    archive.m_Stream = new Reflect::Stream(&strStream); 
-    archive.m_Spool  = elements;
-    archive.Write();
-
-    xml = strStream.str();
-}
-
-void Archive::FromXML(const std::string& xml, V_Element& elements, StatusHandler* status)
-{
-    ArchiveXML archive (status);
-    std::stringstream strStream;
-    strStream << "<?xml version=\"1.0\"?><Reflect FileFormatVersion=\""<<ArchiveXML::CURRENT_VERSION<<"\">" << xml << "</Reflect>";
-
-    archive.m_Stream = new Reflect::Stream(&strStream); 
-    archive.Read();
-
-    elements = archive.m_Spool;
-}
-
-void Archive::ToStream(const ElementPtr& element, std::iostream& stream, ArchiveType type, StatusHandler* status)
-{
-    V_Element elements(1);
-    elements[0] = element;
-    ToStream( elements, stream, type, status );
-}
-
-ElementPtr Archive::FromStream(std::iostream& stream, ArchiveType type, int searchType, StatusHandler* status)
-{
-    if (searchType == Reflect::ReservedTypes::Any)
-    {
-        searchType = Reflect::GetType<Element>();
-    }
-
-    std::auto_ptr<Archive> archive (GetArchive(type, status));
-    archive->m_SearchType = searchType;
-
-    Reflect::StreamPtr reflectStream = new Reflect::Stream(&stream); 
-    archive->OpenStream( reflectStream, false );
-    archive->Read();
-    archive->Close(); 
-
-    V_Element::iterator itr = archive->m_Spool.begin();
-    V_Element::iterator end = archive->m_Spool.end();
-    for ( ; itr != end; ++itr )
-    {
-        if ((*itr)->HasType(searchType))
-        {
-            return *itr;
-        }
-    }
-
-    return NULL;
-}
-
-void Archive::ToStream(const V_Element& elements, std::iostream& stream, ArchiveType type, StatusHandler* status)
-{
-    std::auto_ptr<Archive> archive (GetArchive(type, status));
-
-    // fix the spool
-    archive->m_Spool.clear();
-    archive->m_Spool.reserve( elements.size() );
-
-    V_Element::const_iterator iter = elements.begin();
-    V_Element::const_iterator end  = elements.end();
-    for ( ; iter != end; ++iter )
-    {
-        if ( !(*iter)->HasType(Reflect::GetType<Version>()) )
-        {
-            archive->m_Spool.push_back( (*iter) );
-        }
-    }
-
-    Reflect::StreamPtr reflectStream = new Reflect::Stream(&stream); 
-
-    archive->OpenStream( reflectStream, true );
-    archive->Write();   
-    archive->Close(); 
-}
-
-void Archive::FromStream(std::iostream& stream, ArchiveType type, V_Element& elements, StatusHandler* status)
-{
-    std::auto_ptr<Archive> archive (GetArchive(type, status));
-
-    Reflect::StreamPtr reflectStream = new Reflect::Stream(&stream); 
-
-    archive->OpenStream( reflectStream, false );
-    archive->Read();
-    archive->Close(); 
-
-    elements = archive->m_Spool;
-}
-
-void Archive::ToFile(const ElementPtr& element, const std::string& file)
+void Archive::ToFile(const ElementPtr& element, const tstring& file)
 {
     ToFile( element, file, NULL, NULL );
 }
 
-void Archive::ToFile(const ElementPtr& element, const std::string& file, VersionPtr version, StatusHandler* status)
+void Archive::ToFile(const ElementPtr& element, const tstring& file, VersionPtr version, StatusHandler* status)
 {
     V_Element elements(1);
     elements[0] = element;
     ToFile( elements, file, version, status );
 }
 
-ElementPtr Archive::FromFile(const std::string& file, int searchType, StatusHandler* status)
+ElementPtr Archive::FromFile(const tstring& file, int searchType, StatusHandler* status)
 {
     if (searchType == Reflect::ReservedTypes::Any)
     {
@@ -608,13 +428,14 @@ ElementPtr Archive::FromFile(const std::string& file, int searchType, StatusHand
 
     REFLECT_SCOPE_TIMER(("%s", file.c_str()));
 
-    char print[512];
-    _snprintf(print, sizeof(print), "Parsing '%s'", file.c_str());
-    PROFILE_SCOPE_ACCUM_VERBOSE(g_ParseAccum, print);
+    tchar print[512];
+    _sntprintf(print, sizeof(print), TXT( "Parsing '%s'" ), file.c_str());
+#pragma TODO("Profiler support for wide strings")
+    PROFILE_SCOPE_ACCUM_VERBOSE(g_ParseAccum, ""/*print*/);
 
     std::auto_ptr<Archive> archive (GetArchive(file, status));
     archive->m_SearchType = searchType;
-    archive->Debug("%s\n", print);
+    archive->Debug( TXT( "%s\n" ), print);
 
     s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreRead ) );
 
@@ -636,7 +457,7 @@ ElementPtr Archive::FromFile(const std::string& file, int searchType, StatusHand
     }
     catch (Nocturnal::Exception& ex)
     {
-        std::stringstream str;
+        tstringstream str;
         str << "While reading '" << file << "': " << ex.Get();
         ex.Set( str.str() );
         throw;
@@ -657,21 +478,22 @@ ElementPtr Archive::FromFile(const std::string& file, int searchType, StatusHand
     return NULL;
 }
 
-void Archive::ToFile(const V_Element& elements, const std::string& file)
+void Archive::ToFile(const V_Element& elements, const tstring& file)
 {
     ToFile( elements, file, NULL, NULL );
 }
 
-void Archive::ToFile(const V_Element& elements, const std::string& file, VersionPtr version, StatusHandler* status)
+void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr version, StatusHandler* status)
 {
     REFLECT_SCOPE_TIMER(("%s", file.c_str()));
 
-    char print[512];
-    _snprintf(print, sizeof(print), "Authoring '%s'", file.c_str());
-    PROFILE_SCOPE_ACCUM_VERBOSE(g_AuthorAccum, print);
+    tchar print[512];
+    _sntprintf(print, sizeof(print), TXT( "Authoring '%s'" ), file.c_str());
+#pragma TODO("Profiler support for wide strings")
+    PROFILE_SCOPE_ACCUM_VERBOSE(g_AuthorAccum, ""/*print*/);
 
     std::auto_ptr<Archive> archive (GetArchive(file, status));
-    archive->Debug("%s\n", print);
+    archive->Debug( TXT( "%s\n" ), print);
 
     s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreWrite ) );
     Nocturnal::Path outputPath( file );
@@ -721,7 +543,7 @@ void Archive::ToFile(const V_Element& elements, const std::string& file, Version
     }
     catch ( Nocturnal::Exception& ex )
     {
-        std::stringstream str;
+        tstringstream str;
         str << "While writing '" << file << "': " << ex.Get();
         ex.Set( str.str() );
 
@@ -752,7 +574,7 @@ void Archive::ToFile(const V_Element& elements, const std::string& file, Version
     }
     catch ( Nocturnal::Exception& ex )
     {
-        std::stringstream str;
+        tstringstream str;
         str << "While moving '" << safetyPath.c_str() << "' to '" << file << "': " << ex.Get();
         ex.Set( str.str() );
 
@@ -764,16 +586,17 @@ void Archive::ToFile(const V_Element& elements, const std::string& file, Version
     s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PostWrite ) );
 }
 
-void Archive::FromFile(const std::string& file, V_Element& elements, StatusHandler* status)
+void Archive::FromFile(const tstring& file, V_Element& elements, StatusHandler* status)
 {
     REFLECT_SCOPE_TIMER(("%s", file.c_str()));
 
-    char print[512];
-    _snprintf(print, sizeof(print), "Parsing '%s'", file.c_str());
-    PROFILE_SCOPE_ACCUM_VERBOSE(g_ParseAccum, print);
+    tchar print[512];
+    _sntprintf(print, sizeof(print), TXT( "Parsing '%s'" ), file.c_str());
+#pragma TODO("Profiler support for wide strings")
+    PROFILE_SCOPE_ACCUM_VERBOSE(g_ParseAccum, ""/*print*/);
 
     std::auto_ptr<Archive> archive (GetArchive(file, status));
-    archive->Debug("%s\n", print);
+    archive->Debug( TXT( "%s\n" ), print);
 
     s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreRead ) );
 
@@ -795,7 +618,7 @@ void Archive::FromFile(const std::string& file, V_Element& elements, StatusHandl
     }
     catch (Nocturnal::Exception& ex)
     {
-        std::stringstream str;
+        tstringstream str;
         str << "While reading '" << file << "': " << ex.Get();
         ex.Set( str.str() );
         throw;

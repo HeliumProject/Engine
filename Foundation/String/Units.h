@@ -7,9 +7,9 @@
 
 namespace Nocturnal
 {
-    inline std::string BytesToString( u64 bytes )
+    inline tstring BytesToString( u64 bytes )
     {
-        char buf[ 32 ];
+        tchar buf[ 32 ];
         if ( bytes >= 1024 * 1024 * 1024 )
         {
             _snprintf( buf, 32, "%0.2f GB", bytes / (f32) ( 1024 * 1024 * 1024 ) );

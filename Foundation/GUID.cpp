@@ -1,9 +1,18 @@
 #include "GUID.h"
 #include "TUID.h"
 
+#include "Platform/Types.h"
+
+#define RPC_USE_NATIVE_WCHAR
 #include <objbase.h>
 
 #pragma comment( lib, "rpcrt4.lib" )
+
+#ifdef UNICODE
+# define RPC_TSTR RPC_WSTR
+#else
+# define RPC_TSTR RPC_CSTR
+#endif
 
 using namespace Nocturnal;
 
@@ -105,15 +114,15 @@ void Nocturnal::GUID::ToTUID( tuid& id ) const
     id = (tuid)t;
 }
 
-void Nocturnal::GUID::ToString(std::string& id) const
+void Nocturnal::GUID::ToString(tstring& id) const
 {
-    unsigned char *l_pszString;
+    tchar* l_pszString;
 
-    UuidToStringA((UUID*)(this), &l_pszString);
+    UuidToString((UUID*)(this), (RPC_TSTR*)&l_pszString);
 
-    id = reinterpret_cast<char *>(l_pszString);
+    id = reinterpret_cast<tchar *>(l_pszString);
 
-    RpcStringFree(&l_pszString);
+    RpcStringFree((RPC_TSTR*)&l_pszString);
 }
 
 void Nocturnal::GUID::FromTUID( tuid id )
@@ -122,11 +131,11 @@ void Nocturnal::GUID::FromTUID( tuid id )
     t.ToGUID( *this );
 }
 
-bool Nocturnal::GUID::FromString(const std::string& id)
+bool Nocturnal::GUID::FromString(const tstring& id)
 {
     GUID uid;
 
-    if (RPC_S_OK == UuidFromStringA((unsigned char *)id.data(), reinterpret_cast<UUID*>(&uid)))
+    if (RPC_S_OK == UuidFromString((RPC_TSTR)id.data(), reinterpret_cast<UUID*>(&uid)))
     {
         (*this)=uid;
         return true;

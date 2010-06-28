@@ -11,18 +11,18 @@ REFLECT_DEFINE_ABSTRACT(SetSerializer)
 // String tokenizer adapted from:
 // http://www.oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
 template< typename T >
-void Tokenize( const std::string& str, std::set< T >& tokens, const std::string& delimiters )
+void Tokenize( const tstring& str, std::set< T >& tokens, const tstring& delimiters )
 {
     // Skip delimiters at beginning.
-    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
     // Find first "non-delimiter".
-    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
 
     T temp;
-    while ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( tstring::npos != pos || tstring::npos != lastPos )
     {
         // Found a token, convert it to the proper type for our vector
-        std::stringstream inStream (str.substr( lastPos, pos - lastPos ));
+        tstringstream inStream (str.substr( lastPos, pos - lastPos ));
         inStream >> temp; // NOTE: Stream operator stops at spaces!
         if ( !inStream.fail() )
         {
@@ -43,14 +43,14 @@ void Tokenize( const std::string& str, std::set< T >& tokens, const std::string&
 // Explicit implementation for strings, that gets around the stream operator stopping
 // at spaces by not using a stream at all.
 template<>
-inline void Tokenize( const std::string& str, std::set< std::string >& tokens, const std::string& delimiters )
+inline void Tokenize( const tstring& str, std::set< tstring >& tokens, const tstring& delimiters )
 {
     // Skip delimiters at beginning.
-    std::string::size_type lastPos = str.find_first_not_of( delimiters, 0 );
+    tstring::size_type lastPos = str.find_first_not_of( delimiters, 0 );
     // Find first "non-delimiter".
-    std::string::size_type pos     = str.find_first_of( delimiters, lastPos );
+    tstring::size_type pos     = str.find_first_of( delimiters, lastPos );
 
-    while ( std::string::npos != pos || std::string::npos != lastPos )
+    while ( tstring::npos != pos || tstring::npos != lastPos )
     {
         // Add the token to the vector
         tokens.insert( str.substr( lastPos, pos - lastPos ) );
@@ -222,7 +222,7 @@ void SimpleSetSerializer<DataT, DataSer>::Deserialize(Archive& archive)
         DataSer* data = ObjectCast<DataSer>(*itr);
         if (!data)
         {
-            throw LogisticException("Set value type has changed, this is unpossible");
+            throw LogisticException( TXT( "Set value type has changed, this is unpossible" ) );
         }
 
         m_Data->insert(data->m_Data.Get());
@@ -230,7 +230,7 @@ void SimpleSetSerializer<DataT, DataSer>::Deserialize(Archive& archive)
 }
 
 template < class DataT, class DataSer >
-std::ostream& SimpleSetSerializer<DataT, DataSer>::operator >> (std::ostream& stream) const
+tostream& SimpleSetSerializer<DataT, DataSer>::operator>> (tostream& stream) const
 {
     if (!TranslateOutput( stream ))
     {
@@ -250,23 +250,23 @@ std::ostream& SimpleSetSerializer<DataT, DataSer>::operator >> (std::ostream& st
 }
 
 template < class DataT, class DataSer >
-std::istream& SimpleSetSerializer<DataT, DataSer>::operator << (std::istream& stream)
+tistream& SimpleSetSerializer<DataT, DataSer>::operator<< (tistream& stream)
 {
     m_Data->clear();
 
     if (!TranslateInput( stream ))
     {
-        std::string str;
+        tstring str;
         std::streamsize size = stream.rdbuf()->in_avail();
         str.resize( (size_t) size);
-        stream.read( const_cast< char* >( str.c_str() ), size );
+        stream.read( const_cast< tchar* >( str.c_str() ), size );
 
         Tokenize< DataT >( str, m_Data.Ref(), s_ContainerItemDelimiter );
     }
     return stream;
 }  
 
-template SimpleSetSerializer< std::string, StringSerializer >;
+template SimpleSetSerializer< tstring, StringSerializer >;
 template SimpleSetSerializer< u32, U32Serializer >;
 template SimpleSetSerializer< u64, U64Serializer >;
 template SimpleSetSerializer< f32, F32Serializer >;

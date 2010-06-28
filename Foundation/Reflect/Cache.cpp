@@ -19,7 +19,7 @@ static int g_HitCount = 0;
 static int g_MissCount = 0;
 #endif
 
-static void GetTypeName(int type, std::string& name)
+static void GetTypeName(int type, tstring& name)
 {
     const Class* typeInfo = Registry::GetInstance()->GetClass( type );
     NOC_ASSERT( typeInfo );
@@ -85,7 +85,7 @@ bool Cache::Create(int type, ElementPtr& element)
 #endif
 }
 
-bool Cache::Create(const std::string& shortName, ElementPtr& element)
+bool Cache::Create(const tstring& shortName, ElementPtr& element)
 {
     const Class* typeInfo = Registry::GetInstance()->GetClass(shortName);
 

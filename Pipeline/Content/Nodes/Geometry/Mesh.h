@@ -70,7 +70,7 @@ namespace Content
     class PIPELINE_API MorphTarget : public Reflect::Element
     {
     public:
-        std::string          m_Name;
+        tstring          m_Name;
         Nocturnal::TUID m_Id;
         V_MorphTargetDelta   m_Deltas;
 
@@ -78,7 +78,7 @@ namespace Content
         {
         }
 
-        MorphTarget( const std::string& name, const Nocturnal::TUID& id )
+        MorphTarget( const tstring& name, const Nocturnal::TUID& id )
             : m_Name( name )
             , m_Id( id )
         {
@@ -121,10 +121,10 @@ namespace Content
         };
         static void MeshOriginTypeEnumeration( Reflect::Enumeration* info )
         {
-            info->AddElement(Maya, "Maya");
-            info->AddElement(NavHiRes, "NavHiRes");
-            info->AddElement(NavLowRes, "NavLowRes");
-            info->AddElement(Unknown, "Unknown");
+            info->AddElement(Maya, TXT( "Maya" ) );
+            info->AddElement(NavHiRes, TXT( "NavHiRes" ) );
+            info->AddElement(NavLowRes, TXT( "NavLowRes" ) );
+            info->AddElement(Unknown, TXT( "Unknown" ) );
         }
 
         class Edge

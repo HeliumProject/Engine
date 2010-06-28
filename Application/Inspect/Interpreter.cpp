@@ -35,7 +35,7 @@ void Interpreter::Push(Container* container)
   containerStack.push(container);
 }
 
-Panel* Interpreter::PushPanel(const std::string& name, bool expanded)
+Panel* Interpreter::PushPanel(const tstring& name, bool expanded)
 {
   PanelPtr panel = m_Container->GetCanvas()->Create<Panel>( this );
 
@@ -97,7 +97,7 @@ Container* Interpreter::Top()
   return NULL;
 }
 
-Label* Interpreter::AddLabel(const std::string& name)
+Label* Interpreter::AddLabel(const tstring& name)
 {
   LabelPtr control = m_Container->GetCanvas()->Create<Label>( this );
   control->SetInterpreter( this );

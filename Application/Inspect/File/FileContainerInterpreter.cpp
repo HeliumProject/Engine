@@ -25,7 +25,7 @@ using namespace Nocturnal;
 FileContainerInterpreter::FileContainerInterpreter (Container* labelContainer)
 : ReflectFieldInterpreter (labelContainer)
 , m_List( NULL )
-, m_FileFilter( "" )
+, m_FileFilter( TXT( "" ) )
 {
 
 }
@@ -72,7 +72,7 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
     addButton = m_Container->GetCanvas()->Create<Action>(this);
     if ( isFileIdContainer || ( field->m_Flags & FieldFlags::FilePath ) )
     {
-      std::string specName;
+      tstring specName;
       field->GetProperty( "FilterSpec", specName );
       if ( specName.empty() )
       {
@@ -199,10 +199,10 @@ void FileContainerInterpreter::OnAdd( Button* button )
   if ( clientData.ReferencesObject() && clientData->HasType( Reflect::GetType<ClientDataControl>() ) )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
-    wxTextEntryDialog dlg( m_Container->GetCanvas()->GetControl(), "", "Add" );
+    wxTextEntryDialog dlg( m_Container->GetCanvas()->GetControl(), TXT( "" ), TXT( "Add" ) );
     if ( dlg.ShowModal() == wxID_OK )
     {
-      std::string input = dlg.GetValue().c_str();
+      tstring input = dlg.GetValue().c_str();
       if ( !input.empty() )
       {
         List* list = static_cast< List* >( data->m_Control );
@@ -230,12 +230,12 @@ void FileContainerInterpreter::OnAddFile( Button* button )
     }
     else
     {
-      browserDlg.SetFilter( "All (*.*)|*.*" );
+      browserDlg.SetFilter( TXT( "All (*.*)|*.*" ) );
     }
 
     if ( browserDlg.ShowModal() == wxID_OK )
     {
-      std::string filePath = browserDlg.GetPath().c_str();
+      tstring filePath = browserDlg.GetPath().c_str();
       data->m_List->AddItem( filePath );
     }
 
@@ -282,7 +282,7 @@ void FileContainerInterpreter::OnEdit( Button* button )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
-    const std::vector< std::string >& selectedItems = list->GetSelectedItems();
+    const std::vector< tstring >& selectedItems = list->GetSelectedItems();
 
     // It would be nice to iterate over the selection here, but this is not safe since
     // each call to open can destroy this control and invalidate our iterator.
@@ -300,15 +300,15 @@ void FileContainerInterpreter::OnRemove( Button* button )
   {
     ClientDataControl* data = static_cast< ClientDataControl* >( clientData.Ptr() );
     List* list = static_cast< List* >( data->m_Control );
-    const std::vector< std::string >& selectedItems = list->GetSelectedItems();
+    const std::vector< tstring >& selectedItems = list->GetSelectedItems();
     if ( !selectedItems.empty() )
     {
-      std::vector< std::string >::const_iterator itr = selectedItems.begin();
-      std::vector< std::string >::const_iterator end = selectedItems.end();
+      std::vector< tstring >::const_iterator itr = selectedItems.begin();
+      std::vector< tstring >::const_iterator end = selectedItems.end();
       list->Freeze();
       for ( ; itr != end; ++itr )
       {
-        const std::string& selection = *itr;
+        const tstring& selection = *itr;
         list->RemoveItem( selection );
       }
       list->Thaw();
@@ -343,7 +343,7 @@ void FileContainerInterpreter::OnDrop( const Inspect::FilteredDropTargetArgs& ar
   if ( args.m_Paths.size() )
   {
     m_List->Freeze();
-    for ( std::vector< std::string >::const_iterator itr = args.m_Paths.begin(), end = args.m_Paths.end();
+    for ( std::vector< tstring >::const_iterator itr = args.m_Paths.begin(), end = args.m_Paths.end();
       itr != end; ++itr )
     {
       m_List->AddItem( *itr );

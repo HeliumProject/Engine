@@ -3,12 +3,14 @@
 #include "API.h"
 #include "Stream.h" 
 
-
 namespace Reflect
 {
-    class FOUNDATION_API Indent
+    template< class C >
+    class Indent
     {
     private:
+        static C m_Space;
+
         // Indent spacing
         unsigned int m_Indent;
 
@@ -19,16 +21,43 @@ namespace Reflect
 
         }
 
-        // Push indenting state
-        void Push();
+        void Push()
+        {
+            m_Indent++;
+        }
 
-        // Pop the indenting state
-        void Pop();
+        void Pop()
+        {
+            if (m_Indent > 0)
+                m_Indent--;
+        }
 
-        // Method to actually send the indent to the stream.
-        void Get(Stream& stream);
+        void Get(Stream<C>& stream)
+        {
+            if (m_Indent > 0)
+            {
+                int indent = m_Indent;
 
-        // Method to actually send the indent to a file handle.
-        void Get(FILE* file);
+                while(indent > 0)
+                {
+                    stream << m_Space;
+                    indent--;
+                }
+            }
+        }
+
+        void Get(FILE* file)
+        {
+            if (file != NULL && m_Indent > 0)
+            {
+                int indent = m_Indent;
+
+                while(indent > 0)
+                {
+                    fputc( m_Space, file );
+                    indent--;
+                }
+            }
+        }
     };
 }

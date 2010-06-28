@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Application/API.h"
+#include "Platform/Types.h"
+
 #include <wx/clrpicker.h>
 
 namespace Nocturnal
@@ -19,17 +21,17 @@ namespace Nocturnal
   {
   private:
     bool m_AutoSaveCustomColors;
-    std::string m_RegistryLocation;
-    std::string m_Key;
+    tstring m_RegistryLocation;
+    tstring m_Key;
 
   public:
-    ColorPicker( wxWindow* parent, wxWindowID id, const wxColour& col = *wxBLACK, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCLRP_DEFAULT_STYLE, const wxValidator& validator = wxDefaultValidator, const wxString& name = "Luna::ColorPicker" );
+    ColorPicker( wxWindow* parent, wxWindowID id, const wxColour& col = *wxBLACK, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCLRP_DEFAULT_STYLE, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxT( "Luna::ColorPicker" ) );
     virtual ~ColorPicker();
 
-    bool SaveCustomColors( std::string& colors );
-    bool LoadCustomColors( const std::string& colors );
+    bool SaveCustomColors( tstring& colors );
+    bool LoadCustomColors( const tstring& colors );
 
-    void EnableAutoSaveCustomColors( bool enable = true, const std::string& key = "", const std::string& registryLocation = "" );
+    void EnableAutoSaveCustomColors( bool enable = true, const tstring& key = TXT( "" ), const tstring& registryLocation = TXT( "" ) );
     void DisableAutoSaveCustomColors();
 
   protected:

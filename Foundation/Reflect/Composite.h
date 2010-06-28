@@ -43,8 +43,8 @@ namespace Reflect
     public:
         REFLECTION_TYPE( ReflectionTypes::Composite );
 
-        std::string           m_Base;               // the base type name
-        std::set<std::string> m_Derived;            // the derived type names
+        tstring               m_Base;               // the base type name
+        std::set<tstring>     m_Derived;            // the derived type names
 
         CompositeEnumerator   m_Enumerator;         // the function to enumerate this type
         bool                  m_Enumerated;         // flag if we are enumerated
@@ -75,7 +75,7 @@ namespace Reflect
             std::vector<const Reflect::Composite*> bases;
             if ( !m_Base.empty() )
             {
-                std::string baseName = m_Base;
+                tstring baseName = m_Base;
                 while ( !baseName.empty() )
                 {
                     const Reflect::Composite* base = Reflect::Registry::GetInstance()->GetClass( baseName );
@@ -152,13 +152,13 @@ namespace Reflect
         // Name utilities
         //
 
-        static std::string ShortenName(const std::string& fullName);
+        static tstring ShortenName(const tstring& fullName);
 
         //
         // Find a field by name
         //
 
-        const Field* FindFieldByName(const std::string& name) const;
+        const Field* FindFieldByName(const tstring& name) const;
 
         // 
         // Finds the field info given a pointer to a member variable on a class.
@@ -234,7 +234,7 @@ namespace Reflect
 
         static inline std::string GetName(const std::string& name)
         {
-            size_t pos = name.find_last_of(':')+1;
+            size_t pos = name.find_last_of( ':' )+1;
             if (pos != std::string::npos)
             {
                 return name.substr( pos );

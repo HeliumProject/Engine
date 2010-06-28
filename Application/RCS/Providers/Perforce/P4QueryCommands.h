@@ -8,7 +8,7 @@ namespace Perforce
   {
   public:
     WhereCommand( Provider* provider, RCS::File* File )
-      : Command ( provider, "where" )
+      : Command ( provider, TXT( "where" ) )
       , m_File( File )
     {
 
@@ -24,7 +24,7 @@ namespace Perforce
   {
   public:
     HaveCommand( Provider* provider )
-      : Command ( provider, "have" )
+      : Command ( provider, TXT( "have" ) )
     {
 
     }
@@ -37,7 +37,7 @@ namespace Perforce
   {
   public:
     DirsCommand( Provider* provider )
-      : Command ( provider, "dirs" )
+      : Command ( provider, TXT( "dirs" ) )
     {
 
     }
@@ -50,7 +50,7 @@ namespace Perforce
   {
   public:
     FilesCommand( Provider* provider )
-      : Command ( provider, "files" )
+      : Command ( provider, TXT( "files" ) )
     {
 
     }
@@ -62,7 +62,7 @@ namespace Perforce
   class FStatCommand : public Command
   {
   public:
-    FStatCommand( Provider* provider, const char* command = "", RCS::File* File = NULL )
+    FStatCommand( Provider* provider, const tchar* command = TXT( "" ), RCS::File* File = NULL )
       : Command( provider, command )
       , m_File ( File )
     {
@@ -80,7 +80,7 @@ namespace Perforce
   {
   public:
     SingleFStatCommand( Provider* provider, RCS::File* File )
-      : FStatCommand ( provider, "fstat", File )
+      : FStatCommand ( provider, TXT( "fstat" ), File )
     {
     }
 
@@ -91,8 +91,8 @@ namespace Perforce
   class MultiFStatCommand : public FStatCommand
   {
   public:
-    MultiFStatCommand( Provider* provider, const std::string& folder, RCS::V_File* files, bool recursive, u32 fileData = RCS::FileData::All, u32 actionData = RCS::ActionData::All )
-      : FStatCommand ( provider, "fstat", NULL )
+    MultiFStatCommand( Provider* provider, const tstring& folder, RCS::V_File* files, bool recursive, u32 fileData = RCS::FileData::All, u32 actionData = RCS::ActionData::All )
+      : FStatCommand ( provider, TXT( "fstat" ), NULL )
       , m_Folder ( folder )
       , m_Files ( files )
       , m_Recursive ( recursive )
@@ -106,7 +106,7 @@ namespace Perforce
     virtual void OutputStat( StrDict *dict ) NOC_OVERRIDE;
 
   protected:
-    std::string m_Folder;
+    tstring m_Folder;
     RCS::V_File* m_Files;
     bool m_Recursive;
     u32 m_FileData;
@@ -117,7 +117,7 @@ namespace Perforce
   {
   public:
     FileLogCommand( Provider* provider, RCS::File* File, bool getIntegrationHistory = false )
-      : Command ( provider, "filelog" )
+      : Command ( provider, TXT( "filelog" ) )
       , m_File( File )
     {
       if ( getIntegrationHistory )

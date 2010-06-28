@@ -15,13 +15,13 @@ private:
 
 public:
   Text(wxWindow* parent, Label* label)
-    : wxPanel (parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, "LText")
+    : wxPanel (parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxT( "LText" ) )
     , m_Label (label)
   {
     SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
     wxSizer* sizer = GetSizer();
     
-    m_StaticText = new wxStaticText( this, wxID_ANY, "Temp" );
+    m_StaticText = new wxStaticText( this, wxID_ANY, wxT( "Temp" ) );
     sizer->Add( m_StaticText, 0, wxALIGN_CENTER_VERTICAL, 0);
   }
 
@@ -64,7 +64,7 @@ Label::Label()
   SetProportionalWidth( 1.f/3.f );
 }
 
-bool Label::Process(const std::string& key, const std::string& value)
+bool Label::Process(const tstring& key, const tstring& value)
 {
   bool handled = false;
   if (__super::Process(key, value))
@@ -95,7 +95,7 @@ void Label::Read()
 {
   if ( IsBound() )
   {
-    std::string str;
+    tstring str;
     ReadData( str );
     UpdateUI( str );
 
@@ -103,11 +103,11 @@ void Label::Read()
   }
 }
 
-void Label::SetText(const std::string& text)
+void Label::SetText(const tstring& text)
 {
   if ( !IsBound() )
   {
-    Bind( new StringFormatter<std::string>( new std::string( text ), true ) );
+    Bind( new StringFormatter<tstring>( new tstring( text ), true ) );
   }
   else
   {
@@ -117,9 +117,9 @@ void Label::SetText(const std::string& text)
   UpdateUI( text );
 }
 
-std::string Label::GetText() const
+tstring Label::GetText() const
 {
-  std::string text;
+  tstring text;
   if ( IsBound() )
   {
     ReadData( text );
@@ -134,7 +134,7 @@ void Label::SetAutoToolTip( bool enable )
   m_AutoToolTip = enable;
 }
 
-void Label::SetToolTip( const std::string& toolTip )
+void Label::SetToolTip( const tstring& toolTip )
 {
   // This updates the panel with the proper tooltip.
   // Removed because it produces a tooltip flicker as you mouse 
@@ -147,9 +147,9 @@ void Label::SetToolTip( const std::string& toolTip )
   control->UpdateToolTip( toolTip.c_str() );
 }
 
-bool Label::TrimString(std::string& str, int width)
+bool Label::TrimString(tstring& str, int width)
 {
-  std::string tooltip = str;
+  tstring tooltip = str;
   bool trimmed = __super::TrimString( str, width );
   if ( m_AutoToolTip )
   {
@@ -164,11 +164,11 @@ bool Label::TrimString(std::string& str, int width)
   return trimmed;
 }
 
-void Label::UpdateUI( const std::string& text )
+void Label::UpdateUI( const tstring& text )
 {
   if ( IsRealized() )
   {
-    std::string trimmed = text;
+    tstring trimmed = text;
     TrimString( trimmed, m_Window->GetSize().GetWidth() );
 
     wxStaticText* staticText = Control::Cast< wxStaticText >( this );

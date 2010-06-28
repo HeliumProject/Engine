@@ -2,7 +2,7 @@
 #include "Perforce.h"
 
 #include "Foundation/Log.h"
-#include <sstream>
+#include "Platform/String.h"
 
 using namespace Perforce;
 
@@ -13,7 +13,7 @@ void Command::Run()
 
 std::string Command::AsString()
 {
-  std::stringstream str;
+    std::stringstream str;
   str << m_Command;
 
   std::vector< std::string >::const_iterator itr = m_Arguments.begin();
@@ -29,11 +29,16 @@ std::string Command::AsString()
 void Command::HandleError( Error *error )
 {
   StrBuf buf;
+  tstring errString;
 
   if ( error->IsWarning() )
   {
     error->Fmt( &buf );
-    Log::Warning( buf.Text() );
+
+    bool converted = Platform::ConvertString( buf.Text(), errString );
+    NOC_ASSERT( converted );
+
+    Log::Warning( errString.c_str() );
   }
   else if ( error->IsError() )
   {
@@ -42,7 +47,8 @@ void Command::HandleError( Error *error )
 
     if ( m_ErrorCount == 1 )
     {
-      m_ErrorString = buf.Text();
+        bool converted = Platform::ConvertString( buf.Text(), m_ErrorString );
+        NOC_ASSERT( converted );
     }
     else
     {
@@ -52,25 +58,31 @@ void Command::HandleError( Error *error )
 
       if ( m_ErrorCount < 10 )
       {
-        m_ErrorString += "\n";
-        m_ErrorString += buf.Text();
+        m_ErrorString += TXT( "\n" );
+
+        bool converted = Platform::ConvertString( buf.Text(), errString );
+        NOC_ASSERT( converted );
+
+        m_ErrorString += errString;
       }
       else if ( m_ErrorCount == 10 )
       {
-        m_ErrorString += "\n...";
+        m_ErrorString += TXT( "\n..." );
       }
     }
   }
   else if ( error->IsFatal() )
   {
     error->Fmt( &buf );
-    throw Nocturnal::Exception( buf.Text() );
+    bool converted = Platform::ConvertString( buf.Text(), errString );
+    NOC_ASSERT( converted );
+    throw Nocturnal::Exception( errString.c_str() );
   }
 }
 
 void Command::OutputStat( StrDict* dict )
 {
-  Log::Warning( "Unhandled perforce response for command '%s':\n", m_Command );
+  Log::Warning( TXT( "Unhandled perforce response for command '%s':\n" ), m_Command );
   Log::Indentation indent;
 
   StrRef var;
@@ -82,8 +94,8 @@ void Command::OutputStat( StrDict* dict )
     {
       break;
     }
-    Log::Warning( "%s: %s\n", var.Text(), value.Text() );
+    Log::Warning( TXT( "%s: %s\n" ), var.Text(), value.Text() );
   }
 
-  Log::Warning( "\n" );
+  Log::Warning( TXT( "\n" ) );
 }

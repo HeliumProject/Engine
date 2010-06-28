@@ -19,7 +19,6 @@
 #include "Pipeline/Asset/AssetFolder.h"
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
-#include "Pipeline/Asset/Tracker/Tracker.h"
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Editor/DocumentManager.h"
 #include "Application/RCS/RCS.h"
@@ -381,9 +380,6 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
     m_BrowserSearch->AddSearchCompleteListener( Luna::SearchCompleteSignature::Delegate( this, &BrowserFrame::OnSearchComplete ) );
 
     m_ResultsPanel->AddResultsChangedListener( ResultSignature::Delegate( this, &BrowserFrame::OnResultsPanelUpdated ) );
-
-    Asset::Tracker* assetTracker = Luna::wxGetApp().GetAssetTracker();
-    m_StatusBar->UpdateTrackerStatus( assetTracker ? assetTracker->IsTracking() : false );
 }
 
 BrowserFrame::~BrowserFrame()
@@ -423,7 +419,7 @@ const std::string& BrowserFrame::GetPreferencePrefix() const
 
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the string in the NavBar and starts the search query.
-void BrowserFrame::Search( const std::string& queryString, const AssetCollection* collection, const std::string& selectPath )
+void BrowserFrame::Search( const std::string& queryString, const AssetCollection* collection )
 {
     wxBusyCursor bc;
     if ( queryString.empty() && !collection )
@@ -436,7 +432,7 @@ void BrowserFrame::Search( const std::string& queryString, const AssetCollection
         return;
     }
 
-    m_SearchHistory->RunNewQuery( queryString, collection, selectPath );
+    m_SearchHistory->RunNewQuery( queryString, collection );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1032,12 +1028,6 @@ void BrowserFrame::OnSearchComplete( const Luna::SearchCompleteArgs& args )
 {
     m_IsSearching = false;
 #pragma TODO ("Rachel: figure out how to add EndSearch listener and hook up ResultsPanel::SelectPath to select this path.")
-    if ( !args.m_SearchQuery->GetSelectPath().empty() )
-    {
-        m_ResultsPanel->SelectPath( args.m_SearchQuery->GetSelectPath() );
-        m_FoldersPanel->SetPath( args.m_SearchQuery->GetSelectPath() );
-    }
-
     Asset::V_AssetFiles files;
     Asset::V_AssetFolders folders;
     m_ResultsPanel->GetSelectedFilesAndFolders( files, folders );
@@ -1186,27 +1176,6 @@ void BrowserFrame::UpdateStatusBar( size_t numFolders, size_t numFiles, size_t n
                     status << ", ";
                 }
                 status << numSelected << " selected";
-            }
-        }
-
-        Asset::Tracker* assetTracker = wxGetApp().GetAssetTracker();
-        if ( assetTracker )
-        {
-            if ( assetTracker->IsTracking() )
-            {
-                if ( !status.str().empty() )
-                {
-                    status << " ";
-                }
-                status << "(WARNING: Indexing is in progress, results may be incomplete)";
-            }
-            else if ( assetTracker->DidIndexingFail() )
-            {
-                if ( !status.str().empty() )
-                {
-                    status << " ";
-                }
-                status << "(WARNING: Indexing FAILED! Results may be incomplete.)";
             }
         }
     }

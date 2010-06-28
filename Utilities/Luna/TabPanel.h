@@ -10,7 +10,7 @@ namespace Luna
   class TabPanel : public wxPanel
   {
   public:
-    TabPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name = "TabPanel" );
+    TabPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name = wxT( "TabPanel" ) );
     virtual ~TabPanel();
 
     void AddWindow( wxWindow* child );

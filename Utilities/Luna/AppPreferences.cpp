@@ -15,14 +15,14 @@ void AppPreferences::EnumerateClass( Reflect::Compositor< AppPreferences >& comp
 AppPreferencesPtr g_AppPreferences = NULL;
 
 // Increment this value to invalidate all previously saved preferences
-const static std::string s_AppPreferencesVersion( "1" );
+const static tstring s_AppPreferencesVersion( TXT( "1" ) );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static initialization.
 // 
 void AppPreferences::InitializeType()
 {
-  Reflect::RegisterClass< AppPreferences >( "AppPreferences" );
+  Reflect::RegisterClass< AppPreferences >( TXT( "AppPreferences" ) );
 
   g_AppPreferences = new AppPreferences();
   g_AppPreferences->LoadPreferences();
@@ -44,7 +44,7 @@ AppPreferences* Luna::GetAppPreferences()
 {
   if ( !g_AppPreferences.ReferencesObject() )
   {
-    throw Nocturnal::Exception( "AppPreferences is not initialized, must call AppPreferences::InitializeType first." );
+    throw Nocturnal::Exception( TXT( "AppPreferences is not initialized, must call AppPreferences::InitializeType first." ) );
   }
 
   return g_AppPreferences;
@@ -64,7 +64,7 @@ AppPreferences::AppPreferences()
 // separate aspects of the preferences.  See the globals section at the top
 // of this file.
 // 
-const std::string& AppPreferences::GetCurrentVersion() const 
+const tstring& AppPreferences::GetCurrentVersion() const 
 {
   return s_AppPreferencesVersion;
 }
@@ -72,15 +72,15 @@ const std::string& AppPreferences::GetCurrentVersion() const
 ///////////////////////////////////////////////////////////////////////////////
 // Load preferences.
 // 
-std::string AppPreferences::GetPreferencesPath() const
+tstring AppPreferences::GetPreferencesPath() const
 {
     Nocturnal::Path prefsPath;
     if ( !Application::GetPreferencesDirectory( prefsPath ) )
     {
-        throw Nocturnal::Exception( "Could not get preferences directory." );
+        throw Nocturnal::Exception( TXT( "Could not get preferences directory." ) );
     }
 
-    prefsPath.Set( prefsPath.Get() + "/Luna/AppPreferences.rb" );
+    prefsPath.Set( prefsPath.Get() + TXT( "/Luna/AppPreferences.rb" ) );
     return prefsPath.Get();
 }
 

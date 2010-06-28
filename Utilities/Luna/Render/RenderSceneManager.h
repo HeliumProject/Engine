@@ -27,15 +27,15 @@ namespace Render
     }
 
   private:
-    u32 LoadNewMesh(const char* name,ObjectLoaderPtr loader = NULL, int bangleIndex = -1);
+    u32 LoadNewMesh(const tchar* name,ObjectLoaderPtr loader = NULL, int bangleIndex = -1);
   public:
-    u32 LoadMesh(const char* name,ObjectLoaderPtr loader = NULL, int bangleIndex = -1);
-    u32 ExtractMesh(const char* name, ObjectLoaderPtr loader, int bangleIndex);
+    u32 LoadMesh(const tchar* name,ObjectLoaderPtr loader = NULL, int bangleIndex = -1);
+    u32 ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int bangleIndex);
 
   private:
-    u32 LoadNewEnvironment(const char* fname,u32 clear_color);
+    u32 LoadNewEnvironment(const tchar* fname,u32 clear_color);
   public:
-    u32 LoadEnvironment(const char* name, u32 clear_color);
+    u32 LoadEnvironment(const tchar* name, u32 clear_color);
 
     static Mesh*        ResolveMeshHandle( u32 handle );
     static Environment* ResolveEnvironmentHandle( u32 handle );

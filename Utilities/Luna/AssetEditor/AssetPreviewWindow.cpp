@@ -52,7 +52,7 @@ AssetPreviewWindow::~AssetPreviewWindow()
 ///////////////////////////////////////////////////////////////////////////////
 // SetupScene is used to load a new mesh in the preview window.
 // 
-void AssetPreviewWindow::SetupScene( std::string meshPath )
+void AssetPreviewWindow::SetupScene( tstring meshPath )
 {
   LoadScene( meshPath );
 
@@ -60,16 +60,16 @@ void AssetPreviewWindow::SetupScene( std::string meshPath )
   {
     m_WatchMeshes.insert( meshPath );
     
-    std::vector< std::string > shaderFiles;
+    std::vector< tstring > shaderFiles;
     m_Scene->m_renderer->m_shader_manager.GetShaderFilenames( shaderFiles );
-    for ( std::vector< std::string >::iterator itr = shaderFiles.begin(), end = shaderFiles.end(); itr != end; ++itr )
+    for ( std::vector< tstring >::iterator itr = shaderFiles.begin(), end = shaderFiles.end(); itr != end; ++itr )
     {
       m_WatchShaders.insert( *itr );
     }
 
-    std::vector< std::string > textureFiles;
+    std::vector< tstring > textureFiles;
     m_Scene->m_renderer->m_shader_manager.GetTextureFilenames( textureFiles );
-    for ( std::vector< std::string >::iterator itr = textureFiles.begin(), end = textureFiles.end(); itr != end; ++itr )
+    for ( std::vector< tstring >::iterator itr = textureFiles.begin(), end = textureFiles.end(); itr != end; ++itr )
     {
       m_WatchTextures.insert( *itr );
     }
@@ -112,7 +112,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
 {
   if ( m_Scene )
   {
-    std::string shaderPath = shaderClass->GetFilePath().c_str();
+    tstring shaderPath = shaderClass->GetFilePath().c_str();
     u32 shaderHandle = m_Scene->m_renderer->m_shader_manager.FindShader( shaderPath.c_str() );
     if ( shaderHandle == 0xffffffff )
     {
@@ -315,7 +315,7 @@ void AssetPreviewWindow::OnWatchFiles( wxTimerEvent& args )
   {
     if ( m_ReloadTextures.size() )
     {
-      std::set< std::string >::iterator itr = m_ReloadTextures.begin();
+      std::set< tstring >::iterator itr = m_ReloadTextures.begin();
       while ( itr != m_ReloadTextures.end() )
       {
         if ( m_Scene->m_renderer->m_shader_manager.ReloadTexture( (*itr).c_str() ) )
@@ -357,19 +357,19 @@ void AssetPreviewWindow::OnPreferencesChanged( const Reflect::ElementChangeArgs&
 void AssetPreviewWindow::AddFileChangedListeners()
 {
   Nocturnal::FileChangedSignature::Delegate meshChangedDelegate( this, &AssetPreviewWindow::OnMeshUpdated );
-  for ( std::set< std::string >::iterator itr = m_WatchMeshes.begin(), end = m_WatchMeshes.end(); itr != end; ++itr )
+  for ( std::set< tstring >::iterator itr = m_WatchMeshes.begin(), end = m_WatchMeshes.end(); itr != end; ++itr )
   {
     m_FileWatcher.Add( *itr, meshChangedDelegate );
   }
 
   Nocturnal::FileChangedSignature::Delegate shaderChangedDelegate( this, &AssetPreviewWindow::OnShaderUpdated );
-  for ( std::set< std::string >::iterator itr = m_WatchShaders.begin(), end = m_WatchShaders.end(); itr != end; ++itr )
+  for ( std::set< tstring >::iterator itr = m_WatchShaders.begin(), end = m_WatchShaders.end(); itr != end; ++itr )
   {
     m_FileWatcher.Add( *itr, shaderChangedDelegate );
   }
 
   Nocturnal::FileChangedSignature::Delegate textureChangedDelegate( this, &AssetPreviewWindow::OnTextureUpdated );
-  for ( std::set< std::string >::iterator itr = m_WatchTextures.begin(), end = m_WatchTextures.end(); itr != end; ++itr )
+  for ( std::set< tstring >::iterator itr = m_WatchTextures.begin(), end = m_WatchTextures.end(); itr != end; ++itr )
   {
     m_FileWatcher.Add( *itr, textureChangedDelegate );
   }
@@ -381,19 +381,19 @@ void AssetPreviewWindow::AddFileChangedListeners()
 void AssetPreviewWindow::RemoveFileChangedListeners()
 {
   Nocturnal::FileChangedSignature::Delegate meshChangedDelegate( this, &AssetPreviewWindow::OnMeshUpdated );
-  for ( std::set< std::string >::iterator itr = m_WatchMeshes.begin(), end = m_WatchMeshes.end(); itr != end; ++itr )
+  for ( std::set< tstring >::iterator itr = m_WatchMeshes.begin(), end = m_WatchMeshes.end(); itr != end; ++itr )
   {
     m_FileWatcher.Remove( *itr, meshChangedDelegate );
   }
 
   Nocturnal::FileChangedSignature::Delegate shaderChangedDelegate( this, &AssetPreviewWindow::OnShaderUpdated );
-  for ( std::set< std::string >::iterator itr = m_WatchShaders.begin(), end = m_WatchShaders.end(); itr != end; ++itr )
+  for ( std::set< tstring >::iterator itr = m_WatchShaders.begin(), end = m_WatchShaders.end(); itr != end; ++itr )
   {
     m_FileWatcher.Remove( *itr, shaderChangedDelegate );
   }
 
   Nocturnal::FileChangedSignature::Delegate textureChangedDelegate( this, &AssetPreviewWindow::OnTextureUpdated );
-  for ( std::set< std::string >::iterator itr = m_WatchTextures.begin(), end = m_WatchTextures.end(); itr != end; ++itr )
+  for ( std::set< tstring >::iterator itr = m_WatchTextures.begin(), end = m_WatchTextures.end(); itr != end; ++itr )
   {
     m_FileWatcher.Remove( *itr, textureChangedDelegate );
   }

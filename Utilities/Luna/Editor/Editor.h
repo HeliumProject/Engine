@@ -49,19 +49,19 @@ namespace Luna
   private:
     EditorType  m_EditorType;
 
-    mutable std::string m_PreferencePrefix;
+    mutable tstring m_PreferencePrefix;
 
   public:
-    Editor( EditorType editorType, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame" );
+    Editor( EditorType editorType, wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxT( "frame" ) );
     virtual ~Editor();
 
     EditorType GetEditorType() const;
 
     virtual DocumentManager* GetDocumentManager() = 0;
 
-    virtual const std::string& GetPreferencePrefix() const NOC_OVERRIDE;
+    virtual const tstring& GetPreferencePrefix() const NOC_OVERRIDE;
 
-    void RevisionHistory( const std::string& path );
+    void RevisionHistory( const tstring& path );
 
   protected:
     void OnPropertiesCreated( const PropertiesCreatedArgs& args );

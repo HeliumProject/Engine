@@ -21,7 +21,7 @@ namespace Luna
   class LUNA_EDITOR_API PreferencesBase : public Reflect::Element
   {
   private:
-    std::string m_SavedVersion;
+    tstring m_SavedVersion;
 
     // RTTI
   public:
@@ -36,10 +36,10 @@ namespace Luna
     virtual ~PreferencesBase();
 
     virtual void PreSerialize() NOC_OVERRIDE;
-    virtual const std::string& GetCurrentVersion() const = 0;
+    virtual const tstring& GetCurrentVersion() const = 0;
 
-    virtual bool LoadFromFile( const std::string& path );
-    virtual bool SaveToFile( const std::string& path, std::string& error, Reflect::VersionPtr version = new Reflect::Version() );
+    virtual bool LoadFromFile( const tstring& path );
+    virtual bool SaveToFile( const tstring& path, tstring& error, Reflect::VersionPtr version = new Reflect::Version() );
 
     // Gets the value of the specified field.
     template< class T >

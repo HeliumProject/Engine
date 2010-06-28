@@ -5,7 +5,7 @@
 
 extern const u8 u16_to_rgb_map[];
 
-inline u32 StringHashDJB2( const char* str )
+inline u32 StringHashDJB2( const tchar* str )
 {
   u32 hash = 5381;
   int c;

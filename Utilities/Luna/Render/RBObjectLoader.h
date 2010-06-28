@@ -11,6 +11,6 @@ namespace Content
     RBObjectLoader();
     virtual ~RBObjectLoader();
 
-    u32 ParseFile(const char* fname,bool winding);
+    u32 ParseFile(const tchar* fname,bool winding);
   };
 }

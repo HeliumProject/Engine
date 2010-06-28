@@ -23,7 +23,7 @@ Content::RBObjectLoader::~RBObjectLoader()
   Reflect::Cleanup();
 }
 
-u32 Content::RBObjectLoader::ParseFile( const char* filename, bool winding )
+u32 Content::RBObjectLoader::ParseFile( const tchar* filename, bool winding )
 {
   Content::Scene scene;
 

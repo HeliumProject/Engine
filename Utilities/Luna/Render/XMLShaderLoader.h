@@ -15,6 +15,6 @@ namespace Render
     {
     }
 
-    virtual class Shader* ParseFile( const char* filename, class ShaderManager* db );
+    virtual class Shader* ParseFile( const tchar* filename, class ShaderManager* db );
   };
 }

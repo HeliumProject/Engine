@@ -14,7 +14,7 @@ using namespace Luna;
 static u32 g_Indent = 0; 
 
 ProfileDumpCommand::ProfileDumpCommand()
-: Command( "profile-dump", "[<INPUT>]", "Dump text information about a profile data file" )
+: Command( TXT( "profile-dump" ), TXT( "[<INPUT>]" ), TXT( "Dump text information about a profile data file" ) )
 {
 
 }
@@ -80,13 +80,13 @@ static void ParseAndPrintBlock(char* buffer)
     }
 }
 
-bool ProfileDumpCommand::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+bool ProfileDumpCommand::Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
 {
-    std::string fileArg;
+    tstring fileArg;
 
     if ( argsBegin != argsEnd )
     {
-        const std::string& arg = (*argsBegin);
+        const tstring& arg = (*argsBegin);
         ++argsBegin;
 
         if ( arg.length() )
@@ -96,9 +96,9 @@ bool ProfileDumpCommand::Process( std::vector< std::string >::const_iterator& ar
         }
     }
 
-    const char* filename = fileArg.c_str(); 
+    const tchar* filename = fileArg.c_str(); 
 
-    FILE* file = fopen(filename, "rb"); 
+    FILE* file = _tfopen(filename, TXT( "rb" ) );
     if(!file)
     {
         Log::Print( TXT( "Unable to open %s for reading!\n" ), filename); 

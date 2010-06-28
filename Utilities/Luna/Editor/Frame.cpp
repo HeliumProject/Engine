@@ -23,11 +23,11 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////
 // *R2 <[<title> - ]>[ <code>(<build>), assets: <assets> ]<[: <extra>>]
 // *R2 Luna Asset Editor - [ tech(debug), assets: devel ]: x:/r2/assets/devel/entities/things/stuff/random.entity.rb
-static const char* s_ProgrammerTitleBarFormat = "%s(p) %s[ %s%s, assets: %s ]"; //project, title, code, build, assets, extra
+static const tchar* s_ProgrammerTitleBarFormat = TXT( "%s(p) %s[ %s%s, assets: %s ]" ); //project, title, code, build, assets, extra
 
 // *R2 <[<title> - ]>[ assets: <assets>, tech/tools: <code> ]<[: <extra>>]
 // R2 Luna Asset Editor - [ assets: devel, tech/tools: devel ]: x:/r2/assets/devel/entities/things/stuff/random.entity.rb
-static const char* s_UserTitleBarFormat = "%s %s[ assets: %s, tech/tools: %s ]"; //project, title, assets, code, extra
+static const tchar* s_UserTitleBarFormat = TXT( "%s %s[ assets: %s, tech/tools: %s ]" ); //project, title, assets, code, extra
 
 
 
@@ -65,9 +65,9 @@ void Frame::PostCommand( const Undo::CommandPtr& command )
 ///////////////////////////////////////////////////////////////////////////////
 // Adds a prefix to the key so that it is unique between editors/frames.
 //
-std::string Frame::PrefixPreferenceKey( const std::string& key ) const
+tstring Frame::PrefixPreferenceKey( const tstring& key ) const
 {
-  return GetPreferencePrefix() + std::string( ":" ) + key;
+  return GetPreferencePrefix() + TXT( ":" ) + key;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

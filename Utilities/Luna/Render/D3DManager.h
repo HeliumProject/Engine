@@ -77,7 +77,7 @@ namespace Render
     HRESULT Reset();
     IDirect3DSurface9* GetBufferData();
 
-    bool SaveTGA(const char* fname);
+    bool SaveTGA(const tchar* fname);
 
     inline IDirect3D9* GetD3D()
     {

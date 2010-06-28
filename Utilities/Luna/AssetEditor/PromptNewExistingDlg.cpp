@@ -11,10 +11,10 @@ using namespace Luna;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-PromptNewExistingDlg::PromptNewExistingDlg( wxWindow* parent, CreateFileCallback callback, const std::string& title, const std::string& desc, const std::string& createLabel, const std::string& existingLabel )
+PromptNewExistingDlg::PromptNewExistingDlg( wxWindow* parent, CreateFileCallback callback, const tstring& title, const tstring& desc, const tstring& createLabel, const tstring& existingLabel )
 : wxDialog( parent, wxID_ANY, title.c_str(), wxDefaultPosition, wxSize( 500, 210 ), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER, title.c_str() )
 , m_CreateFileCallback( callback )
-, m_FileFilter( "" )
+, m_FileFilter( TXT( "" ) )
 {
     NOC_ASSERT( m_CreateFileCallback );
 
@@ -27,7 +27,7 @@ PromptNewExistingDlg::PromptNewExistingDlg( wxWindow* parent, CreateFileCallback
     m_Panel->m_Description->Wrap( GetSize().x - 10 );
     m_Panel->m_RadioBtnNew->SetLabel( createLabel.c_str() );
     m_Panel->m_RadioBtnExisting->SetLabel( existingLabel.c_str() );
-    m_Panel->m_ButtonExistingFinder->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( "actions/system-search.png" ) );
+    m_Panel->m_ButtonExistingFinder->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/system-search.png" ) ) );
 
     mainSizer->Add( m_Panel, 1, wxEXPAND | wxALL, 5 );
 
@@ -73,10 +73,10 @@ int PromptNewExistingDlg::ShowModal()
         if ( m_Panel->m_RadioBtnNew->GetValue() )
         {
             // Create the file
-            std::string error;
+            tstring error;
             if ( !( ( *m_CreateFileCallback )( m_Panel->m_FilePathNew->GetValue().c_str(), error ) ) )
             {
-                wxMessageBox( error.c_str(), "Error", wxCENTER | wxOK | wxICON_ERROR, this );
+                wxMessageBox( error.c_str(), TXT( "Error" ), wxCENTER | wxOK | wxICON_ERROR, this );
                 return wxID_CANCEL;
             }
         }
@@ -85,9 +85,9 @@ int PromptNewExistingDlg::ShowModal()
             Nocturnal::Path path( m_Panel->m_FilePathExisting->GetValue().c_str() );
             if ( !path.IsFile() )
             {
-                std::string error( "Invalid file: " );
+                tstring error( TXT( "Invalid file: " ) );
                 error += m_Panel->m_FilePathExisting->GetValue().c_str();
-                wxMessageBox( error.c_str(), "Error", wxCENTER | wxOK | wxICON_ERROR, this );
+                wxMessageBox( error.c_str(), TXT( "Error" ), wxCENTER | wxOK | wxICON_ERROR, this );
                 return wxID_CANCEL;
             }
         }
@@ -98,7 +98,7 @@ int PromptNewExistingDlg::ShowModal()
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the finder spec to use for any displayed dialogs.
 // 
-void PromptNewExistingDlg::SetFileFilter( const std::string& filter )
+void PromptNewExistingDlg::SetFileFilter( const tstring& filter )
 {
     m_FileFilter = filter;
 }
@@ -106,7 +106,7 @@ void PromptNewExistingDlg::SetFileFilter( const std::string& filter )
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the path displayed in the "create new file" area of the dialog.
 // 
-void PromptNewExistingDlg::SetNewFile( const std::string& file )
+void PromptNewExistingDlg::SetNewFile( const tstring& file )
 {
     m_Panel->m_FilePathNew->SetValue( file.c_str() );
 }
@@ -114,7 +114,7 @@ void PromptNewExistingDlg::SetNewFile( const std::string& file )
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the path displayed in the "use existing file" area of the dialog.
 // 
-void PromptNewExistingDlg::SetExistingFile( const std::string& file )
+void PromptNewExistingDlg::SetExistingFile( const tstring& file )
 {
     m_Panel->m_FilePathExisting->SetValue( file.c_str() );
 }
@@ -123,9 +123,9 @@ void PromptNewExistingDlg::SetExistingFile( const std::string& file )
 // Returns the path (either a newly created one or an existing one) chosen by
 // the user.  Should be called after the dialog successfully completes.
 // 
-std::string PromptNewExistingDlg::GetFilePath() const
+tstring PromptNewExistingDlg::GetFilePath() const
 {
-    std::string filePath;
+    tstring filePath;
     if ( m_Panel->m_RadioBtnNew->GetValue() )
     {
         filePath = m_Panel->m_FilePathNew->GetValue().c_str();
@@ -168,7 +168,7 @@ void PromptNewExistingDlg::OnRadioButtonSelected( wxCommandEvent& args )
 void PromptNewExistingDlg::OnButtonExistingClicked( wxCommandEvent& args )
 {
     Nocturnal::Path dir;
-    std::string file;
+    tstring file;
     if ( !m_Panel->m_FilePathExisting->GetValue().IsEmpty() )
     {
         // get and clean user input
@@ -180,7 +180,7 @@ void PromptNewExistingDlg::OnButtonExistingClicked( wxCommandEvent& args )
         }
     }
 
-    Nocturnal::FileDialog dlg( this, "Open", dir.c_str(), file.c_str(), "", Nocturnal::FileDialogStyles::DefaultOpen );
+    Nocturnal::FileDialog dlg( this, TXT( "Open" ), dir.c_str(), file.c_str(), TXT( "" ), Nocturnal::FileDialogStyles::DefaultOpen );
     if ( !m_FileFilter.empty() )
     {
         dlg.SetFilter( m_FileFilter );

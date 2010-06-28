@@ -53,8 +53,8 @@ void BangleWindow::RefreshBangles()
   const M_BangleScene& bangleScene = m_PreviewWindow->GetBangleScenes();
   for ( M_BangleScene::const_iterator itr = bangleScene.begin(), end = bangleScene.end(); itr != end; ++itr )
   {
-    char bangleString[ 128 ] = { 0 };
-    sprintf( bangleString, "Bangle %d", itr->first );
+    tchar bangleString[ 128 ] = { 0 };
+    _stprintf( bangleString, TXT( "Bangle %d" ), itr->first );
 
     wxCheckBox* checkBox = new wxCheckBox( m_Panel, wxID_ANY, bangleString );
     checkBox->SetValue( itr->second.m_Draw );

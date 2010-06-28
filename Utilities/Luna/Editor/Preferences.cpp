@@ -7,9 +7,9 @@ using namespace Luna;
 // Helper function to convert a file ref to an appropriate string 
 // representation.
 // 
-std::string Luna::PathToLabel( const Nocturnal::Path& path, const FilePathOption filePathOption )
+tstring Luna::PathToLabel( const Nocturnal::Path& path, const FilePathOption filePathOption )
 {
-    std::string filePath = path.Get();
+    tstring filePath = path.Get();
 
     // Determine whether to show full path or not...
     if ( !filePath.empty() )
@@ -46,8 +46,8 @@ void Preferences::EnumerateClass( Reflect::Compositor<Preferences>& comp )
 {
 }
 
-const char* Preferences::s_ResetPreferences = "reset";
-const char* Preferences::s_ResetPreferencesLong = "ResetPreferences";
+const tchar* Preferences::s_ResetPreferences = TXT( "reset" );
+const tchar* Preferences::s_ResetPreferencesLong = TXT( "ResetPreferences" );
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ const char* Preferences::s_ResetPreferencesLong = "ResetPreferences";
 // 
 void Preferences::InitializeType()
 {
-    Reflect::RegisterClass<Preferences>( "Preferences" );
+    Reflect::RegisterClass<Preferences>( TXT( "Preferences" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -79,10 +79,10 @@ Preferences::Preferences()
 // 
 void Preferences::SavePreferences()
 {
-    std::string error;
+    tstring error;
     if ( !SaveToFile( GetPreferencesPath(), error ) )
     {
-        Log::Error( "%s\n", error.c_str() );
+        Log::Error( TXT( "%s\n" ), error.c_str() );
     }
 }
 
@@ -115,9 +115,9 @@ void Preferences::LoadPreferences()
     //    }
     //}
 
-    std::string path = GetPreferencesPath();
+    tstring path = GetPreferencesPath();
     if ( !LoadFromFile( path ) )
     {
-        Log::Debug( "Using default preferences; unable to load preferences from '%s'.\n", path.c_str() );
+        Log::Debug( TXT( "Using default preferences; unable to load preferences from '%s'.\n" ), path.c_str() );
     }
 }

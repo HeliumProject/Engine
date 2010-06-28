@@ -14,44 +14,44 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
 {
     Nocturnal::Path exePath( wxStandardPaths::Get().GetExecutablePath().c_str() );
 
-    std::string icon;
+    tstring icon;
     if ( artId == wxART_FILE_OPEN )
-        icon = "actions/document-open.png";
+        icon = TXT( "actions/document-open.png" );
     else if ( artId == wxART_NEW )
-        icon = "actions/document-new.png";
+        icon = TXT( "actions/document-new.png" );
     else if ( artId == wxART_FIND )
-        icon = "actions/edit-find.png";
+        icon = TXT( "actions/edit-find.png" );
     else if ( artId == wxART_FIND_AND_REPLACE )
-        icon = "actions/edit-find-replace.png";
+        icon = TXT( "actions/edit-find-replace.png" );
     else if ( artId == wxART_CUT )
-        icon = "actions/edit-cut.png";
+        icon = TXT( "actions/edit-cut.png" );
     else if ( artId == wxART_PASTE )
-        icon = "actions/edit-paste.png";
+        icon = TXT( "actions/edit-paste.png" );
     else if ( artId == wxART_COPY )
-        icon = "actions/edit-copy.png";
+        icon = TXT( "actions/edit-copy.png" );
     else if ( artId == wxART_UNDO )
-        icon = "actions/edit-undo.png";
+        icon = TXT( "actions/edit-undo.png" );
     else if ( artId == wxART_REDO )
-        icon = "actions/edit-redo.png";
+        icon = TXT( "actions/edit-redo.png" );
     else if ( artId == wxART_DELETE )
-        icon = "actions/edit-delete.png";
+        icon = TXT( "actions/edit-delete.png" );
     else if ( artId == wxART_ERROR )
-        icon = "status/dialog-error.png";
+        icon = TXT( "status/dialog-error.png" );
     else if ( artId == wxART_FILE_SAVE )
-        icon = "actions/document-save.png";
+        icon = TXT( "actions/document-save.png" );
     else if ( artId == wxART_FILE_SAVE_AS )
-        icon = "actions/document-save-as.png";
+        icon = TXT( "actions/document-save-as.png" );
     else if ( artId == wxART_FOLDER )
-        icon = "places/folder.png";
+        icon = TXT( "places/folder.png" );
     else if ( artId == wxART_FOLDER_OPEN )
-        icon = "status/folder-open.png";
+        icon = TXT( "status/folder-open.png" );
     else if ( artId == wxART_HELP )
-        icon = "apps/help-browser.png";
+        icon = TXT( "apps/help-browser.png" );
 
     if ( !icon.empty() )
     {
-        std::stringstream strm;
-        strm << exePath.Directory() << "Icons/" << size.x << 'x' << size.y << '/' << icon;
+        tstringstream strm;
+        strm << exePath.Directory() << TXT( "Icons/" ) << size.x << TXT( 'x' ) << size.y << TXT( '/' ) << icon;
         Nocturnal::Path imageFile( strm.str() );
 
         if ( imageFile.Exists() )
@@ -64,7 +64,7 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
         }
         else
         {
-            wxImage image( exePath.Directory() + "Icons/32x32/" + icon, wxBITMAP_TYPE_PNG );
+            wxImage image( exePath.Directory() + TXT( "Icons/32x32/" ) + icon, wxBITMAP_TYPE_PNG );
             if ( image.Ok() )
             {
                 int x = size.GetWidth() > 0 ? size.GetWidth() : 32;

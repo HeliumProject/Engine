@@ -44,11 +44,11 @@ namespace Luna
 
     static void GeometryModeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(GeometryModes::None, "GeometryModes::None"); 
-      info->AddElement(GeometryModes::Render, "GeometryModes::Render"); 
-      info->AddElement(GeometryModes::Collision, "GeometryModes::Collision"); 
-      info->AddElement(GeometryModes::Pathfinding, "GeometryModes::Pathfinding"); 
-      info->AddElement(GeometryModes::Count, "GeometryModes::Count"); 
+      info->AddElement(GeometryModes::None, TXT( "GeometryModes::None" ) ); 
+      info->AddElement(GeometryModes::Render, TXT( "GeometryModes::Render" ) ); 
+      info->AddElement(GeometryModes::Collision, TXT( "GeometryModes::Collision" ) ); 
+      info->AddElement(GeometryModes::Pathfinding, TXT( "GeometryModes::Pathfinding" ) ); 
+      info->AddElement(GeometryModes::Count, TXT( "GeometryModes::Count" ) ); 
     }
   }
 
@@ -68,11 +68,11 @@ namespace Luna
 
     static void CameraModeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(CameraModes::Orbit, "CameraModes::Orbit", "Orbit"); 
-      info->AddElement(CameraModes::Front, "CameraModes::Front", "Front"); 
-      info->AddElement(CameraModes::Side, "CameraModes::Side", "Side"); 
-      info->AddElement(CameraModes::Top, "CameraModes::Top", "Top"); 
-      info->AddElement(CameraModes::Count, "CameraModes::Count"); 
+      info->AddElement(CameraModes::Orbit, TXT( "CameraModes::Orbit" ), TXT( "Orbit" ) ); 
+      info->AddElement(CameraModes::Front, TXT( "CameraModes::Front" ), TXT( "Front" ) ); 
+      info->AddElement(CameraModes::Side, TXT( "CameraModes::Side" ), TXT( "Side" ) ); 
+      info->AddElement(CameraModes::Top, TXT( "CameraModes::Top" ), TXT( "Top" ) ); 
+      info->AddElement(CameraModes::Count, TXT( "CameraModes::Count" ) ); 
     }
   }
 
@@ -307,7 +307,7 @@ namespace Luna
           const wxPoint& pos = wxDefaultPosition,
           const wxSize& size = wxDefaultSize,
           long style = wxTAB_TRAVERSAL | wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE,
-          const wxString& name = "Luna::View");
+          const wxString& name = wxT( "Luna::View" ) );
 
     ~View ();
 

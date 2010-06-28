@@ -37,7 +37,7 @@ const char* RebuildCommand::m_RebuildStrings[REBUILD_CODE_COUNT] =
 
 
 RebuildCommand::RebuildCommand()
-: Command( "rebuild", "[<INPUT>] [<OUTPUT>]", "Convertion utility for Nocturnal Reflect file format" )
+: Command( TXT( "rebuild" ), TXT( "[<INPUT>] [<OUTPUT>]" ), TXT( "Convertion utility for Nocturnal Reflect file format" ) )
 , m_HelpFlag( false )
 , m_RCS( false )
 , m_XML( false )
@@ -54,17 +54,17 @@ RebuildCommand::~RebuildCommand()
 {
 }
 
-bool RebuildCommand::Initialize( std::string& error ) 
+bool RebuildCommand::Initialize( tstring& error ) 
 {
     bool result = true;
 
-    result &= AddOption( new FlagOption( &Reflect::g_OverrideCRC, "crc", "override crc" ), error );
-    result &= AddOption( new FlagOption( &m_RCS, "rcs", "user rcs" ), error );
-    result &= AddOption( new FlagOption( &m_XML, "xml", "" ), error );
-    result &= AddOption( new FlagOption( &m_Binary, "binary", "" ), error );
-    result &= AddOption( new FlagOption( &m_Verify, "verify", "" ), error );
-    result &= AddOption( new SimpleOption<std::string>( &m_Batch, "batch", "<FILE>", "parse batch file" ), error );
-    result &= AddOption( new FlagOption( &m_HelpFlag, "h|help", "print command usage" ), error );
+    result &= AddOption( new FlagOption( &Reflect::g_OverrideCRC, TXT( "crc" ), TXT( "override crc" ) ), error );
+    result &= AddOption( new FlagOption( &m_RCS, TXT( "rcs" ), TXT( "user rcs" ) ), error );
+    result &= AddOption( new FlagOption( &m_XML, TXT( "xml" ), TXT( "" ) ), error );
+    result &= AddOption( new FlagOption( &m_Binary, TXT( "binary" ), TXT( "" ) ), error );
+    result &= AddOption( new FlagOption( &m_Verify, TXT( "verify" ), TXT( "" ) ), error );
+    result &= AddOption( new SimpleOption<tstring>( &m_Batch, TXT( "batch" ), TXT( "<FILE>" ), TXT( "parse batch file" ) ), error );
+    result &= AddOption( new FlagOption( &m_HelpFlag, TXT( "h|help" ), TXT( "print command usage" ) ), error );
 
     return result;
 }
@@ -74,7 +74,7 @@ void RebuildCommand::Cleanup()
     m_InitializerStack.Cleanup();
 }
 
-bool RebuildCommand::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+bool RebuildCommand::Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
 {
     if ( !ParseOptions( argsBegin, argsEnd, error ) )
     {
@@ -90,13 +90,13 @@ bool RebuildCommand::Process( std::vector< std::string >::const_iterator& argsBe
     if ( ( m_Batch.empty() && argsBegin == argsEnd )
         || ( !m_Batch.empty() && argsBegin != argsEnd ) )
     {
-        error = "Must supply either an input file OR batch file, but not both.";
+        error = TXT( "Must supply either an input file OR batch file, but not both." );
         return false;
     }
 
     while ( argsBegin != argsEnd )
     {
-        const std::string& arg = (*argsBegin);
+        const tstring& arg = (*argsBegin);
         ++argsBegin;
 
         if ( arg.length() )
@@ -131,23 +131,23 @@ bool RebuildCommand::Process( std::vector< std::string >::const_iterator& argsBe
     }
     else
     {
-        std::fstream batchfile;
+        tfstream batchfile;
         batchfile.open(m_Batch.c_str(), std::ios_base::in);
 
         if (!batchfile.is_open())
         {
-            error = std::string( "Unable to open file for read: " ) + m_Batch;
+            error = TXT( "Unable to open file for read: " ) + m_Batch;
             return false;
         }
         else
         {
             while (!batchfile.eof())
             {       
-                std::string line, input, output;
+                tstring line, input, output;
                 std::getline(batchfile, line);
 
                 size_t off = line.find_first_of('|');
-                if ( off != std::string::npos )
+                if ( off != tstring::npos )
                 {
                     input = line.substr(0, off);
                     output = line.substr(off+1);
@@ -165,12 +165,12 @@ bool RebuildCommand::Process( std::vector< std::string >::const_iterator& argsBe
                 {
                     if (m_XML)
                     {
-                        outputPath.ReplaceExtension( "xml" );
+                        outputPath.ReplaceExtension( TXT( "xml" ) );
                     }
 
                     if (m_Binary)
                     {
-                        outputPath.ReplaceExtension( "rb" );
+                        outputPath.ReplaceExtension( TXT( "rb" ) );
                     }
 
                     // do work
@@ -187,17 +187,17 @@ bool RebuildCommand::Process( std::vector< std::string >::const_iterator& argsBe
 
             batchfile.close();
 
-            Log::Print("Rebuild Report:\n");
+            Log::Print( TXT( "Rebuild Report:\n" ) );
             for (int i=0; i<REBUILD_CODE_COUNT; i++)
             {
-                Log::Print(" %s: %d\n", m_RebuildStrings[i], m_RebuildTotals[i]);
+                Log::Print( TXT( " %s: %d\n" ), m_RebuildStrings[i], m_RebuildTotals[i]);
                 if (i > 0)
                 {
-                    std::vector< std::string >::const_iterator itr = m_RebuildResults[i].begin();
-                    std::vector< std::string >::const_iterator end = m_RebuildResults[i].end();
+                    std::vector< tstring >::const_iterator itr = m_RebuildResults[i].begin();
+                    std::vector< tstring >::const_iterator end = m_RebuildResults[i].end();
                     for ( int count = 0; itr != end; ++itr, ++count )
                     {
-                        Log::Print("  [%d]: %s\n", count, itr->c_str());
+                        Log::Print( TXT( "  [%d]: %s\n" ), count, itr->c_str());
                     }
                 }
             }
@@ -213,7 +213,7 @@ bool RebuildCommand::Process( std::vector< std::string >::const_iterator& argsBe
 }
 
 
-int RebuildCommand::ProcessFile(const std::string& input, const std::string& output)
+int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 {
     //
     // Verify only
@@ -237,13 +237,13 @@ int RebuildCommand::ProcessFile(const std::string& input, const std::string& out
             }
             catch (Nocturnal::Exception& ex)
             {
-                Log::Error("Verify FAILED: %s\n", ex.What());
+                Log::Error( TXT( "Verify FAILED: %s\n" ), ex.What());
                 return REBUILD_BAD_READ;
             }
         }
 
-        Log::Print("\n" );
-        Log::Print("Verified OK\n");
+        Log::Print( TXT( "\n" ) );
+        Log::Print( TXT( "Verified OK\n" ) );
         return REBUILD_SUCCESS;
     }
 
@@ -268,7 +268,7 @@ int RebuildCommand::ProcessFile(const std::string& input, const std::string& out
         }
         catch (Nocturnal::Exception& ex)
         {
-            Log::Error("%s\n", ex.What());
+            Log::Error( TXT( "%s\n" ), ex.What());
             return REBUILD_BAD_READ;
         }
     }
@@ -295,7 +295,7 @@ int RebuildCommand::ProcessFile(const std::string& input, const std::string& out
         version = new Version ();
     }
 
-    version->m_Source = "rebuild";
+    version->m_Source = TXT( "rebuild" );
     version->m_SourceVersion = NOCTURNAL_VERSION_STRING;
 
 
@@ -318,7 +318,7 @@ int RebuildCommand::ProcessFile(const std::string& input, const std::string& out
             }
             catch (RCS::Exception& ex)
             {
-                Log::Error("%s\n", ex.What());
+                Log::Error( TXT( "%s\n" ), ex.What());
                 return REBUILD_BAD_WRITE;
             }
         }
@@ -338,7 +338,7 @@ int RebuildCommand::ProcessFile(const std::string& input, const std::string& out
         }
         catch (Nocturnal::Exception& ex)
         {
-            Log::Error("%s\n", ex.What());
+            Log::Error( TXT( "%s\n" ), ex.What());
             return REBUILD_BAD_WRITE;
         }
     }
@@ -366,14 +366,14 @@ int RebuildCommand::ProcessFile(const std::string& input, const std::string& out
             }
             catch (Nocturnal::Exception& ex)
             {
-                Log::Print("Verify FAILED: %s\n", ex.What());
+                Log::Print( TXT( "Verify FAILED: %s\n" ), ex.What());
                 return REBUILD_BAD_WRITE;
             }
         }
     }
 
-    Log::Print("\n" );
-    Log::Print("Verified OK\n");
+    Log::Print( TXT( "\n" ) );
+    Log::Print( TXT( "Verified OK\n" ) );
     return REBUILD_SUCCESS;
 }
 

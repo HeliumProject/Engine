@@ -20,7 +20,7 @@ LUNA_DEFINE_TYPE( Luna::ComponentWrapper );
 // 
 void ComponentWrapper::InitializeType()
 {
-  Reflect::RegisterClass<Luna::ComponentWrapper>( "Luna::ComponentWrapper" );
+  Reflect::RegisterClass<Luna::ComponentWrapper>( TXT( "Luna::ComponentWrapper" ) );
   PersistentDataFactory::GetInstance()->Register( Reflect::GetType< Component::ComponentBase >(), &ComponentWrapper::CreateComponent );
 }
 
@@ -75,7 +75,7 @@ Luna::AssetClass* ComponentWrapper::GetAssetClass() const
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the name of this attribute.
 // 
-std::string ComponentWrapper::GetName() const
+tstring ComponentWrapper::GetName() const
 {
   const Component::ComponentBase* package = GetPackage< Component::ComponentBase >();
   return package->GetClass()->m_UIName;
@@ -97,11 +97,11 @@ i32 ComponentWrapper::GetSlot() const
 // additionally, some parts of the UI may not have an Luna::ComponentWrapper yet, but just
 // want to query the icon for the attribute 
 // 
-static std::string g_DefaultIconName = "null.png"; 
+static tstring g_DefaultIconName = TXT( "null.png" ); 
 
-const std::string& ComponentWrapper::GetComponentIcon(const Component::ComponentBase* attribute)
+const tstring& ComponentWrapper::GetComponentIcon(const Component::ComponentBase* attribute)
 {
-  const std::string& icon = attribute->GetClass()->GetProperty( Asset::AssetProperties::SmallIcon );
+  const tstring& icon = attribute->GetClass()->GetProperty( Asset::AssetProperties::SmallIcon );
   if(icon.empty())
   {
     return g_DefaultIconName; 
@@ -116,7 +116,7 @@ const std::string& ComponentWrapper::GetComponentIcon(const Component::Component
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the icon to use with this attribute.
 // 
-const std::string& ComponentWrapper::GetIcon() const
+const tstring& ComponentWrapper::GetIcon() const
 {
   return Luna::ComponentWrapper::GetComponentIcon( GetPackage< Component::ComponentBase >() ); 
 }

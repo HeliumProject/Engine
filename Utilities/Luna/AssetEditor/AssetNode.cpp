@@ -18,7 +18,7 @@ LUNA_DEFINE_TYPE( Luna::AssetNode );
 // 
 void AssetNode::InitializeType()
 {
-    Reflect::RegisterClass<Luna::AssetNode>( "Luna::AssetNode" );
+    Reflect::RegisterClass<Luna::AssetNode>( TXT( "Luna::AssetNode" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,8 +34,8 @@ void AssetNode::CleanupType()
 // 
 AssetNode::AssetNode( Luna::AssetManager* assetManager )
 : m_AssetManager( assetManager )
-, m_Name( "" )
-, m_Icon( "null.png" )
+, m_Name( TXT( "" ) )
+, m_Icon( TXT( "null.png" ) )
 , m_Style( LabelStyles::Normal )
 , m_Parent( NULL )
 , m_CachedAsset( NULL )
@@ -54,7 +54,7 @@ AssetNode::~AssetNode()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the name that should be displayed in the UI for this asset node.
 // 
-const std::string& AssetNode::GetName() const
+const tstring& AssetNode::GetName() const
 {
     return m_Name;
 }
@@ -62,7 +62,7 @@ const std::string& AssetNode::GetName() const
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the name that should be displayed in the UI for this asset node.
 // 
-void AssetNode::SetName( const std::string& name )
+void AssetNode::SetName( const tstring& name )
 {
     if ( name != m_Name )
     {
@@ -85,7 +85,7 @@ i32 AssetNode::GetIconIndex() const
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the name of the icon for this node.
 // 
-const std::string& AssetNode::GetIcon() const
+const tstring& AssetNode::GetIcon() const
 {
     return m_Icon;
 }
@@ -93,7 +93,7 @@ const std::string& AssetNode::GetIcon() const
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the icon that should be displayed in the UI for this node.
 // 
-void AssetNode::SetIcon( const std::string& icon )
+void AssetNode::SetIcon( const tstring& icon )
 {
     if ( icon != m_Icon )
     {
@@ -293,7 +293,7 @@ bool AssetNode::RearrangeChildren( Luna::AssetNode* child, Luna::AssetNode* befo
             }
             else
             {
-                throw Nocturnal::Exception( "Unable to rearrange %s before %s", GetName().c_str(), beforeSibling->GetName().c_str() );
+                throw Nocturnal::Exception( TXT( "Unable to rearrange %s before %s" ), GetName().c_str(), beforeSibling->GetName().c_str() );
             }
         }
         m_IsRearranging = false;

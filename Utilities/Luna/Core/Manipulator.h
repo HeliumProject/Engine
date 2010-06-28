@@ -39,9 +39,9 @@ namespace Luna
     };
     static void ManipulatorSpaceEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Object, "Object");
-      info->AddElement(Local, "Local");
-      info->AddElement(World, "World");
+      info->AddElement(Object, TXT( "Object" ) );
+      info->AddElement(Local, TXT( "Local" ) );
+      info->AddElement(World, TXT( "World" ) );
     }
   }
 

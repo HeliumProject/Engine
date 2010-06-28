@@ -29,11 +29,11 @@ namespace Luna
 
     static void EditorTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Scene, "Scene");
-      info->AddElement(Asset, "Asset");
-      info->AddElement(AnimationEvents, "AnimationEvents");
-      info->AddElement(Character, "Character"); 
-      info->AddElement(CinematicEvents, "CinematicEvents");
+      info->AddElement(Scene, TXT( "Scene" ) );
+      info->AddElement(Asset, TXT( "Asset" ) );
+      info->AddElement(AnimationEvents, TXT( "AnimationEvents" ) );
+      info->AddElement(Character, TXT( "Character" ) ); 
+      info->AddElement(CinematicEvents, TXT( "CinematicEvents" ) );
     }
   }
   typedef EditorTypes::EditorType EditorType;

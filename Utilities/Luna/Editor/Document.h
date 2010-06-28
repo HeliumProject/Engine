@@ -25,10 +25,10 @@ namespace Luna
     // Arguments for a file being renamed (contains the new and old names)
     struct DocumentPathChangedArgs : public DocumentChangedArgs
     {
-        std::string m_OldFilePath;
-        std::string m_OldFileName;
+        tstring m_OldFilePath;
+        tstring m_OldFileName;
 
-        DocumentPathChangedArgs( Document* document, const std::string& oldFilePath, const std::string& oldFileName )
+        DocumentPathChangedArgs( Document* document, const tstring& oldFilePath, const tstring& oldFileName )
             : DocumentChangedArgs( document )
             , m_OldFilePath( oldFilePath )
             , m_OldFileName( oldFileName )
@@ -52,7 +52,7 @@ namespace Luna
 
     private:
         Nocturnal::Path  m_Path;
-        std::string         m_Name;          // the friendly name (for dialogs)
+        tstring         m_Name;          // the friendly name (for dialogs)
         bool                m_IsModified;    // have we been changed since we saved?
         bool                m_AllowChanges;  // allows override of checkout (but you can't save)
         i32                 m_Revision;
@@ -71,7 +71,7 @@ namespace Luna
         // 
 
     public:
-        Document( const std::string& path, const std::string& name = std::string( "" ) );
+        Document( const tstring& path, const tstring& name = TXT( "" ) );
         virtual ~Document();
 
         //
@@ -79,13 +79,13 @@ namespace Luna
         //
 
         const Nocturnal::Path& GetPath() const;
-        std::string GetFilePath() const
+        tstring GetFilePath() const
         {
             return m_Path.Get();
         }
-        void SetFilePath( const std::string& newFilePath, const std::string& newName = "" );
+        void SetFilePath( const tstring& newFilePath, const tstring& newName = TXT( "" ) );
 
-        const std::string& GetFileName() const;
+        const tstring& GetFileName() const;
 
         u64 GetHash() const;
         int GetRevision() const;

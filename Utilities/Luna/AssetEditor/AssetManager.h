@@ -185,7 +185,7 @@ namespace Luna
     LUNA_DECLARE_TYPE( Luna::AssetManagerClientData, Luna::Object );
     static void InitializeType()
     {
-      Reflect::RegisterClass<Luna::AssetManagerClientData>( "Luna::AssetManagerClientData" );
+      Reflect::RegisterClass<Luna::AssetManagerClientData>( TXT( "Luna::AssetManagerClientData" ) );
     }
 
     static void CleanupType()

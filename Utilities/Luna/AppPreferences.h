@@ -24,8 +24,8 @@ namespace Luna
   public:
     AppPreferences();
 
-    virtual const std::string& GetCurrentVersion() const NOC_OVERRIDE;
-    virtual std::string GetPreferencesPath() const NOC_OVERRIDE;
+    virtual const tstring& GetCurrentVersion() const NOC_OVERRIDE;
+    virtual tstring GetPreferencesPath() const NOC_OVERRIDE;
 
     const Reflect::Field* UseTrackerField() const;
 

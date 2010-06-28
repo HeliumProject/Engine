@@ -22,7 +22,7 @@ const static std::string s_AppPreferencesVersion( "1" );
 // 
 void AppPreferences::InitializeType()
 {
-  Reflect::RegisterClass< AppPreferences >( "AppPreferences" );
+  Reflect::RegisterClass< AppPreferences >( TXT("AppPreferences") );
 
   g_AppPreferences = new AppPreferences();
   g_AppPreferences->LoadPreferences();
@@ -44,7 +44,7 @@ AppPreferences* Luna::GetAppPreferences()
 {
   if ( !g_AppPreferences.ReferencesObject() )
   {
-    throw Nocturnal::Exception( "AppPreferences is not initialized, must call AppPreferences::InitializeType first." );
+    throw Nocturnal::Exception( TXT("AppPreferences is not initialized, must call AppPreferences::InitializeType first.") );
   }
 
   return g_AppPreferences;
@@ -77,10 +77,10 @@ std::string AppPreferences::GetPreferencesPath() const
     Nocturnal::Path prefsPath;
     if ( !Application::GetPreferencesDirectory( prefsPath ) )
     {
-        throw Nocturnal::Exception( "Could not get preferences directory." );
+        throw Nocturnal::Exception( TXT("Could not get preferences directory.") );
     }
 
-    prefsPath.Set( prefsPath.Get() + "/Luna/AppPreferences.rb" );
+    prefsPath.Set( prefsPath.Get() + TXT("/Luna/AppPreferences.rb") );
     return prefsPath.Get();
 }
 

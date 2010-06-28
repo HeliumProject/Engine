@@ -67,15 +67,6 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
     }
   }
 
-  m_InheritedArgs.clear();
-  ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( TXT( "NOC_CMD_ARGS" ), buf, MAX_PATH );
-  m_InheritedArgs = buf;
-  if ( m_InheritedArgs.empty() )
-  {
-    m_InheritedArgs = TXT( "" );
-  }
-
   m_AssetBranch.clear();
   ZeroMemory( buf, MAX_PATH );
   GetEnvironmentVariable( TXT( "NOC_ASSETS_BRANCH_NAME" ), buf, MAX_PATH );

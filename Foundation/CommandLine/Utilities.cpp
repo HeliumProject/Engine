@@ -37,11 +37,6 @@ void Nocturnal::SetCmdLine( int argc, const tchar** argv )
         }
     }
 
-    tstring inherited;
-    Nocturnal::GetEnvVar( TXT( "NOC_CMD_ARGS" ), inherited );
-    _tcsncat( g_CmdLine, TXT( " " ), sizeof( g_CmdLine ) - _tcslen( g_CmdLine ) );
-    _tcsncat( g_CmdLine, inherited.c_str(), sizeof( g_CmdLine ) - _tcslen( g_CmdLine ) );
-
     ProcessCmdLine( g_CmdLine, g_Argc, g_Argv );
 }
 

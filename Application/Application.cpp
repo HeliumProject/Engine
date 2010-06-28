@@ -229,17 +229,6 @@ void Application::Startup( int argc, const tchar** argv, bool checkVersion )
 
 
         //
-        // Report inherited args
-        //
-
-        const char* inherited = getenv( "NOC_CMD_ARGS" );
-        if ( inherited )
-        {
-            Log::Print( TXT( "Inheriting Args: %s\n" ), inherited);
-        }
-
-
-        //
         // Setup exception handlers, do this last
         //
 

@@ -25,11 +25,11 @@ typedef unsigned int            p32;
 typedef unsigned __int64        p64;
 
 #ifdef _WIN64
-typedef unsigned __int64        uintptr;
-typedef __int64                 intptr;
+typedef u64                     uintptr;
+typedef i64                     intptr;
 #else
-typedef unsigned int            uintptr;
-typedef int                     intptr;
+typedef u32                     uintptr;
+typedef i32                     intptr;
 #endif
 
 #elif defined (__GCC__) || defined (__SNC__)

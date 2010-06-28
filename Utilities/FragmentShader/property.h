@@ -8,6 +8,8 @@
 #include "propgrid.h"
 #include "member.h"
 
+#include "Platform/Types.h"
+
 class Method;
 
 class Property: public Member

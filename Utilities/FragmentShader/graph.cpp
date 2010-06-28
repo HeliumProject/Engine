@@ -623,7 +623,7 @@ Graph::Compile(const wxString& output)
 	if (GenerateCode())
 	{
 		wxString code = Project::GetProject()->GetPanel(this)->GetCodeCtrl()->GetValue();
-		FILE *file = fopen(output.c_str(), "wb");
+		FILE *file = _tfopen(output.c_str(), TXT("wb" ));
 		fwrite(code.c_str(), 1, code.Len(), file);
 		fclose(file);
 		return true;
@@ -916,7 +916,7 @@ Graph::OnMotion(wxMouseEvent& evt)
 {
 	int x, y;
 	MouseToCanvas(evt.GetX(), evt.GetY(), &x, &y);
-	Debug::Printf(__FUNCTION__ " %d, %d -> %d, %d\n", evt.GetX(), evt.GetY(), x, y);
+	Debug::Printf( TXT("%s %d, %d -> %d, %d\n"), __FUNCTION__, evt.GetX(), evt.GetY(), x, y);
 	Shape *under = IsInside(x, y);
 	if (under != m_under)
 	{

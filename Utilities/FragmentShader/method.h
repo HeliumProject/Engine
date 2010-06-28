@@ -19,22 +19,22 @@ public:
 	virtual ~Method() {}
 
 	virtual bool CheckType(const InputPort *input) const
-	{ THROW("Method \"" __FUNCTION__ "\" cannot be used to check a type."); }
+	{ THROW(TXT("Method \"CheckType\" cannot be used to check a type.")); }
 
 	virtual wxString GetType(const OutputPort *output) const
-	{ THROW("Method \"" __FUNCTION__ "\" cannot be used to get a type."); }
+	{ THROW(TXT("Method \"GetType\" cannot be used to get a type.")); }
 
 	virtual bool InputConstraints(const Node *node) const
-	{ THROW("Method \"" __FUNCTION__ "\" cannot be used to check input constraints."); }
+	{ THROW(TXT("Method \"InputConstraints\" cannot be used to check input constraints.")); }
 
 	virtual bool Validate(const Property *prop) const
-	{ THROW("Method \"" __FUNCTION__ "\" cannot be used to validate."); }
+	{ THROW(TXT("Method \"Validate\" cannot be used to validate.")); }
 
 	virtual void OnChanged(const Property *prop) const
-	{ THROW("Method \"" __FUNCTION__ "\" cannot be used for OnChanged events."); }
+	{ THROW(TXT("Method \"OnChanged\" cannot be used for OnChanged events.")); }
 
 	virtual wxString GenerateCode(const Node *node) const
-	{ THROW("Method \"" __FUNCTION__ "\" cannot be used to generate code."); }
+	{ THROW(TXT("Method \"GenerateCode\" cannot be used to generate code.")); }
 
 	// Serialization.
 	virtual wxString   GetClassName() const { return wxT("method"); }

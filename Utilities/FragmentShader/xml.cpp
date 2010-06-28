@@ -93,7 +93,7 @@ namespace XML
 		{
 			if (def == wxEmptyString)
 			{
-				THROW("Couldn't find attribute \"%s\" in element <%s>.", name.c_str(), node.GetName().c_str());
+				THROW(TXT("Couldn't find attribute \"%s\" in element <%s>."), name.c_str(), node.GetName().c_str());
 			}
 			value = def;
 		}
@@ -114,7 +114,7 @@ namespace XML
 		}
 		else
 		{
-			THROW("Attribute \"%s\" in element <%s> is not a boolean.", name.c_str(), node.GetName().c_str());
+			THROW(TXT("Attribute \"%s\" in element <%s> is not a boolean."), name.c_str(), node.GetName().c_str());
 		}
 	}
 
@@ -125,7 +125,7 @@ namespace XML
 		long l;
 		if (!value.ToLong(&l, 0))
 		{
-			THROW("Attribute \"%s\" in element <%s> is not an integer.", name.c_str(), node.GetName().c_str());
+			THROW(TXT("Attribute \"%s\" in element <%s> is not an integer."), name.c_str(), node.GetName().c_str());
 		}
 		return l;
 	}

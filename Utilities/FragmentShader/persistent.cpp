@@ -26,10 +26,10 @@ Persistent::GetObjectByUID(const wxString& uid)
 	std::map<wxString, Persistent *>::iterator it = m_Objects.find(uid);
 	if (it != m_Objects.end())
 	{
-		Debug::Printf("%s(\"%s\") = %p\n", __FUNCTION__, uid.c_str(), it->second);
+		Debug::Printf(TXT("%s(\"%s\") = %p\n"), __FUNCTION__, uid.c_str(), it->second);
 		return it->second;
 	}
-	Debug::Printf("%s(\"%s\") = NULL\n", __FUNCTION__, uid.c_str());
+	Debug::Printf(TXT("%s(\"%s\") = NULL\n"), __FUNCTION__, uid.c_str());
 	return (Persistent *)NULL;
 }
 
@@ -45,7 +45,7 @@ Persistent::CreateObjects(const wxXmlNode& root)
 			std::map<wxString, Creator>::iterator it = m_Creators.find(classname);
 			if (it == m_Creators.end())
 			{
-				THROW("Class \"%s\" not found.", root.GetName().c_str());
+				THROW(TXT("Class \"%s\" not found."), root.GetName().c_str());
 			}
 			Persistent *obj = (it->second)(root);
 			m_Objects.insert(std::pair<wxString, Persistent *>(uid, obj));
@@ -71,7 +71,7 @@ Persistent::DeserializeObject(const wxXmlNode& root, Persistent *obj)
 	if (obj != NULL)
 	{
 		m_Objects.insert(std::pair<wxString, Persistent *>(uid, obj));
-		Debug::Printf("%s(%p, %p) -> object %s created as %p\n", __FUNCTION__, &root, obj, uid.c_str(), obj);
+		Debug::Printf(TXT("%s(%p, %p) -> object %s created as %p\n"), __FUNCTION__, &root, obj, uid.c_str(), obj);
 	}
 	CreateObjects(root);
 	obj = GetObjectByUID(uid);

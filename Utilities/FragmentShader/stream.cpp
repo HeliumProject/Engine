@@ -50,7 +50,7 @@ LuaInputStream::Read()
 		}
 		case TYPE_BYTE:
 		{
-			char b;
+			tchar b;
 			m_is->Read((void *)&b, sizeof(b));
 			res = (long)b;
 			break;
@@ -74,7 +74,7 @@ LuaInputStream::Read()
 		{
 			int len;
 			m_is->Read((void *)&len, sizeof(len));
-			char *str = NEWARRAY(char, len + 1);
+			tchar *str = NEWARRAY(tchar, len + 1);
 			m_is->Read((void *)str, len);
 			str[len] = 0;
 			res = str;
@@ -84,7 +84,7 @@ LuaInputStream::Read()
 		case TYPE_STRING2:
 		{
 			int len = (int)ReadNumber();
-			char *str = NEWARRAY(char, len + 1);
+			tchar *str = NEWARRAY(tchar, len + 1);
 			m_is->Read((void *)str, len);
 			str[len] = 0;
 			res = str;
@@ -95,7 +95,7 @@ LuaInputStream::Read()
 			if (type >= TYPE_STR_0 && type <= TYPE_STR_127)
 			{
 				int len = type - TYPE_STR_0;
-				char *str = NEWARRAY(char, len + 1);
+				tchar *str = NEWARRAY(tchar, len + 1);
 				m_is->Read((void *)str, len);
 				str[len] = 0;
 				res = str;
@@ -164,7 +164,7 @@ LuaOutputStream::Write(int i)
 	if (i >= -128 && i <= 127)
 	{
 		m_os->PutC(TYPE_BYTE);
-		char b = i;
+		tchar b = i;
 		m_os->Write((void *)&b, sizeof(b));
 	}
 	else if (i >= -32768 && i <= 32767)
@@ -201,7 +201,7 @@ LuaOutputStream::Write(const wxString& str)
 	size_t len = str.Len();
 	if (len >= 0 && len <= 127)
 	{
-		m_os->PutC((char)(TYPE_STR_0 + len));
+		m_os->PutC((tchar)(TYPE_STR_0 + len));
 	}
 	else
 	{

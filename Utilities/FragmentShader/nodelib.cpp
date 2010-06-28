@@ -70,7 +70,7 @@ NodeDef::ParseNode(Node *node)
 		}
 		else
 		{
-			Debug::Printf("Invalid element <%s> in <node>.\n", name.c_str());
+			Debug::Printf(TXT("Invalid element <%s> in <node>.\n"), name.c_str());
 		}
 		child = child->GetNext();
 	}
@@ -111,7 +111,7 @@ NodeDef::ParsePorts(Node *node, const wxXmlNode& root)
 		}
 		else
 		{
-			Debug::Printf("Invalid element <%s> in <ports>.\n", name.c_str());
+			Debug::Printf(TXT("Invalid element <%s> in <ports>.\n"), name.c_str());
 		}
 		child = child->GetNext();
 	}
@@ -136,7 +136,7 @@ NodeDef::ParseInput(Node *node, const wxXmlNode& root)
 		}
 		else
 		{
-			Debug::Printf("Invalid element <%s> in <input>.\n", name.c_str());
+			Debug::Printf(TXT("Invalid element <%s> in <input>.\n"), name.c_str());
 		}
 		child = child->GetNext();
 	}
@@ -168,7 +168,7 @@ NodeDef::ParseOutput(Node *node, const wxXmlNode& root)
 		}
 		else
 		{
-			Debug::Printf("\tInvalid element <%s> in <output>.\n", name.c_str());
+			Debug::Printf(TXT("\tInvalid element <%s> in <output>.\n"), name.c_str());
 		}
 		child = child->GetNext();
 	}
@@ -288,12 +288,12 @@ namespace NodeLib
 		wxXmlDocument xml;
 		if (!xml.Load(file))
 		{
-			THROW("Could not load library %s.", file.c_str());
+			THROW(TXT("Could not load library %s."), file.c_str());
 		}
 		wxXmlNode *root = xml.DetachRoot();
 		if (root->GetName() != wxT("library"))
 		{
-			THROW("Root node must be <library>.");
+			THROW(TXT("Root node must be <library>."));
 		}
 		m_Libraries.push_back(root);
 		wxString path = XML::GetStringAttribute(*root, wxT("path"));
@@ -343,7 +343,7 @@ namespace NodeLib
 			}
 			else
 			{
-				THROW("Libraries can only have node definitions.");
+				THROW(TXT("Libraries can only have node definitions."));
 			}
 			again:
 			child = child->GetNext();

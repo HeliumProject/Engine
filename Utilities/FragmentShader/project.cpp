@@ -39,15 +39,15 @@ Project::New(wxWindow *parent, MenuState *state, const wxString& type)
 	}
 	l_instance = NEW(Project, (parent, type));
 	// Load the XML project description.
-	Debug::Printf("Parsing \"%s\".\n", l_Types[type].c_str());
+	Debug::Printf(TXT("Parsing \"%s\".\n"), l_Types[type].c_str());
 	wxXmlDocument xml;
 	if (!xml.Load(l_Types[type]))
 	{
-		THROW("Couldn't parse the XML file.");
+		THROW(TXT("Couldn't parse the XML file."));
 	}
 	if (xml.GetRoot()->GetName() != wxT("project"))
 	{
-		THROW("Root node isn't <project>.");
+		THROW(TXT("Root node isn't <project>."));
 	}
 
 	//wxArrayString groups = NodeLib::AddUserNodes();
@@ -68,18 +68,18 @@ Project::New(wxWindow *parent, MenuState *state, const wxString& type)
 			wxString name;
 			if (!child->GetPropVal(wxT("name"), &name))
 			{
-				THROW("Couldn't find attribute 'name' in element <panel>.");
+				THROW(TXT("Couldn't find attribute 'name' in element <panel>."));
 			}
 			Panel *panel = NEW(Panel, (l_instance, state->Clone()));
 			panel->Freeze();
 			l_instance->AddPage(panel, name);
-			Debug::Printf("Panel \"%s\" (%p) created.\n", name.c_str(), panel);
+			Debug::Printf(TXT("Panel \"%s\" (%p) created.\n"), name.c_str(), panel);
 			wxXmlNode *child2 = child->GetChildren();
       /*
 			for (size_t i = 0; i < groups.GetCount(); i++)
 			{
 				panel->AddToTree(groups[i]);
-				Debug::Printf("Group \"%s\" added to panel %p.\n", groups[i].c_str(), panel);
+				Debug::Printf(TXT("Group \"%s\" added to panel %p.\n"), groups[i].c_str(), panel);
 			}
       */
 			while (child2 != 0)
@@ -94,25 +94,25 @@ Project::New(wxWindow *parent, MenuState *state, const wxString& type)
 					wxString path;
 					if (!child2->GetPropVal(wxT("path"), &path))
 					{
-						THROW("Couldn't find attribute 'path' in element <add-library>.");
+						THROW(TXT("Couldn't find attribute 'path' in element <add-library>."));
 					}
 					panel->LoadLibrary(path);
-					Debug::Printf("Library \"%s\" added to panel %p.\n", path, panel);
+					Debug::Printf(TXT("Library \"%s\" added to panel %p.\n"), path, panel);
 				}
 				else if (child2->GetName() == wxT("add-node"))
 				{
 					wxString type;
 					if (!child2->GetPropVal(wxT("type"), &type))
 					{
-						THROW("Couldn't find attribute 'type' in element <add-node>.");
+						THROW(TXT("Couldn't find attribute 'type' in element <add-node>."));
 					}
 					wxString deletable = child2->GetPropVal(wxT("deletable"), wxT("false"));
 					panel->AddNode(type, deletable == wxT("true"));
-					Debug::Printf("Node \"%s\" added to panel %p.\n", type.c_str(), panel);
+					Debug::Printf(TXT("Node \"%s\" added to panel %p.\n"), type.c_str(), panel);
 				}
 				else
 				{
-					Debug::Printf("\tInvalid element <%s> in <panel>.\n", child2->GetName().c_str());
+					Debug::Printf(TXT("\tInvalid element <%s> in <panel>.\n"), child2->GetName().c_str());
 				}
 				child2 = child2->GetNext();
 			}
@@ -120,7 +120,7 @@ Project::New(wxWindow *parent, MenuState *state, const wxString& type)
 		}
 		else
 		{
-			Debug::Printf("\tInvalid element <%s> in <project>.\n", child->GetName().c_str());
+			Debug::Printf(TXT("\tInvalid element <%s> in <project>.\n"), child->GetName().c_str());
 		}
 		child = child->GetNext();
 	}
@@ -297,7 +297,7 @@ Project::Save(const wxString& filename)
 		root->AddChild(panel);
 	}
 
-  const  std::string file = filename.c_str();
+  const tstring file = filename.c_str();
 
   // Checkout the files from revision control if necessary.
   if ( RCS::PathIsManaged( file ) )
@@ -309,7 +309,7 @@ Project::Save(const wxString& filename)
     }
     catch ( const Nocturnal::Exception& e )
     {
-      Log::Error("Error Saving Graphshader <%s>: %s", filename.c_str(), e.What());
+      Log::Error(TXT("Error Saving Graphshader <%s>: %s"), filename.c_str(), e.What());
       return;
     }
   }
@@ -365,7 +365,7 @@ Project::GetProjectTypes()
 {
 	wxArrayString types;
 	wxString path(g_LibPath);
-	path.Append("projects\\");
+	path.Append(wxT("projects\\"));
 	wxDir dir(path);
 	wxString entry;
 	bool cont = dir.GetFirst(&entry, wxT("*.xml"), wxDIR_FILES);
@@ -373,7 +373,7 @@ Project::GetProjectTypes()
 	{
 		wxString filename(path);
 		filename.Append(entry);
-		Debug::Printf("Found project: %s\n", filename.c_str());
+		Debug::Printf( TXT("Found project: %s\n"), filename.c_str());
 		wxXmlDocument xml;
 		if (xml.Load(filename))
 		{
@@ -385,21 +385,21 @@ Project::GetProjectTypes()
 				{
 					types.Add(name);
 					l_Types.insert(std::pair<wxString, wxString>(name, filename));
-					Debug::Printf("\tProject name is \"%s\"\n", name.c_str());
+					Debug::Printf(TXT("\tProject name is \"%s\"\n"), name.c_str());
 				}
 				else
 				{
-					Debug::Printf("\tAttribute \"name\" not found in <project>.\n");
+					Debug::Printf(TXT("\tAttribute \"name\" not found in <project>.\n"));
 				}
 			}
 			else
 			{
-				Debug::Printf("\tRoot node isn't <project>.\n");
+				Debug::Printf(TXT("\tRoot node isn't <project>.\n"));
 			}
 		}
 		else
 		{
-			Debug::Printf("\tError parsing file.\n");
+			Debug::Printf(TXT("\tError parsing file.\n"));
 		}
 		cont = dir.GetNext(&entry);
 	}
@@ -506,7 +506,7 @@ Project::LoadBinary(LuaInputStream& lis)
 	}
 	else
 	{
-		THROW("Unknown binary file version %d.%d.", major, minor);
+		THROW(TXT("Unknown binary file version %d.%d."), major, minor);
 	}
 }
 
@@ -517,7 +517,7 @@ Project::LoadBinary20(LuaInputStream& lis)
 	int panel_cnt = lis.ReadInteger();
 	if (panel_cnt != GetPageCount())
 	{
-		THROW("Could not read from file, number of graphs mismatch.");
+		THROW(TXT("Could not read from file, number of graphs mismatch."));
 	}
 	for (int i = 0; i < panel_cnt; i++)
 	{
@@ -534,7 +534,7 @@ Project::LoadBinary21(LuaInputStream& lis)
 	int panel_cnt = lis.ReadInteger();
 	if (panel_cnt != GetPageCount())
 	{
-		THROW("Could not read from file.");
+		THROW(TXT("Could not read from file."));
 	}
 	for (int i = 0; i < panel_cnt; i++)
 	{

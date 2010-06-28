@@ -222,7 +222,7 @@ Shape::Deserialize(const wxXmlNode& root)
 	m_props.Clear();
 	if (root.GetName() != GetClassName())
 	{
-		THROW("Expecting element <%s>, found <%s>.", GetClassName().c_str(), root.GetName().c_str());
+		THROW(TXT("Expecting element <%s>, found <%s>."), GetClassName().c_str(), root.GetName().c_str());
 	}
 	wxXmlNode *child = root.GetChildren();
 	while (child != NULL)
@@ -320,7 +320,7 @@ Shape::DeserializeMembers(const wxXmlNode& root)
 			std::map<wxString, Member *>::iterator i = m_members_by_id.find(id);
 			if (i == m_members_by_id.end())
 			{
-				THROW("Member \"%s\" not found for element <%s>.", id.c_str(), root.GetParent()->GetName().c_str());
+				THROW(TXT("Member \"%s\" not found for element <%s>."), id.c_str(), root.GetParent()->GetName().c_str());
 			}
 			i->second->Deserialize(*child);
 		}
@@ -330,7 +330,7 @@ Shape::DeserializeMembers(const wxXmlNode& root)
 		}
 		else
 		{
-			THROW("Element <%s> cannot be a subelement of <%s>.", name.c_str(), root.GetName().c_str());
+			THROW(TXT("Element <%s> cannot be a subelement of <%s>."), name.c_str(), root.GetName().c_str());
 		}
 		child = child->GetNext();
 	}
@@ -357,7 +357,7 @@ Shape::DeserializeConnections(const wxXmlNode& root)
 			}
 			else
 			{
-				THROW("Element <%s> cannot be a subelement of <%s>.", name.c_str(), root.GetName().c_str());
+				THROW(TXT("Element <%s> cannot be a subelement of <%s>."), name.c_str(), root.GetName().c_str());
 			}
 		}
 		child = child->GetNext();

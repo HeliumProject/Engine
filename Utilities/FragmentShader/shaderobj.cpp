@@ -36,7 +36,11 @@ ShaderObject::LuaUID(lua_State *L)
 {
 	void *pointer = *(void **)lua_touserdata(L, lua_upvalueindex(1));
 	wxString uid = wxString::Format(wxT("%p"), pointer);
-	lua_pushlstring(L, uid.c_str(), uid.Len());
+
+    std::string temp;
+    Platform::ConvertString( tstring( uid ), temp );
+
+	lua_pushlstring(L, temp.c_str(), temp.length());
 	return 1;
 }
 

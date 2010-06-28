@@ -10,13 +10,16 @@ extern "C"
 	#include <lualib.h>
 }
 
+#include "Platform/Types.h"
+#include "Platform/String.h"
+
 #ifdef _DEBUG
 
-#define NEW(clazz, args)     (clazz *)Debug::DumpHeap("new", new clazz args, sizeof(clazz), __FILE__, __LINE__)
-#define DESTROY(arg)         do { Debug::DumpHeap("delete", (void *)arg, 0, __FILE__, __LINE__); delete arg; } while (0)
-#define NEWARRAY(type, size) (type *)Debug::DumpHeap("new[]", new type[size], sizeof(type) * size, __FILE__, __LINE__)
-#define DESTROYARRAY(arg)    do { Debug::DumpHeap("delete[]", (void *)arg, 0, __FILE__, __LINE__); delete[] arg; } while (0)
-#define THROW(...)           do { Debug::Printf("Exception at %s(%d):\n\n", __FILE__, __LINE__); Debug::Printf(__VA_ARGS__); throw NEW(std::exception, (Debug::Format(__VA_ARGS__))); } while (0)
+#define NEW(clazz, args)     (clazz *)Debug::DumpHeap(TXT("new"), new clazz args, sizeof(clazz), __FILE__, __LINE__ )
+#define DESTROY(arg)         do { Debug::DumpHeap(TXT("delete"), (void *)arg, 0, __FILE__, __LINE__ ); delete arg; } while (0)
+#define NEWARRAY(type, size) (type *)Debug::DumpHeap(TXT("new[]"), new type[size], sizeof(type) * size, __FILE__, __LINE__)
+#define DESTROYARRAY(arg)    do { Debug::DumpHeap(TXT("delete[]"), (void *)arg, 0, __FILE__, __LINE__); delete[] arg; } while (0)
+#define THROW(...)           do { Debug::Printf(TXT("Exception at %s(%d):\n\n"), __FILE__, __LINE__); Debug::Printf(__VA_ARGS__); std::string temp; Platform::ConvertString( Debug::Format(__VA_ARGS__), temp ); throw NEW(std::exception, (temp.c_str())); } while (0)
 #define BREAK(cond)          do { if (cond) { DebugBreak(); } } while (0)
 
 #else
@@ -25,7 +28,7 @@ extern "C"
 #define DESTROY(arg)         delete (arg)
 #define NEWARRAY(type, size) new type[size]
 #define DESTROYARRAY(arg)    delete[] arg
-#define THROW(...)           throw NEW(std::exception, (Debug::Format(__VA_ARGS__)))
+#define THROW(...)           do { std::string temp; Platform::ConvertString( Debug::Format(__VA_ARGS__), temp ); throw NEW(std::exception, (temp.c_str())) } while (0)
 #define BREAK(cond)          do {} while (0)
 
 #endif
@@ -35,22 +38,22 @@ class Shape;
 namespace Debug
 {
 
-	const char *Format(const char *fmt, ...);
+	const tchar *Format(const tchar *fmt, ...);
 
 #ifdef _DEBUG
 
-	void *DumpHeap(const char *op, void *ptr, size_t size, const char *file, int line);
+	void *DumpHeap(const tchar *op, void *ptr, size_t size, const char *file, int line);
 	void Init(lua_State *L);
-	void Printf(const char *fmt, ...);
+	void Printf(const tchar *fmt, ...);
 	void DumpLuaStack(lua_State *L);
-	void Save(Shape *obj, const char *file);
+	void Save(Shape *obj, const tchar *file);
 
 #else
 
 	void Init(lua_State *L);
-	static inline void Printf(const char *fmt, ...) {}
+	static inline void Printf(const tchar *fmt, ...) {}
 	static inline void DumpLuaStack(lua_State *L) {}
-	static inline void Save(Shape *obj, const char *file) {}
+	static inline void Save(Shape *obj, const tchar *file) {}
 
 #endif
 

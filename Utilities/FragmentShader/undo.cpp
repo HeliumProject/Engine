@@ -119,7 +119,7 @@ Undoer::Undo()
 {
 	if (m_index == 0)
 	{
-		THROW("Nothing to undo");
+		THROW(TXT("Nothing to undo"));
 	}
 	UndoRedo *ur = m_list[--m_index];
 	ur->Undo();
@@ -135,7 +135,7 @@ Undoer::Redo()
 	size_t size = m_list.size();
 	if (m_index == size)
 	{
-		THROW("Nothing to redo");
+		THROW(TXT("Nothing to redo"));
 	}
 	UndoRedo *ur = m_list[m_index++];
 	ur->Redo();

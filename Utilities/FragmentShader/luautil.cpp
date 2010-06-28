@@ -199,8 +199,10 @@ namespace LuaUtil
 	static int
 	Panic(lua_State *L)
 	{
-		wxMessageBox(lua_tostring(L, -1), wxT( "Lua panic!" ) );
-		THROW("%s", lua_tostring(L, -1));
+        tstring temp;
+        Platform::ConvertString( lua_tostring(L, -1), temp);
+        wxMessageBox(temp, wxT( "Lua panic!" ) );
+		THROW(TXT("%s"), temp.c_str());
 	}
 
 	static expr_function_t *
@@ -308,10 +310,14 @@ namespace LuaUtil
 				case LUA_ERRRUN:
 				case LUA_ERRMEM:
 				case LUA_ERRERR:
-					BREAK(!strcmp(chunkname, ""));
-					THROW("%s: %s", chunkname, lua_tostring(L, -1));
+                    {
+                        tstring temp;
+                        Platform::ConvertString( lua_tostring(L, -1), temp);
+					    BREAK(!strcmp(chunkname, ""));
+					    THROW(TXT("%s: %s"), chunkname, temp);
+                    }
 			}
-			THROW("%s: Unknown Lua error.", chunkname);
+			THROW(TXT("%s: Unknown Lua error."), chunkname);
 		}
 	}
 
@@ -324,21 +330,23 @@ namespace LuaUtil
 	void
 	LoadResource(lua_State *L, HMODULE hModule, const char *resourcename, const char *chunkname)
 	{
-		HRSRC src = FindResource(hModule, resourcename, RT_RCDATA);
+        tstring temp;
+        Platform::ConvertString( resourcename, temp );
+        HRSRC src = FindResource(hModule, temp.c_str(), RT_RCDATA);
 		if (src == NULL)
 		{
-			THROW("Resource not found");
+			THROW(TXT("Resource not found"));
 		}
 		HGLOBAL res = LoadResource(NULL, src);
 		if (res == NULL)
 		{
-			THROW("Error loading resource");
+			THROW(TXT("Error loading resource"));
 		}
 		DWORD size = SizeofResource(NULL, src);
 		const char *code = (const char *)LockResource(res);
 		if (code == NULL)
 		{
-			THROW("Error locking resource");
+			THROW(TXT("Error locking resource"));
 		}
 		LoadBuffer(L, code, size, chunkname);
 	}
@@ -367,7 +375,9 @@ namespace LuaUtil
 		}
 		else if (type == wxT("string"))
 		{
-			lua_pushlstring(L, value.GetString().c_str(), value.GetString().Len());
+            std::string temp;
+            Platform::ConvertString( value.GetString().c_str(), temp );
+            lua_pushlstring(L, temp.c_str(), temp.length());
 		}
 		else
 		{
@@ -396,7 +406,12 @@ namespace LuaUtil
 			result = (bool)(lua_toboolean(L, -1) != 0);
 			break;
 		case LUA_TSTRING:
-			result = lua_tostring(L, -1);
+            {
+			    tstring temp;
+                Platform::ConvertString( lua_tostring(L, -1), temp );
+                wxString tempStr( temp );
+                result = tempStr;
+            }
 			break;
 		}
 		return result;

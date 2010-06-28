@@ -1,6 +1,7 @@
 #include "report.h"
 
 #include <wx/imaglist.h>
+#include <wx/bitmap.h>
 
 #include "debug.h"
 

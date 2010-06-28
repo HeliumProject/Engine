@@ -47,7 +47,7 @@ Shader::~Shader()
 }
 
 static void
-AppendItem(wxMenu *menu, int id, char **xpm, const wxString& text = "", wxMenu *submenu = NULL)
+AppendItem(wxMenu *menu, int id, char **xpm, const wxString& text = wxT(""), wxMenu *submenu = NULL)
 {
     wxMenuItem *item = NEW(wxMenuItem, (menu, id, text, wxT(""), wxITEM_NORMAL, submenu));
     item->SetBitmap(wxBitmap(xpm));
@@ -390,7 +390,7 @@ Shader::OnAbout(wxCommandEvent& evt)
 {
     wxAboutDialogInfo info;
     info.SetName(wxT("igFragmentShader"));
-    info.SetDescription(wxT("Built on " __TDATE__ " " __TTIME__));
+    //info.SetDescription(wxT("Built on " __TDATE__ " " __TTIME__));
     wxAboutBox(info);
 }
 

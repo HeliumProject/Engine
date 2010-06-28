@@ -10,6 +10,8 @@
 
 #include "debug.h"
 
+#include "Platform/String.h"
+
 wxXmlNode *
 Method::Serialize() const
 {
@@ -234,7 +236,10 @@ MethodLua::MethodLua(const wxString& source)
 	: Method()
 	, m_source(source)
 {
-	LuaUtil::LoadBuffer(g_L, m_source.c_str(), m_source.Len(), "method");
+    std::string temp;
+    Platform::ConvertString( m_source.c_str(), temp );
+
+	LuaUtil::LoadBuffer(g_L, temp.c_str(), temp.length(), "method");
 	m_lua_ref = luaL_ref(g_L, LUA_REGISTRYINDEX);
 }
 
@@ -256,7 +261,9 @@ wxString
 MethodLua::GetType(const OutputPort *output) const
 {
 	Call(static_cast<Node *>(output->GetParent()));
-	wxString type = lua_tostring(g_L, -1);
+    tstring temp;
+    Platform::ConvertString( lua_tostring(g_L, -1), temp );
+    wxString type = temp;
 	lua_pop(g_L, 1);
 	return type;
 }
@@ -290,7 +297,9 @@ wxString
 MethodLua::GenerateCode(const Node *node) const
 {
 	Call(node);
-	wxString code = lua_tostring(g_L, -1);
+	tstring temp;
+    Platform::ConvertString( lua_tostring(g_L, -1), temp );
+    wxString code = temp;
 	lua_pop(g_L, 1);
 	return code;
 }
@@ -308,7 +317,10 @@ void
 MethodLua::Deserialize(const wxXmlNode& root)
 {
 	m_source = root.GetNodeContent();
-	LuaUtil::LoadBuffer(g_L, m_source.c_str(), m_source.Len(), "method");
+
+    std::string temp;
+    Platform::ConvertString( m_source.c_str(), temp );
+    LuaUtil::LoadBuffer(g_L, temp.c_str(), temp.length(), "method");
 	m_lua_ref = luaL_ref(g_L, LUA_REGISTRYINDEX);
 	Method::Deserialize(root);
 }
@@ -329,7 +341,10 @@ MethodLua::Call(const ShaderObject *obj) const
 	obj->PushLua(g_L);
 	lua_setglobal(g_L, "node");
 	lua_rawgeti(g_L, LUA_REGISTRYINDEX, m_lua_ref);
-	LuaUtil::Call(g_L, 0, 1, obj->GetMember(wxT("Name"))->GetString().c_str());
+
+    std::string temp;
+    Platform::ConvertString( obj->GetMember(wxT("Name"))->GetString().c_str(), temp);
+    LuaUtil::Call(g_L, 0, 1, temp.c_str());
 	if (ref != LUA_NOREF)
 	{
 		lua_rawgeti(g_L, LUA_REGISTRYINDEX, ref);

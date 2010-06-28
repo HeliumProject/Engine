@@ -91,15 +91,15 @@ Panel::LoadBinary20(LuaInputStream& lis)
 	for (int i = 0; i < node_count; i++)
 	{
 		wxString node_type = lis.ReadString();
-		Debug::Printf("Loading node %s (%d)\n", node_type, i);
+		Debug::Printf(TXT("Loading node %s (%d)\n"), node_type, i);
 		Node *node = NodeLib::Create(node_type);
 		if (node == NULL)
 		{
-			THROW("Unknown node %s\n", node_type.c_str());
+			THROW(TXT("Unknown node %s\n"), node_type.c_str());
 		}
 		std::vector<wxString> ports;
 		int member_count = lis.ReadInteger();
-		Debug::Printf("  Node has %d members\n", member_count);
+		Debug::Printf(TXT("  Node has %d members\n"), member_count);
 		for (int i = 0; i < member_count; i++)
 		{
 			wxVariant key = lis.Read();
@@ -107,7 +107,7 @@ Panel::LoadBinary20(LuaInputStream& lis)
 			if (key.GetType() == wxT("string"))
 			{
 				wxString name = key.GetString();
-				Debug::Printf("  Reading member %s\n", name.c_str());
+				Debug::Printf(TXT("  Reading member %s\n"), name.c_str());
 				if (name == wxT("cost"))
 				{
 					//int cost = value.GetType() == wxT("long") ? (int)value.GetLong() : (int)value.GetDouble();
@@ -161,7 +161,7 @@ Panel::LoadBinary20(LuaInputStream& lis)
 					}
 					else
 					{
-						Debug::Printf("Member %s:%s not handled in binary file.\n", node_type.c_str(), name.c_str());
+						Debug::Printf(TXT("Member %s:%s not handled in binary file.\n"), node_type.c_str(), name.c_str());
 					}
 				}
 			}
@@ -169,32 +169,32 @@ Panel::LoadBinary20(LuaInputStream& lis)
 
     if (node_type == wxT("Cg/Arithmetic Operators/Two Operand"))
     {
-      wxString name = node->GetMember("Name")->GetString();
-      if (name == "Add")
+      wxString name = node->GetMember(wxT("Name"))->GetString();
+      if (name == wxT("Add"))
       {
-        node->GetMember("operator_ndx")->SetValue(0);
+        node->GetMember(wxT("operator_ndx"))->SetValue(0);
       }
-      else if (name == "Subtract")
+      else if (name == wxT("Subtract"))
       {
-        node->GetMember("operator_ndx")->SetValue(1);
+        node->GetMember(wxT("operator_ndx"))->SetValue(1);
       }
-      else if (name == "Multiply")
+      else if (name == wxT("Multiply"))
       {
-        node->GetMember("operator_ndx")->SetValue(2);
+        node->GetMember(wxT("operator_ndx"))->SetValue(2);
       }
-      else if (name == "Divide")
+      else if (name == wxT("Divide"))
       {
-        node->GetMember("operator_ndx")->SetValue(3);
+        node->GetMember(wxT("operator_ndx"))->SetValue(3);
       }
     }
 
 		int input_count = lis.ReadInteger();
-		Debug::Printf("  Node has %d input ports\n", input_count);
+		Debug::Printf(TXT("  Node has %d input ports\n"), input_count);
     List<InputPort *>::Iterator inputs = node->InputIterator();
 		for (int i = 0; i < input_count; i++)
 		{
 			wxString port_name = lis.ReadString();
-			Debug::Printf("    Read input port %s (%d)\n", port_name.c_str(), i);
+			Debug::Printf(TXT("    Read input port %s (%d)\n"), port_name.c_str(), i);
 			ports.push_back(port_name);
       if (!inputs)
       {
@@ -203,12 +203,12 @@ Panel::LoadBinary20(LuaInputStream& lis)
       }
 		}
 		int output_count = lis.ReadInteger();
-		Debug::Printf("  Node has %d output ports\n", output_count);
+		Debug::Printf(TXT("  Node has %d output ports\n"), output_count);
     List<OutputPort *>::Iterator outputs = node->OutputIterator();
 		for (int i = 0; i < output_count; i++)
 		{
 			wxString port_name = lis.ReadString();
-			Debug::Printf("    Read output port %s (%d)\n", port_name.c_str(), i);
+			Debug::Printf(TXT("    Read output port %s (%d)\n"), port_name.c_str(), i);
 			ports.push_back(port_name);
       if (!outputs)
       {
@@ -221,19 +221,19 @@ Panel::LoadBinary20(LuaInputStream& lis)
 		m_Graph->AddNode(node);
 	}
 	int edges_count = lis.ReadInteger();
-	Debug::Printf("  Graph has %d edges\n", edges_count);
+	Debug::Printf(TXT("  Graph has %d edges\n"), edges_count);
 	for (int i = 0; i < edges_count; i++)
 	{
 		int source_node = lis.ReadInteger() - 1;
 		int source_port = lis.ReadInteger() - 1;
-		Debug::Printf("    Source is node %2d, port %d\n", source_node, source_port);
+		Debug::Printf(TXT("    Source is node %2d, port %d\n"), source_node, source_port);
 		int target_node = lis.ReadInteger() - 1;
 		int target_port = lis.ReadInteger() - 1;
-		Debug::Printf("    Target is node %2d, port %d\n", target_node, target_port);
+		Debug::Printf(TXT("    Target is node %2d, port %d\n"), target_node, target_port);
 		bool debug = lis.ReadBoolean();
     if (debug)
     {
-      Debug::Printf("    Edge is a debug edge\n");
+      Debug::Printf(TXT("    Edge is a debug edge\n"));
     }
 		Shape *source = NULL, *target = NULL;
 		{
@@ -241,17 +241,17 @@ Panel::LoadBinary20(LuaInputStream& lis)
 			for (List<OutputPort *>::Iterator i = pair.first->OutputIterator(); !i; i++)
 			{
 				OutputPort *shape = *i;
-        Debug::Printf("      Looking for source %s (%s)\n", pair.second[source_port].c_str(), (*i)->GetMember(wxT("Name"))->GetString().c_str());
+        Debug::Printf(TXT("      Looking for source %s (%s)\n"), pair.second[source_port].c_str(), (*i)->GetMember(wxT("Name"))->GetString().c_str());
 				if (shape->GetMember(wxT("Name"))->GetString() == pair.second[source_port])
 				{
-					Debug::Printf("        Source is %s\n", shape->GetMember(wxT("Name"))->GetString().c_str());
+					Debug::Printf(TXT("        Source is %s\n"), shape->GetMember(wxT("Name"))->GetString().c_str());
 					source = shape;
           break;
 				}
 			}
 			if (source == NULL)
 			{
-				Debug::Printf("        Source not found\n");
+				Debug::Printf(TXT("        Source not found\n"));
 			}
 		}
 		{
@@ -259,17 +259,17 @@ Panel::LoadBinary20(LuaInputStream& lis)
 			for (List<InputPort *>::Iterator i = pair.first->InputIterator(); !i; i++)
 			{
 				InputPort *shape = *i;
-        Debug::Printf("      Looking for target %s (%s)\n", pair.second[target_port].c_str(), (*i)->GetMember(wxT("Name"))->GetString().c_str());
+        Debug::Printf(TXT("      Looking for target %s (%s)\n"), pair.second[target_port].c_str(), (*i)->GetMember(wxT("Name"))->GetString().c_str());
 				if (shape->GetMember(wxT("Name"))->GetString() == pair.second[target_port])
 				{
-					Debug::Printf("        Target is %s\n", shape->GetMember(wxT("Name"))->GetString().c_str());
+					Debug::Printf(TXT("        Target is %s\n"), shape->GetMember(wxT("Name"))->GetString().c_str());
 					target = shape;
           break;
 				}
 			}
 			if (target == NULL)
 			{
-				Debug::Printf("        Target not found\n");
+				Debug::Printf(TXT("        Target not found\n"));
 			}
 		}
     if (source == NULL)
@@ -379,7 +379,7 @@ Panel::OnTreeSelChanged(wxTreeEvent& evt)
 		lua_getfield(g_L, -1, "get_node_help");
 		lua_pushstring(g_L, BuildNodePath(item).c_str());
 		LuaUtil::Call(g_L, 1, 1);
-		const char *text = luaL_optstring(g_L, -1, "");
+		const tchar *text = luaL_optstring(g_L, -1, "");
 		m_Help->SetValue(text);
 		lua_pop(g_L, 2);
 		m_Ph->ChangeSelection(1);
@@ -463,7 +463,7 @@ Panel::AddToTree(const wxString& name)
 		else
 		{
 			item = m_Tree->AppendItem(node, part);
-			Debug::Printf("\tAdded node \"%s\".\n", m_Tree->GetItemText(item));
+			Debug::Printf(TXT("\tAdded node \"%s\".\n"), m_Tree->GetItemText(item));
 			m_Tree->SortChildren(node);
 			node = item;
 		}

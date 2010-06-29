@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..\;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..\;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -220,7 +220,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..\;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..\;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -390,7 +390,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..\;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..\;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -566,7 +566,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..\;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..\;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -4369,6 +4369,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Commands\FragmentShaderCommand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Commands\FragmentShaderCommand.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Commands\ProfileDumpCommand.cpp"
 				>
 			</File>
@@ -4384,6 +4392,374 @@
 				RelativePath=".\Commands\RebuildCommand.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="Graph"
+			>
+			<File
+				RelativePath=".\Graph\Base64Encode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Base64Encode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Canvas.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Canvas.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Clipboard.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\CodeTextCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\CodeTextCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Debug.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Debug.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\expr.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						PrecompiledHeaderThrough=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						PrecompiledHeaderThrough=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						PrecompiledHeaderThrough=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						PrecompiledHeaderThrough=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug Unicode|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						PrecompiledHeaderThrough=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug Unicode|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						PrecompiledHeaderThrough=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release Unicode|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						PrecompiledHeaderThrough=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release Unicode|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						PrecompiledHeaderThrough=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Graph\expr.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Graph.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Graph.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Group.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Group.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\LuaInputStream.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\LuaInputStream.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\LuaUtilities.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\LuaUtilities.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Member.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Member.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\MenuState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\MenuState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Method.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Method.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Node.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Node.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\NodeDefinition.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\NodeDefinition.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Panel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Panel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Port.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Port.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\ProjectNotebook.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\ProjectNotebook.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Property.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Property.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\PropertyGrid.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\PropertyGrid.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\RecentMenu.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\RecentMenu.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\ReportListCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\ReportListCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\RulerMemoryDC.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\RulerMemoryDC.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Serialized.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Serialized.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\ShaderFrame.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\ShaderFrame.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\ShaderObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\ShaderObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Shape.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Shape.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\TypeDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\TypeDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\UndoRedo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\UndoRedo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Utilities.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\Utilities.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\XML.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Graph\XML.h"
+				>
+			</File>
+			<Filter
+				Name="XPM"
+				>
+				<File
+					RelativePath=".\Graph\XPM\agt_action_success.xpm"
+					>
+				</File>
+				<File
+					RelativePath=".\Graph\XPM\agt_stop.xpm"
+					>
+				</File>
+				<File
+					RelativePath=".\Graph\XPM\agt_update_critical.xpm"
+					>
+				</File>
+				<File
+					RelativePath=".\Graph\XPM\copy.xpm"
+					>
+				</File>
+				<File
+					RelativePath=".\Graph\XPM\cut.xpm"
+					>
+				</File>
+				<File
+					RelativePath=".\Graph\XPM\icon.xpm"
+					>
+				</File>
+				<File
+					RelativePath=".\Graph\XPM\new.xpm"
+					>
+				</File>
+				<File
+					RelativePath=".\Graph\XPM\open.xpm"
+					>
+				</File>
+				<File
+					RelativePath=".\Graph\XPM\paste.xpm"
+					>
+				</File>
+				<File
+					RelativePath=".\Graph\XPM\save.xpm"
+					>
+				</File>
+				<File
+					RelativePath=".\Graph\XPM\x.xpm"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\API.h"

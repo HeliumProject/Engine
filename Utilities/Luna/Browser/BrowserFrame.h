@@ -16,8 +16,6 @@
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/TUID.h"
 
-#include <wx/listctrl.h>
-
 namespace Asset
 {
   struct TrackerArgs;

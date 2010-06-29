@@ -3,13 +3,6 @@
 #include "Luna/API.h"
 #include "Task.h"
 
-#include <string>
-#include <vector>
-
-#include "wx/wx.h"
-#include "wx/textctrl.h"
-#include "wx/button.h"
-
 #include "Foundation/Log.h"
 
 namespace Luna

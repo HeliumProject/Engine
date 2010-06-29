@@ -79,13 +79,13 @@ namespace Nocturnal
 					const tstring& arg = (*argsBegin);
 					++argsBegin;
 
-					std::istringstream str ( arg );
+					tstringstream str ( arg );
 					str >> *m_Data;
 
 					return str.fail();
 				}
 				
-				error = tstring( "Missing parameter for option: " ) + m_Token;
+				error = tstring( TXT("Missing parameter for option: ") ) + m_Token;
 				return false;
 			}
 

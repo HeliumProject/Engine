@@ -177,6 +177,14 @@ int LunaApp::OnExit()
     return __super::OnExit();
 }
 
+#pragma TODO("Apparently wx 2.8 doesn't support unicode command lines, please to fix in 2.9.0")
+static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, tchar* pCmdLine, int nCmdShow)
+{
+    std::string cmdLine;
+    Platform::ConvertString( pCmdLine, cmdLine );
+    return wxEntry( hInstance, hPrevInstance, const_cast<char*>(cmdLine.c_str()), nCmdShow );
+}
+
 /////////////////////////////////////////////////////////////////////////////////
 int Main ( int argc, const tchar** argv )
 {
@@ -303,7 +311,7 @@ int Main ( int argc, const tchar** argv )
             rebuildCommand.Cleanup();
 
             ::FreeConsole();
-            return Application::StandardWinMain( &wxEntry );
+            return Application::StandardWinMain( &wxEntryWrapper );
         }
     }
 

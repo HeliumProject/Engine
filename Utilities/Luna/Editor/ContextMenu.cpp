@@ -60,12 +60,12 @@ void ContextMenuArgs::SetClientData( const ObjectPtr& data )
 ///////////////////////////////////////////////////////////////////////////////
 
 // Special label for items that are separators in the context menu.
-const std::string ContextMenuItem::s_Separator = "-";
+const tstring ContextMenuItem::s_Separator = TXT( "-" );
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-ContextMenuItem::ContextMenuItem( const std::string& label, const std::string& help, const wxBitmap& icon )
+ContextMenuItem::ContextMenuItem( const tstring& label, const tstring& help, const wxBitmap& icon )
 : m_Label( label )
 , m_Help( help )
 , m_Icon( icon )
@@ -117,7 +117,7 @@ bool ContextMenuItem::IsSubMenu() const
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the label for the menu item.
 // 
-const std::string& ContextMenuItem::GetLabel() const
+const tstring& ContextMenuItem::GetLabel() const
 {
   return m_Label;
 }
@@ -125,7 +125,7 @@ const std::string& ContextMenuItem::GetLabel() const
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the label for this item.
 // 
-void ContextMenuItem::SetLabel( const std::string& label )
+void ContextMenuItem::SetLabel( const tstring& label )
 {
   m_Label = label;
 }
@@ -134,7 +134,7 @@ void ContextMenuItem::SetLabel( const std::string& label )
 // Returns the help string for this menu item (usually for showing in the
 // status bar of the application).
 // 
-const std::string& ContextMenuItem::GetHelpString() const
+const tstring& ContextMenuItem::GetHelpString() const
 {
   return m_Help;
 }
@@ -142,7 +142,7 @@ const std::string& ContextMenuItem::GetHelpString() const
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the help string.
 // 
-void ContextMenuItem::SetHelpString( const std::string& help )
+void ContextMenuItem::SetHelpString( const tstring& help )
 {
   m_Help = help;
 }
@@ -276,7 +276,7 @@ bool ContextMenuItem::MergeCallbacks( const ContextMenuItem& item )
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-SubMenu::SubMenu( const std::string& label, const std::string& help, const wxBitmap& icon )
+SubMenu::SubMenu( const tstring& label, const tstring& help, const wxBitmap& icon )
 : ContextMenuItem( label, help, icon )
 {
 }
@@ -352,7 +352,7 @@ ContextMenuItemPtr ContextMenu::AddItem( const ContextMenuItemPtr& menuItem )
 // Adds a new menu item with the specified label to the end of this menu.  Returns
 // the new menu item.
 // 
-ContextMenuItemPtr ContextMenu::AddItem( const std::string& label )
+ContextMenuItemPtr ContextMenu::AddItem( const tstring& label )
 {
   ContextMenuItemPtr menuItem = new ContextMenuItem( label );
   return AddItem( menuItem );
@@ -469,7 +469,7 @@ void ContextMenu::OnMenuOpen( wxMenuEvent& args )
 {
   if ( m_Frame )
   {
-    m_Frame->DoGiveHelp( "", false );
+    m_Frame->DoGiveHelp( TXT( "" ), false );
   }
 }
 
@@ -481,7 +481,7 @@ void ContextMenu::OnMenuClose( wxMenuEvent& args )
 {
   if ( m_Frame )
   {
-    m_Frame->DoGiveHelp( "", false );
+    m_Frame->DoGiveHelp( TXT( "" ), false );
   }
 }
 

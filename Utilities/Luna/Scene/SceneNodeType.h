@@ -37,7 +37,7 @@ namespace Luna
 
   protected:
     // the name of this type
-    std::string m_Name;
+    tstring m_Name;
 
     // The scene that owns us
     Luna::Scene* m_Scene;
@@ -72,8 +72,8 @@ namespace Luna
 
     Luna::Scene* GetScene();
 
-    const std::string& GetName() const;
-    void SetName( const std::string& name );
+    const tstring& GetName() const;
+    void SetName( const tstring& name );
 
     i32 GetImageIndex() const;
     void SetImageIndex( i32 index );
@@ -121,5 +121,5 @@ namespace Luna
   
   typedef stdext::hash_map< i32, S_SceneNodeTypeDumbPtr > HMS_TypeToSceneNodeTypeDumbPtr;
   
-  typedef stdext::hash_map< std::string, SceneNodeTypePtr > HM_StrToSceneNodeTypeSmartPtr;
+  typedef stdext::hash_map< tstring, SceneNodeTypePtr > HM_StrToSceneNodeTypeSmartPtr;
 }

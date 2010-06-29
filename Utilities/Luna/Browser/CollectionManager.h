@@ -37,22 +37,22 @@ namespace Luna
 
     bool ContainsCollection( AssetCollection* collection ) const;
 
-    bool IsCollectionNameAvailable( AssetCollection* collection, const std::string& name, std::string& errors );
-    void GetUniqueName( std::string& name, const char* baseName = "New Collection" );
+    bool IsCollectionNameAvailable( AssetCollection* collection, const tstring& name, tstring& errors );
+    void GetUniqueName( tstring& name, const tchar* baseName = TXT( "New Collection" ) );
 
-    AssetCollection* FindCollection( const std::string& name ) const;
+    AssetCollection* FindCollection( const tstring& name ) const;
     bool AddCollection( AssetCollection* collection );
 
-    bool RenameCollection( AssetCollection* collection, const std::string& name, std::string& errors );
+    bool RenameCollection( AssetCollection* collection, const tstring& name, tstring& errors );
     void DeleteCollection( AssetCollection* collection );
 
-    AssetCollection* OpenCollection( const std::string& path, bool copyLocal = false );
+    AssetCollection* OpenCollection( const tstring& path, bool copyLocal = false );
     void CloseCollection( AssetCollection* collection );
 
-    AssetCollection* ImportCollection( const std::string& path );
-    bool ImportIntoStaticCollection( AssetCollection* collection, const std::string& path );
+    AssetCollection* ImportCollection( const tstring& path );
+    bool ImportIntoStaticCollection( AssetCollection* collection, const tstring& path );
 
-    bool SaveCollection( AssetCollection* collection, const std::string& path = "" );
+    bool SaveCollection( AssetCollection* collection, const tstring& path = TXT( "" ) );
     void SaveAllCollections();
 
   public:
@@ -77,7 +77,7 @@ namespace Luna
     std::set< u64 > m_DirtyCollectionHashes;
 
     // This is what actually gets saved to disc
-    std::set< std::string > m_CollectionFilePaths;
+    std::set< tstring > m_CollectionFilePaths;
 
   private:
     CollectionManagerSignature::Event m_CollectionAdded;

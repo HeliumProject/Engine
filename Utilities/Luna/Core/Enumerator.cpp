@@ -39,7 +39,7 @@ void Enumerator::Cleanup()
   g_Initialized = false;
 }
 
-bool Enumerator::InitializePanel(const std::string& name, const CreatePanelSignature::Delegate& creator)
+bool Enumerator::InitializePanel(const tstring& name, const CreatePanelSignature::Delegate& creator)
 {
   LUNA_CORE_SCOPE_TIMER( ("") );
 
@@ -51,22 +51,22 @@ bool Enumerator::InitializePanel(const std::string& name, const CreatePanelSigna
   {
     if (!creator.Equals( inserted.first->second ))
     {
-      Log::Error("Panel '%s' initialized with a different creator\n", name.c_str());     
+      Log::Error( TXT( "Panel '%s' initialized with a different creator\n" ), name.c_str());     
     }
     else
     {
-      Log::Warning("Panel '%s' already initialized\n", name.c_str());
+      Log::Warning( TXT( "Panel '%s' already initialized\n" ), name.c_str());
     }
   }
 
   return inserted.second;
 }
 
-void Enumerator::CleanupPanel(const std::string& name)
+void Enumerator::CleanupPanel(const tstring& name)
 {
   NOC_ASSERT(g_Initialized);
 
-  Log::Print("Cleaned up Panel '%s'\n", name.c_str());
+  Log::Print( TXT( "Cleaned up Panel '%s'\n" ), name.c_str());
 
   s_PanelCreators.erase(name);
 }

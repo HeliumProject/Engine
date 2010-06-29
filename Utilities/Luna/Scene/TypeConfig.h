@@ -20,20 +20,20 @@ namespace Luna
     // Members
     //
 
-    std::string m_Name;
+    tstring m_Name;
 
     // Settings
     u32 m_Color; // ARGB - 8 bits each
     bool m_Solid;
     bool m_Transparent;
-    std::string m_Icon;
+    tstring m_Icon;
     int m_IconIndex;
 
     // Criteria
-    std::string m_ApplicationType;
-    std::set< std::string > m_ContainsComponents;
-    std::set< std::string > m_MissingComponents;
-    std::string m_Location;
+    tstring m_ApplicationType;
+    std::set< tstring > m_ContainsComponents;
+    std::set< tstring > m_MissingComponents;
+    tstring m_Location;
 
 
     //
@@ -53,7 +53,7 @@ namespace Luna
 
     int Validate(Luna::SceneNode* node);
 
-    bool ContainsComponent(Luna::SceneNode* node, const std::string& name);
+    bool ContainsComponent(Luna::SceneNode* node, const tstring& name);
 
     static void LoadFromFile(V_TypeConfigSmartPtr& types);
   };

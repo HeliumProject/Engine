@@ -17,24 +17,24 @@ NavigationPanel::NavigationPanel( BrowserFrame* browserFrame, SearchHistory* his
 , m_IgnoreNavBarTextChanged( false )
 {
   // Assign the button icons
-  m_BackButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( "folder_back.png" ) );
-  m_BackButton->SetBitmapDisabled( Nocturnal::GlobalImageManager().GetBitmap( "folder_back_disabled.png" ) );
+  m_BackButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_back.png" ) ) );
+  m_BackButton->SetBitmapDisabled( Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_back_disabled.png" ) ) );
   m_BackButton->SetHoldDelay( 0.5f );
   m_BackButton->Enable( false );
 
-  m_ForwardButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( "folder_forward.png" ) );
-  m_ForwardButton->SetBitmapDisabled( Nocturnal::GlobalImageManager().GetBitmap( "folder_forward_disabled.png" ) );
+  m_ForwardButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_forward.png" ) ) );
+  m_ForwardButton->SetBitmapDisabled( Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_forward_disabled.png" ) ) );
   m_ForwardButton->SetHoldDelay( 0.5f );
   m_ForwardButton->Enable( false );
 
-  m_UpFolderButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( "folder_up.png" ) );
-  m_UpFolderButton->SetBitmapDisabled( Nocturnal::GlobalImageManager().GetBitmap( "folder_up_disabled.png" ) );
+  m_UpFolderButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_up.png" ) ) );
+  m_UpFolderButton->SetBitmapDisabled( Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_up_disabled.png" ) ) );
   m_UpFolderButton->Enable( false );
 
-  m_GoButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( "actions/system-search.png" ) );
+  m_GoButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/system-search.png" ) ) );
   m_GoButton->Enable( false );
   
-  m_OptionsButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( "view_style.png" ) );
+  m_OptionsButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( TXT( "view_style.png" ) ) );
   m_OptionsButton->SetHoldDelay( 0.0f );
 
   UpdateHistoryMenus();
@@ -77,13 +77,13 @@ wxString NavigationPanel::GetNavBarValue() const
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void NavigationPanel::SetNavBarValue( const std::string& navBarText, bool isFolder )
+void NavigationPanel::SetNavBarValue( const tstring& navBarText, bool isFolder )
 {
   if ( !m_IgnoreNavBarTextChanged )
   {
     m_IgnoreNavBarTextChanged = true;
 
-    m_NavBarComboBox->SetValue( wxT( navBarText.c_str() ) );
+    m_NavBarComboBox->SetValue( navBarText.c_str() );
     m_IgnoreNavBarTextChanged = false;
   }
 

@@ -43,21 +43,21 @@ using namespace Luna;
 //  };
 //}
 
-#define MATCH_WORD         "[a-z0-9_\\-\\.\\\\/:\\*]+"
-#define MATCH_PHRASE       "[a-z0-9_\\-\\.\\\\/:\\s\\*]+"
-#define MATCH_COLUMN_NAME  "[a-z][a-z0-9_\\-]{1,}"
-#define MATCH_COLLECTION_NAME  "[a-z0-9]{1}[\\w\\-\\(\\. ]{1,24}"
+#define MATCH_WORD             TXT( "[a-z0-9_\\-\\.\\\\/:\\*]+" )
+#define MATCH_PHRASE           TXT( "[a-z0-9_\\-\\.\\\\/:\\s\\*]+" )
+#define MATCH_COLUMN_NAME      TXT( "[a-z][a-z0-9_\\-]{1,}" )
+#define MATCH_COLLECTION_NAME  TXT( "[a-z0-9]{1}[\\w\\-\\(\\. ]{1,24}" )
 
-const char* s_ParseWord             = "("MATCH_WORD")";
-const char* s_ParsePhrase           = "[\"]("MATCH_PHRASE")[\"]";
-const char* s_ParseColumnName       = "("MATCH_COLUMN_NAME")\\s*[:=]\\s*";
-const char* s_ParseCollectionName       = "("MATCH_COLLECTION_NAME")";
-const char* s_TokenizeQueryString   = "("MATCH_COLUMN_NAME"\\s*[:=]\\s*|[\"]"MATCH_PHRASE"[\"]|"MATCH_WORD")";
+const tchar* s_ParseWord             = TXT( "(" ) MATCH_WORD TXT( ")" );
+const tchar* s_ParsePhrase           = TXT( "[\"](" ) MATCH_PHRASE TXT( ")[\"]" );
+const tchar* s_ParseColumnName       = TXT( "(" ) MATCH_COLUMN_NAME TXT( ")\\s*[:=]\\s*" );
+const tchar* s_ParseCollectionName   = TXT( "(" ) MATCH_COLLECTION_NAME TXT( ")" );
+const tchar* s_TokenizeQueryString   = TXT( "(" ) MATCH_COLUMN_NAME TXT( "\\s*[:=]\\s*|[\"]" ) MATCH_PHRASE TXT( "[\"]|" ) MATCH_WORD TXT( ")" );
 
 //const char* s_MatchAssetPathPattern = "^[a-zA-Z]\\:(/[a-zA-Z0-9]([\\w\\-\\. ]*?[a-zA-Z0-9])*){1,}[/]{0,1}$";
-const char* s_MatchAssetPathPattern = "^[a-z]\\:(?:[\\\\/]+[a-z0-9_\\-\\. ]+)*[\\\\/]*$";
-const char* s_MatchTUIDPattern = "^((?:0[x]){0,1}[a-f0-9]{16}|(?:[\\-]){0,1}[0-9]{16,})$$";
-const char* s_MatchDecimalTUIDPattern = "^((?:[\\-]){0,1}[0-9]{16,})$"; // this is also icky, but it might actually be a decimal TUID
+const tchar* s_MatchAssetPathPattern   = TXT( "^[a-z]\\:(?:[\\\\/]+[a-z0-9_\\-\\. ]+)*[\\\\/]*$" );
+const tchar* s_MatchTUIDPattern        = TXT( "^((?:0[x]){0,1}[a-f0-9]{16}|(?:[\\-]){0,1}[0-9]{16,})$$" );
+const tchar* s_MatchDecimalTUIDPattern = TXT( "^((?:[\\-]){0,1}[0-9]{16,})$" ); // this is also icky, but it might actually be a decimal TUID
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -86,24 +86,24 @@ void SearchQuery::PostDeserialize()
 {
     __super::PostDeserialize();
 
-    std::string errors;
+    tstring errors;
     if ( !ParseQueryString( m_QueryString, errors, this ) )
     {
-        Log::Warning( "Errors occurred while parsing the query string: %s\n  %s\n", m_QueryString.c_str(), errors.c_str() );
+        Log::Warning( TXT( "Errors occurred while parsing the query string: %s\n  %s\n" ), m_QueryString.c_str(), errors.c_str() );
         return;
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void SearchQuery::SetQueryString( const std::string& queryString )
+void SearchQuery::SetQueryString( const tstring& queryString )
 {
     // Set the QueryString
     m_QueryString = queryString;
 
-    std::string errors;
+    tstring errors;
     if ( !ParseQueryString( m_QueryString, errors, this ) )
     {
-        Log::Warning( "Errors occurred while parsing the query string: %s\n  %s\n", m_QueryString.c_str(), errors.c_str() );
+        Log::Warning( TXT( "Errors occurred while parsing the query string: %s\n  %s\n" ), m_QueryString.c_str(), errors.c_str() );
         return;
     }
 }
@@ -125,7 +125,7 @@ void SearchQuery::SetCollection( const AssetCollection* collection )
 
     if ( m_QueryString.empty() )
     {
-        m_QueryString = "collection: \"" + collection->GetName() + "\"";
+        m_QueryString = TXT( "collection: \"" ) + collection->GetName() + TXT( "\"" );
     }
 }
 
@@ -140,37 +140,37 @@ AssetCollection* SearchQuery::GetCollection()
 /////////////////////////////////////////////////////////////////////////////////
 bool SearchQuery::operator<( const SearchQuery& rhs ) const
 {
-    return stricmp( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) < 0;
+    return _tcsicmp( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) < 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 bool SearchQuery::operator==( const SearchQuery& rhs ) const
 {
-    return stricmp( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) == 0;
+    return _tcsicmp( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) == 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 bool SearchQuery::operator!=( const SearchQuery& rhs ) const
 {
-    return stricmp( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) != 0;
+    return _tcsicmp( GetQueryString().c_str(), rhs.GetQueryString().c_str() ) != 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // The query->m_Search is filled out when provided.
 //
-bool TokenizeQuery( const std::string& queryString, std::vector< std::string >& tokens )
+bool TokenizeQuery( const tstring& queryString, std::vector< tstring >& tokens )
 {
-    const boost::regex parseTokens( s_TokenizeQueryString, boost::regex::icase );
+    const tregex parseTokens( s_TokenizeQueryString, boost::regex::icase );
 
     // parse once to tokenize then match again
-    boost::sregex_iterator parseItr( queryString.begin(), queryString.end(), parseTokens );
-    boost::sregex_iterator parseEnd;
+    tsregex_iterator parseItr( queryString.begin(), queryString.end(), parseTokens );
+    tsregex_iterator parseEnd;
 
-    std::string curToken;
+    tstring curToken;
     for ( ; parseItr != parseEnd; ++parseItr )
     {
-        const boost::match_results<std::string::const_iterator>& tokenizeResults = *parseItr;
-        curToken = tokenizeResults[1].matched ? Nocturnal::BoostMatchResultAsString( tokenizeResults, 1 ) : "";
+        const boost::match_results<tstring::const_iterator>& tokenizeResults = *parseItr;
+        curToken = tokenizeResults[1].matched ? Nocturnal::BoostMatchResultAsString( tokenizeResults, 1 ) : TXT( "" );
         if ( !curToken.empty() )
         {
             tokens.push_back( curToken );
@@ -180,9 +180,9 @@ bool TokenizeQuery( const std::string& queryString, std::vector< std::string >& 
     return !tokens.empty();
 }
 
-bool ParseCollectionName( const std::string& token, boost::smatch& matchResults, std::string& collectionName, std::string& errors )
+bool ParseCollectionName( const tstring& token, tsmatch& matchResults, tstring& collectionName, tstring& errors )
 {
-    const boost::regex parseCollectionName( s_ParseCollectionName, boost::regex::icase );
+    const tregex parseCollectionName( s_ParseCollectionName, boost::regex::icase );
 
     // Phrase or Word
     if ( boost::regex_search( token, matchResults, parseCollectionName ) )
@@ -194,14 +194,14 @@ bool ParseCollectionName( const std::string& token, boost::smatch& matchResults,
         }
     }
 
-    errors = "Browser could not parse collection name: " + token;
+    errors = TXT( "Browser could not parse collection name: " ) + token;
     return false;
 }
 
-bool ParsePhrase( const std::string& token, boost::smatch& matchResults, std::string& phrase, std::string& errors )
+bool ParsePhrase( const tstring& token, tsmatch& matchResults, tstring& phrase, tstring& errors )
 {
-    const boost::regex parsePhrase( s_ParsePhrase, boost::regex::icase );
-    const boost::regex parseWord( s_ParseWord, boost::regex::icase );
+    const tregex parsePhrase( s_ParsePhrase, boost::regex::icase );
+    const tregex parseWord( s_ParseWord, boost::regex::icase );
 
     // Phrase or Word
     if ( boost::regex_search( token, matchResults, parsePhrase ) 
@@ -214,19 +214,19 @@ bool ParsePhrase( const std::string& token, boost::smatch& matchResults, std::st
         }
     }
 
-    errors = "Browser could not parse search query phrase: " + token;
+    errors = TXT( "Browser could not parse search query phrase: " ) + token;
     return false;
 }
 
-bool SearchQuery::ParseQueryString( const std::string& queryString, std::string& errors, SearchQuery* query )
+bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors, SearchQuery* query )
 {
 #pragma TODO( "Rachel: Need more error checking in SearchQuery::ParseQueryString" )
 
-    const boost::regex matchAssetPath( s_MatchAssetPathPattern, boost::regex::icase ); 
-    const boost::regex matchTUID( s_MatchTUIDPattern, boost::regex::icase );
+    const tregex matchAssetPath( s_MatchAssetPathPattern, boost::regex::icase ); 
+    const tregex matchTUID( s_MatchTUIDPattern, boost::regex::icase );
 
 
-    boost::smatch matchResult;
+    tsmatch matchResult;
     //-------------------------------------------
     // Is an AssetFile/Folder path?
     if ( boost::regex_match( queryString, matchResult, matchAssetPath ) )
@@ -255,7 +255,7 @@ bool SearchQuery::ParseQueryString( const std::string& queryString, std::string&
         }
         else
         {
-            errors = "Invalid or partial path, or file/folder does not exist!";
+            errors = TXT( "Invalid or partial path, or file/folder does not exist!" );
             return false;
         }
     }
@@ -264,17 +264,17 @@ bool SearchQuery::ParseQueryString( const std::string& queryString, std::string&
     // Otherwise we assume it's an CacheDB Query.
     else
     {
-        const boost::regex parseColumnQuery( s_ParseColumnName, boost::regex::icase );
+        const tregex parseColumnQuery( s_ParseColumnName, boost::regex::icase );
 
         // parse once to tokenize then match again
-        std::vector< std::string > tokens;
+        std::vector< tstring > tokens;
         if ( TokenizeQuery( queryString, tokens ) )
         {
-            std::string curToken;
-            std::string currentValue;
+            tstring curToken;
+            tstring currentValue;
 
-            boost::smatch matchResults;
-            std::vector< std::string >::const_iterator tokenItr = tokens.begin(), tokenEnd = tokens.end();
+            tsmatch matchResults;
+            std::vector< tstring >::const_iterator tokenItr = tokens.begin(), tokenEnd = tokens.end();
             for ( ; tokenItr != tokenEnd; ++tokenItr )
             {
                 curToken = *tokenItr;
@@ -283,19 +283,19 @@ bool SearchQuery::ParseQueryString( const std::string& queryString, std::string&
                 // Token Query
                 if ( boost::regex_search( curToken, matchResults, parseColumnQuery ) && matchResults[1].matched )
                 {
-                    std::string columnAlias =  Nocturnal::BoostMatchResultAsString( matchResults, 1 );
+                    tstring columnAlias =  Nocturnal::BoostMatchResultAsString( matchResults, 1 );
 
                     ++tokenItr;
                     if ( tokenItr == tokenEnd )
                     {
-                        errors = "More information needed for search query \"" + columnAlias + ":\", missing argument.";
+                        errors = TXT( "More information needed for search query \"" ) + columnAlias + TXT( ":\", missing argument." );
                         return false;
                     }
                     curToken = *tokenItr;
 
                     //-------------------------------------------
                     // Collection Query
-                    if ( stricmp( columnAlias.c_str(), "collection" ) == 0 )
+                    if ( _tcsicmp( columnAlias.c_str(), TXT( "collection" ) ) == 0 )
                     {
                         if ( ParseCollectionName( curToken, matchResults, currentValue, errors ) )
                         {

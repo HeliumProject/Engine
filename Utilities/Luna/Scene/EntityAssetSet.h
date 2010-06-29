@@ -43,13 +43,13 @@ namespace Luna
         Asset::EntityManifestPtr m_Manifest;
 
         // the master file from the content attribute
-        std::string m_ArtFile;
+        tstring m_ArtFile;
 
         // shape to render with
         Luna::Primitive* m_Shape;
 
         // the name of the class, derived from the path
-        std::string m_Name;
+        tstring m_Name;
 
         //
         // Runtime Type Info
@@ -80,7 +80,7 @@ namespace Luna
             return m_Class;
         }
 
-        const std::string& GetContentFile() const
+        const tstring& GetContentFile() const
         {
             return m_ArtFile;
         }
@@ -95,7 +95,7 @@ namespace Luna
             return m_Shape;
         }
 
-        virtual const std::string& GetName() const NOC_OVERRIDE
+        virtual const tstring& GetName() const NOC_OVERRIDE
         {
             return m_Name;
         }

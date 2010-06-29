@@ -41,17 +41,17 @@ namespace Luna
         return m_Path;
     }
 
-    std::string GetPath()
+    tstring GetPath()
     {
         return m_Path.Get();
     }
 
     virtual i32 GetImageIndex() const;
-    virtual std::string GetApplicationTypeName() const NOC_OVERRIDE;
+    virtual tstring GetApplicationTypeName() const NOC_OVERRIDE;
 
     const Math::Color3& GetColor() const;
 
-    virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
+    virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
     static void CreatePanel( CreatePanelArgs& args );
 
   protected:

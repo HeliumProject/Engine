@@ -29,13 +29,13 @@ void AssetCollection::EnumerateClass( Reflect::Compositor<AssetCollection>& comp
 /////////////////////////////////////////////////////////////////////////////
 AssetCollection::AssetCollection()
 : m_FreezeCount( 0 ) 
-, m_Name( "" )
+, m_Name( TXT( "" ) )
 , m_Flags( AssetCollectionFlags::Default )
 {
 }
 
 /////////////////////////////////////////////////////////////////////////////
-AssetCollection::AssetCollection( const std::string& name, const u32 flags )
+AssetCollection::AssetCollection( const tstring& name, const u32 flags )
 : m_FreezeCount( 0 ) 
 , m_Name( name )
 , m_Flags( AssetCollectionFlags::Default )
@@ -49,17 +49,17 @@ AssetCollection::~AssetCollection()
     m_AssetPaths.clear();
 }
 
-void AssetCollection::GetFileFilters( std::vector< std::string >& filters )
+void AssetCollection::GetFileFilters( std::vector< tstring >& filters )
 {
-    std::string filterFormat = "Asset Collection (*.collection.%s)|*.collection.%s";
+    tstring filterFormat = TXT( "Asset Collection (*.collection.%s)|*.collection.%s" );
 
-    std::set< std::string > reflectExtensions;
+    std::set< tstring > reflectExtensions;
     Reflect::Archive::GetExtensions( reflectExtensions );
 
-    char filter[ 128 ];
-    for ( std::set< std::string >::const_iterator itr = reflectExtensions.begin(), end = reflectExtensions.end(); itr != end; ++itr )
+    tchar filter[ 128 ];
+    for ( std::set< tstring >::const_iterator itr = reflectExtensions.begin(), end = reflectExtensions.end(); itr != end; ++itr )
     {
-        sprintf_s( filter, 128, filterFormat.c_str(), (*itr).c_str(), (*itr).c_str() );
+        _stprintf_s( filter, 128, filterFormat.c_str(), (*itr).c_str(), (*itr).c_str() );
         filters.push_back( filter );
     }
 }
@@ -95,31 +95,31 @@ void AssetCollection::DirtyField( const Reflect::Field* field )
 //
 
 ///////////////////////////////////////////////////////////////////////////////
-void AssetCollection::CreateSignature( const std::string& str, std::string& signature )
+void AssetCollection::CreateSignature( const tstring& str, tstring& signature )
 {
     signature = str;
     toLower( signature );
     signature = Nocturnal::MD5( signature );
 }
 
-void AssetCollection::CreateSignature( tuid id, std::string& signature )
+void AssetCollection::CreateSignature( tuid id, tstring& signature )
 {
-    std::stringstream stream;
+    tstringstream stream;
     stream << TUID::HexFormat << id;
     signature = Nocturnal::MD5( stream.str() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void AssetCollection::CreateFilePath( const std::string name, std::string& filePath, const std::string& folder )
+void AssetCollection::CreateFilePath( const tstring name, tstring& filePath, const tstring& folder )
 {
     if ( folder.empty() )
     {
         Nocturnal::Path prefsPath;
         if ( !Application::GetPreferencesDirectory( prefsPath ) )
         {
-            throw Nocturnal::Exception( "Could not get preferences directory." );
+            throw Nocturnal::Exception( TXT( "Could not get preferences directory." ) );
         }
-        filePath = prefsPath.Get() + "collections/";
+        filePath = prefsPath.Get() + TXT( "collections/" );
     }
     else
     {
@@ -127,11 +127,11 @@ void AssetCollection::CreateFilePath( const std::string name, std::string& fileP
     }
 
     filePath += name;
-    filePath += ".collection.rb";
+    filePath += TXT( ".collection.rb" );
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void AssetCollection::SetName( const std::string& name )
+void AssetCollection::SetName( const tstring& name )
 {
     if ( m_Name != name )
     {
@@ -141,21 +141,21 @@ void AssetCollection::SetName( const std::string& name )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-std::string AssetCollection::GetDisplayName() const
+tstring AssetCollection::GetDisplayName() const
 {
-    std::stringstream stream;
+    tstringstream stream;
     stream << GetName();
-    stream << " (" << GetAssetPaths().size() << " ";
-    stream << ( ( GetAssetPaths().size() == 1 ) ? "item" : "items" );
-    stream << ")";
+    stream << TXT( " (" ) << GetAssetPaths().size() << TXT( " " );
+    stream << ( ( GetAssetPaths().size() == 1 ) ? TXT( "item" ) : TXT( "items" ) );
+    stream << TXT( ")" );
 
     return stream.str();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-std::string AssetCollection::GetQueryString() const
+tstring AssetCollection::GetQueryString() const
 {
-    std::string queryString = "collection: \"" + GetName() + "\"";
+    tstring queryString = TXT( "collection: \"" ) + GetName() + TXT( "\"" );
     return queryString;
 }
 
@@ -296,7 +296,7 @@ AssetCollectionPtr AssetCollection::LoadFrom( const Nocturnal::Path& path )
 {
     if ( !path.Exists() )
     {
-        Log::Warning( "Unable to read collection from file %s; Reason: File does not exist.\n", path.c_str() );
+        Log::Warning( TXT( "Unable to read collection from file %s; Reason: File does not exist.\n" ), path.c_str() );
         return NULL;
     }
 
@@ -308,13 +308,13 @@ AssetCollectionPtr AssetCollection::LoadFrom( const Nocturnal::Path& path )
     }
     catch ( const Nocturnal::Exception& ex )
     {
-        Log::Error( "Unable to read asset collection from file %s; Reason: %s.\n", path.c_str(), ex.What() );
+        Log::Error( TXT( "Unable to read asset collection from file %s; Reason: %s.\n" ), path.c_str(), ex.What() );
         return NULL;
     }
 
     if( assetCollection == NULL )
     {
-        Log::Error( "Unable to read asset collection from file %s.\n", path.c_str() );
+        Log::Error( TXT( "Unable to read asset collection from file %s.\n" ), path.c_str() );
         return NULL;
     }
 
@@ -332,7 +332,7 @@ AssetCollectionPtr AssetCollection::LoadFrom( const Nocturnal::Path& path )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool AssetCollection::SaveTo( const AssetCollection* collection, const std::string& path )
+bool AssetCollection::SaveTo( const AssetCollection* collection, const tstring& path )
 {
     bool saved = false;
     try
@@ -342,7 +342,7 @@ bool AssetCollection::SaveTo( const AssetCollection* collection, const std::stri
     }
     catch ( const Nocturnal::Exception& ex )
     {
-        Log::Error( "Unable to save asset collection '%s', to '%s'; Reason: %s.\n", collection->GetName().c_str(), path.c_str(), ex.Get() );
+        Log::Error( TXT( "Unable to save asset collection '%s', to '%s'; Reason: %s.\n" ), collection->GetName().c_str(), path.c_str(), ex.Get() );
         saved = false;
     }
 
@@ -350,14 +350,14 @@ bool AssetCollection::SaveTo( const AssetCollection* collection, const std::stri
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool AssetCollection::IsValidCollectionName( const std::string& name, std::string& errors )
+bool AssetCollection::IsValidCollectionName( const tstring& name, tstring& errors )
 {
-    const boost::regex matchValidName( "^[a-z0-9]{1}[\\w\\-\\(\\. ]{1,24}$", boost::regex::icase | boost::match_single_line );
+    const tregex matchValidName( TXT( "^[a-z0-9]{1}[\\w\\-\\(\\. ]{1,24}$" ), boost::regex::icase | boost::match_single_line );
 
-    boost::smatch  matchResult;
+    tsmatch  matchResult;
     if ( !boost::regex_match( name, matchResult, matchValidName ) )
     {
-        errors = "Collection names must have a lenght less than 25 characters, and can only contain alphanumeric characters, spaces and special characters: \'.\', \'_\', and \'-\'";
+        errors = TXT( "Collection names must have a lenght less than 25 characters, and can only contain alphanumeric characters, spaces and special characters: \'.\', \'_\', and \'-\'" );
         return false;
     }
 

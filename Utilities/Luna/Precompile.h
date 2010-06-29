@@ -8,17 +8,6 @@
 #include "Platform/Windows/Windows.h"
 
 //
-// D3D
-//
-
-#ifdef _DEBUG
-#define D3D_DEBUG_INFO
-#endif
-
-#include <d3d9.h>
-#include <d3dx9.h>
-
-//
 // wxWidgets
 //
 
@@ -44,3 +33,15 @@
 
 #include <string>
 #include <map>
+
+//
+// D3D
+//
+
+#ifdef _DEBUG
+#define D3D_DEBUG_INFO
+#endif
+
+#undef DrawText
+#include <d3d9.h>
+#include <d3dx9.h>

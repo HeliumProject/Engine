@@ -136,7 +136,7 @@ void PropertiesManager::CreateProperties()
 
     Platform::Thread propertyThread;
     PropertyThreadArgs* propertyThreadArgs = new PropertyThreadArgs( m_Selection, m_SelectionId, &m_SelectionId, m_Setting, m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::Container>(), m_PropertiesCreated );
-    propertyThread.CreateWithArgs( Platform::Thread::EntryHelperWithArgs<PropertiesManager, PropertyThreadArgs, &PropertiesManager::GeneratePropertiesThread>, this, propertyThreadArgs, "GeneratePropertiesThread()", THREAD_PRIORITY_BELOW_NORMAL );
+    propertyThread.CreateWithArgs( Platform::Thread::EntryHelperWithArgs<PropertiesManager, PropertyThreadArgs, &PropertiesManager::GeneratePropertiesThread>, this, propertyThreadArgs, TXT( "GeneratePropertiesThread()" ), THREAD_PRIORITY_BELOW_NORMAL );
   }
 }
 
@@ -174,7 +174,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
   M_PanelCreators intersectingPanels = selection.Empty() ? M_PanelCreators () : s_PanelCreators;
 
   // union support
-  typedef std::map< std::string, OS_SelectableDumbPtr > M_UnionedSelections;
+  typedef std::map< tstring, OS_SelectableDumbPtr > M_UnionedSelections;
   M_UnionedSelections unionedSelections;
   M_PanelCreators unionedPanels;
 

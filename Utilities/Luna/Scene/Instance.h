@@ -12,12 +12,12 @@ namespace Luna
   struct InstancePropertiesChangeArgs
   {
     Luna::Instance* m_Instance;
-    std::string     m_OldType;
-    std::string     m_NewType;
+    tstring     m_OldType;
+    tstring     m_NewType;
 
     InstancePropertiesChangeArgs( Luna::Instance*    instance,
-                                  const std::string& oldType,
-                                  const std::string& newType)
+                                  const tstring& oldType,
+                                  const tstring& newType)
       : m_Instance( instance )
       , m_OldType (oldType)
       , m_NewType (newType)
@@ -64,12 +64,12 @@ namespace Luna
     virtual void CheckNodeType() NOC_OVERRIDE;
 
     // find all the valid configured type names
-    std::set< std::string > GetValidConfiguredTypeNames();
+    std::set< tstring > GetValidConfiguredTypeNames();
 
-    std::string GetConfiguredTypeName() const;
-    void SetConfiguredTypeName( const std::string& type );
+    tstring GetConfiguredTypeName() const;
+    void SetConfiguredTypeName( const tstring& type );
 
-    virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
+    virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
     static void CreatePanel( CreatePanelArgs& args );
 
     bool GetSolid() const;

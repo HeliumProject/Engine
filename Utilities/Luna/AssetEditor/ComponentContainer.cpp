@@ -18,7 +18,7 @@ LUNA_DEFINE_TYPE( Luna::ComponentContainer );
 // 
 void ComponentContainer::InitializeType()
 {
-  Reflect::RegisterClass<Luna::ComponentContainer>( "Luna::ComponentContainer" );
+  Reflect::RegisterClass<Luna::ComponentContainer>( TXT( "Luna::ComponentContainer" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -36,8 +36,8 @@ ComponentContainer::ComponentContainer( Luna::AssetManager* assetManager, Luna::
 : Luna::AssetNode( assetManager )
 , m_Asset( assetClass )
 {
-  SetName( "Components" );
-  SetIcon( "component_components.png" );
+  SetName( TXT( "Components" ) );
+  SetIcon( TXT( "component_components.png" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

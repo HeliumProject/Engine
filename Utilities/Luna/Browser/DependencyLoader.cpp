@@ -10,8 +10,8 @@ using namespace Luna;
 ///////////////////////////////////////////////////////////////////////////////
 /// class DependencyLoader
 ///////////////////////////////////////////////////////////////////////////////
-DependencyLoader::DependencyLoader( const std::string& rootDirectory, const std::string& configDirectory, DependencyCollection* collection )
-: Nocturnal::ThreadMechanism( "DependencyLoader" )
+DependencyLoader::DependencyLoader( const tstring& rootDirectory, const tstring& configDirectory, DependencyCollection* collection )
+: Nocturnal::ThreadMechanism( TXT( "DependencyLoader" ) )
 , m_RootDirectory( rootDirectory )
 , m_ConfigDirectory( configDirectory )
 , m_Collection( collection )

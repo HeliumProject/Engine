@@ -36,10 +36,10 @@ namespace Luna
     {
     public:
         AssetCollection();
-        AssetCollection( const std::string& name, const u32 flags = AssetCollectionFlags::Default );
+        AssetCollection( const tstring& name, const u32 flags = AssetCollectionFlags::Default );
         virtual ~AssetCollection(); 
 
-        static void GetFileFilters( std::vector< std::string >& filters );
+        static void GetFileFilters( std::vector< tstring >& filters );
 
         // Called when collections are added to/removed from a collection manager 
         // for one time setup and tear down.  Override as needed.
@@ -59,8 +59,8 @@ namespace Luna
             return !( *this == rhs );
         }
 
-        const std::string& GetName() const { return m_Name; }
-        void SetName( const std::string& name );
+        const tstring& GetName() const { return m_Name; }
+        void SetName( const tstring& name );
 
         const Nocturnal::Path& GetPath() const
         {
@@ -71,8 +71,8 @@ namespace Luna
             m_Path = path;
         }
 
-        virtual std::string GetDisplayName() const;
-        virtual std::string GetQueryString() const;
+        virtual tstring GetDisplayName() const;
+        virtual tstring GetQueryString() const;
 
         virtual void SetFlags( const u32 flags );
         virtual u32 GetFlags() const { return m_Flags; }
@@ -98,14 +98,14 @@ namespace Luna
             return Reflect::TryCast<T>( LoadFrom( fileRef ) );
         }
 
-        static bool SaveTo( const AssetCollection* collection, const std::string& path );
+        static bool SaveTo( const AssetCollection* collection, const tstring& path );
 
-        static bool IsValidCollectionName( const std::string& name, std::string& errors );
+        static bool IsValidCollectionName( const tstring& name, tstring& errors );
 
     public:
-        static void CreateSignature( const std::string& str, std::string& signature );
-        static void CreateSignature( tuid id, std::string& signature );
-        static void CreateFilePath( const std::string name, std::string& filePath, const std::string& folder = std::string("") );
+        static void CreateSignature( const tstring& str, tstring& signature );
+        static void CreateSignature( tuid id, tstring& signature );
+        static void CreateFilePath( const tstring name, tstring& filePath, const tstring& folder = TXT("") );
 
         bool operator<( const AssetCollection& rhs ) const;
 
@@ -118,7 +118,7 @@ namespace Luna
 
     protected:
         i32           m_FreezeCount;
-        std::string   m_Name;
+        tstring   m_Name;
         Nocturnal::Path m_Path;
         u32           m_Flags;
         std::set< Nocturnal::Path > m_AssetPaths;

@@ -15,7 +15,7 @@ using namespace Luna;
 // 
 TypeGrid::TypeGrid( wxWindow* parent, Luna::SceneManager* sceneManager )
 : m_SceneManager( sceneManager )
-, m_Panel( new wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, "TypeGrid Panel" ) )
+, m_Panel( new wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxT( "TypeGrid Panel"  ) ) )
 , m_Grid( new GridWithIcons( m_Panel, SceneEditorIDs::ID_ObjectGrid ) )
 , m_Scene( NULL )
 {
@@ -108,7 +108,7 @@ void TypeGrid::RemoveNodeType( const NodeTypeExistenceArgs& args )
 // 
 void TypeGrid::VisibilityChanged( const GridRowChangeArgs& args )
 {
-  const std::string& typeName = m_Grid->GetRowName( args.m_RowNumber );
+  const tstring& typeName = m_Grid->GetRowName( args.m_RowNumber );
   M_HierarchyNodeTypeDumbPtr::const_iterator typeItr = m_NodeTypes.find( typeName );
   if ( typeItr != m_NodeTypes.end() )
   {
@@ -118,7 +118,7 @@ void TypeGrid::VisibilityChanged( const GridRowChangeArgs& args )
   }
   else
   {
-    Log::Error( "Unable to change visible property - Node type (%s) was not in list.\n", typeName.c_str() );
+    Log::Error( TXT( "Unable to change visible property - Node type (%s) was not in list.\n" ), typeName.c_str() );
     NOC_BREAK();
   }
 }
@@ -130,7 +130,7 @@ void TypeGrid::VisibilityChanged( const GridRowChangeArgs& args )
 // 
 void TypeGrid::SelectabilityChanged( const GridRowChangeArgs& args )
 {
-  const std::string& typeName = m_Grid->GetRowName( args.m_RowNumber );
+  const tstring& typeName = m_Grid->GetRowName( args.m_RowNumber );
   M_HierarchyNodeTypeDumbPtr::const_iterator typeItr = m_NodeTypes.find( typeName );
   if ( typeItr != m_NodeTypes.end() )
   {
@@ -166,7 +166,7 @@ void TypeGrid::SelectabilityChanged( const GridRowChangeArgs& args )
   }
   else
   {
-    Log::Error( "Unable to change selectable property - Node type (%s) was not in list.\n", typeName.c_str() );
+    Log::Error( TXT( "Unable to change selectable property - Node type (%s) was not in list.\n" ), typeName.c_str() );
     NOC_BREAK();
   }
 }

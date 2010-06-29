@@ -23,13 +23,13 @@ namespace Luna
     virtual ~Region(); 
 
     virtual i32 GetImageIndex() const;
-    virtual std::string GetApplicationTypeName() const NOC_OVERRIDE;
-    virtual void SetName(const std::string& value);
+    virtual tstring GetApplicationTypeName() const NOC_OVERRIDE;
+    virtual void SetName(const tstring& value);
 
     void RemoveZone( const ZonePtr& zone ); 
     void AddZone( const ZonePtr& zone ); 
 
-    virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
+    virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
 
   private: 
     void NodeAdded( const NodeChangeArgs& args );

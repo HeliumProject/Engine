@@ -38,7 +38,7 @@ typedef std::set< Component::ComponentBase*, ComponentSort > S_SortedComponent;
 // Constructor
 // 
 ComponentChooserDlg::ComponentChooserDlg( AssetEditor* editor, const wxPoint& pos, const wxSize& size )
-: wxDialog( editor, -1, "Add Component", pos, size, wxDEFAULT_DIALOG_STYLE  | wxRESIZE_BORDER )
+: wxDialog( editor, -1, wxT( "Add Component" ), pos, size, wxDEFAULT_DIALOG_STYLE  | wxRESIZE_BORDER )
 , m_Editor( editor )
 , m_Panel( new ComponentCategoriesPanel( this ) )
 , m_Toolbar( NULL )
@@ -48,11 +48,11 @@ ComponentChooserDlg::ComponentChooserDlg( AssetEditor* editor, const wxPoint& po
   SetMinSize( wxSize( 300, 300 ) );
   wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
-  m_Toolbar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_HORIZONTAL, "AddComponentToolbar" );
-  m_Toolbar->AddTool( AssetEditorIDs::AddComponent, wxT("Add"), Nocturnal::GlobalImageManager().GetBitmap( "actions/list-add.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Add the selected attribute to the current asset."), wxT("") );
+  m_Toolbar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_HORIZONTAL, wxT( "AddComponentToolbar" ) );
+  m_Toolbar->AddTool( AssetEditorIDs::AddComponent, wxT("Add"), Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/list-add.png" ) ), wxNullBitmap, wxITEM_NORMAL, wxT("Add the selected attribute to the current asset."), wxT("") );
   //TODO: Implement Help button
 	//m_Toolbar->AddTool( AssetEditorIDs::ComponentHelp, wxT("Help"), Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Display additional information in the Browser."), wxT("") );
-	m_Toolbar->AddTool( AssetEditorIDs::ChangeComponentView, wxT("View"), Nocturnal::GlobalImageManager().GetBitmap( "actions/go-down.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Change the attribute view."), wxT("") );
+	m_Toolbar->AddTool( AssetEditorIDs::ChangeComponentView, wxT("View"), Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/go-down.png" ) ), wxNullBitmap, wxITEM_NORMAL, wxT("Change the attribute view."), wxT("") );
 	m_Toolbar->Realize();
   mainSizer->Add( m_Toolbar, 0, wxALL|wxEXPAND, 2 );
 	
@@ -69,7 +69,7 @@ ComponentChooserDlg::ComponentChooserDlg( AssetEditor* editor, const wxPoint& po
   mainSizer->Add( m_Panel, 1, wxALL | wxEXPAND, 5 );
 
   Luna::AssetPreferences* preferences = GetAssetEditorPreferences();
-  std::string selectedPageTitle;
+  tstring selectedPageTitle;
   preferences->Get( preferences->ComponentChooserTab(), selectedPageTitle );
 
   // Add all the category panels
@@ -81,7 +81,7 @@ ComponentChooserDlg::ComponentChooserDlg( AssetEditor* editor, const wxPoint& po
     m_Categories.insert( M_TabToCategory::value_type( m_Panel->m_Tabs->GetPageCount(), category.Ptr() ) );
     Nocturnal::Insert<M_TabToAttribList>::Result inserted = m_ComponentLists.insert( M_TabToAttribList::value_type( m_Panel->m_Tabs->GetPageCount(), M_ListIdToAttrib() ) );
     NOC_ASSERT( inserted.second );
-    std::string title = category->Name().c_str();
+    tstring title = category->Name().c_str();
     m_Panel->m_Tabs->AddPage( GetCategoryPanel( category, inserted.first->second ), title, title == selectedPageTitle );
   }
 
@@ -122,8 +122,8 @@ ComponentCategoryPanel* ComponentChooserDlg::GetCategoryPanel( const Component::
 {
   ComponentCategoryPanel* panel = new ComponentCategoryPanel( m_Panel->m_Tabs );
   panel->m_ShortDescription->SetLabel( category->ShortDescription().c_str() );
-  panel->m_ListCtrl->InsertColumn( ColumnName, "Name" );
-  panel->m_ListCtrl->InsertColumn( ColumnError, "Error" );
+  panel->m_ListCtrl->InsertColumn( ColumnName, TXT( "Name" ) );
+  panel->m_ListCtrl->InsertColumn( ColumnError, TXT( "Error" ) );
   panel->m_ListCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList(), wxIMAGE_LIST_NORMAL );
   panel->m_ListCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList(), wxIMAGE_LIST_SMALL );
   
@@ -141,7 +141,7 @@ ComponentCategoryPanel* ComponentChooserDlg::GetCategoryPanel( const Component::
     attrEnd = sorted.end(); attrItr != attrEnd; ++attrItr, ++id )
   {
     Component::ComponentBase* attribute = *attrItr;
-    std::string errorMsg;
+    tstring errorMsg;
     bool isValid = ValidateComponent( attribute, errorMsg );
 
     // Add regular item
@@ -152,7 +152,7 @@ ComponentCategoryPanel* ComponentChooserDlg::GetCategoryPanel( const Component::
     {
       normalItem.SetTextColour( wxColour( *wxRED ) );
     }
-    const std::string icon = Luna::ComponentWrapper::GetComponentIcon( attribute ); 
+    const tstring icon = Luna::ComponentWrapper::GetComponentIcon( attribute ); 
     normalItem.SetImage( Nocturnal::GlobalImageManager().GetImageIndex( icon ) );
     normalItem.SetId( id );
     normalItem.SetColumn( ColumnName );
@@ -205,7 +205,7 @@ void ComponentChooserDlg::NextView( wxListCtrl* list )
 ///////////////////////////////////////////////////////////////////////////////
 // Displays a string and icon in the bottom panel of the dialog.
 // 
-void ComponentChooserDlg::SetDescription( const std::string& desc, ComponentChooserDlg::Icon icon )
+void ComponentChooserDlg::SetDescription( const tstring& desc, ComponentChooserDlg::Icon icon )
 {
   switch ( icon )
   {
@@ -214,7 +214,7 @@ void ComponentChooserDlg::SetDescription( const std::string& desc, ComponentChoo
     break;
 
   case IconError:
-    m_Panel->m_Icon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "error.png", Nocturnal::IconSizes::Size32 ) );
+    m_Panel->m_Icon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "error.png" ), Nocturnal::IconSizes::Size32 ) );
     m_Panel->m_Icon->Show();
     break;
   }
@@ -249,7 +249,7 @@ void ComponentChooserDlg::AddComponent( const Component::ComponentPtr& attribute
   S_AssetClassDumbPtr selection;
   m_Editor->GetAssetManager()->GetSelectedAssets( selection );
 
-  std::ostringstream errorMsg;
+  tostringstream errorMsg;
 
   // Make sure that something is selected
   if ( !selection.empty() )
@@ -264,7 +264,7 @@ void ComponentChooserDlg::AddComponent( const Component::ComponentPtr& attribute
       Luna::AssetClass* assetClass = *selItr;
       
       Component::ComponentPtr clone = Reflect::ObjectCast< Component::ComponentBase >( Reflect::Registry::GetInstance()->CreateInstance( attributeToClone->GetType() ) );
-      std::string error;
+      tstring error;
       if ( assetClass->GetPackage< Asset::AssetClass >()->ValidateComponent( clone, error ) )
       {
         Luna::ComponentWrapperPtr lunaAttrib = PersistentDataFactory::GetInstance()->CreateTyped< Luna::ComponentWrapper >( clone, m_Editor->GetAssetManager() );
@@ -283,15 +283,15 @@ void ComponentChooserDlg::AddComponent( const Component::ComponentPtr& attribute
     }
   }
 
-  const std::string& errorStr( errorMsg.str() );
+  const tstring& errorStr( errorMsg.str() );
   if ( !errorStr.empty() )
   {
     SetDescription( errorStr, IconError );
   }
   else
   {
-    std::ostringstream msg;
-    msg << "Added " << attributeToClone->GetClass()->m_UIName << ".";
+    tostringstream msg;
+    msg << TXT( "Added " ) << attributeToClone->GetClass()->m_UIName << TXT( "." );
     SetDescription( msg.str(), IconNone );
   }
 }
@@ -324,7 +324,7 @@ Component::ComponentBase* ComponentChooserDlg::FindComponent( size_t tabNumber, 
 // false and the message parameter will contain information about what went
 // wrong.
 // 
-bool ComponentChooserDlg::ValidateComponent( const Component::ComponentPtr& attribute, std::string& message )
+bool ComponentChooserDlg::ValidateComponent( const Component::ComponentPtr& attribute, tstring& message )
 {
   message.clear();
   bool isValid = false;
@@ -369,7 +369,7 @@ bool ComponentChooserDlg::ValidateComponent( const Component::ComponentPtr& attr
   else
   {
     isValid = false;
-    message = "No asset class selected.";
+    message = TXT( "No asset class selected." );
   }
 
   return isValid;
@@ -496,7 +496,7 @@ void ComponentChooserDlg::OnNotebookPageChanged( wxNotebookEvent& args )
 {
   // Store the selected page in the preferences, we'll open back to this page next time.
   Luna::AssetPreferences* preferences = GetAssetEditorPreferences();
-  preferences->Set( preferences->ComponentChooserTab(), std::string( m_Panel->m_Tabs->GetPageText( args.GetSelection() ) ) );
+  preferences->Set( preferences->ComponentChooserTab(), tstring( m_Panel->m_Tabs->GetPageText( args.GetSelection() ) ) );
 
   ComponentCategoryPanel* categoryPanel = reinterpret_cast< ComponentCategoryPanel* >( m_Panel->m_Tabs->GetPage( args.GetSelection() ) );
   if ( m_CurrentList != categoryPanel->m_ListCtrl )

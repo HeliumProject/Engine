@@ -38,7 +38,7 @@ void PersistentDataFactory::Register( i32 elementDerivedTypeID, CreatePersistent
   if ( !inserted.second && inserted.first->second != func )
   {
     // Attempt to re-register type ID to a different function
-    throw Nocturnal::Exception( "PersistentDataFactory: Attempted to re-register type ID '%d'.", elementDerivedTypeID );
+    throw Nocturnal::Exception( TXT( "PersistentDataFactory: Attempted to re-register type ID '%d'." ), elementDerivedTypeID );
   }
 }
 
@@ -58,12 +58,12 @@ Luna::PersistentDataPtr PersistentDataFactory::Create( Reflect::Element* element
     }
     else
     {
-      throw Nocturnal::Exception( "PersistentDataFactory: Failed to create a node to wrap element '%s' (typeID=%d).", element->GetTitle().c_str(), element->GetType() );
+      throw Nocturnal::Exception( TXT( "PersistentDataFactory: Failed to create a node to wrap element '%s' (typeID=%d)." ), element->GetTitle().c_str(), element->GetType() );
     }
   }
   else
   {
-    throw Nocturnal::Exception( "PersistentDataFactory: No creator function found for element '%s' (typeID=%d).", element->GetTitle().c_str(), element->GetType() );
+    throw Nocturnal::Exception( TXT( "PersistentDataFactory: No creator function found for element '%s' (typeID=%d)." ), element->GetTitle().c_str(), element->GetType() );
   }
 
   return wrapper;

@@ -5,7 +5,7 @@
 
 using namespace Luna;
 
-SelectedEntityCollection::SelectedEntityCollection( Selection* selection, const std::string& name )
+SelectedEntityCollection::SelectedEntityCollection( Selection* selection, const tstring& name )
 : AssetCollection( name, AssetCollectionFlags::Dynamic | AssetCollectionFlags::Temporary )
 , m_Selection( selection )
 {

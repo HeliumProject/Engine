@@ -149,9 +149,9 @@ namespace Luna
   // update the title to show loading progress (in percent)
   struct TitleChangeArgs
   {
-    const std::string& m_Title;
+    const tstring& m_Title;
 
-    TitleChangeArgs ( const std::string& title )
+    TitleChangeArgs ( const tstring& title )
       : m_Title (title)
     {
 
@@ -162,9 +162,9 @@ namespace Luna
   // update the status bar of the frame of this instance of the scene editor
   struct StatusChangeArgs
   {
-    const std::string& m_Status;
+    const tstring& m_Status;
 
-    StatusChangeArgs ( const std::string& status )
+    StatusChangeArgs ( const tstring& status )
       : m_Status (status)
     {
 
@@ -377,8 +377,8 @@ namespace Luna
     }
 
     // Path to the file that this scene is currently editing
-    const std::string& GetFileName() const;
-    std::string GetFullPath() const;
+    const tstring& GetFileName() const;
+    tstring GetFullPath() const;
     SceneDocument* GetSceneDocument() const;
 
     // get the current tool in use in this scene
@@ -507,7 +507,7 @@ namespace Luna
       return m_Regions; 
     }
 
-    Luna::SceneNode* Find( const std::string& name ) const; 
+    Luna::SceneNode* Find( const tstring& name ) const; 
 
     Luna::SceneNode* Get( const Nocturnal::TUID& uid ) const
     {
@@ -613,7 +613,7 @@ namespace Luna
     /// @return The visibility settings
     Content::NodeVisibilityPtr GetVisibility(tuid nodeId); 
 
-    bool GetVisibilityFile(std::string& filePath); 
+    bool GetVisibilityFile(tstring& filePath); 
     void LoadVisibility(); 
     void SaveVisibility(); 
 
@@ -628,11 +628,11 @@ namespace Luna
   public:
     // Open a whole scene, replacing the current one.
     bool Reload();
-    bool LoadFile( const std::string& file ); 
+    bool LoadFile( const tstring& file ); 
 
     // Import data into this scene, possibly merging with existing nodes.
-    Undo::CommandPtr ImportFile( const std::string& file, ImportAction action = ImportActions::Import, u32 importFlags = ImportFlags::None, Luna::HierarchyNode* parent = NULL, i32 importReflectType = Reflect::ReservedTypes::Invalid );
-    Undo::CommandPtr ImportXML( const std::string& xml, u32 importFlags = ImportFlags::None, Luna::HierarchyNode* parent = NULL );
+    Undo::CommandPtr ImportFile( const tstring& file, ImportAction action = ImportActions::Import, u32 importFlags = ImportFlags::None, Luna::HierarchyNode* parent = NULL, i32 importReflectType = Reflect::ReservedTypes::Invalid );
+    Undo::CommandPtr ImportXML( const tstring& xml, u32 importFlags = ImportFlags::None, Luna::HierarchyNode* parent = NULL );
     SceneNodePtr CreateNode( Content::SceneNode* data );
     Undo::CommandPtr ImportSceneNodes( Reflect::V_Element& elements, ImportAction action, u32 importFlags, i32 importReflectType = Reflect::ReservedTypes::Invalid );
 
@@ -665,8 +665,8 @@ namespace Luna
     // Save nodes to a file or to an xml string buffer.  Do not change the file
     // that this scene is pointing at.  Optionally export the entire scene or
     // just selected nodes.  Optionally maintain hiearchy or dependencies.
-    bool ExportFile( const std::string& file, const ExportArgs& args );
-    bool ExportXML( std::string& xml, const ExportArgs& args );
+    bool ExportFile( const tstring& file, const ExportArgs& args );
+    bool ExportXML( tstring& xml, const ExportArgs& args );
     bool Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::BatchCommand* changes );
 
   private:
@@ -683,14 +683,14 @@ namespace Luna
 
   private:
     // split the number portion of the name out
-    int Split( std::string& outName );
+    int Split( tstring& outName );
 
     // fully validating setter for a node's name
-    void SetName( Luna::SceneNode* sceneNode, const std::string& newName );
+    void SetName( Luna::SceneNode* sceneNode, const tstring& newName );
 
   public:
     // entry point for other objects to request their name to be changed
-    void Rename( Luna::SceneNode* sceneNode, const std::string& newName, std::string oldName = "" );
+    void Rename( Luna::SceneNode* sceneNode, const tstring& newName, tstring oldName = TXT( "" ) );
 
 
     //
@@ -770,10 +770,10 @@ namespace Luna
 
     // find/search for an object by different criteria
     Luna::SceneNode* FindNode( const Nocturnal::TUID& id );
-    Luna::SceneNode* FindNode( const std::string& name );
+    Luna::SceneNode* FindNode( const tstring& name );
 
     // raise event
-    void ChangeStatus(const std::string& status);
+    void ChangeStatus(const tstring& status);
     void RefreshSelection();
 
     // callbacks when important events occur
@@ -993,7 +993,7 @@ namespace Luna
   class SceneImportCommand : public Undo::Command
   {
   public:
-    SceneImportCommand( Luna::Scene* scene, const std::string& sceneFilePath, ImportAction importAction = ImportActions::Import, u32 importFlags = ImportFlags::None, Luna::HierarchyNode* importRoot = NULL, i32 importReflectType = Reflect::ReservedTypes::Invalid )
+    SceneImportCommand( Luna::Scene* scene, const tstring& sceneFilePath, ImportAction importAction = ImportActions::Import, u32 importFlags = ImportFlags::None, Luna::HierarchyNode* importRoot = NULL, i32 importReflectType = Reflect::ReservedTypes::Invalid )
       : m_Scene( scene )
       , m_SceneFilePath( sceneFilePath )
       , m_ImportAction( importAction )
@@ -1028,7 +1028,7 @@ namespace Luna
 
   private:
     Luna::Scene*           m_Scene;
-    std::string       m_SceneFilePath;
+    tstring       m_SceneFilePath;
     ImportAction      m_ImportAction;
     u32               m_ImportFlags;
     Luna::HierarchyNode*   m_ImportRoot;

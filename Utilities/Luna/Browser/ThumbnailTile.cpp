@@ -48,7 +48,7 @@ Asset::AssetFile* ThumbnailTile::GetFile()
 {
     if ( !IsFile() )
     {
-        throw Nocturnal::Exception( "ThumbnailTile is not a file!" );
+        throw Nocturnal::Exception( TXT( "ThumbnailTile is not a file!" ) );
     }
     return m_File;
 }
@@ -62,7 +62,7 @@ Asset::AssetFolder* ThumbnailTile::GetFolder()
 {
     if ( !IsFolder() )
     {
-        throw Nocturnal::Exception( "ThumbnailTile is not a folder!" );
+        throw Nocturnal::Exception( TXT( "ThumbnailTile is not a folder!" ) );
     }
     return m_Folder;
 }
@@ -79,9 +79,9 @@ void ThumbnailTile::SetRowColumn( u32 row, u32 col )
     m_Column = col;
 }
 
-std::string ThumbnailTile::GetLabel() const
+tstring ThumbnailTile::GetLabel() const
 {
-#pragma TODO ("ThumbnailTile::GetLabel - it would be cool not to incur a string copy right here and return a const std::string& instead." )
+#pragma TODO ("ThumbnailTile::GetLabel - it would be cool not to incur a string copy right here and return a const tstring& instead." )
 
     if ( IsFolder() )
     {
@@ -94,7 +94,7 @@ std::string ThumbnailTile::GetLabel() const
 }
 
 #pragma TODO( "get rid of these string copies!" )
-std::string ThumbnailTile::GetEditableName() const
+tstring ThumbnailTile::GetEditableName() const
 {
     if ( IsFolder() )
     {
@@ -106,7 +106,7 @@ std::string ThumbnailTile::GetEditableName() const
     }
 }
 
-std::string ThumbnailTile::GetFullPath() const
+tstring ThumbnailTile::GetFullPath() const
 {
     if ( IsFolder() )
     {
@@ -118,13 +118,13 @@ std::string ThumbnailTile::GetFullPath() const
     }
 }
 
-std::string ThumbnailTile::GetTypeLabel() const
+tstring ThumbnailTile::GetTypeLabel() const
 {
-    std::string label;
+    tstring label;
     if ( IsFile() )
     {
         label = Asset::GetAssetTypeName( m_File->GetAssetType() );
-        if ( label == "Unknown" || label == "Null" )
+        if ( label == TXT( "Unknown" ) || label == TXT( "Null" ) )
         {
             label = m_File->GetFileType();
         }

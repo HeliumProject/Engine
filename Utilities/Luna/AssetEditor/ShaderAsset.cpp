@@ -69,8 +69,8 @@ LUNA_DEFINE_TYPE( ShaderConvertHelper );
 // 
 void ShaderAsset::InitializeType()
 {
-    Reflect::RegisterClass<Luna::ShaderAsset>( "Luna::ShaderAsset" );
-    Reflect::RegisterClass<ShaderConvertHelper>( "ShaderConvertHelper" );
+    Reflect::RegisterClass<Luna::ShaderAsset>( TXT( "Luna::ShaderAsset"  ) );
+    Reflect::RegisterClass<ShaderConvertHelper>( TXT( "ShaderConvertHelper" ) );
 
     PersistentDataFactory::GetInstance()->Register( Reflect::GetType< Asset::ShaderAsset >(), &ShaderAsset::Create );
 }
@@ -111,14 +111,14 @@ ShaderAsset::~ShaderAsset()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the icon to use based upon what type of shader this asset is.
 // 
-std::string ShaderAsset::GetIcon() const
+tstring ShaderAsset::GetIcon() const
 {
     const i32 typeID = GetPackage< Asset::ShaderAsset >()->GetType();
 
-    std::string icon( "enginetype_shader.png" );
+    tstring icon( TXT( "enginetype_shader.png" ) );
     if ( typeID != Reflect::GetType< Asset::StandardShaderAsset >() )
     {
-        icon = "enginetype_custom_shader.png";
+        icon = TXT( "enginetype_custom_shader.png" );
     }
 
     return icon;
@@ -132,7 +132,7 @@ void ShaderAsset::PopulateContextMenu( ContextMenuItemSet& menu )
     __super::PopulateContextMenu( menu );
 
     menu.AppendSeparator();
-    SubMenuPtr subMenu = new SubMenu( "Convert Shader", "Convert this shader to a different type." );
+    SubMenuPtr subMenu = new SubMenu( TXT( "Convert Shader" ), TXT( "Convert this shader to a different type." ) );
     D_ContextMenuItemSmartPtr::const_iterator itr = m_CustomShaders.GetItems().begin();
     D_ContextMenuItemSmartPtr::const_iterator end = m_CustomShaders.GetItems().end();
     for ( ; itr != end; ++itr )
@@ -143,7 +143,7 @@ void ShaderAsset::PopulateContextMenu( ContextMenuItemSet& menu )
 
     // Append option to reload all textures
     menu.AppendSeparator();
-    ContextMenuItemPtr menuItem = new ContextMenuItem( "Reload all textures" );
+    ContextMenuItemPtr menuItem = new ContextMenuItem( TXT( "Reload all textures" ) );
     menuItem->AddCallback( ContextMenuSignature::Delegate( this, &ShaderAsset::ReloadAllTextures ) );
 
     menu.AppendItem( menuItem );
@@ -176,7 +176,7 @@ void ShaderAsset::Changed( Inspect::Control* control )
     {
         Inspect::StringData* data = Inspect::CastData< Inspect::StringData, Inspect::DataTypes::String >( control->GetData() );
 
-        std::string str;
+        tstring str;
         data->Get( str );
 
         texturePath.Set( str );
@@ -212,13 +212,13 @@ void ShaderAsset::InitializeContextMenu()
 {
     // Build a list of context menu items for each type of shader that exists in
     // the system.
-    typedef std::map< std::string, ContextMenuItemPtr, CaseInsensitiveNatStrCmp > M_Ordered;
+    typedef std::map< tstring, ContextMenuItemPtr, CaseInsensitiveNatStrCmp > M_Ordered;
     M_Ordered items;
     ContextMenuItemPtr addStandardShader;
     const Reflect::Class* classInfo = Reflect::GetClass< Asset::ShaderAsset >();
-    const std::set<std::string>& typeSet = classInfo->m_Derived;
-    std::set<std::string>::const_iterator typeItr = typeSet.begin();
-    std::set<std::string>::const_iterator typeEnd = typeSet.end();
+    const std::set<tstring>& typeSet = classInfo->m_Derived;
+    std::set<tstring>::const_iterator typeItr = typeSet.begin();
+    std::set<tstring>::const_iterator typeEnd = typeSet.end();
     for ( ; typeItr != typeEnd; ++typeItr )
     {
         const Reflect::Class* derived = Reflect::Registry::GetInstance()->GetClass( *typeItr );
@@ -272,8 +272,8 @@ void ShaderAsset::ConvertShader( const ContextMenuArgsPtr& args )
             AssetDocument* doc = assetManager->FindAssetDocument( changeShader );
             if ( !assetManager->IsCheckedOut( doc ) )
             {
-                std::string msg = "You must check out '" + doc->GetFileName() + "' in order to convert it to another shader type.";
-                wxMessageBox( msg.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, assetManager->GetAssetEditor() );
+                tstring msg = TXT( "You must check out '" ) + doc->GetFileName() + TXT( "' in order to convert it to another shader type." );
+                wxMessageBox( msg.c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, assetManager->GetAssetEditor() );
                 return;
             }
 
@@ -293,7 +293,7 @@ void ShaderAsset::ConvertShader( const ContextMenuArgsPtr& args )
                     // Copy the persistent data
                     pkg->CopyTo( newPkg );
                     newPkg->SetPath( pkg->GetPath() );
-                    std::string filePath = pkg->GetFilePath();
+                    tstring filePath = pkg->GetFilePath();
 
                     try
                     {
@@ -301,20 +301,20 @@ void ShaderAsset::ConvertShader( const ContextMenuArgsPtr& args )
                     }
                     catch ( const Nocturnal::Exception& e )
                     {
-                        std::string msg = "Failed to convert shader: " + e.Get();
-                        wxMessageBox( msg.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, assetManager->GetAssetEditor() );
+                        tstring msg = TXT( "Failed to convert shader: " ) + e.Get();
+                        wxMessageBox( msg.c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, assetManager->GetAssetEditor() );
                         return;
                     }
 
                     newPkg = NULL;
 
                     // Close the old shader
-                    std::string error;
+                    tstring error;
                     assetManager->CloseDocument( doc, false );
 
                     if ( !assetManager->Open( filePath, error, true ) )
                     {
-                        wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, assetManager->GetAssetEditor() );
+                        wxMessageBox( error.c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, assetManager->GetAssetEditor() );
                         return;
                     }
                 }

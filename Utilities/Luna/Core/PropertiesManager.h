@@ -96,7 +96,7 @@ namespace Luna
   typedef std::map<ElementTypeFlags, Reflect::Element*> M_ElementByType;
   typedef std::map<ElementTypeFlags, std::vector<Reflect::Element*> > M_ElementsByType;
   typedef std::map<ElementTypeFlags, Inspect::InterpreterPtr> M_InterpretersByType;
-  typedef std::map<std::string, Inspect::InterpreterPtr> M_InterpretersBySymbol;
+  typedef std::map<tstring, Inspect::InterpreterPtr> M_InterpretersBySymbol;
 
   class LUNA_CORE_API EnumerateElementArgs
   {

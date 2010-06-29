@@ -9,9 +9,9 @@ namespace Luna
 {
   static void ShadingModeEnumerateEnumeration( Reflect::Enumeration* info )
   {
-    info->AddElement(ShadingModes::Wireframe, "Wireframe");
-    info->AddElement(ShadingModes::Material, "Material");
-    info->AddElement(ShadingModes::Texture, "Texture");
+    info->AddElement(ShadingModes::Wireframe, TXT( "Wireframe" ) );
+    info->AddElement(ShadingModes::Material, TXT( "Material" ) );
+    info->AddElement(ShadingModes::Texture, TXT( "Texture" ) );
   }
 
   class CameraPreferences : public Reflect::Element

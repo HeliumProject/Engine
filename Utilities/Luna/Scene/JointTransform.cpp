@@ -23,7 +23,7 @@ LUNA_DEFINE_TYPE( Luna::JointTransform );
 
 void JointTransform::InitializeType()
 {
-  Reflect::RegisterClass< Luna::JointTransform >( "Luna::JointTransform" );
+  Reflect::RegisterClass< Luna::JointTransform >( TXT( "Luna::JointTransform" ) );
 
   ZeroMemory(&g_JointTransformMaterial, sizeof(g_JointTransformMaterial));
   g_JointTransformMaterial.Ambient = Luna::Color::DARKGREEN;
@@ -50,12 +50,12 @@ JointTransform::~JointTransform()
 
 i32 JointTransform::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "joint.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "joint.png" ) );
 }
 
-std::string JointTransform::GetApplicationTypeName() const
+tstring JointTransform::GetApplicationTypeName() const
 {
-  return "Joint";
+  return TXT( "Joint" );
 }
 
 void JointTransform::Render( RenderVisitor* render )

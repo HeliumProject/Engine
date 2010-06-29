@@ -16,7 +16,7 @@ LUNA_DEFINE_TYPE( Luna::PersistentData );
 // 
 void PersistentData::InitializeType()
 {
-  Reflect::RegisterClass<Luna::PersistentData>( "Luna::PersistentData" );
+  Reflect::RegisterClass<Luna::PersistentData>( TXT( "Luna::PersistentData" ) );
   PersistentDataFactory::GetInstance()->Register( Reflect::GetType< Reflect::Element >(), &Luna::PersistentData::CreatePersistentData );
 }
 

@@ -20,7 +20,7 @@ LUNA_DEFINE_TYPE(Luna::CurveCreateTool);
 
 void CurveCreateTool::InitializeType()
 {
-  Reflect::RegisterClass< Luna::CurveCreateTool >( "Luna::CurveCreateTool" );
+  Reflect::RegisterClass< Luna::CurveCreateTool >( TXT( "Luna::CurveCreateTool" ) );
 }
 
 void CurveCreateTool::CleanupType()
@@ -257,39 +257,39 @@ void CurveCreateTool::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel( "Create Curve", true );
+  m_Enumerator->PushPanel( TXT( "Create Curve" ), true );
   {
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel( "Surface Snap" );   
+      m_Enumerator->AddLabel( TXT( "Surface Snap" ) );   
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, bool> (this, &CurveCreateTool::GetSurfaceSnap, &CurveCreateTool::SetSurfaceSnap ) );
     }
     m_Enumerator->Pop();
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel( "Object Snap" );   
+      m_Enumerator->AddLabel( TXT( "Object Snap" ) );   
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, bool> (this, &CurveCreateTool::GetObjectSnap, &CurveCreateTool::SetObjectSnap ) );
     }
     m_Enumerator->Pop();
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Plane Snap");
+      m_Enumerator->AddLabel( TXT( "Plane Snap" ) );
       Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, int> (this, &CurveCreateTool::GetPlaneSnap, &CurveCreateTool::SetPlaneSnap) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << IntersectionPlanes::View;
-        items.push_back( Inspect::Item( "View", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "View" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << IntersectionPlanes::Ground;
-        items.push_back( Inspect::Item( "Ground", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Ground" ), str.str() ) );
       }
 
       choice->SetItems( items );
@@ -298,27 +298,27 @@ void CurveCreateTool::CreateProperties()
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel( "Curve Type" );
+      m_Enumerator->AddLabel( TXT( "Curve Type" ) );
       Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, int> (this, &CurveCreateTool::GetCurveType, &CurveCreateTool::SetCurveType ) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::CurveTypes::Linear;
-        items.push_back( Inspect::Item( "Linear", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Linear" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::CurveTypes::BSpline;
-        items.push_back( Inspect::Item( "BSpline", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "BSpline" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::CurveTypes::CatmullRom;
-        items.push_back( Inspect::Item( "Catmull-Rom", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Catmull-Rom" ), str.str() ) );
       }
 
       choice->SetItems( items );
@@ -328,7 +328,7 @@ void CurveCreateTool::CreateProperties()
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel( "Closed" );
+      m_Enumerator->AddLabel( TXT( "Closed" ) );
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, bool> (this, &CurveCreateTool::GetClosed, &CurveCreateTool::SetClosed ) );
     }
     m_Enumerator->Pop();

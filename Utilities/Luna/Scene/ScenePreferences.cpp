@@ -41,10 +41,10 @@ void ScenePreferences::EnumerateClass( Reflect::Compositor<ScenePreferences>& co
 ScenePreferencesPtr g_SceneEditorPreferences = NULL;
 
 // Increment this value to invalidate all previously saved preferences
-const static std::string s_PreferencesVersion( "1" );
+const static tstring s_PreferencesVersion( TXT( "1" ) );
 
 // Increment this value to invalidate just the window settings for the Scene Editor
-const static std::string s_WindowSettingsVersion( "10" );
+const static tstring s_WindowSettingsVersion( TXT( "10" ) );
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ ScenePreferences* Luna::SceneEditorPreferences()
 {
   if ( !g_SceneEditorPreferences.ReferencesObject() )
   {
-    throw Nocturnal::Exception( "SceneEditorPreferences is not initialized, must call ScenePreferences::InitializeType first." );
+    throw Nocturnal::Exception( TXT( "SceneEditorPreferences is not initialized, must call ScenePreferences::InitializeType first." ) );
   }
 
   return g_SceneEditorPreferences;
@@ -123,7 +123,7 @@ void ScenePreferences::PostDeserialize()
 // separate aspects of the preferences.  See the globals section at the top
 // of this file.
 // 
-const std::string& ScenePreferences::GetCurrentVersion() const 
+const tstring& ScenePreferences::GetCurrentVersion() const 
 {
   return s_PreferencesVersion;
 }
@@ -131,14 +131,14 @@ const std::string& ScenePreferences::GetCurrentVersion() const
 ///////////////////////////////////////////////////////////////////////////////
 // Path to load these preferences from.
 // 
-std::string ScenePreferences::GetPreferencesPath() const
+tstring ScenePreferences::GetPreferencesPath() const
 {
     Nocturnal::Path prefsDir;
     if ( Application::GetPreferencesDirectory( prefsDir ) )
     {
-        return prefsDir.Get() + "LunaSceneEditorPrefs.rb";
+        return prefsDir.Get() + TXT( "LunaSceneEditorPrefs.rb" );
     }
-    return "";
+    return TXT( "" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -11,40 +11,40 @@
 
 using namespace Luna;
 
-static const char* s_WordsHelpText = "This will search for file paths that\ncontain all of these words, in any order.";
-static const char* s_PhraseHelpText = "You can do this in standard search by\n\"surrounding your phrase with quotes\"";
-static const char* s_FileTypeHelpText = "Search for files with this extension.";
-static const char* s_FileIDHelpText = "Search by the file's ID (or TUID) using\nthe Hex or Decimal value.";
-static const char* s_LevelHelpText = "Add a level name here to search for\nassets that are placed in a given level.";
-static const char* s_ShaderHelpText = "Add a shader name here to only find\nassets that use the given shader.";
-static const char* m_ComponentHelpText = "Here you can search for the value of\na given attribute.";
+static const tchar* s_WordsHelpText = TXT( "This will search for file paths that\ncontain all of these words, in any order." );
+static const tchar* s_PhraseHelpText = TXT( "You can do this in standard search by\n\"surrounding your phrase with quotes\"" );
+static const tchar* s_FileTypeHelpText = TXT( "Search for files with this extension." );
+static const tchar* s_FileIDHelpText = TXT( "Search by the file's ID (or TUID) using\nthe Hex or Decimal value." );
+static const tchar* s_LevelHelpText = TXT( "Add a level name here to search for\nassets that are placed in a given level." );
+static const tchar* s_ShaderHelpText = TXT( "Add a shader name here to only find\nassets that use the given shader." );
+static const tchar* m_ComponentHelpText = TXT( "Here you can search for the value of\na given attribute." );
 
-static const char* s_CollectionDefaultText = "<Select Collection>";
-static const char* s_FileTypeDefaultText = "<All File Types>";
-static const char* s_CreatedByDefaultText = "<Select User>";
-static const char* s_AssetTypeDefaultText = "<Select Type>";
-static const char* s_FileIDDefaultText = "<Hex or Decimal file ID>";
-static const char* s_LevelDefaultText = "<Level Name>";
-static const char* s_ShaderDefaultText = "<Shader Name>";
-static const char* s_ComponentNameDefaultText = "<Select Component Name>";
-static const char* s_ComponentValueDefaultText = "<Component Value>";
+static const tchar* s_CollectionDefaultText = TXT( "<Select Collection>" );
+static const tchar* s_FileTypeDefaultText = TXT( "<All File Types>" );
+static const tchar* s_CreatedByDefaultText = TXT( "<Select User>" );
+static const tchar* s_AssetTypeDefaultText = TXT( "<Select Type>" );
+static const tchar* s_FileIDDefaultText = TXT( "<Hex or Decimal file ID>" );
+static const tchar* s_LevelDefaultText = TXT( "<Level Name>" );
+static const tchar* s_ShaderDefaultText = TXT( "<Shader Name>") ;
+static const tchar* s_ComponentNameDefaultText = TXT( "<Select Component Name>" );
+static const tchar* s_ComponentValueDefaultText = TXT( "<Component Value>" );
 
 
 
 ///////////////////////////////////////////////////////////////////////////// 
-Filter::Filter( const std::string& name, const std::string& filters )
+Filter::Filter( const tstring& name, const tstring& filters )
 : m_Name( name )
 , m_Filters( filters )
 {
     if ( !m_Filters.empty() )
     {
-        Tokenize( GetFilters(), m_Extensions, ";" );
+        Tokenize( GetFilters(), m_Extensions, TXT( ";" ) );
 
-        std::set< std::string >::iterator it = m_Extensions.begin();
-        std::set< std::string >::iterator end = m_Extensions.end();
+        std::set< tstring >::iterator it = m_Extensions.begin();
+        std::set< tstring >::iterator end = m_Extensions.end();
         for ( ; it != end ; ++it )
         {
-            std::string& extension = (*it);
+            tstring& extension = (*it);
             if ( !extension.empty() && *extension.begin() == '*' )
             {
                 extension.erase( 0, 1 );
@@ -64,12 +64,12 @@ BrowserSearchPanel::BrowserSearchPanel( BrowserFrame* browserFrame, wxWindow* pa
     m_GoButton->SetId( BrowserMenu::AdvancedSearchGo );
     m_CancelButton->SetId( BrowserMenu::AdvancedSearchCancel );
 
-    m_WordsHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ) );
-    m_PhraseHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ) );
-    m_FileIDHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ) );
-    m_ComponentHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ) );
-    m_LevelHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ) );
-    m_ShaderHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ) );
+    m_WordsHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "apps/help-browser.png" ) ) );
+    m_PhraseHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "apps/help-browser.png" ) ) );
+    m_FileIDHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "apps/help-browser.png" ) ) );
+    m_ComponentHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "apps/help-browser.png" ) ) );
+    m_LevelHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "apps/help-browser.png" ) ) );
+    m_ShaderHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "apps/help-browser.png" ) ) );
 
     m_DefaultFieldText.insert( std::make_pair( m_CollectionChoice->GetId(), s_CollectionDefaultText ) );
     m_DefaultFieldText.insert( std::make_pair( m_FileTypeChoice->GetId(), s_FileTypeDefaultText ) );
@@ -138,10 +138,10 @@ void BrowserSearchPanel::OnFolderBrowseButtonClick( wxCommandEvent& event )
     if ( dirDialog.ShowModal() == wxID_OK )
     {
         // clean the user input
-        std::string cleanDirectory = dirDialog.GetPath().c_str();
+        tstring cleanDirectory = dirDialog.GetPath().c_str();
         Nocturnal::Path::Normalize( cleanDirectory );
 
-        m_FieldMRU->AddItem( (wxControlWithItems*) m_FolderChoice, "m_FolderChoice", cleanDirectory );
+        m_FieldMRU->AddItem( (wxControlWithItems*) m_FolderChoice, TXT( "m_FolderChoice" ), cleanDirectory );
     }
 }
 
@@ -222,10 +222,10 @@ void BrowserSearchPanel::OnCollectionManagerChanged( const Reflect::ElementChang
 //  "BMP and GIF files (*.bmp;*.gif)" -> "*.bmp;*.gif"
 //  "PNG files (*.png)" -> "*.png"
 //
-void BrowserSearchPanel::AddFilter( const char* filter )
+void BrowserSearchPanel::AddFilter( const tchar* filter )
 {
-    std::vector< std::string > splitFilter;
-    Tokenize( filter, splitFilter, "\\|" );
+    std::vector< tstring > splitFilter;
+    Tokenize( filter, splitFilter, TXT( "\\|" ) );
 
     const size_t numTokens = splitFilter.size();
     if ( numTokens % 2 != 0 )
@@ -238,12 +238,12 @@ void BrowserSearchPanel::AddFilter( const char* filter )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void BrowserSearchPanel::SetFilterIndex( const std::string& filter )
+void BrowserSearchPanel::SetFilterIndex( const tstring& filter )
 {
     size_t index = 0;
 
-    std::vector< std::string > splitFilter;
-    Tokenize( filter, splitFilter, "\\|" );
+    std::vector< tstring > splitFilter;
+    Tokenize( filter, splitFilter, TXT( "\\|" ) );
 
     if ( (int)splitFilter.size() % 2 != 0 )
         return; // error
@@ -272,12 +272,12 @@ void BrowserSearchPanel::SetFilterIndex( int filterIndex )
 /////////////////////////////////////////////////////////////////////////////
 // returns the currently selected filter eg: "*.*", "*.png;*.jpg", etc...
 //
-std::string BrowserSearchPanel::GetFilter()
+tstring BrowserSearchPanel::GetFilter()
 {
-    std::string filter = "";
+    tstring filter = TXT( "" );
 
     // file type filter
-    std::string selectedFilter = m_FileTypeChoice->GetStringSelection().c_str();
+    tstring selectedFilter = m_FileTypeChoice->GetStringSelection().c_str();
     const Filter* foundFilter = FindFilter( selectedFilter );
     if ( foundFilter )
     {
@@ -293,7 +293,7 @@ std::string BrowserSearchPanel::GetFilter()
 //
 void BrowserSearchPanel::UpdateFilters()
 {
-    m_Filters.Append( Filter( "All files (*.*)", "*.*" ) );
+    m_Filters.Append( Filter( TXT( "All files (*.*)" ), TXT( "*.*" ) ) );
 
     m_FileTypeChoice->Clear();
 
@@ -302,7 +302,7 @@ void BrowserSearchPanel::UpdateFilters()
     if ( findDefaultText != m_DefaultFieldText.end() )
     {
         m_FileTypeChoice->AppendString( findDefaultText->second.c_str() );
-        m_FileTypeChoice->AppendString( "" );
+        m_FileTypeChoice->AppendString( TXT( "" ) );
     }
 
     OS_Filter::Iterator it     = m_Filters.Begin();
@@ -317,7 +317,7 @@ void BrowserSearchPanel::UpdateFilters()
 
 /////////////////////////////////////////////////////////////////////////////
 // Helper function to find a filter by name
-const Filter* BrowserSearchPanel::FindFilter( const std::string& name )
+const Filter* BrowserSearchPanel::FindFilter( const tstring& name )
 {
     OS_Filter::Iterator itr = m_Filters.Begin();
     OS_Filter::Iterator end = m_Filters.End();
@@ -335,9 +335,9 @@ const Filter* BrowserSearchPanel::FindFilter( const std::string& name )
 
 struct SortChoices
 {
-    bool operator()( const std::string& lhs, const std::string& rhs ) const
+    bool operator()( const tstring& lhs, const tstring& rhs ) const
     {
-        return _stricmp( lhs.c_str(), rhs.c_str() ) < 0;
+        return _tcsicmp( lhs.c_str(), rhs.c_str() ) < 0;
     }
 };
 
@@ -356,7 +356,7 @@ void BrowserSearchPanel::PopulateForm()
     m_ComponentValueTextCtrl->Enable( false );
 
     // populate from MRU: m_FolderChoice
-    m_FieldMRU->PopulateControl( (wxControlWithItems*) m_FolderChoice, "m_FolderChoice", "" );
+    m_FieldMRU->PopulateControl( (wxControlWithItems*) m_FolderChoice, TXT( "m_FolderChoice" ), TXT( "" ) );
 
     Thaw();
 
@@ -364,7 +364,7 @@ void BrowserSearchPanel::PopulateForm()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void BrowserSearchPanel::PopulateChoiceControl( wxControlWithItems* control, std::vector< std::string >& contents )
+void BrowserSearchPanel::PopulateChoiceControl( wxControlWithItems* control, std::vector< tstring >& contents )
 {
     control->Clear();
 
@@ -376,22 +376,22 @@ void BrowserSearchPanel::PopulateChoiceControl( wxControlWithItems* control, std
     if ( findDefaultText != m_DefaultFieldText.end() )
     {
         items.push_back( findDefaultText->second.c_str() );
-        items.push_back( "" );
+        items.push_back( TXT( "" ) );
     }
 
     // then insert the list
     std::sort( contents.begin(), contents.end(), SortChoices() );
-    std::vector< std::string >::const_iterator itr = contents.begin();
-    std::vector< std::string >::const_iterator end = contents.end();
+    std::vector< tstring >::const_iterator itr = contents.begin();
+    std::vector< tstring >::const_iterator end = contents.end();
     for ( ; itr != end ; ++itr )
     {
-        const std::string& value = (*itr);
+        const tstring& value = (*itr);
 
         if ( value.empty() )
             continue;
 
-        if ( ( _stricmp( value.c_str(), "null" ) == 0 )
-            || ( _stricmp( value.c_str(), "unknown" ) == 0 ) )
+        if ( ( _tcsicmp( value.c_str(), TXT( "null" ) ) == 0 )
+            || ( _tcsicmp( value.c_str(), TXT( "unknown" ) ) == 0 ) )
         {
             continue;
         }
@@ -406,26 +406,26 @@ void BrowserSearchPanel::PopulateChoiceControl( wxControlWithItems* control, std
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void BrowserSearchPanel::PopulateFileTypeChoice( std::vector< std::string >& contents )
+void BrowserSearchPanel::PopulateFileTypeChoice( std::vector< tstring >& contents )
 {
     // then insert the list
     std::sort( contents.begin(), contents.end(), SortChoices() );
-    std::vector< std::string >::const_iterator itr = contents.begin();
-    std::vector< std::string >::const_iterator end = contents.end();
+    std::vector< tstring >::const_iterator itr = contents.begin();
+    std::vector< tstring >::const_iterator end = contents.end();
     for ( ; itr != end ; ++itr )
     {
-        const std::string& value = (*itr);
+        const tstring& value = (*itr);
 
         if ( value.empty() )
             continue;
 
-        if ( ( _stricmp( value.c_str(), "null" ) == 0 )
-            || ( _stricmp( value.c_str(), "unknown" ) == 0 ) )
+        if ( ( _tcsicmp( value.c_str(), TXT( "null" ) ) == 0 )
+            || ( _tcsicmp( value.c_str(), TXT( "unknown" ) ) == 0 ) )
         {
             continue;
         }
 
-        AddFilter( std::string( std::string( "*." ) + value ).c_str() );
+        AddFilter( tstring( tstring( TXT( "*." ) ) + value ).c_str() );
     }
 
     UpdateFilters();
@@ -435,7 +435,7 @@ void BrowserSearchPanel::PopulateFileTypeChoice( std::vector< std::string >& con
 void BrowserSearchPanel::PopulateCollectionsChoice()
 {
     u32 numAdded = 0;
-    std::vector< std::string > tableData;
+    std::vector< tstring > tableData;
     for ( M_AssetCollections::const_iterator itr = m_CollectionManager->GetCollections().begin(),
         end = m_CollectionManager->GetCollections().end(); itr != end; ++itr )
     {    
@@ -449,7 +449,7 @@ void BrowserSearchPanel::PopulateCollectionsChoice()
 
     if ( numAdded > 0 )
     {
-        tableData.push_back( "" );
+        tableData.push_back( TXT( "" ) );
         PopulateChoiceControl( (wxControlWithItems*) m_CollectionChoice, tableData );
         m_SearchCollectionRadio->Enable( true );
         m_CollectionChoice->Enable( true );
@@ -478,11 +478,11 @@ bool BrowserSearchPanel::ProcessForm()
 
 #pragma TODO( "Rachel: Need more error checking in BrowserSearchPanel::GetQueryString" )
 
-    std::string queryString = "";
+    tstring queryString = TXT( "" );
     AssetCollection* collection = NULL;
 
     wxString fieldStringValue;
-    std::string cleanFieldValue;
+    tstring cleanFieldValue;
 
     // -----------------------------------------
     if ( m_SearchCollectionRadio->GetValue() )
@@ -495,7 +495,7 @@ bool BrowserSearchPanel::ProcessForm()
             collection = m_CollectionManager->FindCollection( fieldStringValue.c_str() );
             if ( collection )
             {
-                queryString += queryString.empty() ? "" : " ";
+                queryString += queryString.empty() ? TXT( "" ) : TXT( " " );
                 queryString += collection->GetQueryString();
             }
             else
@@ -513,23 +513,23 @@ bool BrowserSearchPanel::ProcessForm()
     fieldStringValue.Trim(false); // trim white-space left
     if ( !fieldStringValue.empty() )
     {
-        std::vector< std::string > splitValue;
-        Tokenize( fieldStringValue.c_str(), splitValue, " " );
+        std::vector< tstring > splitValue;
+        Tokenize( fieldStringValue.c_str(), splitValue, TXT( " " ) );
 
-        std::vector< std::string >::const_iterator itr = splitValue.begin();
-        std::vector< std::string >::const_iterator end = splitValue.end();
+        std::vector< tstring >::const_iterator itr = splitValue.begin();
+        std::vector< tstring >::const_iterator end = splitValue.end();
         for ( ; itr != end ; ++itr )
         {
-            const std::string& value = (*itr);
+            const tstring& value = (*itr);
             cleanFieldValue = value;
             Nocturnal::Path::Normalize( cleanFieldValue );
-            bool isPath = true; //( cleanFieldValue.find( '/' ) != std::string::npos ) ? true : false; 
+            bool isPath = true; //( cleanFieldValue.find( '/' ) != tstring::npos ) ? true : false; 
 
-            queryString += queryString.empty() ? "" : " ";
-            queryString += isPath ? "path" : "name";
-            queryString += ":";
+            queryString += queryString.empty() ? TXT( "" ) : TXT( " " );
+            queryString += isPath ? TXT( "path" ) : TXT( "name" );
+            queryString += TXT( ":" );
             queryString += cleanFieldValue;
-            queryString += "";
+            queryString += TXT( "" );
         }
     }
 
@@ -541,15 +541,15 @@ bool BrowserSearchPanel::ProcessForm()
     {
         cleanFieldValue = fieldStringValue.c_str();
         Nocturnal::Path::Normalize( cleanFieldValue );
-        bool isPath = true; //( cleanFieldValue.find( '/' ) != std::string::npos ) ? true : false;
-        bool needsQuotes = ( cleanFieldValue.find( ' ' ) != std::string::npos ) ? true : false;
+        bool isPath = true; //( cleanFieldValue.find( '/' ) != tstring::npos ) ? true : false;
+        bool needsQuotes = ( cleanFieldValue.find( ' ' ) != tstring::npos ) ? true : false;
 
-        queryString += queryString.empty() ? "" : " ";
-        queryString += isPath ? "path" : "name";
-        queryString += ":";
-        queryString += needsQuotes ? "\"" : "";
+        queryString += queryString.empty() ? TXT( "" ) : TXT( " " );
+        queryString += isPath ? TXT( "path" ) : TXT( "name" );
+        queryString += TXT( ":" );
+        queryString += needsQuotes ? TXT( "\"" ) : TXT( "" );
         queryString += cleanFieldValue;
-        queryString += needsQuotes ? "\"" : "";
+        queryString += needsQuotes ? TXT( "\"" ) : TXT( "" );
     }
 
     // File type filter-------------------------------
@@ -558,21 +558,21 @@ bool BrowserSearchPanel::ProcessForm()
     fieldStringValue.Trim(true);  // trim white-space right 
     fieldStringValue.Trim(false); // trim white-space left
     if ( !fieldStringValue.empty()
-        && _stricmp( fieldStringValue.c_str(), s_FileTypeDefaultText  ) != 0 
-        && _stricmp( fieldStringValue.c_str(), "All files (*.*)"  ) != 0 )
+        && _tcsicmp( fieldStringValue.c_str(), s_FileTypeDefaultText  ) != 0 
+        && _tcsicmp( fieldStringValue.c_str(), TXT( "All files (*.*)" ) ) != 0 )
     {
         const Filter* foundFilter = FindFilter( fieldStringValue.c_str() );
         if ( foundFilter != NULL && !foundFilter->GetExtensions().empty() )
         {
-            queryString += queryString.empty() ? "" : " ";
-            queryString += "fileType:";
-            queryString += "\"*";
+            queryString += queryString.empty() ? TXT( "" ) : TXT( " " );
+            queryString += TXT( "fileType:" );
+            queryString += TXT( "\"*" );
             queryString += *(foundFilter->GetExtensions().begin());
-            queryString += "\"";
+            queryString += TXT( "\"" );
         }
         else
         {
-            wxMessageBox( "The file extension you specified is not valid.", "Error", wxCENTER | wxOK | wxICON_ERROR, GetParent() );
+            wxMessageBox( TXT( "The file extension you specified is not valid." ), TXT( "Error" ), wxCENTER | wxOK | wxICON_ERROR, GetParent() );
             return false;
         }
     }
@@ -590,13 +590,13 @@ bool BrowserSearchPanel::ProcessForm()
 
         if ( !cleanFieldValue.empty() )
         {
-            bool needsQuotes = ( cleanFieldValue.find( ' ' ) != std::string::npos ) ? true : false;
+            bool needsQuotes = ( cleanFieldValue.find( ' ' ) != tstring::npos ) ? true : false;
 
-            queryString += queryString.empty() ? "" : " ";
-            queryString += "path:";
-            queryString += needsQuotes ? "\"" : "";
+            queryString += queryString.empty() ? TXT( "" ) : TXT( " " );
+            queryString += TXT( "path:" );
+            queryString += needsQuotes ? TXT( "\"" ) : TXT( "" );
             queryString += cleanFieldValue;
-            queryString += "*\"";
+            queryString += TXT( "*\"" );
         }
     }
 
@@ -607,12 +607,12 @@ bool BrowserSearchPanel::ProcessForm()
     fieldStringValue.Trim(true);  // trim white-space right 
     fieldStringValue.Trim(false); // trim white-space left
     if ( !fieldStringValue.empty()
-        && _stricmp( fieldStringValue.c_str(), s_CreatedByDefaultText  ) != 0 )
+        && _tcsicmp( fieldStringValue.c_str(), s_CreatedByDefaultText  ) != 0 )
     {
-        queryString += queryString.empty() ? "" : " ";
-        queryString += "rcsUser:";
+        queryString += queryString.empty() ? TXT( "" ) : TXT( " " );
+        queryString += TXT( "rcsUser:" );
         queryString += fieldStringValue.c_str();
-        queryString += "";
+        queryString += TXT( "" );
     }
 
 
@@ -622,15 +622,15 @@ bool BrowserSearchPanel::ProcessForm()
     fieldStringValue.Trim(true);  // trim white-space right 
     fieldStringValue.Trim(false); // trim white-space left
     if ( !fieldStringValue.empty()
-        && _stricmp( fieldStringValue.c_str(), s_AssetTypeDefaultText  ) != 0 )
+        && _tcsicmp( fieldStringValue.c_str(), s_AssetTypeDefaultText  ) != 0 )
     {
         bool needsQuotes = ( fieldStringValue.find( ' ' ) != -1 ) ? true : false;
 
-        queryString += queryString.empty() ? "" : " ";
-        queryString += "assetType:";
-        queryString += needsQuotes ? "\"" : "";
+        queryString += queryString.empty() ? TXT( "" ) : TXT( " " );
+        queryString += TXT( "assetType:" );
+        queryString += needsQuotes ? TXT( "\"" ) : TXT( "" );
         queryString += fieldStringValue.c_str();
-        queryString += needsQuotes ? "\"" : "";
+        queryString += needsQuotes ? TXT( "\"" ) : TXT( "" );
     }
 
     // -----------------------------------------
@@ -639,12 +639,12 @@ bool BrowserSearchPanel::ProcessForm()
     fieldStringValue.Trim(true);  // trim white-space right 
     fieldStringValue.Trim(false); // trim white-space left
     if ( !fieldStringValue.empty()
-        && _stricmp( fieldStringValue.c_str(), s_FileIDDefaultText  ) != 0 )
+        && _tcsicmp( fieldStringValue.c_str(), s_FileIDDefaultText  ) != 0 )
     {
-        queryString += queryString.empty() ? "" : " ";
-        queryString += "pathHash:";
+        queryString += queryString.empty() ? TXT( "" ) : TXT( " " );
+        queryString += TXT( "pathHash:" );
         queryString += fieldStringValue.c_str();
-        queryString += "";
+        queryString += TXT( "" );
     }
 
     // -----------------------------------------
@@ -654,7 +654,7 @@ bool BrowserSearchPanel::ProcessForm()
     fieldStringValue.Trim(true);  // trim white-space right 
     fieldStringValue.Trim(false); // trim white-space left
     if ( !fieldStringValue.empty()
-        && _stricmp( fieldStringValue.c_str(), s_ComponentNameDefaultText  ) != 0 )
+        && _tcsicmp( fieldStringValue.c_str(), s_ComponentNameDefaultText  ) != 0 )
     {
         cleanFieldValue = fieldStringValue.c_str();
 
@@ -662,19 +662,19 @@ bool BrowserSearchPanel::ProcessForm()
         fieldStringValue.Trim(true);  // trim white-space right 
         fieldStringValue.Trim(false); // trim white-space left
         if ( !fieldStringValue.empty()
-            && _stricmp( fieldStringValue.c_str(), s_ComponentValueDefaultText  ) != 0 )
+            && _tcsicmp( fieldStringValue.c_str(), s_ComponentValueDefaultText  ) != 0 )
         {
             bool needsQuotes = ( fieldStringValue.find( ' ' ) != -1 ) ? true : false;
 
-            queryString += queryString.empty() ? "" : " ";
-            queryString += cleanFieldValue + ":";
-            queryString += needsQuotes ? "\"" : "";
+            queryString += queryString.empty() ? TXT( "" ) : TXT( " " );
+            queryString += cleanFieldValue + TXT( ":" );
+            queryString += needsQuotes ? TXT( "\"" ) : TXT( "" );
             queryString += fieldStringValue.c_str();
-            queryString += needsQuotes ? "\"" : "";
+            queryString += needsQuotes ? TXT( "\"" ) : TXT( "" );
         }
         else
         {
-            wxMessageBox( "Please specify an attribute value to search for.", "Error", wxCENTER | wxOK | wxICON_ERROR, GetParent() );
+            wxMessageBox( TXT( "Please specify an attribute value to search for." ), TXT( "Error" ), wxCENTER | wxOK | wxICON_ERROR, GetParent() );
             return false;
         }
     }
@@ -685,17 +685,17 @@ bool BrowserSearchPanel::ProcessForm()
     fieldStringValue.Trim(true);  // trim white-space right 
     fieldStringValue.Trim(false); // trim white-space left
     if ( !fieldStringValue.empty()
-        && _stricmp( fieldStringValue.c_str(), s_LevelDefaultText  ) != 0 )
+        && _tcsicmp( fieldStringValue.c_str(), s_LevelDefaultText  ) != 0 )
     {
         cleanFieldValue = fieldStringValue.c_str();
         Nocturnal::Path::Normalize( cleanFieldValue );
-        bool needsQuotes = ( cleanFieldValue.find( ' ' ) != std::string::npos ) ? true : false;
+        bool needsQuotes = ( cleanFieldValue.find( ' ' ) != tstring::npos ) ? true : false;
 
-        queryString += queryString.empty() ? "" : " ";
-        queryString += "level:";
-        queryString += needsQuotes ? "\"" : "";
+        queryString += queryString.empty() ? TXT( "" ) : TXT( " " );
+        queryString += TXT( "level:" );
+        queryString += needsQuotes ? TXT( "\"" ) : TXT( "" );
         queryString += cleanFieldValue;
-        queryString += needsQuotes ? "\"" : "";
+        queryString += needsQuotes ? TXT( "\"" ) : TXT( "" );
     }
 
     // -----------------------------------------
@@ -704,17 +704,17 @@ bool BrowserSearchPanel::ProcessForm()
     fieldStringValue.Trim(true);  // trim white-space right 
     fieldStringValue.Trim(false); // trim white-space left
     if ( !fieldStringValue.empty()
-        && _stricmp( fieldStringValue.c_str(), s_ShaderDefaultText  ) != 0 )
+        && _tcsicmp( fieldStringValue.c_str(), s_ShaderDefaultText  ) != 0 )
     {
         cleanFieldValue = fieldStringValue.c_str();
         Nocturnal::Path::Normalize( cleanFieldValue );
-        bool needsQuotes = ( cleanFieldValue.find( ' ' ) != std::string::npos ) ? true : false;
+        bool needsQuotes = ( cleanFieldValue.find( ' ' ) != tstring::npos ) ? true : false;
 
-        queryString += queryString.empty() ? "" : " ";
-        queryString += "shader:";
-        queryString += needsQuotes ? "\"" : "" ;
+        queryString += queryString.empty() ? TXT( "" ) : TXT( " " );
+        queryString += TXT( "shader:" );
+        queryString += needsQuotes ? TXT( "\"" ) : TXT( "" );
         queryString += cleanFieldValue;
-        queryString += needsQuotes ? "\"" : "" ;
+        queryString += needsQuotes ? TXT( "\"" ) : TXT( "" );
     }
 
     m_BrowserFrame->Search( queryString, collection );

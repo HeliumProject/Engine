@@ -46,22 +46,22 @@ namespace Luna
   // Hashing class for storing UIDs as keys to a hash_map.
   // 
 
-  class NameHasher : public stdext::hash_compare< std::string >
+  class NameHasher : public stdext::hash_compare< tstring >
   {
   public:
-    size_t operator( )( const std::string& str ) const
+    size_t operator( )( const tstring& str ) const
     {
       return __super::operator()( str );
     }
 
-    bool operator( )( const std::string& str1, const std::string& str2 ) const
+    bool operator( )( const tstring& str1, const tstring& str2 ) const
     {
-      return _stricmp(str1.c_str(), str2.c_str()) < 0;
+      return _tcsicmp(str1.c_str(), str2.c_str()) < 0;
     }
   };
 
-  typedef stdext::hash_map< std::string, Luna::SceneNode*, NameHasher > HM_NameToSceneNodeDumbPtr;
-  typedef stdext::hash_map< std::string, SceneNodePtr, NameHasher > HM_NameToSceneNodeSmartPtr;
+  typedef stdext::hash_map< tstring, Luna::SceneNode*, NameHasher > HM_NameToSceneNodeDumbPtr;
+  typedef stdext::hash_map< tstring, SceneNodePtr, NameHasher > HM_NameToSceneNodeSmartPtr;
 
 
   // 
@@ -289,9 +289,9 @@ namespace Luna
     virtual const Nocturnal::TUID& SceneNode::GetID() const;
     virtual void SceneNode::SetID(const Nocturnal::TUID& id);
 
-    virtual std::string GenerateName() const;
-    virtual const std::string& GetName() const;
-    virtual void SetName(const std::string& newName);
+    virtual tstring GenerateName() const;
+    virtual const tstring& GetName() const;
+    virtual void SetName(const tstring& newName);
 
     virtual bool UseGivenName() const;
     bool UseAutoName() const
@@ -305,8 +305,8 @@ namespace Luna
       SetUseGivenName(!use);
     }
 
-    virtual void SetGivenName(const std::string& newName);
-    virtual void Rename(const std::string& newName);
+    virtual void SetGivenName(const tstring& newName);
+    virtual void Rename(const tstring& newName);
 
 
     //
@@ -441,7 +441,7 @@ namespace Luna
     virtual i32 GetImageIndex() const;
 
     // the user interface name for this compile-time class, used to matching object's type
-    virtual std::string GetApplicationTypeName() const;
+    virtual tstring GetApplicationTypeName() const;
 
     // creates our node type object (we don't have a configured type when we call this)
     virtual SceneNodeTypePtr CreateNodeType( Luna::Scene* scene ) const;
@@ -477,14 +477,14 @@ namespace Luna
 
   public:
     // validates named panel types usable by this instance
-    virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
+    virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
 
     // create the panel from the selection
     static void CreatePanel(CreatePanelArgs& args);
 
     // membership property
-    std::string GetMembership() const;
-    void SetMembership( const std::string& layers );
+    tstring GetMembership() const;
+    void SetMembership( const tstring& layers );
 
 
     //

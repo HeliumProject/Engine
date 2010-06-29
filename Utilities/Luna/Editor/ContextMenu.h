@@ -60,15 +60,15 @@ namespace Luna
   class LUNA_EDITOR_API ContextMenuItem : public Nocturnal::RefCountBase<ContextMenuItem>
   {
   private:
-    static const std::string s_Separator;
-    std::string m_Label;
+    static const tstring s_Separator;
+    tstring m_Label;
     V_MenuCallback m_Callbacks;
-    std::string m_Help;
+    tstring m_Help;
     wxBitmap m_Icon;
     bool m_Enabled;
 
   public:
-    ContextMenuItem( const std::string& label, const std::string& help = "", const wxBitmap& icon = wxNullBitmap );
+    ContextMenuItem( const tstring& label, const tstring& help = TXT( "" ), const wxBitmap& icon = wxNullBitmap );
     virtual ~ContextMenuItem();
 
     static ContextMenuItemPtr Separator();
@@ -77,11 +77,11 @@ namespace Luna
 
     virtual bool IsSubMenu() const;
 
-    const std::string& GetLabel() const;
-    void SetLabel( const std::string& label );
+    const tstring& GetLabel() const;
+    void SetLabel( const tstring& label );
 
-    const std::string& GetHelpString() const;
-    void SetHelpString( const std::string& help );
+    const tstring& GetHelpString() const;
+    void SetHelpString( const tstring& help );
 
     const wxBitmap& GetIcon() const;
     void SetIcon( const wxBitmap& icon );
@@ -106,7 +106,7 @@ namespace Luna
     V_ContextMenuItemSmartPtr m_SubItems;
 
   public:
-    SubMenu( const std::string& label, const std::string& help = "", const wxBitmap& icon = wxNullBitmap );
+    SubMenu( const tstring& label, const tstring& help = TXT( "" ), const wxBitmap& icon = wxNullBitmap );
     virtual ~SubMenu();
 
     virtual bool IsSubMenu() const NOC_OVERRIDE;
@@ -136,7 +136,7 @@ namespace Luna
     virtual ~ContextMenu();
 
     ContextMenuItemPtr AddItem( const ContextMenuItemPtr& menuItem );
-    ContextMenuItemPtr AddItem( const std::string& label );
+    ContextMenuItemPtr AddItem( const tstring& label );
     void AddSeparator();
     void Popup( wxWindow* parent, const ContextMenuArgsPtr& args );
     bool IsEmpty() const;

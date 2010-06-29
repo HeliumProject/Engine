@@ -16,7 +16,7 @@ LUNA_DEFINE_TYPE(Luna::VolumeCreateTool);
 
 void VolumeCreateTool::InitializeType()
 {
-  Reflect::RegisterClass< Luna::VolumeCreateTool >( "Luna::VolumeCreateTool" );
+  Reflect::RegisterClass< Luna::VolumeCreateTool >( TXT( "Luna::VolumeCreateTool" ) );
 }
 
 void VolumeCreateTool::CleanupType()
@@ -72,38 +72,38 @@ Luna::TransformPtr VolumeCreateTool::CreateNode()
 
 void VolumeCreateTool::CreateProperties()
 {
-  m_Enumerator->PushPanel("Volume", true);
+  m_Enumerator->PushPanel( TXT( "Volume" ), true);
   {
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Shape");
+      m_Enumerator->AddLabel( TXT( "Shape" ) );
 
       Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::VolumeCreateTool, int>(this, &VolumeCreateTool::GetVolumeShape, &VolumeCreateTool::SetVolumeShape) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::VolumeShapes::Cube;
-        items.push_back( Inspect::Item( "Cube", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Cube" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::VolumeShapes::Cylinder;
-        items.push_back( Inspect::Item( "Cylinder", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Cylinder" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::VolumeShapes::Sphere;
-        items.push_back( Inspect::Item( "Sphere", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Sphere" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::VolumeShapes::Capsule;
-        items.push_back( Inspect::Item( "Capsule", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Capsule" ), str.str() ) );
       }
 
       choice->SetItems( items );

@@ -18,7 +18,7 @@ PreviewPanel::PreviewPanel( BrowserFrame* browserFrame )
 {
     m_PreviewWindow->SetBrowserFrame( m_BrowserFrame );
 
-    m_Label->SetValue( "" );
+    m_Label->SetValue( TXT( "" ) );
 }
 
 PreviewPanel::~PreviewPanel()
@@ -34,7 +34,7 @@ void PreviewPanel::Preview( Asset::AssetClass* asset )
         m_PreviewAsset = asset;
         m_PreviewWindow->ClearScene();
 
-        m_Label->SetValue( "" );
+        m_Label->SetValue( TXT( "" ) );
 
         if ( m_PreviewAsset.ReferencesObject() )
         {

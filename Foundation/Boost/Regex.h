@@ -27,6 +27,9 @@ typedef boost::match_results<const tchar*> tcmatch;
 typedef boost::match_results<tstring::const_iterator> tsmatch;
 typedef boost::regex_token_iterator< const tchar*> tcregex_token_iterator;
 typedef boost::regex_token_iterator< tstring::const_iterator> tsregex_token_iterator;
+typedef boost::regex_iterator< const tchar* > tcregex_iterator;
+typedef boost::regex_iterator< tstring::const_iterator > tsregex_iterator;
+
 
 namespace Nocturnal
 {

@@ -15,10 +15,10 @@ void Luna::OnSaveSelectedAssets( const ContextMenuArgsPtr& args )
   Luna::AssetManagerClientData* clientData = Reflect::ObjectCast< Luna::AssetManagerClientData >( args->GetClientData() );
   if ( clientData )
   {
-    std::string error;
+    tstring error;
     if ( !clientData->m_AssetManager->SaveSelected( error ) )
     {
-      wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, clientData->m_AssetManager->GetAssetEditor() );
+      wxMessageBox( error.c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, clientData->m_AssetManager->GetAssetEditor() );
     }
   }
 }

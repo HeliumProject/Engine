@@ -11,7 +11,7 @@ EVT_TREE_ITEM_COLLAPSING( wxID_ANY, DirectoryCtrl::OnItemCollapsing )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////
-DirectoryCtrl::DirectoryCtrl( const std::string& rootDirectory )
+DirectoryCtrl::DirectoryCtrl( const tstring& rootDirectory )
 : m_RootDirectory( rootDirectory )
 {
 }
@@ -26,7 +26,7 @@ DirectoryCtrl::DirectoryCtrl
  const wxString& filter,
  int defaultFilter,
  const wxString& name,
- const std::string& rootDirectory
+ const tstring& rootDirectory
  )
  : wxGenericDirCtrl( parent, id, dir, pos, size, style, filter, defaultFilter, name )
  , m_RootDirectory( rootDirectory )
@@ -48,15 +48,15 @@ DirectoryCtrl::DirectoryCtrl
     switch ( (DirectoryCtrlIconType) type )
     {
       case DirectoryCtrlIconTypes::Folder:
-        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( "ms_folder_closed.png" ) );
+        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( TXT( "ms_folder_closed.png" ) ) );
         break;
 
       case DirectoryCtrlIconTypes::FolderOpen:
-        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( "ms_folder_open.png" ) );
+        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( TXT( "ms_folder_open.png" ) ) );
         break;
 
       case DirectoryCtrlIconTypes::InsomniacMoon:
-        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( "moon.png" ) );
+        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( TXT( "moon.png" ) ) );
         break;
 
       // We should not be using these anyway - if we are, setup a proper icon for them above
@@ -69,7 +69,7 @@ DirectoryCtrl::DirectoryCtrl
       case DirectoryCtrlIconTypes::Executable:
       case DirectoryCtrlIconTypes::Error:
       default:
-        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( "error.png" ) );
+        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( TXT( "error.png" ) ) );
         break;
     }
   }

@@ -20,7 +20,7 @@ namespace Luna
   struct SceneChangeArgs;
 
   class Layer;
-  typedef std::map< std::string, Luna::Layer* > M_LayerDumbPtr;
+  typedef std::map< tstring, Luna::Layer* > M_LayerDumbPtr;
 
   class Selectable;
   typedef Nocturnal::OrderedSet<Selectable*> OS_SelectableDumbPtr;
@@ -61,7 +61,7 @@ namespace Luna
     {
     public:
       Luna::Layer* m_Layer;
-      std::string m_OldName;
+      tstring m_OldName;
 
     public:
       NameChangeInfo();

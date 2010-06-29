@@ -76,10 +76,10 @@ namespace Luna
       m_IsHighlighted = highlight;
     }
 
-    std::string GetLabel() const;
-    std::string GetEditableName() const;
-    std::string GetFullPath() const;
-    std::string GetTypeLabel() const;
+    tstring GetLabel() const;
+    tstring GetEditableName() const;
+    tstring GetFullPath() const;
+    tstring GetTypeLabel() const;
     bool GetTypeColor( DWORD& color ) const;
     Asset::AssetType GetAssetType() const;
 

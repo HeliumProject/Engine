@@ -190,7 +190,7 @@ void SceneOutliner::Clear()
 ///////////////////////////////////////////////////////////////////////////////
 // Adds the specified tree item as a child of root.
 // 
-wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const std::string& name, i32 image, SceneOutlinerItemData* data, bool isSelected, bool countable)
+wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const tstring& name, i32 image, SceneOutlinerItemData* data, bool isSelected, bool countable)
 {
   LUNA_SCENE_SCOPE_TIMER( ("") );
   NOC_ASSERT(data); 
@@ -287,8 +287,8 @@ void SceneOutliner::UpdateItemCounts( const wxTreeItemId& node, int delta )
 
   if( finalCount > 0 )
   {
-    std::stringstream str; 
-    str << data->GetItemText() << " (" << finalCount << ")"; 
+    tstringstream str; 
+    str << data->GetItemText() << TXT( " (" ) << finalCount << TXT( ")" ); 
     m_TreeCtrl->SetItemText(node, str.str().c_str()); 
   }
   else
@@ -312,7 +312,7 @@ void SceneOutliner::UpdateItemVisibility( const wxTreeItemId& item, bool visible
   }
   else
   {
-    static wxColour color = wxTheColourDatabase->Find( "DARK TURQUOISE" );
+    static wxColour color = wxTheColourDatabase->Find( TXT( "DARK TURQUOISE" ) );
     m_TreeCtrl->SetItemTextColour( item, color );
   }
 }
@@ -457,11 +457,11 @@ void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
     if ( object->HasType( Reflect::GetType<Luna::SceneNode>() ) )
     {
       Luna::SceneNode* node = Reflect::DangerousCast< Luna::SceneNode >( object );
-      const std::string newName = args.GetLabel().c_str();
+      const tstring newName = args.GetLabel().c_str();
       if ( node->GetName() != newName )
       {
         // Create an undoable command to rename the object
-        m_CurrentScene->Push( new Undo::PropertyCommand<std::string>( new Nocturnal::MemberProperty<Luna::SceneNode, std::string> (node, &Luna::SceneNode::GetName, &Luna::SceneNode::SetGivenName), newName) );
+        m_CurrentScene->Push( new Undo::PropertyCommand<tstring>( new Nocturnal::MemberProperty<Luna::SceneNode, tstring> (node, &Luna::SceneNode::GetName, &Luna::SceneNode::SetGivenName), newName) );
         m_CurrentScene->Execute( false );
 
         // Sort

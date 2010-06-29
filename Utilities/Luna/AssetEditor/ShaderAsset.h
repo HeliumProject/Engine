@@ -32,7 +32,7 @@ namespace Luna
     ShaderAsset( Asset::ShaderAsset* shaderClass, Luna::AssetManager* manager );
   public:
     virtual ~ShaderAsset();
-    std::string GetIcon() const NOC_OVERRIDE;
+    tstring GetIcon() const NOC_OVERRIDE;
     virtual void PopulateContextMenu( ContextMenuItemSet& menu );
     virtual void Changed( Inspect::Control* control ) NOC_OVERRIDE;
     virtual void Unpack() NOC_OVERRIDE;

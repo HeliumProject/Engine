@@ -23,9 +23,9 @@ LUNA_DEFINE_TYPE(Luna::Locator);
 
 void Locator::InitializeType()
 {
-  Reflect::RegisterClass< Luna::Locator >( "Luna::Locator" );
+  Reflect::RegisterClass< Luna::Locator >( TXT( "Luna::Locator" ) );
 
-  Enumerator::InitializePanel( "Locator", CreatePanelSignature::Delegate( &Locator::CreatePanel ) );
+  Enumerator::InitializePanel( TXT( "Locator" ), CreatePanelSignature::Delegate( &Locator::CreatePanel ) );
 }
 
 void Locator::CleanupType()
@@ -52,12 +52,12 @@ Locator::~Locator()
 
 i32 Locator::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "locator.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "locator.png" ) );
 }
 
-std::string Locator::GetApplicationTypeName() const
+tstring Locator::GetApplicationTypeName() const
 {
-  return "Locator";
+  return TXT( "Locator" );
 }
 
 SceneNodeTypePtr Locator::CreateNodeType( Luna::Scene* scene ) const
@@ -169,9 +169,9 @@ bool Locator::Pick( PickVisitor* pick )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified panel is supported by Luna::Locator.
 // 
-bool Locator::ValidatePanel(const std::string& name)
+bool Locator::ValidatePanel(const tstring& name)
 {
-  if (name == "Locator")
+  if (name == TXT( "Locator" ) )
   {
     return true;
   }
@@ -181,26 +181,26 @@ bool Locator::ValidatePanel(const std::string& name)
 
 void Locator::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel("Locator", true);
+  args.m_Enumerator->PushPanel( TXT( "Locator" ), true);
   {
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Shape");
+      args.m_Enumerator->AddLabel( TXT( "Shape" ) );
 
       Inspect::Choice* choice = args.m_Enumerator->AddChoice<Luna::Locator, int>(args.m_Selection, &Locator::GetShape, &Locator::SetShape);
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::LocatorShapes::Cross;
-        items.push_back( Inspect::Item( "Cross", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Cross" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::LocatorShapes::Cube;
-        items.push_back( Inspect::Item( "Cube", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Cube" ), str.str() ) );
       }
 
       choice->SetItems( items );

@@ -82,8 +82,8 @@ namespace Luna
 
     void ConstructorInit();
 
-    virtual std::string GenerateName() const NOC_OVERRIDE;
-    virtual std::string GetApplicationTypeName() const NOC_OVERRIDE;
+    virtual tstring GenerateName() const NOC_OVERRIDE;
+    virtual tstring GetApplicationTypeName() const NOC_OVERRIDE;
     virtual SceneNodeTypePtr CreateNodeType( Luna::Scene* scene ) const NOC_OVERRIDE;
 
     // retrieve the nested scene from the scene manager
@@ -140,7 +140,7 @@ namespace Luna
 
     virtual bool Pick( PickVisitor* pick ) NOC_OVERRIDE;
 
-    virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
+    virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
 
   private:
     static void CreatePanel( CreatePanelArgs& args );
@@ -151,11 +151,11 @@ namespace Luna
     //
 
   public:
-    std::string GetEntityAssetPath() const;
-    void SetEntityAssetPath( const std::string& entityClass );
+    tstring GetEntityAssetPath() const;
+    void SetEntityAssetPath( const tstring& entityClass );
 
-    std::string GetAssetTypeName() const;
-    void SetAssetTypeName( const std::string& type );
+    tstring GetAssetTypeName() const;
+    void SetAssetTypeName( const tstring& type );
 
   public:
 

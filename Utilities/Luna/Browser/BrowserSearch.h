@@ -32,7 +32,7 @@ namespace Luna
     class BrowserSearch : public Nocturnal::RefCountBase< BrowserSearch >
     {
     public:
-        BrowserSearch( const std::string& rootDirectory, const std::string& configDirectory );
+        BrowserSearch( const tstring& rootDirectory, const tstring& configDirectory );
         ~BrowserSearch();
 
         bool RequestSearch( SearchQuery* searchQuery );
@@ -45,8 +45,8 @@ namespace Luna
         // Members
         //
 
-        std::string       m_RootDirectory;
-        std::string       m_ConfigDirectory;
+        tstring       m_RootDirectory;
+        tstring       m_ConfigDirectory;
 
         // SearchResults and Status
         // DO NO CHANGE OR ACCESS outside of m_SearchResultsMutex
@@ -82,7 +82,7 @@ namespace Luna
         bool CheckSearchThreadLeave( i32 searchID );
         void SearchThreadLeave( i32 searchID );
 
-        bool FoundAssetFile( const std::string& path );
+        bool FoundAssetFile( const tstring& path );
         u32 FoundAssetFile( Nocturnal::Path& assetPath );
         u32 FoundAssetFiles( const std::set< Nocturnal::Path >& assetFileRefs, i32 searchID );
         u32 FoundAssetFolder( Nocturnal::Path& folder, i32 searchID );

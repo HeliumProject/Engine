@@ -19,7 +19,7 @@ LightPanel::LightPanel( Enumerator* enumerator, const OS_SelectableDumbPtr& sele
 : m_Selection( selection )
 {
   m_Interpreter = m_Enumerator = enumerator;
-  m_Text = "Light";
+  m_Text = TXT( "Light" );
   m_Expanded = true;
 }
 

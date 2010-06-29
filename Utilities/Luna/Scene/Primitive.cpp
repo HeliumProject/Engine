@@ -7,7 +7,7 @@ LUNA_DEFINE_TYPE(Luna::Primitive);
 
 void Primitive::InitializeType()
 {
-  Reflect::RegisterClass< Luna::Primitive >( "Luna::Primitive" );
+  Reflect::RegisterClass< Luna::Primitive >( TXT( "Luna::Primitive" ) );
 }
 
 void Primitive::CleanupType()

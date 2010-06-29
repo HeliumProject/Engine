@@ -11,7 +11,7 @@ LUNA_DEFINE_TYPE( AssetDocument );
 
 void AssetDocument::InitializeType()
 {
-  Reflect::RegisterClass<AssetDocument>( "AssetDocument" );
+  Reflect::RegisterClass<AssetDocument>( TXT( "AssetDocument" ) );
 }
 
 void AssetDocument::CleanupType()

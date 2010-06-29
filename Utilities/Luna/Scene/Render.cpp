@@ -132,7 +132,7 @@ RenderEntry* RenderVisitor::Allocate(const SceneNode* node)
 
   if (m_EntryData.capacity() > capacity)
   {
-    Log::Debug("RenderEntries reallocated from %d to %d\n", capacity * sizeof(RenderEntry), m_EntryData.capacity() * sizeof(RenderEntry));
+    Log::Debug( TXT( "RenderEntries reallocated from %d to %d\n" ), capacity * sizeof(RenderEntry), m_EntryData.capacity() * sizeof(RenderEntry));
   }
 
   return &m_EntryData.back();
@@ -266,11 +266,22 @@ void RenderVisitor::Draw()
   }
 }
 
-bool Luna::IsSupportedTexture( const std::string& file )
+bool Luna::IsSupportedTexture( const tstring& file )
 {
-  static const char* extensions[] = { "*.bmp", "*.dds", "*.dib", "*.hdr", "*.jpg", "*.pfm", "*.png", "*.ppm", "*.tga", NULL };
+  static const tchar* extensions[] = {
+      TXT( "*.bmp" ),
+      TXT( "*.dds" ),
+      TXT( "*.dib" ),
+      TXT( "*.hdr" ),
+      TXT( "*.jpg" ),
+      TXT( "*.pfm" ),
+      TXT( "*.png" ),
+      TXT( "*.ppm" ),
+      TXT( "*.tga" ),
+      NULL
+  };
 
-  for ( const char** ext = extensions; *ext != NULL; ext++ )
+  for ( const tchar** ext = extensions; *ext != NULL; ext++ )
   {
     if ( WildcardMatch( *ext, file.c_str() ) )
     {
@@ -281,7 +292,7 @@ bool Luna::IsSupportedTexture( const std::string& file )
   return false;
 }
 
-IDirect3DTexture9* Luna::LoadTexture( IDirect3DDevice9* device, const std::string& file, u32* textureSize, bool* hasAlpha, D3DPOOL pool )
+IDirect3DTexture9* Luna::LoadTexture( IDirect3DDevice9* device, const tstring& file, u32* textureSize, bool* hasAlpha, D3DPOOL pool )
 {
   IDirect3DTexture9* texture = NULL;
   bool alpha = false;
@@ -401,12 +412,12 @@ IDirect3DTexture9* Luna::LoadTexture( IDirect3DDevice9* device, const std::strin
       }
       else
       {
-        Log::Warning( "Unable to create texture from file '%s'\n", file.c_str() );
+        Log::Warning( TXT( "Unable to create texture from file '%s'\n" ), file.c_str() );
       }
     }
     else
     {
-      Log::Warning( "File '%s' does not exist\n", file.c_str() );
+      Log::Warning( TXT( "File '%s' does not exist\n" ), file.c_str() );
     }
   }
 

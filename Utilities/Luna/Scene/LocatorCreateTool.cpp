@@ -16,7 +16,7 @@ LUNA_DEFINE_TYPE(Luna::LocatorCreateTool);
 
 void LocatorCreateTool::InitializeType()
 {
-  Reflect::RegisterClass< Luna::LocatorCreateTool >( "Luna::LocatorCreateTool" );
+  Reflect::RegisterClass< Luna::LocatorCreateTool >( TXT( "Luna::LocatorCreateTool" ) );
 }
 
 void LocatorCreateTool::CleanupType()
@@ -68,26 +68,26 @@ Luna::TransformPtr LocatorCreateTool::CreateNode()
 
 void LocatorCreateTool::CreateProperties()
 {
-  m_Enumerator->PushPanel("Locator", true);
+  m_Enumerator->PushPanel( TXT( "Locator" ), true);
   {
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Shape");
+      m_Enumerator->AddLabel( TXT( "Shape" ) );
 
       Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::LocatorCreateTool, int>(this, &LocatorCreateTool::GetLocatorShape, &LocatorCreateTool::SetLocatorShape) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::LocatorShapes::Cross;
-        items.push_back( Inspect::Item( "Cross", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Cross" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::LocatorShapes::Cube;
-        items.push_back( Inspect::Item( "Cube", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Cube" ), str.str() ) );
       }
 
       choice->SetItems( items );

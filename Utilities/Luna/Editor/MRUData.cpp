@@ -12,7 +12,7 @@ void MRUData::EnumerateClass( Reflect::Compositor<MRUData>& comp )
 
 void MRUData::InitializeType()
 {
-  Reflect::RegisterClass<MRUData>( "MRUData" );
+  Reflect::RegisterClass<MRUData>( TXT( "MRUData" ) );
 }
 
 void MRUData::CleanupType()
@@ -28,12 +28,12 @@ MRUData::~MRUData()
 {
 }
 
-const std::vector< std::string >& MRUData::GetPaths() const
+const std::vector< tstring >& MRUData::GetPaths() const
 {
   return m_Paths;
 }
 
-void MRUData::SetPaths( const std::vector< std::string >& paths )
+void MRUData::SetPaths( const std::vector< tstring >& paths )
 {
   if ( paths != m_Paths )
   {

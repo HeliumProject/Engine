@@ -29,9 +29,9 @@ struct ScaleColorInfo
 
 void Transform::InitializeType()
 {
-  Reflect::RegisterClass< Luna::Transform >( "Luna::Transform" );
+  Reflect::RegisterClass< Luna::Transform >( TXT( "Luna::Transform" ) );
 
-  Enumerator::InitializePanel("Transform", CreatePanelSignature::Delegate( &Transform::CreatePanel ));
+  Enumerator::InitializePanel( TXT( "Transform" ), CreatePanelSignature::Delegate( &Transform::CreatePanel ));
 }
 
 void Transform::CleanupType()
@@ -461,9 +461,9 @@ void Transform::ConnectManipulator(ManiuplatorAdapterCollection* collection)
   }
 }
 
-bool Transform::ValidatePanel(const std::string& name)
+bool Transform::ValidatePanel(const tstring& name)
 {
-  if (name == "Transform")
+  if (name == TXT( "Transform" ) )
   {
     return true;
   }
@@ -473,18 +473,18 @@ bool Transform::ValidatePanel(const std::string& name)
 
 void Transform::CreatePanel(CreatePanelArgs& args)
 {
-  args.m_Enumerator->PushPanel("Transform", true);
+  args.m_Enumerator->PushPanel( TXT( "Transform" ), true);
 
   {
     args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel("Inherit Transform");
+    args.m_Enumerator->AddLabel( TXT( "Inherit Transform" ) );
     args.m_Enumerator->AddCheckBox<Luna::Transform, bool>(args.m_Selection, &Transform::GetInheritTransform, &Transform::SetInheritTransform);
     args.m_Enumerator->Pop();
   }
 
   {
     args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel("Scale");
+    args.m_Enumerator->AddLabel( TXT( "Scale" ) );
     args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetScaleX, &Transform::SetScaleX);
     args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetScaleY, &Transform::SetScaleY);
     args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetScaleZ, &Transform::SetScaleZ);
@@ -493,7 +493,7 @@ void Transform::CreatePanel(CreatePanelArgs& args)
 
   {
     args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel("Rotate");
+    args.m_Enumerator->AddLabel( TXT( "Rotate" ) );
     args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetRotateX, &Transform::SetRotateX);
     args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetRotateY, &Transform::SetRotateY);
     args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetRotateZ, &Transform::SetRotateZ);
@@ -502,7 +502,7 @@ void Transform::CreatePanel(CreatePanelArgs& args)
 
   {
     args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel("Translate");
+    args.m_Enumerator->AddLabel( TXT( "Translate" ) );
     args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetTranslateX, &Transform::SetTranslateX);
     args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetTranslateY, &Transform::SetTranslateY);
     args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetTranslateZ, &Transform::SetTranslateZ);

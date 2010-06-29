@@ -19,7 +19,7 @@
 
 using namespace Luna;
 
-static const std::string s_EmptyString = std::string("");
+static const tstring s_EmptyString = TXT("");
 
 BEGIN_EVENT_TABLE( CollectionsPanel, CollectionsPanelGenerated )
 EVT_MENU( BrowserMenu::ShowCollection, CollectionsPanel::OnShowCollection )
@@ -75,14 +75,14 @@ CollectionsPanel::CollectionsPanel( BrowserFrame* browserFrame )
     m_MyCollectionsTreeCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
     m_TempCollectionsTreeCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
 
-    m_ContainerImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( "folder.png" );
-    m_DependencyImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( "chart_organisation.png" );
-    m_UsageImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( "chart_organisation_reverse.png" );
+    m_ContainerImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "folder.png" ) );
+    m_DependencyImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "chart_organisation.png" ) );
+    m_UsageImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "chart_organisation_reverse.png" ) );
 
     m_MyCollectionsToolBar->SetToolBitmapSize( wxSize( 16, 16 ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewCollection, "", Nocturnal::GlobalImageManager().GetBitmap( "folder_add.png" ), BrowserMenu::Label( ID_NewCollection ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, "", Nocturnal::GlobalImageManager().GetBitmap( "chart_organisation_add.png" ), BrowserMenu::Label( ID_NewDependencyCollection ) + " - Files this asset depends on." );
-    m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, "", Nocturnal::GlobalImageManager().GetBitmap( "chart_organisation_reverse_add.png" ), BrowserMenu::Label( ID_NewUsageCollection ) + " - Files that use this asset." );
+    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_add.png" ) ), BrowserMenu::Label( ID_NewCollection ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, TXT( "" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "chart_organisation_add.png" ) ), BrowserMenu::Label( ID_NewDependencyCollection ) + TXT( " - Files this asset depends on." ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, TXT( "" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "chart_organisation_reverse_add.png" ) ), BrowserMenu::Label( ID_NewUsageCollection ) + TXT( " - Files that use this asset." ) );
     m_MyCollectionsToolBar->Realize();
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
@@ -159,12 +159,12 @@ void CollectionsPanel::OnMyCollectionsTitleMenu( wxMouseEvent& event )
     event.Skip();
 
     wxMenu* newMenu = new wxMenu();
-    newMenu->Append( ID_NewCollection, BrowserMenu::Label( ID_NewCollection ), BrowserMenu::Label( ID_NewCollection ) + " - Manually add and remove assets to this static collection." );
-    newMenu->Append( ID_NewDependencyCollection, BrowserMenu::Label( ID_NewDependencyCollection ) + " - Files this asset depends on." );
-    newMenu->Append( ID_NewUsageCollection, BrowserMenu::Label( ID_NewUsageCollection ), BrowserMenu::Label( ID_NewUsageCollection ) + " - Files that use this asset." );
+    newMenu->Append( ID_NewCollection, BrowserMenu::Label( ID_NewCollection ), BrowserMenu::Label( ID_NewCollection ) + TXT( " - Manually add and remove assets to this static collection." ) );
+    newMenu->Append( ID_NewDependencyCollection, BrowserMenu::Label( ID_NewDependencyCollection ) + TXT( " - Files this asset depends on." ) );
+    newMenu->Append( ID_NewUsageCollection, BrowserMenu::Label( ID_NewUsageCollection ), BrowserMenu::Label( ID_NewUsageCollection ) + TXT( " - Files that use this asset." ) );
 
     wxMenu menu;
-    menu.Append( wxID_ANY, "New Collection...", newMenu );
+    menu.Append( wxID_ANY, TXT( "New Collection..." ), newMenu );
     menu.AppendSeparator();
     //menu.Append( ID_OpenCollection, BrowserMenu::Label( ID_OpenCollection ) );
     menu.Append( ID_ImportCollection, BrowserMenu::Label( ID_ImportCollection ) );
@@ -248,14 +248,14 @@ void CollectionsPanel::OnMyCollectionsEndLabelEdit( wxTreeEvent& event )
         return;
     }
 
-    std::string errors;
+    tstring errors;
 
     collection->Freeze();
     bool renameResult = m_CollectionManager->RenameCollection( collection, labelValue.c_str(), errors );
     collection->Thaw();
     if ( !renameResult )
     {
-        wxMessageBox( errors.c_str(), "MyCollection Name Already In Use", wxCENTER | wxICON_WARNING | wxOK, this );
+        wxMessageBox( errors.c_str(), TXT( "MyCollection Name Already In Use" ), wxCENTER | wxICON_WARNING | wxOK, this );
         //treeCtrl->EditLabel( item );
         return;
     }
@@ -407,10 +407,10 @@ void CollectionsPanel::OnNewCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnOpenCollection( wxCommandEvent& event )
 {
-    Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_OpenCollection ), "", "", "",
+    Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_OpenCollection ), TXT( "" ), TXT( "" ), TXT( "" ),
         Nocturnal::FileDialogStyles::DefaultOpen | Nocturnal::FileDialogStyles::ShowAllFilesFilter | Nocturnal::FileDialogStyles::ExportFile );
 
-    std::vector< std::string > filters;
+    std::vector< tstring > filters;
     AssetCollection::GetFileFilters( filters );
     browserDlg.AddFilters( filters );
 
@@ -457,12 +457,12 @@ void CollectionsPanel::OnCloseCollection( wxCommandEvent& event )
     {
         if ( event.GetId() == ID_DeleteCollection )
         {
-            std::string warning = "Are you sure you'd like permenantly delete your collection \"";
-            warning += collection->GetName() + "\"?";
+            tstring warning = TXT( "Are you sure you'd like permenantly delete your collection \"" );
+            warning += collection->GetName() + TXT( "\"?" );
 
             if ( wxYES == 
                 wxMessageBox( warning,
-                "Delete Colleciton?", 
+                TXT( "Delete Colleciton?" ), 
                 wxCENTER | wxYES_NO | wxICON_WARNING,
                 this ) )
             {
@@ -515,10 +515,10 @@ void CollectionsPanel::OnImportIntoCollection( wxCommandEvent& event )
         return;
     }
 
-    Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_ImportIntoCollection ), "", "", "",
+    Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_ImportIntoCollection ), TXT( "" ), TXT( "" ), TXT( "" ),
         Nocturnal::FileDialogStyles::DefaultOpen | Nocturnal::FileDialogStyles::ShowAllFilesFilter | Nocturnal::FileDialogStyles::ExportFile );
 
-    std::vector< std::string > filters;
+    std::vector< tstring > filters;
     AssetCollection::GetFileFilters( filters );
     browserDlg.AddFilters( filters );
 
@@ -551,13 +551,13 @@ void CollectionsPanel::OnSaveCollection( wxCommandEvent& event )
     AssetCollection* collection = baseData->GetCollection<AssetCollection>();
     if ( collection )
     {
-        std::string defaultDir( collection->GetPath().Directory() );
-        std::string defaultFile( collection->GetPath().Filename() );
+        tstring defaultDir( collection->GetPath().Directory() );
+        tstring defaultFile( collection->GetPath().Filename() );
 
-        Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_SaveCollection ), defaultDir.c_str(), defaultFile.c_str(), "",
+        Nocturnal::FileDialog browserDlg( this, BrowserMenu::Label( ID_SaveCollection ), defaultDir.c_str(), defaultFile.c_str(), TXT( "" ),
             Nocturnal::FileDialogStyles::DefaultSave | Nocturnal::FileDialogStyles::ShowAllFilesFilter | Nocturnal::FileDialogStyles::ExportFile );
 
-        std::vector< std::string > filters;
+        std::vector< tstring > filters;
         AssetCollection::GetFileFilters( filters );
         browserDlg.AddFilters( filters );
 
@@ -831,7 +831,7 @@ wxDragResult CollectionsPanel::Drop( const Inspect::DragArgs& args )
 
 #pragma TODO( "Reimplement for Nocturnal::Path" )
     //// get the IDs
-    //std::string assetName;
+    //tstring assetName;
     //S_tuid assetIDs;
     //bool gotAllAssetIds = GetAssetIDsFromClipBoard( args.m_ClipboardData->FromBuffer(), assetIDs, assetName );
 
@@ -854,7 +854,7 @@ wxDragResult CollectionsPanel::Drop( const Inspect::DragArgs& args )
     //                        DependencyCollection* dependencyCollection = Reflect::ObjectCast<DependencyCollection>( collection );
     //                        if ( dependencyCollection->GetRootID() != assetID  )
     //                        {
-    //                            std::string warning = "Are you sure you'd like to change the existing asset from\n";
+    //                            tstring warning = "Are you sure you'd like to change the existing asset from\n";
     //                            warning += dependencyCollection->GetAssetName() + " to ";
     //                            warning += assetName + "?";
 
@@ -873,7 +873,7 @@ wxDragResult CollectionsPanel::Drop( const Inspect::DragArgs& args )
 
     //                                dependencyCollection->Freeze();
 
-    //                                std::string filePath;
+    //                                tstring filePath;
     //                                AssetCollection::CreateFilePath( assetName, filePath );
     //                                dependencyCollection->SetFilePath( filePath );
 
@@ -924,9 +924,9 @@ void CollectionsPanel::DragLeave( Nocturnal::Void )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-AssetCollection* CollectionsPanel::NewCollection( CollectionManager* collectionManager, const i32 typeID, const std::string& tryName )
+AssetCollection* CollectionsPanel::NewCollection( CollectionManager* collectionManager, const i32 typeID, const tstring& tryName )
 {
-    std::string name = tryName.empty() ? "New Collection" : tryName;
+    tstring name = tryName.empty() ? TXT( "New Collection" ) : tryName;
     collectionManager->GetUniqueName( name, name.c_str() );
 
     AssetCollectionPtr collection = NULL;
@@ -1050,7 +1050,7 @@ void CollectionsPanel::UpdateCollections()
         m_TempCollectionsTreeCtrl->Enable( tempItemsAdded > 0 );
         if ( tempItemsAdded < 1 )
         {
-            wxTreeItemId itemID = m_TempCollectionsTreeCtrl->AppendItem( m_TempCollectionsTreeCtrl->GetRootItem(), "None Available" );
+            wxTreeItemId itemID = m_TempCollectionsTreeCtrl->AppendItem( m_TempCollectionsTreeCtrl->GetRootItem(), TXT( "None Available" ) );
         }
     }
     PostPopulateTreeCtrl( m_MyCollectionsTreeCtrl );
@@ -1064,7 +1064,7 @@ void CollectionsPanel::PrePopulateTreeCtrl( Nocturnal::SortTreeCtrl* treeCtrl )
     treeCtrl->DeleteAllItems();
 
     // Always add the root
-    wxTreeItemId root = treeCtrl->AddRoot( "HIDDEN ROOT" );
+    wxTreeItemId root = treeCtrl->AddRoot( TXT( "HIDDEN ROOT" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1104,13 +1104,13 @@ AssetCollectionItemData* CollectionsPanel::GetItemData( Nocturnal::SortTreeCtrl*
 
         if ( !data )
         {
-            Log::Error( "Tree item (%x: %s) does not have asset data associated with it\n", id.m_pItem, treeCtrl->GetItemText( id ).c_str() );
+            Log::Error( TXT( "Tree item (%x: %s) does not have asset data associated with it\n" ), id.m_pItem, treeCtrl->GetItemText( id ).c_str() );
             NOC_BREAK();
         }
     }
     else
     {
-        Log::Error( "Tree item does not have asset data associated with it!\n" );
+        Log::Error( TXT( "Tree item does not have asset data associated with it!\n" ) );
         NOC_BREAK();
     }
 

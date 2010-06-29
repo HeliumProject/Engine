@@ -55,7 +55,7 @@ BuildCommand::~BuildCommand()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool BuildCommand::Initialize( std::string& error )
+bool BuildCommand::Initialize( tstring& error )
 {
     bool result = true;
     
@@ -67,8 +67,8 @@ bool BuildCommand::Initialize( std::string& error )
     result &= AddOption( new FlagOption( &m_DisableCacheFilesFlag, "disable_cache_files", "disable upload/download via cache file storage" ), error );
     //DISABLED: result &= AddOption( new FlagOption( &m_SingleThreadFlag, "single_thread", "disable processing using multiple threads" ), error );
     result &= AddOption( new FlagOption( &m_WorkerFlag, "worker", "disable processing using multiple threads" ), error );
-    result &= AddOption( new SimpleOption<std::string>( &m_HackFileSpecOption, "hack_filespec", "<SPEC>", "invalidate the format version of a FileSpec" ), error );
-    result &= AddOption( new SimpleOption<std::vector<std::string>>( &m_RegionOption, "region", "<REGION> [<REGION> ...]", "only build the listed regions" ), error );
+    result &= AddOption( new SimpleOption<tstring>( &m_HackFileSpecOption, "hack_filespec", "<SPEC>", "invalidate the format version of a FileSpec" ), error );
+    result &= AddOption( new SimpleOption<std::vector<tstring>>( &m_RegionOption, "region", "<REGION> [<REGION> ...]", "only build the listed regions" ), error );
     result &= AddOption( new FlagOption( &m_HelpFlag, "h|help", "print command usage" ), error );
 
     return result;
@@ -80,7 +80,7 @@ void BuildCommand::Cleanup()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool BuildCommand::Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error )
+bool BuildCommand::Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error )
 {
     if ( !ParseOptions( argsBegin, argsEnd, error ) )
     {
@@ -95,7 +95,7 @@ bool BuildCommand::Process( std::vector< std::string >::const_iterator& argsBegi
 
     if ( argsBegin != argsEnd )
     {
-        const std::string& arg = (*argsBegin);
+        const tstring& arg = (*argsBegin);
         ++argsBegin;
 
         if ( arg.length() )
@@ -107,7 +107,7 @@ bool BuildCommand::Process( std::vector< std::string >::const_iterator& argsBegi
 
     if ( m_SearchQuery.empty() )
     {
-        error = std::string( "Please pass an asset to build." );
+        error = tstring( "Please pass an asset to build." );
         return false;
     }
 
@@ -176,7 +176,7 @@ void BuildCommand::AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
 #pragma TODO ("Re-enable worker stuff")
     //if ( m_WorkerFlag )
     //{
-    //    std::stringstream stream;
+    //    tstringstream stream;
 
     //    try
     //    {
@@ -193,7 +193,7 @@ void BuildCommand::AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args )
 }
 
 ///////////////////////////////////////////////////////////////////////////
-bool BuildCommand::QueryAssetPaths( const std::string& searchQuery, bool noMultiple, bool all, std::set< Nocturnal::Path >& assetPaths )
+bool BuildCommand::QueryAssetPaths( const tstring& searchQuery, bool noMultiple, bool all, std::set< Nocturnal::Path >& assetPaths )
 { 
     // get the asset files they want to build
     int maxMatches = noMultiple ? 1 : ( all ? -1 : MAX_MATCHES );
@@ -232,13 +232,13 @@ void BuildCommand::Except( const Nocturnal::Exception& ex, const Asset::AssetCla
     // for this option if it becomes useful.
     Debug::ProcessException( ex );
 
-    std::string type;
+    tstring type;
     try
     {
         type = typeid(ex).name();
 
         size_t pos = type.find_first_of(" ");
-        if (pos != std::string::npos && pos < type.length()-1)
+        if (pos != tstring::npos && pos < type.length()-1)
         {
             type = type.substr( pos+1 );
         }
@@ -248,7 +248,7 @@ void BuildCommand::Except( const Nocturnal::Exception& ex, const Asset::AssetCla
         type = "Exception";
     }
 
-    std::ostringstream message;
+    tostringstream message;
     if (assetClass.ReferencesObject())
     {
         message << type << " while building '" << assetClass->GetFullName() << "': " << ex.What() << std::endl;
@@ -262,7 +262,7 @@ void BuildCommand::Except( const Nocturnal::Exception& ex, const Asset::AssetCla
 
     if ( m_GenerateReportFlag )
     {
-        std::ostringstream subject;
+        tostringstream subject;
         subject << "Error Report: " << Nocturnal::GetCmdLine();
 
         //    Windows::SendMail( subject.str(), message.str() );
@@ -275,8 +275,8 @@ void BuildCommand::Report(Asset::AssetClass* assetClass)
 {
     if (m_GenerateReportFlag && (Log::GetErrorCount() || Log::GetWarningCount()))
     {
-        std::string line;
-        std::fstream file ( std::string( assetClass->GetBuiltDirectory() + "error.txt" ).c_str() );
+        tstring line;
+        std::fstream file ( tstring( assetClass->GetBuiltDirectory() + "error.txt" ).c_str() );
         if ( !file.fail() )
         {
             Platform::Print( Platform::ConsoleColors::White, stderr, "Warnings and Errors:\n" );
@@ -301,7 +301,7 @@ void BuildCommand::Report(Asset::AssetClass* assetClass)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool BuildCommand::Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const std::vector< std::string >& options )
+bool BuildCommand::Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const std::vector< tstring >& options )
 {
     bool success = true;
 

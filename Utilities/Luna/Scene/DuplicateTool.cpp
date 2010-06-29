@@ -14,7 +14,7 @@ LUNA_DEFINE_TYPE(Luna::DuplicateTool);
 
 void DuplicateTool::InitializeType()
 {
-  Reflect::RegisterClass< Luna::DuplicateTool >( "Luna::DuplicateTool" );
+  Reflect::RegisterClass< Luna::DuplicateTool >( TXT( "Luna::DuplicateTool" ) );
 }
 
 void DuplicateTool::CleanupType()

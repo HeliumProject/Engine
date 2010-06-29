@@ -13,10 +13,10 @@ namespace Luna
   class LevelInfo : public Nocturnal::RefCountBase< LevelInfo >
   {
   public:
-    std::string m_Name;
+    tstring m_Name;
     bool m_HasServerData;
 
-    std::string GetStrippedName() const;
+    tstring GetStrippedName() const;
   };
   typedef Nocturnal::SmartPtr< LevelInfo > LevelInfoPtr;
   typedef std::vector< LevelInfoPtr > V_LevelInfo;
@@ -27,15 +27,15 @@ namespace Luna
   class BuildInfo : public Nocturnal::RefCountBase< BuildInfo >
   {
   public:
-    std::string m_Name;
+    tstring m_Name;
     __time64_t m_Timestamp;
     bool m_CodeSucceeded;
     bool m_SymbolsSucceeded; // "xml" in build server lingo
-    std::string m_Template;
+    tstring m_Template;
     V_LevelInfo m_Levels;
 
   public:
-    BuildInfo( const std::string& name = "" ); 
+    BuildInfo( const tstring& name = TXT( "" ) ); 
     virtual ~BuildInfo();
 
     bool Succeeded() const;

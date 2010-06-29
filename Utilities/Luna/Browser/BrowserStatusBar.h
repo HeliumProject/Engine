@@ -40,7 +40,7 @@ namespace Luna
     wxAnimationCtrl*  m_Throbber;
     wxStaticText*     m_Message;
     wxTimer           m_ProgressTimer;
-    std::string       m_PercentComplete;
+    tstring       m_PercentComplete;
 
     DECLARE_EVENT_TABLE()
   };

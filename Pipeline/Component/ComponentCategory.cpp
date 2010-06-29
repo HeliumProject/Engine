@@ -7,7 +7,7 @@ REFLECT_DEFINE_CLASS( ComponentCategory );
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-ComponentCategory::ComponentCategory( ComponentCategoryType type, u32 sortGroup, const std::string& name, const std::string& shortDesc, const std::string& longDesc )
+ComponentCategory::ComponentCategory( ComponentCategoryType type, u32 sortGroup, const tstring& name, const tstring& shortDesc, const tstring& longDesc )
 : m_Type( type )
 , m_SortGroup( sortGroup )
 , m_Name( name )

@@ -17,7 +17,7 @@ void DependencyCollection::EnumerateClass( Reflect::Compositor<DependencyCollect
 
 /////////////////////////////////////////////////////////////////////////////
 DependencyCollection::DependencyCollection()
-: AssetCollection( "", AssetCollectionFlags::Dynamic )
+: AssetCollection( TXT( "" ), AssetCollectionFlags::Dynamic )
 , m_IsReverse( false )
 , m_AssetFile( NULL )
 , m_IsLoading( false )
@@ -26,7 +26,7 @@ DependencyCollection::DependencyCollection()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-DependencyCollection::DependencyCollection( const std::string& name, const u32 flags, const bool reverse )
+DependencyCollection::DependencyCollection( const tstring& name, const u32 flags, const bool reverse )
 : AssetCollection( name, flags | AssetCollectionFlags::Dynamic )
 , m_IsReverse( reverse )
 , m_AssetFile( NULL )
@@ -75,20 +75,20 @@ void DependencyCollection::PostDeserialize()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-std::string DependencyCollection::GetDisplayName() const
+tstring DependencyCollection::GetDisplayName() const
 {
-    std::stringstream stream;
+    tstringstream stream;
     stream << GetName();
-    stream << " (" ;
+    stream << TXT( " (" );
     if ( IsLoading() )
     {
-        stream << "Loading...";
+        stream << TXT( "Loading..." );
     }
     else
     {
-        stream << GetAssetPaths().size() << " " << ( ( GetAssetPaths().size() == 1 ) ? "item" : "items" );
+        stream << GetAssetPaths().size() << TXT( " " ) << ( ( GetAssetPaths().size() == 1 ) ? TXT( "item" ) : TXT( "items" ) );
     }
-    stream << ")";
+    stream << TXT( ")" );
 
     return stream.str();
 }
@@ -105,9 +105,9 @@ void DependencyCollection::SetRoot( const Nocturnal::Path& path )
 }
 
 /////////////////////////////////////////////////////////////////////////////
-std::string DependencyCollection::GetAssetName() const
+tstring DependencyCollection::GetAssetName() const
 {
-    std::string assetName;
+    tstring assetName;
     if ( m_AssetFile )
     {
         assetName = m_AssetFile->GetPath().Filename();

@@ -19,7 +19,7 @@ LUNA_DEFINE_TYPE( Luna::PersistentNode );
 // 
 void PersistentNode::InitializeType()
 {
-  Reflect::RegisterClass<Luna::PersistentNode>( "Luna::PersistentNode" );
+  Reflect::RegisterClass<Luna::PersistentNode>( TXT( "Luna::PersistentNode" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

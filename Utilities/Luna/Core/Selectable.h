@@ -47,7 +47,7 @@ namespace Luna
     virtual void ConnectProperties(EnumerateElementArgs& args);
 
     // validate a named panel as usable
-    virtual bool ValidatePanel(const std::string& name);
+    virtual bool ValidatePanel(const tstring& name);
   };
 
   // Smart pointer to an Selectable

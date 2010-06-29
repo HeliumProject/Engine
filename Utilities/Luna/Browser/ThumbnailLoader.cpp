@@ -115,7 +115,7 @@ void* ThumbnailLoader::LoadThread::Entry()
             }
 
             // Include the color map of a shader as a possible thumbnail image
-            if ( file->GetPath().FullExtension() == "shader.rb" )
+            if ( file->GetPath().FullExtension() == TXT( "shader.rb" ) )
             {
                 Asset::ShaderAssetPtr shader = Reflect::ObjectCast< Asset::ShaderAsset >( Asset::AssetFile::GetAssetClass( file ) );
                 if ( shader )
@@ -146,7 +146,7 @@ void* ThumbnailLoader::LoadThread::Entry()
     return NULL;
 }
 
-ThumbnailLoader::ThumbnailLoader( Render::D3DManager* d3dManager, const std::string& thumbnailDirectory )
+ThumbnailLoader::ThumbnailLoader( Render::D3DManager* d3dManager, const tstring& thumbnailDirectory )
 : m_LoadThread( *this )
 , m_Quit( false )
 , m_ThumbnailDirectory( thumbnailDirectory )

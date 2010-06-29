@@ -20,7 +20,7 @@ namespace Luna
     S_tuid m_AssetIds;
     bool   m_Recursive;
     bool   m_SetupLighting;
-    std::string m_StateTrackerFile;
+    tstring m_StateTrackerFile;
 
     ExportParams()
       : m_Recursive( false )
@@ -33,7 +33,7 @@ namespace Luna
   {
   public:
     bool m_Recursive;
-    std::string m_StateTrackerFile;
+    tstring m_StateTrackerFile;
     bool   m_SetupLighting;
 
     ExportOptions()

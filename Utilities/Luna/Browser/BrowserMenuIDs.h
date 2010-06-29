@@ -88,81 +88,81 @@ namespace Luna
     static const u32 s_Count = COUNT_PLUS_START - START;
 
     ///////////////////////////////////////////////////////////////////////////
-    static const std::string s_Labels[s_Count] = 
+    static const tstring s_Labels[s_Count] = 
     {
-      "INVALID", // placeholder for START
+      TXT( "INVALID" ), // placeholder for START
 
-      "Folders",
-      "Collections",
-      "Help",
+      TXT( "Folders" ),
+      TXT( "Collections" ),
+      TXT( "Help" ),
 
-      "Small",
-      "Medium",
-      "Large",
-      "Details",
+      TXT( "Small" ),
+      TXT( "Medium" ),
+      TXT( "Large" ),
+      TXT( "Details" ),
 
-      "Advanced Search",
-      "Go",
-      "Cancel",
+      TXT( "Advanced Search" ),
+      TXT( "Go" ),
+      TXT( "Cancel" ),
 
-      "Path (Windows Format)",
-      "Path (Clean Format)",
+      TXT( "Path (Windows Format)" ),
+      TXT( "Path (Clean Format)" ),
 
-      "Sync",
-      "Check Out",
-      "Revision History",
+      TXT( "Sync" ),
+      TXT( "Check Out" ),
+      TXT( "Revision History" ),
 
-      "Open",
-      "Preview",
+      TXT( "Open" ),
+      TXT( "Preview" ),
 
-      "Refresh",
+      TXT( "Refresh" ),
 
-      "New",
-      "New Folder",
-      "Cut",
-      "Copy",
-      "Paste",
-      "Rename",
-      "Delete",
-      "Properties",
+      TXT( "New" ),
+      TXT( "New Folder" ),
+      TXT( "Cut" ),
+      TXT( "Copy" ),
+      TXT( "Paste" ),
+      TXT( "Rename" ),
+      TXT( "Delete" ),
+      TXT( "Properties" ),
 
-      "Select All\tCtrl+A",
+      TXT( "Select All\tCtrl+A" ),
 
-      "Sort",
-      "Name",
-      "Type",
+      TXT( "Sort" ),
+      TXT( "Name" ),
+      TXT( "Type" ),
 
-      "Folders",
-      "Show in Revision Control",
-      "Windows Explorer", 
+      TXT( "Folders" ),
+      TXT( "Show in Revision Control" ),
+      TXT( "Windows Explorer" ), 
 
-      "Show",
+      TXT( "Show" ),
 
-      "Static Collection",
-      "Dependency Collection",
-      "Usage Collection",
+      TXT( "Static Collection" ),
+      TXT( "Dependency Collection" ),
+      TXT( "Usage Collection" ),
 
-      "Static Collection",
-      "Asset Dependencies Collection",
-      "Asset Usage Collection",
+      TXT( "Static Collection" ),
+      TXT( "Asset Dependencies Collection" ),
+      TXT( "Asset Usage Collection" ),
 
-      "Open",
-      "Close",
+      TXT( "Open" ),
+      TXT( "Close" ),
 
-      "Rename",
-      "Delete",
+      TXT( "Rename" ),
+      TXT( "Delete" ),
 
-      "Import...",
-      "Import into...",
-      "Export...",
+      TXT( "Import..." ),
+      TXT( "Import into..." ),
+      TXT( "Export..." ),
 
-      "Add Selected Assets",
-      "Remove Selected Assets",
+      TXT( "Add Selected Assets" ),
+      TXT( "Remove Selected Assets" ),
 
-      "Customize Preferences...",
+      TXT( "Customize Preferences..." ),
     };
     
-    inline const std::string& Label( i32 id )
+    inline const tstring& Label( i32 id )
     {
       NOC_ASSERT( id > START );
       NOC_ASSERT( id < COUNT_PLUS_START );
@@ -180,10 +180,10 @@ namespace Luna
       Medium = 128,
       Large = 256
     };
-    inline std::string Label( ThumbnailSize size )
+    inline tstring Label( ThumbnailSize size )
     {
-      std::stringstream str;
-      str << "(" << size << "x" << size << ")";
+      tstringstream str;
+      str << TXT( "(" ) << size << TXT( "x" ) << size << TXT( ")" );
       return str.str();
     }
   }
@@ -202,10 +202,10 @@ namespace Luna
 
     static void ViewOptionIDEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Small, "Small");
-      info->AddElement(Medium, "Medium");
-      info->AddElement(Large, "Large");
-      info->AddElement(Custom, "Custom");
+      info->AddElement(Small, TXT( "Small" ) );
+      info->AddElement(Medium, TXT( "Medium" ) );
+      info->AddElement(Large, TXT( "Large" ) );
+      info->AddElement(Custom, TXT( "Custom" ) );
     }
   }
   typedef ViewOptionIDs::ViewOptionID ViewOptionID;

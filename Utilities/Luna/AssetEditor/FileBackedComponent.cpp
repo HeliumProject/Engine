@@ -89,32 +89,32 @@ void FileBackedComponent::PopulateContextMenu( ContextMenuItemSet& menu )
     const size_t numSelected = GetAssetManager()->GetSelection().GetItems().Size();
 
     menu.AppendSeparator();
-    ContextMenuItemPtr menuItem = new ContextMenuItem( "Edit", "Open file in the appropriate editor." );
+    ContextMenuItemPtr menuItem = new ContextMenuItem( TXT( "Edit" ), TXT( "Open file in the appropriate editor." ) );
     menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedComponent::OnOpen ) );
     menu.AppendItem( menuItem );
 
     menu.AppendSeparator();
-    SubMenuPtr rcsSubMenu = new SubMenu( "Perforce" );
+    SubMenuPtr rcsSubMenu = new SubMenu( TXT( "Perforce" ) );
 
-    menuItem = new ContextMenuItem( "Check Out" );
+    menuItem = new ContextMenuItem( TXT( "Check Out" ) );
     menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedComponent::OnCheckOutPath ) );
     rcsSubMenu->AppendItem( menuItem );
 
-    menuItem = new ContextMenuItem( "Revision History" );
+    menuItem = new ContextMenuItem( TXT( "Revision History" ) );
     menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedComponent::OnRevisionHistoryPath ) );
     rcsSubMenu->AppendItem( menuItem );
 
     menu.AppendItem( rcsSubMenu );
 
     menu.AppendSeparator();
-    menuItem = new ContextMenuItem( "Change File Path", "Change this file's path using the Open File dialog" );
+    menuItem = new ContextMenuItem( TXT( "Change File Path" ), TXT( "Change this file's path using the Open File dialog" ) );
     menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedComponent::OnChangePath ) );
     menuItem->Enable( numSelected == 1 );
     menu.AppendItem( menuItem );
 
 
     wxBitmap finderIcon = Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/system-search.png" ) ) ;
-    menuItem = new ContextMenuItem( "Change File Path (Asset Finder)", "Change this file's path using the Asset Finder", finderIcon );
+    menuItem = new ContextMenuItem( TXT( "Change File Path (Asset Finder)" ), TXT( "Change this file's path using the Asset Finder" ), finderIcon );
     menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedComponent::OnChangePathFinder ) );
     menuItem->Enable( numSelected == 1 );
     menu.AppendItem( menuItem );

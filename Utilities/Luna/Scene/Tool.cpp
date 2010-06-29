@@ -7,7 +7,7 @@ LUNA_DEFINE_TYPE(Luna::Tool);
 
 void Tool::InitializeType()
 {
-  Reflect::RegisterClass< Luna::Tool >( "Luna::Tool" );
+  Reflect::RegisterClass< Luna::Tool >( TXT( "Luna::Tool" ) );
 }
 
 void Tool::CleanupType()

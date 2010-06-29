@@ -30,7 +30,7 @@ namespace Luna
     const Reflect::Field* GetField() const;
 
     bool HasFlag( u32 flag ) const;
-    std::string GetValue() const;
+    tstring GetValue() const;
 
     virtual void HandleFieldChanged();
 

@@ -16,7 +16,7 @@ LUNA_DEFINE_TYPE( Luna::ComponentNode );
 // 
 void ComponentNode::InitializeType()
 {
-  Reflect::RegisterClass<Luna::ComponentNode>( "Luna::ComponentNode" );
+  Reflect::RegisterClass<Luna::ComponentNode>( TXT( "Luna::ComponentNode" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ void ComponentNode::PreShowContextMenu()
   // Allow the attribute to populate the context menu
   ContextMenuItemSet& contextMenu = GetContextMenu();
   contextMenu.Clear();
-  ContextMenuItemPtr menuItem = new ContextMenuItem( "Remove Component" );
+  ContextMenuItemPtr menuItem = new ContextMenuItem( TXT( "Remove Component" ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( GetAssetManager()->GetAssetEditor(), &AssetEditor::RemoveSelectedComponents ) );
   contextMenu.AppendItem( menuItem );
 

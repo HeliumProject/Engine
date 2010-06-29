@@ -45,7 +45,7 @@ public:
 
 void Curve::InitializeType()
 {
-  Reflect::RegisterClass< Luna::Curve >( "Luna::Curve" );
+  Reflect::RegisterClass< Luna::Curve >( TXT( "Luna::Curve" ) );
 
   ZeroMemory(&s_Material, sizeof(s_Material));
   s_Material.Ambient = Luna::Color::FORESTGREEN;
@@ -53,7 +53,7 @@ void Curve::InitializeType()
   ZeroMemory(&s_HullMaterial, sizeof(s_HullMaterial));
   s_HullMaterial.Ambient = Luna::Color::GRAY;
 
-  Enumerator::InitializePanel( "Curve", CreatePanelSignature::Delegate( &Curve::CreatePanel ) );
+  Enumerator::InitializePanel( TXT( "Curve" ), CreatePanelSignature::Delegate( &Curve::CreatePanel ) );
 }
 
 void Curve::CleanupType()
@@ -87,12 +87,12 @@ Curve::~Curve()
 
 i32 Curve::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "curve.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "curve.png" ) );
 }
 
-std::string Curve::GetApplicationTypeName() const
+tstring Curve::GetApplicationTypeName() const
 {
-  return "Curve";
+  return TXT( "Curve" );
 }
 
 void Curve::Initialize()
@@ -871,7 +871,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
       const Math::Matrix4& projMatrix = camera->GetProjection();
       ID3DXFont* font = curve->GetScene()->GetView()->GetStatistics()->GetFont();
       DWORD color = D3DCOLOR_ARGB(255, 255, 255, 255);
-      char textBuf[256];
+      tchar textBuf[256];
 
       device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
       OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
@@ -888,11 +888,11 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
 
           if ( curve->GetControlPointLabel() != Content::ControlPointLabels::None )
           {
-            std::stringstream label;
+            tstringstream label;
             switch ( curve->GetControlPointLabel() )
             {
             case Content::ControlPointLabels::CurveAndIndex:
-              label << curve->GetName() << "[" << i << "]";
+              label << curve->GetName() << TXT( "[" ) << i << TXT( "]" );
               break;
 
             case Content::ControlPointLabels::IndexOnly:
@@ -919,8 +919,8 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
             rect.right = screenX;
             rect.bottom = screenY - 2;
 
-            sprintf_s( textBuf, sizeof( textBuf ), label.str().c_str(), i );
-            font->DrawTextA( NULL, textBuf, -1, &rect, DT_NOCLIP, color );
+            _stprintf_s( textBuf, sizeof( textBuf ), label.str().c_str(), i );
+            font->DrawText( NULL, textBuf, -1, &rect, DT_NOCLIP, color );
           }
           ++i;
         }
@@ -1013,9 +1013,9 @@ bool Curve::Pick( PickVisitor* pick )
   return pickHit;
 }
 
-bool Curve::ValidatePanel( const std::string& name )
+bool Curve::ValidatePanel( const tstring& name )
 {
-  if ( name == "Curve" )
+  if ( name == TXT( "Curve" ) )
   {
     return true;
   }
@@ -1025,25 +1025,25 @@ bool Curve::ValidatePanel( const std::string& name )
 
 void Curve::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel( "Curve", true);
+  args.m_Enumerator->PushPanel( TXT( "Curve" ), true);
   {
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Type" );
-      args.m_Enumerator->AddChoice<Luna::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( "CurveType" ), &Curve::GetCurveType, &Curve::SetCurveType );
+      args.m_Enumerator->AddLabel( TXT( "Type" ) );
+      args.m_Enumerator->AddChoice<Luna::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "CurveType" ) ), &Curve::GetCurveType, &Curve::SetCurveType );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Control Point Label" );
-      args.m_Enumerator->AddChoice<Luna::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( "ControlPointLabel" ), &Curve::GetControlPointLabel, &Curve::SetControlPointLabel );
+      args.m_Enumerator->AddLabel( TXT( "Control Point Label" ) );
+      args.m_Enumerator->AddChoice<Luna::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "ControlPointLabel" ) ), &Curve::GetControlPointLabel, &Curve::SetControlPointLabel );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Resolution" );
+      args.m_Enumerator->AddLabel( TXT( "Resolution" ) );
       Inspect::Slider* slider = args.m_Enumerator->AddSlider<Luna::Curve, u32>( args.m_Selection, &Curve::GetResolution, &Curve::SetResolution );
       slider->SetRangeMin( 1.0f, false );
       slider->SetRangeMax( 20.0f, false );
@@ -1052,23 +1052,23 @@ void Curve::CreatePanel( CreatePanelArgs& args )
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Closed" );
+      args.m_Enumerator->AddLabel( TXT( "Closed" ) );
       args.m_Enumerator->AddCheckBox<Luna::Curve, bool>( args.m_Selection, &Curve::GetClosed, &Curve::SetClosed );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Reverse Control Points" );
+      args.m_Enumerator->AddLabel( TXT( "Reverse Control Points" ) );
       Inspect::Action* button = args.m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( &Curve::OnReverseControlPoints ) );
-      button->SetIcon( "reverse.png" );
+      button->SetIcon( TXT( "reverse.png" ) );
       button->SetClientData( new SelectionDataObject( args.m_Selection ) );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Curve Length" );
+      args.m_Enumerator->AddLabel( TXT( "Curve Length" ) );
 
       typedef f32 ( Curve::*Getter )() const;
       typedef void ( Curve::*Setter )( const f32& );

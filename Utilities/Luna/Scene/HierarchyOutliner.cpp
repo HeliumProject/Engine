@@ -57,7 +57,7 @@ void HierarchyOutliner::AddHierarchyNodes()
     RecurseAddHierarchyNode( m_CurrentScene->GetRoot() );
 
     // The root item gets a special icon
-    i32 image = Nocturnal::GlobalImageManager().GetImageIndex( "world.png" );
+    i32 image = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "world.png" ) );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Normal );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Expanded );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Selected );
@@ -118,7 +118,7 @@ void HierarchyOutliner::AddHierarchyNode( Luna::HierarchyNode* node )
 // 
 Nocturnal::SortTreeCtrl* HierarchyOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
 {
-  Nocturnal::SortTreeCtrl* tree = new Nocturnal::SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_MULTIPLE | wxTR_EDIT_LABELS, wxDefaultValidator, "HierarchyOutliner" );
+  Nocturnal::SortTreeCtrl* tree = new Nocturnal::SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_MULTIPLE | wxTR_EDIT_LABELS, wxDefaultValidator, wxT( "HierarchyOutliner" ) );
 
   // Override dynamic GUI event handlers here
   tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_BEGIN_DRAG, wxTreeEventHandler( HierarchyOutliner::OnBeginDrag ), NULL, this );

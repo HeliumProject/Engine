@@ -24,7 +24,7 @@ namespace Luna
     private:
         Nocturnal::InitializerStack m_InitializerStack;
 
-        std::string m_SearchQuery;
+        tstring m_SearchQuery;
         std::set< Nocturnal::Path > m_AssetPaths;
 
         bool m_HelpFlag;
@@ -36,8 +36,8 @@ namespace Luna
         bool m_DisableCacheFilesFlag;
         bool m_SingleThreadFlag;
         bool m_WorkerFlag;
-        std::string m_HackFileSpecOption;
-        std::vector< std::string> m_RegionOption;
+        tstring m_HackFileSpecOption;
+        std::vector< tstring> m_RegionOption;
 
     public:
         BuildCommand();
@@ -45,16 +45,16 @@ namespace Luna
 
         static void AssetBuilt( const AssetBuilder::AssetBuiltArgsPtr& args );
 
-        virtual bool Initialize( std::string& error ) NOC_OVERRIDE;
+        virtual bool Initialize( tstring& error ) NOC_OVERRIDE;
         virtual void Cleanup() NOC_OVERRIDE;
 
-        virtual bool Process( std::vector< std::string >::const_iterator& argsBegin, const std::vector< std::string >::const_iterator& argsEnd, std::string& error ) NOC_OVERRIDE;
+        virtual bool Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) NOC_OVERRIDE;
 
     private:
-        static bool QueryAssetPaths( const std::string& searchQuery, bool noMultiple, bool all, std::set< Nocturnal::Path >& assetPaths );
+        static bool QueryAssetPaths( const tstring& searchQuery, bool noMultiple, bool all, std::set< Nocturnal::Path >& assetPaths );
         void Except( const Nocturnal::Exception& ex, const Asset::AssetClassPtr& assetClass = NULL );
         void Report( Asset::AssetClass* assetClass );
-        bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const std::vector< std::string >& options );
+        bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const std::vector< tstring >& options );
         bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const AssetBuilder::BuilderOptionsPtr& options );
         bool RunAsBuildWorker( Dependencies::DependencyGraph& depGraph );
     };

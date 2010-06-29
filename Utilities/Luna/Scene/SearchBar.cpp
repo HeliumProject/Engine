@@ -31,11 +31,11 @@ SearchBar::SearchBar( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& po
 
     // Initialize Engine Types
     m_AssetType->Clear();
-    m_AssetType->Append( wxString( "(Any)" ) );
+    m_AssetType->Append( wxT( "(Any)" ) );
     const Reflect::Enumeration* assetTypes = Reflect::Registry::GetInstance()->GetEnumeration( Reflect::GetType< Asset::AssetTypes::AssetType >() );
     for ( u32 assetType = 0; assetType < Asset::AssetTypes::Count; ++assetType )
     {
-        std::string label;
+        tstring label;
         bool check = assetTypes->GetElementLabel( assetType, label );
         NOC_ASSERT( check );
         m_AssetType->Append( wxString( label ) );
@@ -50,14 +50,14 @@ SearchBar::SearchBar( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& po
 
     // Initialize Results
     m_Results->ClearAll();
-    m_Results->InsertColumn( ResultColumns::Name, "Name" );
-    m_Results->InsertColumn( ResultColumns::EntityAsset, "Entity Class" );
-    m_Results->InsertColumn( ResultColumns::Zone, "Zone" );
-    m_Results->InsertColumn( ResultColumns::Region, "Region" );
-    m_Results->InsertColumn( ResultColumns::AssetType, "Engine Type" );
+    m_Results->InsertColumn( ResultColumns::Name, wxT( "Name" ) );
+    m_Results->InsertColumn( ResultColumns::EntityAsset, wxT( "Entity Class" ) );
+    m_Results->InsertColumn( ResultColumns::Zone, wxT( "Zone" ) );
+    m_Results->InsertColumn( ResultColumns::Region, wxT( "Region" ) );
+    m_Results->InsertColumn( ResultColumns::AssetType, wxT( "Engine Type" ) );
 
     // Set Status
-    m_Status->SetLabel( "" );
+    m_Status->SetLabel( wxT( "" ) );
 
     // Set Components
     Component::V_Component components;
@@ -194,7 +194,7 @@ void SearchBar::OnSceneRemoving( const SceneChangeArgs& args )
 
 void SearchBar::SetupSearchCriteria( SearchBarTraverser& traverser )
 {
-    std::string searchText = m_SearchText->GetLineText( 0 );
+    tstring searchText = m_SearchText->GetLineText( 0 );
     if ( searchText.size() )
     {
         switch ( m_SearchOption->GetSelection() )
@@ -214,7 +214,7 @@ void SearchBar::SetupSearchCriteria( SearchBarTraverser& traverser )
                 }
                 else
                 {
-                    m_Status->SetLabel( "Invalid id '" + searchText + "' specified!" );
+                    m_Status->SetLabel( TXT( "Invalid id '" ) + searchText + TXT( "' specified!" ) );
                     return;
                 }
                 break;
@@ -240,12 +240,12 @@ void SearchBar::SetupSearchCriteria( SearchBarTraverser& traverser )
         traverser.AddSearchCriteria( new AssetTypeCriteria( assetType ) );
     }
 
-    std::string lowerBoundString = m_BoundsGreaterThan->GetLineText( 0 );
-    std::string upperBoundString = m_BoundsLessThan->GetLineText( 0 );
+    tstring lowerBoundString = m_BoundsGreaterThan->GetLineText( 0 );
+    tstring upperBoundString = m_BoundsLessThan->GetLineText( 0 );
     if ( ( lowerBoundString.size() > 0 ) || ( upperBoundString.size() > 0 ) )
     {
-        float lowerBound = lowerBoundString.size() > 0 ? MAX( 0.0f, atof( lowerBoundString.c_str() ) ) : 0.0f;
-        float upperBound = upperBoundString.size() > 0 ? MAX( 0.0f, atof( upperBoundString.c_str() ) ) : 0.0f;
+        float lowerBound = lowerBoundString.size() > 0 ? MAX( 0.0f, _tstof( lowerBoundString.c_str() ) ) : 0.0f;
+        float upperBound = upperBoundString.size() > 0 ? MAX( 0.0f, _tstof( upperBoundString.c_str() ) ) : 0.0f;
         switch ( m_BoundsOption->GetSelection() )
         {
         case BoundOptions::AABB:
@@ -337,17 +337,17 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
     int numResults = (int) m_ResultNodes.size();
     if ( numResults > 1 )
     {
-        char resultString[ 256 ] = { 0 };
-        sprintf( resultString, "Found %d matches.", numResults );
+        tchar resultString[ 256 ] = { 0 };
+        _stprintf( resultString, TXT( "Found %d matches." ), numResults );
         m_Status->SetLabel( resultString );
     }
     else if ( numResults == 1 )
     {
-        m_Status->SetLabel( "Found 1 match." );
+        m_Status->SetLabel( wxT( "Found 1 match." ) );
     }
     else
     {
-        m_Status->SetLabel( "No matches found." );
+        m_Status->SetLabel( wxT( "No matches found." ) );
     }
 
     const Reflect::Enumeration* assetTypes = Reflect::Registry::GetInstance()->GetEnumeration( Reflect::GetType< Asset::AssetTypes::AssetType >() );
@@ -355,12 +355,12 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
     V_HierarchyNodeSmartPtr::const_iterator resultsEnd = m_ResultNodes.end();
     for ( int id = 0; resultsItr != resultsEnd; ++id, ++resultsItr )
     {
-        std::string name = (*resultsItr)->GetName();
-        std::string entityClassName = "";
-        std::string entityClassPath = "";
-        std::string zone = "";
-        std::string region = "";
-        std::string assetType;
+        tstring name = (*resultsItr)->GetName();
+        tstring entityClassName = TXT( "" );
+        tstring entityClassPath = TXT( "" );
+        tstring zone = TXT( "" );
+        tstring region = TXT( "" );
+        tstring assetType;
 
         Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *resultsItr );
         if ( entity )
@@ -375,7 +375,7 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
                 Asset::EntityAsset* entityClass = entityClassSet->GetEntityAsset();
                 if ( entityClass )
                 {
-                    std::string assetTypeString;
+                    tstring assetTypeString;
                     Asset::AssetType assetTypeEnum = entityClass->GetAssetType();
                     bool check = assetTypes->GetElementLabel( assetTypeEnum, assetTypeString );
                     if ( check )
@@ -394,7 +394,7 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
             {
                 zone = sceneItr->second->GetName();
 
-                std::vector< std::string > regionNames;
+                std::vector< tstring > regionNames;
                 TUID zoneId = sceneItr->second->GetID(); 
                 S_RegionDumbPtr::const_iterator regionItr = regionSet.begin();
                 S_RegionDumbPtr::const_iterator regionEnd = regionSet.end();
@@ -407,11 +407,11 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
                 }
 
                 std::sort( regionNames.begin(), regionNames.end() );
-                std::vector< std::string >::iterator regionNameItr = regionNames.begin();
-                std::vector< std::string >::iterator regionNameEnd = regionNames.end();
+                std::vector< tstring >::iterator regionNameItr = regionNames.begin();
+                std::vector< tstring >::iterator regionNameEnd = regionNames.end();
                 for ( ; regionNameItr != regionNameEnd; ++regionNameItr )
                 {
-                    region = region + ( region.size() ? std::string( ", " ) : std::string( "" ) ) + *regionNameItr;
+                    region = region + ( region.size() ? TXT( ", " ) : TXT( "" ) ) + *regionNameItr;
                 }
             }
         }
@@ -459,20 +459,20 @@ bool SearchBar::CompareComponents( const Component::ComponentPtr& rhs, const Com
     return ( rhs->GetClass()->m_UIName < lhs->GetClass()->m_UIName );
 }
 
-std::string SearchBar::WildcardToRegex( const std::string& str, bool partialMatch )
+tstring SearchBar::WildcardToRegex( const tstring& str, bool partialMatch )
 {
-    std::string result = str;
-    result = boost::regex_replace( result, boost::regex( "\\." ), "\\\\." );
-    result = boost::regex_replace( result, boost::regex( "\\*" ), ".*" );
-    result = boost::regex_replace( result, boost::regex( "\\?" ), "." );
+    tstring result = str;
+    result = boost::regex_replace( result, tregex( TXT( "\\." ) ), TXT( "\\\\." ) );
+    result = boost::regex_replace( result, tregex( TXT( "\\*" ) ), TXT( ".*" ) );
+    result = boost::regex_replace( result, tregex( TXT( "\\?" ) ), TXT( "." ) );
 
     if ( partialMatch )
     {
-        result = ".*" + result + ".*";
+        result = TXT( ".*" ) + result + TXT( ".*" );
     }
     else
     {
-        result = "^" + result + "$";
+        result = TXT( "^" ) + result + TXT( "$" );
     }
 
     return result;
@@ -480,8 +480,8 @@ std::string SearchBar::WildcardToRegex( const std::string& str, bool partialMatc
 
 bool EntityNameCriteria::Validate( Luna::HierarchyNode* node )
 {
-    boost::smatch matchResults; 
-    return boost::regex_match( node->GetName(), matchResults, boost::regex( m_Value, boost::regex::icase ) );
+    tsmatch matchResults; 
+    return boost::regex_match( node->GetName(), matchResults, tregex( m_Value, boost::regex::icase ) );
 }
 
 bool EntityIDCriteria::Validate( Luna::HierarchyNode* node )
@@ -504,8 +504,8 @@ bool EntityAssetNameCriteria::Validate( Luna::HierarchyNode* node )
         return false;
     }
 
-    boost::smatch matchResults; 
-    return boost::regex_match( classSet->GetName(), matchResults, boost::regex( m_Value, boost::regex::icase ) );
+    tsmatch matchResults; 
+    return boost::regex_match( classSet->GetName(), matchResults, tregex( m_Value, boost::regex::icase ) );
 }
 
 bool AssetTypeCriteria::Validate( Luna::HierarchyNode* node )

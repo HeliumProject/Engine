@@ -24,7 +24,7 @@ LUNA_DEFINE_TYPE(Luna::EntityAssetSet);
 
 void EntityAssetSet::InitializeType()
 {
-    Reflect::RegisterClass< Luna::EntityAssetSet >( "Luna::EntityAssetSet" );
+    Reflect::RegisterClass< Luna::EntityAssetSet >( TXT( "Luna::EntityAssetSet" ) );
 }
 
 void EntityAssetSet::CleanupType()
@@ -107,7 +107,7 @@ void EntityAssetSet::LoadAssetClass()
                     }
                     catch ( const Reflect::Exception& e )
                     {
-                        Log::Error("Error loading %s (%s)\n", m_ArtFile.c_str(), e.What());
+                        Log::Error( TXT( "Error loading %s (%s)\n" ), m_ArtFile.c_str(), e.What());
                     }
 
                     if (m_Manifest.ReferencesObject())

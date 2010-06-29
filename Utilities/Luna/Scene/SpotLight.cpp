@@ -22,9 +22,9 @@ LUNA_DEFINE_TYPE(SpotLight);
 
 void SpotLight::InitializeType()
 {
-  Reflect::RegisterClass< SpotLight >( "Luna::SpotLight" );
+  Reflect::RegisterClass< SpotLight >( TXT( "Luna::SpotLight" ) );
 
-  Enumerator::InitializePanel( "SpotLight", CreatePanelSignature::Delegate( &SpotLight::CreatePanel ) );
+  Enumerator::InitializePanel( TXT( "SpotLight" ), CreatePanelSignature::Delegate( &SpotLight::CreatePanel ) );
 }
 
 void SpotLight::CleanupType()
@@ -58,12 +58,12 @@ SpotLight::~SpotLight()
 
 i32 SpotLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "light.png" ) );
 }
 
-std::string SpotLight::GetApplicationTypeName() const
+tstring SpotLight::GetApplicationTypeName() const
 {
-  return "SpotLight";
+  return TXT( "SpotLight" );
 }
 
 void SpotLight::Initialize()
@@ -438,9 +438,9 @@ void SpotLight::DrawOuter( IDirect3DDevice9* device, DrawArgs* args, const Scene
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified panel is supported by Luna::Light.
 //
-bool SpotLight::ValidatePanel(const std::string& name)
+bool SpotLight::ValidatePanel(const tstring& name)
 {
-  if (name == "SpotLight")
+  if (name == TXT( "SpotLight" ) )
   {
     return true;
   }
@@ -450,46 +450,46 @@ bool SpotLight::ValidatePanel(const std::string& name)
 
 void SpotLight::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel("Spot Light", true);
+  args.m_Enumerator->PushPanel( TXT( "Spot Light" ), true);
   {
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Inner Radius");
+      args.m_Enumerator->AddLabel( TXT( "Inner Radius" ) );
       args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerRadius, &SpotLight::SetInnerRadius );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Outer Radius");
+      args.m_Enumerator->AddLabel( TXT( "Outer Radius" ) );
       args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterRadius, &SpotLight::SetOuterRadius );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Area Light Radius");
+      args.m_Enumerator->AddLabel( TXT( "Area Light Radius" ) );
       args.m_Enumerator->AddValue<Light, f32>( args.m_Selection, &Light::GetAreaLightRadius, &Light::SetAreaLightRadius );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Area Light Dimensions");
+      args.m_Enumerator->AddLabel( TXT( "Area Light Dimensions" ) );
       args.m_Enumerator->AddValue<Light, Math::Vector2>( args.m_Selection, &Light::GetAreaLightDimensions, &Light::SetAreaLightDimensions );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Samples Per Meter");
+      args.m_Enumerator->AddLabel( TXT( "Samples Per Meter" ) );
       args.m_Enumerator->AddValue<Light, f32>( args.m_Selection, &Light::GetAreaLightSamplesPerMeter, &Light::SetAreaLightSamplesPerMeter );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Inner Angle");
+      args.m_Enumerator->AddLabel( TXT( "Inner Angle" ) );
 
       args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerConeAngleDegrees, &SpotLight::SetInnerConeAngleDegrees );
       Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerConeAngle, &SpotLight::SetInnerConeAngle );
@@ -500,7 +500,7 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Outer Angle");
+      args.m_Enumerator->AddLabel( TXT( "Outer Angle" ) );
       args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterConeAngleDegrees, &SpotLight::SetOuterConeAngleDegrees );
       Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterConeAngle, &SpotLight::SetOuterConeAngle );
       slider->SetRangeMin( 0 );
@@ -508,25 +508,25 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
     }
     args.m_Enumerator->Pop();
 
-    args.m_Enumerator->PushPanel( "RealTime" );
+    args.m_Enumerator->PushPanel( TXT( "RealTime" ) );
     {
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("Shadow Map Hi Res");
+        args.m_Enumerator->AddLabel( TXT( "Shadow Map Hi Res" ) );
         args.m_Enumerator->AddCheckBox<SpotLight, bool>( args.m_Selection, &SpotLight::GetShadowMapHiRes, &SpotLight::SetShadowMapHiRes );
       }
       args.m_Enumerator->Pop();
      
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("GodRay Enabled");
+        args.m_Enumerator->AddLabel( TXT( "GodRay Enabled" ) );
         args.m_Enumerator->AddCheckBox<SpotLight, bool>( args.m_Selection, &SpotLight::GetGodRayEnabled, &SpotLight::SetGodRayEnabled );
       }
       args.m_Enumerator->Pop();
       
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("GodRay Opacity");
+        args.m_Enumerator->AddLabel( TXT( "GodRay Opacity" ) );
 
         args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayOpacity, &SpotLight::SetGodRayOpacity );
         Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayOpacity, &SpotLight::SetGodRayOpacity );
@@ -537,7 +537,7 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("GodRay Density");
+        args.m_Enumerator->AddLabel( TXT( "GodRay Density" ) );
 
         args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayDensity, &SpotLight::SetGodRayDensity );
         Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayDensity, &SpotLight::SetGodRayDensity );
@@ -548,7 +548,7 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("GodRay Quality");
+        args.m_Enumerator->AddLabel( TXT( "GodRay Quality" ) );
 
         args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayQuality, &SpotLight::SetGodRayQuality );
         Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayQuality, &SpotLight::SetGodRayQuality );
@@ -559,7 +559,7 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("GodRay Fade Near");
+        args.m_Enumerator->AddLabel( TXT( "GodRay Fade Near" ) );
 
         args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeNear, &SpotLight::SetGodRayFadeNear );
         Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeNear, &SpotLight::SetGodRayFadeNear );
@@ -570,7 +570,7 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("GodRay Fade Far");
+        args.m_Enumerator->AddLabel( TXT( "GodRay Fade Far" ) );
 
         args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeFar, &SpotLight::SetGodRayFadeFar );
         Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeFar, &SpotLight::SetGodRayFadeFar );
@@ -581,7 +581,7 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("GodRay Clip Phi Offset");
+        args.m_Enumerator->AddLabel( TXT( "GodRay Clip Phi Offset" ) );
 
         args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlanePhiOffset, &SpotLight::SetGodRayClipPlanePhiOffset );
         Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlanePhiOffset, &SpotLight::SetGodRayClipPlanePhiOffset );
@@ -592,7 +592,7 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("GodRay Clip Offset");
+        args.m_Enumerator->AddLabel( TXT( "GodRay Clip Offset" ) );
 
         args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlaneOffset, &SpotLight::SetGodRayClipPlaneOffset );
         Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlaneOffset, &SpotLight::SetGodRayClipPlaneOffset );
@@ -603,7 +603,7 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("Offset Factor");
+        args.m_Enumerator->AddLabel( TXT( "Offset Factor" ) );
 
         args.m_Enumerator->AddValue<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetFactor, &SpotLight::SetOffsetFactor );
         Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetFactor, &SpotLight::SetOffsetFactor );
@@ -615,7 +615,7 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
 
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("Offset Units");
+        args.m_Enumerator->AddLabel( TXT( "Offset Units" ) );
 
         args.m_Enumerator->AddValue<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetUnits, &SpotLight::SetOffsetUnits );
         Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetUnits, &SpotLight::SetOffsetUnits );

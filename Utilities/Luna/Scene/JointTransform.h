@@ -35,7 +35,7 @@ namespace Luna
     virtual ~JointTransform();
 
     virtual i32 GetImageIndex() const NOC_OVERRIDE;
-    virtual std::string GetApplicationTypeName() const NOC_OVERRIDE;
+    virtual tstring GetApplicationTypeName() const NOC_OVERRIDE;
 
     virtual void Render( RenderVisitor* render ) NOC_OVERRIDE;
     static void DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );

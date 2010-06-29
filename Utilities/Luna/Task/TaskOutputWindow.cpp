@@ -45,7 +45,7 @@ void UpdateTimer::Notify()
   m_Window->LeaveMessageSection();
 }
 
-TaskOutputWindow::TaskOutputWindow( wxWindow* parent, const std::string& title, int xpos, int ypos, int width, int height )
+TaskOutputWindow::TaskOutputWindow( wxWindow* parent, const tstring& title, int xpos, int ypos, int width, int height )
   : wxFrame( parent, -1, title.c_str(), wxPoint( xpos, ypos ), wxSize( width, height ), wxCAPTION|wxMINIMIZE_BOX|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLIP_CHILDREN  )
 {
   wxBoxSizer* bSizer1;
@@ -73,9 +73,9 @@ TaskOutputWindow::TaskOutputWindow( wxWindow* parent, const std::string& title, 
 
   wxIconBundle iconBundle;
   wxIcon tempIcon;
-  tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "build.png", Nocturnal::IconSizes::Size32 ) );
+  tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "build.png" ), Nocturnal::IconSizes::Size32 ) );
   iconBundle.AddIcon( tempIcon );
-  tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "build.png" ) );
+  tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "build.png" ) ) );
   iconBundle.AddIcon( tempIcon );
   SetIcons( iconBundle );
 
@@ -170,7 +170,7 @@ void TaskOutputWindow::TaskStarted( const TaskStartedArgs& args )
 
   if (args.m_Cancelable)
   {
-    m_CloseButton->SetLabel( "Cancel" );
+    m_CloseButton->SetLabel( TXT( "Cancel" ) );
   }
 
   m_MessageTimer->Start( 100 );
@@ -187,23 +187,23 @@ void TaskOutputWindow::TaskFinished( const TaskFinishedArgs& args )
   {
   case TaskResults::Success:
     m_TextControl->SetDefaultStyle(wxTextAttr(*wxGREEN, *wxBLACK));
-    m_TextControl->AppendText( "\n\nSucceeded\n" );
+    m_TextControl->AppendText( TXT( "\n\nSucceeded\n" ) );
     break;
 
   case TaskResults::Failure:
     m_TextControl->SetDefaultStyle(wxTextAttr(*wxRED, *wxBLACK));
-    m_TextControl->AppendText( "\n\nFailed\n" );
+    m_TextControl->AppendText( TXT( "\n\nFailed\n" ) );
     break;
 
   case TaskResults::Cancel:
     m_TextControl->SetDefaultStyle(wxTextAttr(*wxRED, *wxBLACK));
-    m_TextControl->AppendText( "\n\nCancelled\n" );
+    m_TextControl->AppendText( TXT( "\n\nCancelled\n" ) );
     break;
   }
 
   if (m_CloseButton->IsEnabled())
   {
-    m_CloseButton->SetLabel( "Close" );
+    m_CloseButton->SetLabel( wxT( "Close" ) );
   }
   else
   {

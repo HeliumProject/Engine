@@ -30,6 +30,6 @@ namespace Luna
   private:
     BrowserFrame* m_BrowserFrame;
     Asset::AssetClassPtr m_PreviewAsset;
-    std::string m_ContentFile;
+    tstring m_ContentFile;
   };
 }

@@ -24,7 +24,7 @@ namespace Luna
     virtual ~Layer();
 
     virtual i32 GetImageIndex() const NOC_OVERRIDE;
-    virtual std::string GetApplicationTypeName() const NOC_OVERRIDE;
+    virtual tstring GetApplicationTypeName() const NOC_OVERRIDE;
 
     virtual void Initialize() NOC_OVERRIDE;
     virtual void Pack() NOC_OVERRIDE;
@@ -44,11 +44,11 @@ namespace Luna
     virtual void Prune( V_SceneNodeDumbPtr& prunedNodes ) NOC_OVERRIDE;
     virtual void Insert(SceneGraph* g, V_SceneNodeDumbPtr& insertedNodes ) NOC_OVERRIDE;
 
-    virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
+    virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
 
   private:
     static void CreatePanel( CreatePanelArgs& args );
-    static void BuildUnionAndIntersection( Enumerator* enumerator, const OS_SelectableDumbPtr& selection, std::string& unionStr, std::string& intersectionStr );
+    static void BuildUnionAndIntersection( Enumerator* enumerator, const OS_SelectableDumbPtr& selection, tstring& unionStr, tstring& intersectionStr );
 
     Content::NodeVisibilityPtr m_VisibilityData; 
   };

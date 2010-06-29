@@ -50,7 +50,7 @@ namespace Luna
   {
   protected:
     M_ComponentSmartPtr m_Components;
-    mutable std::string m_Name;
+    mutable tstring m_Name;
     mutable Nocturnal::Path m_Path;
     S_AssetReferenceNodeDumbPtr m_References;
 
@@ -68,21 +68,21 @@ namespace Luna
 
     virtual void Pack() NOC_OVERRIDE;
     virtual void Unpack() NOC_OVERRIDE;
-    virtual bool Save( std::string& error );
+    virtual bool Save( tstring& error );
     bool IsBuildable() const;
     bool IsViewable() const;
     bool IsExportable() const;
-    const std::string& GetName() const;
+    const tstring& GetName() const;
     u64 GetHash() const
     {
         return m_Path.Hash();
     }
-    std::string GetFilePath();
+    tstring GetFilePath();
     const Nocturnal::Path& GetPath() const
     {
         return m_Path;
     }
-    virtual std::string GetIcon() const;
+    virtual tstring GetIcon() const;
     const M_ComponentSmartPtr& GetComponents();
     Luna::ComponentWrapper* FindComponent( i32 slot );
     virtual void PopulateContextMenu( ContextMenuItemSet& menu );
@@ -90,7 +90,7 @@ namespace Luna
     void UnregisterAssetReferenceNode( Luna::AssetReferenceNode* node );
     const S_AssetReferenceNodeDumbPtr& GetAssetReferenceNodes() const;
     void ManageShaderGroups( const ContextMenuArgsPtr& args );
-    Undo::CommandPtr AddAnimationSet( std::string& msg );
+    Undo::CommandPtr AddAnimationSet( tstring& msg );
     virtual void Changed( Inspect::Control* control );
     virtual bool CanHandleClipboardData( const Inspect::ReflectClipboardDataPtr& data ) NOC_OVERRIDE;
     virtual bool HandleClipboardData( const Inspect::ReflectClipboardDataPtr& data, ClipboardOperation op, Undo::BatchCommand* batch = NULL ) NOC_OVERRIDE;

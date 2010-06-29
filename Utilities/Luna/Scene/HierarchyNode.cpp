@@ -24,8 +24,8 @@ LUNA_DEFINE_TYPE( Luna::HierarchyNode );
 
 void HierarchyNode::InitializeType()
 {
-  Reflect::RegisterClass< Luna::HierarchyNode >( "Luna::HierarchyNode" );
-  Enumerator::InitializePanel( "Hierarchy", CreatePanelSignature::Delegate( &HierarchyNode::CreatePanel ) );
+  Reflect::RegisterClass< Luna::HierarchyNode >( TXT( "Luna::HierarchyNode" ) );
+  Enumerator::InitializePanel( TXT( "Hierarchy" ), CreatePanelSignature::Delegate( &HierarchyNode::CreatePanel ) );
 }
 
 void HierarchyNode::CleanupType()
@@ -203,23 +203,23 @@ void HierarchyNode::SetReactive( bool value )
   }
 }
 
-void HierarchyNode::SetName( const std::string& value )
+void HierarchyNode::SetName( const tstring& value )
 {
   __super::SetName( value );
 
   // reset path b/c our name changed
-  m_Path = "";
+  m_Path = TXT( "" );
 }
 
-const std::string& HierarchyNode::GetPath()
+const tstring& HierarchyNode::GetPath()
 {
-  if (m_Path == "")
+  if (m_Path == TXT( "" ))
   {
-    m_Path = std::string( "|" ) + GetName();
+    m_Path = TXT( "|" ) + GetName();
     const Luna::HierarchyNode* p = m_Parent;
     while ( p != NULL && p->GetParent() != NULL )
     {
-      m_Path = m_Path.insert( 0, "|" + p->GetName() );
+      m_Path = m_Path.insert( 0, TXT( "|" ) + p->GetName() );
       p = p->GetParent();
     }
   }
@@ -267,7 +267,7 @@ void HierarchyNode::SetParent( Luna::HierarchyNode* value )
         m_Parent->AddChild(this);
       }
 
-      m_Path = "";
+      m_Path = TXT( "" );
 
       ParentChangedArgs parentChanged( this, oldParent );
       m_ParentChanged.Raise( parentChanged );
@@ -452,19 +452,19 @@ void HierarchyNode::DisconnectDescendant(Luna::SceneNode* descendant)
 
     // we should not be disconnecting descendant hierarchy nodes that are not our children
     NOC_ASSERT( m_Children.Contains(child) );
-    Log::Debug("Removing %s from %s's child list (previous=%s next=%s)\n", child->GetName().c_str(), GetName().c_str(), child->m_Previous ? child->m_Previous->GetName().c_str() : "NULL" , child->m_Next ? child->m_Next->GetName().c_str() : "NULL");
+    Log::Debug( TXT( "Removing %s from %s's child list (previous=%s next=%s)\n" ), child->GetName().c_str(), GetName().c_str(), child->m_Previous ? child->m_Previous->GetName().c_str() : TXT( "NULL" ), child->m_Next ? child->m_Next->GetName().c_str() : TXT( "NULL" ) );
 
     // fix up linked list
     if ( child->m_Previous )
     {
-      Log::Debug("Setting %s's m_Next to %s\n", child->m_Previous->m_Next ? child->m_Previous->m_Next->GetName().c_str() : "NULL", child->m_Next ? child->m_Next->GetName().c_str() : "NULL");
+      Log::Debug( TXT( "Setting %s's m_Next to %s\n" ), child->m_Previous->m_Next ? child->m_Previous->m_Next->GetName().c_str() : TXT( "NULL" ), child->m_Next ? child->m_Next->GetName().c_str() : TXT( "NULL" ) );
       NOC_ASSERT( m_Children.Contains( child->m_Previous ) );
       child->m_Previous->m_Next = child->m_Next;
     }
 
     if ( child->m_Next )
     {
-      Log::Debug("Setting %s's m_Previous to %s\n", child->m_Next->m_Previous ? child->m_Next->m_Previous->GetName().c_str() : "NULL", child->m_Previous ? child->m_Previous->GetName().c_str() : "NULL");
+      Log::Debug( TXT( "Setting %s's m_Previous to %s\n" ), child->m_Next->m_Previous ? child->m_Next->m_Previous->GetName().c_str() : TXT( "NULL" ), child->m_Previous ? child->m_Previous->GetName().c_str() : TXT( "NULL" ) );
       NOC_ASSERT( m_Children.Contains( child->m_Next ) );
       child->m_Next->m_Previous = child->m_Previous;
     }
@@ -986,12 +986,12 @@ bool HierarchyNode::Pick(PickVisitor* pick)
   return false;
 }
 
-Luna::HierarchyNode* HierarchyNode::Find( const std::string& targetName )
+Luna::HierarchyNode* HierarchyNode::Find( const tstring& targetName )
 {
   if ( targetName.empty() )
     return NULL;
 
-  if ( _stricmp( GetName().c_str(), targetName.c_str() ) == 0 )
+  if ( _tcsicmp( GetName().c_str(), targetName.c_str() ) == 0 )
   {
     return this;
   }
@@ -1002,10 +1002,10 @@ Luna::HierarchyNode* HierarchyNode::Find( const std::string& targetName )
   {
     Luna::HierarchyNode* child = *itr;
 
-    const std::string& currentName = child->GetName();
+    const tstring& currentName = child->GetName();
 
     // Case-insensitive comparison to see if the name matches the target
-    if ( !currentName.empty() && ( _stricmp( currentName.c_str(), targetName.c_str() ) == 0 ) )
+    if ( !currentName.empty() && ( _tcsicmp( currentName.c_str(), targetName.c_str() ) == 0 ) )
     {
       found = child; // stopping case, breaks out of the loop
     }
@@ -1023,7 +1023,7 @@ Luna::HierarchyNode* HierarchyNode::Find( const std::string& targetName )
   return found;
 }
 
-Luna::HierarchyNode* HierarchyNode::FindFromPath( std::string path )
+Luna::HierarchyNode* HierarchyNode::FindFromPath( tstring path )
 {
   if ( path.empty() )
     return NULL;
@@ -1040,12 +1040,12 @@ Luna::HierarchyNode* HierarchyNode::FindFromPath( std::string path )
     path.erase( 0, 1 );
   }
 
-  std::string childName = path;
-  std::string childPath;
+  tstring childName = path;
+  tstring childPath;
 
   // if our path is longer than one item, pick the first one
   const size_t pathSeparatorIndex = path.find_first_of( '|' );
-  if ( pathSeparatorIndex != std::string::npos )
+  if ( pathSeparatorIndex != tstring::npos )
   {
     childName = path.substr( 0, pathSeparatorIndex );
     childPath = path.substr( pathSeparatorIndex + 1 );
@@ -1057,7 +1057,7 @@ Luna::HierarchyNode* HierarchyNode::FindFromPath( std::string path )
     Luna::HierarchyNode* child = *itr;
 
     // if the name exists, and it matches
-    const std::string& currentName = child->GetName();
+    const tstring& currentName = child->GetName();
 
     if ( !currentName.empty() && currentName == childName )
     {
@@ -1095,9 +1095,9 @@ bool HierarchyNode::IsSimilar(const HierarchyNodePtr& node) const
   return ( GetNodeType() == node->GetNodeType() );
 }
 
-std::string HierarchyNode::GetDescription() const
+tstring HierarchyNode::GetDescription() const
 {
-  return std::string ();
+  return tstring ();
 }
 
 void HierarchyNode::ConnectManipulator(ManiuplatorAdapterCollection* collection)
@@ -1111,9 +1111,9 @@ void HierarchyNode::ConnectManipulator(ManiuplatorAdapterCollection* collection)
   }
 }
 
-bool HierarchyNode::ValidatePanel(const std::string& name)
+bool HierarchyNode::ValidatePanel(const tstring& name)
 {
-  if ( name == "Hierarchy" )
+  if ( name == TXT( "Hierarchy" ) )
     return true;
 
   return __super::ValidatePanel( name );
@@ -1121,18 +1121,18 @@ bool HierarchyNode::ValidatePanel(const std::string& name)
 
 void HierarchyNode::CreatePanel(CreatePanelArgs& args)
 {
-  args.m_Enumerator->PushPanel("Hierarchy Node", true);
+  args.m_Enumerator->PushPanel( TXT( "Hierarchy Node" ), true);
   {
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Hidden" );
+      args.m_Enumerator->AddLabel( TXT( "Hidden" ) );
       args.m_Enumerator->AddCheckBox<Luna::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsHidden, &HierarchyNode::SetHidden, false );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Live" );   
+      args.m_Enumerator->AddLabel( TXT( "Live" ) );   
       args.m_Enumerator->AddCheckBox<Luna::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsLive, &HierarchyNode::SetLive );
     }
     args.m_Enumerator->Pop();

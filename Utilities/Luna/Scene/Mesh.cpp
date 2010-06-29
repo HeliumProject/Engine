@@ -23,7 +23,7 @@ D3DMATERIAL9 Mesh::s_FillMaterial;
 
 void Mesh::InitializeType()
 {
-  Reflect::RegisterClass< Luna::Mesh >( "Luna::Mesh" );
+  Reflect::RegisterClass< Luna::Mesh >( TXT( "Luna::Mesh" ) );
 
   ZeroMemory(&s_WireMaterial, sizeof(s_WireMaterial));
   s_WireMaterial.Ambient = Luna::Color::BLACK;
@@ -78,12 +78,12 @@ Mesh::~Mesh()
 
 i32 Mesh::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "mesh.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "mesh.png" ) );
 }
 
-std::string Mesh::GetApplicationTypeName() const
+tstring Mesh::GetApplicationTypeName() const
 {
-  return "Mesh";
+  return TXT( "Mesh" );
 }
 
 void Mesh::Initialize()

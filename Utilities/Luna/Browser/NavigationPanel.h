@@ -17,7 +17,7 @@ namespace Luna
     ~NavigationPanel();
 
     wxString GetNavBarValue() const;
-    void SetNavBarValue( const std::string& navBarText, bool isFolder = false );
+    void SetNavBarValue( const tstring& navBarText, bool isFolder = false );
 
   protected:
     // Virtual event handlers, overide them in your derived class

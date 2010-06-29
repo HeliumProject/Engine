@@ -72,7 +72,7 @@ bool LunaApp::OnInit()
 {
     wxArtProvider::Push( new ::Luna::ArtProvider() );
 
-    SetVendorName( "Nocturnal" );
+    SetVendorName( TXT( "Nocturnal" ) );
 
     //SetLogo( wxT( "Luna (c) 2010 - Nocturnal\n" ) );
 
@@ -80,30 +80,30 @@ bool LunaApp::OnInit()
     wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );
     wxIdleEvent::SetMode( wxIDLE_PROCESS_SPECIFIED );
 
-    char module[MAX_PATH];
+    tchar module[MAX_PATH];
     GetModuleFileName( 0, module, MAX_PATH );
 
     Nocturnal::Path exePath( module );
-    Nocturnal::Path iconFolder( exePath.Directory() + "Icons/" );
+    Nocturnal::Path iconFolder( exePath.Directory() + TXT( "Icons/" ) );
 
-    Nocturnal::ImageManagerInit( iconFolder.Get(), "" );
+    Nocturnal::ImageManagerInit( iconFolder.Get(), TXT( "" ) );
     Nocturnal::GlobalImageManager().LoadGuiArt();
 
     {
-        Log::Bullet initialize ("Initializing\n");
+        Log::Bullet initialize( TXT( "Initializing\n" ) );
 
         m_InitializerStack.Push( PerforceUI::Initialize, PerforceUI::Cleanup );
 
         {
-            Log::Bullet modules ("Modules:\n");
+            Log::Bullet modules( TXT( "Modules:\n" ) );
 
             {
-                Log::Bullet bullet ("Core...\n");
+                Log::Bullet bullet( TXT( "Core...\n" ) );
                 m_InitializerStack.Push( CoreInitialize, CoreCleanup );
             }
 
             {
-                Log::Bullet bullet ("Editor...\n");
+                Log::Bullet bullet( TXT( "Editor...\n" ) );
                 m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
                 m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
                 m_InitializerStack.Push( AppPreferences::InitializeType, AppPreferences::CleanupType );
@@ -111,43 +111,41 @@ bool LunaApp::OnInit()
             }
 
             {
-                Log::Bullet bullet ("Task...\n");
+                Log::Bullet bullet( TXT( "Task...\n" ) );
                 m_InitializerStack.Push( TaskInitialize, TaskCleanup );
             }
 
             {
-                Log::Bullet vault ("Asset Vault...\n");
+                Log::Bullet bullet( TXT( "Asset Vault...\n" ) );
                 m_InitializerStack.Push( Browser::Initialize, Browser::Cleanup );
             }
 
             {
-                Log::Bullet bullet ("Asset Editor...\n");
+                Log::Bullet bullet( TXT( "Asset Editor...\n" ) );
                 m_InitializerStack.Push( LunaAsset::InitializeModule, LunaAsset::CleanupModule );
             }
 
             {
-                Log::Bullet bullet ("Scene Editor...\n");
+                Log::Bullet bullet( TXT( "Scene Editor...\n" ) );
                 m_InitializerStack.Push( SceneInitialize, SceneCleanup );
             }
         }
 
         {
-            Log::Bullet systems ("Systems:\n");
+            Log::Bullet systems( TXT( "Systems:\n" ) );
 
             {
-                Log::Bullet vault ("Asset Tracker...\n");
+                Log::Bullet vault( TXT( "Asset Tracker...\n" ) );
                 GetAppPreferences()->UseTracker( false ); //!parser.Found( "disable_tracker" ) );
             }
         }
     }
 
-    Log::Print("\n"); 
+    Log::Print( TXT( "\n" ) ); 
 
     if ( Log::GetErrorCount() )
     {
-        std::stringstream str;
-        str << "There were errors during startup, use Luna with caution.";
-        wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
+        wxMessageBox( TXT( "There were errors during startup, use Luna with caution." ), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
     }
 
     GetSceneEditor()->Show();
@@ -180,28 +178,28 @@ int LunaApp::OnExit()
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-int Main ( int argc, const char** argv )
+int Main ( int argc, const tchar** argv )
 {
 	// print physical memory
 	MEMORYSTATUSEX status;
 	memset(&status, 0, sizeof(status));
 	status.dwLength = sizeof(status);
 	::GlobalMemoryStatusEx(&status);
-	Log::Print("Physical Memory: %I64u M bytes total, %I64u M bytes available\n", status.ullTotalPhys >> 20, status.ullAvailPhys >> 20);
+	Log::Print( TXT( "Physical Memory: %I64u M bytes total, %I64u M bytes available\n" ), status.ullTotalPhys >> 20, status.ullAvailPhys >> 20);
 
 	// fill out the options vector
-	std::vector< std::string > options;
+	std::vector< tstring > options;
 	for ( int i = 1; i < argc; ++i )
 	{
 		options.push_back( argv[ i ] );
 	}
-    std::vector< std::string >::const_iterator& argsBegin = options.begin(), argsEnd = options.end();
+    std::vector< tstring >::const_iterator& argsBegin = options.begin(), argsEnd = options.end();
 
     bool success = true;
-	std::string error; 
+	tstring error; 
 
 
-    Processor processor( "luna", "[COMMAND <ARGS>]", "Luna (c) 2010 - Nocturnal" );
+    Processor processor( TXT( "luna" ), TXT( "[COMMAND <ARGS>]" ), TXT( "Luna (c) 2010 - Nocturnal" ) );
 
     //BuildCommand buildCommand;
     //success &= buildCommand.Initialize( error );
@@ -230,31 +228,31 @@ int Main ( int argc, const char** argv )
     //success &= processor.AddOption( new FlagOption(  , Worker::Args::Wait, "wait forever for background processes" ), error );
 
     bool scriptFlag = false;
-    success &= processor.AddOption( new FlagOption( &scriptFlag, Application::Args::Script, "omit prefix and suffix in console output" ), error );
+    success &= processor.AddOption( new FlagOption( &scriptFlag, Application::Args::Script, TXT( "omit prefix and suffix in console output" ) ), error );
     
     bool attachFlag = false;
-    success &= processor.AddOption( new FlagOption( &attachFlag, Application::Args::Attach, "wait for a debugger to attach to the process on startup" ), error );
+    success &= processor.AddOption( new FlagOption( &attachFlag, Application::Args::Attach, TXT( "wait for a debugger to attach to the process on startup" ) ), error );
     
     bool profileFlag = false;
-    success &= processor.AddOption( new FlagOption( &profileFlag, Application::Args::Profile, "enable profile output to the console windows" ), error );
+    success &= processor.AddOption( new FlagOption( &profileFlag, Application::Args::Profile, TXT( "enable profile output to the console windows" ) ), error );
     
     bool memoryFlag = false;
-    success &= processor.AddOption( new FlagOption( &memoryFlag, Application::Args::Memory, "profile and report memory usage to the console" ), error );
+    success &= processor.AddOption( new FlagOption( &memoryFlag, Application::Args::Memory, TXT( "profile and report memory usage to the console" ) ), error );
     
     bool vreboseFlag = false;
-    success &= processor.AddOption( new FlagOption( &vreboseFlag, Application::Args::Verbose, "output a verbose level of console output" ), error );
+    success &= processor.AddOption( new FlagOption( &vreboseFlag, Application::Args::Verbose, TXT( "output a verbose level of console output" ) ), error );
     
     bool extremeFlag = false;
-    success &= processor.AddOption( new FlagOption( &extremeFlag, Application::Args::Extreme, "output an extremely verbose level of console output" ), error );
+    success &= processor.AddOption( new FlagOption( &extremeFlag, Application::Args::Extreme, TXT( "output an extremely verbose level of console output" ) ), error );
     
     bool debugFlag = false;
-    success &= processor.AddOption( new FlagOption( &debugFlag, Application::Args::Debug, "output debug console output" ), error );
+    success &= processor.AddOption( new FlagOption( &debugFlag, Application::Args::Debug, TXT( "output debug console output" ) ), error );
     
     int nice = 0;
-    success &= processor.AddOption( new SimpleOption<int>( &nice , "nice", "<NUM>", "number of processors to nice (for other processes)" ), error );
+    success &= processor.AddOption( new SimpleOption<int>( &nice , TXT( "nice" ), TXT( "<NUM>" ), TXT( "number of processors to nice (for other processes)" ) ), error );
     
     bool helpFlag;
-    success &= processor.AddOption( new FlagOption( &helpFlag, "h|help", "print program usage" ), error );
+    success &= processor.AddOption( new FlagOption( &helpFlag, TXT( "h|help" ), TXT( "print program usage" ) ), error );
 
     success &= processor.ParseOptions( argsBegin, argsEnd, error );
 
@@ -262,16 +260,16 @@ int Main ( int argc, const char** argv )
 	{
         if ( helpFlag )
         {
-            Log::Print( "\nPrinting help for Luna...\n" );
+            Log::Print( TXT( "\nPrinting help for Luna...\n" ) );
             Log::Print( processor.Help().c_str() );
-            Log::Print( "\n" );
+            Log::Print( TXT( "\n" ) );
             success = true;
         }
         else if ( argsBegin != argsEnd )
         {
             while ( success && ( argsBegin != argsEnd ) )
             {
-                const std::string& arg = (*argsBegin);
+                const tstring& arg = (*argsBegin);
                 ++argsBegin;
 
                 if ( arg.length() < 1 )
@@ -281,7 +279,7 @@ int Main ( int argc, const char** argv )
 
                 if ( arg[ 0 ] == '-' )
                 {
-                    error = std::string( "Unknown option, or option passed out of order: " ) + arg;
+                    error = TXT( "Unknown option, or option passed out of order: " ) + arg;
                     success = false;
                 }
                 else
@@ -293,7 +291,7 @@ int Main ( int argc, const char** argv )
                     }
                     else
                     {
-                        error = std::string( "Unknown commandline parameter: " ) + arg + "\n\n";
+                        error = TXT( "Unknown commandline parameter: " ) + arg + TXT( "\n\n" );
                         success = false;
                     }
                 }
@@ -314,7 +312,7 @@ int Main ( int argc, const char** argv )
 
     if ( !success && !error.empty() )
     {
-        Log::Error( "%s\n", error.c_str() );
+        Log::Error( TXT( "%s\n" ), error.c_str() );
     }
 
     return success ? 0 : 1;
@@ -324,7 +322,7 @@ int Main ( int argc, const char** argv )
 ///////////////////////////////////////////////////////////////////////////////
 // Main entry point for the application.
 //
-int main( int argc, const char** argv )
+int main( int argc, const tchar** argv )
 {
     Nocturnal::InitializerStack initializerStack( true );
     initializerStack.Push( &DebugUI::Initialize, &DebugUI::Cleanup );

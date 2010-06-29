@@ -20,7 +20,7 @@ namespace Luna
     class ThumbnailLoader
     {
     public:
-        ThumbnailLoader( Render::D3DManager* d3dManager, const std::string& thumbnailDirectory );
+        ThumbnailLoader( Render::D3DManager* d3dManager, const tstring& thumbnailDirectory );
         ~ThumbnailLoader();
 
         //
@@ -79,6 +79,6 @@ namespace Luna
         Platform::Semaphore                     m_Signal; // Signalling semaphore to wake up load thread
         bool                                    m_Quit;
         Render::D3DManager*                 m_D3DManager;
-        std::string                             m_ThumbnailDirectory;
+        tstring                             m_ThumbnailDirectory;
     };
 }

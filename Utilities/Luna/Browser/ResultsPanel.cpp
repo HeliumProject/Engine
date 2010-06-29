@@ -8,7 +8,7 @@ using namespace Luna;
 BEGIN_EVENT_TABLE( Luna::ResultsPanel, ResultsPanelGenerated )
 END_EVENT_TABLE()
 
-ResultsPanel::ResultsPanel( const std::string& rootDirectory, BrowserFrame* browserFrame )
+ResultsPanel::ResultsPanel( const tstring& rootDirectory, BrowserFrame* browserFrame )
 : ResultsPanelGenerated( browserFrame, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL )
 , m_RootDirectory( rootDirectory )
 , m_CurrentMode( ViewModes::Invalid )
@@ -19,7 +19,7 @@ ResultsPanel::ResultsPanel( const std::string& rootDirectory, BrowserFrame* brow
   wxSizer* sizer = new wxBoxSizer( wxVERTICAL );
   SetSizer( sizer );
 
-  Nocturnal::Path thumbnailPath( m_RootDirectory + "/.thumbnails/" );
+  Nocturnal::Path thumbnailPath( m_RootDirectory + TXT( "/.thumbnails/" ) );
   m_ThumbnailView = new ThumbnailView( thumbnailPath.Get(), browserFrame, this );
   m_ThumbnailView->AddSelectionChangedListener( ThumbnailSelectionSignature::Delegate( this, &ResultsPanel::OnThumbnailSelectionChanged ) );
   m_ThumbnailView->AddHighlightChangedListener( ThumbnailHighlightSignature::Delegate( this, &ResultsPanel::OnThumbnailHighlightChanged ) );
@@ -98,7 +98,7 @@ void ResultsPanel::SetThumbnailSize( ThumbnailSize zoom )
 
 void ResultsPanel::SetResults( SearchResults* results )
 {
-  std::vector< std::string > unused;
+  std::vector< tstring > unused;
   ResultChangeArgs args;
 
   switch ( m_CurrentMode )
@@ -126,7 +126,7 @@ void ResultsPanel::ClearResults()
   m_ResultsChanged.Raise( args );
 }
 
-void ResultsPanel::SelectPath( const std::string& path )
+void ResultsPanel::SelectPath( const tstring& path )
 {
   switch ( m_CurrentMode )
   {
@@ -136,7 +136,7 @@ void ResultsPanel::SelectPath( const std::string& path )
   }
 }
 
-u32 ResultsPanel::GetSelectedPaths( std::vector< std::string >& paths, bool useForwardSlashes )
+u32 ResultsPanel::GetSelectedPaths( std::vector< tstring >& paths, bool useForwardSlashes )
 {
   switch ( m_CurrentMode )
   {
@@ -203,7 +203,7 @@ void ResultsPanel::OnThumbnailSelectionChanged( const ThumbnailSelectionArgs& ar
 
 void ResultsPanel::OnThumbnailHighlightChanged( const ThumbnailHighlightArgs& args )
 {
-  std::vector< std::string > unused;
+  std::vector< tstring > unused;
   ResultChangeArgs combinedArgs( m_ThumbnailView->GetSelectedPaths( unused ), args.m_HighlightPath );
   m_ResultsChanged.Raise( combinedArgs );
 }

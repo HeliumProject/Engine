@@ -22,7 +22,7 @@ InstancePanel::InstancePanel(Enumerator* enumerator, const OS_SelectableDumbPtr&
 {
   m_Interpreter = m_Enumerator = enumerator;
   m_Expanded = true;
-  m_Text = "Instance";
+  m_Text = TXT( "Instance" );
 }
 
 void InstancePanel::Create()
@@ -38,26 +38,26 @@ void InstancePanel::CreateApplicationType()
 {
   m_Enumerator->PushContainer();
   {
-    m_Enumerator->AddLabel( "Application Type" );
-    Inspect::Choice* choice = m_Enumerator->AddChoice< Luna::Instance, std::string >( m_Selection, &Luna::Instance::GetConfiguredTypeName, &Luna::Instance::SetConfiguredTypeName );
+    m_Enumerator->AddLabel( TXT( "Application Type" ) );
+    Inspect::Choice* choice = m_Enumerator->AddChoice< Luna::Instance, tstring >( m_Selection, &Luna::Instance::GetConfiguredTypeName, &Luna::Instance::SetConfiguredTypeName );
 
     // this is the set of names that are compatible with all selected items
-    std::set< std::string > names;
+    std::set< tstring > names;
 
     {
       OS_SelectableDumbPtr::Iterator itr = m_Selection.Begin();
       OS_SelectableDumbPtr::Iterator end = m_Selection.End();
       for ( ; itr != end; ++itr )
       {
-        std::set< std::string > current = Reflect::AssertCast<Luna::Instance>(*itr)->GetValidConfiguredTypeNames();
+        std::set< tstring > current = Reflect::AssertCast<Luna::Instance>(*itr)->GetValidConfiguredTypeNames();
         if (itr == m_Selection.Begin())
         {
           names = current;
         }
         else
         {
-          std::set< std::string >::iterator namesItr = names.begin();
-          std::set< std::string >::iterator namesEnd = names.end();
+          std::set< tstring >::iterator namesItr = names.begin();
+          std::set< tstring >::iterator namesEnd = names.end();
           while ( namesItr != namesEnd )
           {
             if ( current.find( *namesItr ) == current.end() )
@@ -82,11 +82,11 @@ void InstancePanel::CreateApplicationType()
       Inspect::V_Item items;
       items.resize( names.size() + 1 );
 
-      items[0].m_Key = "<AUTOMATIC>";
-      items[0].m_Data = "";
+      items[0].m_Key = TXT( "<AUTOMATIC>" );
+      items[0].m_Data = TXT( "" );
 
-      std::set< std::string >::const_iterator itr = names.begin();
-      std::set< std::string >::const_iterator end = names.end();
+      std::set< tstring >::const_iterator itr = names.begin();
+      std::set< tstring >::const_iterator end = names.end();
       for ( size_t index=1; itr != end; ++itr, ++index )
       {
         Inspect::Item& item = items[index];
@@ -105,7 +105,7 @@ void InstancePanel::CreateAppearanceFlags()
 {
   m_Enumerator->PushContainer();
   {
-    m_Enumerator->AddLabel("Solid");
+    m_Enumerator->AddLabel( TXT( "Solid" ) );
     
     m_SolidOverride = m_Enumerator->AddCheckBox<Luna::Instance, bool>( m_Selection, &Luna::Instance::GetSolidOverride, &Luna::Instance::SetSolidOverride );
 
@@ -119,7 +119,7 @@ void InstancePanel::CreateAppearanceFlags()
 
   m_Enumerator->PushContainer();
   {
-    m_Enumerator->AddLabel("Transparent");
+    m_Enumerator->AddLabel( TXT( "Transparent" ) );
     
     m_TransparentOverride = m_Enumerator->AddCheckBox<Luna::Instance, bool>( m_Selection, &Luna::Instance::GetTransparentOverride, &Luna::Instance::SetTransparentOverride );
     
@@ -148,18 +148,18 @@ void InstancePanel::CreateAppearanceFlags()
   {
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Show Pointer");
+      m_Enumerator->AddLabel( TXT( "Show Pointer" ) );
       m_Enumerator->AddCheckBox<Luna::Volume, bool>( m_Selection, &Luna::Volume::IsPointerVisible, &Luna::Volume::SetPointerVisible );
     }
     m_Enumerator->Pop();
   }
 }
 
-void InstancePanel::Intersect(std::set< std::string >& intersection, const std::set< std::string >& classList)
+void InstancePanel::Intersect(std::set< tstring >& intersection, const std::set< tstring >& classList)
 {
-  for(std::set< std::string >::iterator it = intersection.begin(); it != intersection.end(); )
+  for(std::set< tstring >::iterator it = intersection.begin(); it != intersection.end(); )
   {
-    std::set< std::string >::const_iterator input = std::find(classList.begin(), classList.end(), *it); 
+    std::set< tstring >::const_iterator input = std::find(classList.begin(), classList.end(), *it); 
     if(input == classList.end())
     {
       it = intersection.erase(it); 

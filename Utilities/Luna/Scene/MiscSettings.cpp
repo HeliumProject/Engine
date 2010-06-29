@@ -33,7 +33,7 @@ void MiscSettings::EnumerateClass( Reflect::Compositor<MiscSettings>& comp )
 void MiscSettings::LoadFromFile( MiscSettingsPtr& miscSettings )
 {
 #pragma TODO("reimplement to use a valid config folder" )
-    std::string miscSettingsFile = "";
+    tstring miscSettingsFile = TXT( "" );
 
   MiscSettingsPtr miscSettingsPtr = NULL;
   

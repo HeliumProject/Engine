@@ -13,9 +13,9 @@ END_EVENT_TABLE()
 // Constructor
 // 
 ImportOptionsDlg::ImportOptionsDlg( wxWindow* parent, bool& update )
-: wxDialog( parent, -1, "Import", wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, "LunaImportOptionsDialog")
+: wxDialog( parent, -1, wxT( "Import" ), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, wxT( "LunaImportOptionsDialog" ) )
 , m_UpdateValidator( &update )
-, m_UpdateCheckbox( this, -1, "Update state of existing objects only", wxDefaultPosition, wxDefaultSize, 0, m_UpdateValidator, "Checkbox_Update" )
+, m_UpdateCheckbox( this, -1, wxT( "Update state of existing objects only" ), wxDefaultPosition, wxDefaultSize, 0, m_UpdateValidator, wxT( "Checkbox_Update" ) )
 {
   m_UpdateValidator.SetWindow( &m_UpdateCheckbox );
 }
@@ -35,7 +35,7 @@ void ImportOptionsDlg::OnInit( wxInitDialogEvent& event )
   wxBoxSizer* topmostSizer = new wxBoxSizer( wxVERTICAL );
 
   // Message explaining the options
-  wxString msg = "Options";
+  wxString msg = wxT( "Options" );
   wxStaticBoxSizer* groupBox = new wxStaticBoxSizer( wxHORIZONTAL, this, msg );
   wxBoxSizer* innerGroupBoxSizer = new wxBoxSizer( wxVERTICAL );
 

@@ -18,7 +18,7 @@ namespace Luna
     Luna::ContainerNode* m_Container;
 
   public:
-    ContainerItemNode( Luna::AssetManager* assetManager, Luna::ContainerNode* container, const std::string& name );
+    ContainerItemNode( Luna::AssetManager* assetManager, Luna::ContainerNode* container, const tstring& name );
     virtual ~ContainerItemNode();
   };
   typedef Nocturnal::SmartPtr< Luna::ContainerItemNode > ContainerItemNodePtr;

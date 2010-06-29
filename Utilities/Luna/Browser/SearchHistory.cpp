@@ -61,7 +61,7 @@ void SearchHistory::SetBrowserSearch( BrowserSearch* browserSearch )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void SearchHistory::RunNewQuery( const std::string& queryString, const AssetCollection* collection )
+void SearchHistory::RunNewQuery( const tstring& queryString, const AssetCollection* collection )
 {
   NOC_ASSERT( m_BrowserSearch );
 
@@ -345,7 +345,7 @@ void SearchHistory::PushMRU( const SearchQuery* query )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-SearchQueryPtr SearchHistory::FindQuery( const std::string& queryString )
+SearchQueryPtr SearchHistory::FindQuery( const tstring& queryString )
 {
   for ( OS_SearchQuery::Iterator itr = m_MRUQueries.Begin(), end = m_MRUQueries.End(); itr != end; ++itr )
   {

@@ -15,7 +15,7 @@ namespace Luna
   {
   private:
     D_ContextMenuItemSmartPtr m_Items;
-    std::set< std::string > m_Labels;
+    std::set< tstring > m_Labels;
 
   public:
     ContextMenuItemSet();
@@ -25,11 +25,11 @@ namespace Luna
     void AppendItem( const ContextMenuItemPtr& item );
     void AppendSeparator();
     void AppendSeparatorAfter( const ContextMenuItemPtr& afterItem );
-    void Remove( const std::string& label );
+    void Remove( const tstring& label );
     u32 RemoveAt( const u32 index );
     const D_ContextMenuItemSmartPtr& GetItems() const;
-    bool ContainsLabel( const std::string& label ) const;
-    ContextMenuItemPtr Find( const std::string& label ) const;
+    bool ContainsLabel( const tstring& label ) const;
+    ContextMenuItemPtr Find( const tstring& label ) const;
     bool IsEmpty() const;
     void Clear();
   };

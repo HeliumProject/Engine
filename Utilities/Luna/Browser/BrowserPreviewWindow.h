@@ -15,7 +15,7 @@ namespace Luna
   class BrowserPreviewWindow : public PreviewWindow
   {
   public:
-    BrowserPreviewWindow( wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = "Luna::BrowserPreviewWindow" );
+    BrowserPreviewWindow( wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = wxT( "Luna::BrowserPreviewWindow" ) );
     virtual ~BrowserPreviewWindow();
 
     void SetBrowserFrame( BrowserFrame* browserFrame );

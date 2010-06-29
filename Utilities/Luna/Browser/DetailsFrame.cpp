@@ -9,15 +9,15 @@ using namespace Luna;
 
 static const i32 s_DisplayTimeSize = 32;
 
-std::string TimeAsString( u64 time )
+tstring TimeAsString( u64 time )
 {
-  std::string result;
+  tstring result;
 
   // try to get a printer friendly version of the datetime
   __time64_t timeT  = ( __time64_t ) ( time /*/ 1000*/ );
 
-  char timePrint[s_DisplayTimeSize];
-  if ( _ctime64_s( timePrint, s_DisplayTimeSize, &timeT ) == 0 )
+  tchar timePrint[s_DisplayTimeSize];
+  if ( _tctime64_s( timePrint, s_DisplayTimeSize, &timeT ) == 0 )
   {
     // timeT
     result = timePrint;
@@ -25,45 +25,45 @@ std::string TimeAsString( u64 time )
   }
   else
   {
-    sprintf( timePrint, "%ld", time );
+    _stprintf( timePrint, TXT( "%ld" ), time );
     result = timePrint;
   }    
   return result;
 }
 
-std::string GetOperationString( RCS::Operation operation )
+tstring GetOperationString( RCS::Operation operation )
 {
   switch ( operation )
   {
   case RCS::Operations::None:
-    return "None";
+    return TXT( "None" );
 
   case RCS::Operations::Add:
-    return "Add";
+    return TXT( "Add" );
 
   case RCS::Operations::Edit:
-    return "Edit";
+    return TXT( "Edit" );
 
   case RCS::Operations::Delete:
-    return "Delete";
+    return TXT( "Delete" );
 
   case RCS::Operations::Branch:
-    return "Branch";
+    return TXT( "Branch" );
 
   case RCS::Operations::Integrate:
-    return "Integrate";
+    return TXT( "Integrate" );
 
   case RCS::Operations::Unknown:
   default:
-    return "Unknown";
+    return TXT( "Unknown" );
   }
 }
 
-std::string GetRevisionString( const RCS::Revision* revision )
+tstring GetRevisionString( const RCS::Revision* revision )
 {
-  std::string str;
-  str += revision->m_Username + "@" + revision->m_Client + " (" + GetOperationString( revision->m_Operation ) + ")\n";
-  str += TimeAsString( revision->m_Time ) + "\n";
+  tstring str;
+  str += revision->m_Username + TXT( "@" ) + revision->m_Client + TXT( " (" ) + GetOperationString( revision->m_Operation ) + TXT( ")\n" );
+  str += TimeAsString( revision->m_Time ) + TXT( "\n" );
   str += revision->m_Description;
   return str;
 }
@@ -75,13 +75,13 @@ DetailsFrame::DetailsFrame( wxWindow* parent )
 
 void DetailsFrame::Populate( Asset::AssetFile* file )
 {
-  std::string name = file->GetShortName() + file->GetExtension();
-  SetTitle( name + " - " + GetTitle() );
+  tstring name = file->GetShortName() + file->GetExtension();
+  SetTitle( name + TXT( " - " ) + GetTitle() );
 
   m_Name->SetValue( name );
 
-  std::string fileType( Asset::AssetClass::GetAssetTypeName( file->GetAssetType() ) );
-  if ( fileType == "Unknown" || fileType == "Null" )
+  tstring fileType( Asset::AssetClass::GetAssetTypeName( file->GetAssetType() ) );
+  if ( fileType == TXT( "Unknown" ) || fileType == TXT( "Null" ) )
   {
     fileType = file->GetFileType();
   }
@@ -101,37 +101,37 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
   }
   catch ( const Nocturnal::Exception& e )
   {
-    Log::Error( "%s\n", e.What() );
+    Log::Error( TXT( "%s\n" ), e.What() );
   }
 
   if ( gotRevisionInfo && rcsFile.ExistsInDepot() )
   {
     if ( rcsFile.IsCheckedOutByMe() )
     {
-      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "accept.png" ) );
-      m_RevisionStatus->SetLabel( "Checked out to you" );
+      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "accept.png" ) ) );
+      m_RevisionStatus->SetLabel( TXT( "Checked out to you" ) );
     }
     else if ( rcsFile.IsCheckedOutBySomeoneElse() )
     {
-      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "actions/process-stop.png" ) );
+      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/process-stop.png" ) ) );
       
-      std::string usernames;
+      tstring usernames;
       rcsFile.GetOpenedByUsers( usernames );
       
-      std::string message( "Checked out to: " );
+      tstring message( TXT( "Checked out to: " ) );
       message += usernames;
       
       m_RevisionStatus->SetLabel( message );
     }
     else if ( !rcsFile.IsUpToDate() )
     {
-      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "warning.png" ) );
-      m_RevisionStatus->SetLabel( "Out of date" );
+      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "warning.png" ) ) );
+      m_RevisionStatus->SetLabel( TXT( "Out of date" ) );
     }
     else
     {
-      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "p4.png" ) );
-      m_RevisionStatus->SetLabel( "Available for check out" );
+      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "p4.png" ) ) );
+      m_RevisionStatus->SetLabel( TXT( "Available for check out" ) );
     }
 
     if ( !rcsFile.m_Revisions.empty() )
@@ -145,19 +145,19 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
       }
       else
       {
-        std::string lastCheckIn = GetRevisionString( lastRevision );
+        tstring lastCheckIn = GetRevisionString( lastRevision );
         m_LastCheckIn->SetValue( lastCheckIn );
         m_LastCheckInPanel->Show();
       }
 
-      std::string firstCheckIn = GetRevisionString( firstRevision );
+      tstring firstCheckIn = GetRevisionString( firstRevision );
       m_FirstCheckIn->SetValue( firstCheckIn );
     }
   }
   else
   {
-    m_RevisionStatus->SetLabel( "No Perforce information available" );
-    m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "actions/process-stop.png" ) );
+    m_RevisionStatus->SetLabel( TXT( "No Perforce information available" ) );
+    m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/process-stop.png" ) ) );
     m_LastCheckInPanel->Hide();
     m_FirstCheckInPanel->Hide();
   }

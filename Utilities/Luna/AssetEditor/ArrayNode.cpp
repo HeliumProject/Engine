@@ -17,7 +17,7 @@ LUNA_DEFINE_TYPE( Luna::ArrayNode );
 // 
 void ArrayNode::InitializeType()
 {
-  Reflect::RegisterClass<Luna::ArrayNode>( "Luna::ArrayNode" );
+  Reflect::RegisterClass<Luna::ArrayNode>( TXT( "Luna::ArrayNode" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,10 +53,10 @@ ArrayNode::~ArrayNode()
 // 
 void ArrayNode::CreateChildren()
 {
-  std::string value = GetValue();
-  std::vector< std::string > tokens;
+  tstring value = GetValue();
+  std::vector< tstring > tokens;
   ::Tokenize( value, tokens, Reflect::s_ContainerItemDelimiter );
-  for each ( const std::string& str in tokens )
+  for each ( const tstring& str in tokens )
   {
     AddChild( new Luna::ArrayItemNode( GetAssetManager(), this, str ) );
   }

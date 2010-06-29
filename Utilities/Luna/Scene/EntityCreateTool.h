@@ -13,12 +13,12 @@ namespace Luna
     class EntityRowInfo
     {
     public:
-        std::string m_OriginalValue;
-        std::string m_Name;
+        tstring m_OriginalValue;
+        tstring m_Name;
         Nocturnal::Path m_ClassPath;
         float m_Probability;
 
-        std::string GetListName() const;
+        tstring GetListName() const;
     };
 
     typedef std::vector< EntityRowInfo > V_EntityRowInfo;
@@ -46,7 +46,7 @@ namespace Luna
     protected:
         Inspect::List* m_RandomEntityList;
         V_EntityRowInfo m_RandomEntityInfo;
-        static std::vector< std::string > s_RandomEntities;
+        static std::vector< tstring > s_RandomEntities;
 
         Inspect::FileDialogButton* m_FileButton;
         Inspect::FileBrowserButton* m_BrowserButton;
@@ -61,9 +61,9 @@ namespace Luna
         virtual Luna::TransformPtr CreateNode() NOC_OVERRIDE;
         virtual void CreateProperties() NOC_OVERRIDE;
 
-        std::string GetEntityAsset() const;
-        void SetEntityAsset(const std::string& value);
-        void AddEntityAsset(const std::string& value);
+        tstring GetEntityAsset() const;
+        void SetEntityAsset(const tstring& value);
+        void AddEntityAsset(const tstring& value);
 
         bool GetPointerVisible() const;
         void SetPointerVisible(bool show);
@@ -71,8 +71,8 @@ namespace Luna
         void SetBoundsVisible(bool show);
         bool GetGeometryVisible() const;
         void SetGeometryVisible(bool show);
-        std::string GetRandomEntity() const;
-        void SetRandomEntity( const std::string& entityName );
+        tstring GetRandomEntity() const;
+        void SetRandomEntity( const tstring& entityName );
 
         void OnDeleteClass( Inspect::Button* button );
         void OnClear( Inspect::Button* button );
@@ -80,6 +80,6 @@ namespace Luna
         void OnModify( Inspect::Button* button );
 
         void OnEntityDropped( const Inspect::FilteredDropTargetArgs& args );
-        void DropEntities( const std::vector< std::string >& entities, bool appendToList );
+        void DropEntities( const std::vector< tstring >& entities, bool appendToList );
     };
 }

@@ -33,7 +33,7 @@ void ContextMenuItemSet::PrependItem( const ContextMenuItemPtr& item )
 {
   if ( !ContextMenuItem::IsSeparator( item ) )
   {
-    Insert<std::set< std::string >>::Result inserted = m_Labels.insert( item->GetLabel() );
+    Insert<std::set< tstring >>::Result inserted = m_Labels.insert( item->GetLabel() );
     NOC_ASSERT( inserted.second ); // Menu labels must be unique within a menu
   }
 
@@ -48,7 +48,7 @@ void ContextMenuItemSet::AppendItem( const ContextMenuItemPtr& item )
 {
   if ( !ContextMenuItem::IsSeparator( item ) )
   {
-    Insert<std::set< std::string >>::Result inserted = m_Labels.insert( item->GetLabel() );
+    Insert<std::set< tstring >>::Result inserted = m_Labels.insert( item->GetLabel() );
     NOC_ASSERT( inserted.second ); // Menu labels must be unique within a menu
   }
 
@@ -102,7 +102,7 @@ void ContextMenuItemSet::AppendSeparatorAfter( const ContextMenuItemPtr& afterIt
 // Removes the item with the specified label.  Additional items (separators)
 // may also be removed.  See RemoveAt for more information.
 // 
-void ContextMenuItemSet::Remove( const std::string& label )
+void ContextMenuItemSet::Remove( const tstring& label )
 {
   if ( !label.empty() && ContainsLabel( label ) )
   {
@@ -200,7 +200,7 @@ const D_ContextMenuItemSmartPtr& ContextMenuItemSet::GetItems() const
 // Returns true if there is an item with the specified label somewhere in this
 // context menu.
 // 
-bool ContextMenuItemSet::ContainsLabel( const std::string& label ) const
+bool ContextMenuItemSet::ContainsLabel( const tstring& label ) const
 {
   return m_Labels.find( label ) != m_Labels.end();
 }
@@ -208,7 +208,7 @@ bool ContextMenuItemSet::ContainsLabel( const std::string& label ) const
 ///////////////////////////////////////////////////////////////////////////////
 // Locates the menu item with the specifed label and returns it.
 // 
-ContextMenuItemPtr ContextMenuItemSet::Find( const std::string& label ) const
+ContextMenuItemPtr ContextMenuItemSet::Find( const tstring& label ) const
 {
   ContextMenuItemPtr item;
   if ( ContainsLabel( label ) )

@@ -36,7 +36,7 @@ namespace Luna
     /////////////////////////////////////////////////////////////////////////////
     /// DummyWindow
     /////////////////////////////////////////////////////////////////////////////
-    static const char* s_DummyWindowName = "DummyWindowThread";
+    static const tchar* s_DummyWindowName = TXT( "DummyWindowThread" );
 
     // Custom wxEventTypes for the SearchThread to fire.
     DEFINE_EVENT_TYPE( igEVT_BEGIN_SEARCH )
@@ -46,7 +46,7 @@ namespace Luna
     class DummyWindow : public wxFrame
     {
     public:
-        DummyWindow( const char* name = NULL )
+        DummyWindow( const tchar* name = NULL )
             : wxFrame( NULL, wxID_ANY, s_DummyWindowName, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, s_DummyWindowName )
         {
             Hide();
@@ -54,7 +54,7 @@ namespace Luna
             if ( name )
             {
                 wxString newName( s_DummyWindowName );
-                newName += "-";
+                newName += TXT( "-" );
                 newName += name;
                 SetName( newName );
                 SetTitle( newName );
@@ -159,7 +159,7 @@ namespace Luna
 /////////////////////////////////////////////////////////////////////////////
 /// BrowserSearch
 /////////////////////////////////////////////////////////////////////////////
-BrowserSearch::BrowserSearch( const std::string& rootDirectory, const std::string& configDirectory )
+BrowserSearch::BrowserSearch( const tstring& rootDirectory, const tstring& configDirectory )
 : m_RootDirectory( rootDirectory )
 , m_ConfigDirectory( configDirectory )
 , m_SearchResults( NULL )
@@ -168,8 +168,8 @@ BrowserSearch::BrowserSearch( const std::string& rootDirectory, const std::strin
 , m_CurrentSearchID( -1 )
 , m_CurrentSearchQuery( NULL )
 {
-    m_SearchInitializedEvent = ::CreateEvent( NULL, TRUE, TRUE, "BrowserBeginSearchEvent" );
-    m_EndSearchEvent = ::CreateEvent( NULL, TRUE, TRUE, "BrowserEndSearchEvent" );
+    m_SearchInitializedEvent = ::CreateEvent( NULL, TRUE, TRUE, TXT( "BrowserBeginSearchEvent" ) );
+    m_EndSearchEvent = ::CreateEvent( NULL, TRUE, TRUE, TXT( "BrowserEndSearchEvent" ) );
 }
 
 BrowserSearch::~BrowserSearch()
@@ -216,7 +216,7 @@ bool BrowserSearch::RequestSearch( SearchQuery* searchQuery )
         m_FoundFiles.clear();
 
         NOC_ASSERT( !m_DummyWindow );
-        m_DummyWindow = new DummyWindow( "BrowserSearch" );
+        m_DummyWindow = new DummyWindow( TXT( "BrowserSearch" ) );
         m_DummyWindow->Connect( m_DummyWindow->GetId(), igEVT_BEGIN_SEARCH, wxCommandEventHandler( DummyWindow::OnBeginThread ), NULL, m_DummyWindow );
         m_DummyWindow->Connect( m_DummyWindow->GetId(), igEVT_RESULTS_AVAILABLE, wxCommandEventHandler( DummyWindow::OnThreadUpdate ), NULL, m_DummyWindow );
         m_DummyWindow->Connect( m_DummyWindow->GetId(), igEVT_SEARCH_COMPLETE, wxCommandEventHandler( DummyWindow::OnEndThread ), NULL, m_DummyWindow );
@@ -330,7 +330,7 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
     // AssetFile
     if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::File )
     {
-        std::string searchFolder( m_CurrentSearchQuery->GetQueryString() );
+        tstring searchFolder( m_CurrentSearchQuery->GetQueryString() );
         Nocturnal::Path searchPath( searchFolder );
 
         if ( FoundAssetFolder( Nocturnal::Path( searchPath.Directory() ), searchID ) )
@@ -446,7 +446,7 @@ inline void BrowserSearch::SearchThreadLeave( i32 searchID )
 // SearchThreadProc Helper Functions - Wrangle SearchResults
 /////////////////////////////////////////////////////////////////////////////
 
-bool BrowserSearch::FoundAssetFile( const std::string& path )
+bool BrowserSearch::FoundAssetFile( const tstring& path )
 { 
     Platform::TakeMutex mutex (m_SearchResultsMutex);
 

@@ -57,15 +57,15 @@ namespace Luna
 
     const OS_DocumentSmartPtr& GetDocuments();
 
-    bool Contains( const std::string& path ) const;
+    bool Contains( const tstring& path ) const;
 
-    virtual bool ValidateDocument( Document* document, std::string& error ) const;
-    virtual bool ValidatePath( const std::string& path, std::string& error ) const;
+    virtual bool ValidateDocument( Document* document, tstring& error ) const;
+    virtual bool ValidatePath( const tstring& path, tstring& error ) const;
 
-    virtual DocumentPtr OpenPath( const std::string& path, std::string& error );
+    virtual DocumentPtr OpenPath( const tstring& path, tstring& error );
 
-    virtual bool Save( DocumentPtr document, std::string& error );
-    virtual bool SaveAll( std::string& error );
+    virtual bool Save( DocumentPtr document, tstring& error );
+    virtual bool SaveAll( tstring& error );
 
     virtual bool CloseAll();
     virtual bool CloseDocument( DocumentPtr document, bool prompt = true );
@@ -89,7 +89,7 @@ namespace Luna
   protected:
     bool AddDocument( const DocumentPtr& document );
     bool RemoveDocument( const DocumentPtr& document );
-    Document* FindDocument( const std::string& path ) const;
+    Document* FindDocument( const tstring& path ) const;
 
   private:
     void OnDocumentClosed( const DocumentChangedArgs& args );

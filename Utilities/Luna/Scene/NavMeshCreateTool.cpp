@@ -39,7 +39,7 @@ f32 NavMeshCreateTool::s_Size = 0.3f;
 
 void NavMeshCreateTool::InitializeType()
 {
-  Reflect::RegisterClass< Luna::NavMeshCreateTool >( "Luna::NavMeshCreateTool" );
+  Reflect::RegisterClass< Luna::NavMeshCreateTool >( TXT( "Luna::NavMeshCreateTool" ) );
 }
 
 void NavMeshCreateTool::CleanupType()
@@ -1679,39 +1679,39 @@ void NavMeshCreateTool::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel( "Create NavMesh", true );
+  m_Enumerator->PushPanel( TXT( "Create NavMesh" ), true );
   {
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel( "Surface Snap" );   
+      m_Enumerator->AddLabel( TXT( "Surface Snap" ) );   
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, bool> (this, &NavMeshCreateTool::GetSurfaceSnap, &NavMeshCreateTool::SetSurfaceSnap ) );
     }
     m_Enumerator->Pop();
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel( "Object Snap" );   
+      m_Enumerator->AddLabel( TXT( "Object Snap" ) );   
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, bool> (this, &NavMeshCreateTool::GetObjectSnap, &NavMeshCreateTool::SetObjectSnap ) );
     }
     m_Enumerator->Pop();
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Plane Snap");
+      m_Enumerator->AddLabel( TXT( "Plane Snap" ) );
       Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, int> (this, &NavMeshCreateTool::GetPlaneSnap, &NavMeshCreateTool::SetPlaneSnap) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << IntersectionPlanes::View;
-        items.push_back( Inspect::Item( "View", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "View" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << IntersectionPlanes::Ground;
-        items.push_back( Inspect::Item( "Ground", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Ground" ), str.str() ) );
       }
 
       choice->SetItems( items );

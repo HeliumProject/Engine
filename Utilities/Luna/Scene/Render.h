@@ -415,6 +415,6 @@ namespace Luna
     void Draw();
   };
 
-  bool IsSupportedTexture( const std::string& file );
-  IDirect3DTexture9* LoadTexture( IDirect3DDevice9* device, const std::string& file, u32* textureSize = NULL, bool* hasAlpha = NULL, D3DPOOL pool = D3DPOOL_MANAGED );
+  bool IsSupportedTexture( const tstring& file );
+  IDirect3DTexture9* LoadTexture( IDirect3DDevice9* device, const tstring& file, u32* textureSize = NULL, bool* hasAlpha = NULL, D3DPOOL pool = D3DPOOL_MANAGED );
 }

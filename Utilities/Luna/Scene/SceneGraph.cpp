@@ -10,7 +10,7 @@ LUNA_DEFINE_TYPE( SceneGraph );
 
 void SceneGraph::InitializeType()
 {
-  Reflect::RegisterClass< SceneGraph >( "SceneGraph" );
+  Reflect::RegisterClass< SceneGraph >( TXT( "SceneGraph" ) );
 }
 
 void SceneGraph::CleanupType()

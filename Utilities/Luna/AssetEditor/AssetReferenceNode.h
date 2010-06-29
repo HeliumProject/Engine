@@ -64,7 +64,7 @@ namespace Luna
         void AssociateField( Reflect::Element* element, const Reflect::Field* field );
         bool IsFieldAssociated() const;
         virtual void ConnectProperties( EnumerateElementArgs& args ) NOC_OVERRIDE;
-        bool ValidatePanel( const std::string& name ) NOC_OVERRIDE;
+        bool ValidatePanel( const tstring& name ) NOC_OVERRIDE;
         virtual void PreShowContextMenu() NOC_OVERRIDE;
         virtual bool CanBeCopied() const NOC_OVERRIDE;
         virtual Inspect::ReflectClipboardDataPtr GetClipboardData() NOC_OVERRIDE;
@@ -79,12 +79,12 @@ namespace Luna
         friend class ComponentExistenceCommand;
 
         static void CreatePanel( CreatePanelArgs& args );
-        std::string GetFileName() const;
-        std::string GetFilePath() const;
-        void SetFilePath( const std::string& path );
-        std::string GetAssetTypeName() const;
-        std::string MakeLabel() const;
-        std::string MakeIcon() const;
+        tstring GetFileName() const;
+        tstring GetFilePath() const;
+        void SetFilePath( const tstring& path );
+        tstring GetAssetTypeName() const;
+        tstring MakeLabel() const;
+        tstring MakeIcon() const;
 
         // Callbacks
     private:

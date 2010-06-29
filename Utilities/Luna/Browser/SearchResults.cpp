@@ -133,7 +133,7 @@ bool SearchResults::AddFolder( Asset::AssetFolderPtr folder )
     return false;
 }
 
-bool SearchResults::RemoveFolder( const std::string& fullPath )
+bool SearchResults::RemoveFolder( const tstring& fullPath )
 {
     Asset::V_AssetFolders::iterator itr = m_Folders.begin();
     Asset::V_AssetFolders::iterator end = m_Folders.begin();

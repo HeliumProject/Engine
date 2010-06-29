@@ -114,14 +114,14 @@ Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
     m_Manager->AddCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanging ) );
     m_Manager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanged ) );
 
-    m_SelectedEntityCollection = new SelectedEntityCollection( &m_Selection, "Scene Editor selection" );
+    m_SelectedEntityCollection = new SelectedEntityCollection( &m_Selection, TXT( "Scene Editor selection" ) );
 
     // Evaluation
     m_Graph = new SceneGraph();
 
     // Setup root node
     m_Root = new Luna::PivotTransform( this );
-    m_Root->SetName( "Root" );
+    m_Root->SetName( TXT( "Root" ) );
     m_Root->Evaluate( GraphDirections::Downstream );
     m_Graph->AddNode( m_Root.Ptr() );
 
@@ -138,7 +138,7 @@ Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
     {
         TypeConfig* config = *itr;
 
-        std::string contentType = config->m_ApplicationType;
+        tstring contentType = config->m_ApplicationType;
 
         const Reflect::Class* contentClass = Reflect::Registry::GetInstance()->GetClass(contentType);
 
@@ -218,12 +218,12 @@ bool Scene::IsEditable()
     return false;
 }
 
-const std::string& Scene::GetFileName() const
+const tstring& Scene::GetFileName() const
 {
     return m_File->GetFileName();
 }
 
-std::string Scene::GetFullPath() const
+tstring Scene::GetFullPath() const
 {
     if ( !m_File->GetFilePath().empty() )
     {
@@ -293,19 +293,19 @@ bool Scene::Reload()
     return LoadFile( GetFullPath() );
 }
 
-bool Scene::LoadFile( const std::string& file )
+bool Scene::LoadFile( const tstring& file )
 {
     if ( !m_Nodes.empty() )
     {
         // Shouldn't happen
-        Log::Error( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n", m_File->GetFilePath().c_str(), file.c_str() );
+        Log::Error( TXT( "Scene '%s' is not empty!  You should not be trying to Load '%s'.  Do an Import instead.\n" ), m_File->GetFilePath().c_str(), file.c_str() );
         return false;
     }
 
     return ImportFile( file, ImportActions::Load, NULL ).ReferencesObject();
 }
 
-Undo::CommandPtr Scene::ImportFile( const std::string& file, ImportAction action, u32 importFlags, Luna::HierarchyNode* importRoot, i32 importReflectType )
+Undo::CommandPtr Scene::ImportFile( const tstring& file, ImportAction action, u32 importFlags, Luna::HierarchyNode* importRoot, i32 importReflectType )
 {
     LUNA_SCENE_SCOPE_TIMER( ( "%s", file.c_str() ) );
 
@@ -339,7 +339,7 @@ Undo::CommandPtr Scene::ImportFile( const std::string& file, ImportAction action
     // setup
     m_ImportRoot = importRoot;
 
-    std::ostringstream str;
+    tostringstream str;
     str << "Loading File: " << file;
     m_StatusChanged.Raise( str.str() );
 
@@ -358,7 +358,7 @@ Undo::CommandPtr Scene::ImportFile( const std::string& file, ImportAction action
     }
     catch ( const Nocturnal::Exception& exception )
     {
-        Log::Error( "%s\n", exception.What() );
+        Log::Error( TXT( "%s\n" ), exception.What() );
         success = false;
     }
 
@@ -376,7 +376,7 @@ Undo::CommandPtr Scene::ImportFile( const std::string& file, ImportAction action
     return command;
 }
 
-Undo::CommandPtr Scene::ImportXML( const std::string& xml, u32 importFlags, Luna::HierarchyNode* importRoot )
+Undo::CommandPtr Scene::ImportXML( const tstring& xml, u32 importFlags, Luna::HierarchyNode* importRoot )
 {
     LUNA_SCENE_SCOPE_TIMER( ("") );
 
@@ -395,7 +395,7 @@ Undo::CommandPtr Scene::ImportXML( const std::string& xml, u32 importFlags, Luna
     // setup
     m_ImportRoot = importRoot;
 
-    std::ostringstream str;
+    tostringstream str;
     str << "Parsing XML...";
     m_StatusChanged.Raise( str.str() );
 
@@ -413,7 +413,7 @@ Undo::CommandPtr Scene::ImportXML( const std::string& xml, u32 importFlags, Luna
     }
     catch ( Nocturnal::Exception& exception )
     {
-        Log::Error( "%s\n", exception.What() );
+        Log::Error( TXT( "%s\n" ), exception.What() );
         success = false;
     }
 
@@ -531,7 +531,7 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
     }
     else
     {
-        Log::Error( "Unable to create node for data of type '%s'.\n", data->GetClass()->m_UIName.c_str() );
+        Log::Error( TXT( "Unable to create node for data of type '%s'.\n" ), data->GetClass()->m_UIName.c_str() );
         NOC_BREAK();
     }
 
@@ -594,8 +594,8 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
 
     m_Importing = true;
     m_CursorChanged.Raise(wxCURSOR_WAIT);
-    m_TitleChanged.Raise( std::string ("Luna Scene Editor (Processing)") );
-    m_StatusChanged.Raise( std::string ("Loading Objects") );
+    m_TitleChanged.Raise( tstring( TXT("Luna Scene Editor (Processing)") ) );
+    m_StatusChanged.Raise( tstring( TXT("Loading Objects") ) );
 
     m_RemappedIDs.clear();
 
@@ -705,12 +705,12 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     // 
 
     // evaluate the graph to build global transforms
-    m_StatusChanged.Raise( std::string ("Evaluating Objects...") );
+    m_StatusChanged.Raise( tstring( TXT("Evaluating Objects...") ) );
     Evaluate(true);
 
     // initialize each object after initial evaluation is complete
     V_HierarchyNodeDumbPtr newNodes;
-    m_StatusChanged.Raise( std::string ("Initializing Objects...") );
+    m_StatusChanged.Raise( tstring( TXT("Initializing Objects...") ) );
     V_SceneNodeSmartPtr::const_iterator itr = createdNodes.begin();
     V_SceneNodeSmartPtr::const_iterator end = createdNodes.end();
     for ( ; itr != end; ++itr )
@@ -765,14 +765,14 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     }
 
     // report
-    std::ostringstream str;
+    tostringstream str;
     str.precision( 2 );
     str << "Scene Loading Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
     m_StatusChanged.Raise( str.str() );
 
     // done
-    m_TitleChanged.Raise( std::string ("Luna Scene Editor") );
-    m_StatusChanged.Raise( std::string ("Ready") );
+    m_TitleChanged.Raise( tstring( TXT("Luna Scene Editor") ) );
+    m_StatusChanged.Raise( tstring( TXT("Ready") ) );
     m_CursorChanged.Raise(wxCURSOR_ARROW);
     m_Importing = false;
 
@@ -836,8 +836,8 @@ Undo::CommandPtr Scene::ImportSceneNode( const Reflect::ElementPtr& element, V_S
         if ( createdNode.ReferencesObject() )
         {
             // update ui
-            std::ostringstream str;
-            str << "Loading: " + createdNode->GetName();
+            tostringstream str;
+            str << TXT( "Loading: " ) + createdNode->GetName();
             m_StatusChanged.Raise( str.str() );
 
             // save it in the list of created nodes
@@ -857,10 +857,10 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
     {
     case Reflect::ArchiveStates::ArchiveStarting:
         {
-            std::string verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? "Opening" : "Saving";
-            std::string type = info.m_Archive.GetType() == Reflect::ArchiveTypes::XML ? "XML" : "Binary";
+            tstring verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
+            tstring type = info.m_Archive.GetType() == Reflect::ArchiveTypes::XML ? TXT( "XML" ) : TXT( "Binary" );
 
-            std::ostringstream str;
+            tostringstream str;
             str << verb << " " << type << " File: " << info.m_Archive.GetPath();
             m_StatusChanged.Raise( str.str() );
             break;
@@ -873,15 +873,15 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
                 m_Progress = info.m_Progress;
 
                 {
-                    std::ostringstream str;
+                    tostringstream str;
                     str << "Luna Scene Editor" << " (" << m_Progress << "%)";
                     m_TitleChanged.Raise( str.str() );
                 }
 
                 {
-                    std::string verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? "Opening" : "Saving";
+                    tstring verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
 
-                    std::ostringstream str;
+                    tostringstream str;
                     str << verb << ": " << info.m_Archive.GetPath() << " (" << m_Progress << "%)";
                     m_StatusChanged.Raise( str.str() );
                 }
@@ -892,9 +892,9 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
 
     case Reflect::ArchiveStates::Complete:
         {
-            std::string verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? "Opening" : "Saving";
+            tstring verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
 
-            std::ostringstream str;
+            tostringstream str;
             str << "Completed " << verb << ": " << info.m_Archive.GetPath();
             m_StatusChanged.Raise( str.str() );
             break;
@@ -902,7 +902,7 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
 
     case Reflect::ArchiveStates::PostProcessing:
         {
-            std::ostringstream str;
+            tostringstream str;
             str << "Processing: " << info.m_Archive.GetPath();
             m_StatusChanged.Raise( str.str() );
             break;
@@ -989,7 +989,7 @@ bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::
         }
         else
         {
-            Log::Warning( "Nothing is selected, there is nothing to export\n" );
+            Log::Warning( TXT( "Nothing is selected, there is nothing to export\n" ) );
         }
     }
     else
@@ -1018,7 +1018,7 @@ bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::
         }
         else
         {
-            Log::Warning( "Scene is empty, there's nothing to save!\n" );
+            Log::Warning( TXT( "Scene is empty, there's nothing to save!\n" ) );
         }
     }
 
@@ -1131,7 +1131,7 @@ bool Scene::Save()
     return ExportFile( m_File->GetFilePath(), ExportFlags::Default );
 }
 
-bool Scene::ExportFile( const std::string& file, const ExportArgs& args )
+bool Scene::ExportFile( const tstring& file, const ExportArgs& args )
 {
     u64 startTimer = Platform::TimerGetClock();
 
@@ -1142,7 +1142,7 @@ bool Scene::ExportFile( const std::string& file, const ExportArgs& args )
     m_Progress = 0;
 
     {
-        std::ostringstream str;
+        tostringstream str;
         str << "Preparing to save: " << file;
         m_StatusChanged.Raise( str.str() );
     }
@@ -1160,9 +1160,9 @@ bool Scene::ExportFile( const std::string& file, const ExportArgs& args )
         }
         catch ( Nocturnal::Exception& ex )
         {
-            std::ostringstream str;
+            tostringstream str;
             str << "Failed to write file " << file << ": " << ex.What();
-            wxMessageBox( str.str(), "Error", wxOK|wxCENTRE|wxICON_ERROR );
+            wxMessageBox( str.str(), wxT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
             result = false;
         }
     }
@@ -1172,11 +1172,11 @@ bool Scene::ExportFile( const std::string& file, const ExportArgs& args )
     m_CursorChanged.Raise( wxCURSOR_ARROW );
 
     {
-        std::ostringstream str;
+        tostringstream str;
         str.precision( 2 );
         str << "Saving Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
         m_StatusChanged.Raise( str.str() );
-        m_TitleChanged.Raise( std::string ("Luna Scene Editor") );
+        m_TitleChanged.Raise( tstring( TXT("Luna Scene Editor") ) );
     }
 
     return result;
@@ -1187,7 +1187,7 @@ bool Scene::ExportFile( const std::string& file, const ExportArgs& args )
 // selected items.  The exported items are written into the xml parameter that
 // is passed into this function.
 // 
-bool Scene::ExportXML( std::string& xml, const ExportArgs& args )
+bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 {
     LUNA_SCENE_SCOPE_TIMER( ("") );
 
@@ -1200,7 +1200,7 @@ bool Scene::ExportXML( std::string& xml, const ExportArgs& args )
     m_Progress = 0;
 
     {
-        std::ostringstream str;
+        tostringstream str;
         str << "Preparing to export";
         m_StatusChanged.Raise( str.str() );
     }
@@ -1218,9 +1218,9 @@ bool Scene::ExportXML( std::string& xml, const ExportArgs& args )
         }
         catch ( Nocturnal::Exception& ex )
         {
-            std::ostringstream str;
+            tostringstream str;
             str << "Failed to generate xml: " << ex.What();
-            wxMessageBox( str.str(), "Error", wxOK|wxCENTRE|wxICON_ERROR );
+            wxMessageBox( str.str(), wxT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
             result = false;
         }
     }
@@ -1230,21 +1230,21 @@ bool Scene::ExportXML( std::string& xml, const ExportArgs& args )
     m_CursorChanged.Raise( wxCURSOR_ARROW );
 
     {
-        std::ostringstream str;
+        tostringstream str;
         str.precision( 2 );
         str << "Export Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
         m_StatusChanged.Raise( str.str() );
-        m_TitleChanged.Raise( std::string( "Luna Scene Editor" ) );
+        m_TitleChanged.Raise( tstring( TXT( "Luna Scene Editor" ) ) );
     }
 
     return result;
 }
 
-int Scene::Split( std::string& outName )
+int Scene::Split( tstring& outName )
 {
     int ret = -1;
 
-    std::string name = outName.c_str();
+    tstring name = outName.c_str();
 
     size_t lastNum = name.size();
     while (lastNum > 0 && isdigit(name[lastNum-1]))
@@ -1258,47 +1258,47 @@ int Scene::Split( std::string& outName )
     }
     else
     {
-        std::string numberString = name.substr(lastNum);
+        tstring numberString = name.substr(lastNum);
 
         // trim name
         outName = name.substr(0, lastNum);
 
-        ret = atoi(numberString.c_str());
+        ret = _tstoi(numberString.c_str());
     }
 
     return ret;
 }
 
-void Scene::SetName( Luna::SceneNode* sceneNode, const std::string& newName )
+void Scene::SetName( Luna::SceneNode* sceneNode, const tstring& newName )
 {
     // lua keywords
-    static stdext::hash_set<std::string, NameHasher> keywords;
+    static stdext::hash_set<tstring, NameHasher> keywords;
     if (keywords.empty())
     {
-        keywords.insert( "and" );
-        keywords.insert( "break" );
-        keywords.insert( "do" );
-        keywords.insert( "else" );
-        keywords.insert( "elseif" );
-        keywords.insert( "end" );
-        keywords.insert( "false" );
-        keywords.insert( "for" );
-        keywords.insert( "function" );
-        keywords.insert( "if" );
-        keywords.insert( "in" );
-        keywords.insert( "local" );
-        keywords.insert( "nil" );
-        keywords.insert( "not" );
-        keywords.insert( "or" );
-        keywords.insert( "repeat" );
-        keywords.insert( "return" );
-        keywords.insert( "then" );
-        keywords.insert( "true" );
-        keywords.insert( "until" );
-        keywords.insert( "while" );
+        keywords.insert( TXT( "and" ) );
+        keywords.insert( TXT( "break" ) );
+        keywords.insert( TXT( "do" ) );
+        keywords.insert( TXT( "else" ) );
+        keywords.insert( TXT( "elseif" ) );
+        keywords.insert( TXT( "end" ) );
+        keywords.insert( TXT( "false" ) );
+        keywords.insert( TXT( "for" ) );
+        keywords.insert( TXT( "function" ) );
+        keywords.insert( TXT( "if" ) );
+        keywords.insert( TXT( "in" ) );
+        keywords.insert( TXT( "local" ) );
+        keywords.insert( TXT( "nil" ) );
+        keywords.insert( TXT( "not" ) );
+        keywords.insert( TXT( "or" ) );
+        keywords.insert( TXT( "repeat" ) );
+        keywords.insert( TXT( "return" ) );
+        keywords.insert( TXT( "then" ) );
+        keywords.insert( TXT( "true" ) );
+        keywords.insert( TXT( "until" ) );
+        keywords.insert( TXT( "while" ) );
     }
 
-    std::string realName = newName;
+    tstring realName = newName;
 
     // handle the no-name case
     if (realName.empty() || keywords.find(realName) != keywords.end())
@@ -1314,8 +1314,8 @@ void Scene::SetName( Luna::SceneNode* sceneNode, const std::string& newName )
 
     // handle invalid name (contains invalid characters)
     bool inSpace = false;
-    std::string::iterator itr = realName.begin();
-    std::string::iterator end = realName.end();
+    tstring::iterator itr = realName.begin();
+    tstring::iterator end = realName.end();
     while ( itr != end )
     {
         if ( !isdigit(*itr) && !isalpha(*itr) && *itr != '_' )
@@ -1359,7 +1359,7 @@ void Scene::SetName( Luna::SceneNode* sceneNode, const std::string& newName )
         }
 
         // the result of numeric uniquification
-        std::string result;
+        tstring result;
 
         // do finds while we haven't found a unique numeric version
         HM_NameToSceneNodeDumbPtr::const_iterator searchItr = m_Names.end();
@@ -1368,7 +1368,7 @@ void Scene::SetName( Luna::SceneNode* sceneNode, const std::string& newName )
         {
             // extract the number to ascii
             number++;
-            std::ostringstream numberStr;
+            tostringstream numberStr;
             numberStr << number;
 
             // build the new name to try
@@ -1393,7 +1393,7 @@ void Scene::SetName( Luna::SceneNode* sceneNode, const std::string& newName )
     NOC_ASSERT( previouslyInserted || newlyInserted );
 }
 
-void Scene::Rename( Luna::SceneNode* sceneNode, const std::string& newName, std::string oldName )
+void Scene::Rename( Luna::SceneNode* sceneNode, const tstring& newName, tstring oldName )
 {
     if ( oldName.empty() )
     {
@@ -1524,7 +1524,7 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
         NOC_ASSERT( inserted.first->second == node );
         if ( !inserted.second )
         {
-            Log::Error( "Attempted to add a node with the same ID as one that already exists - %s ["TUID_HEX_FORMAT"].\n", node->GetName().c_str(), node->GetID() );
+            Log::Error( TXT( "Attempted to add a node with the same ID as one that already exists - %s [" ) TUID_HEX_FORMAT TXT( "].\n" ), node->GetName().c_str(), node->GetID() );
             NOC_BREAK();
         }
     }
@@ -1908,22 +1908,22 @@ void Scene::SelectLink( const Inspect::SelectLinkArgs& args )
 
 void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
 {
-    std::string str;
+    tstring str;
 
     if ( args.m_Items.empty() )
     {
         TUID null;
         null.ToString(str);
-        args.m_Items.push_back( Inspect::Item ("NULL", str) );
+        args.m_Items.push_back( Inspect::Item( TXT( "NULL" ), str) );
     }
 
-    std::string suffix;
+    tstring suffix;
 
     if ( !m_Manager->IsCurrentScene( this ) )
     {
         Nocturnal::Path path( m_File->GetFileName() );
         path.RemoveExtension();
-        suffix = std::string (" (") + path.Get() + ")";
+        suffix = TXT( " (" ) + path.Get() + TXT( ")" );
     }
 
     switch (args.m_Type)
@@ -2067,19 +2067,19 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
 
     if (m_Highlighted.Size() == 1)
     {
-        std::string status = first->GetName();
-        std::string desc = first->GetDescription();
+        tstring status = first->GetName();
+        tstring desc = first->GetDescription();
 
         if (!desc.empty())
         {
-            status += std::string (" (") + desc + ")";
+            status += TXT(" (") + desc + TXT( ")" );
         }
 
         m_StatusChanged.Raise( status );
     }
     else if (m_Highlighted.Size() > 1)
     {
-        std::ostringstream str;
+        tostringstream str;
         str << m_Highlighted.Size() << " items";
         m_StatusChanged.Raise( str.str() );
     }
@@ -2188,7 +2188,7 @@ Luna::SceneNode* Scene::FindNode(const TUID& id)
     return node;
 }
 
-Luna::SceneNode* Scene::FindNode(const std::string& name)
+Luna::SceneNode* Scene::FindNode(const tstring& name)
 {
     Luna::SceneNode* node = NULL;
 
@@ -2205,7 +2205,7 @@ Luna::SceneNode* Scene::FindNode(const std::string& name)
     return node;
 }
 
-void Scene::ChangeStatus(const std::string& status)
+void Scene::ChangeStatus(const tstring& status)
 {
     m_StatusChanged.Raise( status );
 }
@@ -2257,7 +2257,7 @@ bool Scene::SelectionChanging(const OS_SelectableDumbPtr& selection)
 
             if (node)
             {
-                std::string str;
+                tstring str;
                 node->GetID().ToString(str);
 
                 // set the picked object ID
@@ -2288,7 +2288,7 @@ void Scene::SelectionChanged(const OS_SelectableDumbPtr& selection)
 
     m_ValidSmartDuplicateMatrix = false;
 
-    std::ostringstream str;
+    tostringstream str;
     if ( selection.Empty() )
     {
         str << "Selection cleared";
@@ -2613,7 +2613,7 @@ Undo::CommandPtr Scene::SetHiddenSelected( bool hidden )
         return NULL;
     }
 
-    Log::Print( "\n o SetHiddenSelected( %s )\n", hidden ? "true" : "false" );
+    Log::Print( TXT( "\n o SetHiddenSelected( %s )\n" ), hidden ? TXT( "true" ) : TXT( "false" ) );
 
     if (hidden)
     {
@@ -2647,7 +2647,7 @@ Undo::CommandPtr Scene::SetHiddenSelected( bool hidden )
 
 Undo::CommandPtr Scene::SetHiddenUnrelated( bool hidden )
 {
-    Log::Print( "\n o SetHiddenUnrelated( %s )\n", hidden ? "true" : "false" );
+    Log::Print( TXT( "\n o SetHiddenUnrelated( %s )\n" ), hidden ? TXT( "true" ) : TXT( "false" ) );
 
     if (hidden)
     {
@@ -2765,7 +2765,7 @@ Undo::CommandPtr Scene::SetGeometryShown( bool shown, bool selected )
 
 Undo::CommandPtr Scene::ShowLastHidden()
 {
-    Log::Print( "\n o ShowLastHidden()\n" );
+    Log::Print( TXT( "\n o ShowLastHidden()\n" ) );
 
     if (m_LastHidden.empty())
     {
@@ -2983,7 +2983,7 @@ Undo::CommandPtr Scene::GroupSelected()
     Luna::PivotTransform* group = new Luna::PivotTransform( this );
 
     // Get a decent name
-    group->Rename( "group1" );
+    group->Rename( TXT( "group1" ) );
 
     // Make sure the new group is under the common parent for the selected nodes.
     group->SetParent( GetCommonParent( selectedHierarchyNodes ) );
@@ -3055,7 +3055,7 @@ Undo::CommandPtr Scene::UngroupSelected()
         }
         else
         {
-            std::string msg = "The Ungroup command only works on groups. The node '" + sceneNode->GetName() +"' is not a group.\n";
+            tstring msg = TXT( "The Ungroup command only works on groups. The node '" ) + sceneNode->GetName() + TXT( "' is not a group.\n" );
             Log::Warning( msg.c_str() );
             warn = true;
         }
@@ -3066,7 +3066,7 @@ Undo::CommandPtr Scene::UngroupSelected()
 
     if ( warn )
     {
-        ChangeStatus( "The Ungroup command only works on groups.  See output window for more information." );
+        ChangeStatus( TXT( "The Ungroup command only works on groups.  See output window for more information." ) );
     }
 
     return batch->IsEmpty() ? NULL : batch;
@@ -3293,7 +3293,7 @@ void Scene::MeasureDistance()
 
     if (first && second)
     {
-        std::ostringstream str;
+        tostringstream str;
 
         Vector3 v = Vector3 (first->GetGlobalTransform().t.x, first->GetGlobalTransform().t.y, first->GetGlobalTransform().t.z) -
             Vector3 (second->GetGlobalTransform().t.x, second->GetGlobalTransform().t.y, second->GetGlobalTransform().t.z);
@@ -3306,7 +3306,7 @@ void Scene::MeasureDistance()
     }
     else
     {
-        m_StatusChanged.Raise( StatusChangeArgs ("Please select 2 placed objects and try again") );
+        m_StatusChanged.Raise( StatusChangeArgs( TXT( "Please select 2 placed objects and try again" ) ) );
     }
 }
 
@@ -3390,7 +3390,7 @@ Undo::CommandPtr Scene::PickWalkSibling(bool forward)
 
         if (!children.Empty())
         {
-            typedef std::map<std::string, Luna::HierarchyNode*> M_NameToHierarchyNodeDumbPtr;
+            typedef std::map<tstring, Luna::HierarchyNode*> M_NameToHierarchyNodeDumbPtr;
 
             M_NameToHierarchyNodeDumbPtr sortedChildren;
             {
@@ -3451,10 +3451,10 @@ Content::NodeVisibilityPtr Scene::GetVisibility(tuid nodeId)
 
 }
 
-bool Scene::GetVisibilityFile(std::string& filename)
+bool Scene::GetVisibilityFile(tstring& filename)
 {
-    char buffer[1024]; 
-    snprintf(buffer, 1024, "visibility/" TUID_HEX_FORMAT ".vis.rb", m_File->GetPath().Hash() ); 
+    tchar buffer[1024]; 
+    _sntprintf(buffer, 1024, TXT( "visibility/" ) TUID_HEX_FORMAT TXT( ".vis.rb" ), m_File->GetPath().Hash() ); 
 
     Nocturnal::Path prefsDir;
     if ( !Application::GetPreferencesDirectory( prefsDir ) )
@@ -3462,7 +3462,7 @@ bool Scene::GetVisibilityFile(std::string& filename)
         return false;
     }
 
-    Nocturnal::Path filePath( prefsDir.Get() + '/' + std::string(buffer) );
+    Nocturnal::Path filePath( prefsDir.Get() + TXT( '/' ) + tstring(buffer) );
     filename = filePath.Get();
 
     return true; 
@@ -3471,7 +3471,7 @@ bool Scene::GetVisibilityFile(std::string& filename)
 void Scene::LoadVisibility()
 {
     // attempt to load up our visibility file...
-    std::string filename; 
+    tstring filename; 
     if( GetVisibilityFile(filename) && Nocturnal::Path(filename).Exists() )
     {
         m_VisibilityDB = Reflect::Archive::FromFile<Content::SceneVisibility>(filename); 
@@ -3487,7 +3487,7 @@ void Scene::LoadVisibility()
 
 void Scene::SaveVisibility()
 {
-    std::string filename; 
+    tstring filename; 
     if(m_VisibilityDB && GetVisibilityFile(filename) )
     {
         Reflect::Archive::ToFile(m_VisibilityDB, filename); 

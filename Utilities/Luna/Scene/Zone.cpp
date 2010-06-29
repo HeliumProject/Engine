@@ -16,8 +16,8 @@ LUNA_DEFINE_TYPE( Zone );
 
 void Zone::InitializeType()
 {
-  Reflect::RegisterClass< Zone >( "Luna::Zone" );
-  Enumerator::InitializePanel( "Zone", CreatePanelSignature::Delegate( &Zone::CreatePanel ) );
+  Reflect::RegisterClass< Zone >( TXT( "Luna::Zone" ) );
+  Enumerator::InitializePanel( TXT( "Zone" ), CreatePanelSignature::Delegate( &Zone::CreatePanel ) );
 }
 
 void Zone::CleanupType()
@@ -37,12 +37,12 @@ Zone::~Zone()
 
 i32 Zone::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "zone.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "zone.png" ) );
 }
 
-std::string Zone::GetApplicationTypeName() const
+tstring Zone::GetApplicationTypeName() const
 {
-  return "Zone";
+  return TXT( "Zone" );
 }
 
 const Math::Color3& Zone::GetColor() const
@@ -50,9 +50,9 @@ const Math::Color3& Zone::GetColor() const
   return GetPackage< Content::Zone >()->m_Color;
 }
 
-bool Zone::ValidatePanel(const std::string& name)
+bool Zone::ValidatePanel(const tstring& name)
 {
-  if ( name == "Zone" )
+  if ( name == TXT( "Zone" ) )
     return true;
 
   return __super::ValidatePanel( name );

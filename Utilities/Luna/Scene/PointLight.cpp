@@ -20,9 +20,9 @@ LUNA_DEFINE_TYPE(Luna::PointLight);
 
 void PointLight::InitializeType()
 {
-  Reflect::RegisterClass< Luna::PointLight >( "Luna::PointLight" );
+  Reflect::RegisterClass< Luna::PointLight >( TXT( "Luna::PointLight" ) );
 
-  Enumerator::InitializePanel( "PointLight", CreatePanelSignature::Delegate( &PointLight::CreatePanel ) );
+  Enumerator::InitializePanel( TXT( "PointLight" ), CreatePanelSignature::Delegate( &PointLight::CreatePanel ) );
 }
 
 void PointLight::CleanupType()
@@ -56,12 +56,12 @@ PointLight::~PointLight()
 
 i32 PointLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "light.png" ) );
 }
 
-std::string PointLight::GetApplicationTypeName() const
+tstring PointLight::GetApplicationTypeName() const
 {
-  return "PointLight";
+  return TXT( "PointLight" );
 }
 
 void PointLight::Initialize()
@@ -211,9 +211,9 @@ void PointLight::DrawShape( IDirect3DDevice9* device, DrawArgs* args, const Scen
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified panel is supported by Luna::PointLight.
 //
-bool PointLight::ValidatePanel(const std::string& name)
+bool PointLight::ValidatePanel(const tstring& name)
 {
-  if (name == "PointLight")
+  if (name == TXT( "PointLight" ) )
   {
     return true;
   }
@@ -223,39 +223,39 @@ bool PointLight::ValidatePanel(const std::string& name)
 
 void PointLight::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel("Point Light", true);
+  args.m_Enumerator->PushPanel( TXT( "Point Light" ), true);
   {
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Inner Radius");
+      args.m_Enumerator->AddLabel( TXT( "Inner Radius" ) );
       args.m_Enumerator->AddValue<Luna::PointLight, float>( args.m_Selection, &PointLight::GetInnerRadius, &PointLight::SetInnerRadius );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Outer Radius");
+      args.m_Enumerator->AddLabel( TXT( "Outer Radius" ) );
       args.m_Enumerator->AddValue<Luna::PointLight, float>( args.m_Selection, &PointLight::GetOuterRadius, &PointLight::SetOuterRadius );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Area Light Radius");
+      args.m_Enumerator->AddLabel( TXT( "Area Light Radius" ) );
       args.m_Enumerator->AddValue<Light, f32>( args.m_Selection, &Light::GetAreaLightRadius, &Light::SetAreaLightRadius );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Area Light Dimensions");
+      args.m_Enumerator->AddLabel( TXT( "Area Light Dimensions" ) );
       args.m_Enumerator->AddValue<Light, Math::Vector2>( args.m_Selection, &Light::GetAreaLightDimensions, &Light::SetAreaLightDimensions );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Samples Per Meter");
+      args.m_Enumerator->AddLabel( TXT( "Samples Per Meter" ) );
       args.m_Enumerator->AddValue<Light, f32>( args.m_Selection, &Light::GetAreaLightSamplesPerMeter, &Light::SetAreaLightSamplesPerMeter );
     }
     args.m_Enumerator->Pop();

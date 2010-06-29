@@ -27,8 +27,8 @@ namespace Luna
     Nocturnal::SortTreeCtrl* GetSortTreeCtrl();
     void Unselect();
 
-    void SetPath( const std::string& path );
-    void GetPath( std::string& path ) const;
+    void SetPath( const tstring& path );
+    void GetPath( tstring& path ) const;
 
   protected:
     // Virtual event handlers, overide them in your derived class

@@ -178,7 +178,7 @@ Render::Shader* Content::RBShaderLoader::ParseFile( const tchar* fname, Render::
     // this seems like a valid shader, allocate a shader
     Render::Shader* sh = new Render::Shader(db,fname);
 
-    std::string texturePath;
+    tstring texturePath;
     bool hadError = false;
 
     SetShaderClassAlpha( sh, shaderClass->m_AlphaMode );

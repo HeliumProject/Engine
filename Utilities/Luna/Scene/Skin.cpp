@@ -15,7 +15,7 @@ LUNA_DEFINE_TYPE( Skin );
 
 void Skin::InitializeType()
 {
-  Reflect::RegisterClass< Skin >( "Luna::Skin" );
+  Reflect::RegisterClass< Skin >( TXT( "Luna::Skin" ) );
 }
 
 void Skin::CleanupType()

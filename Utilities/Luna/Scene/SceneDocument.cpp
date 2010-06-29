@@ -10,7 +10,7 @@ LUNA_DEFINE_TYPE( SceneDocument );
 
 void SceneDocument::InitializeType()
 {
-  Reflect::RegisterClass< SceneDocument >( "SceneDocument" );
+  Reflect::RegisterClass< SceneDocument >( TXT( "SceneDocument" ) );
 }
 
 void SceneDocument::CleanupType()
@@ -22,7 +22,7 @@ void SceneDocument::CleanupType()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-SceneDocument::SceneDocument( const std::string& file, const std::string& name )
+SceneDocument::SceneDocument( const tstring& file, const tstring& name )
 : Document( file, name )
 , m_Scene( NULL )
 {

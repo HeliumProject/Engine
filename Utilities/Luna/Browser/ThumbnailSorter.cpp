@@ -189,7 +189,7 @@ bool ThumbnailSorter::SortAlphabeticalByName( const ThumbnailTile* first, const 
 // 
 bool ThumbnailSorter::SortAlphabeticalByType( const ThumbnailTile* first, const ThumbnailTile* second )
 {
-  i32 result = stricmp( first->GetTypeLabel().c_str(), second->GetTypeLabel().c_str() );
+  i32 result = _tcsicmp( first->GetTypeLabel().c_str(), second->GetTypeLabel().c_str() );
   if ( result == 0 )
   {
     return SortAlphabeticalByName( first, second );

@@ -9,7 +9,7 @@ EVT_BUTTON( wxID_CANCEL, RegionSelectorDialog::OnCancel )
 EVT_BUTTON( wxID_CLOSE, RegionSelectorDialog::OnCancel )
 END_EVENT_TABLE()
 
-RegionSelectorDialog::RegionSelectorDialog( wxWindow* parent, const std::string& title, const std::string& msg, const std::set< std::string >& regionNames, std::string& selectedRegion, int id, wxPoint pos, wxSize size, int style ) 
+RegionSelectorDialog::RegionSelectorDialog( wxWindow* parent, const tstring& title, const tstring& msg, const std::set< tstring >& regionNames, tstring& selectedRegion, int id, wxPoint pos, wxSize size, int style ) 
   : wxDialog( parent, id, title.c_str(), pos, size, style )
   , m_SelectedRegion( selectedRegion )
 {
@@ -30,7 +30,7 @@ RegionSelectorDialog::RegionSelectorDialog( wxWindow* parent, const std::string&
   wxBoxSizer* bSizer6;
   bSizer6 = new wxBoxSizer( wxVERTICAL );
 
-  m_messageText = new wxStaticText( this, wxID_DEFAULT, wxT(msg.c_str()), wxDefaultPosition, wxDefaultSize, 0 );
+  m_messageText = new wxStaticText( this, wxID_DEFAULT, msg.c_str(), wxDefaultPosition, wxDefaultSize, 0 );
   bSizer6->Add( m_messageText, 0, wxALIGN_CENTER|wxALL, 5 );
 
   bSizer1->Add( bSizer6, 0, wxEXPAND, 5 );
@@ -48,9 +48,9 @@ RegionSelectorDialog::RegionSelectorDialog( wxWindow* parent, const std::string&
 
   this->SetSizer( bSizer1 );
 
-  for each ( const std::string& zone in regionNames )
+  for each ( const tstring& zone in regionNames )
   {
-    m_listBox1->Append( wxT( zone.c_str() ) );
+    m_listBox1->Append( zone.c_str() );
   }
 
   m_listBox1->Select( 0 );

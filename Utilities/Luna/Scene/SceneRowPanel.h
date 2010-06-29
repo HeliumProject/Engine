@@ -67,17 +67,17 @@ namespace Luna
     Zone* GetZone();
     bool IsRoot() const;
     void SetActiveRow( bool isCurrent );
-    void SetLabel( const std::string& label );
+    void SetLabel( const tstring& label );
     void EnableSceneSwitch( bool enable );
-    std::string GetRowLabel() const;
+    tstring GetRowLabel() const;
 
   private:
-    bool TrimString( std::string& str, int width );
+    bool TrimString( tstring& str, int width );
     void ResizeText();
     void MakeCurrentScene();
     void UpdateCheckOutButton( bool enabled );
     void UpdateDeleteButton();
-    std::string GetFilePath() const;
+    tstring GetFilePath() const;
     ButtonMode GetButtonMode();
     void SetButtonMode( ButtonMode mode, bool enabled );
     void CheckOut();

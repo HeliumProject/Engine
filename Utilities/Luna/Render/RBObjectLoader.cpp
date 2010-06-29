@@ -125,7 +125,7 @@ u32 Content::RBObjectLoader::ParseFile( const tchar* filename, bool winding )
 
           if ( !File::GlobalResolver().GetPath( new_frag.m_Id, new_frag.m_shader ) )
           {
-            std::stringstream str;
+            tstringstream str;
             str << TUID::HexFormat << new_frag.m_Id;
             new_frag.m_shader = str.str();
           }

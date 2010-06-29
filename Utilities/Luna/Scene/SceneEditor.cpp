@@ -220,7 +220,7 @@ END_EVENT_TABLE()
 
 
 // Specifies the files that can be opened by the Scene Editor
-std::string SceneEditor::s_FileFilter = "Reflect Files (*.rb, *.rx)|*.rb;*.rx";
+tstring SceneEditor::s_FileFilter = TXT( "Reflect Files (*.rb, *.rx)|*.rb;*.rx" );
 
 // Mapping between CameraMode and SceneEditorID
 SceneEditor::RM_CamModeToSceneID SceneEditor::s_CameraModeToSceneID;
@@ -330,9 +330,9 @@ SceneEditor::SceneEditor()
 
     m_MRU->AddItemSelectedListener( Nocturnal::MRUSignature::Delegate( this, &SceneEditor::OnMRUOpen ) );
 
-    std::vector< std::string > paths;
-    std::vector< std::string >::const_iterator itr = SceneEditorPreferences()->GetMRU()->GetPaths().begin();
-    std::vector< std::string >::const_iterator end = SceneEditorPreferences()->GetMRU()->GetPaths().end();
+    std::vector< tstring > paths;
+    std::vector< tstring >::const_iterator itr = SceneEditorPreferences()->GetMRU()->GetPaths().begin();
+    std::vector< tstring >::const_iterator end = SceneEditorPreferences()->GetMRU()->GetPaths().end();
     for ( ; itr != end; ++itr )
     {
         Nocturnal::Path path( *itr );
@@ -356,17 +356,17 @@ SceneEditor::SceneEditor()
     //
     m_StandardToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_StandardToolBar->SetToolBitmapSize(wxSize(16,16));
-    m_StandardToolBar->AddTool(wxID_NEW, wxT("New"), wxArtProvider::GetBitmap( wxART_NEW, wxART_OTHER, wxSize( 16, 16 ) ), "Create a new scene");
-    m_StandardToolBar->AddTool(wxID_OPEN, wxT("Open"), wxArtProvider::GetBitmap( wxART_FILE_OPEN, wxART_OTHER, wxSize(16,16) ), "Open a scene file");
+    m_StandardToolBar->AddTool(wxID_NEW, wxT("New"), wxArtProvider::GetBitmap( wxART_NEW, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Create a new scene" ) );
+    m_StandardToolBar->AddTool(wxID_OPEN, wxT("Open"), wxArtProvider::GetBitmap( wxART_FILE_OPEN, wxART_OTHER, wxSize(16,16) ), wxT( "Open a scene file" ) );
     m_StandardToolBar->AddTool(SceneEditorIDs::ID_FileFind, wxT( "Find..." ), wxArtProvider::GetBitmap( wxART_FIND, wxART_OTHER, wxSize( 16, 16 ) ) );
-    m_StandardToolBar->AddTool(wxID_SAVE, wxT("Save All"), wxArtProvider::GetBitmap( wxART_FILE_SAVE, wxART_OTHER, wxSize( 16, 16 ) ), "Save all currently checked out scenes");
+    m_StandardToolBar->AddTool(wxID_SAVE, wxT("Save All"), wxArtProvider::GetBitmap( wxART_FILE_SAVE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Save all currently checked out scenes") );
     m_StandardToolBar->AddSeparator();
-    m_StandardToolBar->AddTool(wxID_CUT, wxT("Cut"), wxArtProvider::GetBitmap(wxART_CUT, wxART_OTHER, wxSize(16,16)), "Cut selection contents to the clipboard");
-    m_StandardToolBar->AddTool(wxID_COPY, wxT("Copy"), wxArtProvider::GetBitmap(wxART_COPY, wxART_OTHER, wxSize(16,16)), "Copy selection contents to the clipboard");
-    m_StandardToolBar->AddTool(wxID_PASTE, wxT("Paste"), wxArtProvider::GetBitmap(wxART_PASTE, wxART_OTHER, wxSize(16,16)), "Paste clipboard contents into the currrent scene");
+    m_StandardToolBar->AddTool(wxID_CUT, wxT("Cut"), wxArtProvider::GetBitmap(wxART_CUT, wxART_OTHER, wxSize(16,16)), wxT( "Cut selection contents to the clipboard" ) );
+    m_StandardToolBar->AddTool(wxID_COPY, wxT("Copy"), wxArtProvider::GetBitmap(wxART_COPY, wxART_OTHER, wxSize(16,16)), wxT( "Copy selection contents to the clipboard" ) );
+    m_StandardToolBar->AddTool(wxID_PASTE, wxT("Paste"), wxArtProvider::GetBitmap(wxART_PASTE, wxART_OTHER, wxSize(16,16)), wxT( "Paste clipboard contents into the currrent scene" ) );
     m_StandardToolBar->AddSeparator();
-    m_StandardToolBar->AddTool(wxID_UNDO, wxT("Undo"), wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, wxSize(16,16)), "Undo the last operation");
-    m_StandardToolBar->AddTool(wxID_REDO, wxT("Redo"), wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, wxSize(16,16)), "Redo the last undone operation");
+    m_StandardToolBar->AddTool(wxID_UNDO, wxT("Undo"), wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, wxSize(16,16)), wxT( "Undo the last operation" ) );
+    m_StandardToolBar->AddTool(wxID_REDO, wxT("Redo"), wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, wxSize(16,16)), wxT( "Redo the last undone operation" ) );
     m_StandardToolBar->Realize();
 
     m_ViewToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
@@ -465,29 +465,29 @@ SceneEditor::SceneEditor()
         // Zones
         m_ZonesPanel = new ScenesPanel( this, &m_SceneManager, m_Directory, SceneEditorIDs::ID_ZonesControl );
         m_ZonesPage  = m_Directory->GetPageCount();
-        m_Directory->AddPage(m_ZonesPanel, "Zones", false, Nocturnal::GlobalImageManager().GetImageIndex( "zone.png" ));
+        m_Directory->AddPage(m_ZonesPanel, TXT( "Zones" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "zone.png" ) ));
 
         m_RegionsPanel = new RegionsPanel( this, &m_SceneManager, m_Directory); 
         m_RegionsPage  = m_Directory->GetPageCount(); 
-        m_Directory->AddPage( m_RegionsPanel, "Regions", false, Nocturnal::GlobalImageManager().GetImageIndex( "region.png" )); 
+        m_Directory->AddPage( m_RegionsPanel, TXT( "Regions" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "region.png" ) )); 
 
         // Inner tab with different outlines
         wxNotebook* outlinerNotebook = new wxNotebook( m_Directory, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_NOPAGETHEME );
-        m_Directory->AddPage( outlinerNotebook, "Outlines", false, Nocturnal::GlobalImageManager().GetImageIndex( "type.png" ));
+        m_Directory->AddPage( outlinerNotebook, TXT( "Outlines" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "type.png" ) ));
         {
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
             // Types
             m_TypeOutline = new NodeTypeOutliner( &m_SceneManager );
             Nocturnal::SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( outlinerNotebook, SceneEditorIDs::ID_TypeOutlineControl );
             typeTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-            outlinerNotebook->AddPage( typeTree, "Types" );
+            outlinerNotebook->AddPage( typeTree, TXT( "Types" ) );
             m_TreeMonitor.AddTree( typeTree );
 
             // Entity Classes
             m_EntityAssetOutline = new EntityAssetOutliner( &m_SceneManager );
             Nocturnal::SortTreeCtrl* entityTree = m_EntityAssetOutline->InitTreeCtrl( outlinerNotebook, wxID_ANY );
             entityTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-            outlinerNotebook->AddPage( entityTree, "Entity Classes" );
+            outlinerNotebook->AddPage( entityTree, TXT( "Entity Classes" ) );
             m_TreeMonitor.AddTree( entityTree );
 
 #endif
@@ -499,11 +499,11 @@ SceneEditor::SceneEditor()
         Nocturnal::SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_HierarchyOutlineControl );
         hierarchyTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
         m_HierarchyOutlinePage = m_Directory->GetPageCount();
-        m_Directory->AddPage( hierarchyTree, "Hierarchy", false, Nocturnal::GlobalImageManager().GetImageIndex( "world.png" ) );
+        m_Directory->AddPage( hierarchyTree, TXT( "Hierarchy" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "world.png" ) ) );
         m_TreeMonitor.AddTree( hierarchyTree );
 #endif
     }
-    m_FrameManager.AddPane( m_Directory, wxAuiPaneInfo().Name( "directory" ).Caption( "Directory" ).Left().Layer( 1 ).Position( 1 ) );
+    m_FrameManager.AddPane( m_Directory, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ) );
 
     // Properties panel
     m_Properties = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250,250), wxNB_NOPAGETHEME);
@@ -515,14 +515,14 @@ SceneEditor::SceneEditor()
         LSelectionPropertiesPanel* selectionProperties = new LSelectionPropertiesPanel (m_SelectionPropertiesManager, m_Properties, SceneEditorIDs::ID_SelectionProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN);
         m_SelectionProperties.SetControl( selectionProperties->m_PropertyCanvas );
         m_SelectionPropertyPage = m_Properties->GetPageCount();
-        m_Properties->AddPage(selectionProperties, "Selection", false, Nocturnal::GlobalImageManager().GetImageIndex( "select.png" ));
+        m_Properties->AddPage(selectionProperties, wxT( "Selection" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "select.png" ) ));
 
         // Properties panel - Tool page
         m_ToolEnumerator = new Enumerator (&m_ToolProperties);
         m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
         m_ToolProperties.SetControl( new Inspect::CanvasWindow (m_Properties, SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
         m_ToolPropertyPage = m_Properties->GetPageCount();
-        m_Properties->AddPage(m_ToolProperties.GetControl(), "Tool", false, Nocturnal::GlobalImageManager().GetImageIndex( "transform.png" ));
+        m_Properties->AddPage(m_ToolProperties.GetControl(), wxT( "Tool" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "transform.png" ) ));
     }
     m_FrameManager.AddPane( m_Properties, wxAuiPaneInfo().Name(wxT("properties")).Caption(wxT("Properties")).Right().Layer(1).Position(1) );
 
@@ -545,7 +545,7 @@ SceneEditor::SceneEditor()
 
     // Search bar
     SearchBar* searchBar = new SearchBar( this );
-    m_FrameManager.AddPane( searchBar, wxAuiPaneInfo().Name( "search bar" ).Caption( "Search" ).Right().Layer(1).Position(2));
+    m_FrameManager.AddPane( searchBar, wxAuiPaneInfo().Name( wxT( "search bar" ) ).Caption( wxT( "Search" ) ).Right().Layer(1).Position(2));
 
     //
     // Center pane
@@ -625,8 +625,8 @@ SceneEditor::SceneEditor()
 
         m_FileMenu->Append(wxID_NEW, _("New...\tCtrl-n"));
         m_FileMenu->Append(wxID_OPEN, _("Open...\tCtrl-o"));
-        m_MRUMenuItem = m_FileMenu->AppendSubMenu( m_MRUMenu, "Open Recent" );
-        m_FileMenu->Append(SceneEditorIDs::ID_FileFind, "Find...\tCtrl-f" );
+        m_MRUMenuItem = m_FileMenu->AppendSubMenu( m_MRUMenu, TXT( "Open Recent" ) );
+        m_FileMenu->Append(SceneEditorIDs::ID_FileFind, wxT( "Find...\tCtrl-f" ) );
         m_FileMenu->Append(wxID_CLOSE, _("Close"));
         m_FileMenu->AppendSeparator();
         m_FileMenu->Append(wxID_SAVE, _("Save All\tCtrl-s"));
@@ -666,7 +666,7 @@ SceneEditor::SceneEditor()
         m_EditMenu->Append(SceneEditorIDs::ID_EditInvertSelection, _("Invert Selection\tCtrl-i"));
         // Setting the accelerator string this way seems to preserve the string but not actually use the accelerator
         wxMenuItem* menuItemSelectAll = m_EditMenu->Append(SceneEditorIDs::ID_EditSelectAll, _("Select All"));
-        menuItemSelectAll->SetAccelString( "Ctrl-a" );
+        menuItemSelectAll->SetAccelString( wxT( "Ctrl-a" ) );
 
         m_EditMenu->AppendSeparator();
 
@@ -801,7 +801,7 @@ SceneEditor::SceneEditor()
                 Connect( menuItem->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::OnViewColorModeChange ), NULL, this );
             }
 
-            m_ViewMenu->AppendSubMenu( m_ViewColorMenu, "Color Mode" );
+            m_ViewMenu->AppendSubMenu( m_ViewColorMenu, wxT( "Color Mode" ) );
         }
 
         {
@@ -877,7 +877,7 @@ SceneEditor::SceneEditor()
     {
         m_PanelsMenu = new wxMenu;
         CreatePanelsMenu( m_PanelsMenu );
-        mb->Append( m_PanelsMenu, "Panels" );
+        mb->Append( m_PanelsMenu, wxT( "Panels" ) );
     }
 
     {
@@ -920,7 +920,7 @@ SceneEditor::~SceneEditor()
     }
 
     // Save preferences and MRU
-    std::vector< std::string > mruPaths;
+    std::vector< tstring > mruPaths;
     m_MRU->ToVector( mruPaths );
     SceneEditorPreferences()->GetMRU()->SetPaths( mruPaths );
     SceneEditorPreferences()->GetViewPreferences()->LoadFromView( m_View ); 
@@ -1327,7 +1327,7 @@ void SceneEditor::OnNew(wxCommandEvent& event)
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function for common opening code.
 // 
-bool SceneEditor::DoOpen( const std::string& path )
+bool SceneEditor::DoOpen( const tstring& path )
 {
     bool opened = false;
     Nocturnal::Path nocPath( path );
@@ -1335,7 +1335,7 @@ bool SceneEditor::DoOpen( const std::string& path )
     {
         if ( m_SceneManager.CloseAll() )
         {
-            std::string error;
+            tstring error;
 
             try
             {
@@ -1355,7 +1355,7 @@ bool SceneEditor::DoOpen( const std::string& path )
                 m_MRU->Remove( path );
                 if ( !error.empty() )
                 {
-                    wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
+                    wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
                 }
             }
         }
@@ -1368,7 +1368,7 @@ bool SceneEditor::DoOpen( const std::string& path )
 // 
 void SceneEditor::OnOpen(wxCommandEvent& event)
 {
-    Nocturnal::FileDialog openDlg( this, "Open" );
+    Nocturnal::FileDialog openDlg( this, TXT( "Open" ) );
     openDlg.AddFilter( s_FileFilter );
 
     if ( openDlg.ShowModal() == wxID_OK )
@@ -1402,10 +1402,10 @@ void SceneEditor::OnFind( wxCommandEvent& event )
 // 
 void SceneEditor::OnSaveAll(wxCommandEvent& event)
 {
-    std::string error;
+    tstring error;
     if ( !m_SceneManager.SaveAll( error ) )
     {
-        wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
+        wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
     }
 }
 
@@ -1436,11 +1436,11 @@ void SceneEditor::OnImport(wxCommandEvent& event)
             {
             case SceneEditorIDs::ID_FileImport:
                 {
-                    Nocturnal::FileDialog fileDialog( this, "Import" );
+                    Nocturnal::FileDialog fileDialog( this, TXT( "Import" ) );
 
-                    std::set< std::string > filters;
+                    std::set< tstring > filters;
                     Reflect::Archive::GetFileFilters( filters );
-                    for ( std::set< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+                    for ( std::set< tstring >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
                     {
                         fileDialog.AddFilter( (*itr) );
                     }
@@ -1456,7 +1456,7 @@ void SceneEditor::OnImport(wxCommandEvent& event)
 
             case SceneEditorIDs::ID_FileImportFromClipboard:
                 {
-                    std::string xml;
+                    tstring xml;
                     if (wxTheClipboard->Open())
                     {
                         if (wxTheClipboard->IsSupported( wxDF_TEXT ))
@@ -1531,7 +1531,7 @@ void SceneEditor::OnExport(wxCommandEvent& event)
             CursorChanged( wxCURSOR_WAIT );
 
             {
-                std::ostringstream str;
+                tostringstream str;
                 str << "Preparing to export";
                 StatusChanged( str.str() );
             }
@@ -1572,11 +1572,11 @@ void SceneEditor::OnExport(wxCommandEvent& event)
 
                 if ( !scene && load )
                 {
-                    std::string error;
+                    tstring error;
                     scene = m_SceneManager.OpenZone( (*itr)->GetPath(), error );
                     if ( !scene )
                     {
-                        wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
+                        wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
                     }
                 }
 
@@ -1638,11 +1638,11 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                 {
                 case SceneEditorIDs::ID_FileExport:
                     {
-                        Nocturnal::FileDialog fileDialog( this, "Export Selection", "", "", wxFileSelectorDefaultWildcardStr, Nocturnal::FileDialogStyles::DefaultSave );
+                        Nocturnal::FileDialog fileDialog( this, TXT( "Export Selection" ), TXT( "" ), TXT( "" ), wxFileSelectorDefaultWildcardStr, Nocturnal::FileDialogStyles::DefaultSave );
                         
-                        std::set< std::string > filters;
+                        std::set< tstring > filters;
                         Reflect::Archive::GetFileFilters( filters );
-                        for ( std::set< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+                        for ( std::set< tstring >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
                         {
                             fileDialog.AddFilter( (*itr) );
                         }
@@ -1652,7 +1652,7 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                             return;
                         }
 
-                        std::string file = fileDialog.GetPath();
+                        tstring file = fileDialog.GetPath();
 
                         try
                         {
@@ -1660,9 +1660,9 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                         }
                         catch ( Nocturnal::Exception& ex )
                         {
-                            std::ostringstream str;
+                            tostringstream str;
                             str << "Failed to generate file '" << file << "': " << ex.What();
-                            wxMessageBox( str.str(), "Error", wxOK|wxCENTRE|wxICON_ERROR );
+                            wxMessageBox( str.str(), wxT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
                             result = false;
                         }
 
@@ -1671,7 +1671,7 @@ void SceneEditor::OnExport(wxCommandEvent& event)
 
                 case SceneEditorIDs::ID_FileExportToClipboard:
                     {
-                        std::string xml;
+                        tstring xml;
 
                         try
                         {
@@ -1679,9 +1679,9 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                         }
                         catch ( Nocturnal::Exception& ex )
                         {
-                            std::ostringstream str;
+                            tostringstream str;
                             str << "Failed to generate xml: " << ex.What();
-                            wxMessageBox( str.str(), "Error", wxOK|wxCENTRE|wxICON_ERROR );
+                            wxMessageBox( str.str(), wxT( "Error" ), wxOK|wxCENTRE|wxICON_ERROR );
                             result = false;
                         }
 
@@ -1701,11 +1701,11 @@ void SceneEditor::OnExport(wxCommandEvent& event)
             CursorChanged( wxCURSOR_ARROW );
 
             {
-                std::ostringstream str;
+                tostringstream str;
                 str.precision( 2 );
                 str << "Export Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
                 StatusChanged( str.str() );
-                TitleChanged( std::string( "Luna Scene Editor" ) );
+                TitleChanged( tstring( TXT( "Luna Scene Editor" ) ) );
             }
         }
     }
@@ -1802,8 +1802,7 @@ void SceneEditor::OnCopy(wxCommandEvent& event)
     {
         if ( !Copy( m_SceneManager.GetCurrentScene() ) )
         {
-            const char* msg = "There was an error while copying.  Refer to the output window for more details";
-            wxMessageDialog msgBox( this, msg, "Error", wxOK | wxICON_EXCLAMATION );
+            wxMessageDialog msgBox( this, wxT( "There was an error while copying.  Refer to the output window for more details" ), wxT( "Error" ), wxOK | wxICON_EXCLAMATION );
             msgBox.ShowModal();
         }
     }
@@ -1834,7 +1833,7 @@ void SceneEditor::OnDelete(wxCommandEvent& event)
 {
     if ( m_SelectionPropertiesManager->ThreadsActive() )
     {
-        wxMessageBox( "You cannot delete items while the Properties Panel is generating.", "Error", wxCENTER | wxOK | wxICON_ERROR, this );
+        wxMessageBox( wxT( "You cannot delete items while the Properties Panel is generating." ), wxT( "Error" ), wxCENTER | wxOK | wxICON_ERROR, this );
         return;
     }
 
@@ -1846,12 +1845,12 @@ void SceneEditor::OnDelete(wxCommandEvent& event)
 
 void SceneEditor::OnHelpIndex( wxCommandEvent& event )
 {
-    Platform::Execute( "cmd /c start http://wiki/index.php/Luna" );
+    Platform::Execute( TXT( "cmd /c start http://wiki/index.php/Luna" ) );
 }
 
 void SceneEditor::OnHelpSearch( wxCommandEvent& event )
 {
-    Platform::Execute( "cmd /c start http://wiki/index.php/Special:Search" );
+    Platform::Execute( TXT( "cmd /c start http://wiki/index.php/Special:Search" ) );
 }
 
 void SceneEditor::OnPickWalk( wxCommandEvent& event )
@@ -1889,7 +1888,7 @@ void SceneEditor::OnPickWalk( wxCommandEvent& event )
 
 void SceneEditor::OnEditPreferences( wxCommandEvent& event )
 {
-    ScenePreferencesDialog scenePreferencesDialog( this, wxID_ANY, "Preferences" );
+    ScenePreferencesDialog scenePreferencesDialog( this, wxID_ANY, TXT( "Preferences" ) );
     scenePreferencesDialog.ShowModal();
 }
 
@@ -2105,7 +2104,7 @@ void SceneEditor::OnViewVisibleChange(wxCommandEvent& event)
 
         default:
             {
-                Log::Warning( "SceneEditor::OnViewVisibleChange - Unhandled case\n" );
+                Log::Warning( TXT( "SceneEditor::OnViewVisibleChange - Unhandled case\n" ) );
                 return;
             }
         }
@@ -2390,8 +2389,8 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
                 if ( !success )
                 {
                     m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshCreate, false ); 
-                    std::string errorString = std::string( "Please select a zone with HasNavData attribute" );
-                    wxMessageBox( errorString.c_str(), "Active zone must have NavMesh data", wxOK|wxCENTRE|wxICON_ERROR, this );
+                    tstring errorString = TXT( "Please select a zone with HasNavData attribute" );
+                    wxMessageBox( errorString.c_str(), wxT( "Active zone must have NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
                     break;
                 }
             }
@@ -2423,8 +2422,8 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
                 if ( !success )
                 {
                     m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes, false ); 
-                    std::string errorString = std::string( "Please select a zone with HasNavData attribute" );
-                    wxMessageBox( errorString.c_str(), "Active zone must have NavMesh data", wxOK|wxCENTRE|wxICON_ERROR, this );
+                    tstring errorString = TXT( "Please select a zone with HasNavData attribute" );
+                    wxMessageBox( errorString.c_str(), wxT( "Active zone must have NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
                     break;
                 }
             }
@@ -2520,8 +2519,8 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
                     m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate, false ); 
                     m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate, false ); 
                     m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOutScale, false ); 
-                    std::string errorString = std::string( "Please select a zone with HasNavData attribute" );
-                    wxMessageBox( errorString.c_str(), "Active zone must have NavMesh data", wxOK|wxCENTRE|wxICON_ERROR, this );
+                    tstring errorString = TXT( "Please select a zone with HasNavData attribute" );
+                    wxMessageBox( errorString.c_str(), wxT( "Active zone must have NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
                     break;
                 }
             }
@@ -2581,8 +2580,8 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
                 {
                     m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshManipulate, false ); 
                     m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshRotate, false ); 
-                    std::string errorString = std::string( "Please select a zone with HasNavData attribute" );
-                    wxMessageBox( errorString.c_str(), "Active zone must have NavMesh data", wxOK|wxCENTRE|wxICON_ERROR, this );
+                    tstring errorString = TXT( "Please select a zone with HasNavData attribute" );
+                    wxMessageBox( errorString.c_str(), wxT( "Active zone must have NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
                     break;
                 }
             }
@@ -2631,8 +2630,8 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
                 {
                     m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshManipulate, false ); 
                     m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshRotate, false ); 
-                    std::string errorString = std::string( "Please select a zone with HasNavData attribute" );
-                    wxMessageBox( errorString.c_str(), "Active zone must have NavMesh data", wxOK|wxCENTRE|wxICON_ERROR, this );
+                    tstring errorString = TXT( "Please select a zone with HasNavData attribute" );
+                    wxMessageBox( errorString.c_str(), wxT( "Active zone must have NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
                     break;
                 }
             }
@@ -2654,7 +2653,7 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
     }
     else
     {
-        GetStatusBar()->SetStatusText( "You must create a new scene or open an existing scene to use a tool" );
+        GetStatusBar()->SetStatusText( TXT( "You must create a new scene or open an existing scene to use a tool" ) );
     }
 }
 
@@ -2677,14 +2676,14 @@ void SceneEditor::OnUtilitySelected(wxCommandEvent& event)
                 TUID tuid( TUID::Generate() );
                 Content::MeshPtr content_hi_res_nav = new Content::Mesh(tuid);
                 content_hi_res_nav->m_ExportTypes[ Content::ContentTypes::NavMeshHiRes ] = true;
-                content_hi_res_nav->m_GivenName = "HiResNavMesh";
+                content_hi_res_nav->m_GivenName = TXT( "HiResNavMesh" );
                 content_hi_res_nav->m_MeshOriginType = Content::Mesh::NavHiRes;
                 content_hi_res_nav->m_UseGivenName = true;
                 content_hi_res_nav->m_ExportTypeIndex.insert( Content::M_ContentTypeToIndex::value_type(  Content::ContentTypes::NavMeshHiRes , 0) );
                 TUID::Generate(tuid);
                 Content::MeshPtr content_low_res_nav = new Content::Mesh(tuid);
                 content_low_res_nav->m_ExportTypes[ Content::ContentTypes::NavMeshLowRes ] = true;
-                content_low_res_nav->m_GivenName = "LowResNavMesh";
+                content_low_res_nav->m_GivenName = TXT( "LowResNavMesh" );
                 content_low_res_nav->m_MeshOriginType = Content::Mesh::NavLowRes;
                 content_low_res_nav->m_UseGivenName = true;
                 content_low_res_nav->m_ExportTypeIndex.insert( Content::M_ContentTypeToIndex::value_type(  Content::ContentTypes::NavMeshLowRes , 0) );
@@ -2695,8 +2694,8 @@ void SceneEditor::OnUtilitySelected(wxCommandEvent& event)
                     if (!luna_nav_zone_ptr)
                     {
                         //throw a dialog  
-                        std::string errorString = std::string( "Please make a new zone and check HasNavData attribute" );
-                        wxMessageBox( errorString.c_str(), "You must have a zone with NavMesh data", wxOK|wxCENTRE|wxICON_ERROR, this );
+                        tstring errorString = TXT( "Please make a new zone and check HasNavData attribute" );
+                        wxMessageBox( errorString.c_str(), wxT( "You must have a zone with NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
                         break;
                     }
 
@@ -2753,8 +2752,8 @@ void SceneEditor::OnUtilitySelected(wxCommandEvent& event)
                             else
                             {
                                 //throw a dialog  
-                                std::string errorString = std::string( "Trying to change nav mesh zone when it is not selected and checked out" );
-                                wxMessageBox( errorString.c_str(), "Please make nav zone the current editing zone and say yes to check it out", wxOK|wxCENTRE|wxICON_ERROR, this );
+                                tstring errorString = TXT( "Trying to change nav mesh zone when it is not selected and checked out" );
+                                wxMessageBox( errorString.c_str(), wxT( "Please make nav zone the current editing zone and say yes to check it out" ), wxOK|wxCENTRE|wxICON_ERROR, this );
                                 break;
                             }
                         }
@@ -2771,7 +2770,7 @@ void SceneEditor::OnUtilitySelected(wxCommandEvent& event)
     }
     else
     {
-        GetStatusBar()->SetStatusText( "You must create a new scene or open an existing scene to use a tool" );
+        GetStatusBar()->SetStatusText( TXT( "You must create a new scene or open an existing scene to use a tool" ) );
     }
 }
 
@@ -2905,7 +2904,7 @@ void SceneEditor::OnCopyTransform(wxCommandEvent& event)
         Nocturnal::SmartPtr<Reflect::Matrix4ArraySerializer> data = new Reflect::Matrix4ArraySerializer();
         data->m_Data.Set( transforms );
 
-        std::string xml;
+        tstring xml;
         data->ToXML( xml );
 
         if ( wxTheClipboard->Open() )
@@ -2920,7 +2919,7 @@ void SceneEditor::OnPasteTransform(wxCommandEvent& event)
 {
     if ( m_SceneManager.HasCurrentScene() )
     {
-        std::string xml;
+        tstring xml;
         if (wxTheClipboard->Open())
         {
             if (wxTheClipboard->IsSupported( wxDF_TEXT ))
@@ -3142,10 +3141,10 @@ bool SceneEditor::Copy( Luna::Scene* scene )
 
     if ( scene->GetSelection().GetItems().Size() > 0 )
     {
-        std::string xml;
+        tstring xml;
         if ( !scene->ExportXML( xml, ExportFlags::Default | ExportFlags::SelectedNodes ) )
         {
-            Log::Error( "There was an error while generating XML data from the selection.\n" );
+            Log::Error( TXT( "There was an error while generating XML data from the selection.\n" ) );
             isOk = false;
         }
         else
@@ -3171,7 +3170,7 @@ bool SceneEditor::Paste( Luna::Scene* scene )
     NOC_ASSERT( scene );
 
     bool isOk = false;
-    std::string xml;
+    tstring xml;
     if (wxTheClipboard->Open())
     {
         if (wxTheClipboard->IsSupported( wxDF_TEXT ))
@@ -3262,13 +3261,13 @@ bool SceneEditor::ValidateDrag( const Inspect::DragArgs& args )
 {
     bool canHandleArgs = false;
 
-    std::set< std::string > reflectExtensions;
+    std::set< tstring > reflectExtensions;
     Reflect::Archive::GetExtensions( reflectExtensions );
 
     Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( fileList )
     {
-        for ( std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end();
+        for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end();
             fileItr != fileEnd && !canHandleArgs;
             ++fileItr )
         {
@@ -3276,7 +3275,7 @@ bool SceneEditor::ValidateDrag( const Inspect::DragArgs& args )
 
             if ( path.Exists() )
             {
-                std::string ext = path.Extension();
+                tstring ext = path.Extension();
                 if ( reflectExtensions.find( ext ) != reflectExtensions.end() )
                 {
                     canHandleArgs = true;
@@ -3309,7 +3308,7 @@ wxDragResult SceneEditor::Drop( const Inspect::DragArgs& args )
         Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
         if ( fileList )
         {
-            for ( std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin(),
+            for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(),
                 fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
             {
                 Nocturnal::Path path( *fileItr );
@@ -3754,9 +3753,9 @@ void SceneEditor::OpenManifestContextMenu(const SelectArgs& args)
             u32 index = 0;
             for( ;itr != end; ++itr, ++index )
             {
-                std::string str = (*itr)->GetName();
+                tstring str = (*itr)->GetName();
 
-                std::string desc = (*itr)->GetDescription();
+                tstring desc = (*itr)->GetDescription();
 
                 if (!desc.empty())
                 {
@@ -3808,14 +3807,14 @@ void SceneEditor::OpenTypeContextMenu( const SelectArgs& args )
         GeneralCallbackData* data = new GeneralCallbackData;
         data->m_GeneralData = (void*)( &args );
         GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::SelectItemInScene ), data, this );
-        contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, "Select" );
+        contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select" ) );
         ++numMenuItems;
     }
 
     if (!m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Empty())
     {
         GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::SelectSimilarItemsInScene ), NULL, this );
-        contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, "Select Similar" );
+        contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select Similar" ) );
         ++numMenuItems;
     }
 
@@ -3882,7 +3881,7 @@ void SceneEditor::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sce
             data->m_NodeType = type;
 
             GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::OnTypeContextMenu ), data, this );
-            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, "Select All" );      
+            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select All" ) );
             ++numMenuItems;
 
             // add selection for individual items
@@ -3918,7 +3917,7 @@ void SceneEditor::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sce
                 }
 
                 // add the items menu to the sub menu
-                subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, "Select Single", itemMenu );
+                subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select Single" ), itemMenu );
                 ++numMenuItems;
 
                 // if this is an entity, then we need to check if it has art classes
@@ -3939,7 +3938,7 @@ void SceneEditor::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sce
                             data->m_NodeType = type;
 
                             GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::OnTypeContextMenu ), data, this );
-                            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, "Select All With Geometry Shown" );      
+                            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select All With Geometry Shown" ) );
                             ++numMenuItems;      
                         }
 
@@ -3950,7 +3949,7 @@ void SceneEditor::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sce
                             data->m_NodeType = type;
 
                             GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::OnTypeContextMenu ), data, this );
-                            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, "Select All Without Geometry Shown" );      
+                            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select All Without Geometry Shown" ) );
                             ++numMenuItems;      
                         }
                     }
@@ -3979,7 +3978,7 @@ bool SceneEditor::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* 
             const Luna::EntityAssetSet* art = Reflect::ObjectCast<Luna::EntityAssetSet>( itr->second );
             if (art && !art->GetContentFile().empty())
             {
-                std::string artPath( art->GetContentFile() );
+                tstring artPath( art->GetContentFile() );
 
 #pragma TODO( "We need make the artPath relative to the game project file" )
 
@@ -4000,7 +3999,7 @@ bool SceneEditor::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* 
         if (added)
         {
             subMenu->AppendSeparator();
-            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, "Select All With Art Class", menu );
+            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select All With Art Class" ), menu );
             ++numMenuItems;
         }
         else
@@ -4018,8 +4017,8 @@ bool SceneEditor::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* 
 // Static function used to sort context items by name
 bool SceneEditor::SortContextItemsByName( Luna::SceneNode* lhs, Luna::SceneNode* rhs )
 {
-    std::string lname( lhs->GetName() );
-    std::string rname( rhs->GetName() );
+    tstring lname( lhs->GetName() );
+    tstring rname( rhs->GetName() );
 
     boost::to_upper( lname );
     boost::to_upper( rname );
@@ -4031,8 +4030,8 @@ bool SceneEditor::SortContextItemsByName( Luna::SceneNode* lhs, Luna::SceneNode*
 // Static function used to sort type items by name
 bool SceneEditor::SortTypeItemsByName( Luna::SceneNodeType* lhs, Luna::SceneNodeType* rhs )
 {
-    std::string lname( lhs->GetName() );
-    std::string rname( rhs->GetName() );
+    tstring lname( lhs->GetName() );
+    tstring rname( rhs->GetName() );
 
     boost::to_upper( lname );
     boost::to_upper( rname );

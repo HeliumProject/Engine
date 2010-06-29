@@ -29,7 +29,7 @@ Luna::AssetManager::AssetManager( AssetEditor* assetEditor )
 , m_AssetEditor( assetEditor )
 {
     m_RootNode = new Luna::AssetNode( this );
-    m_RootNode->SetName( "ROOT" );
+    m_RootNode->SetName( TXT( "ROOT" ) );
 
     m_UndoQueue.AddUndoingListener( Undo::QueueChangingSignature::Delegate ( this, &AssetManager::UndoingOrRedoing ) );
     m_UndoQueue.AddRedoingListener( Undo::QueueChangingSignature::Delegate ( this, &AssetManager::UndoingOrRedoing ) );
@@ -117,7 +117,7 @@ AssetDocument* Luna::AssetManager::FindAssetDocument( Luna::AssetClass* asset )
     AssetDocument* doc = Reflect::ObjectCast< AssetDocument >( FindDocument( asset->GetFilePath() ) );
     if ( doc == NULL )
     {
-        throw Nocturnal::Exception( "Asset class %s does not have a corresponding document.", asset->GetName().c_str() );
+        throw Nocturnal::Exception( TXT( "Asset class %s does not have a corresponding document." ), asset->GetName().c_str() );
     }
     return doc;
 }
@@ -125,7 +125,7 @@ AssetDocument* Luna::AssetManager::FindAssetDocument( Luna::AssetClass* asset )
 ///////////////////////////////////////////////////////////////////////////////
 // Opens the specified file, which is expected to be an Asset Class.  
 // 
-DocumentPtr Luna::AssetManager::OpenPath( const std::string& path, std::string& error )
+DocumentPtr Luna::AssetManager::OpenPath( const tstring& path, tstring& error )
 {
     Luna::AssetClass* asset = Open( path, error, true );
     if ( asset )
@@ -139,13 +139,13 @@ DocumentPtr Luna::AssetManager::OpenPath( const std::string& path, std::string& 
 // Opens the specified file and returns the Luna::AssetClass that wraps it.  Calling
 // this function on an item that is already open is considered an error.
 // 
-Luna::AssetClass* Luna::AssetManager::Open( const std::string& path, std::string& error, bool addToRoot )
+Luna::AssetClass* Luna::AssetManager::Open( const tstring& path, tstring& error, bool addToRoot )
 {
     wxBusyCursor busyCursor;
 
     if ( path.empty() )
     {
-        error = "Cannot open an empty file path!";
+        error = TXT( "Cannot open an empty file path!" );
         return NULL;
     }
 
@@ -168,7 +168,7 @@ Luna::AssetClass* Luna::AssetManager::Open( const std::string& path, std::string
     }
     catch ( const Nocturnal::Exception& e )
     {
-        error = "Unable to load asset: " + e.Get();
+        error = TXT( "Unable to load asset: " ) + e.Get();
         return NULL;
     }
 
@@ -181,9 +181,9 @@ Luna::AssetClass* Luna::AssetManager::Open( const std::string& path, std::string
     // Warn the user if the file they just opened is out of date.
     if ( !IsUpToDate( file ) )
     {
-        std::string msg;
-        msg = "The version of " + file->GetFileName() + " is not up to date on your computer.  You will not be able to check it out.";
-        wxMessageBox( msg.c_str(), "Warning", wxCENTER | wxOK | wxICON_WARNING, GetAssetEditor() );
+        tstring msg;
+        msg = TXT( "The version of " ) + file->GetFileName() + TXT( " is not up to date on your computer.  You will not be able to check it out." );
+        wxMessageBox( msg.c_str(), TXT( "Warning" ), wxCENTER | wxOK | wxICON_WARNING, GetAssetEditor() );
     }
 
     if ( addToRoot )
@@ -205,14 +205,14 @@ Luna::AssetClass* Luna::AssetManager::Open( const std::string& path, std::string
 ///////////////////////////////////////////////////////////////////////////////
 // Saves the specified document, if it is a valid Asset Editor document.
 // 
-bool Luna::AssetManager::Save( DocumentPtr document, std::string& error )
+bool Luna::AssetManager::Save( DocumentPtr document, tstring& error )
 {
     AssetDocument* assetDoc = Reflect::ObjectCast< AssetDocument >( document );
     if ( !assetDoc )
     {
-        std::string docName = document->GetFileName();
+        tstring docName = document->GetFileName();
         docName[0] = toupper( docName[0] );
-        error = docName + " is not a valid Asset Editor document.";
+        error = docName + TXT( " is not a valid Asset Editor document." );
         return false;
     }
 
@@ -223,13 +223,13 @@ bool Luna::AssetManager::Save( DocumentPtr document, std::string& error )
 // Saves the asset and calls the base class's save function to handle updating
 // the document's settings.
 // 
-bool Luna::AssetManager::Save( Luna::AssetClass* asset, bool prompt, std::string& error )
+bool Luna::AssetManager::Save( Luna::AssetClass* asset, bool prompt, tstring& error )
 {
     AssetDocument* doc = FindAssetDocument( asset );
     if ( !doc )
     {
         NOC_BREAK();
-        error = "Internal Error: No document for asset '" + asset->GetName() + "'.";
+        error = TXT( "Internal Error: No document for asset '" ) + asset->GetName() + TXT( "'." );
         return false;
     }
 
@@ -266,7 +266,7 @@ bool Luna::AssetManager::Save( Luna::AssetClass* asset, bool prompt, std::string
         }
         else
         {
-            error = "Failed to save '" + asset->GetName() + "'.\n" + error;
+            error = TXT( "Failed to save '" ) + asset->GetName() + TXT( "'.\n" ) + error;
             return false;
         }
     }
@@ -277,7 +277,7 @@ bool Luna::AssetManager::Save( Luna::AssetClass* asset, bool prompt, std::string
 ///////////////////////////////////////////////////////////////////////////////
 // Saves all the currently selected asset classes.
 // 
-bool Luna::AssetManager::SaveSelected( std::string& error )
+bool Luna::AssetManager::SaveSelected( tstring& error )
 {
     bool savedAll = true;
     bool prompt = true;
@@ -332,14 +332,14 @@ bool Luna::AssetManager::SaveSelected( std::string& error )
 
         if ( save )
         {
-            std::string currentError;
+            tstring currentError;
             savedAll &= Save( asset, false, currentError );
 
             if ( !currentError.empty() )
             {
                 if ( !error.empty() )
                 {
-                    error += "\n";
+                    error += TXT( "\n" );
                 }
                 error += currentError;
             }
@@ -724,7 +724,7 @@ Luna::AssetClass* Luna::AssetManager::CreateAssetClass( const Asset::AssetClassP
     Nocturnal::Insert<M_AssetClassSmartPtr>::Result inserted = m_AssetClasses.insert( M_AssetClassSmartPtr::value_type( assetClass->GetHash(), assetClass ) );
     if ( !inserted.second )
     {
-        throw Nocturnal::Exception( "Asset class '%s' is already in the Asset Manager!", assetClass->GetName().c_str() );
+        throw Nocturnal::Exception( TXT( "Asset class '%s' is already in the Asset Manager!" ), assetClass->GetName().c_str() );
     }
     return assetClass;
 }
@@ -740,7 +740,7 @@ AssetDocument* Luna::AssetManager::CreateDocument( Luna::AssetClass* assetClass 
     if ( !AddDocument( doc ) )
     {
         // Shouldn't happen... means there's a bug in the code.
-        throw Nocturnal::Exception( "Asset class '%s' already has a document!", assetClass->GetName().c_str() );
+        throw Nocturnal::Exception( TXT( "Asset class '%s' already has a document!" ), assetClass->GetName().c_str() );
     }
     return doc;
 }

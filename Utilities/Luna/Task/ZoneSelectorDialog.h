@@ -22,7 +22,7 @@ namespace Luna
     u32 m_NumZones;
 
   public:
-    ZoneSelectorDialog( wxWindow* parent, const std::string& title, const std::string& msg, const std::vector< std::string >& zoneNames, std::set< u32 >& selectedZones, int id = -1, wxPoint pos = wxDefaultPosition, 
+    ZoneSelectorDialog( wxWindow* parent, const tstring& title, const tstring& msg, const std::vector< tstring >& zoneNames, std::set< u32 >& selectedZones, int id = -1, wxPoint pos = wxDefaultPosition, 
       wxSize size = wxSize( -1, -1 ), int style = wxCAPTION );
     virtual ~ZoneSelectorDialog();
 

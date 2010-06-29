@@ -31,39 +31,39 @@ RegionsPanel::RegionsPanel( SceneEditor* editor, Luna::SceneManager* manager, wx
   ContextMenuItemPtr item; 
 
   // build the regions context menu: 
-  item = new ContextMenuItem("Create Region"); 
+  item = new ContextMenuItem( TXT( "Create Region" ) ); 
   item->AddCallback( ContextMenuSignature::Delegate(this, &RegionsPanel::ContextCreateRegion) ); 
   m_RegionContextMenu.AppendItem( item ); 
   
   // build the region context menu
-  item = new ContextMenuItem("Add or Remove Zones"); 
+  item = new ContextMenuItem(TXT( "Add or Remove Zones" ) ); 
   item->AddCallback( ContextMenuSignature::Delegate(this, &RegionsPanel::ContextRegionAddRemoveZones) ); 
   m_PerRegionContextMenu.AppendItem( item ); 
 
   m_PerRegionContextMenu.AppendSeparator(); 
 
-  item = new ContextMenuItem("Rename Region"); 
+  item = new ContextMenuItem( TXT( "Rename Region" ) ); 
   item->AddCallback( ContextMenuSignature::Delegate(this, &RegionsPanel::ContextRename) ); 
   m_PerRegionContextMenu.AppendItem( item ); 
 
-  item = new ContextMenuItem("Delete Region"); 
+  item = new ContextMenuItem( TXT( "Delete Region" ) ); 
   item->AddCallback( ContextMenuSignature::Delegate(this, &RegionsPanel::ContextDeleteRegion) ); 
   m_PerRegionContextMenu.AppendItem( item ); 
 
   // build the zone context menu
-  item = new ContextMenuItem("Remove from Region"); 
+  item = new ContextMenuItem( TXT( "Remove from Region" ) ); 
   item->AddCallback( ContextMenuSignature::Delegate(this, &RegionsPanel::ContextZoneRemoveFromRegion) ); 
   m_PerOwnedZoneContextMenu.AppendItem( item ); 
 
   // build the zone main context menu
-  item = new ContextMenuItem("Change Region Membership"); 
+  item = new ContextMenuItem( TXT( "Change Region Membership" ) ); 
   item->AddCallback( ContextMenuSignature::Delegate(this, &RegionsPanel::ContextZoneChangeRegions) ); 
   m_PerZoneContextMenu.AppendItem( item ); 
 
   m_RegionTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() ); 
 
-  m_RegionIcon = Nocturnal::GlobalImageManager().GetImageIndex( "region.png" );
-  m_ZoneIcon   = Nocturnal::GlobalImageManager().GetImageIndex( "zone.png" ); 
+  m_RegionIcon = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "region.png" ) );
+  m_ZoneIcon   = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "zone.png" ) ); 
 
   InitTree();
 }
@@ -306,7 +306,7 @@ void RegionsPanel::CreateZoneNodes(Luna::Region* regionWrapper, wxTreeItemId reg
     M_TuidToZone::iterator found = m_ZoneMap.find( zoneId ); 
     if(found == m_ZoneMap.end())
     {
-      m_RegionTree->AppendItem( regionNode, "<unknown zone>", m_ZoneIcon, m_ZoneIcon, NULL); 
+      m_RegionTree->AppendItem( regionNode, TXT( "<unknown zone>" ), m_ZoneIcon, m_ZoneIcon, NULL); 
     }
     else
     {
@@ -365,9 +365,9 @@ bool RegionsPanel::RemoveRegionSubtree(Luna::Region* regionWrapper, bool* expand
 
 void RegionsPanel::InitTree()
 {
-  wxTreeItemId root = m_RegionTree->AddRoot("INVISIBLE_ROOT");
-  m_RegionRoot      = m_RegionTree->AppendItem( root, "Regions", m_RegionIcon, m_RegionIcon ); 
-  m_ZoneRoot        = m_RegionTree->AppendItem( root, "Zones",   m_ZoneIcon, m_ZoneIcon ); 
+  wxTreeItemId root = m_RegionTree->AddRoot( TXT( "INVISIBLE_ROOT" ) );
+  m_RegionRoot      = m_RegionTree->AppendItem( root, TXT( "Regions" ), m_RegionIcon, m_RegionIcon ); 
+  m_ZoneRoot        = m_RegionTree->AppendItem( root, TXT( "Zones" ),   m_ZoneIcon, m_ZoneIcon ); 
   m_RegionTree->Disable();
 }
 
@@ -475,7 +475,7 @@ void RegionsPanel::OnEndLabelEdit( wxTreeEvent& event )
     LRegionPtr region = Reflect::ObjectCast<Luna::Region>(data->m_Object); 
     if(region)
     {
-      std::string name = event.GetLabel(); 
+      tstring name = event.GetLabel(); 
       region->Rename( name ); 
 
       m_RegionTree->EnsureVisible(node); 
@@ -607,7 +607,7 @@ void RegionsPanel::ContextCreateRegion(const ContextMenuArgsPtr&)
 
   // we don't worry about tree nodes here
   // 
-  std::string name; 
+  tstring name; 
   RegionCreateDialog dialog(this); 
   bool keepShowing = true; 
   while(keepShowing)
@@ -621,9 +621,9 @@ void RegionsPanel::ContextCreateRegion(const ContextMenuArgsPtr&)
     }
 
     name = dialog.m_TextCtrl->GetValue();
-    if(name == "")
+    if(name == TXT( "" ))
     {
-      wxMessageBox("You must give a name for the region", "Need a name"); 
+      wxMessageBox( wxT( "You must give a name for the region" ), wxT( "Need a name" ) ); 
       continue; 
     }
 
@@ -634,8 +634,7 @@ void RegionsPanel::ContextCreateRegion(const ContextMenuArgsPtr&)
     if(other)
     {
       nameOk = false; 
-      int tryAgain = wxMessageBox("There is already a node named " + name + ".",
-                                  "Already exists", wxOK|wxCANCEL); 
+      int tryAgain = wxMessageBox( wxT( "There is already a node named " ) + name + wxT( "." ), wxT( "Already exists" ), wxOK|wxCANCEL); 
 
       if(tryAgain != wxOK)
       {
@@ -758,7 +757,7 @@ void RegionsPanel::ContextRegionAddRemoveZones(const ContextMenuArgsPtr&)
   Luna::Region* regionWrapper  = Reflect::AssertCast<Luna::Region>(data->m_Object); 
   Content::Region* region = regionWrapper->GetPackage<Content::Region>(); 
 
-  wxString title = "Select zones for region " + regionWrapper->GetName(); 
+  wxString title = wxT( "Select zones for region " ) + regionWrapper->GetName(); 
 
   ChooserDialog   dialog(this, wxID_ANY, title); 
   wxCheckListBox* listBox = dialog.m_ListBox; 
@@ -767,7 +766,7 @@ void RegionsPanel::ContextRegionAddRemoveZones(const ContextMenuArgsPtr&)
 
   if(zoneSet.empty())
   {
-    wxMessageBox("There are no zones in this level. Add some using the zone panel.", "No Zones", wxOK); 
+    wxMessageBox( wxT( "There are no zones in this level. Add some using the zone panel." ), wxT( "No Zones" ), wxOK); 
     return; 
   }
 
@@ -913,7 +912,7 @@ void RegionsPanel::ContextZoneChangeRegions(const ContextMenuArgsPtr&)
   Zone* zoneWrapper  = Reflect::AssertCast<Zone>(data->m_Object); 
   Content::Zone* zone = zoneWrapper->GetPackage<Content::Zone>(); 
 
-  wxString title = "Select regions for zone " + zoneWrapper->GetName(); 
+  wxString title = wxT( "Select regions for zone " ) + zoneWrapper->GetName(); 
 
   ChooserDialog   dialog(this, wxID_ANY, title); 
   wxCheckListBox* listBox = dialog.m_ListBox; 
@@ -922,7 +921,7 @@ void RegionsPanel::ContextZoneChangeRegions(const ContextMenuArgsPtr&)
 
   if(regionSet.empty())
   {
-    wxMessageBox("There are no regions in this level. You must add some regions.", "No Regions", wxOK); 
+    wxMessageBox( wxT( "There are no regions in this level. You must add some regions." ), wxT( "No Regions" ), wxOK); 
     return; 
   }
 

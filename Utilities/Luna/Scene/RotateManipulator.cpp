@@ -22,7 +22,7 @@ LUNA_DEFINE_TYPE(Luna::RotateManipulator);
 
 void RotateManipulator::InitializeType()
 {
-  Reflect::RegisterClass< Luna::RotateManipulator >( "Luna::RotateManipulator" );
+  Reflect::RegisterClass< Luna::RotateManipulator >( TXT( "Luna::RotateManipulator" ) );
 }
 
 void RotateManipulator::CleanupType()
@@ -722,9 +722,9 @@ void RotateManipulator::MouseMove(wxMouseEvent& e)
     }
     else
     {
-      std::ostringstream str;
+      tostringstream str;
       str << totalRotation;
-      Log::Warning("Invalid floating point result during rotation: %s\n", str.str().c_str());
+      Log::Warning( TXT( "Invalid floating point result during rotation: %s\n" ), str.str().c_str());
     }
   }
 
@@ -771,31 +771,31 @@ void RotateManipulator::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel("Rotate", true);
+  m_Enumerator->PushPanel( TXT( "Rotate" ), true);
   {
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Space");
+      m_Enumerator->AddLabel( TXT( "Space" ) );
       Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::RotateManipulator, int> (this, &RotateManipulator::GetSpace, &RotateManipulator::SetSpace) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << ManipulatorSpaces::Object;
-        items.push_back( Inspect::Item( "Object", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Object" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << ManipulatorSpaces::Local;
-        items.push_back( Inspect::Item( "Local", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Local" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << ManipulatorSpaces::World;
-        items.push_back( Inspect::Item( "World", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "World" ), str.str() ) );
       }
 
       choice->SetItems( items );
@@ -804,14 +804,14 @@ void RotateManipulator::CreateProperties()
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Axis Snap");
+      m_Enumerator->AddLabel( TXT( "Axis Snap" ) );
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::RotateManipulator, bool> (this, &RotateManipulator::GetAxisSnap, &RotateManipulator::SetAxisSnap) );
     }
     m_Enumerator->Pop();
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Snap Degrees");
+      m_Enumerator->AddLabel( TXT( "Snap Degrees" ) );
       m_Enumerator->AddValue<float>( new Nocturnal::MemberProperty<Luna::RotateManipulator, f32> (this, &RotateManipulator::GetSnapDegrees, &RotateManipulator::SetSnapDegrees) );
     }
     m_Enumerator->Pop();

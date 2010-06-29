@@ -16,9 +16,9 @@ LUNA_DEFINE_TYPE( Shader );
 
 void Shader::InitializeType()
 {
-  Reflect::RegisterClass< Shader >( "Luna::Shader" );
+  Reflect::RegisterClass< Shader >( TXT( "Luna::Shader" ) );
 
-  g_ShaderTextureMemoryPool = Profile::Memory::CreatePool("Direct3D Texture Data");
+  g_ShaderTextureMemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Texture Data" ) );
 }
 
 void Shader::CleanupType()
@@ -37,12 +37,12 @@ Shader::Shader( Luna::Scene* scene, Content::Shader* shader )
 
 i32 Shader::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "shader.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "shader.png" ) );
 }
 
-std::string Shader::GetApplicationTypeName() const
+tstring Shader::GetApplicationTypeName() const
 {
-  return "Shader";
+  return TXT( "Shader" );
 }
 
 void Shader::Create()
@@ -84,7 +84,7 @@ bool Shader::LoadTexture()
   //Content::Shader* shader = GetPackage< Content::Shader >();
   //NOC_ASSERT( shader );
 
-  //const std::string& file = shader->GetBaseTextureFilePath();
+  //const tstring& file = shader->GetBaseTextureFilePath();
   //if (!file.empty())
   //{
   //  if ( FileSystem::Exists( file ) )

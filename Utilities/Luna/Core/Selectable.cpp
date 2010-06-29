@@ -7,7 +7,7 @@ LUNA_DEFINE_TYPE( Selectable );
 
 void Selectable::InitializeType()
 {
-  Reflect::RegisterClass<Selectable>( "Selectable" );
+  Reflect::RegisterClass<Selectable>( TXT( "Selectable" ) );
 }
 
 void Selectable::CleanupType()
@@ -46,7 +46,7 @@ void Selectable::ConnectProperties(EnumerateElementArgs& args)
 
 }
 
-bool Selectable::ValidatePanel(const std::string& name)
+bool Selectable::ValidatePanel(const tstring& name)
 {
   return false;
 }

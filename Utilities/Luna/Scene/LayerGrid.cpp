@@ -67,9 +67,9 @@ void LayerGrid::NameChangeInfo::Clear()
 LayerGrid::LayerGrid( wxWindow* parent, Luna::SceneManager* sceneManager, u32 lType)
 : m_SceneManager( sceneManager )
 , m_Scene( NULL )
-, m_Panel( new wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, "LayerGrid Panel" ) )
+, m_Panel( new wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxT( "LayerGrid Panel" ) ) )
 , m_Grid( new Grid( m_Panel, SceneEditorIDs::ID_LayerGrid, true ) )
-, m_ToolBar( new wxToolBar( m_Panel, wxID_ANY, wxDefaultPosition, wxSize( -1, 25 ), wxBORDER_NONE | wxTB_HORIZONTAL | wxTB_NODIVIDER, "LayerToolBar" ) )
+, m_ToolBar( new wxToolBar( m_Panel, wxID_ANY, wxDefaultPosition, wxSize( -1, 25 ), wxBORDER_NONE | wxTB_HORIZONTAL | wxTB_NODIVIDER, wxT( "LayerToolBar" ) ) )
 , m_LayerType(lType)
 {
   // Handle all toolbar events so that this class can process button clicks
@@ -397,7 +397,7 @@ void LayerGrid::LayerSelectedItems( bool addToLayer )
           {
             // Something is wrong.  The rows that are selected in the grid do not correspond to
             // items in our list of layers (m_Layers).  Somehow those lists got out of sync.
-            Log::Error( "Unable to add selection to layer [row=%d] because it doesn't exist\n", *rowItr );
+            Log::Error( TXT( "Unable to add selection to layer [row=%d] because it doesn't exist\n" ), *rowItr );
             NOC_BREAK();
           }
         }
@@ -420,25 +420,25 @@ void LayerGrid::LayerSelectedItems( bool addToLayer )
 void LayerGrid::DebugDumpSelection()
 {
 #ifdef _DEBUG
-  Log::Debug( "Dumping grid selection.\n" );
+  Log::Debug( TXT( "Dumping grid selection.\n" ) );
   std::set< u32 > selection = m_Grid->GetSelectedRows();
   const size_t numSelected = selection.size();
   if ( numSelected == 0 )
   {
-    Log::Debug( "\tNo items are selected.\n" );
+    Log::Debug( TXT( "\tNo items are selected.\n" ) );
   }
   else
   {
-    Log::Debug( "\t%d item%s selected.\n", numSelected, ( numSelected == 1 ) ? "" : "s" );
+    Log::Debug( TXT( "\t%d item%s selected.\n" ), numSelected, ( numSelected == 1 ) ? TXT( "" ) : TXT( "s" ) );
     std::set< u32 >::const_iterator rowItr = selection.begin();
     std::set< u32 >::const_iterator rowEnd = selection.end();
     for ( ; rowItr != rowEnd; ++rowItr )
     {
-      const std::string& name = m_Grid->GetRowName( *rowItr );
-      Log::Debug( "\t\t%s\n", name.c_str() );
+      const tstring& name = m_Grid->GetRowName( *rowItr );
+      Log::Debug( TXT( "\t\t%s\n" ), name.c_str() );
     }
   }
-  Log::Debug( "\n" );
+  Log::Debug( TXT( "\n" ) );
 #endif
 }
 
@@ -728,10 +728,10 @@ void LayerGrid::NameChanging( const SceneNodeChangeArgs& args )
   if ( layerItr != m_Layers.end() )
   {
     Luna::Layer* layer = layerItr->second;
-    const std::string& name = layerItr->first;
+    const tstring& name = layerItr->first;
     if ( args.m_Node != layer || layer->GetName() != name )
     {
-      Log::Error( "Layer in list (named %s), does not match layer named %s.\n", name.c_str(), args.m_Node->GetName().c_str() );
+      Log::Error( TXT( "Layer in list (named %s), does not match layer named %s.\n" ), name.c_str(), args.m_Node->GetName().c_str() );
       NOC_BREAK();
     }
     m_NameChangeInfo.m_Layer = layer;
@@ -739,7 +739,7 @@ void LayerGrid::NameChanging( const SceneNodeChangeArgs& args )
   }
   else
   {
-    Log::Error( "Layer named %s is not in the grid.\n", args.m_Node->GetName().c_str() );
+    Log::Error( TXT( "Layer named %s is not in the grid.\n" ), args.m_Node->GetName().c_str() );
     NOC_BREAK();
   }
 }
@@ -751,12 +751,12 @@ void LayerGrid::NameChanging( const SceneNodeChangeArgs& args )
 // 
 void LayerGrid::NameChanged( const SceneNodeChangeArgs& args )
 {
-  const std::string& oldName = m_NameChangeInfo.m_OldName;
+  const tstring& oldName = m_NameChangeInfo.m_OldName;
   M_LayerDumbPtr::iterator layerItr = m_Layers.find( oldName );
   if ( layerItr != m_Layers.end() )
   {
     Luna::Layer* layer = layerItr->second;
-    const std::string& newName = args.m_Node->GetName();
+    const tstring& newName = args.m_Node->GetName();
     m_Layers.erase( layerItr );
     m_Layers.insert( M_LayerDumbPtr::value_type( newName, layer ) );
 
@@ -765,7 +765,7 @@ void LayerGrid::NameChanged( const SceneNodeChangeArgs& args )
   }
   else
   {
-    Log::Error( "Layer named %s is not in the grid.\n", m_NameChangeInfo.m_OldName.c_str() );
+    Log::Error( TXT( "Layer named %s is not in the grid.\n" ), m_NameChangeInfo.m_OldName.c_str() );
     NOC_BREAK();
   }
 
@@ -778,7 +778,7 @@ void LayerGrid::NameChanged( const SceneNodeChangeArgs& args )
 // 
 void LayerGrid::LayerVisibleChanged( const GridRowChangeArgs& args )
 {
-  const std::string& name = m_Grid->GetRowName( args.m_RowNumber );
+  const tstring& name = m_Grid->GetRowName( args.m_RowNumber );
   M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( name );
   if ( layerItr != m_Layers.end() )
   {
@@ -788,7 +788,7 @@ void LayerGrid::LayerVisibleChanged( const GridRowChangeArgs& args )
   }
   else
   {
-    Log::Error( "LayerVisibleChanged - layer named %s not found\n", name.c_str() );
+    Log::Error( TXT( "LayerVisibleChanged - layer named %s not found\n" ), name.c_str() );
     NOC_BREAK();
   }
 }
@@ -800,7 +800,7 @@ void LayerGrid::LayerVisibleChanged( const GridRowChangeArgs& args )
 // 
 void LayerGrid::LayerSelectableChanged( const GridRowChangeArgs& args )
 {
-  const std::string& name = m_Grid->GetRowName( args.m_RowNumber );
+  const tstring& name = m_Grid->GetRowName( args.m_RowNumber );
   M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( name );
   if ( layerItr != m_Layers.end() )
   {
@@ -836,7 +836,7 @@ void LayerGrid::LayerSelectableChanged( const GridRowChangeArgs& args )
   }
   else
   {
-    Log::Error( "LayerSelectableChanged - layer named %s not found\n", name.c_str() );
+    Log::Error( TXT( "LayerSelectableChanged - layer named %s not found\n" ), name.c_str() );
     NOC_BREAK();
   }
 }
@@ -851,7 +851,7 @@ void LayerGrid::RowRenamed( const GridRowRenamedArgs& args )
   if ( found != m_Layers.end() )
   {
     Luna::Layer* layer = found->second;
-    layer->GetScene()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::Layer, std::string >( layer, &Luna::Layer::GetName, &Luna::Layer::SetGivenName ), args.m_NewName ) );
+    layer->GetScene()->Push( new Undo::PropertyCommand< tstring >( new Nocturnal::MemberProperty< Luna::Layer, tstring >( layer, &Luna::Layer::GetName, &Luna::Layer::SetGivenName ), args.m_NewName ) );
   }
 }
 

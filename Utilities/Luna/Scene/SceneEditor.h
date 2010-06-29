@@ -60,7 +60,7 @@ namespace Luna
     typedef std::map< Luna::Scene*, OutlinerStates > M_OutlinerStates;
 
   private:
-      static std::string s_FileFilter;
+      static tstring s_FileFilter;
 
     // Stores information about the state of each outliner for each scene
     // that is open.  Restores the state when switching between scenes.
@@ -205,7 +205,7 @@ namespace Luna
 
     // application events
     void OnNew(wxCommandEvent& event);
-    bool DoOpen( const std::string& path );
+    bool DoOpen( const tstring& path );
     void OnOpen(wxCommandEvent& event);
     void OnFind( wxCommandEvent& event );
     void OnSaveAll(wxCommandEvent& event);

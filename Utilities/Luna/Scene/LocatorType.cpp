@@ -16,7 +16,7 @@ LUNA_DEFINE_TYPE(Luna::LocatorType);
 
 void LocatorType::InitializeType()
 {
-  Reflect::RegisterClass< Luna::LocatorType >( "Luna::LocatorType" );
+  Reflect::RegisterClass< Luna::LocatorType >( TXT( "Luna::LocatorType" ) );
 }
 
 void LocatorType::CleanupType()

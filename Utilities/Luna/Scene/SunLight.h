@@ -24,11 +24,11 @@ namespace Luna
     SunLight(Luna::Scene* scene);
     SunLight(Luna::Scene* scene, Content::SunLight* light);
 
-    virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
+    virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
     static void CreatePanel( CreatePanelArgs& args );
 
     virtual i32 GetImageIndex() const NOC_OVERRIDE;
-    virtual std::string GetApplicationTypeName() const NOC_OVERRIDE;
+    virtual tstring GetApplicationTypeName() const NOC_OVERRIDE;
 
     float GetRedBlueShift() const;
     void SetRedBlueShift( float redBlueShift );

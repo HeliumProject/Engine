@@ -7,7 +7,7 @@ LUNA_DEFINE_TYPE( Object );
 
 void Object::InitializeType()
 {
-  Reflect::RegisterClass<Object>( "Luna::Object" );
+  Reflect::RegisterClass<Object>( TXT( "Luna::Object" ) );
 }
 
 void Object::CleanupType()

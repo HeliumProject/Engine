@@ -165,7 +165,7 @@ bool AssetOutliner::AddItem( Luna::AssetNode* node )
       isOk = m_Items.insert( M_TreeItems::value_type( node, insertedItem ) ).second;
       if ( !isOk )
       {
-        Log::Error( "Error while trying to build lookup for node '%s'.\n", node->GetName().c_str() );
+        Log::Error( TXT( "Error while trying to build lookup for node '%s'.\n" ), node->GetName().c_str() );
         NOC_BREAK();
       }
       else
@@ -189,7 +189,7 @@ bool AssetOutliner::AddItem( Luna::AssetNode* node )
     }
     else
     {
-      Log::Error( "Unable to determine parent for node '%s'.\n", node->GetName().c_str() );
+      Log::Error( TXT( "Unable to determine parent for node '%s'.\n" ), node->GetName().c_str() );
       NOC_BREAK();
     }
   }
@@ -366,7 +366,7 @@ AssetOutlineItemData* AssetOutliner::GetItemData( const wxTreeItemId& id )
 
   if ( !data )
   {
-    Log::Error( "Tree item (%x: %s) does not have asset data associated with it\n", id.m_pItem, m_TreeControl->GetItemText( id ).c_str() );
+    Log::Error( TXT( "Tree item (%x: %s) does not have asset data associated with it\n" ), id.m_pItem, m_TreeControl->GetItemText( id ).c_str() );
     NOC_BREAK();
   }
 
@@ -377,19 +377,19 @@ AssetOutlineItemData* AssetOutliner::GetItemData( const wxTreeItemId& id )
 // Debug function for dumping the contents of the tree... seems to come in handy
 // from time to time.
 // 
-void AssetOutliner::DebugDumpTree( const wxTreeItemId& treeItem, std::string prefix )
+void AssetOutliner::DebugDumpTree( const wxTreeItemId& treeItem, tstring prefix )
 {
   if ( treeItem != m_TreeControl->GetRootItem() )
   {
     AssetOutlineItemData* data = GetItemData( treeItem );
     Log::Print( prefix.c_str() );
-    Log::Print( "%s [%x] [%x] [%x]\n", m_TreeControl->GetItemText( treeItem ).c_str(), treeItem.m_pItem, data->GetId().m_pItem, data );
+    Log::Print( TXT( "%s [%x] [%x] [%x]\n" ), m_TreeControl->GetItemText( treeItem ).c_str(), treeItem.m_pItem, data->GetId().m_pItem, data );
   }
   wxTreeItemIdValue cookie;
   wxTreeItemId childItem = m_TreeControl->GetFirstChild( treeItem, cookie );
   while ( childItem.IsOk() )
   {
-    DebugDumpTree( childItem, prefix + "  " );
+    DebugDumpTree( childItem, prefix + TXT( "  " ) );
     childItem = m_TreeControl->GetNextChild( treeItem, cookie );
   }
 }
@@ -674,8 +674,8 @@ wxDragResult AssetOutliner::Drop( const Inspect::DragArgs& args )
     Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
     if ( fileList.ReferencesObject() )
     {
-      std::set< std::string >::const_iterator fileItr = fileList->GetFilePaths().begin();
-      std::set< std::string >::const_iterator fileEnd = fileList->GetFilePaths().end();
+      std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin();
+      std::set< tstring >::const_iterator fileEnd = fileList->GetFilePaths().end();
       for ( ; fileItr != fileEnd; ++fileItr )
       {
         m_AssetManager->GetAssetEditor()->Open( *fileItr );

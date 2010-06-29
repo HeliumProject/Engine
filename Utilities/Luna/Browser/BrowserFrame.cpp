@@ -39,29 +39,7 @@ static const u32 s_ToggleButtonStyle =
  | Nocturnal::ButtonStyles::BU_TOGGLE
  | Nocturnal::ButtonStyles::BU_CENTER );
 
-static const char* s_BrowserHelpText = 
-"Search for (\"*\" is wildcard): \n" \
-"- literal-words: rock\n" \
-"- quoted-words: \"ground rock\"\n" \
-"- key-words: user: rachel \n" \
-"- file paths\n" \
-"\n" \
-"Key-words:\n" \
-"- id: file id (TUID).\n" \
-"- name: file name\n" \
-"- path: file path \n" \
-"- type: file type\n" \
-"- user: created-by user.\n" \
-"- engine: asset engine type\n" \
-"- level: entities that are in level\n" \
-"- shader: entities that use shader\n" \
-"\n" \
-"Examples:\n" \
-"  rock*entity.rb\n" \
-"  rock level: gimlick\n" \
-"  shader:default_pink\n" \
-"  id:7117542371602659975\n";
-
+static const tchar* s_BrowserHelpText = TXT( "FFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUU FIXME PUT HELP TEXT HERE" );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class HelpPanel
@@ -115,7 +93,7 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
 , m_Browser( browser )
 , m_BrowserSearch( browserSearch )
 , m_SearchHistory( searchHistory )
-, m_PreferencePrefix( "BrowserFrame" )
+, m_PreferencePrefix( TXT( "BrowserFrame" ) )
 , m_NavigationPanel( NULL )
 , m_ResultsPanel( NULL )
 , m_FoldersPanel( NULL )
@@ -139,10 +117,10 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
     wxIconBundle iconBundle;
 
     wxIcon tempIcon;
-    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "vault.png" ) );
+    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "vault.png" ) ) );
     iconBundle.AddIcon( tempIcon );
 
-    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( "vault.png", Nocturnal::IconSizes::Size32 ) );
+    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "vault.png" ), Nocturnal::IconSizes::Size32 ) );
     iconBundle.AddIcon( tempIcon );
 
     SetIcons( iconBundle );
@@ -174,10 +152,10 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
     //
     {
 #pragma TODO( "pass in the right root directory to the ResultsPanel" )
-        m_ResultsPanel = new ResultsPanel( "", this );
+        m_ResultsPanel = new ResultsPanel( TXT( "" ), this );
 
         wxAuiPaneInfo info;
-        info.Name( "CenterPanel" );
+        info.Name( wxT( "CenterPanel" ) );
         info.CenterPane();
         info.Layer( 0 );
         info.PaneBorder( false );    
@@ -192,9 +170,9 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
         m_PreviewPanel = new PreviewPanel( this );
 
         wxAuiPaneInfo info;
-        info.Name( "PreviewPanel" );
+        info.Name( TXT( "PreviewPanel" ) );
         info.DestroyOnClose( false );
-        info.Caption( "Preview" );
+        info.Caption( TXT( "Preview" ) );
         info.Dock();
         info.Right();
         info.Layer( 1 );
@@ -213,9 +191,9 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
         m_FoldersPanel = new FoldersPanel( this );
 
         wxAuiPaneInfo info;
-        info.Name( wxT( BrowserMenu::Label( BrowserMenu::FoldersPanel ).c_str() ) );
+        info.Name( BrowserMenu::Label( BrowserMenu::FoldersPanel ).c_str() );
         info.DestroyOnClose( false );
-        info.Caption( wxT( BrowserMenu::Label( BrowserMenu::FoldersPanel ).c_str() ) );
+        info.Caption( BrowserMenu::Label( BrowserMenu::FoldersPanel ).c_str() );
         info.Dock();
         info.Left();
         info.Layer( 2 );
@@ -226,7 +204,7 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
 
         m_FrameManager.AddPane( m_FoldersPanel, info );
 
-        std::string defaultPath = m_Browser->GetBrowserPreferences()->GetDefaultFolderPath();
+        tstring defaultPath = m_Browser->GetBrowserPreferences()->GetDefaultFolderPath();
         if ( !defaultPath.empty() )
         {
             m_FoldersPanel->SetPath( defaultPath );
@@ -249,9 +227,9 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
         m_CollectionsPanel = new CollectionsPanel( this );
 
         wxAuiPaneInfo info;
-        info.Name( wxT( BrowserMenu::Label( BrowserMenu::CollectionsPanel ).c_str() ) );
+        info.Name( BrowserMenu::Label( BrowserMenu::CollectionsPanel ).c_str() );
         info.DestroyOnClose( false );
-        info.Caption( wxT( BrowserMenu::Label( BrowserMenu::CollectionsPanel ).c_str() ) );
+        info.Caption( BrowserMenu::Label( BrowserMenu::CollectionsPanel ).c_str() );
         info.Dock();
         info.Right();
         info.Position( 1 );
@@ -287,9 +265,9 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
         ( *m_HelpPanel->m_HelpTextCtrl ) << s_BrowserHelpText;
 
         wxAuiPaneInfo info;
-        info.Name( wxT( BrowserMenu::Label( BrowserMenu::HelpPanel ).c_str() ) );
+        info.Name( BrowserMenu::Label( BrowserMenu::HelpPanel ).c_str() );
         info.DestroyOnClose( false );
-        info.Caption( wxT( BrowserMenu::Label( BrowserMenu::HelpPanel ).c_str() ) );
+        info.Caption( BrowserMenu::Label( BrowserMenu::HelpPanel ).c_str() );
         info.Dock();
         info.Right();
         info.Position( 3 );
@@ -315,8 +293,8 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
             wxMenuItem* smallMenuItem = new wxMenuItem(
                 m_ThumbnailViewMenu,
                 BrowserMenu::ViewSmall,
-                wxT( BrowserMenu::Label( BrowserMenu::ViewSmall ) + std::string( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Small ) ),
-                wxT( BrowserMenu::Label( BrowserMenu::ViewSmall ).c_str() ),
+                BrowserMenu::Label( BrowserMenu::ViewSmall ) + TXT( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Small ),
+                BrowserMenu::Label( BrowserMenu::ViewSmall ).c_str(),
                 wxITEM_CHECK );
             m_ThumbnailViewMenu->Append( smallMenuItem );
             Connect( BrowserMenu::ViewSmall, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( BrowserFrame::OnOptionsMenuSelect ), NULL, this );
@@ -324,8 +302,8 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
             wxMenuItem* mediumMenuItem = new wxMenuItem( 
                 m_ThumbnailViewMenu, 
                 BrowserMenu::ViewMedium, 
-                wxT( BrowserMenu::Label( BrowserMenu::ViewMedium ) + std::string( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Medium ) ),
-                wxT( BrowserMenu::Label( BrowserMenu::ViewMedium ) ),
+                BrowserMenu::Label( BrowserMenu::ViewMedium ) + TXT( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Medium ),
+                BrowserMenu::Label( BrowserMenu::ViewMedium ),
                 wxITEM_CHECK );
             m_ThumbnailViewMenu->Append( mediumMenuItem );
             Connect( BrowserMenu::ViewMedium, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( BrowserFrame::OnOptionsMenuSelect ), NULL, this );
@@ -333,8 +311,8 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
             wxMenuItem* largeMenuItem = new wxMenuItem(
                 m_ThumbnailViewMenu,
                 BrowserMenu::ViewLarge,
-                wxT( BrowserMenu::Label( BrowserMenu::ViewLarge ) + std::string( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Large ) ),
-                wxT( BrowserMenu::Label( BrowserMenu::ViewLarge ) ),
+                BrowserMenu::Label( BrowserMenu::ViewLarge ) + TXT( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Large ),
+                BrowserMenu::Label( BrowserMenu::ViewLarge ),
                 wxITEM_CHECK );
             m_ThumbnailViewMenu->Append( largeMenuItem );
             Connect( BrowserMenu::ViewLarge, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( BrowserFrame::OnOptionsMenuSelect ), NULL, this );
@@ -345,7 +323,7 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
         CreatePanelsMenu( m_PanelsMenu );
         UpdatePanelsMenu( m_PanelsMenu );
 
-        m_OptionsMenu->Append( BrowserMenu::AdvancedSearch, wxT( BrowserMenu::Label( BrowserMenu::AdvancedSearch ) ) );
+        m_OptionsMenu->Append( BrowserMenu::AdvancedSearch, BrowserMenu::Label( BrowserMenu::AdvancedSearch ) );
         m_OptionsMenu->AppendSeparator();
         m_OptionsMenu->Append( wxID_ANY, wxT( "Thumbnail Size" ), m_ThumbnailViewMenu );
         m_OptionsMenu->AppendSeparator();
@@ -412,23 +390,23 @@ void BrowserFrame::SaveWindowState()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-const std::string& BrowserFrame::GetPreferencePrefix() const
+const tstring& BrowserFrame::GetPreferencePrefix() const
 {
     return m_PreferencePrefix;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the string in the NavBar and starts the search query.
-void BrowserFrame::Search( const std::string& queryString, const AssetCollection* collection )
+void BrowserFrame::Search( const tstring& queryString, const AssetCollection* collection )
 {
     wxBusyCursor bc;
     if ( queryString.empty() && !collection )
         return;
 
-    std::string errors;
+    tstring errors;
     if ( !SearchQuery::ParseQueryString( queryString, errors ) )
     {
-        wxMessageBox( errors.c_str(), "Search Errors", wxCENTER | wxICON_WARNING | wxOK, this );
+        wxMessageBox( errors.c_str(), TXT( "Search Errors" ), wxCENTER | wxICON_WARNING | wxOK, this );
         return;
     }
 
@@ -578,7 +556,7 @@ void BrowserFrame::OnFolderSelected( wxTreeEvent& event )
     if ( m_IgnoreFolderSelect )
         return;
 
-    std::string queryString;
+    tstring queryString;
     m_FoldersPanel->GetPath( queryString );
     if ( !queryString.empty() )
     {
@@ -639,9 +617,9 @@ void BrowserFrame::OnPreview( wxCommandEvent& event )
 
         if ( !asset.ReferencesObject() )
         {
-            std::ostringstream msg;
-            msg << "Failed to load asset '" << file->GetFilePath() << "'. Unable to show preview.";
-            wxMessageBox( msg.str(), "Error", wxOK | wxCENTER | wxICON_ERROR, this );
+            tostringstream msg;
+            msg << TXT( "Failed to load asset '" ) << file->GetFilePath() << TXT( "'. Unable to show preview." );
+            wxMessageBox( msg.str(), TXT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, this );
             return;
         }
 
@@ -676,7 +654,7 @@ void BrowserFrame::OnSync( wxCommandEvent& event )
         }
         catch ( const Nocturnal::Exception& e )
         {
-            wxMessageBox( e.What(), "Sync Failed!", wxCENTER | wxICON_ERROR | wxOK, this );
+            wxMessageBox( e.What(), TXT( "Sync Failed!" ), wxCENTER | wxICON_ERROR | wxOK, this );
         }
     }
 
@@ -684,9 +662,9 @@ void BrowserFrame::OnSync( wxCommandEvent& event )
     for ( Asset::V_AssetFolders::const_iterator folderItr = folders.begin(), folderEnd = folders.end();
         folderItr != folderEnd; ++folderItr )
     {
-        std::string path = ( *folderItr )->GetFullPath();
+        tstring path = ( *folderItr )->GetFullPath();
         Nocturnal::Path::GuaranteeSlash( path );
-        path += "...";
+        path += TXT( "..." );
 
         try
         {
@@ -695,7 +673,7 @@ void BrowserFrame::OnSync( wxCommandEvent& event )
         }
         catch ( const Nocturnal::Exception& e )
         {
-            wxMessageBox( e.What(), "Sync Failed!", wxCENTER | wxICON_ERROR | wxOK, this );
+            wxMessageBox( e.What(), TXT( "Sync Failed!" ), wxCENTER | wxICON_ERROR | wxOK, this );
         }
     }
 }
@@ -709,8 +687,8 @@ void BrowserFrame::OnCheckOut( wxCommandEvent& event )
     if ( !folders.empty() )
     {
         if ( wxYES != 
-            wxMessageBox( "Your selection includes folders.  Are you sure that you want to check out all of the contents of the selected folders?  This could result in checking out a lot of files.", 
-            "Check Out Folders?", 
+            wxMessageBox( TXT( "Your selection includes folders.  Are you sure that you want to check out all of the contents of the selected folders?  This could result in checking out a lot of files." ), 
+            TXT( "Check Out Folders?" ), 
             wxCENTER | wxYES_NO | wxICON_WARNING,
             this ) )
         {
@@ -730,7 +708,7 @@ void BrowserFrame::OnCheckOut( wxCommandEvent& event )
         }
         catch ( const Nocturnal::Exception& e )
         {
-            wxMessageBox( e.What(), "Check Out Failed!", wxCENTER | wxICON_ERROR | wxOK, this );
+            wxMessageBox( e.What(), TXT( "Check Out Failed!" ), wxCENTER | wxICON_ERROR | wxOK, this );
         }
     }
 
@@ -738,9 +716,9 @@ void BrowserFrame::OnCheckOut( wxCommandEvent& event )
     for ( Asset::V_AssetFolders::const_iterator folderItr = folders.begin(), folderEnd = folders.end();
         folderItr != folderEnd; ++folderItr )
     {
-        std::string path = ( *folderItr )->GetFullPath();
+        tstring path = ( *folderItr )->GetFullPath();
         Nocturnal::Path::GuaranteeSlash( path );
-        path += "...";
+        path += TXT( "..." );
 
         try
         {
@@ -749,7 +727,7 @@ void BrowserFrame::OnCheckOut( wxCommandEvent& event )
         }
         catch ( const Nocturnal::Exception& e )
         {
-            wxMessageBox( e.What(), "Check Out Failed!", wxCENTER | wxICON_ERROR | wxOK, this );
+            wxMessageBox( e.What(), TXT( "Check Out Failed!" ), wxCENTER | wxICON_ERROR | wxOK, this );
         }
     }
 }
@@ -757,17 +735,17 @@ void BrowserFrame::OnCheckOut( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnRevisionHistory( wxCommandEvent& event )
 {
-    std::vector< std::string > paths;
+    std::vector< tstring > paths;
     if ( m_ResultsPanel->GetSelectedPaths( paths ) == 1 )
     {
-        std::string path = paths.front();
-        std::string command = std::string( "p4win.exe -H \"" ) + path + std::string( "\"" );
+        tstring path = paths.front();
+        tstring command = TXT( "p4win.exe -H \"" ) + path + TXT( "\"" );
 
         if ( Platform::Execute( command ) == -1 )
         {
-            std::string error = Platform::GetErrorString();
-            error += "\nMake sure that you have p4win properly installed.";
-            wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
+            tstring error = Platform::GetErrorString();
+            error += TXT( "\nMake sure that you have p4win properly installed." );
+            wxMessageBox( error.c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
             return;
         }
     }
@@ -776,17 +754,17 @@ void BrowserFrame::OnRevisionHistory( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnCopyPath( wxCommandEvent& event )
 {
-    std::vector< std::string > paths;
+    std::vector< tstring > paths;
     if ( m_ResultsPanel->GetSelectedPaths( paths, event.GetId() == BrowserMenu::CopyPathClean ) )
     {
         wxString text;
         wxTextDataObject* dataObject = new wxTextDataObject();
-        for ( std::vector< std::string >::const_iterator pathItr = paths.begin(),
+        for ( std::vector< tstring >::const_iterator pathItr = paths.begin(),
             pathEnd = paths.end(); pathItr != pathEnd; ++pathItr )
         {
             if ( !text.empty() )
             {
-                text += "\n";
+                text += TXT( "\n" );
             }
             text += *pathItr;
         }
@@ -803,7 +781,7 @@ void BrowserFrame::OnCopyPath( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnShowInFolders( wxCommandEvent& event )
 {
-    std::vector< std::string > paths;
+    std::vector< tstring > paths;
     if ( m_ResultsPanel->GetSelectedPaths( paths )  == 1 )
     {
         wxBusyCursor bc;
@@ -819,17 +797,17 @@ void BrowserFrame::OnShowInFolders( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnShowInPerforce( wxCommandEvent& event )
 {
-    std::vector< std::string > paths;
+    std::vector< tstring > paths;
     if ( m_ResultsPanel->GetSelectedPaths( paths )  == 1 )
     {
-        std::string path = paths.front();
-        std::string command = std::string( "p4win.exe -s \"" ) + path + std::string( "\"" );
+        tstring path = paths.front();
+        tstring command = TXT( "p4win.exe -s \"" ) + path + TXT( "\"" );
 
         if ( Platform::Execute( command ) == -1 )
         {
-            std::string error = Platform::GetErrorString();
-            error += "\nMake sure that you have p4win properly installed.";
-            wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
+            tstring error = Platform::GetErrorString();
+            error += TXT( "\nMake sure that you have p4win properly installed." );
+            wxMessageBox( error.c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
             return;
         }
     }
@@ -838,16 +816,16 @@ void BrowserFrame::OnShowInPerforce( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnShowInWindowsExplorer( wxCommandEvent& event )
 {
-    std::vector< std::string > paths;
+    std::vector< tstring > paths;
     if ( m_ResultsPanel->GetSelectedPaths( paths ) == 1 )
     {
-        std::string command = "explorer.exe ";
+        tstring command = TXT( "explorer.exe " );
         Nocturnal::Path path( paths.front() );
         if ( path.IsFile() )
         {
-            command += "/select,";
+            command += TXT( "/select," );
         }
-        command += "\"" + path.Native() + "\"";
+        command += TXT( "\"" ) + path.Native() + TXT( "\"" );
 
         Platform::Execute( command );
     }
@@ -866,7 +844,7 @@ void BrowserFrame::OnNewCollectionFromSelection( wxCommandEvent& event )
     {
         if ( event.GetId() == BrowserMenu::NewCollectionFromSelection )
         {
-            collection = new AssetCollection( "New Collection", AssetCollectionFlags::CanRename | AssetCollectionFlags::CanHandleDragAndDrop );
+            collection = new AssetCollection( TXT( "New Collection" ), AssetCollectionFlags::CanRename | AssetCollectionFlags::CanHandleDragAndDrop );
             std::set< Nocturnal::Path > fileRefs;
             for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end(); fileItr != fileEnd; ++fileItr )
             {
@@ -892,7 +870,7 @@ void BrowserFrame::OnNewCollectionFromSelection( wxCommandEvent& event )
     if ( collection )
     {
         CollectionManager* collectionManager = m_Browser->GetBrowserPreferences()->GetCollectionManager();
-        std::string name;
+        tstring name;
         collectionManager->GetUniqueName( name, collection->GetName().c_str() );
         collection->SetName( name );
         collectionManager->AddCollection( collection );
@@ -916,7 +894,7 @@ void BrowserFrame::OnNew( wxCommandEvent& args )
 
     //    ::AssetManager::CreateAssetWizard wizard( this, assetTypeID );
 
-    //    std::string defaultDir;
+    //    tstring defaultDir;
     //    const SearchQuery* curQuery = m_SearchHistory->GetCurrentQuery();
     //    if ( curQuery 
     //        && ( curQuery->GetSearchType() == SearchTypes::Folder ) )
@@ -989,7 +967,7 @@ void BrowserFrame::OnClose( wxCloseEvent& event )
     m_Browser->GetBrowserPreferences()->SetThumbnailMode( m_CurrentViewOption );
     m_Browser->GetBrowserPreferences()->SetWindowSettings( this, &m_FrameManager );
 
-    std::string path;
+    tstring path;
     m_FoldersPanel->GetPath( path );
     m_Browser->GetBrowserPreferences()->SetDefaultFolderPath( path );
     m_Browser->OnCloseBrowser();
@@ -1033,7 +1011,7 @@ void BrowserFrame::OnSearchComplete( const Luna::SearchCompleteArgs& args )
     m_ResultsPanel->GetSelectedFilesAndFolders( files, folders );
     u32 numFolders = m_ResultsPanel->GetNumFolders();
     u32 numFiles = m_ResultsPanel->GetNumFiles();
-    UpdateStatusBar( numFolders, numFiles, files.size() + folders.size(), "" );
+    UpdateStatusBar( numFolders, numFiles, files.size() + folders.size(), TXT( "" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1058,7 +1036,7 @@ void BrowserFrame::OnResultsPanelUpdated( const ResultChangeArgs& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Disconnect folder events and set the path
 // 
-void BrowserFrame::SetFolderPath( const std::string& folderPath )
+void BrowserFrame::SetFolderPath( const tstring& folderPath )
 {
     m_IgnoreFolderSelect = true;
     m_FoldersPanel->SetPath( folderPath );
@@ -1085,7 +1063,7 @@ void BrowserFrame::UpdateNavBar( const SearchQueryPtr& searchQuery )
         m_FoldersPanel->Unselect();
     }
 
-    const std::string& queryString = searchQuery->GetQueryString();
+    const tstring& queryString = searchQuery->GetQueryString();
     m_NavigationPanel->SetNavBarValue( queryString, isFolder );
 }
 
@@ -1126,9 +1104,9 @@ void BrowserFrame::UpdateResultsView( u16 customSize )
 // Sets the status bar message (main area, left side of status bar) based on
 // current search progress.
 // 
-void BrowserFrame::UpdateStatusBar( size_t numFolders, size_t numFiles, size_t numSelected, const std::string& hover )
+void BrowserFrame::UpdateStatusBar( size_t numFolders, size_t numFiles, size_t numSelected, const tstring& hover )
 {
-    std::stringstream status;
+    tstringstream status;
 
     if ( !hover.empty() )
     {

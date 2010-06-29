@@ -72,20 +72,20 @@ void Editor::RevisionHistory( const tstring& path )
   Nocturnal::Path::Normalize( clean );
   if ( !RCS::PathIsManaged( clean ) )
   {
-    tstring msg = tstring( "The path '" ) + clean + "' is not under revision control. Unable to display revision history.";
-    wxMessageBox( msg.c_str(), "Warning", wxCENTER | wxICON_WARNING | wxOK, this );
+    tstring msg = TXT( "The path '" ) + clean + TXT( "' is not under revision control. Unable to display revision history." );
+    wxMessageBox( msg.c_str(), wxT( "Warning" ), wxCENTER | wxICON_WARNING | wxOK, this );
     return;
   }
 
   tstring win32Name( clean );
   Nocturnal::Path::MakeNative( win32Name );
-  tstring command = tstring( "p4win.exe -H \"" ) + win32Name + tstring( "\"" );
+  tstring command = TXT( "p4win.exe -H \"" ) + win32Name + TXT( "\"" );
 
   if ( Platform::Execute( command ) == -1 )
   {
     tstring error = Platform::GetErrorString();
-    error += "\nMake sure that you have p4win properly installed.";
-    wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, this );
+    error += TXT( "\nMake sure that you have p4win properly installed." );
+    wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
     return;
   }
 }

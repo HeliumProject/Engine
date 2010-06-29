@@ -46,9 +46,9 @@ namespace Luna
     struct ResultChangeArgs
     {
         size_t m_NumSelected;
-        std::string m_HighlightPath;
+        tstring m_HighlightPath;
 
-        ResultChangeArgs( size_t numSelected, const std::string& highlight )
+        ResultChangeArgs( size_t numSelected, const tstring& highlight )
             : m_NumSelected( numSelected )
             , m_HighlightPath( highlight )
         {
@@ -56,7 +56,7 @@ namespace Luna
 
         ResultChangeArgs()
             : m_NumSelected( 0 )
-            , m_HighlightPath( "" )
+            , m_HighlightPath( TXT( "" ) )
         {
         }
     };
@@ -65,9 +65,9 @@ namespace Luna
     // Highlight change event signature and arguments
     struct ResultHighlightChangeArgs
     {
-        std::string m_HighlightPath;
+        tstring m_HighlightPath;
 
-        ResultHighlightChangeArgs( const std::string& path )
+        ResultHighlightChangeArgs( const tstring& path )
             : m_HighlightPath( path )
         {
         }
@@ -80,7 +80,7 @@ namespace Luna
     class ResultsPanel : public ResultsPanelGenerated 
     {		
     public:
-        ResultsPanel( const std::string& rootDirectory, BrowserFrame* browserFrame );
+        ResultsPanel( const tstring& rootDirectory, BrowserFrame* browserFrame );
         virtual ~ResultsPanel();
 
         void SetViewMode( ViewMode view );
@@ -92,8 +92,8 @@ namespace Luna
         void SetResults( SearchResults* results );
         void ClearResults();
 
-        void SelectPath( const std::string& path );
-        u32 GetSelectedPaths( std::vector< std::string >& paths, bool useForwardSlashes = true );
+        void SelectPath( const tstring& path );
+        u32 GetSelectedPaths( std::vector< tstring >& paths, bool useForwardSlashes = true );
         void GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders );
 
         u32 GetNumFiles() const;
@@ -104,7 +104,7 @@ namespace Luna
         void OnThumbnailHighlightChanged( const ThumbnailHighlightArgs& args );
 
     private:
-        std::string m_RootDirectory;
+        tstring m_RootDirectory;
         ViewMode m_CurrentMode;
         wxWindow* m_CurrentView;
         ThumbnailView* m_ThumbnailView;

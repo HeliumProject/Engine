@@ -9,7 +9,7 @@ namespace Luna
   class SelectedEntityCollection : public AssetCollection
   {
   public:
-    SelectedEntityCollection( Selection* selection, const std::string& name );
+    SelectedEntityCollection( Selection* selection, const tstring& name );
     virtual ~SelectedEntityCollection();
 
     void ClearSelection();

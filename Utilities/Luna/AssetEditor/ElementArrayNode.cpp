@@ -22,7 +22,7 @@ LUNA_DEFINE_TYPE( Luna::ElementArrayNode );
 // 
 void ElementArrayNode::InitializeType()
 {
-  Reflect::RegisterClass<Luna::ElementArrayNode>( "Luna::ElementArrayNode" );
+  Reflect::RegisterClass<Luna::ElementArrayNode>( TXT( "Luna::ElementArrayNode" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ ElementArrayNode::ElementArrayNode( Luna::AssetManager* assetManager, Reflect::E
   if ( field->m_Create )
   {
     ContextMenuItemSet& contextMenu = GetContextMenu();
-    ContextMenuItemPtr menuItem = new ContextMenuItem( "Add" );
+    ContextMenuItemPtr menuItem = new ContextMenuItem( TXT( "Add" ) );
     menuItem->AddCallback( ContextMenuSignature::Delegate::Create<ElementArrayNode, void (ElementArrayNode::*)( const ContextMenuArgsPtr& )>( this, &ElementArrayNode::AddNewArrayElement ) );
     contextMenu.AppendSeparator();
     contextMenu.AppendItem( menuItem );
@@ -435,7 +435,7 @@ Luna::PersistentNode* ElementArrayNode::NewChild( Reflect::Element* element )
 {
   Luna::PersistentNodePtr node = new Luna::PersistentNode( element, GetAssetManager() );
 
-  std::string icon;
+  tstring icon;
   if ( m_Field->GetProperty( Asset::AssetProperties::SmallIcon, icon ) && !icon.empty() )
   {
     node->SetIcon( icon );
@@ -448,17 +448,17 @@ Luna::PersistentNode* ElementArrayNode::NewChild( Reflect::Element* element )
 
   contextMenu.AppendSeparator();
 
-  ContextMenuItemPtr menuItemMoveUp = new ContextMenuItem( "Move Up\tAlt-UP", "Move the selected item(s) up in the list", Nocturnal::GlobalImageManager().GetBitmap( "actions/go-up.png" ) );
+  ContextMenuItemPtr menuItemMoveUp = new ContextMenuItem( TXT( "Move Up\tAlt-UP" ), TXT( "Move the selected item(s) up in the list" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/go-up.png" ) ) );
   menuItemMoveUp->AddCallback( ContextMenuSignature::Delegate::Create<Luna::ElementArrayNode, void (Luna::ElementArrayNode::*)( const ContextMenuArgsPtr& )>( this, &Luna::ElementArrayNode::MoveSelectedChildrenUp ) );
   contextMenu.AppendItem( menuItemMoveUp );
 
-  ContextMenuItemPtr menuItemMoveDown = new ContextMenuItem( "Move Down\tAlt-DOWN", "Move the selected item(s) down in the list", Nocturnal::GlobalImageManager().GetBitmap( "actions/go-down.png" ) );
+  ContextMenuItemPtr menuItemMoveDown = new ContextMenuItem( TXT( "Move Down\tAlt-DOWN" ), TXT( "Move the selected item(s) down in the list" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/go-down.png" ) ) );
   menuItemMoveDown->AddCallback( ContextMenuSignature::Delegate::Create<Luna::ElementArrayNode, void (Luna::ElementArrayNode::*)( const ContextMenuArgsPtr& )>( this, &Luna::ElementArrayNode::MoveSelectedChildrenDown ) );
   contextMenu.AppendItem( menuItemMoveDown );
 
   contextMenu.AppendSeparator();
 
-  ContextMenuItemPtr menuItemDelete = new ContextMenuItem( "Delete" );
+  ContextMenuItemPtr menuItemDelete = new ContextMenuItem( TXT( "Delete" ) );
   menuItemDelete->AddCallback( ContextMenuSignature::Delegate::Create<Luna::ElementArrayNode, void (Luna::ElementArrayNode::*)( const ContextMenuArgsPtr& )>( this, &Luna::ElementArrayNode::DeleteSelectedChildren ) );
   contextMenu.AppendItem( menuItemDelete );
 

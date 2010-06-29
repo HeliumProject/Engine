@@ -91,7 +91,7 @@ void Statistics::Create()
                                      OUT_DEFAULT_PRECIS,
                                      DEFAULT_QUALITY,
                                      DEFAULT_PITCH | FF_DONTCARE,
-                                     "Arial",
+                                     TXT( "Arial" ),
                                      &m_Font );
 
     NOC_ASSERT(SUCCEEDED(result));

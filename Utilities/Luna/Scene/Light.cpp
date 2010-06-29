@@ -36,11 +36,11 @@ D3DMATERIAL9 Light::s_Material;
 
 void Light::InitializeType()
 {
-    Reflect::RegisterClass< Luna::Light >( "Luna::Light" );
+    Reflect::RegisterClass< Luna::Light >( TXT( "Luna::Light" ) );
 
     ZeroMemory(&s_Material, sizeof(s_Material));
 
-    Enumerator::InitializePanel( "Light", CreatePanelSignature::Delegate( &Light::CreatePanel ) );
+    Enumerator::InitializePanel( TXT( "Light" ), CreatePanelSignature::Delegate( &Light::CreatePanel ) );
 }
 
 void Light::CleanupType()
@@ -91,12 +91,12 @@ void Light::Delete()
 
 i32 Light::GetImageIndex() const
 {
-    return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
+    return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "light.png" ) );
 }
 
-std::string Light::GetApplicationTypeName() const
+tstring Light::GetApplicationTypeName() const
 {
-    return "Light";
+    return TXT( "Light" );
 }
 
 void Light::Evaluate(GraphDirection direction)
@@ -172,9 +172,9 @@ bool Light::Pick( PickVisitor* pick )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified panel is supported by Luna::Light.
 //
-bool Light::ValidatePanel(const std::string& name)
+bool Light::ValidatePanel(const tstring& name)
 {
-    if (name == "Light")
+    if (name == TXT( "Light" ) )
     {
         return true;
     }
@@ -185,12 +185,11 @@ bool Light::ValidatePanel(const std::string& name)
 void Light::CreatePanel( CreatePanelArgs& args )
 {
 
-
-    args.m_Enumerator->PushPanel("Light", true);
+    args.m_Enumerator->PushPanel( TXT( "Light" ), true);
     {
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel("Color");
+            args.m_Enumerator->AddLabel( TXT( "Color" ) );
             args.m_Enumerator->AddColorPicker<Light, Color3>( args.m_Selection, &Light::GetColor, &Light::SetColor );
 
             Inspect::Slider* slider = args.m_Enumerator->AddSlider<Light, float>( args.m_Selection, &Light::GetIntensity, &Light::SetIntensity );
@@ -200,14 +199,14 @@ void Light::CreatePanel( CreatePanelArgs& args )
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel("Photon Emissive");
+            args.m_Enumerator->AddLabel( TXT( "Photon Emissive" ) );
             args.m_Enumerator->AddCheckBox<Light, bool>( args.m_Selection, &Light::GetEmitPhotons, &Light::SetEmitPhotons );
         }
         args.m_Enumerator->Pop();
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel("Photon Energy");
+            args.m_Enumerator->AddLabel( TXT( "Photon Energy" ) );
             args.m_Enumerator->AddColorPicker<Luna::Light, Color3>( args.m_Selection, &Light::GetPhotonColor, &Light::SetPhotonColor );
 
             Inspect::Slider* slider = args.m_Enumerator->AddSlider<Luna::Light, float>( args.m_Selection, &Light::GetPhotonIntensity, &Light::SetPhotonIntensity );
@@ -219,7 +218,7 @@ void Light::CreatePanel( CreatePanelArgs& args )
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel("Number of Photons");
+            args.m_Enumerator->AddLabel( TXT( "Number of Photons" ) );
             args.m_Enumerator->AddValue<Luna::Light, u32>( args.m_Selection, &Light::GetNumPhotons, &Light::SetNumPhotons );
         }
         args.m_Enumerator->Pop();
@@ -227,21 +226,21 @@ void Light::CreatePanel( CreatePanelArgs& args )
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel("Attenuate");
+            args.m_Enumerator->AddLabel( TXT( "Attenuate" ) );
             args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetAttenuate, &Light::SetAttenuate );
         }
         args.m_Enumerator->Pop();
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel("Cast Shadows");
+            args.m_Enumerator->AddLabel( TXT( "Cast Shadows" ) );
             args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetCastsShadows, &Light::SetCastsShadows );
         }
         args.m_Enumerator->Pop();
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel("Shadow Factor");
+            args.m_Enumerator->AddLabel( TXT( "Shadow Factor" ) );
             Inspect::Slider* slider = args.m_Enumerator->AddSlider<Luna::Light, f32>( args.m_Selection, &Light::GetShadowFactor, &Light::SetShadowFactor );
             slider->SetRangeMin( 0.0f );
             slider->SetRangeMax( 1.0f );
@@ -250,35 +249,35 @@ void Light::CreatePanel( CreatePanelArgs& args )
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel("Visibility Ray Test");
+            args.m_Enumerator->AddLabel( TXT( "Visibility Ray Test" ) );
             args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetVisibilityRayTest, &Light::SetVisibilityRayTest );
         }
         args.m_Enumerator->Pop();
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel("Render Type");
+            args.m_Enumerator->AddLabel( TXT( "Render Type" ) );
             Inspect::Choice* choice = args.m_Enumerator->AddChoice<Luna::Light, int>(args.m_Selection, &Light::GetRenderType, &Light::SetRenderType);
             choice->SetDropDown( true );
 
             Inspect::V_Item items;
             {
                 {
-                    std::ostringstream str;
+                    tostringstream str;
                     str << Content::LightRenderTypes::Baked;
-                    items.push_back( Inspect::Item( "Baked", str.str() ) );
+                    items.push_back( Inspect::Item( TXT( "Baked" ), str.str() ) );
                 }
 
                 {
-                    std::ostringstream str;
+                    tostringstream str;
                     str << Content::LightRenderTypes::RealTime;
-                    items.push_back( Inspect::Item( "RealTime", str.str() ) );
+                    items.push_back( Inspect::Item( TXT( "RealTime" ), str.str() ) );
                 }
 
                 {
-                    std::ostringstream str;
+                    tostringstream str;
                     str << Content::LightRenderTypes::LightmapOnly;
-                    items.push_back( Inspect::Item( "LightmapOnly", str.str() ) );
+                    items.push_back( Inspect::Item( TXT( "LightmapOnly" ), str.str() ) );
                 }
             }
             choice->SetItems( items );
@@ -287,28 +286,28 @@ void Light::CreatePanel( CreatePanelArgs& args )
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel("Lens Flare Type");
+            args.m_Enumerator->AddLabel( TXT( "Lens Flare Type" ) );
             Inspect::Choice* choice = args.m_Enumerator->AddChoice<Luna::Light, int>(args.m_Selection, &Light::GetLensFlareType, &Light::SetLensFlareType);
             choice->SetDropDown( true );
 
             Inspect::V_Item items;
             {
                 {
-                    std::ostringstream str;
+                    tostringstream str;
                     str << Content::LensFlareTypes::Disabled;
-                    items.push_back( Inspect::Item( "Disabled", str.str() ) );
+                    items.push_back( Inspect::Item( TXT( "Disabled" ), str.str() ) );
                 }
 
                 {
-                    std::ostringstream str;
+                    tostringstream str;
                     str << Content::LensFlareTypes::Vortex;
-                    items.push_back( Inspect::Item( "Vortex", str.str() ) );
+                    items.push_back( Inspect::Item( TXT( "Vortex" ), str.str() ) );
                 }
 
                 {
-                    std::ostringstream str;
+                    tostringstream str;
                     str << Content::LensFlareTypes::VortexNoTrail;
-                    items.push_back( Inspect::Item( "Vortex No Trail", str.str() ) );
+                    items.push_back( Inspect::Item( TXT( "Vortex No Trail" ), str.str() ) );
                 }
             }
             choice->SetItems( items );
@@ -317,7 +316,7 @@ void Light::CreatePanel( CreatePanelArgs& args )
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel("Area Light");
+            args.m_Enumerator->AddLabel( TXT( "Area Light" ) );
 
             Inspect::Choice* choice = args.m_Enumerator->AddChoice<Luna::Light, int>(args.m_Selection, &Light::GetAreaLightType, &Light::SetAreaLightType);
             choice->SetDropDown( true );
@@ -325,29 +324,29 @@ void Light::CreatePanel( CreatePanelArgs& args )
             Inspect::V_Item items;
             {
                 {
-                    std::ostringstream str;
+                    tostringstream str;
                     str << Content::AreaLightTypes::None;
-                    items.push_back( Inspect::Item( "None", str.str() ) );
+                    items.push_back( Inspect::Item( TXT( "None" ), str.str() ) );
                 }
                 {
-                    std::ostringstream str;
+                    tostringstream str;
                     str << Content::AreaLightTypes::Sphere;
-                    items.push_back( Inspect::Item( "Sphere", str.str() ) );
+                    items.push_back( Inspect::Item( TXT( "Sphere" ), str.str() ) );
                 }
                 {
-                    std::ostringstream str;
+                    tostringstream str;
                     str << Content::AreaLightTypes::Rectangle;
-                    items.push_back( Inspect::Item( "Rectangle", str.str() ) );
+                    items.push_back( Inspect::Item( TXT( "Rectangle" ), str.str() ) );
                 }
                 {
-                    std::ostringstream str;
+                    tostringstream str;
                     str << Content::AreaLightTypes::Cylinder;
-                    items.push_back( Inspect::Item( "Cylinder", str.str() ) );
+                    items.push_back( Inspect::Item( TXT( "Cylinder" ), str.str() ) );
                 }
                 {
-                    std::ostringstream str;
+                    tostringstream str;
                     str << Content::AreaLightTypes::Disc;
-                    items.push_back( Inspect::Item( "Disc", str.str() ) );
+                    items.push_back( Inspect::Item( TXT( "Disc" ), str.str() ) );
                 }
             }
             choice->SetItems( items );
@@ -356,13 +355,13 @@ void Light::CreatePanel( CreatePanelArgs& args )
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel("Physical Light");
+            args.m_Enumerator->AddLabel( TXT( "Physical Light" ) );
             args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetPhysicalLight, &Light::SetPhysicalLight );
         }
         args.m_Enumerator->Pop();
 
 
-        args.m_Enumerator->PushPanel( "RealTime" );
+        args.m_Enumerator->PushPanel( TXT( "RealTime" ) );
         {
 
             LightPanel* panel = new LightPanel ( args.m_Enumerator, args.m_Selection );
@@ -378,51 +377,51 @@ void Light::CreatePanel( CreatePanelArgs& args )
 
             args.m_Enumerator->PushContainer();
             {
-                args.m_Enumerator->AddLabel("Draw Distance");
+                args.m_Enumerator->AddLabel( TXT( "Draw Distance" ) );
                 args.m_Enumerator->AddValue<Luna::Light, float>( args.m_Selection, &Light::GetDrawDist, &Light::SetDrawDist );
             }
             args.m_Enumerator->Pop();
 
             args.m_Enumerator->PushContainer();
             {
-                args.m_Enumerator->AddLabel("Kill If Inactive");
+                args.m_Enumerator->AddLabel( TXT( "Kill If Inactive" ) );
                 args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetKillIfInactive, &Light::SetKillIfInactive );
             }
             args.m_Enumerator->Pop();
 
             args.m_Enumerator->PushContainer();
             {
-                args.m_Enumerator->AddLabel("Allow Oversized");
+                args.m_Enumerator->AddLabel( TXT( "Allow Oversized" ) );
                 args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetAllowOversized, &Light::SetAllowOversized );
             }
             args.m_Enumerator->Pop();
 
-            args.m_Enumerator->PushPanel( "Animation" );
+            args.m_Enumerator->PushPanel( TXT( "Animation" ) );
             {
                 args.m_Enumerator->PushContainer();
                 {
-                    args.m_Enumerator->AddLabel("Color");
+                    args.m_Enumerator->AddLabel( TXT( "Color" ) );
                     args.m_Enumerator->AddKeyControl<Luna::Light>( args.m_Selection, &Reflect::CreateObject< Content::ParametricColorKey >, &Light::GetColorAnimation, &Light::SetColorAnimation );
                 }
                 args.m_Enumerator->Pop();
 
                 args.m_Enumerator->PushContainer();
                 {
-                    args.m_Enumerator->AddLabel("Flicker - r = amplitude, g = frequency");
+                    args.m_Enumerator->AddLabel( TXT( "Flicker - r = amplitude, g = frequency" ) );
                     args.m_Enumerator->AddKeyControl<Luna::Light>( args.m_Selection, &Reflect::CreateObject< Content::ParametricColorKey >, &Light::GetIntensityAnimation, &Light::SetIntensityAnimation );
                 }
                 args.m_Enumerator->Pop();
 
                 args.m_Enumerator->PushContainer();
                 {
-                    args.m_Enumerator->AddLabel("Animation Duration");
+                    args.m_Enumerator->AddLabel( TXT( "Animation Duration" ) );
                     args.m_Enumerator->AddValue<Luna::Light, float>( args.m_Selection, &Light::GetAnimationDuration, &Light::SetAnimationDuration );
                 }
                 args.m_Enumerator->Pop();
 
                 args.m_Enumerator->PushContainer();
                 {
-                    args.m_Enumerator->AddLabel("Use Random Offset");
+                    args.m_Enumerator->AddLabel( TXT( "Use Random Offset" ) );
                     args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetRandomAnimOffset, &Light::SetRandomAnimOffset );
                 }
                 args.m_Enumerator->Pop();
@@ -433,7 +432,7 @@ void Light::CreatePanel( CreatePanelArgs& args )
         args.m_Enumerator->Pop();
 
 
-        args.m_Enumerator->PushPanel( "Selection Helper" );
+        args.m_Enumerator->PushPanel( TXT( "Selection Helper" ) );
         {
             /*
             args.m_Enumerator->PushContainer();
@@ -445,21 +444,21 @@ void Light::CreatePanel( CreatePanelArgs& args )
 
             args.m_Enumerator->PushContainer();
             {
-                args.m_Enumerator->AddLabel("Render Type");
+                args.m_Enumerator->AddLabel( TXT( "Render Type" ) );
                 args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperRenderType, &Light::SetSelectionHelperRenderType );
             }
             args.m_Enumerator->Pop();
 
             args.m_Enumerator->PushContainer();
             {
-                args.m_Enumerator->AddLabel("Color");
+                args.m_Enumerator->AddLabel( TXT( "Color" ) );
                 args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperColor, &Light::SetSelectionHelperColor );
             }
             args.m_Enumerator->Pop();
 
             args.m_Enumerator->PushContainer();
             {
-                args.m_Enumerator->AddLabel("Intensity");
+                args.m_Enumerator->AddLabel( TXT( "Intensity" ) );
                 args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperIntensity, &Light::SetSelectionHelperIntensity );
             }
             args.m_Enumerator->Pop();
@@ -467,21 +466,21 @@ void Light::CreatePanel( CreatePanelArgs& args )
 
             args.m_Enumerator->PushContainer();
             {
-                args.m_Enumerator->AddLabel("Scale");
+                args.m_Enumerator->AddLabel( TXT( "Scale" ) );
                 args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperScale, &Light::SetSelectionHelperScale );
             }
             args.m_Enumerator->Pop();
 
             args.m_Enumerator->PushContainer();
             {
-                args.m_Enumerator->AddLabel("Lens Flare");
+                args.m_Enumerator->AddLabel( TXT( "Lens Flare" ) );
                 args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperLensFlare, &Light::SetSelectionHelperLensFlare );
             }
             args.m_Enumerator->Pop();
 
             args.m_Enumerator->PushContainer();
             {
-                args.m_Enumerator->AddLabel("Physical Light");
+                args.m_Enumerator->AddLabel( TXT( "Physical Light" ) );
                 args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperPhysicalLight, &Light::SetSelectionHelperPhysicalLight );
             }
             args.m_Enumerator->Pop();
@@ -490,7 +489,7 @@ void Light::CreatePanel( CreatePanelArgs& args )
             {
                 Inspect::Action* button = args.m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( &Light::OnSelectionHelper ) );
                 button->SetClientData( new SelectionDataObject( args.m_Selection ) );
-                button->SetText( "Select Lights" );
+                button->SetText( TXT( "Select Lights" ) );
             }
             args.m_Enumerator->Pop();
         }

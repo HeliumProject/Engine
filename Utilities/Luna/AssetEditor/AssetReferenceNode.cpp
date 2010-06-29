@@ -28,8 +28,8 @@ LUNA_DEFINE_TYPE( Luna::AssetReferenceNode );
 // 
 void AssetReferenceNode::InitializeType()
 {
-    Reflect::RegisterClass<Luna::AssetReferenceNode>( "Luna::AssetReferenceNode" );
-    Enumerator::InitializePanel( "Asset", CreatePanelSignature::Delegate( &Luna::AssetReferenceNode::CreatePanel ) );
+    Reflect::RegisterClass<Luna::AssetReferenceNode>( TXT( "Luna::AssetReferenceNode" ) );
+    Enumerator::InitializePanel( TXT( "Asset" ), CreatePanelSignature::Delegate( &Luna::AssetReferenceNode::CreatePanel ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -164,11 +164,11 @@ void AssetReferenceNode::Load()
         Luna::AssetClass* assetClass = GetAssetManager()->FindAsset( m_AssetPath.Hash() );
         if ( !assetClass )
         {
-            std::string error;
+            tstring error;
             assetClass = GetAssetManager()->Open( m_AssetPath.Get(), error, false );
             if ( !error.empty() )
             {
-                Log::Error( "%s\n", error.c_str() );
+                Log::Error( TXT( "%s\n" ), error.c_str() );
             }
         }
 
@@ -190,8 +190,8 @@ void AssetReferenceNode::Load()
         }
         else
         {
-            SetName( "Error loading: " + m_AssetPath.Get() );
-            SetIcon( "enginetype_unknown.png" );
+            SetName( TXT( "Error loading: " ) + m_AssetPath.Get() );
+            SetIcon( TXT( "enginetype_unknown.png" ) );
         }
     }
 }
@@ -234,7 +234,7 @@ void AssetReferenceNode::AssociateField( Reflect::Element* element, const Reflec
     // Don't try to associate a reference that's already associated!
     if ( IsFieldAssociated() )
     {
-        throw Nocturnal::Exception( "Attempted to add field (%s) to reference '%s' when there is already a field associated", field->m_UIName.c_str(), GetName().c_str() );
+        throw Nocturnal::Exception( TXT( "Attempted to add field (%s) to reference '%s' when there is already a field associated" ), field->m_UIName.c_str(), GetName().c_str() );
     }
 
     // Store the values
@@ -270,9 +270,9 @@ void AssetReferenceNode::ConnectProperties( EnumerateElementArgs& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Enables the static "Asset" panel for asset classes.
 // 
-bool AssetReferenceNode::ValidatePanel( const std::string& name )
+bool AssetReferenceNode::ValidatePanel( const tstring& name )
 {
-    if ( name == "Asset" )
+    if ( name == TXT( "Asset" ) )
     {
         return true;
     }
@@ -303,17 +303,17 @@ void AssetReferenceNode::PreShowContextMenu()
     {
         const size_t numSelected = GetAssetManager()->GetSelection().GetItems().Size();
 
-        ContextMenuItemPtr menuItem = new ContextMenuItem( "Edit", "Open file in the Asset Editor." );
+        ContextMenuItemPtr menuItem = new ContextMenuItem( TXT( "Edit" ), TXT( "Open file in the Asset Editor." ) );
         menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnOpen ) );
         contextMenu.AppendItem( menuItem );
 
-        SubMenuPtr rcsSubMenu = new SubMenu( "Perforce" );
+        SubMenuPtr rcsSubMenu = new SubMenu( TXT( "Perforce" ) );
 
-        menuItem = new ContextMenuItem( "Check Out" );
+        menuItem = new ContextMenuItem( TXT( "Check Out" ) );
         menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnCheckOutPath ) );
         rcsSubMenu->AppendItem( menuItem );
 
-        menuItem = new ContextMenuItem( "Revision History" );
+        menuItem = new ContextMenuItem( TXT( "Revision History" ) );
         menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnRevisionHistory ) );
         rcsSubMenu->AppendItem( menuItem );
 
@@ -322,14 +322,14 @@ void AssetReferenceNode::PreShowContextMenu()
         if ( IsFieldAssociated() )
         {
             contextMenu.AppendSeparator();
-            menuItem = new ContextMenuItem( "Change File Path", "Change this file's path using the Open File dialog" );
+            menuItem = new ContextMenuItem( TXT( "Change File Path" ), TXT( "Change this file's path using the Open File dialog" ) );
             menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnChangePath ) );
             menuItem->Enable( numSelected == 1 );
             contextMenu.AppendItem( menuItem );
 
 
-            wxBitmap finderIcon = Nocturnal::GlobalImageManager().GetBitmap( "actions/system-search.png" );
-            menuItem = new ContextMenuItem( "Change File Path (Asset Finder)", "Change this file's path using the Asset Finder", finderIcon );
+            wxBitmap finderIcon = Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/system-search.png" ) );
+            menuItem = new ContextMenuItem( TXT( "Change File Path (Asset Finder)" ), TXT( "Change this file's path using the Asset Finder" ), finderIcon );
             menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnChangePathFinder ) );
             menuItem->Enable( numSelected == 1 );
             contextMenu.AppendItem( menuItem );
@@ -434,39 +434,39 @@ Undo::CommandPtr AssetReferenceNode::GetRemoveComponentCommand( Luna::ComponentW
 // 
 void AssetReferenceNode::CreatePanel( CreatePanelArgs& args )
 {
-    args.m_Enumerator->PushPanel( "Asset", true );
+    args.m_Enumerator->PushPanel( TXT( "Asset" ), true );
     {
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( "Name" );
-            typedef std::string ( Luna::AssetReferenceNode::*Getter )() const;
-            typedef void ( Luna::AssetReferenceNode::*Setter )( const std::string& );
-            Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, std::string, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetFileName );
+            args.m_Enumerator->AddLabel( TXT( "Name" ) );
+            typedef tstring ( Luna::AssetReferenceNode::*Getter )() const;
+            typedef void ( Luna::AssetReferenceNode::*Setter )( const tstring& );
+            Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, tstring, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetFileName );
             textBox->SetReadOnly( true );
         }
         args.m_Enumerator->Pop();
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( "Engine Type" );
-            typedef std::string ( Luna::AssetReferenceNode::*Getter )() const;
-            typedef void ( Luna::AssetReferenceNode::*Setter )( const std::string& );
-            Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, std::string, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetAssetTypeName );
+            args.m_Enumerator->AddLabel( TXT( "Engine Type" ) );
+            typedef tstring ( Luna::AssetReferenceNode::*Getter )() const;
+            typedef void ( Luna::AssetReferenceNode::*Setter )( const tstring& );
+            Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, tstring, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetAssetTypeName );
             textBox->SetReadOnly( true );
         }
         args.m_Enumerator->Pop();
 
         args.m_Enumerator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( "File" );
+            args.m_Enumerator->AddLabel( TXT( "File" ) );
         }
         args.m_Enumerator->Pop();
 
         args.m_Enumerator->PushContainer();
         {
-            typedef std::string ( Luna::AssetReferenceNode::*Getter )() const;
-            typedef void ( Luna::AssetReferenceNode::*Setter )( const std::string& );
-            Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, std::string, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetFilePath );
+            typedef tstring ( Luna::AssetReferenceNode::*Getter )() const;
+            typedef void ( Luna::AssetReferenceNode::*Setter )( const tstring& );
+            Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::AssetReferenceNode, tstring, Getter, Setter >( args.m_Selection, &Luna::AssetReferenceNode::GetFilePath );
             textBox->SetJustification( Inspect::Value::kRight );
             textBox->SetReadOnly( true );
         }
@@ -478,22 +478,22 @@ void AssetReferenceNode::CreatePanel( CreatePanelArgs& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns a string displaying the engine type for this asset.
 // 
-std::string AssetReferenceNode::GetAssetTypeName() const
+tstring AssetReferenceNode::GetAssetTypeName() const
 {
     if ( m_Asset )
     {
         return Asset::AssetClass::GetAssetTypeName( m_Asset->GetPackage< Asset::AssetClass >()->GetAssetType() );
     }
 
-    return "Unknown";
+    return TXT( "Unknown" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the file name of the ID associated with this node.
 // 
-std::string AssetReferenceNode::GetFileName() const
+tstring AssetReferenceNode::GetFileName() const
 {
-    std::string fileName = GetFilePath();
+    tstring fileName = GetFilePath();
     if ( !fileName.empty() )
     {
         Nocturnal::Path np( fileName );
@@ -506,12 +506,12 @@ std::string AssetReferenceNode::GetFileName() const
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the full file path associated with this asset ID.
 // 
-std::string AssetReferenceNode::GetFilePath() const
+tstring AssetReferenceNode::GetFilePath() const
 {
     return m_AssetPath.Get();
 }
 
-void AssetReferenceNode::SetFilePath( const std::string& path )
+void AssetReferenceNode::SetFilePath( const tstring& path )
 {
     m_AssetPath.Set( path );
 }
@@ -519,14 +519,14 @@ void AssetReferenceNode::SetFilePath( const std::string& path )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the label to use on this node.
 // 
-std::string AssetReferenceNode::MakeLabel() const
+tstring AssetReferenceNode::MakeLabel() const
 {
-    std::string label;
+    tstring label;
     if ( IsFieldAssociated() )
     {
         if ( m_Field->m_SerializerID == Reflect::GetType< Reflect::U64Serializer >() )
         {
-            label += m_Field->m_UIName + ": ";
+            label += m_Field->m_UIName + TXT( ": " );
         }
     }
 
@@ -536,12 +536,12 @@ std::string AssetReferenceNode::MakeLabel() const
 
         if ( !m_Asset )
         {
-            label += " (double-click to load)";
+            label += TXT( " (double-click to load)" );
         }
     }
     else
     {
-        label += "(double-click to set)";
+        label += TXT( "(double-click to set)" );
     }
 
     return label;
@@ -550,9 +550,9 @@ std::string AssetReferenceNode::MakeLabel() const
 ///////////////////////////////////////////////////////////////////////////////
 // Gets the appropriate icon to use for this node.
 // 
-std::string AssetReferenceNode::MakeIcon() const
+tstring AssetReferenceNode::MakeIcon() const
 {
-    std::string icon;
+    tstring icon;
 
     if ( m_Field )
     {
@@ -567,7 +567,7 @@ std::string AssetReferenceNode::MakeIcon() const
         }
         else
         {
-            icon = "asset_reference.png";
+            icon = TXT( "asset_reference.png" );
         }
     }
     return icon;
@@ -663,15 +663,15 @@ void AssetReferenceNode::AssetTypeChanged( const Asset::AssetTypeChangeArgs& arg
 // 
 void AssetReferenceNode::OnChangePath( const ContextMenuArgsPtr& args )
 {
-    Nocturnal::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path" );
+    Nocturnal::FileDialog dialog( GetAssetManager()->GetAssetEditor(), TXT( "Change File Path" ) );
 
-    std::string currentPath = GetFilePath();
+    tstring currentPath = GetFilePath();
     if ( !currentPath.empty() )
     {
         dialog.SetPath( currentPath.c_str() );
     }
 
-    std::string filter;
+    tstring filter;
     if ( m_Field->GetProperty( Asset::AssetProperties::FileFilter, filter ) )
     {
         dialog.SetFilter( filter );
@@ -681,7 +681,7 @@ void AssetReferenceNode::OnChangePath( const ContextMenuArgsPtr& args )
     {
         if ( GetFilePath() != dialog.GetFilePath() )
         {
-            args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::AssetReferenceNode, std::string >( this, &AssetReferenceNode::GetFilePath, &AssetReferenceNode::SetFilePath ), dialog.GetFilePath() ) );
+            args->GetBatch()->Push( new Undo::PropertyCommand< tstring >( new Nocturnal::MemberProperty< Luna::AssetReferenceNode, tstring >( this, &AssetReferenceNode::GetFilePath, &AssetReferenceNode::SetFilePath ), dialog.GetFilePath() ) );
         }
     }
 }
@@ -694,9 +694,9 @@ void AssetReferenceNode::OnChangePathFinder( const ContextMenuArgsPtr& args )
 {
     NOC_BREAK();
 
-    Nocturnal::FileDialog dialog( GetAssetManager()->GetAssetEditor(), "Change File Path" );
+    Nocturnal::FileDialog dialog( GetAssetManager()->GetAssetEditor(), TXT( "Change File Path" ) );
 
-    std::string filter;
+    tstring filter;
     if ( m_Field->GetProperty( Asset::AssetProperties::FileFilter, filter ) )
     {
         dialog.SetFilter( filter );
@@ -706,7 +706,7 @@ void AssetReferenceNode::OnChangePathFinder( const ContextMenuArgsPtr& args )
     {
         if ( GetFilePath() != dialog.GetPath() )
         {
-            args->GetBatch()->Push( new Undo::PropertyCommand< std::string >( new Nocturnal::MemberProperty< Luna::AssetReferenceNode, std::string >( this, &AssetReferenceNode::GetFilePath, &AssetReferenceNode::SetFilePath ), dialog.GetFilePath() ) );
+            args->GetBatch()->Push( new Undo::PropertyCommand< tstring >( new Nocturnal::MemberProperty< Luna::AssetReferenceNode, tstring >( this, &AssetReferenceNode::GetFilePath, &AssetReferenceNode::SetFilePath ), dialog.GetFilePath() ) );
         }
     }
 }
@@ -725,7 +725,7 @@ NOC_BREAK();
 // 
 void AssetReferenceNode::OnRevisionHistory( const ContextMenuArgsPtr& args )
 {
-    const std::string& path = GetFilePath();
+    const tstring& path = GetFilePath();
     if ( !path.empty() )
     {
         GetAssetManager()->GetAssetEditor()->RevisionHistory( path );

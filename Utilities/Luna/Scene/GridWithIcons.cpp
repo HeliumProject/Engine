@@ -25,7 +25,7 @@ GridWithIcons::GridWithIcons( wxWindow* parent, wxWindowID gridID, bool allowRen
   m_ColumnName = Name;
 
   // Setup the newly created Icon column
-  m_Grid->SetColLabelValue( m_ColumnIcon, " " );
+  m_Grid->SetColLabelValue( m_ColumnIcon, TXT( " " ) );
   m_Grid->SetColSize( m_ColumnIcon, 18 );
   wxGridCellAttr* attr = new wxGridCellAttr();
   attr->SetRenderer( new GridCellImageRenderer() );
@@ -47,7 +47,7 @@ GridWithIcons::~GridWithIcons()
 ///////////////////////////////////////////////////////////////////////////////
 // Adds a row to the grid.
 // 
-bool GridWithIcons::AddRow( const std::string& name, bool visible, bool selectable, i32 imageIndex )
+bool GridWithIcons::AddRow( const tstring& name, bool visible, bool selectable, i32 imageIndex )
 {
   bool isOk = false;
   if ( AddRow( name, visible, selectable ) )
@@ -57,8 +57,8 @@ bool GridWithIcons::AddRow( const std::string& name, bool visible, bool selectab
 
     if ( row >= 0 )
     {
-      const std::string& imageName = Nocturnal::GlobalImageManager().GetNameFromImageIndex( imageIndex );
-      m_Grid->SetCellValue( row, Icon, wxT( imageName.c_str() ) );
+      const tstring& imageName = Nocturnal::GlobalImageManager().GetNameFromImageIndex( imageIndex );
+      m_Grid->SetCellValue( row, Icon, imageName.c_str() );
       isOk = true;
     }
   }
@@ -69,7 +69,7 @@ bool GridWithIcons::AddRow( const std::string& name, bool visible, bool selectab
 // Overridden from the base class to make it protected.  Users of this class
 // should use the AddRow function above.
 // 
-bool GridWithIcons::AddRow( const std::string& name, bool visible, bool selectable )
+bool GridWithIcons::AddRow( const tstring& name, bool visible, bool selectable )
 {
   return __super::AddRow( name, visible, selectable );
 }

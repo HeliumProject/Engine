@@ -23,7 +23,7 @@ namespace Luna
 
   class Scene;
   typedef Nocturnal::SmartPtr< Luna::Scene > ScenePtr;
-  typedef std::map< std::string, ScenePtr > M_SceneSmartPtr;
+  typedef std::map< tstring, ScenePtr > M_SceneSmartPtr;
   typedef std::map< Luna::Scene*, i32 > M_AllocScene;
 
   class SceneDocument;
@@ -79,12 +79,12 @@ namespace Luna
 
     Asset::SceneAsset* GetCurrentLevel() const;
 
-    ScenePtr NewScene( bool isRoot, std::string path = "", bool addDoc = true );
-    virtual DocumentPtr OpenPath( const std::string& path, std::string& error ) NOC_OVERRIDE;
-    ScenePtr OpenZone( const std::string& path, std::string& error );
+    ScenePtr NewScene( bool isRoot, tstring path = TXT( "" ), bool addDoc = true );
+    virtual DocumentPtr OpenPath( const tstring& path, tstring& error ) NOC_OVERRIDE;
+    ScenePtr OpenZone( const tstring& path, tstring& error );
 
   public:
-    virtual bool Save( DocumentPtr document, std::string& error ) NOC_OVERRIDE;
+    virtual bool Save( DocumentPtr document, tstring& error ) NOC_OVERRIDE;
 
     void SetRootScene( Luna::Scene* root );
     Luna::Scene* GetRootScene();
@@ -95,13 +95,13 @@ namespace Luna
     void RemoveAllScenes();
 
     const M_SceneSmartPtr& GetScenes() const;
-    Luna::Scene* GetScene( const std::string& path ) const;
+    Luna::Scene* GetScene( const tstring& path ) const;
 
     bool IsNestedScene( Luna::Scene* scene ) const;
-    Luna::Scene* AllocateNestedScene( const std::string& path, Luna::Scene* parent );
+    Luna::Scene* AllocateNestedScene( const tstring& path, Luna::Scene* parent );
     void ReleaseNestedScene( Luna::Scene*& scene );
     
-    static std::string GetUniqueFileName();
+    static tstring GetUniqueFileName();
 
     bool HasCurrentScene() const;
     bool IsCurrentScene( const Luna::Scene* sceneToCompare ) const;

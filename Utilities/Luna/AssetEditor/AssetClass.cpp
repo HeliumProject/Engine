@@ -37,7 +37,7 @@ LUNA_DEFINE_TYPE( Luna::AssetClass );
 // 
 void AssetClass::InitializeType()
 {
-  Reflect::RegisterClass<Luna::AssetClass>( "Luna::AssetClass" );
+  Reflect::RegisterClass<Luna::AssetClass>( TXT( "Luna::AssetClass" ) );
   PersistentDataFactory::GetInstance()->Register( Reflect::GetType< Asset::AssetClass >(), &Luna::AssetClass::Create );
 }
 
@@ -87,12 +87,12 @@ void AssetClass::Pack()
 
   __super::Pack();
 
-  std::string error;
+  tstring error;
   if ( !GetPackage< Asset::AssetClass >()->ValidateClass( error ) )
   {
-    std::string msg = "The following error was encountered while packing '" + GetName() + "'.\n\n";
+    tstring msg = TXT( "The following error was encountered while packing '" ) + GetName() + TXT( "'.\n\n" );
     msg += error;
-    wxMessageBox( msg.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, GetAssetManager()->GetAssetEditor() );
+    wxMessageBox( msg.c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, GetAssetManager()->GetAssetEditor() );
   }
 }
 
@@ -119,32 +119,32 @@ void AssetClass::Unpack()
     Luna::ComponentWrapperPtr componentWrapper = PersistentDataFactory::GetInstance()->CreateTyped< Luna::ComponentWrapper >( component, GetAssetManager() );
     if ( !componentWrapper.ReferencesObject() )
     {
-      throw ( Nocturnal::Exception( "Internal error - Unable to create component in Luna::AssetClass::Unpack" ) );
+      throw ( Nocturnal::Exception( TXT( "Internal error - Unable to create component in Luna::AssetClass::Unpack" ) ) );
     }
     AddComponent( componentWrapper, false );
   }
 
-  std::string error;
+  tstring error;
   if ( !package->ValidateClass( error ) )
   {
-    std::string msg = "The following error was encountered while unpacking '" + GetName() + "'.\n\n";
+    tstring msg = TXT( "The following error was encountered while unpacking '" ) + GetName() + TXT( "'.\n\n" );
     msg += error;
-    wxMessageBox( msg.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, GetAssetManager()->GetAssetEditor() );
+    wxMessageBox( msg.c_str(), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, GetAssetManager()->GetAssetEditor() );
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Saves this asset class to disk.  Returns true on success.
 // 
-bool AssetClass::Save( std::string& error )
+bool AssetClass::Save( tstring& error )
 {
   Pack();
 
   Asset::AssetClass* assetClass = GetPackage< Asset::AssetClass >();
-  std::string path = GetFilePath();
+  tstring path = GetFilePath();
   if ( path.empty() )
   {
-    Log::Error( "No file path for asset.\n" );
+    Log::Error( TXT( "No file path for asset.\n" ) );
     return false;
   }
 
@@ -193,7 +193,7 @@ bool AssetClass::IsExportable() const
 // Returns the name of this asset, determined by the file name on disk where
 // this asset is located.
 // 
-const std::string& AssetClass::GetName() const
+const tstring& AssetClass::GetName() const
 {
   if ( m_Name.empty() )
   {
@@ -204,7 +204,7 @@ const std::string& AssetClass::GetName() const
     }
     catch ( Nocturnal::Exception& e )
     {
-      Log::Error( "Unable to get asset name: %s\n", e.What() );
+      Log::Error( TXT( "Unable to get asset name: %s\n" ), e.What() );
       NOC_BREAK();
     }
   }
@@ -215,7 +215,7 @@ const std::string& AssetClass::GetName() const
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the path to this asset's location on disk.
 // 
-std::string AssetClass::GetFilePath()
+tstring AssetClass::GetFilePath()
 {
     Asset::AssetClass* package = GetPackage< Asset::AssetClass >();
     return package->GetFilePath().Get();
@@ -224,14 +224,14 @@ std::string AssetClass::GetFilePath()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the icon to use for this asset.
 // 
-std::string AssetClass::GetIcon() const
+tstring AssetClass::GetIcon() const
 {
   // get the engine type icon
-  std::string icon = Asset::AssetClass::GetAssetTypeIcon( GetPackage<Asset::AssetClass>()->GetAssetType() );
+  tstring icon = Asset::AssetClass::GetAssetTypeIcon( GetPackage<Asset::AssetClass>()->GetAssetType() );
   
   if ( icon.empty() )
   {
-    icon = "null.png"; 
+    icon = TXT( "null.png" ); 
   }
 
   return icon;
@@ -272,7 +272,7 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
   const bool isLevel = assetPkg->GetAssetType() == Asset::AssetTypes::Level;
 
   bool areAssetsLocked = true;
-  const char* networkLockAssetsPath = getenv( "NOC_NETWORK_LOCK_ASSETS_FILE" );
+  const tchar* networkLockAssetsPath = _tgetenv( TXT( "NOC_NETWORK_LOCK_ASSETS_FILE" ) );
   if ( networkLockAssetsPath != NULL )
   {
     // Faster than FileSystem::Exists
@@ -287,68 +287,68 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
     }
   }
 
-  //std::vector< std::string > staticContentFiles;
+  //std::vector< tstring > staticContentFiles;
   //::AssetManager::GetStaticContentFiles( GetFileID(), staticContentFiles );
 
   //const bool canPreview = staticContentFiles.size() ? true : false;
-  //std::string previewTip = canPreview
+  //tstring previewTip = canPreview
   //  ? "Preview the asset in the preview panel."
   //  : "This asset cannot be previewed in the preview panel.";
 
   const bool canDuplicate = ( numSelected == 1 ) && ( isShader && !areAssetsLocked );
-  std::string duplicateToolTip = canDuplicate 
-    ? "Create a copy of this asset using the Asset Manager wizard."
-    : "Duplicating assets is not allowed or not available at this time.";
+  tstring duplicateToolTip = canDuplicate 
+    ? TXT( "Create a copy of this asset using the Asset Manager wizard." )
+    : TXT( "Duplicating assets is not allowed or not available at this time." );
 
   const bool canRename = ( numSelected == 1 ) && ( !isLevel && !areAssetsLocked ) ;
-  std::string renameToolTip = canRename 
-    ? "Rename or Move this asset using the Asset Manager wizard."
-    : "Renaming assets is not allowed or not available at this time.";
+  tstring renameToolTip = canRename 
+    ? TXT( "Rename or Move this asset using the Asset Manager wizard." )
+    : TXT( "Renaming assets is not allowed or not available at this time." );
 
   const bool canDelete = ( numSelected == 1 ) && ( !isLevel && !areAssetsLocked );
-  std::string deleteToolTip = canDelete 
-    ? "Delete this asset using the Asset Manager wizard."
-    : "Deleting assets is not allowed or not available at this time.";
+  tstring deleteToolTip = canDelete 
+    ? TXT( "Delete this asset using the Asset Manager wizard." )
+    : TXT( "Deleting assets is not allowed or not available at this time." );
 
-  ContextMenuItemPtr menuItem = new ContextMenuItem( "Preview" );
+  ContextMenuItemPtr menuItem = new ContextMenuItem( TXT( "Preview" ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( m_AssetManager->GetAssetEditor(), &AssetEditor::OnAssetPreview ) );
   menuItem->Enable( false ); // TODO: enable this
   menu.AppendItem( menuItem );
 
   menu.AppendSeparator();
-  menuItem = new ContextMenuItem( "Add Component" );
+  menuItem = new ContextMenuItem( TXT( "Add Component" ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( m_AssetManager->GetAssetEditor(), &AssetEditor::PromptAddComponents ) );
   menu.AppendItem( menuItem );
 
   menu.AppendSeparator();
-  menuItem = new ContextMenuItem( "Save", "Save selected Asset(s)", Nocturnal::GlobalImageManager().GetBitmap( "save.png" ) );
+  menuItem = new ContextMenuItem( TXT( "Save" ), TXT( "Save selected Asset(s)" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "save.png" ) ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( &Luna::OnSaveSelectedAssets ), clientData );
   menu.AppendItem( menuItem );
   menu.AppendSeparator();
 
-  SubMenuPtr rcsSubMenu = new SubMenu( "Perforce" );
+  SubMenuPtr rcsSubMenu = new SubMenu( TXT( "Perforce" ) );
 
-  menuItem = new ContextMenuItem( "Check Out" );
+  menuItem = new ContextMenuItem( TXT( "Check Out" ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( &Luna::OnCheckOutSelectedAssets ), clientData );
   rcsSubMenu->AppendItem( menuItem );
 
-  menuItem = new ContextMenuItem( "Revision History" );
+  menuItem = new ContextMenuItem( TXT( "Revision History" ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( &Luna::OnRevisionHistorySelectedAssets ), clientData );
   rcsSubMenu->AppendItem( menuItem );
 
   menu.AppendItem( rcsSubMenu );
 
   menu.AppendSeparator();
-  menuItem = new ContextMenuItem( "Close" );
+  menuItem = new ContextMenuItem( TXT( "Close" ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( &Luna::OnCloseSelectedAssets ), clientData );
   menu.AppendItem( menuItem );
 
   menu.AppendSeparator();
-  menuItem = new ContextMenuItem( "Expand" );
+  menuItem = new ContextMenuItem( TXT( "Expand" ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( m_AssetManager->GetAssetEditor(), &AssetEditor::OnExpandSelectedAssets ) );
   menu.AppendItem( menuItem );
 
-  menuItem = new ContextMenuItem( "Collapse" );
+  menuItem = new ContextMenuItem( TXT( "Collapse" ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( m_AssetManager->GetAssetEditor(), &AssetEditor::OnCollapseSelectedAssets ) );
   menu.AppendItem( menuItem );
 }
@@ -546,7 +546,7 @@ Undo::CommandPtr AssetClass::CopyComponentsFrom( const Component::M_Component& s
     for ( ; leftOverItr != leftOverEnd; ++leftOverItr )
     {
       // If the component can be added to this asset, perform the command.
-      std::string unused;
+      tstring unused;
       if ( pkg->ValidateComponent( leftOverItr->second, unused ) )
       {
         Luna::ComponentWrapperPtr srcAttrib = PersistentDataFactory::GetInstance()->CreateTyped< Luna::ComponentWrapper >( leftOverItr->second, m_AssetManager );
@@ -610,7 +610,7 @@ bool AssetClass::AddComponent( const Luna::ComponentWrapperPtr& component, bool 
     }
     catch ( const Nocturnal::Exception& e )
     {
-      Log::Error( "%s\n", e.What() );
+      Log::Error( TXT( "%s\n" ), e.What() );
       return false;
     }
   }
@@ -618,7 +618,7 @@ bool AssetClass::AddComponent( const Luna::ComponentWrapperPtr& component, bool 
   Nocturnal::Insert<M_ComponentSmartPtr>::Result inserted = m_Components.insert( M_ComponentSmartPtr::value_type( component->GetSlot(), component ) );
   if ( !inserted.second )
   {
-    throw Nocturnal::Exception( "Attempted to add the same component (%s) twice to asset (%s)", component->GetName().c_str(), GetName().c_str() );
+    throw Nocturnal::Exception( TXT( "Attempted to add the same component (%s) twice to asset (%s)" ), component->GetName().c_str(), GetName().c_str() );
   }
 
   component->SetAssetClass( this );
@@ -634,7 +634,7 @@ bool AssetClass::RemoveComponent( const Luna::ComponentWrapperPtr& component, bo
   M_ComponentSmartPtr::iterator found = m_Components.find( component->GetSlot() );
   if ( found == m_Components.end() )
   {
-    Log::Error( "Unable to remove component %s from asset %s because it has already been removed.\n", component->GetName().c_str(), GetName().c_str() );
+    Log::Error( TXT( "Unable to remove component %s from asset %s because it has already been removed.\n" ), component->GetName().c_str(), GetName().c_str() );
     return false;
   }
 
@@ -647,7 +647,7 @@ bool AssetClass::RemoveComponent( const Luna::ComponentWrapperPtr& component, bo
     }
     catch ( const Nocturnal::Exception& )
     {
-      Log::Error( "Unable to update persistent data for removal of component %s from asset %s.\n", component->GetName().c_str(), GetName().c_str() );
+      Log::Error( TXT( "Unable to update persistent data for removal of component %s from asset %s.\n" ), component->GetName().c_str(), GetName().c_str() );
       return false;
     }
   }

@@ -48,7 +48,7 @@ bool DocumentManager::AddDocument( const DocumentPtr& document )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the first document found with the specified path.
 // 
-Document* DocumentManager::FindDocument( const std::string& path ) const
+Document* DocumentManager::FindDocument( const tstring& path ) const
 {
     OS_DocumentSmartPtr::Iterator docItr = m_Documents.Begin();
     OS_DocumentSmartPtr::Iterator docEnd = m_Documents.End();
@@ -91,7 +91,7 @@ const OS_DocumentSmartPtr& DocumentManager::GetDocuments()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if this class contains a document with the specified path.
 // 
-bool DocumentManager::Contains( const std::string& path ) const
+bool DocumentManager::Contains( const tstring& path ) const
 {
     return FindDocument( path ) != NULL;
 }
@@ -114,9 +114,9 @@ bool DocumentManager::IsUpToDate( Document* document ) const
             }
             catch ( Nocturnal::Exception& ex )
             {
-                std::stringstream str;
+                tstringstream str;
                 str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.What();
-                wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+                wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
             }
 
             if ( rcsFile.ExistsInDepot() )
@@ -132,11 +132,11 @@ bool DocumentManager::IsUpToDate( Document* document ) const
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-bool DocumentManager::ValidateDocument( Document* document, std::string& error ) const
+bool DocumentManager::ValidateDocument( Document* document, tstring& error ) const
 {
     if ( !IsUpToDate( document ) )
     {
-        error = "The version of '" + document->GetFileName() + "' on your computer is out of date.  You will not be able to check it out.";
+        error = TXT( "The version of '" ) + document->GetFileName() + TXT( "' on your computer is out of date.  You will not be able to check it out." );
         return false;
     }
 
@@ -151,12 +151,12 @@ bool DocumentManager::ValidateDocument( Document* document, std::string& error )
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
-bool DocumentManager::ValidatePath( const std::string& path, std::string& error ) const
+bool DocumentManager::ValidatePath( const tstring& path, tstring& error ) const
 {
     // TODO: support add duplicates
     if ( Contains( path ) )
     {
-        error = "The specified file (" + path + ") is already open.";
+        error = TXT( "The specified file (" ) + path + TXT( ") is already open." );
         return false;
     }
 
@@ -166,7 +166,7 @@ bool DocumentManager::ValidatePath( const std::string& path, std::string& error 
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if it successfully opens a document with the specified path.
 // 
-DocumentPtr DocumentManager::OpenPath( const std::string& path, std::string& error )
+DocumentPtr DocumentManager::OpenPath( const tstring& path, tstring& error )
 {
     DocumentPtr document = new Document( path );
 
@@ -186,7 +186,7 @@ DocumentPtr DocumentManager::OpenPath( const std::string& path, std::string& err
 // events.  A derived class may want to call this implementation if the save
 // is successful.
 //
-bool DocumentManager::Save( DocumentPtr document, std::string& error )
+bool DocumentManager::Save( DocumentPtr document, tstring& error )
 {
 
 #pragma TODO( "UMMMMM, shouldn't this actually save?" )
@@ -199,7 +199,7 @@ bool DocumentManager::Save( DocumentPtr document, std::string& error )
 ///////////////////////////////////////////////////////////////////////////////
 // Iterates over all the documents, calling save on each one.
 // 
-bool DocumentManager::SaveAll( std::string& error )
+bool DocumentManager::SaveAll( tstring& error )
 {
     bool savedAll = true;
     bool prompt = true;
@@ -246,13 +246,13 @@ bool DocumentManager::SaveAll( std::string& error )
 
         if ( save )
         {
-            std::string msg;
+            tstring msg;
             if ( !Save( document, msg ) )
             {
                 savedAll = false;
                 if ( !error.empty() )
                 {
-                    error += "\n";
+                    error += TXT( "\n" );
                 }
                 error += msg;
             }
@@ -288,7 +288,7 @@ bool DocumentManager::CloseDocument( DocumentPtr document, bool prompt )
 
     if ( prompt )
     {
-        std::string unused;
+        tstring unused;
         switch ( QueryClose( document ) )
         {
         case SaveActions::Save:
@@ -395,20 +395,20 @@ bool DocumentManager::CloseDocuments( OS_DocumentSmartPtr documents )
                 }
             }
 
-            std::string error;
+            tstring error;
             if ( !Save( document, error ) )
             {
-                error += "\nAborting operation.";
-                wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+                error += TXT( "\nAborting operation." );
+                wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
                 return false;
             }
         }
 
         if ( !CloseDocument( document, false ) )
         {
-            std::string error;
-            error = "Failed to close '" + document->GetFileName() + "'.  Aborting operation.";
-            wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+            tstring error;
+            error = TXT( "Failed to close '" ) + document->GetFileName() + TXT( "'.  Aborting operation." );
+            wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
             return false;
         }
     }
@@ -432,9 +432,9 @@ bool DocumentManager::IsCheckedOut( Document* document ) const
         }
         catch ( Nocturnal::Exception& ex )
         {
-            std::stringstream str;
+            tstringstream str;
             str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.What();
-            wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+            wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
         }
 
         return rcsFile.IsCheckedOutByMe();
@@ -477,17 +477,17 @@ bool DocumentManager::CheckOut( Document* document ) const
     }
     catch ( Nocturnal::Exception& ex )
     {
-        std::stringstream str;
+        tstringstream str;
         str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.What();
-        wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+        wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
         return false;
     }
 
     if ( rcsFile.ExistsInDepot() && !rcsFile.IsUpToDate() )
     {
-        std::ostringstream str;
+        tostringstream str;
         str << "The version of " << document->GetFileName() << " on your computer is out of date.  You will not be able to check it out.";
-        wxMessageBox( str.str().c_str(), "Warning", wxOK | wxCENTER | wxICON_WARNING, m_ParentWindow );
+        wxMessageBox( str.str().c_str(), wxT( "Warning" ), wxOK | wxCENTER | wxICON_WARNING, m_ParentWindow );
         return false;
     }
 
@@ -497,12 +497,12 @@ bool DocumentManager::CheckOut( Document* document ) const
     }
     else if ( rcsFile.IsCheckedOutBySomeoneElse() )
     {
-        std::string usernames;
+        tstring usernames;
         rcsFile.GetOpenedByUsers( usernames );
 
-        std::ostringstream str;
+        tostringstream str;
         str << "Unable to check out " << document->GetFileName() << ", it's currently checked out by " << usernames << ".";
-        wxMessageBox( str.str().c_str(), "Error", wxOK | wxCENTER | wxICON_ERROR, m_ParentWindow );
+        wxMessageBox( str.str().c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, m_ParentWindow );
         return false;
     }
 
@@ -512,9 +512,9 @@ bool DocumentManager::CheckOut( Document* document ) const
     }
     catch ( Nocturnal::Exception& ex )
     {
-        std::stringstream str;
+        tstringstream str;
         str << "Unable to open '" << document->GetFilePath() << "': " << ex.What();
-        wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+        wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
         return false;
     }
 
@@ -537,7 +537,7 @@ bool DocumentManager::QueryAllowChanges( Document* document ) const
         QueryCheckOut( document );
         if ( !IsCheckedOut( document ) )
         {
-            if ( wxMessageBox( "Would you like to edit this file anyway?\n(NOTE: You may not be able to save your changes)", "Edit anyway?", wxCENTER | wxYES_NO | wxICON_QUESTION, m_ParentWindow ) == wxYES )
+            if ( wxMessageBox( wxT( "Would you like to edit this file anyway?\n(NOTE: You may not be able to save your changes)" ), wxT( "Edit anyway?" ), wxCENTER | wxYES_NO | wxICON_QUESTION, m_ParentWindow ) == wxYES )
             {
                 document->SetAllowChanges( true );
             }
@@ -562,9 +562,9 @@ bool DocumentManager::QueryAdd( Document* document ) const
 
         if ( !rcsFile.ExistsInDepot() )
         {
-            std::ostringstream msg;
+            tostringstream msg;
             msg << "Would you like to add \"" << document->GetFileName() << "\" to revision control?";
-            if ( wxYES == wxMessageBox( msg.str().c_str(), "Add to Revision Control?", wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
+            if ( wxYES == wxMessageBox( msg.str().c_str(), wxT( "Add to Revision Control?" ), wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
             {
                 try
                 {
@@ -572,9 +572,9 @@ bool DocumentManager::QueryAdd( Document* document ) const
                 }
                 catch ( Nocturnal::Exception& ex )
                 {
-                    std::stringstream str;
+                    tstringstream str;
                     str << "Unable to open '" << document->GetFilePath() << "': " << ex.What();
-                    wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+                    wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
                     isOk = false;
                 }
             }
@@ -598,9 +598,9 @@ bool DocumentManager::QueryOpen( Document* document ) const
         }
         catch ( Nocturnal::Exception& ex )
         {
-            std::stringstream str;
+            tstringstream str;
             str << "Unable to get info for '" << document->GetFilePath() << "': " << ex.What();
-            wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
+            wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_ParentWindow );
         }
 
         // Is the file already managed?
@@ -608,14 +608,14 @@ bool DocumentManager::QueryOpen( Document* document ) const
         {
             if ( rcsFile.IsCheckedOut() && !rcsFile.IsCheckedOutByMe() )
             {
-                std::string usernames;
+                tstring usernames;
                 rcsFile.GetOpenedByUsers( usernames );
 
-                std::ostringstream str;
-                std::string capitalized = document->GetFileName();
+                tostringstream str;
+                tstring capitalized = document->GetFileName();
                 capitalized[0] = toupper( capitalized[0] );
                 str << capitalized << " is already checked out by \"" << usernames << "\"\nDo you still wish to open the file?";
-                if ( wxYES == wxMessageBox( str.str().c_str(), "Checked Out by Another User", wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
+                if ( wxYES == wxMessageBox( str.str().c_str(), wxT( "Checked Out by Another User" ), wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
                 {
                     return true;
                 }
@@ -634,9 +634,9 @@ bool DocumentManager::QueryOpen( Document* document ) const
         {
             if ( !QueryAdd( document ) )
             {
-                std::ostringstream str;
+                tostringstream str;
                 str << "Unable to add " << document->GetFileName() << " to revision control.  Would you like to continue opening the file?";
-                if ( wxYES == wxMessageBox( str.str().c_str(), "Continue Opening?", wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
+                if ( wxYES == wxMessageBox( str.str().c_str(), wxT( "Continue Opening?" ), wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
                 {
                     return true;
                 }
@@ -664,17 +664,17 @@ bool DocumentManager::QueryCheckOut( Document* document ) const
 {
     if ( !IsUpToDate( document ) )
     {
-        std::ostringstream str;
+        tostringstream str;
         str << "The version of " << document->GetFileName() << " on your computer is out of date.  You will not be able to check it out.";
-        wxMessageBox( str.str().c_str(), "Warning", wxOK | wxCENTER | wxICON_WARNING, m_ParentWindow );
+        wxMessageBox( str.str().c_str(), wxT( "Warning" ), wxOK | wxCENTER | wxICON_WARNING, m_ParentWindow );
     }
     else
     {
         if ( !IsCheckedOut( document ) )
         {
-            std::ostringstream str;
+            tostringstream str;
             str << "Do you wish to check out " << document->GetFileName() << "?";
-            if ( wxYES == wxMessageBox( str.str().c_str(), "Check Out?", wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
+            if ( wxYES == wxMessageBox( str.str().c_str(), wxT( "Check Out?" ), wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
             {
                 return CheckOut( document );
             }
@@ -704,17 +704,17 @@ SaveAction DocumentManager::QuerySave( Document* document ) const
     {
         if ( document->IsModified() )
         {
-            std::string msg;
+            tstring msg;
 
             if ( !IsUpToDate( document ) )
             {
-                msg = std::string( "Unfortunately, the file '" ) + document->GetFileName() + "' has been modified in revsion control since you opened it.\n\nYou cannot save the changes you have made.\n\nTo fix this:\n1) Close the file\n2) Get updated assets\n3) Make your changes again\n\nSorry for the inconvenience.";
-                wxMessageBox( msg.c_str(), "Cannot save", wxOK | wxCENTER | wxICON_ERROR, m_ParentWindow );
+                msg = TXT( "Unfortunately, the file '" ) + document->GetFileName() + TXT( "' has been modified in revsion control since you opened it.\n\nYou cannot save the changes you have made.\n\nTo fix this:\n1) Close the file\n2) Get updated assets\n3) Make your changes again\n\nSorry for the inconvenience." );
+                wxMessageBox( msg.c_str(), wxT( "Cannot save" ), wxOK | wxCENTER | wxICON_ERROR, m_ParentWindow );
                 return SaveActions::Skip;
             }
 
-            msg = std::string( "File '" ) + document->GetFileName() + "' has been changed, but is not checked out.  Would you like to check out and save this file?";
-            if ( wxNO == wxMessageBox( msg.c_str(), "Check out and save?", wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
+            msg = TXT( "File '" ) + document->GetFileName() + TXT( "' has been changed, but is not checked out.  Would you like to check out and save this file?" );
+            if ( wxNO == wxMessageBox( msg.c_str(), wxT( "Check out and save?" ), wxYES_NO | wxCENTER | wxICON_QUESTION, m_ParentWindow ) )
             {
                 return SaveActions::Skip;
             }
@@ -742,9 +742,9 @@ SaveAction DocumentManager::QueryClose( Document* document ) const
 
     if ( IsCheckedOut( document ) || !RCS::PathIsManaged( document->GetFilePath() ) )
     {
-        std::string msg( "Would you like to save changes to " );
-        msg += "'" + document->GetFileName() + "' before closing?";
-        const int result = wxMessageBox( msg.c_str(), "Save Changes?", wxYES_NO | wxCANCEL | wxCENTER | wxICON_QUESTION, m_ParentWindow );
+        tstring msg( TXT( "Would you like to save changes to " ) );
+        msg += TXT( "'" ) + document->GetFileName() + TXT( "' before closing?" );
+        const int result = wxMessageBox( msg.c_str(), wxT( "Save Changes?" ), wxYES_NO | wxCANCEL | wxCENTER | wxICON_QUESTION, m_ParentWindow );
         switch ( result )
         {
         case wxYES:
@@ -773,14 +773,14 @@ SaveAction DocumentManager::QueryCloseAll( Document* document ) const
 {
     if ( document->IsModified() )
     {
-        std::ostringstream msg;
+        tostringstream msg;
         msg << "You are attempting to close file " << document->GetFileName() << " which has changed. Would you like to save your changes before closing?";
-        YesNoAllDlg dlg( m_ParentWindow, "Save Changes?", msg.str().c_str() );
-        dlg.SetButtonToolTip( wxID_YES, "Save and close this file" );
-        dlg.SetButtonToolTip( wxID_YESTOALL, "Save and close all files" );
-        dlg.SetButtonToolTip( wxID_NO, "Do not save this file (it will still be closed)" );
-        dlg.SetButtonToolTip( wxID_NOTOALL, "Do not save any files that have changed (they will still be closed)" );
-        dlg.SetButtonToolTip( wxID_CANCEL, "No files will be saved or closed" );
+        YesNoAllDlg dlg( m_ParentWindow, wxT( "Save Changes?" ), msg.str().c_str() );
+        dlg.SetButtonToolTip( wxID_YES, wxT( "Save and close this file" ) );
+        dlg.SetButtonToolTip( wxID_YESTOALL, wxT( "Save and close all files" ) );
+        dlg.SetButtonToolTip( wxID_NO, wxT( "Do not save this file (it will still be closed)" ) );
+        dlg.SetButtonToolTip( wxID_NOTOALL, wxT( "Do not save any files that have changed (they will still be closed)" ) );
+        dlg.SetButtonToolTip( wxID_CANCEL, wxT( "No files will be saved or closed" ) );
 
         bool attemptCheckOut = false;
         SaveActions::SaveAction action = SaveActions::Save;

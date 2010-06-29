@@ -6,7 +6,7 @@
 #include "Platform/Types.h"
 #include "Foundation/String/Natural.h"
 
-typedef std::set< std::string, CaseSensitiveNatStrCmp > S_NaturalOrderString;
+typedef std::set< tstring, CaseSensitiveNatStrCmp > S_NaturalOrderString;
 
 namespace Luna
 {
@@ -26,10 +26,10 @@ namespace Luna
 
   struct GridRowRenamedArgs : public GridRowChangeArgs
   {
-    std::string m_OldName;
-    std::string m_NewName;
+    tstring m_OldName;
+    tstring m_NewName;
 
-    GridRowRenamedArgs( u32 row, const std::string& oldName, const std::string& newName )
+    GridRowRenamedArgs( u32 row, const tstring& oldName, const tstring& newName )
     : GridRowChangeArgs( row )
     , m_OldName( oldName )
     , m_NewName( newName )
@@ -84,19 +84,19 @@ namespace Luna
     void AddRowRenamedListener( const GridRowRenamedSignature::Delegate& listener );
     void RemoveRowRenamedListener( const GridRowRenamedSignature::Delegate& listener );
     wxPanel* GetPanel() const;
-    i32 GetRowNumber( const std::string& name ) const;
-    const std::string& GetRowName( u32 row ) const;
-    bool SetRowName( const std::string& oldName, const std::string& newName );
+    i32 GetRowNumber( const tstring& name ) const;
+    const tstring& GetRowName( u32 row ) const;
+    bool SetRowName( const tstring& oldName, const tstring& newName );
     bool IsRowVisibleChecked( u32 row );
     void SetRowVisibleState( u32 row, bool checked );
     bool IsRowSelectableChecked( u32 row );
     void SetRowSelectableSate( u32 row, bool checked );
-    virtual bool AddRow( const std::string& name, bool visible, bool selectable );
+    virtual bool AddRow( const tstring& name, bool visible, bool selectable );
     bool RemoveRow( u32 index );
-    bool RemoveRow( const std::string& name );
+    bool RemoveRow( const tstring& name );
     bool RemoveAllRows();
     bool IsAnythingSelected() const;
-    bool IsSelected( const std::string& name ) const;
+    bool IsSelected( const tstring& name ) const;
     void SelectRow( u32 row, bool addToSelection );
     void DeselectAllRows();
     std::set< u32 > GetSelectedRows() const;
@@ -104,7 +104,7 @@ namespace Luna
     void EndBatch();
 
   protected:
-    i32 InsertName( const std::string& name );
+    i32 InsertName( const tstring& name );
     virtual void ResizeColumns();
     void OnSize( wxSizeEvent& event );
     void OnMouseLeftDown( wxMouseEvent& event );

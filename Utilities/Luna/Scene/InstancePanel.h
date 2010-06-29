@@ -34,7 +34,7 @@ namespace Luna
 
     // utility functions
     //
-    static void Intersect(std::set< std::string >& intersection, const std::set< std::string >& classList);
-    static void RecurseAddDerivedClasses( const std::string& baseClass, std::set< std::string >& classList );   
+    static void Intersect(std::set< tstring >& intersection, const std::set< tstring >& classList);
+    static void RecurseAddDerivedClasses( const tstring& baseClass, std::set< tstring >& classList );   
   };
 }

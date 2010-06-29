@@ -19,12 +19,12 @@ namespace Luna
     };
     static void ViewColorModeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement( AssetType, "Engine Type" );
-      info->AddElement( Layer, "Layer" );
-      info->AddElement( NodeType, "NodeType", "Node Type" );
-      info->AddElement( Zone, "Zone" );
-      info->AddElement( Scale, "Scale" );
-      info->AddElement( ScaleGradient, "Scale (Gradient)" );
+      info->AddElement( AssetType, TXT( "Engine Type" ) );
+      info->AddElement( Layer, TXT( "Layer" ) );
+      info->AddElement( NodeType, TXT( "NodeType" ), TXT( "Node Type" ) );
+      info->AddElement( Zone, TXT( "Zone" ) );
+      info->AddElement( Scale, TXT( "Scale" ) );
+      info->AddElement( ScaleGradient, TXT( "Scale (Gradient)" ) );
     }
   }
   typedef ViewColorModes::ViewColorMode ViewColorMode;

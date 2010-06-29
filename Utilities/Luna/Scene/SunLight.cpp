@@ -20,9 +20,9 @@ LUNA_DEFINE_TYPE(SunLight);
 
 void SunLight::InitializeType()
 {
-  Reflect::RegisterClass< SunLight >( "Luna::SunLight" );
+  Reflect::RegisterClass< SunLight >( TXT( "Luna::SunLight" ) );
 
-  Enumerator::InitializePanel( "SunLight", CreatePanelSignature::Delegate( &SunLight::CreatePanel ) );
+  Enumerator::InitializePanel( TXT( "SunLight" ), CreatePanelSignature::Delegate( &SunLight::CreatePanel ) );
 }
 
 void SunLight::CleanupType()
@@ -44,21 +44,21 @@ SunLight::SunLight(Luna::Scene* scene, Content::SunLight* light)
 
 i32 SunLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "light.png" ) );
 }
 
-std::string SunLight::GetApplicationTypeName() const
+tstring SunLight::GetApplicationTypeName() const
 {
-  return "SunLight";
+  return TXT( "SunLight" );
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified panel is supported by SunLight.
 // 
-bool SunLight::ValidatePanel(const std::string& name)
+bool SunLight::ValidatePanel(const tstring& name)
 {
-  if (name == "SunLight")
+  if (name == TXT( "SunLight" ) )
   {
     return true;
   }
@@ -69,11 +69,11 @@ bool SunLight::ValidatePanel(const std::string& name)
 void SunLight::CreatePanel( CreatePanelArgs& args )
 {
   
-  args.m_Enumerator->PushPanel("Sun Light", true);
+  args.m_Enumerator->PushPanel( TXT( "Sun Light" ), true);
   {
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Sun Intensity");
+      args.m_Enumerator->AddLabel( TXT( "Sun Intensity" ) );
 
       args.m_Enumerator->AddValue<SunLight, float>( args.m_Selection, &SunLight::GetSunIntensity, &SunLight::SetSunIntensity );
       Inspect::Slider* slider = args.m_Enumerator->AddSlider<SunLight, float>( args.m_Selection, &SunLight::GetSunIntensity, &SunLight::SetSunIntensity );
@@ -84,7 +84,7 @@ void SunLight::CreatePanel( CreatePanelArgs& args )
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Sky Intensity");
+      args.m_Enumerator->AddLabel( TXT( "Sky Intensity" ) );
 
       args.m_Enumerator->AddValue<SunLight, float>( args.m_Selection, &SunLight::GetSkyIntensity, &SunLight::SetSkyIntensity );
       Inspect::Slider* slider = args.m_Enumerator->AddSlider<SunLight, float>( args.m_Selection, &SunLight::GetSkyIntensity, &SunLight::SetSkyIntensity );
@@ -95,7 +95,7 @@ void SunLight::CreatePanel( CreatePanelArgs& args )
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Haze");
+      args.m_Enumerator->AddLabel( TXT( "Haze" ) );
 
       args.m_Enumerator->AddValue<SunLight, float>( args.m_Selection, &SunLight::GetHaze, &SunLight::SetHaze );
       Inspect::Slider* slider = args.m_Enumerator->AddSlider<SunLight, float>( args.m_Selection, &SunLight::GetHaze, &SunLight::SetHaze );
@@ -106,7 +106,7 @@ void SunLight::CreatePanel( CreatePanelArgs& args )
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Red/Blue Shift");
+      args.m_Enumerator->AddLabel( TXT( "Red/Blue Shift" ) );
 
       args.m_Enumerator->AddValue<SunLight, float>( args.m_Selection, &SunLight::GetRedBlueShift, &SunLight::SetRedBlueShift );
       Inspect::Slider* slider = args.m_Enumerator->AddSlider<SunLight, float>( args.m_Selection, &SunLight::GetRedBlueShift, &SunLight::SetRedBlueShift );
@@ -117,7 +117,7 @@ void SunLight::CreatePanel( CreatePanelArgs& args )
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Saturation");
+      args.m_Enumerator->AddLabel( TXT( "Saturation" ) );
 
       args.m_Enumerator->AddValue<SunLight, float>( args.m_Selection, &SunLight::GetSaturation, &SunLight::SetSaturation );
       Inspect::Slider* slider = args.m_Enumerator->AddSlider<SunLight, float>( args.m_Selection, &SunLight::GetSaturation, &SunLight::SetSaturation );
@@ -128,7 +128,7 @@ void SunLight::CreatePanel( CreatePanelArgs& args )
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Horizon Height");
+      args.m_Enumerator->AddLabel( TXT( "Horizon Height" ) );
 
       args.m_Enumerator->AddValue<SunLight, float>( args.m_Selection, &SunLight::GetHorizonHeight, &SunLight::SetHorizonHeight );
       Inspect::Slider* slider = args.m_Enumerator->AddSlider<SunLight, float>( args.m_Selection, &SunLight::GetHorizonHeight, &SunLight::SetHorizonHeight );
@@ -139,7 +139,7 @@ void SunLight::CreatePanel( CreatePanelArgs& args )
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Horizon Blur");
+      args.m_Enumerator->AddLabel( TXT( "Horizon Blur" ) );
 
       args.m_Enumerator->AddValue<SunLight, float>( args.m_Selection, &SunLight::GetHorizonBlur, &SunLight::SetHorizonBlur );
       Inspect::Slider* slider = args.m_Enumerator->AddSlider<SunLight, float>( args.m_Selection, &SunLight::GetHorizonBlur, &SunLight::SetHorizonBlur );
@@ -151,7 +151,7 @@ void SunLight::CreatePanel( CreatePanelArgs& args )
  
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Ground Color");
+      args.m_Enumerator->AddLabel( TXT( "Ground Color" ) );
       args.m_Enumerator->AddColorPicker<SunLight, Color3>( args.m_Selection, &SunLight::GetGroundColor, &SunLight::SetGroundColor );
     }
     args.m_Enumerator->Pop();

@@ -12,7 +12,7 @@ LUNA_DEFINE_TYPE(Luna::InstanceSet);
 
 void InstanceSet::InitializeType()
 {
-  Reflect::RegisterClass< Luna::InstanceSet >( "Luna::InstanceSet" );
+  Reflect::RegisterClass< Luna::InstanceSet >( TXT( "Luna::InstanceSet" ) );
 }
 
 void Luna::InstanceSet::CleanupType()

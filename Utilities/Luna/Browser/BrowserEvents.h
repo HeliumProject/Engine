@@ -24,8 +24,8 @@ namespace Luna
   // A search has been requested.
   struct SearchErrorArgs
   {
-    std::string m_Errors;
-    SearchErrorArgs( const std::string& errors ) : m_Errors( errors ) {}
+    tstring m_Errors;
+    SearchErrorArgs( const tstring& errors ) : m_Errors( errors ) {}
   };
   typedef Nocturnal::Signature< void, const SearchErrorArgs& > SearchErrorSignature;
 

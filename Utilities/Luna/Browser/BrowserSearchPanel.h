@@ -14,21 +14,21 @@ namespace Luna
   class Filter
   {
   private:
-    std::string m_Name;
-    std::string m_Filters;
-    std::set< std::string >    m_Extensions;
+    tstring m_Name;
+    tstring m_Filters;
+    std::set< tstring >    m_Extensions;
 
   public:
-    Filter( const std::string& name, const std::string& filters );
+    Filter( const tstring& name, const tstring& filters );
 
     virtual ~Filter()
     {
       Clear();
     }
 
-    const std::string& GetName() const { return m_Name; }
-    const std::string& GetFilters() const { return m_Filters; }
-    const std::set< std::string >& GetExtensions() const { return m_Extensions; }
+    const tstring& GetName() const { return m_Name; }
+    const tstring& GetFilters() const { return m_Filters; }
+    const std::set< tstring >& GetExtensions() const { return m_Extensions; }
 
     void Clear()
     {
@@ -64,16 +64,16 @@ namespace Luna
     void OnCollectionManagerChanged( const Reflect::ElementChangeArgs& args );
 
   private:
-    void AddFilter( const char* filter );
+    void AddFilter( const tchar* filter );
     void SetFilterIndex( int filterIndex );
-    void SetFilterIndex( const std::string& filter );
-    std::string GetFilter(); 
+    void SetFilterIndex( const tstring& filter );
+    tstring GetFilter(); 
     void UpdateFilters();
-    const Filter* FindFilter( const std::string& name );
+    const Filter* FindFilter( const tstring& name );
 
     void PopulateForm();
-    void PopulateChoiceControl( wxControlWithItems* control, std::vector< std::string >& contents );
-    void PopulateFileTypeChoice( std::vector< std::string >& contents );
+    void PopulateChoiceControl( wxControlWithItems* control, std::vector< tstring >& contents );
+    void PopulateFileTypeChoice( std::vector< tstring >& contents );
     void PopulateCollectionsChoice();
 
     bool ProcessForm();
@@ -86,7 +86,7 @@ namespace Luna
     CollectionManager* m_CollectionManager;
 
     // maps the fields ID to the help text it should be using
-    typedef std::map< int, std::string > M_DefaultFieldText;
+    typedef std::map< int, tstring > M_DefaultFieldText;
     M_DefaultFieldText m_DefaultFieldText;
 
     typedef Nocturnal::OrderedSet< Filter > OS_Filter;

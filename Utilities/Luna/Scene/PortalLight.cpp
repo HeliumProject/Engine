@@ -20,9 +20,9 @@ LUNA_DEFINE_TYPE(Luna::PortalLight);
 
 void PortalLight::InitializeType()
 {
-  Reflect::RegisterClass< Luna::PortalLight >( "Luna::PortalLight" );
+  Reflect::RegisterClass< Luna::PortalLight >( TXT( "Luna::PortalLight" ) );
 
-  Enumerator::InitializePanel( "PortalLight", CreatePanelSignature::Delegate( &PortalLight::CreatePanel ) );
+  Enumerator::InitializePanel( TXT( "PortalLight" ), CreatePanelSignature::Delegate( &PortalLight::CreatePanel ) );
 }
 
 void PortalLight::CleanupType()
@@ -51,12 +51,12 @@ PortalLight::~PortalLight()
 
 i32 PortalLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "light.png" ) );
 }
 
-std::string PortalLight::GetApplicationTypeName() const
+tstring PortalLight::GetApplicationTypeName() const
 {
-  return "PortalLight";
+  return TXT( "PortalLight" );
 }
 
 void PortalLight::Initialize()
@@ -154,9 +154,9 @@ void PortalLight::DrawShape( IDirect3DDevice9* device, DrawArgs* args, const Sce
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified panel is supported by Luna::PortalLight.
 //
-bool PortalLight::ValidatePanel(const std::string& name)
+bool PortalLight::ValidatePanel(const tstring& name)
 {
-  if (name == "PortalLight")
+  if (name == TXT( "PortalLight" ) )
   {
     return true;
   }

@@ -21,12 +21,12 @@ ResourceTracker::ResourceTracker(IDirect3DDevice9* device)
 {
   if (!IndexResource::s_MemoryPool.Valid())
   {
-    IndexResource::s_MemoryPool = Profile::Memory::CreatePool("Direct3D Index Data");
+    IndexResource::s_MemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Index Data" ) );
   }
 
   if (!VertexResource::s_MemoryPool.Valid())
   {
-    VertexResource::s_MemoryPool = Profile::Memory::CreatePool("Direct3D Vertex Data");
+    VertexResource::s_MemoryPool = Profile::Memory::CreatePool( TXT( "Direct3D Vertex Data" ) );
   }
 }
 
@@ -110,7 +110,7 @@ void Resource::Update()
     {
       if (!m_IsDirty && IsManaged())
       {
-        Log::Debug( "Re-creating non-default resource '%s'...\n", typeid(*this).name() );
+        Log::Debug( TXT( "Re-creating non-default resource '%s'...\n" ), typeid(*this).name() );
       }
 
       Delete();

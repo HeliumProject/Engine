@@ -101,7 +101,7 @@ namespace Luna
     bool m_Reactive;
 
     // hierarchy
-    std::string m_Path;
+    tstring m_Path;
     Luna::HierarchyNode* m_Parent;
     Luna::HierarchyNode* m_Previous;
     Luna::HierarchyNode* m_Next;
@@ -191,14 +191,14 @@ namespace Luna
     // Override from Luna::SceneNode, this resets our (and childrens') cached path member
     //
 
-    virtual void SetName( const std::string& value ) NOC_OVERRIDE;
+    virtual void SetName( const tstring& value ) NOC_OVERRIDE;
 
 
     //
     // Path string of this node in the scene, its cached and computed as needed
     //
 
-    const std::string& GetPath();
+    const tstring& GetPath();
 
 
     //
@@ -336,14 +336,14 @@ namespace Luna
     // Searching
     //
 
-    Luna::HierarchyNode* Find(const std::string& targetName);
+    Luna::HierarchyNode* Find(const tstring& targetName);
 
-    Luna::HierarchyNode* FindFromPath(std::string path);
+    Luna::HierarchyNode* FindFromPath(tstring path);
 
     virtual void FindSimilar(V_HierarchyNodeDumbPtr& similar) const;
     virtual bool IsSimilar(const HierarchyNodePtr& node) const;
 
-    virtual std::string GetDescription() const;
+    virtual tstring GetDescription() const;
 
 
     //
@@ -359,7 +359,7 @@ namespace Luna
     //
 
     // ui integration
-    virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
+    virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
 
     // creator
     static void CreatePanel(CreatePanelArgs& args);

@@ -67,7 +67,7 @@ namespace Luna
     virtual const S_InstanceDumbPtr& GetInstances() const;
 
     // Must be overridden in derived classes
-    virtual const std::string& GetName() const = 0;
+    virtual const tstring& GetName() const = 0;
 
     // 
     // Listeners
@@ -99,5 +99,5 @@ namespace Luna
   };
 
   typedef Nocturnal::SmartPtr< Luna::InstanceSet > InstanceSetPtr;
-  typedef std::map< std::string, InstanceSetPtr > M_InstanceSetSmartPtr;
+  typedef std::map< tstring, InstanceSetPtr > M_InstanceSetSmartPtr;
 }

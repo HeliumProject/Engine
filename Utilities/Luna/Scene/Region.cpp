@@ -14,8 +14,8 @@ LUNA_DEFINE_TYPE( Luna::Region );
 
 void Region::InitializeType()
 {
-  Reflect::RegisterClass< Luna::Region >( "Luna::Region" ); 
-  Enumerator::InitializePanel( "Region", CreatePanelSignature::Delegate( &Region::CreatePanel ) );
+  Reflect::RegisterClass< Luna::Region >( TXT( "Luna::Region" ) ); 
+  Enumerator::InitializePanel( TXT( "Region" ), CreatePanelSignature::Delegate( &Region::CreatePanel ) );
 }
 
 void Region::CleanupType()
@@ -38,15 +38,15 @@ Region::~Region()
 
 i32 Region::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "region.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "region.png" ) );
 }
 
-std::string Region::GetApplicationTypeName() const
+tstring Region::GetApplicationTypeName() const
 {
-  return "Region";
+  return TXT( "Region" );
 }
 
-void Region::SetName(const std::string& value)
+void Region::SetName(const tstring& value)
 {
   Content::RegionPtr region = GetPackage<Content::Region>();
 
@@ -147,11 +147,11 @@ void Region::NodeRemoved( const NodeChangeArgs& args )
   }
 }
 
-std::vector< std::string >::iterator insensitive_find(std::vector< std::string >& strings, const std::string& query)
+std::vector< tstring >::iterator insensitive_find(std::vector< tstring >& strings, const tstring& query)
 {
-  for(std::vector< std::string >::iterator itr = strings.begin(); itr != strings.end(); ++itr)
+  for(std::vector< tstring >::iterator itr = strings.begin(); itr != strings.end(); ++itr)
   {
-    if(!stricmp(query.c_str(), (*itr).c_str()))
+    if(!_tcsicmp(query.c_str(), (*itr).c_str()))
     {
       return itr; 
     }
@@ -162,7 +162,7 @@ std::vector< std::string >::iterator insensitive_find(std::vector< std::string >
 void Region::RemoveSelfFromZone( const ZonePtr& zoneWrapper )
 {
   Content::ZonePtr zone = zoneWrapper->GetPackage<Content::Zone>(); 
-  std::vector< std::string >::iterator found = insensitive_find(zone->m_Regions, GetName()); 
+  std::vector< tstring >::iterator found = insensitive_find(zone->m_Regions, GetName()); 
   
   if(found != zone->m_Regions.end())
   {
@@ -175,7 +175,7 @@ void Region::RemoveSelfFromZone( const ZonePtr& zoneWrapper )
 void Region::AddSelfToZone( const ZonePtr& zoneWrapper )
 {
   Content::ZonePtr zone = zoneWrapper->GetPackage<Content::Zone>(); 
-  std::vector< std::string >::iterator found = insensitive_find(zone->m_Regions, GetName()); 
+  std::vector< tstring >::iterator found = insensitive_find(zone->m_Regions, GetName()); 
   
   if(found == zone->m_Regions.end())
   {
@@ -185,9 +185,9 @@ void Region::AddSelfToZone( const ZonePtr& zoneWrapper )
 }
 
 
-bool Region::ValidatePanel(const std::string& name)
+bool Region::ValidatePanel(const tstring& name)
 {
-  if ( name == "Region" )
+  if ( name == TXT( "Region" ) )
     return true;
 
   return __super::ValidatePanel( name );

@@ -197,10 +197,10 @@ namespace Luna
         }
 
         template <class ValueType, class AttributeType, ValueType AttributeType::* MemberPtr>
-        std::string GetValue() const
+        tstring GetValue() const
         {
             ValueType result;
-            std::ostringstream str;
+            tostringstream str;
 
             OS_SelectableDumbPtr::Iterator itr = m_Selection.Begin();
             OS_SelectableDumbPtr::Iterator end = m_Selection.End();
@@ -230,7 +230,7 @@ namespace Luna
         }
 
         template <class ValueType, class AttributeType, ValueType AttributeType::* MemberPtr>
-        void SetValue(const std::string& dist)
+        void SetValue(const tstring& dist)
         {
             std::istringstream str (dist);
 
@@ -259,8 +259,8 @@ namespace Luna
         void OnExport( Inspect::Button* button )
         {
 
-            std::string changelistDesc;
-            changelistDesc = "Exporting " + Reflect::GetClass< ContentClass >()->m_ShortName + " from Luna Scene Editor";
+            tstring changelistDesc;
+            changelistDesc = TXT( "Exporting " ) + Reflect::GetClass< ContentClass >()->m_ShortName + TXT( " from Luna Scene Editor" );
             RCS::Changeset changelist( changelistDesc );
 
             if( m_Selection.Empty() )
@@ -286,7 +286,7 @@ namespace Luna
                         if( editor )
                         {
                             Component::ComponentViewer< Asset::ArtFileComponent > artFile( entity->GetClassSet()->GetEntityAsset(), true );
-                            std::string objectsFile = entity->GetClassSet()->GetContentFile();
+                            tstring objectsFile = entity->GetClassSet()->GetContentFile();
                             RCS::File rcsObjectsFile( objectsFile );
 
                             try
@@ -318,12 +318,12 @@ namespace Luna
                                 {
                                     Asset::Entity* assetEntity = entity->GetPackage< Asset::Entity >();
 
-                                    std::stringstream stream;
-                                    stream << "Object export file for " << assetEntity->GetEntityAsset()->GetShortName() 
-                                        << " already contains objects of type " << Reflect::GetClass< ContentClass >()->m_ShortName << std::endl;
-                                    stream << "Would you like to overwrite the existing objects?";                  
+                                    tstringstream stream;
+                                    stream << TXT( "Object export file for " ) << assetEntity->GetEntityAsset()->GetShortName() 
+                                        << TXT( " already contains objects of type " ) << Reflect::GetClass< ContentClass >()->m_ShortName << std::endl;
+                                    stream << TXT( "Would you like to overwrite the existing objects?" );
 
-                                    int id = ::MessageBox( GetActiveWindow(), stream.str().c_str(), "Overwrite?", MB_YESNOCANCEL | MB_ICONEXCLAMATION );
+                                    int id = ::MessageBox( GetActiveWindow(), stream.str().c_str(), TXT( "Overwrite?" ), MB_YESNOCANCEL | MB_ICONEXCLAMATION );
 
                                     if( id == IDNO )
                                     {
@@ -361,7 +361,7 @@ namespace Luna
                                         ContentClass* contentObject = object->GetPackage< ContentClass >();
                                         Nocturnal::SmartPtr< ContentClass > clonedObject = Reflect::ObjectCast< ContentClass >( contentObject->Clone() );
 
-                                        std::string name = clonedObject->GetName();
+                                        tstring name = clonedObject->GetName();
 
                                         clonedObject->m_GlobalTransform = clonedObject->m_ObjectTransform;
                                         clonedObject->m_ObjectTransform = Math::Matrix4::Identity; 
@@ -374,10 +374,10 @@ namespace Luna
                             }
                             catch (Nocturnal::Exception& e)
                             {
-                                std::stringstream stream;
-                                stream << "Unable to export objects of type " << Reflect::GetClass< ContentClass >()->m_ShortName.c_str() 
-                                    << " from Luna Scene Editor: " << e.What();
-                                ::MessageBox( NULL, stream.str().c_str(), "Export Objects", MB_OK );   
+                                tstringstream stream;
+                                stream << TXT( "Unable to export objects of type " ) << Reflect::GetClass< ContentClass >()->m_ShortName.c_str() 
+                                    << TXT( " from Luna Scene Editor: " ) << e.What();
+                                ::MessageBox( NULL, stream.str().c_str(), TXT( "Export Objects" ), MB_OK );   
                                 continue;
                             }
 
@@ -418,7 +418,7 @@ namespace Luna
                             }
 
                             Component::ComponentViewer< Asset::ArtFileComponent > artFile( entity->GetClassSet()->GetEntityAsset(), true );
-                            std::string lightFile = entity->GetClassSet()->GetContentFile();
+                            tstring lightFile = entity->GetClassSet()->GetContentFile();
 
                             if( Nocturnal::Path( lightFile ).Exists() )
                             {
@@ -492,14 +492,14 @@ namespace Luna
 
                         if( editor )
                         {
-                            std::string filePath;
+                            tstring filePath;
                             try
                             {
-                                std::string assetPath = Nocturnal::Path( entity->GetEntityAssetPath() ).Directory();
-                                Nocturnal::FileDialog dialog( NULL, "export children to file", assetPath.c_str(), wxEmptyString, "", Nocturnal::FileDialogStyles::DefaultSave );
-                                std::set< std::string > filters;
+                                tstring assetPath = Nocturnal::Path( entity->GetEntityAssetPath() ).Directory();
+                                Nocturnal::FileDialog dialog( NULL, TXT( "export children to file" ), assetPath.c_str(), wxEmptyString, TXT( "" ), Nocturnal::FileDialogStyles::DefaultSave );
+                                std::set< tstring > filters;
                                 Reflect::Archive::GetFileFilters( filters );
-                                for ( std::set< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+                                for ( std::set< tstring >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
                                 {
                                     dialog.AddFilter( *itr );
                                 }
@@ -536,12 +536,12 @@ namespace Luna
                                         {
                                             Asset::Entity* assetEntity = entity->GetPackage< Asset::Entity >();
 
-                                            std::stringstream stream;
-                                            stream << "Object export file for " << assetEntity->GetEntityAsset()->GetShortName() 
-                                                << " already contains objects of type " << Reflect::GetClass< ContentClass >()->m_ShortName << std::endl;
-                                            stream << "Would you like to overwrite the existing objects?";                  
+                                            tstringstream stream;
+                                            stream << TXT( "Object export file for " ) << assetEntity->GetEntityAsset()->GetShortName() 
+                                                << TXT( " already contains objects of type " ) << Reflect::GetClass< ContentClass >()->m_ShortName << std::endl;
+                                            stream << TXT( "Would you like to overwrite the existing objects?" );
 
-                                            int id = ::MessageBox( GetActiveWindow(), stream.str().c_str(), "Overwrite?", MB_YESNOCANCEL | MB_ICONEXCLAMATION );
+                                            int id = ::MessageBox( GetActiveWindow(), stream.str().c_str(), TXT( "Overwrite?" ), MB_YESNOCANCEL | MB_ICONEXCLAMATION );
 
                                             if( id == IDNO )
                                             {
@@ -579,7 +579,7 @@ namespace Luna
                                                 ContentClass* contentObject = object->GetPackage< ContentClass >();
                                                 Nocturnal::SmartPtr< ContentClass > clonedObject = Reflect::ObjectCast< ContentClass >( contentObject->Clone() );
 
-                                                std::string name = clonedObject->GetName();
+                                                tstring name = clonedObject->GetName();
 
                                                 clonedObject->m_GlobalTransform = clonedObject->m_ObjectTransform;
                                                 clonedObject->m_ObjectTransform = Math::Matrix4::Identity; 
@@ -594,10 +594,10 @@ namespace Luna
                             }
                             catch (Nocturnal::Exception& e)
                             {
-                                std::stringstream stream;
-                                stream << "Unable to export objects of type " << Reflect::GetClass< ContentClass >()->m_ShortName.c_str() 
-                                    << " from Luna Scene Editor: " << e.What();
-                                ::MessageBox( NULL, stream.str().c_str(), "Export Objects", MB_OK );   
+                                tstringstream stream;
+                                stream << TXT( "Unable to export objects of type " ) << Reflect::GetClass< ContentClass >()->m_ShortName.c_str() 
+                                    << TXT( " from Luna Scene Editor: " ) << e.What();
+                                ::MessageBox( NULL, stream.str().c_str(), TXT( "Export Objects" ), MB_OK );   
                                 continue;
                             }
                         }
@@ -622,13 +622,13 @@ namespace Luna
                         Luna::Scene* scene = entity->GetScene();
                         if( scene )
                         {              
-                            std::string assetPath = Nocturnal::Path( entity->GetEntityAssetPath() ).Directory();
-                            std::string filePath;
-                            Nocturnal::FileDialog dialog( NULL, "import children to file", assetPath.c_str(), wxEmptyString, "", Nocturnal::FileDialogStyles::DefaultOpen );
+                            tstring assetPath = Nocturnal::Path( entity->GetEntityAssetPath() ).Directory();
+                            tstring filePath;
+                            Nocturnal::FileDialog dialog( NULL, TXT( "import children to file" ), assetPath.c_str(), wxEmptyString, TXT( "" ), Nocturnal::FileDialogStyles::DefaultOpen );
 
-                            std::set< std::string > filters;
+                            std::set< tstring > filters;
                             Reflect::Archive::GetFileFilters( filters );
-                            for ( std::set< std::string >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
+                            for ( std::set< tstring >::const_iterator itr = filters.begin(), end = filters.end(); itr != end; ++itr )
                             {
                                 dialog.AddFilter( *itr );
                             }

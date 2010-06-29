@@ -18,7 +18,7 @@ LUNA_DEFINE_TYPE(Luna::InstanceType);
 
 void InstanceType::InitializeType()
 {
-  Reflect::RegisterClass< Luna::InstanceType >( "Luna::InstanceType" );
+  Reflect::RegisterClass< Luna::InstanceType >( TXT( "Luna::InstanceType" ) );
 }
 
 void InstanceType::CleanupType()

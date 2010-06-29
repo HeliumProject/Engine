@@ -18,8 +18,8 @@ LUNA_DEFINE_TYPE(Luna::Instance);
 
 void Instance::InitializeType()
 {
-  Reflect::RegisterClass< Luna::Instance >( "Luna::Instance" );
-  Enumerator::InitializePanel( "Instance", CreatePanelSignature::Delegate( &Instance::CreatePanel ) );
+  Reflect::RegisterClass< Luna::Instance >( TXT( "Luna::Instance" ) );
+  Enumerator::InitializePanel( TXT( "Instance" ), CreatePanelSignature::Delegate( &Instance::CreatePanel ) );
 }
 
 void Instance::CleanupType()
@@ -48,7 +48,7 @@ void Instance::Unpack()
 
 i32 Instance::GetImageIndex() const
 {
-  i32 image = Nocturnal::GlobalImageManager().GetImageIndex( "null.png" );
+  i32 image = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "null.png" ) );
 
   if ( GetNodeType() )
   {
@@ -78,7 +78,7 @@ Luna::SceneNodeType* Instance::DeduceNodeType()
   TypeConfigPtr config;
 
   // check for a pre-existing configured type
-  const std::string& configured = GetPackage<Content::Instance>()->m_ConfiguredType;
+  const tstring& configured = GetPackage<Content::Instance>()->m_ConfiguredType;
 
   // iterate and score configs
   V_TypeConfigSmartPtr::const_iterator itr = m_Scene->GetTypeConfigs().begin();
@@ -139,9 +139,9 @@ void Instance::CheckNodeType()
   __super::CheckNodeType();
 }
 
-std::set< std::string > Instance::GetValidConfiguredTypeNames()
+std::set< tstring > Instance::GetValidConfiguredTypeNames()
 {
-  std::set< std::string > names;
+  std::set< tstring > names;
 
   // iterate and score configs
   V_TypeConfigSmartPtr::const_iterator itr = m_Scene->GetTypeConfigs().begin();
@@ -158,14 +158,14 @@ std::set< std::string > Instance::GetValidConfiguredTypeNames()
   return names;
 }
 
-std::string Instance::GetConfiguredTypeName() const
+tstring Instance::GetConfiguredTypeName() const
 {
   return GetPackage<Content::Instance>()->m_ConfiguredType;
 }
 
-void Instance::SetConfiguredTypeName( const std::string& type )
+void Instance::SetConfiguredTypeName( const tstring& type )
 {
-  std::string&                  oldType   = GetPackage<Content::Instance>()->m_ConfiguredType;
+  tstring&                  oldType   = GetPackage<Content::Instance>()->m_ConfiguredType;
   InstancePropertiesChangeArgs  args(this, oldType, type);
 
   oldType = type;
@@ -176,9 +176,9 @@ void Instance::SetConfiguredTypeName( const std::string& type )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified panel is supported by Instance.
 // 
-bool Instance::ValidatePanel(const std::string& name)
+bool Instance::ValidatePanel(const tstring& name)
 {
-  if ( name == "Instance" )
+  if ( name == TXT( "Instance" ) )
     return true;
 
   return __super::ValidatePanel( name );

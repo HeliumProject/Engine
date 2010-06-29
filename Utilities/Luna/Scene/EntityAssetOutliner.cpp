@@ -119,7 +119,7 @@ void EntityAssetOutliner::AddEntityAssetSet( Luna::EntityAssetSet* classSet )
     bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
     m_TreeCtrl->DisableSorting();
 
-    const i32 image = Nocturnal::GlobalImageManager().GetImageIndex( "folder.png" );
+    const i32 image = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "folder.png" ) );
     wxTreeItemId classItem = AddItem( m_InvisibleRoot, 
                                       classSet->GetName(), 
                                       image, 
@@ -209,8 +209,8 @@ void EntityAssetOutliner::RemoveEntity( Luna::Entity* entity )
 // 
 Nocturnal::SortTreeCtrl* EntityAssetOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
 {
-  Nocturnal::SortTreeCtrl* tree = new Nocturnal::SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_EDIT_LABELS | wxTR_MULTIPLE, wxDefaultValidator, "EntityAssetOutliner" );
-  m_InvisibleRoot = tree->AddRoot( "INVISIBLE_ROOT" );
+  Nocturnal::SortTreeCtrl* tree = new Nocturnal::SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_EDIT_LABELS | wxTR_MULTIPLE, wxDefaultValidator, wxT( "EntityAssetOutliner" ) );
+  m_InvisibleRoot = tree->AddRoot( TXT( "INVISIBLE_ROOT" ) );
 
   // Override dynamic GUI event handlers here
   tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, wxTreeEventHandler( EntityAssetOutliner::OnBeginLabelEdit ), NULL, this );
@@ -228,7 +228,7 @@ void EntityAssetOutliner::Clear()
   // ? Disconnect all listeners on existing tree items?
 
   // Put the invisible root back into the tree so we are ready to populate it again
-  m_InvisibleRoot = m_TreeCtrl->AddRoot( "INVISIBLE_ROOT" );
+  m_InvisibleRoot = m_TreeCtrl->AddRoot( TXT( "INVISIBLE_ROOT" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

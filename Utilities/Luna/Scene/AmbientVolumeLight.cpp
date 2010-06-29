@@ -22,8 +22,8 @@ LUNA_DEFINE_TYPE(AmbientVolumeLight);
 
 void AmbientVolumeLight::InitializeType()
 {
-  Reflect::RegisterClass< AmbientVolumeLight >( "Luna::AmbientVolumeLight" );
-  Enumerator::InitializePanel( "AmbientVolumeLight", CreatePanelSignature::Delegate( &AmbientVolumeLight::CreatePanel ) );
+  Reflect::RegisterClass< AmbientVolumeLight >( TXT( "Luna::AmbientVolumeLight" ) );
+  Enumerator::InitializePanel( TXT( "AmbientVolumeLight" ), CreatePanelSignature::Delegate( &AmbientVolumeLight::CreatePanel ) );
 }
 
 void AmbientVolumeLight::CleanupType()
@@ -57,12 +57,12 @@ AmbientVolumeLight::~AmbientVolumeLight()
 
 i32 AmbientVolumeLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "light.png" ) );
 }
 
-std::string AmbientVolumeLight::GetApplicationTypeName() const
+tstring AmbientVolumeLight::GetApplicationTypeName() const
 {
-  return "AmbientVolumeLight";
+  return TXT( "AmbientVolumeLight" );
 }
 
 void AmbientVolumeLight::Initialize()
@@ -197,9 +197,9 @@ void AmbientVolumeLight::DrawShape( IDirect3DDevice9* device, DrawArgs* args, co
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified panel is supported by AmbientVolumeLight.
 //
-bool AmbientVolumeLight::ValidatePanel(const std::string& name)
+bool AmbientVolumeLight::ValidatePanel(const tstring& name)
 {
-  if (name == "AmbientVolumeLight")
+  if (name == TXT( "AmbientVolumeLight" ) )
   {
     return true;
   }
@@ -209,11 +209,11 @@ bool AmbientVolumeLight::ValidatePanel(const std::string& name)
 
 void AmbientVolumeLight::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel("Ambient Volume Light", true);
+  args.m_Enumerator->PushPanel( TXT( "Ambient Volume Light" ), true);
   {
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Volume Light");
+      args.m_Enumerator->AddLabel( TXT( "Volume Light" ) );
 
       Inspect::Choice* choice = args.m_Enumerator->AddChoice<AmbientVolumeLight, int>(args.m_Selection, &AmbientVolumeLight::GetVolumeLightType, &AmbientVolumeLight::SetVolumeLightType);
       choice->SetDropDown( true );
@@ -221,14 +221,14 @@ void AmbientVolumeLight::CreatePanel( CreatePanelArgs& args )
       Inspect::V_Item items;
       {
         {
-          std::ostringstream str;
+          tostringstream str;
           str << Content::VolumeLightTypes::Sphere;
-          items.push_back( Inspect::Item( "Sphere", str.str() ) );
+          items.push_back( Inspect::Item( TXT( "Sphere" ), str.str() ) );
         }
         {
-          std::ostringstream str;
+          tostringstream str;
           str << Content::VolumeLightTypes::Cuboid;
-          items.push_back( Inspect::Item( "Cuboid", str.str() ) );
+          items.push_back( Inspect::Item( TXT( "Cuboid" ), str.str() ) );
         }
       }
       choice->SetItems( items );
@@ -237,14 +237,14 @@ void AmbientVolumeLight::CreatePanel( CreatePanelArgs& args )
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Inner Radius");
+      args.m_Enumerator->AddLabel( TXT( "Inner Radius" ) );
       args.m_Enumerator->AddValue<AmbientVolumeLight, float>( args.m_Selection, &AmbientVolumeLight::GetInnerRadius, &AmbientVolumeLight::SetInnerRadius );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Outer Radius");
+      args.m_Enumerator->AddLabel( TXT( "Outer Radius" ) );
       args.m_Enumerator->AddValue<AmbientVolumeLight, float>( args.m_Selection, &AmbientVolumeLight::GetOuterRadius, &AmbientVolumeLight::SetOuterRadius );
     }
     args.m_Enumerator->Pop();

@@ -15,13 +15,13 @@ namespace Luna
     {
     public:
         DependencyCollection();
-        DependencyCollection( const std::string& name, const u32 flags = AssetCollectionFlags::Default, const bool reverse = false );
+        DependencyCollection( const tstring& name, const u32 flags = AssetCollectionFlags::Default, const bool reverse = false );
         ~DependencyCollection();
 
         virtual void InitializeCollection() NOC_OVERRIDE;
         virtual void CleanupCollection() NOC_OVERRIDE;
 
-        virtual std::string GetDisplayName() const;
+        virtual tstring GetDisplayName() const;
 
         void SetRoot( const Nocturnal::Path& path );
         const Nocturnal::Path& GetRoot()
@@ -29,7 +29,7 @@ namespace Luna
             return m_RootPath;
         }
 
-        std::string GetAssetName() const;
+        tstring GetAssetName() const;
 
         virtual void SetFlags( const u32 flags );
 

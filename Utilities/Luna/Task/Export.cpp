@@ -45,13 +45,13 @@ REFLECT_DEFINE_CLASS( ExportOptions );
 
 void ExportOptions::EnumerateClass( Reflect::Compositor<ExportOptions>& comp )
 {
-  comp.GetComposite().m_UIName = "Exporter Options";
+  comp.GetComposite().m_UIName = TXT( "Exporter Options" );
 
   Reflect::Field* fieldRecursive = comp.AddField( &ExportOptions::m_Recursive, "m_Recursive" );
-  fieldRecursive->m_UIName = "Export Nested Assets";
+  fieldRecursive->m_UIName = TXT( "Export Nested Assets" );
   Reflect::Field* fieldStateTrackerFile = comp.AddField( &ExportOptions::m_StateTrackerFile, "m_StateTrackerFile" );
   Reflect::Field* fieldSetupLighting = comp.AddField( &ExportOptions::m_SetupLighting, "m_SetupLighting" );
-  fieldStateTrackerFile->m_UIName = "State Tracker File";
+  fieldStateTrackerFile->m_UIName = TXT( "State Tracker File" );
 }
 
 
@@ -61,7 +61,7 @@ void Export::Initialize()
   {
     g_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
 
-    g_RegisteredTypes.Push( Reflect::RegisterClass<ExportOptions>( "ExportOptions" ) );
+    g_RegisteredTypes.Push( Reflect::RegisterClass<ExportOptions>( TXT( "ExportOptions" ) ) );
   }
 }
 
@@ -121,9 +121,9 @@ void ExportSignal(Nocturnal::Void)
   }
 }
 
-bool Export( const S_tuid& assetIDs, bool recurse, const std::string& stateTrackerFile, bool lightingSetup = false )
+bool Export( const S_tuid& assetIDs, bool recurse, const tstring& stateTrackerFile, bool lightingSetup = false )
 {
-  g_WorkerProcess = Worker::Process::Create( "ExportTool.exe" );
+  g_WorkerProcess = Worker::Process::Create( TXT( "ExportTool.exe" ) );
 
   if (!g_WorkerProcess->Start( 20000 ) )
   {
@@ -150,7 +150,7 @@ bool Export( const S_tuid& assetIDs, bool recurse, const std::string& stateTrack
   }
   catch ( Nocturnal::Exception& ex )
   {
-    Log::Error( "%s\n", ex.What() );
+    Log::Error( TXT( "%s\n" ), ex.What() );
     return false;
   }
 
@@ -173,7 +173,7 @@ bool Export( const S_tuid& assetIDs, bool recurse, const std::string& stateTrack
     {
       Worker::ConsoleOutput* output = (Worker::ConsoleOutput*)msg->GetData();
 
-      Log::Statement statement ( output->m_String, output->m_Stream, output->m_Level, output->m_Indent );
+      Log::Statement statement( output->m_String, output->m_Stream, output->m_Level, output->m_Indent );
 
       if (g_OutputWindow)
       {
@@ -230,7 +230,7 @@ void Luna::ExportAssets( const S_tuid& assetIds, wxWindow* parent, bool showOpti
 {
   if ( g_ExportInProgress )
   {
-    wxMessageBox( "Another build is already in progress!", "Export in Progress", wxICON_WARNING | wxOK );
+    wxMessageBox( wxT( "Another build is already in progress!" ), wxT( "Export in Progress" ), wxICON_WARNING | wxOK );
     return;
   }
 
@@ -244,7 +244,7 @@ void Luna::ExportAssets( const S_tuid& assetIds, wxWindow* parent, bool showOpti
 
   if ( showOptions )
   {
-    TaskOptionsDialog dialog( parent, wxID_ANY, "Export Options" );
+    TaskOptionsDialog dialog( parent, wxID_ANY, TXT( "Export Options" ) );
 
     Inspect::CanvasWindow* canvasWindow = new Inspect::CanvasWindow( dialog.GetPanel(), wxID_ANY, wxDefaultPosition, dialog.GetPanel()->GetSize(), wxALWAYS_SHOW_SB | wxCLIP_CHILDREN );
 
@@ -277,7 +277,7 @@ void Luna::ExportAssets( const S_tuid& assetIds, wxWindow* parent, bool showOpti
 
   if ( !g_OutputWindow && !blocking )
   {
-    g_OutputWindow = new TaskOutputWindow( NULL, "Exporter Output", 100, 100, 700, 500 );
+    g_OutputWindow = new TaskOutputWindow( NULL, TXT( "Exporter Output" ), 100, 100, 700, 500 );
     g_OutputWindow->AddSignalListener( SignalSignature::Delegate ( &ExportSignal ) );
     g_OutputWindow->CentreOnScreen();
   }

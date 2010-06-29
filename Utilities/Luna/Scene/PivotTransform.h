@@ -49,7 +49,7 @@ namespace Luna
     PivotTransform( Luna::Scene* scene, Content::PivotTransform* pivotTransform );
 
     virtual i32 GetImageIndex() const NOC_OVERRIDE;
-    virtual std::string GetApplicationTypeName() const NOC_OVERRIDE;
+    virtual tstring GetApplicationTypeName() const NOC_OVERRIDE;
 
     virtual void Pack() NOC_OVERRIDE;
     virtual void Unpack() NOC_OVERRIDE;
@@ -144,7 +144,7 @@ namespace Luna
     virtual Undo::CommandPtr CenterTransform() NOC_OVERRIDE;
 
     // ui integration
-    virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
+    virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
 
     // creator
     static void CreatePanel(CreatePanelArgs& args);

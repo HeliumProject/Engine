@@ -14,7 +14,7 @@ LUNA_DEFINE_TYPE( Luna::HierarchyNodeType );
 
 void HierarchyNodeType::InitializeType()
 {
-  Reflect::RegisterClass< Luna::HierarchyNodeType >( "Luna::HierarchyNodeType" );
+  Reflect::RegisterClass< Luna::HierarchyNodeType >( TXT( "Luna::HierarchyNodeType" ) );
 }
 
 void Luna::HierarchyNodeType::CleanupType()

@@ -18,7 +18,7 @@ LUNA_DEFINE_TYPE( Luna::FieldFileReference );
 // 
 void FieldFileReference::InitializeType()
 {
-  Reflect::RegisterClass<Luna::FieldFileReference>( "Luna::FieldFileReference" );
+  Reflect::RegisterClass<Luna::FieldFileReference>( TXT( "Luna::FieldFileReference" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -79,12 +79,12 @@ void FieldFileReference::ActivateItem()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the label to use for naming this node.
 // 
-std::string FieldFileReference::MakeLabel() const
+tstring FieldFileReference::MakeLabel() const
 {
-  std::string label;
+  tstring label;
   if ( m_UseLabelPrefix )
   {
-    label += m_Field->m_UIName + ": ";
+    label += m_Field->m_UIName + TXT( ": " );
   }
 
   FilePathOptions::FilePathOption filePathOption = FilePathOptions::PartialPath;

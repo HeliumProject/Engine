@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Platform/Types.h"
+
 #include <map>
 
 namespace Luna
@@ -14,7 +16,7 @@ namespace Luna
   struct NodeTypeExistenceArgs;
 
   // Typedefs
-  typedef std::map< std::string, Luna::HierarchyNodeType* > M_HierarchyNodeTypeDumbPtr;
+  typedef std::map< tstring, Luna::HierarchyNodeType* > M_HierarchyNodeTypeDumbPtr;
 
   /////////////////////////////////////////////////////////////////////////////
   // Provides a UI for displaying the different Hierarchy Node Types in a scene

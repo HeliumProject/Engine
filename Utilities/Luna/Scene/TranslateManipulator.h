@@ -21,12 +21,12 @@ namespace Luna
     };
     static void TranslateSnappingModeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(None, "None");
-      info->AddElement(Surface, "Surface");
-      info->AddElement(Object, "Object");
-      info->AddElement(Vertex, "Vertex");
-      info->AddElement(Offset, "Offset");
-      info->AddElement(Grid, "Grid");
+      info->AddElement(None, TXT( "None" ) );
+      info->AddElement(Surface, TXT( "Surface" ) );
+      info->AddElement(Object, TXT( "Object" ) );
+      info->AddElement(Vertex, TXT( "Vertex" ) );
+      info->AddElement(Offset, TXT( "Offset" ) );
+      info->AddElement(Grid, TXT( "Grid" ) );
     }
   }
   typedef TranslateSnappingModes::TranslateSnappingMode TranslateSnappingMode;

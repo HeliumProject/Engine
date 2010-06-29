@@ -31,7 +31,7 @@ namespace Luna
     class Browser
     {
     public:
-        Browser( const std::string& rootDirectory, const std::string& configDirectory );
+        Browser( const tstring& rootDirectory, const tstring& configDirectory );
         Browser( const Browser& rhs ) {}
         Browser& operator=( const Browser& rhs ) {}
 
@@ -45,7 +45,7 @@ namespace Luna
         static void Initialize();
         static void Cleanup();
 
-        void ShowBrowser( const std::string& queryString = std::string("") );
+        void ShowBrowser( const tstring& queryString = TXT("") );
         bool HasFrame();
 
         void InitializePreferences();
@@ -63,8 +63,8 @@ namespace Luna
         // Members
         //
     private:
-        std::string           m_RootDirectory;
-        std::string           m_ConfigDirectory;
+        tstring           m_RootDirectory;
+        tstring           m_ConfigDirectory;
         BrowserSearchPtr      m_BrowserSearch;
         BrowserFrame*         m_BrowserFrame;
         bool                  m_HasFrame;

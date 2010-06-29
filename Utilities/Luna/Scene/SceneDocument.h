@@ -24,7 +24,7 @@ namespace Luna
     static void CleanupType();
 
   public:
-    SceneDocument( const std::string& file, const std::string& name = "" );
+    SceneDocument( const tstring& file, const tstring& name = TXT( "" ) );
     virtual ~SceneDocument();
     void SetScene( Luna::Scene* scene );
     Luna::Scene* GetScene() const;

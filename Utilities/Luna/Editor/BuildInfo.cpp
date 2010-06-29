@@ -10,13 +10,13 @@ using namespace Luna;
 // Gets the root path to the level, and replaces all non-characters with 
 // underscores.
 // 
-std::string LevelInfo::GetStrippedName() const
+tstring LevelInfo::GetStrippedName() const
 {
-  const boost::regex s_NonWords( "(\\W)" );
-  const boost::regex s_TrailingSlashes( "(/+$)" );
-  std::string name = Nocturnal::Path( m_Name ).Directory();
-  name = boost::regex_replace( name, s_TrailingSlashes, "" );
-  name = boost::regex_replace( name, s_NonWords, "_" );
+  const tregex s_NonWords( TXT( "(\\W)" ) );
+  const tregex s_TrailingSlashes( TXT( "(/+$)" ) );
+  tstring name = Nocturnal::Path( m_Name ).Directory();
+  name = boost::regex_replace( name, s_TrailingSlashes, TXT( "" ) );
+  name = boost::regex_replace( name, s_NonWords, TXT( "_" ) );
   return name;
 }
 
@@ -24,7 +24,7 @@ std::string LevelInfo::GetStrippedName() const
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-BuildInfo::BuildInfo( const std::string& name )
+BuildInfo::BuildInfo( const tstring& name )
 : m_Name( name )
 , m_Timestamp( 0 )
 , m_CodeSucceeded( false )

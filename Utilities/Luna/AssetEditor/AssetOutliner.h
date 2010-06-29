@@ -59,7 +59,7 @@ namespace Luna
     wxTreeItemId DragHitTest( wxPoint point );
     void SetLabelStyle( const wxTreeItemId& treeItem, u32 style );
     AssetOutlineItemData* GetItemData( const wxTreeItemId& id );
-    void DebugDumpTree( const wxTreeItemId& treeItem, std::string prefix );
+    void DebugDumpTree( const wxTreeItemId& treeItem, tstring prefix );
 
     // callback for when an item has been deleted
     void ItemDeleted( AssetOutlineItemData* data );

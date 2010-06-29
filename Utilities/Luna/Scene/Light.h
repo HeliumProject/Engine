@@ -100,7 +100,7 @@ namespace Luna
     Light(Luna::Scene* scene, Content::Light* light);
     
     virtual i32 GetImageIndex() const NOC_OVERRIDE;
-    virtual std::string GetApplicationTypeName() const NOC_OVERRIDE;
+    virtual tstring GetApplicationTypeName() const NOC_OVERRIDE;
 
     virtual void Evaluate(GraphDirection direction) NOC_OVERRIDE;
 
@@ -109,7 +109,7 @@ namespace Luna
 
     virtual bool Pick( PickVisitor* pick ) NOC_OVERRIDE;
 
-    virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
+    virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
     static void CreatePanel( CreatePanelArgs& args );
 
     Math::Color3 GetColor() const;

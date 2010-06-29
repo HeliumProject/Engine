@@ -11,14 +11,14 @@ BEGIN_EVENT_TABLE( BrowserStatusBar, wxStatusBar )
 EVT_SIZE(BrowserStatusBar::OnSize)
 END_EVENT_TABLE()
 
-static const std::string s_TrackingInProgress = "Indexing assets...";
-static const std::string s_TrackingUpdating = "Updating index...";
-static const std::string s_TrackingComplete = "Indexing complete";
-static const std::string s_TrackingFailed = "ERROR: Indexing failed!";
+static const tstring s_TrackingInProgress = TXT( "Indexing assets..." );
+static const tstring s_TrackingUpdating = TXT( "Updating index..." );
+static const tstring s_TrackingComplete = TXT( "Indexing complete" );
+static const tstring s_TrackingFailed = TXT( "ERROR: Indexing failed!" );
 
-static const std::string s_TooltipInProgress = "The files on your computer are being scanned. Until this operation completes, searches may return partial results.";
-static const std::string s_TooltipComplete = "";
-static const std::string s_TooltipFailed = "The Asset Tracker failed to index your files. Check the console for additional info. You can try restarting Luna, report this if the problem persists.";
+static const tstring s_TooltipInProgress = TXT( "The files on your computer are being scanned. Until this operation completes, searches may return partial results." );
+static const tstring s_TooltipComplete = TXT( "" );
+static const tstring s_TooltipFailed = TXT( "The Asset Tracker failed to index your files. Check the console for additional info. You can try restarting Luna, report this if the problem persists." );
 
 static const i32 s_ProgressMiliseconds = 2000; 
 
@@ -26,9 +26,9 @@ BrowserStatusBar::BrowserStatusBar( wxWindow *parent )
 : wxStatusBar( parent, wxID_ANY )
 , m_InitialIndexingCompleted( false )
 , m_IndexingFailed( false )
-, m_CurrentStatus( "Done" )
-, m_StatusText( new wxStaticText( this, wxID_ANY, "Done" ) )
-, m_Throbber( new wxAnimationCtrl( this, wxID_ANY, Nocturnal::GlobalImageManager().GetAnimation( "animation/process-working.png" ) ) )
+, m_CurrentStatus( TXT( "Done" ) )
+, m_StatusText( new wxStaticText( this, wxID_ANY, TXT( "Done" ) ) )
+, m_Throbber( new wxAnimationCtrl( this, wxID_ANY, Nocturnal::GlobalImageManager().GetAnimation( TXT( "animation/process-working.png" ) ) ) )
 , m_Message( new wxStaticText( this, wxID_ANY, s_TrackingInProgress ) )
 {
     static const int widths[ FieldCount ] = { -1, 150 };
@@ -71,7 +71,7 @@ bool BrowserStatusBar::TrimString( wxString& strText, wxStaticText* textField, i
     int avgCharWidth = curWidth / ( int ) strText.size();
     int testLen = ( maxWidth / avgCharWidth );
 
-    wxString testStr = strText.Mid( 0, testLen ) + "...";
+    wxString testStr = strText.Mid( 0, testLen ) + TXT( "..." );
     textField->GetTextExtent( testStr, &curWidth, NULL );
 
     int low = 0;
@@ -99,7 +99,7 @@ bool BrowserStatusBar::TrimString( wxString& strText, wxStaticText* textField, i
             break;
         }
 
-        testStr = strText.Mid( 0, testLen ) + "...";
+        testStr = strText.Mid( 0, testLen ) + TXT( "..." );
         textField->GetTextExtent( testStr, &curWidth, NULL );
     }
 
@@ -107,16 +107,16 @@ bool BrowserStatusBar::TrimString( wxString& strText, wxStaticText* textField, i
     {
         if ( prefix )
         {
-            strText = "..." + strText.Mid( strText.length() - testLen );
+            strText = TXT( "..." ) + strText.Mid( strText.length() - testLen );
         }
         else
         {
-            strText = strText.Mid( 0, testLen ) + "...";
+            strText = strText.Mid( 0, testLen ) + TXT( "..." );
         }
     }
     else
     {
-        strText = "...";
+        strText = TXT( "..." );
     }
     return true;
 }

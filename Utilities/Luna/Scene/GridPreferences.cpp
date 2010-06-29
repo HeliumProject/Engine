@@ -8,7 +8,7 @@ using namespace Luna;
 
 REFLECT_DEFINE_CLASS( GridPreferences );
 
-GridPreferences::GridPreferences( const std::string& version,
+GridPreferences::GridPreferences( const tstring& version,
                                   GridUnit units,
                                   u32 width,
                                   u32 length,

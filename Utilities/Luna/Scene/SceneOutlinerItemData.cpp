@@ -39,7 +39,7 @@ void SceneOutlinerItemData::SetObject( Object* object )
 ///////////////////////////////////////////////////////////////////////////////
 // Tracks the basic label information for this node.
 // 
-void SceneOutlinerItemData::SetItemText( const std::string& text )
+void SceneOutlinerItemData::SetItemText( const tstring& text )
 {
   m_ItemText = text; 
 }
@@ -47,7 +47,7 @@ void SceneOutlinerItemData::SetItemText( const std::string& text )
 ///////////////////////////////////////////////////////////////////////////////
 // Tracks the basic label information for this node.
 // 
-const std::string& SceneOutlinerItemData::GetItemText()
+const tstring& SceneOutlinerItemData::GetItemText()
 {
   return m_ItemText;
 }

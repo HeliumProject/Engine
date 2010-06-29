@@ -24,7 +24,7 @@ namespace Luna
   protected:
     Enumerator* m_Enumerator;
     OS_SelectableDumbPtr m_Selection;
-    std::string m_LabelText;
+    tstring m_LabelText;
     ComponentGroup< TAttrib >* m_ComponentPanel;
     Inspect::CheckBox* m_CheckBox;
     Getter m_Get;
@@ -35,7 +35,7 @@ namespace Luna
     ///////////////////////////////////////////////////////////////////////////
     // Constructor
     // 
-    ComponentOverrideGroup( const std::string& checkBoxLabel, Enumerator* enumerator, const OS_SelectableDumbPtr& selection, Getter get, Setter set )
+    ComponentOverrideGroup( const tstring& checkBoxLabel, Enumerator* enumerator, const OS_SelectableDumbPtr& selection, Getter get, Setter set )
       : m_Selection( selection )
       , m_LabelText( checkBoxLabel )
       , m_ComponentPanel( NULL )

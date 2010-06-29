@@ -27,7 +27,7 @@ namespace Luna
     class ThumbnailManager
     {
     public:
-        ThumbnailManager( wxWindow* window, Render::D3DManager* d3dmanager, const std::string& thumbnailDirectory );
+        ThumbnailManager( wxWindow* window, Render::D3DManager* d3dmanager, const tstring& thumbnailDirectory );
         virtual ~ThumbnailManager();
 
         void Reset();

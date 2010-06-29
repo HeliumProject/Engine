@@ -231,7 +231,7 @@ namespace Luna
     virtual void ConnectManipulator(ManiuplatorAdapterCollection* collection) NOC_OVERRIDE;
 
     // ui integration
-    virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
+    virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
 
     // creator
     static void CreatePanel(CreatePanelArgs& args);

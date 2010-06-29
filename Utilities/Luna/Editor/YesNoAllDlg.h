@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Platform/Types.h"
+
 #include <wx/statline.h>
 
 namespace Luna
@@ -19,9 +21,9 @@ namespace Luna
 	  wxButton* m_ButtonCancel;
 	
   public:
-    YesNoAllDlg( wxWindow* parent, const std::string& title, const std::string& msg, int id = -1, wxPoint pos = wxDefaultPosition, wxSize size = wxSize( 370,130 ), int style = wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxWANTS_CHARS );
+    YesNoAllDlg( wxWindow* parent, const tstring& title, const tstring& msg, int id = -1, wxPoint pos = wxDefaultPosition, wxSize size = wxSize( 370,130 ), int style = wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxWANTS_CHARS );
     virtual ~YesNoAllDlg();
-    void SetButtonToolTip( int buttonId, const std::string& tooltip );
+    void SetButtonToolTip( int buttonId, const tstring& tooltip );
 
   private:
     void OnButtonClick( wxCommandEvent& args );

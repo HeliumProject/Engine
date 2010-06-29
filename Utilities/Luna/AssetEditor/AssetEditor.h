@@ -27,7 +27,7 @@ namespace Luna
   class AssetEditor : public Luna::Editor
   {
   private:
-      static char* s_FileFilter;
+      static tchar* s_FileFilter;
 
   private:
     typedef std::map< i32, FilePathOptions::FilePathOption > M_MenuToFileOption;
@@ -64,7 +64,7 @@ namespace Luna
 
     Luna::AssetManager* GetAssetManager();
 
-    bool Open( const std::string& file );
+    bool Open( const tstring& file );
 
     virtual void SaveWindowState() NOC_OVERRIDE;
     virtual DocumentManager* GetDocumentManager() NOC_OVERRIDE;
@@ -110,7 +110,7 @@ namespace Luna
     bool ToClipboard( const Inspect::ReflectClipboardDataPtr& clipboardData );
     Inspect::ReflectClipboardDataPtr FromClipboard();
     void UpdateUIElements();
-    bool DoOpen( const std::set< std::string >& files );
+    bool DoOpen( const std::set< tstring >& files );
     bool CanMoveSelectedItems( Luna::AssetNode*& commonParent );
     void PreviewSelectedItem();
 

@@ -34,7 +34,7 @@ namespace Worker
         Log::Stream m_Stream;
         Log::Level  m_Level;
         int         m_Indent;
-        char        m_String[0];
+        tchar       m_String[0];
     };
 
     const static u32 ConsoleOutputMessage = 0;

@@ -9,7 +9,7 @@ namespace Luna
   class BrowserPreferencesDialog : public PreferencesDialog
   {
   public:
-    BrowserPreferencesDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = "Vault Preferences", const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 644,375 ), long style = wxDEFAULT_DIALOG_STYLE );
+    BrowserPreferencesDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT( "Vault Preferences" ), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 644,375 ), long style = wxDEFAULT_DIALOG_STYLE );
     ~BrowserPreferencesDialog();
 
   protected:

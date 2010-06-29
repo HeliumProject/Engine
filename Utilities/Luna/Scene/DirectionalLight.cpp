@@ -19,9 +19,9 @@ LUNA_DEFINE_TYPE(Luna::DirectionalLight);
 
 void DirectionalLight::InitializeType()
 {
-  Reflect::RegisterClass< Luna::DirectionalLight >( "Luna::DirectionalLight" );
+  Reflect::RegisterClass< Luna::DirectionalLight >( TXT( "Luna::DirectionalLight" ) );
 
-  Enumerator::InitializePanel( "DirectionalLight", CreatePanelSignature::Delegate( &DirectionalLight::CreatePanel ) );
+  Enumerator::InitializePanel( TXT( "DirectionalLight" ), CreatePanelSignature::Delegate( &DirectionalLight::CreatePanel ) );
 }
 
 void DirectionalLight::CleanupType()
@@ -43,20 +43,20 @@ DirectionalLight::DirectionalLight(Luna::Scene* scene, Content::DirectionalLight
 
 i32 DirectionalLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "light.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "light.png" ) );
 }
 
-std::string DirectionalLight::GetApplicationTypeName() const
+tstring DirectionalLight::GetApplicationTypeName() const
 {
-  return "DirectionalLight";
+  return TXT( "DirectionalLight" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified panel is supported by DirectionalLight.
 //
-bool DirectionalLight::ValidatePanel(const std::string& name)
+bool DirectionalLight::ValidatePanel(const tstring& name)
 {
-  if (name == "DirectionalLight")
+  if (name == TXT( "DirectionalLight" ) )
   {
     return true;
   }
@@ -66,18 +66,18 @@ bool DirectionalLight::ValidatePanel(const std::string& name)
 
 void DirectionalLight::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel("Directional Light", true);
+  args.m_Enumerator->PushPanel( TXT( "Directional Light" ), true);
   {
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Global Sun");
+      args.m_Enumerator->AddLabel( TXT( "Global Sun" ) );
       args.m_Enumerator->AddCheckBox<DirectionalLight, bool>( args.m_Selection, &DirectionalLight::GetGlobalSun, &DirectionalLight::SetGlobalSun );
     }
     args.m_Enumerator->Pop();
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Shadow Softness");
+      args.m_Enumerator->AddLabel( TXT( "Shadow Softness" ) );
 
       args.m_Enumerator->AddValue<DirectionalLight, float>( args.m_Selection, &DirectionalLight::GetShadowSoftness, &DirectionalLight::SetShadowSoftness );
       Inspect::Slider* slider = args.m_Enumerator->AddSlider<DirectionalLight, float>( args.m_Selection, &DirectionalLight::GetShadowSoftness, &DirectionalLight::SetShadowSoftness );
@@ -86,7 +86,7 @@ void DirectionalLight::CreatePanel( CreatePanelArgs& args )
 
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Soft Shadow Samples");
+      args.m_Enumerator->AddLabel( TXT( "Soft Shadow Samples" ) );
 
       args.m_Enumerator->AddValue<DirectionalLight, int>( args.m_Selection, &DirectionalLight::GetSoftShadowSamples, &DirectionalLight::SetSoftShadowSamples );
       Inspect::Slider* slider = args.m_Enumerator->AddSlider<DirectionalLight, int>( args.m_Selection, &DirectionalLight::GetSoftShadowSamples, &DirectionalLight::SetSoftShadowSamples );

@@ -17,10 +17,10 @@ namespace Luna
     wxButton* m_button3;
     wxButton* m_button1;
 
-    std::string& m_SelectedRegion;
+    tstring& m_SelectedRegion;
 
   public:
-    RegionSelectorDialog( wxWindow* parent, const std::string& title, const std::string& msg, const std::set< std::string >& regionNames, std::string& selectedRegion, int id = -1, wxPoint pos = wxDefaultPosition, 
+    RegionSelectorDialog( wxWindow* parent, const tstring& title, const tstring& msg, const std::set< tstring >& regionNames, tstring& selectedRegion, int id = -1, wxPoint pos = wxDefaultPosition, 
       wxSize size = wxSize( -1, -1 ), int style = wxCAPTION );
     virtual ~RegionSelectorDialog();
 

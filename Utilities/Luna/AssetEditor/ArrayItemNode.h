@@ -19,7 +19,7 @@ namespace Luna
     static void CleanupType();
 
   public:
-    ArrayItemNode( Luna::AssetManager* assetManager, Luna::ArrayNode* container, const std::string& name );
+    ArrayItemNode( Luna::AssetManager* assetManager, Luna::ArrayNode* container, const tstring& name );
     virtual ~ArrayItemNode();
   };
 }

@@ -53,12 +53,12 @@ namespace Luna
   private:
     ComponentCategoryPanel* GetCategoryPanel( const Component::ComponentCategoryPtr& category, M_ListIdToAttrib& attribList );
     void NextView( wxListCtrl* list );
-    void SetDescription( const std::string& desc, Icon icon );
+    void SetDescription( const tstring& desc, Icon icon );
     void SetDescription( Component::ComponentBase* attribute );
     void SetDescription( Component::ComponentCategory* category );
     void AddComponent( const Component::ComponentPtr& attributeToClone );
     Component::ComponentBase* FindComponent( size_t tabNumber, i32 itemId );
-    bool ValidateComponent( const Component::ComponentPtr& attribute, std::string& message );
+    bool ValidateComponent( const Component::ComponentPtr& attribute, tstring& message );
     void AutoSizeNameColumn( wxListCtrl* list );
     void ConnectListCallbacks();
     void DisconnectListCallbacks();

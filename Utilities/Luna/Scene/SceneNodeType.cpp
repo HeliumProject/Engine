@@ -10,7 +10,7 @@ LUNA_DEFINE_TYPE( Luna::SceneNodeType );
 
 void SceneNodeType::InitializeType()
 {
-  Reflect::RegisterClass< Luna::SceneNodeType >( "Luna::SceneNodeType" );
+  Reflect::RegisterClass< Luna::SceneNodeType >( TXT( "Luna::SceneNodeType" ) );
 }
 
 void SceneNodeType::CleanupType()
@@ -36,12 +36,12 @@ Luna::Scene* SceneNodeType::GetScene()
   return m_Scene;
 }
 
-const std::string& SceneNodeType::GetName() const
+const tstring& SceneNodeType::GetName() const
 {
   return m_Name;
 }
 
-void SceneNodeType::SetName( const std::string& name )
+void SceneNodeType::SetName( const tstring& name )
 {
   m_Name = name;
 }

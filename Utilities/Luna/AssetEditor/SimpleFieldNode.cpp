@@ -14,7 +14,7 @@ LUNA_DEFINE_TYPE( Luna::SimpleFieldNode );
 // 
 void SimpleFieldNode::InitializeType()
 {
-  Reflect::RegisterClass<Luna::SimpleFieldNode>( "Luna::SimpleFieldNode" );
+  Reflect::RegisterClass<Luna::SimpleFieldNode>( TXT( "Luna::SimpleFieldNode" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ SimpleFieldNode::SimpleFieldNode( Luna::AssetManager* assetManager, Reflect::Ele
   //  m_Serializer->SetTranslateOutputListener( Reflect::TranslateOutputSignature::Delegate ( this, &SimpleFieldNode::TranslateOutputTUID ) );
   //}
 
-  SetName( field->m_UIName + ": " + GetValue() );
+  SetName( field->m_UIName + TXT( ": " ) + GetValue() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@ SimpleFieldNode::~SimpleFieldNode()
 //  {
 //    Reflect::U64Serializer* ser = DangerousCast< U64Serializer > ( args.m_Serializer );
 //
-//    std::string path;
+//    tstring path;
 //    std::getline( args.m_Stream, path );
 //
 //    if ( !path.empty() )
@@ -87,7 +87,7 @@ SimpleFieldNode::~SimpleFieldNode()
 //  if ( args.m_Serializer->GetType() == Reflect::GetType<Reflect::U64Serializer>() )
 //  {
 //    Reflect::U64Serializer* ser = DangerousCast< Reflect::U64Serializer > ( args.m_Serializer );
-//    std::string path;
+//    tstring path;
 //
 //    ConvertTuidToLabel( ser->m_Data.Get(), path );
 //    args.m_Stream << path;

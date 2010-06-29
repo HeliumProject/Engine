@@ -9,7 +9,7 @@ LUNA_DEFINE_TYPE( Persistent );
 
 void Persistent::InitializeType()
 {
-  Reflect::RegisterClass<Persistent>( "Persistent" );
+  Reflect::RegisterClass<Persistent>( TXT( "Persistent" ) );
 }
 
 void Persistent::CleanupType()

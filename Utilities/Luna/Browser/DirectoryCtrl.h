@@ -36,7 +36,7 @@ namespace Luna
     class DirectoryCtrl : public wxGenericDirCtrl
     {
     public:
-        DirectoryCtrl( const std::string& rootDirectory );
+        DirectoryCtrl( const tstring& rootDirectory );
         DirectoryCtrl( wxWindow *parent,
             const wxWindowID id = wxID_ANY,
             const wxString &dir = wxDirDialogDefaultFolderStr,
@@ -46,7 +46,7 @@ namespace Luna
             const wxString& filter = wxEmptyString,
             int defaultFilter = 0,
             const wxString& name = wxTreeCtrlNameStr,
-            const std::string& rootDirectory = "" );
+            const tstring& rootDirectory = TXT( "" ) );
 
         virtual ~DirectoryCtrl();
 
@@ -57,7 +57,7 @@ namespace Luna
         virtual wxTreeCtrl* CreateTreeCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long treeStyle) NOC_OVERRIDE;
 
     private:
-        std::string m_RootDirectory;
+        tstring m_RootDirectory;
         wxImageList m_ImageList;
         wxTreeItemId m_Root;
 

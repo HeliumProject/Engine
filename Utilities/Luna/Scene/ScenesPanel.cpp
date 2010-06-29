@@ -25,7 +25,7 @@ using namespace Luna;
 // Constructor
 // 
 ScenesPanel::ScenesPanel( SceneEditor* editor, Luna::SceneManager* sceneManager, wxWindow* parent, int id ) 
-: wxPanel( parent, id, wxDefaultPosition, wxSize( 300, 200 ), wxTAB_TRAVERSAL, "ScenesPanel" )
+: wxPanel( parent, id, wxDefaultPosition, wxSize( 300, 200 ), wxTAB_TRAVERSAL, wxT( "ScenesPanel" ) )
 , m_Editor( editor )
 , m_SceneManager( sceneManager )
 , m_ButtonNewZone( NULL )
@@ -59,7 +59,7 @@ ScenesPanel::ScenesPanel( SceneEditor* editor, Luna::SceneManager* sceneManager,
     wxBoxSizer* sceneListSizer;
     sceneListSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_ScrollWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER|wxVSCROLL, "ScenesPanel Scrolled Window" );
+    m_ScrollWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER|wxVSCROLL, wxT( "ScenesPanel Scrolled Window" ) );
     m_ScrollWindow->SetScrollRate( 0, 5 );
     m_ScrollSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -126,7 +126,7 @@ void ScenesPanel::Sort()
         }
 
         // Iterate over all the rows and alphabetize them by their paths.
-        typedef std::map< std::string, SceneRowPanel* > M_SortedRows;
+        typedef std::map< tstring, SceneRowPanel* > M_SortedRows;
         M_SortedRows rows;
         M_ZoneRows::const_iterator zoneItr = m_ZoneRows.begin();
         M_ZoneRows::const_iterator zoneEnd = m_ZoneRows.end();
@@ -147,11 +147,11 @@ void ScenesPanel::Sort()
         {
             if ( count++ % 2 )
             {
-                rowItr->second->SetBackgroundColour( wxColour( "#ffffff" ) );
+                rowItr->second->SetBackgroundColour( wxColour( wxT( "#ffffff" ) ) );
             }
             else
             {
-                rowItr->second->SetBackgroundColour( wxColour( "#dddddd" ) );
+                rowItr->second->SetBackgroundColour( wxColour( wxT( "#dddddd" ) ) );
             }
 
             m_ScrollSizer->Add( rowItr->second, 0, wxALL|wxEXPAND, 0 );
@@ -251,57 +251,57 @@ void ScenesPanel::DeleteAllRows()
 // Prompts the user to save a new zone.  The path to the zone is returned (or 
 // an empty path if the operation is cancelled).
 // 
-std::string ScenesPanel::PromptNewZone( const std::string& defaultPath )
+tstring ScenesPanel::PromptNewZone( const tstring& defaultPath )
 {
     NOC_BREAK();
 #pragma TODO( "Zones are deprecated" )
-    return "";
+    return TXT( "" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Prompts the user to add an existing zone.  Returns the path to the zone (or 
 // an empty string if the operation was cancelled).
 // 
-std::string ScenesPanel::PromptAddZone( const std::string& defaultPath )
+tstring ScenesPanel::PromptAddZone( const tstring& defaultPath )
 {
     NOC_BREAK();
 #pragma TODO( "Zones are deprecated" )
-    return "";
+    return TXT( "" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function to actually add a zone, using the specified Prompt Function.
 // 
-Zone* ScenesPanel::AddZone( std::string ( ScenesPanel::*PromptFunction )( const std::string& ) )
+Zone* ScenesPanel::AddZone( tstring ( ScenesPanel::*PromptFunction )( const tstring& ) )
 {
     Luna::Scene* rootScene = m_SceneManager->GetRootScene();
     if ( !rootScene )
     {
         // Error
-        std::ostringstream msg;
+        tostringstream msg;
         msg << "You cannot add a zone because there is no scene loaded.";
-        wxMessageBox( msg.str().c_str(), "Error", wxOK | wxCENTER | wxICON_ERROR, this );
+        wxMessageBox( msg.str().c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, this );
         return NULL;
     }
 
     if ( !rootScene->IsEditable() )
     {
         // Error
-        std::ostringstream msg;
+        tostringstream msg;
         msg << "You cannot add a zone because the scene is not editable.";
-        wxMessageBox( msg.str().c_str(), "Error", wxOK | wxCENTER | wxICON_ERROR, this );
+        wxMessageBox( msg.str().c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, this );
         return NULL;
     }
 
     Nocturnal::Path path( rootScene->GetFullPath() );
 
-    std::string newZonePath = ( this->*PromptFunction )( path.Directory() );
+    tstring newZonePath = ( this->*PromptFunction )( path.Directory() );
 
     if ( newZonePath.empty() )
     {
-        std::ostringstream msg;
+        tostringstream msg;
         msg << "You must specify a path for the new zone.";
-        wxMessageBox( msg.str().c_str(), "Error", wxOK | wxCENTER | wxICON_ERROR, this );
+        wxMessageBox( msg.str().c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, this );
         return NULL;
     }
 
@@ -310,18 +310,18 @@ Zone* ScenesPanel::AddZone( std::string ( ScenesPanel::*PromptFunction )( const 
     if ( !zoneFile.Create() )
     {
         // Error
-        std::ostringstream msg;
+        tostringstream msg;
         msg << "Error creating zone file at location '" << newZonePath << "'";
-        wxMessageBox( msg.str().c_str(), "Error", wxOK | wxCENTER | wxICON_ERROR, this );
+        wxMessageBox( msg.str().c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, this );
         return NULL;
     }
 
     if ( ContainsZone( zoneFile ) )
     {
         // Error
-        std::ostringstream msg;
+        tostringstream msg;
         msg << "Unable to create zone '" << newZonePath << "'. This zone is already in the world.";
-        wxMessageBox( msg.str().c_str(), "Error", wxOK | wxCENTER | wxICON_ERROR, this );
+        wxMessageBox( msg.str().c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, this );
         return NULL;
     }
 
@@ -348,7 +348,7 @@ void ScenesPanel::PromptIfNoZones()
     // world file is always displayed, so 1 is "empty"
     if ( m_ZoneRows.size() == 1 )
     {
-        if ( wxMessageBox( "There are no zones associated with this level.\nWould you like to create one?", "Create Zone?", wxYES_NO | wxICON_QUESTION, this ) == wxYES )
+        if ( wxMessageBox( wxT( "There are no zones associated with this level.\nWould you like to create one?" ), wxT( "Create Zone?" ), wxYES_NO | wxICON_QUESTION, this ) == wxYES )
         {
             // we need to wait until whatever callback we got here from is finished
             wxCommandEvent event( wxEVT_COMMAND_BUTTON_CLICKED, m_ButtonNewZone->GetId() );
@@ -420,13 +420,13 @@ void ScenesPanel::CurrentSceneChanged( const SceneChangeArgs& args )
 {
     if ( args.m_Scene )
     {
-        const std::string& path = args.m_Scene ? args.m_Scene->GetFullPath() : "";
+        const tstring& path = args.m_Scene ? args.m_Scene->GetFullPath() : TXT( "" );
         M_ZoneRows::const_iterator itr = m_ZoneRows.begin();
         M_ZoneRows::const_iterator end = m_ZoneRows.end();
         for ( ; itr != end; ++itr )
         {
             Zone* zone = itr->first;
-            const std::string& pathToCheck = zone ? zone->GetPath() : m_SceneManager->GetRootScene()->GetFullPath();
+            const tstring& pathToCheck = zone ? zone->GetPath() : m_SceneManager->GetRootScene()->GetFullPath();
             SceneRowPanel* panel = itr->second;
             panel->SetActiveRow( path == pathToCheck );
         }
@@ -485,7 +485,7 @@ void ScenesPanel::AddNewZone()
     Zone* zone = AddZone( &ScenesPanel::PromptNewZone );
     if ( zone )
     {
-        std::string error;
+        tstring error;
         Luna::Scene* scene = m_SceneManager->OpenZone( zone->GetPath(), error );
     }
 }
@@ -513,7 +513,7 @@ void ScenesPanel::OnAddZone( wxCommandEvent& args )
 // 
 void ScenesPanel::OnMoveSelToZone( wxCommandEvent& args )
 {
-    Log::Debug( "Move Selection to Zone\n" );
+    Log::Debug( TXT( "Move Selection to Zone\n" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -536,7 +536,7 @@ void ScenesPanel::OnDeleteZoneButton( wxCommandEvent& args )
                     Luna::SceneNode* node = rootScene->FindNode( data->m_Zone->GetID() );
                     if ( node )
                     {
-                        if ( wxMessageBox( "Are you sure that you want to remove this zone?\n(No data will be deleted, the zone will just no longer be part of this level)", "Remove Zone?", wxCENTER | wxICON_QUESTION | wxYES_NO, m_Editor ) == wxYES )
+                        if ( wxMessageBox( wxT( "Are you sure that you want to remove this zone?\n(No data will be deleted, the zone will just no longer be part of this level)" ), wxT( "Remove Zone?" ), wxCENTER | wxICON_QUESTION | wxYES_NO, m_Editor ) == wxYES )
                         {
                             if ( rootScene->GetSelection().Contains( node ) )
                             {

@@ -37,7 +37,7 @@ namespace Luna
     Shader( Luna::Scene* s, Content::Shader* shader );
 
     virtual i32 GetImageIndex() const NOC_OVERRIDE;
-    virtual std::string GetApplicationTypeName() const NOC_OVERRIDE;
+    virtual tstring GetApplicationTypeName() const NOC_OVERRIDE;
 
     virtual void Create() NOC_OVERRIDE;
     virtual void Delete() NOC_OVERRIDE;

@@ -18,7 +18,7 @@ LUNA_DEFINE_TYPE(Luna::VolumeType);
 
 void VolumeType::InitializeType()
 {
-  Reflect::RegisterClass< Luna::VolumeType >( "Luna::VolumeType" );
+  Reflect::RegisterClass< Luna::VolumeType >( TXT( "Luna::VolumeType" ) );
 }
 
 void VolumeType::CleanupType()

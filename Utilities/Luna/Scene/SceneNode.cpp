@@ -21,9 +21,9 @@ LUNA_DEFINE_TYPE( SceneNode );
 
 void SceneNode::InitializeType()
 {
-  Reflect::RegisterClass< Luna::SceneNode >( "Luna::SceneNode" );
+  Reflect::RegisterClass< Luna::SceneNode >( TXT( "Luna::SceneNode" ) );
 
-  Enumerator::InitializePanel("Scene Node", CreatePanelSignature::Delegate( &SceneNode::CreatePanel ));
+  Enumerator::InitializePanel( TXT( "Scene Node" ), CreatePanelSignature::Delegate( &SceneNode::CreatePanel ));
 }
 
 void SceneNode::CleanupType()
@@ -59,21 +59,21 @@ void SceneNode::SetID( const TUID& id )
   GetPackage<Content::SceneNode>()->m_ID = id;
 }
 
-std::string SceneNode::GenerateName() const
+tstring SceneNode::GenerateName() const
 {
-  std::string name = GetPackage()->GetClass()->m_UIName;
+  tstring name = GetPackage()->GetClass()->m_UIName;
   name[0] = tolower( name[0] );
-  name += "1";
+  name += TXT( "1" );
 
   return name;
 }
 
-const std::string& SceneNode::GetName() const
+const tstring& SceneNode::GetName() const
 {
   return GetPackage<Content::SceneNode>()->GetName();
 }
 
-void SceneNode::SetName(const std::string& value)
+void SceneNode::SetName(const tstring& value)
 {
   Content::SceneNode* node = GetPackage<Content::SceneNode>();
 
@@ -100,18 +100,18 @@ void SceneNode::SetUseGivenName(bool use)
 {
   Content::SceneNode* node = GetPackage<Content::SceneNode>();
 
-  std::string oldName = node->GetName();
+  tstring oldName = node->GetName();
 
   node->m_UseGivenName = use;
 
   m_Scene->Rename( this, use ? node->GetName() : GenerateName(), oldName );
 }
 
-void SceneNode::SetGivenName(const std::string& newName)
+void SceneNode::SetGivenName(const tstring& newName)
 {
   Content::SceneNode* node = GetPackage<Content::SceneNode>();
 
-  std::string oldName = node->GetName();
+  tstring oldName = node->GetName();
 
   // we are setting the given name so mark it so
   // in order to get the m_GivenName used in SetName
@@ -124,7 +124,7 @@ void SceneNode::SetGivenName(const std::string& newName)
 
 }
 
-void SceneNode::Rename(const std::string& newName)
+void SceneNode::Rename(const tstring& newName)
 {
   m_Scene->Rename( this, newName );
 }
@@ -378,10 +378,10 @@ void SceneNode::Evaluate(GraphDirection direction)
 
 i32 SceneNode::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "null.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "null.png" ) );
 }
 
-std::string SceneNode::GetApplicationTypeName() const
+tstring SceneNode::GetApplicationTypeName() const
 {
   return GetClass()->m_UIName;
 }
@@ -415,7 +415,7 @@ Luna::SceneNodeType* SceneNode::DeduceNodeType()
   SceneNodeTypePtr nodeType;
 
   // this string will be the encoded type information for this node
-  const std::string name = GetApplicationTypeName();
+  const tstring name = GetApplicationTypeName();
 
   // attempt to find a "natural" simple type for this object in the scene (matches compile-time type)
   const HM_StrToSceneNodeTypeSmartPtr& nodeTypes = m_Scene->GetNodeTypesByName();
@@ -468,9 +468,9 @@ void SceneNode::Execute(bool interactively)
   m_Scene->Execute(interactively);
 }
 
-bool SceneNode::ValidatePanel(const std::string& name)
+bool SceneNode::ValidatePanel(const tstring& name)
 {
-  if (name == "Scene Node")
+  if (name == TXT( "Scene Node" ) )
   {
     return true;
   }
@@ -490,9 +490,9 @@ void SceneNode::CreatePanel(CreatePanelArgs& args)
   args.m_Enumerator->Pop();
 }
 
-std::string SceneNode::GetMembership() const
+tstring SceneNode::GetMembership() const
 {
-  std::set< std::string > layerNames;
+  std::set< tstring > layerNames;
   S_SceneNodeDumbPtr::const_iterator itr = m_Ancestors.begin();
   S_SceneNodeDumbPtr::const_iterator end = m_Ancestors.end();
   for ( ; itr != end; ++itr )
@@ -508,9 +508,9 @@ std::string SceneNode::GetMembership() const
     }
   }
 
-  std::string layers;
-  std::set< std::string >::const_iterator layerItr = layerNames.begin();
-  std::set< std::string >::const_iterator layerEnd = layerNames.end();
+  tstring layers;
+  std::set< tstring >::const_iterator layerItr = layerNames.begin();
+  std::set< tstring >::const_iterator layerEnd = layerNames.end();
   for ( ; layerItr != layerEnd; ++layerItr )
   {
     if ( !layers.empty() )
@@ -523,7 +523,7 @@ std::string SceneNode::GetMembership() const
   return layers;
 }
 
-void SceneNode::SetMembership( const std::string& layers )
+void SceneNode::SetMembership( const tstring& layers )
 {
   // This function is required to generate the UI that lists the layer membership.
   // It doesn't do anything and you shouldn't be calling it.

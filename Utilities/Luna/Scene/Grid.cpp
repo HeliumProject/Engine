@@ -33,7 +33,7 @@ END_EVENT_TABLE()
 // Constructor
 // 
 Grid::Grid( wxWindow* parent, wxWindowID gridID, bool allowRename, bool showColLabels )
-: m_Panel( new wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, "Grid Panel" ) )
+: m_Panel( new wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, TXT( "Grid Panel" ) ) )
 , m_Grid( new wxGrid( m_Panel, gridID ) )
 , m_MouseDownCell( -1, -1 )
 , m_IsCellChanging( false )
@@ -51,9 +51,9 @@ Grid::Grid( wxWindow* parent, wxWindowID gridID, bool allowRename, bool showColL
   m_Grid->Connect( m_Grid->GetId(), wxEVT_GRID_CELL_CHANGE, wxGridEventHandler( Grid::OnCellChange ), NULL, this );
 
   // Set up the grid
-  m_Grid->SetColLabelValue( m_ColumnViz, "V" );
-  m_Grid->SetColLabelValue( m_ColumnSel, "S" );
-  m_Grid->SetColLabelValue( m_ColumnName, "Name" );
+  m_Grid->SetColLabelValue( m_ColumnViz, wxT( "V" ) );
+  m_Grid->SetColLabelValue( m_ColumnSel, wxT( "S" ) );
+  m_Grid->SetColLabelValue( m_ColumnName, wxT( "Name" ) );
   m_Grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
   m_Grid->SetRowLabelSize( 0 );
   m_Grid->SetColLabelSize( showColLabels ? 20 : 0 );
@@ -181,7 +181,7 @@ wxPanel* Grid::GetPanel() const
 // Returns the row number for the row with the specified name, or -1 if no
 // row with that name was found.
 // 
-i32 Grid::GetRowNumber( const std::string& name ) const
+i32 Grid::GetRowNumber( const tstring& name ) const
 {
   i32 row = -1;
   S_NaturalOrderString::const_iterator found = m_Names.find( name );
@@ -197,9 +197,9 @@ i32 Grid::GetRowNumber( const std::string& name ) const
 // Returns the name of the specified row, or an empty string if the specified
 // row was larger than the number of layers contained in the grid.
 // 
-const std::string& Grid::GetRowName( u32 row ) const
+const tstring& Grid::GetRowName( u32 row ) const
 {
-  static const std::string emptyString( "" );
+  static const tstring emptyString( TXT( "" ) );
 
   if ( row >= static_cast< u32 >( m_Names.size() ) )
   {
@@ -208,7 +208,7 @@ const std::string& Grid::GetRowName( u32 row ) const
 
   S_NaturalOrderString::const_iterator itr = m_Names.begin();
   advance( itr, row );
-  NOC_ASSERT( *itr == std::string( m_Grid->GetCellValue( row, m_ColumnName ).c_str() ) );
+  NOC_ASSERT( *itr == tstring( m_Grid->GetCellValue( row, m_ColumnName ).c_str() ) );
   return *itr;
 }
 
@@ -216,7 +216,7 @@ const std::string& Grid::GetRowName( u32 row ) const
 // Changes the name of the row with the oldName, to the specified newName. 
 // Returns true if everything went as planned.
 // 
-bool Grid::SetRowName( const std::string& oldName, const std::string& newName )
+bool Grid::SetRowName( const tstring& oldName, const tstring& newName )
 {
   bool isOk = false;
 
@@ -232,14 +232,14 @@ bool Grid::SetRowName( const std::string& oldName, const std::string& newName )
     bool removed = RemoveRow( oldRow );
     if ( !removed )
     {
-      Log::Error( "Grid::SetRowName - unable to remove old row %s (#%d).\n", oldName.c_str(), oldRow );
+      Log::Error( TXT( "Grid::SetRowName - unable to remove old row %s (#%d).\n" ), oldName.c_str(), oldRow );
     }
 
     // Insert a new row with the new name and old state
     bool inserted = AddRow( newName, isVisible, isSelectable );
     if ( !inserted )
     {
-      Log::Error( "Grid::SetRowName - unable to insert new row %s.\n", newName.c_str() );
+      Log::Error( TXT( "Grid::SetRowName - unable to insert new row %s.\n" ), newName.c_str() );
     }
     else
     {
@@ -300,20 +300,20 @@ void Grid::SetRowSelectableSate( u32 row, bool checked )
 // selectability.  Returns true if the layer was successfully added, otherwise
 // returns false.
 // 
-bool Grid::AddRow( const std::string& name, bool visible, bool selectable )
+bool Grid::AddRow( const tstring& name, bool visible, bool selectable )
 {
   bool isOk = false;
   i32 row = InsertName( name );
   if ( row >= 0 && m_Grid->InsertRows( row, 1 ) )
   {
-    m_Grid->SetCellValue( wxT( name.c_str() ), row, m_ColumnName );
+    m_Grid->SetCellValue( name.c_str(), row, m_ColumnName );
     m_Grid->SetCellValue( visible    ? BOOL_TRUE : BOOL_FALSE, row, m_ColumnViz );
     m_Grid->SetCellValue( selectable ? BOOL_TRUE : BOOL_FALSE, row, m_ColumnSel );
     isOk = true;
   }
   else
   {
-    Log::Error( "Unable to insert layer [%s] into grid at row [%d]\n", name.c_str(), row );
+    Log::Error( TXT( "Unable to insert layer [%s] into grid at row [%d]\n" ), name.c_str(), row );
     NOC_BREAK(); // This shouldn't happen
   }
 
@@ -330,7 +330,7 @@ bool Grid::RemoveRow( u32 row )
   {
     S_NaturalOrderString::iterator itr = m_Names.begin();
     advance( itr, row );
-    NOC_ASSERT( *itr == std::string( m_Grid->GetCellValue( row, m_ColumnName ).c_str() ) );
+    NOC_ASSERT( *itr == tstring( m_Grid->GetCellValue( row, m_ColumnName ).c_str() ) );
     m_Names.erase( itr );
     isOk = m_Grid->DeleteRows( row, 1 );
   }
@@ -341,7 +341,7 @@ bool Grid::RemoveRow( u32 row )
 ///////////////////////////////////////////////////////////////////////////////
 // Removes the layer with the specified name from the grid.
 // 
-bool Grid::RemoveRow( const std::string& name )
+bool Grid::RemoveRow( const tstring& name )
 {
   bool isOk = false;
   i32 row = GetRowNumber( name );
@@ -381,7 +381,7 @@ bool Grid::IsAnythingSelected() const
 // Returns true if the row with the specified name is selected.  Returns false
 // if the requested row name does not exist.
 // 
-bool Grid::IsSelected( const std::string& name ) const
+bool Grid::IsSelected( const tstring& name ) const
 {
   bool isSelected = false;
   i32 row = GetRowNumber( name );
@@ -476,7 +476,7 @@ void Grid::EndBatch()
 // not be inserted into the list for some reason (perhaps it was already
 // in the list?).
 // 
-i32 Grid::InsertName( const std::string& name )
+i32 Grid::InsertName( const tstring& name )
 {
   i32 row = -1;
 
@@ -489,7 +489,7 @@ i32 Grid::InsertName( const std::string& name )
   }
   else
   {
-    Log::Error( "Layer named %s already exists\n", name.c_str() );
+    Log::Error( TXT( "Layer named %s already exists\n" ), name.c_str() );
   }
 
   return row;
@@ -609,10 +609,10 @@ void Grid::OnCellChange( wxGridEvent& event )
     m_IsCellChanging = true;
 
     // Determine the new name and old name
-    const std::string newName = m_Grid->GetCellValue( event.GetRow(), event.GetCol() ).c_str();
+    const tstring newName = m_Grid->GetCellValue( event.GetRow(), event.GetCol() ).c_str();
     S_NaturalOrderString::const_iterator found = m_Names.begin();
     std::advance( found, event.GetRow() );
-    const std::string oldName = *found;
+    const tstring oldName = *found;
 
     // Yuck... revert the cell back to the old name, then just let the listener of the
     // rename event handle the actual rename.
@@ -620,10 +620,10 @@ void Grid::OnCellChange( wxGridEvent& event )
     m_Grid->SetCellValue( event.GetRow(), event.GetCol(), oldName.c_str() );
     SelectRow( event.GetRow(), true ); // Maintain selection
 
-    std::string errorMsg;
+    tstring errorMsg;
     if ( m_Names.find( newName ) != m_Names.end() )
     {
-      errorMsg = "There is already an item with the name '" + newName + "'.";
+      errorMsg = TXT( "There is already an item with the name '" ) + newName + TXT( "'." );
     }
     else
     {
@@ -641,7 +641,7 @@ void Grid::OnCellChange( wxGridEvent& event )
 
     if ( !errorMsg.empty() )
     {
-      wxMessageBox( errorMsg.c_str(), "Error", wxOK | wxCENTER | wxICON_ERROR, m_Grid );
+      wxMessageBox( errorMsg.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, m_Grid );
     }
 
     m_IsCellChanging = false;

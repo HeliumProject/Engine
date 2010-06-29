@@ -85,12 +85,12 @@ namespace Luna
 
     AssetDocument* FindAssetDocument( Luna::AssetClass* asset );
 
-    virtual DocumentPtr OpenPath( const std::string& path, std::string& error ) NOC_OVERRIDE;
-    Luna::AssetClass* Open( const std::string& path, std::string& error, bool addToRoot = false );
+    virtual DocumentPtr OpenPath( const tstring& path, tstring& error ) NOC_OVERRIDE;
+    Luna::AssetClass* Open( const tstring& path, tstring& error, bool addToRoot = false );
 
-    virtual bool Save( DocumentPtr document, std::string& error ) NOC_OVERRIDE;
-    bool Save( Luna::AssetClass* asset, bool prompt, std::string& error );
-    bool SaveSelected( std::string& error );
+    virtual bool Save( DocumentPtr document, tstring& error ) NOC_OVERRIDE;
+    bool Save( Luna::AssetClass* asset, bool prompt, tstring& error );
+    bool SaveSelected( tstring& error );
     
     bool CloseSelected();
     virtual bool CloseAll() NOC_OVERRIDE;

@@ -35,7 +35,7 @@ namespace Luna
 
     const Asset::V_AssetFolders& GetFolders() const;
     bool AddFolder( Asset::AssetFolderPtr assetFolder );
-    bool RemoveFolder( const std::string& fullPath );
+    bool RemoveFolder( const tstring& fullPath );
 
     i32 GetSearchID() { return m_BrowserSearchID; }
   private:

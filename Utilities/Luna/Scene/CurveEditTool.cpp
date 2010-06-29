@@ -15,7 +15,7 @@ LUNA_DEFINE_TYPE(Luna::CurveEditTool);
 
 void CurveEditTool::InitializeType()
 {
-  Reflect::RegisterClass< Luna::CurveEditTool >( "Luna::CurveEditTool" );
+  Reflect::RegisterClass< Luna::CurveEditTool >( TXT( "Luna::CurveEditTool" ) );
 }
 
 void CurveEditTool::CleanupType()
@@ -375,31 +375,31 @@ void CurveEditTool::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel( "Edit Curve", true );
+  m_Enumerator->PushPanel( TXT( "Edit Curve" ), true );
   {
     m_Enumerator->PushContainer();
     { 
-      m_Enumerator->AddLabel( "Edit Control Points" );
+      m_Enumerator->AddLabel( TXT( "Edit Control Points" ) );
       Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CurveEditTool, int> (this, &CurveEditTool::GetCurveEditMode, &CurveEditTool::SetCurveEditMode ) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << CurveEditModes::Modify;
-        items.push_back( Inspect::Item( "Modify Points", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Modify Points" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << CurveEditModes::Insert;
-        items.push_back( Inspect::Item( "Insert Points", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Insert Points" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << CurveEditModes::Remove;
-        items.push_back( Inspect::Item( "Remove Points", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Remove Points" ), str.str() ) );
       }
       choice->SetItems( items );
     }
@@ -407,7 +407,7 @@ void CurveEditTool::CreateProperties()
 
     m_Enumerator->PushContainer();
     { 
-      m_Enumerator->AddLabel( "Selected Curves Only" );
+      m_Enumerator->AddLabel( TXT( "Selected Curves Only" ) );
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CurveEditTool, bool> (this, &CurveEditTool::GetSelectionMode, &CurveEditTool::SetSelectionMode ) );
     }
     m_Enumerator->Pop();

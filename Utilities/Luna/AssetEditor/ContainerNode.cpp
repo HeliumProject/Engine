@@ -16,7 +16,7 @@ LUNA_DEFINE_TYPE( Luna::ContainerNode );
 // 
 void ContainerNode::InitializeType()
 {
-  Reflect::RegisterClass<Luna::ContainerNode>( "Luna::ContainerNode" );
+  Reflect::RegisterClass<Luna::ContainerNode>( TXT( "Luna::ContainerNode" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ void ContainerNode::CleanupType()
 ContainerNode::ContainerNode( Luna::AssetManager* assetManager, Reflect::Element* element, const Reflect::Field* field )
 : Luna::FieldNode( assetManager, element, field )
 {
-  SetIcon( "folder_blue.png" );
+  SetIcon( TXT( "folder_blue.png" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

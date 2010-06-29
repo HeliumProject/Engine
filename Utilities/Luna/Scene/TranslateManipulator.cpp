@@ -28,7 +28,7 @@ LUNA_DEFINE_TYPE(Luna::TranslateManipulator);
 
 void TranslateManipulator::InitializeType()
 {
-  Reflect::RegisterClass< Luna::TranslateManipulator >( "Luna::TranslateManipulator" );
+  Reflect::RegisterClass< Luna::TranslateManipulator >( TXT( "Luna::TranslateManipulator" ) );
 }
 
 void TranslateManipulator::CleanupType()
@@ -1277,31 +1277,31 @@ void TranslateManipulator::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel("Translate", true);
+  m_Enumerator->PushPanel( TXT( "Translate" ), true);
   {
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Space");
+      m_Enumerator->AddLabel( TXT( "Space" ) );
       Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, int> (this, &TranslateManipulator::GetSpace, &TranslateManipulator::SetSpace) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << ManipulatorSpaces::Object;
-        items.push_back( Inspect::Item( "Object", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Object" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << ManipulatorSpaces::Local;
-        items.push_back( Inspect::Item( "Local", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Local" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << ManipulatorSpaces::World;
-        items.push_back( Inspect::Item( "World", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "World" ), str.str() ) );
       }
 
       choice->SetItems( items );
@@ -1310,49 +1310,49 @@ void TranslateManipulator::CreateProperties()
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Snap to live objects only");
+      m_Enumerator->AddLabel( TXT( "Snap to live objects only" ) );
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetLiveObjectsOnly, &TranslateManipulator::SetLiveObjectsOnly) );
     }
     m_Enumerator->Pop();
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Surface Snap");
+      m_Enumerator->AddLabel( TXT( "Surface Snap" ) );
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetSurfaceSnap, &TranslateManipulator::SetSurfaceSnap) );
     }
     m_Enumerator->Pop();
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Object Snap");
+      m_Enumerator->AddLabel( TXT( "Object Snap" ) );
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetObjectSnap, &TranslateManipulator::SetObjectSnap) );
     }
     m_Enumerator->Pop();
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Vertex Snap");
+      m_Enumerator->AddLabel( TXT( "Vertex Snap" ) );
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetVertexSnap, &TranslateManipulator::SetVertexSnap) );
     }
     m_Enumerator->Pop();
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Offset Snap");
+      m_Enumerator->AddLabel( TXT( "Offset Snap" ) );
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetOffsetSnap, &TranslateManipulator::SetOffsetSnap) );
     }
     m_Enumerator->Pop();
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Grid Snap");
+      m_Enumerator->AddLabel( TXT( "Grid Snap" ) );
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetGridSnap, &TranslateManipulator::SetGridSnap) );
     }
     m_Enumerator->Pop();
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Distance");
+      m_Enumerator->AddLabel( TXT( "Distance" ) );
       m_Enumerator->AddValue<float>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, float> (this, &TranslateManipulator::GetDistance, &TranslateManipulator::SetDistance) );
     }
     m_Enumerator->Pop();

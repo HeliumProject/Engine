@@ -40,7 +40,7 @@ namespace Luna
         virtual void ActivateItem() NOC_OVERRIDE;
 
     protected:
-        std::string MakeLabel() const;
+        tstring MakeLabel() const;
         void PreferenceChanged( const Reflect::ElementChangeArgs& args );
     };
 

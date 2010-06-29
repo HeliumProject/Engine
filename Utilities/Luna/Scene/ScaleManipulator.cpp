@@ -23,7 +23,7 @@ LUNA_DEFINE_TYPE(Luna::ScaleManipulator);
 
 void ScaleManipulator::InitializeType()
 {
-  Reflect::RegisterClass< Luna::ScaleManipulator >( "Luna::ScaleManipulator" );
+  Reflect::RegisterClass< Luna::ScaleManipulator >( TXT( "Luna::ScaleManipulator" ) );
 }
 
 void ScaleManipulator::CleanupType()
@@ -641,18 +641,18 @@ void ScaleManipulator::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel("Scale", true);
+  m_Enumerator->PushPanel( TXT( "Scale" ), true);
   {
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Grid Snap");
+      m_Enumerator->AddLabel( TXT( "Grid Snap" ) );
       m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::ScaleManipulator, bool> (this, &ScaleManipulator::GetGridSnap, &ScaleManipulator::SetGridSnap) );
     }
     m_Enumerator->Pop();
 
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Grid Distance");
+      m_Enumerator->AddLabel( TXT( "Grid Distance" ) );
       m_Enumerator->AddValue<float>( new Nocturnal::MemberProperty<Luna::ScaleManipulator, float> (this, &ScaleManipulator::GetDistance, &ScaleManipulator::SetDistance) );
     }
     m_Enumerator->Pop();

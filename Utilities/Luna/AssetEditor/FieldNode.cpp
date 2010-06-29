@@ -14,7 +14,7 @@ LUNA_DEFINE_TYPE( Luna::FieldNode );
 // 
 void FieldNode::InitializeType()
 {
-  Reflect::RegisterClass<Luna::FieldNode>( "Luna::FieldNode" );
+  Reflect::RegisterClass<Luna::FieldNode>( TXT( "Luna::FieldNode" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -83,9 +83,9 @@ bool FieldNode::HasFlag( u32 flag ) const
 // array of reflect elements does not provide a string representation of its
 // data).
 // 
-std::string FieldNode::GetValue() const
+tstring FieldNode::GetValue() const
 {
-  std::stringstream stream;
+  tstringstream stream;
   stream << *m_Serializer;
   return stream.str();
 }

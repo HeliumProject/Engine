@@ -77,7 +77,7 @@ namespace Luna
     void RefreshResults( const M_SceneToZone& sceneToZone, const S_RegionDumbPtr& regionSet );
     
     static bool CompareComponents( const Component::ComponentPtr& rhs, const Component::ComponentPtr& lhs );
-    static std::string WildcardToRegex( const std::string& str, bool partialMatch = true );
+    static tstring WildcardToRegex( const tstring& str, bool partialMatch = true );
   };
 
   class SearchBarCriteria : public Nocturnal::RefCountBase<SearchBarCriteria>
@@ -147,10 +147,10 @@ namespace Luna
     T m_Value;
   };
   
-  class EntityNameCriteria : public ValueCriteria<std::string>
+  class EntityNameCriteria : public ValueCriteria<tstring>
   {
   public:
-    EntityNameCriteria( std::string entityName )
+    EntityNameCriteria( tstring entityName )
     : ValueCriteria( entityName )
     {
     }
@@ -169,10 +169,10 @@ namespace Luna
     virtual bool Validate( Luna::HierarchyNode* node );
   };
 
-  class EntityAssetNameCriteria : public ValueCriteria<std::string>
+  class EntityAssetNameCriteria : public ValueCriteria<tstring>
   {
   public:
-    EntityAssetNameCriteria( std::string entityClassName )
+    EntityAssetNameCriteria( tstring entityClassName )
     : ValueCriteria( entityClassName )
     {
     }

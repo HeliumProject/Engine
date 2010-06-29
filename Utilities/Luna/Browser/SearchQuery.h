@@ -22,10 +22,10 @@ namespace Luna
     };
     static void SearchTypesEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement( File, "File" );
-      info->AddElement( Folder, "Folder" );
-      info->AddElement( ID, "ID" );
-      info->AddElement( DBSearch, "DBSearch" );      
+      info->AddElement( File, TXT( "File" ) );
+      info->AddElement( Folder, TXT( "Folder" ) );
+      info->AddElement( ID, TXT( "ID" ) );
+      info->AddElement( DBSearch, TXT( "DBSearch" ) );
     }
   }
   typedef SearchTypes::SearchType SearchType;
@@ -49,8 +49,8 @@ namespace Luna
 
     SearchType GetSearchType() const { return m_SearchType; }
     
-    void SetQueryString( const std::string& queryString );
-    const std::string& GetQueryString() const { return m_QueryString; }
+    void SetQueryString( const tstring& queryString );
+    const tstring& GetQueryString() const { return m_QueryString; }
     
     const Nocturnal::Path& GetQueryPath()
     {
@@ -69,7 +69,7 @@ namespace Luna
     bool operator==( const SearchQuery& rhs ) const;
     bool operator!=( const SearchQuery& rhs ) const;
 
-    static bool ParseQueryString( const std::string& queryString, std::string& errors, SearchQuery* query = NULL );
+    static bool ParseQueryString( const tstring& queryString, tstring& errors, SearchQuery* query = NULL );
 
   public:
     REFLECT_DECLARE_CLASS( SearchQuery, Reflect::Element );
@@ -78,7 +78,7 @@ namespace Luna
 
   private:
     SearchType              m_SearchType;
-    std::string             m_QueryString;
+    tstring             m_QueryString;
     Nocturnal::Path      m_QueryPath;
     Nocturnal::Path      m_CollectionPath;
 

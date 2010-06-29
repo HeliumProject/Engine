@@ -27,7 +27,7 @@ RegionPanel::RegionPanel(Enumerator* enumerator, const OS_SelectableDumbPtr& sel
 
   // set up some parent class configuration
   m_Expanded = true;
-  m_Text = "Region"; 
+  m_Text = TXT( "Region" ); 
 }
 
 RegionPanel::~RegionPanel()

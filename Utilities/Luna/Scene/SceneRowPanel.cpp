@@ -22,7 +22,7 @@ using namespace Luna;
 // Constructor
 // 
 SceneRowPanel::SceneRowPanel( Luna::Scene* scene, Zone* zone, ScenesPanel* panel, SceneEditor* editor )
-: wxPanel( panel->GetScrollWindow(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, "SceneRowPanel" )
+: wxPanel( panel->GetScrollWindow(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT( "SceneRowPanel" ) )
 , m_Editor( editor )
 , m_RootScene( scene )
 , m_Zone( zone )
@@ -49,8 +49,8 @@ SceneRowPanel::SceneRowPanel( Luna::Scene* scene, Zone* zone, ScenesPanel* panel
     m_ButtonCheckOutOrSave = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 18,18 ), wxBU_AUTODRAW );
     rowSizer->Add( m_ButtonCheckOutOrSave, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
 
-    std::string text = GetRowLabel();
-    m_Text = new wxStaticText( this, wxID_ANY, wxT( text.c_str() ), wxDefaultPosition, wxSize( -1,-1 ), wxALIGN_LEFT | wxST_NO_AUTORESIZE );
+    tstring text = GetRowLabel();
+    m_Text = new wxStaticText( this, wxID_ANY, text.c_str(), wxDefaultPosition, wxSize( -1,-1 ), wxALIGN_LEFT | wxST_NO_AUTORESIZE );
     m_Text->SetFont( wxFont( 8, 74, 90, 90, false, wxT("Arial") ) );
     if ( IsRoot() )
     {
@@ -67,7 +67,7 @@ SceneRowPanel::SceneRowPanel( Luna::Scene* scene, Zone* zone, ScenesPanel* panel
     else
     {
         m_ToggleLoad = new wxCheckBox( this, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, 0 );
-        std::string toggleToolTip = "Load or unload: " + text;
+        tstring toggleToolTip = TXT( "Load or unload: " ) + text;
         m_ToggleLoad->SetToolTip( toggleToolTip );
         rowSizer->Add( m_ToggleLoad, 0, wxALL, 5 );
 
@@ -95,17 +95,17 @@ SceneRowPanel::SceneRowPanel( Luna::Scene* scene, Zone* zone, ScenesPanel* panel
     rowSizer->Fit( this );
 
     // Context Menu
-    ContextMenuItemPtr renameItem = new ContextMenuItem( "Rename" );
+    ContextMenuItemPtr renameItem = new ContextMenuItem( TXT( "Rename" ) );
     renameItem->AddCallback( ContextMenuSignature::Delegate( this, &SceneRowPanel::Rename ) );
     m_ContextMenuItems.AppendItem( renameItem );
 
-    SubMenuPtr revisionControlSubMenu = new SubMenu( "Perforce", "", wxArtProvider::GetBitmap( wxART_INFORMATION, wxART_OTHER, wxSize( 16, 16 ) ) );
+    SubMenuPtr revisionControlSubMenu = new SubMenu( TXT( "Perforce" ), TXT( "" ), wxArtProvider::GetBitmap( wxART_INFORMATION, wxART_OTHER, wxSize( 16, 16 ) ) );
 
-    ContextMenuItemPtr checkOutItem = new ContextMenuItem( "Check Out" );
+    ContextMenuItemPtr checkOutItem = new ContextMenuItem( TXT( "Check Out" ) );
     checkOutItem->AddCallback( ContextMenuSignature::Delegate( this, &SceneRowPanel::CheckOutContext ) );
     revisionControlSubMenu->AppendItem( checkOutItem );
 
-    ContextMenuItemPtr historyItem = new ContextMenuItem( "Revision History" );
+    ContextMenuItemPtr historyItem = new ContextMenuItem( TXT( "Revision History" ) );
     historyItem->AddCallback( ContextMenuSignature::Delegate( this, &SceneRowPanel::RevisionHistory ) );
     revisionControlSubMenu->AppendItem( historyItem );
 
@@ -242,15 +242,15 @@ void SceneRowPanel::SetActiveRow( bool isCurrent )
 // Set the text displayed on this row.  The label will be truncated and prefixed
 // with "..." to make it fit within the available space.
 // 
-void SceneRowPanel::SetLabel( const std::string& label )
+void SceneRowPanel::SetLabel( const tstring& label )
 {
     // Label
-    std::string trimmed = label;
+    tstring trimmed = label;
     TrimString( trimmed, m_Text->GetSize().x );
     m_Text->SetLabel( trimmed.c_str() );
 
     // Tooltip
-    const std::string tooltip( GetFilePath().c_str() );
+    const tstring tooltip( GetFilePath().c_str() );
     m_Text->SetToolTip( tooltip.c_str() );
 }
 
@@ -275,7 +275,7 @@ void SceneRowPanel::EnableSceneSwitch( bool enable )
 // Returns the label text for this row.  The path may be to
 // a root scene, or a zone.
 // 
-std::string SceneRowPanel::GetRowLabel() const
+tstring SceneRowPanel::GetRowLabel() const
 {
     Nocturnal::Path label( GetFilePath() );
     label.Set( label.Filename() );
@@ -288,7 +288,7 @@ std::string SceneRowPanel::GetRowLabel() const
 // Trims the specified string to the width (in pixels) requested.  The string
 // will be prefixed with "...".
 // 
-bool SceneRowPanel::TrimString(std::string& str, int width)
+bool SceneRowPanel::TrimString(tstring& str, int width)
 {
     wxClientDC dc (m_Text);
 
@@ -304,7 +304,7 @@ bool SceneRowPanel::TrimString(std::string& str, int width)
     size_t count = str.size();
     for ( size_t i = count; i>0; i-- )
     {
-        wxStr = (str.substr(0, i-1) + "...").c_str();
+        wxStr = (str.substr(0, i-1) + TXT( "..." )).c_str();
 
         dc.GetTextExtent( wxStr, &x, &y, NULL, NULL, &m_Text->GetFont() );
 
@@ -315,7 +315,7 @@ bool SceneRowPanel::TrimString(std::string& str, int width)
         }
     }
 
-    str = "...";
+    str = TXT( "..." );
     return true;
 }
 
@@ -387,7 +387,7 @@ void SceneRowPanel::UpdateDeleteButton()
 // Returns the path to the scene that this row represents.  The path may be to
 // a root scene, or a zone.
 // 
-std::string SceneRowPanel::GetFilePath() const
+tstring SceneRowPanel::GetFilePath() const
 {
     if ( IsRoot() )
     {
@@ -419,13 +419,13 @@ void SceneRowPanel::SetButtonMode( SceneRowPanel::ButtonMode mode, bool enabled 
     case ModeCheckout:
         m_ButtonCheckOutOrSave->SetBitmapLabel( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ) );
         m_ButtonCheckOutOrSave->SetBitmapDisabled( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ) );
-        m_ButtonCheckOutOrSave->SetToolTip( "Check out file" );
+        m_ButtonCheckOutOrSave->SetToolTip( wxT( "Check out file" ) );
         break;
 
     case ModeSave:
         m_ButtonCheckOutOrSave->SetBitmapLabel( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ) );
         m_ButtonCheckOutOrSave->SetBitmapDisabled( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ) );
-        m_ButtonCheckOutOrSave->SetToolTip( "Save file" );
+        m_ButtonCheckOutOrSave->SetToolTip( wxT( "Save file" ) );
         break;
     }
 
@@ -471,10 +471,10 @@ void SceneRowPanel::Save()
     Luna::Scene* scene = sceneManager->GetScene( GetFilePath() );
     if ( scene )
     {
-        std::string error;
+        tstring error;
         if ( !sceneManager->Save( scene->GetSceneDocument(), error ) )
         {
-            wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxID_OK, m_Editor );
+            wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxID_OK, m_Editor );
         }
     }
 }
@@ -539,10 +539,10 @@ void SceneRowPanel::DocumentModified( const DocumentChangedArgs& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function to make sure the specified name is valid.
 // 
-static inline bool ValidateName( const std::string& name )
+static inline bool ValidateName( const tstring& name )
 {
-    const boost::regex pattern( "^[a-zA-Z0-9\\-_]+[a-zA-Z0-9\\-_ ]*$" );
-    boost::smatch results; 
+    const tregex pattern( TXT( "^[a-zA-Z0-9\\-_]+[a-zA-Z0-9\\-_ ]*$" ) );
+    tsmatch results; 
     return boost::regex_match( name, results, pattern );
 }
 
@@ -556,10 +556,10 @@ void SceneRowPanel::Rename( const ContextMenuArgsPtr& args )
     Nocturnal::Path path( GetFilePath() );
     if ( !path.Exists() )
     {
-        std::string error = "You must save '";
+        tstring error = TXT( "You must save '" );
         error += path.c_str();
-        error += "' to disk before you can rename it!";
-        wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
+        error += TXT( "' to disk before you can rename it!" );
+        wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
         return;
     }
 
@@ -569,14 +569,14 @@ void SceneRowPanel::Rename( const ContextMenuArgsPtr& args )
 
     if ( rcsFile.IsCheckedOutByMe() )
     {
-        std::string error = "You must check in '" + path.Get() + "' before you can rename it.";
-        wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
+        tstring error = TXT( "You must check in '" ) + path.Get() + TXT( "' before you can rename it." );
+        wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
         return;
     }
     else if ( rcsFile.IsCheckedOut() )
     {
-        std::string error = "Cannot rename '" + path.Get() + "' because it is checked out by " + rcsFile.m_Username + ".";
-        wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
+        tstring error = TXT( "Cannot rename '" ) + path.Get() + TXT( "' because it is checked out by " ) + rcsFile.m_Username + TXT( "." );
+        wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
         return;
     }
 
@@ -585,8 +585,8 @@ void SceneRowPanel::Rename( const ContextMenuArgsPtr& args )
     {
         if ( scene->GetSceneDocument()->IsModified() )
         {
-            std::string error = "You must save and check in '" + path.Get() + "' before you can rename it.";
-            wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
+            tstring error = TXT( "You must save and check in '" ) + path.Get() + TXT( "' before you can rename it." );
+            wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
             return;
         }
     }
@@ -596,29 +596,29 @@ void SceneRowPanel::Rename( const ContextMenuArgsPtr& args )
     prompt.m_Text->SetValue( GetRowLabel().c_str() );
     if ( prompt.ShowModal() == wxID_OK )
     {
-        std::string newName( prompt.m_Text->GetValue().c_str() );
+        tstring newName( prompt.m_Text->GetValue().c_str() );
         if ( !ValidateName( newName ) )
         {
-            std::string error = "Invalid name '" + newName + "' specified.";
-            wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
+            tstring error = TXT( "Invalid name '" ) + newName + TXT( "' specified." );
+            wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
             return;
         }
 
-        std::string ext = path.Extension();
-        std::string newPath = path.Directory();
+        tstring ext = path.Extension();
+        tstring newPath = path.Directory();
         newPath += newName + '.' + ext;
 
-        std::string error;
+        tstring error;
 
         // Try to acutally do the rename
         bool succeeded = false;
 
         RCS::Changeset changeset;
-        changeset.m_Description = "Renaming Zone From: " + path + " To: " + newPath;
+        changeset.m_Description = TXT( "Renaming Zone From: " ) + path + TXT( " To: " ) + newPath;
         changeset.Create();
         if ( changeset.m_Id < 0 || changeset.m_Id == RCS::DefaultChangesetId )
         {
-            wxMessageBox( "Could not create new Perforce changlist.", "Error", wxCENTER | wxICON_ERROR | wxOK );
+            wxMessageBox( wxT( "Could not create new Perforce changlist." ), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
             return;
         }
 
@@ -633,9 +633,9 @@ void SceneRowPanel::Rename( const ContextMenuArgsPtr& args )
         }
         catch( const Nocturnal::Exception& ex )
         {    
-            std::string error = "Some files could not be submitted; ";
+            tstring error = TXT( "Some files could not be submitted; " );
             error += ex.What();
-            wxMessageBox( error, "Error", wxCENTER | wxICON_ERROR | wxOK, GetParent() );
+            wxMessageBox( error, wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, GetParent() );
         }
 
         if ( scene )
@@ -675,7 +675,7 @@ void SceneRowPanel::CheckOutContext( const ContextMenuArgsPtr& args )
 // 
 void SceneRowPanel::RevisionHistory( const ContextMenuArgsPtr& args )
 {
-    std::string path = GetFilePath();
+    tstring path = GetFilePath();
     if ( !path.empty() )
     {
         m_Editor->RevisionHistory( path );
@@ -746,7 +746,7 @@ void SceneRowPanel::OnToggleLoad( wxCommandEvent& args )
     if ( m_ToggleLoad->GetValue() )
     {
         // Load
-        std::string error;
+        tstring error;
         Luna::Scene* zone = sceneManager->OpenZone( m_Zone->GetPath(), error );
         if ( zone != NULL )
         {
@@ -756,7 +756,7 @@ void SceneRowPanel::OnToggleLoad( wxCommandEvent& args )
         else
         {
             m_ToggleLoad->SetValue( false );
-            wxMessageBox( error.c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK, m_Editor );
+            wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, m_Editor );
         }
     }
     else

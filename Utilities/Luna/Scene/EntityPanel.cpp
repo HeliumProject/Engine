@@ -153,7 +153,7 @@ EntityPanel::EntityPanel(Enumerator* enumerator, const OS_SelectableDumbPtr& sel
 , m_HighResShadowMapEnabler( NULL )
 {
     m_Expanded = true;
-    m_Text = "Entity";
+    m_Text = TXT( "Entity" );
 
     OS_SelectableDumbPtr::Iterator itr = m_Selection.Begin();
     OS_SelectableDumbPtr::Iterator end = m_Selection.End();
@@ -204,8 +204,8 @@ void EntityPanel::CreateAssetType()
 {
     m_Enumerator->PushContainer();
     {
-        m_Enumerator->AddLabel( "Engine Type" );
-        Inspect::Value* textBox = m_Enumerator->AddValue<Luna::Entity, std::string>( m_Selection, &Luna::Entity::GetAssetTypeName, &Luna::Entity::SetAssetTypeName );
+        m_Enumerator->AddLabel( TXT( "Engine Type" ) );
+        Inspect::Value* textBox = m_Enumerator->AddValue<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetAssetTypeName, &Luna::Entity::SetAssetTypeName );
         textBox->SetReadOnly( true );
     }
     m_Enumerator->Pop();
@@ -215,21 +215,21 @@ void EntityPanel::CreateClassPath()
 {
     m_Enumerator->PushContainer();
     {
-        m_Enumerator->AddLabel( "Class Path" );
+        m_Enumerator->AddLabel( TXT( "Class Path" ) );
 
-        m_TextBox = m_Enumerator->AddValue<Luna::Entity, std::string>( m_Selection, &Luna::Entity::GetEntityAssetPath, &Luna::Entity::SetEntityAssetPath );
+        m_TextBox = m_Enumerator->AddValue<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetEntityAssetPath, &Luna::Entity::SetEntityAssetPath );
         m_TextBox->AddBoundDataChangingListener( Inspect::ChangingSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanging ) );
         m_TextBox->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanged ) );
 
-        Inspect::FileDialogButton* fileButton = m_Enumerator->AddFileDialogButton<Luna::Entity, std::string>( m_Selection, &Luna::Entity::GetEntityAssetPath, &Luna::Entity::SetEntityAssetPath );
+        Inspect::FileDialogButton* fileButton = m_Enumerator->AddFileDialogButton<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetEntityAssetPath, &Luna::Entity::SetEntityAssetPath );
         fileButton->AddBoundDataChangingListener( Inspect::ChangingSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanging ) );
         fileButton->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanged ) );
 
-        Inspect::FileBrowserButton* browserButton = m_Enumerator->AddFileBrowserButton<Luna::Entity, std::string>( m_Selection, &Luna::Entity::GetEntityAssetPath, &Luna::Entity::SetEntityAssetPath );
+        Inspect::FileBrowserButton* browserButton = m_Enumerator->AddFileBrowserButton<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetEntityAssetPath, &Luna::Entity::SetEntityAssetPath );
         browserButton->AddBoundDataChangingListener( Inspect::ChangingSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanging ) );
         browserButton->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanged ) );
 
-        std::string filter;
+        tstring filter;
         Reflect::GetClass<Asset::EntityAsset>()->GetProperty( Asset::AssetProperties::FileFilter, filter );
 
         if ( !filter.empty() )
@@ -256,26 +256,26 @@ void EntityPanel::CreateClassActions()
 {
     m_Enumerator->PushContainer();
     {
-        m_Enumerator->AddLabel( "Class Actions" );
+        m_Enumerator->AddLabel( TXT( "Class Actions" ) );
 
         Inspect::Action* refreshButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRefresh ) );
-        refreshButton->SetIcon( "actions/view-refresh.png" );
-        refreshButton->SetToolTip( "Refresh" );
+        refreshButton->SetIcon( TXT( "actions/view-refresh.png" ) );
+        refreshButton->SetToolTip( TXT( "Refresh" ) );
 
         bool singular = m_Selection.Size() == 1;
 
         Inspect::Action* lunaButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetEditAsset ) );
-        lunaButton->SetIcon( "asset_editor.png" );
-        lunaButton->SetToolTip( "Edit this entity class in Luna's Asset Editor" );
+        lunaButton->SetIcon( TXT( "asset_editor.png" ) );
+        lunaButton->SetToolTip( TXT( "Edit this entity class in Luna's Asset Editor" ) );
 
         Inspect::Action* mayaButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetEditArt ) );
-        mayaButton->SetIcon( "maya.png" );
+        mayaButton->SetIcon( TXT( "maya.png" ) );
         mayaButton->SetEnabled( singular );
-        mayaButton->SetToolTip( "Edit this entity class's art in Maya" );
+        mayaButton->SetToolTip( TXT( "Edit this entity class's art in Maya" ) );
 
         Inspect::Action* historyButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRevisionHistory ) );
-        historyButton->SetIcon( "p4.png" );
-        historyButton->SetToolTip( "Display revision history for this file in Perforce." );
+        historyButton->SetIcon( TXT( "p4.png" ) );
+        historyButton->SetToolTip( TXT( "Display revision history for this file in Perforce." ) );
     }
     m_Enumerator->Pop();
 }
@@ -284,24 +284,24 @@ void EntityPanel::CreateClassActions()
 
 void EntityPanel::CreateChildImportExport()
 {
-    m_Enumerator->PushPanel("Child Import/Export");
+    m_Enumerator->PushPanel( TXT( "Child Import/Export" ) );
     {
         m_Enumerator->PushContainer();
         {
             Inspect::Action* button1 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Transform, Content::Transform > ) );
-            button1->SetText( "Export All" );
+            button1->SetText( TXT( "Export All" ) );
 
             Inspect::Action* button2 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Transform, Content::Transform > ) );
-            button2->SetText( "Import All" );
+            button2->SetText( TXT( "Import All" ) );
 
             Inspect::Action* button3 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Transform > ) );
-            button3->SetText( "Select All" );
+            button3->SetText( TXT( "Select All" ) );
 
             Inspect::Action* button4 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExportToFile< Luna::Transform, Content::Transform > ) );
-            button4->SetText( "Export To File" );
+            button4->SetText( TXT( "Export To File" ) );
 
             Inspect::Action* button5 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImportFromFile< Luna::Transform, Content::Transform > ) );
-            button5->SetText( "Import From File" );
+            button5->SetText( TXT( "Import From File" ) );
 
         }
         m_Enumerator->Pop();
@@ -309,39 +309,39 @@ void EntityPanel::CreateChildImportExport()
         m_Enumerator->PushContainer();
         {
             Inspect::Action* button1 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Entity, Asset::Entity > ) );
-            button1->SetText( "Export Entities" );
+            button1->SetText( TXT( "Export Entities" ) );
 
             Inspect::Action* button2 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Entity, Asset::Entity > ) );
-            button2->SetText( "Import Entities" );
+            button2->SetText( TXT( "Import Entities" ) );
 
             Inspect::Action* button3 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Entity > ) );
-            button3->SetText( "Select Entities" );
+            button3->SetText( TXT( "Select Entities" ) );
         }
         m_Enumerator->Pop();
 
         m_Enumerator->PushContainer();
         {
             Inspect::Action* button1 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Volume, Content::Volume > ) );
-            button1->SetText( "Export Weather Volumes" );
+            button1->SetText( TXT( "Export Weather Volumes" ) );
 
             Inspect::Action* button2 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Volume, Content::Volume > ) );
-            button2->SetText( "Import Weather Volumes" );
+            button2->SetText( TXT( "Import Weather Volumes" ) );
 
             Inspect::Action* button3 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Volume > ) );
-            button3->SetText( "Select Weather Volumes" );
+            button3->SetText( TXT( "Select Weather Volumes" ) );
         }
         m_Enumerator->Pop();
 
         m_Enumerator->PushContainer();
         {
             Inspect::Action* button1 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Light, Content::Light > ) );
-            button1->SetText( "Export Lights" );
+            button1->SetText( TXT( "Export Lights" ) );
 
             Inspect::Action* button2 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Light, Content::Light > ) );
-            button2->SetText( "Import Lights" );
+            button2->SetText( TXT( "Import Lights" ) );
 
             Inspect::Action* button3 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Light > ) );
-            button3->SetText( "Select Lights" );
+            button3->SetText( TXT( "Select Lights" ) );
         }
         m_Enumerator->Pop();
     }
@@ -352,7 +352,7 @@ void EntityPanel::CreateShowFlags()
 {
     m_Enumerator->PushContainer();
     {
-        m_Enumerator->AddLabel( "Show Pointer" );
+        m_Enumerator->AddLabel( TXT( "Show Pointer" ) );
         m_Enumerator->AddCheckBox<Luna::Entity, bool>( m_Selection, 
             &Luna::Entity::IsPointerVisible, 
             &Luna::Entity::SetPointerVisible, false );
@@ -361,7 +361,7 @@ void EntityPanel::CreateShowFlags()
 
     m_Enumerator->PushContainer();
     {
-        m_Enumerator->AddLabel( "Show Bounds" );
+        m_Enumerator->AddLabel( TXT( "Show Bounds" ) );
         m_Enumerator->AddCheckBox<Luna::Entity, bool>( m_Selection, 
             &Luna::Entity::IsBoundsVisible, 
             &Luna::Entity::SetBoundsVisible, false );
@@ -370,7 +370,7 @@ void EntityPanel::CreateShowFlags()
 
     m_Enumerator->PushContainer();
     {
-        m_Enumerator->AddLabel( "Show Geometry" );
+        m_Enumerator->AddLabel( TXT( "Show Geometry" ) );
         m_Enumerator->AddCheckBox<Luna::Entity, bool>( m_Selection, 
             &Luna::Entity::IsGeometryVisible, 
             &Luna::Entity::SetGeometryVisible, false );
@@ -406,14 +406,14 @@ bool EntityPanel::OnEntityAssetChanging( const Inspect::ChangingArgs& args )
 {
     bool result = false;
 
-    std::string newValue;
+    tstring newValue;
     Reflect::Serializer::GetValue(args.m_NewValue, newValue);
 
     Nocturnal::Path path( newValue );
     if ( path.Exists() )
     {
         // Make sure the file has a reflect extension
-        std::set< std::string > extensions;
+        std::set< tstring > extensions;
         Reflect::Archive::GetExtensions( extensions );
         if ( extensions.find( path.Extension() ) != extensions.end() )
         {
@@ -424,7 +424,7 @@ bool EntityPanel::OnEntityAssetChanging( const Inspect::ChangingArgs& args )
     if ( !result )
     {
         // Message to the user that the value is not correct.
-        wxMessageBox( "Invalid Entity Class specified!", "Error", wxOK | wxCENTER | wxICON_ERROR, GetWindow() );
+        wxMessageBox( wxT( "Invalid Entity Class specified!" ), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, GetWindow() );
     }
 
     return result;
@@ -442,7 +442,7 @@ void EntityPanel::OnEntityAssetRefresh( Inspect::Button* button )
     // we did something like reexport an art class, while luna is still opened
     std::set< EntityAssetSet* > reloadQueue;     // entities we want to reload
 
-    std::set< std::string > files;
+    std::set< tstring > files;
 
     OS_SelectableDumbPtr::Iterator selectionIter = m_Selection.Begin();
     OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
@@ -502,7 +502,7 @@ void EntityPanel::OnEntityAssetRefresh( Inspect::Button* button )
 
 void EntityPanel::OnEntityAssetEditAsset( Inspect::Button* button )
 {
-    std::set< std::string > files;
+    std::set< tstring > files;
     OS_SelectableDumbPtr::Iterator selectionIter = m_Selection.Begin();
     OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
     for ( ; selectionIter != selectionEnd; ++selectionIter )
@@ -510,7 +510,7 @@ void EntityPanel::OnEntityAssetEditAsset( Inspect::Button* button )
         Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *selectionIter );
         if ( entity )
         {
-            std::string fileToEdit = entity->GetEntityAssetPath();
+            tstring fileToEdit = entity->GetEntityAssetPath();
             if ( !fileToEdit.empty() )
             {
                 files.insert( fileToEdit );
@@ -518,8 +518,8 @@ void EntityPanel::OnEntityAssetEditAsset( Inspect::Button* button )
         }
     }
 
-    std::set< std::string >::const_iterator fileItr = files.begin();
-    std::set< std::string >::const_iterator fileEnd = files.end();
+    std::set< tstring >::const_iterator fileItr = files.begin();
+    std::set< tstring >::const_iterator fileEnd = files.end();
     for ( ; fileItr != fileEnd; ++fileItr )
     {
 #pragma TODO( "Open the file for edit" )
@@ -533,22 +533,22 @@ void EntityPanel::OnEntityAssetEditArt( Inspect::Button* button )
 
 void EntityPanel::OnEntityAssetRevisionHistory( Inspect::Button* button )
 {
-    std::set< std::string > files;
+    std::set< tstring > files;
     SceneEditor* editor = wxGetApp().GetSceneEditor();
     OS_SelectableDumbPtr::Iterator selectionItr = m_Selection.Begin();
     OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
     for ( ; selectionItr != selectionEnd; ++selectionItr )
     {
         Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *selectionItr );
-        std::string path = entity->GetEntityAssetPath();
+        tstring path = entity->GetEntityAssetPath();
         if ( !path.empty() )
         {
             files.insert( path );
         }
     }
 
-    std::set< std::string >::const_iterator pathItr = files.begin();
-    std::set< std::string >::const_iterator pathEnd = files.end();
+    std::set< tstring >::const_iterator pathItr = files.begin();
+    std::set< tstring >::const_iterator pathEnd = files.end();
     for ( ; pathItr != pathEnd; ++pathItr )
     {
         editor->RevisionHistory( *pathItr );

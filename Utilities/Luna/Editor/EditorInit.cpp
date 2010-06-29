@@ -28,10 +28,10 @@ void Luna::EditorInitialize()
     g_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
 
     // then register reflect stuff
-    g_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::FilePathOptions::FilePathOption>( &Luna::FilePathOptions::FilePathOptionEnumerateEnumeration, "FilePathOption" ) );
-    g_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, "EditorType" ) );
+    g_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::FilePathOptions::FilePathOption>( &Luna::FilePathOptions::FilePathOptionEnumerateEnumeration, TXT( "FilePathOption" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );
 
-    g_InitializerStack.Push( Reflect::RegisterClass<EditorState>( "EditorState" ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<EditorState>( TXT( "EditorState" ) ) );
 
     g_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
     g_InitializerStack.Push( WindowSettings::InitializeType, WindowSettings::CleanupType );

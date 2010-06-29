@@ -7,7 +7,7 @@ LUNA_DEFINE_TYPE(Luna::SceneTool);
 
 void SceneTool::InitializeType()
 {
-  Reflect::RegisterClass< Luna::SceneTool >( "Luna::SceneTool" );
+  Reflect::RegisterClass< Luna::SceneTool >( TXT( "Luna::SceneTool" ) );
 }
 
 void SceneTool::CleanupType()

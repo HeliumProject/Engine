@@ -54,7 +54,7 @@ void LSwitchSceneCommand::Undo()
   }
   else
   {
-    Log::Warning( "Undo command to switch scenes is invalid because one of the scenes was unloaded, doing nothing.\n" );
+    Log::Warning( TXT( "Undo command to switch scenes is invalid because one of the scenes was unloaded, doing nothing.\n" ) );
   }
 }
 
@@ -69,7 +69,7 @@ void LSwitchSceneCommand::Redo()
   }
   else
   {
-    Log::Warning( "Redo command to switch scenes is invalid because one of the scenes was unloaded, doing nothing.\n" );
+    Log::Warning( TXT( "Redo command to switch scenes is invalid because one of the scenes was unloaded, doing nothing.\n" ) );
   }
 }
 

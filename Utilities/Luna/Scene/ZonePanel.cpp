@@ -29,7 +29,7 @@ ZonePanel::ZonePanel(Enumerator* enumerator, const OS_SelectableDumbPtr& selecti
 
   // set up some parent class configuration
   m_Expanded = true;
-  m_Text = "Zone"; 
+  m_Text = TXT( "Zone" ); 
 }
 
 ZonePanel::~ZonePanel()

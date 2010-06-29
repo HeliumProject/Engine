@@ -15,8 +15,8 @@ namespace Luna
 
     static void GridUnitEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement(Meters, "Meters");
-      info->AddElement(Centimeters, "Centimeters");
+      info->AddElement(Meters, TXT( "Meters" ) );
+      info->AddElement(Centimeters, TXT( "Centimeters" ) );
     }
   }
   
@@ -39,7 +39,7 @@ namespace Luna
     Math::Color3 m_MinorColor;
     
   public:
-    GridPreferences( const std::string& version = "",
+    GridPreferences( const tstring& version = TXT( "" ),
                      GridUnit units = GridUnits::Meters,
                      u32 width = 12,
                      u32 length = 12,

@@ -13,9 +13,9 @@ namespace Component
   private:
     ComponentCategoryType m_Type;
     u32                   m_SortGroup;
-    std::string           m_Name;
-    std::string           m_ShortDescription;
-    std::string           m_LongDescription;
+    tstring           m_Name;
+    tstring           m_ShortDescription;
+    tstring           m_LongDescription;
     M_Component           m_Components;
 
     REFLECT_DECLARE_CLASS( ComponentCategory, Reflect::Element );
@@ -25,7 +25,7 @@ namespace Component
     ComponentCategory() {}
 
   public:
-    ComponentCategory( ComponentCategoryType type, u32 sortGroup, const std::string& name, const std::string& shortDesc, const std::string& longDesc );
+    ComponentCategory( ComponentCategoryType type, u32 sortGroup, const tstring& name, const tstring& shortDesc, const tstring& longDesc );
     virtual ~ComponentCategory();
 
     inline ComponentCategoryType Type() const
@@ -38,17 +38,17 @@ namespace Component
       return m_SortGroup;
     }
 
-    inline const std::string& Name() const
+    inline const tstring& Name() const
     {
       return m_Name;
     }
 
-    inline const std::string& ShortDescription() const
+    inline const tstring& ShortDescription() const
     {
       return m_ShortDescription;
     }
 
-    inline const std::string& LongDescription() const
+    inline const tstring& LongDescription() const
     {
       return m_LongDescription;
     }

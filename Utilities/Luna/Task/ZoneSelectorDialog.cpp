@@ -19,7 +19,7 @@ EVT_BUTTON( wxID_CLOSE, ZoneSelectorDialog::OnCancel )
 EVT_BUTTON( ButtonIDs::All, ZoneSelectorDialog::OnAll )
 END_EVENT_TABLE()
 
-ZoneSelectorDialog::ZoneSelectorDialog( wxWindow* parent, const std::string& title, const std::string& msg, const std::vector< std::string >& zoneNames, std::set< u32 >& selectedZones, int id, wxPoint pos, wxSize size, int style ) 
+ZoneSelectorDialog::ZoneSelectorDialog( wxWindow* parent, const tstring& title, const tstring& msg, const std::vector< tstring >& zoneNames, std::set< u32 >& selectedZones, int id, wxPoint pos, wxSize size, int style ) 
   : wxDialog( parent, id, title.c_str(), pos, size, style )
   , m_SelectedZones( selectedZones )
   , m_NumZones( (u32)zoneNames.size() )
@@ -41,7 +41,7 @@ ZoneSelectorDialog::ZoneSelectorDialog( wxWindow* parent, const std::string& tit
   wxBoxSizer* bSizer6;
   bSizer6 = new wxBoxSizer( wxVERTICAL );
 
-  m_messageText = new wxStaticText( this, wxID_DEFAULT, wxT(msg.c_str()), wxDefaultPosition, wxDefaultSize, 0 );
+  m_messageText = new wxStaticText( this, wxID_DEFAULT, msg.c_str(), wxDefaultPosition, wxDefaultSize, 0 );
   bSizer6->Add( m_messageText, 0, wxALIGN_CENTER|wxALL, 5 );
 
   bSizer1->Add( bSizer6, 0, wxEXPAND, 5 );
@@ -62,9 +62,9 @@ ZoneSelectorDialog::ZoneSelectorDialog( wxWindow* parent, const std::string& tit
 
   this->SetSizer( bSizer1 );
 
-  for each ( const std::string& zone in zoneNames )
+  for each ( const tstring& zone in zoneNames )
   {
-    m_listBox1->Append( wxT( zone.c_str() ) );
+    m_listBox1->Append( zone.c_str() );
   }
 
   for each ( const u32 zone in selectedZones )

@@ -32,7 +32,7 @@ namespace Luna
   // callback for creating a named panel creator for the enumerator
   typedef Nocturnal::Signature< void, CreatePanelArgs& > CreatePanelSignature;
 
-  typedef std::map<std::string, CreatePanelSignature::Delegate> M_PanelCreators;
+  typedef std::map<tstring, CreatePanelSignature::Delegate> M_PanelCreators;
 
   extern M_PanelCreators s_PanelCreators;
 
@@ -47,8 +47,8 @@ namespace Luna
     static void Cleanup();
 
     // attach client panel creator by name
-    static bool InitializePanel(const std::string& name, const CreatePanelSignature::Delegate& creator);
-    static void CleanupPanel(const std::string& name);
+    static bool InitializePanel(const tstring& name, const CreatePanelSignature::Delegate& creator);
+    static void CleanupPanel(const tstring& name);
 
     // reset state
     void Reset();
@@ -240,7 +240,7 @@ namespace Luna
       Reflect::V_EnumerationElement::const_iterator end = enumInfo->m_Elements.end();
       for ( ; itr != end; ++itr )
       {
-        std::ostringstream str;
+        tostringstream str;
         str << (*itr)->m_Value;
         items.push_back( Inspect::Item ( (*itr)->m_Label, str.str() ) );
       }

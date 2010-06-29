@@ -29,8 +29,8 @@ LUNA_DEFINE_TYPE(Luna::Entity);
 
 void Entity::InitializeType()
 {
-    Reflect::RegisterClass< Luna::Entity >( "Luna::Entity" );
-    Enumerator::InitializePanel( "Entity", CreatePanelSignature::Delegate( &Entity::CreatePanel ) );
+    Reflect::RegisterClass< Luna::Entity >( TXT( "Luna::Entity" ) );
+    Enumerator::InitializePanel( TXT( "Entity" ), CreatePanelSignature::Delegate( &Entity::CreatePanel ) );
 }
 
 void Entity::CleanupType()
@@ -87,13 +87,13 @@ void Entity::ConstructorInit()
     pkg->AddComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &Entity::OnComponentRemoved ) );
 }
 
-std::string Entity::GenerateName() const
+tstring Entity::GenerateName() const
 {
 
     const Asset::Entity* entity = GetPackage<Asset::Entity>();
     Asset::EntityAssetPtr entityClass = entity->GetEntityAsset();
 
-    std::string name = entityClass ? entityClass->GetShortName() : "";
+    tstring name = entityClass ? entityClass->GetShortName() : TXT( "" );
 
     if (name.empty())
     {
@@ -103,18 +103,18 @@ std::string Entity::GenerateName() const
     {
         if ( isdigit( *name.rbegin() ) )
         {
-            name += "_";
+            name += TXT( "_" );
         }
 
-        name += "1";
+        name += TXT( "1" );
     }
 
     return name;
 }
 
-std::string Entity::GetApplicationTypeName() const
+tstring Entity::GetApplicationTypeName() const
 {
-    return "Entity";
+    return TXT( "Entity" );
 }
 
 SceneNodeTypePtr Entity::CreateNodeType( Luna::Scene* scene ) const
@@ -136,7 +136,7 @@ Luna::Scene* Entity::GetNestedScene( GeometryMode mode, bool load_on_demand ) co
     {
 #pragma TODO( "Support the various rendering modes.  This used to load different files for art, collision, etc." )
         Component::ComponentViewer< Asset::ArtFileComponent > artFile( m_ClassSet->GetEntityAsset(), true );
-        std::string nestedFile = m_ClassSet->GetContentFile();
+        tstring nestedFile = m_ClassSet->GetContentFile();
         m_NestedSceneArt = m_Scene->GetManager()->AllocateNestedScene( nestedFile, m_Scene );
     }
 
@@ -449,12 +449,12 @@ bool Entity::Pick( PickVisitor* pick )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified panel is supported by Luna::Entity.
 //
-bool Entity::ValidatePanel(const std::string& name)
+bool Entity::ValidatePanel(const tstring& name)
 {
-    if ( name == "Entity" )
+    if ( name == TXT( "Entity" ) )
         return true;
 
-    if ( name == "Instance" )
+    if ( name == TXT( "Instance" ) )
         return false;
 
     return __super::ValidatePanel( name );
@@ -475,12 +475,12 @@ void Entity::CreatePanel( CreatePanelArgs& args )
     args.m_Enumerator->Pop();
 }
 
-std::string Entity::GetEntityAssetPath() const
+tstring Entity::GetEntityAssetPath() const
 {
     return GetPackage< Asset::Entity >()->GetEntityAsset()->GetPath().Get();
 }
 
-void Entity::SetEntityAssetPath( const std::string& entityClass )
+void Entity::SetEntityAssetPath( const tstring& entityClass )
 {
     Asset::Entity* entity = GetPackage< Asset::Entity >();
 
@@ -516,7 +516,7 @@ void Entity::SetEntityAssetPath( const std::string& entityClass )
     Dirty();
 }
 
-std::string Entity::GetAssetTypeName() const
+tstring Entity::GetAssetTypeName() const
 {
     if ( GetClassSet()->GetEntityAsset() )
     {
@@ -524,11 +524,11 @@ std::string Entity::GetAssetTypeName() const
     }
     else
     {
-        return "Unknown";
+        return TXT( "Unknown" );
     }
 }
 
-void Entity::SetAssetTypeName( const std::string& type )
+void Entity::SetAssetTypeName( const tstring& type )
 {
     NOC_BREAK();
 }

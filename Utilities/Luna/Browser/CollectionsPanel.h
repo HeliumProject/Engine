@@ -70,10 +70,10 @@ namespace Luna
   private:
     wxTreeItemId DragHitTest( Nocturnal::SortTreeCtrl* treeCtrl, wxPoint point );
 
-    static AssetCollection* NewCollection( CollectionManager* collectionManager, const i32 typeID, const std::string& tryName = std::string("") );
+    static AssetCollection* NewCollection( CollectionManager* collectionManager, const i32 typeID, const tstring& tryName = TXT("") );
 
     template <class T>
-    static T* NewCollection( CollectionManager* collectionManager, const i32 typeID, const std::string& tryName = std::string("") )
+    static T* NewCollection( CollectionManager* collectionManager, const i32 typeID, const tstring& tryName = tstring("") )
     {
       return Reflect::TryCast<T>( NewCollection( collectionManager, typeID, tryName ) );
     }

@@ -22,7 +22,7 @@ LUNA_DEFINE_TYPE( Luna::SceneAsset );
 
 void SceneAsset::InitializeType()
 {
-  Reflect::RegisterClass<Luna::SceneAsset>( "Luna::SceneAsset" );
+  Reflect::RegisterClass<Luna::SceneAsset>( TXT( "Luna::SceneAsset" ) );
   PersistentDataFactory::GetInstance()->Register(Reflect::GetType<Asset::SceneAsset>(), &Luna::SceneAsset::Create);
 }
 
@@ -82,17 +82,17 @@ void SceneAsset::WeatherComponentChanged(const Reflect::ElementChangeArgs& args)
 
   if(args.m_Field != NULL)
   {
-    if(args.m_Field->m_UIName == "Texture")
+    if(args.m_Field->m_UIName == TXT( "Texture" ) )
     {
       notifyArgs.m_Flags   |= Luna::WEATHER_OP_PARTICLE_TEXTURE_REBUILD;
     }
 
-    if(args.m_Field->m_UIName == "Detail Normal Map Override")
+    if(args.m_Field->m_UIName == TXT( "Detail Normal Map Override" ) )
     {
       notifyArgs.m_Flags   |= Luna::WEATHER_OP_DETAIL_NORMALMAP_REBUILD;
     }
 
-    if(args.m_Field->m_UIName == "Enabled")
+    if(args.m_Field->m_UIName == TXT( "Enabled" ) )
     {
       notifyArgs.m_Flags   |= Luna::WEATHER_OP_TEXTURES2D_RELOAD;
     }

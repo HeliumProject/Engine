@@ -55,7 +55,7 @@ namespace Luna
   protected:
     // Derived classes can optionally NOC_OVERRIDE these functions
     virtual void Clear();
-    virtual wxTreeItemId AddItem( const wxTreeItemId& parent, const std::string& name, i32 image, SceneOutlinerItemData* data, bool isSelected, bool countable = true); 
+    virtual wxTreeItemId AddItem( const wxTreeItemId& parent, const tstring& name, i32 image, SceneOutlinerItemData* data, bool isSelected, bool countable = true); 
     virtual void DeleteItem( Object* object );
     void UpdateItemCounts( const wxTreeItemId& node, int delta );
     void UpdateItemVisibility( const wxTreeItemId& item, bool visible );

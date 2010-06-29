@@ -46,7 +46,7 @@ namespace Luna
 
     void SetBrowserSearch( BrowserSearch* browserSearch );
 
-    void RunNewQuery( const std::string& queryString, const AssetCollection* collection = NULL );
+    void RunNewQuery( const tstring& queryString, const AssetCollection* collection = NULL );
     bool RunCurrentQuery();
 
     //
@@ -80,7 +80,7 @@ namespace Luna
 
     const OS_SearchQuery& GetMRUQueries() const;
     void PushMRU( const SearchQuery* query );
-    SearchQueryPtr FindQuery( const std::string& queryString );
+    SearchQueryPtr FindQuery( const tstring& queryString );
 
   public:
     REFLECT_DECLARE_CLASS( SearchHistory, Reflect::Element );

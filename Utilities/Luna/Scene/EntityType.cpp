@@ -21,7 +21,7 @@ LUNA_DEFINE_TYPE(Luna::EntityType);
 
 void EntityType::InitializeType()
 {
-    Reflect::RegisterClass< Luna::EntityType >( "Luna::EntityType" );
+    Reflect::RegisterClass< Luna::EntityType >( TXT( "Luna::EntityType" ) );
 }
 
 void EntityType::CleanupType()

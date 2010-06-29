@@ -55,13 +55,13 @@ void FoldersPanel::Unselect()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void FoldersPanel::SetPath( const std::string& path )
+void FoldersPanel::SetPath( const tstring& path )
 {
   m_FoldersTreeCtrl->SetPath( path );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void FoldersPanel::GetPath( std::string& path ) const
+void FoldersPanel::GetPath( tstring& path ) const
 {
   path = m_FoldersTreeCtrl->GetPath().c_str();
 }
@@ -160,7 +160,7 @@ wxDragResult FoldersPanel::Drop( const Inspect::DragArgs& args )
 #pragma TODO( "reimplement using Nocturnal::Path" )
 
   // get the IDs
-  //std::string assetName;
+  //tstring assetName;
   //S_tuid assetIDs;
   //bool gotAllAssetIds = GetAssetIDsFromClipBoard( args.m_ClipboardData->FromBuffer(), assetIDs, assetName );
 
@@ -183,7 +183,7 @@ wxDragResult FoldersPanel::Drop( const Inspect::DragArgs& args )
   //    //        DependencyCollection* dependencyCollection = Reflect::ObjectCast<DependencyCollection>( collection );
   //    //        if ( dependencyCollection->GetRootID() != assetID  )
   //    //        {
-  //    //          std::string warning = "Are you sure you'd like to change the existing asset from\n";
+  //    //          tstring warning = "Are you sure you'd like to change the existing asset from\n";
   //    //          warning += dependencyCollection->GetAssetName() + " to ";
   //    //          warning += assetName + "?";
 
@@ -202,7 +202,7 @@ wxDragResult FoldersPanel::Drop( const Inspect::DragArgs& args )
 
   //    //            dependencyCollection->Freeze();
 
-  //    //            std::string filePath;
+  //    //            tstring filePath;
   //    //            AssetCollection::CreateFilePath( assetName, filePath );
   //    //            dependencyCollection->SetFilePath( filePath );
 

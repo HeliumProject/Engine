@@ -65,7 +65,7 @@ public:
 
 void NavMesh::InitializeType()
 {
-  Reflect::RegisterClass< Luna::NavMesh >( "Luna::NavMesh" );
+  Reflect::RegisterClass< Luna::NavMesh >( TXT( "Luna::NavMesh" ) );
 
   ZeroMemory(&s_Material, sizeof(s_Material));
   s_Material.Ambient = Luna::Color::FORESTGREEN;
@@ -103,7 +103,7 @@ void NavMesh::InitializeType()
   ZeroMemory(&s_SelectedTriMaterial, sizeof(s_SelectedTriMaterial));
   s_SelectedTriMaterial.Ambient = Color::ColorToColorValue(98, 255, 255, 0);
   s_SelectedTriMaterial.Diffuse = Color::ColorToColorValue(98, 255, 255, 0);
-  Enumerator::InitializePanel( "NavMesh", CreatePanelSignature::Delegate( &NavMesh::CreatePanel ) );
+  Enumerator::InitializePanel( TXT( "NavMesh" ), CreatePanelSignature::Delegate( &NavMesh::CreatePanel ) );
 }
 
 void NavMesh::CleanupType()
@@ -119,7 +119,7 @@ NavMesh::NavMesh( Luna::Scene* scene, Content::Mesh* mesh )
   if (mesh->m_TriangleVertexIndices.size() == 0)
   {
     mesh->m_ExportTypes[ Content::ContentTypes::NavMeshHiRes ] = true;
-    mesh->m_GivenName = "HiResNavMesh";
+    mesh->m_GivenName = TXT( "HiResNavMesh" );
     mesh->m_UseGivenName = true;
     mesh->m_ExportTypeIndex.insert( Content::M_ContentTypeToIndex::value_type(  Content::ContentTypes::NavMeshHiRes , 0) );
   }
@@ -140,12 +140,12 @@ NavMesh::~NavMesh()
 
 i32 NavMesh::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "mesh.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "mesh.png" ) );
 }
 
-std::string NavMesh::GetApplicationTypeName() const
+tstring NavMesh::GetApplicationTypeName() const
 {
-  return "NavMesh";
+  return TXT( "NavMesh" );
 }
 
 void NavMesh::Initialize()
@@ -790,9 +790,9 @@ bool NavMesh::Pick( PickVisitor* pick )
   return __super::Pick( pick );
 }
 
-bool NavMesh::ValidatePanel( const std::string& name )
+bool NavMesh::ValidatePanel( const tstring& name )
 {
-  if ( name == "NavMesh" )
+  if ( name == TXT( "NavMesh" ) )
   {
     return true;
   }

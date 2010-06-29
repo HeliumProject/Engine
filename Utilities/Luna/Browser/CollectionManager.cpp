@@ -47,10 +47,10 @@ void CollectionManager::PostDeserialize()
 {
     __super::PostDeserialize();
 
-    std::set< std::string > copyCollectionFilePaths = m_CollectionFilePaths;
+    std::set< tstring > copyCollectionFilePaths = m_CollectionFilePaths;
 
     ClearCollectionMap();
-    for ( std::set< std::string >::const_iterator itr = copyCollectionFilePaths.begin(), end = copyCollectionFilePaths.end(); itr != end; ++itr )
+    for ( std::set< tstring >::const_iterator itr = copyCollectionFilePaths.begin(), end = copyCollectionFilePaths.end(); itr != end; ++itr )
     {
         Nocturnal::Path collectionPath( *itr );
 
@@ -81,12 +81,12 @@ bool CollectionManager::ContainsCollection( AssetCollection* collection ) const
 
 ///////////////////////////////////////////////////////////////////////////////
 // Checks that collection name is unique
-bool CollectionManager::IsCollectionNameAvailable( AssetCollection* collection, const std::string& name, std::string& errors )
+bool CollectionManager::IsCollectionNameAvailable( AssetCollection* collection, const tstring& name, tstring& errors )
 {
     AssetCollection* foundCollection = FindCollection( name );
     if ( collection && foundCollection && (*collection) != (*foundCollection) )
     {
-        errors = "Collection names need to be unique, you already have a collection called: " + name;
+        errors = TXT( "Collection names need to be unique, you already have a collection called: " ) + name;
         return false;
     }
 
@@ -94,7 +94,7 @@ bool CollectionManager::IsCollectionNameAvailable( AssetCollection* collection, 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void CollectionManager::GetUniqueName( std::string& name, const char* baseName )
+void CollectionManager::GetUniqueName( tstring& name, const tchar* baseName )
 {
     // try the base name first
     name = baseName;
@@ -103,8 +103,8 @@ void CollectionManager::GetUniqueName( std::string& name, const char* baseName )
     while ( FindCollection( name.c_str() ) )
     {
         ++numTries;
-        std::ostringstream str ( name );
-        str << baseName << " " << numTries;
+        tostringstream str ( name );
+        str << baseName << TXT( " " ) << numTries;
         name = str.str();
     }
 }
@@ -121,7 +121,7 @@ bool CollectionManager::AddCollection( AssetCollection* collection )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool CollectionManager::RenameCollection( AssetCollection* collection, const std::string& name, std::string& errors )
+bool CollectionManager::RenameCollection( AssetCollection* collection, const tstring& name, tstring& errors )
 {
     if ( !collection )
         return false;
@@ -136,14 +136,14 @@ bool CollectionManager::RenameCollection( AssetCollection* collection, const std
         return false;
     }
 
-    std::string oldName = collection->GetName();
+    tstring oldName = collection->GetName();
     
-    std::string oldFilePath = collection->GetPath().Get();
+    tstring oldFilePath = collection->GetPath().Get();
 
     AssetCollection* foundCollection = FindCollection( oldName );
     if ( !foundCollection )
     {
-        errors = "";
+        errors = TXT( "" );
         return false;
     }
 
@@ -152,7 +152,7 @@ bool CollectionManager::RenameCollection( AssetCollection* collection, const std
     {
         foundCollection->SetName( name );
 
-        std::string filePath;
+        tstring filePath;
         AssetCollection::CreateFilePath( name, filePath );
         
         Nocturnal::Path path( filePath );
@@ -176,7 +176,7 @@ void CollectionManager::DeleteCollection( AssetCollection* collection )
     if ( !collection )
         return;
 
-    std::string filePath = collection->GetPath().Get();
+    tstring filePath = collection->GetPath().Get();
 
     CloseCollection( collection );
 
@@ -188,21 +188,21 @@ void CollectionManager::DeleteCollection( AssetCollection* collection )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-AssetCollection* CollectionManager::OpenCollection( const std::string& path, bool copyLocal )
+AssetCollection* CollectionManager::OpenCollection( const tstring& path, bool copyLocal )
 {
     Nocturnal::Path filePath( path );
 
     AssetCollectionPtr loadCollection = AssetCollection::LoadFrom( filePath );
     if ( loadCollection )
     {
-        std::string name;
-        GetUniqueName( name, ( loadCollection->GetName().empty() ? "Imported Collection" : loadCollection->GetName().c_str() ) );
+        tstring name;
+        GetUniqueName( name, ( loadCollection->GetName().empty() ? TXT( "Imported Collection" ) : loadCollection->GetName().c_str() ) );
         loadCollection->SetName( name );
 
         u32 flags = loadCollection->GetFlags();
         if ( copyLocal )
         {
-            std::string filePath;
+            tstring filePath;
             AssetCollection::CreateFilePath( name, filePath );
 
             Nocturnal::Path localPath( filePath );
@@ -232,13 +232,13 @@ void CollectionManager::CloseCollection( AssetCollection* collection )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-AssetCollection* CollectionManager::ImportCollection( const std::string& path )
+AssetCollection* CollectionManager::ImportCollection( const tstring& path )
 {
     return OpenCollection( path, true );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-AssetCollection* CollectionManager::FindCollection( const std::string& name ) const
+AssetCollection* CollectionManager::FindCollection( const tstring& name ) const
 {
     for ( M_AssetCollections::const_iterator itr = m_AssetCollections.begin(), end = m_AssetCollections.end(); itr != end; ++itr )
     {    
@@ -253,7 +253,7 @@ AssetCollection* CollectionManager::FindCollection( const std::string& name ) co
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool CollectionManager::ImportIntoStaticCollection( AssetCollection* collection, const std::string& path )
+bool CollectionManager::ImportIntoStaticCollection( AssetCollection* collection, const tstring& path )
 {
     if ( !collection )
         return false;
@@ -281,13 +281,13 @@ bool CollectionManager::ImportIntoStaticCollection( AssetCollection* collection,
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool CollectionManager::SaveCollection( AssetCollection* collection, const std::string& path )
+bool CollectionManager::SaveCollection( AssetCollection* collection, const tstring& path )
 {
     NOC_ASSERT( collection );
 
     bool result = false;
 
-    std::string outputFile = path.empty() ? collection->GetPath().Get() : path;
+    tstring outputFile = path.empty() ? collection->GetPath().Get() : path;
 
     if ( !collection->ReadOnly()
         && !collection->IsTemporary()
@@ -365,7 +365,7 @@ bool CollectionManager::RemoveCollectionFromMap( AssetCollection* collection )
     if ( !collection )
         return false;
 
-    const std::string collectionName = collection->GetName();
+    const tstring collectionName = collection->GetName();
 
     m_CollectionRemoving.Raise( collection );
 

@@ -52,9 +52,9 @@ namespace Luna
     // Highlight change event and arguments
     struct ThumbnailHighlightArgs
     {
-        std::string m_HighlightPath;
+        tstring m_HighlightPath;
 
-        ThumbnailHighlightArgs( const std::string& highlight )
+        ThumbnailHighlightArgs( const tstring& highlight )
             : m_HighlightPath( highlight )
         {
         }
@@ -63,8 +63,8 @@ namespace Luna
 
 
     /////////////////////////////////////////////////////////////////////////////
-    typedef std::map< std::string, DWORD > M_FileTypeColors;
-    typedef std::map< std::string, ThumbnailPtr > M_FileTypeIcons;
+    typedef std::map< tstring, DWORD > M_FileTypeColors;
+    typedef std::map< tstring, ThumbnailPtr > M_FileTypeIcons;
     typedef std::map< Asset::AssetType, ThumbnailPtr > M_AssetTypeIcons;
 
     typedef std::vector< Math::Vector3 > V_TileCorners;
@@ -121,18 +121,18 @@ namespace Luna
         };
 
     public:
-        ThumbnailView( const std::string& thumbnailDirectory, BrowserFrame *browserFrame, wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE | wxVSCROLL, const wxString& name = "Luna::ThumbnailView" );
+        ThumbnailView( const tstring& thumbnailDirectory, BrowserFrame *browserFrame, wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE | wxVSCROLL, const wxString& name = wxT( "Luna::ThumbnailView" ) );
         virtual ~ThumbnailView();
 
         void SetResults( SearchResults* results );
         void ClearResults();
         const SearchResults* GetResults() const;
 
-        void SelectPath( const std::string& path );
-        u32 GetSelectedPaths( std::vector< std::string >& paths, bool useForwardSlashes = true );
+        void SelectPath( const tstring& path );
+        u32 GetSelectedPaths( std::vector< tstring >& paths, bool useForwardSlashes = true );
         void GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders );
 
-        std::string GetHighlightedPath() const;
+        tstring GetHighlightedPath() const;
 
         void SetZoom( u16 zoom );
 
@@ -214,7 +214,7 @@ namespace Luna
 
         void Pick( wxPoint mousePos1, wxPoint mousePos2, OS_ThumbnailTiles& hits );
 
-        void InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const std::string& type, const char* fileName );
+        void InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tchar* fileName );
 
         bool Draw();
         void DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, bool overlayOnly = false );
@@ -279,7 +279,7 @@ namespace Luna
 
         wxTextCtrl* m_EditCtrl;
 
-        std::map<std::string, ThumbnailPtr> m_AssociatedIcons; // this guy is just for use in the bg thread
+        std::map<tstring, ThumbnailPtr> m_AssociatedIcons; // this guy is just for use in the bg thread
         ThumbnailPtr m_TextureMissing;
         ThumbnailPtr m_TextureError;
         ThumbnailPtr m_TextureLoading;
@@ -293,7 +293,7 @@ namespace Luna
 
         ThumbnailTileCreator m_TileCreator;
 
-        std::string         m_ThumbnailDirectory;
+        tstring         m_ThumbnailDirectory;
         ThumbnailManager*   m_ThumbnailManager;
         Asset::V_AssetFiles m_CurrentTextureRequests;
 

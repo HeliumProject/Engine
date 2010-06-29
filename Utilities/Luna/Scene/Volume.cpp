@@ -26,9 +26,9 @@ LUNA_DEFINE_TYPE(Luna::Volume);
 
 void Volume::InitializeType()
 {
-  Reflect::RegisterClass< Luna::Volume >( "Luna::Volume" );
+  Reflect::RegisterClass< Luna::Volume >( TXT( "Luna::Volume" ) );
 
-  Enumerator::InitializePanel( "Volume", CreatePanelSignature::Delegate( &Volume::CreatePanel ) );
+  Enumerator::InitializePanel( TXT( "Volume" ), CreatePanelSignature::Delegate( &Volume::CreatePanel ) );
 }
 
 void Volume::CleanupType()
@@ -55,12 +55,12 @@ Volume::~Volume()
 
 i32 Volume::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "volume.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "volume.png" ) );
 }
 
-std::string Volume::GetApplicationTypeName() const
+tstring Volume::GetApplicationTypeName() const
 {
-  return "Volume";
+  return TXT( "Volume" );
 }
 
 SceneNodeTypePtr Volume::CreateNodeType( Luna::Scene* scene ) const
@@ -211,9 +211,9 @@ bool Volume::Pick( PickVisitor* pick )
 ///////////////////////////////////////////////////////////////////////////////
 // Returns true if the specified panel is supported by Luna::Volume.
 // 
-bool Volume::ValidatePanel(const std::string& name)
+bool Volume::ValidatePanel(const tstring& name)
 {
-  if (name == "Volume")
+  if (name == TXT( "Volume" ) )
   {
     return true;
   }
@@ -223,38 +223,38 @@ bool Volume::ValidatePanel(const std::string& name)
 
 void Volume::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel("Volume", true);
+  args.m_Enumerator->PushPanel( TXT( "Volume" ), true);
   {
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Shape");
+      args.m_Enumerator->AddLabel( TXT( "Shape" ) );
 
       Inspect::Choice* choice = args.m_Enumerator->AddChoice<Luna::Volume, int>(args.m_Selection, &Volume::GetShape, &Volume::SetShape);
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::VolumeShapes::Cube;
-        items.push_back( Inspect::Item( "Cube", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Cube" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::VolumeShapes::Cylinder;
-        items.push_back( Inspect::Item( "Cylinder", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Cylinder" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::VolumeShapes::Sphere;
-        items.push_back( Inspect::Item( "Sphere", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Sphere" ), str.str() ) );
       }
 
       {
-        std::ostringstream str;
+        tostringstream str;
         str << Content::VolumeShapes::Capsule;
-        items.push_back( Inspect::Item( "Capsule", str.str() ) );
+        items.push_back( Inspect::Item( TXT( "Capsule" ), str.str() ) );
       }
 
       choice->SetItems( items );

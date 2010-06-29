@@ -15,7 +15,7 @@ namespace Luna
   {
   protected:
     Object*    m_Object;
-    std::string m_ItemText; 
+    tstring m_ItemText; 
     int         m_CachedCount; 
     bool        m_Countable; 
 
@@ -26,8 +26,8 @@ namespace Luna
     Object* GetObject() const;
     void SetObject( Object* object );
 
-    void SetItemText(const std::string& text); 
-    const std::string& GetItemText(); 
+    void SetItemText(const tstring& text); 
+    const tstring& GetItemText(); 
 
     int GetCachedCount(); 
     void SetCachedCount(int count); 

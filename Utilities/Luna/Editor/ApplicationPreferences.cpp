@@ -21,13 +21,13 @@ void ApplicationPreferences::EnumerateClass( Reflect::Compositor<ApplicationPref
 ApplicationPreferencesPtr g_ApplicationPreferences = NULL;
 
 // Increment this value to invalidate all previously saved preferences
-const static std::string s_PreferencesVersion( "1" );
+const static tstring s_PreferencesVersion( TXT( "1" ) );
 
 // Increment this value to invalidate just the window settings for the Session Frame
-const static std::string s_SessionFrameVersion( "1" );
+const static tstring s_SessionFrameVersion( TXT( "1" ) );
 
 // Increment this value to invalidate just the window settings for the Run Game window
-const static std::string s_RunGameWindowVersion( "1" );
+const static tstring s_RunGameWindowVersion( TXT( "1" ) );
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ const static std::string s_RunGameWindowVersion( "1" );
 // 
 void ApplicationPreferences::InitializeType()
 {
-  Reflect::RegisterClass<ApplicationPreferences>( "ApplicationPreferences" );
+  Reflect::RegisterClass<ApplicationPreferences>( TXT( "ApplicationPreferences" ) );
 
   NOC_ASSERT( !g_ApplicationPreferences );
 
@@ -60,7 +60,7 @@ ApplicationPreferences* Luna::GetApplicationPreferences()
 {
   if ( !g_ApplicationPreferences )
   {
-    throw Nocturnal::Exception( "ApplicationPreferences is not initialized, must call ApplicationPreferences::InitializeType first." );
+    throw Nocturnal::Exception( TXT( "ApplicationPreferences is not initialized, must call ApplicationPreferences::InitializeType first." ) );
   }
 
   return g_ApplicationPreferences;
@@ -91,7 +91,7 @@ void ApplicationPreferences::PostDeserialize()
 // separate aspects of the preferences.  See the globals section at the top
 // of this file.
 // 
-const std::string& ApplicationPreferences::GetCurrentVersion() const 
+const tstring& ApplicationPreferences::GetCurrentVersion() const 
 {
   return s_PreferencesVersion;
 }
@@ -99,14 +99,14 @@ const std::string& ApplicationPreferences::GetCurrentVersion() const
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the path to this preference file on disk.
 // 
-std::string ApplicationPreferences::GetPreferencesPath() const
+tstring ApplicationPreferences::GetPreferencesPath() const
 {
     Nocturnal::Path prefsDir;
     if ( !Application::GetPreferencesDirectory( prefsDir ) )
     {
-        throw Nocturnal::Exception( "Could not get preferences directory." );
+        throw Nocturnal::Exception( TXT( "Could not get preferences directory." ) );
     }
-    return prefsDir.Get() + "LunaGlobalPrefs.rb";
+    return prefsDir.Get() + TXT( "LunaGlobalPrefs.rb" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

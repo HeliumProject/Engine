@@ -13,7 +13,7 @@ LUNA_DEFINE_TYPE(Luna::TransformManipulator);
 
 void TransformManipulator::InitializeType()
 {
-  Reflect::RegisterClass< Luna::TransformManipulator >( "Luna::TransformManipulator" );
+  Reflect::RegisterClass< Luna::TransformManipulator >( TXT( "Luna::TransformManipulator" ) );
 }
 
 void TransformManipulator::CleanupType()
@@ -216,11 +216,11 @@ void TransformManipulator::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel("Manipulator", true);
+  m_Enumerator->PushPanel( TXT( "Manipulator" ), true);
   {
     m_Enumerator->PushContainer();
     {
-      m_Enumerator->AddLabel("Size");
+      m_Enumerator->AddLabel( TXT( "Size" ) );
       Inspect::Slider* slider = m_Enumerator->AddSlider<f32>( new Nocturnal::MemberProperty<Luna::TransformManipulator, f32> (this, &TransformManipulator::GetSize, &TransformManipulator::SetSize) );
       slider->SetRangeMin( 0.10f );
       slider->SetRangeMax( 0.5f );

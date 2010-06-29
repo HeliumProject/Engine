@@ -58,7 +58,7 @@ namespace Luna
     BrowserFrame( Browser* browser, BrowserSearch* browserSearch, SearchHistory* searchHistory, wxWindow* parent = NULL );
     virtual ~BrowserFrame();
 
-    void Search( const std::string& queryString, const AssetCollection* collection = NULL );
+    void Search( const tstring& queryString, const AssetCollection* collection = NULL );
 
     void GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders );
 
@@ -72,7 +72,7 @@ namespace Luna
   public:
     // Virtual overrides of Frame class
     virtual void SaveWindowState() NOC_OVERRIDE;
-    virtual const std::string& GetPreferencePrefix() const NOC_OVERRIDE;
+    virtual const tstring& GetPreferencePrefix() const NOC_OVERRIDE;
 
   protected:
     virtual void OnClose( wxCloseEvent& event );
@@ -124,10 +124,10 @@ namespace Luna
     //
 
   private:
-    void SetFolderPath( const std::string& folderPath );
+    void SetFolderPath( const tstring& folderPath );
     void UpdateNavBar( const SearchQueryPtr& searchQuery );
     void UpdateResultsView( u16 customSize = ThumbnailSizes::Medium );
-    void UpdateStatusBar( size_t numFolders, size_t numFiles, size_t numSelected, const std::string& hover );
+    void UpdateStatusBar( size_t numFolders, size_t numFiles, size_t numSelected, const tstring& hover );
 
     DECLARE_EVENT_TABLE();
 
@@ -136,7 +136,7 @@ namespace Luna
     BrowserSearch*          m_BrowserSearch;
     SearchHistory*          m_SearchHistory;
 
-    std::string             m_PreferencePrefix;
+    tstring             m_PreferencePrefix;
     NavigationPanel*        m_NavigationPanel;
     ResultsPanel*           m_ResultsPanel;
     PreviewPanel*           m_PreviewPanel;

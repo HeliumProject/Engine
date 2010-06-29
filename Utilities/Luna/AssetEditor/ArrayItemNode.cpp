@@ -12,7 +12,7 @@ LUNA_DEFINE_TYPE( Luna::ArrayItemNode );
 // 
 void ArrayItemNode::InitializeType()
 {
-  Reflect::RegisterClass<Luna::ArrayItemNode>( "Luna::ArrayItemNode" );
+  Reflect::RegisterClass<Luna::ArrayItemNode>( TXT( "Luna::ArrayItemNode" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ void ArrayItemNode::CleanupType()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-ArrayItemNode::ArrayItemNode( Luna::AssetManager* assetManager, Luna::ArrayNode* container, const std::string& name )
+ArrayItemNode::ArrayItemNode( Luna::AssetManager* assetManager, Luna::ArrayNode* container, const tstring& name )
 : Luna::ContainerItemNode( assetManager, container, name )
 {
 }

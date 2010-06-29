@@ -57,7 +57,7 @@ namespace Luna
     virtual ~Curve();
 
     virtual i32 GetImageIndex() const NOC_OVERRIDE;
-    virtual std::string GetApplicationTypeName() const NOC_OVERRIDE;
+    virtual tstring GetApplicationTypeName() const NOC_OVERRIDE;
 
     virtual void Initialize() NOC_OVERRIDE;
 
@@ -136,7 +136,7 @@ namespace Luna
     // UI
     //
 
-    virtual bool ValidatePanel(const std::string& name) NOC_OVERRIDE;
+    virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
     static void CreatePanel( CreatePanelArgs& args );
 
   private:

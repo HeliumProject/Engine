@@ -70,7 +70,7 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-ThumbnailView::ThumbnailView( const std::string& thumbnailDirectory, BrowserFrame *browserFrame, wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
+ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, BrowserFrame *browserFrame, wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 : wxScrolledWindow( parent, id, pos, size, style, name )
 , m_ThumbnailDirectory( thumbnailDirectory)
 , m_LabelFontHeight( 14 )
@@ -120,33 +120,33 @@ ThumbnailView::ThumbnailView( const std::string& thumbnailDirectory, BrowserFram
     CalculateTotalItemSize();
 
     // Setup Ribbon colors and FileType Icons
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( "*.entity.*", D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( "*.scene.*", D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( "*.shader.*", D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.entity.*" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.scene.*" ), D3DCOLOR_ARGB( 0xff, 142, 234, 251 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.shader.*" ), D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
 
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( "*.fbx", D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( "*.rb", D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( "*.tga", D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.fbx" ), D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.rb" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.tga" ), D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
 
     IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
 
-    InsertFileTypeIcon( device, m_FileTypeIcons, "*.entity.*", "moon.png" );
-    InsertFileTypeIcon( device, m_FileTypeIcons, "*.scene.*", "enginetype_level.png" );
-    InsertFileTypeIcon( device, m_FileTypeIcons, "*.shader.*", "enginetype_shader.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.entity.*" ), TXT( "moon.png" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.scene.*" ), TXT( "enginetype_level.png" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.shader.*" ), TXT( "enginetype_shader.png" ) );
 
-    InsertFileTypeIcon( device, m_FileTypeIcons, "*.fbx", "maya.png" );
-    InsertFileTypeIcon( device, m_FileTypeIcons, "*.rb", "moon.png" );
-    InsertFileTypeIcon( device, m_FileTypeIcons, "*.tga", "fileType_tga.png" );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.fbx" ), TXT( "maya.png" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.rb" ), TXT( "moon.png" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.tga" ), TXT( "fileType_tga.png" ) );
 
 
     // Populate the AssetTypes lookup texture
     for ( i32 index = 0; index < Asset::AssetTypes::Count; ++index )
     {
-        const std::string& icon = Asset::GetAssetTypeIcon( (Asset::AssetType) index );
-        if ( icon != "null.png" )
+        const tstring& icon = Asset::GetAssetTypeIcon( (Asset::AssetType) index );
+        if ( icon != TXT( "null.png" ) )
         {
 #pragma TODO( "reimplement icons as resources" )
-            std::string file = icon;
+            tstring file = icon;
 
             Nocturnal::Insert<M_AssetTypeIcons>::Result inserted = m_AssetTypeIcons.insert( M_AssetTypeIcons::value_type( (Asset::AssetType) index, new Thumbnail( &m_D3DManager, LoadTexture( device, file ) ) ) );
             NOC_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
@@ -195,10 +195,10 @@ ThumbnailView::~ThumbnailView()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const std::string& type, const char* fileName )
+void ThumbnailView::InsertFileTypeIcon( IDirect3DDevice9* device, M_FileTypeIcons& fileTypeIcons, const tstring& type, const tchar* fileName )
 {
 #pragma TODO( "reimplement icons as resources" )
-    std::string file = fileName;
+    tstring file = fileName;
 
     Nocturnal::Insert<M_FileTypeIcons>::Result inserted = fileTypeIcons.insert( M_FileTypeIcons::value_type( type, new Thumbnail( &m_D3DManager, LoadTexture( device, file ) ) ) );
     NOC_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
@@ -262,7 +262,7 @@ const SearchResults* ThumbnailView::GetResults() const
 // * scrolls down so it's in view in the D3D panel
 // * De-selects all
 // * Selects the corresponding tile
-void ThumbnailView::SelectPath( const std::string& path )
+void ThumbnailView::SelectPath( const tstring& path )
 {
     // Figure out where the tile is so we can scroll to it
     u32 count = 0;
@@ -301,7 +301,7 @@ void ThumbnailView::SelectPath( const std::string& path )
 // Returns the number of items in paths.  If useForwardSlashes is false, 
 // backslashes will be used to build the paths.
 // 
-u32 ThumbnailView::GetSelectedPaths( std::vector< std::string >& paths, bool useForwardSlashes )
+u32 ThumbnailView::GetSelectedPaths( std::vector< tstring >& paths, bool useForwardSlashes )
 {
     paths.reserve( paths.size() + m_SelectedTiles.Size() );
 
@@ -309,7 +309,7 @@ u32 ThumbnailView::GetSelectedPaths( std::vector< std::string >& paths, bool use
         tileEnd = m_SelectedTiles.End(); tileItr != tileEnd; ++tileItr )
     {
         ThumbnailTile* tile = *tileItr;
-        std::string path;
+        tstring path;
         if ( tile->IsFile() )
         {
             path = tile->GetFile()->GetFilePath();
@@ -355,9 +355,9 @@ void ThumbnailView::GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asse
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the path of the item that the mouse is currently over (if any).
 // 
-std::string ThumbnailView::GetHighlightedPath() const
+tstring ThumbnailView::GetHighlightedPath() const
 {
-    std::string path;
+    tstring path;
     if ( !m_MouseOverTiles.Empty() )
     {
         path = m_MouseOverTiles.Front()->GetFullPath();
@@ -597,7 +597,7 @@ void ThumbnailView::ClearHighlight()
         m_MouseOverTiles.Front()->SetHighlighted( false );
         m_MouseOverTiles.Clear();
         Refresh();
-        m_HighlightChanged.Raise( ThumbnailHighlightArgs( "" ) );
+        m_HighlightChanged.Raise( ThumbnailHighlightArgs( TXT( "" ) ) );
     }
 }
 
@@ -681,7 +681,7 @@ void ThumbnailView::CreateResources()
             OUT_DEFAULT_PRECIS,
             NONANTIALIASED_QUALITY,
             DEFAULT_PITCH | FF_DONTCARE,
-            "Arial",
+            TXT( "Arial" ),
             &m_LabelFont );
 
         NOC_ASSERT( SUCCEEDED( result ) );
@@ -704,7 +704,7 @@ void ThumbnailView::CreateResources()
             OUT_DEFAULT_PRECIS,
             NONANTIALIASED_QUALITY,
             DEFAULT_PITCH | FF_DONTCARE,
-            "Arial",
+            TXT( "Arial" ),
             &m_TypeFont );
 
         NOC_ASSERT( SUCCEEDED( result ) );
@@ -718,7 +718,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureMissing )
     {
-        std::string file = "screenshot_missing.png";
+        tstring file = TXT( "screenshot_missing.png" );
 
         m_TextureMissing = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureMissing->GetTexture() );
@@ -726,7 +726,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureError )
     {
-        std::string file = "file_error_256.png";
+        tstring file = TXT( "file_error_256.png" );
 
         m_TextureError = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureError->GetTexture() );
@@ -734,7 +734,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureLoading )
     {
-        std::string file = "screenshot_loading.png";
+        tstring file = TXT( "screenshot_loading.png" );
 
         m_TextureLoading = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureLoading->GetTexture() );
@@ -742,7 +742,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureFolder )
     {
-        std::string file = "folder_256.png";
+        tstring file = TXT( "folder_256.png" );
 
         m_TextureFolder = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureFolder->GetTexture() );
@@ -750,7 +750,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureOverlay )
     {
-        std::string file = "thumbnail_overlay.png";
+        tstring file = TXT( "thumbnail_overlay.png" );
 
         m_TextureOverlay = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureOverlay->GetTexture() );
@@ -758,7 +758,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureSelected )
     {
-        std::string file = "thumbnail_overlay_selected.png";
+        tstring file = TXT( "thumbnail_overlay_selected.png" );
 
         m_TextureSelected = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureSelected->GetTexture() );
@@ -766,7 +766,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureHighlighted )
     {
-        std::string file = "thumbnail_overlay_highlighted.png";
+        tstring file = TXT( "thumbnail_overlay_highlighted.png" );
 
         m_TextureHighlighted = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureHighlighted->GetTexture() );
@@ -774,7 +774,7 @@ void ThumbnailView::CreateResources()
 
     if ( !m_TextureBlankFile )
     {
-        std::string file = "blank_file_32.png";
+        tstring file = TXT( "blank_file_32.png" );
 
         m_TextureBlankFile = new Thumbnail( &m_D3DManager, LoadTexture( device, file ) );
         NOC_ASSERT( m_TextureBlankFile->GetTexture() );
@@ -995,7 +995,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             p4Menu->Append( ID_CheckOut, BrowserMenu::Label( ID_CheckOut ) );
             p4Menu->Append( ID_History, BrowserMenu::Label( ID_History ) );
             p4Menu->Append( ID_ShowInPerforce, BrowserMenu::Label( ID_ShowInPerforce ) );
-            wxMenuItem* currentItem = menu.AppendSubMenu( p4Menu, "Perforce" );
+            wxMenuItem* currentItem = menu.AppendSubMenu( p4Menu, TXT( "Perforce" ) );
             p4Menu->Enable( ID_CheckOut, numSelected > 0 );
             p4Menu->Enable( ID_History, onlyFiles && numSelected == 1 );
             p4Menu->Enable( ID_ShowInPerforce, numSelected == 1 );
@@ -1007,7 +1007,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             wxMenu* showInMenu = new wxMenu;
             showInMenu->Append( ID_ShowInFolders, BrowserMenu::Label( ID_ShowInFolders ) );
             showInMenu->Append( ID_ShowInWindows, BrowserMenu::Label( ID_ShowInWindows ) );
-            wxMenuItem* currentItem = menu.AppendSubMenu( showInMenu, "Show In" );
+            wxMenuItem* currentItem = menu.AppendSubMenu( showInMenu, TXT( "Show In" ) );
             menu.Enable( currentItem->GetId(), numSelected == 1 );
         }
 
@@ -1017,7 +1017,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             collectionMenu->Append( ID_NewCollectionFromSel, BrowserMenu::Label( ID_NewCollectionFromSel ) );
             collectionMenu->Append( ID_NewDependencyCollectionFromSel, BrowserMenu::Label( ID_NewDependencyCollectionFromSel ) );
             collectionMenu->Append( ID_NewUsageCollectionFromSel, BrowserMenu::Label( ID_NewUsageCollectionFromSel ) );
-            wxMenuItem* currentItem = menu.AppendSubMenu( collectionMenu, "Make Collection" );
+            wxMenuItem* currentItem = menu.AppendSubMenu( collectionMenu, TXT( "Make Collection" ) );
             menu.Enable( currentItem->GetId(), numSelected > 0 && onlyFiles );
             collectionMenu->Enable( ID_NewCollectionFromSel, onlyFiles );
             const bool enableDependencyCollection = numSelected == 1 && onlyFiles;
@@ -1030,7 +1030,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             wxMenu* copyToClipboardMenu = new wxMenu;
             copyToClipboardMenu->Append( ID_CopyPathWindows, BrowserMenu::Label( ID_CopyPathWindows ) );
             copyToClipboardMenu->Append( ID_CopyPathClean, BrowserMenu::Label( ID_CopyPathClean ) );
-            wxMenuItem* currentItem = menu.AppendSubMenu( copyToClipboardMenu, "Copy To Clipboard" );
+            wxMenuItem* currentItem = menu.AppendSubMenu( copyToClipboardMenu, TXT( "Copy To Clipboard" ) );
             menu.Enable( currentItem->GetId(), numSelected > 0 );
         }
 
@@ -1057,10 +1057,10 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
         // Thumbnail Size...
         {
             wxMenu* viewMenu = new wxMenu();
-            viewMenu->AppendCheckItem( ID_ViewSmall, BrowserMenu::Label( ID_ViewSmall ) + std::string( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Small ), BrowserMenu::Label( ID_ViewSmall ) );
-            viewMenu->AppendCheckItem( ID_ViewMedium, BrowserMenu::Label( ID_ViewMedium ) + std::string( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Medium ), BrowserMenu::Label( ID_ViewMedium ) );
-            viewMenu->AppendCheckItem( ID_ViewLarge, BrowserMenu::Label( ID_ViewLarge ) + std::string( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Large ), BrowserMenu::Label( ID_ViewLarge ) );
-            menu.AppendSubMenu( viewMenu, "Thumbnail Size" );
+            viewMenu->AppendCheckItem( ID_ViewSmall, BrowserMenu::Label( ID_ViewSmall ) + TXT( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Small ), BrowserMenu::Label( ID_ViewSmall ) );
+            viewMenu->AppendCheckItem( ID_ViewMedium, BrowserMenu::Label( ID_ViewMedium ) + TXT( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Medium ), BrowserMenu::Label( ID_ViewMedium ) );
+            viewMenu->AppendCheckItem( ID_ViewLarge, BrowserMenu::Label( ID_ViewLarge ) + TXT( " " ) + ThumbnailSizes::Label( ThumbnailSizes::Large ), BrowserMenu::Label( ID_ViewLarge ) );
+            menu.AppendSubMenu( viewMenu, TXT( "Thumbnail Size" ) );
 
             // Make sure view option is correct
             menu.Check( ID_ViewLarge, m_Scale == ThumbnailSizes::Large );
@@ -1077,7 +1077,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             sortMenu->AppendCheckItem( ID_SortByType, BrowserMenu::Label( ID_SortByType ) );
             sortMenu->AppendSeparator();
             sortMenu->Append( ID_Sort, BrowserMenu::Label( ID_Sort ) );
-            i32 sortMenuId = menu.AppendSubMenu( sortMenu, "Arrange Icons By" )->GetId();
+            i32 sortMenuId = menu.AppendSubMenu( sortMenu, TXT( "Arrange Icons By" ) )->GetId();
 
             sortMenu->Check( ID_SortByName, GetSortMethod() == ThumbnailSortMethods::AlphabeticalByName );
             sortMenu->Check( ID_SortByType, GetSortMethod() == ThumbnailSortMethods::AlphabeticalByType );
@@ -1108,7 +1108,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             //newMenu->Enable( ID_NewFolder, inFolder );
 
             wxMenuItem* menuItem = new wxMenuItem( &menu, ID_New, BrowserMenu::Label( ID_New ), BrowserMenu::Label( ID_New ), wxITEM_NORMAL, newMenu );
-            menuItem->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( "new_file.png" ) );
+            menuItem->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "new_file.png" ) ) );
             menu.Append( menuItem );
             menuItem->Enable( inFolder );
         }
@@ -1448,7 +1448,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
         }
 
         // Draw label
-        std::string label = tile->GetLabel();
+        tstring label = tile->GetLabel();
         if ( !label.empty() )
         {
             float left = 0.0f;
@@ -1478,18 +1478,18 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
             }
 
             //tile->IsSelected() ? s_TextColorBGSelected : s_TextColorDefault
-            m_LabelFont->DrawTextA( sprite, label.c_str(), -1, &calcRect, DT_CALCRECT, s_TextColorDefault );
+            m_LabelFont->DrawText( sprite, label.c_str(), -1, &calcRect, DT_CALCRECT, s_TextColorDefault );
             u32 flags = 0;
             if ( calcRect.right <= rect.right )
             {
                 flags = DT_CENTER;
             }
-            result = m_LabelFont->DrawTextA( sprite, label.c_str(), -1, &rect, flags, s_TextColorDefault );
+            result = m_LabelFont->DrawText( sprite, label.c_str(), -1, &rect, flags, s_TextColorDefault );
             //NOC_ASSERT( SUCCEEDED( result ) );
         }
 
         // Draw type name on top of the thumbnail image
-        std::string typeLabel = tile->GetTypeLabel();
+        tstring typeLabel = tile->GetTypeLabel();
         if ( !typeLabel.empty() )
         {
             float left = 0.0f;
@@ -1516,7 +1516,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
             {
                 color = s_TextColorDark;
             }
-            result = m_LabelFont->DrawTextA( sprite, typeLabel.c_str(), -1, &rect, DT_CENTER, color );
+            result = m_LabelFont->DrawText( sprite, typeLabel.c_str(), -1, &rect, DT_CENTER, color );
         }
     }
 }
@@ -1785,7 +1785,7 @@ void ThumbnailView::OnMouseMove( wxMouseEvent& args )
                 tileEnd = m_SelectedTiles.End(); tileItr != tileEnd; ++tileItr )
             {
                 ThumbnailTile* tile = *tileItr;
-                std::string path;
+                tstring path;
                 if ( tile->IsFile() )
                 {
                     path = tile->GetFile()->GetFilePath();
@@ -2056,9 +2056,9 @@ void ThumbnailView::OnFileProperties( wxCommandEvent& args )
     {
         if ( files.size() > 5 )
         {
-            std::stringstream message;
-            message << "Are you sure that you want to show the properties for all " << files.size() << " selected files?";
-            i32 result = wxMessageBox( message.str(), "Show Details?", wxCENTER | wxYES_NO | wxICON_QUESTION, this );
+            tstringstream message;
+            message << TXT( "Are you sure that you want to show the properties for all " ) << files.size() << TXT( " selected files?" );
+            i32 result = wxMessageBox( message.str(), TXT( "Show Details?" ), wxCENTER | wxYES_NO | wxICON_QUESTION, this );
             if ( result != wxYES )
             {
                 return;
@@ -2129,11 +2129,11 @@ void ThumbnailView::OnThumbnailLoaded( Luna::ThumbnailLoadedEvent& args )
         else
         {
             // the extension is used to identify this type of file
-            std::string extension = Nocturnal::Path( args.GetAssetFile()->GetFilePath() ).Extension();
+            tstring extension = Nocturnal::Path( args.GetAssetFile()->GetFilePath() ).Extension();
             toLower( extension );
 
             // look for a cached thumbnail for this extension
-            std::map<std::string, ThumbnailPtr>::const_iterator found = m_AssociatedIcons.find( extension );
+            std::map<tstring, ThumbnailPtr>::const_iterator found = m_AssociatedIcons.find( extension );
             if ( found != m_AssociatedIcons.end() )
             {
                 // we got it, just share it
@@ -2144,23 +2144,23 @@ void ThumbnailView::OnThumbnailLoaded( Luna::ThumbnailLoadedEvent& args )
                 WORD index = 0;
 
                 // the win32 function below expects pretty paths
-                std::string win32 = args.GetAssetFile()->GetFilePath();
+                tstring win32 = args.GetAssetFile()->GetFilePath();
                 Nocturnal::Path::MakeNative( win32 );
 
                 // get the icon resource for this example file
-                char path[MAX_PATH];
-                strcpy( path, win32.c_str() );
+                tchar path[MAX_PATH];
+                _tcscpy( path, win32.c_str() );
                 HICON icon = ExtractAssociatedIcon( NULL, path, &index );
 
                 // if we got the resource
                 if ( icon )
                 {
                     // check to see if its the fallback in shell32.dll
-                    char file[MAX_PATH];
-                    _splitpath( path, NULL, NULL, file, NULL );
+                    tchar file[MAX_PATH];
+                    _tsplitpath( path, NULL, NULL, file, NULL );
 
                     // if its windows' stub icon, don't bother using it
-                    if ( stricmp( file, "SHELL32" ) )
+                    if ( _tcsicmp( file, TXT( "SHELL32" ) ) )
                     {
                         // build a thumbnail texture from the icon resource
                         ThumbnailPtr thumb = new Thumbnail( &m_D3DManager );

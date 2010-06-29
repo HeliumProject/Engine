@@ -10,8 +10,8 @@ LUNA_DEFINE_TYPE( Luna::Point );
 
 void Point::InitializeType()
 {
-  Reflect::RegisterClass< Luna::Point >( "Luna::Point" );
-  Enumerator::InitializePanel( "Point", CreatePanelSignature::Delegate( &Point::CreatePanel ) );
+  Reflect::RegisterClass< Luna::Point >( TXT( "Luna::Point" ) );
+  Enumerator::InitializePanel( TXT( "Point" ), CreatePanelSignature::Delegate( &Point::CreatePanel ) );
 }
 
 void Point::CleanupType()
@@ -30,12 +30,12 @@ Point::~Point()
 
 i32 Point::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "point.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "point.png" ) );
 }
 
-std::string Point::GetApplicationTypeName() const
+tstring Point::GetApplicationTypeName() const
 {
-  return "Point";
+  return TXT( "Point" );
 }
 
 const Math::Vector3& Point::GetPosition() const
@@ -106,9 +106,9 @@ void Point::ConnectManipulator(ManiuplatorAdapterCollection *collection)
   }
 }
 
-bool Point::ValidatePanel( const std::string& name )
+bool Point::ValidatePanel( const tstring& name )
 {
-  if ( name == "Point" )
+  if ( name == TXT( "Point" ) )
   {
     return true;
   }
@@ -118,10 +118,10 @@ bool Point::ValidatePanel( const std::string& name )
 
 void Point::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel( "Point", true);
+  args.m_Enumerator->PushPanel( TXT( "Point" ), true);
   {
     args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( "Position" );
+    args.m_Enumerator->AddLabel( TXT( "Position" ) );
     args.m_Enumerator->AddValue<Luna::Point, f32>( args.m_Selection, &Point::GetPositionX, &Point::SetPositionX );
     args.m_Enumerator->AddValue<Luna::Point, f32>( args.m_Selection, &Point::GetPositionY, &Point::SetPositionY );
     args.m_Enumerator->AddValue<Luna::Point, f32>( args.m_Selection, &Point::GetPositionZ, &Point::SetPositionZ );

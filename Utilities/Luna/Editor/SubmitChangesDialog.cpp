@@ -13,7 +13,7 @@ using namespace Luna;
 // Constructor
 // 
 SubmitChangesDialog::SubmitChangesDialog( wxWindow* parent )
-: wxDialog( parent, wxID_ANY, "Commit changes?", wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+: wxDialog( parent, wxID_ANY, wxT( "Commit changes?" ), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 , m_Panel( NULL )
 {
   m_Panel = new SubmitChangesPanel( this, wxID_ANY );
@@ -54,9 +54,9 @@ int SubmitChangesDialog::ShowModal()
   }
   catch ( Nocturnal::Exception& ex )
   {
-    std::stringstream str;
+    tstringstream str;
     str << "Unable to get opened files: " << ex.What();
-    wxMessageBox( str.str().c_str(), "Error", wxCENTER | wxICON_ERROR | wxOK );
+    wxMessageBox( str.str().c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
     return result;
   }
 
@@ -83,9 +83,9 @@ int SubmitChangesDialog::ShowModal()
   else
   {
     // If there's no files in the changelist, ask the user if they want to launch P4V.
-    if ( wxYES == wxMessageBox( "There are no files to commit in your default changelist.\nWould you like to launch P4V?", "Launch P4V?", wxYES_NO | wxCENTER | wxICON_QUESTION, GetParent() ) )
+    if ( wxYES == wxMessageBox( wxT( "There are no files to commit in your default changelist.\nWould you like to launch P4V?" ), wxT( "Launch P4V?" ), wxYES_NO | wxCENTER | wxICON_QUESTION, GetParent() ) )
     {
-      Platform::Execute( "p4v.exe" );
+      Platform::Execute( TXT( "p4v.exe" ) );
     }
   }
 
@@ -97,14 +97,14 @@ int SubmitChangesDialog::ShowModal()
 // 
 void SubmitChangesDialog::Commit()
 {
-  std::string error;
+  tstring error;
 
   RCS::Changeset changeset;
-  changeset.m_Description = "Luna Session Manager: Commit Default Changelist";
+  changeset.m_Description = TXT( "Luna Session Manager: Commit Default Changelist" );
   changeset.Create();
   if ( changeset.m_Id < 0 || changeset.m_Id == RCS::DefaultChangesetId )
   {
-    error = "Could not create new Perforce changlist.";
+    error = TXT( "Could not create new Perforce changlist." );
   }
 
   RCS::V_File files;
@@ -116,8 +116,8 @@ void SubmitChangesDialog::Commit()
     }
     catch ( const Nocturnal::Exception& e )
     {
-      std::stringstream str;
-      error = "Unable to get opened files: " + e.Get();
+      tstringstream str;
+      error = TXT( "Unable to get opened files: " ) + e.Get();
     }
   }
 
@@ -135,7 +135,7 @@ void SubmitChangesDialog::Commit()
   }
   catch ( const Nocturnal::Exception& e )
   {
-    error = "Failed to reopen files in the default change list: " + e.Get();
+    error = TXT( "Failed to reopen files in the default change list: " ) + e.Get();
   }
 
   if ( error.empty() )
@@ -146,18 +146,18 @@ void SubmitChangesDialog::Commit()
     }
     catch ( const Nocturnal::Exception& e )
     {
-      error = "Commit failed: " + e.Get();
+      error = TXT( "Commit failed: " ) + e.Get();
     }
   }
 
   if ( !error.empty() )
   {
-    error += "\n";
-    error += "Would you like to launch P4V?";
+    error += TXT( "\n" );
+    error += TXT( "Would you like to launch P4V?" );
 
-    if ( wxYES == wxMessageBox( error, "Launch P4V?", wxYES_NO | wxCENTER | wxICON_ERROR, this ) )
+    if ( wxYES == wxMessageBox( error, TXT( "Launch P4V?" ), wxYES_NO | wxCENTER | wxICON_ERROR, this ) )
     {
-      Platform::Execute( "p4v.exe" );
+      Platform::Execute( TXT( "p4v.exe" ) );
     }
   }
 }
@@ -175,7 +175,7 @@ void SubmitChangesDialog::OnButtonClicked( wxCommandEvent& args )
     break;
 
   case wxID_NO:
-    Platform::Execute( "p4v.exe" );
+    Platform::Execute( TXT( "p4v.exe" ) );
     break;
 
   case wxID_CANCEL:

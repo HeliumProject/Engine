@@ -626,7 +626,7 @@ PreviewPanelGenerated::PreviewPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* sizer;
 	sizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_PreviewWindow = new BrowserPreviewWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, "Luna::PreviewWindow" );
+	m_PreviewWindow = new BrowserPreviewWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, TXT( "Luna::PreviewWindow" ) );
 	m_PreviewWindow->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ) );
 	
 	sizer->Add( m_PreviewWindow, 1, wxEXPAND, 5 );

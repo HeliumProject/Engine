@@ -85,21 +85,21 @@ void Luna::SceneInitialize()
     g_InitializerStack.Push( Asset::Initialize, Asset::Cleanup );
 
     // reflect types defined in this library (after Reflect::Initialize above)
-    g_InitializerStack.Push( Reflect::RegisterEnumeration<CameraModes::CameraMode>( &CameraModes::CameraModeEnumerateEnumeration, "CameraMode" ) ); 
-    g_InitializerStack.Push( Reflect::RegisterEnumeration<GeometryModes::GeometryMode>( &GeometryModes::GeometryModeEnumerateEnumeration, "GeometryMode" ) ); 
-    g_InitializerStack.Push( Reflect::RegisterEnumeration<ViewColorModes::ViewColorMode>( &ViewColorModes::ViewColorModeEnumerateEnumeration, "ViewColorMode" ) ); 
-    g_InitializerStack.Push( Reflect::RegisterEnumeration<GridUnits::GridUnit>( &GridUnits::GridUnitEnumerateEnumeration, "GridUnit" ) ); 
-    g_InitializerStack.Push( Reflect::RegisterEnumeration<ManipulatorSpaces::ManipulatorSpace>( &ManipulatorSpaces::ManipulatorSpaceEnumerateEnumeration, "ManipulatorSpace" ) ); 
-    g_InitializerStack.Push( Reflect::RegisterEnumeration<TranslateSnappingModes::TranslateSnappingMode>( &TranslateSnappingModes::TranslateSnappingModeEnumerateEnumeration, "TranslateSnappingMode" ) ); 
+    g_InitializerStack.Push( Reflect::RegisterEnumeration<CameraModes::CameraMode>( &CameraModes::CameraModeEnumerateEnumeration, TXT( "CameraMode" ) ) ); 
+    g_InitializerStack.Push( Reflect::RegisterEnumeration<GeometryModes::GeometryMode>( &GeometryModes::GeometryModeEnumerateEnumeration, TXT( "GeometryMode" ) ) ); 
+    g_InitializerStack.Push( Reflect::RegisterEnumeration<ViewColorModes::ViewColorMode>( &ViewColorModes::ViewColorModeEnumerateEnumeration, TXT( "ViewColorMode" ) ) ); 
+    g_InitializerStack.Push( Reflect::RegisterEnumeration<GridUnits::GridUnit>( &GridUnits::GridUnitEnumerateEnumeration, TXT( "GridUnit" ) ) ); 
+    g_InitializerStack.Push( Reflect::RegisterEnumeration<ManipulatorSpaces::ManipulatorSpace>( &ManipulatorSpaces::ManipulatorSpaceEnumerateEnumeration, TXT( "ManipulatorSpace" ) ) ); 
+    g_InitializerStack.Push( Reflect::RegisterEnumeration<TranslateSnappingModes::TranslateSnappingMode>( &TranslateSnappingModes::TranslateSnappingModeEnumerateEnumeration, TXT( "TranslateSnappingMode" ) ) ); 
 
-    g_InitializerStack.Push( Reflect::RegisterEnumeration<ShadingMode>( &ShadingModeEnumerateEnumeration, "ShadingMode" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<CameraPreferences>( "CameraPreferences" ) ); 
-    g_InitializerStack.Push( Reflect::RegisterClass<ViewPreferences>( "ViewPreferences" ) ); 
-    g_InitializerStack.Push( Reflect::RegisterClass<GridPreferences>( "Grid" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<ScenePreferences>( "ScenePreferences" ) );
+    g_InitializerStack.Push( Reflect::RegisterEnumeration<ShadingMode>( &ShadingModeEnumerateEnumeration, TXT( "ShadingMode" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<CameraPreferences>( TXT( "CameraPreferences" ) ) ); 
+    g_InitializerStack.Push( Reflect::RegisterClass<ViewPreferences>( TXT( "ViewPreferences" ) ) ); 
+    g_InitializerStack.Push( Reflect::RegisterClass<GridPreferences>( TXT( "Grid" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<ScenePreferences>( TXT( "ScenePreferences" ) ) );
 
-    g_InitializerStack.Push( Reflect::RegisterClass<ScaleColorModeValue>( "ScaleColorModeValue" ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<MiscSettings>( "MiscSettings" ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<ScaleColorModeValue>( TXT( "ScaleColorModeValue" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterClass<MiscSettings>( TXT( "MiscSettings" ) ) );
 
     // luna types 
     g_InitializerStack.Push( SceneEditor::InitializeEditor, SceneEditor::CleanupEditor );

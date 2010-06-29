@@ -28,7 +28,7 @@ namespace Luna
     virtual ~Point();
 
     virtual i32 GetImageIndex() const NOC_OVERRIDE;
-    virtual std::string GetApplicationTypeName() const NOC_OVERRIDE;
+    virtual tstring GetApplicationTypeName() const NOC_OVERRIDE;
 
     const Math::Vector3& GetPosition() const;
     void SetPosition( const Math::Vector3& value );
@@ -45,7 +45,7 @@ namespace Luna
     virtual void ConnectManipulator( ManiuplatorAdapterCollection* collection ) NOC_OVERRIDE;
     virtual bool Pick( PickVisitor* pick ) NOC_OVERRIDE;
     virtual void Evaluate( GraphDirection direction ) NOC_OVERRIDE;
-    virtual bool ValidatePanel( const std::string& name ) NOC_OVERRIDE;
+    virtual bool ValidatePanel( const tstring& name ) NOC_OVERRIDE;
     static void CreatePanel( CreatePanelArgs& args );
   };
 

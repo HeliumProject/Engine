@@ -20,8 +20,8 @@ LUNA_DEFINE_TYPE( Luna::Layer );
 // 
 void Layer::InitializeType()
 {
-  Reflect::RegisterClass< Luna::Layer >( "Luna::Layer" );
-  Enumerator::InitializePanel( "Layer", CreatePanelSignature::Delegate( &Layer::CreatePanel ) );
+  Reflect::RegisterClass< Luna::Layer >( TXT( "Luna::Layer" ) );
+  Enumerator::InitializePanel( TXT( "Layer" ), CreatePanelSignature::Delegate( &Layer::CreatePanel ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,15 +53,15 @@ Layer::~Layer()
 // 
 i32 Layer::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( "layer.png" );
+  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "layer.png" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the UI friendly name for the node type.
 // 
-std::string Layer::GetApplicationTypeName() const
+tstring Layer::GetApplicationTypeName() const
 {
-  return "Layer";
+  return TXT( "Layer" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -94,9 +94,9 @@ void Layer::Initialize()
     }
     else
     {
-      std::string idStr;
+      tstring idStr;
       (*itr).ToString( idStr );
-      Log::Debug( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n", GetName().c_str(), idStr.c_str() );
+      Log::Debug( TXT( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n" ), GetName().c_str(), idStr.c_str() );
     }
   }
 
@@ -271,9 +271,9 @@ void Layer::Insert(SceneGraph* g, V_SceneNodeDumbPtr& insertedNodes )
       }
       else
       {
-        std::string idStr;
+        tstring idStr;
         id.ToString( idStr );
-        Log::Debug( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n", GetName().c_str(), idStr.c_str() );
+        Log::Debug( TXT( "Layer %s: Unable to reconnect layer member with ID %s (it is no longer in the scene).\n" ), GetName().c_str(), idStr.c_str() );
       }
     }
   }
@@ -283,13 +283,13 @@ void Layer::Insert(SceneGraph* g, V_SceneNodeDumbPtr& insertedNodes )
 // Callback from the UI to determine if this class can display the specified
 // panel.
 // 
-bool Layer::ValidatePanel(const std::string& name)
+bool Layer::ValidatePanel(const tstring& name)
 {
-  if (name == "Layer")
+  if (name == TXT( "Layer" ) )
   {
     return true;
   }
-  else if ( name == "Membership" )
+  else if ( name == TXT( "Membership" ) )
   {
     // We don't have layers of layers, so this panel is not needed
     return false;
@@ -304,15 +304,15 @@ bool Layer::ValidatePanel(const std::string& name)
 // 
 void Layer::CreatePanel( CreatePanelArgs& args )
 {
-  std::string unionStr;
-  std::string intersectionStr;
+  tstring unionStr;
+  tstring intersectionStr;
   BuildUnionAndIntersection( args.m_Enumerator, args.m_Selection, unionStr, intersectionStr );
 
-  args.m_Enumerator->PushPanel("Layer", true);
+  args.m_Enumerator->PushPanel( TXT( "Layer" ), true);
   {
     args.m_Enumerator->PushContainer();
     {
-      args.m_Enumerator->AddLabel("Color");
+      args.m_Enumerator->AddLabel( TXT( "Color" ) );
       args.m_Enumerator->AddColorPicker< Luna::Layer, Math::Color3 >( args.m_Selection, &Layer::GetColor, &Layer::SetColor );
     }
     args.m_Enumerator->Pop();
@@ -323,14 +323,14 @@ void Layer::CreatePanel( CreatePanelArgs& args )
 
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("Members");
+        args.m_Enumerator->AddLabel( TXT( "Members" ) );
       }
       args.m_Enumerator->Pop();
 
       Inspect::Container* container = args.m_Enumerator->PushContainer();
       {
         Inspect::ListPtr control = args.m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::List>( args.m_Enumerator );
-        control->Bind( new Inspect::StringFormatter<std::string>( new std::string( unionStr ), true ) );
+        control->Bind( new Inspect::StringFormatter<tstring>( new tstring( unionStr ), true ) );
         container->AddControl(control);
       }
       args.m_Enumerator->Pop();
@@ -341,28 +341,28 @@ void Layer::CreatePanel( CreatePanelArgs& args )
       
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("Union");
+        args.m_Enumerator->AddLabel( TXT( "Union" ) );
       }
       args.m_Enumerator->Pop();
 
       Inspect::Container* unionContainer = args.m_Enumerator->PushContainer();
       {
         Inspect::ListPtr control = args.m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::List>( args.m_Enumerator );
-        control->Bind( new Inspect::StringFormatter<std::string>( new std::string( unionStr ), true ) );
+        control->Bind( new Inspect::StringFormatter<tstring>( new tstring( unionStr ), true ) );
         unionContainer->AddControl(control);
       }
       args.m_Enumerator->Pop();
 
       args.m_Enumerator->PushContainer();
       {
-        args.m_Enumerator->AddLabel("Intersection");
+        args.m_Enumerator->AddLabel( TXT( "Intersection" ) );
       }
       args.m_Enumerator->Pop();
 
       Inspect::Container* intersectionContainer = args.m_Enumerator->PushContainer();
       {
         Inspect::ListPtr control = args.m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::List>( args.m_Enumerator );
-        control->Bind( new Inspect::StringFormatter<std::string>( new std::string( intersectionStr ), true ) );
+        control->Bind( new Inspect::StringFormatter<tstring>( new tstring( intersectionStr ), true ) );
         intersectionContainer->AddControl(control);
       }
       args.m_Enumerator->Pop();
@@ -375,9 +375,9 @@ void Layer::CreatePanel( CreatePanelArgs& args )
 // Static helper function to build the list of all members and common members
 // across all selected objects. These lists will be shown in the UI.
 // 
-void Layer::BuildUnionAndIntersection( Enumerator* enumerator, const OS_SelectableDumbPtr& selection, std::string& unionStr, std::string& intersectionStr )
+void Layer::BuildUnionAndIntersection( Enumerator* enumerator, const OS_SelectableDumbPtr& selection, tstring& unionStr, tstring& intersectionStr )
 {
-  typedef std::set< std::string, CaseInsensitiveNatStrCmp > S_Ordered;
+  typedef std::set< tstring, CaseInsensitiveNatStrCmp > S_Ordered;
   S_Ordered unionSet;
   S_Ordered intersectionSet;
 
@@ -462,7 +462,7 @@ void Layer::BuildUnionAndIntersection( Enumerator* enumerator, const OS_Selectab
     }
 
     // Build the intersection string
-    for each ( const std::string& str in intersectionSet )
+    for each ( const tstring& str in intersectionSet )
     {
       if ( !intersectionStr.empty() )
       {
@@ -472,7 +472,7 @@ void Layer::BuildUnionAndIntersection( Enumerator* enumerator, const OS_Selectab
     }
 
     // Build the union string
-    for each ( const std::string& str in unionSet )
+    for each ( const tstring& str in unionSet )
     {
       if ( !unionStr.empty() )
       {

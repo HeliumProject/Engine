@@ -505,9 +505,9 @@ void PreviewWindow::OnMouseWheel( wxMouseEvent& args )
 // 
 void PreviewWindow::OnScreenShotToFile( wxCommandEvent& args )
 {
-  Nocturnal::FileDialog dialog( this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, "", Nocturnal::FileDialogStyles::DefaultSave );
+  Nocturnal::FileDialog dialog( this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, TXT( "" ), Nocturnal::FileDialogStyles::DefaultSave );
 
-  dialog.AddFilter( "TGA (*.tga)|*.tga" );
+  dialog.AddFilter( TXT( "TGA (*.tga)|*.tga" ) );
 
   if ( dialog.ShowModal() == wxID_OK )
   {

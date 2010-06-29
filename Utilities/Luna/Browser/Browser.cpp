@@ -29,18 +29,18 @@ void Browser::Initialize()
 
     s_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
 
-    s_InitializerStack.Push( Reflect::RegisterClass<AssetCollection>( "AssetCollection" ) );
-    s_InitializerStack.Push( Reflect::RegisterClass<DependencyCollection>( "DependencyCollection" ) );
-    s_InitializerStack.Push( Reflect::RegisterClass<CollectionManager>( "CollectionManager" ) );
+    s_InitializerStack.Push( Reflect::RegisterClass<AssetCollection>( TXT( "AssetCollection" ) ) );
+    s_InitializerStack.Push( Reflect::RegisterClass<DependencyCollection>( TXT( "DependencyCollection" ) ) );
+    s_InitializerStack.Push( Reflect::RegisterClass<CollectionManager>( TXT( "CollectionManager" ) ) );
 
-    s_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::SearchTypes::SearchType>( &Luna::SearchTypes::SearchTypesEnumerateEnumeration, "SearchType" ) );
-    s_InitializerStack.Push( Reflect::RegisterClass<SearchQuery>( "SearchQuery" ) );
+    s_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::SearchTypes::SearchType>( &Luna::SearchTypes::SearchTypesEnumerateEnumeration, TXT( "SearchType" ) ) );
+    s_InitializerStack.Push( Reflect::RegisterClass<SearchQuery>( TXT( "SearchQuery" ) ) );
 
-    s_InitializerStack.Push( Reflect::RegisterClass<SearchHistory>( "SearchHistory" ) );
+    s_InitializerStack.Push( Reflect::RegisterClass<SearchHistory>( TXT( "SearchHistory" ) ) );
 
-    s_InitializerStack.Push( Reflect::RegisterEnumeration<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnumeration, "ViewOptionID" ) );
+    s_InitializerStack.Push( Reflect::RegisterEnumeration<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnumeration, TXT( "ViewOptionID" ) ) );
 
-    s_InitializerStack.Push( Reflect::RegisterClass<BrowserPreferences>( "BrowserPreferences" ) );
+    s_InitializerStack.Push( Reflect::RegisterClass<BrowserPreferences>( TXT( "BrowserPreferences" ) ) );
 
 }
 
@@ -57,7 +57,7 @@ void Browser::Cleanup()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-Browser::Browser( const std::string& rootDirectory, const std::string& configDirectory )
+Browser::Browser( const tstring& rootDirectory, const tstring& configDirectory )
 : m_RootDirectory( rootDirectory )
 , m_ConfigDirectory( configDirectory )
 , m_BrowserSearch( NULL ) 
@@ -89,7 +89,7 @@ Browser::~Browser()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Browser::ShowBrowser( const std::string& queryString )
+void Browser::ShowBrowser( const tstring& queryString )
 {
     if ( !m_BrowserFrame )
     {
@@ -145,7 +145,7 @@ void Browser::OnDocumentChange( const DocumentManagerChangeArgs& args )
         {
             if ( manager->GetCurrentLevel() )
             {
-                std::string name = manager->GetCurrentLevel()->GetShortName();
+                tstring name = manager->GetCurrentLevel()->GetShortName();
 
                 DependencyCollection* collection = Reflect::ObjectCast<DependencyCollection>( m_CollectionManager->FindCollection( name ) );
                 if ( collection && collection->GetPath().Hash() == manager->GetCurrentLevel()->GetPath().Hash() )

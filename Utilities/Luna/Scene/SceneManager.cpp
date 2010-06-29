@@ -20,11 +20,11 @@ using namespace Luna;
 // Returns a different name each time this function is called so that scenes
 // can be uniquely named.
 // 
-static std::string GetUniqueSceneName()
+static tstring GetUniqueSceneName()
 {
     static i32 number = 1;
 
-    std::ostringstream str;
+    tostringstream str;
     str << "Scene" << number++;
     return str.str();
 }
@@ -67,9 +67,9 @@ Asset::SceneAsset* SceneManager::GetCurrentLevel() const
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
 // 
-ScenePtr SceneManager::NewScene( bool isRoot, std::string path, bool addDoc )
+ScenePtr SceneManager::NewScene( bool isRoot, tstring path, bool addDoc )
 {
-    std::string name;
+    tstring name;
     if ( path.empty() )
     {
         name = GetUniqueSceneName();
@@ -95,7 +95,7 @@ ScenePtr SceneManager::NewScene( bool isRoot, std::string path, bool addDoc )
 ///////////////////////////////////////////////////////////////////////////////
 // Open a top-level scene (world).
 // 
-DocumentPtr SceneManager::OpenPath( const std::string& path, std::string& error ) 
+DocumentPtr SceneManager::OpenPath( const tstring& path, tstring& error ) 
 {
     if ( !CloseAll() )
     {
@@ -113,14 +113,14 @@ DocumentPtr SceneManager::OpenPath( const std::string& path, std::string& error 
         batch->Push( new LSwitchSceneCommand( this, NULL ) );
     }
 
-    std::string scenePath = path;
+    tstring scenePath = path;
     SceneDocumentPtr document;
     Nocturnal::Path filePath( path );
 
     ScenePtr scene = NewScene( m_Root == NULL, scenePath, true );
     if ( !scene->LoadFile( scenePath ) )
     {
-        error = "Failed to load scene from " + path + ".";
+        error = TXT( "Failed to load scene from " ) + path + TXT( "." );
         RemoveScene( scene );
         scene = NULL;
     }
@@ -156,12 +156,12 @@ DocumentPtr SceneManager::OpenPath( const std::string& path, std::string& error 
 ///////////////////////////////////////////////////////////////////////////////
 // Open a zone that should be under the root.
 // 
-ScenePtr SceneManager::OpenZone( const std::string& path, std::string& error )
+ScenePtr SceneManager::OpenZone( const tstring& path, tstring& error )
 {
     ScenePtr scene = NewScene( false, path, true );
     if ( !scene->LoadFile( path ) )
     {
-        error = "Failed to load scene from " + path + ".";
+        error = TXT( "Failed to load scene from " ) + path + TXT( "." );
         RemoveScene( scene );
         scene = NULL;
     }
@@ -188,19 +188,19 @@ ScenePtr SceneManager::OpenZone( const std::string& path, std::string& error )
 // Prompt the user to save a file to a new location.  Returns the path to the
 // new file location, or an empty string if the user cancels the operation.
 // 
-static std::string PromptSaveAs( const DocumentPtr& file, wxWindow* window )
+static tstring PromptSaveAs( const DocumentPtr& file, wxWindow* window )
 {
-    std::string path;
-    std::string defaultDir = Nocturnal::Path( file->GetFilePath() ).Directory();
-    std::string defaultFile = file->GetFilePath();
+    tstring path;
+    tstring defaultDir = Nocturnal::Path( file->GetFilePath() ).Directory();
+    tstring defaultFile = file->GetFilePath();
 
-    Nocturnal::FileDialog saveDlg( window, "Save As...", defaultDir.c_str(), defaultFile.c_str(), "", Nocturnal::FileDialogStyles::DefaultSave );
+    Nocturnal::FileDialog saveDlg( window, TXT( "Save As..." ), defaultDir.c_str(), defaultFile.c_str(), TXT( "" ), Nocturnal::FileDialogStyles::DefaultSave );
     
-    std::set< std::string > extensions;
+    std::set< tstring > extensions;
     Reflect::Archive::GetExtensions( extensions );
-    for ( std::set< std::string >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
+    for ( std::set< tstring >::const_iterator itr = extensions.begin(), end = extensions.end(); itr != end; ++itr )
     {
-        saveDlg.AddFilter( std::string( "Scene (*.scene." ) + *itr + ")|*.scene." + *itr );
+        saveDlg.AddFilter( TXT( "Scene (*.scene." ) + *itr + TXT( ")|*.scene." ) + *itr );
     }
 
     if ( saveDlg.ShowModal() == wxID_OK )
@@ -215,13 +215,13 @@ static std::string PromptSaveAs( const DocumentPtr& file, wxWindow* window )
 // Called when the "save all" option is chosen in the UI.  Iterates over all
 // the open scenes and asks the session manager to save them.
 // 
-bool SceneManager::Save( DocumentPtr document, std::string& error )
+bool SceneManager::Save( DocumentPtr document, tstring& error )
 {
     SceneDocument* sceneDocument = Reflect::ObjectCast< SceneDocument >( document );
     if ( !sceneDocument )
     {
         NOC_BREAK();
-        error = document->GetFilePath() + " is not a valid scene file.";
+        error = document->GetFilePath() + TXT( " is not a valid scene file." );
         return false;
     }
 
@@ -229,14 +229,14 @@ bool SceneManager::Save( DocumentPtr document, std::string& error )
     if ( !scene )
     {
         NOC_BREAK();
-        error = scene->GetFullPath() + " does not contain a valid scene to save.";
+        error = scene->GetFullPath() + TXT( " does not contain a valid scene to save." );
         return false;
     }
 
     // Check for "save as"
     if ( document->GetFilePath().empty() )
     {
-        std::string savePath = PromptSaveAs( sceneDocument, m_Editor );
+        tstring savePath = PromptSaveAs( sceneDocument, m_Editor );
         if ( !savePath.empty() )
         {
             document->SetFilePath( savePath );
@@ -253,7 +253,7 @@ bool SceneManager::Save( DocumentPtr document, std::string& error )
         return __super::Save( document, error );
     }
 
-    error = "Failed to save " + scene->GetFullPath();
+    error = TXT( "Failed to save " ) + scene->GetFullPath();
     return false;
 }
 
@@ -303,7 +303,7 @@ void SceneManager::AddScene(Luna::Scene* scene)
     scene->GetSceneDocument()->AddDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
     scene->AddNodeRemovedListener( NodeChangeSignature::Delegate( this, &SceneManager::SceneNodeDeleting ) );
 
-    const std::string& path = scene->GetFullPath();
+    const tstring& path = scene->GetFullPath();
     Nocturnal::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( path, scene ) );
     NOC_ASSERT(inserted.second);
 
@@ -399,7 +399,7 @@ const M_SceneSmartPtr& SceneManager::GetScenes() const
 ///////////////////////////////////////////////////////////////////////////////
 // Finds a scene by full path in this manager
 // 
-Luna::Scene* SceneManager::GetScene( const std::string& path ) const
+Luna::Scene* SceneManager::GetScene( const tstring& path ) const
 {
     M_SceneSmartPtr::const_iterator found = m_Scenes.find( path );
 
@@ -426,22 +426,22 @@ bool SceneManager::IsNestedScene( Luna::Scene* scene ) const
 // there was a problem loading the scene, it will be empty.  If you allocate a
 // scene, you must call ReleaseNestedScene to free it.
 // 
-Luna::Scene* SceneManager::AllocateNestedScene( const std::string& path, Luna::Scene* parent )
+Luna::Scene* SceneManager::AllocateNestedScene( const tstring& path, Luna::Scene* parent )
 {
     Luna::Scene* scene = GetScene( path );
 
     if ( !scene )
     {
         // Try to load nested scene.
-        parent->ChangeStatus( std::string ("Loading ") + path + "..." );
+        parent->ChangeStatus( TXT("Loading ") + path + TXT( "..." ) );
 
         ScenePtr scenePtr = NewScene( false, path, false );
         if ( !scenePtr->LoadFile( path ) )
         {
-            Log::Error( "Failed to load scene from %s\n", path.c_str() );
+            Log::Error( TXT( "Failed to load scene from %s\n" ), path.c_str() );
         }
 
-        parent->ChangeStatus( "Ready" );
+        parent->ChangeStatus( TXT( "Ready" ) );
         scene = scenePtr;
     }
 
@@ -612,7 +612,7 @@ Luna::Scene* SceneManager::FindFirstNonNestedScene() const
 // 
 void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
 {
-    const std::string pathOrName = !args.m_OldFilePath.empty() ? args.m_OldFilePath : args.m_OldFileName;
+    const tstring pathOrName = !args.m_OldFilePath.empty() ? args.m_OldFilePath : args.m_OldFileName;
     M_SceneSmartPtr::iterator found = m_Scenes.find( pathOrName );
     if ( found != m_Scenes.end() )
     {

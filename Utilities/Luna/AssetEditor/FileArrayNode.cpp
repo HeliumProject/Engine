@@ -19,7 +19,7 @@ LUNA_DEFINE_TYPE( Luna::FileArrayNode );
 // 
 void FileArrayNode::InitializeType()
 {
-    Reflect::RegisterClass<Luna::FileArrayNode>( "Luna::FileArrayNode" );
+    Reflect::RegisterClass<Luna::FileArrayNode>( TXT( "Luna::FileArrayNode" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,12 +61,12 @@ FileArrayNode::FileArrayNode( Luna::AssetManager* assetManager, Reflect::Element
 
 #pragma TODO( "Implement Add File functionality" )
     ContextMenuItemSet& contextMenu = GetContextMenu();
-    ContextMenuItemPtr menuItem = new ContextMenuItem( "Add file" );
+    ContextMenuItemPtr menuItem = new ContextMenuItem( TXT( "Add file" ) );
     menuItem->Disable();
     contextMenu.AppendSeparator();
     contextMenu.AppendItem( menuItem );
 
-    menuItem = new ContextMenuItem( "Add file (Asset Finder)", "Add a new file to this list using the Asset Finder", Nocturnal::GlobalImageManager().GetBitmap( "actions/system-search.png" ) );
+    menuItem = new ContextMenuItem( TXT( "Add file (Asset Finder)" ), TXT( "Add a new file to this list using the Asset Finder" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/system-search.png" ) ) );
     menuItem->Disable();
     contextMenu.AppendItem( menuItem );
 }

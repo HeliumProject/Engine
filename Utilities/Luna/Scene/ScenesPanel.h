@@ -52,9 +52,9 @@ namespace Luna
     void AddRow( Luna::Scene* scene, Zone* zone );
     void DeleteRow( Zone* zone );
     void DeleteAllRows();
-    std::string PromptNewZone( const std::string& defaultPath );
-    std::string PromptAddZone( const std::string& defaultPath );
-    Zone* AddZone( std::string ( ScenesPanel::*PromptFunction )( const std::string& ) );
+    tstring PromptNewZone( const tstring& defaultPath );
+    tstring PromptAddZone( const tstring& defaultPath );
+    Zone* AddZone( tstring ( ScenesPanel::*PromptFunction )( const tstring& ) );
     void AddNewZone();
     bool ContainsZone( const Nocturnal::Path& zonePath ) const;
     void PromptIfNoZones();

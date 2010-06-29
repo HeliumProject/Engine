@@ -18,7 +18,7 @@ DependencyCommand::DependencyCommand( DependencyAction action, const SceneNodePt
     S_SceneNodeSmartPtr::const_iterator foundDescendant = m_Ancestor->GetDescendants().find( m_Descendant );
     if ( foundDescendant != m_Ancestor->GetDescendants().end() )
     {
-      Log::Error( "DependencyCommand - Connection between ancestor (%s) and descendant (%s) already exists\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
+      Log::Error( TXT( "DependencyCommand - Connection between ancestor (%s) and descendant (%s) already exists\n" ), m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
       NOC_BREAK();
     }
 
@@ -26,7 +26,7 @@ DependencyCommand::DependencyCommand( DependencyAction action, const SceneNodePt
     S_SceneNodeDumbPtr::const_iterator foundAncestor = m_Descendant->GetAncestors().find( m_Ancestor );
     if ( foundAncestor != m_Descendant->GetAncestors().end() )
     {
-      Log::Error( "DependencyCommand - Connection between ancestor (%s) and descendant (%s) already exists\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
+      Log::Error( TXT( "DependencyCommand - Connection between ancestor (%s) and descendant (%s) already exists\n" ), m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
       NOC_BREAK();
     }
   }
@@ -37,7 +37,7 @@ DependencyCommand::DependencyCommand( DependencyAction action, const SceneNodePt
     S_SceneNodeSmartPtr::const_iterator foundDescendant = m_Ancestor->GetDescendants().find( m_Descendant );
     if ( foundDescendant == m_Ancestor->GetDescendants().end() )
     {
-      Log::Error( "DependencyCommand - Ancestor (%s) and descendant (%s) are not connected\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
+      Log::Error( TXT( "DependencyCommand - Ancestor (%s) and descendant (%s) are not connected\n" ), m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
       NOC_BREAK();
     }
 
@@ -45,7 +45,7 @@ DependencyCommand::DependencyCommand( DependencyAction action, const SceneNodePt
     S_SceneNodeDumbPtr::const_iterator foundAncestor = m_Descendant->GetAncestors().find( m_Ancestor );
     if ( foundAncestor == m_Descendant->GetAncestors().end() )
     {
-      Log::Error( "DependencyCommand - Ancestor (%s) and descendant (%s) are not connected\n", m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
+      Log::Error( TXT( "DependencyCommand - Ancestor (%s) and descendant (%s) are not connected\n" ), m_Ancestor->GetName().c_str(), m_Descendant->GetName().c_str() );
       NOC_BREAK();
     }
   }

@@ -14,22 +14,19 @@ sub PrintUsage
   $scriptName =~ s/^.*\\(.*?)$/$1/;
   
   print qq{
-Usage: $scriptName -v <VERSION>
+Usage: $scriptName <location of source>
 };
 }
 
-my $version = undef;
-my $options = undef;
+my $location = shift;
 
-my $result = GetOptions ("version=s" => \$version);
-
-if ( !$result )
+if ( !$location )
 {
   PrintUsage();
   exit 1;
 }
 
-if ( !defined $version )
+if ( !-d $location )
 {
   print( "Please specify the version to build\n" );
   PrintUsage();
@@ -42,7 +39,7 @@ sub BuildConfig
 {
   print STDOUT ("\nBuilding\n\n");
 
-  my $path = "SDK\\boost\\$version";
+  my $path = $location;
 
   chdir "$path";
   

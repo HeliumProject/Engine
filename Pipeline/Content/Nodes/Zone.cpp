@@ -13,7 +13,6 @@ void Zone::EnumerateClass( Reflect::Compositor<Zone>& comp )
   Reflect::Field* fieldBackground = comp.AddField( &Zone::m_Background, "m_Background" );
   Reflect::Field* fieldPath = comp.AddField( &Zone::m_Path, "m_Path", Reflect::FieldFlags::Hide );
   Reflect::Field* fieldGameModes = comp.AddField( &Zone::m_Modes, "m_Modes" );
-  Reflect::Field* fieldRegions = comp.AddField( &Zone::m_Regions, "m_Regions", Reflect::FieldFlags::Hide );
   Reflect::Field* fieldGlobal = comp.AddField( &Zone::m_Global, "m_Global" );
   Reflect::Field* fieldHasNavData = comp.AddField( &Zone::m_HasNavData, "m_HasNavData" );
 }

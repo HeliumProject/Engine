@@ -28,7 +28,6 @@
 #include "Pipeline/Content/Nodes/Curve/Curve.h"
 #include "Pipeline/Content/Nodes/Instance/Volume.h"
 #include "Pipeline/Content/Nodes/Zone.h"
-#include "Pipeline/Content/Nodes/Region.h"
 
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/Widgets/Canvas.h"
@@ -66,15 +65,11 @@
 #include "Volume.h"
 #include "Locator.h"
 #include "Zone.h"
-#include "Region.h"
 #include "Light.h"
 #include "SpotLight.h"
 #include "PointLight.h"
 #include "DirectionalLight.h"
-#include "SunLight.h"
-#include "PortalLight.h"
 #include "AmbientLight.h"
-#include "AmbientVolumeLight.h"
 #include "Foundation/String/Utilities.h"
 #include "Foundation/Math/AngleAxis.h"
 
@@ -447,10 +442,6 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
     {
         createdNode = new Luna::Locator( this, Reflect::DangerousCast< Content::Locator >( data ) );
     }
-    else if ( data->HasType( Reflect::GetType<Content::SunLight>() ) )
-    {
-        createdNode = new SunLight( this, Reflect::DangerousCast< Content::SunLight >( data ) );
-    }
     else if ( data->HasType( Reflect::GetType<Content::DirectionalLight>() ) )
     {
         createdNode = new Luna::DirectionalLight( this, Reflect::DangerousCast< Content::DirectionalLight >( data ) );
@@ -463,17 +454,9 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
     {
         createdNode = new Luna::PointLight( this, Reflect::DangerousCast< Content::PointLight >( data ) );
     }
-    else if ( data->HasType( Reflect::GetType<Content::PortalLight>() ) )
-    {
-        createdNode = new Luna::PortalLight( this, Reflect::DangerousCast< Content::PortalLight >( data ) );
-    }
     else if ( data->HasType( Reflect::GetType<Content::AmbientLight>() ) )
     {
         createdNode = new Luna::AmbientLight( this, Reflect::DangerousCast< Content::AmbientLight >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::AmbientVolumeLight>() ) )
-    {
-        createdNode = new AmbientVolumeLight( this, Reflect::DangerousCast< Content::AmbientVolumeLight >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::Shader>() ) )
     {
@@ -514,10 +497,6 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
     else if ( data->HasType( Reflect::GetType<Content::Zone>() ) )
     {
         createdNode = new Zone( this, Reflect::DangerousCast< Content::Zone >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::Region>() ) )
-    {
-        createdNode = new Luna::Region( this, Reflect::DangerousCast< Content::Region >( data ) ); 
     }
     else if ( data->HasType( Reflect::GetType<Content::Point>() ) )
     {
@@ -1580,14 +1559,6 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
     }
 
     {
-        LUNA_SCENE_SCOPE_TIMER( ("Region check") ); 
-        if ( node->HasType( Reflect::GetType<Luna::Region>() ) )
-        {
-            m_Regions.insert( Reflect::DangerousCast< Luna::Region >( node ) ); 
-        }
-    }
-
-    {
         LUNA_SCENE_SCOPE_TIMER( ("Raise events if not transient") );
         if ( !node->IsTransient() && !m_Importing )
         {
@@ -1611,11 +1582,6 @@ void Scene::RemoveSceneNode( const SceneNodePtr& node )
     if ( node->HasType( Reflect::GetType<Zone>() ) )
     {
         m_Zones.erase( Reflect::DangerousCast< Zone >( node ) );
-    }
-
-    if ( node->HasType( Reflect::GetType<Luna::Region>() ) )
-    {
-        m_Regions.erase( Reflect::DangerousCast< Luna::Region >( node ) ); 
     }
 
     Luna::SceneNodeType* t = node->GetNodeType();

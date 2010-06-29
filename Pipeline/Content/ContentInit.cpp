@@ -6,7 +6,6 @@
 
 #include "Pipeline/Content/Nodes/SceneNode.h"
 #include "Pipeline/Content/Nodes/HierarchyNode.h"
-#include "Pipeline/Content/Nodes/Hierarchy.h"
 
 #include "Pipeline/Content/Nodes/Transform/Transform.h"
 #include "Pipeline/Content/Nodes/Transform/PivotTransform.h"
@@ -21,7 +20,6 @@
 #include "Pipeline/Content/Nodes/Camera.h"
 #include "Pipeline/Content/Nodes/Layer.h"
 #include "Pipeline/Content/Nodes/Zone.h"
-#include "Pipeline/Content/Nodes/Region.h"
 #include "Pipeline/Content/Nodes/Curve/Curve.h"
 #include "Pipeline/Content/Nodes/Curve/Point.h"
 #include "Pipeline/Content/Nodes/Geometry/Mesh.h"
@@ -42,17 +40,7 @@
 #include "Pipeline/Content/Nodes/Lights/SpotLight.h"
 #include "Pipeline/Content/Nodes/Lights/PointLight.h"
 #include "Pipeline/Content/Nodes/Lights/DirectionalLight.h"
-#include "Pipeline/Content/Nodes/Lights/ShadowDirection.h"
-#include "Pipeline/Content/Nodes/Lights/SunLight.h"
-#include "Pipeline/Content/Nodes/Lights/AreaLights/AreaLight.h"
-#include "Pipeline/Content/Nodes/Lights/AreaLights/RadiusLight.h"
-#include "Pipeline/Content/Nodes/Lights/AreaLights/SphereLight.h"
-#include "Pipeline/Content/Nodes/Lights/AreaLights/RectangleLight.h"
-#include "Pipeline/Content/Nodes/Lights/AreaLights/CylinderLight.h"
-#include "Pipeline/Content/Nodes/Lights/AreaLights/DiscLight.h"
-#include "Pipeline/Content/Nodes/Lights/PortalLight.h"
 #include "Pipeline/Content/Nodes/Lights/AmbientLight.h"
-#include "Pipeline/Content/Nodes/Lights/AmbientVolumeLight.h"
 
 #include "Pipeline/Content/NodeVisibility.h"
 #include "Pipeline/Content/SceneVisibility.h"
@@ -83,7 +71,6 @@ namespace Content
 
       g_InitializerStack.Push( Reflect::RegisterClass<SceneNode>( TXT( "SceneNode" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<HierarchyNode>( TXT( "HierarchyNode" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Hierarchy>( TXT( "Hierarchy" ) ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<Transform>( TXT( "Transform" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<PivotTransform>( TXT( "PivotTransform" ) ) );
@@ -101,7 +88,6 @@ namespace Content
 
       g_InitializerStack.Push( Reflect::RegisterClass<Layer>( TXT( "Layer" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<Zone>( TXT( "Zone" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Region>( TXT( "Region" ) ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<MorphTargetDelta>( TXT( "MorphTargetDelta" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<MorphTarget>( TXT( "MorphTarget" ) ) );
@@ -136,14 +122,6 @@ namespace Content
       g_InitializerStack.Push( Reflect::RegisterEnumeration<GeometrySimulations::GeometrySimulation>( &GeometrySimulations::GeometrySimulationEnumerateEnumeration, TXT( "GeometrySimulation" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<Descriptor>( TXT( "Descriptor" ) ) );
 
-      // area light sources
-      g_InitializerStack.Push( Reflect::RegisterClass<AreaLight>( TXT( "AreaLight" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<RadiusLight>( TXT( "RadiusLight" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<SphereLight>( TXT( "SphereLight" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<RectangleLight>( TXT( "RectangleLight" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<CylinderLight>( TXT( "CylinderLight" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<DiscLight>( TXT( "DiscLight" ) ) );
-
       g_InitializerStack.Push( Reflect::RegisterClass<ParametricKey>( TXT( "ParametricKey" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<ParametricColorKey>( TXT( "ParametricColorKey" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<ParametricIntensityKey>( TXT( "ParametricIntensityKey" ) ) );
@@ -156,11 +134,7 @@ namespace Content
       g_InitializerStack.Push( Reflect::RegisterClass<SpotLight>( TXT( "SpotLight" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<PointLight>( TXT( "PointLight" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<DirectionalLight>( TXT( "DirectionalLight" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<ShadowDirection>( TXT( "ShadowDirection" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<SunLight>( TXT( "SunLight" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<PortalLight>( TXT( "PortalLight" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<AmbientLight>( TXT( "AmbientLight" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<AmbientVolumeLight>( TXT( "AmbientVolumeLight" ) ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<JointOrdering>( TXT( "JointOrdering" ) ) );
 

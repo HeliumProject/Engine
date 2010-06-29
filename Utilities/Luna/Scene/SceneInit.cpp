@@ -29,7 +29,6 @@
 
 #include "Layer.h"
 #include "Zone.h"
-#include "Region.h"
 
 #include "Shader.h"
 #include "Mesh.h"
@@ -64,10 +63,7 @@
 #include "SpotLight.h"
 #include "PointLight.h"
 #include "DirectionalLight.h"
-#include "SunLight.h"
-#include "PortalLight.h"
 #include "AmbientLight.h"
-#include "AmbientVolumeLight.h"
 
 using namespace Luna;
 
@@ -129,7 +125,6 @@ void Luna::SceneInitialize()
 
     g_InitializerStack.Push( Layer::InitializeType, Layer::CleanupType );
     g_InitializerStack.Push( Zone::InitializeType, Zone::CleanupType );
-    g_InitializerStack.Push( Region::InitializeType, Region::CleanupType ); 
 
     g_InitializerStack.Push( Shader::InitializeType, Shader::CleanupType );
     g_InitializerStack.Push( Mesh::InitializeType, Mesh::CleanupType );
@@ -163,10 +158,7 @@ void Luna::SceneInitialize()
     g_InitializerStack.Push( SpotLight::InitializeType, SpotLight::CleanupType );
     g_InitializerStack.Push( PointLight::InitializeType, PointLight::CleanupType );
     g_InitializerStack.Push( DirectionalLight::InitializeType, DirectionalLight::CleanupType );
-    g_InitializerStack.Push( SunLight::InitializeType, SunLight::CleanupType );
-    g_InitializerStack.Push( PortalLight::InitializeType, PortalLight::CleanupType );
     g_InitializerStack.Push( AmbientLight::InitializeType, AmbientLight::CleanupType );
-    g_InitializerStack.Push( AmbientVolumeLight::InitializeType, AmbientVolumeLight::CleanupType );
 
     g_InitializerStack.Push( View::InitializeType, View::CleanupType );
     g_InitializerStack.Push( Primitive::InitializeType, Primitive::CleanupType );

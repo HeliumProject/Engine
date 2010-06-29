@@ -2,7 +2,6 @@
 #include "ZonePanel.h"
 #include "Foundation/Reflect/Element.h"
 #include "Pipeline/Component/ComponentHandle.h"
-#include "ComponentOverrideGroup.h"
 
 using namespace Luna; 
 

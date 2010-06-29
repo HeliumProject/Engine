@@ -13,7 +13,6 @@ void Light::EnumerateClass( Reflect::Compositor<Light>& comp )
   Reflect::Field* fieldCastShadows = comp.AddField( &Light::m_CastShadows, "m_CastShadows" );
   Reflect::Field* fieldDoVisibilityRayTest = comp.AddField( &Light::m_DoVisibilityRayTest, "m_DoVisibilityRayTest" );
   Reflect::Field* fieldFactor = comp.AddField( &Light::m_Factor, "m_Factor" );
-  Reflect::ElementField* elemAreaLight = comp.AddField( &Light::m_AreaLight, "m_AreaLight" );
 
   Reflect::EnumerationField* enumRenderType = comp.AddEnumerationField( &Light::m_RenderType, "m_RenderType" );
   Reflect::EnumerationField* enumFlareType = comp.AddEnumerationField( &Light::m_FlareType, "m_FlareType" );

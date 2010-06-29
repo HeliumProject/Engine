@@ -71,11 +71,6 @@ namespace Luna
     //
   
   protected:
-    Content::AreaLightType m_AreaLightType;
-    //PrimitiveSphere* m_AreaLightSphere;
-    PrimitiveTemplate<Position>* m_AreaLightPrim;
-
-
     BitArray m_SelectionHelper;
 
   public:
@@ -89,9 +84,6 @@ namespace Luna
     LUNA_DECLARE_TYPE( Luna::Light, Luna::Instance );
     static void InitializeType();
     static void CleanupType();
-
-    virtual void Initialize() NOC_OVERRIDE;
-    virtual void Delete() NOC_OVERRIDE;
 
     //
     // Member functions
@@ -117,18 +109,6 @@ namespace Luna
 
     float GetIntensity() const;
     void SetIntensity( float intensity );
-
-    f32 GetAreaLightRadius() const;
-    void SetAreaLightRadius( f32 radius );
-
-    Math::Vector2 GetAreaLightDimensions() const;
-    void SetAreaLightDimensions( Math::Vector2 dim );
-
-    f32 GetAreaLightSamplesPerMeter() const;
-    void SetAreaLightSamplesPerMeter( f32 samples );
-
-    i32 GetAreaLightType() const;
-    void SetAreaLightType( i32 type );
 
     i32 GetRenderType() const;
     void SetRenderType( i32 renderType );

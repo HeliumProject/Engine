@@ -6,7 +6,6 @@
 #include "Foundation/Boost/Regex.h" 
 #include "Foundation/Log.h"
 #include "EntityAssetSet.h"
-#include "Region.h"
 #include "SceneEditor.h"
 #include "Foundation/Reflect/Object.h"
 #include "Foundation/Reflect/Registry.h"
@@ -103,13 +102,12 @@ void SearchBar::OnSearch( wxCommandEvent& args )
     m_Results->DeleteAllItems();
 
     SearchBarTraverser traverser( this );
-    S_RegionDumbPtr regionSet;
     M_SceneToZone sceneToZone;
 
-    SetupScenes( sceneToZone, regionSet );
+    SetupScenes( sceneToZone );
     SetupSearchCriteria( traverser );
     SearchScenes( sceneToZone, traverser );
-    DisplayResults( sceneToZone, regionSet, traverser );
+    DisplayResults( sceneToZone, traverser );
 }
 
 void SearchBar::OnSelect( wxCommandEvent& args )
@@ -184,11 +182,10 @@ void SearchBar::OnSceneRemoving( const SceneChangeArgs& args )
 
     if ( refresh )
     {
-        S_RegionDumbPtr regionSet;
         M_SceneToZone sceneToZone;
 
-        SetupScenes( sceneToZone, regionSet );
-        RefreshResults( sceneToZone, regionSet );
+        SetupScenes( sceneToZone );
+        RefreshResults( sceneToZone );
     }
 }
 
@@ -269,14 +266,12 @@ void SearchBar::SetupSearchCriteria( SearchBarTraverser& traverser )
     }
 }
 
-void SearchBar::SetupScenes( M_SceneToZone& sceneToZone, S_RegionDumbPtr& regionSet )
+void SearchBar::SetupScenes( M_SceneToZone& sceneToZone )
 {
     M_TuidToZone tuidToZone;
     Luna::Scene* rootScene = m_SceneEditor->GetSceneManager()->GetRootScene();
     if ( rootScene )
     {
-        regionSet = rootScene->GetRegions();
-
         V_ZoneDumbPtr zones;
         rootScene->GetAll< Zone >( zones );
 
@@ -324,13 +319,13 @@ void SearchBar::SearchScenes( const M_SceneToZone& sceneToZone, SearchBarTravers
     }
 }
 
-void SearchBar::DisplayResults( const M_SceneToZone& sceneToZone, const S_RegionDumbPtr& regionSet, SearchBarTraverser& traverser )
+void SearchBar::DisplayResults( const M_SceneToZone& sceneToZone, SearchBarTraverser& traverser )
 {
     m_ResultNodes = traverser.GetSearchResults();
-    RefreshResults( sceneToZone, regionSet );
+    RefreshResults( sceneToZone );
 }
 
-void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_RegionDumbPtr& regionSet )
+void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone )
 {
     m_Results->DeleteAllItems();
 
@@ -359,7 +354,6 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
         tstring entityClassName = TXT( "" );
         tstring entityClassPath = TXT( "" );
         tstring zone = TXT( "" );
-        tstring region = TXT( "" );
         tstring assetType;
 
         Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *resultsItr );
@@ -386,36 +380,6 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
             }
         }
 
-        Luna::Scene* scene = (*resultsItr)->GetScene();
-        if ( scene )
-        {
-            M_SceneToZone::const_iterator sceneItr = sceneToZone.find( scene );
-            if ( sceneItr != sceneToZone.end() )
-            {
-                zone = sceneItr->second->GetName();
-
-                std::vector< tstring > regionNames;
-                TUID zoneId = sceneItr->second->GetID(); 
-                S_RegionDumbPtr::const_iterator regionItr = regionSet.begin();
-                S_RegionDumbPtr::const_iterator regionEnd = regionSet.end();
-                for ( ; regionItr != regionEnd; ++regionItr )
-                {
-                    if ( (*regionItr)->GetPackage<Content::Region>()->HasZone( zoneId ) )
-                    {
-                        regionNames.push_back( (*regionItr)->GetName() );
-                    }
-                }
-
-                std::sort( regionNames.begin(), regionNames.end() );
-                std::vector< tstring >::iterator regionNameItr = regionNames.begin();
-                std::vector< tstring >::iterator regionNameEnd = regionNames.end();
-                for ( ; regionNameItr != regionNameEnd; ++regionNameItr )
-                {
-                    region = region + ( region.size() ? TXT( ", " ) : TXT( "" ) ) + *regionNameItr;
-                }
-            }
-        }
-
         wxListItem nameListItem;
         nameListItem.SetMask( wxLIST_MASK_TEXT );
         nameListItem.SetText( name );
@@ -434,12 +398,6 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
         zoneListItem.SetId( id );
         zoneListItem.SetColumn( ResultColumns::Zone );
 
-        wxListItem regionListItem;
-        regionListItem.SetMask( wxLIST_MASK_TEXT );
-        regionListItem.SetText( region );
-        regionListItem.SetId( id );
-        regionListItem.SetColumn( ResultColumns::Region );
-
         wxListItem assetTypeListItem;
         assetTypeListItem.SetMask( wxLIST_MASK_TEXT );
         assetTypeListItem.SetText( assetType );
@@ -449,7 +407,6 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone, const S_Region
         m_Results->InsertItem( nameListItem );
         m_Results->SetItem( entityClassNameListItem );
         m_Results->SetItem( zoneListItem );
-        m_Results->SetItem( regionListItem );
         m_Results->SetItem( assetTypeListItem );
     }
 }

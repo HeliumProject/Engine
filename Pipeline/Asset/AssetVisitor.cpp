@@ -11,7 +11,6 @@
 #include "Foundation/Flags.h"
 #include "Platform/Types.h"
 #include "Pipeline/Content/Scene.h"
-#include "Pipeline/Content/Nodes/Region.h"
 #include "Pipeline/Content/Nodes/Zone.h"
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Class.h"
@@ -356,62 +355,6 @@ void AssetVisitor::HandleAssetFile( Reflect::Element* element, const Reflect::Fi
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void AssetVisitor::CollectRegionZones( const Content::RegionPtr& region, const Content::V_Zone& zones, Content::V_Zone& regionZones )
-{
-    const V_TUID& regionZoneID = region->GetZones(); 
-
-    // go through all the zones in the content file 
-    Content::V_Zone::const_iterator itrZone = zones.begin();
-    Content::V_Zone::const_iterator endZone = zones.end();
-    for ( ; itrZone != endZone; ++itrZone )
-    {
-        if ( CheckStopRequested( m_StopRequested ) )
-            return;
-
-        const Content::ZonePtr& zone = (*itrZone);
-
-        if(!zone->m_Active)
-            continue; 
-
-        // m_BuilderOptions->m_Zones is basically the list of cinematic zone tuids
-        // we could not do this and instead make a fake region for the cinematic (like the default region)
-        // 
-        //if(  !m_BuilderOptions->m_Zones.empty() && 
-        //  std::find( m_BuilderOptions->m_Zones.begin(), m_BuilderOptions->m_Zones.end(), zone->m_FileID ) == m_BuilderOptions->m_Zones.end() )
-        //{
-        //  continue; 
-        //}
-
-        // m_BuilderOptions->m_ZoneList is the list of zone names provided by the user (possibly)
-        //if( !m_BuilderOptions->m_ZoneList.empty() && 
-        //  std::find( m_BuilderOptions->m_ZoneList.begin(), m_BuilderOptions->m_ZoneList.end(), zone->GetName() ) == m_BuilderOptions->m_ZoneList.end() )
-        //{
-        //  continue; 
-        //}
-
-        if( zone->m_Global )
-        {
-            regionZones.push_back( zone ); 
-            continue; 
-        }
-
-        V_TUID::const_iterator itrRZ = regionZoneID.begin();
-        V_TUID::const_iterator endRZ = regionZoneID.end();
-        for ( ; itrRZ != endRZ; ++itrRZ )
-        {
-            if ( CheckStopRequested( m_StopRequested ) )
-                return;
-
-            if( zone->m_ID == (*itrRZ) )
-            {
-                regionZones.push_back( zone ); 
-                break; 
-            }
-        }
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void AssetVisitor::HandleWorldFile( Reflect::Element* element, const Reflect::Field* field, AssetFile* assetFile )
 {
     /*
@@ -484,7 +427,7 @@ void AssetVisitor::HandleWorldFile( Reflect::Element* element, const Reflect::Fi
         {
             const V_TUID& regionZoneIDs = region->GetZones();
 
-            CollectRegionZones( region, zones, inserted.first->second ); 
+            //CollectRegionZones( region, zones, inserted.first->second ); 
             //region->GetName();
             //if( m_RegionToZones[ region ].size() > 0)
             //  ...

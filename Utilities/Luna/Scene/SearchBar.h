@@ -71,10 +71,10 @@ namespace Luna
     void OnSceneRemoving( const SceneChangeArgs& args );
     
     void SetupSearchCriteria( SearchBarTraverser& traverser );
-    void SetupScenes( M_SceneToZone& sceneToZone, S_RegionDumbPtr& regionSet );
+    void SetupScenes( M_SceneToZone& sceneToZone );
     void SearchScenes( const M_SceneToZone& sceneToZone, SearchBarTraverser& traverser );
-    void DisplayResults( const M_SceneToZone& sceneToZone, const S_RegionDumbPtr& regionSet, SearchBarTraverser& traverser );
-    void RefreshResults( const M_SceneToZone& sceneToZone, const S_RegionDumbPtr& regionSet );
+    void DisplayResults( const M_SceneToZone& sceneToZone, SearchBarTraverser& traverser );
+    void RefreshResults( const M_SceneToZone& sceneToZone );
     
     static bool CompareComponents( const Component::ComponentPtr& rhs, const Component::ComponentPtr& lhs );
     static tstring WildcardToRegex( const tstring& str, bool partialMatch = true );

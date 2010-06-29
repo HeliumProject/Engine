@@ -90,10 +90,6 @@ namespace Luna
     ScenesPanel* m_ZonesPanel;
     size_t        m_ZonesPage;
 
-    // the region management panel
-    RegionsPanel* m_RegionsPanel; 
-    size_t         m_RegionsPage; 
-
     // the outline of the current scene
     HierarchyOutliner* m_HierarchyOutline;
     size_t m_HierarchyOutlinePage;

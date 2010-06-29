@@ -20,7 +20,6 @@
 #include "NavMeshCreateTool.h"
 #include "NodeTypeOutliner.h"
 #include "Point.h"
-#include "RegionsPanel.h"
 #include "RotateManipulator.h"
 #include "ScaleManipulator.h"
 #include "SceneCallbackData.h"
@@ -466,10 +465,6 @@ SceneEditor::SceneEditor()
         m_ZonesPanel = new ScenesPanel( this, &m_SceneManager, m_Directory, SceneEditorIDs::ID_ZonesControl );
         m_ZonesPage  = m_Directory->GetPageCount();
         m_Directory->AddPage(m_ZonesPanel, TXT( "Zones" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "zone.png" ) ));
-
-        m_RegionsPanel = new RegionsPanel( this, &m_SceneManager, m_Directory); 
-        m_RegionsPage  = m_Directory->GetPageCount(); 
-        m_Directory->AddPage( m_RegionsPanel, TXT( "Regions" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "region.png" ) )); 
 
         // Inner tab with different outlines
         wxNotebook* outlinerNotebook = new wxNotebook( m_Directory, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_NOPAGETHEME );

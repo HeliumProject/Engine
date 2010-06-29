@@ -83,8 +83,6 @@ namespace Asset
     void HandleAssetFile( Reflect::Element* element, const Reflect::Field* field, AssetFile* assetFile );
     void HandleWorldFile( Reflect::Element* element, const Reflect::Field* field, AssetFile* assetFile );
     void HandleZoneFile( Reflect::Element* element, const Reflect::Field* field, AssetFile* assetFile );
-    void CollectRegionZones( const Content::RegionPtr& region, const Content::V_Zone& zones, Content::V_Zone& regionZones );
-
     void HandleMayaFile( Reflect::Element* element, const Reflect::Field* field, AssetFile* assetFile );
 
     

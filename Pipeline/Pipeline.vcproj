@@ -775,7 +775,7 @@
 				>
 			</File>
 			<Filter
-				Name="Nodes"
+				Name="Objects"
 				>
 				<File
 					RelativePath=".\Content\Nodes\Camera.cpp"
@@ -786,11 +786,35 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Content\Nodes\Hierarchy.cpp"
+					RelativePath=".\Content\Nodes\Geometry\CollisionPrimitive.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Content\Nodes\Hierarchy.h"
+					RelativePath=".\Content\Nodes\Geometry\CollisionPrimitive.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Curve\Curve.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Curve\Curve.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Transform\Descriptor.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Transform\Descriptor.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Transform\Effector.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Transform\Effector.h"
 					>
 				</File>
 				<File
@@ -799,6 +823,30 @@
 				</File>
 				<File
 					RelativePath=".\Content\Nodes\HierarchyNode.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Geometry\Influence.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Geometry\Influence.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Instance\Instance.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Instance\Instance.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Transform\JointTransform.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Transform\JointTransform.h"
 					>
 				</File>
 				<File
@@ -814,11 +862,35 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Content\Nodes\Region.cpp"
+					RelativePath=".\Content\Nodes\Instance\Locator.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Content\Nodes\Region.h"
+					RelativePath=".\Content\Nodes\Instance\Locator.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Geometry\Mesh.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Geometry\Mesh.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Transform\PivotTransform.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Transform\PivotTransform.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Curve\Point.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Curve\Point.h"
 					>
 				</File>
 				<File
@@ -830,6 +902,38 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Content\Nodes\Geometry\Shader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Geometry\Shader.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Geometry\Skin.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Geometry\Skin.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Transform\Transform.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Transform\Transform.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Instance\Volume.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Content\Nodes\Instance\Volume.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Content\Nodes\Zone.cpp"
 					>
 				</File>
@@ -837,98 +941,6 @@
 					RelativePath=".\Content\Nodes\Zone.h"
 					>
 				</File>
-				<Filter
-					Name="Curve"
-					>
-					<File
-						RelativePath=".\Content\Nodes\Curve\Curve.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Curve\Curve.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Curve\Point.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Curve\Point.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Geometry"
-					>
-					<File
-						RelativePath=".\Content\Nodes\Geometry\CollisionPrimitive.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Geometry\CollisionPrimitive.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Geometry\Influence.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Geometry\Influence.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Geometry\Mesh.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Geometry\Mesh.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Geometry\Shader.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Geometry\Shader.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Geometry\Skin.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Geometry\Skin.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Instance"
-					>
-					<File
-						RelativePath=".\Content\Nodes\Instance\Instance.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Instance\Instance.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Instance\Locator.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Instance\Locator.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Instance\Volume.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Instance\Volume.h"
-						>
-					</File>
-				</Filter>
 				<Filter
 					Name="Lights"
 					>
@@ -938,14 +950,6 @@
 					</File>
 					<File
 						RelativePath=".\Content\Nodes\Lights\AmbientLight.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Lights\AmbientVolumeLight.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Lights\AmbientVolumeLight.h"
 						>
 					</File>
 					<File
@@ -973,131 +977,11 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Content\Nodes\Lights\PortalLight.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Lights\PortalLight.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Lights\ShadowDirection.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Lights\ShadowDirection.h"
-						>
-					</File>
-					<File
 						RelativePath=".\Content\Nodes\Lights\SpotLight.cpp"
 						>
 					</File>
 					<File
 						RelativePath=".\Content\Nodes\Lights\SpotLight.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Lights\SunLight.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Lights\SunLight.h"
-						>
-					</File>
-					<Filter
-						Name="Area Lights"
-						>
-						<File
-							RelativePath=".\Content\Nodes\Lights\AreaLights\AreaLight.cpp"
-							>
-						</File>
-						<File
-							RelativePath=".\Content\Nodes\Lights\AreaLights\AreaLight.h"
-							>
-						</File>
-						<File
-							RelativePath=".\Content\Nodes\Lights\AreaLights\CylinderLight.cpp"
-							>
-						</File>
-						<File
-							RelativePath=".\Content\Nodes\Lights\AreaLights\CylinderLight.h"
-							>
-						</File>
-						<File
-							RelativePath=".\Content\Nodes\Lights\AreaLights\DiscLight.cpp"
-							>
-						</File>
-						<File
-							RelativePath=".\Content\Nodes\Lights\AreaLights\DiscLight.h"
-							>
-						</File>
-						<File
-							RelativePath=".\Content\Nodes\Lights\AreaLights\RadiusLight.cpp"
-							>
-						</File>
-						<File
-							RelativePath=".\Content\Nodes\Lights\AreaLights\RadiusLight.h"
-							>
-						</File>
-						<File
-							RelativePath=".\Content\Nodes\Lights\AreaLights\RectangleLight.cpp"
-							>
-						</File>
-						<File
-							RelativePath=".\Content\Nodes\Lights\AreaLights\RectangleLight.h"
-							>
-						</File>
-						<File
-							RelativePath=".\Content\Nodes\Lights\AreaLights\SphereLight.cpp"
-							>
-						</File>
-						<File
-							RelativePath=".\Content\Nodes\Lights\AreaLights\SphereLight.h"
-							>
-						</File>
-					</Filter>
-				</Filter>
-				<Filter
-					Name="Transform"
-					>
-					<File
-						RelativePath=".\Content\Nodes\Transform\Descriptor.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Transform\Descriptor.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Transform\Effector.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Transform\Effector.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Transform\JointTransform.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Transform\JointTransform.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Transform\PivotTransform.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Transform\PivotTransform.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Transform\Transform.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Content\Nodes\Transform\Transform.h"
 						>
 					</File>
 				</Filter>

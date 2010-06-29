@@ -1079,14 +1079,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Task\RegionSelectorDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Task\RegionSelectorDialog.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Task\Task.cpp"
 				>
 			</File>
@@ -1118,26 +1110,10 @@
 				RelativePath=".\Task\TaskOutputWindow.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Task\ZoneSelectorDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Task\ZoneSelectorDialog.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Scene"
 			>
-			<File
-				RelativePath=".\Scene\ComponentGroup.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\ComponentOverrideGroup.h"
-				>
-			</File>
 			<File
 				RelativePath=".\Scene\JointTransform.cpp"
 				>
@@ -1366,6 +1342,22 @@
 				RelativePath=".\Scene\TypeGrid.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Scene\Zone.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\Zone.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\ZonePanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\ZonePanel.h"
+				>
+			</File>
 			<Filter
 				Name="Tools"
 				>
@@ -1450,6 +1442,78 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Scene\Curve.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Curve.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\CurveCreateTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\CurveCreateTool.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\CurveEditTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\CurveEditTool.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Entity.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Entity.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\EntityAssetOutliner.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\EntityAssetOutliner.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\EntityAssetSet.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\EntityAssetSet.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\EntityCreateTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\EntityCreateTool.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\EntityPanel.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\EntityPanel.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\EntityType.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\EntityType.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Scene\HierarchyNode.cpp"
 					>
 				</File>
@@ -1530,6 +1594,30 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Scene\NavMesh.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\NavMesh.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\NavMeshCommand.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\NavMeshCommand.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\NavMeshCreateTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\NavMeshCreateTool.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Scene\PivotTransform.cpp"
 					>
 				</File>
@@ -1537,140 +1625,40 @@
 					RelativePath=".\Scene\PivotTransform.h"
 					>
 				</File>
-				<Filter
-					Name="Gameplay"
+				<File
+					RelativePath=".\Scene\Point.cpp"
 					>
-					<File
-						RelativePath=".\Scene\Curve.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Curve.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\CurveCreateTool.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\CurveCreateTool.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\CurveEditTool.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\CurveEditTool.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Entity.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Entity.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\EntityAssetOutliner.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\EntityAssetOutliner.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\EntityAssetSet.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\EntityAssetSet.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\EntityCreateTool.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\EntityCreateTool.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\EntityPanel.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\EntityPanel.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\EntityType.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\EntityType.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\NavMesh.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\NavMesh.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\NavMeshCommand.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\NavMeshCommand.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\NavMeshCreateTool.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\NavMeshCreateTool.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Point.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Point.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Volume.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Volume.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\VolumeCreateTool.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\VolumeCreateTool.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\VolumeType.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\VolumeType.h"
-						>
-					</File>
-				</Filter>
+				</File>
+				<File
+					RelativePath=".\Scene\Point.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Volume.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Volume.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\VolumeCreateTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\VolumeCreateTool.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\VolumeType.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\VolumeType.h"
+					>
+				</File>
 				<Filter
-					Name="Lighting"
+					Name="Lights"
 					>
 					<File
 						RelativePath=".\Scene\AmbientLight.cpp"
@@ -1678,14 +1666,6 @@
 					</File>
 					<File
 						RelativePath=".\Scene\AmbientLight.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\AmbientVolumeLight.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\AmbientVolumeLight.h"
 						>
 					</File>
 					<File
@@ -1721,27 +1701,11 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Scene\PortalLight.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PortalLight.h"
-						>
-					</File>
-					<File
 						RelativePath=".\Scene\SpotLight.cpp"
 						>
 					</File>
 					<File
 						RelativePath=".\Scene\SpotLight.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\SunLight.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\SunLight.h"
 						>
 					</File>
 				</Filter>
@@ -1907,174 +1871,6 @@
 				</File>
 				<File
 					RelativePath=".\Scene\Visitor.h"
-					>
-				</File>
-				<Filter
-					Name="Primitives"
-					>
-					<File
-						RelativePath=".\Scene\Primitive.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\Primitive.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveAxes.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveAxes.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveCapsule.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveCapsule.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveCircle.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveCircle.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveCone.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveCone.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveCube.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveCube.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveCylinder.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveCylinder.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveFrame.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveFrame.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveGrid.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveGrid.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveLocator.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveLocator.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitivePointer.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitivePointer.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveRadius.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveRadius.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveRings.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveRings.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveSphere.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\PrimitiveSphere.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="Assets"
-				>
-				<File
-					RelativePath=".\Scene\Region.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\Region.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\RegionPanel.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\RegionPanel.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\RegionsGenerated.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\RegionsGenerated.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\RegionsPanel.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\RegionsPanel.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\Zone.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\Zone.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ZonePanel.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ZonePanel.h"
 					>
 				</File>
 			</Filter>
@@ -2285,6 +2081,122 @@
 						>
 					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="Primitives"
+				>
+				<File
+					RelativePath=".\Scene\Primitive.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Primitive.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveAxes.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveAxes.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveCapsule.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveCapsule.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveCircle.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveCircle.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveCone.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveCone.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveCube.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveCube.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveCylinder.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveCylinder.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveFrame.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveFrame.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveGrid.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveGrid.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveLocator.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveLocator.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitivePointer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitivePointer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveRadius.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveRadius.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveRings.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveRings.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveSphere.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\PrimitiveSphere.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -2568,81 +2480,81 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="AssetEditor"
+			Name="Asset"
 			>
 			<File
-				RelativePath=".\AssetEditor\AssetInit.cpp"
+				RelativePath=".\Asset\AssetInit.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\AssetEditor\AssetInit.h"
+				RelativePath=".\Asset\AssetInit.h"
 				>
 			</File>
 			<File
-				RelativePath=".\AssetEditor\AssetManager.cpp"
+				RelativePath=".\Asset\AssetManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\AssetEditor\AssetManager.h"
+				RelativePath=".\Asset\AssetManager.h"
 				>
 			</File>
 			<File
-				RelativePath=".\AssetEditor\AssetUtils.cpp"
+				RelativePath=".\Asset\AssetUtils.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\AssetEditor\AssetUtils.h"
+				RelativePath=".\Asset\AssetUtils.h"
 				>
 			</File>
 			<File
-				RelativePath=".\AssetEditor\ContextMenuCallbacks.cpp"
+				RelativePath=".\Asset\ContextMenuCallbacks.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\AssetEditor\ContextMenuCallbacks.h"
+				RelativePath=".\Asset\ContextMenuCallbacks.h"
 				>
 			</File>
 			<File
-				RelativePath=".\AssetEditor\HierarchyChangeToken.cpp"
+				RelativePath=".\Asset\HierarchyChangeToken.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\AssetEditor\HierarchyChangeToken.h"
+				RelativePath=".\Asset\HierarchyChangeToken.h"
 				>
 			</File>
 			<Filter
 				Name="Commands"
 				>
 				<File
-					RelativePath=".\AssetEditor\AddAssetNodeCommand.cpp"
+					RelativePath=".\Asset\AddAssetNodeCommand.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AddAssetNodeCommand.h"
+					RelativePath=".\Asset\AddAssetNodeCommand.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetCommand.cpp"
+					RelativePath=".\Asset\AssetCommand.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetCommand.h"
+					RelativePath=".\Asset\AssetCommand.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\ComponentExistenceCommand.cpp"
+					RelativePath=".\Asset\ComponentExistenceCommand.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\ComponentExistenceCommand.h"
+					RelativePath=".\Asset\ComponentExistenceCommand.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\RemoveAssetNodeCommand.cpp"
+					RelativePath=".\Asset\RemoveAssetNodeCommand.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\RemoveAssetNodeCommand.h"
+					RelativePath=".\Asset\RemoveAssetNodeCommand.h"
 					>
 				</File>
 			</Filter>
@@ -2650,11 +2562,11 @@
 				Name="Document"
 				>
 				<File
-					RelativePath=".\AssetEditor\AssetDocument.cpp"
+					RelativePath=".\Asset\AssetDocument.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetDocument.h"
+					RelativePath=".\Asset\AssetDocument.h"
 					>
 				</File>
 			</Filter>
@@ -2662,126 +2574,126 @@
 				Name="Nodes"
 				>
 				<File
-					RelativePath=".\AssetEditor\AssetNode.cpp"
+					RelativePath=".\Asset\AssetNode.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetNode.h"
+					RelativePath=".\Asset\AssetNode.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetReferenceNode.cpp"
+					RelativePath=".\Asset\AssetReferenceNode.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetReferenceNode.h"
+					RelativePath=".\Asset\AssetReferenceNode.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\ComponentContainer.cpp"
+					RelativePath=".\Asset\ComponentContainer.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\ComponentContainer.h"
+					RelativePath=".\Asset\ComponentContainer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\ComponentNode.cpp"
+					RelativePath=".\Asset\ComponentNode.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\ComponentNode.h"
+					RelativePath=".\Asset\ComponentNode.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\PersistentNode.cpp"
+					RelativePath=".\Asset\PersistentNode.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\PersistentNode.h"
+					RelativePath=".\Asset\PersistentNode.h"
 					>
 				</File>
 				<Filter
 					Name="Fields"
 					>
 					<File
-						RelativePath=".\AssetEditor\ArrayItemNode.cpp"
+						RelativePath=".\Asset\ArrayItemNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ArrayItemNode.h"
+						RelativePath=".\Asset\ArrayItemNode.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ArrayNode.cpp"
+						RelativePath=".\Asset\ArrayNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ArrayNode.h"
+						RelativePath=".\Asset\ArrayNode.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ContainerItemNode.cpp"
+						RelativePath=".\Asset\ContainerItemNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ContainerItemNode.h"
+						RelativePath=".\Asset\ContainerItemNode.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ContainerNode.cpp"
+						RelativePath=".\Asset\ContainerNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ContainerNode.h"
+						RelativePath=".\Asset\ContainerNode.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ElementArrayNode.cpp"
+						RelativePath=".\Asset\ElementArrayNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ElementArrayNode.h"
+						RelativePath=".\Asset\ElementArrayNode.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\FieldFactory.cpp"
+						RelativePath=".\Asset\FieldFactory.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\FieldFactory.h"
+						RelativePath=".\Asset\FieldFactory.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\FieldFileReference.cpp"
+						RelativePath=".\Asset\FieldFileReference.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\FieldFileReference.h"
+						RelativePath=".\Asset\FieldFileReference.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\FieldNode.cpp"
+						RelativePath=".\Asset\FieldNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\FieldNode.h"
+						RelativePath=".\Asset\FieldNode.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\FileArrayNode.cpp"
+						RelativePath=".\Asset\FileArrayNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\FileArrayNode.h"
+						RelativePath=".\Asset\FileArrayNode.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\SimpleFieldNode.cpp"
+						RelativePath=".\Asset\SimpleFieldNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\SimpleFieldNode.h"
+						RelativePath=".\Asset\SimpleFieldNode.h"
 						>
 					</File>
 				</Filter>
@@ -2790,46 +2702,46 @@
 				Name="Persistent Data"
 				>
 				<File
-					RelativePath=".\AssetEditor\PersistentData.cpp"
+					RelativePath=".\Asset\PersistentData.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\PersistentData.h"
+					RelativePath=".\Asset\PersistentData.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\PersistentDataFactory.cpp"
+					RelativePath=".\Asset\PersistentDataFactory.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\PersistentDataFactory.h"
+					RelativePath=".\Asset\PersistentDataFactory.h"
 					>
 				</File>
 				<Filter
 					Name="Asset Classes"
 					>
 					<File
-						RelativePath=".\AssetEditor\AssetClass.cpp"
+						RelativePath=".\Asset\AssetClass.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\AssetClass.h"
+						RelativePath=".\Asset\AssetClass.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\SceneAsset.cpp"
+						RelativePath=".\Asset\SceneAsset.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\SceneAsset.h"
+						RelativePath=".\Asset\SceneAsset.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ShaderAsset.cpp"
+						RelativePath=".\Asset\ShaderAsset.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ShaderAsset.h"
+						RelativePath=".\Asset\ShaderAsset.h"
 						>
 					</File>
 				</Filter>
@@ -2837,27 +2749,27 @@
 					Name="Components"
 					>
 					<File
-						RelativePath=".\AssetEditor\ComponentWrapper.cpp"
+						RelativePath=".\Asset\ComponentWrapper.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\ComponentWrapper.h"
+						RelativePath=".\Asset\ComponentWrapper.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\FileBackedComponent.cpp"
+						RelativePath=".\Asset\FileBackedComponent.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\FileBackedComponent.h"
+						RelativePath=".\Asset\FileBackedComponent.h"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\TextureMapComponent.cpp"
+						RelativePath=".\Asset\TextureMapComponent.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\AssetEditor\TextureMapComponent.h"
+						RelativePath=".\Asset\TextureMapComponent.h"
 						>
 					</File>
 				</Filter>
@@ -2866,11 +2778,11 @@
 				Name="Preferences"
 				>
 				<File
-					RelativePath=".\AssetEditor\AssetPreferences.cpp"
+					RelativePath=".\Asset\AssetPreferences.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetPreferences.h"
+					RelativePath=".\Asset\AssetPreferences.h"
 					>
 				</File>
 			</Filter>
@@ -2878,63 +2790,63 @@
 				Name="User Interface"
 				>
 				<File
-					RelativePath=".\AssetEditor\AssetEditor.cpp"
+					RelativePath=".\Asset\AssetEditor.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetEditor.h"
+					RelativePath=".\Asset\AssetEditor.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetEditorGenerated.cpp"
+					RelativePath=".\Asset\AssetEditorGenerated.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetEditorGenerated.h"
+					RelativePath=".\Asset\AssetEditorGenerated.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetEditorIDs.h"
+					RelativePath=".\Asset\AssetEditorIDs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetOutlineItemData.cpp"
+					RelativePath=".\Asset\AssetOutlineItemData.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetOutlineItemData.h"
+					RelativePath=".\Asset\AssetOutlineItemData.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetOutliner.cpp"
+					RelativePath=".\Asset\AssetOutliner.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetOutliner.h"
+					RelativePath=".\Asset\AssetOutliner.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetPreviewWindow.cpp"
+					RelativePath=".\Asset\AssetPreviewWindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\AssetPreviewWindow.h"
+					RelativePath=".\Asset\AssetPreviewWindow.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\ComponentChooserDlg.cpp"
+					RelativePath=".\Asset\ComponentChooserDlg.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\ComponentChooserDlg.h"
+					RelativePath=".\Asset\ComponentChooserDlg.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\PromptNewExistingDlg.cpp"
+					RelativePath=".\Asset\PromptNewExistingDlg.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AssetEditor\PromptNewExistingDlg.h"
+					RelativePath=".\Asset\PromptNewExistingDlg.h"
 					>
 				</File>
 			</Filter>
@@ -2944,6 +2856,10 @@
 			>
 			<File
 				RelativePath=".\Luna.rc"
+				>
+			</File>
+			<File
+				RelativePath=".\resource.h"
 				>
 			</File>
 		</Filter>

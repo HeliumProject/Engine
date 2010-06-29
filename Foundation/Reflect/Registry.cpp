@@ -57,19 +57,6 @@ namespace Reflect
     i32 g_InitCount = 0;
 }
 
-//
-// global destructor should run after cleanup
-//
-class CleanupChecker
-{
-public:
-    ~CleanupChecker()
-    {
-        NOC_ASSERT_MSG( Reflect::g_InitCount == 0, ( "Reflect not cleaned up properly!" ) );
-    }
-
-} g_Checker;
-
 bool Reflect::IsInitialized()
 {
     return g_Instance != NULL;

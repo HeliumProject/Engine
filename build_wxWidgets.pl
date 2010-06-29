@@ -13,23 +13,21 @@ sub PrintUsage
   $scriptName =~ s/^.*\\(.*?)$/$1/;
   
   print qq{
-Usage: $scriptName -v <VERSION> [-o|-options <OPTIONS>]
+Usage: $scriptName <location of code>
 };
 }
 
-my $version = undef;
+my $location = shift;
 
-my $result = GetOptions ("version=s" => \$version);
-
-if ( !$result )
+if ( !$location )
 {
   PrintUsage();
   exit 1;
 }
 
-if ( !defined $version )
+if ( !-d $location )
 {
-  print( "Please specify the version to build\n" );
+  print( "Please specify the location of the code\n" );
   PrintUsage();
   exit 1;
 }
@@ -38,7 +36,7 @@ BuildConfig();
 
 sub BuildConfig
 {
-  my $path = "SDK\\wxWidgets\\$version";
+  my $path = $location;
 
   chdir "$path\\build\\msw";
   

@@ -183,14 +183,6 @@ void SpotLight::Render( RenderVisitor* render )
     entry->m_Draw = &SpotLight::DrawPointer;
   }
 
-  if( m_AreaLightPrim )
-  {
-    RenderEntry* entry = render->Allocate(this);
-    entry->m_Location = normalizedRenderMatrix;
-    entry->m_Center = m_ObjectBounds.Center();
-    entry->m_Draw = &SpotLight::DrawAreaLight;
-  }
-
   // inner is drawn normalized
   if (m_InnerCone)
   {
@@ -343,30 +335,6 @@ void SpotLight::DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const Sce
   type->GetPointer()->Draw( args );
 }
 
-void SpotLight::DrawAreaLight( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
-{
-  const SpotLight* spotLight = Reflect::ConstAssertCast<SpotLight>( object );
-
-  const Luna::InstanceType* type = Reflect::ConstAssertCast<Luna::InstanceType>( spotLight->GetNodeType() );
-
-  const Content::Light* contentLight = spotLight->GetPackage< Content::Light >();
-
-  if( contentLight )
-  {
-    Math::HDRColor3 color = contentLight->m_Color;
-    color.s = 1.0f;
-    color.ToFloat( s_Material.Ambient.r, s_Material.Ambient.g, s_Material.Ambient.b );
-    s_Material.Ambient.a = 0.25f;
-  }
-
-  spotLight->SetMaterial( s_Material );
-
-  if( spotLight->m_AreaLightPrim )
-  {
-    spotLight->m_AreaLightPrim->Draw( args );
-  }
-}
-
 void SpotLight::DrawInner( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
   const SpotLight* spotLight = Reflect::ConstAssertCast<SpotLight>( object );
@@ -463,27 +431,6 @@ void SpotLight::CreatePanel( CreatePanelArgs& args )
     {
       args.m_Enumerator->AddLabel( TXT( "Outer Radius" ) );
       args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterRadius, &SpotLight::SetOuterRadius );
-    }
-    args.m_Enumerator->Pop();
-
-    args.m_Enumerator->PushContainer();
-    {
-      args.m_Enumerator->AddLabel( TXT( "Area Light Radius" ) );
-      args.m_Enumerator->AddValue<Light, f32>( args.m_Selection, &Light::GetAreaLightRadius, &Light::SetAreaLightRadius );
-    }
-    args.m_Enumerator->Pop();
-
-    args.m_Enumerator->PushContainer();
-    {
-      args.m_Enumerator->AddLabel( TXT( "Area Light Dimensions" ) );
-      args.m_Enumerator->AddValue<Light, Math::Vector2>( args.m_Selection, &Light::GetAreaLightDimensions, &Light::SetAreaLightDimensions );
-    }
-    args.m_Enumerator->Pop();
-
-    args.m_Enumerator->PushContainer();
-    {
-      args.m_Enumerator->AddLabel( TXT( "Samples Per Meter" ) );
-      args.m_Enumerator->AddValue<Light, f32>( args.m_Selection, &Light::GetAreaLightSamplesPerMeter, &Light::SetAreaLightSamplesPerMeter );
     }
     args.m_Enumerator->Pop();
 

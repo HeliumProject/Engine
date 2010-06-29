@@ -16,7 +16,6 @@ namespace Content
   class SpotLight; 
   class SunLight; 
   class DirectionalLight; 
-  class ShadowDirection; 
   class PortalLight;
   class LightingEnvironment; 
   class LightingVolume; 
@@ -51,7 +50,6 @@ namespace Content
     virtual void VisitSunLight(SunLight* light) {}
     virtual void VisitPortalLight(PortalLight* light) {}
     virtual void VisitDirectionalLight(DirectionalLight* light) {}
-    virtual void VisitShadowDirection(ShadowDirection* light) {}
     virtual void VisitLightingEnvironment(LightingEnvironment* env) {}
     virtual void VisitLightingVolume(LightingVolume* vol) {}
     virtual void VisitAmbientLight(AmbientLight* light) {}

@@ -328,9 +328,6 @@ namespace Luna
     // shortcut to all the zones in this scene
     S_ZoneDumbPtr m_Zones;
 
-    // shortcut to all the regions in this scene
-    S_RegionDumbPtr m_Regions;
-
     // offset matrix for smart duplicate
     Math::Matrix4 m_SmartDuplicateMatrix;
 
@@ -500,11 +497,6 @@ namespace Luna
     const S_ZoneDumbPtr& GetZones() const
     {
       return m_Zones; 
-    }
-
-    const S_RegionDumbPtr& GetRegions() const
-    {
-      return m_Regions; 
     }
 
     Luna::SceneNode* Find( const tstring& name ) const; 

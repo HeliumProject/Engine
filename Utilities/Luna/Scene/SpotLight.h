@@ -59,7 +59,6 @@ namespace Luna
     static void DrawPointer( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
     static void DrawInner( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
     static void DrawOuter( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
-    static void DrawAreaLight( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
     static void DrawGodRayClipPlane( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
     static bool SetupGodRayClipPlane( IDirect3DDevice9* device, const SceneNode* object );
 

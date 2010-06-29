@@ -190,11 +190,6 @@ void PointLight::DrawShape( IDirect3DDevice9* device, DrawArgs* args, const Scen
   
   light->SetMaterial( s_Material );
 
-  if( light->m_AreaLightPrim )
-  {
-    light->m_AreaLightPrim->Draw( args );
-  }
-
   if (light->GetInnerSphere())
   {
     light->GetInnerSphere()->Draw( args );
@@ -238,28 +233,6 @@ void PointLight::CreatePanel( CreatePanelArgs& args )
       args.m_Enumerator->AddValue<Luna::PointLight, float>( args.m_Selection, &PointLight::GetOuterRadius, &PointLight::SetOuterRadius );
     }
     args.m_Enumerator->Pop();
-
-    args.m_Enumerator->PushContainer();
-    {
-      args.m_Enumerator->AddLabel( TXT( "Area Light Radius" ) );
-      args.m_Enumerator->AddValue<Light, f32>( args.m_Selection, &Light::GetAreaLightRadius, &Light::SetAreaLightRadius );
-    }
-    args.m_Enumerator->Pop();
-
-    args.m_Enumerator->PushContainer();
-    {
-      args.m_Enumerator->AddLabel( TXT( "Area Light Dimensions" ) );
-      args.m_Enumerator->AddValue<Light, Math::Vector2>( args.m_Selection, &Light::GetAreaLightDimensions, &Light::SetAreaLightDimensions );
-    }
-    args.m_Enumerator->Pop();
-
-    args.m_Enumerator->PushContainer();
-    {
-      args.m_Enumerator->AddLabel( TXT( "Samples Per Meter" ) );
-      args.m_Enumerator->AddValue<Light, f32>( args.m_Selection, &Light::GetAreaLightSamplesPerMeter, &Light::SetAreaLightSamplesPerMeter );
-    }
-    args.m_Enumerator->Pop();
-
   }
 
   args.m_Enumerator->Pop();

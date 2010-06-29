@@ -4,7 +4,7 @@
 #include "ArtProvider.h"
 
 #include "Application/Application.h"
-#include "AssetEditor/AssetInit.h"
+#include "Asset/AssetInit.h"
 #include "Browser/Browser.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Log.h"

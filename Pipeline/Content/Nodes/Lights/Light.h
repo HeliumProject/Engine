@@ -2,7 +2,6 @@
 
 #include "Pipeline/API.h"
 #include "Pipeline/Content/Nodes/Instance/Instance.h"
-#include "Pipeline/Content/Nodes/Lights/AreaLights/AreaLight.h"
 #include "Pipeline/Content/ParametricKey/ParametricColorKey.h"
 #include "Pipeline/Content/ParametricKey/ParametricIntensityKey.h"
 
@@ -105,8 +104,6 @@ namespace Content
     LightRenderType m_RenderType;
     LensFlareType   m_FlareType;
 
-    AreaLightPtr m_AreaLight;
-
     V_ParametricColorKeyPtr m_AnimationColor;
 
     V_ParametricColorKeyPtr m_AnimationIntensity;
@@ -130,7 +127,6 @@ namespace Content
       , m_Color(1.0f,1.0f,1.0f)
       , m_RenderType( LightRenderTypes::Baked )
       , m_FlareType( LensFlareTypes::Disabled )
-      , m_AreaLight( NULL )
       , m_KillIfInactive( false )
       , m_AllowOversized( true )
       , m_DrawDist( 70.0f )

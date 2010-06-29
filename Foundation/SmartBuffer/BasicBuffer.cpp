@@ -94,7 +94,7 @@ void BasicBuffer::DumpDebugInfo(FILE* file)
 {
     if ( file )
     {
-        fprintf(file, "BufferPlatform   : %s\n", m_Platform==BufferPlatforms::x86?"PC":"PS3");
+        fprintf(file, "ByteOrder   : %s\n", m_ByteOrder==ByteOrders::LittleEndian?"PC":"PS3");
 
         for (BasicBufferDebugInfoVector::iterator i=m_DebugInfo.begin(); i!=m_DebugInfo.end(); i++)
         {
@@ -222,7 +222,7 @@ u32 BasicBuffer::AddBuffer( const u8* buffer, u32 size, const tchar* dbgStr, ...
 u32 BasicBuffer::AddBuffer( const SmartBufferPtr& buffer, bool add_fixups )
 {
     // platform types have to match
-    NOC_ASSERT(buffer->GetPlatform() == m_Platform);
+    NOC_ASSERT(buffer->GetByteOrder() == m_ByteOrder);
 
     // first bring in all the data from the incoming buffer
     u32 return_val = AddBuffer( buffer->GetData(), buffer->GetSize() );

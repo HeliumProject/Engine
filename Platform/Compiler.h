@@ -49,3 +49,16 @@
 #  define X64
 # endif
 #endif
+
+//
+// Byte Order
+//
+
+#ifdef _MSC_VER
+# ifdef _M_X86
+#  define LITTLE_ENDIAN
+# endif
+# ifdef _M_X64
+#  define LITTLE_ENDIAN
+# endif
+#endif

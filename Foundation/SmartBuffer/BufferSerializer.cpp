@@ -19,12 +19,12 @@ Profile::Accumulator BufferSerializer::s_WriteAccum ( "BufferSerializer Data Wri
 #endif
 
 BufferSerializer::BufferSerializer()
-: m_Platform( DEFAULT_PLATFORM )
+: m_ByteOrder( DEFAULT_BYTE_ORDER )
 {
 }
 
-BufferSerializer::BufferSerializer( BufferPlatform platform )
-: m_Platform( platform )
+BufferSerializer::BufferSerializer( ByteOrder platform )
+: m_ByteOrder( platform )
 {
 
 }
@@ -34,7 +34,7 @@ BasicBufferPtr BufferSerializer::CreateBasic( u32 type, bool track )
     BasicBufferPtr return_val = new BasicBuffer();
 
     return_val->SetType( type );
-    return_val->SetPlatform( m_Platform );
+    return_val->SetByteOrder( m_ByteOrder );
 
     // we don't track anonymous buffers because they could be empty or not pointed to from a non-anonymous buffer
     //  however, we do allow non-anonymous buffers to not be tracked in case they were allocated but not written to
@@ -80,7 +80,7 @@ struct P_Fixup
 u32 BufferSerializer::ComputeSize() const
 {
     u32 computed_size = 0;
-    bool align        = m_Platform == BufferPlatforms::Power32;
+    bool align        = m_ByteOrder == ByteOrders::BigEndian;
 
     // make a unique list of contained buffers
     S_SmartBufferPtr buffers;
@@ -200,8 +200,8 @@ bool BufferSerializer::WriteToFile( const tchar* filename ) const
 
 bool BufferSerializer::WriteToStream( tostream& strm ) const
 {
-    bool swizzle = m_Platform == BufferPlatforms::Power32;
-    bool align   = m_Platform == BufferPlatforms::Power32;
+    bool swizzle = m_ByteOrder == ByteOrders::BigEndian;
+    bool align   = m_ByteOrder == ByteOrders::BigEndian;
 
     // track data for when we need to fixup
     typedef std::map< SmartBufferPtr, u32 > M_BuffU32;
@@ -254,7 +254,7 @@ bool BufferSerializer::WriteToStream( tostream& strm ) const
         for ( u32 chunk_index = 0; itr != end; ++itr, ++chunk_index )
         {
             // a little sanity check
-            NOC_ASSERT( (*itr)->GetPlatform() == m_Platform );
+            NOC_ASSERT( (*itr)->GetByteOrder() == m_ByteOrder );
             NOC_ASSERT( (*itr)->GetSize() > 0 );
 
             // better not have a map for this id already
@@ -492,7 +492,7 @@ bool BufferSerializer::ReadFromStream( tistream& strm )
     {
         const ChunkHeader& header = chunk_headers[ chunk_index ];
         SmartBufferPtr buffer = new SmartBuffer();
-        buffer->SetPlatform( swizzle ? BufferPlatforms::Power32 : BufferPlatforms::x86 );
+        buffer->SetByteOrder( swizzle ? ByteOrders::BigEndian : ByteOrders::LittleEndian );
 
         //NOC_ASSERT( header.m_Offset == ( strm.tellp() - starting_offset ) );
         chunks[ chunk_index ] = buffer;

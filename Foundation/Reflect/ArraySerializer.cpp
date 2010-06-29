@@ -420,7 +420,7 @@ void StringArraySerializer::Deserialize(Archive& archive)
             {
                 i32 index;
                 binary.GetStream().Read(&index); 
-                m_Data.Ref()[i] = binary.GetStrings().GetString(index);
+                m_Data.Ref()[i] = binary.GetStrings().Get(index);
             }
 
             break;

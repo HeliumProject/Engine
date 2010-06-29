@@ -27,36 +27,38 @@
 
 namespace Reflect
 {
-    class ArchiveBinary; 
-
     //
     // String pool for serializing string data in binary
     //
 
+    namespace CharacterEncodings
+    {
+        enum CharacterEncoding
+        {
+            ASCII,  // default encoding, legacy 7-bit
+            UTF_16, // used by windows' Unicode build
+        };
+    }
+    typedef CharacterEncodings::CharacterEncoding CharacterEncoding;
+
     class FOUNDATION_API StringPool
     {
     public:
-        typedef stdext::hash_map<std::string, int> M_CharStringToIndex;
-        typedef stdext::hash_map<std::wstring, int> M_WideStringToIndex;
+        typedef stdext::hash_map<tstring, int> M_StringToIndex;
 
-        M_CharStringToIndex         m_CharIndices; 
-        std::vector< std::string >  m_CharStrings;
+        M_StringToIndex         m_Indices; 
+        std::vector< tstring >  m_Strings;
 
-        M_WideStringToIndex         m_WideIndices; 
-        std::vector< std::wstring > m_WideStrings;
-
-        int Insert( const std::string& str );
-        int Insert( const std::wstring& str );
-
-        tstring GetString( int index );
-
-        void Serialize(ArchiveBinary* archive); 
-        void Deserialize(ArchiveBinary* archive); 
+        i32 Insert(const tstring& str);
+        const tstring& Get(i32 index);
 
         void SerializeDirect(CharStream& stream); 
-        void DeserializeDirect(CharStream& stream); 
+        void DeserializeDirect(CharStream& stream, CharacterEncoding encoding); 
 
         void SerializeCompressed(CharStream& stream); 
-        void DeserializeCompressed(CharStream& stream); 
+        void DeserializeCompressed(CharStream& stream, CharacterEncoding encoding); 
+
+        void Serialize(class ArchiveBinary* archive); 
+        void Deserialize(class ArchiveBinary* archive, CharacterEncoding encoding); 
     };
 }

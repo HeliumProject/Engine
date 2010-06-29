@@ -86,7 +86,7 @@ void SimpleSerializer<T>::Serialize(const Nocturnal::BasicBufferPtr& buffer, con
 {
     T val = m_Data.Get();
 
-    Nocturnal::Swizzle( val, buffer->GetPlatform() != Nocturnal::BufferPlatforms::x86 );
+    Nocturnal::Swizzle( val, buffer->GetByteOrder() != Nocturnal::ByteOrders::LittleEndian );
 
     buffer->AddBuffer( (const u8*)&val, sizeof(T), debugStr );
 }
@@ -191,7 +191,7 @@ void StringSerializer::Deserialize(Archive& archive)
 
             i32 index;
             binary.GetStream().Read(&index); 
-            m_Data.Set( binary.GetStrings().GetString(index) );
+            m_Data.Set( binary.GetStrings().Get(index) );
             break;
         }
     }

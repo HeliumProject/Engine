@@ -107,7 +107,7 @@ void PathSerializer::Deserialize( Archive& archive )
 
             if ( index >= 0 )
             {
-                const tstring& str ( binary.GetStrings().GetString( index ) );
+                const tstring& str ( binary.GetStrings().Get( index ) );
 
                 m_Data.Ref().Set( str );
             }

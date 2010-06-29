@@ -107,7 +107,7 @@ void BitfieldSerializer::Deserialize(Archive& archive)
             std::vector< tstring > strs;
             while (index >= 0)
             {
-                strs.push_back(binary.GetStrings().GetString(index));
+                strs.push_back(binary.GetStrings().Get(index));
 
                 // read next index
                 binary.GetStream().Read(&index); 

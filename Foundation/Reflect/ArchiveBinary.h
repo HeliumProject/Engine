@@ -68,6 +68,7 @@ namespace Reflect
         static const u32 FIRST_VERSION_WITH_ARRAY_COMPRESSION; 
         static const u32 FIRST_VERSION_WITH_STRINGPOOL_COMPRESSION; 
         static const u32 FIRST_VERSION_WITH_POINTER_SERIALIZER; 
+        static const u32 FIRST_VERSION_WITH_UNICODE_SUPPORT; 
 
     private:
         friend class Archive;

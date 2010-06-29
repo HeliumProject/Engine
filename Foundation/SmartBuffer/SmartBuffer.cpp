@@ -9,8 +9,8 @@
 using namespace Nocturnal;
 
 // These are project specific, and in the order of PC, PS3
-const u32 SmartBuffer::s_PointerSizes[ BufferPlatforms::Count ] = { 4, 4 };
-const bool SmartBuffer::s_BigEndian[ BufferPlatforms::Count ] = { false, true };
+const u32 SmartBuffer::s_PointerSizes[ ByteOrders::Count ] = { 4, 4 };
+const bool SmartBuffer::s_BigEndian[ ByteOrders::Count ] = { false, true };
 
 // For profiling memory usage
 Profile::MemoryPoolHandle SmartBuffer::s_ObjectPool;
@@ -23,11 +23,11 @@ SmartBuffer::SmartBuffer()
 , m_MaxSize( 0 )
 , m_Capacity( 0 )
 , m_OwnsData( true )
-, m_Platform( DEFAULT_PLATFORM )
+, m_ByteOrder( DEFAULT_BYTE_ORDER )
 , m_Virtual( false )
 , m_Data ( NULL )
 {
-    NOC_ASSERT( m_Platform >= 0 && m_Platform < BufferPlatforms::Count );
+    NOC_ASSERT( m_ByteOrder >= 0 && m_ByteOrder < ByteOrders::Count );
 }
 
 SmartBuffer::~SmartBuffer()

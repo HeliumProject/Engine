@@ -1,23 +1,26 @@
 #include "ArchiveBinary.h"
-
 #include "Element.h"
 #include "Registry.h"
 #include "Serializers.h"
 
+#include "Platform/Compiler.h"
+#include "Foundation/SmartBuffer/SmartBuffer.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Checksum/CRC32.h"
 
-using Nocturnal::Insert; 
+using Nocturnal::Insert;
+using namespace Nocturnal;
 using namespace Reflect; 
 
 //#define REFLECT_DEBUG_BINARY_CRC
 //#define REFLECT_DISABLE_BINARY_CRC
 
 // version / feature management 
-const u32 ArchiveBinary::CURRENT_VERSION                            = 5;
+const u32 ArchiveBinary::CURRENT_VERSION                            = 6;
 const u32 ArchiveBinary::FIRST_VERSION_WITH_ARRAY_COMPRESSION       = 3; 
 const u32 ArchiveBinary::FIRST_VERSION_WITH_STRINGPOOL_COMPRESSION  = 4; 
 const u32 ArchiveBinary::FIRST_VERSION_WITH_POINTER_SERIALIZER      = 5; 
+const u32 ArchiveBinary::FIRST_VERSION_WITH_UNICODE_SUPPORT         = 6; 
 
 // our ORIGINAL version id was '!', don't ever re-use that byte
 NOC_COMPILE_ASSERT( (ArchiveBinary::CURRENT_VERSION & 0xff) != 33 );
@@ -136,9 +139,28 @@ void ArchiveBinary::Read()
         m_Stream->Read(&m_Version); 
     }
 
-    if(m_Version > CURRENT_VERSION)
+    if (m_Version > CURRENT_VERSION)
     {
         throw Reflect::StreamException( TXT( "Input stream version is higher than what is supported (input: %d, current: %d)\n" ), m_Version, CURRENT_VERSION); 
+    }
+
+    ByteOrder byteOrder = ByteOrders::LittleEndian;
+    CharacterEncoding encoding = CharacterEncodings::ASCII;
+    if ( m_Version >= ArchiveBinary::FIRST_VERSION_WITH_UNICODE_SUPPORT )
+    {
+        // byte order
+        u8 byteOrderByte;
+        m_Stream->Read(&byteOrderByte); 
+        byteOrder = (ByteOrder)byteOrderByte;
+
+        // character encoding
+        u8 encodingByte;
+        m_Stream->Read(&encodingByte);
+        encoding = (CharacterEncoding)encodingByte;
+        if ( encoding != CharacterEncodings::ASCII && encoding != CharacterEncodings::UTF_16 )
+        {
+            throw Reflect::StreamException( TXT( "Input stream contains an unknown character encoding: %d\n" ), encoding); 
+        }
     }
 
     // read and verify CRC
@@ -216,7 +238,7 @@ void ArchiveBinary::Read()
         m_Stream->SeekRead(string_offset, std::ios_base::beg);
 
         // deserialize string table
-        m_Strings.Deserialize(this); 
+        m_Strings.Deserialize(this, encoding); 
     }
 
     // deserialize type data
@@ -311,12 +333,35 @@ void ArchiveBinary::Write()
     // setup visitors
     PreSerialize();
 
+    // save byte order
+    u8 byteOrder;
+#ifdef LITTLE_ENDIAN
+    byteOrder = (u8)ByteOrders::LittleEndian;
+#elif BIG_ENDIAN
+    byteOrder = (u8)ByteOrders::BigEndian;
+#elif
+# error Unknown byte order!
+#endif
+    m_Stream->Write(&byteOrder);
+
+    // save character encoding value
+    CharacterEncoding encoding;
+#ifdef UNICODE
+    encoding = CharacterEncodings::UTF_16;
+    NOC_COMPILE_ASSERT( sizeof(wchar_t) == 2 );
+#else
+    encoding = CharacterEncodings::ASCII;
+    NOC_COMPILE_ASSERT( sizeof(char) == 1 );
+#endif
+    u8 encodingByte = (u8)encoding;
+    m_Stream->Write(&encodingByte);
+
     // always start with the invalid crc, incase we don't make it to the end
     u32 crc = CRC_INVALID;
 
     // save the offset and write the invalid crc to the stream
     u32 crc_offset = (u32)m_Stream->TellWrite();
-    m_Stream->Write(&crc); 
+    m_Stream->Write(&crc);
 
     // save some offsets to write offsets to
     u32 type_offset = (u32)m_Stream->TellWrite();
@@ -705,7 +750,7 @@ ElementPtr ArchiveBinary::Allocate()
     // read type string
     i32 index = -1;
     m_Stream->Read(&index); 
-    const tstring& str = m_Strings.GetString(index);
+    const tstring& str = m_Strings.Get(index);
 
     // read length info if we have it
     u32 length = 0;
@@ -1146,7 +1191,7 @@ bool ArchiveBinary::DeserializeComposite(Composite* composite)
 {
     i32 string_index = -1;
     m_Stream->Read(&string_index); 
-    composite->m_ShortName = m_Strings.GetString(string_index);
+    composite->m_ShortName = m_Strings.Get(string_index);
 
     m_Stream->Read(&composite->m_TypeID); 
 
@@ -1212,7 +1257,7 @@ bool ArchiveBinary::DeserializeField(Field* field)
 
     // field name
     m_Stream->Read(&string_index); 
-    field->m_Name = m_Strings.GetString(string_index);
+    field->m_Name = m_Strings.Get(string_index);
 
     if ( GetVersion() < ArchiveBinary::FIRST_VERSION_WITH_POINTER_SERIALIZER )
     {
@@ -1230,7 +1275,7 @@ bool ArchiveBinary::DeserializeField(Field* field)
     m_Stream->Read(&string_index); 
     if (string_index >= 0)
     {
-        const tstring& str (m_Strings.GetString(string_index));
+        const tstring& str (m_Strings.Get(string_index));
 
         const Class* c = Registry::GetInstance()->GetClass(str);
 

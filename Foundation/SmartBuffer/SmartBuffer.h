@@ -31,18 +31,18 @@ namespace Nocturnal
     typedef Nocturnal::OrderedSet< SmartBufferPtr > S_SmartBufferPtr;
     typedef std::vector< SmartBufferPtr > V_SmartBufferPtr;
 
-    namespace BufferPlatforms
+    namespace ByteOrders
     {
-        enum BufferPlatform
+        enum ByteOrder
         {
-            x86 = 0,    // little endian, 32bit pointers
-            Power32,    // big endian, 32bit pointers
+            LittleEndian = 0,   // little endian
+            BigEndian,          // big endian
             Count
         };
     }
-    typedef BufferPlatforms::BufferPlatform BufferPlatform;
+    typedef ByteOrders::ByteOrder ByteOrder;
 
-    const BufferPlatform DEFAULT_PLATFORM = BufferPlatforms::Power32;
+    const ByteOrder DEFAULT_BYTE_ORDER = ByteOrders::LittleEndian;
 
     class FOUNDATION_API SmartBuffer : public Nocturnal::RefCountBase<SmartBuffer>
     {
@@ -55,8 +55,8 @@ namespace Nocturnal
 
         typedef std::map< u32, FixupPtr >                 M_OffsetToFixup;
 
-        static const u32 s_PointerSizes[ BufferPlatforms::Count ];
-        static const bool s_BigEndian[ BufferPlatforms::Count ];
+        static const u32 s_PointerSizes[ ByteOrders::Count ];
+        static const bool s_BigEndian[ ByteOrders::Count ];
 
         static Profile::MemoryPoolHandle s_ObjectPool;
         static Profile::MemoryPoolHandle s_DataPool;
@@ -69,7 +69,7 @@ namespace Nocturnal
         u32             m_MaxSize;
         u32             m_Capacity;
         bool            m_OwnsData;
-        BufferPlatform  m_Platform;
+        ByteOrder  m_ByteOrder;
         bool            m_Virtual;
         M_OffsetToFixup m_OutgoingFixups;
         S_DumbLocation  m_IncomingFixups;
@@ -90,23 +90,23 @@ namespace Nocturnal
             m_Type = type;
         }
 
-        BufferPlatform GetPlatform() const
+        ByteOrder GetByteOrder() const
         {
-            return m_Platform;
+            return m_ByteOrder;
         }
-        void SetPlatform(BufferPlatform platform)
+        void SetByteOrder(ByteOrder platform)
         {
-            NOC_ASSERT( m_Platform >= 0 && m_Platform < BufferPlatforms::Count );
-            m_Platform = platform;
+            NOC_ASSERT( m_ByteOrder >= 0 && m_ByteOrder < ByteOrders::Count );
+            m_ByteOrder = platform;
         }
 
         u32 GetPlatformPtrSize() const
         {
-            return s_PointerSizes[ m_Platform ];
+            return s_PointerSizes[ m_ByteOrder ];
         }
         bool IsPlatformBigEndian() const
         {
-            return s_BigEndian[ m_Platform ];
+            return s_BigEndian[ m_ByteOrder ];
         }
 
         // Returns a Location object denoting the offset at the front of the data

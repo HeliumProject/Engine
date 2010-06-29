@@ -158,7 +158,7 @@ void EnumerationSerializer::Deserialize(Archive& archive)
 
             if (index >= 0)
             {
-                const tstring& str (binary.GetStrings().GetString(index));
+                const tstring& str (binary.GetStrings().Get(index));
 
                 if (m_Enumeration && !m_Enumeration->GetElementValue(str, m_Data.Ref()))
                 {

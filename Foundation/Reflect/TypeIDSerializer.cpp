@@ -103,7 +103,7 @@ void TypeIDSerializer::Deserialize(Archive& archive)
 
             i32 index;
             binary.GetStream().Read(&index); 
-            str = binary.GetStrings().GetString(index);
+            str = binary.GetStrings().Get(index);
             break;
         }
     }

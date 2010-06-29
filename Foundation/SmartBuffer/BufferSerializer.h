@@ -16,21 +16,21 @@ namespace Nocturnal
 #endif
 
     protected:
-        BufferPlatform m_Platform;
+        ByteOrder m_ByteOrder;
         S_SmartBufferPtr m_Buffers;
 
     public:
         BufferSerializer();
-        BufferSerializer( BufferPlatform );
+        BufferSerializer( ByteOrder );
 
-        BufferPlatform GetPlatform()
+        ByteOrder GetByteOrder()
         {
-            return m_Platform;
+            return m_ByteOrder;
         }
 
-        void SetPlatform(BufferPlatform platform)
+        void SetByteOrder(ByteOrder platform)
         {
-            m_Platform = platform;
+            m_ByteOrder = platform;
         }
 
         S_SmartBufferPtr::Iterator begin() const
@@ -59,7 +59,7 @@ namespace Nocturnal
         {
             Nocturnal::SmartPtr< ObjectBuffer<T> > return_val = new ObjectBuffer<T>;
             return_val->SetType( type );
-            return_val->SetPlatform( m_Platform );
+            return_val->SetByteOrder( m_ByteOrder );
             m_Buffers.Append( return_val );
             return return_val;
         }
@@ -75,7 +75,7 @@ namespace Nocturnal
         {
             Nocturnal::SmartPtr< ObjectArrayBuffer<T> > return_val = new ObjectArrayBuffer<T>( size );
             return_val->SetType( type );
-            return_val->SetPlatform( m_Platform );
+            return_val->SetByteOrder( m_ByteOrder );
             m_Buffers.Append( return_val );
             return return_val;
         }

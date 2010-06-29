@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<project name="CustomIGShader">
+	<!-- The normal map setup -->
+	<panel name="Normal Map Setup">
+		<add-library path="cg_custom_igshader_normal_map.xml"/>
+		<add-library path="cg_color_functions.xml"/>
+		<add-library path="cg_debug.xml"/>
+		<add-library path="cg_lighting_functions.xml"/>
+		<add-library path="cg_misc.xml"/>
+		<add-library path="cg_misc_arithmetic.xml"/>
+		<add-library path="cg_op_arithmetic.xml"/>
+		<add-library path="cg_scatter_gather.xml"/>
+		<add-library path="cg_select.xml"/>
+		<add-library path="cg_stdlib.xml"/>
+		<add-node type="CustomIGShader/CustomIGShaderNormalMap/[OUT] (float4) Final Color"/>
+	</panel>
+	<!-- The base map setup -->
+	<panel name="Base Map Setup">
+		<add-library path="cg_custom_igshader_base_map.xml"/>
+		<add-library path="cg_color_functions.xml"/>
+		<add-library path="cg_debug.xml"/>
+		<add-library path="cg_lighting_functions.xml"/>
+		<add-library path="cg_misc.xml"/>
+		<add-library path="cg_misc_arithmetic.xml"/>
+		<add-library path="cg_op_arithmetic.xml"/>
+		<add-library path="cg_scatter_gather.xml"/>
+		<add-library path="cg_select.xml"/>
+		<add-library path="cg_stdlib.xml"/>
+		<add-node type="CustomIGShader/CustomIGShaderBaseMap/[OUT] (float4) Final Color"/>
+	</panel>
+	<!-- The gpi setup -->
+	<panel name="GPI Map Setup">
+		<add-library path="cg_custom_igshader_gpi_map.xml"/>
+		<add-library path="cg_color_functions.xml"/>
+		<add-library path="cg_debug.xml"/>
+		<add-library path="cg_lighting_functions.xml"/>
+		<add-library path="cg_misc.xml"/>
+		<add-library path="cg_misc_arithmetic.xml"/>
+		<add-library path="cg_op_arithmetic.xml"/>
+		<add-library path="cg_scatter_gather.xml"/>
+		<add-library path="cg_select.xml"/>
+		<add-library path="cg_stdlib.xml"/>
+		<add-node type="CustomIGShader/CustomIGShaderGPIMap/[OUT] (float4) Final Color"/>
+	</panel>
+	<!-- The misc setup -->
+	<panel name="Color Mix Setup">
+		<add-library path="cg_stdlib.xml"/>	
+		<add-library path="cg_custom_igshader_misc.xml"/>
+		<add-library path="cg_color_functions.xml"/>
+		<add-library path="cg_debug.xml"/>
+		<add-library path="cg_lighting_functions.xml"/>
+		<add-library path="cg_misc.xml"/>
+		<add-library path="cg_misc_arithmetic.xml"/>
+		<add-library path="cg_op_arithmetic.xml"/>
+		<add-library path="cg_scatter_gather.xml"/>
+		<add-library path="cg_select.xml"/>
+
+	</panel>
+</project>

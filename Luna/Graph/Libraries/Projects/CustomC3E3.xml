@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<project name="CustomC3E3">
+	<panel name="Fragment Color">
+		<add-library path="cg_custom_c3e3_fragment_color.xml"/>
+		<add-library path="cg_color_functions.xml"/>
+		<add-library path="cg_debug.xml"/>
+		<add-library path="cg_lighting_functions.xml"/>
+		<add-library path="cg_misc.xml"/>
+		<add-library path="cg_misc_arithmetic.xml"/>
+		<add-library path="cg_op_arithmetic.xml"/>
+		<add-library path="cg_scatter_gather.xml"/>
+		<add-library path="cg_select.xml"/>
+		<add-library path="cg_stdlib.xml"/>
+		<add-node type="Viewer/CustomC3E3 Fragment Color/[OUT] (float4) Final Color"/>
+	</panel>
+</project>

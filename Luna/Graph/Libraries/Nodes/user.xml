@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="utf-8"?>
+<library path="User Defined">
+  <group uid="022B56F8" type="Add-Neg">
+    <properties>
+      <member name="bbox" type="rect">
+        <value>0, 0, 77, 63</value>
+      </member>
+      <member name="path" type="string">
+        <value/>
+      </member>
+      <member name="type" type="string">
+        <value/>
+      </member>
+      <member name="description" type="string">
+        <value/>
+      </member>
+      <member name="tooltip" type="string">
+        <value/>
+      </member>
+      <member name="deletable" type="bool">
+        <value>true</value>
+      </member>
+      <property name="Name" type="text">
+        <value>Add-Neg</value>
+      </property>
+    </properties>
+    <children>
+      <node uid="022C8070">
+        <properties>
+          <member name="bbox" type="rect">
+            <value>150, 33, 199, 80</value>
+          </member>
+          <member name="path" type="string">
+            <value>Cg/Arithmetic Operators/Neg</value>
+          </member>
+          <member name="type" type="string">
+            <value>Neg</value>
+          </member>
+          <member name="description" type="string">
+            <value>d = -(a)</value>
+          </member>
+          <member name="tooltip" type="string">
+            <value/>
+          </member>
+          <member name="deletable" type="bool">
+            <value>true</value>
+          </member>
+          <member name="Name" type="string">
+            <value>Neg</value>
+          </member>
+          <property name="Comment" type="memo">
+            <value/>
+          </property>
+          <property name="Fill color" id="Fill_color" type="color">
+            <value>0xffffffff</value>
+          </property>
+        </properties>
+        <children>
+          <input uid="022C94B8">
+            <properties>
+              <member name="bbox" type="rect">
+                <value>150, 49, 199, 64</value>
+              </member>
+              <member name="id" type="string">
+                <value>a</value>
+              </member>
+              <member name="required" type="bool">
+                <value>true</value>
+              </member>
+              <property name="Name" type="text">
+                <value>a</value>
+              </property>
+            </properties>
+            <children/>
+            <connections>
+              <source ref="022ACD30"/>
+            </connections>
+            <methods>
+              <method type="regex" name="check-type" target="GLSL">float.*|half.*|fixed.*|int.*</method>
+            </methods>
+          </input>
+          <output uid="022CB1F0">
+            <properties>
+              <member name="bbox" type="rect">
+                <value>0, 48, 77, 63</value>
+              </member>
+              <member name="id" type="string">
+                <value>d</value>
+              </member>
+              <member name="required" type="bool">
+                <value>false</value>
+              </member>
+              <property name="Name" type="text">
+                <value>d</value>
+              </property>
+            </properties>
+            <children/>
+            <connections/>
+            <methods>
+              <method type="lua" name="get-type" target="*">return node.a.get_type()</method>
+            </methods>
+          </output>
+        </children>
+        <connections/>
+        <methods>
+          <method type="var-parse" name="code" target="GLSL">				\t${node.d.get_type()} r${node.d.uid()} = -(r${node.a.get_source().uid()});\n
+			</method>
+        </methods>
+      </node>
+      <node uid="0229B4B8">
+        <properties>
+          <member name="bbox" type="rect">
+            <value>0, 0, 98, 63</value>
+          </member>
+          <member name="path" type="string">
+            <value>Cg/Arithmetic Operators/Two Operand</value>
+          </member>
+          <member name="type" type="string">
+            <value>Two Operand</value>
+          </member>
+          <member name="description" type="string">
+            <value>Select math operation with two operands.</value>
+          </member>
+          <member name="tooltip" type="string">
+            <value>d = a [ + | - | * | / ] b</value>
+          </member>
+          <member name="deletable" type="bool">
+            <value>true</value>
+          </member>
+          <member name="Name" type="string">
+            <value>Two Operand</value>
+          </member>
+          <property name="Comment" type="memo">
+            <value/>
+          </property>
+          <property name="Fill color" id="Fill_color" type="color">
+            <value>0xffffffff</value>
+          </property>
+          <property name="Operator" type="list">
+            <value>0</value>
+            <method type="lua" name="on-changed">					local labels = { ['+'] = 'Add', ['-'] = 'Subtract', ['*'] = 'Multiply', ['/'] = 'Divide' }
+					node.Name.set_value(labels[node.Operator.get_value()])
+				</method>
+            <options>
+              <option value="+">Add</option>
+              <option value="-">Subtract</option>
+              <option value="*">Multiply</option>
+              <option value="/">Divide</option>
+            </options>
+          </property>
+        </properties>
+        <children>
+          <input uid="0229C830">
+            <properties>
+              <member name="bbox" type="rect">
+                <value>0, 16, 77, 31</value>
+              </member>
+              <member name="id" type="string">
+                <value>a</value>
+              </member>
+              <member name="required" type="bool">
+                <value>true</value>
+              </member>
+              <property name="Name" type="text">
+                <value>a</value>
+              </property>
+            </properties>
+            <children/>
+            <connections/>
+            <methods>
+              <method type="regex" name="check-type" target="GLSL">float.*|half.*|fixed.*|int.*</method>
+            </methods>
+          </input>
+          <input uid="022AABF8">
+            <properties>
+              <member name="bbox" type="rect">
+                <value>0, 32, 77, 47</value>
+              </member>
+              <member name="id" type="string">
+                <value>b</value>
+              </member>
+              <member name="required" type="bool">
+                <value>true</value>
+              </member>
+              <property name="Name" type="text">
+                <value>b</value>
+              </property>
+            </properties>
+            <children/>
+            <connections/>
+            <methods>
+              <method type="regex" name="check-type" target="GLSL">float.*|half.*|fixed.*|int.*</method>
+            </methods>
+          </input>
+          <output uid="022ACD30">
+            <properties>
+              <member name="bbox" type="rect">
+                <value>0, 48, 98, 63</value>
+              </member>
+              <member name="id" type="string">
+                <value>d</value>
+              </member>
+              <member name="required" type="bool">
+                <value>false</value>
+              </member>
+              <property name="Name" type="text">
+                <value>d</value>
+              </property>
+            </properties>
+            <children/>
+            <connections>
+              <target ref="022C94B8"/>
+            </connections>
+            <methods>
+              <method type="lua" name="get-type" target="*">return node.a.get_type()</method>
+            </methods>
+          </output>
+        </children>
+        <connections/>
+        <methods>
+          <method type="var-parse" name="code" target="GLSL">				\t${node.d.get_type()} r${node.d.uid()} = r${node.a.get_source().uid()} ${node.Operator.get_value()} r${node.b.get_source().uid()};\n
+			</method>
+          <method type="lua" name="input-constraints" target="*">return node.a.get_type() == node.b.get_type()</method>
+        </methods>
+      </node>
+    </children>
+    <connections/>
+    <methods/>
+  </group>
+  <group uid="022789A8" type="Double">
+    <properties>
+      <member name="bbox" type="rect">
+        <value>0, 0, 77, 47</value>
+      </member>
+      <member name="path" type="string">
+        <value/>
+      </member>
+      <member name="type" type="string">
+        <value/>
+      </member>
+      <member name="description" type="string">
+        <value/>
+      </member>
+      <member name="tooltip" type="string">
+        <value/>
+      </member>
+      <member name="deletable" type="bool">
+        <value>true</value>
+      </member>
+      <property name="Name" type="text">
+        <value>Double</value>
+      </property>
+    </properties>
+    <children>
+      <node uid="021EC5D0">
+        <properties>
+          <member name="bbox" type="rect">
+            <value>132, 0, 197, 63</value>
+          </member>
+          <member name="path" type="string">
+            <value>Cg/Arithmetic Operators/Two Operand/Two Operand</value>
+          </member>
+          <member name="type" type="string">
+            <value>Two Operand</value>
+          </member>
+          <member name="description" type="string">
+            <value>Select math operation with two operands.</value>
+          </member>
+          <member name="tooltip" type="string">
+            <value>d = a [ + | - | * | / ] b</value>
+          </member>
+          <member name="deletable" type="bool">
+            <value>true</value>
+          </member>
+          <member name="Name" type="string">
+            <value>Multiply</value>
+          </member>
+          <property name="Comment" type="memo">
+            <value/>
+          </property>
+          <property name="Fill color" id="Fill_color" type="color">
+            <value>0xffffffff</value>
+          </property>
+          <property name="Operator" type="list">
+            <value>2</value>
+            <method type="lua" name="on-changed">					local labels = { ['+'] = 'Add', ['-'] = 'Subtract', ['*'] = 'Multiply', ['/'] = 'Divide' }
+					node.Name.set_value(labels[node.Operator.get_value()])
+				</method>
+            <options>
+              <option value="+">Add</option>
+              <option value="-">Subtract</option>
+              <option value="*">Multiply</option>
+              <option value="/">Divide</option>
+            </options>
+          </property>
+        </properties>
+        <children>
+          <input uid="02246240">
+            <properties>
+              <member name="bbox" type="rect">
+                <value>0, 16, 77, 31</value>
+              </member>
+              <member name="id" type="string">
+                <value>a</value>
+              </member>
+              <member name="required" type="bool">
+                <value>true</value>
+              </member>
+              <property name="Name" type="text">
+                <value>a</value>
+              </property>
+            </properties>
+            <children/>
+            <connections/>
+            <methods>
+              <method type="regex" name="check-type" target="GLSL">float.*|half.*|fixed.*|int.*</method>
+            </methods>
+          </input>
+          <input uid="0225C7F0">
+            <properties>
+              <member name="bbox" type="rect">
+                <value>132, 32, 197, 47</value>
+              </member>
+              <member name="id" type="string">
+                <value>b</value>
+              </member>
+              <member name="required" type="bool">
+                <value>true</value>
+              </member>
+              <property name="Name" type="text">
+                <value>b</value>
+              </property>
+            </properties>
+            <children/>
+            <connections>
+              <source ref="0225D070"/>
+            </connections>
+            <methods>
+              <method type="regex" name="check-type" target="GLSL">float.*|half.*|fixed.*|int.*</method>
+            </methods>
+          </input>
+          <output uid="0223FD60">
+            <properties>
+              <member name="bbox" type="rect">
+                <value>0, 32, 77, 47</value>
+              </member>
+              <member name="id" type="string">
+                <value>d</value>
+              </member>
+              <member name="required" type="bool">
+                <value>false</value>
+              </member>
+              <property name="Name" type="text">
+                <value>d</value>
+              </property>
+            </properties>
+            <children/>
+            <connections/>
+            <methods>
+              <method type="lua" name="get-type" target="*">return node.a.get_type()</method>
+            </methods>
+          </output>
+        </children>
+        <connections/>
+        <methods>
+          <method type="var-parse" name="code" target="GLSL">				\t${node.d.get_type()} r${node.d.uid()} = r${node.a.get_source().uid()} ${node.Operator.get_value()} r${node.b.get_source().uid()};\n
+			</method>
+          <method type="lua" name="input-constraints" target="*">return node.a.get_type() == node.b.get_type()</method>
+        </methods>
+      </node>
+      <node uid="0224AF30">
+        <properties>
+          <member name="bbox" type="rect">
+            <value>0, 36, 98, 67</value>
+          </member>
+          <member name="path" type="string">
+            <value>Cg/Arithmetic Operators/User constant/User constant</value>
+          </member>
+          <member name="type" type="string">
+            <value>User constant</value>
+          </member>
+          <member name="description" type="string">
+            <value>An user-defined constant.</value>
+          </member>
+          <member name="tooltip" type="string">
+            <value>User constant</value>
+          </member>
+          <member name="deletable" type="bool">
+            <value>true</value>
+          </member>
+          <member name="Name" type="string">
+            <value>User constant</value>
+          </member>
+          <property name="Comment" type="memo">
+            <value/>
+          </property>
+          <property name="Fill color" id="Fill_color" type="color">
+            <value>0xffffffff</value>
+          </property>
+          <property name="Value" type="text">
+            <value>2</value>
+          </property>
+          <property name="Type" type="text">
+            <value>float4</value>
+            <method type="lua" name="validator">					local types = { int = true, float = true, half = true, fixed = true }
+					local type = node.Type.get_value()
+					local count = type:sub(-1, -1) + 0
+					print('VALIDATOR ', type, ' ', count, ' ', types[type:sub(1, -2)] and count &gt;= 1 and count &lt;= 4, '\n')
+					return types[type:sub(1, -2)] and count &gt;= 1 and count &lt;= 4
+				</method>
+          </property>
+        </properties>
+        <children>
+          <output uid="0225D070">
+            <properties>
+              <member name="bbox" type="rect">
+                <value>0, 52, 98, 67</value>
+              </member>
+              <member name="id" type="string">
+                <value>d</value>
+              </member>
+              <member name="required" type="bool">
+                <value>false</value>
+              </member>
+              <property name="Name" type="text">
+                <value>d</value>
+              </property>
+            </properties>
+            <children/>
+            <connections>
+              <target ref="0225C7F0"/>
+            </connections>
+            <methods>
+              <method type="lua" name="get-type" target="*">return node.Type.get_value()</method>
+            </methods>
+          </output>
+        </children>
+        <connections/>
+        <methods>
+          <method type="var-parse" name="code" target="*">\t${node.d.get_type()} r${node.d.uid()} = ${math.evaluate(node.Value.get_value())};\n</method>
+        </methods>
+      </node>
+    </children>
+    <connections/>
+    <methods/>
+  </group>
+</library>

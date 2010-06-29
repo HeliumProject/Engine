@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<library path="Cg/Arithmetic Operators">
+	<node type="Two Operand">
+		<description><![CDATA[Select math operation with two operands.
+		
+		Supported Types:
+
+		float
+		half
+		fixed
+		int
+		float4
+		half4
+		fixed4
+		int4
+		float3
+		half3
+		fixed3
+		int3
+		float2
+		half2
+		fixed2
+		int2
+		float4x4
+		half4x4
+		fixed4x4
+		int4x4
+		float4x3
+		half4x3
+		fixed4x3
+		int4x3
+		float4x2
+		half4x2
+		fixed4x2
+		int4x2
+		float3x4
+		half3x4
+		fixed3x4
+		int3x4
+		float3x3
+		half3x3
+		fixed3x3
+		int3x3
+		float3x2
+		half3x2
+		fixed3x2
+		int3x2
+		float2x4
+		half2x4
+		fixed2x4
+		int2x4
+		float2x3
+		half2x3
+		fixed2x3
+		int2x3
+		float2x2
+		half2x2
+		fixed2x2
+		int2x2
+		]]></description>
+		<tool-tip>d = a [ + | - | * | / ] b</tool-tip>
+		<ports>
+			<input name="a" required="true">
+				<check-type method="list" target="*">
+					float,half,fixed,int,float4,half4,fixed4,int4,float3,half3,fixed3,int3,float2,half2,fixed2,int2,float4x4,half4x4,fixed4x4,int4x4,float4x3,half4x3,fixed4x3,int4x3,float4x2,half4x2,fixed4x2,int4x2,float3x4,half3x4,fixed3x4,int3x4,float3x3,half3x3,fixed3x3,int3x3,float3x2,half3x2,fixed3x2,int3x2,float2x4,half2x4,fixed2x4,int2x4,float2x3,half2x3,fixed2x3,int2x3,float2x2,half2x2,fixed2x2,int2x2
+				</check-type>
+			</input>
+			<input name="b" required="true">
+				<check-type method="list" target="*">
+					float,half,fixed,int,float4,half4,fixed4,int4,float3,half3,fixed3,int3,float2,half2,fixed2,int2,float4x4,half4x4,fixed4x4,int4x4,float4x3,half4x3,fixed4x3,int4x3,float4x2,half4x2,fixed4x2,int4x2,float3x4,half3x4,fixed3x4,int3x4,float3x3,half3x3,fixed3x3,int3x3,float3x2,half3x2,fixed3x2,int3x2,float2x4,half2x4,fixed2x4,int2x4,float2x3,half2x3,fixed2x3,int2x3,float2x2,half2x2,fixed2x2,int2x2
+				</check-type>
+			</input>
+			<output name="d">
+				<get-type method="same-as" target="*">a</get-type>
+			</output>
+			<input-constraints method="equal" target="*"/>
+		</ports>
+		<properties>
+			<default-properties/>
+			<property name="Operator" id="operator_ndx" type="list">
+				<options>
+					<option value="+">Add</option>
+					<option value="-">Subtract</option>
+					<option value="*">Multiply</option>
+					<option value="/">Divide</option>
+				</options>
+				<on-changed><![CDATA[
+					local labels = {
+						['+'] = 'Add',
+						['-'] = 'Subtract',
+						['*'] = 'Multiply',
+						['/'] = 'Divide'
+					}
+					node.Name.set_value(labels[node.operator_ndx])
+				]]></on-changed>
+			</property>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.d.get_type()} r${node.d.uid()} = r${node.a.get_source().uid()} ${node.operator_ndx.get_value()} r${node.b.get_source().uid()};
+			</code>
+		</code-generation>
+	</node>
+	<node type="Negate">
+		<description><![CDATA[d = -(x)
+
+			Supported Types:
+
+			float
+			half
+			fixed
+			int
+			float4
+			half4
+			fixed4
+			int4
+			float3
+			half3
+			fixed3
+			int3
+			float2
+			half2
+			fixed2
+			int2
+			float4x4
+			half4x4
+			fixed4x4
+			int4x4
+			float4x3
+			half4x3
+			fixed4x3
+			int4x3
+			float4x2
+			half4x2
+			fixed4x2
+			int4x2
+			float3x4
+			half3x4
+			fixed3x4
+			int3x4
+			float3x3
+			half3x3
+			fixed3x3
+			int3x3
+			float3x2
+			half3x2
+			fixed3x2
+			int3x2
+			float2x4
+			half2x4
+			fixed2x4
+			int2x4
+			float2x3
+			half2x3
+			fixed2x3
+			int2x3
+			float2x2
+			half2x2
+			fixed2x2
+			int2x2
+		]]></description>
+		<ports>
+			<input name="a">
+				<check-type method="list" target="*">
+					float,half,fixed,int,float4,half4,fixed4,int4,float3,half3,fixed3,int3,float2,half2,fixed2,int2,float4x4,half4x4,fixed4x4,int4x4,float4x3,half4x3,fixed4x3,int4x3,float4x2,half4x2,fixed4x2,int4x2,float3x4,half3x4,fixed3x4,int3x4,float3x3,half3x3,fixed3x3,int3x3,float3x2,half3x2,fixed3x2,int3x2,float2x4,half2x4,fixed2x4,int2x4,float2x3,half2x3,fixed2x3,int2x3,float2x2,half2x2,fixed2x2,int2x2
+				</check-type>
+			</input>
+			<output name="d">
+				<get-type method="same-as" target="*">a</get-type>
+			</output>
+		</ports>
+		<properties>
+			<default-properties/>
+		</properties>
+		<code-generation>
+			<code method="var-parse" target="*">
+				${node.a.get_source().get_type()} r${node.d.uid()} = -(r${node.a.get_source().uid()});
+			</code>
+		</code-generation>
+	</node>
+</library>

@@ -192,6 +192,5 @@ namespace Reflect
         // Reading and writing multiple elements via binary
         static void       ToStream(const V_Element& elements, std::iostream& stream, StatusHandler* status = NULL);
         static void       FromStream(std::iostream& stream, V_Element& elements, StatusHandler* status = NULL);
-
     };
 }

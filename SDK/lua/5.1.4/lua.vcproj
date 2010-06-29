@@ -720,10 +720,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\src\lua.c"
-			>
-		</File>
-		<File
 			RelativePath=".\src\lua.h"
 			>
 		</File>

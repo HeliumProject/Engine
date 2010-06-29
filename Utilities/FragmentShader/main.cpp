@@ -339,8 +339,3 @@ FragmentShaderApp::OnExceptionInMainLoop()
 {
     throw;
 }
-
-//int main()
-//{
-//    return Application::StandardWinMain( &wxEntry );
-//}

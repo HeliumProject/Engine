@@ -289,7 +289,6 @@
 		</Configuration>
 		<Configuration
 			Name="Debug Unicode|Win32"
-			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(SolutionDir)Windows.vsprops;$(SolutionDir)Unicode.vsprops"
 			UseOfMFC="0"

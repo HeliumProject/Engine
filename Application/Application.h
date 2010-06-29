@@ -132,10 +132,17 @@ namespace Application
   //
 
 #if defined( WIN32 ) && defined ( _WINDOWS_ )
-  APPLICATION_API int StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ),
+  APPLICATION_API int StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPCSTR lpCmdLine, int nShowCmd ),
                                     HINSTANCE hInstance = ::GetModuleHandle(NULL),
                                     HINSTANCE hPrevInstance = NULL,
                                     LPTSTR lpCmdLine = ::GetCommandLine(),
+                                    int nShowCmd = SW_SHOWNORMAL,
+                                    bool checkVersion = true );
+
+  APPLICATION_API int StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd ),
+                                    HINSTANCE hInstance = ::GetModuleHandle(NULL),
+                                    HINSTANCE hPrevInstance = NULL,
+                                    LPWSTR lpCmdLine = ::GetCommandLine(),
                                     int nShowCmd = SW_SHOWNORMAL,
                                     bool checkVersion = true );
 #endif

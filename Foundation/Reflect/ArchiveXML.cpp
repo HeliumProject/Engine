@@ -26,7 +26,7 @@ ArchiveXML::ArchiveXML(StatusHandler* status)
 , m_Version (CURRENT_VERSION)
 , m_Target (&m_Spool)
 {
-    m_Parser = XML_ParserCreate_MM (NULL, NULL, NULL);
+    m_Parser = XML_ParserCreate(NULL);
 
     // set the user data used in callbacks
     XML_SetUserData(m_Parser, (void*)this);

@@ -78,10 +78,8 @@ namespace Reflect
         // The stream to use
         TCharStreamPtr m_Stream;
 
-#ifdef REFLECT_ARCHIVE_VERBOSE
         // Indent helper
         Indent<tchar> m_Indent;
-#endif
 
         // File format version
         u32 m_Version;
@@ -197,6 +195,5 @@ namespace Reflect
         // Reading and writing multiple elements from string data
         static void       ToString(const V_Element& elements, tstring& xml, StatusHandler* status = NULL);
         static void       FromString(const tstring& xml, V_Element& elements, StatusHandler* status = NULL);
-
     };
 }

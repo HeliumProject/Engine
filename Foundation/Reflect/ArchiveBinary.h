@@ -76,8 +76,10 @@ namespace Reflect
         // The stream to use
         CharStreamPtr m_Stream;
 
+#ifdef REFLECT_ARCHIVE_VERBOSE
         // Indent helper
         Indent<tchar> m_Indent;
+#endif
 
         // The strings to cache for binary modes
         StringPool m_Strings;
@@ -192,6 +194,5 @@ namespace Reflect
         // Reading and writing multiple elements via binary
         static void       ToStream(const V_Element& elements, std::iostream& stream, StatusHandler* status = NULL);
         static void       FromStream(std::iostream& stream, V_Element& elements, StatusHandler* status = NULL);
-
     };
 }

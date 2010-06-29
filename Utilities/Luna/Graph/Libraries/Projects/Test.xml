@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<project name="Test">
-	<panel name="Test">
-		<add-library path="test.xml"/>
-		<add-node type="Viewer/CustomC3E3 Fragment Color/[OUT] (float4) Final Color"/>
-	</panel>
-</project>

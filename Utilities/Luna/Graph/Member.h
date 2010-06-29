@@ -1,14 +1,10 @@
-#ifndef __MEMBER_H__
-#define __MEMBER_H__
+#pragma once
 
-#include <wx/wx.h>
-#include <wx/xml/xml.h>
-
-#include "persistent.h"
+#include "Graph/Serialized.h"
 
 class Shape;
 
-class Member: public Persistent
+class Member: public Serialized
 {
 public:
 	// Possible property types.
@@ -98,4 +94,3 @@ protected:
 	};
 };
 
-#endif // __MEMBER_H__

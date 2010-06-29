@@ -1,14 +1,16 @@
-#include "panel.h"
+#include "Precompile.h"
+#include "Graph/Panel.h"
 
 #include <wx/tokenzr.h>
 #include <wx/propgrid/advprops.h>
 #include <wx/xml/xml.h>
 
-#include "luautil.h"
-#include "code.h"
-#include "main.h"
+#include "Graph/LuaUtilities.h"
+#include "Graph/CodeTextCtrl.h"
+#include "Graph/Debug.h"
 
-#include "debug.h"
+wxString g_FragmentShaderLibPath;
+lua_State *g_FragmentShaderLuaState;
 
 class wxTreeItemPath: public wxTreeItemData
 {
@@ -56,7 +58,7 @@ Panel::Panel(wxWindow *parent, MenuState *state)
 	// The graph/code notebook. It stays at the right of vsplitter (right side of the frame.)
 	m_Gc = NEW(wxNotebook, (m_VSplitter, wxID_ANY));
 	// Instantiate the code window.
-	m_Code = NEW(Code, (m_Gc, wxID_ANY));
+	m_Code = NEW(CodeTextCtrl, (m_Gc, wxID_ANY));
 	// Add the graph to it.
 	m_Graph = NEW(Graph, (m_Gc));
 	m_Gc->AddPage(m_Graph, wxT("Graph"), true);
@@ -82,8 +84,7 @@ Panel::~Panel()
 	DESTROY(m_State);
 }
 
-void
-Panel::LoadBinary20(LuaInputStream& lis)
+void Panel::LoadBinary20(LuaInputStream& lis)
 {
 	m_Graph->BeginUpdate();
 	std::vector<std::pair<Node *, std::vector<wxString>>> nodes;
@@ -92,7 +93,7 @@ Panel::LoadBinary20(LuaInputStream& lis)
 	{
 		wxString node_type = lis.ReadString();
 		Debug::Printf(TXT("Loading node %s (%d)\n"), node_type, i);
-		Node *node = NodeLib::Create(node_type);
+		Node *node = NodeLibrary::Create(node_type);
 		if (node == NULL)
 		{
 			THROW(TXT("Unknown node %s\n"), node_type.c_str());
@@ -300,28 +301,25 @@ Panel::LoadBinary20(LuaInputStream& lis)
 	m_Graph->EndUpdate();
 }
 
-void
-Panel::LoadBinary21(LuaInputStream& lis)
+void Panel::LoadBinary21(LuaInputStream& lis)
 {
 	LoadBinary20(lis);
 }
 
-void
-Panel::LoadLibrary(const wxString& filename)
+void Panel::LoadLibrary(const wxString& filename)
 {
-	wxString path(g_LibPath);
+	wxString path(g_FragmentShaderLibPath);
 	path.Append(wxT("nodes\\")).Append(filename);
-	wxArrayString nodes = NodeLib::Add(path);
+	wxArrayString nodes = NodeLibrary::Add(path);
 	for (size_t i = 0; i < nodes.GetCount(); i++)
 	{
 		AddToTree(nodes[i]);
 	}
 }
 
-void
-Panel::AddNode(const wxString& type, bool deletable)
+void Panel::AddNode(const wxString& type, bool deletable)
 {
-	Node *node = NodeLib::Create(type);
+	Node *node = NodeLibrary::Create(type);
 	if (node != NULL)
 	{
 		node->GetMember(wxT("deletable"))->SetValue(deletable);
@@ -329,8 +327,7 @@ Panel::AddNode(const wxString& type, bool deletable)
 	}
 }
 
-Panel::Layout
-Panel::GetLayout()
+Panel::Layout Panel::GetLayout()
 {
 	Layout layout;
 	layout.vsash = m_VSplitter->GetSashPosition();
@@ -339,28 +336,24 @@ Panel::GetLayout()
 	return layout;
 }
 
-void
-Panel::SetLayout(const Panel::Layout& layout)
+void Panel::SetLayout(const Panel::Layout& layout)
 {
 	m_VSplitter->SetSashPosition(layout.vsash);
 	m_HSplitter1->SetSashPosition(layout.hsash1);
 	m_HSplitter2->SetSashPosition(layout.hsash2);
 }
 
-void
-Panel::GetMenu()
+void Panel::GetMenu()
 {
 	m_State->Get();
 }
 
-void
-Panel::SetMenu()
+void Panel::SetMenu()
 {
 	m_State->Set();
 }
 
-void
-Panel::OnTreeItemActivated(wxTreeEvent& evt)
+void Panel::OnTreeItemActivated(wxTreeEvent& evt)
 {
 	wxTreeItemId item = m_Tree->GetSelection();
 	if (m_Tree->GetChildrenCount(item) == 0)
@@ -369,19 +362,18 @@ Panel::OnTreeItemActivated(wxTreeEvent& evt)
 	}
 }
 
-void
-Panel::OnTreeSelChanged(wxTreeEvent& evt)
+void Panel::OnTreeSelChanged(wxTreeEvent& evt)
 {
 	/*wxTreeItemId item = evt.GetItem();
 	if (m_Tree->GetChildrenCount(item) == 0)
 	{
-		LuaUtil::PushSelf(g_L, this);
-		lua_getfield(g_L, -1, "get_node_help");
-		lua_pushstring(g_L, BuildNodePath(item).c_str());
-		LuaUtil::Call(g_L, 1, 1);
-		const tchar *text = luaL_optstring(g_L, -1, "");
+		LuaUtilities::PushSelf(g_FragmentShaderLuaState, this);
+		lua_getfield(g_FragmentShaderLuaState, -1, "get_node_help");
+		lua_pushstring(g_FragmentShaderLuaState, BuildNodePath(item).c_str());
+		LuaUtilities::Call(g_FragmentShaderLuaState, 1, 1);
+		const tchar *text = luaL_optstring(g_FragmentShaderLuaState, -1, "");
 		m_Help->SetValue(text);
-		lua_pop(g_L, 2);
+		lua_pop(g_FragmentShaderLuaState, 2);
 		m_Ph->ChangeSelection(1);
 	}*/
 	wxTreeItemId item = evt.GetItem();
@@ -389,7 +381,7 @@ Panel::OnTreeSelChanged(wxTreeEvent& evt)
 	{
 		wxString type = BuildNodePath(item);
 		m_Graph->SetCurrentType(type);
-		m_Help->SetValue(NodeLib::GetDescription(type));
+		m_Help->SetValue(NodeLibrary::GetDescription(type));
 		m_Ph->SetSelection(1);
 	}
 	else
@@ -398,8 +390,7 @@ Panel::OnTreeSelChanged(wxTreeEvent& evt)
 	}
 }
 
-void
-Panel::OnItemActivated(wxListEvent& evt)
+void Panel::OnItemActivated(wxListEvent& evt)
 {
   union ShapeData
   {
@@ -418,22 +409,19 @@ Panel::OnItemActivated(wxListEvent& evt)
 	}
 }
 
-void
-Panel::OnPropertyChanging(wxPropertyGridEvent& evt)
+void Panel::OnPropertyChanging(wxPropertyGridEvent& evt)
 {
 	// TODO This should be in PropertyGrid, but we need the reference to the graph.
 	m_Props->OnPropertyChanging(m_Graph, evt);
 }
 
-void
-Panel::OnPropertyChanged(wxPropertyGridEvent& evt)
+void Panel::OnPropertyChanged(wxPropertyGridEvent& evt)
 {
 	// TODO This should be in PropertyGrid, but we need the reference to the grap.
 	m_Props->OnPropertyChanged(m_Graph, evt);
 }
 
-void
-Panel::AddToTree(const wxString& name)
+void Panel::AddToTree(const wxString& name)
 {
 	wxTreeItemId node = m_Tree->GetRootItem();
 	if (!node.IsOk())
@@ -474,8 +462,7 @@ Panel::AddToTree(const wxString& name)
 	}*/
 }
 
-wxString
-Panel::BuildNodeName(wxTreeItemId item)
+wxString Panel::BuildNodeName(wxTreeItemId item)
 {
 	wxTreeItemId root = m_Tree->GetRootItem();
 	wxString name = m_Tree->GetItemText(item);
@@ -487,8 +474,7 @@ Panel::BuildNodeName(wxTreeItemId item)
 	return name;
 }
 
-wxString
-Panel::BuildNodePath(wxTreeItemId item)
+wxString Panel::BuildNodePath(wxTreeItemId item)
 {
 	wxTreeItemPath *path = (wxTreeItemPath *)m_Tree->GetItemData(item);
 	if (path == NULL)
@@ -501,8 +487,7 @@ Panel::BuildNodePath(wxTreeItemId item)
 	}
 }
 
-void
-Panel::AddToGraph(wxTreeItemId item)
+void Panel::AddToGraph(wxTreeItemId item)
 {
 	wxString type = BuildNodePath(item);
 	AddNode(type);

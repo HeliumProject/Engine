@@ -5,8 +5,7 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __typediag__
-#define __typediag__
+#pragma once
 
 #include <wx/string.h>
 #include <wx/textctrl.h>
@@ -39,4 +38,3 @@ class TypeDialog : public wxDialog
 	
 };
 
-#endif //__typediag__

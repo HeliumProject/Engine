@@ -1,9 +1,9 @@
-#include "property.h"
+#include "Precompile.h"
+#include "Graph/Property.h"
 
-#include "method.h"
-#include "xml.h"
-
-#include "debug.h"
+#include "Graph/Method.h"
+#include "Graph/XML.h"
+#include "Graph/Debug.h"
 
 Property::~Property()
 {

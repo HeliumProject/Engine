@@ -1,11 +1,9 @@
-#ifndef __UNDO_H__
-#define __UNDO_H__
-
-#include "menustate.h"
+#pragma once
 
 #include <vector>
 
-#include "debug.h"
+#include "Graph/MenuState.h"
+#include "Graph/Debug.h"
 
 class UndoRedo
 {
@@ -70,4 +68,3 @@ private:
 	int m_index;
 };
 
-#endif /* __UNDO_H__ */

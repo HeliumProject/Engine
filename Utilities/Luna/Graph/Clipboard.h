@@ -1,10 +1,8 @@
-#ifndef __CLIPBOARD_H__
-#define __CLIPBOARD_H__
+#pragma once
 
-#include "shape.h"
-#include "util.h"
-
-#include "debug.h"
+#include "Graph/Shape.h"
+#include "Graph/Utilities.h"
+#include "Graph/Debug.h"
 
 class Clipboard: public Shape
 {
@@ -36,7 +34,6 @@ public:
 	// The class name used in serialization.
 	virtual wxString   GetClassName() const          { return wxT("clipboard"); }
 	// Creates an instance of this shape.
-	static Persistent *Create(const wxXmlNode& root) { return NEW(Clipboard, ()); }
+	static Serialized *Create(const wxXmlNode& root) { return NEW(Clipboard, ()); }
 };
 
-#endif // __CLIPBOARD_H__

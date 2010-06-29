@@ -1,16 +1,12 @@
-#ifndef __NODELIB_H__
-#define __NODELIB_H__
+#pragma once
 
-#include <wx/wx.h>
-#include <wx/xml/xml.h>
+#include "Graph/Node.h"
 
-#include "node.h"
-
-class NodeDef
+class NodeDefinition
 {
 	public:
-		NodeDef(const wxString& path, const wxXmlNode *root);
-		virtual ~NodeDef() {}
+		NodeDefinition(const wxString& path, const wxXmlNode *root);
+		virtual ~NodeDefinition() {}
 
 		wxString GetPath() const        { return m_Path; }
 		wxString GetType() const        { return m_NodeType; }
@@ -44,7 +40,7 @@ class NodeDef
 		wxString          m_NodeType;
 };
 
-namespace NodeLib
+namespace NodeLibrary
 {
 	wxArrayString Add(const wxString& file);
 	wxArrayString AddUserNodes();
@@ -54,4 +50,3 @@ namespace NodeLib
 	void Clear();
 };
 
-#endif // __NODELIB_H__

@@ -1,9 +1,9 @@
-#include "shaderobj.h"
+#include "Precompile.h"
+#include "Graph/ShaderObject.h"
 
-#include "method.h"
-#include "xml.h"
-
-#include "debug.h"
+#include "Graph/Method.h"
+#include "Graph/XML.h"
+#include "Graph/Debug.h"
 
 void
 ShaderObject::PushLua(lua_State *L) const

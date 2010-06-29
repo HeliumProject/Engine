@@ -1,10 +1,11 @@
-#include "shape.h"
+#include "Precompile.h"
+#include "Graph/Shape.h"
 
 #include <set>
 
-#include "xml.h"
-
-#include "debug.h"
+#include "Graph/Debug.h"
+#include "Graph/ProjectNotebook.h"
+#include "Graph/XML.h"
 
 Shape::Shape()
 	: m_parent((Shape *)NULL)
@@ -48,7 +49,7 @@ Shape::IsInside(const wxPoint& pt)
 	}
 	return m_bbox.Contains(pt) ? this : (Shape *)NULL;
 }
-#include "project.h"
+
 
 void
 Shape::SetPosition(int x, int y)
@@ -296,7 +297,7 @@ Shape::DeserializeChildren(const wxXmlNode& root)
 	while (child != NULL)
 	{
 		wxString uid = XML::GetStringAttribute(*child, wxT("uid"));
-		Persistent *obj = Persistent::GetObjectByUID(uid);
+		Serialized *obj = Serialized::GetObjectByUID(uid);
 		obj->Deserialize(*child);
 		AddChild(static_cast<Shape *>(obj));
 		child = child->GetNext();
@@ -343,7 +344,7 @@ Shape::DeserializeConnections(const wxXmlNode& root)
 	while (child != NULL)
 	{
 		wxString uid = XML::GetStringAttribute(*child, wxT("ref"));
-		Persistent *obj = Persistent::GetObjectByUID(uid);
+		Serialized *obj = Serialized::GetObjectByUID(uid);
 		if (obj != NULL)
 		{
 			wxString name = child->GetName();

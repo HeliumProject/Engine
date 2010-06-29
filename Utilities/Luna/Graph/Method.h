@@ -1,18 +1,11 @@
-#ifndef __METHOD_H__
-#define __METHOD_H__
+#pragma once
 
-#include <wx/wx.h>
-#include <wx/regex.h>
+#include "Graph/Node.h"
+#include "Graph/Property.h"
+#include "Graph/ShaderObject.h"
+#include "Graph/Serialized.h"
 
-#include <set>
-#include <vector>
-
-#include "node.h"
-#include "property.h"
-#include "shaderobj.h"
-#include "persistent.h"
-
-class Method: public Persistent
+class Method: public Serialized
 {
 public:
 	Method() {}
@@ -181,4 +174,3 @@ private:
 Method *
 DeserializeMethod(const wxXmlNode& root);
 
-#endif // __METHOD_H__

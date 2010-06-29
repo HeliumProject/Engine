@@ -1,14 +1,14 @@
-#include "method.h"
+#include "Precompile.h"
+#include "Graph/Method.h"
 
 #include <wx/tokenzr.h>
 #include <wx/sstream.h>
 
-#include "node.h"
-#include "property.h"
-#include "main.h"
-#include "xml.h"
-
-#include "debug.h"
+#include "Graph/Node.h"
+#include "Graph/Property.h"
+#include "Graph/XML.h"
+#include "Graph/Debug.h"
+#include "Graph/Panel.h"
 
 #include "Platform/String.h"
 
@@ -239,21 +239,21 @@ MethodLua::MethodLua(const wxString& source)
     std::string temp;
     Platform::ConvertString( m_source.c_str(), temp );
 
-	LuaUtil::LoadBuffer(g_L, temp.c_str(), temp.length(), "method");
-	m_lua_ref = luaL_ref(g_L, LUA_REGISTRYINDEX);
+	LuaUtilities::LoadBuffer(g_FragmentShaderLuaState, temp.c_str(), temp.length(), "method");
+	m_lua_ref = luaL_ref(g_FragmentShaderLuaState, LUA_REGISTRYINDEX);
 }
 
 MethodLua::~MethodLua()
 {
-	luaL_unref(g_L, LUA_REGISTRYINDEX, m_lua_ref);
+	luaL_unref(g_FragmentShaderLuaState, LUA_REGISTRYINDEX, m_lua_ref);
 }
 
 bool
 MethodLua::CheckType(const InputPort *input) const
 {
 	Call(static_cast<Node *>(input->GetParent()));
-	bool ok = lua_toboolean(g_L, -1) ? true : false;
-	lua_pop(g_L, 1);
+	bool ok = lua_toboolean(g_FragmentShaderLuaState, -1) ? true : false;
+	lua_pop(g_FragmentShaderLuaState, 1);
 	return ok;
 }
 
@@ -262,9 +262,9 @@ MethodLua::GetType(const OutputPort *output) const
 {
 	Call(static_cast<Node *>(output->GetParent()));
     tstring temp;
-    Platform::ConvertString( lua_tostring(g_L, -1), temp );
+    Platform::ConvertString( lua_tostring(g_FragmentShaderLuaState, -1), temp );
     wxString type = temp;
-	lua_pop(g_L, 1);
+	lua_pop(g_FragmentShaderLuaState, 1);
 	return type;
 }
 
@@ -272,8 +272,8 @@ bool
 MethodLua::InputConstraints(const Node *node) const
 {
 	Call(node);
-	bool ok = lua_toboolean(g_L, -1) ? true : false;
-	lua_pop(g_L, 1);
+	bool ok = lua_toboolean(g_FragmentShaderLuaState, -1) ? true : false;
+	lua_pop(g_FragmentShaderLuaState, 1);
 	return ok;
 }
 
@@ -281,8 +281,8 @@ bool
 MethodLua::Validate(const Property *prop) const
 {
 	Call(dynamic_cast<Node *>(prop->GetOwner()));
-	bool ok = lua_toboolean(g_L, -1) ? true : false;
-	lua_pop(g_L, 1);
+	bool ok = lua_toboolean(g_FragmentShaderLuaState, -1) ? true : false;
+	lua_pop(g_FragmentShaderLuaState, 1);
 	return ok;
 }
 
@@ -290,7 +290,7 @@ void
 MethodLua::OnChanged(const Property *prop) const
 {
 	Call(dynamic_cast<Node *>(prop->GetOwner()));
-	lua_pop(g_L, 1);
+	lua_pop(g_FragmentShaderLuaState, 1);
 }
 
 wxString
@@ -298,9 +298,9 @@ MethodLua::GenerateCode(const Node *node) const
 {
 	Call(node);
 	tstring temp;
-    Platform::ConvertString( lua_tostring(g_L, -1), temp );
+    Platform::ConvertString( lua_tostring(g_FragmentShaderLuaState, -1), temp );
     wxString code = temp;
-	lua_pop(g_L, 1);
+	lua_pop(g_FragmentShaderLuaState, 1);
 	return code;
 }
 
@@ -320,36 +320,36 @@ MethodLua::Deserialize(const wxXmlNode& root)
 
     std::string temp;
     Platform::ConvertString( m_source.c_str(), temp );
-    LuaUtil::LoadBuffer(g_L, temp.c_str(), temp.length(), "method");
-	m_lua_ref = luaL_ref(g_L, LUA_REGISTRYINDEX);
+    LuaUtilities::LoadBuffer(g_FragmentShaderLuaState, temp.c_str(), temp.length(), "method");
+	m_lua_ref = luaL_ref(g_FragmentShaderLuaState, LUA_REGISTRYINDEX);
 	Method::Deserialize(root);
 }
 
 void
 MethodLua::Call(const ShaderObject *obj) const
 {
-	lua_getglobal(g_L, "node");
+	lua_getglobal(g_FragmentShaderLuaState, "node");
 	int ref;
-	if (!lua_isnil(g_L, -1))
+	if (!lua_isnil(g_FragmentShaderLuaState, -1))
 	{
-		ref = luaL_ref(g_L, LUA_REGISTRYINDEX);
+		ref = luaL_ref(g_FragmentShaderLuaState, LUA_REGISTRYINDEX);
 	}
 	else
 	{
 		ref = LUA_NOREF;
 	}
-	obj->PushLua(g_L);
-	lua_setglobal(g_L, "node");
-	lua_rawgeti(g_L, LUA_REGISTRYINDEX, m_lua_ref);
+	obj->PushLua(g_FragmentShaderLuaState);
+	lua_setglobal(g_FragmentShaderLuaState, "node");
+	lua_rawgeti(g_FragmentShaderLuaState, LUA_REGISTRYINDEX, m_lua_ref);
 
     std::string temp;
     Platform::ConvertString( obj->GetMember(wxT("Name"))->GetString().c_str(), temp);
-    LuaUtil::Call(g_L, 0, 1, temp.c_str());
+    LuaUtilities::Call(g_FragmentShaderLuaState, 0, 1, temp.c_str());
 	if (ref != LUA_NOREF)
 	{
-		lua_rawgeti(g_L, LUA_REGISTRYINDEX, ref);
-		lua_setglobal(g_L, "node");
-		luaL_unref(g_L, LUA_REGISTRYINDEX, ref);
+		lua_rawgeti(g_FragmentShaderLuaState, LUA_REGISTRYINDEX, ref);
+		lua_setglobal(g_FragmentShaderLuaState, "node");
+		luaL_unref(g_FragmentShaderLuaState, LUA_REGISTRYINDEX, ref);
 	}
 }
 

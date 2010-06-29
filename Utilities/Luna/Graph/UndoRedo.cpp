@@ -1,8 +1,8 @@
-#include "undo.h"
+#include "Precompile.h"
+#include "Graph/UndoRedo.h"
 
-#include "project.h"
-
-#include "debug.h"
+#include "Graph/ProjectNotebook.h"
+#include "Graph/Debug.h"
 
 UndoRedo::~UndoRedo()
 {

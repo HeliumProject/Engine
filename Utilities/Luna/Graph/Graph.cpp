@@ -1,4 +1,5 @@
-#include "graph.h"
+#include "Precompile.h"
+#include "Graph/Graph.h"
 
 #include <wx/clipbrd.h>
 #include <wx/xml/xml.h>
@@ -10,15 +11,14 @@
 #include <stack>
 #include <set>
 
-#include "shader.h"
-#include "node.h"
-#include "nodelib.h"
-#include "clipboard.h"
-#include "project.h"
-#include "group.h"
-#include "typediag.h"
-
-#include "debug.h"
+#include "Graph/ShaderFrame.h"
+#include "Graph/Node.h"
+#include "Graph/NodeDefinition.h"
+#include "Graph/Clipboard.h"
+#include "Graph/ProjectNotebook.h"
+#include "Graph/Group.h"
+#include "Graph/TypeDialog.h"
+#include "Graph/Debug.h"
 
 class URAddNode: public UndoRedo
 {
@@ -486,7 +486,7 @@ Graph::GenerateCode()
 	}
 	// Generate code
 	Panel* panel = Project::GetProject()->GetPanel(this);
-	Code *codectrl = panel->GetCodeCtrl();
+	CodeTextCtrl *codectrl = panel->GetCodeCtrl();
 	Report *reportctrl = panel->GetReportCtrl();
 	codectrl->Freeze();
 	reportctrl->Freeze();
@@ -711,7 +711,7 @@ Graph::Paste()
 			if (doc.Load(sis))
 			{
 				wxXmlNode *root = doc.GetRoot();
-				Clipboard *clip = (Clipboard *)Persistent::DeserializeObject(*root);
+				Clipboard *clip = (Clipboard *)Serialized::DeserializeObject(*root);
 				List<Shape *> *nodes = NEW(List<Shape *>, ());
 				for (List<Shape *>::Iterator i = clip->ChildIterator(); !i; i++)
 				{
@@ -736,7 +736,7 @@ void
 Graph::Duplicate()
 {
 	wxXmlNode *root = SerializeSelected();
-	Clipboard *clip = (Clipboard *)Persistent::DeserializeObject(*root);
+	Clipboard *clip = (Clipboard *)Serialized::DeserializeObject(*root);
 	List<Shape *> *nodes = NEW(List<Shape *>, ());
 	for (List<Shape *>::Iterator i = clip->ChildIterator(); !i; i++)
 	{
@@ -786,7 +786,7 @@ Graph::SaveGroup()
 	{
 		wxXmlNode *root = group->Serialize();
 		root->AddProperty(wxT("type"), type);
-		if (NodeLib::SaveGroup(root))
+		if (NodeLibrary::SaveGroup(root))
 		{
 			wxMessageBox(wxT("Node saved."), wxT("Info"), wxOK | wxICON_INFORMATION, Project::GetProject()->GetPanel());
 		}
@@ -891,7 +891,7 @@ Graph::OnLeftDown(wxMouseEvent& evt)
 		}
 		if (evt.AltDown() && m_type != wxT(""))
 		{
-			Node *node = NodeLib::Create(m_type);
+			Node *node = NodeLibrary::Create(m_type);
 			node->SetPosition(x, y);
 			AddNode(node);
 			break;

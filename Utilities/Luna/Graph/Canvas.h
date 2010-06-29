@@ -1,7 +1,4 @@
-#ifndef __CANVAS_H__
-#define __CANVAS_H__
-
-#include <wx/wx.h>
+#pragma once
 
 class Canvas: public wxScrolledWindow
 {
@@ -50,4 +47,3 @@ class Canvas: public wxScrolledWindow
 	DECLARE_EVENT_TABLE()
 };
 
-#endif // __CANVAS_H__

@@ -1,8 +1,9 @@
-#include "stream.h"
+#include "Precompile.h"
+#include "Graph/LuaInputStream.h"
 
 #include <math.h>
 
-#include "debug.h"
+#include "Graph/Debug.h"
 
 // 2.0
 #define TYPE_NIL		0

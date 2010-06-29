@@ -1,13 +1,6 @@
-#ifndef __PROPGRID_H__
-#define __PROPGRID_H__
+#pragma once
 
-#include <wx/wx.h>
-#include <wx/propgrid/propgrid.h>
-#include <wx/propgrid/advprops.h>
-
-#include <map>
-
-#include "undo.h"
+#include "Graph/UndoRedo.h"
 
 class Graph;
 class Property;
@@ -29,4 +22,3 @@ private:
 	Undoer *m_undoer;
 };
 
-#endif // __PROPGRID_H__

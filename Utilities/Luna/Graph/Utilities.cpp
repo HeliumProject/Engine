@@ -1,4 +1,5 @@
-#include "util.h"
+#include "Precompile.h"
+#include "Graph/Utilities.h"
 
 /*template<class T> void
 Set<T>::Add(T t)

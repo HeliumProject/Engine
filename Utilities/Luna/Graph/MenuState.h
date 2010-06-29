@@ -1,5 +1,4 @@
-#ifndef __MENUSTATE_H__
-#define __MENUSTATE_H__
+#pragma once
 
 #include <wx/menu.h>
 
@@ -29,5 +28,3 @@ private:
 	std::vector<Range>	m_Ranges;
 	bool				*m_States;
 };
-
-#endif // __MENUSTATE_H__

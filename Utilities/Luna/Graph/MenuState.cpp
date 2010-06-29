@@ -1,6 +1,7 @@
-#include "menustate.h"
+#include "Precompile.h"
+#include "Graph/MenuState.h"
 
-#include "debug.h"
+#include "Graph/Debug.h"
 
 MenuState::MenuState(wxMenuBar *menu)
 	: m_MenuBar(menu)

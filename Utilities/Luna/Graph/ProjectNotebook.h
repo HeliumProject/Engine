@@ -1,13 +1,9 @@
-#ifndef __PROJECT_H__
-#define __PROJECT_H__
+#pragma once
 
-#include <wx/wx.h>
-#include <wx/notebook.h>
-
-#include "luautil.h"
-#include "menustate.h"
-#include "stream.h"
-#include "panel.h"
+#include "Graph/LuaUtilities.h"
+#include "Graph/MenuState.h"
+#include "Graph/LuaInputStream.h"
+#include "Graph/Panel.h"
 
 class Project: public wxNotebook
 {
@@ -56,4 +52,3 @@ DECLARE_NO_COPY_CLASS(Project)
 DECLARE_EVENT_TABLE()
 };
 
-#endif /* __PROJECT_H__ */

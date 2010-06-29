@@ -1,12 +1,6 @@
-#ifndef __UTIL_H__
-#define __UTIL_H__
+#pragma once
 
-#include <wx/wx.h>
-
-#include <map>
-#include <set>
-
-#include "debug.h"
+#include "Graph/Debug.h"
 
 template<class T>
 class List
@@ -84,4 +78,3 @@ namespace Util
 	wxColor  TextColorFromBG(const wxColor& bg);
 };
 
-#endif // __UTIL_H__

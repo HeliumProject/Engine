@@ -1,20 +1,15 @@
-#ifndef __GRAPH_H__
-#define __GRAPH_H__
+#pragma once
 
-#include <wx/wx.h>
-#include <wx/notebook.h>
-
-#include "canvas.h"
-#include "shape.h"
-#include "node.h"
-#include "propgrid.h"
-#include "util.h"
-#include "menustate.h"
-#include "undo.h"
-#include "report.h"
-#include "code.h"
-
-#include "debug.h"
+#include "Graph/Canvas.h"
+#include "Graph/Shape.h"
+#include "Graph/Node.h"
+#include "Graph/PropertyGrid.h"
+#include "Graph/Utilities.h"
+#include "Graph/MenuState.h"
+#include "Graph/UndoRedo.h"
+#include "Graph/ReportListCtrl.h"
+#include "Graph/CodeTextCtrl.h"
+#include "Graph/Debug.h"
 
 class Graph: public Canvas, public Shape
 {
@@ -64,7 +59,7 @@ public:
 	void OnKeyDown(wxKeyEvent& evt);
 
 	virtual wxString   GetClassName() const          { return wxT("graph"); }
-	static Persistent *Create(const wxXmlNode& root) { return (Graph*)NULL; }
+	static Serialized *Create(const wxXmlNode& root) { return (Graph*)NULL; }
 
 	void DoAddNode(Node *node);
 	void DoDelNode(Node *node);
@@ -96,4 +91,3 @@ private:
 	bool m_update;
 };
 
-#endif // __GRAPH_H__

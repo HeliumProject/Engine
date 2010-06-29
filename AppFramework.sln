@@ -2,8 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Luna", "utilities\Luna\Luna.vcproj", "{42ACA40F-393C-4412-9709-CBAA776D1537}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FragmentShader", "utilities\FragmentShader\FragmentShader.vcproj", "{83516907-853B-41DA-AB81-7458E6927DE3}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Expat", "SDK\Expat\2.01\Expat.vcproj", "{533F2B69-13FC-4557-9D26-517FDA493D75}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MySQL", "SDK\MySQL\6.0.2\MySQL.vcproj", "{1EBDB40D-9808-463B-AA43-04D65586485F}"
@@ -62,22 +60,6 @@ Global
 		{42ACA40F-393C-4412-9709-CBAA776D1537}.Release|Win32.Build.0 = Release|Win32
 		{42ACA40F-393C-4412-9709-CBAA776D1537}.Release|x64.ActiveCfg = Release|x64
 		{42ACA40F-393C-4412-9709-CBAA776D1537}.Release|x64.Build.0 = Release|x64
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Debug Unicode|Win32.ActiveCfg = Debug Unicode|Win32
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Debug Unicode|Win32.Build.0 = Debug Unicode|Win32
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Debug Unicode|x64.ActiveCfg = Debug Unicode|x64
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Debug Unicode|x64.Build.0 = Debug Unicode|x64
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Debug|Win32.ActiveCfg = Debug|Win32
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Debug|Win32.Build.0 = Debug|Win32
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Debug|x64.ActiveCfg = Debug|x64
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Debug|x64.Build.0 = Debug|x64
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Release Unicode|Win32.ActiveCfg = Release Unicode|Win32
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Release Unicode|Win32.Build.0 = Release Unicode|Win32
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Release Unicode|x64.ActiveCfg = Release Unicode|x64
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Release Unicode|x64.Build.0 = Release Unicode|x64
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Release|Win32.ActiveCfg = Release|Win32
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Release|Win32.Build.0 = Release|Win32
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Release|x64.ActiveCfg = Release|x64
-		{83516907-853B-41DA-AB81-7458E6927DE3}.Release|x64.Build.0 = Release|x64
 		{533F2B69-13FC-4557-9D26-517FDA493D75}.Debug Unicode|Win32.ActiveCfg = Debug Unicode|Win32
 		{533F2B69-13FC-4557-9D26-517FDA493D75}.Debug Unicode|Win32.Build.0 = Debug Unicode|Win32
 		{533F2B69-13FC-4557-9D26-517FDA493D75}.Debug Unicode|x64.ActiveCfg = Debug Unicode|x64

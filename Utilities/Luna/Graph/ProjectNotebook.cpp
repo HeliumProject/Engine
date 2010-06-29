@@ -1,4 +1,5 @@
-#include "project.h"
+#include "Precompile.h"
+#include "Graph/ProjectNotebook.h"
 
 #include <wx/config.h>
 #include <wx/dir.h>
@@ -9,15 +10,13 @@
 
 #include <map>
 
-#include "shader.h"
-#include "panel.h"
-#include "luautil.h"
-#include "stream.h"
-#include "undo.h"
-#include "main.h"
-#include "xml.h"
-
-#include "debug.h"
+#include "Graph/ShaderFrame.h"
+#include "Graph/Panel.h"
+#include "Graph/LuaUtilities.h"
+#include "Graph/LuaInputStream.h"
+#include "Graph/UndoRedo.h"
+#include "Graph/XML.h"
+#include "Graph/Debug.h"
 
 #include "Application/RCS/RCS.h"
 #include "Foundation/Log.h"
@@ -50,10 +49,10 @@ Project::New(wxWindow *parent, MenuState *state, const wxString& type)
 		THROW(TXT("Root node isn't <project>."));
 	}
 
-	//wxArrayString groups = NodeLib::AddUserNodes();
-	//wxString grpfile(g_LibPath);
+	//wxArrayString groups = NodeLibrary::AddUserNodes();
+	//wxString grpfile(g_FragmentShaderLibPath);
 	//grpfile.Append(wxT("nodes\\user.xml"));
-	//wxArrayString groups = NodeLib::Add(grpfile);
+	//wxArrayString groups = NodeLibrary::Add(grpfile);
 
 	wxXmlNode *child = xml.GetRoot()->GetChildren();
 	while (child != 0)
@@ -225,7 +224,7 @@ Project::GetPanel(wxWindow *child) const
 Project::~Project()
 {
 	SaveConfig();
-	NodeLib::Clear();
+	NodeLibrary::Clear();
 }
 
 Project *
@@ -364,7 +363,7 @@ const wxArrayString
 Project::GetProjectTypes()
 {
 	wxArrayString types;
-	wxString path(g_LibPath);
+	wxString path(g_FragmentShaderLibPath);
 	path.Append(wxT("projects\\"));
 	wxDir dir(path);
 	wxString entry;
@@ -567,7 +566,7 @@ Project::LoadXML(wxInputStream& is)
 		}
 		if (child != NULL)
 		{
-			Persistent::DeserializeObject(*child->GetChildren(), panel->GetGraphCtrl());
+			Serialized::DeserializeObject(*child->GetChildren(), panel->GetGraphCtrl());
 		}
 	}
 }

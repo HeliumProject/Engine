@@ -1,9 +1,7 @@
-#ifndef __GROUP_H__
-#define __GROUP_H__
+#pragma once
 
-#include "node.h"
-
-#include "debug.h"
+#include "Graph/Node.h"
+#include "Graph/Debug.h"
 
 class Group: public Node
 {
@@ -37,7 +35,7 @@ public:
 	// The class name used in serialization.
 	virtual wxString  GetClassName() const { return wxT("group"); }
 	// Creates an instance of this shape.
-	static Persistent *Create(const wxXmlNode& root) { return NEW(Group, ()); }
+	static Serialized *Create(const wxXmlNode& root) { return NEW(Group, ()); }
 
 	///////////////////////////////////////////////////////////////
 	// Lua object.
@@ -57,7 +55,7 @@ public:
 	// Node-specific stuff.
 	///////////////////////////////////////////////////////////////
 
-	virtual void GenerateCode(Code *codectrl, Report *reportctrl) const;
+	virtual void GenerateCode(CodeTextCtrl *codectrl, Report *reportctrl) const;
 	virtual bool CheckInputConstraits() const;
 
 protected:
@@ -74,4 +72,3 @@ protected:
 	wxPoint GetTopLeft(List<Shape *> *shapes) const;
 };
 
-#endif /* __GROUP_H__ */

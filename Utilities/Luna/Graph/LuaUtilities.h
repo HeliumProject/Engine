@@ -1,16 +1,14 @@
-#ifndef __LUAUTIL_H__
-#define __LUAUTIL_H__
+#pragma once
 
-#include <wx/wx.h>
-#include <wx/variant.h>
 
-extern "C" {
+extern "C"
+{
 	#include <lua.h>
 	#include <lauxlib.h>
 	#include <lualib.h>
 }
 
-#include <windows.h>
+#include "Platform/Windows/Windows.h"
 
 class LuaObject
 {
@@ -26,7 +24,7 @@ protected:
 	static int LuaUID(lua_State *L);
 };
 
-namespace LuaUtil
+namespace LuaUtilities
 {
 	class StackUnwinder
 	{
@@ -56,4 +54,3 @@ namespace LuaUtil
 	void CreatePath(lua_State *L, const char *path);
 };
 
-#endif // __LUAUTIL_H__

@@ -1,8 +1,7 @@
-#ifndef __SHADEROBJ_H__
-#define __SHADEROBJ_H__
+#pragma once
 
-#include "shape.h"
-#include "luautil.h"
+#include "Graph/Shape.h"
+#include "Graph/LuaUtilities.h"
 
 class Method;
 
@@ -43,4 +42,3 @@ protected:
 	std::map<wxString, Method *> m_methods;
 };
 
-#endif // __SHADEROBJ_H__

@@ -1,13 +1,14 @@
-#include "report.h"
+#include "Precompile.h"
+#include "Graph/ReportListCtrl.h"
 
 #include <wx/imaglist.h>
 #include <wx/bitmap.h>
 
-#include "debug.h"
+#include "Graph/Debug.h"
 
-#include "xpm/agt_action_success.xpm"
-#include "xpm/agt_update_critical.xpm"
-#include "xpm/agt_stop.xpm"
+#include "Graph/XPM/agt_action_success.xpm"
+#include "Graph/XPM/agt_update_critical.xpm"
+#include "Graph/XPM/agt_stop.xpm"
 
 BEGIN_EVENT_TABLE(Report, wxListCtrl)
 	EVT_SIZE(Report::OnSize)

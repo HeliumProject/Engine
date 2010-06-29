@@ -1,4 +1,5 @@
-#include "luautil.h"
+#include "Precompile.h"
+#include "Graph/LuaUtilities.h"
 
 #include <string.h>
 #include <stdarg.h>
@@ -6,14 +7,15 @@
 
 extern "C"
 {
-	#include "expr.h"
+	#include "Graph/expr.h"
 }
 
 #include "base64.h"
 
-#include "debug.h"
+#include "Graph/Debug.h"
+#include "Graph/Base64Encode.h"
 
-namespace LuaUtil
+namespace LuaUtilities
 {
 	static const char class_lua[] =
 		"local setmetatable = debug.setmetatable\n"
@@ -288,10 +290,10 @@ namespace LuaUtil
 		lua_pop(L, 1);
 		// Make the OOP system available.
 		LoadBuffer(L, class_lua, sizeof(class_lua) - 1, "class");
-		LuaUtil::Call(L, 0, 0);
+		LuaUtilities::Call(L, 0, 0);
 		// Load the Lua Node class.
 		LoadBuffer(L, node_lua, sizeof(node_lua) - 1, "node");
-		LuaUtil::Call(L, 0, 0);
+		LuaUtilities::Call(L, 0, 0);
 		// Set top to zero to remove dangling tables on the stack.
 		lua_settop(L, 0);
 		return L;

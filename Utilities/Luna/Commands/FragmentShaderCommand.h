@@ -1,11 +1,14 @@
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#pragma once
 
-#include <wx/wx.h>
+#include "Foundation/CommandLine/Command.h"
 
-#include "luautil.h"
-
-extern wxString g_LibPath;
-extern lua_State *g_L;
-
-#endif // __MAIN_H__
+//namespace Luna
+//{
+//    class ProfileDumpCommand : public Nocturnal::CommandLine::Command
+//    {
+//    public:
+//        ProfileDumpCommand();
+//
+//        virtual bool Process( std::vector< tstring >::const_iterator& argsBegin, const std::vector< tstring >::const_iterator& argsEnd, tstring& error ) NOC_OVERRIDE;
+//    };
+//}

@@ -1,6 +1,7 @@
-#include "group.h"
+#include "Precompile.h"
+#include "Graph/Group.h"
 
-#include "xml.h"
+#include "Graph/XML.h"
 
 Group::Group()
 	: Node()
@@ -69,7 +70,7 @@ Group::DrawConnections(wxDC& dc) const
 }
 
 void
-Group::GenerateCode(Code *codectrl, Report *reportctrl) const
+Group::GenerateCode(CodeTextCtrl *codectrl, Report *reportctrl) const
 {
 #if 0
 	codectrl->Append(wxT("/*\n===========================================\nMembers:\n"));
@@ -125,7 +126,7 @@ Group::DeserializeChildren(const wxXmlNode& root)
 	while (child != NULL)
 	{
 		wxString uid = XML::GetStringAttribute(*child, wxT("uid"));
-		Persistent *obj = Persistent::GetObjectByUID(uid);
+		Serialized *obj = Serialized::GetObjectByUID(uid);
 		obj->Deserialize(*child);
 		Shape *shape = static_cast<Shape *>(obj);
 		shape->SetParent(this);

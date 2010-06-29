@@ -1,11 +1,6 @@
-#ifndef __SHADER_H__
-#define __SHADER_H__
+#pragma once
 
-#include <wx/wx.h>
-#include <wx/menu.h>
-#include <wx/timer.h>
-
-#include "recentmenu.h"
+#include "Graph/RecentMenu.h"
 
 #define wxID_RECENT			(wxID_HIGHEST + 0)
 // wxID_HIGHEST + 1 through + 20 are reserved for entries in the recent menu.
@@ -69,4 +64,3 @@ private:
 	DECLARE_EVENT_TABLE()
 };
 
-#endif // __SHADER_H__

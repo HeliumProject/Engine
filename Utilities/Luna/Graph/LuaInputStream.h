@@ -1,5 +1,4 @@
-#ifndef __STREAM_H__
-#define __STREAM_H__
+#pragma once
 
 #include <wx/stream.h>
 #include <wx/variant.h>
@@ -35,4 +34,3 @@ class LuaOutputStream
 		wxOutputStream *m_os;
 };
 
-#endif /* __STREAM_H__ */

@@ -1,8 +1,9 @@
-#include "rulerdc.h"
+#include "Precompile.h"
+#include "Graph/RulerMemoryDC.h"
 
-#include "debug.h"
+#include "Graph/Debug.h"
 
-RulerDC::RulerDC()
+RulerMemoryDC::RulerMemoryDC()
 	: wxMemoryDC()
 	, m_Bitmap(1, 1)
 {

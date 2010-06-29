@@ -1,4 +1,5 @@
-#include "main.h"
+#include "Precompile.h"
+#include "FragmentShaderCommand.h"
 
 #include <wx/msgdlg.h>
 #include <wx/clipbrd.h>
@@ -6,28 +7,26 @@
 
 #include <wx/wx.h>
 
+#undef RegisterClass
+
 #include "Application/Application.h"
 
-#include "shader.h"
-#include "project.h"
-#include "panel.h"
-#include "node.h"
-#include "shape.h"
-#include "group.h"
-#include "graph.h"
-#include "luautil.h"
-#include "nodelib.h"
-#include "clipboard.h"
+#include "Graph/ShaderFrame.h"
+#include "Graph/ProjectNotebook.h"
+#include "Graph/Panel.h"
+#include "Graph/Node.h"
+#include "Graph/Shape.h"
+#include "Graph/Group.h"
+#include "Graph/Graph.h"
+#include "Graph/LuaUtilities.h"
+#include "Graph/NodeDefinition.h"
+#include "Graph/Clipboard.h"
+#include "Graph/Debug.h"
+#include "Graph/Serialized.h"
 
-#include "debug.h"
+#include "Graph/XPM/icon.xpm"
 
-#include "icon.xpm"
-
-wxString g_LibPath;
-lua_State *g_L;
-
-static void
-InitLibPath()
+static void InitLibPath()
 {
     tchar* project_data_path =  _tgetenv(TXT("IG_PROJECT_DATA"));
     wxString common_path =  project_data_path;
@@ -35,8 +34,8 @@ InitLibPath()
     if(project_data_path)
     {
         common_path.Append(wxT("\\FragmentShader\\"));
-        g_LibPath = common_path;
-        g_LibPath.Append(wxT("lib\\"));
+        g_FragmentShaderLibPath = common_path;
+        g_FragmentShaderLibPath.Append(wxT("lib\\"));
     }
 }
 
@@ -62,7 +61,7 @@ private:
 
     DECLARE_NO_COPY_CLASS(FragmentShaderApp)
 };
-IMPLEMENT_APP(FragmentShaderApp)
+IMPLEMENT_APP_NO_MAIN(FragmentShaderApp)
 
 static void
 Abort(std::exception *e)
@@ -77,7 +76,7 @@ Abort(std::exception *e)
         wxTheClipboard->Flush();
         wxTheClipboard->Close();
     }
-    lua_close(g_L);
+    lua_close(g_FragmentShaderLuaState);
     throw e;
 }
 
@@ -246,18 +245,18 @@ int
 FragmentShaderApp::OnRun()
 {
     // Register types for de-serialization.
-    InputPort  t1; Persistent::RegisterClass(t1.GetClassName(), t1.Create);
-    OutputPort t2; Persistent::RegisterClass(t2.GetClassName(), t2.Create);
-    Node       t3; Persistent::RegisterClass(t3.GetClassName(), t3.Create);
-    Group      t4; Persistent::RegisterClass(t4.GetClassName(), t4.Create);
-    Shape      t5; Persistent::RegisterClass(t5.GetClassName(), t5.Create);
-    Clipboard  t6; Persistent::RegisterClass(t6.GetClassName(), t6.Create);
+    InputPort  t1; Serialized::RegisterSerializedClass(t1.GetClassName(), t1.Create);
+    OutputPort t2; Serialized::RegisterSerializedClass(t2.GetClassName(), t2.Create);
+    Node       t3; Serialized::RegisterSerializedClass(t3.GetClassName(), t3.Create);
+    Group      t4; Serialized::RegisterSerializedClass(t4.GetClassName(), t4.Create);
+    Shape      t5; Serialized::RegisterSerializedClass(t5.GetClassName(), t5.Create);
+    Clipboard  t6; Serialized::RegisterSerializedClass(t6.GetClassName(), t6.Create);
     // HACK must separate Graph into a Canvas and a Shape
-    //Graph      t7; Persistent::RegisterClass(t7.GetClassName(), t7.Create);
-    Persistent::RegisterClass(wxT("graph"), Graph::Create);
+    //Graph      t7; Serialized::RegisterClass(t7.GetClassName(), t7.Create);
+    Serialized::RegisterSerializedClass(wxT("graph"), Graph::Create);
 
-    g_L = LuaUtil::NewState();
-    Debug::Init(g_L);
+    g_FragmentShaderLuaState = LuaUtilities::NewState();
+    Debug::Init(g_FragmentShaderLuaState);
     InitLibPath();
 
     shader = NEW(Shader, ());
@@ -330,7 +329,7 @@ FragmentShaderApp::OnRun()
 int
 FragmentShaderApp::OnExit()
 {
-    lua_close(g_L);
+    lua_close(g_FragmentShaderLuaState);
     return wxApp::OnExit();
 }
 

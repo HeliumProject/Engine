@@ -1,9 +1,4 @@
-#ifndef __RECENTMENU_H__
-#define __RECENTMENU_H__
-
-#include <wx/wx.h>
-#include <wx/menu.h>
-#include <wx/config.h>
+#pragma once
 
 class RecentMenu: public wxMenu
 {
@@ -20,4 +15,3 @@ private:
 	wxString m_Empty;
 };
 
-#endif // __RECENTMENU_H__

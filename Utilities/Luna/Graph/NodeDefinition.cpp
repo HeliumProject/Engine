@@ -1,18 +1,17 @@
-#include "nodelib.h"
+#include "Precompile.h"
+#include "Graph/NodeDefinition.h"
 
 #include <wx/tokenzr.h>
 
-#include "node.h"
-#include "persistent.h"
-#include "util.h"
-#include "method.h"
-#include "xml.h"
-#include "main.h"
-#include "project.h"
+#include "Graph/Node.h"
+#include "Graph/Serialized.h"
+#include "Graph/Utilities.h"
+#include "Graph/Method.h"
+#include "Graph/XML.h"
+#include "Graph/ProjectNotebook.h"
+#include "Graph/Debug.h"
 
-#include "debug.h"
-
-NodeDef::NodeDef(const wxString& path, const wxXmlNode *root)
+NodeDefinition::NodeDefinition(const wxString& path, const wxXmlNode *root)
 	: m_Path(path)
 	, m_Root(root)
 {
@@ -28,7 +27,7 @@ NodeDef::NodeDef(const wxString& path, const wxXmlNode *root)
 }
 
 Node *
-NodeDef::NewInstance()
+NodeDefinition::NewInstance()
 {
 	Node *node = NEW(Node, ());
 	ParseNode(node);
@@ -36,7 +35,7 @@ NodeDef::NewInstance()
 }
 
 void
-NodeDef::ParseNode(Node *node)
+NodeDefinition::ParseNode(Node *node)
 {
 	wxString type = XML::GetStringAttribute(*m_Root, wxT("type"));
 	wxString name = XML::GetStringAttribute(*m_Root, wxT("name"), m_Type);
@@ -77,21 +76,21 @@ NodeDef::ParseNode(Node *node)
 }
 
 void
-NodeDef::ParseDescription(Node *node, const wxXmlNode& root)
+NodeDefinition::ParseDescription(Node *node, const wxXmlNode& root)
 {
 	wxString description = root.GetNodeContent().Trim();
 	node->GetMember(wxT("description"))->SetValue(description);
 }
 
 void
-NodeDef::ParseToolTip(Node *node, const wxXmlNode& root)
+NodeDefinition::ParseToolTip(Node *node, const wxXmlNode& root)
 {
 	wxString tool_tip = root.GetNodeContent().Trim();
 	node->GetMember(wxT("tooltip"))->SetValue(tool_tip);
 }
 
 void
-NodeDef::ParsePorts(Node *node, const wxXmlNode& root)
+NodeDefinition::ParsePorts(Node *node, const wxXmlNode& root)
 {
 	wxXmlNode *child = root.GetChildren();
 	while (child != 0)
@@ -118,7 +117,7 @@ NodeDef::ParsePorts(Node *node, const wxXmlNode& root)
 }
 
 void
-NodeDef::ParseInput(Node *node, const wxXmlNode& root)
+NodeDefinition::ParseInput(Node *node, const wxXmlNode& root)
 {
 	InputPort *input = NEW(InputPort, ());
 	node->AddInput(input);
@@ -143,7 +142,7 @@ NodeDef::ParseInput(Node *node, const wxXmlNode& root)
 }
 
 void
-NodeDef::ParseCheckType(InputPort *input, const wxXmlNode& root)
+NodeDefinition::ParseCheckType(InputPort *input, const wxXmlNode& root)
 {
 	Method *method = ParseMethod(root, wxT("any"));
 	wxString target = XML::GetStringAttribute(root, wxT("target"), wxT("*"));
@@ -151,7 +150,7 @@ NodeDef::ParseCheckType(InputPort *input, const wxXmlNode& root)
 }
 
 void
-NodeDef::ParseOutput(Node *node, const wxXmlNode& root)
+NodeDefinition::ParseOutput(Node *node, const wxXmlNode& root)
 {
 	OutputPort *output = NEW(OutputPort, ());
 	node->AddOutput(output);
@@ -175,7 +174,7 @@ NodeDef::ParseOutput(Node *node, const wxXmlNode& root)
 }
 
 void
-NodeDef::ParseGetType(OutputPort *output, const wxXmlNode& root)
+NodeDefinition::ParseGetType(OutputPort *output, const wxXmlNode& root)
 {
 	Method *method = ParseMethod(root, wxT("fixed"));
 	wxString target = XML::GetStringAttribute(root, wxT("target"), wxT("*"));
@@ -183,7 +182,7 @@ NodeDef::ParseGetType(OutputPort *output, const wxXmlNode& root)
 }
 
 void
-NodeDef::ParseInputConstraints(Node *node, const wxXmlNode& root)
+NodeDefinition::ParseInputConstraints(Node *node, const wxXmlNode& root)
 {
 	Method *method = ParseMethod(root, wxT("equal"));
 	wxString target = XML::GetStringAttribute(root, wxT("target"), wxT("*"));
@@ -191,7 +190,7 @@ NodeDef::ParseInputConstraints(Node *node, const wxXmlNode& root)
 }
 
 void
-NodeDef::ParseProperties(Node *node, const wxXmlNode& root)
+NodeDefinition::ParseProperties(Node *node, const wxXmlNode& root)
 {
 	wxXmlNode *child = root.GetChildren();
 	while (child != 0)
@@ -210,14 +209,14 @@ NodeDef::ParseProperties(Node *node, const wxXmlNode& root)
 }
 
 void
-NodeDef::ParseDefaultProperties(Node *node, const wxXmlNode& root)
+NodeDefinition::ParseDefaultProperties(Node *node, const wxXmlNode& root)
 {
 	node->AddProperty(NEW(MemoProperty, (node, wxT("Comment"))));
 	node->AddProperty(NEW(ColorProperty, (node, wxT("Fill color"))))->SetValue(wxColor(255, 255, 255));
 }
 
 void
-NodeDef::ParseProperty(Node *node, const wxXmlNode& root)
+NodeDefinition::ParseProperty(Node *node, const wxXmlNode& root)
 {
 	Property *prop = DeserializeProperty(root);
 	wxXmlNode *validator = XML::FindChild(root, wxT("validator"));
@@ -244,13 +243,13 @@ NodeDef::ParseProperty(Node *node, const wxXmlNode& root)
 }
 
 void
-NodeDef::ParseCodeGeneration(Node *node, const wxXmlNode& root)
+NodeDefinition::ParseCodeGeneration(Node *node, const wxXmlNode& root)
 {
 	ParseCode(node, root);
 }
 
 void
-NodeDef::ParseCode(Node *node, const wxXmlNode& root)
+NodeDefinition::ParseCode(Node *node, const wxXmlNode& root)
 {
 	wxXmlNode *child = root.GetChildren();
 	while (child != NULL)
@@ -266,7 +265,7 @@ NodeDef::ParseCode(Node *node, const wxXmlNode& root)
 }
 
 Method *
-NodeDef::ParseMethod(const wxXmlNode& root, const wxString& dftl)
+NodeDefinition::ParseMethod(const wxXmlNode& root, const wxString& dftl)
 {
 	wxXmlProperty *prop = XML::FindAttribute(root, wxT("method"));
 	prop->SetName(wxT("type"));
@@ -275,7 +274,7 @@ NodeDef::ParseMethod(const wxXmlNode& root, const wxString& dftl)
 	return method;
 }
 
-namespace NodeLib
+namespace NodeLibrary
 {
 	static std::vector<wxXmlNode *> m_Libraries;
 	static std::map<wxString, wxXmlNode *> m_Nodes;
@@ -362,10 +361,10 @@ namespace NodeLib
 				wxXmlNode *root = i->second;
 				if (root->GetName() == wxT("node"))
 				{
-					NodeDef nd(type, i->second);
+					NodeDefinition nd(type, i->second);
 					return nd.NewInstance();
 				}
-				return (Node *)Persistent::DeserializeObject(*root);
+				return (Node *)Serialized::DeserializeObject(*root);
 			}
 			std::map<wxString, wxString *>::iterator i2 = m_Aka.find(type);
 			if (i2 == m_Aka.end())
@@ -380,7 +379,7 @@ namespace NodeLib
 	wxString
 	GetDescription(const wxString& type)
 	{
-		/*std::map<wxString, NodeDef *>::iterator i = m_Nodes.find(type);
+		/*std::map<wxString, NodeDefinition *>::iterator i = m_Nodes.find(type);
 		if (i == m_Nodes.end())
 		{
 			return wxT("");
@@ -428,7 +427,7 @@ namespace NodeLib
 		}
 		user->AddChild(root);
 		// Save the user-defined XML.
-		wxString file(g_LibPath);
+		wxString file(g_FragmentShaderLibPath);
 		file.Append(wxT("nodes\\user.xml"));
 		wxXmlDocument doc;
 		doc.SetRoot(user);
@@ -453,7 +452,7 @@ namespace NodeLib
 			}
 		}
 		// Save the user-defined XML.
-		wxString file(g_LibPath);
+		wxString file(g_FragmentShaderLibPath);
 		file.Append(wxT("nodes\\user.xml"));
 		wxXmlDocument doc;
 		doc.SetRoot(user);

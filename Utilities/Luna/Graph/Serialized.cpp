@@ -1,40 +1,39 @@
-#include "persistent.h"
+#include "Precompile.h"
+#include "Graph/Serialized.h"
 
-#include "xml.h"
+#include "Graph/XML.h"
+#include "Graph/Debug.h"
 
-#include "debug.h"
-
-std::map<wxString, Persistent::Creator> Persistent::m_Creators;
-std::map<wxString, Persistent *> Persistent::m_Objects;
+std::map<wxString, Serialized::Creator> Serialized::m_Creators;
+std::map<wxString, Serialized *> Serialized::m_Objects;
 
 void
-Persistent::RegisterClass(const wxString& classname, Creator creator)
+Serialized::RegisterSerializedClass(const wxString& classname, Creator creator)
 {
 	m_Creators.insert(std::pair<wxString, Creator>(classname, creator));
 }
 
 wxXmlNode *
-Persistent::SerializeObject(const Persistent& obj)
+Serialized::SerializeObject(const Serialized& obj)
 {
 	wxXmlNode *root = obj.Serialize();
 	return root;
 }
 
-Persistent *
-Persistent::GetObjectByUID(const wxString& uid)
+Serialized* Serialized::GetObjectByUID(const wxString& uid)
 {
-	std::map<wxString, Persistent *>::iterator it = m_Objects.find(uid);
+	std::map<wxString, Serialized *>::iterator it = m_Objects.find(uid);
 	if (it != m_Objects.end())
 	{
 		Debug::Printf(TXT("%s(\"%s\") = %p\n"), __FUNCTION__, uid.c_str(), it->second);
 		return it->second;
 	}
 	Debug::Printf(TXT("%s(\"%s\") = NULL\n"), __FUNCTION__, uid.c_str());
-	return (Persistent *)NULL;
+	return (Serialized *)NULL;
 }
 
 void
-Persistent::CreateObjects(const wxXmlNode& root)
+Serialized::CreateObjects(const wxXmlNode& root)
 {
 	wxString uid;
 	if (root.GetPropVal(wxT("uid"), &uid))
@@ -47,8 +46,8 @@ Persistent::CreateObjects(const wxXmlNode& root)
 			{
 				THROW(TXT("Class \"%s\" not found."), root.GetName().c_str());
 			}
-			Persistent *obj = (it->second)(root);
-			m_Objects.insert(std::pair<wxString, Persistent *>(uid, obj));
+			Serialized *obj = (it->second)(root);
+			m_Objects.insert(std::pair<wxString, Serialized *>(uid, obj));
 		}
 	}
 	wxXmlNode *child = root.GetChildren();
@@ -59,18 +58,18 @@ Persistent::CreateObjects(const wxXmlNode& root)
 	}
 }
 
-Persistent *
-Persistent::DeserializeObject(const wxXmlNode& root, Persistent *obj)
+Serialized *
+Serialized::DeserializeObject(const wxXmlNode& root, Serialized *obj)
 {
 	m_Objects.clear();
 	wxString uid;
 	if (!root.GetPropVal(wxT("uid"), &uid))
 	{
-		return (Persistent *)NULL;
+		return (Serialized *)NULL;
 	}
 	if (obj != NULL)
 	{
-		m_Objects.insert(std::pair<wxString, Persistent *>(uid, obj));
+		m_Objects.insert(std::pair<wxString, Serialized *>(uid, obj));
 		Debug::Printf(TXT("%s(%p, %p) -> object %s created as %p\n"), __FUNCTION__, &root, obj, uid.c_str(), obj);
 	}
 	CreateObjects(root);

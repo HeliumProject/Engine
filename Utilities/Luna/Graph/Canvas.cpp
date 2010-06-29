@@ -1,12 +1,13 @@
-#include "canvas.h"
+#include "Precompile.h"
+#include "Graph/Canvas.h"
 
 #include <wx/metafile.h>
 #include <wx/dcbuffer.h>
+
 #include <math.h>
 
-#include "rulerdc.h"
-
-#include "debug.h"
+#include "Graph/RulerMemoryDC.h"
+#include "Graph/Debug.h"
 
 BEGIN_EVENT_TABLE(Canvas, wxScrolledWindow)
 	EVT_SIZE(Canvas::OnResize)
@@ -227,7 +228,7 @@ Canvas::Redraw(bool force)
 		// The redrawing is actually just an evaluation of the
 		// graph size so that we can set the virtual size of the
 		// Canvas accordingly.
-		RulerDC ruler;
+		RulerMemoryDC ruler;
 		Paint(ruler);
 		// Oddly enough, if we directly set width and height
 		// the drawing offsets are uncorrectly computed...

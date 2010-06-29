@@ -1,5 +1,4 @@
-#ifndef __DEBUG_H__
-#define __DEBUG_H__
+#pragma once
 
 #include <exception>
 
@@ -58,5 +57,3 @@ namespace Debug
 #endif
 
 };
-
-#endif // __DEBUG_H__

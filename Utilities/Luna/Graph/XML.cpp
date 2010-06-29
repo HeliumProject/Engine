@@ -1,6 +1,7 @@
-#include "xml.h"
+#include "Precompile.h"
+#include "Graph/XML.h"
 
-#include "debug.h"
+#include "Graph/Debug.h"
 
 namespace XML
 {

@@ -1,12 +1,12 @@
-#include "propgrid.h"
+#include "Precompile.h"
+#include "Graph/PropertyGrid.h"
 
 #include <wx/variant.h>
 
-#include "property.h"
-#include "method.h"
-#include "graph.h"
-
-#include "debug.h"
+#include "Graph/Property.h"
+#include "Graph/Method.h"
+#include "Graph/Graph.h"
+#include "Graph/Debug.h"
 
 class URChangeValue: public UndoRedo
 {

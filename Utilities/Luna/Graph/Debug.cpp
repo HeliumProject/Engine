@@ -1,15 +1,13 @@
-#include "debug.h"
+#include "Precompile.h"
+#include "Graph/Debug.h"
 
-#include <wx/wx.h>
+#include "Platform/Windows/Windows.h"
 
-#include <map>
-
-#include <windows.h>
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "shape.h"
-#include "luautil.h"
+#include "Graph/Shape.h"
+#include "Graph/LuaUtilities.h"
 
 #include "Platform/String.h"
 
@@ -93,7 +91,7 @@ namespace Debug
              "  end\n" 
              "  return name\n" 
              "end\n" ;
-        LuaUtil::LoadBuffer(L, find, sizeof(find) - 1, "find" );
+        LuaUtilities::LoadBuffer(L, find, sizeof(find) - 1, "find" );
         lua_call(L, 0, 1);
         lua_pushvalue(L, obj);
         lua_pushvalue(L, table);
@@ -211,8 +209,8 @@ namespace Debug
             "  end\n"
             "  return msg\n"
             "end\n";
-        LuaUtil::LoadBuffer(L, dump_lua, sizeof(dump_lua) - 1, "dump");
-        LuaUtil::Call(L, 0, 0);
+        LuaUtilities::LoadBuffer(L, dump_lua, sizeof(dump_lua) - 1, "dump");
+        LuaUtilities::Call(L, 0, 0);
     }
 
     void Printf(const tchar *fmt, ...)

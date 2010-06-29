@@ -1,12 +1,7 @@
-#ifndef __PROPERTY_H__
-#define __PROPERTY_H__
+#pragma once
 
-#include <wx/wx.h>
-#include <wx/xml/xml.h>
-
-#include <vector>
-#include "propgrid.h"
-#include "member.h"
+#include "Graph/PropertyGrid.h"
+#include "Graph/Member.h"
 
 #include "Platform/Types.h"
 
@@ -151,4 +146,3 @@ private:
 Property *
 DeserializeProperty(const wxXmlNode& root);
 
-#endif // __PROPERTY_H__

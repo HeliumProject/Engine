@@ -1,7 +1,4 @@
-#ifndef __REPORT_H__
-#define __REPORT_H__
-
-#include <wx/listctrl.h>
+#pragma once
 
 class Report: public wxListCtrl
 {
@@ -26,5 +23,3 @@ class Report: public wxListCtrl
 	DECLARE_NO_COPY_CLASS(Report)
 	DECLARE_EVENT_TABLE()
 };
-
-#endif // __REPORT_H__

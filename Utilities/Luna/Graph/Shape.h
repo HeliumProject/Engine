@@ -1,22 +1,17 @@
-#ifndef __SHAPE_H__
-#define __SHAPE_H__
+#pragma once
 
-#include <wx/wx.h>
-#include <wx/xml/xml.h>
-
-#include "persistent.h"
-#include "member.h"
-#include "property.h"
-#include "propgrid.h"
-#include "util.h"
-
-#include "debug.h"
+#include "Graph/Serialized.h"
+#include "Graph/Member.h"
+#include "Graph/Property.h"
+#include "Graph/PropertyGrid.h"
+#include "Graph/Utilities.h"
+#include "Graph/Debug.h"
 
 ///////////////////////////////////////////////////////////////
 // The basic shape class.
 ///////////////////////////////////////////////////////////////
 
-class Shape: public Persistent
+class Shape: public Serialized
 {
 public:
 	///////////////////////////////////////////////////////////////
@@ -143,7 +138,7 @@ public:
 	// The class name used in serialization.
 	virtual wxString   GetClassName() const          { return wxT("shape"); }
 	// Creates an instance of this shape.
-	static Persistent *Create(const wxXmlNode& root) { return NEW(Shape, ()); }
+	static Serialized *Create(const wxXmlNode& root) { return NEW(Shape, ()); }
 
 protected:
 	// (De)serialization helpers.
@@ -169,4 +164,3 @@ protected:
 	std::map<wxString, Member *> m_members_by_id;
 };
 
-#endif // __SHAPE_H__

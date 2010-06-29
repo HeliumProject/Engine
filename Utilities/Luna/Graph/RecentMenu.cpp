@@ -1,8 +1,9 @@
-#include "recentmenu.h"
+#include "Precompile.h"
+#include "Graph/RecentMenu.h"
 
 #include <wx/filename.h>
 
-#include "debug.h"
+#include "Graph/Debug.h"
 
 RecentMenu::RecentMenu(int firstid, int lastid, const wxString& empty)
 	: wxMenu()

@@ -1,15 +1,11 @@
-#ifndef __RULERDC_H__
-#define __RULERDC_H__
+#pragma once
 
-#include <wx/wx.h>
-
-class RulerDC: public wxMemoryDC
+class RulerMemoryDC: public wxMemoryDC
 {
 	public:
-		RulerDC();
+		RulerMemoryDC();
 
 	private:
 		wxBitmap m_Bitmap;
 };
 
-#endif /* __RULERDC_H__ */

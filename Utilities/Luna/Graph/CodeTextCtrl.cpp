@@ -1,8 +1,9 @@
-#include "code.h"
+#include "Precompile.h"
+#include "Graph/CodeTextCtrl.h"
 
-#include "debug.h"
+#include "Graph/Debug.h"
 
-Code::Code(wxWindow *parent, wxWindowID id)
+CodeTextCtrl::CodeTextCtrl(wxWindow *parent, wxWindowID id)
 	: wxTextCtrl(parent, id, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxTE_RICH, wxDefaultValidator, wxTextCtrlNameStr)
 {
 	wxTextAttr attr;
@@ -10,8 +11,8 @@ Code::Code(wxWindow *parent, wxWindowID id)
 	SetDefaultStyle(attr);
 }
 
-Code&
-Code::Append(const wxString& code)
+CodeTextCtrl&
+CodeTextCtrl::Append(const wxString& code)
 {
 	AppendText(code);
 	return *this;

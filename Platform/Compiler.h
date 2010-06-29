@@ -36,3 +36,16 @@
 #  pragma message ("Danger: DLL CRT must be used to ensure proper DLL-exported template compatibility!")
 # endif
 #endif
+
+//
+// Architecture
+//
+
+#ifdef _MSC_VER
+# ifdef _M_X86
+#  define X86
+# endif
+# ifdef _M_X64
+#  define X64
+# endif
+#endif

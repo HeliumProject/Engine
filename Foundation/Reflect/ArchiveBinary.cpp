@@ -339,7 +339,7 @@ void ArchiveBinary::Write()
     byteOrder = (u8)ByteOrders::LittleEndian;
 #elif BIG_ENDIAN
     byteOrder = (u8)ByteOrders::BigEndian;
-#elif
+#else
 # error Unknown byte order!
 #endif
     m_Stream->Write(&byteOrder);

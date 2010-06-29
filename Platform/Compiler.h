@@ -55,7 +55,7 @@
 //
 
 #ifdef _MSC_VER
-# ifdef _M_X86
+# ifdef _M_IX86
 #  define LITTLE_ENDIAN
 # endif
 # ifdef _M_X64

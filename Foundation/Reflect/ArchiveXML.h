@@ -78,10 +78,8 @@ namespace Reflect
         // The stream to use
         TCharStreamPtr m_Stream;
 
-#ifdef REFLECT_ARCHIVE_VERBOSE
         // Indent helper
         Indent<tchar> m_Indent;
-#endif
 
         // File format version
         u32 m_Version;

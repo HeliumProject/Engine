@@ -28,7 +28,7 @@ extern "C"
 #define DESTROY(arg)         delete (arg)
 #define NEWARRAY(type, size) new type[size]
 #define DESTROYARRAY(arg)    delete[] arg
-#define THROW(...)           do { std::string temp; Platform::ConvertString( Debug::Format(__VA_ARGS__), temp ); throw NEW(std::exception, (temp.c_str())) } while (0)
+#define THROW(...)           do { std::string temp; Platform::ConvertString( Debug::Format(__VA_ARGS__), temp ); throw NEW(std::exception, (temp.c_str())); } while (0)
 #define BREAK(cond)          do {} while (0)
 
 #endif

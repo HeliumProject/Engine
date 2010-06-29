@@ -68,7 +68,7 @@
 				AdditionalDependencies="comctl32.lib rpcrt4.lib"
 				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -216,7 +216,7 @@
 				AdditionalDependencies="comctl32.lib rpcrt4.lib"
 				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -364,7 +364,7 @@
 				AdditionalDependencies="comctl32.lib rpcrt4.lib"
 				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -512,7 +512,7 @@
 				AdditionalDependencies="comctl32.lib rpcrt4.lib"
 				AdditionalLibraryDirectories="&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 			/>
 			<Tool
 				Name="VCALinkTool"

@@ -1,0 +1,42 @@
+/* LiteSQL - Documentation 
+ * 
+ * By Tero Laitinen 
+ * 
+ * See LICENSE for copyright information. */
+/* \file usage_upcasting.txt
+    Manual */
+
+/** \page usage_upcasting Upcasting and Virtual Methods
+
+In order to support virtual methods a Persistent object must be upcasted to
+correct type before calling virtual method.
+
+upcast will return an auto_ptr which holds a pointer to an object
+of correct type.
+
+upcastCopy is similar to upcast. It does not select an object of correct type
+from database but just constructs it in memory. Note 
+that constructed object does not have
+all of its fields. This method is suitable when virtual method to be called
+does not need any special fields.
+
+An example of upcast:
+\code
+Playable pl = select<Playable>(db).one();
+pl.upcast()->play();
+\endcode
+
+An another example of upcast:
+\code
+Playable pl = select<Playable>(db).one();
+auto_ptr<Playable> uc = pl.upcast();
+cout << "Playing " << uc->name << endl;
+uc->play();
+\endcode
+
+An example of upcastCopy:
+\code
+Playable pl = select<Playable>(db).one();
+pl.upcastCopy()->makeLogEntry(log);
+\endcode
+*/

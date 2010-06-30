@@ -1,0 +1,122 @@
+/* LiteSQL - Documentation
+ * 
+ * By Tero Laitinen 
+ * 
+ * See LICENSE for copyright information. */
+/* \file documentation.txt
+    Manual */
+
+/** \page usage_using_relations Using Relations
+
+A simple database with Person-class and friends-relation.
+\code
+<?xml version="1.0"?>
+<!DOCTYPE database SYSTEM "http://litesql.sourceforge.net/litesql.dtd">
+<database name="TestDatabase" namespace="test">
+    <object name="Person">
+        <field name="name" type="string"/>
+    </object>
+    <relation name="FriendsRelation">
+        <relate object="Person" handle="friends"/>
+        <relate object="Person"/>
+    </relation>
+</database>    
+\endcode
+
+\section usage_relationclass Relation-class
+
+Usually relations are accessed using a relation handle that is attached
+to a persistent object. Sometimes, it may be convenient to access relation
+using static methods of Relation-class. 
+
+Methods:
+- link : link objects
+- unlink : remove a link between objects
+- get<type> : get a DataSource<type> of objects
+- del : drop links using an expression
+- ( getTYPEn : non-template versions for relations with duplicate types )
+
+\section usage_relationhandle RelationHandle-class
+
+Relation handle is attached to persistent object and it provides convenient
+access to relation. It can be used to link, unlink or select objects 
+related to relation handle's owner.
+
+RelationHandle-class' methods:
+- link : link owner to another object
+- unlink : unlink owner from another object
+- del : drop links using an expression
+- get<type> : get a DataSource<type> of objects (generated for n-ary relations)
+- get : get a DataSource of known type (generated for 2-ended relations, only one type)
+- ( getTYPEn : non-template versions for relations with three or more duplicate types )
+
+\section usage_relationhandle_examples RelationHandle-Examples
+
+A linking example:
+\code
+Person bill(db), bob(db);
+bill.name = "Bill";
+bill.update();
+
+bob.name = "Bob";
+bob.update();
+
+// both objects must be stored in database before they can be linked
+
+bill.friends().link(bob);
+
+// following statement would throw an exception because they are already friends
+// (friends is bidirectional relation)
+bob.friends().link(bill);
+\endcode
+
+A fetching example:
+\code
+Person bob = bill.friends().get(Person::Name == "Bob").one();
+
+vector<Person> billsFriends = bill.friends().get().all();
+\endcode
+
+An unlinking example:
+\code
+// Bill and Bob are no longer friends
+bill.friends().unlink(bob);
+\endcode
+
+\section usage_relation_examples Relation-Examples
+
+Same examples as above converted to static methods of FriendsRelation.
+
+A linking example:
+\code
+Person bill(db), bob(db);
+bill.name = "Bill";
+bill.update();
+
+bob.name = "Bob";
+bob.update();
+
+// both objects must be stored in database before they can be linked
+
+FriendsRelation::link(db, bill, bob);
+\endcode
+
+A fetching example:
+\code
+Person bob = FriendsRelation::getPerson2(db, 
+                                         Person::Name == "Bob",
+                                         FriendsRelation::Person1==bill.id).one();
+
+vector<Person> billsFriends = 
+     FriendsRelation::getPerson2(db, Expr(), 
+                                 FriendsRelation::Person1==bill.id).all();
+\endcode
+
+An unlinking example:
+\code
+// Bill and Bob are no longer friends
+Friendsrelation::unlink(bill, bob);
+\endcode
+
+
+*/

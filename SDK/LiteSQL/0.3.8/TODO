@@ -1,0 +1,6 @@
+- update autotools
+- package win32 as "win32-libs
+- create debian, ubuntu package
+- create mac-port
+- test double on different database types
+

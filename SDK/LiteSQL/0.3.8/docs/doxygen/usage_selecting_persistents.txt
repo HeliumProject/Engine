@@ -1,0 +1,110 @@
+/* LiteSQL - Documentation
+ * 
+ * By Tero Laitinen 
+ * 
+ * See LICENSE for copyright information. */
+/* \file documentation.txt
+    Manual */
+
+/** \page usage_selecting_persistents Selecting Persistents and Expr-API
+
+\section usage_select select-function
+\code
+template <class T> select(const Database& db, const Expr& filter=Expr());
+\endcode
+
+Template function select<T> returns DataSource which can be used to retrieve
+Persistent-objects or to create more complex queries.
+
+select-function has two parameters: Database and expression (Expr) which
+can be used to limit the result set.
+
+\section usage_datasource DataSource
+
+DataSource<T> is basically a wrapper for selection query and is used to 
+access objects of type T.
+
+DataSource<T> has following methods:
+- idQuery(): returns SelectQuery which returns id-number of Persistent objects
+- objectQuery(): returns SelectQuery which returns data rows of Persistent objects
+- cursor(): returns Cursor<T> which will return Persistent objects one by one
+- one(): returns first Persistent object in the result set. Note: throws NotFound - if the result set is empty
+- all(): returns the whole result set as Persistent objects in vector
+- count(): returns number of object in the result set
+- orderBy(FieldType field, bool ascending=true): result set can be ordered with this method. 
+- orderByRelation(FieldType id, FieldType field, bool ascending=true): orders the result set by external relation
+
+\section usage_select_examples Selection Examples
+
+An example of select and selectOne with database:
+\code
+PersonDatabase db("sqlite3", "database=person.db");
+vector<Person> = select<Person>(db).all();
+
+Person bob = select<Person>(db, Person::Name == "Bob").one();
+\endcode
+
+SelectQuery-class can be used when creating SQL SELECT-statements.
+Refer to documentation of SelectQuery for a list of methods.
+Methods can be combined:
+\code
+Records recs = db.query(SelectQuery().result("id_")
+                                     .source("Person_")
+                                     .where(Person::Name == "Bob"));
+\endcode
+
+\section usage_expr_api Selection expressions (filters)
+Filters for select are created using Expr-API. The simplest form of a filter 
+expression is \<field\> \<operator\> \<value\>. Example: 
+\code
+Person::Name == "Bob"
+\endcode
+
+These expression can be combined using parenthesis and connectives:
+\code
+() && ||
+\endcode
+
+Operators that can be used in expressions are 
+\code
+== > < >= <= ! != .in .like
+\endcode
+
+Persistent's (static) field information
+can be accessed using static FieldType-objects
+The name of the FieldType-object is almost the same as the field.
+Capitalize name of the field to get name of the FieldType-object.
+\code
+// Person's name
+Person::Name
+\endcode
+
+\section usage_set_operations Set-operations intersect, union_ and except
+\code
+template <class T> intersect(const DataSource<T>& ds1,
+                             const DataSource<T>& ds2);
+template <class T> union_(const DataSource<T>& ds1,
+                          const DataSource<T>& ds2);
+template <class T> except(const DataSource<T>& ds1,
+                          const DataSource<T>& ds2);
+\endcode
+
+Two DataSources of same type can be used to create a new DataSource
+which can be used to access intersection, union or difference of the sources.
+
+Notes:
+-'union' is a reserved word of C so union_ is the name of set operation.
+-see \ref mysql_notes about using these set operations with MySQL
+\code
+// intersection of Bob's and Bill's friends
+DataSource<Person> commonFriends = 
+    intersect(bob.friends().get(), bill.friends().get());
+// persons that are Bob's friends and/or Bill's friends
+DataSource<Person> allFriends = 
+    union_(bob.friends().get(), bill.friends().get());
+// persons that are Bob's friends but not Bill's friends
+DataSource<Person> allFriends = 
+    except(bob.friends().get(), bill.friends().get());
+\endcode
+
+*/

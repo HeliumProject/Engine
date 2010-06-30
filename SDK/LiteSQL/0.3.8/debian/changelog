@@ -1,0 +1,12 @@
+liblitesql (0.3.4) unstable; urgency=low
+
+  * bugfix release 
+
+ -- Tero Laitinen <tero.laitinen@iki.fi>  Sun,  6 Nov 2005 15:23:49 +0200
+
+liblitesql (0.3.2) unstable; urgency=low
+
+  * Initial release 
+
+ -- Tero Laitinen <tero.laitinen@iki.fi>  Sun,  6 Nov 2005 15:23:49 +0200
+

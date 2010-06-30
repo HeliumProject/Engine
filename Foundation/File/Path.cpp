@@ -266,38 +266,84 @@ void Path::Split( tstring& directory, tstring& filename, tstring& extension ) co
 
 tstring Path::Basename() const
 {
-    return m_Path.substr( m_Path.rfind( '/' ) + 1, m_Path.rfind( '.' ) + 1 );
+    size_t slash = m_Path.rfind( '/' );
+    if ( slash != tstring::npos )
+    {
+        size_t pos = m_Path.rfind( '.' );
+        if ( pos != tstring::npos )
+        {
+            return m_Path.substr( slash + 1, pos + 1 );
+        }
+    }
+
+    return m_Path;
 }
 
 tstring Path::Filename() const
 {
-    return m_Path.substr( m_Path.rfind( '/' ) + 1 );
+    size_t pos = m_Path.rfind( '/' );
+    if ( pos != tstring::npos )
+    {
+        return m_Path.substr( pos + 1 );
+    }
+
+    return m_Path;
 }
 
 tstring Path::Directory() const
 {
-    return m_Path.substr( 0, m_Path.rfind( '/' ) + 1 );
+    size_t pos = m_Path.rfind( '/' );
+    if ( pos != tstring::npos )
+    {
+        return m_Path.substr( 0, pos + 1 );
+    }
+
+    return TXT( "" );
 }
 
 tstring Path::Extension() const
 {
-    return m_Path.substr( m_Path.rfind( '.' ) + 1 );
+    size_t pos = m_Path.rfind( '.' );
+    if ( pos != tstring::npos )
+    {
+        return m_Path.substr( pos + 1 );
+    }
+
+    return TXT( "" );
 }
 
 tstring Path::FullExtension() const
 {
     tstring filename = Filename();
-    return filename.substr( filename.find_first_of( '.' ) + 1 );
+    size_t pos = filename.find_first_of( '.' );
+    if ( pos != tstring::npos )
+    {
+        return filename.substr( pos + 1 );
+    }
+
+    return TXT( "" );
 }
 
 void Path::RemoveExtension()
 {
-    m_Path.erase( m_Path.find_last_of( '.' ) );
+    size_t pos = m_Path.find_last_of( '.' );
+    if ( pos != tstring::npos )
+    {
+        m_Path.erase( pos );
+    }
 }
 
 void Path::RemoveFullExtension()
 {
-    m_Path.erase( m_Path.find_first_of( '.', m_Path.find_last_of( '/' ) ) );
+    size_t slash = m_Path.find_last_of( '/' );
+    if ( slash != tstring::npos )
+    {
+        size_t pos = m_Path.find_first_of( '.', slash );
+        if ( pos != tstring::npos )
+        {
+            m_Path.erase( pos );
+        }
+    }
 }
 
 tstring Path::Native() const
@@ -333,8 +379,8 @@ tstring Path::Signature()
 
 void Path::ReplaceExtension( const tstring& newExtension )
 {
-    int offset = (int)m_Path.rfind( '.' );
-    if ( offset >= 0 )
+    size_t offset = m_Path.rfind( '.' );
+    if ( offset != tstring::npos )
     {
         m_Path.replace( offset + 1, newExtension.length(), newExtension );
     }
@@ -346,7 +392,13 @@ void Path::ReplaceExtension( const tstring& newExtension )
 
 void Path::ReplaceFullExtension( const tstring& newExtension )
 {
-    m_Path.replace( m_Path.find_first_of( '.', m_Path.find_last_of( '/' ) ) + 1, newExtension.length(), newExtension );
+    size_t slash = m_Path.find_last_of( '/' );
+    if ( slash != tstring::npos )
+    {
+        size_t pos = m_Path.find_first_of( '.', slash );
+
+        m_Path.replace( pos + 1, newExtension.length(), newExtension );
+    }
 }
 
 bool Path::Exists() const

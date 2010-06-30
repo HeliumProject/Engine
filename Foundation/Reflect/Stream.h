@@ -363,7 +363,7 @@ namespace Reflect
             if (!fstream->is_open())
             {
                 delete fstream;
-                throw Reflect::StreamException( TXT( "Unable to open '%s' for %s" ) , m_Filename.c_str(), m_OpenForWrite ? "write" : "read");
+                throw Reflect::StreamException( TXT( "Unable to open '%s' for %s" ) , m_Filename.c_str(), m_OpenForWrite ? TXT( "write" ) : TXT( "read" ));
             }
 
             m_Stream    = fstream; 
@@ -377,7 +377,7 @@ namespace Reflect
             fstream->close();
             if (fstream->is_open())
             {
-                throw Reflect::StreamException( TXT( "Unable to close '%s' after %s" ), m_Filename.c_str(), m_OpenForWrite ? "write" : "read");
+                throw Reflect::StreamException( TXT( "Unable to close '%s' after %s" ), m_Filename.c_str(), m_OpenForWrite ? TXT( "write" ) : TXT( "read" ));
             }
         }
 

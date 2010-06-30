@@ -1892,48 +1892,26 @@ void Scene::PopulateLink( Inspect::PopulateLinkArgs& args )
         suffix = TXT( " (" ) + path.Get() + TXT( ")" );
     }
 
-    switch (args.m_Type)
+    //
+    // Map engine internal type to luna internal type
+    //
+
+    i32 typeID = Reflect::GetType<Luna::SceneNode>();
+
+    HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( typeID );
+    if (found != m_NodeTypesByType.end())
     {
-
-        //
-        // Everything else is an internal type
-        //
-
-    default:
+        S_SceneNodeTypeDumbPtr::const_iterator itr = found->second.begin();
+        S_SceneNodeTypeDumbPtr::const_iterator end = found->second.end();
+        for ( ; itr != end; ++itr )
         {
-            //
-            // Map engine internal type to luna internal type
-            //
-
-            i32 typeID = -1;
-
-            switch (args.m_Type)
+            HM_SceneNodeSmartPtr::const_iterator nodeItr = (*itr)->GetInstances().begin();
+            HM_SceneNodeSmartPtr::const_iterator nodeEnd = (*itr)->GetInstances().end();
+            for ( ; nodeItr != nodeEnd; ++nodeItr )
             {
-            default:
-                {
-                    // all the nodes
-                    typeID = Reflect::GetType<Luna::SceneNode>();
-                    break;
-                }
+                nodeItr->second->GetID().ToString(str);
+                args.m_Items.push_back( Inspect::Item (nodeItr->second->GetName() + suffix, str) );
             }
-
-            HMS_TypeToSceneNodeTypeDumbPtr::const_iterator found = m_NodeTypesByType.find( typeID );
-            if (found != m_NodeTypesByType.end())
-            {
-                S_SceneNodeTypeDumbPtr::const_iterator itr = found->second.begin();
-                S_SceneNodeTypeDumbPtr::const_iterator end = found->second.end();
-                for ( ; itr != end; ++itr )
-                {
-                    HM_SceneNodeSmartPtr::const_iterator nodeItr = (*itr)->GetInstances().begin();
-                    HM_SceneNodeSmartPtr::const_iterator nodeEnd = (*itr)->GetInstances().end();
-                    for ( ; nodeItr != nodeEnd; ++nodeItr )
-                    {
-                        nodeItr->second->GetID().ToString(str);
-                        args.m_Items.push_back( Inspect::Item (nodeItr->second->GetName() + suffix, str) );
-                    }
-                }
-            }
-            break;
         }
     }
 }
@@ -3420,7 +3398,7 @@ Content::NodeVisibilityPtr Scene::GetVisibility(tuid nodeId)
 bool Scene::GetVisibilityFile(tstring& filename)
 {
     tchar buffer[1024]; 
-    _sntprintf(buffer, 1024, TXT( "visibility/" ) TUID_HEX_FORMAT TXT( ".vis.rb" ), m_File->GetPath().Hash() ); 
+    _sntprintf(buffer, 1024, TXT( "Visibility/" ) TUID_HEX_FORMAT TXT( ".vis.rb" ), m_File->GetPath().Hash() ); 
 
     Nocturnal::Path prefsDir;
     if ( !Application::GetPreferencesDirectory( prefsDir ) )
@@ -3428,7 +3406,7 @@ bool Scene::GetVisibilityFile(tstring& filename)
         return false;
     }
 
-    Nocturnal::Path filePath( prefsDir.Get() + TXT( '/' ) + tstring(buffer) );
+    Nocturnal::Path filePath( prefsDir.Get() + tstring(buffer) );
     filename = filePath.Get();
 
     return true; 
@@ -3456,6 +3434,7 @@ void Scene::SaveVisibility()
     tstring filename; 
     if(m_VisibilityDB && GetVisibilityFile(filename) )
     {
+        Nocturnal::Path ( filename ).MakePath();
         Reflect::Archive::ToFile(m_VisibilityDB, filename); 
     }
 }

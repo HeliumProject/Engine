@@ -280,6 +280,7 @@ Undo::CommandPtr PivotTransform::ResetTransform()
 
   return command;
 }
+
 // outputs
 void MatrixDecomposeFixedPivots(Math::Scale& scale, Math::Shear& shear, 
                                 Math::EulerAngles& rotate, Math::Vector3& translate, 

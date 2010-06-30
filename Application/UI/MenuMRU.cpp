@@ -127,27 +127,6 @@ void MenuMRU::RemoveInvalidItems( bool tuidRequired )
       remove.insert( current );
       continue;
     }
-
-#pragma TODO("Luna doesn't reference File dll")
-    // If a TUID is required, make sure that we can find a tuid for this file.
-    //if ( tuidRequired )
-    //{
-    //  tuid fileID = TUID::Null;
-    //  try
-    //  {
-    //    fileID = File::GlobalManager().GetID( current );
-    //  }
-    //  catch ( const File::Exception& )
-    //  {
-    //    fileID = TUID::Null;
-    //  }
-
-    //  if ( fileID == TUID::Null )
-    //  {
-    //    remove.insert( current );
-    //    continue;
-    //  }
-    //}
   }
 
   // Remove all the bad items

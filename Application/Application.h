@@ -78,9 +78,6 @@ namespace Application
   // Application behavior
   //
 
-  // Detects if a debugger is attached to the process
-  APPLICATION_API bool IsDebuggerPresent();
-
   // Which streams should go into the trace file
   APPLICATION_API ::Log::Stream GetTraceStreams(); 
 

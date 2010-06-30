@@ -71,7 +71,6 @@ Entity::~Entity()
 
     pkg->RemoveComponentAddedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &Entity::OnComponentAdded ) );
     pkg->RemoveComponentRemovedListener( Component::ComponentCollectionChangedSignature::Delegate( this, &Entity::OnComponentRemoved ) );
-
 }
 
 void Entity::ConstructorInit()
@@ -89,7 +88,6 @@ void Entity::ConstructorInit()
 
 tstring Entity::GenerateName() const
 {
-
     const Asset::Entity* entity = GetPackage<Asset::Entity>();
     Asset::EntityAssetPtr entityClass = entity->GetEntityAsset();
 

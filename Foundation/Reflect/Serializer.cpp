@@ -1,9 +1,10 @@
 #include "Serializer.h"
 #include "Serializers.h"
 
-#include <boost/numeric/conversion/cast.hpp>
-
+#include "Platform/Debug.h"
 #include "Foundation/TUID.h"
+
+#include <boost/numeric/conversion/cast.hpp>
 
 using namespace Reflect;
 
@@ -26,13 +27,20 @@ bool Cast(const Serializer* src, Serializer* dest)
     const SimpleSerializer<srcT>* source = static_cast<const SimpleSerializer<srcT>*>(src);
     SimpleSerializer<destT>* destination = static_cast<SimpleSerializer<destT>*>(dest);
 
-    try
+    if ( Platform::IsDebuggerPresent() )
     {
         destination->m_Data.Set( boost::numeric_cast<destT>(source->m_Data.Get()) );
     }
-    catch (...)
+    else
     {
-        return false;
+        try
+        {
+            destination->m_Data.Set( boost::numeric_cast<destT>(source->m_Data.Get()) );
+        }
+        catch (...)
+        {
+            return false;
+        }
     }
 
     return true;

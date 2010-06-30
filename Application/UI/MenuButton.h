@@ -8,6 +8,7 @@
 #include "Application/UI/Button.h"
 
 #include <wx/timer.h>
+#include <wx/menu.h>
 
 namespace Nocturnal
 {

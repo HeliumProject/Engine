@@ -11,6 +11,7 @@
 
 #include "Platform/Mutex.h"
 #include "Platform/Process.h"
+#include "Platform/Debug.h"
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 
@@ -443,14 +444,21 @@ ElementPtr Archive::FromFile(const tstring& file, int searchType, StatusHandler*
     {
         archive->OpenFile( file );
 
-        try
+        if ( Platform::IsDebuggerPresent() )
         {
             archive->Read();
         }
-        catch (...)
+        else
         {
-            archive->Close(); 
-            throw;
+            try
+            {
+                archive->Read();
+            }
+            catch (...)
+            {
+                archive->Close(); 
+                throw;
+            }
         }
 
         archive->Close(); 
@@ -529,14 +537,21 @@ void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr 
     {
         archive->OpenFile( safetyPath.Get(), true );
 
-        try
+        if ( Platform::IsDebuggerPresent() )
         {
             archive->Write();
         }
-        catch (...)
+        else
         {
-            archive->Close(); 
-            throw;
+            try
+            {
+                archive->Write();
+            }
+            catch (...)
+            {
+                archive->Close(); 
+                throw;
+            }
         }
 
         archive->Close(); 
@@ -604,14 +619,21 @@ void Archive::FromFile(const tstring& file, V_Element& elements, StatusHandler* 
     {
         archive->OpenFile( file );
 
-        try
+        if ( Platform::IsDebuggerPresent() )
         {
             archive->Read();
         }
-        catch (...)
+        else
         {
-            archive->Close(); 
-            throw;
+            try
+            {
+                archive->Read();
+            }
+            catch (...)
+            {
+                archive->Close(); 
+                throw;
+            }
         }
 
         archive->Close(); 

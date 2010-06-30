@@ -5,6 +5,7 @@
 #include "Platform/Error.h"
 #include "Platform/Assert.h"
 #include "Platform/String.h"
+#include "Platform/Debug.h"
 #include "Platform/Windows/Windows.h"
 
 #include <map>
@@ -84,6 +85,11 @@ static void EnumerateLoadedModules()
   //  dynamically loaded dlls so we do this instead of SYMOPT_DEFERRED_LOADS and 
   //  invading the process during SymInitialize
   EnumerateLoadedModules64(GetCurrentProcess(), &EnumerateLoadedModulesProc, NULL);
+}
+
+bool Platform::IsDebuggerPresent()
+{
+    return ::IsDebuggerPresent() != 0;
 }
 
 bool Debug::Initialize(const tstring& pdbPaths)

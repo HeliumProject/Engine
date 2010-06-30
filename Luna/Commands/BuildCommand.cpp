@@ -14,6 +14,7 @@
 #include "Foundation/Profile.h"
 #include "Foundation/Version.h"
 #include "Platform/Exception.h"
+#include "Platform/Debug.h"
 #include "Foundation/CommandLine/Option.h"
 #include "Foundation/CommandLine/Command.h"
 #include "Foundation/CommandLine/Utilities.h"
@@ -127,7 +128,7 @@ bool BuildCommand::Process( std::vector< tstring >::const_iterator& argsBegin, c
 	AssetBuilder::AddAssetBuiltListener( AssetBuilder::AssetBuiltSignature::Delegate ( &AssetBuilt ) );
 
 
-    if ( Application::IsDebuggerPresent() )
+    if ( Platform::IsDebuggerPresent() )
     {
         if ( m_WorkerFlag )
         {
@@ -311,7 +312,7 @@ bool BuildCommand::Build( Dependencies::DependencyGraph& depGraph, std::set< Noc
 
         AssetClassPtr assetClass;
 
-        if (Application::IsDebuggerPresent() && !m_AllFlag )
+        if (Platform::IsDebuggerPresent() && !m_AllFlag )
         {
             assetClass = AssetClass::LoadAssetClass( path );
 
@@ -370,7 +371,7 @@ bool BuildCommand::Build( Dependencies::DependencyGraph& depGraph, std::set< Noc
 
         AssetClassPtr assetClass;
 
-        if (Application::IsDebuggerPresent() && !m_AllFlag)
+        if (Platform::IsDebuggerPresent() && !m_AllFlag)
         {
             assetClass = AssetClass::LoadAssetClass( filePath );
 
@@ -412,7 +413,7 @@ bool BuildCommand::Build( Dependencies::DependencyGraph& depGraph, std::set< Noc
         }
     }
 
-    if (Application::IsDebuggerPresent())
+    if (Platform::IsDebuggerPresent())
     {
         AssetBuilder::Build( depGraph, jobs );
     }

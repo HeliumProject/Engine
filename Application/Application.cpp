@@ -16,11 +16,12 @@
 #include "Platform/Assert.h"
 #include "Platform/Platform.h"
 #include "Platform/Process.h"
+#include "Platform/Debug.h"
+#include "Platform/Exception.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Version.h"
-#include "Platform/Exception.h"
 #include "Foundation/CommandLine/Utilities.h"
 
 #include "Exception.h"
@@ -97,12 +98,12 @@ void Application::Startup( int argc, const tchar** argv, bool checkVersion )
 
             Log::Print( TXT( "Waiting %d minutes for debugger to attach...\n" ), timeout / 60);
 
-            while ( !Application::IsDebuggerPresent() && timeout-- )
+            while ( !Platform::IsDebuggerPresent() && timeout-- )
             {
                 Sleep( 1000 );
             }
 
-            if ( Application::IsDebuggerPresent() )
+            if ( Platform::IsDebuggerPresent() )
             {
                 Log::Print( TXT( "Debugger attached\n" ) );
                 NOC_ISSUE_BREAK();
@@ -447,11 +448,6 @@ void Application::CleanupStandardTraceFiles()
     g_TraceFiles.clear();
 }
 
-bool Application::IsDebuggerPresent()
-{
-    return ::IsDebuggerPresent() != 0;
-}
-
 static DWORD ProcessUnhandledCxxException( LPEXCEPTION_POINTERS info )
 {
     if ( info->ExceptionRecord->ExceptionCode == 0xE06D7363 )
@@ -473,7 +469,7 @@ static DWORD ProcessUnhandledCxxException( LPEXCEPTION_POINTERS info )
 
 static Platform::Thread::Return StandardThreadTryExcept( Platform::Thread::Entry entry, Platform::Thread::Param param )
 {
-    if (Application::IsDebuggerPresent())
+    if (Platform::IsDebuggerPresent())
     {
         return entry( param );
     }
@@ -494,7 +490,7 @@ static Platform::Thread::Return StandardThreadTryExcept( Platform::Thread::Entry
 
 static Platform::Thread::Return StandardThreadTryCatch( Platform::Thread::Entry entry, Platform::Thread::Param param )
 {
-    if ( Application::IsDebuggerPresent() )
+    if ( Platform::IsDebuggerPresent() )
     {
         return StandardThreadTryExcept( entry, param );
     }
@@ -521,7 +517,7 @@ static Platform::Thread::Return StandardThreadEntry( Platform::Thread::Entry ent
 
 Platform::Thread::Return Application::StandardThread( Platform::Thread::Entry entry, Platform::Thread::Param param )
 {
-    if (Application::IsDebuggerPresent())
+    if (Platform::IsDebuggerPresent())
     {
         return StandardThreadEntry( entry, param );
     }
@@ -535,7 +531,7 @@ Platform::Thread::Return Application::StandardThread( Platform::Thread::Entry en
         {
             result = StandardThreadEntry( entry, param );
         }
-        __except( ( g_ShutdownComplete || Application::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
+        __except( ( g_ShutdownComplete || Platform::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
         {
             ::ExitProcess( -1 );
         }
@@ -548,7 +544,7 @@ Platform::Thread::Return Application::StandardThread( Platform::Thread::Entry en
 
 static int StandardMainTryExcept( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
 {
-    if (Application::IsDebuggerPresent())
+    if (Platform::IsDebuggerPresent())
     {
         return main(argc, argv);
     }
@@ -569,7 +565,7 @@ static int StandardMainTryExcept( int (*main)(int argc, const tchar** argv), int
 
 static int StandardMainTryCatch( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
 {
-    if ( Application::IsDebuggerPresent() )
+    if ( Platform::IsDebuggerPresent() )
     {
         return StandardMainTryExcept( main, argc, argv );
     }
@@ -616,7 +612,7 @@ static int StandardMainEntry( int (*main)(int argc, const tchar** argv), int arg
 
 int Application::StandardMain( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv, bool checkVersion )
 {
-    if (Application::IsDebuggerPresent())
+    if (Platform::IsDebuggerPresent())
     {
         return StandardMainEntry( main, argc, argv, checkVersion );
     }
@@ -630,7 +626,7 @@ int Application::StandardMain( int (*main)(int argc, const tchar** argv), int ar
         {
             result = StandardMainEntry( main, argc, argv, checkVersion );
         }
-        __except( ( g_ShutdownComplete || Application::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
+        __except( ( g_ShutdownComplete || Platform::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
         {
             ::ExitProcess( Application::Shutdown( result ) );
         }
@@ -643,7 +639,7 @@ int Application::StandardMain( int (*main)(int argc, const tchar** argv), int ar
 
 static int StandardWinMainTryExcept( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd)
 {
-    if (Application::IsDebuggerPresent())
+    if (Platform::IsDebuggerPresent())
     {
         return winMain( hInstance, hPrevInstance, lpCmdLine, nShowCmd );
     }
@@ -664,7 +660,7 @@ static int StandardWinMainTryExcept( int (*winMain)( HINSTANCE hInstance, HINSTA
 
 static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd)
 {
-    if ( Application::IsDebuggerPresent() )
+    if ( Platform::IsDebuggerPresent() )
     {
         return StandardWinMainTryExcept( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
     }
@@ -721,7 +717,7 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
 
 int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd, bool checkVersion )
 {
-    if (Application::IsDebuggerPresent())
+    if (Platform::IsDebuggerPresent())
     {
         return StandardWinMainEntry( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd, checkVersion );
     }
@@ -735,7 +731,7 @@ int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE
         {
             result = StandardWinMainEntry( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd, checkVersion );
         }
-        __except( ( g_ShutdownComplete || Application::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
+        __except( ( g_ShutdownComplete || Platform::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
         {
             ::ExitProcess( Application::Shutdown( result ) );
         }

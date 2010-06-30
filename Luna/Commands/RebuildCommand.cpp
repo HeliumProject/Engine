@@ -2,21 +2,21 @@
 
 #include "RebuildCommand.h"
 
+#include "Platform/Debug.h"
 #include "Platform/Exception.h"
-#include "Application/Application.h"
 #include "Platform/Windows/Windows.h"
 
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Version.h"
 #include "Foundation/Log.h"
-#include "Application/RCS/RCS.h"
 #include "Foundation/File/Path.h"
-
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Version.h"
-
 #include "Foundation/CommandLine/Option.h"
 #include "Foundation/CommandLine/Command.h"
+
+#include "Application/Application.h"
+#include "Application/RCS/RCS.h"
 
 using namespace Luna;
 using namespace Nocturnal::CommandLine;
@@ -223,7 +223,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
     {
         V_Element elements;
 
-        if ( Application::IsDebuggerPresent() )
+        if ( Platform::IsDebuggerPresent() )
         {
             Reflect::PrintStatus status;
             Archive::FromFile( input, elements, &status );
@@ -254,7 +254,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
     V_Element spool;
 
-    if ( Application::IsDebuggerPresent() )
+    if ( Platform::IsDebuggerPresent() )
     {
         Reflect::PrintStatus status;
         Archive::FromFile( input, spool, &status );
@@ -324,7 +324,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
         }
     }
 
-    if ( Application::IsDebuggerPresent() )
+    if ( Platform::IsDebuggerPresent() )
     {
         Reflect::PrintStatus status;
         Archive::ToFile( spool, absolute, version, &status );
@@ -350,7 +350,7 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
 
     if (m_Verify)
     {
-        if ( Application::IsDebuggerPresent() )
+        if ( Platform::IsDebuggerPresent() )
         {
             V_Element duplicates;
             Reflect::PrintStatus status;

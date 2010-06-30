@@ -13,11 +13,17 @@ sub PrintUsage
   $scriptName =~ s/^.*\\(.*?)$/$1/;
   
   print qq{
-Usage: $scriptName <location of code>
+Usage: $scriptName <location of code> [args]
 };
 }
 
 my $location = shift;
+my $args = shift;
+
+if ( !defined $args )
+{
+  $args = "";
+}
 
 if ( !$location )
 {
@@ -37,6 +43,7 @@ BuildConfig();
 sub BuildConfig
 {
   my $path = $location;
+  my $args = $args;
 
   chdir "$path\\build\\msw";
   
@@ -54,10 +61,10 @@ sub BuildConfig
     die "Microsoft Visual Studio Tools cannot be found in your PATH";
   }
 
-  Build( "BUILD=debug SHARED=0 UNICODE=0 DEBUG_INFO=1 $target" );
-  Build( "BUILD=release SHARED=0 UNICODE=0 DEBUG_INFO=1 $target" );
-  Build( "BUILD=debug SHARED=0 UNICODE=1 DEBUG_INFO=1 $target" );
-  Build( "BUILD=release SHARED=0 UNICODE=1 DEBUG_INFO=1 $target" );
+  Build( "BUILD=debug SHARED=0 UNICODE=0 DEBUG_INFO=1 USE_EXCEPTIONS=0 $target $args" );
+  Build( "BUILD=release SHARED=0 UNICODE=0 DEBUG_INFO=1 USE_EXCEPTIONS=0 $target $args" );
+  Build( "BUILD=debug SHARED=0 UNICODE=1 DEBUG_INFO=1 USE_EXCEPTIONS=0 $target $args" );
+  Build( "BUILD=release SHARED=0 UNICODE=1 DEBUG_INFO=1 USE_EXCEPTIONS=0 $target $args" );
 }
 
 sub Build

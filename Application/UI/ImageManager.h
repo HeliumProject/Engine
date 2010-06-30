@@ -78,7 +78,7 @@ namespace Nocturnal
     wxImageList* GetGuiImageList( const IconSize size = IconSizes::Size16 );
 
     bool LoadGuiArt( const IconSize size = IconSizes::Size16 );
-    bool LoadImage( const tstring& fileName, const IconSize size = IconSizes::Size16 );
+    bool LoadImage( const Nocturnal::Path& filePath, const IconSize size = IconSizes::Size16 );
     int GetImageIndex( const tstring& fileName, const IconSize size = IconSizes::Size16 );
 
     const tstring& GetNameFromImageIndex( i32 index ) const;

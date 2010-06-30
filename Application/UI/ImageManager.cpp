@@ -391,7 +391,10 @@ namespace Nocturnal
             std::set< Nocturnal::Path >::const_iterator fileEnd = artFiles.end();
             for ( ; fileItr != fileEnd; ++fileItr )
             {
-                isOk &= LoadImage( (*fileItr).Get(), size);
+                if ( fileItr->Exists() && fileItr->Size() <= 0 )
+                {
+                    isOk &= LoadImage( (*fileItr), size);
+                }
             }
         }
         else
@@ -405,13 +408,19 @@ namespace Nocturnal
     ///////////////////////////////////////////////////////////////////////////////
     // Load Images into the correct imagelist
     // 
-    bool ImageManager::LoadImage( const tstring& fileName, const IconSize size )
+    bool ImageManager::LoadImage( const Nocturnal::Path& filePath, const IconSize size )
     {
         wxImage image;
 
-        if ( !image.LoadFile( fileName.c_str(), wxBITMAP_TYPE_PNG ) )
+        if ( !filePath.Exists() || filePath.Size() <= 0 )
         {
-            Log::Warning( TXT( "Unable to load GUI image %s\n" ), fileName.c_str() );
+            Log::Warning( TXT( "Unable to load empty image file %s\n" ), filePath.Get().c_str() );
+            return false;
+        }
+
+        if ( !image.LoadFile( filePath.Get().c_str(), wxBITMAP_TYPE_PNG ) )
+        {
+            Log::Warning( TXT( "Unable to load GUI image %s\n" ), filePath.Get().c_str() );
             return false;
         }
         else
@@ -419,7 +428,7 @@ namespace Nocturnal
             // The file was loaded, add it to the image list and store a mapping of file name to index
             u32 index = m_GuiImageLists[size].Add( wxBitmap( image ) );
 
-            m_PathNameToIndex.insert( M_StrI32::value_type( fileName, index ) );
+            m_PathNameToIndex.insert( M_StrI32::value_type( filePath.Get(), index ) );
 
             return true;
         }
@@ -454,7 +463,7 @@ namespace Nocturnal
             }
             else
             {
-                if (!LoadImage( fullPath, size ))
+                if ( !LoadImage( Nocturnal::Path( fullPath ), size ) )
                 {
                     m_PathNameToIndex[ fullPath ] = -1;
                 }

@@ -1,5 +1,7 @@
 #include "FileWatcher.h"
 
+#include "Foundation/Log.h"
+
 #include "Platform/Windows/Windows.h"
 #include "Path.h"
 
@@ -19,7 +21,7 @@ void EmitLastError()
         (LPTSTR) &lpMsgBuf,
         0, NULL );
 
-    printf( "ERROR: %s\n", lpMsgBuf );
+    Log::Error( TXT( "%s\n" ), lpMsgBuf );
 
     LocalFree(lpMsgBuf);
 }

@@ -202,7 +202,7 @@ u32 Render::Scene::LoadNewMesh( const tchar* fname, ObjectLoaderPtr loader, int 
         r = 0.5f*(max - min);
     }  
 
-    printf("Reindexing vertex data\n");
+    Log::Print( TXT( "Reindexing vertex data\n" ) );
     // compile the loose arrays into unique vertices, there is an index buffer per material
     loader->Compile();
 
@@ -270,14 +270,14 @@ u32 Render::Scene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int ba
         total_indices += (u32)loader->m_fragments[f].m_indices.size();
     }
 
-    printf("Building D3D vertex data\n");
+    Log::Print( TXT( "Building D3D vertex data\n" ) );
     result->m_vert_count = (u32)loader->m_vertices.size()/loader->m_vtxSize;  // size is in floats
     result->m_index_count = total_indices;
 
     u32 bytes = result->m_vert_count*sizeof(Render::MeshVertex);
     if ( bytes == 0 )
     {
-        printf("Possible legacy file. '%s'\n",fname);
+        Log::Warning( TXT( "Possible legacy file. '%s'\n" ),fname);
         return 0xffffffff;
     }
     u32 vec_bytes = result->m_vert_count*sizeof(VertexDebug)*2;
@@ -294,7 +294,7 @@ u32 Render::Scene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int ba
     Render::MeshVertex *p;
     if ( !result->m_verts )
     {
-        printf("Possible legacy file. '%s'\n",fname);
+        Log::Warning( TXT( "Possible legacy file. '%s'\n" ),fname);
         return 0xffffffff;
     }
     result->m_verts->Lock(0,0,(void**)&p,0);
@@ -391,10 +391,10 @@ u32 Render::Scene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int ba
         result->m_fragments[currentFragment].m_base_index = pos;
         result->m_fragments[currentFragment].m_prim_count = idx_count/3;
 
-        /*    printf("Fragment %d [base idx = %d, index count = %d]\n",f,result->m_fragments[currentFragment].m_base_index,idx_count);
+        /*    Log::Print( TXT( "Fragment %d [base idx = %d, index count = %d]\n" ),f,result->m_fragments[currentFragment].m_base_index,idx_count);
         for (u32 t=0;t<result->m_fragments[currentFragment].m_prim_count;t++)
         {
-        printf("  Triangle %d: %d, %d, %d\n",t, loader->m_fragments[f].m_indices[t*3+0],loader->m_fragments[f].m_indices[t*3+1],loader->m_fragments[f].m_indices[t*3+2]);
+        Log::Print( TXT( "  Triangle %d: %d, %d, %d\n" ),t, loader->m_fragments[f].m_indices[t*3+0],loader->m_fragments[f].m_indices[t*3+1],loader->m_fragments[f].m_indices[t*3+2]);
         }*/
 
         for (u32 i=0;i<idx_count;i++)
@@ -410,7 +410,7 @@ u32 Render::Scene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int ba
 
     g_loaded_meshes.push_back(result);
 
-    printf("Done\n");
+    Log::Print( TXT( "Done\n" ) );
 
     return (u32)g_loaded_meshes.size()-1;
 }
@@ -860,7 +860,7 @@ void CreateDefaultEnvironments(Render::Renderer* render)
 
     g_loaded_environments.push_back(env);
 
-    printf("Default environments created\n");
+    Log::Print( TXT( "Default environments created\n" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

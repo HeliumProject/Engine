@@ -160,7 +160,7 @@ static void FillTexture(IDirect3DTexture9* tex, u32 val)
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void Render::ShaderManager::CreateDefaults()
 {
-  printf("Default shaders/textures created\n");
+    Log::Print( TXT( "Default shaders/textures created\n" ) );
 
   IDirect3DDevice9* device = m_renderer->GetD3DDevice();
 
@@ -367,7 +367,7 @@ u32 Render::ShaderManager::LoadTexture(const tchar* fname,D3DFORMAT fmt, u32 lev
 
     if (FAILED(D3DXCreateTextureFromFileEx(m_renderer->GetD3DDevice(),fname,0,0,levels,0,fmt,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,0,0,0,&t->m_d3d_texture)))
     {
-      printf("Failed to load texture '%s'\n",fname);
+        Log::Error( TXT( "Failed to load texture '%s'\n" ),fname);
       delete t;
       return 0xffffffff;
     }
@@ -438,7 +438,7 @@ bool Render::ShaderManager::ReloadTexture( const tchar* fname )
   u32 new_handle = LoadTexture(fname, fmt, level_count, false);
   if ( new_handle == 0xffffffff )
   {
-    printf( "Failed to reload texture '%s'!\n", fname );
+      Log::Error( TXT( "Failed to reload texture '%s'!\n" ), fname );
     m_loaded_textures[ handle ] = old_texture;
     return false;
   }

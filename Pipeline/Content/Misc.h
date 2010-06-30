@@ -33,7 +33,7 @@ namespace Content
             //tstring str;
             //t_.m_id.ToString(str);
 
-            //printf("UidBsphereList::Add - '%s' - %f %f %f %f", str.c_str(), t_.m_bsphere.m_Center.x, t_.m_bsphere.m_Center.y, t_.m_bsphere.m_Center.z, t_.m_bsphere.m_Radius);
+            //Log::Print( TXT( "UidBsphereList::Add - '%s' - %f %f %f %f" ), str.c_str(), t_.m_bsphere.m_Center.x, t_.m_bsphere.m_Center.y, t_.m_bsphere.m_Center.z, t_.m_bsphere.m_Radius);
 
             size_t i;
             for(i = 0; i < m_list.size(); i++)
@@ -66,12 +66,12 @@ namespace Content
 
             if (i == m_list.size())
             {
-                //printf(" - new - adding\n");
+                //Log::Print( TXT( " - new - adding\n" ) );
                 m_list.push_back(t_);
             }
             //else
             //{
-            //  printf(" - have it - skipping\n");
+            //  Log::Print( TXT( " - have it - skipping\n" ) );
             //}
         }
 

@@ -210,30 +210,30 @@ FragmentShaderApp::OnInit()
 
     if (usage)
     {
-        printf(
-            "Usage: igFragmentShader [options] [filename]\n"
-            "\n"
-            "Options:\n"
-            "  -h or --help\n"
-            "    Show this help.\n"
-            "\n"
-            "  -c or --compile\n"
-            "    Compile the file instead of open it. Must be specified if either -m, -o\n"
-            "    or -g are specified.\n"
-            "\n"
-            "  -g n or --graph n\n"
-            "    Compile only the n-th graph using \"output_cg_%%d.cg\" as the mask instead\n"
-            "    of compiling all graphs in the project.\n"
-            "\n"
-            "  -m m or --mask m\n"
-            "    Override the default mask. The mask must have a \"%%d\" somewhere.\n"
-            "\n"
-            "  -o f... or --output f...\n"
-            "    Use these file names instead of generating them with the mask. Must be the\n"
-            "    last option if specified.\n"
-            "\n"
-            "  filename\n"
-            "    The file to open or compile. It must be informed except if -h is used.\n"
+        Log::Print(
+            TXT( "Usage: igFragmentShader [options] [filename]\n" )
+            TXT( "\n" )
+            TXT( "Options:\n" )
+            TXT( "  -h or --help\n" )
+            TXT( "    Show this help.\n" )
+            TXT( "\n" )
+            TXT( "  -c or --compile\n" )
+            TXT( "    Compile the file instead of open it. Must be specified if either -m, -o\n" )
+            TXT( "    or -g are specified.\n" )
+            TXT( "\n" )
+            TXT( "  -g n or --graph n\n" )
+            TXT( "    Compile only the n-th graph using \"output_cg_%%d.cg\" as the mask instead\n" )
+            TXT( "    of compiling all graphs in the project.\n" )
+            TXT( "\n" )
+            TXT( "  -m m or --mask m\n" )
+            TXT( "    Override the default mask. The mask must have a \"%%d\" somewhere.\n" )
+            TXT( "\n" )
+            TXT( "  -o f... or --output f...\n" )
+            TXT( "    Use these file names instead of generating them with the mask. Must be the\n" )
+            TXT( "    last option if specified.\n" )
+            TXT( "\n" )
+            TXT( "  filename\n" )
+            TXT( "    The file to open or compile. It must be informed except if -h is used.\n" )
             );
         return false;
     }

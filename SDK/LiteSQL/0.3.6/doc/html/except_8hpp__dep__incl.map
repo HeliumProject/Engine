@@ -1,8 +1,0 @@
-base referer
-rect $types_8hpp-source.html 143,110 223,134
-rect $litesql_8hpp-source.html 866,133 949,157
-rect $cursor_8hpp-source.html 418,160 503,184
-rect $database_8hpp-source.html 553,106 654,130
-rect $backend_8hpp-source.html 271,110 370,134
-rect $persistent_8hpp-source.html 707,157 814,181
-rect $datasource_8hpp-source.html 703,109 818,133

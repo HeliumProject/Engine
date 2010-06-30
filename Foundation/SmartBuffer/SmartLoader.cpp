@@ -2,6 +2,8 @@
 
 #include "Platform/Assert.h"
 
+#include "Foundation/Log.h"
+
 using namespace Nocturnal;
 
 bool Nocturnal::LoadChunkHeaders( ChunkFile& chunk_file, void* data, u32 data_size )
@@ -28,7 +30,7 @@ bool Nocturnal::LoadChunkHeaders( ChunkFile& chunk_file, void* data, u32 data_si
         break;
 
     default:
-        printf("Version wrong (%x, expected %x or %x)\n", chunk_file.m_FileHeader->m_Version, CHUNK_VERSION_128_ALIGN, CHUNK_VERSION_16_ALIGN );
+        Log::Error( TXT( "Version wrong (%x, expected %x or %x)\n" ), chunk_file.m_FileHeader->m_Version, CHUNK_VERSION_128_ALIGN, CHUNK_VERSION_16_ALIGN );
         return false;
     }
 

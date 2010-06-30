@@ -699,8 +699,8 @@ namespace Content
 #ifdef DUMP_LOTS_OF_CRAP
 
     // dump joint ids
-    printf("----------------------------------------\n");
-    printf("%5d joints\n", m_JointIds.size());
+      Log::Print( TXT( "----------------------------------------\n" ) );
+      Log::Print( TXT( "%5d joints\n" ), m_JointIds.size());
     for(Nocturnal::S_TUID::const_iterator ijoint = m_JointIds.begin(); ijoint != m_JointIds.end(); ++ijoint)
     {
       tstring joint_str;
@@ -708,13 +708,13 @@ namespace Content
 
       JointTransform* joint = Get< JointTransform >(*ijoint);
 
-      printf("$$$joint_id '%s' - '%s'\n", joint_str.c_str(), joint ? joint->m_Name.c_str() : "bad uid");
+      Log::Print( TXT( "$$$joint_id '%s' - '%s'\n" ), joint_str.c_str(), joint ? joint->m_Name.c_str() : TXT( "bad uid" ) );
     }
 
 
 
 //    // dump inv bind mats
-//    printf("%%%----------------------------------------\n");
+    //    Log::Print( TXT( "%%%----------------------------------------\n" ) );
 //    for(Nocturnal::S_TUID::const_iterator ijoint = m_JointIds.begin(); ijoint != m_JointIds.end(); ++ijoint)
 //    {
 //      const igSuperJointArray* bindJoints = m_Processor.GetEngineScene().GetSuperJointArray();
@@ -724,13 +724,13 @@ namespace Content
 //
 //      JointTransform* joint = Get< JointTransform >(joint_id);
 //
-//      printf("%%%joint_id '%s' - '%s'\n", joint_str.c_str(), joint ? joint->m_Name.c_str() : "bad uid");
+    //      Log::Print( TXT( "%%%joint_id '%s' - '%s'\n" ), joint_str.c_str(), joint ? joint->m_Name.c_str() : TXT( "bad uid" ) );
 //    }
 
 
 
     // dump verts
-    printf("$$$----------------------------------------\n");
+    Log::Print( TXT( "$$$----------------------------------------\n" ) );
     for(u32 content_type = 0; content_type < Content::ContentTypes::NumContentTypes; content_type++)
     {
       if ((content_type != Content::ContentTypes::Geometry) && (content_type != Content::ContentTypes::Bangle))
@@ -753,11 +753,11 @@ namespace Content
           mesh_id = ((u64)mesh->GetExportTypeIndex((Content::ContentType)content_type) + 1);
         }
 
-        printf("$$$%5d mesh_id\n", mesh_id);
+        Log::Print( TXT( "$$$%5d mesh_id\n" ), mesh_id);
 
         size_t num_verts = (u32)mesh->m_Positions.size();
 
-        printf("$$$%5d verts\n", num_verts);
+        Log::Print( TXT( "$$$%5d verts\n" ), num_verts);
 
         for(size_t ivert = 0; ivert < num_verts; ivert++)
         {
@@ -766,8 +766,8 @@ namespace Content
           InfluencePtr          influence   = skin->m_Influences[iskin_vert];
           u32                   num_weights = (u32)influence->m_Weights.size();
 
-          printf("$$$%5d %f %f %f\n", ivert, pos.x, pos.y, pos.z);
-          printf("$$$%5d infs\n", num_weights);
+          Log::Print( TXT( "$$$%5d %f %f %f\n" ), ivert, pos.x, pos.y, pos.z);
+          Log::Print( TXT( "$$$%5d infs\n" ), num_weights);
 
           for(u32 inf = 0; inf < num_weights; inf++)
           {
@@ -777,7 +777,7 @@ namespace Content
             tstring weight_joint_str;
             weight_joint_id.ToString(weight_joint_str);
 
-            printf("$$$%5d '%s' %f\n", inf, weight_joint_str.c_str(), weight);
+            Log::Print( TXT( "$$$%5d '%s' %f\n" ), inf, weight_joint_str.c_str(), weight);
           }
         }      
       }
@@ -1414,7 +1414,7 @@ namespace Content
 
         if (total_num_weights == pre_total_num_weights)
         {
-          //printf("*** contentType %d - mesh %3d (bangle_id %3d) has 0 weights\n", contentType, skin_verts_id, mesh_id);
+          //Log::Print( TXT( "*** contentType %d - mesh %3d (bangle_id %3d) has 0 weights\n" ), contentType, skin_verts_id, mesh_id);
 
           for(size_t ivert = 0; ivert < num_verts; ivert++)
           {

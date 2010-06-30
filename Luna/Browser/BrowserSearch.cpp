@@ -477,7 +477,7 @@ u32 BrowserSearch::FoundAssetFiles( const std::set< Nocturnal::Path >& assetFile
         }
     }
 
-    return m_FoundFiles.size();
+    return (u32)m_FoundFiles.size();
 }
 
 u32 BrowserSearch::FoundAssetFolder( Nocturnal::Path& folder, i32 searchID )

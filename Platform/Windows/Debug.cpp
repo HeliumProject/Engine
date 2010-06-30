@@ -369,7 +369,7 @@ bool Debug::GetStackTrace(LPCONTEXT context, std::vector<uintptr>& stack, unsign
     }
 
 #ifdef DEBUG_SYMBOLS
-    printf( "0x%08I64X - %s\n", frame.AddrReturn.Offset, GetSymbolInfo(frame.AddrReturn.Offset, false).c_str() );
+    _tprintf( TXT( "0x%08I64X - %s\n" ), frame.AddrReturn.Offset, GetSymbolInfo(frame.AddrReturn.Offset, false).c_str() );
 #endif
 
     if (omitFrames == 0)

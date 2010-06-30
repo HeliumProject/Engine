@@ -1,0 +1,150 @@
+/* LiteSQL - Documentation - Implementation Details
+ * 
+ * By Tero Laitinen 
+ * 
+ * See LICENSE for copyright information. */
+/* \file implementation.txt
+    Manual */
+
+/** \page implementation Implementation Details
+
+\section toc Index
+ - \ref codegenerator 
+ - \ref mappingtodatabase
+ - \ref virtualmethods
+\section codegenerator Code Generator litesql-gen
+
+LiteSQL uses XML database definition file which is used to generate
+Persistent and Relation classes. 
+
+litesql-gen is the code generator written in C++ that generates code from 
+database definition file. 
+
+Small help:
+\code
+./litesql-gen  --help
+Usage: litesql-gen [options] <my-database.xml>
+
+Options:
+ -t, --target=TARGET                generate code for TARGET (default: c++)
+ -v, --verbose                      verbosely report code generation
+ --help                             print help
+ 
+ --output-dir=/path/to/src          output all files to directory
+ 
+ --output-sources=/path/to/src      output sources to directory 
+                                    (only with target c++)
+ 
+ --output-include=/path/to/include  output includes to directory 
+                                    (only with target c++)
+
+Supported targets:
+ 'c++'        C++ target (.cpp,.hpp)
+ 'graphviz'   Graphviz file (.dot)
+ 'ruby-activerecord' experimental ruby support, generates migration and activeRecord classes
+
+\endcode
+
+The example database definition file (exampledatabase.xml)
+page will result in two files (exampledatabase.hpp and testdatabase.cpp)
+when fed to code generator. 
+\include exampledatabase.xml
+exampledatabase.hpp contains class declarations for persistent objects and 
+relations
+\include exampledatabase.hpp
+exampledatabase.cpp contains implementation of methods and lots of static data.
+\include exampledatabase.cpp
+
+\section mappingtodatabase Mapping Objects to Relational Database
+
+Fields of multiple Persistent-classes are stored in separate tables. 
+Each Persistent-class has its own table. Also, each relation is stored in 
+separate table. An example database demonstrates data mapping.
+\code
+<database name="example">
+    <object name="Playable">
+        <field name="name" type="string"/>
+        <method name="play"/>
+    </object>
+    <object name="AudioFile" inherits="Playable">
+        <field name="file" type="string"/>
+        <method name="play"/>
+    </object>
+    <object name="Collection">
+        <field name="description" type="string"/>
+    </object>
+    <relation>
+        <relate object="AudioFile" handle="collections"/>
+        <relate object="Collection" handle="files"/>
+        <field name="percent" type="integer" default="100"/> 
+    </relation>
+</database>
+\endcode
+The database schema extracted from definitions above is similar to following:
+\code
+CREATE TABLE Playable_ (id_ INTEGER PRIMARY KEY, type_ TEXT, name_ TEXT);
+CREATE TABLE AudioFile_ (id_ INTEGER PRIMARY KEY, file_ TEXT);
+CREATE TABLE Collection_ (id_ INTEGER PRIMARY KEY, type_ TEXT, description_ TEXT);
+CREATE TABLE AudioFile_Collection_ (AudioFile1 INTEGER, Collection2 INTEGER, percent_ INTEGER);
+
+-- original name: idx_AudioFile_Collection_AudioFile1
+CREATE INDEX _71b11d59ca507479edd464e053cd01 ON AudioFile_Collection_ (AudioFile1); 
+
+-- original name: idx_AudioFile_Collection_Collection2
+CREATE INDEX _e1305d9ca2d1c6947b38fc301ad676 ON AudioFile_Collection_ (Collection2); 
+
+-- original name: idx_AudioFile_Collection_AudioFile1_Collection2
+CREATE INDEX _7e632b2ede1b6f3348d36e44e443d0 ON AudioFile_Collection_ (AudioFile1,Collection2); 
+\endcode
+
+The relation table AudioFile_Collection_ is indexed by both of its fields.
+If table or index identifier is longer than 31 characters, it will be 
+truncated by calculating MD5-sum of the identifier because all backends do not
+support longer identifiers (certain PostgreSQL - versions at least).
+
+Fields in tables of Persistent classes and relation attributes 
+(extra fields in relation tables) are postfixed with an underscore to 
+allow usage of SQL's reserved words in identifiers. 
+
+\section virtualmethods Virtual Methods
+
+Using database defined in previous section, suppose one needs to select
+a Playable from database and play() it. The routine selecting and playing
+the Playable cannot know the actual type of the Playable. 
+
+After Playable-object is selected from database it really is a Playable 
+despite it was stored as an AudioFile for example. 
+
+In order to retrieve all fields that AudioFile has, the Playable object needs to
+be upcasted. 
+\code
+AudioFile af(db);
+af.name = "A good song";
+af.file = "goodsong.mp3";
+af.update();
+
+Playable p = select<Playable>(db, Playable::Name == "A good song").one()
+// p has only one field: name
+
+p.upcast().play();
+// this executes actually select<AudioFile>(db, Playable::Id == x).one().play();
+\endcode
+
+The code generator (litesql-gen) writes upcast-method that returns object of
+correct type.
+
+Sometimes extra fields that an inherited Persistent may have are not needed
+when accessing virtual methods. It would be futile to execute SQL statements.
+Another upcaster function is provided to help in this situation. 
+
+For example, onDelete() - may not need any fields. del() - method that calls
+onDelete() uses upcastCopy() to access onDelete() of inherited Persistent.
+
+\code
+// same Playable is selected as in above example
+p.upcastCopy()->makeLogEntry(log)
+\endcode
+
+Note that upcastCopy will return a Persistent whose all fields are not retrieved
+from database. 
+*/

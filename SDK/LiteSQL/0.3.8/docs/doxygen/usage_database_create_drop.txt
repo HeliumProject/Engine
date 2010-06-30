@@ -1,0 +1,55 @@
+/*sLiteSQL - Documentathon
+ * 
+ * By Tero Laitinen 
+ * 
+ * See LICENSE for copyright information. */
+/* \file documentation.txt
+    Manual */
+
+/** \page usage_database_create_drop Creating and Dropping Database
+
+The code below defines a simple database:
+\code
+<?xml version="1.0"?>
+<!DOCTYPE database SYSTEM "litesql.dtd">
+<database name="PersonDatabase">
+    <object name="Person">
+        <field name="name" type="string"/>
+    </object>
+</database>
+\endcode
+
+The database file is created when PersonDatabase is constructed. First argument
+of constructor is requested backend. Other possibilities are "postgresql"
+and "mysql". Refer to class documentation for details.
+\code
+PersonDatabase db("sqlite3", "database=person.db");
+\endcode
+
+The database has to be created before any Persistent - classes can be used.
+\code
+db.create();
+\endcode
+
+The database can be dropped using drop() - method.
+\code
+db.drop();
+\endcode
+
+Suppose the database schema has changed along with new features of the program.
+Few data fields has been added to Person-class and completely new 
+Persistent-class House has been defined. To upgrade database on disk, use
+needsUpgrade() and upgrade() - methods.
+\code
+if (db.needsUpgrade())
+    db.upgrade();
+\endcode
+
+If new fields has been added to classes, the upgrade operation may be quite 
+costly. All backends do not support table modifications so records has 
+to be copied forth and back. 
+
+Upgrade routine will try to preserve data. It will drop fields that are not
+in new schema and insert NULL-values to new fields.
+
+*/

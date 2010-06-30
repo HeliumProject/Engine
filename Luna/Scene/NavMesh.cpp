@@ -695,7 +695,7 @@ void NavMesh::DrawMouseOverTri( IDirect3DDevice9* device, DrawArgs* args, const 
   if (navMesh->m_mouse_over_tri != 0xFFFFFFFF)
   {
     device->SetMaterial(&s_MouseOverTriMaterial );
-    device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + data->m_WireframeVertexIndices.size() + navMesh->m_mouse_over_tri*3, 1 );
+    device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + (u32)data->m_WireframeVertexIndices.size() + navMesh->m_mouse_over_tri*3, 1 );
     args->m_TriangleCount += 1;
   }
   device->SetRenderState(D3DRS_ZENABLE, TRUE);
@@ -734,7 +734,7 @@ void NavMesh::DrawSelectedTri( IDirect3DDevice9* device, DrawArgs* args, const S
     for ( u32 i = 0; i < navMesh->m_selected_tris.size(); i++ )
     {
       device->SetMaterial( &s_SelectedTriMaterial );
-      device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + data->m_WireframeVertexIndices.size() + navMesh->m_selected_tris.at(i)*3, 1 );
+      device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + (u32)data->m_WireframeVertexIndices.size() + navMesh->m_selected_tris.at(i)*3, 1 );
       args->m_TriangleCount += 1;
     }
   }
@@ -745,7 +745,7 @@ void NavMesh::DrawSelectedTri( IDirect3DDevice9* device, DrawArgs* args, const S
     device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
     for (std::vector< u32 >::const_iterator it = navMesh->m_marquee_selected_tris.begin(); it != navMesh->m_marquee_selected_tris.end(); ++it)
     {
-      device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + data->m_WireframeVertexIndices.size() + (*it)*3, 1 );
+      device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + (u32)data->m_WireframeVertexIndices.size() + (*it)*3, 1 );
     }
   }
 
@@ -777,7 +777,7 @@ void NavMesh::DrawToBeDeletedTris( IDirect3DDevice9* device, DrawArgs* args, con
   {
     device->SetMaterial( &Luna::View::s_RedMaterial );
     device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-    device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + data->m_WireframeVertexIndices.size() + (*it)*3, 1 );
+    device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + (u32)data->m_WireframeVertexIndices.size() + (*it)*3, 1 );
     args->m_TriangleCount += 1;
   }
   device->SetRenderState( D3DRS_CULLMODE, D3DCULL_CW );

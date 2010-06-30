@@ -87,13 +87,13 @@ void Render::ObjectLoader::Compile(bool flip)
       idx.tanIndex = *tanit;
       idx.cIndex = *cit;
 
-//      printf("p idx = %d, n idx = %d, t idx = %d, tan idx = %d, c idx = %d\n", idx.pIndex, idx.nIndex, idx.tIndex, idx.tanIndex, idx.cIndex);
+//      Log::Print( TXT( "p idx = %d, n idx = %d, t idx = %d, tan idx = %d, c idx = %d\n" ), idx.pIndex, idx.nIndex, idx.tIndex, idx.tanIndex, idx.cIndex);
 
       std::map<IdxSet,u32>::iterator mit = pts.find(idx);
 
       if (mit == pts.end()) 
       {
-//        printf("New vertex\n");
+//        Log::Print( TXT( "New vertex\n" ) );
         m_fragments[f].m_indices.push_back( (u32)pts.size());
         pts.insert( std::map<IdxSet,u32>::value_type(idx, (u32)pts.size()));
 
@@ -121,7 +121,7 @@ void Render::ObjectLoader::Compile(bool flip)
       }
       else 
       {
-        //printf("Found idx = %d\n",mit->second);
+        //Log::Print( TXT( "Found idx = %d\n" ),mit->second);
         m_fragments[f].m_indices.push_back( mit->second);
       }
 
@@ -291,8 +291,8 @@ void Render::ObjectLoader::ComputeTangents()
       //should this really renormalize?
       D3DXVec3Normalize(&sTan,&sTan);
 
-      //printf("Face:%d (pos %d, %d, %d) (uv %d, %d, %d)\n", ii/3, m_fragments[f].m_pIndex[ii],m_fragments[f].m_pIndex[ii+1], m_fragments[f].m_pIndex[ii+2], m_fragments[f].m_tIndex[ii],m_fragments[f].m_tIndex[ii+1], m_fragments[f].m_tIndex[ii+2]);
-      //printf("Face:%d  Tangent: %.4f, %.4f, %.4f  Flip: %.4f\n",ii/3,sTan[0],sTan[1],sTan[2], factor);
+      //Log::Print( TXT( "Face:%d (pos %d, %d, %d) (uv %d, %d, %d)\n" ), ii/3, m_fragments[f].m_pIndex[ii],m_fragments[f].m_pIndex[ii+1], m_fragments[f].m_pIndex[ii+2], m_fragments[f].m_tIndex[ii],m_fragments[f].m_tIndex[ii+1], m_fragments[f].m_tIndex[ii+2]);
+      //Log::Print( TXT( "Face:%d  Tangent: %.4f, %.4f, %.4f  Flip: %.4f\n" ),ii/3,sTan[0],sTan[1],sTan[2], factor);
 
       //loop over the vertices, to update the tangents
       for (int jj = 0; jj < 3; jj++) 
@@ -302,7 +302,7 @@ void Render::ObjectLoader::ComputeTangents()
         //get the present accumulated tangnet
         D3DXVECTOR4 curTan(&m_sTangents[tan_idx*4]);
 
-        //printf("  jj:%d  curTan: %.4f, %.4f, %.4f  Flip: %.4f\n",jj,curTan[0],curTan[1],curTan[2], curTan[3]);
+        //Log::Print( TXT( "  jj:%d  curTan: %.4f, %.4f, %.4f  Flip: %.4f\n" ),jj,curTan[0],curTan[1],curTan[2], curTan[3]);
 
         //check to see if it is uninitialized, if so, insert it
         if (curTan[0] == 0.0f && curTan[1] == 0.0f && curTan[2] == 0.0f) 
@@ -313,7 +313,7 @@ void Render::ObjectLoader::ComputeTangents()
           m_sTangents[tan_idx*4+3] = factor;
 
           m_fragments[f].m_tanIndex.push_back(tan_idx);
-          //printf("Adding tangent at index %d\n",tan_idx);
+          //Log::Print( TXT( "Adding tangent at index %d\n" ),tan_idx);
         }
         else 
         {
@@ -323,7 +323,7 @@ void Render::ObjectLoader::ComputeTangents()
           // if we are within range and have a matching flip factor
           bool flip_equal = (curTan[3]==factor);
           float dot = D3DXVec3Dot( (D3DXVECTOR3*)&curTan, &sTan);
-          //printf("Flip Equal = %d, dot3(face tan, cur tan) = %.3f\n",(u32)flip_equal,dot);
+          //Log::Print( TXT( "Flip Equal = %d, dot3(face tan, cur tan) = %.3f\n" ),(u32)flip_equal,dot);
 
           if ( flip_equal && dot >= cosf( 3.1415926f * 0.333333f))
           {
@@ -334,7 +334,7 @@ void Render::ObjectLoader::ComputeTangents()
             // don't have to add the flip factors because they must already be the same
 
             m_fragments[f].m_tanIndex.push_back(tan_idx);
-            //printf("Tangent in range, merging with index %d\n",tan_idx);
+            //Log::Print( TXT( "Tangent in range, merging with index %d\n" ),tan_idx);
           }
           else 
           {
@@ -362,7 +362,7 @@ void Render::ObjectLoader::ComputeTangents()
 
               m_fragments[f].m_tanIndex.push_back(it->second);
 
-              //printf("Merging with index %d\n",it->second);
+              //Log::Print( TXT( "Merging with index %d\n" ),it->second);
             }
             else 
             {
@@ -376,7 +376,7 @@ void Render::ObjectLoader::ComputeTangents()
 
               m_fragments[f].m_tanIndex.push_back( target);
 
-              //printf("Split vertex, adding new index %d\n",target);
+              //Log::Print( TXT( "Split vertex, adding new index %d\n" ),target);
               collisionMap.insert( std::multimap< u32, u32>::value_type( tan_idx, target));
             }
           }

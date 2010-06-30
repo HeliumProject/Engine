@@ -1,0 +1,123 @@
+#!/bin/sh
+
+# Written by Eric A. McDonald for the LiteSQL project.
+# LiteSQL is by Tero Laitinen.
+# See LICENSE for copyright information.
+
+name=@PACKAGE_TARNAME@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+includedir=@includedir@
+libdir=@libdir@
+version="@PACKAGE_VERSION@"
+
+otherlibs_ldflags="@LDFLAGS@"
+otherlibs="@LIBS@"
+
+show_help=no
+show_version=no
+show_lib_version=no
+show_includes=no
+show_ldflags=no
+show_libs=no
+
+# Loop through argument vector.
+for cloption
+do
+
+    # Determine which option.
+    case $cloption in
+
+	-h | -help | --help)
+	    show_help=yes ;;
+
+	-V | -version | --version)
+	    show_version=yes ;;
+
+	--abi-version | --lib-version)
+	    show_lib_version=yes ;;
+
+	-I | --includes)
+	    show_includes=yes ;;
+
+	-L | --ldflags)
+	    show_ldflags=yes ;;
+
+	--libs)
+	    show_libs=yes ;;
+
+	*)
+	    echo "$0: Unknown option '$cloption'."
+	    show_help=yes
+	    ;;
+
+    esac
+
+done
+
+if [ "x${show_help}" = "xyes" ]
+then
+    cat <<EOF
+'litesql-config' gives LiteSQL version and compiler and linker flags.
+
+LiteSQL Package Query Options:
+  -h, --help              display this help and exit
+  -V, --version           display package version and exit
+  --lib-version           display library ABI version and exit
+  -I, --includes          display include flags for compiler
+  -L, --ldflags           display search flags for linker
+  --libs                  display lib link flags for linker
+
+EOF
+    exit 0
+fi
+
+if [ "x${show_version}" = "xyes" ]
+then
+    echo $version
+    exit 0
+fi
+
+if [ "x${show_lib_version}" = "xyes" ]
+then
+    # Retrieve ABI version at run-time.
+    lib_version=""
+    shlibpath=""
+    # TODO: Maybe find 'liblitesql.la' and use it instead.
+    if [ -x /usr/bin/objdump ] || [ -x /usr/local/bin/objdump ]
+    then
+	shlibpath="${libdir}/lib${name}.so"
+	if [ -r ${shlibpath} ]
+	then
+	    lib_version=`objdump -p ${shlibpath} | grep 'SONAME' | sed -e 's,\([ A-Z]\)*,,g' | sed -e 's,\(\([a-z0-9]\)*\.\)*,,g'`
+	fi
+    fi
+    if [ "x${lib_version}" != "x" ]
+    then
+	echo ${lib_version}
+    else
+	echo "$0: Could not determine library version."
+    fi
+    exit 0
+fi
+
+flags_to_show=""
+
+if [ "x${show_includes}" = "xyes" ] && [ "x${includedir}" != "x/usr/include" ]
+then
+    flags_to_show="${flags_to_show} -I${includedir}"
+fi
+
+if [ "x${show_ldflags}" = "xyes" ] && [ "x${libdir}" != "x/usr/include" ]
+then
+    flags_to_show="${flags_to_show} -L${libdir}"
+fi
+
+if [ "x${show_libs}" = "xyes" ]
+then
+    flags_to_show="${flags_to_show} -llitesql ${otherlibs_ldflags} ${otherlibs}"
+fi
+
+echo ${flags_to_show}
+
+exit 0

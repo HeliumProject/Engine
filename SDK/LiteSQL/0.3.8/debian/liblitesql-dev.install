@@ -1,0 +1,6 @@
+usr/include/*
+usr/include/litesql/*
+usr/lib/pkgconfig/*
+usr/share/pkgconfig/*
+usr/lib/lib*.a
+usr/bin/litesql-gen

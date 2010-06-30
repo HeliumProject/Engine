@@ -2,8 +2,6 @@
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Application/Inspect/DragDrop/ClipboardDataWrapper.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
-#include <sstream>
-#include <strstream>
 
 using namespace Inspect;
 
@@ -136,8 +134,6 @@ ReflectClipboardDataPtr ClipboardDataObject::FromBuffer()
 // 
 bool ClipboardDataObject::ToBuffer( ReflectClipboardData* data )
 {
-  std::stringstream stream;
-
   ClipboardDataWrapperPtr wrapper = new ClipboardDataWrapper();
   wrapper->m_Data = data;
 

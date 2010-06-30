@@ -1,0 +1,105 @@
+# General RPM Spec File for LiteSQL
+
+%define name	    @PACKAGE_TARNAME@
+%define version	    @PACKAGE_VERSION@
+%define release	    1
+
+Name: %{name}
+Summary: LiteSQL provides C++ object persistence in SQLite, MySQL, or PostgreSQL.
+Version: %{version}
+Release: %{release}
+License: BSD
+Packager: Eric McDonald  <eric_mcdonald@users.sourceforge.net>
+
+Group: Development/Libraries
+URL: http://litesql.sourceforge.net
+Source0: %{name}-%{version}.tar.gz
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+
+# Only the headers should be necessary for development, since the DB libs are statically 
+#   linked into `liblitesql'.
+Requires: sqlite-devel >= 3, mysql-devel, postgresql-devel
+# Technically, the "-devel" versions of the DB packages should require the packages 
+#   containing the libs, but to be safe, we explicitly require them, since someone could 
+#   have removed them from a system, overriding the dependency warnings.
+BuildPrereq: sqlite >= 3, sqlite-devel >= 3, mysql, mysql-devel, postgresql-libs, postgresql-devel, doxygen
+
+%description
+LiteSQL is an object persistence framework for C++. It can currently target 
+SQLite3, MySQL, and PostgreSQL as database backends for object storage and 
+retrieval.
+
+LiteSQL not only provides simple object persistence, but also supports the 
+construction of queries for objects in a DB-independent manner. One can 
+use DB cursor objects to iterate over the results of queries.
+
+%package devel
+Summary: The LiteSQL headers and documentation.
+Group: Development/Libraries
+Requires: %{name} = %{version}-%{release}
+%description devel
+The documentation, headers, and utilities to develop a program that uses 
+LiteSQL.
+
+%prep
+%setup
+
+%build
+%configure
+make
+
+%install
+[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+%makeinstall
+
+%clean
+[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+
+%files
+%defattr(-,root,root,-)
+%{_libdir}/liblitesql.*
+
+%files devel
+%defattr(-, root, root, -)
+%docdir %{_datadir}/doc/%{name}-%{version}
+%{_datadir}/doc/%{name}-%{version}
+%attr(0755, root, root) %{_bindir}/litesql-gen
+%attr(0755, root, root) %{_bindir}/litesql-config
+%{_libdir}/pkgconfig/litesql.pc
+%{_includedir}/litesql.hpp
+%{_includedir}/litesql
+
+%changelog
+
+* Sat Dec 24 2005 Tero Laitinen <tero.laitinen@iki.fi>
+- bug fix: litesql-gen produced broken table names when using longer name than 31 characters
+- bug fix: litesql-gen produced broken SQL (duplicated relation attribute fields in CREATE TABLE - statements)
+- RPM packaging headers (by Eric McDonald)
+- added .cvsignore - files (by Eric McDonald)
+- versioning and packaging improvements (by Eric McDonald)
+- litesql-gen : internal restructuring
+
+* Fri Dec 02 2005 Tero Laitinen <tero.laitinen@iki.fi>
+- namespace - attribute is required now on (used in litesql-gen)
+- relation field type names are now consistent with object field type names (they start with upperca
+se letter)
+- bug fix: litesql-gen rejected relations with two or more objects with no relation handles (duplica
+te handle)
+- better tests for backend databases to configure.ac (by Eric McDonald)
+
+* Fri Nov 24 2005 Tero Laitinen <tero.laitinen@iki.fi>
+- anonymous enums removed from enumerated field values (in generated code), compiles now with g++-4.
+0
+- Relation::Row-class added, represents rows of relation table
+- Relation::getRows-method added, used to access relation rows
+- concurrency problem with SQLite3-backend.execute fixed
+- few VC++ - compilation issues fixed (by Axel Schmidt)
+- Python code generator replaced with C++ - code generator (litesql-gen)
+- RelationHandle::getRows-method added, used to access relation rows linked to particular object
+- configure-script added (uses autoconf and automake)
+- scons dependencies removed
+- Python dependencies removed
+- debian packaging headers added
+- graphviz - target added to litesql-gen
+- date-, time-, datetime- and boolean- types added
+

@@ -83,7 +83,7 @@ void StringPool::SerializeDirect(CharStream& stream)
 
 void StringPool::DeserializeDirect(CharStream& stream, CharacterEncoding encoding)
 {
-    i32 stringCount;
+    i32 stringCount = 0;
     stream.Read(&stringCount);
 
 #ifdef REFLECT_ARCHIVE_VERBOSE
@@ -93,7 +93,7 @@ void StringPool::DeserializeDirect(CharStream& stream, CharacterEncoding encodin
     m_Strings.resize(stringCount);
     for (i32 i=0; i<stringCount; ++i)
     {
-        i32 stringLength;
+        i32 stringLength = 0;
         stream.Read(&stringLength);
 
         tstring& outputString = m_Strings[i]; 
@@ -105,7 +105,7 @@ void StringPool::DeserializeDirect(CharStream& stream, CharacterEncoding encodin
 #ifdef UNICODE
                 std::string temp;
                 temp.resize(stringLength); 
-                stream.ReadBuffer(&outputString[0], stringLength); 
+                stream.ReadBuffer(&temp[0], stringLength); 
                 Platform::ConvertString(temp, outputString);
 #else
                 // read the bytes directly into the string
@@ -124,7 +124,7 @@ void StringPool::DeserializeDirect(CharStream& stream, CharacterEncoding encodin
 #else
                 std::wstring temp;
                 temp.resize(stringLength);
-                stream.ReadBuffer(&outputString[0], stringLength * 2); 
+                stream.ReadBuffer(&temp[0], stringLength * 2); 
                 Platform::ConvertString(temp, outputString);
 #endif
                 break;
@@ -155,18 +155,13 @@ void StringPool::SerializeCompressed(CharStream& stream)
     stream.Write(&compressedSize); 
 
     // serialize the strings to a temp buffer
-    std::stringstream memoryStream; 
+    std::stringstream memoryStream;
     Reflect::CharStream tempStream(&memoryStream, false); 
     SerializeDirect(tempStream); 
 
     // get the pointer
-    const char* stringBuff = memoryStream.str().c_str();
-
-    // we own that buffer now... 
-    ArrayPtr<const char> helper(stringBuff); 
-
     originalSize   = (u32) memoryStream.tellp(); 
-    compressedSize = CompressToStream(stream, stringBuff, originalSize); 
+    compressedSize = CompressToStream(stream, memoryStream.str().c_str(), originalSize); 
 
     // go back and record the size information in the stream. 
     stream.SeekWrite(startOffset, std::ios_base::beg); 
@@ -183,18 +178,20 @@ void StringPool::DeserializeCompressed(CharStream& stream, CharacterEncoding enc
     stream.Read(&originalSize); 
     stream.Read(&compressedSize); 
 
-    ArrayPtr<char> helper(new char[originalSize]); 
-
+    ArrayPtr<char> helper (new char[originalSize]); 
     char* originalData = helper.Ptr(); 
+
     int inflatedSize = DecompressFromStream(stream, compressedSize, originalData, originalSize); 
     if (inflatedSize != originalSize)
     {
         throw Reflect::StreamException( TXT( "StringPool failed to read compressed data" ) ); 
     }
 
-    std::stringstream memoryStream(originalData, originalSize); 
-    Reflect::CharStream tempStream(&memoryStream, false); 
+    std::stringstream memoryStream;
+    std::streamsize copied = memoryStream.rdbuf()->sputn( originalData, originalSize );
+    NOC_ASSERT( copied == originalSize );
 
+    Reflect::CharStream tempStream(&memoryStream, false); 
     DeserializeDirect(tempStream, encoding); 
 }
 

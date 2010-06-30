@@ -462,7 +462,7 @@ void NavMeshCreateTool::MouseUp( wxMouseEvent& e )
       SetEditMode( m_PrevEditMode );
       m_MarqueMouseCoords[1].x = e.GetX();
       m_MarqueMouseCoords[1].y = e.GetY();
-      //printf("Marquee ends (%f,%f) --> (%f,%f)\n", m_MarqueMouseCoords[0].x, m_MarqueMouseCoords[0].y, m_MarqueMouseCoords[1].x, m_MarqueMouseCoords[1].y);
+      //Log::Print( TXT( "Marquee ends (%f,%f) --> (%f,%f)\n" ), m_MarqueMouseCoords[0].x, m_MarqueMouseCoords[0].y, m_MarqueMouseCoords[1].x, m_MarqueMouseCoords[1].y);
       Luna::Camera* cam = m_Scene->GetView()->GetCamera();
       Math::Frustum frustum;
       if (cam->ViewportToFrustum(m_MarqueMouseCoords[0].x, m_MarqueMouseCoords[0].y, m_MarqueMouseCoords[1].x, m_MarqueMouseCoords[1].y, frustum))
@@ -1009,7 +1009,7 @@ void NavMeshCreateTool::MouseMove( wxMouseEvent& e )
           {
             m_PrevEditMode = m_EditMode;
             SetEditMode( EDIT_MODE_MARQUEE_SELECT );
-            //printf("Marquee starts\n");
+            //Log::Print( TXT( "Marquee starts\n" ) );
             m_MarqueMouseCoords[0].x = e.GetX();
             m_MarqueMouseCoords[0].y = e.GetY();
             m_SelectionFrame->m_Start = Math::Point (e.GetX(), e.GetY());

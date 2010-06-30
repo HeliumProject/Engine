@@ -1,0 +1,24 @@
+Version 0.3.8
+#############
+- added double as field type for higher precision calculation
+- fixed trac ticket #25 (uncatched exceptions on validating model are 
+  catched now) 
+- Beta for Gui-Tool for editing and generating Code (cross-platform through wxWidgets)
+
+Version 0.3.7
+#############
+- fixed error on creating indexes (see trac ticket #23)
+Version 0.3.6
+#############
+
+- moved code for loading and storing the model into an own library
+
+- added initial version of a win32 gui for code generation (not ready for production use)
+
+- refactored code generators
+- added code generator for ActiveRecord (not ready for production use)
+- added multi-target code generation ( multiple -t options)
+- added options to litesql-gen for output-directory (--output-dir=)
+ 
+- fixed a bug with postgres on database update 
+- fixed a bug: added parsing of index and indexfield tags (was not in the new parser)

@@ -8,94 +8,94 @@ using namespace Perforce;
 
 void Command::Run()
 {
-   m_Provider->RunCommand( this );
+    m_Provider->RunCommand( this );
 }
 
 std::string Command::AsString()
 {
     std::stringstream str;
-  str << m_Command;
+    str << m_Command;
 
-  std::vector< std::string >::const_iterator itr = m_Arguments.begin();
-  std::vector< std::string >::const_iterator end = m_Arguments.end();
-  for ( ; itr != end; ++itr )
-  {
-    str << " " << (*itr);
-  }
+    std::vector< std::string >::const_iterator itr = m_Arguments.begin();
+    std::vector< std::string >::const_iterator end = m_Arguments.end();
+    for ( ; itr != end; ++itr )
+    {
+        str << " " << (*itr);
+    }
 
-  return str.str();
+    return str.str();
 }
 
 void Command::HandleError( Error *error )
 {
-  StrBuf buf;
-  tstring errString;
+    StrBuf buf;
+    tstring errString;
 
-  if ( error->IsWarning() )
-  {
-    error->Fmt( &buf );
-
-    bool converted = Platform::ConvertString( buf.Text(), errString );
-    NOC_ASSERT( converted );
-
-    Log::Warning( errString.c_str() );
-  }
-  else if ( error->IsError() )
-  {
-    ++m_ErrorCount;
-    error->Fmt( &buf );
-
-    if ( m_ErrorCount == 1 )
+    if ( error->IsWarning() )
     {
-        bool converted = Platform::ConvertString( buf.Text(), m_ErrorString );
-        NOC_ASSERT( converted );
-    }
-    else
-    {
-      //
-      // Beyond 10 errors just print ellipsis
-      //
-
-      if ( m_ErrorCount < 10 )
-      {
-        m_ErrorString += TXT( "\n" );
+        error->Fmt( &buf );
 
         bool converted = Platform::ConvertString( buf.Text(), errString );
         NOC_ASSERT( converted );
 
-        m_ErrorString += errString;
-      }
-      else if ( m_ErrorCount == 10 )
-      {
-        m_ErrorString += TXT( "\n..." );
-      }
+        Log::Warning( errString.c_str() );
     }
-  }
-  else if ( error->IsFatal() )
-  {
-    error->Fmt( &buf );
-    bool converted = Platform::ConvertString( buf.Text(), errString );
-    NOC_ASSERT( converted );
-    throw Nocturnal::Exception( errString.c_str() );
-  }
+    else if ( error->IsError() )
+    {
+        ++m_ErrorCount;
+        error->Fmt( &buf );
+
+        if ( m_ErrorCount == 1 )
+        {
+            bool converted = Platform::ConvertString( buf.Text(), m_ErrorString );
+            NOC_ASSERT( converted );
+        }
+        else
+        {
+            //
+            // Beyond 10 errors just print ellipsis
+            //
+
+            if ( m_ErrorCount < 10 )
+            {
+                m_ErrorString += TXT( "\n" );
+
+                bool converted = Platform::ConvertString( buf.Text(), errString );
+                NOC_ASSERT( converted );
+
+                m_ErrorString += errString;
+            }
+            else if ( m_ErrorCount == 10 )
+            {
+                m_ErrorString += TXT( "\n..." );
+            }
+        }
+    }
+    else if ( error->IsFatal() )
+    {
+        error->Fmt( &buf );
+        bool converted = Platform::ConvertString( buf.Text(), errString );
+        NOC_ASSERT( converted );
+        throw Nocturnal::Exception( errString.c_str() );
+    }
 }
 
 void Command::OutputStat( StrDict* dict )
 {
-  Log::Warning( TXT( "Unhandled perforce response for command '%s':\n" ), m_Command );
-  Log::Indentation indent;
+    Log::Warning( TXT( "Unhandled perforce response for command '%s':\n" ), m_Command );
+    Log::Indentation indent;
 
-  StrRef var;
-  StrRef value;
+    StrRef var;
+    StrRef value;
 
-  for ( int i = 0; i < PERFORCE_MAX_DICT_ENTRIES; ++i )
-  {
-    if ( !dict->GetVar( i, var, value ) )
+    for ( int i = 0; i < PERFORCE_MAX_DICT_ENTRIES; ++i )
     {
-      break;
+        if ( !dict->GetVar( i, var, value ) )
+        {
+            break;
+        }
+        Log::Warning( TXT( "%s: %s\n" ), var.Text(), value.Text() );
     }
-    Log::Warning( TXT( "%s: %s\n" ), var.Text(), value.Text() );
-  }
 
-  Log::Warning( TXT( "\n" ) );
+    Log::Warning( TXT( "\n" ) );
 }

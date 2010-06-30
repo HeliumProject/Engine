@@ -1,0 +1,32 @@
+/* LiteSQL - Documentation - Using Cursor
+ * 
+ * By Tero Laitinen 
+ * 
+ * See LICENSE for copyright information. */
+/* \file usage_cursor.txt
+    Manual */
+
+/** \page usage_cursor Using Cursor
+
+Often it is not necessary to fetch all objects to memory and then process them.
+Memory usage can be minimized using template class Cursor which returns one object at
+a time.
+
+Creating a cursor(two ways):
+\code
+Cursor<Record> cur1 = db.cursor(SelectQuery().result("id_").source("Person_"));
+Cursor<Person> cur2 = select<Person>(db).cursor();
+\endcode
+
+Iterating through the result set:
+\code
+for (;!cur.rowsLeft(); cur++)
+    cout << (*cur).name << endl;
+\endcode
+
+The remaining contents of the result set can be retrieved with dump-method:
+\code
+vector<Person> rest = cur.dump();
+\endcode
+*/
+

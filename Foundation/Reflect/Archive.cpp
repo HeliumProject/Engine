@@ -563,7 +563,6 @@ void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr 
         ex.Set( str.str() );
 
         safetyPath.Delete();
-
         throw;
     }
     catch ( ... )

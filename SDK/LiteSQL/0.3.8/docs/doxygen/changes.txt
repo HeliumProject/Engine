@@ -1,0 +1,102 @@
+/* LiteSQL - Documentation - Changes
+ * 
+ * By Tero Laitinen 
+ * 
+ * See LICENSE for copyright information. */
+
+/* \file changes.txt
+    Manual */
+/** \page changes Changes
+
+\section ver0_3_5 Version 0.3.5
+- feature: added <include> tag to generator for including other files 
+- feature: added BLOB-support
+
+- bug fix: Ticket #8 	upgrade removes indices 	
+- bug fix: Ticket #13 	BLOB-Support for 0.3.x
+
+\section ver0_3_4 Version 0.3.4
+- feature: introduced CMake-based build system (used for windows build)
+- feature: Installer for Windows (installs Documentation,litesql-gen, libraries and includes) 
+
+- bug fix: Ticket #10 	float with integer default value does not work 	
+- bug fix: Ticket #13 	Saving and loading dates
+- bug fix: Ticket #9 	SQLite3 - open database (parameters are now separated with ";")
+
+\section ver0_3_3 Version 0.3.3
+2008 November 12th
+- bug fix: compilation issues fixed with g++ 4.x
+- bug fix: postgresql.cpp memory leak fixed
+- documentation fix: rowsLeft example and documentation fixed
+
+\section ver0_3_2 Version 0.3.2
+2006 January 25th:
+- feature: static FieldType-objects for subclasses' id fields are now named Class::Own::Id so that they can be used in template methods
+- bug fix: litesql-gen compiles again with g++ 4.0 (explicit template specialization was missing)
+
+2006 January 21th:
+- feature: litesql-gen writes static FieldType - objects for subclasses' id fields
+- bug fix: litesql-gen wrote broken RelationHandle::del - method. It deleted all rows.
+- bug fix: SQLite3-backend transaction reset not needed in case of an error
+
+2006 January 20th:
+- bug fix: Date-, DateTime- and Time-fields were broken. 
+- bug fix: litesql-gen wrote invalid default values for Date-, DateTime and Time-fields. 
+- bug fix: litesql-gen did not reset fields' modified flags when assigning record to object
+
+2006 January 19th:
+- bug fix: MySQL 5 does not like names like 'schema' and 'sql'. Internal table is now named to 'schema_' and fields are postfixed with an underscore. This breaks compatibility with databases created with previous versions. 
+
+2006 January 16th:
+- bug fix: litesql-gen did not create correct SQL schema for backends with auto incrementing primary key fields (mysql, sqlite3)
+- bug fix: SQLite3 - backend did not reset transaction state when error occurred
+- litesql-gen writes #ifndef #define #endif - checks to generated header now
+
+
+2006 January 14th:
+- bug fix: litesql-gen did not sort objects of relation tags and this resulted to broken relation table names
+
+2006 January 3rd:
+- bug fix: litesql-gen writes explicit template parameters for make_pair now (gcc 2.96 requires it)
+
+2005 December 25th:
+- bug fix: all backend transaction routines leaked some memory (fixed by Michel Loiseleur)
+- bug fix: litesql-gen crashed when XML file had undefined objects inside relation tag
+- litesql-config utility and pkg-config support added (by Eric McDonald)
+- bug fix: litesql-gen produced broken table names when using longer name than 31 characters
+- bug fix: litesql-gen produced broken SQL (duplicated relation attribute fields in CREATE TABLE - statements)
+- RPM packaging headers (by Eric McDonald)
+- added .cvsignore - files (by Eric McDonald)
+- versioning and packaging improvements (by Eric McDonald)
+- litesql-gen : internal restructuring
+
+\section ver0_3_1 Version 0.3.1
+- namespace - attribute is required now on (used in litesql-gen)
+- relation field type names are now consistent with object field type names (they start with uppercase letter) 
+- bug fix: litesql-gen rejected relations with two or more objects with no relation handles (duplicate handle)
+- better tests for backend databases to configure.ac (by Eric McDonald) 
+
+\section ver0_3_0 Version 0.3.0
+- anonymous enums removed from enumerated field values (in generated code), compiles now with g++-4.0
+- Relation::Row-class added, represents rows of relation table
+- Relation::getRows-method added, used to access relation rows
+- concurrency problem with SQLite3-backend.execute fixed
+- few VC++ - compilation issues fixed (by Axel Schmidt)
+- Python code generator replaced with C++ - code generator (litesql-gen)
+- RelationHandle::getRows-method added, used to access relation rows linked to particular object
+- configure-script added (uses autoconf and automake)
+- scons dependencies removed
+- Python dependencies removed
+- debian packaging headers added
+- graphviz - target added to litesql-gen
+- date-, time-, datetime- and boolean- types added 
+\section ver0_2 Version 0.2
+- macro hacks removed, XML database definition file and code generator is used now on
+- support for n-ary relations (relations that link three or more objects)
+- support for relation attributes (ordered relations are now possible)
+- set operations: intersect, union_, except
+- small changes under the hood
+- DataSource-class
+\section ver0_1 Version 0.1
+- initial version
+*/

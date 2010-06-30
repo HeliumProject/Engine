@@ -4782,14 +4782,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\ArtProvider.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ArtProvider.h"
-			>
-		</File>
-		<File
 			RelativePath=".\CommonGenerated.cpp"
 			>
 		</File>

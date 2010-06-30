@@ -1,9 +1,9 @@
 #include "Precompile.h"
 #include "Application.h"
 #include "AppPreferences.h"
-#include "ArtProvider.h"
 
 #include "Application/Application.h"
+#include "Application/UI/ArtProvider.h"
 #include "Asset/AssetInit.h"
 #include "Browser/Browser.h"
 #include "Foundation/InitializerStack.h"
@@ -70,7 +70,7 @@ LunaApp::~LunaApp()
 // 
 bool LunaApp::OnInit()
 {
-    wxArtProvider::Push( new ::Luna::ArtProvider() );
+    wxArtProvider::Push( new ::Nocturnal::ArtProvider() );
 
     SetVendorName( TXT( "Nocturnal" ) );
 

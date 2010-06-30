@@ -1163,6 +1163,14 @@
 			Name="UI"
 			>
 			<File
+				RelativePath=".\UI\ArtProvider.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ArtProvider.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\AutoCompleteComboBox.cpp"
 				>
 			</File>

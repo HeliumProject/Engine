@@ -109,39 +109,6 @@ void Curve::Initialize()
       point->AddParentChangingListener( ParentChangingSignature::Delegate( this, &Curve::ChildChangingParents ) );
     }
   }
-
-#pragma TODO( "This is for copy/paste from Maya and should be removed if Content::Scene starts tracking child order." )
-  Content::Curve* curve = GetPackage< Content::Curve >();
-
-  if ( !curve->m_ControlPointOrder.empty() )
-  {
-    V_LPoint reordered;
-    reordered.reserve( curve->m_ControlPointOrder.size() );
-
-    V_tuid::const_iterator orderItr = curve->m_ControlPointOrder.begin();
-    V_tuid::const_iterator orderEnd = curve->m_ControlPointOrder.end();
-    for ( ; orderItr != orderEnd; ++orderItr )
-    {
-      Luna::Point* controlPoint = Reflect::ObjectCast< Luna::Point >( m_Scene->FindNode( *orderItr ) );
-      if ( controlPoint && m_Children.Contains( controlPoint ) )
-      {
-        reordered.push_back( controlPoint );
-        m_Children.Remove( controlPoint );
-      }
-    }
-
-    V_LPoint::const_iterator pointItr = reordered.begin();
-    V_LPoint::const_iterator pointEnd = reordered.end();
-    for ( ; pointItr != pointEnd; ++pointItr )
-    {
-      Luna::Point* point = *pointItr;
-      point->SetPrevious( NULL );
-      point->SetNext( NULL );
-      ConnectDescendant( point );
-    }
-
-    curve->m_ControlPointOrder.clear();
-  }
 }
 
 int Curve::GetCurveType() const 

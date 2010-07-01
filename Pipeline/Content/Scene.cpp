@@ -84,7 +84,7 @@ void Scene::Add( const SceneNodePtr &node )
 {
     NOC_ASSERT( node.ReferencesObject() );
 
-    Insert<M_DependencyNode>::Result result = m_DependencyNodes.insert( std::pair<Nocturnal::TUID, SceneNodePtr>( node->m_ID, node ) );
+    Insert<std::map< Nocturnal::TUID, SceneNodePtr >>::Result result = m_DependencyNodes.insert( std::pair<Nocturnal::TUID, SceneNodePtr>( node->m_ID, node ) );
 
     //if it already exists in the scene, bail out early
     if( !result.second )
@@ -176,8 +176,8 @@ void Scene::PostLoad( Reflect::V_Element& elements )
 
     // Additional post-processing after all nodes have been created.
     Reflect::V_Element newElements;
-    M_DependencyNode::const_iterator nodeItr = m_DependencyNodes.begin();
-    M_DependencyNode::const_iterator nodeEnd = m_DependencyNodes.end();
+    std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator nodeItr = m_DependencyNodes.begin();
+    std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator nodeEnd = m_DependencyNodes.end();
     for ( ; nodeItr != nodeEnd; ++nodeItr )
     {
         nodeItr->second->PostLoad( newElements );
@@ -207,8 +207,8 @@ void Scene::Serialize( const tstring& filePath )
 {
     V_Element elements;
 
-    M_DependencyNode::const_iterator itr = m_DependencyNodes.begin();
-    M_DependencyNode::const_iterator end = m_DependencyNodes.end();
+    std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator itr = m_DependencyNodes.begin();
+    std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator end = m_DependencyNodes.end();
     for ( ; itr != end; ++itr )
     {
         elements.push_back( itr->second );
@@ -232,57 +232,46 @@ ShaderPtr Scene::GetShader( const MeshPtr &mesh, u32 triIndex )
     return Get< Shader >( mesh->m_ShaderIDs[ mesh->m_ShaderIndices[triIndex] ] );     
 }
 
-void Scene::GetChildren( V_HierarchyNode &children, const HierarchyNodePtr &node ) const
+void Scene::GetChildren( V_HierarchyNode& children, const HierarchyNodePtr &node ) const
 {
-    std::pair< MM_HierarchyNode::const_iterator, MM_HierarchyNode::const_iterator > itors = m_Hierarchy.equal_range( node->m_ID );
-    MM_HierarchyNode::const_iterator itor = itors.first;
-    for( ; itor != itors.second; ++itor )
+    std::map< Nocturnal::TUID, Nocturnal::OrderedSet< Nocturnal::TUID > >::const_iterator found = m_Hierarchy.find( node->m_ID );
+    if ( found != m_Hierarchy.end() )
     {
-        children.push_back( itor->second );
-    }
-}
-
-void Scene::GetDescendants( V_HierarchyNode &descendants, const HierarchyNodePtr &node ) const
-{
-    std::pair< MM_HierarchyNode::const_iterator, MM_HierarchyNode::const_iterator > itors = m_Hierarchy.equal_range( node->m_ID );
-    MM_HierarchyNode::const_iterator itor = itors.first;
-    for( ; itor != itors.second; ++itor )
-    {
-        descendants.push_back( itor->second );
-        GetDescendants( descendants, itor->second );
+        for ( Nocturnal::OrderedSet< Nocturnal::TUID >::Iterator itr = found->second.Begin(), end = found->second.End(); itr != end; itr++ )
+        {
+            std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator found = m_DependencyNodes.find( *itr );
+            if ( found != m_DependencyNodes.end() )
+            {
+                children.push_back( Reflect::TryCast< Content::HierarchyNode >( found->second ) );
+            }
+        }
     }
 }
 
 bool Scene::IsChildOf( const HierarchyNodePtr &potentialChild, const HierarchyNodePtr &potentialParent ) const
 {
-    std::pair< MM_HierarchyNode::const_iterator, MM_HierarchyNode::const_iterator > itors = m_Hierarchy.equal_range( potentialParent->m_ID );
-    MM_HierarchyNode::const_iterator itor = itors.first;
-    for( ; itor != itors.second; ++itor )
+    std::map< Nocturnal::TUID, Nocturnal::OrderedSet< Nocturnal::TUID > >::const_iterator found = m_Hierarchy.find( potentialParent->m_ID );
+    if ( found != m_Hierarchy.end() )
     {
-        if( itor->first == potentialChild->m_ID )
-        {
-            return true;
-        }
-        if ( IsChildOf( potentialChild, itor->second ) )
-        {
-            return true;
-        }
+        return found->second.Contains( potentialChild->m_ID );
     }
+    
     return false;
 }
 
 void Scene::RemoveFromParent( const HierarchyNodePtr& node )
 {
-    std::pair< MM_HierarchyNode::iterator, MM_HierarchyNode::iterator > itors = m_Hierarchy.equal_range( node->m_ParentID );
-    MM_HierarchyNode::iterator itor = itors.first;
-    for( ; itor != itors.second; ++itor )
+    std::map< Nocturnal::TUID, Nocturnal::OrderedSet< Nocturnal::TUID > >::iterator found = m_Hierarchy.find( node->m_ParentID );
+    if ( found != m_Hierarchy.end() )
     {
-        if( itor->second->m_ID == node->m_ID )
+        node->m_ParentID = Nocturnal::TUID::Null;
+
+        found->second.Remove( node->m_ID );
+
+        if ( found->second.Empty() )
         {
-            m_Hierarchy.erase( itor );
-            node->m_ParentID = Nocturnal::TUID::Null;
-            break;
-        }      
+            m_Hierarchy.erase( node->m_ParentID );
+        }
     }
 }
 
@@ -301,17 +290,16 @@ void Scene::AddChild( const HierarchyNodePtr& child, const Nocturnal::TUID& pare
 {
     RemoveFromParent( child );
     child->m_ParentID = parentID;
-    m_Hierarchy.insert( std::pair<Nocturnal::TUID, HierarchyNodePtr>( parentID, child ) );
+    m_Hierarchy[ parentID ].Append( child->m_ID );
 }
 
 void Scene::UpdateHierarchy()
 {
-    V_HierarchyNode::const_iterator itor = m_AddedHierarchyNodes.begin();
+    V_HierarchyNode::const_iterator itr = m_AddedHierarchyNodes.begin();
     V_HierarchyNode::const_iterator end = m_AddedHierarchyNodes.end();
-
-    for( ; itor != end; ++itor )
+    for( ; itr != end; ++itr )
     {
-        m_Hierarchy.insert( std::pair<Nocturnal::TUID, HierarchyNodePtr>( (*itor)->m_ParentID, *itor ) );
+        m_Hierarchy[ (*itr)->m_ParentID ].Append( (*itr)->m_ID );
     }
 
     // done updating with the current batch of newly added hierarchy nodes...safe to clear it
@@ -320,7 +308,7 @@ void Scene::UpdateHierarchy()
 
 bool Scene::Exists( const Nocturnal::TUID& id )
 {
-    M_DependencyNode::iterator findItor = m_DependencyNodes.find( id );
+    std::map< Nocturnal::TUID, SceneNodePtr >::iterator findItor = m_DependencyNodes.find( id );
     return ( findItor != m_DependencyNodes.end() );
 }
 
@@ -365,10 +353,10 @@ void Scene::UpdateGlobalTransforms()
 
 void Scene::Optimize()
 {
-    M_DependencyNode dependencyNodes = m_DependencyNodes;
+    std::map< Nocturnal::TUID, SceneNodePtr > dependencyNodes = m_DependencyNodes;
 
-    M_DependencyNode::const_iterator itr = dependencyNodes.begin();
-    M_DependencyNode::const_iterator end = dependencyNodes.end();
+    std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator itr = dependencyNodes.begin();
+    std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator end = dependencyNodes.end();
     for ( ; itr != end; ++itr )
     {
         HierarchyNodePtr node = ObjectCast<HierarchyNode>( itr->second );
@@ -441,7 +429,7 @@ void Scene::Optimize(const HierarchyNodePtr& object)
             //  global and local transform will become equal)
             //
 
-            M_DependencyNode::const_iterator found = m_DependencyNodes.find( object->m_ParentID );
+            std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator found = m_DependencyNodes.find( object->m_ParentID );
 
             if (found != m_DependencyNodes.end())
             {
@@ -826,10 +814,10 @@ void Scene::MergeMeshes()
     { 
         for each( const Nocturnal::TUID& shaderID in mesh->m_ShaderIDs )
         {
-            M_ShaderMesh::iterator itor = meshesByShader.lower_bound( shaderID );
+            M_ShaderMesh::iterator itr = meshesByShader.lower_bound( shaderID );
             M_ShaderMesh::iterator upper = meshesByShader.upper_bound( shaderID );
 
-            if( itor == upper )
+            if( itr == upper )
             {
                 tstring idStr;
                 shaderID.ToString(idStr);
@@ -842,12 +830,12 @@ void Scene::MergeMeshes()
                 meshesByShader.insert( M_ShaderMesh::value_type( shaderID, newMesh ) );          
             }
 
-            itor = meshesByShader.lower_bound( shaderID );
+            itr = meshesByShader.lower_bound( shaderID );
             upper = meshesByShader.upper_bound( shaderID );
 
-            if ( itor != meshesByShader.end() )
+            if ( itr != meshesByShader.end() )
             {
-                Mesh& destMesh = *itor->second;
+                Mesh& destMesh = *itr->second;
                 u32 numTris = mesh->GetTriangleCount();
                 u32 addedTris = 0;
                 u32 triOffset = destMesh.GetTriangleCount();
@@ -891,12 +879,12 @@ void Scene::MergeMeshes()
 
     m_Meshes.clear();
 
-    M_ShaderMesh::iterator itor = meshesByShader.begin();
+    M_ShaderMesh::iterator itr = meshesByShader.begin();
     M_ShaderMesh::iterator end = meshesByShader.end();
-    for( ; itor != end; ++itor )
+    for( ; itr != end; ++itr )
     {
-        Log::Print( TXT( "Adding MergedMesh: %s\n" ), itor->second->GetName().c_str() );
-        Add( itor->second );
+        Log::Print( TXT( "Adding MergedMesh: %s\n" ), itr->second->GetName().c_str() );
+        Add( itr->second );
     }
     Update();
 }
@@ -987,30 +975,30 @@ static void GatherBSpheres( std::vector< Sphere >& spheres, const std::vector< V
 {
     spheres.resize( uvShells.size() );
 
-    V_UVShell::const_iterator itor = uvShells.begin();
+    V_UVShell::const_iterator itr = uvShells.begin();
     V_UVShell::const_iterator end  = uvShells.end();
 
     std::vector< Sphere >::iterator sphereItor = spheres.begin();
 
     // for each shell
-    for( ; itor != end; ++itor, ++sphereItor )
+    for( ; itr != end; ++itr, ++sphereItor )
     {
         // for each triangle  
-        Vector2 max( (*itor)[0] );
-        Vector2 min( (*itor)[0] );
+        Vector2 max( (*itr)[0] );
+        Vector2 min( (*itr)[0] );
 
-        int size = (int)itor->size();
+        int size = (int)itr->size();
         for( int i = 1; i < size; ++i )
         {        
-            if( (*itor)[i].x > max.x )
-                max.x = (*itor)[i].x;
-            if( (*itor)[i].y > max.y )
-                max.y = (*itor)[i].y;
+            if( (*itr)[i].x > max.x )
+                max.x = (*itr)[i].x;
+            if( (*itr)[i].y > max.y )
+                max.y = (*itr)[i].y;
 
-            if( (*itor)[i].x < min.x )
-                min.x = (*itor)[i].x;
-            if( (*itor)[i].y < min.y )
-                min.y = (*itor)[i].y;
+            if( (*itr)[i].x < min.x )
+                min.x = (*itr)[i].x;
+            if( (*itr)[i].y < min.y )
+                min.y = (*itr)[i].y;
 
         }
         Vector2 diff = max - min;
@@ -1058,17 +1046,17 @@ static void FindBroadPhaseIntersections( const V_UVShell& uvShells, std::map< u3
 
 bool Scene::IntersectSegment( const Math::Line& segment,  Math::Matrix4* transform )
 {
-    V_Mesh::iterator itor = m_Meshes.begin();
+    V_Mesh::iterator itr = m_Meshes.begin();
     V_Mesh::iterator end  = m_Meshes.end();
 
-    for( ; itor != end; ++itor )
+    for( ; itr != end; ++itr )
     {
-        u32 numTris = (*itor)->GetTriangleCount();
+        u32 numTris = (*itr)->GetTriangleCount();
 
         for( u32 i = 0; i < numTris; ++i )
         {
             Math::Vector3 v0, v1, v2;
-            (*itor)->GetTriangle( i, v0, v1, v2, transform );
+            (*itr)->GetTriangle( i, v0, v1, v2, transform );
 
             if( segment.IntersectSegmentTriangle( v0, v1, v2 ) )
             {
@@ -1081,17 +1069,17 @@ bool Scene::IntersectSegment( const Math::Line& segment,  Math::Matrix4* transfo
 
 bool Scene::IntersectRay( const Math::Line& ray,  Math::Matrix4* transform )
 {
-    V_Mesh::iterator itor = m_Meshes.begin();
+    V_Mesh::iterator itr = m_Meshes.begin();
     V_Mesh::iterator end  = m_Meshes.end();
 
-    for( ; itor != end; ++itor )
+    for( ; itr != end; ++itr )
     {
-        u32 numTris = (*itor)->GetTriangleCount();
+        u32 numTris = (*itr)->GetTriangleCount();
 
         for( u32 i = 0; i < numTris; ++i )
         {
             Math::Vector3 v0, v1, v2;
-            (*itor)->GetTriangle( i, v0, v1, v2, transform );
+            (*itr)->GetTriangle( i, v0, v1, v2, transform );
 
             if( ray.IntersectRayTriangle( v0, v1, v2 ) )
             {

@@ -70,22 +70,22 @@ void AnimationClip::Associate( const JointTransformPtr& joint, const AnimationPt
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void AnimationClip::GetJointIDs( Nocturnal::V_TUID& jointIDs )
 {
-  M_Animation::iterator itor = m_JointAnimationMap.begin();
+  M_Animation::iterator itr = m_JointAnimationMap.begin();
   M_Animation::iterator end = m_JointAnimationMap.end();
-  for( ; itor != end; ++itor )
+  for( ; itr != end; ++itr )
   {
-    jointIDs.push_back( itor->first );
+    jointIDs.push_back( itr->first );
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void AnimationClip::GetAnimations( V_Animation& anims )
 {
-  M_Animation::iterator itor = m_JointAnimationMap.begin();
+  M_Animation::iterator itr = m_JointAnimationMap.begin();
   M_Animation::iterator end = m_JointAnimationMap.end();
-  for( ; itor != end; ++itor )
+  for( ; itr != end; ++itr )
   {
-    anims.push_back( itor->second);
+    anims.push_back( itr->second);
   }
 }
 
@@ -535,25 +535,25 @@ void AnimationClip::DumpAnims( const JointOrderingPtr& jointOrdering )
 
 void AnimationClip::ConvertToAdditiveBlend( const Content::Scene& scene, const JointOrderingPtr& jointOrdering, i32 reference_frame)
 {
-  M_Animation::iterator itor = m_JointAnimationMap.begin();
+  M_Animation::iterator itr = m_JointAnimationMap.begin();
   M_Animation::iterator end = m_JointAnimationMap.end();
-  for( ; itor != end; ++itor )
+  for( ; itr != end; ++itr )
   {
-    if ( !jointOrdering->IsRequired( (*itor).first ) )
+    if ( !jointOrdering->IsRequired( (*itr).first ) )
     {
       continue;
     }
 
-    Content::JointTransformPtr joint = scene.Get< Content::JointTransform >( (*itor).first );
+    Content::JointTransformPtr joint = scene.Get< Content::JointTransform >( (*itr).first );
 
     if ( !joint.ReferencesObject() )
     {
       tstring jointGuid;
-      (*itor).first.ToString( jointGuid );
+      (*itr).first.ToString( jointGuid );
       throw Nocturnal::Exception( TXT( "Joint [%s (%s)] not present in bind scene!\n" ), GetName().c_str(), jointGuid.c_str() );
     }
 
-    Content::Animation* anim = itor->second;
+    Content::Animation* anim = itr->second;
     Math::Matrix4& jointTransform( joint->m_ObjectTransform );
 
     if(reference_frame != -1)
@@ -611,34 +611,34 @@ u32 AnimationClip::CompressAnimations( const Content::Scene& scene, const Animat
   u32 missingJoints = 0;
   Nocturnal::S_TUID handledJoints;
 
-  M_Animation::iterator itor = m_JointAnimationMap.begin();
+  M_Animation::iterator itr = m_JointAnimationMap.begin();
   M_Animation::iterator end = m_JointAnimationMap.end();
-  for( ; itor != end; ++itor )
+  for( ; itr != end; ++itr )
   {
-    if ( !jointOrdering->IsRequired( (*itor).first ) )
+    if ( !jointOrdering->IsRequired( (*itr).first ) )
     {
       continue;
     }
 
-    Content::JointTransformPtr joint = scene.Get< Content::JointTransform >( (*itor).first );
+    Content::JointTransformPtr joint = scene.Get< Content::JointTransform >( (*itr).first );
 
     if ( !joint.ReferencesObject() )
     {
       missingJoints++;
       tstring jointGuid;
-      (*itor).first.ToString( jointGuid );
+      (*itr).first.ToString( jointGuid );
       Log::Print(Log::Levels::Verbose,  TXT( "Joint [%s (%s)] not present in bind scene!\n" ), GetName().c_str(), jointGuid.c_str() );
       continue;
     }
 
     CompressedAnimationPtr compressed = new CompressedAnimation( compressionControl, looping );
-    compressed->Compress( joint->GetName(), (*itor).second, joint->m_Translate );
+    compressed->Compress( joint->GetName(), (*itr).second, joint->m_Translate );
 
-    m_JointCompressedAnimationMap.insert( std::make_pair< Nocturnal::TUID, CompressedAnimationPtr >( (*itor).first, compressed ) );
-    if ( !handledJoints.insert( (*itor).first ).second )
+    m_JointCompressedAnimationMap.insert( std::make_pair< Nocturnal::TUID, CompressedAnimationPtr >( (*itr).first, compressed ) );
+    if ( !handledJoints.insert( (*itr).first ).second )
     {
       tstring jointGuid;
-      (*itor).first.ToString( jointGuid );
+      (*itr).first.ToString( jointGuid );
       throw Nocturnal::Exception( TXT( "Already compressed data for joint [%s]!" ), jointGuid );
     }
   }
@@ -649,11 +649,11 @@ u32 AnimationClip::CompressAnimations( const Content::Scene& scene, const Animat
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void AnimationClip::SmoothRotations()
 {
-  M_Animation::iterator itor = m_JointAnimationMap.begin();
+  M_Animation::iterator itr = m_JointAnimationMap.begin();
   M_Animation::iterator end = m_JointAnimationMap.end();
-  for( ; itor != end; ++itor )
+  for( ; itr != end; ++itr )
   {
-    (*itor).second->SmoothRotations();
+    (*itr).second->SmoothRotations();
   }
 }
 
@@ -724,11 +724,11 @@ void AnimationClip::ExtractCinematicRootOffset( const Content::Scene  & scene,
 ////////////////////////////////////////////////////////////////////////////////////////////////
 bool AnimationClip::HasMotion() const
 {
-  M_Animation::const_iterator itor = m_JointAnimationMap.begin();
+  M_Animation::const_iterator itr = m_JointAnimationMap.begin();
   M_Animation::const_iterator end = m_JointAnimationMap.end();
-  for( ; itor != end; ++itor )
+  for( ; itr != end; ++itr )
   {
-    if ( (*itor).second->HasMotion() )
+    if ( (*itr).second->HasMotion() )
       return true;
   }
 

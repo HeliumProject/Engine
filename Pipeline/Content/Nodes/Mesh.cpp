@@ -224,11 +224,11 @@ bool Mesh::ComputeTNB( u32 triIndex )
 
 void Mesh::GetAlignedBoundingBox( Math::AlignedBox& box ) const
 {
-    V_Vector3::const_iterator itor = m_Positions.begin();
+    V_Vector3::const_iterator itr = m_Positions.begin();
     V_Vector3::const_iterator end = m_Positions.end();
-    for ( ; itor != end; ++itor )
+    for ( ; itr != end; ++itr )
     {
-        const Vector3& point = *itor;
+        const Vector3& point = *itr;
         box.Merge( point );
     }
 }
@@ -247,13 +247,13 @@ f32 Mesh::SurfaceArea( Math::Scale* scale ) const
 
     if( !scale )
     {
-        std::vector< u32 >::const_iterator itor = m_TriangleVertexIndices.begin();
+        std::vector< u32 >::const_iterator itr = m_TriangleVertexIndices.begin();
         std::vector< u32 >::const_iterator end  = m_TriangleVertexIndices.end();
-        for( ; itor != end; itor+=3 )
+        for( ; itr != end; itr+=3 )
         {
 
-            Vector3 edge1 = m_Positions[*(itor+1)] - m_Positions[*itor];
-            Vector3 edge3 = m_Positions[*(itor+2)] - m_Positions[*itor];
+            Vector3 edge1 = m_Positions[*(itr+1)] - m_Positions[*itr];
+            Vector3 edge3 = m_Positions[*(itr+2)] - m_Positions[*itr];
 
             f32 dot = edge1.Dot( edge3 );
             f32 triArea = sqrt( ( edge1.LengthSquared()*edge3.LengthSquared() ) -  ( dot*dot ) ) * 0.5f;
@@ -264,12 +264,12 @@ f32 Mesh::SurfaceArea( Math::Scale* scale ) const
     }
     else
     {
-        std::vector< u32 >::const_iterator itor = m_TriangleVertexIndices.begin();
+        std::vector< u32 >::const_iterator itr = m_TriangleVertexIndices.begin();
         std::vector< u32 >::const_iterator end  = m_TriangleVertexIndices.end();
-        for( ; itor != end; itor+=3 )
+        for( ; itr != end; itr+=3 )
         {
-            Vector3 edge1 = m_Positions[*(itor+1)] * *scale - m_Positions[*itor] * *scale;
-            Vector3 edge3 = m_Positions[*(itor+2)] * *scale - m_Positions[*itor] * *scale;
+            Vector3 edge1 = m_Positions[*(itr+1)] * *scale - m_Positions[*itr] * *scale;
+            Vector3 edge3 = m_Positions[*(itr+2)] * *scale - m_Positions[*itr] * *scale;
 
             f32 dot = edge1.Dot( edge3 );
             f32 triArea = sqrt( ( edge1.LengthSquared()*edge3.LengthSquared() ) -  ( dot*dot ) ) * 0.5f;
@@ -290,13 +290,13 @@ f32 Mesh::SurfaceAreaComponents( Math::Vector3& areaVec ) const
 
     f32 area = 0.0f;
 
-    std::vector< u32 >::const_iterator itor = m_TriangleVertexIndices.begin();
+    std::vector< u32 >::const_iterator itr = m_TriangleVertexIndices.begin();
     std::vector< u32 >::const_iterator end  = m_TriangleVertexIndices.end();
-    for( ; itor != end; itor+=3 )
+    for( ; itr != end; itr+=3 )
     {
-    const Math::Vector3& v0 = m_Positions[*itor];
-    const Math::Vector3& v1 = m_Positions[*(itor+1)];
-    const Math::Vector3& v2 = m_Positions[*(itor+2)];
+    const Math::Vector3& v0 = m_Positions[*itr];
+    const Math::Vector3& v1 = m_Positions[*(itr+1)];
+    const Math::Vector3& v2 = m_Positions[*(itr+2)];
 
     f32 a = (v0 - v1).Length();
     f32 b = (v1 - v2).Length();
@@ -331,15 +331,15 @@ f32 Mesh::SurfaceAreaComponents( Math::Vector3& areaVec ) const
 
     Math::Scale scale( 1.5f, 0.5f, 0.5f );
 
-    std::vector< u32 >::const_iterator itor = m_TriangleVertexIndices.begin();
+    std::vector< u32 >::const_iterator itr = m_TriangleVertexIndices.begin();
     std::vector< u32 >::const_iterator end  = m_TriangleVertexIndices.end();
-    for( ; itor != end; itor+=3 )
+    for( ; itr != end; itr+=3 )
     {
         f32 triArea = 0.0f;
 
-        const Math::Vector3& v0 = m_Positions[*itor];
-        const Math::Vector3& v1 = m_Positions[*(itor+1)];
-        const Math::Vector3& v2 = m_Positions[*(itor+2)];
+        const Math::Vector3& v0 = m_Positions[*itr];
+        const Math::Vector3& v1 = m_Positions[*(itr+1)];
+        const Math::Vector3& v2 = m_Positions[*(itr+2)];
 
         {
 
@@ -353,9 +353,9 @@ f32 Mesh::SurfaceAreaComponents( Math::Vector3& areaVec ) const
         }
 
         f32 scaledTriArea = 0.0f;
-        const Math::Vector3& ScaledV0 = m_Positions[*itor] * scale;
-        const Math::Vector3& ScaledV1 = m_Positions[*(itor+1)] * scale;
-        const Math::Vector3& ScaledV2 = m_Positions[*(itor+2)] * scale;
+        const Math::Vector3& ScaledV0 = m_Positions[*itr] * scale;
+        const Math::Vector3& ScaledV1 = m_Positions[*(itr+1)] * scale;
+        const Math::Vector3& ScaledV2 = m_Positions[*(itr+2)] * scale;
 
         {
             f32 a = (ScaledV0 - ScaledV1).Length();
@@ -452,17 +452,17 @@ void Mesh::WeldNavMeshVerts(const f32 vertex_merge_threshold)
     m_Positions = pos_array;
 
     //fix tri data
-    std::vector< u32 >::iterator itor = m_TriangleVertexIndices.begin();
+    std::vector< u32 >::iterator itr = m_TriangleVertexIndices.begin();
     std::vector< u32 >::iterator end  = m_TriangleVertexIndices.end();
-    for( ; itor != end; ++itor )
+    for( ; itr != end; ++itr )
     {
-        *itor = old_to_new_vert_mapping[*itor];
+        *itr = old_to_new_vert_mapping[*itr];
     }
-    itor = m_WireframeVertexIndices.begin();
+    itr = m_WireframeVertexIndices.begin();
     end  = m_WireframeVertexIndices.end();
-    for( ; itor != end; ++itor )
+    for( ; itr != end; ++itr )
     {
-        *itor = old_to_new_vert_mapping[*itor];
+        *itr = old_to_new_vert_mapping[*itr];
     }
 }
 
@@ -952,13 +952,13 @@ u32 Mesh::GetClosestTri(const Math::Vector3& sphere_start_pos, const f32& sphere
 
 void Mesh::GetEdges( S_Edge& edges ) const 
 {
-    std::vector< u32 >::const_iterator itor = m_TriangleVertexIndices.begin();
+    std::vector< u32 >::const_iterator itr = m_TriangleVertexIndices.begin();
     std::vector< u32 >::const_iterator end  = m_TriangleVertexIndices.end();
-    for( ; itor != end; itor+=3 )
+    for( ; itr != end; itr+=3 )
     {
-        edges.insert( Edge( *itor, *(itor+1) ) );
-        edges.insert( Edge( *(itor+1), *(itor+2) ) );
-        edges.insert( Edge( *(itor+2), *itor ) );
+        edges.insert( Edge( *itr, *(itr+1) ) );
+        edges.insert( Edge( *(itr+1), *(itr+2) ) );
+        edges.insert( Edge( *(itr+2), *itr ) );
     }
 }
 
@@ -969,12 +969,12 @@ f32 Mesh::VertDensity() const
 
     f32 edgeLength = 0.0f;
 
-    S_Edge::iterator itor = edges.begin();
+    S_Edge::iterator itr = edges.begin();
     S_Edge::iterator end  = edges.end();
 
-    for( ; itor != end; ++itor )
+    for( ; itr != end; ++itr )
     {
-        edgeLength += (m_Positions[ itor->m_VertIndices[0]] - m_Positions[ itor->m_VertIndices[1] ]).Length();
+        edgeLength += (m_Positions[ itr->m_VertIndices[0]] - m_Positions[ itr->m_VertIndices[1] ]).Length();
     }
 
     return ( edges.size() * 2.0f ) / edgeLength;

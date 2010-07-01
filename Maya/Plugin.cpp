@@ -25,7 +25,7 @@ MCallbackId g_AfterSaveCallbackID;
 MCallbackId g_MayaExitingCallbackID;
 Nocturnal::InitializerStack g_InitializerStack;
 
-MStatus initializePlugin( MObject obj )
+MAYA_API MStatus initializePlugin( MObject obj )
 {
     g_InitializerStack.Push( &Content::Initialize, &Content::Cleanup );
 
@@ -70,7 +70,7 @@ MStatus initializePlugin( MObject obj )
     return MS::kSuccess;
 }
 
-MStatus uninitializePlugin( MObject obj )
+MAYA_API MStatus uninitializePlugin( MObject obj )
 {
     MStatus   status;
     MString   deregisterNodeError( "deregisterNode " );

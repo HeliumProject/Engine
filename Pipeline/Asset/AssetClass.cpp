@@ -189,11 +189,11 @@ static int ScoreAssetType( const AssetClass* assetClass, const AssetClass* engin
 {
     int score = 0;
 
-    Component::M_Component::const_iterator itor = assetClass->GetComponents().begin();
+    Component::M_Component::const_iterator itr = assetClass->GetComponents().begin();
     Component::M_Component::const_iterator end = assetClass->GetComponents().end();
-    for( ; itor != end; ++itor )
+    for( ; itr != end; ++itr )
     {
-        if( engineClass->ContainsComponent( itor->second->GetType() ) )
+        if( engineClass->ContainsComponent( itr->second->GetType() ) )
             ++score;
 
 
@@ -201,11 +201,11 @@ static int ScoreAssetType( const AssetClass* assetClass, const AssetClass* engin
 
     // not sure if we want to do this since the global engine type "templates" contain the
     // maximum number of attributes that something can have and still be classified as that type
-    itor = engineClass->GetComponents().begin();
+    itr = engineClass->GetComponents().begin();
     end = engineClass->GetComponents().end();
-    for( ; itor != end; ++itor )
+    for( ; itr != end; ++itr )
     {
-        if( !assetClass->ContainsComponent( itor->second->GetType() ) )
+        if( !assetClass->ContainsComponent( itr->second->GetType() ) )
             --score;
     }
 

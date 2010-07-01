@@ -33,9 +33,6 @@ void ExportCurve::GatherMayaData( V_ExportBase& newExportObjects )
 
   const int numCVs = curveFn.numCVs();
 
-  curve->m_ControlPointOrder.clear();
-  curve->m_ControlPointOrder.reserve( numCVs );
-
   for ( int i = 0; i < numCVs; i++ )
   {
     MPoint point;
@@ -44,7 +41,6 @@ void ExportCurve::GatherMayaData( V_ExportBase& newExportObjects )
     ExportPointPtr controlPoint = new ExportPoint( point );
     controlPoint->GetContentPoint()->m_ParentID = curve->m_ID;
     newExportObjects.push_back( controlPoint );
-    curve->m_ControlPointOrder.push_back( controlPoint->GetContentPoint()->m_ID );
   }
 
   // link it into the hierarchy

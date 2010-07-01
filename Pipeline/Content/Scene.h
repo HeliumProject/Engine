@@ -32,11 +32,7 @@ namespace Asset
 
 namespace Content
 {  
-    class ContentVisitor; 
     class SceneNode;
-
-    typedef stdext::hash_map< Nocturnal::TUID, SceneNodePtr > M_DependencyNode;
-    typedef stdext::hash_multimap< Nocturnal::TUID, HierarchyNodePtr, Nocturnal::TUIDHasher > MM_HierarchyNode;
 
     struct NodeAddedArgs
     {
@@ -103,7 +99,6 @@ namespace Content
     class PIPELINE_API Scene : public Nocturnal::RefCountBase<Scene>
     {
     private:
-        //internal utility members
         V_HierarchyNode m_AddedHierarchyNodes;
 
         std::map< Nocturnal::TUID, std::vector< Math::BoundingVolumeGenerator::BSphere > >       m_JointBspheres;    // joint uid <-> bsphere map
@@ -127,14 +122,14 @@ namespace Content
         tstring          m_FilePath;
 
         // stores hierarchy info for the scene
-        MM_HierarchyNode     m_Hierarchy;
+        std::map< Nocturnal::TUID, Nocturnal::OrderedSet< Nocturnal::TUID > > m_Hierarchy;
 
         // all the nodes in the scene
-        M_DependencyNode     m_DependencyNodes;
+        std::map< Nocturnal::TUID, SceneNodePtr > m_DependencyNodes;
 
-        Nocturnal::S_TUID     m_JointIds;
+        Nocturnal::S_TUID    m_JointIds;
+
         // shortcuts to each node by type
-
         // should probably have made this a map keyed by reflect type.
         V_PivotTransform    m_Transforms;
         V_JointTransform    m_Joints;
@@ -210,10 +205,10 @@ namespace Content
         template< class T >
         Nocturnal::SmartPtr< T > Get( const Nocturnal::TUID &uid ) const
         {
-            M_DependencyNode::const_iterator itor = m_DependencyNodes.find( uid );
-            if( itor != m_DependencyNodes.end() )
+            std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator itr = m_DependencyNodes.find( uid );
+            if( itr != m_DependencyNodes.end() )
             {
-                return Reflect::ObjectCast< T >( itor->second );
+                return Reflect::ObjectCast< T >( itr->second );
             }
             return NULL;
         }
@@ -245,8 +240,6 @@ namespace Content
         // Scene Hierarchy API
         //
         void GetChildren( V_HierarchyNode& children, const HierarchyNodePtr& node ) const;
-        void GetDescendants( V_HierarchyNode& descendants, const HierarchyNodePtr& node ) const;
-
         bool IsChildOf( const HierarchyNodePtr& potentialChild, const HierarchyNodePtr &potentialParent ) const;
 
         void AddChild( const HierarchyNodePtr& child, const Nocturnal::TUID& parentID );
@@ -297,8 +290,8 @@ namespace Content
 
         // for now do a complete iteration, if we end up nesting dudes
         //  in other classes, we can use reflect's C++ member intospection to find them
-        M_DependencyNode::const_iterator itr = m_DependencyNodes.begin();
-        M_DependencyNode::const_iterator end = m_DependencyNodes.end();
+        std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator itr = m_DependencyNodes.begin();
+        std::map< Nocturnal::TUID, SceneNodePtr >::const_iterator end = m_DependencyNodes.end();
         for ( ; itr != end; ++itr )
         {
             T* node = Reflect::ObjectCast<T>( itr->second );

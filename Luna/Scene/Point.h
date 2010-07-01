@@ -86,6 +86,6 @@ namespace Luna
     }
   };
 
-  typedef Nocturnal::SmartPtr<Luna::Point> LPointPtr;
-  typedef std::vector<LPointPtr> V_LPoint;
+  typedef Nocturnal::SmartPtr<Luna::Point> PointPtr;
+  typedef std::vector<PointPtr> V_Point;
 }

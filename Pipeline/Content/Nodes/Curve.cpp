@@ -13,31 +13,6 @@ void Curve::EnumerateClass( Reflect::Compositor<Curve>& comp )
   Reflect::EnumerationField* curveType = comp.AddEnumerationField( &Curve::m_Type, "m_Type" );
   Reflect::EnumerationField* controlPointLabel = comp.AddEnumerationField( &Curve::m_ControlPointLabel, "m_ControlPointLabel" );
   Reflect::Field* fieldResolution = comp.AddField( &Curve::m_Resolution, "m_Resolution" );
-#pragma TODO( "LEGACY CURVE" )
-  Reflect::Field* fieldControlPoints = comp.AddField( &Curve::m_ControlPoints, "m_ControlPoints" );
-  Reflect::Field* fieldPoints = comp.AddField( &Curve::m_Points, "m_Points" );
-
-#pragma TODO( "This is for copy/paste from Maya and it would be better to remove this member and have Content::Scene track child order." )
-  Reflect::Field* fieldControlPointOrder = comp.AddField( &Curve::m_ControlPointOrder, "m_ControlPointOrder" );
-}
-
-void Curve::PostLoad( Reflect::V_Element& elements )
-{
-#pragma TODO( "LEGACY CURVE" )
-  if ( !m_ControlPoints.empty() )
-  {
-    elements.reserve( elements.size() + m_ControlPoints.size() );
-    Math::V_Vector3::const_iterator itr = m_ControlPoints.begin();
-    Math::V_Vector3::const_iterator end = m_ControlPoints.end();
-    for ( ; itr != end; ++itr )
-    {
-      PointPtr point = new Point();
-      point->m_Position = *itr;
-      point->m_ParentID = m_ID;
-      elements.push_back( point );
-    }
-    m_ControlPoints.clear();
-  }
 }
 
 void Curve::ProjectPointOnCurve( const Math::Vector3& point, Math::Vector3& projectedPoint ) const

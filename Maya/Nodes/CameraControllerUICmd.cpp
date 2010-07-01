@@ -2,7 +2,7 @@
 
 #include "CameraControllerUICmd.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 //-----------------------------------------------------------------------------
 // the name of the CameraControllerUI command
@@ -26,28 +26,28 @@ MString CameraControllerUICmd::s_ui_deletePrefix(     "AEigCCUIDelete"          
 //-----------------------------------------------------------------------------
 // arguments to the CameraControllerUI command
 //-----------------------------------------------------------------------------
-const char * CameraControllerUICmd::s_flag_long_node                    = "-node";
-const char * CameraControllerUICmd::s_flag_short_node                   = "-n";
-const char * CameraControllerUICmd::s_flag_long_forceUpdate             = "-forceUpdate";
-const char * CameraControllerUICmd::s_flag_short_forceUpdate            = "-fu";
-const char * CameraControllerUICmd::s_flag_long_inputCamera             = "-inputCamera";
-const char * CameraControllerUICmd::s_flag_short_inputCamera            = "-ic";
-const char * CameraControllerUICmd::s_flag_long_head                    = "-head";
-const char * CameraControllerUICmd::s_flag_short_head                   = "-h";
-const char * CameraControllerUICmd::s_flag_long_tail                    = "-tail";
-const char * CameraControllerUICmd::s_flag_short_tail                   = "-t";
-const char * CameraControllerUICmd::s_flag_long_cut                     = "-cutStart";
-const char * CameraControllerUICmd::s_flag_short_cut                    = "-cs";
-const char * CameraControllerUICmd::s_flag_long_up                      = "-moveUp";
-const char * CameraControllerUICmd::s_flag_short_up                     = "-mu";
-const char * CameraControllerUICmd::s_flag_long_swap                    = "-swap";
-const char * CameraControllerUICmd::s_flag_short_swap                   = "-s";
-const char * CameraControllerUICmd::s_flag_long_delete                  = "-delete";
-const char * CameraControllerUICmd::s_flag_short_delete                 = "-d";
-const char * CameraControllerUICmd::s_flag_long_cameraIndex             = "-cameraIndex";
-const char * CameraControllerUICmd::s_flag_short_cameraIndex            = "-ci";
-const char * CameraControllerUICmd::s_flag_long_createCinematicCamera   = "-createCinematicCamera";
-const char * CameraControllerUICmd::s_flag_short_createCinematicCamera  = "-ccc";
+const char* CameraControllerUICmd::s_flag_long_node                    = "-node";
+const char* CameraControllerUICmd::s_flag_short_node                   = "-n";
+const char* CameraControllerUICmd::s_flag_long_forceUpdate             = "-forceUpdate";
+const char* CameraControllerUICmd::s_flag_short_forceUpdate            = "-fu";
+const char* CameraControllerUICmd::s_flag_long_inputCamera             = "-inputCamera";
+const char* CameraControllerUICmd::s_flag_short_inputCamera            = "-ic";
+const char* CameraControllerUICmd::s_flag_long_head                    = "-head";
+const char* CameraControllerUICmd::s_flag_short_head                   = "-h";
+const char* CameraControllerUICmd::s_flag_long_tail                    = "-tail";
+const char* CameraControllerUICmd::s_flag_short_tail                   = "-t";
+const char* CameraControllerUICmd::s_flag_long_cut                     = "-cutStart";
+const char* CameraControllerUICmd::s_flag_short_cut                    = "-cs";
+const char* CameraControllerUICmd::s_flag_long_up                      = "-moveUp";
+const char* CameraControllerUICmd::s_flag_short_up                     = "-mu";
+const char* CameraControllerUICmd::s_flag_long_swap                    = "-swap";
+const char* CameraControllerUICmd::s_flag_short_swap                   = "-s";
+const char* CameraControllerUICmd::s_flag_long_delete                  = "-delete";
+const char* CameraControllerUICmd::s_flag_short_delete                 = "-d";
+const char* CameraControllerUICmd::s_flag_long_cameraIndex             = "-cameraIndex";
+const char* CameraControllerUICmd::s_flag_short_cameraIndex            = "-ci";
+const char* CameraControllerUICmd::s_flag_long_createCinematicCamera   = "-createCinematicCamera";
+const char* CameraControllerUICmd::s_flag_short_createCinematicCamera  = "-ccc";
 
 
 //-----------------------------------------------------------------------------
@@ -338,7 +338,7 @@ bool CameraControllerUICmd::isUIActive( bool autoActivate )
     // see if ui should be activated
     MString parentName;
     MGlobal::executeCommand( "setParent -q", parentName );
-    std::string debug = parentName.asChar();
+    tstring debug = parentName.asTChar();
     if ( autoActivate && parentName != MString("MayaWindow") )
     {
       // activate ui and remember the parent layout name

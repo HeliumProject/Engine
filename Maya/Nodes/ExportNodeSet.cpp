@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "ExportNodeSet.h"
 
-#include "MayaUtils/ErrorHelpers.h"
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/ErrorHelpers.h"
+#include "Maya/NodeTypes.h"
 
 using namespace Maya;
 

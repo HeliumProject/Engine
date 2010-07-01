@@ -9,9 +9,9 @@
 
 namespace Maya
 {
-  void MAYA_API RemoveNamespace( const MString & pathName, std::string & result );
-  MStatus MAYA_API FullPathNameWithoutNamespace( MFnDagNode & dagNodeFn, std::string & result );
-  MStatus MAYA_API FullPathNameWithoutNamespace( MDagPath & dagPath, std::string & result );
+  void MAYA_API RemoveNamespace( const MString & pathName, tstring & result );
+  MStatus MAYA_API FullPathNameWithoutNamespace( MFnDagNode & dagNodeFn, tstring & result );
+  MStatus MAYA_API FullPathNameWithoutNamespace( MDagPath & dagPath, tstring & result );
   MStatus MAYA_API FullPathNameWithoutNamespace( MFnDagNode & dagNodeFn, MString & result );
   MStatus MAYA_API FullPathNameWithoutNamespace( MDagPath & dagPath, MString & result );
 }

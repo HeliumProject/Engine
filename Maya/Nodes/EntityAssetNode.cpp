@@ -2,30 +2,26 @@
 #include "EntityAssetNode.h"
 #include "EntityGroupNode.h"
 
-#include "MayaUtils/Duplicate.h"
-#include "MayaUtils/Utils.h"
+#include "Maya/Duplicate.h"
+#include "Maya/Utils.h"
 
-#include "MayaUtils/NodeTypes.h"
-#include "MayaUtils/ErrorHelpers.h"
+#include "Maya/NodeTypes.h"
+#include "Maya/ErrorHelpers.h"
 
-#include "../MayaNodes/ExportNode.h"
-#include "../MayaNodes/ExportNodeSet.h"
+#include "Nodes/ExportNode.h"
+#include "Nodes/ExportNodeSet.h"
 
-#include "Attribute/AttributeHandle.h"
-#include "Asset/ArtFileAttribute.h"
+#include "Pipeline/Component/ComponentHandle.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
 
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Element.h"
 
-#include "Asset/Entity.h"
-#include "Content/Scene.h"
+#include "Pipeline/Asset/Classes/Entity.h"
+#include "Pipeline/Content/Scene.h"
 
-#include "Finder/Finder.h"
-#include "Finder/AssetSpecs.h"
-#include "Finder/ContentSpecs.h"
-
-#include "Application/RCS/rcs.h"
-#include "MayaContent/MayaContentCmd.h"
+#include "Application/RCS/RCS.h"
+#include "Export/MayaContentCmd.h"
 
 #include <maya/MSceneMessage.h>
 #include <maya/MUserEventMessage.h>
@@ -33,8 +29,8 @@
 #include <maya/MDagModifier.h>
 
 using namespace Reflect;
+using namespace Component;
 using namespace Asset;
-using namespace Attribute;
 
 // callbacks
 MIntArray EntityAssetNode::s_CallbackIDs; 
@@ -221,8 +217,8 @@ EntityAssetNode& EntityAssetNode::Get( const Nocturnal::Path& path, bool createI
 
             if ( assetClass.ReferencesObject() )
             {
-                AttributeViewer< ArtFileAttribute > artFile( assetClass );
-                std::string artFilePath = artFile->GetPath().Get();
+                ComponentViewer< ArtFileComponent > artFile( assetClass );
+                tstring artFilePath = artFile->GetPath().Get();
 
                 MObject classTransform = dagFn.create( EntityAssetNode::s_TypeID, assetClass->GetShortName().c_str() );
                 dagFn.setDoNotWrite( true );
@@ -296,7 +292,7 @@ void EntityAssetNode::GetArtFilePath( MString& artFilePath )
 void EntityAssetNode::SetArtFilePath( const MString& artFilePath )
 {
     MPlug plug( thisMObject(), s_ArtFilePath );
-    plug.setValue( artFilePath.asChar() );
+    plug.setValue( MString(artFilePath.asTChar()) );
 }
 
 void EntityAssetNode::LoadArt()
@@ -314,7 +310,7 @@ void EntityAssetNode::LoadArt()
 
     MString artFilePath;
     GetArtFilePath( artFilePath );
-    std::cout << "Importing from: " << artFilePath.asChar() << "..." << std::endl;
+    std::cout << "Importing from: " << artFilePath.asTChar() << "..." << std::endl;
 
     // add the callback to catch all the imported objects
     MObjectArray objectArrays[NodeArrays::Count];
@@ -360,7 +356,7 @@ void EntityAssetNode::LoadArt()
 
         if ( name.length() )
         {
-            std::cout << " - Importing Child: " << name.asChar() << " " << type.asChar() << "(" << nodeTypeStr << ")" << std::endl;
+            std::cout << " - Importing Child: " << name.asTChar() << " " << type.asTChar() << "(" << nodeTypeStr << ")" << std::endl;
         }
 #endif
 
@@ -472,7 +468,7 @@ void EntityAssetNode::AddImportNode( const MObject& object )
     }
 
 #ifdef _DEBUG
-    std::cout << "Adding: " << name.asChar() << std::endl;
+    std::cout << "Adding: " << name.asTChar() << std::endl;
 #endif
 
     //create ImportMessage attrib on the imported object if necessary
@@ -722,7 +718,7 @@ void EntityAssetNode::ImportNodeAddedCallback( MObject &addedNode, void* param )
 #ifdef _DEBUG
     MString name = nodeFn.name();
     MString type = nodeFn.typeName();
-    std::cout << " - Importing: " << name.asChar() << " " << type.asChar() << std::endl;
+    std::cout << " - Importing: " << name.asTChar() << " " << type.asTChar() << std::endl;
 #endif
 
     nodeArrays[ NodeArrays::KeepNodes ]->append( addedNode );

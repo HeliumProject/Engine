@@ -1,4 +1,4 @@
-
+#include "Precompile.h"
 #include "ExportContentCmd.h"
 
 #include <maya/MArgDatabase.h>
@@ -9,12 +9,10 @@
 #include <maya/MFnDependencyNode.h>
 #include <maya/M3dView.h>
 
-#include "MayaContent/MayaContentCmd.h"
-#include "MayaUtils/Export.h"
-
-#include "Finder/Finder.h"
-#include "Finder/ContentSpecs.h"
 #include "Application/RCS/RCS.h"
+
+#include "Export/MayaContentCmd.h"
+#include "Maya/Export.h"
 
 using namespace MayaContent;
 
@@ -32,7 +30,7 @@ MString ExportContentCmd::CommandName( "exportContent" );
 
 void AfterSaveCallback( void *clientData )
 {
-  std::string currentFile = MFileIO::currentFile().asChar();
+  tstring currentFile = MFileIO::currentFile().asTChar();
   Nocturnal::Path::Normalize( currentFile );
 
   // i hate mel
@@ -73,14 +71,14 @@ MSyntax ExportContentCmd::newSyntax()
 //-----------------------------------------------------------------------------
 MStatus ExportContentCmd::doIt( const MArgList & args )
 {
-  MAYAEXPORTER_SCOPE_TIMER((""));
+  EXPORT_SCOPE_TIMER((""));
 
   MStatus stat;
 
   // parse the command line arguments using the declared syntax
   MArgDatabase argParser( syntax(), args, &stat );
 
-  std::string currentFile = MFileIO::currentFile().asChar();
+  tstring currentFile = MFileIO::currentFile().asTChar();
   Nocturnal::Path::Normalize( currentFile );
 
   // make sure we save before we export, the artists asked us to do this for a variety of reasons
@@ -101,7 +99,7 @@ MStatus ExportContentCmd::doIt( const MArgList & args )
       {
         if ( MGlobal::mayaState() == MGlobal::kInteractive )
         {
-          MessageBoxA( M3dView::applicationShell(), "Could not save maya file, cancelling export!", "Save Error", MB_OK | MB_ICONERROR );
+          MessageBox( M3dView::applicationShell(), TXT("Could not save maya file, cancelling export!"), TXT("Save Error"), MB_OK | MB_ICONERROR );
         }
         else
         {
@@ -112,14 +110,14 @@ MStatus ExportContentCmd::doIt( const MArgList & args )
     }
     else if ( MGlobal::mayaState() == MGlobal::kInteractive )
     {
-      std::string error = currentFile + " was not checked out or is not writable and has not been saved.  Do you still want to export this file? (If you export the file, its appearance will change in the game, but the source data will not match it and the export data will be different if someone else exports the file!)";
+      tstring error = currentFile + TXT(" was not checked out or is not writable and has not been saved.  Do you still want to export this file? (If you export the file, its appearance will change in the game, but the source data will not match it and the export data will be different if someone else exports the file!)");
       // return if they don't want to export anymore
-      if ( IDNO == MessageBoxA( M3dView::applicationShell(), error.c_str(), "File Not Saved", MB_YESNO | MB_ICONEXCLAMATION ) )
+      if ( IDNO == MessageBox( M3dView::applicationShell(), error.c_str(), TXT("File Not Saved"), MB_YESNO | MB_ICONEXCLAMATION ) )
       {
         return MS::kFailure;
       }
 
-      MessageBoxA( M3dView::applicationShell(), "WARNING: Exporting file without saving source data!", "Export Warning", MB_OK | MB_ICONHAND );
+      MessageBox( M3dView::applicationShell(), TXT("WARNING: Exporting file without saving source data!"), TXT("Export Warning"), MB_OK | MB_ICONHAND );
     }
     else
     {
@@ -129,11 +127,9 @@ MStatus ExportContentCmd::doIt( const MArgList & args )
   }
 
   //without this initexportinfo we don't find the nodes it needs to export animation data
-  std::vector<std::string> selection;
-  std::vector<std::string> groupNode;
+  std::vector<tstring> selection;
+  std::vector<tstring> groupNode;
   Maya::InitExportInfo( true, selection, groupNode );
-
-  MGlobal::executeCommand( "finalizeDestruction" );
 
   return ExportContent( argParser );
 }
@@ -146,19 +142,19 @@ MStatus ExportContentCmd::ExportContent( MArgDatabase& argParser )
   }
   catch( RCS::FileInUseException& e )
   {
-    MGlobal::displayError( MString("Failed to export: ") + e.what() );
+    MGlobal::displayError( MString("Failed to export: ") + e.What() );
     if ( MGlobal::mayaState() == MGlobal::kInteractive )
     {
-      MessageBoxA( M3dView::applicationShell(), e.what() , "Export Error", MB_OK | MB_ICONERROR );
+      MessageBox( M3dView::applicationShell(), e.What() , TXT("Export Error"), MB_OK | MB_ICONERROR );
     }
     return MS::kFailure;
   }
   catch (Nocturnal::Exception& e)
   {
-    MGlobal::displayError( MString("Failed to export: ") + e.what() );
+    MGlobal::displayError( MString("Failed to export: ") + e.What() );
     if ( MGlobal::mayaState() == MGlobal::kInteractive )
     {
-      MessageBoxA( M3dView::applicationShell(),  e.what(), "Export Error", MB_OK | MB_ICONERROR );
+      MessageBox( M3dView::applicationShell(),  e.What(), TXT("Export Error"), MB_OK | MB_ICONERROR );
     }
     return MS::kFailure;
   }

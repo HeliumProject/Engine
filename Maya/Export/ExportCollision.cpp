@@ -14,7 +14,7 @@ void ExportCollision::GatherMayaData( V_ExportBase &newExportObjects )
   // doing a dangerous cast, because there should be no way for m_ContentObject to NOT be a Content::CollisionPrimitive
   Content::CollisionPrimitive* primitive = Reflect::DangerousCast< Content::CollisionPrimitive >( m_ContentObject );
 
-  primitive->m_DefaultName = nodeFn.name().asChar();
+  primitive->m_DefaultName = nodeFn.name().asTChar();
 
   // this will retrieve and setup the global matrix for this mesh (because meshs are transforms in Content but not Maya)
   MayaContentCmd::ConvertMatrix( MDagPath::getAPathTo( m_MayaObject ).inclusiveMatrix(), primitive->m_GlobalTransform );
@@ -72,7 +72,7 @@ void ExportCollision::GatherMayaData( V_ExportBase &newExportObjects )
         for (int i=0; i<3; i++)
         {
           dn.setObject(test[i].node());
-          if (stricmp(dn.typeName().asChar(), "transform") == 0)
+          if (_tcsicmp(dn.typeName().asTChar(), TXT("transform")) == 0)
           {
             dn.setObject(dn.child(0));
             //Maya::FullPathNameWithoutNamespace( dn, primitive->m_ChildName );

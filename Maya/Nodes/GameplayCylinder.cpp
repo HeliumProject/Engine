@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "GameplayCylinder.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 const MTypeId GameplayCylinder::s_TypeID( IGL_GP_CYLINDER );
 const char* GameplayCylinder::s_TypeName = "gpCylinder";

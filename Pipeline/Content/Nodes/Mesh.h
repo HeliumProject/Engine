@@ -4,7 +4,7 @@
 
 #include "Pipeline/API.h"
 
-#include "Pipeline/Content/Nodes/Transform/PivotTransform.h"
+#include "Pipeline/Content/Nodes/PivotTransform.h"
 #include "Foundation/Container/BitArray.h"
 #include "Pipeline/Content/ContentTypes.h"
 #include "Foundation/Math/CalculateBounds.h"

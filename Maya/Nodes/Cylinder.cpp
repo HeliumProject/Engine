@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Cylinder.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 MObject Cylinder::s_DeletionSync;
 const MTypeId Cylinder::s_TypeID( IGL_CYLINDER );
@@ -54,13 +54,13 @@ void Cylinder::draw( M3dView& view, const MDagPath& path, M3dView::DisplayStyle 
     for ( int i=0; i<3; i++ )
     {
        dn.setObject( scaleXPlugs[i].node() );
-       if ( stricmp( dn.typeName().asChar(), "transform" ) == 0 )
+       if ( _tcsicmp( dn.typeName().asTChar(), TXT("transform") ) == 0 )
        {
          dp = MDagPath::getAPathTo( dn.object(), &mstatus );
          if( !mstatus )
          {
            MString error ( "Error: Cannot get path to child piece of cylinder " );
-           error +=  path.fullPathName().asChar();
+           error +=  path.fullPathName().asTChar();
            error += ". Get Reddy\n";
            MGlobal::displayError( error );
            return;
@@ -72,7 +72,7 @@ void Cylinder::draw( M3dView& view, const MDagPath& path, M3dView::DisplayStyle 
     if( !mstatus )
     {
       MString error ( "Error: Cannot get path to child piece of cylinder " );
-      error +=  path.fullPathName().asChar();
+      error +=  path.fullPathName().asTChar();
       error += "\n";
       MGlobal::displayError( error );
     }

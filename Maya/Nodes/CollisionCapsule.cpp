@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "CollisionCapsule.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 const MTypeId CollisionCapsule::s_TypeID( IGL_COLL_CAPSULE );
 const char* CollisionCapsule::s_TypeName = "igCapsule";

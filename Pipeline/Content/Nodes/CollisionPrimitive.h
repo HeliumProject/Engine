@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Pipeline/API.h"
-#include "Pipeline/Content/Nodes/Transform/PivotTransform.h"
+#include "Pipeline/Content/Nodes/PivotTransform.h"
 
 namespace Content
 {

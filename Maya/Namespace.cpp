@@ -7,20 +7,20 @@
 
 namespace Maya
 {
-  void RemoveNamespace( const MString & pathName, std::string & result )
+  void RemoveNamespace( const MString & pathName, tstring & result )
   {
-    static const std::string barStr("|");
-    static const std::string colonStr(":");
+    static const tstring barStr(TXT( "|" ));
+    static const tstring colonStr(TXT( ":" ));
     result.clear();
-    std::string fullName = pathName.asChar();
-    std::string::iterator begin = fullName.begin();
-    std::string::iterator end = fullName.end();
+    tstring fullName = pathName.asTChar();
+    tstring::iterator begin = fullName.begin();
+    tstring::iterator end = fullName.end();
     int priorBarIndex = (int)fullName.find( barStr );
     int nextBarIndex = (int)fullName.find( barStr, priorBarIndex + 1 );
     int nextColonIndex = (int)fullName.find( colonStr );
-    while ( priorBarIndex != std::string::npos && nextColonIndex != std::string::npos )
+    while ( priorBarIndex != tstring::npos && nextColonIndex != tstring::npos )
     {
-      if ( nextBarIndex == std::string::npos || nextColonIndex < nextBarIndex )
+      if ( nextBarIndex == tstring::npos || nextColonIndex < nextBarIndex )
       {
         // remove string after prior bar and before colon
         fullName = fullName.substr( 0, priorBarIndex+1 ) + fullName.substr( nextColonIndex+1, fullName.size() );
@@ -37,7 +37,7 @@ namespace Maya
     result = fullName;
   }
 
-  MStatus FullPathNameWithoutNamespace( MFnDagNode & dagNodeFn, std::string & result )
+  MStatus FullPathNameWithoutNamespace( MFnDagNode & dagNodeFn, tstring & result )
   {
     MStatus status;
     MString dagPathMString = dagNodeFn.fullPathName( &status );
@@ -45,7 +45,7 @@ namespace Maya
     return status;
   }
 
-  MStatus FullPathNameWithoutNamespace( MDagPath & dagPath, std::string & result )
+  MStatus FullPathNameWithoutNamespace( MDagPath & dagPath, tstring & result )
   {
     MStatus status;
     MString dagPathMString = dagPath.fullPathName( &status );
@@ -57,7 +57,7 @@ namespace Maya
   {
     MStatus status;
     MString dagPathMString = dagNodeFn.fullPathName( &status );
-    std::string resultStr;
+    tstring resultStr;
     RemoveNamespace( dagPathMString, resultStr );
     result = resultStr.c_str();
     return status;
@@ -67,7 +67,7 @@ namespace Maya
   {
     MStatus status;
     MString dagPathMString = dagPath.fullPathName( &status );
-    std::string resultStr;
+    tstring resultStr;
     RemoveNamespace( dagPathMString, resultStr );
     result = resultStr.c_str();
     return status;

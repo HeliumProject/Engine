@@ -1,4 +1,4 @@
-#include "Pipeline/Content/Nodes/Transform/Descriptor.h"
+#include "Pipeline/Content/Nodes/Descriptor.h"
 
 namespace Content 
 {

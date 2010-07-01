@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include "Pipeline/Content/ContentVisitor.h" 
-#include "Pipeline/Content/Nodes/Transform/Effector.h"
+#include "Pipeline/Content/Nodes/Effector.h"
 
 #include "Foundation/Version.h"
 #include "Foundation/Container/Insert.h" 

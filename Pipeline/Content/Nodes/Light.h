@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Pipeline/API.h"
-#include "Pipeline/Content/Nodes/Instance/Instance.h"
+#include "Pipeline/Content/Nodes/Instance.h"
 #include "Pipeline/Content/ParametricKey/ParametricColorKey.h"
 #include "Pipeline/Content/ParametricKey/ParametricIntensityKey.h"
 

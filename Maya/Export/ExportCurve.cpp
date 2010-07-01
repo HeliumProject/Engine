@@ -11,13 +11,13 @@ void ExportCurve::GatherMayaData( V_ExportBase& newExportObjects )
   MFnNurbsCurve curveFn( m_MayaObject, &status );
   if ( status != MS::kSuccess )
   {
-    Log::Error( "Unable to convert maya object to an ExportCurve.\n" );
+    Log::Error( TXT("Unable to convert maya object to an ExportCurve.\n") );
     return;
   }
 
   Content::Curve* curve = Reflect::DangerousCast< Content::Curve >( m_ContentObject );
 
-  curve->m_DefaultName = curveFn.name().asChar();
+  curve->m_DefaultName = curveFn.name().asTChar();
 
   switch ( curveFn.form() )
   {

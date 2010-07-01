@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Plane.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 
 const MTypeId Plane::s_TypeID( IGL_PLANE );

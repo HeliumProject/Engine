@@ -1,4 +1,4 @@
-#include "Pipeline/Content/Nodes/Instance/Locator.h"
+#include "Pipeline/Content/Nodes/Locator.h"
 
 using namespace Content;
 

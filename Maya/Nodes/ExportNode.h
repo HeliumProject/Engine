@@ -2,8 +2,8 @@
 
 #include "API.h"
 
-#include "Content/AnimationClip.h"
-#include "Content/ContentTypes.h"
+#include "Pipeline/Content/Animation/AnimationClip.h"
+#include "Pipeline/Content/ContentTypes.h"
 
 #include <maya/MNodeMessage.h>
 #include <maya/MPxTransform.h>

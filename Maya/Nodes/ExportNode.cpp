@@ -3,16 +3,16 @@
 #include "ExportNode.h"
 #include "ExportNodeSet.h"
 
-#include "Content/Descriptor.h"
-#include "Content/AnimationClip.h"
-#include "MayaUtils/ErrorHelpers.h"
-#include "MayaUtils/Export.h"
-#include "MayaUtils/NodeTypes.h"
-#include "MayaUtils/Utils.h"
+#include "Pipeline/Content/Nodes/Descriptor.h"
+#include "Pipeline/Content/Animation/AnimationClip.h"
+#include "Maya/ErrorHelpers.h"
+#include "Maya/Export.h"
+#include "Maya/NodeTypes.h"
+#include "Maya/Utils.h"
 #include "Foundation/Reflect/Registry.h"
 
 #include <algorithm>
-#include <boost/regex.hpp>
+#include "Foundation/Boost/Regex.h"
 #include <string>
 
 
@@ -283,12 +283,12 @@ void ExportNode::AttributeChangedCB(MNodeMessage::AttributeMessage msg,
       ConfigBangleAttributes( nodeThatChanged, status, ( type == Content::ContentTypes::Bangle ) );
 
       // Keep the node type and name synchronized
-      boost::regex  autoNamePattern( "^([a-zA-Z]+)(\\d*)$" );
-      boost::cmatch matches;
+      tregex  autoNamePattern( TXT("^([a-zA-Z]+)(\\d*)$") );
+      tcmatch matches;
 
-      if( boost::regex_match( nodeFn.name().asChar(), matches, autoNamePattern ) )
+      if( boost::regex_match( nodeFn.name().asTChar(), matches, autoNamePattern ) )
       {
-        std::string namePortion(matches[1].first, matches[1].second);
+        tstring namePortion(matches[1].first, matches[1].second);
 
         // name is the last content type we had
         if( (prevType == Content::ContentTypes::Null) 

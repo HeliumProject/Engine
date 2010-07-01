@@ -13,7 +13,7 @@ void ExportPivotTransform::GatherMayaData( V_ExportBase &newExportObjects )
   // doing a dangerous cast, because there should be no way for m_ContentObject to NOT be a Content::Transform
   Content::PivotTransform* transform = Reflect::DangerousCast< Content::PivotTransform >( m_ContentObject );
 
-  transform->m_DefaultName = transformFn.name().asChar();
+  transform->m_DefaultName = transformFn.name().asTChar();
 
   //
   // Get local and global matrices from teh m and wm plugs

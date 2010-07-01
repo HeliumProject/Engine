@@ -10,7 +10,7 @@
 #include "Animation.h"
 #include "CompressedAnimation.h"
 
-#include "Pipeline/Content/Nodes/Transform/JointTransform.h"
+#include "Pipeline/Content/Nodes/JointTransform.h"
 #include "JointOrdering.h"
 
 

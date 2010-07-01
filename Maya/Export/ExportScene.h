@@ -2,8 +2,7 @@
 
 #include "ExportBase.h"
 #include "Foundation/Reflect/Element.h"
-#include "Content/Scene.h"
-#include "Finder/FinderSpec.h"
+#include "Pipeline/Content/Scene.h"
 
 namespace MayaContent
 {

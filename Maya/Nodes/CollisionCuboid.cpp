@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "CollisionCuboid.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 const MTypeId CollisionCuboid::s_TypeID( IGL_COLL_CUBOID );
 const char* CollisionCuboid::s_TypeName = "igCuboid";

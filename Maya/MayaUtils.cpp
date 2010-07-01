@@ -10,7 +10,7 @@
 #include "Export.h"
 
 extern bool g_MayaFileOpen;
-extern std::string g_MayaFile;
+extern tstring g_MayaFile;
 
 namespace Maya
 {
@@ -20,7 +20,7 @@ namespace Maya
     return g_InitCount > 0;
   }
 
-  bool Init(const std::string& progname)
+  bool Init()
   {
     if ( ++g_InitCount > 1 )
     {
@@ -28,16 +28,16 @@ namespace Maya
     }
 
     g_MayaFileOpen = false;
-    g_MayaFile = "";
+    g_MayaFile = TXT("");
 
     // initialize library
     MStatus stat;
 
-    stat = MLibrary::initialize (true, (char *)progname.c_str(), true);
+    stat = MLibrary::initialize(true, "app", true);
 
     if (!stat)
     {
-      throw Nocturnal::Exception("(Maya::Init) could not initialize Maya libraries for '%s'", progname.c_str());
+      throw Nocturnal::Exception(TXT("(Maya::Init) could not initialize Maya libraries for app"));
     }
 
     return true;
@@ -48,7 +48,7 @@ namespace Maya
     if ( --g_InitCount == 0 )
     {
       g_MayaFileOpen = false;
-      g_MayaFile = "";
+      g_MayaFile = TXT("");
 
       g_foundNodes.clear();
 
@@ -56,13 +56,13 @@ namespace Maya
     }
   }
 
-  bool MEL(const std::string& command, std::string &result)
+  bool MEL(const tstring& command, tstring &result)
   {
     MString res;
 
     bool ret = MGlobal::executeCommand(MString (command.c_str()), res) == MS::kSuccess;
 
-    result = res.asChar();
+    result = res.asTChar();
 
     if (result.size() == 0)
       return true;

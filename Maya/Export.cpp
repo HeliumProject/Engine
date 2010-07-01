@@ -43,34 +43,34 @@ namespace Maya
   //  * shared/tools/distro/maya/scripts/igExportNodes.mel
   //
   //******************** !!IMPORTANT!! ***********************
-  const char* ContentTypesString[ContentTypes::NumContentTypes] =
+  const tchar* ContentTypesString[ContentTypes::NumContentTypes] =
   {
-    "Default",
-    "Geometry",
-    "Skeleton",
-    "Bangle",
-    "HighResCollision",
-    "LowResCollision",
-    "Pathfinding",
-    "LowResPathfinding",
-    "LightMapped",
-    "VertexLit",
-    "Overlay",
-    "PreShell",
-    "BloomPreShell",
-    "PostShell",
-    "BloomPostShell",
-    "Foliage",
-    "GeomGroup",
-    "MonitorCam",
-    "Water",
-    "RisingWater",
-    "WrinkleMap",
-    "Exclude",
-    "Destruction",
-    "Debris",
-    "Glue",
-    "Pins",
+    TXT("Default"),
+    TXT("Geometry"),
+    TXT("Skeleton"),
+    TXT("Bangle"),
+    TXT("HighResCollision"),
+    TXT("LowResCollision"),
+    TXT("Pathfinding"),
+    TXT("LowResPathfinding"),
+    TXT("LightMapped"),
+    TXT("VertexLit"),
+    TXT("Overlay"),
+    TXT("PreShell"),
+    TXT("BloomPreShell"),
+    TXT("PostShell"),
+    TXT("BloomPostShell"),
+    TXT("Foliage"),
+    TXT("GeomGroup"),
+    TXT("MonitorCam"),
+    TXT("Water"),
+    TXT("RisingWater"),
+    TXT("WrinkleMap"),
+    TXT("Exclude"),
+    TXT("Destruction"),
+    TXT("Debris"),
+    TXT("Glue"),
+    TXT("Pins"),
   };
 
   M_StringNodeDecode  g_standardNodes;
@@ -78,7 +78,7 @@ namespace Maya
   typedef std::map< Nocturnal::TUID, u32 > M_UIDU32;
 
   typedef std::multimap< Nocturnal::TUID, u32 > MM_UIDU32;
-  typedef std::map< std::string, u32 > M_STRU32;
+  typedef std::map< tstring, u32 > M_STRU32;
 
   V_ExportInfo        g_foundNodes;
   MM_UIDU32           g_nodeIDIndexMap;
@@ -117,12 +117,12 @@ namespace Maya
   {
     for (int i=0; i<ContentTypes::NumContentTypes; i++)
     {
-      if (stricmp(typeName.asChar(), ContentTypesString[i])==0)
+      if (_tcsicmp(typeName.asTChar(), ContentTypesString[i])==0)
       {
         return static_cast<ContentType>(i);
       }
     }
-    int ival = atoi(typeName.asChar());
+    int ival = _tstoi(typeName.asTChar());
     return static_cast<ContentType>(ival);
   }
 
@@ -164,7 +164,7 @@ namespace Maya
     referencePath.split( '/', splitPath );
     if ( splitPath.length() > 4 && splitPath[2] == MString("art") )
     {
-      std::string artDir = splitPath[4].asChar();
+      tstring artDir = splitPath[4].asTChar();
       unsigned int numStart = 0;
       while ( numStart < artDir.size() && (artDir[numStart] < '0' || artDir[numStart] > '9') )
       {
@@ -172,7 +172,7 @@ namespace Maya
       }
       if ( numStart < artDir.size() )
       {
-        artNumber = atoi( artDir.substr( numStart, artDir.size() - numStart ).c_str() );
+        artNumber = _tstoi( artDir.substr( numStart, artDir.size() - numStart ).c_str() );
       }
     }
     return artNumber;
@@ -217,7 +217,7 @@ namespace Maya
               tuidPlug.getValue( tuidMString );
               if ( tuidMString.length() > 0 )
               {
-                  Nocturnal::TUID t( tuidMString.asChar() );
+                  Nocturnal::TUID t( tuidMString.asTChar() );
                   entityID = (tuid) t;
               }
             }
@@ -248,12 +248,12 @@ namespace Maya
   // isAPrefix
   // determine if the prefix parameter is a prefix of one of the given strings
   //-----------------------------------------------------------------------------
-  inline static bool isAPrefix( const std::string & prefix,
-                                const std::vector<std::string> & strings )
+  inline static bool isAPrefix( const tstring & prefix,
+                                const std::vector<tstring> & strings )
   {
     bool found = false;
-    std::vector<std::string>::const_iterator iter = strings.begin();
-    std::vector<std::string>::const_iterator end  = strings.end();
+    std::vector<tstring>::const_iterator iter = strings.begin();
+    std::vector<tstring>::const_iterator end  = strings.end();
     for ( ; (!found) && iter!=end; ++iter )
     {
       found = ((*iter).find( prefix ) == 0 );
@@ -265,12 +265,12 @@ namespace Maya
   // isAPrefix
   // determine if the prefix parameter is a prefix of one of the given strings
   //-----------------------------------------------------------------------------
-  inline static bool isAPrefix( const std::vector<std::string> & prefix,
-                                const std::string              & full )
+  inline static bool isAPrefix( const std::vector<tstring> & prefix,
+                                const tstring              & full )
   {
     bool found = false;
-    std::vector<std::string>::const_iterator iter = prefix.begin();
-    std::vector<std::string>::const_iterator end  = prefix.end();
+    std::vector<tstring>::const_iterator iter = prefix.begin();
+    std::vector<tstring>::const_iterator end  = prefix.end();
     for ( ; (!found) && iter!=end; ++iter )
     {
       found = (full.find( *iter ) == 0 );
@@ -288,8 +288,8 @@ namespace Maya
   void foundNode( const MObject                & node,
                   const ContentType              type,
                   const int                      index,
-                  const std::vector<std::string> selection,
-                  const std::vector<std::string> groupNode )
+                  const std::vector<tstring> selection,
+                  const std::vector<tstring> groupNode )
   {
     MStatus status;
     MFnDagNode dagNode( node, &status );
@@ -300,8 +300,8 @@ namespace Maya
       if ( status == MS::kSuccess )
       {
         ExportInfo rec;
-        rec.m_pathStrFull = dagPath.fullPathName().asChar();
-        rec.m_pathStrPartial = dagPath.partialPathName().asChar();
+        rec.m_pathStrFull = dagPath.fullPathName().asTChar();
+        rec.m_pathStrPartial = dagPath.partialPathName().asTChar();
         rec.m_path = dagPath;
         rec.m_type = type;
         rec.m_index = index;
@@ -336,8 +336,8 @@ namespace Maya
   // Each export node found in the scene is passed to foundNode() in order to
   // save the node in the m_found vector.
   //-----------------------------------------------------------------------------
-  void findAllExportNodes( const std::vector<std::string> & selection,
-                           const std::vector<std::string> & groupNode )
+  void findAllExportNodes( const std::vector<tstring> & selection,
+                           const std::vector<tstring> & groupNode )
   {
     MStatus status;
     MItDag dagIter( MItDag::kBreadthFirst, MFn::kPluginTransformNode, &status );
@@ -368,7 +368,7 @@ namespace Maya
   // lowIndex to highIndex is stored as an element (eg: coll3)
   //-----------------------------------------------------------------------------
   inline static void rememberDecode( M_StringNodeDecode    & defs,
-                               const std::string             baseName,
+                               const tstring             baseName,
                                      int                     lowIndex,
                                      int                     highIndex,
                                      ContentType       type )
@@ -379,7 +379,7 @@ namespace Maya
     defs[ baseName ] = data;
     for (int index=lowIndex; index<=highIndex; index++)
     {
-      std::stringstream strm;
+      tstringstream strm;
       data.m_index = index;
       strm << baseName << index;
       defs[ strm.str() ] = data;
@@ -391,21 +391,21 @@ namespace Maya
   // If old style nodes are requested then this method is called.  The method
   // extends the m_found vector by each arbitrary old style named node.
   //-----------------------------------------------------------------------------
-  void findAllNamedNodes( const std::vector<std::string> & selection,
-                          const std::vector<std::string> & groupNode )
+  void findAllNamedNodes( const std::vector<tstring> & selection,
+                          const std::vector<tstring> & groupNode )
   {
-    static std::string REFS       = "REFS";
-    static std::string ROOT       = "root";
+    static tstring REFS       = TXT("REFS");
+    static tstring ROOT       = TXT("root");
     if ( g_standardNodes.empty() )
     {
       // initialize standard node names once
-      rememberDecode( g_standardNodes, "geom", 0, -1, ContentTypes::Geometry );
-      rememberDecode( g_standardNodes, "mn", 0, 4, ContentTypes::Geometry );
-      rememberDecode( g_standardNodes, "bn", 0, 99, ContentTypes::Bangle );
-      rememberDecode( g_standardNodes, "coll", 0, 4, ContentTypes::HighResCollision );
-      rememberDecode( g_standardNodes, "coll_low", 0, 4, ContentTypes::LowResCollision );
-      rememberDecode( g_standardNodes, "pathfinding", 0, -1, ContentTypes::Pathfinding );
-      rememberDecode( g_standardNodes, "pathfinding_low", 0, -1, ContentTypes::LowResPathfinding );
+      rememberDecode( g_standardNodes, TXT("geom"), 0, -1, ContentTypes::Geometry );
+      rememberDecode( g_standardNodes, TXT("mn"), 0, 4, ContentTypes::Geometry );
+      rememberDecode( g_standardNodes, TXT("bn"), 0, 99, ContentTypes::Bangle );
+      rememberDecode( g_standardNodes, TXT("coll"), 0, 4, ContentTypes::HighResCollision );
+      rememberDecode( g_standardNodes, TXT("coll_low"), 0, 4, ContentTypes::LowResCollision );
+      rememberDecode( g_standardNodes, TXT("pathfinding"), 0, -1, ContentTypes::Pathfinding );
+      rememberDecode( g_standardNodes, TXT("pathfinding_low"), 0, -1, ContentTypes::LowResPathfinding );
     }
 
     MStatus status;
@@ -417,16 +417,16 @@ namespace Maya
         MFnDagNode dagNode( dagIter.item(), &status );
         if ( status == MS::kSuccess  )
         {
-          std::string name = dagNode.name().asChar();
-          const char * nameCStr = name.c_str();
-          const char * colon = strchr( nameCStr, ':' );
+          tstring name = dagNode.name().asTChar();
+          const tchar* nameCStr = name.c_str();
+          const tchar* colon = _tcschr( nameCStr, ':' );
           if ( colon != NULL )
           {
             // remove any maya namespace prefix before examining the name
             int colonPos = (int)(colon - nameCStr);
             name.erase( 0, colonPos + 1 );
           }
-          if ( name.find( REFS ) != std::string::npos )
+          if ( name.find( REFS ) != tstring::npos )
           {
             dagIter.prune();
           }
@@ -458,8 +458,8 @@ namespace Maya
   }
 
   void InitExportInfo( bool                     allowOldStyle,
-                       std::vector<std::string> selection,
-                       std::vector<std::string> groupNode )
+                       std::vector<tstring> selection,
+                       std::vector<tstring> groupNode )
   {
     g_foundNodes.clear();
     g_nodeIDIndexMap.clear();
@@ -509,14 +509,14 @@ namespace Maya
                       ContentType        type,
                       int                index )
   {
-    std::string nodeName;
+    tstring nodeName;
     if ( node != MObject::kNullObj )
     {
       MStatus status;
       MFnDagNode dagNode( node, &status );
       if ( status == MS::kSuccess )
       {
-        nodeName = dagNode.fullPathName().asChar();
+        nodeName = dagNode.fullPathName().asTChar();
       }
     }
     const int exportNodeCount = (int)g_foundNodes.size();
@@ -527,7 +527,7 @@ namespace Maya
       if ( ( (type == ContentTypes::Default ) || ((*info).m_type      == type ) )
         && ( (index < 0)                      || ((*info).m_index     == index ) )
         && ( (artNumber < 0)                  || ((*info).m_artNumber == artNumber ) )
-        && ( (node == MObject::kNullObj)      || (nodeName.find((*info).m_pathStrFull)!=std::string::npos) ) )
+        && ( (node == MObject::kNullObj)      || (nodeName.find((*info).m_pathStrFull)!=tstring::npos) ) )
       {
         result.push_back( i ); 
       }
@@ -560,10 +560,10 @@ namespace Maya
     if( node.hasAttribute( "groupLightMapMsg" ) )
       return ContentTypes::FragmentGroup;
 
-    return ClassifyOldNode( node.name().asChar(), node.fullPathName().asChar(), num );
+    return ClassifyOldNode( node.name().asTChar(), node.fullPathName().asTChar(), num );
   }
 
-  ContentType ClassifyOldNode( const std::string &name, const std::string& fullname, u32 &num )
+  ContentType ClassifyOldNode( const tstring &name, const tstring& fullname, u32 &num )
   {
     size_t len = name.length();
     num = 0;
@@ -571,40 +571,40 @@ namespace Maya
     if( len < 3 )
       return ContentTypes::Default;
 
-    if( name == "coll" )
+    if( name == TXT("coll") )
       return ContentTypes::HighResCollision;
-    if( name == "coll_low" )
+    if( name == TXT("coll_low") )
       return ContentTypes::LowResCollision;
 
      // THIS IS BULLSHIT
-    if ( fullname.find( "|coll|" ) == std::string::npos && fullname.find( "|coll_low|" ) == std::string::npos )
+    if ( fullname.find( TXT("|coll|") ) == tstring::npos && fullname.find( TXT("|coll_low|") ) == tstring::npos )
     {
-      if( name == "pathfinding" )
+      if( name == TXT("pathfinding") )
         return ContentTypes::Pathfinding;
-      if ( name == "pathfinding_low" )
+      if ( name == TXT("pathfinding_low") )
         return ContentTypes::LowResPathfinding;
-      if( name == "vert" )
+      if( name == TXT("vert") )
         return ContentTypes::VertexLit;
-      if( name == "map" )
+      if( name == TXT("map") )
         return ContentTypes::LightMapped;
-      if( name == "overlay" )
+      if( name == TXT("overlay") )
         return ContentTypes::Overlay;
-      if( name == "preshells" )
+      if( name == TXT("preshells") )
         return ContentTypes::PreShell;
-      if( name == "bloompreshells" )
+      if( name == TXT("bloompreshells") )
         return ContentTypes::BloomPreShell;
-      if( name == "postshells" )
+      if( name == TXT("postshells") )
         return ContentTypes::PostShell;
-      if( name == "bloompostshells" )
+      if( name == TXT("bloompostshells") )
         return ContentTypes::BloomPostShell;
-      if( name == "Foliage" )
+      if( name == TXT("Foliage") )
         return ContentTypes::Foliage;
-      if( name == "geom" )
+      if( name == TXT("geom") )
         return ContentTypes::Geometry;
 
-      std::string mainStr = name.substr( 0, 2 );
-      std::stringstream numStrm( name.substr( 2, len-1 ) );
-      std::string tmpStr = numStrm.str();
+      tstring mainStr = name.substr( 0, 2 );
+      tstringstream numStrm( name.substr( 2, len-1 ) );
+      tstring tmpStr = numStrm.str();
 
       int tmp;
       numStrm >> tmp;
@@ -614,11 +614,11 @@ namespace Maya
       {
         num = tmp;
 
-        if( mainStr == "mn" )
+        if( mainStr == TXT("mn") )
         {
           return ContentTypes::Geometry;
         }
-        if( mainStr == "bn" )
+        if( mainStr == TXT("bn") )
         {
           return ContentTypes::Bangle;
         }

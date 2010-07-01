@@ -2113,7 +2113,7 @@ namespace Maya
   // copyFailedMessage
   //
   ////////////////////////////////////////////////////////////////////////////////
-  static void copyFailedMessage( MPlug & sourcePlug, char * copyPhase )
+  static void copyFailedMessage( MPlug & sourcePlug, tchar* copyPhase )
   {
     MString sourceName( sourcePlug.name() );
     MString failureMessage( MString(copyPhase) + " copy failed " + sourceName );
@@ -2126,7 +2126,7 @@ namespace Maya
   // nonCompoundFailedMessage
   //
   ////////////////////////////////////////////////////////////////////////////////
-  static void nonCompoundFailedMessage( char * attrType )
+  static void nonCompoundFailedMessage( tchar* attrType )
   {
     MString failureMessage( MString("Attempted to copy a ") +
       attrType +
@@ -2214,7 +2214,7 @@ namespace Maya
   {
     MStatus stat;
     bool    success = false;
-    nonCompoundFailedMessage("k2Short");
+    nonCompoundFailedMessage(TXT("k2Short"));
     return success;
   }
 
@@ -2229,7 +2229,7 @@ namespace Maya
   {
     MStatus stat;
     bool    success = false;
-    nonCompoundFailedMessage("k3Short");
+    nonCompoundFailedMessage(TXT("k3Short"));
     return success;
   }
 
@@ -2267,7 +2267,7 @@ namespace Maya
   {
     MStatus stat;
     bool    success = false;
-    nonCompoundFailedMessage("k2Int");
+    nonCompoundFailedMessage(TXT("k2Int"));
     return success;
   }
 
@@ -2282,7 +2282,7 @@ namespace Maya
   {
     MStatus stat;
     bool    success = false;
-    nonCompoundFailedMessage("k3Int");
+    nonCompoundFailedMessage(TXT("k3Int"));
     return success;
   }
 
@@ -2320,7 +2320,7 @@ namespace Maya
   {
     MStatus stat;
     bool    success = false;
-    nonCompoundFailedMessage("k2Float");
+    nonCompoundFailedMessage(TXT("k2Float"));
     return success;
   }
 
@@ -2335,7 +2335,7 @@ namespace Maya
   {
     MStatus stat;
     bool    success = false;
-    nonCompoundFailedMessage("k3Float");
+    nonCompoundFailedMessage(TXT("k3Float"));
     return success;
   }
 
@@ -2373,7 +2373,7 @@ namespace Maya
   {
     MStatus stat;
     bool    success = false;
-    nonCompoundFailedMessage("k2Double");
+    nonCompoundFailedMessage(TXT("k2Double"));
     return success;
   }
 
@@ -2388,7 +2388,7 @@ namespace Maya
   {
     MStatus stat;
     bool    success = false;
-    nonCompoundFailedMessage("k3Double");
+    nonCompoundFailedMessage(TXT("k3Double"));
     return success;
   }
 
@@ -2403,7 +2403,7 @@ namespace Maya
   {
     MStatus              stat;
     MFnNumericData::Type unitType     = MFnNumericData::kInvalid;
-    char               * dataTypeName = "numeric";
+    tchar              * dataTypeName = TXT("numeric");
     bool                 success      = false;
     // get the attribute object
     MObject attrObj = sourcePlug.attribute( &stat );
@@ -2439,64 +2439,64 @@ namespace Maya
       switch (unitType)
       {
       case MFnNumericData::kBoolean:
-        dataTypeName = "kBoolean";
+        dataTypeName = TXT( "kBoolean");
         success = copyNumericData_kBoolean(sourcePlug, destinPlug);
         break;
       case MFnNumericData::kByte:
       case MFnNumericData::kChar:
-        dataTypeName = "kByte";
+        dataTypeName = TXT( "kByte");
         success = copyNumericData_kByte(sourcePlug, destinPlug);
         break;
       case MFnNumericData::kShort:
-        dataTypeName = "kShort";
+        dataTypeName = TXT( "kShort");
         success = copyNumericData_kShort(sourcePlug, destinPlug);
         break;
       case MFnNumericData::k2Short:
-        dataTypeName = "k2Short";
+        dataTypeName = TXT( "k2Short");
         success = copyNumericData_k2Short(sourcePlug, destinPlug);
         break;
       case MFnNumericData::k3Short:
-        dataTypeName = "k3Short";
+        dataTypeName = TXT( "k3Short");
         success = copyNumericData_k3Short(sourcePlug, destinPlug);
         break;
       case MFnNumericData::kInt:
-        dataTypeName = "kInt";
+        dataTypeName = TXT( "kInt");
         success = copyNumericData_kInt(sourcePlug, destinPlug);
         break;
       case MFnNumericData::k2Int:
-        dataTypeName = "k2Int";
+        dataTypeName = TXT( "k2Int");
         success = copyNumericData_k2Int(sourcePlug, destinPlug);
         break;
       case MFnNumericData::k3Int:
-        dataTypeName = "k3Int";
+        dataTypeName = TXT( "k3Int");
         success = copyNumericData_k3Int(sourcePlug, destinPlug);
         break;
       case MFnNumericData::kFloat:
-        dataTypeName = "kFloat";
+        dataTypeName = TXT( "kFloat");
         success = copyNumericData_kFloat(sourcePlug, destinPlug);
         break;
       case MFnNumericData::k2Float:
-        dataTypeName = "k2Float";
+        dataTypeName = TXT( "k2Float");
         success = copyNumericData_k2Float(sourcePlug, destinPlug);
         break;
       case MFnNumericData::k3Float:
-        dataTypeName = "k3Float";
+        dataTypeName = TXT( "k3Float");
         success = copyNumericData_k3Float(sourcePlug, destinPlug);
         break;
       case MFnNumericData::kDouble:
-        dataTypeName = "kDouble";
+        dataTypeName = TXT( "kDouble");
         success = copyNumericData_kDouble(sourcePlug, destinPlug);
         break;
       case MFnNumericData::k2Double:
-        dataTypeName = "k2Double";
+        dataTypeName = TXT( "k2Double");
         success = copyNumericData_k2Double(sourcePlug, destinPlug);
         break;
       case MFnNumericData::k3Double:
-        dataTypeName = "k3Double";
+        dataTypeName = TXT( "k3Double");
         success = copyNumericData_k3Double(sourcePlug, destinPlug);
         break;
       default:
-        dataTypeName = "unknown numeric";
+        dataTypeName = TXT( "unknown numeric");
         success = false;
         break;
       }
@@ -2522,11 +2522,11 @@ namespace Maya
     MPlug & destinPlug )
   {
     bool success = false;
-    MGlobal::displayWarning("unimplemented attribute copy");
+    MGlobal::displayWarning(TXT("unimplemented attribute copy"));
     if (!success)
     {
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "plugin");
+      copyFailedMessage(sourcePlug, TXT("plugin"));
     }
     return success;
   }
@@ -2540,11 +2540,11 @@ namespace Maya
     MPlug & destinPlug )
   {
     bool success = false;
-    MGlobal::displayWarning("unimplemented attribute copy");
+    MGlobal::displayWarning(TXT("unimplemented attribute copy"));
     if (!success)
     {
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "plugin geometry");
+      copyFailedMessage(sourcePlug, TXT("plugin geometry"));
     }
     return success;
   }
@@ -2571,7 +2571,7 @@ namespace Maya
     if (!success)
     {
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "string");
+      copyFailedMessage(sourcePlug, TXT("string"));
     }
     return success;
   }
@@ -2609,7 +2609,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "matrix");
+      copyFailedMessage(sourcePlug, TXT("matrix"));
     }
     return success;
   }
@@ -2647,7 +2647,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "string array");
+      copyFailedMessage(sourcePlug, TXT("string array"));
     }
     return success;
   }
@@ -2685,7 +2685,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "double array");
+      copyFailedMessage(sourcePlug, TXT("double array"));
     }
     return success;
   }
@@ -2723,7 +2723,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "int array");
+      copyFailedMessage(sourcePlug, TXT("int array"));
     }
     return success;
   }
@@ -2761,7 +2761,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "point array");
+      copyFailedMessage(sourcePlug, TXT("point array"));
     }
     return success;
   }
@@ -2799,7 +2799,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "vector array");
+      copyFailedMessage(sourcePlug, TXT("vector array"));
     }
     return success;
   }
@@ -2837,7 +2837,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "component list");
+      copyFailedMessage(sourcePlug, TXT("component list"));
     }
     return success;
   }
@@ -2875,7 +2875,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "mesh");
+      copyFailedMessage(sourcePlug, TXT("mesh"));
     }
     return success;
   }
@@ -2913,7 +2913,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "lattice");
+      copyFailedMessage(sourcePlug, TXT("lattice"));
     }
     return success;
   }
@@ -2951,7 +2951,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "nurbs curve");
+      copyFailedMessage(sourcePlug, TXT("nurbs curve"));
     }
     return success;
   }
@@ -2989,7 +2989,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "nurbs surface");
+      copyFailedMessage(sourcePlug, TXT("nurbs surface"));
     }
     return success;
   }
@@ -3027,7 +3027,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "sphere");
+      copyFailedMessage(sourcePlug, TXT("sphere"));
     }
     return success;
   }
@@ -3043,7 +3043,7 @@ namespace Maya
     MStatus stat;
     bool    success = false;
     MObject arrayAttrsObj;
-    MGlobal::displayWarning("Untested Insomniac Games function invoked: copyDynArrayAttrsData");
+    MGlobal::displayWarning(TXT("Untested Insomniac Games function invoked: copyDynArrayAttrsData"));
     // get the object representing the array data
     stat = sourcePlug.getValue( arrayAttrsObj );
     if (stat!=MS::kSuccess)
@@ -3066,7 +3066,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "multiple arrays of attributes");
+      copyFailedMessage(sourcePlug, TXT("multiple arrays of attributes"));
     }
     return success;
   }
@@ -3105,7 +3105,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "swept geometry");
+      copyFailedMessage(sourcePlug, TXT("swept geometry"));
     }
     return success;
   }
@@ -3143,7 +3143,7 @@ namespace Maya
     {
       MGlobal::displayError(stat.errorString());
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "subdivision surface");
+      copyFailedMessage(sourcePlug, TXT("subdivision surface"));
     }
     return success;
   }
@@ -3257,7 +3257,7 @@ namespace Maya
     if (!success)
     {
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "array attribute");
+      copyFailedMessage(sourcePlug, TXT("array attribute"));
     }
     return success;
   }
@@ -3306,7 +3306,7 @@ namespace Maya
     if (!success)
     {
       // explain a failure if it occurs
-      copyFailedMessage(sourcePlug, "compound attribute");
+      copyFailedMessage(sourcePlug, TXT("compound attribute"));
     }
     return success;
   }

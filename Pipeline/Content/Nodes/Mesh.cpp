@@ -1,4 +1,4 @@
-#include "Pipeline/Content/Nodes/Geometry/Mesh.h"
+#include "Pipeline/Content/Nodes/Mesh.h"
 #include "Pipeline/Content/ContentVisitor.h" 
 #include "Pipeline/Content/Scene.h"
 #include "Foundation/Math/AlignedBox.h"

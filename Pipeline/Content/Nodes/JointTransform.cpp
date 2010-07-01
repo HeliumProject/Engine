@@ -1,4 +1,4 @@
-#include "Pipeline/Content/Nodes/Transform/JointTransform.h"
+#include "Pipeline/Content/Nodes/JointTransform.h"
 
 using namespace Reflect;
 using namespace Content;

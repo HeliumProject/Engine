@@ -1,4 +1,4 @@
-#include "Pipeline/Content/Nodes/Geometry/Shader.h"
+#include "Pipeline/Content/Nodes/Shader.h"
 #include "Pipeline/Content/ContentVisitor.h"
 
 using namespace Reflect;

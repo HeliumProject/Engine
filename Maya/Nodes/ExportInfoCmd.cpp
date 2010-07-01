@@ -17,40 +17,40 @@ MString ExportInfoCmd::CommandName( "exportInfo" );
 //-----------------------------------------------------------------------------
 // arguments to the ExportInfoCmd command
 //-----------------------------------------------------------------------------
-const char * ExportInfoCmd::s_flag_long_geom       = "-geometry";
-const char * ExportInfoCmd::s_flag_short_geom      = "-g";
-const char * ExportInfoCmd::s_flag_long_skel       = "-skeleton";
-const char * ExportInfoCmd::s_flag_short_skel      = "-s";
-const char * ExportInfoCmd::s_flag_long_bang       = "-bangle";
-const char * ExportInfoCmd::s_flag_short_bang      = "-b";
-const char * ExportInfoCmd::s_flag_long_water      = "-water";
-const char * ExportInfoCmd::s_flag_short_water     = "-w";
-const char * ExportInfoCmd::s_flag_long_water_sim  = "-waterSimulation";
-const char * ExportInfoCmd::s_flag_short_water_sim = "-ws";
-const char * ExportInfoCmd::s_flag_long_hrc        = "-highResCollision";
-const char * ExportInfoCmd::s_flag_short_hrc       = "-hrc";
-const char * ExportInfoCmd::s_flag_long_lrc        = "-lowResCollision";
-const char * ExportInfoCmd::s_flag_short_lrc       = "-lrc";
-const char * ExportInfoCmd::s_flag_long_path       = "-pathfinding";
-const char * ExportInfoCmd::s_flag_short_path      = "-p";
-const char * ExportInfoCmd::s_flag_long_index      = "-index";
-const char * ExportInfoCmd::s_flag_short_index     = "-i";
-const char * ExportInfoCmd::s_flag_long_long       = "-long";
-const char * ExportInfoCmd::s_flag_short_long      = "-l";
-const char * ExportInfoCmd::s_flag_long_verbose    = "-verbose";
-const char * ExportInfoCmd::s_flag_short_verbose   = "-v";
-const char * ExportInfoCmd::s_flag_long_aos        = "-allowOldStyle";
-const char * ExportInfoCmd::s_flag_short_aos       = "-aos";
-const char * ExportInfoCmd::s_flag_long_an         = "-artNumber";
-const char * ExportInfoCmd::s_flag_short_an        = "-an";
-const char * ExportInfoCmd::s_flag_long_node       = "-node";
-const char * ExportInfoCmd::s_flag_short_node      = "-n";
-const char * ExportInfoCmd::s_flag_long_groupNode  = "-groupNode";
-const char * ExportInfoCmd::s_flag_short_groupNode = "-gn";
-const char * ExportInfoCmd::s_flag_long_lightmap  = "-lightmapped";
-const char * ExportInfoCmd::s_flag_short_lightmap = "-lm";
-const char * ExportInfoCmd::s_flag_long_fragment  = "-fragment";
-const char * ExportInfoCmd::s_flag_short_fragment = "-frg";
+const char* ExportInfoCmd::s_flag_long_geom       = "-geometry";
+const char* ExportInfoCmd::s_flag_short_geom      = "-g";
+const char* ExportInfoCmd::s_flag_long_skel       = "-skeleton";
+const char* ExportInfoCmd::s_flag_short_skel      = "-s";
+const char* ExportInfoCmd::s_flag_long_bang       = "-bangle";
+const char* ExportInfoCmd::s_flag_short_bang      = "-b";
+const char* ExportInfoCmd::s_flag_long_water      = "-water";
+const char* ExportInfoCmd::s_flag_short_water     = "-w";
+const char* ExportInfoCmd::s_flag_long_water_sim  = "-waterSimulation";
+const char* ExportInfoCmd::s_flag_short_water_sim = "-ws";
+const char* ExportInfoCmd::s_flag_long_hrc        = "-highResCollision";
+const char* ExportInfoCmd::s_flag_short_hrc       = "-hrc";
+const char* ExportInfoCmd::s_flag_long_lrc        = "-lowResCollision";
+const char* ExportInfoCmd::s_flag_short_lrc       = "-lrc";
+const char* ExportInfoCmd::s_flag_long_path       = "-pathfinding";
+const char* ExportInfoCmd::s_flag_short_path      = "-p";
+const char* ExportInfoCmd::s_flag_long_index      = "-index";
+const char* ExportInfoCmd::s_flag_short_index     = "-i";
+const char* ExportInfoCmd::s_flag_long_long       = "-long";
+const char* ExportInfoCmd::s_flag_short_long      = "-l";
+const char* ExportInfoCmd::s_flag_long_verbose    = "-verbose";
+const char* ExportInfoCmd::s_flag_short_verbose   = "-v";
+const char* ExportInfoCmd::s_flag_long_aos        = "-allowOldStyle";
+const char* ExportInfoCmd::s_flag_short_aos       = "-aos";
+const char* ExportInfoCmd::s_flag_long_an         = "-artNumber";
+const char* ExportInfoCmd::s_flag_short_an        = "-an";
+const char* ExportInfoCmd::s_flag_long_node       = "-node";
+const char* ExportInfoCmd::s_flag_short_node      = "-n";
+const char* ExportInfoCmd::s_flag_long_groupNode  = "-groupNode";
+const char* ExportInfoCmd::s_flag_short_groupNode = "-gn";
+const char* ExportInfoCmd::s_flag_long_lightmap  = "-lightmapped";
+const char* ExportInfoCmd::s_flag_short_lightmap = "-lm";
+const char* ExportInfoCmd::s_flag_long_fragment  = "-fragment";
+const char* ExportInfoCmd::s_flag_short_fragment = "-frg";
 
 const MString ExportInfoCmd::s_igNodeNotFound("igNodeNotFound");
 
@@ -175,7 +175,7 @@ bool ExportInfoCmd::parseArgs( const MArgList & args )
           status = selection.getDagPath( i, dagPath );
           if ( status == MS::kSuccess )
           {
-            m_selection.push_back( dagPath.fullPathName().asChar() );
+            m_selection.push_back( dagPath.fullPathName().asTChar() );
           }
         }
       }
@@ -203,7 +203,7 @@ bool ExportInfoCmd::parseArgs( const MArgList & args )
             status = selection.getDagPath( i, dagPath );
             if ( status == MS::kSuccess )
             {
-              m_groupNode.push_back( dagPath.fullPathName().asChar() );
+              m_groupNode.push_back( dagPath.fullPathName().asTChar() );
             }
           }
         }
@@ -258,15 +258,15 @@ MStatus ExportInfoCmd::doIt( const MArgList & args )
       }
       if ( m_verbose )
       {
-        appendToResult( MString("") + (*itr).m_artNumber );
-        appendToResult( Maya::ContentTypesString[ (*itr).m_type ] );
-        appendToResult( MString("") + (*itr).m_index );
+        appendToResult( MString() + (*itr).m_artNumber );
+        appendToResult( MString( Maya::ContentTypesString[ (*itr).m_type ] ) );
+        appendToResult( MString() + (*itr).m_index );
       }
     }
   }
   else
   {
-    MGlobal::displayWarning(CommandName + ": flags are incompatible");
+    MGlobal::displayWarning(CommandName + TXT(": flags are incompatible"));
   }
   return MS::kSuccess;
 }

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Sphere.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 const MTypeId Sphere::s_TypeID( IGL_SPHERE );
 const char* Sphere::s_TypeName = "sphere";

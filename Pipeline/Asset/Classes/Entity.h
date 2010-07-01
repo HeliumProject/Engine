@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Pipeline/API.h"
-#include "Pipeline/Content/Nodes/Instance/Instance.h"
+#include "Pipeline/Content/Nodes/Instance.h"
 #include "Pipeline/Asset/Classes/EntityAsset.h"
 #include "Foundation/Automation/Event.h"
 

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "PivotTransform.h"
 
-#include "Pipeline/Content/Nodes/Transform/PivotTransform.h"
+#include "Pipeline/Content/Nodes/PivotTransform.h"
 #include "Foundation/Math/EulerAngles.h"
 #include "Foundation/Math/Constants.h"
 

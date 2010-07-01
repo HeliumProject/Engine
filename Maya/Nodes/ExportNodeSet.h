@@ -5,8 +5,8 @@
 #include "Platform/Types.h"
 
 #include "ExportNode.h"
-#include "MayaUtils/Utils.h"
-#include "Content/ContentTypes.h"
+#include "Maya/Utils.h"
+#include "Pipeline/Content/ContentTypes.h"
 
 #include <maya/MPxObjectSet.h>
 

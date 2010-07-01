@@ -4,7 +4,7 @@
 #include "CameraController.h"
 #include "ExportNode.h"
 #include "ExportNodeSet.h"
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 MIntArray g_CallbackIDs; 
 

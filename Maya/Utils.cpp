@@ -285,7 +285,7 @@ namespace Maya
   {
     MStatus status( MStatus::kSuccess );
 
-    std::stringstream idStr;
+    tstringstream idStr;
     idStr << Nocturnal::TUID::HexFormat << id;
 
     MString idMStr( idStr.str().c_str() );
@@ -299,14 +299,14 @@ namespace Maya
   {
     MStatus status( MStatus::kSuccess );
 
-    std::string idStr;
+    tstring idStr;
     status = GetStringAttribute( object, idAttributeName, idStr );
 
     tuid id = Nocturnal::TUID::Null;
 
     if ( !idStr.empty() )
     {
-      std::istringstream idStream ( idStr );
+      tistringstream idStream ( idStr );
       idStream >> std::hex >> id;
     }
 
@@ -321,7 +321,7 @@ namespace Maya
 
   ///////////////////////////////////////////////////////////////////////////////
   // 
-  MStatus SetStringAttribute( MObject &object, const MString& attributeName, const std::string& stringAtr, const bool hidden )
+  MStatus SetStringAttribute( MObject &object, const MString& attributeName, const tstring& stringAtr, const bool hidden )
   {
     // locate/create an attribute to store our id attribute
     // we use one of maya's compound types to store our 64 bit id
@@ -356,7 +356,7 @@ namespace Maya
     MPlug objPlug( object, attribute );
 
     objPlug.setLocked( false );
-    objPlug.setValue( stringAtr.c_str() );
+    objPlug.setValue( MString (stringAtr.c_str()) );
     objPlug.setLocked( true );
 
     // reset to the prior state of wasLocked
@@ -371,11 +371,11 @@ namespace Maya
 
   ///////////////////////////////////////////////////////////////////////////////
   // 
-  MStatus GetStringAttribute( const MObject &object, const MString& attributeName, std::string& stringAtr )
+  MStatus GetStringAttribute( const MObject &object, const MString& attributeName, tstring& stringAtr )
   {
     MStatus status( MStatus::kSuccess );
     
-    stringAtr = "";
+    stringAtr = TXT("");
     
     MFnDependencyNode nodeFn( object );
 
@@ -397,7 +397,7 @@ namespace Maya
     MFnStringData stringDataFn;
     status = stringDataFn.setObject( objValue );
 
-    stringAtr = stringDataFn.string( &status ).asChar();
+    stringAtr = stringDataFn.string( &status ).asTChar();
 
     return status ;
   }

@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "ExportDescriptor.h"
-#include "MayaNodes/ExportNode.h"
+#include "Nodes/ExportNode.h"
 
 using namespace MayaContent;
 

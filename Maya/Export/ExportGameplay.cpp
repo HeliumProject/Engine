@@ -14,7 +14,7 @@ void ExportGameplay::GatherMayaData( V_ExportBase &newExportObjects )
   // doing a dangerous cast, because there should be no way for m_ContentObject to NOT be a Content::Volume
   Content::Volume* primitive = Reflect::DangerousCast< Content::Volume >( m_ContentObject );
 
-  primitive->m_DefaultName = nodeFn.name().asChar();
+  primitive->m_DefaultName = nodeFn.name().asTChar();
 
   // this will retrieve and setup the global matrix for this mesh (because meshs are transforms in Content but not Maya)
   MayaContentCmd::ConvertMatrix( MDagPath::getAPathTo( m_MayaObject ).inclusiveMatrix(), primitive->m_GlobalTransform );

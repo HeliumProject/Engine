@@ -3,7 +3,7 @@
 #include "NavMesh.h"
 
 #include "Pipeline/Content/Nodes/Camera.h"
-#include "Pipeline/Content/Nodes/Geometry/Mesh.h"
+#include "Pipeline/Content/Nodes/Mesh.h"
 
 #include "Pick.h"
 #include "PrimitiveLocator.h"

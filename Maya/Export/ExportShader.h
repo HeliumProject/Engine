@@ -2,7 +2,7 @@
 
 #include "ExportBase.h"
 #include "Foundation/TUID.h"
-#include "Content/Shader.h"
+#include "Pipeline/Content/Nodes/Shader.h"
 
 namespace MayaContent
 {

@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 static GLfloat vertices[][3] =
 {

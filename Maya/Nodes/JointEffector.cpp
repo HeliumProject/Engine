@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "JointEffector.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 const MTypeId JointEffector::s_TypeID(IGL_JOINT_EFFECTOR);
 const char* JointEffector::s_TypeName = "igJointEffector";

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ExportBase.h"
-#include "Content/Effector.h"
+#include "Pipeline/Content/Nodes/Effector.h"
 
 namespace MayaContent
 {

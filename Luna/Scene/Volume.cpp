@@ -15,7 +15,7 @@
 #include "PrimitiveCapsule.h"
 #include "PrimitivePointer.h"
 
-#include "Pipeline/Content/Nodes/Instance/Volume.h"
+#include "Pipeline/Content/Nodes/Volume.h"
 
 // Using
 using namespace Math;

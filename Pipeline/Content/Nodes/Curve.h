@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Pipeline/Content/Nodes/Transform/PivotTransform.h"
+#include "Pipeline/Content/Nodes/PivotTransform.h"
 #include "Point.h"
 
 namespace Content

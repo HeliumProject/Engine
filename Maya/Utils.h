@@ -44,8 +44,8 @@ namespace Maya
   MAYA_API MStatus SetTUIDAttribute( MObject &object, const MString& idAttributeName, tuid id, const bool hidden = false );
   MAYA_API tuid GetTUIDAttribute( const MObject &object, const MString& idAttributeName, MStatus* returnStatus = NULL );
 
-  MAYA_API MStatus SetStringAttribute( MObject &object, const MString& attributeName, const std::string& stringAtr, const bool hidden = false );
-  MAYA_API MStatus GetStringAttribute( const MObject &object, const MString& attributeName, std::string& stringAtr );
+  MAYA_API MStatus SetStringAttribute( MObject &object, const MString& attributeName, const tstring& stringAtr, const bool hidden = false );
+  MAYA_API MStatus GetStringAttribute( const MObject &object, const MString& attributeName, tstring& stringAtr );
 
   MAYA_API MStatus RemoveAttribute( MObject& object, const MString& attributeName );
 

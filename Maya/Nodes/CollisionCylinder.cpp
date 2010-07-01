@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "CollisionCylinder.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 const char* CollisionCylinder::s_TypeName = "igCylinder";
 const MTypeId CollisionCylinder::s_TypeID( IGL_COLL_CYLINDER );

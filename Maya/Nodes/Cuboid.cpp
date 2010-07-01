@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Cuboid.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 const MTypeId Cuboid::s_TypeID( IGL_CUBOID );
 const char* Cuboid::s_TypeName = "cuboid";

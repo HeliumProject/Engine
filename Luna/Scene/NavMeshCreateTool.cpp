@@ -22,8 +22,8 @@
 #include "Volume.h"
 #include "VolumeType.h"
 
-#include "Pipeline/Content/Nodes/Geometry/Mesh.h"
-#include "Pipeline/Content/Nodes/Instance/Volume.h"
+#include "Pipeline/Content/Nodes/Mesh.h"
+#include "Pipeline/Content/Nodes/Volume.h"
 
 #include "Foundation/Math/AngleAxis.h"
 #include "Foundation/Math/EulerAngles.h"

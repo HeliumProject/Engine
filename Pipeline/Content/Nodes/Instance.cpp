@@ -1,4 +1,4 @@
-#include "Pipeline/Content/Nodes/Instance/Instance.h"
+#include "Pipeline/Content/Nodes/Instance.h"
 #include "Pipeline/Content/Scene.h"
 
 #include "Pipeline/Component/ComponentHandle.h"

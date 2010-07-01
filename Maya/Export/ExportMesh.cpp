@@ -6,7 +6,7 @@
 
 #include "Foundation/Container/Insert.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 #include <maya/mFnDependencyNode.h>
 #include <maya/MFnWeightGeometryFilter.h>
@@ -126,7 +126,7 @@ void ExportMesh::GatherMayaData( V_ExportBase &newExportObjects )
   m_MayaParent = meshFn.parent(0);
 
   const Content::MeshPtr contentMesh = GetContentMesh();
-  contentMesh->m_DefaultName = m_MayaName.asChar();
+  contentMesh->m_DefaultName = m_MayaName.asTChar();
 
   // this will retrieve and setup the global matrix for this mesh (because meshs are transforms in Content but not Maya)
   MayaContentCmd::ConvertMatrix( MDagPath::getAPathTo( m_MayaObject ).inclusiveMatrix(), contentMesh->m_GlobalTransform );
@@ -383,7 +383,7 @@ bool ExportMesh::GetBlendShapeDeformer( const MFnMesh& meshFn, MFnBlendShapeDefo
 {
   MStatus status;
 
-  Log::Debug( "Searching for morpher (blendShape) for mesh: %s...\n", meshFn.name().asChar() );
+  Log::Debug( TXT("Searching for morpher (blendShape) for mesh: %s...\n"), meshFn.name().asTChar() );
 
   MItDependencyNodes blendShapeItr( MFn::kBlendShape );
 
@@ -408,7 +408,7 @@ bool ExportMesh::GetBlendShapeDeformer( const MFnMesh& meshFn, MFnBlendShapeDefo
 
       if ( baseObjects.length() != 1 )
       {
-        Log::Warning("Morph target (%s) has more than one base object, this is not supported", morpherFn.name().asChar() );
+        Log::Warning(TXT("Morph target (%s) has more than one base object, this is not supported"), morpherFn.name().asTChar() );
       }
 
       // check to see if it's the 
@@ -416,14 +416,14 @@ bool ExportMesh::GetBlendShapeDeformer( const MFnMesh& meshFn, MFnBlendShapeDefo
       {
         morpherFn.setObject( blendShapeObj );
 
-        Log::Debug( "Found morpher (blendShape): %s for baseObject mesh: %s\n", morpherFn.name().asChar(), meshFn.name().asChar() );
+        Log::Debug( TXT("Found morpher (blendShape): %s for baseObject mesh: %s\n"), morpherFn.name().asTChar(), meshFn.name().asTChar() );
 
         return true;
       }
     }
   }
 
-  Log::Debug( "None found.\n" );
+  Log::Debug( TXT("None found.\n") );
   return false;
 }
 
@@ -435,8 +435,8 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
 {
   MStatus status;
 
-  std::string morpherFnName = morpherFn.name().asChar();
-  Log::Debug( "Gathering morph targets for morpher (blendShape): %s\n", morpherFn.name().asChar() );
+  tstring morpherFnName = morpherFn.name().asTChar();
+  Log::Debug( TXT("Gathering morph targets for morpher (blendShape): %s\n"), morpherFn.name().asTChar() );
 
 
   // get the weights
@@ -446,7 +446,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
   status = morpherFn.weightIndexList(weightIndices);
 
   NOC_ASSERT(weightIndices.length() == numWeights);
-  Log::Debug( "NumWeights: %d\n", numWeights );
+  Log::Debug( TXT("NumWeights: %d\n"), numWeights );
 
   for( u32 weightIndex = 0; weightIndex < numWeights; ++weightIndex )
   {
@@ -458,7 +458,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
     NOC_ASSERT(status);
 
     u32 numTargets = targets.length();
-    Log::Debug( "WeightIndex: %d, NumTargets: %d\n", weightIndex, numTargets );
+    Log::Debug( TXT("WeightIndex: %d, NumTargets: %d\n"), weightIndex, numTargets );
 
     for(u32 targetIndex = 0; targetIndex < numTargets; ++targetIndex)
     {
@@ -473,7 +473,7 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
 
       ExportMorphTarget exportMorphTarget;
 
-      exportMorphTarget.m_Name = targetMeshFn.name(&status).asChar();
+      exportMorphTarget.m_Name = targetMeshFn.name(&status).asTChar();
       exportMorphTarget.m_Id = Maya::GetNodeID( targetObject );
 
 
@@ -492,9 +492,9 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
       if ( m_Normals.length() != numNormalDeltas )
       {
         throw Nocturnal::Exception( 
-          "Morph target %s does not have the same number of normals " \
-          "as the base mesh from which it was created (%s). " \
-          "This can cause strange display artifacts in the animations.",
+          TXT("Morph target %s does not have the same number of normals ") \
+          TXT("as the base mesh from which it was created (%s). ") \
+          TXT("This can cause strange display artifacts in the animations."),
           exportMorphTarget.m_Name.c_str(), GetContentMesh()->GetName().c_str() );
       }
 
@@ -523,9 +523,9 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
       if ( m_Points.length() != numPointDeltas )
       {
         throw Nocturnal::Exception( 
-          "Morph target %s does not have the same number of verticies " \
-          "as the base mesh from which it was created (%s). " \
-          "This can cause strange display artifacts in the animations.",
+          TXT("Morph target %s does not have the same number of verticies ") \
+          TXT("as the base mesh from which it was created (%s). ") \
+          TXT("This can cause strange display artifacts in the animations."),
           exportMorphTarget.m_Name.c_str(), GetContentMesh()->GetName().c_str() );
       }
 
@@ -551,15 +551,15 @@ void ExportMesh::GatherMorphTargets( MFnBlendShapeDeformer& morpherFn )
 
       if ( !exportMorphTarget.m_PosDeltas.empty() )
       {
-        Log::Debug( "Adding target mesh: %s\n", exportMorphTarget.m_Name.c_str() );
+        Log::Debug( TXT("Adding target mesh: %s\n"), exportMorphTarget.m_Name.c_str() );
         m_ExportMorphTargets.push_back( exportMorphTarget );
       }
       else
       {
         Log::Warning( 
-          "Skipping target mesh %s because it has no delta points. " \
-          "This means that the mesh does not differ from the base object. " \
-          "This will cause errors in the builders.\n", exportMorphTarget.m_Name.c_str() );
+          TXT("Skipping target mesh %s because it has no delta points. ") \
+          TXT("This means that the mesh does not differ from the base object. ") \
+          TXT("This will cause errors in the builders.\n"), exportMorphTarget.m_Name.c_str() );
       }
     }
   }
@@ -574,7 +574,7 @@ void ExportMesh::AddDefaultShader( V_ExportBase &newExportObjects, const Content
   if ( itr == m_ExportShaderMap.end() )
   {
     Content::ShaderPtr contentShader = new Content::Shader( s_DefaultShaderID );
-    contentShader->m_DefaultName = "Default Shader";
+    contentShader->m_DefaultName = TXT("Default Shader");
 
     ExportShaderPtr defaultShader = new ExportShader( contentShader );
     itr = m_ExportShaderMap.insert( M_UIDExportShader::value_type( s_DefaultShaderID, defaultShader ) ).first;
@@ -865,10 +865,10 @@ void ExportMesh::ProcessMorphTargets( const Content::MeshPtr contentMesh )
     // expand the m_PosDeltas by the unique verticies
     for each ( const ExportMorphTargetDelta& exportPosDelta in exportMorphTarget.m_PosDeltas )
     {
-      MM_u32::const_iterator lowerBound = m_SceneIndicesTracker.m_VertsIndices.lower_bound( exportPosDelta.m_VertexIndex );
+      std::multimap< u32, u32 >::const_iterator lowerBound = m_SceneIndicesTracker.m_VertsIndices.lower_bound( exportPosDelta.m_VertexIndex );
       if ( lowerBound != m_SceneIndicesTracker.m_VertsIndices.end() )
       {
-        MM_u32::const_iterator upperBound = m_SceneIndicesTracker.m_VertsIndices.upper_bound( exportPosDelta.m_VertexIndex );
+        std::multimap< u32, u32 >::const_iterator upperBound = m_SceneIndicesTracker.m_VertsIndices.upper_bound( exportPosDelta.m_VertexIndex );
         for( ; lowerBound != upperBound; ++lowerBound )
         {          
           const u32& newVectorIndex = lowerBound->second;
@@ -880,8 +880,8 @@ void ExportMesh::ProcessMorphTargets( const Content::MeshPtr contentMesh )
           if ( normalDeltaIndex >= (u32) exportMorphTarget.m_NormalDeltaVectors.size() )
           {
             throw Nocturnal::Exception(
-              "Morph target %s does not have the same vertex count/order/normals " \
-              "as the base mesh from which it was created (%s).",
+              TXT("Morph target %s does not have the same vertex count/order/normals ") \
+              TXT("as the base mesh from which it was created (%s)."),
               exportMorphTarget.m_Name.c_str(), contentMesh->GetName().c_str() );
           }
 
@@ -900,7 +900,7 @@ void ExportMesh::ProcessPolygon( unsigned int & triangleIndex, const ExportPolyg
 {
   EXPORT_SCOPE_TIMER( ("") );
 
-  M_u32 mayaIndexToExportIndex; 
+  std::map< u32, u32 > mayaIndexToExportIndex; 
   MIntArray polyVertIndices; 
   MStatus status;
   MFnMesh meshFn( m_MayaObject, &status );
@@ -924,7 +924,7 @@ void ExportMesh::ProcessPolygon( unsigned int & triangleIndex, const ExportPolyg
     status = meshFn.getPolygonTriangleVertices( poly.m_PolygonNumber, triIndex, vertexList );
     if ( !status )
     {
-      Log::Error( "Unable to fetch triangle vertices for poly #%d, tri #%d on mesh %s\n", poly.m_PolygonNumber, triIndex, meshFn.partialPathName().asChar() );
+      Log::Error( TXT("Unable to fetch triangle vertices for poly #%d, tri #%d on mesh %s\n"), poly.m_PolygonNumber, triIndex, meshFn.partialPathName().asTChar() );
       NOC_BREAK();
     }
 
@@ -934,7 +934,7 @@ void ExportMesh::ProcessPolygon( unsigned int & triangleIndex, const ExportPolyg
 
     if ( v0 < 0 || v1 < 0 || v2 < 0 )
     {
-      Log::Error( "Invalid vertex index detected during polygon triangulation (poly #%d, tri #%d, mesh %s)\n", poly.m_PolygonNumber, triIndex, meshFn.partialPathName().asChar() );
+      Log::Error( TXT("Invalid vertex index detected during polygon triangulation (poly #%d, tri #%d, mesh %s)\n"), poly.m_PolygonNumber, triIndex, meshFn.partialPathName().asTChar() );
       NOC_BREAK();
     }
 
@@ -1191,7 +1191,7 @@ bool ExportMesh::ComputeTriangleData( ExportTriangle &exportTri ) const
 // this prevents triangles sharing an edge from putting two wires into the wireframe
 //
 
-inline static void InsertWireEdge( V_u32& wireframeIndices, S_WireEdge& sourceWires, int sourceVert0, int sourceVert1, int vert0, int vert1)
+inline static void InsertWireEdge( std::vector< u32 >& wireframeIndices, S_WireEdge& sourceWires, int sourceVert0, int sourceVert1, int vert0, int vert1)
 {
   if (sourceVert1 < sourceVert0)
   {
@@ -1273,9 +1273,9 @@ void ExportMesh::ProcessTriangle( unsigned int& triangleIndex, unsigned int poly
   // (u32)m_VertexList[exportTri.m_Vertices[X].m_Index] to triVertIdxX (the unique vert)
   // and then later (when processing the blend shapes) index into this from the ideltas
   // create a delta for each unique vert and store this struct in the contentMesh
-  m_SceneIndicesTracker.m_VertsIndices.insert( MM_u32::value_type( v0, ( ( triangleIndex * 3 ) + 0 ) ) );
-  m_SceneIndicesTracker.m_VertsIndices.insert( MM_u32::value_type( v1, ( ( triangleIndex * 3 ) + 1 ) ) );
-  m_SceneIndicesTracker.m_VertsIndices.insert( MM_u32::value_type( v2, ( ( triangleIndex * 3 ) + 2 ) ) );
+  m_SceneIndicesTracker.m_VertsIndices.insert( std::multimap< u32, u32 >::value_type( v0, ( ( triangleIndex * 3 ) + 0 ) ) );
+  m_SceneIndicesTracker.m_VertsIndices.insert( std::multimap< u32, u32 >::value_type( v1, ( ( triangleIndex * 3 ) + 1 ) ) );
+  m_SceneIndicesTracker.m_VertsIndices.insert( std::multimap< u32, u32 >::value_type( v2, ( ( triangleIndex * 3 ) + 2 ) ) );
 
 
   if ( exportTri.m_Vertices[2].m_Wire )

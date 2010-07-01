@@ -34,10 +34,6 @@
 		Value="$(SolutionDir)SDK\lua\5.1.4"
 	/>
 	<UserMacro
-		Name="Maya"
-		Value="C:\Program Files (x86)\Autodesk\Maya2011"
-	/>
-	<UserMacro
 		Name="MySQL"
 		Value="$(SolutionDir)SDK\MySQL\6.0.2"
 	/>

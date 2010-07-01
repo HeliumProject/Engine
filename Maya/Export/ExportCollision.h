@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ExportBase.h"
-#include "Content/CollisionPrimitive.h"
+#include "Pipeline/Content/Nodes/CollisionPrimitive.h"
 
 namespace MayaContent
 {

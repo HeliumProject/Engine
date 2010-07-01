@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "GameplayCapsule.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 const MTypeId GameplayCapsule::s_TypeID( IGL_GP_CAPSULE );
 const char* GameplayCapsule::s_TypeName = "gpCapsule";

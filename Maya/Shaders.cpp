@@ -18,7 +18,7 @@
 
 namespace Maya
 {
-  typedef std::map<std::string, MObject> MObjectMap;
+  typedef std::map<tstring, MObject> MObjectMap;
 
   ////////////////////////////////////////////////////////////////////////////////
   //
@@ -243,7 +243,7 @@ namespace Maya
           if ( shader != MObject::kNullObj )
           {
             nodeFn.setObject(shader);
-            shaderEngines[nodeFn.name().asChar()] = shader;
+            shaderEngines[nodeFn.name().asTChar()] = shader;
           }
         }
       }
@@ -316,7 +316,7 @@ namespace Maya
       for( int i = 0; i < setCount; ++i ) 
       {
         nodeFn.setObject( setArray[i] );
-        shaderEngines[nodeFn.name().asChar()] = nodeFn.object();
+        shaderEngines[nodeFn.name().asTChar()] = nodeFn.object();
       }
     }
   }

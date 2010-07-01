@@ -3,10 +3,10 @@
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Log.h"
 #include "ExportAnimationClip.h"
-#include "MayaNodes/ExportNode.h"
-#include "MayaNodes/ExportNodeSet.h"
+#include "Nodes/ExportNode.h"
+#include "Nodes/ExportNodeSet.h"
 #include "MayaContentCmd.h"
-#include "MayaUtils/Export.h"
+#include "Maya/Export.h"
 #include "Foundation/Boost/Regex.h"
 
 using namespace Content;
@@ -180,7 +180,7 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
   // Cinematic scenes can contain more than one actor, so we want to 
   // only store the export nodes for the actor we are currently exporting
   const Content::AnimationClipPtr animClip = GetContentAnimationClip();
-  const std::string actorNamespace = animClip->m_ActorName + ":";
+  const tstring actorNamespace = animClip->m_ActorName + TXT(":");
   if ( !animClip->m_ActorName.empty() )
   {
     Maya::S_MObject sets;
@@ -196,7 +196,7 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
         ExportNodeSet* exportSet = static_cast< ExportNodeSet* >(nodeFn.userNode( &status ) );
         if ( status )
         {
-          std::string nodeSetName = nodeFn.name().asChar();
+          tstring nodeSetName = nodeFn.name().asTChar();
           if ( nodeSetName.find( actorNamespace ) == 0 )
           {
             exportSet->GetExportNodes( geometryNodes, Content::ContentTypes::Geometry );
@@ -228,7 +228,7 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
     NOC_ASSERT( blendShapeObj.apiType() == MFn::kBlendShape );
 
     morpherFn.setObject( blendShapeObj );
-    std::string morpherFnName = morpherFn.name().asChar();
+    tstring morpherFnName = morpherFn.name().asTChar();
 
     // get the base object
     MObjectArray baseObjects;
@@ -243,7 +243,7 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
 
     if ( baseObjects.length() != 1 )
     {
-      Log::Warning("Morph target (%s) has more than one base object, this is not supported", morpherFnName.c_str() );
+      Log::Warning(TXT("Morph target (%s) has more than one base object, this is not supported"), morpherFnName.c_str() );
       continue;
     }
 
@@ -257,7 +257,7 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
     exportBlendShapeDeformer.m_BlendShapeObject = blendShapeObj;
     exportBlendShapeDeformer.m_BaseObject = baseObjects[0];
 
-    Log::Debug( "Gathering morph targets for morpher: %s", morpherFnName.c_str() );
+    Log::Debug( TXT("Gathering morph targets for morpher: %s"), morpherFnName.c_str() );
 
     u32 numWeights = morpherFn.numWeights( &status );
     if ( numWeights < 1 )

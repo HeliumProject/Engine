@@ -1,4 +1,4 @@
-#include "Pipeline/Content/Nodes/Geometry/CollisionPrimitive.h"
+#include "Pipeline/Content/Nodes/CollisionPrimitive.h"
 
 using namespace Content;
 

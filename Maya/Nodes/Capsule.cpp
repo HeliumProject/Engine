@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Capsule.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 const MTypeId Capsule::s_TypeID( IGL_CAPSULE );
 const char* Capsule::s_TypeName = "capsule";
@@ -45,13 +45,13 @@ void Capsule::draw( M3dView& view, const MDagPath& path, M3dView::DisplayStyle s
     for ( int i=0; i<3; i++ )
     {
        dn.setObject( scaleXPlugs[i].node() );
-       if ( stricmp( dn.typeName().asChar(), "transform" ) == 0 )
+       if ( _tcsicmp( dn.typeName().asTChar(), TXT("transform") ) == 0 )
        {
          dp = MDagPath::getAPathTo( dn.object(), &mstatus );
          if( !mstatus )
          {
            MString error ( "Error: Cannot get path to child piece of capsule " );
-           error +=  path.fullPathName().asChar();
+           error +=  path.fullPathName().asTChar();
            error += ". Get Reddy\n";
            MGlobal::displayError( error );
            return;
@@ -63,7 +63,7 @@ void Capsule::draw( M3dView& view, const MDagPath& path, M3dView::DisplayStyle s
     if( !mstatus )
     {
       MString error ( "Error: Cannot get path to child piece of capsule " );
-      error +=  path.fullPathName().asChar();
+      error +=  path.fullPathName().asTChar();
       error += "\n";
       MGlobal::displayError( error );
     }

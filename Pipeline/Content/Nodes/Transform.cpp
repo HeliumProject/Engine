@@ -1,4 +1,4 @@
-#include "Pipeline/Content/Nodes/Transform/Transform.h"
+#include "Pipeline/Content/Nodes/Transform.h"
 #include "Pipeline/Content/ContentVisitor.h"
 
 using namespace Reflect;

@@ -20,8 +20,8 @@ namespace Maya
 {
   struct ExportInfo
   {
-    std::string          m_pathStrFull;
-    std::string          m_pathStrPartial;
+    tstring          m_pathStrFull;
+    tstring          m_pathStrPartial;
     MDagPath             m_path;
     Content::ContentType m_type;
     int                  m_index;
@@ -67,9 +67,9 @@ namespace Maya
     int                m_index;
   };
 
-  typedef std::map<std::string, NodeDecode> M_StringNodeDecode;
+  typedef std::map<tstring, NodeDecode> M_StringNodeDecode;
 
-  extern MAYA_API const char* ContentTypesString[Content::ContentTypes::NumContentTypes];
+  extern MAYA_API const tchar* ContentTypesString[Content::ContentTypes::NumContentTypes];
 
   extern MAYA_API M_StringNodeDecode g_standardNodes;
 
@@ -79,8 +79,8 @@ namespace Maya
 
   // this call must be made prior to queries
   void MAYA_API InitExportInfo( bool                     allowOldStyle,
-                       std::vector<std::string> selection,
-                       std::vector<std::string> groupNode );
+                       std::vector<tstring> selection,
+                       std::vector<tstring> groupNode );
 
   // these call makes queries after InitExportInfo has been called
   void MAYA_API GetExportInfo( M_MObject_ExportInfoIndex& result,
@@ -108,7 +108,7 @@ namespace Maya
 
   MStatus MAYA_API CreateExportNodeFromTransform( const MObject &transform, MObject& exportNode, Content::ContentType exportType = Content::ContentTypes::Default, u32 num = 0 );
   MStatus MAYA_API ReplaceWithExportNode( const MObject &transFn, Content::ContentType exportType = Content::ContentTypes::Default, u32 num = 0 );
-  Content::ContentType MAYA_API ClassifyOldNode( const std::string &name, const std::string& fullname, u32 &num );
+  Content::ContentType MAYA_API ClassifyOldNode( const tstring &name, const tstring& fullname, u32 &num );
   Content::ContentType MAYA_API ClassifyOldNode( MFnTransform &name, u32 &num );
 
   // makes queries via GetExportInfo

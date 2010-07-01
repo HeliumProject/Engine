@@ -1,17 +1,14 @@
 #include "Precompile.h"
 #include "ExportScene.h"
 #include "MayaContentCmd.h"
-#include "MayaUtils/Utils.h"
+#include "Maya/Utils.h"
 #include "Application/RCS/RCS.h"
 
 #include "Foundation/Log.h"
 
-#include "MayaNodes/ExportNode.h"
+#include "Nodes/ExportNode.h"
 
-#include "Finder/Finder.h"
-#include "Finder/ContentSpecs.h"
-
-#include "Content/Curve.h"
+#include "Pipeline/Content/Nodes/Curve.h"
 
 #include "ExportDescriptor.h"
 #include "ExportMesh.h"
@@ -55,11 +52,11 @@ void ExportScene::ProcessMayaData()
   // done adding to the scene, update it.
   m_ContentScene.Update();
   {
-    V_string dup_bangle_errors;
+    std::vector< tstring > dup_bangle_errors;
     dup_bangle_errors.reserve(64);
     if (m_ContentScene.HasDuplicateBangleIndexedExportNodes(dup_bangle_errors))
     {
-      for (V_string::const_iterator error_it = dup_bangle_errors.begin(); error_it != dup_bangle_errors.end(); ++error_it)
+      for (std::vector< tstring >::const_iterator error_it = dup_bangle_errors.begin(); error_it != dup_bangle_errors.end(); ++error_it)
       {
         Log::Error( error_it->c_str());
         MGlobal::displayError(error_it->c_str());

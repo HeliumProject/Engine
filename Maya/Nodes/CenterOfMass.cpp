@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "CenterOfMass.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 const MTypeId CenterOfMass::s_TypeID(IGL_CENTER_OF_MASS);
 const char* CenterOfMass::s_TypeName = "centerOfMass";

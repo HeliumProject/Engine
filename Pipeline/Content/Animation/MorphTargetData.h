@@ -2,7 +2,7 @@
 
 #include "Pipeline/API.h"
 
-#include "Pipeline/Content/Nodes/Geometry/Mesh.h"
+#include "Pipeline/Content/Nodes/Mesh.h"
 #include "Foundation/Memory/SmartPtr.h"
 
 namespace Content

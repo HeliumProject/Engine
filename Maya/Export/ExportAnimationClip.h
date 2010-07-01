@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ExportAnimationBase.h"
-#include "Content/Animation.h"
+#include "Pipeline/Content/Animation/Animation.h"
 
 namespace MayaContent
 {
@@ -39,7 +39,7 @@ namespace MayaContent
       Content::AnimationClipPtr clip = new Content::AnimationClip();
 
       clip->m_SkeletonID = skeletonID;
-      clip->m_ActorName = "";
+      clip->m_ActorName = TXT("");
 
       m_ContentObject = clip;
     }

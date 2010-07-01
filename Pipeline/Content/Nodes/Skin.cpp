@@ -1,4 +1,4 @@
-#include "Pipeline/Content/Nodes/Geometry/Skin.h"
+#include "Pipeline/Content/Nodes/Skin.h"
 
 using namespace Reflect;
 using namespace Content;

@@ -11,24 +11,22 @@
 
 #include "Foundation/Reflect/Version.h"
 
-#include "MayaUtils/Utils.h"
-#include "MayaUtils/UniqueID.h"
-#include "MayaUtils/NodeTypes.h"
-#include "MayaUtils/ErrorHelpers.h"
+#include "Maya/Utils.h"
+#include "Maya/UniqueID.h"
+#include "Maya/NodeTypes.h"
+#include "Maya/ErrorHelpers.h"
 
 #include "API.h"
 #include "ExportScene.h"
 #include "Platform/Types.h"
-#include "Asset/EntityManifest.h"
-
 
 //
 // Typedefs
 //
 
 typedef std::map<int, int> M_types;
-typedef std::map<std::string, MObject> M_object;
-typedef std::map<std::string, std::string> M_string;
+typedef std::map<tstring, MObject> M_object;
+typedef std::map<tstring, tstring> M_string;
 
 
 //
@@ -79,9 +77,9 @@ namespace MayaContent
     CommandData m_Data;
 
     // the file name of the source file we are dealing with
-    std::string m_SourceFileName;
-    std::string m_ContentFileName;
-    std::string m_FragmentName;
+    tstring m_SourceFileName;
+    tstring m_ContentFileName;
+    tstring m_FragmentName;
 
     // the action abort flag
     bool m_Abort;
@@ -173,7 +171,7 @@ namespace MayaContent
     //
     // This is the primary interface to the exporter
     //
-    static void ExportCurrentScene( MObject root = MObject::kNullObj, std::string& sourceFile = std::string(""), std::string& fragmentName = std::string("") );
+    static void ExportCurrentScene( MObject root = MObject::kNullObj, tstring& sourceFile = tstring(), tstring& fragmentName = tstring() );
 
     //
     // Export whatever is selected to the clipboard as XML
@@ -193,7 +191,7 @@ namespace MayaContent
     static void ConvertMatrix (const MMatrix& matrix, Math::Matrix4& outMatrix);
     static void ConvertMatrix (const Math::Matrix4& outMatrix, MMatrix& matrix);
 
-    static void GetDynamicAttributes( const MObject& node, const Attribute::ComponentCollectionPtr& element );
-    static void ConvertAttributeToComponent( const MFnDependencyNode &nodeFn, const MFnAttribute &attrFn, const Attribute::ComponentCollectionPtr &element );
+    static void GetDynamicAttributes( const MObject& node, const Component::ComponentCollectionPtr& element );
+    static void ConvertAttributeToComponent( const MFnDependencyNode &nodeFn, const MFnAttribute &attrFn, const Component::ComponentCollectionPtr &element );
   };
 }

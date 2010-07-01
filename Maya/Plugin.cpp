@@ -6,36 +6,60 @@
 #include "Foundation/InitializerStack.h"
 #include "Pipeline/Content/ContentInit.h"
 
-#if 0
+#include "Nodes/CameraController.h"
+#include "Nodes/CameraControllerUICmd.h"
+
+#include "Nodes/Cuboid.h"
+#include "Nodes/Sphere.h"
+#include "Nodes/Capsule.h"
+#include "Nodes/Cylinder.h"
+
+#include "Nodes/CollisionCuboid.h"
+#include "Nodes/CollisionSphere.h"
+#include "Nodes/CollisionCapsule.h"
+#include "Nodes/CollisionCylinder.h"
+
+#include "Nodes/GameplayCuboid.h"
+#include "Nodes/GameplaySphere.h"
+#include "Nodes/GameplayCapsule.h"
+#include "Nodes/GameplayCylinder.h"
+
+#include "Nodes/Plane.h"
+#include "Nodes/JointEffector.h"
+
+#include "Nodes/CenterOfMass.h"
+#include "Nodes/NavEffectorSphere.h"
+#include "Nodes/NavEffectorCylinder.h"
+#include "Nodes/NavEffectorCuboid.h"
+#include "Nodes/NavClueCuboid.h"
+
+#include "Nodes/ExportNode.h"
+#include "Nodes/ExportNodeSet.h"
+#include "Nodes/ExportInfoCmd.h"
+
+#include "Nodes/EntityNode.h"
+#include "Nodes/EntityNodeCmd.h"
+#include "Nodes/EntityAssetNode.h"
+#include "Nodes/EntityGroupNode.h"
+
+#include "Foundation/InitializerStack.h"
+#include "Pipeline/Content/ContentInit.h"
+#include "Maya/NodeTypes.h"
+
+#include "Nodes/CallBacks.h"
+
+#include <maya/MFnPlugin.h>
+#include <maya/MUserEventMessage.h>
+
 void AfterSaveCallback( void *clientData );
 void MayaExitingCallback( void *clientData );
-#endif
 
 MCallbackId g_AfterSaveCallbackID;
 MCallbackId g_MayaExitingCallbackID;
 Nocturnal::InitializerStack g_InitializerStack;
 
-#define REGISTER_COMMAND( cmd ) \
-    status = plugin.registerCommand(  cmd::CommandName, \
-    & cmd::creator, \
-    & cmd::newSyntax ); \
-    if ( !status ) \
-{ \
-    status.perror( registerCommandError + cmd::CommandName ); \
-    return status; \
-}
-
-#define DEREGISTER_COMMAND( cmd ) \
-    status = plugin.deregisterCommand( cmd::CommandName ); \
-    if (!status) \
-{ \
-    status.perror( deregisterCommandError ); \
-    return status; \
-}
-
 MStatus initializePlugin( MObject obj )
 {
-    /*
     g_InitializerStack.Push( &Content::Initialize, &Content::Cleanup );
 
     MStatus   status;
@@ -46,128 +70,6 @@ MStatus initializePlugin( MObject obj )
     // MPxCommand
     REGISTER_COMMAND( ExportContentCmd );
 
-    if ( MGlobal::mayaState() != MGlobal::kLibraryApp && MGlobal::mayaState() != MGlobal::kBatch )
-    {
-    g_AfterSaveCallbackID = MSceneMessage::addCallback( MSceneMessage::kAfterSave, AfterSaveCallback );
-    }
-
-    g_MayaExitingCallbackID = MSceneMessage::addCallback( MSceneMessage::kMayaExiting, MayaExitingCallback );
-    */
-    return MS::kSuccess;
-}
-
-MStatus uninitializePlugin( MObject obj )
-{
-    /*
-    MStatus   status;
-    MString   deregisterNodeError( "deregisterNode " );
-    MString   deregisterCommandError( "deregisterCommand " );
-    MFnPlugin plugin( obj );
-
-    DEREGISTER_COMMAND( ExportContentCmd );
-
-    if (MGlobal::mayaState() != MGlobal::kLibraryApp && MGlobal::mayaState() != MGlobal::kBatch)
-    {
-    MSceneMessage::removeCallback( g_AfterSaveCallbackID );
-    }
-
-    MSceneMessage::removeCallback( g_MayaExitingCallbackID );
-
-    g_InitializerStack.Cleanup();
-    */
-    return MS::kSuccess;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-// Called when maya exits
-void MayaExitingCallback( void *clientData )
-{
-    MSceneMessage::removeCallback( g_MayaExitingCallbackID );
-
-    g_InitializerStack.Cleanup();
-}
-
-#if 0
-
-#include "Precompile.h"
-
-#include "CameraController.h"
-#include "CameraControllerUICmd.h"
-
-#include "Cuboid.h"
-#include "Sphere.h"
-#include "Capsule.h"
-#include "Cylinder.h"
-
-#include "CollisionCuboid.h"
-#include "CollisionSphere.h"
-#include "CollisionCapsule.h"
-#include "CollisionCylinder.h"
-
-#include "GameplayCuboid.h"
-#include "GameplaySphere.h"
-#include "GameplayCapsule.h"
-#include "GameplayCylinder.h"
-
-#include "Plane.h"
-#include "JointEffector.h"
-
-#include "CenterOfMass.h"
-#include "NavEffectorSphere.h"
-#include "NavEffectorCylinder.h"
-#include "NavEffectorCuboid.h"
-#include "NavClueCuboid.h"
-
-#include "DestructionGlue.h"
-#include "DestructionPin.h"
-#include "DestructionCmd.h"
-
-#include "ExportNode.h"
-#include "ExportNodeSet.h"
-#include "ExportInfoCmd.h"
-
-#include "EntityNode.h"
-#include "EntityNodeCmd.h"
-#include "EntityAssetNode.h"
-#include "EntityGroupNode.h"
-
-#include "Foundation/InitializerStack.h"
-#include "Content/ContentInit.h"
-#include "MayaUtils/NodeTypes.h"
-
-#include "CallBacks.h"
-
-#include <maya/MFnPlugin.h>
-#include <maya/MUserEventMessage.h>
-
-//
-// TODO for this library:
-//
-//  * Check and see if Maya2008 allows us to instance hierarchies with one node which will remove overhead
-//    in EntityAssetNode having to keep separate node instances up to date with the art class scene
-//  * Check and see if Maya2008 has support for transient node (unsaved data), this will help allow editability
-//    work because instance nodes would normally be saved when exporting the art class data because of 
-//    DG connections and DAG
-//
-
-MCallbackId g_MayaExitingCallbackID;
-
-Nocturnal::InitializerStack g_InitializerStack;
-
-void MayaExitingCallback( void *clientData )
-{
-    MSceneMessage::removeCallback( g_MayaExitingCallbackID );
-
-    g_InitializerStack.Cleanup();
-}
-
-MStatus initializePlugin( MObject obj )
-{ 
-    g_InitializerStack.Push( &Content::Initialize, &Content::Cleanup );
-
-    MString registerNodeError( "registerNode " );
-    MString registerCommandError( "registerCommand " );
-    MFnPlugin plugin( obj, "Insomniac Games", "1.0", "Any" );
 
     REGISTER_NODE( CameraController, kDependNode );
 
@@ -201,18 +103,14 @@ MStatus initializePlugin( MObject obj )
     REGISTER_NODE( NavClueCuboid, kLocatorNode );
     REGISTER_NODE( NavEffectorCuboid, kLocatorNode );
 
-    REGISTER_NODE( DestructionGlue, kLocatorNode );
-    REGISTER_NODE( DestructionPin, kLocatorNode );
-
     // MPxCommand
     REGISTER_COMMAND( ExportInfoCmd );
-    REGISTER_COMMAND( DestructionCmd );
     REGISTER_COMMAND( CameraControllerUICmd );
 
     REGISTER_TRANSFORM( ExportNode, &MPxTransformationMatrix::creator, MPxTransformationMatrix::baseTransformationMatrixId );
     REGISTER_NODE( ExportNodeSet, kObjectSet );
 
-    MStatus status = CallbacksCreate();
+    status = CallbacksCreate();
     if ( !status )
     {
         status.perror( "register call backs" );
@@ -245,6 +143,11 @@ MStatus initializePlugin( MObject obj )
     REGISTER_TRANSFORM( EntityGroupNode, &MPxTransformationMatrix::creator,  MPxTransformationMatrix::baseTransformationMatrixId );
     REGISTER_COMMAND( EntityNodeCmd );
 
+    if ( MGlobal::mayaState() != MGlobal::kLibraryApp && MGlobal::mayaState() != MGlobal::kBatch )
+    {
+        g_AfterSaveCallbackID = MSceneMessage::addCallback( MSceneMessage::kAfterSave, AfterSaveCallback );
+    }
+
     g_MayaExitingCallbackID = MSceneMessage::addCallback( MSceneMessage::kMayaExiting, MayaExitingCallback );
 
     return MS::kSuccess;
@@ -252,10 +155,13 @@ MStatus initializePlugin( MObject obj )
 
 MStatus uninitializePlugin( MObject obj )
 {
-    MStatus status;
-    MString deregisterNodeError( "deregisterNode " );
-    MString deregisterCommandError( "deregisterCommand " );
+    MStatus   status;
+    MString   deregisterNodeError( "deregisterNode " );
+    MString   deregisterCommandError( "deregisterCommand " );
     MFnPlugin plugin( obj );
+
+    DEREGISTER_COMMAND( ExportContentCmd );
+
 
     DEREGISTER_NODE( CollisionSphere );
     DEREGISTER_NODE( Plane );
@@ -270,8 +176,6 @@ MStatus uninitializePlugin( MObject obj )
     DEREGISTER_NODE( CollisionCuboid );
     DEREGISTER_NODE( CollisionCapsuleChild );
     DEREGISTER_NODE( CollisionCapsule );
-    DEREGISTER_NODE( DestructionGlue );
-    DEREGISTER_NODE( DestructionPin );
     DEREGISTER_NODE( CameraController );
 
     DEREGISTER_NODE( GameplayCapsule );
@@ -331,6 +235,11 @@ MStatus uninitializePlugin( MObject obj )
     DEREGISTER_TRANSFORM( EntityGroupNode );
     DEREGISTER_COMMAND( EntityNodeCmd );
 
+    if (MGlobal::mayaState() != MGlobal::kLibraryApp && MGlobal::mayaState() != MGlobal::kBatch)
+    {
+        MSceneMessage::removeCallback( g_AfterSaveCallbackID );
+    }
+
     MSceneMessage::removeCallback( g_MayaExitingCallbackID );
 
     g_InitializerStack.Cleanup();
@@ -338,4 +247,22 @@ MStatus uninitializePlugin( MObject obj )
     return MS::kSuccess;
 }
 
-#endif
+/////////////////////////////////////////////////////////////////////////////
+// Called when maya exits
+void MayaExitingCallback( void *clientData )
+{
+    MSceneMessage::removeCallback( g_MayaExitingCallbackID );
+
+    g_InitializerStack.Cleanup();
+}
+
+
+//
+// TODO for this library:
+//
+//  * Check and see if Maya2008 allows us to instance hierarchies with one node which will remove overhead
+//    in EntityAssetNode having to keep separate node instances up to date with the art class scene
+//  * Check and see if Maya2008 has support for transient node (unsaved data), this will help allow editability
+//    work because instance nodes would normally be saved when exporting the art class data because of 
+//    DG connections and DAG
+//

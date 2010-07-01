@@ -6,15 +6,15 @@
 #include "Platform/Types.h"
 #include "Foundation/Version.h"
 
-#include "MayaUtils/NodeTypes.h"
-#include "MayaUtils/ErrorHelpers.h"
+#include "Maya/NodeTypes.h"
+#include "Maya/ErrorHelpers.h"
 
 #include "Foundation/TUID.h"
-#include "Attribute/AttributeHandle.h"
-#include "Asset/ArtFileAttribute.h"
-#include "MayaUtils/Duplicate.h"
-#include "MayaUtils/Utils.h"
-#include "Math/EulerAngles.h"
+#include "Foundation/Math/EulerAngles.h"
+#include "Pipeline/Component/ComponentHandle.h"
+#include "Pipeline/Asset/Components/ArtFileComponent.h"
+#include "Maya/Duplicate.h"
+#include "Maya/Utils.h"
 
 #include <maya/MPointArray.h>
 #include <maya/MModelMessage.h>
@@ -22,7 +22,7 @@
 #include <maya/MObjectHandle.h>
 
 using namespace Asset;
-using namespace Attribute;
+using namespace Component;
 using namespace Nocturnal;
 
 // enable this to watch all dag changes, just for debugging
@@ -283,7 +283,7 @@ void EntityNode::SetBackingEntity( const Asset::EntityPtr& entity )
     m_Entity = entity;
     m_UID = m_Entity->m_ID;
 
-    AttributeViewer< ArtFileAttribute > artFile( m_Entity );
+    ComponentViewer< ArtFileComponent > artFile( m_Entity );
 
     m_Plug.setAttribute( s_ArtFilePath );
     m_Plug.setValue( artFile->GetPath().c_str() );

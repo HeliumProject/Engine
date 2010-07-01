@@ -11,9 +11,9 @@
 #include "Export.h"
 
 bool g_MayaFileOpen = false;
-std::string g_MayaFile = "";
+tstring g_MayaFile = TXT("");
 
-bool Maya::OpenFile(const std::string& filename, MFileIO::ReferenceMode referenceMode )
+bool Maya::OpenFile(const tstring& filename, MFileIO::ReferenceMode referenceMode )
 {
   MStatus stat;
 
@@ -33,7 +33,7 @@ bool Maya::OpenFile(const std::string& filename, MFileIO::ReferenceMode referenc
 
   if ( !stat )
   {
-    throw Nocturnal::Exception( "(Maya::newFile) could not reset file." );
+    throw Nocturnal::Exception( TXT("(Maya::newFile) could not reset file.") );
     return false;
   }
 
@@ -47,20 +47,20 @@ bool Maya::OpenFile(const std::string& filename, MFileIO::ReferenceMode referenc
   if ( !stat )
   {
     MFileIO::getErrorStatus( &stat );
-    throw Nocturnal::Exception( "(Maya::OpenFile) could not load Maya file '%s' (%s)\n", g_MayaFile.c_str(), stat.errorString() );
+    throw Nocturnal::Exception( TXT("(Maya::OpenFile) could not load Maya file '%s' (%s)\n"), g_MayaFile.c_str(), stat.errorString() );
     return false;
   }
 
   g_MayaFileOpen = true;
 
-  std::vector<std::string> selection;
-  std::vector<std::string> groupNode;
+  std::vector<tstring> selection;
+  std::vector<tstring> groupNode;
   InitExportInfo( true, selection, groupNode );
 
   return true;
 }
 
-bool Maya::IsFileOpen(const std::string& filename)
+bool Maya::IsFileOpen(const tstring& filename)
 {
   if ( g_MayaFileOpen && ( g_MayaFile == filename ) )
     return true;
@@ -75,10 +75,10 @@ bool Maya::CloseFile()
 
   if (MFileIO::newFile(true) != MS::kSuccess)
   {
-    throw Nocturnal::Exception("(Maya::CloseFile) unable to close file");
+    throw Nocturnal::Exception(TXT("(Maya::CloseFile) unable to close file"));
   }
 
-  g_MayaFile = "";
+  g_MayaFile = TXT("");
   g_MayaFileOpen = false;
 
   return true;
@@ -97,7 +97,7 @@ bool Maya::SaveFile()
   stat = MFileIO::save(true);
   if ( !stat )
   {
-    throw Nocturnal::Exception("(Maya::SaveFile) could not save file");
+    throw Nocturnal::Exception(TXT("(Maya::SaveFile) could not save file"));
   }
 
   return true;

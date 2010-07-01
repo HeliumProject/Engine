@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ExportBase.h"
-#include "Content/Volume.h"
+#include "Pipeline/Content/Nodes/Volume.h"
 
 namespace MayaContent
 {

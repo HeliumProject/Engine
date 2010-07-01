@@ -3,7 +3,7 @@
 #include "API.h"
 #include "EntityNode.h"
 
-#include "MayaContent/ExportScene.h"
+#include "Export/ExportScene.h"
 
 #include <maya/MPxTransform.h>
 

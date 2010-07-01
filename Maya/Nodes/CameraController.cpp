@@ -1,7 +1,7 @@
 #include "Precompile.h"
 
-#include "MayaUtils/NodeTypes.h"
-#include "MayaUtils/ErrorHelpers.h"
+#include "Maya/NodeTypes.h"
+#include "Maya/ErrorHelpers.h"
 
 #include "CameraController.h"
 #include "CameraControllerUICmd.h"
@@ -154,7 +154,7 @@ void * CameraController::Creator()
 
 MStatus CameraController::Initialize()
 {
-  static const char * initializeError = "failure in CameraController::Initialize()";
+  static const char* initializeError = "failure in CameraController::Initialize()";
   MStatus              status;
   MFnCompoundAttribute cAttr;
   MFnEnumAttribute     eAttr;
@@ -395,7 +395,7 @@ void CameraController::beforeSaveCallback(void* node)
     if ( guidStr.length() == 0 )
     {
       TUID id( TUID::Generate() );
-      std::string s;
+      tstring s;
       id.ToString(s);
       guidStr = MString(s.c_str());
       guidPlug.setLocked( false );
@@ -666,7 +666,7 @@ void CameraController::loadInput( MDataBlock & dataBlock )
       MFnDagNode cameraShapeNode( sourcePlugArray[0].node(), &status );
       if ( status == MS::kSuccess )
       {
-        std::string shapeName = cameraShapeNode.partialPathName().asChar();
+        tstring shapeName = cameraShapeNode.partialPathName().asTChar();
         MFnTransform cameraTransformNode( cameraShapeNode.parent(0), &status );
         if ( status == MS::kSuccess )
         {
@@ -675,7 +675,7 @@ void CameraController::loadInput( MDataBlock & dataBlock )
           cameraTransformNode.setObject( cameraDagPath );
           double                               rotComponent[3];
           MTransformationMatrix::RotationOrder rotOrder;
-          std::string camName = cameraTransformNode.partialPathName().asChar();
+          tstring camName = cameraTransformNode.partialPathName().asTChar();
           cameraTransformNode.getRotation( rotComponent, rotOrder, MSpace::kWorld );
           
           //since there doesn't appear to be a proper way to get the rotateAxis, we go the long route...
@@ -729,12 +729,12 @@ void CameraController::validateCutValues()
       for(u32 i = 0; i < m_input.size(); i++)
       {
         CameraControllerInput* camera_input = &m_input[i];
-        const char*            camera_name  = camera_input->m_cameraName.asChar();
+        const tchar*           camera_name  = camera_input->m_cameraName.asTChar();
         u32                    camera_id;
         u32                    camera_cut_start;
         u32                    camera_cut_end;
 
-        u32 num = sscanf(camera_name, "igCam%d_%d_%d_", &camera_id, &camera_cut_start, &camera_cut_end);
+        u32 num = _stscanf(camera_name, TXT("igCam%d_%d_%d_"), &camera_id, &camera_cut_start, &camera_cut_end);
 
         char str[1024];
         if (num == 3)

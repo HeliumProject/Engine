@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "CollisionSphere.h"
 
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 const MTypeId CollisionSphere::s_TypeID( IGL_COLL_SPHERE );
 const char* CollisionSphere::s_TypeName = "igSphere";

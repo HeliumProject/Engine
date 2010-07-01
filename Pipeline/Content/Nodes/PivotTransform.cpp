@@ -1,4 +1,4 @@
-#include "Pipeline/Content/Nodes/Transform/PivotTransform.h"
+#include "Pipeline/Content/Nodes/PivotTransform.h"
 
 using namespace Reflect;
 using namespace Content;

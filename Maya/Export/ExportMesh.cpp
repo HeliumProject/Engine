@@ -654,8 +654,6 @@ void ExportMesh::AddSkinData()
 
       for (unsigned i=0; i<m_InfluenceCount; i++)
       {
-#pragma TODO("Fix influenceWeight") 
-
         // warning, the initial implementation of influenceWeight is quite SLOW
         float weight = 0.0f;
 

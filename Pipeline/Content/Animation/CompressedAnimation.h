@@ -31,8 +31,6 @@ namespace Content
     u32  m_ScaleScale;
     u32  m_RotateScale;
 
-    f32  m_BlendFactor;
-
     // The values in the animation
     std::vector< i16 > m_TranslateX;
     std::vector< i16 > m_TranslateY;

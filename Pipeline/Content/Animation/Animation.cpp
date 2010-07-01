@@ -9,7 +9,6 @@ namespace Content
 void Animation::EnumerateClass( Reflect::Compositor<Animation>& comp )
 {
   Reflect::Field* fieldJointID = comp.AddField( &Animation::m_JointID, "m_JointID" );
-  Reflect::Field* fieldBlendFactor = comp.AddField( &Animation::m_BlendFactor, "m_BlendFactor" );
   Reflect::Field* fieldWindowSamples = comp.AddField( &Animation::m_WindowSamples, "m_WindowSamples" );
   Reflect::Field* fieldTotalSamples = comp.AddField( &Animation::m_TotalSamples, "m_TotalSamples" );
   

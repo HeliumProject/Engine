@@ -14,7 +14,7 @@ void ExportDescriptor::GatherMayaData( V_ExportBase &newExportObjects )
   Content::Descriptor* transform = Reflect::DangerousCast< Content::Descriptor >( m_ContentObject );
 
   // get the export attributes and set them on the Content::ExportNode
-  MPlug plug( m_MayaObject, ExportNode::s_attr_contentType );
+  MPlug plug( m_MayaObject, ExportNode::s_ContentTypeAttr );
   int tmp;
   plug.getValue( tmp );
   transform->m_ExportType = (Content::ContentType)tmp;
@@ -38,7 +38,7 @@ void ExportDescriptor::GatherMayaData( V_ExportBase &newExportObjects )
     }
   }
 
-  plug.setAttribute( ExportNode::s_attr_contentNumber );
+  plug.setAttribute( ExportNode::s_ContentNumberAttr );
   plug.getValue( tmp );
   transform->m_ContentNum = (u16)tmp;
 

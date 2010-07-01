@@ -124,8 +124,6 @@ bool ExportInfoCmd::parseArgs( const MArgList & args )
     bool hasFlagGroupNode = argParser.isFlagSet(s_flag_short_groupNode);
     bool hasFlagLightmap  = argParser.isFlagSet(s_flag_short_lightmap);
     bool hasFlagFragment  = argParser.isFlagSet(s_flag_short_fragment);
-    bool hasFlagWater     = argParser.isFlagSet(s_flag_short_water);
-    bool hasFlagRisingWater  = argParser.isFlagSet(s_flag_short_water_sim);
 
     // inspect any type flags
     int typesCount = 0;
@@ -133,8 +131,6 @@ bool ExportInfoCmd::parseArgs( const MArgList & args )
     if ( hasFlagGeom ) { typesCount++; m_type = Content::ContentTypes::Geometry; }
     if ( hasFlagSkel ) { typesCount++; m_type = Content::ContentTypes::Skeleton; }
     if ( hasFlagBang ) { typesCount++; m_type = Content::ContentTypes::Bangle; }
-    if ( hasFlagWater ) { typesCount++; m_type = Content::ContentTypes::Water; }
-    if ( hasFlagRisingWater ) { typesCount++; m_type = Content::ContentTypes::RisingWater; }
     if ( hasFlagHrc ) { typesCount++; m_type = Content::ContentTypes::HighResCollision; }
     if ( hasFlagLrc ) { typesCount++; m_type = Content::ContentTypes::LowResCollision; }
     if ( hasFlagPath ) { typesCount++; m_type = Content::ContentTypes::Pathfinding; }

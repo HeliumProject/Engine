@@ -37,9 +37,7 @@ namespace Content
   class PIPELINE_API Animation : public Reflect::Element
   {
   public:
-    
-    Nocturnal::TUID       m_JointID;
-    f32                m_BlendFactor;
+    Nocturnal::TUID    m_JointID;
 
     // number of samples specified by the animator
     u32                m_WindowSamples;
@@ -52,8 +50,7 @@ namespace Content
     Math::V_Vector3    m_Scale;
 
     Animation()
-      : m_BlendFactor( -1.0f )
-      , m_WindowSamples( 0 )
+      : m_WindowSamples( 0 )
       , m_TotalSamples( 0 )
     {
     }

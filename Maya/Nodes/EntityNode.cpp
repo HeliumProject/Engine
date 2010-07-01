@@ -286,7 +286,7 @@ void EntityNode::SetBackingEntity( const Asset::EntityPtr& entity )
     ComponentViewer< ArtFileComponent > artFile( m_Entity );
 
     m_Plug.setAttribute( s_ArtFilePath );
-    m_Plug.setValue( artFile->GetPath().c_str() );
+    m_Plug.setValue( MString (artFile->GetPath().c_str()) );
 
     Math::Matrix4 gm = m_Entity->m_GlobalTransform * s_RelativeTransform.Inverted();
     MMatrix mat;

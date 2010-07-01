@@ -45,19 +45,15 @@ public:
   static const char* s_TypeName;
 
   // attribs
-  static MObject  s_attr_prev_contentType;
-  static MObject  s_attr_contentType;
-  static MObject  s_attr_contentNumber;
+  static MObject s_PrevContentTypeAttr;
+  static MObject s_ContentTypeAttr;
+  static MObject s_ContentNumberAttr;
 
   // attribute names
   static MString s_KeyPoseAttrName;
   static MString s_DefaultDrawAttrName;
   static MString s_CheapChunkAttrName;
   static MString s_GeomSimAttrName;
-
-  static MString s_RisingWaterEnumAttrName;
-  static MString s_RisingWaterNameAttrName;
-  static MString s_RisingWaterEnumIDAttrName;
 
   static MString s_UseWrinkleMapAttrName;
   static MString s_WrinkleMapRegionAttrNames[Content::MaxCountWrinkleMapRegions];

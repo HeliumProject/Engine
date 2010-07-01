@@ -12,6 +12,7 @@ namespace Content
 
   namespace ContentTypes
   {
+#pragma TODO("This is terrible and needs to be fixed")
     //******************** !!IMPORTANT!! ***********************
     //
     //        !!ELEMENT ORDER MUST BE PRESERVED!!
@@ -51,8 +52,6 @@ namespace Content
       Foliage,
       FragmentGroup,
       MonitorCam,
-      Water,
-      RisingWater,
       WrinkleMap,
       Exclude,
       Destruction,
@@ -65,28 +64,6 @@ namespace Content
       // Last Element
       NumContentTypes,
     };
-
-    //******************** !!IMPORTANT!! ***********************
-    //
-    // If you are hitting any one of these asserts, it means
-    // that you have altered the order of the ContentTypes enum
-    // elements. Please read the !!IMPORTANT!! warning above 
-    // and undo your changes:
-    NOC_COMPILE_ASSERT(ContentTypes::Bangle == 3);
-    NOC_COMPILE_ASSERT(ContentTypes::Pathfinding == 6);
-    NOC_COMPILE_ASSERT(ContentTypes::Overlay == 10);
-    NOC_COMPILE_ASSERT(ContentTypes::BloomPostShell == 14);
-    NOC_COMPILE_ASSERT(ContentTypes::Water == 18);
-    NOC_COMPILE_ASSERT(ContentTypes::Destruction == 22);
-    //
-    // If you are hitting this assert, it means that you have
-    // changed the number of ContentTypes enum elements. If you
-    // believe your changes were made in compliance with the
-    // !!IMPORTANT!! warning above, please change the magic-number
-    // below so that the asserts no longer triggers:
-    NOC_COMPILE_ASSERT(28 == ContentTypes::NumContentTypes);
-    //
-    //******************** !!IMPORTANT!! ***********************
 
     static void ContentTypeEnumerateEnumeration( Reflect::Enumeration* info )
     {
@@ -109,8 +86,6 @@ namespace Content
       info->AddElement(Foliage, TXT( "Foliage" ) );
       info->AddElement(FragmentGroup, TXT( "FragmentGroup" ) );
       info->AddElement(MonitorCam, TXT( "MonitorCam" ) );
-      info->AddElement(Water, TXT( "Water" ) );
-      info->AddElement(RisingWater, TXT( "RisingWater" ) );
       info->AddElement(WrinkleMap, TXT( "WrinkleMap" ) );
       info->AddElement(Destruction, TXT( "Destruction" ) );
       info->AddElement(Debris, TXT( "Debris" ) );

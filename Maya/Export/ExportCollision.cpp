@@ -54,7 +54,7 @@ void ExportCollision::GatherMayaData( V_ExportBase &newExportObjects )
 
   MStatus status;
 
-  if( typeID == IGL_COLL_CAPSULE || typeID == IGL_COLL_CYLINDER  ||  typeID == IGL_LOOSE_ATTACHMENT_CAPSULE)
+  if( typeID == IGL_COLL_CAPSULE || typeID == IGL_COLL_CYLINDER )
   {
     MFnDagNode parentFn(nodeFn.parent(0));
 

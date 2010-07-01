@@ -63,8 +63,6 @@ namespace Maya
     TXT("Foliage"),
     TXT("GeomGroup"),
     TXT("MonitorCam"),
-    TXT("Water"),
-    TXT("RisingWater"),
     TXT("WrinkleMap"),
     TXT("Exclude"),
     TXT("Destruction"),

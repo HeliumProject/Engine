@@ -117,46 +117,13 @@ void ExportAnimationClip::GatherMayaData( V_ExportBase &newExportObjects )
     m_Animations.push_back( anim );
   }
 
-  //
-  // Bake Data
-  //
-  std::vector<MObject>::iterator itor;
-  std::vector<MObject>::iterator end = m_RequiredJoints.end();
-
-  //
-  // gather blend factors
-  //
-  itor = m_RequiredJoints.begin();
-  for ( u32 i = 0; itor != end; ++itor, ++i )
-  {
-    MFnIkJoint jointFn (*itor, &status);
-
-#pragma TODO( "What should we do in this case? this shouldn't be happening" )
-    if ( !status )
-      continue;
-
-    if( jointFn.hasAttribute( "BlendFactor" ) )
-    {
-      MStatus s;
-      MPlug blendFactorPlug = jointFn.findPlug( "BlendFactor", true, &s );
-
-      if ( s )
-      {
-        blendFactorPlug.getValue( m_Animations[ i ]->m_BlendFactor );
-      }
-    }
-  }
-
   animClip->m_StartFrame = (f32)startTime.value();
   animClip->m_EndFrame   = (f32)endTime.value();
   animClip->m_Rate       = Rate( MAnimControl::currentTime().unit() );
   animClip->m_DataRate   = Rate( MAnimControl::currentTime().unit() );
 
-
   // Gather Morph target info
   GatherBlendShapeDeformers();
-
-  
 
   __super::GatherMayaData( newExportObjects );
 }

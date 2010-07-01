@@ -15,7 +15,6 @@
 #include <maya/MSyntax.h>
 #include <maya/MArgDataBase.h>
 
-#include "Nodes/CameraController.h"
 #include "Nodes/ExportNodeSet.h"
 #include "Nodes/EntityNode.h"
 
@@ -26,7 +25,6 @@
 #include "ExportGameplay.h"
 #include "ExportCurve.h"
 #include "ExportDescriptor.h"
-#include "ExportEffector.h"
 #include "ExportJoint.h"
 #include "ExportMesh.h"
 
@@ -491,16 +489,8 @@ bool MayaContentCmd::ExportObject(MObject object, int percent)
             case IGL_COLL_CYLINDER:               
             case IGL_COLL_CYLINDER_CHILD:
             case IGL_COLL_CUBOID:
-            case IGL_LOOSE_ATTACHMENT_SPHERE:
-            case IGL_LOOSE_ATTACHMENT_CAPSULE: 
-            case IGL_LOOSE_ATTACHMENT_CAPSULE_CHILD: 
                 m_ExportScene.Add( new ExportCollision( object, Maya::GetNodeID( object ) ) );
                 return true;
-
-            case IGL_JOINT_EFFECTOR:
-                m_ExportScene.Add( new ExportEffector( object, Maya::GetNodeID( object ) ) );
-                return true;
-
             }
             break;
         }
@@ -685,29 +675,9 @@ void MayaContentCmd::SetQueued(const MObject node)
 void MayaContentCmd::DetermineExportedTypes( BitArray& types )
 {
     EXPORT_SCOPE_TIMER( ("") );
+
     // check for anims
-#if 0
-    int result = 0;
-    MGlobal::executeCommand( "hasTimeAnimCurves", result, false, false );
-
-    if ( result )
-    {
-        types[MayaContentCmd::kAnimation] = true;
-
-        // also consider cinescene stuff
-        MObjectArray cameraControllers;
-        Maya::findNodesOfType( cameraControllers, IGL_CAMERA_CONTROLLER_ID );
-        if( cameraControllers.length() )
-            types[MayaContentCmd::kCineScene] = true;
-    }
-
-    if( !types[MayaContentCmd::kAnimation] )
-#else
     types[MayaContentCmd::kAnimation] = true;
-
-    // also consider cinescene stuff
-
-    Maya::findNodesOfType( m_ObjectsToExport[kCineScene], IGL_CAMERA_CONTROLLER_ID, MFn::kInvalid, m_Root );
 
     if( m_ObjectsToExport[kCineScene].length() )
     {
@@ -718,7 +688,6 @@ void MayaContentCmd::DetermineExportedTypes( BitArray& types )
     }
 
     // find the other types and junk if it doesn't have animation
-#endif
     {
 
         MFnDagNode nodeFn;
@@ -729,9 +698,6 @@ void MayaContentCmd::DetermineExportedTypes( BitArray& types )
 
         ExportNode::FindExportNodes( m_ObjectsToExport[kStaticMesh], Content::ContentTypes::Geometry, m_Root );
         ExportNode::FindExportNodes( m_ObjectsToExport[kStaticMesh], Content::ContentTypes::Bangle, m_Root );
-        ExportNode::FindExportNodes( m_ObjectsToExport[kStaticMesh], Content::ContentTypes::Water, m_Root );
-        ExportNode::FindExportNodes( m_ObjectsToExport[kStaticMesh], Content::ContentTypes::RisingWater, m_Root );
-        Maya::findNodesOfType( m_ObjectsToExport[kStaticMesh], IGL_WATER_PLANE, MFn::kDagNode, m_Root );
 
         u32 numObjects = m_ObjectsToExport[kStaticMesh].length();
         for( u32 i = 0; i < numObjects; ++i )
@@ -797,9 +763,6 @@ void MayaContentCmd::DetermineExportedTypes( BitArray& types )
         Maya::findNodesOfType( collPrims, IGL_COLL_CUBOID, MFn::kDagNode, m_Root );
         Maya::findNodesOfType( collPrims, IGL_COLL_CYLINDER, MFn::kDagNode, m_Root);
         Maya::findNodesOfType( collPrims, IGL_COLL_CYLINDER_CHILD, MFn::kDagNode, m_Root);
-        Maya::findNodesOfType( collPrims, IGL_LOOSE_ATTACHMENT_SPHERE, MFn::kDagNode, m_Root);
-        Maya::findNodesOfType( collPrims, IGL_LOOSE_ATTACHMENT_CAPSULE, MFn::kDagNode, m_Root);
-        Maya::findNodesOfType( collPrims, IGL_LOOSE_ATTACHMENT_CAPSULE_CHILD, MFn::kDagNode, m_Root);
 
         if( collPrims.length() != 0 )
         {
@@ -823,33 +786,6 @@ void MayaContentCmd::DetermineExportedTypes( BitArray& types )
                 types[kPathfinding] = true;
                 break;
             }     
-        }
-
-        //
-        // NavEffectors
-        //
-
-        MObjectArray navEffectors;
-        Maya::findNodesOfType( navEffectors, IGT_NAV_SPHERE_ID, MFn::kDagNode, m_Root );
-        Maya::findNodesOfType( navEffectors, IGT_NAV_CYLINDER_ID, MFn::kDagNode, m_Root );
-        Maya::findNodesOfType( navEffectors, IGT_NAV_CUBOID_ID, MFn::kDagNode, m_Root );
-        if( navEffectors.length() != 0 )
-        {
-            types[kRiggedMesh] = true;
-            Maya::appendObjectArray( m_ObjectsToExport[kRiggedMesh], navEffectors );
-        }
-
-
-        //
-        // NavClues
-        //
-
-        MObjectArray navClues;
-        Maya::findNodesOfType( navClues, IGL_NAV_CLUE_CUBOID_ID, MFn::kDagNode, m_Root );
-        if( navClues.length() != 0 )
-        {
-            types[kRiggedMesh] = true;
-            Maya::appendObjectArray( m_ObjectsToExport[kRiggedMesh], navClues );
         }
     }
 }

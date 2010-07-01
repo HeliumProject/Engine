@@ -21,11 +21,6 @@ MString ExportNode::s_DefaultDrawAttrName          = "DefaultDraw";
 MString ExportNode::s_CheapChunkAttrName           = "CheapChunk";
 MString ExportNode::s_GeomSimAttrName              = "GeometrySimulation";
 
-static const char* s_RisingWaterPackageIDName      = "RisingWaterPackageID";
-MString ExportNode::s_RisingWaterEnumAttrName      = "RisingWaterEnum";
-MString ExportNode::s_RisingWaterNameAttrName      = "RisingWaterName";
-MString ExportNode::s_RisingWaterEnumIDAttrName    = "RisingWaterPackageID";
-
 MString ExportNode::s_UseWrinkleMapAttrName        = "UseWrinkleMapAttributes";
 MString ExportNode::s_WrinkleMapRegionAttrNames[Content::MaxCountWrinkleMapRegions] = 
 { 
@@ -39,9 +34,9 @@ MString ExportNode::s_WrinkleMapRegionAttrNames[Content::MaxCountWrinkleMapRegio
   "WrinkleMap2A",
 };
 
-MObject  ExportNode::s_attr_prev_contentType;
-MObject  ExportNode::s_attr_contentType;
-MObject  ExportNode::s_attr_contentNumber;
+MObject  ExportNode::s_PrevContentTypeAttr;
+MObject  ExportNode::s_ContentTypeAttr;
+MObject  ExportNode::s_ContentNumberAttr;
 
 const MTypeId ExportNode::s_TypeID(IGL_EXPORTNODE_ID);
 const char* ExportNode::s_TypeName = "igExportNode";
@@ -262,20 +257,18 @@ void ExportNode::AttributeChangedCB(MNodeMessage::AttributeMessage msg,
     MObject nodeThatChanged = plug.node();
     MFnDependencyNode nodeFn( nodeThatChanged );
 
-    if( plug.attribute() == ExportNode::s_attr_contentType )
+    if( plug.attribute() == ExportNode::s_ContentTypeAttr )
     {      
       int currentContentType;
       plug.getValue( currentContentType );
       Content::ContentType type = static_cast<Content::ContentType>(currentContentType);
 
-      MPlug prevContentTypePlug = nodeFn.findPlug("prevContentType");
-     
+      MPlug prevContentTypePlug = nodeFn.findPlug("prevContentType");    
       int prevContentType;
       prevContentTypePlug.getValue(prevContentType);
-
       Content::ContentType prevType = static_cast<Content::ContentType>(prevContentType);
 
-      MPlug numPlug( plug.node(), ExportNode::s_attr_contentNumber );
+      MPlug numPlug( plug.node(), ExportNode::s_ContentNumberAttr );
       numPlug.setLocked( false );
 
       // add the appropriate attributes depending on the type
@@ -364,7 +357,7 @@ MStatus ExportNode::Initialize()
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   // Create a short attribute "contentNumber"
   MFnNumericAttribute nAttr;
-  s_attr_contentNumber = nAttr.create("contentNumber", "contentNumber", MFnNumericData::kLong, 0, &stat);
+  s_ContentNumberAttr = nAttr.create("contentNumber", "contentNumber", MFnNumericData::kLong, 0, &stat);
   MCheckErr(stat, "Unable to do: nAttr.create");
 
   nAttr.setKeyable(true);
@@ -372,7 +365,7 @@ MStatus ExportNode::Initialize()
   nAttr.setWritable(true);
 
   // Add "refType" to the ref Trans
-  stat = addAttribute(s_attr_contentNumber);
+  stat = addAttribute(s_ContentNumberAttr);
   MCheckErr(stat, "Unable to do: refTransNode.addAttribute");
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -380,10 +373,10 @@ MStatus ExportNode::Initialize()
   MFnEnumAttribute	eAttr;
   MFnEnumAttribute  eAttr2;
 
-  s_attr_contentType = eAttr.create("contentType", "contentType", Content::ContentTypes::Default, &stat);
+  s_ContentTypeAttr = eAttr.create("contentType", "contentType", Content::ContentTypes::Default, &stat);
   MCheckErr(stat, "Unable to create attr: contentType");
 
-  s_attr_prev_contentType = eAttr2.create("prevContentType", "prevContentType", Content::ContentTypes::Null, &stat);
+  s_PrevContentTypeAttr = eAttr2.create("prevContentType", "prevContentType", Content::ContentTypes::Null, &stat);
   MCheckErr(stat, "Unable to create attr: contentType");
 
   for( u32 i = 0; i < (u32)Content::ContentTypes::NumContentTypes; ++i )
@@ -400,10 +393,10 @@ MStatus ExportNode::Initialize()
   eAttr2.setReadable(true);
   eAttr2.setWritable(true);
 
-  stat = addAttribute(s_attr_contentType);
+  stat = addAttribute(s_ContentTypeAttr);
   MCheckErr(stat, "Unable to add attr: contentType");
 
-  stat = addAttribute(s_attr_prev_contentType);
+  stat = addAttribute(s_PrevContentTypeAttr);
   MCheckErr(stat, "Unable to add attr: prevContentType");
 
   // hide the prevContentType attribute, after it has been added
@@ -427,7 +420,7 @@ void ExportNode::FindExportNodes( MObjectArray& exportNodes, Content::ContentTyp
       {
         if( exportType != Content::ContentTypes::Default )
         {
-          MPlug plug( nodeFn.object(), ExportNode::s_attr_contentType );
+          MPlug plug( nodeFn.object(), ExportNode::s_ContentTypeAttr );
 
           int tmp;
           plug.getValue( tmp );
@@ -439,7 +432,7 @@ void ExportNode::FindExportNodes( MObjectArray& exportNodes, Content::ContentTyp
             }
             else
             {
-              plug.setAttribute( ExportNode::s_attr_contentNumber );
+              plug.setAttribute( ExportNode::s_ContentNumberAttr );
               plug.getValue( tmp );
               if( tmp == num )
                 exportNodes.append( dagIter.currentItem() );
@@ -454,7 +447,7 @@ void ExportNode::FindExportNodes( MObjectArray& exportNodes, Content::ContentTyp
           }
           else
           {
-            MPlug plug( nodeFn.object(), ExportNode::s_attr_contentNumber );
+            MPlug plug( nodeFn.object(), ExportNode::s_ContentNumberAttr );
             int tmp;
             plug.getValue( tmp );
             if( tmp == num )

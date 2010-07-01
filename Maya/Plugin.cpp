@@ -6,9 +6,6 @@
 #include "Foundation/InitializerStack.h"
 #include "Pipeline/Content/ContentInit.h"
 
-#include "Nodes/CameraController.h"
-#include "Nodes/CameraControllerUICmd.h"
-
 #include "Nodes/Cuboid.h"
 #include "Nodes/Sphere.h"
 #include "Nodes/Capsule.h"
@@ -23,15 +20,6 @@
 #include "Nodes/GameplaySphere.h"
 #include "Nodes/GameplayCapsule.h"
 #include "Nodes/GameplayCylinder.h"
-
-#include "Nodes/Plane.h"
-#include "Nodes/JointEffector.h"
-
-#include "Nodes/CenterOfMass.h"
-#include "Nodes/NavEffectorSphere.h"
-#include "Nodes/NavEffectorCylinder.h"
-#include "Nodes/NavEffectorCuboid.h"
-#include "Nodes/NavClueCuboid.h"
 
 #include "Nodes/ExportNode.h"
 #include "Nodes/ExportNodeSet.h"
@@ -70,9 +58,6 @@ MStatus initializePlugin( MObject obj )
     // MPxCommand
     REGISTER_COMMAND( ExportContentCmd );
 
-
-    REGISTER_NODE( CameraController, kDependNode );
-
     REGISTER_NODE( Locator, kLocatorNode );
     REGISTER_NODE( Cuboid, kLocatorNode );
     REGISTER_NODE( Sphere, kLocatorNode );
@@ -86,26 +71,15 @@ MStatus initializePlugin( MObject obj )
     REGISTER_NODE( GameplayCylinder, kLocatorNode );
     REGISTER_NODE( GameplayCapsule, kLocatorNode );
 
+    REGISTER_NODE( CollisionCuboid, kLocatorNode );
+    REGISTER_NODE( CollisionSphere, kLocatorNode );
     REGISTER_NODE( CollisionCylinder, kLocatorNode );
     REGISTER_NODE( CollisionCylinderChild, kLocatorNode );
-    REGISTER_NODE( NavEffectorCylinder, kLocatorNode );
-
-    REGISTER_NODE( CollisionSphere, kLocatorNode );
     REGISTER_NODE( CollisionCapsule, kLocatorNode );
     REGISTER_NODE( CollisionCapsuleChild, kLocatorNode );
-    REGISTER_NODE( JointEffector, kLocatorNode );
-    REGISTER_NODE( NavEffectorSphere, kLocatorNode );
-    REGISTER_NODE( CenterOfMass, kLocatorNode );
-
-    REGISTER_NODE( Plane, kLocatorNode );
-
-    REGISTER_NODE( CollisionCuboid, kLocatorNode );
-    REGISTER_NODE( NavClueCuboid, kLocatorNode );
-    REGISTER_NODE( NavEffectorCuboid, kLocatorNode );
 
     // MPxCommand
     REGISTER_COMMAND( ExportInfoCmd );
-    REGISTER_COMMAND( CameraControllerUICmd );
 
     REGISTER_TRANSFORM( ExportNode, &MPxTransformationMatrix::creator, MPxTransformationMatrix::baseTransformationMatrixId );
     REGISTER_NODE( ExportNodeSet, kObjectSet );
@@ -164,19 +138,11 @@ MStatus uninitializePlugin( MObject obj )
 
 
     DEREGISTER_NODE( CollisionSphere );
-    DEREGISTER_NODE( Plane );
-    DEREGISTER_NODE( CenterOfMass );
-    DEREGISTER_NODE( NavEffectorSphere );
-    DEREGISTER_NODE( NavEffectorCylinder );
-    DEREGISTER_NODE( NavEffectorCuboid );
-    DEREGISTER_NODE( NavClueCuboid );
-    DEREGISTER_NODE( JointEffector );
     DEREGISTER_NODE( CollisionCylinder );
     DEREGISTER_NODE( CollisionCylinderChild );
     DEREGISTER_NODE( CollisionCuboid );
     DEREGISTER_NODE( CollisionCapsuleChild );
     DEREGISTER_NODE( CollisionCapsule );
-    DEREGISTER_NODE( CameraController );
 
     DEREGISTER_NODE( GameplayCapsule );
     DEREGISTER_NODE( GameplayCylinder );
@@ -192,7 +158,6 @@ MStatus uninitializePlugin( MObject obj )
     DEREGISTER_NODE( Locator );
 
     DEREGISTER_COMMAND( ExportInfoCmd );
-    DEREGISTER_COMMAND( CameraControllerUICmd );
 
     status = plugin.deregisterNode( ExportNode::s_TypeID );
     if (!status)

@@ -91,14 +91,14 @@ void ExportNodeSet::GetExportNodes( MObjectArray &exportNodes, Content::ContentT
       if( nodeType != Content::ContentTypes::Null )
       {
         int tmp;
-        MPlug plug( obj, ExportNode::s_attr_contentType );
+        MPlug plug( obj, ExportNode::s_ContentTypeAttr );
         plug.getValue( tmp );
         if( static_cast<Content::ContentType>( tmp ) == nodeType )
         {
           if( num != -1)
           {
             int contentNum;
-            plug.setAttribute( ExportNode::s_attr_contentNumber );
+            plug.setAttribute( ExportNode::s_ContentNumberAttr );
             plug.getValue( contentNum );
             if( num == contentNum )
             {

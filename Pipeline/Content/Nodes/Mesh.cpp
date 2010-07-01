@@ -270,9 +270,7 @@ bool Mesh::IsRenderableType() const
       || m_ExportTypes[ Content::ContentTypes::PostShell ]
       || m_ExportTypes[ Content::ContentTypes::BloomPostShell ]
       || m_ExportTypes[ Content::ContentTypes::Foliage ]
-      || m_ExportTypes[ Content::ContentTypes::FragmentGroup ]
-      || m_ExportTypes[ Content::ContentTypes::Water ]
-      || m_ExportTypes[ Content::ContentTypes::RisingWater ];
+      || m_ExportTypes[ Content::ContentTypes::FragmentGroup ];
 }
 
 void Mesh::GetBoundingSphere( Math::BoundingVolumeGenerator::BSphere& bsphere ) const

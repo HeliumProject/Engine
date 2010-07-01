@@ -31,9 +31,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
-				AdditionalDependencies="&quot;$(TargetPath)&quot;"
-				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine=""
+				AdditionalDependencies=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -110,9 +110,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
-				AdditionalDependencies="&quot;$(TargetPath)&quot;"
-				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine="&#x0D;&#x0A;"
+				AdditionalDependencies=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -191,9 +191,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
-				AdditionalDependencies="&quot;$(TargetPath)&quot;"
-				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine=""
+				AdditionalDependencies=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -268,9 +268,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
-				AdditionalDependencies="&quot;$(TargetPath)&quot;"
-				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine="&#x0D;&#x0A;"
+				AdditionalDependencies=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -347,9 +347,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
-				AdditionalDependencies="&quot;$(TargetPath)&quot;"
-				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine=""
+				AdditionalDependencies=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -426,9 +426,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
-				AdditionalDependencies="&quot;$(TargetPath)&quot;"
-				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine="&#x0D;&#x0A;"
+				AdditionalDependencies=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -507,9 +507,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
-				AdditionalDependencies="&quot;$(TargetPath)&quot;"
-				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine=""
+				AdditionalDependencies=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -584,9 +584,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
-				AdditionalDependencies="&quot;$(TargetPath)&quot;"
-				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine="&#x0D;&#x0A;"
+				AdditionalDependencies=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"

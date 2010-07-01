@@ -26,22 +26,15 @@ namespace MayaContent
   class MAYA_API ExportAnimationClip : public ExportAnimationBase
   {
   protected:
-    std::vector<MObject>  m_RequiredJoints;
     Content::V_Animation  m_Animations;
-    MPlug                 m_KeyPosePlug;
-    std::vector<MPlug>    m_WrinkleMapRegionPlugs;
+    std::vector<MObject>  m_RequiredJoints;
 
     V_ExportBlendShapeDeformer m_ExportBlendShapeDeformers;
 
   public:
-    ExportAnimationClip(const Nocturnal::TUID& skeletonID)
+    ExportAnimationClip()
     {
-      Content::AnimationClipPtr clip = new Content::AnimationClip();
-
-      clip->m_SkeletonID = skeletonID;
-      clip->m_ActorName = TXT("");
-
-      m_ContentObject = clip;
+      m_ContentObject = new Content::AnimationClip();
     }
 
     // Gather the necessary maya data and prepare for SampleOneFrame
@@ -58,7 +51,6 @@ namespace MayaContent
   private:
     void GatherBlendShapeDeformers();
     void SampleOneFramesMorphTargetWeights( const MTime& currentTime, const Content::AnimationClipPtr& animClip );
-
   };
 
   typedef Nocturnal::SmartPtr<ExportAnimationClip> ExportAnimationClipPtr;

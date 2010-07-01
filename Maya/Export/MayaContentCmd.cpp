@@ -1,5 +1,10 @@
 #include "Precompile.h"
-
+#include "ExportAnimationClip.h"
+#include "ExportPivotTransform.h"
+#include "ExportEntity.h"
+#include "ExportCurve.h"
+#include "ExportJoint.h"
+#include "ExportMesh.h"
 #include "MayaContentCmd.h"
 
 #include "Platform/Windows/Debug.h"
@@ -8,27 +13,8 @@
 #include "Application/RCS/RCS.h"
 #include "Application/Exception.h"
 #include "Pipeline/Content/ContentVersion.h"
-#include "Pipeline/Content/ContentTypes.h"
 #include "Pipeline/Content/Nodes/Curve.h"
-
-#include "Maya/Export.h"
-#include <maya/MSyntax.h>
-#include <maya/MArgDataBase.h>
-
-#include "Nodes/ExportNodeSet.h"
-#include "Nodes/EntityNode.h"
-
 #include "Maya/Utils.h"
-
-#include "ExportAnimationClip.h"
-#include "ExportCollision.h"
-#include "ExportGameplay.h"
-#include "ExportCurve.h"
-#include "ExportDescriptor.h"
-#include "ExportJoint.h"
-#include "ExportMesh.h"
-
-#include <sstream>
 
 using namespace Reflect;
 using namespace Content;
@@ -91,7 +77,7 @@ MStatus MayaContentCmd::doIt(const MArgList &args)
             for( u32 i = 0; i < len; ++i )
             {
                 selList.getDependNode( i, object );
-                m_ObjectsToExport[kSelected].append( object );      
+                m_ObjectsToExport.append( object );      
             }
             m_Data = kSelected;
 
@@ -193,19 +179,8 @@ bool MayaContentCmd::DefineExportScene()
         //  loop over the various skeletons that are being exported and export an animation clip for each one
         //
 
-        Maya::V_ExportInfo exportNodes;
-        Maya::GetExportInfo( exportNodes, MObject::kNullObj, -1, Content::ContentTypes::Skeleton );
-
-        for each ( const Maya::ExportInfo& exportInfo in exportNodes )
-        {
-            if ( exportInfo.m_ID == TUID::Null )
-                continue;
-
-            ExportAnimationClipPtr exportAnimClip = new ExportAnimationClip( exportInfo.m_ID );
-            m_ExportScene.Add( exportAnimClip );
-        }
-
-        exportNodes.clear();
+        ExportAnimationClipPtr exportAnimClip = new ExportAnimationClip ();
+        m_ExportScene.Add( exportAnimClip );
     }
     else
     {
@@ -217,10 +192,10 @@ bool MayaContentCmd::DefineExportScene()
 
         if( m_Data < kCommandDataCount )
         {
-            u32 numObjects = m_ObjectsToExport[m_Data].length();
+            u32 numObjects = m_ObjectsToExport.length();
             for( u32 i = 0; i < numObjects; ++i )
             {
-                MObject& object = m_ObjectsToExport[m_Data][i];
+                MObject& object = m_ObjectsToExport[i];
                 dagIter.reset(object);
                 Queue( dagIter, objects );
             }
@@ -372,21 +347,6 @@ bool MayaContentCmd::ExportObject(MObject object, int percent)
         return true;
     }
 
-    if ( Maya::IsExcluded( path.node() ) )
-    {
-        return true;
-    }
-
-    // filter out objects not under export nodes
-    // but only if we're not in selected mode (so exporting things like selected curves works)
-    if( m_Data != kSelected )
-    {
-        if ( nodeFn.typeId().id() != IGL_EXPORTNODE_ID && !Maya::DescendantOf( object, MTypeId( IGL_EXPORTNODE_ID ), true ) )
-        {
-            return true;
-        }
-    }
-
     //
     // API Types
     //
@@ -399,35 +359,9 @@ bool MayaContentCmd::ExportObject(MObject object, int percent)
         {
             switch( nodeFn.typeId().id() )
             {
-            case IGL_EXPORTNODE_ID:
-                {
-#ifdef DEBUG_MAYACONTENTCMD
-                    std::ostringstream str;
-                    str << "Found export node " << MFnDagNode( object ).fullPathName().asTChar();
-                    MGlobal::displayInfo( str.str().c_str() );
-#endif
-
-                    m_ExportScene.Add( new ExportDescriptor( object, Maya::GetNodeID( object ) ) );
-                    return true;
-                }
-
             case IGL_ENTITYNODE_ID:
                 {
-                    // this is a special case, because EntityNodes already have a valid Content object. grab it and add it directly to the content scene
-                    EntityNode* entityNode = (EntityNode*)(nodeFn.userNode());
-
-                    if ( entityNode )
-                    {
-                        Asset::Entity* backingEntity = entityNode->GetBackingEntity();
-                        if ( backingEntity )
-                        {
-                            Asset::EntityPtr entity = Reflect::ObjectCast<Asset::Entity>( backingEntity->Clone() );
-
-                            entity->PreSerialize();
-
-                            m_ExportScene.m_ContentScene.Add( entity );
-                        }
-                    }
+                    m_ExportScene.Add( new ExportEntity( object, Maya::GetNodeID( object ) ) );
                     return true;
                 }
             }
@@ -442,26 +376,13 @@ bool MayaContentCmd::ExportObject(MObject object, int percent)
 
     case MFn::kJoint:
         {
-            MFnIkJoint jointFn ( object );
-
             m_ExportScene.Add( new ExportJoint( object, Maya::GetNodeID( object ) ) );
-
             return true;
         }
 
     case MFn::kMesh:
         {
-            ExportMeshPtr exportMesh = new ExportMesh( object, Maya::GetNodeID( object ) );
-
-            m_ExportScene.Add( exportMesh );
-
-            if (m_Data == MayaContentCmd::kRiggedMesh || m_Data == MayaContentCmd::kCollision )
-            {
-                exportMesh->m_ContentSkin = new Content::Skin();
-
-                m_ExportScene.Add( new ExportBase( exportMesh->m_ContentSkin ) );
-            }
-
+            m_ExportScene.Add( new ExportMesh( object, Maya::GetNodeID( object ) ) );
             return true;
         }
 
@@ -470,29 +391,6 @@ bool MayaContentCmd::ExportObject(MObject object, int percent)
             m_ExportScene.Add( new ExportCurve ( object, Maya::GetNodeID( object ) ) );
 
             return true;
-        }
-
-    case MFn::kPluginLocatorNode:
-        {
-            switch( nodeFn.typeId().id() )
-            {
-            case IGL_GP_SPHERE:                 
-            case IGL_GP_CAPSULE:                
-            case IGL_GP_CYLINDER:               
-            case IGL_GP_CUBOID:
-                m_ExportScene.Add( new ExportGameplay( object, Maya::GetNodeID( object ) ) );
-                return true;
-
-            case IGL_COLL_SPHERE:                 
-            case IGL_COLL_CAPSULE:                
-            case IGL_COLL_CAPSULE_CHILD:   
-            case IGL_COLL_CYLINDER:               
-            case IGL_COLL_CYLINDER_CHILD:
-            case IGL_COLL_CUBOID:
-                m_ExportScene.Add( new ExportCollision( object, Maya::GetNodeID( object ) ) );
-                return true;
-            }
-            break;
         }
     }
 
@@ -656,7 +554,7 @@ bool MayaContentCmd::QueueParents(const MObject node, MObjectArray& objects)
 bool MayaContentCmd::IsQueued(const MObject node)
 {
     // insert it into the map of exported ids
-    Maya::S_MObject::iterator i = m_QueuedNodes.find(node);
+    Maya::MObjectSet::iterator i = m_QueuedNodes.find(node);
 
     return i != m_QueuedNodes.end();
 }
@@ -672,125 +570,7 @@ void MayaContentCmd::SetQueued(const MObject node)
     NOC_ASSERT(result);
 }
 
-void MayaContentCmd::DetermineExportedTypes( BitArray& types )
-{
-    EXPORT_SCOPE_TIMER( ("") );
-
-    // check for anims
-    types[MayaContentCmd::kAnimation] = true;
-
-    if( m_ObjectsToExport[kCineScene].length() )
-    {
-        ExportNode::FindExportNodes( m_ObjectsToExport[kCineScene], Content::ContentTypes::MonitorCam, m_Root, 0 );
-        Maya::findNodesOfType( m_ObjectsToExport[kCineScene], MFn::kSpotLight, m_Root );
-
-        types[kCineScene] = true;
-    }
-
-    // find the other types and junk if it doesn't have animation
-    {
-
-        MFnDagNode nodeFn;
-
-        //
-        //Geometry
-        //
-
-        ExportNode::FindExportNodes( m_ObjectsToExport[kStaticMesh], Content::ContentTypes::Geometry, m_Root );
-        ExportNode::FindExportNodes( m_ObjectsToExport[kStaticMesh], Content::ContentTypes::Bangle, m_Root );
-
-        u32 numObjects = m_ObjectsToExport[kStaticMesh].length();
-        for( u32 i = 0; i < numObjects; ++i )
-        {
-            nodeFn.setObject( m_ObjectsToExport[kStaticMesh][i] );
-            if( nodeFn.childCount() )
-            {
-                types[kStaticMesh] = true;
-                break;
-            }     
-        }
-
-        //
-        // Skeleton
-        //
-
-        ExportNode::FindExportNodes( m_ObjectsToExport[kRiggedMesh], Content::ContentTypes::Skeleton, m_Root );
-
-        numObjects = m_ObjectsToExport[kRiggedMesh].length();
-        for( u32 i = 0; i < numObjects; ++i )
-        {
-            nodeFn.setObject( m_ObjectsToExport[kRiggedMesh][i] );
-            if( nodeFn.childCount() )
-            {
-                Maya::appendObjectArray(m_ObjectsToExport[kRiggedMesh], m_ObjectsToExport[kStaticMesh] );
-                types[kRiggedMesh] = true;
-                break;
-            }     
-        }
-
-
-        //
-        // Collision
-        //
-
-        MObjectArray resColl;
-        ExportNode::FindExportNodes( resColl, Content::ContentTypes::HighResCollision, m_Root );
-        ExportNode::FindExportNodes( resColl, Content::ContentTypes::LowResCollision, m_Root );
-
-        numObjects = resColl.length();
-        if( resColl.length() != 0 )
-        {
-            for( u32 objIndex = 0; objIndex < numObjects; ++objIndex )
-            {
-                nodeFn.setObject( resColl[objIndex] );
-                if( nodeFn.childCount() )
-                {
-                    types[kCollision] = true;
-                    Maya::appendObjectArray(m_ObjectsToExport[kCollision], resColl );
-                    break;
-                }
-            }     
-        }
-
-        MObjectArray collPrims;
-        Maya::findNodesOfType( collPrims, IGL_GP_CAPSULE, MFn::kDagNode, m_Root );
-        Maya::findNodesOfType( collPrims, IGL_GP_SPHERE, MFn::kDagNode, m_Root );
-        Maya::findNodesOfType( collPrims, IGL_GP_CUBOID, MFn::kDagNode, m_Root );
-        Maya::findNodesOfType( collPrims, IGL_GP_CYLINDER, MFn::kDagNode, m_Root);
-        Maya::findNodesOfType( collPrims, IGL_COLL_CAPSULE, MFn::kDagNode, m_Root );
-        Maya::findNodesOfType( collPrims, IGL_COLL_SPHERE, MFn::kDagNode, m_Root );
-        Maya::findNodesOfType( collPrims, IGL_COLL_CAPSULE_CHILD, MFn::kDagNode, m_Root );
-        Maya::findNodesOfType( collPrims, IGL_COLL_CUBOID, MFn::kDagNode, m_Root );
-        Maya::findNodesOfType( collPrims, IGL_COLL_CYLINDER, MFn::kDagNode, m_Root);
-        Maya::findNodesOfType( collPrims, IGL_COLL_CYLINDER_CHILD, MFn::kDagNode, m_Root);
-
-        if( collPrims.length() != 0 )
-        {
-            types[kCollision] = true;
-            Maya::appendObjectArray( m_ObjectsToExport[kCollision], collPrims );
-        }
-
-        //
-        //Pathfinding
-        //
-
-        ExportNode::FindExportNodes( m_ObjectsToExport[kPathfinding], Content::ContentTypes::Pathfinding, m_Root );
-        ExportNode::FindExportNodes( m_ObjectsToExport[kPathfinding], Content::ContentTypes::LowResPathfinding, m_Root );
-
-        numObjects = m_ObjectsToExport[kPathfinding].length();
-        for( u32 i = 0; i < numObjects; ++i )
-        {
-            nodeFn.setObject( m_ObjectsToExport[kPathfinding][i] );
-            if( nodeFn.childCount() )
-            {
-                types[kPathfinding] = true;
-                break;
-            }     
-        }
-    }
-}
-
-void MayaContentCmd::ExportCurrentScene( MObject root, tstring& currentFile, tstring& fragmentName )
+void MayaContentCmd::ExportCurrentScene(CommandData data)
 {
     EXPORT_SCOPE_TIMER( ("") );
 
@@ -798,29 +578,7 @@ void MayaContentCmd::ExportCurrentScene( MObject root, tstring& currentFile, tst
 
     MGlobal::MSelectionMode selectionMode = MGlobal::selectionMode();
 
-    MObjectArray fragmentNodes;
-    ExportNode::FindExportNodes( fragmentNodes, Content::ContentTypes::FragmentGroup, root );
-    u32 numFragments = fragmentNodes.length();
-    if( numFragments && fragmentNodes[0] != root )
-    {
-        MFnDependencyNode nodeFn;
-        for( u32 i = 0; i < numFragments; ++i )
-        {
-            nodeFn.setObject( fragmentNodes[i] );
-            ExportCurrentScene( fragmentNodes[i], currentFile, tstring( nodeFn.name().asTChar() ) );
-        }
-    }
-
-    BitArray usedTypes( MayaContentCmd::kCommandDataCount );
-    MayaContentCmd cmd;
-    cmd.m_Root = root;
-
-    cmd.DetermineExportedTypes( usedTypes );
-
-    if( currentFile.empty() )
-    {
-        currentFile = MFileIO::currentFile().asTChar();
-    }
+    tstring currentFile = MFileIO::currentFile().asTChar();
 
     // clean path returned by maya
     Nocturnal::Path currentPath( currentFile );
@@ -842,74 +600,13 @@ void MayaContentCmd::ExportCurrentScene( MObject root, tstring& currentFile, tst
         // this is ok, the directory may not exist in perforce yet
     }
 
-    // remove all objects that are under a fragment export node 
-    // (except if the fragment export node is the root node)
-    for( u32 i = 0; i < MayaContentCmd::kCommandDataCount; ++i )
-    {
-        //horrible hack
-        if( i == kSelected ) continue;
+    tstring contentFile = currentFile;
 
-        u32 numObjects = cmd.m_ObjectsToExport[i].length();
-        for( u32 k = 0; k < numFragments; ++k )
-        {
-            if ( fragmentNodes[k] == root ) continue;
-
-            MFnDagNode fragmentFn( fragmentNodes[k] );
-            u32 numObjects = cmd.m_ObjectsToExport[i].length();
-            for( u32 j = 0; j < numObjects; )
-            { 
-                if( cmd.m_ObjectsToExport[i][j].hasFn( MFn::kDagNode ) )
-                {
-                    if( fragmentFn.isParentOf( cmd.m_ObjectsToExport[i][j] ) )
-                    {
-                        cmd.m_ObjectsToExport[i].remove( j );
-                        --numObjects;
-                    }
-                    else
-                        ++j;
-                }
-            }
-        }
-
-        CommandData data = static_cast< CommandData >( i );
-        tstring contentFile = currentFile;
-
-        if( usedTypes[i] )
-        {
-            cmd.m_Data = data;
-            cmd.m_SourceFileName = currentFile;
-            cmd.m_ContentFileName = contentFile;
-            cmd.m_FragmentName = fragmentName;
-            cmd.doIt();
-        }
-        else if( Nocturnal::Path( contentFile ).Exists() )
-        {
-            RCS::File rcsFile( contentFile );
-
-            try
-            {
-                rcsFile.Revert();
-            }
-            catch ( RCS::Exception& e )
-            {
-                Log::Warning( TXT("Could not revert '%s': %s\n"), contentFile.c_str(), e.What() );
-            }
-
-            try
-            {
-                rcsFile.Delete();             // delete from perforce deletes locally
-            }
-            catch ( RCS::Exception& e )
-            {
-                Log::Warning( TXT("Could not delete '%s': %s\n"), contentFile.c_str(), e.What() );
-            }
-
-            // if file was never checked into perforce (+add), revert/delete
-            // will leave the file on disk locally
-            Nocturnal::Path contentPath( contentFile );
-            contentPath.Delete();
-        }
-    }
+    MayaContentCmd cmd;
+    cmd.m_Data = data;
+    cmd.m_SourceFileName = currentFile;
+    cmd.m_ContentFileName = contentFile;
+    cmd.doIt();
 
     ReloadProxyFileReferences();
 
@@ -928,9 +625,10 @@ bool MayaContentCmd::ExportSelectionToClipboard()
     for( u32 i = 0; i < len; ++i )
     {
         selList.getDependNode( i, object );
-        cmd.m_ObjectsToExport[kSelected].append( object );      
+        cmd.m_ObjectsToExport.append( object );      
     }
     cmd.m_Data = kSelected;
+
     return cmd.doIt() == MS::kSuccess;
 }
 
@@ -940,11 +638,11 @@ MStatus MayaContentCmd::UnloadProxyFileReferences()
 
     m_UnloadedProxyFileRefNodes.clear();
 
-    Maya::S_MObject refNodes;
+    Maya::MObjectSet refNodes;
     Maya::findNodesOfType( refNodes, MFn::kReference );
 
-    Maya::S_MObject::iterator itor = refNodes.begin();
-    Maya::S_MObject::iterator end  = refNodes.end();
+    Maya::MObjectSet::iterator itor = refNodes.begin();
+    Maya::MObjectSet::iterator end  = refNodes.end();
     for( ; itor != end; ++itor )
     {
         MObject &object = *itor;   

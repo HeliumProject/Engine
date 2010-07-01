@@ -1,6 +1,5 @@
 #include "ContentInit.h"
 #include "ContentVersion.h"
-#include "ContentTypes.h"
 
 #include "Foundation/Reflect/Registry.h"
 
@@ -10,8 +9,6 @@
 #include "Pipeline/Content/Nodes/Transform.h"
 #include "Pipeline/Content/Nodes/PivotTransform.h"
 #include "Pipeline/Content/Nodes/JointTransform.h"
-#include "Pipeline/Content/Nodes/Descriptor.h"
-#include "Pipeline/Content/Nodes/Effector.h"
 
 #include "Pipeline/Content/Nodes/Instance.h"
 #include "Pipeline/Content/Nodes/Locator.h"
@@ -25,7 +22,6 @@
 #include "Pipeline/Content/Nodes/Mesh.h"
 #include "Pipeline/Content/Nodes/Skin.h"
 #include "Pipeline/Content/Nodes/Shader.h"
-#include "Pipeline/Content/Nodes/CollisionPrimitive.h"
 
 #include "Pipeline/Content/ParametricKey/ParametricColorKey.h"
 #include "Pipeline/Content/ParametricKey/ParametricIntensityKey.h"
@@ -67,7 +63,6 @@ namespace Content
       g_InitializerStack.Push( Component::Initialize, Component::Cleanup );
 
       g_InitializerStack.Push( Reflect::RegisterClass<ContentVersion>( TXT( "ContentVersion" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<ContentTypes::ContentType>( &ContentTypes::ContentTypeEnumerateEnumeration, TXT( "ContentType" ) ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<SceneNode>( TXT( "SceneNode" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<HierarchyNode>( TXT( "HierarchyNode" ) ) );
@@ -95,11 +90,6 @@ namespace Content
       g_InitializerStack.Push( Reflect::RegisterEnumeration<Mesh::MeshOriginType>( &Mesh::MeshOriginTypeEnumeration, TXT( "MeshOriginType" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<Mesh>( TXT( "Mesh" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<Shader>( TXT( "Shader" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Effector>( TXT( "Effector" ) ) );
-
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<CollisionShapes::CollisionShape>( &CollisionShapes::CollisionShapeEnumerateEnumeration, TXT( "CollisionShape" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<CollisionPrimitive>( TXT( "CollisionPrimitive" ) ) );
-      Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass<CollisionPrimitive>(), TXT( "CollisionVolume" ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<Influence>( TXT( "Influence" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<Skin>( TXT( "Skin" ) ) );
@@ -117,10 +107,6 @@ namespace Content
 
       g_InitializerStack.Push( Reflect::RegisterClass<Animation>( TXT( "Animation" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<AnimationClip>( TXT( "AnimationClip" ) ) );
-
-      // descriptor
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<GeometrySimulations::GeometrySimulation>( &GeometrySimulations::GeometrySimulationEnumerateEnumeration, TXT( "GeometrySimulation" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Descriptor>( TXT( "Descriptor" ) ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<ParametricKey>( TXT( "ParametricKey" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<ParametricColorKey>( TXT( "ParametricColorKey" ) ) );

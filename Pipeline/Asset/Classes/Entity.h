@@ -19,6 +19,7 @@ namespace Asset
 
     public:
         Entity( const tstring& assetPath = TXT( "" ) );
+        Entity( Nocturnal::TUID id );
 
         // get the path to the class
         tstring GetEntityAssetPath();

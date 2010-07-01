@@ -1,24 +1,15 @@
 #include "Precompile.h"
+#include "ExportAnimationClip.h"
+#include "MayaContentCmd.h"
 
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Log.h"
-#include "ExportAnimationClip.h"
-#include "Nodes/ExportNode.h"
-#include "Nodes/ExportNodeSet.h"
-#include "MayaContentCmd.h"
-#include "Maya/Export.h"
-#include "Foundation/Boost/Regex.h"
 
 using namespace Content;
 using namespace MayaContent;
 using namespace Nocturnal;
 
-// should be the same as s_KeyPoseAttrName in \MayaNodes\ExportNode.cpp
-const char* s_KeyPoseAttrName     = "KeyPose";
-
-
 #define g_kMinTargetWeight  0.01f // min target contribution
-
 
 void ExportAnimationClip::GatherMayaData( V_ExportBase &newExportObjects )
 {  
@@ -29,50 +20,11 @@ void ExportAnimationClip::GatherMayaData( V_ExportBase &newExportObjects )
   //AnimationClip* animClip = Reflect::DangerousCast< AnimationClip >( m_ContentObject );
   const Content::AnimationClipPtr animClip = GetContentAnimationClip();
 
-  // 
-  // Get the skeleton export node
-  // 
-  Maya::ExportInfo* skeletonInfo = NULL;
-  Maya::GetExportInfo( animClip->m_SkeletonID, skeletonInfo );
-  NOC_ASSERT( skeletonInfo );
-
-  boost::cmatch results;
-  const boost::regex namePattern( "(.*):.*" );
-  char partialName[255];
-  sprintf( partialName, "%s", skeletonInfo->m_pathStrPartial.c_str() );
-  if ( boost::regex_search(partialName, results, namePattern))
-  {
-    animClip->m_ActorName = Nocturnal::BoostMatchResultAsString(results, 1); 
-  }
-
   //
   // Get the relevant joints
   //
   MObjectArray joints;
-  Maya::findNodesOfType( joints, MFn::kJoint, skeletonInfo->m_path.node() );
-
-  //
-  // get the KeyPose attribute plug
-  //
-  MFnDagNode skelDagNodeFn( skeletonInfo->m_path, &status );
-  m_KeyPosePlug = skelDagNodeFn.findPlug( s_KeyPoseAttrName, true, &status );
-
-  //
-  // Get the WrinkleMap region plugs
-  //
-  m_WrinkleMapRegionPlugs.clear();
-  MPlug useWrinkleMapPlug = skelDagNodeFn.findPlug( ExportNode::s_UseWrinkleMapAttrName, true, &status );
-  bool useWrinkleMap = false;
-  if ( ( useWrinkleMapPlug.getValue( useWrinkleMap ) == MStatus::kSuccess ) && useWrinkleMap )
-  {
-    //m_WrinkleMapRegionPlugs.setLength( (u32) Content::MaxCountWrinkleMapRegions );
-    m_WrinkleMapRegionPlugs.resize( (u32) Content::MaxCountWrinkleMapRegions, MPlug() );
-    for ( int i = 0; i < Content::MaxCountWrinkleMapRegions; ++i )
-    {
-      m_WrinkleMapRegionPlugs[i] = skelDagNodeFn.findPlug( ExportNode::s_WrinkleMapRegionAttrNames[i], true, &status );
-      NOC_ASSERT( status == MStatus::kSuccess )
-    }
-  }
+  Maya::findNodesOfType( joints, MFn::kJoint );
 
 
   //
@@ -96,10 +48,6 @@ void ExportAnimationClip::GatherMayaData( V_ExportBase &newExportObjects )
 
   MTime startTime( MAnimControl::minTime() );
   MTime endTime  ( MAnimControl::maxTime() );
-
-  //crappy hack for multiple actors with the same GUID, deletes each from the multimap as it finishes with it
-  //after it runs GetExportInfo for the second time here inside GetRequiredJointCount above
-  bool result = Maya::RemoveMultiMapDupe( animClip->m_SkeletonID );
 
   u32 numJoints = joints.length();
   for( u32 i = 0; i < numJoints; ++i )
@@ -139,51 +87,13 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
   
   MFnBlendShapeDeformer morpherFn;
   
-  // get all of the exported meshes under the Geometry export nodes
-  Maya::S_MObject exportBaseObjects;
-
-  MObjectArray geometryNodes;
-
   // Cinematic scenes can contain more than one actor, so we want to 
   // only store the export nodes for the actor we are currently exporting
   const Content::AnimationClipPtr animClip = GetContentAnimationClip();
-  const tstring actorNamespace = animClip->m_ActorName + TXT(":");
-  if ( !animClip->m_ActorName.empty() )
-  {
-    Maya::S_MObject sets;
-    Maya::findNodesOfType( sets, ExportNodeSet::s_TypeID, MFn::kSet );
 
-    Maya::S_MObject::const_iterator setItr = sets.begin();
-    Maya::S_MObject::const_iterator setEnd = sets.end();
-    for ( ; setItr != setEnd; ++setItr )
-    {
-      MFnDependencyNode nodeFn( *setItr, &status );
-      if ( status )
-      {
-        ExportNodeSet* exportSet = static_cast< ExportNodeSet* >(nodeFn.userNode( &status ) );
-        if ( status )
-        {
-          tstring nodeSetName = nodeFn.name().asTChar();
-          if ( nodeSetName.find( actorNamespace ) == 0 )
-          {
-            exportSet->GetExportNodes( geometryNodes, Content::ContentTypes::Geometry );
-          }
-        }
-      }
-    }
-  }
-  else
-  {
-    ExportNode::FindExportNodes( geometryNodes, Content::ContentTypes::Geometry );
-  }
-
-  u32 numObjects = geometryNodes.length();
-  for( u32 i = 0; i < numObjects; ++i )
-  {
-    MObject& object = geometryNodes[i];
-    status = Maya::findNodesOfType( exportBaseObjects, MFn::kMesh, object );
-  }
-
+  // get all of the exported meshes under the Geometry export nodes
+  Maya::MObjectSet exportBaseObjects;
+  status = Maya::findNodesOfType( exportBaseObjects, MFn::kMesh );
 
   // iterate over all of the blend shapes in the scene 
   // skipping those with base objects that are NOT under a Geometry ExportNode
@@ -312,30 +222,6 @@ void ExportAnimationClip::SampleOneFrame( const MTime& currentTime, bool extraFr
 
   if ( !extraFrame )
   {
-    // Wrinkle Map
-    //if ( m_WrinkleMapRegionPlugs.length() > 0 )
-    if ( !m_WrinkleMapRegionPlugs.empty() )
-    {
-      MStatus status;
-
-      Content::FrameWrinkleMapPtr frameWrinkleMap = new FrameWrinkleMap( (f32)currentTime.value() );
-
-      frameWrinkleMap->m_RegionWeights.resize( Content::MaxCountWrinkleMapRegions );
-      for ( int i = 0; i < Content::MaxCountWrinkleMapRegions; ++i )
-      {
-        if ( !m_WrinkleMapRegionPlugs[i].isNull( &status ) && status == MStatus::kSuccess )
-        {
-          float region = 0.0f;    
-          status = m_WrinkleMapRegionPlugs[i].getValue( region );
-          if ( status )
-          {
-            frameWrinkleMap->m_RegionWeights[i] = region;
-          }
-        }
-      }
-      animClip->m_FrameWrinkleMaps.push_back( frameWrinkleMap );
-    }
-
     // Morph Targets
     SampleOneFramesMorphTargetWeights( currentTime, animClip );
   }

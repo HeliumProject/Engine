@@ -1,24 +1,19 @@
 #include "Precompile.h"
 #include "ExportScene.h"
-#include "MayaContentCmd.h"
-#include "Maya/Utils.h"
-#include "Application/RCS/RCS.h"
-
-#include "Foundation/Log.h"
-
-#include "Nodes/ExportNode.h"
-
-#include "Pipeline/Content/Nodes/Curve.h"
-
-#include "ExportDescriptor.h"
 #include "ExportMesh.h"
 #include "ExportAnimationBase.h"
+#include "MayaContentCmd.h"
+
+#include "Foundation/Log.h"
+#include "Application/RCS/RCS.h"
+#include "Pipeline/Content/Nodes/Curve.h"
+#include "Maya/Utils.h"
 
 using namespace MayaContent;
 using namespace Maya;
 using namespace Nocturnal;
 
-static void AddChildrenToSet( S_MObject& objectSet, MObject object )
+static void AddChildrenToSet( MObjectSet& objectSet, MObject object )
 {
   objectSet.insert( object );
   MFnDagNode nodeFn( object );
@@ -51,19 +46,6 @@ void ExportScene::ProcessMayaData()
 
   // done adding to the scene, update it.
   m_ContentScene.Update();
-  {
-    std::vector< tstring > dup_bangle_errors;
-    dup_bangle_errors.reserve(64);
-    if (m_ContentScene.HasDuplicateBangleIndexedExportNodes(dup_bangle_errors))
-    {
-      for (std::vector< tstring >::const_iterator error_it = dup_bangle_errors.begin(); error_it != dup_bangle_errors.end(); ++error_it)
-      {
-        Log::Error( error_it->c_str());
-        MGlobal::displayError(error_it->c_str());
-      }
-    }
-  }
-  
 
   // opimtize will cull extraneous nodes
   m_ContentScene.Optimize();

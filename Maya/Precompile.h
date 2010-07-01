@@ -159,6 +159,9 @@
 #include <maya/MMatrix.h>
 #include <maya/MTransformationMatrix.h>
 
+#include <maya/MSyntax.h>
+#include <maya/MArgDataBase.h>
+
 #ifdef UNICODE
 # define asTChar asWChar
 #else

@@ -3,7 +3,6 @@
 #include "Pipeline/API.h"
 #include "Pipeline/Content/Nodes/SceneNode.h"
 #include "Foundation/Container/BitArray.h"
-#include "Pipeline/Content/ContentTypes.h"
 #include "Foundation/TUID.h"
 
 namespace Content
@@ -25,14 +24,11 @@ namespace Content
         // The live state
         bool m_Live;
 
-        BitArray m_ExportTypes;
-
         HierarchyNode()
             : m_ParentID( Nocturnal::TUID::Null )
             , m_Hidden( false )
             , m_Live( false )
-            , m_ExportTypes( Content::ContentTypes::NumContentTypes )
-        {
+       {
 
         }
 
@@ -41,7 +37,6 @@ namespace Content
             , m_ParentID( Nocturnal::TUID::Null )
             , m_Hidden( false )
             , m_Live( false )
-            , m_ExportTypes( Content::ContentTypes::NumContentTypes )
         {
 
         }

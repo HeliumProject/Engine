@@ -723,10 +723,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Content\ContentTypes.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Content\ContentVersion.cpp"
 				>
 			</File>
@@ -740,10 +736,6 @@
 			</File>
 			<File
 				RelativePath=".\Content\ContentVisitor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Content\Misc.h"
 				>
 			</File>
 			<File
@@ -794,14 +786,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Content\Nodes\CollisionPrimitive.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\CollisionPrimitive.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Content\Nodes\Curve.cpp"
 					>
 				</File>
@@ -810,27 +794,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Content\Nodes\Descriptor.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\Descriptor.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Content\Nodes\DirectionalLight.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Content\Nodes\DirectionalLight.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\Effector.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\Effector.h"
 					>
 				</File>
 				<File

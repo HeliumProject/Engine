@@ -135,35 +135,31 @@ namespace Content
   class PIPELINE_API AnimationClip : public SceneNode
   {
   public:
+    M_Animation             m_JointAnimationMap;
+    M_CompressedAnimation   m_JointCompressedAnimationMap;
 
-    Nocturnal::TUID        m_SkeletonID;
-    tstring           m_ActorName;
-    M_Animation           m_JointAnimationMap;
-    M_CompressedAnimation m_JointCompressedAnimationMap;
+    V_FrameMorphTargets     m_FrameMorphTargets;
 
-    V_FrameMorphTargets   m_FrameMorphTargets;
-
-    V_FrameWrinkleMaps    m_FrameWrinkleMaps;
+    V_FrameWrinkleMaps      m_FrameWrinkleMaps;
 
     // The start time for playback
-    f32                   m_StartFrame;
+    f32                     m_StartFrame;
 
     // The end time for playback
-    f32                   m_EndFrame;
+    f32                     m_EndFrame;
 
     // The sampling rate of all animations
-    unsigned              m_Rate;
+    unsigned                m_Rate;
 
     // The sampling rate of the values
-    unsigned              m_DataRate;
+    unsigned                m_DataRate;
 
     // The linear motion this clip should exhibit
-    Math::Axis            m_LinearMotionAxis;
-    f32                   m_LinearDistancePerFrame;
+    Math::Axis              m_LinearMotionAxis;
+    f32                     m_LinearDistancePerFrame;
 
     AnimationClip()
-      : m_ActorName( TXT( "" ) )
-      , m_StartFrame( 0 )
+      : m_StartFrame( 0 )
       , m_EndFrame( 0 )
       , m_Rate( 30 )
       , m_DataRate( 30 )
@@ -175,8 +171,6 @@ namespace Content
 
     static void EnumerateClass( Reflect::Compositor<AnimationClip>& comp )
     {
-      Reflect::Field* fieldSkeletonID = comp.AddField( &AnimationClip::m_SkeletonID, "m_SkeletonID" );
-      Reflect::Field* fieldActorName = comp.AddField( &AnimationClip::m_ActorName, "m_ActorName" );
       Reflect::Field* fieldJointAnimationMap = comp.AddField( &AnimationClip::m_JointAnimationMap, "m_JointAnimationMap" );
       Reflect::Field* fieldJointCompressedAnimationMap = comp.AddField( &AnimationClip::m_JointCompressedAnimationMap, "m_JointCompressedAnimationMap" );
 

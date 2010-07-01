@@ -8,9 +8,6 @@
 #include "Maya/NodeTypes.h"
 #include "Maya/ErrorHelpers.h"
 
-#include "Nodes/ExportNode.h"
-#include "Nodes/ExportNodeSet.h"
-
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/Components/ArtFileComponent.h"
 
@@ -705,12 +702,6 @@ void EntityAssetNode::ImportNodeAddedCallback( MObject &addedNode, void* param )
 
     // don't gather maya-designated "shared" nodes
     if( nodeFn.isShared() )
-    {
-        return;
-    }
-
-    // or ExportNodeSets!
-    if( nodeFn.typeId() == ExportNodeSet::s_TypeID )
     {
         return;
     }

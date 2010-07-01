@@ -17,15 +17,15 @@
 
 namespace Maya
 {
-  void S_MObjectToObjectArray( const S_MObject &nodes, MObjectArray &array )
+  void MObjectSetToObjectArray( const MObjectSet &nodes, MObjectArray &array )
   {
-    S_MObject::const_iterator itor;
+    MObjectSet::const_iterator itor;
     for( itor = nodes.begin(); itor != nodes.end(); ++itor )
     {
       array.append( *itor );
     }
   }
-  static MStatus _findNodesOfType( MItDag &itor, S_MObject &nodes, const MString &typeStr )
+  static MStatus _findNodesOfType( MItDag &itor, MObjectSet &nodes, const MString &typeStr )
   {
     MStatus stat;
 
@@ -52,15 +52,15 @@ namespace Maya
 
   static MStatus _findNodesOfType( MItDag &itor, MObjectArray &array, const MString &typeStr )
   {
-    S_MObject set;
+    MObjectSet set;
     MStatus stat = _findNodesOfType( itor, set, typeStr );
 
-    S_MObjectToObjectArray( set, array );
+    MObjectSetToObjectArray( set, array );
 
     return stat;
   }
 
-  static MStatus  _findNodesOfType( MItDependencyNodes &itor, S_MObject &nodes, const MString &typeStr )
+  static MStatus  _findNodesOfType( MItDependencyNodes &itor, MObjectSet &nodes, const MString &typeStr )
   {
     MStatus stat;
 
@@ -87,15 +87,15 @@ namespace Maya
 
   static MStatus  _findNodesOfType( MItDependencyNodes &itor, MObjectArray &array, const MString &typeStr )
   {
-    S_MObject set;
+    MObjectSet set;
     MStatus stat = _findNodesOfType( itor, set, typeStr );
 
-    S_MObjectToObjectArray( set, array );
+    MObjectSetToObjectArray( set, array );
 
     return stat;
   }
 
-  MStatus findNodesOfType(S_MObject& objects, const MTypeId &typeId, const MFn::Type FnType, MObject& pathRoot ) 
+  MStatus findNodesOfType(MObjectSet& objects, const MTypeId &typeId, const MFn::Type FnType, MObject& pathRoot ) 
   {
     // Find all the ref nodes in the Dag
     MStatus stat;
@@ -149,16 +149,16 @@ namespace Maya
 
   MStatus findNodesOfType(MObjectArray& oArray, const MTypeId &typeId, const MFn::Type FnType, MObject& pathRoot ) 
   {
-    S_MObject set;
+    MObjectSet set;
 
     MStatus stat = findNodesOfType( set, typeId, FnType, pathRoot );
 
-    S_MObjectToObjectArray( set, oArray );
+    MObjectSetToObjectArray( set, oArray );
 
     return stat;
   }
 
-  MStatus findNodesOfType( S_MObject &nodes, const MString &typeStr, bool isDagNode )
+  MStatus findNodesOfType( MObjectSet &nodes, const MString &typeStr, bool isDagNode )
   {
     // Find all the ref nodes in the Dag
 
@@ -184,15 +184,15 @@ namespace Maya
 
   MStatus findNodesOfType( MObjectArray &array, const MString &typeStr, bool isDagNode )
   {
-    S_MObject set;
+    MObjectSet set;
     MStatus stat = findNodesOfType( set, typeStr, isDagNode );
 
-    S_MObjectToObjectArray( set, array );
+    MObjectSetToObjectArray( set, array );
 
     return stat;
   }
 
-  MStatus findNodesOfType( S_MObject &nodes, const MFn::Type FnType, MObject& pathRoot )
+  MStatus findNodesOfType( MObjectSet &nodes, const MFn::Type FnType, MObject& pathRoot )
   {
     // Find all the ref nodes in the Dag
     MStatus stat;
@@ -240,11 +240,11 @@ namespace Maya
 
   MStatus findNodesOfType(MObjectArray& oArray, const MFn::Type FnType, MObject& pathRoot ) 
   {
-    S_MObject set;
+    MObjectSet set;
 
     MStatus stat = findNodesOfType( set, FnType, pathRoot );
 
-    S_MObjectToObjectArray( set, oArray );
+    MObjectSetToObjectArray( set, oArray );
 
     return stat;
   }
@@ -258,7 +258,7 @@ namespace Maya
     }
   }
 
-  void appendObjectArray( S_MObject &receiver, const MObjectArray & source )
+  void appendObjectArray( MObjectSet &receiver, const MObjectArray & source )
   {
     const unsigned int sourceLength = source.length();
     for (unsigned int i=0; i<sourceLength; i++)

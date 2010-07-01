@@ -30,6 +30,14 @@ Entity::Entity( const tstring& assetPath )
 {
 }
 
+Entity::Entity( Nocturnal::TUID id )
+: Content::Instance ( id )
+, m_ShowPointer (true)
+, m_ShowBounds (true)
+, m_ShowGeometry (false)
+{
+}
+
 EntityAssetPtr Entity::GetEntityAsset() const
 {
     return AssetClass::LoadAssetClass< EntityAsset >( m_Path );

@@ -124,7 +124,6 @@ namespace Luna
       ID_ToolsLightCreate,
       ID_ToolsLighting,
 
-      ID_ToolsNavMeshImport,
       ID_ToolsNavMeshCreate,
       ID_ToolsNavMeshManipulate,
       ID_ToolsNavMeshRotate,

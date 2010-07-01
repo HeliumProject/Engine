@@ -6,7 +6,6 @@
 
 #include "Pipeline/Content/Nodes/PivotTransform.h"
 #include "Foundation/Container/BitArray.h"
-#include "Pipeline/Content/ContentTypes.h"
 #include "Foundation/Math/CalculateBounds.h"
 
 namespace Math
@@ -16,8 +15,6 @@ namespace Math
 
 namespace Content
 {
-    typedef std::map< Content::ContentType, u32 > M_ContentTypeToIndex;
-
     typedef std::vector< Math::V_Vector2 > V_UVShell;
 
     namespace UVSetTypes
@@ -25,8 +22,6 @@ namespace Content
         enum UVSetType
         {
             Base,
-            Lightmap,
-            Blend,
         };
     };
 
@@ -236,8 +231,6 @@ namespace Content
         // The counts of the number of triangles for each shader used
         std::vector< u32 > m_ShaderTriangleCounts;
 
-        M_ContentTypeToIndex m_ExportTypeIndex;
-
         MeshOriginType       m_MeshOriginType;
 
         Mesh ()
@@ -294,21 +287,9 @@ namespace Content
 
         bool ComputeTNB( u32 triIndex );
 
-        // warning -- only valid if this mesh is contained by a Content::Scene
-        // returns the index if valid, otherwise, -1
-        int GetExportTypeIndex( Content::ContentType exportType ) const;
-
         void GetAlignedBoundingBox( Math::AlignedBox& box ) const;
 
         void GetBoundingSphere( Math::BoundingVolumeGenerator::BSphere& bsphere ) const;
-
-        inline bool LightmapUVsExist() const { return !m_LightMapUVs.empty(); }
-
-        inline bool BlendmapUVsExist() const { return !m_BlendMapUVs.empty(); }
-
-        bool LightmapUVsInRange() const;
-
-        bool IsRenderableType() const;
 
         // surface area of the mesh in m^2
         f32 SurfaceArea( Math::Scale* scale = NULL ) const;
@@ -316,11 +297,6 @@ namespace Content
         // can multiply each component by that component's scale^2 and sum to get scaled area
         // scaledArea = (areaVec.x * scale.x^2) + (areaVec.y * scale.y^2) + (areaVec.z * scale.z^2)
         f32 SurfaceAreaComponents( Math::Vector3& areaVec ) const;
-
-        // surface area of the specified uv set in uv units^2
-        f32 UVSurfaceArea( UVSetType uvSet ) const;
-
-        f32 LightmapTexelsPerMeter( u32 logTextureSize, Math::Scale* scale = NULL ) const;
 
         // verts-per-meter
         f32 VertDensity(  ) const;

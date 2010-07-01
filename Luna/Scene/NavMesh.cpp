@@ -118,10 +118,8 @@ NavMesh::NavMesh( Luna::Scene* scene, Content::Mesh* mesh )
   m_Locator->Update();
   if (mesh->m_TriangleVertexIndices.size() == 0)
   {
-    mesh->m_ExportTypes[ Content::ContentTypes::NavMeshHiRes ] = true;
     mesh->m_GivenName = TXT( "HiResNavMesh" );
     mesh->m_UseGivenName = true;
-    mesh->m_ExportTypeIndex.insert( Content::M_ContentTypeToIndex::value_type(  Content::ContentTypes::NavMeshHiRes , 0) );
   }
    
   m_mouse_over_vert = m_mouse_over_edge = m_mouse_over_tri = 0xFFFFFFFF;

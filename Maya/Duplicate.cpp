@@ -1,6 +1,5 @@
 #include "Precompile.h"
 #include "Duplicate.h"
-#include "Shaders.h"
 #include "NodeTypes.h"
 
 #include "Foundation/Reflect/Element.h"
@@ -1387,11 +1386,7 @@ namespace Maya
                             // if allowing shaders from a reference file then whatever shader we have is good
                             destinShaderObj = sourceShaderObj;
                         }
-                        else
-                        {
-                            // not allowing shaders from a reference file, so be sure this isn't one
-                            destinShaderObj = Maya::nonReferencedShadingEngine(sourceShaderObj);
-                        }
+
                         // only one function set is needed for the shading engine if we reuse the source
                         reuseSourceShader = (destinShaderObj==sourceShaderObj);
                         if (reuseSourceShader)

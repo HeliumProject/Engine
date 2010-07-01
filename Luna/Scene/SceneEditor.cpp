@@ -195,8 +195,6 @@ EVT_MENU(SceneEditorIDs::ID_ToolsLightingLayerCreate, SceneEditor::OnToolSelecte
 EVT_MENU(SceneEditorIDs::ID_ToolsLightingLayerUnlink, SceneEditor::OnToolSelected) 
 EVT_MENU(SceneEditorIDs::ID_ToolsLightingLayerSelect, SceneEditor::OnToolSelected) 
 
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshImport, SceneEditor::OnUtilitySelected)
-
 EVT_MENU(SceneEditorIDs::ID_UtilitiesConstruction, SceneEditor::OnUtilitySelected)
 EVT_MENU(SceneEditorIDs::ID_UtilitiesMeasureDistance, SceneEditor::OnUtilitySelected)
 EVT_MENU(SceneEditorIDs::ID_UtilitiesFlushSymbols, SceneEditor::OnUtilitySelected)
@@ -2661,106 +2659,8 @@ void SceneEditor::OnUtilitySelected(wxCommandEvent& event)
         case SceneEditorIDs::ID_UtilitiesMeasureDistance:
             {
                 m_SceneManager.GetCurrentScene()->MeasureDistance();
+                break;
             }
-            break;
-
-        case SceneEditorIDs::ID_ToolsNavMeshImport:
-            {
-                m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshImport, false );   // this isn't a toggle
-                Luna::Scene* rootScene = m_SceneManager.GetRootScene();
-                TUID tuid( TUID::Generate() );
-                Content::MeshPtr content_hi_res_nav = new Content::Mesh(tuid);
-                content_hi_res_nav->m_ExportTypes[ Content::ContentTypes::NavMeshHiRes ] = true;
-                content_hi_res_nav->m_GivenName = TXT( "HiResNavMesh" );
-                content_hi_res_nav->m_MeshOriginType = Content::Mesh::NavHiRes;
-                content_hi_res_nav->m_UseGivenName = true;
-                content_hi_res_nav->m_ExportTypeIndex.insert( Content::M_ContentTypeToIndex::value_type(  Content::ContentTypes::NavMeshHiRes , 0) );
-                TUID::Generate(tuid);
-                Content::MeshPtr content_low_res_nav = new Content::Mesh(tuid);
-                content_low_res_nav->m_ExportTypes[ Content::ContentTypes::NavMeshLowRes ] = true;
-                content_low_res_nav->m_GivenName = TXT( "LowResNavMesh" );
-                content_low_res_nav->m_MeshOriginType = Content::Mesh::NavLowRes;
-                content_low_res_nav->m_UseGivenName = true;
-                content_low_res_nav->m_ExportTypeIndex.insert( Content::M_ContentTypeToIndex::value_type(  Content::ContentTypes::NavMeshLowRes , 0) );
-                if (rootScene)
-                {
-                    const S_ZoneDumbPtr& zones = rootScene->GetZones(); 
-                    Luna::ZonePtr& luna_nav_zone_ptr = rootScene->GetNavZone();
-                    if (!luna_nav_zone_ptr)
-                    {
-                        //throw a dialog  
-                        tstring errorString = TXT( "Please make a new zone and check HasNavData attribute" );
-                        wxMessageBox( errorString.c_str(), wxT( "You must have a zone with NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
-                        break;
-                    }
-
-                    //now add content_hi_res_nav & content_low_res_nav to luna_nav_zone_ptr
-                    {
-                        Luna::Scene* luna_zone_scene_ptr = m_SceneManager.GetScene( luna_nav_zone_ptr->GetPath() );
-                        if (luna_zone_scene_ptr)
-                        {
-                            //first removed the existing meshes
-                            HM_SceneNodeDumbPtr::const_iterator itr = luna_zone_scene_ptr->GetNodes().begin();
-                            while (itr != luna_zone_scene_ptr->GetNodes().end())
-                            {
-                                for ( ; itr != luna_zone_scene_ptr->GetNodes().end(); ++itr )
-                                {
-                                    Luna::Mesh* luna_mesh = Reflect::ObjectCast<Luna::Mesh> (itr->second);
-                                    if (luna_mesh)
-                                    {
-                                        const Content::Mesh* content_mesh = luna_mesh->GetPackage< Content::Mesh >();
-                                        if (content_mesh)
-                                        {
-                                            if  ((content_mesh->m_MeshOriginType == Content::Mesh::NavHiRes) ||
-                                                (content_mesh->m_MeshOriginType == Content::Mesh::NavLowRes ) )
-                                            {
-                                                luna_zone_scene_ptr->RemoveObject(itr->second);
-                                                itr = luna_zone_scene_ptr->GetNodes().begin();
-                                                break;
-                                            }//if  ((content_mesh->GetExportTypeIndex(Content::ContentTypes::NavMeshHiRes)
-                                        }//if (content_mesh)
-                                    }// if (entity)
-                                }//for ( ; itr != luna_zone_scene_ptr->GetNodes().end(); ++itr )
-                            }//while (itr != luna_zone_scene_ptr->GetNodes().end())
-
-                            //now we made sure we deleted old ones. now add the newly made mesh nodes
-                            ImportAction action = ImportActions::Load;
-                            u32 import_flags = 0;
-                            Undo::CommandPtr command;
-
-                            if (luna_zone_scene_ptr->IsCurrent() && luna_zone_scene_ptr->IsEditable())
-                            {
-                                Reflect::V_Element elems;
-                                if (content_hi_res_nav->m_TriangleVertexIndices.size())
-                                {
-                                    elems.push_back(content_hi_res_nav);
-                                }
-                                if (content_low_res_nav->m_TriangleVertexIndices.size())
-                                {
-                                    elems.push_back(content_low_res_nav);
-                                }
-                                if (elems.size())
-                                {
-                                    command = luna_zone_scene_ptr->ImportSceneNodes( elems, action, import_flags );
-                                }
-                            }
-                            else
-                            {
-                                //throw a dialog  
-                                tstring errorString = TXT( "Trying to change nav mesh zone when it is not selected and checked out" );
-                                wxMessageBox( errorString.c_str(), wxT( "Please make nav zone the current editing zone and say yes to check it out" ), wxOK|wxCENTRE|wxICON_ERROR, this );
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            int a = 1;
-                            //assert here
-                        }//if (luna_zone_scene_ptr)
-                    }////now add content_hi_res_nav & content_low_res_nav to luna_nav_zone_ptr
-                }//if (rootScene)
-            }
-            break;
         }
     }
     else

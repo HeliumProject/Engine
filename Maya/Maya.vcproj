@@ -31,7 +31,7 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
 				AdditionalDependencies="&quot;$(TargetPath)&quot;"
 				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
 			/>
@@ -110,7 +110,7 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
 				AdditionalDependencies="&quot;$(TargetPath)&quot;"
 				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
 			/>
@@ -191,7 +191,7 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
 				AdditionalDependencies="&quot;$(TargetPath)&quot;"
 				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
 			/>
@@ -268,7 +268,7 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
 				AdditionalDependencies="&quot;$(TargetPath)&quot;"
 				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
 			/>
@@ -347,7 +347,7 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
 				AdditionalDependencies="&quot;$(TargetPath)&quot;"
 				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
 			/>
@@ -426,7 +426,7 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
 				AdditionalDependencies="&quot;$(TargetPath)&quot;"
 				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
 			/>
@@ -507,7 +507,7 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
 				AdditionalDependencies="&quot;$(TargetPath)&quot;"
 				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011\plug-ins\$(SolutionName).mll&quot;"
 			/>
@@ -584,7 +584,7 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
+				CommandLine="if &quot;$(USERPROFILE)&quot; neq &quot;&quot; copy /y &quot;$(TargetPath)&quot; &quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
 				AdditionalDependencies="&quot;$(TargetPath)&quot;"
 				Outputs="&quot;$(USERPROFILE)\Documents\Maya\2011-x64\plug-ins\$(SolutionName).mll&quot;"
 			/>

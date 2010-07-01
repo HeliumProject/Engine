@@ -10,10 +10,6 @@
 		PreprocessorDefinitions="XML_STATIC=1;wxNO_EXCEPTIONS=1"
 	/>
 	<UserMacro
-		Name="boost"
-		Value="$(SolutionDir)SDK\boost\1.43"
-	/>
-	<UserMacro
 		Name="Crypto++"
 		Value="$(SolutionDir)SDK\Crypto++\5.6.0"
 	/>
@@ -72,14 +68,6 @@
 	<UserMacro
 		Name="wxPropertyGrid"
 		Value="$(SolutionDir)SDK\wxPropertyGrid\1.4.11"
-	/>
-	<UserMacro
-		Name="wxWidgets"
-		Value="$(SolutionDir)SDK\wxWidgets\2.8.11"
-	/>
-	<UserMacro
-		Name="WXWIN"
-		Value="$(wxWidgets)"
 	/>
 	<UserMacro
 		Name="zlib"

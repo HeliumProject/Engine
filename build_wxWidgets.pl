@@ -27,6 +27,11 @@ if ( !defined $args )
 
 if ( !$location )
 {
+  $location = $ENV{wxWidgets};
+}
+
+if ( !$location )
+{
   PrintUsage();
   exit 1;
 }

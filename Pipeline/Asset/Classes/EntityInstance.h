@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Pipeline/API.h"
-#include "Pipeline/Content/Nodes/Instance/Instance.h"
+#include "Pipeline/Content/Nodes/Instance.h"
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Foundation/Automation/Event.h"
 
@@ -15,7 +15,8 @@ namespace Asset
 
     public:
         EntityInstance( const tstring& assetPath = TXT( "" ) );
-
+        EntityInstance( Nocturnal::TUID id );
+        
         // get the path to the class
         tstring GetEntityPath();
 

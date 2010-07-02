@@ -14,7 +14,6 @@
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/ExporterJob.h"
 
-#include "Pipeline/Content/Nodes/Zone.h"
 #include "Foundation/Reflect/Archive.h"
 
 #include "Application/Application.h"

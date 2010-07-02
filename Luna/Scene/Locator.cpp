@@ -12,7 +12,7 @@
 #include "PrimitiveLocator.h"
 #include "PrimitiveCube.h"
 
-#include "Pipeline/Content/Nodes/Instance/Locator.h"
+#include "Pipeline/Content/Nodes/Locator.h"
 
 // Using
 using namespace Math;

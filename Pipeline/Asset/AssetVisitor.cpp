@@ -10,7 +10,6 @@
 #include "Foundation/Flags.h"
 #include "Platform/Types.h"
 #include "Pipeline/Content/Scene.h"
-#include "Pipeline/Content/Nodes/Zone.h"
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Class.h"
 #include "Foundation/Reflect/Field.h"

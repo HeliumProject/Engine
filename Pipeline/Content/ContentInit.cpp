@@ -1,31 +1,26 @@
 #include "ContentInit.h"
 #include "ContentVersion.h"
-#include "ContentTypes.h"
 
 #include "Foundation/Reflect/Registry.h"
 
 #include "Pipeline/Content/Nodes/SceneNode.h"
 #include "Pipeline/Content/Nodes/HierarchyNode.h"
 
-#include "Pipeline/Content/Nodes/Transform/Transform.h"
-#include "Pipeline/Content/Nodes/Transform/PivotTransform.h"
-#include "Pipeline/Content/Nodes/Transform/JointTransform.h"
-#include "Pipeline/Content/Nodes/Transform/Descriptor.h"
-#include "Pipeline/Content/Nodes/Transform/Effector.h"
+#include "Pipeline/Content/Nodes/Transform.h"
+#include "Pipeline/Content/Nodes/PivotTransform.h"
+#include "Pipeline/Content/Nodes/JointTransform.h"
 
-#include "Pipeline/Content/Nodes/Instance/Instance.h"
-#include "Pipeline/Content/Nodes/Instance/Locator.h"
-#include "Pipeline/Content/Nodes/Instance/Volume.h"
+#include "Pipeline/Content/Nodes/Instance.h"
+#include "Pipeline/Content/Nodes/Locator.h"
+#include "Pipeline/Content/Nodes/Volume.h"
 
 #include "Pipeline/Content/Nodes/Camera.h"
 #include "Pipeline/Content/Nodes/Layer.h"
-#include "Pipeline/Content/Nodes/Zone.h"
-#include "Pipeline/Content/Nodes/Curve/Curve.h"
-#include "Pipeline/Content/Nodes/Curve/Point.h"
-#include "Pipeline/Content/Nodes/Geometry/Mesh.h"
-#include "Pipeline/Content/Nodes/Geometry/Skin.h"
-#include "Pipeline/Content/Nodes/Geometry/Shader.h"
-#include "Pipeline/Content/Nodes/Geometry/CollisionPrimitive.h"
+#include "Pipeline/Content/Nodes/Curve.h"
+#include "Pipeline/Content/Nodes/Point.h"
+#include "Pipeline/Content/Nodes/Mesh.h"
+#include "Pipeline/Content/Nodes/Skin.h"
+#include "Pipeline/Content/Nodes/Shader.h"
 
 #include "Pipeline/Content/ParametricKey/ParametricColorKey.h"
 #include "Pipeline/Content/ParametricKey/ParametricIntensityKey.h"
@@ -36,11 +31,11 @@
 #include "Pipeline/Content/Animation/CompressedJointAnimation.h"
 #include "Pipeline/Content/Animation/JointOrdering.h"
 
-#include "Pipeline/Content/Nodes/Lights/Light.h"
-#include "Pipeline/Content/Nodes/Lights/SpotLight.h"
-#include "Pipeline/Content/Nodes/Lights/PointLight.h"
-#include "Pipeline/Content/Nodes/Lights/DirectionalLight.h"
-#include "Pipeline/Content/Nodes/Lights/AmbientLight.h"
+#include "Pipeline/Content/Nodes/Light.h"
+#include "Pipeline/Content/Nodes/SpotLight.h"
+#include "Pipeline/Content/Nodes/PointLight.h"
+#include "Pipeline/Content/Nodes/DirectionalLight.h"
+#include "Pipeline/Content/Nodes/AmbientLight.h"
 
 #include "Pipeline/Content/NodeVisibility.h"
 #include "Pipeline/Content/SceneVisibility.h"
@@ -66,7 +61,6 @@ namespace Content
       g_InitializerStack.Push( Component::Initialize, Component::Cleanup );
 
       g_InitializerStack.Push( Reflect::RegisterClass<ContentVersion>( TXT( "ContentVersion" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<ContentTypes::ContentType>( &ContentTypes::ContentTypeEnumerateEnumeration, TXT( "ContentType" ) ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<SceneNode>( TXT( "SceneNode" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<HierarchyNode>( TXT( "HierarchyNode" ) ) );
@@ -86,7 +80,6 @@ namespace Content
       g_InitializerStack.Push( Reflect::RegisterClass<Camera>( TXT( "Camera" ) ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<Layer>( TXT( "Layer" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Zone>( TXT( "Zone" ) ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<MorphTargetDelta>( TXT( "MorphTargetDelta" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<MorphTarget>( TXT( "MorphTarget" ) ) );
@@ -94,11 +87,6 @@ namespace Content
       g_InitializerStack.Push( Reflect::RegisterEnumeration<Mesh::MeshOriginType>( &Mesh::MeshOriginTypeEnumeration, TXT( "MeshOriginType" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<Mesh>( TXT( "Mesh" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<Shader>( TXT( "Shader" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Effector>( TXT( "Effector" ) ) );
-
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<CollisionShapes::CollisionShape>( &CollisionShapes::CollisionShapeEnumerateEnumeration, TXT( "CollisionShape" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<CollisionPrimitive>( TXT( "CollisionPrimitive" ) ) );
-      Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass<CollisionPrimitive>(), TXT( "CollisionVolume" ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<Influence>( TXT( "Influence" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<Skin>( TXT( "Skin" ) ) );
@@ -115,10 +103,6 @@ namespace Content
       g_InitializerStack.Push( Reflect::RegisterClass<CompressedJointAnimation>( TXT( "CompressedJointAnimation" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<JointAnimation>( TXT( "JointAnimation" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<Animation>( TXT( "Animation" ) ) );
-
-      // descriptor
-      g_InitializerStack.Push( Reflect::RegisterEnumeration<GeometrySimulations::GeometrySimulation>( &GeometrySimulations::GeometrySimulationEnumerateEnumeration, TXT( "GeometrySimulation" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Descriptor>( TXT( "Descriptor" ) ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<ParametricKey>( TXT( "ParametricKey" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<ParametricColorKey>( TXT( "ParametricColorKey" ) ) );

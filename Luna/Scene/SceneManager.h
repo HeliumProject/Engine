@@ -81,7 +81,7 @@ namespace Luna
 
     ScenePtr NewScene( bool isRoot, tstring path = TXT( "" ), bool addDoc = true );
     virtual DocumentPtr OpenPath( const tstring& path, tstring& error ) NOC_OVERRIDE;
-    ScenePtr OpenZone( const tstring& path, tstring& error );
+    ScenePtr OpenScene( const tstring& path, tstring& error );
 
   public:
     virtual bool Save( DocumentPtr document, tstring& error ) NOC_OVERRIDE;
@@ -122,7 +122,6 @@ namespace Luna
   private:
     Luna::Scene* FindFirstNonNestedScene() const;
     void DocumentPathChanged( const DocumentPathChangedArgs& args );
-    void SceneNodeDeleting( const NodeChangeArgs& args );
     void OnDocumentClosed( const DocumentChangedArgs& args );
 
   private:

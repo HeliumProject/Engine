@@ -20,19 +20,18 @@
 
 #include "Pipeline/Content/Scene.h"
 #include "Pipeline/Content/ContentVersion.h"
-#include "Pipeline/Content/Nodes/Transform/JointTransform.h"
-#include "Pipeline/Content/Nodes/Transform/PivotTransform.h"
-#include "Pipeline/Content/Nodes/Geometry/Mesh.h"
-#include "Pipeline/Content/Nodes/Geometry/Shader.h"
-#include "Pipeline/Content/Nodes/Geometry/Skin.h"
-#include "Pipeline/Content/Nodes/Curve/Curve.h"
-#include "Pipeline/Content/Nodes/Instance/Volume.h"
-#include "Pipeline/Content/Nodes/Zone.h"
+#include "Pipeline/Content/Nodes/JointTransform.h"
+#include "Pipeline/Content/Nodes/PivotTransform.h"
+#include "Pipeline/Content/Nodes/Mesh.h"
+#include "Pipeline/Content/Nodes/Shader.h"
+#include "Pipeline/Content/Nodes/Skin.h"
+#include "Pipeline/Content/Nodes/Curve.h"
+#include "Pipeline/Content/Nodes/Volume.h"
 
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/Widgets/Canvas.h"
-#include "SceneGraph.h"
 #include "Application/Undo/PropertyCommand.h"
+#include "SceneGraph.h"
 #include "Statistics.h"
 
 #include "SceneNodeType.h"
@@ -48,8 +47,6 @@
 
 #include "ParentCommand.h"
 
-#include "Point.h"
-
 #include "PivotTransform.h"
 #include "JointTransform.h"
 #include "Layer.h"
@@ -58,13 +55,13 @@
 #include "Shader.h"
 #include "Skin.h"
 #include "Curve.h"
+#include "Point.h"
 #include "InstanceType.h"
 #include "Entity.h"
 #include "EntityAssetSet.h"
 #include "EntityType.h"
 #include "Volume.h"
 #include "Locator.h"
-#include "Zone.h"
 #include "Light.h"
 #include "SpotLight.h"
 #include "PointLight.h"
@@ -493,10 +490,6 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
     else if ( data->HasType( Reflect::GetType<Content::JointTransform>() ) )
     {
         createdNode = new Luna::JointTransform( this, Reflect::DangerousCast< Content::JointTransform >( data ) );
-    }
-    else if ( data->HasType( Reflect::GetType<Content::Zone>() ) )
-    {
-        createdNode = new Zone( this, Reflect::DangerousCast< Content::Zone >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::Point>() ) )
     {
@@ -1551,14 +1544,6 @@ void Scene::AddSceneNode( const SceneNodePtr& node )
     }
 
     {
-        LUNA_SCENE_SCOPE_TIMER( ("Zone check") );
-        if ( node->HasType( Reflect::GetType<Zone>() ) )
-        {
-            m_Zones.insert( Reflect::DangerousCast< Zone >( node ) );
-        }
-    }
-
-    {
         LUNA_SCENE_SCOPE_TIMER( ("Raise events if not transient") );
         if ( !node->IsTransient() && !m_Importing )
         {
@@ -1578,11 +1563,6 @@ void Scene::RemoveSceneNode( const SceneNodePtr& node )
 
     // remove shortcuts to node and children
     m_Nodes.erase( node->GetID() );
-
-    if ( node->HasType( Reflect::GetType<Zone>() ) )
-    {
-        m_Zones.erase( Reflect::DangerousCast< Zone >( node ) );
-    }
 
     Luna::SceneNodeType* t = node->GetNodeType();
     if ( t == NULL )
@@ -1692,21 +1672,9 @@ void Scene::Render( RenderVisitor* render ) const
 
         m_Root->TraverseHierarchy( &renderTraverser );
     }
-
-    S_ZoneDumbPtr::const_iterator zoneItr = m_Zones.begin();
-    S_ZoneDumbPtr::const_iterator zoneEnd = m_Zones.end();
-    for ( ; zoneItr != zoneEnd; ++zoneItr )
-    {
-        Zone* zone = *zoneItr;
-        Luna::Scene* scene = m_Manager->GetScene( zone->GetPath() );
-        if ( scene )
-        {
-            scene->Render( render );
-        }
-    }
 }
 
-bool Scene::Pick( PickVisitor* pick, bool zones ) const
+bool Scene::Pick( PickVisitor* pick ) const
 {
     size_t hitCount = pick->GetHits().size();
 
@@ -1718,21 +1686,6 @@ bool Scene::Pick( PickVisitor* pick, bool zones ) const
         m_Root->TraverseHierarchy ( &pickTraverser );
     }
 
-    if ( zones )
-    {
-        S_ZoneDumbPtr::const_iterator zoneItr = m_Zones.begin();
-        S_ZoneDumbPtr::const_iterator zoneEnd = m_Zones.end();
-        for ( ; zoneItr != zoneEnd; ++zoneItr )
-        {
-            Zone* zone = *zoneItr;
-            Luna::Scene* scene = m_Manager->GetScene( zone->GetPath() );
-            if ( scene )
-            {
-                scene->Pick( pick );
-            }
-        }
-    }
-
     return pick->GetHits().size() > hitCount;
 }
 
@@ -1742,7 +1695,7 @@ void Scene::Select( const SelectArgs& args )
 
     ClearHighlight( ClearHighlightArgs (false) );
 
-    bool result = Pick(args.m_Pick, false);
+    bool result = Pick( args.m_Pick );
 
     OS_SelectableDumbPtr selection;
 
@@ -1927,7 +1880,7 @@ void Scene::SetHighlight(const SetHighlightArgs& args)
 
     OS_SelectableDumbPtr selection;
 
-    bool result = Pick(args.m_Pick, false);
+    bool result = Pick( args.m_Pick );
 
     switch (args.m_Target)
     {
@@ -3454,19 +3407,4 @@ TUID Scene::GetRemappedID( tuid nodeId )
     }
 
     return TUID::Null;
-}
-
-ZonePtr Scene::GetNavZone()
-{
-    S_ZoneDumbPtr::iterator zoneItr = m_Zones.begin();
-    S_ZoneDumbPtr::iterator zoneEnd = m_Zones.end();
-    for (; zoneItr!=zoneEnd; ++zoneItr)
-    {
-        Content::Zone* zone = (*zoneItr)->GetPackage< Content::Zone >();
-        if(zone->m_HasNavData)
-        {
-            return *zoneItr;
-        }
-    }
-    return NULL;
 }

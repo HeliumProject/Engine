@@ -2,7 +2,7 @@
 
 #include "Instance.h"
 
-#include "Pipeline/Content/Nodes/Instance/Locator.h"
+#include "Pipeline/Content/Nodes/Locator.h"
 
 namespace Luna
 {

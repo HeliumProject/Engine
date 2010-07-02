@@ -25,8 +25,6 @@
 #include "SceneCallbackData.h"
 #include "ScenePreferences.h"
 #include "ScenePreferencesDialog.h"
-#include "ScenesPanel.h"
-#include "SearchBar.h"
 #include "SelectionPropertiesPanel.h"
 #include "TranslateManipulator.h"
 #include "ToolsPanel.h"
@@ -177,28 +175,12 @@ EVT_MENU(SceneEditorIDs::ID_ToolsPivot, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsEntityCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsVolumeCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsClueCreate, SceneEditor::OnToolSelected)
-#if LUNA_GAME_CAMERA
-EVT_MENU(SceneEditorIDs::ID_ToolsGameCameraCreate, SceneEditor::OnToolSelected)
-#endif
 EVT_MENU(SceneEditorIDs::ID_ToolsControllerCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsCurveCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsCurveEdit, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsDuplicate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsLocatorCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsLightCreate, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsLighting, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate, SceneEditor::OnToolSelected) 
-EVT_MENU(SceneEditorIDs::ID_ToolsPostProcessingVolumeScript, SceneEditor::OnToolSelected) 
-
-EVT_MENU(SceneEditorIDs::ID_ToolsLightingLayerCreate, SceneEditor::OnToolSelected) 
-EVT_MENU(SceneEditorIDs::ID_ToolsLightingLayerUnlink, SceneEditor::OnToolSelected) 
-EVT_MENU(SceneEditorIDs::ID_ToolsLightingLayerSelect, SceneEditor::OnToolSelected) 
-
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshImport, SceneEditor::OnUtilitySelected)
-
-EVT_MENU(SceneEditorIDs::ID_UtilitiesConstruction, SceneEditor::OnUtilitySelected)
-EVT_MENU(SceneEditorIDs::ID_UtilitiesMeasureDistance, SceneEditor::OnUtilitySelected)
-EVT_MENU(SceneEditorIDs::ID_UtilitiesFlushSymbols, SceneEditor::OnUtilitySelected)
 
 EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshManipulate, SceneEditor::OnToolSelected)
@@ -280,7 +262,7 @@ SceneEditor::SceneEditor()
 , m_DrawerPanel( NULL )
 , m_HierarchyOutline( NULL )
 , m_TypeOutline( NULL )
-, m_EntityAssetOutline( NULL )
+, m_EntityOutline( NULL )
 , m_FileMenu( NULL )
 , m_EditMenu( NULL )
 , m_ViewMenu( NULL )
@@ -292,7 +274,6 @@ SceneEditor::SceneEditor()
 , m_ViewColorMenu( NULL )
 , m_ShadingMenu( NULL )
 , m_CullingMenu( NULL )
-, m_UtilitiesMenu( NULL )
 , m_MRUMenu( NULL )
 , m_MRUMenuItem( NULL )
 , m_MRU( new Nocturnal::MenuMRU( 30, this ) )
@@ -388,9 +369,6 @@ SceneEditor::SceneEditor()
 //    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Entity"), Nocturnal::GlobalImageManager().GetBitmap( "create_entity.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Place entity objects (such as art instances or characters)");
 //    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Volume"), Nocturnal::GlobalImageManager().GetBitmap( "create_volume.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Place volume objects (items for setting up gameplay)");
 //    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsClueCreate, wxT("Clue"), Nocturnal::GlobalImageManager().GetBitmap( "create_clue.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Place clue objects (items for setting up gameplay)");
-//#if LUNA_GAME_CAMERA
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsGameCameraCreate, wxT("GameCamera"), Nocturnal::GlobalImageManager().GetBitmap( "game_camera.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Place a camera");
-//#endif
 //    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsControllerCreate, wxT("Controller"), Nocturnal::GlobalImageManager().GetBitmap( "create_controller.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Place controller objects (items for setting up gameplay)");
 //    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Locator"), Nocturnal::GlobalImageManager().GetBitmap( "create_locator.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Place locator objects (such as bug locators)");
 //    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Curve"), Nocturnal::GlobalImageManager().GetBitmap( "create_curve.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)");
@@ -460,41 +438,27 @@ SceneEditor::SceneEditor()
     m_Directory = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
     m_Directory->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
     {
-        // Zones
-        m_ZonesPanel = new ScenesPanel( this, &m_SceneManager, m_Directory, SceneEditorIDs::ID_ZonesControl );
-        m_ZonesPage  = m_Directory->GetPageCount();
-        m_Directory->AddPage(m_ZonesPanel, TXT( "Zones" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "zone.png" ) ));
-
-        // Inner tab with different outlines
-        wxNotebook* outlinerNotebook = new wxNotebook( m_Directory, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_NOPAGETHEME );
-        m_Directory->AddPage( outlinerNotebook, TXT( "Outlines" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "type.png" ) ));
-        {
-#ifndef LUNA_SCENE_DISABLE_OUTLINERS
-            // Types
-            m_TypeOutline = new NodeTypeOutliner( &m_SceneManager );
-            Nocturnal::SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( outlinerNotebook, SceneEditorIDs::ID_TypeOutlineControl );
-            typeTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-            outlinerNotebook->AddPage( typeTree, TXT( "Types" ) );
-            m_TreeMonitor.AddTree( typeTree );
-
-            // Entity Classes
-            m_EntityAssetOutline = new EntityAssetOutliner( &m_SceneManager );
-            Nocturnal::SortTreeCtrl* entityTree = m_EntityAssetOutline->InitTreeCtrl( outlinerNotebook, wxID_ANY );
-            entityTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-            outlinerNotebook->AddPage( entityTree, TXT( "Entity Classes" ) );
-            m_TreeMonitor.AddTree( entityTree );
-
-#endif
-        }
-
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
         // Hierarchy
         m_HierarchyOutline = new HierarchyOutliner( &m_SceneManager );
         Nocturnal::SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_HierarchyOutlineControl );
         hierarchyTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-        m_HierarchyOutlinePage = m_Directory->GetPageCount();
         m_Directory->AddPage( hierarchyTree, TXT( "Hierarchy" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "world.png" ) ) );
         m_TreeMonitor.AddTree( hierarchyTree );
+
+        // Types
+        m_TypeOutline = new NodeTypeOutliner( &m_SceneManager );
+        Nocturnal::SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_TypeOutlineControl );
+        typeTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
+        m_Directory->AddPage( typeTree, TXT( "Types" ) );
+        m_TreeMonitor.AddTree( typeTree );
+
+        // Entities
+        m_EntityOutline = new EntityAssetOutliner( &m_SceneManager );
+        Nocturnal::SortTreeCtrl* entityTree = m_EntityOutline->InitTreeCtrl( m_Directory, wxID_ANY );
+        entityTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
+        m_Directory->AddPage( entityTree, TXT( "Entities" ) );
+        m_TreeMonitor.AddTree( entityTree );
 #endif
     }
     m_FrameManager.AddPane( m_Directory, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ) );
@@ -525,21 +489,8 @@ SceneEditor::SceneEditor()
     m_FrameManager.AddPane( m_TypeGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("types")).Caption(wxT("Types")).Left().Layer(1).Position(1) );
 
     // Layer panel
-    m_LayersNotebook  = new wxNotebook( this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
-    m_LayersNotebook->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-    {
-        // General purpose layers
-        {
-            LayerGridPtr newGridPtr      = new LayerGrid( m_LayersNotebook, &m_SceneManager, Content::LayerTypes::LT_GeneralPurpose );
-            m_LayersNotebook->AddPage( newGridPtr->GetPanel(), wxT("General"), true);
-            m_LayerGrids.push_back(newGridPtr);
-        }
-    }
-    m_FrameManager.AddPane( m_LayersNotebook, wxAuiPaneInfo().Name(wxT("layers")).Caption(wxT("Layers")).Right().Layer(1).Position(1) );
-
-    // Search bar
-    SearchBar* searchBar = new SearchBar( this );
-    m_FrameManager.AddPane( searchBar, wxAuiPaneInfo().Name( wxT( "search bar" ) ).Caption( wxT( "Search" ) ).Right().Layer(1).Position(2));
+    m_LayerGrid = new LayerGrid( this, &m_SceneManager );
+    m_FrameManager.AddPane( m_LayerGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("layers")).Caption(wxT("Layers")).Right().Layer(1).Position(1) );
 
     //
     // Center pane
@@ -661,17 +612,6 @@ SceneEditor::SceneEditor()
         // Setting the accelerator string this way seems to preserve the string but not actually use the accelerator
         wxMenuItem* menuItemSelectAll = m_EditMenu->Append(SceneEditorIDs::ID_EditSelectAll, _("Select All"));
         menuItemSelectAll->SetAccelString( wxT( "Ctrl-a" ) );
-
-        m_EditMenu->AppendSeparator();
-
-        {
-            m_LightLinksMenu = new wxMenu;
-
-            m_LightLinksMenu->Append(SceneEditorIDs::ID_ToolsLightingLayerCreate, _("Link Selection\tCtrl-l"));
-            m_LightLinksMenu->Append(SceneEditorIDs::ID_ToolsLightingLayerUnlink, _("Unlink Selection\tCtrl-Shift-l"));
-            m_LightLinksMenu->Append(SceneEditorIDs::ID_ToolsLightingLayerSelect, _("Select Linked Lights\tAlt-l"));
-            m_EditMenu->AppendSubMenu(m_LightLinksMenu, _("Light Links"));
-        }
 
         m_EditMenu->AppendSeparator();
         m_EditMenu->Append(SceneEditorIDs::ID_EditDuplicate, _("Duplicate\tCtrl-d"));
@@ -835,9 +775,6 @@ SceneEditor::SceneEditor()
         tools_menu->Append(SceneEditorIDs::ID_ToolsEntityCreate, _("Entity Placement\tCtrl-e"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsVolumeCreate, _("Volume Placement"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsClueCreate, _("Clue Placement"));
-#if LUNA_GAME_CAMERA
-        tools_menu->Append(SceneEditorIDs::ID_ToolsGameCameraCreate, _("Game Camera Placement"));
-#endif
         tools_menu->Append(SceneEditorIDs::ID_ToolsControllerCreate, _("Controller Placement"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsLocatorCreate, _("Locator Placement"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsDuplicate, _("Duplicate Tool\tAlt-d"));
@@ -848,24 +785,8 @@ SceneEditor::SceneEditor()
 
         tools_menu->AppendSeparator();
         tools_menu->Append(SceneEditorIDs::ID_ToolsLightCreate, _("Light Placement"));
-        tools_menu->Append(SceneEditorIDs::ID_ToolsLighting, _("Lighting"));
-
-        tools_menu->AppendSeparator();
-        tools_menu->Append(SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate, _("PostProcessing Volume Placement")); 
-        tools_menu->Append(SceneEditorIDs::ID_ToolsPostProcessingVolumeScript, _("PostProcessing Volume Script")); 
 
         mb->Append(tools_menu, _("Tools"));
-    }
-
-    {
-        m_UtilitiesMenu = new wxMenu;
-        m_UtilitiesMenu->Append(SceneEditorIDs::ID_UtilitiesConstruction, _("Maya Construction"));
-
-        m_UtilitiesMenu->AppendSeparator();
-        m_UtilitiesMenu->Append(SceneEditorIDs::ID_UtilitiesMeasureDistance, _("Measure Distance"));
-        m_UtilitiesMenu->Append(SceneEditorIDs::ID_UtilitiesFlushSymbols, _("Flush Symbols"));
-
-        mb->Append(m_UtilitiesMenu, _("Utilities"));
     }
 
     {
@@ -940,12 +861,10 @@ SceneEditor::~SceneEditor()
     m_View->RemoveToolChangedListener( ToolChangeSignature::Delegate ( this, &SceneEditor::ViewToolChanged ) );
 
     delete m_TypeGrid;
+    delete m_LayerGrid;
     delete m_TypeOutline;
     delete m_HierarchyOutline;
-    delete m_EntityAssetOutline;
-
-    //Clean up all of our layer grids
-    m_LayerGrids.clear();
+    delete m_EntityOutline;
 }
 
 SceneEditorID SceneEditor::CameraModeToSceneEditorID( CameraMode cameraMode )
@@ -1105,38 +1024,9 @@ void SceneEditor::OnChar(wxKeyEvent& event)
             event.Skip(false);
             break;
 
-        case 'l':
-            OnLightLinkEvent(event);
-            break;
-
         default:
             event.Skip();
             break;
-        }
-    }
-}
-
-void SceneEditor::OnLightLinkEvent(wxKeyEvent& event)
-{
-    if(event.m_controlDown == true)
-    {
-        if(event.m_altDown == false)
-        {
-            if(event.m_shiftDown == true)
-            {
-                GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsLightingLayerUnlink) );
-            }
-            else
-            {
-                GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsLightingLayerCreate) );
-            }
-        }
-    }
-    else
-    {
-        if((event.m_shiftDown == false) && (event.m_altDown == true))
-        {
-            GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsLightingLayerSelect) );
         }
     }
 }
@@ -1228,31 +1118,6 @@ void SceneEditor::OnMenuOpen(wxMenuEvent& event)
         m_EditMenu->Enable( wxID_CUT, isAnythingSelected );
         m_EditMenu->Enable( wxID_COPY, isAnythingSelected );
         m_EditMenu->Enable( wxID_PASTE, m_SceneManager.HasCurrentScene() && IsClipboardFormatAvailable( CF_TEXT ) );
-
-        // Light Links
-        if(m_SceneManager.HasCurrentScene() && (m_LayerGrids.empty() == false))
-        {
-            LayerGridPtr&   lightingLayerGridPtr  = m_LayerGrids[Content::LayerTypes::LT_Lighting];
-
-            //Linking
-            {
-                bool            enableOp              = lightingLayerGridPtr->IsSelectionValid();
-                m_LightLinksMenu->Enable( SceneEditorIDs::ID_ToolsLightingLayerCreate, enableOp);
-            }
-
-            //Unlinking and selections
-            {
-                bool            enableOp              = lightingLayerGridPtr->IsSelectionItemsLinked();
-                m_LightLinksMenu->Enable( SceneEditorIDs::ID_ToolsLightingLayerUnlink, enableOp);
-                m_LightLinksMenu->Enable( SceneEditorIDs::ID_ToolsLightingLayerSelect, enableOp);
-            }
-        }
-        else
-        {
-            m_LightLinksMenu->Enable( SceneEditorIDs::ID_ToolsLightingLayerCreate, false);
-            m_LightLinksMenu->Enable( SceneEditorIDs::ID_ToolsLightingLayerUnlink, false);
-            m_LightLinksMenu->Enable( SceneEditorIDs::ID_ToolsLightingLayerSelect, false);
-        }
     }
     else if (menu == m_ViewMenu)
     {
@@ -1481,12 +1346,10 @@ void SceneEditor::OnExport(wxCommandEvent& event)
 {
     static bool exportDependencies = true;
     static bool exportHierarchy = true;
-    static bool exportBounded = false;
-    static bool exportWorld = false;
 
     if ( m_SceneManager.HasCurrentScene() )
     {
-        ExportOptionsDlg dlg ( this, exportDependencies, exportHierarchy, exportBounded, exportWorld );
+        ExportOptionsDlg dlg ( this, exportDependencies, exportHierarchy );
 
         if ( dlg.ShowModal() == wxID_OK )
         {
@@ -1502,23 +1365,7 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                 args.m_Flags |= ExportFlags::MaintainDependencies;
             }
 
-            if ( exportBounded )
-            {
-                OS_SelectableDumbPtr::Iterator itr = m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Begin();
-                OS_SelectableDumbPtr::Iterator end = m_SceneManager.GetCurrentScene()->GetSelection().GetItems().End();
-                for ( ; itr != end; ++itr )
-                {
-                    Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>( *itr );
-                    if ( node )
-                    {
-                        args.m_Bounds.push_back( node->GetGlobalHierarchyBounds() );
-                    }
-                }
-            }
-            else
-            {
-                args.m_Flags |= ExportFlags::SelectedNodes;
-            }
+            args.m_Flags |= ExportFlags::SelectedNodes;
 
             u64 startTimer = Platform::TimerGetClock();
 
@@ -1533,99 +1380,7 @@ void SceneEditor::OnExport(wxCommandEvent& event)
             Undo::BatchCommandPtr changes = new Undo::BatchCommand();
 
             Reflect::V_Element elements;
-            Asset::SceneManifestPtr manifest = new Asset::SceneManifest ();
-            elements.push_back( manifest );
-
-            bool result = true;
-            Luna::Scene* root = m_SceneManager.GetRootScene();
-            for ( S_ZoneDumbPtr::const_iterator itr = root->GetZones().begin(), end = root->GetZones().end(); itr != end && result; ++itr )
-            {
-                bool load = false;
-
-                if ( !args.m_Bounds.empty() )
-                {
-                    // the scene is not loaded, fetch its manifest and check to see if any of the bounds intersect
-                    Asset::SceneManifestPtr currentManifest = Reflect::Archive::FromFile< Asset::SceneManifest >( (*itr)->GetPath() );
-                    if ( currentManifest )
-                    {
-                        Math::AlignedBox bounds;
-                        bounds.minimum = currentManifest->m_BoundingBoxMin;
-                        bounds.maximum = currentManifest->m_BoundingBoxMax;
-
-                        bool intersection = false;
-                        for ( V_AlignedBox::const_iterator itr = args.m_Bounds.begin(), end = args.m_Bounds.end(); itr != end && !intersection; ++itr )
-                        {
-                            intersection = bounds.IntersectsBox( *itr );
-                        }
-
-                        load = intersection;
-                    }
-                }
-
-                Luna::Scene* scene = m_SceneManager.GetScene( (*itr)->GetPath() );
-
-                if ( !scene && load )
-                {
-                    tstring error;
-                    scene = m_SceneManager.OpenZone( (*itr)->GetPath(), error );
-                    if ( !scene )
-                    {
-                        wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
-                    }
-                }
-
-                if ( !scene )
-                {
-                    continue;
-                }
-
-                if ( !exportWorld && scene != m_SceneManager.GetCurrentScene() )
-                {
-                    continue;
-                }
-
-                if ( scene )
-                {
-                    Reflect::V_Element currentElements;
-                    result &= scene->Export( currentElements, args, changes );
-                    if ( result )
-                    {
-                        for ( Reflect::V_Element::const_iterator itr = currentElements.begin(), end = currentElements.end(); itr != end; ++itr )
-                        {
-                            Asset::SceneManifestPtr currentManifest = Reflect::ObjectCast<Asset::SceneManifest>( *itr );
-                            if ( currentManifest )
-                            {
-                                // merge bounds (this will be very pessimistic as we don't test each node)
-                                if (currentManifest->m_BoundingBoxMax.x > manifest->m_BoundingBoxMax.x)
-                                    manifest->m_BoundingBoxMax.x = currentManifest->m_BoundingBoxMax.x;
-
-                                if (currentManifest->m_BoundingBoxMin.x < manifest->m_BoundingBoxMin.x)
-                                    manifest->m_BoundingBoxMin.x = currentManifest->m_BoundingBoxMin.x;
-
-                                if (currentManifest->m_BoundingBoxMax.y > manifest->m_BoundingBoxMax.y)
-                                    manifest->m_BoundingBoxMax.y = currentManifest->m_BoundingBoxMax.y;
-
-                                if (currentManifest->m_BoundingBoxMin.y < manifest->m_BoundingBoxMin.y)
-                                    manifest->m_BoundingBoxMin.y = currentManifest->m_BoundingBoxMin.y;
-
-                                if (currentManifest->m_BoundingBoxMax.z > manifest->m_BoundingBoxMax.z)
-                                    manifest->m_BoundingBoxMax.z = currentManifest->m_BoundingBoxMax.z;
-
-                                if (currentManifest->m_BoundingBoxMin.z < manifest->m_BoundingBoxMin.z)
-                                    manifest->m_BoundingBoxMin.z = currentManifest->m_BoundingBoxMin.z;
-
-                                // merge assets (this is pessimistic too, but is the best we can muster)
-                                manifest->m_Assets.insert( currentManifest->m_Assets.begin(), currentManifest->m_Assets.end() );
-                            }
-                            else
-                            {
-                                elements.push_back( *itr );
-                            }
-                        }
-                    }
-                }
-            }
-
+            bool result = m_SceneManager.GetCurrentScene()->Export( elements, args, changes );
             if ( result && !elements.empty() )
             {
                 switch ( event.GetId() )
@@ -2311,15 +2066,6 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
             }
             break;
 
-#if LUNA_GAME_CAMERA
-        case SceneEditorIDs::ID_ToolsGameCameraCreate:
-            {
-                m_SceneManager.GetCurrentScene()->SetTool(new Luna::GameCameraCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
-                m_Properties->SetSelection(m_ToolPropertyPage);
-            }
-            break;
-#endif
-
         case SceneEditorIDs::ID_ToolsLocatorCreate:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(new Luna::LocatorCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
@@ -2352,74 +2098,32 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
 
         case SceneEditorIDs::ID_ToolsNavMeshCreate:
             {
-                bool success = false;
-
-                Luna::Scene* rootScene = m_SceneManager.GetRootScene();
-                if (rootScene)
+                if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
                 {
-                    Luna::ZonePtr& luna_nav_zone_ptr = rootScene->GetNavZone();
-                    if (luna_nav_zone_ptr)
-                    {
-                        Luna::Scene* luna_zone_scene_ptr = m_SceneManager.GetScene( luna_nav_zone_ptr->GetPath() );
-                        if (luna_zone_scene_ptr && luna_zone_scene_ptr->IsCurrent())
-                        {
-                            if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
-                            {
-                                Luna::NavMeshCreateTool* navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-                                navMeshCreate->SetEditMode( Luna::NavMeshCreateTool::EDIT_MODE_ADD );
-                            }
-                            else
-                            {
-                                Luna::NavMeshCreateTool* navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
-                                m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
-                                m_Properties->SetSelection(m_ToolPropertyPage);
-                                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
-                            }
-                            success = true;
-                        }
-                    }
+                    Luna::NavMeshCreateTool* navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
+                    navMeshCreate->SetEditMode( Luna::NavMeshCreateTool::EDIT_MODE_ADD );
                 }
-
-                if ( !success )
+                else
                 {
-                    m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshCreate, false ); 
-                    tstring errorString = TXT( "Please select a zone with HasNavData attribute" );
-                    wxMessageBox( errorString.c_str(), wxT( "Active zone must have NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
-                    break;
+                    Luna::NavMeshCreateTool* navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
+                    m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
+                    m_Properties->SetSelection(m_ToolPropertyPage);
+                    navMeshCreate->SetEditMode( NavMeshCreateTool::EDIT_MODE_ADD );
                 }
             }
             break;
+
         case SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes:
             {
-                Luna::Scene* rootScene = m_SceneManager.GetRootScene();
-                bool success = false;
-                if (rootScene)
+                Luna::NavMeshCreateTool* navMeshCreate;
+                if ( m_SceneManager.GetCurrentScene()->GetTool() &&  m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
                 {
-                    Luna::ZonePtr& luna_nav_zone_ptr = rootScene->GetNavZone();
-                    if (luna_nav_zone_ptr)
-                    {
-                        Luna::Scene* luna_zone_scene_ptr = m_SceneManager.GetScene( luna_nav_zone_ptr->GetPath() );
-                        if (luna_zone_scene_ptr && luna_zone_scene_ptr->IsCurrent())
-                        {
-                            Luna::NavMeshCreateTool* navMeshCreate;
-                            if ( m_SceneManager.GetCurrentScene()->GetTool() &&  m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
-                            {
-                                success = true;
-                                navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-                                //now change it to be selection
-                                navMeshCreate->SetResolutionMode(GetNavToolBar()->GetToolState(SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes));
-                                m_Properties->SetSelection(m_ToolPropertyPage);
-                            }    
-                        }
-                    }
-                }
-                if ( !success )
-                {
-                    m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes, false ); 
-                    tstring errorString = TXT( "Please select a zone with HasNavData attribute" );
-                    wxMessageBox( errorString.c_str(), wxT( "Active zone must have NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
-                    break;
-                }
+                    navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
+
+                    //now change it to be selection
+                    navMeshCreate->SetResolutionMode(GetNavToolBar()->GetToolState(SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes));
+                    m_Properties->SetSelection(m_ToolPropertyPage);
+                }    
             }
             break;
 
@@ -2428,208 +2132,142 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
         case SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate:
         case SceneEditorIDs::ID_ToolsNavMeshPunchOutScale:
             {
-                Luna::Scene* rootScene = m_SceneManager.GetRootScene();
-                bool success = false;
-                if (rootScene)
+                Luna::NavMeshCreateTool* navMeshCreate;
+                if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
                 {
-                    Luna::ZonePtr& luna_nav_zone_ptr = rootScene->GetNavZone();
-                    if (luna_nav_zone_ptr)
+                    navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
+                }
+                else
+                {
+                    navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
+                    m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
+                }
+                if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOut )
+                {
+                    if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOut ))
                     {
-                        Luna::Scene* luna_zone_scene_ptr = m_SceneManager.GetScene( luna_nav_zone_ptr->GetPath() );
-                        if (luna_zone_scene_ptr && luna_zone_scene_ptr->IsCurrent())
-                        {
-                            success = true;
-                            Luna::NavMeshCreateTool* navMeshCreate;
-                            if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
-                            {
-                                navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-                            }
-                            else
-                            {
-                                navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
-                                m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
-                            }
-                            if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOut )
-                            {
-                                if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOut ))
-                                {
-                                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                                    navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
-                                    m_Properties->SetSelection(m_ToolPropertyPage);
-                                }
-                                else
-                                {
-                                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
-                                }
-                            }
-                            else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate )
-                            {
-                                if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate ))
-                                {
-                                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                                    navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_MOVE);
-                                    m_Properties->SetSelection(m_ToolPropertyPage);
-                                }
-                                else
-                                {
-                                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                                    navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
-                                }
-                            }
-                            else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate )
-                            {
-                                if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate ))
-                                {
-                                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                                    navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_ROTATE);
-                                    m_Properties->SetSelection(m_ToolPropertyPage);
-                                }
-                                else
-                                {
-                                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                                    navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
-                                }
-                            }
-                            else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOutScale )
-                            {
-                                if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOutScale ))
-                                {
-                                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                                    navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_SCALE);
-                                    m_Properties->SetSelection(m_ToolPropertyPage);
-                                }
-                                else
-                                {
-                                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                                    navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
-                                }
-                            }
-                        }
+                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
+                        m_Properties->SetSelection(m_ToolPropertyPage);
+                    }
+                    else
+                    {
+                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
                     }
                 }
-                if ( !success )
+                else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate )
                 {
-                    m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOut, false ); 
-                    m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate, false ); 
-                    m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate, false ); 
-                    m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOutScale, false ); 
-                    tstring errorString = TXT( "Please select a zone with HasNavData attribute" );
-                    wxMessageBox( errorString.c_str(), wxT( "Active zone must have NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
-                    break;
+                    if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate ))
+                    {
+                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_MOVE);
+                        m_Properties->SetSelection(m_ToolPropertyPage);
+                    }
+                    else
+                    {
+                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
+                    }
                 }
+                else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate )
+                {
+                    if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate ))
+                    {
+                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_ROTATE);
+                        m_Properties->SetSelection(m_ToolPropertyPage);
+                    }
+                    else
+                    {
+                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
+                    }
+                }
+                else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOutScale )
+                {
+                    if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOutScale ))
+                    {
+                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_SCALE);
+                        m_Properties->SetSelection(m_ToolPropertyPage);
+                    }
+                    else
+                    {
+                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
+                    }
+                }
+                break;
             }
-            break;
+
         case SceneEditorIDs::ID_ToolsNavMeshRotate:
         case SceneEditorIDs::ID_ToolsNavMeshManipulate:
             {
-                Luna::Scene* rootScene = m_SceneManager.GetRootScene();
-                bool success = false;
-                if (rootScene)
+                Luna::NavMeshCreateTool* navMeshCreate;
+                if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
                 {
-                    Luna::ZonePtr& luna_nav_zone_ptr = rootScene->GetNavZone();
-                    if (luna_nav_zone_ptr)
+                    navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
+                }
+                else
+                {
+                    navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
+                    m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
+                }
+                if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshRotate )
+                {
+                    if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshRotate ))
                     {
-                        Luna::Scene* luna_zone_scene_ptr = m_SceneManager.GetScene( luna_nav_zone_ptr->GetPath() );
-                        if (luna_zone_scene_ptr && luna_zone_scene_ptr->IsCurrent())
-                        {
-                            success = true;
-                            Luna::NavMeshCreateTool* navMeshCreate;
-                            if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
-                            {
-                                navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-                            }
-                            else
-                            {
-                                navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
-                                m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
-                            }
-                            if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshRotate )
-                            {
-                                if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshRotate ))
-                                {
-                                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ROTATE);
-                                    m_Properties->SetSelection(m_ToolPropertyPage);
-                                }
-                                else
-                                {
-                                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
-                                }
-                            }
-                            else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshManipulate )
-                            {
-                                if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshManipulate ))
-                                {
-                                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_MOVE);
-                                    m_Properties->SetSelection(m_ToolPropertyPage);
-                                }
-                                else
-                                {
-                                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
-                                }
-                            }
-                        }
+                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ROTATE);
+                        m_Properties->SetSelection(m_ToolPropertyPage);
+                    }
+                    else
+                    {
+                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
                     }
                 }
-                if ( !success )
+                else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshManipulate )
                 {
-                    m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshManipulate, false ); 
-                    m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshRotate, false ); 
-                    tstring errorString = TXT( "Please select a zone with HasNavData attribute" );
-                    wxMessageBox( errorString.c_str(), wxT( "Active zone must have NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
-                    break;
+                    if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshManipulate ))
+                    {
+                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_MOVE);
+                        m_Properties->SetSelection(m_ToolPropertyPage);
+                    }
+                    else
+                    {
+                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
+                    }
                 }
+                break;
             }
-            break;
+
         case SceneEditorIDs::ID_ToolsNavMeshVertexSelect:
         case SceneEditorIDs::ID_ToolsNavMeshEdgeSelect:
         case SceneEditorIDs::ID_ToolsNavMeshTriSelect:
             {
-                Luna::Scene* rootScene = m_SceneManager.GetRootScene();
-                bool success = false;
-                if (rootScene)
+                Luna::NavMeshCreateTool* navMeshCreate;
+                if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
                 {
-                    Luna::ZonePtr& luna_nav_zone_ptr = rootScene->GetNavZone();
-                    if (luna_nav_zone_ptr)
-                    {
-                        Luna::Scene* luna_zone_scene_ptr = m_SceneManager.GetScene( luna_nav_zone_ptr->GetPath() );
-                        if (luna_zone_scene_ptr && luna_zone_scene_ptr->IsCurrent())
-                        {
-                            success = true;
-                            Luna::NavMeshCreateTool* navMeshCreate;
-                            if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
-                            {
-                                navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-                            }
-                            else
-                            {
-                                navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
-                                m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
-                            }
-                            if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshVertexSelect )
-                            {
-                                navMeshCreate->SetHoverSelectMode( NavMeshCreateTool::MOUSE_HOVER_SELECT_VERT );
-                            }
-                            else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshEdgeSelect )
-                            {
-                                navMeshCreate->SetHoverSelectMode( NavMeshCreateTool::MOUSE_HOVER_SELECT_EDGE );
-                            }
-                            else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshTriSelect )
-                            {
-                                navMeshCreate->SetHoverSelectMode( NavMeshCreateTool::MOUSE_HOVER_SELECT_TRI );
-                            }
-                        }
-                    }
+                    navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
                 }
-                if ( !success )
+                else
                 {
-                    m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshManipulate, false ); 
-                    m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshRotate, false ); 
-                    tstring errorString = TXT( "Please select a zone with HasNavData attribute" );
-                    wxMessageBox( errorString.c_str(), wxT( "Active zone must have NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
-                    break;
+                    navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
+                    m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
                 }
+                if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshVertexSelect )
+                {
+                    navMeshCreate->SetHoverSelectMode( NavMeshCreateTool::MOUSE_HOVER_SELECT_VERT );
+                }
+                else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshEdgeSelect )
+                {
+                    navMeshCreate->SetHoverSelectMode( NavMeshCreateTool::MOUSE_HOVER_SELECT_EDGE );
+                }
+                else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshTriSelect )
+                {
+                    navMeshCreate->SetHoverSelectMode( NavMeshCreateTool::MOUSE_HOVER_SELECT_TRI );
+                }
+                break;
             }
-            break;
         }
 
         m_ToolProperties.GetCanvas()->Clear();
@@ -2644,123 +2282,6 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
         }
 
         m_View->Refresh();
-    }
-    else
-    {
-        GetStatusBar()->SetStatusText( TXT( "You must create a new scene or open an existing scene to use a tool" ) );
-    }
-}
-
-void SceneEditor::OnUtilitySelected(wxCommandEvent& event)
-{
-    if (m_SceneManager.HasCurrentScene())
-    {
-        switch (event.GetId())
-        {
-        case SceneEditorIDs::ID_UtilitiesMeasureDistance:
-            {
-                m_SceneManager.GetCurrentScene()->MeasureDistance();
-            }
-            break;
-
-        case SceneEditorIDs::ID_ToolsNavMeshImport:
-            {
-                m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshImport, false );   // this isn't a toggle
-                Luna::Scene* rootScene = m_SceneManager.GetRootScene();
-                TUID tuid( TUID::Generate() );
-                Content::MeshPtr content_hi_res_nav = new Content::Mesh(tuid);
-                content_hi_res_nav->m_ExportTypes[ Content::ContentTypes::NavMeshHiRes ] = true;
-                content_hi_res_nav->m_GivenName = TXT( "HiResNavMesh" );
-                content_hi_res_nav->m_MeshOriginType = Content::Mesh::NavHiRes;
-                content_hi_res_nav->m_UseGivenName = true;
-                content_hi_res_nav->m_ExportTypeIndex.insert( Content::M_ContentTypeToIndex::value_type(  Content::ContentTypes::NavMeshHiRes , 0) );
-                TUID::Generate(tuid);
-                Content::MeshPtr content_low_res_nav = new Content::Mesh(tuid);
-                content_low_res_nav->m_ExportTypes[ Content::ContentTypes::NavMeshLowRes ] = true;
-                content_low_res_nav->m_GivenName = TXT( "LowResNavMesh" );
-                content_low_res_nav->m_MeshOriginType = Content::Mesh::NavLowRes;
-                content_low_res_nav->m_UseGivenName = true;
-                content_low_res_nav->m_ExportTypeIndex.insert( Content::M_ContentTypeToIndex::value_type(  Content::ContentTypes::NavMeshLowRes , 0) );
-                if (rootScene)
-                {
-                    const S_ZoneDumbPtr& zones = rootScene->GetZones(); 
-                    Luna::ZonePtr& luna_nav_zone_ptr = rootScene->GetNavZone();
-                    if (!luna_nav_zone_ptr)
-                    {
-                        //throw a dialog  
-                        tstring errorString = TXT( "Please make a new zone and check HasNavData attribute" );
-                        wxMessageBox( errorString.c_str(), wxT( "You must have a zone with NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
-                        break;
-                    }
-
-                    //now add content_hi_res_nav & content_low_res_nav to luna_nav_zone_ptr
-                    {
-                        Luna::Scene* luna_zone_scene_ptr = m_SceneManager.GetScene( luna_nav_zone_ptr->GetPath() );
-                        if (luna_zone_scene_ptr)
-                        {
-                            //first removed the existing meshes
-                            HM_SceneNodeDumbPtr::const_iterator itr = luna_zone_scene_ptr->GetNodes().begin();
-                            while (itr != luna_zone_scene_ptr->GetNodes().end())
-                            {
-                                for ( ; itr != luna_zone_scene_ptr->GetNodes().end(); ++itr )
-                                {
-                                    Luna::Mesh* luna_mesh = Reflect::ObjectCast<Luna::Mesh> (itr->second);
-                                    if (luna_mesh)
-                                    {
-                                        const Content::Mesh* content_mesh = luna_mesh->GetPackage< Content::Mesh >();
-                                        if (content_mesh)
-                                        {
-                                            if  ((content_mesh->m_MeshOriginType == Content::Mesh::NavHiRes) ||
-                                                (content_mesh->m_MeshOriginType == Content::Mesh::NavLowRes ) )
-                                            {
-                                                luna_zone_scene_ptr->RemoveObject(itr->second);
-                                                itr = luna_zone_scene_ptr->GetNodes().begin();
-                                                break;
-                                            }//if  ((content_mesh->GetExportTypeIndex(Content::ContentTypes::NavMeshHiRes)
-                                        }//if (content_mesh)
-                                    }// if (entity)
-                                }//for ( ; itr != luna_zone_scene_ptr->GetNodes().end(); ++itr )
-                            }//while (itr != luna_zone_scene_ptr->GetNodes().end())
-
-                            //now we made sure we deleted old ones. now add the newly made mesh nodes
-                            ImportAction action = ImportActions::Load;
-                            u32 import_flags = 0;
-                            Undo::CommandPtr command;
-
-                            if (luna_zone_scene_ptr->IsCurrent() && luna_zone_scene_ptr->IsEditable())
-                            {
-                                Reflect::V_Element elems;
-                                if (content_hi_res_nav->m_TriangleVertexIndices.size())
-                                {
-                                    elems.push_back(content_hi_res_nav);
-                                }
-                                if (content_low_res_nav->m_TriangleVertexIndices.size())
-                                {
-                                    elems.push_back(content_low_res_nav);
-                                }
-                                if (elems.size())
-                                {
-                                    command = luna_zone_scene_ptr->ImportSceneNodes( elems, action, import_flags );
-                                }
-                            }
-                            else
-                            {
-                                //throw a dialog  
-                                tstring errorString = TXT( "Trying to change nav mesh zone when it is not selected and checked out" );
-                                wxMessageBox( errorString.c_str(), wxT( "Please make nav zone the current editing zone and say yes to check it out" ), wxOK|wxCENTRE|wxICON_ERROR, this );
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            int a = 1;
-                            //assert here
-                        }//if (luna_zone_scene_ptr)
-                    }////now add content_hi_res_nav & content_low_res_nav to luna_nav_zone_ptr
-                }//if (rootScene)
-            }
-            break;
-        }
     }
     else
     {
@@ -3433,7 +2954,7 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
     m_HierarchyOutline->SaveState( stateInfo->m_Hierarchy );
     m_TypeOutline->SaveState( stateInfo->m_Types );
-    m_EntityAssetOutline->SaveState( stateInfo->m_EntityAssetes );
+    m_EntityOutline->SaveState( stateInfo->m_EntityAssetes );
 #endif
 
     // Clear the selection attribute canvas
@@ -3448,28 +2969,6 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
     m_View->SetTool(NULL);
     m_ToolsToolBar->Disable();
     m_NavToolBar->Disable();
-}
-
-void SceneEditor::BeginLayersGridBatching()
-{
-    V_LayerGrid::const_iterator gridLayerItr = m_LayerGrids.begin();
-    V_LayerGrid::const_iterator gridLayerEnd = m_LayerGrids.end();
-
-    for ( ; gridLayerItr != gridLayerEnd; ++gridLayerItr )
-    {
-        (*gridLayerItr)->BeginBatch();
-    }
-}
-
-void SceneEditor::EndLayersGridBatching()
-{
-    V_LayerGrid::const_iterator gridLayerItr = m_LayerGrids.begin();
-    V_LayerGrid::const_iterator gridLayerEnd = m_LayerGrids.end();
-
-    for ( ; gridLayerItr != gridLayerEnd; ++gridLayerItr )
-    {
-        (*gridLayerItr)->EndBatch();
-    }
 }
 
 void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
@@ -3503,7 +3002,7 @@ void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
             m_HierarchyOutline->RestoreState( stateInfo->m_Hierarchy );
             m_TypeOutline->RestoreState( stateInfo->m_Types );
-            m_EntityAssetOutline->RestoreState( stateInfo->m_EntityAssetes );
+            m_EntityOutline->RestoreState( stateInfo->m_EntityAssetes );
 #endif
         }
 
@@ -3521,23 +3020,18 @@ void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
                 HM_SceneNodeSmartPtr::const_iterator instEnd = nodeTypeItr->second->GetInstances().end();
 
                 //Begin batching
-                BeginLayersGridBatching();
+                m_LayerGrid->BeginBatch();
 
                 for ( ; instItr != instEnd; ++instItr )
                 {
-                    const SceneNodePtr& dependNode    = instItr->second;
-                    Luna::Layer*        lunaLayer     = Reflect::AssertCast< Luna::Layer >( dependNode );
-                    Content::Layer*     contentLayer  = lunaLayer->GetPackage<Content::Layer>();
-                    LayerGrid*          layerGrid     = GetLayerGridByType((Content::LayerType)contentLayer->m_Type);
-
-                    //Add the layer
-                    layerGrid->AddLayer( lunaLayer );
+                    const SceneNodePtr& dependNode = instItr->second;
+                    Luna::Layer* lunaLayer = Reflect::AssertCast< Luna::Layer >( dependNode );
+                    m_LayerGrid->AddLayer( lunaLayer );
                 }
 
                 //End batching
-                EndLayersGridBatching();
-            } 
-
+                m_LayerGrid->EndBatch();
+            }
             else if ( nodeType->HasType( Reflect::GetType<Luna::HierarchyNodeType>() ) )
             {
                 // Hierarchy node types need to be added to the object grid UI.
@@ -3669,17 +3163,12 @@ void SceneEditor::ViewToolChanged( const ToolChangeArgs& args )
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsEntityCreate, selectedTool == SceneEditorIDs::ID_ToolsEntityCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsVolumeCreate, selectedTool == SceneEditorIDs::ID_ToolsVolumeCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsClueCreate, selectedTool == SceneEditorIDs::ID_ToolsClueCreate );
-#if LUNA_GAME_CAMERA
-    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsGameCameraCreate, selectedTool == SceneEditorIDs::ID_ToolsGameCameraCreate );
-#endif
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsControllerCreate, selectedTool == SceneEditorIDs::ID_ToolsControllerCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsLocatorCreate, selectedTool == SceneEditorIDs::ID_ToolsLocatorCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsDuplicate, selectedTool == SceneEditorIDs::ID_ToolsDuplicate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsCurveCreate, selectedTool == SceneEditorIDs::ID_ToolsCurveCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsCurveEdit, selectedTool == SceneEditorIDs::ID_ToolsCurveEdit );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsLightCreate, selectedTool == SceneEditorIDs::ID_ToolsLightCreate );
-    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsLighting, selectedTool == SceneEditorIDs::ID_ToolsLighting );
-    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate, selectedTool == SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate ); 
 
     m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshCreate, selectedTool == SceneEditorIDs::ID_ToolsNavMeshCreate ); 
 }
@@ -4044,29 +3533,4 @@ void SceneEditor::SyncPropertyThread()
     {
         ::Sleep( 500 );
     }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
-
-LayerGrid*          SceneEditor::GetLayerGridByType(Content::LayerType lType)
-{
-    NOC_ASSERT(m_LayerGrids.size() > (size_t)lType);
-
-    return m_LayerGrids[lType];
-}
-
-Content::LayerType  SceneEditor::GetCurrentLayerGridType()
-{
-    NOC_ASSERT(m_LayersNotebook);
-
-    int index = m_LayersNotebook->GetSelection();
-
-    if(index >= (int)Content::LayerTypes::LT_Unknown)
-    {
-        NOC_ASSERT(!"Invalid Page index");
-        return Content::LayerTypes::LT_Unknown;
-    }
-
-    return (Content::LayerType)index;
 }

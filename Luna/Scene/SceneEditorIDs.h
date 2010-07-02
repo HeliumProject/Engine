@@ -113,18 +113,13 @@ namespace Luna
       ID_ToolsEntityCreate,
       ID_ToolsVolumeCreate,
       ID_ToolsClueCreate,
-#if LUNA_GAME_CAMERA
-      ID_ToolsGameCameraCreate,
-#endif
       ID_ToolsControllerCreate,
       ID_ToolsLocatorCreate,
       ID_ToolsDuplicate,
       ID_ToolsCurveCreate,
       ID_ToolsCurveEdit,
       ID_ToolsLightCreate,
-      ID_ToolsLighting,
-
-      ID_ToolsNavMeshImport,
+      
       ID_ToolsNavMeshCreate,
       ID_ToolsNavMeshManipulate,
       ID_ToolsNavMeshRotate,
@@ -136,18 +131,7 @@ namespace Luna
       ID_ToolsNavMeshPunchOutTranslate,
       ID_ToolsNavMeshPunchOutRotate,
       ID_ToolsNavMeshPunchOutScale,
-
-      ID_ToolsPostProcessingVolumeCreate, 
-      ID_ToolsPostProcessingVolumeScript, 
-
-      ID_ToolsLightingLayerCreate, 
-      ID_ToolsLightingLayerUnlink, 
-      ID_ToolsLightingLayerSelect, 
-
-      ID_UtilitiesConstruction,
-      ID_UtilitiesMeasureDistance,
-      ID_UtilitiesFlushSymbols,
-
+      
       ID_PanelsOutline,
       ID_PanelsProperties,
 

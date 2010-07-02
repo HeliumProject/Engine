@@ -2,7 +2,7 @@
 #include "Shader.h"
 #include "Render.h"
 
-#include "Pipeline/Content/Nodes/Geometry/Shader.h"
+#include "Pipeline/Content/Nodes/Shader.h"
 #include "Foundation/Log.h"
 #include "Application/UI/ImageManager.h"
 

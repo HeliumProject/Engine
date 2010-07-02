@@ -55,7 +55,6 @@ CompressedJointAnimation::CompressedJointAnimation()
 , m_ExceededRangeOnTranslationConversion( false )
 , m_ExceededRangeOnScaleConversion( false )
 , m_ExceededRangeOnRotationConversion( false )
-, m_BlendFactor( -1.0f )
 {
     AnimationCompressionControl defaultCompressionControl;
     m_UseHypercubeCompression = defaultCompressionControl.m_UseHypercubeCompression;
@@ -77,7 +76,6 @@ CompressedJointAnimation::CompressedJointAnimation(
     , m_ExceededRangeOnTranslationConversion( false )
     , m_ExceededRangeOnScaleConversion( false )
     , m_ExceededRangeOnRotationConversion( false )
-    , m_BlendFactor( -1.0f )
 {
     m_BindTranslate.resize( 3 );
     m_MinTranslate.resize( 3, Math::I16_UPPER_BOUND );
@@ -116,9 +114,6 @@ void CompressedJointAnimation::ComputeAverageAndDiffType( i16& average, u8& diff
 
 void CompressedJointAnimation::Compress(const tstring& jt_name,  const JointAnimationPtr& uncompressedAnimation, const Math::Vector3& bindTranslate )
 {
-    // copy over their blend factor for convenience
-    m_BlendFactor = uncompressedAnimation->m_BlendFactor;
-
     f32 translateScale = (f32)( 1 << m_TranslateScale );
     f32 scaleScale = (f32)( 1 << m_ScaleScale );
     f32 rotateScale = (f32)( 1 << m_RotateScale );
@@ -178,86 +173,76 @@ void CompressedJointAnimation::Compress(const tstring& jt_name,  const JointAnim
 
     for ( u32 sampleIndex = 0; sampleIndex < numOutputSamples; ++sampleIndex )
     {
-        // if the blendfactor is zero, just make this frame all 0s
-        if ( m_BlendFactor == 0.0f )
+        // scale
+        status = true;
+        status &= FloatToI16( m_ScaleX[ sampleIndex ], uncompressedAnimation->m_Scale[ sampleIndex % numSamples ].x, scaleScale );
+        status &= FloatToI16( m_ScaleY[ sampleIndex ], uncompressedAnimation->m_Scale[ sampleIndex % numSamples ].y, scaleScale );
+        status &= FloatToI16( m_ScaleZ[ sampleIndex ], uncompressedAnimation->m_Scale[ sampleIndex % numSamples ].z, scaleScale );
+        m_ExceededRangeOnScaleConversion |= !status;
+
+        // rotation
+        status = true;
+
+        // NOTE: this is also done in the animation object itself, but here we need to be able to handle
+        //       looping anims, where the rotation beyond the end hasn't been 'smoothed'
+        Math::Quaternion rotation = uncompressedAnimation->m_Rotate[ sampleIndex % numSamples ];
+        if ( m_Looping && sampleIndex >= numSamples )
         {
-            m_TranslateX[ sampleIndex ] = m_TranslateY[ sampleIndex ] = m_TranslateZ[ sampleIndex ] = 0;
-            m_ScaleX[ sampleIndex ]     = m_ScaleY[ sampleIndex ]     = m_ScaleZ[ sampleIndex ]     = 0;
-            m_RotateX[ sampleIndex ]    = m_RotateY[ sampleIndex ]    = m_RotateZ[ sampleIndex ]    = m_RotateW[ sampleIndex ] = 0;
+            if ( rotation.Dot( uncompressedAnimation->m_Rotate[ ( sampleIndex - 1 ) % numSamples ] ) < 0.0f )
+                rotation = -rotation;
         }
-        else
+
+        status &= FloatToI16( m_RotateX[ sampleIndex ], rotation.values.x, rotateScale );
+        status &= FloatToI16( m_RotateY[ sampleIndex ], rotation.values.y, rotateScale );
+        status &= FloatToI16( m_RotateZ[ sampleIndex ], rotation.values.z, rotateScale );
+        status &= FloatToI16( m_RotateW[ sampleIndex ], rotation.values.w, rotateScale );
+        m_ExceededRangeOnRotationConversion |= !status;
+
+        // translation
+        status = true;
+        status &= FloatToI16( m_TranslateX[ sampleIndex ], uncompressedAnimation->m_Translate[ sampleIndex % numSamples ].x, translateScale );
+        status &= FloatToI16( m_TranslateY[ sampleIndex ], uncompressedAnimation->m_Translate[ sampleIndex % numSamples ].y, translateScale );
+        status &= FloatToI16( m_TranslateZ[ sampleIndex ], uncompressedAnimation->m_Translate[ sampleIndex % numSamples ].z, translateScale );
+        m_ExceededRangeOnTranslationConversion |= !status;
+
+        // 
+        // mike's trick to improve quat compression (constrain to lie on the surface of a hypercube) - obvious !
+        // 
+        if ( m_UseHypercubeCompression )
         {
-            // scale
-            status = true;
-            status &= FloatToI16( m_ScaleX[ sampleIndex ], uncompressedAnimation->m_Scale[ sampleIndex % numSamples ].x, scaleScale );
-            status &= FloatToI16( m_ScaleY[ sampleIndex ], uncompressedAnimation->m_Scale[ sampleIndex % numSamples ].y, scaleScale );
-            status &= FloatToI16( m_ScaleZ[ sampleIndex ], uncompressedAnimation->m_Scale[ sampleIndex % numSamples ].z, scaleScale );
-            m_ExceededRangeOnScaleConversion |= !status;
+            // find max abs component
+            i16 *rot[4] = { &m_RotateX[ sampleIndex ], &m_RotateY[ sampleIndex ], &m_RotateZ[ sampleIndex ], &m_RotateW[ sampleIndex ] };
 
-            // rotation
-            status = true;
-
-            // NOTE: this is also done in the animation object itself, but here we need to be able to handle
-            //       looping anims, where the rotation beyond the end hasn't been 'smoothed'
-            Math::Quaternion rotation = uncompressedAnimation->m_Rotate[ sampleIndex % numSamples ];
-            if ( m_Looping && sampleIndex >= numSamples )
+            // find max abs component
+            i32 max_abs = 0;
+            u32 best_dimension  = 0;
+            for( u32 dimension = 0; dimension < 4; ++dimension )
             {
-                if ( rotation.Dot( uncompressedAnimation->m_Rotate[ ( sampleIndex - 1 ) % numSamples ] ) < 0.0f )
-                    rotation = -rotation;
+                i32 abs_comp = abs( *rot[ dimension ] );
+                if ( abs_comp > max_abs )
+                {
+                    max_abs = abs_comp;
+                    best_dimension = dimension;
+                }
             }
 
-            status &= FloatToI16( m_RotateX[ sampleIndex ], rotation.values.x, rotateScale );
-            status &= FloatToI16( m_RotateY[ sampleIndex ], rotation.values.y, rotateScale );
-            status &= FloatToI16( m_RotateZ[ sampleIndex ], rotation.values.z, rotateScale );
-            status &= FloatToI16( m_RotateW[ sampleIndex ], rotation.values.w, rotateScale );
-            m_ExceededRangeOnRotationConversion |= !status;
+            // compute rescale value
+            f32 rescale_value = ( 23170.0f / (f32)max_abs );  // 23170 = 32768/sqrt(2)
 
-            // translation
-            status = true;
-            status &= FloatToI16( m_TranslateX[ sampleIndex ], uncompressedAnimation->m_Translate[ sampleIndex % numSamples ].x, translateScale );
-            status &= FloatToI16( m_TranslateY[ sampleIndex ], uncompressedAnimation->m_Translate[ sampleIndex % numSamples ].y, translateScale );
-            status &= FloatToI16( m_TranslateZ[ sampleIndex ], uncompressedAnimation->m_Translate[ sampleIndex % numSamples ].z, translateScale );
-            m_ExceededRangeOnTranslationConversion |= !status;
-
-            // 
-            // mike's trick to improve quat compression (constrain to lie on the surface of a hypercube) - obvious !
-            // 
-            if ( m_UseHypercubeCompression )
+            // rescale quat
+            for( u32 dimension = 0; dimension < 4; ++dimension )
             {
-                // find max abs component
-                i16 *rot[4] = { &m_RotateX[ sampleIndex ], &m_RotateY[ sampleIndex ], &m_RotateZ[ sampleIndex ], &m_RotateW[ sampleIndex ] };
-
-                // find max abs component
-                i32 max_abs = 0;
-                u32 best_dimension  = 0;
-                for( u32 dimension = 0; dimension < 4; ++dimension )
+                if ( dimension != best_dimension )
                 {
-                    i32 abs_comp = abs( *rot[ dimension ] );
-                    if ( abs_comp > max_abs )
-                    {
-                        max_abs = abs_comp;
-                        best_dimension = dimension;
-                    }
+                    *rot[ dimension ] = (i32)((f32) *rot[ dimension ] * rescale_value );
                 }
-
-                // compute rescale value
-                f32 rescale_value = ( 23170.0f / (f32)max_abs );  // 23170 = 32768/sqrt(2)
-
-                // rescale quat
-                for( u32 dimension = 0; dimension < 4; ++dimension )
+                else if ( *rot[ dimension ] < 0 )
                 {
-                    if ( dimension != best_dimension )
-                    {
-                        *rot[ dimension ] = (i32)((f32) *rot[ dimension ] * rescale_value );
-                    }
-                    else if ( *rot[ dimension ] < 0 )
-                    {
-                        *rot[ dimension ] = -23170;
-                    }
-                    else
-                    {
-                        *rot[ dimension ] = 23170;
-                    }
+                    *rot[ dimension ] = -23170;
+                }
+                else
+                {
+                    *rot[ dimension ] = 23170;
                 }
             }
         }//@@@ loop sampleIndex

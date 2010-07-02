@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Light.h"
-#include "Pipeline/Content/Nodes/Lights/PointLight.h"
+#include "Pipeline/Content/Nodes/PointLight.h"
 
 namespace Luna
 {

@@ -108,7 +108,6 @@ namespace Luna
     static void DrawMeshVerts( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
     static void DrawMeshEdges( IDirect3DDevice9* device, DrawArgs* args, const SceneNode*object );
     static void DrawMeshTris( IDirect3DDevice9* device, DrawArgs* args, const SceneNode*object );
-    static bool IsNavMeshZoneActive(const Luna::NavMesh* nav_mesh);
 
     static void DrawMouseOverVert( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );
     static void DrawSelectedVerts( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object );

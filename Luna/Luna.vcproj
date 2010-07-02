@@ -1239,35 +1239,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneRowPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneRowPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\ScenesPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\ScenesPanel.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\SceneVisitor.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Scene\SceneVisitor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SearchBar.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SearchBar.h"
 				>
 			</File>
 			<File
@@ -1340,22 +1316,6 @@
 			</File>
 			<File
 				RelativePath=".\Scene\TypeGrid.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Zone.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Zone.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\ZonePanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\ZonePanel.h"
 				>
 			</File>
 			<Filter

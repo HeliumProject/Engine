@@ -777,7 +777,7 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
     }
     break;
 
-  case ViewColorModes::Zone:
+  case ViewColorModes::Scene:
     {
       const Math::Color3& color = m_Scene->GetColor();
       material.Ambient = Luna::Color::ColorToColorValue( defaultMaterial.Ambient.a, color.r, color.g, color.b );

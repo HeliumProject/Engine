@@ -12,19 +12,6 @@
 #include "Foundation/Reflect/Field.h"
 #include "Foundation/Reflect/Version.h"
 
-//
-// Forwards
-//
-namespace Content
-{
-  class Region;
-  typedef Nocturnal::SmartPtr<Region> RegionPtr; 
-
-  class Zone;
-  typedef Nocturnal::SmartPtr< Zone > ZonePtr;
-  typedef std::vector< ZonePtr > V_Zone;
-}
-
 namespace Asset
 {
   class AssetVisitor;

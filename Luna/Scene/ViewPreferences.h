@@ -12,17 +12,17 @@ namespace Luna
     {
       Layer,
       NodeType,
-      Zone,
+      Scene,
       AssetType,
       Scale,
       ScaleGradient,
     };
     static void ViewColorModeEnumerateEnumeration( Reflect::Enumeration* info )
     {
-      info->AddElement( AssetType, TXT( "Engine Type" ) );
       info->AddElement( Layer, TXT( "Layer" ) );
       info->AddElement( NodeType, TXT( "NodeType" ), TXT( "Node Type" ) );
-      info->AddElement( Zone, TXT( "Zone" ) );
+      info->AddElement( Scene, TXT( "Scene" ) );
+      info->AddElement( AssetType, TXT( "Engine Type" ) );
       info->AddElement( Scale, TXT( "Scale" ) );
       info->AddElement( ScaleGradient, TXT( "Scale (Gradient)" ) );
     }

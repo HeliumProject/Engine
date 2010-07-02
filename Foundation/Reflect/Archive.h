@@ -376,13 +376,13 @@ namespace Reflect
     public:
         static const tchar* GetExtension( ArchiveType t )
         {
-            NOC_ASSERT( t < sizeof( s_ArchiveExtensions ) );
+            NOC_ASSERT( t < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ) );
             return s_ArchiveExtensions[ t ];
         }
 
         static void GetExtensions( std::set< tstring >& extensions )
         {
-            for ( int i = 0; i < sizeof( s_ArchiveExtensions ); ++i )
+            for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ); ++i )
             {
                 extensions.insert( s_ArchiveExtensions[ i ] );
             }
@@ -390,7 +390,7 @@ namespace Reflect
 
         static void GetFileFilters( std::set< tstring > filters )
         {
-            for ( int i = 0; i < sizeof( s_ArchiveExtensions ); ++i )
+            for ( int i = 0; i < sizeof( s_ArchiveExtensions ) / sizeof( tchar* ); ++i )
             {
                 tstring filter = tstring( s_ArchiveDescriptions[ i ] ) + TXT( " (*." ) + s_ArchiveExtensions[ i ] + TXT( ")|*." ) + s_ArchiveExtensions[ i ];
                 filters.insert( filter );

@@ -38,8 +38,6 @@ namespace Luna
   class InstanceType;
   class TypeGrid;
   class NodeTypeOutliner;
-  class RegionsPanel; 
-  class ScenesPanel;
   class View;
   class Zone;
 
@@ -87,19 +85,14 @@ namespace Luna
     // the directory notebook
     wxNotebook* m_Directory;
 
-    // the list of zones for the current root
-    ScenesPanel* m_ZonesPanel;
-    size_t        m_ZonesPage;
-
     // the outline of the current scene
     HierarchyOutliner* m_HierarchyOutline;
-    size_t m_HierarchyOutlinePage;
 
     // the outline of all nodes by type
     NodeTypeOutliner* m_TypeOutline;
 
     // the outline of all entity nodes by class
-    EntityAssetOutliner* m_EntityAssetOutline;
+    EntityAssetOutliner* m_EntityOutline;
 
     // the UI for changing visibility/selectability of layers
     LayerGrid* m_LayerGrid;

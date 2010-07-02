@@ -1239,22 +1239,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneRowPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneRowPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\ScenesPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\ScenesPanel.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\SceneVisitor.cpp"
 				>
 			</File>

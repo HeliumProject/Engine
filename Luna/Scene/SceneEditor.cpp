@@ -25,7 +25,6 @@
 #include "SceneCallbackData.h"
 #include "ScenePreferences.h"
 #include "ScenePreferencesDialog.h"
-#include "ScenesPanel.h"
 #include "SearchBar.h"
 #include "SelectionPropertiesPanel.h"
 #include "TranslateManipulator.h"
@@ -265,7 +264,7 @@ SceneEditor::SceneEditor()
 , m_DrawerPanel( NULL )
 , m_HierarchyOutline( NULL )
 , m_TypeOutline( NULL )
-, m_EntityAssetOutline( NULL )
+, m_EntityOutline( NULL )
 , m_FileMenu( NULL )
 , m_EditMenu( NULL )
 , m_ViewMenu( NULL )
@@ -441,41 +440,27 @@ SceneEditor::SceneEditor()
     m_Directory = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
     m_Directory->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
     {
-        // Zones
-        m_ZonesPanel = new ScenesPanel( this, &m_SceneManager, m_Directory, SceneEditorIDs::ID_ZonesControl );
-        m_ZonesPage  = m_Directory->GetPageCount();
-        m_Directory->AddPage(m_ZonesPanel, TXT( "Zones" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "zone.png" ) ));
-
-        // Inner tab with different outlines
-        wxNotebook* outlinerNotebook = new wxNotebook( m_Directory, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_NOPAGETHEME );
-        m_Directory->AddPage( outlinerNotebook, TXT( "Outlines" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "type.png" ) ));
-        {
-#ifndef LUNA_SCENE_DISABLE_OUTLINERS
-            // Types
-            m_TypeOutline = new NodeTypeOutliner( &m_SceneManager );
-            Nocturnal::SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( outlinerNotebook, SceneEditorIDs::ID_TypeOutlineControl );
-            typeTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-            outlinerNotebook->AddPage( typeTree, TXT( "Types" ) );
-            m_TreeMonitor.AddTree( typeTree );
-
-            // Entity Classes
-            m_EntityAssetOutline = new EntityAssetOutliner( &m_SceneManager );
-            Nocturnal::SortTreeCtrl* entityTree = m_EntityAssetOutline->InitTreeCtrl( outlinerNotebook, wxID_ANY );
-            entityTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-            outlinerNotebook->AddPage( entityTree, TXT( "Entity Classes" ) );
-            m_TreeMonitor.AddTree( entityTree );
-
-#endif
-        }
-
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
         // Hierarchy
         m_HierarchyOutline = new HierarchyOutliner( &m_SceneManager );
         Nocturnal::SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_HierarchyOutlineControl );
         hierarchyTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-        m_HierarchyOutlinePage = m_Directory->GetPageCount();
         m_Directory->AddPage( hierarchyTree, TXT( "Hierarchy" ), false, Nocturnal::GlobalImageManager().GetImageIndex( TXT( "world.png" ) ) );
         m_TreeMonitor.AddTree( hierarchyTree );
+
+        // Types
+        m_TypeOutline = new NodeTypeOutliner( &m_SceneManager );
+        Nocturnal::SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_TypeOutlineControl );
+        typeTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
+        m_Directory->AddPage( typeTree, TXT( "Types" ) );
+        m_TreeMonitor.AddTree( typeTree );
+
+        // Entities
+        m_EntityOutline = new EntityAssetOutliner( &m_SceneManager );
+        Nocturnal::SortTreeCtrl* entityTree = m_EntityOutline->InitTreeCtrl( m_Directory, wxID_ANY );
+        entityTree->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
+        m_Directory->AddPage( entityTree, TXT( "Entities" ) );
+        m_TreeMonitor.AddTree( entityTree );
 #endif
     }
     m_FrameManager.AddPane( m_Directory, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ) );
@@ -885,7 +870,7 @@ SceneEditor::~SceneEditor()
     delete m_LayerGrid;
     delete m_TypeOutline;
     delete m_HierarchyOutline;
-    delete m_EntityAssetOutline;
+    delete m_EntityOutline;
 }
 
 SceneEditorID SceneEditor::CameraModeToSceneEditorID( CameraMode cameraMode )
@@ -3193,7 +3178,7 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
     m_HierarchyOutline->SaveState( stateInfo->m_Hierarchy );
     m_TypeOutline->SaveState( stateInfo->m_Types );
-    m_EntityAssetOutline->SaveState( stateInfo->m_EntityAssetes );
+    m_EntityOutline->SaveState( stateInfo->m_EntityAssetes );
 #endif
 
     // Clear the selection attribute canvas
@@ -3241,7 +3226,7 @@ void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
             m_HierarchyOutline->RestoreState( stateInfo->m_Hierarchy );
             m_TypeOutline->RestoreState( stateInfo->m_Types );
-            m_EntityAssetOutline->RestoreState( stateInfo->m_EntityAssetes );
+            m_EntityOutline->RestoreState( stateInfo->m_EntityAssetes );
 #endif
         }
 

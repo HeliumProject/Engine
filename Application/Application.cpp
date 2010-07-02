@@ -146,7 +146,7 @@ void Application::Startup( int argc, const tchar** argv, bool checkVersion )
 
             Log::Print( TXT( "Running %s\n" ), name );
             Log::Print( TXT( "Version: " ) NOCTURNAL_VERSION_STRING TXT( "\n" ) );
-            Log::Print( TXT( "Current Time: %s" ), ctime( &g_StartTime.time ) );
+            Log::Print( TXT( "Current Time: %s" ), _tctime64( &g_StartTime.time ) );
             Log::Print( TXT( "Command Line: %s\n" ), Nocturnal::GetCmdLine() );
         }
 
@@ -282,7 +282,7 @@ int Application::Shutdown( int code )
 
             _timeb endTime;
             _ftime(&endTime); 
-            Log::Print( TXT( "Current Time: %s" ), ctime( &endTime.time ) );
+            Log::Print( TXT( "Current Time: %s" ), _tctime64( &endTime.time ) );
 
             int time = (int) (((endTime.time*1000) + endTime.millitm) - ((g_StartTime.time*1000) +  g_StartTime.millitm));
             int milli = time % 1000; time /= 1000;

@@ -157,7 +157,7 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
       return MS::kFailure;
     }
 
-    classTransform = &EntityAssetNode::Get( node->GetBackingEntity()->GetEntityAsset()->GetPath() );
+    classTransform = &EntityAssetNode::Get( node->GetBackingEntity()->GetEntity()->GetPath() );
     if( *classTransform == EntityAssetNode::Null )
     {
       return MS::kFailure;

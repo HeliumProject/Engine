@@ -935,11 +935,11 @@
 			Name="Export"
 			>
 			<File
-				RelativePath=".\Export\ExportAnimationBase.cpp"
+				RelativePath=".\Export\ExportAnimation.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Export\ExportAnimationBase.h"
+				RelativePath=".\Export\ExportAnimation.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -999,11 +999,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Export\ExportAnimationClip.cpp"
+				RelativePath=".\Export\ExportAnimationBase.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Export\ExportAnimationClip.h"
+				RelativePath=".\Export\ExportAnimationBase.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"

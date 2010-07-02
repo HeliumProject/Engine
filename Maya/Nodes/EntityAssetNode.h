@@ -85,7 +85,7 @@ public:
   static EntityAssetNode& Get( const Nocturnal::Path& path, bool createIfNotExisting = true );
 
   // get/create an EntityAssetNode, and an EntityNode for the given content Entity
-  static std::pair< EntityAssetNode*, EntityNode* > CreateInstance( const Asset::EntityPtr& entity );
+  static std::pair< EntityAssetNode*, EntityNode* > CreateInstance( const Asset::EntityInstancePtr& entity );
 
   // called when removing an instance
   static void RemoveInstance( EntityNode* entityNode );

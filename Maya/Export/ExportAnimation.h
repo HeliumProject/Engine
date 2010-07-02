@@ -26,7 +26,7 @@ namespace MayaContent
   class MAYA_API ExportAnimationClip : public ExportAnimationBase
   {
   protected:
-    Content::V_Animation  m_Animations;
+    Content::V_JointAnimation  m_JointAnimations;
     std::vector<MObject>  m_RequiredJoints;
 
     V_ExportBlendShapeDeformer m_ExportBlendShapeDeformers;
@@ -34,7 +34,7 @@ namespace MayaContent
   public:
     ExportAnimationClip()
     {
-      m_ContentObject = new Content::AnimationClip();
+      m_ContentObject = new Content::Animation();
     }
 
     // Gather the necessary maya data and prepare for SampleOneFrame
@@ -43,14 +43,14 @@ namespace MayaContent
     // gather data for a single frame
     virtual void SampleOneFrame( const MTime & currentTime, bool extraFrame = false );
 
-    const Content::AnimationClipPtr GetContentAnimationClip() const
+    const Content::AnimationPtr GetContentAnimation() const
     {
-      return Reflect::DangerousCast< Content::AnimationClip >( m_ContentObject );
+      return Reflect::DangerousCast< Content::Animation >( m_ContentObject );
     }
 
   private:
     void GatherBlendShapeDeformers();
-    void SampleOneFramesMorphTargetWeights( const MTime& currentTime, const Content::AnimationClipPtr& animClip );
+    void SampleOneFramesMorphTargetWeights( const MTime& currentTime, const Content::AnimationPtr& animClip );
   };
 
   typedef Nocturnal::SmartPtr<ExportAnimationClip> ExportAnimationClipPtr;

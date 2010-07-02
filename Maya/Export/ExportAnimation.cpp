@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "ExportAnimationClip.h"
+#include "ExportAnimation.h"
 #include "MayaContentCmd.h"
 
 #include "Foundation/Boost/Regex.h"
@@ -18,7 +18,7 @@ void ExportAnimationClip::GatherMayaData( V_ExportBase &newExportObjects )
   MStatus status;
 
   //AnimationClip* animClip = Reflect::DangerousCast< AnimationClip >( m_ContentObject );
-  const Content::AnimationClipPtr animClip = GetContentAnimationClip();
+  const Content::AnimationPtr animClip = GetContentAnimation();
 
   //
   // Get the relevant joints
@@ -58,11 +58,11 @@ void ExportAnimationClip::GatherMayaData( V_ExportBase &newExportObjects )
     m_RequiredJoints.push_back(object);
     Content::JointTransformPtr joint = new Content::JointTransform( Maya::GetNodeID( object ) );
 
-    Content::AnimationPtr anim = new Content::Animation();
+    Content::JointAnimationPtr anim = new Content::JointAnimation();
     anim->m_JointID = joint->m_ID;
 
     animClip->Associate( joint, anim );
-    m_Animations.push_back( anim );
+    m_JointAnimations.push_back( anim );
   }
 
   animClip->m_StartFrame = (f32)startTime.value();
@@ -89,7 +89,7 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
   
   // Cinematic scenes can contain more than one actor, so we want to 
   // only store the export nodes for the actor we are currently exporting
-  const Content::AnimationClipPtr animClip = GetContentAnimationClip();
+  const Content::AnimationPtr animClip = GetContentAnimation();
 
   // get all of the exported meshes under the Geometry export nodes
   Maya::MObjectSet exportBaseObjects;
@@ -176,7 +176,7 @@ void ExportAnimationClip::GatherBlendShapeDeformers()
 ///////////////////////////////////////////////////////////////////////////////
 void ExportAnimationClip::SampleOneFrame( const MTime& currentTime, bool extraFrame )
 {
-  const Content::AnimationClipPtr animClip = GetContentAnimationClip();
+  const Content::AnimationPtr animClip = GetContentAnimation();
 
   // Required Joints
   std::vector<MObject>::iterator itr = m_RequiredJoints.begin();
@@ -189,11 +189,11 @@ void ExportAnimationClip::SampleOneFrame( const MTime& currentTime, bool extraFr
     MVector mayaTranslation = jointFn.getTranslation( MSpace::kTransform );
     mayaTranslation *= Math::CentimetersToMeters;
 
-    m_Animations[ i ]->m_Translate.push_back( Math::Vector3( (float)mayaTranslation.x, (float)mayaTranslation.y, (float)mayaTranslation.z ) );
+    m_JointAnimations[ i ]->m_Translate.push_back( Math::Vector3( (float)mayaTranslation.x, (float)mayaTranslation.y, (float)mayaTranslation.z ) );
 
     double s[ 3 ];
     jointFn.getScale( s );
-    m_Animations[i]->m_Scale.push_back( Math::Vector3 ( (float) s[ 0 ], (float) s[ 1 ], (float) s[ 2 ] ) );
+    m_JointAnimations[i]->m_Scale.push_back( Math::Vector3 ( (float) s[ 0 ], (float) s[ 1 ], (float) s[ 2 ] ) );
 
     MEulerRotation r;
     jointFn.getRotation( r );
@@ -209,14 +209,14 @@ void ExportAnimationClip::SampleOneFrame( const MTime& currentTime, bool extraFr
 
     Math::Quaternion rotation( (float)qr.x, (float)qr.y, (float)qr.z, (float)qr.w );
 
-    m_Animations[ i ]->m_Rotate.push_back( rotation );
+    m_JointAnimations[ i ]->m_Rotate.push_back( rotation );
 
     if ( !extraFrame )
     {
-      m_Animations[ i ]->m_WindowSamples++;
+      m_JointAnimations[ i ]->m_WindowSamples++;
     }
 
-    m_Animations[ i ]->m_TotalSamples++;
+    m_JointAnimations[ i ]->m_TotalSamples++;
   }
 
 
@@ -231,7 +231,7 @@ void ExportAnimationClip::SampleOneFrame( const MTime& currentTime, bool extraFr
 ///////////////////////////////////////////////////////////////////////////////
 // Iterate over the morph targets and sample the frames morph target weights
 //
-void ExportAnimationClip::SampleOneFramesMorphTargetWeights( const MTime& currentTime, const Content::AnimationClipPtr& animClip )
+void ExportAnimationClip::SampleOneFramesMorphTargetWeights( const MTime& currentTime, const Content::AnimationPtr& animClip )
 {
   if ( m_ExportBlendShapeDeformers.empty() )
   {

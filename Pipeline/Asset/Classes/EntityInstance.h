@@ -44,4 +44,6 @@ namespace Asset
         // show geometry in editor
         bool m_ShowGeometry;
     };
+
+    typedef Nocturnal::SmartPtr< EntityInstance > EntityInstancePtr;
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ExportBase.h"
-#include "Pipeline/Asset/Classes/Entity.h"
+#include "Pipeline/Asset/Classes/EntityInstance.h"
 
 namespace MayaContent
 {
@@ -11,7 +11,7 @@ namespace MayaContent
     ExportEntity( const MObject& mayaObject, Nocturnal::TUID id )
       : ExportBase( mayaObject )
     {
-      m_ContentObject = new Asset::Entity( id );
+      m_ContentObject = new Asset::EntityInstance( id );
     }
 
     // Gather the necessary maya data

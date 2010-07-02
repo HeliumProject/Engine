@@ -9,7 +9,6 @@
 #include "Maya/ErrorHelpers.h"
 
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
 
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Element.h"
@@ -214,8 +213,7 @@ EntityAssetNode& EntityAssetNode::Get( const Nocturnal::Path& path, bool createI
 
             if ( assetClass.ReferencesObject() )
             {
-                ComponentViewer< ArtFileComponent > artFile( assetClass );
-                tstring artFilePath = artFile->GetPath().Get();
+                tstring artFilePath = assetClass->GetPath().Get();
 
                 MObject classTransform = dagFn.create( EntityAssetNode::s_TypeID, assetClass->GetShortName().c_str() );
                 dagFn.setDoNotWrite( true );
@@ -243,9 +241,9 @@ EntityAssetNode& EntityAssetNode::Get( const Nocturnal::Path& path, bool createI
     return EntityAssetNode::Null;
 }
 
-std::pair< EntityAssetNode*, EntityNode*> EntityAssetNode::CreateInstance( const Asset::EntityPtr& entity )
+std::pair< EntityAssetNode*, EntityNode*> EntityAssetNode::CreateInstance( const Asset::EntityInstancePtr& entity )
 {
-    EntityAssetNode* artClass = &Get( entity->GetEntityAsset()->GetPath() );
+    EntityAssetNode* artClass = &Get( entity->GetEntity()->GetPath() );
     M_EntityNode::iterator instItor = artClass->m_Instances.find( entity->m_ID );
 
     EntityNode* entityNode = NULL;
@@ -272,7 +270,7 @@ std::pair< EntityAssetNode*, EntityNode*> EntityAssetNode::CreateInstance( const
 
 void EntityAssetNode::RemoveInstance( EntityNode* entityNode )
 {
-    EntityAssetNode& artClass = EntityAssetNode::Get( entityNode->GetEntity()->GetEntityAsset()->GetPath(), false );
+    EntityAssetNode& artClass = EntityAssetNode::Get( entityNode->GetEntity()->GetEntity()->GetPath(), false );
 
     if ( artClass != EntityAssetNode::Null )
     {

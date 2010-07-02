@@ -38,7 +38,7 @@ void PreviewPanel::Preview( Asset::AssetClass* asset )
 
         if ( m_PreviewAsset.ReferencesObject() )
         {
-            m_Label->SetValue( m_PreviewAsset->GetFilePath().Get() );
+            m_Label->SetValue( m_PreviewAsset->GetPath().Get() );
 
             Asset::EntityPtr entity = Reflect::ObjectCast< Asset::Entity >( asset );
             if ( entity.ReferencesObject() )

@@ -301,6 +301,24 @@ tstring Path::Directory() const
     return TXT( "" );
 }
 
+std::vector< tstring > Path::DirectoryAsVector() const
+{
+    tistringstream iss( Directory() );
+    std::vector< tstring > out;
+    do
+    { 
+        tstring tmp;
+        std::getline( iss, tmp, s_InternalPathSeparator );
+        if ( !iss )
+        {
+            break;
+        }
+        out.push_back( tmp ); 
+    } while( iss );
+
+    return out;
+}
+
 tstring Path::Extension() const
 {
     size_t pos = m_Path.rfind( '.' );
@@ -376,6 +394,47 @@ tstring Path::Signature()
 {
     return Nocturnal::MD5( m_Path );
 }
+
+Nocturnal::Path Path::GetAbsolutePath( const Nocturnal::Path& basisPath )
+{
+    NOC_ASSERT( !IsAbsolute() ); // shouldn't call this on an already-absolute path
+
+    tstring newPathString;
+    Platform::GetFullPath( tstring( basisPath.Directory() + m_Path ).c_str(), newPathString );
+    return Nocturnal::Path( newPathString );
+}
+
+Nocturnal::Path Path::GetRelativePath( const Nocturnal::Path& basisPath )
+{
+    std::vector< tstring > targetDirectories = this->DirectoryAsVector();
+    std::vector< tstring > baseDirectories = basisPath.DirectoryAsVector();
+
+    size_t i = 0;
+    while( targetDirectories.size() > i && baseDirectories.size() > i && ( targetDirectories[ i ] == baseDirectories[ i ] ) )
+    {
+        ++i;
+    }
+
+    if ( i == 0 )
+    {
+        return *this;
+    }
+
+    tstring newPathString;
+    for ( size_t j = 0; j < ( baseDirectories.size() - i ); ++j )
+    {
+        newPathString += tstring( TXT( ".." ) ) + s_InternalPathSeparator;
+    }
+
+    for ( size_t j = i; j < targetDirectories.size(); ++j )
+    {
+        newPathString += targetDirectories[ j ] + s_InternalPathSeparator;
+    }
+
+    newPathString += Filename();
+    return Nocturnal::Path( newPathString );
+}
+
 
 void Path::ReplaceExtension( const tstring& newExtension )
 {

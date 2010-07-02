@@ -25,8 +25,10 @@ REFLECT_DEFINE_ABSTRACT( AssetClass );
 
 void AssetClass::EnumerateClass( Reflect::Compositor<AssetClass>& comp )
 {
-    Reflect::Field* fieldDescription = comp.AddField( &AssetClass::m_Description, "m_Description" );
-    Reflect::Field* fieldPath = comp.AddField( &AssetClass::m_Path, "m_Path", Reflect::FieldFlags::Hide );
+    comp.AddField( &AssetClass::m_Description, "m_Description" );
+    comp.AddField( &AssetClass::m_Tags, "m_Tags" );
+
+    comp.AddField( &AssetClass::m_Path, "m_Path", Reflect::FieldFlags::Hide );
 }
 
 AssetClass::AssetClass()
@@ -51,17 +53,6 @@ AssetClassPtr AssetClass::LoadAssetClass( const tchar* path )
 
     // success
     return assetClass;
-}
-
-
-const Nocturnal::Path& AssetClass::GetFilePath()
-{
-    return m_Path;
-}
-
-Nocturnal::Path AssetClass::GetDataDir()
-{
-    return Nocturnal::Path( m_Path.Directory() );
 }
 
 Nocturnal::Path AssetClass::GetBuiltDirectory()

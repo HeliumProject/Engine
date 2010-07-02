@@ -1,6 +1,7 @@
 #pragma once
 
 #include <set>
+#include <vector>
 
 #include "Foundation/API.h"
 #include "Foundation/Memory/SmartPtr.h"
@@ -51,6 +52,7 @@ namespace Nocturnal
         tstring Basename() const;
         tstring Filename() const;
         tstring Directory() const;
+        std::vector< tstring > DirectoryAsVector() const;
 
         tstring Extension() const;
         tstring FullExtension() const;
@@ -90,6 +92,8 @@ namespace Nocturnal
         tstring FileMD5() const;
         bool VerifyFileMD5( const tstring& hash ) const;
 
+        Nocturnal::Path GetAbsolutePath( const Nocturnal::Path& basisPath );
+        Nocturnal::Path GetRelativePath( const Nocturnal::Path& basisPath );
 
     public:
 

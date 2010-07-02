@@ -24,9 +24,6 @@ namespace Asset
     typedef std::set<AssetClassPtr> S_AssetClass;
     typedef Nocturnal::OrderedSet< Asset::AssetClassPtr > OS_AssetClass;
 
-    // 
-    // Events and args for when an asset is classified.
-    // 
     struct AssetTypeChangeArgs
     {
         const AssetClass* m_Asset;
@@ -40,40 +37,28 @@ namespace Asset
     };
     typedef Nocturnal::Signature< void, const AssetTypeChangeArgs& > AssetTypeChangeSignature;
 
-
-    /////////////////////////////////////////////////////////////////////////////////
-    //
-    // The Definition of an Asset Class
-    //
-
     class PIPELINE_API AssetClass NOC_ABSTRACT : public Component::ComponentCollection
     {
-        //
-        // Member Data
-        //
     private:
 
         Nocturnal::Path m_Path;
 
-        // description of this asset
         tstring m_Description;
+        std::set< tstring > m_Tags;
 
+    public:
         //
         // RTTI
         //
+        REFLECT_DECLARE_ABSTRACT( AssetClass, ComponentCollection );
 
-    public:
-        REFLECT_DECLARE_ABSTRACT(AssetClass, ComponentCollection);
+        static void EnumerateClass( Reflect::Compositor< AssetClass >& comp );
 
-        static void EnumerateClass( Reflect::Compositor<AssetClass>& comp );
-
-        //
-        // Member functions
-        //
 
     public:
         AssetClass();
 
+    public:
         static void SetBaseBuiltDirectory( const tstring& path )
         {
             s_BaseBuiltDirectory = path;
@@ -107,6 +92,8 @@ namespace Asset
             return Reflect::TryCast<T>( LoadAssetClass( path.Get().c_str() ) );
         }
 
+    public:
+
         void SetPath( const Nocturnal::Path& path )
         {
             m_Path = path;
@@ -116,8 +103,6 @@ namespace Asset
             return m_Path;
         }
 
-        const Nocturnal::Path& GetFilePath();
-        Nocturnal::Path GetDataDir();
         Nocturnal::Path GetBuiltDirectory();
 
         // x:\rcf\assets\entities\fruitBasketFromHell\appleSuccubus.entity.rb -> entities\fruitBasketFromHell\appleSuccubus.entity.rb

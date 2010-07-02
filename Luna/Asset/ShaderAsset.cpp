@@ -275,7 +275,7 @@ void ShaderAsset::ConvertShader( const ContextMenuArgsPtr& args )
                     // Copy the persistent data
                     pkg->CopyTo( newPkg );
                     newPkg->SetPath( pkg->GetPath() );
-                    tstring filePath = pkg->GetFilePath();
+                    tstring filePath = pkg->GetPath().Get();
 
                     try
                     {

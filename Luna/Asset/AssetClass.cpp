@@ -216,7 +216,7 @@ const tstring& AssetClass::GetName() const
 tstring AssetClass::GetFilePath()
 {
     Asset::AssetClass* package = GetPackage< Asset::AssetClass >();
-    return package->GetFilePath().Get();
+    return package->GetPath().Get();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -107,7 +107,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
 {
   if ( m_Scene )
   {
-    tstring shaderPath = shaderClass->GetFilePath().c_str();
+    tstring shaderPath = shaderClass->GetPath().Get();
     u32 shaderHandle = m_Scene->m_renderer->m_shader_manager.FindShader( shaderPath.c_str() );
     if ( shaderHandle == 0xffffffff )
     {

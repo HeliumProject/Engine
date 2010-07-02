@@ -937,14 +937,6 @@
 					RelativePath=".\Content\Nodes\Volume.h"
 					>
 				</File>
-				<File
-					RelativePath=".\Content\Nodes\Zone.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Content\Nodes\Zone.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Animation"

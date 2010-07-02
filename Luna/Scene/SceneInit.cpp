@@ -28,8 +28,6 @@
 #include "PivotTransform.h"
 
 #include "Layer.h"
-#include "Zone.h"
-
 #include "Shader.h"
 #include "Mesh.h"
 #include "Skin.h"
@@ -124,8 +122,6 @@ void Luna::SceneInitialize()
     g_InitializerStack.Push( PivotTransform::InitializeType, PivotTransform::CleanupType );
 
     g_InitializerStack.Push( Layer::InitializeType, Layer::CleanupType );
-    g_InitializerStack.Push( Zone::InitializeType, Zone::CleanupType );
-
     g_InitializerStack.Push( Shader::InitializeType, Shader::CleanupType );
     g_InitializerStack.Push( Mesh::InitializeType, Mesh::CleanupType );
     g_InitializerStack.Push( Skin::InitializeType, Skin::CleanupType );

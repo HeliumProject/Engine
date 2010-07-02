@@ -16,7 +16,6 @@
 
 #include "Pipeline/Content/Nodes/Camera.h"
 #include "Pipeline/Content/Nodes/Layer.h"
-#include "Pipeline/Content/Nodes/Zone.h"
 #include "Pipeline/Content/Nodes/Curve.h"
 #include "Pipeline/Content/Nodes/Point.h"
 #include "Pipeline/Content/Nodes/Mesh.h"
@@ -82,7 +81,6 @@ namespace Content
       g_InitializerStack.Push( Reflect::RegisterClass<Camera>( TXT( "Camera" ) ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<Layer>( TXT( "Layer" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<Zone>( TXT( "Zone" ) ) );
 
       g_InitializerStack.Push( Reflect::RegisterClass<MorphTargetDelta>( TXT( "MorphTargetDelta" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<MorphTarget>( TXT( "MorphTarget" ) ) );

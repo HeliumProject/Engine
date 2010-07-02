@@ -178,26 +178,12 @@ EVT_MENU(SceneEditorIDs::ID_ToolsPivot, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsEntityCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsVolumeCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsClueCreate, SceneEditor::OnToolSelected)
-#if LUNA_GAME_CAMERA
-EVT_MENU(SceneEditorIDs::ID_ToolsGameCameraCreate, SceneEditor::OnToolSelected)
-#endif
 EVT_MENU(SceneEditorIDs::ID_ToolsControllerCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsCurveCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsCurveEdit, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsDuplicate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsLocatorCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsLightCreate, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsLighting, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate, SceneEditor::OnToolSelected) 
-EVT_MENU(SceneEditorIDs::ID_ToolsPostProcessingVolumeScript, SceneEditor::OnToolSelected) 
-
-EVT_MENU(SceneEditorIDs::ID_ToolsLightingLayerCreate, SceneEditor::OnToolSelected) 
-EVT_MENU(SceneEditorIDs::ID_ToolsLightingLayerUnlink, SceneEditor::OnToolSelected) 
-EVT_MENU(SceneEditorIDs::ID_ToolsLightingLayerSelect, SceneEditor::OnToolSelected) 
-
-EVT_MENU(SceneEditorIDs::ID_UtilitiesConstruction, SceneEditor::OnUtilitySelected)
-EVT_MENU(SceneEditorIDs::ID_UtilitiesMeasureDistance, SceneEditor::OnUtilitySelected)
-EVT_MENU(SceneEditorIDs::ID_UtilitiesFlushSymbols, SceneEditor::OnUtilitySelected)
 
 EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshManipulate, SceneEditor::OnToolSelected)
@@ -291,7 +277,6 @@ SceneEditor::SceneEditor()
 , m_ViewColorMenu( NULL )
 , m_ShadingMenu( NULL )
 , m_CullingMenu( NULL )
-, m_UtilitiesMenu( NULL )
 , m_MRUMenu( NULL )
 , m_MRUMenuItem( NULL )
 , m_MRU( new Nocturnal::MenuMRU( 30, this ) )
@@ -387,9 +372,6 @@ SceneEditor::SceneEditor()
 //    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Entity"), Nocturnal::GlobalImageManager().GetBitmap( "create_entity.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Place entity objects (such as art instances or characters)");
 //    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Volume"), Nocturnal::GlobalImageManager().GetBitmap( "create_volume.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Place volume objects (items for setting up gameplay)");
 //    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsClueCreate, wxT("Clue"), Nocturnal::GlobalImageManager().GetBitmap( "create_clue.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Place clue objects (items for setting up gameplay)");
-//#if LUNA_GAME_CAMERA
-//    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsGameCameraCreate, wxT("GameCamera"), Nocturnal::GlobalImageManager().GetBitmap( "game_camera.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Place a camera");
-//#endif
 //    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsControllerCreate, wxT("Controller"), Nocturnal::GlobalImageManager().GetBitmap( "create_controller.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Place controller objects (items for setting up gameplay)");
 //    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Locator"), Nocturnal::GlobalImageManager().GetBitmap( "create_locator.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Place locator objects (such as bug locators)");
 //    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Curve"), Nocturnal::GlobalImageManager().GetBitmap( "create_curve.png", Nocturnal::IconSizes::Size32 ), wxNullBitmap, "Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)");
@@ -524,17 +506,8 @@ SceneEditor::SceneEditor()
     m_FrameManager.AddPane( m_TypeGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("types")).Caption(wxT("Types")).Left().Layer(1).Position(1) );
 
     // Layer panel
-    m_LayersNotebook  = new wxNotebook( this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
-    m_LayersNotebook->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-    {
-        // General purpose layers
-        {
-            LayerGridPtr newGridPtr      = new LayerGrid( m_LayersNotebook, &m_SceneManager, Content::LayerTypes::LT_GeneralPurpose );
-            m_LayersNotebook->AddPage( newGridPtr->GetPanel(), wxT("General"), true);
-            m_LayerGrids.push_back(newGridPtr);
-        }
-    }
-    m_FrameManager.AddPane( m_LayersNotebook, wxAuiPaneInfo().Name(wxT("layers")).Caption(wxT("Layers")).Right().Layer(1).Position(1) );
+    m_LayerGrid = new LayerGrid( this, &m_SceneManager );
+    m_FrameManager.AddPane( m_LayerGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("layers")).Caption(wxT("Layers")).Right().Layer(1).Position(1) );
 
     // Search bar
     SearchBar* searchBar = new SearchBar( this );
@@ -660,17 +633,6 @@ SceneEditor::SceneEditor()
         // Setting the accelerator string this way seems to preserve the string but not actually use the accelerator
         wxMenuItem* menuItemSelectAll = m_EditMenu->Append(SceneEditorIDs::ID_EditSelectAll, _("Select All"));
         menuItemSelectAll->SetAccelString( wxT( "Ctrl-a" ) );
-
-        m_EditMenu->AppendSeparator();
-
-        {
-            m_LightLinksMenu = new wxMenu;
-
-            m_LightLinksMenu->Append(SceneEditorIDs::ID_ToolsLightingLayerCreate, _("Link Selection\tCtrl-l"));
-            m_LightLinksMenu->Append(SceneEditorIDs::ID_ToolsLightingLayerUnlink, _("Unlink Selection\tCtrl-Shift-l"));
-            m_LightLinksMenu->Append(SceneEditorIDs::ID_ToolsLightingLayerSelect, _("Select Linked Lights\tAlt-l"));
-            m_EditMenu->AppendSubMenu(m_LightLinksMenu, _("Light Links"));
-        }
 
         m_EditMenu->AppendSeparator();
         m_EditMenu->Append(SceneEditorIDs::ID_EditDuplicate, _("Duplicate\tCtrl-d"));
@@ -834,9 +796,6 @@ SceneEditor::SceneEditor()
         tools_menu->Append(SceneEditorIDs::ID_ToolsEntityCreate, _("Entity Placement\tCtrl-e"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsVolumeCreate, _("Volume Placement"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsClueCreate, _("Clue Placement"));
-#if LUNA_GAME_CAMERA
-        tools_menu->Append(SceneEditorIDs::ID_ToolsGameCameraCreate, _("Game Camera Placement"));
-#endif
         tools_menu->Append(SceneEditorIDs::ID_ToolsControllerCreate, _("Controller Placement"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsLocatorCreate, _("Locator Placement"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsDuplicate, _("Duplicate Tool\tAlt-d"));
@@ -847,24 +806,8 @@ SceneEditor::SceneEditor()
 
         tools_menu->AppendSeparator();
         tools_menu->Append(SceneEditorIDs::ID_ToolsLightCreate, _("Light Placement"));
-        tools_menu->Append(SceneEditorIDs::ID_ToolsLighting, _("Lighting"));
-
-        tools_menu->AppendSeparator();
-        tools_menu->Append(SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate, _("PostProcessing Volume Placement")); 
-        tools_menu->Append(SceneEditorIDs::ID_ToolsPostProcessingVolumeScript, _("PostProcessing Volume Script")); 
 
         mb->Append(tools_menu, _("Tools"));
-    }
-
-    {
-        m_UtilitiesMenu = new wxMenu;
-        m_UtilitiesMenu->Append(SceneEditorIDs::ID_UtilitiesConstruction, _("Maya Construction"));
-
-        m_UtilitiesMenu->AppendSeparator();
-        m_UtilitiesMenu->Append(SceneEditorIDs::ID_UtilitiesMeasureDistance, _("Measure Distance"));
-        m_UtilitiesMenu->Append(SceneEditorIDs::ID_UtilitiesFlushSymbols, _("Flush Symbols"));
-
-        mb->Append(m_UtilitiesMenu, _("Utilities"));
     }
 
     {
@@ -939,12 +882,10 @@ SceneEditor::~SceneEditor()
     m_View->RemoveToolChangedListener( ToolChangeSignature::Delegate ( this, &SceneEditor::ViewToolChanged ) );
 
     delete m_TypeGrid;
+    delete m_LayerGrid;
     delete m_TypeOutline;
     delete m_HierarchyOutline;
     delete m_EntityAssetOutline;
-
-    //Clean up all of our layer grids
-    m_LayerGrids.clear();
 }
 
 SceneEditorID SceneEditor::CameraModeToSceneEditorID( CameraMode cameraMode )
@@ -1104,38 +1045,9 @@ void SceneEditor::OnChar(wxKeyEvent& event)
             event.Skip(false);
             break;
 
-        case 'l':
-            OnLightLinkEvent(event);
-            break;
-
         default:
             event.Skip();
             break;
-        }
-    }
-}
-
-void SceneEditor::OnLightLinkEvent(wxKeyEvent& event)
-{
-    if(event.m_controlDown == true)
-    {
-        if(event.m_altDown == false)
-        {
-            if(event.m_shiftDown == true)
-            {
-                GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsLightingLayerUnlink) );
-            }
-            else
-            {
-                GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsLightingLayerCreate) );
-            }
-        }
-    }
-    else
-    {
-        if((event.m_shiftDown == false) && (event.m_altDown == true))
-        {
-            GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsLightingLayerSelect) );
         }
     }
 }
@@ -1227,31 +1139,6 @@ void SceneEditor::OnMenuOpen(wxMenuEvent& event)
         m_EditMenu->Enable( wxID_CUT, isAnythingSelected );
         m_EditMenu->Enable( wxID_COPY, isAnythingSelected );
         m_EditMenu->Enable( wxID_PASTE, m_SceneManager.HasCurrentScene() && IsClipboardFormatAvailable( CF_TEXT ) );
-
-        // Light Links
-        if(m_SceneManager.HasCurrentScene() && (m_LayerGrids.empty() == false))
-        {
-            LayerGridPtr&   lightingLayerGridPtr  = m_LayerGrids[Content::LayerTypes::LT_Lighting];
-
-            //Linking
-            {
-                bool            enableOp              = lightingLayerGridPtr->IsSelectionValid();
-                m_LightLinksMenu->Enable( SceneEditorIDs::ID_ToolsLightingLayerCreate, enableOp);
-            }
-
-            //Unlinking and selections
-            {
-                bool            enableOp              = lightingLayerGridPtr->IsSelectionItemsLinked();
-                m_LightLinksMenu->Enable( SceneEditorIDs::ID_ToolsLightingLayerUnlink, enableOp);
-                m_LightLinksMenu->Enable( SceneEditorIDs::ID_ToolsLightingLayerSelect, enableOp);
-            }
-        }
-        else
-        {
-            m_LightLinksMenu->Enable( SceneEditorIDs::ID_ToolsLightingLayerCreate, false);
-            m_LightLinksMenu->Enable( SceneEditorIDs::ID_ToolsLightingLayerUnlink, false);
-            m_LightLinksMenu->Enable( SceneEditorIDs::ID_ToolsLightingLayerSelect, false);
-        }
     }
     else if (menu == m_ViewMenu)
     {
@@ -2310,15 +2197,6 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
             }
             break;
 
-#if LUNA_GAME_CAMERA
-        case SceneEditorIDs::ID_ToolsGameCameraCreate:
-            {
-                m_SceneManager.GetCurrentScene()->SetTool(new Luna::GameCameraCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
-                m_Properties->SetSelection(m_ToolPropertyPage);
-            }
-            break;
-#endif
-
         case SceneEditorIDs::ID_ToolsLocatorCreate:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(new Luna::LocatorCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
@@ -2627,8 +2505,8 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
                     wxMessageBox( errorString.c_str(), wxT( "Active zone must have NavMesh data" ), wxOK|wxCENTRE|wxICON_ERROR, this );
                     break;
                 }
+                break;
             }
-            break;
         }
 
         m_ToolProperties.GetCanvas()->Clear();
@@ -2643,25 +2521,6 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
         }
 
         m_View->Refresh();
-    }
-    else
-    {
-        GetStatusBar()->SetStatusText( TXT( "You must create a new scene or open an existing scene to use a tool" ) );
-    }
-}
-
-void SceneEditor::OnUtilitySelected(wxCommandEvent& event)
-{
-    if (m_SceneManager.HasCurrentScene())
-    {
-        switch (event.GetId())
-        {
-        case SceneEditorIDs::ID_UtilitiesMeasureDistance:
-            {
-                m_SceneManager.GetCurrentScene()->MeasureDistance();
-                break;
-            }
-        }
     }
     else
     {
@@ -3351,28 +3210,6 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
     m_NavToolBar->Disable();
 }
 
-void SceneEditor::BeginLayersGridBatching()
-{
-    V_LayerGrid::const_iterator gridLayerItr = m_LayerGrids.begin();
-    V_LayerGrid::const_iterator gridLayerEnd = m_LayerGrids.end();
-
-    for ( ; gridLayerItr != gridLayerEnd; ++gridLayerItr )
-    {
-        (*gridLayerItr)->BeginBatch();
-    }
-}
-
-void SceneEditor::EndLayersGridBatching()
-{
-    V_LayerGrid::const_iterator gridLayerItr = m_LayerGrids.begin();
-    V_LayerGrid::const_iterator gridLayerEnd = m_LayerGrids.end();
-
-    for ( ; gridLayerItr != gridLayerEnd; ++gridLayerItr )
-    {
-        (*gridLayerItr)->EndBatch();
-    }
-}
-
 void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
 {
     if ( args.m_Scene )
@@ -3422,23 +3259,18 @@ void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
                 HM_SceneNodeSmartPtr::const_iterator instEnd = nodeTypeItr->second->GetInstances().end();
 
                 //Begin batching
-                BeginLayersGridBatching();
+                m_LayerGrid->BeginBatch();
 
                 for ( ; instItr != instEnd; ++instItr )
                 {
-                    const SceneNodePtr& dependNode    = instItr->second;
-                    Luna::Layer*        lunaLayer     = Reflect::AssertCast< Luna::Layer >( dependNode );
-                    Content::Layer*     contentLayer  = lunaLayer->GetPackage<Content::Layer>();
-                    LayerGrid*          layerGrid     = GetLayerGridByType((Content::LayerType)contentLayer->m_Type);
-
-                    //Add the layer
-                    layerGrid->AddLayer( lunaLayer );
+                    const SceneNodePtr& dependNode = instItr->second;
+                    Luna::Layer* lunaLayer = Reflect::AssertCast< Luna::Layer >( dependNode );
+                    m_LayerGrid->AddLayer( lunaLayer );
                 }
 
                 //End batching
-                EndLayersGridBatching();
-            } 
-
+                m_LayerGrid->EndBatch();
+            }
             else if ( nodeType->HasType( Reflect::GetType<Luna::HierarchyNodeType>() ) )
             {
                 // Hierarchy node types need to be added to the object grid UI.
@@ -3570,17 +3402,12 @@ void SceneEditor::ViewToolChanged( const ToolChangeArgs& args )
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsEntityCreate, selectedTool == SceneEditorIDs::ID_ToolsEntityCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsVolumeCreate, selectedTool == SceneEditorIDs::ID_ToolsVolumeCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsClueCreate, selectedTool == SceneEditorIDs::ID_ToolsClueCreate );
-#if LUNA_GAME_CAMERA
-    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsGameCameraCreate, selectedTool == SceneEditorIDs::ID_ToolsGameCameraCreate );
-#endif
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsControllerCreate, selectedTool == SceneEditorIDs::ID_ToolsControllerCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsLocatorCreate, selectedTool == SceneEditorIDs::ID_ToolsLocatorCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsDuplicate, selectedTool == SceneEditorIDs::ID_ToolsDuplicate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsCurveCreate, selectedTool == SceneEditorIDs::ID_ToolsCurveCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsCurveEdit, selectedTool == SceneEditorIDs::ID_ToolsCurveEdit );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsLightCreate, selectedTool == SceneEditorIDs::ID_ToolsLightCreate );
-    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsLighting, selectedTool == SceneEditorIDs::ID_ToolsLighting );
-    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate, selectedTool == SceneEditorIDs::ID_ToolsPostProcessingVolumeCreate ); 
 
     m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshCreate, selectedTool == SceneEditorIDs::ID_ToolsNavMeshCreate ); 
 }
@@ -3945,29 +3772,4 @@ void SceneEditor::SyncPropertyThread()
     {
         ::Sleep( 500 );
     }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
-
-LayerGrid*          SceneEditor::GetLayerGridByType(Content::LayerType lType)
-{
-    NOC_ASSERT(m_LayerGrids.size() > (size_t)lType);
-
-    return m_LayerGrids[lType];
-}
-
-Content::LayerType  SceneEditor::GetCurrentLayerGridType()
-{
-    NOC_ASSERT(m_LayersNotebook);
-
-    int index = m_LayersNotebook->GetSelection();
-
-    if(index >= (int)Content::LayerTypes::LT_Unknown)
-    {
-        NOC_ASSERT(!"Invalid Page index");
-        return Content::LayerTypes::LT_Unknown;
-    }
-
-    return (Content::LayerType)index;
 }

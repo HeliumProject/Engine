@@ -10,7 +10,6 @@ void Layer::EnumerateClass( Reflect::Compositor<Layer>& comp )
   Reflect::Field* fieldSelectable = comp.AddField( &Layer::m_Selectable, "m_Selectable" );
   Reflect::Field* fieldMembers    = comp.AddField( &Layer::m_Members, "m_Members" );
   Reflect::Field* fieldColor      = comp.AddField( &Layer::m_Color, "m_Color" );
-  Reflect::Field* fieldType       = comp.AddField( &Layer::m_Type, "m_Type" );
 }
 
 Layer::Layer()
@@ -18,7 +17,6 @@ Layer::Layer()
 , m_Visible( true )
 , m_Selectable( true )
 , m_Color( 255 )
-, m_Type(LayerTypes::LT_GeneralPurpose)
 {
 }
 
@@ -27,10 +25,5 @@ Layer::Layer( Nocturnal::TUID& id )
 , m_Visible( true )
 , m_Selectable( true )
 , m_Color( 255 )
-, m_Type(LayerTypes::LT_GeneralPurpose)
-{
-}
-
-Layer::~Layer()
 {
 }

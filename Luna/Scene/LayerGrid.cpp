@@ -53,8 +53,8 @@ LayerGrid::NameChangeInfo::~NameChangeInfo()
 // 
 void LayerGrid::NameChangeInfo::Clear()
 {
-  m_Layer = NULL;
-  m_OldName.clear();
+    m_Layer = NULL;
+    m_OldName.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -64,56 +64,49 @@ void LayerGrid::NameChangeInfo::Clear()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-LayerGrid::LayerGrid( wxWindow* parent, Luna::SceneManager* sceneManager, u32 lType)
+LayerGrid::LayerGrid( wxWindow* parent, Luna::SceneManager* sceneManager )
 : m_SceneManager( sceneManager )
 , m_Scene( NULL )
 , m_Panel( new wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxT( "LayerGrid Panel" ) ) )
 , m_Grid( new Grid( m_Panel, SceneEditorIDs::ID_LayerGrid, true ) )
 , m_ToolBar( new wxToolBar( m_Panel, wxID_ANY, wxDefaultPosition, wxSize( -1, 25 ), wxBORDER_NONE | wxTB_HORIZONTAL | wxTB_NODIVIDER, wxT( "LayerToolBar" ) ) )
-, m_LayerType(lType)
 {
-  // Handle all toolbar events so that this class can process button clicks
-  m_ToolBar->PushEventHandler( this );
+    // Handle all toolbar events so that this class can process button clicks
+    m_ToolBar->PushEventHandler( this );
 
-  // Set up the toolbar that goes at the top of the panel
-  m_ToolBar->AddTool( ID_NewLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_NEW, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Create New Layer" ) );
-  m_ToolBar->AddTool( ID_NewLayerFromSelection, wxT( "" ), wxArtProvider::GetBitmap( wxART_NEW_DIR, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Create New Layer From Selection" ) );
-  m_ToolBar->AddTool( ID_DeleteLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_DELETE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Delete Highlighted Layer(s)" ) );
-  m_ToolBar->AddSeparator();
-  m_ToolBar->AddTool( ID_AddSelectionToLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_ADD_BOOKMARK, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Add Selection To Highlighted Layer(s)" ) );
-  m_ToolBar->AddTool( ID_RemoveSelectionFromLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_DEL_BOOKMARK, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Remove Selection From Highlighted Layer(s)" ) );
-  m_ToolBar->AddSeparator();
-  m_ToolBar->AddTool( ID_SelectLayerMembers, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Select Layer Members" ) );
-  m_ToolBar->AddTool( ID_SelectLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Select Highlighted Layer(s)" ) );
-  
-  if(m_LayerType == Content::LayerTypes::LT_Lighting)
-  {
-    m_ToolBar->AddTool( ID_CleanUpLayers, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Remove invalid Layer(s)" ) );
-  }
+    // Set up the toolbar that goes at the top of the panel
+    m_ToolBar->AddTool( ID_NewLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_NEW, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Create New Layer" ) );
+    m_ToolBar->AddTool( ID_NewLayerFromSelection, wxT( "" ), wxArtProvider::GetBitmap( wxART_NEW_DIR, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Create New Layer From Selection" ) );
+    m_ToolBar->AddTool( ID_DeleteLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_DELETE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Delete Highlighted Layer(s)" ) );
+    m_ToolBar->AddSeparator();
+    m_ToolBar->AddTool( ID_AddSelectionToLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_ADD_BOOKMARK, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Add Selection To Highlighted Layer(s)" ) );
+    m_ToolBar->AddTool( ID_RemoveSelectionFromLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_DEL_BOOKMARK, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Remove Selection From Highlighted Layer(s)" ) );
+    m_ToolBar->AddSeparator();
+    m_ToolBar->AddTool( ID_SelectLayerMembers, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Select Layer Members" ) );
+    m_ToolBar->AddTool( ID_SelectLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Select Highlighted Layer(s)" ) );
+    m_ToolBar->Realize();
 
-  m_ToolBar->Realize();
+    // Add everything to a top level sizer
+    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+    mainSizer->Add( m_ToolBar, 0, wxALIGN_TOP );
+    mainSizer->Add( m_Grid->GetPanel(), 1, wxEXPAND );
+    mainSizer->Layout();
+    m_Panel->SetAutoLayout( true );
+    m_Panel->SetSizer( mainSizer );
+    mainSizer->SetSizeHints( m_Panel );
 
-  // Add everything to a top level sizer
-  wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
-  mainSizer->Add( m_ToolBar, 0, wxALIGN_TOP );
-  mainSizer->Add( m_Grid->GetPanel(), 1, wxEXPAND );
-  mainSizer->Layout();
-  m_Panel->SetAutoLayout( true );
-  m_Panel->SetSizer( mainSizer );
-  mainSizer->SetSizeHints( m_Panel );
+    // Make sure the toolbar buttons start out disabled
+    UpdateToolBarButtons();
 
-  // Make sure the toolbar buttons start out disabled
-  UpdateToolBarButtons();
-
-  // Listeners that are not dependent on the current scene
-  if ( m_SceneManager )
-  {
-    m_SceneManager->AddCurrentSceneChangingListener( SceneChangeSignature::Delegate ( this, &LayerGrid::CurrentSceneChanging ) );
-    m_SceneManager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate ( this, &LayerGrid::CurrentSceneChanged ) );
-  }
-  m_Grid->AddRowVisibilityChangedListener( GridRowChangeSignature::Delegate  ( this, &LayerGrid::LayerVisibleChanged ) );
-  m_Grid->AddRowSelectabilityChangedListener( GridRowChangeSignature::Delegate  ( this, &LayerGrid::LayerSelectableChanged ) );
-  m_Grid->AddRowRenamedListener( GridRowRenamedSignature::Delegate ( this, &LayerGrid::RowRenamed ) );
+    // Listeners that are not dependent on the current scene
+    if ( m_SceneManager )
+    {
+        m_SceneManager->AddCurrentSceneChangingListener( SceneChangeSignature::Delegate ( this, &LayerGrid::CurrentSceneChanging ) );
+        m_SceneManager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate ( this, &LayerGrid::CurrentSceneChanged ) );
+    }
+    m_Grid->AddRowVisibilityChangedListener( GridRowChangeSignature::Delegate  ( this, &LayerGrid::LayerVisibleChanged ) );
+    m_Grid->AddRowSelectabilityChangedListener( GridRowChangeSignature::Delegate  ( this, &LayerGrid::LayerSelectableChanged ) );
+    m_Grid->AddRowRenamedListener( GridRowRenamedSignature::Delegate ( this, &LayerGrid::RowRenamed ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -121,27 +114,27 @@ LayerGrid::LayerGrid( wxWindow* parent, Luna::SceneManager* sceneManager, u32 lT
 // 
 LayerGrid::~LayerGrid()
 {
-  // Remove listeners that are not dependent on the current scene
-  if ( m_SceneManager )
-  {
-    m_SceneManager->RemoveCurrentSceneChangingListener( SceneChangeSignature::Delegate ( this, &LayerGrid::CurrentSceneChanging ) );
-    m_SceneManager->RemoveCurrentSceneChangedListener( SceneChangeSignature::Delegate ( this, &LayerGrid::CurrentSceneChanged ) );
-  }
-  m_Grid->RemoveRowVisibilityChangedListener( GridRowChangeSignature::Delegate  ( this, &LayerGrid::LayerVisibleChanged ) );
-  m_Grid->RemoveRowSelectabilityChangedListener( GridRowChangeSignature::Delegate  ( this, &LayerGrid::LayerSelectableChanged ) );
-  m_Grid->RemoveRowRenamedListener( GridRowRenamedSignature::Delegate ( this, &LayerGrid::RowRenamed ) );
+    // Remove listeners that are not dependent on the current scene
+    if ( m_SceneManager )
+    {
+        m_SceneManager->RemoveCurrentSceneChangingListener( SceneChangeSignature::Delegate ( this, &LayerGrid::CurrentSceneChanging ) );
+        m_SceneManager->RemoveCurrentSceneChangedListener( SceneChangeSignature::Delegate ( this, &LayerGrid::CurrentSceneChanged ) );
+    }
+    m_Grid->RemoveRowVisibilityChangedListener( GridRowChangeSignature::Delegate  ( this, &LayerGrid::LayerVisibleChanged ) );
+    m_Grid->RemoveRowSelectabilityChangedListener( GridRowChangeSignature::Delegate  ( this, &LayerGrid::LayerSelectableChanged ) );
+    m_Grid->RemoveRowRenamedListener( GridRowRenamedSignature::Delegate ( this, &LayerGrid::RowRenamed ) );
 
-  DisconnectSceneListeners();
+    DisconnectSceneListeners();
 
-  m_ToolBar->PopEventHandler();
+    m_ToolBar->PopEventHandler();
 
-  if ( m_Panel->GetParent() == NULL )
-  {
-    delete m_Panel;
-    m_Panel = NULL;
-  }
+    if ( m_Panel->GetParent() == NULL )
+    {
+        delete m_Panel;
+        m_Panel = NULL;
+    }
 
-  delete m_Grid;
+    delete m_Grid;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -151,14 +144,14 @@ LayerGrid::~LayerGrid()
 // 
 wxPanel*LayerGrid::GetPanel() const
 {
-  return m_Panel;
+    return m_Panel;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 wxToolBar*  LayerGrid::GetToolBar()  const
 {
-  return m_ToolBar;
+    return m_ToolBar;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -168,11 +161,9 @@ wxToolBar*  LayerGrid::GetToolBar()  const
 // 
 bool LayerGrid::AddLayer( Luna::Layer* layer )
 {
-  //Verify this is the correct destination
-  Content::Layer* cLayer = layer->GetPackage<Content::Layer>();
+    //Verify this is the correct destination
+    Content::Layer* cLayer = layer->GetPackage<Content::Layer>();
 
-  if(cLayer->m_Type == m_LayerType)
-  { 
     Nocturnal::Insert<M_LayerDumbPtr>::Result inserted = m_Layers.insert( M_LayerDumbPtr::value_type( layer->GetName(), layer ) );
     NOC_ASSERT( inserted.second );
 
@@ -185,12 +176,11 @@ bool LayerGrid::AddLayer( Luna::Layer* layer )
     // Select the newly added row
     if(result)
     {
-      m_Grid->SelectRow(m_Grid->GetRowNumber(layer->GetName()), false);
-      return true;
+        m_Grid->SelectRow(m_Grid->GetRowNumber(layer->GetName()), false);
+        return true;
     }
-  }
 
-  return false;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -198,11 +188,9 @@ bool LayerGrid::AddLayer( Luna::Layer* layer )
 // 
 bool LayerGrid::RemoveLayer( Luna::Layer* layer )
 {
-  //Verify this is the correct destination
-  Content::Layer* cLayer = layer->GetPackage<Content::Layer>();
+    //Verify this is the correct destination
+    Content::Layer* cLayer = layer->GetPackage<Content::Layer>();
 
-  if(cLayer->m_Type == m_LayerType)
-  { 
     bool foundLayer = m_Layers.erase( layer->GetName() ) > 0;
     NOC_ASSERT( foundLayer );
 
@@ -210,9 +198,8 @@ bool LayerGrid::RemoveLayer( Luna::Layer* layer )
     layer->RemoveNameChangingListener( SceneNodeChangeSignature::Delegate ( this, &LayerGrid::NameChanging ) );
     layer->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate ( this, &LayerGrid::NameChanged ) );
     return m_Grid->RemoveRow( layer->GetName() );
-  }
 
-  return false;
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -220,7 +207,7 @@ bool LayerGrid::RemoveLayer( Luna::Layer* layer )
 // 
 void LayerGrid::OnCleanUpLayers(wxCommandEvent& event)
 {
-  CleanUpLayers();
+    CleanUpLayers();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -231,7 +218,7 @@ void LayerGrid::OnCleanUpLayers(wxCommandEvent& event)
 // 
 void LayerGrid::BeginBatch()
 {
-  m_Grid->BeginBatch();
+    m_Grid->BeginBatch();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -240,7 +227,7 @@ void LayerGrid::BeginBatch()
 // 
 void LayerGrid::EndBatch()
 {
-  m_Grid->EndBatch();
+    m_Grid->EndBatch();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -248,15 +235,15 @@ void LayerGrid::EndBatch()
 // 
 void LayerGrid::ConnectSceneListeners()
 {
-  if ( m_Scene )
-  {
-    // Add listeners for when layers are added/removed from a the scene
-    m_Scene->AddNodeAddedListener( NodeChangeSignature::Delegate ( this, &LayerGrid::NodeAdded ) );
-    m_Scene->AddNodeRemovedListener( NodeChangeSignature::Delegate ( this, &LayerGrid::SceneNodeRemoved ) );
+    if ( m_Scene )
+    {
+        // Add listeners for when layers are added/removed from a the scene
+        m_Scene->AddNodeAddedListener( NodeChangeSignature::Delegate ( this, &LayerGrid::NodeAdded ) );
+        m_Scene->AddNodeRemovedListener( NodeChangeSignature::Delegate ( this, &LayerGrid::SceneNodeRemoved ) );
 
-    // Listen for changes to the scene's selection
-    m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &LayerGrid::SelectionChanged ) );
-  }
+        // Listen for changes to the scene's selection
+        m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &LayerGrid::SelectionChanged ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -264,15 +251,15 @@ void LayerGrid::ConnectSceneListeners()
 // 
 void LayerGrid::DisconnectSceneListeners()
 {
-  if ( m_Scene )
-  {
-    // Remove layer creation listeners on the scene
-    m_Scene->RemoveNodeAddedListener( NodeChangeSignature::Delegate ( this, &LayerGrid::NodeAdded ) );
-    m_Scene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate ( this, &LayerGrid::SceneNodeRemoved ) );
+    if ( m_Scene )
+    {
+        // Remove layer creation listeners on the scene
+        m_Scene->RemoveNodeAddedListener( NodeChangeSignature::Delegate ( this, &LayerGrid::NodeAdded ) );
+        m_Scene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate ( this, &LayerGrid::SceneNodeRemoved ) );
 
-    // Remove selection change listener on scene
-    m_Scene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &LayerGrid::SelectionChanged ) );
-  }
+        // Remove selection change listener on scene
+        m_Scene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &LayerGrid::SelectionChanged ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -280,18 +267,18 @@ void LayerGrid::DisconnectSceneListeners()
 // 
 void LayerGrid::RemoveAllLayers()
 {
-  // Remove name change listener on each layer
-  M_LayerDumbPtr::const_iterator layerItr = m_Layers.begin();
-  M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
-  for ( ; layerItr != layerEnd; ++layerItr )
-  {
-    Luna::Layer* layer = layerItr->second;
-    layer->RemoveNameChangingListener( SceneNodeChangeSignature::Delegate ( this, &LayerGrid::NameChanging ) );
-    layer->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate ( this, &LayerGrid::NameChanged ) );
-  }
+    // Remove name change listener on each layer
+    M_LayerDumbPtr::const_iterator layerItr = m_Layers.begin();
+    M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
+    for ( ; layerItr != layerEnd; ++layerItr )
+    {
+        Luna::Layer* layer = layerItr->second;
+        layer->RemoveNameChangingListener( SceneNodeChangeSignature::Delegate ( this, &LayerGrid::NameChanging ) );
+        layer->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate ( this, &LayerGrid::NameChanged ) );
+    }
 
-  m_Layers.clear();
-  m_Grid->RemoveAllRows();
+    m_Layers.clear();
+    m_Grid->RemoveAllRows();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -299,12 +286,12 @@ void LayerGrid::RemoveAllLayers()
 // 
 void LayerGrid::UpdateToolBarButtons()
 {
-  // Enable/disable everything in the toolbar based on whether or not we have
-  // a valid scene.
-  for ( i32 toolId = ID_NewLayer; toolId < ID_COUNT; ++toolId )
-  {
-    m_ToolBar->EnableTool( toolId, m_Scene != NULL );
-  }
+    // Enable/disable everything in the toolbar based on whether or not we have
+    // a valid scene.
+    for ( i32 toolId = ID_NewLayer; toolId < ID_COUNT; ++toolId )
+    {
+        m_ToolBar->EnableTool( toolId, m_Scene != NULL );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -324,93 +311,93 @@ void LayerGrid::UpdateToolBarButtons()
 // 
 void LayerGrid::LayerSelectedItems( bool addToLayer )
 {
-  NOC_ASSERT( m_Scene );
+    NOC_ASSERT( m_Scene );
 
-  // Decide whether we are adding the selected scene items to the highlighted
-  // layers, or removing the items from the layers.
-  const DependencyCommand::DependencyAction action = addToLayer ? DependencyCommand::Connect : DependencyCommand::Disconnect;
+    // Decide whether we are adding the selected scene items to the highlighted
+    // layers, or removing the items from the layers.
+    const DependencyCommand::DependencyAction action = addToLayer ? DependencyCommand::Connect : DependencyCommand::Disconnect;
 
-  // If there are selected nodes in the scene, and selected rows in this control...
-  const OS_SelectableDumbPtr& selectedNodes = m_Scene->GetSelection().GetItems();
-  std::set< u32 > selectedRows = m_Grid->GetSelectedRows();
-  if ( selectedNodes.Size() > 0 && selectedRows.size() > 0 )
-  {
-    //Log::Debug( "LayerSelectedItems\n" );
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
-
-    OS_SelectableDumbPtr::Iterator nodeItr = selectedNodes.Begin();
-    OS_SelectableDumbPtr::Iterator nodeEnd = selectedNodes.End();
-    std::set< u32 >::const_iterator rowItr;
-    const std::set< u32 >::const_iterator rowEnd = selectedRows.end();
-    const M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
-
-    // For each node in the scene's selection list...
-    for ( ; nodeItr != nodeEnd; ++nodeItr )
+    // If there are selected nodes in the scene, and selected rows in this control...
+    const OS_SelectableDumbPtr& selectedNodes = m_Scene->GetSelection().GetItems();
+    std::set< u32 > selectedRows = m_Grid->GetSelectedRows();
+    if ( selectedNodes.Size() > 0 && selectedRows.size() > 0 )
     {
-      // ensure that we are not trying to add one layer to another layer
-      {
-        Layer* layerTest = Reflect::ObjectCast< Layer >( *nodeItr );
-        if( layerTest )
+        //Log::Debug( "LayerSelectedItems\n" );
+        Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+
+        OS_SelectableDumbPtr::Iterator nodeItr = selectedNodes.Begin();
+        OS_SelectableDumbPtr::Iterator nodeEnd = selectedNodes.End();
+        std::set< u32 >::const_iterator rowItr;
+        const std::set< u32 >::const_iterator rowEnd = selectedRows.end();
+        const M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
+
+        // For each node in the scene's selection list...
+        for ( ; nodeItr != nodeEnd; ++nodeItr )
         {
-          continue;
+            // ensure that we are not trying to add one layer to another layer
+            {
+                Layer* layerTest = Reflect::ObjectCast< Layer >( *nodeItr );
+                if( layerTest )
+                {
+                    continue;
+                }
+            }
+
+            //Check the current selection
+            if(IsSelectableValid(*nodeItr) == false)
+            {
+                //Invalid or incompatible
+                continue;
+            }
+
+            Luna::SceneNode* node = Reflect::ObjectCast< Luna::SceneNode >( *nodeItr );
+            if ( node )
+            {
+                // For each row that is highlighted...
+                for ( rowItr = selectedRows.begin(); rowItr != rowEnd; ++rowItr )
+                {
+                    // Find the layer that goes with the highlighted row
+                    M_LayerDumbPtr::iterator layerItr = m_Layers.find( m_Grid->GetRowName( *rowItr ) );
+                    if ( layerItr != layerEnd )
+                    {
+                        // Check to see if the node is already in the current layer...
+                        Luna::Layer* layer = layerItr->second;
+                        S_SceneNodeSmartPtr::const_iterator foundDescendant = layer->GetDescendants().find( node );
+
+                        // If the node is already in this layer, and we are suppose to be adding the node to the layer,
+                        // just skip the command (doCommand = false).  If the node is not in this layer, and we are
+                        // suppose to be removing the node from the layer, skip the command as well.  Otherwise, go 
+                        // ahead and carry out the command (doCommand = true).
+                        const bool doCommand = addToLayer ? ( foundDescendant == layer->GetDescendants().end() ) : ( foundDescendant != layer->GetDescendants().end() );
+                        if ( doCommand )
+                        {
+                            // Finally make an undoable command to add/remove the node to/from the layer
+                            batch->Push( new DependencyCommand( action, layer, node ) );
+                            //Log::Debug( "\t\t%s node %s %s layer %s [row=%d]\n", addToLayer ? "Added" : "Removed", node->GetName().c_str(), addToLayer ? "to" : "from", layer->GetName().c_str(), *rowItr );
+                        }
+                        else
+                        {
+                            //Log::Debug( "\t\tNode %s was already a member of layer %s [row=%d]\n", node->GetName().c_str(), layer->GetName().c_str(), *rowItr );
+                        }
+                    }
+                    else
+                    {
+                        // Something is wrong.  The rows that are selected in the grid do not correspond to
+                        // items in our list of layers (m_Layers).  Somehow those lists got out of sync.
+                        Log::Error( TXT( "Unable to add selection to layer [row=%d] because it doesn't exist\n" ), *rowItr );
+                        NOC_BREAK();
+                    }
+                }
+            }
         }
-      }
 
-      //Check the current selection
-      if(IsSelectableValid(*nodeItr) == false)
-      {
-        //Invalid or incompatible
-        continue;
-      }
-
-      Luna::SceneNode* node = Reflect::ObjectCast< Luna::SceneNode >( *nodeItr );
-      if ( node )
-      {
-        // For each row that is highlighted...
-        for ( rowItr = selectedRows.begin(); rowItr != rowEnd; ++rowItr )
+        //Log::Debug( "\n" );
+        if( !batch->IsEmpty() )
         {
-          // Find the layer that goes with the highlighted row
-          M_LayerDumbPtr::iterator layerItr = m_Layers.find( m_Grid->GetRowName( *rowItr ) );
-          if ( layerItr != layerEnd )
-          {
-            // Check to see if the node is already in the current layer...
-            Luna::Layer* layer = layerItr->second;
-            S_SceneNodeSmartPtr::const_iterator foundDescendant = layer->GetDescendants().find( node );
-
-            // If the node is already in this layer, and we are suppose to be adding the node to the layer,
-            // just skip the command (doCommand = false).  If the node is not in this layer, and we are
-            // suppose to be removing the node from the layer, skip the command as well.  Otherwise, go 
-            // ahead and carry out the command (doCommand = true).
-            const bool doCommand = addToLayer ? ( foundDescendant == layer->GetDescendants().end() ) : ( foundDescendant != layer->GetDescendants().end() );
-            if ( doCommand )
-            {
-              // Finally make an undoable command to add/remove the node to/from the layer
-              batch->Push( new DependencyCommand( action, layer, node ) );
-              //Log::Debug( "\t\t%s node %s %s layer %s [row=%d]\n", addToLayer ? "Added" : "Removed", node->GetName().c_str(), addToLayer ? "to" : "from", layer->GetName().c_str(), *rowItr );
-            }
-            else
-            {
-              //Log::Debug( "\t\tNode %s was already a member of layer %s [row=%d]\n", node->GetName().c_str(), layer->GetName().c_str(), *rowItr );
-            }
-          }
-          else
-          {
-            // Something is wrong.  The rows that are selected in the grid do not correspond to
-            // items in our list of layers (m_Layers).  Somehow those lists got out of sync.
-            Log::Error( TXT( "Unable to add selection to layer [row=%d] because it doesn't exist\n" ), *rowItr );
-            NOC_BREAK();
-          }
+            m_Scene->Push( batch );
+            m_Scene->Execute( false );
         }
-      }
     }
-
-    //Log::Debug( "\n" );
-    if( !batch->IsEmpty() )
-    {
-      m_Scene->Push( batch );
-      m_Scene->Execute( false );
-    }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -420,25 +407,25 @@ void LayerGrid::LayerSelectedItems( bool addToLayer )
 void LayerGrid::DebugDumpSelection()
 {
 #ifdef _DEBUG
-  Log::Debug( TXT( "Dumping grid selection.\n" ) );
-  std::set< u32 > selection = m_Grid->GetSelectedRows();
-  const size_t numSelected = selection.size();
-  if ( numSelected == 0 )
-  {
-    Log::Debug( TXT( "\tNo items are selected.\n" ) );
-  }
-  else
-  {
-    Log::Debug( TXT( "\t%d item%s selected.\n" ), numSelected, ( numSelected == 1 ) ? TXT( "" ) : TXT( "s" ) );
-    std::set< u32 >::const_iterator rowItr = selection.begin();
-    std::set< u32 >::const_iterator rowEnd = selection.end();
-    for ( ; rowItr != rowEnd; ++rowItr )
+    Log::Debug( TXT( "Dumping grid selection.\n" ) );
+    std::set< u32 > selection = m_Grid->GetSelectedRows();
+    const size_t numSelected = selection.size();
+    if ( numSelected == 0 )
     {
-      const tstring& name = m_Grid->GetRowName( *rowItr );
-      Log::Debug( TXT( "\t\t%s\n" ), name.c_str() );
+        Log::Debug( TXT( "\tNo items are selected.\n" ) );
     }
-  }
-  Log::Debug( TXT( "\n" ) );
+    else
+    {
+        Log::Debug( TXT( "\t%d item%s selected.\n" ), numSelected, ( numSelected == 1 ) ? TXT( "" ) : TXT( "s" ) );
+        std::set< u32 >::const_iterator rowItr = selection.begin();
+        std::set< u32 >::const_iterator rowEnd = selection.end();
+        for ( ; rowItr != rowEnd; ++rowItr )
+        {
+            const tstring& name = m_Grid->GetRowName( *rowItr );
+            Log::Debug( TXT( "\t\t%s\n" ), name.c_str() );
+        }
+    }
+    Log::Debug( TXT( "\n" ) );
 #endif
 }
 
@@ -449,21 +436,12 @@ void LayerGrid::DebugDumpSelection()
 // 
 void LayerGrid::OnNewLayer( wxCommandEvent& event )
 {
-  if ( m_Scene )
-  {
-    Content::LayerType    currentType = m_SceneManager->GetEditor()->GetCurrentLayerGridType();
-    Content::Layer*       cLayer      = new Content::Layer();
-
-    //Setup the layer type
-    cLayer->m_Type                    = m_LayerType;
-
-
-    // Step 1: add a layer to the scene
-    Luna::Layer*          lLayer      = new Luna::Layer( m_Scene, cLayer);
-
-    m_Scene->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, lLayer ) );
-    m_Scene->Execute( false ); 
-  }
+    if ( m_Scene )
+    {
+        Luna::Layer* layer = new Luna::Layer( m_Scene, new Content::Layer() );
+        m_Scene->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, layer ) );
+        m_Scene->Execute( false ); 
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -471,48 +449,41 @@ void LayerGrid::OnNewLayer( wxCommandEvent& event )
 // 
 void LayerGrid::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
 {
-  if ( m_Scene )
-  {    
-    if(IsSelectionValid() == false)
-    {
-      return;
-    }
-   
-    Undo::BatchCommandPtr batch       = new Undo::BatchCommand ();
-    Content::LayerType    currentType = m_SceneManager->GetEditor()->GetCurrentLayerGridType();
-    Content::Layer*       cLayer      = new Content::Layer();
-
-    //Setup the layer type
-    cLayer->m_Type                    = m_LayerType;
-
-    // Step 1: add a layer to the scene
-    Luna::Layer*          lLayer      = new Luna::Layer( m_Scene, cLayer);
-
-    // Generate a name for this layer
-    GenerateLayerName(lLayer);
-
-    batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, lLayer ) );
-
-    // Step 2: add all the selected items to the layer
-    const OS_SelectableDumbPtr& selection = m_Scene->GetSelection().GetItems();
-    OS_SelectableDumbPtr::Iterator itr = selection.Begin();
-    OS_SelectableDumbPtr::Iterator end = selection.End();
-    for ( ; itr != end; ++itr )
-    {
-      //If the element is a supported type
-      if(IsSelectableValid(*itr))
-      {
-        Luna::SceneNode* node = Reflect::ObjectCast< Luna::SceneNode >( *itr );
-        if ( node )
+    if ( m_Scene )
+    {    
+        if(IsSelectionValid() == false)
         {
-          batch->Push( new DependencyCommand( DependencyCommand::Connect, lLayer, node ) );
+            return;
         }
-      }
-    }
 
-    m_Scene->Push( batch );
-    m_Scene->Execute( false );
-  }
+        Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+        Luna::Layer* layer = new Luna::Layer( m_Scene, new Content::Layer() );
+
+        // Generate a name for this layer
+        GenerateLayerName(layer);
+
+        batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, layer ) );
+
+        // Step 2: add all the selected items to the layer
+        const OS_SelectableDumbPtr& selection = m_Scene->GetSelection().GetItems();
+        OS_SelectableDumbPtr::Iterator itr = selection.Begin();
+        OS_SelectableDumbPtr::Iterator end = selection.End();
+        for ( ; itr != end; ++itr )
+        {
+            //If the element is a supported type
+            if(IsSelectableValid(*itr))
+            {
+                Luna::SceneNode* node = Reflect::ObjectCast< Luna::SceneNode >( *itr );
+                if ( node )
+                {
+                    batch->Push( new DependencyCommand( DependencyCommand::Connect, layer, node ) );
+                }
+            }
+        }
+
+        m_Scene->Push( batch );
+        m_Scene->Execute( false );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -523,67 +494,67 @@ void LayerGrid::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
 // 
 void LayerGrid::OnDeleteLayer( wxCommandEvent& event_ )
 {
-  DeleteSelectedLayers();
+    DeleteSelectedLayers();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 void LayerGrid::DeleteSelectedLayers()
 {
-  // If anything selected in the grid
-  if ( m_Scene && m_Grid->IsAnythingSelected() )
-  {
-    LayerSelectedItems( false );
-
-    // Begin undo batch
-    Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
-
-    // Get an ordered list of the selected rows, and traverse the list in reverse order.
-    // This makes sure that removing an item doesn't change the row number of another
-    // item that will be removed later in the loop.  If we don't do this, we run the
-    // risk of invalidating the selection array as we iterate over it.
-    const std::set< u32 >& selection = m_Grid->GetSelectedRows();
-    std::set< u32 >::const_reverse_iterator rowItr = selection.rbegin();
-    std::set< u32 >::const_reverse_iterator rowEnd = selection.rend();
-    for ( ; rowItr != rowEnd; ++rowItr )
+    // If anything selected in the grid
+    if ( m_Scene && m_Grid->IsAnythingSelected() )
     {
-      M_LayerDumbPtr::iterator layerItr = m_Layers.find( m_Grid->GetRowName( *rowItr ) );
-      NOC_ASSERT( layerItr != m_Layers.end() );
-      // NOTE: m_Layers is changing as we iterate over the selection (items are being 
-      // removed via callbacks), so don't hold on to any iterators that point into the list.  
-      // Recalculate m_Layers.end() each time through the loop.
-      if ( layerItr != m_Layers.end() )
-      {
-        Luna::Layer* layer = layerItr->second;
+        LayerSelectedItems( false );
 
-        // If the layer that we are about to delete is in the scene's selection list,
-        // we had better just clear out the selection list (otherwise the attribute
-        // editor will still be showing a layer that is no longer in the scene).  This
-        // has to be done before actually deleting the layer.
-        if ( m_Scene->GetSelection().Contains( layer ) )
+        // Begin undo batch
+        Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+
+        // Get an ordered list of the selected rows, and traverse the list in reverse order.
+        // This makes sure that removing an item doesn't change the row number of another
+        // item that will be removed later in the loop.  If we don't do this, we run the
+        // risk of invalidating the selection array as we iterate over it.
+        const std::set< u32 >& selection = m_Grid->GetSelectedRows();
+        std::set< u32 >::const_reverse_iterator rowItr = selection.rbegin();
+        std::set< u32 >::const_reverse_iterator rowEnd = selection.rend();
+        for ( ; rowItr != rowEnd; ++rowItr )
         {
-          batch->Push( m_Scene->GetSelection().Clear() );
-        }
-        
-        // If the layer has any members, we should remove them before removing the layer,
-        // otherwise if those members are deleted, they will be pointing to an invalid
-        // layer that will eventually be Disconnected.
-        Luna::S_SceneNodeSmartPtr descendents = layer->GetDescendants();
-        for ( Luna::S_SceneNodeSmartPtr::iterator itr = descendents.begin(), end = descendents.end(); itr != end; ++itr )
-        {
-          batch->Push( new DependencyCommand( DependencyCommand::Disconnect, layer, *itr ) );
+            M_LayerDumbPtr::iterator layerItr = m_Layers.find( m_Grid->GetRowName( *rowItr ) );
+            NOC_ASSERT( layerItr != m_Layers.end() );
+            // NOTE: m_Layers is changing as we iterate over the selection (items are being 
+            // removed via callbacks), so don't hold on to any iterators that point into the list.  
+            // Recalculate m_Layers.end() each time through the loop.
+            if ( layerItr != m_Layers.end() )
+            {
+                Luna::Layer* layer = layerItr->second;
+
+                // If the layer that we are about to delete is in the scene's selection list,
+                // we had better just clear out the selection list (otherwise the attribute
+                // editor will still be showing a layer that is no longer in the scene).  This
+                // has to be done before actually deleting the layer.
+                if ( m_Scene->GetSelection().Contains( layer ) )
+                {
+                    batch->Push( m_Scene->GetSelection().Clear() );
+                }
+
+                // If the layer has any members, we should remove them before removing the layer,
+                // otherwise if those members are deleted, they will be pointing to an invalid
+                // layer that will eventually be Disconnected.
+                Luna::S_SceneNodeSmartPtr descendents = layer->GetDescendants();
+                for ( Luna::S_SceneNodeSmartPtr::iterator itr = descendents.begin(), end = descendents.end(); itr != end; ++itr )
+                {
+                    batch->Push( new DependencyCommand( DependencyCommand::Disconnect, layer, *itr ) );
+                }
+
+                // Push the command to delete the layer
+                batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, m_Scene, layer ) );
+            }
         }
 
-        // Push the command to delete the layer
-        batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Remove, m_Scene, layer ) );
-      }
+        // End undo batch
+        m_Scene->Push( batch );
+
+        m_Scene->Execute( false );
     }
-
-    // End undo batch
-    m_Scene->Push( batch );
-
-    m_Scene->Execute( false );
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -594,10 +565,10 @@ void LayerGrid::DeleteSelectedLayers()
 // 
 void LayerGrid::OnAddSelectionToLayer( wxCommandEvent& event )
 {
-  if ( m_Scene )
-  {
-    LayerSelectedItems( true );
-  }
+    if ( m_Scene )
+    {
+        LayerSelectedItems( true );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -608,10 +579,10 @@ void LayerGrid::OnAddSelectionToLayer( wxCommandEvent& event )
 // 
 void LayerGrid::OnRemoveSelectionFromLayer( wxCommandEvent& event )
 {
-  if ( m_Scene )
-  {
-    LayerSelectedItems( false );
-  }
+    if ( m_Scene )
+    {
+        LayerSelectedItems( false );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -619,28 +590,28 @@ void LayerGrid::OnRemoveSelectionFromLayer( wxCommandEvent& event )
 // 
 void LayerGrid::OnSelectLayerMembers( wxCommandEvent& event )
 {
-  if ( m_Scene )
-  {
-    OS_SelectableDumbPtr newSelection;
-    M_LayerDumbPtr::const_iterator layerItr = m_Layers.begin();
-    M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
-    for ( ; layerItr != layerEnd; ++layerItr )
+    if ( m_Scene )
     {
-      Luna::Layer* layer = layerItr->second;
-      if ( m_Grid->IsSelected( layer->GetName() ) )
-      {
-        S_SceneNodeSmartPtr::const_iterator dependItr = layer->GetDescendants().begin();
-        S_SceneNodeSmartPtr::const_iterator dependEnd = layer->GetDescendants().end();
-        for ( ; dependItr != dependEnd; ++dependItr )
+        OS_SelectableDumbPtr newSelection;
+        M_LayerDumbPtr::const_iterator layerItr = m_Layers.begin();
+        M_LayerDumbPtr::const_iterator layerEnd = m_Layers.end();
+        for ( ; layerItr != layerEnd; ++layerItr )
         {
-          newSelection.Append( *dependItr );
+            Luna::Layer* layer = layerItr->second;
+            if ( m_Grid->IsSelected( layer->GetName() ) )
+            {
+                S_SceneNodeSmartPtr::const_iterator dependItr = layer->GetDescendants().begin();
+                S_SceneNodeSmartPtr::const_iterator dependEnd = layer->GetDescendants().end();
+                for ( ; dependItr != dependEnd; ++dependItr )
+                {
+                    newSelection.Append( *dependItr );
+                }
+            }
         }
-      }
-    }
 
-    m_Scene->Push( m_Scene->GetSelection().SetItems( newSelection ) );
-    m_Scene->Execute( false );
-  }
+        m_Scene->Push( m_Scene->GetSelection().SetItems( newSelection ) );
+        m_Scene->Execute( false );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -651,24 +622,24 @@ void LayerGrid::OnSelectLayerMembers( wxCommandEvent& event )
 // 
 void LayerGrid::OnSelectLayer( wxCommandEvent& event )
 {
-  if ( m_Scene )
-  {
-    OS_SelectableDumbPtr newSelection;
-
-    const std::set< u32 >& selection = m_Grid->GetSelectedRows();
-    std::set< u32 >::const_iterator rowItr = selection.begin();
-    std::set< u32 >::const_iterator rowEnd = selection.end();
-    for ( ; rowItr != rowEnd; ++rowItr )
+    if ( m_Scene )
     {
-      M_LayerDumbPtr::iterator layerItr = m_Layers.find( m_Grid->GetRowName( *rowItr ) );
-      NOC_ASSERT( layerItr != m_Layers.end() );
-      Luna::Layer* layer = layerItr->second;
-      newSelection.Append( layer );
-    }
+        OS_SelectableDumbPtr newSelection;
 
-    m_Scene->Push( m_Scene->GetSelection().SetItems( newSelection ) );
-    m_Scene->Execute( false );
-  }
+        const std::set< u32 >& selection = m_Grid->GetSelectedRows();
+        std::set< u32 >::const_iterator rowItr = selection.begin();
+        std::set< u32 >::const_iterator rowEnd = selection.end();
+        for ( ; rowItr != rowEnd; ++rowItr )
+        {
+            M_LayerDumbPtr::iterator layerItr = m_Layers.find( m_Grid->GetRowName( *rowItr ) );
+            NOC_ASSERT( layerItr != m_Layers.end() );
+            Luna::Layer* layer = layerItr->second;
+            newSelection.Append( layer );
+        }
+
+        m_Scene->Push( m_Scene->GetSelection().SetItems( newSelection ) );
+        m_Scene->Execute( false );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -681,41 +652,38 @@ void LayerGrid::OnSelectLayer( wxCommandEvent& event )
 // 
 void LayerGrid::SelectionChanged( const OS_SelectableDumbPtr& selection )
 {
-  if ( selection.Size() > 0 )
-  {
-    u32 numLayersInSelection = 0;
-    OS_SelectableDumbPtr::Iterator itr = selection.Begin();
-    OS_SelectableDumbPtr::Iterator end = selection.End();
-    for ( ; itr != end; ++itr )
+    if ( selection.Size() > 0 )
     {
-      Luna::Layer* lunaLayer = Reflect::ObjectCast< Luna::Layer >( *itr );
-      if ( lunaLayer )
-      {
-        Content::Layer* contentLayer = lunaLayer->GetPackage<Content::Layer>();
-        if(contentLayer->m_Type == m_LayerType)
-        {  
-          NOC_ASSERT( m_Layers.find( lunaLayer->GetName() ) != m_Layers.end() );
+        u32 numLayersInSelection = 0;
+        OS_SelectableDumbPtr::Iterator itr = selection.Begin();
+        OS_SelectableDumbPtr::Iterator end = selection.End();
+        for ( ; itr != end; ++itr )
+        {
+            Luna::Layer* lunaLayer = Reflect::ObjectCast< Luna::Layer >( *itr );
+            if ( lunaLayer )
+            {
+                Content::Layer* contentLayer = lunaLayer->GetPackage<Content::Layer>();
+                NOC_ASSERT( m_Layers.find( lunaLayer->GetName() ) != m_Layers.end() );
 
-          ++numLayersInSelection;
-          // If this is the first layer that we found in the selection list...
-          if ( numLayersInSelection == 1 )
-          {
-            // Clear the grid's selection as soon as we find a layer contained
-            // in the selection list.  The grid's selection will be rebuilt as
-            // we continue to iterate over the selection list.
-            m_Grid->DeselectAllRows();
-          }
+                ++numLayersInSelection;
+                // If this is the first layer that we found in the selection list...
+                if ( numLayersInSelection == 1 )
+                {
+                    // Clear the grid's selection as soon as we find a layer contained
+                    // in the selection list.  The grid's selection will be rebuilt as
+                    // we continue to iterate over the selection list.
+                    m_Grid->DeselectAllRows();
+                }
 
-          i32 row = m_Grid->GetRowNumber( lunaLayer->GetName() );
-          NOC_ASSERT( row >= 0 );
-          if ( row >= 0 )
-          {
-            m_Grid->SelectRow( row, true );
-          }
+                i32 row = m_Grid->GetRowNumber( lunaLayer->GetName() );
+                NOC_ASSERT( row >= 0 );
+                if ( row >= 0 )
+                {
+                    m_Grid->SelectRow( row, true );
+                }
+            }
         }
-      }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -724,24 +692,24 @@ void LayerGrid::SelectionChanged( const OS_SelectableDumbPtr& selection )
 // 
 void LayerGrid::NameChanging( const SceneNodeChangeArgs& args )
 {
-  M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( args.m_Node->GetName() );
-  if ( layerItr != m_Layers.end() )
-  {
-    Luna::Layer* layer = layerItr->second;
-    const tstring& name = layerItr->first;
-    if ( args.m_Node != layer || layer->GetName() != name )
+    M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( args.m_Node->GetName() );
+    if ( layerItr != m_Layers.end() )
     {
-      Log::Error( TXT( "Layer in list (named %s), does not match layer named %s.\n" ), name.c_str(), args.m_Node->GetName().c_str() );
-      NOC_BREAK();
+        Luna::Layer* layer = layerItr->second;
+        const tstring& name = layerItr->first;
+        if ( args.m_Node != layer || layer->GetName() != name )
+        {
+            Log::Error( TXT( "Layer in list (named %s), does not match layer named %s.\n" ), name.c_str(), args.m_Node->GetName().c_str() );
+            NOC_BREAK();
+        }
+        m_NameChangeInfo.m_Layer = layer;
+        m_NameChangeInfo.m_OldName = name;
     }
-    m_NameChangeInfo.m_Layer = layer;
-    m_NameChangeInfo.m_OldName = name;
-  }
-  else
-  {
-    Log::Error( TXT( "Layer named %s is not in the grid.\n" ), args.m_Node->GetName().c_str() );
-    NOC_BREAK();
-  }
+    else
+    {
+        Log::Error( TXT( "Layer named %s is not in the grid.\n" ), args.m_Node->GetName().c_str() );
+        NOC_BREAK();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -751,25 +719,25 @@ void LayerGrid::NameChanging( const SceneNodeChangeArgs& args )
 // 
 void LayerGrid::NameChanged( const SceneNodeChangeArgs& args )
 {
-  const tstring& oldName = m_NameChangeInfo.m_OldName;
-  M_LayerDumbPtr::iterator layerItr = m_Layers.find( oldName );
-  if ( layerItr != m_Layers.end() )
-  {
-    Luna::Layer* layer = layerItr->second;
-    const tstring& newName = args.m_Node->GetName();
-    m_Layers.erase( layerItr );
-    m_Layers.insert( M_LayerDumbPtr::value_type( newName, layer ) );
+    const tstring& oldName = m_NameChangeInfo.m_OldName;
+    M_LayerDumbPtr::iterator layerItr = m_Layers.find( oldName );
+    if ( layerItr != m_Layers.end() )
+    {
+        Luna::Layer* layer = layerItr->second;
+        const tstring& newName = args.m_Node->GetName();
+        m_Layers.erase( layerItr );
+        m_Layers.insert( M_LayerDumbPtr::value_type( newName, layer ) );
 
-    bool nameUpdated = m_Grid->SetRowName( oldName, newName );
-    NOC_ASSERT( nameUpdated );
-  }
-  else
-  {
-    Log::Error( TXT( "Layer named %s is not in the grid.\n" ), m_NameChangeInfo.m_OldName.c_str() );
-    NOC_BREAK();
-  }
+        bool nameUpdated = m_Grid->SetRowName( oldName, newName );
+        NOC_ASSERT( nameUpdated );
+    }
+    else
+    {
+        Log::Error( TXT( "Layer named %s is not in the grid.\n" ), m_NameChangeInfo.m_OldName.c_str() );
+        NOC_BREAK();
+    }
 
-  m_NameChangeInfo.Clear();
+    m_NameChangeInfo.Clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -778,19 +746,19 @@ void LayerGrid::NameChanged( const SceneNodeChangeArgs& args )
 // 
 void LayerGrid::LayerVisibleChanged( const GridRowChangeArgs& args )
 {
-  const tstring& name = m_Grid->GetRowName( args.m_RowNumber );
-  M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( name );
-  if ( layerItr != m_Layers.end() )
-  {
-    Luna::Layer* layer = layerItr->second;
-    layer->SetVisible( m_Grid->IsRowVisibleChecked( args.m_RowNumber ) );
-    layer->GetScene()->Execute( false );
-  }
-  else
-  {
-    Log::Error( TXT( "LayerVisibleChanged - layer named %s not found\n" ), name.c_str() );
-    NOC_BREAK();
-  }
+    const tstring& name = m_Grid->GetRowName( args.m_RowNumber );
+    M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( name );
+    if ( layerItr != m_Layers.end() )
+    {
+        Luna::Layer* layer = layerItr->second;
+        layer->SetVisible( m_Grid->IsRowVisibleChecked( args.m_RowNumber ) );
+        layer->GetScene()->Execute( false );
+    }
+    else
+    {
+        Log::Error( TXT( "LayerVisibleChanged - layer named %s not found\n" ), name.c_str() );
+        NOC_BREAK();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -800,45 +768,45 @@ void LayerGrid::LayerVisibleChanged( const GridRowChangeArgs& args )
 // 
 void LayerGrid::LayerSelectableChanged( const GridRowChangeArgs& args )
 {
-  const tstring& name = m_Grid->GetRowName( args.m_RowNumber );
-  M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( name );
-  if ( layerItr != m_Layers.end() )
-  {
-    Luna::Layer* layer = layerItr->second;
-    bool selectable = m_Grid->IsRowSelectableChecked( args.m_RowNumber );
-
-    layer->SetSelectable( selectable );
-
-    if (!selectable)
+    const tstring& name = m_Grid->GetRowName( args.m_RowNumber );
+    M_LayerDumbPtr::const_iterator layerItr = m_Layers.find( name );
+    if ( layerItr != m_Layers.end() )
     {
-      OS_SelectableDumbPtr newSelection;
+        Luna::Layer* layer = layerItr->second;
+        bool selectable = m_Grid->IsRowSelectableChecked( args.m_RowNumber );
 
-      OS_SelectableDumbPtr selection = layer->GetScene()->GetSelection().GetItems();
-      OS_SelectableDumbPtr::Iterator itr = selection.Begin();
-      OS_SelectableDumbPtr::Iterator end = selection.End();
-      for ( ; itr != end; ++itr )
-      {
-        Luna::SceneNode* node = Reflect::ObjectCast<Luna::SceneNode>( *itr );
+        layer->SetSelectable( selectable );
 
-        if (!node || !layer->ContainsMember( node ))
+        if (!selectable)
         {
-          newSelection.Append(*itr);
+            OS_SelectableDumbPtr newSelection;
+
+            OS_SelectableDumbPtr selection = layer->GetScene()->GetSelection().GetItems();
+            OS_SelectableDumbPtr::Iterator itr = selection.Begin();
+            OS_SelectableDumbPtr::Iterator end = selection.End();
+            for ( ; itr != end; ++itr )
+            {
+                Luna::SceneNode* node = Reflect::ObjectCast<Luna::SceneNode>( *itr );
+
+                if (!node || !layer->ContainsMember( node ))
+                {
+                    newSelection.Append(*itr);
+                }
+            }
+
+            if (newSelection.Size() != selection.Size())
+            {
+                layer->GetScene()->GetSelection().SetItems( newSelection );
+            }
         }
-      }
 
-      if (newSelection.Size() != selection.Size())
-      {
-        layer->GetScene()->GetSelection().SetItems( newSelection );
-      }
+        layer->GetScene()->Execute( false );
     }
-
-    layer->GetScene()->Execute( false );
-  }
-  else
-  {
-    Log::Error( TXT( "LayerSelectableChanged - layer named %s not found\n" ), name.c_str() );
-    NOC_BREAK();
-  }
+    else
+    {
+        Log::Error( TXT( "LayerSelectableChanged - layer named %s not found\n" ), name.c_str() );
+        NOC_BREAK();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -847,12 +815,12 @@ void LayerGrid::LayerSelectableChanged( const GridRowChangeArgs& args )
 // 
 void LayerGrid::RowRenamed( const GridRowRenamedArgs& args )
 {
-  M_LayerDumbPtr::iterator found = m_Layers.find( args.m_OldName );
-  if ( found != m_Layers.end() )
-  {
-    Luna::Layer* layer = found->second;
-    layer->GetScene()->Push( new Undo::PropertyCommand< tstring >( new Nocturnal::MemberProperty< Luna::Layer, tstring >( layer, &Luna::Layer::GetName, &Luna::Layer::SetGivenName ), args.m_NewName ) );
-  }
+    M_LayerDumbPtr::iterator found = m_Layers.find( args.m_OldName );
+    if ( found != m_Layers.end() )
+    {
+        Luna::Layer* layer = found->second;
+        layer->GetScene()->Push( new Undo::PropertyCommand< tstring >( new Nocturnal::MemberProperty< Luna::Layer, tstring >( layer, &Luna::Layer::GetName, &Luna::Layer::SetGivenName ), args.m_NewName ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -861,12 +829,12 @@ void LayerGrid::RowRenamed( const GridRowRenamedArgs& args )
 // 
 void LayerGrid::CurrentSceneChanging( const SceneChangeArgs& args )
 {
-  if ( args.m_Scene == m_Scene )
-  {
-    DisconnectSceneListeners();
-    RemoveAllLayers();
-    m_Scene = NULL;
-  }
+    if ( args.m_Scene == m_Scene )
+    {
+        DisconnectSceneListeners();
+        RemoveAllLayers();
+        m_Scene = NULL;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -878,12 +846,12 @@ void LayerGrid::CurrentSceneChanging( const SceneChangeArgs& args )
 // 
 void LayerGrid::CurrentSceneChanged( const SceneChangeArgs& args )
 {
-  if ( args.m_Scene != m_Scene )
-  {
-    m_Scene = args.m_Scene;
-    UpdateToolBarButtons();
-    ConnectSceneListeners();
-  }
+    if ( args.m_Scene != m_Scene )
+    {
+        m_Scene = args.m_Scene;
+        UpdateToolBarButtons();
+        ConnectSceneListeners();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -892,10 +860,10 @@ void LayerGrid::CurrentSceneChanged( const SceneChangeArgs& args )
 // 
 void LayerGrid::NodeAdded( const NodeChangeArgs& args )
 {
-  if ( args.m_Node->HasType( Reflect::GetType<Luna::Layer>() ) )
-  {
-    AddLayer( Reflect::DangerousCast< Luna::Layer >( args.m_Node ) );
-  }
+    if ( args.m_Node->HasType( Reflect::GetType<Luna::Layer>() ) )
+    {
+        AddLayer( Reflect::DangerousCast< Luna::Layer >( args.m_Node ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -904,8 +872,8 @@ void LayerGrid::NodeAdded( const NodeChangeArgs& args )
 // 
 void LayerGrid::SceneNodeRemoved( const NodeChangeArgs& args )
 {
-  if ( args.m_Node->HasType( Reflect::GetType<Luna::Layer>() ) )
-  {
-    RemoveLayer( Reflect::DangerousCast< Luna::Layer >( args.m_Node ) );
-  }
+    if ( args.m_Node->HasType( Reflect::GetType<Luna::Layer>() ) )
+    {
+        RemoveLayer( Reflect::DangerousCast< Luna::Layer >( args.m_Node ) );
+    }
 }

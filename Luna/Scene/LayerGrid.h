@@ -5,7 +5,6 @@
 
 #include "Foundation/Automation/Event.h"
 #include "Foundation/Container/OrderedSet.h"
-#include "Pipeline/Content/Nodes/LayerTypes.h"
 
 namespace Luna
 {
@@ -77,10 +76,9 @@ namespace Luna
     wxToolBar*          m_ToolBar;
     M_LayerDumbPtr      m_Layers;
     NameChangeInfo      m_NameChangeInfo;
-    u32                 m_LayerType;
 
   public:
-   LayerGrid( wxWindow* parent, Luna::SceneManager* sceneManager, u32 lType);
+   LayerGrid( wxWindow* parent, Luna::SceneManager* sceneManager );
     virtual ~LayerGrid();
     wxPanel* GetPanel() const;
     wxToolBar*  GetToolBar()  const;

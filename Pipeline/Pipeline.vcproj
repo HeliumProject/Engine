@@ -842,10 +842,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Content\Nodes\LayerTypes.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Content\Nodes\Light.cpp"
 					>
 				</File>

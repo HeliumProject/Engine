@@ -2,7 +2,7 @@
 
 #include "AssetFlags.h"
 
-#include "Pipeline/Component/ComponentCollection.h"
+#include "Foundation/Component/ComponentCollection.h"
 
 #include "Foundation/Reflect/ArchiveXML.h"
 

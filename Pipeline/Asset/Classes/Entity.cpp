@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetExceptions.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Element.h"

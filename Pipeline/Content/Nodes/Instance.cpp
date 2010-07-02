@@ -1,7 +1,7 @@
 #include "Pipeline/Content/Nodes/Instance.h"
 #include "Pipeline/Content/Scene.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Log.h"
 
 using namespace Content;

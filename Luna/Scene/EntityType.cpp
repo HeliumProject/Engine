@@ -12,7 +12,7 @@
 #include "PrimitiveCapsule.h"
 #include "PrimitiveCylinder.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 
 using namespace Luna;

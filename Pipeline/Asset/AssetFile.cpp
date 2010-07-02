@@ -2,7 +2,7 @@
 
 #include "Pipeline/Asset/AssetClass.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 

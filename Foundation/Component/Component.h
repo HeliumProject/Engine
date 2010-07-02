@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Pipeline/API.h" 
+#include "Foundation/API.h" 
 #include "Foundation/Automation/Event.h"
-#include "Pipeline/Component/ComponentExceptions.h"
+#include "Foundation/Component/ComponentExceptions.h"
 #include "Foundation/Reflect/Element.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Serializers.h"
@@ -49,7 +49,7 @@ namespace Component
     // Abstract Base Class - Subclass this for structured attribute data you can add to a collection
     //
 
-    class PIPELINE_API ComponentBase : public Reflect::Element
+    class FOUNDATION_API ComponentBase : public Reflect::Element
     {
     private:
         REFLECT_DECLARE_ABSTRACT( ComponentBase, Reflect::Element );

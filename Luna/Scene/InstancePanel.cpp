@@ -6,7 +6,7 @@
 #include "Application/Inspect/Widgets/Text Controls/Choice.h"
 #include "Application/Inspect/Widgets/Button Controls/InspectButton.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Log.h"
 
 #include <algorithm>

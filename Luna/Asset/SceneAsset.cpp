@@ -9,7 +9,7 @@
 #include "Application/Inspect/Widgets/Control.h"
 #include "Application/Inspect/Widgets/Container.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 
 using namespace Luna;
 

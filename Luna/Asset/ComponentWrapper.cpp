@@ -7,7 +7,7 @@
 #include "Core/PropertiesManager.h"
 
 #include "Pipeline/Asset/AssetFlags.h"
-#include "Pipeline/Component/Component.h"
+#include "Foundation/Component/Component.h"
 
 // Using
 using namespace Luna;

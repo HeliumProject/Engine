@@ -11,7 +11,7 @@
 
 #include "Foundation/TUID.h"
 #include "Foundation/Math/EulerAngles.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Maya/Duplicate.h"
 #include "Maya/Utils.h"
 

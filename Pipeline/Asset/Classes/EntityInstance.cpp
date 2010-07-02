@@ -1,6 +1,6 @@
 #include "EntityInstance.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetClass.h"
 
 #include "Foundation/Log.h"

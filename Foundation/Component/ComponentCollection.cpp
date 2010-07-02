@@ -1,5 +1,5 @@
 #include "ComponentCollection.h"
-#include "Pipeline/Component/ComponentExceptions.h"
+#include "Foundation/Component/ComponentExceptions.h"
 
 #include "Foundation/Container/Insert.h" 
 

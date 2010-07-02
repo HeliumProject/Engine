@@ -26,7 +26,7 @@
 #include "Pipeline/Asset/Manifests/ManifestVersion.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 
-#include "Pipeline/Component/ComponentInit.h"
+#include "Foundation/Component/ComponentInit.h"
 #include "Foundation/InitializerStack.h"
 #include "Pipeline/Content/ContentInit.h"
 #include "Foundation/Reflect/Registry.h"

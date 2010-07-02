@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Pipeline/API.h"
-#include "Pipeline/Component/Component.h"
+#include "Foundation/Component/Component.h"
 
 namespace Asset
 {

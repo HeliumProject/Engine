@@ -41,7 +41,7 @@
 #include "Pipeline/Content/SceneVisibility.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Pipeline/Component/ComponentInit.h"
+#include "Foundation/Component/ComponentInit.h"
 
 #include "Foundation/InitializerStack.h"
 

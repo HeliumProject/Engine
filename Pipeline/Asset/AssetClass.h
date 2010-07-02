@@ -10,8 +10,8 @@
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"
-#include "Pipeline/Component/Component.h"
-#include "Pipeline/Component/ComponentCollection.h" 
+#include "Foundation/Component/Component.h"
+#include "Foundation/Component/ComponentCollection.h" 
 
 #define REGEX_LEVEL_DIR "levels\\/(?:test\\/){0,1}([0-9a-zA-Z \\-_]+)?"
 

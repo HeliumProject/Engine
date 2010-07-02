@@ -11,7 +11,7 @@
 
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/SceneAsset.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Pipeline/Asset/ExporterJob.h"
 
 #include "Foundation/Reflect/Archive.h"

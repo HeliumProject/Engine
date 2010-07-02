@@ -4,7 +4,7 @@
 
 #include "AssetFlags.h"
 
-#include "Pipeline/Component/ComponentCollection.h"
+#include "Foundation/Component/ComponentCollection.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Reflect/Element.h"
 #include "Foundation/Reflect/Class.h"

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Platform/Exception.h"
-#include "Foundation/TUID.h"
 
 namespace Component
 {

@@ -7,7 +7,7 @@
 #include "SwitchSceneCommand.h"
 
 #include "Pipeline/Asset/Classes/SceneAsset.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
 #include "Application/UI/FileDialog.h"

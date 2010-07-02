@@ -5,7 +5,7 @@
 
 #include "Pipeline/Asset/AssetExceptions.h" 
 #include "Pipeline/Asset/AssetTemplate.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 
 using namespace Asset;
 

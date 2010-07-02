@@ -12,7 +12,7 @@
 #include "PrimitiveCube.h"
 #include "PrimitivePointer.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 #include "Pipeline/Asset/Classes/Entity.h"
 

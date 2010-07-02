@@ -5,7 +5,7 @@
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Components/DependenciesComponent.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Flags.h"
 #include "Platform/Types.h"

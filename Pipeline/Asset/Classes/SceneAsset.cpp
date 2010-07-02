@@ -4,7 +4,7 @@
 
 #include "Pipeline/Asset/AssetTemplate.h"
 #include "Pipeline/Asset/Components/DependenciesComponent.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 
 using namespace Asset;
 

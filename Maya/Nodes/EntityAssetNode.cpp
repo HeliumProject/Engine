@@ -8,7 +8,7 @@
 #include "Maya/NodeTypes.h"
 #include "Maya/ErrorHelpers.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Element.h"

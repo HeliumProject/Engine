@@ -8,7 +8,7 @@
 #include "Application/Inspect/Widgets/Button Controls/InspectButton.h"
 
 #include "Pipeline/Asset/AssetInit.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Foundation/Log.h"
 #include "Platform/Process.h"

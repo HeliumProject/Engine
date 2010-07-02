@@ -16,7 +16,7 @@
 
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/AssetInit.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 

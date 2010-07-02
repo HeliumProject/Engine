@@ -4,7 +4,7 @@
 #include "Pipeline/Asset/AssetTypeInfo.h"
 #include "Pipeline/Asset/AssetExceptions.h"
 
-#include "Pipeline/Component/Component.h"
+#include "Foundation/Component/Component.h"
 
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"

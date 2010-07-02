@@ -2,7 +2,7 @@
 
 #include "Pipeline/API.h"
 #include "Foundation/Reflect/Serializers.h"
-#include "Pipeline/Component/ComponentCollection.h"
+#include "Foundation/Component/ComponentCollection.h"
 #include "Foundation/TUID.h"
 
 

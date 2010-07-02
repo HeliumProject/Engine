@@ -15,7 +15,7 @@
 #include "Foundation/Log.h"
 
 #include "Pipeline/Asset/Classes/Entity.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Pipeline/Asset/Components/BoundingBoxComponent.h"
 
 using namespace Luna;

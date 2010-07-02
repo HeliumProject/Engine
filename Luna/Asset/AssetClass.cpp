@@ -11,7 +11,7 @@
 #include "FieldFactory.h"
 #include "PersistentDataFactory.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetExceptions.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Foundation/Container/Insert.h" 

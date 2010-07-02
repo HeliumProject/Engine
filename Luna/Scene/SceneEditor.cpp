@@ -36,7 +36,7 @@
 
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Log.h"

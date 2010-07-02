@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Pipeline/API.h" 
+#include "Foundation/API.h" 
 
 #include <hash_map>
 
@@ -29,7 +29,7 @@ namespace Component
     typedef Nocturnal::Signature<void, const ComponentCollectionChanged&> ComponentCollectionChangedSignature;
 
 
-    class PIPELINE_API ComponentCollection : public Reflect::Element
+    class FOUNDATION_API ComponentCollection : public Reflect::Element
     {
     public:
         REFLECT_DECLARE_CLASS(ComponentCollection, Reflect::Element);

@@ -2,7 +2,7 @@
 
 #include "Instance.h"
 
-#include "Pipeline/Asset/Classes/Entity.h"
+#include "Pipeline/Asset/Classes/EntityInstance.h"
 
 namespace Luna
 {
@@ -77,7 +77,7 @@ namespace Luna
     //
 
     Entity(Luna::Scene* s);
-    Entity(Luna::Scene* s, Asset::Entity* entity);
+    Entity(Luna::Scene* s, Asset::EntityInstance* entity);
     virtual ~Entity();
 
     void ConstructorInit();

@@ -9,9 +9,7 @@
 #include "SwitchSceneCommand.h"
 #include "Zone.h"
 
-#include "Pipeline/Asset/Classes/EntityAsset.h"
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Content/ContentVersion.h"
 #include "Foundation/Log.h"
 #include "Application/UI/FileDialog.h"

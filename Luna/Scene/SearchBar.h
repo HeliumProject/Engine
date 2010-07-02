@@ -2,7 +2,6 @@
 
 #include "SearchGenerated.h"
 
-#include "Pipeline/Component/ComponentCategory.h"
 #include "Entity.h"
 #include "Scene.h"
 #include "SceneVisitor.h"

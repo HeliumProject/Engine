@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Pipeline/API.h" 
-#include "ComponentCategoryTypes.h"
 #include "Foundation/Automation/Event.h"
 #include "Pipeline/Component/ComponentExceptions.h"
 #include "Foundation/Reflect/Element.h"
@@ -86,17 +85,6 @@ namespace Component
         {
             return ComponentBehaviors::Exclusive;
         }
-
-
-        // 
-        // Categories and other UI niceties
-        // 
-
-        // Each attribute belongs to a single category (specified by GetCategoryType below).
-        const ComponentCategory& GetCategory() const;
-
-        // Derived classes must implement this function to return what category they belong to.
-        virtual ComponentCategoryType GetCategoryType() const = 0;
 
 
         // 

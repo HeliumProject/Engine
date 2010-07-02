@@ -32,8 +32,8 @@
 #include "Pipeline/Content/ParametricKey/ParametricKey.h"
 
 #include "Pipeline/Content/Animation/Animation.h"
-#include "Pipeline/Content/Animation/AnimationClip.h"
-#include "Pipeline/Content/Animation/CompressedAnimation.h"
+#include "Pipeline/Content/Animation/JointAnimation.h"
+#include "Pipeline/Content/Animation/CompressedJointAnimation.h"
 #include "Pipeline/Content/Animation/JointOrdering.h"
 
 #include "Pipeline/Content/Nodes/Lights/Light.h"
@@ -47,7 +47,6 @@
 
 #include "Foundation/InitializerStack.h"
 #include "Pipeline/Component/ComponentInit.h"
-#include "Pipeline/Component/ComponentCategories.h"
 
 #include "Foundation/InitializerStack.h"
 
@@ -113,10 +112,9 @@ namespace Content
       g_InitializerStack.Push( Reflect::RegisterClass<FrameMorphTargets>( TXT( "FrameMorphTargets" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<FrameWrinkleMap>( TXT( "FrameWrinkleMap" ) ) );
 
-      g_InitializerStack.Push( Reflect::RegisterClass<CompressedAnimation>( TXT( "CompressedAnimation" ) ) );
-
+      g_InitializerStack.Push( Reflect::RegisterClass<CompressedJointAnimation>( TXT( "CompressedJointAnimation" ) ) );
+      g_InitializerStack.Push( Reflect::RegisterClass<JointAnimation>( TXT( "JointAnimation" ) ) );
       g_InitializerStack.Push( Reflect::RegisterClass<Animation>( TXT( "Animation" ) ) );
-      g_InitializerStack.Push( Reflect::RegisterClass<AnimationClip>( TXT( "AnimationClip" ) ) );
 
       // descriptor
       g_InitializerStack.Push( Reflect::RegisterEnumeration<GeometrySimulations::GeometrySimulation>( &GeometrySimulations::GeometrySimulationEnumerateEnumeration, TXT( "GeometrySimulation" ) ) );

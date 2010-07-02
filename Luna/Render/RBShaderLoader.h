@@ -1,13 +1,7 @@
 #pragma once
 
 #include "Render/ShaderLoader.h"
-
-namespace Asset
-{
-  class StandardColorMapComponent;
-  class StandardNormalMapComponent;
-  class StandardExpensiveMapComponent;
-}
+#include "Pipeline/Asset/Classes/ShaderAsset.h"
 
 namespace Render
 {
@@ -29,8 +23,6 @@ namespace Content
     static void SetColorFormat( Render::TextureSettings* settings, u32 colorFormat, u32 mode );
 
     static void UpdateShaderClass(Render::ShaderManager* db, const tchar* shaderFilename, u32 alphaMode);
-    static void UpdateShaderColorMap(Render::Shader* sh, const Asset::StandardColorMapComponent* colorMap);
-    static void UpdateShaderNormalMap(Render::Shader* sh, const Asset::StandardNormalMapComponent* colorMap);
-    static void UpdateShaderExpensiveMap(Render::Shader* sh, const Asset::StandardExpensiveMapComponent* colorMap);
+    static void UpdateShader(Render::Shader* sh, const Asset::ShaderAsset* shader );
   };
 }

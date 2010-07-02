@@ -14,7 +14,6 @@
 #include "ResultsPanel.h"
 #include "SearchQuery.h"
 
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/AssetFile.h"
 #include "Pipeline/Asset/AssetFolder.h"
 #include "Pipeline/Asset/AssetInit.h"
@@ -427,14 +426,7 @@ bool BrowserFrame::IsPreviewable( Asset::AssetFile* file )
     Asset::AssetClassPtr asset = Asset::AssetFile::GetAssetClass( file );
     if ( asset.ReferencesObject() )
     {
-        Component::ComponentViewer< Asset::ArtFileComponent > artFile( asset );
-        if ( artFile.Valid() )
-        {
-            if ( !artFile->GetPath().Get().empty() )
-            {
-                return artFile->GetPath().Exists();
-            }
-        }
+         return asset->GetPath().Exists();
     }
 
 

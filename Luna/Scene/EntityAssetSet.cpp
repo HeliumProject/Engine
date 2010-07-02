@@ -14,9 +14,9 @@
 
 #include "Foundation/Log.h"
 
-#include "Pipeline/Asset/Classes/EntityAsset.h"
+#include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
+#include "Pipeline/Asset/Components/BoundingBoxComponent.h"
 
 using namespace Luna;
 
@@ -54,7 +54,7 @@ EntityAssetSet::~EntityAssetSet()
 void EntityAssetSet::LoadAssetClass()
 {
 
-    m_Class = Asset::AssetClass::LoadAssetClass<Asset::EntityAsset>( m_AssetPath );
+    m_Class = Asset::AssetClass::LoadAssetClass<Asset::Entity>( m_AssetPath );
 
     if ( !m_Class.ReferencesObject() )
     {
@@ -64,57 +64,56 @@ void EntityAssetSet::LoadAssetClass()
     {
         m_Name = m_Class->GetFullName();
 
-        Component::ComponentViewer< Asset::ArtFileComponent > model (m_Class);
+        m_ArtFile = m_Class->GetPath().Get();
 
-        if (model.Valid())
+        if (!m_ArtFile.empty())
         {
-            m_ArtFile = model->GetPath().Get();
-
-            if (!m_ArtFile.empty())
+            Luna::PrimitiveCube* cube;
+            if ( !m_Shape )
             {
-                Luna::PrimitiveCube* cube;
-                if ( !m_Shape )
-                {
-                    cube = new Luna::PrimitiveCube (m_Type->GetScene()->GetView()->GetResources());
-                    cube->Update();
+                cube = new Luna::PrimitiveCube (m_Type->GetScene()->GetView()->GetResources());
+                cube->Update();
 
-                    m_Shape = cube;
-                }
-                else
-                {
-                    cube = dynamic_cast< Luna::PrimitiveCube* >( m_Shape );
-                }
+                m_Shape = cube;
+            }
+            else
+            {
+                cube = dynamic_cast< Luna::PrimitiveCube* >( m_Shape );
+            }
 
-                if ( model->m_Minima != Math::Vector3::Zero || model->m_Maxima != Math::Vector3::Zero )
+            Asset::BoundingBoxComponentPtr boundingBox = m_Class->GetComponent< Asset::BoundingBoxComponent >();
+            if ( boundingBox.ReferencesObject() )
+            {
+                if ( boundingBox->GetMinima() != Math::Vector3::Zero || boundingBox->GetMaxima() != Math::Vector3::Zero )
                 {
-                    cube->SetBounds( model->m_Minima, model->m_Maxima );
+                    cube->SetBounds( boundingBox->GetMinima(), boundingBox->GetMaxima() );
                     cube->Update();
                 }
-                else if (model->m_Extents != Math::Vector3::Zero)
+                else if ( boundingBox->GetExtents() != Math::Vector3::Zero )
                 {
-                    Math::Vector3 minima = -(model->m_Extents / 2.f) + model->m_Offset;
-                    minima.y += model->m_Extents.y / 2.f;
-                    Math::Vector3 maxima = (model->m_Extents / 2.f) + model->m_Offset;
-                    maxima.y += model->m_Extents.y / 2.f;
+                    Math::Vector3 minima = -(boundingBox->GetExtents() / 2.f) + boundingBox->GetOffset();
+                    minima.y += boundingBox->GetExtents().y / 2.f;
+                    Math::Vector3 maxima = (boundingBox->GetExtents() / 2.f) + boundingBox->GetOffset();
+                    maxima.y += boundingBox->GetExtents().y / 2.f;
                     cube->SetBounds( minima, maxima );
                     cube->Update();
                 }
-                else if ( Nocturnal::Path( m_ArtFile ).Exists() )
+            }
+            else if ( Nocturnal::Path( m_ArtFile ).Exists() )
+            {
+                try
                 {
-                    try
-                    {
-                        m_Manifest = Reflect::Archive::FromFile<Asset::EntityManifest>( m_ArtFile );
-                    }
-                    catch ( const Reflect::Exception& e )
-                    {
-                        Log::Error( TXT( "Error loading %s (%s)\n" ), m_ArtFile.c_str(), e.What());
-                    }
+                    m_Manifest = Reflect::Archive::FromFile<Asset::EntityManifest>( m_ArtFile );
+                }
+                catch ( const Reflect::Exception& e )
+                {
+                    Log::Error( TXT( "Error loading %s (%s)\n" ), m_ArtFile.c_str(), e.What());
+                }
 
-                    if (m_Manifest.ReferencesObject())
-                    {
-                        cube->SetBounds( m_Manifest->m_BoundingBoxMin, m_Manifest->m_BoundingBoxMax );
-                        cube->Update();
-                    }
+                if (m_Manifest.ReferencesObject())
+                {
+                    cube->SetBounds( m_Manifest->m_BoundingBoxMin, m_Manifest->m_BoundingBoxMax );
+                    cube->Update();
                 }
             }
         }

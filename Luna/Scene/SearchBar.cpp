@@ -2,7 +2,6 @@
 #include "SearchBar.h"
 
 #include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Component/ComponentCategories.h"
 #include "Foundation/Boost/Regex.h" 
 #include "Foundation/Log.h"
 #include "EntityAssetSet.h"
@@ -60,21 +59,6 @@ SearchBar::SearchBar( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& po
 
     // Set Components
     Component::V_Component components;
-    Component::ComponentCategories* componentCategories = Component::ComponentCategories::GetInstance();
-    if ( componentCategories )
-    {
-        Component::M_ComponentCategories::const_iterator categoryItr = componentCategories->GetCategories().begin();
-        Component::M_ComponentCategories::const_iterator categoryEnd = componentCategories->GetCategories().end();
-        for ( ; categoryItr != categoryEnd; ++categoryItr )
-        {
-            Component::M_Component::const_iterator componentItr = categoryItr->second->Components().begin();
-            Component::M_Component::const_iterator componentEnd = categoryItr->second->Components().end();
-            for ( ; componentItr != componentEnd; ++id, ++componentItr )
-            {
-                components.push_back( componentItr->second );
-            }
-        }
-    }
 
     // Initialize Components
     std::sort( components.begin(), components.end(), CompareComponents );
@@ -366,7 +350,7 @@ void SearchBar::RefreshResults( const M_SceneToZone& sceneToZone )
                 Nocturnal::Path path( entityClassPath );
                 entityClassName = path.Basename();
 
-                Asset::EntityAsset* entityClass = entityClassSet->GetEntityAsset();
+                Asset::Entity* entityClass = entityClassSet->GetEntity();
                 if ( entityClass )
                 {
                     tstring assetTypeString;
@@ -479,7 +463,7 @@ bool AssetTypeCriteria::Validate( Luna::HierarchyNode* node )
         return false;
     }
 
-    Asset::EntityAsset* entityClass = classSet->GetEntityAsset();
+    Asset::Entity* entityClass = classSet->GetEntity();
     if ( !entityClass )
     {
         return false;
@@ -565,7 +549,7 @@ bool ComponentCriteria::Validate( Luna::HierarchyNode* node )
         return false;
     }
 
-    Asset::EntityAsset* entityClass = classSet->GetEntityAsset();
+    Asset::Entity* entityClass = classSet->GetEntity();
     if ( !entityClass )
     {
         return false;

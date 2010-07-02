@@ -1,6 +1,6 @@
 #include "DependenciesComponent.h"
-#include "Pipeline/Asset/Classes/EntityAsset.h"
-#include "Pipeline/Asset/Classes/SceneAsset.h"
+
+#include "Pipeline/Asset/AssetFlags.h"
 
 using namespace Asset;
 
@@ -14,10 +14,4 @@ void DependenciesComponent::EnumerateClass( Reflect::Compositor<DependenciesComp
 
   Reflect::Field* fieldPaths = comp.AddField( &DependenciesComponent::m_Paths, "m_Paths", Reflect::FieldFlags::Path );
   fieldPaths->SetProperty( Asset::AssetProperties::FileFilter, "*.entity.*;*.font.*;*.movie.*;*.shader.*;*.scene.*" );
-}
-
-
-Component::ComponentCategoryType DependenciesComponent::GetCategoryType() const
-{
-  return Component::ComponentCategoryTypes::Misc;
 }

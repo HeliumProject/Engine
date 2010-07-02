@@ -5,7 +5,7 @@
 #include "BrowserPreferences.h"
 
 #include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
+#include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Application/UI/ImageManager.h"
 #include "Application/UI/MenuButton.h"
@@ -40,13 +40,10 @@ void PreviewPanel::Preview( Asset::AssetClass* asset )
         {
             m_Label->SetValue( m_PreviewAsset->GetFilePath().Get() );
 
-            Component::ComponentViewer< Asset::ArtFileComponent > artFile( m_PreviewAsset );
-            if ( artFile.Valid() )
+            Asset::EntityPtr entity = Reflect::ObjectCast< Asset::Entity >( asset );
+            if ( entity.ReferencesObject() )
             {
-                if ( !artFile->GetPath().Get().empty() )
-                {
-                    m_ContentFile = artFile->GetPath().Get();
-                }
+                m_ContentFile = entity->GetPath().Get();
             }
         }
 

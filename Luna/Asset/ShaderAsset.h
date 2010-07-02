@@ -1,8 +1,8 @@
 #pragma once
 
 #include "AssetClass.h"
+#include "Pipeline/Asset/Classes/ShaderAsset.h"
 
-#include "Pipeline/Asset/Classes/StandardShaderAsset.h"
 #include "Editor/ContextMenuGenerator.h"
 
 namespace Luna

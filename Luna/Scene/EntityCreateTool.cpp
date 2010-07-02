@@ -12,7 +12,7 @@
 #include "Pick.h"
 
 #include "Pipeline/Asset/AssetInit.h"
-#include "Pipeline/Asset/Classes/EntityAsset.h"
+#include "Pipeline/Asset/Classes/Entity.h"
 
 #include "Application/UI/FileDialog.h"
 
@@ -107,7 +107,7 @@ Luna::TransformPtr EntityCreateTool::CreateNode()
             }
         }
 
-        EntityPtr entity = new Luna::Entity (m_Scene, new Asset::Entity( entityClassPath.Get() ) );
+        EntityPtr entity = new Luna::Entity (m_Scene, new Asset::EntityInstance( entityClassPath.Get() ) );
 
         entity->SetPointerVisible( s_PointerVisible );
         entity->SetBoundsVisible( s_BoundsVisible );
@@ -161,7 +161,7 @@ void EntityCreateTool::CreateProperties()
             clearButton->SetClientData( this );
 
             tstring filter;
-            if ( Reflect::GetClass<Asset::EntityAsset>()->GetProperty( Asset::AssetProperties::FileFilter, filter ) )
+            if ( Reflect::GetClass<Asset::Entity>()->GetProperty( Asset::AssetProperties::FileFilter, filter ) )
             {
                 m_FileButton->SetFilter( filter );
                 m_BrowserButton->SetFilter( filter );

@@ -12,7 +12,7 @@
 #include "Pipeline/Content/Nodes/Transform/PivotTransform.h"
 #include "Pipeline/Content/Nodes/Transform/JointTransform.h"
 #include "Pipeline/Content/Nodes/Transform/Descriptor.h"
-#include "Pipeline/Content/Animation/AnimationClip.h"
+#include "Pipeline/Content/Animation/Animation.h"
 #include "Pipeline/Content/Animation/JointOrdering.h"
 #include "Pipeline/Content/Animation/MorphTargetData.h"
 #include "Pipeline/Content/Nodes/Lights/Light.h"
@@ -112,7 +112,7 @@ namespace Content
     V_Shader            m_Shaders;
     V_Skin              m_Skins;
     V_Descriptor        m_ExportNodes;
-    V_AnimationClip     m_AnimationClips;
+    V_Animation         m_Animations;
 
     mutable MM_TypedMesh  m_TypedMeshes;
 
@@ -159,8 +159,8 @@ namespace Content
     // Animation API
     //
 
-    u32  GetNumAnimationClips() const;
-    void GetJointsFromClip( const AnimationClipPtr& clip, V_JointTransform& joints );
+    u32  GetNumAnimations() const;
+    void GetJointsFromAnimation( const AnimationPtr& clip, V_JointTransform& joints );
     u32  GetNumValidJointAnimations( u32 clipIndex = 0 ) const;
     u32  GetNumValidJointAnimations( const Nocturnal::S_TUID& jointList, u32 clipIndex = 0 ) const;
     void GetJointMismatchReport( std::vector< tstring > &mismatchMessages, u32 clipIndex = 0 ) const;

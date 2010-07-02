@@ -2,7 +2,6 @@
 
 #include "Pipeline/API.h"
 #include "AssetType.h"
-#include "Pipeline/Asset/Classes/EntityAsset.h"
 
 namespace Asset
 {

@@ -11,10 +11,9 @@
 #include "FieldFactory.h"
 #include "PersistentDataFactory.h"
 
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Pipeline/Asset/AssetExceptions.h"
-#include "Pipeline/Asset/Classes/StandardShaderAsset.h"
+#include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Natural.h"
 #include "Foundation/Log.h"
@@ -185,8 +184,7 @@ bool AssetClass::IsViewable() const
 // 
 bool AssetClass::IsExportable() const
 {
-  Component::ComponentViewer< Asset::ArtFileComponent > artViewer( GetPackage< Asset::AssetClass >() );
-  return artViewer.Valid();
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

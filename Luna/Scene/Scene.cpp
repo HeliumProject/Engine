@@ -432,7 +432,7 @@ SceneNodePtr Scene::CreateNode( Content::SceneNode* data )
 
     if ( data->HasType( Reflect::GetType<Asset::Entity>() ) )
     {
-        createdNode = new Luna::Entity( this, Reflect::DangerousCast< Asset::Entity >( data ) );
+        createdNode = new Luna::Entity( this, Reflect::DangerousCast< Asset::EntityInstance >( data ) );
     }
     else if ( data->HasType( Reflect::GetType<Content::Volume>() ) )
     {

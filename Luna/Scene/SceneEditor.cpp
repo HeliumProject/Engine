@@ -36,7 +36,6 @@
 #include "Browser/BrowserToolBar.h"
 #include "Mesh.h"
 
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 #include "Pipeline/Component/ComponentHandle.h"

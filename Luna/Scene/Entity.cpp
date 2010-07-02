@@ -13,7 +13,6 @@
 #include "PrimitivePointer.h"
 
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 #include "Pipeline/Asset/Classes/Entity.h"
 
@@ -39,12 +38,12 @@ void Entity::CleanupType()
 }
 
 Entity::Entity(Luna::Scene* scene)
-: Luna::Instance (scene, new Asset::Entity ())
+: Luna::Instance (scene, new Asset::EntityInstance())
 {
     ConstructorInit();
 }
 
-Entity::Entity(Luna::Scene* scene, Asset::Entity* entity)
+Entity::Entity(Luna::Scene* scene, Asset::EntityInstance* entity)
 : Luna::Instance ( scene, entity )
 {
     ConstructorInit();
@@ -88,8 +87,8 @@ void Entity::ConstructorInit()
 
 tstring Entity::GenerateName() const
 {
-    const Asset::Entity* entity = GetPackage<Asset::Entity>();
-    Asset::EntityAssetPtr entityClass = entity->GetEntityAsset();
+    const Asset::EntityInstance* entity = GetPackage<Asset::EntityInstance>();
+    Asset::EntityPtr entityClass = entity->GetEntity();
 
     tstring name = entityClass ? entityClass->GetShortName() : TXT( "" );
 
@@ -130,10 +129,9 @@ Luna::Scene* Entity::GetNestedScene( GeometryMode mode, bool load_on_demand ) co
 {
     Luna::Scene* nestedScene = NULL;
 
-    if (m_ClassSet->GetEntityAsset())
+    if (m_ClassSet->GetEntity())
     {
 #pragma TODO( "Support the various rendering modes.  This used to load different files for art, collision, etc." )
-        Component::ComponentViewer< Asset::ArtFileComponent > artFile( m_ClassSet->GetEntityAsset(), true );
         tstring nestedFile = m_ClassSet->GetContentFile();
         m_NestedSceneArt = m_Scene->GetManager()->AllocateNestedScene( nestedFile, m_Scene );
     }
@@ -275,7 +273,7 @@ void Entity::Evaluate(GraphDirection direction)
 
 void Entity::Render( RenderVisitor* render )
 {
-    const Asset::Entity* package = GetPackage< Asset::Entity >();
+    const Asset::EntityInstance* package = GetPackage< Asset::EntityInstance >();
 
     if (IsPointerVisible())
     {
@@ -351,7 +349,7 @@ void Entity::DrawBounds( IDirect3DDevice9* device, DrawArgs* args, const SceneNo
 
     const Luna::EntityAssetSet* classSet = entity->GetClassSet();
 
-    const Asset::Entity* package = entity->GetPackage< Asset::Entity >();
+    const Asset::EntityInstance* package = entity->GetPackage< Asset::EntityInstance >();
 
     entity->SetMaterial( type->GetMaterial() );
 
@@ -365,7 +363,7 @@ bool Entity::Pick( PickVisitor* pick )
 
     Luna::EntityType* type = Reflect::AssertCast<Luna::EntityType>(m_NodeType);
 
-    const Asset::Entity* package = GetPackage< Asset::Entity >();
+    const Asset::EntityInstance* package = GetPackage< Asset::EntityInstance >();
 
     pick->SetFlag( PickFlags::IgnoreVertex, true );
 
@@ -475,19 +473,19 @@ void Entity::CreatePanel( CreatePanelArgs& args )
 
 tstring Entity::GetEntityAssetPath() const
 {
-    return GetPackage< Asset::Entity >()->GetEntityAsset()->GetPath().Get();
+    return GetPackage< Asset::EntityInstance >()->GetEntity()->GetPath().Get();
 }
 
 void Entity::SetEntityAssetPath( const tstring& entityClass )
 {
-    Asset::Entity* entity = GetPackage< Asset::Entity >();
+    Asset::EntityInstance* entity = GetPackage< Asset::EntityInstance >();
 
-    Nocturnal::Path oldPath = entity->GetEntityAsset()->GetPath();
+    Nocturnal::Path oldPath = entity->GetEntity()->GetPath();
     Nocturnal::Path newPath( entityClass );
 
     m_ClassChanging.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
 
-    entity->GetEntityAsset()->SetPath( newPath );
+    entity->GetEntity()->SetPath( newPath );
 
     // since our entity class is criteria used for deducing object type,
     //  ensure we are a member of the correct type
@@ -516,9 +514,9 @@ void Entity::SetEntityAssetPath( const tstring& entityClass )
 
 tstring Entity::GetAssetTypeName() const
 {
-    if ( GetClassSet()->GetEntityAsset() )
+    if ( GetClassSet()->GetEntity() )
     {
-        return Asset::AssetClass::GetAssetTypeName( GetClassSet()->GetEntityAsset()->GetAssetType() );
+        return Asset::AssetClass::GetAssetTypeName( GetClassSet()->GetEntity()->GetAssetType() );
     }
     else
     {

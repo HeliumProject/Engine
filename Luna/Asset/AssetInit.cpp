@@ -20,14 +20,12 @@
 #include "FieldFileReference.h"
 #include "FieldNode.h"
 #include "FileArrayNode.h"
-#include "FileBackedComponent.h"
 #include "PersistentData.h"
 #include "PersistentNode.h" 
 #include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 #include "ShaderAsset.h"
 #include "SimpleFieldNode.h"
 #include "SceneAsset.h"
-#include "TextureMapComponent.h"
 
 #include "Foundation/InitializerStack.h"
 #include "Pipeline/Asset/AssetInit.h"
@@ -81,8 +79,6 @@ void LunaAsset::InitializeModule()
     g_InitializerStack.Push( Luna::SceneAsset::InitializeType, Luna::SceneAsset::CleanupType ); 
     g_InitializerStack.Push( Luna::ShaderAsset::InitializeType, Luna::ShaderAsset::CleanupType );
     g_InitializerStack.Push( Luna::ComponentWrapper::InitializeType, Luna::ComponentWrapper::CleanupType );
-    g_InitializerStack.Push( Luna::FileBackedComponent::InitializeType, Luna::FileBackedComponent::CleanupType );
-    g_InitializerStack.Push( Luna::TextureMapComponent::InitializeType, Luna::TextureMapComponent::CleanupType );
     g_InitializerStack.Push( Luna::ComponentContainer::InitializeType, Luna::ComponentContainer::CleanupType );
     g_InitializerStack.Push( Luna::ComponentNode::InitializeType, Luna::ComponentNode::CleanupType );
     g_InitializerStack.Push( AssetDocument::InitializeType, AssetDocument::CleanupType );

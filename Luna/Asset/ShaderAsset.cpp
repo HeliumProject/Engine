@@ -8,9 +8,6 @@
 #include "AssetReferenceNode.h"
 #include "PersistentDataFactory.h"
 
-#include "Pipeline/Asset/Classes/StandardShaderAsset.h"
-#include "Pipeline/Asset/Components/TextureMapComponent.h"
-
 #include "Foundation/String/Natural.h"
 #include "Editor/Editor.h"
 #include "Application/Inspect/Widgets/Button Controls/InspectButton.h"
@@ -113,15 +110,7 @@ ShaderAsset::~ShaderAsset()
 // 
 tstring ShaderAsset::GetIcon() const
 {
-    const i32 typeID = GetPackage< Asset::ShaderAsset >()->GetType();
-
-    tstring icon( TXT( "enginetype_shader.png" ) );
-    if ( typeID != Reflect::GetType< Asset::StandardShaderAsset >() )
-    {
-        icon = TXT( "enginetype_custom_shader.png" );
-    }
-
-    return icon;
+    return tstring( TXT( "enginetype_shader.png" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -180,7 +169,7 @@ void ShaderAsset::Changed( Inspect::Control* control )
         data->Get( str );
 
         texturePath.Set( str );
-        shaderClass->SetTextureDirty( texturePath, true );
+        //shaderClass->SetTextureDirty( texturePath, true );
     }
 
     CheckShaderChanged( texturePath );
@@ -228,14 +217,7 @@ void ShaderAsset::InitializeContextMenu()
         // If this derived class is not the same type as us, add it to the list.
         if ( derived->m_TypeID != GetPackage< Asset::ShaderAsset >()->GetType() )
         {
-            if ( derived->m_TypeID == Reflect::GetType< Asset::StandardShaderAsset >() )
-            {
-                addStandardShader = menuItem;
-            }
-            else
-            {
-                items.insert( M_Ordered::value_type( derived->m_UIName, menuItem ) );
-            }
+            items.insert( M_Ordered::value_type( derived->m_UIName, menuItem ) );
         }
     }
 
@@ -339,28 +321,8 @@ void ShaderAsset::ConvertShader( const ContextMenuArgsPtr& args )
 void ShaderAsset::ReloadAllTextures( const ContextMenuArgsPtr& args )
 {
     Asset::ShaderAssetPtr shaderClass = GetPackage< Asset::ShaderAsset >();
-    Component::M_Component::const_iterator itr = shaderClass->GetComponents().begin();
-    Component::M_Component::const_iterator end = shaderClass->GetComponents().end(); 
 
-    std::set< Nocturnal::Path > textureFiles;
-
-    while( itr != end )
-    {
-        // try to cast this item to a texture map attribute
-        Asset::TextureMapComponent *textureAttr = Reflect::ObjectCast< Asset::TextureMapComponent >( (*itr).second );
-
-        if( textureAttr )
-        {
-            textureFiles.insert( textureAttr->GetPath() );
-        }    
-        itr++;
-    }
-
-    for( std::set< Nocturnal::Path >::const_iterator itr = textureFiles.begin(), end = textureFiles.end(); itr != end; ++itr )
-    {
-        shaderClass->SetTextureDirty( *itr, true );
-        CheckShaderChanged( (*itr) );
-    }
-
-    return;
+    CheckShaderChanged( shaderClass->m_ColorMapPath );
+    CheckShaderChanged( shaderClass->m_NormalMapPath );
+    CheckShaderChanged( shaderClass->m_GPIMapPath );
 }

@@ -59,7 +59,7 @@ namespace Content
     m_ExportNodes.clear();
     m_AddedHierarchyNodes.clear();
     m_AddedDescriptors.clear();
-    m_AnimationClips.clear();
+    m_Animations.clear();
     m_TypedMeshes.clear();
     m_MorphTargetData = new MorphTargetData();
 
@@ -148,10 +148,10 @@ namespace Content
       m_Skins.push_back( skin );
     }
 
-    else if( node->HasType( Reflect::GetType<AnimationClip>() ) )
+    else if( node->HasType( Reflect::GetType<Animation>() ) )
     {
-      AnimationClip* clip = DangerousCast< AnimationClip >( node );
-      m_AnimationClips.push_back( clip );
+      Animation* clip = DangerousCast< Animation >( node );
+      m_Animations.push_back( clip );
     }
 
     m_NodeAddedSignature.Raise( NodeAddedArgs( *node ) );
@@ -658,7 +658,7 @@ namespace Content
     }
   }
 
-  void Scene::GetJointsFromClip( const AnimationClipPtr& clip, V_JointTransform& joints )
+  void Scene::GetJointsFromAnimation( const AnimationPtr& clip, V_JointTransform& joints )
   {
     Nocturnal::V_TUID jointIDs;
     clip->GetJointIDs( jointIDs );

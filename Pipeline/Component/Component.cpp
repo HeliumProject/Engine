@@ -1,7 +1,5 @@
 #include "Component.h"
 #include "ComponentCollection.h"
-#include "ComponentCategory.h"
-#include "ComponentCategories.h"
 
 using namespace Component;
 
@@ -22,11 +20,6 @@ ComponentBase::ComponentBase()
 ComponentBase::~ComponentBase()
 {
 
-}
-
-const ComponentCategory& ComponentBase::GetCategory() const
-{
-    return *( ComponentCategories::GetInstance()->GetCategory( GetCategoryType() ) );
 }
 
 ComponentCollection* ComponentBase::GetCollection() const

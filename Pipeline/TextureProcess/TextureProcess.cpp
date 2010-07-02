@@ -21,7 +21,7 @@
 
 #include "Foundation/Log.h"
 
-#include "Pipeline/Texture/Texture.h"
+#include "Pipeline/Image/Image.h"
 #include "Pipeline/TextureProcess/TextureProcess.h"
 
 using namespace TextureProcess;
@@ -55,7 +55,7 @@ bool TextureProcess::Bank::LoadImages()
     Log::Print( Log::Levels::Verbose, TXT( "[%d] : %s" ), c, filename.c_str());
 
     bool convert_to_linear = (*i)->m_is_normal_map ? false : true;
-    Nocturnal::Texture* tex = Nocturnal::Texture::LoadFile((*i)->m_texture_file.c_str(), convert_to_linear, NULL);
+    Nocturnal::Image* tex = Nocturnal::Image::LoadFile((*i)->m_texture_file.c_str(), convert_to_linear, NULL);
     if (tex)
     {
       // convert all input images to either RGBA 8 bit or RGBA floating point
@@ -69,7 +69,7 @@ bool TextureProcess::Bank::LoadImages()
       }
 
       tchar* type[] = { TXT( "2D TEXTURE" ), TXT( "CUBE MAP") , TXT( "VOLUME TEXTURE" ) };
-      if (tex->Type()==Nocturnal::Texture::VOLUME)
+      if (tex->Type()==Nocturnal::Image::VOLUME)
       {
         Log::Print( Log::Levels::Verbose, TXT( "%s %d x %d x %d\n" ),type[tex->Type()],tex->m_Width,tex->m_Height,tex->m_Depth);
       }
@@ -120,7 +120,7 @@ bool TextureProcess::Bank::AdjustImages()
 
       if ( !IsOne( (*i)->m_relscale_x ) || !IsOne( (*i)->m_relscale_y ) )
       {
-        Nocturnal::Texture* new_tex = (*i)->m_texture->RelativeScaleImage((*i)->m_relscale_x, (*i)->m_relscale_y, (*i)->m_texture->m_NativeFormat, Nocturnal::MIP_FILTER_CUBIC);
+        Nocturnal::Image* new_tex = (*i)->m_texture->RelativeScaleImage((*i)->m_relscale_x, (*i)->m_relscale_y, (*i)->m_texture->m_NativeFormat, Nocturnal::MIP_FILTER_CUBIC);
         if (new_tex)
         {
           throw Nocturnal::Exception( TXT( "Failed to rescale, aborting" ) );
@@ -142,7 +142,7 @@ bool TextureProcess::Bank::AdjustImages()
         // this texture is not a power of 2 so rescale it to fix it
         Log::Warning( TXT( "Rescaling texture '%s', it is not a power of 2 (%d x %d)\n" ),(*i)->m_texture_file.c_str(),(*i)->m_texture->m_Width,(*i)->m_texture->m_Height);
 
-        Nocturnal::Texture* new_tex = (*i)->m_texture->ScaleUpNextPowerOfTwo((*i)->m_texture->m_NativeFormat,Nocturnal::MIP_FILTER_CUBIC);
+        Nocturnal::Image* new_tex = (*i)->m_texture->ScaleUpNextPowerOfTwo((*i)->m_texture->m_NativeFormat,Nocturnal::MIP_FILTER_CUBIC);
         if (!new_tex)
         {
           throw Nocturnal::Exception( TXT( "Failed to rescale, aborting" ) );
@@ -155,7 +155,7 @@ bool TextureProcess::Bank::AdjustImages()
     if ((*i)->m_texture == NULL)
     {
       tchar buf[120];
-      _stprintf(buf, TXT( "Texture %s has no pixel data, file may be missing or corrupted" ), (*i)->m_texture_file.c_str());
+      _stprintf(buf, TXT( "Image %s has no pixel data, file may be missing or corrupted" ), (*i)->m_texture_file.c_str());
       throw Nocturnal::Exception(buf);
     }
   }
@@ -196,7 +196,7 @@ bool TextureProcess::Bank::CompressImages()
       if ( (*i)->m_is_normal_map )
       {
         // does a clone if sizes are the same
-        Nocturnal::Texture* nt = (*i)->m_texture->ScaleImage((*i)->m_texture->m_Width, (*i)->m_texture->m_Height, (*i)->m_texture->m_NativeFormat, m.m_Filter);
+        Nocturnal::Image* nt = (*i)->m_texture->ScaleImage((*i)->m_texture->m_Width, (*i)->m_texture->m_Height, (*i)->m_texture->m_NativeFormat, m.m_Filter);
 
         nt->PrepareFor2ChannelNormalMap((*i)->m_is_detail_normal_map, (*i)->m_is_detail_map_only);
 

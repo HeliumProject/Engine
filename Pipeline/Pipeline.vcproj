@@ -592,118 +592,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Texture"
-			>
-			<File
-				RelativePath=".\Texture\Texture.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Texture\Texture.h"
-				>
-			</File>
-			<Filter
-				Name="Filters"
-				>
-				<File
-					RelativePath=".\Texture\Filters\DilationFilter.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Texture\Filters\DilationFilter.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Texture\Filters\ImageFilter.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Texture\Filters\ImageFilter.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Image"
-				>
-				<File
-					RelativePath=".\Texture\Image\ColorFormats.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Texture\Image\MipSet.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Texture\Image\MipSet.h"
-					>
-				</File>
-				<Filter
-					Name="Formats"
-					>
-					<File
-						RelativePath=".\Texture\Image\Formats\BMP.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Texture\Image\Formats\BMP.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Texture\Image\Formats\DDS.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Texture\Image\Formats\DDS.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Texture\Image\Formats\DXT.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Texture\Image\Formats\DXT.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Texture\Image\Formats\JPEG.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Texture\Image\Formats\JPEG.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Texture\Image\Formats\TGA.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Texture\Image\Formats\TGA.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="Utilities"
-				>
-				<File
-					RelativePath=".\Texture\Utilities\Decode.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Texture\Utilities\Decode.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Texture\Utilities\Swizzle.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Texture\Utilities\Swizzle.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
 			Name="Content"
 			>
 			<File
@@ -998,19 +886,19 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Content\Animation\AnimationClip.cpp"
+					RelativePath=".\Content\Animation\CompressedJointAnimation.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Content\Animation\AnimationClip.h"
+					RelativePath=".\Content\Animation\CompressedJointAnimation.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Content\Animation\CompressedAnimation.cpp"
+					RelativePath=".\Content\Animation\JointAnimation.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Content\Animation\CompressedAnimation.h"
+					RelativePath=".\Content\Animation\JointAnimation.h"
 					>
 				</File>
 				<File
@@ -1154,6 +1042,22 @@
 				Name="Classes"
 				>
 				<File
+					RelativePath=".\Asset\Classes\AnimationClip.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Asset\Classes\AnimationClip.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Asset\Classes\AudioClip.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Asset\Classes\AudioClip.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Asset\Classes\Entity.cpp"
 					>
 				</File>
@@ -1162,11 +1066,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Classes\EntityAsset.cpp"
+					RelativePath=".\Asset\Classes\EntityInstance.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Classes\EntityAsset.h"
+					RelativePath=".\Asset\Classes\EntityInstance.h"
 					>
 				</File>
 				<File
@@ -1186,11 +1090,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Classes\StandardShaderAsset.cpp"
+					RelativePath=".\Asset\Classes\Texture.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Classes\StandardShaderAsset.h"
+					RelativePath=".\Asset\Classes\Texture.h"
 					>
 				</File>
 			</Filter>
@@ -1198,19 +1102,11 @@
 				Name="Components"
 				>
 				<File
-					RelativePath=".\Asset\Components\ArtFileComponent.cpp"
+					RelativePath=".\Asset\Components\BoundingBoxComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Components\ArtFileComponent.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\ColorMapComponent.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\ColorMapComponent.h"
+					RelativePath=".\Asset\Components\BoundingBoxComponent.h"
 					>
 				</File>
 				<File
@@ -1222,75 +1118,27 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Components\DetailMapComponent.cpp"
+					RelativePath=".\Asset\Components\MeshProcessingComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Components\DetailMapComponent.h"
+					RelativePath=".\Asset\Components\MeshProcessingComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Components\ExpensiveMapComponent.cpp"
+					RelativePath=".\Asset\Components\TextureProcessingComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Components\ExpensiveMapComponent.h"
+					RelativePath=".\Asset\Components\TextureProcessingComponent.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Components\FileBackedComponent.cpp"
+					RelativePath=".\Asset\Components\TransformComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Asset\Components\FileBackedComponent.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\NormalMapComponent.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\NormalMapComponent.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\StandardColorMapComponent.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\StandardColorMapComponent.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\StandardDetailMapComponent.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\StandardDetailMapComponent.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\StandardExpensiveMapComponent.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\StandardExpensiveMapComponent.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\StandardNormalMapComponent.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\StandardNormalMapComponent.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\TextureMapComponent.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\Components\TextureMapComponent.h"
+					RelativePath=".\Asset\Components\TransformComponent.h"
 					>
 				</File>
 			</Filter>
@@ -1343,26 +1191,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Component\ComponentCategories.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Component\ComponentCategories.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Component\ComponentCategory.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Component\ComponentCategory.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Component\ComponentCategoryTypes.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Component\ComponentCollection.cpp"
 				>
 			</File>
@@ -1386,6 +1214,114 @@
 				RelativePath=".\Component\ComponentInit.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="Image"
+			>
+			<File
+				RelativePath=".\Image\ColorFormats.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Image\Image.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Image\Image.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Image\MipSet.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Image\MipSet.h"
+				>
+			</File>
+			<Filter
+				Name="Filters"
+				>
+				<File
+					RelativePath=".\Image\Filters\DilationFilter.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Filters\DilationFilter.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Filters\ImageFilter.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Filters\ImageFilter.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Formats"
+				>
+				<File
+					RelativePath=".\Image\Formats\BMP.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Formats\BMP.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Formats\DDS.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Formats\DDS.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Formats\DXT.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Formats\DXT.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Formats\JPEG.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Formats\JPEG.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Formats\TGA.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Formats\TGA.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Utilities"
+				>
+				<File
+					RelativePath=".\Image\Utilities\Decode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Utilities\Decode.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Utilities\Swizzle.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Image\Utilities\Swizzle.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\API.h"

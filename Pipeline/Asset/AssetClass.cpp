@@ -6,7 +6,7 @@
 
 #include "Pipeline/Component/Component.h"
 
-#include "Pipeline/Asset/Classes/EntityAsset.h"
+#include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 

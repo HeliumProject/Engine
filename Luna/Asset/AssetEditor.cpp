@@ -7,7 +7,6 @@
 #include "AssetOutliner.h"
 #include "AssetPreferences.h"
 #include "AssetReferenceNode.h"
-#include "ComponentChooserDlg.h"
 #include "ComponentExistenceCommand.h"
 #include "ElementArrayNode.h"
 #include "PersistentNode.h"
@@ -15,12 +14,11 @@
 #include "AssetEditorGenerated.h"
 #include "Browser/BrowserToolBar.h"
 
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Pipeline/Asset/Classes/EntityAsset.h"
-#include "Pipeline/Asset/Classes/StandardShaderAsset.h"
+#include "Pipeline/Asset/Classes/Entity.h"
+#include "Pipeline/Asset/Classes/ShaderAsset.h"
 
 #include "Foundation/File/Path.h"
 
@@ -464,10 +462,10 @@ void AssetEditor::PromptAddComponents( const ContextMenuArgsPtr& args )
 {
     AssetPreferences* preferences = GetAssetEditorPreferences();
     WindowSettings* settings = preferences->GetComponentChooserDlgWindowSettings();
-    ComponentChooserDlg dlg( this );
-    settings->ApplyToWindow( &dlg );
-    dlg.ShowModal();
-    settings->SetFromWindow( &dlg );
+    //ComponentChooserDlg dlg( this );
+    //settings->ApplyToWindow( &dlg );
+    //dlg.ShowModal();
+    //settings->SetFromWindow( &dlg );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -896,10 +894,8 @@ void AssetEditor::UpdateUIElements()
                 buildable &= asset->IsBuildable();
                 viewable &= asset->IsViewable();
                 exportable &= asset->IsExportable();
-                isEntity &= asset->GetPackage< Asset::AssetClass >()->HasType( Reflect::GetType< Asset::EntityAsset >() );
+                isEntity &= asset->GetPackage< Asset::AssetClass >()->HasType( Reflect::GetType< Asset::Entity >() );
 
-                Component::ComponentViewer< Asset::ArtFileComponent > model ( asset->GetPackage< Asset::AssetClass >() );
-                canSyncShaders &= model.Valid();
                 canSyncShaders &= isEntity;
 
                 // Check to see if the selected item needs to be saved (until we find one that does)

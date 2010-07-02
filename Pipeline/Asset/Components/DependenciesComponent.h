@@ -19,7 +19,6 @@ namespace Asset
     static void EnumerateClass( Reflect::Compositor<DependenciesComponent>& comp );
 
     virtual Component::ComponentUsage GetComponentUsage() const NOC_OVERRIDE { return Component::ComponentUsages::Class; }
-    virtual Component::ComponentCategoryType GetCategoryType() const NOC_OVERRIDE;
   };
 
   typedef Nocturnal::SmartPtr< DependenciesComponent > DependenciesComponentPtr;

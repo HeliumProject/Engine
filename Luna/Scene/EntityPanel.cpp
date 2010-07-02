@@ -9,7 +9,6 @@
 
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Foundation/Log.h"
 #include "Platform/Process.h"
@@ -114,9 +113,9 @@ bool IsAssetType( const OS_SelectableDumbPtr& selection, Asset::AssetTypes::Asse
     for ( ; itr != end; ++itr )
     {
         Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *itr );
-        if ( entity && entity->GetClassSet() && entity->GetClassSet()->GetEntityAsset() )
+        if ( entity && entity->GetClassSet() && entity->GetClassSet()->GetEntity() )
         {
-            if ( entity->GetClassSet()->GetEntityAsset()->GetAssetType() != assetType )
+            if ( entity->GetClassSet()->GetEntity()->GetAssetType() != assetType )
             {
                 return false;
             }
@@ -230,7 +229,7 @@ void EntityPanel::CreateClassPath()
         browserButton->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanged ) );
 
         tstring filter;
-        Reflect::GetClass<Asset::EntityAsset>()->GetProperty( Asset::AssetProperties::FileFilter, filter );
+        Reflect::GetClass<Asset::Entity>()->GetProperty( Asset::AssetProperties::FileFilter, filter );
 
         if ( !filter.empty() )
         {
@@ -308,10 +307,10 @@ void EntityPanel::CreateChildImportExport()
 
         m_Enumerator->PushContainer();
         {
-            Inspect::Action* button1 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Entity, Asset::Entity > ) );
+            Inspect::Action* button1 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Entity, Asset::EntityInstance > ) );
             button1->SetText( TXT( "Export Entities" ) );
 
-            Inspect::Action* button2 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Entity, Asset::Entity > ) );
+            Inspect::Action* button2 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Entity, Asset::EntityInstance > ) );
             button2->SetText( TXT( "Import Entities" ) );
 
             Inspect::Action* button3 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Entity > ) );

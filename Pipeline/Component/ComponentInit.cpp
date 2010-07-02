@@ -3,9 +3,6 @@
 #include "Component.h"
 #include "ComponentCollection.h"
 
-#include "ComponentCategory.h"
-#include "ComponentCategories.h"
-
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Reflect/Registry.h"
 
@@ -22,13 +19,9 @@ void Component::Initialize()
   {
     g_ComponentInitializerStack.Push( &Reflect::Initialize, &Reflect::Cleanup );
 
-//    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentCollection>( "ComponentCollection" ) );
-
     g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentBase>( TXT("ComponentBase") ) );
     g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentCollection>( TXT("ComponentCollection") ) );
-    g_ComponentRegisteredTypes.Push( Reflect::RegisterClass<ComponentCategory>( TXT("ComponentCategory") ) );
 
-    ComponentCategories::Initialize();
   }
 }
 
@@ -36,7 +29,6 @@ void Component::Cleanup()
 {
   if (--g_ComponentInitCount == 0)
   {
-    ComponentCategories::Cleanup();
     g_ComponentRegisteredTypes.Cleanup();
     g_ComponentInitializerStack.Cleanup();
   }

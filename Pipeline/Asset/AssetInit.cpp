@@ -1,33 +1,32 @@
 #include "AssetInit.h"
 
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/AssetType.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/AssetFile.h"
 #include "Pipeline/Asset/AssetFolder.h"
 #include "Pipeline/Asset/AssetTemplate.h"
 #include "Pipeline/Asset/AssetVersion.h"
-#include "Pipeline/Asset/Components/ColorMapComponent.h"
+#include "Pipeline/Asset/TextureEnums.h"
+
 #include "Pipeline/Asset/Components/DependenciesComponent.h"
-#include "Pipeline/Asset/Components/DetailMapComponent.h"
+#include "Pipeline/Asset/Components/MeshProcessingComponent.h"
+#include "Pipeline/Asset/Components/TextureProcessingComponent.h"
+#include "Pipeline/Asset/Components/TransformComponent.h"
+
+#include "Pipeline/Asset/Classes/EntityInstance.h"
 #include "Pipeline/Asset/Classes/Entity.h"
-#include "Pipeline/Asset/Classes/EntityAsset.h"
-#include "Pipeline/Asset/Manifests/EntityManifest.h"
-#include "Pipeline/Asset/Components/ExpensiveMapComponent.h"
-#include "Pipeline/Asset/ExporterJob.h"
+#include "Pipeline/Asset/Classes/Texture.h"
+#include "Pipeline/Asset/Classes/AnimationClip.h"
+#include "Pipeline/Asset/Classes/AudioClip.h"
 #include "Pipeline/Asset/Classes/SceneAsset.h"
+#include "Pipeline/Asset/Classes/ShaderAsset.h"
+
+#include "Pipeline/Asset/Manifests/EntityManifest.h"
+#include "Pipeline/Asset/ExporterJob.h"
 #include "Pipeline/Asset/Manifests/ManifestVersion.h"
-#include "Pipeline/Asset/Components/NormalMapComponent.h"
-#include "Pipeline/Asset/Components/StandardColorMapComponent.h"
-#include "Pipeline/Asset/Components/StandardDetailMapComponent.h"
-#include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
-#include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
-#include "Pipeline/Asset/Classes/StandardShaderAsset.h"
-#include "Pipeline/Asset/Components/TextureMapComponent.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 
 #include "Pipeline/Component/ComponentInit.h"
-#include "Pipeline/Component/ComponentCategories.h"
 #include "Foundation/InitializerStack.h"
 #include "Pipeline/Content/ContentInit.h"
 #include "Foundation/Reflect/Registry.h"
@@ -90,19 +89,15 @@ void Asset::Initialize()
     // Enums
     //
 
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<RunTimeFilters::RunTimeFilter>( &RunTimeFilters::RunTimeFilterEnumerateEnumeration, TXT( "RunTimeFilter" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<WrapModes::WrapMode>( &WrapModes::WrapModeEnumerateEnumeration, TXT( "WrapMode" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<AlphaTypes::AlphaType>( &AlphaTypes::AlphaTypeEnumerateEnumeration, TXT( "AlphaType" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<WetSurfaceTypes::WetSurfaceType>( &WetSurfaceTypes::WetSurfaceTypeEnumerateEnumeration, TXT( "WetSurfaceType" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<MipGenFilterTypes::MipGenFilterType>( &MipGenFilterTypes::MipGenFilterTypeEnumerateEnumeration, TXT( "MipGenFilterType" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<PostMipFilterTypes::PostMipFilterType>( &PostMipFilterTypes::PostMipFilterTypeEnumerateEnumeration, TXT( "PostMipFilterType" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<ReductionRatios::ReductionRatio>( &ReductionRatios::ReductionRatioEnumerateEnumeration, TXT( "ReductionRatio" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<ColorTexFormats::ColorTexFormat>( &ColorTexFormats::ColorTexFormatEnumerateEnumeration, TXT( "ColorTexFormat" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<NormalTexFormats::NormalTexFormat>( &NormalTexFormats::NormalTexFormatEnumerateEnumeration, TXT( "NormalTexFormat" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<GlossParaIncanTexFormats::GlossParaIncanTexFormat>( &GlossParaIncanTexFormats::GlossParaIncanTexFormatEnumerateEnumeration, TXT( "GlossParaIncanTexFormat" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<CubeSpecTypeFormats::CubeSpecTypeFormat>( &CubeSpecTypeFormats::CubeSpecTypeFormatEnumerateEnumeration, TXT( "CubeSpecTypeFormat" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<DetailTexFormats::DetailTexFormat>( &DetailTexFormats::DetailTexFormatEnumerateEnumeration, TXT( "DetailTexFormat" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<Asset::AssetType>( &AssetTypes::AssetTypeEnumerateEnumeration, TXT( "AssetType" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< TextureFilters::TextureFilter >( &TextureFilters::TextureFilterEnumerateEnumeration, TXT( "TextureFilter" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< WrapModes::WrapMode >( &WrapModes::WrapModeEnumerateEnumeration, TXT( "WrapMode" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< AlphaTypes::AlphaType >( &AlphaTypes::AlphaTypeEnumerateEnumeration, TXT( "AlphaType" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< WetSurfaceTypes::WetSurfaceType >( &WetSurfaceTypes::WetSurfaceTypeEnumerateEnumeration, TXT( "WetSurfaceType" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< MipGenFilterTypes::MipGenFilterType >( &MipGenFilterTypes::MipGenFilterTypeEnumerateEnumeration, TXT( "MipGenFilterType" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< PostMipFilterTypes::PostMipFilterType >( &PostMipFilterTypes::PostMipFilterTypeEnumerateEnumeration, TXT( "PostMipFilterType" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< ReductionRatios::ReductionRatio >( &ReductionRatios::ReductionRatioEnumerateEnumeration, TXT( "ReductionRatio" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< AnimationClipModes::AnimationClipMode >( &AnimationClipModes::AnimationClipModeEnumerateEnumeration, TXT( "AnimationClipMode" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< Asset::AssetType >( &AssetTypes::AssetTypeEnumerateEnumeration, TXT( "AssetType" ) ) );
 
     //
     // Basic Types
@@ -114,8 +109,6 @@ void Asset::Initialize()
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetFile>( TXT( "AssetFile" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetFolder>( TXT( "AssetFolder" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<ShaderAsset>( TXT( "ShaderAsset" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<FileBackedComponent>( TXT( "FileBackedComponent" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<Entity>( TXT( "Entity" ) ) );
 
     g_AssetInitializerStack.Push( Reflect::RegisterClass<ManifestVersion>( TXT( "ManifestVersion" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetManifest>( TXT( "AssetManifest" ) ) );
@@ -132,47 +125,29 @@ void Asset::Initialize()
     g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<TextureColorFormats::TextureColorFormat>( &TextureColorFormats::TextureColorFormatEnumerateEnumeration, TXT( "TextureColorFormat" ) ) );
 
     //
-    // Asset Attributes
+    // Components
     //
 
     g_AssetInitializerStack.Push( Reflect::RegisterClass<DependenciesComponent>( TXT( "DependenciesComponent" ) ) );
-    Component::ComponentCategories::GetInstance()->Categorize( new DependenciesComponent );
-
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<TextureMapComponent>( TXT( "TextureMapComponent" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ColorMapComponent>( TXT( "ColorMapComponent" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<NormalMapComponent>( TXT( "NormalMapComponent" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ExpensiveMapComponent>( TXT( "ExpensiveMapComponent" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<DetailMapComponent>( TXT( "DetailMapComponent" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardColorMapComponent>( TXT( "StandardColorMapComponent" ) ) );
-    Component::ComponentCategories::GetInstance()->Categorize( new StandardColorMapComponent );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardNormalMapComponent>( TXT( "StandardNormalMapComponent" ) ) );
-    Component::ComponentCategories::GetInstance()->Categorize( new StandardNormalMapComponent );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardExpensiveMapComponent>( TXT( "StandardExpensiveMapComponent" ) ) );
-    Component::ComponentCategories::GetInstance()->Categorize( new StandardExpensiveMapComponent );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardDetailMapComponent>( TXT( "StandardDetailMapComponent" ) ) );
-    Component::ComponentCategories::GetInstance()->Categorize( new StandardDetailMapComponent );
-
-    //
-    // Attribute Sets
-    //
-
-    // appearance
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ArtFileComponent>( TXT( "ArtFileComponent" ) ) );
-    Component::ComponentCategories::GetInstance()->Categorize( new ArtFileComponent );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<MeshProcessingComponent>( TXT( "MeshProcessingComponent" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<TextureProcessingComponent>( TXT( "TextureProcessingComponent" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<TransformComponent>( TXT( "TransformComponent" ) ) );
+    
 
     //
     // Asset classes
     //
 
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<EntityAsset>( TXT( "EntityAsset" ) ) );
-    g_AssetClassTypes.push_back( Reflect::GetType<EntityAsset>() );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<Entity>( TXT( "Entity" ) ) );
+    g_AssetClassTypes.push_back( Reflect::GetType<Entity>() );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<SceneAsset>( TXT( "SceneAsset" ) ) );
     g_AssetClassTypes.push_back( Reflect::GetType<SceneAsset>() );
-
-    // Shaders
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<StandardShaderAsset>( TXT( "StandardShaderAsset" ) ) );
-    g_AssetClassTypes.push_back( Reflect::GetType<StandardShaderAsset>() );
-
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<Texture>( TXT( "Texture" ) ) );
+    g_AssetClassTypes.push_back( Reflect::GetType<Texture>() );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<AnimationClip>( TXT( "AnimationClip" ) ) );
+    g_AssetClassTypes.push_back( Reflect::GetType<AnimationClip>() );
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<AudioClip>( TXT( "AudioClip" ) ) );
+    g_AssetClassTypes.push_back( Reflect::GetType<AudioClip>() );
 
     /////////////////////////////////////////////////////////////
     // Support for engine types

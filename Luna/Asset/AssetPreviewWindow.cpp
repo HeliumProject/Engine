@@ -3,11 +3,6 @@
 #include "AssetPreviewWindow.h"
 #include "AssetPreferences.h"
 
-#include "Pipeline/Asset/Components/StandardColorMapComponent.h"
-#include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
-#include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
-#include "Pipeline/Asset/Components/StandardDetailMapComponent.h"
-
 #include "Render/RBShaderLoader.h"
 #include "Render/RBObjectLoader.h"
 
@@ -133,18 +128,18 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       shader->m_flags &= ~SHDR_FLAG_TWO_SIDED;
     }
 
-    Asset::StandardColorMapComponent* colorMap = shaderClass->GetComponent< Asset::StandardColorMapComponent >();
-    if ( colorMap )
+    Asset::TexturePtr colorMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shaderClass->m_ColorMapPath );
+    if ( colorMap.ReferencesObject() )
     {
       Render::TextureSettings settings;
       settings.Clear();
 
       settings.m_Path = colorMap->GetPath().Get();
       settings.m_Anisotropy = 0;
-      settings.m_MipBias = colorMap->m_MipBias;
+      settings.m_MipBias = 0.0f;
       Content::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
-      Content::RBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
-      Content::RBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, Render::Texture::SAMPLER_BASE_MAP );
+      Content::RBShaderLoader::SetFilter( &settings, colorMap->GetFilter() );
+      Content::RBShaderLoader::SetColorFormat( &settings, colorMap->GetFormat(), Render::Texture::SAMPLER_BASE_MAP );
       
       m_Scene->m_renderer->m_shader_manager.UpdateShaderTexture( shaderPath.c_str(), Render::Texture::SAMPLER_BASE_MAP, settings );
     }
@@ -153,20 +148,20 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       m_Scene->m_renderer->m_shader_manager.SetShaderDefaultTexture( shaderPath.c_str(), Render::Texture::SAMPLER_BASE_MAP );
     }
     
-    Content::RBShaderLoader::UpdateShaderColorMap( shader, colorMap );
+    Content::RBShaderLoader::UpdateShader( shader, shaderClass );
 
-    Asset::StandardNormalMapComponent* normalMap = shaderClass->GetComponent< Asset::StandardNormalMapComponent >();
-    if ( normalMap )
+    Asset::TexturePtr normalMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shaderClass->m_NormalMapPath );
+    if ( normalMap.ReferencesObject() )
     {
       Render::TextureSettings settings;
       settings.Clear();
       
       settings.m_Path = normalMap->GetPath().Get();
       settings.m_Anisotropy = 0;
-      settings.m_MipBias = normalMap->m_MipBias;
+      settings.m_MipBias = 0.0f;
       Content::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
-      Content::RBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
-      Content::RBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, Render::Texture::SAMPLER_NORMAL_MAP );
+      Content::RBShaderLoader::SetFilter( &settings, normalMap->GetFilter() );
+      Content::RBShaderLoader::SetColorFormat( &settings, normalMap->GetFormat(), Render::Texture::SAMPLER_NORMAL_MAP );
       
       m_Scene->m_renderer->m_shader_manager.UpdateShaderTexture( shaderPath.c_str(), Render::Texture::SAMPLER_NORMAL_MAP, settings );
     }
@@ -175,25 +170,20 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       m_Scene->m_renderer->m_shader_manager.SetShaderDefaultTexture( shaderPath.c_str(), Render::Texture::SAMPLER_BASE_MAP );
     }
 
-    Content::RBShaderLoader::UpdateShaderNormalMap( shader, normalMap );
+    Content::RBShaderLoader::UpdateShader( shader, shaderClass );
 
-    Asset::StandardExpensiveMapComponent* expensiveMap = shaderClass->GetComponent< Asset::StandardExpensiveMapComponent >();
-    if ( expensiveMap )
+    Asset::TexturePtr gpiMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shaderClass->m_GPIMapPath );
+    if ( gpiMap.ReferencesObject() )
     {
       Render::TextureSettings settings;
       settings.Clear();
 
-      settings.m_Path = expensiveMap->GetPath().Get();
+      settings.m_Path = gpiMap->GetPath().Get();
       settings.m_Anisotropy = 0;
-      settings.m_MipBias = expensiveMap->m_MipBias;
+      settings.m_MipBias = 0.0f;
       Content::RBShaderLoader::SetWrapUV( &settings, shaderClass->m_WrapModeU, shaderClass->m_WrapModeV );
-      Content::RBShaderLoader::SetFilter( &settings, colorMap->m_TexFilter );
-      Content::RBShaderLoader::SetColorFormat( &settings, colorMap->m_TexFormat, Render::Texture::SAMPLER_GPI_MAP );
-
-      if (expensiveMap->m_DetailMapMaskEnabled && settings.m_Format == D3DFMT_DXT1)
-      {
-        settings.m_Format = D3DFMT_DXT5;
-      }
+      Content::RBShaderLoader::SetFilter( &settings, gpiMap->GetFilter() );
+      Content::RBShaderLoader::SetColorFormat( &settings, gpiMap->GetFormat(), Render::Texture::SAMPLER_GPI_MAP );
 
       m_Scene->m_renderer->m_shader_manager.UpdateShaderTexture( shaderPath.c_str(), Render::Texture::SAMPLER_GPI_MAP, settings );
     }
@@ -202,7 +192,7 @@ void AssetPreviewWindow::UpdateShader( Asset::ShaderAsset* shaderClass )
       m_Scene->m_renderer->m_shader_manager.SetShaderDefaultTexture( shaderPath.c_str(), Render::Texture::SAMPLER_BASE_MAP );
     }
 
-    Content::RBShaderLoader::UpdateShaderExpensiveMap( shader, expensiveMap );
+    Content::RBShaderLoader::UpdateShader( shader, shaderClass );
     
     Refresh();
   }

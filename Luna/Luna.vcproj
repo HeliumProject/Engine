@@ -2756,22 +2756,6 @@
 						RelativePath=".\Asset\ComponentWrapper.h"
 						>
 					</File>
-					<File
-						RelativePath=".\Asset\FileBackedComponent.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Asset\FileBackedComponent.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Asset\TextureMapComponent.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Asset\TextureMapComponent.h"
-						>
-					</File>
 				</Filter>
 			</Filter>
 			<Filter
@@ -2831,14 +2815,6 @@
 				</File>
 				<File
 					RelativePath=".\Asset\AssetPreviewWindow.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\ComponentChooserDlg.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Asset\ComponentChooserDlg.h"
 					>
 				</File>
 				<File

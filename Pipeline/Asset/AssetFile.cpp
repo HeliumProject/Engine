@@ -1,8 +1,6 @@
 #include "AssetFile.h"
 
 #include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
-#include "Pipeline/Asset/Components/ColorMapComponent.h"
 
 #include "Pipeline/Component/ComponentHandle.h"
 #include "Foundation/File/Path.h"

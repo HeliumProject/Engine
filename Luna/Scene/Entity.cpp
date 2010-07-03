@@ -514,14 +514,7 @@ void Entity::SetEntityAssetPath( const tstring& entityClass )
 
 tstring Entity::GetAssetTypeName() const
 {
-    if ( GetClassSet()->GetEntity() )
-    {
-        return Asset::AssetClass::GetAssetTypeName( GetClassSet()->GetEntity()->GetAssetType() );
-    }
-    else
-    {
-        return TXT( "Unknown" );
-    }
+    return TXT( "Unknown" );
 }
 
 void Entity::SetAssetTypeName( const tstring& type )

@@ -101,34 +101,6 @@ bool SelectionHasSameAttribute(const OS_SelectableDumbPtr& selection, Component:
     return true;
 }
 
-bool IsAssetType( const OS_SelectableDumbPtr& selection, Asset::AssetTypes::AssetType assetType )
-{
-    if ( selection.Empty() )
-    {
-        return false;
-    }
-
-    OS_SelectableDumbPtr::Iterator itr = selection.Begin();
-    OS_SelectableDumbPtr::Iterator end = selection.End();
-    for ( ; itr != end; ++itr )
-    {
-        Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *itr );
-        if ( entity && entity->GetClassSet() && entity->GetClassSet()->GetEntity() )
-        {
-            if ( entity->GetClassSet()->GetEntity()->GetAssetType() != assetType )
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 EntityPanel::EntityPanel(Enumerator* enumerator, const OS_SelectableDumbPtr& selection)
 : InstancePanel (enumerator, selection)
 , m_LightingPanel ( NULL )

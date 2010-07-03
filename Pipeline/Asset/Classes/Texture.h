@@ -2,7 +2,6 @@
 
 #include "Pipeline/API.h"
 #include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/AssetType.h"
 
 #include "Pipeline/Asset/TextureEnums.h"
 #include "Pipeline/Image/MipSet.h"

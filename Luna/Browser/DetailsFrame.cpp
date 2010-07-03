@@ -80,12 +80,7 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
 
   m_Name->SetValue( name );
 
-  tstring fileType( Asset::AssetClass::GetAssetTypeName( file->GetAssetType() ) );
-  if ( fileType == TXT( "Unknown" ) || fileType == TXT( "Null" ) )
-  {
-    fileType = file->GetFileType();
-  }
-  m_FileType->SetValue( fileType );
+  m_FileType->SetValue( TXT( "Unknown" ) );
 
   m_FileID->SetValue( file->GetFilePath() );
 

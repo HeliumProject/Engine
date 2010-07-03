@@ -14,7 +14,6 @@
 #include "Application/Preferences.h"
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
-#include "Pipeline/Asset/AssetExceptions.h"
 
 #include "Browser/Browser.h"
 
@@ -884,19 +883,7 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
 
 void Scene::ArchiveException(Reflect::ExceptionInfo& info)
 {
-    if ( typeid( info.m_Exception ) == typeid( Asset::UnableToLoadAssetClassException ) )
-    {
-        Asset::Entity* entity = Reflect::ObjectCast<Asset::Entity>( info.m_Element );
-        if ( entity )
-        {
-            // use the default entity class?
-#pragma TODO( "reimplement" )
-            //      entity->SetEntityAssetID( 0x0 );
-
-            // accept this object from the file
-            info.m_Action = Reflect::ExceptionActions::Accept;
-        }
-    }
+#pragma TODO( "Sub default assets?" )
 }
 
 bool Scene::Export( Reflect::V_Element& elements, const ExportArgs& args, Undo::BatchCommand* changes )

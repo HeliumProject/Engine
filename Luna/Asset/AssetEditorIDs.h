@@ -26,9 +26,6 @@ namespace Luna
       Checkout,
       AddShaderGroup,
       DeleteShaderGroup,
-      Build,
-      View,
-      Export,
       SyncShaders,
       AddAnimationSet,
       AddAnimationGroup,
@@ -42,7 +39,6 @@ namespace Luna
       OpenSession,
       MoveUp,
       MoveDown,
-      Preview,
       ExpandAll,
       CollapseAll,
       // Insert new menu IDs here (unless they overlap with wxWidget IDs, see below)

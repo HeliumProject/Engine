@@ -58,8 +58,6 @@ EVT_MENU( wxID_COPY, OnCopy )
 EVT_MENU( wxID_PASTE, OnPaste )
 EVT_MENU( AssetEditorIDs::MoveUp, OnMoveUp )
 EVT_MENU( AssetEditorIDs::MoveDown, OnMoveDown )
-EVT_MENU( AssetEditorIDs::Preview, OnPreview )
-EVT_MENU( AssetEditorIDs::Build, OnBuild )
 EVT_MENU( wxID_HELP_INDEX, OnHelpIndex )
 EVT_MENU( wxID_HELP_SEARCH, OnHelpSearch )
 EVT_MENU( AssetEditorIDs::Checkout, OnCheckout )
@@ -134,10 +132,6 @@ AssetEditor::AssetEditor()
     m_MainToolBar->AddTool( wxID_UNDO, wxT( "Undo" ), wxArtProvider::GetBitmap( wxART_UNDO, wxART_OTHER, wxSize(16, 16 ) ), wxT( "Undo" ) );
     m_MainToolBar->AddTool( wxID_REDO, wxT( "Redo" ), wxArtProvider::GetBitmap( wxART_REDO, wxART_OTHER, wxSize(16, 16 ) ), wxT( "Redo" ) );
     m_MainToolBar->AddSeparator();
-    m_MainToolBar->AddTool( AssetEditorIDs::Preview, wxT( "Preview" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "preview.png" ) ), wxT( "Preview" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::Build, wxT( "Build" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "build.png" ) ), wxT( "Build (Shift-click for build options)" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::View, wxT( "View" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "view.png" ) ), wxT( "View (Shift-click for build options)" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::Export, wxT( "Export" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "export.png" ) ), wxT( "Export all relevant art assets (Shift-click for export options)" ) );
     m_MainToolBar->AddTool( AssetEditorIDs::SyncShaders, wxT( "Sync Shaders" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "sync_shaders.png" ) ), wxT( "Synchronize the Shader Usage settings." ) );
     m_MainToolBar->AddTool( AssetEditorIDs::UpdateSymbols, wxT( "Update Symbols" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "header.png" ) ), wxT( "Update Symbols for Update Classes" ) ); 
     m_MainToolBar->AddSeparator();
@@ -146,9 +140,6 @@ AssetEditor::AssetEditor()
     m_MainToolBar->AddTool( AssetEditorIDs::EditAnimationGroup, wxT( "Edit Group" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "animationgroup_edit.png" ) ), wxT( "Edit the selected Animation Group." ) );
     m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationClip, wxT( "Add Clip" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "animationclip_add.png" ) ), wxT( "Add a new Animation Clip to the selected Animation Chain(s)." ) );
     m_MainToolBar->Realize();
-    m_MainToolBar->EnableTool( AssetEditorIDs::Build, false );
-    m_MainToolBar->EnableTool( AssetEditorIDs::View, false );
-    m_MainToolBar->EnableTool( AssetEditorIDs::Export, false );
     m_MainToolBar->EnableTool( AssetEditorIDs::SyncShaders, false );
     m_MainToolBar->EnableTool( AssetEditorIDs::UpdateSymbols, false ); 
     m_MainToolBar->EnableTool( AssetEditorIDs::AddAnimationSet, false );
@@ -851,10 +842,6 @@ Inspect::ReflectClipboardDataPtr AssetEditor::FromClipboard()
 // 
 void AssetEditor::UpdateUIElements()
 {
-    bool previewable = false;
-    bool buildable = true;
-    bool viewable = true;
-    bool exportable = true;
     bool canSyncShaders = true;
     bool isEntity = true;
     bool canSaveSelection = false;
@@ -891,9 +878,6 @@ void AssetEditor::UpdateUIElements()
             Nocturnal::Insert< S_AssetClassDumbPtr >::Result inserted = assets.insert( asset );
             if ( inserted.second )
             {
-                buildable &= asset->IsBuildable();
-                viewable &= asset->IsViewable();
-                exportable &= asset->IsExportable();
                 isEntity &= asset->GetPackage< Asset::AssetClass >()->HasType( Reflect::GetType< Asset::Entity >() );
 
                 canSyncShaders &= isEntity;
@@ -933,14 +917,7 @@ void AssetEditor::UpdateUIElements()
     m_MainToolBar->EnableTool( AssetEditorIDs::SaveAllAssetClasses, doAnyDocsNeedSaved );
 
     // Asset Toolbar
-    bool enableBuild = buildable && assets.size() > 0;
-    bool enableView = viewable && assets.size() == 1;
-    bool enableExport = exportable && assets.size() > 0;
     bool enableSyncShaders = canSyncShaders && assets.size() > 0;
-    m_MainToolBar->EnableTool( AssetEditorIDs::Preview, previewable );
-    m_MainToolBar->EnableTool( AssetEditorIDs::Build, enableBuild );
-    m_MainToolBar->EnableTool( AssetEditorIDs::View, enableView );
-    m_MainToolBar->EnableTool( AssetEditorIDs::Export, enableExport );
     m_MainToolBar->EnableTool( AssetEditorIDs::SyncShaders, enableSyncShaders );
 
 }

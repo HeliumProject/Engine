@@ -3,7 +3,6 @@
 
 #include "Pipeline/Asset/AssetFile.h"
 #include "Pipeline/Asset/AssetFolder.h"
-#include "Pipeline/Asset/AssetTypeInfo.h"
 #include "Platform/Exception.h"
 
 using namespace Luna;
@@ -123,11 +122,6 @@ tstring ThumbnailTile::GetTypeLabel() const
     tstring label;
     if ( IsFile() )
     {
-        label = Asset::GetAssetTypeName( m_File->GetAssetType() );
-        if ( label == TXT( "Unknown" ) || label == TXT( "Null" ) )
-        {
-            label = m_File->GetFileType();
-        }
     }
     return label;
 }
@@ -136,28 +130,10 @@ bool ThumbnailTile::GetTypeColor( DWORD& color ) const
 {
     if ( IsFile() )
     {
-        // try by engine type
-        Asset::AssetType type = m_File->GetAssetType();
-        if ( type != Asset::AssetTypes::Null )
-        {
-            color = Asset::GetAssetTypeColor( type );
-            if ( color != 0 )
-            {
-                return true;
-            }
-        }    
     }
     return false;
 }
 
-Asset::AssetType ThumbnailTile::GetAssetType() const
-{
-    if ( IsFile() )
-    {
-        return m_File->GetAssetType();
-    }
-    return Asset::AssetTypes::Null;
-}
 
 const Thumbnail* ThumbnailTile::GetThumbnail() const
 {

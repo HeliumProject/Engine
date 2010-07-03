@@ -2,7 +2,6 @@
 
 #include "Pipeline/API.h"
 #include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/AssetType.h"
 #include "Pipeline/Asset/Classes/Texture.h"
 
 #include "Foundation/TUID.h"
@@ -14,8 +13,6 @@ namespace Finder
 
 namespace Asset
 {
-    typedef std::set< AssetTypes::AssetType > S_AssetType;
-
     namespace AlphaTypes
     {
         enum AlphaType

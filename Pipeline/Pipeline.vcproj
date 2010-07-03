@@ -911,10 +911,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Asset\AssetExceptions.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Asset\AssetFile.cpp"
 				>
 			</File>
@@ -943,26 +939,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Asset\AssetTemplate.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\AssetTemplate.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\AssetType.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\AssetTypeInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\AssetTypeInfo.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Asset\AssetVersion.cpp"
 				>
 			</File>
@@ -976,14 +952,6 @@
 			</File>
 			<File
 				RelativePath=".\Asset\AssetVisitor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\ExporterJob.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\ExporterJob.h"
 				>
 			</File>
 			<File

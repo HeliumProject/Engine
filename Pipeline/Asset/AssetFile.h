@@ -51,8 +51,6 @@ namespace Asset
     u64 GetSize();
     const tstring& GetRCSUser();
 
-    AssetType GetAssetType();
-
     static AssetClassPtr GetAssetClass( AssetFile* assetFile );
 
     void AddAttribute( const tstring& attrName, const tstring& attrValue, bool canAppend = true );
@@ -82,7 +80,6 @@ namespace Asset
     tstring   m_FileFilter;
     tstring   m_Extension;
     tstring   m_FileType;
-    AssetType     m_AssetType;
     u64           m_Size;
     std::map< tstring, tstring >      m_Attributes;
     std::set< Nocturnal::Path > m_Dependencies;

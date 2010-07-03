@@ -81,7 +81,6 @@ AssetReferenceNode::~AssetReferenceNode()
         AssetDocument* doc = GetAssetManager()->FindAssetDocument( m_Asset );
         doc->AddDocumentModifiedListener( DocumentChangedSignature::Delegate ( this, &AssetReferenceNode::DocumentModified ) );
         m_Asset->UnregisterAssetReferenceNode( this );
-        m_Asset->GetPackage< Asset::AssetClass >()->RemoveAssetTypeChangedListener( Asset::AssetTypeChangeSignature::Delegate( this, &AssetReferenceNode::AssetTypeChanged ) );
     }
 }
 
@@ -182,7 +181,6 @@ void AssetReferenceNode::Load()
             AssetDocument* doc = GetAssetManager()->FindAssetDocument( m_Asset );
             doc->AddDocumentModifiedListener( DocumentChangedSignature::Delegate ( this, &AssetReferenceNode::DocumentModified ) );
 
-            m_Asset->GetPackage< Asset::AssetClass >()->AddAssetTypeChangedListener( Asset::AssetTypeChangeSignature::Delegate( this, &AssetReferenceNode::AssetTypeChanged ) );
             m_Asset->RegisterAssetReferenceNode( this );
 
             SetName( MakeLabel() );
@@ -207,8 +205,6 @@ void AssetReferenceNode::Unload()
         // Remove listeners
         AssetDocument* doc = GetAssetManager()->FindAssetDocument( m_Asset );
         doc->RemoveDocumentModifiedListener( DocumentChangedSignature::Delegate ( this, &AssetReferenceNode::DocumentModified ) );
-
-        m_Asset->GetPackage< Asset::AssetClass >()->RemoveAssetTypeChangedListener( Asset::AssetTypeChangeSignature::Delegate( this, &AssetReferenceNode::AssetTypeChanged ) );
 
         m_Asset->UnregisterAssetReferenceNode( this );
 
@@ -480,11 +476,6 @@ void AssetReferenceNode::CreatePanel( CreatePanelArgs& args )
 // 
 tstring AssetReferenceNode::GetAssetTypeName() const
 {
-    if ( m_Asset )
-    {
-        return Asset::AssetClass::GetAssetTypeName( m_Asset->GetPackage< Asset::AssetClass >()->GetAssetType() );
-    }
-
     return TXT( "Unknown" );
 }
 

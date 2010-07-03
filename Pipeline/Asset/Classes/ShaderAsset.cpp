@@ -3,8 +3,6 @@
 #include "Foundation/Log.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 
-#include "Pipeline/Asset/AssetExceptions.h" 
-#include "Pipeline/Asset/AssetTemplate.h"
 #include "Foundation/Component/ComponentHandle.h"
 
 using namespace Asset;

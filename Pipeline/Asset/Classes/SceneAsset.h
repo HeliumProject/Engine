@@ -37,11 +37,6 @@ namespace Asset
 
     virtual bool ValidateCompatible( const Component::ComponentPtr& attr, tstring& error ) const NOC_OVERRIDE;
 
-    virtual bool IsBuildable() const NOC_OVERRIDE;
-    virtual bool IsViewable() const NOC_OVERRIDE;
-
-    void MakeDefault();
-
     REFLECT_DECLARE_CLASS( SceneAsset, AssetClass );
 
     static void EnumerateClass( Reflect::Compositor<SceneAsset>& comp );

@@ -1,10 +1,8 @@
 #include "AssetInit.h"
 
-#include "Pipeline/Asset/AssetType.h"
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/AssetFile.h"
 #include "Pipeline/Asset/AssetFolder.h"
-#include "Pipeline/Asset/AssetTemplate.h"
 #include "Pipeline/Asset/AssetVersion.h"
 #include "Pipeline/Asset/TextureEnums.h"
 
@@ -22,7 +20,6 @@
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 
 #include "Pipeline/Asset/Manifests/EntityManifest.h"
-#include "Pipeline/Asset/ExporterJob.h"
 #include "Pipeline/Asset/Manifests/ManifestVersion.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 
@@ -79,13 +76,6 @@ void Asset::Initialize()
     g_AssetInitializerStack.Push( Content::Initialize, Content::Cleanup );
 
     //
-    // Numbered asset conversion
-    //
-
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ExporterJob>( TXT( "ExporterJob" ) ) );
-
-
-    //
     // Enums
     //
 
@@ -97,13 +87,11 @@ void Asset::Initialize()
     g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< PostMipFilterTypes::PostMipFilterType >( &PostMipFilterTypes::PostMipFilterTypeEnumerateEnumeration, TXT( "PostMipFilterType" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< ReductionRatios::ReductionRatio >( &ReductionRatios::ReductionRatioEnumerateEnumeration, TXT( "ReductionRatio" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< AnimationClipModes::AnimationClipMode >( &AnimationClipModes::AnimationClipModeEnumerateEnumeration, TXT( "AnimationClipMode" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< Asset::AssetType >( &AssetTypes::AssetTypeEnumerateEnumeration, TXT( "AssetType" ) ) );
 
     //
     // Basic Types
     //
 
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetTemplate>( TXT( "AssetTemplate" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetVersion>( TXT( "AssetVersion" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetClass>( TXT( "AssetClass" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetFile>( TXT( "AssetFile" ) ) );

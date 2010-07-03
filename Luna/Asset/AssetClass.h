@@ -69,9 +69,6 @@ namespace Luna
     virtual void Pack() NOC_OVERRIDE;
     virtual void Unpack() NOC_OVERRIDE;
     virtual bool Save( tstring& error );
-    bool IsBuildable() const;
-    bool IsViewable() const;
-    bool IsExportable() const;
     const tstring& GetName() const;
     u64 GetHash() const
     {

@@ -12,7 +12,6 @@
 #include "PersistentDataFactory.h"
 
 #include "Foundation/Component/ComponentHandle.h"
-#include "Pipeline/Asset/AssetExceptions.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Natural.h"
@@ -162,31 +161,6 @@ bool AssetClass::Save( tstring& error )
   return saved;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns true if this asset is able to be built.
-// 
-bool AssetClass::IsBuildable() const
-{
-  return GetPackage< Asset::AssetClass >()->IsBuildable();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns true if this asset is able to be viewed.
-// 
-bool AssetClass::IsViewable() const
-{
-  return GetPackage< Asset::AssetClass >()->IsViewable();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns true if this asset has art data that can be exported.
-// 
-bool AssetClass::IsExportable() const
-{
-    return false;
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the name of this asset, determined by the file name on disk where
 // this asset is located.
@@ -224,15 +198,7 @@ tstring AssetClass::GetFilePath()
 // 
 tstring AssetClass::GetIcon() const
 {
-  // get the engine type icon
-  tstring icon = Asset::AssetClass::GetAssetTypeIcon( GetPackage<Asset::AssetClass>()->GetAssetType() );
-  
-  if ( icon.empty() )
-  {
-    icon = TXT( "null.png" ); 
-  }
-
-  return icon;
+  return TXT( "null.png" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -267,7 +233,6 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
 
   const size_t numSelected = m_AssetManager->GetSelection().GetItems().Size();
   const bool isShader = assetPkg->HasType( Reflect::GetType< Asset::ShaderAsset >() );
-  const bool isLevel = assetPkg->GetAssetType() == Asset::AssetTypes::Level;
 
   bool areAssetsLocked = true;
   const tchar* networkLockAssetsPath = _tgetenv( TXT( "NOC_NETWORK_LOCK_ASSETS_FILE" ) );
@@ -298,12 +263,12 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
     ? TXT( "Create a copy of this asset using the Asset Manager wizard." )
     : TXT( "Duplicating assets is not allowed or not available at this time." );
 
-  const bool canRename = ( numSelected == 1 ) && ( !isLevel && !areAssetsLocked ) ;
+  const bool canRename = ( numSelected == 1 ) && ( !areAssetsLocked ) ;
   tstring renameToolTip = canRename 
     ? TXT( "Rename or Move this asset using the Asset Manager wizard." )
     : TXT( "Renaming assets is not allowed or not available at this time." );
 
-  const bool canDelete = ( numSelected == 1 ) && ( !isLevel && !areAssetsLocked );
+  const bool canDelete = ( numSelected == 1 ) && ( !areAssetsLocked );
   tstring deleteToolTip = canDelete 
     ? TXT( "Delete this asset using the Asset Manager wizard." )
     : TXT( "Deleting assets is not allowed or not available at this time." );

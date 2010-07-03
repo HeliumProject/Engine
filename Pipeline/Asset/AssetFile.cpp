@@ -50,7 +50,6 @@ void AssetFile::Init()
     m_FileFilter              = TXT( "" );
     m_Extension               = TXT( "" );
     m_FileType                = TXT( "" );
-    m_AssetType               = Asset::AssetTypes::Null;
     m_Size                    = 0;
     m_Attributes.clear();
     m_Dependencies.clear();
@@ -123,12 +122,6 @@ u64 AssetFile::GetSize()
         m_Size = Nocturnal::Path( GetFilePath() ).Size();
     }
     return m_Size;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-AssetType AssetFile::GetAssetType()
-{
-    return m_AssetType;
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -12,7 +12,6 @@
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Foundation/Component/ComponentHandle.h"
-#include "Pipeline/Asset/ExporterJob.h"
 
 #include "Foundation/Reflect/Archive.h"
 
@@ -120,87 +119,6 @@ void ExportSignal(Nocturnal::Void)
   }
 }
 
-bool Export( const S_tuid& assetIDs, bool recurse, const tstring& stateTrackerFile, bool lightingSetup = false )
-{
-  g_WorkerProcess = Worker::Process::Create( TXT( "ExportTool.exe" ) );
-
-  if (!g_WorkerProcess->Start( 20000 ) )
-  {
-    return false;
-  }
-
-  Asset::ExporterJobPtr job = new Asset::ExporterJob();
-
-  job->m_Recursive = recurse;
-  job->m_StateTrackerFile = stateTrackerFile;
-  job->m_SetupLighting = lightingSetup;
-
-  S_tuid::const_iterator itr = assetIDs.begin();
-  S_tuid::const_iterator end = assetIDs.end();
-  for ( ; itr != end; ++itr )
-  {
-    job->m_AssetIds.insert( *itr );
-  }
-
-  std::stringstream stream;
-  try
-  {
-    Reflect::ArchiveBinary::ToStream( job, stream );
-  }
-  catch ( Nocturnal::Exception& ex )
-  {
-    Log::Error( TXT( "%s\n" ), ex.What() );
-    return false;
-  }
-
-  if (!g_WorkerProcess->Send(0x0, (u32)stream.str().length(), (const u8*)stream.str().c_str()))
-  {
-    return false;
-  }
-
-  while (g_WorkerProcess->Running() && !g_ExportCancelling)
-  {
-    IPC::Message* msg = g_WorkerProcess->Receive();
-
-    if (!msg)
-    {
-      break;
-    }
-
-    u32 messageId = msg->GetID();
-    if (messageId == Worker::ConsoleOutputMessage)
-    {
-      Worker::ConsoleOutput* output = (Worker::ConsoleOutput*)msg->GetData();
-
-      Log::Statement statement( output->m_String, output->m_Stream, output->m_Level, output->m_Indent );
-
-      if (g_OutputWindow)
-      {
-        g_OutputWindow->PrintListener( Log::PrintedArgs ( statement ) );
-      }
-      else
-      {
-        Log::PrintStatement( statement );
-      }
-    }
-
-    delete msg;
-  }
-
-  if (g_ExportCancelling)
-  {
-    ExitThread( 0 );
-    return 0;
-  }
-  else
-  {
-    int result = g_WorkerProcess->Finish();
-
-    Worker::Process::Release( g_WorkerProcess );
-
-    return result == 0;
-  }
-}
 
 DWORD WINAPI ExportThread( LPVOID lpParam )
 {
@@ -208,7 +126,7 @@ DWORD WINAPI ExportThread( LPVOID lpParam )
 
   ExportParams* params = static_cast< ExportParams* >( lpParam );
 
-  success = ::Export( params->m_AssetIds, params->m_Recursive, params->m_StateTrackerFile, params->m_SetupLighting );
+  success = true;
 
   if ( !g_ExportCancelling )
   {

@@ -1,8 +1,6 @@
 #include "Platform/Windows/Windows.h"
 
 #include "AssetClass.h"
-#include "Pipeline/Asset/AssetTypeInfo.h"
-#include "Pipeline/Asset/AssetExceptions.h"
 
 #include "Foundation/Component/Component.h"
 
@@ -75,23 +73,6 @@ tstring AssetClass::GetShortName() const
     return m_Path.Basename();
 }
 
-#pragma TODO( "implement AssetType info lookup functions" )
-tstring AssetClass::GetAssetTypeName( const AssetType assetType )
-{
-    return TXT( "" );
-}
-
-tstring AssetClass::GetAssetTypeBuilder( const AssetType AssetType )
-{
-    return TXT( "" );
-}
-
-tstring AssetClass::GetAssetTypeIcon( const AssetType AssetType )
-{
-    return TXT( "" );
-}
-
-
 void AssetClass::ComponentChanged( const Component::ComponentBase* attr )
 {
     __super::ComponentChanged( attr );
@@ -142,63 +123,9 @@ void AssetClass::LoadFinished()
 
 }
 
-bool AssetClass::IsBuildable() const
-{
-    return false;
-}
-
-bool AssetClass::IsViewable() const
-{
-    return false;
-}
-
 void AssetClass::CopyTo(const Reflect::ElementPtr& destination) 
 {
     // Restore the Asset Class ID after performing the copy
     AssetClass* destinationAsset = Reflect::ObjectCast< AssetClass >( destination );
     __super::CopyTo( destination );
-}
-
-AssetType AssetClass::GetAssetType() const
-{
-    if ( this->HasType( Reflect::GetType<SceneAsset>() ) )
-    {
-        return AssetTypes::Level;
-    }
-
-    if ( this->HasType( Reflect::GetType<ShaderAsset>() ) )
-    {
-        return AssetTypes::Shader;
-    }
-
-#pragma TODO( "classify based on attributes" )
-
-    return AssetTypes::Null;
-}
-
-static int ScoreAssetType( const AssetClass* assetClass, const AssetClass* engineClass )
-{
-    int score = 0;
-
-    Component::M_Component::const_iterator itr = assetClass->GetComponents().begin();
-    Component::M_Component::const_iterator end = assetClass->GetComponents().end();
-    for( ; itr != end; ++itr )
-    {
-        if( engineClass->ContainsComponent( itr->second->GetType() ) )
-            ++score;
-
-
-    }
-
-    // not sure if we want to do this since the global engine type "templates" contain the
-    // maximum number of attributes that something can have and still be classified as that type
-    itr = engineClass->GetComponents().begin();
-    end = engineClass->GetComponents().end();
-    for( ; itr != end; ++itr )
-    {
-        if( !assetClass->ContainsComponent( itr->second->GetType() ) )
-            --score;
-    }
-
-    return score;
 }

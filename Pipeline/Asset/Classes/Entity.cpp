@@ -1,12 +1,9 @@
 #include "Entity.h"
 
 #include "Foundation/Component/ComponentHandle.h"
-#include "Pipeline/Asset/AssetExceptions.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Element.h"
 #include "Foundation/Reflect/Version.h"
-
-#include "Pipeline/Asset/AssetTemplate.h"
 
 using namespace Reflect;
 using namespace Asset;

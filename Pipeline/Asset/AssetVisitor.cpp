@@ -1,6 +1,5 @@
 #include "AssetVisitor.h"
 
-#include "Pipeline/Asset/AssetExceptions.h"
 #include "Pipeline/Asset/Classes/EntityInstance.h"
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Components/DependenciesComponent.h"

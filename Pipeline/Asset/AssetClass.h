@@ -6,7 +6,6 @@
 #include "Pipeline/API.h"
 #include "AssetFlags.h"
 #include "AssetVersion.h"
-#include "AssetType.h"
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"
@@ -23,19 +22,6 @@ namespace Asset
 
     typedef std::set<AssetClassPtr> S_AssetClass;
     typedef Nocturnal::OrderedSet< Asset::AssetClassPtr > OS_AssetClass;
-
-    struct AssetTypeChangeArgs
-    {
-        const AssetClass* m_Asset;
-        AssetType m_PreviousAssetType;
-
-        AssetTypeChangeArgs( const AssetClass* asset, AssetType previousType )
-            : m_Asset( asset )
-            , m_PreviousAssetType( previousType )
-        {
-        }
-    };
-    typedef Nocturnal::Signature< void, const AssetTypeChangeArgs& > AssetTypeChangeSignature;
 
     class PIPELINE_API AssetClass NOC_ABSTRACT : public Component::ComponentCollection
     {
@@ -119,15 +105,24 @@ namespace Asset
         {
             m_Description = description;
         }
+
+        const std::set< tstring >& GetTags() const
+        {
+            return m_Tags;
+        }
+        void SetTags( const std::set< tstring >& tags )
+        {
+            m_Tags = tags;
+        }
+        void AddTag( const tstring& tag )
+        {
+            m_Tags.insert( tag );
+        }
+        void RemoveTag( const tstring& tag )
+        {
+            m_Tags.erase( tag );
+        }
     
-        // AssetTypeInfo funcitons
-        static tstring GetAssetTypeName( const AssetType assetType );
-        static tstring GetAssetTypeBuilder( const AssetType AssetType );
-        static tstring GetAssetTypeIcon( const AssetType AssetType );
-
-        // configure this instance as the default instance of the derived class
-        virtual void MakeDefault() {}
-
         // we were changed by somebody, reclassify
         virtual void ComponentChanged( const Component::ComponentBase* attr = NULL ) NOC_OVERRIDE;
 
@@ -149,33 +144,9 @@ namespace Asset
         // callback when this AssetClass has finished loading off disk
         virtual void LoadFinished();
 
-        // can this asset type be built
-        virtual bool IsBuildable() const;
-
-        // can this asset type be viewed
-        virtual bool IsViewable() const;
-
         // copy this asset and its attributes into the destination
         virtual void CopyTo(const Reflect::ElementPtr& destination) NOC_OVERRIDE;
 
-        // classify the asset based on its type and its attributes
-        AssetType GetAssetType() const;
-
         static tstring s_BaseBuiltDirectory;
-
-        // 
-        // Listeners
-        // 
-    private:
-        mutable AssetTypeChangeSignature::Event m_AssetTypeChanged;
-    public:
-        void AddAssetTypeChangedListener( const AssetTypeChangeSignature::Delegate& listener )
-        {
-            m_AssetTypeChanged.Add( listener );
-        }
-        void RemoveAssetTypeChangedListener( const AssetTypeChangeSignature::Delegate& listener )
-        {
-            m_AssetTypeChanged.Remove( listener );
-        }
     };
 }

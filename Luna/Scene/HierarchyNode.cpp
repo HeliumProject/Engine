@@ -796,8 +796,7 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
           Asset::Entity* entityClass = entityClassSet->GetEntity();
           if ( entityClass )
           {
-            Asset::AssetType assetType = entityClass->GetAssetType();
-            material = Luna::View::s_AssetTypeMaterials[ assetType ];
+            material = Luna::View::s_AssetTypeMaterials[ 0 ];
           }
         }
       }

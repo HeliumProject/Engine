@@ -52,6 +52,32 @@ bool Path::operator<( const Path& rhs ) const
     return m_Path < rhs.m_Path;
 }
 
+Nocturnal::Path Path::operator+( const tstring& rhs ) const
+{
+    return Nocturnal::Path( Get() + rhs );
+}
+
+Nocturnal::Path Path::operator+( const Nocturnal::Path& rhs ) const
+{
+    // you shouldn't use this on an absolute path
+    NOC_ASSERT( !rhs.IsAbsolute() );
+    return rhs.GetAbsolutePath( *this );
+}
+
+Nocturnal::Path& Path::operator+=( const tstring& rhs )
+{
+    Set( Get() + rhs );
+    return *this;
+}
+
+Nocturnal::Path& Path::operator+=( const Nocturnal::Path& rhs )
+{
+    // you shouldn't use this on an absolute path
+    NOC_ASSERT( !rhs.IsAbsolute() );
+    *this = rhs.GetAbsolutePath( *this );
+    return *this;
+}
+
 void Path::Normalize( tstring& path )
 {
     toLower( path );
@@ -321,10 +347,11 @@ std::vector< tstring > Path::DirectoryAsVector() const
 
 tstring Path::Extension() const
 {
-    size_t pos = m_Path.rfind( '.' );
+    tstring filename = Filename();
+    size_t pos = filename.rfind( '.' );
     if ( pos != tstring::npos )
     {
-        return m_Path.substr( pos + 1 );
+        return filename.substr( pos + 1 );
     }
 
     return TXT( "" );
@@ -344,7 +371,8 @@ tstring Path::FullExtension() const
 
 void Path::RemoveExtension()
 {
-    size_t pos = m_Path.find_last_of( '.' );
+    size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
+    size_t pos = m_Path.find_last_of( '.', slash == tstring::npos ? 0 : slash );
     if ( pos != tstring::npos )
     {
         m_Path.erase( pos );
@@ -353,14 +381,39 @@ void Path::RemoveExtension()
 
 void Path::RemoveFullExtension()
 {
-    size_t slash = m_Path.find_last_of( '/' );
-    if ( slash != tstring::npos )
+    size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
+    size_t pos = m_Path.find_first_of( '.', slash == tstring::npos ? 0 : slash );
+    if ( pos != tstring::npos )
     {
-        size_t pos = m_Path.find_first_of( '.', slash );
-        if ( pos != tstring::npos )
-        {
-            m_Path.erase( pos );
-        }
+        m_Path.erase( pos );
+    }
+}
+
+void Path::ReplaceExtension( const tstring& newExtension )
+{
+    size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
+    size_t offset = m_Path.find_last_of( '.', slash == tstring::npos ? 0 : slash );
+    if ( offset != tstring::npos )
+    {
+        m_Path.replace( offset + 1, newExtension.length(), newExtension );
+    }
+    else
+    {
+        m_Path += TXT( "." ) + newExtension;
+    }
+}
+
+void Path::ReplaceFullExtension( const tstring& newExtension )
+{
+    size_t slash = m_Path.find_last_of( s_InternalPathSeparator );
+    size_t offset = m_Path.find_first_of( '.', slash == tstring::npos ? 0 : slash );
+    if ( offset != tstring::npos )
+    {
+        m_Path.replace( offset + 1, newExtension.length(), newExtension );
+    }
+    else
+    {
+        m_Path += TXT( "." ) + newExtension;
     }
 }
 
@@ -395,7 +448,7 @@ tstring Path::Signature()
     return Nocturnal::MD5( m_Path );
 }
 
-Nocturnal::Path Path::GetAbsolutePath( const Nocturnal::Path& basisPath )
+Nocturnal::Path Path::GetAbsolutePath( const Nocturnal::Path& basisPath ) const
 {
     NOC_ASSERT( !IsAbsolute() ); // shouldn't call this on an already-absolute path
 
@@ -404,7 +457,7 @@ Nocturnal::Path Path::GetAbsolutePath( const Nocturnal::Path& basisPath )
     return Nocturnal::Path( newPathString );
 }
 
-Nocturnal::Path Path::GetRelativePath( const Nocturnal::Path& basisPath )
+Nocturnal::Path Path::GetRelativePath( const Nocturnal::Path& basisPath ) const
 {
     std::vector< tstring > targetDirectories = this->DirectoryAsVector();
     std::vector< tstring > baseDirectories = basisPath.DirectoryAsVector();
@@ -433,31 +486,6 @@ Nocturnal::Path Path::GetRelativePath( const Nocturnal::Path& basisPath )
 
     newPathString += Filename();
     return Nocturnal::Path( newPathString );
-}
-
-
-void Path::ReplaceExtension( const tstring& newExtension )
-{
-    size_t offset = m_Path.rfind( '.' );
-    if ( offset != tstring::npos )
-    {
-        m_Path.replace( offset + 1, newExtension.length(), newExtension );
-    }
-    else
-    {
-        m_Path += TXT( "." ) + newExtension;
-    }
-}
-
-void Path::ReplaceFullExtension( const tstring& newExtension )
-{
-    size_t slash = m_Path.find_last_of( '/' );
-    if ( slash != tstring::npos )
-    {
-        size_t pos = m_Path.find_first_of( '.', slash );
-
-        m_Path.replace( pos + 1, newExtension.length(), newExtension );
-    }
 }
 
 bool Path::Exists() const

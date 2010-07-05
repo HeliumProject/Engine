@@ -4,7 +4,7 @@
 
 #include "Types.h"
 
-#ifndef WIN32
+#ifdef __GNUC__
 # include <pthread.h>
 #endif
 
@@ -13,9 +13,8 @@ namespace Platform
     class PLATFORM_API Event
     {
     public:
-#ifdef WIN32
-        typedef void* Handle;
-#else
+
+#ifdef __GNUC__
         struct Handle
         {
             // Protect critical section
@@ -33,6 +32,10 @@ namespace Platform
             // Number of waiting threads
             unsigned waiting_threads;
         };
+#elif defined( WIN32 )
+        typedef void* Handle;
+#else
+#  pragma TODO( "Emit an error here..." )
 #endif
 
     private:

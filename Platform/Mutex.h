@@ -4,7 +4,7 @@
 
 #include "Types.h"
 
-#ifndef WIN32
+#ifdef __GNUC__
 # include <pthread.h>
 #endif
 
@@ -13,7 +13,9 @@ namespace Platform
     class PLATFORM_API Mutex
     {
     public:
-#ifdef WIN32
+#ifdef __GNUC__
+        typedef pthread_mutex_t Handle;
+#elif defined( WIN32 )
         struct Handle
         {
             struct DebugInfoStruct
@@ -38,7 +40,7 @@ namespace Platform
             u32* SpinCount;
         };
 #else
-        typedef pthread_mutex_t Handle;
+#  pragma TODO( "Emit an error here..." )
 #endif
 
     private:

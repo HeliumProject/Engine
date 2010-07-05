@@ -1,7 +1,7 @@
-#include "Mutex.h"
-#include "Platform.h"
+#include "Platform/Mutex.h"
+#include "Platform/Platform.h"
 
-#include "Assert.h"
+#include "Platform/Assert.h"
 
 using namespace Platform;
 

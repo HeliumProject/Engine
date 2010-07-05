@@ -8,7 +8,26 @@
 #define NULL (0)
 #endif
 
-#ifdef WIN32
+#if defined( __GNUC__ ) || defined( __GCC__ ) || defined( __SNC__ )
+
+typedef unsigned char           u8;
+typedef signed char             i8;
+typedef unsigned short          u16;
+typedef signed short            i16;
+typedef unsigned int            u32;
+typedef signed int              i32;
+typedef unsigned long long      u64;
+typedef long long               i64;
+typedef float                   f32;
+typedef double                  f64;
+
+typedef unsigned int            p32;
+typedef unsigned long long      p64;
+
+typedef unsigned int            uintptr;
+typedef int                     intptr;
+
+#elif defined( WIN32 )
 
 typedef unsigned char           u8;
 typedef signed char             i8;
@@ -31,25 +50,6 @@ typedef i64                     intptr;
 typedef u32                     uintptr;
 typedef i32                     intptr;
 #endif
-
-#elif defined (__GCC__) || defined (__SNC__)
-
-typedef unsigned char           u8;
-typedef signed char             i8;
-typedef unsigned short          u16;
-typedef signed short            i16;
-typedef unsigned int            u32;
-typedef signed int              i32;
-typedef unsigned long long      u64;
-typedef long long               i64;
-typedef float                   f32;
-typedef double                  f64;
-
-typedef unsigned int            p32;
-typedef unsigned long long      p64;
-
-typedef unsigned int            uintptr;
-typedef int                     intptr;
 
 #endif
 

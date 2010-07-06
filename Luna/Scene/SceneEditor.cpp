@@ -414,25 +414,29 @@ SceneEditor::SceneEditor()
     // Docked panes
     //
 
-    // Drawers - REMOVED FOR NOW
-    //{
-    //  m_DrawerPanel = new DrawerPanel( this );
+    {
+      m_DrawerPanel = new DrawerPanel( this );
 
-    //  wxAuiPaneInfo info;
-    //  info.MinSize( GetSize().x, -1 );
-    //  info.Name( wxT( "DrawerToolBar" ) );
-    //  info.DestroyOnClose( false );
-    //  info.Caption( wxT( "Drawers" ) );
-    //  info.ToolbarPane();
-    //  info.Gripper( false );
-    //  info.Top();
-    //  info.Floatable( false );
-    //  info.BottomDockable( false );
-    //  info.LeftDockable( false );
-    //  info.RightDockable( false );
+      wxAuiPaneInfo info;
+      info.MinSize( GetSize().x, -1 );
+      info.Name( wxT( "DrawerToolBar" ) );
+      info.DestroyOnClose( false );
+      info.Caption( wxT( "Drawers" ) );
+      info.ToolbarPane();
+      info.Gripper( false );
+      info.Top();
+      info.Floatable( false );
+      info.BottomDockable( false );
+      info.LeftDockable( false );
+      info.RightDockable( false );
 
-    //  m_FrameManager.AddPane( m_DrawerPanel, info );
-    //}
+      //AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("directory") ), Nocturnal::GlobalImageManager().GetBitmap( TXT("world.png") ) ) );
+      //AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("properties") ), Nocturnal::GlobalImageManager().GetBitmap( TXT("transform.png") ) ) );
+      //AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("types") ), Nocturnal::GlobalImageManager().GetBitmap( TXT("type.png") ) ) );
+      //AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("layers") ), Nocturnal::GlobalImageManager().GetBitmap( TXT("layer.png") ) ) );
+
+      m_FrameManager.AddPane( m_DrawerPanel, info );
+    }
 
     // Directory
     m_Directory = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
@@ -507,27 +511,19 @@ SceneEditor::SceneEditor()
     m_View->AddClearHighlightListener( ClearHighlightSignature::Delegate ( this, &SceneEditor::ClearHighlight ) );
     m_View->AddToolChangedListener( ToolChangeSignature::Delegate ( this, &SceneEditor::ViewToolChanged ) );
 
-    // Create drawers - commented out for now
-    //{
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "directory" ), Nocturnal::GlobalImageManager().GetBitmap( "world.png" ) ) );
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "properties" ), Nocturnal::GlobalImageManager().GetBitmap( "transform.png" ) ) );
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "types" ), Nocturnal::GlobalImageManager().GetBitmap( "type.png" ) ) );
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "layers" ), Nocturnal::GlobalImageManager().GetBitmap( "layer.png" ) ) );
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "lighting" ), Nocturnal::GlobalImageManager().GetBitmap( "light.png" ) ) );
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "live link" ), Nocturnal::GlobalImageManager().GetBitmap( "devices/input-gaming.png" ) ) );
-    //  AddDrawer( new Drawer( m_FrameManager.GetPane( "search bar" ), Nocturnal::GlobalImageManager().GetBitmap( "actions/system-search.png" ) ) );
-    //}
+    //
+    // Tools panel
+    //
 
-    // Tools (requires m_View) - REMOVING UNTIL UI IS COMPLETED
-    //{
-    //  wxAuiPaneInfo info;
-    //  info.Name( "Tools" );
-    //  info.Caption( "Tools" );
-    //  info.Float();
+    {
+      wxAuiPaneInfo info;
+      info.Name( TXT("Tools") );
+      info.Caption( TXT("Tools") );
+      info.Float();
 
-    //  ToolsPanel* toolsPanel = new ToolsPanel( this );
-    //  m_FrameManager.AddPane( toolsPanel, info );
-    //}
+      ToolsPanel* toolsPanel = new ToolsPanel( this );
+      m_FrameManager.AddPane( toolsPanel, info );
+    }
 
     //
     // Toolbars

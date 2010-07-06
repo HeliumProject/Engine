@@ -8,8 +8,6 @@
 #include "SearchHistory.h"
 #include "SearchQuery.h"
 
-#include "Pipeline/Asset/AssetFolder.h"
-#include "Pipeline/Asset/AssetFile.h"
 #include "Platform/Exception.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
 #include "Scene/SceneManager.h"

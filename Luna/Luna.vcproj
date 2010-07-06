@@ -1071,14 +1071,6 @@
 			Name="Task"
 			>
 			<File
-				RelativePath=".\Task\Export.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Task\Export.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Task\Task.cpp"
 				>
 			</File>

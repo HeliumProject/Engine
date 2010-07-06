@@ -12,7 +12,6 @@
 #include "Pipeline/Asset/AssetClass.h"
 #include "Foundation/Log.h"
 #include "Platform/Process.h"
-#include "Task/Export.h"
 #include "Volume.h"
 
 #include "Light.h"

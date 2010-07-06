@@ -32,6 +32,9 @@ namespace Asset
         tstring m_Description;
         std::set< tstring > m_Tags;
 
+    private:
+        static tstring s_BaseBuiltDirectory;
+
     public:
         //
         // RTTI
@@ -91,10 +94,10 @@ namespace Asset
 
         Nocturnal::Path GetBuiltDirectory();
 
-        // x:\rcf\assets\entities\fruitBasketFromHell\appleSuccubus.entity.rb -> entities\fruitBasketFromHell\appleSuccubus.entity.rb
+        // stuff/fruitBasketFromHell/appleSuccubus.entity.rb
         tstring GetFullName() const;
 
-        // x:\rcf\assets\entities\fruitBasketFromHell\appleSuccubus.entity.rb -> appleSuccubus
+        // appleSuccubus
         tstring GetShortName() const;
 
         const tstring& GetDescription() const
@@ -122,12 +125,13 @@ namespace Asset
         {
             m_Tags.erase( tag );
         }
-    
+
+    public:
+        virtual void GetDependencies( std::set< Nocturnal::Path >& dependencies );
+
+    public:
         // we were changed by somebody, reclassify
         virtual void ComponentChanged( const Component::ComponentBase* attr = NULL ) NOC_OVERRIDE;
-
-        // write to the location on disk backed by the file manager id
-        virtual void Serialize( const AssetVersionPtr &version = new AssetVersion () );
 
         // add to or set an attribute in the collection
         virtual void SetComponent( const Component::ComponentPtr& attr, bool validate = true ) NOC_OVERRIDE;
@@ -135,18 +139,23 @@ namespace Asset
         // remove attribute from a slot
         virtual void RemoveComponent( i32 typeID ) NOC_OVERRIDE;
 
+    public:
+
         // Returns true by default. Override to specify more stringent requirements on the asset.
         virtual bool ValidateClass( tstring& error ) const;
 
         // validate the incoming attribute as ok to consume
         virtual bool ValidateCompatible( const Component::ComponentPtr &component, tstring& error ) const NOC_OVERRIDE;
 
+
+    public:
+        // write to the location on disk backed by the file manager id
+        virtual void Serialize( const AssetVersionPtr &version = new AssetVersion () );
+
         // callback when this AssetClass has finished loading off disk
         virtual void LoadFinished();
 
         // copy this asset and its attributes into the destination
         virtual void CopyTo(const Reflect::ElementPtr& destination) NOC_OVERRIDE;
-
-        static tstring s_BaseBuiltDirectory;
     };
 }

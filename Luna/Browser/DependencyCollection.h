@@ -2,6 +2,8 @@
 
 #include "Luna/API.h"
 
+#include "Pipeline/Asset/AssetFile.h"
+
 #include "AssetCollection.h"
 #include "DependencyLoader.h"
 

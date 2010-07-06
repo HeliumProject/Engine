@@ -2,7 +2,6 @@
 
 #include "Luna/API.h"
 
-#include "Pipeline/Asset/AssetFile.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Serializers.h"

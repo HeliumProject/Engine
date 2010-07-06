@@ -64,13 +64,17 @@ Nocturnal::Path AssetClass::GetBuiltDirectory()
 
 tstring AssetClass::GetFullName() const
 {
-#pragma TODO( "break out some settings stuff for the asset root" )
-    return m_Path.Filename();
+    return m_Path.Get();
 }
 
 tstring AssetClass::GetShortName() const
 {
     return m_Path.Basename();
+}
+
+void AssetClass::GetDependencies( std::set< Nocturnal::Path >& dependencies )
+{
+    return;
 }
 
 void AssetClass::ComponentChanged( const Component::ComponentBase* attr )

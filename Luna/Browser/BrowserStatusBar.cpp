@@ -3,7 +3,7 @@
 
 #include "Application.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 using namespace Luna;
 
@@ -28,7 +28,7 @@ BrowserStatusBar::BrowserStatusBar( wxWindow *parent )
 , m_IndexingFailed( false )
 , m_CurrentStatus( TXT( "Done" ) )
 , m_StatusText( new wxStaticText( this, wxID_ANY, TXT( "Done" ) ) )
-, m_Throbber( new wxAnimationCtrl( this, wxID_ANY, Nocturnal::GlobalImageManager().GetAnimation( TXT( "animation/process-working.png" ) ) ) )
+, m_Throbber( new wxAnimationCtrl( this, wxID_ANY, wxNullAnimation ) )
 , m_Message( new wxStaticText( this, wxID_ANY, s_TrackingInProgress ) )
 {
     static const int widths[ FieldCount ] = { -1, 150 };

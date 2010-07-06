@@ -7,7 +7,7 @@
 #include "LocatorType.h"
 
 #include "Core/Enumerator.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveLocator.h"
 #include "PrimitiveCube.h"
@@ -52,7 +52,7 @@ Locator::~Locator()
 
 i32 Locator::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "locator.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "locator" ) );
 }
 
 tstring Locator::GetApplicationTypeName() const

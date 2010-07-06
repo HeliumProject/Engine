@@ -229,22 +229,22 @@ void EntityPanel::CreateClassActions()
         m_Enumerator->AddLabel( TXT( "Class Actions" ) );
 
         Inspect::Action* refreshButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRefresh ) );
-        refreshButton->SetIcon( TXT( "actions/view-refresh.png" ) );
+        refreshButton->SetIcon( TXT( "actions/view-refresh" ) );
         refreshButton->SetToolTip( TXT( "Refresh" ) );
 
         bool singular = m_Selection.Size() == 1;
 
         Inspect::Action* lunaButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetEditAsset ) );
-        lunaButton->SetIcon( TXT( "asset_editor.png" ) );
+        lunaButton->SetIcon( TXT( "asset_editor" ) );
         lunaButton->SetToolTip( TXT( "Edit this entity class in Luna's Asset Editor" ) );
 
         Inspect::Action* mayaButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetEditArt ) );
-        mayaButton->SetIcon( TXT( "maya.png" ) );
+        mayaButton->SetIcon( TXT( "maya" ) );
         mayaButton->SetEnabled( singular );
         mayaButton->SetToolTip( TXT( "Edit this entity class's art in Maya" ) );
 
         Inspect::Action* historyButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRevisionHistory ) );
-        historyButton->SetIcon( TXT( "p4.png" ) );
+        historyButton->SetIcon( TXT( "p4" ) );
         historyButton->SetToolTip( TXT( "Display revision history for this file in Perforce." ) );
     }
     m_Enumerator->Pop();

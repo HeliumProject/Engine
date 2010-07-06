@@ -6,7 +6,7 @@
 #include "InstanceType.h"
 
 #include "Core/Enumerator.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveSphere.h"
 #include "PrimitivePointer.h"
@@ -56,7 +56,7 @@ PointLight::~PointLight()
 
 i32 PointLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "light.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
 }
 
 tstring PointLight::GetApplicationTypeName() const

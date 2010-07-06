@@ -137,27 +137,27 @@ void EntityCreateTool::CreateProperties()
             m_FileButtonAdd = m_Enumerator->AddFileDialogButton< tstring >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
             m_BrowserButtonAdd = m_Enumerator->AddFileBrowserButton< tstring >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
 
-            m_FileButtonAdd->SetIcon( TXT( "ellipses_add.png" ) );
-            m_BrowserButtonAdd->SetIcon( TXT( "magnify_add.png" ) );
+            m_FileButtonAdd->SetIcon( TXT( "ellipses_add" ) );
+            m_BrowserButtonAdd->SetIcon( TXT( "magnify_add" ) );
 
             Inspect::Action* modifyButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnModify ) );
             modifyButton->SetToolTip( TXT( "Modify" ) );
-            modifyButton->SetIcon( TXT( "percent.png" ) );
+            modifyButton->SetIcon( TXT( "percent" ) );
             modifyButton->SetClientData( this );
 
             Inspect::Action* normalizeButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnNormalize ) );
             normalizeButton->SetToolTip( TXT( "Normalize" ) );
-            normalizeButton->SetIcon( TXT( "normalize.png" ) );
+            normalizeButton->SetIcon( TXT( "normalize" ) );
             normalizeButton->SetClientData( this );
 
             Inspect::Action* deleteButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnDeleteClass ) );
             deleteButton->SetToolTip( TXT( "Delete" ) );
-            deleteButton->SetIcon( TXT( "actions/list-remove.png" ) );
+            deleteButton->SetIcon( TXT( "actions/list-remove" ) );
             deleteButton->SetClientData( this );
 
             Inspect::Action*  clearButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnClear ) );
             clearButton->SetToolTip( TXT( "Clear" ) );
-            clearButton->SetIcon( TXT( "delete.png" ) );
+            clearButton->SetIcon( TXT( "delete" ) );
             clearButton->SetClientData( this );
 
             tstring filter;

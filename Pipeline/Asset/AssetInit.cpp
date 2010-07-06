@@ -154,18 +154,18 @@ void Asset::Initialize()
 
       // Level
       ASSET_REGISTER_ENGINETYPE( Level );
-      ASSET_REGISTER_ENGINETYPE_ICONFILENAME( TXT( "enginetype_level.png" ) );
+      ASSET_REGISTER_ENGINETYPE_ICONFILENAME( TXT( "enginetype_level" ) );
       ASSET_REGISTER_ENGINETYPE_TYPECOLOR_ARGB( 0xff, 142, 234, 251 );
 
       // Shader
       ASSET_REGISTER_ENGINETYPE( Shader );
-      ASSET_REGISTER_ENGINETYPE_ICONFILENAME( TXT( "enginetype_shader.png" ) );
+      ASSET_REGISTER_ENGINETYPE_ICONFILENAME( TXT( "enginetype_shader" ) );
       ASSET_REGISTER_ENGINETYPE_TYPECOLOR_ARGB( 0xff, 57, 143, 202 );
 
       // TexturePack
       ASSET_REGISTER_ENGINETYPE( TexturePack );
       ASSET_REGISTER_ENGINETYPE_BUILDERDLL( TXT( "TexturePackBuilder.dll" ) );
-      ASSET_REGISTER_ENGINETYPE_ICONFILENAME( TXT( "enginetype_texturepack.png" ) );
+      ASSET_REGISTER_ENGINETYPE_ICONFILENAME( TXT( "enginetype_texturepack" ) );
       ASSET_REGISTER_ENGINETYPE_TYPECOLOR_ARGB( 0xff, 164, 93, 163 );
     }
 

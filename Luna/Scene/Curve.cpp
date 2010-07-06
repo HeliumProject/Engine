@@ -10,7 +10,7 @@
 #include "HierarchyNodeType.h"
 #include "ReverseChildrenCommand.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Core/Enumerator.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "Foundation/Log.h"
@@ -87,7 +87,7 @@ Curve::~Curve()
 
 i32 Curve::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "curve.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "curve" ) );
 }
 
 tstring Curve::GetApplicationTypeName() const
@@ -1028,7 +1028,7 @@ void Curve::CreatePanel( CreatePanelArgs& args )
     {
       args.m_Enumerator->AddLabel( TXT( "Reverse Control Points" ) );
       Inspect::Action* button = args.m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( &Curve::OnReverseControlPoints ) );
-      button->SetIcon( TXT( "reverse.png" ) );
+      button->SetIcon( TXT( "reverse" ) );
       button->SetClientData( new SelectionDataObject( args.m_Selection ) );
     }
     args.m_Enumerator->Pop();

@@ -3,7 +3,7 @@
 
 #include "Pipeline/Content/Nodes/Mesh.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Pick.h"
 #include "Color.h"
 
@@ -78,7 +78,7 @@ Mesh::~Mesh()
 
 i32 Mesh::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "mesh.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "mesh" ) );
 }
 
 tstring Mesh::GetApplicationTypeName() const
@@ -517,11 +517,10 @@ void Mesh::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode
 
     case ShadingModes::Texture:
       {
-        static size_t shaderCount;
-        static size_t shaderTriCountsCount;
-        static size_t shaderStartIndicesCount;
+        size_t shaderCount;
+        size_t shaderTriCountsCount;
+        size_t shaderStartIndicesCount;
 
-#pragma TODO("Fix the bug in content export that requires these checks")
         shaderCount = mesh->m_Shaders.size();
 
         shaderTriCountsCount = data->m_ShaderTriangleCounts.size();

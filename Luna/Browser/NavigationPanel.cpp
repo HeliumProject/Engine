@@ -3,7 +3,7 @@
 
 #include "Application/UI/AutoCompleteComboBox.h"
 #include "Application/UI/Button.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 
 using namespace Luna;
@@ -17,24 +17,24 @@ NavigationPanel::NavigationPanel( BrowserFrame* browserFrame, SearchHistory* his
 , m_IgnoreNavBarTextChanged( false )
 {
   // Assign the button icons
-  m_BackButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_back.png" ) ) );
-  m_BackButton->SetBitmapDisabled( Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_back_disabled.png" ) ) );
+  m_BackButton->SetBitmapLabel( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+  m_BackButton->SetBitmapDisabled( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
   m_BackButton->SetHoldDelay( 0.5f );
   m_BackButton->Enable( false );
 
-  m_ForwardButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_forward.png" ) ) );
-  m_ForwardButton->SetBitmapDisabled( Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_forward_disabled.png" ) ) );
+  m_ForwardButton->SetBitmapLabel( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+  m_ForwardButton->SetBitmapDisabled( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
   m_ForwardButton->SetHoldDelay( 0.5f );
   m_ForwardButton->Enable( false );
 
-  m_UpFolderButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_up.png" ) ) );
-  m_UpFolderButton->SetBitmapDisabled( Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_up_disabled.png" ) ) );
+  m_UpFolderButton->SetBitmapLabel( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+  m_UpFolderButton->SetBitmapDisabled( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
   m_UpFolderButton->Enable( false );
 
-  m_GoButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/system-search.png" ) ) );
+  m_GoButton->SetBitmapLabel( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
   m_GoButton->Enable( false );
   
-  m_OptionsButton->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( TXT( "view_style.png" ) ) );
+  m_OptionsButton->SetBitmapLabel( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
   m_OptionsButton->SetHoldDelay( 0.0f );
 
   UpdateHistoryMenus();

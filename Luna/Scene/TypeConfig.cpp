@@ -3,7 +3,7 @@
 #include "Instance.h"
 #include "Entity.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 #include "Foundation/Log.h"
 
@@ -185,14 +185,14 @@ void TypeConfig::LoadFromFile(V_TypeConfigSmartPtr& types)
 
                             if ( iconPath.Exists() )
                             {
-                                t->m_IconIndex = Nocturnal::GlobalImageManager().GetImageIndex( iconPath.Get() );
+                                t->m_IconIndex = Nocturnal::GlobalFileIconsTable().GetIconID( iconPath.Get() );
                             }
                             else
                             {
                                 iconPath.Set( TXT( "" ) + t->m_Icon );
                                 if ( iconPath.Exists() )
                                 {
-                                    t->m_IconIndex = Nocturnal::GlobalImageManager().GetImageIndex( iconPath.Get() );
+                                    t->m_IconIndex = Nocturnal::GlobalFileIconsTable().GetIconID( iconPath.Get() );
                                 }
                             }
 

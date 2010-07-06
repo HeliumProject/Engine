@@ -62,7 +62,7 @@ namespace Luna
 
     private:
         WindowSettingsPtr     m_WindowSettings;
-        tstring           m_DefaultFolder;
+        tstring               m_DefaultFolder;
         ViewOptionID          m_ThumbnailMode;
         u32                   m_ThumbnailSize;
         bool                  m_DisplayPreviewAxis;

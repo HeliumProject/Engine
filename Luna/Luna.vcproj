@@ -931,6 +931,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Editor\EditorGenerated.fbp"
+				>
+			</File>
+			<File
 				RelativePath=".\Editor\EditorGenerated.h"
 				>
 			</File>
@@ -1175,14 +1179,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneLiveGenerated.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneLiveGenerated.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\SceneManager.cpp"
 				>
 			</File>
@@ -1236,14 +1232,6 @@
 			</File>
 			<File
 				RelativePath=".\Scene\SceneVisitor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SearchGenerated.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SearchGenerated.h"
 				>
 			</File>
 			<File
@@ -2184,6 +2172,10 @@
 			</File>
 			<File
 				RelativePath=".\Browser\BrowserGenerated.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Browser\BrowserGenerated.fbp"
 				>
 			</File>
 			<File
@@ -4362,15 +4354,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\ArtProvider.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ArtProvider.h"
-			>
-		</File>
-		<File
 			RelativePath=".\CommonGenerated.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CommonGenerated.fbp"
 			>
 		</File>
 		<File
@@ -4411,6 +4399,10 @@
 		</File>
 		<File
 			RelativePath=".\LunaGenerated.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\LunaGenerated.fbp"
 			>
 		</File>
 		<File

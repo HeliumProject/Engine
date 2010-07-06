@@ -4,7 +4,7 @@
 
 #include "Pipeline/Content/Nodes/Shader.h"
 #include "Foundation/Log.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 #include "Scene.h"
 
@@ -37,7 +37,7 @@ Shader::Shader( Luna::Scene* scene, Content::Shader* shader )
 
 i32 Shader::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "shader.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "shader" ) );
 }
 
 tstring Shader::GetApplicationTypeName() const

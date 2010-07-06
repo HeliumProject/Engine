@@ -1,7 +1,7 @@
 #include "InspectPanel.h"
 #include "Application/Inspect/Widgets/Canvas.h"
 #include "Application/Inspect/Widgets/Other Controls/Label.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 using namespace Reflect;
 using namespace Inspect;
@@ -164,16 +164,16 @@ void Panel::RefreshControls()
     treeWndCtrl = new Nocturnal::TreeWndCtrl( m_Parent->GetWindow() );
     treeWndCtrl->AddRoot( TXT( "Panel Root (hidden)" ) );
     treeWndCtrl->SetHideRoot( true );
-    treeWndCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-    treeWndCtrl->SetStateImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
+    treeWndCtrl->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+    treeWndCtrl->SetStateImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
     m_OwnWindow = true;
   }
   
   m_Window = treeWndCtrl;
   treeWndCtrl->Freeze();
   
-  int collapsedIndex = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "ms_folder_closed.png" ) );
-  int expandedIndex = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "ms_folder_open.png" ) );
+  int collapsedIndex = Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "ms_folder_closed" ) );
+  int expandedIndex = Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "ms_folder_open" ) );
 
   wxTreeItemId item = m_ItemData.GetId();
   if ( m_ShowTreeNode )

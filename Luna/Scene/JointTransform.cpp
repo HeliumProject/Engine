@@ -4,7 +4,7 @@
 #include "Pipeline/Content/Nodes/JointTransform.h"
 #include "Foundation/Math/EulerAngles.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Color.h"
 #include "PrimitiveAxes.h"
 #include "PrimitiveRings.h"
@@ -50,7 +50,7 @@ JointTransform::~JointTransform()
 
 i32 JointTransform::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "joint.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "joint" ) );
 }
 
 tstring JointTransform::GetApplicationTypeName() const

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "DirectoryCtrl.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/SortTreeCtrl.h"
 
 using namespace Luna;
@@ -48,15 +48,15 @@ DirectoryCtrl::DirectoryCtrl
     switch ( (DirectoryCtrlIconType) type )
     {
       case DirectoryCtrlIconTypes::Folder:
-        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( TXT( "ms_folder_closed.png" ) ) );
+        m_ImageList.Add( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
         break;
 
       case DirectoryCtrlIconTypes::FolderOpen:
-        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( TXT( "ms_folder_open.png" ) ) );
+        m_ImageList.Add( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
         break;
 
       case DirectoryCtrlIconTypes::InsomniacMoon:
-        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( TXT( "moon.png" ) ) );
+        m_ImageList.Add( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
         break;
 
       // We should not be using these anyway - if we are, setup a proper icon for them above
@@ -69,7 +69,7 @@ DirectoryCtrl::DirectoryCtrl
       case DirectoryCtrlIconTypes::Executable:
       case DirectoryCtrlIconTypes::Error:
       default:
-        m_ImageList.Add( Nocturnal::GlobalImageManager().GetBitmap( TXT( "error.png" ) ) );
+        m_ImageList.Add( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
         break;
     }
   }

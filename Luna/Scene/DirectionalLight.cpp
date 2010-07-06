@@ -6,7 +6,7 @@
 #include "InstanceType.h"
 
 #include "Core/Enumerator.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 #include "PrimitivePointer.h"
 
@@ -43,7 +43,7 @@ DirectionalLight::DirectionalLight(Luna::Scene* scene, Content::DirectionalLight
 
 i32 DirectionalLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "light.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
 }
 
 tstring DirectionalLight::GetApplicationTypeName() const

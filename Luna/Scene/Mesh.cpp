@@ -517,11 +517,10 @@ void Mesh::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode
 
     case ShadingModes::Texture:
       {
-        static size_t shaderCount;
-        static size_t shaderTriCountsCount;
-        static size_t shaderStartIndicesCount;
+        size_t shaderCount;
+        size_t shaderTriCountsCount;
+        size_t shaderStartIndicesCount;
 
-#pragma TODO("Fix the bug in content export that requires these checks")
         shaderCount = mesh->m_Shaders.size();
 
         shaderTriCountsCount = data->m_ShaderTriangleCounts.size();

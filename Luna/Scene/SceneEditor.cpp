@@ -257,7 +257,7 @@ void SceneEditor::CleanupEditor()
 // Constructor
 // 
 SceneEditor::SceneEditor()
-: Editor( EditorTypes::Scene, NULL, wxID_ANY, wxT("Luna Scene Editor"), wxDefaultPosition, wxSize(1180, 750), wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER )
+: Editor( EditorTypes::Scene, NULL, wxID_ANY, wxT("Luna"), wxDefaultPosition, wxSize(1180, 750), wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER )
 , m_SceneManager( this )
 , m_DrawerPanel( NULL )
 , m_HierarchyOutline( NULL )
@@ -1450,7 +1450,6 @@ void SceneEditor::OnExport(wxCommandEvent& event)
                 str.precision( 2 );
                 str << "Export Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
                 StatusChanged( str.str() );
-                TitleChanged( tstring( TXT( "Luna Scene Editor" ) ) );
             }
         }
     }
@@ -2837,7 +2836,6 @@ void SceneEditor::SceneAdded( const SceneChangeArgs& args )
     if ( !m_SceneManager.IsNestedScene( args.m_Scene ) )
     {
         // Only listen to zone and world files.
-        args.m_Scene->AddTitleChangedListener( TitleChangeSignature::Delegate( this, &SceneEditor::TitleChanged ) );
         args.m_Scene->AddStatusChangedListener( StatusChangeSignature::Delegate( this, &SceneEditor::StatusChanged ) );
         args.m_Scene->AddCursorChangedListener( CursorChangeSignature::Delegate( this, &SceneEditor::CursorChanged ) );
         args.m_Scene->AddBusyCursorChangedListener( CursorChangeSignature::Delegate( this, &SceneEditor::BusyCursorChanged ) );
@@ -2854,7 +2852,6 @@ void SceneEditor::SceneAdded( const SceneChangeArgs& args )
 
 void SceneEditor::SceneRemoving( const SceneChangeArgs& args )
 {
-    args.m_Scene->RemoveTitleChangedListener( TitleChangeSignature::Delegate ( this, &SceneEditor::TitleChanged ) );
     args.m_Scene->RemoveStatusChangedListener( StatusChangeSignature::Delegate ( this, &SceneEditor::StatusChanged ) );
     args.m_Scene->RemoveCursorChangedListener( CursorChangeSignature::Delegate ( this, &SceneEditor::CursorChanged ) );
     args.m_Scene->RemoveBusyCursorChangedListener( CursorChangeSignature::Delegate ( this, &SceneEditor::BusyCursorChanged ) );
@@ -2878,11 +2875,6 @@ void SceneEditor::SceneLoadFinished( const LoadArgs& args )
 {
     m_View->Refresh();
     DocumentModified( DocumentChangedArgs( args.m_Scene->GetSceneDocument() ) );
-}
-
-void SceneEditor::TitleChanged( const TitleChangeArgs& args )
-{
-    SetLabel( args.m_Title.c_str() );
 }
 
 void SceneEditor::StatusChanged( const StatusChangeArgs& args )
@@ -2930,7 +2922,6 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
     }
 
     // Unhook our event handlers
-    args.m_Scene->RemoveTitleChangedListener( TitleChangeSignature::Delegate ( this, &SceneEditor::TitleChanged ) );
     args.m_Scene->RemoveStatusChangedListener( StatusChangeSignature::Delegate ( this, &SceneEditor::StatusChanged ) );
     args.m_Scene->RemoveCursorChangedListener( CursorChangeSignature::Delegate ( this, &SceneEditor::CursorChanged ) );
     args.m_Scene->RemoveBusyCursorChangedListener( CursorChangeSignature::Delegate ( this, &SceneEditor::BusyCursorChanged ) );
@@ -2975,7 +2966,6 @@ void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
         m_NavToolBar->Enable();
 
         // Hook our event handlers
-        args.m_Scene->AddTitleChangedListener( TitleChangeSignature::Delegate ( this, &SceneEditor::TitleChanged ) );
         args.m_Scene->AddStatusChangedListener( StatusChangeSignature::Delegate ( this, &SceneEditor::StatusChanged ) );
         args.m_Scene->AddCursorChangedListener( CursorChangeSignature::Delegate ( this, &SceneEditor::CursorChanged ) );
         args.m_Scene->AddBusyCursorChangedListener( CursorChangeSignature::Delegate ( this, &SceneEditor::BusyCursorChanged ) );

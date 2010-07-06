@@ -565,7 +565,6 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
 
     m_Importing = true;
     m_CursorChanged.Raise(wxCURSOR_WAIT);
-    m_TitleChanged.Raise( tstring( TXT("Luna Scene Editor (Processing)") ) );
     m_StatusChanged.Raise( tstring( TXT("Loading Objects") ) );
 
     m_RemappedIDs.clear();
@@ -742,7 +741,6 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     m_StatusChanged.Raise( str.str() );
 
     // done
-    m_TitleChanged.Raise( tstring( TXT("Luna Scene Editor") ) );
     m_StatusChanged.Raise( tstring( TXT("Ready") ) );
     m_CursorChanged.Raise(wxCURSOR_ARROW);
     m_Importing = false;
@@ -842,12 +840,6 @@ void Scene::ArchiveStatus(Reflect::StatusInfo& info)
             if (info.m_Progress > m_Progress)
             {
                 m_Progress = info.m_Progress;
-
-                {
-                    tostringstream str;
-                    str << "Luna Scene Editor" << " (" << m_Progress << "%)";
-                    m_TitleChanged.Raise( str.str() );
-                }
 
                 {
                     tstring verb = info.m_Archive.GetMode() == Reflect::ArchiveModes::Read ? TXT( "Opening" ) : TXT( "Saving" );
@@ -1135,7 +1127,6 @@ bool Scene::ExportFile( const tstring& file, const ExportArgs& args )
         str.precision( 2 );
         str << "Saving Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
         m_StatusChanged.Raise( str.str() );
-        m_TitleChanged.Raise( tstring( TXT("Luna Scene Editor") ) );
     }
 
     return result;
@@ -1193,7 +1184,6 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
         str.precision( 2 );
         str << "Export Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
         m_StatusChanged.Raise( str.str() );
-        m_TitleChanged.Raise( tstring( TXT( "Luna Scene Editor" ) ) );
     }
 
     return result;

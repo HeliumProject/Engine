@@ -806,18 +806,6 @@ namespace Luna
     //
 
   private:
-    TitleChangeSignature::Event m_TitleChanged;
-  public:
-    void AddTitleChangedListener( const TitleChangeSignature::Delegate& listener )
-    {
-      m_TitleChanged.Add( listener );
-    }
-    void RemoveTitleChangedListener( const TitleChangeSignature::Delegate& listener )
-    {
-      m_TitleChanged.Remove( listener );
-    }
-
-  private:
     StatusChangeSignature::Event m_StatusChanged;
   public:
     void AddStatusChangedListener( const StatusChangeSignature::Delegate& listener )

@@ -1078,6 +1078,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Inspect\Reflect\ReflectMapEntryDialog.fbp"
+					>
+				</File>
+				<File
 					RelativePath=".\Inspect\Reflect\ReflectMapEntryDialog.h"
 					>
 				</File>
@@ -1451,6 +1455,10 @@
 				</File>
 				<File
 					RelativePath=".\UI\PerforceUI\Panels.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\PerforceUI\Panels.fbp"
 					>
 				</File>
 				<File

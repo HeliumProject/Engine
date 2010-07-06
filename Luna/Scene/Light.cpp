@@ -8,7 +8,7 @@
 
 #include "Core/Enumerator.h"
 #include "SceneEditor.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveSphere.h"
 #include "PrimitivePointer.h"
@@ -52,7 +52,7 @@ Light::Light(Luna::Scene* scene, Content::Light* light)
 
 i32 Light::GetImageIndex() const
 {
-    return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "light.png" ) );
+    return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
 }
 
 tstring Light::GetApplicationTypeName() const

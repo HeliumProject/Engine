@@ -126,7 +126,7 @@ ActionPtr ReflectArrayInterpreter::AddRemoveButton( List* list )
 ActionPtr ReflectArrayInterpreter::AddMoveUpButton( List* list )
 {
   ActionPtr upButton = m_Container->GetCanvas()->Create<Action>(this);
-  upButton->SetIcon( TXT( "actions/go-up.png" ) );
+  upButton->SetIcon( TXT( "actions/go-up" ) );
   upButton->AddListener( ActionSignature::Delegate ( &ReflectArrayInterpreter::OnMoveUp ) );
   upButton->SetClientData( new ClientDataControl( list ) );
   
@@ -136,7 +136,7 @@ ActionPtr ReflectArrayInterpreter::AddMoveUpButton( List* list )
 ActionPtr ReflectArrayInterpreter::AddMoveDownButton( List* list )
 {
   ActionPtr downButton = m_Container->GetCanvas()->Create<Action>(this);
-  downButton->SetIcon( TXT( "actions/go-down.png" ) );
+  downButton->SetIcon( TXT( "actions/go-down" ) );
   downButton->AddListener( ActionSignature::Delegate ( &ReflectArrayInterpreter::OnMoveDown ) );
   downButton->SetClientData( new ClientDataControl( list ) );
   

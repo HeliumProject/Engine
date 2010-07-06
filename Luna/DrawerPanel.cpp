@@ -2,7 +2,7 @@
 #include "DrawerPanel.h"
 
 #include "Application/UI/Button.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 using namespace Luna;
 

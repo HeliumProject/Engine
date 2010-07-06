@@ -2,7 +2,7 @@
 #include "Point.h"
 #include "Transform.h"
 #include "Core/Enumerator.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 using namespace Luna;
 
@@ -30,7 +30,7 @@ Point::~Point()
 
 i32 Point::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "point.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "point" ) );
 }
 
 tstring Point::GetApplicationTypeName() const

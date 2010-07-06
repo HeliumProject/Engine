@@ -89,7 +89,7 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
 
       // Add button - opens file browser
       findButton = m_Container->GetCanvas()->Create<Action>(this);
-      findButton->SetIcon( "actions/system-search.png" );
+      findButton->SetIcon( "actions/system-search" );
       findButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnFindFile ) );
       findButton->SetClientData( new ClientDataFilter( list, instances.front()->GetType(), specName ) );
 
@@ -114,12 +114,12 @@ void FileContainerInterpreter::InterpretField(const Field* field, const std::vec
     if ( isFileIdArray )
     {
       upButton = m_Container->GetCanvas()->Create<Action>(this);
-      upButton->SetIcon( "actions/go-up.png" );
+      upButton->SetIcon( "actions/go-up" );
       upButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnMoveUp ) );
       upButton->SetClientData( new ClientDataControl( list ) );
 
       downButton = m_Container->GetCanvas()->Create<Action>(this);
-      downButton->SetIcon( "actions/go-down.png" );
+      downButton->SetIcon( "actions/go-down" );
       downButton->AddListener( ActionSignature::Delegate ( this, &FileContainerInterpreter::OnMoveDown ) );
       downButton->SetClientData( new ClientDataControl( list ) );
     }

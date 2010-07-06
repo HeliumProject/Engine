@@ -4,7 +4,7 @@
 #include "ParentCommand.h"
 #include "Scene.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/SortTreeCtrl.h"
 
 // Using
@@ -57,7 +57,7 @@ void HierarchyOutliner::AddHierarchyNodes()
     RecurseAddHierarchyNode( m_CurrentScene->GetRoot() );
 
     // The root item gets a special icon
-    i32 image = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "world.png" ) );
+    i32 image = Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "world" ) );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Normal );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Expanded );
     m_TreeCtrl->SetItemImage( m_TreeCtrl->GetRootItem(), image, wxTreeItemIcon_Selected );

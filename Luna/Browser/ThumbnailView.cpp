@@ -14,7 +14,7 @@
 #include "Editor/UpdateStatusEvent.h"
 #include "Application/Inspect/DragDrop/DropSource.h"
 #include "Application/Undo/Command.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 #include "Scene/Color.h"  // BARF! Should we move Color.h to Editor?
 #include "Scene/Render.h" // BARF! Should we move Render.h to Editor?
@@ -129,13 +129,13 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, BrowserFrame *b
 
     IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
 
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.entity.*" ), TXT( "moon.png" ) );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.scene.*" ), TXT( "enginetype_level.png" ) );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.shader.*" ), TXT( "enginetype_shader.png" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.entity.*" ), TXT( "moon" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.scene.*" ), TXT( "enginetype_level" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.shader.*" ), TXT( "enginetype_shader" ) );
 
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.fbx" ), TXT( "maya.png" ) );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.rb" ), TXT( "moon.png" ) );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.tga" ), TXT( "fileType_tga.png" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.fbx" ), TXT( "maya" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.rb" ), TXT( "moon" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.tga" ), TXT( "fileType_tga" ) );
 
     // Connect Listeners
     m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
@@ -1092,7 +1092,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             //newMenu->Enable( ID_NewFolder, inFolder );
 
             wxMenuItem* menuItem = new wxMenuItem( &menu, ID_New, BrowserMenu::Label( ID_New ), BrowserMenu::Label( ID_New ), wxITEM_NORMAL, newMenu );
-            menuItem->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "new_file.png" ) ) );
+            menuItem->SetBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
             menu.Append( menuItem );
             menuItem->Enable( inFolder );
         }
@@ -1402,19 +1402,19 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
             }
 
             // FileType Overlay
-            M_FileTypeIcons::iterator findIcon = m_FileTypeIcons.find( tile->GetFile()->GetPath().FullExtension() );
-            if ( findIcon != m_FileTypeIcons.end() )
-            {
-                Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
-                inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
+                M_FileTypeIcons::iterator findIcon = m_FileTypeIcons.find( tile->GetFile()->GetPath().FullExtension() );
+                if ( findIcon != m_FileTypeIcons.end() )
+                {
+                    Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
+                    inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
+                }
+                else if ( Nocturnal::Path( tile->GetFile()->GetFilePath() ).Extension() == Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary )
+                    && ( findIcon = m_FileTypeIcons.find( Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary ) ) ) != m_FileTypeIcons.end() )
+                {
+                    Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
+                    inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
+                }
             }
-            else if ( Nocturnal::Path( tile->GetFile()->GetFilePath() ).Extension() == Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary )
-                && ( findIcon = m_FileTypeIcons.find( Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary ) ) ) != m_FileTypeIcons.end() )
-            {
-                Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
-                inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
-            }
-        }
 
         if ( tile->GetThumbnail() == m_TextureLoading )
         {

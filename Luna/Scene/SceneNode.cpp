@@ -12,7 +12,7 @@
 #include "Transform.h"
 
 #include "Statistics.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 using namespace Luna;
 using namespace Nocturnal;
@@ -378,7 +378,7 @@ void SceneNode::Evaluate(GraphDirection direction)
 
 i32 SceneNode::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "null.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "null" ) );
 }
 
 tstring SceneNode::GetApplicationTypeName() const

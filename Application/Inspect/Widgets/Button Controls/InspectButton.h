@@ -3,6 +3,8 @@
 #include "Application/API.h"
 #include "Application/Inspect/Widgets/Control.h"
 
+#include <wx/artprov.h>
+
 #include "Foundation/Reflect/Class.h"
 
 namespace Inspect
@@ -19,7 +21,7 @@ namespace Inspect
     tstring m_Text;
 
     // Icon for the button
-    tstring m_Icon;
+    wxArtID m_Icon;
 
   public:
     Button();
@@ -32,7 +34,7 @@ namespace Inspect
     virtual bool Write();
 
     virtual void SetText( const tstring& text );
-    virtual void SetIcon( const tstring& icon );
+    virtual void SetIcon( const wxArtID& icon );
   };
 
   typedef Nocturnal::SmartPtr<Button> ButtonPtr;

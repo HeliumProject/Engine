@@ -2,7 +2,7 @@
 #include "DetailsFrame.h"
 
 #include "Pipeline/Asset/AssetFile.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/RCS/RCS.h"
 
 using namespace Luna;
@@ -103,12 +103,12 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
   {
     if ( rcsFile.IsCheckedOutByMe() )
     {
-      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "accept.png" ) ) );
+      m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
       m_RevisionStatus->SetLabel( TXT( "Checked out to you" ) );
     }
     else if ( rcsFile.IsCheckedOutBySomeoneElse() )
     {
-      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/process-stop.png" ) ) );
+      m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
       
       tstring usernames;
       rcsFile.GetOpenedByUsers( usernames );
@@ -120,12 +120,12 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
     }
     else if ( !rcsFile.IsUpToDate() )
     {
-      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "warning.png" ) ) );
+      m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
       m_RevisionStatus->SetLabel( TXT( "Out of date" ) );
     }
     else
     {
-      m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "p4.png" ) ) );
+      m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
       m_RevisionStatus->SetLabel( TXT( "Available for check out" ) );
     }
 
@@ -152,7 +152,7 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
   else
   {
     m_RevisionStatus->SetLabel( TXT( "No Perforce information available" ) );
-    m_RevisionStatusIcon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/process-stop.png" ) ) );
+    m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
     m_LastCheckInPanel->Hide();
     m_FirstCheckInPanel->Hide();
   }

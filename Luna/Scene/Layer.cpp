@@ -2,7 +2,7 @@
 #include "Layer.h"
 #include "Scene.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/Inspect/Widgets/Text Controls/Choice.h"
 
 #include "Foundation/Container/Insert.h" 
@@ -53,7 +53,7 @@ Layer::~Layer()
 // 
 i32 Layer::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "layer.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "layer" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

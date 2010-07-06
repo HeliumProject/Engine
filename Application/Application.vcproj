@@ -1167,6 +1167,14 @@
 			Name="UI"
 			>
 			<File
+				RelativePath=".\UI\ArtProvider.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ArtProvider.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\AutoCompleteComboBox.cpp"
 				>
 			</File>
@@ -1239,19 +1247,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\FileIconsTable.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\FileIconsTable.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\FileTreeCtrl.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\UI\FileTreeCtrl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ImageManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ImageManager.h"
 				>
 			</File>
 			<File

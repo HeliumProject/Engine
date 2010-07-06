@@ -3,7 +3,7 @@
 
 #include "Application/Inspect/Widgets/Controls.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 using namespace Inspect;
 
@@ -228,8 +228,8 @@ void Canvas::Realize(Container* parent)
   treeWndCtrl->SetColumnSize( 15 );
   if ( ( treeWndCtrl->GetStateImageList() == NULL ) && ( treeWndCtrl->GetImageList() == NULL ) )
   {
-    treeWndCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-    treeWndCtrl->SetStateImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
+    treeWndCtrl->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+    treeWndCtrl->SetStateImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
   }
 
   wxTreeItemId root = treeWndCtrl->GetRootItem();

@@ -3,7 +3,7 @@
 
 #include "Pipeline/Content/Nodes/Mesh.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Pick.h"
 #include "Color.h"
 
@@ -78,7 +78,7 @@ Mesh::~Mesh()
 
 i32 Mesh::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "mesh.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "mesh" ) );
 }
 
 tstring Mesh::GetApplicationTypeName() const

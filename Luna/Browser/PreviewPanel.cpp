@@ -7,7 +7,7 @@
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Foundation/Component/ComponentHandle.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 
 using namespace Luna;
@@ -44,8 +44,8 @@ void PreviewPanel::Preview( Asset::AssetClass* asset )
             if ( entity.ReferencesObject() )
             {
                 m_ContentFile = entity->GetPath().Get();
+                }
             }
-        }
 
         if ( !m_ContentFile.empty() )
         {

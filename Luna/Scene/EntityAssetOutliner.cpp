@@ -5,7 +5,7 @@
 #include "EntityAssetSet.h"
 #include "Scene.h"
 #include "SceneOutlinerItemData.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/SortTreeCtrl.h"
 
 // Using
@@ -119,7 +119,7 @@ void EntityAssetOutliner::AddEntityAssetSet( Luna::EntityAssetSet* classSet )
     bool isSortingEnabled = m_TreeCtrl->IsSortingEnabled();
     m_TreeCtrl->DisableSorting();
 
-    const i32 image = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "folder.png" ) );
+    const i32 image = Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "folder" ) );
     wxTreeItemId classItem = AddItem( m_InvisibleRoot, 
                                       classSet->GetName(), 
                                       image, 

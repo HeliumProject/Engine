@@ -12,7 +12,7 @@
 #include "Application/Inspect/DragDrop/ReflectClipboardData.h"
 #include "Scene/SceneManager.h"
 #include "Application/UI/FileDialog.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 #include "Application/UI/SortTreeCtrl.h"
 
@@ -72,17 +72,17 @@ CollectionsPanel::CollectionsPanel( BrowserFrame* browserFrame )
 , m_CollectionManager( NULL )
 , m_DragOriginatedHere( false )
 {
-    m_MyCollectionsTreeCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
-    m_TempCollectionsTreeCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
+    m_MyCollectionsTreeCtrl->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+    m_TempCollectionsTreeCtrl->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
 
-    m_ContainerImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "folder.png" ) );
-    m_DependencyImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "chart_organisation.png" ) );
-    m_UsageImageIndex = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "chart_organisation_reverse.png" ) );
+    m_ContainerImageIndex = Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "folder" ) );
+    m_DependencyImageIndex = Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "chart_organisation" ) );
+    m_UsageImageIndex = Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "chart_organisation_reverse" ) );
 
     m_MyCollectionsToolBar->SetToolBitmapSize( wxSize( 16, 16 ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "folder_add.png" ) ), BrowserMenu::Label( ID_NewCollection ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, TXT( "" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "chart_organisation_add.png" ) ), BrowserMenu::Label( ID_NewDependencyCollection ) + TXT( " - Files this asset depends on." ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, TXT( "" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "chart_organisation_reverse_add.png" ) ), BrowserMenu::Label( ID_NewUsageCollection ) + TXT( " - Files that use this asset." ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), BrowserMenu::Label( ID_NewCollection ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, TXT( "" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), BrowserMenu::Label( ID_NewDependencyCollection ) + TXT( " - Files this asset depends on." ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, TXT( "" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), BrowserMenu::Label( ID_NewUsageCollection ) + TXT( " - Files that use this asset." ) );
     m_MyCollectionsToolBar->Realize();
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );

@@ -1,7 +1,7 @@
 #include "AssetTypeInfo.h"
 #include "Pipeline/Asset/AssetExceptions.h"
 
-static const tchar* s_DefaultIconFilename = TXT( "null.png" );
+static const tchar* s_DefaultIconFilename = TXT( "null" );
 
 using namespace Asset;
 

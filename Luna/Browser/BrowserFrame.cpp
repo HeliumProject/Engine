@@ -25,7 +25,7 @@
 #include "Scene/SceneManager.h"
 #include "Application/UI/AutoCompleteComboBox.h"
 #include "Application/UI/Button.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 #include "Platform/Exception.h"
 #include "Platform/Process.h"
@@ -117,10 +117,10 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
     wxIconBundle iconBundle;
 
     wxIcon tempIcon;
-    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "vault.png" ) ) );
+    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
     iconBundle.AddIcon( tempIcon );
 
-    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "vault.png" ), Nocturnal::IconSizes::Size32 ) );
+    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
     iconBundle.AddIcon( tempIcon );
 
     SetIcons( iconBundle );

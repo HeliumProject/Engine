@@ -7,7 +7,7 @@
 #include "VolumeType.h"
 
 #include "Core/Enumerator.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveCube.h"
 #include "PrimitiveCylinder.h"
@@ -55,7 +55,7 @@ Volume::~Volume()
 
 i32 Volume::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "volume.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "volume" ) );
 }
 
 tstring Volume::GetApplicationTypeName() const

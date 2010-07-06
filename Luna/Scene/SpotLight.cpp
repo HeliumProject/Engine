@@ -8,7 +8,7 @@
 #include "InstanceType.h"
 
 #include "Core/Enumerator.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveCone.h"
 #include "PrimitivePointer.h"
@@ -58,7 +58,7 @@ SpotLight::~SpotLight()
 
 i32 SpotLight::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "light.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "light" ) );
 }
 
 tstring SpotLight::GetApplicationTypeName() const

@@ -9,7 +9,7 @@ void ArtFileComponent::EnumerateClass( Reflect::Compositor<ArtFileComponent>& co
   comp.GetComposite().m_UIName = TXT( "Art File" );
   comp.GetComposite().SetProperty( AssetProperties::ShortDescription, "Contains a reference to a Maya file (.mb) which contains the art (geometry, animation, etc.) for an entity in the game." );
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, "All instances of an entity will utilize the same Maya file to represent their geometry in-game.  In addition to entities, Animation Clips and Animation Sets can also be associated with Maya files." );
-  comp.GetComposite().SetProperty( AssetProperties::SmallIcon, "attribute_artfile.png" );
+  comp.GetComposite().SetProperty( AssetProperties::SmallIcon, "attribute_artfile" );
 
   Reflect::Field* fieldFragmentNode = comp.AddField( &ArtFileComponent::m_FragmentNode, "m_FragmentNode" );
 

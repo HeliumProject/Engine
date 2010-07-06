@@ -33,7 +33,7 @@
 #include "Application/Inspect/Widgets/Canvas.h"
 #include "Application/RCS/RCS.h"
 #include "Application/UI/FileDialog.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/ListDialog.h"
 #include "Platform/Process.h"
 #include <wx/clipbrd.h>
@@ -105,11 +105,11 @@ AssetEditor::AssetEditor()
 {
     wxIconBundle iconBundle;
     wxIcon tempIcon;
-    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "asset_editor.png" ), Nocturnal::IconSizes::Size64 ) );
+    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 64, 64 ) ) );
     iconBundle.AddIcon( tempIcon );
-    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "asset_editor.png" ), Nocturnal::IconSizes::Size32 ) );
+    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
     iconBundle.AddIcon( tempIcon );
-    tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "asset_editor.png" ) ) );
+    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
     iconBundle.AddIcon( tempIcon );
     SetIcons( iconBundle );
 
@@ -123,30 +123,30 @@ AssetEditor::AssetEditor()
     // Toolbars
     m_MainToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_MainToolBar->SetToolBitmapSize( wxSize( 16,16 ) );
-    m_MainToolBar->AddTool( wxID_NEW, wxT( "New" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "new_file.png" ) ), wxT( "New" ) );
-    m_MainToolBar->AddTool( wxID_OPEN, wxT( "Open" ), wxArtProvider::GetBitmap( wxART_FILE_OPEN, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Open" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::SearchForFile, wxT( "Find..." ), wxArtProvider::GetBitmap( wxART_FIND, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Find..." ) );
-    m_MainToolBar->AddTool( wxID_SAVE, wxT( "Save" ), wxArtProvider::GetBitmap( wxART_FILE_SAVE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Save" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::SaveAllAssetClasses, wxT( "Save All" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "save_all.png" ) ), wxT( "Save All" ) );
+    m_MainToolBar->AddTool( wxID_NEW, wxT( "New" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxT( "New" ) );
+    m_MainToolBar->AddTool( wxID_OPEN, wxT( "Open" ), wxArtProvider::GetBitmap( wxART_FILE_OPEN ), wxT( "Open" ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::SearchForFile, wxT( "Find..." ), wxArtProvider::GetBitmap( wxART_FIND ), wxT( "Find..." ) );
+    m_MainToolBar->AddTool( wxID_SAVE, wxT( "Save" ), wxArtProvider::GetBitmap( wxART_FILE_SAVE ), wxT( "Save" ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::SaveAllAssetClasses, wxT( "Save All" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxT( "Save All" ) );
     m_MainToolBar->AddSeparator();
-    m_MainToolBar->AddTool( wxID_CUT, wxT( "Cut" ), wxArtProvider::GetBitmap( wxART_CUT, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Cut" ) );
+    m_MainToolBar->AddTool( wxID_CUT, wxT( "Cut" ), wxArtProvider::GetBitmap( wxART_CUT ), wxT( "Cut" ) );
     m_MainToolBar->AddTool( wxID_COPY, wxT( "Copy" ), wxArtProvider::GetBitmap( wxART_COPY, wxART_OTHER, wxSize(16, 16 ) ), wxT( "Copy" ) );
     m_MainToolBar->AddTool( wxID_PASTE, wxT( "Paste" ), wxArtProvider::GetBitmap( wxART_PASTE, wxART_OTHER, wxSize(16, 16 ) ), wxT( "Paste" ) );
     m_MainToolBar->AddSeparator();
     m_MainToolBar->AddTool( wxID_UNDO, wxT( "Undo" ), wxArtProvider::GetBitmap( wxART_UNDO, wxART_OTHER, wxSize(16, 16 ) ), wxT( "Undo" ) );
     m_MainToolBar->AddTool( wxID_REDO, wxT( "Redo" ), wxArtProvider::GetBitmap( wxART_REDO, wxART_OTHER, wxSize(16, 16 ) ), wxT( "Redo" ) );
     m_MainToolBar->AddSeparator();
-    m_MainToolBar->AddTool( AssetEditorIDs::Preview, wxT( "Preview" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "preview.png" ) ), wxT( "Preview" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::Build, wxT( "Build" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "build.png" ) ), wxT( "Build (Shift-click for build options)" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::View, wxT( "View" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "view.png" ) ), wxT( "View (Shift-click for build options)" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::Export, wxT( "Export" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "export.png" ) ), wxT( "Export all relevant art assets (Shift-click for export options)" ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::SyncShaders, wxT( "Sync Shaders" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "sync_shaders.png" ) ), wxT( "Synchronize the Shader Usage settings." ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::UpdateSymbols, wxT( "Update Symbols" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "header.png" ) ), wxT( "Update Symbols for Update Classes" ) ); 
+    m_MainToolBar->AddTool( AssetEditorIDs::Preview, wxT( "Preview" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxT( "Preview" ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::Build, wxT( "Build" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxT( "Build (Shift-click for build options)" ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::View, wxT( "View" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxT( "View (Shift-click for build options)" ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::Export, wxT( "Export" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxT( "Export all relevant art assets (Shift-click for export options)" ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::SyncShaders, wxT( "Sync Shaders" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxT( "Synchronize the Shader Usage settings." ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::UpdateSymbols, wxT( "Update Symbols" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxT( "Update Symbols for Update Classes" ) ); 
     m_MainToolBar->AddSeparator();
-    m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationSet, wxT( "Add Set" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "animationset_add.png" ) ), wxT( "Add an Animation Set to the selected asset(s)." ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationGroup, wxT( "Add Group" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "animationgroup_add.png" ) ), wxT( "Add a new Animation Group to the selected Animation Set(s)." ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::EditAnimationGroup, wxT( "Edit Group" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "animationgroup_edit.png" ) ), wxT( "Edit the selected Animation Group." ) );
-    m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationClip, wxT( "Add Clip" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "animationclip_add.png" ) ), wxT( "Add a new Animation Clip to the selected Animation Chain(s)." ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationSet, wxT( "Add Set" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxT( "Add an Animation Set to the selected asset(s)." ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationGroup, wxT( "Add Group" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxT( "Add a new Animation Group to the selected Animation Set(s)." ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::EditAnimationGroup, wxT( "Edit Group" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxT( "Edit the selected Animation Group." ) );
+    m_MainToolBar->AddTool( AssetEditorIDs::AddAnimationClip, wxT( "Add Clip" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxT( "Add a new Animation Clip to the selected Animation Chain(s)." ) );
     m_MainToolBar->Realize();
     m_MainToolBar->EnableTool( AssetEditorIDs::Build, false );
     m_MainToolBar->EnableTool( AssetEditorIDs::View, false );
@@ -218,7 +218,7 @@ AssetEditor::AssetEditor()
     // File menu
 
     wxMenuItem* menuItem = new wxMenuItem( m_MenuFile, wxID_ANY, TXT( "New" ), TXT( "" ), wxITEM_NORMAL, m_MenuNew );
-    menuItem->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "new_file.png" ) ) );
+    menuItem->SetBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
     m_MenuFile->Append( menuItem );
 
     menuItem = new wxMenuItem( m_MenuFile, wxID_OPEN, TXT( "Open\tCtrl-o" ) );
@@ -244,7 +244,7 @@ AssetEditor::AssetEditor()
     m_MenuFile->Append( menuItem );
 
     menuItem = new wxMenuItem( m_MenuFile, AssetEditorIDs::SaveAllAssetClasses, TXT( "Save All\tCtrl-Shift-s" ) );
-    menuItem->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "save_all.png" ) ) );
+    menuItem->SetBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
     m_MenuFile->Append( menuItem );
 
     m_MenuFile->AppendSeparator();
@@ -290,11 +290,11 @@ AssetEditor::AssetEditor()
     m_MenuEdit->AppendSeparator();
 
     menuItem = new wxMenuItem( m_MenuEdit, AssetEditorIDs::MoveUp, TXT( "Move Up\tAlt-UP" ) );
-    menuItem->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/go-up.png" ) ) );
+    menuItem->SetBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
     m_MenuEdit->Append( menuItem );
 
     menuItem = new wxMenuItem( m_MenuEdit, AssetEditorIDs::MoveDown, TXT( "Move Down\tAlt-DOWN" ) );
-    menuItem->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/go-down.png" ) ) );
+    menuItem->SetBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
     m_MenuEdit->Append( menuItem );
 
     menuBar->Append( m_MenuEdit, TXT( "Edit" ) );

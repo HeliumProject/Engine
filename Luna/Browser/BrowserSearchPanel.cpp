@@ -7,7 +7,7 @@
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Container/Insert.h" 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 using namespace Luna;
 
@@ -64,12 +64,12 @@ BrowserSearchPanel::BrowserSearchPanel( BrowserFrame* browserFrame, wxWindow* pa
     m_GoButton->SetId( BrowserMenu::AdvancedSearchGo );
     m_CancelButton->SetId( BrowserMenu::AdvancedSearchCancel );
 
-    m_WordsHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "apps/help-browser.png" ) ) );
-    m_PhraseHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "apps/help-browser.png" ) ) );
-    m_FileIDHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "apps/help-browser.png" ) ) );
-    m_ComponentHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "apps/help-browser.png" ) ) );
-    m_LevelHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "apps/help-browser.png" ) ) );
-    m_ShaderHelpBitmap->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "apps/help-browser.png" ) ) );
+    m_WordsHelpBitmap->SetBitmap( wxArtProvider::GetBitmap( wxART_HELP_BROWSER ) );
+    m_PhraseHelpBitmap->SetBitmap( wxArtProvider::GetBitmap( wxART_HELP_BROWSER ) );
+    m_FileIDHelpBitmap->SetBitmap( wxArtProvider::GetBitmap( wxART_HELP_BROWSER ) );
+    m_ComponentHelpBitmap->SetBitmap( wxArtProvider::GetBitmap( wxART_HELP_BROWSER ) );
+    m_LevelHelpBitmap->SetBitmap( wxArtProvider::GetBitmap( wxART_HELP_BROWSER ) );
+    m_ShaderHelpBitmap->SetBitmap( wxArtProvider::GetBitmap( wxART_HELP_BROWSER ) );
 
     m_DefaultFieldText.insert( std::make_pair( m_CollectionChoice->GetId(), s_CollectionDefaultText ) );
     m_DefaultFieldText.insert( std::make_pair( m_FileTypeChoice->GetId(), s_FileTypeDefaultText ) );

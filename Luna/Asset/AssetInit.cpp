@@ -35,7 +35,7 @@
 #include "Pipeline/Content/ContentInit.h"
 #include "Foundation/Log.h"
 #include "Foundation/Reflect/Registry.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 // Using
 using namespace Luna;

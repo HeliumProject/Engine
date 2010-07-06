@@ -7,7 +7,7 @@
 #include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Component/ComponentHandle.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 
 using namespace Luna;

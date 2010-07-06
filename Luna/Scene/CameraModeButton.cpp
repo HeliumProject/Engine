@@ -3,7 +3,7 @@
 
 #include "SceneEditor.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 using namespace Luna;
 
@@ -18,10 +18,10 @@ CameraModeButton::CameraModeButton( wxWindow* parent, SceneEditor* sceneEditor, 
   SetMargins( 4 );
   const Reflect::Enumeration* cameraModeEnum = Reflect::Registry::GetInstance()->GetEnumeration( Reflect::GetType< CameraModes::CameraMode >() );
 
-  m_Bitmaps[ CameraModes::Orbit ] = Nocturnal::GlobalImageManager().GetBitmap( TXT( "camera_perspective.png" ), Nocturnal::IconSizes::Size32 );
-  m_Bitmaps[ CameraModes::Front ] = Nocturnal::GlobalImageManager().GetBitmap( TXT( "camera_front.png" ), Nocturnal::IconSizes::Size32 );
-  m_Bitmaps[ CameraModes::Side ] = Nocturnal::GlobalImageManager().GetBitmap( TXT( "camera_side.png" ), Nocturnal::IconSizes::Size32 );
-  m_Bitmaps[ CameraModes::Top ] = Nocturnal::GlobalImageManager().GetBitmap( TXT( "camera_top.png" ), Nocturnal::IconSizes::Size32 );
+  m_Bitmaps[ CameraModes::Orbit ] = wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) );
+  m_Bitmaps[ CameraModes::Front ] = wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) );
+  m_Bitmaps[ CameraModes::Side ] = wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) );
+  m_Bitmaps[ CameraModes::Top ] = wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) );
 
   tstring label;
   wxMenu* menu = new wxMenu();

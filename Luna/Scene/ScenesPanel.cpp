@@ -15,7 +15,7 @@
 #include "Pipeline/Content/ContentVersion.h"
 #include "Foundation/Log.h"
 #include "Application/UI/FileDialog.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Foundation/Container/Insert.h" 
 
 // Using
@@ -41,15 +41,15 @@ ScenesPanel::ScenesPanel( SceneEditor* editor, Luna::SceneManager* sceneManager,
     wxBoxSizer* toolbarSizer;
     toolbarSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    m_ButtonNewZone = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+    m_ButtonNewZone = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
     toolbarSizer->Add( m_ButtonNewZone, 0, wxALL, 2 );
     m_ButtonNewZone->SetToolTip( wxT("Create a new zone and add it to this world.") );
 
-    m_ButtonAddZone = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+    m_ButtonAddZone = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
     toolbarSizer->Add( m_ButtonAddZone, 0, wxALL, 2 );
     m_ButtonAddZone->SetToolTip( wxT("Add an existing zone to this world.") );
 
-    m_ButtonMoveSelToZone = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+    m_ButtonMoveSelToZone = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
     toolbarSizer->Add( m_ButtonMoveSelToZone, 0, wxALL, 2 );
     m_ButtonMoveSelToZone->SetToolTip( wxT("Move selection into current zone.") );
     m_ButtonMoveSelToZone->Hide();

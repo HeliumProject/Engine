@@ -6,7 +6,7 @@
 #include "AssetEditor.h"
 
 #include "Application/Inspect/DragDrop/ReflectClipboardData.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 using namespace Luna;
 
@@ -35,7 +35,7 @@ void AssetNode::CleanupType()
 AssetNode::AssetNode( Luna::AssetManager* assetManager )
 : m_AssetManager( assetManager )
 , m_Name( TXT( "" ) )
-, m_Icon( TXT( "null.png" ) )
+, m_Icon( TXT( "null" ) )
 , m_Style( LabelStyles::Normal )
 , m_Parent( NULL )
 , m_CachedAsset( NULL )
@@ -79,7 +79,7 @@ void AssetNode::SetName( const tstring& name )
 // 
 i32 AssetNode::GetIconIndex() const
 {
-    return Nocturnal::GlobalImageManager().GetImageIndex( GetIcon() );
+    return Nocturnal::GlobalFileIconsTable().GetIconID( GetIcon() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

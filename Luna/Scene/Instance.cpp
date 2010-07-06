@@ -5,7 +5,7 @@
 
 #include "Scene.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 #include "Foundation/Log.h"
 
@@ -48,7 +48,7 @@ void Instance::Unpack()
 
 i32 Instance::GetImageIndex() const
 {
-  i32 image = Nocturnal::GlobalImageManager().GetImageIndex( TXT( "null.png" ) );
+  i32 image = Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "null" ) );
 
   if ( GetNodeType() )
   {

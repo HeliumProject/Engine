@@ -3,7 +3,7 @@
 
 #include "AssetEditorGenerated.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/FileDialog.h"
 
 using namespace Luna;
@@ -27,7 +27,7 @@ PromptNewExistingDlg::PromptNewExistingDlg( wxWindow* parent, CreateFileCallback
     m_Panel->m_Description->Wrap( GetSize().x - 10 );
     m_Panel->m_RadioBtnNew->SetLabel( createLabel.c_str() );
     m_Panel->m_RadioBtnExisting->SetLabel( existingLabel.c_str() );
-    m_Panel->m_ButtonExistingFinder->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/system-search.png" ) ) );
+    m_Panel->m_ButtonExistingFinder->SetBitmapLabel( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
 
     mainSizer->Add( m_Panel, 1, wxEXPAND | wxALL, 5 );
 

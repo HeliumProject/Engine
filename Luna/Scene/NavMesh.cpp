@@ -18,7 +18,7 @@
 #include "ReverseChildrenCommand.h"
 
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Core/Enumerator.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "Foundation/Log.h"
@@ -140,7 +140,7 @@ NavMesh::~NavMesh()
 
 i32 NavMesh::GetImageIndex() const
 {
-  return Nocturnal::GlobalImageManager().GetImageIndex( TXT( "mesh.png" ) );
+  return Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "mesh" ) );
 }
 
 tstring NavMesh::GetApplicationTypeName() const
@@ -838,7 +838,7 @@ void NavMesh::CreatePanel( CreatePanelArgs& args )
     {
       args.m_Enumerator->AddLabel( "Reverse Control Points" );
       Inspect::Action* button = args.m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( &Curve::OnReverseControlPoints ) );
-      button->SetIcon( "reverse.png" );
+      button->SetIcon( "reverse" );
       button->SetClientData( new SelectionDataObject( args.m_Selection ) );
     }
     args.m_Enumerator->Pop();

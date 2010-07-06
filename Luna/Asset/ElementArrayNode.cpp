@@ -9,7 +9,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Reflect/ElementArraySerializer.h"
 #include "Foundation/TUID.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 using namespace Luna;
 
@@ -448,11 +448,11 @@ Luna::PersistentNode* ElementArrayNode::NewChild( Reflect::Element* element )
 
   contextMenu.AppendSeparator();
 
-  ContextMenuItemPtr menuItemMoveUp = new ContextMenuItem( TXT( "Move Up\tAlt-UP" ), TXT( "Move the selected item(s) up in the list" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/go-up.png" ) ) );
+  ContextMenuItemPtr menuItemMoveUp = new ContextMenuItem( TXT( "Move Up\tAlt-UP" ), TXT( "Move the selected item(s) up in the list" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
   menuItemMoveUp->AddCallback( ContextMenuSignature::Delegate::Create<Luna::ElementArrayNode, void (Luna::ElementArrayNode::*)( const ContextMenuArgsPtr& )>( this, &Luna::ElementArrayNode::MoveSelectedChildrenUp ) );
   contextMenu.AppendItem( menuItemMoveUp );
 
-  ContextMenuItemPtr menuItemMoveDown = new ContextMenuItem( TXT( "Move Down\tAlt-DOWN" ), TXT( "Move the selected item(s) down in the list" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/go-down.png" ) ) );
+  ContextMenuItemPtr menuItemMoveDown = new ContextMenuItem( TXT( "Move Down\tAlt-DOWN" ), TXT( "Move the selected item(s) down in the list" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
   menuItemMoveDown->AddCallback( ContextMenuSignature::Delegate::Create<Luna::ElementArrayNode, void (Luna::ElementArrayNode::*)( const ContextMenuArgsPtr& )>( this, &Luna::ElementArrayNode::MoveSelectedChildrenDown ) );
   contextMenu.AppendItem( menuItemMoveDown );
 

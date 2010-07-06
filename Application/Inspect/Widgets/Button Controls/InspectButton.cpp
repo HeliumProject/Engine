@@ -2,7 +2,7 @@
 #include "Application/Inspect/Widgets/Container.h"
 #include "Application/Inspect/Widgets/Canvas.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 // Using
 using namespace Inspect;
@@ -66,6 +66,7 @@ END_EVENT_TABLE()
 // 
 Button::Button()
 : m_Text( TXT( "..." ) )
+, m_Icon( (wxArtID)wxT( "" ) )
 {
   m_FixedWidth = true;
 }
@@ -171,7 +172,7 @@ void Button::SetText(const tstring& text)
 ///////////////////////////////////////////////////////////////////////////////
 // Sets the label on this button.
 // 
-void Button::SetIcon(const tstring& icon)
+void Button::SetIcon(const wxArtID& icon)
 {
   if ( IsRealized() )
   {
@@ -179,7 +180,7 @@ void Button::SetIcon(const tstring& icon)
     if ( !m_Icon.empty() )
     {
       m_Icon = icon;
-      Control::Cast< wxBitmapButton >( this )->SetBitmapLabel( Nocturnal::GlobalImageManager().GetBitmap( m_Icon ) );
+      Control::Cast< wxBitmapButton >( this )->SetBitmapLabel( wxArtProvider::GetBitmap( m_Icon ) );
     }
   }
   else

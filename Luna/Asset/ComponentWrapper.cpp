@@ -97,7 +97,7 @@ i32 ComponentWrapper::GetSlot() const
 // additionally, some parts of the UI may not have an Luna::ComponentWrapper yet, but just
 // want to query the icon for the attribute 
 // 
-static tstring g_DefaultIconName = TXT( "null.png" ); 
+static tstring g_DefaultIconName = TXT( "null" ); 
 
 const tstring& ComponentWrapper::GetComponentIcon(const Component::ComponentBase* attribute)
 {

@@ -21,7 +21,7 @@
 #include "Application/Inspect/DragDrop/ClipboardElementArray.h"
 #include "Core/Enumerator.h"
 #include "Pipeline/Asset/Manifests/EntityManifest.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 #include <algorithm>
 
@@ -231,7 +231,7 @@ tstring AssetClass::GetIcon() const
   
   if ( icon.empty() )
   {
-    icon = TXT( "null.png" ); 
+    icon = TXT( "null" ); 
   }
 
   return icon;
@@ -321,7 +321,7 @@ void AssetClass::PopulateContextMenu( ContextMenuItemSet& menu )
   menu.AppendItem( menuItem );
 
   menu.AppendSeparator();
-  menuItem = new ContextMenuItem( TXT( "Save" ), TXT( "Save selected Asset(s)" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "save.png" ) ) );
+  menuItem = new ContextMenuItem( TXT( "Save" ), TXT( "Save selected Asset(s)" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
   menuItem->AddCallback( ContextMenuSignature::Delegate( &Luna::OnSaveSelectedAssets ), clientData );
   menu.AppendItem( menuItem );
   menu.AppendSeparator();

@@ -8,7 +8,7 @@
 #include "SceneManager.h"
 #include "SceneEditorIDs.h"
 #include "Foundation/Log.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Foundation/Container/Insert.h" 
 
 // Using
@@ -76,19 +76,19 @@ LayerGrid::LayerGrid( wxWindow* parent, Luna::SceneManager* sceneManager, u32 lT
   m_ToolBar->PushEventHandler( this );
 
   // Set up the toolbar that goes at the top of the panel
-  m_ToolBar->AddTool( ID_NewLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_NEW, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Create New Layer" ) );
-  m_ToolBar->AddTool( ID_NewLayerFromSelection, wxT( "" ), wxArtProvider::GetBitmap( wxART_NEW_DIR, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Create New Layer From Selection" ) );
-  m_ToolBar->AddTool( ID_DeleteLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_DELETE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Delete Highlighted Layer(s)" ) );
+  m_ToolBar->AddTool( ID_NewLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_NEW ), wxT( "Create New Layer" ) );
+  m_ToolBar->AddTool( ID_NewLayerFromSelection, wxT( "" ), wxArtProvider::GetBitmap( wxART_NEW_DIR ), wxT( "Create New Layer From Selection" ) );
+  m_ToolBar->AddTool( ID_DeleteLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_DELETE ), wxT( "Delete Highlighted Layer(s)" ) );
   m_ToolBar->AddSeparator();
-  m_ToolBar->AddTool( ID_AddSelectionToLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_ADD_BOOKMARK, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Add Selection To Highlighted Layer(s)" ) );
-  m_ToolBar->AddTool( ID_RemoveSelectionFromLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_DEL_BOOKMARK, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Remove Selection From Highlighted Layer(s)" ) );
+  m_ToolBar->AddTool( ID_AddSelectionToLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_ADD_BOOKMARK ), wxT( "Add Selection To Highlighted Layer(s)" ) );
+  m_ToolBar->AddTool( ID_RemoveSelectionFromLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_DEL_BOOKMARK ), wxT( "Remove Selection From Highlighted Layer(s)" ) );
   m_ToolBar->AddSeparator();
-  m_ToolBar->AddTool( ID_SelectLayerMembers, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Select Layer Members" ) );
-  m_ToolBar->AddTool( ID_SelectLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Select Highlighted Layer(s)" ) );
+  m_ToolBar->AddTool( ID_SelectLayerMembers, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ), wxT( "Select Layer Members" ) );
+  m_ToolBar->AddTool( ID_SelectLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ), wxT( "Select Highlighted Layer(s)" ) );
   
   if(m_LayerType == Content::LayerTypes::LT_Lighting)
   {
-    m_ToolBar->AddTool( ID_CleanUpLayers, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ), wxT( "Remove invalid Layer(s)" ) );
+    m_ToolBar->AddTool( ID_CleanUpLayers, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ), wxT( "Remove invalid Layer(s)" ) );
   }
 
   m_ToolBar->Realize();

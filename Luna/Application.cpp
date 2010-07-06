@@ -18,7 +18,7 @@
 #include "Scene/SceneEditor.h"
 #include "Scene/SceneInit.h"
 #include "Task/TaskInit.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Platform/Windows/Windows.h"
 #include "Platform/Process.h"
 #include "Application/Worker/Process.h"
@@ -70,11 +70,9 @@ LunaApp::~LunaApp()
 // 
 bool LunaApp::OnInit()
 {
-    wxArtProvider::Push( new ::Nocturnal::ArtProvider() );
-
     SetVendorName( TXT( "Nocturnal" ) );
 
-    //SetLogo( wxT( "Luna (c) 2010 - Nocturnal\n" ) );
+    //parse.SetLogo( wxT( "Luna (c) 2010 - Nocturnal\n" ) );
 
     // don't spend a lot of time updating idle events for windows that don't need it
     wxUpdateUIEvent::SetMode( wxUPDATE_UI_PROCESS_SPECIFIED );
@@ -86,9 +84,6 @@ bool LunaApp::OnInit()
     Nocturnal::Path exePath( module );
     Nocturnal::Path iconFolder( exePath.Directory() + TXT( "Icons/" ) );
 
-    Nocturnal::ImageManagerInit( iconFolder.Get(), TXT( "" ) );
-    Nocturnal::GlobalImageManager().LoadGuiArt();
-
     {
         Log::Bullet initialize( TXT( "Initializing\n" ) );
 
@@ -96,6 +91,37 @@ bool LunaApp::OnInit()
 
         {
             Log::Bullet modules( TXT( "Modules:\n" ) );
+
+            {
+                Log::Bullet bullet( TXT( "Icons...\n" ) );
+                //m_InitializerStack.Push( ArtProvider::Initialize, ArtProvider::Cleanup );
+
+                // ImageHandlers:
+                //    wxWidgets normally doesn't link in image handlers for all types of images,
+                //    in order to be a bit more efficient.  Consequently, you have to initialize
+                //    and add image handlers.  You can see how it is done for each type in the
+                //    demo in MyApp.OnInit.  Or you can call wxInitAllImageHandlers() to do them
+                //    all.  However, there is a limitation to doing them all.  TGA files may be
+                //    handled by the wxCURHandler instead of the wxTGAHandler, simply because that
+                //    handler appears in the list before TGA when you init them all at once.
+                //wxImage::AddHandler( new wxJPEGHandler );
+                //wxImage::AddHandler( new wxPNGHandler );
+                //wxImage::AddHandler(...
+                wxInitAllImageHandlers();
+
+                wxImageHandler* curHandler = wxImage::FindHandler( wxBITMAP_TYPE_CUR );
+                if ( curHandler )
+                {
+                    // Force the cursor handler to the end of the list so that it doesn't try to
+                    // open TGA files.
+                    wxImage::RemoveHandler( curHandler->GetName() );
+                    curHandler = NULL;
+                    wxImage::AddHandler( new wxCURHandler );
+                }
+
+                Nocturnal::ArtProvider* artProvider = new Nocturnal::ArtProvider();
+                wxArtProvider::Push( artProvider );
+            }
 
             {
                 Log::Bullet bullet( TXT( "Core...\n" ) );
@@ -170,9 +196,9 @@ int LunaApp::OnExit()
     // Save preferences
     ::Luna::GetApplicationPreferences()->SavePreferences();
 
-    Nocturnal::ImageManagerCleanup();
-
     m_InitializerStack.Cleanup();
+
+    wxImage::CleanUpHandlers();
 
     return __super::OnExit();
 }

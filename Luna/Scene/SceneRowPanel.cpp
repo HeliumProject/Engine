@@ -13,7 +13,7 @@
 #include "Foundation/Boost/Regex.h" 
 #include "Foundation/Log.h"
 #include "Application/RCS/RCS.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 // Using
 using namespace Luna;
@@ -71,7 +71,7 @@ SceneRowPanel::SceneRowPanel( Luna::Scene* scene, Zone* zone, ScenesPanel* panel
         m_ToggleLoad->SetToolTip( toggleToolTip );
         rowSizer->Add( m_ToggleLoad, 0, wxALL, 5 );
 
-        m_ButtonDelete = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_DELETE, wxART_OTHER, wxSize( 16, 16 ) ), wxDefaultPosition, wxSize( 18,18 ), wxBU_AUTODRAW );
+        m_ButtonDelete = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_DELETE ), wxDefaultPosition, wxSize( 18,18 ), wxBU_AUTODRAW );
         m_ButtonDelete->SetToolTip( wxT("Delete this zone") );
         m_ButtonDelete->SetClientObject( new ZoneClientData( m_Zone ) );
         rowSizer->Add( m_ButtonDelete, 0, wxALL, 1 );
@@ -99,7 +99,7 @@ SceneRowPanel::SceneRowPanel( Luna::Scene* scene, Zone* zone, ScenesPanel* panel
     renameItem->AddCallback( ContextMenuSignature::Delegate( this, &SceneRowPanel::Rename ) );
     m_ContextMenuItems.AppendItem( renameItem );
 
-    SubMenuPtr revisionControlSubMenu = new SubMenu( TXT( "Perforce" ), TXT( "" ), wxArtProvider::GetBitmap( wxART_INFORMATION, wxART_OTHER, wxSize( 16, 16 ) ) );
+    SubMenuPtr revisionControlSubMenu = new SubMenu( TXT( "Perforce" ), TXT( "" ), wxArtProvider::GetBitmap( wxART_INFORMATION ) );
 
     ContextMenuItemPtr checkOutItem = new ContextMenuItem( TXT( "Check Out" ) );
     checkOutItem->AddCallback( ContextMenuSignature::Delegate( this, &SceneRowPanel::CheckOutContext ) );
@@ -417,14 +417,14 @@ void SceneRowPanel::SetButtonMode( SceneRowPanel::ButtonMode mode, bool enabled 
     switch ( m_ButtonMode )
     {
     case ModeCheckout:
-        m_ButtonCheckOutOrSave->SetBitmapLabel( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ) );
-        m_ButtonCheckOutOrSave->SetBitmapDisabled( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ) );
+        m_ButtonCheckOutOrSave->SetBitmapLabel( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ) );
+        m_ButtonCheckOutOrSave->SetBitmapDisabled( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ) );
         m_ButtonCheckOutOrSave->SetToolTip( wxT( "Check out file" ) );
         break;
 
     case ModeSave:
-        m_ButtonCheckOutOrSave->SetBitmapLabel( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ) );
-        m_ButtonCheckOutOrSave->SetBitmapDisabled( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE, wxART_OTHER, wxSize( 16, 16 ) ) );
+        m_ButtonCheckOutOrSave->SetBitmapLabel( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ) );
+        m_ButtonCheckOutOrSave->SetBitmapDisabled( wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ) );
         m_ButtonCheckOutOrSave->SetToolTip( wxT( "Save file" ) );
         break;
     }

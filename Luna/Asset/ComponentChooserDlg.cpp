@@ -11,7 +11,7 @@
 #include "Pipeline/Asset/AssetFlags.h"
 #include "Pipeline/Component/ComponentCategories.h"
 #include "Foundation/Container/Insert.h" 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/SortableListView.h"
 
 // Using
@@ -49,10 +49,10 @@ ComponentChooserDlg::ComponentChooserDlg( AssetEditor* editor, const wxPoint& po
   wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
   m_Toolbar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_HORIZONTAL, wxT( "AddComponentToolbar" ) );
-  m_Toolbar->AddTool( AssetEditorIDs::AddComponent, wxT("Add"), Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/list-add.png" ) ), wxNullBitmap, wxITEM_NORMAL, wxT("Add the selected attribute to the current asset."), wxT("") );
+  m_Toolbar->AddTool( AssetEditorIDs::AddComponent, wxT("Add"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxITEM_NORMAL, wxT("Add the selected attribute to the current asset."), wxT("") );
   //TODO: Implement Help button
-	//m_Toolbar->AddTool( AssetEditorIDs::ComponentHelp, wxT("Help"), Nocturnal::GlobalImageManager().GetBitmap( "apps/help-browser.png" ), wxNullBitmap, wxITEM_NORMAL, wxT("Display additional information in the Browser."), wxT("") );
-	m_Toolbar->AddTool( AssetEditorIDs::ChangeComponentView, wxT("View"), Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/go-down.png" ) ), wxNullBitmap, wxITEM_NORMAL, wxT("Change the attribute view."), wxT("") );
+	//m_Toolbar->AddTool( AssetEditorIDs::ComponentHelp, wxT("Help"), wxArtProvider::GetBitmap( wxART_HELP_BROWSER ), wxNullBitmap, wxITEM_NORMAL, wxT("Display additional information in the Browser."), wxT("") );
+	m_Toolbar->AddTool( AssetEditorIDs::ChangeComponentView, wxT("View"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxITEM_NORMAL, wxT("Change the attribute view."), wxT("") );
 	m_Toolbar->Realize();
   mainSizer->Add( m_Toolbar, 0, wxALL|wxEXPAND, 2 );
 	
@@ -124,8 +124,8 @@ ComponentCategoryPanel* ComponentChooserDlg::GetCategoryPanel( const Component::
   panel->m_ShortDescription->SetLabel( category->ShortDescription().c_str() );
   panel->m_ListCtrl->InsertColumn( ColumnName, TXT( "Name" ) );
   panel->m_ListCtrl->InsertColumn( ColumnError, TXT( "Error" ) );
-  panel->m_ListCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList(), wxIMAGE_LIST_NORMAL );
-  panel->m_ListCtrl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList(), wxIMAGE_LIST_SMALL );
+  panel->m_ListCtrl->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList(), wxIMAGE_LIST_NORMAL );
+  panel->m_ListCtrl->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList(), wxIMAGE_LIST_SMALL );
   
   // Sort the attributes alphabetically
   S_SortedComponent sorted;
@@ -153,7 +153,7 @@ ComponentCategoryPanel* ComponentChooserDlg::GetCategoryPanel( const Component::
       normalItem.SetTextColour( wxColour( *wxRED ) );
     }
     const tstring icon = Luna::ComponentWrapper::GetComponentIcon( attribute ); 
-    normalItem.SetImage( Nocturnal::GlobalImageManager().GetImageIndex( icon ) );
+    normalItem.SetImage( Nocturnal::GlobalFileIconsTable().GetIconID( icon ) );
     normalItem.SetId( id );
     normalItem.SetColumn( ColumnName );
     panel->m_ListCtrl->InsertItem( normalItem );
@@ -214,7 +214,7 @@ void ComponentChooserDlg::SetDescription( const tstring& desc, ComponentChooserD
     break;
 
   case IconError:
-    m_Panel->m_Icon->SetBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "error.png" ), Nocturnal::IconSizes::Size32 ) );
+    m_Panel->m_Icon->SetBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
     m_Panel->m_Icon->Show();
     break;
   }

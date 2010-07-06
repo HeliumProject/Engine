@@ -5,7 +5,7 @@
 #include "TaskOutputWindow.h"
 
 #include "Foundation/Log.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 using namespace Luna;
 
@@ -73,9 +73,9 @@ TaskOutputWindow::TaskOutputWindow( wxWindow* parent, const tstring& title, int 
 
   wxIconBundle iconBundle;
   wxIcon tempIcon;
-  tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "build.png" ), Nocturnal::IconSizes::Size32 ) );
+  tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
   iconBundle.AddIcon( tempIcon );
-  tempIcon.CopyFromBitmap( Nocturnal::GlobalImageManager().GetBitmap( TXT( "build.png" ) ) );
+  tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
   iconBundle.AddIcon( tempIcon );
   SetIcons( iconBundle );
 

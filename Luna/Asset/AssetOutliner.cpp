@@ -12,7 +12,7 @@
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
 #include "Application/Inspect/DragDrop/ReflectClipboardData.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 
 // Using
@@ -40,7 +40,7 @@ AssetOutliner::AssetOutliner( AssetEditor* editor, const wxPoint& pos, const wxS
   // So, there will be an invisible root item, that will not be shown, effectively
   // making any items that are direct children of it appear to be root items.
   m_TreeControl->AddRoot( TXT( "INVISIBLE_ROOT_ITEM" ) );
-  m_TreeControl->SetImageList( Nocturnal::GlobalImageManager().GetGuiImageList() );
+  m_TreeControl->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
 
   // This class will handle all the events for the tree control.
   m_TreeControl->PushEventHandler( this );

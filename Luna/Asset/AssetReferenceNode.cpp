@@ -14,7 +14,7 @@
 
 #include "Editor/RefreshSelectionCommand.h"
 #include "Core/Enumerator.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/FileDialog.h"
 
 
@@ -191,7 +191,7 @@ void AssetReferenceNode::Load()
         else
         {
             SetName( TXT( "Error loading: " ) + m_AssetPath.Get() );
-            SetIcon( TXT( "enginetype_unknown.png" ) );
+            SetIcon( TXT( "enginetype_unknown" ) );
         }
     }
 }
@@ -328,7 +328,7 @@ void AssetReferenceNode::PreShowContextMenu()
             contextMenu.AppendItem( menuItem );
 
 
-            wxBitmap finderIcon = Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/system-search.png" ) );
+            wxBitmap finderIcon = wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID );
             menuItem = new ContextMenuItem( TXT( "Change File Path (Asset Finder)" ), TXT( "Change this file's path using the Asset Finder" ), finderIcon );
             menuItem->AddCallback( ContextMenuSignature::Delegate( this, &AssetReferenceNode::OnChangePathFinder ) );
             menuItem->Enable( numSelected == 1 );
@@ -567,7 +567,7 @@ tstring AssetReferenceNode::MakeIcon() const
         }
         else
         {
-            icon = TXT( "asset_reference.png" );
+            icon = TXT( "asset_reference" );
         }
     }
     return icon;

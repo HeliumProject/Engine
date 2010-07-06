@@ -9,7 +9,7 @@ void StandardNormalMapComponent::EnumerateClass( Reflect::Compositor<StandardNor
   comp.GetComposite().m_UIName = TXT( "Normal Map" );
   comp.GetComposite().SetProperty( AssetProperties::ShortDescription, TXT( "Normal (bump) map settings." ) );
   comp.GetComposite().SetProperty( AssetProperties::LongDescription, TXT( "Enhances details on a shader without requiring more polygons on the model." ) );
-  comp.GetComposite().SetProperty( AssetProperties::SmallIcon, TXT( "attribute_normalmap.png" ) );
+  comp.GetComposite().SetProperty( AssetProperties::SmallIcon, TXT( "attribute_normalmap" ) );
 
   Reflect::EnumerationField* enumTexFormat  = comp.AddEnumerationField( &StandardNormalMapComponent::m_TexFormat, "m_TexFormat",        AssetFlags::RealTimeUpdateable );
   Reflect::Field* fieldNormalMapScale       = comp.AddField( &StandardNormalMapComponent::m_NormalMapScale,       "m_NormalMapScale",   AssetFlags::RealTimeUpdateable );

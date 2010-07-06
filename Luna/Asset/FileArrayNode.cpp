@@ -6,7 +6,7 @@
 #include "AssetUtils.h"
 #include "FieldFileReference.h"
 
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 
 using namespace Luna;
 
@@ -66,7 +66,7 @@ FileArrayNode::FileArrayNode( Luna::AssetManager* assetManager, Reflect::Element
     contextMenu.AppendSeparator();
     contextMenu.AppendItem( menuItem );
 
-    menuItem = new ContextMenuItem( TXT( "Add file (Asset Finder)" ), TXT( "Add a new file to this list using the Asset Finder" ), Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/system-search.png" ) ) );
+    menuItem = new ContextMenuItem( TXT( "Add file (Asset Finder)" ), TXT( "Add a new file to this list using the Asset Finder" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
     menuItem->Disable();
     contextMenu.AppendItem( menuItem );
 }

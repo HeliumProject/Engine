@@ -7,7 +7,7 @@
 #include "PersistentDataFactory.h"
 
 #include "Editor/ContextMenuGenerator.h"
-#include "Application/UI/ImageManager.h"
+#include "Application/UI/ArtProvider.h"
 #include "Application/UI/FileDialog.h"
 
 
@@ -113,7 +113,7 @@ void FileBackedComponent::PopulateContextMenu( ContextMenuItemSet& menu )
     menu.AppendItem( menuItem );
 
 
-    wxBitmap finderIcon = Nocturnal::GlobalImageManager().GetBitmap( TXT( "actions/system-search.png" ) ) ;
+    wxBitmap finderIcon = wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) ;
     menuItem = new ContextMenuItem( TXT( "Change File Path (Asset Finder)" ), TXT( "Change this file's path using the Asset Finder" ), finderIcon );
     menuItem->AddCallback( ContextMenuSignature::Delegate( this, &FileBackedComponent::OnChangePathFinder ) );
     menuItem->Enable( numSelected == 1 );

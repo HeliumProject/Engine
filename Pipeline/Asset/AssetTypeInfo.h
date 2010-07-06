@@ -20,7 +20,7 @@ namespace Asset
     AssetTypeInfo (
       const tstring& name = TXT( "" ),
       const tstring& builder = TXT( "" ),
-      const tstring& iconFilename = TXT( "null.png" ),
+      const tstring& iconFilename = TXT( "null" ),
       const u32 typeColor = 0 );
 
     bool IsValid() const { return ( !m_Name.empty() || m_Name.compare( TXT( "Null" ) ) == 0 ); }

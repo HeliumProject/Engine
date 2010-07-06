@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Platform/Types.h"
 #include "Platform/Compiler.h"
 
 #ifdef MAYA_EXPORTS

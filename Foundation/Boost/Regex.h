@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Platform/Types.h"
+
 #include <string> 
 #include <sstream>
 #include <boost/regex.hpp>
@@ -29,7 +31,6 @@ typedef boost::regex_token_iterator< const tchar*> tcregex_token_iterator;
 typedef boost::regex_token_iterator< tstring::const_iterator> tsregex_token_iterator;
 typedef boost::regex_iterator< const tchar* > tcregex_iterator;
 typedef boost::regex_iterator< tstring::const_iterator > tsregex_iterator;
-
 
 namespace Nocturnal
 {

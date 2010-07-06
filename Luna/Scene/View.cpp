@@ -16,7 +16,6 @@
 #include "Statistics.h"
 #include "Tool.h"
 
-#include "Pipeline/Asset/AssetType.h"
 #include "Platform/Exception.h"
 #include "Editor/Orientation.h"
 
@@ -59,7 +58,7 @@ D3DMATERIAL9 View::s_HighlightedMaterial;
 D3DMATERIAL9 View::s_UnselectableMaterial;
 D3DMATERIAL9 View::s_ComponentMaterial;
 D3DMATERIAL9 View::s_SelectedComponentMaterial;
-D3DMATERIAL9 View::s_AssetTypeMaterials[ Asset::AssetTypes::Count ];
+D3DMATERIAL9 View::s_AssetTypeMaterials[ 1 ];
 D3DMATERIAL9 View::s_RedMaterial;
 D3DMATERIAL9 View::s_YellowMaterial;
 D3DMATERIAL9 View::s_GreenMaterial;
@@ -124,12 +123,9 @@ void View::InitializeType()
   s_BlueMaterial.Specular = Luna::Color::BLACK;
   
   ZeroMemory( s_AssetTypeMaterials, sizeof( s_AssetTypeMaterials ) );
-  for ( u32 i = 0; i < Asset::AssetTypes::Count; ++i )
-  {
-    s_AssetTypeMaterials[ i ].Ambient = Luna::Color::BLACK;
-    s_AssetTypeMaterials[ i ].Diffuse = Luna::Color::BLACK;
-    s_AssetTypeMaterials[ i ].Specular = Luna::Color::BLACK;
-  }
+  s_AssetTypeMaterials[ 0 ].Ambient = Luna::Color::BLACK;
+  s_AssetTypeMaterials[ 0 ].Diffuse = Luna::Color::BLACK;
+  s_AssetTypeMaterials[ 0 ].Specular = Luna::Color::BLACK;
 }
 
 void View::CleanupType()

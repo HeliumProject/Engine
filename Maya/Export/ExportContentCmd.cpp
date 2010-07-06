@@ -1,4 +1,4 @@
-
+#include "Precompile.h"
 #include "ExportContentCmd.h"
 
 #include <maya/MArgDatabase.h>
@@ -9,12 +9,9 @@
 #include <maya/MFnDependencyNode.h>
 #include <maya/M3dView.h>
 
-#include "MayaContent/MayaContentCmd.h"
-#include "MayaUtils/Export.h"
-
-#include "Finder/Finder.h"
-#include "Finder/ContentSpecs.h"
 #include "Application/RCS/RCS.h"
+
+#include "Export/MayaContentCmd.h"
 
 using namespace MayaContent;
 
@@ -32,22 +29,22 @@ MString ExportContentCmd::CommandName( "exportContent" );
 
 void AfterSaveCallback( void *clientData )
 {
-  std::string currentFile = MFileIO::currentFile().asChar();
-  Nocturnal::Path::Normalize( currentFile );
+    tstring currentFile = MFileIO::currentFile().asTChar();
+    Nocturnal::Path::Normalize( currentFile );
 
-  // i hate mel
-  int exportOnSave = 0;
-  if ( !MGlobal::executeCommand( "optionVar -q \"exportOnSave\"", exportOnSave ) )
-  {
-    MGlobal::displayError( "Could not read 'exportOnSave' option value!" );
-    return;
-  }
+    // i hate mel
+    int exportOnSave = 0;
+    if ( !MGlobal::executeCommand( "optionVar -q \"exportOnSave\"", exportOnSave ) )
+    {
+        MGlobal::displayError( "Could not read 'exportOnSave' option value!" );
+        return;
+    }
 
-  if ( exportOnSave )
-  {
-    MArgDatabase argParser;
-    ExportContentCmd::ExportContent( argParser );
-  }
+    if ( exportOnSave )
+    {
+        MArgDatabase argParser;
+        ExportContentCmd::ExportContent( argParser );
+    }
 }
 
 
@@ -57,14 +54,14 @@ void AfterSaveCallback( void *clientData )
 //-----------------------------------------------------------------------------
 MSyntax ExportContentCmd::newSyntax()
 {
-  MSyntax syntax;
+    MSyntax syntax;
 
-  syntax.setObjectType(MSyntax::kSelectionList, 0); // will function without error, but do nothing with no selection
-  syntax.useSelectionAsDefault( true );
+    syntax.setObjectType(MSyntax::kSelectionList, 0); // will function without error, but do nothing with no selection
+    syntax.useSelectionAsDefault( true );
 
-  syntax.addFlag( ExportAnimShort, ExportAnimLong );
+    syntax.addFlag( ExportAnimShort, ExportAnimLong );
 
-  return syntax;
+    return syntax;
 }
 
 //-----------------------------------------------------------------------------
@@ -73,95 +70,89 @@ MSyntax ExportContentCmd::newSyntax()
 //-----------------------------------------------------------------------------
 MStatus ExportContentCmd::doIt( const MArgList & args )
 {
-  MAYAEXPORTER_SCOPE_TIMER((""));
+    EXPORT_SCOPE_TIMER((""));
 
-  MStatus stat;
+    MStatus stat;
 
-  // parse the command line arguments using the declared syntax
-  MArgDatabase argParser( syntax(), args, &stat );
+    // parse the command line arguments using the declared syntax
+    MArgDatabase argParser( syntax(), args, &stat );
 
-  std::string currentFile = MFileIO::currentFile().asChar();
-  Nocturnal::Path::Normalize( currentFile );
+    tstring currentFile = MFileIO::currentFile().asTChar();
+    Nocturnal::Path::Normalize( currentFile );
 
-  // make sure we save before we export, the artists asked us to do this for a variety of reasons
-  // including fear that maya would crash during export and lose work
-  if ( MGlobal::mayaState() == MGlobal::kInteractive )
-  {
-    if ( true ) //PromptCheckoutMayaFile( currentFile ) )
+    // make sure we save before we export, the artists asked us to do this for a variety of reasons
+    // including fear that maya would crash during export and lose work
+    if ( MGlobal::mayaState() == MGlobal::kInteractive )
     {
-      // don't want this callback hit from in here
-      MSceneMessage::removeCallback( g_AfterSaveCallbackID );
-
-      MStatus saveStatus = MFileIO::save();
-
-      // re-register our callback
-      g_AfterSaveCallbackID = MSceneMessage::addCallback( MSceneMessage::kAfterSave, AfterSaveCallback );
-
-      if ( !saveStatus )
-      {
-        if ( MGlobal::mayaState() == MGlobal::kInteractive )
+        if ( true ) //PromptCheckoutMayaFile( currentFile ) )
         {
-          MessageBoxA( M3dView::applicationShell(), "Could not save maya file, cancelling export!", "Save Error", MB_OK | MB_ICONERROR );
+            // don't want this callback hit from in here
+            MSceneMessage::removeCallback( g_AfterSaveCallbackID );
+
+            MStatus saveStatus = MFileIO::save();
+
+            // re-register our callback
+            g_AfterSaveCallbackID = MSceneMessage::addCallback( MSceneMessage::kAfterSave, AfterSaveCallback );
+
+            if ( !saveStatus )
+            {
+                if ( MGlobal::mayaState() == MGlobal::kInteractive )
+                {
+                    MessageBox( M3dView::applicationShell(), TXT("Could not save maya file, cancelling export!"), TXT("Save Error"), MB_OK | MB_ICONERROR );
+                }
+                else
+                {
+                    std::cerr << "Could not save maya file, cancelling export!" << std::endl;
+                }
+                return MS::kFailure;
+            }
+        }
+        else if ( MGlobal::mayaState() == MGlobal::kInteractive )
+        {
+            tstring error = currentFile + TXT(" was not checked out or is not writable and has not been saved.  Do you still want to export this file? (If you export the file, its appearance will change in the game, but the source data will not match it and the export data will be different if someone else exports the file!)");
+            // return if they don't want to export anymore
+            if ( IDNO == MessageBox( M3dView::applicationShell(), error.c_str(), TXT("File Not Saved"), MB_YESNO | MB_ICONEXCLAMATION ) )
+            {
+                return MS::kFailure;
+            }
+
+            MessageBox( M3dView::applicationShell(), TXT("WARNING: Exporting file without saving source data!"), TXT("Export Warning"), MB_OK | MB_ICONHAND );
         }
         else
         {
-          std::cerr << "Could not save maya file, cancelling export!" << std::endl;
+            std::cerr << "WARNING: Exporting file without saving source data!" << std::endl;
+            return MS::kFailure;
         }
-        return MS::kFailure;
-      }
     }
-    else if ( MGlobal::mayaState() == MGlobal::kInteractive )
-    {
-      std::string error = currentFile + " was not checked out or is not writable and has not been saved.  Do you still want to export this file? (If you export the file, its appearance will change in the game, but the source data will not match it and the export data will be different if someone else exports the file!)";
-      // return if they don't want to export anymore
-      if ( IDNO == MessageBoxA( M3dView::applicationShell(), error.c_str(), "File Not Saved", MB_YESNO | MB_ICONEXCLAMATION ) )
-      {
-        return MS::kFailure;
-      }
 
-      MessageBoxA( M3dView::applicationShell(), "WARNING: Exporting file without saving source data!", "Export Warning", MB_OK | MB_ICONHAND );
-    }
-    else
-    {
-      std::cerr << "WARNING: Exporting file without saving source data!" << std::endl;
-      return MS::kFailure;
-    }
-  }
-
-  //without this initexportinfo we don't find the nodes it needs to export animation data
-  std::vector<std::string> selection;
-  std::vector<std::string> groupNode;
-  Maya::InitExportInfo( true, selection, groupNode );
-
-  MGlobal::executeCommand( "finalizeDestruction" );
-
-  return ExportContent( argParser );
+    return ExportContent( argParser );
 }
 
 MStatus ExportContentCmd::ExportContent( MArgDatabase& argParser )
 {
-  try
-  {
-    MayaContentCmd::ExportCurrentScene();
-  }
-  catch( RCS::FileInUseException& e )
-  {
-    MGlobal::displayError( MString("Failed to export: ") + e.what() );
-    if ( MGlobal::mayaState() == MGlobal::kInteractive )
+    try
     {
-      MessageBoxA( M3dView::applicationShell(), e.what() , "Export Error", MB_OK | MB_ICONERROR );
+#pragma TODO("Set data type")
+        MayaContentCmd::ExportCurrentScene( MayaContentCmd::kScene );
     }
-    return MS::kFailure;
-  }
-  catch (Nocturnal::Exception& e)
-  {
-    MGlobal::displayError( MString("Failed to export: ") + e.what() );
-    if ( MGlobal::mayaState() == MGlobal::kInteractive )
+    catch( RCS::FileInUseException& e )
     {
-      MessageBoxA( M3dView::applicationShell(),  e.what(), "Export Error", MB_OK | MB_ICONERROR );
+        MGlobal::displayError( MString("Failed to export: ") + e.What() );
+        if ( MGlobal::mayaState() == MGlobal::kInteractive )
+        {
+            MessageBox( M3dView::applicationShell(), e.What() , TXT("Export Error"), MB_OK | MB_ICONERROR );
+        }
+        return MS::kFailure;
     }
-    return MS::kFailure;
-  }
-  
-  return MS::kSuccess;
+    catch (Nocturnal::Exception& e)
+    {
+        MGlobal::displayError( MString("Failed to export: ") + e.What() );
+        if ( MGlobal::mayaState() == MGlobal::kInteractive )
+        {
+            MessageBox( M3dView::applicationShell(),  e.What(), TXT("Export Error"), MB_OK | MB_ICONERROR );
+        }
+        return MS::kFailure;
+    }
+
+    return MS::kSuccess;
 }

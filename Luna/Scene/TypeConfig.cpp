@@ -7,7 +7,7 @@
 
 #include "Foundation/Log.h"
 
-#include "Pipeline/Content/Nodes/Instance/Instance.h"
+#include "Pipeline/Content/Nodes/Instance.h"
 #include "Pipeline/Asset/Classes/Entity.h"
 
 #include <tinyxml.h>
@@ -87,7 +87,7 @@ int TypeConfig::Validate(Luna::SceneNode* node)
         Asset::Entity* entity = node->GetPackage< Asset::Entity >();
 
         {
-            tstring location = entity->GetEntityAssetPath();
+            tstring location = entity->GetPath();
 
 #pragma TODO( "do we need to strip this?" )
             //FileSystem::StripPrefix( FinderSpecs::Asset::ENTITY_FOLDER.GetFolder(), location );

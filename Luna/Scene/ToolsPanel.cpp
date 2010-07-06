@@ -23,7 +23,7 @@ ToolsPanel::ToolsPanel( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& 
 	autoFlexSizer->SetFlexibleDirection( wxBOTH );
 	autoFlexSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-#if ( 1 )
+#if ( 0 )
 
 	m_button10 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
 	autoFlexSizer->Add( m_button10, 0, wxALL, 0 );
@@ -48,7 +48,7 @@ ToolsPanel::ToolsPanel( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& 
 
   autoFlexSizer->Add( new CameraModeButton( this, m_SceneEditor ), 0, wxALL, 0 );
 
-#elif ( 1 )
+#elif ( 0 )
 
 	m_button10 = new wxButton( this, wxID_ANY, wxT("a"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	autoFlexSizer->Add( m_button10, 0, wxALL, 5 );

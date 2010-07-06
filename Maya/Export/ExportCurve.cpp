@@ -11,13 +11,13 @@ void ExportCurve::GatherMayaData( V_ExportBase& newExportObjects )
   MFnNurbsCurve curveFn( m_MayaObject, &status );
   if ( status != MS::kSuccess )
   {
-    Log::Error( "Unable to convert maya object to an ExportCurve.\n" );
+    Log::Error( TXT("Unable to convert maya object to an ExportCurve.\n") );
     return;
   }
 
   Content::Curve* curve = Reflect::DangerousCast< Content::Curve >( m_ContentObject );
 
-  curve->m_DefaultName = curveFn.name().asChar();
+  curve->m_DefaultName = curveFn.name().asTChar();
 
   switch ( curveFn.form() )
   {
@@ -33,9 +33,6 @@ void ExportCurve::GatherMayaData( V_ExportBase& newExportObjects )
 
   const int numCVs = curveFn.numCVs();
 
-  curve->m_ControlPointOrder.clear();
-  curve->m_ControlPointOrder.reserve( numCVs );
-
   for ( int i = 0; i < numCVs; i++ )
   {
     MPoint point;
@@ -44,7 +41,6 @@ void ExportCurve::GatherMayaData( V_ExportBase& newExportObjects )
     ExportPointPtr controlPoint = new ExportPoint( point );
     controlPoint->GetContentPoint()->m_ParentID = curve->m_ID;
     newExportObjects.push_back( controlPoint );
-    curve->m_ControlPointOrder.push_back( controlPoint->GetContentPoint()->m_ID );
   }
 
   // link it into the hierarchy

@@ -2,7 +2,7 @@
 
 #include "SceneTool.h"
 
-#include "Pipeline/Content/Nodes/Curve/Curve.h"
+#include "Pipeline/Content/Nodes/Curve.h"
 #include "Curve.h"
 
 namespace Luna

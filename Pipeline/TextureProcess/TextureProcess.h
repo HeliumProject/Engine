@@ -6,7 +6,7 @@
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Automation/Event.h"
 
-#include "Pipeline/Texture/Texture.h"
+#include "Pipeline/Image/Image.h"
 
 namespace Nocturnal
 {
@@ -33,7 +33,7 @@ namespace TextureProcess
 
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //
-  // Texture
+  // Image
   //  Class to hold all the info about a single effects texture
   //
   ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ namespace TextureProcess
     bool                            m_is_detail_map_only;
 
     // output data
-    Nocturnal::Texture*                 m_texture;
+    Nocturnal::Image*                 m_texture;
     Nocturnal::MipSet*                  m_mips;
     Nocturnal::MipSet::RuntimeSettings  m_runtime;
     u32                          m_mip_levels;

@@ -14,12 +14,11 @@
 #include "ResultsPanel.h"
 #include "SearchQuery.h"
 
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
 #include "Pipeline/Asset/AssetFile.h"
 #include "Pipeline/Asset/AssetFolder.h"
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Editor/DocumentManager.h"
 #include "Application/RCS/RCS.h"
 #include "Scene/SceneManager.h"
@@ -427,14 +426,7 @@ bool BrowserFrame::IsPreviewable( Asset::AssetFile* file )
     Asset::AssetClassPtr asset = Asset::AssetFile::GetAssetClass( file );
     if ( asset.ReferencesObject() )
     {
-        Component::ComponentViewer< Asset::ArtFileComponent > artFile( asset );
-        if ( artFile.Valid() )
-        {
-            if ( !artFile->GetPath().Get().empty() )
-            {
-                return artFile->GetPath().Exists();
-            }
-        }
+        return asset->GetPath().Exists();
     }
 
 
@@ -599,7 +591,7 @@ void BrowserFrame::OnOpen( wxCommandEvent& event )
         if ( path.Exists() )
         {
 #pragma TODO( "Open the file for editing" )
-NOC_BREAK();
+            NOC_BREAK();
         }
     }
 }

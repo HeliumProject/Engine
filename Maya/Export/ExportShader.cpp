@@ -17,7 +17,7 @@ void ExportShader::GatherMayaData( V_ExportBase &newExportObjects )
   MFnLambertShader shaderFn (m_MayaObject);
 
   const Content::ShaderPtr contentShader = GetContentShader();
-  contentShader->m_DefaultName = shaderFn.name().asChar();
+  contentShader->m_DefaultName = shaderFn.name().asTChar();
 
   // get color value
   MColor color = shaderFn.color();
@@ -48,15 +48,15 @@ void ExportShader::GatherMayaData( V_ExportBase &newExportObjects )
         //MPlug	l_TextureFilePathPlug = l_NodeFn.findPlug("fileTextureName");
         //l_TextureFilePathPlug.getValue(l_TexturePath);
 
-        //if (FileSystem::Exists(l_TexturePath.asChar()))
+        //if (FileSystem::Exists(l_TexturePath.asTChar()))
         //{
         //  try
         //  {
-        //    contentShader->m_BaseTextureFileID = File::GlobalManager().Add( l_TexturePath.asChar() );
+        //    contentShader->m_BaseTextureFileID = File::GlobalManager().Add( l_TexturePath.asTChar() );
         //  }
         //  catch ( const File::Exception& e )
         //  {
-        //    Log::Warning("Unable to add file '%s' to the file manager.\nReason: %s\n\n", l_TexturePath.asChar(), e.what() );
+        //    Log::Warning("Unable to add file '%s' to the file manager.\nReason: %s\n\n", l_TexturePath.asTChar(), e.What() );
         //  }
         //}
       }

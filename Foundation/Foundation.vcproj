@@ -1331,6 +1331,42 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Component"
+			>
+			<File
+				RelativePath=".\Component\Component.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\Component.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentCollection.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentCollection.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentExceptions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentHandle.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentInit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\ComponentInit.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>

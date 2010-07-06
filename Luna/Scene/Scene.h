@@ -53,10 +53,6 @@ namespace Luna
   class MiscSettings;
   typedef Nocturnal::SmartPtr< MiscSettings > MiscSettingsPtr;
 
-  class Zone;
-  typedef Nocturnal::SmartPtr< Zone > ZonePtr;
-  typedef std::set< Zone* > S_ZoneDumbPtr;
-
   class Region; 
   typedef std::set< Luna::Region*> S_RegionDumbPtr; 
 
@@ -325,9 +321,6 @@ namespace Luna
     // the tool in use by this scene
     LToolPtr m_Tool;
 
-    // shortcut to all the zones in this scene
-    S_ZoneDumbPtr m_Zones;
-
     // offset matrix for smart duplicate
     Math::Matrix4 m_SmartDuplicateMatrix;
 
@@ -385,8 +378,6 @@ namespace Luna
     // support for zone color
     const Math::Color3& GetColor() const;
     void SetColor( const Math::Color3& color );
-
-    ZonePtr GetNavZone();
 
     //
     // Selection
@@ -492,11 +483,6 @@ namespace Luna
     const V_TypeConfigSmartPtr& GetTypeConfigs() const
     {
       return m_TypeConfigs;
-    }
-
-    const S_ZoneDumbPtr& GetZones() const
-    {
-      return m_Zones; 
     }
 
     Luna::SceneNode* Find( const tstring& name ) const; 
@@ -727,7 +713,7 @@ namespace Luna
 
     // core render and pick visitation entry points
     void Render( RenderVisitor* render ) const;
-    bool Pick( PickVisitor* pick, bool zones = true ) const;
+    bool Pick( PickVisitor* pick ) const;
 
     // selection and highlight setup
     void Select( const SelectArgs& args );
@@ -818,18 +804,6 @@ namespace Luna
     //
     // Events
     //
-
-  private:
-    TitleChangeSignature::Event m_TitleChanged;
-  public:
-    void AddTitleChangedListener( const TitleChangeSignature::Delegate& listener )
-    {
-      m_TitleChanged.Add( listener );
-    }
-    void RemoveTitleChangedListener( const TitleChangeSignature::Delegate& listener )
-    {
-      m_TitleChanged.Remove( listener );
-    }
 
   private:
     StatusChangeSignature::Event m_StatusChanged;

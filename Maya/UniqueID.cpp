@@ -46,7 +46,7 @@ Nocturnal::TUID Maya::GetNodeID( const MObject& node, bool create )
 
       // parse it
       Nocturnal::GUID id;
-      bool parsed = id.FromString(str.asChar());
+      bool parsed = id.FromString(str.asTChar());
       NOC_ASSERT( parsed );
 
       // convert it to a TUID and set the new attribute
@@ -106,7 +106,7 @@ Nocturnal::TUID Maya::GetNodeID( const MObject& node, bool create )
 
   // parse the value (this may be null if we did not create the attribute)
   Nocturnal::TUID id;
-  id.FromString(str.asChar());
+  id.FromString(str.asTChar());
   return id;
 }
 
@@ -150,7 +150,7 @@ MStatus Maya::SetNodeID( const MObject& node, const Nocturnal::TUID& id )
 
   plug.setLocked(false);
 
-  std::string s;
+  tstring s;
   id.ToString(s);
   plug.setValue(MString(s.c_str()));
 

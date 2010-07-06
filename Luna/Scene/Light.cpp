@@ -16,7 +16,7 @@
 #include "PrimitiveCircle.h"
 #include "PrimitiveCylinder.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "LightPanel.h"
 
 // Using

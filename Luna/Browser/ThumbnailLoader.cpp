@@ -3,7 +3,6 @@
 #include "Render.h"
 
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
-#include "Pipeline/Asset/Components/ColorMapComponent.h"
 #include "Foundation/File/Directory.h"
 #include "Render/D3DManager.h"
 
@@ -120,19 +119,16 @@ void* ThumbnailLoader::LoadThread::Entry()
                 Asset::ShaderAssetPtr shader = Reflect::ObjectCast< Asset::ShaderAsset >( Asset::AssetFile::GetAssetClass( file ) );
                 if ( shader )
                 {
-                    Asset::ColorMapComponentPtr colorMap = Reflect::ObjectCast< Asset::ColorMapComponent >( shader->GetComponent( Reflect::GetType< Asset::ColorMapComponent >() ) );
-                    if ( colorMap )
+                    Asset::TexturePtr colorMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shader->m_ColorMapPath );
+                    if ( colorMap.ReferencesObject() )
                     {
-                        if ( !colorMap->GetPath().Get().empty() )
+                        if ( colorMap->GetPath().Exists() && Luna::IsSupportedTexture( colorMap->GetPath().Get() ) )
                         {
-                            if ( colorMap->GetPath().Exists() && Luna::IsSupportedTexture( colorMap->GetPath().Get() ) )
+                            IDirect3DTexture9* texture = NULL;
+                            if ( texture = LoadTexture( device, colorMap->GetPath().Get() ) )
                             {
-                                IDirect3DTexture9* texture = NULL;
-                                if ( texture = LoadTexture( device, colorMap->GetPath().Get() ) )
-                                {
-                                    ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_D3DManager, texture );
-                                    args.m_Textures.push_back( thumbnail );
-                                }
+                                ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_D3DManager, texture );
+                                args.m_Textures.push_back( thumbnail );
                             }
                         }
                     }

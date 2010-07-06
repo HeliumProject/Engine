@@ -2,19 +2,13 @@
 
 #include "Application/RCS/rcs.h"
 
-#include "Finder/ContentSpecs.h"
-
 #include "EntityNodeCmd.h"
 #include "EntityNode.h"
 #include "EntityAssetNode.h"
 
-#include "Finder/Finder.h"
-#include "Finder/AssetSpecs.h"
-#include "Finder/ExtensionSpecs.h"
+#include "Application/UI/FileDialog.h"
 
-#include "UIToolkit/FileDialog.h"
-
-#include "MayaUtils/NodeTypes.h"
+#include "Maya/NodeTypes.h"
 
 #include <maya/MSyntax.h>
 #include <maya/MArgDatabase.h>
@@ -121,7 +115,7 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
 
     //if ( browserDlg.ShowModal() == wxID_OK )
     //{
-    //  std::string fullPath = browserDlg.GetPath();
+    //  tstring fullPath = browserDlg.GetPath();
     //  if ( FileSystem::Exists( fullPath ) )
     //  {
     //    if ( FileSystem::HasExtension( fullPath, FinderSpecs::Asset::ENTITY_DECORATION.GetDecoration() ) )
@@ -163,7 +157,7 @@ MStatus EntityNodeCmd::doIt( const MArgList & args )
       return MS::kFailure;
     }
 
-    classTransform = &EntityAssetNode::Get( node->GetBackingEntity()->GetEntityAsset()->GetPath() );
+    classTransform = &EntityAssetNode::Get( node->GetBackingEntity()->GetEntity()->GetPath() );
     if( *classTransform == EntityAssetNode::Null )
     {
       return MS::kFailure;

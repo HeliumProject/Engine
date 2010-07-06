@@ -1,17 +1,14 @@
 #include "AssetVisitor.h"
 
-#include "Pipeline/Asset/AssetExceptions.h"
+#include "Pipeline/Asset/Classes/EntityInstance.h"
 #include "Pipeline/Asset/Classes/Entity.h"
-#include "Pipeline/Asset/Classes/EntityAsset.h"
 #include "Pipeline/Asset/Components/DependenciesComponent.h"
 
-#include "Pipeline/Asset/Components/ArtFileComponent.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Flags.h"
 #include "Platform/Types.h"
 #include "Pipeline/Content/Scene.h"
-#include "Pipeline/Content/Nodes/Zone.h"
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Class.h"
 #include "Foundation/Reflect/Field.h"
@@ -54,11 +51,7 @@ AssetVisitor::AssetVisitor( M_AssetFiles* assetFiles, Asset::AssetClass* assetCl
     // Register custom handlers
     //
 
-    // Elements
-    m_ElementHandlerLookup.insert( ElementHandlerLookup::value_type( 
-        Reflect::GetType<Asset::ArtFileComponent>(),
-        &AssetVisitor::HandleArtFileComponent ) );
-
+ 
     // Field
     m_FieldFilterTypes.insert( (i32)Reflect::FieldFlags::Discard );
 
@@ -130,81 +123,6 @@ bool AssetVisitor::HandleElement( Reflect::Element* element )
     m_CurrentElement = element;
     element->Host( *this );
     return false;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-bool AssetVisitor::HandleArtFileComponent( Reflect::Element* element )
-{
-    using namespace Asset;
-    using namespace Reflect;
-
-    AssetFile* assetFile = GetCurrentAssetFile();
-    if ( assetFile )
-    {
-        // Determine which shaders this asset is currently using
-        Asset::ArtFileComponent* attribute = Reflect::AssertCast< Asset::ArtFileComponent >(element);
-
-        Nocturnal::Path filePath = attribute->GetPath();
-        tstring artFile = filePath.Get();
-
-        if ( !artFile.empty() )
-        {
-            const tstring& attrName = Reflect::Registry::GetInstance()->GetClass( element->GetType() )->m_FullName;
-            assetFile->AddAttribute( attrName, artFile, false );
-
-            if ( Nocturnal::Path( artFile ).Exists() )
-            {
-                Asset::EntityManifestPtr manifest;
-                try
-                {
-                    manifest = Archive::FromFile<Asset::EntityManifest>( artFile );
-                }
-                catch ( const Nocturnal::Exception& ex )
-                {
-                    Log::Warning( TXT( "%s\n" ), ex.What() );
-                }
-
-                if (manifest.ReferencesObject())
-                {
-                    std::set< Nocturnal::Path >::iterator newItr = manifest->m_Shaders.begin();
-                    std::set< Nocturnal::Path >::iterator newEnd = manifest->m_Shaders.end();
-                    for ( ; newItr != newEnd; ++newItr )
-                    {
-                        if ( CheckStopRequested( m_StopRequested ) )
-                            return false;
-
-                        Nocturnal::Path shaderPath = (*newItr);
-
-                        M_AssetFiles::iterator found = m_AssetFiles->find( shaderPath.Hash() );
-                        if ( found != m_AssetFiles->end() )
-                        {
-                            // this file is already in our list so add it as a dependency and then move on
-                            AddDependency( found->second );
-                        }
-                        else
-                        {
-                            Insert<M_AssetFiles>::Result inserted = m_AssetFiles->insert( M_AssetFiles::value_type( shaderPath.Hash(), new AssetFile( shaderPath ) ) );
-                            if ( inserted.second )
-                            {
-                                AssetFilePtr& shaderAssetFile = inserted.first->second;
-                                PreHandleFile( shaderAssetFile );
-                                {
-                                    // passing NULL in as the field since HandleAssetFile doesn't use the field. That should be changed to be an optional param
-                                    HandleAssetFile( element, NULL, shaderAssetFile );
-                                }
-                                PostHandleFile( shaderAssetFile );
-                            }
-                        }
-                    }
-
-                    return true;
-                }
-            }
-        }
-    }
-
-    // we couldn't handle it
-    return HandleElement( element );
 }
 
 /////////////////////////////////////////////////////////////////////////////

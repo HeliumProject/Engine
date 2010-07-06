@@ -34,14 +34,14 @@
 
 #define NOC_DISABLEABLE_CODE_BLOCK(x) { static bool code_block_enabled = true; if (code_block_enabled) {x} }
 
-#ifdef WIN32
+#ifdef __GNUC__
+# define NOC_ISSUE_BREAK() asm volatile ("tw 31,1,1")
+#elif defined( WIN32 )
 # ifdef _MANAGED
 #  define NOC_ISSUE_BREAK() System::Diagnostics::Debugger::Break()
 # else //_MANAGED
 #  define NOC_ISSUE_BREAK() __debugbreak()
 # endif //_MANAGED
-#elif defined (__GCC__)
-# define NOC_ISSUE_BREAK() asm volatile ("tw 31,1,1")
 #elif defined (__SNC__)
 # define NOC_ISSUE_BREAK() __builtin_snpause()
 #else
@@ -62,7 +62,7 @@
 # else //_MANAGED
 #  define NOC_ASSERT(x) if (!(x)) NOC_DISABLEABLE_CODE_BLOCK( ::printf("ASSERT FAILED [expr='%s', %s:%d]\n", #x, __FILE__, __LINE__); NOC_ISSUE_BREAK(); )
 #  define NOC_ASSERT_MSG(x, msg) if (!(x)) NOC_DISABLEABLE_CODE_BLOCK( ::printf("ASSERT FAILED [expr='%s', %s:%d]\n", #x, __FILE__, __LINE__); ::printf("MESSAGE\n["); ::printf msg ; ::printf( "]\n" ); NOC_ISSUE_BREAK(); )
-# endif 
+# endif
 #else //NOC_ASSERT_ENABLED
 # define NOC_ASSERT(x)
 # define NOC_ASSERT_MSG(x, msg)
@@ -73,7 +73,7 @@
 // Compile time
 //
 
-#define NOC_COMPILE_ASSERT(exp) typedef tchar __NOC_COMPILE_ASSERT__[(exp)?1:-1] 
+#define NOC_COMPILE_ASSERT(exp) typedef tchar __NOC_COMPILE_ASSERT__[(exp)?1:-1]
 
 
 //

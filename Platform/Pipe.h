@@ -2,10 +2,12 @@
 
 #include "Event.h"
 
-#ifdef WIN32
+#ifdef __GNUC__
+# include "POSIX/Pipe.h"
+#elif defined( WIN32 )
 # include "Windows/Pipe.h"
 #else
-# include "POSIX/Pipe.h"
+#  pragma TODO( "Emit an error here..." )
 #endif
 
 const static u32 IPC_PIPE_BUFFER_SIZE = 8192;

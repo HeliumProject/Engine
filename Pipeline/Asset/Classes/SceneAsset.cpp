@@ -2,9 +2,8 @@
 
 #include "Foundation/Reflect/ArchiveXML.h"
 
-#include "Pipeline/Asset/AssetTemplate.h"
 #include "Pipeline/Asset/Components/DependenciesComponent.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 
 using namespace Asset;
 
@@ -24,21 +23,6 @@ void SceneAsset::EnumerateClass( Reflect::Compositor<SceneAsset>& comp )
   Reflect::Field* fieldOcclVisDistAdjust = comp.AddField( &SceneAsset::m_OcclVisDistAdjust, "m_OcclVisDistAdjust" );
   Reflect::Field* fieldDecalGeomMem = comp.AddField( &SceneAsset::m_DecalGeomMem, "m_DecalGeomMem" );
   Reflect::Field* fieldZones = comp.AddField( &SceneAsset::m_Zones, "m_Zones" );
-
-  // asset creation template
-  Reflect::V_Element assetTemplates;
-
-  AssetTemplatePtr classTemplate = new AssetTemplate( &comp.GetComposite() );
-
-  classTemplate->m_DefaultAddSubDir = true;
-  classTemplate->m_ShowSubDirCheckbox = false;
-  
-  classTemplate->AddOptionalComponent( Reflect::GetType< Asset::DependenciesComponent >() );
-  assetTemplates.push_back( classTemplate );
-
-  tstring str;
-  Reflect::ArchiveXML::ToString( assetTemplates, str );
-  comp.GetComposite().SetProperty( AssetProperties::AssetTemplates, str );
 }
 
 
@@ -55,19 +39,4 @@ bool SceneAsset::ValidateCompatible( const Component::ComponentPtr& attr, tstrin
   }
 
   return __super::ValidateCompatible( attr, error );
-}
-
-void SceneAsset::MakeDefault()
-{
-  Clear();
-}
-
-bool SceneAsset::IsBuildable() const
-{
-  return true;
-}
-
-bool SceneAsset::IsViewable() const
-{
-  return true;
 }

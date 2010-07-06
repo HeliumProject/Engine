@@ -22,6 +22,11 @@ my $location = shift;
 
 if ( !$location )
 {
+  $location = $ENV{boost};
+}
+
+if ( !$location )
+{
   PrintUsage();
   exit 1;
 }

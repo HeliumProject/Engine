@@ -71,7 +71,7 @@ void CurveCreateTool::CreateInstance( const Math::Vector3& position )
   m_Instance->SetCurveType( s_CurveType );
 
   m_Scene->AddObject( m_Instance );
-  LPointPtr point = new Luna::Point( m_Scene, new Content::Point( position ) );
+  PointPtr point = new Luna::Point( m_Scene, new Content::Point( position ) );
   point->SetParent( m_Instance );
   point->SetTransient( true );
   m_Scene->AddObject( point );
@@ -201,7 +201,7 @@ bool CurveCreateTool::MouseDown( wxMouseEvent& e )
     Math::Vector3 position;
     PickPosition( e.GetX(), e.GetY(), position );
 
-    LPointPtr point = new Luna::Point( m_Scene, new Content::Point( position ) );
+    PointPtr point = new Luna::Point( m_Scene, new Content::Point( position ) );
     point->SetParent( m_Instance );
     point->SetTransient( true );
     m_Scene->AddObject( point );

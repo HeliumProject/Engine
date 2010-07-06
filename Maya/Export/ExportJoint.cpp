@@ -2,7 +2,7 @@
 
 #include "ExportJoint.h"
 #include "MayaContentCmd.h"
-#include "Math/EulerAngles.h"
+#include "Foundation/Math/EulerAngles.h"
 
 using namespace MayaContent;
 
@@ -15,7 +15,7 @@ void ExportJoint::GatherMayaData( V_ExportBase &newExportObjects )
   // doing a dangerous cast, because there should be no way for m_ContentObject to NOT be a Content::JointTransform
   Content::JointTransform* joint = Reflect::DangerousCast< Content::JointTransform >( m_ContentObject );
 
-  joint->m_DefaultName = jointFn.name().asChar();
+  joint->m_DefaultName = jointFn.name().asTChar();
 
   //
   // Grab the special "segmentScaleCompensate" attribute

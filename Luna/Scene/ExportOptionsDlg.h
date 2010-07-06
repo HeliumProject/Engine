@@ -13,14 +13,8 @@ namespace Luna
     wxGenericValidator m_HierarchyValidator;
     wxCheckBox m_HierarchyCheckbox;
 
-    wxGenericValidator m_BoundedValidator;
-    wxCheckBox m_BoundedCheckbox;
-
-    wxGenericValidator m_WorldValidator;
-    wxCheckBox m_WorldCheckbox;
-
   public:
-    ExportOptionsDlg( wxWindow* parent, bool& dependencies, bool& hierarchy, bool& bounded, bool& world );
+    ExportOptionsDlg( wxWindow* parent, bool& dependencies, bool& hierarchy );
     virtual ~ExportOptionsDlg();
 
   private:

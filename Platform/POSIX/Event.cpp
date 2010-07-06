@@ -1,7 +1,7 @@
-#include "Event.h"
-#include "Platform.h"
+#include "Platform/Event.h"
+#include "Platform/Platform.h"
 
-#include "Assert.h"
+#include "Platform/Assert.h"
 
 using namespace Platform;
 
@@ -73,7 +73,7 @@ void event_signal(Event::Handle* evt)
             // No waiters: signal evt
             evt->is_signaled = true;
         }
-        else 
+        else
         {
             // Waiters: wakeup one waiter
             pthread_cond_signal (&evt->condition);
@@ -97,7 +97,7 @@ void event_pulse(Event::Handle* evt)
     }
 
     // Auto-reset evt: wakeup one waiter
-    else 
+    else
     {
         pthread_cond_signal (&evt->condition);
 

@@ -3,14 +3,13 @@
 #include "NavMesh.h"
 
 #include "Pipeline/Content/Nodes/Camera.h"
-#include "Pipeline/Content/Nodes/Geometry/Mesh.h"
+#include "Pipeline/Content/Nodes/Mesh.h"
 
 #include "Pick.h"
 #include "PrimitiveLocator.h"
 #include "PrimitiveCone.h"
 #include "Color.h"
 #include "Scene.h"
-#include "zone.h"
 #include "SceneManager.h"
 #include "NavMeshCreateTool.h"
 #include "Statistics.h"
@@ -118,10 +117,8 @@ NavMesh::NavMesh( Luna::Scene* scene, Content::Mesh* mesh )
   m_Locator->Update();
   if (mesh->m_TriangleVertexIndices.size() == 0)
   {
-    mesh->m_ExportTypes[ Content::ContentTypes::NavMeshHiRes ] = true;
     mesh->m_GivenName = TXT( "HiResNavMesh" );
     mesh->m_UseGivenName = true;
-    mesh->m_ExportTypeIndex.insert( Content::M_ContentTypeToIndex::value_type(  Content::ContentTypes::NavMeshHiRes , 0) );
   }
    
   m_mouse_over_vert = m_mouse_over_edge = m_mouse_over_tri = 0xFFFFFFFF;
@@ -275,24 +272,7 @@ void NavMesh::SetUpNavMeshRenderEntry(RenderVisitor* render, RenderEntry* entry)
   entry->m_Center = m_ObjectBounds.Center();
   entry->m_DrawSetup = &Mesh::SetupNormalWire;
 }
-bool NavMesh::IsNavMeshZoneActive(const Luna::NavMesh* navMesh)
-{
-  Luna::Scene* rootScene = navMesh->GetScene()->GetManager()->GetRootScene();
-  if (rootScene)
-  {
-    Luna::ZonePtr& luna_nav_zone_ptr = rootScene->GetNavZone();
-    if (luna_nav_zone_ptr)
-    {
-#pragma TODO( "reimplement" )
-        //Luna::Scene* luna_zone_scene_ptr = navMesh->GetScene()->GetManager()->GetScene( luna_nav_zone_ptr->GetPath() );
-      //if (luna_zone_scene_ptr && luna_zone_scene_ptr->IsCurrent())
-      //{
-      //  return true;
-      //}
-    }
-  }
-  return false;
-}
+
 void NavMesh::Render( RenderVisitor* render )
 {
   this->SetSelected( true );  // makes sure the mesh gets drawn
@@ -300,8 +280,6 @@ void NavMesh::Render( RenderVisitor* render )
   //__super::Render( render );
   RenderEntry* entry;
 
-  if (IsNavMeshZoneActive(this))
-  {
     entry = render->Allocate(this);
     SetUpNavMeshRenderEntry(render, entry);
     entry->m_Flags |= RenderFlags::DistanceSort;
@@ -343,7 +321,6 @@ void NavMesh::Render( RenderVisitor* render )
       SetUpNavMeshRenderEntry(render, entry);
       entry->m_Draw = &NavMesh::DrawLocator;
     }
-  }
 
   //draw the mesh wire frame wire (always)
   entry = render->Allocate(this);
@@ -410,8 +387,6 @@ void NavMesh::DrawMeshEdges( IDirect3DDevice9* device, DrawArgs* args, const Sce
     return;
   }
   //device->SetMaterial( &navMesh->s_Material );
-  if (IsNavMeshZoneActive(navMesh))
-  {
     if (data->m_MeshOriginType == Content::Mesh::NavHiRes)
     {
       device->SetMaterial( &NavMesh::s_HiResEdgeDisplayMaterial );
@@ -420,18 +395,6 @@ void NavMesh::DrawMeshEdges( IDirect3DDevice9* device, DrawArgs* args, const Sce
     {
       device->SetMaterial( &NavMesh::s_LowResEdgeDisplayMaterial );
     }
-  }
-  else
-  {
-    if (data->m_MeshOriginType == Content::Mesh::NavHiRes)
-    {
-      device->SetMaterial( &NavMesh::s_HiResTriSubDuedDisplayMaterial );
-    }
-    else
-    {
-      device->SetMaterial( &NavMesh::s_LowResTriSubDuedDisplayMaterial );
-    }
-  }
   
   device->DrawIndexedPrimitive( D3DPT_LINELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), indices->GetBaseIndex(), navMesh->m_LineCount );
   args->m_LineCount += navMesh->m_LineCount;
@@ -451,8 +414,6 @@ void NavMesh::DrawMeshTris( IDirect3DDevice9* device, DrawArgs* args, const Scen
   //device->SetMaterial( &navMesh->s_Material );
  
   //if ( navMesh->GetScene()->GetManager()->GetCurrentScene()->GetTool() || navMesh->GetScene()->GetManager()->GetCurrentScene()->GetTool()->GetType() != Reflect::GetType<Luna::NavMeshCreateTool>())
-  if (IsNavMeshZoneActive(navMesh))
-  {
     if (data->m_MeshOriginType == Content::Mesh::NavHiRes)
     {
       device->SetMaterial( &NavMesh::s_HiResTriDisplayMaterial );
@@ -461,18 +422,6 @@ void NavMesh::DrawMeshTris( IDirect3DDevice9* device, DrawArgs* args, const Scen
     {
       device->SetMaterial( &NavMesh::s_LowResTriDisplayMaterial );
     }
-  }
-  else
-  {
-    if (data->m_MeshOriginType == Content::Mesh::NavHiRes)
-    {
-      device->SetMaterial( &NavMesh::s_HiResTriSubDuedDisplayMaterial );
-    }
-    else
-    {
-      device->SetMaterial( &NavMesh::s_LowResTriSubDuedDisplayMaterial );
-    }
-  }
   
   device->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
   device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
@@ -1603,6 +1552,5 @@ void NavMesh::SelectObtuseAngledTris()
     
   }
   ChangeTriEdgeVertSelection();
-
 }
 

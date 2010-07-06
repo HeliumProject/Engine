@@ -46,10 +46,6 @@ u32 Content::RBObjectLoader::ParseFile( const tchar* filename, bool winding )
 
   m_parse_warnings = 0;
 
-  Content::V_Descriptor descriptors;
-  scene.GetAll<Content::Descriptor>( descriptors );
-
-
   u32 mesh_count = (u32)meshes.size();
   for ( u32 m=0;m<mesh_count;m++)
   {

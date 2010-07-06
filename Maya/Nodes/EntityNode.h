@@ -2,7 +2,7 @@
 
 #include "API.h"
 #include "Foundation/TUID.h"
-#include "Asset/Entity.h"
+#include "Pipeline/Asset/Classes/EntityInstance.h"
 
 #include <maya/MDagMessage.h>
 #include <maya/MNodeMessage.h>
@@ -49,7 +49,7 @@ private:
 private:
   // private non-static members
   MPlug                 m_Plug;
-  Asset::EntityPtr      m_Entity;
+  Asset::EntityInstancePtr      m_Entity;
   Nocturnal::TUID        m_UID; // cache the TUID here so we don't have to look it up on the backing entityPtr each time we do a comparison
   MCallbackId           m_AttributeChangedCB;
   MCallbackId           m_ChildAddedCB;
@@ -75,7 +75,7 @@ public:
     return m_UID;
   }
 
-  const Asset::EntityPtr& GetEntity() const
+  const Asset::EntityInstancePtr& GetEntity() const
   {
     return m_Entity;
   }
@@ -87,12 +87,12 @@ public:
 
   void GetArtFilePath( MString& artFilePath );
 
-  const Asset::EntityPtr& GetBackingEntity()
+  const Asset::EntityInstancePtr& GetBackingEntity()
   {
     return m_Entity;
   }
 
-  void SetBackingEntity( const Asset::EntityPtr& entity );
+  void SetBackingEntity( const Asset::EntityInstancePtr& entity );
   void UpdateBackingEntity();
 
   void Show( const EntityAssetNode& instanceClassNode );

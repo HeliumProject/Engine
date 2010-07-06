@@ -8,7 +8,6 @@
 
 #include "Pipeline/Asset/AssetFile.h"
 #include "Pipeline/Asset/AssetFolder.h"
-#include "Pipeline/Asset/AssetTypeInfo.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "Editor/Orientation.h"
@@ -137,21 +136,6 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, BrowserFrame *b
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.fbx" ), TXT( "maya" ) );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.rb" ), TXT( "moon" ) );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.tga" ), TXT( "fileType_tga" ) );
-
-
-    // Populate the AssetTypes lookup texture
-    for ( i32 index = 0; index < Asset::AssetTypes::Count; ++index )
-    {
-        const tstring& icon = Asset::GetAssetTypeIcon( (Asset::AssetType) index );
-        if ( icon != TXT( "null" ) )
-        {
-#pragma TODO( "reimplement icons as resources" )
-            tstring file = icon;
-
-            Nocturnal::Insert<M_AssetTypeIcons>::Result inserted = m_AssetTypeIcons.insert( M_AssetTypeIcons::value_type( (Asset::AssetType) index, new Thumbnail( &m_D3DManager, LoadTexture( device, file ) ) ) );
-            NOC_ASSERT( inserted.second && inserted.first->second && inserted.first->second->GetTexture() );
-        }
-    }
 
     // Connect Listeners
     m_EditCtrl->Connect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
@@ -1418,14 +1402,6 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
             }
 
             // FileType Overlay
-            Asset::AssetType type = tile->GetAssetType();
-            if ( type != Asset::AssetTypes::Null && m_AssetTypeIcons.find( type ) != m_AssetTypeIcons.end() )
-            {
-                Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( m_AssetTypeIcons[type], V_TileCorners() ) );
-                inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
-            }
-            else
-            {
                 M_FileTypeIcons::iterator findIcon = m_FileTypeIcons.find( tile->GetFile()->GetPath().FullExtension() );
                 if ( findIcon != m_FileTypeIcons.end() )
                 {
@@ -1439,7 +1415,6 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
                     inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
                 }
             }
-        }
 
         if ( tile->GetThumbnail() == m_TextureLoading )
         {

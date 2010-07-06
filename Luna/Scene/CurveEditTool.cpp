@@ -116,7 +116,7 @@ bool CurveEditTool::MouseDown( wxMouseEvent &e )
 
         u32 index = points.first > points.second ? points.first : points.second;
 
-        LPointPtr point = new Luna::Point( m_Scene, new Content::Point( p ) );
+        PointPtr point = new Luna::Point( m_Scene, new Content::Point( p ) );
 
         curve->GetScene()->Push( curve->InsertControlPointAtIndex( index, point ) );
         break;

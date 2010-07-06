@@ -13,15 +13,16 @@
 #include "View.h"
 
 #include "Foundation/Container/ReversibleMap.h"
-#include "Core/PropertiesManager.h"
-#include "Core/Selection.h"
-#include "Editor/Editor.h"
-#include "Editor/EditorInfo.h"
+
 #include "Application/Inspect/Widgets/Canvas.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
 #include "Application/UI/MenuMRU.h"
 
-#include "Pipeline/Content/Nodes/LayerTypes.h"
+#include "Core/PropertiesManager.h"
+#include "Core/Selection.h"
+#include "Editor/Editor.h"
+#include "Editor/EditorInfo.h"
+
 #include <wx/dnd.h>
 
 namespace Luna
@@ -37,10 +38,7 @@ namespace Luna
   class InstanceType;
   class TypeGrid;
   class NodeTypeOutliner;
-  class RegionsPanel; 
-  class ScenesPanel;
   class View;
-  class Zone;
 
   struct DrawerArgs;
   struct ToolChangeArgs;
@@ -86,24 +84,17 @@ namespace Luna
     // the directory notebook
     wxNotebook* m_Directory;
 
-    // the list of zones for the current root
-    ScenesPanel* m_ZonesPanel;
-    size_t        m_ZonesPage;
-
     // the outline of the current scene
     HierarchyOutliner* m_HierarchyOutline;
-    size_t m_HierarchyOutlinePage;
 
     // the outline of all nodes by type
     NodeTypeOutliner* m_TypeOutline;
 
     // the outline of all entity nodes by class
-    EntityAssetOutliner* m_EntityAssetOutline;
-
-    wxNotebook* m_LayersNotebook;
+    EntityAssetOutliner* m_EntityOutline;
 
     // the UI for changing visibility/selectability of layers
-    V_LayerGrid m_LayerGrids;
+    LayerGrid* m_LayerGrid;
 
     // the UI for changing visibility/selectability of specific runtime types
     TypeGrid* m_TypeGrid;
@@ -120,7 +111,6 @@ namespace Luna
     // menu items
     wxMenu* m_FileMenu;
     wxMenu* m_EditMenu;
-    wxMenu* m_LightLinksMenu;
     wxMenu* m_ViewMenu;
     wxMenu* m_ViewDefaultsMenu; 
     wxMenu* m_PanelsMenu;
@@ -134,7 +124,6 @@ namespace Luna
 
     wxMenu* m_ShadingMenu;
     wxMenu* m_CullingMenu;
-    wxMenu* m_UtilitiesMenu;
     wxMenu* m_MRUMenu;
     wxMenuItem* m_MRUMenuItem;
     Nocturnal::MenuMRUPtr m_MRU;
@@ -239,7 +228,6 @@ namespace Luna
     void OnNextView(wxCommandEvent& event);
 
     void OnToolSelected(wxCommandEvent& event);
-    void OnUtilitySelected(wxCommandEvent& event);
 
     void OnParent(wxCommandEvent& event);
     void OnUnparent(wxCommandEvent& event);
@@ -265,11 +253,6 @@ namespace Luna
 
     void OnMRUOpen( const Nocturnal::MRUArgs& args );
 
-    void OnLightLinkEvent(wxKeyEvent& event);
-    void BeginLayersGridBatching();
-    void EndLayersGridBatching();
-
-    void GeneratePostProcessingVolumeScript();
     //
     // Scene Editor Implementation
     //
@@ -279,9 +262,6 @@ namespace Luna
     {
       return m_View;
     }
-
-    Content::LayerType  GetCurrentLayerGridType();
-    LayerGrid*          GetLayerGridByType(Content::LayerType lType);
 
     TypeGrid* GetObjectGrid()
     {

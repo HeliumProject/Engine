@@ -1,4 +1,4 @@
-#include "Pipe.h"
+#include "Platform/Pipe.h"
 
 #include "Platform/Assert.h"
 
@@ -22,7 +22,7 @@ bool Platform::CreatePipe(const tchar* name, Pipe& pipe)
 
 bool Platform::OpenPipe(const tchar* name, Pipe& pipe)
 {
-    if (cellFsOpen(name, CELL_FS_O_RDWR, &pipe, NULL, 0) != CELL_FS_OK)
+    if ( ( pipe = (int)fopen( name, TXT( "rw" ) ) ) == 0 )
     {
         return false;
     }
@@ -32,7 +32,7 @@ bool Platform::OpenPipe(const tchar* name, Pipe& pipe)
 
 void Platform::ClosePipe(Pipe& pipe)
 {
-    cellFsClose(pipe);
+    fclose( (FILE*)pipe );
 }
 
 bool Platform::ConnectPipe(Pipe& pipe, Event& terminate)
@@ -55,14 +55,13 @@ bool Platform::ReadPipe(Pipe& pipe, void* buffer, u32 bytes, u32& read, Event& t
     }
 
     uint64_t read_local = 0;
-    if (cellFsRead(pipe, buffer, bytes, &read_local) != CELL_FS_OK)
+    if ( ( read_local = fread( buffer, bytes, 1, (FILE*)pipe ) ) )
     {
-        return false;
+        read = (u32)read_local;
+        return true;
     }
 
-    read = (u32)read_local;
-
-    return true;
+    return false;
 }
 
 bool Platform::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event& terminate)
@@ -73,12 +72,11 @@ bool Platform::WritePipe(Pipe& pipe, void* buffer, u32 bytes, u32& wrote, Event&
     }
 
     uint64_t wrote_local = 0;
-    if (cellFsWrite(pipe, buffer, bytes, &wrote_local) != CELL_FS_OK)
+    if ( ( wrote_local = fwrite( buffer, 1, bytes, (FILE*)pipe ) ) )
     {
-        return false;
+        wrote = (u32) wrote_local;
+        return true;
     }
 
-    wrote = (u32)wrote_local;
-
-    return true;
+    return false;
 }

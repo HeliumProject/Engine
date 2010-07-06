@@ -6,11 +6,7 @@
 
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
-
-#include "Pipeline/Asset/Components/TextureMapComponent.h"
-#include "Pipeline/Asset/Components/StandardColorMapComponent.h"
-#include "Pipeline/Asset/Components/StandardNormalMapComponent.h"
-#include "Pipeline/Asset/Components/StandardExpensiveMapComponent.h"
+#include "Pipeline/Asset/Classes/Texture.h"
 
 #include <d3d9.h>
 #include <d3dx9.h>
@@ -24,10 +20,10 @@ u32 TextureAddressModes( u32 mode )
 
     switch( mode )
     {
-    case Asset::WrapModes::UV_WRAP:
+    case Asset::WrapModes::Wrap:
         outMode = (u32) D3DTADDRESS_WRAP;
         break;
-    case Asset::WrapModes::UV_CLAMP:
+    case Asset::WrapModes::Clamp:
         outMode = (u32) D3DTADDRESS_CLAMP;
         break;
     default:
@@ -37,63 +33,28 @@ u32 TextureAddressModes( u32 mode )
     return outMode;
 }
 
-D3DFORMAT GetD3DColorFormat( const Asset::ColorTexFormat format )
+D3DFORMAT GetD3DColorFormat( const Asset::TextureFormat format )
 {
     D3DFORMAT outFormat = D3DFMT_A8R8G8B8;
 
     switch( format )
     {
-    case Asset::ColorTexFormats::CA_8888:
+    case Asset::TextureFormats::ARGB8888:
         outFormat = D3DFMT_A8R8G8B8;
         break;
-    case Asset::ColorTexFormats::CA_4444:
+    case Asset::TextureFormats::ARGB4444:
         outFormat = D3DFMT_A4R4G4B4;
         break;
-    case Asset::ColorTexFormats::CA_DXT5:
+    case Asset::TextureFormats::DXT5:
         outFormat = D3DFMT_DXT5;
         break;
-    default:
-        break;
-    }
-
-    return outFormat;
-}
-
-D3DFORMAT GetD3DColorFormat( const Asset::NormalTexFormat format )
-{
-    D3DFORMAT outFormat = D3DFMT_DXT5;
-
-    switch( format )
-    {
-    case Asset::NormalTexFormats::NM_AL88:
+    case Asset::TextureFormats::AL88:
         outFormat = D3DFMT_A8L8;
         break;
-    case Asset::NormalTexFormats::NM_DXT5:
-        outFormat = D3DFMT_DXT5;
-        break;
-    default:
-        break;
-    }
-
-    return outFormat;
-}
-
-D3DFORMAT GetD3DColorFormat( const Asset::GlossParaIncanTexFormat format )
-{
-    D3DFORMAT outFormat = D3DFMT_DXT1;
-
-    switch( format )
-    {
-    case Asset::GlossParaIncanTexFormats::GPI_ARGB8888:
-        outFormat = D3DFMT_A8B8G8R8;
-        break;
-    case Asset::GlossParaIncanTexFormats::GPI_ARGB4444:
-        outFormat = D3DFMT_A4R4G4B4;
-        break;
-    case Asset::GlossParaIncanTexFormats::GPI_DXT:
+    case Asset::TextureFormats::DXT1:
         outFormat = D3DFMT_DXT1;
         break;
-    case Asset::GlossParaIncanTexFormats::GPI_RGB565:
+    case Asset::TextureFormats::RGB565:
         outFormat = D3DFMT_R5G6B5;
         break;
     default:
@@ -103,24 +64,24 @@ D3DFORMAT GetD3DColorFormat( const Asset::GlossParaIncanTexFormat format )
     return outFormat;
 }
 
-u32 TextureFilterMode( const Asset::RunTimeFilter mode )
+u32 TextureFilterMode( const Asset::TextureFilter mode )
 {
     u32 outMode = Render::Texture::FILTER_LINEAR;
 
     switch( mode )
     {
-    case Asset::RunTimeFilters::RTF_POINT:
+    case Asset::TextureFilters::Point:
         outMode = Render::Texture::FILTER_POINT;
+        break;
+    case Asset::TextureFilters::Bilinear:
+    case Asset::TextureFilters::Trilinear:
+        outMode = Render::Texture::FILTER_LINEAR;
         break;
     case Asset::RunTimeFilters::RTF_ANISO2_BI:
     case Asset::RunTimeFilters::RTF_ANISO2_TRI:
     case Asset::RunTimeFilters::RTF_ANISO4_BI:
     case Asset::RunTimeFilters::RTF_ANISO4_TRI:
         outMode = Render::Texture::FILTER_ANISOTROPIC;
-        break;
-    case Asset::RunTimeFilters::RTF_BILINEAR:
-    case Asset::RunTimeFilters::RTF_TRILINEAR:
-        outMode = Render::Texture::FILTER_LINEAR;
         break;
     default:
         break;
@@ -191,16 +152,14 @@ Render::Shader* Content::RBShaderLoader::ParseFile( const tchar* fname, Render::
     settings.m_WrapU = TextureAddressModes( shaderClass->m_WrapModeU );
     settings.m_WrapV = TextureAddressModes( shaderClass->m_WrapModeV );
 
-    Asset::StandardColorMapComponent* colorMap = shaderClass->GetComponent< Asset::StandardColorMapComponent >();
-    if( colorMap )
+    Asset::TexturePtr textureClass = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shaderClass->m_ColorMapPath );
+    if( textureClass.ReferencesObject() )
     {
-        Asset::TextureMapComponent* textureMap = Reflect::ObjectCast< Asset::TextureMapComponent >( colorMap );
-
-        settings.m_Path = colorMap->GetPath().Get();
+        settings.m_Path = textureClass->GetPath().Get();
         settings.m_Anisotropy = 0;
-        settings.m_Filter = TextureFilterMode( colorMap->m_TexFilter );
-        settings.m_Format = GetD3DColorFormat( colorMap->m_TexFormat );
-        settings.m_MipBias = colorMap->m_MipBias;
+        settings.m_Filter = TextureFilterMode( textureClass->GetFilter() );
+        settings.m_Format = GetD3DColorFormat( textureClass->GetFormat() );
+        settings.m_MipBias = 0.0f;
     }
     else
     {
@@ -208,7 +167,7 @@ Render::Shader* Content::RBShaderLoader::ParseFile( const tchar* fname, Render::
         settings.m_Path = TXT( "@@base" );
     }
 
-    UpdateShaderColorMap(sh, colorMap);
+    UpdateShader(sh, shaderClass);
 
     if( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_BASE_MAP ) )
     {
@@ -231,24 +190,26 @@ Render::Shader* Content::RBShaderLoader::ParseFile( const tchar* fname, Render::
     settings.m_WrapU = TextureAddressModes( shaderClass->m_WrapModeU );
     settings.m_WrapV = TextureAddressModes( shaderClass->m_WrapModeV );
 
-    Asset::StandardNormalMapComponent* normalMap = shaderClass->GetComponent< Asset::StandardNormalMapComponent >();
-    if( normalMap && normalMap->m_NormalMapScale>0.0f)
+    if ( shaderClass->m_NormalMapScaling > 0.0f )
     {
-        Asset::TextureMapComponent* textureMap = Reflect::ObjectCast< Asset::TextureMapComponent >( normalMap );
+        Asset::TexturePtr normalMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shaderClass->m_NormalMapPath );
 
-        settings.m_Path = normalMap->GetPath().Get();
-        settings.m_Anisotropy = 0;
-        settings.m_Filter = TextureFilterMode( normalMap->m_TexFilter );
-        settings.m_Format = GetD3DColorFormat( normalMap->m_TexFormat );
-        settings.m_MipBias = normalMap->m_MipBias;
-    }
-    else
-    {
-        settings.m_Format = D3DFMT_UNKNOWN;
-        settings.m_Path = TXT( "@@normal" );
+        if ( normalMap.ReferencesObject() )
+        {
+            settings.m_Path = normalMap->GetPath().Get();
+            settings.m_Anisotropy = 0;
+            settings.m_Filter = TextureFilterMode( normalMap->GetFilter() );
+            settings.m_Format = GetD3DColorFormat( normalMap->GetFormat() );
+            settings.m_MipBias = 0.0f;
+        }
+        else
+        {
+            settings.m_Format = D3DFMT_UNKNOWN;
+            settings.m_Path = TXT( "@@normal" );
+        }
     }
 
-    UpdateShaderNormalMap( sh, normalMap );
+    UpdateShader(sh, shaderClass);
 
     if( !db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_NORMAL_MAP ) )
     {
@@ -271,23 +232,14 @@ Render::Shader* Content::RBShaderLoader::ParseFile( const tchar* fname, Render::
     settings.m_WrapU = TextureAddressModes( shaderClass->m_WrapModeU );
     settings.m_WrapV = TextureAddressModes( shaderClass->m_WrapModeV );
 
-    Asset::StandardExpensiveMapComponent* expensiveMap = shaderClass->GetComponent< Asset::StandardExpensiveMapComponent >();
-    if( expensiveMap )
+    Asset::TexturePtr gpiMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shaderClass->m_GPIMapPath );
+    if( gpiMap.ReferencesObject() )
     {
-        Asset::TextureMapComponent* textureMap = Reflect::ObjectCast< Asset::TextureMapComponent >( expensiveMap );
-
-        settings.m_Path = expensiveMap->GetPath().Get();
+        settings.m_Path = gpiMap->GetPath().Get();
         settings.m_Anisotropy = 0;
-        settings.m_Filter = TextureFilterMode( expensiveMap->m_TexFilter );
-
-        settings.m_Format = GetD3DColorFormat( expensiveMap->m_TexFormat );
-        settings.m_MipBias = expensiveMap->m_MipBias;
-
-        // if detail mask is enabled, we need to switch from dxt1 to dxt5
-        if (expensiveMap->m_DetailMapMaskEnabled && settings.m_Format == D3DFMT_DXT1)
-        {
-            settings.m_Format = D3DFMT_DXT5;
-        }
+        settings.m_Filter = TextureFilterMode( gpiMap->GetFilter() );
+        settings.m_Format = GetD3DColorFormat( gpiMap->GetFormat() );
+        settings.m_MipBias = 0.0f;
 
         if( db->LoadTextureWithSettings( settings, sh, Render::Texture::SAMPLER_GPI_MAP ) )
         {
@@ -296,11 +248,11 @@ Render::Shader* Content::RBShaderLoader::ParseFile( const tchar* fname, Render::
 
             sh->m_flags |= SHDR_FLAG_GPI_MAP;
 
-            UpdateShaderExpensiveMap( sh, expensiveMap );
+            UpdateShader( sh, shaderClass );
         }
         else
         {
-            UpdateShaderExpensiveMap( sh, 0 );
+            UpdateShader( sh, 0 );
             Log::Warning( TXT( "Could not load expensive map '%s', loading defaults.\n" ), settings.m_Path.c_str() );
             settings.Clear();
             settings.m_Format = D3DFMT_UNKNOWN;
@@ -327,7 +279,7 @@ Render::Shader* Content::RBShaderLoader::ParseFile( const tchar* fname, Render::
     }
     else
     {
-        UpdateShaderExpensiveMap( sh, 0 );
+        UpdateShader( sh, 0 );
 
         settings.Clear();
         settings.m_Format = D3DFMT_UNKNOWN;
@@ -372,7 +324,7 @@ void Content::RBShaderLoader::SetWrapUV( Render::TextureSettings* settings, u32 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void Content::RBShaderLoader::SetFilter( Render::TextureSettings* settings, u32 filter )
 {
-    settings->m_Filter = TextureFilterMode( (Asset::RunTimeFilter) filter );
+    settings->m_Filter = TextureFilterMode( (Asset::TextureFilter) filter );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -381,16 +333,16 @@ void Content::RBShaderLoader::SetColorFormat( Render::TextureSettings* settings,
     switch ( mode )
     {
     case Render::Texture::SAMPLER_GPI_MAP:
-        settings->m_Format = GetD3DColorFormat( (Asset::GlossParaIncanTexFormat) colorFormat );
+        settings->m_Format = GetD3DColorFormat( (Asset::TextureFormat) colorFormat );
         break;
 
     case Render::Texture::SAMPLER_NORMAL_MAP:
-        settings->m_Format = GetD3DColorFormat( (Asset::NormalTexFormat) colorFormat );
+        settings->m_Format = GetD3DColorFormat( (Asset::TextureFormat) colorFormat );
         break;
 
     case Render::Texture::SAMPLER_BASE_MAP:
     default:
-        settings->m_Format = GetD3DColorFormat( (Asset::ColorTexFormat) colorFormat );
+        settings->m_Format = GetD3DColorFormat( (Asset::TextureFormat) colorFormat );
         break;
     }
 }
@@ -411,13 +363,13 @@ void Content::RBShaderLoader::UpdateShaderClass(Render::ShaderManager* db, const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void Content::RBShaderLoader::UpdateShaderColorMap(Render::Shader* sh, const Asset::StandardColorMapComponent* colorMap)
+void Content::RBShaderLoader::UpdateShader(Render::Shader* sh, const Asset::ShaderAsset* shader)
 {
-    if (colorMap && !colorMap->m_DisableBaseTint)
+    if ( shader->m_EnableColorMapTint )
     {
-        sh->m_basetint[0] = (float)colorMap->m_BaseMapTint.r/255.0f;
-        sh->m_basetint[1] = (float)colorMap->m_BaseMapTint.g/255.0f;
-        sh->m_basetint[2] = (float)colorMap->m_BaseMapTint.b/255.0f;
+        sh->m_basetint[0] = (float)shader->m_ColorMapTint.r/255.0f;
+        sh->m_basetint[1] = (float)shader->m_ColorMapTint.g/255.0f;
+        sh->m_basetint[2] = (float)shader->m_ColorMapTint.b/255.0f;
         sh->m_basetint[3] = 1.0f;
     }
     else
@@ -427,75 +379,30 @@ void Content::RBShaderLoader::UpdateShaderColorMap(Render::Shader* sh, const Ass
         sh->m_basetint[2] = 1.0f;
         sh->m_basetint[3] = 1.0f;
     }
-}
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-void Content::RBShaderLoader::UpdateShaderNormalMap(Render::Shader* sh, const Asset::StandardNormalMapComponent* normalMap)
-{
-    if (!normalMap)
+    sh->m_normal_scale = shader->m_NormalMapScaling;
+ 
+    sh->m_parallax_scale = shader->m_ParallaxMapEnabled ? shader->m_ParallaxMapScaling : 0.0f;
+    sh->m_parallax_bias = 0.0f;
+
+    sh->m_gloss_scale = shader->m_GlossMapEnabled ? shader->m_GlossMapScaling : 0.0f;
+
+    if ( shader->m_GlossMapEnabled )
     {
-        sh->m_normal_scale = 0.0f;
-        return;
+        sh->m_glosstint[0] = (float)shader->m_GlossMapTint.r/255.0f;
+        sh->m_glosstint[1] = (float)shader->m_GlossMapTint.g/255.0f;
+        sh->m_glosstint[2] = (float)shader->m_GlossMapTint.b/255.0f;
+        sh->m_glosstint[3] = shader->m_GlossMapDirtiness;
     }
-
-    sh->m_normal_scale = normalMap->m_NormalMapScale;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-void Content::RBShaderLoader::UpdateShaderExpensiveMap(Render::Shader* sh, const Asset::StandardExpensiveMapComponent* expensiveMap)
-{
-    if (!expensiveMap)
+    else
     {
-        sh->m_parallax_scale = 0.0f;
-        sh->m_parallax_bias = 0.0f;
-
-        sh->m_gloss_scale = 0.0f;
         sh->m_glosstint[0] = 1.0f;
         sh->m_glosstint[1] = 1.0f;
         sh->m_glosstint[2] = 1.0f;
         sh->m_glosstint[3] = 1.0f;
-
-        sh->m_incan_scale = 0.0f;
-
-        sh->m_env_lod = 5.0f;
-
-        return;
     }
 
-    if (expensiveMap->m_ParallaxMapEnabled)
-    {
-        sh->m_parallax_scale = expensiveMap->m_ParallaxScale;
-        //sh->m_parallax_bias = expensiveMap->m_ParallaxBias;        
-    }
-    else
-    {
-        sh->m_parallax_scale = 0.0f;
-        sh->m_parallax_bias = 0.0f;
-    }
+    sh->m_env_lod = 5.0f;
 
-    if (expensiveMap->m_GlossMapEnabled)
-    {
-        sh->m_gloss_scale = expensiveMap->m_GlossScale;
-
-        sh->m_glosstint[0] = (float)expensiveMap->m_GlossTint.r/255.0f;
-        sh->m_glosstint[1] = (float)expensiveMap->m_GlossTint.g/255.0f;
-        sh->m_glosstint[2] = (float)expensiveMap->m_GlossTint.b/255.0f;
-        sh->m_glosstint[3] = expensiveMap->m_GlossDirty;
-
-        sh->m_specular_power = expensiveMap->m_RealTimeSpecPower;
-        //sh->m_env_lod = expensiveMap->m_CubeBias;
-    }
-    else
-    {
-        sh->m_gloss_scale = 0.0f;
-    }
-
-    if (expensiveMap->m_IncanMapEnabled)
-    {
-        sh->m_incan_scale = 1.0f;
-    }
-    else
-    {
-        sh->m_incan_scale = 0.0f;
-    }
+    sh->m_incan_scale = shader->m_IncandescentMapEnabled ? shader->m_IncandescentMapScaling : 0.0f;
 }

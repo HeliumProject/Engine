@@ -65,7 +65,6 @@ namespace Luna
     /////////////////////////////////////////////////////////////////////////////
     typedef std::map< tstring, DWORD > M_FileTypeColors;
     typedef std::map< tstring, ThumbnailPtr > M_FileTypeIcons;
-    typedef std::map< Asset::AssetType, ThumbnailPtr > M_AssetTypeIcons;
 
     typedef std::vector< Math::Vector3 > V_TileCorners;
     typedef std::map< DWORD, V_TileCorners > M_RibbonColorTileCorners;
@@ -305,7 +304,6 @@ namespace Luna
 
         M_FileTypeColors m_FileTypeColors;
         M_FileTypeIcons m_FileTypeIcons;
-        M_AssetTypeIcons m_AssetTypeIcons;
 
         V_TileCorners m_VisibleTileCorners;
         V_TileCorners m_HighlighedTileCorners;

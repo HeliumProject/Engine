@@ -5,10 +5,9 @@
 #include "SceneEditor.h"
 #include "SceneDocument.h"
 #include "SwitchSceneCommand.h"
-#include "Zone.h"
 
 #include "Pipeline/Asset/Classes/SceneAsset.h"
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Log.h"
 #include "Application/UI/FileDialog.h"
@@ -156,7 +155,7 @@ DocumentPtr SceneManager::OpenPath( const tstring& path, tstring& error )
 ///////////////////////////////////////////////////////////////////////////////
 // Open a zone that should be under the root.
 // 
-ScenePtr SceneManager::OpenZone( const tstring& path, tstring& error )
+ScenePtr SceneManager::OpenScene( const tstring& path, tstring& error )
 {
     ScenePtr scene = NewScene( false, path, true );
     if ( !scene->LoadFile( path ) )
@@ -165,22 +164,7 @@ ScenePtr SceneManager::OpenZone( const tstring& path, tstring& error )
         RemoveScene( scene );
         scene = NULL;
     }
-    else
-    {
-        Nocturnal::Path zonePath( path );
 
-        S_ZoneDumbPtr::const_iterator zoneItr = m_Root->GetZones().begin();
-        S_ZoneDumbPtr::const_iterator zoneEnd = m_Root->GetZones().end();
-        for ( ; zoneItr != zoneEnd; ++zoneItr )
-        {
-            Zone* zone = *zoneItr;
-            if ( zone->GetPathObject().Hash() == zonePath.Hash() )
-            {
-                scene->SetColor( zone->GetColor() );
-                break;
-            }
-        }
-    }
     return scene;
 }
 
@@ -301,7 +285,6 @@ bool SceneManager::IsRoot( Luna::Scene* scene ) const
 void SceneManager::AddScene(Luna::Scene* scene)
 {
     scene->GetSceneDocument()->AddDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
-    scene->AddNodeRemovedListener( NodeChangeSignature::Delegate( this, &SceneManager::SceneNodeDeleting ) );
 
     const tstring& path = scene->GetFullPath();
     Nocturnal::Insert<M_SceneSmartPtr>::Result inserted = m_Scenes.insert( M_SceneSmartPtr::value_type( path, scene ) );
@@ -326,7 +309,6 @@ void SceneManager::RemoveScene(Luna::Scene* scene)
     // 
 
     scene->GetSceneDocument()->RemoveDocumentPathChangedListener( DocumentPathChangedSignature::Delegate ( this, &SceneManager::DocumentPathChanged ) );
-    scene->RemoveNodeRemovedListener( NodeChangeSignature::Delegate( this, &SceneManager::SceneNodeDeleting ) );
     m_SceneRemoving.Raise( scene );
 
     M_SceneSmartPtr::iterator found = m_Scenes.find( scene->GetFullPath() );
@@ -624,22 +606,6 @@ void SceneManager::DocumentPathChanged( const DocumentPathChangedArgs& args )
         Nocturnal::Insert<M_SceneSmartPtr>::Result inserted = 
             m_Scenes.insert( M_SceneSmartPtr::value_type( scene->GetFullPath(), scene ) );
         NOC_ASSERT( inserted.second );
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when a node is being deleted from a scene.  If the node is a 
-// zone, and that zone is loaded, we will automatically unload it.
-// 
-void SceneManager::SceneNodeDeleting( const NodeChangeArgs& args )
-{
-    if ( args.m_Node->HasType( Reflect::GetType< Zone >() ) )
-    {
-        Document* doc = FindDocument( Reflect::TryCast< Zone >( args.m_Node )->GetPath() );
-        if ( doc )
-        {
-            CloseDocument( doc );
-        }
     }
 }
 

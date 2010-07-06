@@ -3,8 +3,6 @@
 #include "AppPreferences.h"
 
 #include "Application/Application.h"
-#include "Application/UI/ArtProvider.h"
-#include "Asset/AssetInit.h"
 #include "Browser/Browser.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Log.h"
@@ -144,11 +142,6 @@ bool LunaApp::OnInit()
             {
                 Log::Bullet bullet( TXT( "Asset Vault...\n" ) );
                 m_InitializerStack.Push( Browser::Initialize, Browser::Cleanup );
-            }
-
-            {
-                Log::Bullet bullet( TXT( "Asset Editor...\n" ) );
-                m_InitializerStack.Push( LunaAsset::InitializeModule, LunaAsset::CleanupModule );
             }
 
             {

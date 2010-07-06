@@ -2,7 +2,7 @@
 
 #include "Instance.h"
 
-#include "Pipeline/Content/Nodes/Instance/Volume.h"
+#include "Pipeline/Content/Nodes/Volume.h"
 
 namespace Luna
 {

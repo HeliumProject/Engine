@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 
-#include "Pipeline/Content/Nodes/Curve/Point.h"
+#include "Pipeline/Content/Nodes/Point.h"
 #include "NavMesh.h"
 #include "RotateManipulator.h"
 #include "SceneTool.h"

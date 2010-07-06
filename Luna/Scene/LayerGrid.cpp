@@ -64,13 +64,12 @@ void LayerGrid::NameChangeInfo::Clear()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-LayerGrid::LayerGrid( wxWindow* parent, Luna::SceneManager* sceneManager, u32 lType)
+LayerGrid::LayerGrid( wxWindow* parent, Luna::SceneManager* sceneManager )
 : m_SceneManager( sceneManager )
 , m_Scene( NULL )
 , m_Panel( new wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxT( "LayerGrid Panel" ) ) )
 , m_Grid( new Grid( m_Panel, SceneEditorIDs::ID_LayerGrid, true ) )
 , m_ToolBar( new wxToolBar( m_Panel, wxID_ANY, wxDefaultPosition, wxSize( -1, 25 ), wxBORDER_NONE | wxTB_HORIZONTAL | wxTB_NODIVIDER, wxT( "LayerToolBar" ) ) )
-, m_LayerType(lType)
 {
   // Handle all toolbar events so that this class can process button clicks
   m_ToolBar->PushEventHandler( this );
@@ -85,12 +84,6 @@ LayerGrid::LayerGrid( wxWindow* parent, Luna::SceneManager* sceneManager, u32 lT
   m_ToolBar->AddSeparator();
   m_ToolBar->AddTool( ID_SelectLayerMembers, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ), wxT( "Select Layer Members" ) );
   m_ToolBar->AddTool( ID_SelectLayer, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ), wxT( "Select Highlighted Layer(s)" ) );
-  
-  if(m_LayerType == Content::LayerTypes::LT_Lighting)
-  {
-    m_ToolBar->AddTool( ID_CleanUpLayers, wxT( "" ), wxArtProvider::GetBitmap( wxART_MISSING_IMAGE ), wxT( "Remove invalid Layer(s)" ) );
-  }
-
   m_ToolBar->Realize();
 
   // Add everything to a top level sizer
@@ -171,8 +164,6 @@ bool LayerGrid::AddLayer( Luna::Layer* layer )
   //Verify this is the correct destination
   Content::Layer* cLayer = layer->GetPackage<Content::Layer>();
 
-  if(cLayer->m_Type == m_LayerType)
-  { 
     Nocturnal::Insert<M_LayerDumbPtr>::Result inserted = m_Layers.insert( M_LayerDumbPtr::value_type( layer->GetName(), layer ) );
     NOC_ASSERT( inserted.second );
 
@@ -188,7 +179,6 @@ bool LayerGrid::AddLayer( Luna::Layer* layer )
       m_Grid->SelectRow(m_Grid->GetRowNumber(layer->GetName()), false);
       return true;
     }
-  }
 
   return false;
 }
@@ -201,8 +191,6 @@ bool LayerGrid::RemoveLayer( Luna::Layer* layer )
   //Verify this is the correct destination
   Content::Layer* cLayer = layer->GetPackage<Content::Layer>();
 
-  if(cLayer->m_Type == m_LayerType)
-  { 
     bool foundLayer = m_Layers.erase( layer->GetName() ) > 0;
     NOC_ASSERT( foundLayer );
 
@@ -210,7 +198,6 @@ bool LayerGrid::RemoveLayer( Luna::Layer* layer )
     layer->RemoveNameChangingListener( SceneNodeChangeSignature::Delegate ( this, &LayerGrid::NameChanging ) );
     layer->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate ( this, &LayerGrid::NameChanged ) );
     return m_Grid->RemoveRow( layer->GetName() );
-  }
 
   return false;
 }
@@ -451,17 +438,8 @@ void LayerGrid::OnNewLayer( wxCommandEvent& event )
 {
   if ( m_Scene )
   {
-    Content::LayerType    currentType = m_SceneManager->GetEditor()->GetCurrentLayerGridType();
-    Content::Layer*       cLayer      = new Content::Layer();
-
-    //Setup the layer type
-    cLayer->m_Type                    = m_LayerType;
-
-
-    // Step 1: add a layer to the scene
-    Luna::Layer*          lLayer      = new Luna::Layer( m_Scene, cLayer);
-
-    m_Scene->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, lLayer ) );
+        Luna::Layer* layer = new Luna::Layer( m_Scene, new Content::Layer() );
+        m_Scene->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, layer ) );
     m_Scene->Execute( false ); 
   }
 }
@@ -479,19 +457,12 @@ void LayerGrid::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
     }
    
     Undo::BatchCommandPtr batch       = new Undo::BatchCommand ();
-    Content::LayerType    currentType = m_SceneManager->GetEditor()->GetCurrentLayerGridType();
-    Content::Layer*       cLayer      = new Content::Layer();
-
-    //Setup the layer type
-    cLayer->m_Type                    = m_LayerType;
-
-    // Step 1: add a layer to the scene
-    Luna::Layer*          lLayer      = new Luna::Layer( m_Scene, cLayer);
+        Luna::Layer* layer = new Luna::Layer( m_Scene, new Content::Layer() );
 
     // Generate a name for this layer
-    GenerateLayerName(lLayer);
+        GenerateLayerName(layer);
 
-    batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, lLayer ) );
+        batch->Push( new SceneNodeExistenceCommand( Undo::ExistenceActions::Add, m_Scene, layer ) );
 
     // Step 2: add all the selected items to the layer
     const OS_SelectableDumbPtr& selection = m_Scene->GetSelection().GetItems();
@@ -505,7 +476,7 @@ void LayerGrid::OnNewLayerFromSelection( wxCommandEvent& dummyEvt )
         Luna::SceneNode* node = Reflect::ObjectCast< Luna::SceneNode >( *itr );
         if ( node )
         {
-          batch->Push( new DependencyCommand( DependencyCommand::Connect, lLayer, node ) );
+                    batch->Push( new DependencyCommand( DependencyCommand::Connect, layer, node ) );
         }
       }
     }
@@ -692,8 +663,6 @@ void LayerGrid::SelectionChanged( const OS_SelectableDumbPtr& selection )
       if ( lunaLayer )
       {
         Content::Layer* contentLayer = lunaLayer->GetPackage<Content::Layer>();
-        if(contentLayer->m_Type == m_LayerType)
-        {  
           NOC_ASSERT( m_Layers.find( lunaLayer->GetName() ) != m_Layers.end() );
 
           ++numLayersInSelection;
@@ -716,7 +685,6 @@ void LayerGrid::SelectionChanged( const OS_SelectableDumbPtr& selection )
       }
     }
   }
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Callback just before a layer's name is changed.  Stores the layer and the

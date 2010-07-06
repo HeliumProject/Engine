@@ -105,7 +105,7 @@ namespace Luna
 
         // Getters/Setters
 
-        template <class AttributeType>
+        template <class ComponentType>
         bool GetOverride() const
         {
             OS_SelectableDumbPtr::Iterator itr = m_Selection.Begin();
@@ -115,7 +115,7 @@ namespace Luna
                 Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *itr );
                 NOC_ASSERT(entity);
 
-                if ( !entity->GetPackage<Asset::Entity>()->ContainsAttribute( Reflect::GetType<AttributeType>() ) )
+                if ( !entity->GetPackage<Asset::EntityInstance>()->ContainsComponent( Reflect::GetType<ComponentType>() ) )
                 {
                     return false;
                 }
@@ -124,7 +124,7 @@ namespace Luna
             return true;
         }
 
-        template <class AttributeType, class Control, Control EntityPanel::* MemberPtr>
+        template <class ComponentType, class Control, Control EntityPanel::* MemberPtr>
         void SetOverride(bool o)
         {
             OS_SelectableDumbPtr::Iterator itr = m_Selection.Begin();
@@ -136,16 +136,16 @@ namespace Luna
 
                 if ( o )
                 {
-                    if ( !entity->GetPackage<Asset::Entity>()->ContainsAttribute( Reflect::GetType<AttributeType>() ) )
+                    if ( !entity->GetPackage<Asset::EntityInstance>()->ContainsComponent( Reflect::GetType<ComponentType>() ) )
                     {
-                        entity->GetPackage<Asset::Entity>()->SetAttribute( new AttributeType () );
+                        entity->GetPackage<Asset::EntityInstance>()->SetComponent( new ComponentType() );
                     }
                 }
                 else
                 {
-                    if ( entity->GetPackage<Asset::Entity>()->ContainsAttribute( Reflect::GetType<AttributeType>() ) )
+                    if ( entity->GetPackage<Asset::EntityInstance>()->ContainsComponent( Reflect::GetType<ComponentType>() ) )
                     {
-                        entity->GetPackage<Asset::Entity>()->RemoveAttribute( Reflect::GetType<AttributeType>() );
+                        entity->GetPackage<Asset::EntityInstance>()->RemoveComponent( Reflect::GetType<ComponentType>() );
                     }
                 }
             }
@@ -154,7 +154,7 @@ namespace Luna
         }
 
         //
-        template< class AttributeType, bool AttributeType::*PtrToBool >
+        template< class ComponentType, bool ComponentType::*PtrToBool >
         bool GetBoolOverride() const
         {
             OS_SelectableDumbPtr::Iterator itr = m_Selection.Begin();
@@ -162,8 +162,8 @@ namespace Luna
             for ( ; itr != end; ++itr )
             {
                 Luna::Entity* entity = Reflect::AssertCast< Luna::Entity >( *itr );
-                Asset::Entity* pkg = entity->GetPackage< Asset::Entity >();
-                Nocturnal::SmartPtr< AttributeType > attrib = Reflect::ObjectCast< AttributeType >( pkg->GetAttribute( Reflect::GetType< AttributeType >() ) );
+                Asset::EntityInstance* pkg = entity->GetPackage< Asset::EntityInstance >();
+                Nocturnal::SmartPtr< ComponentType > attrib = Reflect::ObjectCast< ComponentType >( pkg->GetAttribute( Reflect::GetType< ComponentType >() ) );
                 if ( !attrib.ReferencesObject() || !( attrib->*PtrToBool ) )
                 {
                     return false;
@@ -173,7 +173,7 @@ namespace Luna
         }
 
         //
-        template< class AttributeType, class Control, Control EntityPanel::*MemberPtr, bool AttributeType::*PtrToBool >
+        template< class ComponentType, class Control, Control EntityPanel::*MemberPtr, bool ComponentType::*PtrToBool >
         void SetBoolOverride( bool o )
         {
             OS_SelectableDumbPtr::Iterator itr = m_Selection.Begin();
@@ -182,13 +182,13 @@ namespace Luna
             {
                 Luna::Entity* entity = Reflect::AssertCast< Luna::Entity >( *itr );
 
-                Asset::Entity* pkg = entity->GetPackage<Asset::Entity>();
-                if ( !pkg->ContainsAttribute( Reflect::GetType<AttributeType>() ) )
+                Asset::EntityInstance* pkg = entity->GetPackage<Asset::EntityInstance>();
+                if ( !pkg->ContainsAttribute( Reflect::GetType<ComponentType>() ) )
                 {
-                    pkg->SetAttribute( new AttributeType () );
+                    pkg->SetAttribute( new ComponentType () );
                 }
 
-                Component::ComponentEditor< AttributeType > attr( pkg );
+                Component::ComponentEditor< ComponentType > attr( pkg );
                 (attr.operator->())->*PtrToBool = o;
                 attr.Commit();
             }
@@ -196,7 +196,7 @@ namespace Luna
             (this->*MemberPtr)->SetEnabled( o );
         }
 
-        template <class ValueType, class AttributeType, ValueType AttributeType::* MemberPtr>
+        template <class ValueType, class ComponentType, ValueType ComponentType::* MemberPtr>
         tstring GetValue() const
         {
             ValueType result;
@@ -209,7 +209,7 @@ namespace Luna
                 Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *itr );
                 NOC_ASSERT(entity);
 
-                Component::ComponentViewer< AttributeType > attr (entity->GetPackage<Asset::Entity>());
+                Component::ComponentViewer< ComponentType > attr (entity->GetPackage<Asset::EntityInstance>());
                 if (!attr.Valid())
                 {
                     return "";
@@ -229,7 +229,7 @@ namespace Luna
             return str.str();
         }
 
-        template <class ValueType, class AttributeType, ValueType AttributeType::* MemberPtr>
+        template <class ValueType, class ComponentType, ValueType ComponentType::* MemberPtr>
         void SetValue(const tstring& dist)
         {
             std::istringstream str (dist);
@@ -244,7 +244,7 @@ namespace Luna
                 Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *itr );
                 NOC_ASSERT(entity);
 
-                Component::ComponentEditor< AttributeType > attr (entity->GetPackage<Asset::Entity>());
+                Component::ComponentEditor< ComponentType > attr (entity->GetPackage<Asset::EntityInstance>());
                 NOC_ASSERT(attr.Valid());
 
                 (attr.operator->())->*MemberPtr = value;
@@ -285,7 +285,6 @@ namespace Luna
 
                         if( editor )
                         {
-                            Component::ComponentViewer< Asset::ArtFileComponent > artFile( entity->GetClassSet()->GetEntityAsset(), true );
                             tstring objectsFile = entity->GetClassSet()->GetContentFile();
                             RCS::File rcsObjectsFile( objectsFile );
 
@@ -316,10 +315,10 @@ namespace Luna
                                 }
                                 if( hasType )
                                 {
-                                    Asset::Entity* assetEntity = entity->GetPackage< Asset::Entity >();
+                                    Asset::EntityInstance* entityInstance = entity->GetPackage< Asset::EntityInstance >();
 
                                     tstringstream stream;
-                                    stream << TXT( "Object export file for " ) << assetEntity->GetEntityAsset()->GetShortName() 
+                                    stream << TXT( "Object export file for " ) << entityInstance->GetEntity()->GetShortName() 
                                         << TXT( " already contains objects of type " ) << Reflect::GetClass< ContentClass >()->m_ShortName << std::endl;
                                     stream << TXT( "Would you like to overwrite the existing objects?" );
 
@@ -417,12 +416,11 @@ namespace Luna
                                 }
                             }
 
-                            Component::ComponentViewer< Asset::ArtFileComponent > artFile( entity->GetClassSet()->GetEntityAsset(), true );
                             tstring lightFile = entity->GetClassSet()->GetContentFile();
 
                             if( Nocturnal::Path( lightFile ).Exists() )
                             {
-                                Asset::Entity* assetEntity = entity->GetPackage< Asset::Entity >();
+                                Asset::EntityInstance* assetEntity = entity->GetPackage< Asset::EntityInstance >();
                                 editor->PostCommand( new SceneImportCommand( scene, lightFile, ImportActions::Import, ImportFlags::None, entity, Reflect::GetType< ContentClass >() ) );
                             }
                         }
@@ -534,10 +532,10 @@ namespace Luna
                                         }
                                         if( hasType )
                                         {
-                                            Asset::Entity* assetEntity = entity->GetPackage< Asset::Entity >();
+                                            Asset::EntityInstance* entityInstance = entity->GetPackage< Asset::EntityInstance >();
 
                                             tstringstream stream;
-                                            stream << TXT( "Object export file for " ) << assetEntity->GetEntityAsset()->GetShortName() 
+                                            stream << TXT( "Object export file for " ) << entityInstance->GetEntity()->GetShortName() 
                                                 << TXT( " already contains objects of type " ) << Reflect::GetClass< ContentClass >()->m_ShortName << std::endl;
                                             stream << TXT( "Would you like to overwrite the existing objects?" );
 
@@ -652,7 +650,7 @@ namespace Luna
                                             }
                                         }
 
-                                        Asset::Entity* assetEntity = entity->GetPackage< Asset::Entity >();
+                                        Asset::EntityInstance* assetEntity = entity->GetPackage< Asset::EntityInstance >();
                                         editor->PostCommand( new SceneImportCommand( scene, filePath, ImportActions::Import, ImportFlags::None, entity, Reflect::GetType< ContentClass >() ) );
                                     }               
                                 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <set>
+#include <vector>
 
 #include "Foundation/API.h"
 #include "Foundation/Memory/SmartPtr.h"
@@ -42,6 +43,11 @@ namespace Nocturnal
 
         bool operator<( const Path& rhs ) const;
 
+        Path operator+( const tstring& rhs ) const;
+        Path operator+( const Path& rhs ) const;
+        Path& operator+=( const tstring& rhs );
+        Path& operator+=( const Nocturnal::Path& rhs );
+
         const tstring& Get() const;
         const tstring& Set( const tstring& path );
 
@@ -51,11 +57,14 @@ namespace Nocturnal
         tstring Basename() const;
         tstring Filename() const;
         tstring Directory() const;
+        std::vector< tstring > DirectoryAsVector() const;
 
         tstring Extension() const;
         tstring FullExtension() const;
         void RemoveExtension();
         void RemoveFullExtension();
+        void ReplaceExtension( const tstring& newExtension );
+        void ReplaceFullExtension( const tstring& newExtension );
 
         tstring Native() const;
         tstring Absolute() const;
@@ -90,11 +99,10 @@ namespace Nocturnal
         tstring FileMD5() const;
         bool VerifyFileMD5( const tstring& hash ) const;
 
-
     public:
 
-        void ReplaceExtension( const tstring& newExtension );
-        void ReplaceFullExtension( const tstring& newExtension );
+        Nocturnal::Path GetAbsolutePath( const Nocturnal::Path& basisPath ) const;
+        Nocturnal::Path GetRelativePath( const Nocturnal::Path& basisPath ) const;
 
     public:
 

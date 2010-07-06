@@ -13,10 +13,13 @@ namespace Platform
     class PLATFORM_API Semaphore
     {
     public:
-#ifdef WIN32
+
+#ifdef __GNUC__
+        typedef sem_t Handle;
+#elif defined( WIN32 )
         typedef void* Handle;
 #else
-        typedef sem_t Handle;
+#  pragma TODO( "Emit an error here..." )
 #endif
 
     private:

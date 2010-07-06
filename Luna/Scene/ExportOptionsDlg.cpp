@@ -12,21 +12,15 @@ END_EVENT_TABLE()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-ExportOptionsDlg::ExportOptionsDlg( wxWindow* parent, bool& dependencies, bool& hierarchy, bool& bounded, bool& world )
+ExportOptionsDlg::ExportOptionsDlg( wxWindow* parent, bool& dependencies, bool& hierarchy )
 : wxDialog( parent, -1, wxT( "Export" ), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, wxT( "LunaExportOptionsDialog" ) )
 , m_DependencyValidator( &dependencies )
 , m_DependencyCheckbox( this, -1, wxT( "Include dependencies (layers, etc...)" ), wxDefaultPosition, wxDefaultSize, 0, m_DependencyValidator, wxT( "Checkbox_Dependency" ) )
 , m_HierarchyValidator( &hierarchy )
 , m_HierarchyCheckbox( this, -1, wxT( "Include hierarchy (parents and children)" ), wxDefaultPosition, wxDefaultSize, 0, m_HierarchyValidator, wxT( "Checkbox_Hierarchy" ) )
-, m_BoundedValidator( &bounded )
-, m_BoundedCheckbox( this, -1, wxT( "Objects bounded by selected objects" ), wxDefaultPosition, wxDefaultSize, 0, m_BoundedValidator, wxT( "Checkbox_Bounded" ) )
-, m_WorldValidator( &world )
-, m_WorldCheckbox( this, -1, wxT( "Objects in other zones (loaded and unloaded)" ), wxDefaultPosition, wxDefaultSize, 0, m_WorldValidator, wxT( "Checkbox_World" ) )
 {
   m_DependencyValidator.SetWindow( &m_DependencyCheckbox );
   m_HierarchyValidator.SetWindow( &m_HierarchyCheckbox );
-  m_BoundedValidator.SetWindow( &m_BoundedCheckbox );
-  m_WorldValidator.SetWindow( &m_WorldCheckbox );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -51,8 +45,6 @@ void ExportOptionsDlg::OnInit( wxInitDialogEvent& event )
   // Checkboxes inside of the group box
   innerGroupBoxSizer->Add( &m_DependencyCheckbox, wxSizerFlags().Border( wxALL, 10 ) );
   innerGroupBoxSizer->Add( &m_HierarchyCheckbox, wxSizerFlags().Border( wxLEFT | wxRIGHT | wxBOTTOM, 10 ) );
-  innerGroupBoxSizer->Add( &m_BoundedCheckbox, wxSizerFlags().Border( wxLEFT | wxRIGHT | wxBOTTOM, 10 ) );
-  innerGroupBoxSizer->Add( &m_WorldCheckbox, wxSizerFlags().Border( wxLEFT | wxRIGHT | wxBOTTOM, 10 ) );
   innerGroupBoxSizer->Layout();
   groupBox->Add( innerGroupBoxSizer );
   groupBox->Layout();

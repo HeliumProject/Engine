@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Foundation/Reflect/Enumeration.h"
-#include "Pipeline/Texture/Image/ColorFormats.h"
-#include "Pipeline/Texture/Image/MipSet.h"
+#include "Pipeline/Image/ColorFormats.h"
+#include "Pipeline/Image/MipSet.h"
 
 namespace Asset
 {

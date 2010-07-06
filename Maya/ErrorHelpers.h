@@ -71,7 +71,7 @@ if( MS::kSuccess != stat )                                                      
 #define MMsgErr(stat,msg)                                                                         \
 if( MS::kSuccess != stat )                                                                        \
 {                                                                                                 \
-  std::string str = std::string(msg) + "(" + std::string(stat.errorString().asChar()) + ")\n";    \
+  tstring str = tstring(msg) + "(" + tstring(stat.errorString().asTChar()) + ")\n";    \
   MGlobal::displayError(str.c_str());                                                             \
   return MS::kFailure;                                                                            \
 }
@@ -84,13 +84,13 @@ if( MS::kSuccess != stat )                                                      
 #include "Platform/Windows/Debug.h"
 
 # if 0
-inline void ProcessMayaPluginException( Debug::StructuredException& ex, bool exit = true )
+inline void ProcessMayaPluginException( Nocturnal::Exception& ex, bool exit = true )
 {
   Debug::ProcessException( ex, true );
 
   std::ostringstream str;
   str << "A fatal plugin error occurred so Maya must be shut down." << std::endl;
-  str << ex.what();
+  str << ex.What();
 
   ::MessageBox( M3dView::applicationShell(),
                 str.str().c_str(),
@@ -106,4 +106,4 @@ inline void ProcessMayaPluginException( Debug::StructuredException& ex, bool exi
 
 #define MAYA_START_EXCEPTION_HANDLING() /*Debug::EnableTranslator<Debug::TranslateException> translator; try { */
 
-#define MAYA_FINISH_EXCEPTION_HANDLING(...) } /* catch ( Debug::StructuredException& ex ) { ProcessMayaPluginException( ex, __VA_ARGS__ ); } */
+#define MAYA_FINISH_EXCEPTION_HANDLING(...) /* } catch ( Nocturnal::Exception& ex ) { ProcessMayaPluginException( ex, __VA_ARGS__ ); } */

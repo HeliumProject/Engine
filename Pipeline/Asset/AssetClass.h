@@ -6,12 +6,11 @@
 #include "Pipeline/API.h"
 #include "AssetFlags.h"
 #include "AssetVersion.h"
-#include "AssetType.h"
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"
-#include "Pipeline/Component/Component.h"
-#include "Pipeline/Component/ComponentCollection.h" 
+#include "Foundation/Component/Component.h"
+#include "Foundation/Component/ComponentCollection.h" 
 
 #define REGEX_LEVEL_DIR "levels\\/(?:test\\/){0,1}([0-9a-zA-Z \\-_]+)?"
 
@@ -24,56 +23,28 @@ namespace Asset
     typedef std::set<AssetClassPtr> S_AssetClass;
     typedef Nocturnal::OrderedSet< Asset::AssetClassPtr > OS_AssetClass;
 
-    // 
-    // Events and args for when an asset is classified.
-    // 
-    struct AssetTypeChangeArgs
-    {
-        const AssetClass* m_Asset;
-        AssetType m_PreviousAssetType;
-
-        AssetTypeChangeArgs( const AssetClass* asset, AssetType previousType )
-            : m_Asset( asset )
-            , m_PreviousAssetType( previousType )
-        {
-        }
-    };
-    typedef Nocturnal::Signature< void, const AssetTypeChangeArgs& > AssetTypeChangeSignature;
-
-
-    /////////////////////////////////////////////////////////////////////////////////
-    //
-    // The Definition of an Asset Class
-    //
-
     class PIPELINE_API AssetClass NOC_ABSTRACT : public Component::ComponentCollection
     {
-        //
-        // Member Data
-        //
     private:
 
         Nocturnal::Path m_Path;
 
-        // description of this asset
         tstring m_Description;
+        std::set< tstring > m_Tags;
 
+    public:
         //
         // RTTI
         //
+        REFLECT_DECLARE_ABSTRACT( AssetClass, ComponentCollection );
 
-    public:
-        REFLECT_DECLARE_ABSTRACT(AssetClass, ComponentCollection);
+        static void EnumerateClass( Reflect::Compositor< AssetClass >& comp );
 
-        static void EnumerateClass( Reflect::Compositor<AssetClass>& comp );
-
-        //
-        // Member functions
-        //
 
     public:
         AssetClass();
 
+    public:
         static void SetBaseBuiltDirectory( const tstring& path )
         {
             s_BaseBuiltDirectory = path;
@@ -107,6 +78,8 @@ namespace Asset
             return Reflect::TryCast<T>( LoadAssetClass( path.Get().c_str() ) );
         }
 
+    public:
+
         void SetPath( const Nocturnal::Path& path )
         {
             m_Path = path;
@@ -116,8 +89,6 @@ namespace Asset
             return m_Path;
         }
 
-        const Nocturnal::Path& GetFilePath();
-        Nocturnal::Path GetDataDir();
         Nocturnal::Path GetBuiltDirectory();
 
         // x:\rcf\assets\entities\fruitBasketFromHell\appleSuccubus.entity.rb -> entities\fruitBasketFromHell\appleSuccubus.entity.rb
@@ -134,15 +105,24 @@ namespace Asset
         {
             m_Description = description;
         }
+
+        const std::set< tstring >& GetTags() const
+        {
+            return m_Tags;
+        }
+        void SetTags( const std::set< tstring >& tags )
+        {
+            m_Tags = tags;
+        }
+        void AddTag( const tstring& tag )
+        {
+            m_Tags.insert( tag );
+        }
+        void RemoveTag( const tstring& tag )
+        {
+            m_Tags.erase( tag );
+        }
     
-        // AssetTypeInfo funcitons
-        static tstring GetAssetTypeName( const AssetType assetType );
-        static tstring GetAssetTypeBuilder( const AssetType AssetType );
-        static tstring GetAssetTypeIcon( const AssetType AssetType );
-
-        // configure this instance as the default instance of the derived class
-        virtual void MakeDefault() {}
-
         // we were changed by somebody, reclassify
         virtual void ComponentChanged( const Component::ComponentBase* attr = NULL ) NOC_OVERRIDE;
 
@@ -164,33 +144,9 @@ namespace Asset
         // callback when this AssetClass has finished loading off disk
         virtual void LoadFinished();
 
-        // can this asset type be built
-        virtual bool IsBuildable() const;
-
-        // can this asset type be viewed
-        virtual bool IsViewable() const;
-
         // copy this asset and its attributes into the destination
         virtual void CopyTo(const Reflect::ElementPtr& destination) NOC_OVERRIDE;
 
-        // classify the asset based on its type and its attributes
-        AssetType GetAssetType() const;
-
         static tstring s_BaseBuiltDirectory;
-
-        // 
-        // Listeners
-        // 
-    private:
-        mutable AssetTypeChangeSignature::Event m_AssetTypeChanged;
-    public:
-        void AddAssetTypeChangedListener( const AssetTypeChangeSignature::Delegate& listener )
-        {
-            m_AssetTypeChanged.Add( listener );
-        }
-        void RemoveAssetTypeChangedListener( const AssetTypeChangeSignature::Delegate& listener )
-        {
-            m_AssetTypeChanged.Remove( listener );
-        }
     };
 }

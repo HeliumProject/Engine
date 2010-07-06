@@ -1,12 +1,10 @@
 #include "Platform/Windows/Windows.h"
 
 #include "AssetClass.h"
-#include "Pipeline/Asset/AssetTypeInfo.h"
-#include "Pipeline/Asset/AssetExceptions.h"
 
-#include "Pipeline/Component/Component.h"
+#include "Foundation/Component/Component.h"
 
-#include "Pipeline/Asset/Classes/EntityAsset.h"
+#include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 
@@ -25,8 +23,10 @@ REFLECT_DEFINE_ABSTRACT( AssetClass );
 
 void AssetClass::EnumerateClass( Reflect::Compositor<AssetClass>& comp )
 {
-    Reflect::Field* fieldDescription = comp.AddField( &AssetClass::m_Description, "m_Description" );
-    Reflect::Field* fieldPath = comp.AddField( &AssetClass::m_Path, "m_Path", Reflect::FieldFlags::Hide );
+    comp.AddField( &AssetClass::m_Description, "m_Description" );
+    comp.AddField( &AssetClass::m_Tags, "m_Tags" );
+
+    comp.AddField( &AssetClass::m_Path, "m_Path", Reflect::FieldFlags::Hide );
 }
 
 AssetClass::AssetClass()
@@ -53,17 +53,6 @@ AssetClassPtr AssetClass::LoadAssetClass( const tchar* path )
     return assetClass;
 }
 
-
-const Nocturnal::Path& AssetClass::GetFilePath()
-{
-    return m_Path;
-}
-
-Nocturnal::Path AssetClass::GetDataDir()
-{
-    return Nocturnal::Path( m_Path.Directory() );
-}
-
 Nocturnal::Path AssetClass::GetBuiltDirectory()
 {
 #pragma TODO( "make human-readable built directories" )
@@ -83,23 +72,6 @@ tstring AssetClass::GetShortName() const
 {
     return m_Path.Basename();
 }
-
-#pragma TODO( "implement AssetType info lookup functions" )
-tstring AssetClass::GetAssetTypeName( const AssetType assetType )
-{
-    return TXT( "" );
-}
-
-tstring AssetClass::GetAssetTypeBuilder( const AssetType AssetType )
-{
-    return TXT( "" );
-}
-
-tstring AssetClass::GetAssetTypeIcon( const AssetType AssetType )
-{
-    return TXT( "" );
-}
-
 
 void AssetClass::ComponentChanged( const Component::ComponentBase* attr )
 {
@@ -151,63 +123,9 @@ void AssetClass::LoadFinished()
 
 }
 
-bool AssetClass::IsBuildable() const
-{
-    return false;
-}
-
-bool AssetClass::IsViewable() const
-{
-    return false;
-}
-
 void AssetClass::CopyTo(const Reflect::ElementPtr& destination) 
 {
     // Restore the Asset Class ID after performing the copy
     AssetClass* destinationAsset = Reflect::ObjectCast< AssetClass >( destination );
     __super::CopyTo( destination );
-}
-
-AssetType AssetClass::GetAssetType() const
-{
-    if ( this->HasType( Reflect::GetType<SceneAsset>() ) )
-    {
-        return AssetTypes::Level;
-    }
-
-    if ( this->HasType( Reflect::GetType<ShaderAsset>() ) )
-    {
-        return AssetTypes::Shader;
-    }
-
-#pragma TODO( "classify based on attributes" )
-
-    return AssetTypes::Null;
-}
-
-static int ScoreAssetType( const AssetClass* assetClass, const AssetClass* engineClass )
-{
-    int score = 0;
-
-    Component::M_Component::const_iterator itor = assetClass->GetComponents().begin();
-    Component::M_Component::const_iterator end = assetClass->GetComponents().end();
-    for( ; itor != end; ++itor )
-    {
-        if( engineClass->ContainsComponent( itor->second->GetType() ) )
-            ++score;
-
-
-    }
-
-    // not sure if we want to do this since the global engine type "templates" contain the
-    // maximum number of attributes that something can have and still be classified as that type
-    itor = engineClass->GetComponents().begin();
-    end = engineClass->GetComponents().end();
-    for( ; itor != end; ++itor )
-    {
-        if( !assetClass->ContainsComponent( itor->second->GetType() ) )
-            --score;
-    }
-
-    return score;
 }

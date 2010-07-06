@@ -8,7 +8,7 @@
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Foundation/Math/Color3.h"
 
-#include "Pipeline/Component/ComponentHandle.h"
+#include "Foundation/Component/ComponentHandle.h"
 
 using namespace Luna;
 

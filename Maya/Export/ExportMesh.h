@@ -2,9 +2,9 @@
 
 #include "ExportBase.h"
 
-#include "Content/Mesh.h"
-#include "Content/Skin.h"
-#include "Content/Shader.h"
+#include "Pipeline/Content/Nodes/Mesh.h"
+#include "Pipeline/Content/Nodes/Skin.h"
+#include "Pipeline/Content/Nodes/Shader.h"
 
 #include "ExportScene.h"
 #include "ExportShader.h"
@@ -202,7 +202,7 @@ namespace MayaContent
 
   struct MAYA_API ExportMorphTarget
   {
-    std::string                  m_Name;
+    tstring                  m_Name;
     Nocturnal::TUID                 m_Id;
     V_ExportMorphTargetDelta     m_PosDeltas;
     Math::V_Vector3              m_NormalDeltaVectors;
@@ -210,14 +210,12 @@ namespace MayaContent
 
   typedef std::vector< ExportMorphTarget >  V_ExportMorphTarget;
 
-  typedef std::multimap< u32, u32 > MM_u32;
-
   class SceneIndicesTracker
   {
   public:
         // A one-to-many mapping from scene vertex index to unique index in Content::Mesh::m_TriangleVertexIndices    
-      MM_u32  m_VertsIndices;
-      V_u32   m_NormalIndices;
+      std::multimap< u32, u32 >  m_VertsIndices;
+      std::vector< u32 >   m_NormalIndices;
   };
 
   //

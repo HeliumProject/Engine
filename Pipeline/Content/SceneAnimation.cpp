@@ -1,13 +1,13 @@
 #include "Scene.h"
 
+#include "Pipeline/Content/Animation/JointAnimation.h"
 #include "Pipeline/Content/Animation/Animation.h"
-#include "Pipeline/Content/Animation/AnimationClip.h"
 
 namespace Content
 {
-  u32 Scene::GetNumAnimationClips() const
+  u32 Scene::GetNumAnimations() const
   {
-    return (u32)(m_AnimationClips.size());
+    return (u32)(m_Animations.size());
   }
 
   u32 Scene::GetNumValidJointAnimations( u32 clipIndex ) const
@@ -21,7 +21,7 @@ namespace Content
 
     for each ( Nocturnal::TUID jointId in jointList )
     {
-      if ( m_AnimationClips[ clipIndex ]->m_JointAnimationMap.find( jointId ) != m_AnimationClips[ clipIndex ]->m_JointAnimationMap.end() )
+      if ( m_Animations[ clipIndex ]->m_JointAnimationMap.find( jointId ) != m_Animations[ clipIndex ]->m_JointAnimationMap.end() )
         ++validJointAnimations;
     }
 
@@ -32,8 +32,8 @@ namespace Content
   {
     std::set< Nocturnal::TUID > animatedJoints;
 
-    M_Animation::iterator itr = m_AnimationClips[ clipIndex ]->m_JointAnimationMap.begin();
-    M_Animation::iterator end = m_AnimationClips[ clipIndex ]->m_JointAnimationMap.end();
+    M_JointAnimation::iterator itr = m_Animations[ clipIndex ]->m_JointAnimationMap.begin();
+    M_JointAnimation::iterator end = m_Animations[ clipIndex ]->m_JointAnimationMap.end();
     
     tstring jointIdAsString;
     for( ; itr != end; ++itr )

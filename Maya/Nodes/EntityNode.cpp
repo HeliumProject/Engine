@@ -6,15 +6,14 @@
 #include "Platform/Types.h"
 #include "Foundation/Version.h"
 
-#include "MayaUtils/NodeTypes.h"
-#include "MayaUtils/ErrorHelpers.h"
+#include "Maya/NodeTypes.h"
+#include "Maya/ErrorHelpers.h"
 
 #include "Foundation/TUID.h"
-#include "Attribute/AttributeHandle.h"
-#include "Asset/ArtFileAttribute.h"
-#include "MayaUtils/Duplicate.h"
-#include "MayaUtils/Utils.h"
-#include "Math/EulerAngles.h"
+#include "Foundation/Math/EulerAngles.h"
+#include "Foundation/Component/ComponentHandle.h"
+#include "Maya/Duplicate.h"
+#include "Maya/Utils.h"
 
 #include <maya/MPointArray.h>
 #include <maya/MModelMessage.h>
@@ -22,7 +21,7 @@
 #include <maya/MObjectHandle.h>
 
 using namespace Asset;
-using namespace Attribute;
+using namespace Component;
 using namespace Nocturnal;
 
 // enable this to watch all dag changes, just for debugging
@@ -152,11 +151,11 @@ void EntityNode::copyInternalData( MPxNode* node )
 
     EntityNode* source = (EntityNode*)(node);
     source->Hide();
-    m_Entity = Reflect::ObjectCast< Asset::Entity >( source->m_Entity->Clone() );
+    m_Entity = Reflect::ObjectCast< Asset::EntityInstance >( source->m_Entity->Clone() );
     TUID::Generate( m_Entity->m_ID );
     m_UID = m_Entity->m_ID;
 
-    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntityAsset()->GetPath() );
+    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntity()->GetPath() );
     if( instanceClassNode == EntityAssetNode::Null )
     {
         return;
@@ -278,15 +277,13 @@ void EntityNode::draw( M3dView & view, const MDagPath & path, M3dView::DisplaySt
     glPopMatrix();
 }
 
-void EntityNode::SetBackingEntity( const Asset::EntityPtr& entity )
+void EntityNode::SetBackingEntity( const Asset::EntityInstancePtr& entity )
 {
     m_Entity = entity;
     m_UID = m_Entity->m_ID;
 
-    AttributeViewer< ArtFileAttribute > artFile( m_Entity );
-
     m_Plug.setAttribute( s_ArtFilePath );
-    m_Plug.setValue( artFile->GetPath().c_str() );
+    m_Plug.setValue( MString (entity->GetEntity()->GetPath().c_str()) );
 
     Math::Matrix4 gm = m_Entity->m_GlobalTransform * s_RelativeTransform.Inverted();
     MMatrix mat;
@@ -378,7 +375,7 @@ void EntityNode::Show( const EntityAssetNode& instanceClassNode )
 
 void EntityNode::Show()
 {
-    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntityAsset()->GetPath() );
+    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntity()->GetPath() );
 
     Show( instanceClassNode );
 }
@@ -401,7 +398,7 @@ void EntityNode::Hide()
 
 void EntityNode::Flatten()
 {
-    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntityAsset()->GetPath() );
+    EntityAssetNode& instanceClassNode = EntityAssetNode::Get( m_Entity->GetEntity()->GetPath() );
 
     if( instanceClassNode == EntityAssetNode::Null )
         return;

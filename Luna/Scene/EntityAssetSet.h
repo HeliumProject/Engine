@@ -3,7 +3,7 @@
 #include "InstanceSet.h"
 
 #include "Foundation/TUID.h"
-#include "Pipeline/Asset/Classes/EntityAsset.h"
+#include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Manifests/EntityManifest.h"
 
 namespace Luna
@@ -37,7 +37,7 @@ namespace Luna
         bool m_ClassMissing;
 
         // loaded class data, not shared via cache
-        Asset::EntityAssetPtr m_Class;
+        Asset::EntityPtr m_Class;
 
         // manifest information exported from the content
         Asset::EntityManifestPtr m_Manifest;
@@ -75,7 +75,7 @@ namespace Luna
             return m_AssetPath;
         }
 
-        Asset::EntityAsset* GetEntityAsset() const
+        Asset::Entity* GetEntity() const
         {
             return m_Class;
         }

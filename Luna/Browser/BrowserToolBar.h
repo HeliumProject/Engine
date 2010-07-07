@@ -28,7 +28,7 @@ namespace Luna
                 wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT,
+                long style = wxTB_FLAT | wxTB_NODIVIDER,
                 const wxString& name = wxT( "Vault" ) );
     virtual ~BrowserToolBar();
 

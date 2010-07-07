@@ -3328,7 +3328,7 @@ Content::NodeVisibilityPtr Scene::GetVisibility(tuid nodeId)
 bool Scene::GetVisibilityFile(tstring& filename)
 {
     tchar buffer[1024]; 
-    _sntprintf(buffer, 1024, TXT( "Visibility/" ) TUID_HEX_FORMAT TXT( ".vis.rb" ), m_File->GetPath().Hash() ); 
+    _sntprintf(buffer, 1024, TXT( "Visibility/" ) TUID_HEX_FORMAT TXT( ".vis.nrb" ), m_File->GetPath().Hash() ); 
 
     Nocturnal::Path prefsDir;
     if ( !Application::GetPreferencesDirectory( prefsDir ) )

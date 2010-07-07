@@ -29,8 +29,6 @@ BrowserToolBar::BrowserToolBar
   m_SearchBox = new wxTextCtrl( this, BrowserToolBarIDs::SearchBoxID, wxEmptyString, wxDefaultPosition, wxSize( 140, -1 ), 0 );
   AddControl( m_SearchBox );
 
-  Realize();
-
   // Connect Events
   // wxEVT_KEY_DOWN or wxEVT_CHAR?
   m_SearchBox->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( BrowserToolBar::OnKeyDown ), NULL, this );

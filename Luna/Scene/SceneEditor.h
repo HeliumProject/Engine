@@ -82,11 +82,11 @@ namespace Luna
     // the outline of the current scene
     HierarchyOutliner* m_HierarchyOutline;
 
-    // the outline of all nodes by type
-    NodeTypeOutliner* m_TypeOutline;
-
     // the outline of all entity nodes by class
     EntityAssetOutliner* m_EntityOutline;
+
+    // the outline of all nodes by type
+    NodeTypeOutliner* m_TypeOutline;
 
     // the UI for changing visibility/selectability of layers
     LayerGrid* m_LayerGrid;
@@ -184,7 +184,6 @@ namespace Luna
     void OnNew(wxCommandEvent& event);
     bool DoOpen( const tstring& path );
     void OnOpen(wxCommandEvent& event);
-    void OnFind( wxCommandEvent& event );
     void OnSaveAll(wxCommandEvent& event);
     void OnImport(wxCommandEvent& event);
     void OnExport(wxCommandEvent& event);

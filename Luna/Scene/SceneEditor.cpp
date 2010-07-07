@@ -76,7 +76,6 @@ EVT_SHOW(SceneEditor::OnShow)
 EVT_MENU_OPEN( SceneEditor::OnMenuOpen )
 EVT_MENU(wxID_NEW, SceneEditor::OnNew)
 EVT_MENU(wxID_OPEN, SceneEditor::OnOpen)
-EVT_MENU(SceneEditorIDs::ID_FileFind, SceneEditor::OnFind)
 EVT_MENU(wxID_SAVE, SceneEditor::OnSaveAll)
 EVT_MENU(SceneEditorIDs::ID_FileImport, SceneEditor::OnImport)
 EVT_MENU(SceneEditorIDs::ID_FileImportFromClipboard, SceneEditor::OnImport)
@@ -242,8 +241,8 @@ SceneEditor::SceneEditor()
 : Editor( EditorTypes::Scene, NULL, wxID_ANY, wxT("Luna"), wxDefaultPosition, wxSize(1180, 750), wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER )
 , m_SceneManager( this )
 , m_HierarchyOutline( NULL )
-, m_TypeOutline( NULL )
 , m_EntityOutline( NULL )
+, m_TypeOutline( NULL )
 , m_FileMenu( NULL )
 , m_EditMenu( NULL )
 , m_ViewMenu( NULL )
@@ -267,6 +266,9 @@ SceneEditor::SceneEditor()
 {
     SetMinSize(wxSize(400,300));
 
+    //
+    // Icon
+    //
     wxIconBundle iconBundle;
     wxIcon tempIcon;
     tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 64, 64 ) ) );
@@ -277,205 +279,15 @@ SceneEditor::SceneEditor()
     iconBundle.AddIcon( tempIcon );
     SetIcons( iconBundle );
 
-
-    //
-    // Attach event handlers
-    //
-
-    m_SceneManager.AddCurrentSceneChangingListener( SceneChangeSignature::Delegate (this, &SceneEditor::CurrentSceneChanging) );
-    m_SceneManager.AddCurrentSceneChangedListener( SceneChangeSignature::Delegate (this, &SceneEditor::CurrentSceneChanged) );
-    m_SceneManager.AddSceneAddedListener( SceneChangeSignature::Delegate( this, &SceneEditor::SceneAdded ) );
-    m_SceneManager.AddSceneRemovingListener( SceneChangeSignature::Delegate( this, &SceneEditor::SceneRemoving ) );
-
-    m_MRU->AddItemSelectedListener( Nocturnal::MRUSignature::Delegate( this, &SceneEditor::OnMRUOpen ) );
-
-    std::vector< tstring > paths;
-    std::vector< tstring >::const_iterator itr = SceneEditorPreferences()->GetMRU()->GetPaths().begin();
-    std::vector< tstring >::const_iterator end = SceneEditorPreferences()->GetMRU()->GetPaths().end();
-    for ( ; itr != end; ++itr )
-    {
-        Nocturnal::Path path( *itr );
-        if ( path.Exists() )
-        {
-            paths.push_back( *itr );
-        }
-    }
-    m_MRU->FromVector( paths );
-
     // 
-    // Status bar
+    // StatusBar
     // 
 
     CreateStatusBar();
     GetStatusBar()->SetStatusText(_("Ready"));
 
-
     //
-    // Create toolbars
-    //
-    m_StandardToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
-    m_StandardToolBar->SetToolBitmapSize(wxSize(16,16));
-    m_StandardToolBar->AddTool(wxID_NEW, wxT("New"), wxArtProvider::GetBitmap( wxART_NEW ), wxT( "Create a new scene" ) );
-    m_StandardToolBar->AddTool(wxID_OPEN, wxT("Open"), wxArtProvider::GetBitmap( wxART_FILE_OPEN, wxART_OTHER, wxSize(16,16) ), wxT( "Open a scene file" ) );
-    m_StandardToolBar->AddTool(SceneEditorIDs::ID_FileFind, wxT( "Find..." ), wxArtProvider::GetBitmap( wxART_FIND ) );
-    m_StandardToolBar->AddTool(wxID_SAVE, wxT("Save All"), wxArtProvider::GetBitmap( wxART_FILE_SAVE ), wxT( "Save all currently checked out scenes") );
-    m_StandardToolBar->AddSeparator();
-    m_StandardToolBar->AddTool(wxID_CUT, wxT("Cut"), wxArtProvider::GetBitmap(wxART_CUT, wxART_OTHER, wxSize(16,16)), wxT( "Cut selection contents to the clipboard" ) );
-    m_StandardToolBar->AddTool(wxID_COPY, wxT("Copy"), wxArtProvider::GetBitmap(wxART_COPY, wxART_OTHER, wxSize(16,16)), wxT( "Copy selection contents to the clipboard" ) );
-    m_StandardToolBar->AddTool(wxID_PASTE, wxT("Paste"), wxArtProvider::GetBitmap(wxART_PASTE, wxART_OTHER, wxSize(16,16)), wxT( "Paste clipboard contents into the currrent scene" ) );
-    m_StandardToolBar->AddSeparator();
-    m_StandardToolBar->AddTool(wxID_UNDO, wxT("Undo"), wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, wxSize(16,16)), wxT( "Undo the last operation" ) );
-    m_StandardToolBar->AddTool(wxID_REDO, wxT("Redo"), wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, wxSize(16,16)), wxT( "Redo the last undone operation" ) );
-    m_StandardToolBar->Realize();
-
-    m_ViewToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
-    m_ViewToolBar->SetToolBitmapSize(wxSize(16, 16));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::PerspectiveCamera ), wxT("Use the orbit perspective camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::FrontOrthoCamera ), wxT("Use the front orthographic camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::SideOrthoCamera ), wxT("Use the side orthographic camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::TopOrthoCamera ), wxT("Use the top orthographic camera"));
-    m_ViewToolBar->Realize();
-
-    m_ToolsToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
-    m_ToolsToolBar->SetToolBitmapSize(wxSize(16, 16));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsSelect, wxT("Select"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Select ), wxNullBitmap, wxT("Select items from the workspace"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsTranslate, wxT("Translate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Translate ), wxNullBitmap, wxT("Translate items"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsRotate, wxT("Rotate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Rotate ), wxNullBitmap, wxT("Rotate selected items"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsScale, wxT("Scale"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Scale ), wxNullBitmap, wxT("Scale selected items"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsDuplicate, wxT("Duplicate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Duplicate ), wxNullBitmap, wxT("Duplicate the selected object numerous times"));
- 
-    m_ToolsToolBar->AddSeparator();
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Create Locator"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place locator objects (such as bug locators)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Create Volume"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place volume objects (items for setting up gameplay)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Create Entity"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place entity objects (such as art instances or characters)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Create Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Edit created curves (modify or create/delete control points)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMesh, wxT("Edit NavMesh"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Create NavMesh or add new verts and tris"));
-
-    m_ToolsToolBar->Realize();
-    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsSelect, true );
-    m_ToolsToolBar->Disable();
-
-    m_BrowserToolBar = new BrowserToolBar( this );
-    m_BrowserToolBar->Realize();
-
-    //
-    // Docked panes
-    //
-
-    // Directory
-    m_Directory = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
-    m_Directory->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
-    {
-#ifndef LUNA_SCENE_DISABLE_OUTLINERS
-        // Hierarchy
-        m_HierarchyOutline = new HierarchyOutliner( &m_SceneManager );
-        Nocturnal::SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_HierarchyOutlineControl );
-        hierarchyTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
-        m_Directory->AddPage( hierarchyTree, TXT( "Hierarchy" ), false, Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "world.png" ) ) );
-        m_TreeMonitor.AddTree( hierarchyTree );
-
-        // Types
-        m_TypeOutline = new NodeTypeOutliner( &m_SceneManager );
-        Nocturnal::SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_TypeOutlineControl );
-        typeTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
-        m_Directory->AddPage( typeTree, TXT( "Types" ) );
-        m_TreeMonitor.AddTree( typeTree );
-
-        // Entities
-        m_EntityOutline = new EntityAssetOutliner( &m_SceneManager );
-        Nocturnal::SortTreeCtrl* entityTree = m_EntityOutline->InitTreeCtrl( m_Directory, wxID_ANY );
-        entityTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
-        m_Directory->AddPage( entityTree, TXT( "Entities" ) );
-        m_TreeMonitor.AddTree( entityTree );
-#endif
-    }
-    m_FrameManager.AddPane( m_Directory, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ) );
-
-    // Properties panel
-    m_Properties = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250,250), wxNB_NOPAGETHEME);
-    m_Properties->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
-    {
-        // Properties panel - Selection page
-        m_SelectionEnumerator = new Enumerator (&m_SelectionProperties);
-        m_SelectionPropertiesManager = new PropertiesManager (m_SelectionEnumerator);
-        LSelectionPropertiesPanel* selectionProperties = new LSelectionPropertiesPanel (m_SelectionPropertiesManager, m_Properties, SceneEditorIDs::ID_SelectionProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN);
-        m_SelectionProperties.SetControl( selectionProperties->m_PropertyCanvas );
-        m_SelectionPropertyPage = m_Properties->GetPageCount();
-        m_Properties->AddPage(selectionProperties, wxT( "Selection" ), false, Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "select" ) ));
-
-        // Properties panel - Tool page
-        m_ToolEnumerator = new Enumerator (&m_ToolProperties);
-        m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
-        m_ToolProperties.SetControl( new Inspect::CanvasWindow (m_Properties, SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
-        m_ToolPropertyPage = m_Properties->GetPageCount();
-        m_Properties->AddPage(m_ToolProperties.GetControl(), wxT( "Tool" ), false, Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "transform" ) ));
-    }
-    m_FrameManager.AddPane( m_Properties, wxAuiPaneInfo().Name(wxT("properties")).Caption(wxT("Properties")).Right().Layer(1).Position(1) );
-
-    // Objects panel
-    m_TypeGrid = new TypeGrid( this, &m_SceneManager );
-    m_FrameManager.AddPane( m_TypeGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("types")).Caption(wxT("Types")).Left().Layer(1).Position(1) );
-
-    // Layer panel
-    m_LayerGrid = new LayerGrid( this, &m_SceneManager );
-    m_FrameManager.AddPane( m_LayerGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("layers")).Caption(wxT("Layers")).Right().Layer(1).Position(1) );
-
-    //
-    // Center pane
-    //
-
-    m_View = new Luna::View(this, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS);
-    m_FrameManager.AddPane(m_View, wxAuiPaneInfo().Name(wxT("view_content")).CenterPane());
-
-    m_SelectionPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
-    m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
-    m_View->AddRenderListener( RenderSignature::Delegate ( this, &SceneEditor::Render ) );
-    m_View->AddSelectListener( SelectSignature::Delegate ( this, &SceneEditor::Select ) ); 
-    m_View->AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &SceneEditor::SetHighlight ) );
-    m_View->AddClearHighlightListener( ClearHighlightSignature::Delegate ( this, &SceneEditor::ClearHighlight ) );
-    m_View->AddToolChangedListener( ToolChangeSignature::Delegate ( this, &SceneEditor::ViewToolChanged ) );
-
-    //
-    // Tools panel
-    //
-
-    {
-        wxAuiPaneInfo info;
-        info.Name( TXT("Tools") );
-        info.Caption( TXT("Tools") );
-        info.Float();
-
-        ToolsPanel* toolsPanel = new ToolsPanel( this );
-        m_FrameManager.AddPane( toolsPanel, info );
-    }
-
-    //
-    // Toolbars
-    //
-
-    m_FrameManager.AddPane(m_StandardToolBar, wxAuiPaneInfo().
-        Name(wxT("standard")).Caption(wxT("Standard")).
-        ToolbarPane().Top().
-        LeftDockable(false).RightDockable(false));
-
-    m_FrameManager.AddPane(m_ViewToolBar, wxAuiPaneInfo().
-        Name(wxT("view")).Caption(wxT("View")).
-        ToolbarPane().Top().Position(1).
-        LeftDockable(false).RightDockable(false));
-
-    m_FrameManager.AddPane(m_BrowserToolBar, wxAuiPaneInfo().
-        Name(wxT("browser")).Caption(wxT("Browser")).
-        ToolbarPane().Top().Position(2).
-        LeftDockable(false).RightDockable(false));
-
-    m_FrameManager.AddPane(m_ToolsToolBar, wxAuiPaneInfo().
-        Name(wxT("utilities")).Caption(wxT("Utilities")).
-        ToolbarPane().Top().Position(3).
-        LeftDockable(false).RightDockable(false));
-
-    //
-    // Create menus
+    // MenuBar
     //
 
     wxMenuBar* mb = new wxMenuBar;
@@ -487,7 +299,6 @@ SceneEditor::SceneEditor()
         m_FileMenu->Append(wxID_NEW, _("New...\tCtrl-n"));
         m_FileMenu->Append(wxID_OPEN, _("Open...\tCtrl-o"));
         m_MRUMenuItem = m_FileMenu->AppendSubMenu( m_MRUMenu, TXT( "Open Recent" ) );
-        m_FileMenu->Append(SceneEditorIDs::ID_FileFind, wxT( "Find...\tCtrl-f" ) );
         m_FileMenu->Append(wxID_CLOSE, _("Close"));
         m_FileMenu->AppendSeparator();
         m_FileMenu->Append(wxID_SAVE, _("Save All\tCtrl-s"));
@@ -712,15 +523,199 @@ SceneEditor::SceneEditor()
         mb->Append(help_menu, _("Help"));
     }
 
-    // Disable certain toolbar buttons (they'll enable when appropriate)
-    m_StandardToolBar->EnableTool( wxID_SAVE, false );
+    // Disable certain menus (they'll enable when appropriate)
     m_FileMenu->Enable( wxID_SAVE, false );
 
     SetMenuBar(mb);
 
+    //
+    // ToolBars
+    //
+
+    m_StandardToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
+    m_StandardToolBar->SetToolBitmapSize(wxSize(16,16));
+    m_StandardToolBar->AddTool(wxID_NEW, wxT("New"), wxArtProvider::GetBitmap( wxART_NEW ), wxT( "Create a new scene" ) );
+    m_StandardToolBar->AddTool(wxID_OPEN, wxT("Open"), wxArtProvider::GetBitmap( wxART_FILE_OPEN, wxART_OTHER, wxSize(16,16) ), wxT( "Open a scene file" ) );
+    m_StandardToolBar->AddTool(wxID_SAVE, wxT("Save All"), wxArtProvider::GetBitmap( wxART_FILE_SAVE ), wxT( "Save all currently checked out scenes") );
+    m_StandardToolBar->AddSeparator();
+    m_StandardToolBar->AddTool(wxID_CUT, wxT("Cut"), wxArtProvider::GetBitmap(wxART_CUT, wxART_OTHER, wxSize(16,16)), wxT( "Cut selection contents to the clipboard" ) );
+    m_StandardToolBar->AddTool(wxID_COPY, wxT("Copy"), wxArtProvider::GetBitmap(wxART_COPY, wxART_OTHER, wxSize(16,16)), wxT( "Copy selection contents to the clipboard" ) );
+    m_StandardToolBar->AddTool(wxID_PASTE, wxT("Paste"), wxArtProvider::GetBitmap(wxART_PASTE, wxART_OTHER, wxSize(16,16)), wxT( "Paste clipboard contents into the currrent scene" ) );
+    m_StandardToolBar->AddSeparator();
+    m_StandardToolBar->AddTool(wxID_UNDO, wxT("Undo"), wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, wxSize(16,16)), wxT( "Undo the last operation" ) );
+    m_StandardToolBar->AddTool(wxID_REDO, wxT("Redo"), wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, wxSize(16,16)), wxT( "Redo the last undone operation" ) );
+    m_StandardToolBar->Realize();
+
+    m_ViewToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
+    m_ViewToolBar->SetToolBitmapSize(wxSize(16, 16));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::PerspectiveCamera ), wxT("Use the orbit perspective camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::FrontOrthoCamera ), wxT("Use the front orthographic camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::SideOrthoCamera ), wxT("Use the side orthographic camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::TopOrthoCamera ), wxT("Use the top orthographic camera"));
+    m_ViewToolBar->Realize();
+
+    m_ToolsToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
+    m_ToolsToolBar->SetToolBitmapSize(wxSize(16, 16));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsSelect, wxT("Select"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Select ), wxNullBitmap, wxT("Select items from the workspace"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsTranslate, wxT("Translate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Translate ), wxNullBitmap, wxT("Translate items"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsRotate, wxT("Rotate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Rotate ), wxNullBitmap, wxT("Rotate selected items"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsScale, wxT("Scale"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Scale ), wxNullBitmap, wxT("Scale selected items"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsDuplicate, wxT("Duplicate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Duplicate ), wxNullBitmap, wxT("Duplicate the selected object numerous times"));
+    m_ToolsToolBar->AddSeparator();
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Create Locator"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place locator objects (such as bug locators)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Create Volume"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place volume objects (items for setting up gameplay)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Create Entity"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place entity objects (such as art instances or characters)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Create Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Edit created curves (modify or create/delete control points)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMesh, wxT("Edit NavMesh"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Create NavMesh or add new verts and tris"));
+    m_ToolsToolBar->Realize();
+    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsSelect, true );
+    m_ToolsToolBar->Disable();
+
+    m_BrowserToolBar = new BrowserToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
+    m_BrowserToolBar->Realize();
+
+    // Disable certain toolbar buttons (they'll enable when appropriate)
+    m_StandardToolBar->EnableTool( wxID_SAVE, false );
+
+    //
+    // Center pane
+    //
+
+    m_View = new Luna::View(this, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS);
+    m_View->AddRenderListener( RenderSignature::Delegate ( this, &SceneEditor::Render ) );
+    m_View->AddSelectListener( SelectSignature::Delegate ( this, &SceneEditor::Select ) ); 
+    m_View->AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &SceneEditor::SetHighlight ) );
+    m_View->AddClearHighlightListener( ClearHighlightSignature::Delegate ( this, &SceneEditor::ClearHighlight ) );
+    m_View->AddToolChangedListener( ToolChangeSignature::Delegate ( this, &SceneEditor::ViewToolChanged ) );
+    m_FrameManager.AddPane(m_View, wxAuiPaneInfo().Name(wxT("view_content")).CenterPane());
+
+    //
+    // Docked panes
+    //
+
+    // Directory
+    m_Directory = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
+    m_Directory->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+    {
+#ifndef LUNA_SCENE_DISABLE_OUTLINERS
+        // Hierarchy
+        m_HierarchyOutline = new HierarchyOutliner( &m_SceneManager );
+        Nocturnal::SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_HierarchyOutlineControl );
+        hierarchyTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+        m_Directory->AddPage( hierarchyTree, TXT( "Hierarchy" ), false, Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "world.png" ) ) );
+        m_TreeMonitor.AddTree( hierarchyTree );
+
+        // Entities
+        m_EntityOutline = new EntityAssetOutliner( &m_SceneManager );
+        Nocturnal::SortTreeCtrl* entityTree = m_EntityOutline->InitTreeCtrl( m_Directory, wxID_ANY );
+        entityTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+        m_Directory->AddPage( entityTree, TXT( "Entities" ) );
+        m_TreeMonitor.AddTree( entityTree );
+
+        // Types
+        m_TypeOutline = new NodeTypeOutliner( &m_SceneManager );
+        Nocturnal::SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_TypeOutlineControl );
+        typeTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+        m_Directory->AddPage( typeTree, TXT( "Types" ) );
+        m_TreeMonitor.AddTree( typeTree );
+#endif
+    }
+    m_FrameManager.AddPane( m_Directory, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ) );
+
+    // Objects panel
+    m_TypeGrid = new TypeGrid( this, &m_SceneManager );
+    m_FrameManager.AddPane( m_TypeGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("types")).Caption(wxT("Types")).Left().Layer(1).Position(1) );
+
+    // Layer panel
+    m_LayerGrid = new LayerGrid( this, &m_SceneManager );
+    m_FrameManager.AddPane( m_LayerGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("layers")).Caption(wxT("Layers")).Left().Layer(1).Position(1) );
+
+    // Properties panel
+    m_Properties = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250,250), wxNB_NOPAGETHEME);
+    m_Properties->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+    {
+        // Properties panel - Selection page
+        m_SelectionEnumerator = new Enumerator (&m_SelectionProperties);
+        m_SelectionPropertiesManager = new PropertiesManager (m_SelectionEnumerator);
+        m_SelectionPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
+        SelectionPropertiesPanel* selectionProperties = new SelectionPropertiesPanel (m_SelectionPropertiesManager, m_Properties, SceneEditorIDs::ID_SelectionProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN);
+        m_SelectionProperties.SetControl( selectionProperties->m_PropertyCanvas );
+        m_SelectionPropertyPage = m_Properties->GetPageCount();
+        m_Properties->AddPage(selectionProperties, wxT( "Selection" ), false, Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "select" ) ));
+
+        // Properties panel - Tool page
+        m_ToolEnumerator = new Enumerator (&m_ToolProperties);
+        m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
+        m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
+        m_ToolProperties.SetControl( new Inspect::CanvasWindow (m_Properties, SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
+        m_ToolPropertyPage = m_Properties->GetPageCount();
+        m_Properties->AddPage(m_ToolProperties.GetControl(), wxT( "Tool" ), false, Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "transform" ) ));
+    }
+    m_FrameManager.AddPane( m_Properties, wxAuiPaneInfo().Name(wxT("properties")).Caption(wxT("Properties")).Right().Layer(1).Position(1) );
+
+    ToolsPanel* toolsPanel = new ToolsPanel( this );
+    m_FrameManager.AddPane( toolsPanel, wxAuiPaneInfo().Name(wxT("tools")).Caption(wxT("Tools")).Right().Layer(1).Position(1) );
+
+    //
+    // Docked ToolBars
+    //
+
+    m_FrameManager.AddPane(m_StandardToolBar, wxAuiPaneInfo().
+        Name(wxT("standard")).Caption(wxT("Standard")).
+        ToolbarPane().Top().
+        LeftDockable(false).RightDockable(false));
+
+    m_FrameManager.AddPane(m_ViewToolBar, wxAuiPaneInfo().
+        Name(wxT("view")).Caption(wxT("View")).
+        ToolbarPane().Top().Position(1).
+        LeftDockable(false).RightDockable(false));
+
+    m_FrameManager.AddPane(m_BrowserToolBar, wxAuiPaneInfo().
+        Name(wxT("browser")).Caption(wxT("Browser")).
+        ToolbarPane().Top().Position(2).
+        LeftDockable(false).RightDockable(false));
+
+    m_FrameManager.AddPane(m_ToolsToolBar, wxAuiPaneInfo().
+        Name(wxT("utilities")).Caption(wxT("Utilities")).
+        ToolbarPane().Top().Position(3).
+        LeftDockable(false).RightDockable(false));
+
+    m_FrameManager.AddPane(m_BrowserToolBar, wxAuiPaneInfo().
+        Name(wxT("vault")).Caption(wxT("Vault")).
+        ToolbarPane().Top().Position(4).
+        LeftDockable(false).RightDockable(false));
+
+    //
     // Restore layout if any
+    //
+
     SceneEditorPreferences()->GetSceneEditorWindowSettings()->ApplyToWindow( this, &m_FrameManager, true );
     SceneEditorPreferences()->GetViewPreferences()->ApplyToView( m_View ); 
+
+    //
+    // Attach event handlers
+    //
+
+    m_SceneManager.AddCurrentSceneChangingListener( SceneChangeSignature::Delegate (this, &SceneEditor::CurrentSceneChanging) );
+    m_SceneManager.AddCurrentSceneChangedListener( SceneChangeSignature::Delegate (this, &SceneEditor::CurrentSceneChanged) );
+    m_SceneManager.AddSceneAddedListener( SceneChangeSignature::Delegate( this, &SceneEditor::SceneAdded ) );
+    m_SceneManager.AddSceneRemovingListener( SceneChangeSignature::Delegate( this, &SceneEditor::SceneRemoving ) );
+
+    m_MRU->AddItemSelectedListener( Nocturnal::MRUSignature::Delegate( this, &SceneEditor::OnMRUOpen ) );
+
+    std::vector< tstring > paths;
+    std::vector< tstring >::const_iterator itr = SceneEditorPreferences()->GetMRU()->GetPaths().begin();
+    std::vector< tstring >::const_iterator end = SceneEditorPreferences()->GetMRU()->GetPaths().end();
+    for ( ; itr != end; ++itr )
+    {
+        Nocturnal::Path path( *itr );
+        if ( path.Exists() )
+        {
+            paths.push_back( *itr );
+        }
+    }
+    m_MRU->FromVector( paths );
 
     Inspect::DropTarget* dropTarget = new Inspect::DropTarget();
     dropTarget->SetDragOverCallback( Inspect::DragOverCallback::Delegate( this, &SceneEditor::DragOver ) );
@@ -1140,25 +1135,6 @@ void SceneEditor::OnOpen(wxCommandEvent& event)
     {
         DoOpen( openDlg.GetPath().c_str() );
     }
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback when the user causes a UI event to find a file. 
-// 
-void SceneEditor::OnFind( wxCommandEvent& event )
-{
-    NOC_BREAK();
-#pragma TODO( "Reimplement to use the Vault" )
-    //File::FileBrowser browserDlg( this, -1, "Open" );
-
-    //browserDlg.SetFilter( s_Filter );
-    //browserDlg.SetFilterIndex( FinderSpecs::Asset::LEVEL_DECORATION );
-
-    //if ( browserDlg.ShowModal() == wxID_OK )
-    //{
-    //    DoOpen( browserDlg.GetPath() );
-    //}
 }
 
 ///////////////////////////////////////////////////////////////////////////////

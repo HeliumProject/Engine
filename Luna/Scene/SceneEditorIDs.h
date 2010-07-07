@@ -18,7 +18,6 @@ namespace Luna
       ID_ObjectGrid,
 
       // menu items
-      ID_FileFind,
       ID_FileCheckOut,
       ID_FileImport,
       ID_FileImportFromClipboard,

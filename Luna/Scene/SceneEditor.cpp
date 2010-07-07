@@ -288,6 +288,8 @@ SceneEditor::SceneEditor()
 {
     SetMinSize(wxSize(400,300));
 
+#pragma TODO("Logo")
+#if 0
     wxIconBundle iconBundle;
     wxIcon tempIcon;
     tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 64, 64 ) ) );
@@ -297,6 +299,8 @@ SceneEditor::SceneEditor()
     tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
     iconBundle.AddIcon( tempIcon );
     SetIcons( iconBundle );
+#endif
+
 
     //
     // Attach event handlers

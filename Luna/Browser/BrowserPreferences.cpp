@@ -70,7 +70,7 @@ tstring BrowserPreferences::GetPreferencesPath() const
     {
         throw Nocturnal::Exception( TXT( "Could not get preferences directory." ) );
     }
-    return prefsDir.Get() + TXT( "LunaBrowserPrefs.rb" );
+    return prefsDir.Get() + TXT( "LunaBrowserPrefs.nrb" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

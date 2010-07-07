@@ -136,7 +136,7 @@ tstring ScenePreferences::GetPreferencesPath() const
     Nocturnal::Path prefsDir;
     if ( Application::GetPreferencesDirectory( prefsDir ) )
     {
-        return prefsDir.Get() + TXT( "LunaSceneEditorPrefs.rb" );
+        return prefsDir.Get() + TXT( "LunaSceneEditorPrefs.nrb" );
     }
     return TXT( "" );
 }

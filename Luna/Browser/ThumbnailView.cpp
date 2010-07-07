@@ -124,7 +124,7 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, BrowserFrame *b
     m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.shader.*" ), D3DCOLOR_ARGB( 0xff, 57, 143, 202 ) ) );
 
     m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.fbx" ), D3DCOLOR_ARGB( 0xff, 215, 15, 10 ) ) );
-    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.rb" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
+    m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.nrb" ), D3DCOLOR_ARGB( 0xff, 0, 180, 253 ) ) );
     m_FileTypeColors.insert( M_FileTypeColors::value_type( TXT( "*.tga" ), D3DCOLOR_ARGB( 0xff, 0, 130, 132 ) ) ); 
 
     IDirect3DDevice9* device = m_D3DManager.GetD3DDevice();
@@ -134,7 +134,7 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, BrowserFrame *b
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.shader.*" ), TXT( "enginetype_shader" ) );
 
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.fbx" ), TXT( "maya" ) );
-    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.rb" ), TXT( "moon" ) );
+    InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.nrb" ), TXT( "moon" ) );
     InsertFileTypeIcon( device, m_FileTypeIcons, TXT( "*.tga" ), TXT( "fileType_tga" ) );
 
     // Connect Listeners

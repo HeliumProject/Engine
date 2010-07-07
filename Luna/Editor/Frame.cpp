@@ -22,11 +22,11 @@ END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////
 // *R2 <[<title> - ]>[ <code>(<build>), assets: <assets> ]<[: <extra>>]
-// *R2 Luna Asset Editor - [ tech(debug), assets: devel ]: x:/r2/assets/devel/entities/things/stuff/random.entity.rb
+// *R2 Luna Asset Editor - [ tech(debug), assets: devel ]: x:/r2/assets/devel/entities/things/stuff/random.entity.nrb
 static const tchar* s_ProgrammerTitleBarFormat = TXT( "%s(p) %s[ %s%s, assets: %s ]" ); //project, title, code, build, assets, extra
 
 // *R2 <[<title> - ]>[ assets: <assets>, tech/tools: <code> ]<[: <extra>>]
-// R2 Luna Asset Editor - [ assets: devel, tech/tools: devel ]: x:/r2/assets/devel/entities/things/stuff/random.entity.rb
+// R2 Luna Asset Editor - [ assets: devel, tech/tools: devel ]: x:/r2/assets/devel/entities/things/stuff/random.entity.nrb
 static const tchar* s_UserTitleBarFormat = TXT( "%s %s[ assets: %s, tech/tools: %s ]" ); //project, title, assets, code, extra
 
 

@@ -170,7 +170,7 @@ bool RebuildCommand::Process( std::vector< tstring >::const_iterator& argsBegin,
 
                     if (m_Binary)
                     {
-                        outputPath.ReplaceExtension( TXT( "rb" ) );
+                        outputPath.ReplaceExtension( TXT( "nrb" ) );
                     }
 
                     // do work

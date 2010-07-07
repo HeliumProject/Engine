@@ -36,7 +36,6 @@ namespace Luna
   class InstanceType;
   class TypeGrid;
   class NodeTypeOutliner;
-  class View;
 
   struct ToolChangeArgs;
 

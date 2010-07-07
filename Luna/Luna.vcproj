@@ -4449,14 +4449,6 @@
 			RelativePath=".\Precompile.h"
 			>
 		</File>
-		<File
-			RelativePath=".\TabPanel.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\TabPanel.h"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

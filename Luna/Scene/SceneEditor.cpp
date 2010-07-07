@@ -282,8 +282,6 @@ SceneEditor::SceneEditor()
 {
     SetMinSize(wxSize(400,300));
 
-#pragma TODO("Logo")
-#if 0
     wxIconBundle iconBundle;
     wxIcon tempIcon;
     tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 64, 64 ) ) );
@@ -293,7 +291,6 @@ SceneEditor::SceneEditor()
     tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
     iconBundle.AddIcon( tempIcon );
     SetIcons( iconBundle );
-#endif
 
 
     //
@@ -415,13 +412,10 @@ SceneEditor::SceneEditor()
         info.LeftDockable( false );
         info.RightDockable( false );
 
-#pragma TODO("Drawers")
-#if 0
         AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("directory") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
         AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("properties") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
         AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("types") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
         AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("layers") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
-#endif
 
         m_FrameManager.AddPane( m_DrawerPanel, info );
     }

@@ -151,7 +151,7 @@ namespace Reflect
     // must line up with enum above
     const static tchar* s_ArchiveExtensions[] =
     {
-        TXT( "rb" ),    // Binary
+        TXT( "nrb" ),    // Binary
         TXT( "xml" )    // XML
     };
 

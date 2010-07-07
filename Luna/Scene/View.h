@@ -6,6 +6,7 @@
 
 #include "Luna/API.h"
 #include "Render.h"
+#include "Resource.h"
 #include "Camera.h"
 #include "Editor/D3DWindowManager.h"
 #include "Application/Undo/Queue.h"
@@ -228,7 +229,6 @@ namespace Luna
   // View Manager
   //
 
-  class ResourceTracker;
   class Statistics;
   class Primitive;
   class PrimitiveAxes;

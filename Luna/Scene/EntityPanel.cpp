@@ -352,7 +352,6 @@ void EntityPanel::CreateShowFlags()
 
 void EntityPanel::Create()
 {
-    CreateApplicationType();
     CreateAssetType(); 
 
     CreateClassPath(); 

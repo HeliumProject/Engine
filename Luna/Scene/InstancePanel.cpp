@@ -27,78 +27,9 @@ InstancePanel::InstancePanel(Enumerator* enumerator, const OS_SelectableDumbPtr&
 
 void InstancePanel::Create()
 {
-  CreateApplicationType();
-
   CreateAppearanceFlags();
 
   Inspect::Panel::Create();
-}
-
-void InstancePanel::CreateApplicationType()
-{
-  m_Enumerator->PushContainer();
-  {
-    m_Enumerator->AddLabel( TXT( "Application Type" ) );
-    Inspect::Choice* choice = m_Enumerator->AddChoice< Luna::Instance, tstring >( m_Selection, &Luna::Instance::GetConfiguredTypeName, &Luna::Instance::SetConfiguredTypeName );
-
-    // this is the set of names that are compatible with all selected items
-    std::set< tstring > names;
-
-    {
-      OS_SelectableDumbPtr::Iterator itr = m_Selection.Begin();
-      OS_SelectableDumbPtr::Iterator end = m_Selection.End();
-      for ( ; itr != end; ++itr )
-      {
-        std::set< tstring > current = Reflect::AssertCast<Luna::Instance>(*itr)->GetValidConfiguredTypeNames();
-        if (itr == m_Selection.Begin())
-        {
-          names = current;
-        }
-        else
-        {
-          std::set< tstring >::iterator namesItr = names.begin();
-          std::set< tstring >::iterator namesEnd = names.end();
-          while ( namesItr != namesEnd )
-          {
-            if ( current.find( *namesItr ) == current.end() )
-            {
-              namesItr = names.erase( namesItr );
-            }
-            else
-            {
-              ++namesItr;
-            }
-          }
-
-          if (names.empty())
-          {
-            break;
-          }
-        }
-      }
-    }
-
-    {
-      Inspect::V_Item items;
-      items.resize( names.size() + 1 );
-
-      items[0].m_Key = TXT( "<AUTOMATIC>" );
-      items[0].m_Data = TXT( "" );
-
-      std::set< tstring >::const_iterator itr = names.begin();
-      std::set< tstring >::const_iterator end = names.end();
-      for ( size_t index=1; itr != end; ++itr, ++index )
-      {
-        Inspect::Item& item = items[index];
-        item.m_Key = *itr;
-        item.m_Data = *itr;
-      }
-
-      choice->SetItems(items);
-      choice->SetDropDown(true);
-    }
-  }
-  m_Enumerator->Pop();
 }
 
 void InstancePanel::CreateAppearanceFlags()

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "InstanceSet.h"
-#include "TypeConfig.h"
 #include "HierarchyNodeType.h"
 
 namespace Luna
@@ -37,9 +36,6 @@ namespace Luna
 
     // shared ui pointer is the basic visualization for all instances
     Luna::PrimitivePointer* m_Pointer;
-
-    // this item holds the runtime information for this type of object
-    TypeConfigPtr m_Configuration;
 
     // the sets for this type
     M_InstanceSetSmartPtr m_Sets;
@@ -78,14 +74,6 @@ namespace Luna
 
     bool IsTransparent() NOC_OVERRIDE;
     const D3DMATERIAL9& GetMaterial() const;
-
-
-    //
-    // Configuration
-    //
-
-    const TypeConfigPtr& GetConfiguration();
-    virtual void SetConfiguration(const TypeConfigPtr& t);
 
 
     //

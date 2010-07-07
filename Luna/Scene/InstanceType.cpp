@@ -29,7 +29,6 @@ void InstanceType::CleanupType()
 InstanceType::InstanceType( Luna::Scene* scene, i32 instanceType )
 : Luna::HierarchyNodeType( scene, instanceType )
 , m_Pointer( NULL )
-, m_Configuration( NULL )
 {
   ZeroMemory(&m_Material, sizeof(m_WireMaterial));
   m_Material.Ambient = Luna::Color::BLACK;
@@ -61,42 +60,12 @@ void InstanceType::Delete()
 
 bool InstanceType::IsTransparent()
 {
-  if (m_Configuration.ReferencesObject())
-  {
-    return m_Configuration->m_Transparent;
-  }
-
   return false;
 }
 
 const D3DMATERIAL9& InstanceType::GetMaterial() const
 {
   return m_Material;
-}
-
-const TypeConfigPtr& InstanceType::GetConfiguration()
-{
-  return m_Configuration;
-}
-
-void InstanceType::SetConfiguration(const TypeConfigPtr& t)
-{
-  m_Configuration = t;
-
-  m_Name = t->m_Name;
-  m_ImageIndex = t->m_IconIndex;
-
-  m_Material.Ambient = Luna::Color::ColorToColorValue(t->m_Color);
-
-  m_Pointer->SetSolid(t->m_Solid);
-  m_Pointer->SetTransparent(t->m_Transparent);
-
-  if (m_Pointer->IsSolid())
-  {
-    m_Pointer->SetUsingCameraShadingMode(true);
-  }
-
-  m_Pointer->Update();
 }
 
 void InstanceType::AddSet(Luna::InstanceSet* set)

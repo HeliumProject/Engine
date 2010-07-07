@@ -121,46 +121,6 @@ Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
 
     // Load configurations
     MiscSettings::LoadFromFile( m_MiscSettings );
-    TypeConfig::LoadFromFile( m_TypeConfigs );
-
-    V_TypeConfigSmartPtr::const_iterator itr = m_TypeConfigs.begin();
-    V_TypeConfigSmartPtr::const_iterator end = m_TypeConfigs.end();
-    for ( ; itr != end; ++itr )
-    {
-        TypeConfig* config = *itr;
-
-        tstring contentType = config->m_ApplicationType;
-
-        const Reflect::Class* contentClass = Reflect::Registry::GetInstance()->GetClass(contentType);
-
-        if (contentClass->m_Create)
-        {
-            Reflect::ObjectPtr contentElement = contentClass->m_Create();
-
-            Content::SceneNode* contentNode = Reflect::ObjectCast<Content::SceneNode>( contentElement );
-
-            if (contentNode)
-            {
-                SceneNodePtr sceneNode = CreateNode( contentNode );
-
-                if (sceneNode.ReferencesObject())
-                {
-                    Luna::Instance* instance = Reflect::ObjectCast<Luna::Instance>( sceneNode );
-
-                    if (instance)
-                    {
-                        SceneNodeTypePtr type = instance->CreateNodeType( this );
-
-                        Luna::InstanceType* instanceType = Reflect::AssertCast<Luna::InstanceType>(type);
-
-                        instanceType->SetConfiguration( config );
-
-                        AddNodeType( instanceType );
-                    }
-                }
-            }
-        }
-    }
 
     // we listen to our own events because there a couple ways to add nodes and get this event
     AddNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 
@@ -3328,7 +3288,7 @@ Content::NodeVisibilityPtr Scene::GetVisibility(tuid nodeId)
 bool Scene::GetVisibilityFile(tstring& filename)
 {
     tchar buffer[1024]; 
-    _sntprintf(buffer, 1024, TXT( "Visibility/" ) TUID_HEX_FORMAT TXT( ".vis.rb" ), m_File->GetPath().Hash() ); 
+    _sntprintf(buffer, 1024, TXT( "Visibility/" ) TUID_HEX_FORMAT TXT( ".vis.nrb" ), m_File->GetPath().Hash() ); 
 
     Nocturnal::Path prefsDir;
     if ( !Application::GetPreferencesDirectory( prefsDir ) )

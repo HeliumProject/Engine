@@ -33,6 +33,163 @@ using namespace Luna;
 
 LUNA_DEFINE_TYPE(Luna::NavMeshCreateTool);
 
+
+        //case SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes:
+        //    {
+        //        Luna::NavMeshCreateTool* navMeshCreate;
+        //        if ( m_SceneManager.GetCurrentScene()->GetTool() &&  m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
+        //        {
+        //            navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
+
+        //            //now change it to be selection
+        //            navMeshCreate->SetResolutionMode(m_ToolsToolBar->GetToolState(SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes));
+        //            m_Properties->SetSelection(m_ToolPropertyPage);
+        //        }    
+        //    }
+        //    break;
+
+        //case SceneEditorIDs::ID_ToolsNavMeshPunchOut:
+        //case SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate:
+        //case SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate:
+        //case SceneEditorIDs::ID_ToolsNavMeshPunchOutScale:
+        //    {
+        //        Luna::NavMeshCreateTool* navMeshCreate;
+        //        if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
+        //        {
+        //            navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
+        //        }
+        //        else
+        //        {
+        //            navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
+        //            m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
+        //        }
+        //        if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOut )
+        //        {
+        //            if ( m_ToolsToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOut ))
+        //            {
+        //                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+        //                navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
+        //                m_Properties->SetSelection(m_ToolPropertyPage);
+        //            }
+        //            else
+        //            {
+        //                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
+        //            }
+        //        }
+        //        else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate )
+        //        {
+        //            if ( m_ToolsToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate ))
+        //            {
+        //                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+        //                navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_MOVE);
+        //                m_Properties->SetSelection(m_ToolPropertyPage);
+        //            }
+        //            else
+        //            {
+        //                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+        //                navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
+        //            }
+        //        }
+        //        else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate )
+        //        {
+        //            if ( m_ToolsToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate ))
+        //            {
+        //                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+        //                navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_ROTATE);
+        //                m_Properties->SetSelection(m_ToolPropertyPage);
+        //            }
+        //            else
+        //            {
+        //                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+        //                navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
+        //            }
+        //        }
+        //        else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOutScale )
+        //        {
+        //            if ( m_ToolsToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOutScale ))
+        //            {
+        //                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+        //                navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_SCALE);
+        //                m_Properties->SetSelection(m_ToolPropertyPage);
+        //            }
+        //            else
+        //            {
+        //                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
+        //                navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
+        //            }
+        //        }
+        //        break;
+        //    }
+
+        //case SceneEditorIDs::ID_ToolsNavMeshRotate:
+        //case SceneEditorIDs::ID_ToolsNavMeshManipulate:
+        //    {
+        //        Luna::NavMeshCreateTool* navMeshCreate;
+        //        if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
+        //        {
+        //            navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
+        //        }
+        //        else
+        //        {
+        //            navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
+        //            m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
+        //        }
+        //        if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshRotate )
+        //        {
+        //            if ( m_ToolsToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshRotate ))
+        //            {
+        //                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ROTATE);
+        //                m_Properties->SetSelection(m_ToolPropertyPage);
+        //            }
+        //            else
+        //            {
+        //                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
+        //            }
+        //        }
+        //        else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshManipulate )
+        //        {
+        //            if ( m_ToolsToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshManipulate ))
+        //            {
+        //                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_MOVE);
+        //                m_Properties->SetSelection(m_ToolPropertyPage);
+        //            }
+        //            else
+        //            {
+        //                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
+        //            }
+        //        }
+        //        break;
+        //    }
+
+        //case SceneEditorIDs::ID_ToolsNavMeshVertexSelect:
+        //case SceneEditorIDs::ID_ToolsNavMeshEdgeSelect:
+        //case SceneEditorIDs::ID_ToolsNavMeshTriSelect:
+        //    {
+        //        Luna::NavMeshCreateTool* navMeshCreate;
+        //        if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
+        //        {
+        //            navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
+        //        }
+        //        else
+        //        {
+        //            navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
+        //            m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
+        //        }
+        //        if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshVertexSelect )
+        //        {
+        //            navMeshCreate->SetHoverSelectMode( NavMeshCreateTool::MOUSE_HOVER_SELECT_VERT );
+        //        }
+        //        else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshEdgeSelect )
+        //        {
+        //            navMeshCreate->SetHoverSelectMode( NavMeshCreateTool::MOUSE_HOVER_SELECT_EDGE );
+        //        }
+        //        else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshTriSelect )
+        //        {
+        //            navMeshCreate->SetHoverSelectMode( NavMeshCreateTool::MOUSE_HOVER_SELECT_TRI );
+        //        }
+        //        break;
+        //    }
+
 bool NavMeshCreateTool::s_SurfaceSnap = false;
 bool NavMeshCreateTool::s_ObjectSnap = false;
 f32 NavMeshCreateTool::s_Size = 0.3f;
@@ -98,8 +255,11 @@ NavMeshCreateTool::NavMeshCreateTool( Luna::Scene* scene, Enumerator* enumerator
   m_ZCone->Update();
 
   ResetManipulatorSize();
+#pragma TODO("Move into the tool settings")
+#if 0
   SceneEditor* editor = (SceneEditor*)(m_Scene->GetManager()->GetEditor());
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes, m_ResMode == RES_MODE_LOW_RES);
+#endif
 
   m_SelectionFrame = new Luna::PrimitiveFrame ( m_Scene->GetView()->GetResources() );
   m_SelectionFrame->Update();
@@ -183,6 +343,8 @@ NavMeshCreateTool::~NavMeshCreateTool()
 
   SetHoverSelectMode( MOUSE_HOVER_SELECT_DISABLED );
 
+#pragma TODO("Move into the tool settings")
+#if 0
   SceneEditor* editor = (SceneEditor*)(m_Scene->GetManager()->GetEditor());
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshManipulate, false );
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshRotate, false );
@@ -190,6 +352,7 @@ NavMeshCreateTool::~NavMeshCreateTool()
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate, false );
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate, false );
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOutScale, false );
+#endif
 
   m_Selection.Clear();
   m_Scene->Push( m_Scene->GetSelection().SetItems( m_Selection ) );
@@ -1808,11 +1971,14 @@ void NavMeshCreateTool::SetEditMode(u32 mode)
 
   if ( m_Instance.ReferencesObject() )
   {
+#pragma TODO("Move into the tool settings")
+#if 0
     SceneEditor* editor = (SceneEditor*)(m_Scene->GetManager()->GetEditor());
     editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshManipulate, m_EditMode == EDIT_MODE_MOVE);
     editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOut, m_EditMode == EDIT_MODE_CUBE_PUNCH_OUT);
-    editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshCreate, m_EditMode == EDIT_MODE_ADD);
+    editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMesh, m_EditMode == EDIT_MODE_ADD);
     editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshRotate, m_EditMode == EDIT_MODE_ROTATE);
+#endif
 
     m_Instance->m_DrawLocator = false;
 
@@ -2637,11 +2803,14 @@ void NavMeshCreateTool::SetPunchOutMode( u32 mode )
 { 
   m_PunchOutEditMode = mode; 
 
+#pragma TODO("Move into the tool settings")
+#if 0
   SceneEditor* editor = (SceneEditor*)(m_Scene->GetManager()->GetEditor());
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOut, m_PunchOutEditMode == EDIT_MODE_DISABLED);
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate, m_PunchOutEditMode == EDIT_MODE_MOVE);
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate, m_PunchOutEditMode == EDIT_MODE_ROTATE);
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshPunchOutScale, m_PunchOutEditMode == EDIT_MODE_SCALE);
+#endif
 
   if ( mode == EDIT_MODE_DISABLED )
   {
@@ -2672,10 +2841,13 @@ void NavMeshCreateTool::SetHoverSelectMode( u32 mode )
     m_Scene->Execute( true );
   }
 
+#pragma TODO("Move into the tool settings")
+#if 0
   SceneEditor* editor = (SceneEditor*)(m_Scene->GetManager()->GetEditor());
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshVertexSelect, mode == MOUSE_HOVER_SELECT_VERT);
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshEdgeSelect, mode == MOUSE_HOVER_SELECT_EDGE);
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshTriSelect, mode == MOUSE_HOVER_SELECT_TRI);
+#endif
 }
 
 void NavMeshCreateTool::CopySelected()

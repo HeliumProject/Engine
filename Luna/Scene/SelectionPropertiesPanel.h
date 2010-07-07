@@ -7,7 +7,7 @@ namespace Luna
 {
   class PropertiesManager;
 
-  class LSelectionPropertiesPanel : public wxPanel 
+  class SelectionPropertiesPanel : public wxPanel 
   {
   public:
     wxRadioButton* m_Intersection;
@@ -19,7 +19,7 @@ namespace Luna
     PropertiesManager* m_PropertyManager;
     Inspect::CanvasWindow* m_PropertyCanvas;
 
-    LSelectionPropertiesPanel( PropertiesManager* propertyManager, wxWindow* parent, int id = wxID_ANY, wxPoint pos = wxDefaultPosition, wxSize size = wxSize( 243,335 ), int style = wxTAB_TRAVERSAL );
+    SelectionPropertiesPanel( PropertiesManager* propertyManager, wxWindow* parent, int id = wxID_ANY, wxPoint pos = wxDefaultPosition, wxSize size = wxSize( 243,335 ), int style = wxTAB_TRAVERSAL );
 
     void OnIntersection(wxCommandEvent& event);
     void OnUnion(wxCommandEvent& event);

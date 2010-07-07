@@ -44,7 +44,7 @@ ScenePreferencesPtr g_SceneEditorPreferences = NULL;
 const static tstring s_PreferencesVersion( TXT( "1" ) );
 
 // Increment this value to invalidate just the window settings for the Scene Editor
-const static tstring s_WindowSettingsVersion( TXT( "10" ) );
+const static tstring s_WindowSettingsVersion( TXT( "11" ) );
 
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -29,8 +29,6 @@ namespace Luna
 {
     // Forwards
     class BrowserToolBar;
-    class Drawer;
-    class DrawerPanel;
     class EntityAssetOutliner;
     class EntityType;
     class HierarchyNode;
@@ -38,10 +36,8 @@ namespace Luna
     class InstanceType;
     class TypeGrid;
     class NodeTypeOutliner;
-    class View;
     class HelpPanel;
 
-    struct DrawerArgs;
     struct ToolChangeArgs;
 
     typedef std::map< Luna::Scene*, SceneDocumentPtr > M_SceneToEditorFile;
@@ -80,21 +76,16 @@ namespace Luna
         Inspect::Canvas m_ToolProperties;
         size_t m_ToolPropertyPage;
 
-        DrawerPanel* m_DrawerPanel;
-
         HelpPanel* m_Help;
 
         // the directory notebook
         wxNotebook* m_Directory;
 
-        // the outline of the current scene
-        HierarchyOutliner* m_HierarchyOutline;
+        // the outline of all entity nodes by class
+        EntityAssetOutliner* m_EntityOutline;
 
         // the outline of all nodes by type
         NodeTypeOutliner* m_TypeOutline;
-
-        // the outline of all entity nodes by class
-        EntityAssetOutliner* m_EntityOutline;
 
         // the UI for changing visibility/selectability of layers
         LayerGrid* m_LayerGrid;
@@ -136,7 +127,6 @@ namespace Luna
         wxToolBar* m_ViewToolBar;
         wxToolBar* m_ToolsToolBar;
         BrowserToolBar* m_BrowserToolBar;
-        wxToolBar* m_NavToolBar;
 
         //context items ordered by name  
         V_HierarchyNodeDumbPtr m_OrderedContextItems;
@@ -177,10 +167,6 @@ namespace Luna
             return m_TreeSortTimer;
         }
 
-        wxToolBar* GetNavToolBar() { return m_NavToolBar; }
-
-        void SetHelpText( const tchar* text );
-
         //
         // wxEventHandler Event Handlers
         //
@@ -197,7 +183,6 @@ namespace Luna
         void OnNew(wxCommandEvent& event);
         bool DoOpen( const tstring& path );
         void OnOpen(wxCommandEvent& event);
-        void OnFind( wxCommandEvent& event );
         void OnSaveAll(wxCommandEvent& event);
         void OnImport(wxCommandEvent& event);
         void OnExport(wxCommandEvent& event);
@@ -269,6 +254,8 @@ namespace Luna
             return m_View;
         }
 
+        void SetHelpText( const tchar* text );
+
         TypeGrid* GetObjectGrid()
         {
             return m_TypeGrid;
@@ -327,10 +314,7 @@ namespace Luna
         void OpenTypeContextMenu( const SelectArgs& args );
         void OpenManifestContextMenu( const SelectArgs& args );
 
-        void OnDrawerPaneModified( const DrawerArgs& args );
-
     private:
-        void AddDrawer( Drawer* drawer );
         void SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  u32& numMenuItems );
         bool SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* entityMenu, u32& numMenuItems );
 

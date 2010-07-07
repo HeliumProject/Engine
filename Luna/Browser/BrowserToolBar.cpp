@@ -23,12 +23,11 @@ BrowserToolBar::BrowserToolBar
  )
  : wxToolBar( parent, id, pos, size, style, name )
 {
-  m_SearchBox = new wxTextCtrl( this, BrowserToolBarIDs::SearchBoxID, wxEmptyString, wxDefaultPosition, wxSize( 140, -1 ), 0 );
-
   SetToolBitmapSize( wxSize( 16, 16 ) );
-//  AddTool( BrowserToolBarIDs::ButtonID, wxT( "Vault" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
+  AddTool( BrowserToolBarIDs::ButtonID, wxT( "Vault" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
+
+  m_SearchBox = new wxTextCtrl( this, BrowserToolBarIDs::SearchBoxID, wxEmptyString, wxDefaultPosition, wxSize( 140, -1 ), 0 );
   AddControl( m_SearchBox );
-  Realize();
 
   // Connect Events
   // wxEVT_KEY_DOWN or wxEVT_CHAR?
@@ -111,7 +110,7 @@ void BrowserToolBar::OnTextEnter( wxCommandEvent& event )
 wxAuiPaneInfo BrowserToolBar::GetAuiPaneInfo( int position )
 {
   wxAuiPaneInfo info; 
-  info.Name( wxT( "browsertoolbar" ) ); 
+  info.Name( wxT( "vaulttoolbar" ) ); 
   info.DestroyOnClose( false ); 
   info.Caption( wxT( "Vault Toolbar" ) ); 
   info.ToolbarPane(); 

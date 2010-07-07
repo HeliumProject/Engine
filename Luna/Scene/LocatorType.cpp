@@ -52,40 +52,6 @@ void LocatorType::Delete()
   m_Cube->Delete();
 }
 
-void LocatorType::SetConfiguration(const TypeConfigPtr& t)
-{
-  __super::SetConfiguration(t);
-
-  for ( int i=0; i<2; i++ )
-  {
-    Luna::Primitive* shape = NULL;
-
-    switch (i)
-    {
-    case 0:
-      shape = m_Locator;
-      break;
-
-    case 1:
-      shape = m_Cube;
-      break;
-    }
-
-    if (shape)
-    {
-      shape->SetSolid(t->m_Solid);
-      shape->SetTransparent(t->m_Transparent);
-
-      if (t->m_Solid)
-      {
-        shape->SetUsingCameraShadingMode(true);
-      }
-
-      shape->Update();
-    }
-  }
-}
-
 const Luna::Primitive* LocatorType::GetShape( Content::LocatorShape shape ) const
 {
   switch (shape)

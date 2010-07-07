@@ -100,6 +100,17 @@ void ArtProvider::Create()
     //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_WARNING, TXT( "" ) ) );
 
     //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( NOCTURNAL_UNKNOWN_ART_ID, TXT( "" ) ) );
+
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::PerspectiveCamera, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::FrontOrthoCamera, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::SideOrthoCamera, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::TopOrthoCamera, TXT( "" ) ) );
+
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Select, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Translate, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Rotate, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Scale, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Duplicate, TXT( "" ) ) );
 }
 
 wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& artClient, const wxSize& size )

@@ -1119,6 +1119,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Scene\Layer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\Layer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\LayerGrid.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\LayerGrid.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Scene\MiscSettings.cpp"
 				>
 			</File>
@@ -1280,14 +1296,6 @@
 			</File>
 			<File
 				RelativePath=".\Scene\Transform.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\TypeConfig.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\TypeConfig.h"
 				>
 			</File>
 			<File
@@ -1649,26 +1657,6 @@
 						>
 					</File>
 				</Filter>
-			</Filter>
-			<Filter
-				Name="Layers"
-				>
-				<File
-					RelativePath=".\Scene\Layer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\Layer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\LayerGrid.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\LayerGrid.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Cameras"

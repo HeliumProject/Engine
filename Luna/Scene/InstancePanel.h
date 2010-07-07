@@ -26,7 +26,6 @@ namespace Luna
     virtual void Create() NOC_OVERRIDE;
 
   protected:
-    void CreateApplicationType();
     void CreateAppearanceFlags();
 
     void OnSolidOverride( const Inspect::ChangeArgs& args );

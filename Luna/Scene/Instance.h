@@ -58,16 +58,6 @@ namespace Luna
 
     virtual i32 GetImageIndex() const NOC_OVERRIDE;
     virtual SceneNodeTypePtr CreateNodeType( Luna::Scene* scene ) const NOC_OVERRIDE;
-    virtual Luna::SceneNodeType* DeduceNodeType() NOC_OVERRIDE;
-
-    // support for checking class membership when checking type
-    virtual void CheckNodeType() NOC_OVERRIDE;
-
-    // find all the valid configured type names
-    std::set< tstring > GetValidConfiguredTypeNames();
-
-    tstring GetConfiguredTypeName() const;
-    void SetConfiguredTypeName( const tstring& type );
 
     virtual bool ValidatePanel(const tstring& name) NOC_OVERRIDE;
     static void CreatePanel( CreatePanelArgs& args );
@@ -81,22 +71,6 @@ namespace Luna
     void SetTransparent( bool b );
     bool GetTransparentOverride() const;
     void SetTransparentOverride( bool b );
-
-    //
-    // Events
-    //
-  protected:
-    InstancePropertiesChangeSignature::Event m_Changed;
-  public:
-    void AddConfiguredTypeChangedListener( const InstancePropertiesChangeSignature::Delegate& listener )
-    {
-      m_Changed.Add( listener );
-    }
-
-    void RemoveConfiguredTypeChangedListener( const InstancePropertiesChangeSignature::Delegate& listener )
-    {
-      m_Changed.Remove( listener );
-    }
   };
 
   typedef std::vector< Luna::Instance* > V_InstanceDumbPtr;

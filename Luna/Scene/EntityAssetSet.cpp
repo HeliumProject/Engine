@@ -117,20 +117,6 @@ void EntityAssetSet::LoadAssetClass()
                 }
             }
         }
-
-
-        if (m_Shape && m_Type->GetConfiguration().ReferencesObject())
-        {
-            m_Shape->SetSolid(m_Type->GetConfiguration()->m_Solid);
-            m_Shape->SetTransparent(m_Type->GetConfiguration()->m_Transparent);
-
-            if (m_Type->GetConfiguration()->m_Solid)
-            {
-                m_Shape->SetUsingCameraShadingMode(true);
-            }
-
-            m_Shape->Update();
-        }
     }
 
     m_ClassLoaded.Raise( EntityAssetSetChangeArgs( this ) );

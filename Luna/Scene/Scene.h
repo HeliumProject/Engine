@@ -26,7 +26,6 @@
 #include "SceneNode.h"
 
 #include "Transform.h"
-#include "TypeConfig.h"
 
 #include "Pipeline/Content/NodeVisibility.h"
 #include "Pipeline/Content/SceneVisibility.h"
@@ -294,9 +293,6 @@ namespace Luna
     // miscellaneous settings loaded from a config file
     MiscSettingsPtr m_MiscSettings;
 
-    // type configurations loaded from the config file
-    V_TypeConfigSmartPtr m_TypeConfigs;
-
     // selection of this scene
     Selection m_Selection;
 
@@ -477,12 +473,6 @@ namespace Luna
     const MiscSettings* GetMiscSettings() const
     {
       return m_MiscSettings;
-    }
-
-    // the configurations of the types in the scene
-    const V_TypeConfigSmartPtr& GetTypeConfigs() const
-    {
-      return m_TypeConfigs;
     }
 
     Luna::SceneNode* Find( const tstring& name ) const; 

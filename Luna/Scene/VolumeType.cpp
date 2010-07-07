@@ -66,48 +66,6 @@ void VolumeType::Delete()
   m_Capsule->Delete();
 }
 
-void VolumeType::SetConfiguration(const TypeConfigPtr& t)
-{
-  __super::SetConfiguration(t);
-
-  for ( int i=0; i<4; i++ )
-  {
-    Luna::Primitive* shape = NULL;
-
-    switch (i)
-    {
-    case 0:
-      shape = m_Cube;
-      break;
-
-    case 1:
-      shape = m_Cylinder;
-      break;
-
-    case 2:
-      shape = m_Sphere;
-      break;
-
-    case 3:
-      shape = m_Capsule;
-      break;
-    }
-
-    if (shape)
-    {
-      shape->SetSolid(t->m_Solid);
-      shape->SetTransparent(t->m_Transparent);
-
-      if (t->m_Solid)
-      {
-        shape->SetUsingCameraShadingMode(true);
-      }
-
-      shape->Update();
-    }
-  }
-}
-
 const Luna::Primitive* VolumeType::GetShape( Content::VolumeShape shape ) const
 {
   switch (shape)

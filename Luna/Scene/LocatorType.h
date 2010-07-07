@@ -45,8 +45,6 @@ namespace Luna
     virtual void Create() NOC_OVERRIDE;
     virtual void Delete() NOC_OVERRIDE;
 
-    virtual void SetConfiguration(const TypeConfigPtr& t) NOC_OVERRIDE;
-
     const Luna::Primitive* GetShape( Content::LocatorShape shape ) const;
   };
 }

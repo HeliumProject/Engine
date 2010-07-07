@@ -22,9 +22,6 @@ namespace Content
     Instance (const Nocturnal::TUID& id);
 
   public:
-    // The overidden type of the node
-    tstring m_ConfiguredType;
-
     // Visibility preferences for this instance
     bool  m_Solid;
     bool  m_SolidOverride;

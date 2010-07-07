@@ -37,7 +37,6 @@
 #include "CurveCreateTool.h"
 #include "CurveEditTool.h"
 
-#include "TypeConfig.h"
 #include "Instance.h"
 #include "InstanceType.h"
 
@@ -130,8 +129,6 @@ void Luna::SceneInitialize()
     g_InitializerStack.Push( Curve::InitializeType, Curve::CleanupType );
     g_InitializerStack.Push( CurveCreateTool::InitializeType, CurveCreateTool::CleanupType );
     g_InitializerStack.Push( CurveEditTool::InitializeType, CurveEditTool::CleanupType );
-
-    g_InitializerStack.Push( TypeConfig::InitializeType, TypeConfig::CleanupType );
 
     g_InitializerStack.Push( Instance::InitializeType, Instance::CleanupType );
     g_InitializerStack.Push( InstanceSet::InitializeType, InstanceSet::CleanupType );

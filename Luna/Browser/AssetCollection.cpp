@@ -127,7 +127,7 @@ void AssetCollection::CreateFilePath( const tstring name, tstring& filePath, con
     }
 
     filePath += name;
-    filePath += TXT( ".collection.rb" );
+    filePath += TXT( ".collection.nrb" );
 }
 
 /////////////////////////////////////////////////////////////////////////////

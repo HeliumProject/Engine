@@ -94,7 +94,7 @@ namespace Asset
 
         Nocturnal::Path GetBuiltDirectory();
 
-        // stuff/fruitBasketFromHell/appleSuccubus.entity.rb
+        // stuff/fruitBasketFromHell/appleSuccubus.entity.nrb
         tstring GetFullName() const;
 
         // appleSuccubus

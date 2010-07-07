@@ -201,7 +201,7 @@ END_EVENT_TABLE()
 
 
 // Specifies the files that can be opened by the Scene Editor
-tstring SceneEditor::s_FileFilter = TXT( "Reflect Files (*.rb, *.rx)|*.rb;*.rx" );
+tstring SceneEditor::s_FileFilter = TXT( "Reflect Files (*.nrb, *.nrx, *.xml)|*.nrb;*.nrx;*.xml" );
 
 // Mapping between CameraMode and SceneEditorID
 SceneEditor::RM_CamModeToSceneID SceneEditor::s_CameraModeToSceneID;

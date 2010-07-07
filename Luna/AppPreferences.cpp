@@ -80,7 +80,7 @@ tstring AppPreferences::GetPreferencesPath() const
         throw Nocturnal::Exception( TXT( "Could not get preferences directory." ) );
     }
 
-    prefsPath.Set( prefsPath.Get() + TXT( "/Luna/AppPreferences.rb" ) );
+    prefsPath.Set( prefsPath.Get() + TXT( "/Luna/AppPreferences.nrb" ) );
     return prefsPath.Get();
 }
 

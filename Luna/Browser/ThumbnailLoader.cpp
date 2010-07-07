@@ -114,7 +114,7 @@ void* ThumbnailLoader::LoadThread::Entry()
             }
 
             // Include the color map of a shader as a possible thumbnail image
-            if ( file->GetPath().FullExtension() == TXT( "shader.rb" ) )
+            if ( file->GetPath().FullExtension() == TXT( "shader.nrb" ) )
             {
                 Asset::ShaderAssetPtr shader = Reflect::ObjectCast< Asset::ShaderAsset >( Asset::AssetFile::GetAssetClass( file ) );
                 if ( shader )

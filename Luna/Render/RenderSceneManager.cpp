@@ -373,7 +373,7 @@ u32 Render::Scene::ExtractMesh(const tchar* name, ObjectLoaderPtr loader, int ba
         tchar shader_name[ MAX_PATH ];
         Nocturnal::Path shaderPath( loader->m_fragments[ f ].m_shader );
 
-        if ( shaderPath.Extension() == TXT( "rb" ) )
+        if ( shaderPath.Extension() == TXT( "nrb" ) )
         {
             _stprintf( shader_name, TXT( "%s" ), shaderPath.c_str() );
         }

@@ -109,16 +109,13 @@ namespace Luna
       ID_ToolsTranslate,
       ID_ToolsTranslatePivot,
       ID_ToolsPivot,
-
-      ID_ToolsEntityCreate,
-      ID_ToolsVolumeCreate,
-      ID_ToolsClueCreate,
-      ID_ToolsControllerCreate,
-      ID_ToolsLocatorCreate,
       ID_ToolsDuplicate,
+
+      ID_ToolsLocatorCreate,
+      ID_ToolsVolumeCreate,
+      ID_ToolsEntityCreate,
       ID_ToolsCurveCreate,
       ID_ToolsCurveEdit,
-      ID_ToolsLightCreate,
       
       ID_ToolsNavMeshCreate,
       ID_ToolsNavMeshManipulate,

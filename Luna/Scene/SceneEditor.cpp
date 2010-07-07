@@ -172,16 +172,13 @@ EVT_MENU(SceneEditorIDs::ID_ToolsRotatePivot, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsTranslate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsTranslatePivot, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsPivot, SceneEditor::OnToolSelected)
+EVT_MENU(SceneEditorIDs::ID_ToolsDuplicate, SceneEditor::OnToolSelected)
 
-EVT_MENU(SceneEditorIDs::ID_ToolsEntityCreate, SceneEditor::OnToolSelected)
+EVT_MENU(SceneEditorIDs::ID_ToolsLocatorCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsVolumeCreate, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsClueCreate, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsControllerCreate, SceneEditor::OnToolSelected)
+EVT_MENU(SceneEditorIDs::ID_ToolsEntityCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsCurveCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsCurveEdit, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsDuplicate, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsLocatorCreate, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsLightCreate, SceneEditor::OnToolSelected)
 
 EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshManipulate, SceneEditor::OnToolSelected)
@@ -195,10 +192,7 @@ EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshVertexSelect, SceneEditor::OnToolSelecte
 EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshEdgeSelect, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshTriSelect, SceneEditor::OnToolSelected)
 
-
-
 END_EVENT_TABLE()
-
 
 // Specifies the files that can be opened by the Scene Editor
 tstring SceneEditor::s_FileFilter = TXT( "Reflect Files (*.nrb, *.nrx, *.xml)|*.nrb;*.nrx;*.xml" );
@@ -369,14 +363,11 @@ SceneEditor::SceneEditor()
     m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsDuplicate, wxT("Duplicate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Duplicate, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Duplicate the selected object numerous times"));
  
     m_ToolsToolBar->AddSeparator();
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Entity"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place entity objects (such as art instances or characters)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Volume"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place volume objects (items for setting up gameplay)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsClueCreate, wxT("Clue"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place clue objects (items for setting up gameplay)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsControllerCreate, wxT("Controller"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place controller objects (items for setting up gameplay)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Locator"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place locator objects (such as bug locators)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Create Locator"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place locator objects (such as bug locators)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Create Volume"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place volume objects (items for setting up gameplay)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Create Entity"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place entity objects (such as art instances or characters)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Create Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)"));
     m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Edit created curves (modify or create/delete control points)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLightCreate, wxT("Light"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place lights in the scene"));
     m_ToolsToolBar->Realize();
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsSelect, true );
     m_ToolsToolBar->Disable();
@@ -755,29 +746,19 @@ SceneEditor::SceneEditor()
         wxMenu* tools_menu = new wxMenu;
 
         tools_menu->Append(SceneEditorIDs::ID_ToolsSelect, _("Select (Q)\tESCAPE"));
-
-        tools_menu->AppendSeparator();
         tools_menu->Append(SceneEditorIDs::ID_ToolsTranslate, _("Translate (W)"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsRotate, _("Rotate (E)"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsScale, _("Scale (R)"));
-
-        tools_menu->AppendSeparator();
         tools_menu->Append(SceneEditorIDs::ID_ToolsPivot, _("Move Pivot\tINSERT"));
-
-        tools_menu->AppendSeparator();
-        tools_menu->Append(SceneEditorIDs::ID_ToolsEntityCreate, _("Entity Placement\tCtrl-e"));
-        tools_menu->Append(SceneEditorIDs::ID_ToolsVolumeCreate, _("Volume Placement"));
-        tools_menu->Append(SceneEditorIDs::ID_ToolsClueCreate, _("Clue Placement"));
-        tools_menu->Append(SceneEditorIDs::ID_ToolsControllerCreate, _("Controller Placement"));
-        tools_menu->Append(SceneEditorIDs::ID_ToolsLocatorCreate, _("Locator Placement"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsDuplicate, _("Duplicate Tool\tAlt-d"));
 
         tools_menu->AppendSeparator();
+
+        tools_menu->Append(SceneEditorIDs::ID_ToolsLocatorCreate, _("Create Locator"));
+        tools_menu->Append(SceneEditorIDs::ID_ToolsVolumeCreate, _("Create Volume"));
+        tools_menu->Append(SceneEditorIDs::ID_ToolsEntityCreate, _("Create Entity"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsCurveCreate, _("Create Curve"));
         tools_menu->Append(SceneEditorIDs::ID_ToolsCurveEdit, _("Edit Curve"));
-
-        tools_menu->AppendSeparator();
-        tools_menu->Append(SceneEditorIDs::ID_ToolsLightCreate, _("Light Placement"));
 
         mb->Append(tools_menu, _("Tools"));
     }
@@ -2044,16 +2025,9 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
                 break;
             }
 
-        case SceneEditorIDs::ID_ToolsEntityCreate:
+        case SceneEditorIDs::ID_ToolsDuplicate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Luna::EntityCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
-                m_Properties->SetSelection(m_ToolPropertyPage);
-            }
-            break;
-
-        case SceneEditorIDs::ID_ToolsVolumeCreate:
-            {
-                m_SceneManager.GetCurrentScene()->SetTool(new Luna::VolumeCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Luna::DuplicateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 m_Properties->SetSelection(m_ToolPropertyPage);
             }
             break;
@@ -2065,9 +2039,16 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
             }
             break;
 
-        case SceneEditorIDs::ID_ToolsDuplicate:
+        case SceneEditorIDs::ID_ToolsVolumeCreate:
             {
-                m_SceneManager.GetCurrentScene()->SetTool(new Luna::DuplicateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_SceneManager.GetCurrentScene()->SetTool(new Luna::VolumeCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
+                m_Properties->SetSelection(m_ToolPropertyPage);
+            }
+            break;
+
+        case SceneEditorIDs::ID_ToolsEntityCreate:
+            {
+                m_SceneManager.GetCurrentScene()->SetTool(new Luna::EntityCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 m_Properties->SetSelection(m_ToolPropertyPage);
             }
             break;
@@ -3144,14 +3125,12 @@ void SceneEditor::ViewToolChanged( const ToolChangeArgs& args )
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsTranslate, selectedTool == SceneEditorIDs::ID_ToolsTranslate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsTranslatePivot, selectedTool == SceneEditorIDs::ID_ToolsTranslatePivot );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsEntityCreate, selectedTool == SceneEditorIDs::ID_ToolsEntityCreate );
-    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsVolumeCreate, selectedTool == SceneEditorIDs::ID_ToolsVolumeCreate );
-    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsClueCreate, selectedTool == SceneEditorIDs::ID_ToolsClueCreate );
-    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsControllerCreate, selectedTool == SceneEditorIDs::ID_ToolsControllerCreate );
+
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsLocatorCreate, selectedTool == SceneEditorIDs::ID_ToolsLocatorCreate );
+    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsVolumeCreate, selectedTool == SceneEditorIDs::ID_ToolsVolumeCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsDuplicate, selectedTool == SceneEditorIDs::ID_ToolsDuplicate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsCurveCreate, selectedTool == SceneEditorIDs::ID_ToolsCurveCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsCurveEdit, selectedTool == SceneEditorIDs::ID_ToolsCurveEdit );
-    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsLightCreate, selectedTool == SceneEditorIDs::ID_ToolsLightCreate );
 
     m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshCreate, selectedTool == SceneEditorIDs::ID_ToolsNavMeshCreate ); 
 }

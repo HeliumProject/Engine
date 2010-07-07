@@ -116,10 +116,10 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
     wxIconBundle iconBundle;
 
     wxIcon tempIcon;
-    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
     iconBundle.AddIcon( tempIcon );
 
-    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
+    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
     iconBundle.AddIcon( tempIcon );
 
     SetIcons( iconBundle );

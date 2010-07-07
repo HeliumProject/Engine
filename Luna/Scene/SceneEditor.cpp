@@ -290,11 +290,11 @@ SceneEditor::SceneEditor()
 
     wxIconBundle iconBundle;
     wxIcon tempIcon;
-    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 64, 64 ) ) );
+    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 64, 64 ) ) );
     iconBundle.AddIcon( tempIcon );
-    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
+    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
     iconBundle.AddIcon( tempIcon );
-    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
     iconBundle.AddIcon( tempIcon );
     SetIcons( iconBundle );
 
@@ -365,34 +365,34 @@ SceneEditor::SceneEditor()
     m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsDuplicate, wxT("Duplicate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Duplicate, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Duplicate the selected object numerous times"));
  
     m_ToolsToolBar->AddSeparator();
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Entity"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place entity objects (such as art instances or characters)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Volume"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place volume objects (items for setting up gameplay)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsClueCreate, wxT("Clue"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place clue objects (items for setting up gameplay)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsControllerCreate, wxT("Controller"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place controller objects (items for setting up gameplay)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Locator"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place locator objects (such as bug locators)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Curve"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Edit created curves (modify or create/delete control points)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLightCreate, wxT("Light"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place lights in the scene"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Entity"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place entity objects (such as art instances or characters)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Volume"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place volume objects (items for setting up gameplay)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsClueCreate, wxT("Clue"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place clue objects (items for setting up gameplay)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsControllerCreate, wxT("Controller"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place controller objects (items for setting up gameplay)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Locator"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place locator objects (such as bug locators)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Edit created curves (modify or create/delete control points)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLightCreate, wxT("Light"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place lights in the scene"));
     m_ToolsToolBar->Realize();
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsSelect, true );
     m_ToolsToolBar->Disable();
 
     m_NavToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_NavToolBar->SetToolBitmapSize(wxSize(16,16));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes, wxT("NavMeshEditLowResMesh"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxT("Work with low res nav mesh"));
+    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes, wxT("NavMeshEditLowResMesh"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Work with low res nav mesh"));
     m_NavToolBar->AddSeparator();
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshCreate, wxT("CreateNavMesh"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxT("Create NavMesh or add new verts and tris"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshManipulate, wxT("NavMeshEdit"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxT("Translate Vert/Edge/Tri on NavMesh"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshRotate, wxT("NavMeshRotate"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxT("Rotate Verts on NavMesh"));
+    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshCreate, wxT("CreateNavMesh"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Create NavMesh or add new verts and tris"));
+    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshManipulate, wxT("NavMeshEdit"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Translate Vert/Edge/Tri on NavMesh"));
+    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshRotate, wxT("NavMeshRotate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Rotate Verts on NavMesh"));
     m_NavToolBar->AddSeparator();
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshVertexSelect, wxT("VertexSelect"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxT("Vertex select mode"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshEdgeSelect, wxT("EdgeSelect"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxT("Edge select mode"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshTriSelect, wxT("TriSelect"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxT("Triangle select mode"));
+    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshVertexSelect, wxT("VertexSelect"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Vertex select mode"));
+    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshEdgeSelect, wxT("EdgeSelect"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Edge select mode"));
+    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshTriSelect, wxT("TriSelect"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Triangle select mode"));
     m_NavToolBar->AddSeparator();
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOut, wxT("NavMeshPunchOutTool"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxT("punch cube like hole in the nav mesh"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate, wxT("NavMeshPunchOutTranslate"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxT("Translate punch out volume"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate, wxT("NavMeshPunchOutRotate"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxT("Rotate punch out volume"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutScale, wxT("NavMeshPunchOutScale"), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), wxNullBitmap, wxT("Scale punch out volume"));
+    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOut, wxT("NavMeshPunchOutTool"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("punch cube like hole in the nav mesh"));
+    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate, wxT("NavMeshPunchOutTranslate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Translate punch out volume"));
+    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate, wxT("NavMeshPunchOutRotate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Rotate punch out volume"));
+    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutScale, wxT("NavMeshPunchOutScale"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Scale punch out volume"));
     m_NavToolBar->Realize();
     m_NavToolBar->Disable();
 
@@ -420,10 +420,10 @@ SceneEditor::SceneEditor()
         info.LeftDockable( false );
         info.RightDockable( false );
 
-        AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("directory") ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) ) );
-        AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("properties") ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) ) );
-        AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("types") ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) ) );
-        AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("layers") ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) ) );
+        AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("directory") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
+        AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("properties") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
+        AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("types") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
+        AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("layers") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
 
         m_FrameManager.AddPane( m_DrawerPanel, info );
     }

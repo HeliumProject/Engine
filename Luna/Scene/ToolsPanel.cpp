@@ -25,25 +25,25 @@ ToolsPanel::ToolsPanel( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& 
 	
 #if ( 0 )
 
-	m_button10 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
+	m_button10 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
 	autoFlexSizer->Add( m_button10, 0, wxALL, 0 );
 
-	m_button11 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
+	m_button11 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
 	autoFlexSizer->Add( m_button11, 0, wxALL, 0 );
 	
-	m_button12 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
+	m_button12 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
 	autoFlexSizer->Add( m_button12, 0, wxALL, 0 );
 	
-	m_button13 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
+	m_button13 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
 	autoFlexSizer->Add( m_button13, 0, wxALL, 0 );
 	
-	m_button14 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
+	m_button14 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
 	autoFlexSizer->Add( m_button14, 0, wxALL, 0 );
 	
-	m_button15 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
+	m_button15 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
 	autoFlexSizer->Add( m_button15, 0, wxALL, 0 );
 	
-	m_button16 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID, wxART_OTHER, wxSize( 32, 32 ) ) );
+	m_button16 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
 	autoFlexSizer->Add( m_button16, 0, wxALL, 0 );
 
   autoFlexSizer->Add( new CameraModeButton( this, m_SceneEditor ), 0, wxALL, 0 );

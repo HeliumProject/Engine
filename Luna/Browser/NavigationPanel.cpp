@@ -17,24 +17,24 @@ NavigationPanel::NavigationPanel( BrowserFrame* browserFrame, SearchHistory* his
 , m_IgnoreNavBarTextChanged( false )
 {
   // Assign the button icons
-  m_BackButton->SetBitmapLabel( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
-  m_BackButton->SetBitmapDisabled( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+  m_BackButton->SetBitmapLabel( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
+  m_BackButton->SetBitmapDisabled( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
   m_BackButton->SetHoldDelay( 0.5f );
   m_BackButton->Enable( false );
 
-  m_ForwardButton->SetBitmapLabel( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
-  m_ForwardButton->SetBitmapDisabled( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+  m_ForwardButton->SetBitmapLabel( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
+  m_ForwardButton->SetBitmapDisabled( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
   m_ForwardButton->SetHoldDelay( 0.5f );
   m_ForwardButton->Enable( false );
 
-  m_UpFolderButton->SetBitmapLabel( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
-  m_UpFolderButton->SetBitmapDisabled( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+  m_UpFolderButton->SetBitmapLabel( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
+  m_UpFolderButton->SetBitmapDisabled( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
   m_UpFolderButton->Enable( false );
 
-  m_GoButton->SetBitmapLabel( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+  m_GoButton->SetBitmapLabel( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
   m_GoButton->Enable( false );
   
-  m_OptionsButton->SetBitmapLabel( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+  m_OptionsButton->SetBitmapLabel( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
   m_OptionsButton->SetHoldDelay( 0.0f );
 
   UpdateHistoryMenus();

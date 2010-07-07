@@ -48,15 +48,15 @@ DirectoryCtrl::DirectoryCtrl
     switch ( (DirectoryCtrlIconType) type )
     {
       case DirectoryCtrlIconTypes::Folder:
-        m_ImageList.Add( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+        m_ImageList.Add( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
         break;
 
       case DirectoryCtrlIconTypes::FolderOpen:
-        m_ImageList.Add( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+        m_ImageList.Add( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
         break;
 
       case DirectoryCtrlIconTypes::InsomniacMoon:
-        m_ImageList.Add( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+        m_ImageList.Add( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
         break;
 
       // We should not be using these anyway - if we are, setup a proper icon for them above
@@ -69,7 +69,7 @@ DirectoryCtrl::DirectoryCtrl
       case DirectoryCtrlIconTypes::Executable:
       case DirectoryCtrlIconTypes::Error:
       default:
-        m_ImageList.Add( wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ) );
+        m_ImageList.Add( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
         break;
     }
   }

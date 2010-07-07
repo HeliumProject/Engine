@@ -16,10 +16,10 @@
 namespace Nocturnal
 {
     // Nocturnal's custom art IDs
-#define NOCTURNAL_UNKNOWN_ART_ID wxART_MAKE_ART_ID( NOCTURNAL_UNKNOWN_ART_ID )
-
     namespace ArtIDs
     {
+        static const wxChar* Unknown = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_UNKNOWN );
+
         static const wxChar* PerspectiveCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_PERSPECTIVE_CAMERA );
         static const wxChar* FrontOrthoCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_FRONT_ORTHO_CAMERA );
         static const wxChar* SideOrthoCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_SIDE_ORTHO_CAMERA );

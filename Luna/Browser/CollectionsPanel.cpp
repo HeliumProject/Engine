@@ -80,9 +80,9 @@ CollectionsPanel::CollectionsPanel( BrowserFrame* browserFrame )
     m_UsageImageIndex = Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "chart_organisation_reverse" ) );
 
     m_MyCollectionsToolBar->SetToolBitmapSize( wxSize( 16, 16 ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), BrowserMenu::Label( ID_NewCollection ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, TXT( "" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), BrowserMenu::Label( ID_NewDependencyCollection ) + TXT( " - Files this asset depends on." ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, TXT( "" ), wxArtProvider::GetBitmap( NOCTURNAL_UNKNOWN_ART_ID ), BrowserMenu::Label( ID_NewUsageCollection ) + TXT( " - Files that use this asset." ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), BrowserMenu::Label( ID_NewCollection ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, TXT( "" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), BrowserMenu::Label( ID_NewDependencyCollection ) + TXT( " - Files this asset depends on." ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, TXT( "" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), BrowserMenu::Label( ID_NewUsageCollection ) + TXT( " - Files that use this asset." ) );
     m_MyCollectionsToolBar->Realize();
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );

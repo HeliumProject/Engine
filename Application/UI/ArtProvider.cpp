@@ -75,32 +75,32 @@ void ArtProvider::Create()
     //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_GO_TO_PARENT, TXT( "" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_GO_UP, TXT( "actions/go-up.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HARDDISK, TXT( "devices/drive-harddisk.png" ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP, TXT( "" ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_BOOK, TXT( "" ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_FOLDER, TXT( "" ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_PAGE, TXT( "" ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_SETTINGS, TXT( "" ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_SIDE_PANEL, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP, TXT( "apps/help-browser.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_BOOK, TXT( "apps/help-browser.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_FOLDER, TXT( "apps/help-browser.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_PAGE, TXT( "apps/help-browser.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_SETTINGS, TXT( "apps/help-browser.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_HELP_SIDE_PANEL, TXT( "apps/help-browser.png" ) ) );
     //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_INFORMATION, TXT( "" ) ) );
     //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_LIST_VIEW, TXT( "" ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_MISSING_IMAGE, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_MISSING_IMAGE, TXT( "status/image-missing.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_NEW, TXT( "actions/document-new.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_NEW_DIR, TXT( "actions/folder-new.png" ) ) );
     //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_NORMAL_FILE, TXT( "" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_PASTE, TXT( "actions/edit-paste.png" ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_PRINT, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_PRINT, TXT( "actions/document-print.png" ) ) );
     //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_QUESTION, TXT( "" ) ) );
     //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_QUIT, TXT( "" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_REDO, TXT( "actions/edit-redo.png" ) ) );
     //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_REMOVABLE, TXT( "" ) ) );
     //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_REPORT_VIEW, TXT( "" ) ) );
     //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_TICK_MARK, TXT( "" ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_TIP, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_TIP, TXT( "status/dialog-information.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_UNDO, TXT( "actions/edit-undo.png" ) ) );
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_WARNING, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_WARNING, TXT( "status/dialog-warning.png" ) ) );
 
 
-    //m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Unknown, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Unknown, TXT( "emotes/face-devil-grin.png" ) ) );
 
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::PerspectiveCamera, TXT( "" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::FrontOrthoCamera, TXT( "" ) ) );
@@ -128,29 +128,31 @@ wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& art
     }
 
     M_ArtIDToFilename::iterator findFilename = m_ArtIDToFilename.find( artId );
-    if ( findFilename != m_ArtIDToFilename.end() )
+    if ( findFilename == m_ArtIDToFilename.end() || findFilename->second.empty() )
+    {
+        findFilename = m_ArtIDToFilename.find( Nocturnal::ArtIDs::Unknown );
+    }
+
+    if ( findFilename != m_ArtIDToFilename.end() && !findFilename->second.empty() )
     {
         const tstring& icon = findFilename->second;
 
-        if ( !icon.empty() )
+        int width = size.GetWidth() > 0 ? size.GetWidth() : DefaultImageSize.GetWidth();
+        int height = size.GetHeight() > 0 ? size.GetHeight() : DefaultImageSize.GetHeight();
+
+        Nocturnal::Path exePath( wxStandardPaths::Get().GetExecutablePath().c_str() );
+
+        tstringstream strm;
+        strm << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << icon;
+        Nocturnal::Path imageFile( strm.str() );
+
+        if ( imageFile.Exists() && imageFile.Size() > 0 )
         {
-            int width = size.GetWidth() > 0 ? size.GetWidth() : DefaultImageSize.GetWidth();
-            int height = size.GetHeight() > 0 ? size.GetHeight() : DefaultImageSize.GetHeight();
-
-            Nocturnal::Path exePath( wxStandardPaths::Get().GetExecutablePath().c_str() );
-
-            tstringstream strm;
-            strm << exePath.Directory() << TXT( "Icons/" ) << width << TXT( 'x' ) << height << TXT( '/' ) << icon;
-            Nocturnal::Path imageFile( strm.str() );
-
-            if ( imageFile.Exists() && imageFile.Size() > 0 )
+            wxImage image( imageFile.Get().c_str(), wxBITMAP_TYPE_PNG );
+            if ( image.Ok() )
             {
-                wxImage image( imageFile.Get().c_str(), wxBITMAP_TYPE_PNG );
-                if ( image.Ok() )
-                {
-                    m_HashTable->Put( artId, new ArtProviderBitmapEntry( image ) );
-                    return wxBitmap( image );
-                }
+                m_HashTable->Put( artId, new ArtProviderBitmapEntry( image ) );
+                return wxBitmap( image );
             }
         }
     }

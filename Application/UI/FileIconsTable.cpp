@@ -208,7 +208,7 @@ void FileIconsTable::Create()
         std::set< Nocturnal::Path > artFiles;
         Nocturnal::Directory::GetFiles( iconFolder, artFiles, TXT( "*.png" ), true );
 
-        int numImages = artFiles.size();
+        int numImages = (int)artFiles.size();
         if ( numImages <= 0 )
         {
             numImages = 0;

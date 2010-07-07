@@ -13,6 +13,7 @@
 #include "PreviewPanel.h"
 #include "ResultsPanel.h"
 #include "SearchQuery.h"
+#include "HelpPanel.h"
 
 #include "Pipeline/Asset/AssetFile.h"
 #include "Pipeline/Asset/AssetFolder.h"
@@ -39,26 +40,6 @@ static const u32 s_ToggleButtonStyle =
  | Nocturnal::ButtonStyles::BU_CENTER );
 
 static const tchar* s_BrowserHelpText = TXT( "FFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUU FIXME PUT HELP TEXT HERE" );
-
-///////////////////////////////////////////////////////////////////////////////
-/// Class HelpPanel
-///////////////////////////////////////////////////////////////////////////////
-class Luna::HelpPanel : public HelpPanelGenerated 
-{	
-public:
-    HelpPanel( BrowserFrame* browserFrame )
-        : HelpPanelGenerated( browserFrame )
-        , m_BrowserFrame( browserFrame )
-    {
-    }
-    virtual ~HelpPanel()
-    {
-    }
-
-private:
-    BrowserFrame* m_BrowserFrame;
-};
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class Browser
@@ -260,8 +241,7 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
         m_ItalicTextAttr.SetFlags( wxTEXT_ATTR_FONT_FACE );
         m_ItalicTextAttr.SetFont( msgFont );
 
-        m_HelpPanel->m_HelpTextCtrl->SetDefaultStyle( m_DefaultTextAttr );
-        ( *m_HelpPanel->m_HelpTextCtrl ) << s_BrowserHelpText;
+        m_HelpPanel->SetHelpText( s_BrowserHelpText );
 
         wxAuiPaneInfo info;
         info.Name( BrowserMenu::Label( BrowserMenu::HelpPanel ).c_str() );

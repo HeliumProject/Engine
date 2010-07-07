@@ -12,6 +12,7 @@
 #include "EntityCreateTool.h"
 #include "EntityType.h"
 #include "ExportOptionsDlg.h"
+#include "HelpPanel.h"
 #include "HierarchyNodeType.h"
 #include "HierarchyOutliner.h"
 #include "ImportOptionsDlg.h"
@@ -338,8 +339,9 @@ SceneEditor::SceneEditor()
     // Create toolbars
     //
     m_StandardToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
+    m_StandardToolBar->SetHelpText( TXT( "This is the basic toolbar, allowing access to common actions." ) );
     m_StandardToolBar->SetToolBitmapSize(wxSize(16,16));
-    m_StandardToolBar->AddTool(wxID_NEW, wxT("New"), wxArtProvider::GetBitmap( wxART_NEW ), wxT( "Create a new scene" ) );
+    m_StandardToolBar->AddTool( wxID_NEW, wxT("New"), wxArtProvider::GetBitmap( wxART_NEW ), wxT( "Create a new scene" ) );
     m_StandardToolBar->AddTool(wxID_OPEN, wxT("Open"), wxArtProvider::GetBitmap( wxART_FILE_OPEN, wxART_OTHER, wxSize(16,16) ), wxT( "Open a scene file" ) );
     m_StandardToolBar->AddTool(SceneEditorIDs::ID_FileFind, wxT( "Find..." ), wxArtProvider::GetBitmap( wxART_FIND ) );
     m_StandardToolBar->AddTool(wxID_SAVE, wxT("Save All"), wxArtProvider::GetBitmap( wxART_FILE_SAVE ), wxT( "Save all currently checked out scenes") );
@@ -434,6 +436,10 @@ SceneEditor::SceneEditor()
 
         m_FrameManager.AddPane( m_DrawerPanel, info );
     }
+
+    // Help
+    m_Help = new HelpPanel( this );
+    m_FrameManager.AddPane( m_Help, wxAuiPaneInfo().Name(wxT("Help")).Caption(wxT("Help")).Right().Layer(1).Position(1) );
 
     // Directory
     m_Directory = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
@@ -3516,4 +3522,9 @@ void SceneEditor::SyncPropertyThread()
     {
         ::Sleep( 500 );
     }
+}
+
+void SceneEditor::SetHelpText( const tchar* text )
+{
+    m_Help->SetText( text );
 }

@@ -12,11 +12,17 @@
 // Using
 using namespace Luna;
 
+enum
+{
+    FrameTimerID = wxID_HIGHEST
+};
+
 
 // Static UI event table
 BEGIN_EVENT_TABLE( Frame, wxFrame )
 EVT_SET_FOCUS( Frame::OnSetFocus )
 EVT_CLOSE( Frame::OnExiting )
+EVT_TIMER( FrameTimerID, Frame::OnHelpTimer )
 END_EVENT_TABLE()
 
 
@@ -42,6 +48,10 @@ Frame::Frame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPo
   m_FrameManager.SetFrame( this ); 
 
   SetTitle( title.c_str() );
+
+  m_HelpLastWindow = NULL;
+  m_HelpTimer = new wxTimer( this, FrameTimerID );
+  m_HelpTimer->Start( 100 );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,6 +59,9 @@ Frame::Frame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPo
 // 
 Frame::~Frame()
 {
+    m_HelpTimer->Stop();
+    delete m_HelpTimer;
+
   m_FrameManager.UnInit();
 }
 
@@ -150,4 +163,22 @@ void Frame::OnExiting( wxCloseEvent& args )
 {
   SaveWindowState();
   args.Skip();
+}
+
+void Frame::OnHelpTimer( wxTimerEvent& evt )
+{
+    wxPoint pos = wxGetMousePosition();
+    wxWindow *w = wxFindWindowAtPoint( pos );
+    if ( w && w != m_HelpLastWindow )
+    {
+        m_HelpLastWindow = w;
+        wxString help = w->GetHelpText();
+        while ( help.empty() && w->GetParent() )
+        {
+            w = w->GetParent();
+            help = w->GetHelpText();
+        }
+
+        this->SetHelpText( help );
+    }
 }

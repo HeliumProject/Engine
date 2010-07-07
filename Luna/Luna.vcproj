@@ -4398,6 +4398,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\HelpPanel.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\HelpPanel.h"
+			>
+		</File>
+		<File
 			RelativePath=".\LunaGenerated.cpp"
 			>
 		</File>

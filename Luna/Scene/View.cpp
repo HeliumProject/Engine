@@ -169,6 +169,8 @@ View::View(wxWindow *parent,
   InitCameras();
 
   Reset();
+
+  SetHelpText( TXT( "This is the main editing view.  It displays objects in the scene and allows manipulation of the data." ) );
 }
 
 View::~View()

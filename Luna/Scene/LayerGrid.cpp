@@ -71,7 +71,11 @@ LayerGrid::LayerGrid( wxWindow* parent, Luna::SceneManager* sceneManager )
 , m_Grid( new Grid( m_Panel, SceneEditorIDs::ID_LayerGrid, true ) )
 , m_ToolBar( new wxToolBar( m_Panel, wxID_ANY, wxDefaultPosition, wxSize( -1, 25 ), wxBORDER_NONE | wxTB_HORIZONTAL | wxTB_NODIVIDER, wxT( "LayerToolBar" ) ) )
 {
-  // Handle all toolbar events so that this class can process button clicks
+    m_Panel->SetHelpText( TXT( "This is the layer panel.  You can select and manipulate layers here." ) );
+    m_ToolBar->SetHelpText( TXT( "This is the layer toolbar." ) );
+    m_Grid->GetPanel()->SetHelpText( TXT( "This is the layer grid, you can select a layer to manipulate here." ) );
+
+    // Handle all toolbar events so that this class can process button clicks
   m_ToolBar->PushEventHandler( this );
 
   // Set up the toolbar that goes at the top of the panel

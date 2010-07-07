@@ -1,6 +1,8 @@
 #pragma once
 
-namespace Luna
+#include <wx/aui/aui.h>
+
+namespace Nocturnal
 {
   class Drawer;
 

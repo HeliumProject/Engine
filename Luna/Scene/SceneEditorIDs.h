@@ -116,19 +116,8 @@ namespace Luna
       ID_ToolsEntityCreate,
       ID_ToolsCurveCreate,
       ID_ToolsCurveEdit,
-      
-      ID_ToolsNavMeshCreate,
-      ID_ToolsNavMeshManipulate,
-      ID_ToolsNavMeshRotate,
-      ID_ToolsNavMeshVertexSelect,
-      ID_ToolsNavMeshEdgeSelect,
-      ID_ToolsNavMeshTriSelect,
-      ID_ToolsNavMeshWorkWithLOWRes,
-      ID_ToolsNavMeshPunchOut,
-      ID_ToolsNavMeshPunchOutTranslate,
-      ID_ToolsNavMeshPunchOutRotate,
-      ID_ToolsNavMeshPunchOutScale,
-      
+      ID_ToolsNavMesh,
+
       ID_PanelsOutline,
       ID_PanelsProperties,
 

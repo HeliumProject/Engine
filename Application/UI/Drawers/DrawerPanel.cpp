@@ -1,10 +1,9 @@
-#include "Precompile.h"
 #include "DrawerPanel.h"
 
 #include "Application/UI/Button.h"
 #include "Application/UI/ArtProvider.h"
 
-using namespace Luna;
+using namespace Nocturnal;
 
 DrawerPanel::DrawerPanel( wxWindow* parent )
 : wxPanel( parent )

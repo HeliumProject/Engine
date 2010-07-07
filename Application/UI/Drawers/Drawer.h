@@ -1,10 +1,12 @@
 #pragma once
 
+#include <wx/event.h>
+#include <wx/aui/aui.h>
 #include <set>
 
 #include "Foundation/Automation/Event.h"
 
-namespace Luna
+namespace Nocturnal
 {
   class Drawer;
   class FloatingWindow;

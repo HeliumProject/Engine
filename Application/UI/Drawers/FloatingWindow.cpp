@@ -1,9 +1,8 @@
-#include "Precompile.h"
 #include "FloatingWindow.h"
 
 #include "Drawer.h"
 
-using namespace Luna;
+using namespace Nocturnal;
 
 static int s_DismissMilliseconds = 500;
 
@@ -14,7 +13,7 @@ void func( evt& args ) \
   m_FloatingWindow->func( args ); \
 }
 
-namespace Luna
+namespace Nocturnal
 {
   class DrawerEventMarshaller : public wxEvtHandler
   {

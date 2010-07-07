@@ -29,7 +29,7 @@ namespace Luna
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTB_FLAT | wxTB_NODIVIDER | wxTB_HORZ_TEXT,
-                const wxString& name = wxT( "Asset Vault" ) );
+                const wxString& name = wxT( "Vault" ) );
     virtual ~BrowserToolBar();
 
     wxAuiPaneInfo GetAuiPaneInfo( int position = -1 );

@@ -1,10 +1,12 @@
 #pragma once
 
+#include <map>
+
 #include "Drawer.h"
 
 namespace Nocturnal { class Button; }
 
-namespace Luna
+namespace Nocturnal
 {
   class MainFrame;
 

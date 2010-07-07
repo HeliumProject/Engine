@@ -29,8 +29,6 @@ namespace Luna
 {
   // Forwards
   class BrowserToolBar;
-  class Drawer;
-  class DrawerPanel;
   class EntityAssetOutliner;
   class EntityType;
   class HierarchyNode;
@@ -40,7 +38,6 @@ namespace Luna
   class NodeTypeOutliner;
   class View;
 
-  struct DrawerArgs;
   struct ToolChangeArgs;
 
   typedef std::map< Luna::Scene*, SceneDocumentPtr > M_SceneToEditorFile;
@@ -78,8 +75,6 @@ namespace Luna
     PropertiesManagerPtr m_ToolPropertiesManager;
     Inspect::Canvas m_ToolProperties;
     size_t m_ToolPropertyPage;
-
-    DrawerPanel* m_DrawerPanel;
 
     // the directory notebook
     wxNotebook* m_Directory;
@@ -133,7 +128,6 @@ namespace Luna
     wxToolBar* m_ViewToolBar;
     wxToolBar* m_ToolsToolBar;
     BrowserToolBar* m_BrowserToolBar;
-    wxToolBar* m_NavToolBar;
 
     //context items ordered by name  
     V_HierarchyNodeDumbPtr m_OrderedContextItems;
@@ -173,8 +167,6 @@ namespace Luna
     {
       return m_TreeSortTimer;
     }
-
-    wxToolBar* GetNavToolBar() { return m_NavToolBar; }
 
     //
     // wxEventHandler Event Handlers
@@ -321,10 +313,7 @@ namespace Luna
     void OpenTypeContextMenu( const SelectArgs& args );
     void OpenManifestContextMenu( const SelectArgs& args );
 
-    void OnDrawerPaneModified( const DrawerArgs& args );
-
   private:
-    void AddDrawer( Drawer* drawer );
     void SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  u32& numMenuItems );
     bool SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* entityMenu, u32& numMenuItems );
 

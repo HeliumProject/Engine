@@ -1,11 +1,51 @@
-#include "Precompile.h"
 #include "Drawer.h"
 
 #include "FloatingWindow.h"
 
-using namespace Luna;
+using namespace Nocturnal;
 
 static int s_PopupOffsetY = 0; // Pixel offset for top of popup window
+
+//m_DrawerPanel = new DrawerPanel( this );
+
+//wxAuiPaneInfo info;
+//info.MinSize( GetSize().x, -1 );
+//info.Name( wxT( "DrawerToolBar" ) );
+//info.DestroyOnClose( false );
+//info.Caption( wxT( "Drawers" ) );
+//info.ToolbarPane();
+//info.Gripper( false );
+//info.Top();
+//info.Floatable( false );
+//info.BottomDockable( false );
+//info.LeftDockable( false );
+//info.RightDockable( false );
+
+//AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("directory") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
+//AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("properties") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
+//AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("types") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
+//AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("layers") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
+
+//m_FrameManager.AddPane( m_DrawerPanel, info );
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Callback for when the pane on a drawer is modified (meaning that we need to 
+// update the FrameManager).
+//
+//void SceneEditor::OnDrawerPaneModified( const DrawerArgs& args )
+//{
+//    m_FrameManager.Update();
+//}
+
+///////////////////////////////////////////////////////////////////////////////
+// Adds the drawer to the panel and does other setup work.
+// 
+//void SceneEditor::AddDrawer( Drawer* drawer )
+//{
+//    m_DrawerPanel->AddDrawer( drawer );
+//    drawer->AddPaneModifiedListener( DrawerSignature::Delegate( this, &SceneEditor::OnDrawerPaneModified ) );
+//}
 
 Drawer::Drawer( wxAuiPaneInfo& pane, const wxBitmap& icon ) 
 : m_Pane( &pane )

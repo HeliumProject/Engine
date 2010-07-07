@@ -1498,6 +1498,34 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Drawers"
+				>
+				<File
+					RelativePath=".\UI\Drawers\Drawer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\Drawers\Drawer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\Drawers\DrawerPanel.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\Drawers\DrawerPanel.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\Drawers\FloatingWindow.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\Drawers\FloatingWindow.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="RCS"

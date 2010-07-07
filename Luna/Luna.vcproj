@@ -4366,38 +4366,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Drawer.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Drawer.h"
-			>
-		</File>
-		<File
-			RelativePath=".\DrawerPanel.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\DrawerPanel.h"
-			>
-		</File>
-		<File
-			RelativePath=".\FloatingWindow.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\FloatingWindow.h"
-			>
-		</File>
-		<File
-			RelativePath=".\FrameManager.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\FrameManager.h"
-			>
-		</File>
-		<File
 			RelativePath=".\LunaGenerated.cpp"
 			>
 		</File>
@@ -4479,14 +4447,6 @@
 		</File>
 		<File
 			RelativePath=".\Precompile.h"
-			>
-		</File>
-		<File
-			RelativePath=".\RenameDialog.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\RenameDialog.h"
 			>
 		</File>
 		<File

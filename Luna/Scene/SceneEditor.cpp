@@ -4,8 +4,6 @@
 #include "Application.h"
 #include "CurveCreateTool.h"
 #include "CurveEditTool.h"
-#include "Drawer.h"
-#include "DrawerPanel.h"
 #include "DuplicateTool.h"
 #include "EntityAssetOutliner.h"
 #include "EntityAssetSet.h"
@@ -179,18 +177,7 @@ EVT_MENU(SceneEditorIDs::ID_ToolsVolumeCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsEntityCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsCurveCreate, SceneEditor::OnToolSelected)
 EVT_MENU(SceneEditorIDs::ID_ToolsCurveEdit, SceneEditor::OnToolSelected)
-
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshCreate, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshManipulate, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshRotate, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshPunchOut, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshPunchOutScale, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshVertexSelect, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshEdgeSelect, SceneEditor::OnToolSelected)
-EVT_MENU(SceneEditorIDs::ID_ToolsNavMeshTriSelect, SceneEditor::OnToolSelected)
+EVT_MENU(SceneEditorIDs::ID_ToolsNavMesh, SceneEditor::OnToolSelected)
 
 END_EVENT_TABLE()
 
@@ -254,7 +241,6 @@ void SceneEditor::CleanupEditor()
 SceneEditor::SceneEditor()
 : Editor( EditorTypes::Scene, NULL, wxID_ANY, wxT("Luna"), wxDefaultPosition, wxSize(1180, 750), wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER )
 , m_SceneManager( this )
-, m_DrawerPanel( NULL )
 , m_HierarchyOutline( NULL )
 , m_TypeOutline( NULL )
 , m_EntityOutline( NULL )
@@ -275,7 +261,6 @@ SceneEditor::SceneEditor()
 , m_StandardToolBar( NULL )
 , m_ViewToolBar( NULL )
 , m_ToolsToolBar( NULL )
-, m_NavToolBar (NULL)
 , m_View( NULL )
 , m_TreeMonitor( &m_SceneManager )
 , m_TreeSortTimer( &m_TreeMonitor )
@@ -286,7 +271,7 @@ SceneEditor::SceneEditor()
     wxIcon tempIcon;
     tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 64, 64 ) ) );
     iconBundle.AddIcon( tempIcon );
-    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
+    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
     iconBundle.AddIcon( tempIcon );
     tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
     iconBundle.AddIcon( tempIcon );
@@ -352,42 +337,24 @@ SceneEditor::SceneEditor()
     m_ViewToolBar->Realize();
 
     m_ToolsToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
-    m_ToolsToolBar->SetToolBitmapSize(wxSize(32,32));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsSelect, wxT("Select"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Select, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Select items from the workspace"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsTranslate, wxT("Translate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Translate, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Translate items"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsRotate, wxT("Rotate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Rotate, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Rotate selected items"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsScale, wxT("Scale"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Scale, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Scale selected items"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsDuplicate, wxT("Duplicate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Duplicate, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Duplicate the selected object numerous times"));
+    m_ToolsToolBar->SetToolBitmapSize(wxSize(16, 16));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsSelect, wxT("Select"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Select ), wxNullBitmap, wxT("Select items from the workspace"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsTranslate, wxT("Translate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Translate ), wxNullBitmap, wxT("Translate items"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsRotate, wxT("Rotate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Rotate ), wxNullBitmap, wxT("Rotate selected items"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsScale, wxT("Scale"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Scale ), wxNullBitmap, wxT("Scale selected items"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsDuplicate, wxT("Duplicate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Duplicate ), wxNullBitmap, wxT("Duplicate the selected object numerous times"));
  
     m_ToolsToolBar->AddSeparator();
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Create Locator"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place locator objects (such as bug locators)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Create Volume"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place volume objects (items for setting up gameplay)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Create Entity"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Place entity objects (such as art instances or characters)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Create Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxNullBitmap, wxT("Edit created curves (modify or create/delete control points)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Create Locator"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place locator objects (such as bug locators)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Create Volume"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place volume objects (items for setting up gameplay)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Create Entity"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place entity objects (such as art instances or characters)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Create Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Edit created curves (modify or create/delete control points)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMesh, wxT("Edit NavMesh"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Create NavMesh or add new verts and tris"));
+
     m_ToolsToolBar->Realize();
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsSelect, true );
     m_ToolsToolBar->Disable();
-
-    m_NavToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
-    m_NavToolBar->SetToolBitmapSize(wxSize(16,16));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes, wxT("NavMeshEditLowResMesh"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Work with low res nav mesh"));
-    m_NavToolBar->AddSeparator();
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshCreate, wxT("CreateNavMesh"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Create NavMesh or add new verts and tris"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshManipulate, wxT("NavMeshEdit"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Translate Vert/Edge/Tri on NavMesh"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshRotate, wxT("NavMeshRotate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Rotate Verts on NavMesh"));
-    m_NavToolBar->AddSeparator();
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshVertexSelect, wxT("VertexSelect"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Vertex select mode"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshEdgeSelect, wxT("EdgeSelect"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Edge select mode"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshTriSelect, wxT("TriSelect"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Triangle select mode"));
-    m_NavToolBar->AddSeparator();
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOut, wxT("NavMeshPunchOutTool"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("punch cube like hole in the nav mesh"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate, wxT("NavMeshPunchOutTranslate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Translate punch out volume"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate, wxT("NavMeshPunchOutRotate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Rotate punch out volume"));
-    m_NavToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMeshPunchOutScale, wxT("NavMeshPunchOutScale"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Scale punch out volume"));
-    m_NavToolBar->Realize();
-    m_NavToolBar->Disable();
-
 
     m_BrowserToolBar = new BrowserToolBar( this );
     m_BrowserToolBar->Realize();
@@ -395,30 +362,6 @@ SceneEditor::SceneEditor()
     //
     // Docked panes
     //
-
-    {
-        m_DrawerPanel = new DrawerPanel( this );
-
-        wxAuiPaneInfo info;
-        info.MinSize( GetSize().x, -1 );
-        info.Name( wxT( "DrawerToolBar" ) );
-        info.DestroyOnClose( false );
-        info.Caption( wxT( "Drawers" ) );
-        info.ToolbarPane();
-        info.Gripper( false );
-        info.Top();
-        info.Floatable( false );
-        info.BottomDockable( false );
-        info.LeftDockable( false );
-        info.RightDockable( false );
-
-        AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("directory") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
-        AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("properties") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
-        AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("types") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
-        AddDrawer( new Drawer( m_FrameManager.GetPane( TXT("layers") ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) ) );
-
-        m_FrameManager.AddPane( m_DrawerPanel, info );
-    }
 
     // Directory
     m_Directory = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
@@ -528,12 +471,7 @@ SceneEditor::SceneEditor()
 
     m_FrameManager.AddPane(m_ToolsToolBar, wxAuiPaneInfo().
         Name(wxT("utilities")).Caption(wxT("Utilities")).
-        ToolbarPane().Top().Row(2).
-        LeftDockable(false).RightDockable(false));
-
-    m_FrameManager.AddPane(m_NavToolBar, wxAuiPaneInfo().
-        Name(wxT("Nav Utilities")).Caption(wxT("Nav Utilities")).
-        ToolbarPane().Top().Row(4).
+        ToolbarPane().Top().Position(3).
         LeftDockable(false).RightDockable(false));
 
     //
@@ -2063,178 +2001,14 @@ void SceneEditor::OnToolSelected(wxCommandEvent& event)
             }
             break;
 
-        case SceneEditorIDs::ID_ToolsNavMeshCreate:
+        case SceneEditorIDs::ID_ToolsNavMesh:
             {
-                if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
-                {
-                    Luna::NavMeshCreateTool* navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-                    navMeshCreate->SetEditMode( Luna::NavMeshCreateTool::EDIT_MODE_ADD );
-                }
-                else
-                {
-                    Luna::NavMeshCreateTool* navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
-                    m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
-                    m_Properties->SetSelection(m_ToolPropertyPage);
-                    navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
-                }
+                Luna::NavMeshCreateTool* navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
+                m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
+                m_Properties->SetSelection(m_ToolPropertyPage);
+                navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
             }
             break;
-
-        case SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes:
-            {
-                Luna::NavMeshCreateTool* navMeshCreate;
-                if ( m_SceneManager.GetCurrentScene()->GetTool() &&  m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
-                {
-                    navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-
-                    //now change it to be selection
-                    navMeshCreate->SetResolutionMode(GetNavToolBar()->GetToolState(SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes));
-                    m_Properties->SetSelection(m_ToolPropertyPage);
-                }    
-            }
-            break;
-
-        case SceneEditorIDs::ID_ToolsNavMeshPunchOut:
-        case SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate:
-        case SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate:
-        case SceneEditorIDs::ID_ToolsNavMeshPunchOutScale:
-            {
-                Luna::NavMeshCreateTool* navMeshCreate;
-                if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
-                {
-                    navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-                }
-                else
-                {
-                    navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
-                    m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
-                }
-                if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOut )
-                {
-                    if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOut ))
-                    {
-                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
-                        m_Properties->SetSelection(m_ToolPropertyPage);
-                    }
-                    else
-                    {
-                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
-                    }
-                }
-                else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate )
-                {
-                    if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOutTranslate ))
-                    {
-                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_MOVE);
-                        m_Properties->SetSelection(m_ToolPropertyPage);
-                    }
-                    else
-                    {
-                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
-                    }
-                }
-                else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate )
-                {
-                    if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOutRotate ))
-                    {
-                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_ROTATE);
-                        m_Properties->SetSelection(m_ToolPropertyPage);
-                    }
-                    else
-                    {
-                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
-                    }
-                }
-                else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshPunchOutScale )
-                {
-                    if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshPunchOutScale ))
-                    {
-                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_SCALE);
-                        m_Properties->SetSelection(m_ToolPropertyPage);
-                    }
-                    else
-                    {
-                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_CUBE_PUNCH_OUT);
-                        navMeshCreate->SetPunchOutMode(NavMeshCreateTool::EDIT_MODE_DISABLED);
-                    }
-                }
-                break;
-            }
-
-        case SceneEditorIDs::ID_ToolsNavMeshRotate:
-        case SceneEditorIDs::ID_ToolsNavMeshManipulate:
-            {
-                Luna::NavMeshCreateTool* navMeshCreate;
-                if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
-                {
-                    navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-                }
-                else
-                {
-                    navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
-                    m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
-                }
-                if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshRotate )
-                {
-                    if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshRotate ))
-                    {
-                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ROTATE);
-                        m_Properties->SetSelection(m_ToolPropertyPage);
-                    }
-                    else
-                    {
-                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
-                    }
-                }
-                else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshManipulate )
-                {
-                    if ( m_NavToolBar->GetToolState( SceneEditorIDs::ID_ToolsNavMeshManipulate ))
-                    {
-                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_MOVE);
-                        m_Properties->SetSelection(m_ToolPropertyPage);
-                    }
-                    else
-                    {
-                        navMeshCreate->SetEditMode(NavMeshCreateTool::EDIT_MODE_ADD);
-                    }
-                }
-                break;
-            }
-
-        case SceneEditorIDs::ID_ToolsNavMeshVertexSelect:
-        case SceneEditorIDs::ID_ToolsNavMeshEdgeSelect:
-        case SceneEditorIDs::ID_ToolsNavMeshTriSelect:
-            {
-                Luna::NavMeshCreateTool* navMeshCreate;
-                if ( m_SceneManager.GetCurrentScene()->GetTool() && m_SceneManager.GetCurrentScene()->GetTool()->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
-                {
-                    navMeshCreate = static_cast<NavMeshCreateTool*>( m_SceneManager.GetCurrentScene()->GetTool().Ptr() );
-                }
-                else
-                {
-                    navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
-                    m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
-                }
-                if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshVertexSelect )
-                {
-                    navMeshCreate->SetHoverSelectMode( NavMeshCreateTool::MOUSE_HOVER_SELECT_VERT );
-                }
-                else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshEdgeSelect )
-                {
-                    navMeshCreate->SetHoverSelectMode( NavMeshCreateTool::MOUSE_HOVER_SELECT_EDGE );
-                }
-                else if ( event.GetId() == SceneEditorIDs::ID_ToolsNavMeshTriSelect )
-                {
-                    navMeshCreate->SetHoverSelectMode( NavMeshCreateTool::MOUSE_HOVER_SELECT_TRI );
-                }
-                break;
-            }
         }
 
         m_ToolProperties.GetCanvas()->Clear();
@@ -2927,7 +2701,6 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
     args.m_Scene->SetTool( NULL );
     m_View->SetTool(NULL);
     m_ToolsToolBar->Disable();
-    m_NavToolBar->Disable();
 }
 
 void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
@@ -2935,7 +2708,6 @@ void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
     if ( args.m_Scene )
     {
         m_ToolsToolBar->Enable();
-        m_NavToolBar->Enable();
 
         // Hook our event handlers
         args.m_Scene->AddStatusChangedListener( StatusChangeSignature::Delegate ( this, &SceneEditor::StatusChanged ) );
@@ -3107,7 +2879,7 @@ void SceneEditor::ViewToolChanged( const ToolChangeArgs& args )
         }
         else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
         {
-            selectedTool = SceneEditorIDs::ID_ToolsNavMeshCreate;
+            selectedTool = SceneEditorIDs::ID_ToolsNavMesh;
         }
     }
 
@@ -3126,7 +2898,7 @@ void SceneEditor::ViewToolChanged( const ToolChangeArgs& args )
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsCurveCreate, selectedTool == SceneEditorIDs::ID_ToolsCurveCreate );
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsCurveEdit, selectedTool == SceneEditorIDs::ID_ToolsCurveEdit );
 
-    m_NavToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshCreate, selectedTool == SceneEditorIDs::ID_ToolsNavMeshCreate ); 
+    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsNavMesh, selectedTool == SceneEditorIDs::ID_ToolsNavMesh ); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3211,24 +2983,6 @@ void SceneEditor::OpenManifestContextMenu(const SelectArgs& args)
             m_OrderedContextItems.clear();
         }
     }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Callback for when the pane on a drawer is modified (meaning that we need to 
-// update the FrameManager).
-//
-void SceneEditor::OnDrawerPaneModified( const DrawerArgs& args )
-{
-    m_FrameManager.Update();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Adds the drawer to the panel and does other setup work.
-// 
-void SceneEditor::AddDrawer( Drawer* drawer )
-{
-    m_DrawerPanel->AddDrawer( drawer );
-    drawer->AddPaneModifiedListener( DrawerSignature::Delegate( this, &SceneEditor::OnDrawerPaneModified ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

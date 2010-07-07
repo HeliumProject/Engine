@@ -353,7 +353,7 @@ SceneEditor::SceneEditor()
     m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::PerspectiveCamera ), wxT("Use the orbit perspective camera"));
     m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::FrontOrthoCamera ), wxT("Use the front orthographic camera"));
     m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::SideOrthoCamera ), wxT("Use the side orthographic camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs:::TopOrthoCamera ), wxT("Use the top orthographic camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::TopOrthoCamera ), wxT("Use the top orthographic camera"));
     m_ViewToolBar->Realize();
 
     m_ToolsToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );

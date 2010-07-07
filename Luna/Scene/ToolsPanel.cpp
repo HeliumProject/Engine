@@ -23,8 +23,6 @@ ToolsPanel::ToolsPanel( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& 
 	autoFlexSizer->SetFlexibleDirection( wxBOTH );
 	autoFlexSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-#if ( 0 )
-
 	m_button10 = new wxBitmapButton( this, wxID_ANY, wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
 	autoFlexSizer->Add( m_button10, 0, wxALL, 0 );
 
@@ -47,31 +45,6 @@ ToolsPanel::ToolsPanel( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& 
 	autoFlexSizer->Add( m_button16, 0, wxALL, 0 );
 
   autoFlexSizer->Add( new CameraModeButton( this, m_SceneEditor ), 0, wxALL, 0 );
-
-#elif ( 0 )
-
-	m_button10 = new wxButton( this, wxID_ANY, wxT("a"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	autoFlexSizer->Add( m_button10, 0, wxALL, 5 );
-
-	m_button11 = new wxButton( this, wxID_ANY, wxT("b"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	autoFlexSizer->Add( m_button11, 0, wxALL, 5 );
-	
-	m_button12 = new wxButton( this, wxID_ANY, wxT("c"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	autoFlexSizer->Add( m_button12, 0, wxALL, 5 );
-	
-	m_button13 = new wxButton( this, wxID_ANY, wxT("dddddd"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	autoFlexSizer->Add( m_button13, 0, wxALL, 5 );
-	
-	m_button14 = new wxButton( this, wxID_ANY, wxT("e"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	autoFlexSizer->Add( m_button14, 0, wxALL, 5 );
-	
-	m_button15 = new wxButton( this, wxID_ANY, wxT("f"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	autoFlexSizer->Add( m_button15, 0, wxALL, 5 );
-	
-	m_button16 = new wxButton( this, wxID_ANY, wxT("g"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	autoFlexSizer->Add( m_button16, 0, wxALL, 5 );
-	
-#endif
 
 	mainSizer->Add( autoFlexSizer, 0, wxEXPAND, 5 );
 	

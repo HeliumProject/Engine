@@ -20,16 +20,16 @@ namespace Nocturnal
 
     namespace ArtIDs
     {
-        const wxChar* PerspectiveCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_PERSPECTIVE_CAMERA );
-        const wxChar* FrontOrthoCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_FRONT_ORTHO_CAMERA );
-        const wxChar* SideOrthoCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_SIDE_ORTHO_CAMERA );
-        const wxChar* TopOrthoCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_TOP_ORTHO_CAMERA );
+        static const wxChar* PerspectiveCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_PERSPECTIVE_CAMERA );
+        static const wxChar* FrontOrthoCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_FRONT_ORTHO_CAMERA );
+        static const wxChar* SideOrthoCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_SIDE_ORTHO_CAMERA );
+        static const wxChar* TopOrthoCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_TOP_ORTHO_CAMERA );
 
-        const wxChar* Select = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_SELECT );
-        const wxChar* Translate = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_TRANSLATE );
-        const wxChar* Rotate = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_ROTATE );
-        const wxChar* Scale = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_SCALE );
-        const wxChar* Duplicate = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_DUPLICATE );
+        static const wxChar* Select = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_SELECT );
+        static const wxChar* Translate = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_TRANSLATE );
+        static const wxChar* Rotate = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_ROTATE );
+        static const wxChar* Scale = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_SCALE );
+        static const wxChar* Duplicate = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_DUPLICATE );
     }
 
     /////////////////////////////////////////////////////////////////////////////

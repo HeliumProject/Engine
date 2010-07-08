@@ -1278,26 +1278,6 @@
 				RelativePath=".\UI\ThreadMechanism.h"
 				>
 			</File>
-			<File
-				RelativePath=".\UI\Wizard.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\Wizard.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\WizardPage.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\WizardPage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\WizardPageTemplate.h"
-				>
-			</File>
 			<Filter
 				Name="MRU"
 				>

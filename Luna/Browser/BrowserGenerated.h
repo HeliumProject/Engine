@@ -231,22 +231,6 @@ namespace Luna
 	};
 	
 	///////////////////////////////////////////////////////////////////////////////
-	/// Class HelpPanelGenerated
-	///////////////////////////////////////////////////////////////////////////////
-	class HelpPanelGenerated : public wxPanel 
-	{
-		private:
-		
-		protected:
-		
-		public:
-			wxTextCtrl* m_HelpTextCtrl;
-			HelpPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 246,204 ), long style = wxTAB_TRAVERSAL );
-			~HelpPanelGenerated();
-		
-	};
-	
-	///////////////////////////////////////////////////////////////////////////////
 	/// Class PreviewPanelGenerated
 	///////////////////////////////////////////////////////////////////////////////
 	class PreviewPanelGenerated : public wxPanel 

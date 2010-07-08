@@ -4,6 +4,7 @@
 #include "Application/UI/CustomColors.h"
 #include "Application/UI/RegistryConfig.h"
 
+#include <wx/dcclient.h>
 #include <wx/colordlg.h>
 #include <wx/dcmemory.h>
 #include <wx/image.h>
@@ -331,7 +332,8 @@ bool KeyControl::FromClipboard( V_KeyPtr& keys )
         {
             wxTextDataObject data;
             wxTheClipboard->GetData( data );
-            bool converted = Platform::ConvertString( data.GetText().c_str(), xml );
+            const wxChar* str = data.GetText().c_str();
+            bool converted = Platform::ConvertString( str, xml );
             NOC_ASSERT( converted );
         }  
         wxTheClipboard->Close();

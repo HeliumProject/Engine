@@ -7,6 +7,7 @@
 #include "wx/tglbtn.h"
 #include <wx/image.h>
 #include <wx/settings.h>
+#include <wx/msw/dc.h>
 
 using namespace Nocturnal;
 

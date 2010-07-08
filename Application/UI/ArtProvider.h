@@ -26,11 +26,6 @@ namespace Nocturnal
         static const wxChar* SideOrthoCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_SIDE_ORTHO_CAMERA );
         static const wxChar* TopOrthoCamera = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_TOP_ORTHO_CAMERA );
 
-        static const wxChar* CameraModeOrbit = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_CAMERA_MODE_ORBIT );
-        static const wxChar* CameraModeFront = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_CAMERA_MODE_FRONT );
-        static const wxChar* CameraModeSide = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_CAMERA_MODE_SIDE );
-        static const wxChar* CameraModeTop = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_CAMERA_MODE_TOP );
-
         static const wxChar* Select = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_SELECT );
         static const wxChar* Translate = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_TRANSLATE );
         static const wxChar* Rotate = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_ROTATE );

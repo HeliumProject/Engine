@@ -42,9 +42,6 @@ BrowserToolBar::~BrowserToolBar()
   m_SearchBox->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( BrowserToolBar::OnKeyDown ), NULL, this );
   m_SearchBox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( BrowserToolBar::OnTextEnter ), NULL, this );
   Disconnect( BrowserToolBarIDs::ButtonID, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( BrowserToolBar::OnButtonClick ), NULL, this );
-
-  delete m_SearchBox;
-  m_SearchBox = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -8,6 +8,7 @@
 
 #include <sstream>
 
+#include <wx/hash.h>
 #include <wx/image.h>
 #include <wx/stdpaths.h>
 
@@ -153,10 +154,6 @@ void ArtProvider::Create()
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::SideOrthoCamera, TXT( "devices/camera.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::TopOrthoCamera, TXT( "devices/camera.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::CameraModeOrbit, TXT( "devices/camera.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::CameraModeFront, TXT( "devices/camera.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::CameraModeSide, TXT( "devices/camera.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::CameraModeTop, TXT( "devices/camera.png" ) ) );
 
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Select, TXT( "" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Translate, TXT( "apps/amsn4.png" ) ) );

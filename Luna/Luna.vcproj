@@ -739,7 +739,6 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
-			RelativePathToProject=".\SDK\wxPropertyGrid\1.4.11\wxPropertyGrid.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{CFCA9C73-C321-48BA-8F29-097FD061EBB1}"
@@ -1111,43 +1110,11 @@
 			Name="Scene"
 			>
 			<File
-				RelativePath=".\Scene\JointTransform.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\JointTransform.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Layer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Layer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\LayerGrid.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\LayerGrid.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\MiscSettings.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Scene\MiscSettings.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Scene.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Scene.h"
 				>
 			</File>
 			<File
@@ -1179,14 +1146,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneGraph.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneGraph.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\SceneInit.cpp"
 				>
 			</File>
@@ -1200,30 +1159,6 @@
 			</File>
 			<File
 				RelativePath=".\Scene\SceneManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneNode.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneNode.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneNodePanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneNodePanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneNodeType.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneNodeType.h"
 				>
 			</File>
 			<File
@@ -1243,14 +1178,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneVisitor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneVisitor.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\SelectedEntityCollection.cpp"
 				>
 			</File>
@@ -1267,43 +1194,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\Shader.cpp"
+				RelativePath=".\Scene\TreeMonitor.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\Shader.h"
+				RelativePath=".\Scene\TreeMonitor.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\Skin.cpp"
+				RelativePath=".\Scene\TreeSortTimer.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\Skin.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Statistics.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Statistics.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Transform.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\Transform.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\TypeGrid.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\TypeGrid.h"
+				RelativePath=".\Scene\TreeSortTimer.h"
 				>
 			</File>
 			<Filter
@@ -1331,6 +1234,86 @@
 				</File>
 				<File
 					RelativePath=".\Scene\Tool.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\ToolsPanel.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug Unicode|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release Unicode|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Scene\ToolsPanel.h"
 					>
 				</File>
 				<File
@@ -1379,7 +1362,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Objects"
+				Name="Scene Graph"
 				>
 				<File
 					RelativePath=".\Scene\CreateTool.cpp"
@@ -1510,6 +1493,22 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Scene\JointTransform.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\JointTransform.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Layer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Layer.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Scene\Locator.cpp"
 					>
 				</File>
@@ -1579,6 +1578,78 @@
 				</File>
 				<File
 					RelativePath=".\Scene\Point.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Scene.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Scene.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneGraph.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneGraph.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneNode.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneNodePanel.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneNodePanel.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneNodeType.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneNodeType.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneVisitor.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneVisitor.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Shader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Shader.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Skin.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Skin.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Transform.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Transform.h"
 					>
 				</File>
 				<File
@@ -1774,6 +1845,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Scene\Statistics.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Statistics.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Scene\VertexResource.cpp"
 					>
 				</File>
@@ -1803,7 +1882,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="UI"
+				Name="Grids"
 				>
 				<File
 					RelativePath=".\Scene\Grid.cpp"
@@ -1830,185 +1909,21 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\TreeMonitor.cpp"
+					RelativePath=".\Scene\LayerGrid.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\TreeMonitor.h"
+					RelativePath=".\Scene\LayerGrid.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\TreeSortTimer.cpp"
+					RelativePath=".\Scene\TypeGrid.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\TreeSortTimer.h"
+					RelativePath=".\Scene\TypeGrid.h"
 					>
 				</File>
-				<Filter
-					Name="Outlines"
-					>
-					<File
-						RelativePath=".\Scene\HierarchyOutliner.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\HierarchyOutliner.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\HierarchyOutlinerItemData.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\HierarchyOutlinerItemData.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\NodeTypeOutliner.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\NodeTypeOutliner.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\SceneOutliner.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\SceneOutliner.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\SceneOutlinerItemData.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\SceneOutlinerItemData.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\SceneOutlinerState.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\SceneOutlinerState.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Dialogs"
-					>
-					<File
-						RelativePath=".\Scene\ExportOptionsDlg.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ExportOptionsDlg.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ImportOptionsDlg.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ImportOptionsDlg.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Tools"
-					>
-					<File
-						RelativePath=".\Scene\CameraModeButton.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\CameraModeButton.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scene\ToolsPanel.cpp"
-						>
-						<FileConfiguration
-							Name="Debug|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\$(InputName)1.obj"
-								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug|x64"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\$(InputName)1.obj"
-								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\$(InputName)1.obj"
-								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|x64"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\$(InputName)1.obj"
-								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug Unicode|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\$(InputName)1.obj"
-								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug Unicode|x64"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\$(InputName)1.obj"
-								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release Unicode|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\$(InputName)1.obj"
-								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release Unicode|x64"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\$(InputName)1.obj"
-								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath=".\Scene\ToolsPanel.h"
-						>
-					</File>
-				</Filter>
 			</Filter>
 			<Filter
 				Name="Primitives"
@@ -2123,6 +2038,78 @@
 				</File>
 				<File
 					RelativePath=".\Scene\PrimitiveSphere.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Outlines"
+				>
+				<File
+					RelativePath=".\Scene\HierarchyOutliner.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\HierarchyOutliner.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\HierarchyOutlinerItemData.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\HierarchyOutlinerItemData.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\NodeTypeOutliner.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\NodeTypeOutliner.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneOutliner.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneOutliner.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneOutlinerItemData.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneOutlinerItemData.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneOutlinerState.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\SceneOutlinerState.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Dialogs"
+				>
+				<File
+					RelativePath=".\Scene\ExportOptionsDlg.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\ExportOptionsDlg.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\ImportOptionsDlg.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\ImportOptionsDlg.h"
 					>
 				</File>
 			</Filter>
@@ -4321,6 +4308,46 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="UI"
+			>
+			<File
+				RelativePath=".\UI\PerforcePanels.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforcePanels.fbp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforcePanels.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceSubmitDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceSubmitDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceSubmitPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceSubmitPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceWaitDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceWaitDialog.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>
@@ -4342,27 +4369,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\CommonGenerated.cpp"
+			RelativePath=".\HelpPanel.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\CommonGenerated.fbp"
-			>
-		</File>
-		<File
-			RelativePath=".\CommonGenerated.h"
-			>
-		</File>
-		<File
-			RelativePath=".\LunaGenerated.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\LunaGenerated.fbp"
-			>
-		</File>
-		<File
-			RelativePath=".\LunaGenerated.h"
+			RelativePath=".\HelpPanel.h"
 			>
 		</File>
 		<File

@@ -231,7 +231,7 @@ void NavigationPanel::OnNavBarTextEnter( wxCommandEvent& event )
   if ( m_IgnoreNavBarTextChanged )
     return;
   
-  m_BrowserFrame->Search( GetNavBarValue().c_str() ); 
+  m_BrowserFrame->Search( (const wxChar*)GetNavBarValue().c_str() ); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -239,7 +239,7 @@ void NavigationPanel::OnGoButtonClick( wxCommandEvent& event )
 {
   event.Skip();
   
-  m_BrowserFrame->Search( GetNavBarValue().c_str() );
+  m_BrowserFrame->Search( (const wxChar*)GetNavBarValue().c_str() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

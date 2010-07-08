@@ -718,7 +718,7 @@ void CreateTool::MouseUp(wxMouseEvent& e)
 
 void CreateTool::KeyPress( wxKeyEvent& e )
 {
-  if (e.KeyCode() == WXK_RETURN)
+  if (e.GetKeyCode() == WXK_RETURN)
   {
     AddToScene();
 

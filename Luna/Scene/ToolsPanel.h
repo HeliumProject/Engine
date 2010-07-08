@@ -13,7 +13,8 @@ namespace Luna
     {
     public:
         ToolsPanel( SceneEditor* sceneEditor, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 140, 300 ), long style = wxTAB_TRAVERSAL );
-        virtual ~ToolsPanel();
+
+        void Create( wxScrolledWindow* properties );
 
         void OnToggleButton( wxCommandEvent& );
 
@@ -23,7 +24,6 @@ namespace Luna
         SceneEditor* m_SceneEditor;
         std::vector<wxBitmapToggleButton*> m_Buttons;
         wxStaticLine* m_Divider;
-        wxScrolledWindow* m_ScrollWindow;
-        wxStaticText* m_StaticText;  	
+        wxScrolledWindow* m_Properties;
     };
 }

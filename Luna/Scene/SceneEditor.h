@@ -62,21 +62,17 @@ namespace Luna
         // that is open.  Restores the state when switching between scenes.
         M_OutlinerStates m_OutlinerStates;
 
-        // the attributes notebook
-        wxNotebook* m_Properties;
-
         // the attributes for the current selection
         EnumeratorPtr m_SelectionEnumerator;
         PropertiesManagerPtr m_SelectionPropertiesManager;
         Inspect::Canvas m_SelectionProperties;
-        size_t m_SelectionPropertyPage;
 
         // the attributes for the current tool
         EnumeratorPtr m_ToolEnumerator;
         PropertiesManagerPtr m_ToolPropertiesManager;
         Inspect::Canvas m_ToolProperties;
-        size_t m_ToolPropertyPage;
 
+        // static help text
         HelpPanel* m_Help;
 
         // the directory notebook

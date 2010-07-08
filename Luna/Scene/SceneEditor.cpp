@@ -241,6 +241,7 @@ void SceneEditor::CleanupEditor()
 SceneEditor::SceneEditor()
 : Editor( EditorTypes::Scene, NULL, wxID_ANY, wxT("Luna"), wxDefaultPosition, wxSize(1180, 750), wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER )
 , m_SceneManager( this )
+, m_HierarchyOutline( NULL )
 , m_EntityOutline( NULL )
 , m_TypeOutline( NULL )
 , m_FileMenu( NULL )
@@ -582,6 +583,13 @@ SceneEditor::SceneEditor()
     m_Directory->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
     {
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
+        // Hierarchy
+        m_HierarchyOutline = new HierarchyOutliner( &m_SceneManager );
+        Nocturnal::SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, wxID_ANY );
+        hierarchyTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+        m_Directory->AddPage( hierarchyTree, TXT( "Hierarchy" ) );
+        m_TreeMonitor.AddTree( hierarchyTree );
+
         // Entities
         m_EntityOutline = new EntityAssetOutliner( &m_SceneManager );
         Nocturnal::SortTreeCtrl* entityTree = m_EntityOutline->InitTreeCtrl( m_Directory, wxID_ANY );
@@ -739,6 +747,7 @@ SceneEditor::~SceneEditor()
     delete m_LayerGrid;
     delete m_TypeOutline;
     delete m_EntityOutline;
+    delete m_HierarchyOutline;
 }
 
 SceneEditorID SceneEditor::CameraModeToSceneEditorID( CameraMode cameraMode )
@@ -2635,7 +2644,8 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
     OutlinerStates* stateInfo = &m_OutlinerStates.insert( M_OutlinerStates::value_type( args.m_Scene, OutlinerStates() ) ).first->second;
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
     m_TypeOutline->SaveState( stateInfo->m_Types );
-    m_EntityOutline->SaveState( stateInfo->m_EntityAssetes );
+    m_EntityOutline->SaveState( stateInfo->m_Entities );
+    m_HierarchyOutline->SaveState( stateInfo->m_Hierarchy );
 #endif
 
     // Clear the selection attribute canvas
@@ -2679,7 +2689,8 @@ void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
             OutlinerStates* stateInfo = &foundOutline->second;
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
             m_TypeOutline->RestoreState( stateInfo->m_Types );
-            m_EntityOutline->RestoreState( stateInfo->m_EntityAssetes );
+            m_EntityOutline->RestoreState( stateInfo->m_Entities );
+            m_HierarchyOutline->RestoreState( stateInfo->m_Hierarchy );
 #endif
         }
 

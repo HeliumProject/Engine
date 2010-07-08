@@ -739,7 +739,6 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
-			RelativePathToProject=".\SDK\wxPropertyGrid\1.4.11\wxPropertyGrid.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{CFCA9C73-C321-48BA-8F29-097FD061EBB1}"
@@ -1192,6 +1191,22 @@
 			</File>
 			<File
 				RelativePath=".\Scene\SelectionPropertiesPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\TreeMonitor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\TreeMonitor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\TreeSortTimer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\TreeSortTimer.h"
 				>
 			</File>
 			<Filter
@@ -1713,26 +1728,6 @@
 						>
 					</File>
 				</Filter>
-			</Filter>
-			<Filter
-				Name="UI Helpers"
-				>
-				<File
-					RelativePath=".\Scene\TreeMonitor.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\TreeMonitor.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\TreeSortTimer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\TreeSortTimer.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Cameras"
@@ -4313,6 +4308,46 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="UI"
+			>
+			<File
+				RelativePath=".\UI\PerforcePanels.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforcePanels.fbp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforcePanels.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceSubmitDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceSubmitDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceSubmitPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceSubmitPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceWaitDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceWaitDialog.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>
@@ -4334,35 +4369,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\CommonGenerated.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\CommonGenerated.fbp"
-			>
-		</File>
-		<File
-			RelativePath=".\CommonGenerated.h"
-			>
-		</File>
-		<File
 			RelativePath=".\HelpPanel.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\HelpPanel.h"
-			>
-		</File>
-		<File
-			RelativePath=".\LunaGenerated.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\LunaGenerated.fbp"
-			>
-		</File>
-		<File
-			RelativePath=".\LunaGenerated.h"
 			>
 		</File>
 		<File

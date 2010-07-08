@@ -15,7 +15,7 @@ private:
 
 public:
   Text(wxWindow* parent, Label* label)
-    : wxPanel (parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxT( "LText" ) )
+    : wxPanel (parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxNO_BORDER, wxT( "Text" ) )
     , m_Label (label)
   {
     SetSizer( new wxBoxSizer( wxHORIZONTAL ) );

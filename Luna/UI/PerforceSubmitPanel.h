@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "Application/UI/PerforceUI/Panels.h"
+#include "PerforcePanels.h"
 
 #include "Application/RCS/RCS.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
@@ -39,7 +39,7 @@ namespace PerforceUI
 
 
   ///////////////////////////////////////////////////////////////////////////////
-  class Panel : public MainPanel 
+  class SubmitPanel : public GeneratedSubmitPanel 
   {
   public:
 
@@ -47,7 +47,7 @@ namespace PerforceUI
     // Ctor/Dtor
     //
 
-    Panel( wxWindow* parent, 
+    SubmitPanel( wxWindow* parent, 
       int id = wxID_ANY,
       int changelist = RCS::DefaultChangesetId,
       const tstring& description = TXT( "" ),
@@ -55,7 +55,7 @@ namespace PerforceUI
       const tstring& title = TXT( "" ),
       const tstring& titleDescription = TXT( "" ) );
 
-    virtual ~Panel();
+    virtual ~SubmitPanel();
 
 
     //

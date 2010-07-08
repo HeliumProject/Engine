@@ -5,8 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __Panels__
-#define __Panels__
+#ifndef __PerforcePanels__
+#define __PerforcePanels__
 
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -29,9 +29,9 @@
 namespace PerforceUI
 {
 	///////////////////////////////////////////////////////////////////////////////
-	/// Class MainPanel
+	/// Class GeneratedSubmitPanel
 	///////////////////////////////////////////////////////////////////////////////
-	class MainPanel : public wxPanel 
+	class GeneratedSubmitPanel : public wxPanel 
 	{
 		private:
 		
@@ -88,15 +88,15 @@ namespace PerforceUI
 			wxButton* m_HelpButton;
 		
 		public:
-			MainPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,400 ), long style = wxTAB_TRAVERSAL );
-			~MainPanel();
+			GeneratedSubmitPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,400 ), long style = wxTAB_TRAVERSAL );
+			~GeneratedSubmitPanel();
 		
 	};
 	
 	///////////////////////////////////////////////////////////////////////////////
-	/// Class WaitPanel
+	/// Class GeneratedWaitPanel
 	///////////////////////////////////////////////////////////////////////////////
-	class WaitPanel : public wxPanel 
+	class GeneratedWaitPanel : public wxPanel 
 	{
 		private:
 		
@@ -111,11 +111,11 @@ namespace PerforceUI
 		public:
 			wxGauge* m_Gauge;
 			wxButton* m_CancelButton;
-			WaitPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 260,40 ), long style = wxTAB_TRAVERSAL );
-			~WaitPanel();
+			GeneratedWaitPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 260,40 ), long style = wxTAB_TRAVERSAL );
+			~GeneratedWaitPanel();
 		
 	};
 	
 } // namespace PerforceUI
 
-#endif //__Panels__
+#endif //__PerforcePanels__

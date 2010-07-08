@@ -2,38 +2,43 @@
 #include "Application.h"
 #include "AppPreferences.h"
 
-#include "Application/Application.h"
-#include "Browser/Browser.h"
-#include "Foundation/InitializerStack.h"
-#include "Foundation/Log.h"
-#include "Core/CoreInit.h"
-#include "Platform/Exception.h"
-#include "Editor/ApplicationPreferences.h"
-#include "Editor/Editor.h"
-#include "Editor/EditorInit.h"
-#include "Editor/Preferences.h"
-#include "Foundation/Math/Utils.h"
-#include "Scene/SceneEditor.h"
-#include "Scene/SceneInit.h"
-#include "Task/TaskInit.h"
-#include "Application/UI/ArtProvider.h"
 #include "Platform/Windows/Windows.h"
+#include "Platform/Windows/Console.h"
 #include "Platform/Process.h"
-#include "Application/Worker/Process.h"
+#include "Platform/Exception.h"
 
-#include "Application/UI/DebugUI/DebugUI.h"
-#include "Application/UI/PerforceUI/PerforceUI.h"
-
-
+#include "Foundation/Log.h"
+#include "Foundation/InitializerStack.h"
+#include "Foundation/Math/Utils.h"
 #include "Foundation/CommandLine/Option.h"
 #include "Foundation/CommandLine/Command.h"
 #include "Foundation/CommandLine/Commands/Help.h"
 #include "Foundation/CommandLine/Processor.h"
 
+#include "Application/Application.h"
+#include "Application/UI/ArtProvider.h"
+#include "Application/Worker/Process.h"
+#include "Application/Exception.h"
+
+#include "Core/CoreInit.h"
+#include "Browser/Browser.h"
+#include "Editor/ApplicationPreferences.h"
+#include "Editor/Editor.h"
+#include "Editor/EditorInit.h"
+#include "Editor/Preferences.h"
+#include "Scene/SceneEditor.h"
+#include "Scene/SceneInit.h"
+#include "Task/TaskInit.h"
+#include "UI/PerforceWaitDialog.h"
+
 //#include "Commands/BuildCommand.h"
 #include "Commands/ProfileDumpCommand.h"
 #include "Commands/RebuildCommand.h"
 
+#include <set>
+#include <wx/wx.h>
+#include <wx/choicdlg.h>
+#include <wx/msw/private.h>
 #include <wx/cmdline.h>
 #include <wx/splash.h>
 #include <wx/cshelp.h>
@@ -41,6 +46,90 @@
 using namespace Luna;
 using namespace Nocturnal;
 using namespace Nocturnal::CommandLine;
+
+#if ( wxUSE_EXCEPTIONS == 1 )
+#pragma message( "WARNING: wxWidgets exception handling is enabled!" )
+#endif
+
+static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
+{
+  static std::set<uintptr> disabled;
+  static bool skipAll = false;
+  bool skip = skipAll;
+
+  // are we NOT skipping everything?
+  if (!skipAll)
+  {
+    // have we disabled this break point?
+    if (disabled.find(args.m_Info->ContextRecord->IPREG) != disabled.end())
+    {
+      skip = true;
+    }
+    // we have NOT disabled this break point yet
+    else
+    {
+      Debug::ExceptionArgs exArgs ( Debug::ExceptionTypes::SEH, args.m_Fatal ); 
+      Debug::GetExceptionDetails( args.m_Info, exArgs ); 
+
+      // dump args.m_Info to console
+      Platform::Print(Platform::ConsoleColors::Red, stderr, TXT( "%s" ), Debug::GetExceptionInfo(args.m_Info).c_str());
+
+      // display result
+      tstring message( TXT( "A break point was triggered in the application:\n\n" ) );
+      message += Debug::GetSymbolInfo( args.m_Info->ContextRecord->IPREG );
+      message += TXT("\n\nWhat do you wish to do?");
+
+      const tchar* nothing = TXT( "Let the OS handle this as an exception" );
+      const tchar* thisOnce = TXT( "Skip this break point once" );
+      const tchar* thisDisable = TXT( "Skip this break point and disable it" );
+      const tchar* allDisable = TXT( "Skip all break points" );
+
+      wxArrayString choices;
+      choices.Add(nothing);
+      choices.Add(thisOnce);
+      choices.Add(thisDisable);
+      choices.Add(allDisable);
+      wxString choice = ::wxGetSingleChoice( message.c_str(), TXT( "Break Point Triggered" ), choices );
+
+      if (choice == nothing)
+      {
+        // we are not continuable, so unhook the top level filter
+        SetUnhandledExceptionFilter( NULL );
+
+        // this should let the OS prompt for the debugger
+        return EXCEPTION_CONTINUE_SEARCH;
+      }
+      else if (choice == thisOnce)
+      {
+        skip = true;
+      }
+      else if (choice == thisDisable)
+      {
+        skip = true;
+        disabled.insert(args.m_Info->ContextRecord->IPREG);
+      }
+      else if (choice == allDisable)
+      {
+        skip = true;
+        skipAll = true;
+      }
+    }
+  }
+
+  if (skipAll || skip)
+  {
+    // skip break instruction (move the ip ahead one byte)
+    args.m_Info->ContextRecord->IPREG += 1;
+
+    // continue execution past the break instruction
+    return EXCEPTION_CONTINUE_EXECUTION;
+  }
+  else
+  {
+    // fall through and let window's crash API run
+    return EXCEPTION_CONTINUE_SEARCH;
+  }
+}
 
 namespace Luna
 {
@@ -86,7 +175,7 @@ bool LunaApp::OnInit()
     {
         Log::Bullet initialize( TXT( "Initializing\n" ) );
 
-        m_InitializerStack.Push( PerforceUI::Initialize, PerforceUI::Cleanup );
+        PerforceUI::WaitDialog::Enable( true );
 
         {
             Log::Bullet modules( TXT( "Modules:\n" ) );
@@ -372,7 +461,12 @@ int Main ( int argc, const tchar** argv )
 int main( int argc, const tchar** argv )
 {
     Nocturnal::InitializerStack initializerStack( true );
-    initializerStack.Push( &DebugUI::Initialize, &DebugUI::Cleanup );
 
-    return Application::StandardMain( &Main, argc, argv );
+    Debug::g_BreakpointOccurred.Set( &ShowBreakpointDialog );
+
+    int result = Application::StandardMain( &Main, argc, argv );
+
+    Debug::g_BreakpointOccurred.Clear();
+
+    return result;
 }

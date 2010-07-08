@@ -7,25 +7,25 @@
 
 namespace PerforceUI
 {
-  class Panel;
+  class SubmitPanel;
 
-  class Dialog : public wxDialog 
+  class SubmitDialog : public wxDialog 
   {
   public:
-    Dialog( wxWindow* parent,
+    SubmitDialog( wxWindow* parent,
       int id = wxID_ANY,
       int changelistNumber = RCS::DefaultChangesetId,
       const tstring& description = TXT( "" ),
       wxString title = wxT("Perforce Change Specification") );
 
-    virtual ~Dialog();
+    virtual ~SubmitDialog();
 
     virtual int ShowModal();
     virtual void EndModal( int retCode = wxID_CANCEL );
 
-    Panel* GetPanel() const;
+    SubmitPanel* GetPanel() const;
 
   private:
-    Panel* m_Panel;
+    SubmitPanel* m_Panel;
   };
 }

@@ -5,12 +5,14 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "Panels.h"
+#include "Precompile.h"
+
+#include "PerforcePanels.h"
 
 ///////////////////////////////////////////////////////////////////////////
 using namespace PerforceUI;
 
-MainPanel::MainPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+GeneratedSubmitPanel::GeneratedSubmitPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	this->SetMinSize( wxSize( 550,400 ) );
 	
@@ -321,11 +323,11 @@ MainPanel::MainPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const
 	this->Layout();
 }
 
-MainPanel::~MainPanel()
+GeneratedSubmitPanel::~GeneratedSubmitPanel()
 {
 }
 
-WaitPanel::WaitPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+GeneratedWaitPanel::GeneratedWaitPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	this->SetMinSize( wxSize( 260,40 ) );
 	this->SetMaxSize( wxSize( 260,40 ) );
@@ -371,6 +373,6 @@ WaitPanel::WaitPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const
 	this->Layout();
 }
 
-WaitPanel::~WaitPanel()
+GeneratedWaitPanel::~GeneratedWaitPanel()
 {
 }

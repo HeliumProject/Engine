@@ -1,10 +1,11 @@
-#include "Dialog.h"
-#include "Application/UI/PerforceUI/PerforceUIPanel.h"
+#include "Precompile.h"
+#include "PerforceSubmitDialog.h"
+#include "PerforceSubmitPanel.h"
 
 using namespace PerforceUI;
 
 ///////////////////////////////////////////////////////////////////////////////
-Dialog::Dialog
+SubmitDialog::SubmitDialog
 ( 
  wxWindow* parent,
  int id,
@@ -14,7 +15,7 @@ Dialog::Dialog
  )
  : wxDialog( parent, id, title, wxDefaultPosition, wxSize( 560,410 ), wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX )
 {
-  m_Panel = new Panel( this, wxID_ANY, changelistNumber, description );
+  m_Panel = new SubmitPanel( this, wxID_ANY, changelistNumber, description );
 
   wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
   sizer->Add( m_Panel, 1, wxEXPAND | wxALL, 5 );
@@ -27,12 +28,12 @@ Dialog::Dialog
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-Dialog::~Dialog()
+SubmitDialog::~SubmitDialog()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-int Dialog::ShowModal()
+int SubmitDialog::ShowModal()
 {
   int result = wxID_CANCEL;
 
@@ -42,7 +43,7 @@ int Dialog::ShowModal()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Dialog::EndModal( int retCode )
+void SubmitDialog::EndModal( int retCode )
 {
   m_Panel->CommitChanges();
 
@@ -50,7 +51,7 @@ void Dialog::EndModal( int retCode )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-Panel* Dialog::GetPanel() const
+SubmitPanel* SubmitDialog::GetPanel() const
 {
   return m_Panel; 
 }

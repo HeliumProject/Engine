@@ -1175,14 +1175,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\AutoCompleteComboBox.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\AutoCompleteComboBox.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\AutoFlexSizer.cpp"
 				>
 			</File>
@@ -1215,22 +1207,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\DialogWorkerThread.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\DialogWorkerThread.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\FieldMRU.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\FieldMRU.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\FileDialog.cpp"
 				>
 			</File>
@@ -1255,14 +1231,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\FileTreeCtrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\FileTreeCtrl.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\ImageViewPanel.cpp"
 				>
 			</File>
@@ -1271,35 +1239,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\ListDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ListDialog.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ListView.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ListView.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\MenuButton.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\UI\MenuButton.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\MenuMRU.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\MenuMRU.h"
 				>
 			</File>
 			<File
@@ -1319,14 +1263,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\MRU.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\PropertyGridAttribs.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\RegistryConfig.cpp"
 				>
 			</File>
@@ -1335,79 +1271,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\SortableListView.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\SortableListView.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\SortTreeCtrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\SortTreeCtrl.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\ThreadMechanism.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\UI\ThreadMechanism.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeCtrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeCtrl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeWndCtrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeWndCtrl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeWndCtrlApi.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeWndCtrlCollapsed.xpm"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeWndCtrlExpanded.xpm"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeWndCtrlItem.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeWndCtrlItem.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeWndCtrlNode.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeWndCtrlNode.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeWndCtrlSpacer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TreeWndCtrlSpacer.h"
 				>
 			</File>
 			<File
@@ -1430,73 +1298,141 @@
 				RelativePath=".\UI\WizardPageTemplate.h"
 				>
 			</File>
-			<File
-				RelativePath=".\UI\WorkerThreadDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\WorkerThreadDialog.h"
-				>
-			</File>
 			<Filter
-				Name="DebugUI"
+				Name="MRU"
 				>
 				<File
-					RelativePath=".\UI\DebugUI\DebugUI.cpp"
+					RelativePath=".\UI\FieldMRU.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\UI\DebugUI\DebugUI.h"
+					RelativePath=".\UI\FieldMRU.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\MenuMRU.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\MenuMRU.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UI\MRU.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="PerforceUI"
+				Name="Controls"
 				>
 				<File
-					RelativePath=".\UI\PerforceUI\Dialog.cpp"
+					RelativePath=".\UI\AutoCompleteComboBox.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\UI\PerforceUI\Dialog.h"
+					RelativePath=".\UI\AutoCompleteComboBox.h"
 					>
 				</File>
 				<File
-					RelativePath=".\UI\PerforceUI\Panels.cpp"
+					RelativePath=".\UI\ListDialog.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\UI\PerforceUI\Panels.fbp"
+					RelativePath=".\UI\ListDialog.h"
 					>
 				</File>
 				<File
-					RelativePath=".\UI\PerforceUI\Panels.h"
+					RelativePath=".\UI\ListView.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\UI\PerforceUI\PerforceUI.cpp"
+					RelativePath=".\UI\ListView.h"
 					>
 				</File>
 				<File
-					RelativePath=".\UI\PerforceUI\PerforceUI.h"
+					RelativePath=".\UI\SortableListView.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\UI\PerforceUI\PerforceUIPanel.cpp"
+					RelativePath=".\UI\SortableListView.h"
 					>
 				</File>
-				<File
-					RelativePath=".\UI\PerforceUI\PerforceUIPanel.h"
+				<Filter
+					Name="TreeCtrl"
 					>
-				</File>
-				<File
-					RelativePath=".\UI\PerforceUI\WaitDialog.cpp"
+					<File
+						RelativePath=".\UI\FileTreeCtrl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\FileTreeCtrl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\SortTreeCtrl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\SortTreeCtrl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\TreeCtrl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\TreeCtrl.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="TreeWnd"
 					>
-				</File>
-				<File
-					RelativePath=".\UI\PerforceUI\WaitDialog.h"
-					>
-				</File>
+					<File
+						RelativePath=".\UI\TreeWndCtrl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\TreeWndCtrl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\TreeWndCtrlApi.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\TreeWndCtrlCollapsed.xpm"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\TreeWndCtrlExpanded.xpm"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\TreeWndCtrlItem.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\TreeWndCtrlItem.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\TreeWndCtrlNode.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\TreeWndCtrlNode.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\TreeWndCtrlSpacer.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\TreeWndCtrlSpacer.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter

@@ -1,4 +1,5 @@
-#include "PerforceUIPanel.h"
+#include "Precompile.h"
+#include "PerforceSubmitPanel.h"
 
 #include <set>
 #include <sstream>
@@ -35,7 +36,7 @@ inline const tchar* GetOperationString( RCS::Operation operation )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-Panel::Panel
+SubmitPanel::SubmitPanel
 ( 
  wxWindow* parent, 
  int id,
@@ -45,7 +46,7 @@ Panel::Panel
  const tstring& title,
  const tstring& titleDescription
  )
- : MainPanel( parent, id, wxDefaultPosition, wxSize( 550,400 ), wxTAB_TRAVERSAL )
+ : GeneratedSubmitPanel( parent, id, wxDefaultPosition, wxSize( 550,400 ), wxTAB_TRAVERSAL )
  , m_PanelStyle( panelStyle )
  , m_Title( title )
  , m_TitleDescription( titleDescription )
@@ -79,7 +80,7 @@ Panel::Panel
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-Panel::~Panel()
+SubmitPanel::~SubmitPanel()
 {
     m_FilePaths.clear();
 
@@ -87,7 +88,7 @@ Panel::~Panel()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::SetChangeset( const RCS::Changeset& changeset, bool getFiles )
+void SubmitPanel::SetChangeset( const RCS::Changeset& changeset, bool getFiles )
 {
     m_Changeset = changeset;
 
@@ -110,7 +111,7 @@ void Panel::SetChangeset( const RCS::Changeset& changeset, bool getFiles )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::SetFileList( const std::vector< tstring >& filePaths )
+void SubmitPanel::SetFileList( const std::vector< tstring >& filePaths )
 {
     m_FilePaths.clear();
     m_FilePaths = filePaths;
@@ -118,7 +119,7 @@ void Panel::SetFileList( const std::vector< tstring >& filePaths )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::SetChangeDescription( const tstring& description )
+void SubmitPanel::SetChangeDescription( const tstring& description )
 {
     if ( m_Changeset.m_Description != description )
     {
@@ -127,7 +128,7 @@ void Panel::SetChangeDescription( const tstring& description )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::SetJobStatus( const tstring& jobStatus )
+void SubmitPanel::SetJobStatus( const tstring& jobStatus )
 {
     if ( m_JobStatus != jobStatus )
     {
@@ -136,7 +137,7 @@ void Panel::SetJobStatus( const tstring& jobStatus )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::SetReopenFiles( bool reopenFiles )
+void SubmitPanel::SetReopenFiles( bool reopenFiles )
 { 
     if ( m_ReopenFiles != reopenFiles )
     {
@@ -145,7 +146,7 @@ void Panel::SetReopenFiles( bool reopenFiles )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::SetTitleDescription( const tstring& titleDescription )
+void SubmitPanel::SetTitleDescription( const tstring& titleDescription )
 {
     if ( m_TitleDescription != titleDescription )
     {
@@ -154,7 +155,7 @@ void Panel::SetTitleDescription( const tstring& titleDescription )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool Panel::IsFileSelected( const tstring& depotPath )
+bool SubmitPanel::IsFileSelected( const tstring& depotPath )
 {
     if ( !ShouldShowCommitButtons() )
         return true;
@@ -170,7 +171,7 @@ bool Panel::IsFileSelected( const tstring& depotPath )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool Panel::TransferDataToForm()
+bool SubmitPanel::TransferDataToForm()
 {
     DisconnectListeners();
 
@@ -183,7 +184,7 @@ bool Panel::TransferDataToForm()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-bool Panel::TransferDataFromForm()
+bool SubmitPanel::TransferDataFromForm()
 {
     if ( HasCancelAction() )
     {
@@ -226,7 +227,7 @@ bool Panel::TransferDataFromForm()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::Clear()
+void SubmitPanel::Clear()
 {
     m_DescriptionTextCtrl->Clear();  
     m_FileCheckList->Clear();
@@ -236,7 +237,7 @@ void Panel::Clear()
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::Populate()
+void SubmitPanel::Populate()
 {
     m_TitlePanel->Show( ShouldShowTitle() ); 
     if ( ShouldShowTitle() )
@@ -317,34 +318,34 @@ void Panel::Populate()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::ConnectListeners()
+void SubmitPanel::ConnectListeners()
 {
     // Reconnect listeners
-    m_SelectAllButton->Connect( m_SelectAllButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnSelectAllButtonClick ), NULL, this );
-    m_UnselectButton->Connect( m_UnselectButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnUnselectAllButtonClick ), NULL, this );
-    m_SubmitButton->Connect( m_SubmitButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnSubmitButtonClick ), NULL, this );
-    m_UpdateButton->Connect( m_UpdateButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnUpdateButtonClick ), NULL, this );
-    m_CancelButton->Connect( m_CancelButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnCancelButtonClick ), NULL, this );
-    m_SpecNoteButton->Connect( m_SpecNoteButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnSpecNotesButtonClick ), NULL, this );
-    m_HelpButton->Connect( m_HelpButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnHelpButtonClick ), NULL, this );
+    m_SelectAllButton->Connect( m_SelectAllButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnSelectAllButtonClick ), NULL, this );
+    m_UnselectButton->Connect( m_UnselectButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnUnselectAllButtonClick ), NULL, this );
+    m_SubmitButton->Connect( m_SubmitButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnSubmitButtonClick ), NULL, this );
+    m_UpdateButton->Connect( m_UpdateButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnUpdateButtonClick ), NULL, this );
+    m_CancelButton->Connect( m_CancelButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnCancelButtonClick ), NULL, this );
+    m_SpecNoteButton->Connect( m_SpecNoteButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnSpecNotesButtonClick ), NULL, this );
+    m_HelpButton->Connect( m_HelpButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnHelpButtonClick ), NULL, this );
 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::DisconnectListeners()
+void SubmitPanel::DisconnectListeners()
 {
     // Disconnect listeners
-    m_SelectAllButton->Disconnect( m_SelectAllButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnSelectAllButtonClick ), NULL, this );
-    m_UnselectButton->Disconnect( m_UnselectButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnUnselectAllButtonClick ), NULL, this );
-    m_SubmitButton->Disconnect( m_SubmitButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnSubmitButtonClick ), NULL, this );
-    m_UpdateButton->Disconnect( m_UpdateButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnUpdateButtonClick ), NULL, this );
-    m_CancelButton->Disconnect( m_CancelButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnCancelButtonClick ), NULL, this );
-    m_SpecNoteButton->Disconnect( m_SpecNoteButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnSpecNotesButtonClick ), NULL, this );
-    m_HelpButton->Disconnect( m_HelpButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Panel::OnHelpButtonClick ), NULL, this );
+    m_SelectAllButton->Disconnect( m_SelectAllButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnSelectAllButtonClick ), NULL, this );
+    m_UnselectButton->Disconnect( m_UnselectButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnUnselectAllButtonClick ), NULL, this );
+    m_SubmitButton->Disconnect( m_SubmitButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnSubmitButtonClick ), NULL, this );
+    m_UpdateButton->Disconnect( m_UpdateButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnUpdateButtonClick ), NULL, this );
+    m_CancelButton->Disconnect( m_CancelButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnCancelButtonClick ), NULL, this );
+    m_SpecNoteButton->Disconnect( m_SpecNoteButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnSpecNotesButtonClick ), NULL, this );
+    m_HelpButton->Disconnect( m_HelpButton->GetId(), wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SubmitPanel::OnHelpButtonClick ), NULL, this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::ShowTitle( const tstring& title, const tstring& description )
+void SubmitPanel::ShowTitle( const tstring& title, const tstring& description )
 {
     if ( !ShouldShowTitle() 
         || title.compare( m_Title ) != 0 
@@ -360,7 +361,7 @@ void Panel::ShowTitle( const tstring& title, const tstring& description )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::HideTitle()
+void SubmitPanel::HideTitle()
 {
     if ( ShouldShowTitle() )
     {
@@ -371,7 +372,7 @@ void Panel::HideTitle()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::ShowJobStatus( bool show )
+void SubmitPanel::ShowJobStatus( bool show )
 {
     if ( show != ShouldShowJobStatus() )
     {
@@ -388,7 +389,7 @@ void Panel::ShowJobStatus( bool show )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::ShowClientDetails( bool show )
+void SubmitPanel::ShowClientDetails( bool show )
 {
     if ( show != ShouldShowClientDetails() )
     {
@@ -405,7 +406,7 @@ void Panel::ShowClientDetails( bool show )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::ShowCommitButtons( bool show )
+void SubmitPanel::ShowCommitButtons( bool show )
 {
     if ( show != ShouldShowCommitButtons() )
     {
@@ -422,7 +423,7 @@ void Panel::ShowCommitButtons( bool show )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::OnSelectAllButtonClick( wxCommandEvent& event )
+void SubmitPanel::OnSelectAllButtonClick( wxCommandEvent& event )
 { 
     m_FileCheckList->Freeze();
     for each ( const M_FileItemTable::value_type& indexPair in m_FileItemTable )
@@ -435,7 +436,7 @@ void Panel::OnSelectAllButtonClick( wxCommandEvent& event )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::OnUnselectAllButtonClick( wxCommandEvent& event )
+void SubmitPanel::OnUnselectAllButtonClick( wxCommandEvent& event )
 { 
     m_FileCheckList->Freeze();
     for each ( const M_FileItemTable::value_type& indexPair in m_FileItemTable )
@@ -448,7 +449,7 @@ void Panel::OnUnselectAllButtonClick( wxCommandEvent& event )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::OnSubmitButtonClick( wxCommandEvent& event )
+void SubmitPanel::OnSubmitButtonClick( wxCommandEvent& event )
 { 
     m_Action = Actions::Submit;
 
@@ -456,7 +457,7 @@ void Panel::OnSubmitButtonClick( wxCommandEvent& event )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::OnUpdateButtonClick( wxCommandEvent& event )
+void SubmitPanel::OnUpdateButtonClick( wxCommandEvent& event )
 { 
     m_Action = Actions::Update;
 
@@ -464,7 +465,7 @@ void Panel::OnUpdateButtonClick( wxCommandEvent& event )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::OnCancelButtonClick( wxCommandEvent& event )
+void SubmitPanel::OnCancelButtonClick( wxCommandEvent& event )
 { 
     m_Action = Actions::Cancel;
 
@@ -472,13 +473,13 @@ void Panel::OnCancelButtonClick( wxCommandEvent& event )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::OnSpecNotesButtonClick( wxCommandEvent& event )
+void SubmitPanel::OnSpecNotesButtonClick( wxCommandEvent& event )
 { 
     event.Skip(); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void Panel::OnHelpButtonClick( wxCommandEvent& event )
+void SubmitPanel::OnHelpButtonClick( wxCommandEvent& event )
 { 
     event.Skip(); 
 }
@@ -495,7 +496,7 @@ inline bool CanReopenFile( RCS::Operation operation )
 ///////////////////////////////////////////////////////////////////////////////
 // Gets the list of FilesInfos and submits the changelist if Action::Submit is true.
 // 
-void Panel::CommitChanges()
+void SubmitPanel::CommitChanges()
 {
     if ( m_Action == Actions::Cancel )
     {

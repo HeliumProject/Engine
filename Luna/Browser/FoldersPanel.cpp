@@ -7,7 +7,7 @@
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
 #include "Application/Inspect/DragDrop/ReflectClipboardData.h"
-#include "Application/UI/SortTreeCtrl.h"
+#include "UI/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Luna;
 
@@ -39,9 +39,9 @@ wxTreeCtrl* FoldersPanel::GetTreeCtrl()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-Nocturnal::SortTreeCtrl* FoldersPanel::GetSortTreeCtrl()
+SortTreeCtrl* FoldersPanel::GetSortTreeCtrl()
 {
-  return reinterpret_cast<Nocturnal::SortTreeCtrl*>( m_FoldersTreeCtrl->GetTreeCtrl() );
+  return reinterpret_cast<SortTreeCtrl*>( m_FoldersTreeCtrl->GetTreeCtrl() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ void FoldersPanel::GetPath( tstring& path ) const
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function for hit testing a point during a drag and drop operation.
 // 
-wxTreeItemId FoldersPanel::DragHitTest( Nocturnal::SortTreeCtrl* treeCtrl, wxPoint point )
+wxTreeItemId FoldersPanel::DragHitTest( SortTreeCtrl* treeCtrl, wxPoint point )
 {
   int flags = 0;
   wxTreeItemId item = treeCtrl->HitTest( point, flags );
@@ -96,7 +96,7 @@ wxTreeItemId FoldersPanel::DragHitTest( Nocturnal::SortTreeCtrl* treeCtrl, wxPoi
 // 
 wxDragResult FoldersPanel::DragOver( const Inspect::DragArgs& args )
 {
-  Nocturnal::SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
+  SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
 
   wxDragResult result = args.m_Default;
   wxTreeItemId item = DragHitTest( treeCtrl, wxPoint( args.m_X, args.m_Y ) );
@@ -153,7 +153,7 @@ wxDragResult FoldersPanel::DragOver( const Inspect::DragArgs& args )
 // 
 wxDragResult FoldersPanel::Drop( const Inspect::DragArgs& args )
 {
-  Nocturnal::SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
+  SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
   
   wxDragResult result = wxDragNone;
 
@@ -243,7 +243,7 @@ wxDragResult FoldersPanel::Drop( const Inspect::DragArgs& args )
 // 
 void FoldersPanel::DragLeave( Nocturnal::Void )
 {
-  Nocturnal::SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
+  SortTreeCtrl* treeCtrl = GetSortTreeCtrl();
   
   if ( m_DragOverItem.IsOk() )
   {

@@ -41,12 +41,12 @@
 #include "Foundation/Log.h"
 #include "Pipeline/Content/ContentVersion.h"
 #include "Editor/MRUData.h"
-#include "Application/Inspect/Widgets/Control.h"
+#include "Application/Inspect/Controls/Control.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 #include "Application/UI/FileDialog.h"
 #include "Application/UI/FileIconsTable.h"
-#include "Application/UI/SortTreeCtrl.h"
+#include "UI/Controls/Tree/SortTreeCtrl.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "Platform/Process.h"
 
@@ -580,21 +580,21 @@ SceneEditor::SceneEditor()
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
         // Hierarchy
         m_HierarchyOutline = new HierarchyOutliner( &m_SceneManager );
-        Nocturnal::SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, wxID_ANY );
+        SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, wxID_ANY );
         hierarchyTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
         m_Directory->AddPage( hierarchyTree, TXT( "Hierarchy" ) );
         m_TreeMonitor.AddTree( hierarchyTree );
 
         // Entities
         m_EntityOutline = new EntityAssetOutliner( &m_SceneManager );
-        Nocturnal::SortTreeCtrl* entityTree = m_EntityOutline->InitTreeCtrl( m_Directory, wxID_ANY );
+        SortTreeCtrl* entityTree = m_EntityOutline->InitTreeCtrl( m_Directory, wxID_ANY );
         entityTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
         m_Directory->AddPage( entityTree, TXT( "Entities" ) );
         m_TreeMonitor.AddTree( entityTree );
 
         // Types
         m_TypeOutline = new NodeTypeOutliner( &m_SceneManager );
-        Nocturnal::SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_TypeOutlineControl );
+        SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_TypeOutlineControl );
         typeTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
         m_Directory->AddPage( typeTree, TXT( "Types" ) );
         m_TreeMonitor.AddTree( typeTree );

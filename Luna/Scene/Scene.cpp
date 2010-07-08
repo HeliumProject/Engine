@@ -28,7 +28,7 @@
 #include "Pipeline/Content/Nodes/Volume.h"
 
 #include "Application/Inspect/Data/Data.h"
-#include "Application/Inspect/Widgets/Canvas.h"
+#include "Application/Inspect/Controls/Canvas.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "SceneGraph.h"
 #include "Statistics.h"

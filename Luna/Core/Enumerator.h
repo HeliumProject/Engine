@@ -5,12 +5,12 @@
 
 #include "Luna/API.h"
 #include "Application/Inspect/Data/Data.h"
-#include "Application/Inspect/Widgets/Controls.h"
+#include "Application/Inspect/Controls/Controls.h"
 #include "Application/Inspect/Interpreter.h"
-#include "Application/Inspect/File/FileDialogButton.h"
-#include "Application/Inspect/File/FileBrowserButton.h"
-#include "Application/Inspect/Content/ParametricKeyData.h"
-#include "Application/Inspect/Content/ParametricKeyControl.h"
+#include "Application/Inspect/Interpreters/File/FileDialogButton.h"
+#include "Application/Inspect/Interpreters/File/FileBrowserButton.h"
+#include "Application/Inspect/Interpreters/Content/ParametricKeyData.h"
+#include "Application/Inspect/Interpreters/Content/ParametricKeyControl.h"
 
 #include "Selection.h"
 

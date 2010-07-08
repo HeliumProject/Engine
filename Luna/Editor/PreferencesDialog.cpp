@@ -5,8 +5,8 @@
 #include <wx/listbook.h>
 
 #include "Core/Enumerator.h"
-#include "Application/Inspect/Widgets/Canvas.h"
-#include "Application/Inspect/Reflect/ReflectInterpreter.h"
+#include "Application/Inspect/Controls/Canvas.h"
+#include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 
 using namespace Luna;
 

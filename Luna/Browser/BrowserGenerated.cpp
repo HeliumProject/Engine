@@ -11,8 +11,8 @@
 #include "Application/UI/AutoCompleteComboBox.h"
 #include "Application/UI/Button.h"
 #include "Application/UI/MenuButton.h"
-#include "Application/UI/SortTreeCtrl.h"
 #include "DirectoryCtrl.h"
+#include "UI/Controls/Tree/SortTreeCtrl.h"
 
 #include "BrowserGenerated.h"
 
@@ -536,7 +536,7 @@ CollectionsPanelGenerated::CollectionsPanelGenerated( wxWindow* parent, wxWindow
 	wxBoxSizer* m_MyCollectionsCtrlSizer;
 	m_MyCollectionsCtrlSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_MyCollectionsTreeCtrl = new Nocturnal::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTR_EDIT_LABELS|wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
+	m_MyCollectionsTreeCtrl = new Luna::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTR_EDIT_LABELS|wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
 	m_MyCollectionsTreeCtrl->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	
 	m_MyCollectionsCtrlSizer->Add( m_MyCollectionsTreeCtrl, 1, wxEXPAND|wxLEFT, 5 );
@@ -557,7 +557,7 @@ CollectionsPanelGenerated::CollectionsPanelGenerated( wxWindow* parent, wxWindow
 	wxBoxSizer* m_TempCollectionsCtrlSizer;
 	m_TempCollectionsCtrlSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_TempCollectionsTreeCtrl = new Nocturnal::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
+	m_TempCollectionsTreeCtrl = new Luna::SortTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_HIDE_ROOT|wxTR_NO_BUTTONS|wxTR_SINGLE|wxNO_BORDER );
 	m_TempCollectionsTreeCtrl->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_TempCollectionsTreeCtrl->Enable( false );
 	

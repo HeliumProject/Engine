@@ -1,6 +1,6 @@
 #include "Foundation/InitializerStack.h"
 #include "Application/Inspect/InspectInit.h"
-#include "Application/Inspect/Widgets/Controls.h"
+#include "Application/Inspect/Controls/Controls.h"
 
 #include "Application/Inspect/Script.h"
 

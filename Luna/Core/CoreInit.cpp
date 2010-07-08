@@ -3,9 +3,9 @@
 
 #include "Foundation/InitializerStack.h"
 #include "Application/Inspect/InspectInit.h"
-#include "Application/Inspect/Reflect/InspectReflectInit.h"
-#include "Application/Inspect/Content/InspectContentInit.h"
-#include "Application/Inspect/File/InspectFileInit.h"
+#include "Application/Inspect/Interpreters/Reflect/InspectReflectInit.h"
+#include "Application/Inspect/Interpreters/Content/InspectContentInit.h"
+#include "Application/Inspect/Interpreters/File/InspectFileInit.h"
 
 #include "Object.h"
 #include "Selectable.h"

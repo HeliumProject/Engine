@@ -10,10 +10,10 @@
 
 class Frame;
 namespace Luna{ class DirectoryCtrl; }
+namespace Luna{ class SortTreeCtrl; }
 namespace Nocturnal{ class AutoCompleteComboBox; }
 namespace Nocturnal{ class Button; }
 namespace Nocturnal{ class MenuButton; }
-namespace Nocturnal{ class SortTreeCtrl; }
 
 #include "Editor/Frame.h"
 #include <wx/string.h>
@@ -222,9 +222,9 @@ namespace Luna
 			wxStaticText* m_MyCollectionsTitle;
 			Nocturnal::Button* m_NewDependencyCollectionButton;
 			Nocturnal::Button* m_NewCollectionButton;
-			Nocturnal::SortTreeCtrl* m_MyCollectionsTreeCtrl;
+			Luna::SortTreeCtrl* m_MyCollectionsTreeCtrl;
 			wxStaticText* m_TempCollectionsTitle;
-			Nocturnal::SortTreeCtrl* m_TempCollectionsTreeCtrl;
+			Luna::SortTreeCtrl* m_TempCollectionsTreeCtrl;
 			CollectionsPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 250,397 ), long style = wxTAB_TRAVERSAL );
 			~CollectionsPanelGenerated();
 		

@@ -2,7 +2,7 @@
 #include "DirectoryCtrl.h"
 
 #include "Application/UI/ArtProvider.h"
-#include "Application/UI/SortTreeCtrl.h"
+#include "UI/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Luna;
 
@@ -108,5 +108,5 @@ void DirectoryCtrl::OnItemCollapsing( wxTreeEvent& e )
 ///////////////////////////////////////////////////////////////////////////////
 wxTreeCtrl* DirectoryCtrl::CreateTreeCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long treeStyle)
 {
-    return reinterpret_cast<wxTreeCtrl*>( new Nocturnal::SortTreeCtrl( parent, id, pos, size, treeStyle ) );
+    return reinterpret_cast<wxTreeCtrl*>( new SortTreeCtrl( parent, id, pos, size, treeStyle ) );
 }

@@ -1,9 +1,9 @@
 #include "Interpreter.h"
 
-#include "Application/Inspect/Widgets/Canvas.h"
-#include "Application/Inspect/Widgets/InspectPanel.h"
-#include "Application/Inspect/Widgets/Other Controls/Label.h"
-#include "Application/Inspect/Widgets/Button Controls/Action.h"
+#include "Application/Inspect/Controls/Canvas.h"
+#include "Application/Inspect/Controls/InspectPanel.h"
+#include "Application/Inspect/Controls/Label.h"
+#include "Application/Inspect/Controls/Action.h"
 
 using namespace Inspect;
 

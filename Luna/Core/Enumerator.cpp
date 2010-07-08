@@ -1,12 +1,11 @@
 #include "Precompile.h"
 #include "Enumerator.h"
 
-#include "Application/Inspect/Reflect/ReflectInterpreter.h"
-
 #include "Foundation/Log.h"
 #include "Foundation/Container/Insert.h" 
 
-#include "Application/Inspect/Widgets/Other Controls/Label.h"
+#include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
+#include "Application/Inspect/Controls/Label.h"
 
 using namespace Luna;
 

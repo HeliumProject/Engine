@@ -35,7 +35,7 @@ namespace Luna
     void RemoveInstance( Luna::SceneNode* instance );
 
     // Overrides from SceneOutliner
-    Nocturnal::SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) NOC_OVERRIDE;
+    SortTreeCtrl* CreateTreeCtrl( wxWindow* parent, wxWindowID id ) NOC_OVERRIDE;
     virtual void Clear() NOC_OVERRIDE;
     virtual void CurrentSceneChanged( Luna::Scene* oldScene ) NOC_OVERRIDE;
     virtual void ConnectSceneListeners() NOC_OVERRIDE;

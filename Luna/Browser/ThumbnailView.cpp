@@ -1661,9 +1661,9 @@ void ThumbnailView::OnSize( wxSizeEvent& args )
 // 
 void ThumbnailView::OnKeyDown( wxKeyEvent& args )
 {
-    switch ( toupper( args.KeyCode() ) )
+    switch ( toupper( args.GetUnicodeKey() ) )
     {
-    case 'A':
+    case wxT('A'):
         if ( args.GetModifiers() == wxMOD_CONTROL )
         {
             // Seletct All

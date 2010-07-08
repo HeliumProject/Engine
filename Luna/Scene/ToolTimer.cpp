@@ -18,7 +18,7 @@ void ToolTimer::CheckUpdate()
 {
   unsigned int currentMilliseconds = wxGetLocalTimeMillis().GetLo();
   unsigned int milliseconds = ( currentMilliseconds < m_LastMilliseconds ) ? 0xFFFFFFFF - ( m_LastMilliseconds - currentMilliseconds ) : ( currentMilliseconds - m_LastMilliseconds );
-  if ( milliseconds > (unsigned int) m_milli )
+  if ( milliseconds > (unsigned int) GetInterval() )
   {
     Notify();
     Start();

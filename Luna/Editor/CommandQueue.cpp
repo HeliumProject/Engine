@@ -36,7 +36,7 @@ void CommandQueue::Push( const Undo::CommandPtr& command )
 
   if ( flush )
   {
-    m_Window->AddPendingEvent( wxCommandEvent ( wxEVT_FLUSH_COMMANDS, m_Window->GetId() ) );
+    m_Window->GetEventHandler()->AddPendingEvent( wxCommandEvent ( wxEVT_FLUSH_COMMANDS, m_Window->GetId() ) );
   }
 }
 

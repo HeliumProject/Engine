@@ -264,6 +264,9 @@ namespace Nocturnal
             wxTreeItemData *data = NULL);
         virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags) const;
 
+        int DoGetItemState(const wxTreeItemId& item) const;
+        void DoSetItemState(const wxTreeItemId& item, int state);
+
         // obtain the user data for the lParam member of TV_ITEM
         TreeItemParam *GetItemParam(const wxTreeItemId& item) const;
 

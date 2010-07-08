@@ -241,17 +241,17 @@ void CurveEditTool::KeyDown( wxKeyEvent& e )
 {
   CurveEditMode mode = m_HotEditMode;
 
-  switch (e.KeyCode())
+  switch (e.GetUnicodeKey())
   {
-  case 'M':
+  case wxT('M'):
     m_HotEditMode = CurveEditModes::Modify;
     break;
 
-  case 'I':
+  case wxT('I'):
     m_HotEditMode = CurveEditModes::Insert;
     break;
 
-  case 'R':
+  case wxT('R'):
     m_HotEditMode = CurveEditModes::Remove;
     break;
 
@@ -270,11 +270,11 @@ void CurveEditTool::KeyUp( wxKeyEvent& e )
 {
   CurveEditMode mode = m_HotEditMode;
 
-  switch (e.KeyCode())
+  switch (e.GetUnicodeKey())
   {
-  case 'M':
-  case 'I':
-  case 'R':
+  case wxT('M'):
+  case wxT('I'):
+  case wxT('R'):
     m_HotEditMode = CurveEditModes::None;
     break;
 

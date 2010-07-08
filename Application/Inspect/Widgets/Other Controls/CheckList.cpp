@@ -17,23 +17,23 @@ typedef std::map< tstring, bool > M_strbool;
 class CheckListBox : public wxCheckListBox
 {
 public:
-  CheckList* m_CheckList;
+    CheckList* m_CheckList;
 
-  CheckListBox (wxWindow* parent, CheckList* checkList, long style )
-    : wxCheckListBox (parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, style)
-    , m_CheckList (checkList)
-  {
+    CheckListBox (wxWindow* parent, CheckList* checkList, long style )
+        : wxCheckListBox (parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, style)
+        , m_CheckList (checkList)
+    {
 
-  }
+    }
 
-  void OnCheck( wxCommandEvent& args )
-  {
-    args.Skip();
-    m_CheckList->Write();
-  }
+    void OnCheck( wxCommandEvent& args )
+    {
+        args.Skip();
+        m_CheckList->Write();
+    }
 
 
-  DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE();
 };
 
 BEGIN_EVENT_TABLE(CheckListBox, wxCheckListBox)
@@ -46,7 +46,7 @@ END_EVENT_TABLE();
 // 
 CheckList::CheckList()
 {
-  m_FixedHeight = true;
+    m_FixedHeight = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -54,19 +54,19 @@ CheckList::CheckList()
 // 
 void CheckList::Realize(Container* parent)
 {
-  PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
+    PROFILE_SCOPE_ACCUM( g_RealizeAccumulator );
 
-  if (m_Window != NULL)
-    return;
+    if (m_Window != NULL)
+        return;
 
-  m_Window = new CheckListBox(parent->GetWindow(), this, wxLB_SINGLE | wxLB_HSCROLL);
-  
-  wxSize size( -1, m_Canvas->GetStdSize(Math::SingleAxes::Y) * 5);
-  m_Window->SetSize( size );
-  m_Window->SetMinSize( size );
-  m_Window->SetMaxSize( size );
+    m_Window = new CheckListBox(parent->GetWindow(), this, wxLB_SINGLE | wxLB_HSCROLL);
 
-  __super::Realize(parent);
+    wxSize size( -1, m_Canvas->GetStdSize(Math::SingleAxes::Y) * 5);
+    m_Window->SetSize( size );
+    m_Window->SetMinSize( size );
+    m_Window->SetMaxSize( size );
+
+    __super::Realize(parent);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,43 +74,43 @@ void CheckList::Realize(Container* parent)
 // 
 void CheckList::Read()
 {
-  // from data into ui
-  if ( IsRealized() && IsBound() )
-  {
-    SerializerData< M_strbool >* data = CastData< SerializerData< M_strbool >, DataTypes::Serializer >( GetData() );
-    M_strbool value;
-    data->Get( value );
-
-    CheckListBox* list = Control::Cast< CheckListBox >( this );
-    list->Freeze();
-
-    M_strbool::const_iterator itr = value.begin();
-    M_strbool::const_iterator end = value.end();
-    for ( i32 index = 0; itr != end; ++itr, ++index )
+    // from data into ui
+    if ( IsRealized() && IsBound() )
     {
-      if ( index < (i32)( list->GetCount() ) )
-      {
-        if ( itr->first != list->GetString( index ).c_str() )
-        {
-          list->Delete( index );
-          index = list->Append( itr->first.c_str() );
-        }
-      }
-      else
-      {
-        index = list->Append( itr->first.c_str() );
-      }
+        SerializerData< M_strbool >* data = CastData< SerializerData< M_strbool >, DataTypes::Serializer >( GetData() );
+        M_strbool value;
+        data->Get( value );
 
-      if ( index >= 0 && itr->second )
-      {
-        list->Check( static_cast< u32 >( index ) );
-      }
+        CheckListBox* list = Control::Cast< CheckListBox >( this );
+        list->Freeze();
+
+        M_strbool::const_iterator itr = value.begin();
+        M_strbool::const_iterator end = value.end();
+        for ( i32 index = 0; itr != end; ++itr, ++index )
+        {
+            if ( index < (i32)( list->GetCount() ) )
+            {
+                if ( itr->first != list->GetString( index ).c_str() )
+                {
+                    list->Delete( index );
+                    index = list->Append( itr->first.c_str() );
+                }
+            }
+            else
+            {
+                index = list->Append( itr->first.c_str() );
+            }
+
+            if ( index >= 0 && itr->second )
+            {
+                list->Check( static_cast< u32 >( index ) );
+            }
+        }
+
+        list->Thaw();
     }
 
-    list->Thaw();
-  }
-
-  __super::Read();
+    __super::Read();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -118,26 +118,27 @@ void CheckList::Read()
 // 
 bool CheckList::Write()
 {
-  bool result = false;
+    bool result = false;
 
-  if ( IsRealized() && IsBound() )
-  {
-    M_strbool value;
-    CheckListBox* list = Control::Cast< CheckListBox >( this );
-    u32 numItems = list->GetCount();
-    for ( u32 index = 0; index < numItems; ++index )
+    if ( IsRealized() && IsBound() )
     {
-      value.insert( M_strbool::value_type( list->GetString( index ).c_str(), list->IsChecked( index ) ) );
+        M_strbool value;
+        CheckListBox* list = Control::Cast< CheckListBox >( this );
+        u32 numItems = list->GetCount();
+        for ( u32 index = 0; index < numItems; ++index )
+        {
+            const wxChar* str =list->GetString( index ).c_str();
+            value.insert( M_strbool::value_type( str, list->IsChecked( index ) ) );
+        }
+
+        SerializerData< M_strbool >* data = CastData< SerializerData< M_strbool >, DataTypes::Serializer >( GetData() );
+        if ( WriteTypedData( value, data ) && __super::Write() )
+        {
+            result = true;
+        }
     }
 
-    SerializerData< M_strbool >* data = CastData< SerializerData< M_strbool >, DataTypes::Serializer >( GetData() );
-    if ( WriteTypedData( value, data ) && __super::Write() )
-    {
-      result = true;
-    }
-  }
-
-  return result;
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -148,7 +149,7 @@ bool CheckList::Write()
 // 
 bool CheckList::IsDefault() const
 {
-  // If this control needs to show a default state, some custom code will have to
-  // go here.
-  return false;
+    // If this control needs to show a default state, some custom code will have to
+    // go here.
+    return false;
 }

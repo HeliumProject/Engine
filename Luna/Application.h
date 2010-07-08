@@ -17,9 +17,11 @@ namespace Luna
         LunaApp();
         ~LunaApp();
 
-        virtual bool  OnInit() NOC_OVERRIDE;
-        virtual int   OnRun() NOC_OVERRIDE;
-        virtual int   OnExit() NOC_OVERRIDE;
+        virtual bool    OnInit() NOC_OVERRIDE;
+        virtual int     OnRun() NOC_OVERRIDE;
+        virtual int     OnExit() NOC_OVERRIDE;
+
+        virtual void    OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) NOC_OVERRIDE;
 
         DocumentManager* GetDocumentManager()
         {

@@ -300,7 +300,8 @@ bool FileInterpreter::DataChanging( DataChangingArgs& args )
 
         if ( dialog.ShowModal() == wxID_OK )
         {
-            Reflect::Serializer::SetValue< tstring >( args.m_NewValue, dialog.GetPath().c_str() );
+            const wxChar* str = dialog.GetPath().c_str();
+            Reflect::Serializer::SetValue< tstring >( args.m_NewValue, str );
         }
     }
 

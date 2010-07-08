@@ -237,7 +237,7 @@ MethodLua::MethodLua(const wxString& source)
 	, m_source(source)
 {
     std::string temp;
-    Platform::ConvertString( m_source.c_str(), temp );
+    Platform::ConvertString( (const wxChar*)m_source.c_str(), temp );
 
 	LuaUtilities::LoadBuffer(g_FragmentShaderLuaState, temp.c_str(), temp.length(), "method");
 	m_lua_ref = luaL_ref(g_FragmentShaderLuaState, LUA_REGISTRYINDEX);
@@ -319,7 +319,7 @@ MethodLua::Deserialize(const wxXmlNode& root)
 	m_source = root.GetNodeContent();
 
     std::string temp;
-    Platform::ConvertString( m_source.c_str(), temp );
+    Platform::ConvertString( (const wxChar*)m_source.c_str(), temp );
     LuaUtilities::LoadBuffer(g_FragmentShaderLuaState, temp.c_str(), temp.length(), "method");
 	m_lua_ref = luaL_ref(g_FragmentShaderLuaState, LUA_REGISTRYINDEX);
 	Method::Deserialize(root);
@@ -343,7 +343,7 @@ MethodLua::Call(const ShaderObject *obj) const
 	lua_rawgeti(g_FragmentShaderLuaState, LUA_REGISTRYINDEX, m_lua_ref);
 
     std::string temp;
-    Platform::ConvertString( obj->GetMember(wxT("Name"))->GetString().c_str(), temp);
+    Platform::ConvertString( (const wxChar*)obj->GetMember(wxT("Name"))->GetString().c_str(), temp);
     LuaUtilities::Call(g_FragmentShaderLuaState, 0, 1, temp.c_str());
 	if (ref != LUA_NOREF)
 	{
@@ -401,7 +401,7 @@ MethodVarParse::Compile(const wxString& pattern)
 			}
 			else
 			{
-				switch (pattern[i + 1])
+				switch ((const wxChar)pattern[i + 1])
 				{
 				case wxT('t'):
 					source.Append(wxT("\\t"));

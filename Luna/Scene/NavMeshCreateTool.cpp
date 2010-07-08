@@ -1331,7 +1331,7 @@ void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
       break;
     }//case WXK_TAB
   }//switch( keyCode )
-  switch (tolower(e.KeyCode()))
+  switch (tolower(e.GetUnicodeKey()))
   {
   case 't':
     {

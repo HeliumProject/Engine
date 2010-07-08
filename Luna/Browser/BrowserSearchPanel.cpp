@@ -492,7 +492,7 @@ bool BrowserSearchPanel::ProcessForm()
         fieldStringValue.Trim(false); // trim white-space left
         if ( !fieldStringValue.empty() )
         {
-            collection = m_CollectionManager->FindCollection( fieldStringValue.c_str() );
+            collection = m_CollectionManager->FindCollection( (const wxChar*)fieldStringValue.c_str() );
             if ( collection )
             {
                 queryString += queryString.empty() ? TXT( "" ) : TXT( " " );
@@ -514,7 +514,7 @@ bool BrowserSearchPanel::ProcessForm()
     if ( !fieldStringValue.empty() )
     {
         std::vector< tstring > splitValue;
-        Tokenize( fieldStringValue.c_str(), splitValue, TXT( " " ) );
+        Tokenize( (const wxChar*)fieldStringValue.c_str(), splitValue, TXT( " " ) );
 
         std::vector< tstring >::const_iterator itr = splitValue.begin();
         std::vector< tstring >::const_iterator end = splitValue.end();
@@ -561,7 +561,7 @@ bool BrowserSearchPanel::ProcessForm()
         && _tcsicmp( fieldStringValue.c_str(), s_FileTypeDefaultText  ) != 0 
         && _tcsicmp( fieldStringValue.c_str(), TXT( "All files (*.*)" ) ) != 0 )
     {
-        const Filter* foundFilter = FindFilter( fieldStringValue.c_str() );
+        const Filter* foundFilter = FindFilter( (const wxChar*)fieldStringValue.c_str() );
         if ( foundFilter != NULL && !foundFilter->GetExtensions().empty() )
         {
             queryString += queryString.empty() ? TXT( "" ) : TXT( " " );

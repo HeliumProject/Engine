@@ -1010,7 +1010,8 @@ namespace Nocturnal
             return;
 
         TreeViewItem tvItem(item, TVIF_TEXT);
-        tvItem.pszText = (wxChar *)text.c_str();  // conversion is ok
+        const wxChar* str = text.c_str();
+        tvItem.pszText = (wxChar*)str;  // conversion is ok
         DoSetItem(&tvItem);
 
         // when setting the text of the item being edited, the text control should
@@ -1551,7 +1552,8 @@ namespace Nocturnal
         if ( !text.empty() )
         {
             mask |= TVIF_TEXT;
-            tvIns.item.pszText = (wxChar *)text.c_str();  // cast is ok
+            const wxChar* str = text.c_str();
+            tvIns.item.pszText = (wxChar *)str;  // cast is ok
         }
         else
         {
@@ -3390,6 +3392,31 @@ namespace Nocturnal
         TreeView_GetItem(GetHwnd(), &tvi);
 
         return STATEIMAGEMASKTOINDEX(tvi.state);
+    }
+
+    int TreeCtrl::DoGetItemState(const wxTreeItemId& item) const
+    {
+        wxCHECK_MSG( item.IsOk(), wxTREE_ITEMSTATE_NONE, wxT("invalid tree item") );
+
+        // receive the desired information
+        TreeViewItem tvItem(item, TVIF_STATE, TVIS_STATEIMAGEMASK);
+        DoGetItem(&tvItem);
+
+        // state images are one-based
+        return STATEIMAGEMASKTOINDEX(tvItem.state) - 1;
+    }
+
+    void TreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
+    {
+        wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
+
+        TreeViewItem tvItem(item, TVIF_STATE, TVIS_STATEIMAGEMASK);
+
+        // state images are one-based
+        // 0 if no state image display (wxTREE_ITEMSTATE_NONE = -1)
+        tvItem.state = INDEXTOSTATEIMAGEMASK(state + 1);
+
+        DoSetItem(&tvItem);
     }
 
 }

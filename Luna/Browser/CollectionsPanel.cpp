@@ -251,7 +251,7 @@ void CollectionsPanel::OnMyCollectionsEndLabelEdit( wxTreeEvent& event )
     tstring errors;
 
     collection->Freeze();
-    bool renameResult = m_CollectionManager->RenameCollection( collection, labelValue.c_str(), errors );
+    bool renameResult = m_CollectionManager->RenameCollection( collection, (const wxChar*)labelValue.c_str(), errors );
     collection->Thaw();
     if ( !renameResult )
     {
@@ -420,11 +420,11 @@ void CollectionsPanel::OnOpenCollection( wxCommandEvent& event )
 
         if ( event.GetId() == ID_OpenCollection )
         {
-            collection = m_CollectionManager->OpenCollection( browserDlg.GetPath().c_str() );
+            collection = m_CollectionManager->OpenCollection( (const wxChar*)browserDlg.GetPath().c_str() );
         }
         else
         {
-            collection = m_CollectionManager->ImportCollection( browserDlg.GetPath().c_str() );
+            collection = m_CollectionManager->ImportCollection( (const wxChar*)browserDlg.GetPath().c_str() );
         }
 
         if ( collection )
@@ -525,7 +525,7 @@ void CollectionsPanel::OnImportIntoCollection( wxCommandEvent& event )
     if ( browserDlg.ShowModal() == wxID_OK )
     {
         collection->Freeze();
-        m_CollectionManager->ImportIntoStaticCollection( collection, browserDlg.GetPath().c_str() );
+        m_CollectionManager->ImportIntoStaticCollection( collection, (const wxChar*)browserDlg.GetPath().c_str() );
         collection->Thaw();
     }
 }
@@ -563,7 +563,7 @@ void CollectionsPanel::OnSaveCollection( wxCommandEvent& event )
 
         if ( browserDlg.ShowModal() == wxID_OK )
         {
-            m_CollectionManager->SaveCollection( collection, browserDlg.GetPath().c_str() );
+            m_CollectionManager->SaveCollection( collection, (const wxChar*)browserDlg.GetPath().c_str() );
         }
     }
 }

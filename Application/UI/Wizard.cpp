@@ -47,7 +47,7 @@ void Wizard::SetFirstPage( wxWizardPage* page )
   {
     if ( m_FirstPage )
     {
-      GetPageAreaSizer()->Remove( m_FirstPage ); 
+      GetPageAreaSizer()->Detach( m_FirstPage ); 
     }
 
     m_FirstPage = page;

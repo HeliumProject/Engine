@@ -14,7 +14,7 @@ bool FileDropTarget::OnDropFiles( wxCoord x, wxCoord y, const wxArrayString& fil
     return false;
   }
 
-  FileDroppedArgs args( filenames[ 0 ].c_str() );
+  FileDroppedArgs args( (const wxChar*)filenames[ 0 ].c_str() );
 
   if ( !m_FileExtensions.empty() )
   {

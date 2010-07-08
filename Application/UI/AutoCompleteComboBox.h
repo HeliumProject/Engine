@@ -3,7 +3,9 @@
 #include "Application/API.h"
 
 #include "Platform/Types.h"
+#include "Platform/Compiler.h"
 
+#include <wx/textctrl.h>
 #include <wx/combobox.h>
 
 namespace Nocturnal
@@ -36,19 +38,16 @@ namespace Nocturnal
         DECLARE_EVENT_TABLE();
 
     public:
-        virtual void OnTextChanged( wxCommandEvent& event );
-        virtual void OnKeyDown( wxKeyEvent& event );
-
-        virtual void Clear();
-        virtual void Delete( unsigned int n );
+        void OnTextChanged( wxCommandEvent& event );
+        void OnKeyDown( wxKeyEvent& event );
 
     protected:
-        virtual int DoAppend( const wxString& item );
-        virtual int DoInsert( const wxString& item, unsigned int pos );
+        virtual void DoClear() NOC_OVERRIDE;
+        virtual void DoDeleteOneItem( unsigned int n ) NOC_OVERRIDE;
+        virtual int DoInsertOneItem( const wxString& item, unsigned int pos ) NOC_OVERRIDE;
 
     private:
         bool GetBestPartialMatch( const wxString& current, wxString& match );
-        void UpdateList( wxArrayString& items );
 
     private:
         wxArrayString m_Choices;

@@ -196,7 +196,20 @@ int LunaApp::OnExit()
     return __super::OnExit();
 }
 
-#pragma TODO("Apparently wx 2.8 doesn't support unicode command lines, please to fix in 2.9.0")
+void LunaApp::OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg)
+{
+    tstring function = func;
+
+#pragma TODO("Remove post wxWidgets 2.9.0")
+    if ( function == wxT("DoNotifyWindowAboutCaptureLost") )
+    {
+        return;
+    }
+
+    NOC_BREAK();
+}
+
+#pragma TODO("Apparently wxWidgets doesn't support unicode command lines, please to fix in wxWidgets 2.9.x")
 static int wxEntryWrapper(HINSTANCE hInstance, HINSTANCE hPrevInstance, tchar* pCmdLine, int nCmdShow)
 {
     std::string cmdLine;

@@ -8,6 +8,7 @@
 
 #include <sstream>
 
+#include <wx/hash.h>
 #include <wx/image.h>
 #include <wx/stdpaths.h>
 

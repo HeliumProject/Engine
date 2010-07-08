@@ -11,6 +11,7 @@
 #include "TreeMonitor.h"
 #include "TreeSortTimer.h"
 #include "View.h"
+#include "ToolsPanel.h"
 
 #include "Foundation/Container/ReversibleMap.h"
 
@@ -93,6 +94,9 @@ namespace Luna
     // the UI for changing visibility/selectability of specific runtime types
     TypeGrid* m_TypeGrid;
 
+    // the tools panel
+    ToolsPanel* m_ToolsPanel;
+
     // the loaded scenes
     M_SceneToEditorFile m_SceneFiles;
 
@@ -125,7 +129,7 @@ namespace Luna
     // Toolbars
     wxToolBar* m_StandardToolBar;
     wxToolBar* m_ViewToolBar;
-    wxToolBar* m_ToolsToolBar;
+
     BrowserToolBar* m_BrowserToolBar;
 
     //context items ordered by name  

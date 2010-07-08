@@ -45,7 +45,6 @@
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 #include "Application/UI/FileDialog.h"
-#include "Application/UI/ArtProvider.h"
 #include "Application/UI/FileIconsTable.h"
 #include "Application/UI/SortTreeCtrl.h"
 #include "Application/Undo/PropertyCommand.h"
@@ -642,6 +641,7 @@ SceneEditor::SceneEditor()
     m_FrameManager.AddPane( m_Properties, wxAuiPaneInfo().Name(wxT("properties")).Caption(wxT("Properties")).Right().Layer(1).Position(1) );
 
     m_ToolsPanel = new ToolsPanel( this );
+    m_ToolsPanel->Disable();
     m_FrameManager.AddPane( m_ToolsPanel, wxAuiPaneInfo().Name(wxT("tools")).Caption(wxT("Tools")).Right().Layer(1).Position(1) );
 
     //
@@ -2658,7 +2658,9 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
     // implimented it will cause a crash under certain scenarios (see trac #1322)
     args.m_Scene->SetTool( NULL );
     m_View->SetTool(NULL);
+
     m_ToolsPanel->Disable();
+    m_ToolsPanel->Refresh();
 }
 
 void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
@@ -2666,6 +2668,7 @@ void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
     if ( args.m_Scene )
     {
         m_ToolsPanel->Enable();
+        m_ToolsPanel->Refresh();
 
         // Hook our event handlers
         args.m_Scene->AddStatusChangedListener( StatusChangeSignature::Delegate ( this, &SceneEditor::StatusChanged ) );

@@ -15,6 +15,8 @@ namespace Luna
         ToolsPanel( SceneEditor* sceneEditor, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 140, 300 ), long style = wxTAB_TRAVERSAL );
         virtual ~ToolsPanel();
 
+        void OnToggleButton( wxCommandEvent& );
+
         void ToggleTool( i32 selectedTool );
 
     private:

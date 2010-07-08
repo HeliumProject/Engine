@@ -21,27 +21,19 @@ ToolsPanel::ToolsPanel( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& 
     autoFlexSizer->SetFlexibleDirection( wxBOTH );
     autoFlexSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    wxBitmapToggleButton* btn = new wxBitmapToggleButton( this, wxID_ANY, wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT | wxBU_AUTODRAW );
-    m_Buttons.push_back( btn );
-    autoFlexSizer->Add( btn, 0, wxALL, 0 );
+    for ( i32 i=0; i<ToolModes::Count; i++ )
+    {
+        ToolInfo* info = &ToolInfos[ i ];
 
-#if 0
-    // setup
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsSelect, wxT("Select"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Select ), wxNullBitmap, wxT("Select items from the workspace"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsTranslate, wxT("Translate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Translate ), wxNullBitmap, wxT("Translate items"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsRotate, wxT("Rotate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Rotate ), wxNullBitmap, wxT("Rotate selected items"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsScale, wxT("Scale"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Scale ), wxNullBitmap, wxT("Scale selected items"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsDuplicate, wxT("Duplicate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Duplicate ), wxNullBitmap, wxT("Duplicate the selected object numerous times"));
-    m_ToolsToolBar->AddSeparator();
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Create Locator"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place locator objects (such as bug locators)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Create Volume"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place volume objects (items for setting up gameplay)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Create Entity"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place entity objects (such as art instances or characters)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Create Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Edit created curves (modify or create/delete control points)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMesh, wxT("Edit NavMesh"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Create NavMesh or add new verts and tris"));
-    m_ToolsToolBar->Realize();
-    m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsSelect, true );
-#endif
+        wxBitmapToggleButton* btn = new wxBitmapToggleButton( this, info->m_ID, wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, wxSize( 32, 32 ) ), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT | wxBU_AUTODRAW );
+        btn->SetToolTip( info->m_Description );
+
+        // connect its event handler to us
+        btn->Connect( btn->GetId(), wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolsPanel::OnToggleButton ), NULL, this );
+
+        autoFlexSizer->Add( btn, 0, wxALL, 0 );
+        m_Buttons.push_back( btn );
+    }
 
     mainSizer->Add( autoFlexSizer, 0, wxEXPAND, 5 );
 
@@ -73,6 +65,11 @@ ToolsPanel::ToolsPanel( SceneEditor* sceneEditor, wxWindowID id, const wxPoint& 
 
 ToolsPanel::~ToolsPanel()
 {
+}
+
+void ToolsPanel::OnToggleButton( wxCommandEvent& e )
+{
+    m_SceneEditor->GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, e.GetId() ) );
 }
 
 void ToolsPanel::ToggleTool( i32 selectedTool )

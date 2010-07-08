@@ -4312,15 +4312,15 @@
 			Name="UI"
 			>
 			<File
-				RelativePath=".\UI\PerforcePanels.cpp"
+				RelativePath=".\UI\PerforceGenerated.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\UI\PerforcePanels.fbp"
+				RelativePath=".\UI\PerforceGenerated.fbp"
 				>
 			</File>
 			<File
-				RelativePath=".\UI\PerforcePanels.h"
+				RelativePath=".\UI\PerforceGenerated.h"
 				>
 			</File>
 			<File

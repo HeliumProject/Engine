@@ -5,8 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PerforcePanels__
-#define __PerforcePanels__
+#ifndef __PerforceGenerated__
+#define __PerforceGenerated__
 
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -26,12 +26,12 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-namespace PerforceUI
+namespace Luna
 {
 	///////////////////////////////////////////////////////////////////////////////
-	/// Class GeneratedSubmitPanel
+	/// Class PerforceSubmitPanelGenerated
 	///////////////////////////////////////////////////////////////////////////////
-	class GeneratedSubmitPanel : public wxPanel 
+	class PerforceSubmitPanelGenerated : public wxPanel 
 	{
 		private:
 		
@@ -88,15 +88,15 @@ namespace PerforceUI
 			wxButton* m_HelpButton;
 		
 		public:
-			GeneratedSubmitPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,400 ), long style = wxTAB_TRAVERSAL );
-			~GeneratedSubmitPanel();
+			PerforceSubmitPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,400 ), long style = wxTAB_TRAVERSAL );
+			~PerforceSubmitPanelGenerated();
 		
 	};
 	
 	///////////////////////////////////////////////////////////////////////////////
-	/// Class GeneratedWaitPanel
+	/// Class PerforceWaitPanelGenerated
 	///////////////////////////////////////////////////////////////////////////////
-	class GeneratedWaitPanel : public wxPanel 
+	class PerforceWaitPanelGenerated : public wxPanel 
 	{
 		private:
 		
@@ -111,11 +111,11 @@ namespace PerforceUI
 		public:
 			wxGauge* m_Gauge;
 			wxButton* m_CancelButton;
-			GeneratedWaitPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 260,40 ), long style = wxTAB_TRAVERSAL );
-			~GeneratedWaitPanel();
+			PerforceWaitPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 260,40 ), long style = wxTAB_TRAVERSAL );
+			~PerforceWaitPanelGenerated();
 		
 	};
 	
-} // namespace PerforceUI
+} // namespace Luna
 
-#endif //__PerforcePanels__
+#endif //__PerforceGenerated__

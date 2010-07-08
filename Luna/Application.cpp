@@ -175,7 +175,7 @@ bool LunaApp::OnInit()
     {
         Log::Bullet initialize( TXT( "Initializing\n" ) );
 
-        PerforceUI::WaitDialog::Enable( true );
+        Luna::WaitDialog::Enable( true );
 
         {
             Log::Bullet modules( TXT( "Modules:\n" ) );

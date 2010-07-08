@@ -7,12 +7,12 @@
         <property name="disconnect_events">1</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
-        <property name="file">PerforcePanels</property>
+        <property name="file">PerforceGenerated</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="internationalize">0</property>
         <property name="name">Panels</property>
-        <property name="namespace">&quot;PerforceUI&quot;</property>
+        <property name="namespace">&quot;Luna&quot;</property>
         <property name="path">.</property>
         <property name="precompiled_header">#include &quot;Precompile.h&quot;</property>
         <property name="relative_path">1</property>
@@ -28,7 +28,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size">550,400</property>
-            <property name="name">GeneratedSubmitPanel</property>
+            <property name="name">PerforceSubmitPanelGenerated</property>
             <property name="pos"></property>
             <property name="size">550,400</property>
             <property name="subclass"></property>
@@ -2132,7 +2132,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size">260,40</property>
             <property name="minimum_size">260,40</property>
-            <property name="name">GeneratedWaitPanel</property>
+            <property name="name">PerforceWaitPanelGenerated</property>
             <property name="pos"></property>
             <property name="size">260,40</property>
             <property name="subclass"></property>

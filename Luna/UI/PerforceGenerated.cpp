@@ -7,12 +7,12 @@
 
 #include "Precompile.h"
 
-#include "PerforcePanels.h"
+#include "PerforceGenerated.h"
 
 ///////////////////////////////////////////////////////////////////////////
-using namespace PerforceUI;
+using namespace Luna;
 
-GeneratedSubmitPanel::GeneratedSubmitPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+PerforceSubmitPanelGenerated::PerforceSubmitPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	this->SetMinSize( wxSize( 550,400 ) );
 	
@@ -323,11 +323,11 @@ GeneratedSubmitPanel::GeneratedSubmitPanel( wxWindow* parent, wxWindowID id, con
 	this->Layout();
 }
 
-GeneratedSubmitPanel::~GeneratedSubmitPanel()
+PerforceSubmitPanelGenerated::~PerforceSubmitPanelGenerated()
 {
 }
 
-GeneratedWaitPanel::GeneratedWaitPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+PerforceWaitPanelGenerated::PerforceWaitPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	this->SetMinSize( wxSize( 260,40 ) );
 	this->SetMaxSize( wxSize( 260,40 ) );
@@ -373,6 +373,6 @@ GeneratedWaitPanel::GeneratedWaitPanel( wxWindow* parent, wxWindowID id, const w
 	this->Layout();
 }
 
-GeneratedWaitPanel::~GeneratedWaitPanel()
+PerforceWaitPanelGenerated::~PerforceWaitPanelGenerated()
 {
 }

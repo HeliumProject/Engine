@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Application/API.h"
-#include "SortableListView.h"
+#include "ListView.h"
 #include <wx/wx.h>
 
 namespace Nocturnal

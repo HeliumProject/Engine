@@ -1329,14 +1329,6 @@
 					RelativePath=".\UI\ListView.h"
 					>
 				</File>
-				<File
-					RelativePath=".\UI\SortableListView.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\UI\SortableListView.h"
-					>
-				</File>
 				<Filter
 					Name="TreeCtrl"
 					>

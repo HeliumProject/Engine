@@ -10,6 +10,7 @@
 #include "EntityCreateTool.h"
 #include "EntityType.h"
 #include "ExportOptionsDlg.h"
+#include "HelpPanel.h"
 #include "HierarchyNodeType.h"
 #include "HierarchyOutliner.h"
 #include "ImportOptionsDlg.h"
@@ -240,7 +241,6 @@ void SceneEditor::CleanupEditor()
 SceneEditor::SceneEditor()
 : Editor( EditorTypes::Scene, NULL, wxID_ANY, wxT("Luna"), wxDefaultPosition, wxSize(1180, 750), wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER )
 , m_SceneManager( this )
-, m_HierarchyOutline( NULL )
 , m_EntityOutline( NULL )
 , m_TypeOutline( NULL )
 , m_FileMenu( NULL )
@@ -582,13 +582,6 @@ SceneEditor::SceneEditor()
     m_Directory->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
     {
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
-        // Hierarchy
-        m_HierarchyOutline = new HierarchyOutliner( &m_SceneManager );
-        Nocturnal::SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_HierarchyOutlineControl );
-        hierarchyTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
-        m_Directory->AddPage( hierarchyTree, TXT( "Hierarchy" ), false, Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "world.png" ) ) );
-        m_TreeMonitor.AddTree( hierarchyTree );
-
         // Entities
         m_EntityOutline = new EntityAssetOutliner( &m_SceneManager );
         Nocturnal::SortTreeCtrl* entityTree = m_EntityOutline->InitTreeCtrl( m_Directory, wxID_ANY );
@@ -609,6 +602,9 @@ SceneEditor::SceneEditor()
     // Objects panel
     m_TypeGrid = new TypeGrid( this, &m_SceneManager );
     m_FrameManager.AddPane( m_TypeGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("types")).Caption(wxT("Types")).Left().Layer(1).Position(1) );
+
+    m_Help = new HelpPanel( this );
+    m_FrameManager.AddPane( m_Help, wxAuiPaneInfo().Name( wxT( "Help" ) ).Caption( wxT( "Help" ) ).Left().Layer( 1 ).Position( 1 ) );
 
     // Layer panel
     m_LayerGrid = new LayerGrid( this, &m_SceneManager );
@@ -742,7 +738,6 @@ SceneEditor::~SceneEditor()
     delete m_TypeGrid;
     delete m_LayerGrid;
     delete m_TypeOutline;
-    delete m_HierarchyOutline;
     delete m_EntityOutline;
 }
 
@@ -2639,7 +2634,6 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
     // If we were editing a scene, save the outliner info before changing to the new one.
     OutlinerStates* stateInfo = &m_OutlinerStates.insert( M_OutlinerStates::value_type( args.m_Scene, OutlinerStates() ) ).first->second;
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
-    m_HierarchyOutline->SaveState( stateInfo->m_Hierarchy );
     m_TypeOutline->SaveState( stateInfo->m_Types );
     m_EntityOutline->SaveState( stateInfo->m_EntityAssetes );
 #endif
@@ -2684,7 +2678,6 @@ void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
         {
             OutlinerStates* stateInfo = &foundOutline->second;
 #ifndef LUNA_SCENE_DISABLE_OUTLINERS
-            m_HierarchyOutline->RestoreState( stateInfo->m_Hierarchy );
             m_TypeOutline->RestoreState( stateInfo->m_Types );
             m_EntityOutline->RestoreState( stateInfo->m_EntityAssetes );
 #endif
@@ -3182,4 +3175,9 @@ void SceneEditor::SyncPropertyThread()
     {
         ::Sleep( 500 );
     }
+}
+
+void SceneEditor::SetHelpText( const tchar* text )
+{
+    m_Help->SetText( text );
 }

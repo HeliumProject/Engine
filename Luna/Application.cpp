@@ -36,6 +36,7 @@
 
 #include <wx/cmdline.h>
 #include <wx/splash.h>
+#include <wx/cshelp.h>
 
 using namespace Luna;
 using namespace Nocturnal;
@@ -119,6 +120,12 @@ bool LunaApp::OnInit()
 
                 Nocturnal::ArtProvider* artProvider = new Nocturnal::ArtProvider();
                 wxArtProvider::Push( artProvider );
+            }
+
+            {
+                Log::Bullet bullet( TXT( "Help...\n" ) );
+                wxSimpleHelpProvider* helpProvider = new wxSimpleHelpProvider();
+                wxHelpProvider::Set( helpProvider );
             }
 
             {

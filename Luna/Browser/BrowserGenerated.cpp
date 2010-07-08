@@ -363,19 +363,19 @@ SearchPanelGenerated::SearchPanelGenerated( wxWindow* parent, wxWindowID id, con
 	int m_ComponentNameChoiceNChoices = sizeof( m_ComponentNameChoiceChoices ) / sizeof( wxString );
 	m_ComponentNameChoice = new wxChoice( m_ScrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ComponentNameChoiceNChoices, m_ComponentNameChoiceChoices, 0 );
 	m_ComponentNameChoice->SetSelection( 0 );
-	m_ComponentNameChoice->SetToolTip( wxT("Here you can search for the value of\na given attribute.") );
+	m_ComponentNameChoice->SetToolTip( wxT("Here you can search for the value of\na given component.") );
 	m_ComponentNameChoice->SetMinSize( wxSize( 150,-1 ) );
 	
 	bSizer261->Add( m_ComponentNameChoice, 0, wxALL, 5 );
 	
 	m_ComponentValueTextCtrl = new wxTextCtrl( m_ScrolledWindow, wxID_ANY, wxT("<Component Value>"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ComponentValueTextCtrl->SetToolTip( wxT("Here you can search for the value of\na given attribute.") );
+	m_ComponentValueTextCtrl->SetToolTip( wxT("Here you can search for the value of\na given component.") );
 	m_ComponentValueTextCtrl->SetMinSize( wxSize( 150,-1 ) );
 	
 	bSizer261->Add( m_ComponentValueTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_ComponentHelpBitmap = new wxStaticBitmap( m_ScrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	m_ComponentHelpBitmap->SetToolTip( wxT("Here you can search for the value of\na given attribute.") );
+	m_ComponentHelpBitmap->SetToolTip( wxT("Here you can search for the value of\na given component.") );
 	
 	bSizer261->Add( m_ComponentHelpBitmap, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
 	
@@ -598,35 +598,12 @@ CollectionsPanelGenerated::~CollectionsPanelGenerated()
 	m_TempCollectionsTreeCtrl->Disconnect( wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, wxTreeEventHandler( CollectionsPanelGenerated::OnTempCollectionsMenu ), NULL, this );
 }
 
-HelpPanelGenerated::HelpPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
-{
-	wxBoxSizer* bSizer20;
-	bSizer20 = new wxBoxSizer( wxVERTICAL );
-	
-	wxBoxSizer* bSizer1611;
-	bSizer1611 = new wxBoxSizer( wxVERTICAL );
-	
-	m_HelpTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH|wxDOUBLE_BORDER|wxHSCROLL|wxVSCROLL );
-	m_HelpTextCtrl->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	
-	bSizer1611->Add( m_HelpTextCtrl, 1, wxBOTTOM|wxEXPAND|wxRIGHT, 2 );
-	
-	bSizer20->Add( bSizer1611, 1, wxEXPAND, 5 );
-	
-	this->SetSizer( bSizer20 );
-	this->Layout();
-}
-
-HelpPanelGenerated::~HelpPanelGenerated()
-{
-}
-
 PreviewPanelGenerated::PreviewPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* sizer;
 	sizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_PreviewWindow = new BrowserPreviewWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, TXT( "Luna::PreviewWindow" ) );
+	m_PreviewWindow = new BrowserPreviewWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, wxT( "Luna::PreviewWindow" ) );
 	m_PreviewWindow->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ) );
 	
 	sizer->Add( m_PreviewWindow, 1, wxEXPAND, 5 );

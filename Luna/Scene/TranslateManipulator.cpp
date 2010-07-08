@@ -1190,7 +1190,7 @@ void TranslateManipulator::MouseMove(wxMouseEvent& e)
 
 void TranslateManipulator::KeyPress( wxKeyEvent& e )
 {
-    switch (e.GetUnicodeKey())
+    switch (e.GetKeyCode())
     {
     case wxT('L'):
         SetLiveObjectsOnly( !m_LiveObjectsOnly );
@@ -1206,7 +1206,7 @@ void TranslateManipulator::KeyDown( wxKeyEvent& e )
 {
     TranslateSnappingMode mode = m_HotSnappingMode;
 
-    switch (e.GetUnicodeKey())
+    switch (e.GetKeyCode())
     {
     case wxT('S'):
         m_HotSnappingMode = TranslateSnappingModes::Surface;
@@ -1246,7 +1246,7 @@ void TranslateManipulator::KeyUp( wxKeyEvent& e )
 {
     TranslateSnappingMode mode = m_HotSnappingMode;
 
-    switch (e.GetUnicodeKey())
+    switch (e.GetKeyCode())
     {
     case wxT('S'):
     case wxT('O'):

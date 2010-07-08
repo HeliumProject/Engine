@@ -1314,7 +1314,6 @@ void NavMeshCreateTool::MouseMove( wxMouseEvent& e )
 void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
 {
   const int keyCode = e.GetKeyCode();
-
   switch( keyCode )
   { 
   case WXK_RETURN:
@@ -1322,6 +1321,7 @@ void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
       AddToScene();
       break;
     }
+
   case WXK_TAB:
     {
       if ( m_Instance.ReferencesObject() )
@@ -1329,11 +1329,12 @@ void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
         SetHoverSelectMode( (m_MouseHoverSelectionMode+1)%(MOUSE_HOVER_SELECT_DISABLED) );
       }
       break;
-    }//case WXK_TAB
-  }//switch( keyCode )
-  switch (tolower(e.GetUnicodeKey()))
+    }
+  }
+
+  switch ( e.GetKeyCode() )
   {
-  case 't':
+  case wxT('T'):
     {
       //add tri here
       if ( m_Instance.ReferencesObject() )
@@ -1347,7 +1348,8 @@ void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
       }
     }
     break;
-  case 'o':
+
+  case wxT('O'):
     {
       //will force stuff to select obtuse angles tris
       m_Instance->SelectObtuseAngledTris();
@@ -1355,7 +1357,8 @@ void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
       return;//dont pass the event back up to luna
     }
     break;
-  case 'w':
+
+  case wxT('W'):
     {
       m_Selection.Append( m_Instance );
       switch( m_EditMode )
@@ -1387,8 +1390,9 @@ void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
       return;   // don't pass this keypress onto scene editor since 'w' does something different there
     }
     break;
+
   case WXK_DELETE:
-  case 'd':
+  case wxT('D'):
     {
       switch( m_MouseHoverSelectionMode )
       {
@@ -1432,7 +1436,8 @@ void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
       return;   // don't pass this keypress onto scene editor 
     }
     break;
-  case 'f':
+
+  case wxT('F'):
     {
       Math::AlignedBox box;
       if ( m_EditMode == EDIT_MODE_CUBE_PUNCH_OUT )
@@ -1453,7 +1458,8 @@ void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
       return;   // we are doing the framing, don't pass this to __super
     }
     break;
-  case 'v':
+
+  case wxT('V'):
     {
       if (m_Instance->m_selected_verts.size())
       {
@@ -1465,7 +1471,8 @@ void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
       }
       return;
     }
-  case 'p':
+
+  case wxT('P'):
     {
       if ( m_EditMode == EDIT_MODE_CUBE_PUNCH_OUT )
       {
@@ -1486,7 +1493,8 @@ void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
       m_Scene->Execute( true );
     }
     break;
-  case 'e':
+
+  case wxT('E'):
     {
       switch ( m_EditMode )
       {
@@ -1518,7 +1526,8 @@ void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
       return;
     }
     break;
-  case 'r':
+
+  case wxT('R'):
     {
       if ( m_EditMode == EDIT_MODE_CUBE_PUNCH_OUT )
       {
@@ -1537,6 +1546,7 @@ void NavMeshCreateTool::KeyPress(wxKeyEvent &e)
     }
     break;
   }
+
   __super::KeyPress( e );
 }
 

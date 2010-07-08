@@ -241,7 +241,7 @@ void CurveEditTool::KeyDown( wxKeyEvent& e )
 {
   CurveEditMode mode = m_HotEditMode;
 
-  switch (e.GetUnicodeKey())
+  switch (e.GetKeyCode())
   {
   case wxT('M'):
     m_HotEditMode = CurveEditModes::Modify;
@@ -270,7 +270,7 @@ void CurveEditTool::KeyUp( wxKeyEvent& e )
 {
   CurveEditMode mode = m_HotEditMode;
 
-  switch (e.GetUnicodeKey())
+  switch (e.GetKeyCode())
   {
   case wxT('M'):
   case wxT('I'):

@@ -825,7 +825,7 @@ void SceneEditor::OnChar(wxKeyEvent& event)
 
     if (event.GetSkipped())
     {
-        switch (tolower(event.GetUnicodeKey()))
+        switch (tolower(event.GetKeyCode()))
         {
         case wxT('4'):
             GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewWireframe) );

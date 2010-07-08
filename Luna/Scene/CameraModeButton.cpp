@@ -18,10 +18,10 @@ CameraModeButton::CameraModeButton( wxWindow* parent, SceneEditor* sceneEditor, 
   SetMargins( 4 );
   const Reflect::Enumeration* cameraModeEnum = Reflect::Registry::GetInstance()->GetEnumeration( Reflect::GetType< CameraModes::CameraMode >() );
 
-  m_Bitmaps[ CameraModes::Orbit ] = wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) );
-  m_Bitmaps[ CameraModes::Front ] = wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) );
-  m_Bitmaps[ CameraModes::Side ] = wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) );
-  m_Bitmaps[ CameraModes::Top ] = wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) );
+  m_Bitmaps[ CameraModes::Orbit ] = wxArtProvider::GetBitmap( Nocturnal::ArtIDs::CameraModeOrbit, wxART_OTHER, wxSize( 32, 32 ) );
+  m_Bitmaps[ CameraModes::Front ] = wxArtProvider::GetBitmap( Nocturnal::ArtIDs::CameraModeFront, wxART_OTHER, wxSize( 32, 32 ) );
+  m_Bitmaps[ CameraModes::Side ] = wxArtProvider::GetBitmap( Nocturnal::ArtIDs::CameraModeSide, wxART_OTHER, wxSize( 32, 32 ) );
+  m_Bitmaps[ CameraModes::Top ] = wxArtProvider::GetBitmap( Nocturnal::ArtIDs::CameraModeTop, wxART_OTHER, wxSize( 32, 32 ) );
 
   tstring label;
   wxMenu* menu = new wxMenu();

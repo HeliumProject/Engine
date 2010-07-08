@@ -25,7 +25,6 @@ namespace Luna
 
             // Add our own icons here
             Error,
-            InsomniacMoon,
 
             Count,
         };

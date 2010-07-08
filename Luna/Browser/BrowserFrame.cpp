@@ -114,14 +114,8 @@ BrowserFrame::BrowserFrame( Browser* browser, BrowserSearch* browserSearch, Sear
     // Set the task bar icon
     //
     wxIconBundle iconBundle;
-
-    wxIcon tempIcon;
-    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
-    iconBundle.AddIcon( tempIcon );
-
-    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
-    iconBundle.AddIcon( tempIcon );
-
+    iconBundle.AddIcon( wxArtProvider::GetIcon( wxART_FIND ) );
+    iconBundle.AddIcon( wxArtProvider::GetIcon( wxART_FIND, wxART_OTHER, wxSize( 32, 32 ) ) );
     SetIcons( iconBundle );
 
     //

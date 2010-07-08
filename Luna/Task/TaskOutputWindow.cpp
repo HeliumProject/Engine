@@ -72,11 +72,8 @@ TaskOutputWindow::TaskOutputWindow( wxWindow* parent, const tstring& title, int 
   bSizer1->Add( bSizer4, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 
   wxIconBundle iconBundle;
-  wxIcon tempIcon;
-  tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 32, 32 ) ) );
-  iconBundle.AddIcon( tempIcon );
-  tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
-  iconBundle.AddIcon( tempIcon );
+  iconBundle.AddIcon( wxArtProvider::GetIcon( Nocturnal::ArtIDs::TaskWindow, wxART_OTHER, wxSize( 32, 32 ) ) );
+  iconBundle.AddIcon( wxArtProvider::GetIcon( Nocturnal::ArtIDs::TaskWindow ) );
   SetIcons( iconBundle );
 
   this->SetSizer( bSizer1 );

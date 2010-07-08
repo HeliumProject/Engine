@@ -24,7 +24,7 @@ BrowserToolBar::BrowserToolBar
  : wxToolBar( parent, id, pos, size, style, name )
 {
   SetToolBitmapSize( wxSize( 16, 16 ) );
-  AddTool( BrowserToolBarIDs::ButtonID, wxT( "Vault" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
+  AddTool( BrowserToolBarIDs::ButtonID, wxT( "Vault" ), wxArtProvider::GetBitmap( wxART_FIND ) );
 
   m_SearchBox = new wxTextCtrl( this, BrowserToolBarIDs::SearchBoxID, wxEmptyString, wxDefaultPosition, wxSize( 140, -1 ), 0 );
   AddControl( m_SearchBox );

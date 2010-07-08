@@ -103,12 +103,12 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
   {
     if ( rcsFile.IsCheckedOutByMe() )
     {
-      m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
+      m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::RCSCheckedOutByMe ) );
       m_RevisionStatus->SetLabel( TXT( "Checked out to you" ) );
     }
     else if ( rcsFile.IsCheckedOutBySomeoneElse() )
     {
-      m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
+      m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::RCSCheckedOutBySomeoneElse ) );
       
       tstring usernames;
       rcsFile.GetOpenedByUsers( usernames );
@@ -120,12 +120,12 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
     }
     else if ( !rcsFile.IsUpToDate() )
     {
-      m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
+      m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::RCSOutOfDate ) );
       m_RevisionStatus->SetLabel( TXT( "Out of date" ) );
     }
     else
     {
-      m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
+      m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Null ) );
       m_RevisionStatus->SetLabel( TXT( "Available for check out" ) );
     }
 
@@ -152,7 +152,7 @@ void DetailsFrame::Populate( Asset::AssetFile* file )
   else
   {
     m_RevisionStatus->SetLabel( TXT( "No Perforce information available" ) );
-    m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
+    m_RevisionStatusIcon->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::RCSUnknown ) );
     m_LastCheckInPanel->Hide();
     m_FirstCheckInPanel->Hide();
   }

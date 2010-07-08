@@ -270,13 +270,9 @@ SceneEditor::SceneEditor()
     // Icon
     //
     wxIconBundle iconBundle;
-    wxIcon tempIcon;
-    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown, wxART_OTHER, wxSize( 64, 64 ) ) );
-    iconBundle.AddIcon( tempIcon );
-    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
-    iconBundle.AddIcon( tempIcon );
-    tempIcon.CopyFromBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
-    iconBundle.AddIcon( tempIcon );
+    iconBundle.AddIcon( wxArtProvider::GetIcon( Nocturnal::ArtIDs::SceneEditor, wxART_OTHER, wxSize( 64, 64 ) ) );
+    iconBundle.AddIcon( wxArtProvider::GetIcon( Nocturnal::ArtIDs::SceneEditor, wxART_OTHER, wxSize( 32, 32 ) ) );
+    iconBundle.AddIcon( wxArtProvider::GetIcon( Nocturnal::ArtIDs::SceneEditor ) );
     SetIcons( iconBundle );
 
     // 
@@ -562,12 +558,12 @@ SceneEditor::SceneEditor()
     m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsScale, wxT("Scale"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Scale ), wxNullBitmap, wxT("Scale selected items"));
     m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsDuplicate, wxT("Duplicate"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Duplicate ), wxNullBitmap, wxT("Duplicate the selected object numerous times"));
     m_ToolsToolBar->AddSeparator();
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Create Locator"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place locator objects (such as bug locators)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Create Volume"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place volume objects (items for setting up gameplay)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Create Entity"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Place entity objects (such as art instances or characters)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Create Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Edit created curves (modify or create/delete control points)"));
-    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMesh, wxT("Edit NavMesh"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), wxNullBitmap, wxT("Create NavMesh or add new verts and tris"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsLocatorCreate, wxT("Create Locator"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Locator ), wxNullBitmap, wxT("Place locator objects (such as bug locators)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsVolumeCreate, wxT("Create Volume"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Volume ), wxNullBitmap, wxT("Place volume objects (items for setting up gameplay)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsEntityCreate, wxT("Create Entity"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Entity ), wxNullBitmap, wxT("Place entity objects (such as art instances or characters)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveCreate, wxT("Create Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Curve ), wxNullBitmap, wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsCurveEdit, wxT("Edit Curve"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::CurveEdit ), wxNullBitmap, wxT("Edit created curves (modify or create/delete control points)"));
+    m_ToolsToolBar->AddCheckTool(SceneEditorIDs::ID_ToolsNavMesh, wxT("Edit NavMesh"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::NavMesh ), wxNullBitmap, wxT("Create NavMesh or add new verts and tris"));
     m_ToolsToolBar->Realize();
     m_ToolsToolBar->ToggleTool( SceneEditorIDs::ID_ToolsSelect, true );
     m_ToolsToolBar->Disable();

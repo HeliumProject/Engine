@@ -1092,7 +1092,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             //newMenu->Enable( ID_NewFolder, inFolder );
 
             wxMenuItem* menuItem = new wxMenuItem( &menu, ID_New, BrowserMenu::Label( ID_New ), BrowserMenu::Label( ID_New ), wxITEM_NORMAL, newMenu );
-            menuItem->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ) );
+            menuItem->SetBitmap( wxArtProvider::GetBitmap( wxART_NEW ) );
             menu.Append( menuItem );
             menuItem->Enable( inFolder );
         }

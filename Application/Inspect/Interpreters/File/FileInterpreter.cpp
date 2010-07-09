@@ -10,7 +10,7 @@
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 
-#include "Pipeline/Asset/AssetFlags.h"
+#include "Pipeline/Asset/AssetClass.h"
 #include "Application/UI/FileDialog.h"
 #include "Foundation/Log.h"
 #include "Foundation/String/Wildcard.h"
@@ -108,14 +108,6 @@ void FileInterpreter::InterpretField(const Field* field, const std::vector<Refle
                     editButton->AddListener( ActionSignature::Delegate ( this, &FileInterpreter::Edit ) );
                     editButton->SetText( TXT( "Edit" ) );
                     group->AddControl( editButton );
-                }
-
-                if ( field->m_Flags & Asset::AssetFlags::RealTimeUpdateable )
-                {
-                    // File refresh button
-                    ButtonPtr refreshButton = m_Container->GetCanvas()->Create<Button>(this);
-                    refreshButton->SetText( TXT( "Reload" ) );
-                    group->AddControl( refreshButton );
                 }
             }
         }

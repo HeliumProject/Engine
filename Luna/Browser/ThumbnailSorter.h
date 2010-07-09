@@ -33,8 +33,7 @@ namespace Luna
     void Clear();
 
     void Add( ThumbnailTile* tile );
-    void Add( const M_FolderToTilePtr& tiles );
-    void Add( const M_FileToTilePtr& tiles );
+    void Add( const M_PathToTilePtr& tiles );
 
     ThumbnailIteratorPtr GetIterator( ThumbnailTile* startingTile = NULL ) const;
 

@@ -5,9 +5,7 @@
 #include "Foundation/Reflect/Element.h"
 #include "Foundation/Reflect/Version.h"
 
-using namespace Reflect;
 using namespace Asset;
-using namespace Component;
 
 REFLECT_DEFINE_CLASS(Entity)
 
@@ -18,3 +16,6 @@ void Entity::EnumerateClass( Reflect::Compositor<Entity>& comp )
     comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.entity.*" );
 }
 
+void Entity::GatherIndexData( AssetIndexData& indexData )
+{
+}

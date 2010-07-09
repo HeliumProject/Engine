@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Widgets/Canvas.h"
 #include "Application/Inspect/Data/Data.h"
-#include "Application/Inspect/Widgets/Other Controls/Label.h"
+#include "Application/Inspect/Controls/Label.h"
+#include "Application/Inspect/Controls/Canvas.h"
 
 namespace Inspect
 {

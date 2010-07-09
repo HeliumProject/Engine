@@ -10,10 +10,7 @@
 namespace Luna
 {
   class SortTreeCtrl;
-}
 
-namespace Luna
-{
   ///////////////////////////////////////////////////////////////////////////////
   /// Class FoldersPanel
   ///////////////////////////////////////////////////////////////////////////////
@@ -24,7 +21,7 @@ namespace Luna
     virtual ~FoldersPanel();
 
     wxTreeCtrl* GetTreeCtrl();
-    Nocturnal::SortTreeCtrl* GetSortTreeCtrl();
+    SortTreeCtrl* GetSortTreeCtrl();
     void Unselect();
 
     void SetPath( const tstring& path );
@@ -44,7 +41,7 @@ namespace Luna
     void DragLeave( Nocturnal::Void );
 
   private:
-    wxTreeItemId DragHitTest( Nocturnal::SortTreeCtrl* treeCtrl, wxPoint point );
+    wxTreeItemId DragHitTest( SortTreeCtrl* treeCtrl, wxPoint point );
 
   private:
     BrowserFrame* m_BrowserFrame;
@@ -59,8 +56,8 @@ namespace Luna
       
       ID_CheckOut = BrowserMenu::CheckOut,
 
-      ID_CopyPathWindows = BrowserMenu::CopyPathWindows,
-      ID_CopyPathClean = BrowserMenu::CopyPathClean,
+      ID_CopyPathNative = BrowserMenu::CopyPathNative,
+      ID_CopyPath = BrowserMenu::CopyPath,
 
       ID_ShowInFolders = BrowserMenu::ShowInFolders,
       ID_ShowInPerforce = BrowserMenu::ShowInPerforce,

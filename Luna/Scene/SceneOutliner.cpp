@@ -46,7 +46,7 @@ SceneOutliner::~SceneOutliner()
 // This function needs to be called to create the internal tree control GUI, and
 // should only be called once.
 // 
-Nocturnal::SortTreeCtrl* SceneOutliner::InitTreeCtrl( wxWindow* parent, wxWindowID id )
+SortTreeCtrl* SceneOutliner::InitTreeCtrl( wxWindow* parent, wxWindowID id )
 {
   NOC_ASSERT( !m_TreeCtrl );
   if ( !m_TreeCtrl )

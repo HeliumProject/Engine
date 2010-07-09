@@ -56,24 +56,9 @@ void ThumbnailSorter::Add( ThumbnailTile* tile )
   m_AlphaByType.insert( tile );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Adds all of the (folder) tiles in the map to the sorted list of tiles.
-// 
-void ThumbnailSorter::Add( const M_FolderToTilePtr& tiles )
+void ThumbnailSorter::Add( const M_PathToTilePtr& tiles )
 {
-  for ( M_FolderToTilePtr::const_iterator tileItr = tiles.begin(), tileEnd = tiles.end();
-    tileItr != tileEnd; ++tileItr )
-  {
-    Add( tileItr->second );
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Adds all of the (file) tiles in the map to the sorted list of tiles.
-// 
-void ThumbnailSorter::Add( const M_FileToTilePtr& tiles )
-{
-  for ( M_FileToTilePtr::const_iterator tileItr = tiles.begin(), tileEnd = tiles.end();
+  for ( M_PathToTilePtr::const_iterator tileItr = tiles.begin(), tileEnd = tiles.end();
     tileItr != tileEnd; ++tileItr )
   {
     Add( tileItr->second );
@@ -161,11 +146,11 @@ bool ThumbnailSorter::SortAlphabeticalByName( const ThumbnailTile* first, const 
   }
 
   // 1. Folders come before files
-  if ( first->IsFolder() && second->IsFile() )
+  if ( first->GetPath().IsDirectory() && second->GetPath().IsFile() )
   {
     return true;
   }
-  else if ( first->IsFile() && second->IsFolder() )
+  else if ( first->GetPath().IsFile() && second->GetPath().IsDirectory() )
   {
     return false;
   }
@@ -176,9 +161,7 @@ bool ThumbnailSorter::SortAlphabeticalByName( const ThumbnailTile* first, const 
   if ( result == 0 )
   {
     // 3. Labels are the same, look at the full path
-      Nocturnal::Path left( first->GetFullPath() );
-      Nocturnal::Path right( first->GetFullPath() );
-      return left < right;
+      return first->GetPath() < second->GetPath();
   }
   return result < 0;
 }

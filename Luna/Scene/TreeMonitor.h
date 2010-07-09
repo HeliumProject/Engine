@@ -4,12 +4,11 @@
 
 #include "Platform/Types.h"
 
-namespace Nocturnal { class SortTreeCtrl; }
-
 namespace Luna
 {
   // Forwards
   class SceneManager;
+  class SortTreeCtrl;
   struct NodeChangeArgs;
   struct SceneChangeArgs;
   struct SceneNodeChangeArgs;
@@ -25,7 +24,7 @@ namespace Luna
   class TreeMonitor
   {
   private:
-    typedef std::set< Nocturnal::SortTreeCtrl* > S_Trees;
+    typedef std::set< SortTreeCtrl* > S_Trees;
 
     Luna::SceneManager* m_SceneManager;
     S_Trees m_Trees;
@@ -36,8 +35,8 @@ namespace Luna
     TreeMonitor( Luna::SceneManager* sceneManager );
     virtual ~TreeMonitor();
 
-    void AddTree( Nocturnal::SortTreeCtrl* tree );
-    void RemoveTree( Nocturnal::SortTreeCtrl* tree );
+    void AddTree( SortTreeCtrl* tree );
+    void RemoveTree( SortTreeCtrl* tree );
     void ClearTrees();
 
     void FreezeSorting();

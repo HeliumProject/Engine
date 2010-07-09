@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "Application/Inspect/Widgets/Canvas.h"
+#include "Application/Inspect/Controls/Canvas.h"
 
 namespace Luna
 {

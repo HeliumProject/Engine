@@ -1,6 +1,8 @@
 #include "Precompile.h"
 #include "BrowserPreferencesDialog.h"
 
+#include "Application.h"
+
 #include "Browser/Browser.h"
 #include "Browser/BrowserPreferences.h"
 
@@ -19,6 +21,5 @@ void BrowserPreferencesDialog::GetPreferences( Reflect::V_Element& preferences )
 {
   __super::GetPreferences( preferences );
 
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-  //  preferences.push_back( GlobalBrowser().GetBrowserPreferences() );
+  preferences.push_back( wxGetApp().GetBrowser()->GetBrowserPreferences() );
 }

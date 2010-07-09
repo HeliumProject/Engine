@@ -10,10 +10,9 @@ using namespace Luna;
 ///////////////////////////////////////////////////////////////////////////////
 /// class DependencyLoader
 ///////////////////////////////////////////////////////////////////////////////
-DependencyLoader::DependencyLoader( const tstring& rootDirectory, const tstring& configDirectory, DependencyCollection* collection )
+DependencyLoader::DependencyLoader( const Nocturnal::Path& rootDirectory, Luna::DependencyCollection* collection )
 : Nocturnal::ThreadMechanism( TXT( "DependencyLoader" ) )
 , m_RootDirectory( rootDirectory )
-, m_ConfigDirectory( configDirectory )
 , m_Collection( collection )
 {
 }

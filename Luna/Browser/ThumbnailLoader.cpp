@@ -2,6 +2,7 @@
 #include "ThumbnailLoader.h"
 #include "Render.h"
 
+#include "Pipeline/Asset/AssetClass.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Foundation/File/Directory.h"
 #include "Render/D3DManager.h"
@@ -50,16 +51,16 @@ void* ThumbnailLoader::LoadThread::Entry()
             break;
         }
 
-        Asset::AssetFilePtr file;
+        Nocturnal::Path path;
 
         {
-            Platform::Locker<Asset::OS_AssetFiles>::Handle queue = m_Loader.m_FileQueue.Lock();
+            Platform::Locker< Nocturnal::OrderedSet< Nocturnal::Path > >::Handle queue = m_Loader.m_FileQueue.Lock();
             if ( !queue->Empty() )
             {
 #ifdef NOC_ASSERT_ENABLED
                 emptyQueuePollingCheck = false;
 #endif
-                file = queue->Front();
+                path = queue->Front();
             }
             else
             {
@@ -72,25 +73,17 @@ void* ThumbnailLoader::LoadThread::Entry()
                 continue;
             }
 
-            if ( file.ReferencesObject() )
-            {
-                // Why does the queue have an invalid file pointer?
-                queue->Remove( file );
-            }
-            else
-            {
-                NOC_BREAK();
-            }
+            queue->Remove( path );
         }
 
         ResultArgs args;
-        args.m_File = file;
+        args.m_Path = &path;
         args.m_Cancelled = false;
 
-        if ( Luna::IsSupportedTexture( file->GetFilePath() ) )
+        if ( Luna::IsSupportedTexture( path.Get() ) )
         {
             IDirect3DTexture9* texture = NULL;
-            if ( texture = LoadTexture( device, file->GetFilePath() ) )
+            if ( texture = LoadTexture( device, path.Get() ) )
             {
                 ThumbnailPtr thumbnail = new Thumbnail( m_Loader.m_D3DManager, texture );
                 args.m_Textures.push_back( thumbnail );
@@ -99,7 +92,7 @@ void* ThumbnailLoader::LoadThread::Entry()
         else
         {
             tstringstream str;
-            str << file->GetPath().Hash();
+            str << path.Hash();
             Nocturnal::Path thumbnailFolderPath( m_Loader.m_ThumbnailDirectory + wxT('/') + str.str() );
             Nocturnal::Directory thumbnailFolder( thumbnailFolderPath.Get() );
 
@@ -116,9 +109,9 @@ void* ThumbnailLoader::LoadThread::Entry()
             }
 
             // Include the color map of a shader as a possible thumbnail image
-            if ( file->GetPath().FullExtension() == TXT( "shader.nrb" ) )
+            if ( path.FullExtension() == TXT( "shader.nrb" ) )
             {
-                Asset::ShaderAssetPtr shader = Reflect::ObjectCast< Asset::ShaderAsset >( Asset::AssetFile::GetAssetClass( file ) );
+                Asset::ShaderAssetPtr shader = Asset::AssetClass::LoadAssetClass< Asset::ShaderAsset >( path );
                 if ( shader )
                 {
                     Asset::TexturePtr colorMap = Asset::AssetClass::LoadAssetClass< Asset::Texture >( shader->m_ColorMapPath );
@@ -161,11 +154,11 @@ ThumbnailLoader::~ThumbnailLoader()
     m_LoadThread.Wait();
 }
 
-void ThumbnailLoader::Load( const Asset::V_AssetFiles& files )
+void ThumbnailLoader::Enqueue( const std::set< Nocturnal::Path >& files )
 {
-    Platform::Locker<Asset::OS_AssetFiles>::Handle queue = m_FileQueue.Lock();
+    Platform::Locker< Nocturnal::OrderedSet< Nocturnal::Path > >::Handle queue = m_FileQueue.Lock();
 
-    for ( Asset::V_AssetFiles::const_reverse_iterator itr = files.rbegin(), end = files.rend();
+    for ( std::set< Nocturnal::Path >::const_reverse_iterator itr = files.rbegin(), end = files.rend();
         itr != end;
         ++itr )
     {
@@ -180,7 +173,7 @@ void ThumbnailLoader::Load( const Asset::V_AssetFiles& files )
 
 void ThumbnailLoader::Stop()
 {
-    Platform::Locker<Asset::OS_AssetFiles>::Handle queue = m_FileQueue.Lock();
+    Platform::Locker< Nocturnal::OrderedSet< Nocturnal::Path > >::Handle queue = m_FileQueue.Lock();
     if ( queue->Empty() )
     {
         return;
@@ -189,10 +182,11 @@ void ThumbnailLoader::Stop()
     while ( !queue->Empty() )
     {
         ResultArgs args;
-        args.m_File = queue->Front();
+        args.m_Path = &( queue->Front() );
         args.m_Cancelled = true;
         m_Result.Raise( args );
-        queue->Remove( args.m_File );
+        
+        queue->Remove( queue->Front() );
     }
 
     m_Signal.Reset();

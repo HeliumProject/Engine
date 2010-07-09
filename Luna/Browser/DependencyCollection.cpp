@@ -1,6 +1,7 @@
 #include "Precompile.h"
 #include "DependencyCollection.h"
 
+#include "Application.h"
 #include "Browser.h"
 
 using namespace Luna;
@@ -19,7 +20,6 @@ void DependencyCollection::EnumerateClass( Reflect::Compositor<DependencyCollect
 DependencyCollection::DependencyCollection()
 : AssetCollection( TXT( "" ), AssetCollectionFlags::Dynamic )
 , m_IsReverse( false )
-, m_AssetFile( NULL )
 , m_IsLoading( false )
 , m_DependencyLoader( NULL )
 {
@@ -29,7 +29,6 @@ DependencyCollection::DependencyCollection()
 DependencyCollection::DependencyCollection( const tstring& name, const u32 flags, const bool reverse )
 : AssetCollection( name, flags | AssetCollectionFlags::Dynamic )
 , m_IsReverse( reverse )
-, m_AssetFile( NULL )
 , m_IsLoading( false )
 , m_DependencyLoader( NULL )
 {
@@ -44,15 +43,13 @@ DependencyCollection::~DependencyCollection()
 void DependencyCollection::InitializeCollection() 
 {
     __super::InitializeCollection();
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-    //GlobalBrowser().GetBrowserPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &DependencyCollection::OnPreferencesChanged ) );
+    wxGetApp().GetBrowser()->GetBrowserPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &DependencyCollection::OnPreferencesChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 void DependencyCollection::CleanupCollection() 
 {
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-    //    GlobalBrowser().GetBrowserPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &DependencyCollection::OnPreferencesChanged ) );
+    wxGetApp().GetBrowser()->GetBrowserPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &DependencyCollection::OnPreferencesChanged ) );
     __super::CleanupCollection();
 }
 
@@ -68,8 +65,6 @@ void DependencyCollection::PreDeserialize()
 void DependencyCollection::PostDeserialize()
 {
     __super::PostDeserialize();
-
-    m_AssetFile = new Asset::AssetFile( m_RootPath );
 
     IsLoading( false );
 }
@@ -97,38 +92,28 @@ tstring DependencyCollection::GetDisplayName() const
 void DependencyCollection::SetRoot( const Nocturnal::Path& path )
 {
     m_RootPath = path;
-    m_AssetFile = new Asset::AssetFile( m_RootPath );
-
     DirtyField( GetClass()->FindField( &DependencyCollection::m_Path ) );
-
     ClearAssets();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 tstring DependencyCollection::GetAssetName() const
 {
-    tstring assetName;
-    if ( m_AssetFile )
-    {
-        assetName = m_AssetFile->GetPath().Filename();
-    }
-
-    return assetName;
+    return m_RootPath.Filename();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 u32 DependencyCollection::GetRecursionDepthForLoad() const
 {
     u32 maxRecursionDepth = 0;
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-    //if ( IsReverse() )
-    //{
-    //    maxRecursionDepth = GlobalBrowser().GetBrowserPreferences()->GetUsageCollectionRecursionDepth();
-    //}
-    //else
-    //{
-    //    maxRecursionDepth = GlobalBrowser().GetBrowserPreferences()->GetDependencyCollectionRecursionDepth();
-    //}
+    if ( IsReverse() )
+    {
+        maxRecursionDepth = wxGetApp().GetBrowser()->GetBrowserPreferences()->GetUsageCollectionRecursionDepth();
+    }
+    else
+    {
+        maxRecursionDepth = wxGetApp().GetBrowser()->GetBrowserPreferences()->GetDependencyCollectionRecursionDepth();
+    }
     return maxRecursionDepth;
 }
 
@@ -139,8 +124,7 @@ void DependencyCollection::LoadDependencies( bool threaded )
     {
         Freeze();
         IsLoading( true );
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-        //        m_DependencyLoader->StartThread();
+        m_DependencyLoader->StartThread();
         // It will be thawed and m_IsLoading set to false in the DependencyLoader::OnEndThread callback
     }
     else
@@ -149,8 +133,8 @@ void DependencyCollection::LoadDependencies( bool threaded )
         IsLoading( true );
         {
             std::set< Nocturnal::Path > assets;
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-            //            GlobalBrowser().GetCacheDB()->GetAssetDependencies( m_spFileReference, assets, m_IsReverse, GetRecursionDepthForLoad() );
+#pragma TODO( "Reimplmenet without the CacheDB" )
+            //wxGetApp().GetBrowser()->GetCacheDB()->GetAssetDependencies( m_spFileReference, assets, m_IsReverse, GetRecursionDepthForLoad() );
             SetAssetReferences( assets );
         }
         IsLoading( false );

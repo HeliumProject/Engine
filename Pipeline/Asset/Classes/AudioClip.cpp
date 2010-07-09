@@ -11,3 +11,16 @@ void AudioClip::EnumerateClass( Reflect::Compositor< AudioClip >& comp )
 
     comp.AddEnumerationField( &AudioClip::m_Mode, "m_Mode" );
 }
+
+void AudioClip::GatherIndexData( AssetIndexData& indexData )
+{
+    const Reflect::Enumeration* modeEnum = Reflect::GetEnumeration< AudioClipMode >();
+    if ( modeEnum )
+    {
+        tstring mode;
+        if ( modeEnum->GetElementLabel( m_Mode, mode ) )
+        {
+            indexData.AddDataItem( TXT( "mode" ), mode );
+        }
+    }
+}

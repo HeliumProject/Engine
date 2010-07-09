@@ -93,8 +93,7 @@ namespace Luna
         void ClearResults();
 
         void SelectPath( const tstring& path );
-        u32 GetSelectedPaths( std::vector< tstring >& paths, bool useForwardSlashes = true );
-        void GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders );
+        u32 GetSelectedPaths( std::set< Nocturnal::Path >& paths );
 
         u32 GetNumFiles() const;
         u32 GetNumFolders() const;

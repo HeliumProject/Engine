@@ -2,8 +2,6 @@
 
 #include "Luna/API.h"
 
-#include "Pipeline/Asset/AssetFile.h"
-
 #include "AssetCollection.h"
 #include "DependencyLoader.h"
 
@@ -57,10 +55,6 @@ namespace Luna
     private:
         Nocturnal::Path m_RootPath;
         bool m_IsReverse;
-
-        // Cache
-        Asset::AssetFilePtr m_AssetFile;
-
         bool m_IsLoading;
         DependencyLoader* m_DependencyLoader;
     };

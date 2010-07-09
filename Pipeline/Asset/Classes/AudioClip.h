@@ -39,6 +39,8 @@ namespace Asset
             : m_Mode( AudioClipModes::Default )
         {
         }
+
+        void GatherIndexData( AssetIndexData& indexData );
     };
 
     typedef Nocturnal::SmartPtr< AudioClip > AudioClipPtr;

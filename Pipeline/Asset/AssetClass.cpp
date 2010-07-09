@@ -17,6 +17,8 @@
 using namespace Reflect;
 using namespace Asset;
 
+const tchar* ASSET_VERSION = TXT( "1" );
+
 tstring AssetClass::s_BaseBuiltDirectory = TXT( "" );
 
 REFLECT_DEFINE_ABSTRACT( AssetClass );
@@ -92,9 +94,10 @@ void AssetClass::RemoveComponent( i32 typeID )
     __super::RemoveComponent( typeID );
 }
 
-void AssetClass::Serialize( const AssetVersionPtr &version )
+void AssetClass::Serialize()
 {
-    Reflect::Archive::ToFile( this, m_Path, version );
+    Reflect::Version version( TXT( "Pipeline" ), ASSET_VERSION );
+    Reflect::Archive::ToFile( this, m_Path, &version );
 
     m_Modified = false;
 }

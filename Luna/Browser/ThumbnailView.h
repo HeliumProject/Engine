@@ -86,8 +86,8 @@ namespace Luna
             ID_CheckOut = BrowserMenu::CheckOut,
             ID_History = BrowserMenu::History,
 
-            ID_CopyPathWindows = BrowserMenu::CopyPathWindows,
-            ID_CopyPathClean = BrowserMenu::CopyPathClean,
+            ID_CopyPathNative = BrowserMenu::CopyPathNative,
+            ID_CopyPath = BrowserMenu::CopyPath,
 
             ID_Open = BrowserMenu::Open,
             ID_Preview = BrowserMenu::Preview,
@@ -128,8 +128,7 @@ namespace Luna
         const SearchResults* GetResults() const;
 
         void SelectPath( const tstring& path );
-        u32 GetSelectedPaths( std::vector< tstring >& paths, bool useForwardSlashes = true );
-        void GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders );
+        void GetSelectedPaths( std::set< Nocturnal::Path >& paths );
 
         tstring GetHighlightedPath() const;
 
@@ -154,7 +153,7 @@ namespace Luna
         void CreateTiles( SearchResults* results );
 
         friend ThumbnailTileCreator;
-        void OnTilesCreated( const M_FolderToTilePtr& folders, const M_FileToTilePtr& files, const ThumbnailSorter& sorter, const Asset::V_AssetFiles& textures );
+        void OnTilesCreated( const M_PathToTilePtr& tiles, const ThumbnailSorter& sorter, const std::set< Nocturnal::Path >& textures );
 
         bool Select( ThumbnailTile* tile );
         bool Deselect( ThumbnailTile* tile );
@@ -185,8 +184,7 @@ namespace Luna
 
         void ShowContextMenu( const wxPoint& pos );
 
-        ThumbnailTile* FindTile( Asset::AssetFile* file ) const;
-        ThumbnailTile* FindTile( Asset::AssetFolder* folder ) const;
+        ThumbnailTile* FindTile( const Nocturnal::Path& path ) const;
 
         enum Corner
         {
@@ -294,10 +292,9 @@ namespace Luna
 
         tstring         m_ThumbnailDirectory;
         ThumbnailManager*   m_ThumbnailManager;
-        Asset::V_AssetFiles m_CurrentTextureRequests;
+        std::set< Nocturnal::Path > m_CurrentTextureRequests;
 
-        M_FolderToTilePtr m_FolderTiles;
-        M_FileToTilePtr m_FileTiles;
+        M_PathToTilePtr m_Tiles;
         OS_ThumbnailTiles m_VisibleTiles;
         OS_ThumbnailTiles m_MouseOverTiles; // there will only be one
         OS_ThumbnailTiles m_SelectedTiles;

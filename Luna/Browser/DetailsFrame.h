@@ -14,6 +14,6 @@ namespace Luna
   public:
     DetailsFrame( wxWindow* parent );
 
-    void Populate( Asset::AssetFile* file );
+    void Populate( const Nocturnal::Path& path );
   };
 }

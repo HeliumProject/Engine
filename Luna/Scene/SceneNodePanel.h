@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 #include "Application/Inspect/Data/Data.h"
-#include "Application/Inspect/Widgets/InspectPanel.h"
+#include "Application/Inspect/Controls/InspectPanel.h"
 #include "SceneNode.h"
 
 namespace Luna

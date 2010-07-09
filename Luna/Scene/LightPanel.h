@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Application/Inspect/Widgets/InspectPanel.h"
-#include "Application/Inspect/Reflect/ReflectInterpreter.h"
+#include "Application/Inspect/Controls/InspectPanel.h"
+#include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 #include "Core/Enumerator.h"
 
 namespace Luna

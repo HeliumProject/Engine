@@ -27,8 +27,8 @@ namespace Luna
       AdvancedSearchGo,
       AdvancedSearchCancel,
 
-      CopyPathWindows,
-      CopyPathClean,
+      CopyPathNative,
+      CopyPath,
 
       Sync,
       CheckOut,
@@ -105,8 +105,8 @@ namespace Luna
       TXT( "Go" ),
       TXT( "Cancel" ),
 
-      TXT( "Path (Windows Format)" ),
-      TXT( "Path (Clean Format)" ),
+      TXT( "Path (Native Format)" ),
+      TXT( "Path (Internal Tools Format)" ),
 
       TXT( "Sync" ),
       TXT( "Check Out" ),

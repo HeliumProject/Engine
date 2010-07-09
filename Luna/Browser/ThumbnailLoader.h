@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Thumbnail.h"
-#include "Pipeline/Asset/AssetFile.h"
 #include "Foundation/Automation/Event.h"
+#include "Foundation/Container/OrderedSet.h"
+#include "Foundation/File/Path.h"
 #include "Platform/Mutex.h"
 #include "Platform/Semaphore.h"
 
@@ -23,21 +24,14 @@ namespace Luna
         ThumbnailLoader( Render::D3DManager* d3dManager, const tstring& thumbnailDirectory );
         ~ThumbnailLoader();
 
-        //
-        // Queue some more files to load thumbnails for
-        //
-
-        void Load( const Asset::V_AssetFiles& files );
+        void Enqueue( const std::set< Nocturnal::Path >& files );
         void Stop();
 
-        //
-        // The result data
-        //
 
     public:
         struct ResultArgs
         {
-            Asset::AssetFilePtr m_File;
+            Nocturnal::Path* m_Path;
             V_ThumbnailPtr m_Textures;
             bool m_Cancelled;
         };
@@ -75,7 +69,7 @@ namespace Luna
         private:
             ThumbnailLoader& m_Loader;
         }                                       m_LoadThread; // The loading thread object
-        Platform::Locker<Asset::OS_AssetFiles>  m_FileQueue; // The queue of files to load (mutex locked)
+        Platform::Locker< Nocturnal::OrderedSet< Nocturnal::Path > >  m_FileQueue; // The queue of files to load (mutex locked)
         Platform::Semaphore                     m_Signal; // Signalling semaphore to wake up load thread
         bool                                    m_Quit;
         Render::D3DManager*                 m_D3DManager;

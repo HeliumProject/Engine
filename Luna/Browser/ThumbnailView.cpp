@@ -6,8 +6,6 @@
 #include "DetailsFrame.h"
 #include "ThumbnailLoadedEvent.h"
 
-#include "Pipeline/Asset/AssetFile.h"
-#include "Pipeline/Asset/AssetFolder.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "Editor/Orientation.h"
@@ -202,8 +200,7 @@ void ThumbnailView::SetResults( SearchResults* results )
         m_MouseDownTile = NULL;
         m_RangeSelectTile = NULL;
 
-        m_FolderTiles.clear();
-        m_FileTiles.clear();
+        m_Tiles.clear();
         m_VisibleTiles.Clear();
         m_MouseOverTiles.Clear();
         m_SelectedTiles.Clear();
@@ -258,11 +255,7 @@ void ThumbnailView::SelectPath( const tstring& path )
         u32 row = count / m_TotalVisibleItems.x;
         u32 col = count % m_TotalVisibleItems.x;
         tile->SetRowColumn( row, col );
-        if ( tile->IsFile() && ( tile->GetFile()->GetFilePath() == path ) )
-        {
-            found = tile;
-        }
-        else if ( tile->IsFolder() && ( tile->GetFolder()->GetFullPath() == path ) )
+        if ( tile->GetPath().IsFile() && ( tile->GetPath().Get() == path ) )
         {
             found = tile;
         }
@@ -281,58 +274,16 @@ void ThumbnailView::SelectPath( const tstring& path )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Fills out the paths variable with the full paths of all the selected items.
-// Returns the number of items in paths.  If useForwardSlashes is false, 
-// backslashes will be used to build the paths.
-// 
-u32 ThumbnailView::GetSelectedPaths( std::vector< tstring >& paths, bool useForwardSlashes )
-{
-    paths.reserve( paths.size() + m_SelectedTiles.Size() );
-
-    for ( OS_ThumbnailTiles::Iterator tileItr = m_SelectedTiles.Begin(),
-        tileEnd = m_SelectedTiles.End(); tileItr != tileEnd; ++tileItr )
-    {
-        ThumbnailTile* tile = *tileItr;
-        tstring path;
-        if ( tile->IsFile() )
-        {
-            path = tile->GetFile()->GetFilePath();
-        }
-        else if ( tile->IsFolder() )
-        {
-            path = tile->GetFolder()->GetFullPath(); 
-        }
-
-        if ( !path.empty() )
-        {
-            if ( !useForwardSlashes )
-            {
-                Nocturnal::Path::MakeNative( path );
-            }
-            paths.push_back( path );
-        }
-    }
-    return static_cast< u32 >( paths.size() );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Fills out the specified arrays with the files and folders that are currently
 // selected.
 // 
-void ThumbnailView::GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders )
+void ThumbnailView::GetSelectedPaths( std::set< Nocturnal::Path >& paths )
 {
     for ( OS_ThumbnailTiles::Iterator tileItr = m_SelectedTiles.Begin(),
         tileEnd = m_SelectedTiles.End(); tileItr != tileEnd; ++tileItr )
     {
         ThumbnailTile* tile = *tileItr;
-        if ( tile->IsFile() )
-        {
-            files.push_back( tile->GetFile() );
-        }
-        else if ( tile->IsFolder() )
-        {
-            folders.push_back( tile->GetFolder() ); 
-        }
+        paths.insert( tile->GetPath() );
     }
 }
 
@@ -427,8 +378,7 @@ void ThumbnailView::Sort( ThumbnailSortMethod method, u32 sortOptions )
 
         m_Sorter.Clear();
         m_Sorter.SetSortMethod( method );
-        m_Sorter.Add( m_FolderTiles );
-        m_Sorter.Add( m_FileTiles );
+        m_Sorter.Add( m_Tiles );
 
         // Only refresh if the option is set
         if ( sortOptions & SortOptions::Refresh )
@@ -456,10 +406,9 @@ void ThumbnailView::Scroll( int x, int y )
 // after being generated from the current results.  Replaces the view's containers
 // with those provided by the loader.
 // 
-void ThumbnailView::OnTilesCreated( const M_FolderToTilePtr& folders, const M_FileToTilePtr& files, const ThumbnailSorter& sorter, const Asset::V_AssetFiles& textures )
+void ThumbnailView::OnTilesCreated( const M_PathToTilePtr& tiles, const ThumbnailSorter& sorter, const std::set< Nocturnal::Path >& textures )
 {
-    m_FolderTiles = folders;
-    m_FileTiles = files;
+    m_Tiles = tiles;
 
     // Retain the sorting method regardless of the setting specified in the callback
     ThumbnailSortMethod sortMethod = m_Sorter.GetSortMethod();
@@ -893,7 +842,7 @@ void ThumbnailView::CalculateTotalVisibleItems()
 void ThumbnailView::AdjustScrollBar( bool maintainScrollPos )
 {
     // Do the math
-    size_t totalItems = m_Results ? ( m_Results->GetFolders().size() + m_Results->GetFiles().size() ) : 0;
+    size_t totalItems = m_Results ? m_Results->GetPathsMap().size() : 0;
     u32 totalItemsY = (u32)( ceil( ( float )totalItems / ( float )m_TotalVisibleItems.x ) );
     Math::Vector3 itemSizePixels( 0.0f, m_TotalItemSize.y + s_GapBetweenTiles.y, 0.0f );
     m_World.TransformVertex( itemSizePixels );
@@ -921,38 +870,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
 {
     // Iterate over the selection so we know what kind of menu to make
     bool inFolder = m_BrowserFrame->InFolder();
-    bool onlyFiles = !m_FileTiles.empty() && m_FolderTiles.empty();
-    bool onlyFolders = !m_FolderTiles.empty() && m_FileTiles.empty();
     size_t numSelected = m_SelectedTiles.Size();
-    bool filesAndFolders = false;
-
-    bool skipIteration = onlyFiles || onlyFolders;
-    if ( !skipIteration )
-    {
-        bool foundFiles = false;
-        bool foundFolders = false;
-        for ( OS_ThumbnailTiles::Iterator tileItr = m_SelectedTiles.Begin(),
-            tileEnd = m_SelectedTiles.End(); tileItr != tileEnd && !filesAndFolders; ++tileItr )
-        {
-            ThumbnailTile* tile = *tileItr;
-            foundFiles |= tile->IsFile();
-            foundFolders |= tile->IsFolder();
-            filesAndFolders = foundFiles && foundFolders;
-        }
-
-        if ( !filesAndFolders )
-        {
-            onlyFiles = foundFiles;
-            onlyFolders = foundFolders;
-        }
-    }
-
-    bool viewOnTarget = onlyFiles && numSelected == 1;
-    if ( viewOnTarget )
-    {
-        Nocturnal::Path path( m_SelectedTiles.Front()->GetFile()->GetFilePath() );
-        viewOnTarget &= path.Extension() == Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary );
-    }
 
     // Prepare the menu
     wxMenu menu;
@@ -965,14 +883,6 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             menu.AppendSeparator();
         }
 
-        if ( onlyFiles )
-        {
-            // Preview
-            menu.Append( ID_Preview, BrowserMenu::Label( ID_Preview ) );
-            menu.Enable( ID_Preview, numSelected == 1 && m_BrowserFrame->IsPreviewable( ( m_SelectedTiles.Front() )->GetFile() ) );
-            menu.AppendSeparator();
-        }
-
         // Perforce
         {
             wxMenu* p4Menu = new wxMenu;
@@ -981,7 +891,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             p4Menu->Append( ID_ShowInPerforce, BrowserMenu::Label( ID_ShowInPerforce ) );
             wxMenuItem* currentItem = menu.AppendSubMenu( p4Menu, TXT( "Perforce" ) );
             p4Menu->Enable( ID_CheckOut, numSelected > 0 );
-            p4Menu->Enable( ID_History, onlyFiles && numSelected == 1 );
+            p4Menu->Enable( ID_History, numSelected == 1 );
             p4Menu->Enable( ID_ShowInPerforce, numSelected == 1 );
             menu.Enable( currentItem->GetId(), p4Menu->IsEnabled( ID_CheckOut ) && p4Menu->IsEnabled( ID_History ) && p4Menu->IsEnabled( ID_ShowInPerforce ) );
         }
@@ -1002,9 +912,9 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
             collectionMenu->Append( ID_NewDependencyCollectionFromSel, BrowserMenu::Label( ID_NewDependencyCollectionFromSel ) );
             collectionMenu->Append( ID_NewUsageCollectionFromSel, BrowserMenu::Label( ID_NewUsageCollectionFromSel ) );
             wxMenuItem* currentItem = menu.AppendSubMenu( collectionMenu, TXT( "Make Collection" ) );
-            menu.Enable( currentItem->GetId(), numSelected > 0 && onlyFiles );
-            collectionMenu->Enable( ID_NewCollectionFromSel, onlyFiles );
-            const bool enableDependencyCollection = numSelected == 1 && onlyFiles;
+            menu.Enable( currentItem->GetId(), numSelected > 0 );
+            collectionMenu->Enable( ID_NewCollectionFromSel, true );
+            const bool enableDependencyCollection = numSelected == 1;
             collectionMenu->Enable( ID_NewDependencyCollectionFromSel, enableDependencyCollection );
             collectionMenu->Enable( ID_NewUsageCollectionFromSel, enableDependencyCollection );
         }
@@ -1012,28 +922,11 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
         // Copy To Clipboard...
         {
             wxMenu* copyToClipboardMenu = new wxMenu;
-            copyToClipboardMenu->Append( ID_CopyPathWindows, BrowserMenu::Label( ID_CopyPathWindows ) );
-            copyToClipboardMenu->Append( ID_CopyPathClean, BrowserMenu::Label( ID_CopyPathClean ) );
+            copyToClipboardMenu->Append( ID_CopyPathNative, BrowserMenu::Label( ID_CopyPathNative ) );
+            copyToClipboardMenu->Append( ID_CopyPath, BrowserMenu::Label( ID_CopyPath ) );
             wxMenuItem* currentItem = menu.AppendSubMenu( copyToClipboardMenu, TXT( "Copy To Clipboard" ) );
             menu.Enable( currentItem->GetId(), numSelected > 0 );
         }
-
-        // Cut, Copy, Rename, Delete
-        //{
-        //  menu.AppendSeparator();
-        //  menu.Append( ID_Cut, BrowserMenu::Label( ID_Cut ) + " (Coming Soon!)" );
-        //  menu.Enable( ID_Cut, false ); //onlyFiles && numSelected == 1 && inFolder );
-
-        //  menu.Append( ID_Copy, BrowserMenu::Label( ID_Copy ) + " (Coming Soon!)" );
-        //  menu.Enable( ID_Copy, false ); //onlyFiles && numSelected == 1 && inFolder );
-
-        //  menu.AppendSeparator();
-        //  menu.Append( ID_Delete, BrowserMenu::Label( ID_Delete ) );
-        //  menu.Enable( ID_Delete, onlyFiles && numSelected == 1 );
-
-        //  menu.Append( ID_Rename, BrowserMenu::Label( ID_Rename ) + " (Coming Soon!)" );
-        //  menu.Enable( ID_Rename, false ); //onlyFiles && numSelected == 1 && inFolder );
-        //}
 
     }
     else
@@ -1116,7 +1009,7 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
     {
         menu.AppendSeparator();
         menu.Append( ID_Properties, BrowserMenu::Label( ID_Properties ) );
-        menu.Enable( ID_Properties, numSelected > 0 && onlyFiles );
+        menu.Enable( ID_Properties, numSelected > 0 );
     }
 
     // Show the menu
@@ -1126,29 +1019,14 @@ void ThumbnailView::ShowContextMenu( const wxPoint& pos )
 ///////////////////////////////////////////////////////////////////////////////
 // Finds the tile that goes with the specified asset file.
 // 
-ThumbnailTile* ThumbnailView::FindTile( Asset::AssetFile* file ) const
+ThumbnailTile* ThumbnailView::FindTile( const Nocturnal::Path& path ) const
 {
-    ThumbnailTile* tile = NULL;
-    M_FileToTilePtr::const_iterator found = m_FileTiles.find( file );
-    if ( found != m_FileTiles.end() )
+    M_PathToTilePtr::const_iterator found = m_Tiles.find( path );
+    if ( found != m_Tiles.end() )
     {
-        tile = found->second;
+        return found->second;
     }
-    return tile;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Finds the tile that goes with the speicfied asset folder.
-// 
-ThumbnailTile* ThumbnailView::FindTile( Asset::AssetFolder* folder ) const
-{
-    ThumbnailTile* tile = NULL;
-    M_FolderToTilePtr::const_iterator found = m_FolderTiles.find( folder );
-    if ( found != m_FolderTiles.end() )
-    {
-        tile = found->second;
-    }
-    return tile;
+    return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1383,7 +1261,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
         }
 
         // Get the ribbon color for files
-        if ( tile->IsFile() )
+        if ( tile->GetPath().IsFile() )
         {
             DWORD ribbonColor = 0;
             if ( tile->GetTypeColor( ribbonColor ) )
@@ -1393,7 +1271,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
             }
             else
             {
-                M_FileTypeColors::iterator findColor = m_FileTypeColors.find( tile->GetFile()->GetPath().FullExtension() );
+                M_FileTypeColors::iterator findColor = m_FileTypeColors.find( tile->GetPath().FullExtension() );
                 if ( findColor != m_FileTypeColors.end() )
                 {
                     Nocturnal::Insert<M_RibbonColorTileCorners>::Result inserted = m_RibbonColorTileCorners.insert( M_RibbonColorTileCorners::value_type( findColor->second, V_TileCorners() ) );
@@ -1402,13 +1280,13 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
             }
 
             // FileType Overlay
-                M_FileTypeIcons::iterator findIcon = m_FileTypeIcons.find( tile->GetFile()->GetPath().FullExtension() );
+                M_FileTypeIcons::iterator findIcon = m_FileTypeIcons.find( tile->GetPath().FullExtension() );
                 if ( findIcon != m_FileTypeIcons.end() )
                 {
                     Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
                     inserted.first->second.push_back( tileCorners[ThumbnailTopLeft] );
                 }
-                else if ( Nocturnal::Path( tile->GetFile()->GetFilePath() ).Extension() == Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary )
+                else if ( tile->GetPath().Extension() == Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary )
                     && ( findIcon = m_FileTypeIcons.find( Reflect::Archive::GetExtension( Reflect::ArchiveTypes::Binary ) ) ) != m_FileTypeIcons.end() )
                 {
                     Nocturnal::Insert<M_FileTypeTileCorners>::Result inserted = m_FileTypeTileCorners.insert( M_FileTypeTileCorners::value_type( findIcon->second, V_TileCorners() ) );
@@ -1419,7 +1297,7 @@ void ThumbnailView::DrawTile( IDirect3DDevice9* device, ThumbnailTile* tile, boo
         if ( tile->GetThumbnail() == m_TextureLoading )
         {
             // Keep track of which textures that need to be loaded
-            m_CurrentTextureRequests.push_back( tile->GetFile() );
+            m_CurrentTextureRequests.insert( tile->GetPath() );
         }
 
         // Draw label
@@ -1760,19 +1638,9 @@ void ThumbnailView::OnMouseMove( wxMouseEvent& args )
                 tileEnd = m_SelectedTiles.End(); tileItr != tileEnd; ++tileItr )
             {
                 ThumbnailTile* tile = *tileItr;
-                tstring path;
-                if ( tile->IsFile() )
+                if ( !tile->GetPath().empty() )
                 {
-                    path = tile->GetFile()->GetFilePath();
-                }
-                else
-                {
-                    path = tile->GetFolder()->GetFullPath(); 
-                }
-
-                if ( !path.empty() )
-                {
-                    clipboardData.AddFile( path );
+                    clipboardData.AddFile( tile->GetPath().Get() );
                     doDrag = true;
                 }
             }
@@ -1897,11 +1765,11 @@ void ThumbnailView::OnMouseLeftDoubleClick( wxMouseEvent& args )
     if ( !hits.Empty() )
     {
         hit = hits.Front();
-        if ( hit->IsFolder() )
+        if ( hit->GetPath().IsDirectory() )
         {
-            m_BrowserFrame->Search( hit->GetFolder()->GetFullPath() );
+            m_BrowserFrame->Search( hit->GetPath().Get() );
         }
-        else if ( hit->IsFile() )
+        else
         {
             wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED, ID_Open );
             evt.SetEventObject( this );
@@ -2024,15 +1892,14 @@ void ThumbnailView::OnSort( wxCommandEvent& args )
 // 
 void ThumbnailView::OnFileProperties( wxCommandEvent& args )
 {
-    Asset::V_AssetFiles files;
-    Asset::V_AssetFolders folders;
-    GetSelectedFilesAndFolders( files, folders );
-    if ( !files.empty() )
+    std::set< Nocturnal::Path > paths;
+    GetSelectedPaths( paths );
+    if ( !paths.empty() )
     {
-        if ( files.size() > 5 )
+        if ( paths.size() > 5 )
         {
             tstringstream message;
-            message << TXT( "Are you sure that you want to show the properties for all " ) << files.size() << TXT( " selected files?" );
+            message << TXT( "Are you sure that you want to show the properties for all " ) << paths.size() << TXT( " selected paths?" );
             i32 result = wxMessageBox( message.str(), TXT( "Show Details?" ), wxCENTER | wxYES_NO | wxICON_QUESTION, this );
             if ( result != wxYES )
             {
@@ -2040,7 +1907,7 @@ void ThumbnailView::OnFileProperties( wxCommandEvent& args )
             }
         }
 
-        for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end();
+        for ( std::set< Nocturnal::Path >::const_iterator fileItr = paths.begin(), fileEnd = paths.end();
             fileItr != fileEnd; ++fileItr )
         {
             DetailsFrame* detailsWindow = new DetailsFrame( m_BrowserFrame );
@@ -2059,7 +1926,7 @@ void ThumbnailView::OnRename( wxCommandEvent& args )
     {
         ThumbnailTile* tile = m_SelectedTiles.Front();
 
-        if ( !tile->IsFile() || !tile->GetFile() )
+        if ( !tile->GetPath().IsFile() )
         {
             return;
         }
@@ -2094,7 +1961,7 @@ void ThumbnailView::OnEditBoxPressEnter( wxCommandEvent& args )
 // 
 void ThumbnailView::OnThumbnailLoaded( Luna::ThumbnailLoadedEvent& args )
 {
-    ThumbnailTile* tile = FindTile( args.GetAssetFile() );
+    ThumbnailTile* tile = FindTile( args.GetPath() );
     if ( tile )
     {
         if ( !args.GetThumbnails().empty() )
@@ -2104,7 +1971,7 @@ void ThumbnailView::OnThumbnailLoaded( Luna::ThumbnailLoadedEvent& args )
         else
         {
             // the extension is used to identify this type of file
-            tstring extension = Nocturnal::Path( args.GetAssetFile()->GetFilePath() ).Extension();
+            tstring extension = args.GetPath().Extension();
             toLower( extension );
 
             // look for a cached thumbnail for this extension
@@ -2118,13 +1985,11 @@ void ThumbnailView::OnThumbnailLoaded( Luna::ThumbnailLoadedEvent& args )
             {
                 WORD index = 0;
 
-                // the win32 function below expects pretty paths
-                tstring win32 = args.GetAssetFile()->GetFilePath();
-                Nocturnal::Path::MakeNative( win32 );
+                tstring native = args.GetPath().Native();
 
                 // get the icon resource for this example file
                 tchar path[MAX_PATH];
-                _tcscpy( path, win32.c_str() );
+                _tcscpy( path, native.c_str() );
                 HICON icon = ExtractAssociatedIcon( NULL, path, &index );
 
                 // if we got the resource

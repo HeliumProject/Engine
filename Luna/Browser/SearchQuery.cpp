@@ -1,6 +1,7 @@
 #include "Precompile.h"
 #include "SearchQuery.h"
 
+#include "Application.h"
 #include "Browser.h"
 
 #include "Foundation/Boost/Regex.h"
@@ -132,7 +133,7 @@ void SearchQuery::SetCollection( const AssetCollection* collection )
 /////////////////////////////////////////////////////////////////////////////////
 AssetCollection* SearchQuery::GetCollection()
 {
-    //return GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->FindCollection( m_CollectionPath->GetPath() );
+    //return wxGetApp().GetBrowser()->GetBrowserPreferences()->GetCollectionManager()->FindCollection( m_CollectionPath->GetPath() );
 #pragma TODO( "collections are being replaced... ?" )
     return NULL;
 }
@@ -299,20 +300,18 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
                     {
                         if ( ParseCollectionName( curToken, matchResults, currentValue, errors ) )
                         {
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-                            //AssetCollection* collection = GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->FindCollection( currentValue );
-                            //if ( !collection )
-                            //{
-                            //    // TODO: error out
-                            //    errors = "Could not find collection named: " + currentValue;
-                            //    return false;
-                            //}
-                            //else if ( collection && query )
-                            //{
-                            //    query->SetCollection( collection );
-                            //}
-                            //continue;
-                            return false;
+                            AssetCollection* collection = wxGetApp().GetBrowser()->GetBrowserPreferences()->GetCollectionManager()->FindCollection( currentValue );
+                            if ( !collection )
+                            {
+                                // TODO: error out
+                                errors = "Could not find collection named: " + currentValue;
+                                return false;
+                            }
+                            else if ( collection && query )
+                            {
+                                query->SetCollection( collection );
+                            }
+                            continue;
                         }
                         else
                         {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PerforcePanels.h"
+#include "PerforceGenerated.h"
 
 #include "Foundation/Profile.h"
 #include "Application/RCS/Providers/Perforce/P4Provider.h"
@@ -8,7 +8,7 @@
 #include <wx/dialog.h>
 #include <wx/timer.h>
 
-namespace PerforceUI
+namespace Luna
 {
     typedef bool (*CancelWaitFunc)();
 
@@ -23,7 +23,7 @@ namespace PerforceUI
         void Throb();
 
     private:
-        GeneratedWaitPanel* m_Panel;
+        PerforceWaitPanelGenerated* m_Panel;
     };
 
     class PerforceWaitTimer : public wxTimer

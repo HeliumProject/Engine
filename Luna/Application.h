@@ -5,6 +5,7 @@
 
 #include "Editor/DocumentManager.h"
 #include "Scene/SceneEditor.h"
+#include "Browser/Browser.h"
 
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>
@@ -37,10 +38,20 @@ namespace Luna
             return m_SceneEditor;
         }
 
+        Browser* GetBrowser()
+        {
+            if ( !m_Browser )
+            {
+                m_Browser = new Browser();
+            }
+            return m_Browser;
+        }
+
     protected:
         Nocturnal::InitializerStack m_InitializerStack;
         DocumentManager* m_DocumentManager;
         SceneEditor* m_SceneEditor;
+        Browser* m_Browser;
     };
 
     DECLARE_APP( LunaApp );

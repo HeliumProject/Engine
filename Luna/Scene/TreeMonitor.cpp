@@ -5,7 +5,7 @@
 #include "SceneManager.h"
 #include "SceneNode.h"
 
-#include "Application/UI/SortTreeCtrl.h"
+#include "UI/Controls/Tree/SortTreeCtrl.h"
 
 using namespace Luna;
 
@@ -33,7 +33,7 @@ TreeMonitor::~TreeMonitor()
 ///////////////////////////////////////////////////////////////////////////////
 // Adds a tree to the list managed by this class.
 // 
-void TreeMonitor::AddTree( Nocturnal::SortTreeCtrl* tree )
+void TreeMonitor::AddTree( SortTreeCtrl* tree )
 {
   m_Trees.insert( tree );
 }
@@ -41,7 +41,7 @@ void TreeMonitor::AddTree( Nocturnal::SortTreeCtrl* tree )
 ///////////////////////////////////////////////////////////////////////////////
 // Removes the specified tree from the list managed by this class.
 // 
-void TreeMonitor::RemoveTree( Nocturnal::SortTreeCtrl* tree )
+void TreeMonitor::RemoveTree( SortTreeCtrl* tree )
 {
   m_Trees.erase( tree );
 }
@@ -91,7 +91,7 @@ void TreeMonitor::ThawSorting()
       S_Trees::const_iterator treeEnd = m_Trees.end();
       for ( ; treeItr != treeEnd; ++treeItr )
       {
-        Nocturnal::SortTreeCtrl* tree = *treeItr;
+        SortTreeCtrl* tree = *treeItr;
         tree->EnableSorting();
         if ( m_NeedsSorting )
         {

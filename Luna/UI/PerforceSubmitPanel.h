@@ -2,30 +2,30 @@
 
 #include <map>
 
-#include "PerforcePanels.h"
+#include "PerforceGenerated.h"
 
 #include "Application/RCS/RCS.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
 
-namespace PerforceUI
+namespace Luna
 {
   ///////////////////////////////////////////////////////////////////////////////
-  namespace Actions
+  namespace PerforceSubmitActions
   {
-    enum Action
+    enum PerforceSubmitAction
     {
       Submit,
       Update,
       Cancel
     };
   }
-  typedef Actions::Action Action;
+  typedef PerforceSubmitActions::PerforceSubmitAction PerforceSubmitAction;
 
 
   ///////////////////////////////////////////////////////////////////////////////
-  namespace PanelStyles
+  namespace PerforceSubmitPanelStyles
   {
-    enum PanelStyle
+    enum PerforceSubmitPanelStyle
     {
       Title             = 1 << 0,  // Show the client information      
       ClientDetails     = 1 << 1,  // Show the client information
@@ -33,13 +33,13 @@ namespace PerforceUI
       CommitButtons     = 1 << 3,  // Show the commit buttons
     };
 
-    static const u64 Default = ( ClientDetails | CommitButtons );
+    static const u32 Default = ( ClientDetails | CommitButtons );
   }
-  typedef u64 PanelStyle;
+  typedef u32 PanelStyle;
 
 
   ///////////////////////////////////////////////////////////////////////////////
-  class SubmitPanel : public GeneratedSubmitPanel 
+  class PerforceSubmitPanel : public PerforceSubmitPanelGenerated 
   {
   public:
 
@@ -47,15 +47,15 @@ namespace PerforceUI
     // Ctor/Dtor
     //
 
-    SubmitPanel( wxWindow* parent, 
+    PerforceSubmitPanel( wxWindow* parent, 
       int id = wxID_ANY,
       int changelist = RCS::DefaultChangesetId,
       const tstring& description = TXT( "" ),
-      const PanelStyle panelStyle = PanelStyles::Default,
+      const PanelStyle panelStyle = PerforceSubmitPanelStyles::Default,
       const tstring& title = TXT( "" ),
       const tstring& titleDescription = TXT( "" ) );
 
-    virtual ~SubmitPanel();
+    virtual ~PerforceSubmitPanel();
 
 
     //
@@ -74,8 +74,8 @@ namespace PerforceUI
     const tstring& GetJobStatus() const { return m_JobStatus; }
     void SetJobStatus( const tstring& jobStatus = TXT( "" ) );
 
-    const Action GetAction() const { return m_Action; }
-    void SetAction( const Action action ) { m_Action = action; }
+    const PerforceSubmitAction GetAction() const { return m_Action; }
+    void SetAction( const PerforceSubmitAction action ) { m_Action = action; }
 
     bool GetReopenFiles() const { return m_ReopenFiles; }
     void SetReopenFiles( bool reopenFiles = true );
@@ -149,7 +149,7 @@ namespace PerforceUI
     std::vector< tstring >              m_FilePaths;
 
     bool                  m_ReopenFiles;
-    Action                m_Action;
+    PerforceSubmitAction                m_Action;
 
     // Stored for UI
     M_FileItemTable       m_FileItemTable;
@@ -159,14 +159,14 @@ namespace PerforceUI
     // PanelStyle Helpers
     //
 
-    inline bool ShouldShowClientDetails() { return ( ( m_PanelStyle & PanelStyles::ClientDetails ) == PanelStyles::ClientDetails ); }
-    inline bool ShouldShowTitle() { return ( !m_Title.empty() && !m_Changeset.m_Description.empty() && ( m_PanelStyle & PanelStyles::Title ) == PanelStyles::Title ); }
-    inline bool ShouldShowJobStatus() { return ( ( m_PanelStyle & PanelStyles::JobStatus ) == PanelStyles::JobStatus ); }
-    inline bool ShouldShowCommitButtons() { return ( ( m_PanelStyle & PanelStyles::CommitButtons ) == PanelStyles::CommitButtons ); }
+    inline bool ShouldShowClientDetails() { return ( ( m_PanelStyle & PerforceSubmitPanelStyles::ClientDetails ) == PerforceSubmitPanelStyles::ClientDetails ); }
+    inline bool ShouldShowTitle() { return ( !m_Title.empty() && !m_Changeset.m_Description.empty() && ( m_PanelStyle & PerforceSubmitPanelStyles::Title ) == PerforceSubmitPanelStyles::Title ); }
+    inline bool ShouldShowJobStatus() { return ( ( m_PanelStyle & PerforceSubmitPanelStyles::JobStatus ) == PerforceSubmitPanelStyles::JobStatus ); }
+    inline bool ShouldShowCommitButtons() { return ( ( m_PanelStyle & PerforceSubmitPanelStyles::CommitButtons ) == PerforceSubmitPanelStyles::CommitButtons ); }
 
-    inline bool HasSubmitAction() { return ( ( m_PanelStyle & Actions::Submit ) == Actions::Submit ); }
-    inline bool HasUpdateAction() { return ( ( m_PanelStyle & Actions::Update ) == Actions::Update ); }
-    inline bool HasCancelAction() { return ( ( m_PanelStyle & Actions::Cancel ) == Actions::Cancel ); }
+    inline bool HasSubmitAction() { return ( ( m_PanelStyle & PerforceSubmitActions::Submit ) == PerforceSubmitActions::Submit ); }
+    inline bool HasUpdateAction() { return ( ( m_PanelStyle & PerforceSubmitActions::Update ) == PerforceSubmitActions::Update ); }
+    inline bool HasCancelAction() { return ( ( m_PanelStyle & PerforceSubmitActions::Cancel ) == PerforceSubmitActions::Cancel ); }
 
   };
 }

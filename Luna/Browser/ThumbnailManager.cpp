@@ -13,7 +13,7 @@ ThumbnailManager::ThumbnailManager( wxWindow* window, Render::D3DManager* d3dman
 : m_Window( window )
 , m_Loader( d3dmanager, thumbnailDirectory )
 {
-  m_Loader.AddResultListener( ThumbnailLoader::ResultSignature::Delegate( this, &ThumbnailManager::OnThumbnailLoaded ) );
+    m_Loader.AddResultListener( ThumbnailLoader::ResultSignature::Delegate( this, &ThumbnailManager::OnThumbnailLoaded ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@ ThumbnailManager::ThumbnailManager( wxWindow* window, Render::D3DManager* d3dman
 // 
 ThumbnailManager::~ThumbnailManager()
 {
-  m_Loader.RemoveResultListener( ThumbnailLoader::ResultSignature::Delegate( this, &ThumbnailManager::OnThumbnailLoaded ) );
+    m_Loader.RemoveResultListener( ThumbnailLoader::ResultSignature::Delegate( this, &ThumbnailManager::OnThumbnailLoaded ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,16 +29,16 @@ ThumbnailManager::~ThumbnailManager()
 // 
 void ThumbnailManager::Reset()
 {
-  Platform::Locker< Asset::M_AssetFiles >::Handle list = m_AllRequests.Lock();
-  list->clear();
+    Platform::Locker< std::map< u64, Nocturnal::Path* > >::Handle list = m_AllRequests.Lock();
+    list->clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Request that some thumbnails be loaded.
 // 
-void ThumbnailManager::Request( const Asset::V_AssetFiles& files )
+void ThumbnailManager::Request( const std::set< Nocturnal::Path >& paths )
 {
-  m_Loader.Load( files );
+    m_Loader.Enqueue( paths );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ void ThumbnailManager::Request( const Asset::V_AssetFiles& files )
 // 
 void ThumbnailManager::Cancel()
 {
-  m_Loader.Stop();
+    m_Loader.Stop();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,8 +55,8 @@ void ThumbnailManager::Cancel()
 // 
 void ThumbnailManager::DetachFromWindow()
 {
-  Platform::TakeMutex mutex( m_WindowMutex );
-  m_Window = NULL;
+    Platform::TakeMutex mutex( m_WindowMutex );
+    m_Window = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,26 +65,26 @@ void ThumbnailManager::DetachFromWindow()
 // 
 void ThumbnailManager::OnThumbnailLoaded( const ThumbnailLoader::ResultArgs& args )
 {
-  Platform::Locker< Asset::M_AssetFiles >::Handle list = m_AllRequests.Lock();
-  if ( args.m_Cancelled )
-  {
-      list->erase( args.m_File->GetPath().Hash() );
-  }
-  else
-  {
-      Nocturnal::Insert< Asset::M_AssetFiles >::Result inserted = list->insert( std::make_pair( args.m_File->GetPath().Hash(), args.m_File ) );
-    if ( inserted.second )
+    Platform::Locker< std::map< u64, Nocturnal::Path* > >::Handle list = m_AllRequests.Lock();
+    if ( args.m_Cancelled )
     {
-      // Only post to the window if we still have a pointer
-      Platform::TakeMutex mutex( m_WindowMutex );
-      if ( m_Window )
-      {
-        ThumbnailLoadedEvent evt;
-        evt.SetThumbnails( args.m_Textures );
-        evt.SetAssetFile( args.m_File );
-        evt.SetCancelled( false );
-        wxPostEvent( m_Window, evt );
-      }
+        list->erase( args.m_Path->Hash() );
     }
-  }
+    else
+    {
+        Nocturnal::Insert< std::map< u64, Nocturnal::Path* > >::Result inserted = list->insert( std::make_pair( args.m_Path->Hash(), args.m_Path ) );
+        if ( inserted.second )
+        {
+            // Only post to the window if we still have a pointer
+            Platform::TakeMutex mutex( m_WindowMutex );
+            if ( m_Window )
+            {
+                ThumbnailLoadedEvent evt;
+                evt.SetThumbnails( args.m_Textures );
+                evt.SetPath( *args.m_Path );
+                evt.SetCancelled( false );
+                wxPostEvent( m_Window, evt );
+            }
+        }
+    }
 }

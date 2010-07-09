@@ -6,11 +6,11 @@
 
 #include <wx/msgdlg.h>
 
-using namespace PerforceUI;
+using namespace Luna;
 
 static bool ShowWaitDialog(Perforce::WaitInterface* waitInterface)
 {
-    int result = PerforceUI::WaitDialog().ShowModal( waitInterface );
+    int result = Luna::WaitDialog().ShowModal( waitInterface );
 
     return result != wxID_OK;
 }
@@ -37,7 +37,7 @@ void WaitDialog::Enable( bool enable )
 WaitDialog::WaitDialog()
 : wxDialog( NULL, wxID_ANY, wxT("Waiting for Perforce..."), wxDefaultPosition, wxSize( 260,80 ), wxCAPTION )
 {
-    m_Panel = new GeneratedWaitPanel( this );
+    m_Panel = new PerforceWaitPanelGenerated( this );
     m_Panel->m_Gauge->SetIndeterminateMode();
 }
 

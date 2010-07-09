@@ -15,7 +15,7 @@
 
 #include "Foundation/Container/ReversibleMap.h"
 
-#include "Application/Inspect/Widgets/Canvas.h"
+#include "Application/Inspect/Controls/Canvas.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
 #include "Application/UI/MenuMRU.h"
 

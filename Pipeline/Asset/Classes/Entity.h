@@ -32,6 +32,8 @@ namespace Asset
     {
     }
 
+    void GatherIndexData( AssetIndexData& indexData );
+
   }; 
 
   typedef Nocturnal::SmartPtr< Entity > EntityPtr;

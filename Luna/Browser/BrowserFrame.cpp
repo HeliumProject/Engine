@@ -15,8 +15,6 @@
 #include "SearchQuery.h"
 #include "HelpPanel.h"
 
-#include "Pipeline/Asset/AssetFile.h"
-#include "Pipeline/Asset/AssetFolder.h"
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Foundation/Component/ComponentHandle.h"
@@ -55,8 +53,8 @@ EVT_MENU( BrowserMenu::Open, BrowserFrame::OnOpen )
 EVT_MENU( BrowserMenu::Preview, BrowserFrame::OnPreview )
 EVT_MENU( BrowserMenu::CheckOut, BrowserFrame::OnCheckOut )
 EVT_MENU( BrowserMenu::History, BrowserFrame::OnRevisionHistory )
-EVT_MENU( BrowserMenu::CopyPathClean, BrowserFrame::OnCopyPath )
-EVT_MENU( BrowserMenu::CopyPathWindows, BrowserFrame::OnCopyPath )
+EVT_MENU( BrowserMenu::CopyPath, BrowserFrame::OnCopyPath )
+EVT_MENU( BrowserMenu::CopyPathNative, BrowserFrame::OnCopyPath )
 EVT_MENU( BrowserMenu::ShowInFolders, BrowserFrame::OnShowInFolders )
 EVT_MENU( BrowserMenu::ShowInPerforce, BrowserFrame::OnShowInPerforce )
 EVT_MENU( BrowserMenu::ShowInWindowsExplorer, BrowserFrame::OnShowInWindowsExplorer )
@@ -386,28 +384,11 @@ void BrowserFrame::Search( const tstring& queryString, const AssetCollection* co
     m_SearchHistory->RunNewQuery( queryString, collection );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-void BrowserFrame::GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders )
+void BrowserFrame::GetSelectedPaths( std::set< Nocturnal::Path >& paths )
 {
-    m_ResultsPanel->GetSelectedFilesAndFolders( files, folders );
+    m_ResultsPanel->GetSelectedPaths( paths );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-bool BrowserFrame::IsPreviewable( Asset::AssetFile* file )
-{
-    NOC_ASSERT( file );
-
-    Asset::AssetClassPtr asset = Asset::AssetFile::GetAssetClass( file );
-    if ( asset.ReferencesObject() )
-    {
-        return asset->GetPath().Exists();
-    }
-
-
-    return false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 wxMenu* BrowserFrame::GetNewAssetMenu( bool forceEnableAll )
 {
     bool enableItems = forceEnableAll || InFolder();
@@ -555,14 +536,11 @@ void BrowserFrame::OnAdvancedSearchCancelButton( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnOpen( wxCommandEvent& event )
 {
-    Asset::V_AssetFiles files;
-    Asset::V_AssetFolders folders; // ignored
-    m_ResultsPanel->GetSelectedFilesAndFolders( files, folders );
-    for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end();
-        fileItr != fileEnd; ++fileItr )
+    std::set< Nocturnal::Path > paths;
+    m_ResultsPanel->GetSelectedPaths( paths );
+    for ( std::set< Nocturnal::Path >::const_iterator itr = paths.begin(), end = paths.end(); itr != end; ++itr )
     {
-        Nocturnal::Path path (( *fileItr )->GetFilePath() );
-        if ( path.Exists() )
+        if ( (*itr).Exists() && (*itr).IsFile() )
         {
 #pragma TODO( "Open the file for editing" )
             NOC_BREAK();
@@ -573,18 +551,17 @@ void BrowserFrame::OnOpen( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnPreview( wxCommandEvent& event )
 {
-    Asset::V_AssetFiles files;
-    Asset::V_AssetFolders folders; // ignored
-    m_ResultsPanel->GetSelectedFilesAndFolders( files, folders );
-    if ( !files.empty() )
+    std::set< Nocturnal::Path > paths;
+    m_ResultsPanel->GetSelectedPaths( paths );
+    if ( !paths.empty() )
     {
-        Asset::AssetFile* file = *files.begin();
-        Asset::AssetClassPtr asset = Asset::AssetFile::GetAssetClass( file );
+        const Nocturnal::Path& path = *paths.begin();
+        Asset::AssetClassPtr asset = Asset::AssetClass::LoadAssetClass( path );
 
         if ( !asset.ReferencesObject() )
         {
             tostringstream msg;
-            msg << TXT( "Failed to load asset '" ) << file->GetFilePath() << TXT( "'. Unable to show preview." );
+            msg << TXT( "Failed to load asset '" ) << path.c_str() << TXT( "'. Unable to show preview." );
             wxMessageBox( msg.str(), TXT( "Error" ), wxOK | wxCENTER | wxICON_ERROR, this );
             return;
         }
@@ -605,36 +582,27 @@ void BrowserFrame::OnPreview( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnSync( wxCommandEvent& event )
 {
-    Asset::V_AssetFiles files;
-    Asset::V_AssetFolders folders;
-    m_ResultsPanel->GetSelectedFilesAndFolders( files, folders );
+    std::set< Nocturnal::Path > paths;
+    m_ResultsPanel->GetSelectedPaths( paths );
 
     // Sync the files
-    for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end();
-        fileItr != fileEnd; ++fileItr )
+    for ( std::set< Nocturnal::Path >::const_iterator itr = paths.begin(), end = paths.end(); itr != end; ++itr )
     {
-        try
-        {
-            RCS::File rcsFile( ( *fileItr )->GetFilePath() );
-            rcsFile.Sync();
-        }
-        catch ( const Nocturnal::Exception& e )
-        {
-            wxMessageBox( e.What(), TXT( "Sync Failed!" ), wxCENTER | wxICON_ERROR | wxOK, this );
-        }
-    }
-
-    // Sync the folders
-    for ( Asset::V_AssetFolders::const_iterator folderItr = folders.begin(), folderEnd = folders.end();
-        folderItr != folderEnd; ++folderItr )
-    {
-        tstring path = ( *folderItr )->GetFullPath();
-        Nocturnal::Path::GuaranteeSlash( path );
-        path += TXT( "..." );
+        const Nocturnal::Path& path = *itr;
 
         try
         {
-            RCS::File rcsFile( path );
+            tstring spec;
+            if ( path.IsDirectory() )
+            {
+                spec = path.Get() + TXT( "..." );
+            }
+            else
+            {
+                spec = path.Get();
+            }
+
+            RCS::File rcsFile( spec );
             rcsFile.Sync();
         }
         catch ( const Nocturnal::Exception& e )
@@ -647,48 +615,71 @@ void BrowserFrame::OnSync( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnCheckOut( wxCommandEvent& event )
 {
-    Asset::V_AssetFiles files;
-    Asset::V_AssetFolders folders;
-    m_ResultsPanel->GetSelectedFilesAndFolders( files, folders );
-    if ( !folders.empty() )
+    std::set< Nocturnal::Path > paths;
+    m_ResultsPanel->GetSelectedPaths( paths );
+
+    bool checkoutDirectories = false;
+
+    for ( std::set< Nocturnal::Path >::const_iterator itr = paths.begin(), end = paths.end(); itr != end; ++itr )
     {
-        if ( wxYES != 
-            wxMessageBox( TXT( "Your selection includes folders.  Are you sure that you want to check out all of the contents of the selected folders?  This could result in checking out a lot of files." ), 
-            TXT( "Check Out Folders?" ), 
-            wxCENTER | wxYES_NO | wxICON_WARNING,
-            this ) )
+        const Nocturnal::Path& path = *itr;
+
+        if ( path.IsDirectory() )
         {
-            // Operation cancelled
-            return;
+
+            const tchar* checkoutFiles = TXT( "Let the OS handle this as an exception" );
+            const tchar* checkoutFilesAndFolders = TXT( "Skip this break point once" );
+
+            wxArrayString choices;
+            choices.Add(checkoutFiles);
+            choices.Add(checkoutFilesAndFolders);
+            wxString choice = ::wxGetSingleChoice( TXT( "Your selection includes folders.  Checking out folders may cause many files to be checked out.  How would you like to proceed?" ),
+                                                   TXT( "Folders in selection" ),
+                                                   choices );
+
+            if ( choice.empty() )
+            {
+                // they clicked cancel
+                return;
+            }
+            else if ( choice == checkoutFiles )
+            {
+                // do nothing, already set to not check out directories above
+            }
+            else if ( choice == checkoutFilesAndFolders )
+            {
+                checkoutDirectories = true;
+            }
+            else
+            {
+                NOC_BREAK();
+            }
         }
     }
 
-    // Check out the files
-    for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end();
-        fileItr != fileEnd; ++fileItr )
+    for ( std::set< Nocturnal::Path >::const_iterator itr = paths.begin(), end = paths.end(); itr != end; ++itr )
     {
+        const Nocturnal::Path& path = *itr;
         try
         {
-            RCS::File rcsFile( ( *fileItr )->GetFilePath() );
-            rcsFile.Edit();
-        }
-        catch ( const Nocturnal::Exception& e )
-        {
-            wxMessageBox( e.What(), TXT( "Check Out Failed!" ), wxCENTER | wxICON_ERROR | wxOK, this );
-        }
-    }
+            tstring spec;
+            if ( path.IsDirectory() )
+            {
+                if ( checkoutDirectories )
+                {
+                    spec = path.Get() + TXT( "..." );
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                spec = path.Get();
+            }
 
-    // Check out the folders
-    for ( Asset::V_AssetFolders::const_iterator folderItr = folders.begin(), folderEnd = folders.end();
-        folderItr != folderEnd; ++folderItr )
-    {
-        tstring path = ( *folderItr )->GetFullPath();
-        Nocturnal::Path::GuaranteeSlash( path );
-        path += TXT( "..." );
-
-        try
-        {
-            RCS::File rcsFile( path );
+            RCS::File rcsFile( spec );
             rcsFile.Edit();
         }
         catch ( const Nocturnal::Exception& e )
@@ -701,11 +692,13 @@ void BrowserFrame::OnCheckOut( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnRevisionHistory( wxCommandEvent& event )
 {
-    std::vector< tstring > paths;
-    if ( m_ResultsPanel->GetSelectedPaths( paths ) == 1 )
+    std::set< Nocturnal::Path > paths;
+    m_ResultsPanel->GetSelectedPaths( paths );
+
+    if ( paths.size() == 1 )
     {
-        tstring path = paths.front();
-        tstring command = TXT( "p4win.exe -H \"" ) + path + TXT( "\"" );
+        const Nocturnal::Path& path = *paths.begin();
+        tstring command = TXT( "p4win.exe -H \"" ) + path.Get() + TXT( "\"" );
 
         if ( Platform::Execute( command ) == -1 )
         {
@@ -720,19 +713,30 @@ void BrowserFrame::OnRevisionHistory( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnCopyPath( wxCommandEvent& event )
 {
-    std::vector< tstring > paths;
-    if ( m_ResultsPanel->GetSelectedPaths( paths, event.GetId() == BrowserMenu::CopyPathClean ) )
+    std::set< Nocturnal::Path > paths;
+    if ( m_ResultsPanel->GetSelectedPaths( paths ) )
     {
         wxString text;
         wxTextDataObject* dataObject = new wxTextDataObject();
-        for ( std::vector< tstring >::const_iterator pathItr = paths.begin(),
-            pathEnd = paths.end(); pathItr != pathEnd; ++pathItr )
+        for ( std::set< Nocturnal::Path >::const_iterator itr = paths.begin(), end = paths.end(); itr != end; ++itr )
         {
             if ( !text.empty() )
             {
                 text += TXT( "\n" );
             }
-            text += *pathItr;
+
+            if ( event.GetId() == BrowserMenu::CopyPath )
+            {
+                text += (*itr).c_str();
+            }
+            else if ( event.GetId() == BrowserMenu::CopyPathNative )
+            {
+                text += (*itr).Native().c_str();
+            }
+            else
+            {
+                NOC_BREAK();
+            }
         }
 
         if ( wxTheClipboard->Open() )
@@ -747,12 +751,13 @@ void BrowserFrame::OnCopyPath( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnShowInFolders( wxCommandEvent& event )
 {
-    std::vector< tstring > paths;
-    if ( m_ResultsPanel->GetSelectedPaths( paths )  == 1 )
+    std::set< Nocturnal::Path > paths;
+    m_ResultsPanel->GetSelectedPaths( paths );
+    if ( paths.size() == 1 )
     {
         wxBusyCursor bc;
 
-        Nocturnal::Path path( paths.front() );
+        const Nocturnal::Path& path = *( paths.begin() );
         if ( path.Exists() )
         {
             Search( path.Get() );
@@ -763,11 +768,12 @@ void BrowserFrame::OnShowInFolders( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnShowInPerforce( wxCommandEvent& event )
 {
-    std::vector< tstring > paths;
-    if ( m_ResultsPanel->GetSelectedPaths( paths )  == 1 )
+    std::set< Nocturnal::Path > paths;
+    m_ResultsPanel->GetSelectedPaths( paths );
+    if ( paths.size() == 1 )
     {
-        tstring path = paths.front();
-        tstring command = TXT( "p4win.exe -s \"" ) + path + TXT( "\"" );
+        const Nocturnal::Path& path = *( paths.begin() );
+        tstring command = tstring( TXT( "p4win.exe -s \"" ) ) + path.c_str() + TXT( "\"" );
 
         if ( Platform::Execute( command ) == -1 )
         {
@@ -782,11 +788,12 @@ void BrowserFrame::OnShowInPerforce( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void BrowserFrame::OnShowInWindowsExplorer( wxCommandEvent& event )
 {
-    std::vector< tstring > paths;
-    if ( m_ResultsPanel->GetSelectedPaths( paths ) == 1 )
+    std::set< Nocturnal::Path > paths;
+    m_ResultsPanel->GetSelectedPaths( paths );
+    if ( paths.size() == 1 )
     {
         tstring command = TXT( "explorer.exe " );
-        Nocturnal::Path path( paths.front() );
+        const Nocturnal::Path& path = *( paths.begin() );
         if ( path.IsFile() )
         {
             command += TXT( "/select," );
@@ -801,33 +808,23 @@ void BrowserFrame::OnShowInWindowsExplorer( wxCommandEvent& event )
 void BrowserFrame::OnNewCollectionFromSelection( wxCommandEvent& event )
 {
     wxBusyCursor busyCursor;
-    Asset::V_AssetFiles files;
-    Asset::V_AssetFolders folders;
-    GetSelectedFilesAndFolders( files, folders );
+    std::set< Nocturnal::Path > paths;
+    GetSelectedPaths( paths );
     AssetCollectionPtr collection;
 
-    if ( files.size() )
+    if ( paths.size() )
     {
         if ( event.GetId() == BrowserMenu::NewCollectionFromSelection )
         {
             collection = new AssetCollection( TXT( "New Collection" ), AssetCollectionFlags::CanRename | AssetCollectionFlags::CanHandleDragAndDrop );
-            std::set< Nocturnal::Path > fileRefs;
-            for ( Asset::V_AssetFiles::const_iterator fileItr = files.begin(), fileEnd = files.end(); fileItr != fileEnd; ++fileItr )
-            {
-                fileRefs.insert( (*fileItr)->GetPath() );
-            }
-
-            if ( !fileRefs.empty() )
-            {
-                collection->AddAssets( fileRefs );
-            }
+            collection->AddAssets( paths );
         }
         else
         {
             const bool reverse = event.GetId() == BrowserMenu::NewUsageCollectionFromSelection;
-            Asset::AssetFile* file = *files.begin();
-            DependencyCollectionPtr dependencyCollection = new DependencyCollection( file->GetShortName(), AssetCollectionFlags::Dynamic, reverse );
-            dependencyCollection->SetRoot( file->GetPath() );
+            const Nocturnal::Path& path = *paths.begin();
+            DependencyCollectionPtr dependencyCollection = new DependencyCollection( path.Filename(), AssetCollectionFlags::Dynamic, reverse );
+            dependencyCollection->SetRoot( path );
             dependencyCollection->LoadDependencies();
             collection = dependencyCollection;
         }
@@ -972,12 +969,11 @@ void BrowserFrame::OnSearchComplete( const Luna::SearchCompleteArgs& args )
 {
     m_IsSearching = false;
 #pragma TODO ("Rachel: figure out how to add EndSearch listener and hook up ResultsPanel::SelectPath to select this path.")
-    Asset::V_AssetFiles files;
-    Asset::V_AssetFolders folders;
-    m_ResultsPanel->GetSelectedFilesAndFolders( files, folders );
+    std::set< Nocturnal::Path > paths;
+    m_ResultsPanel->GetSelectedPaths( paths );
     u32 numFolders = m_ResultsPanel->GetNumFolders();
     u32 numFiles = m_ResultsPanel->GetNumFiles();
-    UpdateStatusBar( numFolders, numFiles, files.size() + folders.size(), TXT( "" ) );
+    UpdateStatusBar( numFolders, numFiles, paths.size(), TXT( "" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

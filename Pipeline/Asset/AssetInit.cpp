@@ -1,9 +1,6 @@
 #include "AssetInit.h"
 
 #include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/AssetFile.h"
-#include "Pipeline/Asset/AssetFolder.h"
-#include "Pipeline/Asset/AssetVersion.h"
 #include "Pipeline/Asset/TextureEnums.h"
 
 #include "Pipeline/Asset/Components/DependenciesComponent.h"
@@ -87,17 +84,14 @@ void Asset::Initialize()
     g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< PostMipFilterTypes::PostMipFilterType >( &PostMipFilterTypes::PostMipFilterTypeEnumerateEnumeration, TXT( "PostMipFilterType" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< ReductionRatios::ReductionRatio >( &ReductionRatios::ReductionRatioEnumerateEnumeration, TXT( "ReductionRatio" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< AnimationClipModes::AnimationClipMode >( &AnimationClipModes::AnimationClipModeEnumerateEnumeration, TXT( "AnimationClipMode" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration< AudioClipModes::AudioClipMode >( &AudioClipModes::AudioClipModeEnumerateEnumeration, TXT( "AudioClipMode" ) ) );
 
     //
     // Basic Types
     //
 
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetVersion>( TXT( "AssetVersion" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetClass>( TXT( "AssetClass" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetFile>( TXT( "AssetFile" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetFolder>( TXT( "AssetFolder" ) ) );
-    g_AssetInitializerStack.Push( Reflect::RegisterClass<ShaderAsset>( TXT( "ShaderAsset" ) ) );
-
+    g_AssetInitializerStack.Push( Reflect::RegisterClass< AssetIndexData >( TXT( "AssetIndexData" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<ManifestVersion>( TXT( "ManifestVersion" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<AssetManifest>( TXT( "AssetManifest" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<EntityManifest>( TXT( "EntityManifest" ) ) ); Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass< EntityManifest >(), TXT( "AssetManifest" ) );
@@ -126,6 +120,8 @@ void Asset::Initialize()
     // Asset classes
     //
 
+    g_AssetInitializerStack.Push( Reflect::RegisterClass<ShaderAsset>( TXT( "ShaderAsset" ) ) );
+    g_AssetClassTypes.push_back( Reflect::GetType< ShaderAsset >() );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<Entity>( TXT( "Entity" ) ) );
     g_AssetClassTypes.push_back( Reflect::GetType<Entity>() );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<SceneAsset>( TXT( "SceneAsset" ) ) );

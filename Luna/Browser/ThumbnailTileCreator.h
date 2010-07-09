@@ -29,9 +29,8 @@ namespace Luna
     ThumbnailPtr m_TextureLoading;
     ThumbnailPtr m_TextureFolder;
     SearchResultsPtr m_Results;
-    M_FolderToTilePtr m_FolderTiles;
-    M_FileToTilePtr m_FileTiles;
+    M_PathToTilePtr m_Tiles;
     ThumbnailSorter m_Sorter;
-    Asset::V_AssetFiles m_TextureRequests;
+    std::set< Nocturnal::Path > m_TextureRequests;
   };
 }

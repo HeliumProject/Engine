@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "ScenePreferencesDialog.h"
 
-#include "Browser/Browser.h"
 #include "Scene/ScenePreferences.h"
 
 using namespace Luna;

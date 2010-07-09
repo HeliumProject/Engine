@@ -40,14 +40,18 @@ namespace Luna
 
         Vault& GetVault()
         {
-            return m_Vault;
+            if ( !m_Vault )
+            {
+                m_Vault = new Vault();
+            }
+            return *m_Vault;
         }
 
     protected:
         Nocturnal::InitializerStack m_InitializerStack;
         SceneEditor* m_SceneEditor;
         DocumentManager m_DocumentManager;
-        Vault m_Vault;
+        Vault* m_Vault;
     };
 
     DECLARE_APP( LunaApp );

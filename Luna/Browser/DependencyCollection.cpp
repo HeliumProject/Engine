@@ -124,8 +124,7 @@ void DependencyCollection::LoadDependencies( bool threaded )
     {
         Freeze();
         IsLoading( true );
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-        //        m_DependencyLoader->StartThread();
+        m_DependencyLoader->StartThread();
         // It will be thawed and m_IsLoading set to false in the DependencyLoader::OnEndThread callback
     }
     else
@@ -134,8 +133,8 @@ void DependencyCollection::LoadDependencies( bool threaded )
         IsLoading( true );
         {
             std::set< Nocturnal::Path > assets;
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-            //            wxGetApp().GetBrowser()->GetCacheDB()->GetAssetDependencies( m_spFileReference, assets, m_IsReverse, GetRecursionDepthForLoad() );
+#pragma TODO( "Reimplmenet without the CacheDB" )
+            //wxGetApp().GetBrowser()->GetCacheDB()->GetAssetDependencies( m_spFileReference, assets, m_IsReverse, GetRecursionDepthForLoad() );
             SetAssetReferences( assets );
         }
         IsLoading( false );

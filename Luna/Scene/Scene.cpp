@@ -16,7 +16,7 @@
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 
 #include "Application.h"
-#include "Browser/Browser.h"
+#include "Vault/Vault.h"
 
 #include "Pipeline/Content/Scene.h"
 #include "Pipeline/Content/ContentVersion.h"
@@ -2147,7 +2147,7 @@ void Scene::CurrentSceneChanging( const SceneChangeArgs& args )
     {
         // This scene is not going to be the current one, tell the collection
         // manager to stop displaying this collection.
-        wxGetApp().GetBrowser()->GetBrowserPreferences()->GetCollectionManager()->DeleteCollection( m_SelectedEntityCollection );
+        wxGetApp().GetVault().GetVaultPreferences()->GetCollectionManager()->DeleteCollection( m_SelectedEntityCollection );
     }
 }
 
@@ -2158,7 +2158,7 @@ void Scene::CurrentSceneChanged( const SceneChangeArgs& args )
 {
     if ( args.m_Scene == this )
     {
-        wxGetApp().GetBrowser()->GetBrowserPreferences()->GetCollectionManager()->AddCollection( m_SelectedEntityCollection );
+        wxGetApp().GetVault().GetVaultPreferences()->GetCollectionManager()->AddCollection( m_SelectedEntityCollection );
     }
 }
 

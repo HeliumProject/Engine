@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 #include "Core/Selection.h"
-#include "Browser/AssetCollection.h"
+#include "Vault/AssetCollection.h"
 
 namespace Luna
 {

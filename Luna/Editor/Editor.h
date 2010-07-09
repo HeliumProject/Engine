@@ -57,7 +57,7 @@ namespace Luna
 
     EditorType GetEditorType() const;
 
-    virtual DocumentManager* GetDocumentManager() = 0;
+    virtual DocumentManager& GetDocumentManager() = 0;
 
     virtual const tstring& GetPreferencePrefix() const NOC_OVERRIDE;
 

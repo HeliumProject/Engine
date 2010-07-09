@@ -2115,286 +2115,350 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Browser"
+			Name="Vault"
 			>
 			<File
-				RelativePath=".\Browser\AssetCollection.cpp"
+				RelativePath=".\Vault\AssetCollection.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\AssetCollection.h"
+				RelativePath=".\Vault\AssetCollection.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\Browser.cpp"
+				RelativePath=".\Vault\CollectionManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\Browser.h"
+				RelativePath=".\Vault\CollectionManager.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserEvents.h"
+				RelativePath=".\Vault\CollectionsPanel.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserFrame.cpp"
+				RelativePath=".\Vault\CollectionsPanel.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserFrame.h"
+				RelativePath=".\Vault\DependencyCollection.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserGenerated.cpp"
+				RelativePath=".\Vault\DependencyCollection.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserGenerated.fbp"
+				RelativePath=".\Vault\DependencyLoader.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserGenerated.h"
+				RelativePath=".\Vault\DependencyLoader.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserMenuIDs.h"
+				RelativePath=".\Vault\DetailsFrame.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserPreferences.cpp"
+				RelativePath=".\Vault\DetailsFrame.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserPreferences.h"
+				RelativePath=".\Vault\DirectoryCtrl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserPreferencesDialog.cpp"
+				RelativePath=".\Vault\DirectoryCtrl.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserPreferencesDialog.h"
+				RelativePath=".\Vault\FoldersPanel.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserPreviewWindow.cpp"
+				RelativePath=".\Vault\FoldersPanel.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserPreviewWindow.h"
+				RelativePath=".\Vault\NavigationPanel.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserSearch.cpp"
+				RelativePath=".\Vault\NavigationPanel.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserSearch.h"
+				RelativePath=".\Vault\PreviewPanel.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserSearchEnvironment.cpp"
+				RelativePath=".\Vault\PreviewPanel.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserSearchEnvironment.h"
+				RelativePath=".\Vault\ResultsPanel.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserSearchPanel.cpp"
+				RelativePath=".\Vault\ResultsPanel.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserSearchPanel.h"
+				RelativePath=".\Vault\SearchHistory.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserStatusBar.cpp"
+				RelativePath=".\Vault\SearchHistory.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserStatusBar.h"
+				RelativePath=".\Vault\SearchQuery.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserToolBar.cpp"
+				RelativePath=".\Vault\SearchQuery.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\BrowserToolBar.h"
+				RelativePath=".\Vault\SearchResults.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\CollectionManager.cpp"
+				RelativePath=".\Vault\SearchResults.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\CollectionManager.h"
+				RelativePath=".\Vault\Thumbnail.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\CollectionsPanel.cpp"
+				RelativePath=".\Vault\Thumbnail.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\CollectionsPanel.h"
+				RelativePath=".\Vault\ThumbnailIterator.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\DependencyCollection.cpp"
+				RelativePath=".\Vault\ThumbnailLoadedEvent.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\DependencyCollection.h"
+				RelativePath=".\Vault\ThumbnailLoadedEvent.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\DependencyLoader.cpp"
+				RelativePath=".\Vault\ThumbnailLoader.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\DependencyLoader.h"
+				RelativePath=".\Vault\ThumbnailLoader.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\DetailsFrame.cpp"
+				RelativePath=".\Vault\ThumbnailManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\DetailsFrame.h"
+				RelativePath=".\Vault\ThumbnailManager.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\DirectoryCtrl.cpp"
+				RelativePath=".\Vault\ThumbnailSorter.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\DirectoryCtrl.h"
+				RelativePath=".\Vault\ThumbnailSorter.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\FoldersPanel.cpp"
+				RelativePath=".\Vault\ThumbnailTile.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\FoldersPanel.h"
+				RelativePath=".\Vault\ThumbnailTile.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\NavigationPanel.cpp"
+				RelativePath=".\Vault\ThumbnailTileCreator.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\NavigationPanel.h"
+				RelativePath=".\Vault\ThumbnailTileCreator.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\PreviewPanel.cpp"
+				RelativePath=".\Vault\ThumbnailView.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\PreviewPanel.h"
+				RelativePath=".\Vault\ThumbnailView.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ResultsPanel.cpp"
+				RelativePath=".\Vault\Vault.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ResultsPanel.h"
+				RelativePath=".\Vault\Vault.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\SearchHistory.cpp"
+				RelativePath=".\Vault\VaultEvents.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\SearchHistory.h"
+				RelativePath=".\Vault\VaultFrame.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\SearchQuery.cpp"
+				RelativePath=".\Vault\VaultFrame.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\SearchQuery.h"
+				RelativePath=".\Vault\VaultGenerated.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\SearchResults.cpp"
+				RelativePath=".\Vault\VaultGenerated.fbp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug Unicode|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug Unicode|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release Unicode|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release Unicode|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Browser\SearchResults.h"
+				RelativePath=".\Vault\VaultGenerated.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\Thumbnail.cpp"
+				RelativePath=".\Vault\VaultMenuIDs.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\Thumbnail.h"
+				RelativePath=".\Vault\VaultPreferences.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailIterator.h"
+				RelativePath=".\Vault\VaultPreferences.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailLoadedEvent.cpp"
+				RelativePath=".\Vault\VaultPreferencesDialog.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailLoadedEvent.h"
+				RelativePath=".\Vault\VaultPreferencesDialog.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailLoader.cpp"
+				RelativePath=".\Vault\VaultPreviewWindow.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailLoader.h"
+				RelativePath=".\Vault\VaultPreviewWindow.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailManager.cpp"
+				RelativePath=".\Vault\VaultSearch.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailManager.h"
+				RelativePath=".\Vault\VaultSearch.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailSorter.cpp"
+				RelativePath=".\Vault\VaultSearchEnvironment.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailSorter.h"
+				RelativePath=".\Vault\VaultSearchEnvironment.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailTile.cpp"
+				RelativePath=".\Vault\VaultSearchPanel.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailTile.h"
+				RelativePath=".\Vault\VaultSearchPanel.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailTileCreator.cpp"
+				RelativePath=".\Vault\VaultStatusBar.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailTileCreator.h"
+				RelativePath=".\Vault\VaultStatusBar.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailView.cpp"
+				RelativePath=".\Vault\VaultToolBar.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Browser\ThumbnailView.h"
+				RelativePath=".\Vault\VaultToolBar.h"
 				>
 			</File>
 		</Filter>

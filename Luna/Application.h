@@ -5,7 +5,7 @@
 
 #include "Editor/DocumentManager.h"
 #include "Scene/SceneEditor.h"
-#include "Browser/Browser.h"
+#include "Vault/Vault.h"
 
 #include <wx/app.h>
 #include <wx/xrc/xmlres.h>
@@ -24,7 +24,7 @@ namespace Luna
 
         virtual void    OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) NOC_OVERRIDE;
 
-        DocumentManager* GetDocumentManager()
+        DocumentManager& GetDocumentManager()
         {
             return m_DocumentManager;
         }
@@ -38,20 +38,16 @@ namespace Luna
             return m_SceneEditor;
         }
 
-        Browser* GetBrowser()
+        Vault& GetVault()
         {
-            if ( !m_Browser )
-            {
-                m_Browser = new Browser();
-            }
-            return m_Browser;
+            return m_Vault;
         }
 
     protected:
         Nocturnal::InitializerStack m_InitializerStack;
-        DocumentManager* m_DocumentManager;
         SceneEditor* m_SceneEditor;
-        Browser* m_Browser;
+        DocumentManager m_DocumentManager;
+        Vault m_Vault;
     };
 
     DECLARE_APP( LunaApp );

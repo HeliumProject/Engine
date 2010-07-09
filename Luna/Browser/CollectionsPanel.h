@@ -11,14 +11,10 @@
 
 namespace Luna
 {
-  class SortTreeCtrl;
-}
-
-namespace Luna
-{
   //
   // Forwrds
   //
+  class SortTreeCtrl;
   struct PreferencesLoadedArgs;
   class AssetCollectionItemData;
 
@@ -81,7 +77,7 @@ namespace Luna
     void DragLeave( Nocturnal::Void );
 
   private:
-    wxTreeItemId DragHitTest( Nocturnal::SortTreeCtrl* treeCtrl, wxPoint point );
+    wxTreeItemId DragHitTest( SortTreeCtrl* treeCtrl, wxPoint point );
 
     static AssetCollection* NewCollection( CollectionManager* collectionManager, const i32 typeID, const tstring& tryName = TXT("") );
 
@@ -96,10 +92,10 @@ namespace Luna
     void DisconnectCollectionManagerListeners();
     void ConnectCollectionListeners();
     void UpdateCollections();
-    void PrePopulateTreeCtrl( Nocturnal::SortTreeCtrl* treeCtrl );
-    void PostPopulateTreeCtrl( Nocturnal::SortTreeCtrl* treeCtrl );
+    void PrePopulateTreeCtrl( SortTreeCtrl* treeCtrl );
+    void PostPopulateTreeCtrl( SortTreeCtrl* treeCtrl );
 
-    static AssetCollectionItemData* GetItemData( Nocturnal::SortTreeCtrl* treeCtrl, const wxTreeItemId& id );
+    static AssetCollectionItemData* GetItemData( SortTreeCtrl* treeCtrl, const wxTreeItemId& id );
 
   private:
     BrowserFrame*      m_BrowserFrame;

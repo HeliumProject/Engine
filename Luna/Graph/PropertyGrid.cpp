@@ -31,19 +31,19 @@ PropertyGrid::Clear()
 	wxPropertyGrid::Clear();
 }
 
-wxPGId
+wxPGProperty*
 PropertyGrid::Append(wxPGProperty *pgprop, Property *prop)
 {
-	wxPGId id = wxPropertyGrid::Append(pgprop);
-	m_map.insert(std::pair<wxPGId, Property *>(id, prop));
+	wxPGProperty* id = wxPropertyGrid::Append(pgprop);
+	m_map.insert(std::pair<wxPGProperty*, Property *>(id, prop));
 	return id;
 }
 
 void
 PropertyGrid::OnPropertyChanging(Graph *graph, wxPropertyGridEvent& evt)
 {
-	wxPGId id = evt.GetProperty();
-	std::map<wxPGId, Property *>::iterator i = m_map.find(id);
+	wxPGProperty* id = evt.GetProperty();
+	std::map<wxPGProperty*, Property *>::iterator i = m_map.find(id);
 	if (i != m_map.end())
 	{
 		Property *prop = i->second;
@@ -69,8 +69,8 @@ void
 PropertyGrid::OnPropertyChanged(Graph *graph, wxPropertyGridEvent& evt)
 {
 	graph->BeginUpdate();
-	wxPGId id = evt.GetProperty();
-	std::map<wxPGId, Property *>::iterator i = m_map.find(id);
+	wxPGProperty* id = evt.GetProperty();
+	std::map<wxPGProperty*, Property *>::iterator i = m_map.find(id);
 	if (i != m_map.end())
 	{
 		Property *prop = i->second;

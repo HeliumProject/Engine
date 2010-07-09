@@ -36,9 +36,9 @@
 // prevent infrequently used stuff
 #define WIN32_LEAN_AND_MEAN
 
-// windows xp
-#define WINVER 0x0500
-#define _WIN32_WINNT 0x0500
+// windows vista
+#define WINVER 0x0600
+#define _WIN32_WINNT 0x0600
 
 // internet explorer 6
 #define _WIN32_IE 0x0600

@@ -7,7 +7,7 @@
 
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/DragDrop/FilteredDropTarget.h"
-#include "Application/Inspect/Reflect/ReflectInterpreter.h"
+#include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 #include "Entity.h"
 #include "Application/UI/FileDialog.h"
 #include "Application/RCS/RCS.h"

@@ -12,7 +12,7 @@
 #include "Application/UI/FileDialog.h"
 #include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
-#include "Application/UI/SortTreeCtrl.h"
+#include "UI/Controls/Tree/SortTreeCtrl.h"
 
 
 using namespace Luna;
@@ -78,9 +78,9 @@ CollectionsPanel::CollectionsPanel( BrowserFrame* browserFrame )
     m_UsageImageIndex = Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "chart_organisation_reverse" ) );
 
     m_MyCollectionsToolBar->SetToolBitmapSize( wxSize( 16, 16 ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), BrowserMenu::Label( ID_NewCollection ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, TXT( "" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), BrowserMenu::Label( ID_NewDependencyCollection ) + TXT( " - Files this asset depends on." ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, TXT( "" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), BrowserMenu::Label( ID_NewUsageCollection ) + TXT( " - Files that use this asset." ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::NewCollection ), BrowserMenu::Label( ID_NewCollection ) );
+    //m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, TXT( "" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), BrowserMenu::Label( ID_NewDependencyCollection ) + TXT( " - Files this asset depends on." ) );
+    //m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, TXT( "" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), BrowserMenu::Label( ID_NewUsageCollection ) + TXT( " - Files that use this asset." ) );
     m_MyCollectionsToolBar->Realize();
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
@@ -130,7 +130,7 @@ void CollectionsPanel::OnTempCollectionsDoubleClick( wxTreeEvent& event )
     event.Skip();
 
     // this just makes the code below more generic in case we want to abstract it later
-    Nocturnal::SortTreeCtrl* treeCtrl = m_TempCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_TempCollectionsTreeCtrl;
 
     wxTreeItemId item = treeCtrl->GetSelection();
     if ( !item )
@@ -176,7 +176,7 @@ void CollectionsPanel::OnMyCollectionsTitleMenu( wxMouseEvent& event )
 void CollectionsPanel::OnMyCollectionsBeginLabelEdit( wxTreeEvent& event )
 {
     // this just makes the code below more generic in case we want to abstract it later
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     wxTreeItemId item = event.GetItem();
     if ( !item )
@@ -210,7 +210,7 @@ void CollectionsPanel::OnMyCollectionsBeginLabelEdit( wxTreeEvent& event )
 void CollectionsPanel::OnMyCollectionsEndLabelEdit( wxTreeEvent& event )
 {
     // this just makes the code below more generic in case we want to abstract it later
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     event.Veto();
 
@@ -249,7 +249,7 @@ void CollectionsPanel::OnMyCollectionsEndLabelEdit( wxTreeEvent& event )
     tstring errors;
 
     collection->Freeze();
-    bool renameResult = m_CollectionManager->RenameCollection( collection, labelValue.c_str(), errors );
+    bool renameResult = m_CollectionManager->RenameCollection( collection, (const wxChar*)labelValue.c_str(), errors );
     collection->Thaw();
     if ( !renameResult )
     {
@@ -263,7 +263,7 @@ void CollectionsPanel::OnMyCollectionsEndLabelEdit( wxTreeEvent& event )
 void CollectionsPanel::OnMyCollectionsDoubleClick( wxTreeEvent& event )
 {
     // this just makes the code below more generic in case we want to abstract it later
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     wxTreeItemId item = treeCtrl->GetSelection();
     if ( !item )
@@ -287,7 +287,7 @@ void CollectionsPanel::OnMyCollectionsDoubleClick( wxTreeEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnMyCollectionsMenu( wxTreeEvent& event )
 {
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     wxTreeItemId item = event.GetItem();
     if ( !item )
@@ -346,7 +346,7 @@ void CollectionsPanel::OnMyCollectionsMenu( wxTreeEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnShowCollection( wxCommandEvent& event )
 {
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -417,11 +417,11 @@ void CollectionsPanel::OnOpenCollection( wxCommandEvent& event )
 
         if ( event.GetId() == ID_OpenCollection )
         {
-            collection = m_CollectionManager->OpenCollection( browserDlg.GetPath().c_str() );
+            collection = m_CollectionManager->OpenCollection( (const wxChar*)browserDlg.GetPath().c_str() );
         }
         else
         {
-            collection = m_CollectionManager->ImportCollection( browserDlg.GetPath().c_str() );
+            collection = m_CollectionManager->ImportCollection( (const wxChar*)browserDlg.GetPath().c_str() );
         }
 
         if ( collection )
@@ -434,7 +434,7 @@ void CollectionsPanel::OnOpenCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnCloseCollection( wxCommandEvent& event )
 {
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -476,7 +476,7 @@ void CollectionsPanel::OnCloseCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnRenameCollection( wxCommandEvent& event )
 {
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -491,7 +491,7 @@ void CollectionsPanel::OnRenameCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnImportIntoCollection( wxCommandEvent& event )
 {
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -522,7 +522,7 @@ void CollectionsPanel::OnImportIntoCollection( wxCommandEvent& event )
     if ( browserDlg.ShowModal() == wxID_OK )
     {
         collection->Freeze();
-        m_CollectionManager->ImportIntoStaticCollection( collection, browserDlg.GetPath().c_str() );
+        m_CollectionManager->ImportIntoStaticCollection( collection, (const wxChar*)browserDlg.GetPath().c_str() );
         collection->Thaw();
     }
 }
@@ -530,7 +530,7 @@ void CollectionsPanel::OnImportIntoCollection( wxCommandEvent& event )
 ///////////////////////////////////////////////////////////////////////////////
 void CollectionsPanel::OnSaveCollection( wxCommandEvent& event )
 {
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -560,14 +560,14 @@ void CollectionsPanel::OnSaveCollection( wxCommandEvent& event )
 
         if ( browserDlg.ShowModal() == wxID_OK )
         {
-            m_CollectionManager->SaveCollection( collection, browserDlg.GetPath().c_str() );
+            m_CollectionManager->SaveCollection( collection, (const wxChar*)browserDlg.GetPath().c_str() );
         }
     }
 }
 
 void CollectionsPanel::UpdateCollection( CollectionAction action )
 {
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
     wxTreeItemId rootID = treeCtrl->GetRootItem();
 
     wxTreeItemId item = treeCtrl->GetSelection();
@@ -667,7 +667,7 @@ void CollectionsPanel::OnCollectionModified( const Reflect::ElementChangeArgs& a
     {
         wxTreeItemId itemID = findItem->second;
 
-        Nocturnal::SortTreeCtrl* treeCtrl = collection->IsTemporary() ? m_TempCollectionsTreeCtrl : m_MyCollectionsTreeCtrl; 
+        SortTreeCtrl* treeCtrl = collection->IsTemporary() ? m_TempCollectionsTreeCtrl : m_MyCollectionsTreeCtrl; 
         treeCtrl->SetItemText( itemID, collection->GetDisplayName() );
 
         int iconIndex = m_ContainerImageIndex;
@@ -714,7 +714,7 @@ void CollectionsPanel::OnClearAllCollections( const CollectionManagerArgs& args 
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function for hit testing a point during a drag and drop operation.
 // 
-wxTreeItemId CollectionsPanel::DragHitTest( Nocturnal::SortTreeCtrl* treeCtrl, wxPoint point )
+wxTreeItemId CollectionsPanel::DragHitTest( SortTreeCtrl* treeCtrl, wxPoint point )
 {
     int flags = 0;
     wxTreeItemId item = treeCtrl->HitTest( point, flags );
@@ -739,7 +739,7 @@ wxTreeItemId CollectionsPanel::DragHitTest( Nocturnal::SortTreeCtrl* treeCtrl, w
 // 
 wxDragResult CollectionsPanel::DragOver( const Inspect::DragArgs& args )
 {
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     wxDragResult result = args.m_Default;
     wxTreeItemId item = DragHitTest( treeCtrl, wxPoint( args.m_X, args.m_Y ) );
@@ -795,7 +795,7 @@ wxDragResult CollectionsPanel::DragOver( const Inspect::DragArgs& args )
 // 
 wxDragResult CollectionsPanel::Drop( const Inspect::DragArgs& args )
 {
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     wxDragResult result = wxDragNone;
 
@@ -884,7 +884,7 @@ wxDragResult CollectionsPanel::Drop( const Inspect::DragArgs& args )
 // 
 void CollectionsPanel::DragLeave( Nocturnal::Void )
 {
-    Nocturnal::SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
+    SortTreeCtrl* treeCtrl = m_MyCollectionsTreeCtrl;
 
     if ( m_DragOverItem.IsOk() )
     {
@@ -995,7 +995,7 @@ void CollectionsPanel::UpdateCollections()
                 }
             }
 
-            Nocturnal::SortTreeCtrl* treeCtrl = NULL;
+            SortTreeCtrl* treeCtrl = NULL;
             if ( collection->IsTemporary() )
             {
                 treeCtrl = m_TempCollectionsTreeCtrl;
@@ -1028,7 +1028,7 @@ void CollectionsPanel::UpdateCollections()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void CollectionsPanel::PrePopulateTreeCtrl( Nocturnal::SortTreeCtrl* treeCtrl )
+void CollectionsPanel::PrePopulateTreeCtrl( SortTreeCtrl* treeCtrl )
 {
     treeCtrl->Freeze();
     treeCtrl->DeleteAllItems();
@@ -1038,7 +1038,7 @@ void CollectionsPanel::PrePopulateTreeCtrl( Nocturnal::SortTreeCtrl* treeCtrl )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void CollectionsPanel::PostPopulateTreeCtrl( Nocturnal::SortTreeCtrl* treeCtrl )
+void CollectionsPanel::PostPopulateTreeCtrl( SortTreeCtrl* treeCtrl )
 {
     treeCtrl->SortChildren( treeCtrl->GetRootItem() );
     treeCtrl->Thaw();
@@ -1061,7 +1061,7 @@ void CollectionsPanel::PostPopulateTreeCtrl( Nocturnal::SortTreeCtrl* treeCtrl )
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function to get the interface to the data stored on each tree item.
 // 
-AssetCollectionItemData* CollectionsPanel::GetItemData( Nocturnal::SortTreeCtrl* treeCtrl, const wxTreeItemId& id )
+AssetCollectionItemData* CollectionsPanel::GetItemData( SortTreeCtrl* treeCtrl, const wxTreeItemId& id )
 {
     AssetCollectionItemData* data = NULL;
     if ( id.IsOk() )

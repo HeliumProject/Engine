@@ -11,10 +11,11 @@
 #include "TreeMonitor.h"
 #include "TreeSortTimer.h"
 #include "View.h"
+#include "ToolsPanel.h"
 
 #include "Foundation/Container/ReversibleMap.h"
 
-#include "Application/Inspect/Widgets/Canvas.h"
+#include "Application/Inspect/Controls/Canvas.h"
 #include "Application/Inspect/DragDrop/DropTarget.h"
 #include "Application/UI/MenuMRU.h"
 
@@ -48,8 +49,8 @@ namespace Luna
         struct OutlinerStates
         {
             SceneOutlinerState m_Hierarchy;
+            SceneOutlinerState m_Entities;
             SceneOutlinerState m_Types;
-            SceneOutlinerState m_EntityAssetes;
         };
 
         typedef std::map< Luna::Scene*, OutlinerStates > M_OutlinerStates;
@@ -61,21 +62,17 @@ namespace Luna
         // that is open.  Restores the state when switching between scenes.
         M_OutlinerStates m_OutlinerStates;
 
-        // the attributes notebook
-        wxNotebook* m_Properties;
-
         // the attributes for the current selection
         EnumeratorPtr m_SelectionEnumerator;
         PropertiesManagerPtr m_SelectionPropertiesManager;
         Inspect::Canvas m_SelectionProperties;
-        size_t m_SelectionPropertyPage;
 
         // the attributes for the current tool
         EnumeratorPtr m_ToolEnumerator;
         PropertiesManagerPtr m_ToolPropertiesManager;
         Inspect::Canvas m_ToolProperties;
-        size_t m_ToolPropertyPage;
 
+        // static help text
         HelpPanel* m_Help;
 
         // the directory notebook
@@ -83,6 +80,7 @@ namespace Luna
 
         // the outline of the current scene
         HierarchyOutliner* m_HierarchyOutline;
+
         // the outline of all entity nodes by class
         EntityAssetOutliner* m_EntityOutline;
 
@@ -94,6 +92,9 @@ namespace Luna
 
         // the UI for changing visibility/selectability of specific runtime types
         TypeGrid* m_TypeGrid;
+
+        // the tools panel
+        ToolsPanel* m_ToolsPanel;
 
         // the loaded scenes
         M_SceneToEditorFile m_SceneFiles;
@@ -127,7 +128,7 @@ namespace Luna
         // Toolbars
         wxToolBar* m_StandardToolBar;
         wxToolBar* m_ViewToolBar;
-        wxToolBar* m_ToolsToolBar;
+
         BrowserToolBar* m_BrowserToolBar;
 
         //context items ordered by name  

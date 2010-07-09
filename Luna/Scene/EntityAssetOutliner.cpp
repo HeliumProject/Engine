@@ -6,7 +6,7 @@
 #include "Scene.h"
 #include "SceneOutlinerItemData.h"
 #include "Application/UI/ArtProvider.h"
-#include "Application/UI/SortTreeCtrl.h"
+#include "UI/Controls/Tree/SortTreeCtrl.h"
 
 // Using
 using namespace Luna;
@@ -207,9 +207,9 @@ void EntityAssetOutliner::RemoveEntity( Luna::Entity* entity )
 // be called once.  The tree control is returned so that the caller can
 // insert it into the UI in the proper place.
 // 
-Nocturnal::SortTreeCtrl* EntityAssetOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
+SortTreeCtrl* EntityAssetOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
 {
-  Nocturnal::SortTreeCtrl* tree = new Nocturnal::SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_EDIT_LABELS | wxTR_MULTIPLE, wxDefaultValidator, wxT( "EntityAssetOutliner" ) );
+  SortTreeCtrl* tree = new SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_HIDE_ROOT | wxTR_EDIT_LABELS | wxTR_MULTIPLE, wxDefaultValidator, wxT( "EntityAssetOutliner" ) );
   m_InvisibleRoot = tree->AddRoot( TXT( "INVISIBLE_ROOT" ) );
 
   // Override dynamic GUI event handlers here

@@ -93,7 +93,7 @@ ListProperty::ListProperty(Shape *owner, const wxString& name, std::vector<Item>
 void
 ListProperty::Show(PropertyGrid *props)
 {
-	wxPGId id = props->Append(NEW(wxEnumProperty, (m_name, wxPG_LABEL, m_labels)), this);
+	wxPGProperty* id = props->Append(NEW(wxEnumProperty, (m_name, wxPG_LABEL, m_labels)), this);
 	props->SetPropertyValue(id, m_int);
 }
 
@@ -150,14 +150,14 @@ ListProperty::Deserialize(const wxXmlNode& root)
 void
 BoolProperty::Show(PropertyGrid *props)
 {
-	wxPGId id = props->Append(NEW(wxBoolProperty, (m_name, wxPG_LABEL, m_bool)), this);
+	wxPGProperty* id = props->Append(NEW(wxBoolProperty, (m_name, wxPG_LABEL, m_bool)), this);
 	props->SetPropertyAttribute(id, wxPG_BOOL_USE_CHECKBOX, (long)1, wxPG_RECURSE);
 }
 
 void
 FileProperty::Show(PropertyGrid *props)
 {
-	wxPGId id = props->Append(NEW(wxFileProperty, (m_name, wxPG_LABEL, m_string)), this);
+	wxPGProperty* id = props->Append(NEW(wxFileProperty, (m_name, wxPG_LABEL, m_string)), this);
 	props->SetPropertyAttribute(id, wxPG_FILE_WILDCARD, m_wildcard);
 }
 

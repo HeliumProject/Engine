@@ -3,7 +3,7 @@
 #include "Scene.h"
 
 #include "Application/UI/ArtProvider.h"
-#include "Application/Inspect/Widgets/Text Controls/Choice.h"
+#include "Application/Inspect/Controls/Choice.h"
 
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Natural.h"

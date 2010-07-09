@@ -340,7 +340,7 @@ Node::MemberLuaGetValue(lua_State *L)
     wxString value = member->GetValue();
 
     std::string temp;
-    Platform::ConvertString( value.c_str(), temp );
+    Platform::ConvertString( (const wxChar*)value.c_str(), temp );
     lua_pushlstring(L, temp.c_str(), temp.length());
     return 1;
 }

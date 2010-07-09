@@ -1,6 +1,8 @@
 #include "RegistryConfig.h"
 #include <wx/config.h>
 
+#include "Platform/Assert.h"
+
 using namespace Nocturnal;
 
 ///////////////////////////////////////////////////////////////////////////////

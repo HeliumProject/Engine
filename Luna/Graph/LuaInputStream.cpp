@@ -209,5 +209,5 @@ LuaOutputStream::Write(const wxString& str)
 		m_os->PutC(TYPE_STRING2);
 		Write((int)len);
 	}
-	m_os->Write((void *)str.c_str(), len);
+	m_os->Write((const wxChar*)str.c_str(), len);
 }

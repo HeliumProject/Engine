@@ -1,5 +1,6 @@
 #include "DropSource.h"
 
+#include <wx/window.h>
 #include <wx/timer.h>
 
 using namespace Inspect;

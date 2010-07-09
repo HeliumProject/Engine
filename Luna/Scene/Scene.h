@@ -10,7 +10,7 @@
 #include "Core/Selection.h"
 
 #include "Application/Inspect/Data/Data.h"
-#include "Application/Inspect/Widgets/Canvas.h"
+#include "Application/Inspect/Controls/Canvas.h"
 #include "Core/Enumerator.h"
 
 #include "Application/Undo/ExistenceCommand.h"

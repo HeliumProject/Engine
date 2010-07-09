@@ -29,15 +29,15 @@ ClipboardDataObject::~ClipboardDataObject()
 // 
 void ClipboardDataObject::GetAllFormats( wxDataFormat* formats, wxDataObjectBase::Direction dir ) const
 {
-  if ( dir == wxDataObjectBase::Get )
-  {
-    *formats = GetFormat();
-  }
-  else
-  {
-    formats[0] = GetFormat();
-    formats[1] = wxDataFormat( wxDF_FILENAME );
-  }
+    if ( dir == wxDataObjectBase::Get )
+    {
+        *formats = GetFormat();
+    }
+    else
+    {
+        formats[0] = GetFormat();
+        formats[1] = wxDataFormat( wxDF_FILENAME );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -45,14 +45,14 @@ void ClipboardDataObject::GetAllFormats( wxDataFormat* formats, wxDataObjectBase
 // 
 size_t ClipboardDataObject::GetFormatCount( wxDataObjectBase::Direction dir ) const
 {
-  if ( dir ==  wxDataObjectBase::Get )
-  {
-    // We only provide data in the Luna format
-    return 1;
-  }
+    if ( dir ==  wxDataObjectBase::Get )
+    {
+        // We only provide data in the Luna format
+        return 1;
+    }
 
-  // Data can be set from multiple formats.
-  return 2;
+    // Data can be set from multiple formats.
+    return 2;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ size_t ClipboardDataObject::GetFormatCount( wxDataObjectBase::Direction dir ) co
 // 
 wxDataFormat ClipboardDataObject::GetPreferredFormat( wxDataObjectBase::Direction dir ) const
 {
-  return GetFormat();
+    return GetFormat();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ wxDataFormat ClipboardDataObject::GetPreferredFormat( wxDataObjectBase::Directio
 // 
 bool ClipboardDataObject::SetData( size_t size, const void* buf ) 
 { 
-  return __super::SetData( size, buf ); 
+    return __super::SetData( size, buf ); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -76,36 +76,36 @@ bool ClipboardDataObject::SetData( size_t size, const void* buf )
 // 
 bool ClipboardDataObject::SetData( const wxDataFormat& format, size_t len, const void* buf )
 {
-  bool result = false;
+    bool result = false;
 
-  if ( format == GetFormat() )
-  {
-    // Luna clipboard format
-    result = __super::SetData( format, len, buf );
-  }
-  else if ( format.IsStandard() && format.GetFormatId() == wxDF_FILENAME )
-  {
-    // File name list format.  Convert to our own type of filename list.
-    wxFileDataObject fileData;
-    fileData.SetData( len, buf );
-
-    if ( fileData.GetFilenames().size() > 0 )
+    if ( format == GetFormat() )
     {
-      ClipboardFileListPtr fileList = new ClipboardFileList();
-
-      wxArrayString::const_iterator fileItr = fileData.GetFilenames().begin();
-      wxArrayString::const_iterator fileEnd = fileData.GetFilenames().end();
-      for ( ; fileItr != fileEnd; ++fileItr )
-      {
-        const wxString& file = *fileItr;
-        fileList->AddFilePath( file.c_str() );
-      }
-
-      result = ToBuffer( fileList );
+        // Luna clipboard format
+        result = __super::SetData( format, len, buf );
     }
-  }
+    else if ( format.IsStandard() && format.GetFormatId() == wxDF_FILENAME )
+    {
+        // File name list format.  Convert to our own type of filename list.
+        wxFileDataObject fileData;
+        fileData.SetData( len, buf );
 
-  return result;
+        if ( fileData.GetFilenames().size() > 0 )
+        {
+            ClipboardFileListPtr fileList = new ClipboardFileList();
+
+            wxArrayString::const_iterator fileItr = fileData.GetFilenames().begin();
+            wxArrayString::const_iterator fileEnd = fileData.GetFilenames().end();
+            for ( ; fileItr != fileEnd; ++fileItr )
+            {
+                const wxChar* file = fileItr->c_str();
+                fileList->AddFilePath( file );
+            }
+
+            result = ToBuffer( fileList );
+        }
+    }
+
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -114,18 +114,18 @@ bool ClipboardDataObject::SetData( const wxDataFormat& format, size_t len, const
 // 
 ReflectClipboardDataPtr ClipboardDataObject::FromBuffer()
 {
-  ReflectClipboardDataPtr data;
+    ReflectClipboardDataPtr data;
 
-  if ( GetDataSize() > 0 )
-  {
-    ClipboardDataWrapperPtr wrapper = Reflect::ObjectCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( (const tchar*)GetData(), Reflect::GetType< ClipboardDataWrapper >() ) );
-    if ( wrapper.ReferencesObject() )
+    if ( GetDataSize() > 0 )
     {
-      data = wrapper->m_Data;
+        ClipboardDataWrapperPtr wrapper = Reflect::ObjectCast< ClipboardDataWrapper >( Reflect::ArchiveXML::FromString( (const tchar*)GetData(), Reflect::GetType< ClipboardDataWrapper >() ) );
+        if ( wrapper.ReferencesObject() )
+        {
+            data = wrapper->m_Data;
+        }
     }
-  }
 
-  return data;
+    return data;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -134,11 +134,11 @@ ReflectClipboardDataPtr ClipboardDataObject::FromBuffer()
 // 
 bool ClipboardDataObject::ToBuffer( ReflectClipboardData* data )
 {
-  ClipboardDataWrapperPtr wrapper = new ClipboardDataWrapper();
-  wrapper->m_Data = data;
+    ClipboardDataWrapperPtr wrapper = new ClipboardDataWrapper();
+    wrapper->m_Data = data;
 
-  tstring xml;
-  Reflect::ArchiveXML::ToString( wrapper, xml );
+    tstring xml;
+    Reflect::ArchiveXML::ToString( wrapper, xml );
 
-  return SetData( xml.size(), (const tchar*)( xml.c_str() ) );
+    return SetData( xml.size(), (const tchar*)( xml.c_str() ) );
 }

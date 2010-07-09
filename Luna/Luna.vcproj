@@ -739,7 +739,6 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
-			RelativePathToProject=".\SDK\wxPropertyGrid\1.4.11\wxPropertyGrid.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{CFCA9C73-C321-48BA-8F29-097FD061EBB1}"
@@ -1192,6 +1191,22 @@
 			</File>
 			<File
 				RelativePath=".\Scene\SelectionPropertiesPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\TreeMonitor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\TreeMonitor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\TreeSortTimer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene\TreeSortTimer.h"
 				>
 			</File>
 			<Filter
@@ -1713,26 +1728,6 @@
 						>
 					</File>
 				</Filter>
-			</Filter>
-			<Filter
-				Name="UI Helpers"
-				>
-				<File
-					RelativePath=".\Scene\TreeMonitor.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\TreeMonitor.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\TreeSortTimer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\TreeSortTimer.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Cameras"
@@ -4313,6 +4308,162 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="UI"
+			>
+			<File
+				RelativePath=".\UI\PerforceGenerated.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceGenerated.fbp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceGenerated.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceSubmitDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceSubmitDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceSubmitPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceSubmitPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceWaitDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PerforceWaitDialog.h"
+				>
+			</File>
+			<Filter
+				Name="Controls"
+				>
+				<Filter
+					Name="Tree"
+					>
+					<File
+						RelativePath=".\UI\Controls\Tree\FileTreeCtrl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\Controls\Tree\FileTreeCtrl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\Controls\Tree\SortTreeCtrl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\Controls\Tree\SortTreeCtrl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\Controls\Tree\TreeCtrl.cpp"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="0"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Debug|x64"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="0"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="0"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|x64"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="0"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Debug Unicode|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="0"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Debug Unicode|x64"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="0"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release Unicode|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="0"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release Unicode|x64"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								UsePrecompiledHeader="0"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\UI\Controls\Tree\TreeCtrl.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="List"
+					>
+					<File
+						RelativePath=".\UI\Controls\List\ListDialog.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\Controls\List\ListDialog.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\Controls\List\ListView.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UI\Controls\List\ListView.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>
@@ -4334,35 +4485,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\CommonGenerated.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\CommonGenerated.fbp"
-			>
-		</File>
-		<File
-			RelativePath=".\CommonGenerated.h"
-			>
-		</File>
-		<File
 			RelativePath=".\HelpPanel.cpp"
 			>
 		</File>
 		<File
 			RelativePath=".\HelpPanel.h"
-			>
-		</File>
-		<File
-			RelativePath=".\LunaGenerated.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\LunaGenerated.fbp"
-			>
-		</File>
-		<File
-			RelativePath=".\LunaGenerated.h"
 			>
 		</File>
 		<File

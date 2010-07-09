@@ -91,7 +91,9 @@ void* ThumbnailLoader::LoadThread::Entry()
         }
         else
         {
-            Nocturnal::Path thumbnailFolderPath( m_Loader.m_ThumbnailDirectory + '/' + path.Hash() );
+            tstringstream str;
+            str << path.Hash();
+            Nocturnal::Path thumbnailFolderPath( m_Loader.m_ThumbnailDirectory + wxT('/') + str.str() );
             Nocturnal::Directory thumbnailFolder( thumbnailFolderPath.Get() );
 
             while( !thumbnailFolder.IsDone() )

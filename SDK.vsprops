@@ -7,7 +7,7 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		PreprocessorDefinitions="XML_STATIC=1;wxNO_EXCEPTIONS=1"
+		PreprocessorDefinitions="XML_STATIC=1;wxNO_EXCEPTIONS=1;wxUSE_UNICODE=0"
 	/>
 	<UserMacro
 		Name="Crypto++"

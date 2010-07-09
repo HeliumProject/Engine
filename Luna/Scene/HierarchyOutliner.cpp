@@ -5,7 +5,7 @@
 #include "Scene.h"
 
 #include "Application/UI/ArtProvider.h"
-#include "Application/UI/SortTreeCtrl.h"
+#include "UI/Controls/Tree/SortTreeCtrl.h"
 
 // Using
 using namespace Luna;
@@ -116,9 +116,9 @@ void HierarchyOutliner::AddHierarchyNode( Luna::HierarchyNode* node )
 // Required by the base class.  Creates the tree control that this class wraps,
 // and connects GUI event handlers.
 // 
-Nocturnal::SortTreeCtrl* HierarchyOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
+SortTreeCtrl* HierarchyOutliner::CreateTreeCtrl( wxWindow* parent, wxWindowID id )
 {
-  Nocturnal::SortTreeCtrl* tree = new Nocturnal::SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_MULTIPLE | wxTR_EDIT_LABELS, wxDefaultValidator, wxT( "HierarchyOutliner" ) );
+  SortTreeCtrl* tree = new SortTreeCtrl( parent, id, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE | wxNO_BORDER | wxTR_MULTIPLE | wxTR_EDIT_LABELS, wxDefaultValidator, wxT( "HierarchyOutliner" ) );
 
   // Override dynamic GUI event handlers here
   tree->Connect( tree->GetId(), wxEVT_COMMAND_TREE_BEGIN_DRAG, wxTreeEventHandler( HierarchyOutliner::OnBeginDrag ), NULL, this );

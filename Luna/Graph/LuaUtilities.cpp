@@ -378,7 +378,7 @@ namespace LuaUtilities
 		else if (type == wxT("string"))
 		{
             std::string temp;
-            Platform::ConvertString( value.GetString().c_str(), temp );
+            Platform::ConvertString( (const wxChar*)value.GetString().c_str(), temp );
             lua_pushlstring(L, temp.c_str(), temp.length());
 		}
 		else

@@ -90,14 +90,18 @@ FragmentShaderApp::ProcessOptions()
     graph = 0;
     for (int index = 1; index < argc; index++)
     {
-        std::string temp;
-        Platform::ConvertString( argv[index], temp );
+        const wxChar* argStr = argv[index];
 
+        std::string temp;
+        Platform::ConvertString( argStr, temp );
         wxString option = wxString::FromAscii(temp.c_str());
+
         wxString arg;
         if (index != (argc - 1))
         {
-            Platform::ConvertString( argv[index] + 1, temp );
+            const wxChar* bareArg = argv[index];
+            bareArg++;
+            Platform::ConvertString( bareArg, temp );
             arg = wxString::FromAscii(temp.c_str());
         }
 
@@ -153,7 +157,7 @@ FragmentShaderApp::ProcessOptions()
             {
                 while (++index != argc)
                 {
-                    Platform::ConvertString( argv[index], temp );
+                    Platform::ConvertString( (const wxChar*)argv[index], temp );
 
                     wxString name;
                     name.Append(wxString::FromAscii(temp.c_str()));

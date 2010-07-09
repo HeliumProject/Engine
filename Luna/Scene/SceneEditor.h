@@ -81,6 +81,8 @@ namespace Luna
         // the directory notebook
         wxNotebook* m_Directory;
 
+        // the outline of the current scene
+        HierarchyOutliner* m_HierarchyOutline;
         // the outline of all entity nodes by class
         EntityAssetOutliner* m_EntityOutline;
 

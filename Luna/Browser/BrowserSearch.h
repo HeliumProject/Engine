@@ -45,15 +45,15 @@ namespace Luna
         // Members
         //
 
-        tstring       m_RootDirectory;
-        tstring       m_ConfigDirectory;
+        Nocturnal::Path       m_RootDirectory;
+        Nocturnal::Path       m_ConfigDirectory;
 
         // SearchResults and Status
         // DO NO CHANGE OR ACCESS outside of m_SearchResultsMutex
         i32                     m_CurrentSearchID;   // Used for debugging to track a search through the system
         SearchQueryPtr          m_CurrentSearchQuery;
         SearchResultsPtr        m_SearchResults;     // The results to populate and pass to ResultsAvailableArgs
-        std::set< Nocturnal::Path >       m_FoundFiles;        // The *complete* list of found files from this section
+        std::set< Nocturnal::Path > m_FoundPaths;        // The *complete* list of found files from this section
         Platform::Mutex         m_SearchResultsMutex;
 
         // Searching Thread
@@ -82,10 +82,8 @@ namespace Luna
         bool CheckSearchThreadLeave( i32 searchID );
         void SearchThreadLeave( i32 searchID );
 
-        bool FoundAssetFile( const tstring& path );
-        u32 FoundAssetFile( Nocturnal::Path& assetPath );
-        u32 FoundAssetFiles( const std::set< Nocturnal::Path >& assetFileRefs, i32 searchID );
-        u32 FoundAssetFolder( Nocturnal::Path& folder, i32 searchID );
+        u32 AddPath( const Nocturnal::Path& path, i32 searchID );
+        u32 AddPaths( const std::set< Nocturnal::Path >& paths, i32 searchID );
 
         // 
         // Events

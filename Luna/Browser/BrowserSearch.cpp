@@ -4,8 +4,6 @@
 #include "Browser.h"
 #include "SearchResults.h"
 
-#include "Pipeline/Asset/AssetFile.h"
-#include "Pipeline/Asset/AssetFolder.h"
 #include "Platform/Exception.h"
 #include "Foundation/Boost/Regex.h"
 #include "Foundation/Container/Insert.h"
@@ -181,7 +179,7 @@ BrowserSearch::~BrowserSearch()
 
     m_CurrentSearchQuery = NULL;
     m_SearchResults = NULL;
-    m_FoundFiles.clear();
+    m_FoundPaths.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -213,7 +211,7 @@ bool BrowserSearch::RequestSearch( SearchQuery* searchQuery )
         // clear previous results, if any
         m_CurrentSearchQuery = searchQuery;
         m_SearchResults = new SearchResults( m_CurrentSearchID );
-        m_FoundFiles.clear();
+        m_FoundPaths.clear();
 
         NOC_ASSERT( !m_DummyWindow );
         m_DummyWindow = new DummyWindow( TXT( "BrowserSearch" ) );
@@ -282,7 +280,7 @@ void BrowserSearch::OnResultsAvailable( const Luna::DummyWindowArgs& args )
         m_ResultsAvailableListeners.Raise( ResultsAvailableArgs( m_CurrentSearchQuery, m_SearchResults ) );
     }
     m_SearchResults = new SearchResults( searchID );
-    m_FoundFiles.clear();
+    m_FoundPaths.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -313,31 +311,18 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
     //-------------------------------------------
     // AssetFolder
     Nocturnal::Path searchPath( m_CurrentSearchQuery->GetQueryString() );
-    if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::Folder
-        && FoundAssetFolder( searchPath, searchID ) )
-    {
-        // it's an AssetFolder - early out
-        SearchThreadLeave( searchID );
-        return;
-    }
 
-    if ( CheckSearchThreadLeave( searchID ) )
-    {
-        return;
-    }
-
-    //-------------------------------------------
-    // AssetFile
     if ( m_CurrentSearchQuery->GetSearchType() == SearchTypes::File )
     {
-        tstring searchFolder( m_CurrentSearchQuery->GetQueryString() );
-        Nocturnal::Path searchPath( searchFolder );
+        searchPath.Set( searchPath.Directory() );
+    }
 
-        if ( FoundAssetFolder( Nocturnal::Path( searchPath.Directory() ), searchID ) )
-        {
-            SearchThreadLeave( searchID );
-            return;
-        }
+    if (    m_CurrentSearchQuery->GetSearchType() == SearchTypes::File
+         || m_CurrentSearchQuery->GetSearchType() == SearchTypes::Folder )
+    {
+        AddPath( searchPath, searchID );
+        SearchThreadLeave( searchID );
+        return;
     }
 
     if ( CheckSearchThreadLeave( searchID ) )
@@ -371,7 +356,7 @@ void BrowserSearch::SearchThreadProc( i32 searchID )
         }
 
         // FoundAssetFiles
-        if ( !assetFiles.empty() && FoundAssetFiles( assetFiles, searchID ) )
+        if ( !assetFiles.empty() && AddPaths( assetFiles, searchID ) )
         {
             SearchThreadLeave( searchID );
             return;
@@ -446,75 +431,52 @@ inline void BrowserSearch::SearchThreadLeave( i32 searchID )
 // SearchThreadProc Helper Functions - Wrangle SearchResults
 /////////////////////////////////////////////////////////////////////////////
 
-bool BrowserSearch::FoundAssetFile( const tstring& path )
+u32 BrowserSearch::AddPath( const Nocturnal::Path& path, i32 searchID )
 { 
-    Platform::TakeMutex mutex (m_SearchResultsMutex);
-
-    Asset::AssetFilePtr assetFile = Asset::AssetFile::CreateAssetFile( path );
-    if ( assetFile 
-        && m_FoundFiles.find( assetFile->GetPath() ) == m_FoundFiles.end()
-        && m_SearchResults->AddFile( assetFile ) )
-    {
-        m_FoundFiles.insert( assetFile->GetPath() );
-        return true;
-    }
-
-    return false;
-}
-
-u32 BrowserSearch::FoundAssetFiles( const std::set< Nocturnal::Path >& assetFileRefs, i32 searchID )
-{
-    Platform::TakeMutex mutex (m_SearchResultsMutex);
-
-    for ( std::set< Nocturnal::Path >::const_iterator itr = assetFileRefs.begin(), end = assetFileRefs.end(); itr != end; ++itr )
-    {
-        Asset::AssetFilePtr assetFile = Asset::AssetFile::CreateAssetFile( (*itr).Get() );
-        if ( assetFile 
-            && m_FoundFiles.find( assetFile->GetPath() ) == m_FoundFiles.end()
-            && m_SearchResults->AddFile( assetFile ) )
-        {
-            m_FoundFiles.insert( assetFile->GetPath() );
-        }
-    }
-
-    return (u32)m_FoundFiles.size();
-}
-
-u32 BrowserSearch::FoundAssetFolder( Nocturnal::Path& folder, i32 searchID )
-{  
     u32 numFilesAdded = 0;
 
-    std::set< Nocturnal::Path > files;
-    Nocturnal::Directory::GetFiles( folder.Get(), files );
-    for ( std::set< Nocturnal::Path >::const_iterator itr = files.begin(), end = files.end(); itr != end; ++itr )
+    Platform::TakeMutex mutex (m_SearchResultsMutex);
+
+    Nocturnal::Insert<std::set< Nocturnal::Path >>::Result inserted = m_FoundPaths.insert( path );
+    if ( inserted.second )
     {
-        if ( m_StopSearching )
-        {
-            return numFilesAdded;
-        }
-
-        const Nocturnal::Path& path = (*itr);
-
-        if ( path.IsDirectory() ) 
-        {
-            Platform::TakeMutex mutex (m_SearchResultsMutex);
-            if ( m_SearchResults->AddFolder( new Asset::AssetFolder( path ) ) )
-            {
-                ++numFilesAdded;
-            }
-        }
-        else
-        {
-            if ( FoundAssetFile( path ) )
-            {
-                ++numFilesAdded;
-            }
-        }
-
+        m_SearchResults->AddPath( path );
         ++numFilesAdded;
+    }
+
+    if ( path.IsDirectory() )
+    {
+        std::set< Nocturnal::Path > files;
+        Nocturnal::Directory::GetFiles( path.Get(), files );
+        for ( std::set< Nocturnal::Path >::const_iterator itr = files.begin(), end = files.end(); itr != end; ++itr )
+        {
+            Nocturnal::Insert<std::set< Nocturnal::Path >>::Result inserted = m_FoundPaths.insert( *itr );
+            if ( inserted.second )
+            {
+                m_SearchResults->AddPath( *itr );
+                ++numFilesAdded;
+            }
+        }   
     }
 
     return numFilesAdded;
 }
 
+u32 BrowserSearch::AddPaths( const std::set< Nocturnal::Path >& paths, i32 searchID )
+{
+    u32 numFilesAdded = 0;
+    
+    Platform::TakeMutex mutex (m_SearchResultsMutex);
 
+    for ( std::set< Nocturnal::Path >::const_iterator itr = paths.begin(), end = paths.end(); itr != end; ++itr )
+    {
+        Nocturnal::Insert<std::set< Nocturnal::Path >>::Result inserted = m_FoundPaths.insert( *itr );
+        if ( inserted.second )
+        {
+            m_SearchResults->AddPath( *itr );
+            ++numFilesAdded;
+        }
+    }
+
+    return numFilesAdded;
+}

@@ -4,8 +4,7 @@
 #include <set>
 
 #include "Pipeline/API.h"
-#include "AssetFlags.h"
-#include "AssetVersion.h"
+#include "AssetIndexData.h"
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"
@@ -16,6 +15,16 @@
 
 namespace Asset
 {
+    namespace AssetProperties
+    {
+        static const tchar* ShortDescription  = TXT( "ShortDescription" );
+        static const tchar* LongDescription   = TXT( "ShortDescription" );
+        static const tchar* SmallIcon         = TXT( "SmallIcon" );
+        static const tchar* RootFolderSpec    = TXT( "RootFolderSpec" );
+        static const tchar* FileFilter        = TXT( "FileFilter" );
+        static const tchar* AssetTemplates    = TXT( "AssetTemplates" );
+    }
+
     class AssetClass;
     typedef Nocturnal::SmartPtr< AssetClass > AssetClassPtr;
     typedef std::vector< AssetClassPtr > V_AssetClass;
@@ -127,6 +136,19 @@ namespace Asset
         }
 
     public:
+        void GatherIndexData( AssetIndexData& indexData )
+        {
+            //get my reflect elements
+            //for each element
+            //   if element is interesting
+            //       put into indexData
+
+            //for each component
+            //    get reflect elements from component
+            //        if element is interestinfg
+            //            add to indexdata
+        }
+
         virtual void GetDependencies( std::set< Nocturnal::Path >& dependencies );
 
     public:
@@ -150,7 +172,7 @@ namespace Asset
 
     public:
         // write to the location on disk backed by the file manager id
-        virtual void Serialize( const AssetVersionPtr &version = new AssetVersion () );
+        virtual void Serialize();
 
         // callback when this AssetClass has finished loading off disk
         virtual void LoadFinished();

@@ -58,9 +58,7 @@ namespace Luna
 
     void Search( const tstring& queryString, const AssetCollection* collection = NULL );
 
-    void GetSelectedFilesAndFolders( Asset::V_AssetFiles& files, Asset::V_AssetFolders& folders );
-
-    static bool IsPreviewable( Asset::AssetFile* file );
+    void GetSelectedPaths( std::set< Nocturnal::Path >& paths );
 
     Browser* GetBrowser() { return m_Browser; }
 
@@ -107,7 +105,7 @@ namespace Luna
 
     void OnUpdateStatusBar( Luna::UpdateStatusEvent& event );
 
-    // Event Listener Callbacks
+    // Our Event Listener Callbacks
     //void OnSearchQueryChanged( const Reflect::ElementChangeArgs& args );
     void OnRequestSearch( const Luna::RequestSearchArgs& args );
     void OnBeginSearching( const Luna::BeginSearchingArgs& args );

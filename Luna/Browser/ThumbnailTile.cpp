@@ -1,69 +1,21 @@
 #include "Precompile.h"
 #include "ThumbnailTile.h"
 
-#include "Pipeline/Asset/AssetFile.h"
-#include "Pipeline/Asset/AssetFolder.h"
 #include "Platform/Exception.h"
 
 using namespace Luna;
 
-ThumbnailTile::ThumbnailTile( Asset::AssetFile* file )
-: m_Type( ThumbnailTileTypes::File )
-, m_File( file )
+ThumbnailTile::ThumbnailTile( const Nocturnal::Path& path )
+: m_Path( path )
+, m_Row( 0 )
+, m_Column( 0 )
+, m_IsSelected( false )
+, m_IsHighlighted( false )
 {
-    Init();
-}
-
-ThumbnailTile::ThumbnailTile( Asset::AssetFolder* folder )
-: m_Type( ThumbnailTileTypes::Folder )
-, m_Folder( folder )
-{
-    Init();
 }
 
 ThumbnailTile::~ThumbnailTile()
 {
-}
-
-void ThumbnailTile::Init()
-{
-    m_Row = 0;
-    m_Column = 0;
-    m_IsSelected = false;
-    m_IsHighlighted = false;
-}
-
-ThumbnailTileType ThumbnailTile::GetType() const
-{
-    return m_Type;
-}
-
-bool ThumbnailTile::IsFile() const
-{
-    return ( m_Type == ThumbnailTileTypes::File );
-}
-
-Asset::AssetFile* ThumbnailTile::GetFile()
-{
-    if ( !IsFile() )
-    {
-        throw Nocturnal::Exception( TXT( "ThumbnailTile is not a file!" ) );
-    }
-    return m_File;
-}
-
-bool ThumbnailTile::IsFolder() const
-{
-    return ( m_Type == ThumbnailTileTypes::Folder );
-}
-
-Asset::AssetFolder* ThumbnailTile::GetFolder()
-{
-    if ( !IsFolder() )
-    {
-        throw Nocturnal::Exception( TXT( "ThumbnailTile is not a folder!" ) );
-    }
-    return m_Folder;
 }
 
 void ThumbnailTile::GetRowColumn( u32& row, u32& col ) const
@@ -80,58 +32,34 @@ void ThumbnailTile::SetRowColumn( u32 row, u32 col )
 
 tstring ThumbnailTile::GetLabel() const
 {
-#pragma TODO ("ThumbnailTile::GetLabel - it would be cool not to incur a string copy right here and return a const tstring& instead." )
-
-    if ( IsFolder() )
-    {
-        return m_Folder->GetShortName();
-    }
-    else
-    {
-        return m_File->GetShortName() + m_File->GetExtension();
-    }
+    return m_Path.IsDirectory() ? m_Path.Basename() : m_Path.Filename();
 }
 
 #pragma TODO( "get rid of these string copies!" )
 tstring ThumbnailTile::GetEditableName() const
 {
-    if ( IsFolder() )
-    {
-        return m_Folder->GetShortName();
-    }
-    else
-    {
-        return m_File->GetShortName();
-    }
+    return m_Path.Basename();
 }
 
-tstring ThumbnailTile::GetFullPath() const
+const Nocturnal::Path& ThumbnailTile::GetPath() const
 {
-    if ( IsFolder() )
-    {
-        return m_Folder->GetFullPath();
-    }
-    else
-    {
-        return m_File->GetFilePath();
-    }
+    return m_Path;
+}
+
+const tstring& ThumbnailTile::GetFullPath() const
+{
+    return m_Path.Get();
 }
 
 tstring ThumbnailTile::GetTypeLabel() const
 {
-    tstring label;
-    if ( IsFile() )
-    {
-    }
-    return label;
+    return m_Path.IsDirectory() ? TXT( "Directory" ) : TXT( "File" );
 }
 
 bool ThumbnailTile::GetTypeColor( DWORD& color ) const
 {
-    if ( IsFile() )
-    {
-    }
-    return false;
+    color = m_Path.IsDirectory() ? 0x00FF00 : 0x0000FF;
+    return true;
 }
 
 

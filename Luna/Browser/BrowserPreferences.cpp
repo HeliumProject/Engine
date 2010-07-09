@@ -3,7 +3,6 @@
 #include "BrowserFrame.h"
 
 #include "Application/Preferences.h"
-#include "Pipeline/Asset/AssetFlags.h"
 #include "Foundation/Reflect/Serializer.h"
 #include "Foundation/Reflect/Serializers.h"
 

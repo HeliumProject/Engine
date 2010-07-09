@@ -59,8 +59,8 @@ namespace Luna
       
       ID_CheckOut = BrowserMenu::CheckOut,
 
-      ID_CopyPathWindows = BrowserMenu::CopyPathWindows,
-      ID_CopyPathClean = BrowserMenu::CopyPathClean,
+      ID_CopyPathNative = BrowserMenu::CopyPathNative,
+      ID_CopyPath = BrowserMenu::CopyPath,
 
       ID_ShowInFolders = BrowserMenu::ShowInFolders,
       ID_ShowInPerforce = BrowserMenu::ShowInPerforce,

@@ -16,7 +16,7 @@ ThumbnailLoadedEvent::ThumbnailLoadedEvent( const ThumbnailLoadedEvent& event )
 : wxCommandEvent( event ) 
 { 
   SetThumbnails( event.GetThumbnails() );
-  SetAssetFile( event.GetAssetFile() );
+  SetPath( event.GetPath() );
   SetCancelled( event.Cancelled() );
 }
 
@@ -36,14 +36,14 @@ void ThumbnailLoadedEvent::SetThumbnails( const V_ThumbnailPtr& thumbnails )
   m_Thumbnails = thumbnails;
 }
 
-Asset::AssetFile* ThumbnailLoadedEvent::GetAssetFile() const
+const Nocturnal::Path& ThumbnailLoadedEvent::GetPath() const
 {
-  return m_File;
+  return m_Path;
 }
 
-void ThumbnailLoadedEvent::SetAssetFile( const Asset::AssetFilePtr& file )
+void ThumbnailLoadedEvent::SetPath( const Nocturnal::Path& path )
 {
-  m_File = file;
+  m_Path = path;
 }
 
 bool ThumbnailLoadedEvent::Cancelled() const

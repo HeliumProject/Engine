@@ -15,8 +15,8 @@ void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
     comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.shader.*" );
 
     comp.AddField( &ShaderAsset::m_ColorMapPath, "m_ColorMapPath", Reflect::FieldFlags::FilePath );
-    comp.AddField( &ShaderAsset::m_ColorMapPath, "m_NormalMapPath", Reflect::FieldFlags::FilePath );
-    comp.AddField( &ShaderAsset::m_ColorMapPath, "m_GPIMapPath", Reflect::FieldFlags::FilePath );
+    comp.AddField( &ShaderAsset::m_NormalMapPath, "m_NormalMapPath", Reflect::FieldFlags::FilePath );
+    comp.AddField( &ShaderAsset::m_GPIMapPath, "m_GPIMapPath", Reflect::FieldFlags::FilePath );
 
     comp.AddField( &ShaderAsset::m_EnableColorMapTint, "m_EnableColorMapTint" );
     comp.AddField( &ShaderAsset::m_ColorMapTint, "m_ColorMapTint" );
@@ -35,12 +35,12 @@ void ShaderAsset::EnumerateClass( Reflect::Compositor<ShaderAsset>& comp )
     comp.AddField( &ShaderAsset::m_IncandescentMapEnabled, "m_IncandescentMapEnabled" );
     comp.AddField( &ShaderAsset::m_IncandescentMapScaling, "m_IncandescentMapScaling" );
 
-    Reflect::Field* fieldDoubleSided = comp.AddField( &ShaderAsset::m_DoubleSided, "m_DoubleSided", AssetFlags::RealTimeUpdateable );
+    Reflect::Field* fieldDoubleSided = comp.AddField( &ShaderAsset::m_DoubleSided, "m_DoubleSided" );
 
-    Reflect::EnumerationField* enumWrapModeU = comp.AddEnumerationField( &ShaderAsset::m_WrapModeU, "m_WrapModeU", AssetFlags::RealTimeUpdateable );
-    Reflect::EnumerationField* enumWrapModeV = comp.AddEnumerationField( &ShaderAsset::m_WrapModeV, "m_WrapModeV", AssetFlags::RealTimeUpdateable );
+    Reflect::EnumerationField* enumWrapModeU = comp.AddEnumerationField( &ShaderAsset::m_WrapModeU, "m_WrapModeU" );
+    Reflect::EnumerationField* enumWrapModeV = comp.AddEnumerationField( &ShaderAsset::m_WrapModeV, "m_WrapModeV" );
 
-    Reflect::EnumerationField* enumAlphaMode = comp.AddEnumerationField( &ShaderAsset::m_AlphaMode, "m_AlphaMode", AssetFlags::RealTimeUpdateable );
+    Reflect::EnumerationField* enumAlphaMode = comp.AddEnumerationField( &ShaderAsset::m_AlphaMode, "m_AlphaMode" );
 
-    Reflect::EnumerationField* enumWetSurfaceMode = comp.AddEnumerationField( &ShaderAsset::m_WetSurfaceMode, "m_WetSurfaceMode", AssetFlags::RealTimeUpdateable );
+    Reflect::EnumerationField* enumWetSurfaceMode = comp.AddEnumerationField( &ShaderAsset::m_WetSurfaceMode, "m_WetSurfaceMode" );
 }

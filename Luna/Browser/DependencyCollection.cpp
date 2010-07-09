@@ -19,7 +19,6 @@ void DependencyCollection::EnumerateClass( Reflect::Compositor<DependencyCollect
 DependencyCollection::DependencyCollection()
 : AssetCollection( TXT( "" ), AssetCollectionFlags::Dynamic )
 , m_IsReverse( false )
-, m_AssetFile( NULL )
 , m_IsLoading( false )
 , m_DependencyLoader( NULL )
 {
@@ -29,7 +28,6 @@ DependencyCollection::DependencyCollection()
 DependencyCollection::DependencyCollection( const tstring& name, const u32 flags, const bool reverse )
 : AssetCollection( name, flags | AssetCollectionFlags::Dynamic )
 , m_IsReverse( reverse )
-, m_AssetFile( NULL )
 , m_IsLoading( false )
 , m_DependencyLoader( NULL )
 {
@@ -69,8 +67,6 @@ void DependencyCollection::PostDeserialize()
 {
     __super::PostDeserialize();
 
-    m_AssetFile = new Asset::AssetFile( m_RootPath );
-
     IsLoading( false );
 }
 
@@ -97,23 +93,14 @@ tstring DependencyCollection::GetDisplayName() const
 void DependencyCollection::SetRoot( const Nocturnal::Path& path )
 {
     m_RootPath = path;
-    m_AssetFile = new Asset::AssetFile( m_RootPath );
-
     DirtyField( GetClass()->FindField( &DependencyCollection::m_Path ) );
-
     ClearAssets();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 tstring DependencyCollection::GetAssetName() const
 {
-    tstring assetName;
-    if ( m_AssetFile )
-    {
-        assetName = m_AssetFile->GetPath().Filename();
-    }
-
-    return assetName;
+    return m_RootPath.Filename();
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -14,11 +14,11 @@ namespace Luna
     struct ThumbnailResultArgs
     {
         const V_ThumbnailPtr& m_Thumbnails;
-        Asset::AssetFilePtr m_File;
+        Nocturnal::Path m_Path;
 
-        ThumbnailResultArgs( const V_ThumbnailPtr& thumbnails, Asset::AssetFilePtr file )
+        ThumbnailResultArgs( const V_ThumbnailPtr& thumbnails, const Nocturnal::Path& path )
             : m_Thumbnails( thumbnails )
-            , m_File( file )
+            , m_Path( path )
         {
         }
     };
@@ -31,7 +31,7 @@ namespace Luna
         virtual ~ThumbnailManager();
 
         void Reset();
-        void Request( const Asset::V_AssetFiles& files );
+        void Request( const std::set< Nocturnal::Path >& paths );
         void Cancel();
         void DetachFromWindow();
 
@@ -41,7 +41,7 @@ namespace Luna
     private:
         wxWindow* m_Window;
         ThumbnailLoader m_Loader;
-        Platform::Locker< Asset::M_AssetFiles > m_AllRequests;
+        Platform::Locker< std::map< u64, Nocturnal::Path* > > m_AllRequests;
         Platform::Mutex m_WindowMutex;
     };
 }

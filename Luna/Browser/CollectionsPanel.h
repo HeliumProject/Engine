@@ -22,11 +22,24 @@ namespace Luna
   struct PreferencesLoadedArgs;
   class AssetCollectionItemData;
 
+  namespace CollectionActions
+  {
+      enum CollectionAction
+      {
+          Add,
+          Remove,
+      };
+  }
+  typedef CollectionActions::CollectionAction CollectionAction;
+
   ///////////////////////////////////////////////////////////////////////////////
   /// Class CollectionsPanel
   ///////////////////////////////////////////////////////////////////////////////
   class CollectionsPanel : public CollectionsPanelGenerated 
   {
+  private:
+      void UpdateCollection( CollectionAction action );
+
   public:
     CollectionsPanel( BrowserFrame* browserFrame );
     ~CollectionsPanel();
@@ -37,8 +50,8 @@ namespace Luna
     virtual void OnTempCollectionsDoubleClick( wxTreeEvent& event );
 
     virtual void OnMyCollectionsTitleMenu( wxMouseEvent& event );
-		virtual void OnMyCollectionsBeginLabelEdit( wxTreeEvent& event );
-		virtual void OnMyCollectionsEndLabelEdit( wxTreeEvent& event );
+    virtual void OnMyCollectionsBeginLabelEdit( wxTreeEvent& event );
+	virtual void OnMyCollectionsEndLabelEdit( wxTreeEvent& event );
     virtual void OnMyCollectionsDoubleClick( wxTreeEvent& event );
     virtual void OnMyCollectionsMenu( wxTreeEvent& event );
 

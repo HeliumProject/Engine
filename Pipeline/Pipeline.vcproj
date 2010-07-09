@@ -911,23 +911,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Asset\AssetFile.cpp"
+				RelativePath=".\Asset\AssetIndexData.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Asset\AssetFile.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\AssetFlags.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\AssetFolder.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\AssetFolder.h"
+				RelativePath=".\Asset\AssetIndexData.h"
 				>
 			</File>
 			<File
@@ -936,22 +924,6 @@
 			</File>
 			<File
 				RelativePath=".\Asset\AssetInit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\AssetVersion.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\AssetVersion.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\AssetVisitor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Asset\AssetVisitor.h"
 				>
 			</File>
 			<File

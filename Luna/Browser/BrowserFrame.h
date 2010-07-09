@@ -132,7 +132,7 @@ namespace Luna
     BrowserSearch*          m_BrowserSearch;
     SearchHistory*          m_SearchHistory;
 
-    tstring             m_PreferencePrefix;
+    tstring                 m_PreferencePrefix;
     NavigationPanel*        m_NavigationPanel;
     ResultsPanel*           m_ResultsPanel;
     PreviewPanel*           m_PreviewPanel;

@@ -15,6 +15,7 @@
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 
+#include "Application.h"
 #include "Browser/Browser.h"
 
 #include "Pipeline/Content/Scene.h"
@@ -2146,8 +2147,7 @@ void Scene::CurrentSceneChanging( const SceneChangeArgs& args )
     {
         // This scene is not going to be the current one, tell the collection
         // manager to stop displaying this collection.
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-        //    GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->DeleteCollection( m_SelectedEntityCollection );
+        wxGetApp().GetBrowser()->GetBrowserPreferences()->GetCollectionManager()->DeleteCollection( m_SelectedEntityCollection );
     }
 }
 
@@ -2158,8 +2158,7 @@ void Scene::CurrentSceneChanged( const SceneChangeArgs& args )
 {
     if ( args.m_Scene == this )
     {
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-        //GlobalBrowser().GetBrowserPreferences()->GetCollectionManager()->AddCollection( m_SelectedEntityCollection );
+        wxGetApp().GetBrowser()->GetBrowserPreferences()->GetCollectionManager()->AddCollection( m_SelectedEntityCollection );
     }
 }
 

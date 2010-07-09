@@ -157,10 +157,8 @@ namespace Luna
 /////////////////////////////////////////////////////////////////////////////
 /// BrowserSearch
 /////////////////////////////////////////////////////////////////////////////
-BrowserSearch::BrowserSearch( const tstring& rootDirectory, const tstring& configDirectory )
-: m_RootDirectory( rootDirectory )
-, m_ConfigDirectory( configDirectory )
-, m_SearchResults( NULL )
+BrowserSearch::BrowserSearch()
+: m_SearchResults( NULL )
 , m_StopSearching( true )
 , m_DummyWindow( NULL )
 , m_CurrentSearchID( -1 )

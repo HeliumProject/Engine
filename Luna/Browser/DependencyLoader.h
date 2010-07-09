@@ -15,7 +15,7 @@ namespace Luna
     class DependencyLoader : public Nocturnal::ThreadMechanism
     {
     public:
-        DependencyLoader( const tstring& rootDirectory, const tstring& configDirectory, DependencyCollection* collection );
+        DependencyLoader( const Nocturnal::Path& rootDirectory, DependencyCollection* collection );
         virtual ~DependencyLoader();
 
     protected:
@@ -25,10 +25,9 @@ namespace Luna
         void OnEndThread( const Nocturnal::ThreadProcArgs& args );
 
     private:
-        tstring           m_RootDirectory;
-        tstring           m_ConfigDirectory;
-        DependencyCollection* m_Collection;
-        std::set< Nocturnal::Path >     m_AssetPaths;
+        Nocturnal::Path             m_RootDirectory;
+        DependencyCollection*       m_Collection;
+        std::set< Nocturnal::Path > m_AssetPaths;
     };
 
 }

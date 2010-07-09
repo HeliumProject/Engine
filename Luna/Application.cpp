@@ -138,6 +138,7 @@ namespace Luna
 
 LunaApp::LunaApp()
 : wxApp()
+, m_Browser( NULL )
 , m_DocumentManager( new DocumentManager() )
 , m_SceneEditor( NULL )
 {
@@ -148,6 +149,11 @@ LunaApp::~LunaApp()
     if ( m_DocumentManager )
     {
         delete m_DocumentManager;
+    }
+
+    if ( m_Browser )
+    {
+        delete m_Browser;
     }
 }
 

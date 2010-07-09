@@ -31,7 +31,7 @@ namespace Luna
     class Browser
     {
     public:
-        Browser( const tstring& rootDirectory, const tstring& configDirectory );
+        Browser();
         Browser( const Browser& rhs ) {}
         Browser& operator=( const Browser& rhs ) {}
 
@@ -44,6 +44,15 @@ namespace Luna
 
         static void Initialize();
         static void Cleanup();
+
+        void SetRootDirectory( const Nocturnal::Path& path )
+        {
+            m_RootDirectory = path;
+            if ( m_BrowserSearch )
+            {
+                m_BrowserSearch->SetRootDirectory( path );
+            }
+        }
 
         void ShowBrowser( const tstring& queryString = TXT("") );
         bool HasFrame();
@@ -63,8 +72,7 @@ namespace Luna
         // Members
         //
     private:
-        tstring           m_RootDirectory;
-        tstring           m_ConfigDirectory;
+        Nocturnal::Path       m_RootDirectory;
         BrowserSearchPtr      m_BrowserSearch;
         BrowserFrame*         m_BrowserFrame;
         bool                  m_HasFrame;

@@ -55,10 +55,8 @@ void Browser::Cleanup()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-Browser::Browser( const tstring& rootDirectory, const tstring& configDirectory )
-: m_RootDirectory( rootDirectory )
-, m_ConfigDirectory( configDirectory )
-, m_BrowserSearch( NULL ) 
+Browser::Browser()
+: m_BrowserSearch( NULL ) 
 , m_BrowserFrame( NULL )
 , m_HasFrame( false )
 , m_BrowserPreferences( new BrowserPreferences() )
@@ -66,7 +64,7 @@ Browser::Browser( const tstring& rootDirectory, const tstring& configDirectory )
     InitializePreferences();
 
     // Create the one and only BrowserSearch
-    m_BrowserSearch = new BrowserSearch( m_RootDirectory, m_ConfigDirectory );
+    m_BrowserSearch = new BrowserSearch();
 
     ////////////////////////////////////////////////////////////////
     // Connect Listeners                                          //

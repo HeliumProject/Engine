@@ -1,5 +1,6 @@
 #include "Precompile.h"
 
+#include "Application.h"
 #include "Browser.h"
 #include "BrowserToolBar.h"
 
@@ -23,25 +24,25 @@ BrowserToolBar::BrowserToolBar
  )
  : wxToolBar( parent, id, pos, size, style, name )
 {
-  SetToolBitmapSize( wxSize( 16, 16 ) );
-  AddTool( BrowserToolBarIDs::ButtonID, wxT( "Vault" ), wxArtProvider::GetBitmap( wxART_FIND ) );
+    SetToolBitmapSize( wxSize( 16, 16 ) );
+    AddTool( BrowserToolBarIDs::ButtonID, wxT( "Vault" ), wxArtProvider::GetBitmap( wxART_FIND ) );
 
-  m_SearchBox = new wxTextCtrl( this, BrowserToolBarIDs::SearchBoxID, wxEmptyString, wxDefaultPosition, wxSize( 140, -1 ), 0 );
-  AddControl( m_SearchBox );
+    m_SearchBox = new wxTextCtrl( this, BrowserToolBarIDs::SearchBoxID, wxEmptyString, wxDefaultPosition, wxSize( 140, -1 ), 0 );
+    AddControl( m_SearchBox );
 
-  // Connect Events
-  // wxEVT_KEY_DOWN or wxEVT_CHAR?
-  m_SearchBox->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( BrowserToolBar::OnKeyDown ), NULL, this );
-  m_SearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( BrowserToolBar::OnTextEnter ), NULL, this );
-  Connect( BrowserToolBarIDs::ButtonID, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( BrowserToolBar::OnButtonClick ), NULL, this );
+    // Connect Events
+    // wxEVT_KEY_DOWN or wxEVT_CHAR?
+    m_SearchBox->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( BrowserToolBar::OnKeyDown ), NULL, this );
+    m_SearchBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( BrowserToolBar::OnTextEnter ), NULL, this );
+    Connect( BrowserToolBarIDs::ButtonID, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( BrowserToolBar::OnButtonClick ), NULL, this );
 }
 
 BrowserToolBar::~BrowserToolBar()
 {
-  // Disconnect Events
-  m_SearchBox->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( BrowserToolBar::OnKeyDown ), NULL, this );
-  m_SearchBox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( BrowserToolBar::OnTextEnter ), NULL, this );
-  Disconnect( BrowserToolBarIDs::ButtonID, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( BrowserToolBar::OnButtonClick ), NULL, this );
+    // Disconnect Events
+    m_SearchBox->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( BrowserToolBar::OnKeyDown ), NULL, this );
+    m_SearchBox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( BrowserToolBar::OnTextEnter ), NULL, this );
+    Disconnect( BrowserToolBarIDs::ButtonID, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( BrowserToolBar::OnButtonClick ), NULL, this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,11 +50,10 @@ BrowserToolBar::~BrowserToolBar()
 // Opens the asset vault with no search string
 void BrowserToolBar::OnButtonClick( wxCommandEvent& args )
 {
-  wxString value = m_SearchBox->GetValue();
-  value.Trim(true);  // trim white-space right 
-  value.Trim(false); // trim white-space left
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-  //  GlobalBrowser().ShowBrowser( value.c_str() );
+    wxString value = m_SearchBox->GetValue();
+    value.Trim(true);  // trim white-space right 
+    value.Trim(false); // trim white-space left
+    wxGetApp().GetBrowser()->ShowBrowser( value.wx_str() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -62,66 +62,53 @@ void BrowserToolBar::OnButtonClick( wxCommandEvent& args )
 //
 void BrowserToolBar::OnKeyDown( wxKeyEvent& evt )
 { 
-  wxString key;
-  long keycode = evt.GetKeyCode();
-  if ( keycode == WXK_RETURN )
-  {
-    wxString value = m_SearchBox->GetValue();
-    value.Trim(true);  // trim white-space right 
-    value.Trim(false); // trim white-space left
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-    //if ( !value.empty() )
-    //{
-    //  GlobalBrowser().ShowBrowser( value.c_str() );
-    //}
-    //else
-    //{
-    //  GlobalBrowser().ShowBrowser();
-    //}
-  }
+    wxString key;
+    long keycode = evt.GetKeyCode();
+    if ( keycode == WXK_RETURN )
+    {
+        wxString value = m_SearchBox->GetValue();
+        value.Trim(true);  // trim white-space right 
+        value.Trim(false); // trim white-space left
 
-  evt.Skip();
+        wxGetApp().GetBrowser()->ShowBrowser( value.wx_str() );
+    }
+
+    evt.Skip();
 }
 
 void BrowserToolBar::OnTextEnter( wxCommandEvent& event )
 {
-  wxString value = m_SearchBox->GetValue();
-  value.Trim(true);  // trim white-space right 
-  value.Trim(false); // trim white-space left
-#pragma TODO( "reimplemnent without GlobalBrowser" )
-  //if ( !value.empty() )
-  //{
-  //  GlobalBrowser().ShowBrowser( value.c_str() );
+    wxString value = m_SearchBox->GetValue();
+    value.Trim(true);  // trim white-space right 
+    value.Trim(false); // trim white-space left
 
-  //  // store the results from entering a search in the navigation bar
-  //  BrowserSearchDatabase::UpdateSearchEvents( value.c_str() );
-  //}
-  //else
-  //{
-  //  GlobalBrowser().ShowBrowser();
-  //}
-  event.Skip();
+    wxGetApp().GetBrowser()->ShowBrowser( value.wx_str() );
+
+    //// store the results from entering a search in the navigation bar
+    //BrowserSearchDatabase::UpdateSearchEvents( value.wx_str() );
+
+    event.Skip();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 wxAuiPaneInfo BrowserToolBar::GetAuiPaneInfo( int position )
 {
-  wxAuiPaneInfo info; 
-  info.Name( wxT( "vaulttoolbar" ) ); 
-  info.DestroyOnClose( false ); 
-  info.Caption( wxT( "Vault Toolbar" ) ); 
-  info.ToolbarPane(); 
-  info.Top(); 
-  //info.Resizable();
-  //info.MinSize( 350, -1 );
+    wxAuiPaneInfo info; 
+    info.Name( wxT( "vaulttoolbar" ) ); 
+    info.DestroyOnClose( false ); 
+    info.Caption( wxT( "Vault Toolbar" ) ); 
+    info.ToolbarPane(); 
+    info.Top(); 
+    //info.Resizable();
+    //info.MinSize( 350, -1 );
 
-  if ( position > 0 )
-  {
-    info.Position( position );
-  }
+    if ( position > 0 )
+    {
+        info.Position( position );
+    }
 
-  info.LeftDockable( false ); 
-  info.RightDockable( false ); 
+    info.LeftDockable( false ); 
+    info.RightDockable( false ); 
 
-  return info;
+    return info;
 }

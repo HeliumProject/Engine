@@ -32,8 +32,13 @@ namespace Luna
     class BrowserSearch : public Nocturnal::RefCountBase< BrowserSearch >
     {
     public:
-        BrowserSearch( const tstring& rootDirectory, const tstring& configDirectory );
+        BrowserSearch();
         ~BrowserSearch();
+
+        void SetRootDirectory( const Nocturnal::Path& path )
+        {
+            m_RootDirectory = path;
+        }
 
         bool RequestSearch( SearchQuery* searchQuery );
         void RequestStop();
@@ -46,7 +51,6 @@ namespace Luna
         //
 
         Nocturnal::Path       m_RootDirectory;
-        Nocturnal::Path       m_ConfigDirectory;
 
         // SearchResults and Status
         // DO NO CHANGE OR ACCESS outside of m_SearchResultsMutex

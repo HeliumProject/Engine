@@ -738,7 +738,8 @@
 			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{ECA5FC4D-29CE-5030-9175-551834BF6CB0}"
+			ReferencedProjectIdentifier="{05ED8488-418B-499C-895B-5654C64209F6}"
+			RelativePathToProject=".\SDK\LiteSQL\0.3.8\LiteSQL.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{CFCA9C73-C321-48BA-8F29-097FD061EBB1}"

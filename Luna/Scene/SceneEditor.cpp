@@ -30,7 +30,7 @@
 #include "TypeGrid.h"
 #include "View.h"
 #include "VolumeCreateTool.h"
-#include "Browser/BrowserToolBar.h"
+#include "Vault/VaultToolBar.h"
 #include "Mesh.h"
 
 #include "Pipeline/Asset/AssetClass.h"
@@ -284,7 +284,132 @@ SceneEditor::SceneEditor()
     GetStatusBar()->SetStatusText(_("Ready"));
 
     //
-    // MenuBar
+    // ToolBars
+    //
+
+    m_StandardToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
+    m_StandardToolBar->SetToolBitmapSize(wxSize(16,16));
+    m_StandardToolBar->AddTool(wxID_NEW, wxT("New"), wxArtProvider::GetBitmap( wxART_NEW ), wxT( "Create a new scene" ) );
+    m_StandardToolBar->AddTool(wxID_OPEN, wxT("Open"), wxArtProvider::GetBitmap( wxART_FILE_OPEN, wxART_OTHER, wxSize(16,16) ), wxT( "Open a scene file" ) );
+    m_StandardToolBar->AddTool(wxID_SAVE, wxT("Save All"), wxArtProvider::GetBitmap( wxART_FILE_SAVE ), wxT( "Save all currently checked out scenes") );
+    m_StandardToolBar->AddSeparator();
+    m_StandardToolBar->AddTool(wxID_CUT, wxT("Cut"), wxArtProvider::GetBitmap(wxART_CUT, wxART_OTHER, wxSize(16,16)), wxT( "Cut selection contents to the clipboard" ) );
+    m_StandardToolBar->AddTool(wxID_COPY, wxT("Copy"), wxArtProvider::GetBitmap(wxART_COPY, wxART_OTHER, wxSize(16,16)), wxT( "Copy selection contents to the clipboard" ) );
+    m_StandardToolBar->AddTool(wxID_PASTE, wxT("Paste"), wxArtProvider::GetBitmap(wxART_PASTE, wxART_OTHER, wxSize(16,16)), wxT( "Paste clipboard contents into the currrent scene" ) );
+    m_StandardToolBar->AddSeparator();
+    m_StandardToolBar->AddTool(wxID_UNDO, wxT("Undo"), wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, wxSize(16,16)), wxT( "Undo the last operation" ) );
+    m_StandardToolBar->AddTool(wxID_REDO, wxT("Redo"), wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, wxSize(16,16)), wxT( "Redo the last undone operation" ) );
+    m_StandardToolBar->Realize();
+
+    m_ViewToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
+    m_ViewToolBar->SetToolBitmapSize(wxSize(16, 16));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::PerspectiveCamera ), wxT("Use the orbit perspective camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::FrontOrthoCamera ), wxT("Use the front orthographic camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::SideOrthoCamera ), wxT("Use the side orthographic camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::TopOrthoCamera ), wxT("Use the top orthographic camera"));
+    m_ViewToolBar->Realize();
+
+    m_VaultToolBar = new VaultToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
+    m_VaultToolBar->Realize();
+
+    // Disable certain toolbar buttons (they'll enable when appropriate)
+    m_StandardToolBar->EnableTool( wxID_SAVE, false );
+
+    //
+    // Center pane
+    //
+
+    m_View = new Luna::View(this, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS);
+    m_View->AddRenderListener( RenderSignature::Delegate ( this, &SceneEditor::Render ) );
+    m_View->AddSelectListener( SelectSignature::Delegate ( this, &SceneEditor::Select ) ); 
+    m_View->AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &SceneEditor::SetHighlight ) );
+    m_View->AddClearHighlightListener( ClearHighlightSignature::Delegate ( this, &SceneEditor::ClearHighlight ) );
+    m_View->AddToolChangedListener( ToolChangeSignature::Delegate ( this, &SceneEditor::ViewToolChanged ) );
+    m_FrameManager.AddPane(m_View, wxAuiPaneInfo().Name(wxT("view_content")).CenterPane());
+
+    //
+    // Docked panes
+    //
+
+    // Directory
+    m_Directory = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
+    m_Directory->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+    {
+#ifndef LUNA_SCENE_DISABLE_OUTLINERS
+        // Hierarchy
+        m_HierarchyOutline = new HierarchyOutliner( &m_SceneManager );
+        SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, wxID_ANY );
+        hierarchyTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+        m_Directory->AddPage( hierarchyTree, TXT( "Hierarchy" ) );
+        m_TreeMonitor.AddTree( hierarchyTree );
+
+        // Entities
+        m_EntityOutline = new EntityAssetOutliner( &m_SceneManager );
+        SortTreeCtrl* entityTree = m_EntityOutline->InitTreeCtrl( m_Directory, wxID_ANY );
+        entityTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+        m_Directory->AddPage( entityTree, TXT( "Entities" ) );
+        m_TreeMonitor.AddTree( entityTree );
+
+        // Types
+        m_TypeOutline = new NodeTypeOutliner( &m_SceneManager );
+        SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_TypeOutlineControl );
+        typeTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
+        m_Directory->AddPage( typeTree, TXT( "Types" ) );
+        m_TreeMonitor.AddTree( typeTree );
+#endif
+    }
+    m_FrameManager.AddPane( m_Directory, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ) );
+
+    // Objects panel
+    m_TypeGrid = new TypeGrid( this, &m_SceneManager );
+    m_FrameManager.AddPane( m_TypeGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("types")).Caption(wxT("Types")).Left().Layer(1).Position(1) );
+
+    m_Help = new HelpPanel( this );
+    m_FrameManager.AddPane( m_Help, wxAuiPaneInfo().Name( wxT( "Help" ) ).Caption( wxT( "Help" ) ).Left().Layer( 1 ).Position( 1 ) );
+
+    // Layer panel
+    m_LayerGrid = new LayerGrid( this, &m_SceneManager );
+    m_FrameManager.AddPane( m_LayerGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("layers")).Caption(wxT("Layers")).Left().Layer(1).Position(1) );
+
+    // Seleciton Properties panel
+        m_SelectionEnumerator = new Enumerator (&m_SelectionProperties);
+        m_SelectionPropertiesManager = new PropertiesManager (m_SelectionEnumerator);
+        m_SelectionPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
+    SelectionPropertiesPanel* selectionProperties = new SelectionPropertiesPanel (m_SelectionPropertiesManager, this, SceneEditorIDs::ID_SelectionProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN);
+        m_SelectionProperties.SetControl( selectionProperties->m_PropertyCanvas );
+    m_FrameManager.AddPane( selectionProperties, wxAuiPaneInfo().Name(wxT("properties")).Caption(wxT("Properties")).Right().Layer(1).Position(1) );
+
+        // Properties panel - Tool page
+    m_ToolsPanel = new ToolsPanel( this );
+        m_ToolEnumerator = new Enumerator (&m_ToolProperties);
+        m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
+        m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
+    m_ToolProperties.SetControl( new Inspect::CanvasWindow ( m_ToolsPanel, SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
+    m_ToolsPanel->Create( m_ToolProperties.GetControl() );
+    m_ToolsPanel->Disable();
+    m_FrameManager.AddPane( m_ToolsPanel, wxAuiPaneInfo().Name(wxT("tools")).Caption(wxT("Tools")).Right().Layer(1).Position(1) );
+
+    //
+    // Docked ToolBars
+    //
+
+    m_FrameManager.AddPane(m_StandardToolBar, wxAuiPaneInfo().
+        Name(wxT("standard")).Caption(wxT("Standard")).
+        ToolbarPane().Top().
+        LeftDockable(false).RightDockable(false));
+
+    m_FrameManager.AddPane(m_ViewToolBar, wxAuiPaneInfo().
+        Name(wxT("view")).Caption(wxT("View")).
+        ToolbarPane().Top().Position(1).
+        LeftDockable(false).RightDockable(false));
+
+    m_FrameManager.AddPane(m_VaultToolBar, wxAuiPaneInfo().
+        Name(wxT("vault")).Caption(wxT("Vault")).
+        ToolbarPane().Top().Position(2).
+        LeftDockable(false).RightDockable(false));
+
+    //
+    // MenuBar (must come after wxAui stuff above, as Panels menu is dynamically constructed)
     //
 
     wxMenuBar* mb = new wxMenuBar;
@@ -525,135 +650,6 @@ SceneEditor::SceneEditor()
 
     SetMenuBar(mb);
 
-    //
-    // ToolBars
-    //
-
-    m_StandardToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
-    m_StandardToolBar->SetToolBitmapSize(wxSize(16,16));
-    m_StandardToolBar->AddTool(wxID_NEW, wxT("New"), wxArtProvider::GetBitmap( wxART_NEW ), wxT( "Create a new scene" ) );
-    m_StandardToolBar->AddTool(wxID_OPEN, wxT("Open"), wxArtProvider::GetBitmap( wxART_FILE_OPEN, wxART_OTHER, wxSize(16,16) ), wxT( "Open a scene file" ) );
-    m_StandardToolBar->AddTool(wxID_SAVE, wxT("Save All"), wxArtProvider::GetBitmap( wxART_FILE_SAVE ), wxT( "Save all currently checked out scenes") );
-    m_StandardToolBar->AddSeparator();
-    m_StandardToolBar->AddTool(wxID_CUT, wxT("Cut"), wxArtProvider::GetBitmap(wxART_CUT, wxART_OTHER, wxSize(16,16)), wxT( "Cut selection contents to the clipboard" ) );
-    m_StandardToolBar->AddTool(wxID_COPY, wxT("Copy"), wxArtProvider::GetBitmap(wxART_COPY, wxART_OTHER, wxSize(16,16)), wxT( "Copy selection contents to the clipboard" ) );
-    m_StandardToolBar->AddTool(wxID_PASTE, wxT("Paste"), wxArtProvider::GetBitmap(wxART_PASTE, wxART_OTHER, wxSize(16,16)), wxT( "Paste clipboard contents into the currrent scene" ) );
-    m_StandardToolBar->AddSeparator();
-    m_StandardToolBar->AddTool(wxID_UNDO, wxT("Undo"), wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, wxSize(16,16)), wxT( "Undo the last operation" ) );
-    m_StandardToolBar->AddTool(wxID_REDO, wxT("Redo"), wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, wxSize(16,16)), wxT( "Redo the last undone operation" ) );
-    m_StandardToolBar->Realize();
-
-    m_ViewToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
-    m_ViewToolBar->SetToolBitmapSize(wxSize(16, 16));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::PerspectiveCamera ), wxT("Use the orbit perspective camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::FrontOrthoCamera ), wxT("Use the front orthographic camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::SideOrthoCamera ), wxT("Use the side orthographic camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::TopOrthoCamera ), wxT("Use the top orthographic camera"));
-    m_ViewToolBar->Realize();
-
-    m_BrowserToolBar = new BrowserToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
-    m_BrowserToolBar->Realize();
-
-    // Disable certain toolbar buttons (they'll enable when appropriate)
-    m_StandardToolBar->EnableTool( wxID_SAVE, false );
-
-    //
-    // Center pane
-    //
-
-    m_View = new Luna::View(this, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS);
-    m_View->AddRenderListener( RenderSignature::Delegate ( this, &SceneEditor::Render ) );
-    m_View->AddSelectListener( SelectSignature::Delegate ( this, &SceneEditor::Select ) ); 
-    m_View->AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &SceneEditor::SetHighlight ) );
-    m_View->AddClearHighlightListener( ClearHighlightSignature::Delegate ( this, &SceneEditor::ClearHighlight ) );
-    m_View->AddToolChangedListener( ToolChangeSignature::Delegate ( this, &SceneEditor::ViewToolChanged ) );
-    m_FrameManager.AddPane(m_View, wxAuiPaneInfo().Name(wxT("view_content")).CenterPane());
-
-    //
-    // Docked panes
-    //
-
-    // Directory
-    m_Directory = new wxNotebook (this, wxID_ANY, wxPoint(0,0), wxSize(250, 250), wxNB_NOPAGETHEME);
-    m_Directory->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
-    {
-#ifndef LUNA_SCENE_DISABLE_OUTLINERS
-        // Hierarchy
-        m_HierarchyOutline = new HierarchyOutliner( &m_SceneManager );
-        SortTreeCtrl* hierarchyTree = m_HierarchyOutline->InitTreeCtrl( m_Directory, wxID_ANY );
-        hierarchyTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
-        m_Directory->AddPage( hierarchyTree, TXT( "Hierarchy" ) );
-        m_TreeMonitor.AddTree( hierarchyTree );
-
-        // Entities
-        m_EntityOutline = new EntityAssetOutliner( &m_SceneManager );
-        SortTreeCtrl* entityTree = m_EntityOutline->InitTreeCtrl( m_Directory, wxID_ANY );
-        entityTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
-        m_Directory->AddPage( entityTree, TXT( "Entities" ) );
-        m_TreeMonitor.AddTree( entityTree );
-
-        // Types
-        m_TypeOutline = new NodeTypeOutliner( &m_SceneManager );
-        SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( m_Directory, SceneEditorIDs::ID_TypeOutlineControl );
-        typeTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
-        m_Directory->AddPage( typeTree, TXT( "Types" ) );
-        m_TreeMonitor.AddTree( typeTree );
-#endif
-    }
-    m_FrameManager.AddPane( m_Directory, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ) );
-
-    // Objects panel
-    m_TypeGrid = new TypeGrid( this, &m_SceneManager );
-    m_FrameManager.AddPane( m_TypeGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("types")).Caption(wxT("Types")).Left().Layer(1).Position(1) );
-
-    m_Help = new HelpPanel( this );
-    m_FrameManager.AddPane( m_Help, wxAuiPaneInfo().Name( wxT( "Help" ) ).Caption( wxT( "Help" ) ).Left().Layer( 1 ).Position( 1 ) );
-
-    // Layer panel
-    m_LayerGrid = new LayerGrid( this, &m_SceneManager );
-    m_FrameManager.AddPane( m_LayerGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("layers")).Caption(wxT("Layers")).Left().Layer(1).Position(1) );
-
-    // Seleciton Properties panel
-        m_SelectionEnumerator = new Enumerator (&m_SelectionProperties);
-        m_SelectionPropertiesManager = new PropertiesManager (m_SelectionEnumerator);
-        m_SelectionPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
-    SelectionPropertiesPanel* selectionProperties = new SelectionPropertiesPanel (m_SelectionPropertiesManager, this, SceneEditorIDs::ID_SelectionProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN);
-        m_SelectionProperties.SetControl( selectionProperties->m_PropertyCanvas );
-    m_FrameManager.AddPane( selectionProperties, wxAuiPaneInfo().Name(wxT("properties")).Caption(wxT("Properties")).Right().Layer(1).Position(1) );
-
-        // Properties panel - Tool page
-    m_ToolsPanel = new ToolsPanel( this );
-        m_ToolEnumerator = new Enumerator (&m_ToolProperties);
-        m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
-        m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
-    m_ToolProperties.SetControl( new Inspect::CanvasWindow ( m_ToolsPanel, SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
-    m_ToolsPanel->Create( m_ToolProperties.GetControl() );
-    m_ToolsPanel->Disable();
-    m_FrameManager.AddPane( m_ToolsPanel, wxAuiPaneInfo().Name(wxT("tools")).Caption(wxT("Tools")).Right().Layer(1).Position(1) );
-
-    //
-    // Docked ToolBars
-    //
-
-    m_FrameManager.AddPane(m_StandardToolBar, wxAuiPaneInfo().
-        Name(wxT("standard")).Caption(wxT("Standard")).
-        ToolbarPane().Top().
-        LeftDockable(false).RightDockable(false));
-
-    m_FrameManager.AddPane(m_ViewToolBar, wxAuiPaneInfo().
-        Name(wxT("view")).Caption(wxT("View")).
-        ToolbarPane().Top().Position(1).
-        LeftDockable(false).RightDockable(false));
-
-    m_FrameManager.AddPane(m_BrowserToolBar, wxAuiPaneInfo().
-        Name(wxT("browser")).Caption(wxT("Browser")).
-        ToolbarPane().Top().Position(2).
-        LeftDockable(false).RightDockable(false));
-
-    m_FrameManager.AddPane(m_BrowserToolBar, wxAuiPaneInfo().
-        Name(wxT("vault")).Caption(wxT("Vault")).
-        ToolbarPane().Top().Position(4).
-        LeftDockable(false).RightDockable(false));
 
     //
     // Restore layout if any
@@ -3153,9 +3149,9 @@ bool SceneEditor::SortTypeItemsByName( Luna::SceneNodeType* lhs, Luna::SceneNode
     return lname < rname;
 }
 
-DocumentManager* SceneEditor::GetDocumentManager()
+DocumentManager& SceneEditor::GetDocumentManager()
 {
-    return &m_SceneManager;
+    return m_SceneManager;
 }
 
 void SceneEditor::SyncPropertyThread()

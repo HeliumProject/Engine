@@ -29,7 +29,7 @@
 namespace Luna
 {
     // Forwards
-    class BrowserToolBar;
+    class VaultToolBar;
     class EntityAssetOutliner;
     class EntityType;
     class HierarchyNode;
@@ -129,7 +129,7 @@ namespace Luna
         wxToolBar* m_StandardToolBar;
         wxToolBar* m_ViewToolBar;
 
-        BrowserToolBar* m_BrowserToolBar;
+        VaultToolBar* m_VaultToolBar;
 
         //context items ordered by name  
         V_HierarchyNodeDumbPtr m_OrderedContextItems;
@@ -156,7 +156,7 @@ namespace Luna
 
         virtual void SaveWindowState() NOC_OVERRIDE;
 
-        virtual DocumentManager* GetDocumentManager() NOC_OVERRIDE;
+        virtual DocumentManager& GetDocumentManager() NOC_OVERRIDE;
 
         void SyncPropertyThread();
 

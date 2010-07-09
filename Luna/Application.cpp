@@ -21,7 +21,7 @@
 #include "Application/Exception.h"
 
 #include "Core/CoreInit.h"
-#include "Browser/Browser.h"
+#include "Vault/Vault.h"
 #include "Editor/ApplicationPreferences.h"
 #include "Editor/Editor.h"
 #include "Editor/EditorInit.h"
@@ -138,23 +138,12 @@ namespace Luna
 
 LunaApp::LunaApp()
 : wxApp()
-, m_Browser( NULL )
-, m_DocumentManager( new DocumentManager() )
 , m_SceneEditor( NULL )
 {
 }
 
 LunaApp::~LunaApp()
 {
-    if ( m_DocumentManager )
-    {
-        delete m_DocumentManager;
-    }
-
-    if ( m_Browser )
-    {
-        delete m_Browser;
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -243,7 +232,7 @@ bool LunaApp::OnInit()
 
             {
                 Log::Bullet bullet( TXT( "Asset Vault...\n" ) );
-                m_InitializerStack.Push( Browser::Initialize, Browser::Cleanup );
+                m_InitializerStack.Push( Vault::Initialize, Vault::Cleanup );
             }
 
             {

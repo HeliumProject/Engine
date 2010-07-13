@@ -4,7 +4,9 @@
 
 #include "Types.h"
 
-#include <semaphore.h>
+#ifdef __GNUC__
+# include <semaphore.h>
+#endif
 
 namespace Platform
 {

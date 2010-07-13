@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Foundation" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="libFoundation" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="..\output\Debug\Intermediate\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="libFoundation" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="..\output\Release\Intermediate\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add directory="$(PROJECT_DIR)\.." />
+			<Add directory="$(boost)" />
+		</Compiler>
+		<Unit filename="API.h" />
+		<Unit filename="Atomic.cpp" />
+		<Unit filename="Atomic.h" />
+		<Unit filename="Automation\Event.h" />
+		<Unit filename="Automation\Property.h" />
+		<Unit filename="Boost\Regex.h" />
+		<Unit filename="Checksum\CRC32.h" />
+		<Unit filename="Checksum\Hash64.h" />
+		<Unit filename="Checksum\MD5.h" />
+		<Unit filename="Checksum\MurmurHash2.h" />
+		<Unit filename="CommandLine\Command.cpp" />
+		<Unit filename="CommandLine\Command.h" />
+		<Unit filename="CommandLine\Commands\FailTest.cpp" />
+		<Unit filename="CommandLine\Commands\FailTest.h" />
+		<Unit filename="CommandLine\Commands\Help.cpp" />
+		<Unit filename="CommandLine\Commands\Help.h" />
+		<Unit filename="CommandLine\Option.cpp" />
+		<Unit filename="CommandLine\Option.h" />
+		<Unit filename="CommandLine\Processor.cpp" />
+		<Unit filename="CommandLine\Processor.h" />
+		<Unit filename="CommandLine\Utilities.cpp" />
+		<Unit filename="CommandLine\Utilities.h" />
+		<Unit filename="Component\Component.cpp" />
+		<Unit filename="Component\Component.h" />
+		<Unit filename="Component\ComponentCollection.cpp" />
+		<Unit filename="Component\ComponentCollection.h" />
+		<Unit filename="Component\ComponentExceptions.h" />
+		<Unit filename="Component\ComponentHandle.h" />
+		<Unit filename="Component\ComponentInit.cpp" />
+		<Unit filename="Component\ComponentInit.h" />
+		<Unit filename="Container\BitArray.h" />
+		<Unit filename="Container\Insert.h" />
+		<Unit filename="Container\OrderedSet.h" />
+		<Unit filename="Container\ReversibleMap.h" />
+		<Unit filename="Environment.cpp" />
+		<Unit filename="Environment.h" />
+		<Unit filename="File\Directory.cpp" />
+		<Unit filename="File\Directory.h" />
+		<Unit filename="File\FileHandle.cpp" />
+		<Unit filename="File\FileHandle.h" />
+		<Unit filename="File\FileWatcher.cpp" />
+		<Unit filename="File\FileWatcher.h" />
+		<Unit filename="File\Handle.cpp" />
+		<Unit filename="File\Handle.h" />
+		<Unit filename="File\Path.cpp" />
+		<Unit filename="File\Path.h" />
+		<Unit filename="Flags.h" />
+		<Unit filename="GUID.cpp" />
+		<Unit filename="GUID.h" />
+		<Unit filename="IPC\Connection.cpp" />
+		<Unit filename="IPC\Connection.h" />
+		<Unit filename="IPC\IPC.h" />
+		<Unit filename="IPC\Message.cpp" />
+		<Unit filename="IPC\Message.h" />
+		<Unit filename="IPC\Pipe.cpp" />
+		<Unit filename="IPC\Pipe.h" />
+		<Unit filename="IPC\TCP.cpp" />
+		<Unit filename="IPC\TCP.h" />
+		<Unit filename="InitializerStack.cpp" />
+		<Unit filename="InitializerStack.h" />
+		<Unit filename="Log.cpp" />
+		<Unit filename="Log.h" />
+		<Unit filename="Math\AlignedBox.cpp" />
+		<Unit filename="Math\AlignedBox.h" />
+		<Unit filename="Math\AngleAxis.cpp" />
+		<Unit filename="Math\AngleAxis.h" />
+		<Unit filename="Math\CalculateBounds.cpp" />
+		<Unit filename="Math\CalculateBounds.h" />
+		<Unit filename="Math\Color.h" />
+		<Unit filename="Math\Color3.h" />
+		<Unit filename="Math\Color4.h" />
+		<Unit filename="Math\Constants.h" />
+		<Unit filename="Math\Conversion.h" />
+		<Unit filename="Math\Curve.cpp" />
+		<Unit filename="Math\Curve.h" />
+		<Unit filename="Math\EulerAngles.cpp" />
+		<Unit filename="Math\EulerAngles.h" />
+		<Unit filename="Math\EulerOrder.h" />
+		<Unit filename="Math\Frustum.cpp" />
+		<Unit filename="Math\Frustum.h" />
+		<Unit filename="Math\HDRColor3.h" />
+		<Unit filename="Math\HDRColor4.h" />
+		<Unit filename="Math\Line.cpp" />
+		<Unit filename="Math\Line.h" />
+		<Unit filename="Math\Macros.h" />
+		<Unit filename="Math\Matrix3.cpp" />
+		<Unit filename="Math\Matrix3.h" />
+		<Unit filename="Math\Matrix4.cpp" />
+		<Unit filename="Math\Matrix4.h" />
+		<Unit filename="Math\Plane.cpp" />
+		<Unit filename="Math\Plane.h" />
+		<Unit filename="Math\Point.cpp" />
+		<Unit filename="Math\Point.h" />
+		<Unit filename="Math\Polygon.h" />
+		<Unit filename="Math\Quaternion.cpp" />
+		<Unit filename="Math\Quaternion.h" />
+		<Unit filename="Math\Scale.cpp" />
+		<Unit filename="Math\Scale.h" />
+		<Unit filename="Math\Shear.cpp" />
+		<Unit filename="Math\Shear.h" />
+		<Unit filename="Math\Utils.h" />
+		<Unit filename="Math\Vector2.cpp" />
+		<Unit filename="Math\Vector2.h" />
+		<Unit filename="Math\Vector3.cpp" />
+		<Unit filename="Math\Vector3.h" />
+		<Unit filename="Math\Vector4.cpp" />
+		<Unit filename="Math\Vector4.h" />
+		<Unit filename="Math\half.cpp" />
+		<Unit filename="Math\half.h" />
+		<Unit filename="Math\halftofloat.h" />
+		<Unit filename="Memory.cpp" />
+		<Unit filename="Memory.h" />
+		<Unit filename="Memory\ArrayPtr.h" />
+		<Unit filename="Memory\Endian.h" />
+		<Unit filename="Memory\HybridPtr.h" />
+		<Unit filename="Memory\SmartPtr.h" />
+		<Unit filename="Profile.cpp" />
+		<Unit filename="Profile.h" />
+		<Unit filename="Reflect\API.h" />
+		<Unit filename="Reflect\Archive.cpp" />
+		<Unit filename="Reflect\Archive.h" />
+		<Unit filename="Reflect\ArchiveBinary.cpp" />
+		<Unit filename="Reflect\ArchiveBinary.h" />
+		<Unit filename="Reflect\ArchiveXML.cpp" />
+		<Unit filename="Reflect\ArchiveXML.h" />
+		<Unit filename="Reflect\ArraySerializer.cpp" />
+		<Unit filename="Reflect\ArraySerializer.h" />
+		<Unit filename="Reflect\Base.h" />
+		<Unit filename="Reflect\BitfieldSerializer.cpp" />
+		<Unit filename="Reflect\BitfieldSerializer.h" />
+		<Unit filename="Reflect\Cache.cpp" />
+		<Unit filename="Reflect\Cache.h" />
+		<Unit filename="Reflect\Class.cpp" />
+		<Unit filename="Reflect\Class.h" />
+		<Unit filename="Reflect\Composite.cpp" />
+		<Unit filename="Reflect\Composite.h" />
+		<Unit filename="Reflect\Compression.cpp" />
+		<Unit filename="Reflect\Compression.h" />
+		<Unit filename="Reflect\ContainerSerializer.cpp" />
+		<Unit filename="Reflect\ContainerSerializer.h" />
+		<Unit filename="Reflect\Element.cpp" />
+		<Unit filename="Reflect\Element.h" />
+		<Unit filename="Reflect\ElementArraySerializer.cpp" />
+		<Unit filename="Reflect\ElementArraySerializer.h" />
+		<Unit filename="Reflect\ElementMapSerializer.cpp" />
+		<Unit filename="Reflect\ElementMapSerializer.h" />
+		<Unit filename="Reflect\ElementSetSerializer.cpp" />
+		<Unit filename="Reflect\ElementSetSerializer.h" />
+		<Unit filename="Reflect\Enumeration.cpp" />
+		<Unit filename="Reflect\Enumeration.h" />
+		<Unit filename="Reflect\EnumerationSerializer.cpp" />
+		<Unit filename="Reflect\EnumerationSerializer.h" />
+		<Unit filename="Reflect\Exceptions.h" />
+		<Unit filename="Reflect\Field.cpp" />
+		<Unit filename="Reflect\Field.h" />
+		<Unit filename="Reflect\Indent.h" />
+		<Unit filename="Reflect\MapSerializer.cpp" />
+		<Unit filename="Reflect\MapSerializer.h" />
+		<Unit filename="Reflect\Object.cpp" />
+		<Unit filename="Reflect\Object.h" />
+		<Unit filename="Reflect\PathSerializer.cpp" />
+		<Unit filename="Reflect\PathSerializer.h" />
+		<Unit filename="Reflect\PointerSerializer.cpp" />
+		<Unit filename="Reflect\PointerSerializer.h" />
+		<Unit filename="Reflect\Registry.cpp" />
+		<Unit filename="Reflect\Registry.h" />
+		<Unit filename="Reflect\Serializer.cpp" />
+		<Unit filename="Reflect\Serializer.h" />
+		<Unit filename="Reflect\Serializers.h" />
+		<Unit filename="Reflect\SetSerializer.cpp" />
+		<Unit filename="Reflect\SetSerializer.h" />
+		<Unit filename="Reflect\SimpleSerializer.cpp" />
+		<Unit filename="Reflect\SimpleSerializer.h" />
+		<Unit filename="Reflect\Stream.cpp" />
+		<Unit filename="Reflect\Stream.h" />
+		<Unit filename="Reflect\StringPool.cpp" />
+		<Unit filename="Reflect\StringPool.h" />
+		<Unit filename="Reflect\Structure.cpp" />
+		<Unit filename="Reflect\Structure.h" />
+		<Unit filename="Reflect\Type.cpp" />
+		<Unit filename="Reflect\Type.h" />
+		<Unit filename="Reflect\TypeID.h" />
+		<Unit filename="Reflect\TypeIDSerializer.cpp" />
+		<Unit filename="Reflect\TypeIDSerializer.h" />
+		<Unit filename="Reflect\Version.cpp" />
+		<Unit filename="Reflect\Version.h" />
+		<Unit filename="Reflect\Visitor.cpp" />
+		<Unit filename="Reflect\Visitor.h" />
+		<Unit filename="SmartBuffer\API.h" />
+		<Unit filename="SmartBuffer\BasicBuffer.cpp" />
+		<Unit filename="SmartBuffer\BasicBuffer.h" />
+		<Unit filename="SmartBuffer\BufferSerializer.cpp" />
+		<Unit filename="SmartBuffer\BufferSerializer.h" />
+		<Unit filename="SmartBuffer\Fixup.cpp" />
+		<Unit filename="SmartBuffer\Fixup.h" />
+		<Unit filename="SmartBuffer\ObjectBuffer.h" />
+		<Unit filename="SmartBuffer\SmartBuffer.cpp" />
+		<Unit filename="SmartBuffer\SmartBuffer.h" />
+		<Unit filename="SmartBuffer\SmartLoader.cpp" />
+		<Unit filename="SmartBuffer\SmartLoader.h" />
+		<Unit filename="String\Natural.h" />
+		<Unit filename="String\Tokenize.h" />
+		<Unit filename="String\Units.h" />
+		<Unit filename="String\Utilities.h" />
+		<Unit filename="String\Wildcard.h" />
+		<Unit filename="TUID.cpp" />
+		<Unit filename="TUID.h" />
+		<Unit filename="Timer.cpp" />
+		<Unit filename="Timer.h" />
+		<Unit filename="Version.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

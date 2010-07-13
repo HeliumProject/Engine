@@ -7,7 +7,7 @@
 
 using namespace Inspect;
 
-BEGIN_EVENT_TABLE(CanvasWindow, Nocturnal::TreeWndCtrl)
+BEGIN_EVENT_TABLE(CanvasWindow, wxTreeWndCtrl)
 EVT_SHOW(CanvasWindow::OnShow)
 EVT_SIZE(CanvasWindow::OnSize)
 EVT_LEFT_DOWN(CanvasWindow::OnClick)
@@ -27,7 +27,7 @@ CanvasWindow::CanvasWindow(wxWindow *parent,
                            wxBitmap collapsedBitmap,
                            wxPen pen,
                            unsigned int clickTolerance)
-: TreeWndCtrl(parent, winid, pos, size, wxALWAYS_SHOW_SB | style, name, treeStyle, columnSize, expandedBitmap, collapsedBitmap, pen, clickTolerance)
+: wxTreeWndCtrl(parent, winid, pos, size, wxALWAYS_SHOW_SB | style, name, treeStyle, columnSize, expandedBitmap, collapsedBitmap, pen, clickTolerance)
 , m_Canvas(NULL)
 {
   SetScrollRate(SCROLL_INCREMENT, SCROLL_INCREMENT);
@@ -187,7 +187,7 @@ void Canvas::RemoveControl(Control* control)
 {
   CanvasWindow* treeWndCtrl = GetControl();
   wxTreeItemId item = treeWndCtrl->FindItem( control->GetWindow() );
-  if ( item != Nocturnal::TreeWndCtrlItemIdInvalid )
+  if ( item != wxTreeWndCtrlItemIdInvalid )
   {
     treeWndCtrl->Delete( item );
   }
@@ -233,7 +233,7 @@ void Canvas::Realize(Container* parent)
   }
 
   wxTreeItemId root = treeWndCtrl->GetRootItem();
-  if ( root == Nocturnal::TreeWndCtrlItemIdInvalid )
+  if ( root == wxTreeWndCtrlItemIdInvalid )
   {
     root = treeWndCtrl->AddRoot( TXT( "Canvas Root" ) );
   }

@@ -40,7 +40,6 @@
 #include "SceneEditor.h"
 #include "SceneManager.h"
 #include "ScenePreferences.h"
-#include "SelectedEntityCollection.h"
 #include "TypeGrid.h"
 #include "LayerGrid.h"
 #include "MiscSettings.h"
@@ -106,8 +105,6 @@ Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
     m_Manager->AddCurrentSceneChangingListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanging ) );
     m_Manager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate( this, &Scene::CurrentSceneChanged ) );
 
-    m_SelectedEntityCollection = new SelectedEntityCollection( &m_Selection, TXT( "Scene Editor selection" ) );
-
     // Evaluation
     m_Graph = new SceneGraph();
 
@@ -131,9 +128,6 @@ Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
 
 Scene::~Scene()
 {
-    m_SelectedEntityCollection->ClearSelection();
-    m_SelectedEntityCollection = NULL;
-
     SceneEditorPreferences()->GetViewPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 
     // remove our own listeners 
@@ -2145,9 +2139,6 @@ void Scene::CurrentSceneChanging( const SceneChangeArgs& args )
 {
     if ( args.m_Scene == this )
     {
-        // This scene is not going to be the current one, tell the collection
-        // manager to stop displaying this collection.
-        wxGetApp().GetVault().GetVaultPreferences()->GetCollectionManager()->DeleteCollection( m_SelectedEntityCollection );
     }
 }
 
@@ -2158,7 +2149,6 @@ void Scene::CurrentSceneChanged( const SceneChangeArgs& args )
 {
     if ( args.m_Scene == this )
     {
-        wxGetApp().GetVault().GetVaultPreferences()->GetCollectionManager()->AddCollection( m_SelectedEntityCollection );
     }
 }
 

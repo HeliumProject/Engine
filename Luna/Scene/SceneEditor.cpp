@@ -1039,7 +1039,7 @@ void SceneEditor::OnMenuOpen(wxMenuEvent& event)
 ///////////////////////////////////////////////////////////////////////////////
 // Called when the "new" button is pressed.  Creates a new scene.
 // 
-void SceneEditor::OnNew(wxCommandEvent& event)
+void SceneEditor::OnNew( wxCommandEvent& event )
 {
     if ( m_SceneManager.CloseAll() )
     {

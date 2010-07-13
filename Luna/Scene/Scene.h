@@ -46,9 +46,6 @@ namespace Luna
   class PickVisitor;
   struct SceneChangeArgs;
 
-  class SelectedEntityCollection;
-  typedef Nocturnal::SmartPtr< SelectedEntityCollection > SelectedEntityCollectionPtr;
-  
   class MiscSettings;
   typedef Nocturnal::SmartPtr< MiscSettings > MiscSettingsPtr;
 
@@ -295,9 +292,6 @@ namespace Luna
 
     // selection of this scene
     Selection m_Selection;
-
-    // collection tracking the selected entities
-    SelectedEntityCollectionPtr m_SelectedEntityCollection;
 
     // highlighted items of this scene
     OS_SelectableDumbPtr m_Highlighted;

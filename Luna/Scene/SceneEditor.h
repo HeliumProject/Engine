@@ -174,7 +174,7 @@ namespace Luna
         // wxEventHandler Event Handlers
         //
 
-    private:
+    public:
         // frame events
         void OnEraseBackground(wxEraseEvent& event);
         void OnSize(wxSizeEvent& event);
@@ -183,7 +183,7 @@ namespace Luna
         void OnMenuOpen(wxMenuEvent& event);
 
         // application events
-        void OnNew(wxCommandEvent& event);
+        void OnNew( wxCommandEvent& event );
         bool DoOpen( const tstring& path );
         void OnOpen(wxCommandEvent& event);
         void OnSaveAll(wxCommandEvent& event);

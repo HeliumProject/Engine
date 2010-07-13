@@ -62,14 +62,11 @@ namespace Luna
 
     // the current scene
     Luna::Scene* m_CurrentScene;
+    Asset::SceneAssetPtr m_CurrentSceneAsset; 
 
-    // the editor window
     SceneEditor* m_Editor;
 
     Undo::QueueManager m_UndoManager;
-
-    // level that owns the world we're looking at (as far as we know)
-    Asset::SceneAssetPtr m_CurrentLevel; 
 
   public:
     SceneManager( SceneEditor* editor );
@@ -77,7 +74,7 @@ namespace Luna
 
     SceneEditor* GetEditor();
 
-    Asset::SceneAsset* GetCurrentLevel() const;
+    Asset::SceneAsset* GetCurrentSceneAsset() const;
 
     ScenePtr NewScene( bool isRoot, tstring path = TXT( "" ), bool addDoc = true );
     virtual DocumentPtr OpenPath( const tstring& path, tstring& error ) NOC_OVERRIDE;

@@ -821,12 +821,7 @@ void VaultFrame::OnNewCollectionFromSelection( wxCommandEvent& event )
         }
         else
         {
-            const bool reverse = event.GetId() == VaultMenu::NewUsageCollectionFromSelection;
-            const Nocturnal::Path& path = *paths.begin();
-            DependencyCollectionPtr dependencyCollection = new DependencyCollection( path.Filename(), AssetCollectionFlags::Dynamic, reverse );
-            dependencyCollection->SetRoot( path );
-            dependencyCollection->LoadDependencies();
-            collection = dependencyCollection;
+            NOC_BREAK();
         }
     }
 

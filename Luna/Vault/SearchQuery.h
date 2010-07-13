@@ -1,7 +1,6 @@
 #pragma once
 
 #include "AssetCollection.h"
-#include "DependencyCollection.h"
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/Memory/SmartPtr.h"

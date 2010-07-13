@@ -1,6 +1,7 @@
 #include "Precompile.h"
 #include "Application.h"
 #include "AppPreferences.h"
+#include "LunaIDs.h"
 
 #include "Platform/Windows/Windows.h"
 #include "Platform/Windows/Console.h"
@@ -266,6 +267,22 @@ bool LunaApp::OnInit()
 int LunaApp::OnRun()
 {
     return __super::OnRun();
+}
+
+void LunaApp::OnNew( wxCommandEvent& event )
+{
+    switch( event.GetId() )
+    {
+    case LunaIDs::ID_NewScene:
+        GetSceneEditor()->OnNew( event );
+        break;
+    case LunaIDs::ID_NewEntity:
+        NOC_BREAK();
+        break;
+    default:
+        NOC_BREAK();
+        break;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

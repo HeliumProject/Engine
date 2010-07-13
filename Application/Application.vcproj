@@ -1080,42 +1080,6 @@
 						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrl.h"
 						>
 					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlApi.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlCollapsed.xpm"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlExpanded.xpm"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlItem.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlNode.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlNode.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlSpacer.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Inspect\Controls\TreeWnd\TreeWndCtrlSpacer.h"
-						>
-					</File>
 				</Filter>
 			</Filter>
 			<Filter

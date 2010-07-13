@@ -3,7 +3,6 @@
 #include "Luna/API.h"
 
 #include "AssetCollection.h"
-#include "DependencyCollection.h"
 
 #include "Foundation/Memory/SmartPtr.h"
 #include "Foundation/Reflect/Registry.h"

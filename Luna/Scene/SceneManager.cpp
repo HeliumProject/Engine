@@ -58,9 +58,9 @@ SceneEditor* SceneManager::GetEditor()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the currently open level (if any).
 // 
-Asset::SceneAsset* SceneManager::GetCurrentLevel() const
+Asset::SceneAsset* SceneManager::GetCurrentSceneAsset() const
 {
-    return m_CurrentLevel; 
+    return m_CurrentSceneAsset; 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -633,7 +633,7 @@ void SceneManager::OnDocumentClosed( const DocumentChangedArgs& args )
         if ( IsRoot( scene ) )
         {
             RemoveAllScenes();
-            m_CurrentLevel = NULL;
+            m_CurrentSceneAsset = NULL;
         }
         else
         {

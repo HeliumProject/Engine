@@ -22,8 +22,6 @@ static const tstring s_EmptyString = TXT("");
 BEGIN_EVENT_TABLE( CollectionsPanel, CollectionsPanelGenerated )
 EVT_MENU( VaultMenu::ShowCollection, CollectionsPanel::OnShowCollection )
 EVT_MENU( VaultMenu::NewCollection, CollectionsPanel::OnNewCollection )
-EVT_MENU( VaultMenu::NewDependencyCollection, CollectionsPanel::OnNewCollection )
-EVT_MENU( VaultMenu::NewUsageCollection, CollectionsPanel::OnNewCollection )
 EVT_MENU( VaultMenu::OpenCollection, CollectionsPanel::OnOpenCollection )
 EVT_MENU( VaultMenu::CloseCollection, CollectionsPanel::OnCloseCollection )
 EVT_MENU( VaultMenu::RenameCollection, CollectionsPanel::OnRenameCollection )
@@ -158,8 +156,6 @@ void CollectionsPanel::OnMyCollectionsTitleMenu( wxMouseEvent& event )
 
     wxMenu* newMenu = new wxMenu();
     newMenu->Append( ID_NewCollection, VaultMenu::Label( ID_NewCollection ), VaultMenu::Label( ID_NewCollection ) + TXT( " - Manually add and remove assets to this static collection." ) );
-    newMenu->Append( ID_NewDependencyCollection, VaultMenu::Label( ID_NewDependencyCollection ) + TXT( " - Files this asset depends on." ) );
-    newMenu->Append( ID_NewUsageCollection, VaultMenu::Label( ID_NewUsageCollection ), VaultMenu::Label( ID_NewUsageCollection ) + TXT( " - Files that use this asset." ) );
 
     wxMenu menu;
     menu.Append( wxID_ANY, TXT( "New Collection..." ), newMenu );
@@ -381,15 +377,6 @@ void CollectionsPanel::OnNewCollection( wxCommandEvent& event )
 
     case ID_NewCollection:
         collection = NewCollection( m_CollectionManager, Reflect::GetType< Luna::AssetCollection >() );
-        break;
-
-    case ID_NewDependencyCollection:
-        collection = NewCollection( m_CollectionManager, Reflect::GetType< Luna::DependencyCollection >() );
-        break;
-
-    case ID_NewUsageCollection:
-        collection = NewCollection( m_CollectionManager, Reflect::GetType< Luna::DependencyCollection >() );
-        Reflect::ObjectCast<DependencyCollection>( collection )->SetReverse( true );
         break;
     }
 
@@ -674,17 +661,6 @@ void CollectionsPanel::OnCollectionModified( const Reflect::ElementChangeArgs& a
         if ( collection->GetType() == Reflect::GetType< Luna::AssetCollection >() )
         {
             iconIndex = m_ContainerImageIndex;
-        }
-        else if ( collection->GetType() == Reflect::GetType< Luna::DependencyCollection >() )
-        {
-            if ( Reflect::ConstObjectCast<Luna::DependencyCollection>( collection )->IsReverse() )
-            {
-                iconIndex = m_UsageImageIndex;
-            }
-            else
-            {
-                iconIndex = m_DependencyImageIndex;
-            }
         }
         treeCtrl->SetItemImage( itemID, iconIndex, wxTreeItemIcon_Normal );
     }
@@ -982,17 +958,6 @@ void CollectionsPanel::UpdateCollections()
             if ( collection->GetType() == Reflect::GetType< Luna::AssetCollection >() )
             {
                 iconIndex = m_ContainerImageIndex;
-            }
-            else if ( collection->GetType() == Reflect::GetType< Luna::DependencyCollection >() )
-            {
-                if ( Reflect::ObjectCast<DependencyCollection>( collection )->IsReverse() )
-                {
-                    iconIndex = m_UsageImageIndex;
-                }
-                else
-                {
-                    iconIndex = m_DependencyImageIndex;
-                }
             }
 
             SortTreeCtrl* treeCtrl = NULL;

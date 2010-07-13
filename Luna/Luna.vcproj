@@ -1178,14 +1178,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SelectedEntityCollection.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SelectedEntityCollection.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\SelectionPropertiesPanel.cpp"
 				>
 			</File>
@@ -2139,22 +2131,6 @@
 			</File>
 			<File
 				RelativePath=".\Vault\CollectionsPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\DependencyCollection.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\DependencyCollection.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\DependencyLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\DependencyLoader.h"
 				>
 			</File>
 			<File
@@ -4630,6 +4606,10 @@
 		</File>
 		<File
 			RelativePath=".\HelpPanel.h"
+			>
+		</File>
+		<File
+			RelativePath=".\LunaIDs.h"
 			>
 		</File>
 		<File

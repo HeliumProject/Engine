@@ -5,7 +5,6 @@
 #include "VaultGenerated.h"
 #include "VaultMenuIDs.h"
 #include "VaultStatusBar.h"
-#include "DependencyCollection.h"
 #include "SearchQuery.h"
 #include "SearchHistory.h"
 

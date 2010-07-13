@@ -12,7 +12,7 @@ void AudioClip::EnumerateClass( Reflect::Compositor< AudioClip >& comp )
     comp.AddEnumerationField( &AudioClip::m_Mode, "m_Mode" );
 }
 
-void AudioClip::GatherIndexData( AssetIndexData& indexData )
+void AudioClip::GatherIndexData( std::map< tstring, tstring >& indexData )
 {
     const Reflect::Enumeration* modeEnum = Reflect::GetEnumeration< AudioClipMode >();
     if ( modeEnum )

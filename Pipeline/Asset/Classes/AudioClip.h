@@ -40,7 +40,7 @@ namespace Asset
         {
         }
 
-        void GatherIndexData( AssetIndexData& indexData );
+        void GatherIndexData( std::map< tstring, tstring >& indexData );
     };
 
     typedef Nocturnal::SmartPtr< AudioClip > AudioClipPtr;

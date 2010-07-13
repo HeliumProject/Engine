@@ -7,6 +7,7 @@
 #include "CollectionManager.h"
 #include "SearchHistory.h"
 #include "SearchQuery.h"
+#include "AssetCacheEntry.h"
 
 #include "Platform/Exception.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
@@ -26,6 +27,9 @@ Vault::Vault()
     if ( ++s_InitCount == 1 )
     {
         s_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
+
+        s_InitializerStack.Push( Reflect::RegisterClass< AssetIndexData >( TXT( "AssetIndexData" ) ) );
+        s_InitializerStack.Push( Reflect::RegisterClass< AssetIndexData >( TXT( "AssetCacheEntry" ) ) );
 
         s_InitializerStack.Push( Reflect::RegisterClass<AssetCollection>( TXT( "AssetCollection" ) ) );
         s_InitializerStack.Push( Reflect::RegisterClass<DependencyCollection>( TXT( "DependencyCollection" ) ) );

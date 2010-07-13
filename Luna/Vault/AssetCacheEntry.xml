@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE database SYSTEM "litesql.dtd"> 
+<database name="AssetCacheDB" namespace="Luna" include="AssetCacheDB.hpp">
+	
+	<object name="Entry">
+		<field name="mPath" type="string" />
+	</object>
+	
+	<relation name="Dependencies" unidir="true">
+		<relate object="Entry" handle="dependencies"/>
+		<relate object="Entry"/>
+	</relation>
+	
+	<object name="Attribute">
+		<field name="mKey" type="string" />
+	</object>
+	
+	<relation name="Attributes">
+		<relate object="Entry" limit="one"/>
+		<relate object="Attribute" limit="many" handle="attributes"/>
+		<field name="mValue" type="string" />
+	</relation>
+	
+</database>

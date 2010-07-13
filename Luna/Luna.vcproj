@@ -2119,11 +2119,27 @@
 			Name="Vault"
 			>
 			<File
+				RelativePath=".\Vault\AssetCacheEntry.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Vault\AssetCacheEntry.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Vault\AssetCollection.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Vault\AssetCollection.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Vault\AssetIndexData.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Vault\AssetIndexData.h"
 				>
 			</File>
 			<File

@@ -4,7 +4,6 @@
 #include <set>
 
 #include "Pipeline/API.h"
-#include "AssetIndexData.h"
 
 #include "Foundation/Container/OrderedSet.h"
 #include "Foundation/File/Path.h"
@@ -136,7 +135,7 @@ namespace Asset
         }
 
     public:
-        void GatherIndexData( AssetIndexData& indexData )
+        void GatherIndexData( std::map< tstring, tstring >& indexData )
         {
             //get my reflect elements
             //for each element

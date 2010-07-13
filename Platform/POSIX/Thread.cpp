@@ -1,7 +1,7 @@
-#include "Thread.h"
-#include "Platform.h"
+#include "Platform/Thread.h"
+#include "Platform/Platform.h"
 
-#include "Assert.h"
+#include "Platform/Assert.h"
 
 using namespace Platform;
 
@@ -52,22 +52,40 @@ bool Thread::Valid()
 
 ThreadLocalPointer::ThreadLocalPointer()
 {
-    int status = pthread_key_create(&m_Key, NULL); 
-    NOC_ASSERT( status == 0 && "Profile library could not create pthread_key"); 
-    SetPointer(NULL); 
+#if 0
+    int status = pthread_key_create(&m_Key, NULL);
+    NOC_ASSERT( status == 0 && "Profile library could not create pthread_key");
+#endif
+
+    SetPointer(NULL);
+
+    NOC_BREAK();
 }
 
 ThreadLocalPointer::~ThreadLocalPointer()
 {
-    pthread_key_delete(m_Key); 
+#if 0
+    pthread_key_delete(m_Key);
+#endif
+
+    NOC_BREAK();
 }
 
 void* ThreadLocalPointer::GetPointer()
 {
-    return pthread_getspecific(m_Key); 
+#if 0
+    return pthread_getspecific(m_Key);
+#endif
+
+    NOC_BREAK();
+    return NULL;
 }
 
 void ThreadLocalPointer::SetPointer(void* pointer)
 {
-    pthread_setspecific(m_Key, pointer); 
+#if 0
+    pthread_setspecific(m_Key, pointer);
+#endif
+
+    NOC_BREAK();
 }

@@ -5,6 +5,7 @@
 #include "Types.h"
 
 #ifdef __GNUC__
+# include <string.h>
 # include <pthread.h>
 #endif
 

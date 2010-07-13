@@ -1,5 +1,7 @@
 #include "Platform/String.h"
 
+#ifndef __GNUC__
+
 bool Platform::ConvertChar( char src, wchar_t& dest )
 {
     return mbtowc( &dest, &src, 1 ) > 0;
@@ -23,3 +25,5 @@ bool Platform::ConvertString( const std::wstring& src, std::string& dest )
     wcstombs( const_cast<char*>( dest.data() ), src.c_str(), src.length() );
     return true;
 }
+
+#endif

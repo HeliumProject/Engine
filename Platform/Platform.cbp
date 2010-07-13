@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Platform" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="..\output\Debug\Platform" prefix_auto="1" extension_auto="1" />
+				<Option object_output="..\output\Debug\Intermediate\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="..\output\Release\Platform" prefix_auto="1" extension_auto="1" />
+				<Option object_output="..\output\Release\Intermediate\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="API.h" />
+		<Unit filename="Align.h" />
+		<Unit filename="Assert.h" />
+		<Unit filename="Atomic.h" />
+		<Unit filename="Compiler.h" />
+		<Unit filename="Debug.h" />
+		<Unit filename="Error.h" />
+		<Unit filename="Event.h" />
+		<Unit filename="Exception.h" />
+		<Unit filename="Mutex.h" />
+		<Unit filename="POSIX\Atomic.cpp" />
+		<Unit filename="POSIX\Debug.cpp" />
+		<Unit filename="POSIX\Error.cpp" />
+		<Unit filename="POSIX\Event.cpp" />
+		<Unit filename="POSIX\Mutex.cpp" />
+		<Unit filename="POSIX\Path.cpp" />
+		<Unit filename="POSIX\Path.h" />
+		<Unit filename="POSIX\Pipe.cpp" />
+		<Unit filename="POSIX\Pipe.h" />
+		<Unit filename="POSIX\Platform.cpp" />
+		<Unit filename="POSIX\Process.cpp" />
+		<Unit filename="POSIX\Profile.cpp" />
+		<Unit filename="POSIX\Semaphore.cpp" />
+		<Unit filename="POSIX\Socket.cpp" />
+		<Unit filename="POSIX\Socket.h" />
+		<Unit filename="POSIX\Stat.cpp" />
+		<Unit filename="POSIX\Thread.cpp" />
+		<Unit filename="Path.h" />
+		<Unit filename="Pipe.h" />
+		<Unit filename="Platform.h" />
+		<Unit filename="Process.h" />
+		<Unit filename="Profile.h" />
+		<Unit filename="Semaphore.h" />
+		<Unit filename="Socket.h" />
+		<Unit filename="Stat.h" />
+		<Unit filename="String.cpp" />
+		<Unit filename="String.h" />
+		<Unit filename="Thread.h" />
+		<Unit filename="Types.h" />
+		<Unit filename="Windows\Atomic.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Console.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Console.h" />
+		<Unit filename="Windows\Debug.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Debug.h" />
+		<Unit filename="Windows\Error.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Event.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Memory.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Memory.h" />
+		<Unit filename="Windows\Mutex.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Path.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Path.h" />
+		<Unit filename="Windows\Pipe.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Pipe.h" />
+		<Unit filename="Windows\Platform.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Process.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Profile.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Safe.h" />
+		<Unit filename="Windows\Semaphore.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Socket.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Socket.h" />
+		<Unit filename="Windows\Stat.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Thread.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Windows\Windows.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

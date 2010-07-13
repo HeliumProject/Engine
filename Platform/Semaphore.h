@@ -4,9 +4,7 @@
 
 #include "Types.h"
 
-#ifndef WIN32
-# include <semaphore.h>
-#endif
+#include <semaphore.h>
 
 namespace Platform
 {

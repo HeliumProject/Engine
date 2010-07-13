@@ -3,6 +3,8 @@
 
 #include "Platform/Assert.h"
 
+#include <pthread.h>
+
 using namespace Platform;
 
 // Manual-Reset event implementation for pthreads:

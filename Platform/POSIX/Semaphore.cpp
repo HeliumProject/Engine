@@ -1,7 +1,7 @@
-#include "Semaphore.h"
-#include "Platform.h"
+#include "Platform/Semaphore.h"
+#include "Platform/Platform.h"
 
-#include "Assert.h"
+#include "Platform/Assert.h"
 
 using namespace Platform;
 

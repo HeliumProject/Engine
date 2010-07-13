@@ -2446,14 +2446,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Vault\VaultStatusBar.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultStatusBar.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Vault\VaultToolBar.cpp"
 				>
 			</File>
@@ -4507,78 +4499,6 @@
 					</File>
 					<File
 						RelativePath=".\UI\Controls\Tree\SortTreeCtrl.h"
-						>
-					</File>
-					<File
-						RelativePath=".\UI\Controls\Tree\TreeCtrl.cpp"
-						>
-						<FileConfiguration
-							Name="Debug|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								UsePrecompiledHeader="0"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug|x64"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								UsePrecompiledHeader="0"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								UsePrecompiledHeader="0"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|x64"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								UsePrecompiledHeader="0"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug Unicode|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								UsePrecompiledHeader="0"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug Unicode|x64"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								UsePrecompiledHeader="0"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release Unicode|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								UsePrecompiledHeader="0"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release Unicode|x64"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								UsePrecompiledHeader="0"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath=".\UI\Controls\Tree\TreeCtrl.h"
 						>
 					</File>
 				</Filter>

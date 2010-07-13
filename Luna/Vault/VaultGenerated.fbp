@@ -71,7 +71,7 @@
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
         </object>
-        <object class="Panel" expanded="0">
+        <object class="Panel" expanded="1">
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="enabled">1</property>
@@ -258,7 +258,7 @@
                         <property name="selected"></property>
                         <property name="size">24,24</property>
                         <property name="style">wxBU_AUTODRAW</property>
-                        <property name="subclass">Nocturnal::Button; Application/UI/Button.h</property>
+                        <property name="subclass">; </property>
                         <property name="tooltip"></property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
@@ -369,7 +369,7 @@
                         <property name="selected"></property>
                         <property name="size">24,24</property>
                         <property name="style">wxBU_AUTODRAW</property>
-                        <property name="subclass">Nocturnal::Button; Application/UI/Button.h</property>
+                        <property name="subclass">; Application/UI/Button.h</property>
                         <property name="tooltip"></property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
@@ -508,7 +508,7 @@
                 </object>
             </object>
         </object>
-        <object class="Panel" expanded="0">
+        <object class="Panel" expanded="1">
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="enabled">1</property>
@@ -670,7 +670,7 @@
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
         </object>
-        <object class="Panel" expanded="1">
+        <object class="Panel" expanded="0">
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="enabled">1</property>
@@ -2989,7 +2989,7 @@
                 </object>
             </object>
         </object>
-        <object class="Panel" expanded="0">
+        <object class="Panel" expanded="1">
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="enabled">1</property>
@@ -3170,7 +3170,7 @@
                                 <property name="selected"></property>
                                 <property name="size">-1,-1</property>
                                 <property name="style"></property>
-                                <property name="subclass">Nocturnal::Button; Application/UI/Button.h</property>
+                                <property name="subclass">; Application/UI/Button.h</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
@@ -3227,7 +3227,7 @@
                                 <property name="selected"></property>
                                 <property name="size">-1,-1</property>
                                 <property name="style"></property>
-                                <property name="subclass">Nocturnal::Button; Application/UI/Button.h</property>
+                                <property name="subclass">; Application/UI/Button.h</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>

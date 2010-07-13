@@ -13,7 +13,6 @@
 
 using namespace Inspect;
 
-#pragma TODO( "W T F? Why is RegisterClass defined as RegisterClassA?" )
 #undef RegisterClass
 
 namespace InspectContent

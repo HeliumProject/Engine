@@ -6,7 +6,7 @@ namespace Luna
 {
 
     // Required so that OnCompareItems will be called
-    IMPLEMENT_DYNAMIC_CLASS( SortTreeCtrl, TreeCtrl );
+    IMPLEMENT_DYNAMIC_CLASS( SortTreeCtrl, wxTreeCtrl );
 
     ///////////////////////////////////////////////////////////////////////////////
     // Default constructor - required by IMPLEMENT_DYNAMIC_CLASS
@@ -19,7 +19,7 @@ namespace Luna
     // Constructor
     // 
     SortTreeCtrl::SortTreeCtrl( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator, const wxString& name )
-        : TreeCtrl( parent, id, pos, size, style, validator, name )
+        : wxTreeCtrl( parent, id, pos, size, style, validator, name )
         , m_AllowSorting( true )
         , m_SortMethod( TreeSortMethods::Natural )
     {

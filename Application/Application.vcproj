@@ -1231,14 +1231,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\Button.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\Button.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\ColorPicker.cpp"
 				>
 			</File>

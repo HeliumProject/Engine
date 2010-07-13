@@ -114,9 +114,6 @@ const wxColour& TaskOutputWindow::TranslateColor( Log::Color color )
 {
   const wxColour* result = wxLIGHT_GREY;
 
-  static const wxColor yellow ( 0xff, 0xff, 0x00 );
-  static const wxColor* wxYELLOW (&yellow);
-
   static const wxColor purple ( 0xff, 0x00, 0xff );
   static const wxColor* wxPURPLE (&purple);
 

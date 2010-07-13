@@ -4,7 +4,6 @@
 #include "VaultEvents.h"
 #include "VaultGenerated.h"
 #include "VaultMenuIDs.h"
-#include "VaultStatusBar.h"
 #include "DependencyCollection.h"
 #include "SearchQuery.h"
 #include "SearchHistory.h"
@@ -128,8 +127,8 @@ namespace Luna
     DECLARE_EVENT_TABLE();
 
   private:
-    Vault*                m_Vault;
-    VaultSearch*          m_VaultSearch;
+    Vault*                  m_Vault;
+    VaultSearch*            m_VaultSearch;
     SearchHistory*          m_SearchHistory;
 
     tstring                 m_PreferencePrefix;
@@ -139,13 +138,13 @@ namespace Luna
     FoldersPanel*           m_FoldersPanel;
     CollectionsPanel*       m_CollectionsPanel;
     HelpPanel*              m_HelpPanel;
-    VaultStatusBar*       m_StatusBar;
+    wxStatusBar*            m_StatusBar;
 
     wxTextAttr              m_DefaultTextAttr;
     wxTextAttr              m_TitleTextAttr;
     wxTextAttr              m_ItalicTextAttr;
 
-    std::map< i32, i32 >                   m_MenuItemToAssetType;
+    std::map< i32, i32 >    m_MenuItemToAssetType;
 
     //
     // NavBar Menus

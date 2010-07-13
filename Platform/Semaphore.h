@@ -4,7 +4,7 @@
 
 #include "Types.h"
 
-#ifndef WIN32
+#ifdef __GNUC__
 # include <semaphore.h>
 #endif
 

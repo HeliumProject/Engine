@@ -7,11 +7,11 @@
         <property name="disconnect_events">1</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
-        <property name="file">BrowserGenerated</property>
+        <property name="file">VaultGenerated</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="internationalize">0</property>
-        <property name="name">BrowserGenerated</property>
+        <property name="name">VaultGenerated</property>
         <property name="namespace">&quot;Luna&quot;</property>
         <property name="path">./</property>
         <property name="precompiled_header">#include &quot;Precompile.h&quot;</property>
@@ -30,7 +30,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">BrowserFrameGenerated</property>
+            <property name="name">VaultFrameGenerated</property>
             <property name="pos"></property>
             <property name="size">500,300</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
@@ -1685,7 +1685,7 @@
                                                     <property name="label">...</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
-                                                    <property name="name">m_BrowserFoldersButton</property>
+                                                    <property name="name">m_VaultFoldersButton</property>
                                                     <property name="permission">public</property>
                                                     <property name="pos"></property>
                                                     <property name="size"></property>
@@ -3539,16 +3539,16 @@
                     <property name="proportion">1</property>
                     <object class="CustomControl" expanded="1">
                         <property name="bg">wxSYS_COLOUR_APPWORKSPACE</property>
-                        <property name="class">BrowserPreviewWindow</property>
-                        <property name="construction">m_PreviewWindow = new BrowserPreviewWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, wxT( &quot;Luna::PreviewWindow&quot; ) );</property>
+                        <property name="class">VaultPreviewWindow</property>
+                        <property name="construction">m_PreviewWindow = new VaultPreviewWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, wxT( &quot;Luna::PreviewWindow&quot; ) );</property>
                         <property name="context_help"></property>
-                        <property name="declaration">Luna::BrowserPreviewWindow* m_PreviewWindow;</property>
+                        <property name="declaration">Luna::VaultPreviewWindow* m_PreviewWindow;</property>
                         <property name="enabled">1</property>
                         <property name="fg"></property>
                         <property name="font"></property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="include">#include &quot;BrowserPreviewWindow.h&quot;</property>
+                        <property name="include">#include &quot;VaultPreviewWindow.h&quot;</property>
                         <property name="maximum_size"></property>
                         <property name="minimum_size"></property>
                         <property name="name">m_PreviewWindow</property>

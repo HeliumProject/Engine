@@ -1,10 +1,8 @@
 #include "Platform/Profile.h"
+#include "Platform/Assert.h"
 
-#include <sys/time_util.h>
 #include <pthread.h>
 #include <assert.h>
-
-using namespace Profile;
 
 void Platform::TraceFile::Open(const tchar* file)
 {
@@ -28,14 +26,13 @@ const tchar* Platform::TraceFile::GetFilePath()
 
 u64 Platform::TimerGetClock()
 {
-    u64 time;
-    SYS_TIMEBASE_GET(time);
+    u64 time = 0;
+    NOC_BREAK();
     return time;
 }
 
 float Platform::CyclesToMillis(u64 cycles)
 {
-    NOC_COMPILE_ASSERT( false );
     return (f64)cycles * (f64)(1000.0 / 79800000ULL);
 }
 

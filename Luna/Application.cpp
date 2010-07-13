@@ -138,6 +138,7 @@ namespace Luna
 
 LunaApp::LunaApp()
 : wxApp()
+, m_Vault( NULL )
 , m_SceneEditor( NULL )
 {
 }
@@ -228,11 +229,6 @@ bool LunaApp::OnInit()
             {
                 Log::Bullet bullet( TXT( "Task...\n" ) );
                 m_InitializerStack.Push( TaskInitialize, TaskCleanup );
-            }
-
-            {
-                Log::Bullet bullet( TXT( "Asset Vault...\n" ) );
-                m_InitializerStack.Push( Vault::Initialize, Vault::Cleanup );
             }
 
             {

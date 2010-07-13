@@ -35,7 +35,7 @@
 #define NOC_DISABLEABLE_CODE_BLOCK(x) { static bool code_block_enabled = true; if (code_block_enabled) {x} }
 
 #ifdef __GNUC__
-# define NOC_ISSUE_BREAK() asm volatile ("tw 31,1,1")
+# define NOC_ISSUE_BREAK() asm("int $3")
 #elif defined( WIN32 )
 # ifdef _MANAGED
 #  define NOC_ISSUE_BREAK() System::Diagnostics::Debugger::Break()

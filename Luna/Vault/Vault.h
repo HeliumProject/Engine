@@ -42,9 +42,6 @@ namespace Luna
     public:
         ~Vault();
 
-        static void Initialize();
-        static void Cleanup();
-
         void SetRootDirectory( const Nocturnal::Path& path )
         {
             m_RootDirectory = path;

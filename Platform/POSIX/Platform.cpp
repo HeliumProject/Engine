@@ -1,6 +1,6 @@
-#include "Platform.h"
+#include "Platform/Platform.h"
 
-#include <sys/timer.h>
+#include <unistd.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -21,5 +21,5 @@ void Platform::Print(const tchar* fmt, ...)
 
 void Platform::Sleep(int millis)
 {
-    sys_timer_usleep(millis * 1000);
+    usleep( millis * 1000 );
 }

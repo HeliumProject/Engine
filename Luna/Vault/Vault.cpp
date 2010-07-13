@@ -17,50 +17,30 @@ using namespace Luna;
 int Vault::s_InitCount = 0;
 Nocturnal::InitializerStack Vault::s_InitializerStack;
 
-///////////////////////////////////////////////////////////////////////////////
-void Vault::Initialize()
-{
-    if ( ++s_InitCount > 1 )
-    {
-        return;
-    }
-
-    s_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
-
-    s_InitializerStack.Push( Reflect::RegisterClass<AssetCollection>( TXT( "AssetCollection" ) ) );
-    s_InitializerStack.Push( Reflect::RegisterClass<DependencyCollection>( TXT( "DependencyCollection" ) ) );
-    s_InitializerStack.Push( Reflect::RegisterClass<CollectionManager>( TXT( "CollectionManager" ) ) );
-
-    s_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::SearchTypes::SearchType>( &Luna::SearchTypes::SearchTypesEnumerateEnumeration, TXT( "SearchType" ) ) );
-    s_InitializerStack.Push( Reflect::RegisterClass<SearchQuery>( TXT( "SearchQuery" ) ) );
-
-    s_InitializerStack.Push( Reflect::RegisterClass<SearchHistory>( TXT( "SearchHistory" ) ) );
-
-    s_InitializerStack.Push( Reflect::RegisterEnumeration<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnumeration, TXT( "ViewOptionID" ) ) );
-
-    s_InitializerStack.Push( Reflect::RegisterClass<VaultPreferences>( TXT( "VaultPreferences" ) ) );
-
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void Vault::Cleanup()
-{
-    if ( --s_InitCount > 0 )
-        return;
-
-    NOC_ASSERT( s_InitCount == 0 );
-    s_InitCount = 0;
-
-    s_InitializerStack.Cleanup();
-}
-
-///////////////////////////////////////////////////////////////////////////////
 Vault::Vault()
 : m_VaultSearch( NULL ) 
 , m_VaultFrame( NULL )
 , m_HasFrame( false )
 , m_VaultPreferences( new VaultPreferences() )
 {
+    if ( ++s_InitCount == 1 )
+    {
+        s_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
+
+        s_InitializerStack.Push( Reflect::RegisterClass<AssetCollection>( TXT( "AssetCollection" ) ) );
+        s_InitializerStack.Push( Reflect::RegisterClass<DependencyCollection>( TXT( "DependencyCollection" ) ) );
+        s_InitializerStack.Push( Reflect::RegisterClass<CollectionManager>( TXT( "CollectionManager" ) ) );
+
+        s_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::SearchTypes::SearchType>( &Luna::SearchTypes::SearchTypesEnumerateEnumeration, TXT( "SearchType" ) ) );
+        s_InitializerStack.Push( Reflect::RegisterClass<SearchQuery>( TXT( "SearchQuery" ) ) );
+
+        s_InitializerStack.Push( Reflect::RegisterClass<SearchHistory>( TXT( "SearchHistory" ) ) );
+
+        s_InitializerStack.Push( Reflect::RegisterEnumeration<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnumeration, TXT( "ViewOptionID" ) ) );
+
+        s_InitializerStack.Push( Reflect::RegisterClass<VaultPreferences>( TXT( "VaultPreferences" ) ) );
+    }
+
     InitializePreferences();
 
     // Create the one and only VaultSearch
@@ -82,6 +62,13 @@ Vault::~Vault()
     m_HasFrame = false;
     m_VaultSearch = NULL;
     m_SearchHistory = NULL;
+
+    if ( --s_InitCount == 0 )
+    {
+      s_InitializerStack.Cleanup();
+    }
+
+    NOC_ASSERT( s_InitCount >= 0 );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

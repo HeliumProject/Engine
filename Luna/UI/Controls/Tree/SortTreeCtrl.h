@@ -1,6 +1,8 @@
 #pragma once
 
-#include "TreeCtrl.h"
+#include <wx/treectrl.h>
+
+#include "Platform/Compiler.h"
 
 namespace Luna
 {
@@ -21,7 +23,7 @@ namespace Luna
   // specified for how the tree should be sorted.  By default, sorting is
   // turned on, and TreeSortMethods::Natural is used.
   // 
-  class SortTreeCtrl : public TreeCtrl
+  class SortTreeCtrl : public wxTreeCtrl
   {
   protected:
     bool m_AllowSorting;
@@ -45,8 +47,8 @@ namespace Luna
 
     // TreeCtrl overrides
   public:
-    virtual int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 );
-    virtual void SortChildren( const wxTreeItemId& item );
+    virtual int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 ) NOC_OVERRIDE;
+    virtual void SortChildren( const wxTreeItemId& item ) NOC_OVERRIDE;
 
   private:
     // Required so that OnCompareItems will be called

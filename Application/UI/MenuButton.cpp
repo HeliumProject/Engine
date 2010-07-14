@@ -5,23 +5,25 @@ using namespace Nocturnal;
 //-----------------------------------------------------------
 // macros
 //-----------------------------------------------------------
-IMPLEMENT_DYNAMIC_CLASS( Nocturnal::MenuButton, Nocturnal::Button );
-BEGIN_EVENT_TABLE( Nocturnal::MenuButton, Nocturnal::Button)
+IMPLEMENT_DYNAMIC_CLASS( Nocturnal::MenuButton, wxButton );
+BEGIN_EVENT_TABLE( Nocturnal::MenuButton, wxButton)
 END_EVENT_TABLE();
 
 MenuButton::MenuButton(wxWindow *parent,
                        wxWindowID id,
                        const wxBitmap& bitmap,
-                       const wxPoint& pos ,
+                       const wxPoint& pos,
                        const wxSize& size,
                        long style,
                        const wxValidator& validator,
                        const wxString& name ) 
-                       : Button( parent, id, bitmap, pos, size, style, validator, name )
+                       : wxButton( parent, id, wxEmptyString, pos, size, style, validator, name )
                        , m_contextMenu ( NULL )
                        , m_holdDelay( 0.5f )
                        , m_timerShowOnHold( this )
 {
+    SetBitmap( bitmap );
+
     Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( MenuButton::OnRightMouseDown ), NULL, this );
     Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( MenuButton::OnLeftMouseDown ), NULL, this );
     Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MenuButton::OnLeftMouseUp ), NULL, this ); 

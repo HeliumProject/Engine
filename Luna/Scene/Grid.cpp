@@ -45,9 +45,6 @@ Grid::Grid( wxWindow* parent, wxWindowID gridID, bool allowRename, bool showColL
   // Do this first!
   m_Grid->CreateGrid( 0, COLUMN_TOTAL, wxGrid::wxGridSelectRows );
 
-#pragma TODO("Remove post wxWidgets 2.9.0")
-  m_Grid->AppendCols( COLUMN_TOTAL );
-
   BeginBatch();
 
   // Insert this class into the event handler list for the grid window

@@ -5,16 +5,16 @@
 /// either when the left mouse button is held down for a specified amount of time, or if the 
 /// right mouse button is pressed.
 #include "Application/API.h"
-#include "Application/UI/Button.h"
 
 #include <wx/timer.h>
 #include <wx/menu.h>
+#include <wx/button.h>
 
 namespace Nocturnal
 {
     /// @class MenuButton
     /// @brief adds on to the Button class to add menu functionality through mouse interaction
-    class APPLICATION_API MenuButton : public Nocturnal::Button
+    class APPLICATION_API MenuButton : public wxButton
     {
     public:
         // wxWidgets setup

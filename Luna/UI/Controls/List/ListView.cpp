@@ -219,7 +219,7 @@ const tstring& StringLookup( long item, SortData* data )
 // the text values for each item in the list is slow, so the values are cached
 // as this function runs.
 // 
-int wxCALLBACK LazyMapCompareFunction( long item1, long item2, long sortData )
+int wxCALLBACK LazyMapCompareFunction( long item1, long item2, wxIntPtr sortData )
 {
     SortData* data = static_cast< SortData* >( wxUIntToPtr( sortData ) );
     if ( data )
@@ -355,7 +355,7 @@ bool SortableListView::SortItems( long whichColumn )
     if ( IsSortingEnabled() )
     {
         SortData data( this, whichColumn );
-        wasSorted = __super::SortItems( &LazyMapCompareFunction, wxPtrToUInt( &data ) );
+        wasSorted = __super::SortItems( &LazyMapCompareFunction, wxIntPtr( &data ) );
     }
     return wasSorted;
 }

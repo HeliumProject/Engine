@@ -38,7 +38,6 @@ WaitDialog::WaitDialog()
 : wxDialog( NULL, wxID_ANY, wxT("Waiting for Perforce..."), wxDefaultPosition, wxSize( 260,80 ), wxCAPTION )
 {
     m_Panel = new PerforceWaitPanelGenerated( this );
-    m_Panel->m_Gauge->SetIndeterminateMode();
 }
 
 int WaitDialog::ShowModal( Perforce::WaitInterface* waitInterface )

@@ -17,17 +17,15 @@ Third-party SDKs
 ================
 
 For boost and wxWidgets you will need to download and build it manually.
-Download both source zips and place them into your tree like this:
- 
-  SDK\boost\1.43\<boost files>
-  SDK\wxWidgets\2.8.11\<wxWidgets files>
+Wherever you put the source to them, make sure to set the 'boost' and
+'wxWidgets' environment variables for our projects to locate them with.
 
-then, to build the appropriate configs run (from the project root dir):
+At the current point in time, you might need to pull from wxWidget's svn
+trunk to build the code without errors.
 
-  build_boost.pl -v 1.43
-  build_wxWidgets.pl -v 2.8.11
-  
-using the correct version numbers (the versions you downloaded)
+There are some convenience scripts to build the dependent SDKs:
+  build_boost.pl <optional: the path to a specific version>
+  build_wxWidgets.pl <optional: the path to a specific version>
 
 =======
 Unicode

@@ -749,10 +749,6 @@
 			RelativePathToProject=".\SDK\Expat\2.01\Expat.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}"
-			RelativePathToProject=".\SDK\Crypto++\5.6.0\Crypto++.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{C87D1745-76D6-4A2E-B655-23564E398510}"
 			RelativePathToProject=".\SDK\lua\5.1.4\lua.vcproj"
 		/>

@@ -115,21 +115,14 @@ namespace Luna
     enum ContextMenuIDs
     {
       ID_ShowCollection = VaultMenu::ShowCollection,
-
       ID_NewCollection = VaultMenu::NewCollection,
-      ID_NewDependencyCollection = VaultMenu::NewDependencyCollection,
-      ID_NewUsageCollection = VaultMenu::NewUsageCollection,
-
       ID_OpenCollection = VaultMenu::OpenCollection,
       ID_CloseCollection = VaultMenu::CloseCollection,
-
       ID_RenameCollection = VaultMenu::RenameCollection,
       ID_DeleteCollection = VaultMenu::DeleteCollection,
-
       ID_ImportCollection = VaultMenu::ImportCollection,
       ID_ImportIntoCollection = VaultMenu::ImportIntoCollection,
       ID_SaveCollection = VaultMenu::SaveCollection,
-
       ID_AddToCollection = VaultMenu::AddToCollection,
       ID_RemoveFromCollection = VaultMenu::RemoveFromCollection,
     };

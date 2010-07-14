@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(Crypto++)&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -109,7 +109,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(Crypto++)&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -172,7 +172,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(Crypto++)&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -235,7 +235,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(Crypto++)&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -298,7 +298,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(Crypto++)&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -363,7 +363,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(Crypto++)&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -426,7 +426,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(Crypto++)&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -489,7 +489,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(Crypto++)&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(tiff)&quot;;&quot;$(tiff)\libtiff&quot;;&quot;$(squish)&quot;;&quot;$(nvtt)\src&quot;;&quot;$(nvtt)\project\vc8&quot;;&quot;$(SQLite)&quot;;&quot;$(MySQL)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;PIPELINE_EXPORTS;"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -548,10 +548,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{BC01F636-4D0F-489D-B082-7538025CE185}"
 			RelativePathToProject=".\SDK\tiff\3.9.2\tiff.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}"
-			RelativePathToProject=".\SDK\Crypto++\5.6.0\Crypto++.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"

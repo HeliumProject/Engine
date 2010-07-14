@@ -27,7 +27,7 @@ wxSize AutoFlexSizer::CalcMin()
 
 void AutoFlexSizer::UpdateRowsCols()
 {
-    int width = m_containingWindow->GetSize().x;
+    int width = m_containingWindow->GetClientSize().x;
 
     int numColumns = 1;
     int maxColumns = (int) m_children.GetCount();

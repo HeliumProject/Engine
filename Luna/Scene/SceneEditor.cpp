@@ -458,9 +458,7 @@ SceneEditor::SceneEditor()
         m_EditMenu->Append(SceneEditorIDs::ID_EditCenter, _("Center\tCtrl-Shift-c"));
         m_EditMenu->AppendSeparator();
         m_EditMenu->Append(SceneEditorIDs::ID_EditInvertSelection, _("Invert Selection\tCtrl-i"));
-        // Setting the accelerator string this way seems to preserve the string but not actually use the accelerator
-        wxMenuItem* menuItemSelectAll = m_EditMenu->Append(SceneEditorIDs::ID_EditSelectAll, _("Select All"));
-        menuItemSelectAll->SetAccelString( wxT( "Ctrl-a" ) );
+        m_EditMenu->Append(SceneEditorIDs::ID_EditSelectAll, _("Select All\tCtrl-a"));
 
         m_EditMenu->AppendSeparator();
         m_EditMenu->Append(SceneEditorIDs::ID_EditDuplicate, _("Duplicate\tCtrl-d"));
@@ -1039,7 +1037,7 @@ void SceneEditor::OnMenuOpen(wxMenuEvent& event)
 ///////////////////////////////////////////////////////////////////////////////
 // Called when the "new" button is pressed.  Creates a new scene.
 // 
-void SceneEditor::OnNew(wxCommandEvent& event)
+void SceneEditor::OnNew( wxCommandEvent& event )
 {
     if ( m_SceneManager.CloseAll() )
     {

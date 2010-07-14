@@ -12,7 +12,6 @@ class Frame;
 namespace Luna{ class DirectoryCtrl; }
 namespace Luna{ class SortTreeCtrl; }
 namespace Nocturnal{ class AutoCompleteComboBox; }
-namespace Nocturnal{ class Button; }
 namespace Nocturnal{ class MenuButton; }
 
 #include "Editor/Frame.h"
@@ -89,9 +88,9 @@ namespace Luna
 		public:
 			Nocturnal::MenuButton* m_BackButton;
 			Nocturnal::MenuButton* m_ForwardButton;
-			Nocturnal::Button* m_UpFolderButton;
+			wxBitmapButton* m_UpFolderButton;
 			Nocturnal::AutoCompleteComboBox* m_NavBarComboBox;
-			Nocturnal::Button* m_GoButton;
+			wxBitmapButton* m_GoButton;
 			Nocturnal::MenuButton* m_OptionsButton;
 			NavigationPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 557,39 ), long style = wxNO_BORDER|wxTAB_TRAVERSAL );
 			~NavigationPanelGenerated();
@@ -220,8 +219,8 @@ namespace Luna
 		
 		public:
 			wxStaticText* m_MyCollectionsTitle;
-			Nocturnal::Button* m_NewDependencyCollectionButton;
-			Nocturnal::Button* m_NewCollectionButton;
+			wxBitmapButton* m_NewDependencyCollectionButton;
+			wxBitmapButton* m_NewCollectionButton;
 			Luna::SortTreeCtrl* m_MyCollectionsTreeCtrl;
 			wxStaticText* m_TempCollectionsTitle;
 			Luna::SortTreeCtrl* m_TempCollectionsTreeCtrl;

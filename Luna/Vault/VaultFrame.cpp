@@ -22,7 +22,6 @@
 #include "Application/RCS/RCS.h"
 #include "Scene/SceneManager.h"
 #include "Application/UI/AutoCompleteComboBox.h"
-#include "Application/UI/Button.h"
 #include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 #include "Platform/Exception.h"
@@ -31,11 +30,6 @@
 #include <wx/clipbrd.h>
 
 using namespace Luna;
-
-static const u32 s_ToggleButtonStyle = 
-( Nocturnal::ButtonStyles::BU_BITMAP
- | Nocturnal::ButtonStyles::BU_TOGGLE
- | Nocturnal::ButtonStyles::BU_CENTER );
 
 static const tchar* s_VaultHelpText = TXT( "FFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUU FIXME PUT HELP TEXT HERE" );
 
@@ -183,7 +177,7 @@ VaultFrame::VaultFrame( Vault* browser, VaultSearch* browserSearch, SearchHistor
         }
 
         // Status bar
-        m_StatusBar = new VaultStatusBar( this );
+        m_StatusBar = new wxStatusBar( this );
         SetStatusBar( m_StatusBar );
 
         // Connect Folders
@@ -821,12 +815,7 @@ void VaultFrame::OnNewCollectionFromSelection( wxCommandEvent& event )
         }
         else
         {
-            const bool reverse = event.GetId() == VaultMenu::NewUsageCollectionFromSelection;
-            const Nocturnal::Path& path = *paths.begin();
-            DependencyCollectionPtr dependencyCollection = new DependencyCollection( path.Filename(), AssetCollectionFlags::Dynamic, reverse );
-            dependencyCollection->SetRoot( path );
-            dependencyCollection->LoadDependencies();
-            collection = dependencyCollection;
+            NOC_BREAK();
         }
     }
 

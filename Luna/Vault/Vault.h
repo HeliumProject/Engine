@@ -61,7 +61,6 @@ namespace Luna
 
     protected:
         void OnCloseVault();
-        void OnDocumentChange( const DocumentManagerChangeArgs& args );
 
     protected:
 

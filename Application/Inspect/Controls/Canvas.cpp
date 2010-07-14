@@ -27,7 +27,7 @@ CanvasWindow::CanvasWindow(wxWindow *parent,
                            wxBitmap collapsedBitmap,
                            wxPen pen,
                            unsigned int clickTolerance)
-: TreeWndCtrl(parent, winid, pos, size, wxALWAYS_SHOW_SB | style, name, treeStyle, columnSize, expandedBitmap, collapsedBitmap, pen, clickTolerance)
+: Nocturnal::TreeWndCtrl(parent, winid, pos, size, wxALWAYS_SHOW_SB | style, name, treeStyle, columnSize, expandedBitmap, collapsedBitmap, pen, clickTolerance)
 , m_Canvas(NULL)
 {
   SetScrollRate(SCROLL_INCREMENT, SCROLL_INCREMENT);

@@ -10,10 +10,6 @@
 		PreprocessorDefinitions="XML_STATIC=1;wxNO_EXCEPTIONS=1;wxUSE_UNICODE=0"
 	/>
 	<UserMacro
-		Name="Crypto++"
-		Value="$(SolutionDir)SDK\Crypto++\5.6.0"
-	/>
-	<UserMacro
 		Name="DirectX"
 		Value="c:\Program Files (x86)\Microsoft DirectX SDK (February 2010)"
 	/>

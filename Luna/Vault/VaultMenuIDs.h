@@ -65,19 +65,13 @@ namespace Luna
       NewUsageCollectionFromSelection,
 
       NewCollection,
-      NewDependencyCollection,
-      NewUsageCollection,
-
       OpenCollection,
       CloseCollection,
-
       RenameCollection,
       DeleteCollection,
-
       ImportCollection,
       ImportIntoCollection,
       SaveCollection,
-
       AddToCollection,
       RemoveFromCollection,
 
@@ -139,23 +133,16 @@ namespace Luna
       TXT( "Show" ),
 
       TXT( "Static Collection" ),
-      TXT( "Dependency Collection" ),
-      TXT( "Usage Collection" ),
-
       TXT( "Static Collection" ),
       TXT( "Asset Dependencies Collection" ),
       TXT( "Asset Usage Collection" ),
-
       TXT( "Open" ),
       TXT( "Close" ),
-
       TXT( "Rename" ),
       TXT( "Delete" ),
-
       TXT( "Import..." ),
       TXT( "Import into..." ),
       TXT( "Export..." ),
-
       TXT( "Add Selected Assets" ),
       TXT( "Remove Selected Assets" ),
 

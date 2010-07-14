@@ -8,7 +8,6 @@
 #include "Precompile.h"
 
 #include "Application/UI/AutoCompleteComboBox.h"
-#include "Application/UI/Button.h"
 #include "Application/UI/MenuButton.h"
 #include "DirectoryCtrl.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
@@ -52,7 +51,7 @@ NavigationPanelGenerated::NavigationPanelGenerated( wxWindow* parent, wxWindowID
 	
 	bSizer20->Add( m_ForwardButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_UpFolderButton = new Nocturnal::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_UpFolderButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	m_UpFolderButton->Enable( false );
 	
 	m_UpFolderButton->Enable( false );
@@ -62,7 +61,7 @@ NavigationPanelGenerated::NavigationPanelGenerated( wxWindow* parent, wxWindowID
 	m_NavBarComboBox = new Nocturnal::AutoCompleteComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxTE_PROCESS_ENTER|wxWANTS_CHARS ); 
 	bSizer20->Add( m_NavBarComboBox, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	m_GoButton = new Nocturnal::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
+	m_GoButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
 	m_GoButton->Enable( false );
 	
 	m_GoButton->Enable( false );
@@ -516,14 +515,14 @@ CollectionsPanelGenerated::CollectionsPanelGenerated( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizer17;
 	bSizer17 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_NewDependencyCollectionButton = new Nocturnal::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_NewDependencyCollectionButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_NewDependencyCollectionButton->Hide();
 	
 	m_NewDependencyCollectionButton->Hide();
 	
 	bSizer17->Add( m_NewDependencyCollectionButton, 0, wxALL, 5 );
 	
-	m_NewCollectionButton = new Nocturnal::Button( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_NewCollectionButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_NewCollectionButton->Hide();
 	
 	m_NewCollectionButton->Hide();

@@ -29,7 +29,7 @@ Vault::Vault()
         s_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
 
         s_InitializerStack.Push( Reflect::RegisterClass< AssetIndexData >( TXT( "AssetIndexData" ) ) );
-        s_InitializerStack.Push( Reflect::RegisterClass< AssetIndexData >( TXT( "AssetCacheEntry" ) ) );
+        //s_InitializerStack.Push( Reflect::RegisterClass< AssetIndexData >( TXT( "AssetCacheEntry" ) ) );
 
         s_InitializerStack.Push( Reflect::RegisterClass<AssetCollection>( TXT( "AssetCollection" ) ) );
         s_InitializerStack.Push( Reflect::RegisterClass<DependencyCollection>( TXT( "DependencyCollection" ) ) );

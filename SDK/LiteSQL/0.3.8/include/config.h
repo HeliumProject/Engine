@@ -19,7 +19,7 @@
 /* #undef HAVE_LIBPQ */
 
 /* Define to 1 if you have the `sqlite3' library (-lsqlite3). */
-/* #undef HAVE_LIBSQLITE3 */
+#define HAVE_LIBSQLITE3 1
 
 /* Define to 1 if you have the `localtime_r' function. */
 /* #undef HAVE_LOCALTIME_R */

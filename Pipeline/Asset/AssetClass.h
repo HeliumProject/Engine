@@ -135,7 +135,7 @@ namespace Asset
         }
 
     public:
-        void GatherIndexData( std::map< tstring, tstring >& indexData )
+        void GatherIndexData( std::multimap< tstring, tstring >& indexData )
         {
             //get my reflect elements
             //for each element

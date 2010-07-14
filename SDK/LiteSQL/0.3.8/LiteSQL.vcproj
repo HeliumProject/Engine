@@ -799,7 +799,7 @@
 			Name="Common"
 			>
 			<File
-				RelativePath=".\config.h"
+				RelativePath=".\include\config.h"
 				>
 			</File>
 			<File

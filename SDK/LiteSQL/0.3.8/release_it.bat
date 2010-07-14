@@ -1,8 +1,11 @@
+@echo off
 
 set CMAKE_BUILDDIR=build\cmake\vc
+
 set STARTDIR=%CD%
-@if "%VS71COMNTOOLS%"=="" call "%VS80COMNTOOLS%\vsvars32.bat"
-@if "%VS80COMNTOOLS%"=="" call "%VS71COMNTOOLS%\vsvars32.bat"
+if defined VS71COMNTOOLS call "%VS80COMNTOOLS%\vsvars32.bat"
+if defined VS80COMNTOOLS call "%VS71COMNTOOLS%\vsvars32.bat"
+if defined VS90COMNTOOLS call "%VS90COMNTOOLS%\vsvars32.bat"
 
 mkdir %CMAKE_BUILDDIR%
 

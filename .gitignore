@@ -4,6 +4,8 @@
 Build/*
 Built/*
 SDK/Crypto++/5.6.0/adhoc.cpp.copied
+SDK/LiteSQL/0.3.8/build/*
 BASE.*
 LOCAL.*
 REMOTE.*
+*.db

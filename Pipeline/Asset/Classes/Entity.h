@@ -23,7 +23,7 @@ namespace Asset
     {
     }
 
-    void GatherIndexData( std::map< tstring, tstring >& indexData );
+    void GatherIndexData( std::multimap< tstring, tstring >& indexData );
   }; 
 
   typedef Nocturnal::SmartPtr< Entity > EntityPtr;

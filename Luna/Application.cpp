@@ -22,6 +22,7 @@
 
 #include "Core/CoreInit.h"
 #include "Vault/Vault.h"
+#include "Vault/AssetCacheDB.h"
 #include "Editor/ApplicationPreferences.h"
 #include "Editor/Editor.h"
 #include "Editor/EditorInit.h"
@@ -254,6 +255,63 @@ bool LunaApp::OnInit()
         wxMessageBox( TXT( "There were errors during startup, use Luna with caution." ), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
     }
 
+
+    {
+        AssetCacheDB db("sqlite3", "database=assetCache.db");
+        // create tables, sequences and indexes
+        db.verbose = true;
+
+        try
+        {
+            db.create();
+        }
+        catch( const litesql::SQLError& )
+        {
+            db.upgrade();
+        }
+
+        
+        // start transaction
+        db.begin();
+        {
+            //Files
+            CacheEntry file1(db);
+            file1.mPath = TXT( "test1.png" );
+            file1.update(); // store file in database
+            
+            CacheEntry file2(db);
+            file2.mPath = TXT( "test2.png" );
+            file2.update(); // store file in database
+
+            CacheEntry file3(db);
+            file3.mPath = TXT( "test3.png" );
+            file3.update(); // store file in database
+
+            //IndexDatum
+            IndexDatum audioClipModedatum(db);
+            audioClipModedatum.mKey = TXT( "AudioClipMode" );
+            audioClipModedatum.update();
+
+            file1.indexdata().link( audioClipModedatum, TXT( "Loop" ) );
+
+            file1.dependencies().link( file2 );
+            file1.dependencies().link( file3 );
+
+            file2.dependencies().link( file3 );
+
+
+            // test selection
+            std::vector< CacheEntry > cacheEntries = litesql::select<CacheEntry>( db ).all();
+
+            CacheEntry findFile = litesql::select< CacheEntry >( db, CacheEntry::MPath == TXT( "test1.png" ) ).one();
+            std::vector< IndexDatum > filesData = findFile.indexdata().get().all();
+
+        }
+        // commit transaction
+        db.commit();
+    }
+
+    
     GetSceneEditor()->Show();
 
     //return __super::OnCmdLineParsed( parser );

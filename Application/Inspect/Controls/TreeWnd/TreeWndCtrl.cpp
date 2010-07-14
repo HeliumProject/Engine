@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        TreeWndCtrl.cpp
 // Purpose:     TreeWndCtrl implementation.
-// Author:      Giac Veltri (while at Insomniac Games)
+// Author:      Insomniac Games
 // Created:     03/23/03
 // Modified by:
 // Licence:     wxWindows licence
@@ -12,53 +12,17 @@
 // ----------------------------------------------------------------------------
 
 #include "TreeWndCtrl.h"
+#include "TreeWndCtrlItem.h"
+#include "TreeWndCtrlNode.h"
+#include "TreeWndCtrlSpacer.h"
+#include "TreeWndCtrlCollapsed.xpm"
+#include "TreeWndCtrlExpanded.xpm"
 
 using namespace Nocturnal;
 
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
-
-/* XPM */
-static char* s_treeWndCtrlExpandedXpm[] = {
-"9 9 5 1",
-"X c #000000",
-". c #ffffff",
-"- c #808080",
-"| c #808080",
-"+ c #808080",
-
-"+-------+",
-"|.......|",
-"|.......|",
-"|.......|",
-"|.XXXXX.|",
-"|.......|",
-"|.......|",
-"|.......|",
-"+-------+",
-};
-
-/* XPM */
-static char* s_treeWndCtrlCollapsedXpm[] = {
-"9 9 5 1",
-"X c #000000",
-". c #ffffff",
-"- c #808080",
-"| c #808080",
-"+ c #808080",
-
-"+-------+",
-"|.......|",
-"|...X...|",
-"|...X...|",
-"|.XXXXX.|",
-"|...X...|",
-"|...X...|",
-"|.......|",
-"+-------+",
-};
-
 
 const wxTreeItemId Nocturnal::TreeWndCtrlItemIdInvalid(NULL);
 wxBitmap Nocturnal::TreeWndCtrlDefaultExpand( s_treeWndCtrlExpandedXpm );
@@ -70,6 +34,28 @@ wxPen Nocturnal::TreeWndCtrlDefaultPen( wxColour( 0x80, 0x80, 0x80 ), 1, wxSOLID
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(TreeWndCtrl, wxScrolledWindow)
+
+TreeWndCtrl::TreeWndCtrl()
+: wxScrolledWindow(),
+m_clickTolerance(WXTWC_DEFAULT_CLICK_TOLERANCE),
+m_dashMode(wxTWC_DASH_DEFAULT),
+m_lineMode(wxTWC_LINE_CENTER),
+m_lineDrawMode(wxTWC_LINEDRAW_ALL),
+m_toggleMode(wxTWC_TOGGLE_AUTOMATIC),
+m_expandedBitmap(TreeWndCtrlDefaultExpand),
+m_collapsedBitmap(TreeWndCtrlDefaultCollapse),
+m_pen(TreeWndCtrlDefaultPen),
+m_imageListNormal(NULL),
+m_ownsImageListNormal(false),
+m_imageListState(NULL),
+m_ownsImageListState(false),
+m_columnSize(WXTWC_DEFAULT_COLUMN_SIZE),
+m_hideRoot(false),
+m_dirty(true),
+m_lastToggledItem(TreeWndCtrlItemIdInvalid),
+m_root(TreeWndCtrlItemIdInvalid)
+{
+}
 
 TreeWndCtrl::TreeWndCtrl(wxWindow *parent,
                          wxWindowID winid,
@@ -84,10 +70,6 @@ TreeWndCtrl::TreeWndCtrl(wxWindow *parent,
                          wxPen pen,
                          unsigned int clickTolerance)
                          : wxScrolledWindow(parent, winid, pos, size, style, name),
-                         m_columnSize(columnSize),
-                         m_expandedBitmap(expandedBitmap),
-                         m_collapsedBitmap(collapsedBitmap),
-                         m_pen(pen),
                          m_clickTolerance(clickTolerance),
                          m_dashMode(wxTWC_DASH_DEFAULT),
                          m_lineMode(wxTWC_LINE_CENTER),
@@ -119,6 +101,14 @@ TreeWndCtrl::TreeWndCtrl(wxWindow *parent,
 
     if ( treeStyle & wxTR_NO_BUTTONS )
         m_toggleMode = wxTWC_TOGGLE_DISABLED;
+
+    m_expandedBitmap = expandedBitmap;
+
+    m_collapsedBitmap = collapsedBitmap;
+
+    m_pen = pen;
+
+    m_columnSize = columnSize;
 
     m_hideRoot = ( treeStyle & wxTR_HIDE_ROOT ) ? true : false;
 
@@ -1075,455 +1065,4 @@ wxRect TreeWndCtrl::GetItemBounds(const wxTreeItemId& item, bool recursive) cons
     }
 
     return windowRect;
-}
-
-// ----------------------------------------------------------------------------
-// TreeWndCtrlItem
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(TreeWndCtrlItem, wxPanel)
-
-BEGIN_EVENT_TABLE( TreeWndCtrlItem, wxPanel )
-EVT_PAINT( TreeWndCtrlItem::OnPaint )
-EVT_LEFT_DCLICK( TreeWndCtrlItem::OnDoubleClick )
-END_EVENT_TABLE()
-
-TreeWndCtrlItem::TreeWndCtrlItem()
-: wxPanel(),
-m_bitmapTextWidth(-1),
-m_image(-1),
-m_stateImage(-1),
-m_spacing(WXTWC_DEFAULT_ITEM_SPACING),
-m_dirty(true),
-m_bitmapPoint(0, 0),
-m_textPoint(0, 0),
-m_item(TreeWndCtrlItemIdInvalid),
-m_text( wxT( "" ) ),
-m_treeWndCtrl(NULL)
-{
-}
-
-TreeWndCtrlItem::TreeWndCtrlItem(TreeWndCtrl *parent,
-                                 const wxString& text,
-                                 int image,
-                                 int stateImage)
-                                 : wxPanel(parent),
-                                 m_bitmapTextWidth(-1),
-                                 m_image(image),
-                                 m_stateImage(stateImage),
-                                 m_spacing(WXTWC_DEFAULT_ITEM_SPACING),
-                                 m_dirty(true),
-                                 m_bitmapPoint(0, 0),
-                                 m_textPoint(0, 0),
-                                 m_item(TreeWndCtrlItemIdInvalid),
-                                 m_text(text),
-                                 m_treeWndCtrl(parent)
-{
-}
-
-bool TreeWndCtrlItem::Layout()
-{
-    if ( m_dirty )
-    {
-        Freeze();
-
-        m_bitmapPoint = wxPoint(0, 0);
-        m_textPoint = wxPoint(0, 0);
-
-        wxCoord width = 0;
-        wxCoord height = 0;
-
-        int bitmapWidth = 0;
-        int bitmapHeight = 0;
-        wxBitmap bitmap = GetBitmap();
-        if ( bitmap.Ok() )
-        {
-            bitmapWidth = bitmap.GetWidth();
-            bitmapHeight = bitmap.GetHeight();
-        }
-
-        if ( bitmapWidth )
-            width = bitmapWidth + m_spacing;
-
-        wxCoord textWidth = 0;
-        wxCoord textHeight = 0;
-
-        wxClientDC dc(this);
-        wxFont oldFont = dc.GetFont();
-        dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-        dc.GetTextExtent(m_text, &textWidth, &textHeight);
-        dc.SetFont(oldFont);
-
-        m_textPoint.x = width;
-        width += textWidth;
-
-        if ( bitmapHeight > textHeight )
-        {
-            height = bitmapHeight;
-            m_textPoint.y = (bitmapHeight - textHeight) / 2;
-        }
-        else
-        {
-            height = textHeight;
-            m_bitmapPoint.y = (textHeight - bitmapHeight) / 2;
-        }
-
-        SetSize(width, height);
-        m_bitmapTextWidth = width;
-
-        Thaw();
-        m_dirty = false;
-    }
-
-    return __super::Layout();
-}
-
-void TreeWndCtrlItem::OnPaint(wxPaintEvent& e)
-{
-    wxPaintDC dc(this);
-
-    wxBitmap bitmap = GetBitmap();
-    if ( bitmap.Ok() )
-    {
-        dc.DrawBitmap(bitmap, m_bitmapPoint.x, m_bitmapPoint.y, true);
-    }
-
-    wxFont oldFont = dc.GetFont();
-    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-    dc.DrawText(m_text, m_textPoint.x, m_textPoint.y);
-    dc.SetFont(oldFont);
-
-    e.Skip();
-}
-
-void TreeWndCtrlItem::OnDoubleClick(wxMouseEvent& e)
-{
-    if ( m_item == TreeWndCtrlItemIdInvalid )
-        return;
-
-    if ( ( m_bitmapTextWidth >= 0 ) && ( e.GetPosition().x > m_bitmapTextWidth ) )
-        return;
-
-    m_treeWndCtrl->Toggle(m_item);
-}
-
-void TreeWndCtrlItem::SetSpacing(int spacing)
-{
-    m_spacing = spacing;
-    m_dirty = true;
-    Layout();
-}
-
-void TreeWndCtrlItem::SetItem(const wxTreeItemId& item)
-{
-    m_item = item;
-    m_dirty = true;
-    Layout();
-}
-
-void TreeWndCtrlItem::SetText(const wxString& text)
-{
-    m_text = text;
-    m_dirty = true;
-    Layout();
-}    
-
-void TreeWndCtrlItem::SetImage(int image)
-{
-    m_image = image;
-    m_dirty = true;
-    Layout();
-}
-
-void TreeWndCtrlItem::SetStateImage(int stateImage)
-{
-    m_stateImage = stateImage;
-    m_dirty = true;
-    Layout();
-}
-
-wxBitmap TreeWndCtrlItem::GetBitmap()
-{
-    wxBitmap bitmap;
-    if ( m_item == TreeWndCtrlItemIdInvalid )
-        return bitmap;
-
-    int image = -1;
-    wxImageList* imageList = NULL;
-    if ( m_treeWndCtrl->ToggleVisible(m_item) && m_treeWndCtrl->IsExpanded(m_item) )
-    {
-        image = m_stateImage;
-        imageList = m_treeWndCtrl->GetStateImageList();
-    }
-    else
-    {
-        image = m_image;
-        imageList = m_treeWndCtrl->GetImageList();
-    }
-
-    if ( imageList && ( image >= 0 ) )
-    {
-        bitmap = imageList->GetBitmap(image);
-    }
-
-    return bitmap;
-}
-
-// ----------------------------------------------------------------------------
-// TreeWndCtrlNode
-// ----------------------------------------------------------------------------
-
-TreeWndCtrlNode::TreeWndCtrlNode(TreeWndCtrl* treeWndCtrl,
-                                 const wxTreeItemId& parent,
-                                 wxWindow *window,
-                                 unsigned int numColumns,
-                                 wxTreeItemData *data,
-                                 bool expanded)
-                                 : m_expanded(expanded),
-                                 m_window(window),
-                                 m_data(data),
-                                 m_id(this),
-                                 m_parent(parent)
-{
-    m_spacer = new TreeWndCtrlSpacer(treeWndCtrl, m_id, numColumns);
-}
-
-TreeWndCtrlNode::~TreeWndCtrlNode()
-{
-}
-
-// ----------------------------------------------------------------------------
-// TreeWndCtrlSpacer
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(TreeWndCtrlSpacer, wxPanel)
-
-BEGIN_EVENT_TABLE( TreeWndCtrlSpacer, wxPanel )
-EVT_LEFT_DOWN( TreeWndCtrlSpacer::OnMouseDown )
-EVT_PAINT( TreeWndCtrlSpacer::OnPaint )
-END_EVENT_TABLE()
-
-TreeWndCtrlSpacer::TreeWndCtrlSpacer()
-: wxPanel(),
-m_numColumns(0),
-m_node(TreeWndCtrlItemIdInvalid),
-m_treeWndCtrl(NULL)
-{
-}
-
-TreeWndCtrlSpacer::TreeWndCtrlSpacer(TreeWndCtrl *parent,
-                                     const wxTreeItemId& node,
-                                     unsigned int numColumns)
-                                     : wxPanel(parent),
-                                     m_numColumns(numColumns),
-                                     m_node(node),
-                                     m_treeWndCtrl(parent)
-{
-    Layout();
-}
-
-bool TreeWndCtrlSpacer::Layout()
-{
-    SetSize(m_numColumns * m_treeWndCtrl->GetColumnSize(), wxDefaultSize.GetHeight());
-    return __super::Layout();
-}
-
-void TreeWndCtrlSpacer::SetNumColumns(unsigned int numColumns)
-{
-    m_numColumns = numColumns;
-    Layout();
-}
-
-int TreeWndCtrlSpacer::GetVerticalMidpoint(wxBitmap bitmap)
-{
-    switch ( m_treeWndCtrl->GetLineMode() )
-    {
-    case wxTWC_LINE_TOP:
-        return bitmap.GetHeight()/2;
-
-    case wxTWC_LINE_BOTTOM:
-        return GetSize().GetHeight() - 1 - bitmap.GetHeight()/2;
-
-    case wxTWC_LINE_CENTER:
-    default:
-        return GetSize().GetHeight()/2;
-    }
-}
-
-wxPoint TreeWndCtrlSpacer::GetBitmapPosition(wxBitmap bitmap, unsigned int columnIndex)
-{
-    unsigned int columnSize = m_treeWndCtrl->GetColumnSize();
-    unsigned int columnStartX = columnIndex * columnSize;
-    unsigned int columnCenterX = columnStartX + (columnSize / 2);
-    unsigned int columnCenterY = GetVerticalMidpoint(bitmap);
-
-    return wxPoint(columnCenterX - bitmap.GetWidth() / 2, columnCenterY - bitmap.GetHeight() / 2);
-}
-
-void TreeWndCtrlSpacer::DrawHorizontalLine(wxPaintDC& dc,
-                                           unsigned int x1,
-                                           unsigned int x2,
-                                           unsigned int y)
-{
-    switch ( m_treeWndCtrl->GetDashMode() )
-    {
-    case wxTWC_DASH_CUSTOM:
-        dc.DrawLine( x1, y, x2, y );
-        break;
-
-    case wxTWC_DASH_DEFAULT:
-    default:
-        {
-            int originX = 0;
-            int originY = 0;
-            ClientToScreen( &originX, &originY );
-            int origin = originX + originY + y;
-
-            for ( unsigned int x = x1; x <= x2; ++x )
-            {
-                if ( ( origin + x ) % 2 )
-                    dc.DrawPoint( x, y );
-            }
-        }
-        break;
-    }
-}
-
-void TreeWndCtrlSpacer::DrawVerticalLine(wxPaintDC& dc,
-                                         unsigned int y1,
-                                         unsigned int y2,
-                                         unsigned int x)
-{
-    switch ( m_treeWndCtrl->GetDashMode() )
-    {
-    case wxTWC_DASH_CUSTOM:
-        dc.DrawLine( x, y1, x, y2 );
-        break;
-
-    case wxTWC_DASH_DEFAULT:
-    default:
-        {
-            int originX = 0;
-            int originY = 0;
-            ClientToScreen( &originX, &originY );
-            int origin = originX + originY + x;
-
-            for ( unsigned int y = y1; y <= y2; ++y )
-            {
-                if ( ( origin + y ) % 2 )
-                    dc.DrawPoint( x, y );
-            }
-        }
-        break;
-    }
-}
-
-void TreeWndCtrlSpacer::DrawLines(wxPaintDC& dc,
-                                  const wxTreeItemId& node,
-                                  int columnIndex,
-                                  bool leaf)
-{
-    wxTreeItemId parent = m_treeWndCtrl->GetItemParent(node);
-    if ( columnIndex > 0 )
-    {
-        if ( parent != TreeWndCtrlItemIdInvalid )
-            DrawLines(dc, parent, columnIndex - 1, false);
-
-        if ( m_treeWndCtrl->GetLineDrawMode() == wxTWC_LINEDRAW_ROOT_ONLY )
-            return;
-    }
-
-    unsigned int columnSize = m_treeWndCtrl->GetColumnSize();
-
-    int columnStartX = columnIndex * columnSize;
-    int columnCenterX = columnStartX + columnSize/2;
-    int columnCenterY = GetVerticalMidpoint(m_treeWndCtrl->GetToggleBitmap(m_node));
-    int columnStartY = 0;
-
-    bool hasSibling = false;
-    if ( parent == TreeWndCtrlItemIdInvalid )
-    {
-        columnStartY = columnCenterY;
-    }
-    else
-    {
-        hasSibling = m_treeWndCtrl->GetNextSibling(node) != TreeWndCtrlItemIdInvalid;
-        if ( ( columnIndex == 0 ) && ( m_node == node ) && ( m_treeWndCtrl->GetPrevSibling(node) == TreeWndCtrlItemIdInvalid ) )
-        {
-            columnStartY = columnCenterY;
-        }
-    }
-
-    wxPen oldPen = dc.GetPen();
-    dc.SetPen(m_treeWndCtrl->GetPen());
-
-    if ( leaf )
-    {
-        int columnEndX = columnStartX + columnSize - 1;
-        int columnEndY = hasSibling ? GetSize().GetHeight() : columnCenterY;
-
-        DrawHorizontalLine( dc, columnCenterX, columnEndX, columnCenterY );
-        if ( columnStartY != columnEndY )
-            DrawVerticalLine( dc, columnStartY, columnEndY, columnCenterX );
-    }
-    else if ( hasSibling )
-    {
-        int columnEndY = GetSize().GetHeight();
-        DrawVerticalLine( dc, columnStartY, columnEndY, columnCenterX );
-    }
-
-    dc.SetPen(oldPen);
-}
-
-void TreeWndCtrlSpacer::DrawToggle(wxPaintDC& dc, unsigned int columnIndex)
-{
-    wxBitmap bitmap = m_treeWndCtrl->GetToggleBitmap(m_node);
-    wxPoint bitmapPosition = GetBitmapPosition(bitmap, columnIndex);
-    dc.DrawBitmap(bitmap, bitmapPosition.x, bitmapPosition.y, true);
-}
-
-void TreeWndCtrlSpacer::OnMouseDown(wxMouseEvent& e)
-{
-    e.Skip();
-
-    if ( !m_numColumns )
-        return;
-
-    if ( !m_treeWndCtrl->ToggleVisible(m_node) )
-        return;
-
-    wxBitmap bitmap = m_treeWndCtrl->GetToggleBitmap(m_node);
-    wxPoint bitmapStart = GetBitmapPosition(bitmap, m_numColumns - 1);
-
-    int clickTolerance = m_treeWndCtrl->GetClickTolerance();
-
-    if ( e.GetPosition().x < bitmapStart.x - clickTolerance )
-        return;
-
-    if ( e.GetPosition().x > bitmapStart.x + bitmap.GetWidth() + clickTolerance )
-        return;
-
-    if ( e.GetPosition().y < bitmapStart.y - clickTolerance )
-        return;
-
-    if ( e.GetPosition().y > bitmapStart.y + bitmap.GetHeight() + clickTolerance )
-        return;
-
-    m_treeWndCtrl->Toggle(m_node);
-}
-
-void TreeWndCtrlSpacer::OnPaint(wxPaintEvent& e)
-{
-    wxPaintDC dc(this);
-
-    if ( m_numColumns == 0 )
-        return;
-
-    if ( m_treeWndCtrl->GetLineDrawMode() != wxTWC_LINEDRAW_NONE )
-        DrawLines(dc, m_node, m_numColumns - 1, true);
-
-    if ( m_treeWndCtrl->ToggleVisible(m_node) )
-        DrawToggle( dc, m_numColumns - 1 );
-
-    e.Skip();
 }

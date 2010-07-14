@@ -29,7 +29,6 @@
 
 #define WXTWC_DEFAULT_CLICK_TOLERANCE     4
 #define WXTWC_DEFAULT_COLUMN_SIZE         23
-#define WXTWC_DEFAULT_ITEM_SPACING        5
 
 enum TreeWndCtrlDashMode
 {
@@ -85,7 +84,9 @@ namespace Nocturnal
         DECLARE_DYNAMIC_CLASS(TreeWndCtrl)
 
     public:
-        TreeWndCtrl(wxWindow *parent = NULL,
+        TreeWndCtrl();
+
+        TreeWndCtrl(wxWindow *parent,
             wxWindowID winid = wxID_ANY,
             const wxPoint &pos = wxDefaultPosition,
             const wxSize &size = wxDefaultSize,
@@ -392,168 +393,4 @@ namespace Nocturnal
         DECLARE_NO_COPY_CLASS(TreeWndCtrl)
     };
 
-    class TreeWndCtrlItem : public wxPanel
-    {
-        DECLARE_DYNAMIC_CLASS(TreeWndCtrlItem)
-
-    public:
-        TreeWndCtrlItem();
-
-        TreeWndCtrlItem(TreeWndCtrl *parent,
-            const wxString& text,
-            int image = -1,
-            int stateImage = -1);
-
-        virtual bool Layout();
-
-        void OnPaint(wxPaintEvent& e);
-
-        void OnDoubleClick(wxMouseEvent& e);
-
-        void SetSpacing(int spacing);
-
-        int GetSpacing() const
-        { return m_spacing; }
-
-        void SetItem(const wxTreeItemId& item);
-
-        wxTreeItemId GetItem() const
-        { return m_item; }
-
-        void SetText(const wxString& text);
-
-        wxString GetText() const
-        { return m_text; }
-
-        void SetImage(int image);
-
-        int GetImage() const
-        { return m_image; }
-
-        void SetStateImage(int stateImage);
-
-        int GetStateImage() const
-        { return m_stateImage; }
-
-    protected:
-        int m_bitmapTextWidth;
-        int m_image;
-        int m_stateImage;
-        int m_spacing;
-        bool m_dirty;
-        wxPoint m_bitmapPoint;
-        wxPoint m_textPoint;
-        wxTreeItemId m_item;
-        wxString m_text;
-        TreeWndCtrl* m_treeWndCtrl;
-
-        wxBitmap GetBitmap();
-
-        DECLARE_NO_COPY_CLASS(TreeWndCtrlItem)
-
-        DECLARE_EVENT_TABLE();
-    };
-
-    // ----------------------------------------------------------------------------
-    // TreeWndCtrlSpacer
-    // ----------------------------------------------------------------------------
-
-    class TreeWndCtrlSpacer : public wxPanel
-    {
-        DECLARE_DYNAMIC_CLASS(TreeWndCtrlSpacer)
-
-    public:
-        TreeWndCtrlSpacer();
-
-        TreeWndCtrlSpacer(TreeWndCtrl *parent,
-            const wxTreeItemId& node,
-            unsigned int numColumns);
-
-        virtual bool Layout();
-
-        wxTreeItemId GetNode() const { return m_node; }
-
-        unsigned int GetNumColumns() const { return m_numColumns; }
-        void SetNumColumns(unsigned int numColumns);
-
-    protected:
-        int GetVerticalMidpoint(wxBitmap bitmap);
-        wxPoint GetBitmapPosition(wxBitmap bitmap, unsigned int columnIndex);
-
-        void DrawHorizontalLine(wxPaintDC& dc,
-            unsigned int x1,
-            unsigned int x2,
-            unsigned int y);
-
-        void DrawVerticalLine(wxPaintDC& dc,
-            unsigned int y1,
-            unsigned int y2,
-            unsigned int x);
-
-        void DrawLines(wxPaintDC& dc,
-            const wxTreeItemId& node,
-            int columnIndex,
-            bool leaf);
-
-        void DrawToggle(wxPaintDC& dc, unsigned int columnIndex);
-
-        void OnMouseDown(wxMouseEvent& e);
-        void OnPaint(wxPaintEvent& e);    
-
-    private:
-        unsigned int m_numColumns;
-        wxTreeItemId m_node;
-        TreeWndCtrl* m_treeWndCtrl;
-
-        DECLARE_NO_COPY_CLASS(TreeWndCtrlSpacer)
-
-        DECLARE_EVENT_TABLE();
-    };
-
-    // ----------------------------------------------------------------------------
-    // TreeWndCtrlNode
-    // ----------------------------------------------------------------------------
-
-    class TreeWndCtrlNode
-    {
-    public:
-        TreeWndCtrlNode(TreeWndCtrl* treeWndCtrl,
-            const wxTreeItemId& parent,
-            wxWindow *window,
-            unsigned int numColumns,
-            wxTreeItemData *data = NULL,
-            bool expanded = true);
-
-        ~TreeWndCtrlNode();
-
-        wxWindow *GetWindow() const
-        { return m_window; }
-
-        wxTreeItemId GetParent() const
-        { return m_parent; }
-
-        TreeWndCtrlSpacer* GetSpacer() const
-        { return m_spacer; }
-
-        wxTreeItemData *GetData() const
-        { return m_data; }
-
-        void SetData(wxTreeItemData *data)
-        { m_data = data; }
-
-    protected:
-        bool m_expanded;
-
-        wxWindow *m_window;
-        TreeWndCtrlSpacer *m_spacer;
-        wxTreeItemData *m_data;
-
-        wxTreeItemId m_id;
-        wxTreeItemId m_parent;
-        wxArrayTreeItemIds m_children;
-
-        DECLARE_NO_COPY_CLASS(TreeWndCtrlNode)
-
-        friend class TreeWndCtrl;
-    };
 }

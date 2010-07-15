@@ -850,22 +850,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Editor\BangleWindow.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\BangleWindow.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\BuildInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Editor\BuildInfo.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Editor\CommandQueue.cpp"
 				>
 			</File>
@@ -2423,18 +2407,6 @@
 			</File>
 			<File
 				RelativePath=".\Vault\VaultToolBar.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Resources"
-			>
-			<File
-				RelativePath=".\Luna.rc"
-				>
-			</File>
-			<File
-				RelativePath=".\resource.h"
 				>
 			</File>
 		</Filter>
@@ -4525,6 +4497,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Luna.rc"
+			>
+		</File>
+		<File
 			RelativePath=".\LunaIDs.h"
 			>
 		</File>
@@ -4598,6 +4574,10 @@
 		</File>
 		<File
 			RelativePath=".\Precompile.h"
+			>
+		</File>
+		<File
+			RelativePath=".\resource.h"
 			>
 		</File>
 	</Files>

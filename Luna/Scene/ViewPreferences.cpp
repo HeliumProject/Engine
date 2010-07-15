@@ -17,8 +17,6 @@ void ViewPreferences::EnumerateClass( Reflect::Compositor<ViewPreferences>& comp
   Reflect::Field* fieldGridVisible = comp.AddField( &ViewPreferences::m_GridVisible, "m_GridVisible" );
   Reflect::Field* fieldBoundsVisible = comp.AddField( &ViewPreferences::m_BoundsVisible, "m_BoundsVisible" );
   Reflect::Field* fieldStatisticsVisible = comp.AddField( &ViewPreferences::m_StatisticsVisible, "m_StatisticsVisible" );
-  Reflect::Field* fieldPathfindingVisible = comp.AddField( &ViewPreferences::m_PathfindingVisible, "m_PathfindingVisible" );
-
 }
     
 ViewPreferences::ViewPreferences()
@@ -30,7 +28,6 @@ ViewPreferences::ViewPreferences()
 , m_GridVisible (true)
 , m_BoundsVisible (false)
 , m_StatisticsVisible (false)
-, m_PathfindingVisible (false)
 {
   for(int i = 0; i < CameraModes::Count; ++i)
   {
@@ -59,8 +56,6 @@ void ViewPreferences::ApplyToView(Luna::View* view)
   view->SetGridVisible( m_GridVisible ); 
   view->SetBoundsVisible( m_BoundsVisible ); 
   view->SetStatisticsVisible( m_StatisticsVisible ); 
-  view->SetPathfindingVisible( m_PathfindingVisible ); 
-
 }
 
 void ViewPreferences::LoadFromView(Luna::View* view)
@@ -88,8 +83,6 @@ void ViewPreferences::LoadFromView(Luna::View* view)
   m_GridVisible = view->IsGridVisible(); 
   m_BoundsVisible = view->IsBoundsVisible(); 
   m_StatisticsVisible = view->IsStatisticsVisible(); 
-  m_PathfindingVisible = view->IsPathfindingVisible(); 
-
 }
 
 ViewColorMode ViewPreferences::GetColorMode() const

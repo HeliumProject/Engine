@@ -254,16 +254,6 @@ void Entity::Evaluate(GraphDirection direction)
                 {
                     m_ObjectBounds.Merge( nested->GetRoot()->GetObjectHierarchyBounds() );
                 }
-
-                if (m_Scene->GetView()->IsPathfindingVisible())
-                {
-                    nested = GetNestedScene( GeometryModes::Pathfinding );
-
-                    if (nested)
-                    {
-                        m_ObjectBounds.Merge( nested->GetRoot()->GetObjectHierarchyBounds() );
-                    }
-                }
             }
 
             break;
@@ -307,15 +297,6 @@ void Entity::Render( RenderVisitor* render )
             render->State().m_Selected || (m_Scene->IsCurrent() && IsSelected()),
             render->State().m_Live || (m_Scene->IsCurrent() && IsLive()),
             render->State().m_Selectable || (m_Scene->IsCurrent() && IsSelectable()) );
-
-        if (nested)
-        {
-            render->PushState( state );
-            nested->Render( render );
-            render->PopState();
-        }
-
-        nested = render->GetView()->IsPathfindingVisible() ? GetNestedScene( GeometryModes::Pathfinding ) : NULL;
 
         if (nested)
         {
@@ -394,28 +375,6 @@ bool Entity::Pick( PickVisitor* pick )
 
         // retrieve nested scene
         const Luna::Scene* scene = GetNestedScene(GetScene()->GetView()->GetGeometryMode());
-
-        // hit test the entire nested scene
-        if (scene && scene->Pick(pick))
-        {
-            // verify that our hits are in there
-            NOC_ASSERT( pick->GetHits().size() > high );
-
-            // process nested hits into hits in this scene
-            V_PickHitSmartPtr::const_iterator itr = pick->GetHits().begin() + high;
-            V_PickHitSmartPtr::const_iterator end = pick->GetHits().end();
-            for ( ; itr != end; ++itr )
-            {
-                // take ownership
-                (*itr)->SetObject(this);
-            }
-
-            // success!
-            result = true;
-        }
-
-        // retrieve pathfinding scene
-        scene = GetScene()->GetView()->IsPathfindingVisible() ? GetNestedScene(GeometryModes::Pathfinding) : NULL;
 
         // hit test the entire nested scene
         if (scene && scene->Pick(pick))

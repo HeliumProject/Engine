@@ -48,7 +48,6 @@ namespace Luna
     bool m_GridVisible; 
     bool m_BoundsVisible; 
     bool m_StatisticsVisible; 
-    bool m_PathfindingVisible; 
 
   public:
     REFLECT_DECLARE_CLASS(ViewPreferences, Reflect::Element);

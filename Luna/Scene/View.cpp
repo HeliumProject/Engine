@@ -145,7 +145,6 @@ View::View(wxWindow *parent,
              , m_Tool (NULL)
              , m_CameraMode (CameraModes::Orbit)
              , m_GeometryMode (GeometryModes::Render)
-             , m_PathfindingVisible (false)
              , m_DragMode (DragModes::None)
              , m_Highlighting (true)
              , m_AxesVisible (true)
@@ -252,16 +251,6 @@ void View::SetGeometryMode(GeometryMode mode)
 void View::NextGeometryMode()
 {
   SetGeometryMode((GeometryMode)((m_GeometryMode + 1) % GeometryModes::Count));
-}
-
-bool View::IsPathfindingVisible() const
-{
-  return m_PathfindingVisible;
-}
-
-void View::SetPathfindingVisible(bool visible)
-{
-  m_PathfindingVisible = visible;
 }
 
 Luna::Tool* View::GetTool()

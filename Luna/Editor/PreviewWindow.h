@@ -4,19 +4,11 @@
 #include "Foundation/Memory/SmartPtr.h"
 #include "Render/Renderer.h"
 #include "Camera.h"
-#include "BangleWindow.h"
 
 namespace Luna
 {
   struct D3DEventArgs;
-  
-  typedef struct
-  {
-    Render::Scene* m_Scene;
-    bool m_Draw;
-  } BangleScene;
-  
-  typedef std::map< u32, BangleScene > M_BangleScene;
+
   typedef std::vector< Render::Scene* > V_Scene;
   
   class PreviewWindow : public wxWindow
@@ -34,9 +26,6 @@ namespace Luna
 
     virtual void Frame();
     
-    const M_BangleScene& GetBangleScenes();
-    void SetBangleDraw( u32 bangleIndex, bool draw );
-
   protected:
     virtual void SetupLighting( Render::Scene* scene );
     virtual void Draw();
@@ -59,7 +48,6 @@ namespace Luna
     void OnScreenShotToFile( wxCommandEvent& args );
     void OnFrame( wxCommandEvent& args );
     void OnChangeAxisDisplay( wxCommandEvent& args );
-    void OnBangles( wxCommandEvent& args );
 
   protected:
     Render::Renderer m_Render;
@@ -73,9 +61,6 @@ namespace Luna
     i32 m_AxisOnMenuID;
     i32 m_AxisOffMenuID;
     
-    BangleWindow* m_BangleWindow;
-    M_BangleScene m_BangleScenes;
-
   private:
     DECLARE_EVENT_TABLE();
   };

@@ -262,7 +262,6 @@ namespace Luna
 
     CameraMode m_CameraMode;
     GeometryMode m_GeometryMode;
-    bool m_PathfindingVisible;
 
     // Drag
     DragMode m_DragMode;
@@ -334,9 +333,6 @@ namespace Luna
     GeometryMode GetGeometryMode() const;
     void SetGeometryMode(GeometryMode mode);
     void NextGeometryMode();
-
-    bool IsPathfindingVisible() const;
-    void SetPathfindingVisible(bool visible);
 
     Luna::Tool* GetTool();
     void SetTool(Luna::Tool* tool);

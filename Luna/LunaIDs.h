@@ -67,7 +67,6 @@ namespace Luna
             ID_ViewNone,
             ID_ViewRender,
             ID_ViewCollision,
-            ID_ViewPathfinding,
 
             ID_ViewWireframeOnMesh,
             ID_ViewWireframeOnShaded,

@@ -59,9 +59,6 @@ PreviewWindow::PreviewWindow( wxWindow *parent, wxWindowID id, const wxPoint& po
   wxMenuItem* current = m_ContextMenu.Append( wxID_ANY, wxT( "Frame" ) );
   Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PreviewWindow::OnFrame ), NULL, this );
   
-  current = m_ContextMenu.Append( wxID_ANY, wxT( "Bangles..." ) );
-  Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PreviewWindow::OnBangles ), NULL, this );
-
   m_AxisSubMenu = new wxMenu();
   current = m_AxisSubMenu->Append( wxID_ANY, wxT( "On" ), wxEmptyString, wxITEM_CHECK );
   m_AxisOnMenuID = current->GetId();
@@ -75,9 +72,6 @@ PreviewWindow::PreviewWindow( wxWindow *parent, wxWindowID id, const wxPoint& po
   current = screenShotSubMenu->Append( wxID_ANY, wxT( "Save to file..." ) );
   Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PreviewWindow::OnScreenShotToFile ), NULL, this );
   m_ContextMenu.AppendSubMenu( screenShotSubMenu, wxT( "Screenshot" ) );
-
-  m_BangleWindow = new BangleWindow( this, wxID_ANY, wxT( "Bangles" ) );
-  m_BangleWindow->Hide();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -85,17 +79,6 @@ PreviewWindow::PreviewWindow( wxWindow *parent, wxWindowID id, const wxPoint& po
 // 
 PreviewWindow::~PreviewWindow()
 {
-  if ( m_BangleWindow )
-  {
-    RemoveChild( m_BangleWindow );
-    delete m_BangleWindow;
-  }
-
-  for ( M_BangleScene::iterator itr = m_BangleScenes.begin(), end = m_BangleScenes.end(); itr != end; ++itr )
-  {
-    delete itr->second.m_Scene;
-  }
-
   delete m_Scene;
 }
 
@@ -142,12 +125,6 @@ bool PreviewWindow::LoadScene( const tstring& path )
         D3DXMatrixIdentity( &scene->m_worldmat );
         scene->m_render_reference_grid = m_DisplayAxis;
         SetupLighting( scene );
-        
-        BangleScene bangleScene;
-        bangleScene.m_Scene = scene;
-        bangleScene.m_Draw = itr->second;
-
-        m_BangleScenes.insert( std::make_pair( itr->first, bangleScene ) );
       }
 
       m_Scene->SetEnvironmentHandle( m_Scene->LoadEnvironment( TXT( "@@default" ), 0x40404040 ) );
@@ -156,7 +133,6 @@ bool PreviewWindow::LoadScene( const tstring& path )
       D3DXMatrixIdentity( &m_Scene->m_worldmat );
       m_Scene->m_render_reference_grid = m_DisplayAxis;
       SetupLighting( m_Scene );
-      m_BangleWindow->RefreshBangles();
       Refresh();
 
       return true;
@@ -170,12 +146,6 @@ bool PreviewWindow::LoadScene( const tstring& path )
 // Remove the currently displayed mesh from the scene.
 void PreviewWindow::ClearScene()
 {
-  for ( M_BangleScene::iterator itr = m_BangleScenes.begin(), end = m_BangleScenes.end(); itr != end; ++itr )
-  {
-    delete itr->second.m_Scene;
-  }
-  m_BangleScenes.clear();
-  
   m_MeshHandle = s_InvalidMesh;
   if ( m_Scene )
   {
@@ -209,11 +179,6 @@ void PreviewWindow::DisplayReferenceAxis( bool display )
     if ( m_Scene )
     {
       m_Scene->m_render_reference_grid = display;
-      
-      for ( M_BangleScene::iterator itr = m_BangleScenes.begin(), end = m_BangleScenes.end(); itr != end; ++itr )
-      {
-        itr->second.m_Scene->m_render_reference_grid = display;
-      }
     }
 
     Refresh();
@@ -234,37 +199,7 @@ void PreviewWindow::Frame()
     box.Merge( min );
     box.Merge( max );
     
-    for ( M_BangleScene::iterator itr = m_BangleScenes.begin(), end = m_BangleScenes.end(); itr != end; ++itr )
-    {
-      const Math::Vector3& bangleMin = *( const Math::Vector3* )( &itr->second.m_Scene->m_min );
-      const Math::Vector3& bangleMax = *( const Math::Vector3* )( &itr->second.m_Scene->m_max );
-      
-      box.Merge( bangleMin );
-      box.Merge( bangleMax );
-    }
-
     m_Camera.Frame( box );
-    Refresh();
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Sets up lighting in the scene.
-// 
-const M_BangleScene& PreviewWindow::GetBangleScenes()
-{
-  return m_BangleScenes;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Sets up lighting in the scene.
-// 
-void PreviewWindow::SetBangleDraw( u32 bangleIndex, bool draw )
-{
-  M_BangleScene::iterator itr = m_BangleScenes.find( bangleIndex );
-  if ( itr != m_BangleScenes.end() )
-  {
-    itr->second.m_Draw = draw;
     Refresh();
   }
 }
@@ -355,12 +290,6 @@ void PreviewWindow::Resize( const wxSize& size )
       m_Scene->m_width = size.x;
       m_Scene->m_height = size.y;
       
-      for ( M_BangleScene::iterator itr = m_BangleScenes.begin(), end = m_BangleScenes.end(); itr != end; ++itr )
-      {
-        itr->second.m_Scene->m_width = size.x;
-        itr->second.m_Scene->m_height = size.y;
-      }
-
       Refresh();
     }
   }
@@ -390,24 +319,11 @@ bool PreviewWindow::RenderScene()
   if ( m_MeshHandle != s_InvalidMesh && m_Scene )
   {
     std::vector< Render::Scene* > renderScenes;
-    renderScenes.reserve( m_BangleScenes.size() + 1 );
 
     m_Scene->m_viewmat = *( ( D3DMATRIX* )( &m_Camera.GetView() ) );
     m_Scene->m_projmat = *( ( D3DMATRIX* )( &m_Camera.SetProjection( m_Scene->m_width, m_Scene->m_height ) ) );
     renderScenes.push_back( m_Scene );
 
-    for ( M_BangleScene::iterator itr = m_BangleScenes.begin(), end = m_BangleScenes.end(); itr != end; ++itr )
-    {
-      if ( itr->second.m_Draw )
-      {
-        Render::Scene* scene = itr->second.m_Scene;
-
-        scene->m_viewmat = *( ( D3DMATRIX* )( &m_Camera.GetView() ) );
-        scene->m_projmat = *( ( D3DMATRIX* )( &m_Camera.SetProjection( scene->m_width, scene->m_height ) ) );
-        renderScenes.push_back( scene );
-      }
-    }
-    
     m_Render.RenderScenes( (int) renderScenes.size(), &renderScenes[ 0 ] );
     
     return true;
@@ -533,12 +449,4 @@ void PreviewWindow::OnFrame( wxCommandEvent& args )
 void PreviewWindow::OnChangeAxisDisplay( wxCommandEvent& args )
 {
   DisplayReferenceAxis( args.GetId() == m_AxisOnMenuID );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Displays the bangles window
-// 
-void PreviewWindow::OnBangles( wxCommandEvent& args )
-{
-  m_BangleWindow->Show();
 }

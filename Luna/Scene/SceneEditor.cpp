@@ -122,7 +122,6 @@ EVT_MENU(SceneEditorIDs::ID_ViewStatistics, SceneEditor::OnViewChange)
 EVT_MENU(SceneEditorIDs::ID_ViewNone, SceneEditor::OnViewChange)
 EVT_MENU(SceneEditorIDs::ID_ViewRender, SceneEditor::OnViewChange)
 EVT_MENU(SceneEditorIDs::ID_ViewCollision, SceneEditor::OnViewChange)
-EVT_MENU(SceneEditorIDs::ID_ViewPathfinding, SceneEditor::OnViewChange)
 
 EVT_MENU(SceneEditorIDs::ID_ViewWireframeOnMesh, SceneEditor::OnViewChange)
 EVT_MENU(SceneEditorIDs::ID_ViewWireframeOnShaded, SceneEditor::OnViewChange)
@@ -500,10 +499,8 @@ SceneEditor::SceneEditor()
             m_GeometryMenu = new wxMenu;
 
             m_GeometryMenu->AppendCheckItem(SceneEditorIDs::ID_ViewNone, _("None"));
-            m_GeometryMenu->AppendCheckItem(SceneEditorIDs::ID_ViewRender, _("Art"));
+            m_GeometryMenu->AppendCheckItem(SceneEditorIDs::ID_ViewRender, _("Render"));
             m_GeometryMenu->AppendCheckItem(SceneEditorIDs::ID_ViewCollision, _("Collision"));
-            m_GeometryMenu->AppendSeparator();
-            m_GeometryMenu->AppendCheckItem(SceneEditorIDs::ID_ViewPathfinding, _("Pathfinding"));
 
             m_ViewMenu->AppendSubMenu(m_GeometryMenu, _("Geometry"));
         }
@@ -1000,7 +997,6 @@ void SceneEditor::OnMenuOpen(wxMenuEvent& event)
         m_GeometryMenu->Check( SceneEditorIDs::ID_ViewNone, m_View->GetGeometryMode() == GeometryModes::None );
         m_GeometryMenu->Check( SceneEditorIDs::ID_ViewRender, m_View->GetGeometryMode() == GeometryModes::Render );
         m_GeometryMenu->Check( SceneEditorIDs::ID_ViewCollision, m_View->GetGeometryMode() == GeometryModes::Collision );
-        m_GeometryMenu->Check( SceneEditorIDs::ID_ViewPathfinding, m_View->IsPathfindingVisible() );
 
         ViewColorMode colorMode = SceneEditorPreferences()->GetViewPreferences()->GetColorMode();
         M_IDToColorMode::const_iterator colorModeItr = m_ColorModeLookup.begin();
@@ -1530,12 +1526,6 @@ void SceneEditor::OnViewChange(wxCommandEvent& event)
     case SceneEditorIDs::ID_ViewCollision:
         {
             m_View->SetGeometryMode( GeometryModes::Collision );
-            break;
-        }
-
-    case SceneEditorIDs::ID_ViewPathfinding:
-        {
-            m_View->SetPathfindingVisible( !m_View->IsPathfindingVisible() );
             break;
         }
 

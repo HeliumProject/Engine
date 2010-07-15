@@ -30,30 +30,32 @@
 #include "TypeGrid.h"
 #include "View.h"
 #include "VolumeCreateTool.h"
-#include "Vault/VaultToolBar.h"
 #include "Mesh.h"
+#include "UI/Controls/Tree/SortTreeCtrl.h"
+#include "Editor/MRUData.h"
+#include "Vault/VaultToolBar.h"
 
-#include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/Manifests/SceneManifest.h"
+#include "Platform/Process.h"
+
 #include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Container/Insert.h" 
+#include "Foundation/String/Utilities.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Log.h"
-#include "Pipeline/Content/ContentVersion.h"
-#include "Editor/MRUData.h"
+
 #include "Application/Inspect/Controls/Control.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
+#include "Application/Undo/PropertyCommand.h"
 #include "Application/UI/FileDialog.h"
 #include "Application/UI/FileIconsTable.h"
-#include "UI/Controls/Tree/SortTreeCtrl.h"
-#include "Application/Undo/PropertyCommand.h"
-#include "Platform/Process.h"
 
+#include "Pipeline/Asset/AssetClass.h"
+#include "Pipeline/Asset/Manifests/SceneManifest.h"
+#include "Pipeline/Content/ContentVersion.h"
 #include "Pipeline/Content/Scene.h"
 
 #include <algorithm>
-#include <boost/algorithm/string.hpp>
 
 #include <wx/progdlg.h>
 #include <wx/string.h>
@@ -3128,8 +3130,8 @@ bool SceneEditor::SortContextItemsByName( Luna::SceneNode* lhs, Luna::SceneNode*
     tstring lname( lhs->GetName() );
     tstring rname( rhs->GetName() );
 
-    boost::to_upper( lname );
-    boost::to_upper( rname );
+    toUpper( lname );
+    toUpper( rname );
 
     return lname < rname;
 }
@@ -3141,8 +3143,8 @@ bool SceneEditor::SortTypeItemsByName( Luna::SceneNodeType* lhs, Luna::SceneNode
     tstring lname( lhs->GetName() );
     tstring rname( rhs->GetName() );
 
-    boost::to_upper( lname );
-    boost::to_upper( rname );
+    toUpper( lname );
+    toUpper( rname );
 
     return lname < rname;
 }

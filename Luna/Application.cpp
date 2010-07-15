@@ -9,6 +9,7 @@
 #include "Platform/Exception.h"
 
 #include "Foundation/Log.h"
+#include "Foundation/Numeric.h"
 #include "Foundation/InitializerStack.h"
 #include "Foundation/Math/Utils.h"
 #include "Foundation/CommandLine/Option.h"
@@ -142,6 +143,7 @@ LunaApp::LunaApp()
 , m_Vault( NULL )
 , m_SceneEditor( NULL )
 {
+    Nocturnal::NumericTest();
 }
 
 LunaApp::~LunaApp()

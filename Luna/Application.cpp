@@ -38,6 +38,7 @@
 #include "Commands/RebuildCommand.h"
 
 #include <set>
+#include <tchar.h>
 #include <wx/wx.h>
 #include <wx/choicdlg.h>
 #include <wx/msw/private.h>
@@ -468,7 +469,7 @@ int Main ( int argc, const tchar** argv )
 ///////////////////////////////////////////////////////////////////////////////
 // Main entry point for the application.
 //
-int main( int argc, const tchar** argv )
+int _tmain( int argc, const tchar** argv )
 {
     Nocturnal::InitializerStack initializerStack( true );
 

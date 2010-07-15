@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -109,7 +109,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -172,7 +172,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -235,7 +235,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -298,7 +298,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -363,7 +363,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
 				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
@@ -426,7 +426,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
@@ -489,7 +489,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
+				AdditionalIncludeDirectories="..;&quot;$(TinyXML)&quot;;&quot;$(MySQL)\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(p4api)\include&quot;;&quot;$(SQLite)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;APPLICATION_EXPORTS;MAKE_Application_TO_NOT_USE_RCS"
 				ExceptionHandling="2"
 				RuntimeLibrary="2"

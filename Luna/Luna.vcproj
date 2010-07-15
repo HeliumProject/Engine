@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -133,7 +133,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -220,7 +220,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -306,7 +306,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -390,7 +390,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -479,7 +479,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -566,7 +566,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -652,7 +652,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(boost)&quot;;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"

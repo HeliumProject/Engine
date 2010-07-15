@@ -317,7 +317,7 @@ void EventSystem::ReadTextEventsFile( const tstring& eventsFile, V_EventPtr& lis
         const tregex s_EventTextFileStringPattern( TXT("^\\s*Event\\:\\s*.*?\\|(\\d+)\\|(\\d*)\\|(.*?)\\|(\\d+)\\s*$") );
 
         tcmatch eventResultAttr; 
-        if ( !boost::regex_match(line.c_str(), eventResultAttr, s_EventTextFileStringPattern))
+        if ( !std::tr1::regex_match(line.c_str(), eventResultAttr, s_EventTextFileStringPattern))
         {
             // remove extra elements added to listOfEvents in the above resize
             //listOfEvents.resize( itCurrentEvent - listOfEvents.begin() - 1 );

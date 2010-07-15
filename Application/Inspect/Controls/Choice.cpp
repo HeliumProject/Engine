@@ -185,7 +185,7 @@ tstring Choice::GetValue()
       }
     }
 
-    return value.c_str();
+    return (const tchar*)value.c_str();
   }
   else
   {

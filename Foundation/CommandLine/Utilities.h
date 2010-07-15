@@ -84,5 +84,8 @@ namespace Nocturnal
     }
 
     FOUNDATION_API bool GetCmdLineFlag( const tchar* arg );
+
+#if 0
 #pragma deprecated( GetCmdLineFlag )  // All commandline options should be defined and parsed once in the application, we shouldn't be parsing the entire commandline everytime! 
+#endif
 }

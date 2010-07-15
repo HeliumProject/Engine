@@ -15,8 +15,8 @@ tstring LevelInfo::GetStrippedName() const
   const tregex s_NonWords( TXT( "(\\W)" ) );
   const tregex s_TrailingSlashes( TXT( "(/+$)" ) );
   tstring name = Nocturnal::Path( m_Name ).Directory();
-  name = boost::regex_replace( name, s_TrailingSlashes, TXT( "" ) );
-  name = boost::regex_replace( name, s_NonWords, TXT( "_" ) );
+  name = std::tr1::regex_replace( name, s_TrailingSlashes, tstring (TXT( "" )) );
+  name = std::tr1::regex_replace( name, s_NonWords, tstring (TXT( "_" )) );
   return name;
 }
 

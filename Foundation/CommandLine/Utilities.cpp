@@ -193,7 +193,7 @@ const tchar* Nocturnal::GetCmdLineArg( const tchar* arg )
     return NULL;
 }
 
-#pragma TODO ( "Deprecate Nocturnal::GetCmdLineFlag. All commandline options should be defined and parsed once in the application, we shouldn't be parsing the entire commandline everytime! " )
+#pragma TODO ( "Deprecate Nocturnal::GetCmdLineFlag. All commandline options should be defined and parsed once in the application, we shouldn't be parsing the entire commandline everytime!" )
 bool Nocturnal::GetCmdLineFlag( const tchar* arg )
 {
     bool explicitValue;

@@ -4,7 +4,7 @@
 #include "Volume.h"
 #include "Scene.h"
 
-#include "View.h"
+#include "Viewport.h"
 #include "Color.h"
 
 #include "PrimitiveCube.h"
@@ -29,16 +29,16 @@ void VolumeType::CleanupType()
 VolumeType::VolumeType( Luna::Scene* scene, i32 instanceType )
 : Luna::InstanceType( scene, instanceType )
 {
-  m_Cube = new Luna::PrimitiveCube( scene->GetView()->GetResources() );
+  m_Cube = new Luna::PrimitiveCube( scene->GetViewport()->GetResources() );
   m_Cube->Update();
 
-  m_Cylinder = new Luna::PrimitiveCylinder( scene->GetView()->GetResources() );
+  m_Cylinder = new Luna::PrimitiveCylinder( scene->GetViewport()->GetResources() );
   m_Cylinder->Update();
   
-  m_Sphere = new Luna::PrimitiveSphere( scene->GetView()->GetResources() );
+  m_Sphere = new Luna::PrimitiveSphere( scene->GetViewport()->GetResources() );
   m_Sphere->Update();
 
-  m_Capsule = new Luna::PrimitiveCapsule( scene->GetView()->GetResources() );
+  m_Capsule = new Luna::PrimitiveCapsule( scene->GetViewport()->GetResources() );
   m_Capsule->Update();
 }
 

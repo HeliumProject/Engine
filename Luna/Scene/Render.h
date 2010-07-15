@@ -366,7 +366,7 @@ namespace Luna
   //  - Drawing entries and handling type renderstate transitions
   //
 
-  class View;
+  class Viewport;
   class Camera;
 
   class RenderVisitor : public Visitor
@@ -378,7 +378,7 @@ namespace Luna
     DrawArgs* m_Args;
 
     // view we are rendering for
-    const Luna::View* m_View;
+    const Luna::Viewport* m_View;
 
     // the render object data pool
     V_RenderEntry m_EntryData;
@@ -398,7 +398,7 @@ namespace Luna
   public:
     RenderVisitor();
 
-    const Luna::View* GetView()
+    const Luna::Viewport* GetViewport()
     {
       return m_View;
     }
@@ -408,7 +408,7 @@ namespace Luna
       return (u32)m_EntryData.size();
     }
     
-    void Reset( DrawArgs* args, const Luna::View* view );
+    void Reset( DrawArgs* args, const Luna::Viewport* view );
 
     RenderEntry* Allocate( const SceneNode* object );
 

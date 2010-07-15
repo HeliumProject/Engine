@@ -38,7 +38,7 @@ void JointTransform::CleanupType()
 
 JointTransform::JointTransform( Luna::Scene* scene, Content::JointTransform* joint ) : Luna::Transform( scene, joint )
 {
-  Luna::PrimitiveRings* rings = static_cast< Luna::PrimitiveRings* >( m_Scene->GetView()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
+  Luna::PrimitiveRings* rings = static_cast< Luna::PrimitiveRings* >( m_Scene->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings ) );
   m_ObjectBounds.minimum = Math::Vector3(-rings->m_Radius, -rings->m_Radius, -rings->m_Radius);
   m_ObjectBounds.maximum = Math::Vector3(rings->m_Radius, rings->m_Radius, rings->m_Radius);
 }
@@ -86,8 +86,8 @@ void JointTransform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const
 
   joint->SetMaterial( g_JointTransformMaterial );
 
-  node->GetScene()->GetView()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
-  node->GetScene()->GetView()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
+  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
+  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
 }
 
 void JointTransform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
@@ -98,13 +98,13 @@ void JointTransform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, con
 
   joint->SetMaterial( g_JointTransformMaterial );
 
-  node->GetScene()->GetView()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
-  node->GetScene()->GetView()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
+  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes )->Draw( args );
+  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointRings )->Draw( args );
 }
 
 bool JointTransform::Pick( PickVisitor* pick )
 {
   pick->SetCurrentObject (this, pick->State().m_Matrix.Normalized());
 
-  return pick->PickPoint(Vector3::Zero, static_cast< Luna::PrimitiveAxes* >( m_Scene->GetView()->GetGlobalPrimitive( GlobalPrimitives::JointAxes ) )->m_Length);
+  return pick->PickPoint(Vector3::Zero, static_cast< Luna::PrimitiveAxes* >( m_Scene->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::JointAxes ) )->m_Length);
 }

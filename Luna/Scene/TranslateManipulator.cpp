@@ -2,7 +2,7 @@
 #include "TranslateManipulator.h"
 
 #include "Pick.h"
-#include "View.h"
+#include "Viewport.h"
 #include "Camera.h"
 #include "Color.h"
 
@@ -52,21 +52,21 @@ TranslateManipulator::TranslateManipulator(const ManipulatorMode mode, Luna::Sce
     m_ShowCones = mode == ManipulatorModes::Translate;
     m_Factor = 1.0f;
 
-    m_Axes = new Luna::PrimitiveAxes (m_Scene->GetView()->GetResources());
+    m_Axes = new Luna::PrimitiveAxes (m_Scene->GetViewport()->GetResources());
     m_Axes->Update();
 
-    m_Ring = new Luna::PrimitiveCircle (m_Scene->GetView()->GetResources());
+    m_Ring = new Luna::PrimitiveCircle (m_Scene->GetViewport()->GetResources());
     m_Ring->Update();
 
-    m_XCone = new Luna::PrimitiveCone (m_Scene->GetView()->GetResources());
+    m_XCone = new Luna::PrimitiveCone (m_Scene->GetViewport()->GetResources());
     m_XCone->SetSolid( true );
     m_XCone->Update();
 
-    m_YCone = new Luna::PrimitiveCone (m_Scene->GetView()->GetResources());
+    m_YCone = new Luna::PrimitiveCone (m_Scene->GetViewport()->GetResources());
     m_YCone->SetSolid( true );
     m_YCone->Update();
 
-    m_ZCone = new Luna::PrimitiveCone (m_Scene->GetView()->GetResources());
+    m_ZCone = new Luna::PrimitiveCone (m_Scene->GetViewport()->GetResources());
     m_ZCone->SetSolid( true );
     m_ZCone->Update();
 
@@ -654,7 +654,7 @@ void TranslateManipulator::MouseMove(wxMouseEvent& e)
             if (pick.HasHits())
             {
                 V_PickHitSmartPtr sorted;
-                PickHit::Sort(primary->GetNode()->GetScene()->GetView()->GetCamera(), pick.GetHits(), sorted, GetSnappingMode() == TranslateSnappingModes::Vertex ? PickSortTypes::Vertex : PickSortTypes::Intersection);
+                PickHit::Sort(primary->GetNode()->GetScene()->GetViewport()->GetCamera(), pick.GetHits(), sorted, GetSnappingMode() == TranslateSnappingModes::Vertex ? PickSortTypes::Vertex : PickSortTypes::Intersection);
 
                 V_PickHitSmartPtr::const_iterator itr = sorted.begin();
                 V_PickHitSmartPtr::const_iterator end = sorted.end();

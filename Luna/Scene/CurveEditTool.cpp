@@ -58,12 +58,12 @@ bool CurveEditTool::MouseDown( wxMouseEvent &e )
     Curve* curve = NULL;
     
     {
-      FrustumLinePickVisitor pick (m_Scene->GetView()->GetCamera(), e.GetX(), e.GetY());
+      FrustumLinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), e.GetX(), e.GetY());
 
       m_Scene->Pick( &pick );
 
       V_PickHitSmartPtr sorted;
-      PickHit::Sort(m_Scene->GetView()->GetCamera(), pick.GetHits(), sorted, PickSortTypes::Intersection);
+      PickHit::Sort(m_Scene->GetViewport()->GetCamera(), pick.GetHits(), sorted, PickSortTypes::Intersection);
 
       for ( V_PickHitSmartPtr::const_iterator itr = sorted.begin(), end = sorted.end(); itr != end; ++itr )
       {
@@ -79,7 +79,7 @@ bool CurveEditTool::MouseDown( wxMouseEvent &e )
       return false;
     }
 
-    LinePickVisitor pick (m_Scene->GetView()->GetCamera(), e.GetX(), e.GetY());
+    LinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), e.GetX(), e.GetY());
 
     switch ( GetEditMode() )
     {

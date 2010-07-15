@@ -5,7 +5,7 @@
 #include "Entity.h"
 #include "Scene.h"
 
-#include "View.h"
+#include "Viewport.h"
 #include "Color.h"
 #include "PrimitiveCube.h"
 #include "PrimitiveSphere.h"

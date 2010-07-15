@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "View.h"
+#include "Viewport.h"
 
 #include "Camera.h"
 #include "CameraMovedCommand.h"
@@ -23,48 +23,48 @@ using namespace Math;
 using namespace Luna;
 
 
-BEGIN_EVENT_TABLE(Luna::View, wxWindow)
+BEGIN_EVENT_TABLE(Luna::Viewport, wxWindow)
 
-EVT_SIZE(View::OnSize)
+EVT_SIZE(Viewport::OnSize)
 
-EVT_PAINT(View::OnPaint)
-EVT_SET_FOCUS(View::OnSetFocus)
-EVT_KILL_FOCUS(View::OnKillFocus)
+EVT_PAINT(Viewport::OnPaint)
+EVT_SET_FOCUS(Viewport::OnSetFocus)
+EVT_KILL_FOCUS(Viewport::OnKillFocus)
 
-EVT_KEY_DOWN(View::OnKeyDown)
-EVT_KEY_UP(View::OnKeyUp)
-EVT_CHAR(View::OnChar)
+EVT_KEY_DOWN(Viewport::OnKeyDown)
+EVT_KEY_UP(Viewport::OnKeyUp)
+EVT_CHAR(Viewport::OnChar)
 
-EVT_LEFT_DOWN(View::OnMouseDown)
-EVT_MIDDLE_DOWN(View::OnMouseDown)
-EVT_RIGHT_DOWN(View::OnMouseDown)
+EVT_LEFT_DOWN(Viewport::OnMouseDown)
+EVT_MIDDLE_DOWN(Viewport::OnMouseDown)
+EVT_RIGHT_DOWN(Viewport::OnMouseDown)
 
-EVT_LEFT_UP(View::OnMouseUp)
-EVT_MIDDLE_UP(View::OnMouseUp)
-EVT_RIGHT_UP(View::OnMouseUp)
+EVT_LEFT_UP(Viewport::OnMouseUp)
+EVT_MIDDLE_UP(Viewport::OnMouseUp)
+EVT_RIGHT_UP(Viewport::OnMouseUp)
 
-EVT_MOTION(View::OnMouseMove)
-EVT_MOUSEWHEEL(View::OnMouseScroll)
-EVT_LEAVE_WINDOW(View::OnMouseLeave)
+EVT_MOTION(Viewport::OnMouseMove)
+EVT_MOUSEWHEEL(Viewport::OnMouseScroll)
+EVT_LEAVE_WINDOW(Viewport::OnMouseLeave)
 
-EVT_MOUSE_CAPTURE_LOST(View::OnMouseCaptureLost)
+EVT_MOUSE_CAPTURE_LOST(Viewport::OnMouseCaptureLost)
 
 END_EVENT_TABLE()
 
-D3DMATERIAL9 View::s_LiveMaterial;
-D3DMATERIAL9 View::s_SelectedMaterial;
-D3DMATERIAL9 View::s_ReactiveMaterial;
-D3DMATERIAL9 View::s_HighlightedMaterial;
-D3DMATERIAL9 View::s_UnselectableMaterial;
-D3DMATERIAL9 View::s_ComponentMaterial;
-D3DMATERIAL9 View::s_SelectedComponentMaterial;
-D3DMATERIAL9 View::s_AssetTypeMaterials[ 1 ];
-D3DMATERIAL9 View::s_RedMaterial;
-D3DMATERIAL9 View::s_YellowMaterial;
-D3DMATERIAL9 View::s_GreenMaterial;
-D3DMATERIAL9 View::s_BlueMaterial;
+D3DMATERIAL9 Viewport::s_LiveMaterial;
+D3DMATERIAL9 Viewport::s_SelectedMaterial;
+D3DMATERIAL9 Viewport::s_ReactiveMaterial;
+D3DMATERIAL9 Viewport::s_HighlightedMaterial;
+D3DMATERIAL9 Viewport::s_UnselectableMaterial;
+D3DMATERIAL9 Viewport::s_ComponentMaterial;
+D3DMATERIAL9 Viewport::s_SelectedComponentMaterial;
+D3DMATERIAL9 Viewport::s_AssetTypeMaterials[ 1 ];
+D3DMATERIAL9 Viewport::s_RedMaterial;
+D3DMATERIAL9 Viewport::s_YellowMaterial;
+D3DMATERIAL9 Viewport::s_GreenMaterial;
+D3DMATERIAL9 Viewport::s_BlueMaterial;
 
-void View::InitializeType()
+void Viewport::InitializeType()
 {
   ZeroMemory( &s_LiveMaterial, sizeof( s_LiveMaterial ) );
   s_LiveMaterial.Ambient = Luna::Color::MAGENTA;
@@ -128,12 +128,12 @@ void View::InitializeType()
   s_AssetTypeMaterials[ 0 ].Specular = Luna::Color::BLACK;
 }
 
-void View::CleanupType()
+void Viewport::CleanupType()
 {
 
 }
 
-View::View(wxWindow *parent,
+Viewport::Viewport(wxWindow *parent,
              wxWindowID winid,
              const wxPoint& pos,
              const wxSize& size,
@@ -172,12 +172,12 @@ View::View(wxWindow *parent,
   SetHelpText( TXT( "This is the main editing view.  It displays objects in the scene and allows manipulation of the data." ) );
 }
 
-View::~View()
+Viewport::~Viewport()
 {
-  m_Cameras[ CameraModes::Orbit ].RemoveMovedListener( CameraMovedSignature::Delegate ( this, &View::CameraMoved ) );
+  m_Cameras[ CameraModes::Orbit ].RemoveMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 
-  m_D3DManager.RemoveDeviceFoundListener( DeviceStateSignature::Delegate( this, &View::OnAllocateResources ) );
-  m_D3DManager.RemoveDeviceLostListener( DeviceStateSignature::Delegate( this, &View::OnReleaseResources ) );
+  m_D3DManager.RemoveDeviceFoundListener( DeviceStateSignature::Delegate( this, &Viewport::OnAllocateResources ) );
+  m_D3DManager.RemoveDeviceLostListener( DeviceStateSignature::Delegate( this, &Viewport::OnReleaseResources ) );
 
   for (u32 i=0; i<GlobalPrimitives::Count; i++)
     delete m_GlobalPrimitives[i];
@@ -188,37 +188,37 @@ View::~View()
   delete m_ResourceTracker;
 }
 
-ResourceTracker* View::GetResources() const
+ResourceTracker* Viewport::GetResources() const
 {
   return m_ResourceTracker;
 }
 
-Statistics* View::GetStatistics() const
+Statistics* Viewport::GetStatistics() const
 {
   return m_Statistics;
 }
 
-Luna::Camera* View::GetCamera()
+Luna::Camera* Viewport::GetCamera()
 {
   return &m_Cameras[m_CameraMode];
 }
 
-const Luna::Camera* View::GetCamera() const
+const Luna::Camera* Viewport::GetCamera() const
 {
   return &m_Cameras[m_CameraMode];
 }
 
-Luna::Camera* View::GetCameraForMode(CameraMode mode)
+Luna::Camera* Viewport::GetCameraForMode(CameraMode mode)
 {
   return &m_Cameras[mode]; 
 }
 
-CameraMode View::GetCameraMode() const
+CameraMode Viewport::GetCameraMode() const
 {
   return m_CameraMode;
 }
 
-void View::SetCameraMode(CameraMode mode)
+void Viewport::SetCameraMode(CameraMode mode)
 {
   if ( mode != m_CameraMode )
   {
@@ -231,34 +231,34 @@ void View::SetCameraMode(CameraMode mode)
   }
 }
 
-void View::NextCameraMode()
+void Viewport::NextCameraMode()
 {
   SetCameraMode((CameraMode)((m_CameraMode + 1) % CameraModes::Count));
 }
 
-GeometryMode View::GetGeometryMode() const
+GeometryMode Viewport::GetGeometryMode() const
 {
   return m_GeometryMode;
 }
 
-void View::SetGeometryMode(GeometryMode mode)
+void Viewport::SetGeometryMode(GeometryMode mode)
 {
   m_GeometryMode = mode;
 
   Refresh();
 }
 
-void View::NextGeometryMode()
+void Viewport::NextGeometryMode()
 {
   SetGeometryMode((GeometryMode)((m_GeometryMode + 1) % GeometryModes::Count));
 }
 
-Luna::Tool* View::GetTool()
+Luna::Tool* Viewport::GetTool()
 {
   return m_Tool;
 }
 
-void View::SetTool(Luna::Tool* tool)
+void Viewport::SetTool(Luna::Tool* tool)
 {
   if ( m_Tool != tool )
   {
@@ -273,12 +273,12 @@ void View::SetTool(Luna::Tool* tool)
   }
 }
 
-bool View::IsHighlighting() const
+bool Viewport::IsHighlighting() const
 {
   return m_Highlighting;
 }
 
-void View::SetHighlighting(bool highlight)
+void Viewport::SetHighlighting(bool highlight)
 {
   m_Highlighting = highlight;
 
@@ -294,47 +294,47 @@ void View::SetHighlighting(bool highlight)
   }
 }
 
-bool View::IsAxesVisible() const
+bool Viewport::IsAxesVisible() const
 {
   return m_AxesVisible;
 }
 
-void View::SetAxesVisible(bool visible)
+void Viewport::SetAxesVisible(bool visible)
 {
   m_AxesVisible = visible;
 }
 
-bool View::IsGridVisible() const
+bool Viewport::IsGridVisible() const
 {
   return m_GridVisible;
 }
 
-void View::SetGridVisible(bool visible)
+void Viewport::SetGridVisible(bool visible)
 {
   m_GridVisible = visible;
 }
 
-bool View::IsBoundsVisible() const
+bool Viewport::IsBoundsVisible() const
 {
   return m_BoundsVisible;
 }
 
-void View::SetBoundsVisible(bool visible)
+void Viewport::SetBoundsVisible(bool visible)
 {
   m_BoundsVisible = visible;
 }
 
-bool View::IsStatisticsVisible() const
+bool Viewport::IsStatisticsVisible() const
 {
   return m_StatisticsVisible;
 }
 
-void View::SetStatisticsVisible(bool visible)
+void Viewport::SetStatisticsVisible(bool visible)
 {
   m_StatisticsVisible = visible;
 }
 
-Luna::Primitive* View::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which )
+Luna::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive which )
 {
   Luna::Primitive* prim = NULL;
   if ( which >= 0 && which < GlobalPrimitives::Count )
@@ -344,16 +344,16 @@ Luna::Primitive* View::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive whi
   return prim;
 }
 
-void View::InitDevice()
+void Viewport::InitDevice()
 {
   m_D3DManager.InitD3D( GetHwnd(), 64, 64 );
-  m_D3DManager.AddDeviceFoundListener( DeviceStateSignature::Delegate( this, &View::OnAllocateResources ) );
-  m_D3DManager.AddDeviceLostListener( DeviceStateSignature::Delegate( this, &View::OnReleaseResources ) );
+  m_D3DManager.AddDeviceFoundListener( DeviceStateSignature::Delegate( this, &Viewport::OnAllocateResources ) );
+  m_D3DManager.AddDeviceLostListener( DeviceStateSignature::Delegate( this, &Viewport::OnReleaseResources ) );
 
   m_ResourceTracker = new ResourceTracker( GetDevice() );
 }
 
-void View::InitWidgets()
+void Viewport::InitWidgets()
 {
   if ( !GetDevice() )
   {
@@ -370,7 +370,7 @@ void View::InitWidgets()
   m_GlobalPrimitives[GlobalPrimitives::StandardAxes]->Update();
 
   m_GlobalPrimitives[GlobalPrimitives::StandardGrid] = new Luna::PrimitiveGrid (m_ResourceTracker);
-  SceneEditorPreferences()->GetGridPreferencesPtr()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &View::OnGridPreferencesChanged ));
+  SceneEditorPreferences()->GetGridPreferencesPtr()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Viewport::OnGridPreferencesChanged ));
   OnGridPreferencesChanged( Reflect::ElementChangeArgs( NULL, NULL ) );
 
   m_GlobalPrimitives[GlobalPrimitives::StandardRings] = new Luna::PrimitiveRings (m_ResourceTracker);
@@ -392,7 +392,7 @@ void View::InitWidgets()
   m_SelectionFrame->Update();
 }
 
-void View::InitCameras()
+void Viewport::InitCameras()
 {
   // create the cameras
   m_Cameras[CameraModes::Orbit].Setup(ProjectionModes::Perspective, Vector3::Zero, Vector3::Zero);
@@ -406,10 +406,10 @@ void View::InitCameras()
   m_CameraHistory[CameraModes::Side].SetMaxLength( 10 );
   m_CameraHistory[CameraModes::Top].SetMaxLength( 10 );
 
-  m_Cameras[ CameraModes::Orbit ].AddMovedListener( CameraMovedSignature::Delegate ( this, &View::CameraMoved ) );
+  m_Cameras[ CameraModes::Orbit ].AddMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 }
 
-void View::Reset()
+void Viewport::Reset()
 {
   if ( !GetDevice() )
   {
@@ -452,7 +452,7 @@ void View::Reset()
 #endif
 }
 
-void View::OnSize(wxSizeEvent& e)
+void Viewport::OnSize(wxSizeEvent& e)
 {
   if ( !GetDevice() )
   {
@@ -467,7 +467,7 @@ void View::OnSize(wxSizeEvent& e)
   Refresh();
 }
 
-void View::OnPaint(wxPaintEvent& e)
+void Viewport::OnPaint(wxPaintEvent& e)
 {
   // draw
   Draw();
@@ -476,21 +476,21 @@ void View::OnPaint(wxPaintEvent& e)
   ::ValidateRect( (HWND)GetHandle(), NULL );
 }
 
-void View::OnSetFocus(wxFocusEvent& e)
+void Viewport::OnSetFocus(wxFocusEvent& e)
 {
   m_Focused = true;
 
   Refresh();
 }
 
-void View::OnKillFocus(wxFocusEvent& e)
+void Viewport::OnKillFocus(wxFocusEvent& e)
 {
   m_Focused = false;
 
   Refresh();
 }
 
-void View::OnKeyDown(wxKeyEvent& e)
+void Viewport::OnKeyDown(wxKeyEvent& e)
 {
   if ( m_Tool )
   {
@@ -519,7 +519,7 @@ void View::OnKeyDown(wxKeyEvent& e)
   }
 }
 
-void View::OnKeyUp(wxKeyEvent& e)
+void Viewport::OnKeyUp(wxKeyEvent& e)
 {
   if ( m_Tool )
   {
@@ -539,7 +539,7 @@ void View::OnKeyUp(wxKeyEvent& e)
   }
 }
 
-void View::OnChar(wxKeyEvent& e)
+void Viewport::OnChar(wxKeyEvent& e)
 {
   if ( m_Tool )
   {
@@ -559,7 +559,7 @@ void View::OnChar(wxKeyEvent& e)
   }
 }
 
-void View::OnMouseDown(wxMouseEvent& e)
+void Viewport::OnMouseDown(wxMouseEvent& e)
 {
 #pragma TODO("Freeze here -Geoff")
 
@@ -645,7 +645,7 @@ void View::OnMouseDown(wxMouseEvent& e)
   Update();
 }
 
-void View::OnMouseUp(wxMouseEvent& e)
+void Viewport::OnMouseUp(wxMouseEvent& e)
 {
 #pragma TODO("Freeze here -Geoff")
 
@@ -820,7 +820,7 @@ void View::OnMouseUp(wxMouseEvent& e)
   Update();
 }
 
-void View::OnMouseMove(wxMouseEvent& e)
+void Viewport::OnMouseMove(wxMouseEvent& e)
 {
   // Grab focus on mouse move if our top level window is active
   if ( !m_Focused )
@@ -957,7 +957,7 @@ void View::OnMouseMove(wxMouseEvent& e)
   }
 }
 
-void View::OnMouseScroll(wxMouseEvent& e)
+void Viewport::OnMouseScroll(wxMouseEvent& e)
 {
   if (m_Focused)
   {
@@ -968,7 +968,7 @@ void View::OnMouseScroll(wxMouseEvent& e)
   }
 }
 
-void View::OnMouseLeave(wxMouseEvent& e)
+void Viewport::OnMouseLeave(wxMouseEvent& e)
 {
   if (m_Focused)
   {
@@ -977,14 +977,14 @@ void View::OnMouseLeave(wxMouseEvent& e)
   }
 }
 
-void View::OnMouseCaptureLost(wxMouseCaptureLostEvent& e)
+void Viewport::OnMouseCaptureLost(wxMouseCaptureLostEvent& e)
 {
   // If this function does not exist, then an assert is thrown off by the wxWidgets 
   // framework when you hold down either the left or middle mouse buttons and click
   // the right mouse button.
 }
 
-void View::Draw()
+void Viewport::Draw()
 {
   if ( !m_D3DManager.TestDeviceReady() )
   {
@@ -1036,7 +1036,7 @@ void View::Draw()
   //
 
   {
-    LUNA_SCENE_DRAW_SCOPE_TIMER( ("Setup View and Projection") );
+    LUNA_SCENE_DRAW_SCOPE_TIMER( ("Setup Viewport and Projection") );
 
     // proj
     int w, h;
@@ -1044,7 +1044,7 @@ void View::Draw()
     device->SetTransform(D3DTS_PROJECTION, (D3DMATRIX*)&m_Cameras[m_CameraMode].SetProjection(w, h));
 
     // view
-    device->SetTransform(D3DTS_VIEW, (D3DMATRIX*)&m_Cameras[m_CameraMode].GetView());
+    device->SetTransform(D3DTS_VIEW, (D3DMATRIX*)&m_Cameras[m_CameraMode].GetViewport());
   }
 
 
@@ -1246,29 +1246,29 @@ void View::Draw()
   return;
 }
 
-void View::UndoTransform( )
+void Viewport::UndoTransform( )
 {
   UndoTransform( m_CameraMode );
 }
 
-void View::UndoTransform( CameraMode camMode )
+void Viewport::UndoTransform( CameraMode camMode )
 {
   m_CameraHistory[camMode].Undo();
   Refresh();
 }
 
-void View::RedoTransform( )
+void Viewport::RedoTransform( )
 {
   RedoTransform( m_CameraMode );
 }
 
-void View::RedoTransform( CameraMode camMode )
+void Viewport::RedoTransform( CameraMode camMode )
 {
   m_CameraHistory[camMode].Redo();
   Refresh();
 }
 
-void View::UpdateCameraHistory( )
+void Viewport::UpdateCameraHistory( )
 {  
   // We only work for the Orbit camera at the moment. SetTransform assumes a Perspective view
   // Not sure how to handle orthographic at the moment.
@@ -1280,7 +1280,7 @@ void View::UpdateCameraHistory( )
   m_CameraHistory[m_CameraMode].Push( new CameraMovedCommand( this, &m_Cameras[m_CameraMode] ) );
 }
 
-void View::PreDraw( DrawArgs* args )
+void Viewport::PreDraw( DrawArgs* args )
 {
   IDirect3DDevice9* device = GetDevice();
   device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
@@ -1291,7 +1291,7 @@ void View::PreDraw( DrawArgs* args )
   }
 }
 
-void View::PostDraw( DrawArgs* args )
+void Viewport::PostDraw( DrawArgs* args )
 {
   IDirect3DDevice9* device = GetDevice();
   device->SetTransform(D3DTS_WORLD, (D3DMATRIX*)&Matrix4::Identity);
@@ -1384,29 +1384,29 @@ void View::PostDraw( DrawArgs* args )
   }
 }
 
-void View::OnReleaseResources( const DeviceStateArgs& args )
+void Viewport::OnReleaseResources( const DeviceStateArgs& args )
 {
   m_ResourceTracker->DeviceLost();
   m_Statistics->Delete();
 }
 
-void View::OnAllocateResources( const DeviceStateArgs& args )
+void Viewport::OnAllocateResources( const DeviceStateArgs& args )
 {
   m_ResourceTracker->DeviceReset();
   m_Statistics->Create();
 }
 
-void View::CameraMoved( const Luna::CameraMovedArgs& args )
+void Viewport::CameraMoved( const Luna::CameraMovedArgs& args )
 {
   m_CameraMoved.Raise( args );  
 }
 
-void View::RemoteCameraMoved( const Math::Matrix4& transform )
+void Viewport::RemoteCameraMoved( const Math::Matrix4& transform )
 {
   m_Cameras[ CameraModes::Orbit ].SetTransform( transform );
 }
 
-void View::OnGridPreferencesChanged( const Reflect::ElementChangeArgs& args )
+void Viewport::OnGridPreferencesChanged( const Reflect::ElementChangeArgs& args )
 {
   GridPreferences* gridPreferences = SceneEditorPreferences()->GetGridPreferences();
   Luna::PrimitiveGrid* grid = (Luna::PrimitiveGrid*) m_GlobalPrimitives[GlobalPrimitives::StandardGrid];

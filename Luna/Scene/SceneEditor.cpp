@@ -28,7 +28,7 @@
 #include "TranslateManipulator.h"
 #include "ToolsPanel.h"
 #include "TypeGrid.h"
-#include "View.h"
+#include "Viewport.h"
 #include "VolumeCreateTool.h"
 #include "Mesh.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
@@ -320,7 +320,7 @@ SceneEditor::SceneEditor()
     // Center pane
     //
 
-    m_View = new Luna::View(this, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS);
+    m_View = new Luna::Viewport(this, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS);
     m_View->AddRenderListener( RenderSignature::Delegate ( this, &SceneEditor::Render ) );
     m_View->AddSelectListener( SelectSignature::Delegate ( this, &SceneEditor::Select ) ); 
     m_View->AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &SceneEditor::SetHighlight ) );
@@ -400,7 +400,7 @@ SceneEditor::SceneEditor()
         LeftDockable(false).RightDockable(false));
 
     m_FrameManager.AddPane(m_ViewToolBar, wxAuiPaneInfo().
-        Name(wxT("view")).Caption(wxT("View")).
+        Name(wxT("view")).Caption(wxT("Viewport")).
         ToolbarPane().Top().Position(1).
         LeftDockable(false).RightDockable(false));
 
@@ -598,10 +598,10 @@ SceneEditor::SceneEditor()
         m_ViewMenu->Append(SceneEditorIDs::ID_ViewFrameOrigin, _("Frame Origin (O)"));
         m_ViewMenu->Append(SceneEditorIDs::ID_ViewFrameSelected, _("Frame Selected (F)"));
         m_ViewMenu->AppendCheckItem(SceneEditorIDs::ID_ViewHighlightMode, _("Highlight Mode (H)"));
-        m_ViewMenu->Append(SceneEditorIDs::ID_ViewPreviousView, _("Previous View   ["));
-        m_ViewMenu->Append(SceneEditorIDs::ID_ViewNextView, _("Next View    ]"));
+        m_ViewMenu->Append(SceneEditorIDs::ID_ViewPreviousView, _("Previous Viewport   ["));
+        m_ViewMenu->Append(SceneEditorIDs::ID_ViewNextView, _("Next Viewport    ]"));
 
-        mb->Append(m_ViewMenu, _("View"));
+        mb->Append(m_ViewMenu, _("Viewport"));
     }
 
     {
@@ -910,10 +910,10 @@ void SceneEditor::OnShow(wxShowEvent& event)
     class RenderThread : public wxThread
     {
     private:
-        Luna::View* m_View;
+        Luna::Viewport* m_View;
 
     public:
-        RenderThread(Luna::View* view)
+        RenderThread(Luna::Viewport* view)
             : m_View (view)
         {
 
@@ -1606,7 +1606,7 @@ void SceneEditor::OnViewCameraChange(wxCommandEvent& event)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Handles callbacks for menu items dealing with View->Show and View->Hide.
+// Handles callbacks for menu items dealing with Viewport->Show and Viewport->Hide.
 // Changes the visibility of items according to which command was called.
 // 
 void SceneEditor::OnViewVisibleChange(wxCommandEvent& event)

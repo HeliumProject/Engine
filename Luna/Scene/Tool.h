@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "View.h"
+#include "Viewport.h"
 
 #include "Core/Selection.h"
 
 namespace Luna
 {
-  class View;
+  class Viewport;
 
   class Tool NOC_ABSTRACT : public Object
   {
@@ -20,7 +20,7 @@ namespace Luna
     Enumerator* m_Enumerator;
 
     // The 3d view
-    Luna::View* m_View;
+    Luna::Viewport* m_View;
 
     bool m_AllowSelection;
 
@@ -39,7 +39,7 @@ namespace Luna
     //
 
   public:
-    Tool( Luna::View* view, Enumerator* enumerator )
+    Tool( Luna::Viewport* view, Enumerator* enumerator )
       : m_Enumerator (enumerator)
       , m_View ( view )
       , m_AllowSelection( true )

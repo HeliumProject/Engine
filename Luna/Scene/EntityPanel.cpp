@@ -81,7 +81,7 @@ bool SelectionHasSameAttribute(const OS_SelectableDumbPtr& selection, Component:
 
         if ( itr == selection.Begin() )
         {
-            attribute.View( packageNode );
+            attribute.Viewport( packageNode );
             if ( !attribute.Valid() )
             {
                 return false;
@@ -434,7 +434,7 @@ void EntityPanel::OnEntityAssetRefresh( Inspect::Button* button )
         {
             for ( int i=0; i<GeometryModes::Count; i++ )
             {
-                Luna::Scene* nestedScene = entity->GetNestedScene(entity->GetScene()->GetView()->GetGeometryMode());
+                Luna::Scene* nestedScene = entity->GetNestedScene(entity->GetScene()->GetViewport()->GetGeometryMode());
 
                 if (nestedScene)
                 {

@@ -36,7 +36,7 @@ namespace Luna
 
   public:
     SceneTool( Luna::Scene* scene, Enumerator* enumerator )
-      : Tool ( scene->GetView(), enumerator )
+      : Tool ( scene->GetViewport(), enumerator )
       , m_Scene ( scene )
     {
 

@@ -248,7 +248,7 @@ VaultFrame::VaultFrame( Vault* browser, VaultSearch* browserSearch, SearchHistor
     m_FrameManager.Update();
 
     //
-    // View Menu Button
+    // Viewport Menu Button
     //
     {
         m_OptionsMenu = new wxMenu();

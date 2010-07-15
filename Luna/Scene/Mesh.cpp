@@ -58,12 +58,12 @@ Mesh::Mesh( Luna::Scene* scene, Content::Mesh* mesh )
     count += mesh->m_ShaderTriangleCounts[i];
   }
 
-  m_Indices = new IndexResource ( scene->GetView()->GetResources() );
+  m_Indices = new IndexResource ( scene->GetViewport()->GetResources() );
   m_Indices->SetElementType( ElementTypes::Unsigned32 );
   m_Indices->SetElementCount( (u32)(mesh->m_WireframeVertexIndices.size() + mesh->m_TriangleVertexIndices.size()) );
   m_Indices->SetPopulator( PopulateSignature::Delegate( this, &Mesh::Populate ) );
   
-  m_Vertices = new VertexResource ( scene->GetView()->GetResources() );
+  m_Vertices = new VertexResource ( scene->GetViewport()->GetResources() );
   m_Vertices->SetElementType( ElementTypes::StandardVertex );
   m_Vertices->SetElementCount( (u32)mesh->m_Positions.size() );
 
@@ -262,7 +262,7 @@ void Mesh::Render( RenderVisitor* render )
 {
   RenderEntry* entry = render->Allocate(this);
 
-  if (render->GetView()->GetCamera()->IsBackFaceCulling() && render->State().m_Matrix.Determinant() < 0)
+  if (render->GetViewport()->GetCamera()->IsBackFaceCulling() && render->State().m_Matrix.Determinant() < 0)
   {
     entry->m_ObjectSetup = &Mesh::SetupFlippedObject;
     entry->m_ObjectReset = &Mesh::ResetFlippedObject;
@@ -277,12 +277,12 @@ void Mesh::Render( RenderVisitor* render )
   entry->m_Flags |= m_HasAlpha ? RenderFlags::DistanceSort : 0;
 
   bool selectable = render->State().m_Selectable;
-  bool highlighted = ( ( IsHighlighted() && m_Scene->IsCurrent() ) || ( render->State().m_Highlighted ) ) && render->GetView()->IsHighlighting();
+  bool highlighted = ( ( IsHighlighted() && m_Scene->IsCurrent() ) || ( render->State().m_Highlighted ) ) && render->GetViewport()->IsHighlighting();
   bool selected = ( IsSelected() && m_Scene->IsCurrent() ) || ( render->State().m_Selected );
   bool live = ( IsLive() && m_Scene->IsCurrent() ) || ( render->State().m_Live );
-  bool wire = render->GetView()->GetCamera()->GetWireframeOnShaded();
+  bool wire = render->GetViewport()->GetCamera()->GetWireframeOnShaded();
 
-  switch ( render->GetView()->GetCamera()->GetShadingMode() )
+  switch ( render->GetViewport()->GetCamera()->GetShadingMode() )
   {
   case ShadingModes::Wireframe:
     {
@@ -332,12 +332,12 @@ void Mesh::Render( RenderVisitor* render )
 
       entry->m_Draw = &Mesh::DrawNormal;
 
-      if ( render->GetView()->GetCamera()->GetWireframeOnMesh() && ( highlighted || selected || live || wire ) )
+      if ( render->GetViewport()->GetCamera()->GetWireframeOnMesh() && ( highlighted || selected || live || wire ) )
       {
         // this will draw unbiased wireframe
         entry = render->Allocate(this);
 
-        if (render->GetView()->GetCamera()->IsBackFaceCulling() && render->State().m_Matrix.Determinant() < 0)
+        if (render->GetViewport()->GetCamera()->IsBackFaceCulling() && render->State().m_Matrix.Determinant() < 0)
         {
           entry->m_ObjectSetup = &Mesh::SetupFlippedObject;
           entry->m_ObjectReset = &Mesh::ResetFlippedObject;
@@ -444,22 +444,22 @@ void Mesh::DrawUnselectableWire( IDirect3DDevice9* device, DrawArgs* args, const
 
 void Mesh::SetupUnselectableWire( IDirect3DDevice9* device )
 {
-  device->SetMaterial( &Luna::View::s_UnselectableMaterial );
+  device->SetMaterial( &Luna::Viewport::s_UnselectableMaterial );
 }
 
 void Mesh::SetupSelectedWire( IDirect3DDevice9* device )
 {
-  device->SetMaterial( &Luna::View::s_SelectedMaterial );
+  device->SetMaterial( &Luna::Viewport::s_SelectedMaterial );
 }
 
 void Mesh::SetupHighlightedWire( IDirect3DDevice9* device )
 {
-  device->SetMaterial( &Luna::View::s_HighlightedMaterial );
+  device->SetMaterial( &Luna::Viewport::s_HighlightedMaterial );
 }
 
 void Mesh::SetupLiveWire( IDirect3DDevice9* device )
 {
-  device->SetMaterial( &Luna::View::s_LiveMaterial );
+  device->SetMaterial( &Luna::Viewport::s_LiveMaterial );
 }
 
 void Mesh::SetupAlpha( IDirect3DDevice9* device )
@@ -501,7 +501,7 @@ void Mesh::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const SceneNode
 
   if (indices && vertices)
   {
-    Luna::View* view = node->GetScene()->GetView();
+    Luna::Viewport* view = node->GetScene()->GetViewport();
     Luna::Camera* camera = view->GetCamera();
 
     switch ( camera->GetShadingMode() )

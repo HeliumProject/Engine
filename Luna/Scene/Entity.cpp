@@ -248,7 +248,7 @@ void Entity::Evaluate(GraphDirection direction)
             if ( IsGeometryVisible() )
             {
                 // merge nested scene into our bounding box
-                const Luna::Scene* nested = GetNestedScene( m_Scene->GetView()->GetGeometryMode() );
+                const Luna::Scene* nested = GetNestedScene( m_Scene->GetViewport()->GetGeometryMode() );
 
                 if (nested)
                 {
@@ -290,7 +290,7 @@ void Entity::Render( RenderVisitor* render )
 
     if (IsGeometryVisible())
     {
-        const Luna::Scene* nested = GetNestedScene( render->GetView()->GetGeometryMode() );
+        const Luna::Scene* nested = GetNestedScene( render->GetViewport()->GetGeometryMode() );
 
         VisitorState state ( render->State().m_Matrix,
             render->State().m_Highlighted || (m_Scene->IsCurrent() && IsHighlighted()),
@@ -374,7 +374,7 @@ bool Entity::Pick( PickVisitor* pick )
         pick->PushState( VisitorState (pick->State().m_Matrix, IsHighlighted(), IsSelected(), IsLive(), IsSelectable()) );
 
         // retrieve nested scene
-        const Luna::Scene* scene = GetNestedScene(GetScene()->GetView()->GetGeometryMode());
+        const Luna::Scene* scene = GetNestedScene(GetScene()->GetViewport()->GetGeometryMode());
 
         // hit test the entire nested scene
         if (scene && scene->Pick(pick))

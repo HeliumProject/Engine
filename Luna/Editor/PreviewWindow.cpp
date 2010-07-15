@@ -320,7 +320,7 @@ bool PreviewWindow::RenderScene()
   {
     std::vector< Render::Scene* > renderScenes;
 
-    m_Scene->m_viewmat = *( ( D3DMATRIX* )( &m_Camera.GetView() ) );
+    m_Scene->m_viewmat = *( ( D3DMATRIX* )( &m_Camera.GetViewport() ) );
     m_Scene->m_projmat = *( ( D3DMATRIX* )( &m_Camera.SetProjection( m_Scene->m_width, m_Scene->m_height ) ) );
     renderScenes.push_back( m_Scene );
 

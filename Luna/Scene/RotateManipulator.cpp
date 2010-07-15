@@ -2,7 +2,7 @@
 #include "RotateManipulator.h"
 
 #include "Pick.h"
-#include "View.h"
+#include "Viewport.h"
 #include "Camera.h"
 #include "Color.h"
 
@@ -43,7 +43,7 @@ RotateManipulator::RotateManipulator(const ManipulatorMode mode, Luna::Scene* sc
 
   prefs->GetEnum( prefs->RotateManipulatorSpace(), m_Space );
 
-  m_Ring = new Luna::PrimitiveCircle (m_Scene->GetView()->GetResources());
+  m_Ring = new Luna::PrimitiveCircle (m_Scene->GetViewport()->GetResources());
   m_Ring->m_RadiusSteps = 360;
   m_Ring->Update();
 }
@@ -588,7 +588,7 @@ void RotateManipulator::MouseMove(wxMouseEvent& e)
   else
   {
     //
-    // ArcBall and View Plane
+    // ArcBall and Viewport Plane
     //
 
     if (m_Type == RotationTypes::ArcBall)

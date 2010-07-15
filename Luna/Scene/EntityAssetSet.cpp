@@ -71,7 +71,7 @@ void EntityAssetSet::LoadAssetClass()
             Luna::PrimitiveCube* cube;
             if ( !m_Shape )
             {
-                cube = new Luna::PrimitiveCube (m_Type->GetScene()->GetView()->GetResources());
+                cube = new Luna::PrimitiveCube (m_Type->GetScene()->GetViewport()->GetResources());
                 cube->Update();
 
                 m_Shape = cube;

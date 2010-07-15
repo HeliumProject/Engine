@@ -2,14 +2,14 @@
 #include "CameraMovedCommand.h"
 
 #include "Camera.h"
-#include "View.h"
+#include "Viewport.h"
 
 using namespace Math;
 
 namespace Luna
 {
 
-CameraMovedCommand::CameraMovedCommand(Luna::View* view, Luna::Camera* cam )
+CameraMovedCommand::CameraMovedCommand(Luna::Viewport* view, Luna::Camera* cam )
 : m_Camera( cam ),
   m_View( view )
 {

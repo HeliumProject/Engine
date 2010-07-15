@@ -113,7 +113,7 @@ void NavMesh::CleanupType()
 NavMesh::NavMesh( Luna::Scene* scene, Content::Mesh* mesh )
 : Luna::Mesh ( scene, mesh )
 {
-  m_Locator = new Luna::PrimitiveLocator( m_Scene->GetView()->GetResources() );
+  m_Locator = new Luna::PrimitiveLocator( m_Scene->GetViewport()->GetResources() );
   m_Locator->Update();
   if (mesh->m_TriangleVertexIndices.size() == 0)
   {
@@ -328,7 +328,7 @@ void NavMesh::Render( RenderVisitor* render )
   entry->m_Draw = &NavMesh::DrawMeshEdges;
 
   //draw the mesh tris
-  if (render->GetView()->GetCamera()->GetShadingMode() !=  ShadingModes::Wireframe)
+  if (render->GetViewport()->GetCamera()->GetShadingMode() !=  ShadingModes::Wireframe)
   {
     entry = render->Allocate(this);
     SetUpNavMeshRenderEntry(render, entry);
@@ -369,7 +369,7 @@ void NavMesh::DrawMeshVerts( IDirect3DDevice9* device, DrawArgs* args, const Sce
   device->SetRenderState( D3DRS_POINTSIZE, *( (DWORD*) &pointSize ) );
   device->DrawPrimitive( D3DPT_POINTLIST, (u32)vertices->GetBaseIndex(), meshPoints );
   device->SetRenderState( D3DRS_POINTSPRITEENABLE, FALSE );
-  device->SetMaterial( &Luna::View::s_ReactiveMaterial );
+  device->SetMaterial( &Luna::Viewport::s_ReactiveMaterial );
   device->SetRenderState( D3DRS_CULLMODE, D3DCULL_CW );
 }
 
@@ -453,7 +453,7 @@ void NavMesh::DrawMouseOverVert( IDirect3DDevice9* device, DrawArgs* args, const
   {
     static float high_light_pointSize = 10.0f;
     device->SetRenderState( D3DRS_POINTSIZE, *( (DWORD*) &high_light_pointSize ) );
-    device->SetMaterial( &Luna::View::s_ReactiveMaterial );
+    device->SetMaterial( &Luna::Viewport::s_ReactiveMaterial );
     device->DrawPrimitive( D3DPT_POINTLIST, (u32)vertices->GetBaseIndex() + navMesh->m_mouse_over_vert, 1 );
   }
   device->SetRenderState( D3DRS_POINTSPRITEENABLE, FALSE );
@@ -490,7 +490,7 @@ void NavMesh::DrawSelectedVerts( IDirect3DDevice9* device, DrawArgs* args, const
   device->SetRenderState( D3DRS_POINTSIZE, *( (DWORD*) &select_top_two_pointSize ) );
   if (navMesh->m_selected_verts.size())
   {
-    device->SetMaterial( &Luna::View::s_RedMaterial );
+    device->SetMaterial( &Luna::Viewport::s_RedMaterial );
     device->DrawPrimitive( D3DPT_POINTLIST, (u32)vertices->GetBaseIndex() + navMesh->m_selected_verts[0], 1 );
     if (navMesh->m_selected_verts.size()>1)
     {
@@ -500,7 +500,7 @@ void NavMesh::DrawSelectedVerts( IDirect3DDevice9* device, DrawArgs* args, const
 
   static float select_pointSize = 6.0f;
   device->SetRenderState( D3DRS_POINTSIZE, *( (DWORD*) &select_pointSize ) );
-  device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
+  device->SetMaterial( &Luna::Viewport::s_SelectedComponentMaterial );
   for (std::vector< u32 >::const_iterator it = navMesh->m_selected_verts.begin(); it != navMesh->m_selected_verts.end(); ++it)
   {
     device->DrawPrimitive( D3DPT_POINTLIST, (u32)vertices->GetBaseIndex() + *it, 1 );
@@ -513,7 +513,7 @@ void NavMesh::DrawSelectedVerts( IDirect3DDevice9* device, DrawArgs* args, const
   static float marquee_pointSize = 7.0f;
   if (navMesh->m_marquee_selected_verts.size())
   {
-    device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
+    device->SetMaterial( &Luna::Viewport::s_SelectedComponentMaterial );
     device->SetRenderState( D3DRS_POINTSIZE, *( (DWORD*) &marquee_pointSize ) );
     for (std::vector< u32 >::const_iterator it = navMesh->m_marquee_selected_verts.begin(); it != navMesh->m_marquee_selected_verts.end(); ++it)
     {
@@ -539,7 +539,7 @@ void NavMesh::DrawToBeDeletedVerts( IDirect3DDevice9* device, DrawArgs* args, co
 
   static float delete_pointSize = 8.0f;
   device->SetRenderState( D3DRS_POINTSIZE, *( (DWORD*) &delete_pointSize ) );
-  device->SetMaterial( &Luna::View::s_RedMaterial );
+  device->SetMaterial( &Luna::Viewport::s_RedMaterial );
   for (std::vector< u32 >::const_iterator it = navMesh->m_to_be_deleted_verts.begin(); it != navMesh->m_to_be_deleted_verts.end(); ++it)
   {
     device->DrawPrimitive( D3DPT_POINTLIST, (u32)vertices->GetBaseIndex() + *it, 1 );
@@ -554,7 +554,7 @@ void NavMesh::DrawMouseOverEdge( IDirect3DDevice9* device, DrawArgs* args, const
   const Luna::NavMesh* navMesh = Reflect::ConstAssertCast< Luna::NavMesh > ( node );
   const Content::Mesh* data = navMesh->GetPackage<Content::Mesh>();
   const VertexResource* vertices = navMesh->m_Vertices;
-  //Luna::View* view = node->GetScene()->GetView();
+  //Luna::Viewport* view = node->GetScene()->GetViewport();
   //Luna::Camera* camera = view->GetCamera();
   u32 meshPoints    = (u32) data->GetVertexCount();
   navMesh->SetMaterial( navMesh->s_Material );
@@ -569,7 +569,7 @@ void NavMesh::DrawMouseOverEdge( IDirect3DDevice9* device, DrawArgs* args, const
   }
   if (navMesh->m_mouse_over_edge != 0xFFFFFFFF)
   {
-    device->SetMaterial( &Luna::View::s_ReactiveMaterial );
+    device->SetMaterial( &Luna::Viewport::s_ReactiveMaterial );
     device->DrawIndexedPrimitive(D3DPT_LINELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + navMesh->m_mouse_over_edge*2, 1 );
     args->m_LineCount += 1;
   }
@@ -582,7 +582,7 @@ void NavMesh::DrawSelectedEdge( IDirect3DDevice9* device, DrawArgs* args, const 
   const Luna::NavMesh* navMesh = Reflect::ConstAssertCast< Luna::NavMesh > ( node );
   const Content::Mesh* data = navMesh->GetPackage<Content::Mesh>();
   const VertexResource* vertices = navMesh->m_Vertices;
-  //Luna::View* view = node->GetScene()->GetView();
+  //Luna::Viewport* view = node->GetScene()->GetViewport();
   //Luna::Camera* camera = view->GetCamera();
   u32 meshPoints    = (u32) data->GetVertexCount();
   if ( !meshPoints || !vertices->SetState() )
@@ -597,14 +597,14 @@ void NavMesh::DrawSelectedEdge( IDirect3DDevice9* device, DrawArgs* args, const 
   device->SetRenderState(D3DRS_ZENABLE, FALSE);
   if (navMesh->m_selected_edge != 0xFFFFFFFF)
   {
-    device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
+    device->SetMaterial( &Luna::Viewport::s_SelectedComponentMaterial );
     device->DrawIndexedPrimitive(D3DPT_LINELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + navMesh->m_selected_edge*2, 1 );
     args->m_LineCount += 1;
   }
   //TEMP RENDERING TO DISPLAY MAQRQUEE TRIS
   if (navMesh->m_marquee_selected_edges.size())
   {
-    device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
+    device->SetMaterial( &Luna::Viewport::s_SelectedComponentMaterial );
     for (std::vector< u32 >::const_iterator it = navMesh->m_marquee_selected_edges.begin(); it != navMesh->m_marquee_selected_edges.end(); ++it)
     {
       device->DrawIndexedPrimitive(D3DPT_LINELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + *(it)*2, 1 );
@@ -621,7 +621,7 @@ void NavMesh::DrawMouseOverTri( IDirect3DDevice9* device, DrawArgs* args, const 
   const Luna::NavMesh* navMesh = Reflect::ConstAssertCast< Luna::NavMesh > ( node );
   const Content::Mesh* data = navMesh->GetPackage<Content::Mesh>();
   const VertexResource* vertices = navMesh->m_Vertices;
-  //Luna::View* view = node->GetScene()->GetView();
+  //Luna::Viewport* view = node->GetScene()->GetViewport();
   //Luna::Camera* camera = view->GetCamera();
   u32 meshPoints    = (u32) data->GetVertexCount();
   if ( !meshPoints || !vertices->SetState() )
@@ -660,7 +660,7 @@ void NavMesh::DrawSelectedTri( IDirect3DDevice9* device, DrawArgs* args, const S
   const Luna::NavMesh* navMesh = Reflect::ConstAssertCast< Luna::NavMesh > ( node );
   const Content::Mesh* data = navMesh->GetPackage<Content::Mesh>();
   const VertexResource* vertices = navMesh->m_Vertices;
-  //Luna::View* view = node->GetScene()->GetView();
+  //Luna::Viewport* view = node->GetScene()->GetViewport();
   //Luna::Camera* camera = view->GetCamera();
   u32 meshPoints    = (u32) data->GetVertexCount();
   if ( !meshPoints || !vertices->SetState() )
@@ -691,7 +691,7 @@ void NavMesh::DrawSelectedTri( IDirect3DDevice9* device, DrawArgs* args, const S
   //TEMP RENDERING TO DISPLAY MAQRQUEE TRIS
   if (navMesh->m_marquee_selected_tris.size())
   {
-    device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
+    device->SetMaterial( &Luna::Viewport::s_SelectedComponentMaterial );
     for (std::vector< u32 >::const_iterator it = navMesh->m_marquee_selected_tris.begin(); it != navMesh->m_marquee_selected_tris.end(); ++it)
     {
       device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + (u32)data->m_WireframeVertexIndices.size() + (*it)*3, 1 );
@@ -710,7 +710,7 @@ void NavMesh::DrawToBeDeletedTris( IDirect3DDevice9* device, DrawArgs* args, con
   const Luna::NavMesh* navMesh = Reflect::ConstAssertCast< Luna::NavMesh > ( node );
   const Content::Mesh* data = navMesh->GetPackage<Content::Mesh>();
   const VertexResource* vertices = navMesh->m_Vertices;
-  //Luna::View* view = node->GetScene()->GetView();
+  //Luna::Viewport* view = node->GetScene()->GetViewport();
   //Luna::Camera* camera = view->GetCamera();
   u32 meshPoints    = (u32) data->GetVertexCount();
   if ( !meshPoints || !vertices->SetState() )
@@ -724,7 +724,7 @@ void NavMesh::DrawToBeDeletedTris( IDirect3DDevice9* device, DrawArgs* args, con
   }
   for (std::vector< u32 >::const_iterator it = navMesh->m_to_be_deleted_tris.begin(); it != navMesh->m_to_be_deleted_tris.end(); ++it)
   {
-    device->SetMaterial( &Luna::View::s_RedMaterial );
+    device->SetMaterial( &Luna::Viewport::s_RedMaterial );
     device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
     device->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vertices->GetBaseIndex(), 0, vertices->GetElementCount(), navMesh->m_Indices->GetBaseIndex() + (u32)data->m_WireframeVertexIndices.size() + (*it)*3, 1 );
     args->m_TriangleCount += 1;

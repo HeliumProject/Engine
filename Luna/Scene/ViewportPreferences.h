@@ -2,7 +2,7 @@
 
 #include "Foundation/Reflect/Element.h"
 #include "CameraPreferences.h"
-#include "View.h"
+#include "Viewport.h"
 
 namespace Luna
 {
@@ -29,13 +29,13 @@ namespace Luna
   }
   typedef ViewColorModes::ViewColorMode ViewColorMode;
 
-  class ViewPreferences : public Reflect::Element
+  class ViewportPreferences : public Reflect::Element
   {
   public: 
-    ViewPreferences(); 
+    ViewportPreferences(); 
 
-    void ApplyToView(Luna::View* view); 
-    void LoadFromView(Luna::View* view); 
+    void ApplyToView(Luna::Viewport* view); 
+    void LoadFromView(Luna::Viewport* view); 
 
   private: 
     CameraMode            m_CameraMode; 
@@ -50,14 +50,14 @@ namespace Luna
     bool m_StatisticsVisible; 
 
   public:
-    REFLECT_DECLARE_CLASS(ViewPreferences, Reflect::Element);
-    static void EnumerateClass( Reflect::Compositor<ViewPreferences>& comp );
+    REFLECT_DECLARE_CLASS(ViewportPreferences, Reflect::Element);
+    static void EnumerateClass( Reflect::Compositor<ViewportPreferences>& comp );
 
     ViewColorMode GetColorMode() const;
     void SetColorMode( ViewColorMode mode );
     const Reflect::Field* ColorModeField() const;
   }; 
 
-  typedef Nocturnal::SmartPtr<ViewPreferences> ViewPreferencesPtr; 
+  typedef Nocturnal::SmartPtr<ViewportPreferences> ViewPreferencesPtr; 
 
 }

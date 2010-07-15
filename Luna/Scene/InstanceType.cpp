@@ -4,7 +4,7 @@
 
 #include "Scene.h"
 
-#include "View.h"
+#include "Viewport.h"
 #include "Color.h"
 #include "PrimitivePointer.h"
 
@@ -35,7 +35,7 @@ InstanceType::InstanceType( Luna::Scene* scene, i32 instanceType )
   m_Material.Diffuse = Luna::Color::BLACK;
   m_Material.Specular = Luna::Color::BLACK;
 
-  m_Pointer = new Luna::PrimitivePointer( scene->GetView()->GetResources() );
+  m_Pointer = new Luna::PrimitivePointer( scene->GetViewport()->GetResources() );
   m_Pointer->Update();
 }
 

@@ -89,7 +89,7 @@ bool Shader::LoadTexture()
   //{
   //  if ( FileSystem::Exists( file ) )
   //  {
-  //    m_BaseTexture = Luna::LoadTexture( m_Scene->GetView()->GetDevice(), file, &m_BaseTextureSize, &m_Alpha );
+  //    m_BaseTexture = Luna::LoadTexture( m_Scene->GetViewport()->GetDevice(), file, &m_BaseTextureSize, &m_Alpha );
 
   //    Profile::Memory::Allocate( g_ShaderTextureMemoryPool, m_BaseTextureSize );
   //  }

@@ -10,7 +10,7 @@
 #include "SceneOutlinerState.h"
 #include "TreeMonitor.h"
 #include "TreeSortTimer.h"
-#include "View.h"
+#include "Viewport.h"
 #include "ToolsPanel.h"
 
 #include "Foundation/Container/ReversibleMap.h"
@@ -103,7 +103,7 @@ namespace Luna
         Luna::SceneManager m_SceneManager;
 
         // the 3d view
-        Luna::View* m_View;
+        Luna::Viewport* m_View;
 
         // menu items
         wxMenu* m_FileMenu;
@@ -252,7 +252,7 @@ namespace Luna
 
     public:
 
-        Luna::View* GetView()
+        Luna::Viewport* GetViewport()
         {
             return m_View;
         }

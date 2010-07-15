@@ -81,7 +81,7 @@ void CurveCreateTool::CreateInstance( const Math::Vector3& position )
 
 void CurveCreateTool::PickPosition(int x, int y, Math::Vector3 &position)
 {
-  FrustumLinePickVisitor pick (m_Scene->GetView()->GetCamera(), x, y);
+  FrustumLinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), x, y);
 
   // pick in the world
   m_Scene->GetManager()->GetRootScene()->Pick(&pick);
@@ -91,7 +91,7 @@ void CurveCreateTool::PickPosition(int x, int y, Math::Vector3 &position)
   if (s_SurfaceSnap || s_ObjectSnap)
   {
     V_PickHitSmartPtr sorted;
-    PickHit::Sort(m_Scene->GetView()->GetCamera(), pick.GetHits(), sorted, PickSortTypes::Intersection);
+    PickHit::Sort(m_Scene->GetViewport()->GetCamera(), pick.GetHits(), sorted, PickSortTypes::Intersection);
 
     V_PickHitSmartPtr::const_iterator itr = sorted.begin();
     V_PickHitSmartPtr::const_iterator end = sorted.end();
@@ -128,7 +128,7 @@ void CurveCreateTool::PickPosition(int x, int y, Math::Vector3 &position)
   if (!set)
   {
     // place the object on the camera plane
-    m_Scene->GetView()->GetCamera()->ViewportToPlaneVertex(x, y, Luna::CreateTool::s_PlaneSnap, position);
+    m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex(x, y, Luna::CreateTool::s_PlaneSnap, position);
   }
 }
 
@@ -282,8 +282,8 @@ void CurveCreateTool::CreateProperties()
 
       {
         tostringstream str;
-        str << IntersectionPlanes::View;
-        items.push_back( Inspect::Item( TXT( "View" ), str.str() ) );
+        str << IntersectionPlanes::Viewport;
+        items.push_back( Inspect::Item( TXT( "Viewport" ), str.str() ) );
       }
 
       {

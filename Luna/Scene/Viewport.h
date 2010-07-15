@@ -226,7 +226,7 @@ namespace Luna
   typedef Nocturnal::Signature< void, const CameraModeChangeArgs& > CameraModeChangeSignature;
 
   //
-  // View Manager
+  // Viewport Manager
   //
 
   class Statistics;
@@ -236,7 +236,7 @@ namespace Luna
   class PrimitiveFrame;
   struct DeviceStateArgs;
 
-  class LUNA_SCENE_API View : public wxWindow
+  class LUNA_SCENE_API Viewport : public wxWindow
   {
     //
     // Members
@@ -301,14 +301,14 @@ namespace Luna
     static void InitializeType();
     static void CleanupType();
 
-    View(wxWindow *parent,
+    Viewport(wxWindow *parent,
           wxWindowID winid = wxID_ANY,
           const wxPoint& pos = wxDefaultPosition,
           const wxSize& size = wxDefaultSize,
           long style = wxTAB_TRAVERSAL | wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE,
-          const wxString& name = wxT( "Luna::View" ) );
+          const wxString& name = wxT( "Luna::Viewport" ) );
 
-    ~View ();
+    ~Viewport ();
 
     DECLARE_EVENT_TABLE();
 

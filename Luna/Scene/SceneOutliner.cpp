@@ -605,7 +605,7 @@ void SceneOutliner::OnChar( wxKeyEvent& args )
   // Pass everything else on to the view to handle the normal keyboard shortcuts
   default:
     {
-      if ( !m_SceneManager->GetEditor()->GetView()->GetEventHandler()->ProcessEvent( args ) )
+      if ( !m_SceneManager->GetEditor()->GetViewport()->GetEventHandler()->ProcessEvent( args ) )
       {
         // If the view didn't handle the event, let the tree control try
         args.Skip();

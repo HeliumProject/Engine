@@ -87,7 +87,7 @@ void Luna::SceneInitialize()
 
     g_InitializerStack.Push( Reflect::RegisterEnumeration<ShadingMode>( &ShadingModeEnumerateEnumeration, TXT( "ShadingMode" ) ) );
     g_InitializerStack.Push( Reflect::RegisterClass<CameraPreferences>( TXT( "CameraPreferences" ) ) ); 
-    g_InitializerStack.Push( Reflect::RegisterClass<ViewPreferences>( TXT( "ViewPreferences" ) ) ); 
+    g_InitializerStack.Push( Reflect::RegisterClass<ViewportPreferences>( TXT( "ViewportPreferences" ) ) ); 
     g_InitializerStack.Push( Reflect::RegisterClass<GridPreferences>( TXT( "Grid" ) ) );
     g_InitializerStack.Push( Reflect::RegisterClass<ScenePreferences>( TXT( "ScenePreferences" ) ) );
 
@@ -153,7 +153,7 @@ void Luna::SceneInitialize()
     g_InitializerStack.Push( DirectionalLight::InitializeType, DirectionalLight::CleanupType );
     g_InitializerStack.Push( AmbientLight::InitializeType, AmbientLight::CleanupType );
 
-    g_InitializerStack.Push( View::InitializeType, View::CleanupType );
+    g_InitializerStack.Push( Viewport::InitializeType, Viewport::CleanupType );
     g_InitializerStack.Push( Primitive::InitializeType, Primitive::CleanupType );
 
     g_InitializerStack.Push( NavMesh::InitializeType, NavMesh::CleanupType );

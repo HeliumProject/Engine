@@ -428,14 +428,14 @@ LunaFrameGenerated::LunaFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_MenuView->Append( m_ItemHighlightMode );
 	
 	wxMenuItem* m_ItemPreviousView;
-	m_ItemPreviousView = new wxMenuItem( m_MenuView, wxID_ANY, wxString( _("Previous View") ) + wxT('\t') + wxT("["), wxEmptyString, wxITEM_NORMAL );
+	m_ItemPreviousView = new wxMenuItem( m_MenuView, wxID_ANY, wxString( _("Previous Viewport") ) + wxT('\t') + wxT("["), wxEmptyString, wxITEM_NORMAL );
 	m_MenuView->Append( m_ItemPreviousView );
 	
 	wxMenuItem* m_ItemNextView;
-	m_ItemNextView = new wxMenuItem( m_MenuView, wxID_ANY, wxString( _("Next View") ) + wxT('\t') + wxT("]"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemNextView = new wxMenuItem( m_MenuView, wxID_ANY, wxString( _("Next Viewport") ) + wxT('\t') + wxT("]"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuView->Append( m_ItemNextView );
 	
-	m_MainMenuBar->Append( m_MenuView, _("View") ); 
+	m_MainMenuBar->Append( m_MenuView, _("Viewport") ); 
 	
 	m_MenuTools = new wxMenu();
 	wxMenuItem* m_ItemSelect;

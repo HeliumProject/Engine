@@ -47,7 +47,7 @@ Transform::Transform( Luna::Scene* scene, Content::Transform* transform ) : Luna
   m_BindIsDirty = true;
   m_BindTransform = Math::Matrix4::Identity;
 
-  Luna::PrimitiveAxes* axes = static_cast< Luna::PrimitiveAxes* >( m_Scene->GetView()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
+  Luna::PrimitiveAxes* axes = static_cast< Luna::PrimitiveAxes* >( m_Scene->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
   m_ObjectBounds.minimum = Math::Vector3(-axes->m_Length, -axes->m_Length, -axes->m_Length);
   m_ObjectBounds.maximum = Math::Vector3(axes->m_Length, axes->m_Length, axes->m_Length);
 }
@@ -398,14 +398,14 @@ void Transform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const Scen
 {
   const Luna::HierarchyNode* node = Reflect::ConstAssertCast<Luna::HierarchyNode>( object );
 
-  node->GetScene()->GetView()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Draw( args );
+  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Draw( args );
 }
 
 void Transform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
   const Luna::HierarchyNode* node = Reflect::ConstAssertCast<Luna::HierarchyNode>( object );
 
-  node->GetScene()->GetView()->GetGlobalPrimitive( GlobalPrimitives::SelectedAxes )->Draw( args );
+  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::SelectedAxes )->Draw( args );
 }
 
 bool Transform::Pick( PickVisitor* pick )
@@ -413,7 +413,7 @@ bool Transform::Pick( PickVisitor* pick )
 #ifdef DRAW_TRANFORMS
   pick->SetCurrentObject (this, pick->State().m_Matrix);
 
-  return m_Scene->GetView()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Pick(pick);
+  return m_Scene->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Pick(pick);
 #else
   return false;
 #endif

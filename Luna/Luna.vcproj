@@ -1833,19 +1833,19 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\View.cpp"
+					RelativePath=".\Scene\Viewport.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\View.h"
+					RelativePath=".\Scene\Viewport.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ViewPreferences.cpp"
+					RelativePath=".\Scene\ViewportPreferences.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ViewPreferences.h"
+					RelativePath=".\Scene\ViewportPreferences.h"
 					>
 				</File>
 				<File

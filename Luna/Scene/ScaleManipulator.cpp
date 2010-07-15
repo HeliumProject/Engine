@@ -2,7 +2,7 @@
 #include "ScaleManipulator.h"
 
 #include "Pick.h"
-#include "View.h"
+#include "Viewport.h"
 #include "Camera.h"
 #include "Color.h"
 
@@ -41,22 +41,22 @@ ScaleManipulator::ScaleManipulator(const ManipulatorMode mode, Luna::Scene* scen
   prefs->Get( prefs->ScaleManipulatorGridSnap(), m_GridSnap );
   prefs->Get( prefs->ScaleManipulatorDistance(), m_Distance );
 
-  m_Axes = new Luna::PrimitiveAxes (m_Scene->GetView()->GetResources());
+  m_Axes = new Luna::PrimitiveAxes (m_Scene->GetViewport()->GetResources());
   m_Axes->Update();
 
-  m_Cube = new Luna::PrimitiveCube (m_Scene->GetView()->GetResources());
+  m_Cube = new Luna::PrimitiveCube (m_Scene->GetViewport()->GetResources());
   m_Cube->SetSolid(true);
   m_Cube->Update();
 
-  m_XCube = new Luna::PrimitiveCube (m_Scene->GetView()->GetResources());
+  m_XCube = new Luna::PrimitiveCube (m_Scene->GetViewport()->GetResources());
   m_XCube->SetSolid(true);
   m_XCube->Update();
 
-  m_YCube = new Luna::PrimitiveCube (m_Scene->GetView()->GetResources());
+  m_YCube = new Luna::PrimitiveCube (m_Scene->GetViewport()->GetResources());
   m_YCube->SetSolid(true);
   m_YCube->Update();
 
-  m_ZCube = new Luna::PrimitiveCube (m_Scene->GetView()->GetResources());
+  m_ZCube = new Luna::PrimitiveCube (m_Scene->GetViewport()->GetResources());
   m_ZCube->SetSolid(true);
   m_ZCube->Update();
 

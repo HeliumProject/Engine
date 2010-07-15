@@ -8,7 +8,7 @@
 #include "Editor/MRUData.h"
 
 #include "Pipeline/Content/NodeVisibility.h"
-#include "ViewPreferences.h"
+#include "ViewportPreferences.h"
 #include "GridPreferences.h"
 
 namespace Luna
@@ -68,7 +68,7 @@ namespace Luna
 
     Content::NodeVisibility* GetDefaultNodeVisibility(); 
 
-    ViewPreferences*  GetViewPreferences(); 
+    ViewportPreferences*  GetViewPreferences(); 
     ViewPreferencesPtr& GetViewPreferencesPtr();
 
     GridPreferences* GetGridPreferences();

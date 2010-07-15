@@ -132,11 +132,11 @@ void CreateTool::Place(const Math::Matrix4& position)
 
 void CreateTool::DetermineTranslationAndNormal( int x, int y, Math::Vector3& t, Math::Vector3& n )
 {
-  FrustumLinePickVisitor pick( m_Scene->GetView()->GetCamera(), x, y );
+  FrustumLinePickVisitor pick( m_Scene->GetViewport()->GetCamera(), x, y );
   if ( !DetermineTranslationAndNormal( pick, t, n ) )
   {
     // place the object on the selected plane
-    m_Scene->GetView()->GetCamera()->ViewportToPlaneVertex( x, y, s_PlaneSnap, t );
+    m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex( x, y, s_PlaneSnap, t );
   }
 }
 
@@ -150,7 +150,7 @@ bool CreateTool::DetermineTranslationAndNormal( PickVisitor& pick, Math::Vector3
   {
     // process results
     V_PickHitSmartPtr sorted;
-    PickHit::Sort( m_Scene->GetView()->GetCamera(), pick.GetHits(), sorted, PickSortTypes::Intersection );
+    PickHit::Sort( m_Scene->GetViewport()->GetCamera(), pick.GetHits(), sorted, PickSortTypes::Intersection );
 
     V_PickHitSmartPtr::const_iterator itr = sorted.begin();
     V_PickHitSmartPtr::const_iterator end = sorted.end();
@@ -466,7 +466,7 @@ bool CreateTool::ValidPosition( const Math::AlignedBox& bounds, const Math::Vect
 {
   Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>( m_Instance );
   
-  FrustumPickVisitor frustumPick( m_Scene->GetView()->GetCamera(), Math::Frustum( bounds ) );
+  FrustumPickVisitor frustumPick( m_Scene->GetViewport()->GetCamera(), Math::Frustum( bounds ) );
   m_Scene->GetManager()->GetCurrentScene()->Pick( &frustumPick );
 
   V_PickHitSmartPtr::const_iterator resultsItr = frustumPick.GetHits().begin();
@@ -751,8 +751,8 @@ void CreateTool::CreateProperties()
 
       {
         tostringstream str;
-        str << IntersectionPlanes::View;
-        items.push_back( Inspect::Item( TXT( "View" ), str.str() ) );
+        str << IntersectionPlanes::Viewport;
+        items.push_back( Inspect::Item( TXT( "Viewport" ), str.str() ) );
       }
 
       {
@@ -1145,7 +1145,7 @@ void CreateTool::CreateMultipleObjects( bool stamp )
     instanceTransform.t += Math::Vector4( m_InstanceTranslation );
 
     Math::Vector3 point = Math::Vector3( instanceTransform.t.x, instanceTransform.t.y, instanceTransform.t.z );
-    LinePickVisitor pick( m_Scene->GetView()->GetCamera(), Math::Line( point + instanceNormalOffset, point - instanceNormalOffset ) );
+    LinePickVisitor pick( m_Scene->GetViewport()->GetCamera(), Math::Line( point + instanceNormalOffset, point - instanceNormalOffset ) );
 
     Math::Vector3 instanceTranslation;
     Math::Vector3 instanceNormal;

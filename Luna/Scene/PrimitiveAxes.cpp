@@ -137,7 +137,7 @@ void PrimitiveAxes::DrawViewport( DrawArgs* args, const Luna::Camera* camera ) c
   }
 
   // restore matrix state
-  m_Device->SetTransform(D3DTS_VIEW, (D3DMATRIX*)&camera->GetView());
+  m_Device->SetTransform(D3DTS_VIEW, (D3DMATRIX*)&camera->GetViewport());
   m_Device->SetTransform(D3DTS_PROJECTION, (D3DMATRIX*)&camera->GetProjection());
 }
 

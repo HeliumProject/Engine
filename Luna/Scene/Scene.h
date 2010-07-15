@@ -303,7 +303,7 @@ namespace Luna
     Undo::Queue m_UndoQueue;
 
     // the 3d view control
-    Luna::View* m_View;
+    Luna::Viewport* m_View;
 
     // the manager for this class
     Luna::SceneManager* m_Manager;
@@ -563,7 +563,7 @@ namespace Luna
     //
 
     // the 3d view to use for drawing this scene
-    Luna::View* GetView() const
+    Luna::Viewport* GetViewport() const
     {
       return m_View;
     }

@@ -66,15 +66,15 @@ Curve::Curve( Luna::Scene* scene, Content::Curve* curve )
 , m_Locator ( NULL )
 , m_Cone ( NULL )
 {
-  m_Locator = new Luna::PrimitiveLocator( m_Scene->GetView()->GetResources() );
+  m_Locator = new Luna::PrimitiveLocator( m_Scene->GetViewport()->GetResources() );
   m_Locator->Update();
 
-  m_Cone = new Luna::PrimitiveCone( m_Scene->GetView()->GetResources() );
+  m_Cone = new Luna::PrimitiveCone( m_Scene->GetViewport()->GetResources() );
   m_Cone->m_Radius = 0.2f;
   m_Cone->SetSolid(true);
   m_Cone->Update();
 
-  m_Vertices = new VertexResource ( scene->GetView()->GetResources() );
+  m_Vertices = new VertexResource ( scene->GetViewport()->GetResources() );
   m_Vertices->SetElementType( ElementTypes::Position );
   m_Vertices->SetPopulator( PopulateSignature::Delegate( this, &Curve::Populate ) );
 }
@@ -722,7 +722,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
 
   const VertexResource* vertices = curve->m_Vertices;
 
-  Luna::View* view = node->GetScene()->GetView();
+  Luna::Viewport* view = node->GetScene()->GetViewport();
   Luna::Camera* camera = view->GetCamera();
 
   u32 countCurvePoints    = (u32) data->m_Points.size();
@@ -825,7 +825,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
 
     static float controlPointSize = 5.0f;
     device->SetRenderState( D3DRS_POINTSPRITEENABLE, TRUE );
-    device->SetMaterial( &Luna::View::s_ComponentMaterial );
+    device->SetMaterial( &Luna::Viewport::s_ComponentMaterial );
     device->DrawPrimitive( D3DPT_POINTLIST, (u32)vertices->GetBaseIndex(), countControlPoints );
 
 
@@ -833,14 +833,14 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
     //  Overdraw selected points
     //
     {
-      Luna::Camera* camera = curve->GetScene()->GetView()->GetCamera();
-      const Math::Matrix4& viewMatrix = camera->GetView();
+      Luna::Camera* camera = curve->GetScene()->GetViewport()->GetCamera();
+      const Math::Matrix4& viewMatrix = camera->GetViewport();
       const Math::Matrix4& projMatrix = camera->GetProjection();
-      ID3DXFont* font = curve->GetScene()->GetView()->GetStatistics()->GetFont();
+      ID3DXFont* font = curve->GetScene()->GetViewport()->GetStatistics()->GetFont();
       DWORD color = D3DCOLOR_ARGB(255, 255, 255, 255);
       tchar textBuf[256];
 
-      device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
+      device->SetMaterial( &Luna::Viewport::s_SelectedComponentMaterial );
       OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
       OS_HierarchyNodeDumbPtr::Iterator childEnd = curve->GetChildren().End();
       for ( u32 i = 0; childItr != childEnd; ++childItr )
@@ -898,7 +898,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
     //  Overdraw highlighted points
     // 
     {
-      device->SetMaterial (&Luna::View::s_HighlightedMaterial);
+      device->SetMaterial (&Luna::Viewport::s_HighlightedMaterial);
       OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
       OS_HierarchyNodeDumbPtr::Iterator childEnd = curve->GetChildren().End();
       for ( u32 i = 0; childItr != childEnd; ++childItr )

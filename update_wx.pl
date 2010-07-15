@@ -18,7 +18,7 @@ print( "\n o Doing: svn update\n");
 system("svn update");
 
 my $origin = dirname $0;
-print( "\n o Changing $origin\n");
+print( "\n o Changing CWD to $origin\n");
 chdir $origin;
 
 print( "\n o Doing: build_wx\n");

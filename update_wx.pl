@@ -14,12 +14,12 @@ if ( !-d $ENV{wxWidgets} )
 print( "\n o Changing CWD to $ENV{wxWidgets}\n");
 chdir $ENV{wxWidgets};
 
-print( "\n o Doing: svn update\n");
+print( "\n o Svn update\n");
 system("svn update");
 
 my $origin = dirname $0;
 print( "\n o Changing CWD to $origin\n");
 chdir $origin;
 
-print( "\n o Doing: build_wx\n");
+print( "\n o Building wxWidgets\n");
 do "build_wx.pl"

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Platform.h"
+#include "Foundation/Automation/Event.h"
+
 #include <d3d9.h>
 #include <d3dx9.h>
 
@@ -56,6 +58,27 @@ namespace Render
 
   #define __MAX_CLIENTS__ 32
 
+  namespace DeviceStates
+  {
+    enum DeviceState
+    {
+      Found,
+      Lost
+    };
+  }
+  typedef DeviceStates::DeviceState DeviceState;
+
+  struct DeviceStateArgs
+  {
+    DeviceState m_DeviceState;
+
+    DeviceStateArgs( DeviceState state )
+      : m_DeviceState( state )
+    {
+    }
+  };
+  typedef Nocturnal::Signature< void, const DeviceStateArgs& > DeviceStateSignature;
+
   // all rendering classes should be derived this
   class D3DManager
   {
@@ -75,6 +98,19 @@ namespace Render
 
     HRESULT Display(HWND target,RECT* src=0, RECT* dst=0);      // if display fails, call reset
     HRESULT Reset();
+
+    bool TestDeviceReady();
+
+    inline bool IsDeviceLost() const
+    {
+      return m_IsLost;
+    }
+
+    inline void SetDeviceLost( bool lost = true )
+    {
+      m_IsLost = lost;
+    }
+
     IDirect3DSurface9* GetBufferData();
 
     bool SaveTGA(const tchar* fname);
@@ -126,9 +162,43 @@ namespace Render
 
     // call up to the parent class to handle their default pool (this will be called for every client)
     // this is called for a number of reasons
-    virtual HRESULT HandleClientDefaultPool(u32 reason)
+    HRESULT HandleClientDefaultPool(u32 reason)
     {
-      return S_OK;
+        if ( reason == Render::DEFPOOL_RELEASE )
+        {
+            m_Lost.Raise( DeviceStates::Lost );
+        }
+        else if ( reason == Render::DEFPOOL_CREATE )
+        {
+            m_Found.Raise( DeviceStates::Found );
+        }
+        return S_OK;
+    }
+
+  private:
+    bool m_IsLost;
+
+  private:
+    DeviceStateSignature::Event m_Found;
+  public:
+    void AddDeviceFoundListener( const DeviceStateSignature::Delegate& listener )
+    {
+      m_Found.Add( listener );
+    }
+    void RemoveDeviceFoundListener( const DeviceStateSignature::Delegate& listener )
+    {
+      m_Found.Remove( listener );
+    }
+  private:
+    DeviceStateSignature::Event m_Lost;
+  public:
+    void AddDeviceLostListener( const DeviceStateSignature::Delegate& listener )
+    {
+      m_Lost.Add( listener );
+    }
+    void RemoveDeviceLostListener( const DeviceStateSignature::Delegate& listener )
+    {
+      m_Lost.Remove( listener );
     }
 
   private:

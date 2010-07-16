@@ -8,7 +8,7 @@
 #include "Render.h"
 #include "Resource.h"
 #include "Camera.h"
-#include "D3DWindowManager.h"
+#include "Render/D3DManager.h"
 #include "Application/Undo/Queue.h"
 
 #include "Foundation/Reflect/Enumeration.h"
@@ -241,7 +241,6 @@ namespace Luna
     class PrimitiveAxes;
     class PrimitiveGrid;
     class PrimitiveFrame;
-    struct DeviceStateArgs;
 
     class LUNA_SCENE_API Viewport : public wxWindow
     {
@@ -252,7 +251,7 @@ namespace Luna
     private:
         // Control/Device
         bool m_Focused;
-        D3DWindowManager m_D3DManager;
+        Render::D3DManager m_D3DManager;
 
         // Resources
         ResourceTracker* m_ResourceTracker;
@@ -409,8 +408,8 @@ namespace Luna
     private:
         void PreDraw( DrawArgs* args );
         void PostDraw( DrawArgs* args );
-        void OnReleaseResources( const DeviceStateArgs& args );
-        void OnAllocateResources( const DeviceStateArgs& args );
+        void OnReleaseResources( const Render::DeviceStateArgs& args );
+        void OnAllocateResources( const Render::DeviceStateArgs& args );
 
     private:
         void CameraMoved( const Luna::CameraMovedArgs& args );

@@ -176,8 +176,8 @@ Viewport::~Viewport()
 {
   m_Cameras[ CameraModes::Orbit ].RemoveMovedListener( CameraMovedSignature::Delegate ( this, &Viewport::CameraMoved ) );
 
-  m_D3DManager.RemoveDeviceFoundListener( DeviceStateSignature::Delegate( this, &Viewport::OnAllocateResources ) );
-  m_D3DManager.RemoveDeviceLostListener( DeviceStateSignature::Delegate( this, &Viewport::OnReleaseResources ) );
+  m_D3DManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnAllocateResources ) );
+  m_D3DManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnReleaseResources ) );
 
   for (u32 i=0; i<GlobalPrimitives::Count; i++)
     delete m_GlobalPrimitives[i];
@@ -347,8 +347,8 @@ Luna::Primitive* Viewport::GetGlobalPrimitive( GlobalPrimitives::GlobalPrimitive
 void Viewport::InitDevice()
 {
   m_D3DManager.InitD3D( GetHwnd(), 64, 64 );
-  m_D3DManager.AddDeviceFoundListener( DeviceStateSignature::Delegate( this, &Viewport::OnAllocateResources ) );
-  m_D3DManager.AddDeviceLostListener( DeviceStateSignature::Delegate( this, &Viewport::OnReleaseResources ) );
+  m_D3DManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnAllocateResources ) );
+  m_D3DManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &Viewport::OnReleaseResources ) );
 
   m_ResourceTracker = new ResourceTracker( GetDevice() );
 }
@@ -1384,13 +1384,13 @@ void Viewport::PostDraw( DrawArgs* args )
   }
 }
 
-void Viewport::OnReleaseResources( const DeviceStateArgs& args )
+void Viewport::OnReleaseResources( const Render::DeviceStateArgs& args )
 {
   m_ResourceTracker->DeviceLost();
   m_Statistics->Delete();
 }
 
-void Viewport::OnAllocateResources( const DeviceStateArgs& args )
+void Viewport::OnAllocateResources( const Render::DeviceStateArgs& args )
 {
   m_ResourceTracker->DeviceReset();
   m_Statistics->Create();

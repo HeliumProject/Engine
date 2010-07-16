@@ -237,13 +237,13 @@ bool App::OnInit()
 
                 m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
                 m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
+                m_InitializerStack.Push( WindowSettings::InitializeType, WindowSettings::CleanupType );
                 m_InitializerStack.Push( ApplicationPreferences::InitializeType, ApplicationPreferences::CleanupType );
 
                 m_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::FilePathOptions::FilePathOption>( &Luna::FilePathOptions::FilePathOptionEnumerateEnumeration, TXT( "FilePathOption" ) ) );
                 m_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );
                 m_InitializerStack.Push( Reflect::RegisterClass<EditorState>( TXT( "EditorState" ) ) );
 
-                m_InitializerStack.Push( WindowSettings::InitializeType, WindowSettings::CleanupType );
                 m_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
                 m_InitializerStack.Push( MRUData::InitializeType, MRUData::CleanupType );
             }

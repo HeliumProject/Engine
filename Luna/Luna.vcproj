@@ -104,7 +104,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="xcopy &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons\&quot; /E /Y"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -192,7 +192,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="xcopy &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons\&quot; /E /Y"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -277,7 +277,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="xcopy &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons\&quot; /E /Y"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -362,7 +362,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="xcopy &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons\&quot; /E /Y"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -450,7 +450,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="xcopy &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons\&quot; /E /Y"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -538,7 +538,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="xcopy &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons\&quot; /E /Y"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -623,7 +623,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="xcopy &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons\&quot; /E /Y"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -708,7 +708,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="xcopy &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons\&quot; /E /Y"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -4218,14 +4218,6 @@
 		</File>
 		<File
 			RelativePath=".\CommandQueue.h"
-			>
-		</File>
-		<File
-			RelativePath=".\D3DWindowManager.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\D3DWindowManager.h"
 			>
 		</File>
 		<File

@@ -17,6 +17,7 @@ Render::D3DManager*        Render::D3DManager::m_clients[__MAX_CLIENTS__] = {0};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 Render::D3DManager::D3DManager()
+: m_IsLost( false )
 {
     m_d3d=0;
     m_device=0; 
@@ -461,6 +462,31 @@ HRESULT Render::D3DManager::Reset()
     }
 
     return hr;
+}
+
+bool Render::D3DManager::TestDeviceReady()
+{
+  IDirect3DDevice9* device = GetD3DDevice();
+  if ( !device )
+  {
+    return false;
+  }
+
+  if ( !m_IsLost )
+  {
+    return true;
+  }
+
+  HRESULT result = device->TestCooperativeLevel();
+  if ( result == D3DERR_DEVICENOTRESET )
+  {
+    Reset();
+    result = device->TestCooperativeLevel();
+  }
+
+  m_IsLost = result != D3D_OK;
+
+  return !m_IsLost;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

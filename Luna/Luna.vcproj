@@ -4221,14 +4221,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\CoreInit.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\CoreInit.h"
-			>
-		</File>
-		<File
 			RelativePath=".\D3DWindowManager.cpp"
 			>
 		</File>
@@ -4274,14 +4266,6 @@
 		</File>
 		<File
 			RelativePath=".\EditorInfo.h"
-			>
-		</File>
-		<File
-			RelativePath=".\EditorInit.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\EditorInit.h"
 			>
 		</File>
 		<File

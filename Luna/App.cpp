@@ -14,22 +14,39 @@
 #include "Foundation/CommandLine/Command.h"
 #include "Foundation/CommandLine/Commands/Help.h"
 #include "Foundation/CommandLine/Processor.h"
+#include "Foundation/Reflect/Registry.h"
 
 #include "Application/Application.h"
+#include "Application/Exception.h"
 #include "Application/UI/ArtProvider.h"
 #include "Application/Worker/Process.h"
-#include "Application/Exception.h"
+#include "Application/Inspect/InspectInit.h"
+#include "Application/Inspect/Interpreters/Reflect/InspectReflectInit.h"
+#include "Application/Inspect/Interpreters/Content/InspectContentInit.h"
+#include "Application/Inspect/Interpreters/File/InspectFileInit.h"
+#include "Application/RCS/Providers/Perforce/Perforce.h"
 
-#include "CoreInit.h"
-#include "Vault/Vault.h"
-#include "ApplicationPreferences.h"
+#include "Object.h"
+#include "Selectable.h"
+#include "Persistent.h"
+#include "Enumerator.h"
+
 #include "Editor.h"
-#include "EditorInit.h"
+#include "EditorState.h"
+#include "EditorInfo.h"
 #include "Preferences.h"
+#include "PreferencesBase.h"
+#include "ApplicationPreferences.h"
+#include "Preferences.h"
+#include "WindowSettings.h"
+#include "Document.h"
+#include "MRUData.h"
+
 #include "Scene/SceneEditor.h"
 #include "Scene/SceneInit.h"
 #include "Task/TaskInit.h"
 #include "UI/PerforceWaitDialog.h"
+#include "Vault/Vault.h"
 
 //#include "Commands/BuildCommand.h"
 #include "Commands/ProfileDumpCommand.h"
@@ -205,14 +222,30 @@ bool App::OnInit()
 
             {
                 Log::Bullet bullet( TXT( "Core...\n" ) );
-                m_InitializerStack.Push( CoreInitialize, CoreCleanup );
-            }
 
-            {
-                Log::Bullet bullet( TXT( "Editor...\n" ) );
+                m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
+                m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
+                m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
+                m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
+                m_InitializerStack.Push( InspectContent::Initialize, InspectContent::Cleanup );
+                m_InitializerStack.Push( InspectFile::Initialize, InspectFile::Cleanup );
+
+                m_InitializerStack.Push( Object::InitializeType, Object::CleanupType );
+                m_InitializerStack.Push( Selectable::InitializeType, Selectable::CleanupType );
+                m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );
+                m_InitializerStack.Push( Enumerator::Initialize, Enumerator::Cleanup );
+
                 m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
                 m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
-                m_InitializerStack.Push( EditorInitialize, EditorCleanup );
+                m_InitializerStack.Push( ApplicationPreferences::InitializeType, ApplicationPreferences::CleanupType );
+
+                m_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::FilePathOptions::FilePathOption>( &Luna::FilePathOptions::FilePathOptionEnumerateEnumeration, TXT( "FilePathOption" ) ) );
+                m_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );
+                m_InitializerStack.Push( Reflect::RegisterClass<EditorState>( TXT( "EditorState" ) ) );
+
+                m_InitializerStack.Push( WindowSettings::InitializeType, WindowSettings::CleanupType );
+                m_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
+                m_InitializerStack.Push( MRUData::InitializeType, MRUData::CleanupType );
             }
 
             {

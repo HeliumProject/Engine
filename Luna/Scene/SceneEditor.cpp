@@ -10,7 +10,7 @@
 #include "EntityCreateTool.h"
 #include "EntityType.h"
 #include "ExportOptionsDlg.h"
-#include "HelpPanel.h"
+#include "UI/HelpPanel.h"
 #include "HierarchyNodeType.h"
 #include "HierarchyOutliner.h"
 #include "ImportOptionsDlg.h"

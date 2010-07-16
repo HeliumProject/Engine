@@ -4316,6 +4316,14 @@
 			Name="UI"
 			>
 			<File
+				RelativePath=".\UI\HelpPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\HelpPanel.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\LunaGenerated.cpp"
 				>
 			</File>
@@ -4490,14 +4498,6 @@
 		</File>
 		<File
 			RelativePath=".\AppPreferences.h"
-			>
-		</File>
-		<File
-			RelativePath=".\HelpPanel.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\HelpPanel.h"
 			>
 		</File>
 		<File

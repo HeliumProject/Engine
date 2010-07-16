@@ -13,7 +13,7 @@
 #include "PreviewPanel.h"
 #include "ResultsPanel.h"
 #include "SearchQuery.h"
-#include "HelpPanel.h"
+#include "UI/HelpPanel.h"
 
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"

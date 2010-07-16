@@ -1,6 +1,6 @@
 #include "Precompile.h"
 
-#include "Application.h"
+#include "App.h"
 #include "Vault.h"
 #include "VaultToolBar.h"
 

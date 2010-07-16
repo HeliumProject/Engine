@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "Light.h"
-#include "Application.h"
+#include "App.h"
 
 #include "Scene.h"
 #include "SceneManager.h"

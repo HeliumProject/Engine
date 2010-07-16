@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "SearchQuery.h"
 
-#include "Application.h"
+#include "App.h"
 #include "Vault.h"
 
 #include "Foundation/Boost/Regex.h"

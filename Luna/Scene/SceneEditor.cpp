@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "SceneEditor.h"
 
-#include "Application.h"
+#include "App.h"
 #include "CurveCreateTool.h"
 #include "CurveEditTool.h"
 #include "DuplicateTool.h"

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "VaultPreferencesDialog.h"
 
-#include "Application.h"
+#include "App.h"
 
 #include "Vault/Vault.h"
 #include "Vault/VaultPreferences.h"

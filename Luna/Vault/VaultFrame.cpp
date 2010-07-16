@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "VaultFrame.h"
 
-#include "Application.h"
+#include "App.h"
 #include "Vault.h"
 #include "VaultEvents.h"
 #include "VaultPreferencesDialog.h"

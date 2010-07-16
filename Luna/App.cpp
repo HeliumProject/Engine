@@ -1,7 +1,6 @@
 #include "Precompile.h"
-#include "Application.h"
+#include "App.h"
 #include "AppPreferences.h"
-#include "LunaIDs.h"
 
 #include "Platform/Windows/Windows.h"
 #include "Platform/Windows/Console.h"
@@ -136,10 +135,10 @@ static int ShowBreakpointDialog(const Debug::BreakpointArgs& args )
 
 namespace Luna
 {
-    IMPLEMENT_APP( LunaApp );
+    IMPLEMENT_APP( App );
 }
 
-LunaApp::LunaApp()
+App::App()
 : wxApp()
 , m_Vault( NULL )
 , m_SceneEditor( NULL )
@@ -147,7 +146,7 @@ LunaApp::LunaApp()
     Nocturnal::NumericTest();
 }
 
-LunaApp::~LunaApp()
+App::~App()
 {
 }
 
@@ -156,7 +155,7 @@ LunaApp::~LunaApp()
 // switch and exits.  If we get this far, we need to parse the command line
 // and determine what mode to launch the app in.
 // 
-bool LunaApp::OnInit()
+bool App::OnInit()
 {
     SetVendorName( TXT( "Nocturnal" ) );
 
@@ -267,31 +266,15 @@ bool LunaApp::OnInit()
 ///////////////////////////////////////////////////////////////////////////////
 // Called when the application is ready to start running.
 // 
-int LunaApp::OnRun()
+int App::OnRun()
 {
     return __super::OnRun();
-}
-
-void LunaApp::OnNew( wxCommandEvent& event )
-{
-    switch( event.GetId() )
-    {
-    case LunaIDs::ID_NewScene:
-        GetSceneEditor()->OnNew( event );
-        break;
-    case LunaIDs::ID_NewEntity:
-        NOC_BREAK();
-        break;
-    default:
-        NOC_BREAK();
-        break;
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Called when the application is being exited.  Cleans up resources.
 // 
-int LunaApp::OnExit()
+int App::OnExit()
 {
     // Save preferences
     ::Luna::GetApplicationPreferences()->SavePreferences();
@@ -303,7 +286,10 @@ int LunaApp::OnExit()
     return __super::OnExit();
 }
 
-void LunaApp::OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg)
+///////////////////////////////////////////////////////////////////////////////
+// Called when an assert failure occurs
+// 
+void App::OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg)
 {
     tstring function = func;
 

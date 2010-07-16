@@ -3,14 +3,13 @@
 #include "Luna/API.h"
 #include "InstancePanel.h"
 
-#include "Application.h"
-
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/DragDrop/FilteredDropTarget.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
-#include "Entity.h"
 #include "Application/UI/FileDialog.h"
 #include "Application/RCS/RCS.h"
+
+#include "Entity.h"
 
 namespace Luna
 {

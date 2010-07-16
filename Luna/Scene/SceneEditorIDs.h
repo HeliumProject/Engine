@@ -127,10 +127,6 @@ namespace Luna
             ID_PanelsOutline,
             ID_PanelsProperties,
 
-            ID_ZoneNew,
-            ID_ZoneOpen,
-            ID_ZoneMoveSel,
-
             ID_About,
 
             // This needs to be last, since command entries will be dynamically generated from this id onward

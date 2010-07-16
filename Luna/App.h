@@ -12,18 +12,15 @@
 
 namespace Luna
 {
-    class LunaApp : public wxApp
+    class App : public wxApp
     {
     public:
-        LunaApp();
-        ~LunaApp();
+        App();
+        ~App();
 
         virtual bool    OnInit() NOC_OVERRIDE;
         virtual int     OnRun() NOC_OVERRIDE;
         virtual int     OnExit() NOC_OVERRIDE;
-
-        virtual void    OnNew( wxCommandEvent& event );
-
         virtual void    OnAssertFailure(const wxChar *file, int line, const wxChar *func, const wxChar *cond, const wxChar *msg) NOC_OVERRIDE;
 
         DocumentManager& GetDocumentManager()
@@ -56,5 +53,5 @@ namespace Luna
         Vault* m_Vault;
     };
 
-    DECLARE_APP( LunaApp );
+    DECLARE_APP( App );
 }

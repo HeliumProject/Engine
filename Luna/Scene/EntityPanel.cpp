@@ -2,7 +2,7 @@
 #include "EntityPanel.h"
 #include "EntityAssetSet.h"
 
-#include "Application.h"
+#include "App.h"
 
 #include "Application/Inspect/Controls/Value.h"
 #include "Application/Inspect/Controls/InspectButton.h"

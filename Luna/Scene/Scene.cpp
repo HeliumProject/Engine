@@ -15,7 +15,7 @@
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Asset/Manifests/SceneManifest.h"
 
-#include "Application.h"
+#include "App.h"
 #include "Vault/Vault.h"
 
 #include "Pipeline/Content/Scene.h"

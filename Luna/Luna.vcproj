@@ -2450,39 +2450,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Render\ObjectLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\ObjectLoader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\OBJObjectLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\OBJObjectLoader.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Render\Platform.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\RBObjectLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\RBObjectLoader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\RBShaderLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\RBShaderLoader.h"
 				>
 			</File>
 			<File
@@ -2510,14 +2478,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Render\ShaderLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\ShaderLoader.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Render\ShaderManager.cpp"
 				>
 			</File>
@@ -2535,14 +2495,6 @@
 			</File>
 			<File
 				RelativePath=".\Render\VectorMath.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\XMLShaderLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\XMLShaderLoader.h"
 				>
 			</File>
 			<Filter
@@ -3903,6 +3855,58 @@
 					</File>
 				</Filter>
 			</Filter>
+			<Filter
+				Name="Loaders"
+				>
+				<File
+					RelativePath=".\Render\ObjectLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Render\ObjectLoader.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Render\OBJObjectLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Render\OBJObjectLoader.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Render\RBObjectLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Render\RBObjectLoader.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Render\RBShaderLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Render\RBShaderLoader.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Render\ShaderLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Render\ShaderLoader.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Render\XMLShaderLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Render\XMLShaderLoader.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Commands"
@@ -4473,11 +4477,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Application.cpp"
+			RelativePath=".\App.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\Application.h"
+			RelativePath=".\App.h"
 			>
 		</File>
 		<File
@@ -4498,10 +4502,6 @@
 		</File>
 		<File
 			RelativePath=".\Luna.rc"
-			>
-		</File>
-		<File
-			RelativePath=".\LunaIDs.h"
 			>
 		</File>
 		<File

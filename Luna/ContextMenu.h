@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 #include "Foundation/Automation/Event.h"
-#include "Core/Object.h"
+#include "Object.h"
 
 // Forwards
 namespace Undo
@@ -37,18 +37,18 @@ namespace Luna
   /////////////////////////////////////////////////////////////////////////////
   // Combines a callback delegate with an optional Object-derived pointer.
   // 
-  struct LMenuCallback
+  struct MenuCallback
   {
     ContextMenuSignature::Delegate m_Delegate;
     ObjectPtr m_ClientData;
 
-    LMenuCallback( const ContextMenuSignature::Delegate& callback, const ObjectPtr& clientData )
+    MenuCallback( const ContextMenuSignature::Delegate& callback, const ObjectPtr& clientData )
       : m_Delegate( callback )
       , m_ClientData( clientData )
     {
     }
   };
-  typedef std::vector< LMenuCallback > V_MenuCallback;
+  typedef std::vector< MenuCallback > V_MenuCallback;
 
 
   class ContextMenuItem;

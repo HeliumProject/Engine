@@ -4,7 +4,7 @@
 #include "Foundation/Math/EulerAngles.h"
 #include "Foundation/Math/Constants.h"
 
-#include "Core/Manipulator.h"
+#include "Manipulator.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "PrimitiveAxes.h"
 

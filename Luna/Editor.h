@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "Core/PropertiesManager.h"
+#include "PropertiesManager.h"
 #include "Frame.h"
 #include "EditorInfo.h"
 #include "EditorState.h"

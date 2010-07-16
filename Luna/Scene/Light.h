@@ -2,7 +2,7 @@
 
 #include "Instance.h"
 #include "Pipeline/Content/Nodes/Light.h"
-#include "Core/Enumerator.h"
+#include "Enumerator.h"
 #include "Foundation/Container/BitArray.h"
 #include "Primitive.h"
 

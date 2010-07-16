@@ -6,7 +6,7 @@
 #include "SceneManager.h"
 #include "InstanceType.h"
 
-#include "Core/Enumerator.h"
+#include "Enumerator.h"
 #include "SceneEditor.h"
 #include "Application/UI/ArtProvider.h"
 

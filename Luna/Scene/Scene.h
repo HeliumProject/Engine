@@ -7,11 +7,11 @@
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Version.h"
 
-#include "Core/Selection.h"
+#include "Selection.h"
 
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/Controls/Canvas.h"
-#include "Core/Enumerator.h"
+#include "Enumerator.h"
 
 #include "Application/Undo/ExistenceCommand.h"
 #include "Application/Undo/Queue.h"

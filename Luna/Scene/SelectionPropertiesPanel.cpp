@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "SelectionPropertiesPanel.h"
 
-#include "Core/Enumerator.h"
-#include "Core/PropertiesManager.h"
+#include "Enumerator.h"
+#include "PropertiesManager.h"
 
 using namespace Luna;
 

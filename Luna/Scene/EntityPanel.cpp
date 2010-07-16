@@ -20,7 +20,7 @@
 #include "SceneManager.h"
 #include "SceneEditor.h"
 
-#include "Editor/Editor.h"
+#include "Editor.h"
 
 using namespace Reflect;
 using namespace Asset;

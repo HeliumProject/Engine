@@ -3,7 +3,7 @@
 // Includes
 #include "Luna/API.h"
 #include "SceneOutlinerState.h"
-#include "Core/Selection.h"
+#include "Selection.h"
 #include "Platform/Types.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
 

@@ -4,10 +4,10 @@
 
 #include "Foundation/Reflect/Element.h"
 
-#include "Core/Persistent.h"
-#include "Core/Selection.h"
+#include "Persistent.h"
+#include "Selection.h"
 
-#include "Core/Enumerator.h"
+#include "Enumerator.h"
 
 #include "Luna/API.h"
 

@@ -6,7 +6,7 @@
 #include "Entity.h"
 #include "EntityType.h"
 
-#include "Editor/SharedFileManager.h"
+#include "SharedFileManager.h"
 #include "PrimitiveCube.h"
 #include "PrimitiveSphere.h"
 #include "PrimitiveCylinder.h"

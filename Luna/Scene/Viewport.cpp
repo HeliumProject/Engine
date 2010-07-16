@@ -17,7 +17,7 @@
 #include "Tool.h"
 
 #include "Platform/Exception.h"
-#include "Editor/Orientation.h"
+#include "Orientation.h"
 
 using namespace Math;
 using namespace Luna;

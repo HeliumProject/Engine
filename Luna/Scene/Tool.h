@@ -3,7 +3,7 @@
 #include "Luna/API.h"
 #include "Viewport.h"
 
-#include "Core/Selection.h"
+#include "Selection.h"
 
 namespace Luna
 {

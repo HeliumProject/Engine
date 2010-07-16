@@ -31,7 +31,7 @@
 #include "VolumeCreateTool.h"
 #include "Mesh.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
-#include "Editor/MRUData.h"
+#include "MRUData.h"
 #include "Vault/VaultToolBar.h"
 
 #include "Platform/Process.h"

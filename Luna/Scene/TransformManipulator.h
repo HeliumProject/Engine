@@ -10,7 +10,7 @@
 
 #include "Tool.h"
 #include "Application/Undo/Queue.h"
-#include "Core/Manipulator.h"
+#include "Manipulator.h"
 
 namespace Luna
 {

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Point.h"
 #include "Transform.h"
-#include "Core/Enumerator.h"
+#include "Enumerator.h"
 #include "Application/UI/ArtProvider.h"
 
 using namespace Luna;

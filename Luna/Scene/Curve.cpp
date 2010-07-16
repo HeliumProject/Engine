@@ -11,10 +11,10 @@
 #include "ReverseChildrenCommand.h"
 
 #include "Application/UI/ArtProvider.h"
-#include "Core/Enumerator.h"
+#include "Enumerator.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "Foundation/Log.h"
-#include "Editor/Orientation.h"
+#include "Orientation.h"
 
 #include "Foundation/Math/Curve.h"
 #include "Foundation/Math/AngleAxis.h"

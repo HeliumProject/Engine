@@ -8,7 +8,7 @@
 #include "SceneManager.h"
 #include "SceneEditor.h"
 
-#include "Core/Enumerator.h"
+#include "Enumerator.h"
 #include "PrimitiveCube.h"
 #include "PrimitivePointer.h"
 

@@ -10,7 +10,7 @@
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
 #include "Foundation/InitializerStack.h"
-#include "Editor/DocumentManager.h"
+#include "DocumentManager.h"
 
 //
 // Forwards

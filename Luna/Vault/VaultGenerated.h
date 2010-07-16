@@ -13,7 +13,7 @@ namespace Luna{ class DirectoryCtrl; }
 namespace Luna{ class SortTreeCtrl; }
 namespace Nocturnal{ class MenuButton; }
 
-#include "Editor/Frame.h"
+#include "Frame.h"
 #include <wx/string.h>
 #include <wx/frame.h>
 #include <wx/gdicmn.h>

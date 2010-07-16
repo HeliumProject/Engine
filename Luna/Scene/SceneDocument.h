@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "Editor/Document.h"
+#include "Document.h"
 
 namespace Luna
 {

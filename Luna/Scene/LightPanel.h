@@ -2,7 +2,7 @@
 
 #include "Application/Inspect/Controls/InspectPanel.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
-#include "Core/Enumerator.h"
+#include "Enumerator.h"
 
 namespace Luna
 {

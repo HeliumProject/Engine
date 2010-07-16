@@ -8,7 +8,7 @@
 #include "Render.h"
 #include "Resource.h"
 #include "Camera.h"
-#include "Editor/D3DWindowManager.h"
+#include "D3DWindowManager.h"
 #include "Application/Undo/Queue.h"
 
 #include "Foundation/Reflect/Enumeration.h"

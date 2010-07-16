@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 #include "SceneNodePanel.h"
-#include "Core/Selectable.h"
+#include "Selectable.h"
 
 namespace Luna
 {

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Camera.h"
 #include "Viewport.h"
-#include "Editor/Orientation.h"
+#include "Orientation.h"
 #include "Foundation/Math/AngleAxis.h"
 
 using namespace Math;

@@ -1,6 +1,6 @@
 #include "Precompile.h"
 #include "RefreshSelectionCommand.h"
-#include "Core/Selection.h"
+#include "Selection.h"
 
 using namespace Luna;
 

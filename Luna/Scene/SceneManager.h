@@ -4,8 +4,8 @@
 
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Foundation/Automation/Event.h"
-#include "Editor/DocumentManager.h"
-#include "Core/Selection.h"
+#include "DocumentManager.h"
+#include "Selection.h"
 #include "Application/Undo/QueueManager.h"
 
 

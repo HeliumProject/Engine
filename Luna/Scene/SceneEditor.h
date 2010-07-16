@@ -19,10 +19,10 @@
 #include "Application/Inspect/DragDrop/DropTarget.h"
 #include "Application/UI/MenuMRU.h"
 
-#include "Core/PropertiesManager.h"
-#include "Core/Selection.h"
-#include "Editor/Editor.h"
-#include "Editor/EditorInfo.h"
+#include "PropertiesManager.h"
+#include "Selection.h"
+#include "Editor.h"
+#include "EditorInfo.h"
 
 #include <wx/dnd.h>
 

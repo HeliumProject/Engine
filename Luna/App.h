@@ -3,7 +3,7 @@
 #include "Platform/Compiler.h"
 #include "Foundation/InitializerStack.h"
 
-#include "Editor/DocumentManager.h"
+#include "DocumentManager.h"
 #include "Scene/SceneEditor.h"
 #include "Vault/Vault.h"
 

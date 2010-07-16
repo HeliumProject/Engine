@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "Core/Selectable.h"
+#include "Selectable.h"
 
 namespace Luna
 {

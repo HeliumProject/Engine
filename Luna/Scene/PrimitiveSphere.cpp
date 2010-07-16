@@ -2,7 +2,7 @@
 #include "PrimitiveSphere.h"
 
 #include "Pick.h"
-#include "Editor/Orientation.h"
+#include "Orientation.h"
 
 using namespace Math;
 using namespace Luna;

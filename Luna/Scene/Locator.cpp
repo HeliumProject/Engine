@@ -6,7 +6,7 @@
 
 #include "LocatorType.h"
 
-#include "Core/Enumerator.h"
+#include "Enumerator.h"
 #include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveLocator.h"

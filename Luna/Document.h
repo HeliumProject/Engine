@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "Core/Object.h"
+#include "Object.h"
 #include "Foundation/File/Path.h"
 
 namespace Luna

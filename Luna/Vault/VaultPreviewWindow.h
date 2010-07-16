@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Platform/Compiler.h"
-#include "Editor/PreviewWindow.h"
+#include "PreviewWindow.h"
 
 namespace Reflect
 {

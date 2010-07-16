@@ -8,8 +8,8 @@
 
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "Editor/Orientation.h"
-#include "Editor/UpdateStatusEvent.h"
+#include "Orientation.h"
+#include "UpdateStatusEvent.h"
 #include "Application/Inspect/DragDrop/DropSource.h"
 #include "Application/Undo/Command.h"
 #include "Application/UI/ArtProvider.h"

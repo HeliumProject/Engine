@@ -216,7 +216,7 @@ void ContextMenuItem::AddCallback( const ContextMenuSignature::Delegate& callbac
 {
   if ( !ContainsCallback( callback ) )
   {
-    m_Callbacks.push_back( LMenuCallback( callback, clientData ) );
+    m_Callbacks.push_back( MenuCallback( callback, clientData ) );
   }
 }
 
@@ -230,7 +230,7 @@ void ContextMenuItem::Callback( const ContextMenuArgsPtr& args )
   V_MenuCallback::const_iterator end = m_Callbacks.end();
   for ( ; itr != end; ++itr )
   {
-    const LMenuCallback& callback = *itr;
+    const MenuCallback& callback = *itr;
     if ( callback.m_Delegate.Valid() )
     {
       args->SetClientData( callback.m_ClientData );

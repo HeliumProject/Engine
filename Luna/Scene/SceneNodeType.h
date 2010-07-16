@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 
-#include "Core/Object.h"
+#include "Object.h"
 
 #include "SceneNode.h"
 

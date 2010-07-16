@@ -15,7 +15,7 @@
 #include "ScenePreferences.h"
 #include "Mesh.h"
 
-#include "Editor/Editor.h"
+#include "Editor.h"
 
 #include "Foundation/Math/AngleAxis.h"
 #include "Foundation/Math/Utils.h"

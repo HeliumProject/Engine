@@ -18,7 +18,7 @@
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Foundation/Component/ComponentHandle.h"
-#include "Editor/DocumentManager.h"
+#include "DocumentManager.h"
 #include "Application/RCS/RCS.h"
 #include "Scene/SceneManager.h"
 #include "Application/UI/ArtProvider.h"

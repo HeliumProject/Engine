@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 #include "SceneOutliner.h"
-#include "Core/Object.h"
+#include "Object.h"
 
 namespace Luna
 {

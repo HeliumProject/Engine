@@ -11,7 +11,7 @@
 #include "Scene.h"
 #include "ScenePreferences.h"
 
-#include "Editor/Editor.h"
+#include "Editor.h"
 
 #include "Foundation/Math/AngleAxis.h"
 

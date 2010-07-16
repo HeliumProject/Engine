@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Viewport.h"
-#include "Core/Object.h"
+#include "Object.h"
 
 namespace Luna
 {

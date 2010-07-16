@@ -2403,18 +2403,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Data"
-			>
-			<File
-				RelativePath=".\Data\Project.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Data\Project.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Render"
 			>
 			<File
@@ -4558,6 +4546,14 @@
 		</File>
 		<File
 			RelativePath=".\Precompile.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Project.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Project.h"
 			>
 		</File>
 		<File

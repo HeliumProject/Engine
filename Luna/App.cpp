@@ -1,6 +1,5 @@
 #include "Precompile.h"
 #include "App.h"
-#include "AppPreferences.h"
 
 #include "Platform/Windows/Windows.h"
 #include "Platform/Windows/Console.h"
@@ -181,19 +180,7 @@ bool App::OnInit()
 
             {
                 Log::Bullet bullet( TXT( "Icons...\n" ) );
-                //m_InitializerStack.Push( ArtProvider::Initialize, ArtProvider::Cleanup );
 
-                // ImageHandlers:
-                //    wxWidgets normally doesn't link in image handlers for all types of images,
-                //    in order to be a bit more efficient.  Consequently, you have to initialize
-                //    and add image handlers.  You can see how it is done for each type in the
-                //    demo in MyApp.OnInit.  Or you can call wxInitAllImageHandlers() to do them
-                //    all.  However, there is a limitation to doing them all.  TGA files may be
-                //    handled by the wxCURHandler instead of the wxTGAHandler, simply because that
-                //    handler appears in the list before TGA when you init them all at once.
-                //wxImage::AddHandler( new wxJPEGHandler );
-                //wxImage::AddHandler( new wxPNGHandler );
-                //wxImage::AddHandler(...
                 wxInitAllImageHandlers();
 
                 wxImageHandler* curHandler = wxImage::FindHandler( wxBITMAP_TYPE_CUR );
@@ -225,7 +212,6 @@ bool App::OnInit()
                 Log::Bullet bullet( TXT( "Editor...\n" ) );
                 m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
                 m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
-                m_InitializerStack.Push( AppPreferences::InitializeType, AppPreferences::CleanupType );
                 m_InitializerStack.Push( EditorInitialize, EditorCleanup );
             }
 
@@ -237,15 +223,6 @@ bool App::OnInit()
             {
                 Log::Bullet bullet( TXT( "Scene Editor...\n" ) );
                 m_InitializerStack.Push( SceneInitialize, SceneCleanup );
-            }
-        }
-
-        {
-            Log::Bullet systems( TXT( "Systems:\n" ) );
-
-            {
-                Log::Bullet vault( TXT( "Asset Tracker...\n" ) );
-                GetAppPreferences()->UseTracker( false ); //!parser.Found( "disable_tracker" ) );
             }
         }
     }

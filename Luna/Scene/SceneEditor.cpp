@@ -21,7 +21,6 @@
 #include "Point.h"
 #include "RotateManipulator.h"
 #include "ScaleManipulator.h"
-#include "SceneCallbackData.h"
 #include "ScenePreferences.h"
 #include "ScenePreferencesDialog.h"
 #include "SelectionPropertiesPanel.h"
@@ -202,19 +201,61 @@ public:
         : m_Scene( scene )
     {
     }
-
-    virtual ~SceneSelectData()
-    {
-    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// Creates a new Scene Editor.
+// Helper template for stashing data inside wx calls
 // 
-static Editor* CreateSceneEditor()
+template< class T >
+class DataObject : public wxObject
 {
-    return new SceneEditor();
+public:
+    DataObject()
+        : m_Data ()
+    {
+
+    }
+
+    DataObject(const T& t)
+        : m_Data ( t )
+    {
+
+    }
+
+    T m_Data;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// Stashes data for selection context menu
+// 
+namespace ContextCallbackTypes
+{
+    enum ContextCallbackType
+    {
+        All,
+        Item,
+        Instance,
+        Count
+    };
 }
+
+class ContextCallbackData: public wxObject
+{
+public:
+    ContextCallbackData()
+        : m_ContextCallbackType( ContextCallbackTypes::All )
+        , m_NodeType( NULL )
+        , m_Nodes( NULL )
+        , m_InstanceSet( NULL )
+    {
+
+    }
+
+    ContextCallbackTypes::ContextCallbackType m_ContextCallbackType;
+    const Luna::SceneNodeType* m_NodeType;
+    const Luna::InstanceSet* m_InstanceSet;
+    Luna::SceneNode* m_Nodes;
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static initialization.
@@ -233,7 +274,6 @@ void SceneEditor::InitializeEditor()
 void SceneEditor::CleanupEditor()
 {
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
@@ -2146,7 +2186,6 @@ void SceneEditor::OnSnapCameraTo(wxCommandEvent& event)
 ///////////////////////////////////////////////////////////////////////////////
 //Pushes the selected menu item as the current selected item.  
 //
-
 void SceneEditor::OnManifestContextMenu(wxCommandEvent& event)
 {
     if( !m_OrderedContextItems.empty() )
@@ -2192,7 +2231,7 @@ void SceneEditor::OnTypeContextMenu(wxCommandEvent &event)
 
     case ContextCallbackTypes::Item:
         {
-            newSelection.Append( static_cast<Luna::HierarchyNode*>( data->m_NodeInstance ) );
+            newSelection.Append( static_cast<Luna::HierarchyNode*>( data->m_Nodes ) );
             break;
         }
 
@@ -2210,54 +2249,6 @@ void SceneEditor::OnTypeContextMenu(wxCommandEvent &event)
 
             break;
         }
-
-    case ContextCallbackTypes::Entity_Visible_Geometry:
-        {
-            const HM_SceneNodeSmartPtr& instances( data->m_NodeType->GetInstances() );
-
-            HM_SceneNodeSmartPtr::const_iterator itr = instances.begin();
-            HM_SceneNodeSmartPtr::const_iterator end = instances.end();
-
-            for( ; itr != end; ++itr )
-            {
-                const Luna::SceneNode* node (itr->second);
-                const Luna::Entity* entity = Reflect::ConstObjectCast<Luna::Entity> (node);
-
-                if ( entity && entity->IsGeometryVisible())
-                {
-                    newSelection.Append( itr->second );
-                }
-            }
-
-            break;
-        }
-
-    case ContextCallbackTypes::Entity_Invisible_Geometry:
-        {
-            const HM_SceneNodeSmartPtr& instances( data->m_NodeType->GetInstances() );
-
-            HM_SceneNodeSmartPtr::const_iterator itr = instances.begin();
-            HM_SceneNodeSmartPtr::const_iterator end = instances.end();
-
-            for( ; itr != end; ++itr )
-            {
-                const Luna::SceneNode* node (itr->second);
-                const Luna::Entity* entity = Reflect::ConstObjectCast<Luna::Entity> (node);
-
-                if ( entity && !entity->IsGeometryVisible())
-                {
-                    newSelection.Append( itr->second );
-                }
-            }
-
-            break;
-        }
-
-
-    default:
-        {
-            break;
-        }
     }
 
     if( !newSelection.Empty() )
@@ -2270,13 +2261,12 @@ void SceneEditor::OnTypeContextMenu(wxCommandEvent &event)
 // Upon selection from the context menu, performs a select operation
 void SceneEditor::SelectItemInScene( wxCommandEvent& event )
 {
-    GeneralCallbackData* data = static_cast<GeneralCallbackData*>( event.m_callbackUserData );
+    DataObject<const SelectArgs*>* data = static_cast<DataObject<const SelectArgs*>*>( event.m_callbackUserData );
 
-    SelectArgs* args = static_cast<SelectArgs*>( data->m_GeneralData );
-
-    args->m_Mode = SelectionModes::Replace;
-    args->m_Target = SelectionTargetModes::Single;
-    m_SceneManager.GetCurrentScene()->Select(*args);
+    SelectArgs args ( *data->m_Data );
+    args.m_Mode = SelectionModes::Replace;
+    args.m_Target = SelectionTargetModes::Single;
+    m_SceneManager.GetCurrentScene()->Select(args);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2904,8 +2894,7 @@ void SceneEditor::OpenTypeContextMenu( const SelectArgs& args )
     if (m_SceneManager.GetCurrentScene()->HasHighlighted())
     {
         // need to provide the select args if needed
-        GeneralCallbackData* data = new GeneralCallbackData;
-        data->m_GeneralData = (void*)( &args );
+        DataObject<const SelectArgs*>* data = new DataObject<const SelectArgs*> ( &args );
         GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::SelectItemInScene ), data, this );
         contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select" ) );
         ++numMenuItems;
@@ -3009,7 +2998,7 @@ void SceneEditor::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sce
                 {    
                     ContextCallbackData* data = new ContextCallbackData;
                     data->m_ContextCallbackType = ContextCallbackTypes::Item;
-                    data->m_NodeInstance = *ord_itr;
+                    data->m_Nodes = *ord_itr;
 
                     GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::OnTypeContextMenu ), data, this );
                     itemMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, (*ord_itr)->GetName().c_str() );
@@ -3029,30 +3018,7 @@ void SceneEditor::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sce
                 if (entity)
                 {
                     // set up for entity types
-                    if (SetupEntityTypeMenus( entity, subMenu, numMenuItems ))
-                    {
-                        // setup for geometry visible objects
-                        {
-                            ContextCallbackData* data = new ContextCallbackData;
-                            data->m_ContextCallbackType = ContextCallbackTypes::Entity_Visible_Geometry;
-                            data->m_NodeType = type;
-
-                            GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::OnTypeContextMenu ), data, this );
-                            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select All With Geometry Shown" ) );
-                            ++numMenuItems;      
-                        }
-
-                        // setup for geometry invisible objects         
-                        {
-                            ContextCallbackData* data = new ContextCallbackData;
-                            data->m_ContextCallbackType = ContextCallbackTypes::Entity_Invisible_Geometry;
-                            data->m_NodeType = type;
-
-                            GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::OnTypeContextMenu ), data, this );
-                            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select All Without Geometry Shown" ) );
-                            ++numMenuItems;      
-                        }
-                    }
+                    SetupEntityTypeMenus( entity, subMenu, numMenuItems );
                 }
             }
             contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, type->GetName().c_str(), subMenu );
@@ -3061,7 +3027,7 @@ void SceneEditor::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sce
     }
 }
 
-bool SceneEditor::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* subMenu, u32& numMenuItems )
+void SceneEditor::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* subMenu, u32& numMenuItems )
 {
     const M_InstanceSetSmartPtr& sets = entity->GetSets();
 
@@ -3106,11 +3072,7 @@ bool SceneEditor::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* 
         {
             delete menu;
         }
-
-        return added;
     }
-
-    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

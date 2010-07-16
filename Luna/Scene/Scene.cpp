@@ -118,7 +118,7 @@ Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
     m_ImportRoot = m_Root.Ptr();
 
     // Load configurations
-    MiscSettings::LoadFromFile( m_MiscSettings );
+    m_MiscSettings = MiscSettings::LoadFromFile();
 
     // we listen to our own events because there a couple ways to add nodes and get this event
     AddNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 

@@ -1098,14 +1098,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneCallbackData.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneCallbackData.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\SceneDocument.cpp"
 				>
 			</File>
@@ -4490,14 +4482,6 @@
 		</File>
 		<File
 			RelativePath=".\App.h"
-			>
-		</File>
-		<File
-			RelativePath=".\AppPreferences.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\AppPreferences.h"
 			>
 		</File>
 		<File

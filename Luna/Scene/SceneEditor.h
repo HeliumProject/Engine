@@ -319,7 +319,7 @@ namespace Luna
 
     private:
         void SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  u32& numMenuItems );
-        bool SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* entityMenu, u32& numMenuItems );
+        void SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* entityMenu, u32& numMenuItems );
 
         static bool SortContextItemsByName( Luna::SceneNode* lhs, Luna::SceneNode* rhs ); 
         static bool SortTypeItemsByName( Luna::SceneNodeType* lhs, Luna::SceneNodeType* rhs );

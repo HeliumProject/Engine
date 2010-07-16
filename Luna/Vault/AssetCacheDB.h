@@ -30,7 +30,7 @@ public:
 ;
 ;
 };
-class Dependencies {
+class FileReferences {
 public:
     class Row {
     public:
@@ -44,7 +44,7 @@ public:
     static void link(const litesql::Database& db, const Luna::CacheEntry& o0, const Luna::CacheEntry& o1);
     static void unlink(const litesql::Database& db, const Luna::CacheEntry& o0, const Luna::CacheEntry& o1);
     static void del(const litesql::Database& db, const litesql::Expr& expr=litesql::Expr());
-    static litesql::DataSource<Dependencies::Row> getRows(const litesql::Database& db, const litesql::Expr& expr=litesql::Expr());
+    static litesql::DataSource<FileReferences::Row> getRows(const litesql::Database& db, const litesql::Expr& expr=litesql::Expr());
     static litesql::DataSource<Luna::CacheEntry> getCacheEntry1(const litesql::Database& db, const litesql::Expr& expr=litesql::Expr(), const litesql::Expr& srcExpr=litesql::Expr());
     static litesql::DataSource<Luna::CacheEntry> getCacheEntry2(const litesql::Database& db, const litesql::Expr& expr=litesql::Expr(), const litesql::Expr& srcExpr=litesql::Expr());
 };
@@ -63,14 +63,14 @@ public:
         litesql::DataSource<IndexDatum> get(const litesql::Expr& expr=litesql::Expr(), const litesql::Expr& srcExpr=litesql::Expr());
         litesql::DataSource<IndexData::Row> getRows(const litesql::Expr& expr=litesql::Expr());
     };
-    class DependenciesHandle : public litesql::RelationHandle<CacheEntry> {
+    class FileReferencesHandle : public litesql::RelationHandle<CacheEntry> {
     public:
-        DependenciesHandle(const CacheEntry& owner);
+        FileReferencesHandle(const CacheEntry& owner);
         void link(const CacheEntry& o0);
         void unlink(const CacheEntry& o0);
         void del(const litesql::Expr& expr=litesql::Expr());
         litesql::DataSource<CacheEntry> get(const litesql::Expr& expr=litesql::Expr(), const litesql::Expr& srcExpr=litesql::Expr());
-        litesql::DataSource<Dependencies::Row> getRows(const litesql::Expr& expr=litesql::Expr());
+        litesql::DataSource<FileReferences::Row> getRows(const litesql::Expr& expr=litesql::Expr());
     };
     static const tstring type__;
     static const tstring table__;
@@ -89,7 +89,7 @@ public:
     CacheEntry(const CacheEntry& obj);
     const CacheEntry& operator=(const CacheEntry& obj);
     CacheEntry::IndexdataHandle indexdata();
-    CacheEntry::DependenciesHandle dependencies();
+    CacheEntry::FileReferencesHandle fileReferences();
 protected:
     tstring insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs);
     void create();

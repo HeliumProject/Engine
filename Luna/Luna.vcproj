@@ -4517,6 +4517,18 @@
 				</Filter>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Tracker"
+			>
+			<File
+				RelativePath=".\Tracker\Tracker.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Tracker\Tracker.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\API.h"
 			>

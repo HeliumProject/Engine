@@ -86,7 +86,6 @@ namespace Component
             return ComponentBehaviors::Exclusive;
         }
 
-
         // 
         // Collection information
         // 
@@ -101,6 +100,8 @@ namespace Component
         // Return false if the attribute canot be added to that collection, and fill out the error 
         // string with a meaningful explanation that will be shown to the user.
         virtual bool ValidateSibling( const ComponentBase* attribute, tstring& error ) const;
+        
+        virtual void GatherIndexData( std::multimap< tstring, tstring >& indexData ) const;
 
     protected:
         // the collection we are an attribute of

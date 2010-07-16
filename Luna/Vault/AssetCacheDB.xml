@@ -16,9 +16,9 @@
 		<field name="mValue" type="string" />
 	</relation>
 	
-	<relation name="Dependencies" unidir="true">
+	<relation name="FileReferences" unidir="true">
 		<relate object="CacheEntry" />
-		<relate object="CacheEntry" handle="dependencies"/>
+		<relate object="CacheEntry" handle="fileReferences"/>
 	</relation>
 	
 </database>

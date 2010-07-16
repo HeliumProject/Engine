@@ -16,6 +16,7 @@ void Entity::EnumerateClass( Reflect::Compositor<Entity>& comp )
     comp.GetComposite().SetProperty( AssetProperties::FileFilter, "*.entity.*" );
 }
 
-void Entity::GatherIndexData( std::multimap< tstring, tstring >& indexData )
+void Entity::GatherIndexData( std::multimap< tstring, tstring >& indexData ) const
 {
+    __super::GatherIndexData( indexData );
 }

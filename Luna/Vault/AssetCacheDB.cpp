@@ -58,8 +58,8 @@ template <> litesql::DataSource<Luna::IndexDatum> IndexData::get(const litesql::
     sel.where(srcExpr);
     return DataSource<Luna::IndexDatum>(db, Luna::IndexDatum::Id.in(sel) && expr);
 }
-Dependencies::Row::Row(const litesql::Database& db, const litesql::Record& rec)
-         : cacheEntry2(Dependencies::CacheEntry2), cacheEntry1(Dependencies::CacheEntry1) {
+FileReferences::Row::Row(const litesql::Database& db, const litesql::Record& rec)
+         : cacheEntry2(FileReferences::CacheEntry2), cacheEntry1(FileReferences::CacheEntry1) {
     switch(rec.size()) {
     case 2:
         cacheEntry2 = rec[1];
@@ -67,10 +67,10 @@ Dependencies::Row::Row(const litesql::Database& db, const litesql::Record& rec)
         cacheEntry1 = rec[0];
     }
 }
-const tstring Dependencies::table__( TXT( "CacheEntry_CacheEntry_" ));
-const litesql::FieldType Dependencies::CacheEntry1( TXT( "CacheEntry1" ), TXT( "INTEGER" ),table__);
-const litesql::FieldType Dependencies::CacheEntry2( TXT( "CacheEntry2" ), TXT( "INTEGER" ),table__);
-void Dependencies::link(const litesql::Database& db, const Luna::CacheEntry& o0, const Luna::CacheEntry& o1) {
+const tstring FileReferences::table__( TXT( "CacheEntry_CacheEntry_" ));
+const litesql::FieldType FileReferences::CacheEntry1( TXT( "CacheEntry1" ), TXT( "INTEGER" ),table__);
+const litesql::FieldType FileReferences::CacheEntry2( TXT( "CacheEntry2" ), TXT( "INTEGER" ),table__);
+void FileReferences::link(const litesql::Database& db, const Luna::CacheEntry& o0, const Luna::CacheEntry& o1) {
     Record values;
     Split fields;
     fields.push_back(CacheEntry1.name());
@@ -79,28 +79,28 @@ void Dependencies::link(const litesql::Database& db, const Luna::CacheEntry& o0,
     values.push_back(o1.id);
     db.insert(table__, values, fields);
 }
-void Dependencies::unlink(const litesql::Database& db, const Luna::CacheEntry& o0, const Luna::CacheEntry& o1) {
+void FileReferences::unlink(const litesql::Database& db, const Luna::CacheEntry& o0, const Luna::CacheEntry& o1) {
     db.delete_(table__, (CacheEntry1 == o0.id && CacheEntry2 == o1.id));
 }
-void Dependencies::del(const litesql::Database& db, const litesql::Expr& expr) {
+void FileReferences::del(const litesql::Database& db, const litesql::Expr& expr) {
     db.delete_(table__, expr);
 }
-litesql::DataSource<Dependencies::Row> Dependencies::getRows(const litesql::Database& db, const litesql::Expr& expr) {
+litesql::DataSource<FileReferences::Row> FileReferences::getRows(const litesql::Database& db, const litesql::Expr& expr) {
     SelectQuery sel;
     sel.result(CacheEntry1.fullName());
     sel.result(CacheEntry2.fullName());
     sel.source(table__);
     sel.where(expr);
-    return DataSource<Dependencies::Row>(db, sel);
+    return DataSource<FileReferences::Row>(db, sel);
 }
-litesql::DataSource<Luna::CacheEntry> Dependencies::getCacheEntry1(const litesql::Database& db, const litesql::Expr& expr, const litesql::Expr& srcExpr) {
+litesql::DataSource<Luna::CacheEntry> FileReferences::getCacheEntry1(const litesql::Database& db, const litesql::Expr& expr, const litesql::Expr& srcExpr) {
     SelectQuery sel;
     sel.source(table__);
     sel.result(CacheEntry1.fullName());
     sel.where(srcExpr);
     return DataSource<Luna::CacheEntry>(db, Luna::CacheEntry::Id.in(sel) && expr);
 }
-litesql::DataSource<Luna::CacheEntry> Dependencies::getCacheEntry2(const litesql::Database& db, const litesql::Expr& expr, const litesql::Expr& srcExpr) {
+litesql::DataSource<Luna::CacheEntry> FileReferences::getCacheEntry2(const litesql::Database& db, const litesql::Expr& expr, const litesql::Expr& srcExpr) {
     SelectQuery sel;
     sel.source(table__);
     sel.result(CacheEntry2.fullName());
@@ -126,23 +126,23 @@ litesql::DataSource<IndexDatum> CacheEntry::IndexdataHandle::get(const litesql::
 litesql::DataSource<IndexData::Row> CacheEntry::IndexdataHandle::getRows(const litesql::Expr& expr) {
     return IndexData::getRows(owner->getDatabase(), expr && (IndexData::CacheEntry == owner->id));
 }
-CacheEntry::DependenciesHandle::DependenciesHandle(const CacheEntry& owner)
+CacheEntry::FileReferencesHandle::FileReferencesHandle(const CacheEntry& owner)
          : litesql::RelationHandle<CacheEntry>(owner) {
 }
-void CacheEntry::DependenciesHandle::link(const CacheEntry& o0) {
-    Dependencies::link(owner->getDatabase(), o0, *owner);
+void CacheEntry::FileReferencesHandle::link(const CacheEntry& o0) {
+    FileReferences::link(owner->getDatabase(), o0, *owner);
 }
-void CacheEntry::DependenciesHandle::unlink(const CacheEntry& o0) {
-    Dependencies::unlink(owner->getDatabase(), o0, *owner);
+void CacheEntry::FileReferencesHandle::unlink(const CacheEntry& o0) {
+    FileReferences::unlink(owner->getDatabase(), o0, *owner);
 }
-void CacheEntry::DependenciesHandle::del(const litesql::Expr& expr) {
-    Dependencies::del(owner->getDatabase(), expr && Dependencies::CacheEntry2 == owner->id);
+void CacheEntry::FileReferencesHandle::del(const litesql::Expr& expr) {
+    FileReferences::del(owner->getDatabase(), expr && FileReferences::CacheEntry2 == owner->id);
 }
-litesql::DataSource<CacheEntry> CacheEntry::DependenciesHandle::get(const litesql::Expr& expr, const litesql::Expr& srcExpr) {
-    return Dependencies::getCacheEntry1(owner->getDatabase(), expr, (Dependencies::CacheEntry2 == owner->id) && srcExpr);
+litesql::DataSource<CacheEntry> CacheEntry::FileReferencesHandle::get(const litesql::Expr& expr, const litesql::Expr& srcExpr) {
+    return FileReferences::getCacheEntry1(owner->getDatabase(), expr, (FileReferences::CacheEntry2 == owner->id) && srcExpr);
 }
-litesql::DataSource<Dependencies::Row> CacheEntry::DependenciesHandle::getRows(const litesql::Expr& expr) {
-    return Dependencies::getRows(owner->getDatabase(), expr && (Dependencies::CacheEntry2 == owner->id));
+litesql::DataSource<FileReferences::Row> CacheEntry::FileReferencesHandle::getRows(const litesql::Expr& expr) {
+    return FileReferences::getRows(owner->getDatabase(), expr && (FileReferences::CacheEntry2 == owner->id));
 }
 const tstring CacheEntry::type__( TXT( "CacheEntry" ));
 const tstring CacheEntry::table__( TXT( "CacheEntry_" ));
@@ -185,8 +185,8 @@ const CacheEntry& CacheEntry::operator=(const CacheEntry& obj) {
 CacheEntry::IndexdataHandle CacheEntry::indexdata() {
     return CacheEntry::IndexdataHandle(*this);
 }
-CacheEntry::DependenciesHandle CacheEntry::dependencies() {
-    return CacheEntry::DependenciesHandle(*this);
+CacheEntry::FileReferencesHandle CacheEntry::fileReferences() {
+    return CacheEntry::FileReferencesHandle(*this);
 }
 tstring CacheEntry::insert(litesql::Record& tables, litesql::Records& fieldRecs, litesql::Records& valueRecs) {
     tables.push_back(table__);
@@ -232,7 +232,7 @@ void CacheEntry::delRecord() {
 }
 void CacheEntry::delRelations() {
     IndexData::del(*db, (IndexData::CacheEntry == id));
-    Dependencies::del(*db, (Dependencies::CacheEntry1 == id) || (Dependencies::CacheEntry2 == id));
+    FileReferences::del(*db, (FileReferences::CacheEntry1 == id) || (FileReferences::CacheEntry2 == id));
 }
 void CacheEntry::update() {
     if (!inDatabase) {

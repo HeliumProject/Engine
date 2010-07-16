@@ -135,20 +135,8 @@ namespace Asset
         }
 
     public:
-        void GatherIndexData( std::multimap< tstring, tstring >& indexData )
-        {
-            //get my reflect elements
-            //for each element
-            //   if element is interesting
-            //       put into indexData
-
-            //for each component
-            //    get reflect elements from component
-            //        if element is interestinfg
-            //            add to indexdata
-        }
-
-        virtual void GetDependencies( std::set< Nocturnal::Path >& dependencies );
+        virtual void GatherIndexData( std::multimap< tstring, tstring >& indexData ) const NOC_OVERRIDE;
+        virtual void GetFileReferences( std::set< Nocturnal::Path >& fileReferences );
 
     public:
         // we were changed by somebody, reclassify

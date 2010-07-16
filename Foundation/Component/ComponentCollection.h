@@ -39,6 +39,7 @@ namespace Component
         ComponentCollection( const ComponentPtr& attr );
         virtual ~ComponentCollection(); 
 
+        virtual void GatherIndexData( std::multimap< tstring, tstring >& indexData ) const;
 
         //
         // Component Management

@@ -40,7 +40,7 @@ namespace Asset
         {
         }
 
-        void GatherIndexData( std::multimap< tstring, tstring >& indexData );
+        virtual void GatherIndexData( std::multimap< tstring, tstring >& indexData ) const NOC_OVERRIDE;
     };
 
     typedef Nocturnal::SmartPtr< AudioClip > AudioClipPtr;

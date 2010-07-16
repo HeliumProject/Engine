@@ -119,10 +119,31 @@ sub CleanFile
 	
 	foreach my $line ( @file )
 	{
-	  chomp $line;
-	  #$line =~ s/(?<!\#include\s)\s*("(?:[^"\\]+|\\.)*")/ TXT( \1 )/g;
-	  next if( $line =~ /\#include/ );
-	  $line =~ s/("(?:[^"\\]+|\\.)*")/ TXT( \1 )/g;
+		chomp $line;
+
+		#Fixup includes to header hpp file
+		$line =~ s/$inFilename\.hpp/$outFilename.h/img;
+		next if( $line =~ /\#include/ );
+
+		# Quote string literals
+		$line =~ s/("(?:[^"\\]+|\\.)*")/ TXT( \1 )/g;
+	  
+	    # Fixup string vars
+		$line =~ s/([^\w]+)char(?=\s*\*)/\1tchar/mg;
+		
+		$line =~ s/std\:\:string/tstring/mg;
+		
+		$line =~ s/std\:\:istream/tistream/mg;
+		$line =~ s/std\:\:ostream/tostream/mg;
+		$line =~ s/std\:\:iostream/tiostream/mg;
+		
+		$line =~ s/std\:\:ifstream/tifstream/mg;
+		$line =~ s/std\:\:ofstream/tofstream/mg;
+		$line =~ s/std\:\:fstream/tfstream/mg;
+		
+		$line =~ s/std\:\:istringstream/tistringstream/mg;
+		$line =~ s/std\:\:ostringstream/tostringstream/mg;
+		$line =~ s/std\:\:stringstream/tstringstream/mg;
 	}
 
 	my $fileContents = "";
@@ -142,11 +163,9 @@ sub CleanFile
 
 	$fileContents .= join( "\n", @file );
 
-	$fileContents =~ s/std\:\:string/tstring/mg;
-	$fileContents =~ s/std\:\:ostream/tostream/mg;
-	$fileContents =~ s/std\:\:istream/tistream/mg;
-	$fileContents =~ s/[^t]*char/tchar/mg;
-	$fileContents =~ s/$inFilename\.hpp/$outFilename.h/img;
+
+	
+	
 	
 	unlink ( $outFile ) if -e $outFile;
 	open( OUT, ">$outFile" ) or die $!;
@@ -159,7 +178,10 @@ sub CleanFile
 sub DoSystemCommand
 {
   my $command = shift; 
-  print( $command . "\n" );
+  if( $verbose )
+  {
+	print( $command . "\n" );
+  }
   system( $command );
   
   my $result = $? >> 8;

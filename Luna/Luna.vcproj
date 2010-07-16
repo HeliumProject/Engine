@@ -4253,14 +4253,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\EditorGenerated.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\EditorGenerated.h"
-			>
-		</File>
-		<File
 			RelativePath=".\EditorInfo.cpp"
 			>
 		</File>
@@ -4458,14 +4450,6 @@
 		</File>
 		<File
 			RelativePath=".\PropertiesManager.h"
-			>
-		</File>
-		<File
-			RelativePath=".\RefreshSelectionCommand.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\RefreshSelectionCommand.h"
 			>
 		</File>
 		<File

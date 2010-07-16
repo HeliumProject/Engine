@@ -45,13 +45,13 @@ namespace Luna
     wxStaticCastEvent(igThumbnailLoadedEventFunction, &func)                    
 
 // Define the event table entry. Yes, it really *does* end in a comma.
-#define igEVT_THUMBNAIL_LOADED(id, fn)                                            \
+#define LUNA_EVT_THUMBNAIL_LOADED(id, fn)                                            \
     DECLARE_EVENT_TABLE_ENTRY( Luna::ThumbnailLoadedCommandEvent, id, wxID_ANY,  \
     (wxObjectEventFunction)(wxEventFunction)                     \
     (wxCommandEventFunction) wxStaticCastEvent(                  \
     igThumbnailLoadedEventFunction, &fn ), (wxObject*) NULL ),
 
 // Optionally, you can do a similar #define for LUNA_EVT_THUMBNAIL_LOADED_RANGE.
-#define igEVT_THUMBNAIL_LOADED_RANGE(id1,id2, fn)                                 \
+#define LUNA_EVT_THUMBNAIL_LOADED_RANGE(id1,id2, fn)                                 \
     DECLARE_EVENT_TABLE_ENTRY( Luna::ThumbnailLoadedCommandEvent, id1, id2,      \
     igThumbnailLoadedEventHandler(fn), (wxObject*) NULL ),

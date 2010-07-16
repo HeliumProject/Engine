@@ -28,23 +28,23 @@ namespace Luna
 	  wxString m_Text;
   };
    
-  typedef void (wxEvtHandler::*igUpdateStatusEventFunction)(Luna::UpdateStatusEvent &);
+  typedef void (wxEvtHandler::*UpdateStatusEventFunction)(Luna::UpdateStatusEvent &);
 }
 
 // This #define simplifies the one below, and makes the syntax less
 // ugly if you want to use Connect() instead of an event table.
-#define igUpdateStatusEventHandler(func)                                         \
-	(wxObjectEventFunction)(wxEventFunction)(wxCommandEventFunction)\
-  wxStaticCastEvent(Luna::igUpdateStatusEventFunction, &func)                    
+#define LUNA_UPDATE_STATUS_EVENT_HANDLER(func) \
+	(wxObjectEventFunction)(wxEventFunction)(wxCommandEventFunction) \
+  wxStaticCastEvent(Luna::UpdateStatusEventFunction, &func)                    
  
 // Define the event table entry. Yes, it really *does* end in a comma.
-#define igEVT_UPDATE_STATUS(id, fn)                                            \
-  DECLARE_EVENT_TABLE_ENTRY( Luna::UpdateStatusCommandEvent, id, wxID_ANY,  \
-	(wxObjectEventFunction)(wxEventFunction)                     \
-	(wxCommandEventFunction) wxStaticCastEvent(                  \
-	igUpdateStatusEventFunction, &fn ), (wxObject*) NULL ),
+#define LUNA_EVT_UPDATE_STATUS(id, fn) \
+  DECLARE_EVENT_TABLE_ENTRY( Luna::UpdateStatusCommandEvent, id, wxID_ANY, \
+	(wxObjectEventFunction)(wxEventFunction) \
+	(wxCommandEventFunction) wxStaticCastEvent( \
+	UpdateStatusEventFunction, &fn ), (wxObject*) NULL ),
  
 // Optionally, you can do a similar #define for LUNA_EVT_UPDATE_STATUS_RANGE.
-#define igEVT_UPDATE_STATUS_RANGE(id1,id2, fn)                                 \
-  DECLARE_EVENT_TABLE_ENTRY( Luna::UpdateStatusCommandEvent, id1, id2,      \
-	igUpdateStatusEventHandler(fn), (wxObject*) NULL ),
+#define LUNA_EVT_UPDATE_STATUS_RANGE(id1,id2, fn) \
+  DECLARE_EVENT_TABLE_ENTRY( Luna::UpdateStatusCommandEvent, id1, id2, \
+	LUNA_UPDATE_STATUS_EVENT_HANDLER(fn), (wxObject*) NULL ),

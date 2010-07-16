@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE database SYSTEM "litesql.dtd"> 
-<database name="AssetCacheDB" namespace="Luna" include="AssetCacheDB.hpp">
+<database name="TrackerDBGenerated" namespace="Luna">
 	
 	<object name="CacheEntry">
 		<field name="mPath" type="string" />

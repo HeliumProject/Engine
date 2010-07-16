@@ -1343,14 +1343,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\AutoCompleteComboBox.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\AutoCompleteComboBox.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\AutoFlexSizer.cpp"
 				>
 			</File>

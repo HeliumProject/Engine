@@ -21,7 +21,6 @@
 #include "Editor/DocumentManager.h"
 #include "Application/RCS/RCS.h"
 #include "Scene/SceneManager.h"
-#include "Application/UI/AutoCompleteComboBox.h"
 #include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 #include "Platform/Exception.h"

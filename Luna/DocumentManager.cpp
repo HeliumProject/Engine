@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "DocumentManager.h"
 
-#include "YesNoAllDlg.h"
+#include "UI/YesNoAllDlg.h"
 
 #include "Application/RCS/RCS.h"
 

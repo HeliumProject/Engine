@@ -4221,22 +4221,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\ContextMenu.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ContextMenu.h"
-			>
-		</File>
-		<File
-			RelativePath=".\ContextMenuGenerator.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\ContextMenuGenerator.h"
-			>
-		</File>
-		<File
 			RelativePath=".\CoreInit.cpp"
 			>
 		</File>

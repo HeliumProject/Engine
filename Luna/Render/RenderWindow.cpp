@@ -1,33 +1,33 @@
 #include "Precompile.h"
-#include "PreviewWindow.h"
 
 #include "Foundation/Math/Utils.h"
 #include "Render/RBObjectLoader.h"
+#include "Render/RenderWindow.h"
 #include "Scene/Camera.h"
 #include "Application/UI/FileDialog.h"
 
-using namespace Luna;
+using namespace Render;
 
 static const u32 s_InvalidMesh = (u32)(-1);
 
-BEGIN_EVENT_TABLE( PreviewWindow, wxWindow )
-EVT_SIZE( PreviewWindow::OnSize )
-EVT_PAINT( PreviewWindow::OnPaint )
-EVT_MOUSE_CAPTURE_LOST( PreviewWindow::OnMouseCaptureLost )
-EVT_LEFT_DOWN( PreviewWindow::OnMouseDown )
-EVT_LEFT_UP( PreviewWindow::OnMouseUp )
-EVT_RIGHT_DOWN( PreviewWindow::OnMouseDown )
-EVT_RIGHT_UP( PreviewWindow::OnMouseUp )
-EVT_MIDDLE_DOWN( PreviewWindow::OnMouseDown )
-EVT_MIDDLE_UP( PreviewWindow::OnMouseUp )
-EVT_MOTION( PreviewWindow::OnMouseMove )
-EVT_MOUSEWHEEL( PreviewWindow::OnMouseWheel )
+BEGIN_EVENT_TABLE( RenderWindow, wxWindow )
+EVT_SIZE( RenderWindow::OnSize )
+EVT_PAINT( RenderWindow::OnPaint )
+EVT_MOUSE_CAPTURE_LOST( RenderWindow::OnMouseCaptureLost )
+EVT_LEFT_DOWN( RenderWindow::OnMouseDown )
+EVT_LEFT_UP( RenderWindow::OnMouseUp )
+EVT_RIGHT_DOWN( RenderWindow::OnMouseDown )
+EVT_RIGHT_UP( RenderWindow::OnMouseUp )
+EVT_MIDDLE_DOWN( RenderWindow::OnMouseDown )
+EVT_MIDDLE_UP( RenderWindow::OnMouseUp )
+EVT_MOTION( RenderWindow::OnMouseMove )
+EVT_MOUSEWHEEL( RenderWindow::OnMouseWheel )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-PreviewWindow::PreviewWindow( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
+RenderWindow::RenderWindow( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 : wxWindow( parent, id, pos, size, style, name )
 , m_Scene( NULL )
 , m_IsDeviceLost( false )
@@ -57,27 +57,27 @@ PreviewWindow::PreviewWindow( wxWindow *parent, wxWindowID id, const wxPoint& po
 
   // Context menu
   wxMenuItem* current = m_ContextMenu.Append( wxID_ANY, wxT( "Frame" ) );
-  Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PreviewWindow::OnFrame ), NULL, this );
+  Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( RenderWindow::OnFrame ), NULL, this );
   
   m_AxisSubMenu = new wxMenu();
   current = m_AxisSubMenu->Append( wxID_ANY, wxT( "On" ), wxEmptyString, wxITEM_CHECK );
   m_AxisOnMenuID = current->GetId();
-  Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PreviewWindow::OnChangeAxisDisplay ), NULL, this );
+  Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( RenderWindow::OnChangeAxisDisplay ), NULL, this );
   current = m_AxisSubMenu->Append( wxID_ANY, wxT( "Off" ), wxEmptyString, wxITEM_CHECK );
   m_AxisOffMenuID = current->GetId();
-  Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PreviewWindow::OnChangeAxisDisplay ), NULL, this );
+  Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( RenderWindow::OnChangeAxisDisplay ), NULL, this );
   m_ContextMenu.AppendSubMenu( m_AxisSubMenu, wxT( "Axis" ) );
 
   wxMenu* screenShotSubMenu = new wxMenu();
   current = screenShotSubMenu->Append( wxID_ANY, wxT( "Save to file..." ) );
-  Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( PreviewWindow::OnScreenShotToFile ), NULL, this );
+  Connect( current->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( RenderWindow::OnScreenShotToFile ), NULL, this );
   m_ContextMenu.AppendSubMenu( screenShotSubMenu, wxT( "Screenshot" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Destructor
 // 
-PreviewWindow::~PreviewWindow()
+RenderWindow::~RenderWindow()
 {
   delete m_Scene;
 }
@@ -85,7 +85,7 @@ PreviewWindow::~PreviewWindow()
 ///////////////////////////////////////////////////////////////////////////////
 // Display the specified mesh.  Path should point to a static content file.
 // 
-bool PreviewWindow::LoadScene( const tstring& path )
+bool RenderWindow::LoadScene( const tstring& path )
 {
   NOC_ASSERT( m_MeshHandle == s_InvalidMesh );
   
@@ -144,7 +144,7 @@ bool PreviewWindow::LoadScene( const tstring& path )
 
 ///////////////////////////////////////////////////////////////////////////////
 // Remove the currently displayed mesh from the scene.
-void PreviewWindow::ClearScene()
+void RenderWindow::ClearScene()
 {
   m_MeshHandle = s_InvalidMesh;
   if ( m_Scene )
@@ -159,7 +159,7 @@ void PreviewWindow::ClearScene()
 // Saves a screenshot to the specified location.  Returns true if the screenshot
 // was saved.
 // 
-bool PreviewWindow::SaveScreenShotAs( const tstring& path )
+bool RenderWindow::SaveScreenShotAs( const tstring& path )
 {
   if ( RenderScene() )
   {
@@ -171,7 +171,7 @@ bool PreviewWindow::SaveScreenShotAs( const tstring& path )
 ///////////////////////////////////////////////////////////////////////////////
 // Turns the reference Axis on or off.
 // 
-void PreviewWindow::DisplayReferenceAxis( bool display )
+void RenderWindow::DisplayReferenceAxis( bool display )
 {
   if ( m_DisplayAxis != display )
   {
@@ -188,7 +188,7 @@ void PreviewWindow::DisplayReferenceAxis( bool display )
 ///////////////////////////////////////////////////////////////////////////////
 // Resets the view so that the mesh is centered in the view.
 // 
-void PreviewWindow::Frame()
+void RenderWindow::Frame()
 {
   if ( m_MeshHandle != s_InvalidMesh && m_Scene )
   {
@@ -207,7 +207,7 @@ void PreviewWindow::Frame()
 ///////////////////////////////////////////////////////////////////////////////
 // Sets up lighting in the scene.
 // 
-void PreviewWindow::SetupLighting( Render::Scene* scene )
+void RenderWindow::SetupLighting( Render::Scene* scene )
 {
   if ( !scene )
   {
@@ -240,7 +240,7 @@ void PreviewWindow::SetupLighting( Render::Scene* scene )
 ///////////////////////////////////////////////////////////////////////////////
 // Draw the scene.
 // 
-void PreviewWindow::Draw()
+void RenderWindow::Draw()
 {
   IDirect3DDevice9* device = m_Render.GetD3DDevice();
   if ( !device )
@@ -279,7 +279,7 @@ void PreviewWindow::Draw()
 ///////////////////////////////////////////////////////////////////////////////
 // Resizes the renderer.
 // 
-void PreviewWindow::Resize( const wxSize& size )
+void RenderWindow::Resize( const wxSize& size )
 {
   if ( size.x > 0 && size.y > 0 && m_Scene )
   {
@@ -299,7 +299,7 @@ void PreviewWindow::Resize( const wxSize& size )
 // Show a context menu of operations.  Derived classes can override this to 
 // completely replace the menu that is show (or do nothing).
 // 
-void PreviewWindow::ShowContextMenu( const wxPoint& pos )
+void RenderWindow::ShowContextMenu( const wxPoint& pos )
 {
   if ( m_Scene )
   {
@@ -314,7 +314,7 @@ void PreviewWindow::ShowContextMenu( const wxPoint& pos )
 // Renders the scene if there is one.  Returns true if the scene is valid and
 // has at least one mesh.  Otherwise, returns false.
 // 
-bool PreviewWindow::RenderScene()
+bool RenderWindow::RenderScene()
 {
   if ( m_MeshHandle != s_InvalidMesh && m_Scene )
   {
@@ -334,7 +334,7 @@ bool PreviewWindow::RenderScene()
 ///////////////////////////////////////////////////////////////////////////////
 // Handle size event, update the D3D device.
 // 
-void PreviewWindow::OnSize( wxSizeEvent& args )
+void RenderWindow::OnSize( wxSizeEvent& args )
 {
   // Do custom work for your window here
   Resize( args.GetSize() );
@@ -343,7 +343,7 @@ void PreviewWindow::OnSize( wxSizeEvent& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Handle all D3D drawing.
 // 
-void PreviewWindow::OnPaint( wxPaintEvent& args )
+void RenderWindow::OnPaint( wxPaintEvent& args )
 {
   Draw();
 
@@ -353,7 +353,7 @@ void PreviewWindow::OnPaint( wxPaintEvent& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Required by wxWidgets.
 // 
-void PreviewWindow::OnMouseCaptureLost( wxMouseCaptureLostEvent& args )
+void RenderWindow::OnMouseCaptureLost( wxMouseCaptureLostEvent& args )
 {
   // We don't have anything to clean up
 }
@@ -361,7 +361,7 @@ void PreviewWindow::OnMouseCaptureLost( wxMouseCaptureLostEvent& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Start tracking mouse movement for moving the camera.
 // 
-void PreviewWindow::OnMouseDown( wxMouseEvent& args )
+void RenderWindow::OnMouseDown( wxMouseEvent& args )
 {
   args.Skip();
 
@@ -381,7 +381,7 @@ void PreviewWindow::OnMouseDown( wxMouseEvent& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Stop tracking mouse movement for moving the camera.
 // 
-void PreviewWindow::OnMouseUp( wxMouseEvent& args )
+void RenderWindow::OnMouseUp( wxMouseEvent& args )
 {
   args.Skip();
   if ( HasCapture() )
@@ -394,7 +394,7 @@ void PreviewWindow::OnMouseUp( wxMouseEvent& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Move the camera.
 // 
-void PreviewWindow::OnMouseMove( wxMouseEvent& args )
+void RenderWindow::OnMouseMove( wxMouseEvent& args )
 {
   args.Skip();
 
@@ -408,7 +408,7 @@ void PreviewWindow::OnMouseMove( wxMouseEvent& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Zooms the camera in and out.
 // 
-void PreviewWindow::OnMouseWheel( wxMouseEvent& args )
+void RenderWindow::OnMouseWheel( wxMouseEvent& args )
 {
   args.Skip();
 
@@ -419,7 +419,7 @@ void PreviewWindow::OnMouseWheel( wxMouseEvent& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Prompt for a location and save a screenshot there.
 // 
-void PreviewWindow::OnScreenShotToFile( wxCommandEvent& args )
+void RenderWindow::OnScreenShotToFile( wxCommandEvent& args )
 {
   Nocturnal::FileDialog dialog( this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, TXT( "" ), Nocturnal::FileDialogStyles::DefaultSave );
 
@@ -438,7 +438,7 @@ void PreviewWindow::OnScreenShotToFile( wxCommandEvent& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Center the mesh.
 // 
-void PreviewWindow::OnFrame( wxCommandEvent& args )
+void RenderWindow::OnFrame( wxCommandEvent& args )
 {
   Frame();
 }
@@ -446,7 +446,7 @@ void PreviewWindow::OnFrame( wxCommandEvent& args )
 ///////////////////////////////////////////////////////////////////////////////
 // Toggle visibility of the reference Axis.
 // 
-void PreviewWindow::OnChangeAxisDisplay( wxCommandEvent& args )
+void RenderWindow::OnChangeAxisDisplay( wxCommandEvent& args )
 {
   DisplayReferenceAxis( args.GetId() == m_AxisOnMenuID );
 }

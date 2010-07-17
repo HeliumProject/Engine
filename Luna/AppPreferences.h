@@ -7,29 +7,26 @@
 
 namespace Luna
 {
-  class ApplicationPreferences;
+  class AppPreferences;
 
   // Global preferences for the Luna application
-  LUNA_EDITOR_API ApplicationPreferences* GetApplicationPreferences();
+  LUNA_EDITOR_API AppPreferences* GetApplicationPreferences();
 
   /////////////////////////////////////////////////////////////////////////////
   // Global preferences for Luna.
   // 
-  class LUNA_EDITOR_API ApplicationPreferences : public Preferences
+  class LUNA_EDITOR_API AppPreferences : public Reflect::ConcreteInheritor< AppPreferences, Preferences >
   {
-  private:
-    WindowSettingsPtr m_SessionFrameSettings;
-    WindowSettingsPtr m_RunGameSettings;
+  public:
+    static void EnumerateClass( Reflect::Compositor<AppPreferences>& comp );
 
     // RTTI
   public:
     static void InitializeType();
     static void CleanupType();
-    REFLECT_DECLARE_CLASS( ApplicationPreferences, Preferences )
-    static void EnumerateClass( Reflect::Compositor<ApplicationPreferences>& comp );
 
   public:
-    ApplicationPreferences();
+    AppPreferences();
 
     virtual void PostDeserialize() NOC_OVERRIDE;
 
@@ -38,7 +35,8 @@ namespace Luna
 
     WindowSettings* GetSessionFrameSettings();
 
-    WindowSettings* GetRunGameSettings();
+  private:
+    WindowSettingsPtr m_SessionFrameSettings;
   };
-  typedef Nocturnal::SmartPtr< ApplicationPreferences > ApplicationPreferencesPtr;
+  typedef Nocturnal::SmartPtr< AppPreferences > ApplicationPreferencesPtr;
 }

@@ -8,7 +8,6 @@
 
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "Orientation.h"
 #include "UpdateStatusEvent.h"
 #include "Application/Inspect/DragDrop/DropSource.h"
 #include "Application/Undo/Command.h"
@@ -91,18 +90,18 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultFrame *bro
     EnableScrolling( false, false );
 
     // Set up camera orientation (orthographic)
-    const Math::Vector3 dir = Luna::OutVector * -1.f;
-    const Math::Vector3 up = Luna::UpVector;
-    m_Orientation.SetBasis( Luna::UpAxis, Math::Vector4( up ) );
-    m_Orientation.SetBasis( Luna::SideAxis, Math::Vector4( dir.Cross( up ) ) );
-    m_Orientation.SetBasis( Luna::OutAxis, Math::Vector4( Math::Vector3::Zero - dir ) );
+    const Math::Vector3 dir = Math::Vector3::BasisZ * -1.f;
+    const Math::Vector3 up = Math::Vector3::BasisY;
+    m_Orientation.SetBasis( Math::SingleAxes::Y, Math::Vector4( up ) );
+    m_Orientation.SetBasis( Math::SingleAxes::X, Math::Vector4( dir.Cross( up ) ) );
+    m_Orientation.SetBasis( Math::SingleAxes::Z, Math::Vector4( Math::Vector3::Zero - dir ) );
     m_Orientation.Invert();
 
     m_World = Math::Matrix4( Math::Scale( m_Scale, m_Scale, m_Scale ) );
 
     // Set up camera view matrix
     const Math::Vector3 pivot( 0, 0, 0 );
-    m_ViewMatrix = Math::Matrix4( pivot * -1 ) * m_Orientation * Math::Matrix4( OutVector * ( -s_FarClipDistance / 2.0f ) );
+    m_ViewMatrix = Math::Matrix4( pivot * -1 ) * m_Orientation * Math::Matrix4( Math::Vector3::BasisZ * ( -s_FarClipDistance / 2.0f ) );
 
     m_D3DManager.InitD3D( GetHwnd(), 64, 64 );
     m_D3DManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
@@ -579,9 +578,9 @@ void ThumbnailView::UpdateProjectionMatrix()
     NOC_ASSERT( GetSize().x > 0 && GetSize().y > 0 );
 
     m_Projection = Math::Matrix4::Identity;
-    m_Projection.x = SideVector;
-    m_Projection.y = UpVector;
-    m_Projection.z = OutVector;
+    m_Projection.x = Math::Vector3::BasisX;
+    m_Projection.y = Math::Vector3::BasisY;
+    m_Projection.z = Math::Vector3::BasisZ;
     m_Projection.Invert();
 
     Math::Matrix4 ortho;

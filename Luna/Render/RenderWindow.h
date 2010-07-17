@@ -5,17 +5,17 @@
 #include "Render/Renderer.h"
 #include "Camera.h"
 
-namespace Luna
+namespace Render
 {
   struct D3DEventArgs;
 
   typedef std::vector< Render::Scene* > V_Scene;
   
-  class PreviewWindow : public wxWindow
+  class RenderWindow : public wxWindow
   {
   public:
-    PreviewWindow( wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = wxT( "Luna::PreviewWindow" ) );
-    virtual ~PreviewWindow();
+    RenderWindow( wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = wxT( "Luna::RenderWindow" ) );
+    virtual ~RenderWindow();
 
     bool LoadScene( const tstring& path );
     void ClearScene();

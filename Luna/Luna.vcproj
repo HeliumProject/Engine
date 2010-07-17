@@ -1013,6 +1013,14 @@
 				Name="Manipulators"
 				>
 				<File
+					RelativePath=".\Scene\Manipulator.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Manipulator.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Scene\RotateManipulator.cpp"
 					>
 				</File>
@@ -1502,6 +1510,14 @@
 				</File>
 				<File
 					RelativePath=".\Scene\IndexResource.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Orientation.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scene\Orientation.h"
 					>
 				</File>
 				<File
@@ -2175,6 +2191,14 @@
 			</File>
 			<File
 				RelativePath=".\Render\RenderSceneManager.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Render\RenderWindow.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Render\RenderWindow.h"
 				>
 			</File>
 			<File
@@ -4205,11 +4229,11 @@
 			>
 		</File>
 		<File
-			RelativePath=".\ApplicationPreferences.cpp"
+			RelativePath=".\AppPreferences.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\ApplicationPreferences.h"
+			RelativePath=".\AppPreferences.h"
 			>
 		</File>
 		<File
@@ -4265,14 +4289,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Manipulator.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Manipulator.h"
-			>
-		</File>
-		<File
 			RelativePath=".\MRUData.cpp"
 			>
 		</File>
@@ -4286,14 +4302,6 @@
 		</File>
 		<File
 			RelativePath=".\Object.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Orientation.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Orientation.h"
 			>
 		</File>
 		<File
@@ -4398,18 +4406,6 @@
 		</File>
 		<File
 			RelativePath=".\PreferencesDialog.h"
-			>
-		</File>
-		<File
-			RelativePath=".\PreferencesTest.h"
-			>
-		</File>
-		<File
-			RelativePath=".\PreviewWindow.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PreviewWindow.h"
 			>
 		</File>
 		<File

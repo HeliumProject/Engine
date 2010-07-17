@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Platform/Compiler.h"
-#include "PreviewWindow.h"
+
+#include "Render/RenderWindow.h"
 
 namespace Reflect
 {
@@ -12,7 +13,7 @@ namespace Luna
 {
   class VaultFrame;
 
-  class VaultPreviewWindow : public PreviewWindow
+  class VaultPreviewWindow : public Render::RenderWindow
   {
   public:
     VaultPreviewWindow( wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, const wxString& name = wxT( "Luna::VaultPreviewWindow" ) );

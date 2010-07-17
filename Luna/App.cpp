@@ -34,7 +34,7 @@
 #include "Editor.h"
 #include "Preferences.h"
 #include "PreferencesBase.h"
-#include "ApplicationPreferences.h"
+#include "AppPreferences.h"
 #include "Preferences.h"
 #include "WindowSettings.h"
 #include "Document.h"
@@ -236,7 +236,7 @@ bool App::OnInit()
                 m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
                 m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
                 m_InitializerStack.Push( WindowSettings::InitializeType, WindowSettings::CleanupType );
-                m_InitializerStack.Push( ApplicationPreferences::InitializeType, ApplicationPreferences::CleanupType );
+                m_InitializerStack.Push( AppPreferences::InitializeType, AppPreferences::CleanupType );
 
                 m_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::FilePathOptions::FilePathOption>( &Luna::FilePathOptions::FilePathOptionEnumerateEnumeration, TXT( "FilePathOption" ) ) );
                 m_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );

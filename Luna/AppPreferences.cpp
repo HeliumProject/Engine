@@ -1,15 +1,14 @@
 #include "Precompile.h"
-#include "ApplicationPreferences.h"
+#include "AppPreferences.h"
 #include "Application/Preferences.h"
 
 using namespace Luna;
 
-REFLECT_DEFINE_CLASS( ApplicationPreferences )
+REFLECT_DEFINE_CLASS( AppPreferences )
 
-void ApplicationPreferences::EnumerateClass( Reflect::Compositor<ApplicationPreferences>& comp )
+void AppPreferences::EnumerateClass( Reflect::Compositor<AppPreferences>& comp )
 {
-  Reflect::ElementField* elemSessionFrameSettings = comp.AddField( &ApplicationPreferences::m_SessionFrameSettings, "m_SessionFrameSettings" );
-  Reflect::ElementField* elemRunGameSettings = comp.AddField( &ApplicationPreferences::m_RunGameSettings, "m_RunGameSettings" );
+  Reflect::ElementField* elemSessionFrameSettings = comp.AddField( &AppPreferences::m_SessionFrameSettings, "m_SessionFrameSettings" );
 }
 
 
@@ -33,22 +32,22 @@ const static tstring s_RunGameWindowVersion( TXT( "1" ) );
 ///////////////////////////////////////////////////////////////////////////////
 // Static initialization.
 // 
-void ApplicationPreferences::InitializeType()
+void AppPreferences::InitializeType()
 {
-  Reflect::RegisterClass<ApplicationPreferences>( TXT( "ApplicationPreferences" ) );
+  Reflect::RegisterClass<AppPreferences>( TXT( "AppPreferences" ) );
 
   NOC_ASSERT( !g_ApplicationPreferences );
 
-  g_ApplicationPreferences = new ApplicationPreferences();
+  g_ApplicationPreferences = new AppPreferences();
   g_ApplicationPreferences->LoadPreferences();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static cleanup.
 // 
-void ApplicationPreferences::CleanupType()
+void AppPreferences::CleanupType()
 {
-  Reflect::UnregisterClass<ApplicationPreferences>();
+  Reflect::UnregisterClass<AppPreferences>();
 
   g_ApplicationPreferences = NULL;
 }
@@ -56,11 +55,11 @@ void ApplicationPreferences::CleanupType()
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the one and only instance of this class.
 // 
-ApplicationPreferences* Luna::GetApplicationPreferences()
+AppPreferences* Luna::GetApplicationPreferences()
 {
   if ( !g_ApplicationPreferences )
   {
-    throw Nocturnal::Exception( TXT( "ApplicationPreferences is not initialized, must call ApplicationPreferences::InitializeType first." ) );
+    throw Nocturnal::Exception( TXT( "AppPreferences is not initialized, must call AppPreferences::InitializeType first." ) );
   }
 
   return g_ApplicationPreferences;
@@ -69,20 +68,18 @@ ApplicationPreferences* Luna::GetApplicationPreferences()
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-ApplicationPreferences::ApplicationPreferences()
+AppPreferences::AppPreferences()
 : m_SessionFrameSettings( new WindowSettings( s_SessionFrameVersion ) )
-, m_RunGameSettings( new WindowSettings( s_RunGameWindowVersion ) )
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Overridden to verify settings after load.
 // 
-void ApplicationPreferences::PostDeserialize()
+void AppPreferences::PostDeserialize()
 {
   __super::PostDeserialize();
   WindowSettings::CheckWindowSettings( m_SessionFrameSettings, s_SessionFrameVersion );
-  WindowSettings::CheckWindowSettings( m_RunGameSettings, s_RunGameWindowVersion );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -91,7 +88,7 @@ void ApplicationPreferences::PostDeserialize()
 // separate aspects of the preferences.  See the globals section at the top
 // of this file.
 // 
-const tstring& ApplicationPreferences::GetCurrentVersion() const 
+const tstring& AppPreferences::GetCurrentVersion() const 
 {
   return s_PreferencesVersion;
 }
@@ -99,7 +96,7 @@ const tstring& ApplicationPreferences::GetCurrentVersion() const
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the path to this preference file on disk.
 // 
-tstring ApplicationPreferences::GetPreferencesPath() const
+tstring AppPreferences::GetPreferencesPath() const
 {
     Nocturnal::Path prefsDir;
     if ( !Application::GetPreferencesDirectory( prefsDir ) )
@@ -112,15 +109,7 @@ tstring ApplicationPreferences::GetPreferencesPath() const
 ///////////////////////////////////////////////////////////////////////////////
 // Returns the window settings for the Session Frame.
 // 
-WindowSettings* ApplicationPreferences::GetSessionFrameSettings()
+WindowSettings* AppPreferences::GetSessionFrameSettings()
 {
   return m_SessionFrameSettings;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the window settings for the Run Game window.
-// 
-WindowSettings* ApplicationPreferences::GetRunGameSettings()
-{
-  return m_RunGameSettings;
 }

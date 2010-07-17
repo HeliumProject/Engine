@@ -27,7 +27,7 @@ CurveEditMode CurveEditTool::s_EditMode = CurveEditModes::Modify;
 bool CurveEditTool::s_CurrentSelection = false;
 
 CurveEditTool::CurveEditTool(Luna::Scene *scene, Luna::PropertiesGenerator *generator)
-: Luna::SceneTool( scene, generator )
+: Tool( scene, generator )
 , m_HotEditMode ( CurveEditModes::None )
 {
   Initialize();

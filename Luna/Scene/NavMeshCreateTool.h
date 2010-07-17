@@ -3,9 +3,11 @@
 #include "Luna/API.h"
 
 #include "Pipeline/Content/Nodes/Point.h"
-#include "NavMesh.h"
+
 #include "RotateManipulator.h"
-#include "SceneTool.h"
+#include "NavMesh.h"
+#include "Tool.h"
+
 #define PUNCH_VOLUME 1
 
 namespace Luna
@@ -17,7 +19,7 @@ namespace Luna
   class TranslateManipulator;
   class ScaleManipulator;
 
-  class NavMeshCreateTool : public Luna::SceneTool
+  class NavMeshCreateTool : public Tool
   {
     //
     //  Members
@@ -144,7 +146,7 @@ namespace Luna
     // RTTI
     //
 
-    LUNA_DECLARE_TYPE(Luna::NavMeshCreateTool, Luna::SceneTool);
+    LUNA_DECLARE_TYPE(Luna::NavMeshCreateTool, Tool);
     static void InitializeType();
     static void CleanupType();
 

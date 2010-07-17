@@ -905,14 +905,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\SceneTool.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\SceneTool.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Scene\Tool.cpp"
 					>
 				</File>

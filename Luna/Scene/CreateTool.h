@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "SceneTool.h"
+#include "Tool.h"
 #include "ToolTimer.h"
 #include "HierarchyNode.h"
+#include "Scene.h"
 
 namespace Luna
 {
@@ -41,7 +42,7 @@ namespace Luna
 
   typedef std::map< Math::Vector3, Math::V_Vector3, Vector3Compare > M_Vector3;
 
-  class CreateTool : public Luna::SceneTool
+  class CreateTool : public Tool
   {
     //
     // Members
@@ -126,7 +127,7 @@ namespace Luna
     //
   public:
 
-    LUNA_DECLARE_TYPE(Luna::CreateTool, Luna::SceneTool);
+    LUNA_DECLARE_TYPE(Luna::CreateTool, Tool);
     static void InitializeType();
     static void CleanupType();
 

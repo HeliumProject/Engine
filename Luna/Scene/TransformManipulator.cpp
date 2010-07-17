@@ -22,7 +22,7 @@ void TransformManipulator::CleanupType()
 }
 
 TransformManipulator::TransformManipulator(const ManipulatorMode mode, Luna::Scene* scene, PropertiesGenerator* generator)
-: Luna::SceneTool(scene, generator)
+: Tool(scene, generator)
 , m_Mode (mode)
 , m_SelectedAxes (MultipleAxes::None)
 , m_Size (0.3f)

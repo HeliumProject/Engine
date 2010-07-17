@@ -15,7 +15,7 @@
 #include "SceneDocument.h"
 #include "ScenePreferences.h"
 
-#include "SceneTool.h"
+#include "Tool.h"
 #include "CreateTool.h"
 #include "DuplicateTool.h"
 
@@ -100,7 +100,6 @@ void Luna::SceneInitialize()
     g_InitializerStack.Push( ScenePreferences::InitializeType, ScenePreferences::CleanupType );
 
     g_InitializerStack.Push( Tool::InitializeType, Tool::CleanupType );
-    g_InitializerStack.Push( SceneTool::InitializeType, SceneTool::CleanupType );
     g_InitializerStack.Push( CreateTool::InitializeType, CreateTool::CleanupType );
     g_InitializerStack.Push( DuplicateTool::InitializeType, DuplicateTool::CleanupType );
 

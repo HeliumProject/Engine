@@ -60,7 +60,7 @@ void CreateTool::CleanupType()
 }
 
 CreateTool::CreateTool(Luna::Scene* scene, PropertiesGenerator* generator)
-: Luna::SceneTool (scene, generator)
+: Tool (scene, generator)
 , m_Created (false)
 , m_InstanceUpdateOffsets (false)
 , m_Instance (NULL)

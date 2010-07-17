@@ -29,7 +29,7 @@ void CurveCreateTool::CleanupType()
 }
 
 CurveCreateTool::CurveCreateTool( Luna::Scene* scene, PropertiesGenerator* generator )
-: Luna::SceneTool( scene, generator )
+: Tool( scene, generator )
 , m_Instance( NULL )
 , m_Created( false )
 {

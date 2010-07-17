@@ -4,11 +4,11 @@
 
 #include "Pipeline/Content/Nodes/Curve.h"
 #include "Curve.h"
-#include "SceneTool.h"
+#include "Tool.h"
 
 namespace Luna
 {
-  class CurveCreateTool : public Luna::SceneTool
+  class CurveCreateTool : public Tool
   {
     //
     //  Members
@@ -38,7 +38,7 @@ namespace Luna
     // RTTI
     //
 
-    LUNA_DECLARE_TYPE(Luna::CurveCreateTool, Luna::SceneTool);
+    LUNA_DECLARE_TYPE(Luna::CurveCreateTool, Tool);
     static void InitializeType();
     static void CleanupType();
 

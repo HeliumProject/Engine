@@ -4245,22 +4245,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\EditorInfo.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\EditorInfo.h"
-			>
-		</File>
-		<File
-			RelativePath=".\EditorState.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\EditorState.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Enumerator.cpp"
 			>
 		</File>

@@ -32,8 +32,6 @@
 #include "Enumerator.h"
 
 #include "Editor.h"
-#include "EditorState.h"
-#include "EditorInfo.h"
 #include "Preferences.h"
 #include "PreferencesBase.h"
 #include "ApplicationPreferences.h"
@@ -242,7 +240,6 @@ bool App::OnInit()
 
                 m_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::FilePathOptions::FilePathOption>( &Luna::FilePathOptions::FilePathOptionEnumerateEnumeration, TXT( "FilePathOption" ) ) );
                 m_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );
-                m_InitializerStack.Push( Reflect::RegisterClass<EditorState>( TXT( "EditorState" ) ) );
 
                 m_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
                 m_InitializerStack.Push( MRUData::InitializeType, MRUData::CleanupType );

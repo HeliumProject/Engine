@@ -22,7 +22,6 @@
 #include "PropertiesManager.h"
 #include "Selection.h"
 #include "Editor.h"
-#include "EditorInfo.h"
 
 #include <wx/dnd.h>
 

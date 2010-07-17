@@ -18,31 +18,31 @@ namespace Luna
 {
   struct LUNA_CORE_API CreatePanelArgs
   {
-    class Enumerator* m_Enumerator;
+    class PropertiesGenerator* m_Generator;
     const OS_SelectableDumbPtr& m_Selection;
 
-    CreatePanelArgs(Enumerator* enumerator, const OS_SelectableDumbPtr& selection)
-      : m_Enumerator (enumerator)
+    CreatePanelArgs(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection)
+      : m_Generator (generator)
       , m_Selection (selection)
     {
 
     }
   };
 
-  // callback for creating a named panel creator for the enumerator
+  // callback for creating a named panel creator for the generator
   typedef Nocturnal::Signature< void, CreatePanelArgs& > CreatePanelSignature;
 
   typedef std::map<tstring, CreatePanelSignature::Delegate> M_PanelCreators;
 
   extern M_PanelCreators s_PanelCreators;
 
-  class LUNA_CORE_API Enumerator : public Inspect::Interpreter
+  class LUNA_CORE_API PropertiesGenerator : public Inspect::Interpreter
   {
   public:
-    Enumerator (Inspect::Container* container);
-    virtual ~Enumerator();
+    PropertiesGenerator (Inspect::Container* container);
+    virtual ~PropertiesGenerator();
 
-    // init and cleanup enumerator system
+    // init and cleanup generator system
     static void Initialize();
     static void Cleanup();
 
@@ -311,5 +311,5 @@ namespace Luna
     }
   };
 
-  typedef Nocturnal::SmartPtr<Enumerator> EnumeratorPtr;
+  typedef Nocturnal::SmartPtr<PropertiesGenerator> EnumeratorPtr;
 }

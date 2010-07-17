@@ -43,7 +43,7 @@ namespace Luna
     static void CleanupType();
 
   public:
-    CurveCreateTool( Luna::Scene* scene, Enumerator* enumerator );
+    CurveCreateTool( Luna::Scene* scene, PropertiesGenerator* generator );
     virtual ~CurveCreateTool();
 
     void CreateInstance( const Math::Vector3& position );

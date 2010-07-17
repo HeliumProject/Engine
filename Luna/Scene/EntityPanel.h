@@ -68,7 +68,7 @@ namespace Luna
         Inspect::ReflectInterpreterPtr  m_CollisionReflectInterpreter;
 
     public:
-        EntityPanel(Enumerator* enumerator, const OS_SelectableDumbPtr& selection);
+        EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection);
         virtual ~EntityPanel();
         virtual void Create() NOC_OVERRIDE;
 

@@ -1,5 +1,5 @@
 #include "Precompile.h"
-#include "Enumerator.h"
+#include "PropertiesGenerator.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/Container/Insert.h" 
@@ -9,7 +9,7 @@
 
 using namespace Luna;
 
-//#define LUNA_DEBUG_ENUMERATOR
+//#define LUNA_DEBUG_PROPERTIES_GENERATOR
 
 namespace Luna
 {
@@ -18,27 +18,27 @@ namespace Luna
 
 static bool g_Initialized = false;
 
-Enumerator::Enumerator(Inspect::Container* container)
+PropertiesGenerator::PropertiesGenerator(Inspect::Container* container)
 : Inspect::Interpreter (container)
 {
 }
 
-Enumerator::~Enumerator()
+PropertiesGenerator::~PropertiesGenerator()
 {
 }
 
-void Enumerator::Initialize()
+void PropertiesGenerator::Initialize()
 {
   g_Initialized = true;
 }
 
-void Enumerator::Cleanup()
+void PropertiesGenerator::Cleanup()
 {
   s_PanelCreators.clear();
   g_Initialized = false;
 }
 
-bool Enumerator::InitializePanel(const tstring& name, const CreatePanelSignature::Delegate& creator)
+bool PropertiesGenerator::InitializePanel(const tstring& name, const CreatePanelSignature::Delegate& creator)
 {
   LUNA_CORE_SCOPE_TIMER( ("") );
 
@@ -61,7 +61,7 @@ bool Enumerator::InitializePanel(const tstring& name, const CreatePanelSignature
   return inserted.second;
 }
 
-void Enumerator::CleanupPanel(const tstring& name)
+void PropertiesGenerator::CleanupPanel(const tstring& name)
 {
   NOC_ASSERT(g_Initialized);
 
@@ -70,7 +70,7 @@ void Enumerator::CleanupPanel(const tstring& name)
   s_PanelCreators.erase(name);
 }
 
-void Enumerator::Reset()
+void PropertiesGenerator::Reset()
 {
   LUNA_CORE_SCOPE_TIMER( ("") );
 

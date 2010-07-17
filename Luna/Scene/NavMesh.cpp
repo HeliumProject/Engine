@@ -18,7 +18,7 @@
 
 
 #include "Application/UI/ArtProvider.h"
-#include "Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "Foundation/Log.h"
 #include "Orientation.h"
@@ -102,7 +102,7 @@ void NavMesh::InitializeType()
   ZeroMemory(&s_SelectedTriMaterial, sizeof(s_SelectedTriMaterial));
   s_SelectedTriMaterial.Ambient = Color::ColorToColorValue(98, 255, 255, 0);
   s_SelectedTriMaterial.Diffuse = Color::ColorToColorValue(98, 255, 255, 0);
-  Enumerator::InitializePanel( TXT( "NavMesh" ), CreatePanelSignature::Delegate( &NavMesh::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "NavMesh" ), CreatePanelSignature::Delegate( &NavMesh::CreatePanel ) );
 }
 
 void NavMesh::CleanupType()
@@ -751,59 +751,59 @@ bool NavMesh::ValidatePanel( const tstring& name )
 
 void NavMesh::CreatePanel( CreatePanelArgs& args )
 {
-  /*args.m_Enumerator->PushPanel( "NavMesh", true);
+  /*args.m_Generator->PushPanel( "NavMesh", true);
   {
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Type" );
-      args.m_Enumerator->AddChoice<Luna::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( "CurveType" ), &Curve::GetCurveType, &Curve::SetCurveType );
+      args.m_Generator->AddLabel( "Type" );
+      args.m_Generator->AddChoice<Luna::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( "CurveType" ), &Curve::GetCurveType, &Curve::SetCurveType );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Control Point Label" );
-      args.m_Enumerator->AddChoice<Luna::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( "ControlPointLabel" ), &Curve::GetControlPointLabel, &Curve::SetControlPointLabel );
+      args.m_Generator->AddLabel( "Control Point Label" );
+      args.m_Generator->AddChoice<Luna::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( "ControlPointLabel" ), &Curve::GetControlPointLabel, &Curve::SetControlPointLabel );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Resolution" );
-      Inspect::Slider* slider = args.m_Enumerator->AddSlider<Luna::Curve, u32>( args.m_Selection, &Curve::GetResolution, &Curve::SetResolution );
+      args.m_Generator->AddLabel( "Resolution" );
+      Inspect::Slider* slider = args.m_Generator->AddSlider<Luna::Curve, u32>( args.m_Selection, &Curve::GetResolution, &Curve::SetResolution );
       slider->SetRangeMin( 1.0f, false );
       slider->SetRangeMax( 20.0f, false );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Closed" );
-      args.m_Enumerator->AddCheckBox<Luna::Curve, bool>( args.m_Selection, &Curve::GetClosed, &Curve::SetClosed );
+      args.m_Generator->AddLabel( "Closed" );
+      args.m_Generator->AddCheckBox<Luna::Curve, bool>( args.m_Selection, &Curve::GetClosed, &Curve::SetClosed );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Reverse Control Points" );
-      Inspect::Action* button = args.m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( &Curve::OnReverseControlPoints ) );
+      args.m_Generator->AddLabel( "Reverse Control Points" );
+      Inspect::Action* button = args.m_Generator->AddAction( Inspect::ActionSignature::Delegate( &Curve::OnReverseControlPoints ) );
       button->SetIcon( "reverse" );
       button->SetClientData( new SelectionDataObject( args.m_Selection ) );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( "Curve Length" );
+      args.m_Generator->AddLabel( "Curve Length" );
 
       typedef f32 ( Curve::*Getter )() const;
       typedef void ( Curve::*Setter )( const f32& );
-      Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::Curve, f32, Getter, Setter >( args.m_Selection, &Curve::CalculateCurveLength );
+      Inspect::Value* textBox = args.m_Generator->AddValue< Luna::Curve, f32, Getter, Setter >( args.m_Selection, &Curve::CalculateCurveLength );
       textBox->SetReadOnly( true );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
   }
-  args.m_Enumerator->Pop();*/
+  args.m_Generator->Pop();*/
 }
 
 void NavMesh::AddVert( Math::Vector3 position )

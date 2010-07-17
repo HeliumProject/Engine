@@ -15,10 +15,10 @@ using namespace Luna;
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 //
-LightPanel::LightPanel( Enumerator* enumerator, const OS_SelectableDumbPtr& selection )
+LightPanel::LightPanel( PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection )
 : m_Selection( selection )
 {
-  m_Interpreter = m_Enumerator = enumerator;
+  m_Interpreter = m_Generator = generator;
   m_Text = TXT( "Light" );
   m_Expanded = true;
 }
@@ -30,6 +30,6 @@ LightPanel::LightPanel( Enumerator* enumerator, const OS_SelectableDumbPtr& sele
 void LightPanel::Create()
 {  
   //Create the interpreter
-  m_ReflectInterpreter  = m_Enumerator->CreateInterpreter< Inspect::ReflectInterpreter >( this );
+  m_ReflectInterpreter  = m_Generator->CreateInterpreter< Inspect::ReflectInterpreter >( this );
   Inspect::Panel::Create();
 }

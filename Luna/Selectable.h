@@ -7,7 +7,7 @@
 namespace Luna
 {
   class ManiuplatorAdapterCollection;
-  class Enumerator;
+  class PropertiesGenerator;
   class EnumerateElementArgs;
 
   class LUNA_CORE_API Selectable : public Object

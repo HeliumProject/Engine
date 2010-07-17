@@ -24,8 +24,8 @@ void LocatorCreateTool::CleanupType()
   Reflect::UnregisterClass< Luna::LocatorCreateTool >();
 }
 
-LocatorCreateTool::LocatorCreateTool(Luna::Scene* scene, Enumerator* enumerator)
-: Luna::CreateTool (scene, enumerator)
+LocatorCreateTool::LocatorCreateTool(Luna::Scene* scene, PropertiesGenerator* generator)
+: Luna::CreateTool (scene, generator)
 {
 
 }
@@ -68,13 +68,13 @@ Luna::TransformPtr LocatorCreateTool::CreateNode()
 
 void LocatorCreateTool::CreateProperties()
 {
-  m_Enumerator->PushPanel( TXT( "Locator" ), true);
+  m_Generator->PushPanel( TXT( "Locator" ), true);
   {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Shape" ) );
+      m_Generator->AddLabel( TXT( "Shape" ) );
 
-      Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::LocatorCreateTool, int>(this, &LocatorCreateTool::GetLocatorShape, &LocatorCreateTool::SetLocatorShape) );
+      Inspect::Choice* choice = m_Generator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::LocatorCreateTool, int>(this, &LocatorCreateTool::GetLocatorShape, &LocatorCreateTool::SetLocatorShape) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
@@ -92,11 +92,11 @@ void LocatorCreateTool::CreateProperties()
 
       choice->SetItems( items );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
     __super::CreateProperties();
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
 }
 
 int LocatorCreateTool::GetLocatorShape() const

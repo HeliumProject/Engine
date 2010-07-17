@@ -204,8 +204,8 @@ void NavMeshCreateTool::CleanupType()
   Reflect::UnregisterClass< Luna::NavMeshCreateTool >();
 }
 
-NavMeshCreateTool::NavMeshCreateTool( Luna::Scene* scene, Enumerator* enumerator )
-: Luna::SceneTool( scene, enumerator )
+NavMeshCreateTool::NavMeshCreateTool( Luna::Scene* scene, PropertiesGenerator* generator )
+: Luna::SceneTool( scene, generator )
 , m_Instance( NULL )
 , m_Created( false )
 , m_EditMode( EDIT_MODE_DISABLED )
@@ -220,9 +220,9 @@ NavMeshCreateTool::NavMeshCreateTool( Luna::Scene* scene, Enumerator* enumerator
 , m_SnapDegrees( 15.0f )
 , m_RotationStartValue( Math::Vector3::Zero )
 {
-  m_PunchOutTranslator = new Luna::TranslateManipulator( ManipulatorModes::Translate, scene, enumerator );
-  m_PunchOutRotator = new Luna::RotateManipulator( ManipulatorModes::Rotate, scene, enumerator );
-  m_PunchOutScaler = new Luna::ScaleManipulator( ManipulatorModes::Scale, scene, enumerator );
+  m_PunchOutTranslator = new Luna::TranslateManipulator( ManipulatorModes::Translate, scene, generator );
+  m_PunchOutRotator = new Luna::RotateManipulator( ManipulatorModes::Rotate, scene, generator );
+  m_PunchOutScaler = new Luna::ScaleManipulator( ManipulatorModes::Scale, scene, generator );
 
   ZeroMemory(&m_AxisMaterial, sizeof(m_AxisMaterial));
   m_AxisMaterial.Ambient = Luna::Color::BLACK;
@@ -1852,26 +1852,26 @@ void NavMeshCreateTool::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel( TXT( "Create NavMesh" ), true );
+  m_Generator->PushPanel( TXT( "Create NavMesh" ), true );
   {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Surface Snap" ) );   
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, bool> (this, &NavMeshCreateTool::GetSurfaceSnap, &NavMeshCreateTool::SetSurfaceSnap ) );
+      m_Generator->AddLabel( TXT( "Surface Snap" ) );   
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, bool> (this, &NavMeshCreateTool::GetSurfaceSnap, &NavMeshCreateTool::SetSurfaceSnap ) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Object Snap" ) );   
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, bool> (this, &NavMeshCreateTool::GetObjectSnap, &NavMeshCreateTool::SetObjectSnap ) );
+      m_Generator->AddLabel( TXT( "Object Snap" ) );   
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, bool> (this, &NavMeshCreateTool::GetObjectSnap, &NavMeshCreateTool::SetObjectSnap ) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Plane Snap" ) );
-      Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, int> (this, &NavMeshCreateTool::GetPlaneSnap, &NavMeshCreateTool::SetPlaneSnap) );
+      m_Generator->AddLabel( TXT( "Plane Snap" ) );
+      Inspect::Choice* choice = m_Generator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, int> (this, &NavMeshCreateTool::GetPlaneSnap, &NavMeshCreateTool::SetPlaneSnap) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
@@ -1889,9 +1889,9 @@ void NavMeshCreateTool::CreateProperties()
 
       choice->SetItems( items );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
 
   if ( m_EditMode  == EDIT_MODE_MOVE)
   {
@@ -1933,7 +1933,7 @@ void NavMeshCreateTool::SetSurfaceSnap( bool snap )
   if (s_SurfaceSnap)
   {
     s_ObjectSnap = false;
-    m_Enumerator->GetContainer()->Read();
+    m_Generator->GetContainer()->Read();
   }
 
   m_Scene->Execute( true );
@@ -1951,7 +1951,7 @@ void NavMeshCreateTool::SetObjectSnap( bool snap )
   if (s_ObjectSnap)
   {
     s_SurfaceSnap = false;
-    m_Enumerator->GetContainer()->Read();
+    m_Generator->GetContainer()->Read();
   }
 
   m_Scene->Execute( true );

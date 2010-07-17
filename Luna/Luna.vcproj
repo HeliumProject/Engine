@@ -4269,14 +4269,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Enumerator.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Enumerator.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Frame.cpp"
 			>
 		</File>
@@ -4414,6 +4406,14 @@
 		</File>
 		<File
 			RelativePath=".\Project.h"
+			>
+		</File>
+		<File
+			RelativePath=".\PropertiesGenerator.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\PropertiesGenerator.h"
 			>
 		</File>
 		<File

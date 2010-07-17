@@ -25,7 +25,7 @@ LUNA_DEFINE_TYPE( Luna::HierarchyNode );
 void HierarchyNode::InitializeType()
 {
   Reflect::RegisterClass< Luna::HierarchyNode >( TXT( "Luna::HierarchyNode" ) );
-  Enumerator::InitializePanel( TXT( "Hierarchy" ), CreatePanelSignature::Delegate( &HierarchyNode::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "Hierarchy" ), CreatePanelSignature::Delegate( &HierarchyNode::CreatePanel ) );
 }
 
 void HierarchyNode::CleanupType()
@@ -1120,22 +1120,22 @@ bool HierarchyNode::ValidatePanel(const tstring& name)
 
 void HierarchyNode::CreatePanel(CreatePanelArgs& args)
 {
-  args.m_Enumerator->PushPanel( TXT( "Hierarchy Node" ), true);
+  args.m_Generator->PushPanel( TXT( "Hierarchy Node" ), true);
   {
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Hidden" ) );
-      args.m_Enumerator->AddCheckBox<Luna::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsHidden, &HierarchyNode::SetHidden, false );
+      args.m_Generator->AddLabel( TXT( "Hidden" ) );
+      args.m_Generator->AddCheckBox<Luna::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsHidden, &HierarchyNode::SetHidden, false );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Live" ) );   
-      args.m_Enumerator->AddCheckBox<Luna::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsLive, &HierarchyNode::SetLive );
+      args.m_Generator->AddLabel( TXT( "Live" ) );   
+      args.m_Generator->AddCheckBox<Luna::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsLive, &HierarchyNode::SetLive );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
   }
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 

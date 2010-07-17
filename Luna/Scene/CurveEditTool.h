@@ -40,7 +40,7 @@ namespace Luna
     static void CleanupType();
 
   public:
-    CurveEditTool( Luna::Scene* scene, Enumerator* enumerator );
+    CurveEditTool( Luna::Scene* scene, PropertiesGenerator* generator );
     virtual ~CurveEditTool();
 
     CurveEditMode GetEditMode() const;

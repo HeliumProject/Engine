@@ -26,7 +26,7 @@ namespace Luna
     static void CleanupType();
 
   public:
-    LocatorCreateTool(Luna::Scene* scene, Enumerator* enumerator);
+    LocatorCreateTool(Luna::Scene* scene, PropertiesGenerator* generator);
 
     virtual ~LocatorCreateTool();
 

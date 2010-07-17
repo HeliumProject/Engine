@@ -100,8 +100,8 @@ bool SelectionHasSameAttribute(const OS_SelectableDumbPtr& selection, Component:
     return true;
 }
 
-EntityPanel::EntityPanel(Enumerator* enumerator, const OS_SelectableDumbPtr& selection)
-: InstancePanel (enumerator, selection)
+EntityPanel::EntityPanel(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection)
+: InstancePanel (generator, selection)
 , m_LightingPanel ( NULL )
 , m_DrawDistance ( NULL )
 , m_UpdateDistance ( NULL )
@@ -172,30 +172,30 @@ EntityPanel::~EntityPanel()
 
 void EntityPanel::CreateAssetType()
 {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-        m_Enumerator->AddLabel( TXT( "Engine Type" ) );
-        Inspect::Value* textBox = m_Enumerator->AddValue<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetAssetTypeName, &Luna::Entity::SetAssetTypeName );
+        m_Generator->AddLabel( TXT( "Engine Type" ) );
+        Inspect::Value* textBox = m_Generator->AddValue<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetAssetTypeName, &Luna::Entity::SetAssetTypeName );
         textBox->SetReadOnly( true );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 }
 
 void EntityPanel::CreateClassPath()
 {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-        m_Enumerator->AddLabel( TXT( "Class Path" ) );
+        m_Generator->AddLabel( TXT( "Class Path" ) );
 
-        m_TextBox = m_Enumerator->AddValue<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetEntityAssetPath, &Luna::Entity::SetEntityAssetPath );
+        m_TextBox = m_Generator->AddValue<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetEntityAssetPath, &Luna::Entity::SetEntityAssetPath );
         m_TextBox->AddBoundDataChangingListener( Inspect::ChangingSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanging ) );
         m_TextBox->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanged ) );
 
-        Inspect::FileDialogButton* fileButton = m_Enumerator->AddFileDialogButton<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetEntityAssetPath, &Luna::Entity::SetEntityAssetPath );
+        Inspect::FileDialogButton* fileButton = m_Generator->AddFileDialogButton<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetEntityAssetPath, &Luna::Entity::SetEntityAssetPath );
         fileButton->AddBoundDataChangingListener( Inspect::ChangingSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanging ) );
         fileButton->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanged ) );
 
-        Inspect::FileBrowserButton* browserButton = m_Enumerator->AddFileBrowserButton<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetEntityAssetPath, &Luna::Entity::SetEntityAssetPath );
+        Inspect::FileBrowserButton* browserButton = m_Generator->AddFileBrowserButton<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetEntityAssetPath, &Luna::Entity::SetEntityAssetPath );
         browserButton->AddBoundDataChangingListener( Inspect::ChangingSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanging ) );
         browserButton->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &EntityPanel::OnEntityAssetChanged ) );
 
@@ -218,134 +218,134 @@ void EntityPanel::CreateClassPath()
         filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &EntityPanel::OnEntityAssetDrop ) );
         m_TextBox->SetDropTarget( filteredDropTarget );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
 }
 
 void EntityPanel::CreateClassActions()
 {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-        m_Enumerator->AddLabel( TXT( "Class Actions" ) );
+        m_Generator->AddLabel( TXT( "Class Actions" ) );
 
-        Inspect::Action* refreshButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRefresh ) );
+        Inspect::Action* refreshButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRefresh ) );
         refreshButton->SetIcon( TXT( "actions/view-refresh" ) );
         refreshButton->SetToolTip( TXT( "Refresh" ) );
 
         bool singular = m_Selection.Size() == 1;
 
-        Inspect::Action* lunaButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetEditAsset ) );
+        Inspect::Action* lunaButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetEditAsset ) );
         lunaButton->SetIcon( TXT( "asset_editor" ) );
         lunaButton->SetToolTip( TXT( "Edit this entity class in Luna's Asset Editor" ) );
 
-        Inspect::Action* mayaButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetEditArt ) );
+        Inspect::Action* mayaButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetEditArt ) );
         mayaButton->SetIcon( TXT( "maya" ) );
         mayaButton->SetEnabled( singular );
         mayaButton->SetToolTip( TXT( "Edit this entity class's art in Maya" ) );
 
-        Inspect::Action* historyButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRevisionHistory ) );
+        Inspect::Action* historyButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRevisionHistory ) );
         historyButton->SetIcon( TXT( "p4" ) );
         historyButton->SetToolTip( TXT( "Display revision history for this file in Perforce." ) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 }
 
 
 
 void EntityPanel::CreateChildImportExport()
 {
-    m_Enumerator->PushPanel( TXT( "Child Import/Export" ) );
+    m_Generator->PushPanel( TXT( "Child Import/Export" ) );
     {
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            Inspect::Action* button1 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Transform, Content::Transform > ) );
+            Inspect::Action* button1 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Transform, Content::Transform > ) );
             button1->SetText( TXT( "Export All" ) );
 
-            Inspect::Action* button2 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Transform, Content::Transform > ) );
+            Inspect::Action* button2 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Transform, Content::Transform > ) );
             button2->SetText( TXT( "Import All" ) );
 
-            Inspect::Action* button3 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Transform > ) );
+            Inspect::Action* button3 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Transform > ) );
             button3->SetText( TXT( "Select All" ) );
 
-            Inspect::Action* button4 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExportToFile< Luna::Transform, Content::Transform > ) );
+            Inspect::Action* button4 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExportToFile< Luna::Transform, Content::Transform > ) );
             button4->SetText( TXT( "Export To File" ) );
 
-            Inspect::Action* button5 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImportFromFile< Luna::Transform, Content::Transform > ) );
+            Inspect::Action* button5 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImportFromFile< Luna::Transform, Content::Transform > ) );
             button5->SetText( TXT( "Import From File" ) );
 
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            Inspect::Action* button1 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Entity, Asset::EntityInstance > ) );
+            Inspect::Action* button1 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Entity, Asset::EntityInstance > ) );
             button1->SetText( TXT( "Export Entities" ) );
 
-            Inspect::Action* button2 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Entity, Asset::EntityInstance > ) );
+            Inspect::Action* button2 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Entity, Asset::EntityInstance > ) );
             button2->SetText( TXT( "Import Entities" ) );
 
-            Inspect::Action* button3 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Entity > ) );
+            Inspect::Action* button3 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Entity > ) );
             button3->SetText( TXT( "Select Entities" ) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            Inspect::Action* button1 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Volume, Content::Volume > ) );
+            Inspect::Action* button1 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Volume, Content::Volume > ) );
             button1->SetText( TXT( "Export Weather Volumes" ) );
 
-            Inspect::Action* button2 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Volume, Content::Volume > ) );
+            Inspect::Action* button2 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Volume, Content::Volume > ) );
             button2->SetText( TXT( "Import Weather Volumes" ) );
 
-            Inspect::Action* button3 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Volume > ) );
+            Inspect::Action* button3 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Volume > ) );
             button3->SetText( TXT( "Select Weather Volumes" ) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            Inspect::Action* button1 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Light, Content::Light > ) );
+            Inspect::Action* button1 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Light, Content::Light > ) );
             button1->SetText( TXT( "Export Lights" ) );
 
-            Inspect::Action* button2 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Light, Content::Light > ) );
+            Inspect::Action* button2 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Light, Content::Light > ) );
             button2->SetText( TXT( "Import Lights" ) );
 
-            Inspect::Action* button3 = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Light > ) );
+            Inspect::Action* button3 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Light > ) );
             button3->SetText( TXT( "Select Lights" ) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 }
 
 void EntityPanel::CreateShowFlags()
 {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-        m_Enumerator->AddLabel( TXT( "Show Pointer" ) );
-        m_Enumerator->AddCheckBox<Luna::Entity, bool>( m_Selection, 
+        m_Generator->AddLabel( TXT( "Show Pointer" ) );
+        m_Generator->AddCheckBox<Luna::Entity, bool>( m_Selection, 
             &Luna::Entity::IsPointerVisible, 
             &Luna::Entity::SetPointerVisible, false );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-        m_Enumerator->AddLabel( TXT( "Show Bounds" ) );
-        m_Enumerator->AddCheckBox<Luna::Entity, bool>( m_Selection, 
+        m_Generator->AddLabel( TXT( "Show Bounds" ) );
+        m_Generator->AddCheckBox<Luna::Entity, bool>( m_Selection, 
             &Luna::Entity::IsBoundsVisible, 
             &Luna::Entity::SetBoundsVisible, false );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-        m_Enumerator->AddLabel( TXT( "Show Geometry" ) );
-        m_Enumerator->AddCheckBox<Luna::Entity, bool>( m_Selection, 
+        m_Generator->AddLabel( TXT( "Show Geometry" ) );
+        m_Generator->AddCheckBox<Luna::Entity, bool>( m_Selection, 
             &Luna::Entity::IsGeometryVisible, 
             &Luna::Entity::SetGeometryVisible, false );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 }
 
 

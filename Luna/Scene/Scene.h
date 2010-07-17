@@ -11,7 +11,7 @@
 
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/Controls/Canvas.h"
-#include "Enumerator.h"
+#include "PropertiesGenerator.h"
 
 #include "Application/Undo/ExistenceCommand.h"
 #include "Application/Undo/Queue.h"

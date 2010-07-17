@@ -5,7 +5,7 @@
 #include "SceneManager.h"
 #include "InstanceType.h"
 
-#include "Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "Application/UI/ArtProvider.h"
 
 #include "PrimitivePointer.h"
@@ -21,7 +21,7 @@ void DirectionalLight::InitializeType()
 {
   Reflect::RegisterClass< Luna::DirectionalLight >( TXT( "Luna::DirectionalLight" ) );
 
-  Enumerator::InitializePanel( TXT( "DirectionalLight" ), CreatePanelSignature::Delegate( &DirectionalLight::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "DirectionalLight" ), CreatePanelSignature::Delegate( &DirectionalLight::CreatePanel ) );
 }
 
 void DirectionalLight::CleanupType()
@@ -66,34 +66,34 @@ bool DirectionalLight::ValidatePanel(const tstring& name)
 
 void DirectionalLight::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel( TXT( "Directional Light" ), true);
+  args.m_Generator->PushPanel( TXT( "Directional Light" ), true);
   {
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Global Sun" ) );
-      args.m_Enumerator->AddCheckBox<DirectionalLight, bool>( args.m_Selection, &DirectionalLight::GetGlobalSun, &DirectionalLight::SetGlobalSun );
+      args.m_Generator->AddLabel( TXT( "Global Sun" ) );
+      args.m_Generator->AddCheckBox<DirectionalLight, bool>( args.m_Selection, &DirectionalLight::GetGlobalSun, &DirectionalLight::SetGlobalSun );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Shadow Softness" ) );
+      args.m_Generator->AddLabel( TXT( "Shadow Softness" ) );
 
-      args.m_Enumerator->AddValue<DirectionalLight, float>( args.m_Selection, &DirectionalLight::GetShadowSoftness, &DirectionalLight::SetShadowSoftness );
-      Inspect::Slider* slider = args.m_Enumerator->AddSlider<DirectionalLight, float>( args.m_Selection, &DirectionalLight::GetShadowSoftness, &DirectionalLight::SetShadowSoftness );
+      args.m_Generator->AddValue<DirectionalLight, float>( args.m_Selection, &DirectionalLight::GetShadowSoftness, &DirectionalLight::SetShadowSoftness );
+      Inspect::Slider* slider = args.m_Generator->AddSlider<DirectionalLight, float>( args.m_Selection, &DirectionalLight::GetShadowSoftness, &DirectionalLight::SetShadowSoftness );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Soft Shadow Samples" ) );
+      args.m_Generator->AddLabel( TXT( "Soft Shadow Samples" ) );
 
-      args.m_Enumerator->AddValue<DirectionalLight, int>( args.m_Selection, &DirectionalLight::GetSoftShadowSamples, &DirectionalLight::SetSoftShadowSamples );
-      Inspect::Slider* slider = args.m_Enumerator->AddSlider<DirectionalLight, int>( args.m_Selection, &DirectionalLight::GetSoftShadowSamples, &DirectionalLight::SetSoftShadowSamples );
+      args.m_Generator->AddValue<DirectionalLight, int>( args.m_Selection, &DirectionalLight::GetSoftShadowSamples, &DirectionalLight::SetSoftShadowSamples );
+      Inspect::Slider* slider = args.m_Generator->AddSlider<DirectionalLight, int>( args.m_Selection, &DirectionalLight::GetSoftShadowSamples, &DirectionalLight::SetSoftShadowSamples );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
   }
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 
 }
 

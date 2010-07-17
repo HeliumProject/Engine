@@ -4,7 +4,7 @@
 #include <wx/wx.h>
 #include <wx/listbook.h>
 
-#include "Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "Application/Inspect/Controls/Canvas.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
 

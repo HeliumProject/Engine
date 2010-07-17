@@ -16,8 +16,8 @@ namespace Luna
     //
 
   protected:
-    // The attribute enumerator to use
-    Enumerator* m_Enumerator;
+    // The attribute generator to use
+    PropertiesGenerator* m_Generator;
 
     // The 3d view
     Luna::Viewport* m_View;
@@ -39,8 +39,8 @@ namespace Luna
     //
 
   public:
-    Tool( Luna::Viewport* view, Enumerator* enumerator )
-      : m_Enumerator (enumerator)
+    Tool( Luna::Viewport* view, PropertiesGenerator* generator )
+      : m_Generator (generator)
       , m_View ( view )
       , m_AllowSelection( true )
     {

@@ -28,8 +28,8 @@ void CurveCreateTool::CleanupType()
   Reflect::UnregisterClass< Luna::CurveCreateTool >();
 }
 
-CurveCreateTool::CurveCreateTool( Luna::Scene* scene, Enumerator* enumerator )
-: Luna::SceneTool( scene, enumerator )
+CurveCreateTool::CurveCreateTool( Luna::Scene* scene, PropertiesGenerator* generator )
+: Luna::SceneTool( scene, generator )
 , m_Instance( NULL )
 , m_Created( false )
 {
@@ -257,26 +257,26 @@ void CurveCreateTool::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel( TXT( "Create Curve" ), true );
+  m_Generator->PushPanel( TXT( "Create Curve" ), true );
   {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Surface Snap" ) );   
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, bool> (this, &CurveCreateTool::GetSurfaceSnap, &CurveCreateTool::SetSurfaceSnap ) );
+      m_Generator->AddLabel( TXT( "Surface Snap" ) );   
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, bool> (this, &CurveCreateTool::GetSurfaceSnap, &CurveCreateTool::SetSurfaceSnap ) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Object Snap" ) );   
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, bool> (this, &CurveCreateTool::GetObjectSnap, &CurveCreateTool::SetObjectSnap ) );
+      m_Generator->AddLabel( TXT( "Object Snap" ) );   
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, bool> (this, &CurveCreateTool::GetObjectSnap, &CurveCreateTool::SetObjectSnap ) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Plane Snap" ) );
-      Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, int> (this, &CurveCreateTool::GetPlaneSnap, &CurveCreateTool::SetPlaneSnap) );
+      m_Generator->AddLabel( TXT( "Plane Snap" ) );
+      Inspect::Choice* choice = m_Generator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, int> (this, &CurveCreateTool::GetPlaneSnap, &CurveCreateTool::SetPlaneSnap) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
@@ -294,12 +294,12 @@ void CurveCreateTool::CreateProperties()
 
       choice->SetItems( items );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Curve Type" ) );
-      Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, int> (this, &CurveCreateTool::GetCurveType, &CurveCreateTool::SetCurveType ) );
+      m_Generator->AddLabel( TXT( "Curve Type" ) );
+      Inspect::Choice* choice = m_Generator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, int> (this, &CurveCreateTool::GetCurveType, &CurveCreateTool::SetCurveType ) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
@@ -324,17 +324,17 @@ void CurveCreateTool::CreateProperties()
       choice->SetItems( items );
 
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Closed" ) );
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, bool> (this, &CurveCreateTool::GetClosed, &CurveCreateTool::SetClosed ) );
+      m_Generator->AddLabel( TXT( "Closed" ) );
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CurveCreateTool, bool> (this, &CurveCreateTool::GetClosed, &CurveCreateTool::SetClosed ) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
 }
 
 bool CurveCreateTool::GetSurfaceSnap() const
@@ -349,7 +349,7 @@ void CurveCreateTool::SetSurfaceSnap( bool snap )
   if (s_SurfaceSnap)
   {
     s_ObjectSnap = false;
-    m_Enumerator->GetContainer()->Read();
+    m_Generator->GetContainer()->Read();
   }
 
   m_Scene->Execute( true );
@@ -367,7 +367,7 @@ void CurveCreateTool::SetObjectSnap( bool snap )
   if (s_ObjectSnap)
   {
     s_SurfaceSnap = false;
-    m_Enumerator->GetContainer()->Read();
+    m_Generator->GetContainer()->Read();
   }
 
   m_Scene->Execute( true );

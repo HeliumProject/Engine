@@ -29,7 +29,7 @@
 #include "Object.h"
 #include "Selectable.h"
 #include "Persistent.h"
-#include "Enumerator.h"
+#include "PropertiesGenerator.h"
 
 #include "Editor.h"
 #include "Preferences.h"
@@ -231,7 +231,7 @@ bool App::OnInit()
                 m_InitializerStack.Push( Object::InitializeType, Object::CleanupType );
                 m_InitializerStack.Push( Selectable::InitializeType, Selectable::CleanupType );
                 m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );
-                m_InitializerStack.Push( Enumerator::Initialize, Enumerator::Cleanup );
+                m_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
 
                 m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
                 m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );

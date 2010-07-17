@@ -37,7 +37,7 @@ namespace Luna
     static void CleanupType();
 
   public:
-    RotateManipulator(const ManipulatorMode mode, Luna::Scene* scene, Enumerator* enumerator);
+    RotateManipulator(const ManipulatorMode mode, Luna::Scene* scene, PropertiesGenerator* generator);
 
     ~RotateManipulator();
 

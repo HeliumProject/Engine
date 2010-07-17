@@ -149,7 +149,7 @@ namespace Luna
     static void CleanupType();
 
   public:
-    NavMeshCreateTool( Luna::Scene* scene, Enumerator* enumerator );
+    NavMeshCreateTool( Luna::Scene* scene, PropertiesGenerator* generator );
     virtual ~NavMeshCreateTool();
 
     void CreateInstance( const Math::Vector3& position );

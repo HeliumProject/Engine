@@ -6,7 +6,7 @@
 
 #include "VolumeType.h"
 
-#include "Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveCube.h"
@@ -28,7 +28,7 @@ void Volume::InitializeType()
 {
   Reflect::RegisterClass< Luna::Volume >( TXT( "Luna::Volume" ) );
 
-  Enumerator::InitializePanel( TXT( "Volume" ), CreatePanelSignature::Delegate( &Volume::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "Volume" ), CreatePanelSignature::Delegate( &Volume::CreatePanel ) );
 }
 
 void Volume::CleanupType()
@@ -223,13 +223,13 @@ bool Volume::ValidatePanel(const tstring& name)
 
 void Volume::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel( TXT( "Volume" ), true);
+  args.m_Generator->PushPanel( TXT( "Volume" ), true);
   {
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Shape" ) );
+      args.m_Generator->AddLabel( TXT( "Shape" ) );
 
-      Inspect::Choice* choice = args.m_Enumerator->AddChoice<Luna::Volume, int>(args.m_Selection, &Volume::GetShape, &Volume::SetShape);
+      Inspect::Choice* choice = args.m_Generator->AddChoice<Luna::Volume, int>(args.m_Selection, &Volume::GetShape, &Volume::SetShape);
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
@@ -259,9 +259,9 @@ void Volume::CreatePanel( CreatePanelArgs& args )
 
       choice->SetItems( items );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
   }
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 
 bool Volume::IsPointerVisible() const

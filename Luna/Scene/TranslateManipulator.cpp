@@ -36,8 +36,8 @@ void TranslateManipulator::CleanupType()
     Reflect::UnregisterClass< Luna::TranslateManipulator >();
 }
 
-TranslateManipulator::TranslateManipulator(const ManipulatorMode mode, Luna::Scene* scene, Enumerator* enumerator)
-: Luna::TransformManipulator (mode, scene, enumerator)
+TranslateManipulator::TranslateManipulator(const ManipulatorMode mode, Luna::Scene* scene, PropertiesGenerator* generator)
+: Luna::TransformManipulator (mode, scene, generator)
 , m_HotSnappingMode (TranslateSnappingModes::None)
 , m_ShowCones (true)
 , m_Factor (1.f)
@@ -1231,7 +1231,7 @@ void TranslateManipulator::KeyDown( wxKeyEvent& e )
 
     if ( mode != m_HotSnappingMode )
     {
-        m_Enumerator->GetContainer()->Read();
+        m_Generator->GetContainer()->Read();
 
         TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
 
@@ -1262,7 +1262,7 @@ void TranslateManipulator::KeyUp( wxKeyEvent& e )
 
     if ( mode != m_HotSnappingMode )
     {
-        m_Enumerator->GetContainer()->Read();
+        m_Generator->GetContainer()->Read();
 
         TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
 
@@ -1277,12 +1277,12 @@ void TranslateManipulator::CreateProperties()
 {
     __super::CreateProperties();
 
-    m_Enumerator->PushPanel( TXT( "Translate" ), true);
+    m_Generator->PushPanel( TXT( "Translate" ), true);
     {
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_Enumerator->AddLabel( TXT( "Space" ) );
-            Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, int> (this, &TranslateManipulator::GetSpace, &TranslateManipulator::SetSpace) );
+            m_Generator->AddLabel( TXT( "Space" ) );
+            Inspect::Choice* choice = m_Generator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, int> (this, &TranslateManipulator::GetSpace, &TranslateManipulator::SetSpace) );
             choice->SetDropDown( true );
             Inspect::V_Item items;
 
@@ -1306,58 +1306,58 @@ void TranslateManipulator::CreateProperties()
 
             choice->SetItems( items );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_Enumerator->AddLabel( TXT( "Snap to live objects only" ) );
-            m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetLiveObjectsOnly, &TranslateManipulator::SetLiveObjectsOnly) );
+            m_Generator->AddLabel( TXT( "Snap to live objects only" ) );
+            m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetLiveObjectsOnly, &TranslateManipulator::SetLiveObjectsOnly) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_Enumerator->AddLabel( TXT( "Surface Snap" ) );
-            m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetSurfaceSnap, &TranslateManipulator::SetSurfaceSnap) );
+            m_Generator->AddLabel( TXT( "Surface Snap" ) );
+            m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetSurfaceSnap, &TranslateManipulator::SetSurfaceSnap) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_Enumerator->AddLabel( TXT( "Object Snap" ) );
-            m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetObjectSnap, &TranslateManipulator::SetObjectSnap) );
+            m_Generator->AddLabel( TXT( "Object Snap" ) );
+            m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetObjectSnap, &TranslateManipulator::SetObjectSnap) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_Enumerator->AddLabel( TXT( "Vertex Snap" ) );
-            m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetVertexSnap, &TranslateManipulator::SetVertexSnap) );
+            m_Generator->AddLabel( TXT( "Vertex Snap" ) );
+            m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetVertexSnap, &TranslateManipulator::SetVertexSnap) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_Enumerator->AddLabel( TXT( "Offset Snap" ) );
-            m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetOffsetSnap, &TranslateManipulator::SetOffsetSnap) );
+            m_Generator->AddLabel( TXT( "Offset Snap" ) );
+            m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetOffsetSnap, &TranslateManipulator::SetOffsetSnap) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_Enumerator->AddLabel( TXT( "Grid Snap" ) );
-            m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetGridSnap, &TranslateManipulator::SetGridSnap) );
+            m_Generator->AddLabel( TXT( "Grid Snap" ) );
+            m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, bool> (this, &TranslateManipulator::GetGridSnap, &TranslateManipulator::SetGridSnap) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_Enumerator->AddLabel( TXT( "Distance" ) );
-            m_Enumerator->AddValue<float>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, float> (this, &TranslateManipulator::GetDistance, &TranslateManipulator::SetDistance) );
+            m_Generator->AddLabel( TXT( "Distance" ) );
+            m_Generator->AddValue<float>( new Nocturnal::MemberProperty<Luna::TranslateManipulator, float> (this, &TranslateManipulator::GetDistance, &TranslateManipulator::SetDistance) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 }
 
 int TranslateManipulator::GetSpace() const
@@ -1407,7 +1407,7 @@ void TranslateManipulator::SetSurfaceSnap(bool snap)
 
         if (m_SnappingMode == TranslateSnappingModes::Surface)
         {
-            m_Enumerator->GetContainer()->Read();
+            m_Generator->GetContainer()->Read();
         }
 
         TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
@@ -1432,7 +1432,7 @@ void TranslateManipulator::SetObjectSnap(bool snap)
 
         if (m_SnappingMode == TranslateSnappingModes::Object)
         {
-            m_Enumerator->GetContainer()->Read();
+            m_Generator->GetContainer()->Read();
         }
 
         TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
@@ -1457,7 +1457,7 @@ void TranslateManipulator::SetVertexSnap(bool snap)
 
         if (m_SnappingMode == TranslateSnappingModes::Vertex)
         {
-            m_Enumerator->GetContainer()->Read();
+            m_Generator->GetContainer()->Read();
         }
 
         TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
@@ -1482,7 +1482,7 @@ void TranslateManipulator::SetOffsetSnap(bool snap)
 
         if (m_SnappingMode == TranslateSnappingModes::Offset)
         {
-            m_Enumerator->GetContainer()->Read();
+            m_Generator->GetContainer()->Read();
         }
 
         TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();
@@ -1507,7 +1507,7 @@ void TranslateManipulator::SetGridSnap(bool snap)
 
         if (m_SnappingMode == TranslateSnappingModes::Grid)
         {
-            m_Enumerator->GetContainer()->Read();
+            m_Generator->GetContainer()->Read();
         }
 
         TranslateManipulatorAdapter* primary = PrimaryObject<TranslateManipulatorAdapter>();

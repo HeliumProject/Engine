@@ -23,7 +23,7 @@ void SceneNode::InitializeType()
 {
   Reflect::RegisterClass< Luna::SceneNode >( TXT( "Luna::SceneNode" ) );
 
-  Enumerator::InitializePanel( TXT( "Scene Node" ), CreatePanelSignature::Delegate( &SceneNode::CreatePanel ));
+  PropertiesGenerator::InitializePanel( TXT( "Scene Node" ), CreatePanelSignature::Delegate( &SceneNode::CreatePanel ));
 }
 
 void SceneNode::CleanupType()
@@ -480,14 +480,14 @@ bool SceneNode::ValidatePanel(const tstring& name)
 
 void SceneNode::CreatePanel(CreatePanelArgs& args)
 {
-  SceneNodePanel* panel = new SceneNodePanel ( args.m_Enumerator, args.m_Selection );
+  SceneNodePanel* panel = new SceneNodePanel ( args.m_Generator, args.m_Selection );
 
-  args.m_Enumerator->Push( panel );
+  args.m_Generator->Push( panel );
   {
-    panel->SetCanvas( args.m_Enumerator->GetContainer()->GetCanvas() );
+    panel->SetCanvas( args.m_Generator->GetContainer()->GetCanvas() );
     panel->Create();
   }
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 
 tstring SceneNode::GetMembership() const

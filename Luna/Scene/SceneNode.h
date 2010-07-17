@@ -7,7 +7,7 @@
 #include "Persistent.h"
 #include "Selection.h"
 
-#include "Enumerator.h"
+#include "PropertiesGenerator.h"
 
 #include "Luna/API.h"
 

@@ -58,7 +58,7 @@ namespace Luna
     static void CleanupType();
 
   public:
-    TranslateManipulator(const ManipulatorMode mode, Luna::Scene* scene, Enumerator* enumerator);
+    TranslateManipulator(const ManipulatorMode mode, Luna::Scene* scene, PropertiesGenerator* generator);
     ~TranslateManipulator();
 
     TranslateSnappingMode GetSnappingMode() const;

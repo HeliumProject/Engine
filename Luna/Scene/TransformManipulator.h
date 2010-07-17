@@ -74,7 +74,7 @@ namespace Luna
     //
 
   public:
-    TransformManipulator(const ManipulatorMode mode, Luna::Scene* scene, Enumerator* enumerator);
+    TransformManipulator(const ManipulatorMode mode, Luna::Scene* scene, PropertiesGenerator* generator);
 
     virtual ~TransformManipulator();
 

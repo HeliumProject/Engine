@@ -8,7 +8,7 @@
 #include "SceneManager.h"
 #include "SceneEditor.h"
 
-#include "Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "PrimitiveCube.h"
 #include "PrimitivePointer.h"
 
@@ -29,7 +29,7 @@ LUNA_DEFINE_TYPE(Luna::Entity);
 void Entity::InitializeType()
 {
     Reflect::RegisterClass< Luna::Entity >( TXT( "Luna::Entity" ) );
-    Enumerator::InitializePanel( TXT( "Entity" ), CreatePanelSignature::Delegate( &Entity::CreatePanel ) );
+    PropertiesGenerator::InitializePanel( TXT( "Entity" ), CreatePanelSignature::Delegate( &Entity::CreatePanel ) );
 }
 
 void Entity::CleanupType()
@@ -420,14 +420,14 @@ bool Entity::ValidatePanel(const tstring& name)
 //
 void Entity::CreatePanel( CreatePanelArgs& args )
 {
-    EntityPanel* panel = new EntityPanel ( args.m_Enumerator, args.m_Selection );
+    EntityPanel* panel = new EntityPanel ( args.m_Generator, args.m_Selection );
 
-    args.m_Enumerator->Push( panel );
+    args.m_Generator->Push( panel );
     {
-        panel->SetCanvas( args.m_Enumerator->GetContainer()->GetCanvas() );
+        panel->SetCanvas( args.m_Generator->GetContainer()->GetCanvas() );
         panel->Create();
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 }
 
 tstring Entity::GetEntityAssetPath() const

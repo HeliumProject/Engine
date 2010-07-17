@@ -51,19 +51,19 @@ void EnumerateElementArgs::EnumerateElement(Reflect::Element* element, i32 inclu
     Nocturnal::Insert<M_ElementByType>::Result inserted = m_CurrentElements.insert( M_ElementByType::value_type (ElementTypeFlags ( element->GetType(), includeFlags, excludeFlags ), element) );
 }
 
-PropertiesManager::PropertiesManager( Enumerator* enumerator )
-: m_Enumerator( enumerator )
+PropertiesManager::PropertiesManager( PropertiesGenerator* generator )
+: m_Generator( generator )
 , m_Setting (PropertySettings::Intersection)
 , m_SelectionDirty (false)
 , m_SelectionId (0)
 , m_ThreadCount (0)
 {
-  m_Enumerator->GetContainer()->GetCanvas()->AddShowListener( Inspect::CanvasShowSignature::Delegate ( this, &PropertiesManager::Show ) );
+  m_Generator->GetContainer()->GetCanvas()->AddShowListener( Inspect::CanvasShowSignature::Delegate ( this, &PropertiesManager::Show ) );
 }
 
 PropertiesManager::~PropertiesManager()
 {
-  m_Enumerator->GetContainer()->GetCanvas()->RemoveShowListener( Inspect::CanvasShowSignature::Delegate ( this, &PropertiesManager::Show ) );
+  m_Generator->GetContainer()->GetCanvas()->RemoveShowListener( Inspect::CanvasShowSignature::Delegate ( this, &PropertiesManager::Show ) );
 }
 
 void PropertiesManager::Show( const Inspect::CanvasShowArgs& args )
@@ -110,13 +110,13 @@ void PropertiesManager::CreateProperties()
   {
     LUNA_CORE_SCOPE_TIMER( ("Reset Property State") );
 
-    m_Enumerator->Reset();
+    m_Generator->Reset();
   }
   
-  m_PreviousScroll = m_Enumerator->GetContainer()->GetCanvas()->GetScroll();
+  m_PreviousScroll = m_Generator->GetContainer()->GetCanvas()->GetScroll();
 
   // early out if we are not visible
-  if (!m_Enumerator->GetContainer()->GetCanvas()->GetWindow()->IsShown())
+  if (!m_Generator->GetContainer()->GetCanvas()->GetWindow()->IsShown())
   {
     return;
   }
@@ -135,7 +135,7 @@ void PropertiesManager::CreateProperties()
     }
 
     Platform::Thread propertyThread;
-    PropertyThreadArgs* propertyThreadArgs = new PropertyThreadArgs( m_Selection, m_SelectionId, &m_SelectionId, m_Setting, m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::Container>(), m_PropertiesCreated );
+    PropertyThreadArgs* propertyThreadArgs = new PropertyThreadArgs( m_Selection, m_SelectionId, &m_SelectionId, m_Setting, m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Container>(), m_PropertiesCreated );
     propertyThread.CreateWithArgs( Platform::Thread::EntryHelperWithArgs<PropertiesManager, PropertyThreadArgs, &PropertiesManager::GeneratePropertiesThread>, this, propertyThreadArgs, TXT( "GeneratePropertiesThread()" ), THREAD_PRIORITY_BELOW_NORMAL );
   }
 }
@@ -200,7 +200,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
 
       M_PanelCreators currentPanels;
 
-#ifdef LUNA_DEBUG_ENUMERATOR
+#ifdef LUNA_DEBUG_PROPERTIES_GENERATOR
       Log::Print("Object type %s:\n", typeid(*(*itr)).name());
 #endif
 
@@ -218,7 +218,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
 
           if ((*itr)->ValidatePanel(itrPanel->first))
           {
-#ifdef LUNA_DEBUG_ENUMERATOR
+#ifdef LUNA_DEBUG_PROPERTIES_GENERATOR
             Log::Print(" accepts %s\n", itrPanel->first.c_str());
 #endif
             switch (m_Setting)
@@ -242,14 +242,14 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
           }
           else
           {
-#ifdef LUNA_DEBUG_ENUMERATOR
+#ifdef LUNA_DEBUG_PROPERTIES_GENERATOR
             Log::Print(" rejects %s\n", itrPanel->first.c_str());
 #endif
           }
         }
       }
 
-#ifdef LUNA_DEBUG_ENUMERATOR
+#ifdef LUNA_DEBUG_PROPERTIES_GENERATOR
       Log::Print("\n");
 #endif
 
@@ -350,9 +350,9 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
       {
       case PropertySettings::Intersection:
         {
-          m_Enumerator->Push( args.m_Container );
-          itr->second.Invoke( CreatePanelArgs (m_Enumerator, selection) );
-          m_Enumerator->Pop( false );
+          m_Generator->Push( args.m_Container );
+          itr->second.Invoke( CreatePanelArgs (m_Generator, selection) );
+          m_Generator->Pop( false );
           break;
         }
 
@@ -363,9 +363,9 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
           if (found != unionedSelections.end())
           {
             // this connects the invocation with the validated selection
-            m_Enumerator->Push( args.m_Container );
-            itr->second.Invoke( CreatePanelArgs (m_Enumerator, found->second) );
-            m_Enumerator->Pop( false );
+            m_Generator->Push( args.m_Container );
+            itr->second.Invoke( CreatePanelArgs (m_Generator, found->second) );
+            m_Generator->Pop( false );
           }
           else
           {
@@ -378,7 +378,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
       }
 
       // if you hit then, then your custom panel creator needs work
-      Inspect::ST_Container& containerStack = m_Enumerator->GetCurrentContainerStack();
+      Inspect::ST_Container& containerStack = m_Generator->GetCurrentContainerStack();
       NOC_ASSERT(containerStack.empty());
     }
   }
@@ -401,7 +401,7 @@ void PropertiesManager::GenerateProperties( PropertyThreadArgs& args )
         return;
       }
 
-      Inspect::ReflectInterpreterPtr interpreter = m_Enumerator->CreateInterpreter<Inspect::ReflectInterpreter>( args.m_Container );
+      Inspect::ReflectInterpreterPtr interpreter = m_Generator->CreateInterpreter<Inspect::ReflectInterpreter>( args.m_Container );
 
       interpreter->Interpret(itr->second, itr->first.m_IncludeFlags, itr->first.m_ExcludeFlags);
 
@@ -425,14 +425,14 @@ void PropertiesManager::FinalizeProperties( u32 selectionId, const Inspect::V_Co
   
   for ( Inspect::V_Control::const_iterator itr = controls.begin(), end = controls.end(); itr != end; ++itr )
   {
-    m_Enumerator->GetContainer()->AddControl( *itr );
+    m_Generator->GetContainer()->AddControl( *itr );
   }
 
-  m_Enumerator->GetContainer()->GetCanvas()->Freeze();
-  m_Enumerator->GetContainer()->GetCanvas()->Layout();
-  m_Enumerator->GetContainer()->GetCanvas()->SetScroll( m_PreviousScroll );
-  m_Enumerator->GetContainer()->GetCanvas()->Read();
-  m_Enumerator->GetContainer()->GetCanvas()->Thaw();
+  m_Generator->GetContainer()->GetCanvas()->Freeze();
+  m_Generator->GetContainer()->GetCanvas()->Layout();
+  m_Generator->GetContainer()->GetCanvas()->SetScroll( m_PreviousScroll );
+  m_Generator->GetContainer()->GetCanvas()->Read();
+  m_Generator->GetContainer()->GetCanvas()->Thaw();
 }
 
 void PropertiesManager::AddPropertiesCreatedListener( const PropertiesCreatedSignature::Delegate& listener )

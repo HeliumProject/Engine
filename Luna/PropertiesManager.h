@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "Application/Inspect/Controls/Controls.h"
 #include "Selection.h"
 #include "Platform/Mutex.h"
@@ -116,8 +116,8 @@ namespace Luna
   class LUNA_CORE_API PropertiesManager : public Nocturnal::RefCountBase< PropertiesManager > // : public Inspect::Interpreter
   {
   private:
-    // enumerator container
-    Enumerator* m_Enumerator;
+    // generator container
+    PropertiesGenerator* m_Generator;
 
     // selection to create properties for
     OS_SelectableDumbPtr m_Selection;
@@ -142,7 +142,7 @@ namespace Luna
     Platform::Mutex m_ThreadCountMutex;
 
   public:
-    PropertiesManager( Enumerator* enumerator );
+    PropertiesManager( PropertiesGenerator* generator );
     ~PropertiesManager();
 
     // callback when show events occur on the canvas window

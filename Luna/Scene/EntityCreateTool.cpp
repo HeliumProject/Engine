@@ -50,8 +50,8 @@ void EntityCreateTool::CleanupType()
     Reflect::UnregisterClass< Luna::EntityCreateTool >();
 }
 
-EntityCreateTool::EntityCreateTool(Luna::Scene* scene, Enumerator* enumerator)
-: Luna::CreateTool (scene, enumerator)
+EntityCreateTool::EntityCreateTool(Luna::Scene* scene, PropertiesGenerator* generator)
+: Luna::CreateTool (scene, generator)
 , m_RandomEntityList ( NULL )
 , m_FileButton( NULL )
 , m_BrowserButton( NULL )
@@ -127,35 +127,35 @@ Luna::TransformPtr EntityCreateTool::CreateNode()
 
 void EntityCreateTool::CreateProperties()
 {
-    m_Enumerator->PushPanel( TXT( "Entity" ), true);
+    m_Generator->PushPanel( TXT( "Entity" ), true);
     {
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_FileButton = m_Enumerator->AddFileDialogButton< tstring >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::SetEntityAsset ) );
-            m_BrowserButton = m_Enumerator->AddFileBrowserButton< tstring >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::SetEntityAsset ) );
+            m_FileButton = m_Generator->AddFileDialogButton< tstring >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::SetEntityAsset ) );
+            m_BrowserButton = m_Generator->AddFileBrowserButton< tstring >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::SetEntityAsset ) );
 
-            m_FileButtonAdd = m_Enumerator->AddFileDialogButton< tstring >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
-            m_BrowserButtonAdd = m_Enumerator->AddFileBrowserButton< tstring >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
+            m_FileButtonAdd = m_Generator->AddFileDialogButton< tstring >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
+            m_BrowserButtonAdd = m_Generator->AddFileBrowserButton< tstring >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, tstring> (this, &EntityCreateTool::GetEntityAsset, &EntityCreateTool::AddEntityAsset ) );
 
             m_FileButtonAdd->SetIcon( TXT( "ellipses_add" ) );
             m_BrowserButtonAdd->SetIcon( TXT( "magnify_add" ) );
 
-            Inspect::Action* modifyButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnModify ) );
+            Inspect::Action* modifyButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnModify ) );
             modifyButton->SetToolTip( TXT( "Modify" ) );
             modifyButton->SetIcon( TXT( "percent" ) );
             modifyButton->SetClientData( this );
 
-            Inspect::Action* normalizeButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnNormalize ) );
+            Inspect::Action* normalizeButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnNormalize ) );
             normalizeButton->SetToolTip( TXT( "Normalize" ) );
             normalizeButton->SetIcon( TXT( "normalize" ) );
             normalizeButton->SetClientData( this );
 
-            Inspect::Action* deleteButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnDeleteClass ) );
+            Inspect::Action* deleteButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnDeleteClass ) );
             deleteButton->SetToolTip( TXT( "Delete" ) );
             deleteButton->SetIcon( TXT( "actions/list-remove" ) );
             deleteButton->SetClientData( this );
 
-            Inspect::Action*  clearButton = m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnClear ) );
+            Inspect::Action*  clearButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityCreateTool::OnClear ) );
             clearButton->SetToolTip( TXT( "Clear" ) );
             clearButton->SetIcon( TXT( "delete" ) );
             clearButton->SetClientData( this );
@@ -170,43 +170,43 @@ void EntityCreateTool::CreateProperties()
                 m_BrowserButtonAdd->SetFilter( filter );
             }
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_RandomEntityList = m_Enumerator->AddList< tstring >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, tstring > (this, &EntityCreateTool::GetRandomEntity, &EntityCreateTool::SetRandomEntity) );
+            m_RandomEntityList = m_Generator->AddList< tstring >( new Nocturnal::MemberProperty<Luna::EntityCreateTool, tstring > (this, &EntityCreateTool::GetRandomEntity, &EntityCreateTool::SetRandomEntity) );
 
             Inspect::FilteredDropTarget* filteredDropTarget = new Inspect::FilteredDropTarget( TXT( "*.entity.*" ) );
             filteredDropTarget->AddDroppedListener( Inspect::FilteredDropTargetSignature::Delegate( this, &EntityCreateTool::OnEntityDropped ) );
 
             m_RandomEntityList->SetDropTarget( filteredDropTarget );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_Enumerator->AddLabel( TXT( "Show Pointer" ) );
-            m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::EntityCreateTool, bool> (this, &EntityCreateTool::GetPointerVisible, &EntityCreateTool::SetPointerVisible) );
+            m_Generator->AddLabel( TXT( "Show Pointer" ) );
+            m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::EntityCreateTool, bool> (this, &EntityCreateTool::GetPointerVisible, &EntityCreateTool::SetPointerVisible) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_Enumerator->AddLabel( TXT( "Show Bounds" ) );
-            m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::EntityCreateTool, bool> (this, &EntityCreateTool::GetBoundsVisible, &EntityCreateTool::SetBoundsVisible) );
+            m_Generator->AddLabel( TXT( "Show Bounds" ) );
+            m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::EntityCreateTool, bool> (this, &EntityCreateTool::GetBoundsVisible, &EntityCreateTool::SetBoundsVisible) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
-        m_Enumerator->PushContainer();
+        m_Generator->PushContainer();
         {
-            m_Enumerator->AddLabel( TXT( "Show Geometry" ) );
-            m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::EntityCreateTool, bool> (this, &EntityCreateTool::GetGeometryVisible, &EntityCreateTool::SetGeometryVisible) );
+            m_Generator->AddLabel( TXT( "Show Geometry" ) );
+            m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::EntityCreateTool, bool> (this, &EntityCreateTool::GetGeometryVisible, &EntityCreateTool::SetGeometryVisible) );
         }
-        m_Enumerator->Pop();
+        m_Generator->Pop();
 
         __super::CreateProperties();
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
     for ( std::vector< tstring >::iterator itr = s_RandomEntities.begin(), end = s_RandomEntities.end(); itr != end; ++itr )
     {
@@ -251,7 +251,7 @@ void EntityCreateTool::AddEntityAsset( const tstring& value )
     rowInfo.m_OriginalValue = value;
     m_RandomEntityInfo.push_back( rowInfo );
 
-    m_Enumerator->GetContainer()->GetCanvas()->Read();
+    m_Generator->GetContainer()->GetCanvas()->Read();
 
     Place(Math::Matrix4::Identity);
 }
@@ -360,7 +360,7 @@ void EntityCreateTool::OnDeleteClass( Inspect::Button* button )
         }
     }
 
-    thisTool->m_Enumerator->GetContainer()->GetCanvas()->Read();
+    thisTool->m_Generator->GetContainer()->GetCanvas()->Read();
 
     thisTool->RefreshInstance();
 }
@@ -382,7 +382,7 @@ void EntityCreateTool::OnClear( Inspect::Button* button )
     thisTool->m_FileButtonAdd->SetPath( TXT( "" ) );
     thisTool->m_BrowserButtonAdd->SetPath( TXT( "" ) );
 
-    thisTool->m_Enumerator->GetContainer()->GetCanvas()->Read();
+    thisTool->m_Generator->GetContainer()->GetCanvas()->Read();
 
     thisTool->RefreshInstance();
 }
@@ -409,7 +409,7 @@ void EntityCreateTool::OnNormalize( Inspect::Button* button )
         (*itr).m_Probability /= total;
     }
 
-    thisTool->m_Enumerator->GetContainer()->GetCanvas()->Read();
+    thisTool->m_Generator->GetContainer()->GetCanvas()->Read();
 }
 
 void EntityCreateTool::OnModify( Inspect::Button* button )
@@ -469,7 +469,7 @@ void EntityCreateTool::OnModify( Inspect::Button* button )
         }
     }  
 
-    thisTool->m_Enumerator->GetContainer()->GetCanvas()->Read();
+    thisTool->m_Generator->GetContainer()->GetCanvas()->Read();
 }
 
 void EntityCreateTool::OnEntityDropped( const Inspect::FilteredDropTargetArgs& args )
@@ -479,7 +479,7 @@ void EntityCreateTool::OnEntityDropped( const Inspect::FilteredDropTargetArgs& a
 
 void EntityCreateTool::DropEntities( const std::vector< tstring >& entities, bool appendToList )
 {
-    m_Enumerator->GetContainer()->GetCanvas()->Freeze();
+    m_Generator->GetContainer()->GetCanvas()->Freeze();
 
     if ( !appendToList )
     {
@@ -491,6 +491,6 @@ void EntityCreateTool::DropEntities( const std::vector< tstring >& entities, boo
         AddEntityAsset( *itr );
     }
 
-    m_Enumerator->GetContainer()->GetCanvas()->Thaw();
+    m_Generator->GetContainer()->GetCanvas()->Thaw();
 }
 

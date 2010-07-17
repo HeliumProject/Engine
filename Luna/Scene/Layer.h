@@ -48,7 +48,7 @@ namespace Luna
 
   private:
     static void CreatePanel( CreatePanelArgs& args );
-    static void BuildUnionAndIntersection( Enumerator* enumerator, const OS_SelectableDumbPtr& selection, tstring& unionStr, tstring& intersectionStr );
+    static void BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection, tstring& unionStr, tstring& intersectionStr );
 
     Content::NodeVisibilityPtr m_VisibilityData; 
   };

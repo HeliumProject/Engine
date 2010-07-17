@@ -5,7 +5,7 @@
 #include "SceneManager.h"
 #include "InstanceType.h"
 
-#include "Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveSphere.h"
@@ -22,7 +22,7 @@ void PointLight::InitializeType()
 {
   Reflect::RegisterClass< Luna::PointLight >( TXT( "Luna::PointLight" ) );
 
-  Enumerator::InitializePanel( TXT( "PointLight" ), CreatePanelSignature::Delegate( &PointLight::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "PointLight" ), CreatePanelSignature::Delegate( &PointLight::CreatePanel ) );
 }
 
 void PointLight::CleanupType()
@@ -218,24 +218,24 @@ bool PointLight::ValidatePanel(const tstring& name)
 
 void PointLight::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel( TXT( "Point Light" ), true);
+  args.m_Generator->PushPanel( TXT( "Point Light" ), true);
   {
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Inner Radius" ) );
-      args.m_Enumerator->AddValue<Luna::PointLight, float>( args.m_Selection, &PointLight::GetInnerRadius, &PointLight::SetInnerRadius );
+      args.m_Generator->AddLabel( TXT( "Inner Radius" ) );
+      args.m_Generator->AddValue<Luna::PointLight, float>( args.m_Selection, &PointLight::GetInnerRadius, &PointLight::SetInnerRadius );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Outer Radius" ) );
-      args.m_Enumerator->AddValue<Luna::PointLight, float>( args.m_Selection, &PointLight::GetOuterRadius, &PointLight::SetOuterRadius );
+      args.m_Generator->AddLabel( TXT( "Outer Radius" ) );
+      args.m_Generator->AddValue<Luna::PointLight, float>( args.m_Selection, &PointLight::GetOuterRadius, &PointLight::SetOuterRadius );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
   }
 
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 
 float PointLight::GetInnerRadius() const

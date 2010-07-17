@@ -413,7 +413,7 @@ SceneEditor::SceneEditor()
     m_FrameManager.AddPane( m_LayerGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("layers")).Caption(wxT("Layers")).Left().Layer(1).Position(1) );
 
     // Seleciton Properties panel
-        m_SelectionEnumerator = new Enumerator (&m_SelectionProperties);
+        m_SelectionEnumerator = new PropertiesGenerator (&m_SelectionProperties);
         m_SelectionPropertiesManager = new PropertiesManager (m_SelectionEnumerator);
         m_SelectionPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
     SelectionPropertiesPanel* selectionProperties = new SelectionPropertiesPanel (m_SelectionPropertiesManager, this, SceneEditorIDs::ID_SelectionProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN);
@@ -422,7 +422,7 @@ SceneEditor::SceneEditor()
 
         // Properties panel - Tool page
     m_ToolsPanel = new ToolsPanel( this );
-        m_ToolEnumerator = new Enumerator (&m_ToolProperties);
+        m_ToolEnumerator = new PropertiesGenerator (&m_ToolProperties);
         m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
         m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
     m_ToolProperties.SetControl( new Inspect::CanvasWindow ( m_ToolsPanel, SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );

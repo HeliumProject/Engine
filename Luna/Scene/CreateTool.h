@@ -136,7 +136,7 @@ namespace Luna
     //
 
   public:
-    CreateTool(Luna::Scene* scene, Enumerator* enumerator);
+    CreateTool(Luna::Scene* scene, PropertiesGenerator* generator);
 
     virtual ~CreateTool();
 

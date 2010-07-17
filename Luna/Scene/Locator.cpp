@@ -6,7 +6,7 @@
 
 #include "LocatorType.h"
 
-#include "Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveLocator.h"
@@ -25,7 +25,7 @@ void Locator::InitializeType()
 {
   Reflect::RegisterClass< Luna::Locator >( TXT( "Luna::Locator" ) );
 
-  Enumerator::InitializePanel( TXT( "Locator" ), CreatePanelSignature::Delegate( &Locator::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "Locator" ), CreatePanelSignature::Delegate( &Locator::CreatePanel ) );
 }
 
 void Locator::CleanupType()
@@ -181,13 +181,13 @@ bool Locator::ValidatePanel(const tstring& name)
 
 void Locator::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel( TXT( "Locator" ), true);
+  args.m_Generator->PushPanel( TXT( "Locator" ), true);
   {
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Shape" ) );
+      args.m_Generator->AddLabel( TXT( "Shape" ) );
 
-      Inspect::Choice* choice = args.m_Enumerator->AddChoice<Luna::Locator, int>(args.m_Selection, &Locator::GetShape, &Locator::SetShape);
+      Inspect::Choice* choice = args.m_Generator->AddChoice<Luna::Locator, int>(args.m_Selection, &Locator::GetShape, &Locator::SetShape);
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
@@ -205,7 +205,7 @@ void Locator::CreatePanel( CreatePanelArgs& args )
 
       choice->SetItems( items );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
   }
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }

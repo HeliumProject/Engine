@@ -31,8 +31,8 @@ void ScaleManipulator::CleanupType()
   Reflect::UnregisterClass< Luna::ScaleManipulator >();
 }
 
-ScaleManipulator::ScaleManipulator(const ManipulatorMode mode, Luna::Scene* scene, Enumerator* enumerator)
-: Luna::TransformManipulator (mode, scene, enumerator)
+ScaleManipulator::ScaleManipulator(const ManipulatorMode mode, Luna::Scene* scene, PropertiesGenerator* generator)
+: Luna::TransformManipulator (mode, scene, generator)
 , m_GridSnap( false )
 , m_Distance( 1.0f )
 {
@@ -641,23 +641,23 @@ void ScaleManipulator::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel( TXT( "Scale" ), true);
+  m_Generator->PushPanel( TXT( "Scale" ), true);
   {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Grid Snap" ) );
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::ScaleManipulator, bool> (this, &ScaleManipulator::GetGridSnap, &ScaleManipulator::SetGridSnap) );
+      m_Generator->AddLabel( TXT( "Grid Snap" ) );
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::ScaleManipulator, bool> (this, &ScaleManipulator::GetGridSnap, &ScaleManipulator::SetGridSnap) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Grid Distance" ) );
-      m_Enumerator->AddValue<float>( new Nocturnal::MemberProperty<Luna::ScaleManipulator, float> (this, &ScaleManipulator::GetDistance, &ScaleManipulator::SetDistance) );
+      m_Generator->AddLabel( TXT( "Grid Distance" ) );
+      m_Generator->AddValue<float>( new Nocturnal::MemberProperty<Luna::ScaleManipulator, float> (this, &ScaleManipulator::GetDistance, &ScaleManipulator::SetDistance) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
 }
 
 bool ScaleManipulator::GetGridSnap() const

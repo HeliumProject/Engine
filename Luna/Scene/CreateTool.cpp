@@ -59,8 +59,8 @@ void CreateTool::CleanupType()
   Reflect::UnregisterClass< Luna::CreateTool >();
 }
 
-CreateTool::CreateTool(Luna::Scene* scene, Enumerator* enumerator)
-: Luna::SceneTool (scene, enumerator)
+CreateTool::CreateTool(Luna::Scene* scene, PropertiesGenerator* generator)
+: Luna::SceneTool (scene, generator)
 , m_Created (false)
 , m_InstanceUpdateOffsets (false)
 , m_Instance (NULL)
@@ -740,12 +740,12 @@ void CreateTool::CreateProperties()
 
   Place(Math::Matrix4::Identity);
 
-  m_Enumerator->PushPanel( TXT( "Create" ), true);
+  m_Generator->PushPanel( TXT( "Create" ), true);
   {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Plane Snap" ) );
-      Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CreateTool, int> (this, &CreateTool::GetPlaneSnap, &CreateTool::SetPlaneSnap) );
+      m_Generator->AddLabel( TXT( "Plane Snap" ) );
+      Inspect::Choice* choice = m_Generator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CreateTool, int> (this, &CreateTool::GetPlaneSnap, &CreateTool::SetPlaneSnap) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
@@ -763,156 +763,156 @@ void CreateTool::CreateProperties()
 
       choice->SetItems( items );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Snap to live objects only" ) );
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetLiveObjectsOnly, &CreateTool::SetLiveObjectsOnly) );
+      m_Generator->AddLabel( TXT( "Snap to live objects only" ) );
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetLiveObjectsOnly, &CreateTool::SetLiveObjectsOnly) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Surface Snap" ) );
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetSurfaceSnap, &CreateTool::SetSurfaceSnap) );
+      m_Generator->AddLabel( TXT( "Surface Snap" ) );
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetSurfaceSnap, &CreateTool::SetSurfaceSnap) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Object Snap" ) );
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetObjectSnap, &CreateTool::SetObjectSnap) );
+      m_Generator->AddLabel( TXT( "Object Snap" ) );
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetObjectSnap, &CreateTool::SetObjectSnap) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Normal Snap" ) );
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetNormalSnap, &CreateTool::SetNormalSnap) );
+      m_Generator->AddLabel( TXT( "Normal Snap" ) );
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetNormalSnap, &CreateTool::SetNormalSnap) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Randomize Azimuth" ) );
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetRandomizeAzimuth, &CreateTool::SetRandomizeAzimuth) );
+      m_Generator->AddLabel( TXT( "Randomize Azimuth" ) );
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetRandomizeAzimuth, &CreateTool::SetRandomizeAzimuth) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_AzimuthMin = m_Enumerator->PushContainer();
+    m_AzimuthMin = m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Azimuth Lower Bound" ) );
-      Inspect::Slider* slider = m_Enumerator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetAzimuthMin, &CreateTool::SetAzimuthMin) );
+      m_Generator->AddLabel( TXT( "Azimuth Lower Bound" ) );
+      Inspect::Slider* slider = m_Generator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetAzimuthMin, &CreateTool::SetAzimuthMin) );
       slider->SetRangeMin( 0.f );
       slider->SetRangeMax( 180.f );
 
-      Inspect::ValuePtr textBox = m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Enumerator );
+      Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
       textBox->Bind( slider->GetData() );
-      m_Enumerator->Add( textBox );
+      m_Generator->Add( textBox );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_AzimuthMax = m_Enumerator->PushContainer();
+    m_AzimuthMax = m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Azimuth Upper Bound" ) );
-      Inspect::Slider* slider = m_Enumerator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetAzimuthMax, &CreateTool::SetAzimuthMax) );
+      m_Generator->AddLabel( TXT( "Azimuth Upper Bound" ) );
+      Inspect::Slider* slider = m_Generator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetAzimuthMax, &CreateTool::SetAzimuthMax) );
       slider->SetRangeMin( 0.f );
       slider->SetRangeMax( 180.f );
 
-      Inspect::ValuePtr textBox = m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Enumerator );
+      Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
       textBox->Bind( slider->GetData() );
-      m_Enumerator->Add( textBox );
+      m_Generator->Add( textBox );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Randomize Direction" ) );
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetRandomizeDirection, &CreateTool::SetRandomizeDirection) );
+      m_Generator->AddLabel( TXT( "Randomize Direction" ) );
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetRandomizeDirection, &CreateTool::SetRandomizeDirection) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_DirectionMin = m_Enumerator->PushContainer();
+    m_DirectionMin = m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Direction Lower Bound" ) );
-      Inspect::Slider* slider = m_Enumerator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetDirectionMin, &CreateTool::SetDirectionMin) );
+      m_Generator->AddLabel( TXT( "Direction Lower Bound" ) );
+      Inspect::Slider* slider = m_Generator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetDirectionMin, &CreateTool::SetDirectionMin) );
       slider->SetRangeMin( 0.f );
       slider->SetRangeMax( 180.f );
 
-      Inspect::ValuePtr textBox = m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Enumerator );
+      Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
       textBox->Bind( slider->GetData() );
-      m_Enumerator->Add( textBox );
+      m_Generator->Add( textBox );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_DirectionMax = m_Enumerator->PushContainer();
+    m_DirectionMax = m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Direction Upper Bound" ) );
-      Inspect::Slider* slider = m_Enumerator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetDirectionMax, &CreateTool::SetDirectionMax) );
+      m_Generator->AddLabel( TXT( "Direction Upper Bound" ) );
+      Inspect::Slider* slider = m_Generator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetDirectionMax, &CreateTool::SetDirectionMax) );
       slider->SetRangeMin( 0.f );
       slider->SetRangeMax( 180.f );
 
-      Inspect::ValuePtr textBox = m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Enumerator );
+      Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
       textBox->Bind( slider->GetData() );
-      m_Enumerator->Add( textBox );
+      m_Generator->Add( textBox );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Randomize Scale" ) );
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetRandomizeScale, &CreateTool::SetRandomizeScale) );
+      m_Generator->AddLabel( TXT( "Randomize Scale" ) );
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetRandomizeScale, &CreateTool::SetRandomizeScale) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_ScaleMin = m_Enumerator->PushContainer();
+    m_ScaleMin = m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Scale Lower Bound" ) );
-      Inspect::Slider* slider = m_Enumerator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetScaleMin, &CreateTool::SetScaleMin) );
+      m_Generator->AddLabel( TXT( "Scale Lower Bound" ) );
+      Inspect::Slider* slider = m_Generator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetScaleMin, &CreateTool::SetScaleMin) );
       slider->SetRangeMin( 0.05f );
       slider->SetRangeMax( 5.f );
 
-      Inspect::ValuePtr textBox = m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Enumerator );
+      Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
       textBox->Bind( slider->GetData() );
-      m_Enumerator->Add( textBox );
+      m_Generator->Add( textBox );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_ScaleMax = m_Enumerator->PushContainer();
+    m_ScaleMax = m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Scale Upper Bound" ) );
-      Inspect::Slider* slider = m_Enumerator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetScaleMax, &CreateTool::SetScaleMax) );
+      m_Generator->AddLabel( TXT( "Scale Upper Bound" ) );
+      Inspect::Slider* slider = m_Generator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetScaleMax, &CreateTool::SetScaleMax) );
       slider->SetRangeMin( 0.05f );
       slider->SetRangeMax( 5.f );
 
-      Inspect::ValuePtr textBox = m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Enumerator );
+      Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
       textBox->Bind( slider->GetData() );
-      m_Enumerator->Add( textBox );
+      m_Generator->Add( textBox );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushPanel( TXT( "Paint" ) );
+    m_Generator->PushPanel( TXT( "Paint" ) );
     {
-      m_Enumerator->PushContainer();
+      m_Generator->PushContainer();
       {
-        m_Enumerator->AddLabel( TXT( "Enable Instance Painting" ) );
-        m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetPaintMode, &CreateTool::SetPaintMode) );
+        m_Generator->AddLabel( TXT( "Enable Instance Painting" ) );
+        m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetPaintMode, &CreateTool::SetPaintMode) );
       }
-      m_Enumerator->Pop();
+      m_Generator->Pop();
 
-      m_PaintPreventAnyOverlap = m_Enumerator->PushContainer();
+      m_PaintPreventAnyOverlap = m_Generator->PushContainer();
       {
-        m_Enumerator->AddLabel( TXT( "Prevent Overlap" ) );
-        m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetPaintPreventAnyOverlap, &CreateTool::SetPaintPreventAnyOverlap) );
+        m_Generator->AddLabel( TXT( "Prevent Overlap" ) );
+        m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CreateTool, bool> (this, &CreateTool::GetPaintPreventAnyOverlap, &CreateTool::SetPaintPreventAnyOverlap) );
       }
-      m_Enumerator->Pop();
+      m_Generator->Pop();
 
-      m_PaintPlacementStyle = m_Enumerator->PushContainer();
+      m_PaintPlacementStyle = m_Generator->PushContainer();
       {
-        m_Enumerator->AddLabel( TXT( "Placement Style" ) );
+        m_Generator->AddLabel( TXT( "Placement Style" ) );
 
-        Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CreateTool, int> (this, &CreateTool::GetPaintPlacementStyle, &CreateTool::SetPaintPlacementStyle ) );
+        Inspect::Choice* choice = m_Generator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CreateTool, int> (this, &CreateTool::GetPaintPlacementStyle, &CreateTool::SetPaintPlacementStyle ) );
         choice->SetDropDown( true );
         Inspect::V_Item items;
 
@@ -930,13 +930,13 @@ void CreateTool::CreateProperties()
 
         choice->SetItems( items );
       }
-      m_Enumerator->Pop();
+      m_Generator->Pop();
 
-      m_PaintDistributionStyle = m_Enumerator->PushContainer();
+      m_PaintDistributionStyle = m_Generator->PushContainer();
       {
-        m_Enumerator->AddLabel( TXT( "Distribution Style" ) );
+        m_Generator->AddLabel( TXT( "Distribution Style" ) );
 
-        Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CreateTool, int> (this, &CreateTool::GetPaintDistributionStyle, &CreateTool::SetPaintDistributionStyle ) );
+        Inspect::Choice* choice = m_Generator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CreateTool, int> (this, &CreateTool::GetPaintDistributionStyle, &CreateTool::SetPaintDistributionStyle ) );
         choice->SetDropDown( true );
         Inspect::V_Item items;
 
@@ -966,67 +966,67 @@ void CreateTool::CreateProperties()
 
         choice->SetItems( items );
       }
-      m_Enumerator->Pop();
+      m_Generator->Pop();
 
-      m_PaintRadius = m_Enumerator->PushContainer();
+      m_PaintRadius = m_Generator->PushContainer();
       {
-        m_Enumerator->AddLabel( TXT( "Radius" ) );
-        Inspect::Slider* slider = m_Enumerator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetPaintRadius, &CreateTool::SetPaintRadius) );
+        m_Generator->AddLabel( TXT( "Radius" ) );
+        Inspect::Slider* slider = m_Generator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetPaintRadius, &CreateTool::SetPaintRadius) );
         slider->SetRangeMin( 0.1f );
         slider->SetRangeMax( 30.0f );
         slider->SetValue( s_PaintRadius );
 
-        Inspect::ValuePtr textBox = m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Enumerator );
+        Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
         textBox->Bind( slider->GetData() );
-        m_Enumerator->Add( textBox );
+        m_Generator->Add( textBox );
       }
-      m_Enumerator->Pop();
+      m_Generator->Pop();
 
-      m_PaintSpeed = m_Enumerator->PushContainer();
+      m_PaintSpeed = m_Generator->PushContainer();
       {
-        m_Enumerator->AddLabel( TXT( "Speed" ) );
-        Inspect::Slider* slider = m_Enumerator->AddSlider<int>( new Nocturnal::MemberProperty<Luna::CreateTool, int> (this, &CreateTool::GetPaintSpeed, &CreateTool::SetPaintSpeed) );
+        m_Generator->AddLabel( TXT( "Speed" ) );
+        Inspect::Slider* slider = m_Generator->AddSlider<int>( new Nocturnal::MemberProperty<Luna::CreateTool, int> (this, &CreateTool::GetPaintSpeed, &CreateTool::SetPaintSpeed) );
         slider->SetRangeMin( 1 );
         slider->SetRangeMax( 10 );
         slider->SetValue( s_PaintSpeed );
 
-        Inspect::ValuePtr textBox = m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Enumerator );
+        Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
         textBox->Bind( slider->GetData() );
-        m_Enumerator->Add( textBox );
+        m_Generator->Add( textBox );
       }
-      m_Enumerator->Pop();
+      m_Generator->Pop();
 
-      m_PaintDensity = m_Enumerator->PushContainer();
+      m_PaintDensity = m_Generator->PushContainer();
       {
-        m_Enumerator->AddLabel( TXT( "Density" ) );
-        Inspect::Slider* slider = m_Enumerator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetPaintDensity, &CreateTool::SetPaintDensity) );
+        m_Generator->AddLabel( TXT( "Density" ) );
+        Inspect::Slider* slider = m_Generator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetPaintDensity, &CreateTool::SetPaintDensity) );
         slider->SetRangeMin( 0.0f );
         slider->SetRangeMax( 2.0f );
         slider->SetValue( s_PaintDensity );
 
-        Inspect::ValuePtr textBox = m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Enumerator );
+        Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
         textBox->Bind( slider->GetData() );
-        m_Enumerator->Add( textBox );
+        m_Generator->Add( textBox );
       }
-      m_Enumerator->Pop();
+      m_Generator->Pop();
       
-      m_PaintJitter = m_Enumerator->PushContainer();
+      m_PaintJitter = m_Generator->PushContainer();
       {
-        m_Enumerator->AddLabel( TXT( "Jitter" ) );
-        Inspect::Slider* slider = m_Enumerator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetPaintJitter, &CreateTool::SetPaintJitter) );
+        m_Generator->AddLabel( TXT( "Jitter" ) );
+        Inspect::Slider* slider = m_Generator->AddSlider<float>( new Nocturnal::MemberProperty<Luna::CreateTool, float> (this, &CreateTool::GetPaintJitter, &CreateTool::SetPaintJitter) );
         slider->SetRangeMin( 0.0f );
         slider->SetRangeMax( 1.0f );
         slider->SetValue( s_PaintJitter );
 
-        Inspect::ValuePtr textBox = m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Enumerator );
+        Inspect::ValuePtr textBox = m_Generator->GetContainer()->GetCanvas()->Create<Inspect::Value>( m_Generator );
         textBox->Bind( slider->GetData() );
-        m_Enumerator->Add( textBox );
+        m_Generator->Add( textBox );
       }
-      m_Enumerator->Pop();
+      m_Generator->Pop();
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
 
   m_AzimuthMin->SetEnabled(s_RandomizeAzimuth);
   m_AzimuthMax->SetEnabled(s_RandomizeAzimuth);
@@ -1192,7 +1192,7 @@ void CreateTool::SetSurfaceSnap(bool snap)
   if (s_SurfaceSnap)
   {
     s_ObjectSnap = false;
-    m_Enumerator->GetContainer()->Read();
+    m_Generator->GetContainer()->Read();
   }
 
   m_Scene->Execute(false);
@@ -1220,7 +1220,7 @@ void CreateTool::SetObjectSnap(bool snap)
   if (s_ObjectSnap)
   {
     s_SurfaceSnap = false;
-    m_Enumerator->GetContainer()->Read();
+    m_Generator->GetContainer()->Read();
   }
 
   m_Scene->Execute(false);

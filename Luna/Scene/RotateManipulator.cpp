@@ -30,8 +30,8 @@ void RotateManipulator::CleanupType()
   Reflect::UnregisterClass< Luna::RotateManipulator >();
 }
 
-RotateManipulator::RotateManipulator(const ManipulatorMode mode, Luna::Scene* scene, Enumerator* enumerator)
-: Luna::TransformManipulator (mode, scene, enumerator)
+RotateManipulator::RotateManipulator(const ManipulatorMode mode, Luna::Scene* scene, PropertiesGenerator* generator)
+: Luna::TransformManipulator (mode, scene, generator)
 , m_Type (RotationTypes::None)
 , m_AxisSnap (false)
 , m_SnapDegrees (15.0f)
@@ -771,12 +771,12 @@ void RotateManipulator::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel( TXT( "Rotate" ), true);
+  m_Generator->PushPanel( TXT( "Rotate" ), true);
   {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Space" ) );
-      Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::RotateManipulator, int> (this, &RotateManipulator::GetSpace, &RotateManipulator::SetSpace) );
+      m_Generator->AddLabel( TXT( "Space" ) );
+      Inspect::Choice* choice = m_Generator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::RotateManipulator, int> (this, &RotateManipulator::GetSpace, &RotateManipulator::SetSpace) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
@@ -800,23 +800,23 @@ void RotateManipulator::CreateProperties()
 
       choice->SetItems( items );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Axis Snap" ) );
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::RotateManipulator, bool> (this, &RotateManipulator::GetAxisSnap, &RotateManipulator::SetAxisSnap) );
+      m_Generator->AddLabel( TXT( "Axis Snap" ) );
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::RotateManipulator, bool> (this, &RotateManipulator::GetAxisSnap, &RotateManipulator::SetAxisSnap) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Snap Degrees" ) );
-      m_Enumerator->AddValue<float>( new Nocturnal::MemberProperty<Luna::RotateManipulator, f32> (this, &RotateManipulator::GetSnapDegrees, &RotateManipulator::SetSnapDegrees) );
+      m_Generator->AddLabel( TXT( "Snap Degrees" ) );
+      m_Generator->AddValue<float>( new Nocturnal::MemberProperty<Luna::RotateManipulator, f32> (this, &RotateManipulator::GetSnapDegrees, &RotateManipulator::SetSnapDegrees) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
 }
 
 int RotateManipulator::GetSpace() const

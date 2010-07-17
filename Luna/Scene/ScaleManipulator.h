@@ -28,7 +28,7 @@ namespace Luna
     static void CleanupType();
 
   public:
-    ScaleManipulator(const ManipulatorMode mode, Luna::Scene* scene, Enumerator* enumerator);
+    ScaleManipulator(const ManipulatorMode mode, Luna::Scene* scene, PropertiesGenerator* generator);
 
     ~ScaleManipulator();
 

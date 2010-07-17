@@ -104,7 +104,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -192,7 +192,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -277,7 +277,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -362,7 +362,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -450,7 +450,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -538,7 +538,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -623,7 +623,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -708,7 +708,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 	</Configurations>

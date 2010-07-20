@@ -42,7 +42,6 @@
 #include "ScenePreferences.h"
 #include "TypeGrid.h"
 #include "LayerGrid.h"
-#include "MiscSettings.h"
 
 #include "ParentCommand.h"
 
@@ -82,7 +81,6 @@ Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
 , m_Id( TUID::Generate() )
 , m_Progress( 0 )
 , m_Importing( false )
-, m_MiscSettings( new MiscSettings() )
 , m_View( manager->GetEditor()->GetViewport() )
 , m_Manager( manager )
 , m_SmartDuplicateMatrix(Math::Matrix4::Identity)
@@ -116,9 +114,6 @@ Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
 
     // All imports should default to the master root
     m_ImportRoot = m_Root.Ptr();
-
-    // Load configurations
-    m_MiscSettings = MiscSettings::LoadFromFile();
 
     // we listen to our own events because there a couple ways to add nodes and get this event
     AddNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 

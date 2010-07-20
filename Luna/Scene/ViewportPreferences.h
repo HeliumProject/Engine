@@ -13,18 +13,12 @@ namespace Luna
       Layer,
       NodeType,
       Scene,
-      AssetType,
-      Scale,
-      ScaleGradient,
     };
     static void ViewColorModeEnumerateEnumeration( Reflect::Enumeration* info )
     {
       info->AddElement( Layer, TXT( "Layer" ) );
       info->AddElement( NodeType, TXT( "NodeType" ), TXT( "Node Type" ) );
       info->AddElement( Scene, TXT( "Scene" ) );
-      info->AddElement( AssetType, TXT( "Engine Type" ) );
-      info->AddElement( Scale, TXT( "Scale" ) );
-      info->AddElement( ScaleGradient, TXT( "Scale (Gradient)" ) );
     }
   }
   typedef ViewColorModes::ViewColorMode ViewColorMode;

@@ -46,12 +46,6 @@ namespace Luna
   class PickVisitor;
   struct SceneChangeArgs;
 
-  class MiscSettings;
-  typedef Nocturnal::SmartPtr< MiscSettings > MiscSettingsPtr;
-
-  class Region; 
-  typedef std::set< Luna::Region*> S_RegionDumbPtr; 
-
 
   // 
   // Import options
@@ -286,9 +280,6 @@ namespace Luna
 
     // references to the node types by the compile time type id
     HMS_TypeToSceneNodeTypeDumbPtr m_NodeTypesByType;
-    
-    // miscellaneous settings loaded from a config file
-    MiscSettingsPtr m_MiscSettings;
 
     // selection of this scene
     Selection m_Selection;
@@ -461,12 +452,6 @@ namespace Luna
     const HMS_TypeToSceneNodeTypeDumbPtr& GetNodeTypesByType() const
     {
       return m_NodeTypesByType;
-    }
-
-    // miscellaneous settings
-    const MiscSettings* GetMiscSettings() const
-    {
-      return m_MiscSettings;
     }
 
     Luna::SceneNode* Find( const tstring& name ) const; 

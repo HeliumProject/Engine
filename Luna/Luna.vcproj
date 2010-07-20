@@ -810,14 +810,6 @@
 			Name="Scene"
 			>
 			<File
-				RelativePath=".\Scene\MiscSettings.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\MiscSettings.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\SceneDocument.cpp"
 				>
 			</File>

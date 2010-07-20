@@ -783,39 +783,6 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
       material.Ambient = Luna::Color::ColorToColorValue( defaultMaterial.Ambient.a, color.r, color.g, color.b );
     }
     break;
-  
-  case ViewColorModes::AssetType:
-    {
-      Luna::HierarchyNode* hierarchyNode = (Luna::HierarchyNode*) this;
-      Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( hierarchyNode );
-      if ( entity )
-      {
-        Luna::EntityAssetSet* entityClassSet = entity->GetClassSet();
-        if ( entityClassSet )
-        {
-          Asset::Entity* entityClass = entityClassSet->GetEntity();
-          if ( entityClass )
-          {
-            material = Luna::Viewport::s_AssetTypeMaterials[ 0 ];
-          }
-        }
-      }
-    }
-    break;
-  
-  case ViewColorModes::Scale:
-    {
-      HierarchyNode* hierarchyNode = (HierarchyNode*) this;
-      material.Ambient = hierarchyNode->GetTransform()->GetScaleColor();
-    }
-    break;
-
-  case ViewColorModes::ScaleGradient:
-    {
-      HierarchyNode* hierarchyNode = (HierarchyNode*) this;
-      material.Ambient = hierarchyNode->GetTransform()->GetScaleColorGradient();
-    }
-    break;
   }
 
   if ( m_Scene->IsCurrent() )

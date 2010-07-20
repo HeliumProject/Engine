@@ -73,7 +73,6 @@ namespace Luna
         virtual void Create() NOC_OVERRIDE;
 
     protected:
-        void CreateAssetType();
         void CreateClassPath();
         void CreateClassActions();
         void CreateShowFlags();

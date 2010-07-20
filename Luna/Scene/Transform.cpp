@@ -9,7 +9,6 @@
 #include "PrimitiveAxes.h"
 
 #include "Scene.h"
-#include "MiscSettings.h"
 #include "HierarchyNodeType.h"
 
 #include "Color.h"
@@ -201,16 +200,6 @@ void Transform::SetInheritTransform(bool inherit)
   ComputeObjectComponents();
 }
 
-D3DCOLORVALUE Transform::GetScaleColor() const
-{
-  return m_ScaleColor;
-}
-
-D3DCOLORVALUE Transform::GetScaleColorGradient() const
-{
-  return m_ScaleColorGradient;
-}
-
 Math::Matrix4 Transform::GetScaleComponent() const
 {
   return Math::Matrix4 (m_Scale);
@@ -357,20 +346,6 @@ void Transform::Evaluate(GraphDirection direction)
   }
 
   __super::Evaluate(direction);
-  
-  static ScaleColorInfo scaleColorInfoTable[] =
-  {
-    { Color::RED,      Color::RED,        0.30f,     FLT_MAX   },
-    { Color::YELLOW,   Color::RED,        0.15f,       0.30f   },
-    { Color::GREEN,    Color::YELLOW,     0.00f,       0.15f   },
-    { Color::GREEN,    Color::GREEN,   -FLT_MAX,       0.00f   },
-  };
-
-  static int scaleColorInfoTableCount = sizeof ( scaleColorInfoTable ) / sizeof ( ScaleColorInfo );
-
-  f32 scaleDelta = MAX( m_Scale.x, MAX( m_Scale.y, m_Scale.z ) ) - 1.0f;
-  m_ScaleColor = m_Scene->GetMiscSettings()->GetScaleColor( scaleDelta );
-  m_ScaleColorGradient = m_Scene->GetMiscSettings()->GetScaleColorGradient( scaleDelta );
 }
 
 void Transform::Render( RenderVisitor* render )

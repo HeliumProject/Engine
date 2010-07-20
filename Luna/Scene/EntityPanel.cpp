@@ -170,17 +170,6 @@ EntityPanel::~EntityPanel()
     delete m_HighResShadowMapEnabler;
 }
 
-void EntityPanel::CreateAssetType()
-{
-    m_Generator->PushContainer();
-    {
-        m_Generator->AddLabel( TXT( "Engine Type" ) );
-        Inspect::Value* textBox = m_Generator->AddValue<Luna::Entity, tstring>( m_Selection, &Luna::Entity::GetAssetTypeName, &Luna::Entity::SetAssetTypeName );
-        textBox->SetReadOnly( true );
-    }
-    m_Generator->Pop();
-}
-
 void EntityPanel::CreateClassPath()
 {
     m_Generator->PushContainer();
@@ -352,8 +341,6 @@ void EntityPanel::CreateShowFlags()
 
 void EntityPanel::Create()
 {
-    CreateAssetType(); 
-
     CreateClassPath(); 
     CreateClassActions(); 
 

@@ -58,7 +58,6 @@ D3DMATERIAL9 Viewport::s_HighlightedMaterial;
 D3DMATERIAL9 Viewport::s_UnselectableMaterial;
 D3DMATERIAL9 Viewport::s_ComponentMaterial;
 D3DMATERIAL9 Viewport::s_SelectedComponentMaterial;
-D3DMATERIAL9 Viewport::s_AssetTypeMaterials[ 1 ];
 D3DMATERIAL9 Viewport::s_RedMaterial;
 D3DMATERIAL9 Viewport::s_YellowMaterial;
 D3DMATERIAL9 Viewport::s_GreenMaterial;
@@ -121,11 +120,6 @@ void Viewport::InitializeType()
   s_BlueMaterial.Ambient = Luna::Color::BLUE;
   s_BlueMaterial.Diffuse = Luna::Color::BLACK;
   s_BlueMaterial.Specular = Luna::Color::BLACK;
-  
-  ZeroMemory( s_AssetTypeMaterials, sizeof( s_AssetTypeMaterials ) );
-  s_AssetTypeMaterials[ 0 ].Ambient = Luna::Color::BLACK;
-  s_AssetTypeMaterials[ 0 ].Diffuse = Luna::Color::BLACK;
-  s_AssetTypeMaterials[ 0 ].Specular = Luna::Color::BLACK;
 }
 
 void Viewport::CleanupType()

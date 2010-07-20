@@ -293,7 +293,6 @@ namespace Luna
         static D3DMATERIAL9 s_UnselectableMaterial;
         static D3DMATERIAL9 s_ComponentMaterial;
         static D3DMATERIAL9 s_SelectedComponentMaterial;
-        static D3DMATERIAL9 s_AssetTypeMaterials[];
 
         static D3DMATERIAL9 s_RedMaterial;
         static D3DMATERIAL9 s_YellowMaterial;

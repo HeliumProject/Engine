@@ -1,10 +1,186 @@
 #include "Precompile.h"
 #include "Renderer.h"
-#include "Misc.h"
-#include "TGAHeader.h"
-#include "SphericalHarmonics.h"
+#include "Foundation/Checksum/CRC32.h"
 
 #include <mmsystem.h>
+
+static f32 fconst1 = (4.0f/17.0f);
+static f32 fconst2 = (8.0f/17.0f);
+static f32 fconst3 = (15.0f/17.0f);
+static f32 fconst4 = (5.0f/68.0f);
+static f32 fconst5 = (15.0f/68.0f);
+const u8 u16_to_rgb_map[] = { 15, 23, 31, 14, 22, 30, 13, 21, 29, 12, 20, 28, 11, 19, 27, 10 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+inline void AddLightToSH(D3DXVECTOR4* sh, const D3DXVECTOR4& col, const D3DXVECTOR4& dirn)
+{
+  sh[0]+=(col*fconst1);
+  sh[1]+=(col*fconst2*dirn.x);
+  sh[2]+=(col*fconst2*dirn.y);
+  sh[3]+=(col*fconst2*dirn.z);
+  sh[4]+=(col*fconst3*(dirn.x*dirn.z));
+  sh[5]+=(col*fconst3*(dirn.z*dirn.y));
+  sh[6]+=(col*fconst3*(dirn.y*dirn.x));
+  sh[7]+=(col*fconst4*(3.0f * dirn.z * dirn.z - 1.0f));
+  sh[8]+=(col*fconst5 * (dirn.x * dirn.x - dirn.y * dirn.y));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+inline void AddAmbientToSH(D3DXVECTOR4* sh, const D3DXVECTOR4& col)
+{
+  sh[0]+=col;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+inline void FinalizeSH(D3DXVECTOR4* sh)
+{  
+  // To compute the lighting the following is used with constant 7:
+  //
+  // col += sh[7] * (3.0f * norm.z*norm.z - 1.0f);
+  //
+  // this can be simplied to  'col += sh[7] * norm.z*norm.z;'
+  // by adjusting constant 0 and constant 7 before uploading to the gpu.
+  // The optimized GPU code to compute the final color looks like this:
+  // half3 norm2 = ws_normal*ws_normal;
+  // half3 normd = ws_normal.xzy*ws_normal.zyx;
+  // half3 col = g_sh0;
+  // col += g_sh1 * ws_normal.x;
+  // col += g_sh2 * ws_normal.y;
+  // col += g_sh3 * ws_normal.z;
+  // col += g_sh4 * normd.x;
+  // col += g_sh5 * normd.y;
+  // col += g_sh6 * normd.z;  
+  // col += g_sh7 * norm2.z;
+  // col += g_sh8 * (norm2.x - norm2.y);	
+
+  //
+  // NOTE: once this has been called you cannot accumulate more lights
+
+  sh[0]=sh[0]-sh[7];
+  sh[7]*=3.0f;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+inline u32 HashU16ToRGB(u16 index)
+{  
+  u32 color = 0xff;
+  for (u32 i = 0; i < 16; ++i)
+  {
+    u32 bit = (index >> i) & 0x1;
+    color |= bit << u16_to_rgb_map[i];
+  }
+  return color;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+inline void HashU16ToRGB(u16 index, float& r, float& g, float& b, float& a)
+{
+  u32 color = HashU16ToRGB(index);
+  r = ((color >> 24) & 0xFF) * (1.0f / 255.0f);
+  g = ((color >> 16) & 0xFF) * (1.0f / 255.0f);
+  b = ((color >> 8)  & 0xFF) * (1.0f / 255.0f);
+  a = 1.0f;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+inline u16 HashRGBToU16(u32 color)
+{
+  u16 index = 0;
+  for (u32 i = 0; i < 16; i++)
+  {
+    u32 bit = (color >> u16_to_rgb_map[i]) & 0x1;
+    index |= bit << i;
+  }
+  return index;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+void ExtractFromViewProj( D3DXVECTOR4 &center_of_projection, D3DXVECTOR4 *frustum_vertices, D3DXMATRIX &viewproj_matrix )
+{
+  D3DXMATRIX Pinv,V,Vinv,Minv;
+  D3DXMATRIX &M = viewproj_matrix;
+
+  // get the elements of the view proj matrix (_YX ordered)
+  float m00 = M._11;
+  float m01 = M._12;
+  float m02 = M._13;
+  float m03 = M._14;
+
+  float m10 = M._21;
+  float m11 = M._22;
+  float m12 = M._23;
+  float m13 = M._24;
+
+  float m20 = M._31;
+  float m21 = M._32;
+  float m22 = M._33;
+  float m23 = M._34;
+
+  float m32 = M._43;
+  float m33 = M._44;
+
+  // use biggest element out of m03,m13,m23 for accuracy
+  float mk2=m02, mk3=m03;
+  if (m13*m13 > mk3*mk3)
+  {
+    mk2=m12, mk3=m13;
+  }
+  if (m23*m23 > mk3*mk3)
+  {
+    mk2=m22, mk3=m23;
+  }
+
+  // some helper vars
+  float p = mk2*m33 - mk3*m32;
+  float q = 1.0f / p;
+  float n = p / mk2;
+  float f = p / (mk2 - mk3);
+
+  float s00 = m00*m00 + m10*m10 + m20*m20;
+  float s11 = m01*m01 + m11*m11 + m21*m21;
+  float s30 = m03*m00 + m13*m10 + m23*m20;
+  float s31 = m03*m01 + m13*m11 + m23*m21;
+
+  float rx = 1.0f/sqrt(s00 - s30*s30);
+  float ry = 1.0f/sqrt(s11 - s31*s31);
+
+  // reconstruct inverse of proj matrix
+  Pinv = D3DXMATRIX(   -rx,    0.0f, 0.0f,   0.0f,
+             0.0f,      ry, 0.0f,   0.0f,
+             0.0f,    0.0f, 0.0f, -mk3*q,
+           s30*rx, -s31*ry, 1.0f,  mk2*q);
+
+  // calculate view matrix
+  V=M*Pinv;
+
+  // invert view matrix
+  float det;
+  D3DXMatrixInverse(&Vinv,&det,&V);
+
+  // invert view proj matrix
+  Minv = Pinv*Vinv;
+  
+  // transform points from clip space back to world space
+  D3DXVECTOR4 aa = D3DXVECTOR4(0, 0, -p/mk3, 0);
+  D3DXVECTOR4 bb = D3DXVECTOR4(-n, -n, 0, n);
+  D3DXVECTOR4 cc = D3DXVECTOR4( n, -n, 0, n);
+  D3DXVECTOR4 dd = D3DXVECTOR4(-n,  n, 0, n);
+  D3DXVECTOR4 ee = D3DXVECTOR4( n,  n, 0, n);
+  D3DXVECTOR4 ff = D3DXVECTOR4(-f, -f, f, f);
+  D3DXVECTOR4 gg = D3DXVECTOR4( f, -f, f, f);
+  D3DXVECTOR4 hh = D3DXVECTOR4(-f,  f, f, f);
+  D3DXVECTOR4 ii = D3DXVECTOR4( f,  f, f, f);
+
+  D3DXVec4Transform(&center_of_projection, &aa,&Minv);
+  D3DXVec4Transform(&frustum_vertices[0], &bb ,&Minv);
+  D3DXVec4Transform(&frustum_vertices[1], &cc ,&Minv);
+  D3DXVec4Transform(&frustum_vertices[2], &dd ,&Minv);
+  D3DXVec4Transform(&frustum_vertices[3], &ee ,&Minv);
+  D3DXVec4Transform(&frustum_vertices[4], &ff ,&Minv);
+  D3DXVec4Transform(&frustum_vertices[5], &gg ,&Minv);
+  D3DXVec4Transform(&frustum_vertices[6], &hh ,&Minv);
+  D3DXVec4Transform(&frustum_vertices[7], &ii ,&Minv);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 Render::Renderer::Renderer()

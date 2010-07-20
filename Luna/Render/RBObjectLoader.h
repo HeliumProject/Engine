@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Render/Platform.h"
 #include "Render/ObjectLoader.h"
 
 namespace Content

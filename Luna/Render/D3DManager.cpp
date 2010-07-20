@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "Renderer.h"
-#include "TGAHeader.h"
 
 #include "Foundation/Log.h"
+#include "Pipeline/Image/Formats/TGA.h"
 
 bool                           Render::D3DManager::m_unique = false;
 u32                            Render::D3DManager::m_master_count = 0;
@@ -544,7 +544,7 @@ bool Render::D3DManager::SaveTGA(const tchar* fname)
         return false;
     }
 
-    TGAHeader tga;
+    Nocturnal::TGAHeader tga;
     memset(&tga,0,sizeof(tga));
     tga.imageType = 0x02;
     tga.imageDescriptor = 0x28;

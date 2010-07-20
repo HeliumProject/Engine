@@ -109,7 +109,8 @@ static void Test( bool clamp )
         i64 source = NumericLimits<i64>::Maximum;
         f32 dest = 0;
         RangeCast( source, dest, clamp );
-        NOC_ASSERT( dest == (f32)NumericLimits<i64>::Maximum );
+        f32 test = (f32)NumericLimits<i64>::Maximum;
+        NOC_ASSERT( dest == test );
     }
 
     // f64->i32
@@ -121,8 +122,11 @@ static void Test( bool clamp )
     }
 }
 
-void Nocturnal::NumericTest()
+struct NumericTest
 {
-    Test(true);
-    Test(false);
-}
+    NumericTest()
+    {
+        Test(true);
+        Test(false);
+    }
+} g_Test;

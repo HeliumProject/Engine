@@ -25,15 +25,10 @@ if ( !defined $args )
   $args = "";
 }
 
-if ( !$location )
+if ( !-d $location )
 {
+  $args = $location;
   $location = $ENV{wxWidgets};
-}
-
-if ( !$location )
-{
-  PrintUsage();
-  exit 1;
 }
 
 if ( !-d $location )

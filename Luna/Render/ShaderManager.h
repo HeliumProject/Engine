@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Platform.h"
 #include <d3d9.h>
 
 #include "ShaderLoader.h"

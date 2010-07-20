@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Platform.h"
 #include "Foundation/Automation/Event.h"
 
 #include <d3d9.h>

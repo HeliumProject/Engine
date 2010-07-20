@@ -3,7 +3,7 @@
 #include "SceneEditor.h"
 
 #include "Application/UI/ArtProvider.h"
-#include "Application/UI/AutoFlexSizer.h"
+#include <wx/wrapsizer.h>
 
 using namespace Luna;
 
@@ -19,10 +19,7 @@ void ToolsPanel::Create( wxScrolledWindow* properties )
     wxBoxSizer* mainSizer;
     mainSizer = new wxBoxSizer( wxVERTICAL );
 
-    wxFlexGridSizer* autoFlexSizer;
-    autoFlexSizer = new Nocturnal::AutoFlexSizer();
-    autoFlexSizer->SetFlexibleDirection( wxBOTH );
-    autoFlexSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+    wxWrapSizer* wrapSizer = new wxWrapSizer();
 
     for ( i32 i=0; i<ToolModes::Count; i++ )
     {
@@ -34,11 +31,11 @@ void ToolsPanel::Create( wxScrolledWindow* properties )
         // connect its event handler to us
         btn->Connect( btn->GetId(), wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolsPanel::OnToggleButton ), NULL, this );
 
-        autoFlexSizer->Add( btn, 0, wxALL, 0 );
+        wrapSizer->Add( btn, 0, wxALL, 0 );
         m_Buttons.push_back( btn );
     }
 
-    mainSizer->Add( autoFlexSizer, 0, wxEXPAND, 5 );
+    mainSizer->Add( wrapSizer, 0, wxEXPAND, 5 );
 
     m_Divider = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
     mainSizer->Add( m_Divider, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );

@@ -104,7 +104,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -192,7 +192,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -277,7 +277,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -362,7 +362,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -450,7 +450,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -538,7 +538,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -623,7 +623,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -708,7 +708,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -2150,18 +2150,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Render\Misc.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\Misc.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\Platform.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Render\Renderer.cpp"
 				>
 			</File>
@@ -2199,18 +2187,6 @@
 			</File>
 			<File
 				RelativePath=".\Render\ShaderManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\SphericalHarmonics.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\TGAHeader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Render\VectorMath.h"
 				>
 			</File>
 			<Filter

@@ -1,13 +1,13 @@
 #include "Precompile.h"
 #include "Environment.h"
 
-#include "Misc.h"
+#include "Foundation/Checksum/CRC32.h"
 
 Render::Environment::Environment(const tchar* fname)
 {
   m_load_count = 0;
   m_filename = fname;
-  m_crc = StringHashDJB2(fname);
+  m_crc = Nocturnal::StringCrc32(fname);
   m_timestamp = (u64)-1L;
   m_env_texture = 0;
   m_clearcolor = 0;

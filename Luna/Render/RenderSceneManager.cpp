@@ -1,12 +1,11 @@
 #include "Precompile.h"
 #include "RenderSceneManager.h"
 #include "Renderer.h"
-#include "Misc.h"
-
 #include "OBJObjectLoader.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/File/Path.h"
+#include "Foundation/Checksum/CRC32.h"
 
 static std::vector<Render::Mesh*>         g_loaded_meshes;
 static std::vector<Render::Environment*>  g_loaded_environments;
@@ -213,7 +212,7 @@ u32 Render::Scene::LoadNewMesh( const tchar* fname, ObjectLoaderPtr loader, int 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 u32 Render::Scene::LoadMesh(const tchar* fname,ObjectLoaderPtr loader, int bangleIndex)
 {
-    u32 crc = StringHashDJB2(fname);
+    u32 crc = Nocturnal::StringCrc32(fname);
 
     u32 mesh_count = (u32)g_loaded_meshes.size();
     u32 handle = 0xffffffff;
@@ -461,7 +460,7 @@ u32 Render::Scene::LoadNewEnvironment(const tchar* fname,u32 clear_color)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 u32 Render::Scene::LoadEnvironment(const tchar* fname, u32 clear_color)
 {
-    u32 crc = StringHashDJB2(fname);
+    u32 crc = Nocturnal::StringCrc32(fname);
 
     u32 env_count = (u32)g_loaded_environments.size();
     u32 handle = 0xffffffff;

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Platform.h"
 #include "D3DManager.h"
 #include "ShaderManager.h"
 #include "RenderSceneManager.h"

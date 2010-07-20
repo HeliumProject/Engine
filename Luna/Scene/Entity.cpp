@@ -471,20 +471,6 @@ void Entity::SetEntityAssetPath( const tstring& entityClass )
     Dirty();
 }
 
-tstring Entity::GetAssetTypeName() const
-{
-    return TXT( "Unknown" );
-}
-
-void Entity::SetAssetTypeName( const tstring& type )
-{
-    NOC_BREAK();
-}
-
-void Entity::OnInstanceCollisionComponentModified( const Reflect::ElementChangeArgs& args )
-{
-}
-
 void Entity::OnComponentAdded( const Component::ComponentCollectionChanged& args )
 {
 }

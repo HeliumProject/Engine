@@ -3,12 +3,11 @@
 
 // Libraries
 #include "Foundation/InitializerStack.h"
-#include "Application/RCS/Providers/Perforce/Perforce.h"
 #include "Foundation/Reflect/Registry.h"
+#include "Application/RCS/Providers/Perforce/Perforce.h"
 #include "Pipeline/Content/ContentInit.h"
 #include "Pipeline/Content/ContentVersion.h"
 #include "Pipeline/Asset/AssetInit.h"
-#include "MiscSettings.h"
 
 // Types
 #include "SceneEditor.h"
@@ -90,9 +89,6 @@ void Luna::SceneInitialize()
     g_InitializerStack.Push( Reflect::RegisterClass<ViewportPreferences>( TXT( "ViewportPreferences" ) ) ); 
     g_InitializerStack.Push( Reflect::RegisterClass<GridPreferences>( TXT( "Grid" ) ) );
     g_InitializerStack.Push( Reflect::RegisterClass<ScenePreferences>( TXT( "ScenePreferences" ) ) );
-
-    g_InitializerStack.Push( Reflect::RegisterClass<ScaleColorModeValue>( TXT( "ScaleColorModeValue" ) ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<MiscSettings>( TXT( "MiscSettings" ) ) );
 
     // luna types 
     g_InitializerStack.Push( SceneEditor::InitializeEditor, SceneEditor::CleanupEditor );

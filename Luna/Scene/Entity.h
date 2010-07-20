@@ -154,16 +154,10 @@ namespace Luna
     tstring GetEntityAssetPath() const;
     void SetEntityAssetPath( const tstring& entityClass );
 
-    tstring GetAssetTypeName() const;
-    void SetAssetTypeName( const tstring& type );
-
-  public:
-
     //
     // Callbacks
     //
   protected:
-    void OnInstanceCollisionComponentModified( const Reflect::ElementChangeArgs& args );
     void OnComponentAdded( const Component::ComponentCollectionChanged& args );
     void OnComponentRemoved( const Component::ComponentCollectionChanged& args );
 

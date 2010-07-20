@@ -275,7 +275,6 @@ void FileIconsTable::Create()
         {
             const Nocturnal::Path& filePath = (*fileItr);
 
-
             if ( !filePath.Exists() || filePath.Size() <= 0 )
             {
                 Log::Warning( TXT( "Unable to load empty image file %s\n" ), filePath.Get().c_str() );
@@ -295,6 +294,9 @@ void FileIconsTable::Create()
                 size_t findDot = token.find( TXT( "." ) );
                 if ( findDot != wxString::npos )
                     token.erase( findDot );
+
+#pragma TODO("really we should just be inserting a column of alpha or something, scaling is lame -Geoff")
+                image.Rescale( 16, 16 );
 
                 // The file was loaded, add it to the image list and store a mapping of file name to index
                 int index = m_SmallImageList->Add( wxBitmap( image ) );

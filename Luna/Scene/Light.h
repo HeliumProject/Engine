@@ -212,10 +212,6 @@ namespace Luna
       }
     }
 
-
-    static void OnSelectionHelper( Inspect::Button* button );
-
-
     //
     // Events
     //

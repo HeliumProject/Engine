@@ -406,14 +406,6 @@ void Light::CreatePanel( CreatePanelArgs& args )
                 args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperPhysicalLight, &Light::SetSelectionHelperPhysicalLight );
             }
             args.m_Generator->Pop();
-
-            args.m_Generator->PushContainer();
-            {
-                Inspect::Action* button = args.m_Generator->AddAction( Inspect::ActionSignature::Delegate( &Light::OnSelectionHelper ) );
-                button->SetClientData( new SelectionDataObject( args.m_Selection ) );
-                button->SetText( TXT( "Select Lights" ) );
-            }
-            args.m_Generator->Pop();
         }
         args.m_Generator->Pop();
     }
@@ -756,50 +748,3 @@ static bool CompareLights( Content::Light* light1, Content::Light* light2, BitAr
 
 }
 
-void Light::OnSelectionHelper( Inspect::Button* button )
-{
-    SceneEditor* editor = wxGetApp().GetSceneEditor();
-    Luna::Scene* scene = editor->GetSceneManager()->GetCurrentScene();
-    if( scene )
-    {
-        SelectionDataObject* selectionData = static_cast<SelectionDataObject*>( button->GetClientData() );
-        if( selectionData )
-        {
-
-            OS_SelectableDumbPtr lightSelection;
-
-            V_LightDumbPtr lights;
-            scene->GetAll< Luna::Light >( lights );
-
-            OS_SelectableDumbPtr& selection = selectionData->m_Selection;
-
-            OS_SelectableDumbPtr::Iterator selItor = selection.Begin();
-            OS_SelectableDumbPtr::Iterator selEnd  = selection.End();
-
-            for( ; selItor != selEnd; ++selItor )
-            {
-                Luna::Light* selLight = Reflect::ObjectCast< Luna::Light >( *selItor );
-
-                if( selLight )
-                {
-                    Content::Light* contentLight = selLight->GetPackage< Content::Light >();
-
-                    if( contentLight )
-                    {
-                        V_LightDumbPtr::iterator itor = lights.begin();
-                        V_LightDumbPtr::iterator end  = lights.end();
-
-                        for( ; itor != end; ++itor )
-                        {
-                            if( CompareLights( contentLight, (*itor)->GetPackage< Content::Light >(), selLight->m_SelectionHelper ) )
-                            {
-                                lightSelection.Append( *itor );
-                            }
-                        }
-                    }
-                }
-            }
-            editor->PostCommand( new SceneSelectCommand( scene, lightSelection ) );
-        }
-    }
-}

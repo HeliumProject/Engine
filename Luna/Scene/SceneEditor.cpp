@@ -10,7 +10,6 @@
 #include "EntityCreateTool.h"
 #include "EntityType.h"
 #include "ExportOptionsDlg.h"
-#include "UI/HelpPanel.h"
 #include "HierarchyNodeType.h"
 #include "HierarchyOutliner.h"
 #include "ImportOptionsDlg.h"
@@ -25,13 +24,14 @@
 #include "ScenePreferencesDialog.h"
 #include "SelectionPropertiesPanel.h"
 #include "TranslateManipulator.h"
-#include "ToolsPanel.h"
 #include "TypeGrid.h"
 #include "Viewport.h"
 #include "VolumeCreateTool.h"
 #include "Mesh.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
 #include "MRUData.h"
+
+#include "UI/HelpPanel.h"
 #include "Vault/VaultToolBar.h"
 
 #include "Platform/Process.h"
@@ -280,7 +280,7 @@ void SceneEditor::CleanupEditor()
 // 
 SceneEditor::SceneEditor()
 : Editor( EditorTypes::Scene, NULL, wxID_ANY, wxT("Luna"), wxDefaultPosition, wxSize(1180, 750), wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER )
-, m_SceneManager( this )
+, m_SceneManager()
 , m_HierarchyOutline( NULL )
 , m_EntityOutline( NULL )
 , m_TypeOutline( NULL )
@@ -344,10 +344,10 @@ SceneEditor::SceneEditor()
 
     m_ViewToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_ViewToolBar->SetToolBitmapSize(wxSize(16, 16));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::PerspectiveCamera ), wxT("Use the orbit perspective camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::FrontOrthoCamera ), wxT("Use the front orthographic camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::SideOrthoCamera ), wxT("Use the side orthographic camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::TopOrthoCamera ), wxT("Use the top orthographic camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), wxArtProvider::GetBitmap( Luna::ArtIDs::PerspectiveCamera ), wxT("Use the orbit perspective camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), wxArtProvider::GetBitmap( Luna::ArtIDs::FrontOrthoCamera ), wxT("Use the front orthographic camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), wxArtProvider::GetBitmap( Luna::ArtIDs::SideOrthoCamera ), wxT("Use the side orthographic camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), wxArtProvider::GetBitmap( Luna::ArtIDs::TopOrthoCamera ), wxT("Use the top orthographic camera"));
     m_ViewToolBar->Realize();
 
     m_VaultToolBar = new VaultToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
@@ -421,14 +421,14 @@ SceneEditor::SceneEditor()
     m_FrameManager.AddPane( selectionProperties, wxAuiPaneInfo().Name(wxT("properties")).Caption(wxT("Properties")).Right().Layer(1).Position(1) );
 
         // Properties panel - Tool page
-    m_ToolsPanel = new ToolsPanel( this );
-        m_ToolEnumerator = new PropertiesGenerator (&m_ToolProperties);
-        m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
-        m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
-    m_ToolProperties.SetControl( new Inspect::CanvasWindow ( m_ToolsPanel, SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
-    m_ToolsPanel->Create( m_ToolProperties.GetControl() );
-    m_ToolsPanel->Disable();
-    m_FrameManager.AddPane( m_ToolsPanel, wxAuiPaneInfo().Name(wxT("tools")).Caption(wxT("Tools")).Right().Layer(1).Position(1) );
+//    m_ToolsPanel = new ToolsPanel( this );
+//        m_ToolEnumerator = new PropertiesGenerator (&m_ToolProperties);
+//        m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
+//        m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
+//    m_ToolProperties.SetControl( new Inspect::CanvasWindow ( m_ToolsPanel, SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
+//    m_ToolsPanel->Create( m_ToolProperties.GetControl() );
+//    m_ToolsPanel->Disable();
+//    m_FrameManager.AddPane( m_ToolsPanel, wxAuiPaneInfo().Name(wxT("tools")).Caption(wxT("Tools")).Right().Layer(1).Position(1) );
 
     //
     // Docked ToolBars
@@ -1079,7 +1079,7 @@ void SceneEditor::OnNew( wxCommandEvent& event )
 {
     if ( m_SceneManager.CloseAll() )
     {
-        ScenePtr scene = m_SceneManager.NewScene( true );
+        ScenePtr scene = m_SceneManager.NewScene( GetViewport(), true );
         scene->GetSceneDocument()->SetModified( true );
         m_SceneManager.SetCurrentScene( scene );
     }
@@ -1788,39 +1788,7 @@ void SceneEditor::OnFrameSelected(wxCommandEvent& event)
 {
     if ( m_SceneManager.HasCurrentScene() )
     {
-        bool found = false;
-        Math::AlignedBox box;
-
-        OS_SelectableDumbPtr::Iterator itr = m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Begin();
-        OS_SelectableDumbPtr::Iterator end = m_SceneManager.GetCurrentScene()->GetSelection().GetItems().End();
-        for ( ; itr != end; ++itr )
-        {
-            Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(*itr);
-            if (node)
-            {
-                box.Merge(node->GetGlobalHierarchyBounds());
-                found = true;
-                continue;
-            }
-
-            Luna::Point* point = Reflect::ObjectCast<Luna::Point>(*itr);
-            if (point)
-            {
-                Math::Vector3 p = point->GetPosition();
-                point->GetTransform()->GetGlobalTransform().TransformVertex(p);
-                box.Merge(p);
-                found = true;
-                continue;
-            }
-        }
-
-        if (found)
-        {
-            m_View->UpdateCameraHistory();    // we want the previous state before the move
-            m_View->GetCamera()->Frame(box);
-
-            m_SceneManager.GetCurrentScene()->Execute(false);
-        }
+        m_SceneManager.GetCurrentScene()->FrameSelected();
     }
 }
 
@@ -2610,16 +2578,16 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
     args.m_Scene->SetTool( NULL );
     m_View->SetTool(NULL);
 
-    m_ToolsPanel->Disable();
-    m_ToolsPanel->Refresh();
+    //m_ToolsPanel->Disable();
+    //m_ToolsPanel->Refresh();
 }
 
 void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
 {
     if ( args.m_Scene )
     {
-        m_ToolsPanel->Enable();
-        m_ToolsPanel->Refresh();
+        //m_ToolsPanel->Enable();
+        //m_ToolsPanel->Refresh();
 
         // Hook our event handlers
         args.m_Scene->AddStatusChangedListener( StatusChangeSignature::Delegate ( this, &SceneEditor::StatusChanged ) );
@@ -2795,7 +2763,7 @@ void SceneEditor::ViewToolChanged( const ToolChangeArgs& args )
         }
     }
 
-    m_ToolsPanel->ToggleTool( selectedTool );
+    //m_ToolsPanel->ToggleTool( selectedTool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3116,5 +3084,5 @@ void SceneEditor::SyncPropertyThread()
 
 void SceneEditor::SetHelpText( const tchar* text )
 {
-    m_Help->SetText( text );
+    m_Help->SetHelpText( text );
 }

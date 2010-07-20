@@ -5,7 +5,7 @@
 #include "TaskOutputWindow.h"
 
 #include "Foundation/Log.h"
-#include "Application/UI/ArtProvider.h"
+#include "UI/ArtProvider.h"
 
 using namespace Luna;
 
@@ -72,8 +72,8 @@ TaskOutputWindow::TaskOutputWindow( wxWindow* parent, const tstring& title, int 
   bSizer1->Add( bSizer4, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 
   wxIconBundle iconBundle;
-  iconBundle.AddIcon( wxArtProvider::GetIcon( Nocturnal::ArtIDs::TaskWindow, wxART_OTHER, wxSize( 32, 32 ) ) );
-  iconBundle.AddIcon( wxArtProvider::GetIcon( Nocturnal::ArtIDs::TaskWindow ) );
+  iconBundle.AddIcon( wxArtProvider::GetIcon( Luna::ArtIDs::TaskWindow, wxART_OTHER, wxSize( 32, 32 ) ) );
+  iconBundle.AddIcon( wxArtProvider::GetIcon( Luna::ArtIDs::TaskWindow ) );
   SetIcons( iconBundle );
 
   this->SetSizer( bSizer1 );

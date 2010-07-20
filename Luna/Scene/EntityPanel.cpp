@@ -242,78 +242,6 @@ void EntityPanel::CreateClassActions()
         mayaButton->SetIcon( TXT( "maya" ) );
         mayaButton->SetEnabled( singular );
         mayaButton->SetToolTip( TXT( "Edit this entity class's art in Maya" ) );
-
-        Inspect::Action* historyButton = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnEntityAssetRevisionHistory ) );
-        historyButton->SetIcon( TXT( "p4" ) );
-        historyButton->SetToolTip( TXT( "Display revision history for this file in Perforce." ) );
-    }
-    m_Generator->Pop();
-}
-
-
-
-void EntityPanel::CreateChildImportExport()
-{
-    m_Generator->PushPanel( TXT( "Child Import/Export" ) );
-    {
-        m_Generator->PushContainer();
-        {
-            Inspect::Action* button1 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Transform, Content::Transform > ) );
-            button1->SetText( TXT( "Export All" ) );
-
-            Inspect::Action* button2 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Transform, Content::Transform > ) );
-            button2->SetText( TXT( "Import All" ) );
-
-            Inspect::Action* button3 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Transform > ) );
-            button3->SetText( TXT( "Select All" ) );
-
-            Inspect::Action* button4 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExportToFile< Luna::Transform, Content::Transform > ) );
-            button4->SetText( TXT( "Export To File" ) );
-
-            Inspect::Action* button5 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImportFromFile< Luna::Transform, Content::Transform > ) );
-            button5->SetText( TXT( "Import From File" ) );
-
-        }
-        m_Generator->Pop();
-
-        m_Generator->PushContainer();
-        {
-            Inspect::Action* button1 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Entity, Asset::EntityInstance > ) );
-            button1->SetText( TXT( "Export Entities" ) );
-
-            Inspect::Action* button2 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Entity, Asset::EntityInstance > ) );
-            button2->SetText( TXT( "Import Entities" ) );
-
-            Inspect::Action* button3 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Entity > ) );
-            button3->SetText( TXT( "Select Entities" ) );
-        }
-        m_Generator->Pop();
-
-        m_Generator->PushContainer();
-        {
-            Inspect::Action* button1 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Volume, Content::Volume > ) );
-            button1->SetText( TXT( "Export Weather Volumes" ) );
-
-            Inspect::Action* button2 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Volume, Content::Volume > ) );
-            button2->SetText( TXT( "Import Weather Volumes" ) );
-
-            Inspect::Action* button3 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Volume > ) );
-            button3->SetText( TXT( "Select Weather Volumes" ) );
-        }
-        m_Generator->Pop();
-
-        m_Generator->PushContainer();
-        {
-            Inspect::Action* button1 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnExport< Luna::Light, Content::Light > ) );
-            button1->SetText( TXT( "Export Lights" ) );
-
-            Inspect::Action* button2 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnImport< Luna::Light, Content::Light > ) );
-            button2->SetText( TXT( "Import Lights" ) );
-
-            Inspect::Action* button3 = m_Generator->AddAction( Inspect::ActionSignature::Delegate( this, &EntityPanel::OnSelectChildren< Luna::Light > ) );
-            button3->SetText( TXT( "Select Lights" ) );
-        }
-        m_Generator->Pop();
     }
     m_Generator->Pop();
 }
@@ -359,8 +287,6 @@ void EntityPanel::Create()
 
     CreateShowFlags(); 
     CreateAppearanceFlags();
-
-    CreateChildImportExport();
 
     Inspect::Panel::Create();
 }
@@ -498,30 +424,6 @@ void EntityPanel::OnEntityAssetEditAsset( Inspect::Button* button )
 
 void EntityPanel::OnEntityAssetEditArt( Inspect::Button* button )
 {
-}
-
-void EntityPanel::OnEntityAssetRevisionHistory( Inspect::Button* button )
-{
-    std::set< tstring > files;
-    SceneEditor* editor = wxGetApp().GetSceneEditor();
-    OS_SelectableDumbPtr::Iterator selectionItr = m_Selection.Begin();
-    OS_SelectableDumbPtr::Iterator selectionEnd = m_Selection.End();
-    for ( ; selectionItr != selectionEnd; ++selectionItr )
-    {
-        Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( *selectionItr );
-        tstring path = entity->GetEntityAssetPath();
-        if ( !path.empty() )
-        {
-            files.insert( path );
-        }
-    }
-
-    std::set< tstring >::const_iterator pathItr = files.begin();
-    std::set< tstring >::const_iterator pathEnd = files.end();
-    for ( ; pathItr != pathEnd; ++pathItr )
-    {
-        editor->RevisionHistory( *pathItr );
-    }
 }
 
 void EntityPanel::OnEntityAssetDrop( const Inspect::FilteredDropTargetArgs& args )

@@ -77,13 +77,13 @@ using namespace Math;
 using namespace Luna;
 using namespace Nocturnal;
 
-Scene::Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file )
+Scene::Scene( Luna::Viewport* viewport, Luna::SceneManager* manager, const SceneDocumentPtr& file )
 : m_File( file )
 , m_Id( TUID::Generate() )
 , m_Progress( 0 )
 , m_Importing( false )
 , m_MiscSettings( new MiscSettings() )
-, m_View( manager->GetEditor()->GetViewport() )
+, m_View( viewport )
 , m_Manager( manager )
 , m_SmartDuplicateMatrix(Math::Matrix4::Identity)
 , m_ValidSmartDuplicateMatrix( false )
@@ -3085,6 +3085,43 @@ Undo::CommandPtr Scene::SnapCameraToSelected()
     Execute(false);
 
     return NULL;
+}
+
+void Scene::FrameSelected()
+{
+    bool found = false;
+    Math::AlignedBox box;
+
+    OS_SelectableDumbPtr::Iterator itr = GetSelection().GetItems().Begin();
+    OS_SelectableDumbPtr::Iterator end = GetSelection().GetItems().End();
+    for ( ; itr != end; ++itr )
+    {
+        Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(*itr);
+        if (node)
+        {
+            box.Merge(node->GetGlobalHierarchyBounds());
+            found = true;
+            continue;
+        }
+
+        Luna::Point* point = Reflect::ObjectCast<Luna::Point>(*itr);
+        if (point)
+        {
+            Math::Vector3 p = point->GetPosition();
+            point->GetTransform()->GetGlobalTransform().TransformVertex(p);
+            box.Merge(p);
+            found = true;
+            continue;
+        }
+    }
+
+    if (found)
+    {
+        m_View->UpdateCameraHistory();    // we want the previous state before the move
+        m_View->GetCamera()->Frame(box);
+
+        Execute(false);
+    }
 }
 
 void Scene::MeasureDistance()

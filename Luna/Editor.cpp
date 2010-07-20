@@ -56,40 +56,6 @@ const tstring& Editor::GetPreferencePrefix() const
   return m_PreferencePrefix;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Uses p4win to display the revision history for the specified file.  Error
-// checking is performed and messages are displayed as modal dialogs to this
-// editor.
-//
-void Editor::RevisionHistory( const tstring& path )
-{
-  if ( path.empty() )
-  {
-    return;
-  }
-
-  tstring clean( path );
-  Nocturnal::Path::Normalize( clean );
-  if ( !RCS::PathIsManaged( clean ) )
-  {
-    tstring msg = TXT( "The path '" ) + clean + TXT( "' is not under revision control. Unable to display revision history." );
-    wxMessageBox( msg.c_str(), wxT( "Warning" ), wxCENTER | wxICON_WARNING | wxOK, this );
-    return;
-  }
-
-  tstring win32Name( clean );
-  Nocturnal::Path::MakeNative( win32Name );
-  tstring command = TXT( "p4win.exe -H \"" ) + win32Name + TXT( "\"" );
-
-  if ( Platform::Execute( command ) == -1 )
-  {
-    tstring error = Platform::GetErrorString();
-    error += TXT( "\nMake sure that you have p4win properly installed." );
-    wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
-    return;
-  }
-}
-
 void Editor::OnPropertiesCreated( const PropertiesCreatedArgs& args )
 {
   PostCommand( new PropertiesCreatedCommand( args.m_PropertiesManager, args.m_SelectionId, args.m_Controls ) );

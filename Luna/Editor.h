@@ -76,33 +76,6 @@ namespace Luna
 
     class DocumentManager;
 
-    class PropertiesCreatedCommand : public Undo::Command
-    {
-    public:
-        PropertiesCreatedCommand( PropertiesManager* propertiesManager, u32 selectionId, const Inspect::V_Control& controls ) 
-            : m_PropertiesManager( propertiesManager )
-            , m_SelectionId( selectionId )
-            , m_Controls( controls )
-        { 
-        }
-
-        virtual void Undo() NOC_OVERRIDE
-        {
-            // this should never happen
-            NOC_BREAK();
-        }
-
-        virtual void Redo() NOC_OVERRIDE
-        {
-            m_PropertiesManager->FinalizeProperties( m_SelectionId, m_Controls );
-        }
-
-    private:
-        PropertiesManager* m_PropertiesManager;
-        u32 m_SelectionId;
-        Inspect::V_Control m_Controls;
-    };
-
     /////////////////////////////////////////////////////////////////////////////
     // Base class for different editors in Luna.  Think of each editor as a top
     // level window.

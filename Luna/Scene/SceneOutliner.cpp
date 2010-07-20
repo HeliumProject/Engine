@@ -12,11 +12,11 @@ using namespace Luna;
 // Helper macro.  In debug, asserts that m_TreeCtrl exists.  In release,
 // bails out of the function if m_TreeCtrl does not exist.
 #define VERIFY_TREE_CTRL()  \
-  NOC_ASSERT( m_TreeCtrl );  \
-  if ( !m_TreeCtrl )        \
-  {                         \
+    NOC_ASSERT( m_TreeCtrl );  \
+    if ( !m_TreeCtrl )        \
+{                         \
     return;                 \
-  }
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@ SceneOutliner::SceneOutliner( Luna::SceneManager* sceneManager )
 , m_IgnoreSelectionChange( false )
 , m_DisplayCounts( false )
 {
-  m_SceneManager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
+    m_SceneManager->AddCurrentSceneChangedListener( SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,9 +37,9 @@ SceneOutliner::SceneOutliner( Luna::SceneManager* sceneManager )
 // 
 SceneOutliner::~SceneOutliner()
 {
-  DisconnectDynamicEventTable();
-  m_SceneManager->RemoveCurrentSceneChangedListener( SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
-  DisconnectSceneListeners();
+    DisconnectDynamicEventTable();
+    m_SceneManager->RemoveCurrentSceneChangedListener( SceneChangeSignature::Delegate::Create<SceneOutliner, void (SceneOutliner::*)( const SceneChangeArgs& args )> ( this, &SceneOutliner::CurrentSceneChanged ) );
+    DisconnectSceneListeners();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -48,16 +48,16 @@ SceneOutliner::~SceneOutliner()
 // 
 SortTreeCtrl* SceneOutliner::InitTreeCtrl( wxWindow* parent, wxWindowID id )
 {
-  NOC_ASSERT( !m_TreeCtrl );
-  if ( !m_TreeCtrl )
-  {
-    m_TreeCtrl = CreateTreeCtrl( parent, id );
-    NOC_ASSERT( m_TreeCtrl );
+    NOC_ASSERT( !m_TreeCtrl );
+    if ( !m_TreeCtrl )
+    {
+        m_TreeCtrl = CreateTreeCtrl( parent, id );
+        NOC_ASSERT( m_TreeCtrl );
 
-    // Set up dynamic event handlers for UI callbacks
-    ConnectDynamicEventTable();
-  }
-  return m_TreeCtrl;
+        // Set up dynamic event handlers for UI callbacks
+        ConnectDynamicEventTable();
+    }
+    return m_TreeCtrl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -66,11 +66,11 @@ SortTreeCtrl* SceneOutliner::InitTreeCtrl( wxWindow* parent, wxWindowID id )
 // 
 void SceneOutliner::SaveState( SceneOutlinerState& state )
 {
-  VERIFY_TREE_CTRL();
+    VERIFY_TREE_CTRL();
 
-  m_StateInfo.SetHorizontalScrollBarPos( m_TreeCtrl->GetScrollPos( wxHORIZONTAL ) );
-  m_StateInfo.SetVerticalScrollBarPos( m_TreeCtrl->GetScrollPos( wxVERTICAL ) );
-  state = m_StateInfo;
+    m_StateInfo.SetHorizontalScrollBarPos( m_TreeCtrl->GetScrollPos( wxHORIZONTAL ) );
+    m_StateInfo.SetVerticalScrollBarPos( m_TreeCtrl->GetScrollPos( wxVERTICAL ) );
+    state = m_StateInfo;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -78,8 +78,8 @@ void SceneOutliner::SaveState( SceneOutlinerState& state )
 // 
 void SceneOutliner::RestoreState( const SceneOutlinerState& state )
 {
-  m_StateInfo.Reset();
-  m_StateInfo = state;
+    m_StateInfo.Reset();
+    m_StateInfo = state;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ void SceneOutliner::RestoreState( const SceneOutlinerState& state )
 // 
 void SceneOutliner::DisableSorting()
 {
-  m_TreeCtrl->DisableSorting();
+    m_TreeCtrl->DisableSorting();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ void SceneOutliner::DisableSorting()
 // 
 void SceneOutliner::EnableSorting()
 {
-  m_TreeCtrl->EnableSorting();
+    m_TreeCtrl->EnableSorting();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -104,10 +104,10 @@ void SceneOutliner::EnableSorting()
 // 
 SceneOutlinerItemData* SceneOutliner::GetTreeItemData( const wxTreeItemId& item )
 {
-  NOC_ASSERT( item.IsOk() );
-  NOC_ASSERT( m_TreeCtrl->GetItemData( item ) != NULL );
+    NOC_ASSERT( item.IsOk() );
+    NOC_ASSERT( m_TreeCtrl->GetItemData( item ) != NULL );
 
-  return static_cast< SceneOutlinerItemData* >( m_TreeCtrl->GetItemData( item ) );
+    return static_cast< SceneOutlinerItemData* >( m_TreeCtrl->GetItemData( item ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -115,29 +115,29 @@ SceneOutlinerItemData* SceneOutliner::GetTreeItemData( const wxTreeItemId& item 
 // 
 void SceneOutliner::UpdateCurrentScene( Luna::Scene* scene )
 {
-  if ( m_CurrentScene != scene )
-  {
-    Luna::Scene* oldScene = m_CurrentScene;
+    if ( m_CurrentScene != scene )
+    {
+        Luna::Scene* oldScene = m_CurrentScene;
 
-    m_TreeCtrl->Freeze();
+        m_TreeCtrl->Freeze();
 
-    CurrentSceneChanging( scene );
+        CurrentSceneChanging( scene );
 
-    Clear();
-    DisconnectSceneListeners();
-    
-    m_CurrentScene = scene;
-    
-    ConnectSceneListeners();
+        Clear();
+        DisconnectSceneListeners();
 
-    CurrentSceneChanged( oldScene );
+        m_CurrentScene = scene;
 
-    m_TreeCtrl->Thaw();
+        ConnectSceneListeners();
 
-    // Presumably, derived classes will have populated the tree by this point,
-    // so we can restore the state of the outline now.
-    DoRestoreState();
-  }
+        CurrentSceneChanged( oldScene );
+
+        m_TreeCtrl->Thaw();
+
+        // Presumably, derived classes will have populated the tree by this point,
+        // so we can restore the state of the outline now.
+        DoRestoreState();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -146,26 +146,26 @@ void SceneOutliner::UpdateCurrentScene( Luna::Scene* scene )
 // 
 void SceneOutliner::DoRestoreState()
 {
-  VERIFY_TREE_CTRL();
+    VERIFY_TREE_CTRL();
 
-  if ( m_StateInfo.GetExpandedObjects().size() > 0 )
-  {
-    S_Objects::const_iterator itr = m_StateInfo.GetExpandedObjects().begin();
-    S_Objects::const_iterator end = m_StateInfo.GetExpandedObjects().end();
-    for ( ; itr != end; ++itr )
+    if ( m_StateInfo.GetExpandedObjects().size() > 0 )
     {
-      Object* object = *itr;
-      M_TreeItems::const_iterator found = m_Items.find( object );
-      if ( found != m_Items.end() )
-      {
-        m_TreeCtrl->EnsureVisible( found->second );
-        m_TreeCtrl->Expand( found->second );
-      }
+        S_Objects::const_iterator itr = m_StateInfo.GetExpandedObjects().begin();
+        S_Objects::const_iterator end = m_StateInfo.GetExpandedObjects().end();
+        for ( ; itr != end; ++itr )
+        {
+            Object* object = *itr;
+            M_TreeItems::const_iterator found = m_Items.find( object );
+            if ( found != m_Items.end() )
+            {
+                m_TreeCtrl->EnsureVisible( found->second );
+                m_TreeCtrl->Expand( found->second );
+            }
+        }
     }
-  }
 
-  m_TreeCtrl->SetScrollPos( wxHORIZONTAL, m_StateInfo.GetHorizontalScrollBarPos() );
-  m_TreeCtrl->SetScrollPos( wxVERTICAL, m_StateInfo.GetVerticalScrollBarPos() );
+    m_TreeCtrl->SetScrollPos( wxHORIZONTAL, m_StateInfo.GetHorizontalScrollBarPos() );
+    m_TreeCtrl->SetScrollPos( wxVERTICAL, m_StateInfo.GetVerticalScrollBarPos() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -173,9 +173,9 @@ void SceneOutliner::DoRestoreState()
 // 
 void SceneOutliner::Sort( const wxTreeItemId& root )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  m_TreeCtrl->Sort( root );
+    m_TreeCtrl->Sort( root );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -183,8 +183,8 @@ void SceneOutliner::Sort( const wxTreeItemId& root )
 // 
 void SceneOutliner::Clear()
 {
-  m_TreeCtrl->DeleteAllItems();
-  m_Items.clear();
+    m_TreeCtrl->DeleteAllItems();
+    m_Items.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -192,44 +192,44 @@ void SceneOutliner::Clear()
 // 
 wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const tstring& name, i32 image, SceneOutlinerItemData* data, bool isSelected, bool countable)
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
-  NOC_ASSERT(data); 
+    LUNA_SCENE_SCOPE_TIMER( ("") );
+    NOC_ASSERT(data); 
 
-  bool isVisible = true;
+    bool isVisible = true;
 
-  // If the object is a dependency node, connect a name change listener
-  if ( data->GetObject() && data->GetObject()->HasType( Reflect::GetType< Luna::SceneNode >() ) )
-  {
-    Luna::SceneNode* node = Reflect::DangerousCast< Luna::SceneNode >( data->GetObject() );
-    isVisible = node->IsVisible();
-    node->AddNameChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeNameChanged ) );
-    node->AddVisibilityChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeVisibilityChanged ) );
-  }
+    // If the object is a dependency node, connect a name change listener
+    if ( data->GetObject() && data->GetObject()->HasType( Reflect::GetType< Luna::SceneNode >() ) )
+    {
+        Luna::SceneNode* node = Reflect::DangerousCast< Luna::SceneNode >( data->GetObject() );
+        isVisible = node->IsVisible();
+        node->AddNameChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeNameChanged ) );
+        node->AddVisibilityChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeVisibilityChanged ) );
+    }
 
-  // Actually add the item
-  wxTreeItemId item = m_TreeCtrl->AppendItem( parent, name.c_str(), image, image, data );
-  m_Items.insert( M_TreeItems::value_type( data->GetObject(), item ) );
+    // Actually add the item
+    wxTreeItemId item = m_TreeCtrl->AppendItem( parent, name.c_str(), image, image, data );
+    m_Items.insert( M_TreeItems::value_type( data->GetObject(), item ) );
 
-  data->SetItemText( name ); 
-  data->SetCountable( countable ); 
-  data->SetCachedCount( countable ? 1 : 0 ); 
+    data->SetItemText( name ); 
+    data->SetCountable( countable ); 
+    data->SetCachedCount( countable ? 1 : 0 ); 
 
-  UpdateItemVisibility( item, isVisible );
+    UpdateItemVisibility( item, isVisible );
 
-  if ( isSelected )
-  {
-    bool isIgnoring = m_IgnoreSelectionChange;
-    m_IgnoreSelectionChange = true;
-    m_TreeCtrl->SelectItem( item );
-    m_IgnoreSelectionChange = isIgnoring;
-  }
+    if ( isSelected )
+    {
+        bool isIgnoring = m_IgnoreSelectionChange;
+        m_IgnoreSelectionChange = true;
+        m_TreeCtrl->SelectItem( item );
+        m_IgnoreSelectionChange = isIgnoring;
+    }
 
-  if ( m_DisplayCounts && countable )
-  {
-    UpdateItemCounts( parent, data->GetCachedCount() ); 
-  }
+    if ( m_DisplayCounts && countable )
+    {
+        UpdateItemCounts( parent, data->GetCachedCount() ); 
+    }
 
-  return item;
+    return item;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -237,67 +237,67 @@ wxTreeItemId SceneOutliner::AddItem( const wxTreeItemId& parent, const tstring& 
 // 
 void SceneOutliner::DeleteItem( Object* object )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  // Delete the item if it is in our list
-  M_TreeItems::iterator found = m_Items.find( object );
-  if ( found != m_Items.end() )
-  {
-    wxTreeItemId item = found->second;
-
-    SceneOutlinerItemData* data = (SceneOutlinerItemData*) m_TreeCtrl->GetItemData( item ); 
-
-    // Sanity checks
-    NOC_ASSERT( data );
-    NOC_ASSERT( data->GetObject() == object );
-
-    // access the node and the data before erasing it from the tree control
-    // just in case we have to update the counts
-    wxTreeItemId parent = m_TreeCtrl->GetItemParent( item ); 
-    int cachedCount = data->GetCachedCount(); 
-    
-    m_TreeCtrl->Delete( item );
-    data = NULL; 
-
-    // now update the counts if necessary. 
-    if ( m_DisplayCounts )
+    // Delete the item if it is in our list
+    M_TreeItems::iterator found = m_Items.find( object );
+    if ( found != m_Items.end() )
     {
-      UpdateItemCounts(parent, -cachedCount); 
+        wxTreeItemId item = found->second;
+
+        SceneOutlinerItemData* data = (SceneOutlinerItemData*) m_TreeCtrl->GetItemData( item ); 
+
+        // Sanity checks
+        NOC_ASSERT( data );
+        NOC_ASSERT( data->GetObject() == object );
+
+        // access the node and the data before erasing it from the tree control
+        // just in case we have to update the counts
+        wxTreeItemId parent = m_TreeCtrl->GetItemParent( item ); 
+        int cachedCount = data->GetCachedCount(); 
+
+        m_TreeCtrl->Delete( item );
+        data = NULL; 
+
+        // now update the counts if necessary. 
+        if ( m_DisplayCounts )
+        {
+            UpdateItemCounts(parent, -cachedCount); 
+        }
     }
-  }
 }
 
 void SceneOutliner::UpdateItemCounts( const wxTreeItemId& node, int delta )
 {
-  if(!node)
-  {
-    return; 
-  }
+    if(!node)
+    {
+        return; 
+    }
 
-  SceneOutlinerItemData* data = (SceneOutlinerItemData*) m_TreeCtrl->GetItemData(node); 
-  if(!data)
-  {
-    return; // probably only INVISIBLE_ROOT has no data
-  }
-  
-  int finalCount = data->GetCachedCount() + delta; 
-  NOC_ASSERT(finalCount >= 0); 
+    SceneOutlinerItemData* data = (SceneOutlinerItemData*) m_TreeCtrl->GetItemData(node); 
+    if(!data)
+    {
+        return; // probably only INVISIBLE_ROOT has no data
+    }
 
-  data->SetCachedCount( finalCount ); 
+    int finalCount = data->GetCachedCount() + delta; 
+    NOC_ASSERT(finalCount >= 0); 
 
-  if( finalCount > 0 )
-  {
-    tstringstream str; 
-    str << data->GetItemText() << TXT( " (" ) << finalCount << TXT( ")" ); 
-    m_TreeCtrl->SetItemText(node, str.str().c_str()); 
-  }
-  else
-  {
-    m_TreeCtrl->SetItemText(node, data->GetItemText().c_str()); 
-  }
+    data->SetCachedCount( finalCount ); 
 
-  wxTreeItemId parent = m_TreeCtrl->GetItemParent(node); 
-  UpdateItemCounts(parent, delta); 
+    if( finalCount > 0 )
+    {
+        tstringstream str; 
+        str << data->GetItemText() << TXT( " (" ) << finalCount << TXT( ")" ); 
+        m_TreeCtrl->SetItemText(node, str.str().c_str()); 
+    }
+    else
+    {
+        m_TreeCtrl->SetItemText(node, data->GetItemText().c_str()); 
+    }
+
+    wxTreeItemId parent = m_TreeCtrl->GetItemParent(node); 
+    UpdateItemCounts(parent, delta); 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -306,15 +306,15 @@ void SceneOutliner::UpdateItemCounts( const wxTreeItemId& node, int delta )
 // 
 void SceneOutliner::UpdateItemVisibility( const wxTreeItemId& item, bool visible )
 {
-  if ( visible )
-  {
-    m_TreeCtrl->SetItemTextColour( item, wxNullColour );
-  }
-  else
-  {
-    static wxColour color = wxTheColourDatabase->Find( TXT( "DARK TURQUOISE" ) );
-    m_TreeCtrl->SetItemTextColour( item, color );
-  }
+    if ( visible )
+    {
+        m_TreeCtrl->SetItemTextColour( item, wxNullColour );
+    }
+    else
+    {
+        static wxColour color = wxTheColourDatabase->Find( TXT( "DARK TURQUOISE" ) );
+        m_TreeCtrl->SetItemTextColour( item, color );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -325,10 +325,10 @@ void SceneOutliner::UpdateItemVisibility( const wxTreeItemId& item, bool visible
 // 
 void SceneOutliner::ConnectSceneListeners()
 {
-  if ( m_CurrentScene )
-  {
-    m_CurrentScene->AddSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &SceneOutliner::SelectionChanged ) );
-  }
+    if ( m_CurrentScene )
+    {
+        m_CurrentScene->AddSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &SceneOutliner::SelectionChanged ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -338,10 +338,10 @@ void SceneOutliner::ConnectSceneListeners()
 // 
 void SceneOutliner::DisconnectSceneListeners()
 {
-  if ( m_CurrentScene )
-  {
-    m_CurrentScene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &SceneOutliner::SelectionChanged ) );
-  }
+    if ( m_CurrentScene )
+    {
+        m_CurrentScene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &SceneOutliner::SelectionChanged ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -351,7 +351,7 @@ void SceneOutliner::DisconnectSceneListeners()
 // 
 void SceneOutliner::CurrentSceneChanging( Luna::Scene* newScene )
 {
-  // Override in derived classes if you need to do something here.
+    // Override in derived classes if you need to do something here.
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -361,7 +361,7 @@ void SceneOutliner::CurrentSceneChanging( Luna::Scene* newScene )
 // 
 void SceneOutliner::CurrentSceneChanged( Luna::Scene* oldScene )
 {
-  // Override in derived classes if you need to do something here.
+    // Override in derived classes if you need to do something here.
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -370,9 +370,9 @@ void SceneOutliner::CurrentSceneChanged( Luna::Scene* oldScene )
 // 
 void SceneOutliner::CurrentSceneChanged( const SceneChangeArgs& args )
 {
-  VERIFY_TREE_CTRL();
+    VERIFY_TREE_CTRL();
 
-  UpdateCurrentScene( args.m_Scene );
+    UpdateCurrentScene( args.m_Scene );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -381,26 +381,26 @@ void SceneOutliner::CurrentSceneChanged( const SceneChangeArgs& args )
 // 
 void SceneOutliner::SelectionChanged( const OS_SelectableDumbPtr& selection )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  m_IgnoreSelectionChange = true;
-  m_TreeCtrl->Freeze();
+    m_IgnoreSelectionChange = true;
+    m_TreeCtrl->Freeze();
 
-  m_TreeCtrl->UnselectAll();
+    m_TreeCtrl->UnselectAll();
 
-  OS_SelectableDumbPtr::Iterator itr = selection.Begin();
-  OS_SelectableDumbPtr::Iterator end = selection.End();
-  for ( ; itr != end; ++itr )
-  {
-    M_TreeItems::const_iterator found = m_Items.find( *itr );
-    if ( found != m_Items.end() )
+    OS_SelectableDumbPtr::Iterator itr = selection.Begin();
+    OS_SelectableDumbPtr::Iterator end = selection.End();
+    for ( ; itr != end; ++itr )
     {
-      m_TreeCtrl->SelectItem( found->second );
+        M_TreeItems::const_iterator found = m_Items.find( *itr );
+        if ( found != m_Items.end() )
+        {
+            m_TreeCtrl->SelectItem( found->second );
+        }
     }
-  }
 
-  m_TreeCtrl->Thaw();
-  m_IgnoreSelectionChange = false;
+    m_TreeCtrl->Thaw();
+    m_IgnoreSelectionChange = false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -409,26 +409,26 @@ void SceneOutliner::SelectionChanged( const OS_SelectableDumbPtr& selection )
 // 
 void SceneOutliner::SceneNodeNameChanged( const SceneNodeChangeArgs& args )
 {
-  M_TreeItems::const_iterator found = m_Items.find( args.m_Node );
-  if ( found != m_Items.end() )
-  {
-    const wxTreeItemId& item = found->second;
-    
-    SceneOutlinerItemData* data = ( SceneOutlinerItemData* ) m_TreeCtrl->GetItemData( item ); 
-    data->SetItemText( args.m_Node->GetName() ); 
+    M_TreeItems::const_iterator found = m_Items.find( args.m_Node );
+    if ( found != m_Items.end() )
+    {
+        const wxTreeItemId& item = found->second;
+
+        SceneOutlinerItemData* data = ( SceneOutlinerItemData* ) m_TreeCtrl->GetItemData( item ); 
+        data->SetItemText( args.m_Node->GetName() ); 
 
 #pragma TODO("make the node counting code work better with rename of hierarchy nodes")
-    // this code will not work that great if we get a rename of a hierarchy node that
-    // is counting its children. right now, that doesn't happen. 
-    // 
-    // however, the 2 things that we should do are: 
-    // * hook rename begin to just display the item text, not the count 
-    // * make this code that sets the item text be the same as what is in UpdateCounts
-    //
-    m_TreeCtrl->SetItemText( item, args.m_Node->GetName().c_str() );
+        // this code will not work that great if we get a rename of a hierarchy node that
+        // is counting its children. right now, that doesn't happen. 
+        // 
+        // however, the 2 things that we should do are: 
+        // * hook rename begin to just display the item text, not the count 
+        // * make this code that sets the item text be the same as what is in UpdateCounts
+        //
+        m_TreeCtrl->SetItemText( item, args.m_Node->GetName().c_str() );
 
-    Sort( m_TreeCtrl->GetItemParent( item ) );
-  }
+        Sort( m_TreeCtrl->GetItemParent( item ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -437,11 +437,11 @@ void SceneOutliner::SceneNodeNameChanged( const SceneNodeChangeArgs& args )
 // 
 void SceneOutliner::SceneNodeVisibilityChanged( const SceneNodeChangeArgs& args )
 {
-  M_TreeItems::const_iterator found = m_Items.find( args.m_Node );
-  if ( found != m_Items.end() )
-  {
-    UpdateItemVisibility( found->second, args.m_Node->IsVisible() );
-  }
+    M_TreeItems::const_iterator found = m_Items.find( args.m_Node );
+    if ( found != m_Items.end() )
+    {
+        UpdateItemVisibility( found->second, args.m_Node->IsVisible() );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -450,33 +450,33 @@ void SceneOutliner::SceneNodeVisibilityChanged( const SceneNodeChangeArgs& args 
 // 
 void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
 {
-  if ( !args.IsEditCancelled() )
-  {
-    SceneOutlinerItemData* data = GetTreeItemData( args.GetItem() );
-    Object* object = data->GetObject();
-    if ( object->HasType( Reflect::GetType<Luna::SceneNode>() ) )
+    if ( !args.IsEditCancelled() )
     {
-      Luna::SceneNode* node = Reflect::DangerousCast< Luna::SceneNode >( object );
-      const tstring newName = args.GetLabel().c_str();
-      if ( node->GetName() != newName )
-      {
-        // Create an undoable command to rename the object
-        m_CurrentScene->Push( new Undo::PropertyCommand<tstring>( new Nocturnal::MemberProperty<Luna::SceneNode, tstring> (node, &Luna::SceneNode::GetName, &Luna::SceneNode::SetGivenName), newName) );
-        m_CurrentScene->Execute( false );
-
-        // Sort
-        Sort( m_TreeCtrl->GetItemParent( args.GetItem() ) );
-
-        // Keep the item in view
-        if ( !m_TreeCtrl->IsVisible( args.GetItem() ) )
+        SceneOutlinerItemData* data = GetTreeItemData( args.GetItem() );
+        Object* object = data->GetObject();
+        if ( object->HasType( Reflect::GetType<Luna::SceneNode>() ) )
         {
-          m_TreeCtrl->EnsureVisible( args.GetItem() );
+            Luna::SceneNode* node = Reflect::DangerousCast< Luna::SceneNode >( object );
+            const tstring newName = args.GetLabel().c_str();
+            if ( node->GetName() != newName )
+            {
+                // Create an undoable command to rename the object
+                m_CurrentScene->Push( new Undo::PropertyCommand<tstring>( new Nocturnal::MemberProperty<Luna::SceneNode, tstring> (node, &Luna::SceneNode::GetName, &Luna::SceneNode::SetGivenName), newName) );
+                m_CurrentScene->Execute( false );
+
+                // Sort
+                Sort( m_TreeCtrl->GetItemParent( args.GetItem() ) );
+
+                // Keep the item in view
+                if ( !m_TreeCtrl->IsVisible( args.GetItem() ) )
+                {
+                    m_TreeCtrl->EnsureVisible( args.GetItem() );
+                }
+            }
+            args.Veto();
+            OnSelectionChanged( (wxTreeEvent)NULL );
         }
-      }
-      args.Veto();
-      OnSelectionChanged( (wxTreeEvent)NULL );
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -485,26 +485,26 @@ void SceneOutliner::OnEndLabelEdit( wxTreeEvent& args )
 // 
 void SceneOutliner::OnSelectionChanging( wxTreeEvent& args )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  if ( !m_IgnoreSelectionChange )
-  {
-    const wxTreeItemId& item = args.GetItem();
-    // Any item can be deselected, so only check the case where an item is
-    // about to be selected.
-    if ( !m_TreeCtrl->IsSelected( item ) )
+    if ( !m_IgnoreSelectionChange )
     {
-      SceneOutlinerItemData* data = GetTreeItemData( item );
-      Selectable* selectableItem = Reflect::ObjectCast<Selectable>( data->GetObject() );
-      if ( selectableItem )
-      {
-        if ( !selectableItem->IsSelectable() )
+        const wxTreeItemId& item = args.GetItem();
+        // Any item can be deselected, so only check the case where an item is
+        // about to be selected.
+        if ( !m_TreeCtrl->IsSelected( item ) )
         {
-          args.Veto();
+            SceneOutlinerItemData* data = GetTreeItemData( item );
+            Selectable* selectableItem = Reflect::ObjectCast<Selectable>( data->GetObject() );
+            if ( selectableItem )
+            {
+                if ( !selectableItem->IsSelectable() )
+                {
+                    args.Veto();
+                }
+            }
         }
-      }
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -513,33 +513,33 @@ void SceneOutliner::OnSelectionChanging( wxTreeEvent& args )
 // 
 void SceneOutliner::OnSelectionChanged( wxTreeEvent& args )
 {
-  LUNA_SCENE_SCOPE_TIMER( ("") );
+    LUNA_SCENE_SCOPE_TIMER( ("") );
 
-  if ( m_CurrentScene && !m_IgnoreSelectionChange )
-  {
-    wxArrayTreeItemIds selections;
-    const size_t numSelections = m_TreeCtrl->GetSelections( selections );
-
-    OS_SelectableDumbPtr selectableObjects;
-
-    for ( size_t i = 0; i < numSelections; i++ )
+    if ( m_CurrentScene && !m_IgnoreSelectionChange )
     {
-      SceneOutlinerItemData* itemData = GetTreeItemData( selections[i] );
-      if ( itemData )
-      {
-        Selectable* selectableItem = Reflect::ObjectCast<Selectable>( itemData->GetObject() );
-        if ( selectableItem )
-        {
-          selectableObjects.Append( selectableItem );
-        }
-      }
-    }  
+        wxArrayTreeItemIds selections;
+        const size_t numSelections = m_TreeCtrl->GetSelections( selections );
 
-    // Set the selection on the scene.  Note, the second parameter is a delegate that
-    // tells the scene selection event not to pass the event back to this class since
-    // we have already updated ourselves.
-    m_CurrentScene->Push( m_CurrentScene->GetSelection().SetItems( selectableObjects, SelectionChangingSignature::Delegate (), SelectionChangedSignature::Delegate( this, &SceneOutliner::SelectionChanged ) ) );
-  }
+        OS_SelectableDumbPtr selectableObjects;
+
+        for ( size_t i = 0; i < numSelections; i++ )
+        {
+            SceneOutlinerItemData* itemData = GetTreeItemData( selections[i] );
+            if ( itemData )
+            {
+                Selectable* selectableItem = Reflect::ObjectCast<Selectable>( itemData->GetObject() );
+                if ( selectableItem )
+                {
+                    selectableObjects.Append( selectableItem );
+                }
+            }
+        }  
+
+        // Set the selection on the scene.  Note, the second parameter is a delegate that
+        // tells the scene selection event not to pass the event back to this class since
+        // we have already updated ourselves.
+        m_CurrentScene->Push( m_CurrentScene->GetSelection().SetItems( selectableObjects, SelectionChangingSignature::Delegate (), SelectionChangedSignature::Delegate( this, &SceneOutliner::SelectionChanged ) ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -548,11 +548,11 @@ void SceneOutliner::OnSelectionChanged( wxTreeEvent& args )
 // 
 void SceneOutliner::OnExpanded( wxTreeEvent& args )
 {
-  M_TreeItems::const_iterator found = m_Items.find( GetTreeItemData( args.GetItem() )->GetObject() );
-  if ( found != m_Items.end() )
-  {
-    m_StateInfo.AddExpandedObject( found->first );
-  }
+    M_TreeItems::const_iterator found = m_Items.find( GetTreeItemData( args.GetItem() )->GetObject() );
+    if ( found != m_Items.end() )
+    {
+        m_StateInfo.AddExpandedObject( found->first );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -561,11 +561,11 @@ void SceneOutliner::OnExpanded( wxTreeEvent& args )
 // 
 void SceneOutliner::OnCollapsed( wxTreeEvent& args )
 {
-  M_TreeItems::const_iterator found = m_Items.find( GetTreeItemData( args.GetItem() )->GetObject() );
-  if ( found != m_Items.end() )
-  {
-    m_StateInfo.RemoveExpandedObject( found->first );
-  }
+    M_TreeItems::const_iterator found = m_Items.find( GetTreeItemData( args.GetItem() )->GetObject() );
+    if ( found != m_Items.end() )
+    {
+        m_StateInfo.RemoveExpandedObject( found->first );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -574,17 +574,17 @@ void SceneOutliner::OnCollapsed( wxTreeEvent& args )
 // 
 void SceneOutliner::OnDeleted( wxTreeEvent& args )
 {
-  // If the object is a dependency node, disconnect our listeners from it
-  Object* object = GetTreeItemData( args.GetItem() )->GetObject();
-  if ( object->HasType( Reflect::GetType<Luna::SceneNode>() ) )
-  {
-    Luna::SceneNode* node = Reflect::DangerousCast< Luna::SceneNode >( object );
-    node->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeNameChanged ) );
-    node->RemoveVisibilityChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeVisibilityChanged ) );
-  }
+    // If the object is a dependency node, disconnect our listeners from it
+    Object* object = GetTreeItemData( args.GetItem() )->GetObject();
+    if ( object->HasType( Reflect::GetType<Luna::SceneNode>() ) )
+    {
+        Luna::SceneNode* node = Reflect::DangerousCast< Luna::SceneNode >( object );
+        node->RemoveNameChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeNameChanged ) );
+        node->RemoveVisibilityChangedListener( SceneNodeChangeSignature::Delegate( this, &SceneOutliner::SceneNodeVisibilityChanged ) );
+    }
 
-  // Delete the item if it is in our list
-  m_Items.erase( object );
+    // Delete the item if it is in our list
+    m_Items.erase( object );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -592,26 +592,35 @@ void SceneOutliner::OnDeleted( wxTreeEvent& args )
 // 
 void SceneOutliner::OnChar( wxKeyEvent& args )
 {
-  switch ( args.GetKeyCode() )
-  {
-  case WXK_UP:
-  case WXK_DOWN:
-  case WXK_LEFT:
-  case WXK_RIGHT:
-    // Do nothing, the arrow keys are already handled by the tree control
-    args.Skip();
-    break;
-
-  // Pass everything else on to the view to handle the normal keyboard shortcuts
-  default:
+    switch ( args.GetKeyCode() )
     {
-      if ( !m_SceneManager->GetEditor()->GetViewport()->GetEventHandler()->ProcessEvent( args ) )
-      {
-        // If the view didn't handle the event, let the tree control try
+    case WXK_UP:
+    case WXK_DOWN:
+    case WXK_LEFT:
+    case WXK_RIGHT:
+        // Do nothing, the arrow keys are already handled by the tree control
         args.Skip();
-      }
+        break;
+
+    case WXK_DELETE:
+        if ( m_SceneManager->HasCurrentScene() )
+        {
+            m_SceneManager->GetCurrentScene()->Push( m_SceneManager->GetCurrentScene()->DeleteSelected() );
+        }
+        break;
+
+    case 'F':
+        if ( m_SceneManager->HasCurrentScene() )
+        {
+            m_SceneManager->GetCurrentScene()->FrameSelected();
+        }
+        break;
+
+        // Pass everything else on to the view to handle the normal keyboard shortcuts
+    default:
+        args.Skip();
+        break;
     }
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -620,17 +629,17 @@ void SceneOutliner::OnChar( wxKeyEvent& args )
 // 
 void SceneOutliner::ConnectDynamicEventTable()
 {
-  if ( m_TreeCtrl )
-  {
-    // Set up dynamic event handlers for UI callbacks from the tree control
-    m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_END_LABEL_EDIT, wxTreeEventHandler( SceneOutliner::OnEndLabelEdit ), NULL, this );
-    m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGING, wxTreeEventHandler( SceneOutliner::OnSelectionChanging ), NULL, this );
-    m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( SceneOutliner::OnSelectionChanged ), NULL, this );
-    m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_ITEM_EXPANDED, wxTreeEventHandler( SceneOutliner::OnExpanded ), NULL, this );
-    m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_ITEM_COLLAPSED, wxTreeEventHandler( SceneOutliner::OnCollapsed ), NULL, this );
-    m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_DELETE_ITEM, wxTreeEventHandler( SceneOutliner::OnDeleted ), NULL, this );
-    m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_CHAR, wxKeyEventHandler( SceneOutliner::OnChar ), NULL, this );
-  }
+    if ( m_TreeCtrl )
+    {
+        // Set up dynamic event handlers for UI callbacks from the tree control
+        m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_END_LABEL_EDIT, wxTreeEventHandler( SceneOutliner::OnEndLabelEdit ), NULL, this );
+        m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGING, wxTreeEventHandler( SceneOutliner::OnSelectionChanging ), NULL, this );
+        m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( SceneOutliner::OnSelectionChanged ), NULL, this );
+        m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_ITEM_EXPANDED, wxTreeEventHandler( SceneOutliner::OnExpanded ), NULL, this );
+        m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_ITEM_COLLAPSED, wxTreeEventHandler( SceneOutliner::OnCollapsed ), NULL, this );
+        m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_DELETE_ITEM, wxTreeEventHandler( SceneOutliner::OnDeleted ), NULL, this );
+        m_TreeCtrl->Connect( m_TreeCtrl->GetId(), wxEVT_CHAR, wxKeyEventHandler( SceneOutliner::OnChar ), NULL, this );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -638,14 +647,14 @@ void SceneOutliner::ConnectDynamicEventTable()
 // 
 void SceneOutliner::DisconnectDynamicEventTable()
 {
-  if ( m_TreeCtrl )
-  {
-    m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_END_LABEL_EDIT, wxTreeEventHandler( SceneOutliner::OnEndLabelEdit ), NULL, this );
-    m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGING, wxTreeEventHandler( SceneOutliner::OnSelectionChanging ), NULL, this );
-    m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( SceneOutliner::OnSelectionChanged ), NULL, this );
-    m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_ITEM_EXPANDED, wxTreeEventHandler( SceneOutliner::OnExpanded ), NULL, this );
-    m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_ITEM_COLLAPSED, wxTreeEventHandler( SceneOutliner::OnCollapsed ), NULL, this );
-    m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_DELETE_ITEM, wxTreeEventHandler( SceneOutliner::OnDeleted ), NULL, this );
-    m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_CHAR, wxKeyEventHandler( SceneOutliner::OnChar ), NULL, this );
-  }
+    if ( m_TreeCtrl )
+    {
+        m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_END_LABEL_EDIT, wxTreeEventHandler( SceneOutliner::OnEndLabelEdit ), NULL, this );
+        m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGING, wxTreeEventHandler( SceneOutliner::OnSelectionChanging ), NULL, this );
+        m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( SceneOutliner::OnSelectionChanged ), NULL, this );
+        m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_ITEM_EXPANDED, wxTreeEventHandler( SceneOutliner::OnExpanded ), NULL, this );
+        m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_ITEM_COLLAPSED, wxTreeEventHandler( SceneOutliner::OnCollapsed ), NULL, this );
+        m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_COMMAND_TREE_DELETE_ITEM, wxTreeEventHandler( SceneOutliner::OnDeleted ), NULL, this );
+        m_TreeCtrl->Disconnect( m_TreeCtrl->GetId(), wxEVT_CHAR, wxKeyEventHandler( SceneOutliner::OnChar ), NULL, this );
+    }
 }

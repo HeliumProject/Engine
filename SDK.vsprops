@@ -42,6 +42,10 @@
 		Value="$(SolutionDir)SDK\p4api\2009.2"
 	/>
 	<UserMacro
+        Name="PCRE"
+        Value="$(SolutionDir)SDK\pcre\8.10"
+    />
+	<UserMacro
 		Name="SQLite"
 		Value="$(SolutionDir)SDK\SQLite\3.6.23.1"
 	/>

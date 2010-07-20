@@ -3,8 +3,8 @@
 #include "Platform/Compiler.h"
 #include "Foundation/InitializerStack.h"
 
+#include "UI/MainFrame.h"
 #include "DocumentManager.h"
-#include "Scene/SceneEditor.h"
 #include "Vault/Vault.h"
 
 #include <wx/app.h>
@@ -28,13 +28,13 @@ namespace Luna
             return m_DocumentManager;
         }
 
-        SceneEditor* GetSceneEditor()
+        MainFrame* GetFrame()
         {
-            if ( !m_SceneEditor )
+            if ( !m_Frame )
             {
-                m_SceneEditor = new SceneEditor();
+                m_Frame = new MainFrame();
             }
-            return m_SceneEditor;
+            return m_Frame;
         }
 
         Vault& GetVault()
@@ -48,9 +48,11 @@ namespace Luna
 
     protected:
         Nocturnal::InitializerStack m_InitializerStack;
-        SceneEditor* m_SceneEditor;
         DocumentManager m_DocumentManager;
         Vault* m_Vault;
+
+        MainFrame* m_Frame;
+
     };
 
     DECLARE_APP( App );

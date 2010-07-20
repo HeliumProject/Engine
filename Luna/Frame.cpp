@@ -122,7 +122,7 @@ void Frame::UpdatePanelsMenu( wxMenu* menu )
   {
     const wxAuiPaneInfo& pane = panes.Item( index );
     i32 itemId = menu->FindItem( pane.caption );
-    if ( itemId >= 0 )
+    if ( itemId != wxNOT_FOUND )
     {
       menu->Check( itemId, pane.IsShown() );
     }

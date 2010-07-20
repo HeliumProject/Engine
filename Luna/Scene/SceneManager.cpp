@@ -5,6 +5,7 @@
 #include "SceneEditor.h"
 #include "SceneDocument.h"
 #include "SwitchSceneCommand.h"
+#include "Viewport.h"
 
 #include "Pipeline/Asset/Classes/SceneAsset.h"
 #include "Foundation/Component/ComponentHandle.h"
@@ -31,10 +32,17 @@ static tstring GetUniqueSceneName()
 ///////////////////////////////////////////////////////////////////////////////
 // 
 // 
+#ifdef UI_REFACTOR
 SceneManager::SceneManager(SceneEditor* editor)
 : DocumentManager( editor )
+#else
+SceneManager::SceneManager()
+: DocumentManager()
+#endif
 , m_CurrentScene( NULL )
+#ifdef UI_REFACTOR
 , m_Editor (editor)
+#endif
 {
 
 }
@@ -47,6 +55,7 @@ SceneManager::~SceneManager()
 
 }
 
+#ifdef UI_REFACTOR
 ///////////////////////////////////////////////////////////////////////////////
 // The editor that owns us
 // 
@@ -54,19 +63,12 @@ SceneEditor* SceneManager::GetEditor()
 {
     return m_Editor;
 }
-
-///////////////////////////////////////////////////////////////////////////////
-// Returns the currently open level (if any).
-// 
-Asset::SceneAsset* SceneManager::GetCurrentSceneAsset() const
-{
-    return m_CurrentSceneAsset; 
-}
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // Create a new scene.  Pass in true if this should be the root scene.
 // 
-ScenePtr SceneManager::NewScene( bool isRoot, tstring path, bool addDoc )
+ScenePtr SceneManager::NewScene( Luna::Viewport* viewport, bool isRoot, tstring path, bool addDoc )
 {
     tstring name;
     if ( path.empty() )
@@ -76,7 +78,7 @@ ScenePtr SceneManager::NewScene( bool isRoot, tstring path, bool addDoc )
 
     SceneDocumentPtr document = new SceneDocument( path, name );
     document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &SceneManager::OnDocumentClosed ) );
-    ScenePtr scene = new Luna::Scene( this, document );
+    ScenePtr scene = new Luna::Scene( viewport, this, document );
     if ( isRoot )
     {
         SetRootScene( scene );
@@ -116,7 +118,7 @@ DocumentPtr SceneManager::OpenPath( const tstring& path, tstring& error )
     SceneDocumentPtr document;
     Nocturnal::Path filePath( path );
 
-    ScenePtr scene = NewScene( m_Root == NULL, scenePath, true );
+    ScenePtr scene = NewScene( NULL, m_Root == NULL, scenePath, true );
     if ( !scene->LoadFile( scenePath ) )
     {
         error = TXT( "Failed to load scene from " ) + path + TXT( "." );
@@ -155,9 +157,9 @@ DocumentPtr SceneManager::OpenPath( const tstring& path, tstring& error )
 ///////////////////////////////////////////////////////////////////////////////
 // Open a zone that should be under the root.
 // 
-ScenePtr SceneManager::OpenScene( const tstring& path, tstring& error )
+ScenePtr SceneManager::OpenScene( Luna::Viewport* viewport, const tstring& path, tstring& error )
 {
-    ScenePtr scene = NewScene( false, path, true );
+    ScenePtr scene = NewScene( viewport, false, path, true );
     if ( !scene->LoadFile( path ) )
     {
         error = TXT( "Failed to load scene from " ) + path + TXT( "." );
@@ -172,7 +174,7 @@ ScenePtr SceneManager::OpenScene( const tstring& path, tstring& error )
 // Prompt the user to save a file to a new location.  Returns the path to the
 // new file location, or an empty string if the user cancels the operation.
 // 
-static tstring PromptSaveAs( const DocumentPtr& file, wxWindow* window )
+static tstring PromptSaveAs( const DocumentPtr& file, wxWindow* window = NULL )
 {
     tstring path;
     tstring defaultDir = Nocturnal::Path( file->GetFilePath() ).Directory();
@@ -220,7 +222,11 @@ bool SceneManager::Save( DocumentPtr document, tstring& error )
     // Check for "save as"
     if ( document->GetFilePath().empty() )
     {
+#ifdef UI_REFACTOR
         tstring savePath = PromptSaveAs( sceneDocument, m_Editor );
+#else
+        tstring savePath = PromptSaveAs( sceneDocument );
+#endif
         if ( !savePath.empty() )
         {
             document->SetFilePath( savePath );
@@ -408,7 +414,7 @@ bool SceneManager::IsNestedScene( Luna::Scene* scene ) const
 // there was a problem loading the scene, it will be empty.  If you allocate a
 // scene, you must call ReleaseNestedScene to free it.
 // 
-Luna::Scene* SceneManager::AllocateNestedScene( const tstring& path, Luna::Scene* parent )
+Luna::Scene* SceneManager::AllocateNestedScene( Luna::Viewport* viewport, const tstring& path, Luna::Scene* parent )
 {
     Luna::Scene* scene = GetScene( path );
 
@@ -417,7 +423,7 @@ Luna::Scene* SceneManager::AllocateNestedScene( const tstring& path, Luna::Scene
         // Try to load nested scene.
         parent->ChangeStatus( TXT("Loading ") + path + TXT( "..." ) );
 
-        ScenePtr scenePtr = NewScene( false, path, false );
+        ScenePtr scenePtr = NewScene( viewport, false, path, false );
         if ( !scenePtr->LoadFile( path ) )
         {
             Log::Error( TXT( "Failed to load scene from %s\n" ), path.c_str() );
@@ -493,7 +499,9 @@ Luna::Scene* SceneManager::GetCurrentScene() const
 // 
 void SceneManager::FreezeTreeSorting()
 {
+#ifdef UI_REFACTOR
     m_Editor->GetTreeMonitor().FreezeSorting();
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -501,7 +509,9 @@ void SceneManager::FreezeTreeSorting()
 // 
 void SceneManager::ThawTreeSorting()
 {
+#ifdef UI_REFACTOR
     m_Editor->GetTreeMonitor().ThawSorting();
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -617,7 +627,9 @@ void SceneManager::OnDocumentClosed( const DocumentChangedArgs& args )
     const SceneDocument* document = Reflect::ConstObjectCast< SceneDocument >( args.m_Document );
     NOC_ASSERT( document );
 
+#ifdef UI_REFACTOR
     m_Editor->SyncPropertyThread();
+#endif
 
     if ( document )
     {
@@ -633,7 +645,6 @@ void SceneManager::OnDocumentClosed( const DocumentChangedArgs& args )
         if ( IsRoot( scene ) )
         {
             RemoveAllScenes();
-            m_CurrentSceneAsset = NULL;
         }
         else
         {

@@ -20,6 +20,7 @@ namespace Luna
   // Forwards
   class SceneEditor;
   class HierarchyNode;
+  class Viewport;
 
   class Scene;
   typedef Nocturnal::SmartPtr< Luna::Scene > ScenePtr;
@@ -62,23 +63,25 @@ namespace Luna
 
     // the current scene
     Luna::Scene* m_CurrentScene;
-    Asset::SceneAssetPtr m_CurrentSceneAsset; 
 
+#ifdef UI_REFACTOR
     SceneEditor* m_Editor;
+#endif
 
     Undo::QueueManager m_UndoManager;
 
   public:
+#ifdef UI_REFACTOR
     SceneManager( SceneEditor* editor );
+    SceneEditor* GetEditor();
+#else
+    SceneManager();
+#endif
     ~SceneManager();
 
-    SceneEditor* GetEditor();
-
-    Asset::SceneAsset* GetCurrentSceneAsset() const;
-
-    ScenePtr NewScene( bool isRoot, tstring path = TXT( "" ), bool addDoc = true );
+    ScenePtr NewScene( Luna::Viewport* viewport, bool isRoot, tstring path = TXT( "" ), bool addDoc = true );
     virtual DocumentPtr OpenPath( const tstring& path, tstring& error ) NOC_OVERRIDE;
-    ScenePtr OpenScene( const tstring& path, tstring& error );
+    ScenePtr OpenScene( Luna::Viewport* viewport, const tstring& path, tstring& error );
 
   public:
     virtual bool Save( DocumentPtr document, tstring& error ) NOC_OVERRIDE;
@@ -95,7 +98,7 @@ namespace Luna
     Luna::Scene* GetScene( const tstring& path ) const;
 
     bool IsNestedScene( Luna::Scene* scene ) const;
-    Luna::Scene* AllocateNestedScene( const tstring& path, Luna::Scene* parent );
+    Luna::Scene* AllocateNestedScene( Luna::Viewport* viewport, const tstring& path, Luna::Scene* parent );
     void ReleaseNestedScene( Luna::Scene*& scene );
     
     static tstring GetUniqueFileName();

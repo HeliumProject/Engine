@@ -133,7 +133,7 @@ Luna::Scene* Entity::GetNestedScene( GeometryMode mode, bool load_on_demand ) co
     {
 #pragma TODO( "Support the various rendering modes.  This used to load different files for art, collision, etc." )
         tstring nestedFile = m_ClassSet->GetContentFile();
-        m_NestedSceneArt = m_Scene->GetManager()->AllocateNestedScene( nestedFile, m_Scene );
+        m_NestedSceneArt = m_Scene->GetManager()->AllocateNestedScene( m_Scene->GetViewport(), nestedFile, m_Scene );
     }
 
     return m_NestedSceneArt;

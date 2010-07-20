@@ -1343,14 +1343,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\AutoFlexSizer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\AutoFlexSizer.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\ColorPicker.cpp"
 				>
 			</File>

@@ -913,86 +913,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Scene\ToolsPanel.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|x64"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|x64"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug Unicode|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug Unicode|x64"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release Unicode|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release Unicode|x64"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\Scene\ToolsPanel.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Scene\ToolTimer.cpp"
 					>
 				</File>
@@ -4012,11 +3932,35 @@
 			Name="UI"
 			>
 			<File
+				RelativePath=".\UI\ArtProvider.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ArtProvider.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\DirectoryPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\DirectoryPanel.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\HelpPanel.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\UI\HelpPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\LayersPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\LayersPanel.h"
 				>
 			</File>
 			<File
@@ -4096,6 +4040,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\MainFrame.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\MainFrame.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\PerforceGenerated.cpp"
 				>
 			</File>
@@ -4129,6 +4081,46 @@
 			</File>
 			<File
 				RelativePath=".\UI\PerforceWaitDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PropertiesPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PropertiesPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ToolsPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ToolsPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TypesPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TypesPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\VaultPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\VaultPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ViewPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ViewPanel.h"
 				>
 			</File>
 			<File
@@ -4246,6 +4238,10 @@
 		</File>
 		<File
 			RelativePath=".\Luna.rc"
+			>
+		</File>
+		<File
+			RelativePath=".\LunaIDs.h"
 			>
 		</File>
 		<File

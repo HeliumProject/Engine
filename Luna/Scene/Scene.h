@@ -330,7 +330,7 @@ namespace Luna
     //
 
   public:
-    Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file );
+      Scene( Luna::Viewport* viewport, Luna::SceneManager* manager, const SceneDocumentPtr& file );
     ~Scene();
 
     Nocturnal::TUID GetId() const
@@ -777,6 +777,7 @@ namespace Luna
     Undo::CommandPtr SnapSelectedToCamera();
     Undo::CommandPtr SnapCameraToSelected();
 
+    void FrameSelected();
     void MeasureDistance();
     Undo::CommandPtr PickWalkUp();
     Undo::CommandPtr PickWalkDown();

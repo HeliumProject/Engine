@@ -86,7 +86,9 @@ CreateTool::CreateTool(Luna::Scene* scene, PropertiesGenerator* generator)
 
 CreateTool::~CreateTool()
 {
+#ifdef UI_REFACTOR
   m_Scene->GetManager()->GetEditor()->GetTreeSortTimer().Stop();
+#endif
 
   m_PaintTimer.RemoveTickListener( TickSignature::Delegate( this, &CreateTool::TimerCallback ) );
 
@@ -575,7 +577,9 @@ void CreateTool::AddToScene()
     LUNA_SCENE_SCOPE_TIMER( ("Place New Instance At Origin") );
 
     m_Instance = NULL;
+#ifdef UI_REFACTOR
     m_Scene->GetManager()->GetEditor()->GetTreeSortTimer().Start( TreeSortTimer::DefaultMilliseconds, wxTIMER_ONE_SHOT );
+#endif
     Place( Math::Matrix4::Identity );
   }
 }

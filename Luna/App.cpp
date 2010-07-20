@@ -154,7 +154,7 @@ namespace Luna
 App::App()
 : wxApp()
 , m_Vault( NULL )
-, m_SceneEditor( NULL )
+, m_Frame( NULL )
 {
 }
 
@@ -262,7 +262,8 @@ bool App::OnInit()
         wxMessageBox( TXT( "There were errors during startup, use Luna with caution." ), TXT( "Error" ), wxCENTER | wxICON_ERROR | wxOK );
     }
 
-    GetSceneEditor()->Show();
+    //GetSceneEditor()->Show();
+    GetFrame()->Show();
 
     //return __super::OnCmdLineParsed( parser );
     return true;
@@ -300,6 +301,11 @@ void App::OnAssertFailure(const wxChar *file, int line, const wxChar *func, cons
 
 #pragma TODO("Remove post wxWidgets 2.9.0")
     if ( function == wxT("DoNotifyWindowAboutCaptureLost") )
+    {
+        return;
+    }
+
+    if ( wxStrcmp( msg, wxT( "invalid tool button bitmap" ) ) == 0 )
     {
         return;
     }

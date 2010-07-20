@@ -113,7 +113,7 @@ namespace Nocturnal
 
     inline u32 StringCrc32(const tchar* str)
     {
-      return Crc32(str, _tcslen(str) * sizeof(tchar));
+      return Crc32(str, (u32)(_tcslen(str) * sizeof(tchar)));
     }
 
     inline u32 FileCrc32(const tstring& filePath, u32 packetSize = 4096)

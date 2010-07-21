@@ -111,7 +111,9 @@ void Asset::Initialize()
     //
 
     g_AssetInitializerStack.Push( Reflect::RegisterClass<DependenciesComponent>( TXT( "DependenciesComponent" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<MeshCompressionFactor>( &MeshCompressionFactors::MeshComressionFactorEnumerateEnumeration, TXT("MeshCompressionFactor") ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<MeshProcessingComponent>( TXT( "MeshProcessingComponent" ) ) );
+    g_AssetInitializerStack.Push( Reflect::RegisterEnumeration<TextureDataFormat>( &TextureDataFormats::TextureDataFormatEnumerateEnumeration, TXT("TextureDataFormat") ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<TextureProcessingComponent>( TXT( "TextureProcessingComponent" ) ) );
     g_AssetInitializerStack.Push( Reflect::RegisterClass<TransformComponent>( TXT( "TransformComponent" ) ) );
     

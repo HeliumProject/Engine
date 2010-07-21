@@ -15,11 +15,11 @@ namespace Reflect
     class DocumentNode;
     typedef Nocturnal::SmartPtr< DocumentNode > DocumentNodePtr;
 
-    class DocumentElement;
-    typedef Nocturnal::SmartPtr< DocumentElement > DocumentElementPtr;
-
     class DocumentAttribute;
     typedef Nocturnal::SmartPtr< DocumentAttribute > DocumentAttributePtr;
+
+    class DocumentElement;
+    typedef Nocturnal::SmartPtr< DocumentElement > DocumentElementPtr;
 
     class FOUNDATION_API DocumentNode : public Reflect::AbstractInheritor< DocumentNode, Reflect::Element >
     {

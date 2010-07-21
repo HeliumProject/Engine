@@ -523,6 +523,10 @@ namespace Reflect
 
 #define REFLECT_SPECIALIZE_SERIALIZER(Name) \
 typedef Nocturnal::SmartPtr< Name > ##Name##Ptr; \
+template<> static inline i32 Reflect::GetType<Name::DataType>() \
+{ \
+    return Reflect::GetType<Name>(); \
+} \
 template<> static inline Name::DataType* Serializer::GetData<Name::DataType>( Serializer* serializer ) \
 { \
     return serializer && serializer->GetType() == Reflect::GetType<Name::DataType>() ? static_cast<Name*>( serializer )->m_Data.Ptr() : NULL; \

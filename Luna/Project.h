@@ -11,8 +11,6 @@
 
 namespace Luna
 {
-    typedef Nocturnal::Signature< void, class ProjectNode* > ProjectNodeSignature;
-
     //
     // Project: the top level object loaded into Luna
     //  provides a way to organize references to files like scenes
@@ -22,25 +20,35 @@ namespace Luna
     {
     public:
         ProjectNode()
-            : m_Parent ( NULL )
-            , m_NextSibling ( NULL )
+            : m_Parent( NULL )
+            , m_NextSibling( NULL )
         {
 
         }
 
-        ProjectNode( ProjectNode* parent, ProjectNode* sibling = NULL )
+        ProjectNode( class ProjectFolder* parent, ProjectNode* nextSibling = NULL )
             : m_Parent( parent )
-            , m_NextSibling ( sibling )
+            , m_NextSibling( nextSibling )
         {
 
         }
 
-        ProjectNode* GetParent() const
+        class Project* GetProject() const
+        {
+            return m_Project;
+        }
+
+        void SetProject( class Project* project )
+        {
+            m_Project = project;
+        }
+
+        class ProjectFolder* GetParent() const
         {
             return m_Parent;
         }
 
-        void SetParent( ProjectNode* node )
+        void SetParent( class ProjectFolder* node )
         {
             m_Parent = node;
         }
@@ -55,15 +63,29 @@ namespace Luna
             m_NextSibling = node;
         }
 
-        virtual void Initialize( ProjectNode* parent, ProjectNode* sibling )
+        ProjectNode* GetPreviousSibling() const
         {
-            SetParent( parent );
-            SetNextSibling( sibling );
+            return m_PreviousSibling;
         }
 
-    private:
-        ProjectNode* m_Parent;
-        ProjectNode* m_NextSibling;
+        void SetPreviousSibling( ProjectNode* node )
+        {
+            m_PreviousSibling = node;
+        }
+
+        virtual void Initialize( Project* project, ProjectFolder* parent, ProjectNode* nextSibling, ProjectNode* previousSibling )
+        {
+            SetProject( project );
+            SetParent( parent );
+            SetNextSibling( nextSibling );
+            SetPreviousSibling( previousSibling );
+        }
+
+    protected:
+        Project*        m_Project;
+        ProjectFolder*  m_Parent;
+        ProjectNode*    m_NextSibling;
+        ProjectNode*    m_PreviousSibling;
 
     public:
         static void EnumerateClass( Reflect::Compositor< ProjectNode >& comp )
@@ -88,6 +110,8 @@ namespace Luna
             return m_Path;
         }
 
+        virtual void Initialize( Project* project, ProjectFolder* parent, ProjectNode* nextSibling, ProjectNode* previousSibling ) NOC_OVERRIDE;
+
     private:
         Nocturnal::Path m_Path;
 
@@ -100,64 +124,44 @@ namespace Luna
 
     typedef Nocturnal::SmartPtr< ProjectFile > ProjectFilePtr;
 
+    typedef Nocturnal::Signature< bool, ProjectNode* > ProjectHierarchyChangingSignature;
+    typedef Nocturnal::Signature< void, ProjectNode* > ProjectHierarchyChangedSignature;
+
     class ProjectFolder : public Reflect::ConcreteInheritor< ProjectFolder, ProjectNode >
     {
     public:
-        void AddChild( Nocturnal::SmartPtr< ProjectNode > node )
+        virtual void AddChild( ProjectNodePtr node );
+
+        ProjectHierarchyChangingSignature::Event GetChildAdding()
         {
-            if ( std::find( m_Children.begin(), m_Children.end(), node ) == m_Children.end() )
-            {
-                m_Children.push_back( node );
-                m_ChildAdded.Raise( node );
-            }
+            return m_ChildAdding;
         }
 
-        ProjectNodeSignature::Event GetChildAdded()
+        ProjectHierarchyChangedSignature::Event GetChildAdded()
         {
             return m_ChildAdded;
         }
 
-        void RemoveChild( Nocturnal::SmartPtr< ProjectNode > node )
+        virtual void RemoveChild( ProjectNodePtr node );
+
+        ProjectHierarchyChangingSignature::Event GetChildRemoving()
         {
-            size_t size = m_Children.size();
-            std::remove( m_Children.begin(), m_Children.end(), node );
-            if ( m_Children.size() < size )
-            {
-                m_ChildRemoved.Raise( node );
-            }
+            return m_ChildRemoving;
         }
 
-        ProjectNodeSignature::Event GetChildRemoved()
+        ProjectHierarchyChangedSignature::Event GetChildRemoved()
         {
             return m_ChildRemoved;
         }
 
-        virtual void Initialize( ProjectNode* parent, ProjectNode* sibling ) NOC_OVERRIDE
-        {
-            Base::Initialize( parent, sibling );
-
-            for ( std::vector< ProjectNodePtr >::const_iterator itr = m_Children.begin()
-                , end = m_Children.end()
-                ; itr != end
-                ; ++itr )
-            {
-                if ( itr+1 != end )
-                {
-                    sibling = *(itr+1);
-                }
-                else
-                {
-                    sibling = NULL;
-                }
-
-                (*itr)->Initialize( this, sibling );
-            }
-        }
+        virtual void Initialize( Project* project, ProjectFolder* parent, ProjectNode* nextSibling, ProjectNode* previousSibling ) NOC_OVERRIDE;
 
     private:
-        std::vector< ProjectNodePtr >   m_Children;
-        ProjectNodeSignature::Event     m_ChildAdded;
-        ProjectNodeSignature::Event     m_ChildRemoved;
+        std::vector< ProjectNodePtr >               m_Children;
+        ProjectHierarchyChangingSignature::Event    m_ChildAdding;
+        ProjectHierarchyChangedSignature::Event     m_ChildAdded;
+        ProjectHierarchyChangingSignature::Event    m_ChildRemoving;
+        ProjectHierarchyChangedSignature::Event     m_ChildRemoved;
 
     public:
         static void EnumerateClass( Reflect::Compositor< ProjectFolder >& comp )
@@ -173,11 +177,16 @@ namespace Luna
     public:
         Project();
 
+        void AddPath( const Nocturnal::Path& path )
+        {
+            m_Paths.insert( path );
+        }
+
         virtual void PostDeserialize() NOC_OVERRIDE
         {
             Base::PostDeserialize();
 
-            Initialize( this, NULL );
+            Initialize( this, this, NULL, NULL );
         }
 
     public:
@@ -185,6 +194,9 @@ namespace Luna
         {
 
         }
+
+    private:
+        std::set< Nocturnal::Path > m_Paths;
     };
 
     typedef Nocturnal::SmartPtr<Project> ProjectPtr;

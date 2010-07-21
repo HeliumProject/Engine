@@ -4,6 +4,7 @@
 
 #include "DirectoryPanel.h"
 #include "HelpPanel.h"
+#include "ProjectPanel.h"
 #include "LayersPanel.h"
 #include "PropertiesPanel.h"
 #include "ToolsPanel.h"
@@ -61,6 +62,7 @@ namespace Luna
         static tstring s_PreferencesPrefix;
 
         HelpPanel*       m_HelpPanel;
+        ProjectPanel*    m_ProjectPanel;
         LayersPanel*     m_LayersPanel;
         TypesPanel*      m_TypesPanel;
         ViewPanel*       m_ViewPanel;

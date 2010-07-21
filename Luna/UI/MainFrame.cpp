@@ -264,6 +264,9 @@ EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowBounds, SceneEditor::OnViewDefaultsCh
         Thaw();
     }
 
+    m_ProjectPanel = new ProjectPanel( this );
+    m_FrameManager.AddPane( m_ProjectPanel, wxAuiPaneInfo().Name( wxT( "project" ) ).Caption( wxT( "Project" ) ).Left().Layer( 1 ).Position( 1 ) );
+
     m_DirectoryPanel = new DirectoryPanel( this );
     m_FrameManager.AddPane( m_DirectoryPanel, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ) );
 

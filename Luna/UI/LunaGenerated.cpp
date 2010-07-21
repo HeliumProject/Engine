@@ -831,6 +831,22 @@ TypesPanelGenerated::~TypesPanelGenerated()
 {
 }
 
+ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+{
+	wxBoxSizer* bSizer24;
+	bSizer24 = new wxBoxSizer( wxVERTICAL );
+	
+	m_treeCtrl2 = new wxTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE );
+	bSizer24->Add( m_treeCtrl2, 1, wxALL|wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer24 );
+	this->Layout();
+}
+
+ProjectPanelGenerated::~ProjectPanelGenerated()
+{
+}
+
 DirectoryPanelGenerated::DirectoryPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* bSizer21;

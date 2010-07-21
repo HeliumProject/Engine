@@ -4069,6 +4069,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\ProjectPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ProjectPanel.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\PropertiesPanel.cpp"
 				>
 			</File>

@@ -36,6 +36,7 @@ namespace Luna{ class Frame; }
 #include <wx/textctrl.h>
 #include <wx/statbmp.h>
 #include <wx/scrolwin.h>
+#include <wx/treectrl.h>
 #include <wx/notebook.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -260,6 +261,23 @@ namespace Luna
 			
 			TypesPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
 			~TypesPanelGenerated();
+		
+	};
+	
+	///////////////////////////////////////////////////////////////////////////////
+	/// Class ProjectPanelGenerated
+	///////////////////////////////////////////////////////////////////////////////
+	class ProjectPanelGenerated : public wxPanel 
+	{
+		private:
+		
+		protected:
+			wxTreeCtrl* m_treeCtrl2;
+		
+		public:
+			
+			ProjectPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+			~ProjectPanelGenerated();
 		
 	};
 	

@@ -4233,10 +4233,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\LunaIDs.h"
-			>
-		</File>
-		<File
 			RelativePath=".\MRUData.cpp"
 			>
 		</File>

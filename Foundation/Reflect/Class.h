@@ -115,6 +115,8 @@ namespace Reflect
     class AbstractInheritor : public B
     {
     public:
+        typedef B Base;
+
         virtual i32 GetType() const NOC_OVERRIDE
         {
             // this function caches a static in our translation unit
@@ -165,33 +167,35 @@ namespace Reflect
 //
 
 // declares creator for constructable types
-#define _REFLECT_DECLARE_CREATOR( __Class )                                                                           \
-  public:                                                                                                             \
-  static Reflect::Object* CreateObject()                                                                            \
-{                                                                                                                 \
+#define _REFLECT_DECLARE_CREATOR( __Class )                                                                         \
+public:                                                                                                             \
+static Reflect::Object* CreateObject()                                                                              \
+{                                                                                                                   \
     return new __Class;                                                                                             \
 }
 
 // declares type checking functions
-#define _REFLECT_DECLARE_CLASS( __Class, __Base, __Creator )                                                          \
-  public:                                                                                                             \
-  virtual i32 GetType() const NOC_OVERRIDE                                                                          \
-{                                                                                                                 \
+#define _REFLECT_DECLARE_CLASS( __Class, __Base, __Creator )                                                        \
+public:                                                                                                             \
+typedef __Base Base;                                                                                                \
+\
+virtual i32 GetType() const NOC_OVERRIDE                                                                            \
+{                                                                                                                   \
     return Reflect::GetType<__Class>();                                                                             \
-}                                                                                                                 \
-    \
-    virtual bool HasType(i32 id) const NOC_OVERRIDE                                                                   \
-{                                                                                                                 \
+}                                                                                                                   \
+\
+virtual bool HasType(i32 id) const NOC_OVERRIDE                                                                     \
+{                                                                                                                   \
     return Reflect::GetType<__Class>() == id || __Base::HasType(id);                                                \
-}                                                                                                                 \
-    \
-    virtual const Reflect::Class* GetClass() const NOC_OVERRIDE                                                       \
-{                                                                                                                 \
+}                                                                                                                   \
+\
+virtual const Reflect::Class* GetClass() const NOC_OVERRIDE                                                         \
+{                                                                                                                   \
     return Reflect::GetClass<__Class>();                                                                            \
-}                                                                                                                 \
-    \
-    static Reflect::Class* CreateClass(const tstring& shortName = TXT( "" ) )                                             \
-{                                                                                                                 \
+}                                                                                                                   \
+\
+static Reflect::Class* CreateClass(const tstring& shortName = TXT( "" ) )                                           \
+{                                                                                                                   \
     return Reflect::Class::Create<__Class>(typeid(__Base).name(), shortName, __Creator);                            \
 }
 
@@ -204,26 +208,26 @@ namespace Reflect
 //
 
 // declares an NOC_ABSTRACT element (an element that either A: cannot be instantiated or B: is never actually serialized)
-#define REFLECT_DECLARE_ABSTRACT(__Class, __Base)                                                                     \
+#define REFLECT_DECLARE_ABSTRACT(__Class, __Base)                                                                   \
     _REFLECT_DECLARE_CLASS(__Class, __Base, NULL)
 
 // defines the NOC_ABSTRACT element class
-#define REFLECT_DEFINE_ABSTRACT(__Class)                                                                              \
+#define REFLECT_DEFINE_ABSTRACT(__Class)                                                                            \
     _REFLECT_DEFINE_CLASS(__Class)
 
 // declares a full element with creator
-#define REFLECT_DECLARE_CLASS(__Class, __Base)                                                                        \
-    _REFLECT_DECLARE_CLASS(__Class, __Base, &__Class::CreateObject)                                                     \
+#define REFLECT_DECLARE_CLASS(__Class, __Base)                                                                      \
+    _REFLECT_DECLARE_CLASS(__Class, __Base, &__Class::CreateObject)                                                 \
     _REFLECT_DECLARE_CREATOR(__Class)
 
 // defines a full element
-#define REFLECT_DEFINE_CLASS(__Class)                                                                                 \
+#define REFLECT_DEFINE_CLASS(__Class)                                                                               \
     _REFLECT_DEFINE_CLASS(__Class)
 
 // alias a type name
-#define REFLECT_ALIAS_CLASS(__Class, __Alias)                                                                         \
+#define REFLECT_ALIAS_CLASS(__Class, __Alias)                                                                       \
     Reflect::Registry::GetInstance()->AliasType( Reflect::GetClass<__Class>(), __Alias);
 
 // unalias a type name
-#define REFLECT_UNALIAS_CLASS(__Class, __Alias)                                                                       \
+#define REFLECT_UNALIAS_CLASS(__Class, __Alias)                                                                     \
     Reflect::Registry::GetInstance()->UnAliasType( Reflect::GetClass<__Class>(), __Alias);

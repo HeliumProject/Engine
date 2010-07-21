@@ -19,7 +19,7 @@ void PivotTransform::InitializeType()
 {
   Reflect::RegisterClass< Luna::PivotTransform >( TXT( "Luna::PivotTransform" ) );
 
-  Enumerator::InitializePanel( TXT( "Pivot" ), CreatePanelSignature::Delegate( &PivotTransform::CreatePanel ));
+  PropertiesGenerator::InitializePanel( TXT( "Pivot" ), CreatePanelSignature::Delegate( &PivotTransform::CreatePanel ));
 }
 
 void PivotTransform::CleanupType()
@@ -494,70 +494,70 @@ bool PivotTransform::ValidatePanel(const tstring& name)
 
 void PivotTransform::CreatePanel(CreatePanelArgs& args)
 {
-  args.m_Enumerator->PushPanel( TXT( "Pivots" ) );
+  args.m_Generator->PushPanel( TXT( "Pivots" ) );
 
   {
-    args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( TXT( "Shear" ) );
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearYZ, &PivotTransform::SetShearYZ);
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXZ, &PivotTransform::SetShearXZ);
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXY, &PivotTransform::SetShearXY);
-    args.m_Enumerator->Pop();
+    args.m_Generator->PushContainer();
+    args.m_Generator->AddLabel( TXT( "Shear" ) );
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearYZ, &PivotTransform::SetShearYZ);
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXZ, &PivotTransform::SetShearXZ);
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetShearXY, &PivotTransform::SetShearXY);
+    args.m_Generator->Pop();
   }
 
   {
-    args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( TXT( "Scale Pivot" ) );
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotX, &PivotTransform::SetScalePivotX);
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotY, &PivotTransform::SetScalePivotY);
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotZ, &PivotTransform::SetScalePivotZ);
-    args.m_Enumerator->Pop();
+    args.m_Generator->PushContainer();
+    args.m_Generator->AddLabel( TXT( "Scale Pivot" ) );
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotX, &PivotTransform::SetScalePivotX);
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotY, &PivotTransform::SetScalePivotY);
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotZ, &PivotTransform::SetScalePivotZ);
+    args.m_Generator->Pop();
   }
 
   {
-    args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( TXT( "Scale Pivot Translate" ) );
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateX, &PivotTransform::SetScalePivotTranslateX);
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateY, &PivotTransform::SetScalePivotTranslateY);
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateZ, &PivotTransform::SetScalePivotTranslateZ);
-    args.m_Enumerator->Pop();
+    args.m_Generator->PushContainer();
+    args.m_Generator->AddLabel( TXT( "Scale Pivot Translate" ) );
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateX, &PivotTransform::SetScalePivotTranslateX);
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateY, &PivotTransform::SetScalePivotTranslateY);
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetScalePivotTranslateZ, &PivotTransform::SetScalePivotTranslateZ);
+    args.m_Generator->Pop();
   }
 
   {
-    args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( TXT( "Rotate Pivot" ) );
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotX, &PivotTransform::SetRotatePivotX);
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotY, &PivotTransform::SetRotatePivotY);
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotZ, &PivotTransform::SetRotatePivotZ);
-    args.m_Enumerator->Pop();
+    args.m_Generator->PushContainer();
+    args.m_Generator->AddLabel( TXT( "Rotate Pivot" ) );
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotX, &PivotTransform::SetRotatePivotX);
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotY, &PivotTransform::SetRotatePivotY);
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotZ, &PivotTransform::SetRotatePivotZ);
+    args.m_Generator->Pop();
   }
 
   {
-    args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( TXT( "Rotate Pivot Translate" ) );
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateX, &PivotTransform::SetRotatePivotTranslateX);
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateY, &PivotTransform::SetRotatePivotTranslateY);
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateZ, &PivotTransform::SetRotatePivotTranslateZ);
-    args.m_Enumerator->Pop();
+    args.m_Generator->PushContainer();
+    args.m_Generator->AddLabel( TXT( "Rotate Pivot Translate" ) );
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateX, &PivotTransform::SetRotatePivotTranslateX);
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateY, &PivotTransform::SetRotatePivotTranslateY);
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetRotatePivotTranslateZ, &PivotTransform::SetRotatePivotTranslateZ);
+    args.m_Generator->Pop();
   }
 
   {
-    args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( TXT( "Translate Pivot" ) );
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotX, &PivotTransform::SetTranslatePivotX);
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotY, &PivotTransform::SetTranslatePivotY);
-    args.m_Enumerator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotZ, &PivotTransform::SetTranslatePivotZ);
-    args.m_Enumerator->Pop();
+    args.m_Generator->PushContainer();
+    args.m_Generator->AddLabel( TXT( "Translate Pivot" ) );
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotX, &PivotTransform::SetTranslatePivotX);
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotY, &PivotTransform::SetTranslatePivotY);
+    args.m_Generator->AddValue<Luna::PivotTransform, f32>(args.m_Selection, &PivotTransform::GetTranslatePivotZ, &PivotTransform::SetTranslatePivotZ);
+    args.m_Generator->Pop();
   }
 
   {
-    args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( TXT( "Snap Pivots" ) );
-    args.m_Enumerator->AddCheckBox<Luna::PivotTransform, bool>(args.m_Selection, &PivotTransform::GetSnapPivots, &PivotTransform::SetSnapPivots);
-    args.m_Enumerator->Pop();
+    args.m_Generator->PushContainer();
+    args.m_Generator->AddLabel( TXT( "Snap Pivots" ) );
+    args.m_Generator->AddCheckBox<Luna::PivotTransform, bool>(args.m_Selection, &PivotTransform::GetSnapPivots, &PivotTransform::SetSnapPivots);
+    args.m_Generator->Pop();
   }
 
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 
 f32 PivotTransform::GetShearYZ() const

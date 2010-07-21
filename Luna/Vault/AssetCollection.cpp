@@ -352,10 +352,10 @@ bool AssetCollection::SaveTo( const AssetCollection* collection, const tstring& 
 ///////////////////////////////////////////////////////////////////////////////
 bool AssetCollection::IsValidCollectionName( const tstring& name, tstring& errors )
 {
-    const tregex matchValidName( TXT( "^[a-z0-9]{1}[\\w\\-\\(\\. ]{1,24}$" ), boost::regex::icase | boost::match_single_line );
+    const tregex matchValidName( TXT( "^[a-z0-9]{1}[\\w\\-\\(\\. ]{1,24}$" ), std::tr1::regex::icase );
 
     tsmatch  matchResult;
-    if ( !boost::regex_match( name, matchResult, matchValidName ) )
+    if ( !std::tr1::regex_match( name, matchResult, matchValidName ) )
     {
         errors = TXT( "Collection names must have a lenght less than 25 characters, and can only contain alphanumeric characters, spaces and special characters: \'.\', \'_\', and \'-\'" );
         return false;

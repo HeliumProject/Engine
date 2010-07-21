@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Render.h"
 
-#include "View.h"
+#include "Viewport.h"
 #include "Camera.h"
 #include "SceneNode.h"
 
@@ -21,7 +21,7 @@ RenderVisitor::RenderVisitor()
 
 }
 
-void RenderVisitor::Reset( DrawArgs* args, const Luna::View* view )
+void RenderVisitor::Reset( DrawArgs* args, const Luna::Viewport* view )
 {
   m_Args = args;
   m_View = view;

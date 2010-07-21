@@ -1,7 +1,6 @@
 #include "Precompile.h"
 #include "NavigationPanel.h"
 
-#include "Application/UI/AutoCompleteComboBox.h"
 #include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 

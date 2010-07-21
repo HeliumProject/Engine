@@ -21,7 +21,7 @@ LUNA_DEFINE_TYPE( Luna::Layer );
 void Layer::InitializeType()
 {
   Reflect::RegisterClass< Luna::Layer >( TXT( "Luna::Layer" ) );
-  Enumerator::InitializePanel( TXT( "Layer" ), CreatePanelSignature::Delegate( &Layer::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "Layer" ), CreatePanelSignature::Delegate( &Layer::CreatePanel ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -299,89 +299,89 @@ bool Layer::ValidatePanel(const tstring& name)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Static callback from the attribute enumerator indicating that the UI elements
+// Static callback from the attribute generator indicating that the UI elements
 // for the layer panel need to be built.
 // 
 void Layer::CreatePanel( CreatePanelArgs& args )
 {
   tstring unionStr;
   tstring intersectionStr;
-  BuildUnionAndIntersection( args.m_Enumerator, args.m_Selection, unionStr, intersectionStr );
+  BuildUnionAndIntersection( args.m_Generator, args.m_Selection, unionStr, intersectionStr );
 
-  args.m_Enumerator->PushPanel( TXT( "Layer" ), true);
+  args.m_Generator->PushPanel( TXT( "Layer" ), true);
   {
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Color" ) );
-      args.m_Enumerator->AddColorPicker< Luna::Layer, Math::Color3 >( args.m_Selection, &Layer::GetColor, &Layer::SetColor );
+      args.m_Generator->AddLabel( TXT( "Color" ) );
+      args.m_Generator->AddColorPicker< Luna::Layer, Math::Color3 >( args.m_Selection, &Layer::GetColor, &Layer::SetColor );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
     if ( args.m_Selection.Size() == 1 )
     {
       // Only one layer selected, just show its members
 
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "Members" ) );
+        args.m_Generator->AddLabel( TXT( "Members" ) );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
-      Inspect::Container* container = args.m_Enumerator->PushContainer();
+      Inspect::Container* container = args.m_Generator->PushContainer();
       {
-        Inspect::ListPtr control = args.m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::List>( args.m_Enumerator );
+        Inspect::ListPtr control = args.m_Generator->GetContainer()->GetCanvas()->Create<Inspect::List>( args.m_Generator );
         control->Bind( new Inspect::StringFormatter<tstring>( new tstring( unionStr ), true ) );
         container->AddControl(control);
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
     }
     else if ( args.m_Selection.Size() > 1 )
     {
       // More than one layer selected, show union and intersection of members
       
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "Union" ) );
+        args.m_Generator->AddLabel( TXT( "Union" ) );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
-      Inspect::Container* unionContainer = args.m_Enumerator->PushContainer();
+      Inspect::Container* unionContainer = args.m_Generator->PushContainer();
       {
-        Inspect::ListPtr control = args.m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::List>( args.m_Enumerator );
+        Inspect::ListPtr control = args.m_Generator->GetContainer()->GetCanvas()->Create<Inspect::List>( args.m_Generator );
         control->Bind( new Inspect::StringFormatter<tstring>( new tstring( unionStr ), true ) );
         unionContainer->AddControl(control);
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "Intersection" ) );
+        args.m_Generator->AddLabel( TXT( "Intersection" ) );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
-      Inspect::Container* intersectionContainer = args.m_Enumerator->PushContainer();
+      Inspect::Container* intersectionContainer = args.m_Generator->PushContainer();
       {
-        Inspect::ListPtr control = args.m_Enumerator->GetContainer()->GetCanvas()->Create<Inspect::List>( args.m_Enumerator );
+        Inspect::ListPtr control = args.m_Generator->GetContainer()->GetCanvas()->Create<Inspect::List>( args.m_Generator );
         control->Bind( new Inspect::StringFormatter<tstring>( new tstring( intersectionStr ), true ) );
         intersectionContainer->AddControl(control);
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
     }
   }
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static helper function to build the list of all members and common members
 // across all selected objects. These lists will be shown in the UI.
 // 
-void Layer::BuildUnionAndIntersection( Enumerator* enumerator, const OS_SelectableDumbPtr& selection, tstring& unionStr, tstring& intersectionStr )
+void Layer::BuildUnionAndIntersection( PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection, tstring& unionStr, tstring& intersectionStr )
 {
   typedef std::set< tstring, CaseInsensitiveNatStrCmp > S_Ordered;
   S_Ordered unionSet;
   S_Ordered intersectionSet;
 
-  if ( enumerator )
+  if ( generator )
   {
     // Keep a running tally of the union and intersection of members over each layer.
     HM_SceneNodeDumbPtr mapUnion;

@@ -2,14 +2,14 @@
 
 #include "Luna/API.h"
 #include "SceneNodePanel.h"
-#include "Core/Selectable.h"
+#include "Selectable.h"
 
 namespace Luna
 {
   class InstancePanel : public Inspect::Panel
   {
   protected:
-    Enumerator* m_Enumerator;
+    PropertiesGenerator* m_Generator;
     OS_SelectableDumbPtr m_Selection;
     Inspect::CheckBox* m_Solid;
     Inspect::CheckBox* m_SolidOverride;
@@ -22,7 +22,7 @@ namespace Luna
     bool                   m_RecurseSelectableClasses; 
 
   public:
-    InstancePanel(Enumerator* enumerator, const OS_SelectableDumbPtr& selection);
+    InstancePanel(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection);
     virtual void Create() NOC_OVERRIDE;
 
   protected:

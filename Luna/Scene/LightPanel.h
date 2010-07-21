@@ -2,7 +2,7 @@
 
 #include "Application/Inspect/Controls/InspectPanel.h"
 #include "Application/Inspect/Interpreters/Reflect/ReflectInterpreter.h"
-#include "Core/Enumerator.h"
+#include "PropertiesGenerator.h"
 
 namespace Luna
 {
@@ -12,12 +12,12 @@ namespace Luna
   class LightPanel : public Inspect::Panel
   {
   private:
-    Enumerator* m_Enumerator;
+    PropertiesGenerator* m_Generator;
     OS_SelectableDumbPtr m_Selection;
     Inspect::ReflectInterpreterPtr  m_ReflectInterpreter;
 
   public:
-    LightPanel( Enumerator* enumerator, const OS_SelectableDumbPtr& selection );
+    LightPanel( PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection );
     virtual void Create() NOC_OVERRIDE;
   };
 }

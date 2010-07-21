@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "SearchQuery.h"
 
-#include "Application.h"
+#include "App.h"
 #include "Vault.h"
 
 #include "Foundation/Boost/Regex.h"
@@ -161,7 +161,7 @@ bool SearchQuery::operator!=( const SearchQuery& rhs ) const
 //
 bool TokenizeQuery( const tstring& queryString, std::vector< tstring >& tokens )
 {
-    const tregex parseTokens( s_TokenizeQueryString, boost::regex::icase );
+    const tregex parseTokens( s_TokenizeQueryString, std::tr1::regex::icase );
 
     // parse once to tokenize then match again
     tsregex_iterator parseItr( queryString.begin(), queryString.end(), parseTokens );
@@ -170,7 +170,7 @@ bool TokenizeQuery( const tstring& queryString, std::vector< tstring >& tokens )
     tstring curToken;
     for ( ; parseItr != parseEnd; ++parseItr )
     {
-        const boost::match_results<tstring::const_iterator>& tokenizeResults = *parseItr;
+        const std::tr1::match_results<tstring::const_iterator>& tokenizeResults = *parseItr;
         curToken = tokenizeResults[1].matched ? Nocturnal::BoostMatchResultAsString( tokenizeResults, 1 ) : TXT( "" );
         if ( !curToken.empty() )
         {
@@ -183,10 +183,10 @@ bool TokenizeQuery( const tstring& queryString, std::vector< tstring >& tokens )
 
 bool ParseCollectionName( const tstring& token, tsmatch& matchResults, tstring& collectionName, tstring& errors )
 {
-    const tregex parseCollectionName( s_ParseCollectionName, boost::regex::icase );
+    const tregex parseCollectionName( s_ParseCollectionName, std::tr1::regex::icase );
 
     // Phrase or Word
-    if ( boost::regex_search( token, matchResults, parseCollectionName ) )
+    if ( std::tr1::regex_search( token, matchResults, parseCollectionName ) )
     {
         if ( matchResults[1].matched )
         {
@@ -201,12 +201,12 @@ bool ParseCollectionName( const tstring& token, tsmatch& matchResults, tstring& 
 
 bool ParsePhrase( const tstring& token, tsmatch& matchResults, tstring& phrase, tstring& errors )
 {
-    const tregex parsePhrase( s_ParsePhrase, boost::regex::icase );
-    const tregex parseWord( s_ParseWord, boost::regex::icase );
+    const tregex parsePhrase( s_ParsePhrase, std::tr1::regex::icase );
+    const tregex parseWord( s_ParseWord, std::tr1::regex::icase );
 
     // Phrase or Word
-    if ( boost::regex_search( token, matchResults, parsePhrase ) 
-        || boost::regex_search( token, matchResults, parseWord ) )
+    if ( std::tr1::regex_search( token, matchResults, parsePhrase ) 
+        || std::tr1::regex_search( token, matchResults, parseWord ) )
     {
         if ( matchResults[1].matched )
         {
@@ -223,14 +223,14 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
 {
 #pragma TODO( "Rachel: Need more error checking in SearchQuery::ParseQueryString" )
 
-    const tregex matchAssetPath( s_MatchAssetPathPattern, boost::regex::icase ); 
-    const tregex matchTUID( s_MatchTUIDPattern, boost::regex::icase );
+    const tregex matchAssetPath( s_MatchAssetPathPattern, std::tr1::regex::icase ); 
+    const tregex matchTUID( s_MatchTUIDPattern, std::tr1::regex::icase );
 
 
     tsmatch matchResult;
     //-------------------------------------------
     // Is an AssetFile/Folder path?
-    if ( boost::regex_match( queryString, matchResult, matchAssetPath ) )
+    if ( std::tr1::regex_match( queryString, matchResult, matchAssetPath ) )
     {
         // we know it's a path, clean it
         Nocturnal::Path path( queryString );
@@ -265,7 +265,7 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
     // Otherwise we assume it's an CacheDB Query.
     else
     {
-        const tregex parseColumnQuery( s_ParseColumnName, boost::regex::icase );
+        const tregex parseColumnQuery( s_ParseColumnName, std::tr1::regex::icase );
 
         // parse once to tokenize then match again
         std::vector< tstring > tokens;
@@ -282,7 +282,7 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
 
                 //-------------------------------------------
                 // Token Query
-                if ( boost::regex_search( curToken, matchResults, parseColumnQuery ) && matchResults[1].matched )
+                if ( std::tr1::regex_search( curToken, matchResults, parseColumnQuery ) && matchResults[1].matched )
                 {
                     tstring columnAlias =  Nocturnal::BoostMatchResultAsString( matchResults, 1 );
 

@@ -8,7 +8,7 @@
 #include "SceneManager.h"
 #include "SceneEditor.h"
 
-#include "Core/Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "PrimitiveCube.h"
 #include "PrimitivePointer.h"
 
@@ -29,7 +29,7 @@ LUNA_DEFINE_TYPE(Luna::Entity);
 void Entity::InitializeType()
 {
     Reflect::RegisterClass< Luna::Entity >( TXT( "Luna::Entity" ) );
-    Enumerator::InitializePanel( TXT( "Entity" ), CreatePanelSignature::Delegate( &Entity::CreatePanel ) );
+    PropertiesGenerator::InitializePanel( TXT( "Entity" ), CreatePanelSignature::Delegate( &Entity::CreatePanel ) );
 }
 
 void Entity::CleanupType()
@@ -133,7 +133,7 @@ Luna::Scene* Entity::GetNestedScene( GeometryMode mode, bool load_on_demand ) co
     {
 #pragma TODO( "Support the various rendering modes.  This used to load different files for art, collision, etc." )
         tstring nestedFile = m_ClassSet->GetContentFile();
-        m_NestedSceneArt = m_Scene->GetManager()->AllocateNestedScene( nestedFile, m_Scene );
+        m_NestedSceneArt = m_Scene->GetManager()->AllocateNestedScene( m_Scene->GetViewport(), nestedFile, m_Scene );
     }
 
     return m_NestedSceneArt;
@@ -248,21 +248,11 @@ void Entity::Evaluate(GraphDirection direction)
             if ( IsGeometryVisible() )
             {
                 // merge nested scene into our bounding box
-                const Luna::Scene* nested = GetNestedScene( m_Scene->GetView()->GetGeometryMode() );
+                const Luna::Scene* nested = GetNestedScene( m_Scene->GetViewport()->GetGeometryMode() );
 
                 if (nested)
                 {
                     m_ObjectBounds.Merge( nested->GetRoot()->GetObjectHierarchyBounds() );
-                }
-
-                if (m_Scene->GetView()->IsPathfindingVisible())
-                {
-                    nested = GetNestedScene( GeometryModes::Pathfinding );
-
-                    if (nested)
-                    {
-                        m_ObjectBounds.Merge( nested->GetRoot()->GetObjectHierarchyBounds() );
-                    }
                 }
             }
 
@@ -300,22 +290,13 @@ void Entity::Render( RenderVisitor* render )
 
     if (IsGeometryVisible())
     {
-        const Luna::Scene* nested = GetNestedScene( render->GetView()->GetGeometryMode() );
+        const Luna::Scene* nested = GetNestedScene( render->GetViewport()->GetGeometryMode() );
 
         VisitorState state ( render->State().m_Matrix,
             render->State().m_Highlighted || (m_Scene->IsCurrent() && IsHighlighted()),
             render->State().m_Selected || (m_Scene->IsCurrent() && IsSelected()),
             render->State().m_Live || (m_Scene->IsCurrent() && IsLive()),
             render->State().m_Selectable || (m_Scene->IsCurrent() && IsSelectable()) );
-
-        if (nested)
-        {
-            render->PushState( state );
-            nested->Render( render );
-            render->PopState();
-        }
-
-        nested = render->GetView()->IsPathfindingVisible() ? GetNestedScene( GeometryModes::Pathfinding ) : NULL;
 
         if (nested)
         {
@@ -393,29 +374,7 @@ bool Entity::Pick( PickVisitor* pick )
         pick->PushState( VisitorState (pick->State().m_Matrix, IsHighlighted(), IsSelected(), IsLive(), IsSelectable()) );
 
         // retrieve nested scene
-        const Luna::Scene* scene = GetNestedScene(GetScene()->GetView()->GetGeometryMode());
-
-        // hit test the entire nested scene
-        if (scene && scene->Pick(pick))
-        {
-            // verify that our hits are in there
-            NOC_ASSERT( pick->GetHits().size() > high );
-
-            // process nested hits into hits in this scene
-            V_PickHitSmartPtr::const_iterator itr = pick->GetHits().begin() + high;
-            V_PickHitSmartPtr::const_iterator end = pick->GetHits().end();
-            for ( ; itr != end; ++itr )
-            {
-                // take ownership
-                (*itr)->SetObject(this);
-            }
-
-            // success!
-            result = true;
-        }
-
-        // retrieve pathfinding scene
-        scene = GetScene()->GetView()->IsPathfindingVisible() ? GetNestedScene(GeometryModes::Pathfinding) : NULL;
+        const Luna::Scene* scene = GetNestedScene(GetScene()->GetViewport()->GetGeometryMode());
 
         // hit test the entire nested scene
         if (scene && scene->Pick(pick))
@@ -461,14 +420,14 @@ bool Entity::ValidatePanel(const tstring& name)
 //
 void Entity::CreatePanel( CreatePanelArgs& args )
 {
-    EntityPanel* panel = new EntityPanel ( args.m_Enumerator, args.m_Selection );
+    EntityPanel* panel = new EntityPanel ( args.m_Generator, args.m_Selection );
 
-    args.m_Enumerator->Push( panel );
+    args.m_Generator->Push( panel );
     {
-        panel->SetCanvas( args.m_Enumerator->GetContainer()->GetCanvas() );
+        panel->SetCanvas( args.m_Generator->GetContainer()->GetCanvas() );
         panel->Create();
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 }
 
 tstring Entity::GetEntityAssetPath() const
@@ -510,20 +469,6 @@ void Entity::SetEntityAssetPath( const tstring& entityClass )
     m_ClassChanged.Raise( EntityAssetChangeArgs( this, oldPath, newPath ) );
 
     Dirty();
-}
-
-tstring Entity::GetAssetTypeName() const
-{
-    return TXT( "Unknown" );
-}
-
-void Entity::SetAssetTypeName( const tstring& type )
-{
-    NOC_BREAK();
-}
-
-void Entity::OnInstanceCollisionComponentModified( const Reflect::ElementChangeArgs& args )
-{
 }
 
 void Entity::OnComponentAdded( const Component::ComponentCollectionChanged& args )

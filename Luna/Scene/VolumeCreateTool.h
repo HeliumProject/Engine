@@ -26,7 +26,7 @@ namespace Luna
     static void CleanupType();
 
   public:
-    VolumeCreateTool(Luna::Scene* scene, Enumerator* enumerator);
+    VolumeCreateTool(Luna::Scene* scene, PropertiesGenerator* generator);
 
     virtual ~VolumeCreateTool();
 

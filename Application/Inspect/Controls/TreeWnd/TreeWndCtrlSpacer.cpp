@@ -33,6 +33,7 @@ m_numColumns(0),
 m_node(TreeWndCtrlItemIdInvalid),
 m_treeWndCtrl(NULL)
 {
+    Layout();
 }
 
 TreeWndCtrlSpacer::TreeWndCtrlSpacer(TreeWndCtrl *parent,

@@ -7,7 +7,7 @@
 #include <vector>
 #include <set>
 
-#include <boost/regex.hpp>
+#include <regex>
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -26,8 +26,8 @@ void Tokenize( const tstring& str, std::vector< T >& tokens, const tstring delim
 {
     tregex splitPattern(delimiters); 
 
-    boost::sregex_token_iterator i(str.begin(), str.end(), splitPattern, -1); 
-    boost::sregex_token_iterator end; 
+    std::tr1::sregex_token_iterator i(str.begin(), str.end(), splitPattern, -1); 
+    std::tr1::sregex_token_iterator end; 
 
     for(; i != end; i++)
     {
@@ -45,10 +45,10 @@ void Tokenize( const tstring& str, std::vector< T >& tokens, const tstring delim
 template< typename T >
 void Tokenize( const tstring& str, std::set< T >& tokens, const tstring delimiters )
 {
-    boost::regex splitPattern(delimiters); 
+    std::tr1::regex splitPattern(delimiters); 
 
-    boost::sregex_token_iterator i(str.begin(), str.end(), splitPattern, -1); 
-    boost::sregex_token_iterator end; 
+    std::tr1::sregex_token_iterator i(str.begin(), str.end(), splitPattern, -1); 
+    std::tr1::sregex_token_iterator end; 
 
     for(; i != end; i++)
     {

@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "VaultFrame.h"
 
-#include "Application.h"
+#include "App.h"
 #include "Vault.h"
 #include "VaultEvents.h"
 #include "VaultPreferencesDialog.h"
@@ -13,15 +13,14 @@
 #include "PreviewPanel.h"
 #include "ResultsPanel.h"
 #include "SearchQuery.h"
-#include "HelpPanel.h"
+#include "UI/HelpPanel.h"
 
 #include "Pipeline/Asset/AssetInit.h"
 #include "Pipeline/Asset/Classes/ShaderAsset.h"
 #include "Foundation/Component/ComponentHandle.h"
-#include "Editor/DocumentManager.h"
+#include "DocumentManager.h"
 #include "Application/RCS/RCS.h"
 #include "Scene/SceneManager.h"
-#include "Application/UI/AutoCompleteComboBox.h"
 #include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 #include "Platform/Exception.h"
@@ -56,7 +55,7 @@ EVT_MENU( VaultMenu::Preferences, VaultFrame::OnPreferences )
 EVT_MENU( VaultMenu::NewCollectionFromSelection, VaultFrame::OnNewCollectionFromSelection )
 EVT_MENU( VaultMenu::NewDepedencyCollectionFromSelection, VaultFrame::OnNewCollectionFromSelection )
 EVT_MENU( VaultMenu::NewUsageCollectionFromSelection, VaultFrame::OnNewCollectionFromSelection )
-igEVT_UPDATE_STATUS( wxID_ANY, VaultFrame::OnUpdateStatusBar )
+LUNA_EVT_UPDATE_STATUS( wxID_ANY, VaultFrame::OnUpdateStatusBar )
 END_EVENT_TABLE()
 
 
@@ -248,7 +247,7 @@ VaultFrame::VaultFrame( Vault* browser, VaultSearch* browserSearch, SearchHistor
     m_FrameManager.Update();
 
     //
-    // View Menu Button
+    // Viewport Menu Button
     //
     {
         m_OptionsMenu = new wxMenu();

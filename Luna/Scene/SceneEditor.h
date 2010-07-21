@@ -10,8 +10,7 @@
 #include "SceneOutlinerState.h"
 #include "TreeMonitor.h"
 #include "TreeSortTimer.h"
-#include "View.h"
-#include "ToolsPanel.h"
+#include "Viewport.h"
 
 #include "Foundation/Container/ReversibleMap.h"
 
@@ -19,10 +18,9 @@
 #include "Application/Inspect/DragDrop/DropTarget.h"
 #include "Application/UI/MenuMRU.h"
 
-#include "Core/PropertiesManager.h"
-#include "Core/Selection.h"
-#include "Editor/Editor.h"
-#include "Editor/EditorInfo.h"
+#include "PropertiesManager.h"
+#include "Selection.h"
+#include "Editor.h"
 
 #include <wx/dnd.h>
 
@@ -93,9 +91,6 @@ namespace Luna
         // the UI for changing visibility/selectability of specific runtime types
         TypeGrid* m_TypeGrid;
 
-        // the tools panel
-        ToolsPanel* m_ToolsPanel;
-
         // the loaded scenes
         M_SceneToEditorFile m_SceneFiles;
 
@@ -103,7 +98,7 @@ namespace Luna
         Luna::SceneManager m_SceneManager;
 
         // the 3d view
-        Luna::View* m_View;
+        Luna::Viewport* m_View;
 
         // menu items
         wxMenu* m_FileMenu;
@@ -252,7 +247,7 @@ namespace Luna
 
     public:
 
-        Luna::View* GetView()
+        Luna::Viewport* GetViewport()
         {
             return m_View;
         }
@@ -319,7 +314,7 @@ namespace Luna
 
     private:
         void SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sceneNodeTypes,wxMenu& contextMenu,  u32& numMenuItems );
-        bool SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* entityMenu, u32& numMenuItems );
+        void SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* entityMenu, u32& numMenuItems );
 
         static bool SortContextItemsByName( Luna::SceneNode* lhs, Luna::SceneNode* rhs ); 
         static bool SortTypeItemsByName( Luna::SceneNodeType* lhs, Luna::SceneNodeType* rhs );

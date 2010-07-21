@@ -22,8 +22,8 @@ void DuplicateTool::CleanupType()
   Reflect::UnregisterClass< Luna::DuplicateTool >();
 }
 
-DuplicateTool::DuplicateTool(Luna::Scene* scene, Enumerator* enumerator)
-: Luna::CreateTool (scene, enumerator)
+DuplicateTool::DuplicateTool(Luna::Scene* scene, PropertiesGenerator* generator)
+: Luna::CreateTool (scene, generator)
 , m_Source (NULL)
 {
   if (!m_Scene->GetSelection().GetItems().Empty())

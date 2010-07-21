@@ -1,9 +1,10 @@
 #pragma once
 
-#include "SceneTool.h"
+#include "Luna/API.h"
 
 #include "Pipeline/Content/Nodes/Curve.h"
 #include "Curve.h"
+#include "Tool.h"
 
 namespace Luna
 {
@@ -22,7 +23,7 @@ namespace Luna
   }
   typedef CurveEditModes::CurveEditMode CurveEditMode;
 
-  class CurveEditTool: public Luna::SceneTool
+  class CurveEditTool: public Tool
   {
   private:
     static CurveEditMode s_EditMode;
@@ -35,12 +36,12 @@ namespace Luna
     // RTTI
     //
 
-    LUNA_DECLARE_TYPE(Luna::CurveEditTool, Luna::SceneTool);
+    LUNA_DECLARE_TYPE(Luna::CurveEditTool, Tool);
     static void InitializeType();
     static void CleanupType();
 
   public:
-    CurveEditTool( Luna::Scene* scene, Enumerator* enumerator );
+    CurveEditTool( Luna::Scene* scene, PropertiesGenerator* generator );
     virtual ~CurveEditTool();
 
     CurveEditMode GetEditMode() const;

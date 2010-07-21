@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Point.h"
 #include "Transform.h"
-#include "Core/Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "Application/UI/ArtProvider.h"
 
 using namespace Luna;
@@ -11,7 +11,7 @@ LUNA_DEFINE_TYPE( Luna::Point );
 void Point::InitializeType()
 {
   Reflect::RegisterClass< Luna::Point >( TXT( "Luna::Point" ) );
-  Enumerator::InitializePanel( TXT( "Point" ), CreatePanelSignature::Delegate( &Point::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "Point" ), CreatePanelSignature::Delegate( &Point::CreatePanel ) );
 }
 
 void Point::CleanupType()
@@ -118,16 +118,16 @@ bool Point::ValidatePanel( const tstring& name )
 
 void Point::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel( TXT( "Point" ), true);
+  args.m_Generator->PushPanel( TXT( "Point" ), true);
   {
-    args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( TXT( "Position" ) );
-    args.m_Enumerator->AddValue<Luna::Point, f32>( args.m_Selection, &Point::GetPositionX, &Point::SetPositionX );
-    args.m_Enumerator->AddValue<Luna::Point, f32>( args.m_Selection, &Point::GetPositionY, &Point::SetPositionY );
-    args.m_Enumerator->AddValue<Luna::Point, f32>( args.m_Selection, &Point::GetPositionZ, &Point::SetPositionZ );
-    args.m_Enumerator->Pop();
+    args.m_Generator->PushContainer();
+    args.m_Generator->AddLabel( TXT( "Position" ) );
+    args.m_Generator->AddValue<Luna::Point, f32>( args.m_Selection, &Point::GetPositionX, &Point::SetPositionX );
+    args.m_Generator->AddValue<Luna::Point, f32>( args.m_Selection, &Point::GetPositionY, &Point::SetPositionY );
+    args.m_Generator->AddValue<Luna::Point, f32>( args.m_Selection, &Point::GetPositionZ, &Point::SetPositionZ );
+    args.m_Generator->Pop();
   }
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 
 bool Point::Pick( PickVisitor* pick )

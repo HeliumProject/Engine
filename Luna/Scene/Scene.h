@@ -7,11 +7,11 @@
 #include "Foundation/Reflect/Archive.h"
 #include "Foundation/Reflect/Version.h"
 
-#include "Core/Selection.h"
+#include "Selection.h"
 
 #include "Application/Inspect/Data/Data.h"
 #include "Application/Inspect/Controls/Canvas.h"
-#include "Core/Enumerator.h"
+#include "PropertiesGenerator.h"
 
 #include "Application/Undo/ExistenceCommand.h"
 #include "Application/Undo/Queue.h"
@@ -45,12 +45,6 @@ namespace Luna
   class SceneManager;
   class PickVisitor;
   struct SceneChangeArgs;
-
-  class MiscSettings;
-  typedef Nocturnal::SmartPtr< MiscSettings > MiscSettingsPtr;
-
-  class Region; 
-  typedef std::set< Luna::Region*> S_RegionDumbPtr; 
 
 
   // 
@@ -286,9 +280,6 @@ namespace Luna
 
     // references to the node types by the compile time type id
     HMS_TypeToSceneNodeTypeDumbPtr m_NodeTypesByType;
-    
-    // miscellaneous settings loaded from a config file
-    MiscSettingsPtr m_MiscSettings;
 
     // selection of this scene
     Selection m_Selection;
@@ -303,7 +294,7 @@ namespace Luna
     Undo::Queue m_UndoQueue;
 
     // the 3d view control
-    Luna::View* m_View;
+    Luna::Viewport* m_View;
 
     // the manager for this class
     Luna::SceneManager* m_Manager;
@@ -330,7 +321,7 @@ namespace Luna
     //
 
   public:
-    Scene( Luna::SceneManager* manager, const SceneDocumentPtr& file );
+      Scene( Luna::Viewport* viewport, Luna::SceneManager* manager, const SceneDocumentPtr& file );
     ~Scene();
 
     Nocturnal::TUID GetId() const
@@ -463,12 +454,6 @@ namespace Luna
       return m_NodeTypesByType;
     }
 
-    // miscellaneous settings
-    const MiscSettings* GetMiscSettings() const
-    {
-      return m_MiscSettings;
-    }
-
     Luna::SceneNode* Find( const tstring& name ) const; 
 
     Luna::SceneNode* Get( const Nocturnal::TUID& uid ) const
@@ -563,7 +548,7 @@ namespace Luna
     //
 
     // the 3d view to use for drawing this scene
-    Luna::View* GetView() const
+    Luna::Viewport* GetViewport() const
     {
       return m_View;
     }
@@ -777,6 +762,7 @@ namespace Luna
     Undo::CommandPtr SnapSelectedToCamera();
     Undo::CommandPtr SnapCameraToSelected();
 
+    void FrameSelected();
     void MeasureDistance();
     Undo::CommandPtr PickWalkUp();
     Undo::CommandPtr PickWalkDown();

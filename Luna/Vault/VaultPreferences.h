@@ -6,8 +6,8 @@
 #include "SearchQuery.h"
 
 #include "Foundation/Container/OrderedSet.h"
-#include "Editor/WindowSettings.h"
-#include "Editor/Preferences.h"
+#include "WindowSettings.h"
+#include "Preferences.h"
 #include "Foundation/TUID.h"
 
 namespace Luna

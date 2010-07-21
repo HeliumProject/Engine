@@ -11,9 +11,6 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
-//   Asset::Initialize();
-//   Asset::Cleanup();
-
 u32 TextureAddressModes( u32 mode )
 {
     u32 outMode = (u32) D3DTADDRESS_CLAMP;

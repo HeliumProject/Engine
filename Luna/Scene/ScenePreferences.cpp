@@ -85,7 +85,7 @@ ScenePreferences::ScenePreferences()
 : m_SceneEditorWindowSettings( new WindowSettings( s_WindowSettingsVersion ) )
 , m_MRU( new MRUData() )
 , m_DefaultNodeVisibility( new Content::NodeVisibility() )
-, m_ViewPreferences( new ViewPreferences() )
+, m_ViewPreferences( new ViewportPreferences() )
 , m_GridPreferences( new GridPreferences() )
 , m_ScaleManipulatorSize( 0.3f )
 , m_RotateManipulatorSize( 0.3f )
@@ -162,7 +162,7 @@ Content::NodeVisibility* ScenePreferences::GetDefaultNodeVisibility()
   return m_DefaultNodeVisibility; 
 }
 
-ViewPreferences* ScenePreferences::GetViewPreferences()
+ViewportPreferences* ScenePreferences::GetViewPreferences()
 {
   return m_ViewPreferences; 
 }

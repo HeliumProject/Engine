@@ -1,8 +1,8 @@
 #include "Precompile.h"
 #include "Renderer.h"
-#include "TGAHeader.h"
 
 #include "Foundation/Log.h"
+#include "Pipeline/Image/Formats/TGA.h"
 
 bool                           Render::D3DManager::m_unique = false;
 u32                            Render::D3DManager::m_master_count = 0;
@@ -17,6 +17,7 @@ Render::D3DManager*        Render::D3DManager::m_clients[__MAX_CLIENTS__] = {0};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 Render::D3DManager::D3DManager()
+: m_IsLost( false )
 {
     m_d3d=0;
     m_device=0; 
@@ -463,6 +464,31 @@ HRESULT Render::D3DManager::Reset()
     return hr;
 }
 
+bool Render::D3DManager::TestDeviceReady()
+{
+  IDirect3DDevice9* device = GetD3DDevice();
+  if ( !device )
+  {
+    return false;
+  }
+
+  if ( !m_IsLost )
+  {
+    return true;
+  }
+
+  HRESULT result = device->TestCooperativeLevel();
+  if ( result == D3DERR_DEVICENOTRESET )
+  {
+    Reset();
+    result = device->TestCooperativeLevel();
+  }
+
+  m_IsLost = result != D3D_OK;
+
+  return !m_IsLost;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 IDirect3DSurface9* Render::D3DManager::GetBufferData()
 {
@@ -518,7 +544,7 @@ bool Render::D3DManager::SaveTGA(const tchar* fname)
         return false;
     }
 
-    TGAHeader tga;
+    Nocturnal::TGAHeader tga;
     memset(&tga,0,sizeof(tga));
     tga.imageType = 0x02;
     tga.imageDescriptor = 0x28;

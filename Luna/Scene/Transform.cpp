@@ -4,12 +4,11 @@
 #include "Foundation/Math/EulerAngles.h"
 #include "Foundation/Math/Constants.h"
 
-#include "Core/Manipulator.h"
+#include "Manipulator.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "PrimitiveAxes.h"
 
 #include "Scene.h"
-#include "MiscSettings.h"
 #include "HierarchyNodeType.h"
 
 #include "Color.h"
@@ -31,7 +30,7 @@ void Transform::InitializeType()
 {
   Reflect::RegisterClass< Luna::Transform >( TXT( "Luna::Transform" ) );
 
-  Enumerator::InitializePanel( TXT( "Transform" ), CreatePanelSignature::Delegate( &Transform::CreatePanel ));
+  PropertiesGenerator::InitializePanel( TXT( "Transform" ), CreatePanelSignature::Delegate( &Transform::CreatePanel ));
 }
 
 void Transform::CleanupType()
@@ -47,7 +46,7 @@ Transform::Transform( Luna::Scene* scene, Content::Transform* transform ) : Luna
   m_BindIsDirty = true;
   m_BindTransform = Math::Matrix4::Identity;
 
-  Luna::PrimitiveAxes* axes = static_cast< Luna::PrimitiveAxes* >( m_Scene->GetView()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
+  Luna::PrimitiveAxes* axes = static_cast< Luna::PrimitiveAxes* >( m_Scene->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes ) );
   m_ObjectBounds.minimum = Math::Vector3(-axes->m_Length, -axes->m_Length, -axes->m_Length);
   m_ObjectBounds.maximum = Math::Vector3(axes->m_Length, axes->m_Length, axes->m_Length);
 }
@@ -201,16 +200,6 @@ void Transform::SetInheritTransform(bool inherit)
   ComputeObjectComponents();
 }
 
-D3DCOLORVALUE Transform::GetScaleColor() const
-{
-  return m_ScaleColor;
-}
-
-D3DCOLORVALUE Transform::GetScaleColorGradient() const
-{
-  return m_ScaleColorGradient;
-}
-
 Math::Matrix4 Transform::GetScaleComponent() const
 {
   return Math::Matrix4 (m_Scale);
@@ -357,20 +346,6 @@ void Transform::Evaluate(GraphDirection direction)
   }
 
   __super::Evaluate(direction);
-  
-  static ScaleColorInfo scaleColorInfoTable[] =
-  {
-    { Color::RED,      Color::RED,        0.30f,     FLT_MAX   },
-    { Color::YELLOW,   Color::RED,        0.15f,       0.30f   },
-    { Color::GREEN,    Color::YELLOW,     0.00f,       0.15f   },
-    { Color::GREEN,    Color::GREEN,   -FLT_MAX,       0.00f   },
-  };
-
-  static int scaleColorInfoTableCount = sizeof ( scaleColorInfoTable ) / sizeof ( ScaleColorInfo );
-
-  f32 scaleDelta = MAX( m_Scale.x, MAX( m_Scale.y, m_Scale.z ) ) - 1.0f;
-  m_ScaleColor = m_Scene->GetMiscSettings()->GetScaleColor( scaleDelta );
-  m_ScaleColorGradient = m_Scene->GetMiscSettings()->GetScaleColorGradient( scaleDelta );
 }
 
 void Transform::Render( RenderVisitor* render )
@@ -398,14 +373,14 @@ void Transform::DrawNormal( IDirect3DDevice9* device, DrawArgs* args, const Scen
 {
   const Luna::HierarchyNode* node = Reflect::ConstAssertCast<Luna::HierarchyNode>( object );
 
-  node->GetScene()->GetView()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Draw( args );
+  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Draw( args );
 }
 
 void Transform::DrawSelected( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* object )
 {
   const Luna::HierarchyNode* node = Reflect::ConstAssertCast<Luna::HierarchyNode>( object );
 
-  node->GetScene()->GetView()->GetGlobalPrimitive( GlobalPrimitives::SelectedAxes )->Draw( args );
+  node->GetScene()->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::SelectedAxes )->Draw( args );
 }
 
 bool Transform::Pick( PickVisitor* pick )
@@ -413,7 +388,7 @@ bool Transform::Pick( PickVisitor* pick )
 #ifdef DRAW_TRANFORMS
   pick->SetCurrentObject (this, pick->State().m_Matrix);
 
-  return m_Scene->GetView()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Pick(pick);
+  return m_Scene->GetViewport()->GetGlobalPrimitive( GlobalPrimitives::TransformAxes )->Pick(pick);
 #else
   return false;
 #endif
@@ -473,43 +448,43 @@ bool Transform::ValidatePanel(const tstring& name)
 
 void Transform::CreatePanel(CreatePanelArgs& args)
 {
-  args.m_Enumerator->PushPanel( TXT( "Transform" ), true);
+  args.m_Generator->PushPanel( TXT( "Transform" ), true);
 
   {
-    args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( TXT( "Inherit Transform" ) );
-    args.m_Enumerator->AddCheckBox<Luna::Transform, bool>(args.m_Selection, &Transform::GetInheritTransform, &Transform::SetInheritTransform);
-    args.m_Enumerator->Pop();
+    args.m_Generator->PushContainer();
+    args.m_Generator->AddLabel( TXT( "Inherit Transform" ) );
+    args.m_Generator->AddCheckBox<Luna::Transform, bool>(args.m_Selection, &Transform::GetInheritTransform, &Transform::SetInheritTransform);
+    args.m_Generator->Pop();
   }
 
   {
-    args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( TXT( "Scale" ) );
-    args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetScaleX, &Transform::SetScaleX);
-    args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetScaleY, &Transform::SetScaleY);
-    args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetScaleZ, &Transform::SetScaleZ);
-    args.m_Enumerator->Pop();
+    args.m_Generator->PushContainer();
+    args.m_Generator->AddLabel( TXT( "Scale" ) );
+    args.m_Generator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetScaleX, &Transform::SetScaleX);
+    args.m_Generator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetScaleY, &Transform::SetScaleY);
+    args.m_Generator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetScaleZ, &Transform::SetScaleZ);
+    args.m_Generator->Pop();
   }
 
   {
-    args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( TXT( "Rotate" ) );
-    args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetRotateX, &Transform::SetRotateX);
-    args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetRotateY, &Transform::SetRotateY);
-    args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetRotateZ, &Transform::SetRotateZ);
-    args.m_Enumerator->Pop();
+    args.m_Generator->PushContainer();
+    args.m_Generator->AddLabel( TXT( "Rotate" ) );
+    args.m_Generator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetRotateX, &Transform::SetRotateX);
+    args.m_Generator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetRotateY, &Transform::SetRotateY);
+    args.m_Generator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetRotateZ, &Transform::SetRotateZ);
+    args.m_Generator->Pop();
   }
 
   {
-    args.m_Enumerator->PushContainer();
-    args.m_Enumerator->AddLabel( TXT( "Translate" ) );
-    args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetTranslateX, &Transform::SetTranslateX);
-    args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetTranslateY, &Transform::SetTranslateY);
-    args.m_Enumerator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetTranslateZ, &Transform::SetTranslateZ);
-    args.m_Enumerator->Pop();
+    args.m_Generator->PushContainer();
+    args.m_Generator->AddLabel( TXT( "Translate" ) );
+    args.m_Generator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetTranslateX, &Transform::SetTranslateX);
+    args.m_Generator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetTranslateY, &Transform::SetTranslateY);
+    args.m_Generator->AddValue<Luna::Transform, f32>(args.m_Selection, &Transform::GetTranslateZ, &Transform::SetTranslateZ);
+    args.m_Generator->Pop();
   }
 
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 
 f32 Transform::GetScaleX() const

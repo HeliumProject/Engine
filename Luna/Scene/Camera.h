@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 
-#include "Core/Persistent.h"
+#include "Persistent.h"
 
 #include "Foundation/Math/Line.h"
 #include "Foundation/Math/Frustum.h"
@@ -53,7 +53,7 @@ namespace Luna
   {
     enum IntersectionPlane
     {
-      View,
+      Viewport,
       Ground,
     };
   }
@@ -215,10 +215,10 @@ namespace Luna
 
 
     //
-    // View
+    // Viewport
     //
 
-    const Math::Matrix4& GetView() const
+    const Math::Matrix4& GetViewport() const
     {
       return m_View;
     }

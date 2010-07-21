@@ -1,13 +1,12 @@
 #include "Precompile.h"
 #include "ShaderManager.h"
 #include "Renderer.h"
-#include "Misc.h"
 #include "ShaderLoader.h"
 #include "XMLShaderLoader.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/File/Path.h"
-
+#include "Foundation/Checksum/CRC32.h"
 
 #include <d3dx9.h>
 
@@ -16,7 +15,7 @@ Render::Texture::Texture(const tchar* fname)
 {
   m_filename = fname;  
   m_timestamp = (u64)-1;
-  m_crc= StringHashDJB2( fname );
+  m_crc= Nocturnal::StringCrc32( fname );
   m_load_count=0;
   m_d3d_texture = 0;
 
@@ -42,7 +41,7 @@ Render::Shader::Shader(ShaderManager* sd, const tchar* shader)
 {
   m_filename = shader;  
   m_timestamp = (u64)-1;
-  m_crc=StringHashDJB2(shader);
+  m_crc=Nocturnal::StringCrc32(shader);
   m_load_count = 0;
   m_flags = SHDR_FLAG_GPI_MAP;
   m_sd = sd;
@@ -296,7 +295,7 @@ u32 Render::ShaderManager::LoadShader(const tchar* fname, bool inc, ShaderLoader
 ////////////////////////////////////////////////////////////////////////////////////////////////
 u32 Render::ShaderManager::FindShader(const tchar* fname)
 {
-  u32 crc = StringHashDJB2(fname);
+  u32 crc = Nocturnal::StringCrc32(fname);
 
   u32 shader_count = (u32)m_loaded_shaders.size();
   u32 handle = 0xffffffff;
@@ -460,7 +459,7 @@ bool Render::ShaderManager::ReloadTexture( const tchar* fname )
 u32 Render::ShaderManager::FindTexture(const tchar* fname)
 {
   // NOTE: We only include the name in the CRC, we really should include other info such as the format
-  u32 crc = StringHashDJB2(fname);
+  u32 crc = Nocturnal::StringCrc32(fname);
 
   u32 texture_count = (u32)m_loaded_textures.size();
   u32 handle = 0xffffffff;

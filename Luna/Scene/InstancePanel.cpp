@@ -13,14 +13,14 @@
 
 using namespace Luna;
 
-InstancePanel::InstancePanel(Enumerator* enumerator, const OS_SelectableDumbPtr& selection)
+InstancePanel::InstancePanel(PropertiesGenerator* generator, const OS_SelectableDumbPtr& selection)
 : m_Selection (selection)
 , m_EnableClassPicker (false)
 , m_EnableClassBrowser (false)
 , m_EnableSymbolInterpreter (false)
 , m_RecurseSelectableClasses (true )
 {
-  m_Interpreter = m_Enumerator = enumerator;
+  m_Interpreter = m_Generator = generator;
   m_Expanded = true;
   m_Text = TXT( "Instance" );
 }
@@ -34,33 +34,33 @@ void InstancePanel::Create()
 
 void InstancePanel::CreateAppearanceFlags()
 {
-  m_Enumerator->PushContainer();
+  m_Generator->PushContainer();
   {
-    m_Enumerator->AddLabel( TXT( "Solid" ) );
+    m_Generator->AddLabel( TXT( "Solid" ) );
     
-    m_SolidOverride = m_Enumerator->AddCheckBox<Luna::Instance, bool>( m_Selection, &Luna::Instance::GetSolidOverride, &Luna::Instance::SetSolidOverride );
+    m_SolidOverride = m_Generator->AddCheckBox<Luna::Instance, bool>( m_Selection, &Luna::Instance::GetSolidOverride, &Luna::Instance::SetSolidOverride );
 
-    m_Solid = m_Enumerator->AddCheckBox<Luna::Instance, bool>( m_Selection, &Luna::Instance::GetSolid, &Luna::Instance::SetSolid );
+    m_Solid = m_Generator->AddCheckBox<Luna::Instance, bool>( m_Selection, &Luna::Instance::GetSolid, &Luna::Instance::SetSolid );
     m_Solid->Read();
 
     m_SolidOverride->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &InstancePanel::OnSolidOverride ) );
     m_SolidOverride->RaiseBoundDataChanged();
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
 
-  m_Enumerator->PushContainer();
+  m_Generator->PushContainer();
   {
-    m_Enumerator->AddLabel( TXT( "Transparent" ) );
+    m_Generator->AddLabel( TXT( "Transparent" ) );
     
-    m_TransparentOverride = m_Enumerator->AddCheckBox<Luna::Instance, bool>( m_Selection, &Luna::Instance::GetTransparentOverride, &Luna::Instance::SetTransparentOverride );
+    m_TransparentOverride = m_Generator->AddCheckBox<Luna::Instance, bool>( m_Selection, &Luna::Instance::GetTransparentOverride, &Luna::Instance::SetTransparentOverride );
     
-    m_Transparent = m_Enumerator->AddCheckBox<Luna::Instance, bool>( m_Selection, &Luna::Instance::GetTransparent, &Luna::Instance::SetTransparent );
+    m_Transparent = m_Generator->AddCheckBox<Luna::Instance, bool>( m_Selection, &Luna::Instance::GetTransparent, &Luna::Instance::SetTransparent );
     m_Transparent->Read();
 
     m_TransparentOverride->AddBoundDataChangedListener( Inspect::ChangedSignature::Delegate ( this, &InstancePanel::OnTransparentOverride ) );
     m_TransparentOverride->RaiseBoundDataChanged();
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
   
   bool allVolumes = true;
 
@@ -77,12 +77,12 @@ void InstancePanel::CreateAppearanceFlags()
 
   if ( allVolumes )
   {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Show Pointer" ) );
-      m_Enumerator->AddCheckBox<Luna::Volume, bool>( m_Selection, &Luna::Volume::IsPointerVisible, &Luna::Volume::SetPointerVisible );
+      m_Generator->AddLabel( TXT( "Show Pointer" ) );
+      m_Generator->AddCheckBox<Luna::Volume, bool>( m_Selection, &Luna::Volume::IsPointerVisible, &Luna::Volume::SetPointerVisible );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
   }
 }
 

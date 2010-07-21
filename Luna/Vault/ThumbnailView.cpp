@@ -8,8 +8,7 @@
 
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
-#include "Editor/Orientation.h"
-#include "Editor/UpdateStatusEvent.h"
+#include "UpdateStatusEvent.h"
 #include "Application/Inspect/DragDrop/DropSource.h"
 #include "Application/Undo/Command.h"
 #include "Application/UI/ArtProvider.h"
@@ -61,7 +60,7 @@ EVT_MENU( ID_SortByName, ThumbnailView::OnSortAlphabetical )
 EVT_MENU( ID_SortByType, ThumbnailView::OnSortByType )
 EVT_MENU( ID_Sort, ThumbnailView::OnSort )
 EVT_MENU( ID_Properties, ThumbnailView::OnFileProperties )
-igEVT_THUMBNAIL_LOADED( wxID_ANY, ThumbnailView::OnThumbnailLoaded )
+LUNA_EVT_THUMBNAIL_LOADED( wxID_ANY, ThumbnailView::OnThumbnailLoaded )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -91,22 +90,22 @@ ThumbnailView::ThumbnailView( const tstring& thumbnailDirectory, VaultFrame *bro
     EnableScrolling( false, false );
 
     // Set up camera orientation (orthographic)
-    const Math::Vector3 dir = Luna::OutVector * -1.f;
-    const Math::Vector3 up = Luna::UpVector;
-    m_Orientation.SetBasis( Luna::UpAxis, Math::Vector4( up ) );
-    m_Orientation.SetBasis( Luna::SideAxis, Math::Vector4( dir.Cross( up ) ) );
-    m_Orientation.SetBasis( Luna::OutAxis, Math::Vector4( Math::Vector3::Zero - dir ) );
+    const Math::Vector3 dir = Math::Vector3::BasisZ * -1.f;
+    const Math::Vector3 up = Math::Vector3::BasisY;
+    m_Orientation.SetBasis( Math::SingleAxes::Y, Math::Vector4( up ) );
+    m_Orientation.SetBasis( Math::SingleAxes::X, Math::Vector4( dir.Cross( up ) ) );
+    m_Orientation.SetBasis( Math::SingleAxes::Z, Math::Vector4( Math::Vector3::Zero - dir ) );
     m_Orientation.Invert();
 
     m_World = Math::Matrix4( Math::Scale( m_Scale, m_Scale, m_Scale ) );
 
     // Set up camera view matrix
     const Math::Vector3 pivot( 0, 0, 0 );
-    m_ViewMatrix = Math::Matrix4( pivot * -1 ) * m_Orientation * Math::Matrix4( OutVector * ( -s_FarClipDistance / 2.0f ) );
+    m_ViewMatrix = Math::Matrix4( pivot * -1 ) * m_Orientation * Math::Matrix4( Math::Vector3::BasisZ * ( -s_FarClipDistance / 2.0f ) );
 
     m_D3DManager.InitD3D( GetHwnd(), 64, 64 );
-    m_D3DManager.AddDeviceFoundListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
-    m_D3DManager.AddDeviceLostListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+    m_D3DManager.AddDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
+    m_D3DManager.AddDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
     CreateResources();
 
     m_TileCreator.SetDefaultThumbnails( m_TextureError, m_TextureLoading, m_TextureFolder );
@@ -150,8 +149,8 @@ ThumbnailView::~ThumbnailView()
     m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_KILL_FOCUS, wxFocusEventHandler( ThumbnailView::OnEditBoxLostFocus ), NULL, this );
     m_EditCtrl->Disconnect( m_EditCtrl->GetId(), wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( ThumbnailView::OnEditBoxPressEnter ), NULL, this );
 
-    m_D3DManager.RemoveDeviceFoundListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
-    m_D3DManager.RemoveDeviceLostListener( DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
+    m_D3DManager.RemoveDeviceFoundListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnAllocateResources ) );
+    m_D3DManager.RemoveDeviceLostListener( Render::DeviceStateSignature::Delegate( this, &ThumbnailView::OnReleaseResources ) );
 
     if ( m_LabelFont )
     {
@@ -579,9 +578,9 @@ void ThumbnailView::UpdateProjectionMatrix()
     NOC_ASSERT( GetSize().x > 0 && GetSize().y > 0 );
 
     m_Projection = Math::Matrix4::Identity;
-    m_Projection.x = SideVector;
-    m_Projection.y = UpVector;
-    m_Projection.z = OutVector;
+    m_Projection.x = Math::Vector3::BasisX;
+    m_Projection.y = Math::Vector3::BasisY;
+    m_Projection.z = Math::Vector3::BasisZ;
     m_Projection.Invert();
 
     Math::Matrix4 ortho;
@@ -2049,7 +2048,7 @@ void ThumbnailView::OnVaultFrameClosing( wxCloseEvent& args )
 ///////////////////////////////////////////////////////////////////////////////
 // If the device is lost, clean up any D3D resources that we created.
 // 
-void ThumbnailView::OnReleaseResources( const DeviceStateArgs& args )
+void ThumbnailView::OnReleaseResources( const Render::DeviceStateArgs& args )
 {
     DeleteResources();
 
@@ -2061,7 +2060,7 @@ void ThumbnailView::OnReleaseResources( const DeviceStateArgs& args )
 ///////////////////////////////////////////////////////////////////////////////
 // If the device is found, reset any D3D resources that are needed.
 // 
-void ThumbnailView::OnAllocateResources( const DeviceStateArgs& args )
+void ThumbnailView::OnAllocateResources( const Render::DeviceStateArgs& args )
 {
     CreateResources();
 }

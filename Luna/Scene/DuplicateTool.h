@@ -27,7 +27,7 @@ namespace Luna
     static void CleanupType();
 
   public:
-    DuplicateTool(Luna::Scene* scene, Enumerator* enumerator);
+    DuplicateTool(Luna::Scene* scene, PropertiesGenerator* generator);
 
     virtual ~DuplicateTool();
 

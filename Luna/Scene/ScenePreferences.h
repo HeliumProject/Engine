@@ -1,14 +1,14 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "Core/Manipulator.h"
+#include "Manipulator.h"
 #include "Scene/TranslateManipulator.h"
-#include "Editor/Preferences.h"
-#include "Editor/WindowSettings.h"
-#include "Editor/MRUData.h"
+#include "Preferences.h"
+#include "WindowSettings.h"
+#include "MRUData.h"
 
 #include "Pipeline/Content/NodeVisibility.h"
-#include "ViewPreferences.h"
+#include "ViewportPreferences.h"
 #include "GridPreferences.h"
 
 namespace Luna
@@ -68,7 +68,7 @@ namespace Luna
 
     Content::NodeVisibility* GetDefaultNodeVisibility(); 
 
-    ViewPreferences*  GetViewPreferences(); 
+    ViewportPreferences*  GetViewPreferences(); 
     ViewPreferencesPtr& GetViewPreferencesPtr();
 
     GridPreferences* GetGridPreferences();

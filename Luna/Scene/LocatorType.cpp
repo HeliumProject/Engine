@@ -4,7 +4,7 @@
 #include "Locator.h"
 #include "Scene.h"
 
-#include "View.h"
+#include "Viewport.h"
 #include "Color.h"
 
 #include "PrimitiveLocator.h"
@@ -27,10 +27,10 @@ void LocatorType::CleanupType()
 LocatorType::LocatorType( Luna::Scene* scene, i32 instanceType )
 : Luna::InstanceType( scene, instanceType )
 {
-  m_Locator = new Luna::PrimitiveLocator( scene->GetView()->GetResources() );
+  m_Locator = new Luna::PrimitiveLocator( scene->GetViewport()->GetResources() );
   m_Locator->Update();
 
-  m_Cube = new Luna::PrimitiveCube( scene->GetView()->GetResources() );
+  m_Cube = new Luna::PrimitiveCube( scene->GetViewport()->GetResources() );
   m_Cube->Update();
 }
 

@@ -3,8 +3,7 @@
 
 #include "Platform/Debug.h"
 #include "Foundation/TUID.h"
-
-#include <boost/numeric/conversion/cast.hpp>
+#include "Foundation/Numeric.h"
 
 using namespace Reflect;
 
@@ -27,23 +26,7 @@ bool Cast(const Serializer* src, Serializer* dest)
     const SimpleSerializer<srcT>* source = static_cast<const SimpleSerializer<srcT>*>(src);
     SimpleSerializer<destT>* destination = static_cast<SimpleSerializer<destT>*>(dest);
 
-    if ( Platform::IsDebuggerPresent() )
-    {
-        destination->m_Data.Set( boost::numeric_cast<destT>(source->m_Data.Get()) );
-    }
-    else
-    {
-        try
-        {
-            destination->m_Data.Set( boost::numeric_cast<destT>(source->m_Data.Get()) );
-        }
-        catch (...)
-        {
-            return false;
-        }
-    }
-
-    return true;
+    return Nocturnal::RangeCast( source->m_Data.Get(), destination->m_Data.Ref() );
 }
 
 template<>

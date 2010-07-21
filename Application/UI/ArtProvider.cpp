@@ -111,7 +111,7 @@ void ArtProvider::Create()
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FIND, TXT( "actions/filefind.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FIND_AND_REPLACE, TXT( "actions/filefind.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FLOPPY, TXT( "devices/floppy_mount.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FOLDER, TXT( "filesystem/folder.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FOLDER, TXT( "filesystems/folder.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_FOLDER_OPEN, TXT( "filesystems/folder_open.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_GO_BACK, TXT( "actions/previous.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_GO_DIR_UP, TXT( "actions/up.png" ) ) );
@@ -145,38 +145,32 @@ void ArtProvider::Create()
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_UNDO, TXT( "actions/undo.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( wxART_WARNING, TXT( "actions/messagebox_warning.png" ) ) );
 
-
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Unknown, TXT( "nocturnal/unknown.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Null, TXT( "" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::PerspectiveCamera, TXT( "devices/camera.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::FrontOrthoCamera, TXT( "devices/camera.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::SideOrthoCamera, TXT( "devices/camera.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::TopOrthoCamera, TXT( "devices/camera.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Open, TXT( "filesystems/folder_open.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Save, TXT( "actions/filesave.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::SaveAs, TXT( "actions/filesaveas.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::SaveAll, TXT( "actions/save_all.png" ) ) );
 
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Cut, TXT( "actions/editcut.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Copy, TXT( "actions/editcopy.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Paste, TXT( "actions/editpaste.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Select, TXT( "" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Translate, TXT( "apps/amsn4.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Rotate, TXT( "" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Scale, TXT( "apps/amsn8.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Duplicate, TXT( "" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::SelectAll, TXT( "nocturnal/unknown.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Locator, TXT( "apps/galeon.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Volume, TXT( "apps/3d.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Entity, TXT( "apps/katuberling.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Curve, TXT( "" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::CurveEdit, TXT( "" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::NavMesh, TXT( "apps/gnome_apps.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Undo, TXT( "actions/undo.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Redo, TXT( "actions/redo.png" ) ) );
 
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::NewCollection, TXT( "actions/folder_new.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Back, TXT( "actions/previous.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Forward, TXT( "actions/forward.png" ) ) );
+
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::Options, TXT( "actions/messagebox_info.png" ) ) );
 
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::RCSCheckedOutByMe, TXT( "actions/apply.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::RCSCheckedOutBySomeoneElse, TXT( "actions/lock.png" ) ) );
     m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::RCSOutOfDate, TXT( "actions/messagebox_warning.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::RCSUnknown, TXT( "" ) ) );
-
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::TaskWindow, TXT( "actions/openterm.png" ) ) );
-    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::SceneEditor, TXT( "apps/browser.png" ) ) );
+    m_ArtIDToFilename.insert( M_ArtIDToFilename::value_type( Nocturnal::ArtIDs::RCSUnknown, TXT( "nocturnal/unknown.png" ) ) );
 }
 
 wxBitmap ArtProvider::CreateBitmap( const wxArtID& artId, const wxArtClient& artClient, const wxSize& size )

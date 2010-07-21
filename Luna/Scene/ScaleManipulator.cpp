@@ -2,7 +2,7 @@
 #include "ScaleManipulator.h"
 
 #include "Pick.h"
-#include "View.h"
+#include "Viewport.h"
 #include "Camera.h"
 #include "Color.h"
 
@@ -14,7 +14,7 @@
 #include "SceneManager.h"
 #include "ScenePreferences.h"
 
-#include "Editor/Editor.h"
+#include "Editor.h"
 
 using namespace Math;
 using namespace Luna;
@@ -31,8 +31,8 @@ void ScaleManipulator::CleanupType()
   Reflect::UnregisterClass< Luna::ScaleManipulator >();
 }
 
-ScaleManipulator::ScaleManipulator(const ManipulatorMode mode, Luna::Scene* scene, Enumerator* enumerator)
-: Luna::TransformManipulator (mode, scene, enumerator)
+ScaleManipulator::ScaleManipulator(const ManipulatorMode mode, Luna::Scene* scene, PropertiesGenerator* generator)
+: Luna::TransformManipulator (mode, scene, generator)
 , m_GridSnap( false )
 , m_Distance( 1.0f )
 {
@@ -41,22 +41,22 @@ ScaleManipulator::ScaleManipulator(const ManipulatorMode mode, Luna::Scene* scen
   prefs->Get( prefs->ScaleManipulatorGridSnap(), m_GridSnap );
   prefs->Get( prefs->ScaleManipulatorDistance(), m_Distance );
 
-  m_Axes = new Luna::PrimitiveAxes (m_Scene->GetView()->GetResources());
+  m_Axes = new Luna::PrimitiveAxes (m_Scene->GetViewport()->GetResources());
   m_Axes->Update();
 
-  m_Cube = new Luna::PrimitiveCube (m_Scene->GetView()->GetResources());
+  m_Cube = new Luna::PrimitiveCube (m_Scene->GetViewport()->GetResources());
   m_Cube->SetSolid(true);
   m_Cube->Update();
 
-  m_XCube = new Luna::PrimitiveCube (m_Scene->GetView()->GetResources());
+  m_XCube = new Luna::PrimitiveCube (m_Scene->GetViewport()->GetResources());
   m_XCube->SetSolid(true);
   m_XCube->Update();
 
-  m_YCube = new Luna::PrimitiveCube (m_Scene->GetView()->GetResources());
+  m_YCube = new Luna::PrimitiveCube (m_Scene->GetViewport()->GetResources());
   m_YCube->SetSolid(true);
   m_YCube->Update();
 
-  m_ZCube = new Luna::PrimitiveCube (m_Scene->GetView()->GetResources());
+  m_ZCube = new Luna::PrimitiveCube (m_Scene->GetViewport()->GetResources());
   m_ZCube->SetSolid(true);
   m_ZCube->Update();
 
@@ -641,23 +641,23 @@ void ScaleManipulator::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel( TXT( "Scale" ), true);
+  m_Generator->PushPanel( TXT( "Scale" ), true);
   {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Grid Snap" ) );
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::ScaleManipulator, bool> (this, &ScaleManipulator::GetGridSnap, &ScaleManipulator::SetGridSnap) );
+      m_Generator->AddLabel( TXT( "Grid Snap" ) );
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::ScaleManipulator, bool> (this, &ScaleManipulator::GetGridSnap, &ScaleManipulator::SetGridSnap) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Grid Distance" ) );
-      m_Enumerator->AddValue<float>( new Nocturnal::MemberProperty<Luna::ScaleManipulator, float> (this, &ScaleManipulator::GetDistance, &ScaleManipulator::SetDistance) );
+      m_Generator->AddLabel( TXT( "Grid Distance" ) );
+      m_Generator->AddValue<float>( new Nocturnal::MemberProperty<Luna::ScaleManipulator, float> (this, &ScaleManipulator::GetDistance, &ScaleManipulator::SetDistance) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
 }
 
 bool ScaleManipulator::GetGridSnap() const

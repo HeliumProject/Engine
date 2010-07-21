@@ -1,5 +1,6 @@
 #include "Precompile.h"
 #include "Tool.h"
+#include "Scene.h"
 
 using namespace Luna;
 
@@ -13,4 +14,13 @@ void Tool::InitializeType()
 void Tool::CleanupType()
 {
   Reflect::UnregisterClass< Luna::Tool >();
+}
+
+Tool::Tool( Luna::Scene* scene, PropertiesGenerator* generator )
+: m_Generator ( generator )
+, m_View ( scene->GetViewport() )
+, m_Scene ( scene )
+, m_AllowSelection( true )
+{
+
 }

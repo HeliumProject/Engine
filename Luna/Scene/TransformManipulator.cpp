@@ -2,7 +2,7 @@
 #include "TransformManipulator.h"
 #include "Transform.h"
 
-#include "View.h"
+#include "Viewport.h"
 #include "Camera.h"
 #include "Color.h"
 
@@ -21,8 +21,8 @@ void TransformManipulator::CleanupType()
   Reflect::UnregisterClass< Luna::TransformManipulator >();
 }
 
-TransformManipulator::TransformManipulator(const ManipulatorMode mode, Luna::Scene* scene, Enumerator* enumerator)
-: Luna::SceneTool(scene, enumerator)
+TransformManipulator::TransformManipulator(const ManipulatorMode mode, Luna::Scene* scene, PropertiesGenerator* generator)
+: Tool(scene, generator)
 , m_Mode (mode)
 , m_SelectedAxes (MultipleAxes::None)
 , m_Size (0.3f)
@@ -216,18 +216,18 @@ void TransformManipulator::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel( TXT( "Manipulator" ), true);
+  m_Generator->PushPanel( TXT( "Manipulator" ), true);
   {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Size" ) );
-      Inspect::Slider* slider = m_Enumerator->AddSlider<f32>( new Nocturnal::MemberProperty<Luna::TransformManipulator, f32> (this, &TransformManipulator::GetSize, &TransformManipulator::SetSize) );
+      m_Generator->AddLabel( TXT( "Size" ) );
+      Inspect::Slider* slider = m_Generator->AddSlider<f32>( new Nocturnal::MemberProperty<Luna::TransformManipulator, f32> (this, &TransformManipulator::GetSize, &TransformManipulator::SetSize) );
       slider->SetRangeMin( 0.10f );
       slider->SetRangeMax( 0.5f );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
 }
 
 f32 TransformManipulator::GetSize() const

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Luna/API.h"
-#include "View.h"
-
-#include "Core/Selection.h"
+#include "Object.h"
+#include "Selection.h"
+#include "Viewport.h"
 
 namespace Luna
 {
-  class View;
+  class PropertiesGenerator;
+  class Scene;
 
   class Tool NOC_ABSTRACT : public Object
   {
@@ -16,11 +16,14 @@ namespace Luna
     //
 
   protected:
-    // The attribute enumerator to use
-    Enumerator* m_Enumerator;
-
     // The 3d view
-    Luna::View* m_View;
+    Viewport* m_View;
+
+    // The attribute generator to use
+    PropertiesGenerator* m_Generator;
+
+    // The scene to edit
+    Scene* m_Scene;
 
     bool m_AllowSelection;
 
@@ -39,18 +42,7 @@ namespace Luna
     //
 
   public:
-    Tool( Luna::View* view, Enumerator* enumerator )
-      : m_Enumerator (enumerator)
-      , m_View ( view )
-      , m_AllowSelection( true )
-    {
-
-    }
-
-    virtual ~Tool()
-    {
-
-    }
+    Tool( Luna::Scene* scene, PropertiesGenerator* generator );
 
     // Create and Initialize
     virtual bool Initialize()

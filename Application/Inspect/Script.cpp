@@ -11,7 +11,7 @@
 #include "Foundation/Log.h"
 #include "Foundation/Boost/Regex.h"
 
-#include <boost/regex.hpp> 
+#include <regex> 
 
 using namespace Inspect;
 
@@ -95,7 +95,7 @@ bool Script::PreProcess(tstring& script)
   const tregex cfPattern ( TXT( ".*" ) LS_REGEX_DELIM_BEGIN TXT( ".*" ) LS_REGEX_DELIM_END TXT( ".*" ) );
 
   tsmatch matchResult; 
-  if(!boost::regex_search(script, matchResult, cfPattern))
+  if(!std::tr1::regex_search(script, matchResult, cfPattern))
   {
     return false; 
   }
@@ -108,14 +108,14 @@ bool Script::PreProcess(tstring& script)
   // including comments and additional UI[.[ (.*) ].] 
   // 
   const tregex cfStartEndPattern ( TXT( ".*" ) LS_REGEX_DELIM_BEGIN TXT( "(.*)" ) LS_REGEX_DELIM_END TXT( ".*" ) ); 
-  script = boost::regex_replace(script, cfStartEndPattern, TXT( "$1" ) ); 
+  script = std::tr1::regex_replace(script, cfStartEndPattern, tstring (TXT( "$1" )) ); 
 
   //
   // Cull comments
   //
   
   const tregex cfCommentPattern ( LC_COMMENT TXT( ".*\n" ) ); 
-  script = boost::regex_replace(script, cfCommentPattern, TXT( "\n" ) ); 
+  script = std::tr1::regex_replace(script, cfCommentPattern, tstring (TXT( "\n" )) ); 
 
   //
   // Debug

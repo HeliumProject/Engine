@@ -24,8 +24,8 @@ void VolumeCreateTool::CleanupType()
   Reflect::UnregisterClass< Luna::VolumeCreateTool >();
 }
 
-VolumeCreateTool::VolumeCreateTool(Luna::Scene* scene, Enumerator* enumerator)
-: Luna::CreateTool (scene, enumerator)
+VolumeCreateTool::VolumeCreateTool(Luna::Scene* scene, PropertiesGenerator* generator)
+: Luna::CreateTool (scene, generator)
 {
 
 }
@@ -72,13 +72,13 @@ Luna::TransformPtr VolumeCreateTool::CreateNode()
 
 void VolumeCreateTool::CreateProperties()
 {
-  m_Enumerator->PushPanel( TXT( "Volume" ), true);
+  m_Generator->PushPanel( TXT( "Volume" ), true);
   {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Shape" ) );
+      m_Generator->AddLabel( TXT( "Shape" ) );
 
-      Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::VolumeCreateTool, int>(this, &VolumeCreateTool::GetVolumeShape, &VolumeCreateTool::SetVolumeShape) );
+      Inspect::Choice* choice = m_Generator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::VolumeCreateTool, int>(this, &VolumeCreateTool::GetVolumeShape, &VolumeCreateTool::SetVolumeShape) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
@@ -108,11 +108,11 @@ void VolumeCreateTool::CreateProperties()
 
       choice->SetItems( items );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
     __super::CreateProperties();
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
 }
 
 int VolumeCreateTool::GetVolumeShape() const

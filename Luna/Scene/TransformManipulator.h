@@ -5,12 +5,12 @@
 #include "Foundation/Math/Vector3.h"
 #include "Foundation/Math/Matrix4.h"
 
-#include "SceneTool.h"
-#include "Transform.h"
+#include "Application/Undo/Queue.h"
 
 #include "Tool.h"
-#include "Application/Undo/Queue.h"
-#include "Core/Manipulator.h"
+#include "Scene.h"
+#include "Transform.h"
+#include "Manipulator.h"
 
 namespace Luna
 {
@@ -25,7 +25,7 @@ namespace Luna
 
   class PickVisitor;
 
-  class TransformManipulator NOC_ABSTRACT : public Luna::SceneTool, public ManiuplatorAdapterCollection
+  class TransformManipulator NOC_ABSTRACT : public Tool, public ManiuplatorAdapterCollection
   {
   protected:
     // The mode of the manipulator (duh)
@@ -64,7 +64,7 @@ namespace Luna
     // RTTI
     //
 
-    LUNA_DECLARE_TYPE(Luna::TransformManipulator, Luna::SceneTool);
+    LUNA_DECLARE_TYPE(Luna::TransformManipulator, Tool);
     static void InitializeType();
     static void CleanupType();
 
@@ -74,7 +74,7 @@ namespace Luna
     //
 
   public:
-    TransformManipulator(const ManipulatorMode mode, Luna::Scene* scene, Enumerator* enumerator);
+    TransformManipulator(const ManipulatorMode mode, Luna::Scene* scene, PropertiesGenerator* generator);
 
     virtual ~TransformManipulator();
 

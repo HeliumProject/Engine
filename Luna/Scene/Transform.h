@@ -2,7 +2,7 @@
 
 #include "Pipeline/Content/Nodes/Transform.h"
 
-#include "Core/Manipulator.h"
+#include "Manipulator.h"
 
 #include "HierarchyNode.h"
 #include "Foundation/Math/EulerAngles.h"
@@ -50,10 +50,6 @@ namespace Luna
     bool m_BindIsDirty;
     Math::Matrix4 m_BindTransform;
     Math::Matrix4 m_InverseBindTransform;
-    
-    // Scale color info
-    D3DCOLORVALUE m_ScaleColor;
-    D3DCOLORVALUE m_ScaleColorGradient;
 
 
     //
@@ -182,13 +178,6 @@ namespace Luna
 
     bool GetInheritTransform() const;
     void SetInheritTransform(bool inherit);
-    
-    //
-    // Color
-    //
-    
-    D3DCOLORVALUE GetScaleColor() const;
-    D3DCOLORVALUE GetScaleColorGradient() const;
 
 
     //

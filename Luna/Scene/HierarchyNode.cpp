@@ -25,7 +25,7 @@ LUNA_DEFINE_TYPE( Luna::HierarchyNode );
 void HierarchyNode::InitializeType()
 {
   Reflect::RegisterClass< Luna::HierarchyNode >( TXT( "Luna::HierarchyNode" ) );
-  Enumerator::InitializePanel( TXT( "Hierarchy" ), CreatePanelSignature::Delegate( &HierarchyNode::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "Hierarchy" ), CreatePanelSignature::Delegate( &HierarchyNode::CreatePanel ) );
 }
 
 void HierarchyNode::CleanupType()
@@ -745,7 +745,7 @@ void HierarchyNode::Evaluate(GraphDirection direction)
 
 bool HierarchyNode::BoundsCheck(const Math::Matrix4& instanceMatrix) const
 {
-  Luna::Camera* camera = m_Scene->GetView()->GetCamera();
+  Luna::Camera* camera = m_Scene->GetViewport()->GetCamera();
 
   Math::AlignedBox bounds (m_ObjectHierarchyBounds);
 
@@ -761,7 +761,7 @@ bool HierarchyNode::BoundsCheck(const Math::Matrix4& instanceMatrix) const
 
 void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
 {
-  Luna::View* view = m_Scene->GetView();
+  Luna::Viewport* view = m_Scene->GetViewport();
 
   IDirect3DDevice9* device = view->GetResources()->GetDevice();
 
@@ -783,39 +783,6 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
       material.Ambient = Luna::Color::ColorToColorValue( defaultMaterial.Ambient.a, color.r, color.g, color.b );
     }
     break;
-  
-  case ViewColorModes::AssetType:
-    {
-      Luna::HierarchyNode* hierarchyNode = (Luna::HierarchyNode*) this;
-      Luna::Entity* entity = Reflect::ObjectCast< Luna::Entity >( hierarchyNode );
-      if ( entity )
-      {
-        Luna::EntityAssetSet* entityClassSet = entity->GetClassSet();
-        if ( entityClassSet )
-        {
-          Asset::Entity* entityClass = entityClassSet->GetEntity();
-          if ( entityClass )
-          {
-            material = Luna::View::s_AssetTypeMaterials[ 0 ];
-          }
-        }
-      }
-    }
-    break;
-  
-  case ViewColorModes::Scale:
-    {
-      HierarchyNode* hierarchyNode = (HierarchyNode*) this;
-      material.Ambient = hierarchyNode->GetTransform()->GetScaleColor();
-    }
-    break;
-
-  case ViewColorModes::ScaleGradient:
-    {
-      HierarchyNode* hierarchyNode = (HierarchyNode*) this;
-      material.Ambient = hierarchyNode->GetTransform()->GetScaleColorGradient();
-    }
-    break;
   }
 
   if ( m_Scene->IsCurrent() )
@@ -824,19 +791,19 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
     {
       if ( IsHighlighted() && view->IsHighlighting() )
       {
-        material = Luna::View::s_HighlightedMaterial;
+        material = Luna::Viewport::s_HighlightedMaterial;
       }
       else if ( IsSelected() )
       {
-        material = Luna::View::s_SelectedMaterial;
+        material = Luna::Viewport::s_SelectedMaterial;
       }
       else if ( IsReactive() )
       {
-        material = Luna::View::s_ReactiveMaterial;
+        material = Luna::Viewport::s_ReactiveMaterial;
       }
       else if ( IsLive() )
       {
-        material = Luna::View::s_LiveMaterial;
+        material = Luna::Viewport::s_LiveMaterial;
       }
 
       material.Ambient.a = defaultMaterial.Ambient.a;
@@ -846,7 +813,7 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
     }
     else
     {
-      material = Luna::View::s_UnselectableMaterial;
+      material = Luna::Viewport::s_UnselectableMaterial;
     }
   }
   else
@@ -894,7 +861,7 @@ void HierarchyNode::Render( RenderVisitor* render )
 {
   Luna::Transform* transform = GetTransform();
 
-  if ( transform && IsSelected() && m_Scene->IsCurrent() && render->GetView()->IsBoundsVisible() )
+  if ( transform && IsSelected() && m_Scene->IsCurrent() && render->GetViewport()->IsBoundsVisible() )
   {
     Math::V_Vector3 vertices;
     Math::V_Vector3 lineList;
@@ -902,7 +869,7 @@ void HierarchyNode::Render( RenderVisitor* render )
     D3DMATERIAL9 material;
     ZeroMemory(&material, sizeof(material));
 
-    m_Scene->GetView()->GetDevice()->SetFVF( ElementFormats[ ElementTypes::Position ] );
+    m_Scene->GetViewport()->GetDevice()->SetFVF( ElementFormats[ ElementTypes::Position ] );
 
 
     //
@@ -912,14 +879,14 @@ void HierarchyNode::Render( RenderVisitor* render )
     {
       Math::Matrix4 matrix = render->State().m_Matrix;
 
-      m_Scene->GetView()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
+      m_Scene->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
       vertices.clear();
       m_ObjectBounds.GetVertices(vertices);
       Math::AlignedBox::GetWireframe( vertices, lineList );
       material.Ambient = Luna::Color::ColorToColorValue( 1, 255, 0, 0 );
-      m_Scene->GetView()->GetDevice()->SetMaterial(&material);
-      m_Scene->GetView()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
+      m_Scene->GetViewport()->GetDevice()->SetMaterial(&material);
+      m_Scene->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
     }
 
 
@@ -930,14 +897,14 @@ void HierarchyNode::Render( RenderVisitor* render )
     {
       Math::Matrix4 matrix = render->ParentState().m_Matrix;
 
-      m_Scene->GetView()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
+      m_Scene->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
       vertices.clear();
       GetGlobalBounds().GetVertices(vertices);
       Math::AlignedBox::GetWireframe( vertices, lineList );
       material.Ambient = Luna::Color::ColorToColorValue( 1, 255, 128, 128 );
-      m_Scene->GetView()->GetDevice()->SetMaterial(&material);
-      m_Scene->GetView()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
+      m_Scene->GetViewport()->GetDevice()->SetMaterial(&material);
+      m_Scene->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
     }
 
 
@@ -948,14 +915,14 @@ void HierarchyNode::Render( RenderVisitor* render )
     {
       Math::Matrix4 matrix = render->State().m_Matrix;
 
-      m_Scene->GetView()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
+      m_Scene->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
       vertices.clear();
       m_ObjectHierarchyBounds.GetVertices(vertices);
       Math::AlignedBox::GetWireframe( vertices, lineList );
       material.Ambient = Luna::Color::ColorToColorValue( 1, 0, 0, 255 );
-      m_Scene->GetView()->GetDevice()->SetMaterial(&material);
-      m_Scene->GetView()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
+      m_Scene->GetViewport()->GetDevice()->SetMaterial(&material);
+      m_Scene->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
     }
 
 
@@ -966,17 +933,17 @@ void HierarchyNode::Render( RenderVisitor* render )
     {
       Math::Matrix4 matrix = render->ParentState().m_Matrix;
 
-      m_Scene->GetView()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
+      m_Scene->GetViewport()->GetDevice()->SetTransform( D3DTS_WORLD, (D3DMATRIX*)&(matrix) );
 
       vertices.clear();
       GetGlobalHierarchyBounds().GetVertices(vertices);
       Math::AlignedBox::GetWireframe( vertices, lineList );
       material.Ambient = Luna::Color::ColorToColorValue( 1, 128, 128, 255 );
-      m_Scene->GetView()->GetDevice()->SetMaterial(&material);
-      m_Scene->GetView()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
+      m_Scene->GetViewport()->GetDevice()->SetMaterial(&material);
+      m_Scene->GetViewport()->GetDevice()->DrawPrimitiveUP( D3DPT_LINELIST, (UINT)lineList.size() / 2, &lineList.front(), sizeof(Math::Vector3));
     }
 
-    m_Scene->GetView()->GetResources()->ResetState();
+    m_Scene->GetViewport()->GetResources()->ResetState();
   }
 }
 
@@ -1120,22 +1087,22 @@ bool HierarchyNode::ValidatePanel(const tstring& name)
 
 void HierarchyNode::CreatePanel(CreatePanelArgs& args)
 {
-  args.m_Enumerator->PushPanel( TXT( "Hierarchy Node" ), true);
+  args.m_Generator->PushPanel( TXT( "Hierarchy Node" ), true);
   {
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Hidden" ) );
-      args.m_Enumerator->AddCheckBox<Luna::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsHidden, &HierarchyNode::SetHidden, false );
+      args.m_Generator->AddLabel( TXT( "Hidden" ) );
+      args.m_Generator->AddCheckBox<Luna::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsHidden, &HierarchyNode::SetHidden, false );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Live" ) );   
-      args.m_Enumerator->AddCheckBox<Luna::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsLive, &HierarchyNode::SetLive );
+      args.m_Generator->AddLabel( TXT( "Live" ) );   
+      args.m_Generator->AddCheckBox<Luna::HierarchyNode, bool>( args.m_Selection, &HierarchyNode::IsLive, &HierarchyNode::SetLive );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
   }
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 

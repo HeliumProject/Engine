@@ -7,7 +7,7 @@
 
 #include "InstanceType.h"
 
-#include "Core/Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveCone.h"
@@ -24,7 +24,7 @@ void SpotLight::InitializeType()
 {
   Reflect::RegisterClass< SpotLight >( TXT( "Luna::SpotLight" ) );
 
-  Enumerator::InitializePanel( TXT( "SpotLight" ), CreatePanelSignature::Delegate( &SpotLight::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "SpotLight" ), CreatePanelSignature::Delegate( &SpotLight::CreatePanel ) );
 }
 
 void SpotLight::CleanupType()
@@ -74,7 +74,7 @@ void SpotLight::Initialize()
 
   if (!m_InnerCone)
   {
-    m_InnerCone = new Luna::PrimitiveCone ( m_Scene->GetView()->GetResources() );
+    m_InnerCone = new Luna::PrimitiveCone ( m_Scene->GetViewport()->GetResources() );
     m_InnerCone->m_Length = light->GetInnerRadius();
     m_InnerCone->m_Radius = tan(light->m_InnerConeAngle ) * m_InnerCone->m_Length;
     m_InnerCone->Update();
@@ -82,7 +82,7 @@ void SpotLight::Initialize()
 
   if (!m_OuterCone)
   {
-    m_OuterCone = new Luna::PrimitiveCone ( m_Scene->GetView()->GetResources() );
+    m_OuterCone = new Luna::PrimitiveCone ( m_Scene->GetViewport()->GetResources() );
     m_OuterCone->m_Length = light->GetOuterRadius();
     m_OuterCone->m_Radius = tan(light->m_OuterConeAngle ) * m_OuterCone->m_Length;
     m_OuterCone->Update();
@@ -418,163 +418,163 @@ bool SpotLight::ValidatePanel(const tstring& name)
 
 void SpotLight::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel( TXT( "Spot Light" ), true);
+  args.m_Generator->PushPanel( TXT( "Spot Light" ), true);
   {
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Inner Radius" ) );
-      args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerRadius, &SpotLight::SetInnerRadius );
+      args.m_Generator->AddLabel( TXT( "Inner Radius" ) );
+      args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerRadius, &SpotLight::SetInnerRadius );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Outer Radius" ) );
-      args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterRadius, &SpotLight::SetOuterRadius );
+      args.m_Generator->AddLabel( TXT( "Outer Radius" ) );
+      args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterRadius, &SpotLight::SetOuterRadius );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Inner Angle" ) );
+      args.m_Generator->AddLabel( TXT( "Inner Angle" ) );
 
-      args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerConeAngleDegrees, &SpotLight::SetInnerConeAngleDegrees );
-      Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerConeAngle, &SpotLight::SetInnerConeAngle );
+      args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerConeAngleDegrees, &SpotLight::SetInnerConeAngleDegrees );
+      Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetInnerConeAngle, &SpotLight::SetInnerConeAngle );
       slider->SetRangeMin( 0 );
       slider->SetRangeMax( Math::HalfPi );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Outer Angle" ) );
-      args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterConeAngleDegrees, &SpotLight::SetOuterConeAngleDegrees );
-      Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterConeAngle, &SpotLight::SetOuterConeAngle );
+      args.m_Generator->AddLabel( TXT( "Outer Angle" ) );
+      args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterConeAngleDegrees, &SpotLight::SetOuterConeAngleDegrees );
+      Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetOuterConeAngle, &SpotLight::SetOuterConeAngle );
       slider->SetRangeMin( 0 );
       slider->SetRangeMax( Math::HalfPi );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushPanel( TXT( "RealTime" ) );
+    args.m_Generator->PushPanel( TXT( "RealTime" ) );
     {
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "Shadow Map Hi Res" ) );
-        args.m_Enumerator->AddCheckBox<SpotLight, bool>( args.m_Selection, &SpotLight::GetShadowMapHiRes, &SpotLight::SetShadowMapHiRes );
+        args.m_Generator->AddLabel( TXT( "Shadow Map Hi Res" ) );
+        args.m_Generator->AddCheckBox<SpotLight, bool>( args.m_Selection, &SpotLight::GetShadowMapHiRes, &SpotLight::SetShadowMapHiRes );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
      
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "GodRay Enabled" ) );
-        args.m_Enumerator->AddCheckBox<SpotLight, bool>( args.m_Selection, &SpotLight::GetGodRayEnabled, &SpotLight::SetGodRayEnabled );
+        args.m_Generator->AddLabel( TXT( "GodRay Enabled" ) );
+        args.m_Generator->AddCheckBox<SpotLight, bool>( args.m_Selection, &SpotLight::GetGodRayEnabled, &SpotLight::SetGodRayEnabled );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
       
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "GodRay Opacity" ) );
+        args.m_Generator->AddLabel( TXT( "GodRay Opacity" ) );
 
-        args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayOpacity, &SpotLight::SetGodRayOpacity );
-        Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayOpacity, &SpotLight::SetGodRayOpacity );
+        args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayOpacity, &SpotLight::SetGodRayOpacity );
+        Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayOpacity, &SpotLight::SetGodRayOpacity );
         slider->SetRangeMin( 0.0f );
         slider->SetRangeMax( 1.0f );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "GodRay Density" ) );
+        args.m_Generator->AddLabel( TXT( "GodRay Density" ) );
 
-        args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayDensity, &SpotLight::SetGodRayDensity );
-        Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayDensity, &SpotLight::SetGodRayDensity );
+        args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayDensity, &SpotLight::SetGodRayDensity );
+        Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayDensity, &SpotLight::SetGodRayDensity );
         slider->SetRangeMin( 0.00f );
         slider->SetRangeMax( 0.95f );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "GodRay Quality" ) );
+        args.m_Generator->AddLabel( TXT( "GodRay Quality" ) );
 
-        args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayQuality, &SpotLight::SetGodRayQuality );
-        Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayQuality, &SpotLight::SetGodRayQuality );
+        args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayQuality, &SpotLight::SetGodRayQuality );
+        Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayQuality, &SpotLight::SetGodRayQuality );
         slider->SetRangeMin( 0.0f );
         slider->SetRangeMax( 1.0f );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "GodRay Fade Near" ) );
+        args.m_Generator->AddLabel( TXT( "GodRay Fade Near" ) );
 
-        args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeNear, &SpotLight::SetGodRayFadeNear );
-        Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeNear, &SpotLight::SetGodRayFadeNear );
+        args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeNear, &SpotLight::SetGodRayFadeNear );
+        Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeNear, &SpotLight::SetGodRayFadeNear );
         slider->SetRangeMin( 0.5f );
         slider->SetRangeMax( 1000.0f );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "GodRay Fade Far" ) );
+        args.m_Generator->AddLabel( TXT( "GodRay Fade Far" ) );
 
-        args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeFar, &SpotLight::SetGodRayFadeFar );
-        Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeFar, &SpotLight::SetGodRayFadeFar );
+        args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeFar, &SpotLight::SetGodRayFadeFar );
+        Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayFadeFar, &SpotLight::SetGodRayFadeFar );
         slider->SetRangeMin( 10.0f );
         slider->SetRangeMax( 1000.0f );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "GodRay Clip Phi Offset" ) );
+        args.m_Generator->AddLabel( TXT( "GodRay Clip Phi Offset" ) );
 
-        args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlanePhiOffset, &SpotLight::SetGodRayClipPlanePhiOffset );
-        Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlanePhiOffset, &SpotLight::SetGodRayClipPlanePhiOffset );
+        args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlanePhiOffset, &SpotLight::SetGodRayClipPlanePhiOffset );
+        Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlanePhiOffset, &SpotLight::SetGodRayClipPlanePhiOffset );
         slider->SetRangeMin(-1.0f );
         slider->SetRangeMax( 1.0f );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "GodRay Clip Offset" ) );
+        args.m_Generator->AddLabel( TXT( "GodRay Clip Offset" ) );
 
-        args.m_Enumerator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlaneOffset, &SpotLight::SetGodRayClipPlaneOffset );
-        Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlaneOffset, &SpotLight::SetGodRayClipPlaneOffset );
+        args.m_Generator->AddValue<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlaneOffset, &SpotLight::SetGodRayClipPlaneOffset );
+        Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, float>( args.m_Selection, &SpotLight::GetGodRayClipPlaneOffset, &SpotLight::SetGodRayClipPlaneOffset );
         slider->SetRangeMin( 0.0f );
         slider->SetRangeMax( 0.95f );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "Offset Factor" ) );
+        args.m_Generator->AddLabel( TXT( "Offset Factor" ) );
 
-        args.m_Enumerator->AddValue<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetFactor, &SpotLight::SetOffsetFactor );
-        Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetFactor, &SpotLight::SetOffsetFactor );
+        args.m_Generator->AddValue<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetFactor, &SpotLight::SetOffsetFactor );
+        Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetFactor, &SpotLight::SetOffsetFactor );
         slider->SetRangeMin( 0.0f );
         slider->SetRangeMax( 255.0f );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
 
-      args.m_Enumerator->PushContainer();
+      args.m_Generator->PushContainer();
       {
-        args.m_Enumerator->AddLabel( TXT( "Offset Units" ) );
+        args.m_Generator->AddLabel( TXT( "Offset Units" ) );
 
-        args.m_Enumerator->AddValue<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetUnits, &SpotLight::SetOffsetUnits );
-        Inspect::Slider* slider = args.m_Enumerator->AddSlider<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetUnits, &SpotLight::SetOffsetUnits );
+        args.m_Generator->AddValue<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetUnits, &SpotLight::SetOffsetUnits );
+        Inspect::Slider* slider = args.m_Generator->AddSlider<SpotLight, u8>( args.m_Selection, &SpotLight::GetOffsetUnits, &SpotLight::SetOffsetUnits );
         slider->SetRangeMin( 0.0f );
         slider->SetRangeMax( 255.0f );
       }
-      args.m_Enumerator->Pop();
+      args.m_Generator->Pop();
 
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
   }
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 
 float SpotLight::GetInnerRadius() const

@@ -7,7 +7,7 @@
 
 #include "Foundation/Memory/SmartPtr.h"
 
-#include "Core/Object.h"
+#include "Object.h"
 
 #include "Visitor.h"
 

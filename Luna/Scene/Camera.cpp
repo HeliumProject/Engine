@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "Camera.h"
-#include "View.h"
-#include "Editor/Orientation.h"
+#include "Viewport.h"
+#include "Orientation.h"
 #include "Foundation/Math/AngleAxis.h"
 
 using namespace Math;
@@ -269,9 +269,9 @@ void Camera::MouseMove(wxMouseEvent& e)
     case MovementModes::Track:
     {
       Vector3 p1;
-      ViewportToPlaneVertex(m_Prev.x, m_Prev.y, IntersectionPlanes::View, p1);
+      ViewportToPlaneVertex(m_Prev.x, m_Prev.y, IntersectionPlanes::Viewport, p1);
       Vector3 p2;
-      ViewportToPlaneVertex(e.GetPosition().x, e.GetPosition().y, IntersectionPlanes::View, p2);
+      ViewportToPlaneVertex(e.GetPosition().x, e.GetPosition().y, IntersectionPlanes::Viewport, p2);
 
       // Track vector is the translation of the m_Pivot from the starting planar intersection to the current planar intersection
       m_Pivot += p1 - p2;
@@ -355,7 +355,7 @@ void Camera::MouseScroll(wxMouseEvent& e)
 void Camera::Update( bool updateRemote )
 {
   //
-  // Compute View Transform
+  // Compute Viewport Transform
   //
 
   if ( m_MovementMode != MovementModes::Free )
@@ -498,7 +498,7 @@ void Camera::ViewportToPlaneVertex(float x, float y, IntersectionPlane p, Vector
   // compute plane
   switch (p)
   {
-    case IntersectionPlanes::View:
+    case IntersectionPlanes::Viewport:
     {
       switch (m_ProjectionMode)
       {

@@ -11,10 +11,10 @@
 #include "ReverseChildrenCommand.h"
 
 #include "Application/UI/ArtProvider.h"
-#include "Core/Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "Application/Undo/PropertyCommand.h"
 #include "Foundation/Log.h"
-#include "Editor/Orientation.h"
+#include "Orientation.h"
 
 #include "Foundation/Math/Curve.h"
 #include "Foundation/Math/AngleAxis.h"
@@ -53,7 +53,7 @@ void Curve::InitializeType()
   ZeroMemory(&s_HullMaterial, sizeof(s_HullMaterial));
   s_HullMaterial.Ambient = Luna::Color::GRAY;
 
-  Enumerator::InitializePanel( TXT( "Curve" ), CreatePanelSignature::Delegate( &Curve::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "Curve" ), CreatePanelSignature::Delegate( &Curve::CreatePanel ) );
 }
 
 void Curve::CleanupType()
@@ -66,15 +66,15 @@ Curve::Curve( Luna::Scene* scene, Content::Curve* curve )
 , m_Locator ( NULL )
 , m_Cone ( NULL )
 {
-  m_Locator = new Luna::PrimitiveLocator( m_Scene->GetView()->GetResources() );
+  m_Locator = new Luna::PrimitiveLocator( m_Scene->GetViewport()->GetResources() );
   m_Locator->Update();
 
-  m_Cone = new Luna::PrimitiveCone( m_Scene->GetView()->GetResources() );
+  m_Cone = new Luna::PrimitiveCone( m_Scene->GetViewport()->GetResources() );
   m_Cone->m_Radius = 0.2f;
   m_Cone->SetSolid(true);
   m_Cone->Update();
 
-  m_Vertices = new VertexResource ( scene->GetView()->GetResources() );
+  m_Vertices = new VertexResource ( scene->GetViewport()->GetResources() );
   m_Vertices->SetElementType( ElementTypes::Position );
   m_Vertices->SetPopulator( PopulateSignature::Delegate( this, &Curve::Populate ) );
 }
@@ -722,7 +722,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
 
   const VertexResource* vertices = curve->m_Vertices;
 
-  Luna::View* view = node->GetScene()->GetView();
+  Luna::Viewport* view = node->GetScene()->GetViewport();
   Luna::Camera* camera = view->GetCamera();
 
   u32 countCurvePoints    = (u32) data->m_Points.size();
@@ -825,7 +825,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
 
     static float controlPointSize = 5.0f;
     device->SetRenderState( D3DRS_POINTSPRITEENABLE, TRUE );
-    device->SetMaterial( &Luna::View::s_ComponentMaterial );
+    device->SetMaterial( &Luna::Viewport::s_ComponentMaterial );
     device->DrawPrimitive( D3DPT_POINTLIST, (u32)vertices->GetBaseIndex(), countControlPoints );
 
 
@@ -833,14 +833,14 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
     //  Overdraw selected points
     //
     {
-      Luna::Camera* camera = curve->GetScene()->GetView()->GetCamera();
-      const Math::Matrix4& viewMatrix = camera->GetView();
+      Luna::Camera* camera = curve->GetScene()->GetViewport()->GetCamera();
+      const Math::Matrix4& viewMatrix = camera->GetViewport();
       const Math::Matrix4& projMatrix = camera->GetProjection();
-      ID3DXFont* font = curve->GetScene()->GetView()->GetStatistics()->GetFont();
+      ID3DXFont* font = curve->GetScene()->GetViewport()->GetStatistics()->GetFont();
       DWORD color = D3DCOLOR_ARGB(255, 255, 255, 255);
       tchar textBuf[256];
 
-      device->SetMaterial( &Luna::View::s_SelectedComponentMaterial );
+      device->SetMaterial( &Luna::Viewport::s_SelectedComponentMaterial );
       OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
       OS_HierarchyNodeDumbPtr::Iterator childEnd = curve->GetChildren().End();
       for ( u32 i = 0; childItr != childEnd; ++childItr )
@@ -898,7 +898,7 @@ void Curve::Draw( IDirect3DDevice9* device, DrawArgs* args, const SceneNode* obj
     //  Overdraw highlighted points
     // 
     {
-      device->SetMaterial (&Luna::View::s_HighlightedMaterial);
+      device->SetMaterial (&Luna::Viewport::s_HighlightedMaterial);
       OS_HierarchyNodeDumbPtr::Iterator childItr = curve->GetChildren().Begin();
       OS_HierarchyNodeDumbPtr::Iterator childEnd = curve->GetChildren().End();
       for ( u32 i = 0; childItr != childEnd; ++childItr )
@@ -992,59 +992,59 @@ bool Curve::ValidatePanel( const tstring& name )
 
 void Curve::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel( TXT( "Curve" ), true);
+  args.m_Generator->PushPanel( TXT( "Curve" ), true);
   {
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Type" ) );
-      args.m_Enumerator->AddChoice<Luna::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "CurveType" ) ), &Curve::GetCurveType, &Curve::SetCurveType );
+      args.m_Generator->AddLabel( TXT( "Type" ) );
+      args.m_Generator->AddChoice<Luna::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "CurveType" ) ), &Curve::GetCurveType, &Curve::SetCurveType );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Control Point Label" ) );
-      args.m_Enumerator->AddChoice<Luna::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "ControlPointLabel" ) ), &Curve::GetControlPointLabel, &Curve::SetControlPointLabel );
+      args.m_Generator->AddLabel( TXT( "Control Point Label" ) );
+      args.m_Generator->AddChoice<Luna::Curve, int>( args.m_Selection, Reflect::Registry::GetInstance()->GetEnumeration( TXT( "ControlPointLabel" ) ), &Curve::GetControlPointLabel, &Curve::SetControlPointLabel );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Resolution" ) );
-      Inspect::Slider* slider = args.m_Enumerator->AddSlider<Luna::Curve, u32>( args.m_Selection, &Curve::GetResolution, &Curve::SetResolution );
+      args.m_Generator->AddLabel( TXT( "Resolution" ) );
+      Inspect::Slider* slider = args.m_Generator->AddSlider<Luna::Curve, u32>( args.m_Selection, &Curve::GetResolution, &Curve::SetResolution );
       slider->SetRangeMin( 1.0f, false );
       slider->SetRangeMax( 20.0f, false );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Closed" ) );
-      args.m_Enumerator->AddCheckBox<Luna::Curve, bool>( args.m_Selection, &Curve::GetClosed, &Curve::SetClosed );
+      args.m_Generator->AddLabel( TXT( "Closed" ) );
+      args.m_Generator->AddCheckBox<Luna::Curve, bool>( args.m_Selection, &Curve::GetClosed, &Curve::SetClosed );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Reverse Control Points" ) );
-      Inspect::Action* button = args.m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( &Curve::OnReverseControlPoints ) );
+      args.m_Generator->AddLabel( TXT( "Reverse Control Points" ) );
+      Inspect::Action* button = args.m_Generator->AddAction( Inspect::ActionSignature::Delegate( &Curve::OnReverseControlPoints ) );
       button->SetIcon( TXT( "reverse" ) );
       button->SetClientData( new SelectionDataObject( args.m_Selection ) );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Curve Length" ) );
+      args.m_Generator->AddLabel( TXT( "Curve Length" ) );
 
       typedef f32 ( Curve::*Getter )() const;
       typedef void ( Curve::*Setter )( const f32& );
-      Inspect::Value* textBox = args.m_Enumerator->AddValue< Luna::Curve, f32, Getter, Setter >( args.m_Selection, &Curve::CalculateCurveLength );
+      Inspect::Value* textBox = args.m_Generator->AddValue< Luna::Curve, f32, Getter, Setter >( args.m_Selection, &Curve::CalculateCurveLength );
       textBox->SetReadOnly( true );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
   }
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 
 void Curve::OnReverseControlPoints( Inspect::Button* button )

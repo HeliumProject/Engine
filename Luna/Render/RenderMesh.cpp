@@ -1,13 +1,13 @@
 #include "Precompile.h"
 #include "RenderMesh.h"
 
-#include "Misc.h"
+#include "Foundation/Checksum/CRC32.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 Render::Mesh::Mesh(const tchar* name)
 {
   m_filename = name;
-  m_crc = StringHashDJB2(name);
+  m_crc = Nocturnal::StringCrc32(name);
   m_load_count = 0;
   m_timestamp = (u64)-1;
   m_verts = 0;

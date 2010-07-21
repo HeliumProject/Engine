@@ -1,31 +1,45 @@
 #include "Precompile.h"
 #include "AppPreferences.h"
-
 #include "Application/Preferences.h"
 
 using namespace Luna;
 
-REFLECT_DEFINE_CLASS( AppPreferences );
+REFLECT_DEFINE_CLASS( AppPreferences )
 
-void AppPreferences::EnumerateClass( Reflect::Compositor< AppPreferences >& comp )
+void AppPreferences::EnumerateClass( Reflect::Compositor<AppPreferences>& comp )
 {
-  Reflect::Field* fieldUseTracker = comp.AddField( &AppPreferences::m_UseTracker, "m_UseTracker" );
+  Reflect::ElementField* elemSessionFrameSettings = comp.AddField( &AppPreferences::m_SessionFrameSettings, "m_SessionFrameSettings" );
 }
 
-AppPreferencesPtr g_AppPreferences = NULL;
+
+///////////////////////////////////////////////////////////////////////////////
+// Globals, statics, etc.
+///////////////////////////////////////////////////////////////////////////////
+
+// Pointer to the global Scene Editor preferences
+ApplicationPreferencesPtr g_ApplicationPreferences = NULL;
 
 // Increment this value to invalidate all previously saved preferences
-const static tstring s_AppPreferencesVersion( TXT( "1" ) );
+const static tstring s_PreferencesVersion( TXT( "1" ) );
+
+// Increment this value to invalidate just the window settings for the Session Frame
+const static tstring s_SessionFrameVersion( TXT( "1" ) );
+
+// Increment this value to invalidate just the window settings for the Run Game window
+const static tstring s_RunGameWindowVersion( TXT( "1" ) );
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static initialization.
 // 
 void AppPreferences::InitializeType()
 {
-  Reflect::RegisterClass< AppPreferences >( TXT( "AppPreferences" ) );
+  Reflect::RegisterClass<AppPreferences>( TXT( "AppPreferences" ) );
 
-  g_AppPreferences = new AppPreferences();
-  g_AppPreferences->LoadPreferences();
+  NOC_ASSERT( !g_ApplicationPreferences );
+
+  g_ApplicationPreferences = new AppPreferences();
+  g_ApplicationPreferences->LoadPreferences();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -33,29 +47,39 @@ void AppPreferences::InitializeType()
 // 
 void AppPreferences::CleanupType()
 {
-  g_AppPreferences = NULL;
-  Reflect::UnregisterClass< AppPreferences >();
+  Reflect::UnregisterClass<AppPreferences>();
+
+  g_ApplicationPreferences = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Returns the global preferences.  You must call AppPreferences::InitializeType first.
+// Returns the one and only instance of this class.
 // 
-AppPreferences* Luna::GetAppPreferences()
+AppPreferences* Luna::GetApplicationPreferences()
 {
-  if ( !g_AppPreferences.ReferencesObject() )
+  if ( !g_ApplicationPreferences )
   {
     throw Nocturnal::Exception( TXT( "AppPreferences is not initialized, must call AppPreferences::InitializeType first." ) );
   }
 
-  return g_AppPreferences;
+  return g_ApplicationPreferences;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
 AppPreferences::AppPreferences()
-: m_UseTracker( true )
+: m_SessionFrameSettings( new WindowSettings( s_SessionFrameVersion ) )
 {
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Overridden to verify settings after load.
+// 
+void AppPreferences::PostDeserialize()
+{
+  __super::PostDeserialize();
+  WindowSettings::CheckWindowSettings( m_SessionFrameSettings, s_SessionFrameVersion );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -66,40 +90,26 @@ AppPreferences::AppPreferences()
 // 
 const tstring& AppPreferences::GetCurrentVersion() const 
 {
-  return s_AppPreferencesVersion;
+  return s_PreferencesVersion;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Load preferences.
+// Returns the path to this preference file on disk.
 // 
 tstring AppPreferences::GetPreferencesPath() const
 {
-    Nocturnal::Path prefsPath;
-    if ( !Application::GetPreferencesDirectory( prefsPath ) )
+    Nocturnal::Path prefsDir;
+    if ( !Application::GetPreferencesDirectory( prefsDir ) )
     {
         throw Nocturnal::Exception( TXT( "Could not get preferences directory." ) );
     }
-
-    prefsPath.Set( prefsPath.Get() + TXT( "/Luna/AppPreferences.nrb" ) );
-    return prefsPath.Get();
+    return prefsDir.Get() + TXT( "LunaGlobalPrefs.nrb" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Sets the tracker setting and raises an event if it changed.
+// Returns the window settings for the Session Frame.
 // 
-void AppPreferences::UseTracker( bool useTracker )
+WindowSettings* AppPreferences::GetSessionFrameSettings()
 {
-  if ( m_UseTracker != useTracker )
-  {
-    m_UseTracker = useTracker;
-    RaiseChanged( UseTrackerField() );
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Gets the tracker field
-// 
-const Reflect::Field* AppPreferences::UseTrackerField() const
-{
-  return GetClass()->FindField( &AppPreferences::m_UseTracker );
+  return m_SessionFrameSettings;
 }

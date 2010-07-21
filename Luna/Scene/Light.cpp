@@ -1,12 +1,12 @@
 #include "Precompile.h"
 #include "Light.h"
-#include "Application.h"
+#include "App.h"
 
 #include "Scene.h"
 #include "SceneManager.h"
 #include "InstanceType.h"
 
-#include "Core/Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "SceneEditor.h"
 #include "Application/UI/ArtProvider.h"
 
@@ -35,7 +35,7 @@ void Light::InitializeType()
 
     ZeroMemory(&s_Material, sizeof(s_Material));
 
-    Enumerator::InitializePanel( TXT( "Light" ), CreatePanelSignature::Delegate( &Light::CreatePanel ) );
+    PropertiesGenerator::InitializePanel( TXT( "Light" ), CreatePanelSignature::Delegate( &Light::CreatePanel ) );
 }
 
 void Light::CleanupType()
@@ -146,79 +146,79 @@ bool Light::ValidatePanel(const tstring& name)
 void Light::CreatePanel( CreatePanelArgs& args )
 {
 
-    args.m_Enumerator->PushPanel( TXT( "Light" ), true);
+    args.m_Generator->PushPanel( TXT( "Light" ), true);
     {
-        args.m_Enumerator->PushContainer();
+        args.m_Generator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( TXT( "Color" ) );
-            args.m_Enumerator->AddColorPicker<Light, Color3>( args.m_Selection, &Light::GetColor, &Light::SetColor );
+            args.m_Generator->AddLabel( TXT( "Color" ) );
+            args.m_Generator->AddColorPicker<Light, Color3>( args.m_Selection, &Light::GetColor, &Light::SetColor );
 
-            Inspect::Slider* slider = args.m_Enumerator->AddSlider<Light, float>( args.m_Selection, &Light::GetIntensity, &Light::SetIntensity );
-            args.m_Enumerator->AddValue<Light, float>( args.m_Selection, &Light::GetIntensity, &Light::SetIntensity );
+            Inspect::Slider* slider = args.m_Generator->AddSlider<Light, float>( args.m_Selection, &Light::GetIntensity, &Light::SetIntensity );
+            args.m_Generator->AddValue<Light, float>( args.m_Selection, &Light::GetIntensity, &Light::SetIntensity );
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
 
-        args.m_Enumerator->PushContainer();
+        args.m_Generator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( TXT( "Photon Emissive" ) );
-            args.m_Enumerator->AddCheckBox<Light, bool>( args.m_Selection, &Light::GetEmitPhotons, &Light::SetEmitPhotons );
+            args.m_Generator->AddLabel( TXT( "Photon Emissive" ) );
+            args.m_Generator->AddCheckBox<Light, bool>( args.m_Selection, &Light::GetEmitPhotons, &Light::SetEmitPhotons );
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
 
-        args.m_Enumerator->PushContainer();
+        args.m_Generator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( TXT( "Photon Energy" ) );
-            args.m_Enumerator->AddColorPicker<Luna::Light, Color3>( args.m_Selection, &Light::GetPhotonColor, &Light::SetPhotonColor );
+            args.m_Generator->AddLabel( TXT( "Photon Energy" ) );
+            args.m_Generator->AddColorPicker<Luna::Light, Color3>( args.m_Selection, &Light::GetPhotonColor, &Light::SetPhotonColor );
 
-            Inspect::Slider* slider = args.m_Enumerator->AddSlider<Luna::Light, float>( args.m_Selection, &Light::GetPhotonIntensity, &Light::SetPhotonIntensity );
+            Inspect::Slider* slider = args.m_Generator->AddSlider<Luna::Light, float>( args.m_Selection, &Light::GetPhotonIntensity, &Light::SetPhotonIntensity );
             slider->SetRangeMin( 0.0f );
 
-            args.m_Enumerator->AddValue<Luna::Light, float>( args.m_Selection, &Light::GetPhotonIntensity, &Light::SetPhotonIntensity );
+            args.m_Generator->AddValue<Luna::Light, float>( args.m_Selection, &Light::GetPhotonIntensity, &Light::SetPhotonIntensity );
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
 
-        args.m_Enumerator->PushContainer();
+        args.m_Generator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( TXT( "Number of Photons" ) );
-            args.m_Enumerator->AddValue<Luna::Light, u32>( args.m_Selection, &Light::GetNumPhotons, &Light::SetNumPhotons );
+            args.m_Generator->AddLabel( TXT( "Number of Photons" ) );
+            args.m_Generator->AddValue<Luna::Light, u32>( args.m_Selection, &Light::GetNumPhotons, &Light::SetNumPhotons );
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
 
 
-        args.m_Enumerator->PushContainer();
+        args.m_Generator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( TXT( "Attenuate" ) );
-            args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetAttenuate, &Light::SetAttenuate );
+            args.m_Generator->AddLabel( TXT( "Attenuate" ) );
+            args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetAttenuate, &Light::SetAttenuate );
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
 
-        args.m_Enumerator->PushContainer();
+        args.m_Generator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( TXT( "Cast Shadows" ) );
-            args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetCastsShadows, &Light::SetCastsShadows );
+            args.m_Generator->AddLabel( TXT( "Cast Shadows" ) );
+            args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetCastsShadows, &Light::SetCastsShadows );
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
 
-        args.m_Enumerator->PushContainer();
+        args.m_Generator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( TXT( "Shadow Factor" ) );
-            Inspect::Slider* slider = args.m_Enumerator->AddSlider<Luna::Light, f32>( args.m_Selection, &Light::GetShadowFactor, &Light::SetShadowFactor );
+            args.m_Generator->AddLabel( TXT( "Shadow Factor" ) );
+            Inspect::Slider* slider = args.m_Generator->AddSlider<Luna::Light, f32>( args.m_Selection, &Light::GetShadowFactor, &Light::SetShadowFactor );
             slider->SetRangeMin( 0.0f );
             slider->SetRangeMax( 1.0f );
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
 
-        args.m_Enumerator->PushContainer();
+        args.m_Generator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( TXT( "Visibility Ray Test" ) );
-            args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetVisibilityRayTest, &Light::SetVisibilityRayTest );
+            args.m_Generator->AddLabel( TXT( "Visibility Ray Test" ) );
+            args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetVisibilityRayTest, &Light::SetVisibilityRayTest );
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
 
-        args.m_Enumerator->PushContainer();
+        args.m_Generator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( TXT( "Render Type" ) );
-            Inspect::Choice* choice = args.m_Enumerator->AddChoice<Luna::Light, int>(args.m_Selection, &Light::GetRenderType, &Light::SetRenderType);
+            args.m_Generator->AddLabel( TXT( "Render Type" ) );
+            Inspect::Choice* choice = args.m_Generator->AddChoice<Luna::Light, int>(args.m_Selection, &Light::GetRenderType, &Light::SetRenderType);
             choice->SetDropDown( true );
 
             Inspect::V_Item items;
@@ -243,12 +243,12 @@ void Light::CreatePanel( CreatePanelArgs& args )
             }
             choice->SetItems( items );
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
 
-        args.m_Enumerator->PushContainer();
+        args.m_Generator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( TXT( "Lens Flare Type" ) );
-            Inspect::Choice* choice = args.m_Enumerator->AddChoice<Luna::Light, int>(args.m_Selection, &Light::GetLensFlareType, &Light::SetLensFlareType);
+            args.m_Generator->AddLabel( TXT( "Lens Flare Type" ) );
+            Inspect::Choice* choice = args.m_Generator->AddChoice<Luna::Light, int>(args.m_Selection, &Light::GetLensFlareType, &Light::SetLensFlareType);
             choice->SetDropDown( true );
 
             Inspect::V_Item items;
@@ -273,151 +273,143 @@ void Light::CreatePanel( CreatePanelArgs& args )
             }
             choice->SetItems( items );
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
 
-        args.m_Enumerator->PushContainer();
+        args.m_Generator->PushContainer();
         {
-            args.m_Enumerator->AddLabel( TXT( "Physical Light" ) );
-            args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetPhysicalLight, &Light::SetPhysicalLight );
+            args.m_Generator->AddLabel( TXT( "Physical Light" ) );
+            args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetPhysicalLight, &Light::SetPhysicalLight );
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
 
 
-        args.m_Enumerator->PushPanel( TXT( "RealTime" ) );
+        args.m_Generator->PushPanel( TXT( "RealTime" ) );
         {
 
-            LightPanel* panel = new LightPanel ( args.m_Enumerator, args.m_Selection );
+            LightPanel* panel = new LightPanel ( args.m_Generator, args.m_Selection );
 
-            args.m_Enumerator->Push( panel );
+            args.m_Generator->Push( panel );
             {
-                panel->SetCanvas( args.m_Enumerator->GetContainer()->GetCanvas() );
+                panel->SetCanvas( args.m_Generator->GetContainer()->GetCanvas() );
                 panel->Create();
             }
-            args.m_Enumerator->Pop();
+            args.m_Generator->Pop();
 
 
 
-            args.m_Enumerator->PushContainer();
+            args.m_Generator->PushContainer();
             {
-                args.m_Enumerator->AddLabel( TXT( "Draw Distance" ) );
-                args.m_Enumerator->AddValue<Luna::Light, float>( args.m_Selection, &Light::GetDrawDist, &Light::SetDrawDist );
+                args.m_Generator->AddLabel( TXT( "Draw Distance" ) );
+                args.m_Generator->AddValue<Luna::Light, float>( args.m_Selection, &Light::GetDrawDist, &Light::SetDrawDist );
             }
-            args.m_Enumerator->Pop();
+            args.m_Generator->Pop();
 
-            args.m_Enumerator->PushContainer();
+            args.m_Generator->PushContainer();
             {
-                args.m_Enumerator->AddLabel( TXT( "Kill If Inactive" ) );
-                args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetKillIfInactive, &Light::SetKillIfInactive );
+                args.m_Generator->AddLabel( TXT( "Kill If Inactive" ) );
+                args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetKillIfInactive, &Light::SetKillIfInactive );
             }
-            args.m_Enumerator->Pop();
+            args.m_Generator->Pop();
 
-            args.m_Enumerator->PushContainer();
+            args.m_Generator->PushContainer();
             {
-                args.m_Enumerator->AddLabel( TXT( "Allow Oversized" ) );
-                args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetAllowOversized, &Light::SetAllowOversized );
+                args.m_Generator->AddLabel( TXT( "Allow Oversized" ) );
+                args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetAllowOversized, &Light::SetAllowOversized );
             }
-            args.m_Enumerator->Pop();
+            args.m_Generator->Pop();
 
-            args.m_Enumerator->PushPanel( TXT( "Animation" ) );
+            args.m_Generator->PushPanel( TXT( "Animation" ) );
             {
-                args.m_Enumerator->PushContainer();
+                args.m_Generator->PushContainer();
                 {
-                    args.m_Enumerator->AddLabel( TXT( "Color" ) );
-                    args.m_Enumerator->AddKeyControl<Luna::Light>( args.m_Selection, &Reflect::CreateObject< Content::ParametricColorKey >, &Light::GetColorAnimation, &Light::SetColorAnimation );
+                    args.m_Generator->AddLabel( TXT( "Color" ) );
+                    args.m_Generator->AddKeyControl<Luna::Light>( args.m_Selection, &Reflect::CreateObject< Content::ParametricColorKey >, &Light::GetColorAnimation, &Light::SetColorAnimation );
                 }
-                args.m_Enumerator->Pop();
+                args.m_Generator->Pop();
 
-                args.m_Enumerator->PushContainer();
+                args.m_Generator->PushContainer();
                 {
-                    args.m_Enumerator->AddLabel( TXT( "Flicker - r = amplitude, g = frequency" ) );
-                    args.m_Enumerator->AddKeyControl<Luna::Light>( args.m_Selection, &Reflect::CreateObject< Content::ParametricColorKey >, &Light::GetIntensityAnimation, &Light::SetIntensityAnimation );
+                    args.m_Generator->AddLabel( TXT( "Flicker - r = amplitude, g = frequency" ) );
+                    args.m_Generator->AddKeyControl<Luna::Light>( args.m_Selection, &Reflect::CreateObject< Content::ParametricColorKey >, &Light::GetIntensityAnimation, &Light::SetIntensityAnimation );
                 }
-                args.m_Enumerator->Pop();
+                args.m_Generator->Pop();
 
-                args.m_Enumerator->PushContainer();
+                args.m_Generator->PushContainer();
                 {
-                    args.m_Enumerator->AddLabel( TXT( "Animation Duration" ) );
-                    args.m_Enumerator->AddValue<Luna::Light, float>( args.m_Selection, &Light::GetAnimationDuration, &Light::SetAnimationDuration );
+                    args.m_Generator->AddLabel( TXT( "Animation Duration" ) );
+                    args.m_Generator->AddValue<Luna::Light, float>( args.m_Selection, &Light::GetAnimationDuration, &Light::SetAnimationDuration );
                 }
-                args.m_Enumerator->Pop();
+                args.m_Generator->Pop();
 
-                args.m_Enumerator->PushContainer();
+                args.m_Generator->PushContainer();
                 {
-                    args.m_Enumerator->AddLabel( TXT( "Use Random Offset" ) );
-                    args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetRandomAnimOffset, &Light::SetRandomAnimOffset );
+                    args.m_Generator->AddLabel( TXT( "Use Random Offset" ) );
+                    args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetRandomAnimOffset, &Light::SetRandomAnimOffset );
                 }
-                args.m_Enumerator->Pop();
+                args.m_Generator->Pop();
             }
-            args.m_Enumerator->Pop();
+            args.m_Generator->Pop();
 
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
 
 
-        args.m_Enumerator->PushPanel( TXT( "Selection Helper" ) );
+        args.m_Generator->PushPanel( TXT( "Selection Helper" ) );
         {
             /*
-            args.m_Enumerator->PushContainer();
+            args.m_Generator->PushContainer();
             {
-            args.m_Enumerator->AddLabel("Light Type");
-            args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperLightType, &Light::SetSelectionHelperLightType );
+            args.m_Generator->AddLabel("Light Type");
+            args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperLightType, &Light::SetSelectionHelperLightType );
             }
             */
 
-            args.m_Enumerator->PushContainer();
+            args.m_Generator->PushContainer();
             {
-                args.m_Enumerator->AddLabel( TXT( "Render Type" ) );
-                args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperRenderType, &Light::SetSelectionHelperRenderType );
+                args.m_Generator->AddLabel( TXT( "Render Type" ) );
+                args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperRenderType, &Light::SetSelectionHelperRenderType );
             }
-            args.m_Enumerator->Pop();
+            args.m_Generator->Pop();
 
-            args.m_Enumerator->PushContainer();
+            args.m_Generator->PushContainer();
             {
-                args.m_Enumerator->AddLabel( TXT( "Color" ) );
-                args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperColor, &Light::SetSelectionHelperColor );
+                args.m_Generator->AddLabel( TXT( "Color" ) );
+                args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperColor, &Light::SetSelectionHelperColor );
             }
-            args.m_Enumerator->Pop();
+            args.m_Generator->Pop();
 
-            args.m_Enumerator->PushContainer();
+            args.m_Generator->PushContainer();
             {
-                args.m_Enumerator->AddLabel( TXT( "Intensity" ) );
-                args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperIntensity, &Light::SetSelectionHelperIntensity );
+                args.m_Generator->AddLabel( TXT( "Intensity" ) );
+                args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperIntensity, &Light::SetSelectionHelperIntensity );
             }
-            args.m_Enumerator->Pop();
+            args.m_Generator->Pop();
 
 
-            args.m_Enumerator->PushContainer();
+            args.m_Generator->PushContainer();
             {
-                args.m_Enumerator->AddLabel( TXT( "Scale" ) );
-                args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperScale, &Light::SetSelectionHelperScale );
+                args.m_Generator->AddLabel( TXT( "Scale" ) );
+                args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperScale, &Light::SetSelectionHelperScale );
             }
-            args.m_Enumerator->Pop();
+            args.m_Generator->Pop();
 
-            args.m_Enumerator->PushContainer();
+            args.m_Generator->PushContainer();
             {
-                args.m_Enumerator->AddLabel( TXT( "Lens Flare" ) );
-                args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperLensFlare, &Light::SetSelectionHelperLensFlare );
+                args.m_Generator->AddLabel( TXT( "Lens Flare" ) );
+                args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperLensFlare, &Light::SetSelectionHelperLensFlare );
             }
-            args.m_Enumerator->Pop();
+            args.m_Generator->Pop();
 
-            args.m_Enumerator->PushContainer();
+            args.m_Generator->PushContainer();
             {
-                args.m_Enumerator->AddLabel( TXT( "Physical Light" ) );
-                args.m_Enumerator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperPhysicalLight, &Light::SetSelectionHelperPhysicalLight );
+                args.m_Generator->AddLabel( TXT( "Physical Light" ) );
+                args.m_Generator->AddCheckBox<Luna::Light, bool>( args.m_Selection, &Light::GetSelectionHelperPhysicalLight, &Light::SetSelectionHelperPhysicalLight );
             }
-            args.m_Enumerator->Pop();
-
-            args.m_Enumerator->PushContainer();
-            {
-                Inspect::Action* button = args.m_Enumerator->AddAction( Inspect::ActionSignature::Delegate( &Light::OnSelectionHelper ) );
-                button->SetClientData( new SelectionDataObject( args.m_Selection ) );
-                button->SetText( TXT( "Select Lights" ) );
-            }
-            args.m_Enumerator->Pop();
+            args.m_Generator->Pop();
         }
-        args.m_Enumerator->Pop();
+        args.m_Generator->Pop();
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 }
 
 Color3 Light::GetColor() const
@@ -756,50 +748,3 @@ static bool CompareLights( Content::Light* light1, Content::Light* light2, BitAr
 
 }
 
-void Light::OnSelectionHelper( Inspect::Button* button )
-{
-    SceneEditor* editor = wxGetApp().GetSceneEditor();
-    Luna::Scene* scene = editor->GetSceneManager()->GetCurrentScene();
-    if( scene )
-    {
-        SelectionDataObject* selectionData = static_cast<SelectionDataObject*>( button->GetClientData() );
-        if( selectionData )
-        {
-
-            OS_SelectableDumbPtr lightSelection;
-
-            V_LightDumbPtr lights;
-            scene->GetAll< Luna::Light >( lights );
-
-            OS_SelectableDumbPtr& selection = selectionData->m_Selection;
-
-            OS_SelectableDumbPtr::Iterator selItor = selection.Begin();
-            OS_SelectableDumbPtr::Iterator selEnd  = selection.End();
-
-            for( ; selItor != selEnd; ++selItor )
-            {
-                Luna::Light* selLight = Reflect::ObjectCast< Luna::Light >( *selItor );
-
-                if( selLight )
-                {
-                    Content::Light* contentLight = selLight->GetPackage< Content::Light >();
-
-                    if( contentLight )
-                    {
-                        V_LightDumbPtr::iterator itor = lights.begin();
-                        V_LightDumbPtr::iterator end  = lights.end();
-
-                        for( ; itor != end; ++itor )
-                        {
-                            if( CompareLights( contentLight, (*itor)->GetPackage< Content::Light >(), selLight->m_SelectionHelper ) )
-                            {
-                                lightSelection.Append( *itor );
-                            }
-                        }
-                    }
-                }
-            }
-            editor->PostCommand( new SceneSelectCommand( scene, lightSelection ) );
-        }
-    }
-}

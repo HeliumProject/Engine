@@ -26,13 +26,13 @@ void CurveEditTool::CleanupType()
 CurveEditMode CurveEditTool::s_EditMode = CurveEditModes::Modify;
 bool CurveEditTool::s_CurrentSelection = false;
 
-CurveEditTool::CurveEditTool(Luna::Scene *scene, Luna::Enumerator *enumerator)
-: Luna::SceneTool( scene, enumerator )
+CurveEditTool::CurveEditTool(Luna::Scene *scene, Luna::PropertiesGenerator *generator)
+: Tool( scene, generator )
 , m_HotEditMode ( CurveEditModes::None )
 {
   Initialize();
 
-  m_ControlPointManipulator = new Luna::TranslateManipulator( ManipulatorModes::Translate, scene, enumerator );
+  m_ControlPointManipulator = new Luna::TranslateManipulator( ManipulatorModes::Translate, scene, generator );
 }
 
 CurveEditTool::~CurveEditTool()
@@ -58,12 +58,12 @@ bool CurveEditTool::MouseDown( wxMouseEvent &e )
     Curve* curve = NULL;
     
     {
-      FrustumLinePickVisitor pick (m_Scene->GetView()->GetCamera(), e.GetX(), e.GetY());
+      FrustumLinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), e.GetX(), e.GetY());
 
       m_Scene->Pick( &pick );
 
       V_PickHitSmartPtr sorted;
-      PickHit::Sort(m_Scene->GetView()->GetCamera(), pick.GetHits(), sorted, PickSortTypes::Intersection);
+      PickHit::Sort(m_Scene->GetViewport()->GetCamera(), pick.GetHits(), sorted, PickSortTypes::Intersection);
 
       for ( V_PickHitSmartPtr::const_iterator itr = sorted.begin(), end = sorted.end(); itr != end; ++itr )
       {
@@ -79,7 +79,7 @@ bool CurveEditTool::MouseDown( wxMouseEvent &e )
       return false;
     }
 
-    LinePickVisitor pick (m_Scene->GetView()->GetCamera(), e.GetX(), e.GetY());
+    LinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), e.GetX(), e.GetY());
 
     switch ( GetEditMode() )
     {
@@ -262,7 +262,7 @@ void CurveEditTool::KeyDown( wxKeyEvent& e )
 
   if ( mode != m_HotEditMode )
   {
-    m_Enumerator->GetContainer()->Read();
+    m_Generator->GetContainer()->Read();
   }
 }
 
@@ -285,7 +285,7 @@ void CurveEditTool::KeyUp( wxKeyEvent& e )
 
   if ( mode != m_HotEditMode )
   {
-    m_Enumerator->GetContainer()->Read();
+    m_Generator->GetContainer()->Read();
   }
 }
 
@@ -375,12 +375,12 @@ void CurveEditTool::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel( TXT( "Edit Curve" ), true );
+  m_Generator->PushPanel( TXT( "Edit Curve" ), true );
   {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     { 
-      m_Enumerator->AddLabel( TXT( "Edit Control Points" ) );
-      Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CurveEditTool, int> (this, &CurveEditTool::GetCurveEditMode, &CurveEditTool::SetCurveEditMode ) );
+      m_Generator->AddLabel( TXT( "Edit Control Points" ) );
+      Inspect::Choice* choice = m_Generator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::CurveEditTool, int> (this, &CurveEditTool::GetCurveEditMode, &CurveEditTool::SetCurveEditMode ) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
@@ -403,16 +403,16 @@ void CurveEditTool::CreateProperties()
       }
       choice->SetItems( items );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     { 
-      m_Enumerator->AddLabel( TXT( "Selected Curves Only" ) );
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CurveEditTool, bool> (this, &CurveEditTool::GetSelectionMode, &CurveEditTool::SetSelectionMode ) );
+      m_Generator->AddLabel( TXT( "Selected Curves Only" ) );
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::CurveEditTool, bool> (this, &CurveEditTool::GetSelectionMode, &CurveEditTool::SetSelectionMode ) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
 
   m_ControlPointManipulator->CreateProperties();
 }

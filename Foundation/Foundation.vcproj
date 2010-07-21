@@ -1432,6 +1432,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Numeric.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Numeric.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Profile.cpp"
 			>
 		</File>

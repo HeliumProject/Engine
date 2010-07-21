@@ -1,41 +1,42 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "Editor/Preferences.h"
+
+#include "Preferences.h"
+#include "WindowSettings.h"
 
 namespace Luna
 {
   class AppPreferences;
 
-  AppPreferences* GetAppPreferences();
+  // Global preferences for the Luna application
+  LUNA_EDITOR_API AppPreferences* GetApplicationPreferences();
 
-  class AppPreferences : public Preferences
+  /////////////////////////////////////////////////////////////////////////////
+  // Global preferences for Luna.
+  // 
+  class LUNA_EDITOR_API AppPreferences : public Reflect::ConcreteInheritor< AppPreferences, Preferences >
   {
-  private:
-    bool m_UseTracker;
+  public:
+    static void EnumerateClass( Reflect::Compositor<AppPreferences>& comp );
 
     // RTTI
   public:
     static void InitializeType();
     static void CleanupType();
-    REFLECT_DECLARE_CLASS( AppPreferences, Preferences )
-    static void EnumerateClass( Reflect::Compositor< AppPreferences >& comp );
 
   public:
     AppPreferences();
 
+    virtual void PostDeserialize() NOC_OVERRIDE;
+
     virtual const tstring& GetCurrentVersion() const NOC_OVERRIDE;
     virtual tstring GetPreferencesPath() const NOC_OVERRIDE;
 
-    const Reflect::Field* UseTrackerField() const;
+    WindowSettings* GetSessionFrameSettings();
 
-  public:
-      void UseTracker( bool useTracker );
-      bool UseTracker() const
-      {
-          return m_UseTracker;
-      }
-    
+  private:
+    WindowSettingsPtr m_SessionFrameSettings;
   };
-  typedef Nocturnal::SmartPtr< AppPreferences > AppPreferencesPtr;
+  typedef Nocturnal::SmartPtr< AppPreferences > ApplicationPreferencesPtr;
 }

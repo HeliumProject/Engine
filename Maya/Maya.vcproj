@@ -47,7 +47,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;;&quot;$(boost)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;_DEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -127,7 +127,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;;&quot;$(boost)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;_DEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -206,7 +206,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;;&quot;$(boost)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;NDEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -284,7 +284,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;;&quot;$(boost)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;NDEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -363,7 +363,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;;&quot;$(boost)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;_DEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -443,7 +443,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;;&quot;$(boost)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;_DEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -522,7 +522,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;;&quot;$(boost)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;NDEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -600,7 +600,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;;&quot;$(boost)&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;NDEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"

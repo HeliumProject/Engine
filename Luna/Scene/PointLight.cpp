@@ -5,7 +5,7 @@
 #include "SceneManager.h"
 #include "InstanceType.h"
 
-#include "Core/Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveSphere.h"
@@ -22,7 +22,7 @@ void PointLight::InitializeType()
 {
   Reflect::RegisterClass< Luna::PointLight >( TXT( "Luna::PointLight" ) );
 
-  Enumerator::InitializePanel( TXT( "PointLight" ), CreatePanelSignature::Delegate( &PointLight::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "PointLight" ), CreatePanelSignature::Delegate( &PointLight::CreatePanel ) );
 }
 
 void PointLight::CleanupType()
@@ -72,14 +72,14 @@ void PointLight::Initialize()
 
   if (!m_InnerSphere)
   {
-    m_InnerSphere = new Luna::PrimitiveSphere ( m_Scene->GetView()->GetResources() );
+    m_InnerSphere = new Luna::PrimitiveSphere ( m_Scene->GetViewport()->GetResources() );
     m_InnerSphere->m_Radius = light->GetInnerRadius();
     m_InnerSphere->Update();
   }
 
   if (!m_OuterSphere)
   {
-    m_OuterSphere = new Luna::PrimitiveSphere ( m_Scene->GetView()->GetResources() );
+    m_OuterSphere = new Luna::PrimitiveSphere ( m_Scene->GetViewport()->GetResources() );
     m_OuterSphere->m_Radius = light->GetOuterRadius();
     m_OuterSphere->Update();
   }
@@ -218,24 +218,24 @@ bool PointLight::ValidatePanel(const tstring& name)
 
 void PointLight::CreatePanel( CreatePanelArgs& args )
 {
-  args.m_Enumerator->PushPanel( TXT( "Point Light" ), true);
+  args.m_Generator->PushPanel( TXT( "Point Light" ), true);
   {
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Inner Radius" ) );
-      args.m_Enumerator->AddValue<Luna::PointLight, float>( args.m_Selection, &PointLight::GetInnerRadius, &PointLight::SetInnerRadius );
+      args.m_Generator->AddLabel( TXT( "Inner Radius" ) );
+      args.m_Generator->AddValue<Luna::PointLight, float>( args.m_Selection, &PointLight::GetInnerRadius, &PointLight::SetInnerRadius );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
 
-    args.m_Enumerator->PushContainer();
+    args.m_Generator->PushContainer();
     {
-      args.m_Enumerator->AddLabel( TXT( "Outer Radius" ) );
-      args.m_Enumerator->AddValue<Luna::PointLight, float>( args.m_Selection, &PointLight::GetOuterRadius, &PointLight::SetOuterRadius );
+      args.m_Generator->AddLabel( TXT( "Outer Radius" ) );
+      args.m_Generator->AddValue<Luna::PointLight, float>( args.m_Selection, &PointLight::GetOuterRadius, &PointLight::SetOuterRadius );
     }
-    args.m_Enumerator->Pop();
+    args.m_Generator->Pop();
   }
 
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 
 float PointLight::GetInnerRadius() const

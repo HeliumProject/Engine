@@ -19,7 +19,7 @@ LUNA_DEFINE_TYPE(Luna::Instance);
 void Instance::InitializeType()
 {
   Reflect::RegisterClass< Luna::Instance >( TXT( "Luna::Instance" ) );
-  Enumerator::InitializePanel( TXT( "Instance" ), CreatePanelSignature::Delegate( &Instance::CreatePanel ) );
+  PropertiesGenerator::InitializePanel( TXT( "Instance" ), CreatePanelSignature::Delegate( &Instance::CreatePanel ) );
 }
 
 void Instance::CleanupType()
@@ -85,14 +85,14 @@ bool Instance::ValidatePanel(const tstring& name)
 // 
 void Instance::CreatePanel( CreatePanelArgs& args )
 {
-  InstancePanel* panel = new InstancePanel ( args.m_Enumerator, args.m_Selection );
+  InstancePanel* panel = new InstancePanel ( args.m_Generator, args.m_Selection );
 
-  args.m_Enumerator->Push( panel );
+  args.m_Generator->Push( panel );
   {
-    panel->SetCanvas( args.m_Enumerator->GetContainer()->GetCanvas() );
+    panel->SetCanvas( args.m_Generator->GetContainer()->GetCanvas() );
     panel->Create();
   }
-  args.m_Enumerator->Pop();
+  args.m_Generator->Pop();
 }
 
 bool Instance::GetSolid() const

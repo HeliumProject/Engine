@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/UI/ArtProvider.h"
+#include "UI/ArtProvider.h"
 
 namespace Luna
 {
@@ -65,7 +65,6 @@ namespace Luna
             ID_ViewNone,
             ID_ViewRender,
             ID_ViewCollision,
-            ID_ViewPathfinding,
 
             ID_ViewWireframeOnMesh,
             ID_ViewWireframeOnShaded,
@@ -128,10 +127,6 @@ namespace Luna
             ID_PanelsOutline,
             ID_PanelsProperties,
 
-            ID_ZoneNew,
-            ID_ZoneOpen,
-            ID_ZoneMoveSel,
-
             ID_About,
 
             // This needs to be last, since command entries will be dynamically generated from this id onward
@@ -171,17 +166,17 @@ namespace Luna
 
     static ToolInfo ToolInfos[] =
     {
-        { ToolModes::Select,            wxT("Select"),          Nocturnal::ArtIDs::Select,      wxT("Select items from the workspace") },
-        { ToolModes::Translate,         wxT("Translate"),       Nocturnal::ArtIDs::Translate,   wxT("Translate items") },
-        { ToolModes::Rotate,            wxT("Rotate"),          Nocturnal::ArtIDs::Rotate,      wxT("Rotate selected items") },
-        { ToolModes::Scale,             wxT("Scale"),           Nocturnal::ArtIDs::Scale,       wxT("Scale selected items") },
-        { ToolModes::Duplicate,         wxT("Duplicate"),       Nocturnal::ArtIDs::Duplicate,   wxT("Duplicate the selected object numerous times") },
-        { ToolModes::LocatorCreate,     wxT("Create Locator"),  Nocturnal::ArtIDs::Locator,     wxT("Place locator objects (such as bug locators)") },
-        { ToolModes::VolumeCreate,      wxT("Create Volume"),   Nocturnal::ArtIDs::Volume,      wxT("Place volume objects (items for setting up gameplay)") },
-        { ToolModes::EntityCreate,      wxT("Create Entity"),   Nocturnal::ArtIDs::Entity,      wxT("Place entity objects (such as art instances or characters)") },
-        { ToolModes::CurveCreate,       wxT("Create Curve"),    Nocturnal::ArtIDs::Curve,       wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)") },
-        { ToolModes::CurveEdit,         wxT("Edit Curve"),      Nocturnal::ArtIDs::CurveEdit,   wxT("Edit created curves (modify or create/delete control points)") },
-        { ToolModes::NavMesh,           wxT("Edit NavMesh"),    Nocturnal::ArtIDs::NavMesh,     wxT("Create NavMesh or add new verts and tris") },
+        { ToolModes::Select,            wxT("Select"),          Luna::ArtIDs::SelectTool,    wxT("Select items from the workspace") },
+        { ToolModes::Translate,         wxT("Translate"),       Luna::ArtIDs::TranslateTool, wxT("Translate items") },
+        { ToolModes::Rotate,            wxT("Rotate"),          Luna::ArtIDs::RotateTool,    wxT("Rotate selected items") },
+        { ToolModes::Scale,             wxT("Scale"),           Luna::ArtIDs::ScaleTool,     wxT("Scale selected items") },
+        { ToolModes::Duplicate,         wxT("Duplicate"),       Luna::ArtIDs::DuplicateTool, wxT("Duplicate the selected object numerous times") },
+        { ToolModes::LocatorCreate,     wxT("Create Locator"),  Luna::ArtIDs::Locator,       wxT("Place locator objects (such as bug locators)") },
+        { ToolModes::VolumeCreate,      wxT("Create Volume"),   Luna::ArtIDs::Volume,        wxT("Place volume objects (items for setting up gameplay)") },
+        { ToolModes::EntityCreate,      wxT("Create Entity"),   Luna::ArtIDs::Entity,        wxT("Place entity objects (such as art instances or characters)") },
+        { ToolModes::CurveCreate,       wxT("Create Curve"),    Luna::ArtIDs::Curve,         wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)") },
+        { ToolModes::CurveEdit,         wxT("Edit Curve"),      Luna::ArtIDs::CurveEdit,     wxT("Edit created curves (modify or create/delete control points)") },
+        { ToolModes::NavMesh,           wxT("Edit NavMesh"),    Luna::ArtIDs::NavMesh,       wxT("Create NavMesh or add new verts and tris") },
     };
 
     NOC_COMPILE_ASSERT( sizeof(ToolInfos) == SceneEditorIDs::ID_ToolsCount * sizeof(ToolInfo) );

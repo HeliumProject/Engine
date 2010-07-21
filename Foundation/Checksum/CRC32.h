@@ -4,6 +4,7 @@
 #include "Platform/Exception.h"
 
 #include <stdio.h>
+#include <string.h>
 
 namespace Nocturnal
 {
@@ -83,11 +84,6 @@ namespace Nocturnal
         0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D,
     };
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Return the CRC for the given block of data
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////
     inline u32 Crc32(u32 crc, const void* data, u32 count)
     {
         u8* d = (u8*)data;
@@ -113,6 +109,11 @@ namespace Nocturnal
     inline u32 Crc32(const void* data, u32 count)
     {
         return Crc32(0xffffffff, data, count);
+    }
+
+    inline u32 StringCrc32(const tchar* str)
+    {
+      return Crc32(str, (u32)(_tcslen(str) * sizeof(tchar)));
     }
 
     inline u32 FileCrc32(const tstring& filePath, u32 packetSize = 4096)

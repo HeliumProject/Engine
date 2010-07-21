@@ -1,20 +1,21 @@
 #include "Choice.h"
 #include "Application/Inspect/Controls/Container.h"
 
-#include "Application/UI/AutoCompleteComboBox.h"
+#include <wx/textctrl.h>
+#include <wx/combobox.h>
 
 using namespace Inspect;
 
-class ComboBox : public Nocturnal::AutoCompleteComboBox
+class ComboBox : public wxComboBox
 {
 public:
-  Choice* m_ComboBox;
+  Choice* m_Choice;
 
   bool m_Override;
 
-  ComboBox (wxWindow* parent, Choice* comboBox, int flags)
-    : Nocturnal::AutoCompleteComboBox (parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, flags)
-    , m_ComboBox (comboBox)
+  ComboBox (wxWindow* parent, Choice* choice, int flags)
+    : wxComboBox (parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, flags)
+    , m_Choice (choice)
     , m_Override (false)
   {
 
@@ -24,7 +25,7 @@ public:
   {
     if (!m_Override)
     {
-      m_ComboBox->Write(); 
+      m_Choice->Write(); 
     }
 
     event.Skip();
@@ -34,7 +35,7 @@ public:
   {
     if (!m_Override)
     {
-      m_ComboBox->Write(); 
+      m_Choice->Write(); 
     }
 
     // process the event
@@ -54,7 +55,7 @@ public:
   {
     if (!m_Override)
     {
-      m_ComboBox->Write();
+      m_Choice->Write();
     }
 
     event.Skip();
@@ -63,7 +64,7 @@ public:
   DECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(ComboBox, AutoCompleteComboBox)
+BEGIN_EVENT_TABLE(ComboBox, wxComboBox)
 EVT_COMBOBOX(wxID_ANY, ComboBox::OnConfirm)
 EVT_TEXT_ENTER(wxID_ANY, ComboBox::OnTextEnter)
 EVT_SET_FOCUS(ComboBox::OnSetFocus)
@@ -185,7 +186,7 @@ tstring Choice::GetValue()
       }
     }
 
-    return value.c_str();
+    return (const tchar*)value.c_str();
   }
   else
   {

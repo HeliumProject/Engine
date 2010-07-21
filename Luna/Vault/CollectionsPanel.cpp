@@ -13,6 +13,7 @@
 #include "Application/UI/ArtProvider.h"
 #include "Application/UI/MenuButton.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
+#include "UI/ArtProvider.h"
 
 
 using namespace Luna;
@@ -76,9 +77,7 @@ CollectionsPanel::CollectionsPanel( VaultFrame* browserFrame )
     m_UsageImageIndex = Nocturnal::GlobalFileIconsTable().GetIconID( TXT( "chart_organisation_reverse" ) );
 
     m_MyCollectionsToolBar->SetToolBitmapSize( wxSize( 16, 16 ) );
-    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::NewCollection ), VaultMenu::Label( ID_NewCollection ) );
-    //m_MyCollectionsToolBar->AddTool( ID_NewDependencyCollection, TXT( "" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), VaultMenu::Label( ID_NewDependencyCollection ) + TXT( " - Files this asset depends on." ) );
-    //m_MyCollectionsToolBar->AddTool( ID_NewUsageCollection, TXT( "" ), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Unknown ), VaultMenu::Label( ID_NewUsageCollection ) + TXT( " - Files that use this asset." ) );
+    m_MyCollectionsToolBar->AddTool( ID_NewCollection, TXT( "" ), wxArtProvider::GetBitmap( Luna::ArtIDs::NewCollection ), VaultMenu::Label( ID_NewCollection ) );
     m_MyCollectionsToolBar->Realize();
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );

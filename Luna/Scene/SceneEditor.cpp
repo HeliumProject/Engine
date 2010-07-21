@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "SceneEditor.h"
 
-#include "Application.h"
+#include "App.h"
 #include "CurveCreateTool.h"
 #include "CurveEditTool.h"
 #include "DuplicateTool.h"
@@ -10,7 +10,6 @@
 #include "EntityCreateTool.h"
 #include "EntityType.h"
 #include "ExportOptionsDlg.h"
-#include "HelpPanel.h"
 #include "HierarchyNodeType.h"
 #include "HierarchyOutliner.h"
 #include "ImportOptionsDlg.h"
@@ -21,39 +20,41 @@
 #include "Point.h"
 #include "RotateManipulator.h"
 #include "ScaleManipulator.h"
-#include "SceneCallbackData.h"
 #include "ScenePreferences.h"
 #include "ScenePreferencesDialog.h"
 #include "SelectionPropertiesPanel.h"
 #include "TranslateManipulator.h"
-#include "ToolsPanel.h"
 #include "TypeGrid.h"
-#include "View.h"
+#include "Viewport.h"
 #include "VolumeCreateTool.h"
-#include "Vault/VaultToolBar.h"
 #include "Mesh.h"
+#include "UI/Controls/Tree/SortTreeCtrl.h"
+#include "MRUData.h"
 
-#include "Pipeline/Asset/AssetClass.h"
-#include "Pipeline/Asset/Manifests/SceneManifest.h"
+#include "UI/HelpPanel.h"
+#include "Vault/VaultToolBar.h"
+
+#include "Platform/Process.h"
+
 #include "Foundation/Component/ComponentHandle.h"
 #include "Foundation/Container/Insert.h" 
+#include "Foundation/String/Utilities.h"
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Log.h"
-#include "Pipeline/Content/ContentVersion.h"
-#include "Editor/MRUData.h"
+
 #include "Application/Inspect/Controls/Control.h"
 #include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
+#include "Application/Undo/PropertyCommand.h"
 #include "Application/UI/FileDialog.h"
 #include "Application/UI/FileIconsTable.h"
-#include "UI/Controls/Tree/SortTreeCtrl.h"
-#include "Application/Undo/PropertyCommand.h"
-#include "Platform/Process.h"
 
+#include "Pipeline/Asset/AssetClass.h"
+#include "Pipeline/Asset/Manifests/SceneManifest.h"
+#include "Pipeline/Content/ContentVersion.h"
 #include "Pipeline/Content/Scene.h"
 
 #include <algorithm>
-#include <boost/algorithm/string.hpp>
 
 #include <wx/progdlg.h>
 #include <wx/string.h>
@@ -120,7 +121,6 @@ EVT_MENU(SceneEditorIDs::ID_ViewStatistics, SceneEditor::OnViewChange)
 EVT_MENU(SceneEditorIDs::ID_ViewNone, SceneEditor::OnViewChange)
 EVT_MENU(SceneEditorIDs::ID_ViewRender, SceneEditor::OnViewChange)
 EVT_MENU(SceneEditorIDs::ID_ViewCollision, SceneEditor::OnViewChange)
-EVT_MENU(SceneEditorIDs::ID_ViewPathfinding, SceneEditor::OnViewChange)
 
 EVT_MENU(SceneEditorIDs::ID_ViewWireframeOnMesh, SceneEditor::OnViewChange)
 EVT_MENU(SceneEditorIDs::ID_ViewWireframeOnShaded, SceneEditor::OnViewChange)
@@ -201,19 +201,61 @@ public:
         : m_Scene( scene )
     {
     }
-
-    virtual ~SceneSelectData()
-    {
-    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// Creates a new Scene Editor.
+// Helper template for stashing data inside wx calls
 // 
-static Editor* CreateSceneEditor()
+template< class T >
+class DataObject : public wxObject
 {
-    return new SceneEditor();
+public:
+    DataObject()
+        : m_Data ()
+    {
+
+    }
+
+    DataObject(const T& t)
+        : m_Data ( t )
+    {
+
+    }
+
+    T m_Data;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// Stashes data for selection context menu
+// 
+namespace ContextCallbackTypes
+{
+    enum ContextCallbackType
+    {
+        All,
+        Item,
+        Instance,
+        Count
+    };
 }
+
+class ContextCallbackData: public wxObject
+{
+public:
+    ContextCallbackData()
+        : m_ContextCallbackType( ContextCallbackTypes::All )
+        , m_NodeType( NULL )
+        , m_Nodes( NULL )
+        , m_InstanceSet( NULL )
+    {
+
+    }
+
+    ContextCallbackTypes::ContextCallbackType m_ContextCallbackType;
+    const Luna::SceneNodeType* m_NodeType;
+    const Luna::InstanceSet* m_InstanceSet;
+    Luna::SceneNode* m_Nodes;
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static initialization.
@@ -233,13 +275,12 @@ void SceneEditor::CleanupEditor()
 {
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
 SceneEditor::SceneEditor()
 : Editor( EditorTypes::Scene, NULL, wxID_ANY, wxT("Luna"), wxDefaultPosition, wxSize(1180, 750), wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER )
-, m_SceneManager( this )
+, m_SceneManager()
 , m_HierarchyOutline( NULL )
 , m_EntityOutline( NULL )
 , m_TypeOutline( NULL )
@@ -303,10 +344,10 @@ SceneEditor::SceneEditor()
 
     m_ViewToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
     m_ViewToolBar->SetToolBitmapSize(wxSize(16, 16));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::PerspectiveCamera ), wxT("Use the orbit perspective camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::FrontOrthoCamera ), wxT("Use the front orthographic camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::SideOrthoCamera ), wxT("Use the side orthographic camera"));
-    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), wxArtProvider::GetBitmap( Nocturnal::ArtIDs::TopOrthoCamera ), wxT("Use the top orthographic camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewOrbit, wxT("Orbit"), wxArtProvider::GetBitmap( Luna::ArtIDs::PerspectiveCamera ), wxT("Use the orbit perspective camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewFront, wxT("Front"), wxArtProvider::GetBitmap( Luna::ArtIDs::FrontOrthoCamera ), wxT("Use the front orthographic camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewSide, wxT("Side"), wxArtProvider::GetBitmap( Luna::ArtIDs::SideOrthoCamera ), wxT("Use the side orthographic camera"));
+    m_ViewToolBar->AddTool(SceneEditorIDs::ID_ViewTop, wxT("Top"), wxArtProvider::GetBitmap( Luna::ArtIDs::TopOrthoCamera ), wxT("Use the top orthographic camera"));
     m_ViewToolBar->Realize();
 
     m_VaultToolBar = new VaultToolBar( this, -1, wxDefaultPosition, wxDefaultSize, wxTB_FLAT | wxTB_NODIVIDER );
@@ -319,7 +360,7 @@ SceneEditor::SceneEditor()
     // Center pane
     //
 
-    m_View = new Luna::View(this, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS);
+    m_View = new Luna::Viewport(this, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS);
     m_View->AddRenderListener( RenderSignature::Delegate ( this, &SceneEditor::Render ) );
     m_View->AddSelectListener( SelectSignature::Delegate ( this, &SceneEditor::Select ) ); 
     m_View->AddSetHighlightListener( SetHighlightSignature::Delegate ( this, &SceneEditor::SetHighlight ) );
@@ -372,7 +413,7 @@ SceneEditor::SceneEditor()
     m_FrameManager.AddPane( m_LayerGrid->GetPanel(), wxAuiPaneInfo().Name(wxT("layers")).Caption(wxT("Layers")).Left().Layer(1).Position(1) );
 
     // Seleciton Properties panel
-        m_SelectionEnumerator = new Enumerator (&m_SelectionProperties);
+        m_SelectionEnumerator = new PropertiesGenerator (&m_SelectionProperties);
         m_SelectionPropertiesManager = new PropertiesManager (m_SelectionEnumerator);
         m_SelectionPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
     SelectionPropertiesPanel* selectionProperties = new SelectionPropertiesPanel (m_SelectionPropertiesManager, this, SceneEditorIDs::ID_SelectionProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN);
@@ -380,14 +421,14 @@ SceneEditor::SceneEditor()
     m_FrameManager.AddPane( selectionProperties, wxAuiPaneInfo().Name(wxT("properties")).Caption(wxT("Properties")).Right().Layer(1).Position(1) );
 
         // Properties panel - Tool page
-    m_ToolsPanel = new ToolsPanel( this );
-        m_ToolEnumerator = new Enumerator (&m_ToolProperties);
-        m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
-        m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
-    m_ToolProperties.SetControl( new Inspect::CanvasWindow ( m_ToolsPanel, SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
-    m_ToolsPanel->Create( m_ToolProperties.GetControl() );
-    m_ToolsPanel->Disable();
-    m_FrameManager.AddPane( m_ToolsPanel, wxAuiPaneInfo().Name(wxT("tools")).Caption(wxT("Tools")).Right().Layer(1).Position(1) );
+//    m_ToolsPanel = new ToolsPanel( this );
+//        m_ToolEnumerator = new PropertiesGenerator (&m_ToolProperties);
+//        m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
+//        m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &SceneEditor::OnPropertiesCreated ) );
+//    m_ToolProperties.SetControl( new Inspect::CanvasWindow ( m_ToolsPanel, SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
+//    m_ToolsPanel->Create( m_ToolProperties.GetControl() );
+//    m_ToolsPanel->Disable();
+//    m_FrameManager.AddPane( m_ToolsPanel, wxAuiPaneInfo().Name(wxT("tools")).Caption(wxT("Tools")).Right().Layer(1).Position(1) );
 
     //
     // Docked ToolBars
@@ -399,7 +440,7 @@ SceneEditor::SceneEditor()
         LeftDockable(false).RightDockable(false));
 
     m_FrameManager.AddPane(m_ViewToolBar, wxAuiPaneInfo().
-        Name(wxT("view")).Caption(wxT("View")).
+        Name(wxT("view")).Caption(wxT("Viewport")).
         ToolbarPane().Top().Position(1).
         LeftDockable(false).RightDockable(false));
 
@@ -498,10 +539,8 @@ SceneEditor::SceneEditor()
             m_GeometryMenu = new wxMenu;
 
             m_GeometryMenu->AppendCheckItem(SceneEditorIDs::ID_ViewNone, _("None"));
-            m_GeometryMenu->AppendCheckItem(SceneEditorIDs::ID_ViewRender, _("Art"));
+            m_GeometryMenu->AppendCheckItem(SceneEditorIDs::ID_ViewRender, _("Render"));
             m_GeometryMenu->AppendCheckItem(SceneEditorIDs::ID_ViewCollision, _("Collision"));
-            m_GeometryMenu->AppendSeparator();
-            m_GeometryMenu->AppendCheckItem(SceneEditorIDs::ID_ViewPathfinding, _("Pathfinding"));
 
             m_ViewMenu->AppendSubMenu(m_GeometryMenu, _("Geometry"));
         }
@@ -599,10 +638,10 @@ SceneEditor::SceneEditor()
         m_ViewMenu->Append(SceneEditorIDs::ID_ViewFrameOrigin, _("Frame Origin (O)"));
         m_ViewMenu->Append(SceneEditorIDs::ID_ViewFrameSelected, _("Frame Selected (F)"));
         m_ViewMenu->AppendCheckItem(SceneEditorIDs::ID_ViewHighlightMode, _("Highlight Mode (H)"));
-        m_ViewMenu->Append(SceneEditorIDs::ID_ViewPreviousView, _("Previous View   ["));
-        m_ViewMenu->Append(SceneEditorIDs::ID_ViewNextView, _("Next View    ]"));
+        m_ViewMenu->Append(SceneEditorIDs::ID_ViewPreviousView, _("Previous Viewport   ["));
+        m_ViewMenu->Append(SceneEditorIDs::ID_ViewNextView, _("Next Viewport    ]"));
 
-        mb->Append(m_ViewMenu, _("View"));
+        mb->Append(m_ViewMenu, _("Viewport"));
     }
 
     {
@@ -911,10 +950,10 @@ void SceneEditor::OnShow(wxShowEvent& event)
     class RenderThread : public wxThread
     {
     private:
-        Luna::View* m_View;
+        Luna::Viewport* m_View;
 
     public:
-        RenderThread(Luna::View* view)
+        RenderThread(Luna::Viewport* view)
             : m_View (view)
         {
 
@@ -998,7 +1037,6 @@ void SceneEditor::OnMenuOpen(wxMenuEvent& event)
         m_GeometryMenu->Check( SceneEditorIDs::ID_ViewNone, m_View->GetGeometryMode() == GeometryModes::None );
         m_GeometryMenu->Check( SceneEditorIDs::ID_ViewRender, m_View->GetGeometryMode() == GeometryModes::Render );
         m_GeometryMenu->Check( SceneEditorIDs::ID_ViewCollision, m_View->GetGeometryMode() == GeometryModes::Collision );
-        m_GeometryMenu->Check( SceneEditorIDs::ID_ViewPathfinding, m_View->IsPathfindingVisible() );
 
         ViewColorMode colorMode = SceneEditorPreferences()->GetViewPreferences()->GetColorMode();
         M_IDToColorMode::const_iterator colorModeItr = m_ColorModeLookup.begin();
@@ -1041,7 +1079,7 @@ void SceneEditor::OnNew( wxCommandEvent& event )
 {
     if ( m_SceneManager.CloseAll() )
     {
-        ScenePtr scene = m_SceneManager.NewScene( true );
+        ScenePtr scene = m_SceneManager.NewScene( GetViewport(), true );
         scene->GetSceneDocument()->SetModified( true );
         m_SceneManager.SetCurrentScene( scene );
     }
@@ -1531,12 +1569,6 @@ void SceneEditor::OnViewChange(wxCommandEvent& event)
             break;
         }
 
-    case SceneEditorIDs::ID_ViewPathfinding:
-        {
-            m_View->SetPathfindingVisible( !m_View->IsPathfindingVisible() );
-            break;
-        }
-
     case SceneEditorIDs::ID_ViewWireframeOnMesh:
         {
             m_View->GetCamera()->SetWireframeOnMesh( !m_View->GetCamera()->GetWireframeOnMesh() );
@@ -1614,7 +1646,7 @@ void SceneEditor::OnViewCameraChange(wxCommandEvent& event)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Handles callbacks for menu items dealing with View->Show and View->Hide.
+// Handles callbacks for menu items dealing with Viewport->Show and Viewport->Hide.
 // Changes the visibility of items according to which command was called.
 // 
 void SceneEditor::OnViewVisibleChange(wxCommandEvent& event)
@@ -1756,39 +1788,7 @@ void SceneEditor::OnFrameSelected(wxCommandEvent& event)
 {
     if ( m_SceneManager.HasCurrentScene() )
     {
-        bool found = false;
-        Math::AlignedBox box;
-
-        OS_SelectableDumbPtr::Iterator itr = m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Begin();
-        OS_SelectableDumbPtr::Iterator end = m_SceneManager.GetCurrentScene()->GetSelection().GetItems().End();
-        for ( ; itr != end; ++itr )
-        {
-            Luna::HierarchyNode* node = Reflect::ObjectCast<Luna::HierarchyNode>(*itr);
-            if (node)
-            {
-                box.Merge(node->GetGlobalHierarchyBounds());
-                found = true;
-                continue;
-            }
-
-            Luna::Point* point = Reflect::ObjectCast<Luna::Point>(*itr);
-            if (point)
-            {
-                Math::Vector3 p = point->GetPosition();
-                point->GetTransform()->GetGlobalTransform().TransformVertex(p);
-                box.Merge(p);
-                found = true;
-                continue;
-            }
-        }
-
-        if (found)
-        {
-            m_View->UpdateCameraHistory();    // we want the previous state before the move
-            m_View->GetCamera()->Frame(box);
-
-            m_SceneManager.GetCurrentScene()->Execute(false);
-        }
+        m_SceneManager.GetCurrentScene()->FrameSelected();
     }
 }
 
@@ -2154,7 +2154,6 @@ void SceneEditor::OnSnapCameraTo(wxCommandEvent& event)
 ///////////////////////////////////////////////////////////////////////////////
 //Pushes the selected menu item as the current selected item.  
 //
-
 void SceneEditor::OnManifestContextMenu(wxCommandEvent& event)
 {
     if( !m_OrderedContextItems.empty() )
@@ -2200,7 +2199,7 @@ void SceneEditor::OnTypeContextMenu(wxCommandEvent &event)
 
     case ContextCallbackTypes::Item:
         {
-            newSelection.Append( static_cast<Luna::HierarchyNode*>( data->m_NodeInstance ) );
+            newSelection.Append( static_cast<Luna::HierarchyNode*>( data->m_Nodes ) );
             break;
         }
 
@@ -2218,54 +2217,6 @@ void SceneEditor::OnTypeContextMenu(wxCommandEvent &event)
 
             break;
         }
-
-    case ContextCallbackTypes::Entity_Visible_Geometry:
-        {
-            const HM_SceneNodeSmartPtr& instances( data->m_NodeType->GetInstances() );
-
-            HM_SceneNodeSmartPtr::const_iterator itr = instances.begin();
-            HM_SceneNodeSmartPtr::const_iterator end = instances.end();
-
-            for( ; itr != end; ++itr )
-            {
-                const Luna::SceneNode* node (itr->second);
-                const Luna::Entity* entity = Reflect::ConstObjectCast<Luna::Entity> (node);
-
-                if ( entity && entity->IsGeometryVisible())
-                {
-                    newSelection.Append( itr->second );
-                }
-            }
-
-            break;
-        }
-
-    case ContextCallbackTypes::Entity_Invisible_Geometry:
-        {
-            const HM_SceneNodeSmartPtr& instances( data->m_NodeType->GetInstances() );
-
-            HM_SceneNodeSmartPtr::const_iterator itr = instances.begin();
-            HM_SceneNodeSmartPtr::const_iterator end = instances.end();
-
-            for( ; itr != end; ++itr )
-            {
-                const Luna::SceneNode* node (itr->second);
-                const Luna::Entity* entity = Reflect::ConstObjectCast<Luna::Entity> (node);
-
-                if ( entity && !entity->IsGeometryVisible())
-                {
-                    newSelection.Append( itr->second );
-                }
-            }
-
-            break;
-        }
-
-
-    default:
-        {
-            break;
-        }
     }
 
     if( !newSelection.Empty() )
@@ -2278,13 +2229,12 @@ void SceneEditor::OnTypeContextMenu(wxCommandEvent &event)
 // Upon selection from the context menu, performs a select operation
 void SceneEditor::SelectItemInScene( wxCommandEvent& event )
 {
-    GeneralCallbackData* data = static_cast<GeneralCallbackData*>( event.m_callbackUserData );
+    DataObject<const SelectArgs*>* data = static_cast<DataObject<const SelectArgs*>*>( event.m_callbackUserData );
 
-    SelectArgs* args = static_cast<SelectArgs*>( data->m_GeneralData );
-
-    args->m_Mode = SelectionModes::Replace;
-    args->m_Target = SelectionTargetModes::Single;
-    m_SceneManager.GetCurrentScene()->Select(*args);
+    SelectArgs args ( *data->m_Data );
+    args.m_Mode = SelectionModes::Replace;
+    args.m_Target = SelectionTargetModes::Single;
+    m_SceneManager.GetCurrentScene()->Select(args);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2628,16 +2578,16 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
     args.m_Scene->SetTool( NULL );
     m_View->SetTool(NULL);
 
-    m_ToolsPanel->Disable();
-    m_ToolsPanel->Refresh();
+    //m_ToolsPanel->Disable();
+    //m_ToolsPanel->Refresh();
 }
 
 void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
 {
     if ( args.m_Scene )
     {
-        m_ToolsPanel->Enable();
-        m_ToolsPanel->Refresh();
+        //m_ToolsPanel->Enable();
+        //m_ToolsPanel->Refresh();
 
         // Hook our event handlers
         args.m_Scene->AddStatusChangedListener( StatusChangeSignature::Delegate ( this, &SceneEditor::StatusChanged ) );
@@ -2813,7 +2763,7 @@ void SceneEditor::ViewToolChanged( const ToolChangeArgs& args )
         }
     }
 
-    m_ToolsPanel->ToggleTool( selectedTool );
+    //m_ToolsPanel->ToggleTool( selectedTool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2912,8 +2862,7 @@ void SceneEditor::OpenTypeContextMenu( const SelectArgs& args )
     if (m_SceneManager.GetCurrentScene()->HasHighlighted())
     {
         // need to provide the select args if needed
-        GeneralCallbackData* data = new GeneralCallbackData;
-        data->m_GeneralData = (void*)( &args );
+        DataObject<const SelectArgs*>* data = new DataObject<const SelectArgs*> ( &args );
         GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::SelectItemInScene ), data, this );
         contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select" ) );
         ++numMenuItems;
@@ -3017,7 +2966,7 @@ void SceneEditor::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sce
                 {    
                     ContextCallbackData* data = new ContextCallbackData;
                     data->m_ContextCallbackType = ContextCallbackTypes::Item;
-                    data->m_NodeInstance = *ord_itr;
+                    data->m_Nodes = *ord_itr;
 
                     GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::OnTypeContextMenu ), data, this );
                     itemMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, (*ord_itr)->GetName().c_str() );
@@ -3037,30 +2986,7 @@ void SceneEditor::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sce
                 if (entity)
                 {
                     // set up for entity types
-                    if (SetupEntityTypeMenus( entity, subMenu, numMenuItems ))
-                    {
-                        // setup for geometry visible objects
-                        {
-                            ContextCallbackData* data = new ContextCallbackData;
-                            data->m_ContextCallbackType = ContextCallbackTypes::Entity_Visible_Geometry;
-                            data->m_NodeType = type;
-
-                            GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::OnTypeContextMenu ), data, this );
-                            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select All With Geometry Shown" ) );
-                            ++numMenuItems;      
-                        }
-
-                        // setup for geometry invisible objects         
-                        {
-                            ContextCallbackData* data = new ContextCallbackData;
-                            data->m_ContextCallbackType = ContextCallbackTypes::Entity_Invisible_Geometry;
-                            data->m_NodeType = type;
-
-                            GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SceneEditor::OnTypeContextMenu ), data, this );
-                            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select All Without Geometry Shown" ) );
-                            ++numMenuItems;      
-                        }
-                    }
+                    SetupEntityTypeMenus( entity, subMenu, numMenuItems );
                 }
             }
             contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, type->GetName().c_str(), subMenu );
@@ -3069,7 +2995,7 @@ void SceneEditor::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& sce
     }
 }
 
-bool SceneEditor::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* subMenu, u32& numMenuItems )
+void SceneEditor::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* subMenu, u32& numMenuItems )
 {
     const M_InstanceSetSmartPtr& sets = entity->GetSets();
 
@@ -3114,11 +3040,7 @@ bool SceneEditor::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* 
         {
             delete menu;
         }
-
-        return added;
     }
-
-    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3128,8 +3050,8 @@ bool SceneEditor::SortContextItemsByName( Luna::SceneNode* lhs, Luna::SceneNode*
     tstring lname( lhs->GetName() );
     tstring rname( rhs->GetName() );
 
-    boost::to_upper( lname );
-    boost::to_upper( rname );
+    toUpper( lname );
+    toUpper( rname );
 
     return lname < rname;
 }
@@ -3141,8 +3063,8 @@ bool SceneEditor::SortTypeItemsByName( Luna::SceneNodeType* lhs, Luna::SceneNode
     tstring lname( lhs->GetName() );
     tstring rname( rhs->GetName() );
 
-    boost::to_upper( lname );
-    boost::to_upper( rname );
+    toUpper( lname );
+    toUpper( rname );
 
     return lname < rname;
 }
@@ -3162,5 +3084,5 @@ void SceneEditor::SyncPropertyThread()
 
 void SceneEditor::SetHelpText( const tchar* text )
 {
-    m_Help->SetText( text );
+    m_Help->SetHelpText( text );
 }

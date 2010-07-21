@@ -6,7 +6,7 @@
 #include "Entity.h"
 #include "EntityType.h"
 
-#include "Editor/SharedFileManager.h"
+#include "SharedFileManager.h"
 #include "PrimitiveCube.h"
 #include "PrimitiveSphere.h"
 #include "PrimitiveCylinder.h"
@@ -71,7 +71,7 @@ void EntityAssetSet::LoadAssetClass()
             Luna::PrimitiveCube* cube;
             if ( !m_Shape )
             {
-                cube = new Luna::PrimitiveCube (m_Type->GetScene()->GetView()->GetResources());
+                cube = new Luna::PrimitiveCube (m_Type->GetScene()->GetViewport()->GetResources());
                 cube->Update();
 
                 m_Shape = cube;

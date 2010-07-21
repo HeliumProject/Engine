@@ -7,7 +7,6 @@
 
 #include "Precompile.h"
 
-#include "Application/UI/AutoCompleteComboBox.h"
 #include "Application/UI/MenuButton.h"
 #include "DirectoryCtrl.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
@@ -58,7 +57,7 @@ NavigationPanelGenerated::NavigationPanelGenerated( wxWindow* parent, wxWindowID
 	
 	bSizer20->Add( m_UpFolderButton, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_NavBarComboBox = new Nocturnal::AutoCompleteComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxTE_PROCESS_ENTER|wxWANTS_CHARS ); 
+	m_NavBarComboBox = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxTE_PROCESS_ENTER|wxWANTS_CHARS ); 
 	bSizer20->Add( m_NavBarComboBox, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_GoButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 24,24 ), wxBU_AUTODRAW );
@@ -601,7 +600,7 @@ PreviewPanelGenerated::PreviewPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* sizer;
 	sizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_PreviewWindow = new VaultPreviewWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, wxT( "Luna::PreviewWindow" ) );
+	m_PreviewWindow = new VaultPreviewWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE, wxT( "Luna::RenderWindow" ) );
 	m_PreviewWindow->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ) );
 	
 	sizer->Add( m_PreviewWindow, 1, wxEXPAND, 5 );

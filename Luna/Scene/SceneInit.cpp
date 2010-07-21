@@ -3,19 +3,18 @@
 
 // Libraries
 #include "Foundation/InitializerStack.h"
-#include "Application/RCS/Providers/Perforce/Perforce.h"
 #include "Foundation/Reflect/Registry.h"
+#include "Application/RCS/Providers/Perforce/Perforce.h"
 #include "Pipeline/Content/ContentInit.h"
 #include "Pipeline/Content/ContentVersion.h"
 #include "Pipeline/Asset/AssetInit.h"
-#include "MiscSettings.h"
 
 // Types
 #include "SceneEditor.h"
 #include "SceneDocument.h"
 #include "ScenePreferences.h"
 
-#include "SceneTool.h"
+#include "Tool.h"
 #include "CreateTool.h"
 #include "DuplicateTool.h"
 
@@ -87,12 +86,9 @@ void Luna::SceneInitialize()
 
     g_InitializerStack.Push( Reflect::RegisterEnumeration<ShadingMode>( &ShadingModeEnumerateEnumeration, TXT( "ShadingMode" ) ) );
     g_InitializerStack.Push( Reflect::RegisterClass<CameraPreferences>( TXT( "CameraPreferences" ) ) ); 
-    g_InitializerStack.Push( Reflect::RegisterClass<ViewPreferences>( TXT( "ViewPreferences" ) ) ); 
+    g_InitializerStack.Push( Reflect::RegisterClass<ViewportPreferences>( TXT( "ViewportPreferences" ) ) ); 
     g_InitializerStack.Push( Reflect::RegisterClass<GridPreferences>( TXT( "Grid" ) ) );
     g_InitializerStack.Push( Reflect::RegisterClass<ScenePreferences>( TXT( "ScenePreferences" ) ) );
-
-    g_InitializerStack.Push( Reflect::RegisterClass<ScaleColorModeValue>( TXT( "ScaleColorModeValue" ) ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<MiscSettings>( TXT( "MiscSettings" ) ) );
 
     // luna types 
     g_InitializerStack.Push( SceneEditor::InitializeEditor, SceneEditor::CleanupEditor );
@@ -100,7 +96,6 @@ void Luna::SceneInitialize()
     g_InitializerStack.Push( ScenePreferences::InitializeType, ScenePreferences::CleanupType );
 
     g_InitializerStack.Push( Tool::InitializeType, Tool::CleanupType );
-    g_InitializerStack.Push( SceneTool::InitializeType, SceneTool::CleanupType );
     g_InitializerStack.Push( CreateTool::InitializeType, CreateTool::CleanupType );
     g_InitializerStack.Push( DuplicateTool::InitializeType, DuplicateTool::CleanupType );
 
@@ -153,7 +148,7 @@ void Luna::SceneInitialize()
     g_InitializerStack.Push( DirectionalLight::InitializeType, DirectionalLight::CleanupType );
     g_InitializerStack.Push( AmbientLight::InitializeType, AmbientLight::CleanupType );
 
-    g_InitializerStack.Push( View::InitializeType, View::CleanupType );
+    g_InitializerStack.Push( Viewport::InitializeType, Viewport::CleanupType );
     g_InitializerStack.Push( Primitive::InitializeType, Primitive::CleanupType );
 
     g_InitializerStack.Push( NavMesh::InitializeType, NavMesh::CleanupType );

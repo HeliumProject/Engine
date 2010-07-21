@@ -11,8 +11,9 @@
 #include "LunaGenerated.h"
 
 ///////////////////////////////////////////////////////////////////////////
+using namespace Luna;
 
-LunaFrameGenerated::LunaFrameGenerated( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
+MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : Luna::Frame( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -511,12 +512,12 @@ LunaFrameGenerated::LunaFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_MainToolbar->AddTool( ID_Open, _("Open"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_MainToolbar->AddTool( ID_SaveAll, _("Save"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_MainToolbar->AddSeparator(); 
-	m_MainToolbar->AddTool( wxID_ANY, _("Cut"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_MainToolbar->AddTool( wxID_ANY, _("Copy"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_MainToolbar->AddTool( wxID_ANY, _("Paste"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_MainToolbar->AddTool( ID_Cut, _("Cut"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_MainToolbar->AddTool( ID_Copy, _("Copy"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_MainToolbar->AddTool( ID_Paste, _("Paste"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_MainToolbar->AddSeparator(); 
-	m_MainToolbar->AddTool( wxID_ANY, _("Undo"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_MainToolbar->AddTool( wxID_ANY, _("Redo"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_MainToolbar->AddTool( ID_Undo, _("Undo"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_MainToolbar->AddTool( ID_Redo, _("Redo"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_MainToolbar->AddSeparator(); 
 	m_ToolVaultSearch = new wxSearchCtrl( m_MainToolbar, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 400,-1 ), 0 );
 	#ifndef __WXMAC__
@@ -531,21 +532,21 @@ LunaFrameGenerated::LunaFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_MainStatusBar = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 	
 	// Connect Events
-	this->Connect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( LunaFrameGenerated::OnNew ) );
-	this->Connect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( LunaFrameGenerated::OnNew ) );
-	this->Connect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LunaFrameGenerated::OnNew ) );
-	this->Connect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LunaFrameGenerated::OnOpen ) );
-	this->Connect( ID_SaveAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LunaFrameGenerated::OnSaveAll ) );
+	this->Connect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
+	this->Connect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
+	this->Connect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
+	this->Connect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
+	this->Connect( ID_SaveAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
 }
 
-LunaFrameGenerated::~LunaFrameGenerated()
+MainFrameGenerated::~MainFrameGenerated()
 {
 	// Disconnect Events
-	this->Disconnect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( LunaFrameGenerated::OnNew ) );
-	this->Disconnect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( LunaFrameGenerated::OnNew ) );
-	this->Disconnect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LunaFrameGenerated::OnNew ) );
-	this->Disconnect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LunaFrameGenerated::OnOpen ) );
-	this->Disconnect( ID_SaveAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LunaFrameGenerated::OnSaveAll ) );
+	this->Disconnect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
+	this->Disconnect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
+	this->Disconnect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
+	this->Disconnect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
+	this->Disconnect( ID_SaveAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
 	
 }
 
@@ -571,15 +572,15 @@ LayersPanelGenerated::LayersPanelGenerated( wxWindow* parent, wxWindowID id, con
 	bSizer19 = new wxBoxSizer( wxVERTICAL );
 	
 	m_LayersToolbar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL ); 
-	m_LayersToolbar->AddTool( wxID_ANY, _("Create New Layer"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayersToolbar->AddTool( wxID_ANY, _("Create New Layer From Selection"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayersToolbar->AddTool( wxID_ANY, _("Delete Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayersToolbar->AddTool( ID_CreateNewLayer, _("Create New Layer"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayersToolbar->AddTool( ID_CreateNewLayerFromSelection, _("Create New Layer From Selection"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayersToolbar->AddTool( ID_DeleteSelectedLayers, _("Delete Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_LayersToolbar->AddSeparator(); 
-	m_LayersToolbar->AddTool( wxID_ANY, _("Add Selection to Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayersToolbar->AddTool( wxID_ANY, _("Remove Selection from Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayersToolbar->AddTool( ID_AddSelectionToLayers, _("Add Selection to Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayersToolbar->AddTool( ID_RemoveSelectionFromLayers, _("Remove Selection from Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_LayersToolbar->AddSeparator(); 
-	m_LayersToolbar->AddTool( wxID_ANY, _("Select Layer Members"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayersToolbar->AddTool( wxID_ANY, _("Select Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayersToolbar->AddTool( ID_SelectLayerMembers, _("Select Layer Members"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayersToolbar->AddTool( ID_SelectLayers, _("Select Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_LayersToolbar->Realize();
 	
 	bSizer19->Add( m_LayersToolbar, 0, wxEXPAND, 5 );
@@ -820,16 +821,16 @@ DetailsPanelGenerated::~DetailsPanelGenerated()
 
 ToolsPanelGenerated::ToolsPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	wxBoxSizer* bSizer18;
-	bSizer18 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizer28;
+	bSizer28 = new wxBoxSizer( wxVERTICAL );
 	
-	m_ToolsPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer18->Add( m_ToolsPanel, 1, wxEXPAND | wxALL, 5 );
+	m_ToolsContainerPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bSizer28->Add( m_ToolsContainerPanel, 0, wxEXPAND, 5 );
 	
 	m_PropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer18->Add( m_PropertiesPanel, 1, wxEXPAND | wxALL, 5 );
+	bSizer28->Add( m_PropertiesPanel, 1, wxEXPAND, 5 );
 	
-	this->SetSizer( bSizer18 );
+	this->SetSizer( bSizer28 );
 	this->Layout();
 }
 
@@ -882,16 +883,22 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	bSizer21 = new wxBoxSizer( wxVERTICAL );
 	
 	m_ToolbarView = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL ); 
-	m_ToolbarView->AddTool( wxID_ANY, _("Orbit"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_ToolbarView->AddTool( wxID_ANY, _("Front"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_ToolbarView->AddTool( wxID_ANY, _("Side"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_ToolbarView->AddTool( wxID_ANY, _("Top"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_CameraOrbit, _("Orbit"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_CameraFront, _("Front"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_CameraSide, _("Side"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_CameraTop, _("Top"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
 	m_ToolbarView->Realize();
 	
 	bSizer21->Add( m_ToolbarView, 0, wxEXPAND, 5 );
 	
-	m_ViewPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer21->Add( m_ViewPanel, 1, wxEXPAND | wxALL, 5 );
+	m_ViewPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
+	wxBoxSizer* m_ViewSizer;
+	m_ViewSizer = new wxBoxSizer( wxVERTICAL );
+	
+	m_ViewPanel->SetSizer( m_ViewSizer );
+	m_ViewPanel->Layout();
+	m_ViewSizer->Fit( m_ViewPanel );
+	bSizer21->Add( m_ViewPanel, 1, wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer21 );
 	this->Layout();

@@ -55,7 +55,7 @@ namespace Luna
         Inspect::FileBrowserButton* m_BrowserButtonAdd;
 
     public:
-        EntityCreateTool(Luna::Scene* scene, Enumerator* enumerator);
+        EntityCreateTool(Luna::Scene* scene, PropertiesGenerator* generator);
         virtual ~EntityCreateTool();
 
         virtual Luna::TransformPtr CreateNode() NOC_OVERRIDE;

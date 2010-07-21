@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 
-#include "Editor/PreferencesDialog.h"
+#include "PreferencesDialog.h"
 
 namespace Luna
 {

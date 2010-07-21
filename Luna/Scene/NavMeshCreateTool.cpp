@@ -204,8 +204,8 @@ void NavMeshCreateTool::CleanupType()
   Reflect::UnregisterClass< Luna::NavMeshCreateTool >();
 }
 
-NavMeshCreateTool::NavMeshCreateTool( Luna::Scene* scene, Enumerator* enumerator )
-: Luna::SceneTool( scene, enumerator )
+NavMeshCreateTool::NavMeshCreateTool( Luna::Scene* scene, PropertiesGenerator* generator )
+: Tool( scene, generator )
 , m_Instance( NULL )
 , m_Created( false )
 , m_EditMode( EDIT_MODE_DISABLED )
@@ -220,9 +220,9 @@ NavMeshCreateTool::NavMeshCreateTool( Luna::Scene* scene, Enumerator* enumerator
 , m_SnapDegrees( 15.0f )
 , m_RotationStartValue( Math::Vector3::Zero )
 {
-  m_PunchOutTranslator = new Luna::TranslateManipulator( ManipulatorModes::Translate, scene, enumerator );
-  m_PunchOutRotator = new Luna::RotateManipulator( ManipulatorModes::Rotate, scene, enumerator );
-  m_PunchOutScaler = new Luna::ScaleManipulator( ManipulatorModes::Scale, scene, enumerator );
+  m_PunchOutTranslator = new Luna::TranslateManipulator( ManipulatorModes::Translate, scene, generator );
+  m_PunchOutRotator = new Luna::RotateManipulator( ManipulatorModes::Rotate, scene, generator );
+  m_PunchOutScaler = new Luna::ScaleManipulator( ManipulatorModes::Scale, scene, generator );
 
   ZeroMemory(&m_AxisMaterial, sizeof(m_AxisMaterial));
   m_AxisMaterial.Ambient = Luna::Color::BLACK;
@@ -236,21 +236,21 @@ NavMeshCreateTool::NavMeshCreateTool( Luna::Scene* scene, Enumerator* enumerator
 
   SetHoverSelectMode( MOUSE_HOVER_SELECT_VERT );
 
-  m_Axes = new Luna::PrimitiveAxes (m_Scene->GetView()->GetResources());
+  m_Axes = new Luna::PrimitiveAxes (m_Scene->GetViewport()->GetResources());
   m_Axes->Update();
 
-  m_Ring = new Luna::PrimitiveCircle (m_Scene->GetView()->GetResources());
+  m_Ring = new Luna::PrimitiveCircle (m_Scene->GetViewport()->GetResources());
   m_Ring->Update();
 
-  m_XCone = new Luna::PrimitiveCone (m_Scene->GetView()->GetResources());
+  m_XCone = new Luna::PrimitiveCone (m_Scene->GetViewport()->GetResources());
   m_XCone->SetSolid( true );
   m_XCone->Update();
 
-  m_YCone = new Luna::PrimitiveCone (m_Scene->GetView()->GetResources());
+  m_YCone = new Luna::PrimitiveCone (m_Scene->GetViewport()->GetResources());
   m_YCone->SetSolid( true );
   m_YCone->Update();
 
-  m_ZCone = new Luna::PrimitiveCone (m_Scene->GetView()->GetResources());
+  m_ZCone = new Luna::PrimitiveCone (m_Scene->GetViewport()->GetResources());
   m_ZCone->SetSolid( true );
   m_ZCone->Update();
 
@@ -261,7 +261,7 @@ NavMeshCreateTool::NavMeshCreateTool( Luna::Scene* scene, Enumerator* enumerator
   editor->GetNavToolBar()->ToggleTool( SceneEditorIDs::ID_ToolsNavMeshWorkWithLOWRes, m_ResMode == RES_MODE_LOW_RES);
 #endif
 
-  m_SelectionFrame = new Luna::PrimitiveFrame ( m_Scene->GetView()->GetResources() );
+  m_SelectionFrame = new Luna::PrimitiveFrame ( m_Scene->GetViewport()->GetResources() );
   m_SelectionFrame->Update();
   SetSurfaceSnap(true);
 
@@ -412,7 +412,7 @@ void NavMeshCreateTool::CreateInstance( const Math::Vector3& position )
 
 void NavMeshCreateTool::PickPosition(int x, int y, Math::Vector3 &position)
 {
-  FrustumLinePickVisitor pick (m_Scene->GetView()->GetCamera(), x, y);
+  FrustumLinePickVisitor pick (m_Scene->GetViewport()->GetCamera(), x, y);
 
   // pick in the world
   m_Scene->GetManager()->GetRootScene()->Pick(&pick);
@@ -422,7 +422,7 @@ void NavMeshCreateTool::PickPosition(int x, int y, Math::Vector3 &position)
   if (s_SurfaceSnap || s_ObjectSnap)
   {
     V_PickHitSmartPtr sorted;
-    PickHit::Sort(m_Scene->GetView()->GetCamera(), pick.GetHits(), sorted, PickSortTypes::Surface);
+    PickHit::Sort(m_Scene->GetViewport()->GetCamera(), pick.GetHits(), sorted, PickSortTypes::Surface);
 
     V_PickHitSmartPtr::const_iterator itr = sorted.begin();
     V_PickHitSmartPtr::const_iterator end = sorted.end();
@@ -459,7 +459,7 @@ void NavMeshCreateTool::PickPosition(int x, int y, Math::Vector3 &position)
   if (!set)
   {
     // place the object on the camera plane
-    m_Scene->GetView()->GetCamera()->ViewportToPlaneVertex(x, y, Luna::CreateTool::s_PlaneSnap, position);
+    m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex(x, y, Luna::CreateTool::s_PlaneSnap, position);
   }
 }
 
@@ -626,7 +626,7 @@ void NavMeshCreateTool::MouseUp( wxMouseEvent& e )
       m_MarqueMouseCoords[1].x = e.GetX();
       m_MarqueMouseCoords[1].y = e.GetY();
       //Log::Print( TXT( "Marquee ends (%f,%f) --> (%f,%f)\n" ), m_MarqueMouseCoords[0].x, m_MarqueMouseCoords[0].y, m_MarqueMouseCoords[1].x, m_MarqueMouseCoords[1].y);
-      Luna::Camera* cam = m_Scene->GetView()->GetCamera();
+      Luna::Camera* cam = m_Scene->GetViewport()->GetCamera();
       Math::Frustum frustum;
       if (cam->ViewportToFrustum(m_MarqueMouseCoords[0].x, m_MarqueMouseCoords[0].y, m_MarqueMouseCoords[1].x, m_MarqueMouseCoords[1].y, frustum))
       {
@@ -855,7 +855,7 @@ bool NavMeshCreateTool::MouseDown( wxMouseEvent& e )
             else
             {
               // hack to make sure our start point isn't picked on the ground when we are manipulating
-              m_Scene->GetView()->GetCamera()->ViewportToPlaneVertex(e.GetX(), e.GetY(), IntersectionPlanes::View, m_StartValue);
+              m_Scene->GetViewport()->GetCamera()->ViewportToPlaneVertex(e.GetX(), e.GetY(), IntersectionPlanes::Viewport, m_StartValue);
             }
 
             // push the original position to the undor queue
@@ -1139,14 +1139,14 @@ void NavMeshCreateTool::MouseMove( wxMouseEvent& e )
 
     if ( m_Instance->GetNumberVertices() > 0 )
     {
-      Luna::Camera* cam = m_Scene->GetView()->GetCamera();
+      Luna::Camera* cam = m_Scene->GetViewport()->GetCamera();
       Math::Vector3 ss_start;
       cam->ViewportToWorldVertex (e.GetX(), e.GetY(), ss_start);
       Math::Vector3 ss_dir;
       cam->ViewportToWorldNormal(e.GetX(), e.GetY(), ss_dir); //= position - ss_start;
       ss_dir = ss_dir.Normalize();
       f32 ss_len = Luna::Camera::FarClipDistance;
-      Math::Matrix4 view_mat = cam->GetView();
+      Math::Matrix4 view_mat = cam->GetViewport();
       view_mat.Transform(view_space);
       view_space.w = 0.0f;
       f32 dist_to_cam = view_space.Length();
@@ -1162,7 +1162,7 @@ void NavMeshCreateTool::MouseMove( wxMouseEvent& e )
       cam->ScreenToViewport(e.GetX()+3, e.GetY()+3, view_proj_off_set_vec3);//3 pixel trheshold
       view_proj_off_set_vec3 -= view_proj_vec3;
       f32 thresh_sqr = view_proj_off_set_vec3.LengthSquared();
-      Math::Matrix4 view_proj_mat = cam->GetView()*cam->GetProjection();
+      Math::Matrix4 view_proj_mat = cam->GetViewport()*cam->GetProjection();
 
       switch ( m_EditMode)
       {
@@ -1852,33 +1852,33 @@ void NavMeshCreateTool::CreateProperties()
 {
   __super::CreateProperties();
 
-  m_Enumerator->PushPanel( TXT( "Create NavMesh" ), true );
+  m_Generator->PushPanel( TXT( "Create NavMesh" ), true );
   {
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Surface Snap" ) );   
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, bool> (this, &NavMeshCreateTool::GetSurfaceSnap, &NavMeshCreateTool::SetSurfaceSnap ) );
+      m_Generator->AddLabel( TXT( "Surface Snap" ) );   
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, bool> (this, &NavMeshCreateTool::GetSurfaceSnap, &NavMeshCreateTool::SetSurfaceSnap ) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Object Snap" ) );   
-      m_Enumerator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, bool> (this, &NavMeshCreateTool::GetObjectSnap, &NavMeshCreateTool::SetObjectSnap ) );
+      m_Generator->AddLabel( TXT( "Object Snap" ) );   
+      m_Generator->AddCheckBox<bool>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, bool> (this, &NavMeshCreateTool::GetObjectSnap, &NavMeshCreateTool::SetObjectSnap ) );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
 
-    m_Enumerator->PushContainer();
+    m_Generator->PushContainer();
     {
-      m_Enumerator->AddLabel( TXT( "Plane Snap" ) );
-      Inspect::Choice* choice = m_Enumerator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, int> (this, &NavMeshCreateTool::GetPlaneSnap, &NavMeshCreateTool::SetPlaneSnap) );
+      m_Generator->AddLabel( TXT( "Plane Snap" ) );
+      Inspect::Choice* choice = m_Generator->AddChoice<int>( new Nocturnal::MemberProperty<Luna::NavMeshCreateTool, int> (this, &NavMeshCreateTool::GetPlaneSnap, &NavMeshCreateTool::SetPlaneSnap) );
       choice->SetDropDown( true );
       Inspect::V_Item items;
 
       {
         tostringstream str;
-        str << IntersectionPlanes::View;
-        items.push_back( Inspect::Item( TXT( "View" ), str.str() ) );
+        str << IntersectionPlanes::Viewport;
+        items.push_back( Inspect::Item( TXT( "Viewport" ), str.str() ) );
       }
 
       {
@@ -1889,9 +1889,9 @@ void NavMeshCreateTool::CreateProperties()
 
       choice->SetItems( items );
     }
-    m_Enumerator->Pop();
+    m_Generator->Pop();
   }
-  m_Enumerator->Pop();
+  m_Generator->Pop();
 
   if ( m_EditMode  == EDIT_MODE_MOVE)
   {
@@ -1933,7 +1933,7 @@ void NavMeshCreateTool::SetSurfaceSnap( bool snap )
   if (s_SurfaceSnap)
   {
     s_ObjectSnap = false;
-    m_Enumerator->GetContainer()->Read();
+    m_Generator->GetContainer()->Read();
   }
 
   m_Scene->Execute( true );
@@ -1951,7 +1951,7 @@ void NavMeshCreateTool::SetObjectSnap( bool snap )
   if (s_ObjectSnap)
   {
     s_SurfaceSnap = false;
-    m_Enumerator->GetContainer()->Read();
+    m_Generator->GetContainer()->Read();
   }
 
   m_Scene->Execute( true );
@@ -2654,7 +2654,7 @@ void NavMeshCreateTool::MoveRotator( wxMouseEvent& e )
   else
   {
     //
-    // ArcBall and View Plane
+    // ArcBall and Viewport Plane
     //
 
     if (m_Type == RotationTypes::ArcBall)

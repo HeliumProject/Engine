@@ -2,7 +2,7 @@
 
 #include "Instance.h"
 #include "Pipeline/Content/Nodes/Light.h"
-#include "Core/Enumerator.h"
+#include "PropertiesGenerator.h"
 #include "Foundation/Container/BitArray.h"
 #include "Primitive.h"
 
@@ -211,10 +211,6 @@ namespace Luna
         pkg->RemoveAttribute( Reflect::GetType< T >() );
       }
     }
-
-
-    static void OnSelectionHelper( Inspect::Button* button );
-
 
     //
     // Events

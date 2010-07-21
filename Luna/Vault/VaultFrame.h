@@ -9,7 +9,7 @@
 
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
-#include "Editor/UpdateStatusEvent.h"
+#include "UpdateStatusEvent.h"
 #include "Foundation/Reflect/Element.h"
 #include "Foundation/Reflect/Version.h"
 #include "Foundation/TUID.h"

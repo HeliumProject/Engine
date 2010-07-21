@@ -5,14 +5,14 @@
 
 using namespace Luna;
 
-BEGIN_EVENT_TABLE( VaultPreviewWindow, PreviewWindow )
+BEGIN_EVENT_TABLE( VaultPreviewWindow, RenderWindow )
 END_EVENT_TABLE()
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
 VaultPreviewWindow::VaultPreviewWindow( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
-: PreviewWindow( parent, id, pos, size, style, name )
+: RenderWindow( parent, id, pos, size, style, name )
 , m_VaultFrame( NULL )
 {
 }

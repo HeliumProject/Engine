@@ -10,9 +10,10 @@
 
 #include "Platform/Compiler.h"
 #include "Foundation/Memory/SmartPtr.h"
-#include "Editor/D3DWindowManager.h"
 #include "Foundation/Math/Matrix4.h"
 #include "Foundation/Math/Frustum.h"
+
+#include "Render/D3DManager.h"
 
 namespace Asset
 {
@@ -253,8 +254,8 @@ namespace Luna
 
         void OnVaultFrameClosing( wxCloseEvent& args );
 
-        void OnReleaseResources( const DeviceStateArgs& args );
-        void OnAllocateResources( const DeviceStateArgs& args );
+        void OnReleaseResources( const Render::DeviceStateArgs& args );
+        void OnAllocateResources( const Render::DeviceStateArgs& args );
 
     private:
         static const float s_NearClipDistance;
@@ -269,7 +270,7 @@ namespace Luna
         static const float s_MinThumbnailSize;
         static const float s_MaxThumbnailSize;
 
-        D3DWindowManager m_D3DManager;
+        Render::D3DManager m_D3DManager;
         float m_LabelFontHeight;
         ID3DXFont* m_LabelFont;
         ID3DXFont* m_TypeFont;

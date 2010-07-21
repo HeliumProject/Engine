@@ -203,14 +203,6 @@ namespace Reflect
         // Deduction templates (params are concrete types)
         //
 
-    public:
-        template<class T>
-        static inline int DeduceType()
-        {
-            return Reflect::ReservedTypes::Invalid;
-        }
-
-    protected:
         template<class T>
         static inline T* GetData(Serializer*)
         {
@@ -228,11 +220,10 @@ namespace Reflect
         // Creation templates
         //
 
-    public:
         template <class T>
         static SerializerPtr Create()
         {
-            i32 type = DeduceType<T>();
+            i32 type = Reflect::GetType<T>();
 
             NOC_ASSERT( type != Reflect::ReservedTypes::Invalid );
 
@@ -436,7 +427,7 @@ namespace Reflect
         }
 
         bool result = false;
-        int type = DeduceType<T>();
+        int type = Reflect::GetType<T>();
 
         // if you die here, then you are not using serializers that
         //  fully implement the type deduction functions above
@@ -483,7 +474,7 @@ namespace Reflect
         }
 
         bool result = false;
-        int type = DeduceType<T>();
+        int type = Reflect::GetType<T>();
 
         // if you die here, then you are not using serializers that
         //  fully implement the type deduction functions above
@@ -531,16 +522,12 @@ namespace Reflect
 }
 
 #define REFLECT_SPECIALIZE_SERIALIZER(Name) \
-    typedef Nocturnal::SmartPtr< Name > ##Name##Ptr; \
-    template<> static inline int Serializer::DeduceType<Name::DataType>() \
+typedef Nocturnal::SmartPtr< Name > ##Name##Ptr; \
+template<> static inline Name::DataType* Serializer::GetData<Name::DataType>( Serializer* serializer ) \
 { \
-    return Reflect::GetType<Name>(); \
+    return serializer && serializer->GetType() == Reflect::GetType<Name::DataType>() ? static_cast<Name*>( serializer )->m_Data.Ptr() : NULL; \
 } \
-    template<> static inline Name::DataType* Serializer::GetData<Name::DataType>( Serializer* serializer ) \
+template<> static inline const Name::DataType* Serializer::GetData<Name::DataType>( const Serializer* serializer ) \
 { \
-    return serializer && serializer->GetType() == DeduceType<Name::DataType>() ? static_cast<Name*>( serializer )->m_Data.Ptr() : NULL; \
-} \
-    template<> static inline const Name::DataType* Serializer::GetData<Name::DataType>( const Serializer* serializer ) \
-{ \
-    return serializer && serializer->GetType() == DeduceType<Name::DataType>() ? static_cast<const Name*>( serializer )->m_Data.Ptr() : NULL; \
+    return serializer && serializer->GetType() == Reflect::GetType<Name::DataType>() ? static_cast<const Name*>( serializer )->m_Data.Ptr() : NULL; \
 }

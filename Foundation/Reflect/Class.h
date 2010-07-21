@@ -116,6 +116,7 @@ namespace Reflect
     {
     public:
         typedef B Base;
+        typedef D This;
 
         virtual i32 GetType() const NOC_OVERRIDE
         {
@@ -178,6 +179,7 @@ static Reflect::Object* CreateObject()                                          
 #define _REFLECT_DECLARE_CLASS( __Class, __Base, __Creator )                                                        \
 public:                                                                                                             \
 typedef __Base Base;                                                                                                \
+typedef __Class This;                                                                                                \
 \
 virtual i32 GetType() const NOC_OVERRIDE                                                                            \
 {                                                                                                                   \

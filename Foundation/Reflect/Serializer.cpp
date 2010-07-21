@@ -81,7 +81,7 @@ M_CastingFuncs g_CastingFuncs;
 template<class S, class D>
 void MapCast()
 {
-    P_i32 key (Reflect::Serializer::DeduceType<S>(), Reflect::Serializer::DeduceType<D>());
+    P_i32 key (Reflect::GetType<S>(), Reflect::GetType<D>());
     M_CastingFuncs::value_type val (key , &Cast<S, D>);
     bool ins = g_CastingFuncs.insert( val ).second;
     NOC_ASSERT(ins);

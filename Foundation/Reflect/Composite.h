@@ -31,6 +31,15 @@ namespace Reflect
     class Field;
     class Composite;
 
+    class PointerSerializer;
+    class ElementArraySerializer;
+    class ElementSetSerializer;
+    class EnumerationSerializer;
+    class BitfieldSerializer;
+
+    template< class KeyT >
+    class SimpleElementMapSerializer;
+
     typedef void (*CompositeEnumerator)(void* type);
 
 
@@ -259,7 +268,7 @@ namespace Reflect
                 GetName(name),
                 GetOffset(field),
                 sizeof(FieldT),
-                serializerType < 0 ? Serializer::DeduceType<FieldT>() : serializerType,
+                serializerType < 0 ? Reflect::GetType<FieldT>() : serializerType,
                 flags );
         }
 

@@ -135,7 +135,7 @@ namespace Asset
         }
 
     public:
-        virtual void GatherIndexData( std::multimap< tstring, tstring >& indexData ) const NOC_OVERRIDE;
+        virtual void GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const NOC_OVERRIDE;
         virtual void GetFileReferences( std::set< Nocturnal::Path >& fileReferences );
 
     public:

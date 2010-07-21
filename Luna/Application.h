@@ -5,6 +5,8 @@
 
 #include "Editor/DocumentManager.h"
 #include "Scene/SceneEditor.h"
+#include "Platform/Thread.h"
+#include "Tracker/Tracker.h"
 #include "Vault/Vault.h"
 
 #include <wx/app.h>
@@ -53,6 +55,8 @@ namespace Luna
         Nocturnal::InitializerStack m_InitializerStack;
         SceneEditor* m_SceneEditor;
         DocumentManager m_DocumentManager;
+        Tracker m_Tracker;
+        Platform::Thread m_TrackerThread;
         Vault* m_Vault;
     };
 

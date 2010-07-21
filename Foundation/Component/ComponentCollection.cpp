@@ -46,13 +46,13 @@ ComponentCollection::~ComponentCollection()
     }
 }
 
-void ComponentCollection::GatherIndexData( std::multimap< tstring, tstring >& indexData ) const
+void ComponentCollection::GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const
 {
     for( M_Component::const_iterator attrItr = m_Components.begin(), attrEnd = m_Components.end(); attrItr != attrEnd; ++attrItr )
     {
         if ( attrItr->second->m_Enabled )
         {
-            attrItr->second->GatherIndexData( indexData );
+            attrItr->second->GatherSearchableProperties( properties );
         }
     }
 }

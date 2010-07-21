@@ -41,7 +41,3 @@ bool ComponentBase::ValidateSibling( const ComponentBase* attribute, tstring& er
 {
     return true;
 }
-
-void ComponentBase::GatherIndexData( std::multimap< tstring, tstring >& indexData ) const
-{
-}

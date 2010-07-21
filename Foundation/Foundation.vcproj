@@ -1366,6 +1366,14 @@
 				RelativePath=".\Component\ComponentInit.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Component\SearchableProperties.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Component\SearchableProperties.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\API.h"

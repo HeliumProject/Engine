@@ -39,7 +39,7 @@ namespace Component
         ComponentCollection( const ComponentPtr& attr );
         virtual ~ComponentCollection(); 
 
-        virtual void GatherIndexData( std::multimap< tstring, tstring >& indexData ) const;
+        virtual void GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const;
 
         //
         // Component Management

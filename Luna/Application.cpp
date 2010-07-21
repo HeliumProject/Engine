@@ -23,13 +23,13 @@
 
 #include "Core/CoreInit.h"
 #include "Vault/Vault.h"
-#include "Vault/AssetCacheDB.h"
 #include "Editor/ApplicationPreferences.h"
 #include "Editor/Editor.h"
 #include "Editor/EditorInit.h"
 #include "Editor/Preferences.h"
 #include "Scene/SceneEditor.h"
 #include "Scene/SceneInit.h"
+#include "Tracker/Tracker.h"
 #include "Task/TaskInit.h"
 #include "UI/PerforceWaitDialog.h"
 
@@ -239,14 +239,6 @@ bool LunaApp::OnInit()
             }
         }
 
-        {
-            Log::Bullet systems( TXT( "Systems:\n" ) );
-
-            {
-                Log::Bullet vault( TXT( "Asset Tracker...\n" ) );
-                GetAppPreferences()->UseTracker( false ); //!parser.Found( "disable_tracker" ) );
-            }
-        }
     }
 
     Log::Print( TXT( "\n" ) ); 
@@ -257,65 +249,9 @@ bool LunaApp::OnInit()
     }
 
 
-    {
-        AssetCacheDB db("sqlite3", "database=assetCache.db");
-        // create tables, sequences and indexes
-        db.verbose = true;
-
-        try
-        {
-            db.create();
-        }
-        catch( const litesql::SQLError& )
-        {
-            db.upgrade();
-        }
-
-        
-        // start transaction
-        db.begin();
-        {
-            //Files
-            CacheEntry file1(db);
-            file1.mPath = TXT( "test1.png" );
-            file1.update(); // store file in database
-            
-            CacheEntry file2(db);
-            file2.mPath = TXT( "test2.png" );
-            file2.update(); // store file in database
-
-            CacheEntry file3(db);
-            file3.mPath = TXT( "test3.png" );
-            file3.update(); // store file in database
-
-            //IndexDatum
-            IndexDatum audioClipModedatum(db);
-            audioClipModedatum.mKey = TXT( "AudioClipMode" );
-            audioClipModedatum.update();
-
-            file1.indexdata().link( audioClipModedatum, TXT( "Loop" ) );
-
-            file1.dependencies().link( file2 );
-            file1.dependencies().link( file3 );
-
-            file2.dependencies().link( file3 );
-
-
-            // test selection
-            std::vector< CacheEntry > cacheEntries = litesql::select<CacheEntry>( db ).all();
-
-            CacheEntry findFile = litesql::select< CacheEntry >( db, CacheEntry::MPath == TXT( "test1.png" ) ).one();
-            std::vector< IndexDatum > filesData = findFile.indexdata().get().all();
-
-        }
-        // commit transaction
-        db.commit();
-    }
-
     
     GetSceneEditor()->Show();
 
-    //return __super::OnCmdLineParsed( parser );
     return true;
 }
 
@@ -348,6 +284,8 @@ void LunaApp::OnNew( wxCommandEvent& event )
 // 
 int LunaApp::OnExit()
 {
+    m_TrackerThread.Wait();
+
     // Save preferences
     ::Luna::GetApplicationPreferences()->SavePreferences();
 
@@ -421,11 +359,14 @@ int Main ( int argc, const tchar** argv )
     success &= processor.RegisterCommand( &helpCommand, error );
 
     //success &= processor.AddOption( new FlagOption(  , "pipe", "use pipe for console connection" ), error ); 
-    //success &= processor.AddOption( new FlagOption(  , "disable_tracker", "disable Asset Tracker" ), error );
-    //
+    
+    bool disableTracker = false;
+    success &= processor.AddOption( new FlagOption( &disableTracker, "disable_tracker", "disable Asset Tracker" ), error );
+    //GetAppPreferences()->UseTracker( disableTracker );
+
     //success &= processor.AddOption( new FlagOption(  , WindowSettings::s_Reset, "reset all window positions" ), error );
     //success &= processor.AddOption( new FlagOption(  , Preferences::s_ResetPreferences, "resets all preferences for all of Luna" ), error );
-    //
+    
     //success &= processor.AddOption( new FlagOption(  , Worker::Args::Debug, "debug use of background processes" ), error );
     //success &= processor.AddOption( new FlagOption(  , Worker::Args::Wait, "wait forever for background processes" ), error );
 

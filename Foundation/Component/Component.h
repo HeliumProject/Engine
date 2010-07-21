@@ -7,6 +7,8 @@
 #include "Foundation/Reflect/Registry.h"
 #include "Foundation/Reflect/Serializers.h"
 
+#include "Foundation/Component/SearchableProperties.h"
+
 namespace Component
 {
     class ComponentCategory;
@@ -101,7 +103,9 @@ namespace Component
         // string with a meaningful explanation that will be shown to the user.
         virtual bool ValidateSibling( const ComponentBase* attribute, tstring& error ) const;
         
-        virtual void GatherIndexData( std::multimap< tstring, tstring >& indexData ) const;
+        virtual void GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const
+        {
+        }
 
     protected:
         // the collection we are an attribute of

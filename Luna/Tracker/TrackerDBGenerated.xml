@@ -2,23 +2,25 @@
 <!DOCTYPE database SYSTEM "litesql.dtd"> 
 <database name="TrackerDBGenerated" namespace="Luna">
 	
-	<object name="CacheEntry">
+	<object name="TrackedFile">
 		<field name="mPath" type="string" />
+        <field name="mSize" type="integer" />
+        <field name="mLastModified" type="datetime" />
+    </object>
+	
+	<object name="TrackedProperty">
+		<field name="mName" type="string" />
 	</object>
 	
-	<object name="IndexDatum">
-		<field name="mKey" type="string" />
-	</object>
-	
-	<relation name="IndexData">
-		<relate object="IndexDatum" />
-		<relate object="CacheEntry" limit="many" handle="indexdata"/>
+	<relation name="TrackedFileProperties">
+		<relate object="TrackedProperty" />
+		<relate object="TrackedFile" limit="many" handle="properties"/>
 		<field name="mValue" type="string" />
 	</relation>
 	
 	<relation name="FileReferences" unidir="true">
-		<relate object="CacheEntry" />
-		<relate object="CacheEntry" handle="fileReferences"/>
+		<relate object="TrackedFile" />
+		<relate object="TrackedFile" handle="fileReferences"/>
 	</relation>
 	
 </database>

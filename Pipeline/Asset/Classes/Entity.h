@@ -23,7 +23,7 @@ namespace Asset
     {
     }
 
-    virtual void GatherIndexData( std::multimap< tstring, tstring >& indexData ) const NOC_OVERRIDE;
+    virtual void GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const NOC_OVERRIDE;
   }; 
 
   typedef Nocturnal::SmartPtr< Entity > EntityPtr;

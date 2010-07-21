@@ -82,16 +82,16 @@ tstring AssetClass::GetShortName() const
     return m_Path.Basename();
 }
 
-void AssetClass::GatherIndexData( std::multimap< tstring, tstring >& indexData ) const
+void AssetClass::GatherSearchableProperties( Nocturnal::SearchableProperties* properties ) const
 {
-    indexData.insert( std::multimap< tstring, tstring >::value_type( TXT( "AssetDescription" ), m_Description ) );
+    properties->Insert( TXT( "AssetDescription" ), m_Description );
     
     for ( std::set< tstring >::const_iterator itr = m_Tags.begin(), end = m_Tags.end(); itr != end; ++itr )
     {
-        indexData.insert( std::multimap< tstring, tstring >::value_type( TXT( "AssetTag" ), (*itr) ) );
+        properties->Insert( TXT( "AssetTag" ), (*itr) );
     }
 
-    __super::GatherIndexData( indexData );
+    __super::GatherSearchableProperties( properties );
 }
 
 namespace Asset

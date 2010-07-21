@@ -294,9 +294,8 @@ namespace Luna
         void SceneRemoving( const SceneChangeArgs& args );
         void SceneLoadFinished( const LoadArgs& args );
         void TitleChanged( const TitleChangeArgs& args );
-        void StatusChanged( const StatusChangeArgs& args );
-        void CursorChanged( const CursorChangeArgs& args );
-        void BusyCursorChanged( const CursorChangeArgs& args );
+        void SceneStatusChanged( const SceneStatusChangeArgs& args );
+        void SceneContextChanged( const SceneContextChangeArgs& args );
         void Executed( const ExecuteArgs& args );
 
         void SelectionChanged( const OS_SelectableDumbPtr& selection );

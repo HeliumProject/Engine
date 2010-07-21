@@ -31,181 +31,166 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_MenuFile->Append( -1, _("New"), m_MenuFileNew );
 	
 	wxMenuItem* m_ItemOpen;
-	m_ItemOpen = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Open...") ) + wxT('\t') + wxT("ctrl-o"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemOpen = new wxMenuItem( m_MenuFile, ID_Open, wxString( _("Open...") ) + wxT('\t') + wxT("ctrl-o"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemOpen );
 	
 	m_MenuFileOpenRecent = new wxMenu();
 	m_MenuFile->Append( -1, _("Open Recent"), m_MenuFileOpenRecent );
 	
 	wxMenuItem* m_ItemClose;
-	m_ItemClose = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Close") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemClose = new wxMenuItem( m_MenuFile, ID_Close, wxString( _("Close") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemClose );
 	
 	wxMenuItem* m_separator1;
 	m_separator1 = m_MenuFile->AppendSeparator();
 	
 	wxMenuItem* m_ItemSaveAll;
-	m_ItemSaveAll = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Save All") ) + wxT('\t') + wxT("ctrl-s"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSaveAll = new wxMenuItem( m_MenuFile, ID_SaveAll, wxString( _("Save All") ) + wxT('\t') + wxT("ctrl-s"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemSaveAll );
 	
 	wxMenuItem* m_separator2;
 	m_separator2 = m_MenuFile->AppendSeparator();
 	
-	wxMenuItem* m_ItemCheckOut;
-	m_ItemCheckOut = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Check Out") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuFile->Append( m_ItemCheckOut );
-	
-	wxMenuItem* m_ItemRevert;
-	m_ItemRevert = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Revert") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuFile->Append( m_ItemRevert );
-	
-	wxMenuItem* m_separator3;
-	m_separator3 = m_MenuFile->AppendSeparator();
-	
 	wxMenuItem* m_ItemImport;
-	m_ItemImport = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Import...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemImport = new wxMenuItem( m_MenuFile, ID_Import, wxString( _("Import...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemImport );
 	
 	wxMenuItem* m_ItemImportFromClipboard;
-	m_ItemImportFromClipboard = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Import from Clipboard...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemImportFromClipboard = new wxMenuItem( m_MenuFile, ID_ImportFromClipboard, wxString( _("Import from Clipboard...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemImportFromClipboard );
 	
 	wxMenuItem* m_ItemExport;
-	m_ItemExport = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Export...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemExport = new wxMenuItem( m_MenuFile, ID_Export, wxString( _("Export...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemExport );
 	
 	wxMenuItem* m_ItemExportToClipboard;
-	m_ItemExportToClipboard = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Export to Clipboard...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemExportToClipboard = new wxMenuItem( m_MenuFile, ID_ExportToClipboard, wxString( _("Export to Clipboard...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemExportToClipboard );
-	
-	wxMenuItem* m_ItemExportToOBJ;
-	m_ItemExportToOBJ = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Export to OBJ File...") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuFile->Append( m_ItemExportToOBJ );
 	
 	wxMenuItem* m_separator4;
 	m_separator4 = m_MenuFile->AppendSeparator();
 	
 	wxMenuItem* m_ItemExit;
-	m_ItemExit = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Exit") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemExit = new wxMenuItem( m_MenuFile, ID_Exit, wxString( _("Exit") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemExit );
 	
 	m_MainMenuBar->Append( m_MenuFile, _("File") ); 
 	
 	m_MenuEdit = new wxMenu();
 	wxMenuItem* m_ItemUndo;
-	m_ItemUndo = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Undo") ) + wxT('\t') + wxT("ctrl-z"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemUndo = new wxMenuItem( m_MenuEdit, wxID_UNDO, wxString( _("Undo") ) + wxT('\t') + wxT("ctrl-z"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemUndo );
 	
 	wxMenuItem* m_ItemRedo;
-	m_ItemRedo = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Redo") ) + wxT('\t') + wxT("ctrl-shift-z"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemRedo = new wxMenuItem( m_MenuEdit, wxID_REDO, wxString( _("Redo") ) + wxT('\t') + wxT("ctrl-shift-z"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemRedo );
 	
 	wxMenuItem* m_separator5;
 	m_separator5 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemCut;
-	m_ItemCut = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Cut") ) + wxT('\t') + wxT("ctrl-x"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemCut = new wxMenuItem( m_MenuEdit, wxID_CUT, wxString( _("Cut") ) + wxT('\t') + wxT("ctrl-x"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemCut );
 	
 	wxMenuItem* m_ItemCopy;
-	m_ItemCopy = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Copy") ) + wxT('\t') + wxT("ctrl-c"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemCopy = new wxMenuItem( m_MenuEdit, wxID_COPY, wxString( _("Copy") ) + wxT('\t') + wxT("ctrl-c"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemCopy );
 	
 	wxMenuItem* m_ItemPaste;
-	m_ItemPaste = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Paste") ) + wxT('\t') + wxT("ctrl-v"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemPaste = new wxMenuItem( m_MenuEdit, wxID_PASTE, wxString( _("Paste") ) + wxT('\t') + wxT("ctrl-v"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemPaste );
 	
 	wxMenuItem* m_separator6;
 	m_separator6 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemSelectAll;
-	m_ItemSelectAll = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Select All") ) + wxT('\t') + wxT("ctrl-a"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSelectAll = new wxMenuItem( m_MenuEdit, ID_SelectAll, wxString( _("Select All") ) + wxT('\t') + wxT("ctrl-a"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemSelectAll );
 	
 	wxMenuItem* m_ItemInvertSelection;
-	m_ItemInvertSelection = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Invert Selection") ) + wxT('\t') + wxT("ctrl-i"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemInvertSelection = new wxMenuItem( m_MenuEdit, ID_InvertSelection, wxString( _("Invert Selection") ) + wxT('\t') + wxT("ctrl-i"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemInvertSelection );
 	
 	wxMenuItem* m_separator7;
 	m_separator7 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemDelete;
-	m_ItemDelete = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Delete") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemDelete = new wxMenuItem( m_MenuEdit, wxID_DELETE, wxString( _("Delete") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemDelete );
 	
 	wxMenuItem* m_separator8;
 	m_separator8 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemParent;
-	m_ItemParent = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Parent") ) + wxT('\t') + wxT("ctrl-p"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemParent = new wxMenuItem( m_MenuEdit, ID_Parent, wxString( _("Parent") ) + wxT('\t') + wxT("ctrl-p"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemParent );
 	
 	wxMenuItem* m_ItemUnparent;
-	m_ItemUnparent = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Unparent") ) + wxT('\t') + wxT("ctrl-shift-p"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemUnparent = new wxMenuItem( m_MenuEdit, ID_Unparent, wxString( _("Unparent") ) + wxT('\t') + wxT("ctrl-shift-p"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemUnparent );
 	
 	wxMenuItem* m_ItemGroup;
-	m_ItemGroup = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Group") ) + wxT('\t') + wxT("ctrl-g"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemGroup = new wxMenuItem( m_MenuEdit, ID_Group, wxString( _("Group") ) + wxT('\t') + wxT("ctrl-g"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemGroup );
 	
 	wxMenuItem* m_ItemUngroup;
-	m_ItemUngroup = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Ungroup") ) + wxT('\t') + wxT("ctrl-shift-g"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemUngroup = new wxMenuItem( m_MenuEdit, ID_Ungroup, wxString( _("Ungroup") ) + wxT('\t') + wxT("ctrl-shift-g"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemUngroup );
 	
 	wxMenuItem* m_ItemCenter;
-	m_ItemCenter = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Center") ) + wxT('\t') + wxT("ctrl-shift-c"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemCenter = new wxMenuItem( m_MenuEdit, ID_Center, wxString( _("Center") ) + wxT('\t') + wxT("ctrl-shift-c"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemCenter );
 	
 	wxMenuItem* m_separator9;
 	m_separator9 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemDuplicate;
-	m_ItemDuplicate = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Duplicate") ) + wxT('\t') + wxT("ctrl-d"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemDuplicate = new wxMenuItem( m_MenuEdit, ID_Duplicate, wxString( _("Duplicate") ) + wxT('\t') + wxT("ctrl-d"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemDuplicate );
 	
 	wxMenuItem* m_ItemSmartDuplicate;
-	m_ItemSmartDuplicate = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Smart Duplicate") ) + wxT('\t') + wxT("ctrl-shift-d"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSmartDuplicate = new wxMenuItem( m_MenuEdit, ID_SmartDuplicate, wxString( _("Smart Duplicate") ) + wxT('\t') + wxT("ctrl-shift-d"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemSmartDuplicate );
 	
 	wxMenuItem* m_separator10;
 	m_separator10 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemCopyTransform;
-	m_ItemCopyTransform = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Copy Transform") ) + wxT('\t') + wxT("alt-t"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemCopyTransform = new wxMenuItem( m_MenuEdit, ID_CopyTransform, wxString( _("Copy Transform") ) + wxT('\t') + wxT("alt-t"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemCopyTransform );
 	
 	wxMenuItem* m_ItemPasteTransform;
-	m_ItemPasteTransform = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Paste Transform") ) + wxT('\t') + wxT("alt-shift-t"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemPasteTransform = new wxMenuItem( m_MenuEdit, ID_PasteTransform, wxString( _("Paste Transform") ) + wxT('\t') + wxT("alt-shift-t"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemPasteTransform );
 	
 	wxMenuItem* m_separator11;
 	m_separator11 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemSnapToCamera;
-	m_ItemSnapToCamera = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Snap To Camera") ) + wxT('\t') + wxT("alt-c"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSnapToCamera = new wxMenuItem( m_MenuEdit, ID_SnapToCamera, wxString( _("Snap To Camera") ) + wxT('\t') + wxT("alt-c"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemSnapToCamera );
 	
 	wxMenuItem* m_ItemSnapCameraTo;
-	m_ItemSnapCameraTo = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Snap Camera To") ) + wxT('\t') + wxT("alt-shift-c"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSnapCameraTo = new wxMenuItem( m_MenuEdit, ID_SnapCameraTo, wxString( _("Snap Camera To") ) + wxT('\t') + wxT("alt-shift-c"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemSnapCameraTo );
 	
 	wxMenuItem* m_separator12;
 	m_separator12 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemWalkUp;
-	m_ItemWalkUp = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Walk Up") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemWalkUp = new wxMenuItem( m_MenuEdit, ID_WalkUp, wxString( _("Walk Up") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemWalkUp );
 	
 	wxMenuItem* m_ItemWalkDown;
-	m_ItemWalkDown = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Walk Down") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemWalkDown = new wxMenuItem( m_MenuEdit, ID_WalkDown, wxString( _("Walk Down") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemWalkDown );
 	
 	wxMenuItem* m_ItemWalkForward;
-	m_ItemWalkForward = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Walk Forward") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemWalkForward = new wxMenuItem( m_MenuEdit, ID_WalkForward, wxString( _("Walk Forward") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemWalkForward );
 	
 	wxMenuItem* m_ItemWalkBackward;
-	m_ItemWalkBackward = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Walk Backward") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemWalkBackward = new wxMenuItem( m_MenuEdit, ID_WalkBackward, wxString( _("Walk Backward") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemWalkBackward );
 	
 	m_MainMenuBar->Append( m_MenuEdit, _("Edit") ); 
@@ -500,7 +485,7 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	
 	m_MenuHelp = new wxMenu();
 	wxMenuItem* m_ItemAbout;
-	m_ItemAbout = new wxMenuItem( m_MenuHelp, wxID_ANY, wxString( _("About...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemAbout = new wxMenuItem( m_MenuHelp, ID_About, wxString( _("About...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuHelp->Append( m_ItemAbout );
 	
 	m_MainMenuBar->Append( m_MenuHelp, _("Help") ); 

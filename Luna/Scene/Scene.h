@@ -146,30 +146,43 @@ namespace Luna
   typedef Nocturnal::Signature< void, const TitleChangeArgs& > TitleChangeSignature;
 
   // update the status bar of the frame of this instance of the scene editor
-  struct StatusChangeArgs
+  struct SceneStatusChangeArgs
   {
     const tstring& m_Status;
 
-    StatusChangeArgs ( const tstring& status )
+    SceneStatusChangeArgs ( const tstring& status )
       : m_Status (status)
     {
 
     }
   };
-  typedef Nocturnal::Signature< void, const StatusChangeArgs& > StatusChangeSignature;
+  typedef Nocturnal::Signature< void, const SceneStatusChangeArgs& > SceneStatusChangeSignature;
 
-  // update the cursor image
-  struct CursorChangeArgs
-  {
-    wxStockCursor m_Cursor;
-
-    CursorChangeArgs ( wxStockCursor cursor )
-      : m_Cursor (cursor)
+    namespace SceneContexts
     {
+        enum SceneContext
+        {
+            None,
+            Normal,
+            Loading,
+            Saving,
+            Picking,
+        };
+    }
+    typedef SceneContexts::SceneContext SceneContext;
 
+  struct SceneContextChangeArgs
+  {
+      SceneContext m_OldContext;
+      SceneContext m_NewContext;
+
+    SceneContextChangeArgs( SceneContext oldContext, SceneContext newContext )
+      : m_OldContext( oldContext )
+      , m_NewContext( newContext )
+    {
     }
   };
-  typedef Nocturnal::Signature< void, const CursorChangeArgs& > CursorChangeSignature;
+  typedef Nocturnal::Signature< void, const SceneContextChangeArgs& > SceneContextChangedSignature;
 
 
   //
@@ -776,39 +789,27 @@ namespace Luna
     //
 
   private:
-    StatusChangeSignature::Event m_StatusChanged;
+    SceneStatusChangeSignature::Event m_StatusChanged;
   public:
-    void AddStatusChangedListener( const StatusChangeSignature::Delegate& listener )
+    void AddStatusChangedListener( const SceneStatusChangeSignature::Delegate& listener )
     {
       m_StatusChanged.Add( listener );
     }
-    void RemoveStatusChangedListener( const StatusChangeSignature::Delegate& listener )
+    void RemoveStatusChangedListener( const SceneStatusChangeSignature::Delegate& listener )
     {
       m_StatusChanged.Remove( listener );
     }
 
   private:
-    CursorChangeSignature::Event m_CursorChanged;
+      SceneContextChangedSignature::Event m_SceneContextChanged;
   public:
-    void AddCursorChangedListener( const CursorChangeSignature::Delegate& listener )
+    void AddSceneContextChangedListener( const SceneContextChangedSignature::Delegate& listener )
     {
-      m_CursorChanged.Add( listener );
+      m_SceneContextChanged.Add( listener );
     }
-    void RemoveCursorChangedListener( const CursorChangeSignature::Delegate& listener )
+    void RemoveSceneContextChangedListener( const SceneContextChangedSignature::Delegate& listener )
     {
-      m_CursorChanged.Remove( listener );
-    }
-
-  private:
-    CursorChangeSignature::Event m_BusyCursorChanged;
-  public:
-    void AddBusyCursorChangedListener( const CursorChangeSignature::Delegate& listener )
-    {
-      m_BusyCursorChanged.Add( listener );
-    }
-    void RemoveBusyCursorChangedListener( const CursorChangeSignature::Delegate& listener )
-    {
-      m_BusyCursorChanged.Remove( listener );
+      m_SceneContextChanged.Remove( listener );
     }
 
   private:

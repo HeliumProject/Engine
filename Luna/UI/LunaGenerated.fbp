@@ -79,7 +79,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxMenuBar" expanded="0">
+            <object class="wxMenuBar" expanded="1">
                 <property name="bg"></property>
                 <property name="context_help"></property>
                 <property name="context_menu">1</property>
@@ -172,7 +172,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_Open</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Open...</property>
                         <property name="name">m_ItemOpen</property>
@@ -192,7 +192,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_Close</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Close</property>
                         <property name="name">m_ItemClose</property>
@@ -211,7 +211,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_SaveAll</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Save All</property>
                         <property name="name">m_ItemSaveAll</property>
@@ -230,41 +230,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
-                        <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Check Out</property>
-                        <property name="name">m_ItemCheckOut</property>
-                        <property name="permission">none</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
-                    </object>
-                    <object class="wxMenuItem" expanded="0">
-                        <property name="bitmap"></property>
-                        <property name="checked">0</property>
-                        <property name="enabled">1</property>
-                        <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
-                        <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Revert</property>
-                        <property name="name">m_ItemRevert</property>
-                        <property name="permission">none</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
-                    </object>
-                    <object class="separator" expanded="0">
-                        <property name="name">m_separator3</property>
-                        <property name="permission">none</property>
-                    </object>
-                    <object class="wxMenuItem" expanded="0">
-                        <property name="bitmap"></property>
-                        <property name="checked">0</property>
-                        <property name="enabled">1</property>
-                        <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_Import</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Import...</property>
                         <property name="name">m_ItemImport</property>
@@ -279,7 +245,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_ImportFromClipboard</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Import from Clipboard...</property>
                         <property name="name">m_ItemImportFromClipboard</property>
@@ -294,7 +260,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_Export</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Export...</property>
                         <property name="name">m_ItemExport</property>
@@ -309,25 +275,10 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_ExportToClipboard</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Export to Clipboard...</property>
                         <property name="name">m_ItemExportToClipboard</property>
-                        <property name="permission">none</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
-                    </object>
-                    <object class="wxMenuItem" expanded="0">
-                        <property name="bitmap"></property>
-                        <property name="checked">0</property>
-                        <property name="enabled">1</property>
-                        <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
-                        <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Export to OBJ File...</property>
-                        <property name="name">m_ItemExportToOBJ</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
@@ -343,7 +294,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_Exit</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Exit</property>
                         <property name="name">m_ItemExit</property>
@@ -354,7 +305,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">Edit</property>
                     <property name="name">m_MenuEdit</property>
                     <property name="permission">protected</property>
@@ -363,7 +314,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">wxID_UNDO</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Undo</property>
                         <property name="name">m_ItemUndo</property>
@@ -378,7 +329,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">wxID_REDO</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Redo</property>
                         <property name="name">m_ItemRedo</property>
@@ -397,7 +348,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">wxID_CUT</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Cut</property>
                         <property name="name">m_ItemCut</property>
@@ -412,7 +363,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">wxID_COPY</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Copy</property>
                         <property name="name">m_ItemCopy</property>
@@ -427,7 +378,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">wxID_PASTE</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Paste</property>
                         <property name="name">m_ItemPaste</property>
@@ -446,7 +397,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_SelectAll</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Select All</property>
                         <property name="name">m_ItemSelectAll</property>
@@ -461,7 +412,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_InvertSelection</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Invert Selection</property>
                         <property name="name">m_ItemInvertSelection</property>
@@ -480,7 +431,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">wxID_DELETE</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Delete</property>
                         <property name="name">m_ItemDelete</property>
@@ -499,7 +450,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_Parent</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Parent</property>
                         <property name="name">m_ItemParent</property>
@@ -514,7 +465,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_Unparent</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Unparent</property>
                         <property name="name">m_ItemUnparent</property>
@@ -529,7 +480,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_Group</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Group</property>
                         <property name="name">m_ItemGroup</property>
@@ -544,7 +495,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_Ungroup</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Ungroup</property>
                         <property name="name">m_ItemUngroup</property>
@@ -559,7 +510,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_Center</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Center</property>
                         <property name="name">m_ItemCenter</property>
@@ -578,7 +529,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_Duplicate</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Duplicate</property>
                         <property name="name">m_ItemDuplicate</property>
@@ -593,7 +544,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_SmartDuplicate</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Smart Duplicate</property>
                         <property name="name">m_ItemSmartDuplicate</property>
@@ -612,7 +563,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_CopyTransform</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Copy Transform</property>
                         <property name="name">m_ItemCopyTransform</property>
@@ -627,7 +578,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_PasteTransform</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Paste Transform</property>
                         <property name="name">m_ItemPasteTransform</property>
@@ -646,7 +597,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_SnapToCamera</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Snap To Camera</property>
                         <property name="name">m_ItemSnapToCamera</property>
@@ -661,7 +612,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_SnapCameraTo</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Snap Camera To</property>
                         <property name="name">m_ItemSnapCameraTo</property>
@@ -680,7 +631,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_WalkUp</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Walk Up</property>
                         <property name="name">m_ItemWalkUp</property>
@@ -695,7 +646,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_WalkDown</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Walk Down</property>
                         <property name="name">m_ItemWalkDown</property>
@@ -710,7 +661,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_WalkForward</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Walk Forward</property>
                         <property name="name">m_ItemWalkForward</property>
@@ -725,7 +676,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_WalkBackward</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Walk Backward</property>
                         <property name="name">m_ItemWalkBackward</property>
@@ -1684,7 +1635,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">Help</property>
                     <property name="name">m_MenuHelp</property>
                     <property name="permission">protected</property>
@@ -1693,7 +1644,7 @@
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help"></property>
-                        <property name="id">wxID_ANY</property>
+                        <property name="id">ID_About</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">About...</property>
                         <property name="name">m_ItemAbout</property>

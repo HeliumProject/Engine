@@ -4,12 +4,6 @@
 
 namespace Luna
 {
-  class Entity;
-  class InstanceSet;
-
-  class Primitive;
-  class PrimitivePointer;
-
   class EntityType : public Luna::InstanceType
   {
     //

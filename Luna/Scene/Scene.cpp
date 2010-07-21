@@ -37,7 +37,6 @@
 #include "SceneNodeType.h"
 #include "HierarchyNodeType.h"
 
-#include "SceneEditor.h"
 #include "SceneManager.h"
 #include "ScenePreferences.h"
 #include "TypeGrid.h"
@@ -209,7 +208,7 @@ void Scene::SetTool(const LToolPtr& tool)
     // cancel pick, if any
     if (m_PickData.ReferencesObject())
     {
-        m_BusyCursorChanged.Raise(wxCURSOR_ARROW);
+        m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Picking, SceneContexts::Normal ) );
         m_PickData = NULL;
     }
 }
@@ -514,7 +513,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
     // 
 
     m_Importing = true;
-    m_CursorChanged.Raise(wxCURSOR_WAIT);
+    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Loading ) );
     m_StatusChanged.Raise( tstring( TXT("Loading Objects") ) );
 
     m_RemappedIDs.clear();
@@ -692,7 +691,7 @@ Undo::CommandPtr Scene::ImportSceneNodes( Reflect::V_Element& elements, ImportAc
 
     // done
     m_StatusChanged.Raise( tstring( TXT("Ready") ) );
-    m_CursorChanged.Raise(wxCURSOR_ARROW);
+    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Loading, SceneContexts::Normal ) );
     m_Importing = false;
 
     return command;
@@ -1038,7 +1037,7 @@ bool Scene::ExportFile( const tstring& file, const ExportArgs& args )
 
     bool result = false;
 
-    m_CursorChanged.Raise( wxCURSOR_WAIT );
+    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Saving ) );
 
     m_Progress = 0;
 
@@ -1070,7 +1069,7 @@ bool Scene::ExportFile( const tstring& file, const ExportArgs& args )
 
     changes->Undo();
 
-    m_CursorChanged.Raise( wxCURSOR_ARROW );
+    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Saving, SceneContexts::Normal ) );
 
     {
         tostringstream str;
@@ -1095,7 +1094,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 
     u64 startTimer = Platform::TimerGetClock();
 
-    m_CursorChanged.Raise( wxCURSOR_WAIT );
+    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Saving ) );
 
     m_Progress = 0;
 
@@ -1127,7 +1126,7 @@ bool Scene::ExportXML( tstring& xml, const ExportArgs& args )
 
     changes->Undo();
 
-    m_CursorChanged.Raise( wxCURSOR_ARROW );
+    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Saving, SceneContexts::Normal ) );
 
     {
         tostringstream str;
@@ -1714,7 +1713,7 @@ void Scene::Select( const SelectArgs& args )
 
 void Scene::PickLink( const Inspect::PickLinkArgs& args )
 {
-    m_BusyCursorChanged.Raise(wxCURSOR_BULLSEYE);
+    m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Normal, SceneContexts::Picking ) );
     m_PickData = args.m_Data;
 }
 
@@ -2099,7 +2098,7 @@ bool Scene::SelectionChanging(const OS_SelectableDumbPtr& selection)
             }
         }
 
-        m_BusyCursorChanged.Raise(wxCURSOR_ARROW);
+        m_SceneContextChanged.Raise( SceneContextChangeArgs( SceneContexts::Picking, SceneContexts::Normal ) );
         m_PickData = NULL;
     }
 
@@ -3157,11 +3156,11 @@ void Scene::MeasureDistance()
 
         str << first->GetName() << " is " << distance << " meters from " << second->GetName();
 
-        m_StatusChanged.Raise( StatusChangeArgs (str.str()) );
+        m_StatusChanged.Raise( SceneStatusChangeArgs (str.str()) );
     }
     else
     {
-        m_StatusChanged.Raise( StatusChangeArgs( TXT( "Please select 2 placed objects and try again" ) ) );
+        m_StatusChanged.Raise( SceneStatusChangeArgs( TXT( "Please select 2 placed objects and try again" ) ) );
     }
 }
 

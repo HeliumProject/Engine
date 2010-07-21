@@ -1694,26 +1694,6 @@
 					>
 				</File>
 			</Filter>
-			<Filter
-				Name="Dialogs"
-				>
-				<File
-					RelativePath=".\Scene\ExportOptionsDlg.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ExportOptionsDlg.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ImportOptionsDlg.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ImportOptionsDlg.h"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Vault"
@@ -3937,11 +3917,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\ExportOptionsDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ExportOptionsDlg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\HelpPanel.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\UI\HelpPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ImportOptionsDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ImportOptionsDlg.h"
 				>
 			</File>
 			<File

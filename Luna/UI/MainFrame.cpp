@@ -29,6 +29,8 @@
 
 #include "Scene/ScenePreferences.h"
 #include "Scene/ScenePreferencesDialog.h"
+#include "Vault/VaultPreferences.h"
+#include "Vault/VaultPreferencesDialog.h"
 
 #include "ArtProvider.h"
 #include "ImportOptionsDlg.h"

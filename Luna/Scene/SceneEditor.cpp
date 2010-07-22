@@ -694,7 +694,7 @@ SceneEditor::SceneEditor()
     //
 
     SceneEditorPreferences()->GetSceneEditorWindowSettings()->ApplyToWindow( this, &m_FrameManager, true );
-    SceneEditorPreferences()->GetViewPreferences()->ApplyToView( m_View ); 
+    SceneEditorPreferences()->GetViewPreferences()->ApplyToViewport( m_View ); 
 
     //
     // Attach event handlers
@@ -742,7 +742,7 @@ SceneEditor::~SceneEditor()
     std::vector< tstring > mruPaths;
     m_MRU->ToVector( mruPaths );
     SceneEditorPreferences()->GetMRU()->SetPaths( mruPaths );
-    SceneEditorPreferences()->GetViewPreferences()->LoadFromView( m_View ); 
+    SceneEditorPreferences()->GetViewPreferences()->LoadFromViewport( m_View ); 
     SceneEditorPreferences()->SavePreferences();
 
     //

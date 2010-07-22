@@ -2,27 +2,11 @@
 #include "ViewportPreferences.h"
 
 using namespace Luna; 
-
-REFLECT_DEFINE_CLASS( ViewportPreferences );
-
-void ViewportPreferences::EnumerateClass( Reflect::Compositor<ViewportPreferences>& comp )
-{
-  Reflect::EnumerationField* enumCameraMode = comp.AddEnumerationField( &ViewportPreferences::m_CameraMode, "m_CameraMode" );
-  Reflect::EnumerationField* enumGeometryMode = comp.AddEnumerationField( &ViewportPreferences::m_GeometryMode, "m_GeometryMode" );
-  Reflect::Field* fieldCameraPrefs = comp.AddField( &ViewportPreferences::m_CameraPrefs, "m_CameraPrefs" );
-  Reflect::Field* fieldColorMode = comp.AddEnumerationField( &ViewportPreferences::m_ColorMode, "m_ColorMode" );
-
-  Reflect::Field* fieldHighlighting = comp.AddField( &ViewportPreferences::m_Highlighting, "m_Highlighting" );
-  Reflect::Field* fieldAxesVisible = comp.AddField( &ViewportPreferences::m_AxesVisible, "m_AxesVisible" );
-  Reflect::Field* fieldGridVisible = comp.AddField( &ViewportPreferences::m_GridVisible, "m_GridVisible" );
-  Reflect::Field* fieldBoundsVisible = comp.AddField( &ViewportPreferences::m_BoundsVisible, "m_BoundsVisible" );
-  Reflect::Field* fieldStatisticsVisible = comp.AddField( &ViewportPreferences::m_StatisticsVisible, "m_StatisticsVisible" );
-}
-    
+   
 ViewportPreferences::ViewportPreferences()
 : m_CameraMode (CameraModes::Orbit)
 , m_GeometryMode (GeometryModes::Render)
-, m_ColorMode (ViewColorModes::NodeType)
+, m_ColorMode (ViewColorModes::Type)
 , m_Highlighting (true)
 , m_AxesVisible (true)
 , m_GridVisible (true)
@@ -35,7 +19,7 @@ ViewportPreferences::ViewportPreferences()
   }
 }
 
-void ViewportPreferences::ApplyToView(Luna::Viewport* view)
+void ViewportPreferences::ApplyToViewport(Luna::Viewport* view)
 {
   // apply settings for all modes that we have... 
   for(size_t i = 0; i < m_CameraPrefs.size(); ++i)
@@ -58,7 +42,7 @@ void ViewportPreferences::ApplyToView(Luna::Viewport* view)
   view->SetStatisticsVisible( m_StatisticsVisible ); 
 }
 
-void ViewportPreferences::LoadFromView(Luna::Viewport* view)
+void ViewportPreferences::LoadFromViewport(Luna::Viewport* view)
 {
   // just blow away the previous preferences
   m_CameraPrefs.clear(); 

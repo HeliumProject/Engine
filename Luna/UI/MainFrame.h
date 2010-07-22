@@ -141,6 +141,7 @@ namespace Luna
         void OnExiting( wxCloseEvent& args );
 
         void OnAbout( wxCommandEvent& event );
+        void OnPreferences( wxCommandEvent& event );
 
         void OnManifestContextMenu(wxCommandEvent& event);
         void OnTypeContextMenu(wxCommandEvent& event);

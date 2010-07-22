@@ -1,10 +1,9 @@
 #include "Precompile.h"
 
-#include "MainFrame.h"
-#include "ArtProvider.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
-#include "ImportOptionsDlg.h"
-#include "ExportOptionsDlg.h"
+#include "Pipeline/Content/ContentVersion.h"
+#include "Pipeline/Content/Scene.h"
 
 #include "Application/UI/FileDialog.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
@@ -28,10 +27,13 @@
 #include "Scene/ScaleManipulator.h"
 #include "Scene/TranslateManipulator.h"
 
-#include "Foundation/Reflect/ArchiveXML.h"
+#include "Scene/ScenePreferences.h"
+#include "Scene/ScenePreferencesDialog.h"
 
-#include "Pipeline/Content/ContentVersion.h"
-#include "Pipeline/Content/Scene.h"
+#include "ArtProvider.h"
+#include "ImportOptionsDlg.h"
+#include "ExportOptionsDlg.h"
+#include "MainFrame.h"
 
 using namespace Luna;
 
@@ -1296,6 +1298,12 @@ void MainFrame::OnExiting( wxCloseEvent& args )
 void MainFrame::OnAbout( wxCommandEvent& event )
 {
     wxMessageBox( wxT( "Luna" ), wxT( "About" ), wxOK | wxCENTER, this );
+}
+
+void MainFrame::OnPreferences( wxCommandEvent& event )
+{
+    ScenePreferencesDialog scenePreferencesDialog( this, wxID_ANY, TXT( "Preferences" ) );
+    scenePreferencesDialog.ShowModal();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

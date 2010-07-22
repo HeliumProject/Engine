@@ -446,7 +446,10 @@ int Main ( int argc, const tchar** argv )
             //buildCommand.Cleanup();
             rebuildCommand.Cleanup();
 
+#ifndef _DEBUG
             ::FreeConsole();
+#endif
+
             return Application::StandardWinMain( &wxEntryWrapper );
         }
     }

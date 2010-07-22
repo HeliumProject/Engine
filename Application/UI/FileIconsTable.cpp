@@ -281,6 +281,8 @@ void FileIconsTable::Create()
                 continue;
             }
 
+            Log::Debug( TXT("Loading %s...\n"), filePath.Get().c_str() );
+
             wxImage image;
             if ( !image.LoadFile( filePath.Get().c_str(), wxBITMAP_TYPE_PNG ) )
             {

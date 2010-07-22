@@ -3,6 +3,17 @@
 
 using namespace Luna;
 
+ProjectViewModel::ProjectViewModel()
+: m_Project( NULL )
+{
+
+}
+
+void ProjectViewModel::SetProject( Project* project )
+{
+    m_Project = project;
+}
+
 unsigned int ProjectViewModel::GetColumnCount() const
 {
     return 2;

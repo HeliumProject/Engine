@@ -4,11 +4,9 @@
 
 using namespace Luna;
 
-ProjectPanel::ProjectPanel(wxWindow *parent, Project* project)
+ProjectPanel::ProjectPanel( wxWindow *parent )
 : ProjectPanelGenerated( parent )
-, m_Model( project )
 {
-    m_DataViewCtrl->AssociateModel( &m_Model );
 }
 
 ProjectPanel::~ProjectPanel()
@@ -16,4 +14,10 @@ ProjectPanel::~ProjectPanel()
 #pragma TODO("If we don't do this here we crash in a base class.... wtf -Geoff")
     m_DataViewCtrl->Destroy();
     m_DataViewCtrl = NULL;
+}
+
+void ProjectPanel::SetProject( Project* project )
+{
+    m_Model.SetProject( project );
+    m_DataViewCtrl->AssociateModel( &m_Model );
 }

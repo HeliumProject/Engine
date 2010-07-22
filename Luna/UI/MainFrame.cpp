@@ -130,6 +130,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
     //
     Connect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnNewScene ) );
     Connect( ID_NewEntity, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnNewEntity ) );
+    Connect( ID_NewProject, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnNewProject ) );
     Connect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnOpen ) );
     Connect( ID_Close, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnClose ) );
 
@@ -278,8 +279,7 @@ EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowBounds, SceneEditor::OnViewDefaultsCh
     //
     // Project/Help area
     //
-    m_Project = new Project ();
-    m_ProjectPanel = new ProjectPanel( this, m_Project );
+    m_ProjectPanel = new ProjectPanel( this );
     wxAuiPaneInfo projectPaneInfo = wxAuiPaneInfo().Name( wxT( "project" ) ).Caption( wxT( "Project" ) ).Left().Layer( 2 ).Position( 1 ).BestSize( 200, 700 );
     projectPaneInfo.dock_proportion = 30000;
     m_FrameManager.AddPane( m_ProjectPanel, projectPaneInfo );
@@ -354,11 +354,48 @@ void MainFrame::SetHelpText( const tchar* text )
 ///////////////////////////////////////////////////////////////////////////////
 // Helper function for common opening code.
 // 
-bool MainFrame::DoOpen( const tstring& path )
+bool MainFrame::OpenProject( const Nocturnal::Path& path )
 {
     bool opened = false;
-    Nocturnal::Path nocPath( path );
-    if ( !path.empty() && nocPath.Exists() )
+
+    if ( !path.empty() && path.Exists() )
+    {
+        tstring error;
+        try
+        {
+            m_Project = Reflect::Archive::FromFile< Luna::Project >( path );
+        }
+        catch ( const Nocturnal::Exception& ex )
+        {
+            error = ex.What();
+        }
+
+        opened = m_Project.ReferencesObject();
+
+        if ( opened )
+        {
+            m_MRU->Insert( path );
+
+            m_ProjectPanel->SetProject( m_Project );
+        }
+        else
+        {
+            m_MRU->Remove( path );
+            if ( !error.empty() )
+            {
+                wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
+            }
+        }
+    }
+
+    return opened;
+}
+
+bool MainFrame::AddScene( const Nocturnal::Path& path )
+{
+    bool opened = false;
+
+    if ( !path.empty() && path.Exists() )
     {
         if ( m_SceneManager.CloseAll() )
         {
@@ -372,21 +409,9 @@ bool MainFrame::DoOpen( const tstring& path )
             {
                 error = ex.What();
             }
-
-            if ( opened )
-            {
-                m_MRU->Insert( path );
-            }
-            else
-            {
-                m_MRU->Remove( path );
-                if ( !error.empty() )
-                {
-                    wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
-                }
-            }
         }
     }
+
     return opened;
 }
 
@@ -496,19 +521,26 @@ void MainFrame::OnNewEntity( wxCommandEvent& event )
     wxMessageBox( wxT( "Not supported yet." ), wxT( "Error" ), wxOK|wxICON_ERROR );
 }
 
+void MainFrame::OnNewProject( wxCommandEvent& event )
+{
+    m_Project = new Project;
+    m_ProjectPanel->SetProject( m_Project );
+}
+
 void MainFrame::OnOpen( wxCommandEvent& event )
 {
     Nocturnal::FileDialog openDlg( this, TXT( "Open" ) );
 
     if ( openDlg.ShowModal() == wxID_OK )
     {
-        DoOpen( (const wxChar*)openDlg.GetPath().c_str() );
+        OpenProject( (const wxChar*)openDlg.GetPath().c_str() );
     }
 }
 
 void MainFrame::OnClose( wxCommandEvent& event )
 {
     m_SceneManager.CloseAll();
+    m_Project = NULL;
 }
 
 void MainFrame::OnSaveAll( wxCommandEvent& event )

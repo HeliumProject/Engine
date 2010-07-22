@@ -34,9 +34,14 @@ namespace Luna
     class Project : public Reflect::ConcreteInheritor< Project, Reflect::Document >
     {
     public:
-        void AddPath( const Nocturnal::Path& path )
+        const Nocturnal::Path& GetPath()
         {
-            m_Paths.insert( path );
+            return m_Path;
+        }
+
+        void SetPath(const Nocturnal::Path& path)
+        {
+            m_Path = path;
         }
 
     public:
@@ -46,7 +51,7 @@ namespace Luna
         }
 
     private:
-        std::set< Nocturnal::Path > m_Paths;
+        Nocturnal::Path m_Path;
     };
 
     typedef Nocturnal::SmartPtr<Project> ProjectPtr;

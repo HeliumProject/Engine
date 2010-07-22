@@ -9,11 +9,8 @@ namespace Luna
     class ProjectViewModel : public wxDataViewModel
     {
     public:
-        ProjectViewModel( Project* project )
-            : m_Project ( project )
-        {
-
-        }
+        ProjectViewModel();
+        void SetProject( Project* project );
 
         unsigned int GetColumnCount() const NOC_OVERRIDE;
         wxString GetColumnType(unsigned int) const NOC_OVERRIDE;

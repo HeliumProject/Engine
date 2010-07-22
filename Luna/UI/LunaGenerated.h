@@ -55,6 +55,7 @@ namespace Luna
 			{
 				ID_NewScene = 1000,
 				ID_NewEntity,
+				ID_NewProject,
 				ID_Open,
 				ID_Close,
 				ID_SaveAll,

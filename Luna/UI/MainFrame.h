@@ -49,8 +49,8 @@ namespace Luna
 
         void SetHelpText( const tchar* text );
 
-        bool DoOpen( const tstring& path );
-
+        bool OpenProject( const Nocturnal::Path& path );
+        bool AddScene( const Nocturnal::Path& path );
 
 #ifdef UI_REFACTOR
         TreeMonitor& GetTreeMonitor()
@@ -98,6 +98,7 @@ namespace Luna
 
         void OnNewScene( wxCommandEvent& event );
         void OnNewEntity( wxCommandEvent& event );
+        void OnNewProject( wxCommandEvent& event );
         void OnOpen( wxCommandEvent& event );
         void OnClose( wxCommandEvent& event );
         void OnSaveAll( wxCommandEvent& event );

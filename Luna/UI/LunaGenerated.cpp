@@ -28,6 +28,10 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_ItemFileNewEntity = new wxMenuItem( m_MenuFileNew, ID_NewEntity, wxString( _("Entity...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFileNew->Append( m_ItemFileNewEntity );
 	
+	wxMenuItem* m_ItemFileNewProject;
+	m_ItemFileNewProject = new wxMenuItem( m_MenuFileNew, ID_NewProject, wxString( _("Project...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_MenuFileNew->Append( m_ItemFileNewProject );
+	
 	m_MenuFile->Append( -1, _("New"), m_MenuFileNew );
 	
 	wxMenuItem* m_ItemOpen;
@@ -519,6 +523,7 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	// Connect Events
 	this->Connect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
 	this->Connect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
+	this->Connect( ID_NewProject, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
 	this->Connect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
 	this->Connect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
 	this->Connect( ID_SaveAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
@@ -529,6 +534,7 @@ MainFrameGenerated::~MainFrameGenerated()
 	// Disconnect Events
 	this->Disconnect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
 	this->Disconnect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
+	this->Disconnect( ID_NewProject, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
 	this->Disconnect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
 	this->Disconnect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
 	this->Disconnect( ID_SaveAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );

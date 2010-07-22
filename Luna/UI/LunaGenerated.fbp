@@ -79,7 +79,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxMenuBar" expanded="0">
+            <object class="wxMenuBar" expanded="1">
                 <property name="bg"></property>
                 <property name="context_help"></property>
                 <property name="context_menu">1</property>
@@ -128,11 +128,11 @@
                 <event name="OnSetFocus"></event>
                 <event name="OnSize"></event>
                 <event name="OnUpdateUI"></event>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">File</property>
                     <property name="name">m_MenuFile</property>
                     <property name="permission">protected</property>
-                    <object class="submenu" expanded="0">
+                    <object class="submenu" expanded="1">
                         <property name="label">New</property>
                         <property name="name">m_MenuFileNew</property>
                         <property name="permission">protected</property>
@@ -160,6 +160,21 @@
                             <property name="kind">wxITEM_NORMAL</property>
                             <property name="label">Entity...</property>
                             <property name="name">m_ItemFileNewEntity</property>
+                            <property name="permission">none</property>
+                            <property name="shortcut"></property>
+                            <property name="unchecked_bitmap"></property>
+                            <event name="OnMenuSelection">OnNew</event>
+                            <event name="OnUpdateUI"></event>
+                        </object>
+                        <object class="wxMenuItem" expanded="1">
+                            <property name="bitmap"></property>
+                            <property name="checked">0</property>
+                            <property name="enabled">1</property>
+                            <property name="help"></property>
+                            <property name="id">ID_NewProject</property>
+                            <property name="kind">wxITEM_NORMAL</property>
+                            <property name="label">Project...</property>
+                            <property name="name">m_ItemFileNewProject</property>
                             <property name="permission">none</property>
                             <property name="shortcut"></property>
                             <property name="unchecked_bitmap"></property>

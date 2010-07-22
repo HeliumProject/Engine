@@ -121,9 +121,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
     //
     // General Events
     //
-    Connect( ID_Exit, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnExit ) );
     Connect( wxID_CLOSE, wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainFrame::OnExiting ) );
-    Connect( ID_About, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnAbout ) );
 
     //
     // File Handling
@@ -454,51 +452,6 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
         //m_MenuEdit->Enable( wxID_CUT, isAnythingSelected );
         //m_MenuEdit->Enable( wxID_COPY, isAnythingSelected );
         //m_MenuEdit->Enable( wxID_PASTE, m_SceneManager.HasCurrentScene() && IsClipboardFormatAvailable( CF_TEXT ) );
-    }
-    else if ( menu == m_MenuView )
-    {
-        //m_HelperMenu->Check( SceneEditorIDs::ID_ViewAxes, m_View->IsAxesVisible() );
-        //m_HelperMenu->Check( SceneEditorIDs::ID_ViewGrid, m_View->IsGridVisible() );
-        //m_HelperMenu->Check( SceneEditorIDs::ID_ViewBounds, m_View->IsBoundsVisible() );
-        //m_HelperMenu->Check( SceneEditorIDs::ID_ViewStatistics, m_View->IsStatisticsVisible() );
-
-        //m_CameraMenu->Check( SceneEditorIDs::ID_ViewOrbit, m_View->GetCameraMode() == CameraModes::Orbit );
-        //m_CameraMenu->Check( SceneEditorIDs::ID_ViewFront, m_View->GetCameraMode() == CameraModes::Front );
-        //m_CameraMenu->Check( SceneEditorIDs::ID_ViewSide, m_View->GetCameraMode() == CameraModes::Side );
-        //m_CameraMenu->Check( SceneEditorIDs::ID_ViewTop, m_View->GetCameraMode() == CameraModes::Top );
-
-        //m_GeometryMenu->Check( SceneEditorIDs::ID_ViewNone, m_View->GetGeometryMode() == GeometryModes::None );
-        //m_GeometryMenu->Check( SceneEditorIDs::ID_ViewRender, m_View->GetGeometryMode() == GeometryModes::Render );
-        //m_GeometryMenu->Check( SceneEditorIDs::ID_ViewCollision, m_View->GetGeometryMode() == GeometryModes::Collision );
-        //m_GeometryMenu->Check( SceneEditorIDs::ID_ViewPathfinding, m_View->IsPathfindingVisible() );
-
-        //ViewColorMode colorMode = MainFramePreferences()->GetViewPreferences()->GetColorMode();
-        //M_IDToColorMode::const_iterator colorModeItr = m_ColorModeLookup.begin();
-        //M_IDToColorMode::const_iterator colorModeEnd = m_ColorModeLookup.end();
-        //for ( ; colorModeItr != colorModeEnd; ++colorModeItr )
-        //{
-        //    m_ViewColorMenu->Check( colorModeItr->first, colorModeItr->second == colorMode );
-        //}
-
-        //m_ShadingMenu->Check( SceneEditorIDs::ID_ViewWireframeOnMesh, m_View->GetCamera()->GetWireframeOnMesh() );
-        //m_ShadingMenu->Check( SceneEditorIDs::ID_ViewWireframeOnShaded, m_View->GetCamera()->GetWireframeOnShaded() );
-        //m_ShadingMenu->Check( SceneEditorIDs::ID_ViewWireframe, m_View->GetCamera()->GetShadingMode() == ShadingModes::Wireframe );
-        //m_ShadingMenu->Check( SceneEditorIDs::ID_ViewMaterial, m_View->GetCamera()->GetShadingMode() == ShadingModes::Material );
-        //m_ShadingMenu->Check( SceneEditorIDs::ID_ViewTexture, m_View->GetCamera()->GetShadingMode() == ShadingModes::Texture );
-
-        //m_CullingMenu->Check( SceneEditorIDs::ID_ViewFrustumCulling, m_View->GetCamera()->IsViewFrustumCulling() );
-        //m_CullingMenu->Check( SceneEditorIDs::ID_ViewBackfaceCulling, m_View->GetCamera()->IsBackFaceCulling() );
-
-        //m_ViewMenu->Check( SceneEditorIDs::ID_ViewHighlightMode, m_View->IsHighlighting() );
-
-        //Content::NodeVisibilityPtr nodeDefaults = MainFramePreferences()->GetDefaultNodeVisibility(); 
-
-        //m_ViewDefaultsMenu->Check( SceneEditorIDs::ID_ViewDefaultShowLayers, nodeDefaults->GetVisibleLayer()); 
-        //m_ViewDefaultsMenu->Check( SceneEditorIDs::ID_ViewDefaultShowInstances, !nodeDefaults->GetHiddenNode());
-        //m_ViewDefaultsMenu->Check( SceneEditorIDs::ID_ViewDefaultShowGeometry, nodeDefaults->GetShowGeometry()); 
-        //m_ViewDefaultsMenu->Check( SceneEditorIDs::ID_ViewDefaultShowPointer, nodeDefaults->GetShowPointer());  
-        //m_ViewDefaultsMenu->Check( SceneEditorIDs::ID_ViewDefaultShowBounds, nodeDefaults->GetShowBounds());  
-
     }
     else
     {

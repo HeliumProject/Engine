@@ -537,6 +537,8 @@ MainFrameGenerated::~MainFrameGenerated()
 
 HelpPanelGenerated::HelpPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
+	this->SetMinSize( wxSize( 300,200 ) );
+	
 	wxBoxSizer* bSizer32;
 	bSizer32 = new wxBoxSizer( wxVERTICAL );
 	

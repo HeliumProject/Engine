@@ -10,6 +10,7 @@ namespace Luna
     {
     public:
    	    ProjectPanel( wxWindow* parent, Project* project );
+        ~ProjectPanel();
 
     protected:
         ProjectViewModel m_Model;

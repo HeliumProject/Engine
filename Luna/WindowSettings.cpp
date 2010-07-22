@@ -6,108 +6,9 @@
 
 using namespace Luna;
 
-// Definition
-REFLECT_DEFINE_CLASS( WindowSettings )
-
-void WindowSettings::EnumerateClass( Reflect::Compositor<WindowSettings>& comp )
-{
-    Reflect::Field* fieldVersion = comp.AddField( &WindowSettings::m_Version, "m_Version" );
-    Reflect::Field* fieldDockingState = comp.AddField( &WindowSettings::m_DockingState, "m_DockingState" );
-    Reflect::Field* fieldIsMaximized = comp.AddField( &WindowSettings::m_IsMaximized, "m_IsMaximized" );
-    Reflect::Field* fieldPosX = comp.AddField( &WindowSettings::m_PosX, "m_PosX" );
-    Reflect::Field* fieldPosY = comp.AddField( &WindowSettings::m_PosY, "m_PosY" );
-    Reflect::Field* fieldWidth = comp.AddField( &WindowSettings::m_Width, "m_Width" );
-    Reflect::Field* fieldHeight = comp.AddField( &WindowSettings::m_Height, "m_Height" );
-}
-
 // Statics
 const tchar* WindowSettings::s_Reset = TXT( "resetWin" );
 const tchar* WindowSettings::s_ResetLong = TXT( "ResetWindowSettings" );
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Static initialization.
-// 
-void WindowSettings::InitializeType()
-{
-    Reflect::RegisterClass<WindowSettings>( TXT( "WindowSettings" ) );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Static cleanup.
-// 
-void WindowSettings::CleanupType()
-{
-    Reflect::UnregisterClass<WindowSettings>();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Checks the window settings against the provided version number and recreates 
-// the window settings if necessary.
-// 
-void WindowSettings::CheckWindowSettings( WindowSettingsPtr& settings, const tstring& version )
-{
-    if ( !settings )
-    {
-        settings = new WindowSettings( version );
-    }
-    else if ( settings->GetCurrentVersion() != version )
-    {
-        settings = new WindowSettings( version );
-    }
-#pragma TODO ("Shouldn't be using the command line here, it should be an option IN luna to reset prefs")
-    //else if ( Nocturnal::GetCmdLineFlag( s_Reset ) )
-    //{
-    //    settings = new WindowSettings( version );
-    //}
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Determines if the specified settings are valid and returns true if so.
-// 
-bool WindowSettings::ValidatePositionAndSize( wxPoint pos, wxSize size )
-{
-    // If you have a default x position, y must match and vice versa
-    if ( pos.x == wxDefaultPosition.x && pos.y != wxDefaultPosition.y || pos.x != wxDefaultPosition.x && pos.y == wxDefaultPosition.y )
-    {
-        return false;
-    }
-
-    // If you have a default width, height must match and vice versa
-    if ( size.x == wxDefaultSize.x && size.y != wxDefaultSize.y || size.x != wxDefaultSize.x && size.y == wxDefaultSize.y )
-    {
-        return false;
-    }
-
-    // Make sure each of the four corners of the window lie within one of the 
-    // currently connected displays.
-    if ( pos != wxDefaultPosition )
-    {
-        if ( wxDisplay::GetFromPoint( pos ) == wxNOT_FOUND )
-        {
-            return false;
-        }
-
-        if ( size != wxDefaultSize )
-        {
-            if ( wxDisplay::GetFromPoint( pos + wxPoint( size.x, 0 ) ) == wxNOT_FOUND )
-            {
-                return false;
-            }
-            else if ( wxDisplay::GetFromPoint( pos + wxPoint( 0, size.y ) ) == wxNOT_FOUND )
-            {
-                return false;
-            }
-            else if ( wxDisplay::GetFromPoint( pos + wxPoint( size.x, size.y ) ) == wxNOT_FOUND )
-            {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
@@ -119,13 +20,6 @@ WindowSettings::WindowSettings( const tstring& version, wxPoint pos, wxSize size
 , m_PosY( pos.y )
 , m_Width( size.x )
 , m_Height( size.y )
-{
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Destructor
-// 
-WindowSettings::~WindowSettings()
 {
 }
 
@@ -153,7 +47,7 @@ void WindowSettings::SetFromWindow( const wxWindow* window, wxAuiManager* manage
         SetMaximized( false );
     }
 
-    if ( !IsMaximized() && ValidatePositionAndSize( window->GetPosition(), window->GetSize()) )
+    if ( !IsMaximized() && Validate( window->GetPosition(), window->GetSize()) )
     {
         // Only store position/size if not maximized, and only if valid
         SetPosition( window->GetPosition() );
@@ -181,7 +75,7 @@ void WindowSettings::ApplyToWindow( wxWindow* window, wxAuiManager* manager, boo
 
     if ( !tlw || !IsMaximized() )
     {
-        if ( ValidatePositionAndSize( GetPosition(), GetSize() ) )
+        if ( Validate( GetPosition(), GetSize() ) )
         {
             window->SetPosition( GetPosition() );
             window->SetSize( GetSize() );
@@ -310,4 +204,71 @@ const tstring& WindowSettings::GetDockingState() const
 void WindowSettings::SetDockingState( const tstring& state )
 {
     Set( DockingState(), state );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Checks the window settings against the provided version number and recreates 
+// the window settings if necessary.
+// 
+void WindowSettings::Check( WindowSettingsPtr& settings, const tstring& version )
+{
+    if ( !settings )
+    {
+        settings = new WindowSettings( version );
+    }
+    else if ( settings->GetCurrentVersion() != version )
+    {
+        settings = new WindowSettings( version );
+    }
+#pragma TODO ("Shouldn't be using the command line here, it should be an option IN luna to reset prefs")
+    //else if ( Nocturnal::GetCmdLineFlag( s_Reset ) )
+    //{
+    //    settings = new WindowSettings( version );
+    //}
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Determines if the specified settings are valid and returns true if so.
+// 
+bool WindowSettings::Validate( wxPoint pos, wxSize size )
+{
+    // If you have a default x position, y must match and vice versa
+    if ( pos.x == wxDefaultPosition.x && pos.y != wxDefaultPosition.y || pos.x != wxDefaultPosition.x && pos.y == wxDefaultPosition.y )
+    {
+        return false;
+    }
+
+    // If you have a default width, height must match and vice versa
+    if ( size.x == wxDefaultSize.x && size.y != wxDefaultSize.y || size.x != wxDefaultSize.x && size.y == wxDefaultSize.y )
+    {
+        return false;
+    }
+
+    // Make sure each of the four corners of the window lie within one of the 
+    // currently connected displays.
+    if ( pos != wxDefaultPosition )
+    {
+        if ( wxDisplay::GetFromPoint( pos ) == wxNOT_FOUND )
+        {
+            return false;
+        }
+
+        if ( size != wxDefaultSize )
+        {
+            if ( wxDisplay::GetFromPoint( pos + wxPoint( size.x, 0 ) ) == wxNOT_FOUND )
+            {
+                return false;
+            }
+            else if ( wxDisplay::GetFromPoint( pos + wxPoint( 0, size.y ) ) == wxNOT_FOUND )
+            {
+                return false;
+            }
+            else if ( wxDisplay::GetFromPoint( pos + wxPoint( size.x, size.y ) ) == wxNOT_FOUND )
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }

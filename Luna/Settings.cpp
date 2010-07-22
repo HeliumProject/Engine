@@ -4,45 +4,6 @@
 
 using namespace Luna;
 
-REFLECT_DEFINE_ABSTRACT( Settings );
-
-void Settings::EnumerateClass( Reflect::Compositor<Settings>& comp )
-{
-    Reflect::Field* fieldSavedVersion = comp.AddField( &Settings::m_SavedVersion, "m_SavedVersion", Reflect::FieldFlags::Force | Reflect::FieldFlags::Hide );
-}
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Static initialization.
-// 
-void Settings::InitializeType()
-{
-    Reflect::RegisterClass<Settings>( TXT( "Settings" ) );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Static cleanup.
-// 
-void Settings::CleanupType()
-{
-    Reflect::UnregisterClass<Settings>();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Constructor
-// 
-Settings::Settings()
-{
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Destructor
-// 
-Settings::~Settings()
-{
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // Overridden to store the current preferences version (provided by derived 
 // classes) before saving.  Derived classes can change their version to 
@@ -60,10 +21,9 @@ void Settings::PreSerialize()
 // the file could not be loaded (or the version was old), this function will 
 // return false, and any values you query will be at the default settings.
 // 
-bool Settings::LoadFromFile( const tstring& path )
+bool Settings::LoadFromFile( const Nocturnal::Path& path )
 {
-    Nocturnal::Path file( path );
-    if ( file.Exists() )
+    if ( path.Exists() )
     {
         try
         {
@@ -92,7 +52,7 @@ bool Settings::LoadFromFile( const tstring& path )
 ///////////////////////////////////////////////////////////////////////////////
 // Save the preferences to the specified file on disc.
 // 
-bool Settings::SaveToFile( const tstring& path, tstring& error, Reflect::VersionPtr version )
+bool Settings::SaveToFile( const Nocturnal::Path& path, tstring& error, Reflect::VersionPtr version )
 {
     bool result = false;
 

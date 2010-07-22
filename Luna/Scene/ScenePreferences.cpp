@@ -109,7 +109,7 @@ void ScenePreferences::PostDeserialize()
 {
   __super::PostDeserialize();
 
-  WindowSettings::CheckWindowSettings( m_SceneEditorWindowSettings, s_WindowSettingsVersion );
+  WindowSettings::Check( m_SceneEditorWindowSettings, s_WindowSettingsVersion );
 
   if ( !m_MRU.ReferencesObject() )
   {

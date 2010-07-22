@@ -37,25 +37,32 @@ namespace Luna
   // Base class for preferenced within Luna.  Provides convenience functions
   // for saving and loading.
   // 
-  class LUNA_EDITOR_API Preferences NOC_ABSTRACT : public Settings
+  class LUNA_EDITOR_API Preferences NOC_ABSTRACT : public Reflect::AbstractInheritor< Preferences, Settings >
   {
   public:
-    static const tchar* s_ResetPreferences;
-    static const tchar* s_ResetPreferencesLong;
-
-  public:
-    static void InitializeType();
-    static void CleanupType();
-
     Preferences();
 
     virtual tstring GetPreferencesPath() const = 0;
     void SavePreferences();
     void LoadPreferences();
 
-  public:
-    REFLECT_DECLARE_ABSTRACT( Preferences, Settings );
-    static void EnumerateClass( Reflect::Compositor<Preferences>& comp );
+    static const tchar* s_ResetPreferences;
+    static const tchar* s_ResetPreferencesLong;
+
+    static void InitializeType()
+    {
+        Reflect::RegisterClass<Preferences>( TXT( "Preferences" ) );
+    }
+
+    static void CleanupType()
+    {
+        Reflect::UnregisterClass<Preferences>();
+    }
+
+    static void EnumerateClass( Reflect::Compositor<Preferences>& comp )
+    {
+
+    }
   };
   typedef Nocturnal::SmartPtr< Preferences > PreferencesPtr;
 }

@@ -79,7 +79,8 @@ AppPreferences::AppPreferences()
 void AppPreferences::PostDeserialize()
 {
   __super::PostDeserialize();
-  WindowSettings::CheckWindowSettings( m_SessionFrameSettings, s_SessionFrameVersion );
+
+  WindowSettings::Check( m_SessionFrameSettings, s_SessionFrameVersion );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

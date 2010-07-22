@@ -38,33 +38,8 @@ tstring Luna::PathToLabel( const Nocturnal::Path& path, const FilePathOption fil
     return filePath;
 }
 
-// Definitions
-REFLECT_DEFINE_ABSTRACT( Preferences )
-
-
-void Preferences::EnumerateClass( Reflect::Compositor<Preferences>& comp )
-{
-}
-
 const tchar* Preferences::s_ResetPreferences = TXT( "reset" );
 const tchar* Preferences::s_ResetPreferencesLong = TXT( "ResetPreferences" );
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Static initialization.
-// 
-void Preferences::InitializeType()
-{
-    Reflect::RegisterClass<Preferences>( TXT( "Preferences" ) );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Static cleanup.
-// 
-void Preferences::CleanupType()
-{
-    Reflect::UnregisterClass<Preferences>();
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor

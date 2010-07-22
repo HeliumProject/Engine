@@ -5,6 +5,7 @@
 #include "DirectoryPanel.h"
 #include "HelpPanel.h"
 #include "ProjectPanel.h"
+#include "Project.h"
 #include "LayersPanel.h"
 #include "PropertiesPanel.h"
 #include "ToolsPanel.h"
@@ -70,6 +71,7 @@ namespace Luna
         DirectoryPanel*  m_DirectoryPanel;
         PropertiesPanel* m_PropertiesPanel;
 
+        ProjectPtr       m_Project;
         SceneManager     m_SceneManager;
 
         // the attributes for the current selection

@@ -36,7 +36,7 @@ namespace Luna{ class Frame; }
 #include <wx/textctrl.h>
 #include <wx/statbmp.h>
 #include <wx/scrolwin.h>
-#include <wx/treectrl.h>
+#include <wx/dataview.h>
 #include <wx/notebook.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -272,7 +272,7 @@ namespace Luna
 		private:
 		
 		protected:
-			wxTreeCtrl* m_treeCtrl2;
+			wxDataViewCtrl* m_DataViewCtrl;
 		
 		public:
 			

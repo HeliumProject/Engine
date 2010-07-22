@@ -22,7 +22,7 @@
 #include "ScenePreferencesDialog.h"
 #include "SelectionPropertiesPanel.h"
 #include "TranslateManipulator.h"
-#include "TypeGrid.h"
+#include "UI/TypeGrid.h"
 #include "Viewport.h"
 #include "VolumeCreateTool.h"
 #include "Mesh.h"

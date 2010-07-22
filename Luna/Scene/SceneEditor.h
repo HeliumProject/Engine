@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 
-#include "LayerGrid.h"
+#include "UI/LayerGrid.h"
 #include "Scene.h"
 #include "SceneDocument.h"
 #include "SceneEditorIDs.h"

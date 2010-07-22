@@ -39,8 +39,8 @@
 
 #include "SceneManager.h"
 #include "ScenePreferences.h"
-#include "TypeGrid.h"
-#include "LayerGrid.h"
+#include "UI/TypeGrid.h"
+#include "UI/LayerGrid.h"
 
 #include "ParentCommand.h"
 

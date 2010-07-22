@@ -1483,50 +1483,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Grids"
-				>
-				<File
-					RelativePath=".\Scene\Grid.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\Grid.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\GridCellImageRenderer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\GridCellImageRenderer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\GridWithIcons.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\GridWithIcons.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\LayerGrid.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\LayerGrid.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\TypeGrid.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\TypeGrid.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="Primitives"
 				>
 				<File
@@ -3925,6 +3881,30 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\Grid.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Grid.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\GridCellImageRenderer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\GridCellImageRenderer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\GridWithIcons.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\GridWithIcons.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\HelpPanel.cpp"
 				>
 			</File>
@@ -3938,6 +3918,14 @@
 			</File>
 			<File
 				RelativePath=".\UI\ImportOptionsDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\LayerGrid.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\LayerGrid.h"
 				>
 			</File>
 			<File
@@ -4098,6 +4086,14 @@
 			</File>
 			<File
 				RelativePath=".\UI\ToolsPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TypeGrid.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TypeGrid.h"
 				>
 			</File>
 			<File

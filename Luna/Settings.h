@@ -18,22 +18,22 @@ namespace Luna
   /////////////////////////////////////////////////////////////////////////////
   // Class for accessing user preferences.
   // 
-  class LUNA_EDITOR_API PreferencesBase : public Reflect::Element
+  class LUNA_EDITOR_API Settings : public Reflect::Element
   {
   private:
     tstring m_SavedVersion;
 
     // RTTI
   public:
-    REFLECT_DECLARE_ABSTRACT( PreferencesBase, Reflect::Element );
-    static void EnumerateClass( Reflect::Compositor<PreferencesBase>& comp );
+    REFLECT_DECLARE_ABSTRACT( Settings, Reflect::Element );
+    static void EnumerateClass( Reflect::Compositor<Settings>& comp );
 
   public:
     static void InitializeType();
     static void CleanupType();
 
-    PreferencesBase();
-    virtual ~PreferencesBase();
+    Settings();
+    virtual ~Settings();
 
     virtual void PreSerialize() NOC_OVERRIDE;
     virtual const tstring& GetCurrentVersion() const = 0;
@@ -151,5 +151,5 @@ namespace Luna
       m_Loaded.Remove( listener );
     }
   };
-  typedef Nocturnal::SmartPtr< PreferencesBase > PreferencesBasePtr;
+  typedef Nocturnal::SmartPtr< Settings > SettingsPtr;
 }

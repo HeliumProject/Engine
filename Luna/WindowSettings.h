@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "PreferencesBase.h"
+#include "Settings.h"
 
 class wxAuiManager;
 
@@ -13,7 +13,7 @@ namespace Luna
   /////////////////////////////////////////////////////////////////////////////
   // Data class for storing window locations.
   // 
-  class LUNA_EDITOR_API WindowSettings : public PreferencesBase
+  class LUNA_EDITOR_API WindowSettings : public Settings
   {
   public:
     static const tchar* s_Reset;
@@ -38,7 +38,7 @@ namespace Luna
 
     // RTTI
   public:
-    REFLECT_DECLARE_CLASS( WindowSettings, PreferencesBase )
+    REFLECT_DECLARE_CLASS( WindowSettings, Settings )
 
     static void EnumerateClass( Reflect::Compositor<WindowSettings>& comp );
 

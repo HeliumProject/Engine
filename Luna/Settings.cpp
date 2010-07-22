@@ -1,14 +1,14 @@
 #include "Precompile.h"
 
-#include "PreferencesBase.h"
+#include "Settings.h"
 
 using namespace Luna;
 
-REFLECT_DEFINE_ABSTRACT( PreferencesBase );
+REFLECT_DEFINE_ABSTRACT( Settings );
 
-void PreferencesBase::EnumerateClass( Reflect::Compositor<PreferencesBase>& comp )
+void Settings::EnumerateClass( Reflect::Compositor<Settings>& comp )
 {
-    Reflect::Field* fieldSavedVersion = comp.AddField( &PreferencesBase::m_SavedVersion, "m_SavedVersion", Reflect::FieldFlags::Force | Reflect::FieldFlags::Hide );
+    Reflect::Field* fieldSavedVersion = comp.AddField( &Settings::m_SavedVersion, "m_SavedVersion", Reflect::FieldFlags::Force | Reflect::FieldFlags::Hide );
 }
 
 
@@ -16,30 +16,30 @@ void PreferencesBase::EnumerateClass( Reflect::Compositor<PreferencesBase>& comp
 ///////////////////////////////////////////////////////////////////////////////
 // Static initialization.
 // 
-void PreferencesBase::InitializeType()
+void Settings::InitializeType()
 {
-    Reflect::RegisterClass<PreferencesBase>( TXT( "PreferencesBase" ) );
+    Reflect::RegisterClass<Settings>( TXT( "Settings" ) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Static cleanup.
 // 
-void PreferencesBase::CleanupType()
+void Settings::CleanupType()
 {
-    Reflect::UnregisterClass<PreferencesBase>();
+    Reflect::UnregisterClass<Settings>();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constructor
 // 
-PreferencesBase::PreferencesBase()
+Settings::Settings()
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Destructor
 // 
-PreferencesBase::~PreferencesBase()
+Settings::~Settings()
 {
 }
 
@@ -48,7 +48,7 @@ PreferencesBase::~PreferencesBase()
 // classes) before saving.  Derived classes can change their version to 
 // invalidate old preferences files.
 // 
-void PreferencesBase::PreSerialize()
+void Settings::PreSerialize()
 {
     __super::PreSerialize();
 
@@ -60,7 +60,7 @@ void PreferencesBase::PreSerialize()
 // the file could not be loaded (or the version was old), this function will 
 // return false, and any values you query will be at the default settings.
 // 
-bool PreferencesBase::LoadFromFile( const tstring& path )
+bool Settings::LoadFromFile( const tstring& path )
 {
     Nocturnal::Path file( path );
     if ( file.Exists() )
@@ -71,7 +71,7 @@ bool PreferencesBase::LoadFromFile( const tstring& path )
             Reflect::VersionPtr version = Reflect::Archive::FromFile< Reflect::Version >( path );
             if ( version && version->IsCurrent() )
             {
-                PreferencesBasePtr fromFile = Reflect::Archive::FromFile< PreferencesBase >( path );
+                SettingsPtr fromFile = Reflect::Archive::FromFile< Settings >( path );
                 if ( fromFile.ReferencesObject() && fromFile->m_SavedVersion == GetCurrentVersion() )
                 {
                     fromFile->CopyTo( this );
@@ -92,7 +92,7 @@ bool PreferencesBase::LoadFromFile( const tstring& path )
 ///////////////////////////////////////////////////////////////////////////////
 // Save the preferences to the specified file on disc.
 // 
-bool PreferencesBase::SaveToFile( const tstring& path, tstring& error, Reflect::VersionPtr version )
+bool Settings::SaveToFile( const tstring& path, tstring& error, Reflect::VersionPtr version )
 {
     bool result = false;
 

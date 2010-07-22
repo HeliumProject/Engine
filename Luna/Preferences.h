@@ -2,7 +2,7 @@
 
 #include "Luna/API.h"
 
-#include "PreferencesBase.h"
+#include "Settings.h"
 #include "Foundation/File/Path.h"
 
 namespace Luna
@@ -37,7 +37,7 @@ namespace Luna
   // Base class for preferenced within Luna.  Provides convenience functions
   // for saving and loading.
   // 
-  class LUNA_EDITOR_API Preferences NOC_ABSTRACT : public PreferencesBase
+  class LUNA_EDITOR_API Preferences NOC_ABSTRACT : public Settings
   {
   public:
     static const tchar* s_ResetPreferences;
@@ -54,7 +54,7 @@ namespace Luna
     void LoadPreferences();
 
   public:
-    REFLECT_DECLARE_ABSTRACT( Preferences, PreferencesBase );
+    REFLECT_DECLARE_ABSTRACT( Preferences, Settings );
     static void EnumerateClass( Reflect::Compositor<Preferences>& comp );
   };
   typedef Nocturnal::SmartPtr< Preferences > PreferencesPtr;

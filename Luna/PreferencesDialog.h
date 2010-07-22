@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "PreferencesBase.h"
+#include "Settings.h"
 
 #include <map>
 

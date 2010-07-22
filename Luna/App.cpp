@@ -32,7 +32,7 @@
 
 #include "Editor.h"
 #include "Preferences.h"
-#include "PreferencesBase.h"
+#include "Settings.h"
 #include "AppPreferences.h"
 #include "Preferences.h"
 #include "WindowSettings.h"
@@ -231,7 +231,7 @@ bool App::OnInit()
                 m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );
                 m_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
 
-                m_InitializerStack.Push( PreferencesBase::InitializeType, PreferencesBase::CleanupType );
+                m_InitializerStack.Push( Settings::InitializeType, Settings::CleanupType );
                 m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
                 m_InitializerStack.Push( WindowSettings::InitializeType, WindowSettings::CleanupType );
                 m_InitializerStack.Push( AppPreferences::InitializeType, AppPreferences::CleanupType );

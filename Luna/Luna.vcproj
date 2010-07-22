@@ -4342,14 +4342,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\PreferencesBase.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PreferencesBase.h"
-			>
-		</File>
-		<File
 			RelativePath=".\PreferencesDialog.cpp"
 			>
 		</File>
@@ -4399,6 +4391,14 @@
 		</File>
 		<File
 			RelativePath=".\Selection.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Settings.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Settings.h"
 			>
 		</File>
 		<File

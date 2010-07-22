@@ -121,55 +121,8 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
     //
     // General Events
     //
-    Connect( ID_Exit, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnExit ) );
     Connect( wxID_CLOSE, wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainFrame::OnExiting ) );
-    Connect( ID_About, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnAbout ) );
 
-    //
-    // File Handling
-    //
-    Connect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnNewScene ) );
-    Connect( ID_NewEntity, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnNewEntity ) );
-    Connect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnOpen ) );
-    Connect( ID_Close, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnClose ) );
-
-    Connect( ID_SaveAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnSaveAll ) );
-
-    Connect( ID_Import, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnImport ) );
-    Connect( ID_ImportFromClipboard, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnImport ) );
-    Connect( ID_Export, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnExport ) );
-    Connect( ID_ExportToClipboard, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnExport ) );
-
-    //
-    // Editing
-    //
-
-    Connect( wxID_UNDO, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnUndo ) );
-    Connect( wxID_REDO, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnRedo ) );
-    Connect( wxID_CUT, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnCut ) );
-    Connect( wxID_COPY, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnCopy ) );
-    Connect( wxID_PASTE, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnPaste ) );
-    Connect( wxID_DELETE, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnDelete ) );
-
-    Connect( ID_SelectAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnSelectAll ) );
-    Connect( ID_InvertSelection, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnInvertSelection ) );
-
-    Connect( ID_Parent, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnParent ) );
-    Connect( ID_Unparent, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnUnparent ) );
-    Connect( ID_Group, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnGroup ) );
-    Connect( ID_Ungroup, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnUngroup ) );
-    Connect( ID_Center, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnCenter ) );
-    Connect( ID_Duplicate, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnDuplicate ) );
-    Connect( ID_SmartDuplicate, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnSmartDuplicate ) );
-    Connect( ID_CopyTransform, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnCopyTransform ) );
-    Connect( ID_PasteTransform, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnPasteTransform ) );
-    Connect( ID_SnapToCamera, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnSnapToCamera ) );
-    Connect( ID_SnapCameraTo, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnSnapCameraTo ) );
-
-    Connect( ID_WalkUp, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnPickWalk ) );
-    Connect( ID_WalkDown, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnPickWalk ) );
-    Connect( ID_WalkForward, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnPickWalk ) );
-    Connect( ID_WalkBackward, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnPickWalk ) );
 
     /*
 EVT_MENU(wxID_HELP_INDEX, MainFrame::OnHelpIndex)
@@ -428,51 +381,6 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
         //m_MenuEdit->Enable( wxID_CUT, isAnythingSelected );
         //m_MenuEdit->Enable( wxID_COPY, isAnythingSelected );
         //m_MenuEdit->Enable( wxID_PASTE, m_SceneManager.HasCurrentScene() && IsClipboardFormatAvailable( CF_TEXT ) );
-    }
-    else if ( menu == m_MenuView )
-    {
-        //m_HelperMenu->Check( SceneEditorIDs::ID_ViewAxes, m_View->IsAxesVisible() );
-        //m_HelperMenu->Check( SceneEditorIDs::ID_ViewGrid, m_View->IsGridVisible() );
-        //m_HelperMenu->Check( SceneEditorIDs::ID_ViewBounds, m_View->IsBoundsVisible() );
-        //m_HelperMenu->Check( SceneEditorIDs::ID_ViewStatistics, m_View->IsStatisticsVisible() );
-
-        //m_CameraMenu->Check( SceneEditorIDs::ID_ViewOrbit, m_View->GetCameraMode() == CameraModes::Orbit );
-        //m_CameraMenu->Check( SceneEditorIDs::ID_ViewFront, m_View->GetCameraMode() == CameraModes::Front );
-        //m_CameraMenu->Check( SceneEditorIDs::ID_ViewSide, m_View->GetCameraMode() == CameraModes::Side );
-        //m_CameraMenu->Check( SceneEditorIDs::ID_ViewTop, m_View->GetCameraMode() == CameraModes::Top );
-
-        //m_GeometryMenu->Check( SceneEditorIDs::ID_ViewNone, m_View->GetGeometryMode() == GeometryModes::None );
-        //m_GeometryMenu->Check( SceneEditorIDs::ID_ViewRender, m_View->GetGeometryMode() == GeometryModes::Render );
-        //m_GeometryMenu->Check( SceneEditorIDs::ID_ViewCollision, m_View->GetGeometryMode() == GeometryModes::Collision );
-        //m_GeometryMenu->Check( SceneEditorIDs::ID_ViewPathfinding, m_View->IsPathfindingVisible() );
-
-        //ViewColorMode colorMode = MainFramePreferences()->GetViewPreferences()->GetColorMode();
-        //M_IDToColorMode::const_iterator colorModeItr = m_ColorModeLookup.begin();
-        //M_IDToColorMode::const_iterator colorModeEnd = m_ColorModeLookup.end();
-        //for ( ; colorModeItr != colorModeEnd; ++colorModeItr )
-        //{
-        //    m_ViewColorMenu->Check( colorModeItr->first, colorModeItr->second == colorMode );
-        //}
-
-        //m_ShadingMenu->Check( SceneEditorIDs::ID_ViewWireframeOnMesh, m_View->GetCamera()->GetWireframeOnMesh() );
-        //m_ShadingMenu->Check( SceneEditorIDs::ID_ViewWireframeOnShaded, m_View->GetCamera()->GetWireframeOnShaded() );
-        //m_ShadingMenu->Check( SceneEditorIDs::ID_ViewWireframe, m_View->GetCamera()->GetShadingMode() == ShadingModes::Wireframe );
-        //m_ShadingMenu->Check( SceneEditorIDs::ID_ViewMaterial, m_View->GetCamera()->GetShadingMode() == ShadingModes::Material );
-        //m_ShadingMenu->Check( SceneEditorIDs::ID_ViewTexture, m_View->GetCamera()->GetShadingMode() == ShadingModes::Texture );
-
-        //m_CullingMenu->Check( SceneEditorIDs::ID_ViewFrustumCulling, m_View->GetCamera()->IsViewFrustumCulling() );
-        //m_CullingMenu->Check( SceneEditorIDs::ID_ViewBackfaceCulling, m_View->GetCamera()->IsBackFaceCulling() );
-
-        //m_ViewMenu->Check( SceneEditorIDs::ID_ViewHighlightMode, m_View->IsHighlighting() );
-
-        //Content::NodeVisibilityPtr nodeDefaults = MainFramePreferences()->GetDefaultNodeVisibility(); 
-
-        //m_ViewDefaultsMenu->Check( SceneEditorIDs::ID_ViewDefaultShowLayers, nodeDefaults->GetVisibleLayer()); 
-        //m_ViewDefaultsMenu->Check( SceneEditorIDs::ID_ViewDefaultShowInstances, !nodeDefaults->GetHiddenNode());
-        //m_ViewDefaultsMenu->Check( SceneEditorIDs::ID_ViewDefaultShowGeometry, nodeDefaults->GetShowGeometry()); 
-        //m_ViewDefaultsMenu->Check( SceneEditorIDs::ID_ViewDefaultShowPointer, nodeDefaults->GetShowPointer());  
-        //m_ViewDefaultsMenu->Check( SceneEditorIDs::ID_ViewDefaultShowBounds, nodeDefaults->GetShowBounds());  
-
     }
     else
     {

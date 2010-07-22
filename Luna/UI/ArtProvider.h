@@ -10,10 +10,35 @@ namespace Luna
         static const wxChar* NewScene = wxART_MAKE_ART_ID( LUNA_ART_ID_NEW_SCENE );
         static const wxChar* NewEntity = wxART_MAKE_ART_ID( LUNA_ART_ID_NEW_ENTITY );
 
+        static const wxChar* FrameOrigin = wxART_MAKE_ART_ID( LUNA_ART_ID_FRAME_ORIGIN );
+        static const wxChar* FrameSelected = wxART_MAKE_ART_ID( LUNA_ART_ID_FRAME_SELECTED );
+
+        static const wxChar* PreviousView = wxART_MAKE_ART_ID( LUNA_ART_ID_PREVIOUS_VIEW );
+        static const wxChar* NextView = wxART_MAKE_ART_ID( LUNA_ART_ID_NEXT_VIEW );
+
+        static const wxChar* HighlightMode = wxART_MAKE_ART_ID( LUNA_ART_ID_HIGHLIGHT_MODE );
+
         static const wxChar* PerspectiveCamera = wxART_MAKE_ART_ID( LUNA_ART_ID_PERSPECTIVE_CAMERA );
         static const wxChar* FrontOrthoCamera = wxART_MAKE_ART_ID( LUNA_ART_ID_FRONT_ORTHO_CAMERA );
         static const wxChar* SideOrthoCamera = wxART_MAKE_ART_ID( LUNA_ART_ID_SIDE_ORTHO_CAMERA );
         static const wxChar* TopOrthoCamera = wxART_MAKE_ART_ID( LUNA_ART_ID_TOP_ORTHO_CAMERA );
+
+        static const wxChar* ShowAxes = wxART_MAKE_ART_ID( LUNA_ART_ID_SHOW_AXES );
+        static const wxChar* ShowGrid = wxART_MAKE_ART_ID( LUNA_ART_ID_SHOW_GRID );
+        static const wxChar* ShowBounds = wxART_MAKE_ART_ID( LUNA_ART_ID_SHOW_BOUNDS );
+        static const wxChar* ShowStatistics = wxART_MAKE_ART_ID( LUNA_ART_ID_SHOW_STATISTICS );
+
+        static const wxChar* FrustumCull = wxART_MAKE_ART_ID( LUNA_ART_ID_FRUSTUM_CULL );
+        static const wxChar* BackfaceCull = wxART_MAKE_ART_ID( LUNA_ART_ID_BACKFACE_CULL );
+
+        static const wxChar* ShadingWireframe = wxART_MAKE_ART_ID( LUNA_ART_ID_SHADING_WIREFRAME );
+        static const wxChar* ShadingMaterial = wxART_MAKE_ART_ID( LUNA_ART_ID_SHADING_MATERIAL );
+
+        static const wxChar* ColorModeScene = wxART_MAKE_ART_ID( LUNA_ART_ID_COLOR_MODE_SCENE );
+        static const wxChar* ColorModeLayer = wxART_MAKE_ART_ID( LUNA_ART_ID_COLOR_MODE_LAYER );
+        static const wxChar* ColorModeNodeType = wxART_MAKE_ART_ID( LUNA_ART_ID_COLOR_MODE_NODE_TYPE );
+        static const wxChar* ColorModeScale = wxART_MAKE_ART_ID( LUNA_ART_ID_COLOR_MODE_SCALE );
+        static const wxChar* ColorModeScaleGradient = wxART_MAKE_ART_ID( LUNA_ART_ID_COLOR_MODE_SCALE_GRADIENT );
 
         static const wxChar* SelectTool = wxART_MAKE_ART_ID( LUNA_ART_ID_SELECT_TOOL );
         static const wxChar* TranslateTool = wxART_MAKE_ART_ID( LUNA_ART_ID_TRANSLATE_TOOL );

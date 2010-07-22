@@ -34,8 +34,6 @@ namespace Luna
     class Project : public Reflect::ConcreteInheritor< Project, Reflect::Document >
     {
     public:
-        Project();
-
         void AddPath( const Nocturnal::Path& path )
         {
             m_Paths.insert( path );

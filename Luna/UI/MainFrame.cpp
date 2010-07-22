@@ -231,7 +231,8 @@ EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowBounds, SceneEditor::OnViewDefaultsCh
     //
     // Project/Help area
     //
-    m_ProjectPanel = new ProjectPanel( this );
+    m_Project = new Project ();
+    m_ProjectPanel = new ProjectPanel( this, m_Project );
     wxAuiPaneInfo projectPaneInfo = wxAuiPaneInfo().Name( wxT( "project" ) ).Caption( wxT( "Project" ) ).Left().Layer( 2 ).Position( 1 ).BestSize( 200, 700 );
     projectPaneInfo.dock_proportion = 30000;
     m_FrameManager.AddPane( m_ProjectPanel, projectPaneInfo );

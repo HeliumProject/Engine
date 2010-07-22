@@ -682,8 +682,8 @@ ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer24;
 	bSizer24 = new wxBoxSizer( wxVERTICAL );
 	
-	m_treeCtrl2 = new wxTreeCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE );
-	bSizer24->Add( m_treeCtrl2, 1, wxALL|wxEXPAND, 5 );
+	m_DataViewCtrl = new wxDataViewCtrl ( this, wxID_ANY );
+	bSizer24->Add( m_DataViewCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer24 );
 	this->Layout();

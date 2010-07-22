@@ -264,22 +264,9 @@ EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowBounds, SceneEditor::OnViewDefaultsCh
         Thaw();
     }
 
-    m_Project = new Project ();
-    m_ProjectPanel = new ProjectPanel( this, m_Project );
-    m_FrameManager.AddPane( m_ProjectPanel, wxAuiPaneInfo().Name( wxT( "project" ) ).Caption( wxT( "Project" ) ).Left().Layer( 1 ).Position( 1 ) );
-
-    m_DirectoryPanel = new DirectoryPanel( this );
-    m_FrameManager.AddPane( m_DirectoryPanel, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ) );
-
-    m_LayersPanel = new LayersPanel( this );
-    m_FrameManager.AddPane( m_LayersPanel, wxAuiPaneInfo().Name( wxT( "layers" ) ).Caption( wxT( "Layers" ) ).Left().Layer( 1 ).Position( 1 ) );
-
-    m_TypesPanel = new TypesPanel( this );
-    m_FrameManager.AddPane( m_TypesPanel, wxAuiPaneInfo().Name( wxT( "types" ) ).Caption( wxT( "Types" ) ).Left().Layer( 1 ).Position( 1 ) );
-
-    m_HelpPanel = new HelpPanel( this );
-    m_FrameManager.AddPane( m_HelpPanel, wxAuiPaneInfo().Name( wxT( "help" ) ).Caption( wxT( "Help" ) ).Left().Layer( 1 ).Position( 1 ) );
-
+    //
+    // View panel area
+    //
     m_ViewPanel = new ViewPanel( this );
     m_ViewPanel->GetViewport()->AddRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
     m_ViewPanel->GetViewport()->AddSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
@@ -289,7 +276,27 @@ EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowBounds, SceneEditor::OnViewDefaultsCh
     m_FrameManager.AddPane( m_ViewPanel, wxAuiPaneInfo().Name( wxT( "view" ) ).CenterPane() );
 
     //
-    // Properties panel
+    // Project/Help area
+    //
+    m_Project = new Project ();
+    m_ProjectPanel = new ProjectPanel( this, m_Project );
+    wxAuiPaneInfo projectPaneInfo = wxAuiPaneInfo().Name( wxT( "project" ) ).Caption( wxT( "Project" ) ).Left().Layer( 2 ).Position( 1 ).BestSize( 200, 700 );
+    projectPaneInfo.dock_proportion = 30000;
+    m_FrameManager.AddPane( m_ProjectPanel, projectPaneInfo );
+
+    m_HelpPanel = new HelpPanel( this );
+    wxAuiPaneInfo helpPaneInfo = wxAuiPaneInfo().Name( wxT( "help" ) ).Caption( wxT( "Help" ) ).Left().Layer( 2 ).Position( 2 ).MinSize( 200, 200 ).BestSize( wxSize( 200, 200 ) );
+    helpPaneInfo.dock_proportion = 10000;
+    m_FrameManager.AddPane( m_HelpPanel, helpPaneInfo );
+
+    //
+    // Directory area
+    //
+    m_DirectoryPanel = new DirectoryPanel( this );
+    m_FrameManager.AddPane( m_DirectoryPanel, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ).BestSize( wxSize( 200, 900 ) ) );
+
+    //
+    // Properties/Layers/Types area
     //
     m_PropertiesPanel = new PropertiesPanel( this );
     m_SelectionEnumerator = new PropertiesGenerator( &m_SelectionProperties );
@@ -299,6 +306,15 @@ EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowBounds, SceneEditor::OnViewDefaultsCh
     m_SelectionProperties.SetControl( new Inspect::CanvasWindow ( m_PropertiesPanel, SceneEditorIDs::ID_SelectionProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
     m_FrameManager.AddPane( m_PropertiesPanel, wxAuiPaneInfo().Name( wxT( "properties" ) ).Caption( wxT( "Properties" ) ).Right().Layer( 1 ).Position( 1 ) );
 
+    m_LayersPanel = new LayersPanel( this );
+    m_FrameManager.AddPane( m_LayersPanel, wxAuiPaneInfo().Name( wxT( "layers" ) ).Caption( wxT( "Layers" ) ).Right().Layer( 1 ).Position( 2 ) );
+
+    m_TypesPanel = new TypesPanel( this );
+    m_FrameManager.AddPane( m_TypesPanel, wxAuiPaneInfo().Name( wxT( "types" ) ).Caption( wxT( "Types" ) ).Right().Layer( 1 ).Position( 3 ) );
+
+    //
+    // Tools panel
+    //
     m_ToolsPanel = new ToolsPanel( this );
     m_ToolEnumerator = new PropertiesGenerator (&m_ToolProperties);
     m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
@@ -307,7 +323,7 @@ EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowBounds, SceneEditor::OnViewDefaultsCh
     m_ToolsPanel->Create( m_ToolProperties.GetControl() );
     m_ToolsPanel->Disable();
     m_ToolsPanel->Refresh();
-    m_FrameManager.AddPane( m_ToolsPanel, wxAuiPaneInfo().Name( wxT( "tools" ) ).Caption( wxT( "Tools" ) ).Right().Layer( 1 ).Position( 1 ) );
+    m_FrameManager.AddPane( m_ToolsPanel, wxAuiPaneInfo().Name( wxT( "tools" ) ).Caption( wxT( "Tools" ) ).BestSize( wxSize( 200, 500 ) ).MinSize( wxSize( 150, 250 ) ).FloatingSize( wxSize( 200, 500 ) ).Float() );
 
     m_FrameManager.Update();
 

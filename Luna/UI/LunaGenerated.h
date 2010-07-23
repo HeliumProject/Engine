@@ -22,15 +22,16 @@ namespace Luna{ class Frame; }
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/srchctrl.h>
-#include <wx/toolbar.h>
 #include <wx/statusbr.h>
 #include <wx/frame.h>
-#include <wx/richtext/richtextctrl.h>
-#include <wx/sizer.h>
-#include <wx/panel.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
+#include <wx/statline.h>
+#include <wx/sizer.h>
+#include <wx/panel.h>
+#include <wx/srchctrl.h>
+#include <wx/richtext/richtextctrl.h>
+#include <wx/toolbar.h>
 #include <wx/listbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
@@ -83,11 +84,6 @@ namespace Luna
 				ID_WalkBackward,
 				ID_Preferences,
 				ID_About,
-				ID_Cut,
-				ID_Copy,
-				ID_Paste,
-				ID_Undo,
-				ID_Redo,
 			};
 			
 			wxMenuBar* m_MainMenuBar;
@@ -99,8 +95,6 @@ namespace Luna
 			wxMenu* m_MenuPanels;
 			wxMenu* m_MenuSettings;
 			wxMenu* m_MenuHelp;
-			wxToolBar* m_MainToolbar;
-			wxSearchCtrl* m_ToolVaultSearch;
 			wxStatusBar* m_MainStatusBar;
 			
 			// Virtual event handlers, overide them in your derived class
@@ -145,6 +139,51 @@ namespace Luna
 	};
 	
 	///////////////////////////////////////////////////////////////////////////////
+	/// Class ToolbarPanelGenerated
+	///////////////////////////////////////////////////////////////////////////////
+	class ToolbarPanelGenerated : public wxPanel 
+	{
+		private:
+		
+		protected:
+			wxPanel* m_MainPanel;
+			wxBitmapButton* m_NewSceneButton;
+			wxBitmapButton* m_OpenButton;
+			wxBitmapButton* m_SaveAllButton;
+			wxStaticLine* m_staticline1;
+			wxBitmapButton* m_CutButton;
+			wxBitmapButton* m_CopyButton;
+			wxBitmapButton* m_PasteButton;
+			wxBitmapButton* m_DeleteButton;
+			wxStaticLine* m_staticline2;
+			wxBitmapButton* m_UndoButton;
+			wxBitmapButton* m_RedoButton;
+			wxStaticLine* m_staticline3;
+			wxPanel* m_ToolsPanel;
+			wxStaticLine* m_staticline4;
+			wxSearchCtrl* m_VaultSearchBox;
+			wxPanel* m_ToolsPropertiesPanel;
+			
+			// Virtual event handlers, overide them in your derived class
+			virtual void OnNewScene( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnSaveAll( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnCut( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnCopy( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnPaste( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnUndo( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnRedo( wxCommandEvent& event ) { event.Skip(); }
+			
+		
+		public:
+			
+			ToolbarPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 939,70 ), long style = wxTAB_TRAVERSAL );
+			~ToolbarPanelGenerated();
+		
+	};
+	
+	///////////////////////////////////////////////////////////////////////////////
 	/// Class HelpPanelGenerated
 	///////////////////////////////////////////////////////////////////////////////
 	class HelpPanelGenerated : public wxPanel 
@@ -180,8 +219,17 @@ namespace Luna
 				ID_SelectLayers,
 			};
 			
-			wxToolBar* m_LayersToolbar;
-			wxPanel* m_LayersPanel;
+			wxToolBar* m_LayerManagementToolbar;
+			
+			// Virtual event handlers, overide them in your derived class
+			virtual void OnNewLayer( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnNewLayerFromSelection( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnDeleteLayer( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnAddSelectionToLayer( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnRemoveSelectionFromLayer( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnSelectLayerMembers( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnSelectLayer( wxCommandEvent& event ) { event.Skip(); }
+			
 		
 		public:
 			
@@ -372,21 +420,16 @@ namespace Luna
 			};
 			
 			wxToolBar* m_ToolbarView;
-			wxPanel* m_ViewPanel;
+			wxPanel* m_ViewContainerPanel;
 			
 			// Virtual event handlers, overide them in your derived class
 			virtual void OnFrameOrigin( wxCommandEvent& event ) { event.Skip(); }
 			virtual void OnFrameSelected( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnViewPrevious( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnViewNext( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnPreviousView( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnNextView( wxCommandEvent& event ) { event.Skip(); }
 			virtual void OnHighlightMode( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnCamera( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnShowAxes( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnShowGrid( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnShowBounds( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnShowStatistics( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnCulling( wxCommandEvent& event ) { event.Skip(); }
-			virtual void OnShading( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnViewCameraChange( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnViewChange( wxCommandEvent& event ) { event.Skip(); }
 			virtual void OnColorMode( wxCommandEvent& event ) { event.Skip(); }
 			
 		

@@ -4081,6 +4081,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\ToolbarPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ToolbarPanel.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\ToolsPanel.cpp"
 				>
 			</File>

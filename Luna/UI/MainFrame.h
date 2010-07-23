@@ -8,9 +8,11 @@
 #include "Project.h"
 #include "LayersPanel.h"
 #include "PropertiesPanel.h"
-#include "ToolsPanel.h"
+#include "ToolbarPanel.h"
 #include "TypesPanel.h"
 #include "ViewPanel.h"
+
+#include "TypeGrid.h"
 
 #include "PropertiesManager.h"
 
@@ -19,10 +21,8 @@
 
 #include "Application/UI/MenuMRU.h"
 
-#ifdef UI_REFACTOR
-# include "TreeMonitor.h"
-# include "TreeSortTimer.h"
-#endif
+#include "Scene/TreeMonitor.h"
+#include "Scene/TreeSortTimer.h"
 
 namespace Luna
 {
@@ -33,6 +33,16 @@ namespace Luna
         {
             ID_MenuOpened = wxID_HIGHEST + 1,
         };
+
+    private:
+        struct OutlinerStates
+        {
+            SceneOutlinerState m_Hierarchy;
+            SceneOutlinerState m_Entities;
+            SceneOutlinerState m_Types;
+        };
+
+        typedef std::map< Luna::Scene*, OutlinerStates > M_OutlinerStates;
 
     public:
         MainFrame( wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
@@ -52,22 +62,21 @@ namespace Luna
         bool OpenProject( const Nocturnal::Path& path );
         bool AddScene( const Nocturnal::Path& path );
 
-#ifdef UI_REFACTOR
-        TreeMonitor& GetTreeMonitor()
-        {
-            return m_TreeMonitor;
-        }
-#endif
+        void SyncPropertyThread();
 
     private:
         static tstring s_PreferencesPrefix;
+
+        // Stores information about the state of each outliner for each scene
+        // that is open.  Restores the state when switching between scenes.
+        M_OutlinerStates m_OutlinerStates;
 
         HelpPanel*       m_HelpPanel;
         ProjectPanel*    m_ProjectPanel;
         LayersPanel*     m_LayersPanel;
         TypesPanel*      m_TypesPanel;
         ViewPanel*       m_ViewPanel;
-        ToolsPanel*      m_ToolsPanel;
+        ToolbarPanel*    m_ToolbarPanel;
         DirectoryPanel*  m_DirectoryPanel;
         PropertiesPanel* m_PropertiesPanel;
 
@@ -86,14 +95,27 @@ namespace Luna
 
         Nocturnal::MenuMRUPtr m_MRU;
 
+        typedef std::map< i32, i32 > M_IDToColorMode; // Maps wx ID for menu items to our ViewColorMode enum
+        M_IDToColorMode m_ColorModeLookup;
+
         //context items ordered by name  
         V_HierarchyNodeDumbPtr m_OrderedContextItems;
 
-#ifdef UI_REFACTOR
+        // the UI for changing visibility/selectability of specific runtime types
+        TypeGrid* m_TypeGrid;
+
+        std::vector< wxBitmapToggleButton* > m_ToolsButtons;
+
         TreeMonitor m_TreeMonitor;
         TreeSortTimer m_TreeSortTimer;
-#endif
+
     private:
+
+        // frame events
+        void OnEraseBackground( wxEraseEvent& event );
+        void OnSize( wxSizeEvent& event );
+        void OnChar( wxKeyEvent& event );
+        void OnShow( wxShowEvent& event );
         void OnMenuOpen( wxMenuEvent& event );
 
         void OnNewScene( wxCommandEvent& event );
@@ -102,6 +124,12 @@ namespace Luna
         void OnOpen( wxCommandEvent& event );
         void OnClose( wxCommandEvent& event );
         void OnSaveAll( wxCommandEvent& event );
+
+        void OnViewChange( wxCommandEvent& event );
+        void OnViewCameraChange( wxCommandEvent& event );
+        void OnViewVisibleChange( wxCommandEvent& event );
+        void OnViewColorModeChange( wxCommandEvent& event );
+        void OnViewDefaultsChange( wxCommandEvent& event );
 
         void OnImport( wxCommandEvent& event );
         void OnExport( wxCommandEvent& event );

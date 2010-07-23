@@ -28,6 +28,9 @@
 #include "Scene/ScaleManipulator.h"
 #include "Scene/TranslateManipulator.h"
 
+#include "Scene/ScenePreferences.h"
+#include "Scene/ViewportPreferences.h"
+
 #include "Foundation/Reflect/ArchiveXML.h"
 
 #include "Pipeline/Content/ContentVersion.h"
@@ -111,6 +114,8 @@ public:
 MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style )
 : MainFrameGenerated( parent, id, title, pos, size, style )
 , m_MRU( new Nocturnal::MenuMRU( 30, this ) )
+, m_TreeMonitor( &m_SceneManager )
+, m_TreeSortTimer( &m_TreeMonitor )
 {
 
     //
@@ -123,106 +128,10 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
     //
     Connect( wxID_CLOSE, wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainFrame::OnExiting ) );
 
-    //
-    // File Handling
-    //
-    Connect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnNewScene ) );
-    Connect( ID_NewEntity, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnNewEntity ) );
-    Connect( ID_NewProject, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnNewProject ) );
-    Connect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnOpen ) );
-    Connect( ID_Close, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnClose ) );
-
-    Connect( ID_SaveAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnSaveAll ) );
-
-    Connect( ID_Import, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnImport ) );
-    Connect( ID_ImportFromClipboard, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnImport ) );
-    Connect( ID_Export, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnExport ) );
-    Connect( ID_ExportToClipboard, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnExport ) );
-
-    //
-    // Editing
-    //
-
-    Connect( wxID_UNDO, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnUndo ) );
-    Connect( wxID_REDO, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnRedo ) );
-    Connect( wxID_CUT, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnCut ) );
-    Connect( wxID_COPY, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnCopy ) );
-    Connect( wxID_PASTE, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnPaste ) );
-    Connect( wxID_DELETE, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnDelete ) );
-
-    Connect( ID_SelectAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnSelectAll ) );
-    Connect( ID_InvertSelection, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnInvertSelection ) );
-
-    Connect( ID_Parent, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnParent ) );
-    Connect( ID_Unparent, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnUnparent ) );
-    Connect( ID_Group, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnGroup ) );
-    Connect( ID_Ungroup, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnUngroup ) );
-    Connect( ID_Center, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnCenter ) );
-    Connect( ID_Duplicate, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnDuplicate ) );
-    Connect( ID_SmartDuplicate, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnSmartDuplicate ) );
-    Connect( ID_CopyTransform, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnCopyTransform ) );
-    Connect( ID_PasteTransform, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnPasteTransform ) );
-    Connect( ID_SnapToCamera, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnSnapToCamera ) );
-    Connect( ID_SnapCameraTo, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnSnapCameraTo ) );
-
-    Connect( ID_WalkUp, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnPickWalk ) );
-    Connect( ID_WalkDown, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnPickWalk ) );
-    Connect( ID_WalkForward, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnPickWalk ) );
-    Connect( ID_WalkBackward, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrame::OnPickWalk ) );
-
     /*
 EVT_MENU(wxID_HELP_INDEX, MainFrame::OnHelpIndex)
 EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
 
-EVT_MENU(SceneEditorIDs::ID_EditPreferences, SceneEditor::OnEditPreferences)
-
-EVT_MENU(SceneEditorIDs::ID_ViewAxes, SceneEditor::OnViewChange)
-EVT_MENU(SceneEditorIDs::ID_ViewGrid, SceneEditor::OnViewChange)
-EVT_MENU(SceneEditorIDs::ID_ViewBounds, SceneEditor::OnViewChange)
-EVT_MENU(SceneEditorIDs::ID_ViewStatistics, SceneEditor::OnViewChange)
-
-EVT_MENU(SceneEditorIDs::ID_ViewNone, SceneEditor::OnViewChange)
-EVT_MENU(SceneEditorIDs::ID_ViewRender, SceneEditor::OnViewChange)
-EVT_MENU(SceneEditorIDs::ID_ViewCollision, SceneEditor::OnViewChange)
-
-EVT_MENU(SceneEditorIDs::ID_ViewWireframeOnMesh, SceneEditor::OnViewChange)
-EVT_MENU(SceneEditorIDs::ID_ViewWireframeOnShaded, SceneEditor::OnViewChange)
-EVT_MENU(SceneEditorIDs::ID_ViewWireframe, SceneEditor::OnViewChange)
-EVT_MENU(SceneEditorIDs::ID_ViewMaterial, SceneEditor::OnViewChange)
-EVT_MENU(SceneEditorIDs::ID_ViewTexture, SceneEditor::OnViewChange)
-
-EVT_MENU(SceneEditorIDs::ID_ViewFrustumCulling, SceneEditor::OnViewChange)
-EVT_MENU(SceneEditorIDs::ID_ViewBackfaceCulling, SceneEditor::OnViewChange)
-
-EVT_MENU(SceneEditorIDs::ID_ViewOrbit, SceneEditor::OnViewCameraChange)
-EVT_MENU(SceneEditorIDs::ID_ViewFront, SceneEditor::OnViewCameraChange)
-EVT_MENU(SceneEditorIDs::ID_ViewSide, SceneEditor::OnViewCameraChange)
-EVT_MENU(SceneEditorIDs::ID_ViewTop, SceneEditor::OnViewCameraChange)
-
-EVT_MENU(SceneEditorIDs::ID_ViewShowAll, SceneEditor::OnViewVisibleChange)
-EVT_MENU(SceneEditorIDs::ID_ViewShowAllGeometry, SceneEditor::OnViewVisibleChange)
-EVT_MENU(SceneEditorIDs::ID_ViewShowSelected, SceneEditor::OnViewVisibleChange)
-EVT_MENU(SceneEditorIDs::ID_ViewShowSelectedGeometry, SceneEditor::OnViewVisibleChange)
-EVT_MENU(SceneEditorIDs::ID_ViewShowUnrelated, SceneEditor::OnViewVisibleChange)
-EVT_MENU(SceneEditorIDs::ID_ViewShowLastHidden, SceneEditor::OnViewVisibleChange)
-
-EVT_MENU(SceneEditorIDs::ID_ViewHideAll, SceneEditor::OnViewVisibleChange)
-EVT_MENU(SceneEditorIDs::ID_ViewHideAllGeometry, SceneEditor::OnViewVisibleChange)
-EVT_MENU(SceneEditorIDs::ID_ViewHideSelected, SceneEditor::OnViewVisibleChange)
-EVT_MENU(SceneEditorIDs::ID_ViewHideSelectedGeometry, SceneEditor::OnViewVisibleChange)
-EVT_MENU(SceneEditorIDs::ID_ViewHideUnrelated, SceneEditor::OnViewVisibleChange)
-
-EVT_MENU(SceneEditorIDs::ID_ViewFrameOrigin, SceneEditor::OnFrameOrigin)
-EVT_MENU(SceneEditorIDs::ID_ViewFrameSelected, SceneEditor::OnFrameSelected)
-EVT_MENU(SceneEditorIDs::ID_ViewHighlightMode, SceneEditor::OnHighlightMode)
-EVT_MENU(SceneEditorIDs::ID_ViewPreviousView, SceneEditor::OnPreviousView)
-EVT_MENU(SceneEditorIDs::ID_ViewNextView, SceneEditor::OnNextView)
-
-EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowLayers, SceneEditor::OnViewDefaultsChange)
-EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowInstances, SceneEditor::OnViewDefaultsChange)
-EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowGeometry, SceneEditor::OnViewDefaultsChange) 
-EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowPointer, SceneEditor::OnViewDefaultsChange) 
-EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowBounds, SceneEditor::OnViewDefaultsChange) 
 */
     //
     // Toolbox
@@ -244,24 +153,17 @@ EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowBounds, SceneEditor::OnViewDefaultsCh
     Connect( SceneEditorIDs::ID_ToolsCurveEdit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
     Connect( SceneEditorIDs::ID_ToolsNavMesh, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
 
-#pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
-    {
-        Freeze();
-
-        m_MainToolbar->FindById( ID_NewScene )->SetNormalBitmap( wxArtProvider::GetBitmap( Luna::ArtIDs::NewScene ) );
-        m_MainToolbar->FindById( ID_Open )->SetNormalBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Open ) );
-        m_MainToolbar->FindById( ID_SaveAll )->SetNormalBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::SaveAll ) );
-        m_MainToolbar->FindById( ID_Cut )->SetNormalBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Cut ) );
-        m_MainToolbar->FindById( ID_Copy )->SetNormalBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Copy ) );
-        m_MainToolbar->FindById( ID_Paste )->SetNormalBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Paste ) );
-        m_MainToolbar->FindById( ID_Undo )->SetNormalBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Undo ) );
-        m_MainToolbar->FindById( ID_Redo )->SetNormalBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Redo ) );
-
-        m_MainToolbar->Realize();
-
-        Layout();
-        Thaw();
-    }
+    //
+    // Tools
+    //
+    m_ToolbarPanel = new ToolbarPanel( this );
+    m_ToolEnumerator = new PropertiesGenerator( &m_ToolProperties );
+    m_ToolPropertiesManager = new PropertiesManager( m_ToolEnumerator );
+    m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
+    m_ToolProperties.SetControl( new Inspect::CanvasWindow ( m_ToolbarPanel->GetToolsPropertiesPanel(), SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
+    m_FrameManager.AddPane( m_ToolbarPanel, wxAuiPaneInfo().Name( wxT( "tools" ) ).Top().Layer( 5 ).Position( 1 ).CaptionVisible( false ).PaneBorder( false ).Gripper( false ).CloseButton( false ).MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).Movable( false ).MinSize( wxSize( -1, 52 ) ) );
+    m_ToolbarPanel->GetToolsPanel()->Disable();
+    m_ToolbarPanel->GetToolsPanel()->Refresh();
 
     //
     // View panel area
@@ -290,7 +192,7 @@ EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowBounds, SceneEditor::OnViewDefaultsCh
     //
     // Directory area
     //
-    m_DirectoryPanel = new DirectoryPanel( this );
+    m_DirectoryPanel = new DirectoryPanel( &m_SceneManager, &m_TreeMonitor, this );
     m_FrameManager.AddPane( m_DirectoryPanel, wxAuiPaneInfo().Name( wxT( "directory" ) ).Caption( wxT( "Directory" ) ).Left().Layer( 1 ).Position( 1 ).BestSize( wxSize( 200, 900 ) ) );
 
     //
@@ -304,24 +206,11 @@ EVT_MENU(SceneEditorIDs::ID_ViewDefaultShowBounds, SceneEditor::OnViewDefaultsCh
     m_SelectionProperties.SetControl( new Inspect::CanvasWindow ( m_PropertiesPanel, SceneEditorIDs::ID_SelectionProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
     m_FrameManager.AddPane( m_PropertiesPanel, wxAuiPaneInfo().Name( wxT( "properties" ) ).Caption( wxT( "Properties" ) ).Right().Layer( 1 ).Position( 1 ) );
 
-    m_LayersPanel = new LayersPanel( this );
+    m_LayersPanel = new LayersPanel( &m_SceneManager, this );
     m_FrameManager.AddPane( m_LayersPanel, wxAuiPaneInfo().Name( wxT( "layers" ) ).Caption( wxT( "Layers" ) ).Right().Layer( 1 ).Position( 2 ) );
 
-    m_TypesPanel = new TypesPanel( this );
+    m_TypesPanel = new TypesPanel( &m_SceneManager, this );
     m_FrameManager.AddPane( m_TypesPanel, wxAuiPaneInfo().Name( wxT( "types" ) ).Caption( wxT( "Types" ) ).Right().Layer( 1 ).Position( 3 ) );
-
-    //
-    // Tools panel
-    //
-    m_ToolsPanel = new ToolsPanel( this );
-    m_ToolEnumerator = new PropertiesGenerator (&m_ToolProperties);
-    m_ToolPropertiesManager = new PropertiesManager (m_ToolEnumerator);
-    m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
-    m_ToolProperties.SetControl( new Inspect::CanvasWindow ( m_ToolsPanel->GetToolsPropertiesPanel(), SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
-    m_ToolsPanel->Create( m_ToolProperties.GetControl() );
-    m_ToolsPanel->Disable();
-    m_ToolsPanel->Refresh();
-    m_FrameManager.AddPane( m_ToolsPanel, wxAuiPaneInfo().Name( wxT( "tools" ) ).Caption( wxT( "Tools" ) ).BestSize( wxSize( 200, 500 ) ).MinSize( wxSize( 150, 250 ) ).FloatingSize( wxSize( 200, 500 ) ).Float() );
 
     m_FrameManager.Update();
 
@@ -342,6 +231,10 @@ MainFrame::~MainFrame()
     m_ViewPanel->GetViewport()->RemoveSetHighlightListener( SetHighlightSignature::Delegate ( this, &MainFrame::SetHighlight ) );
     m_ViewPanel->GetViewport()->RemoveClearHighlightListener( ClearHighlightSignature::Delegate ( this, &MainFrame::ClearHighlight ) );
     m_ViewPanel->GetViewport()->RemoveToolChangedListener( ToolChangeSignature::Delegate ( this, &MainFrame::ViewToolChanged ) );
+
+#pragma TODO( "We shouldn't really have to do these if we clean up how some of our objects reference each other" )
+    m_DirectoryPanel->Destroy();
+    m_LayersPanel->Destroy();
 }
 
 void MainFrame::SetHelpText( const tchar* text )
@@ -413,6 +306,199 @@ bool MainFrame::AddScene( const Nocturnal::Path& path )
     return opened;
 }
 
+void MainFrame::OnEraseBackground(wxEraseEvent& event)
+{
+    event.Skip();
+}
+
+void MainFrame::OnSize(wxSizeEvent& event)
+{
+    event.Skip();
+}
+
+void MainFrame::OnChar(wxKeyEvent& event)
+{
+    switch (event.GetKeyCode())
+    {
+    case WXK_SPACE:
+        m_ViewPanel->GetViewport()->NextCameraMode();
+        event.Skip(false);
+        break;
+
+    case WXK_UP:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_EditWalkUp) );
+        event.Skip(false);
+        break;
+
+    case WXK_DOWN:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_EditWalkDown) );
+        event.Skip(false);
+        break;
+
+    case WXK_RIGHT:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_EditWalkForward) );
+        event.Skip(false);
+        break;
+
+    case WXK_LEFT:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_EditWalkBackward) );
+        event.Skip(false);
+        break;
+
+    case WXK_INSERT:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsPivot) );
+        event.Skip(false);
+        break;
+
+    case WXK_DELETE:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, wxID_DELETE) );
+        event.Skip(false);
+        break;
+
+    case WXK_ESCAPE:
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsSelect) );
+        event.Skip(false);
+        break;
+
+    default:
+        event.Skip();
+        break;
+    }
+
+    if (event.GetSkipped())
+    {
+        switch ( event.GetKeyCode() )
+        {
+        case wxT('4'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewWireframe) );
+            event.Skip(false);
+            break;
+
+        case wxT('5'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewMaterial) );
+            event.Skip(false);
+            break;
+
+        case wxT('6'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewTexture) );
+            event.Skip(false);
+            break;
+
+        case wxT('7'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewOrbit) );
+            event.Skip(false);
+            break;
+
+        case wxT('8'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewFront) );
+            event.Skip(false);
+            break;
+
+        case wxT('9'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewSide) );
+            event.Skip(false);
+            break;
+
+        case wxT('0'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewTop) );
+            event.Skip(false);
+            break;
+
+        case wxT('Q'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsSelect) );
+            event.Skip(false);
+            break;
+
+        case wxT('W'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsTranslate) );
+            event.Skip(false);
+            break;
+
+        case wxT('E'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsRotate) );
+            event.Skip(false);
+            break;
+
+        case wxT('R'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsScale) );
+            event.Skip(false);
+            break;
+
+        case wxT('O'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewFrameOrigin) );
+            event.Skip(false);
+            break;
+
+        case wxT('F'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewFrameSelected) );
+            event.Skip(false);
+            break;
+
+        case wxT('H'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewHighlightMode) );
+            event.Skip(false);
+            break;
+
+        case wxT(']'):
+            GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewNextView) );
+            event.Skip(false);
+            break;
+
+        case wxT('['):
+            GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewPreviousView) );
+            event.Skip(false);
+            break;
+
+        default:
+            event.Skip();
+            break;
+        }
+    }
+}
+
+void MainFrame::OnShow(wxShowEvent& event)
+{
+#ifdef LUNA_DEBUG_RUNTIME_DATA_SELECTION
+    // Sometimes it's handy to put debug code here for program start up.
+    New();
+    wxCommandEvent evt( wxEVT_COMMAND_TOOL_CLICKED, SceneEditorIDs::ID_ToolsVolumeCreate );
+    GetEventHandler()->ProcessEvent( evt );
+    m_SceneManager.GetCurrentScene()->SetTool(NULL);
+    wxCloseEvent close( wxEVT_CLOSE_WINDOW );
+    GetEventHandler()->AddPendingEvent( close );
+#endif
+
+#ifdef LUNA_DEBUG_RENDER
+    class RenderThread : public wxThread
+    {
+    private:
+        Luna::Viewport* m_View;
+
+    public:
+        RenderThread(Luna::Viewport* view)
+            : m_View (view)
+        {
+
+        }
+
+        wxThread::ExitCode Entry()
+        {
+            while (true)
+            {
+                m_View->Refresh();
+            }
+
+            return NULL;
+        }
+    };
+
+    RenderThread* thread = new RenderThread (m_View);
+    thread->Create();
+    thread->Run();
+#endif
+
+    event.Skip();
+}
 
 void MainFrame::OnMenuOpen( wxMenuEvent& event )
 {
@@ -503,6 +589,259 @@ void MainFrame::OnSaveAll( wxCommandEvent& event )
     {
         wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
     }
+}
+
+void MainFrame::OnViewChange(wxCommandEvent& event)
+{
+    switch (event.GetId())
+    {
+    case SceneEditorIDs::ID_ViewAxes:
+        {
+            m_ViewPanel->GetViewport()->SetAxesVisible( !m_ViewPanel->GetViewport()->IsAxesVisible() );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewGrid:
+        {
+            m_ViewPanel->GetViewport()->SetGridVisible( !m_ViewPanel->GetViewport()->IsGridVisible() );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewBounds:
+        {
+            m_ViewPanel->GetViewport()->SetBoundsVisible( !m_ViewPanel->GetViewport()->IsBoundsVisible() );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewStatistics:
+        {
+            m_ViewPanel->GetViewport()->SetStatisticsVisible( !m_ViewPanel->GetViewport()->IsStatisticsVisible() );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewNone:
+        {
+            m_ViewPanel->GetViewport()->SetGeometryMode( GeometryModes::None );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewRender:
+        {
+            m_ViewPanel->GetViewport()->SetGeometryMode( GeometryModes::Render );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewCollision:
+        {
+            m_ViewPanel->GetViewport()->SetGeometryMode( GeometryModes::Collision );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewWireframeOnMesh:
+        {
+            m_ViewPanel->GetViewport()->GetCamera()->SetWireframeOnMesh( !m_ViewPanel->GetViewport()->GetCamera()->GetWireframeOnMesh() );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewWireframeOnShaded:
+        {
+            m_ViewPanel->GetViewport()->GetCamera()->SetWireframeOnShaded( !m_ViewPanel->GetViewport()->GetCamera()->GetWireframeOnShaded() );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewWireframe:
+        {
+            m_ViewPanel->GetViewport()->GetCamera()->SetShadingMode( ShadingModes::Wireframe );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewMaterial:
+        {
+            m_ViewPanel->GetViewport()->GetCamera()->SetShadingMode( ShadingModes::Material );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewTexture:
+        {
+            m_ViewPanel->GetViewport()->GetCamera()->SetShadingMode( ShadingModes::Texture );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewFrustumCulling:
+        {
+            m_ViewPanel->GetViewport()->GetCamera()->SetViewFrustumCulling( !m_ViewPanel->GetViewport()->GetCamera()->IsViewFrustumCulling() );
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewBackfaceCulling:
+        {
+            m_ViewPanel->GetViewport()->GetCamera()->SetBackFaceCulling( !m_ViewPanel->GetViewport()->GetCamera()->IsBackFaceCulling() );
+            break;
+        }
+    }
+
+    m_ViewPanel->GetViewport()->Refresh();
+}
+
+void MainFrame::OnViewCameraChange(wxCommandEvent& event)
+{
+    switch (event.GetId())
+    {
+    case SceneEditorIDs::ID_ViewOrbit:
+        {
+            m_ViewPanel->GetViewport()->SetCameraMode(CameraModes::Orbit);
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewFront:
+        {
+            m_ViewPanel->GetViewport()->SetCameraMode(CameraModes::Front);
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewSide:
+        {
+            m_ViewPanel->GetViewport()->SetCameraMode(CameraModes::Side);
+            break;
+        }
+
+    case SceneEditorIDs::ID_ViewTop:
+        {
+            m_ViewPanel->GetViewport()->SetCameraMode(CameraModes::Top);
+            break;
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Handles callbacks for menu items dealing with Viewport->Show and Viewport->Hide.
+// Changes the visibility of items according to which command was called.
+// 
+void MainFrame::OnViewVisibleChange(wxCommandEvent& event)
+{
+    if ( m_SceneManager.HasCurrentScene() )
+    {
+        Undo::BatchCommandPtr batch = new Undo::BatchCommand ();
+
+        switch ( event.GetId() )
+        {
+        case SceneEditorIDs::ID_ViewShowAll:
+            {
+                batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenSelected( false ) );
+                batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenUnrelated( false ) );
+                break;
+            }
+
+        case SceneEditorIDs::ID_ViewShowAllGeometry:
+            {
+                batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( true, true ) );
+                batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( true, false ) );
+                break;
+            }
+
+        case SceneEditorIDs::ID_ViewShowSelected:
+            {
+                batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenSelected( false ) );
+                break;
+            }
+
+        case SceneEditorIDs::ID_ViewShowSelectedGeometry:
+            {
+                batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( true, true ) );
+                break;
+            }
+
+        case SceneEditorIDs::ID_ViewShowUnrelated:
+            {
+                batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenUnrelated( false ) );
+                break;
+            }
+
+        case SceneEditorIDs::ID_ViewShowLastHidden:
+            {
+                batch->Push( m_SceneManager.GetCurrentScene()->ShowLastHidden() );
+                break;
+            }
+
+        case SceneEditorIDs::ID_ViewHideAll:
+            {
+                batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenSelected( true ) );
+                batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenUnrelated( true ) );
+                break;
+            }
+
+        case SceneEditorIDs::ID_ViewHideAllGeometry:
+            {
+                batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( false, true ) );
+                batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( false, false ) );
+                break;
+            }
+
+        case SceneEditorIDs::ID_ViewHideSelected:
+            {
+                batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenSelected( true ) );
+                break;
+            }
+
+        case SceneEditorIDs::ID_ViewHideSelectedGeometry:
+            {
+                batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( false, true ) );
+                break;
+            }
+
+        case SceneEditorIDs::ID_ViewHideUnrelated:
+            {
+                batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenUnrelated( true ) );
+                break;
+            }
+
+        default:
+            {
+                Log::Warning( TXT( "MainFrame::OnViewVisibleChange - Unhandled case\n" ) );
+                return;
+            }
+        }
+
+        m_SceneManager.GetCurrentScene()->Push( batch );
+
+        m_SceneManager.GetCurrentScene()->Execute( false );
+    }
+}
+
+void MainFrame::OnViewColorModeChange(wxCommandEvent& event)
+{
+    const ViewColorMode previousColorMode = SceneEditorPreferences()->GetViewPreferences()->GetColorMode();
+
+    const M_IDToColorMode::const_iterator newColorModeItr = m_ColorModeLookup.find( event.GetId() );
+    if ( newColorModeItr != m_ColorModeLookup.end() )
+    {
+        SceneEditorPreferences()->GetViewPreferences()->SetColorMode( ( ViewColorMode )( newColorModeItr->second ) );
+    }
+}
+
+void MainFrame::OnViewDefaultsChange(wxCommandEvent& event)
+{
+    Content::NodeVisibilityPtr nodeDefaults = SceneEditorPreferences()->GetDefaultNodeVisibility(); 
+
+    switch ( event.GetId() )
+    {
+    case SceneEditorIDs::ID_ViewDefaultShowLayers: 
+        nodeDefaults->SetVisibleLayer( !nodeDefaults->GetVisibleLayer() ); 
+        break; 
+    case SceneEditorIDs::ID_ViewDefaultShowInstances: 
+        nodeDefaults->SetHiddenNode( !nodeDefaults->GetHiddenNode() ); 
+        break; 
+    case SceneEditorIDs::ID_ViewDefaultShowGeometry: 
+        nodeDefaults->SetShowGeometry( !nodeDefaults->GetShowGeometry() ); 
+        break; 
+    case SceneEditorIDs::ID_ViewDefaultShowPointer: 
+        nodeDefaults->SetShowPointer( !nodeDefaults->GetShowPointer() ); 
+        break; 
+    case SceneEditorIDs::ID_ViewDefaultShowBounds: 
+        nodeDefaults->SetShowBounds( !nodeDefaults->GetShowBounds() ); 
+        break; 
+    }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -704,8 +1043,8 @@ void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
         return;
     }
 
-    m_ToolsPanel->Enable();
-    m_ToolsPanel->Refresh();
+    m_ToolbarPanel->GetToolsPanel()->Enable();
+    m_ToolbarPanel->GetToolsPanel()->Refresh();
 }
 
 void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
@@ -715,8 +1054,8 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
         return;
     }
 
-    m_ToolsPanel->Disable();
-    m_ToolsPanel->Refresh();
+    m_ToolbarPanel->GetToolsPanel()->Disable();
+    m_ToolbarPanel->GetToolsPanel()->Refresh();
 }
 
 void MainFrame::OnPropertiesCreated( const PropertiesCreatedArgs& args )
@@ -943,7 +1282,7 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
         }
     }
 
-    m_ToolsPanel->ToggleTool( selectedTool );
+    m_ToolbarPanel->ToggleTool( selectedTool );
 }
 
 void MainFrame::OnUndo( wxCommandEvent& event )
@@ -1767,7 +2106,7 @@ void MainFrame::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* su
             {
                 tstring artPath( art->GetContentFile() );
 
-#pragma TODO( "We need make the artPath relative to the game project file" )
+#pragma TODO( "We need make the artPath relative to the entity file" )
 
                 // Why is the art path blank?
                 NOC_ASSERT(!artPath.empty());

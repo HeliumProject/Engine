@@ -268,28 +268,6 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	
 	this->SetMenuBar( m_MainMenuBar );
 	
-	m_MainToolbar = this->CreateToolBar( wxTB_HORIZONTAL, wxID_ANY ); 
-	m_MainToolbar->AddTool( ID_NewScene, _("New"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_MainToolbar->AddTool( ID_Open, _("Open"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_MainToolbar->AddTool( ID_SaveAll, _("Save"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_MainToolbar->AddSeparator(); 
-	m_MainToolbar->AddTool( ID_Cut, _("Cut"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_MainToolbar->AddTool( ID_Copy, _("Copy"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_MainToolbar->AddTool( ID_Paste, _("Paste"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_MainToolbar->AddSeparator(); 
-	m_MainToolbar->AddTool( ID_Undo, _("Undo"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_MainToolbar->AddTool( ID_Redo, _("Redo"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_MainToolbar->AddSeparator(); 
-	m_ToolVaultSearch = new wxSearchCtrl( m_MainToolbar, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 400,-1 ), 0 );
-	#ifndef __WXMAC__
-	m_ToolVaultSearch->ShowSearchButton( true );
-	#endif
-	m_ToolVaultSearch->ShowCancelButton( false );
-	m_ToolVaultSearch->SetMinSize( wxSize( 200,-1 ) );
-	
-	m_MainToolbar->AddControl( m_ToolVaultSearch );
-	m_MainToolbar->Realize();
-	
 	m_MainStatusBar = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 	
 	// Connect Events
@@ -327,14 +305,6 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	this->Connect( ID_WalkForward, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
 	this->Connect( ID_Preferences, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPreferences ) );
 	this->Connect( ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
-	this->Connect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
-	this->Connect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
-	this->Connect( ID_SaveAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
-	this->Connect( ID_Cut, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
-	this->Connect( ID_Copy, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
-	this->Connect( ID_Paste, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
-	this->Connect( ID_Undo, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnUndo ) );
-	this->Connect( ID_Redo, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnRedo ) );
 }
 
 MainFrameGenerated::~MainFrameGenerated()
@@ -374,14 +344,110 @@ MainFrameGenerated::~MainFrameGenerated()
 	this->Disconnect( ID_WalkForward, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
 	this->Disconnect( ID_Preferences, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPreferences ) );
 	this->Disconnect( ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
-	this->Disconnect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
-	this->Disconnect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
-	this->Disconnect( ID_SaveAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
-	this->Disconnect( ID_Cut, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
-	this->Disconnect( ID_Copy, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
-	this->Disconnect( ID_Paste, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
-	this->Disconnect( ID_Undo, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnUndo ) );
-	this->Disconnect( ID_Redo, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnRedo ) );
+	
+}
+
+ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+{
+	wxBoxSizer* bSizer26;
+	bSizer26 = new wxBoxSizer( wxVERTICAL );
+	
+	m_MainPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer27;
+	bSizer27 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_NewSceneButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_NewSceneButton, 0, wxALL, 5 );
+	
+	m_OpenButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_OpenButton, 0, wxALL, 5 );
+	
+	m_SaveAllButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_SaveAllButton, 0, wxALL, 5 );
+	
+	m_staticline1 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer27->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	
+	m_CutButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_CutButton, 0, wxALL, 5 );
+	
+	m_CopyButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_CopyButton, 0, wxALL, 5 );
+	
+	m_PasteButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_PasteButton, 0, wxALL, 5 );
+	
+	m_DeleteButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_DeleteButton, 0, wxALL, 5 );
+	
+	m_staticline2 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer27->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	
+	m_UndoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_UndoButton, 0, wxALL, 5 );
+	
+	m_RedoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_RedoButton, 0, wxALL, 5 );
+	
+	m_staticline3 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer27->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+	
+	m_ToolsPanel = new wxPanel( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* m_ToolsPanelSizer;
+	m_ToolsPanelSizer = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_ToolsPanel->SetSizer( m_ToolsPanelSizer );
+	m_ToolsPanel->Layout();
+	m_ToolsPanelSizer->Fit( m_ToolsPanel );
+	bSizer27->Add( m_ToolsPanel, 1, wxEXPAND | wxALL, 5 );
+	
+	m_staticline4 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer27->Add( m_staticline4, 0, wxEXPAND | wxALL, 5 );
+	
+	m_VaultSearchBox = new wxSearchCtrl( m_MainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 400,-1 ), 0 );
+	#ifndef __WXMAC__
+	m_VaultSearchBox->ShowSearchButton( true );
+	#endif
+	m_VaultSearchBox->ShowCancelButton( false );
+	m_VaultSearchBox->SetMinSize( wxSize( 300,-1 ) );
+	
+	bSizer27->Add( m_VaultSearchBox, 0, wxALL, 5 );
+	
+	m_MainPanel->SetSizer( bSizer27 );
+	m_MainPanel->Layout();
+	bSizer27->Fit( m_MainPanel );
+	bSizer26->Add( m_MainPanel, 0, wxEXPAND | wxALL, 0 );
+	
+	m_ToolsPropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bSizer26->Add( m_ToolsPropertiesPanel, 0, wxEXPAND | wxALL, 0 );
+	
+	this->SetSizer( bSizer26 );
+	this->Layout();
+	
+	// Connect Events
+	m_NewSceneButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnNewScene ), NULL, this );
+	m_OpenButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnOpen ), NULL, this );
+	m_SaveAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnSaveAll ), NULL, this );
+	m_CutButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCut ), NULL, this );
+	m_CopyButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCopy ), NULL, this );
+	m_PasteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnPaste ), NULL, this );
+	m_DeleteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnDelete ), NULL, this );
+	m_UndoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnUndo ), NULL, this );
+	m_RedoButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnRedo ), NULL, this );
+}
+
+ToolbarPanelGenerated::~ToolbarPanelGenerated()
+{
+	// Disconnect Events
+	m_NewSceneButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnNewScene ), NULL, this );
+	m_OpenButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnOpen ), NULL, this );
+	m_SaveAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnSaveAll ), NULL, this );
+	m_CutButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCut ), NULL, this );
+	m_CopyButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnCopy ), NULL, this );
+	m_PasteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnPaste ), NULL, this );
+	m_DeleteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnDelete ), NULL, this );
+	m_UndoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnUndo ), NULL, this );
+	m_RedoButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ToolbarPanelGenerated::OnRedo ), NULL, this );
 	
 }
 
@@ -408,29 +474,44 @@ LayersPanelGenerated::LayersPanelGenerated( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bSizer19;
 	bSizer19 = new wxBoxSizer( wxVERTICAL );
 	
-	m_LayersToolbar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL ); 
-	m_LayersToolbar->AddTool( ID_CreateNewLayer, _("Create New Layer"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayersToolbar->AddTool( ID_CreateNewLayerFromSelection, _("Create New Layer From Selection"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayersToolbar->AddTool( ID_DeleteSelectedLayers, _("Delete Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayersToolbar->AddSeparator(); 
-	m_LayersToolbar->AddTool( ID_AddSelectionToLayers, _("Add Selection to Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayersToolbar->AddTool( ID_RemoveSelectionFromLayers, _("Remove Selection from Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayersToolbar->AddSeparator(); 
-	m_LayersToolbar->AddTool( ID_SelectLayerMembers, _("Select Layer Members"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayersToolbar->AddTool( ID_SelectLayers, _("Select Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_LayersToolbar->Realize();
+	m_LayerManagementToolbar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL ); 
+	m_LayerManagementToolbar->AddTool( ID_CreateNewLayer, _("Create New Layer"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayerManagementToolbar->AddTool( ID_CreateNewLayerFromSelection, _("Create New Layer From Selection"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayerManagementToolbar->AddTool( ID_DeleteSelectedLayers, _("Delete Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayerManagementToolbar->AddSeparator(); 
+	m_LayerManagementToolbar->AddTool( ID_AddSelectionToLayers, _("Add Selection to Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayerManagementToolbar->AddTool( ID_RemoveSelectionFromLayers, _("Remove Selection from Selected Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayerManagementToolbar->AddSeparator(); 
+	m_LayerManagementToolbar->AddTool( ID_SelectLayerMembers, _("Select Layer Members"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayerManagementToolbar->AddTool( ID_SelectLayers, _("Select Layers"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_LayerManagementToolbar->Realize();
 	
-	bSizer19->Add( m_LayersToolbar, 0, wxEXPAND, 5 );
-	
-	m_LayersPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer19->Add( m_LayersPanel, 1, wxEXPAND | wxALL, 5 );
+	bSizer19->Add( m_LayerManagementToolbar, 0, wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer19 );
 	this->Layout();
+	
+	// Connect Events
+	this->Connect( ID_CreateNewLayer, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayer ) );
+	this->Connect( ID_CreateNewLayerFromSelection, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayerFromSelection ) );
+	this->Connect( ID_DeleteSelectedLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnDeleteLayer ) );
+	this->Connect( ID_AddSelectionToLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnAddSelectionToLayer ) );
+	this->Connect( ID_RemoveSelectionFromLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnRemoveSelectionFromLayer ) );
+	this->Connect( ID_SelectLayerMembers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayerMembers ) );
+	this->Connect( ID_SelectLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayer ) );
 }
 
 LayersPanelGenerated::~LayersPanelGenerated()
 {
+	// Disconnect Events
+	this->Disconnect( ID_CreateNewLayer, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayer ) );
+	this->Disconnect( ID_CreateNewLayerFromSelection, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnNewLayerFromSelection ) );
+	this->Disconnect( ID_DeleteSelectedLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnDeleteLayer ) );
+	this->Disconnect( ID_AddSelectionToLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnAddSelectionToLayer ) );
+	this->Disconnect( ID_RemoveSelectionFromLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnRemoveSelectionFromLayer ) );
+	this->Disconnect( ID_SelectLayerMembers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayerMembers ) );
+	this->Disconnect( ID_SelectLayers, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( LayersPanelGenerated::OnSelectLayer ) );
+	
 }
 
 VaultPanelGenerated::VaultPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
@@ -677,6 +758,11 @@ ToolsPanelGenerated::~ToolsPanelGenerated()
 
 TypesPanelGenerated::TypesPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
+	wxBoxSizer* bSizer30;
+	bSizer30 = new wxBoxSizer( wxVERTICAL );
+	
+	this->SetSizer( bSizer30 );
+	this->Layout();
 }
 
 TypesPanelGenerated::~TypesPanelGenerated()
@@ -706,10 +792,28 @@ DirectoryPanelGenerated::DirectoryPanelGenerated( wxWindow* parent, wxWindowID i
 	
 	m_DirectoryNotebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_HierarchyPanel = new wxPanel( m_DirectoryNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer31;
+	bSizer31 = new wxBoxSizer( wxVERTICAL );
+	
+	m_HierarchyPanel->SetSizer( bSizer31 );
+	m_HierarchyPanel->Layout();
+	bSizer31->Fit( m_HierarchyPanel );
 	m_DirectoryNotebook->AddPage( m_HierarchyPanel, _("Hierarchy"), false );
 	m_EntitiesPanel = new wxPanel( m_DirectoryNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer32;
+	bSizer32 = new wxBoxSizer( wxVERTICAL );
+	
+	m_EntitiesPanel->SetSizer( bSizer32 );
+	m_EntitiesPanel->Layout();
+	bSizer32->Fit( m_EntitiesPanel );
 	m_DirectoryNotebook->AddPage( m_EntitiesPanel, _("Entities"), false );
 	m_TypesPanel = new wxPanel( m_DirectoryNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer33;
+	bSizer33 = new wxBoxSizer( wxVERTICAL );
+	
+	m_TypesPanel->SetSizer( bSizer33 );
+	m_TypesPanel->Layout();
+	bSizer33->Fit( m_TypesPanel );
 	m_DirectoryNotebook->AddPage( m_TypesPanel, _("Types"), false );
 	
 	bSizer21->Add( m_DirectoryNotebook, 1, wxEXPAND | wxALL, 5 );
@@ -769,14 +873,14 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	
 	bSizer21->Add( m_ToolbarView, 0, wxEXPAND, 5 );
 	
-	m_ViewPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
+	m_ViewContainerPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
 	wxBoxSizer* m_ViewSizer;
 	m_ViewSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_ViewPanel->SetSizer( m_ViewSizer );
-	m_ViewPanel->Layout();
-	m_ViewSizer->Fit( m_ViewPanel );
-	bSizer21->Add( m_ViewPanel, 1, wxEXPAND, 5 );
+	m_ViewContainerPanel->SetSizer( m_ViewSizer );
+	m_ViewContainerPanel->Layout();
+	m_ViewSizer->Fit( m_ViewContainerPanel );
+	bSizer21->Add( m_ViewContainerPanel, 1, wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer21 );
 	this->Layout();
@@ -784,21 +888,21 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	// Connect Events
 	this->Connect( ID_FrameOrigin, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameOrigin ) );
 	this->Connect( ID_FrameSelected, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameSelected ) );
-	this->Connect( ID_PreviousView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewPrevious ) );
-	this->Connect( ID_NextView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewNext ) );
+	this->Connect( ID_PreviousView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnPreviousView ) );
+	this->Connect( ID_NextView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnNextView ) );
 	this->Connect( ID_HighlightMode, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnHighlightMode ) );
-	this->Connect( ID_CameraOrbit, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
-	this->Connect( ID_CameraFront, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
-	this->Connect( ID_CameraSide, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
-	this->Connect( ID_CameraTop, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
-	this->Connect( ID_ShowAxes, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowAxes ) );
-	this->Connect( ID_ShowGrid, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowGrid ) );
-	this->Connect( ID_ShowBounds, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowBounds ) );
-	this->Connect( ID_ShowStatistics, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowStatistics ) );
-	this->Connect( ID_FrustumCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCulling ) );
-	this->Connect( ID_BackfaceCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCulling ) );
-	this->Connect( ID_ShadingWireframe, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShading ) );
-	this->Connect( ID_ShadingMaterial, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShading ) );
+	this->Connect( ID_CameraOrbit, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
+	this->Connect( ID_CameraFront, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
+	this->Connect( ID_CameraSide, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
+	this->Connect( ID_CameraTop, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
+	this->Connect( ID_ShowAxes, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Connect( ID_ShowGrid, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Connect( ID_ShowBounds, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Connect( ID_ShowStatistics, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Connect( ID_FrustumCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Connect( ID_BackfaceCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Connect( ID_ShadingWireframe, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Connect( ID_ShadingMaterial, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
 	this->Connect( ID_ColorModeScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
 	this->Connect( ID_ColorModeLayer, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
 	this->Connect( ID_ColorModeNodeType, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
@@ -811,21 +915,21 @@ ViewPanelGenerated::~ViewPanelGenerated()
 	// Disconnect Events
 	this->Disconnect( ID_FrameOrigin, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameOrigin ) );
 	this->Disconnect( ID_FrameSelected, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameSelected ) );
-	this->Disconnect( ID_PreviousView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewPrevious ) );
-	this->Disconnect( ID_NextView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewNext ) );
+	this->Disconnect( ID_PreviousView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnPreviousView ) );
+	this->Disconnect( ID_NextView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnNextView ) );
 	this->Disconnect( ID_HighlightMode, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnHighlightMode ) );
-	this->Disconnect( ID_CameraOrbit, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
-	this->Disconnect( ID_CameraFront, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
-	this->Disconnect( ID_CameraSide, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
-	this->Disconnect( ID_CameraTop, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
-	this->Disconnect( ID_ShowAxes, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowAxes ) );
-	this->Disconnect( ID_ShowGrid, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowGrid ) );
-	this->Disconnect( ID_ShowBounds, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowBounds ) );
-	this->Disconnect( ID_ShowStatistics, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowStatistics ) );
-	this->Disconnect( ID_FrustumCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCulling ) );
-	this->Disconnect( ID_BackfaceCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCulling ) );
-	this->Disconnect( ID_ShadingWireframe, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShading ) );
-	this->Disconnect( ID_ShadingMaterial, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShading ) );
+	this->Disconnect( ID_CameraOrbit, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
+	this->Disconnect( ID_CameraFront, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
+	this->Disconnect( ID_CameraSide, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
+	this->Disconnect( ID_CameraTop, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewCameraChange ) );
+	this->Disconnect( ID_ShowAxes, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Disconnect( ID_ShowGrid, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Disconnect( ID_ShowBounds, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Disconnect( ID_ShowStatistics, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Disconnect( ID_FrustumCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Disconnect( ID_BackfaceCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Disconnect( ID_ShadingWireframe, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
+	this->Disconnect( ID_ShadingMaterial, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewChange ) );
 	this->Disconnect( ID_ColorModeScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
 	this->Disconnect( ID_ColorModeLayer, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
 	this->Disconnect( ID_ColorModeNodeType, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );

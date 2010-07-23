@@ -16,6 +16,12 @@ void Settings::PreSerialize()
     m_SavedVersion = GetCurrentVersion();
 }
 
+tstring Settings::GetCurrentVersion() const
+{
+#pragma TODO("We should hash the reflection data here")
+    return TXT( "Unknown" );
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Loads the preference settings from a file on disc, if the file exists.  If
 // the file could not be loaded (or the version was old), this function will 

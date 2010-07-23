@@ -75,18 +75,6 @@ const Math::Color3& GridPreferences::GetMinorColor()
   return m_MinorColor;
 }
 
-void GridPreferences::EnumerateClass( Reflect::Compositor< GridPreferences >& comp )
-{
-  Reflect::EnumerationField* fieldUnits = comp.AddEnumerationField( &GridPreferences::m_Units, "m_Units" );
-  Reflect::Field* fieldWidth = comp.AddField( &GridPreferences::m_Width, "m_Width" );
-  Reflect::Field* fieldLength = comp.AddField( &GridPreferences::m_Length, "m_Length" );
-  Reflect::Field* fieldMajorStep = comp.AddField( &GridPreferences::m_MajorStep, "m_MajorStep" );
-  Reflect::Field* fieldMinorStep = comp.AddField( &GridPreferences::m_MinorStep, "m_MinorStep" );
-  Reflect::Field* fieldAxisColor = comp.AddField( &GridPreferences::m_AxisColor, "m_AxisColor" );
-  Reflect::Field* fieldMajorColor = comp.AddField( &GridPreferences::m_MajorColor, "m_MajorColor" );
-  Reflect::Field* fieldMinorColor = comp.AddField( &GridPreferences::m_MinorColor, "m_MinorColor" );
-}
-
 void GridPreferences::OnChanged( const Reflect::ElementChangeArgs& args )
 {
   if ( m_Units == m_PreviousUnits )

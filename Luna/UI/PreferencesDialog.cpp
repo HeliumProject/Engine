@@ -28,14 +28,18 @@ PreferencesDialog::~PreferencesDialog()
 {
 }
 
-int PreferencesDialog::ShowModal()
+int PreferencesDialog::ShowModal( Luna::Preferences* prefs )
 {
   m_PreferenceSizer = new wxBoxSizer( wxVERTICAL );
   m_CurrentPreference = NULL;
   m_PreferenceInfo.clear();
 
+#pragma TODO("Automate this")
   Reflect::V_Element preferences;
-  GetPreferences( preferences );
+  preferences.push_back( prefs->GetScenePreferences() );
+  preferences.push_back( prefs->GetViewportPreferences() );
+  preferences.push_back( prefs->GetGridPreferences() );
+  preferences.push_back( prefs->GetVaultPreferences() );
 
   wxListBox* propertiesListBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxSize( 130 /* 207 */, -1 ) );
   propertiesListBox->Connect( propertiesListBox->GetId(), wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( PreferencesDialog::OnPreferencesChanged ), NULL, this );
@@ -133,10 +137,6 @@ int PreferencesDialog::ShowModal()
   }
   
   return result;
-}
-
-void PreferencesDialog::GetPreferences( Reflect::V_Element& preferences )
-{
 }
 
 void PreferencesDialog::OnRestoreDefaults( wxCommandEvent& args )

@@ -63,5 +63,5 @@ namespace Luna
     }
   }; 
 
-  typedef Nocturnal::SmartPtr<ViewportPreferences> ViewPreferencesPtr; 
+  typedef Nocturnal::SmartPtr<ViewportPreferences> ViewportPreferencesPtr; 
 }

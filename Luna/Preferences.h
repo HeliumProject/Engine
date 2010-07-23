@@ -3,10 +3,59 @@
 #include "Luna/API.h"
 
 #include "Settings.h"
-#include "Foundation/File/Path.h"
+#include "Scene/ScenePreferences.h"
+#include "Scene/ViewportPreferences.h"
+#include "Scene/GridPreferences.h"
+#include "Vault/VaultPreferences.h"
 
 namespace Luna
 {
+  /////////////////////////////////////////////////////////////////////////////
+  // Base class for preferenced within Luna.  Provides convenience functions
+  // for saving and loading.
+  // 
+  class LUNA_EDITOR_API Preferences : public Reflect::ConcreteInheritor< Preferences, Settings >
+  {
+  public:
+    Preferences();
+
+    ScenePreferences* GetScenePreferences()
+    {
+        return m_ScenePreferences;
+    }
+
+    ViewportPreferences* GetViewportPreferences()
+    {
+        return m_ViewportPreferences;
+    }
+
+    GridPreferences* GetGridPreferences()
+    {
+        return m_GridPreferences;
+    }
+
+    VaultPreferences* GetVaultPreferences()
+    {
+        return m_VaultPreferences;
+    }
+
+  private:
+    ScenePreferencesPtr m_ScenePreferences;
+    ViewportPreferencesPtr m_ViewportPreferences;
+    GridPreferencesPtr m_GridPreferences;
+    VaultPreferencesPtr m_VaultPreferences;
+
+  public:
+    static void EnumerateClass( Reflect::Compositor<Preferences>& comp )
+    {
+        comp.AddField( &Preferences::m_ScenePreferences, "ScenePreferences" );
+        comp.AddField( &Preferences::m_ViewportPreferences, "ViewportPreferences"  );
+        comp.AddField( &Preferences::m_GridPreferences, "GridPreferences" );
+        comp.AddField( &Preferences::m_VaultPreferences, "VaultPreferences" );
+    }
+  };
+  typedef Nocturnal::SmartPtr< Preferences > PreferencesPtr;
+
   /////////////////////////////////////////////////////////////////////////////
   // Choice of how file paths should be displayed in the UI.
   // 
@@ -32,37 +81,4 @@ namespace Luna
 
   // Get the UI label for a file path based upon the specified FilePathOption
   LUNA_EDITOR_API tstring PathToLabel( const Nocturnal::Path& path, const FilePathOption filePathOption );
-
-  /////////////////////////////////////////////////////////////////////////////
-  // Base class for preferenced within Luna.  Provides convenience functions
-  // for saving and loading.
-  // 
-  class LUNA_EDITOR_API Preferences NOC_ABSTRACT : public Reflect::AbstractInheritor< Preferences, Settings >
-  {
-  public:
-    Preferences();
-
-    virtual tstring GetPreferencesPath() const = 0;
-    void SavePreferences();
-    void LoadPreferences();
-
-    static const tchar* s_ResetPreferences;
-    static const tchar* s_ResetPreferencesLong;
-
-    static void InitializeType()
-    {
-        Reflect::RegisterClass<Preferences>( TXT( "Preferences" ) );
-    }
-
-    static void CleanupType()
-    {
-        Reflect::UnregisterClass<Preferences>();
-    }
-
-    static void EnumerateClass( Reflect::Compositor<Preferences>& comp )
-    {
-
-    }
-  };
-  typedef Nocturnal::SmartPtr< Preferences > PreferencesPtr;
 }

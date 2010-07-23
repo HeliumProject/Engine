@@ -61,6 +61,11 @@
 #include "DirectionalLight.h"
 #include "AmbientLight.h"
 
+#include "ScenePreferences.h"
+#include "ViewportPreferences.h"
+#include "GridPreferences.h"
+#include "Preferences.h"
+
 using namespace Luna;
 
 static i32 g_InitCount = 0;
@@ -83,17 +88,11 @@ void Luna::SceneInitialize()
     g_InitializerStack.Push( Reflect::RegisterEnumeration<GridUnits::GridUnit>( &GridUnits::GridUnitEnumerateEnumeration, TXT( "GridUnit" ) ) ); 
     g_InitializerStack.Push( Reflect::RegisterEnumeration<ManipulatorSpaces::ManipulatorSpace>( &ManipulatorSpaces::ManipulatorSpaceEnumerateEnumeration, TXT( "ManipulatorSpace" ) ) ); 
     g_InitializerStack.Push( Reflect::RegisterEnumeration<TranslateSnappingModes::TranslateSnappingMode>( &TranslateSnappingModes::TranslateSnappingModeEnumerateEnumeration, TXT( "TranslateSnappingMode" ) ) ); 
-
-    g_InitializerStack.Push( Reflect::RegisterEnumeration<ShadingMode>( &ShadingModeEnumerateEnumeration, TXT( "ShadingMode" ) ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<CameraPreferences>( TXT( "CameraPreferences" ) ) ); 
-    g_InitializerStack.Push( Reflect::RegisterClass<ViewportPreferences>( TXT( "ViewportPreferences" ) ) ); 
-    g_InitializerStack.Push( Reflect::RegisterClass<GridPreferences>( TXT( "Grid" ) ) );
-    g_InitializerStack.Push( Reflect::RegisterClass<ScenePreferences>( TXT( "ScenePreferences" ) ) );
+    g_InitializerStack.Push( Reflect::RegisterEnumeration<ShadingMode>( &ShadingModes::EnumerateEnumeration, TXT( "ShadingMode" ) ) );
 
     // luna types 
     g_InitializerStack.Push( SceneEditor::InitializeEditor, SceneEditor::CleanupEditor );
     g_InitializerStack.Push( SceneDocument::InitializeType, SceneDocument::CleanupType );
-    g_InitializerStack.Push( ScenePreferences::InitializeType, ScenePreferences::CleanupType );
 
     g_InitializerStack.Push( Tool::InitializeType, Tool::CleanupType );
     g_InitializerStack.Push( CreateTool::InitializeType, CreateTool::CleanupType );

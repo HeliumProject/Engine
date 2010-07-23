@@ -15,7 +15,7 @@ namespace Luna
     public:
         WindowSettings( const tstring& version = TXT( "" ), wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
 
-        virtual const tstring& GetCurrentVersion() const NOC_OVERRIDE;
+        virtual tstring GetCurrentVersion() const NOC_OVERRIDE;
 
         void SetFromWindow( const wxWindow* window, wxAuiManager* manager = NULL );
         void ApplyToWindow( wxWindow* window, wxAuiManager* manager = NULL, bool updateAui = false );
@@ -63,16 +63,6 @@ namespace Luna
     public:
         static const tchar* s_Reset;
         static const tchar* s_ResetLong;
-
-        static void InitializeType()
-        {
-            Reflect::RegisterClass<WindowSettings>( TXT( "WindowSettings" ) );
-        }
-
-        static void CleanupType()
-        {
-            Reflect::UnregisterClass<WindowSettings>();
-        }
 
         static void EnumerateClass( Reflect::Compositor<WindowSettings>& comp )
         {

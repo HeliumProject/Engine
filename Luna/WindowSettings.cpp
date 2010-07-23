@@ -26,7 +26,7 @@ WindowSettings::WindowSettings( const tstring& version, wxPoint pos, wxSize size
 ///////////////////////////////////////////////////////////////////////////////
 // Get the version of these settings.
 // 
-const tstring& WindowSettings::GetCurrentVersion() const
+tstring WindowSettings::GetCurrentVersion() const
 {
     return m_Version;
 }

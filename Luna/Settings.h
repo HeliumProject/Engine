@@ -14,7 +14,7 @@ namespace Luna
     {
     public:
         virtual void PreSerialize() NOC_OVERRIDE;
-        virtual const tstring& GetCurrentVersion() const = 0;
+        virtual tstring GetCurrentVersion() const;
 
         virtual bool LoadFromFile( const Nocturnal::Path& path );
         virtual bool SaveToFile( const Nocturnal::Path& path, tstring& error, Reflect::VersionPtr version = new Reflect::Version() );
@@ -132,16 +132,6 @@ namespace Luna
         tstring m_SavedVersion;
 
     public:
-        static void InitializeType()
-        {
-            Reflect::RegisterClass<Settings>( TXT( "Settings" ) );
-        }
-
-        static void CleanupType()
-        {
-            Reflect::UnregisterClass<Settings>();
-        }
-
         static void EnumerateClass( Reflect::Compositor<Settings>& comp )
         {
             comp.AddField( &Settings::m_SavedVersion, "m_SavedVersion", Reflect::FieldFlags::Force | Reflect::FieldFlags::Hide );

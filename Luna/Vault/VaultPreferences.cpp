@@ -10,34 +10,11 @@
 
 using namespace Luna;
 
-const static tstring s_PreferencesVersion( TXT( "2" ) );
-
-///////////////////////////////////////////////////////////////////////////////
-REFLECT_DEFINE_CLASS( VaultPreferences )
-void VaultPreferences::EnumerateClass( Reflect::Compositor< VaultPreferences >& comp )
-{
-  comp.GetComposite().m_UIName = TXT( "Vault Preferences" );
-
-  Reflect::ElementField* elemWindowSettings = comp.AddField( &VaultPreferences::m_WindowSettings, "m_WindowSettings", Reflect::FieldFlags::Hide );
-  Reflect::Field* fieldDefaultFolder = comp.AddField( &VaultPreferences::m_DefaultFolder, "m_DefaultFolder", Reflect::FieldFlags::Hide );
-  Reflect::Field* fieldThumbnailMode = comp.AddEnumerationField( &VaultPreferences::m_ThumbnailMode, "m_ThumbnailMode" );
-  Reflect::Field* fieldThumbnailSize = comp.AddField( &VaultPreferences::m_ThumbnailSize, "m_ThumbnailSize" );
-  fieldThumbnailSize->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=16.0; max=256.0} value{}].]" ) );
-  Reflect::Field* fieldDisplayPreviewAxis = comp.AddField( &VaultPreferences::m_DisplayPreviewAxis, "m_DisplayPreviewAxis" );
-
-  Reflect::Field* fieldCollectionManager = comp.AddField( &VaultPreferences::m_CollectionManager, "m_CollectionManager", Reflect::FieldFlags::Hide | Reflect::FieldFlags::Share );
-
-  Reflect::Field* fieldSearchHistory = comp.AddField( &VaultPreferences::m_SearchHistory, "m_SearchHistory", Reflect::FieldFlags::Hide | Reflect::FieldFlags::Share );
-
-  Reflect::Field* fieldDependencyRecursion = comp.AddField( &VaultPreferences::m_DependencyCollectionRecursionDepth, "DependencySearchDepth" );
-  fieldDependencyRecursion->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=0; max=100} value{}].]" ) );
-  Reflect::Field* fieldUsageRecursion = comp.AddField( &VaultPreferences::m_UsageCollectionRecursionDepth, "UsageSearchDepth" );
-  fieldUsageRecursion->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=0; max=100} value{}].]" ) );
-}
+const static tstring s_WindowSettingsVersion( TXT( "1" ) );
 
 ///////////////////////////////////////////////////////////////////////////////
 VaultPreferences::VaultPreferences( const tstring& defaultFolder, ViewOptionID thumbnailMode, u32 thumbnailSize )
- : m_WindowSettings( new WindowSettings() )
+ : m_WindowSettings( new WindowSettings(s_WindowSettingsVersion) )
  , m_DefaultFolder( defaultFolder )
  , m_ThumbnailMode( thumbnailMode )
  , m_ThumbnailSize( thumbnailSize )
@@ -53,23 +30,6 @@ VaultPreferences::VaultPreferences( const tstring& defaultFolder, ViewOptionID t
 
 VaultPreferences::~VaultPreferences()
 {
-}
-
-///////////////////////////////////////////////////////////////////////////////
-const tstring& VaultPreferences::GetCurrentVersion() const
-{
-  return s_PreferencesVersion;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-tstring VaultPreferences::GetPreferencesPath() const
-{
-    Nocturnal::Path prefsDir;
-    if ( !Application::GetPreferencesDirectory( prefsDir ) )
-    {
-        throw Nocturnal::Exception( TXT( "Could not get preferences directory." ) );
-    }
-    return prefsDir.Get() + TXT( "LunaVaultPrefs.nrb" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

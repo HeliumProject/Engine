@@ -15,7 +15,8 @@ ViewportPreferences::ViewportPreferences()
 {
   for(int i = 0; i < CameraModes::Count; ++i)
   {
-    m_CameraPrefs.push_back( new CameraPreferences( CameraMode(i) ) ); 
+    m_CameraPrefs.push_back( new CameraPreferences() ); 
+    m_CameraPrefs.back()->m_CameraMode = CameraMode(i);
   }
 }
 
@@ -24,12 +25,11 @@ void ViewportPreferences::ApplyToViewport(Luna::Viewport* view)
   // apply settings for all modes that we have... 
   for(size_t i = 0; i < m_CameraPrefs.size(); ++i)
   {
-    LCameraPreferencesPtr prefs = m_CameraPrefs[i]; 
+    CameraPreferencesPtr prefs = m_CameraPrefs[i]; 
     CameraMode mode = prefs->m_CameraMode; 
     Luna::Camera* camera = view->GetCameraForMode(mode); 
 
     prefs->ApplyToCamera(camera); 
-
   }
   
   view->SetCameraMode( m_CameraMode ); 
@@ -50,7 +50,8 @@ void ViewportPreferences::LoadFromViewport(Luna::Viewport* view)
   for(int i = 0; i < CameraModes::Count; ++i)
   {
     CameraMode mode = (CameraMode) i; 
-    LCameraPreferencesPtr prefs = new CameraPreferences( mode ); 
+    CameraPreferencesPtr prefs = new CameraPreferences(); 
+    prefs->m_CameraMode = mode;
     Luna::Camera* camera = view->GetCameraForMode( mode ); 
 
     prefs->LoadFromCamera(camera); 

@@ -6,25 +6,23 @@
 #include "Field.h"
 #include "Visitor.h"
 
-/*
-
-Composite Binary format:
-
-struct Field
-{
-i32 name;               // string pool index of the name of this field
-i32 serializer_id;      // string pool index of the short name of the serializer type
-};
-
-struct Composite
-{
-i32 short_name;         // string pool index of the short name for this type
-i32 count;              // number of field infos to follow
-Field[] fields;         // field rtti data
-i32 term;               // -1
-};
-
-*/
+//
+//  Composite Binary format:
+//
+//  struct Field
+//  {
+//      i32 name;               // string pool index of the name of this field
+//      i32 serializer_id;      // string pool index of the short name of the serializer type
+//  };
+//
+//  struct Composite
+//  {
+//      i32 short_name;         // string pool index of the short name for this type
+//      i32 count;              // number of field infos to follow
+//      Field[] fields;         // field rtti data
+//      i32 term;               // -1
+//  };
+//
 
 namespace Reflect
 {

@@ -27,15 +27,13 @@
 #include "Scene/ScaleManipulator.h"
 #include "Scene/TranslateManipulator.h"
 
-#include "Scene/ScenePreferences.h"
-#include "Scene/ScenePreferencesDialog.h"
-#include "Vault/VaultPreferences.h"
-#include "Vault/VaultPreferencesDialog.h"
+#include "UI/PreferencesDialog.h"
 
 #include "ArtProvider.h"
 #include "ImportOptionsDlg.h"
 #include "ExportOptionsDlg.h"
 #include "MainFrame.h"
+#include "App.h"
 
 using namespace Luna;
 
@@ -1304,8 +1302,8 @@ void MainFrame::OnAbout( wxCommandEvent& event )
 
 void MainFrame::OnPreferences( wxCommandEvent& event )
 {
-    ScenePreferencesDialog scenePreferencesDialog( this, wxID_ANY, TXT( "Preferences" ) );
-    scenePreferencesDialog.ShowModal();
+    PreferencesDialog dlg ( this, wxID_ANY, TXT( "Preferences" ) );
+    dlg.ShowModal( wxGetApp().GetPreferences() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

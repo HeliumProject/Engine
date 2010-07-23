@@ -117,12 +117,12 @@ Scene::Scene( Luna::Viewport* viewport, Luna::SceneManager* manager, const Scene
     // we listen to our own events because there a couple ways to add nodes and get this event
     AddNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 
     AddNodeRemovedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeRemoved )); 
-    SceneEditorPreferences()->GetViewPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
+    wxGetApp().GetPreferences()->GetViewportPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 }
 
 Scene::~Scene()
 {
-    SceneEditorPreferences()->GetViewPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
+    wxGetApp().GetPreferences()->GetViewportPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Scene::ViewPreferencesChanged ) );
 
     // remove our own listeners 
     RemoveNodeAddedListener( NodeChangeSignature::Delegate(this, &Scene::OnSceneNodeAdded )); 
@@ -3289,7 +3289,7 @@ Undo::CommandPtr Scene::PickWalkSibling(bool forward)
 
 void Scene::ViewPreferencesChanged( const Reflect::ElementChangeArgs& args )
 {
-    if ( args.m_Field == SceneEditorPreferences()->GetViewPreferences()->ColorModeField() )
+    if ( args.m_Field == wxGetApp().GetPreferences()->GetViewportPreferences()->ColorModeField() )
     {
         Execute( false );
     }
@@ -3335,7 +3335,7 @@ void Scene::LoadVisibility()
         m_VisibilityDB = new Content::SceneVisibility(); 
     }
 
-    m_VisibilityDB->SetNodeDefaults( SceneEditorPreferences()->GetDefaultNodeVisibility() ); 
+    m_VisibilityDB->SetNodeDefaults( wxGetApp().GetPreferences()->GetScenePreferences()->GetDefaultNodeVisibility() ); 
 
 }
 

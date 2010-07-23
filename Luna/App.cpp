@@ -33,7 +33,6 @@
 #include "Editor.h"
 #include "Preferences.h"
 #include "Settings.h"
-#include "AppPreferences.h"
 #include "Preferences.h"
 #include "WindowSettings.h"
 #include "Document.h"
@@ -153,6 +152,7 @@ namespace Luna
 
 App::App()
 : wxApp()
+, m_Preferences( new Preferences )
 , m_Vault( NULL )
 , m_Frame( NULL )
 {
@@ -183,77 +183,69 @@ bool App::OnInit()
     Nocturnal::Path exePath( module );
     Nocturnal::Path iconFolder( exePath.Directory() + TXT( "Icons/" ) );
 
+    Luna::WaitDialog::Enable( true );
+
+    wxInitAllImageHandlers();
+
+    wxImageHandler* curHandler = wxImage::FindHandler( wxBITMAP_TYPE_CUR );
+    if ( curHandler )
     {
-        Log::Bullet initialize( TXT( "Initializing\n" ) );
-
-        Luna::WaitDialog::Enable( true );
-
-        {
-            Log::Bullet modules( TXT( "Modules:\n" ) );
-
-            {
-                Log::Bullet bullet( TXT( "Icons...\n" ) );
-
-                wxInitAllImageHandlers();
-
-                wxImageHandler* curHandler = wxImage::FindHandler( wxBITMAP_TYPE_CUR );
-                if ( curHandler )
-                {
-                    // Force the cursor handler to the end of the list so that it doesn't try to
-                    // open TGA files.
-                    wxImage::RemoveHandler( curHandler->GetName() );
-                    curHandler = NULL;
-                    wxImage::AddHandler( new wxCURHandler );
-                }
-
-                Nocturnal::ArtProvider* artProvider = new Nocturnal::ArtProvider();
-                wxArtProvider::Push( artProvider );
-            }
-
-            {
-                Log::Bullet bullet( TXT( "Help...\n" ) );
-                wxSimpleHelpProvider* helpProvider = new wxSimpleHelpProvider();
-                wxHelpProvider::Set( helpProvider );
-            }
-
-            {
-                Log::Bullet bullet( TXT( "Core...\n" ) );
-
-                m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
-                m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
-                m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
-                m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
-                m_InitializerStack.Push( InspectContent::Initialize, InspectContent::Cleanup );
-                m_InitializerStack.Push( InspectFile::Initialize, InspectFile::Cleanup );
-
-                m_InitializerStack.Push( Object::InitializeType, Object::CleanupType );
-                m_InitializerStack.Push( Selectable::InitializeType, Selectable::CleanupType );
-                m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );
-                m_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
-
-                m_InitializerStack.Push( Settings::InitializeType, Settings::CleanupType );
-                m_InitializerStack.Push( Preferences::InitializeType, Preferences::CleanupType );
-                m_InitializerStack.Push( WindowSettings::InitializeType, WindowSettings::CleanupType );
-                m_InitializerStack.Push( AppPreferences::InitializeType, AppPreferences::CleanupType );
-
-                m_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::FilePathOptions::FilePathOption>( &Luna::FilePathOptions::FilePathOptionEnumerateEnumeration, TXT( "FilePathOption" ) ) );
-                m_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );
-
-                m_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
-                m_InitializerStack.Push( MRUData::InitializeType, MRUData::CleanupType );
-            }
-
-            {
-                Log::Bullet bullet( TXT( "Task...\n" ) );
-                m_InitializerStack.Push( TaskInitialize, TaskCleanup );
-            }
-
-            {
-                Log::Bullet bullet( TXT( "Scene Editor...\n" ) );
-                m_InitializerStack.Push( SceneInitialize, SceneCleanup );
-            }
-        }
+        // Force the cursor handler to the end of the list so that it doesn't try to
+        // open TGA files.
+        wxImage::RemoveHandler( curHandler->GetName() );
+        curHandler = NULL;
+        wxImage::AddHandler( new wxCURHandler );
     }
+
+    Nocturnal::ArtProvider* artProvider = new Nocturnal::ArtProvider();
+    wxArtProvider::Push( artProvider );
+
+    wxSimpleHelpProvider* helpProvider = new wxSimpleHelpProvider();
+    wxHelpProvider::Set( helpProvider );
+
+    // libs
+    m_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
+    m_InitializerStack.Push( Reflect::Initialize, Reflect::Cleanup );
+    m_InitializerStack.Push( Inspect::Initialize, Inspect::Cleanup );
+    m_InitializerStack.Push( InspectReflect::Initialize, InspectReflect::Cleanup );
+    m_InitializerStack.Push( InspectContent::Initialize, InspectContent::Cleanup );
+    m_InitializerStack.Push( InspectFile::Initialize, InspectFile::Cleanup );
+
+    // core
+    m_InitializerStack.Push( Object::InitializeType, Object::CleanupType );
+    m_InitializerStack.Push( Selectable::InitializeType, Selectable::CleanupType );
+    m_InitializerStack.Push( Persistent::InitializeType, Persistent::CleanupType );
+    m_InitializerStack.Push( PropertiesGenerator::Initialize, PropertiesGenerator::Cleanup );
+    m_InitializerStack.Push( Reflect::RegisterEnumeration<FilePathOptions::FilePathOption>( &FilePathOptions::FilePathOptionEnumerateEnumeration, TXT( "FilePathOption" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );
+    m_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
+    m_InitializerStack.Push( MRUData::InitializeType, MRUData::CleanupType );
+
+    // task
+#pragma TODO("Move init into here")
+    m_InitializerStack.Push( TaskInitialize, TaskCleanup );
+
+    // scene
+#pragma TODO("Move init into here")
+    m_InitializerStack.Push( SceneInitialize, SceneCleanup );
+
+    // vault
+    m_InitializerStack.Push( Reflect::RegisterClass<AssetCollection>( TXT( "AssetCollection" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<CollectionManager>( TXT( "CollectionManager" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::SearchTypes::SearchType>( &Luna::SearchTypes::SearchTypesEnumerateEnumeration, TXT( "SearchType" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<SearchQuery>( TXT( "SearchQuery" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<SearchHistory>( TXT( "SearchHistory" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterEnumeration<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnumeration, TXT( "ViewOptionID" ) ) );
+
+    // preferences
+    m_InitializerStack.Push( Reflect::RegisterClass<Settings>( TXT( "Settings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<WindowSettings>( TXT( "WindowSettings" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<CameraPreferences>( TXT( "CameraPreferences" ) ) ); 
+    m_InitializerStack.Push( Reflect::RegisterClass<ViewportPreferences>( TXT( "ViewportPreferences" ) ) ); 
+    m_InitializerStack.Push( Reflect::RegisterClass<GridPreferences>( TXT( "GridPreferences" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<ScenePreferences>( TXT( "ScenePreferences" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<VaultPreferences>( TXT( "VaultPreferences" ) ) );
+    m_InitializerStack.Push( Reflect::RegisterClass<Preferences>( TXT( "Preferences" ) ) );
 
     Log::Print( TXT( "\n" ) ); 
 
@@ -270,20 +262,11 @@ bool App::OnInit()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Called when the application is ready to start running.
-// 
-int App::OnRun()
-{
-    return __super::OnRun();
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // Called when the application is being exited.  Cleans up resources.
 // 
 int App::OnExit()
 {
-    // Save preferences
-    ::Luna::GetApplicationPreferences()->SavePreferences();
+    SavePreferences();
 
     m_InitializerStack.Cleanup();
 
@@ -311,6 +294,16 @@ void App::OnAssertFailure(const wxChar *file, int line, const wxChar *func, cons
     }
 
     NOC_BREAK();
+}
+
+void App::SavePreferences()
+{
+#pragma NYI("write m_Preferences to a file")
+}
+
+void App::LoadPreferences()
+{
+#pragma NYI("load m_Preferences to a file")
 }
 
 #pragma TODO("Apparently wxWidgets doesn't support unicode command lines, please to fix in wxWidgets 2.9.x")

@@ -1,94 +1,81 @@
 #pragma once
 
-#include "Luna/API.h"
-#include "Manipulator.h"
-#include "Scene/TranslateManipulator.h"
-#include "Preferences.h"
-#include "WindowSettings.h"
-#include "MRUData.h"
-
 #include "Pipeline/Content/NodeVisibility.h"
-#include "ViewportPreferences.h"
-#include "GridPreferences.h"
+
+#include "Luna/API.h"
+#include "Luna/Scene/Manipulator.h"
+#include "Luna/Scene/TranslateManipulator.h"
+#include "Luna/WindowSettings.h"
+#include "Luna/MRUData.h"
 
 namespace Luna
 {
-  class ScenePreferences;
+    class ScenePreferences : public Reflect::ConcreteInheritor< ScenePreferences, Settings >
+    {
+    public:
+        ScenePreferences();
 
-  // Returns the global pointer to the Scene Editor preferences.
-  ScenePreferences* SceneEditorPreferences();
+        WindowSettings* GetWindowSettings();
+        Content::NodeVisibility* GetDefaultNodeVisibility(); 
 
-  /////////////////////////////////////////////////////////////////////////////
-  // Structure representing all Scene Editor preferences.
-  // 
-  class ScenePreferences : public Preferences
-  {
-  private:
-    WindowSettingsPtr m_SceneEditorWindowSettings;
-    MRUDataPtr m_MRU;
-    Content::NodeVisibilityPtr m_DefaultNodeVisibility; 
-    ViewPreferencesPtr m_ViewPreferences; 
-    GridPreferencesPtr m_GridPreferences;
+        const Reflect::Field* ScaleManipulatorSize() const;
 
-    f32 m_ScaleManipulatorSize;
+        const Reflect::Field* RotateManipulatorSize() const;
+        const Reflect::Field* RotateManipulatorAxisSnap() const;
+        const Reflect::Field* RotateManipulatorSnapDegrees() const;
+        const Reflect::Field* RotateManipulatorSpace() const;
 
-    f32 m_RotateManipulatorSize;
-    bool m_RotateManipulatorAxisSnap;
-    f32 m_RotateManipulatorSnapDegrees;
-    ManipulatorSpace m_RotateManipulatorSpace;
+        const Reflect::Field* TranslateManipulatorSize() const;
+        const Reflect::Field* TranslateManipulatorSpace() const;
+        const Reflect::Field* TranslateManipulatorSnappingMode() const;
+        const Reflect::Field* TranslateManipulatorDistance() const;
+        const Reflect::Field* TranslateManipulatorLiveObjectsOnly() const;
 
-    f32 m_TranslateManipulatorSize;
-    ManipulatorSpace m_TranslateManipulatorSpace;
-    TranslateSnappingMode m_TranslateManipulatorSnappingMode;
-    f32 m_TranslateManipulatorDistance;
-    bool m_TranslateManipulatorLiveObjectsOnly;
+        const Reflect::Field* ScaleManipulatorGridSnap() const;
+        const Reflect::Field* ScaleManipulatorDistance() const;
 
-    bool m_ScaleManipulatorGridSnap;
-    f32 m_ScaleManipulatorDistance;
+    private:
+        WindowSettingsPtr m_WindowSettings;
+        MRUDataPtr m_MRU;
+        Content::NodeVisibilityPtr m_DefaultNodeVisibility; 
 
+        f32 m_ScaleManipulatorSize;
+        bool m_ScaleManipulatorGridSnap;
+        f32 m_ScaleManipulatorDistance;
 
-    // RTTI
-  public:
-    static void InitializeType();
-    static void CleanupType();
-    REFLECT_DECLARE_CLASS( ScenePreferences, Preferences )
-    static void EnumerateClass( Reflect::Compositor<ScenePreferences>& comp );
+        f32 m_RotateManipulatorSize;
+        bool m_RotateManipulatorAxisSnap;
+        f32 m_RotateManipulatorSnapDegrees;
+        ManipulatorSpace m_RotateManipulatorSpace;
 
-  public:
-    ScenePreferences();
+        f32 m_TranslateManipulatorSize;
+        ManipulatorSpace m_TranslateManipulatorSpace;
+        TranslateSnappingMode m_TranslateManipulatorSnappingMode;
+        f32 m_TranslateManipulatorDistance;
+        bool m_TranslateManipulatorLiveObjectsOnly;
 
-    virtual void PostDeserialize() NOC_OVERRIDE;
+    public:
+        static void EnumerateClass( Reflect::Compositor<ScenePreferences>& comp )
+        {
+            comp.AddField( &ScenePreferences::m_WindowSettings, "m_WindowSettings" );
+            comp.AddField( &ScenePreferences::m_MRU, "m_MRU" );
+            comp.AddField( &ScenePreferences::m_DefaultNodeVisibility, "m_DefaultNodeVisibility" );
 
-    virtual const tstring& GetCurrentVersion() const NOC_OVERRIDE;
-    virtual tstring GetPreferencesPath() const NOC_OVERRIDE;
+            comp.AddField( &ScenePreferences::m_ScaleManipulatorSize, "m_ScaleManipulatorSize" );
+            comp.AddField( &ScenePreferences::m_ScaleManipulatorGridSnap, "m_ScaleManipulatorGridSnap" );
+            comp.AddField( &ScenePreferences::m_ScaleManipulatorDistance, "m_ScaleManipulatorDistance" );
 
-    WindowSettings* GetSceneEditorWindowSettings();
+            comp.AddField( &ScenePreferences::m_RotateManipulatorSize, "m_RotateManipulatorSize" );
+            comp.AddField( &ScenePreferences::m_RotateManipulatorAxisSnap, "m_RotateManipulatorAxisSnap" );
+            comp.AddField( &ScenePreferences::m_RotateManipulatorSnapDegrees, "m_RotateManipulatorSnapDegrees" );
+            comp.AddEnumerationField( &ScenePreferences::m_RotateManipulatorSpace, "m_RotateManipulatorSpace" );
 
-    MRUData* GetMRU();
-
-    Content::NodeVisibility* GetDefaultNodeVisibility(); 
-
-    ViewportPreferences*  GetViewPreferences(); 
-    ViewPreferencesPtr& GetViewPreferencesPtr();
-
-    GridPreferences* GetGridPreferences();
-    GridPreferencesPtr& GetGridPreferencesPtr();
-
-    const Reflect::Field* ScaleManipulatorSize() const;
-
-    const Reflect::Field* RotateManipulatorSize() const;
-    const Reflect::Field* RotateManipulatorAxisSnap() const;
-    const Reflect::Field* RotateManipulatorSnapDegrees() const;
-    const Reflect::Field* RotateManipulatorSpace() const;
-
-    const Reflect::Field* TranslateManipulatorSize() const;
-    const Reflect::Field* TranslateManipulatorSpace() const;
-    const Reflect::Field* TranslateManipulatorSnappingMode() const;
-    const Reflect::Field* TranslateManipulatorDistance() const;
-    const Reflect::Field* TranslateManipulatorLiveObjectsOnly() const;
-
-    const Reflect::Field* ScaleManipulatorGridSnap() const;
-    const Reflect::Field* ScaleManipulatorDistance() const;
-  };
-  typedef Nocturnal::SmartPtr< ScenePreferences > ScenePreferencesPtr;
+            comp.AddField( &ScenePreferences::m_TranslateManipulatorSize, "m_TranslateManipulatorSize" );
+            comp.AddEnumerationField( &ScenePreferences::m_TranslateManipulatorSpace, "m_TranslateManipulatorSpace" );
+            comp.AddEnumerationField( &ScenePreferences::m_TranslateManipulatorSnappingMode, "m_TranslateManipulatorSnappingMode" );
+            comp.AddField( &ScenePreferences::m_TranslateManipulatorDistance, "m_TranslateManipulatorDistance" );
+            comp.AddField( &ScenePreferences::m_TranslateManipulatorLiveObjectsOnly, "m_TranslateManipulatorLiveObjectsOnly" );
+        }
+    };
+    typedef Nocturnal::SmartPtr< ScenePreferences > ScenePreferencesPtr;
 }

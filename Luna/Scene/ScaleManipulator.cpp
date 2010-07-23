@@ -9,12 +9,12 @@
 #include "PrimitiveAxes.h"
 #include "PrimitiveCube.h"
 
+#include "App.h"
+#include "Editor.h"
 #include "Scene.h"
 #include "SceneEditor.h"
 #include "SceneManager.h"
 #include "ScenePreferences.h"
-
-#include "Editor.h"
 
 using namespace Math;
 using namespace Luna;
@@ -36,7 +36,7 @@ ScaleManipulator::ScaleManipulator(const ManipulatorMode mode, Luna::Scene* scen
 , m_GridSnap( false )
 , m_Distance( 1.0f )
 {
-  ScenePreferences* prefs = SceneEditorPreferences();
+  ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
   prefs->Get( prefs->ScaleManipulatorSize(), m_Size );
   prefs->Get( prefs->ScaleManipulatorGridSnap(), m_GridSnap );
   prefs->Get( prefs->ScaleManipulatorDistance(), m_Distance );
@@ -65,7 +65,7 @@ ScaleManipulator::ScaleManipulator(const ManipulatorMode mode, Luna::Scene* scen
 
 ScaleManipulator::~ScaleManipulator()
 {
-  ScenePreferences* prefs = SceneEditorPreferences();
+  ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
   prefs->Set( prefs->ScaleManipulatorSize(), m_Size );
   prefs->Set( prefs->ScaleManipulatorGridSnap(), m_GridSnap );
   prefs->Set( prefs->ScaleManipulatorDistance(), m_Distance );

@@ -815,6 +815,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\litesql_char.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\litesql\operations.hpp"
 				>
 			</File>

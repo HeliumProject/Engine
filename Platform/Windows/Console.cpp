@@ -76,7 +76,7 @@ void Platform::PrintString(ConsoleColor color, FILE* stream, const tstring& tstr
         SetConsoleTextAttribute(GetStdHandle(STD_ERROR_HANDLE), color | FOREGROUND_INTENSITY | background);
     }
 
-    fprintf(stream, "%s", tstring.c_str());
+    _ftprintf(stream, TXT("%s"), tstring.c_str());
 
     fflush(stream);
 

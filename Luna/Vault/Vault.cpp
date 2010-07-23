@@ -11,39 +11,21 @@
 #include "Platform/Exception.h"
 #include "Application/RCS/Providers/Perforce/Perforce.h"
 #include "Scene/SceneManager.h"
+#include "App.h"
 
 using namespace Luna;
-
-int Vault::s_InitCount = 0;
-Nocturnal::InitializerStack Vault::s_InitializerStack;
 
 Vault::Vault()
 : m_VaultSearch( NULL ) 
 , m_VaultFrame( NULL )
 , m_HasFrame( false )
-, m_VaultPreferences( new VaultPreferences() )
 {
-    if ( ++s_InitCount == 1 )
-    {
-        s_InitializerStack.Push( Perforce::Initialize, Perforce::Cleanup );
-
-        s_InitializerStack.Push( Reflect::RegisterClass<AssetCollection>( TXT( "AssetCollection" ) ) );
-        s_InitializerStack.Push( Reflect::RegisterClass<CollectionManager>( TXT( "CollectionManager" ) ) );
-
-        s_InitializerStack.Push( Reflect::RegisterEnumeration<Luna::SearchTypes::SearchType>( &Luna::SearchTypes::SearchTypesEnumerateEnumeration, TXT( "SearchType" ) ) );
-        s_InitializerStack.Push( Reflect::RegisterClass<SearchQuery>( TXT( "SearchQuery" ) ) );
-
-        s_InitializerStack.Push( Reflect::RegisterClass<SearchHistory>( TXT( "SearchHistory" ) ) );
-
-        s_InitializerStack.Push( Reflect::RegisterEnumeration<ViewOptionIDs::ViewOptionID>( &ViewOptionIDs::ViewOptionIDEnumerateEnumeration, TXT( "ViewOptionID" ) ) );
-
-        s_InitializerStack.Push( Reflect::RegisterClass<VaultPreferences>( TXT( "VaultPreferences" ) ) );
-    }
-
-    InitializePreferences();
-
     // Create the one and only VaultSearch
     m_VaultSearch = new VaultSearch();
+
+    m_CollectionManager = wxGetApp().GetPreferences()->GetVaultPreferences()->GetCollectionManager();
+    m_SearchHistory = wxGetApp().GetPreferences()->GetVaultPreferences()->GetSearchHistory();
+    m_SearchHistory->SetVaultSearch( m_VaultSearch );
 }
 
 Vault::~Vault()
@@ -51,13 +33,6 @@ Vault::~Vault()
     m_HasFrame = false;
     m_VaultSearch = NULL;
     m_SearchHistory = NULL;
-
-    if ( --s_InitCount == 0 )
-    {
-      s_InitializerStack.Cleanup();
-    }
-
-    NOC_ASSERT( s_InitCount >= 0 );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -84,7 +59,7 @@ void Vault::ShowVault( const tstring& queryString )
     {
         if ( !m_SearchHistory->RunCurrentQuery() )
         {
-            m_VaultFrame->Search( m_VaultPreferences->GetDefaultFolderPath() );
+            m_VaultFrame->Search( wxGetApp().GetPreferences()->GetVaultPreferences()->GetDefaultFolderPath() );
         }
     }
 }
@@ -98,26 +73,9 @@ bool Vault::HasFrame()
 ///////////////////////////////////////////////////////////////////////////////
 void Vault::OnCloseVault()
 {
-    m_VaultPreferences->SavePreferences();
+    wxGetApp().SavePreferences();
     m_VaultFrame = NULL;
     m_VaultSearch->RequestStop();
 
     m_HasFrame = false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-VaultPreferences* Vault::GetVaultPreferences()
-{
-    return m_VaultPreferences;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void Vault::InitializePreferences()
-{
-    // Load Preferences
-    m_VaultPreferences->LoadPreferences();
-
-    m_CollectionManager = m_VaultPreferences->GetCollectionManager();
-    m_SearchHistory = m_VaultPreferences->GetSearchHistory();
-    m_SearchHistory->SetVaultSearch( m_VaultSearch );
 }

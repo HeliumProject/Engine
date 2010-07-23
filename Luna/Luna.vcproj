@@ -851,14 +851,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\ScenePreferencesDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\ScenePreferencesDialog.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\SelectionPropertiesPanel.cpp"
 				>
 			</File>
@@ -1924,14 +1916,6 @@
 			</File>
 			<File
 				RelativePath=".\Vault\VaultPreferences.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultPreferencesDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultPreferencesDialog.h"
 				>
 			</File>
 			<File
@@ -4057,6 +4041,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\PreferencesDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PreferencesDialog.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\ProjectPanel.cpp"
 				>
 			</File>
@@ -4191,14 +4183,6 @@
 		</File>
 		<File
 			RelativePath=".\App.h"
-			>
-		</File>
-		<File
-			RelativePath=".\AppPreferences.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\AppPreferences.h"
 			>
 		</File>
 		<File
@@ -4350,22 +4334,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\PreferencesBase.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PreferencesBase.h"
-			>
-		</File>
-		<File
-			RelativePath=".\PreferencesDialog.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PreferencesDialog.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Project.cpp"
 			>
 		</File>
@@ -4407,6 +4375,14 @@
 		</File>
 		<File
 			RelativePath=".\Selection.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Settings.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Settings.h"
 			>
 		</File>
 		<File

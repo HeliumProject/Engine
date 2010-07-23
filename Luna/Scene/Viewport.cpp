@@ -15,6 +15,7 @@
 #include "ScenePreferences.h"
 #include "Statistics.h"
 #include "Tool.h"
+#include "App.h"
 
 #include "Platform/Exception.h"
 #include "Orientation.h"
@@ -364,7 +365,7 @@ void Viewport::InitWidgets()
   m_GlobalPrimitives[GlobalPrimitives::StandardAxes]->Update();
 
   m_GlobalPrimitives[GlobalPrimitives::StandardGrid] = new Luna::PrimitiveGrid (m_ResourceTracker);
-  SceneEditorPreferences()->GetGridPreferencesPtr()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Viewport::OnGridPreferencesChanged ));
+  wxGetApp().GetPreferences()->GetGridPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &Viewport::OnGridPreferencesChanged ));
   OnGridPreferencesChanged( Reflect::ElementChangeArgs( NULL, NULL ) );
 
   m_GlobalPrimitives[GlobalPrimitives::StandardRings] = new Luna::PrimitiveRings (m_ResourceTracker);
@@ -1402,7 +1403,7 @@ void Viewport::RemoteCameraMoved( const Math::Matrix4& transform )
 
 void Viewport::OnGridPreferencesChanged( const Reflect::ElementChangeArgs& args )
 {
-  GridPreferences* gridPreferences = SceneEditorPreferences()->GetGridPreferences();
+  GridPreferences* gridPreferences = wxGetApp().GetPreferences()->GetGridPreferences();
   Luna::PrimitiveGrid* grid = (Luna::PrimitiveGrid*) m_GlobalPrimitives[GlobalPrimitives::StandardGrid];
 
   grid->m_Width = gridPreferences->GetWidth();

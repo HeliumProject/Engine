@@ -10,12 +10,12 @@
 #include "PrimitiveCone.h"
 #include "PrimitiveCircle.h"
 
+#include "App.h"
+#include "Editor.h"
 #include "SceneManager.h"
 #include "Scene.h"
 #include "ScenePreferences.h"
 #include "Mesh.h"
-
-#include "Editor.h"
 
 #include "Foundation/Math/AngleAxis.h"
 #include "Foundation/Math/Utils.h"
@@ -42,7 +42,7 @@ TranslateManipulator::TranslateManipulator(const ManipulatorMode mode, Luna::Sce
 , m_ShowCones (true)
 , m_Factor (1.f)
 {
-    Luna::ScenePreferences* prefs = SceneEditorPreferences();
+    Luna::ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
     prefs->Get( prefs->TranslateManipulatorSize(), m_Size );
     prefs->GetEnum( prefs->TranslateManipulatorSpace(), m_Space );
     prefs->GetEnum( prefs->TranslateManipulatorSnappingMode(), m_SnappingMode );
@@ -75,7 +75,7 @@ TranslateManipulator::TranslateManipulator(const ManipulatorMode mode, Luna::Sce
 
 TranslateManipulator::~TranslateManipulator()
 {
-    Luna::ScenePreferences* prefs = SceneEditorPreferences();
+    Luna::ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
     prefs->Set( prefs->TranslateManipulatorSize(), m_Size );
     prefs->SetEnum( prefs->TranslateManipulatorSpace(), m_Space );
     prefs->SetEnum( prefs->TranslateManipulatorSnappingMode(), m_SnappingMode );

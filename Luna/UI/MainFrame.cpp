@@ -1,10 +1,9 @@
 #include "Precompile.h"
 
-#include "MainFrame.h"
-#include "ArtProvider.h"
+#include "Foundation/Reflect/ArchiveXML.h"
 
-#include "ImportOptionsDlg.h"
-#include "ExportOptionsDlg.h"
+#include "Pipeline/Content/ContentVersion.h"
+#include "Pipeline/Content/Scene.h"
 
 #include "Application/UI/FileDialog.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
@@ -28,13 +27,13 @@
 #include "Scene/ScaleManipulator.h"
 #include "Scene/TranslateManipulator.h"
 
-#include "Scene/ScenePreferences.h"
-#include "Scene/ViewportPreferences.h"
+#include "UI/PreferencesDialog.h"
 
-#include "Foundation/Reflect/ArchiveXML.h"
-
-#include "Pipeline/Content/ContentVersion.h"
-#include "Pipeline/Content/Scene.h"
+#include "ArtProvider.h"
+#include "ImportOptionsDlg.h"
+#include "ExportOptionsDlg.h"
+#include "MainFrame.h"
+#include "App.h"
 
 using namespace Luna;
 
@@ -810,38 +809,13 @@ void MainFrame::OnViewVisibleChange(wxCommandEvent& event)
 
 void MainFrame::OnViewColorModeChange(wxCommandEvent& event)
 {
-    const ViewColorMode previousColorMode = SceneEditorPreferences()->GetViewPreferences()->GetColorMode();
+    const ViewColorMode previousColorMode = wxGetApp().GetPreferences()->GetViewportPreferences()->GetColorMode();
 
     const M_IDToColorMode::const_iterator newColorModeItr = m_ColorModeLookup.find( event.GetId() );
     if ( newColorModeItr != m_ColorModeLookup.end() )
     {
-        SceneEditorPreferences()->GetViewPreferences()->SetColorMode( ( ViewColorMode )( newColorModeItr->second ) );
+        wxGetApp().GetPreferences()->GetViewportPreferences()->SetColorMode( ( ViewColorMode )( newColorModeItr->second ) );
     }
-}
-
-void MainFrame::OnViewDefaultsChange(wxCommandEvent& event)
-{
-    Content::NodeVisibilityPtr nodeDefaults = SceneEditorPreferences()->GetDefaultNodeVisibility(); 
-
-    switch ( event.GetId() )
-    {
-    case SceneEditorIDs::ID_ViewDefaultShowLayers: 
-        nodeDefaults->SetVisibleLayer( !nodeDefaults->GetVisibleLayer() ); 
-        break; 
-    case SceneEditorIDs::ID_ViewDefaultShowInstances: 
-        nodeDefaults->SetHiddenNode( !nodeDefaults->GetHiddenNode() ); 
-        break; 
-    case SceneEditorIDs::ID_ViewDefaultShowGeometry: 
-        nodeDefaults->SetShowGeometry( !nodeDefaults->GetShowGeometry() ); 
-        break; 
-    case SceneEditorIDs::ID_ViewDefaultShowPointer: 
-        nodeDefaults->SetShowPointer( !nodeDefaults->GetShowPointer() ); 
-        break; 
-    case SceneEditorIDs::ID_ViewDefaultShowBounds: 
-        nodeDefaults->SetShowBounds( !nodeDefaults->GetShowBounds() ); 
-        break; 
-    }
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1635,6 +1609,12 @@ void MainFrame::OnExiting( wxCloseEvent& args )
 void MainFrame::OnAbout( wxCommandEvent& event )
 {
     wxMessageBox( wxT( "Luna" ), wxT( "About" ), wxOK | wxCENTER, this );
+}
+
+void MainFrame::OnPreferences( wxCommandEvent& event )
+{
+    PreferencesDialog dlg ( this, wxID_ANY, TXT( "Preferences" ) );
+    dlg.ShowModal( wxGetApp().GetPreferences() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

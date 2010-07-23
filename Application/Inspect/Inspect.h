@@ -37,10 +37,10 @@
 #endif
 
 // prints console output of size and position info
-#define INSPECT_DEBUG_LAYOUT_LOGIC
+//#define INSPECT_DEBUG_LAYOUT_LOGIC
 
 // prints stepping of script code compilation
-#define INSPECT_DEBUG_SCRIPT_COMPILE
+//#define INSPECT_DEBUG_SCRIPT_COMPILE
 
 // prints tracks of Data instances
-#define INSPECT_DEBUG_DATA_TRACKING
+//#define INSPECT_DEBUG_DATA_TRACKING

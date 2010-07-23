@@ -16,6 +16,7 @@
 #include "SceneManager.h"
 #include "ScenePreferences.h"
 #include "SceneVisitor.h"
+#include "App.h"
 
 using namespace Luna;
 using namespace Nocturnal;
@@ -767,7 +768,7 @@ void HierarchyNode::SetMaterial( const D3DMATERIAL9& defaultMaterial ) const
 
   D3DMATERIAL9 material = defaultMaterial;
 
-  switch ( SceneEditorPreferences()->GetViewPreferences()->GetColorMode() )
+  switch ( wxGetApp().GetPreferences()->GetViewportPreferences()->GetColorMode() )
   {
   case ViewColorModes::Layer:
     if ( m_LayerColor )

@@ -8,6 +8,7 @@
 #include "Foundation/String/Tokenize.h"
 #include "Foundation/Container/Insert.h" 
 #include "Application/UI/ArtProvider.h"
+#include "App.h"
 
 using namespace Luna;
 
@@ -93,7 +94,7 @@ VaultSearchPanel::~VaultSearchPanel()
 
 void VaultSearchPanel::ConnectListners()
 {
-    m_CollectionManager = m_VaultFrame->GetVault()->GetVaultPreferences()->GetCollectionManager();
+    m_CollectionManager = wxGetApp().GetPreferences()->GetVaultPreferences()->GetCollectionManager();
     //m_CollectionManager->AddClearAllListener( CollectionManagerSignature::Delegate( this, &VaultSearchPanel::OnCollectionManagerChanged ) );
     //m_CollectionManager->AddCollectionAddedListener( CollectionManagerSignature::Delegate( this, &VaultSearchPanel::OnCollectionManagerChanged ) );
     //m_CollectionManager->AddCollectionRemovingListener( CollectionManagerSignature::Delegate( this, &VaultSearchPanel::OnCollectionManagerChanged ) );

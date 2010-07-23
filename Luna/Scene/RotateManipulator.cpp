@@ -8,10 +8,10 @@
 
 #include "PrimitiveCircle.h"
 
+#include "App.h"
+#include "Editor.h"
 #include "Scene.h"
 #include "ScenePreferences.h"
-
-#include "Editor.h"
 
 #include "Foundation/Math/AngleAxis.h"
 
@@ -36,7 +36,7 @@ RotateManipulator::RotateManipulator(const ManipulatorMode mode, Luna::Scene* sc
 , m_AxisSnap (false)
 , m_SnapDegrees (15.0f)
 {
-  Luna::ScenePreferences* prefs = SceneEditorPreferences();
+  Luna::ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
   prefs->Get( prefs->RotateManipulatorSize(), m_Size );
   prefs->Get( prefs->RotateManipulatorAxisSnap(), m_AxisSnap );
   prefs->Get( prefs->RotateManipulatorSnapDegrees(), m_SnapDegrees );
@@ -50,7 +50,7 @@ RotateManipulator::RotateManipulator(const ManipulatorMode mode, Luna::Scene* sc
 
 RotateManipulator::~RotateManipulator()
 {
-  ScenePreferences* prefs = SceneEditorPreferences();
+  ScenePreferences* prefs = wxGetApp().GetPreferences()->GetScenePreferences();
   prefs->Set( prefs->RotateManipulatorSize(), m_Size );
   prefs->Set( prefs->RotateManipulatorAxisSnap(), m_AxisSnap );
   prefs->Set( prefs->RotateManipulatorSnapDegrees(), m_SnapDegrees );

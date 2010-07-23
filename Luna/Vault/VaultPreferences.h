@@ -5,29 +5,21 @@
 #include "SearchHistory.h"
 #include "SearchQuery.h"
 
-#include "Foundation/Container/OrderedSet.h"
-#include "WindowSettings.h"
-#include "Preferences.h"
 #include "Foundation/TUID.h"
+#include "Foundation/Container/OrderedSet.h"
+#include "Luna/WindowSettings.h"
 
 namespace Luna
 {
-    /////////////////////////////////////////////////////////////////////////////
-    class VaultPreferences;
-    typedef Nocturnal::SmartPtr< VaultPreferences > VaultPreferencesPtr;
-
     class VaultFrame;
 
-    class VaultPreferences : public Reflect::ConcreteInheritor< VaultPreferences, Preferences >
+    class VaultPreferences : public Reflect::ConcreteInheritor< VaultPreferences, Settings >
     {
     public:
         VaultPreferences( const tstring& defaultFolder = TXT( "" ),
                             ViewOptionID thumbnailMode = ViewOptionIDs::Medium,
                             u32 thumbnailSize = ThumbnailSizes::Medium );
         ~VaultPreferences();
-
-        virtual const tstring& GetCurrentVersion() const;
-        virtual tstring GetPreferencesPath() const;
 
         void GetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager = NULL );
         void SetWindowSettings( VaultFrame* browserFrame, wxAuiManager* manager = NULL );
@@ -56,10 +48,6 @@ namespace Luna
         CollectionManager* GetCollectionManager() { return m_CollectionManager; }
         SearchHistory* GetSearchHistory() { return m_SearchHistory; }
 
-    public:
-        REFLECT_DECLARE_CLASS( VaultPreferences, Preferences );
-        static void EnumerateClass( Reflect::Compositor< VaultPreferences >& comp );
-
     private:
         WindowSettingsPtr     m_WindowSettings;
         tstring               m_DefaultFolder;
@@ -70,5 +58,34 @@ namespace Luna
         SearchHistoryPtr      m_SearchHistory;
         u32                   m_DependencyCollectionRecursionDepth;
         u32                   m_UsageCollectionRecursionDepth;
+
+    public:
+        static void EnumerateClass( Reflect::Compositor< VaultPreferences >& comp )
+        {
+            comp.AddField( &VaultPreferences::m_WindowSettings, "m_WindowSettings", Reflect::FieldFlags::Hide );
+            comp.AddField( &VaultPreferences::m_DefaultFolder, "m_DefaultFolder", Reflect::FieldFlags::Hide );
+            comp.AddEnumerationField( &VaultPreferences::m_ThumbnailMode, "m_ThumbnailMode" );
+
+            {
+                Reflect::Field* field = comp.AddField( &VaultPreferences::m_ThumbnailSize, "m_ThumbnailSize" );
+                field->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=16.0; max=256.0} value{}].]" ) );
+            }
+
+            comp.AddField( &VaultPreferences::m_DisplayPreviewAxis, "m_DisplayPreviewAxis" );
+            comp.AddField( &VaultPreferences::m_CollectionManager, "m_CollectionManager", Reflect::FieldFlags::Hide | Reflect::FieldFlags::Share );
+            comp.AddField( &VaultPreferences::m_SearchHistory, "m_SearchHistory", Reflect::FieldFlags::Hide | Reflect::FieldFlags::Share );
+
+            {
+                Reflect::Field* field = comp.AddField( &VaultPreferences::m_DependencyCollectionRecursionDepth, "DependencySearchDepth" );
+                field->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=0; max=100} value{}].]" ) );
+            }
+
+            {
+                Reflect::Field* field = comp.AddField( &VaultPreferences::m_UsageCollectionRecursionDepth, "UsageSearchDepth" );
+                field->SetProperty( TXT( "UIScript" ), TXT( "UI[.[slider{min=0; max=100} value{}].]" ) );
+            }
+        }
     };
+
+    typedef Nocturnal::SmartPtr< VaultPreferences > VaultPreferencesPtr;
 }

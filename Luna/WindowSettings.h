@@ -1,79 +1,78 @@
 #pragma once
 
 #include "Luna/API.h"
-#include "PreferencesBase.h"
+#include "Settings.h"
 
 class wxAuiManager;
 
 namespace Luna
 {
-  class WindowSettings;
-  typedef Nocturnal::SmartPtr< WindowSettings > WindowSettingsPtr;
+    class WindowSettings;
+    typedef Nocturnal::SmartPtr< WindowSettings > WindowSettingsPtr;
 
-  /////////////////////////////////////////////////////////////////////////////
-  // Data class for storing window locations.
-  // 
-  class LUNA_EDITOR_API WindowSettings : public PreferencesBase
-  {
-  public:
-    static const tchar* s_Reset;
-    static const tchar* s_ResetLong;
+    class LUNA_EDITOR_API WindowSettings : public Reflect::ConcreteInheritor< WindowSettings, Settings >
+    {
+    public:
+        WindowSettings( const tstring& version = TXT( "" ), wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
 
-  private:
-    // Used to invalidate older values for a particular instance of this class
-    tstring m_Version;
+        virtual tstring GetCurrentVersion() const NOC_OVERRIDE;
 
-    // String (wxWidgets AUI) representing docking state of all child panels 
-    tstring m_DockingState;
+        void SetFromWindow( const wxWindow* window, wxAuiManager* manager = NULL );
+        void ApplyToWindow( wxWindow* window, wxAuiManager* manager = NULL, bool updateAui = false );
 
-    bool m_IsMaximized;
+        const Reflect::Field* PositionX() const;
+        const Reflect::Field* PositionY() const;
+        wxPoint GetPosition() const;
+        void SetPosition( i32 x, i32 y );
+        void SetPosition( wxPoint pos ) { SetPosition( pos.x, pos.y ); }
 
-    // Position of the window (upper left corner)
-    i32 m_PosX;
-    i32 m_PosY;
+        const Reflect::Field* Width() const;
+        const Reflect::Field* Height() const;
+        wxSize GetSize() const;
+        void SetSize( i32 width, i32 height );
+        void SetSize( wxSize size ) { SetSize( size.x, size.y ); }
 
-    // Size of the window
-    i32 m_Width;
-    i32 m_Height;
+        const Reflect::Field* Maximized() const;
+        bool IsMaximized() const;
+        void SetMaximized( bool maximized );
 
-    // RTTI
-  public:
-    REFLECT_DECLARE_CLASS( WindowSettings, PreferencesBase )
+        const Reflect::Field* DockingState() const;
+        const tstring& GetDockingState() const;
+        void SetDockingState( const tstring& state );
 
-    static void EnumerateClass( Reflect::Compositor<WindowSettings>& comp );
+        static void Check( WindowSettingsPtr& settings, const tstring& version );
+        static bool Validate( wxPoint pos, wxSize size );
 
-  public:
-    static void InitializeType();
-    static void CleanupType();
-    static void CheckWindowSettings( WindowSettingsPtr& settings, const tstring& version );
-    static bool ValidatePositionAndSize( wxPoint pos, wxSize size );
+    private:
+        // Used to invalidate older values for a particular instance of this class
+        tstring m_Version;
 
-    WindowSettings( const tstring& version = TXT( "" ), wxPoint pos = wxDefaultPosition, wxSize size = wxDefaultSize );
-    virtual ~WindowSettings();
+        // String (wxWidgets AUI) representing docking state of all child panels 
+        tstring m_DockingState;
 
-    virtual const tstring& GetCurrentVersion() const NOC_OVERRIDE;
+        bool m_IsMaximized;
 
-    void SetFromWindow( const wxWindow* window, wxAuiManager* manager = NULL );
-    void ApplyToWindow( wxWindow* window, wxAuiManager* manager = NULL, bool updateAui = false );
+        // Position of the window (upper left corner)
+        i32 m_PosX;
+        i32 m_PosY;
 
-    const Reflect::Field* PositionX() const;
-    const Reflect::Field* PositionY() const;
-    wxPoint GetPosition() const;
-    void SetPosition( i32 x, i32 y );
-    void SetPosition( wxPoint pos ) { SetPosition( pos.x, pos.y ); }
+        // Size of the window
+        i32 m_Width;
+        i32 m_Height;
 
-    const Reflect::Field* Width() const;
-    const Reflect::Field* Height() const;
-    wxSize GetSize() const;
-    void SetSize( i32 width, i32 height );
-    void SetSize( wxSize size ) { SetSize( size.x, size.y ); }
+    public:
+        static const tchar* s_Reset;
+        static const tchar* s_ResetLong;
 
-    const Reflect::Field* Maximized() const;
-    bool IsMaximized() const;
-    void SetMaximized( bool maximized );
-
-    const Reflect::Field* DockingState() const;
-    const tstring& GetDockingState() const;
-    void SetDockingState( const tstring& state );
-  };
+        static void EnumerateClass( Reflect::Compositor<WindowSettings>& comp )
+        {
+            comp.AddField( &WindowSettings::m_Version, "m_Version" );
+            comp.AddField( &WindowSettings::m_DockingState, "m_DockingState" );
+            comp.AddField( &WindowSettings::m_IsMaximized, "m_IsMaximized" );
+            comp.AddField( &WindowSettings::m_PosX, "m_PosX" );
+            comp.AddField( &WindowSettings::m_PosY, "m_PosY" );
+            comp.AddField( &WindowSettings::m_Width, "m_Width" );
+            comp.AddField( &WindowSettings::m_Height, "m_Height" );
+        }
+    };
 }

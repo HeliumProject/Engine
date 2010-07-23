@@ -1,24 +1,12 @@
 #pragma once
 
-#include "Luna/API.h"
-#include "PreferencesBase.h"
-
 #include <map>
 
 #include "Foundation/Reflect/Element.h"
-#include "wx/wx.h"
+#include "Application/Inspect/Controls/Canvas.h"
 
-namespace Inspect
-{
-  class Canvas;
-  typedef Nocturnal::SmartPtr<Canvas> CanvasPtr;
-}
-
-namespace Reflect
-{
-  class Element;
-  typedef Nocturnal::SmartPtr<Element> ElementPtr;
-}
+#include "Luna/API.h"
+#include "Luna/Preferences.h"
 
 namespace Luna
 {
@@ -35,17 +23,14 @@ namespace Luna
   typedef Nocturnal::SmartPtr<PreferenceInfo> PreferenceInfoPtr;
   typedef std::map<int, PreferenceInfoPtr> M_PreferenceInfo;
 
-  class PreferencesDialog NOC_ABSTRACT : public wxDialog
+  class PreferencesDialog : public wxDialog
   {
   public:
     PreferencesDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 644,375 ), long style = wxDEFAULT_DIALOG_STYLE );
     ~PreferencesDialog();
 
-    virtual int ShowModal();
+    virtual int ShowModal( Luna::Preferences* prefs );
   
-  protected:
-    virtual void GetPreferences( Reflect::V_Element& preferences );
-    
   private:
     void OnRestoreDefaults( wxCommandEvent& args );
     void OnApply( wxCommandEvent& args );

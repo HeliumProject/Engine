@@ -129,7 +129,6 @@ namespace Luna
         void OnViewCameraChange( wxCommandEvent& event );
         void OnViewVisibleChange( wxCommandEvent& event );
         void OnViewColorModeChange( wxCommandEvent& event );
-        void OnViewDefaultsChange( wxCommandEvent& event );
 
         void OnImport( wxCommandEvent& event );
         void OnExport( wxCommandEvent& event );
@@ -169,6 +168,7 @@ namespace Luna
         void OnExiting( wxCloseEvent& args );
 
         void OnAbout( wxCommandEvent& event );
+        void OnPreferences( wxCommandEvent& event );
 
         void OnManifestContextMenu(wxCommandEvent& event);
         void OnTypeContextMenu(wxCommandEvent& event);

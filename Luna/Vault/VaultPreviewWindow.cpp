@@ -2,6 +2,7 @@
 #include "VaultPreviewWindow.h"
 #include "Vault.h"
 #include "VaultFrame.h"
+#include "App.h"
 
 using namespace Luna;
 
@@ -24,7 +25,7 @@ VaultPreviewWindow::~VaultPreviewWindow()
 {
   if ( m_VaultFrame )
   {
-    VaultPreferences* preferences = m_VaultFrame->GetVault()->GetVaultPreferences();
+    VaultPreferences* preferences = wxGetApp().GetPreferences()->GetVaultPreferences();
     preferences->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultPreviewWindow::OnPreferencesChanged ) );
   }
 }
@@ -37,7 +38,7 @@ void VaultPreviewWindow::SetVaultFrame( VaultFrame* browserFrame )
 {
   m_VaultFrame = browserFrame;
 
-  VaultPreferences* preferences = m_VaultFrame->GetVault()->GetVaultPreferences();
+  VaultPreferences* preferences = wxGetApp().GetPreferences()->GetVaultPreferences();
   __super::DisplayReferenceAxis( preferences->DisplayPreviewAxis() );
 
   preferences->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &VaultPreviewWindow::OnPreferencesChanged ) );
@@ -48,7 +49,7 @@ void VaultPreviewWindow::SetVaultFrame( VaultFrame* browserFrame )
 // 
 void VaultPreviewWindow::DisplayReferenceAxis( bool display )
 {
-  VaultPreferences* preferences = m_VaultFrame->GetVault()->GetVaultPreferences();
+  VaultPreferences* preferences = wxGetApp().GetPreferences()->GetVaultPreferences();
   preferences->SetDisplayPreviewAxis( display );
 }
 
@@ -58,7 +59,7 @@ void VaultPreviewWindow::DisplayReferenceAxis( bool display )
 // 
 void VaultPreviewWindow::OnPreferencesChanged( const Reflect::ElementChangeArgs& args )
 {
-  VaultPreferences* preferences = m_VaultFrame->GetVault()->GetVaultPreferences();
+  VaultPreferences* preferences = wxGetApp().GetPreferences()->GetVaultPreferences();
   if ( args.m_Element == preferences )
   {
     if ( args.m_Field == preferences->DisplayPreviewAxisField() || args.m_Field == NULL )

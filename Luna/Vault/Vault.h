@@ -9,7 +9,6 @@
 #include "SearchHistory.h"
 #include "Foundation/Memory/SmartPtr.h"
 #include "Platform/Types.h"
-#include "Foundation/InitializerStack.h"
 #include "DocumentManager.h"
 
 //
@@ -35,10 +34,6 @@ namespace Luna
         Vault( const Vault& rhs ) {}
         Vault& operator=( const Vault& rhs ) {}
 
-    protected:
-        static Nocturnal::InitializerStack s_InitializerStack;
-        static int s_InitCount;
-
     public:
         ~Vault();
 
@@ -54,31 +49,17 @@ namespace Luna
         void ShowVault( const tstring& queryString = TXT("") );
         bool HasFrame();
 
-        void InitializePreferences();
-        VaultPreferences* GetVaultPreferences();
-
         friend class VaultFrame;
 
     protected:
         void OnCloseVault();
 
-    protected:
-
-        //
-        // Members
-        //
     private:
-        Nocturnal::Path       m_RootDirectory;
-        VaultSearchPtr      m_VaultSearch;
-        VaultFrame*         m_VaultFrame;
-        bool                  m_HasFrame;
-        SearchHistory*        m_SearchHistory;
-        VaultPreferencesPtr m_VaultPreferences;
-        CollectionManager*    m_CollectionManager;
-
-    private:
-
+        Nocturnal::Path         m_RootDirectory;
+        VaultSearchPtr          m_VaultSearch;
+        VaultFrame*             m_VaultFrame;
+        bool                    m_HasFrame;
+        SearchHistory*          m_SearchHistory;
+        CollectionManager*      m_CollectionManager;
     };
-
-
 } // namespace Luna

@@ -36,6 +36,7 @@ namespace Luna{ class Frame; }
 #include <wx/textctrl.h>
 #include <wx/statbmp.h>
 #include <wx/scrolwin.h>
+#include <wx/dataview.h>
 #include <wx/notebook.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -54,8 +55,34 @@ namespace Luna
 			{
 				ID_NewScene = 1000,
 				ID_NewEntity,
+				ID_NewProject,
 				ID_Open,
+				ID_Close,
 				ID_SaveAll,
+				ID_Import,
+				ID_ImportFromClipboard,
+				ID_Export,
+				ID_ExportToClipboard,
+				ID_Exit,
+				ID_SelectAll,
+				ID_InvertSelection,
+				ID_Parent,
+				ID_Unparent,
+				ID_Group,
+				ID_Ungroup,
+				ID_Center,
+				ID_Duplicate,
+				ID_SmartDuplicate,
+				ID_CopyTransform,
+				ID_PasteTransform,
+				ID_SnapToCamera,
+				ID_SnapCameraTo,
+				ID_WalkUp,
+				ID_WalkDown,
+				ID_WalkForward,
+				ID_WalkBackward,
+				ID_Preferences,
+				ID_About,
 				ID_Cut,
 				ID_Copy,
 				ID_Paste,
@@ -68,16 +95,6 @@ namespace Luna
 			wxMenu* m_MenuFileNew;
 			wxMenu* m_MenuFileOpenRecent;
 			wxMenu* m_MenuEdit;
-			wxMenu* m_MenuView;
-			wxMenu* m_MenuViewHelper;
-			wxMenu* m_MenuViewGeometry;
-			wxMenu* m_MenuViewShading;
-			wxMenu* m_MenuViewCamera;
-			wxMenu* m_MenuViewCulling;
-			wxMenu* m_MenuViewShow;
-			wxMenu* m_MenuViewHide;
-			wxMenu* m_MenuViewColorMode;
-			wxMenu* m_MenuViewDefaults;
 			wxMenu* m_MenuTools;
 			wxMenu* m_MenuPanels;
 			wxMenu* m_MenuSettings;
@@ -87,14 +104,42 @@ namespace Luna
 			wxStatusBar* m_MainStatusBar;
 			
 			// Virtual event handlers, overide them in your derived class
+			virtual void OnNewScene( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnNewEntity( wxCommandEvent& event ) { event.Skip(); }
 			virtual void OnNew( wxCommandEvent& event ) { event.Skip(); }
 			virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnClose( wxCommandEvent& event ) { event.Skip(); }
 			virtual void OnSaveAll( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnImport( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnExit( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnUndo( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnRedo( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnCut( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnCopy( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnPaste( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnSelectAll( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnInvertSelection( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnDelete( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnParent( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnUnparent( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnGroup( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnUngroup( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnCenter( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnDuplicate( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnSmartDuplicate( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnCopyTransform( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnPasteTransform( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnSnapToCamera( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnSnapCameraTo( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnPickWalk( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnPreferences( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
 			
 		
 		public:
 			
-			MainFrameGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 878,642 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+			MainFrameGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 			~MainFrameGenerated();
 		
 	};
@@ -111,7 +156,7 @@ namespace Luna
 		
 		public:
 			
-			HelpPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+			HelpPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,200 ), long style = wxTAB_TRAVERSAL );
 			~HelpPanelGenerated();
 		
 	};
@@ -240,6 +285,23 @@ namespace Luna
 	};
 	
 	///////////////////////////////////////////////////////////////////////////////
+	/// Class ProjectPanelGenerated
+	///////////////////////////////////////////////////////////////////////////////
+	class ProjectPanelGenerated : public wxPanel 
+	{
+		private:
+		
+		protected:
+			wxDataViewCtrl* m_DataViewCtrl;
+		
+		public:
+			
+			ProjectPanelGenerated( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+			~ProjectPanelGenerated();
+		
+	};
+	
+	///////////////////////////////////////////////////////////////////////////////
 	/// Class DirectoryPanelGenerated
 	///////////////////////////////////////////////////////////////////////////////
 	class DirectoryPanelGenerated : public wxPanel 
@@ -285,14 +347,48 @@ namespace Luna
 		protected:
 			enum
 			{
-				ID_CameraOrbit = 1000,
+				ID_FrameOrigin = 1000,
+				ID_FrameSelected,
+				ID_PreviousView,
+				ID_NextView,
+				ID_HighlightMode,
+				ID_CameraOrbit,
 				ID_CameraFront,
 				ID_CameraSide,
 				ID_CameraTop,
+				ID_ShowAxes,
+				ID_ShowGrid,
+				ID_ShowBounds,
+				ID_ShowStatistics,
+				ID_FrustumCull,
+				ID_BackfaceCull,
+				ID_ShadingWireframe,
+				ID_ShadingMaterial,
+				ID_ColorModeScene,
+				ID_ColorModeLayer,
+				ID_ColorModeNodeType,
+				ID_ColorModeScale,
+				ID_ColorModeScaleGradient,
 			};
 			
 			wxToolBar* m_ToolbarView;
 			wxPanel* m_ViewPanel;
+			
+			// Virtual event handlers, overide them in your derived class
+			virtual void OnFrameOrigin( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnFrameSelected( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnViewPrevious( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnViewNext( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnHighlightMode( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnCamera( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnShowAxes( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnShowGrid( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnShowBounds( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnShowStatistics( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnCulling( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnShading( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnColorMode( wxCommandEvent& event ) { event.Skip(); }
+			
 		
 		public:
 			

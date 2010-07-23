@@ -28,415 +28,176 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_ItemFileNewEntity = new wxMenuItem( m_MenuFileNew, ID_NewEntity, wxString( _("Entity...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFileNew->Append( m_ItemFileNewEntity );
 	
+	wxMenuItem* m_ItemFileNewProject;
+	m_ItemFileNewProject = new wxMenuItem( m_MenuFileNew, ID_NewProject, wxString( _("Project...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_MenuFileNew->Append( m_ItemFileNewProject );
+	
 	m_MenuFile->Append( -1, _("New"), m_MenuFileNew );
 	
 	wxMenuItem* m_ItemOpen;
-	m_ItemOpen = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Open...") ) + wxT('\t') + wxT("ctrl-o"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemOpen = new wxMenuItem( m_MenuFile, ID_Open, wxString( _("Open...") ) + wxT('\t') + wxT("ctrl-o"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemOpen );
 	
 	m_MenuFileOpenRecent = new wxMenu();
 	m_MenuFile->Append( -1, _("Open Recent"), m_MenuFileOpenRecent );
 	
 	wxMenuItem* m_ItemClose;
-	m_ItemClose = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Close") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemClose = new wxMenuItem( m_MenuFile, ID_Close, wxString( _("Close") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemClose );
 	
 	wxMenuItem* m_separator1;
 	m_separator1 = m_MenuFile->AppendSeparator();
 	
 	wxMenuItem* m_ItemSaveAll;
-	m_ItemSaveAll = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Save All") ) + wxT('\t') + wxT("ctrl-s"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSaveAll = new wxMenuItem( m_MenuFile, ID_SaveAll, wxString( _("Save All") ) + wxT('\t') + wxT("ctrl-s"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemSaveAll );
 	
 	wxMenuItem* m_separator2;
 	m_separator2 = m_MenuFile->AppendSeparator();
 	
-	wxMenuItem* m_ItemCheckOut;
-	m_ItemCheckOut = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Check Out") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuFile->Append( m_ItemCheckOut );
-	
-	wxMenuItem* m_ItemRevert;
-	m_ItemRevert = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Revert") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuFile->Append( m_ItemRevert );
-	
-	wxMenuItem* m_separator3;
-	m_separator3 = m_MenuFile->AppendSeparator();
-	
 	wxMenuItem* m_ItemImport;
-	m_ItemImport = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Import...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemImport = new wxMenuItem( m_MenuFile, ID_Import, wxString( _("Import...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemImport );
 	
 	wxMenuItem* m_ItemImportFromClipboard;
-	m_ItemImportFromClipboard = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Import from Clipboard...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemImportFromClipboard = new wxMenuItem( m_MenuFile, ID_ImportFromClipboard, wxString( _("Import from Clipboard...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemImportFromClipboard );
 	
 	wxMenuItem* m_ItemExport;
-	m_ItemExport = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Export...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemExport = new wxMenuItem( m_MenuFile, ID_Export, wxString( _("Export...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemExport );
 	
 	wxMenuItem* m_ItemExportToClipboard;
-	m_ItemExportToClipboard = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Export to Clipboard...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemExportToClipboard = new wxMenuItem( m_MenuFile, ID_ExportToClipboard, wxString( _("Export to Clipboard...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemExportToClipboard );
-	
-	wxMenuItem* m_ItemExportToOBJ;
-	m_ItemExportToOBJ = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Export to OBJ File...") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuFile->Append( m_ItemExportToOBJ );
 	
 	wxMenuItem* m_separator4;
 	m_separator4 = m_MenuFile->AppendSeparator();
 	
 	wxMenuItem* m_ItemExit;
-	m_ItemExit = new wxMenuItem( m_MenuFile, wxID_ANY, wxString( _("Exit") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemExit = new wxMenuItem( m_MenuFile, ID_Exit, wxString( _("Exit") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuFile->Append( m_ItemExit );
 	
 	m_MainMenuBar->Append( m_MenuFile, _("File") ); 
 	
 	m_MenuEdit = new wxMenu();
 	wxMenuItem* m_ItemUndo;
-	m_ItemUndo = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Undo") ) + wxT('\t') + wxT("ctrl-z"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemUndo = new wxMenuItem( m_MenuEdit, wxID_UNDO, wxString( _("Undo") ) + wxT('\t') + wxT("ctrl-z"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemUndo );
 	
 	wxMenuItem* m_ItemRedo;
-	m_ItemRedo = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Redo") ) + wxT('\t') + wxT("ctrl-shift-z"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemRedo = new wxMenuItem( m_MenuEdit, wxID_REDO, wxString( _("Redo") ) + wxT('\t') + wxT("ctrl-shift-z"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemRedo );
 	
 	wxMenuItem* m_separator5;
 	m_separator5 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemCut;
-	m_ItemCut = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Cut") ) + wxT('\t') + wxT("ctrl-x"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemCut = new wxMenuItem( m_MenuEdit, wxID_CUT, wxString( _("Cut") ) + wxT('\t') + wxT("ctrl-x"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemCut );
 	
 	wxMenuItem* m_ItemCopy;
-	m_ItemCopy = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Copy") ) + wxT('\t') + wxT("ctrl-c"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemCopy = new wxMenuItem( m_MenuEdit, wxID_COPY, wxString( _("Copy") ) + wxT('\t') + wxT("ctrl-c"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemCopy );
 	
 	wxMenuItem* m_ItemPaste;
-	m_ItemPaste = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Paste") ) + wxT('\t') + wxT("ctrl-v"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemPaste = new wxMenuItem( m_MenuEdit, wxID_PASTE, wxString( _("Paste") ) + wxT('\t') + wxT("ctrl-v"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemPaste );
 	
 	wxMenuItem* m_separator6;
 	m_separator6 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemSelectAll;
-	m_ItemSelectAll = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Select All") ) + wxT('\t') + wxT("ctrl-a"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSelectAll = new wxMenuItem( m_MenuEdit, ID_SelectAll, wxString( _("Select All") ) + wxT('\t') + wxT("ctrl-a"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemSelectAll );
 	
 	wxMenuItem* m_ItemInvertSelection;
-	m_ItemInvertSelection = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Invert Selection") ) + wxT('\t') + wxT("ctrl-i"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemInvertSelection = new wxMenuItem( m_MenuEdit, ID_InvertSelection, wxString( _("Invert Selection") ) + wxT('\t') + wxT("ctrl-i"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemInvertSelection );
 	
 	wxMenuItem* m_separator7;
 	m_separator7 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemDelete;
-	m_ItemDelete = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Delete") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemDelete = new wxMenuItem( m_MenuEdit, wxID_DELETE, wxString( _("Delete") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemDelete );
 	
 	wxMenuItem* m_separator8;
 	m_separator8 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemParent;
-	m_ItemParent = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Parent") ) + wxT('\t') + wxT("ctrl-p"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemParent = new wxMenuItem( m_MenuEdit, ID_Parent, wxString( _("Parent") ) + wxT('\t') + wxT("ctrl-p"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemParent );
 	
 	wxMenuItem* m_ItemUnparent;
-	m_ItemUnparent = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Unparent") ) + wxT('\t') + wxT("ctrl-shift-p"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemUnparent = new wxMenuItem( m_MenuEdit, ID_Unparent, wxString( _("Unparent") ) + wxT('\t') + wxT("ctrl-shift-p"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemUnparent );
 	
 	wxMenuItem* m_ItemGroup;
-	m_ItemGroup = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Group") ) + wxT('\t') + wxT("ctrl-g"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemGroup = new wxMenuItem( m_MenuEdit, ID_Group, wxString( _("Group") ) + wxT('\t') + wxT("ctrl-g"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemGroup );
 	
 	wxMenuItem* m_ItemUngroup;
-	m_ItemUngroup = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Ungroup") ) + wxT('\t') + wxT("ctrl-shift-g"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemUngroup = new wxMenuItem( m_MenuEdit, ID_Ungroup, wxString( _("Ungroup") ) + wxT('\t') + wxT("ctrl-shift-g"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemUngroup );
 	
 	wxMenuItem* m_ItemCenter;
-	m_ItemCenter = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Center") ) + wxT('\t') + wxT("ctrl-shift-c"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemCenter = new wxMenuItem( m_MenuEdit, ID_Center, wxString( _("Center") ) + wxT('\t') + wxT("ctrl-shift-c"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemCenter );
 	
 	wxMenuItem* m_separator9;
 	m_separator9 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemDuplicate;
-	m_ItemDuplicate = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Duplicate") ) + wxT('\t') + wxT("ctrl-d"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemDuplicate = new wxMenuItem( m_MenuEdit, ID_Duplicate, wxString( _("Duplicate") ) + wxT('\t') + wxT("ctrl-d"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemDuplicate );
 	
 	wxMenuItem* m_ItemSmartDuplicate;
-	m_ItemSmartDuplicate = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Smart Duplicate") ) + wxT('\t') + wxT("ctrl-shift-d"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSmartDuplicate = new wxMenuItem( m_MenuEdit, ID_SmartDuplicate, wxString( _("Smart Duplicate") ) + wxT('\t') + wxT("ctrl-shift-d"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemSmartDuplicate );
 	
 	wxMenuItem* m_separator10;
 	m_separator10 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemCopyTransform;
-	m_ItemCopyTransform = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Copy Transform") ) + wxT('\t') + wxT("alt-t"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemCopyTransform = new wxMenuItem( m_MenuEdit, ID_CopyTransform, wxString( _("Copy Transform") ) + wxT('\t') + wxT("alt-t"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemCopyTransform );
 	
 	wxMenuItem* m_ItemPasteTransform;
-	m_ItemPasteTransform = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Paste Transform") ) + wxT('\t') + wxT("alt-shift-t"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemPasteTransform = new wxMenuItem( m_MenuEdit, ID_PasteTransform, wxString( _("Paste Transform") ) + wxT('\t') + wxT("alt-shift-t"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemPasteTransform );
 	
 	wxMenuItem* m_separator11;
 	m_separator11 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemSnapToCamera;
-	m_ItemSnapToCamera = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Snap To Camera") ) + wxT('\t') + wxT("alt-c"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSnapToCamera = new wxMenuItem( m_MenuEdit, ID_SnapToCamera, wxString( _("Snap To Camera") ) + wxT('\t') + wxT("alt-c"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemSnapToCamera );
 	
 	wxMenuItem* m_ItemSnapCameraTo;
-	m_ItemSnapCameraTo = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Snap Camera To") ) + wxT('\t') + wxT("alt-shift-c"), wxEmptyString, wxITEM_NORMAL );
+	m_ItemSnapCameraTo = new wxMenuItem( m_MenuEdit, ID_SnapCameraTo, wxString( _("Snap Camera To") ) + wxT('\t') + wxT("alt-shift-c"), wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemSnapCameraTo );
 	
 	wxMenuItem* m_separator12;
 	m_separator12 = m_MenuEdit->AppendSeparator();
 	
 	wxMenuItem* m_ItemWalkUp;
-	m_ItemWalkUp = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Walk Up") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemWalkUp = new wxMenuItem( m_MenuEdit, ID_WalkUp, wxString( _("Walk Up") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemWalkUp );
 	
 	wxMenuItem* m_ItemWalkDown;
-	m_ItemWalkDown = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Walk Down") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemWalkDown = new wxMenuItem( m_MenuEdit, ID_WalkDown, wxString( _("Walk Down") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemWalkDown );
 	
 	wxMenuItem* m_ItemWalkForward;
-	m_ItemWalkForward = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Walk Forward") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemWalkForward = new wxMenuItem( m_MenuEdit, ID_WalkForward, wxString( _("Walk Forward") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemWalkForward );
 	
 	wxMenuItem* m_ItemWalkBackward;
-	m_ItemWalkBackward = new wxMenuItem( m_MenuEdit, wxID_ANY, wxString( _("Walk Backward") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemWalkBackward = new wxMenuItem( m_MenuEdit, ID_WalkBackward, wxString( _("Walk Backward") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuEdit->Append( m_ItemWalkBackward );
 	
 	m_MainMenuBar->Append( m_MenuEdit, _("Edit") ); 
-	
-	m_MenuView = new wxMenu();
-	m_MenuViewHelper = new wxMenu();
-	wxMenuItem* m_ItemAxes;
-	m_ItemAxes = new wxMenuItem( m_MenuViewHelper, wxID_ANY, wxString( _("Axes") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewHelper->Append( m_ItemAxes );
-	
-	wxMenuItem* m_ItemGrid;
-	m_ItemGrid = new wxMenuItem( m_MenuViewHelper, wxID_ANY, wxString( _("Grid") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewHelper->Append( m_ItemGrid );
-	
-	wxMenuItem* m_ItemBounds;
-	m_ItemBounds = new wxMenuItem( m_MenuViewHelper, wxID_ANY, wxString( _("Bounds") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewHelper->Append( m_ItemBounds );
-	
-	wxMenuItem* m_ItemStatistics;
-	m_ItemStatistics = new wxMenuItem( m_MenuViewHelper, wxID_ANY, wxString( _("Statistics") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewHelper->Append( m_ItemStatistics );
-	
-	m_MenuView->Append( -1, _("Helper"), m_MenuViewHelper );
-	
-	m_MenuViewGeometry = new wxMenu();
-	wxMenuItem* m_ItemNone;
-	m_ItemNone = new wxMenuItem( m_MenuViewGeometry, wxID_ANY, wxString( _("None") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewGeometry->Append( m_ItemNone );
-	
-	wxMenuItem* m_ItemArt;
-	m_ItemArt = new wxMenuItem( m_MenuViewGeometry, wxID_ANY, wxString( _("Art") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewGeometry->Append( m_ItemArt );
-	
-	wxMenuItem* m_ItemCollision;
-	m_ItemCollision = new wxMenuItem( m_MenuViewGeometry, wxID_ANY, wxString( _("Collision") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewGeometry->Append( m_ItemCollision );
-	
-	wxMenuItem* m_ItemPathfinding;
-	m_ItemPathfinding = new wxMenuItem( m_MenuViewGeometry, wxID_ANY, wxString( _("Pathfinding") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewGeometry->Append( m_ItemPathfinding );
-	
-	m_MenuView->Append( -1, _("Geometry"), m_MenuViewGeometry );
-	
-	m_MenuViewShading = new wxMenu();
-	wxMenuItem* m_ItemWireframe;
-	m_ItemWireframe = new wxMenuItem( m_MenuViewShading, wxID_ANY, wxString( _("Wireframe") ) + wxT('\t') + wxT("4"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewShading->Append( m_ItemWireframe );
-	
-	wxMenuItem* m_ItemMaterial;
-	m_ItemMaterial = new wxMenuItem( m_MenuViewShading, wxID_ANY, wxString( _("Material") ) + wxT('\t') + wxT("5"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewShading->Append( m_ItemMaterial );
-	
-	wxMenuItem* m_ItemTexture;
-	m_ItemTexture = new wxMenuItem( m_MenuViewShading, wxID_ANY, wxString( _("Texture") ) + wxT('\t') + wxT("6"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewShading->Append( m_ItemTexture );
-	
-	wxMenuItem* m_separator13;
-	m_separator13 = m_MenuViewShading->AppendSeparator();
-	
-	wxMenuItem* m_ItemWireframeOnMesh;
-	m_ItemWireframeOnMesh = new wxMenuItem( m_MenuViewShading, wxID_ANY, wxString( _("Wireframe on Mesh") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewShading->Append( m_ItemWireframeOnMesh );
-	
-	wxMenuItem* m_ItemWireframeOnShaded;
-	m_ItemWireframeOnShaded = new wxMenuItem( m_MenuViewShading, wxID_ANY, wxString( _("Wireframe on Shaded") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewShading->Append( m_ItemWireframeOnShaded );
-	
-	m_MenuView->Append( -1, _("Shading"), m_MenuViewShading );
-	
-	m_MenuViewCamera = new wxMenu();
-	wxMenuItem* m_ItemOrbit;
-	m_ItemOrbit = new wxMenuItem( m_MenuViewCamera, wxID_ANY, wxString( _("Orbit") ) + wxT('\t') + wxT("7"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewCamera->Append( m_ItemOrbit );
-	
-	wxMenuItem* m_ItemFront;
-	m_ItemFront = new wxMenuItem( m_MenuViewCamera, wxID_ANY, wxString( _("Front") ) + wxT('\t') + wxT("8"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewCamera->Append( m_ItemFront );
-	
-	wxMenuItem* m_ItemSide;
-	m_ItemSide = new wxMenuItem( m_MenuViewCamera, wxID_ANY, wxString( _("Side") ) + wxT('\t') + wxT("9"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewCamera->Append( m_ItemSide );
-	
-	wxMenuItem* m_ItemTop;
-	m_ItemTop = new wxMenuItem( m_MenuViewCamera, wxID_ANY, wxString( _("Top") ) + wxT('\t') + wxT("0"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewCamera->Append( m_ItemTop );
-	
-	m_MenuView->Append( -1, _("Camera"), m_MenuViewCamera );
-	
-	m_MenuViewCulling = new wxMenu();
-	wxMenuItem* m_ItemCullingFrustum;
-	m_ItemCullingFrustum = new wxMenuItem( m_MenuViewCulling, wxID_ANY, wxString( _("Frustum") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewCulling->Append( m_ItemCullingFrustum );
-	
-	wxMenuItem* m_ItemCullingBackface;
-	m_ItemCullingBackface = new wxMenuItem( m_MenuViewCulling, wxID_ANY, wxString( _("Backface") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewCulling->Append( m_ItemCullingBackface );
-	
-	m_MenuView->Append( -1, _("Culling"), m_MenuViewCulling );
-	
-	m_MenuViewShow = new wxMenu();
-	wxMenuItem* m_ItemShowAll;
-	m_ItemShowAll = new wxMenuItem( m_MenuViewShow, wxID_ANY, wxString( _("Show All") ) + wxT('\t') + wxT("alt-j"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewShow->Append( m_ItemShowAll );
-	
-	wxMenuItem* m_ItemShowAllGeometry;
-	m_ItemShowAllGeometry = new wxMenuItem( m_MenuViewShow, wxID_ANY, wxString( _("Show All Geometry") ) + wxT('\t') + wxT("ctrl-alt-b"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewShow->Append( m_ItemShowAllGeometry );
-	
-	wxMenuItem* m_separator14;
-	m_separator14 = m_MenuViewShow->AppendSeparator();
-	
-	wxMenuItem* m_ItemShowSelected;
-	m_ItemShowSelected = new wxMenuItem( m_MenuViewShow, wxID_ANY, wxString( _("Show Selected") ) + wxT('\t') + wxT("alt-s"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewShow->Append( m_ItemShowSelected );
-	
-	wxMenuItem* m_ItemShowSelectedGeometry;
-	m_ItemShowSelectedGeometry = new wxMenuItem( m_MenuViewShow, wxID_ANY, wxString( _("Show Selected Geometry") ) + wxT('\t') + wxT("ctrl-b"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewShow->Append( m_ItemShowSelectedGeometry );
-	
-	wxMenuItem* m_separator15;
-	m_separator15 = m_MenuViewShow->AppendSeparator();
-	
-	wxMenuItem* m_ItemShowUnrelated;
-	m_ItemShowUnrelated = new wxMenuItem( m_MenuViewShow, wxID_ANY, wxString( _("Show Unrelated") ) + wxT('\t') + wxT("alt-shift-s"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewShow->Append( m_ItemShowUnrelated );
-	
-	wxMenuItem* m_separator16;
-	m_separator16 = m_MenuViewShow->AppendSeparator();
-	
-	wxMenuItem* m_ItemShowLastHidden;
-	m_ItemShowLastHidden = new wxMenuItem( m_MenuViewShow, wxID_ANY, wxString( _("Show Last Hidden") ) + wxT('\t') + wxT("ctrl-shift-h"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewShow->Append( m_ItemShowLastHidden );
-	
-	m_MenuView->Append( -1, _("Show"), m_MenuViewShow );
-	
-	m_MenuViewHide = new wxMenu();
-	wxMenuItem* m_ItemHideAll;
-	m_ItemHideAll = new wxMenuItem( m_MenuViewHide, wxID_ANY, wxString( _("Hide All") ) + wxT('\t') + wxT("alt-shift-j"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewHide->Append( m_ItemHideAll );
-	
-	wxMenuItem* m_ItemHideAllGeometry;
-	m_ItemHideAllGeometry = new wxMenuItem( m_MenuViewHide, wxID_ANY, wxString( _("Hide All Geometry") ) + wxT('\t') + wxT("ctrl-alt-shift-b"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewHide->Append( m_ItemHideAllGeometry );
-	
-	wxMenuItem* m_separator17;
-	m_separator17 = m_MenuViewHide->AppendSeparator();
-	
-	wxMenuItem* m_ItemHideSelected;
-	m_ItemHideSelected = new wxMenuItem( m_MenuViewHide, wxID_ANY, wxString( _("Hide Selected") ) + wxT('\t') + wxT("ctrl-h"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewHide->Append( m_ItemHideSelected );
-	
-	wxMenuItem* m_ItemHideSelectedGeometry;
-	m_ItemHideSelectedGeometry = new wxMenuItem( m_MenuViewHide, wxID_ANY, wxString( _("Hide Selected Geometry") ) + wxT('\t') + wxT("ctrl-shift-b"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewHide->Append( m_ItemHideSelectedGeometry );
-	
-	wxMenuItem* m_separator18;
-	m_separator18 = m_MenuViewHide->AppendSeparator();
-	
-	wxMenuItem* m_ItemHideUnrelated;
-	m_ItemHideUnrelated = new wxMenuItem( m_MenuViewHide, wxID_ANY, wxString( _("Hide Unrelated") ) + wxT('\t') + wxT("alt-h"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewHide->Append( m_ItemHideUnrelated );
-	
-	m_MenuView->Append( -1, _("Hide"), m_MenuViewHide );
-	
-	m_MenuViewColorMode = new wxMenu();
-	wxMenuItem* m_ItemLayer;
-	m_ItemLayer = new wxMenuItem( m_MenuViewColorMode, wxID_ANY, wxString( _("Layer") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewColorMode->Append( m_ItemLayer );
-	
-	wxMenuItem* m_ItemNodeType;
-	m_ItemNodeType = new wxMenuItem( m_MenuViewColorMode, wxID_ANY, wxString( _("Node Type") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewColorMode->Append( m_ItemNodeType );
-	
-	wxMenuItem* m_ItemScene;
-	m_ItemScene = new wxMenuItem( m_MenuViewColorMode, wxID_ANY, wxString( _("Scene") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewColorMode->Append( m_ItemScene );
-	
-	wxMenuItem* m_ItemScaleColorMode;
-	m_ItemScaleColorMode = new wxMenuItem( m_MenuViewColorMode, wxID_ANY, wxString( _("Scale") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewColorMode->Append( m_ItemScaleColorMode );
-	
-	wxMenuItem* m_ItemScaleGradientColorMode;
-	m_ItemScaleGradientColorMode = new wxMenuItem( m_MenuViewColorMode, wxID_ANY, wxString( _("Scale (Gradient)") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewColorMode->Append( m_ItemScaleGradientColorMode );
-	
-	m_MenuView->Append( -1, _("Color Mode"), m_MenuViewColorMode );
-	
-	m_MenuViewDefaults = new wxMenu();
-	wxMenuItem* m_ItemShowLayers;
-	m_ItemShowLayers = new wxMenuItem( m_MenuViewDefaults, wxID_ANY, wxString( _("Show Layers") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewDefaults->Append( m_ItemShowLayers );
-	
-	wxMenuItem* m_ItemShowInstances;
-	m_ItemShowInstances = new wxMenuItem( m_MenuViewDefaults, wxID_ANY, wxString( _("Show Instances") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewDefaults->Append( m_ItemShowInstances );
-	
-	wxMenuItem* m_ItemShowGeometry;
-	m_ItemShowGeometry = new wxMenuItem( m_MenuViewDefaults, wxID_ANY, wxString( _("Show Geometry") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewDefaults->Append( m_ItemShowGeometry );
-	
-	wxMenuItem* m_ItemShowPointer;
-	m_ItemShowPointer = new wxMenuItem( m_MenuViewDefaults, wxID_ANY, wxString( _("Show Pointer") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewDefaults->Append( m_ItemShowPointer );
-	
-	wxMenuItem* m_ItemShowBounds;
-	m_ItemShowBounds = new wxMenuItem( m_MenuViewDefaults, wxID_ANY, wxString( _("Show Bounds") ) , wxEmptyString, wxITEM_NORMAL );
-	m_MenuViewDefaults->Append( m_ItemShowBounds );
-	
-	m_MenuView->Append( -1, _("Defaults"), m_MenuViewDefaults );
-	
-	wxMenuItem* m_ItemFrameOrigin;
-	m_ItemFrameOrigin = new wxMenuItem( m_MenuView, wxID_ANY, wxString( _("Frame Origin") ) + wxT('\t') + wxT("o"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuView->Append( m_ItemFrameOrigin );
-	
-	wxMenuItem* m_ItemFrameSelected;
-	m_ItemFrameSelected = new wxMenuItem( m_MenuView, wxID_ANY, wxString( _("Frame Selected") ) + wxT('\t') + wxT("f"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuView->Append( m_ItemFrameSelected );
-	
-	wxMenuItem* m_ItemHighlightMode;
-	m_ItemHighlightMode = new wxMenuItem( m_MenuView, wxID_ANY, wxString( _("Highlight Mode") ) + wxT('\t') + wxT("h"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuView->Append( m_ItemHighlightMode );
-	
-	wxMenuItem* m_ItemPreviousView;
-	m_ItemPreviousView = new wxMenuItem( m_MenuView, wxID_ANY, wxString( _("Previous View") ) + wxT('\t') + wxT("["), wxEmptyString, wxITEM_NORMAL );
-	m_MenuView->Append( m_ItemPreviousView );
-	
-	wxMenuItem* m_ItemNextView;
-	m_ItemNextView = new wxMenuItem( m_MenuView, wxID_ANY, wxString( _("Next View") ) + wxT('\t') + wxT("]"), wxEmptyString, wxITEM_NORMAL );
-	m_MenuView->Append( m_ItemNextView );
-	
-	m_MainMenuBar->Append( m_MenuView, _("View") ); 
 	
 	m_MenuTools = new wxMenu();
 	wxMenuItem* m_ItemSelect;
@@ -493,14 +254,14 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	
 	m_MenuSettings = new wxMenu();
 	wxMenuItem* m_ItemPreferences;
-	m_ItemPreferences = new wxMenuItem( m_MenuSettings, wxID_ANY, wxString( _("Preferences...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemPreferences = new wxMenuItem( m_MenuSettings, ID_Preferences, wxString( _("Preferences...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuSettings->Append( m_ItemPreferences );
 	
 	m_MainMenuBar->Append( m_MenuSettings, _("Settings") ); 
 	
 	m_MenuHelp = new wxMenu();
 	wxMenuItem* m_ItemAbout;
-	m_ItemAbout = new wxMenuItem( m_MenuHelp, wxID_ANY, wxString( _("About...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_ItemAbout = new wxMenuItem( m_MenuHelp, ID_About, wxString( _("About...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_MenuHelp->Append( m_ItemAbout );
 	
 	m_MainMenuBar->Append( m_MenuHelp, _("Help") ); 
@@ -532,26 +293,102 @@ MainFrameGenerated::MainFrameGenerated( wxWindow* parent, wxWindowID id, const w
 	m_MainStatusBar = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 	
 	// Connect Events
-	this->Connect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
-	this->Connect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
-	this->Connect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
+	this->Connect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
+	this->Connect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewEntity ) );
+	this->Connect( ID_NewProject, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
+	this->Connect( ID_Open, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
+	this->Connect( ID_Close, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnClose ) );
+	this->Connect( ID_SaveAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
+	this->Connect( ID_Import, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
+	this->Connect( ID_ImportFromClipboard, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
+	this->Connect( ID_Export, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
+	this->Connect( ID_ExportToClipboard, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
+	this->Connect( ID_Exit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExit ) );
+	this->Connect( wxID_UNDO, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUndo ) );
+	this->Connect( wxID_REDO, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnRedo ) );
+	this->Connect( wxID_CUT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
+	this->Connect( wxID_COPY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
+	this->Connect( wxID_PASTE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
+	this->Connect( ID_SelectAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectAll ) );
+	this->Connect( ID_InvertSelection, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnInvertSelection ) );
+	this->Connect( wxID_DELETE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDelete ) );
+	this->Connect( ID_Parent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnParent ) );
+	this->Connect( ID_Unparent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUnparent ) );
+	this->Connect( ID_Group, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnGroup ) );
+	this->Connect( ID_Ungroup, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUngroup ) );
+	this->Connect( ID_Center, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCenter ) );
+	this->Connect( ID_Duplicate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDuplicate ) );
+	this->Connect( ID_SmartDuplicate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSmartDuplicate ) );
+	this->Connect( ID_CopyTransform, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopyTransform ) );
+	this->Connect( ID_PasteTransform, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPasteTransform ) );
+	this->Connect( ID_SnapToCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapToCamera ) );
+	this->Connect( ID_SnapCameraTo, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapCameraTo ) );
+	this->Connect( ID_WalkUp, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
+	this->Connect( ID_WalkForward, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
+	this->Connect( ID_Preferences, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPreferences ) );
+	this->Connect( ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
+	this->Connect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
 	this->Connect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
 	this->Connect( ID_SaveAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
+	this->Connect( ID_Cut, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
+	this->Connect( ID_Copy, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
+	this->Connect( ID_Paste, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
+	this->Connect( ID_Undo, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnUndo ) );
+	this->Connect( ID_Redo, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnRedo ) );
 }
 
 MainFrameGenerated::~MainFrameGenerated()
 {
 	// Disconnect Events
-	this->Disconnect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
-	this->Disconnect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
-	this->Disconnect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
+	this->Disconnect( ID_NewScene, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
+	this->Disconnect( ID_NewEntity, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNewEntity ) );
+	this->Disconnect( ID_NewProject, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnNew ) );
+	this->Disconnect( ID_Open, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
+	this->Disconnect( ID_Close, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnClose ) );
+	this->Disconnect( ID_SaveAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
+	this->Disconnect( ID_Import, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
+	this->Disconnect( ID_ImportFromClipboard, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnImport ) );
+	this->Disconnect( ID_Export, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
+	this->Disconnect( ID_ExportToClipboard, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExport ) );
+	this->Disconnect( ID_Exit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnExit ) );
+	this->Disconnect( wxID_UNDO, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUndo ) );
+	this->Disconnect( wxID_REDO, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnRedo ) );
+	this->Disconnect( wxID_CUT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
+	this->Disconnect( wxID_COPY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
+	this->Disconnect( wxID_PASTE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
+	this->Disconnect( ID_SelectAll, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSelectAll ) );
+	this->Disconnect( ID_InvertSelection, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnInvertSelection ) );
+	this->Disconnect( wxID_DELETE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDelete ) );
+	this->Disconnect( ID_Parent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnParent ) );
+	this->Disconnect( ID_Unparent, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUnparent ) );
+	this->Disconnect( ID_Group, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnGroup ) );
+	this->Disconnect( ID_Ungroup, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnUngroup ) );
+	this->Disconnect( ID_Center, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCenter ) );
+	this->Disconnect( ID_Duplicate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnDuplicate ) );
+	this->Disconnect( ID_SmartDuplicate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSmartDuplicate ) );
+	this->Disconnect( ID_CopyTransform, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnCopyTransform ) );
+	this->Disconnect( ID_PasteTransform, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPasteTransform ) );
+	this->Disconnect( ID_SnapToCamera, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapToCamera ) );
+	this->Disconnect( ID_SnapCameraTo, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnSnapCameraTo ) );
+	this->Disconnect( ID_WalkUp, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
+	this->Disconnect( ID_WalkForward, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPickWalk ) );
+	this->Disconnect( ID_Preferences, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnPreferences ) );
+	this->Disconnect( ID_About, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrameGenerated::OnAbout ) );
+	this->Disconnect( ID_NewScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnNewScene ) );
 	this->Disconnect( ID_Open, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnOpen ) );
 	this->Disconnect( ID_SaveAll, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnSaveAll ) );
+	this->Disconnect( ID_Cut, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnCut ) );
+	this->Disconnect( ID_Copy, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnCopy ) );
+	this->Disconnect( ID_Paste, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnPaste ) );
+	this->Disconnect( ID_Undo, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnUndo ) );
+	this->Disconnect( ID_Redo, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( MainFrameGenerated::OnRedo ) );
 	
 }
 
 HelpPanelGenerated::HelpPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
+	this->SetMinSize( wxSize( 300,200 ) );
+	
 	wxBoxSizer* bSizer32;
 	bSizer32 = new wxBoxSizer( wxVERTICAL );
 	
@@ -846,6 +683,22 @@ TypesPanelGenerated::~TypesPanelGenerated()
 {
 }
 
+ProjectPanelGenerated::ProjectPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
+{
+	wxBoxSizer* bSizer24;
+	bSizer24 = new wxBoxSizer( wxVERTICAL );
+	
+	m_DataViewCtrl = new wxDataViewCtrl ( this, wxID_ANY );
+	bSizer24->Add( m_DataViewCtrl, 1, wxALL|wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer24 );
+	this->Layout();
+}
+
+ProjectPanelGenerated::~ProjectPanelGenerated()
+{
+}
+
 DirectoryPanelGenerated::DirectoryPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* bSizer21;
@@ -883,10 +736,35 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	bSizer21 = new wxBoxSizer( wxVERTICAL );
 	
 	m_ToolbarView = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL ); 
-	m_ToolbarView->AddTool( ID_CameraOrbit, _("Orbit"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_CameraFront, _("Front"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_CameraSide, _("Side"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
-	m_ToolbarView->AddTool( ID_CameraTop, _("Top"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_FrameOrigin, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, _("Frame the origin (o)"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_FrameSelected, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, _("Frame selected item (f)"), wxEmptyString ); 
+	m_ToolbarView->AddSeparator(); 
+	m_ToolbarView->AddTool( ID_PreviousView, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, _("Switch to the previous view ([)"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_NextView, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_NORMAL, _("Switch to the next view (])"), wxEmptyString ); 
+	m_ToolbarView->AddSeparator(); 
+	m_ToolbarView->AddTool( ID_HighlightMode, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle highlight mode (h)"), wxEmptyString ); 
+	m_ToolbarView->AddSeparator(); 
+	m_ToolbarView->AddTool( ID_CameraOrbit, _("Orbit"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Use the orbit camera"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_CameraFront, _("Front"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Use the front camera"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_CameraSide, _("Side"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Use the side camera"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_CameraTop, _("Top"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Use the top camera"), wxEmptyString ); 
+	m_ToolbarView->AddSeparator(); 
+	m_ToolbarView->AddTool( ID_ShowAxes, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle axes display"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_ShowGrid, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle grid display"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_ShowBounds, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle bounds display"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_ShowStatistics, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle statistics display"), wxEmptyString ); 
+	m_ToolbarView->AddSeparator(); 
+	m_ToolbarView->AddTool( ID_FrustumCull, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Enable frustum culling"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_BackfaceCull, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Enable backface culling"), wxEmptyString ); 
+	m_ToolbarView->AddSeparator(); 
+	m_ToolbarView->AddTool( ID_ShadingWireframe, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle wireframe display"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_ShadingMaterial, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle material display"), wxEmptyString ); 
+	m_ToolbarView->AddSeparator(); 
+	m_ToolbarView->AddTool( ID_ColorModeScene, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle scene coloring mode"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_ColorModeLayer, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle layer coloring mode"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_ColorModeNodeType, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle node type coloring mode"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_ColorModeScale, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle scale coloring mode"), wxEmptyString ); 
+	m_ToolbarView->AddTool( ID_ColorModeScaleGradient, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle scale gradient coloring mode"), wxEmptyString ); 
 	m_ToolbarView->Realize();
 	
 	bSizer21->Add( m_ToolbarView, 0, wxEXPAND, 5 );
@@ -902,8 +780,56 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	
 	this->SetSizer( bSizer21 );
 	this->Layout();
+	
+	// Connect Events
+	this->Connect( ID_FrameOrigin, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameOrigin ) );
+	this->Connect( ID_FrameSelected, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameSelected ) );
+	this->Connect( ID_PreviousView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewPrevious ) );
+	this->Connect( ID_NextView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewNext ) );
+	this->Connect( ID_HighlightMode, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnHighlightMode ) );
+	this->Connect( ID_CameraOrbit, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
+	this->Connect( ID_CameraFront, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
+	this->Connect( ID_CameraSide, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
+	this->Connect( ID_CameraTop, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
+	this->Connect( ID_ShowAxes, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowAxes ) );
+	this->Connect( ID_ShowGrid, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowGrid ) );
+	this->Connect( ID_ShowBounds, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowBounds ) );
+	this->Connect( ID_ShowStatistics, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowStatistics ) );
+	this->Connect( ID_FrustumCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCulling ) );
+	this->Connect( ID_BackfaceCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCulling ) );
+	this->Connect( ID_ShadingWireframe, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShading ) );
+	this->Connect( ID_ShadingMaterial, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShading ) );
+	this->Connect( ID_ColorModeScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
+	this->Connect( ID_ColorModeLayer, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
+	this->Connect( ID_ColorModeNodeType, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
+	this->Connect( ID_ColorModeScale, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
+	this->Connect( ID_ColorModeScaleGradient, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
 }
 
 ViewPanelGenerated::~ViewPanelGenerated()
 {
+	// Disconnect Events
+	this->Disconnect( ID_FrameOrigin, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameOrigin ) );
+	this->Disconnect( ID_FrameSelected, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnFrameSelected ) );
+	this->Disconnect( ID_PreviousView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewPrevious ) );
+	this->Disconnect( ID_NextView, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnViewNext ) );
+	this->Disconnect( ID_HighlightMode, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnHighlightMode ) );
+	this->Disconnect( ID_CameraOrbit, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
+	this->Disconnect( ID_CameraFront, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
+	this->Disconnect( ID_CameraSide, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
+	this->Disconnect( ID_CameraTop, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCamera ) );
+	this->Disconnect( ID_ShowAxes, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowAxes ) );
+	this->Disconnect( ID_ShowGrid, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowGrid ) );
+	this->Disconnect( ID_ShowBounds, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowBounds ) );
+	this->Disconnect( ID_ShowStatistics, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShowStatistics ) );
+	this->Disconnect( ID_FrustumCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCulling ) );
+	this->Disconnect( ID_BackfaceCull, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnCulling ) );
+	this->Disconnect( ID_ShadingWireframe, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShading ) );
+	this->Disconnect( ID_ShadingMaterial, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnShading ) );
+	this->Disconnect( ID_ColorModeScene, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
+	this->Disconnect( ID_ColorModeLayer, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
+	this->Disconnect( ID_ColorModeNodeType, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
+	this->Disconnect( ID_ColorModeScale, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
+	this->Disconnect( ID_ColorModeScaleGradient, wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( ViewPanelGenerated::OnColorMode ) );
+	
 }

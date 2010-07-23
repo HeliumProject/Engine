@@ -14,7 +14,7 @@
 #include "Application/UI/MenuButton.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
 #include "UI/ArtProvider.h"
-
+#include "App.h"
 
 using namespace Luna;
 
@@ -82,8 +82,8 @@ CollectionsPanel::CollectionsPanel( VaultFrame* browserFrame )
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
 
-    m_VaultFrame->GetVault()->GetVaultPreferences()->AddPreferencesLoadedListener( PreferencesLoadedSignature::Delegate( this, &CollectionsPanel::OnPreferencesLoaded ) );
-    m_VaultFrame->GetVault()->GetVaultPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
+    wxGetApp().GetPreferences()->GetVaultPreferences()->AddPreferencesLoadedListener( PreferencesLoadedSignature::Delegate( this, &CollectionsPanel::OnPreferencesLoaded ) );
+    wxGetApp().GetPreferences()->GetVaultPreferences()->AddChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
 
     // Drag-and-drop 
     // No need to delete drop target, wx takes care of that after calling SetDropTarget.
@@ -100,8 +100,8 @@ CollectionsPanel::~CollectionsPanel()
 {
     Disconnect( wxEVT_SIZE, wxSizeEventHandler( CollectionsPanel::OnSizeCollectionsPanel ), NULL, this );
 
-    m_VaultFrame->GetVault()->GetVaultPreferences()->RemovePreferencesLoadedListener( PreferencesLoadedSignature::Delegate( this, &CollectionsPanel::OnPreferencesLoaded ) );
-    m_VaultFrame->GetVault()->GetVaultPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
+    wxGetApp().GetPreferences()->GetVaultPreferences()->RemovePreferencesLoadedListener( PreferencesLoadedSignature::Delegate( this, &CollectionsPanel::OnPreferencesLoaded ) );
+    wxGetApp().GetPreferences()->GetVaultPreferences()->RemoveChangedListener( Reflect::ElementChangeSignature::Delegate( this, &CollectionsPanel::OnPrefrencesChanged ) );
 
     for ( M_AssetCollections::const_iterator itr = m_CollectionManager->GetCollections().begin(),
         end = m_CollectionManager->GetCollections().end(); itr != end; ++itr )
@@ -901,7 +901,7 @@ void CollectionsPanel::UpdateCollectionManager()
         DisconnectCollectionManagerListeners();
     }
 
-    m_CollectionManager = m_VaultFrame->GetVault()->GetVaultPreferences()->GetCollectionManager();
+    m_CollectionManager = wxGetApp().GetPreferences()->GetVaultPreferences()->GetCollectionManager();
     ConnectCollectionManagerListeners();
     ConnectCollectionListeners();
     UpdateCollections();

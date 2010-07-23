@@ -9,10 +9,8 @@
 #include "EntityAssetSet.h"
 #include "EntityCreateTool.h"
 #include "EntityType.h"
-#include "ExportOptionsDlg.h"
 #include "HierarchyNodeType.h"
 #include "HierarchyOutliner.h"
-#include "ImportOptionsDlg.h"
 #include "Layer.h"
 #include "LocatorCreateTool.h"
 #include "NavMeshCreateTool.h"
@@ -20,18 +18,21 @@
 #include "Point.h"
 #include "RotateManipulator.h"
 #include "ScaleManipulator.h"
-#include "ScenePreferences.h"
-#include "ScenePreferencesDialog.h"
 #include "SelectionPropertiesPanel.h"
 #include "TranslateManipulator.h"
-#include "TypeGrid.h"
+#include "UI/TypeGrid.h"
 #include "Viewport.h"
 #include "VolumeCreateTool.h"
 #include "Mesh.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
+#include "UI/PreferencesDialog.h"
 #include "MRUData.h"
+#include "App.h"
 
 #include "UI/HelpPanel.h"
+#include "UI/ImportOptionsDlg.h"
+#include "UI/ExportOptionsDlg.h"
+
 #include "Vault/VaultToolBar.h"
 
 #include "Platform/Process.h"
@@ -692,8 +693,8 @@ SceneEditor::SceneEditor()
     // Restore layout if any
     //
 
-    SceneEditorPreferences()->GetSceneEditorWindowSettings()->ApplyToWindow( this, &m_FrameManager, true );
-    SceneEditorPreferences()->GetViewPreferences()->ApplyToView( m_View ); 
+    wxGetApp().GetPreferences()->GetScenePreferences()->GetWindowSettings()->ApplyToWindow( this, &m_FrameManager, true );
+    wxGetApp().GetPreferences()->GetViewportPreferences()->ApplyToViewport( m_View ); 
 
     //
     // Attach event handlers
@@ -706,9 +707,11 @@ SceneEditor::SceneEditor()
 
     m_MRU->AddItemSelectedListener( Nocturnal::MRUSignature::Delegate( this, &SceneEditor::OnMRUOpen ) );
 
+#pragma TODO("MRU")
+#if 0
     std::vector< tstring > paths;
-    std::vector< tstring >::const_iterator itr = SceneEditorPreferences()->GetMRU()->GetPaths().begin();
-    std::vector< tstring >::const_iterator end = SceneEditorPreferences()->GetMRU()->GetPaths().end();
+    std::vector< tstring >::const_iterator itr = wxGetApp().GetPreferences()->GetMRU()->GetPaths().begin();
+    std::vector< tstring >::const_iterator end = wxGetApp().GetPreferences()->GetMRU()->GetPaths().end();
     for ( ; itr != end; ++itr )
     {
         Nocturnal::Path path( *itr );
@@ -718,6 +721,7 @@ SceneEditor::SceneEditor()
         }
     }
     m_MRU->FromVector( paths );
+#endif
 
     Inspect::DropTarget* dropTarget = new Inspect::DropTarget();
     dropTarget->SetDragOverCallback( Inspect::DragOverCallback::Delegate( this, &SceneEditor::DragOver ) );
@@ -738,11 +742,14 @@ SceneEditor::~SceneEditor()
     }
 
     // Save preferences and MRU
+#pragma TODO("MRU")
+#if 0
     std::vector< tstring > mruPaths;
     m_MRU->ToVector( mruPaths );
-    SceneEditorPreferences()->GetMRU()->SetPaths( mruPaths );
-    SceneEditorPreferences()->GetViewPreferences()->LoadFromView( m_View ); 
-    SceneEditorPreferences()->SavePreferences();
+    wxGetApp().GetPreferences()->GetScenePreferences()->GetMRU()->SetPaths( mruPaths );
+#endif
+    wxGetApp().GetPreferences()->GetViewportPreferences()->LoadFromViewport( m_View ); 
+    wxGetApp().SavePreferences();
 
     //
     // Detach event handlers
@@ -1038,7 +1045,7 @@ void SceneEditor::OnMenuOpen(wxMenuEvent& event)
         m_GeometryMenu->Check( SceneEditorIDs::ID_ViewRender, m_View->GetGeometryMode() == GeometryModes::Render );
         m_GeometryMenu->Check( SceneEditorIDs::ID_ViewCollision, m_View->GetGeometryMode() == GeometryModes::Collision );
 
-        ViewColorMode colorMode = SceneEditorPreferences()->GetViewPreferences()->GetColorMode();
+        ViewColorMode colorMode = wxGetApp().GetPreferences()->GetViewportPreferences()->GetColorMode();
         M_IDToColorMode::const_iterator colorModeItr = m_ColorModeLookup.begin();
         M_IDToColorMode::const_iterator colorModeEnd = m_ColorModeLookup.end();
         for ( ; colorModeItr != colorModeEnd; ++colorModeItr )
@@ -1057,7 +1064,7 @@ void SceneEditor::OnMenuOpen(wxMenuEvent& event)
 
         m_ViewMenu->Check( SceneEditorIDs::ID_ViewHighlightMode, m_View->IsHighlighting() );
 
-        Content::NodeVisibilityPtr nodeDefaults = SceneEditorPreferences()->GetDefaultNodeVisibility(); 
+        Content::NodeVisibilityPtr nodeDefaults = wxGetApp().GetPreferences()->GetScenePreferences()->GetDefaultNodeVisibility(); 
 
         m_ViewDefaultsMenu->Check( SceneEditorIDs::ID_ViewDefaultShowLayers, nodeDefaults->GetVisibleLayer()); 
         m_ViewDefaultsMenu->Check( SceneEditorIDs::ID_ViewDefaultShowInstances, !nodeDefaults->GetHiddenNode());
@@ -1252,12 +1259,12 @@ void SceneEditor::OnExport(wxCommandEvent& event)
 
             u64 startTimer = Platform::TimerGetClock();
 
-            CursorChanged( wxCURSOR_WAIT );
+            SetCursor( wxCursor( wxCURSOR_WAIT ) );
 
             {
                 tostringstream str;
                 str << "Preparing to export";
-                StatusChanged( str.str() );
+                SceneStatusChanged( str.str() );
             }
 
             Undo::BatchCommandPtr changes = new Undo::BatchCommand();
@@ -1330,13 +1337,13 @@ void SceneEditor::OnExport(wxCommandEvent& event)
 
             changes->Undo();
 
-            CursorChanged( wxCURSOR_ARROW );
+            SetCursor( wxCursor( wxCURSOR_ARROW ) );
 
             {
                 tostringstream str;
                 str.precision( 2 );
                 str << "Export Complete: " << std::fixed << Platform::CyclesToMillis( Platform::TimerGetClock() - startTimer ) / 1000.f << " seconds...";
-                StatusChanged( str.str() );
+                SceneStatusChanged( str.str() );
             }
         }
     }
@@ -1519,8 +1526,8 @@ void SceneEditor::OnPickWalk( wxCommandEvent& event )
 
 void SceneEditor::OnEditPreferences( wxCommandEvent& event )
 {
-    ScenePreferencesDialog scenePreferencesDialog( this, wxID_ANY, TXT( "Preferences" ) );
-    scenePreferencesDialog.ShowModal();
+    PreferencesDialog dlg ( this, wxID_ANY, TXT( "Preferences" ) );
+    dlg.ShowModal( wxGetApp().GetPreferences() );
 }
 
 void SceneEditor::OnViewChange(wxCommandEvent& event)
@@ -1742,18 +1749,18 @@ void SceneEditor::OnViewVisibleChange(wxCommandEvent& event)
 
 void SceneEditor::OnViewColorModeChange(wxCommandEvent& event)
 {
-    const ViewColorMode previousColorMode = SceneEditorPreferences()->GetViewPreferences()->GetColorMode();
+    const ViewColorMode previousColorMode = wxGetApp().GetPreferences()->GetViewportPreferences()->GetColorMode();
 
     const M_IDToColorMode::const_iterator newColorModeItr = m_ColorModeLookup.find( event.GetId() );
     if ( newColorModeItr != m_ColorModeLookup.end() )
     {
-        SceneEditorPreferences()->GetViewPreferences()->SetColorMode( ( ViewColorMode )( newColorModeItr->second ) );
+        wxGetApp().GetPreferences()->GetViewportPreferences()->SetColorMode( ( ViewColorMode )( newColorModeItr->second ) );
     }
 }
 
 void SceneEditor::OnViewDefaultsChange(wxCommandEvent& event)
 {
-    Content::NodeVisibilityPtr nodeDefaults = SceneEditorPreferences()->GetDefaultNodeVisibility(); 
+    Content::NodeVisibilityPtr nodeDefaults = wxGetApp().GetPreferences()->GetScenePreferences()->GetDefaultNodeVisibility(); 
 
     switch ( event.GetId() )
     {
@@ -2258,7 +2265,7 @@ void SceneEditor::OnMRUOpen( const Nocturnal::MRUArgs& args )
 // 
 void SceneEditor::SaveWindowState()
 {
-    SceneEditorPreferences()->GetSceneEditorWindowSettings()->SetFromWindow( this, &m_FrameManager );
+    wxGetApp().GetPreferences()->GetScenePreferences()->GetWindowSettings()->SetFromWindow( this, &m_FrameManager );
 }
 
 
@@ -2459,9 +2466,8 @@ void SceneEditor::SceneAdded( const SceneChangeArgs& args )
     if ( !m_SceneManager.IsNestedScene( args.m_Scene ) )
     {
         // Only listen to zone and world files.
-        args.m_Scene->AddStatusChangedListener( StatusChangeSignature::Delegate( this, &SceneEditor::StatusChanged ) );
-        args.m_Scene->AddCursorChangedListener( CursorChangeSignature::Delegate( this, &SceneEditor::CursorChanged ) );
-        args.m_Scene->AddBusyCursorChangedListener( CursorChangeSignature::Delegate( this, &SceneEditor::BusyCursorChanged ) );
+        args.m_Scene->AddStatusChangedListener( SceneStatusChangeSignature::Delegate( this, &SceneEditor::SceneStatusChanged ) );
+        args.m_Scene->AddSceneContextChangedListener( SceneContextChangedSignature::Delegate( this, &SceneEditor::SceneContextChanged ) );
         args.m_Scene->AddLoadFinishedListener( LoadSignature::Delegate( this, & SceneEditor::SceneLoadFinished ) );
 
         m_SelectionEnumerator->AddPopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Luna::Scene::PopulateLink));
@@ -2475,9 +2481,8 @@ void SceneEditor::SceneAdded( const SceneChangeArgs& args )
 
 void SceneEditor::SceneRemoving( const SceneChangeArgs& args )
 {
-    args.m_Scene->RemoveStatusChangedListener( StatusChangeSignature::Delegate ( this, &SceneEditor::StatusChanged ) );
-    args.m_Scene->RemoveCursorChangedListener( CursorChangeSignature::Delegate ( this, &SceneEditor::CursorChanged ) );
-    args.m_Scene->RemoveBusyCursorChangedListener( CursorChangeSignature::Delegate ( this, &SceneEditor::BusyCursorChanged ) );
+    args.m_Scene->RemoveStatusChangedListener( SceneStatusChangeSignature::Delegate ( this, &SceneEditor::SceneStatusChanged ) );
+    args.m_Scene->RemoveSceneContextChangedListener( SceneContextChangedSignature::Delegate ( this, &SceneEditor::SceneContextChanged ) );
     args.m_Scene->RemoveLoadFinishedListener( LoadSignature::Delegate( this, & SceneEditor::SceneLoadFinished ) );
 
     m_SelectionEnumerator->RemovePopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Luna::Scene::PopulateLink));
@@ -2500,27 +2505,38 @@ void SceneEditor::SceneLoadFinished( const LoadArgs& args )
     DocumentModified( DocumentChangedArgs( args.m_Scene->GetSceneDocument() ) );
 }
 
-void SceneEditor::StatusChanged( const StatusChangeArgs& args )
+void SceneEditor::SceneStatusChanged( const SceneStatusChangeArgs& args )
 {
     GetStatusBar()->SetStatusText( args.m_Status.c_str() );
 }
 
-void SceneEditor::CursorChanged( const CursorChangeArgs& args )
+void SceneEditor::SceneContextChanged( const SceneContextChangeArgs& args )
 {
-    wxSetCursor( args.m_Cursor );
-}
-
-void SceneEditor::BusyCursorChanged( const CursorChangeArgs& args )
-{
-    if (args.m_Cursor == wxCURSOR_ARROW)
+    if ( args.m_OldContext != SceneContexts::Normal )
     {
         wxEndBusyCursor();
     }
-    else
+
+    static wxCursor busyCursor;
+    busyCursor = wxCursor( wxCURSOR_WAIT );
+
+    static wxCursor pickingCursor;
+    pickingCursor = wxCursor( wxCURSOR_BULLSEYE );
+
+    switch ( args.m_NewContext )
     {
-        static wxCursor busyCursor;
-        busyCursor = wxCursor (args.m_Cursor);
-        wxBeginBusyCursor(&busyCursor);
+    case SceneContexts::Loading:
+        wxBeginBusyCursor( &busyCursor );
+        break;
+
+    case SceneContexts::Picking:
+        wxBeginBusyCursor( &pickingCursor );
+        break;
+
+    case SceneContexts::Normal:
+    default:
+        wxSetCursor( wxCURSOR_ARROW );
+        break;
     }
 }
 
@@ -2545,9 +2561,8 @@ void SceneEditor::CurrentSceneChanging( const SceneChangeArgs& args )
     }
 
     // Unhook our event handlers
-    args.m_Scene->RemoveStatusChangedListener( StatusChangeSignature::Delegate ( this, &SceneEditor::StatusChanged ) );
-    args.m_Scene->RemoveCursorChangedListener( CursorChangeSignature::Delegate ( this, &SceneEditor::CursorChanged ) );
-    args.m_Scene->RemoveBusyCursorChangedListener( CursorChangeSignature::Delegate ( this, &SceneEditor::BusyCursorChanged ) );
+    args.m_Scene->RemoveStatusChangedListener( SceneStatusChangeSignature::Delegate ( this, &SceneEditor::SceneStatusChanged ) );
+    args.m_Scene->RemoveSceneContextChangedListener( SceneContextChangedSignature::Delegate ( this, &SceneEditor::SceneContextChanged ) );
     args.m_Scene->RemoveExecutedListener( ExecuteSignature::Delegate ( this, &SceneEditor::Executed ) );
 
     // Selection event handlers
@@ -2590,9 +2605,8 @@ void SceneEditor::CurrentSceneChanged( const SceneChangeArgs& args )
         //m_ToolsPanel->Refresh();
 
         // Hook our event handlers
-        args.m_Scene->AddStatusChangedListener( StatusChangeSignature::Delegate ( this, &SceneEditor::StatusChanged ) );
-        args.m_Scene->AddCursorChangedListener( CursorChangeSignature::Delegate ( this, &SceneEditor::CursorChanged ) );
-        args.m_Scene->AddBusyCursorChangedListener( CursorChangeSignature::Delegate ( this, &SceneEditor::BusyCursorChanged ) );
+        args.m_Scene->AddStatusChangedListener( SceneStatusChangeSignature::Delegate ( this, &SceneEditor::SceneStatusChanged ) );
+        args.m_Scene->AddSceneContextChangedListener( SceneContextChangedSignature::Delegate ( this, &SceneEditor::SceneContextChanged ) );
         args.m_Scene->AddExecutedListener( ExecuteSignature::Delegate ( this, &SceneEditor::Executed ) );
 
         // Selection event handlers

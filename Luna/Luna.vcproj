@@ -855,14 +855,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\ScenePreferencesDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\ScenePreferencesDialog.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\SelectionPropertiesPanel.cpp"
 				>
 			</File>
@@ -1487,50 +1479,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Grids"
-				>
-				<File
-					RelativePath=".\Scene\Grid.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\Grid.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\GridCellImageRenderer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\GridCellImageRenderer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\GridWithIcons.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\GridWithIcons.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\LayerGrid.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\LayerGrid.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\TypeGrid.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\TypeGrid.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="Primitives"
 				>
 				<File
@@ -1698,27 +1646,7 @@
 					>
 				</File>
 			</Filter>
-			<Filter
-				Name="Dialogs"
-				>
-				<File
-					RelativePath=".\Scene\ExportOptionsDlg.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ExportOptionsDlg.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ImportOptionsDlg.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Scene\ImportOptionsDlg.h"
-					>
-				</File>
 			</Filter>
-		</Filter>
 		<Filter
 			Name="Vault"
 			>
@@ -1992,14 +1920,6 @@
 			</File>
 			<File
 				RelativePath=".\Vault\VaultPreferences.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultPreferencesDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vault\VaultPreferencesDialog.h"
 				>
 			</File>
 			<File
@@ -3941,11 +3861,59 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\ExportOptionsDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ExportOptionsDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Grid.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\Grid.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\GridCellImageRenderer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\GridCellImageRenderer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\GridWithIcons.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\GridWithIcons.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\HelpPanel.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\UI\HelpPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ImportOptionsDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ImportOptionsDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\LayerGrid.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\LayerGrid.h"
 				>
 			</File>
 			<File
@@ -4077,6 +4045,30 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\PreferencesDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\PreferencesDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ProjectPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ProjectPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ProjectViewModel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\ProjectViewModel.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\PropertiesPanel.cpp"
 				>
 			</File>
@@ -4090,6 +4082,14 @@
 			</File>
 			<File
 				RelativePath=".\UI\ToolsPanel.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TypeGrid.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UI\TypeGrid.h"
 				>
 			</File>
 			<File
@@ -4270,14 +4270,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\AppPreferences.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\AppPreferences.h"
-			>
-		</File>
-		<File
 			RelativePath=".\CommandQueue.cpp"
 			>
 		</File>
@@ -4319,10 +4311,6 @@
 		</File>
 		<File
 			RelativePath=".\Luna.rc"
-			>
-		</File>
-		<File
-			RelativePath=".\LunaIDs.h"
 			>
 		</File>
 		<File
@@ -4430,22 +4418,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\PreferencesBase.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PreferencesBase.h"
-			>
-		</File>
-		<File
-			RelativePath=".\PreferencesDialog.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PreferencesDialog.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Project.cpp"
 			>
 		</File>
@@ -4487,6 +4459,14 @@
 		</File>
 		<File
 			RelativePath=".\Selection.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Settings.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Settings.h"
 			>
 		</File>
 		<File

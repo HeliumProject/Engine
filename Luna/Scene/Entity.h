@@ -6,16 +6,12 @@
 
 namespace Luna
 {
-  class EntityType;
-  class EntityAssetSet;
-  class Entity;
-
   struct LightmapTweakArgs
   {
-    Luna::Entity* m_Entity;
+    class Entity* m_Entity;
     u32      m_LightmapSetIndex;
 
-    LightmapTweakArgs( Luna::Entity* entity, u32 lightmapSetIndex )
+    LightmapTweakArgs( class Luna::Entity* entity, u32 lightmapSetIndex )
       : m_Entity( entity )
       , m_LightmapSetIndex( lightmapSetIndex )
     {}
@@ -24,9 +20,9 @@ namespace Luna
 
   struct CubemapTweakArgs
   {
-    Luna::Entity* m_Entity;
+    class Entity* m_Entity;
 
-    CubemapTweakArgs( Luna::Entity* entity )
+    CubemapTweakArgs( class Luna::Entity* entity )
       : m_Entity( entity )
     {}
   };
@@ -34,11 +30,11 @@ namespace Luna
 
   struct EntityAssetChangeArgs
   {
-    Luna::Entity* m_Entity;
+    class Luna::Entity* m_Entity;
     Nocturnal::Path m_OldPath;
     Nocturnal::Path m_NewPath;
     
-    EntityAssetChangeArgs( Luna::Entity* entity, const Nocturnal::Path& oldPath, const Nocturnal::Path& newPath )
+    EntityAssetChangeArgs( class Luna::Entity* entity, const Nocturnal::Path& oldPath, const Nocturnal::Path& newPath )
       : m_Entity( entity )
       , m_OldPath( oldPath )
       , m_NewPath( newPath )
@@ -56,7 +52,7 @@ namespace Luna
     //
 
   protected:
-    Luna::EntityAssetSet* m_ClassSet;
+    class EntityAssetSet* m_ClassSet;
     mutable Luna::Scene* m_NestedSceneArt;
     mutable Luna::Scene* m_NestedSceneCollision;
     mutable Luna::Scene* m_NestedScenePathfinding;
@@ -119,9 +115,9 @@ namespace Luna
     //
 
     // class set is the object common to all entities with common class within the same type
-    Luna::EntityAssetSet* GetClassSet();
-    const Luna::EntityAssetSet* GetClassSet() const;
-    void SetClassSet(Luna::EntityAssetSet* artClass);
+    class Luna::EntityAssetSet* GetClassSet();
+    const class Luna::EntityAssetSet* GetClassSet() const;
+    void SetClassSet( class Luna::EntityAssetSet* artClass );
 
     // gather some manifest data
     virtual void PopulateManifest( Asset::SceneManifest* manifest ) const NOC_OVERRIDE;

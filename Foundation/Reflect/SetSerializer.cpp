@@ -96,7 +96,7 @@ void SimpleSetSerializer<DataT, DataSer>::Clear()
 template < class DataT, class DataSer >
 i32 SimpleSetSerializer<DataT, DataSer>::GetItemType() const
 {
-    return Serializer::DeduceType<DataT>();
+    return Reflect::GetType<DataT>();
 }
 
 template < class DataT, class DataSer >

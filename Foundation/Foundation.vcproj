@@ -1031,6 +1031,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Reflect\Document.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Reflect\Document.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Reflect\Element.cpp"
 				>
 			</File>

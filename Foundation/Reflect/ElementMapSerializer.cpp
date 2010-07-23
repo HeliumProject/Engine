@@ -37,7 +37,7 @@ void SimpleElementMapSerializer<KeyT>::Clear()
 template < class KeyT >
 i32 SimpleElementMapSerializer<KeyT>::GetKeyType() const
 {
-    return Serializer::DeduceType<KeyT>();
+    return Reflect::GetType<KeyT>();
 }
 
 template < class KeyT >
@@ -193,7 +193,7 @@ void SimpleElementMapSerializer<KeyT>::Serialize(Archive& archive) const
             }
 
             ElementPtr elem;
-            archive.GetCache().Create( Serializer::DeduceType<KeyT>(), elem );
+            archive.GetCache().Create( Reflect::GetType<KeyT>(), elem );
 
             Serializer* ser = AssertCast<Serializer>(elem.Ptr());
             ser->ConnectData((void*)&(itr->first));

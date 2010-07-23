@@ -211,13 +211,13 @@ void SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::ConnectData(Nocturnal:
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 i32 SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetKeyType() const
 {
-    return Serializer::DeduceType<KeyT>();
+    return Reflect::GetType<KeyT>();
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >
 i32 SimpleMapSerializer<KeyT, KeySer, ValueT, ValueSer>::GetValueType() const
 {
-    return Serializer::DeduceType<ValueT>();
+    return Reflect::GetType<ValueT>();
 }
 
 template < class KeyT, class KeySer, class ValueT, class ValueSer >

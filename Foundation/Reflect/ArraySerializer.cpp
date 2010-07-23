@@ -104,7 +104,7 @@ void SimpleArraySerializer<T>::Clear()
 template < class T >
 i32 SimpleArraySerializer<T>::GetItemType() const
 {
-    return Serializer::DeduceType<T>();
+    return Reflect::GetType<T>();
 }
 
 template < class T >

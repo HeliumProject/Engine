@@ -33,7 +33,7 @@ namespace Reflect
 
     typedef Nocturnal::SmartPtr< PathSerializer > PathSerializerPtr;
 
-    template<> static inline int Serializer::DeduceType< PathSerializer::DataType >()
+    template<> static inline int Reflect::GetType< PathSerializer::DataType >()
     {
         return Reflect::GetType< PathSerializer >();
     }

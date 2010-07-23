@@ -20,6 +20,7 @@
 #include "Scene/SceneManager.h"
 
 #include "Application/UI/MenuMRU.h"
+#include "Application/Inspect/DragDrop/DropTarget.h"
 
 #include "Scene/TreeMonitor.h"
 #include "Scene/TreeSortTimer.h"
@@ -110,6 +111,19 @@ namespace Luna
         TreeSortTimer m_TreeSortTimer;
 
     private:
+        bool ValidateDrag( const Inspect::DragArgs& args );
+        wxDragResult DragOver( const Inspect::DragArgs& args );
+        wxDragResult Drop( const Inspect::DragArgs& args );
+
+        void SceneAdded( const SceneChangeArgs& args );
+        void SceneRemoving( const SceneChangeArgs& args );
+        void SceneLoadFinished( const LoadArgs& args );
+
+        bool DoOpen( const tstring& path );
+
+    private:
+
+        void OnMRUOpen( const Nocturnal::MRUArgs& args );
 
         // frame events
         void OnEraseBackground( wxEraseEvent& event );
@@ -157,12 +171,19 @@ namespace Luna
 
         void OnPickWalk( wxCommandEvent& event );
 
+        void Executed( const ExecuteArgs& args );
+
+        void SelectionChanged( const OS_SelectableDumbPtr& selection );
+
         void CurrentSceneChanged( const SceneChangeArgs& args );
         void CurrentSceneChanging( const SceneChangeArgs& args );
         void OnPropertiesCreated( const PropertiesCreatedArgs& args );
         void OnToolSelected(wxCommandEvent& event);
+        void DocumentModified( const DocumentChangedArgs& args );
+        void DocumentClosed( const DocumentChangedArgs& args );
         void ViewToolChanged( const ToolChangeArgs& args );
         void SceneStatusChanged( const SceneStatusChangeArgs& args );
+        void SceneContextChanged( const SceneContextChangeArgs& args );
 
         void OnExit( wxCommandEvent& event );
         void OnExiting( wxCloseEvent& args );

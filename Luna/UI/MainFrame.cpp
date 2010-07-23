@@ -1,11 +1,14 @@
 #include "Precompile.h"
 
+#include "MainFrame.h"
+
 #include "Foundation/Reflect/ArchiveXML.h"
 
 #include "Pipeline/Content/ContentVersion.h"
 #include "Pipeline/Content/Scene.h"
 
 #include "Application/UI/FileDialog.h"
+#include "Application/Inspect/DragDrop/ClipboardFileList.h"
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 
 #include "Scene/Scene.h"
@@ -32,7 +35,6 @@
 #include "ArtProvider.h"
 #include "ImportOptionsDlg.h"
 #include "ExportOptionsDlg.h"
-#include "MainFrame.h"
 #include "App.h"
 
 using namespace Luna;
@@ -126,6 +128,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
     // General Events
     //
     Connect( wxID_CLOSE, wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainFrame::OnExiting ) );
+    Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainFrame::OnExiting ) );
 
     /*
 EVT_MENU(wxID_HELP_INDEX, MainFrame::OnHelpIndex)
@@ -197,12 +200,11 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     //
     // Properties/Layers/Types area
     //
-    m_PropertiesPanel = new PropertiesPanel( this );
     m_SelectionEnumerator = new PropertiesGenerator( &m_SelectionProperties );
     m_SelectionPropertiesManager = new PropertiesManager( m_SelectionEnumerator );
     m_SelectionPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
-    //m_SelectionProperties.SetControl( selectionProperties->m_PropertyCanvas );
-    m_SelectionProperties.SetControl( new Inspect::CanvasWindow ( m_PropertiesPanel, SceneEditorIDs::ID_SelectionProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
+    m_PropertiesPanel = new PropertiesPanel( m_SelectionPropertiesManager, this );
+    m_SelectionProperties.SetControl( m_PropertiesPanel->GetPropertiesCanvas() );
     m_FrameManager.AddPane( m_PropertiesPanel, wxAuiPaneInfo().Name( wxT( "properties" ) ).Caption( wxT( "Properties" ) ).Right().Layer( 1 ).Position( 1 ) );
 
     m_LayersPanel = new LayersPanel( &m_SceneManager, this );
@@ -215,15 +217,82 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
 
     CreatePanelsMenu( m_MenuPanels );
 
+    //
+    // Restore layout if any
+    //
+
+    wxGetApp().GetPreferences()->GetScenePreferences()->GetWindowSettings()->ApplyToWindow( this, &m_FrameManager, true );
+    wxGetApp().GetPreferences()->GetViewportPreferences()->ApplyToViewport( m_ViewPanel->GetViewport() ); 
+
+    //
+    // Attach event handlers
+    //
+
     m_SceneManager.AddCurrentSceneChangingListener( SceneChangeSignature::Delegate (this, &MainFrame::CurrentSceneChanging) );
     m_SceneManager.AddCurrentSceneChangedListener( SceneChangeSignature::Delegate (this, &MainFrame::CurrentSceneChanged) );
+    m_SceneManager.AddSceneAddedListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneAdded ) );
+    m_SceneManager.AddSceneRemovingListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneRemoving ) );
+
+    m_MRU->AddItemSelectedListener( Nocturnal::MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
+
+#pragma TODO("MRU")
+#if 0
+    std::vector< tstring > paths;
+    std::vector< tstring >::const_iterator itr = wxGetApp().GetPreferences()->GetMRU()->GetPaths().begin();
+    std::vector< tstring >::const_iterator end = wxGetApp().GetPreferences()->GetMRU()->GetPaths().end();
+    for ( ; itr != end; ++itr )
+    {
+        Nocturnal::Path path( *itr );
+        if ( path.Exists() )
+        {
+            paths.push_back( *itr );
+        }
+    }
+    m_MRU->FromVector( paths );
+#endif
+
+    Inspect::DropTarget* dropTarget = new Inspect::DropTarget();
+    dropTarget->SetDragOverCallback( Inspect::DragOverCallback::Delegate( this, &MainFrame::DragOver ) );
+    dropTarget->SetDropCallback( Inspect::DropCallback::Delegate( this, &MainFrame::Drop ) );
+    m_ViewPanel->GetViewport()->SetDropTarget( dropTarget );
 
 }
 
 MainFrame::~MainFrame()
 {
+    // Remove any straggling document listeners
+    OS_DocumentSmartPtr::Iterator docItr = m_SceneManager.GetDocuments().Begin();
+    OS_DocumentSmartPtr::Iterator docEnd = m_SceneManager.GetDocuments().End();
+    for ( ; docItr != docEnd; ++docItr )
+    {
+        ( *docItr )->RemoveDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+        ( *docItr )->RemoveDocumentSavedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+        ( *docItr )->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+    }
+
+    // Save preferences and MRU
+#pragma TODO("MRU")
+#if 0
+    std::vector< tstring > mruPaths;
+    m_MRU->ToVector( mruPaths );
+    wxGetApp().GetPreferences()->GetScenePreferences()->GetMRU()->SetPaths( mruPaths );
+#endif
+    wxGetApp().GetPreferences()->GetViewportPreferences()->LoadFromViewport( m_ViewPanel->GetViewport() ); 
+    wxGetApp().SavePreferences();
+
+    //
+    // Detach event handlers
+    //
+
     m_SceneManager.RemoveCurrentSceneChangingListener( SceneChangeSignature::Delegate (this, &MainFrame::CurrentSceneChanging) );
     m_SceneManager.RemoveCurrentSceneChangedListener( SceneChangeSignature::Delegate (this, &MainFrame::CurrentSceneChanged) );
+    m_SceneManager.RemoveSceneAddedListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneAdded ) );
+    m_SceneManager.RemoveSceneRemovingListener( SceneChangeSignature::Delegate( this, &MainFrame::SceneRemoving ) );
+
+    m_MRU->RemoveItemSelectedListener( Nocturnal::MRUSignature::Delegate( this, &MainFrame::OnMRUOpen ) );
+
+    m_SelectionPropertiesManager->RemovePropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
+    m_ToolPropertiesManager->RemovePropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
 
     m_ViewPanel->GetViewport()->RemoveRenderListener( RenderSignature::Delegate ( this, &MainFrame::Render ) );
     m_ViewPanel->GetViewport()->RemoveSelectListener( SelectSignature::Delegate ( this, &MainFrame::Select ) ); 
@@ -303,6 +372,123 @@ bool MainFrame::AddScene( const Nocturnal::Path& path )
     }
 
     return opened;
+}
+
+bool MainFrame::ValidateDrag( const Inspect::DragArgs& args )
+{
+    bool canHandleArgs = false;
+
+    std::set< tstring > reflectExtensions;
+    Reflect::Archive::GetExtensions( reflectExtensions );
+
+    Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
+    if ( fileList )
+    {
+        for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(), fileEnd = fileList->GetFilePaths().end();
+            fileItr != fileEnd && !canHandleArgs;
+            ++fileItr )
+        {
+            Nocturnal::Path path( *fileItr );
+
+            if ( path.Exists() )
+            {
+                tstring ext = path.Extension();
+                if ( reflectExtensions.find( ext ) != reflectExtensions.end() )
+                {
+                    canHandleArgs = true;
+                }
+            }
+        }
+    }
+
+    return canHandleArgs;
+}
+
+wxDragResult MainFrame::DragOver( const Inspect::DragArgs& args )
+{
+    wxDragResult result = args.m_Default;
+
+    if ( !ValidateDrag( args ) )
+    {
+        result = wxDragNone;
+    }
+
+    return result;
+}
+
+wxDragResult MainFrame::Drop( const Inspect::DragArgs& args )
+{
+    wxDragResult result = args.m_Default;
+
+    if ( ValidateDrag( args ) )
+    {
+        Inspect::ClipboardFileListPtr fileList = Reflect::ObjectCast< Inspect::ClipboardFileList >( args.m_ClipboardData->FromBuffer() );
+        if ( fileList )
+        {
+            for ( std::set< tstring >::const_iterator fileItr = fileList->GetFilePaths().begin(),
+                fileEnd = fileList->GetFilePaths().end(); fileItr != fileEnd; ++fileItr )
+            {
+                Nocturnal::Path path( *fileItr );
+
+#pragma TODO( "Load the files" )
+            }
+        }
+    }
+
+    return result;
+}
+
+void MainFrame::SceneAdded( const SceneChangeArgs& args )
+{
+    if ( !m_SceneManager.IsNestedScene( args.m_Scene ) )
+    {
+        // Only listen to zone and world files.
+        args.m_Scene->AddStatusChangedListener( SceneStatusChangeSignature::Delegate( this, &MainFrame::SceneStatusChanged ) );
+        args.m_Scene->AddSceneContextChangedListener( SceneContextChangedSignature::Delegate( this, &MainFrame::SceneContextChanged ) );
+        args.m_Scene->AddLoadFinishedListener( LoadSignature::Delegate( this, & MainFrame::SceneLoadFinished ) );
+
+        m_SelectionEnumerator->AddPopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Luna::Scene::PopulateLink));
+
+        Document* document = args.m_Scene->GetSceneDocument();
+        document->AddDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+        document->AddDocumentSavedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+        document->AddDocumentClosedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+    }
+}
+
+void MainFrame::SceneRemoving( const SceneChangeArgs& args )
+{
+    args.m_Scene->RemoveStatusChangedListener( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
+    args.m_Scene->RemoveSceneContextChangedListener( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
+    args.m_Scene->RemoveLoadFinishedListener( LoadSignature::Delegate( this, & MainFrame::SceneLoadFinished ) );
+
+    m_SelectionEnumerator->RemovePopulateLinkListener( Inspect::PopulateLinkSignature::Delegate (args.m_Scene, &Luna::Scene::PopulateLink));
+
+    m_ViewPanel->GetViewport()->Refresh();
+
+    if ( m_SceneManager.IsRoot( args.m_Scene ) )
+    {
+        m_OutlinerStates.clear();
+    }
+    else
+    {
+        m_OutlinerStates.erase( args.m_Scene );
+    }
+}
+
+void MainFrame::SceneLoadFinished( const LoadArgs& args )
+{
+    m_ViewPanel->GetViewport()->Refresh();
+    DocumentModified( DocumentChangedArgs( args.m_Scene->GetSceneDocument() ) );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Overridden from base class.  Called when attempting to open a file from the
+// MRU list.  Closes all currently open files before trying to open the new one.
+// 
+void MainFrame::OnMRUOpen( const Nocturnal::MRUArgs& args )
+{
+    DoOpen( args.m_Item );
 }
 
 void MainFrame::OnEraseBackground(wxEraseEvent& event)
@@ -505,17 +691,16 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
 
     if ( menu == m_MenuFile )
     {
-        //// File->Import is enabled if there is a current editing scene
-        //m_MenuFile->Enable( SceneEditorIDs::ID_FileImport, m_SceneManager.HasCurrentScene() );
-        //m_MenuFile->Enable( SceneEditorIDs::ID_FileImportFromClipboard, m_SceneManager.HasCurrentScene() );
+        // File->Import is enabled if there is a current editing scene
+        m_MenuFile->Enable( ID_Import, m_SceneManager.HasCurrentScene() );
+        m_MenuFile->Enable( ID_ImportFromClipboard, m_SceneManager.HasCurrentScene() );
 
-        //// File->Export is only enabled if there is something selected
-        //const bool enableExport = m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
-        //m_MenuFile->Enable( SceneEditorIDs::ID_FileExport, enableExport );
-        //m_MenuFile->Enable( SceneEditorIDs::ID_FileExportToClipboard, enableExport );
+        // File->Export is only enabled if there is something selected
+        const bool enableExport = m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
+        m_MenuFile->Enable( ID_Export, enableExport );
+        m_MenuFile->Enable( ID_ExportToClipboard, enableExport );
 
-        //m_MRUMenuItem->Enable( !m_MRU->GetItems().Empty() );
-        //m_MRU->PopulateMenu( m_MRUMenu );
+        m_MRU->PopulateMenu( m_MenuFileOpenRecent );
     }
     else if ( menu == m_MenuPanels )
     {
@@ -523,20 +708,20 @@ void MainFrame::OnMenuOpen( wxMenuEvent& event )
     }
     else if ( menu == m_MenuEdit )
     {
-        //// Edit->Undo/Redo is only enabled if there are commands in the queue
-        //const bool canUndo = m_SceneManager.HasCurrentScene() && m_SceneManager.CanUndo();
-        //const bool canRedo = m_SceneManager.HasCurrentScene() && m_SceneManager.CanRedo();
-        //m_MenuEdit->Enable( wxID_UNDO, canUndo );
-        //m_MenuEdit->Enable( wxID_REDO, canRedo );
+        // Edit->Undo/Redo is only enabled if there are commands in the queue
+        const bool canUndo = m_SceneManager.HasCurrentScene() && m_SceneManager.CanUndo();
+        const bool canRedo = m_SceneManager.HasCurrentScene() && m_SceneManager.CanRedo();
+        m_MenuEdit->Enable( wxID_UNDO, canUndo );
+        m_MenuEdit->Enable( wxID_REDO, canRedo );
 
-        //// Edit->Invert Selection is only enabled if something is selected
-        //const bool isAnythingSelected = m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
-        //m_MenuEdit->Enable( SceneEditorIDs::ID_EditInvertSelection, isAnythingSelected );
+        // Edit->Invert Selection is only enabled if something is selected
+        const bool isAnythingSelected = m_SceneManager.HasCurrentScene() && m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Size() > 0;
+        m_MenuEdit->Enable( ID_InvertSelection, isAnythingSelected );
 
-        //// Cut/copy/paste
-        //m_MenuEdit->Enable( wxID_CUT, isAnythingSelected );
-        //m_MenuEdit->Enable( wxID_COPY, isAnythingSelected );
-        //m_MenuEdit->Enable( wxID_PASTE, m_SceneManager.HasCurrentScene() && IsClipboardFormatAvailable( CF_TEXT ) );
+        // Cut/copy/paste
+        m_MenuEdit->Enable( wxID_CUT, isAnythingSelected );
+        m_MenuEdit->Enable( wxID_COPY, isAnythingSelected );
+        m_MenuEdit->Enable( wxID_PASTE, m_SceneManager.HasCurrentScene() && IsClipboardFormatAvailable( CF_TEXT ) );
     }
     else
     {
@@ -563,6 +748,42 @@ void MainFrame::OnNewProject( wxCommandEvent& event )
 {
     m_Project = new Project;
     m_ProjectPanel->SetProject( m_Project );
+}
+
+bool MainFrame::DoOpen( const tstring& path )
+{
+    bool opened = false;
+    Nocturnal::Path nocPath( path );
+    if ( !path.empty() && nocPath.Exists() )
+    {
+        if ( m_SceneManager.CloseAll() )
+        {
+            tstring error;
+
+            try
+            {
+                opened = m_SceneManager.OpenPath( path, error ) != NULL;
+            }
+            catch ( const Nocturnal::Exception& ex )
+            {
+                error = ex.What();
+            }
+
+            if ( opened )
+            {
+                m_MRU->Insert( path );
+            }
+            else
+            {
+                m_MRU->Remove( path );
+                if ( !error.empty() )
+                {
+                    wxMessageBox( error.c_str(), wxT( "Error" ), wxCENTER | wxICON_ERROR | wxOK, this );
+                }
+            }
+        }
+    }
+    return opened;
 }
 
 void MainFrame::OnOpen( wxCommandEvent& event )
@@ -1012,13 +1233,86 @@ void MainFrame::OnExport(wxCommandEvent& event)
 
 void MainFrame::CurrentSceneChanged( const SceneChangeArgs& args )
 {
-    if ( !args.m_Scene )
+    if ( args.m_Scene )
     {
-        return;
-    }
+        m_ToolbarPanel->GetToolsPanel()->Enable();
+        m_ToolbarPanel->GetToolsPanel()->Refresh();
 
-    m_ToolbarPanel->GetToolsPanel()->Enable();
-    m_ToolbarPanel->GetToolsPanel()->Refresh();
+        // Hook our event handlers
+        args.m_Scene->AddStatusChangedListener( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
+        args.m_Scene->AddSceneContextChangedListener( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
+        args.m_Scene->AddExecutedListener( ExecuteSignature::Delegate ( this, &MainFrame::Executed ) );
+
+        // Selection event handlers
+        args.m_Scene->AddSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
+
+        // These events are emitted from the attribute editor and cause execution of the scene to occur, and interactive goodness
+        m_SelectionEnumerator->AddPropertyChangingListener( Inspect::ChangingSignature::Delegate (args.m_Scene, &Luna::Scene::PropertyChanging));
+        m_SelectionEnumerator->AddPropertyChangedListener( Inspect::ChangedSignature::Delegate (args.m_Scene, &Luna::Scene::PropertyChanged));
+        m_SelectionEnumerator->AddPickLinkListener( Inspect::PickLinkSignature::Delegate (args.m_Scene, &Luna::Scene::PickLink));
+        m_SelectionEnumerator->AddSelectLinkListener( Inspect::SelectLinkSignature::Delegate (args.m_Scene, &Luna::Scene::SelectLink));
+
+        // Restore the tree control with the information for the new editing scene
+        M_OutlinerStates::iterator foundOutline = m_OutlinerStates.find( args.m_Scene );
+        if ( foundOutline != m_OutlinerStates.end() )
+        {
+            OutlinerStates* stateInfo = &foundOutline->second;
+            m_DirectoryPanel->RestoreState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
+        }
+
+        // Iterate over the node types looking for the layer node type
+        HM_StrToSceneNodeTypeSmartPtr::const_iterator nodeTypeItr = args.m_Scene->GetNodeTypesByName().begin();
+        HM_StrToSceneNodeTypeSmartPtr::const_iterator nodeTypeEnd = args.m_Scene->GetNodeTypesByName().end();
+        for ( ; nodeTypeItr != nodeTypeEnd; ++nodeTypeItr )
+        {
+            const SceneNodeTypePtr& nodeType = nodeTypeItr->second;
+            if ( Reflect::Registry::GetInstance()->GetClass( nodeType->GetInstanceType() )->HasType( Reflect::GetType<Luna::Layer>() ) )
+            {
+                // Now that we have the layer node type, iterate over all the layer instances and
+                // add them to the layer grid UI.
+                HM_SceneNodeSmartPtr::const_iterator instItr = nodeTypeItr->second->GetInstances().begin();
+                HM_SceneNodeSmartPtr::const_iterator instEnd = nodeTypeItr->second->GetInstances().end();
+
+                //Begin batching
+                m_LayersPanel->BeginBatch();
+
+                for ( ; instItr != instEnd; ++instItr )
+                {
+                    const SceneNodePtr& dependNode    = instItr->second;
+                    Luna::Layer*        lunaLayer     = Reflect::AssertCast< Luna::Layer >( dependNode );
+                    m_LayersPanel->AddLayer( lunaLayer );
+                }
+
+                //End batching
+                m_LayersPanel->EndBatch();
+            } 
+            else if ( nodeType->HasType( Reflect::GetType<Luna::HierarchyNodeType>() ) )
+            {
+                // Hierarchy node types need to be added to the object grid UI.
+                Luna::HierarchyNodeType* hierarchyNodeType = Reflect::AssertCast< Luna::HierarchyNodeType >( nodeTypeItr->second );
+                m_TypesPanel->AddType( hierarchyNodeType );
+            }
+        }
+
+        // Restore selection-sensitive settings
+        args.m_Scene->RefreshSelection();
+
+        // Restore tool
+        if (args.m_Scene->GetTool().ReferencesObject())
+        {
+            // Restore tool to the view from the scene
+            m_ViewPanel->GetViewport()->SetTool(args.m_Scene->GetTool());
+
+            // Restore tool attributes
+            args.m_Scene->GetTool()->CreateProperties();
+
+            // Layout ui
+            m_ToolProperties.Layout();
+
+            // Read state
+            m_ToolProperties.Read();
+        }
+    }
 }
 
 void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
@@ -1027,6 +1321,35 @@ void MainFrame::CurrentSceneChanging( const SceneChangeArgs& args )
     {
         return;
     }
+
+    // Unhook our event handlers
+    args.m_Scene->RemoveStatusChangedListener( SceneStatusChangeSignature::Delegate ( this, &MainFrame::SceneStatusChanged ) );
+    args.m_Scene->RemoveSceneContextChangedListener( SceneContextChangedSignature::Delegate ( this, &MainFrame::SceneContextChanged ) );
+    args.m_Scene->RemoveExecutedListener( ExecuteSignature::Delegate ( this, &MainFrame::Executed ) );
+
+    // Selection event handlers
+    args.m_Scene->RemoveSelectionChangedListener( SelectionChangedSignature::Delegate ( this, &MainFrame::SelectionChanged ) );
+
+    // Remove attribute listeners
+    m_SelectionEnumerator->RemovePropertyChangingListener( Inspect::ChangingSignature::Delegate (args.m_Scene, &Luna::Scene::PropertyChanging));
+    m_SelectionEnumerator->RemovePropertyChangedListener( Inspect::ChangedSignature::Delegate (args.m_Scene, &Luna::Scene::PropertyChanged));
+    m_SelectionEnumerator->RemovePickLinkListener( Inspect::PickLinkSignature::Delegate (args.m_Scene, &Luna::Scene::PickLink));
+    m_SelectionEnumerator->RemoveSelectLinkListener( Inspect::SelectLinkSignature::Delegate (args.m_Scene, &Luna::Scene::SelectLink));
+
+    // If we were editing a scene, save the outliner info before changing to the new one.
+    OutlinerStates* stateInfo = &m_OutlinerStates.insert( M_OutlinerStates::value_type( args.m_Scene, OutlinerStates() ) ).first->second;
+    m_DirectoryPanel->SaveState( stateInfo->m_Hierarchy, stateInfo->m_Entities, stateInfo->m_Types );
+
+    // Clear the selection attribute canvas
+    m_SelectionProperties.Clear();
+
+    // Clear the tool attribute canavs
+    m_ToolProperties.Clear();
+
+    // Release the tool from the VIEW and Scene, saving the tool in the scene isn't a desirable behavior and the way it is currently
+    // implimented it will cause a crash under certain scenarios (see trac #1322)
+    args.m_Scene->SetTool( NULL );
+    m_ViewPanel->GetViewport()->SetTool( NULL );
 
     m_ToolbarPanel->GetToolsPanel()->Disable();
     m_ToolbarPanel->GetToolsPanel()->Refresh();
@@ -1189,6 +1512,33 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
     {
         GetStatusBar()->SetStatusText( TXT( "You must create a new scene or open an existing scene to use a tool" ) );
     }
+}
+
+void MainFrame::DocumentModified( const DocumentChangedArgs& args )
+{
+    bool doAnyDocsNeedSaved = false;
+    OS_DocumentSmartPtr::Iterator docItr = m_SceneManager.GetDocuments().Begin();
+    OS_DocumentSmartPtr::Iterator docEnd = m_SceneManager.GetDocuments().End();
+    for ( ; docItr != docEnd; ++docItr )
+    {
+        if ( ( *docItr )->IsModified() || !( *docItr )->GetPath().Exists() )
+        {
+            doAnyDocsNeedSaved = true;
+            break;
+        }
+    }
+
+    m_ToolbarPanel->SetSaveButtonState( doAnyDocsNeedSaved );
+    m_MenuFile->Enable( ID_SaveAll, doAnyDocsNeedSaved );
+}
+
+void MainFrame::DocumentClosed( const DocumentChangedArgs& args )
+{
+    DocumentModified( args );
+
+    args.m_Document->RemoveDocumentModifiedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+    args.m_Document->RemoveDocumentSavedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
+    args.m_Document->RemoveDocumentClosedListener( DocumentChangedSignature::Delegate( this, &MainFrame::DocumentModified ) );
 }
 
 void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
@@ -1581,6 +1931,49 @@ void MainFrame::OnPickWalk( wxCommandEvent& event )
 void MainFrame::SceneStatusChanged( const SceneStatusChangeArgs& args )
 {
     m_MainStatusBar->SetStatusText( args.m_Status.c_str() );
+}
+
+void MainFrame::SceneContextChanged( const SceneContextChangeArgs& args )
+{
+    if ( args.m_OldContext != SceneContexts::Normal )
+    {
+        wxEndBusyCursor();
+    }
+
+    static wxCursor busyCursor;
+    busyCursor = wxCursor( wxCURSOR_WAIT );
+
+    static wxCursor pickingCursor;
+    pickingCursor = wxCursor( wxCURSOR_BULLSEYE );
+
+    switch ( args.m_NewContext )
+    {
+    case SceneContexts::Loading:
+        wxBeginBusyCursor( &busyCursor );
+        break;
+
+    case SceneContexts::Picking:
+        wxBeginBusyCursor( &pickingCursor );
+        break;
+
+    case SceneContexts::Normal:
+    default:
+        wxSetCursor( wxCURSOR_ARROW );
+        break;
+    }
+}
+
+void MainFrame::Executed( const ExecuteArgs& args )
+{
+    if (!m_SelectionPropertiesManager->ThreadsActive() && !args.m_Interactively)
+    {
+        m_SelectionProperties.Read();
+    }
+}
+
+void MainFrame::SelectionChanged( const OS_SelectableDumbPtr& selection )
+{
+    m_SelectionPropertiesManager->SetSelection( selection );
 }
 
 void MainFrame::OnExit( wxCommandEvent& event )
@@ -2139,4 +2532,12 @@ bool MainFrame::SortTypeItemsByName( Luna::SceneNodeType* lhs, Luna::SceneNodeTy
     toUpper( rname );
 
     return lname < rname;
+}
+
+void MainFrame::SyncPropertyThread()
+{
+    while ( m_SelectionPropertiesManager->ThreadsActive() )
+    {
+        ::Sleep( 500 );
+    }
 }

@@ -47,3 +47,20 @@ DirectoryPanel::~DirectoryPanel()
 #endif
 }
 
+void DirectoryPanel::SaveState( SceneOutlinerState& hierarchyState, SceneOutlinerState& entityState, SceneOutlinerState& typesState )
+{
+#ifndef LUNA_SCENE_DISABLE_OUTLINERS
+    m_TypeOutline->SaveState( typesState );
+    m_EntityOutline->SaveState( entityState );
+    m_HierarchyOutline->SaveState( hierarchyState );
+#endif
+}
+
+void DirectoryPanel::RestoreState( SceneOutlinerState& hierarchyState, SceneOutlinerState& entityState, SceneOutlinerState& typesState )
+{
+#ifndef LUNA_SCENE_DISABLE_OUTLINERS
+    m_TypeOutline->RestoreState( typesState );
+    m_EntityOutline->RestoreState( entityState );
+    m_HierarchyOutline->RestoreState( hierarchyState );
+#endif
+}

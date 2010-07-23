@@ -28,6 +28,8 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
         Thaw();
     }
 
+    m_SaveAllButton->Disable();
+
     for ( i32 i=0; i < ToolModes::Count; ++i )
     {
         ToolInfo* info = &ToolInfos[ i ];
@@ -56,3 +58,14 @@ void ToolbarPanel::OnToggleToolButton( wxCommandEvent& event )
     GetParent()->GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, event.GetId() ) );
 }
 
+void ToolbarPanel::SetSaveButtonState( bool enabled )
+{
+    if ( enabled )
+    {
+        m_SaveAllButton->Enable();
+    }
+    else
+    {
+        m_SaveAllButton->Disable();
+    }
+}

@@ -828,10 +828,60 @@ DirectoryPanelGenerated::~DirectoryPanelGenerated()
 
 PropertiesPanelGenerated::PropertiesPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
+	wxBoxSizer* bSizer32;
+	bSizer32 = new wxBoxSizer( wxVERTICAL );
+	
+	m_ControlsPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer33;
+	bSizer33 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_CommonButton = new wxRadioButton( m_ControlsPanel, wxID_ANY, _("Common"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer33->Add( m_CommonButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_AllButton = new wxRadioButton( m_ControlsPanel, wxID_ANY, _("All"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer33->Add( m_AllButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_staticline5 = new wxStaticLine( m_ControlsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer33->Add( m_staticline5, 0, wxEXPAND | wxALL, 5 );
+	
+	m_ExpandAllButton = new wxButton( m_ControlsPanel, wxID_ANY, _("Expand All"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer33->Add( m_ExpandAllButton, 0, wxALL, 5 );
+	
+	m_CollapseAllButton = new wxButton( m_ControlsPanel, wxID_ANY, _("Collapse All"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer33->Add( m_CollapseAllButton, 0, wxALL, 5 );
+	
+	m_ControlsPanel->SetSizer( bSizer33 );
+	m_ControlsPanel->Layout();
+	bSizer33->Fit( m_ControlsPanel );
+	bSizer32->Add( m_ControlsPanel, 0, wxEXPAND | wxALL, 5 );
+	
+	m_PropertiesPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer34;
+	bSizer34 = new wxBoxSizer( wxVERTICAL );
+	
+	m_PropertiesPanel->SetSizer( bSizer34 );
+	m_PropertiesPanel->Layout();
+	bSizer34->Fit( m_PropertiesPanel );
+	bSizer32->Add( m_PropertiesPanel, 1, wxEXPAND | wxALL, 5 );
+	
+	this->SetSizer( bSizer32 );
+	this->Layout();
+	
+	// Connect Events
+	m_CommonButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnIntersection ), NULL, this );
+	m_AllButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnUnion ), NULL, this );
+	m_ExpandAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PropertiesPanelGenerated::OnExpandAll ), NULL, this );
+	m_CollapseAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PropertiesPanelGenerated::OnCollapseAll ), NULL, this );
 }
 
 PropertiesPanelGenerated::~PropertiesPanelGenerated()
 {
+	// Disconnect Events
+	m_CommonButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnIntersection ), NULL, this );
+	m_AllButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PropertiesPanelGenerated::OnUnion ), NULL, this );
+	m_ExpandAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PropertiesPanelGenerated::OnExpandAll ), NULL, this );
+	m_CollapseAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PropertiesPanelGenerated::OnCollapseAll ), NULL, this );
+	
 }
 
 ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
@@ -871,7 +921,7 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	m_ToolbarView->AddTool( ID_ColorModeScaleGradient, _("tool"), wxNullBitmap, wxNullBitmap, wxITEM_CHECK, _("Toggle scale gradient coloring mode"), wxEmptyString ); 
 	m_ToolbarView->Realize();
 	
-	bSizer21->Add( m_ToolbarView, 0, wxEXPAND, 5 );
+	bSizer21->Add( m_ToolbarView, 0, wxEXPAND, 1 );
 	
 	m_ViewContainerPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
 	wxBoxSizer* m_ViewSizer;
@@ -880,7 +930,7 @@ ViewPanelGenerated::ViewPanelGenerated( wxWindow* parent, wxWindowID id, const w
 	m_ViewContainerPanel->SetSizer( m_ViewSizer );
 	m_ViewContainerPanel->Layout();
 	m_ViewSizer->Fit( m_ViewContainerPanel );
-	bSizer21->Add( m_ViewContainerPanel, 1, wxEXPAND, 5 );
+	bSizer21->Add( m_ViewContainerPanel, 1, wxEXPAND, 1 );
 	
 	this->SetSizer( bSizer21 );
 	this->Layout();

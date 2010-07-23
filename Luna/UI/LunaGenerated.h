@@ -39,6 +39,7 @@ namespace Luna{ class Frame; }
 #include <wx/scrolwin.h>
 #include <wx/dataview.h>
 #include <wx/notebook.h>
+#include <wx/radiobut.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -377,6 +378,20 @@ namespace Luna
 		private:
 		
 		protected:
+			wxPanel* m_ControlsPanel;
+			wxRadioButton* m_CommonButton;
+			wxRadioButton* m_AllButton;
+			wxStaticLine* m_staticline5;
+			wxButton* m_ExpandAllButton;
+			wxButton* m_CollapseAllButton;
+			wxPanel* m_PropertiesPanel;
+			
+			// Virtual event handlers, overide them in your derived class
+			virtual void OnIntersection( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnUnion( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnExpandAll( wxCommandEvent& event ) { event.Skip(); }
+			virtual void OnCollapseAll( wxCommandEvent& event ) { event.Skip(); }
+			
 		
 		public:
 			

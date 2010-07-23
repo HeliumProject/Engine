@@ -25,6 +25,8 @@ namespace Luna
             return m_ToolsPropertiesPanel;
         }
 
+        void SetSaveButtonState( bool enabled );
+            
     private:
         std::vector< wxBitmapToggleButton* > m_ToolsButtons;
 

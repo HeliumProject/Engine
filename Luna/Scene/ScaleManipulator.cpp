@@ -12,7 +12,6 @@
 #include "App.h"
 #include "Editor.h"
 #include "Scene.h"
-#include "SceneEditor.h"
 #include "SceneManager.h"
 #include "ScenePreferences.h"
 

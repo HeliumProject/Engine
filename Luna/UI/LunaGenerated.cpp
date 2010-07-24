@@ -389,8 +389,8 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	m_RedoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	bSizer27->Add( m_RedoButton, 0, wxALL, 2 );
 	
-	m_staticline3 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer27->Add( m_staticline3, 0, wxEXPAND | wxALL, 2 );
+	
+	bSizer27->Add( 20, 0, 0, 0, 0 );
 	
 	m_ToolsPanel = new wxPanel( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_ToolsPanelSizer;

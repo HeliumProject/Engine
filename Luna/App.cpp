@@ -38,7 +38,6 @@
 #include "Document.h"
 #include "MRUData.h"
 
-#include "Scene/SceneEditor.h"
 #include "Scene/SceneInit.h"
 #include "Task/TaskInit.h"
 #include "UI/PerforceWaitDialog.h"

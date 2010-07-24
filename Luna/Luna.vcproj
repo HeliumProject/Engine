@@ -815,18 +815,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Scene\SceneEditor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneEditor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene\SceneEditorIDs.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Scene\SceneInit.cpp"
 				>
 			</File>
@@ -3905,14 +3893,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UI\LayerGrid.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\LayerGrid.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UI\LayersPanel.cpp"
 				>
 			</File>
@@ -3997,6 +3977,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UI\LunaIDs.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UI\MainFrame.cpp"
 				>
 			</File>
@@ -4078,22 +4062,6 @@
 			</File>
 			<File
 				RelativePath=".\UI\ToolbarPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ToolsPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\ToolsPanel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TypeGrid.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UI\TypeGrid.h"
 				>
 			</File>
 			<File

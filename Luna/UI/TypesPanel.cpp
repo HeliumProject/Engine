@@ -2,14 +2,14 @@
 
 #include "TypesPanel.h"
 
-#include "Scene/SceneEditorIDs.h"
+#include "LunaIDs.h"
 
 using namespace Luna;
 
 TypesPanel::TypesPanel( SceneManager* manager, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style )
 : TypesPanelGenerated( parent, id, pos, size, style )
 , m_SceneManager( manager )
-, m_Grid( new GridWithIcons( this, SceneEditorIDs::ID_ObjectGrid ) )
+, m_Grid( new GridWithIcons( this, EventIds::ID_ObjectGrid ) )
 , m_Scene( NULL )
 {
   GetSizer()->Add( m_Grid->GetPanel(), 1, wxEXPAND );

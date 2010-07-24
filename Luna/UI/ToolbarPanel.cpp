@@ -3,7 +3,7 @@
 #include "ToolbarPanel.h"
 #include "ArtProvider.h"
 
-#include "Scene/SceneEditorIDs.h"
+#include "LunaIDs.h"
 
 using namespace Luna;
 
@@ -30,19 +30,40 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
 
     m_SaveAllButton->Disable();
 
+    std::map< ToolType, wxPanel* > toolTypePanels;
     for ( i32 i=0; i < ToolModes::Count; ++i )
     {
         ToolInfo* info = &ToolInfos[ i ];
 
-        wxBitmapToggleButton* btn = new wxBitmapToggleButton( m_ToolsPanel, info->m_ID, wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, wxSize( 16, 16 ) ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+        std::map< ToolType, wxPanel* >::iterator itr = toolTypePanels.find( info->m_Type );
+
+        wxPanel* typePanel = NULL;
+
+        if ( itr == toolTypePanels.end() )
+        {
+            typePanel = new wxPanel( m_ToolsPanel );
+            typePanel->SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
+            toolTypePanels[ info->m_Type ] = typePanel;
+            m_ToolsPanel->GetSizer()->Add( typePanel, 0, wxALL | wxALIGN_CENTER_VERTICAL | wxEXPAND, 0 );
+            m_ToolsPanel->GetSizer()->Add( new wxStaticLine( m_ToolsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL ), 0, wxEXPAND | wxALL, 2 );
+        }
+
+        if ( !typePanel )
+        {
+            typePanel = (*itr).second;
+        }
+
+        wxBitmapToggleButton* btn = new wxBitmapToggleButton( typePanel, info->m_ID, wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, wxSize( 16, 16 ) ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
         btn->SetToolTip( info->m_Description );
 
         // connect its event handler to us
         btn->Connect( btn->GetId(), wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
 
-        m_ToolsPanel->GetSizer()->Add( btn, 0, wxALL | wxALIGN_CENTER_VERTICAL, 2 );
+        typePanel->GetSizer()->Add( btn, 0, wxALL | wxALIGN_CENTER_VERTICAL, 2 );
         m_ToolsButtons.push_back( btn );
     }
+
+    Layout();
 }
 
 void ToolbarPanel::ToggleTool( i32 selectedTool )

@@ -2,7 +2,6 @@
 #include "SceneOutliner.h"
 #include "Scene.h"
 #include "SceneManager.h"
-#include "SceneEditor.h"
 #include "SceneOutlinerItemData.h"
 #include "Application/Undo/PropertyCommand.h"
 

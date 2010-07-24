@@ -2,8 +2,8 @@
 
 #include "LayersPanel.h"
 #include "ArtProvider.h"
+#include "LunaIDs.h"
 
-#include "Scene/SceneEditorIDs.h"
 #include "Scene/DependencyCommand.h"
 
 using namespace Luna;
@@ -40,7 +40,7 @@ void LayersPanel::NameChangeInfo::Clear()
 LayersPanel::LayersPanel( SceneManager* manager, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 : LayersPanelGenerated( parent, id, pos, size, style )
 , m_SceneManager( manager )
-, m_Grid( new Grid( this, SceneEditorIDs::ID_LayerGrid, true ) )
+, m_Grid( new Grid( this, EventIds::ID_LayerGrid, true ) )
 , m_Scene( NULL )
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )

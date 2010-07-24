@@ -12,8 +12,6 @@
 #include "TypesPanel.h"
 #include "ViewPanel.h"
 
-#include "TypeGrid.h"
-
 #include "PropertiesManager.h"
 
 #include "Scene/Scene.h"
@@ -101,9 +99,6 @@ namespace Luna
 
         //context items ordered by name  
         V_HierarchyNodeDumbPtr m_OrderedContextItems;
-
-        // the UI for changing visibility/selectability of specific runtime types
-        TypeGrid* m_TypeGrid;
 
         std::vector< wxBitmapToggleButton* > m_ToolsButtons;
 

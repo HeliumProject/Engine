@@ -14,7 +14,6 @@
 
 #include "Scene.h"
 #include "SceneManager.h"
-#include "SceneEditor.h"
 #include "HierarchyNodeType.h"
 #include "ScaleManipulator.h"
 #include "TranslateManipulator.h"

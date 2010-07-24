@@ -6,7 +6,6 @@
 
 #include "Scene.h"
 #include "SceneManager.h"
-#include "SceneEditor.h"
 
 #include "PropertiesGenerator.h"
 #include "PrimitiveCube.h"

@@ -4,7 +4,7 @@
 
 #include "MainFrame.h"
 #include "Scene/SceneManager.h"
-#include "Scene/SceneEditorIDs.h"
+#include "LunaIDs.h"
 
 using namespace Luna;
 
@@ -30,7 +30,7 @@ DirectoryPanel::DirectoryPanel( SceneManager* manager, TreeMonitor* treeMonitor,
 
     // Types
     m_TypeOutline = new NodeTypeOutliner( m_SceneManager );
-    SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( m_TypesPanel, SceneEditorIDs::ID_TypeOutlineControl );
+    SortTreeCtrl* typeTree = m_TypeOutline->InitTreeCtrl( m_TypesPanel, EventIds::ID_TypeOutlineControl );
     typeTree->SetImageList( Nocturnal::GlobalFileIconsTable().GetSmallImageList() );
     m_TypesPanel->GetSizer()->Add( typeTree, 1, wxEXPAND );
     m_TreeMonitor->AddTree( typeTree );

@@ -12,7 +12,6 @@
 #include "Application/Inspect/DragDrop/ClipboardDataObject.h"
 
 #include "Scene/Scene.h"
-#include "Scene/SceneEditorIDs.h"
 #include "Scene/InstanceSet.h"
 #include "Scene/EntityType.h"
 #include "Scene/EntityAssetSet.h"
@@ -32,6 +31,7 @@
 
 #include "UI/PreferencesDialog.h"
 
+#include "LunaIDs.h"
 #include "ArtProvider.h"
 #include "ImportOptionsDlg.h"
 #include "ExportOptionsDlg.h"
@@ -138,22 +138,22 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     //
     // Toolbox
     //
-    Connect( SceneEditorIDs::ID_ToolsSelect, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsScale, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsScalePivot, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsRotate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsRotatePivot, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsTranslate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsTranslatePivot, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsPivot, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsDuplicate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsSelect, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsScale, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsScalePivot, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsRotate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsRotatePivot, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsTranslate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsTranslatePivot, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsPivot, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsDuplicate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
 
-    Connect( SceneEditorIDs::ID_ToolsLocatorCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsVolumeCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsEntityCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsCurveCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsCurveEdit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
-    Connect( SceneEditorIDs::ID_ToolsNavMesh, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsLocatorCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsVolumeCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsEntityCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsCurveCreate, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsCurveEdit, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
+    Connect( EventIds::ID_ToolsNavMesh, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnToolSelected ) );
 
     //
     // Tools
@@ -162,7 +162,7 @@ EVT_MENU(wxID_HELP_SEARCH, MainFrame::OnHelpSearch)
     m_ToolEnumerator = new PropertiesGenerator( &m_ToolProperties );
     m_ToolPropertiesManager = new PropertiesManager( m_ToolEnumerator );
     m_ToolPropertiesManager->AddPropertiesCreatedListener( PropertiesCreatedSignature::Delegate( this, &MainFrame::OnPropertiesCreated ) );
-    m_ToolProperties.SetControl( new Inspect::CanvasWindow ( m_ToolbarPanel->GetToolsPropertiesPanel(), SceneEditorIDs::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
+    m_ToolProperties.SetControl( new Inspect::CanvasWindow ( m_ToolbarPanel->GetToolsPropertiesPanel(), EventIds::ID_ToolProperties, wxPoint(0,0), wxSize(250,250), wxNO_BORDER | wxCLIP_CHILDREN) );
     m_FrameManager.AddPane( m_ToolbarPanel, wxAuiPaneInfo().Name( wxT( "tools" ) ).Top().Layer( 5 ).Position( 1 ).CaptionVisible( false ).PaneBorder( false ).Gripper( false ).CloseButton( false ).MaximizeButton( false ).MinimizeButton( false ).PinButton( false ).Movable( false ).MinSize( wxSize( -1, 52 ) ) );
     m_ToolbarPanel->GetToolsPanel()->Disable();
     m_ToolbarPanel->GetToolsPanel()->Refresh();
@@ -511,27 +511,27 @@ void MainFrame::OnChar(wxKeyEvent& event)
         break;
 
     case WXK_UP:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_EditWalkUp) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkUp) );
         event.Skip(false);
         break;
 
     case WXK_DOWN:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_EditWalkDown) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkDown) );
         event.Skip(false);
         break;
 
     case WXK_RIGHT:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_EditWalkForward) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkForward) );
         event.Skip(false);
         break;
 
     case WXK_LEFT:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_EditWalkBackward) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditWalkBackward) );
         event.Skip(false);
         break;
 
     case WXK_INSERT:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsPivot) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsPivot) );
         event.Skip(false);
         break;
 
@@ -541,7 +541,7 @@ void MainFrame::OnChar(wxKeyEvent& event)
         break;
 
     case WXK_ESCAPE:
-        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsSelect) );
+        GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsSelect) );
         event.Skip(false);
         break;
 
@@ -555,82 +555,82 @@ void MainFrame::OnChar(wxKeyEvent& event)
         switch ( event.GetKeyCode() )
         {
         case wxT('4'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewWireframe) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewWireframe) );
             event.Skip(false);
             break;
 
         case wxT('5'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewMaterial) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewMaterial) );
             event.Skip(false);
             break;
 
         case wxT('6'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewTexture) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewTexture) );
             event.Skip(false);
             break;
 
         case wxT('7'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewOrbit) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewOrbit) );
             event.Skip(false);
             break;
 
         case wxT('8'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewFront) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewFront) );
             event.Skip(false);
             break;
 
         case wxT('9'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewSide) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewSide) );
             event.Skip(false);
             break;
 
         case wxT('0'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewTop) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewTop) );
             event.Skip(false);
             break;
 
         case wxT('Q'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsSelect) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsSelect) );
             event.Skip(false);
             break;
 
         case wxT('W'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsTranslate) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsTranslate) );
             event.Skip(false);
             break;
 
         case wxT('E'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsRotate) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsRotate) );
             event.Skip(false);
             break;
 
         case wxT('R'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ToolsScale) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ToolsScale) );
             event.Skip(false);
             break;
 
         case wxT('O'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewFrameOrigin) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewFrameOrigin) );
             event.Skip(false);
             break;
 
         case wxT('F'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewFrameSelected) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewFrameSelected) );
             event.Skip(false);
             break;
 
         case wxT('H'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewHighlightMode) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewHighlightMode) );
             event.Skip(false);
             break;
 
         case wxT(']'):
-            GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewNextView) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewNextView) );
             event.Skip(false);
             break;
 
         case wxT('['):
-            GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_ViewPreviousView) );
+            GetEventHandler()->ProcessEvent( wxCommandEvent ( wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_ViewPreviousView) );
             event.Skip(false);
             break;
 
@@ -646,7 +646,7 @@ void MainFrame::OnShow(wxShowEvent& event)
 #ifdef LUNA_DEBUG_RUNTIME_DATA_SELECTION
     // Sometimes it's handy to put debug code here for program start up.
     New();
-    wxCommandEvent evt( wxEVT_COMMAND_TOOL_CLICKED, SceneEditorIDs::ID_ToolsVolumeCreate );
+    wxCommandEvent evt( wxEVT_COMMAND_TOOL_CLICKED, EventIds::ID_ToolsVolumeCreate );
     GetEventHandler()->ProcessEvent( evt );
     m_SceneManager.GetCurrentScene()->SetTool(NULL);
     wxCloseEvent close( wxEVT_CLOSE_WINDOW );
@@ -815,85 +815,85 @@ void MainFrame::OnViewChange(wxCommandEvent& event)
 {
     switch (event.GetId())
     {
-    case SceneEditorIDs::ID_ViewAxes:
+    case EventIds::ID_ViewAxes:
         {
             m_ViewPanel->GetViewport()->SetAxesVisible( !m_ViewPanel->GetViewport()->IsAxesVisible() );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewGrid:
+    case EventIds::ID_ViewGrid:
         {
             m_ViewPanel->GetViewport()->SetGridVisible( !m_ViewPanel->GetViewport()->IsGridVisible() );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewBounds:
+    case EventIds::ID_ViewBounds:
         {
             m_ViewPanel->GetViewport()->SetBoundsVisible( !m_ViewPanel->GetViewport()->IsBoundsVisible() );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewStatistics:
+    case EventIds::ID_ViewStatistics:
         {
             m_ViewPanel->GetViewport()->SetStatisticsVisible( !m_ViewPanel->GetViewport()->IsStatisticsVisible() );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewNone:
+    case EventIds::ID_ViewNone:
         {
             m_ViewPanel->GetViewport()->SetGeometryMode( GeometryModes::None );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewRender:
+    case EventIds::ID_ViewRender:
         {
             m_ViewPanel->GetViewport()->SetGeometryMode( GeometryModes::Render );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewCollision:
+    case EventIds::ID_ViewCollision:
         {
             m_ViewPanel->GetViewport()->SetGeometryMode( GeometryModes::Collision );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewWireframeOnMesh:
+    case EventIds::ID_ViewWireframeOnMesh:
         {
             m_ViewPanel->GetViewport()->GetCamera()->SetWireframeOnMesh( !m_ViewPanel->GetViewport()->GetCamera()->GetWireframeOnMesh() );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewWireframeOnShaded:
+    case EventIds::ID_ViewWireframeOnShaded:
         {
             m_ViewPanel->GetViewport()->GetCamera()->SetWireframeOnShaded( !m_ViewPanel->GetViewport()->GetCamera()->GetWireframeOnShaded() );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewWireframe:
+    case EventIds::ID_ViewWireframe:
         {
             m_ViewPanel->GetViewport()->GetCamera()->SetShadingMode( ShadingModes::Wireframe );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewMaterial:
+    case EventIds::ID_ViewMaterial:
         {
             m_ViewPanel->GetViewport()->GetCamera()->SetShadingMode( ShadingModes::Material );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewTexture:
+    case EventIds::ID_ViewTexture:
         {
             m_ViewPanel->GetViewport()->GetCamera()->SetShadingMode( ShadingModes::Texture );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewFrustumCulling:
+    case EventIds::ID_ViewFrustumCulling:
         {
             m_ViewPanel->GetViewport()->GetCamera()->SetViewFrustumCulling( !m_ViewPanel->GetViewport()->GetCamera()->IsViewFrustumCulling() );
             break;
         }
 
-    case SceneEditorIDs::ID_ViewBackfaceCulling:
+    case EventIds::ID_ViewBackfaceCulling:
         {
             m_ViewPanel->GetViewport()->GetCamera()->SetBackFaceCulling( !m_ViewPanel->GetViewport()->GetCamera()->IsBackFaceCulling() );
             break;
@@ -907,25 +907,25 @@ void MainFrame::OnViewCameraChange(wxCommandEvent& event)
 {
     switch (event.GetId())
     {
-    case SceneEditorIDs::ID_ViewOrbit:
+    case EventIds::ID_ViewOrbit:
         {
             m_ViewPanel->GetViewport()->SetCameraMode(CameraModes::Orbit);
             break;
         }
 
-    case SceneEditorIDs::ID_ViewFront:
+    case EventIds::ID_ViewFront:
         {
             m_ViewPanel->GetViewport()->SetCameraMode(CameraModes::Front);
             break;
         }
 
-    case SceneEditorIDs::ID_ViewSide:
+    case EventIds::ID_ViewSide:
         {
             m_ViewPanel->GetViewport()->SetCameraMode(CameraModes::Side);
             break;
         }
 
-    case SceneEditorIDs::ID_ViewTop:
+    case EventIds::ID_ViewTop:
         {
             m_ViewPanel->GetViewport()->SetCameraMode(CameraModes::Top);
             break;
@@ -945,71 +945,71 @@ void MainFrame::OnViewVisibleChange(wxCommandEvent& event)
 
         switch ( event.GetId() )
         {
-        case SceneEditorIDs::ID_ViewShowAll:
+        case EventIds::ID_ViewShowAll:
             {
                 batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenSelected( false ) );
                 batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenUnrelated( false ) );
                 break;
             }
 
-        case SceneEditorIDs::ID_ViewShowAllGeometry:
+        case EventIds::ID_ViewShowAllGeometry:
             {
                 batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( true, true ) );
                 batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( true, false ) );
                 break;
             }
 
-        case SceneEditorIDs::ID_ViewShowSelected:
+        case EventIds::ID_ViewShowSelected:
             {
                 batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenSelected( false ) );
                 break;
             }
 
-        case SceneEditorIDs::ID_ViewShowSelectedGeometry:
+        case EventIds::ID_ViewShowSelectedGeometry:
             {
                 batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( true, true ) );
                 break;
             }
 
-        case SceneEditorIDs::ID_ViewShowUnrelated:
+        case EventIds::ID_ViewShowUnrelated:
             {
                 batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenUnrelated( false ) );
                 break;
             }
 
-        case SceneEditorIDs::ID_ViewShowLastHidden:
+        case EventIds::ID_ViewShowLastHidden:
             {
                 batch->Push( m_SceneManager.GetCurrentScene()->ShowLastHidden() );
                 break;
             }
 
-        case SceneEditorIDs::ID_ViewHideAll:
+        case EventIds::ID_ViewHideAll:
             {
                 batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenSelected( true ) );
                 batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenUnrelated( true ) );
                 break;
             }
 
-        case SceneEditorIDs::ID_ViewHideAllGeometry:
+        case EventIds::ID_ViewHideAllGeometry:
             {
                 batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( false, true ) );
                 batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( false, false ) );
                 break;
             }
 
-        case SceneEditorIDs::ID_ViewHideSelected:
+        case EventIds::ID_ViewHideSelected:
             {
                 batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenSelected( true ) );
                 break;
             }
 
-        case SceneEditorIDs::ID_ViewHideSelectedGeometry:
+        case EventIds::ID_ViewHideSelectedGeometry:
             {
                 batch->Push( m_SceneManager.GetCurrentScene()->SetGeometryShown( false, true ) );
                 break;
             }
 
-        case SceneEditorIDs::ID_ViewHideUnrelated:
+        case EventIds::ID_ViewHideUnrelated:
             {
                 batch->Push( m_SceneManager.GetCurrentScene()->SetHiddenUnrelated( true ) );
                 break;
@@ -1064,7 +1064,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
 
             switch ( event.GetId() )
             {
-            case SceneEditorIDs::ID_FileImport:
+            case EventIds::ID_FileImport:
                 {
                     Nocturnal::FileDialog fileDialog( this, TXT( "Import" ) );
 
@@ -1084,7 +1084,7 @@ void MainFrame::OnImport(wxCommandEvent& event)
                     break;
                 }
 
-            case SceneEditorIDs::ID_FileImportFromClipboard:
+            case EventIds::ID_FileImportFromClipboard:
                 {
                     tstring xml;
                     if (wxTheClipboard->Open())
@@ -1156,7 +1156,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
             {
                 switch ( event.GetId() )
                 {
-                case SceneEditorIDs::ID_FileExport:
+                case EventIds::ID_FileExport:
                     {
                         Nocturnal::FileDialog fileDialog( this, TXT( "Export Selection" ), TXT( "" ), TXT( "" ), wxFileSelectorDefaultWildcardStr, Nocturnal::FileDialogStyles::DefaultSave );
 
@@ -1189,7 +1189,7 @@ void MainFrame::OnExport(wxCommandEvent& event)
                         break;
                     }
 
-                case SceneEditorIDs::ID_FileExportToClipboard:
+                case EventIds::ID_FileExportToClipboard:
                     {
                         tstring xml;
 
@@ -1366,49 +1366,49 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
     {
         switch (event.GetId())
         {
-        case SceneEditorIDs::ID_ToolsSelect:
+        case EventIds::ID_ToolsSelect:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(NULL);
                 break;
             }
 
-        case SceneEditorIDs::ID_ToolsScale:
+        case EventIds::ID_ToolsScale:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(new Luna::ScaleManipulator (ManipulatorModes::Scale, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
-        case SceneEditorIDs::ID_ToolsScalePivot:
+        case EventIds::ID_ToolsScalePivot:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(new Luna::TranslateManipulator (ManipulatorModes::ScalePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
-        case SceneEditorIDs::ID_ToolsRotate:
+        case EventIds::ID_ToolsRotate:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(new Luna::RotateManipulator (ManipulatorModes::Rotate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
-        case SceneEditorIDs::ID_ToolsRotatePivot:
+        case EventIds::ID_ToolsRotatePivot:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(new Luna::TranslateManipulator (ManipulatorModes::RotatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
-        case SceneEditorIDs::ID_ToolsTranslate:
+        case EventIds::ID_ToolsTranslate:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(new Luna::TranslateManipulator (ManipulatorModes::Translate, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
-        case SceneEditorIDs::ID_ToolsTranslatePivot:
+        case EventIds::ID_ToolsTranslatePivot:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(new Luna::TranslateManipulator (ManipulatorModes::TranslatePivot, m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
                 break;
             }
 
-        case SceneEditorIDs::ID_ToolsPivot:
+        case EventIds::ID_ToolsPivot:
             {
                 if (m_SceneManager.GetCurrentScene()->GetTool().ReferencesObject())
                 {
@@ -1448,37 +1448,37 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
                 break;
             }
 
-        case SceneEditorIDs::ID_ToolsDuplicate:
+        case EventIds::ID_ToolsDuplicate:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(new Luna::DuplicateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
-        case SceneEditorIDs::ID_ToolsLocatorCreate:
+        case EventIds::ID_ToolsLocatorCreate:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(new Luna::LocatorCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
-        case SceneEditorIDs::ID_ToolsVolumeCreate:
+        case EventIds::ID_ToolsVolumeCreate:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(new Luna::VolumeCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
-        case SceneEditorIDs::ID_ToolsEntityCreate:
+        case EventIds::ID_ToolsEntityCreate:
             {
                 m_SceneManager.GetCurrentScene()->SetTool(new Luna::EntityCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator));
             }
             break;
 
-        case SceneEditorIDs::ID_ToolsCurveCreate:
+        case EventIds::ID_ToolsCurveCreate:
             {
                 m_SceneManager.GetCurrentScene()->SetTool( new Luna::CurveCreateTool( m_SceneManager.GetCurrentScene(), m_ToolEnumerator ) );
             }
             break;
 
-        case SceneEditorIDs::ID_ToolsCurveEdit:
+        case EventIds::ID_ToolsCurveEdit:
             {
                 Luna::CurveEditTool* curveEditTool = new Luna::CurveEditTool( m_SceneManager.GetCurrentScene(), m_ToolEnumerator );
                 m_SceneManager.GetCurrentScene()->SetTool( curveEditTool );
@@ -1486,7 +1486,7 @@ void MainFrame::OnToolSelected( wxCommandEvent& event )
             }
             break;
 
-        case SceneEditorIDs::ID_ToolsNavMesh:
+        case EventIds::ID_ToolsNavMesh:
             {
                 Luna::NavMeshCreateTool* navMeshCreate = new Luna::NavMeshCreateTool (m_SceneManager.GetCurrentScene(), m_ToolEnumerator);
                 m_SceneManager.GetCurrentScene()->SetTool( navMeshCreate );
@@ -1543,7 +1543,7 @@ void MainFrame::DocumentClosed( const DocumentChangedArgs& args )
 
 void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
 {
-    i32 selectedTool = SceneEditorIDs::ID_ToolsSelect;
+    i32 selectedTool = EventIds::ID_ToolsSelect;
     if ( args.m_NewTool )
     {
         if ( args.m_NewTool->HasType( Reflect::GetType<Luna::TransformManipulator>() ) )
@@ -1552,57 +1552,57 @@ void MainFrame::ViewToolChanged( const ToolChangeArgs& args )
             switch ( manipulator->GetMode() )
             {
             case ManipulatorModes::Scale:
-                selectedTool = SceneEditorIDs::ID_ToolsScale;
+                selectedTool = EventIds::ID_ToolsScale;
                 break;
 
             case ManipulatorModes::ScalePivot:
-                selectedTool = SceneEditorIDs::ID_ToolsScalePivot;
+                selectedTool = EventIds::ID_ToolsScalePivot;
                 break;
 
             case ManipulatorModes::Rotate:
-                selectedTool = SceneEditorIDs::ID_ToolsRotate;
+                selectedTool = EventIds::ID_ToolsRotate;
                 break;
 
             case ManipulatorModes::RotatePivot:
-                selectedTool = SceneEditorIDs::ID_ToolsRotatePivot;
+                selectedTool = EventIds::ID_ToolsRotatePivot;
                 break;
 
             case ManipulatorModes::Translate:
-                selectedTool = SceneEditorIDs::ID_ToolsTranslate;
+                selectedTool = EventIds::ID_ToolsTranslate;
                 break;
 
             case ManipulatorModes::TranslatePivot:
-                selectedTool = SceneEditorIDs::ID_ToolsTranslatePivot;
+                selectedTool = EventIds::ID_ToolsTranslatePivot;
                 break;
             }
         }
         else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::EntityCreateTool>() )
         {
-            selectedTool = SceneEditorIDs::ID_ToolsEntityCreate;
+            selectedTool = EventIds::ID_ToolsEntityCreate;
         }
         else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::VolumeCreateTool>() )
         {
-            selectedTool = SceneEditorIDs::ID_ToolsVolumeCreate;
+            selectedTool = EventIds::ID_ToolsVolumeCreate;
         }
         else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::LocatorCreateTool>() )
         {
-            selectedTool = SceneEditorIDs::ID_ToolsLocatorCreate;
+            selectedTool = EventIds::ID_ToolsLocatorCreate;
         }
         else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::DuplicateTool>() )
         {
-            selectedTool = SceneEditorIDs::ID_ToolsDuplicate;
+            selectedTool = EventIds::ID_ToolsDuplicate;
         }
         else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::CurveCreateTool>() )
         {
-            selectedTool = SceneEditorIDs::ID_ToolsCurveCreate;
+            selectedTool = EventIds::ID_ToolsCurveCreate;
         }
         else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::CurveEditTool>() )
         {
-            selectedTool = SceneEditorIDs::ID_ToolsCurveEdit;
+            selectedTool = EventIds::ID_ToolsCurveEdit;
         }
         else if ( args.m_NewTool->GetType() == Reflect::GetType<Luna::NavMeshCreateTool>() )
         {
-            selectedTool = SceneEditorIDs::ID_ToolsNavMesh;
+            selectedTool = EventIds::ID_ToolsNavMesh;
         }
     }
 
@@ -2017,7 +2017,7 @@ void MainFrame::OnManifestContextMenu(wxCommandEvent& event)
 {
     if( !m_OrderedContextItems.empty() )
     { 
-        u32 selectionIndex = event.GetId() - SceneEditorIDs::ID_SelectContextMenu;
+        u32 selectionIndex = event.GetId() - EventIds::ID_SelectContextMenu;
 
         Luna::HierarchyNode* selection = m_OrderedContextItems[ selectionIndex ];
 
@@ -2303,13 +2303,13 @@ void MainFrame::OpenManifestContextMenu(const SelectArgs& args)
                     str += '\t' + desc;
                 }
 
-                contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + index , str.c_str() );
+                contextMenu.Append( EventIds::ID_SelectContextMenu + index , str.c_str() );
             }
 
             contextMenu.SetEventHandler( GetEventHandler() );
-            GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu, SceneEditorIDs::ID_SelectContextMenu +  (u32)m_OrderedContextItems.size(),wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnManifestContextMenu ), NULL, this );
+            GetEventHandler()->Connect( EventIds::ID_SelectContextMenu, EventIds::ID_SelectContextMenu +  (u32)m_OrderedContextItems.size(),wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnManifestContextMenu ), NULL, this );
             PopupMenu( &contextMenu );
-            GetEventHandler()->Disconnect( SceneEditorIDs::ID_SelectContextMenu, SceneEditorIDs::ID_SelectContextMenu +  (u32)m_OrderedContextItems.size(),wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnManifestContextMenu ), NULL, this ); 
+            GetEventHandler()->Disconnect( EventIds::ID_SelectContextMenu, EventIds::ID_SelectContextMenu +  (u32)m_OrderedContextItems.size(),wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnManifestContextMenu ), NULL, this ); 
             m_OrderedContextItems.clear();
         }
     }
@@ -2328,15 +2328,15 @@ void MainFrame::OpenTypeContextMenu( const SelectArgs& args )
     {
         // need to provide the select args if needed
         DataObject<const SelectArgs*>* data = new DataObject<const SelectArgs*> ( &args );
-        GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::SelectItemInScene ), data, this );
-        contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select" ) );
+        GetEventHandler()->Connect( EventIds::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::SelectItemInScene ), data, this );
+        contextMenu.Append( EventIds::ID_SelectContextMenu + numMenuItems, TXT( "Select" ) );
         ++numMenuItems;
     }
 
     if (!m_SceneManager.GetCurrentScene()->GetSelection().GetItems().Empty())
     {
-        GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::SelectSimilarItemsInScene ), NULL, this );
-        contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select Similar" ) );
+        GetEventHandler()->Connect( EventIds::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::SelectSimilarItemsInScene ), NULL, this );
+        contextMenu.Append( EventIds::ID_SelectContextMenu + numMenuItems, TXT( "Select Similar" ) );
         ++numMenuItems;
     }
 
@@ -2358,7 +2358,7 @@ void MainFrame::OpenTypeContextMenu( const SelectArgs& args )
     PopupMenu( &contextMenu );
 
     // this must be done piecemeal because the range version of Disconnect() will only disconnect the ranged version Connect()
-    for ( u32 i = SceneEditorIDs::ID_SelectContextMenu; i < SceneEditorIDs::ID_SelectContextMenu + numMenuItems; i++ )
+    for ( u32 i = EventIds::ID_SelectContextMenu; i < EventIds::ID_SelectContextMenu + numMenuItems; i++ )
     {
         // clean up, disconnect any id that was set up for any of the items
         GetEventHandler()->Disconnect( i, wxEVT_COMMAND_MENU_SELECTED );
@@ -2402,8 +2402,8 @@ void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& scene
             data->m_ContextCallbackType = ContextCallbackTypes::All;
             data->m_NodeType = type;
 
-            GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnTypeContextMenu ), data, this );
-            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select All" ) );
+            GetEventHandler()->Connect( EventIds::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnTypeContextMenu ), data, this );
+            subMenu->Append( EventIds::ID_SelectContextMenu + numMenuItems, TXT( "Select All" ) );
             ++numMenuItems;
 
             // add selection for individual items
@@ -2433,13 +2433,13 @@ void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& scene
                     data->m_ContextCallbackType = ContextCallbackTypes::Item;
                     data->m_Nodes = *ord_itr;
 
-                    GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnTypeContextMenu ), data, this );
-                    itemMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, (*ord_itr)->GetName().c_str() );
+                    GetEventHandler()->Connect( EventIds::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnTypeContextMenu ), data, this );
+                    itemMenu->Append( EventIds::ID_SelectContextMenu + numMenuItems, (*ord_itr)->GetName().c_str() );
                     ++numMenuItems;
                 }
 
                 // add the items menu to the sub menu
-                subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select Single" ), itemMenu );
+                subMenu->Append( EventIds::ID_SelectContextMenu + numMenuItems, TXT( "Select Single" ), itemMenu );
                 ++numMenuItems;
 
                 // if this is an entity, then we need to check if it has art classes
@@ -2454,7 +2454,7 @@ void MainFrame::SetupTypeContextMenu( const HM_StrToSceneNodeTypeSmartPtr& scene
                     SetupEntityTypeMenus( entity, subMenu, numMenuItems );
                 }
             }
-            contextMenu.Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, type->GetName().c_str(), subMenu );
+            contextMenu.Append( EventIds::ID_SelectContextMenu + numMenuItems, type->GetName().c_str(), subMenu );
             ++numMenuItems;
         }
     }
@@ -2488,8 +2488,8 @@ void MainFrame::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* su
                 data->m_ContextCallbackType = ContextCallbackTypes::Instance;
                 data->m_InstanceSet = art;
 
-                GetEventHandler()->Connect( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnTypeContextMenu ), data, this );
-                menu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, artPath.c_str() );
+                GetEventHandler()->Connect( EventIds::ID_SelectContextMenu + numMenuItems, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::OnTypeContextMenu ), data, this );
+                menu->Append( EventIds::ID_SelectContextMenu + numMenuItems, artPath.c_str() );
                 ++numMenuItems;
                 added = true;
             }
@@ -2498,7 +2498,7 @@ void MainFrame::SetupEntityTypeMenus( const Luna::EntityType* entity, wxMenu* su
         if (added)
         {
             subMenu->AppendSeparator();
-            subMenu->Append( SceneEditorIDs::ID_SelectContextMenu + numMenuItems, TXT( "Select All With Art Class" ), menu );
+            subMenu->Append( EventIds::ID_SelectContextMenu + numMenuItems, TXT( "Select All With Art Class" ), menu );
             ++numMenuItems;
         }
         else

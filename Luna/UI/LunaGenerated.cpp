@@ -357,40 +357,40 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	bSizer27 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_NewSceneButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_NewSceneButton, 0, wxALL, 5 );
+	bSizer27->Add( m_NewSceneButton, 0, wxALL, 2 );
 	
 	m_OpenButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_OpenButton, 0, wxALL, 5 );
+	bSizer27->Add( m_OpenButton, 0, wxALL, 2 );
 	
 	m_SaveAllButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_SaveAllButton, 0, wxALL, 5 );
+	bSizer27->Add( m_SaveAllButton, 0, wxALL, 2 );
 	
 	m_staticline1 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer27->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bSizer27->Add( m_staticline1, 0, wxEXPAND | wxALL, 2 );
 	
 	m_CutButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_CutButton, 0, wxALL, 5 );
+	bSizer27->Add( m_CutButton, 0, wxALL, 2 );
 	
 	m_CopyButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_CopyButton, 0, wxALL, 5 );
+	bSizer27->Add( m_CopyButton, 0, wxALL, 2 );
 	
 	m_PasteButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_PasteButton, 0, wxALL, 5 );
+	bSizer27->Add( m_PasteButton, 0, wxALL, 2 );
 	
 	m_DeleteButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_DeleteButton, 0, wxALL, 5 );
+	bSizer27->Add( m_DeleteButton, 0, wxALL, 2 );
 	
 	m_staticline2 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer27->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	bSizer27->Add( m_staticline2, 0, wxEXPAND | wxALL, 2 );
 	
 	m_UndoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_UndoButton, 0, wxALL, 5 );
+	bSizer27->Add( m_UndoButton, 0, wxALL, 2 );
 	
 	m_RedoButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	bSizer27->Add( m_RedoButton, 0, wxALL, 5 );
+	bSizer27->Add( m_RedoButton, 0, wxALL, 2 );
 	
 	m_staticline3 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer27->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+	bSizer27->Add( m_staticline3, 0, wxEXPAND | wxALL, 2 );
 	
 	m_ToolsPanel = new wxPanel( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_ToolsPanelSizer;
@@ -399,10 +399,10 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	m_ToolsPanel->SetSizer( m_ToolsPanelSizer );
 	m_ToolsPanel->Layout();
 	m_ToolsPanelSizer->Fit( m_ToolsPanel );
-	bSizer27->Add( m_ToolsPanel, 1, wxEXPAND | wxALL, 5 );
+	bSizer27->Add( m_ToolsPanel, 1, wxEXPAND | wxALL, 0 );
 	
 	m_staticline4 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer27->Add( m_staticline4, 0, wxEXPAND | wxALL, 5 );
+	bSizer27->Add( m_staticline4, 0, wxEXPAND | wxALL, 2 );
 	
 	m_VaultSearchBox = new wxSearchCtrl( m_MainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 400,-1 ), 0 );
 	#ifndef __WXMAC__
@@ -411,7 +411,7 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	m_VaultSearchBox->ShowCancelButton( false );
 	m_VaultSearchBox->SetMinSize( wxSize( 300,-1 ) );
 	
-	bSizer27->Add( m_VaultSearchBox, 0, wxALL, 5 );
+	bSizer27->Add( m_VaultSearchBox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 2 );
 	
 	m_MainPanel->SetSizer( bSizer27 );
 	m_MainPanel->Layout();

@@ -34,13 +34,13 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
     {
         ToolInfo* info = &ToolInfos[ i ];
 
-        wxBitmapToggleButton* btn = new wxBitmapToggleButton( m_ToolsPanel, info->m_ID, wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, wxSize( 16, 16 ) ), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT | wxBU_AUTODRAW );
+        wxBitmapToggleButton* btn = new wxBitmapToggleButton( m_ToolsPanel, info->m_ID, wxArtProvider::GetBitmap( info->m_Bitmap, wxART_OTHER, wxSize( 16, 16 ) ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
         btn->SetToolTip( info->m_Description );
 
         // connect its event handler to us
         btn->Connect( btn->GetId(), wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ToolbarPanel::OnToggleToolButton ), NULL, this );
 
-        m_ToolsPanel->GetSizer()->Add( btn );
+        m_ToolsPanel->GetSizer()->Add( btn, 0, wxALL | wxALIGN_CENTER_VERTICAL, 2 );
         m_ToolsButtons.push_back( btn );
     }
 }

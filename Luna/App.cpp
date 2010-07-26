@@ -38,7 +38,6 @@
 #include "WindowSettings.h"
 #include "Document.h"
 
-#include "Scene/SceneEditor.h"
 #include "Scene/SceneInit.h"
 #include "Task/TaskInit.h"
 #include "UI/PerforceWaitDialog.h"

@@ -7,6 +7,12 @@
 
 using namespace Inspect;
 
+BEGIN_EVENT_TABLE( CanvasStrip, wxPanel )
+EVT_SHOW( CanvasStrip::OnShow )
+EVT_SIZE( CanvasStrip::OnSize )
+EVT_LEFT_DOWN( CanvasStrip::OnClick )
+END_EVENT_TABLE();
+
 BEGIN_EVENT_TABLE(CanvasWindow, Nocturnal::TreeWndCtrl)
 EVT_SHOW(CanvasWindow::OnShow)
 EVT_SIZE(CanvasWindow::OnSize)
@@ -14,6 +20,43 @@ EVT_LEFT_DOWN(CanvasWindow::OnClick)
 EVT_TREE_ITEM_EXPANDED(wxID_ANY, CanvasWindow::OnToggle)
 EVT_TREE_ITEM_COLLAPSED(wxID_ANY, CanvasWindow::OnToggle)
 END_EVENT_TABLE();
+
+//
+// CanvasStrip
+//
+
+CanvasStrip::CanvasStrip(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const wxSize& size, long style, const wxString& name )
+: wxPanel( parent, winid, pos, size, style, name )
+, m_Canvas( NULL )
+{
+}
+
+void CanvasStrip::OnShow(wxShowEvent& event)
+{
+  if (m_Canvas)
+  {
+    m_Canvas->RaiseShow( event.GetShow() );
+  }
+}
+
+void CanvasStrip::OnSize(wxSizeEvent& event)
+{
+  Layout();
+  
+  event.Skip();
+}
+
+void CanvasStrip::OnClick(wxMouseEvent& event)
+{
+  SetFocus();
+
+  event.Skip();
+}
+
+
+//
+// CanvasWindow
+//
 
 CanvasWindow::CanvasWindow(wxWindow *parent,
                            wxWindowID winid,

@@ -4,9 +4,9 @@
 
 namespace Luna
 {
-    namespace SceneEditorIDs
+    namespace EventIds
     {
-        enum SceneEditorID
+        enum EventId
         {
             // controls
             ID_ZonesControl = wxID_HIGHEST+1,
@@ -133,32 +133,44 @@ namespace Luna
             ID_SelectContextMenu,
         };
     }
-    typedef SceneEditorIDs::SceneEditorID SceneEditorID;
+    typedef EventIds::EventId EventId;
 
     namespace ToolModes
     {
         enum ToolMode
         {
-            Begin = SceneEditorIDs::ID_ToolsSelect,
-            Select = SceneEditorIDs::ID_ToolsSelect,
-            Scale = SceneEditorIDs::ID_ToolsScale,
-            Rotate = SceneEditorIDs::ID_ToolsRotate,
-            Translate = SceneEditorIDs::ID_ToolsTranslate,
-            Duplicate = SceneEditorIDs::ID_ToolsDuplicate,
-            LocatorCreate = SceneEditorIDs::ID_ToolsLocatorCreate,
-            VolumeCreate = SceneEditorIDs::ID_ToolsVolumeCreate,
-            EntityCreate = SceneEditorIDs::ID_ToolsEntityCreate,
-            CurveCreate = SceneEditorIDs::ID_ToolsCurveCreate,
-            CurveEdit = SceneEditorIDs::ID_ToolsCurveEdit,
-            NavMesh = SceneEditorIDs::ID_ToolsNavMesh,
-            End = SceneEditorIDs::ID_ToolsEnd,
-            Count = SceneEditorIDs::ID_ToolsCount,
+            Begin = EventIds::ID_ToolsSelect,
+            Select = EventIds::ID_ToolsSelect,
+            Scale = EventIds::ID_ToolsScale,
+            Rotate = EventIds::ID_ToolsRotate,
+            Translate = EventIds::ID_ToolsTranslate,
+            Duplicate = EventIds::ID_ToolsDuplicate,
+            LocatorCreate = EventIds::ID_ToolsLocatorCreate,
+            VolumeCreate = EventIds::ID_ToolsVolumeCreate,
+            EntityCreate = EventIds::ID_ToolsEntityCreate,
+            CurveCreate = EventIds::ID_ToolsCurveCreate,
+            CurveEdit = EventIds::ID_ToolsCurveEdit,
+            NavMesh = EventIds::ID_ToolsNavMesh,
+            End = EventIds::ID_ToolsEnd,
+            Count = EventIds::ID_ToolsCount,
         };
     }
+
+    namespace ToolTypes
+    {
+        enum ToolType
+        {
+            Manipulator,
+            Creator,
+            Editor,
+        };
+    }
+    typedef ToolTypes::ToolType ToolType;
 
     struct ToolInfo
     {
         i32             m_ID;
+        ToolType        m_Type;
         const tchar*    m_Name;
         const tchar*    m_Bitmap;
         const tchar*    m_Description;
@@ -166,18 +178,18 @@ namespace Luna
 
     static ToolInfo ToolInfos[] =
     {
-        { ToolModes::Select,            wxT("Select"),          Luna::ArtIDs::SelectTool,    wxT("Select items from the workspace") },
-        { ToolModes::Translate,         wxT("Translate"),       Luna::ArtIDs::TranslateTool, wxT("Translate items") },
-        { ToolModes::Rotate,            wxT("Rotate"),          Luna::ArtIDs::RotateTool,    wxT("Rotate selected items") },
-        { ToolModes::Scale,             wxT("Scale"),           Luna::ArtIDs::ScaleTool,     wxT("Scale selected items") },
-        { ToolModes::Duplicate,         wxT("Duplicate"),       Luna::ArtIDs::DuplicateTool, wxT("Duplicate the selected object numerous times") },
-        { ToolModes::LocatorCreate,     wxT("Create Locator"),  Luna::ArtIDs::Locator,       wxT("Place locator objects (such as bug locators)") },
-        { ToolModes::VolumeCreate,      wxT("Create Volume"),   Luna::ArtIDs::Volume,        wxT("Place volume objects (items for setting up gameplay)") },
-        { ToolModes::EntityCreate,      wxT("Create Entity"),   Luna::ArtIDs::Entity,        wxT("Place entity objects (such as art instances or characters)") },
-        { ToolModes::CurveCreate,       wxT("Create Curve"),    Luna::ArtIDs::Curve,         wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)") },
-        { ToolModes::CurveEdit,         wxT("Edit Curve"),      Luna::ArtIDs::CurveEdit,     wxT("Edit created curves (modify or create/delete control points)") },
-        { ToolModes::NavMesh,           wxT("Edit NavMesh"),    Luna::ArtIDs::NavMesh,       wxT("Create NavMesh or add new verts and tris") },
+        { ToolModes::Select,        ToolTypes::Manipulator,    wxT("Select"),          Luna::ArtIDs::SelectTool,    wxT("Select items from the workspace") },
+        { ToolModes::Translate,     ToolTypes::Manipulator,    wxT("Translate"),       Luna::ArtIDs::TranslateTool, wxT("Translate items") },
+        { ToolModes::Rotate,        ToolTypes::Manipulator,    wxT("Rotate"),          Luna::ArtIDs::RotateTool,    wxT("Rotate selected items") },
+        { ToolModes::Scale,         ToolTypes::Manipulator,    wxT("Scale"),           Luna::ArtIDs::ScaleTool,     wxT("Scale selected items") },
+        { ToolModes::Duplicate,     ToolTypes::Creator,        wxT("Duplicate"),       Luna::ArtIDs::DuplicateTool, wxT("Duplicate the selected object numerous times") },
+        { ToolModes::LocatorCreate, ToolTypes::Creator,        wxT("Create Locator"),  Luna::ArtIDs::Locator,       wxT("Place locator objects (such as bug locators)") },
+        { ToolModes::VolumeCreate,  ToolTypes::Creator,        wxT("Create Volume"),   Luna::ArtIDs::Volume,        wxT("Place volume objects (items for setting up gameplay)") },
+        { ToolModes::EntityCreate,  ToolTypes::Creator,        wxT("Create Entity"),   Luna::ArtIDs::Entity,        wxT("Place entity objects (such as art instances or characters)") },
+        { ToolModes::CurveCreate,   ToolTypes::Creator,        wxT("Create Curve"),    Luna::ArtIDs::Curve,         wxT("Create curve objects (Linear, B-Spline, or Catmull-Rom Spline)") },
+        { ToolModes::CurveEdit,     ToolTypes::Editor,         wxT("Edit Curve"),      Luna::ArtIDs::CurveEdit,     wxT("Edit created curves (modify or create/delete control points)") },
+        { ToolModes::NavMesh,       ToolTypes::Editor,         wxT("Edit NavMesh"),    Luna::ArtIDs::NavMesh,       wxT("Create NavMesh or add new verts and tris") },
     };
 
-    NOC_COMPILE_ASSERT( sizeof(ToolInfos) == SceneEditorIDs::ID_ToolsCount * sizeof(ToolInfo) );
+    NOC_COMPILE_ASSERT( sizeof(ToolInfos) == EventIds::ID_ToolsCount * sizeof(ToolInfo) );
 }

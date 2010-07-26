@@ -2,7 +2,6 @@
 #include "SceneManager.h"
 
 #include "Scene.h"
-#include "SceneEditor.h"
 #include "SceneDocument.h"
 #include "SwitchSceneCommand.h"
 #include "Viewport.h"

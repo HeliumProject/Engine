@@ -55,4 +55,6 @@ namespace Luna
 
     virtual bool IsTransparent();
   };
+
+  typedef std::map< tstring, HierarchyNodeType* > M_HierarchyNodeTypeDumbPtr;
 }

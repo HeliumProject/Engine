@@ -8,7 +8,7 @@
 #include "Project.h"
 #include "LayersPanel.h"
 #include "PropertiesPanel.h"
-#include "ToolsPanel.h"
+#include "ToolbarPanel.h"
 #include "TypesPanel.h"
 #include "ViewPanel.h"
 
@@ -18,11 +18,10 @@
 #include "Scene/SceneManager.h"
 
 #include "Application/UI/MenuMRU.h"
+#include "Application/Inspect/DragDrop/DropTarget.h"
 
-#ifdef UI_REFACTOR
-# include "TreeMonitor.h"
-# include "TreeSortTimer.h"
-#endif
+#include "Scene/TreeMonitor.h"
+#include "Scene/TreeSortTimer.h"
 
 namespace Luna
 {
@@ -33,6 +32,16 @@ namespace Luna
         {
             ID_MenuOpened = wxID_HIGHEST + 1,
         };
+
+    private:
+        struct OutlinerStates
+        {
+            SceneOutlinerState m_Hierarchy;
+            SceneOutlinerState m_Entities;
+            SceneOutlinerState m_Types;
+        };
+
+        typedef std::map< Luna::Scene*, OutlinerStates > M_OutlinerStates;
 
     public:
         MainFrame( wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,1024 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
@@ -52,22 +61,21 @@ namespace Luna
         bool OpenProject( const Nocturnal::Path& path );
         bool AddScene( const Nocturnal::Path& path );
 
-#ifdef UI_REFACTOR
-        TreeMonitor& GetTreeMonitor()
-        {
-            return m_TreeMonitor;
-        }
-#endif
+        void SyncPropertyThread();
 
     private:
         static tstring s_PreferencesPrefix;
+
+        // Stores information about the state of each outliner for each scene
+        // that is open.  Restores the state when switching between scenes.
+        M_OutlinerStates m_OutlinerStates;
 
         HelpPanel*       m_HelpPanel;
         ProjectPanel*    m_ProjectPanel;
         LayersPanel*     m_LayersPanel;
         TypesPanel*      m_TypesPanel;
         ViewPanel*       m_ViewPanel;
-        ToolsPanel*      m_ToolsPanel;
+        ToolbarPanel*    m_ToolbarPanel;
         DirectoryPanel*  m_DirectoryPanel;
         PropertiesPanel* m_PropertiesPanel;
 
@@ -86,14 +94,37 @@ namespace Luna
 
         Nocturnal::MenuMRUPtr m_MRU;
 
+        typedef std::map< i32, i32 > M_IDToColorMode; // Maps wx ID for menu items to our ViewColorMode enum
+        M_IDToColorMode m_ColorModeLookup;
+
         //context items ordered by name  
         V_HierarchyNodeDumbPtr m_OrderedContextItems;
 
-#ifdef UI_REFACTOR
+        std::vector< wxBitmapToggleButton* > m_ToolsButtons;
+
         TreeMonitor m_TreeMonitor;
         TreeSortTimer m_TreeSortTimer;
-#endif
+
     private:
+        bool ValidateDrag( const Inspect::DragArgs& args );
+        wxDragResult DragOver( const Inspect::DragArgs& args );
+        wxDragResult Drop( const Inspect::DragArgs& args );
+
+        void SceneAdded( const SceneChangeArgs& args );
+        void SceneRemoving( const SceneChangeArgs& args );
+        void SceneLoadFinished( const LoadArgs& args );
+
+        bool DoOpen( const tstring& path );
+
+    private:
+
+        void OnMRUOpen( const Nocturnal::MRUArgs& args );
+
+        // frame events
+        void OnEraseBackground( wxEraseEvent& event );
+        void OnSize( wxSizeEvent& event );
+        void OnChar( wxKeyEvent& event );
+        void OnShow( wxShowEvent& event );
         void OnMenuOpen( wxMenuEvent& event );
 
         void OnNewScene( wxCommandEvent& event );
@@ -102,6 +133,11 @@ namespace Luna
         void OnOpen( wxCommandEvent& event );
         void OnClose( wxCommandEvent& event );
         void OnSaveAll( wxCommandEvent& event );
+
+        void OnViewChange( wxCommandEvent& event );
+        void OnViewCameraChange( wxCommandEvent& event );
+        void OnViewVisibleChange( wxCommandEvent& event );
+        void OnViewColorModeChange( wxCommandEvent& event );
 
         void OnImport( wxCommandEvent& event );
         void OnExport( wxCommandEvent& event );
@@ -130,12 +166,19 @@ namespace Luna
 
         void OnPickWalk( wxCommandEvent& event );
 
+        void Executed( const ExecuteArgs& args );
+
+        void SelectionChanged( const OS_SelectableDumbPtr& selection );
+
         void CurrentSceneChanged( const SceneChangeArgs& args );
         void CurrentSceneChanging( const SceneChangeArgs& args );
         void OnPropertiesCreated( const PropertiesCreatedArgs& args );
         void OnToolSelected(wxCommandEvent& event);
+        void DocumentModified( const DocumentChangedArgs& args );
+        void DocumentClosed( const DocumentChangedArgs& args );
         void ViewToolChanged( const ToolChangeArgs& args );
         void SceneStatusChanged( const SceneStatusChangeArgs& args );
+        void SceneContextChanged( const SceneContextChangeArgs& args );
 
         void OnExit( wxCommandEvent& event );
         void OnExiting( wxCloseEvent& args );

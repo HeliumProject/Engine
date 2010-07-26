@@ -10,7 +10,7 @@ ViewPanel::ViewPanel(wxWindow *parent, wxWindowID id, const wxPoint &pos, const 
 {
 #pragma TODO( "Remove this block of code if/when wxFormBuilder supports wxArtProvider" )
     {
-        Freeze();
+//        Freeze();
 
         m_ToolbarView->FindById( ID_FrameOrigin )->SetNormalBitmap( wxArtProvider::GetBitmap( Luna::ArtIDs::FrameOrigin ) );
         m_ToolbarView->FindById( ID_FrameSelected )->SetNormalBitmap( wxArtProvider::GetBitmap( Luna::ArtIDs::FrameSelected ) );
@@ -45,11 +45,11 @@ ViewPanel::ViewPanel(wxWindow *parent, wxWindowID id, const wxPoint &pos, const 
         m_ToolbarView->Realize();
 
         Layout();
-        Thaw();
+        //Thaw();
     }
 
-    m_Viewport = new Luna::Viewport( m_ViewPanel, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS | wxEXPAND );
-    m_ViewPanel->GetSizer()->Add( m_Viewport, 1, wxEXPAND | wxALL, 5 );
+    m_Viewport = new Luna::Viewport( m_ViewContainerPanel, -1, wxPoint(0,0), wxSize(150,250), wxNO_BORDER | wxWANTS_CHARS | wxEXPAND );
+    m_ViewContainerPanel->GetSizer()->Add( m_Viewport, 1, wxEXPAND | wxALL, 5 );
 
     m_ToolbarView->FindById( ID_HighlightMode )->SetToggle( m_Viewport->IsHighlighting() );
 

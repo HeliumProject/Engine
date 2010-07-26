@@ -26,7 +26,6 @@
 #include "Mesh.h"
 #include "UI/Controls/Tree/SortTreeCtrl.h"
 #include "UI/PreferencesDialog.h"
-#include "MRUData.h"
 #include "App.h"
 
 #include "UI/HelpPanel.h"
@@ -707,11 +706,9 @@ SceneEditor::SceneEditor()
 
     m_MRU->AddItemSelectedListener( Nocturnal::MRUSignature::Delegate( this, &SceneEditor::OnMRUOpen ) );
 
-#pragma TODO("MRU")
-#if 0
     std::vector< tstring > paths;
-    std::vector< tstring >::const_iterator itr = wxGetApp().GetPreferences()->GetMRU()->GetPaths().begin();
-    std::vector< tstring >::const_iterator end = wxGetApp().GetPreferences()->GetMRU()->GetPaths().end();
+    std::vector< tstring >::const_iterator itr = wxGetApp().GetPreferences()->GetScenePreferences()->GetMRU()->GetPaths().begin();
+    std::vector< tstring >::const_iterator end = wxGetApp().GetPreferences()->GetScenePreferences()->GetMRU()->GetPaths().end();
     for ( ; itr != end; ++itr )
     {
         Nocturnal::Path path( *itr );
@@ -721,7 +718,6 @@ SceneEditor::SceneEditor()
         }
     }
     m_MRU->FromVector( paths );
-#endif
 
     Inspect::DropTarget* dropTarget = new Inspect::DropTarget();
     dropTarget->SetDragOverCallback( Inspect::DragOverCallback::Delegate( this, &SceneEditor::DragOver ) );
@@ -742,12 +738,9 @@ SceneEditor::~SceneEditor()
     }
 
     // Save preferences and MRU
-#pragma TODO("MRU")
-#if 0
     std::vector< tstring > mruPaths;
     m_MRU->ToVector( mruPaths );
     wxGetApp().GetPreferences()->GetScenePreferences()->GetMRU()->SetPaths( mruPaths );
-#endif
     wxGetApp().GetPreferences()->GetViewportPreferences()->LoadFromViewport( m_View ); 
     wxGetApp().SavePreferences();
 

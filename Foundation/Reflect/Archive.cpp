@@ -369,39 +369,46 @@ void Archive::PostDeserialize(const ElementPtr& element, const Field* field)
 
 bool Archive::TryElementCallback( Element* element, ElementCallback callback )
 {
-    try
+    if ( Platform::IsDebuggerPresent() )
     {
         (element->*callback)();
     }
-    catch ( const Nocturnal::Exception& exception )
+    else
     {
-        if ( m_Status )
+        try
         {
-            ExceptionInfo info ( *this, element, callback, exception );
-
-            m_Status->ArchiveException( info );
-
-            switch ( info.m_Action )
+            (element->*callback)();
+        }
+        catch ( const Nocturnal::Exception& exception )
+        {
+            if ( m_Status )
             {
-            case ExceptionActions::Unknown:
-                {
-                    throw;
-                }
+                ExceptionInfo info ( *this, element, callback, exception );
 
-            case ExceptionActions::Accept:
-                {
-                    return true;
-                }
+                m_Status->ArchiveException( info );
 
-            case ExceptionActions::Reject:
+                switch ( info.m_Action )
                 {
-                    return false;
+                case ExceptionActions::Unknown:
+                    {
+                        throw;
+                    }
+
+                case ExceptionActions::Accept:
+                    {
+                        return true;
+                    }
+
+                case ExceptionActions::Reject:
+                    {
+                        return false;
+                    }
                 }
             }
-        }
-        else
-        {
-            throw;
+            else
+            {
+                throw;
+            }
         }
     }
 
@@ -440,16 +447,18 @@ ElementPtr Archive::FromFile(const tstring& file, int searchType, StatusHandler*
 
     s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreRead ) );
 
-    try
+    if ( Platform::IsDebuggerPresent() )
     {
         archive->OpenFile( file );
+        archive->Read();
+        archive->Close(); 
+    }
+    else
+    {
+        try
+        {
+            archive->OpenFile( file );
 
-        if ( Platform::IsDebuggerPresent() )
-        {
-            archive->Read();
-        }
-        else
-        {
             try
             {
                 archive->Read();
@@ -459,16 +468,16 @@ ElementPtr Archive::FromFile(const tstring& file, int searchType, StatusHandler*
                 archive->Close(); 
                 throw;
             }
-        }
 
-        archive->Close(); 
-    }
-    catch (Nocturnal::Exception& ex)
-    {
-        tstringstream str;
-        str << "While reading '" << file << "': " << ex.Get();
-        ex.Set( str.str() );
-        throw;
+            archive->Close(); 
+        }
+        catch (Nocturnal::Exception& ex)
+        {
+            tstringstream str;
+            str << "While reading '" << file << "': " << ex.Get();
+            ex.Set( str.str() );
+            throw;
+        }
     }
 
     s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PostRead ) );
@@ -533,42 +542,47 @@ void Archive::ToFile(const V_Element& elements, const tstring& file, VersionPtr 
     safetyPath.ReplaceExtension( outputPath.Extension() );
 
     // generate the file to the safety location
-    try
+    if ( Platform::IsDebuggerPresent() )
     {
         archive->OpenFile( safetyPath.Get(), true );
-
-        if ( Platform::IsDebuggerPresent() )
-        {
-            archive->Write();
-        }
-        else
-        {
-            try
-            {
-                archive->Write();
-            }
-            catch (...)
-            {
-                archive->Close(); 
-                throw;
-            }
-        }
-
+        archive->Write();
         archive->Close(); 
     }
-    catch ( Nocturnal::Exception& ex )
-    {
-        tstringstream str;
-        str << "While writing '" << file << "': " << ex.Get();
-        ex.Set( str.str() );
+    else
+     {
+        bool open = false;
 
-        safetyPath.Delete();
-        throw;
-    }
-    catch ( ... )
-    {
-        safetyPath.Delete();
-        throw;
+        try
+        {
+            archive->OpenFile( safetyPath.Get(), true );
+            open = true;
+            archive->Write();
+            archive->Close(); 
+        }
+        catch ( Nocturnal::Exception& ex )
+        {
+            tstringstream str;
+            str << "While writing '" << file << "': " << ex.Get();
+            ex.Set( str.str() );
+
+            if ( open )
+            {
+                archive->Close();
+            }
+
+            safetyPath.Delete();
+            throw;
+        }
+        catch ( ... )
+        {
+            if ( open )
+            {
+                archive->Close();
+            }
+
+            safetyPath.Delete();
+            throw;
+        }
     }
 
     try
@@ -614,16 +628,18 @@ void Archive::FromFile(const tstring& file, V_Element& elements, StatusHandler* 
 
     s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PreRead ) );
 
-    try
+    if ( Platform::IsDebuggerPresent() )
     {
         archive->OpenFile( file );
+        archive->Read();
+        archive->Close(); 
+    }
+    else
+    {
+        try
+        {
+            archive->OpenFile( file );
 
-        if ( Platform::IsDebuggerPresent() )
-        {
-            archive->Read();
-        }
-        else
-        {
             try
             {
                 archive->Read();
@@ -633,16 +649,16 @@ void Archive::FromFile(const tstring& file, V_Element& elements, StatusHandler* 
                 archive->Close(); 
                 throw;
             }
-        }
 
-        archive->Close(); 
-    }
-    catch (Nocturnal::Exception& ex)
-    {
-        tstringstream str;
-        str << "While reading '" << file << "': " << ex.Get();
-        ex.Set( str.str() );
-        throw;
+            archive->Close(); 
+        }
+        catch (Nocturnal::Exception& ex)
+        {
+            tstringstream str;
+            str << "While reading '" << file << "': " << ex.Get();
+            ex.Set( str.str() );
+            throw;
+        }
     }
 
     s_FileAccess.Raise( FileAccessArgs( file, FileOperations::PostRead ) );

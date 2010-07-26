@@ -26,7 +26,7 @@ ArchiveXML::ArchiveXML(StatusHandler* status)
 , m_Version (CURRENT_VERSION)
 , m_Target (&m_Spool)
 {
-    m_Parser = XML_ParserCreate(NULL);
+    m_Parser = XML_ParserCreate( Platform::GetEncoding().c_str() );
 
     // set the user data used in callbacks
     XML_SetUserData(m_Parser, (void*)this);
@@ -115,18 +115,20 @@ void ArchiveXML::Read()
 
     // while there is data, parse buffer
     long step = 0;
-    const unsigned buffer_size = 4096;
+    const unsigned bufferSizeInBytes = 4096;
     while (!m_Stream->Fail() && !m_Abort)
     {
-        m_Progress = (int)(((float)(step++ * buffer_size) / (float)size) * 100.0f);
+        m_Progress = (int)(((float)(step++ * bufferSizeInBytes) / (float)size) * 100.0f);
 
-        tchar* pszBuffer = (tchar*)XML_GetBuffer(m_Parser, buffer_size); // REQUEST
+        tchar* pszBuffer = (tchar*)XML_GetBuffer(m_Parser, bufferSizeInBytes); // REQUEST
         NOC_ASSERT(pszBuffer != NULL);
 
-        m_Stream->ReadBuffer(pszBuffer, buffer_size);
+        // divide by the character size so wide char builds don't override the allocation
+        //  stream objects read characters, not byte-by-byte
+        m_Stream->ReadBuffer(pszBuffer, bufferSizeInBytes / sizeof(tchar));
 
         int last_read = static_cast<int>(m_Stream->ElementsRead());
-        if (!XML_ParseBuffer(m_Parser, last_read, last_read == 0) != 0)
+        if (!XML_ParseBuffer(m_Parser, last_read * sizeof(tchar), last_read == 0) != 0)
         {
             throw Reflect::DataFormatException( TXT( "XML parsing failure, buffer contents:\n%s" ), (const tchar*)pszBuffer);
         }
@@ -189,7 +191,12 @@ void ArchiveXML::Write()
 
 void ArchiveXML::Start()
 {
-    *m_Stream << "<?xml version=\"1.0\"?>\n";
+#ifdef UNICODE
+    u16 feff = 0xfeff;
+    m_Stream->Write( &feff ); // byte order mark
+#endif
+
+    *m_Stream << "<?xml version=\"1.0\" encoding=\"" << Platform::GetEncoding() << "\"?>\n";
     *m_Stream << "<Reflect FileFormatVersion=\"" << m_Version << "\">\n";
 }
 
@@ -515,7 +522,10 @@ void ArchiveXML::OnStartElement(const XML_Char *pszName, const XML_Char **papszA
                 }
             }
 
-            newState->m_Field = parentTypeDefinition->FindFieldByName( fieldName );
+            if ( fieldName )
+            {
+                newState->m_Field = parentTypeDefinition->FindFieldByName( fieldName );
+            }
 
             // we have found a fieldinfo into our parent's definition
             if (newState->m_Field != NULL)

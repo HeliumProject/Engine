@@ -9,8 +9,6 @@
 #include <maya/MFnDependencyNode.h>
 #include <maya/M3dView.h>
 
-#include "Application/RCS/RCS.h"
-
 #include "Export/MayaContentCmd.h"
 
 using namespace MayaContent;
@@ -134,15 +132,6 @@ MStatus ExportContentCmd::ExportContent( MArgDatabase& argParser )
     {
 #pragma TODO("Set data type")
         MayaContentCmd::ExportCurrentScene( MayaContentCmd::kScene );
-    }
-    catch( RCS::FileInUseException& e )
-    {
-        MGlobal::displayError( MString("Failed to export: ") + e.What() );
-        if ( MGlobal::mayaState() == MGlobal::kInteractive )
-        {
-            MessageBox( M3dView::applicationShell(), e.What() , TXT("Export Error"), MB_OK | MB_ICONERROR );
-        }
-        return MS::kFailure;
     }
     catch (Nocturnal::Exception& e)
     {

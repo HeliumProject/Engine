@@ -27,3 +27,11 @@ bool Platform::ConvertString( const std::wstring& src, std::string& dest )
 }
 
 #endif
+
+tstring Platform::GetEncoding()
+{
+    tstringstream str;
+    str << TXT("UTF-");
+    str << sizeof(tchar) * 8;
+    return str.str();
+}

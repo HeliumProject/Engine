@@ -10,8 +10,6 @@
 #include "Platform/Windows/Debug.h"
 #include "Foundation/Container/BitArray.h"
 #include "Foundation/Reflect/ArchiveXML.h"
-#include "Application/RCS/RCS.h"
-#include "Application/Exception.h"
 #include "Pipeline/Content/ContentVersion.h"
 #include "Pipeline/Content/Nodes/Curve.h"
 #include "Maya/Utils.h"
@@ -95,8 +93,6 @@ MStatus MayaContentCmd::doIt(const MArgList &args)
     }
     catch ( Nocturnal::Exception& ex )
     {
-        Debug::ProcessException( ex );
-
         if( MGlobal::mayaState() == MGlobal::kInteractive )
         {
             ::MessageBox( M3dView::applicationShell(), ex.What(), TXT("Critical Error"), MB_OK );
@@ -147,8 +143,6 @@ MStatus MayaContentCmd::doIt()
     }
     catch ( Nocturnal::Exception& ex )
     {
-        Debug::ProcessException( ex );
-
         if( MGlobal::mayaState() == MGlobal::kInteractive )
         {
             ::MessageBox( M3dView::applicationShell(), ex.What(), TXT("Critical Error"), MB_OK );
@@ -274,16 +268,6 @@ bool MayaContentCmd::WriteExportedData()
     else
     {
         ContentVersionPtr v = new ContentVersion (TXT("Maya"), MGlobal::mayaVersion().asTChar());
-
-        RCS::File rcsFile( m_ContentFileName );
-        rcsFile.GetInfo();
-
-        if ( rcsFile.IsCheckedOutBySomeoneElse() )
-        {
-            throw Nocturnal::Exception( TXT("One (or more) of this asset's export files is checked out and locked by another user. %s"), rcsFile.m_LocalPath.c_str() );
-        }
-
-        rcsFile.Open( RCS::OpenFlags::Exclusive );
 
         try
         {
@@ -584,21 +568,6 @@ void MayaContentCmd::ExportCurrentScene(CommandData data)
     Nocturnal::Path currentPath( currentFile );
     Nocturnal::Path contentFileDir( currentPath.Directory() );
     contentFileDir.MakePath();
-
-    try
-    {
-        RCS::File rcsContentFile( contentFileDir.Get() + TXT("...") );
-        rcsContentFile.GetInfo();
-        if ( rcsContentFile.ExistsInDepot() && !rcsContentFile.IsCheckedOutByMe() && !rcsContentFile.IsUpToDate() )
-        {
-            rcsContentFile.m_LocalPath += TXT("\\...");
-            rcsContentFile.Sync();
-        }
-    }
-    catch( const Nocturnal::Exception& )
-    {
-        // this is ok, the directory may not exist in perforce yet
-    }
 
     tstring contentFile = currentFile;
 

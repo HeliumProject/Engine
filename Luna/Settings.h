@@ -7,6 +7,34 @@
 
 namespace Luna
 {
+    class LUNA_EDITOR_API MRUData : public Reflect::ConcreteInheritor< MRUData, Reflect::Element >
+    {
+    public:
+        const std::vector< tstring >& GetPaths() const
+        {
+            return m_Paths;
+        }
+
+        void SetPaths( const std::vector< tstring >& paths )
+        {
+            if ( paths != m_Paths )
+            {
+                m_Paths = paths;
+                RaiseChanged( GetClass()->FindField( &MRUData::m_Paths ) );
+            }
+        }
+
+    private:
+        std::vector< tstring > m_Paths;
+
+    public:
+        static void EnumerateClass( Reflect::Compositor<MRUData>& comp )
+        {
+            comp.AddField( &MRUData::m_Paths, "m_Paths" );
+        }
+    };
+    typedef Nocturnal::SmartPtr< MRUData > MRUDataPtr;
+
     struct PreferencesLoadedArgs {};
     typedef Nocturnal::Signature< void, const PreferencesLoadedArgs& > PreferencesLoadedSignature;
 

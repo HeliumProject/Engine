@@ -67,6 +67,9 @@ namespace Luna
         static const wxChar* TaskWindow = wxART_MAKE_ART_ID( LUNA_ART_ID_TASKWINDOW );
         static const wxChar* LunaIcon = wxART_MAKE_ART_ID( LUNA_ART_ID_LUNA_ICON );
 
+        static const wxChar* Play = wxART_MAKE_ART_ID( LUNA_ART_ID_PLAY );
+        static const wxChar* Pause = wxART_MAKE_ART_ID( LUNA_ART_ID_PAUSE );
+        static const wxChar* Stop = wxART_MAKE_ART_ID( LUNA_ART_ID_STOP );
     }
 
     class ArtProvider : public Nocturnal::ArtProvider

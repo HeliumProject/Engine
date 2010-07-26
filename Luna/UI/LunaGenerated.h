@@ -161,7 +161,10 @@ namespace Luna
 			wxBitmapButton* m_RedoButton;
 			
 			wxPanel* m_ToolsPanel;
-			wxStaticLine* m_staticline4;
+			wxBitmapButton* m_PlayButton;
+			wxBitmapButton* m_PauseButton;
+			wxBitmapButton* m_StopButton;
+			
 			wxSearchCtrl* m_VaultSearchBox;
 			wxPanel* m_ToolsPropertiesPanel;
 			

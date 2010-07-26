@@ -401,8 +401,17 @@ ToolbarPanelGenerated::ToolbarPanelGenerated( wxWindow* parent, wxWindowID id, c
 	m_ToolsPanelSizer->Fit( m_ToolsPanel );
 	bSizer27->Add( m_ToolsPanel, 1, wxEXPAND | wxALL, 0 );
 	
-	m_staticline4 = new wxStaticLine( m_MainPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer27->Add( m_staticline4, 0, wxEXPAND | wxALL, 2 );
+	m_PlayButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_PlayButton, 0, wxALL, 2 );
+	
+	m_PauseButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_PauseButton, 0, wxALL, 2 );
+	
+	m_StopButton = new wxBitmapButton( m_MainPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	bSizer27->Add( m_StopButton, 0, wxALL, 2 );
+	
+	
+	bSizer27->Add( 20, 0, 1, wxEXPAND, 5 );
 	
 	m_VaultSearchBox = new wxSearchCtrl( m_MainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 400,-1 ), 0 );
 	#ifndef __WXMAC__

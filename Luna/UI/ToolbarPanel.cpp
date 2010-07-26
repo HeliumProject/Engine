@@ -24,6 +24,10 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
         m_UndoButton->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Undo ) );
         m_RedoButton->SetBitmap( wxArtProvider::GetBitmap( Nocturnal::ArtIDs::Redo ) );
 
+        m_PlayButton->SetBitmap( wxArtProvider::GetBitmap( Luna::ArtIDs::Play ) );
+        m_PauseButton->SetBitmap( wxArtProvider::GetBitmap( Luna::ArtIDs::Pause ) );
+        m_StopButton->SetBitmap( wxArtProvider::GetBitmap( Luna::ArtIDs::Stop ) );
+
         Layout();
         Thaw();
     }
@@ -45,7 +49,8 @@ ToolbarPanel::ToolbarPanel( wxWindow* parent, wxWindowID id, const wxPoint& pos,
             typePanel->SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
             toolTypePanels[ info->m_Type ] = typePanel;
             m_ToolsPanel->GetSizer()->Add( typePanel, 0, wxALL | wxALIGN_CENTER_VERTICAL | wxEXPAND, 0 );
-            m_ToolsPanel->GetSizer()->Add( new wxStaticLine( m_ToolsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL ), 0, wxEXPAND | wxALL, 2 );
+            //m_ToolsPanel->GetSizer()->Add( new wxStaticLine( m_ToolsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL ), 0, wxEXPAND | wxALL, 2 );
+            m_ToolsPanel->GetSizer()->Add( 20, 0 ); // add spacer to the right of the panel
         }
 
         if ( !typePanel )

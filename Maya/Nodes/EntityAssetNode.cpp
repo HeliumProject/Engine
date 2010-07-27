@@ -16,7 +16,6 @@
 #include "Pipeline/Asset/Classes/Entity.h"
 #include "Pipeline/Content/Scene.h"
 
-#include "Application/RCS/RCS.h"
 #include "Export/MayaContentCmd.h"
 
 #include <maya/MSceneMessage.h>

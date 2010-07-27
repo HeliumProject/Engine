@@ -43,8 +43,11 @@ namespace Nocturnal
 
         bool operator<( const Path& rhs ) const;
 
+        Path operator+( const tchar* rhs ) const;
         Path operator+( const tstring& rhs ) const;
         Path operator+( const Path& rhs ) const;
+
+        Path& operator+=( const tchar* rhs );
         Path& operator+=( const tstring& rhs );
         Path& operator+=( const Nocturnal::Path& rhs );
 

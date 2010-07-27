@@ -525,6 +525,10 @@
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
 			RelativePathToProject=".\Platform\Platform.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{533F2B69-13FC-4557-9D26-517FDA493D75}"
+			RelativePathToProject=".\SDK\Expat\2.01\Expat.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter

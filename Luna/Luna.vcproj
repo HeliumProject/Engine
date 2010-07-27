@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -69,9 +69,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29d.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(DirectX)\lib\x86&quot;"
+				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(wxWidgets)\lib\vc_dll&quot;;&quot;$(DirectX)\lib\x86&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -103,8 +103,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="set wxDLL=wxmsw291d_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\$(TargetFileName)&quot; del /q &quot;$(BuiltDir)\$(TargetFileName)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\$(TargetFileName)&quot; &quot;$(TargetPath)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -133,7 +132,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -157,9 +156,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29d.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;;&quot;$(DirectX)\lib\x64&quot;"
+				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(wxWidgets)\lib\vc_amd64_dll&quot;;&quot;$(DirectX)\lib\x64&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -191,8 +190,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="set wxDLL=wxmsw291d_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_amd64_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\$(TargetFileName)&quot; del /q &quot;$(BuiltDir)\$(TargetFileName)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\$(TargetFileName)&quot; &quot;$(TargetPath)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -220,7 +218,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -242,9 +240,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(DirectX)\lib\x86&quot;"
+				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(wxWidgets)\lib\vc_dll&quot;;&quot;$(DirectX)\lib\x86&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -276,8 +274,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="set wxDLL=wxmsw291_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\$(TargetFileName)&quot; del /q &quot;$(BuiltDir)\$(TargetFileName)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\$(TargetFileName)&quot; &quot;$(TargetPath)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -306,7 +303,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -327,9 +324,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\$(ConfigurationName)&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;;&quot;$(DirectX)\lib\x64&quot;"
+				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(wxWidgets)\lib\vc_amd64_dll&quot;;&quot;$(DirectX)\lib\x64&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -361,8 +358,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="set wxDLL=wxmsw291_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_amd64_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\$(TargetFileName)&quot; del /q &quot;$(BuiltDir)\$(TargetFileName)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\$(TargetFileName)&quot; &quot;$(TargetPath)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -390,7 +386,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -415,9 +411,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29ud.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(DirectX)\lib\x86&quot;"
+				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(wxWidgets)\lib\vc_dll&quot;;&quot;$(DirectX)\lib\x86&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -449,8 +445,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="set wxDLL=wxmsw291ud_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\$(TargetFileName)&quot; del /q &quot;$(BuiltDir)\$(TargetFileName)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\$(TargetFileName)&quot; &quot;$(TargetPath)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -479,7 +474,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="false"
@@ -503,9 +498,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29ud.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;;&quot;$(DirectX)\lib\x64&quot;"
+				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(wxWidgets)\lib\vc_amd64_dll&quot;;&quot;$(DirectX)\lib\x64&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -537,8 +532,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="set wxDLL=wxmsw291ud_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_amd64_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\$(TargetFileName)&quot; del /q &quot;$(BuiltDir)\$(TargetFileName)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\$(TargetFileName)&quot; &quot;$(TargetPath)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -566,7 +560,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				EnableEnhancedInstructionSet="1"
@@ -588,9 +582,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29u.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Debug&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(DirectX)\lib\x86&quot;"
+				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;;&quot;$(DirectX)\lib\x86&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -622,8 +616,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="set wxDLL=wxmsw291u_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\$(TargetFileName)&quot; del /q &quot;$(BuiltDir)\$(TargetFileName)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\$(TargetFileName)&quot; &quot;$(TargetPath)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 		<Configuration
@@ -652,7 +645,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(wxPropertyGrid)\include&quot;;&quot;$(lua)\src&quot;"
+				AdditionalIncludeDirectories="&quot;$(IntDir)&quot;;.;.\Scene;..;..\..;..\..\..;&quot;$(TinyXML)&quot;;&quot;$(SQLite)&quot;;&quot;$(p4api)\include&quot;;&quot;$(MySQL)\include&quot;;&quot;$(DirectX)\Include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;;&quot;$(lua)\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -673,9 +666,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
+				AdditionalDependencies="wxmsw29u.lib libclient.lib librpc.lib libsupp.lib comctl32.lib d3d9.lib d3dx9.lib ws2_32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;;&quot;$(DirectX)\lib\x64&quot;"
+				AdditionalLibraryDirectories="&quot;$(p4api)\lib\$(PlatformName)\Release&quot;;&quot;$(wxWidgets)\lib\vc_amd64_dll&quot;;&quot;$(DirectX)\lib\x64&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -707,8 +700,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Copying Icons..."
-				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(OutDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="set wxDLL=wxmsw291u_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_amd64_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\$(TargetFileName)&quot; del /q &quot;$(BuiltDir)\$(TargetFileName)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\$(TargetFileName)&quot; &quot;$(TargetPath)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0"
 			/>
 		</Configuration>
 	</Configurations>
@@ -4195,14 +4187,6 @@
 		</File>
 		<File
 			RelativePath=".\Luna.rc"
-			>
-		</File>
-		<File
-			RelativePath=".\MRUData.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\MRUData.h"
 			>
 		</File>
 		<File

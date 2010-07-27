@@ -52,6 +52,11 @@ bool Path::operator<( const Path& rhs ) const
     return m_Path < rhs.m_Path;
 }
 
+Nocturnal::Path Path::operator+( const tchar* rhs ) const
+{
+    return Nocturnal::Path( Get() + rhs );
+}
+
 Nocturnal::Path Path::operator+( const tstring& rhs ) const
 {
     return Nocturnal::Path( Get() + rhs );
@@ -62,6 +67,12 @@ Nocturnal::Path Path::operator+( const Nocturnal::Path& rhs ) const
     // you shouldn't use this on an absolute path
     NOC_ASSERT( !rhs.IsAbsolute() );
     return rhs.GetAbsolutePath( *this );
+}
+
+Nocturnal::Path& Path::operator+=( const tchar* rhs )
+{
+    Set( Get() + rhs );
+    return *this;
 }
 
 Nocturnal::Path& Path::operator+=( const tstring& rhs )

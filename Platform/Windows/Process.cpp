@@ -138,6 +138,23 @@ int Platform::Execute( const tstring& command, tstring& output, bool showWindow 
 
 tstring Platform::GetProcessString()
 {
+    tostringstream result;
+    result << GetProcessName() << "_" << GetCurrentProcessId() << "_" << GetCurrentThreadId();
+    return result.str();
+}
+
+tstring Platform::GetProcessPath()
+{
+    HMODULE moduleHandle = GetModuleHandle( NULL );
+
+    tchar module[ MAX_PATH + 1 ];
+    GetModuleFileName( moduleHandle, module, MAX_PATH );
+
+    return module;
+}
+
+tstring Platform::GetProcessName()
+{
     HMODULE moduleHandle = GetModuleHandle( NULL );
 
     tchar module[ MAX_PATH + 1 ];
@@ -146,7 +163,5 @@ tstring Platform::GetProcessString()
     tchar file[ MAX_PATH + 1 ];
     _tsplitpath( module, NULL, NULL, file, NULL );
 
-    tostringstream result;
-    result << file << "_" << GetCurrentProcessId() << "_" << GetCurrentThreadId();
-    return result.str();
+    return file;
 }

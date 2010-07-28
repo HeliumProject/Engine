@@ -4,7 +4,7 @@
 #include <set>
 #include <sstream>
 
-#include "Foundation/Environment.h"
+#include "Platform/Environment.h"
 #include "Foundation/Container/Insert.h" 
 
 #include <wx/msgdlg.h>
@@ -548,7 +548,7 @@ void PerforceSubmitPanel::CommitChanges()
                 m_Changeset.Create();
                 if ( m_Changeset.m_Description.empty() )
                 {
-                    Nocturnal::GetEnvVar( TXT( "USERNAME" ), m_Changeset.m_Description );
+                    Nocturnal::GetUsername( m_Changeset.m_Description );
                 }
 
                 RCS::V_File::iterator fItr = openedFiles.begin();

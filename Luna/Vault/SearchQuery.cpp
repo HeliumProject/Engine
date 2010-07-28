@@ -4,7 +4,7 @@
 #include "App.h"
 #include "Vault.h"
 
-#include "Foundation/Boost/Regex.h"
+#include "Foundation/Regex.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/Checksum/MD5.h"
 #include "Foundation/String/Tokenize.h"
@@ -171,7 +171,7 @@ bool TokenizeQuery( const tstring& queryString, std::vector< tstring >& tokens )
     for ( ; parseItr != parseEnd; ++parseItr )
     {
         const std::tr1::match_results<tstring::const_iterator>& tokenizeResults = *parseItr;
-        curToken = tokenizeResults[1].matched ? Nocturnal::BoostMatchResultAsString( tokenizeResults, 1 ) : TXT( "" );
+        curToken = tokenizeResults[1].matched ? Nocturnal::MatchResultAsString( tokenizeResults, 1 ) : TXT( "" );
         if ( !curToken.empty() )
         {
             tokens.push_back( curToken );
@@ -190,7 +190,7 @@ bool ParseCollectionName( const tstring& token, tsmatch& matchResults, tstring& 
     {
         if ( matchResults[1].matched )
         {
-            collectionName = Nocturnal::BoostMatchResultAsString( matchResults, 1 );
+            collectionName = Nocturnal::MatchResultAsString( matchResults, 1 );
             return true;
         }
     }
@@ -210,7 +210,7 @@ bool ParsePhrase( const tstring& token, tsmatch& matchResults, tstring& phrase, 
     {
         if ( matchResults[1].matched )
         {
-            phrase = Nocturnal::BoostMatchResultAsString( matchResults, 1 );
+            phrase = Nocturnal::MatchResultAsString( matchResults, 1 );
             return true;
         }
     }
@@ -284,7 +284,7 @@ bool SearchQuery::ParseQueryString( const tstring& queryString, tstring& errors,
                 // Token Query
                 if ( std::tr1::regex_search( curToken, matchResults, parseColumnQuery ) && matchResults[1].matched )
                 {
-                    tstring columnAlias =  Nocturnal::BoostMatchResultAsString( matchResults, 1 );
+                    tstring columnAlias =  Nocturnal::MatchResultAsString( matchResults, 1 );
 
                     ++tokenItr;
                     if ( tokenItr == tokenEnd )

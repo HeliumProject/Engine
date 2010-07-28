@@ -11,28 +11,28 @@ namespace Nocturnal
     //  This class is probably only good for the simplest use cases.
     // 
     // example: 
-    //   ArrayPtr<char> array( new char[24] ); 
+    //   AutoPtr<Foo> foo( new Foo ); 
     // 
 
     template <typename T>
-    struct ArrayPtr
+    struct AutoPtr
     {
-    public: 
-        ArrayPtr( T* ptr = NULL ) : m_Ptr( ptr )
+    public:
+        AutoPtr( T* ptr = NULL ) : m_Ptr( ptr )
         {
 
         }
 
     private:
-        ArrayPtr( const ArrayPtr& rhs )
+        AutoPtr( const AutoPtr& rhs )
         {
 
         }
 
     public:
-        ~ArrayPtr()
+        ~AutoPtr()
         {
-            delete [] m_Ptr; 
+            delete m_Ptr; 
         }
 
         T* Ptr()
@@ -40,14 +40,14 @@ namespace Nocturnal
             return m_Ptr; 
         }
 
-        const T& operator[]( size_t i ) const
+        const T* operator->() const
         {
-            return m_Ptr[i];
+            return m_Ptr;
         }
 
-        T& operator[]( size_t i )
+        T* operator->()
         {
-            return m_Ptr[i];
+            return m_Ptr;
         }
 
     private: 

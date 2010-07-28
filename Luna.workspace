@@ -1,7 +1,54 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<CodeBlocks_workspace_file>
-	<Workspace title="Luna">
-		<Project filename="Platform/Platform.cbp" />
-		<Project filename="Foundation/Foundation.cbp" active="1" />
-	</Workspace>
-</CodeBlocks_workspace_file>
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Workspace Name="Luna" Database="./Luna.tags">
+  <Project Name="TinyXML" Path="SDK/TinyXML/2.6.1/TinyXML.project" Active="Yes"/>
+  <Project Name="Maya" Path="Maya/Maya.project"/>
+  <Project Name="SQLite" Path="SDK/SQLite/3.6.23.1/SQLite.project"/>
+  <Project Name="nVidiaTextureTools" Path="SDK/nvtt/2.0.7/nVidiaTextureTools.project"/>
+  <Project Name="MySQL" Path="SDK/MySQL/6.0.2/MySQL.project"/>
+  <Project Name="Foundation" Path="Foundation/Foundation.project"/>
+  <Project Name="Luna" Path="Luna/Luna.project"/>
+  <Project Name="Platform" Path="Platform/Platform.project"/>
+  <Project Name="Expat" Path="SDK/Expat/2.01/Expat.project"/>
+  <Project Name="Pipeline" Path="Pipeline/Pipeline.project"/>
+  <Project Name="Application" Path="Application/Application.project"/>
+  <Project Name="TIFF" Path="SDK/tiff/3.9.2/TIFF.project"/>
+  <Project Name="Lua" Path="SDK/lua/5.1.4/Lua.project"/>
+  <Project Name="Squish" Path="SDK/squish/1.10/Squish.project"/>
+  <Project Name="ZLib" Path="SDK/zlib/1.2.5/ZLib.project"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Project Name="TinyXML" ConfigName="Debug"/>
+      <Project Name="Maya" ConfigName="Debug"/>
+      <Project Name="SQLite" ConfigName="Debug"/>
+      <Project Name="nVidiaTextureTools" ConfigName="Debug"/>
+      <Project Name="MySQL" ConfigName="Debug"/>
+      <Project Name="Foundation" ConfigName="Debug"/>
+      <Project Name="Luna" ConfigName="Debug"/>
+      <Project Name="Platform" ConfigName="Debug"/>
+      <Project Name="Expat" ConfigName="Debug"/>
+      <Project Name="Pipeline" ConfigName="Debug"/>
+      <Project Name="Application" ConfigName="Debug"/>
+      <Project Name="TIFF" ConfigName="Debug"/>
+      <Project Name="Lua" ConfigName="Debug"/>
+      <Project Name="Squish" ConfigName="Debug"/>
+      <Project Name="ZLib" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="TinyXML" ConfigName="Debug"/>
+      <Project Name="Maya" ConfigName="Debug"/>
+      <Project Name="SQLite" ConfigName="Debug"/>
+      <Project Name="nVidiaTextureTools" ConfigName="Debug"/>
+      <Project Name="MySQL" ConfigName="Debug"/>
+      <Project Name="Foundation" ConfigName="Debug"/>
+      <Project Name="Luna" ConfigName="Debug"/>
+      <Project Name="Platform" ConfigName="Debug"/>
+      <Project Name="Expat" ConfigName="Debug"/>
+      <Project Name="Pipeline" ConfigName="Debug"/>
+      <Project Name="Application" ConfigName="Debug"/>
+      <Project Name="TIFF" ConfigName="Debug"/>
+      <Project Name="Lua" ConfigName="Debug"/>
+      <Project Name="Squish" ConfigName="Debug"/>
+      <Project Name="ZLib" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>

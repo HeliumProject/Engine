@@ -1,7 +1,7 @@
 #include "Precompile.h"
 #include "CollectionManager.h"
 
-#include "Foundation/Boost/Regex.h"
+#include "Foundation/Regex.h"
 #include "Foundation/Checksum/MD5.h"
 #include "Foundation/Flags.h"
 #include "Foundation/String/Utilities.h"

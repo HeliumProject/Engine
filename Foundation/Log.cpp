@@ -4,7 +4,6 @@
 #include "Platform/Mutex.h"
 #include "Platform/Windows/Windows.h"
 #include "Platform/Windows/Console.h"
-#include "Foundation/Version.h"
 
 #include <cstdio>
 #include <fstream>

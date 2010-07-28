@@ -6,7 +6,6 @@
 #include "P4ChangelistCommands.h"
 
 #include "Platform/Assert.h"
-#include "Foundation/Version.h"
 #include "Application/Application.h"
 #include "Platform/Windows/Windows.h"
 #include "Platform/Mutex.h"

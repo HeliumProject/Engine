@@ -1,5 +1,5 @@
 #include "Utilities.h"
-#include "Foundation/Environment.h"
+#include "Platform/Environment.h"
 #include "Platform/Assert.h"
 
 using namespace Nocturnal;

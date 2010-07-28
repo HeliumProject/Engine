@@ -35,15 +35,15 @@ typedef std::tr1::regex_iterator< tstring::const_iterator > tsregex_iterator;
 namespace Nocturnal
 {
     template <class MatchT>
-    inline tstring BoostMatchResultAsString( const std::tr1::match_results<MatchT>& results, int i )
+    inline tstring MatchResultAsString( const std::tr1::match_results<MatchT>& results, int i )
     {
         return tstring ( results[i].first, results[i].second ); 
     }
 
     template <class T, class MatchT>
-    inline T BoostMatchResult( const std::tr1::match_results<MatchT>& results, int i )
+    inline T MatchResult( const std::tr1::match_results<MatchT>& results, int i )
     {
-        tistringstream str ( BoostMatchResultAsString<MatchT>(results, i) );
+        tistringstream str ( MatchResultAsString<MatchT>(results, i) );
 
         T result;
         str >> result;

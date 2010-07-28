@@ -7,16 +7,16 @@
 // Limits
 //-------
 
-// Smallest positive Half
+// Smallest positive half
 #define HALF_MIN	5.96046448e-08
 
-// Smallest positive normalized Half
+// Smallest positive normalized half
 #define HALF_NRM_MIN	6.10351562e-05
 
-// Largest positive Half
+// Largest positive half
 #define HALF_MAX	65504.0
 
-// Smallest positive e for which Half (1.0 + e) != Half (1.0)
+// Smallest positive e for which half (1.0 + e) != half (1.0)
 #define HALF_EPSILON	0.00097656
 
 // Number of digits in mantissa (significand + hidden leading 1)
@@ -29,19 +29,19 @@
 #define HALF_RADIX	2
 
 // Minimum negative integer such that HALF_RADIX raised to the power of
-// one less than that integer is a normalized Half
+// one less than that integer is a normalized half
 #define HALF_MIN_EXP	-13
 
 // Maximum positive integer such that HALF_RADIX raised to the power of
-// one less than that integer is a normalized Half
+// one less than that integer is a normalized half
 #define HALF_MAX_EXP	16
 
 // Minimum positive integer such that 10 raised to that power is
-// a normalized Half
+// a normalized half
 #define HALF_MIN_10_EXP	-4
 
 // Maximum positive integer such that 10 raised to that power is
-// a normalized Half
+// a normalized half
 #define HALF_MAX_10_EXP	4
 
 
@@ -98,9 +98,9 @@ namespace Math
     //	    0 11111111 10000000000000000000000 = NAN
     //	    1 11111111 11111111111111111111111 = NAN
     //
-    // Representation of a Half:
+    // Representation of a half:
     //
-    //	Here is the bit-layout for a Half number, h:
+    //	Here is the bit-layout for a half number, h:
     //
     //	    15 (msb)
     //	    | 
@@ -146,35 +146,32 @@ namespace Math
     //
     // Conversion:
     //
-    //	Converting from a f32 to a Half requires some non-trivial bit
+    //	Converting from a f32 to a half requires some non-trivial bit
     //	manipulations.  In some cases, this makes conversion relatively
     //	slow, but the most common case is accelerated via table lookups.
     //
-    //	Converting back from a Half to a f32 is easier because we don't
+    //	Converting back from a half to a f32 is easier because we don't
     //	have to do any rounding.  In addition, there are only 65536
-    //	different Half numbers; we can convert each of those numbers once
+    //	different half numbers; we can convert each of those numbers once
     //	and store the results in a table.  Later, all conversions can be
     //	done using only simple table lookups.
     //
     //---------------------------------------------------------------------------
 
-    class FOUNDATION_API Half
+    class FOUNDATION_API half
     {
     public:
-
-        //-------------
-        // Constructors
-        //-------------
-        Half ()
+        half ()
         {
+            _h = 0;
         }
 
-        Half (const Half &h)
+        half (const half &h)
         {
             _h = h._h;
         }
 
-        Half (f32 f)
+        half (f32 f)
         {
             if (f == 0)
             {
@@ -185,9 +182,9 @@ namespace Math
                 //
                 // We extract the combined sign and exponent, e, from our
                 // floating-point number, f.  Then we convert e to the sign
-                // and exponent of the Half number via a table lookup.
+                // and exponent of the half number via a table lookup.
                 //
-                // For the most common case, where a normalized Half is produced,
+                // For the most common case, where a normalized half is produced,
                 // the table lookup returns a non-zero value; in this case, all
                 // we have to do, is round f's significand to 10 bits and combine
                 // the result with e.
@@ -195,7 +192,7 @@ namespace Math
                 // For all other cases (overflow, zeroes, denormalized numbers
                 // resulting from underflow, infinities and NANs), the table
                 // lookup returns zero, and we call a longer, non-inline function
-                // to do the f32-to-Half conversion.
+                // to do the f32-to-half conversion.
                 //
 
                 uif x;
@@ -233,88 +230,85 @@ namespace Math
             return _toFloat[_h].f;
         }
 
-
         //------------
         // Unary minus
         //------------
-        Half operator - () const
+        half operator - () const
         {
-            Half h;
+            half h;
             h._h = _h ^ 0x8000;
             return h;
         }
 
-
         //-----------
         // Assignment
         //-----------
-        Half operator = (Half  h)
+        half operator = (half  h)
         {
             _h = h._h;
             return *this;
         }
 
-        Half operator = (f32 f)
+        half operator = (f32 f)
         {
-            *this = Half (f);
+            *this = half (f);
             return *this;
         }
 
-        Half operator += (Half  h)
+        half operator += (half  h)
         {
-            *this = Half (f32 (*this) + f32 (h));
+            *this = half (f32 (*this) + f32 (h));
             return *this;
         }
 
-        Half operator += (f32 f)
+        half operator += (f32 f)
         {
-            *this = Half (f32 (*this) + f);
+            *this = half (f32 (*this) + f);
             return *this;
         }
 
-        Half operator -= (Half  h)
+        half operator -= (half  h)
         {
-            *this = Half (f32 (*this) - f32 (h));
+            *this = half (f32 (*this) - f32 (h));
             return *this;
         }
 
-        Half operator -= (f32 f)
+        half operator -= (f32 f)
         {
-            *this = Half (f32 (*this) - f);
+            *this = half (f32 (*this) - f);
             return *this;
         }
 
-        Half operator *= (Half  h)
+        half operator *= (half  h)
         {
-            *this = Half (f32 (*this) * f32 (h));
+            *this = half (f32 (*this) * f32 (h));
             return *this;
         }
 
-        Half operator *= (f32 f)
+        half operator *= (f32 f)
         {
-            *this = Half (f32 (*this) * f);
+            *this = half (f32 (*this) * f);
             return *this;
         }
 
-        Half operator /= (Half  h)
+        half operator /= (half  h)
         {
-            *this = Half (f32 (*this) / f32 (h));
+            *this = half (f32 (*this) / f32 (h));
             return *this;
         }
 
-        Half operator /= (f32 f)
+        half operator /= (f32 f)
         {
-            *this = Half (f32 (*this) / f);
+            *this = half (f32 (*this) / f);
             return *this;
         }
-
 
         //---------------------------------------------------------
         // Round to n-bit precision (n should be between 0 and 10).
         // After rounding, the significand's 10-n least significant
         // bits will be zero.
         //---------------------------------------------------------
-        Half round(u32 n) const
+        half round(u32 n) const
         {
             //
             // Parameter check.
@@ -361,7 +355,7 @@ namespace Math
             // Put the original sign bit back.
             //
 
-            Half h;
+            half h;
             h._h = s | e;
 
             return h;
@@ -430,8 +424,6 @@ namespace Math
             return (_h & 0x8000) != 0;
         }
 
-
-
         //--------------------------------------------
         // Special values
         //
@@ -445,34 +437,33 @@ namespace Math
         //	sNan()		returns a NAN with the bit
         //			pattern 0111110111111111
         //--------------------------------------------
-        static Half posInf()
+        static half posInf()
         {
-            Half h;
+            half h;
             h._h = 0x7c00;
             return h;
         }
 
-        static Half negInf()
+        static half negInf()
         {
-            Half h;
+            half h;
             h._h = 0xfc00;
             return h;
         }
 
-        static Half qNan()
+        static half qNan()
         {
-            Half h;
+            half h;
             h._h = 0x7fff;
             return h;
         }
 
-        static Half sNan()
+        static half sNan()
         {
-            Half h;
+            half h;
             h._h = 0x7dff;
             return h;
         }
-
 
         //--------------------------------------
         // Access to the internal representation
@@ -493,7 +484,7 @@ namespace Math
             f32		f;
         };
 
-        static void	createBitString(tchar c[19], Half h);
+        static void	createBitString(tchar c[19], half h);
         static void	createBitString(tchar c[35], f32 f);
 
         static const uif _toFloat[1 << 16];
@@ -505,7 +496,7 @@ namespace Math
         u16 _h;
     };
 
-    typedef Half f16;
+    typedef half f16;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -514,7 +505,7 @@ namespace Math
     //
     //  written by: rob wyatt
     //
-    //  Convert a standard Half to an IEEE f32.
+    //  Convert a standard half to an IEEE f32.
     //  Including handling all the exception cases such as zero, nan, inf
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -594,7 +585,7 @@ namespace Math
     //
     //  written by: rob wyatt
     //
-    //  Convert an IEEE f32 to Half f32, including handling all the
+    //  Convert an IEEE f32 to half f32, including handling all the
     //  exception cases such as zero, nan, inf
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -609,7 +600,7 @@ namespace Math
         i32 m =   i        & 0x007fffff;
 
         //
-        // Now reassemble s, e and m into a Half:
+        // Now reassemble s, e and m into a half:
         //
 
         if (e <= 0)
@@ -650,11 +641,11 @@ namespace Math
 
             if (e > 30)
             {
-                return s | 0x7c00;	// if this returns, the Half becomes an
+                return s | 0x7c00;	// if this returns, the half becomes an
             }   			// infinity with the same sign as f.
 
             //
-            // Assemble the Half from s, e and m.
+            // Assemble the half from s, e and m.
             //
             return s | (e << 10) | (m >> 13);
         }

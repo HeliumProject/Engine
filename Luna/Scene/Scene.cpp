@@ -5,7 +5,6 @@
 #include <hash_set>
 #include <cctype>
 
-#include "Foundation/Version.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/Reflect/ArchiveXML.h"
 #include "Foundation/Reflect/Version.h"

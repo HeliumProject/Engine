@@ -591,11 +591,11 @@
 			Name="Memory"
 			>
 			<File
-				RelativePath=".\Memory\Align.h"
+				RelativePath=".\Memory\ArrayPtr.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Memory\ArrayPtr.h"
+				RelativePath=".\Memory\AutoPtr.h"
 				>
 			</File>
 			<File

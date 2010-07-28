@@ -1475,10 +1475,6 @@
 			RelativePath=".\TUID.h"
 			>
 		</File>
-		<File
-			RelativePath=".\Version.h"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

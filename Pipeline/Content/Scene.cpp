@@ -1,6 +1,5 @@
 #include "Scene.h"
 
-#include "Foundation/Version.h"
 #include "Foundation/Container/Insert.h" 
 #include "Foundation/String/Utilities.h"
 #include "Foundation/Reflect/ArchiveXML.h"

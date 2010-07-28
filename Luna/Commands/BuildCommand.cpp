@@ -12,7 +12,6 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
-#include "Foundation/Version.h"
 #include "Platform/Exception.h"
 #include "Platform/Debug.h"
 #include "Foundation/CommandLine/Option.h"

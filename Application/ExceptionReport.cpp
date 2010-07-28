@@ -2,7 +2,6 @@
 
 #include "ExceptionReport.h"
 
-#include "Foundation/Version.h"
 #include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"

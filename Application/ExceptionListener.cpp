@@ -6,7 +6,6 @@
 #include "ExceptionListener.h"
 #include "ExceptionReport.h"
 
-#include "Foundation/Version.h"
 #include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Log.h"

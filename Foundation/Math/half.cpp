@@ -1,15 +1,14 @@
-#include "Half.h"
+#include "half.h"
 
 namespace Math
 {
-
     //-------------------------------------------------------------
-    // Lookup tables for Half-to-f32 and f32-to-Half conversion
+    // Lookup tables for half-to-f32 and f32-to-half conversion
     //-------------------------------------------------------------
-    const Half::uif Half::_toFloat[1 << 16] =
+    const half::uif half::_toFloat[1 << 16] =
 #include "Halftofloat.h"
 
-        const u16 Half::_eLut[1 << 9] =
+    const u16 half::_eLut[1 << 9] =
     {
         0,     0,     0,     0,     0,     0,     0,     0, 
         0,     0,     0,     0,     0,     0,     0,     0, 
@@ -77,13 +76,12 @@ namespace Math
         0,     0,     0,     0,     0,     0,     0,     0, 
     };
 
-
     //-----------------------------------------------
-    // Overflow handler for f32-to-Half conversion;
+    // Overflow handler for f32-to-half conversion;
     // generates a hardware floating-point overflow,
     // which may be trapped by the operating system.
     //-----------------------------------------------
-    f32 Half::overflow()
+    f32 half::overflow()
     {
         volatile f32 f = 1e10;
 
@@ -92,21 +90,20 @@ namespace Math
         return f;
     }
 
-
     //-----------------------------------------------------
-    // Float-to-Half conversion -- general case, including
+    // Float-to-half conversion -- general case, including
     // zeroes, denormalized numbers and exponent overflows.
     //-----------------------------------------------------
-    i16 Half::convert(i32 i)
+    i16 half::convert(i32 i)
     {
         //
         // Our floating point number, f, is represented by the bit
         // pattern in integer i.  Disassemble that bit pattern into
         // the sign, s, the exponent, e, and the significand, m.
         // Shift s into the position where it will go in in the
-        // resulting Half number.
+        // resulting half number.
         // Adjust e, accounting for the different exponent bias
-        // of f32 and Half (127 versus 15).
+        // of f32 and half (127 versus 15).
         //
 
         i32 s =  (i >> 16) & 0x00008000;
@@ -114,7 +111,7 @@ namespace Math
         i32 m =   i        & 0x007fffff;
 
         //
-        // Now reassemble s, e and m into a Half:
+        // Now reassemble s, e and m into a half:
         //
 
         if (e <= 0)
@@ -126,7 +123,7 @@ namespace Math
                 // less than HALF_MIN (f may be a small normalized
                 // f32, a denormalized f32 or a zero).
                 //
-                // We convert f to a Half zero.
+                // We convert f to a half zero.
                 //
 
                 return 0;
@@ -136,7 +133,7 @@ namespace Math
             // E is between -10 and 0.  F is a normalized f32,
             // whose magnitude is less than HALF_NRM_MIN.
             //
-            // We convert f to a denormalized Half.
+            // We convert f to a denormalized half.
             // 
 
             m = (m | 0x00800000) >> (1 - e);
@@ -145,7 +142,7 @@ namespace Math
             // Round to nearest, round "0.5" up.
             //
             // Rounding may cause the significand to overflow and make
-            // our number normalized.  Because of the way a Half's bits
+            // our number normalized.  Because of the way a half's bits
             // are laid out, we don't have to treat this case separately;
             // the code below will handle it correctly.
             // 
@@ -154,7 +151,7 @@ namespace Math
                 m += 0x00002000;
 
             //
-            // Assemble the Half from s, e (zero) and m.
+            // Assemble the half from s, e (zero) and m.
             //
 
             return s | (m >> 13);
@@ -164,7 +161,7 @@ namespace Math
             if (m == 0)
             {
                 //
-                // F is an infinity; convert f to a Half
+                // F is an infinity; convert f to a half
                 // infinity with the same sign as f.
                 //
 
@@ -173,7 +170,7 @@ namespace Math
             else
             {
                 //
-                // F is a NAN; produce a Half NAN that preserves
+                // F is a NAN; produce a half NAN that preserves
                 // the sign bit and the 10 leftmost bits of the
                 // significand of f.
                 //
@@ -185,7 +182,7 @@ namespace Math
         {
             //
             // E is greater than zero.  F is a normalized f32.
-            // We try to convert f to a normalized Half.
+            // We try to convert f to a normalized half.
             //
 
             //
@@ -210,23 +207,22 @@ namespace Math
             if (e > 30)
             {
                 overflow ();	// Cause a hardware floating point overflow;
-                return s | 0x7c00;	// if this returns, the Half becomes an
+                return s | 0x7c00;	// if this returns, the half becomes an
             }   			// infinity with the same sign as f.
 
             //
-            // Assemble the Half from s, e and m.
+            // Assemble the half from s, e and m.
             //
 
             return s | (e << 10) | (m >> 13);
         }
     }
 
-
     //---------------------------------------
     // Functions to print the bit-layout of
     // floats and Halfs, mostly for debugging
     //---------------------------------------
-    void Half::createBitString(tchar c[19], Half h)
+    void half::createBitString(tchar c[19], half h)
     {
         u16 b = h.bits();
 
@@ -240,9 +236,9 @@ namespace Math
     }
 
 
-    void Half::createBitString(tchar c[35], f32 f)
+    void half::createBitString(tchar c[35], f32 f)
     {
-        Half::uif x;
+        half::uif x;
         x.f = f;
         for (i32 i = 31, j = 0; i >= 0; i--, j++)
         {
@@ -253,5 +249,4 @@ namespace Math
         }
         c[34] = 0;
     }
-
 }

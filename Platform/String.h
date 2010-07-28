@@ -4,10 +4,17 @@
 #include <stdlib.h>
 
 #include "Platform/API.h"
+#include "Platform/Types.h"
 
 namespace Platform
 {
     inline bool ConvertChar( char src, char& dest )
+    {
+        dest = src;
+        return true;
+    }
+
+    inline bool ConvertString( const std::string& src, std::string& dest )
     {
         dest = src;
         return true;
@@ -20,22 +27,18 @@ namespace Platform
         return true;
     }
 
-    PLATFORM_API bool ConvertChar( char src, wchar_t& dest );
-    PLATFORM_API bool ConvertChar( wchar_t src, char& dest );
-
     inline bool ConvertString( const std::wstring& src, std::wstring& dest )
     {
         dest = src;
         return true;
     }
 
+    PLATFORM_API bool ConvertChar( char src, wchar_t& dest );
+    PLATFORM_API bool ConvertChar( wchar_t src, char& dest );
+
     PLATFORM_API bool ConvertString( const std::string& src, std::wstring& dest );
     PLATFORM_API bool ConvertString( const std::wstring& src, std::string& dest );
 #endif
 
-    inline bool ConvertString( const std::string& src, std::string& dest )
-    {
-        dest = src;
-        return true;
-    }
+    tstring GetEncoding();
 }

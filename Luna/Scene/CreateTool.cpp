@@ -3,7 +3,6 @@
 
 #include "Mesh.h"
 #include "Scene.h"
-#include "SceneEditor.h"
 #include "SceneManager.h"
 #include "ToolTimer.h"
 #include "Transform.h"

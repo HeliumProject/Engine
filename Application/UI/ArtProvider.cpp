@@ -25,7 +25,7 @@ wxSize ArtProvider::DefaultImageSize( 16, 16 );
 ///////////////////////////////////////////////////////////////////////////////
 namespace Nocturnal
 {
-    WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmap, ArtProviderBitmapsHash);
+    WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxBitmap, ArtProviderBitmapsHash, class );
 
     class ArtProviderCache
     {

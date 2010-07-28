@@ -10,7 +10,6 @@
 #include "Pipeline/Asset/AssetInit.h"
 
 // Types
-#include "SceneEditor.h"
 #include "SceneDocument.h"
 #include "ScenePreferences.h"
 
@@ -91,7 +90,6 @@ void Luna::SceneInitialize()
     g_InitializerStack.Push( Reflect::RegisterEnumeration<ShadingMode>( &ShadingModes::EnumerateEnumeration, TXT( "ShadingMode" ) ) );
 
     // luna types 
-    g_InitializerStack.Push( SceneEditor::InitializeEditor, SceneEditor::CleanupEditor );
     g_InitializerStack.Push( SceneDocument::InitializeType, SceneDocument::CleanupType );
 
     g_InitializerStack.Push( Tool::InitializeType, Tool::CleanupType );

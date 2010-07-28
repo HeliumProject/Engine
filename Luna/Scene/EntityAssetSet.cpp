@@ -2,7 +2,6 @@
 #include "EntityAssetSet.h"
 
 #include "Scene.h"
-#include "SceneEditor.h"
 #include "Entity.h"
 #include "EntityType.h"
 

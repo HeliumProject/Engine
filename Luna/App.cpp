@@ -5,6 +5,7 @@
 #include "Platform/Windows/Console.h"
 #include "Platform/Process.h"
 #include "Platform/Exception.h"
+#include "Platform/Debug.h"
 
 #include "Foundation/Log.h"
 #include "Foundation/InitializerStack.h"
@@ -36,9 +37,7 @@
 #include "Preferences.h"
 #include "WindowSettings.h"
 #include "Document.h"
-#include "MRUData.h"
 
-#include "Scene/SceneEditor.h"
 #include "Scene/SceneInit.h"
 #include "Tracker/Tracker.h"
 #include "Task/TaskInit.h"
@@ -220,7 +219,7 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterEnumeration<FilePathOptions::FilePathOption>( &FilePathOptions::FilePathOptionEnumerateEnumeration, TXT( "FilePathOption" ) ) );
                 m_InitializerStack.Push( Reflect::RegisterEnumeration<EditorTypes::EditorType>( &EditorTypes::EditorTypeEnumerateEnumeration, TXT( "EditorType" ) ) );
                 m_InitializerStack.Push( Document::InitializeType, Document::CleanupType );
-                m_InitializerStack.Push( MRUData::InitializeType, MRUData::CleanupType );
+    m_InitializerStack.Push( Reflect::RegisterClass<MRUData>( TXT( "MRUData" ) ) );
 
     // task
 #pragma TODO("Move init into here")
@@ -247,8 +246,7 @@ bool App::OnInit()
     m_InitializerStack.Push( Reflect::RegisterClass<ScenePreferences>( TXT( "ScenePreferences" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClass<VaultPreferences>( TXT( "VaultPreferences" ) ) );
     m_InitializerStack.Push( Reflect::RegisterClass<Preferences>( TXT( "Preferences" ) ) );
-
-    Log::Print( TXT( "\n" ) ); 
+    LoadPreferences();
 
     if ( Log::GetErrorCount() )
     {
@@ -268,7 +266,6 @@ int App::OnExit()
 {
     m_TrackerThread.Wait();
 
-    // Save preferences
     SavePreferences();
 
     m_InitializerStack.Cleanup();
@@ -301,12 +298,60 @@ void App::OnAssertFailure(const wxChar *file, int line, const wxChar *func, cons
 
 void App::SavePreferences()
 {
-#pragma NYI("write m_Preferences to a file")
+    Nocturnal::Path path;
+    Application::GetPreferencesDirectory( path );
+    path += TXT("LunaPreferences.xml");
+
+    tstring error;
+    if ( Platform::IsDebuggerPresent() )
+    {
+        m_Preferences->SaveToFile( path, error );
+}
+    else
+    {
+        try
+        {
+            m_Preferences->SaveToFile( path, error );
+        }
+        catch ( const Nocturnal::Exception& ex )
+        {
+            error = ex.What();
+        }
+
+        if ( error.size() )
+        {
+            wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
+        }
+    }
 }
 
 void App::LoadPreferences()
 {
-#pragma NYI("load m_Preferences to a file")
+    Nocturnal::Path path;
+    Application::GetPreferencesDirectory( path );
+    path += TXT("LunaPreferences.xml");
+
+    if ( Platform::IsDebuggerPresent() )
+    {
+        m_Preferences->LoadFromFile( path );
+}
+    else
+    {
+        tstring error;
+        try
+        {
+            m_Preferences->LoadFromFile( path );
+        }
+        catch ( const Nocturnal::Exception& ex )
+        {
+            error = ex.What();
+        }
+
+        if ( error.size() )
+        {
+            wxMessageBox( error.c_str(), wxT( "Error" ), wxOK | wxCENTER | wxICON_ERROR );
+        }
+    }
 }
 
 #pragma TODO("Apparently wxWidgets doesn't support unicode command lines, please to fix in wxWidgets 2.9.x")

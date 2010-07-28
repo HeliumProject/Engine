@@ -32,6 +32,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Maya", "Maya\Maya.vcproj", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LiteSQL", "SDK\LiteSQL\0.3.8\LiteSQL.vcproj", "{05ED8488-418B-499C-895B-5654C64209F6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{24737AFE-90DE-4E0B-895F-DC7A06A9523D}"
+	ProjectSection(SolutionItems) = preProject
+		build.pl = build.pl
+		build_wx.pl = build_wx.pl
+		README = README
+		update.pl = update.pl
+		update_wx.pl = update_wx.pl
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Unicode|Win32 = Debug Unicode|Win32

@@ -6,7 +6,6 @@
 #include "Luna/Scene/Manipulator.h"
 #include "Luna/Scene/TranslateManipulator.h"
 #include "Luna/WindowSettings.h"
-#include "Luna/MRUData.h"
 
 namespace Luna
 {
@@ -15,6 +14,7 @@ namespace Luna
     public:
         ScenePreferences();
 
+        MRUData* GetMRU();
         WindowSettings* GetWindowSettings();
         Content::NodeVisibility* GetDefaultNodeVisibility(); 
 
@@ -35,8 +35,8 @@ namespace Luna
         const Reflect::Field* ScaleManipulatorDistance() const;
 
     private:
-        WindowSettingsPtr m_WindowSettings;
         MRUDataPtr m_MRU;
+        WindowSettingsPtr m_WindowSettings;
         Content::NodeVisibilityPtr m_DefaultNodeVisibility; 
 
         f32 m_ScaleManipulatorSize;

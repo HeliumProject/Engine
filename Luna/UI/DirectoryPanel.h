@@ -2,28 +2,27 @@
 
 #include "LunaGenerated.h"
 
+#include "Scene/SceneManager.h"
+#include "Scene/TreeMonitor.h"
 #include "Scene/EntityAssetOutliner.h"
 #include "Scene/HierarchyOutliner.h"
 #include "Scene/NodeTypeOutliner.h"
 
 namespace Luna
 {
-#ifdef UI_REFACTOR
-    class MainFrame;
-    class SceneManager;
-#endif
 
     class DirectoryPanel : public DirectoryPanelGenerated
     {
     public:
-   	    DirectoryPanel( wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+   	    DirectoryPanel( SceneManager* manager, TreeMonitor* treeMonitor, wxWindow* parent = NULL, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+        virtual ~DirectoryPanel();
+
+        void SaveState( SceneOutlinerState& hierarchyState, SceneOutlinerState& entityState, SceneOutlinerState& typesState );
+        void RestoreState( SceneOutlinerState& hierarchyState, SceneOutlinerState& entityState, SceneOutlinerState& typesState );
 
     private:
-#ifdef UI_REFACTOR
-        MainFrame* m_Owner;
-        SceneManager* m_SceneManager;
-#endif
-
+        SceneManager*        m_SceneManager;
+        TreeMonitor*         m_TreeMonitor;
         EntityAssetOutliner* m_EntityOutline;
         HierarchyOutliner*   m_HierarchyOutline;
         NodeTypeOutliner*    m_TypeOutline;

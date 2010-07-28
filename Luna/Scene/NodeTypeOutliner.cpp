@@ -25,6 +25,7 @@ NodeTypeOutliner::NodeTypeOutliner( Luna::SceneManager* sceneManager )
 // 
 NodeTypeOutliner::~NodeTypeOutliner()
 {
+    DisconnectSceneListeners();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

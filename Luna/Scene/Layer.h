@@ -55,4 +55,5 @@ namespace Luna
 
   typedef Nocturnal::SmartPtr< Luna::Layer > LayerPtr;
   typedef std::vector< Luna::Layer* > V_LayerDumbPtr;
+  typedef std::map< tstring, Luna::Layer* > M_LayerDumbPtr;
 }

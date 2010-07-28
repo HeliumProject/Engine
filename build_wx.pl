@@ -61,10 +61,11 @@ sub BuildConfig
     die "Microsoft Visual Studio Tools cannot be found in your PATH";
   }
 
-  Build( "BUILD=debug SHARED=0 UNICODE=0 DEBUG_INFO=1 USE_EXCEPTIONS=0 $target $args" );
-  Build( "BUILD=release SHARED=0 UNICODE=0 DEBUG_INFO=1 USE_EXCEPTIONS=0 $target $args" );
-  Build( "BUILD=debug SHARED=0 UNICODE=1 DEBUG_INFO=1 USE_EXCEPTIONS=0 $target $args" );
-  Build( "BUILD=release SHARED=0 UNICODE=1 DEBUG_INFO=1 USE_EXCEPTIONS=0 $target $args" );
+  my $settings = "SHARED=1 MONOLITHIC=1 DEBUG_INFO=1 USE_EXCEPTIONS=0";
+  Build( "BUILD=debug UNICODE=1 $settings $target $args" );
+  Build( "BUILD=release UNICODE=1 $settings $target $args" );
+  Build( "BUILD=debug UNICODE=0 $settings $target $args" );
+  Build( "BUILD=release UNICODE=0 $settings $target $args" );
 }
 
 sub Build

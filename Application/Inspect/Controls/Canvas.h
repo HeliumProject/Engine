@@ -13,6 +13,41 @@ namespace Inspect
 
 
   //
+  // 
+  //
+
+  class APPLICATION_API CanvasStrip : public wxPanel
+  {
+  public:
+    Canvas* m_Canvas;
+
+    CanvasStrip( wxWindow *parent,
+                 wxWindowID winid = wxID_ANY,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+                 const wxString& name = wxT( "CanvasStrip" ) );
+
+    Canvas* GetCanvas()
+    {
+      return m_Canvas;
+    }
+
+    void SetCanvas(Canvas* canvas)
+    {
+      m_Canvas = canvas;
+    }
+
+  protected:
+    void OnShow(wxShowEvent&);
+    void OnSize(wxSizeEvent&);
+    void OnClick(wxMouseEvent&);
+    void OnToggle(wxTreeEvent&);
+
+    DECLARE_EVENT_TABLE();
+  };
+
+  //
   // Defines the base wx-derived window used by the canvas
   //
 

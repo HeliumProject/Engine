@@ -47,7 +47,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;_DEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -70,7 +70,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
-				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\Autodesk\Maya2011\lib&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -127,7 +127,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;_DEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -150,7 +150,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\Autodesk\Maya2011\lib&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -206,7 +206,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;NDEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -228,7 +228,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
-				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\Autodesk\Maya2011\lib&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -284,7 +284,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;NDEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -306,7 +306,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\Autodesk\Maya2011\lib&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -363,7 +363,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;_DEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -386,7 +386,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
-				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\Autodesk\Maya2011\lib&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -443,7 +443,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;_DEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -466,7 +466,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\Autodesk\Maya2011\lib&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -522,7 +522,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files (x86)\Autodesk\Maya2011\include&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;NDEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -544,7 +544,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
-				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\Autodesk\Maya2011\lib&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -600,7 +600,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;;&quot;$(wxWidgets)\include&quot;;&quot;$(wxWidgets)\include\msvc&quot;"
+				AdditionalIncludeDirectories=".;..;&quot;C:\Program Files\Autodesk\Maya2011\include&quot;"
 				PreprocessorDefinitions="_WINDOWS;NT_PLUGIN;WIN32;NDEBUG;_USRDLL;MAYA_EXPORTS;REQUIRE_IOSTREAM;MLIBRARY_DONTUSE_MFC_MANIFEST"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -622,7 +622,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\Autodesk\Maya2011\lib&quot;;&quot;$(boost)\stage\lib\$(PlatformName)&quot;;&quot;$(wxWidgets)\lib\vc_amd64_lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -656,10 +656,6 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 			RelativePathToProject=".\Foundation\Foundation.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{82FA5300-7B8A-4B72-A404-D5748984A231}"
-			RelativePathToProject=".\Application\Application.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{6005C4B7-F1A0-442F-81AA-1377FF18F910}"

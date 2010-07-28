@@ -7,7 +7,6 @@
 #include "InstanceType.h"
 
 #include "PropertiesGenerator.h"
-#include "SceneEditor.h"
 #include "Application/UI/ArtProvider.h"
 
 #include "PrimitiveSphere.h"

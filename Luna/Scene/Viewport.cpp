@@ -10,7 +10,7 @@
 #include "PrimitiveGrid.h"
 #include "PrimitiveRings.h"
 #include "Resource.h"
-#include "SceneEditorIDs.h"
+#include "UI/LunaIDs.h"
 #include "SceneInit.h"
 #include "ScenePreferences.h"
 #include "Statistics.h"
@@ -498,7 +498,7 @@ void Viewport::OnKeyDown(wxKeyEvent& e)
       frame = frame->GetParent();
     frame->GetEventHandler()->ProcessEvent(e);
 
-    frame->GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, SceneEditorIDs::ID_EditSelectAll) );
+    frame->GetEventHandler()->ProcessEvent( wxCommandEvent (wxEVT_COMMAND_MENU_SELECTED, EventIds::ID_EditSelectAll) );
   }
   else
   {

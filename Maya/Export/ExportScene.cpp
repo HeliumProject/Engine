@@ -5,7 +5,6 @@
 #include "MayaContentCmd.h"
 
 #include "Foundation/Log.h"
-#include "Application/RCS/RCS.h"
 #include "Pipeline/Content/Nodes/Curve.h"
 #include "Maya/Utils.h"
 

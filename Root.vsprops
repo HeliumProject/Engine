@@ -3,7 +3,11 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="Root"
-	OutputDirectory="$(SolutionDir)Built\$(PlatformName)\$(ConfigurationName)"
+	OutputDirectory="$(SolutionDir)Build\$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
 	IntermediateDirectory="$(SolutionDir)Build\$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
 	>
+	<UserMacro
+		Name="BuiltDir"
+		Value="$(SolutionDir)Built\$(PlatformName)\$(ConfigurationName)"
+	/>
 </VisualStudioPropertySheet>

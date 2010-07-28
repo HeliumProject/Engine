@@ -30,6 +30,7 @@ namespace Nocturnal
         static const wxChar* Cut = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_CUT );
         static const wxChar* Copy = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_COPY );
         static const wxChar* Paste = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_PASTE );
+        static const wxChar* Delete = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_DELETE );
 
         static const wxChar* Undo = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_UNDO );
         static const wxChar* Redo = wxART_MAKE_ART_ID( NOCTURNAL_ART_ID_REDO );

@@ -18,7 +18,6 @@
 
 #include "Scene.h"
 #include "SceneManager.h"
-#include "SceneEditor.h"
 
 #include "Editor.h"
 

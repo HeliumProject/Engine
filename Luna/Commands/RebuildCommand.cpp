@@ -296,7 +296,6 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
     }
 
     version->m_Source = TXT( "rebuild" );
-    version->m_SourceVersion = NOCTURNAL_VERSION_STRING;
 
 
     //

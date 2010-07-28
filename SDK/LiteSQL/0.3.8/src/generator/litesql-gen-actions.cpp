@@ -52,7 +52,7 @@
 
 //#include "objectmodel.hpp"
 #include "xmlobjects.hpp"
-#include "litesql-gen-main.hpp"
+//#include "litesql-gen-main.hpp"
 #include "litesql-gen.hpp"
 
 using namespace std;

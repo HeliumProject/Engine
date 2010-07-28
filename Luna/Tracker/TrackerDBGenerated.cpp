@@ -292,7 +292,7 @@ bool TrackedFile::typeIsCorrect() {
     return type == type__;
 }
 std::auto_ptr<TrackedFile> TrackedFile::upcast() {
-    return auto_ptr<TrackedFile>(new TrackedFile(*this));
+    return std::auto_ptr<TrackedFile>(new TrackedFile(*this));
 }
 std::auto_ptr<TrackedFile> TrackedFile::upcastCopy() {
     TrackedFile* np = new TrackedFile(*this);
@@ -302,7 +302,7 @@ std::auto_ptr<TrackedFile> TrackedFile::upcastCopy() {
     np->mSize = mSize;
     np->mLastModified = mLastModified;
     np->inDatabase = inDatabase;
-    return auto_ptr<TrackedFile>(np);
+    return std::auto_ptr<TrackedFile>(np);
 }
 tostream & operator<<(tostream& os, TrackedFile o) {
     os <<  TXT( "-------------------------------------" ) << std::endl;
@@ -428,7 +428,7 @@ bool TrackedProperty::typeIsCorrect() {
     return type == type__;
 }
 std::auto_ptr<TrackedProperty> TrackedProperty::upcast() {
-    return auto_ptr<TrackedProperty>(new TrackedProperty(*this));
+    return std::auto_ptr<TrackedProperty>(new TrackedProperty(*this));
 }
 std::auto_ptr<TrackedProperty> TrackedProperty::upcastCopy() {
     TrackedProperty* np = new TrackedProperty(*this);
@@ -436,7 +436,7 @@ std::auto_ptr<TrackedProperty> TrackedProperty::upcastCopy() {
     np->type = type;
     np->mName = mName;
     np->inDatabase = inDatabase;
-    return auto_ptr<TrackedProperty>(np);
+    return std::auto_ptr<TrackedProperty>(np);
 }
 tostream & operator<<(tostream& os, TrackedProperty o) {
     os <<  TXT( "-------------------------------------" ) << std::endl;
@@ -451,7 +451,7 @@ TrackerDBGenerated::TrackerDBGenerated(tstring backendType, tstring connInfo)
     initialize();
 }
 std::vector<litesql::Database::SchemaItem> TrackerDBGenerated::getSchema() const {
-    vector<Database::SchemaItem> res;
+    std::vector<Database::SchemaItem> res;
     res.push_back(Database::SchemaItem( TXT( "schema_" ), TXT( "table" ), TXT( "CREATE TABLE schema_ (name_ TEXT, type_ TEXT, sql_ TEXT);" )));
     if (backend->supportsSequences()) {
         res.push_back(Database::SchemaItem( TXT( "TrackedFile_seq" ), TXT( "sequence" ), TXT( "CREATE SEQUENCE TrackedFile_seq START 1 INCREMENT 1" )));

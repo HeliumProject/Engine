@@ -6,7 +6,7 @@
 
 #ifndef _litesql_updatequery_hpp
 #define _litesql_updatequery_hpp
-
+#include "litesql_char.hpp"
 #include "litesql/utils.hpp"
 #include "litesql/expr.hpp"
 /** \file updatequery.hpp
@@ -14,18 +14,17 @@
 namespace litesql {
 /** a class that helps creating UPDATE-SQL statements. methods are 
     self-explanatory. */
-using namespace std;    
 class UpdateQuery {
-    string table;
-    string _where;
+    LITESQL_String table;
+    LITESQL_String _where;
     Split fields;
     Split values;
 public:
-    UpdateQuery(string t) : table(t), _where("True") {}
+    UpdateQuery(LITESQL_String t) : table(t), _where(LITESQL_L("True")) {}
     UpdateQuery& where(const Expr& e);
-    UpdateQuery& set(FieldType f, string value);
-    operator std::string() const;
-    std::string asString() const { return this->operator std::string(); }
+    UpdateQuery& set(FieldType f, LITESQL_String value);
+    operator LITESQL_String() const;
+    LITESQL_String asString() const { return this->operator LITESQL_String(); }
 };
 }
 

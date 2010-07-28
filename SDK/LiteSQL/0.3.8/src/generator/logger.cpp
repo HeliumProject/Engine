@@ -1,8 +1,8 @@
+#include "litesql_char.hpp"
 #include "logger.hpp"
-#
 #include <iostream>
+#include <string>
 
-using namespace std; 
 using namespace litesql; 
 
 static bool logger_verbose = false;
@@ -12,31 +12,30 @@ void Logger::verbose(bool verbose)
   logger_verbose = verbose;
 }
 
-void Logger::report(const string& msg,const string& msg2)
+void Logger::report(const LITESQL_String& msg,const LITESQL_String& msg2)
 {
   if (logger_verbose)
-    cout  << msg  << msg2 << endl;
+    LITESQL_cout  << msg  << msg2 << std::endl;
 }
 
-void Logger::report(const string& msg)
+void Logger::report(const LITESQL_String& msg)
 {
   if (logger_verbose)
-    cout  << msg << endl;
+    LITESQL_cout  << msg << std::endl;
 }
 
-void Logger::error(const std::string& msg)
+void Logger::error(const LITESQL_String& msg)
 {
-    cerr  << msg << endl;
+    LITESQL_cerr  << msg << std::endl;
 }
 
-void Logger::error(const std::string& msg,const std::string& msg2)
+void Logger::error(const LITESQL_String& msg,const LITESQL_String& msg2)
 {
-    cerr  << msg << msg2 << endl;
+    LITESQL_cerr  << msg << msg2 << std::endl;
 }
 
 void Logger::error(const Except& ex)
 {
-    cerr  << ex << endl;
+    LITESQL_cerr  << ex << std::endl;
 }
-
 

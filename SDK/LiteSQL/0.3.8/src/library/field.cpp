@@ -3,58 +3,58 @@
  * The list of contributors at http://litesql.sf.net/ 
  * 
  * See LICENSE for copyright information. */
+#include "litesql_char.hpp"
 #include <cstdlib>
 #include "compatibility.hpp"
 #include "litesql.hpp"
 #include "litesql/field.hpp"
 
 namespace litesql {
-using namespace std;
-In FieldType::in(const string& set) const {
+In FieldType::in(const LITESQL_String& set) const {
     return In(*this, set);
 }
 In FieldType::in(const SelectQuery& sel) const {
     return In(*this, sel);
 }
-Like FieldType::like(const string& s) {
+Like FieldType::like(const LITESQL_String& s) {
     return Like(*this, s);
 }
 template <> 
-string convert<int, string>(int value) {
+LITESQL_String convert<int, LITESQL_String>(int value) {
     return toString(value);
 }
 template <>
-string convert<float, string>(float value) {
+LITESQL_String convert<float, LITESQL_String>(float value) {
     return toString(value);
 }
 template <>
-string convert<double, string>(double value) {
+LITESQL_String convert<double, LITESQL_String>(double value) {
     return toString(value);
 }
 
 
 template <> 
-string convert<const int&, string>(const int& value) {
+LITESQL_String convert<const int&, LITESQL_String>(const int& value) {
     return toString(value);
 }
 template <>
-string convert<const float&, string>(const float& value) {
-    return toString(value);
-}
-
-template <>
-string convert<const double&, string>(const double& value) {
+LITESQL_String convert<const float&, LITESQL_String>(const float& value) {
     return toString(value);
 }
 
 template <>
-string convert<const bool&, string>(const bool& value) {
+LITESQL_String convert<const double&, LITESQL_String>(const double& value) {
     return toString(value);
 }
 
 template <>
-int convert<const string&, int>(const string& value) {
-    return strtol(value.c_str(), NULL, 10);
+LITESQL_String convert<const bool&, LITESQL_String>(const bool& value) {
+    return toString(value);
+}
+
+template <>
+int convert<const LITESQL_String&, int>(const LITESQL_String& value) {
+    return _tcstol(value.c_str(), NULL, 10);
 }
 template <>
 bool convert<int, bool>(int value) {
@@ -71,53 +71,53 @@ double convert<int,double>(int value) {
 }
 
 template <>
-bool convert<const string&, bool>(const string& value) {
-    return convert<const string&, int>(value);
+bool convert<const LITESQL_String&, bool>(const LITESQL_String& value) {
+    return convert<const LITESQL_String&, int>(value);
 }
 template <>
-long long convert<const string&, long long>(const string& value) {
-    return strtoll(value.c_str(), NULL, 10);
+long long convert<const LITESQL_String&, long long>(const LITESQL_String& value) {
+    return _tcstol(value.c_str(), NULL, 10);
 }
 template <>
-float convert<const string&, float>(const string& value) {
+float convert<const LITESQL_String&, float>(const LITESQL_String& value) {
     return strtof(value.c_str(), NULL);
 }
 template <>
-double convert<const string&, double>(const string& value) {
-    return strtod(value.c_str(), NULL);
+double convert<const LITESQL_String&, double>(const LITESQL_String& value) {
+    return _tcstod(value.c_str(), NULL);
 }
 
 template <>
-string convert<const string&, string>(const string& value) {
+LITESQL_String convert<const LITESQL_String&, LITESQL_String>(const LITESQL_String& value) {
     return value;
 }
 
 
 
-const char hexDigits[] = "0123456789abcdef";
+const LITESQL_Char hexDigits[] =  LITESQL_L("0123456789abcdef");
 
 const Blob Blob::nil;
 
-string Blob::toHex(void) const
+LITESQL_String Blob::toHex(void) const
 {
-  string result;
+  LITESQL_String result;
   if (!m_data) 
   {
-    result ="NULL";  
+    result = LITESQL_L("NULL");  
   }
   else
   {
     result.reserve(m_length);
     for (size_t i = 0; i < m_length;i++)
     {
-      result.push_back( hexDigits[(m_data[i]&0xf0) >>4]);
-      result.push_back( hexDigits[m_data[i]&0x0f]);
+      result.push_back(hexDigits[(m_data[i]&0xf0) >>4]);
+      result.push_back(hexDigits[m_data[i]&0x0f]);
     }
   }
   return result;
 }
 
-int hex(char c)
+int hex(LITESQL_Char c)
 {
   switch(c)
   {
@@ -160,7 +160,7 @@ int hex(char c)
     case 'F':
       return 0xf;
     default:
-      throw("invalid digit");
+      throw(LITESQL_L("invalid digit"));
   }
 }
 
@@ -170,9 +170,9 @@ Blob::~Blob()
     free(m_data); 
 }
 
-void Blob::initWithHexString(const string& hexString)
+void Blob::initWithHexString(const LITESQL_String& hexString)
 {
-  if ("NULL"==hexString)
+  if (LITESQL_L("NULL")==hexString)
   {
     m_data = NULL;
     m_length = 0;
@@ -188,14 +188,14 @@ void Blob::initWithHexString(const string& hexString)
   }
 }
 
-void   Blob::data(const char* pszData) 
+void   Blob::data(const LITESQL_Char* pszData) 
 {
   if (m_data!=NULL)
   {
     free(m_data);
   }
-  initWithData( (u8_t*)pszData,
-		  pszData!=NULL ? strlen(pszData)+1 : 0 );
+  initWithData((u8_t*)pszData,
+		  pszData!=NULL ? _tcslen(pszData)+1 : 0);
 }
 
 
@@ -222,34 +222,34 @@ void Blob::initWithData(const u8_t* data, size_t length)
   }
 }
 
-ostream& operator << (ostream& os, const Blob& blob)
+LITESQL_oStream& operator << (LITESQL_oStream& os, const Blob& blob)
 {
-  return os << convert<const Blob&, string>(blob);
+  return os << convert<const Blob&, LITESQL_String>(blob);
 }
 
 
 template <>
-Blob convert<const string&, Blob>(const string& value) 
+Blob convert<const LITESQL_String&, Blob>(const LITESQL_String& value) 
 {
-  if ("NULL"==value)
+  if (LITESQL_L("NULL")==value)
     return Blob(NULL,0);
   else
     return Blob(value);
 }
 
 template <>
-string convert<const Blob&, string>(const Blob& value)
+LITESQL_String convert<const Blob&, LITESQL_String>(const Blob& value)
 {
   if (value.isNull())
   {
-    return "NULL";
+    return  LITESQL_L("NULL");
   }
   else 
   {
-    string hexVal;
-    hexVal.append("X'");
+    LITESQL_String hexVal;
+    hexVal.append(LITESQL_L("X'"));
     hexVal.append(value.toHex());
-    hexVal.append("'");
+    hexVal.append(LITESQL_L("'"));
     return hexVal;
   }
 }

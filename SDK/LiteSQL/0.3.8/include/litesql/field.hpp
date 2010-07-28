@@ -6,6 +6,7 @@
 
 #ifndef litesql_field_hpp
 #define litesql_field_hpp
+#include "litesql_char.hpp"
 #include <iostream>
 #include <vector>
 #include <utility>
@@ -15,7 +16,6 @@
 /** \file field.hpp
     contains FieldType- and Field-classes */
 namespace litesql {
-using namespace std;
 
 /** holds field name, type and table information */
 class In;
@@ -24,25 +24,25 @@ class SelectQuery;
 
 class FieldType {
 protected:
-    typedef vector< pair<string, string> > Values;
+    typedef std::vector< std::pair<LITESQL_String, LITESQL_String> > Values;
 public:
     FieldType() {};
-    FieldType(const string& n, 
-              const string& t, 
-              const string& tbl,
+    FieldType(const LITESQL_String& n, 
+              const LITESQL_String& t, 
+              const LITESQL_String& tbl,
               const Values& vals = Values())
         : _name(n), _type(t), _table(tbl), _values(vals) {}
-    string fullName() const { return  table() + "." + name(); }
-    string name() const { return _name; }
-    string type() const { return _type; }
-    string table() const { return _table; }
-    vector< pair<string, string> > values() { return _values; }
+    LITESQL_String fullName() const { return  table() +  LITESQL_L(".") + name(); }
+    LITESQL_String name() const { return _name; }
+    LITESQL_String type() const { return _type; }
+    LITESQL_String table() const { return _table; }
+    std::vector< std::pair<LITESQL_String, LITESQL_String> > values() { return _values; }
     /** syntactic sugar to Expr-API, Object::field_.in(set) */
-    In in(const string& set) const;
+    In in(const LITESQL_String& set) const;
     /** syntactic sugar to Expr-API, Object::field_.in(sel) */
     In in(const SelectQuery& sel) const;
     /** syntactic sugar to Expr-API, Object::field_.like(s) */
-    Like like(const string& s);
+    Like like(const LITESQL_String& s);
     bool operator==(const FieldType & fd) const {
         return fd.fullName() == fullName();
     }
@@ -50,7 +50,7 @@ public:
         return ! (*this == fd);
     }
 private:
-    string _name, _type, _table;
+    LITESQL_String _name, _type, _table;
     Values _values;
 };
 
@@ -60,14 +60,14 @@ To convert(From value);
 
 /** store function */
 template <class T>
-std::string store(const T& value) {
+LITESQL_String store(const T& value) {
     return litesql::toString(value);
-//  return convert<T,std::string>(value);
+//  return convert<T,LITESQL_String>(value);
 }
 
 template <class T>
-T load(const std::string& value) {
-    return convert<const std::string&, T>(value);
+T load(const LITESQL_String& value) {
+    return convert<const LITESQL_String&, T>(value);
 }
 /** holds field value */
 template <class T>
@@ -77,16 +77,16 @@ class Field {
     T _value;
 public:
     Field(const FieldType & f) : field(&f), _modified(true) {}
-    string fullName() const { return field->fullName(); }   
-    string name() const { return field->name(); }
-    string type() const { return field->type(); }
-    string table() const { return field->table(); }
+    LITESQL_String fullName() const { return field->fullName(); }   
+    LITESQL_String name() const { return field->name(); }
+    LITESQL_String type() const { return field->type(); }
+    LITESQL_String table() const { return field->table(); }
     T value() const { return _value; }
     const FieldType & fieldType() const { return *field; } 
     bool modified() const { return _modified; }
     void setModified(bool state) { _modified = state; }
-    const Field & operator=(const string& v) { 
-        _value = convert<const string&, T>(v);
+    const Field & operator=(const LITESQL_String& v) { 
+        _value = convert<const LITESQL_String&, T>(v);
         _modified = true;
         return *this;
     }
@@ -109,32 +109,32 @@ public:
     bool operator!=(const T2& v) const { return !(*this == v); }
     
 
-    operator string() const { return toString(value()); }
+    operator LITESQL_String() const { return toString(value()); }
 
     operator T() const { return value(); }
 };
 
 template <>
-class Field<string> {
+class Field<LITESQL_String> {
     const FieldType * field; 
     bool _modified;
-    string _value;
+    LITESQL_String _value;
 public:
     Field(const FieldType & f) : field(&f), _modified(true) {}
-    string fullName() const { return field->fullName(); }   
-    string name() const { return field->name(); }
-    string type() const { return field->type(); }
-    string table() const { return field->table(); }
-    string value() const { return _value; }
+    LITESQL_String fullName() const { return field->fullName(); }   
+    LITESQL_String name() const { return field->name(); }
+    LITESQL_String type() const { return field->type(); }
+    LITESQL_String table() const { return field->table(); }
+    LITESQL_String value() const { return _value; }
     const FieldType & fieldType() const { return *field; } 
     bool modified() const { return _modified; }
     void setModified(bool state) { _modified = state; }
-    const Field & operator=(string v) { 
+    const Field & operator=(LITESQL_String v) { 
         _value = v;
         _modified = true;
         return *this;
     }
-    const Field& operator=(const char * v) {
+    const Field& operator=(const LITESQL_Char * v) {
         _value = v;
         _modified = true;
         return *this;
@@ -142,7 +142,7 @@ public:
     template <class T2>
     const Field & operator=(T2 v) { 
         _modified = true;
-        _value = litesql::convert<T2, string>(v); 
+        _value = litesql::convert<T2, LITESQL_String>(v); 
         return *this;
     }
     template <class T2>
@@ -152,7 +152,7 @@ public:
     template <class T2>
     bool operator!=(const T2& v) const { return !(*this == v); }
 
-    operator string() const { return value(); }
+    operator LITESQL_String() const { return value(); }
 };
 
 typedef unsigned char u8_t;
@@ -161,7 +161,7 @@ class Blob {
 public:
   static const Blob nil;
   Blob()                            : m_data(NULL),m_length(0)               {};
-  Blob(const string & value) : m_data(NULL),m_length(0)
+  Blob(const LITESQL_String & value) : m_data(NULL),m_length(0)
   {
     initWithHexString(value);
   };
@@ -183,24 +183,24 @@ public:
     return *this;
   }
 
-  string toHex()            const ;
+  LITESQL_String toHex()            const ;
   size_t length()           const  { return m_length;      };
   bool   isNull()           const  { return m_data==NULL;  }; 
   u8_t   data(size_t index) const  { return m_data[index]; };
-  void   data(const char* pszData);
+  void   data(const LITESQL_Char* pszData);
 private:
   u8_t* m_data;
   size_t m_length;
 
   void initWithData(const u8_t* data, size_t length);
-  void initWithHexString(const string& hexString);
+  void initWithHexString(const LITESQL_String& hexString);
 };
 
-ostream& operator << (ostream& os, const Blob& blob);
+LITESQL_oStream& operator << (LITESQL_oStream& os, const Blob& blob);
 template <>
-Blob convert<const string&, Blob>(const string& value);
+Blob convert<const LITESQL_String&, Blob>(const LITESQL_String& value);
 template <>
-string convert<const Blob&, string>(const Blob& value);
+LITESQL_String convert<const Blob&, LITESQL_String>(const Blob& value);
 
 template <>
 class Field<Blob> {
@@ -209,10 +209,10 @@ class Field<Blob> {
     Blob _value;
 public:
     Field(const FieldType & f) : field(&f), _modified(true) {}
-    string fullName() const { return field->fullName(); }   
-    string name() const { return field->name(); }
-    string type() const { return field->type(); }
-    string table() const { return field->table(); }
+    LITESQL_String fullName() const { return field->fullName(); }   
+    LITESQL_String name() const { return field->name(); }
+    LITESQL_String type() const { return field->type(); }
+    LITESQL_String table() const { return field->table(); }
     Blob value() const { return _value; }
     const FieldType & fieldType() const { return *field; } 
     bool modified() const { return _modified; }
@@ -224,7 +224,7 @@ public:
     }
 
 /*
-const Field& operator=(const char * v) {
+const Field& operator=(const LITESQL_Char * v) {
         _value = v;
         _modified = true;
         return *this;
@@ -243,19 +243,19 @@ const Field& operator=(const char * v) {
     bool operator!=(const T2& v) const { return !(*this == v); }
 */
 
-    operator string() const { return _value.toHex(); }
+    operator LITESQL_String() const { return _value.toHex(); }
 };
 
 template <class T>
-std::string operator+(std::string a, litesql::Field<T> f) {
-    return a + std::string(f);
+LITESQL_String operator+(LITESQL_String a, litesql::Field<T> f) {
+    return a + LITESQL_String(f);
 }
 template <class T>
-std::string operator+(litesql::Field<T> f, std::string a) {
-    return std::string(f) + a;    
+LITESQL_String operator+(litesql::Field<T> f, LITESQL_String a) {
+    return LITESQL_String(f) + a;    
 }
 template <class T>
-std::ostream & operator << (std::ostream & os, const litesql::Field<T> & f) {
+LITESQL_oStream & operator << (LITESQL_oStream & os, const litesql::Field<T> & f) {
     return os << f.value();
 }
 

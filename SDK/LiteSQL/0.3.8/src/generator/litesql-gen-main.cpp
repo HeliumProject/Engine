@@ -1,4 +1,5 @@
 #include "litesql.hpp"
+#include "litesql_char.hpp"
 #include "generator.hpp"
 #include "litesql-gen-cpp.hpp"
 #include "litesql-gen-graphviz.hpp"
@@ -6,87 +7,86 @@
 #include "logger.hpp"
 #include "objectmodel.hpp"
 
-using namespace std;
 using namespace litesql;
 
-const char* help = 
-"Usage: litesql-gen [options] <my-database.xml>\n\n"
-"Options:\n"
-" -t, --target=TARGET                generate code for TARGET (default: c++)\n"
-" -v, --verbose                      verbosely report code generation\n"
-" --help                             print help\n"
+const LiteSQL_Char* help = 
+ LiteSQL_L( "Usage: litesql-gen [options] <my-database.xml>\n\n" )
+ LiteSQL_L( "Options:\n" )
+ LiteSQL_L( " -t, --target=TARGET                generate code for TARGET (default: c++)\n" )
+ LiteSQL_L( " -v, --verbose                      verbosely report code generation\n" )
+ LiteSQL_L( " --help                             print help\n" )
 
-" -t, --target=TARGET                generate code for TARGET (default: c++)\n"
-" --output-dir=/path/to/src          output all files to directory \n"
-" --output-sources=/path/to/src      output sources to directory \n"
-" --output-include=/path/to/include  output includes to directory\n"
-" --refresh                          refresh code of target\n"
-" --overwrite                        overwrite code on generation\n"
-"\n"
-"Supported targets:\n"
-"  'c++'        C++ target (.cpp,.hpp)\n"
-"  'ruby-activerecord'          ruby target (.rb)\n"
-//"  'objc'          Objective C (.m,.h)\n"
-//"  'c'          C target (.c,.h)\n"
-//"  'haskell'    Haskell target (.hs)\n"
-//"  'sql'        SQL schema of database (.sql)\n"
-//"  'php'        PHP target (.php)\n"
-//"  'python'     Python target (.py)\n"
-"  'graphviz'   Graphviz file (.dot)\n"
-"\n\n"
+ LiteSQL_L( " -t, --target=TARGET                generate code for TARGET (default: c++)\n" )
+ LiteSQL_L( " --output-dir=/path/to/src          output all files to directory \n" )
+ LiteSQL_L( " --output-sources=/path/to/src      output sources to directory \n" )
+ LiteSQL_L( " --output-include=/path/to/include  output includes to directory\n" )
+ LiteSQL_L( " --refresh                          refresh code of target\n" )
+ LiteSQL_L( " --overwrite                        overwrite code on generation\n" )
+ LiteSQL_L( "\n" )
+ LiteSQL_L( "Supported targets:\n" )
+ LiteSQL_L( "  'c++'        C++ target (.cpp,.hpp)\n" )
+ LiteSQL_L( "  'ruby-activerecord'          ruby target (.rb)\n" )
+// LiteSQL_L( "  'objc'          Objective C (.m,.h)\n" )
+// LiteSQL_L( "  'c'          C target (.c,.h)\n" )
+// LiteSQL_L( "  'haskell'    Haskell target (.hs)\n" )
+// LiteSQL_L( "  'sql'        SQL schema of database (.sql)\n" )
+// LiteSQL_L( "  'php'        PHP target (.php)\n" )
+// LiteSQL_L( "  'python'     Python target (.py)\n" )
+ LiteSQL_L( "  'graphviz'   Graphviz file (.dot)\n" )
+ LiteSQL_L( "\n\n" )
 ;
 
 struct options_t {
-  string output_dir;
-  string output_sources;
-  string output_includes;
+  LiteSQL_String output_dir;
+  LiteSQL_String output_sources;
+  LiteSQL_String output_includes;
   bool refresh;
   bool printHelp;
-  vector<string> targets;
+  std::vector<LiteSQL_String> targets;
 };
 
-options_t options = {"","","",true,false};
+options_t options = { LiteSQL_L( "" ), LiteSQL_L( "" ), LiteSQL_L( "" ),true,false};
 
-int parseArgs(int argc, char **argv) 
+int parseArgs(int argc, LiteSQL_Char **argv) 
 {
   if(argc==1)
     return -1;
 
   for (int i = 1; i < argc; i++) {
-    string arg = argv[i];
-    if (arg == "-v" || arg == "--verbose") {
+    LiteSQL_String arg = argv[i];
+    if (arg ==  LiteSQL_L( "-v" ) || arg ==  LiteSQL_L( "--verbose" )) {
       Logger::verbose(true);
       continue;
-    } else if (arg == "-t" || arg == "--target") {
+    } else if (arg ==  LiteSQL_L( "-t" ) || arg ==  LiteSQL_L( "--target" )) {
       if (i+1 >= argc) {
-        Logger::error("Error: missing target");
+        Logger::error( LiteSQL_L( "Error: missing target" ));
         return -1;
       }    
       options.targets.push_back(argv[i+1]);
       i++;
       continue;
-    } else if (litesql::startsWith(arg, "--target=")) {
-      litesql::Split lang(arg, "=");
+    } else if (litesql::startsWith(arg,  LiteSQL_L( "--target=" ))) {
+      litesql::Split lang(arg,  LiteSQL_L( "=" ));
       options.targets.push_back(lang[1]);
       continue;
-    }  else if (litesql::startsWith(arg, "--output-dir")) {
-      litesql::Split lang(arg, "=");
+    }  else if (litesql::startsWith(arg,  LiteSQL_L( "--output-dir" ))) {
+      litesql::Split lang(arg,  LiteSQL_L( "=" ));
       options.output_dir=lang[1];
       continue;
-    } else if (litesql::startsWith(arg, "--output-sources")) {
-      litesql::Split lang(arg, "=");
+    } else if (litesql::startsWith(arg,  LiteSQL_L( "--output-sources" ))) {
+      litesql::Split lang(arg,  LiteSQL_L( "=" ));
       options.output_sources=lang[1];
       continue;
-    }  else if (litesql::startsWith(arg, "--output-include")) {
-      litesql::Split lang(arg, "=");
+    }  else if (litesql::startsWith(arg,  LiteSQL_L( "--output-include" ))) {
+      litesql::Split lang(arg,  LiteSQL_L( "=" ));
       options.output_includes=lang[1];
       continue;
     }
-    else if (arg == "--help") {
+    else if (arg ==  LiteSQL_L( "--help" )) {
       options.printHelp = true;
       continue;
     } else if (i < argc - 1) {
-      Logger::error("Error: invalid argument "+ arg);
+      Logger::error( LiteSQL_L( "Error: invalid argument " )+ arg);
       return -1;
     }
   }
@@ -100,10 +100,10 @@ int generateCode(ObjectModel& model)
     
     generator.setOutputDirectory(options.output_dir);
     
-    for (vector<string>::const_iterator target= options.targets.begin(); target!=options.targets.end();target++)
+    for (std::vector<LiteSQL_String>::const_iterator target= options.targets.begin(); target!=options.targets.end();target++)
     {
 
-      if (*target == "c++") 
+      if (*target ==  LiteSQL_L( "c++" )) 
       {
         CppGenerator* pCppGen = new CppGenerator();
         pCppGen->setOutputSourcesDirectory(options.output_sources);
@@ -111,24 +111,24 @@ int generateCode(ObjectModel& model)
 
         generator.add(pCppGen);
       }    
-      else if (*target == "graphviz") 
+      else if (*target ==  LiteSQL_L( "graphviz" )) 
       {
         generator.add(new GraphvizGenerator());
       }
-      else if (*target == "ruby-activerecord") 
+      else if (*target ==  LiteSQL_L( "ruby-activerecord" )) 
       {
         generator.add(new RubyActiveRecordGenerator());
       }
       else 
       {
-        throw litesql::Except("unsupported target: " + *target);
+        throw litesql::Except( LiteSQL_L( "unsupported target: " ) + *target);
       }
     }
 
     return generator.generateCode(&model)? 0 : 1 ;
 }
 
-int main(int argc, char **argv) { 
+int main(int argc, LiteSQL_Char **argv) { 
 
   int rc = parseArgs(argc,argv);
   if (rc!=0)
@@ -138,14 +138,14 @@ int main(int argc, char **argv) {
   }
 
   if (options.printHelp) {
-    cout << help << endl;
+    LiteSQL_cout << help << std::endl;
   }
 
   ObjectModel model;
   try {
     if (!model.loadFromFile(argv[argc-1]))
     {
-      string msg = "could not load file '" + string(argv[argc-1]) + "'";
+      LiteSQL_String msg =  LiteSQL_L( "could not load file '" ) + LiteSQL_String(argv[argc-1]) +  LiteSQL_L( "'" );
       Logger::error(msg);
       return -1;
     }

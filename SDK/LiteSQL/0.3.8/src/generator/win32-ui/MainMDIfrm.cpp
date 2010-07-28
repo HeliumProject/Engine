@@ -6,12 +6,12 @@
 #include "resource.h"
 #include "mdiframeapp.h"
 
-const TCHAR* CMDIFrameApp::REGISTRY_KEY=_T("litesl-generator");
+const TCHAR* CMDIFrameApp::REGISTRY_KEY=_T( LiteSQL_L( "litesl-generator" ));
 
 CMainMDIFrame::CMainMDIFrame()
 {
 	// Set the registry key name, and load the initial window position
-	// Use a registry key name like "CompanyName\\Application"
+	// Use a registry key name like  LiteSQL_L( "CompanyName\\Application" )
 	LoadRegistrySettings(CMDIFrameApp::REGISTRY_KEY);
 }
 
@@ -21,13 +21,13 @@ CMainMDIFrame::~CMainMDIFrame()
 
 void CMainMDIFrame::OnFileOpen()
 {
-	TCHAR szFilePathName[_MAX_PATH] = _T("");
+	TCHAR szFilePathName[_MAX_PATH] = _T( LiteSQL_L( "" ));
 	OPENFILENAME ofn = {0};
 	ofn.lStructSize = sizeof(OPENFILENAME);
 	ofn.hwndOwner = m_hWnd;
 	ofn.lpstrFile = szFilePathName;
 	ofn.nMaxFile = _MAX_PATH;
-	ofn.lpstrTitle = _T("Open File");
+	ofn.lpstrTitle = _T( LiteSQL_L( "Open File" ));
 
 	// Bring up the dialog, and open the file
 	::GetOpenFileName(&ofn);
@@ -53,13 +53,13 @@ void CMainMDIFrame::OnFileSave()
 
 void CMainMDIFrame::OnFileSaveAs()
 {
-	TCHAR szFilePathName[_MAX_PATH] = _T("");
+	TCHAR szFilePathName[_MAX_PATH] = _T( LiteSQL_L( "" ));
 	OPENFILENAME ofn = {0};
 	ofn.lStructSize = sizeof(OPENFILENAME);
 	ofn.hwndOwner = m_hWnd;
 	ofn.lpstrFile = szFilePathName;
 	ofn.nMaxFile = _MAX_PATH;
-	ofn.lpstrTitle = _T("Open File");
+	ofn.lpstrTitle = _T( LiteSQL_L( "Open File" ));
 
 	// Bring up the dialog, and open the file
 	::GetOpenFileName(&ofn);
@@ -93,7 +93,7 @@ void CMainMDIFrame::OnFilePrint()
 
 void CMainMDIFrame::OnInitialUpdate()
 {
-	TRACE(_T("MDI Frame started \n"));
+	TRACE(_T( LiteSQL_L( "MDI Frame started \n" )));
 	//The frame is now created.
 	//Place any additional startup code here.
 }
@@ -197,4 +197,3 @@ LRESULT CMainMDIFrame::WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 //	pass unhandled messages on for default processing
 	return WndProcDefault(uMsg, wParam, lParam);
 }
-

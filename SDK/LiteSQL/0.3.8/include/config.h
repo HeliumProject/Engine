@@ -13,7 +13,7 @@
 /* #undef HAVE_INTTYPES_H */
 
 /* Define to 1 if you have the 'mysqlclient' library (-lmysqlclient). */
-/* #undef HAVE_LIBMYSQLCLIENT */
+// #define HAVE_LIBMYSQLCLIENT 1
 
 /* Define to 1 if you have the `pq' library (-lpq). */
 /* #undef HAVE_LIBPQ */

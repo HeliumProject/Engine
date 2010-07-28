@@ -1,39 +1,39 @@
 #include "generator.hpp"
 #include "objectmodel.hpp"
+#include "litesql_char.hpp"
 //#include <fstream>
 
-using namespace std;
 using namespace litesql;
 
 CodeGenerator::~CodeGenerator()
 {}
 
-void CodeGenerator::setOutputDirectory(const string& directory) 
+void CodeGenerator::setOutputDirectory(const LITESQL_String& directory) 
 {
   m_directory = directory;
 }
-const string& CodeGenerator::getOutputDirectory() const 
+const LITESQL_String& CodeGenerator::getOutputDirectory() const 
 {
   return m_directory;
 }
 
-std::string CodeGenerator::getOutputFilename(const std::string& name) const
+LITESQL_String CodeGenerator::getOutputFilename(const LITESQL_String& name) const
 {
-  string fname = getOutputDirectory();
+  LITESQL_String fname = getOutputDirectory();
 
   if (!fname.empty())
   {
 #ifdef WIN32
-    fname.append("\\");
+    fname.append(LITESQL_L("\\"));
 #else
-    fname.append("/");
+    fname.append(LITESQL_L("/"));
 #endif // #ifdef _WINDOWS_
   }
   fname.append(name); 
   return fname;
 }
     
-const char* CodeGenerator::getTarget() const
+const LITESQL_Char* CodeGenerator::getTarget() const
 {return m_target;}
 
 bool CodeGenerator::generate(const std::vector<xml::Object* >& objects)
@@ -58,7 +58,7 @@ bool CodeGenerator::generate(const std::vector<xml::Relation* >& relations)
   return true;
 }
 
-bool CodeGenerator::generate(const std::vector<xml::Object* >& objects,ostream& os,size_t indent)
+bool CodeGenerator::generate(const std::vector<xml::Object* >& objects,LITESQL_oStream& os,size_t indent)
 {
   for (std::vector<xml::Object* >::const_iterator it = objects.begin();
     it != objects.end();
@@ -69,7 +69,7 @@ bool CodeGenerator::generate(const std::vector<xml::Object* >& objects,ostream& 
   return true;
 }
 
-bool CodeGenerator::generate(const std::vector<xml::Relation* >& relations,ostream& os,size_t indent)
+bool CodeGenerator::generate(const std::vector<xml::Relation* >& relations,LITESQL_oStream& os,size_t indent)
 {
   for (std::vector<xml::Relation* >::const_iterator it = relations.begin();
     it != relations.end();
@@ -89,16 +89,16 @@ void CompositeGenerator::add(CodeGenerator* g)
 
 }
 
-void CompositeGenerator::setOutputDirectory(const string& directory) 
+void CompositeGenerator::setOutputDirectory(const LITESQL_String& directory) 
 {
   CodeGenerator::setOutputDirectory(directory);
-  for(vector<CodeGenerator*>::iterator it = generators.begin(); it != generators.end();it++)
+  for(std::vector<CodeGenerator*>::iterator it = generators.begin(); it != generators.end();it++)
   {
     (*it)->setOutputDirectory(directory);
   }
 }
 
-const string& CompositeGenerator::getOutputDirectory() const
+const LITESQL_String& CompositeGenerator::getOutputDirectory() const
 {
   return CodeGenerator::getOutputDirectory();
 }
@@ -107,7 +107,7 @@ bool CompositeGenerator::generateCode(const ObjectModel* model)
 {
   bool success=true;
 
-  for(vector<CodeGenerator*>::iterator it = generators.begin(); it != generators.end();it++)
+  for(std::vector<CodeGenerator*>::iterator it = generators.begin(); it != generators.end();it++)
   {
     success &= (*it)->generateCode(model);
   }

@@ -1,80 +1,80 @@
 // include LiteSQL's header file and generated header file
+#include "litesql_char.hpp"
 #include "xmlparser.hpp"
 #include "objectmodel.hpp"
 #include <string.h>
 #include "logger.hpp"
 
-using namespace std;
 using namespace xml;
 
-#define xmlStrcasecmp(s1,s2)  ((s1==NULL) ? (s2!=NULL) : strcmp(s1,s2))
-#define xmlStrEqual(s1,s2)   (!strcmp(s1,s2))
+#define xmlStrcasecmp(s1,s2)  ((s1==NULL) ? (s2!=NULL) : _tcscmp(s1,s2))
+#define xmlStrEqual(s1,s2)   (!_tcscmp(s1,s2))
 
-const char* litesql::toString(AT_field_type t)
+const LITESQL_Char* litesql::toString(AT_field_type t)
 {
   switch (t) 
   {
   case A_field_type_boolean:
-    return "boolean";
+    return  LITESQL_L("boolean");
   case A_field_type_integer:
-    return "integer";
+    return  LITESQL_L("integer");
   case A_field_type_string:
-    return "string";
+    return  LITESQL_L("LITESQL_String");
   case A_field_type_float: 
-    return "float";
+    return  LITESQL_L("float");
   case A_field_type_double: 
-    return "double";
+    return  LITESQL_L("double");
   case A_field_type_time:
-    return "time";
+    return  LITESQL_L("time");
   case A_field_type_date:
-    return "date";
+    return  LITESQL_L("date");
   case A_field_type_datetime:
-    return "datetime";
+    return  LITESQL_L("datetime");
   case A_field_type_blob: 
-    return "blob";
+    return  LITESQL_L("blob");
 
   default: 
-    return "unknown";   
+    return  LITESQL_L("unknown");   
   }
 }
 
-AT_field_type litesql::field_type(const char* value)
+AT_field_type litesql::field_type(const LITESQL_Char* value)
 {
   AT_field_type t;
 
-  if (!xmlStrcasecmp(value,(XML_Char*)"boolean"))
+  if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("boolean")))
   {
     t = A_field_type_boolean;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"integer"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("integer")))
   {
     t = A_field_type_integer;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"string"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("LITESQL_String")))
   {
     t = A_field_type_string;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"float"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("float")))
   {
     t = A_field_type_float;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"double"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("double")))
   {
     t = A_field_type_double;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"time"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("time")))
   {
     t = A_field_type_time;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"date"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("date")))
   {
     t = A_field_type_date;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"datetime"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("datetime")))
   {
     t = A_field_type_datetime;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"blob"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("blob")))
   {
     t = A_field_type_blob;
   }
@@ -85,17 +85,17 @@ AT_field_type litesql::field_type(const char* value)
   return t;
 }
 
-static const char* toString(AT_relate_limit t)
+static const LITESQL_Char* toString(AT_relate_limit t)
 {
   switch (t) 
   {
   case A_relate_limit_one:
-    return "one";
+    return  LITESQL_L("one");
   case A_relate_limit_many:
-    return "many";
+    return  LITESQL_L("many");
   case AU_relate_limit:
   default:
-    return "unknown";   
+    return  LITESQL_L("unknown");   
   }
 }
 
@@ -103,11 +103,11 @@ static const char* toString(AT_relate_limit t)
 static AT_field_unique field_unique(const XML_Char* value)
 {
   AT_field_unique t;
-  if (!xmlStrcasecmp(value,(XML_Char*)"true"))
+  if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("true")))
   {
     t = A_field_unique_true;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"false"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("false")))
   {
     t = A_field_unique_false;
   }
@@ -121,11 +121,11 @@ static AT_field_unique field_unique(const XML_Char* value)
 static AT_index_unique index_unique(const XML_Char* value)
 {
   AT_index_unique t;
-  if (!xmlStrcasecmp(value,(XML_Char*)"true"))
+  if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("true")))
   {
     t = A_index_unique_true;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"false"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("false")))
   {
     t = A_index_unique_false;
   }
@@ -140,11 +140,11 @@ static AT_index_unique index_unique(const XML_Char* value)
 static AT_field_indexed field_indexed(const XML_Char* value)
 {
   AT_field_indexed t;
-  if (!xmlStrcasecmp(value,(XML_Char*)"true"))
+  if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("true")))
   {
     t = A_field_indexed_true;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"false"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("false")))
   {
     t = A_field_indexed_false;
   }
@@ -158,11 +158,11 @@ static AT_field_indexed field_indexed(const XML_Char* value)
 static AT_relation_unidir relation_unidir(const XML_Char* value)
 {
   AT_relation_unidir t;
-  if (!xmlStrcasecmp(value,(XML_Char*)"true"))
+  if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("true")))
   {
     t = A_relation_unidir_true;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"false"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("false")))
   {
     t = A_relation_unidir_false;
   }
@@ -176,11 +176,11 @@ static AT_relation_unidir relation_unidir(const XML_Char* value)
 static AT_relate_unique relate_unique(const XML_Char* value)
 {
   AT_relate_unique t;
-  if (!xmlStrcasecmp(value,(XML_Char*)"true"))
+  if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("true")))
   {
     t = A_relate_unique_true;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"false"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("false")))
   {
     t = A_relate_unique_false;
   }
@@ -194,11 +194,11 @@ static AT_relate_unique relate_unique(const XML_Char* value)
 static AT_relate_limit relate_limit(const XML_Char* value)
 {
   AT_relate_limit t;
-  if (!xmlStrcasecmp(value,(XML_Char*)"one"))
+  if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("one")))
   {
     t = A_relate_limit_one;
   }
-  else if (!xmlStrcasecmp(value,(XML_Char*)"many"))
+  else if (!xmlStrcasecmp(value,(XML_Char*) LITESQL_L("many")))
   {
     t = A_relate_limit_many;
   }
@@ -261,7 +261,7 @@ private:
   IndexField* idxField;
 
   ParseState m_parseState;
-  vector<ParseState> history;
+  std::vector<ParseState> history;
 };
 
 }
@@ -269,10 +269,10 @@ private:
 void LitesqlParser::onStartElement(const XML_Char *fullname,
                                    const XML_Char **atts)
 {
-  //   Logger::report("starting " <<fullname );
+  //   Logger::report(LITESQL_L("starting ") <<fullname);
   history.push_back(m_parseState);
 
-  if (xmlStrEqual(fullname,(XML_Char*) Database::TAG ))
+  if (xmlStrEqual(fullname,(XML_Char*) Database::TAG))
   {
     if (m_parseState!=ROOT)
     {
@@ -281,10 +281,10 @@ void LitesqlParser::onStartElement(const XML_Char *fullname,
     else
     {
       m_parseState = DATABASE;
-      m_pObjectModel->db.name = safe((char*)xmlGetAttrValue(atts,"name"));
-      m_pObjectModel->db.include = safe((char*)xmlGetAttrValue(atts,"include"));
-      m_pObjectModel->db.nspace = safe((char*)xmlGetAttrValue(atts,"namespace"));
-      Logger::report("database = " + m_pObjectModel->db.name);
+      m_pObjectModel->db.name = safe((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("name")));
+      m_pObjectModel->db.include = safe((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("include")));
+      m_pObjectModel->db.nspace = safe((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("namespace")));
+      Logger::report(LITESQL_L("database = ") + m_pObjectModel->db.name);
     }
   } 
   else if (xmlStrEqual(fullname,(XML_Char*)Object::TAG))
@@ -295,30 +295,30 @@ void LitesqlParser::onStartElement(const XML_Char *fullname,
     }
     else
     {
-      m_pObjectModel->objects.push_back(obj = new Object(    (char*)xmlGetAttrValue(atts,"name"), 
-        safe((char*)xmlGetAttrValue(atts,"inherits"))));
-      Logger::report("object = " + obj->name);
+      m_pObjectModel->objects.push_back(obj = new Object(   (LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("name")), 
+        safe((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("inherits")))));
+      Logger::report(LITESQL_L("object = ") + obj->name);
       m_parseState = OBJECT; 
 
     }
   } 
   else if (xmlStrEqual(fullname,(XML_Char*)Field::TAG))
   {
-    Field* pNewField = new Field(   (char*)xmlGetAttrValue(atts,"name"), 
-                                    field_type(xmlGetAttrValue(atts,"type")),
-                                    safe(  (char*)xmlGetAttrValue(atts,"default")),
-                                    field_indexed(xmlGetAttrValue(atts,"indexed")),
-                                    field_unique(xmlGetAttrValue(atts,"unique"))
-      );
+    Field* pNewField = new Field(  (LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("name")), 
+                                    field_type(xmlGetAttrValue(atts, LITESQL_L("type"))),
+                                    safe( (LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("default"))),
+                                    field_indexed(xmlGetAttrValue(atts, LITESQL_L("indexed"))),
+                                    field_unique(xmlGetAttrValue(atts, LITESQL_L("unique")))
+     );
 
     switch(m_parseState)
     {
     case OBJECT:
       if (!obj) {
-        Logger::error("parsing field inside object, but currentObject == NULL ");
+        Logger::error(LITESQL_L("parsing field inside object, but currentObject == NULL "));
       }
       else {
-        Logger::report("field = ",(char*)xmlGetAttrValue(atts,"name") );
+        Logger::report(LITESQL_L("field = "),(LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("name")));
         obj->fields.push_back(fld = pNewField);
       };
       m_parseState = FIELD;
@@ -326,11 +326,11 @@ void LitesqlParser::onStartElement(const XML_Char *fullname,
 
     case RELATION:
       if (!rel) {
-        Logger::error("parsing field inside realtion, but currentRelation == NULL ");
+        Logger::error(LITESQL_L("parsing field inside realtion, but currentRelation == NULL "));
       }
       else
       {
-        Logger::report("field = ",(char*)xmlGetAttrValue(atts,"name") );
+        Logger::report(LITESQL_L("field = "),(LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("name")));
         rel->fields.push_back(rel_fld = pNewField);
       }
       m_parseState = FIELD;
@@ -343,7 +343,7 @@ void LitesqlParser::onStartElement(const XML_Char *fullname,
   }
   else if (xmlStrEqual(fullname,(XML_Char*)Index::TAG))
   {
-    Index* pIdx = new Index(index_unique(xmlGetAttrValue(atts,"unique")));
+    Index* pIdx = new Index(index_unique(xmlGetAttrValue(atts, LITESQL_L("unique"))));
     
     switch (m_parseState)
     {
@@ -372,7 +372,7 @@ void LitesqlParser::onStartElement(const XML_Char *fullname,
     }
     else
     {
-      IndexField idxField((char*)xmlGetAttrValue(atts,"name"));
+      IndexField idxField((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("name")));
       idx->fields.push_back(idxField);
     }    
     
@@ -388,9 +388,9 @@ void LitesqlParser::onStartElement(const XML_Char *fullname,
     {
       if (fld) 
       {
-        fld->value(Value((char*)xmlGetAttrValue(atts,"name"), (char*)xmlGetAttrValue(atts,"value")));
+        fld->value(Value((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("name")), (LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("value"))));
       }
-      Logger::report("value = " );
+      Logger::report(LITESQL_L("value = "));
     }
 
   } 
@@ -403,12 +403,12 @@ void LitesqlParser::onStartElement(const XML_Char *fullname,
     else
     {
       obj->methods.push_back(
-        mtd = new Method( safe((char*)xmlGetAttrValue(atts,"name")), 
-        safe((char*)xmlGetAttrValue(atts,"returntype")) 
-        )
-        );
+        mtd = new Method(safe((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("name"))), 
+        safe((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("returntype"))) 
+       )
+       );
       m_parseState= METHOD;
-      Logger::report("method = " );
+      Logger::report(LITESQL_L("method = "));
     }
 
   }
@@ -420,7 +420,9 @@ void LitesqlParser::onStartElement(const XML_Char *fullname,
     }
     else
     {
-      mtd->param(Param((char*)xmlGetAttrValue(atts,"name"),(char*)xmlGetAttrValue(atts,"type")));
+        std::string tempString;
+        LITESQL_ConvertString((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("type")), tempString);
+        mtd->param(Param((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("name")),tempString.c_str()));
     }
   }
   else if (xmlStrEqual(fullname,(XML_Char*)Relation::TAG))
@@ -431,11 +433,11 @@ void LitesqlParser::onStartElement(const XML_Char *fullname,
     }
     else
     {
-      m_pObjectModel->relations.push_back(rel = new Relation(  safe((char*)xmlGetAttrValue(atts,"id")), 
-        safe((char*)xmlGetAttrValue(atts,"name")),
-        relation_unidir(xmlGetAttrValue(atts,"unidir"))));
+      m_pObjectModel->relations.push_back(rel = new Relation( safe((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("id"))), 
+        safe((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("name"))),
+        relation_unidir(xmlGetAttrValue(atts, LITESQL_L("unidir")))));
 
-      Logger::report( "relation = " + rel->getName());
+      Logger::report( LITESQL_L("relation = ") + rel->getName());
 
       m_parseState = RELATION;
     }
@@ -449,27 +451,27 @@ void LitesqlParser::onStartElement(const XML_Char *fullname,
     else
     {
       rel->related.push_back(
-        new Relate( safe((char*)xmlGetAttrValue(atts,"object")), 
-        relate_limit(xmlGetAttrValue(atts,"limit")), 
-        relate_unique(xmlGetAttrValue(atts,"unique")), 
-        safe((char*)xmlGetAttrValue(atts,"handle"))));
-      Logger::report("relate = " );
+        new Relate(safe((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("object"))), 
+        relate_limit(xmlGetAttrValue(atts, LITESQL_L("limit"))), 
+        relate_unique(xmlGetAttrValue(atts, LITESQL_L("unique"))), 
+        safe((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("handle")))));
+      Logger::report(LITESQL_L("relate = "));
     }
   } 
-  else if (xmlStrEqual(fullname,(XML_Char*)"include"))
+  else if (xmlStrEqual(fullname,(XML_Char*) LITESQL_L("include")))
   {
-    string filename((char*)xmlGetAttrValue(atts,"name"));
+    LITESQL_String filename((LITESQL_Char*)xmlGetAttrValue(atts, LITESQL_L("name")));
     if (m_parseState!=DATABASE)
     {
       m_parseState = ERROR;
     }
     else
     {
-      Logger::report("include \"" + filename + '"' );
+      Logger::report(LITESQL_L("include \"") + filename + LITESQL_L('"'));
       ObjectModel includedModel;
       if (!includedModel.loadFromFile(filename)) 
       {
-        Logger::report("error on parsing included file \"" + filename + '"' );
+        Logger::report(LITESQL_L("error on parsing included file \"") + filename + LITESQL_L('"'));
       }
       m_pObjectModel->objects.insert(m_pObjectModel->objects.end(),includedModel.objects.begin(),includedModel.objects.end());
       m_pObjectModel->relations.insert(m_pObjectModel->relations.end(),includedModel.relations.begin(),includedModel.relations.end());
@@ -479,13 +481,13 @@ void LitesqlParser::onStartElement(const XML_Char *fullname,
   else
   {
     m_parseState = UNKNOWN;
-    Logger::error("unknown = ",fullname );
+    Logger::error(LITESQL_L("unknown = "),fullname);
   } 
 }
 
 void LitesqlParser::onEndElement(const XML_Char *fullname)
 {
-  //  Logger::report("ending ",fullname); 
+  //  Logger::report(LITESQL_L("ending "),fullname); 
   if (xmlStrEqual(fullname,(XML_Char*)Database::TAG))
   {
     if (m_parseState!=DATABASE)
@@ -494,7 +496,7 @@ void LitesqlParser::onEndElement(const XML_Char *fullname)
     }
     else
     {
-      Logger::report("end database " );
+      Logger::report(LITESQL_L("end database "));
       m_parseState = ROOT;
     }
   } 
@@ -506,7 +508,7 @@ void LitesqlParser::onEndElement(const XML_Char *fullname)
     }
     else
     {
-      Logger::report("end object " );
+      Logger::report(LITESQL_L("end object "));
       obj = NULL;
       fld= NULL;
       rel = NULL;
@@ -522,7 +524,7 @@ void LitesqlParser::onEndElement(const XML_Char *fullname)
     }
     else
     {
-      Logger::report("end field" );
+      Logger::report(LITESQL_L("end field"));
       fld = NULL;
       m_parseState = history.back();
     }
@@ -535,7 +537,7 @@ void LitesqlParser::onEndElement(const XML_Char *fullname)
     }
     else
     {
-      Logger::report("end index" );
+      Logger::report(LITESQL_L("end index"));
       idx = NULL;
       m_parseState = history.back();
     }
@@ -548,7 +550,7 @@ void LitesqlParser::onEndElement(const XML_Char *fullname)
     }
     else
     {
-      Logger::report("end indexfield" );
+      Logger::report(LITESQL_L("end indexfield"));
       m_parseState = history.back();
     }
   }
@@ -560,7 +562,7 @@ void LitesqlParser::onEndElement(const XML_Char *fullname)
     }
     else
     {
-      Logger::report("end value" );
+      Logger::report(LITESQL_L("end value"));
     }
 
   } 
@@ -573,7 +575,7 @@ void LitesqlParser::onEndElement(const XML_Char *fullname)
     else
     {
       m_parseState = OBJECT;
-      Logger::report("end method" );
+      Logger::report(LITESQL_L("end method"));
     }
 
   } 
@@ -585,7 +587,7 @@ void LitesqlParser::onEndElement(const XML_Char *fullname)
     }
     else
     {
-      Logger::report("end param" );
+      Logger::report(LITESQL_L("end param"));
     }
   } 
   else if (xmlStrEqual(fullname,(XML_Char*)Relation::TAG))
@@ -596,7 +598,7 @@ void LitesqlParser::onEndElement(const XML_Char *fullname)
     }
     else
     {
-      Logger::report("end relation " );
+      Logger::report(LITESQL_L("end relation "));
       rel = NULL;
       rel_fld = NULL;
       m_parseState = DATABASE;
@@ -611,10 +613,10 @@ void LitesqlParser::onEndElement(const XML_Char *fullname)
     else
     {
       rel_fld = NULL;
-      Logger::report("end relate" );
+      Logger::report(LITESQL_L("end relate"));
     }
   } 
-  else if (xmlStrEqual(fullname,(XML_Char*)"include"))
+  else if (xmlStrEqual(fullname,(XML_Char*) LITESQL_L("include")))
   {
     if (m_parseState!=INCLUDE)
     {
@@ -622,14 +624,14 @@ void LitesqlParser::onEndElement(const XML_Char *fullname)
     }
     else
     {
-      Logger::report("end include " );
+      Logger::report(LITESQL_L("end include "));
       m_parseState = DATABASE;
     }
   } 
   else 
   {
     m_parseState = history.back();
-    Logger::error( "end unknown " );
+    Logger::error( LITESQL_L("end unknown "));
   }
 
   history.pop_back();
@@ -652,7 +654,7 @@ for (std::vector<xml::Object* >::iterator it=objects.begin();
 */
 }
 
-bool ObjectModel::loadFromFile(const std::string& filename)
+bool ObjectModel::loadFromFile(const LITESQL_String& filename)
 {
   LitesqlParser parser(this);
 
@@ -669,7 +671,7 @@ bool ObjectModel::remove(xml::Field* field)
   if (field!=NULL)
   {  
     std::vector<Field*>::iterator found;
-    for ( std::vector<xml::Object* >::iterator it=objects.begin();
+    for (std::vector<xml::Object* >::iterator it=objects.begin();
           it !=objects.end();
           it++)
     {
@@ -697,4 +699,3 @@ bool ObjectModel::remove(xml::Object* object)
   }
   return false;
 }
-

@@ -5,6 +5,7 @@
  * Few windows specific bugs fixed by Axel Schmidt.
  * 
  * See LICENSE for copyright information. */
+#include "litesql_char.hpp"
 #include "compatibility.hpp"
 #include "odbc_backend.hpp"
 
@@ -22,7 +23,6 @@
 #endif
 
 using namespace litesql;
-using namespace std;
 
 size_t ODBCBackend::Result::fieldNum() const {
     return flds.size();
@@ -50,8 +50,8 @@ bool busy = false;
         switch(status)
         {
         case SQLITE_ERROR: case SQLITE_MISUSE: {
-                std::string error = ODBCBackend_errmsg(db);
-                throw UnknownError("step failed: " +toString(status)  + error);
+                LITESQL_String error = ODBCBackend_errmsg(db);
+                throw UnknownError(LITESQL_L("step failed: ") +toString(status)  + error);
             }
         case SQLITE_DONE: return Record(); break;
         case SQLITE_BUSY: case SQLITE_LOCKED:
@@ -68,9 +68,9 @@ bool busy = false;
     rec.reserve(columnNum);
     for (int i = 0; i < columnNum; i++) {
         if (ODBCBackend_column_type(stmt, i) == SQLITE_NULL)
-            rec.push_back("NULL");
+            rec.push_back(LITESQL_L("NULL"));
         else
-            rec.push_back((char*) ODBCBackend_column_text(stmt, i));
+            rec.push_back((LITESQL_Char*) ODBCBackend_column_text(stmt, i));
     }
 */
     return rec;
@@ -82,18 +82,18 @@ ODBCBackend::Cursor::~Cursor() {
 //    }
 }
 
-ODBCBackend::ODBCBackend(const string& connInfo) : /*db(NULL),*/ transaction(false) {
-    Split params(connInfo,";");
-    string database;
+ODBCBackend::ODBCBackend(const LITESQL_String& connInfo) : /*db(NULL),*/ transaction(false) {
+    Split params(connInfo, LITESQL_L(";"));
+    LITESQL_String database;
     for (size_t i = 0; i < params.size(); i++) {
-        Split param(params[i], "=");
+        Split param(params[i],  LITESQL_L("="));
         if (param.size() == 1)
             continue;
-        if (param[0] == "database")
+        if (param[0] ==  LITESQL_L("database"))
             database = param[1];
     }
     if (database.size() == 0)
-        throw DatabaseError("no database-param specified");
+        throw DatabaseError(LITESQL_L("no database-param specified"));
 
 /*    if (ODBCBackend_open(database.c_str(), &db)) {
         throw DatabaseError(ODBCBackend_errmsg(db));
@@ -103,29 +103,29 @@ ODBCBackend::ODBCBackend(const string& connInfo) : /*db(NULL),*/ transaction(fal
 bool ODBCBackend::supportsSequences() const {
     return false;
 }
-string ODBCBackend::getInsertID() const {
-    return toString(""/*ODBCBackend_last_insert_rowid(db)*/);
+LITESQL_String ODBCBackend::getInsertID() const {
+    return toString(LITESQL_L("")/*ODBCBackend_last_insert_rowid(db)*/);
 }
 void ODBCBackend::begin() const {
     if (!transaction) {
-        delete execute("BEGIN;");
+        delete execute(LITESQL_L("BEGIN;"));
         transaction = true;
     }
 }
 void ODBCBackend::commit() const {
     if (transaction) {
-        delete execute("COMMIT;");
+        delete execute(LITESQL_L("COMMIT;"));
         transaction = false;
     }
 }
 void ODBCBackend::rollback() const {
     if (transaction) {
-        delete execute("ROLLBACK;");
+        delete execute(LITESQL_L("ROLLBACK;"));
         transaction = false;
     }
 }
 
-static int callback(void *r, int argc, char **argv, char **azColName) {
+static int callback(void *r, int argc, LITESQL_Char **argv, LITESQL_Char **azColName) {
 /*
 ODBCBackend::Result * res = (ODBCBackend::Result*) r;
     if (res->flds.size() == 0) 
@@ -133,28 +133,28 @@ ODBCBackend::Result * res = (ODBCBackend::Result*) r;
             res->flds.push_back(azColName[i]);
     Record rec; 
     for (int i = 0; i < argc; i++) 
-        rec.push_back(argv[i] ? argv[i] : "NULL");   
+        rec.push_back(argv[i] ? argv[i] :  LITESQL_L("NULL"));   
     res->recs.push_back(rec);
 */
    return 0;
 }
 void ODBCBackend::throwError(int status) const {
 /*
-string error = ODBCBackend_errmsg(db);
-    error = toString(status) + "=status code : " + error;
+LITESQL_String error = ODBCBackend_errmsg(db);
+    error = toString(status) +  LITESQL_L("=status code : ") + error;
 */
    switch(status) {
     //case SQLITE_ERROR: throw SQLError(error);
     //case SQLITE_INTERNAL: throw InternalError(error);
     //case SQLITE_NOMEM: throw MemoryError(error);
     //case SQLITE_FULL: throw InsertionError(error);
-    default: throw UnknownError("compile failed: "/* + error*/);
+    default: throw UnknownError(LITESQL_L("compile failed: ")/* + error*/);
     }
 }
 
-Backend::Result* ODBCBackend::execute(string query) const {
+Backend::Result* ODBCBackend::execute(LITESQL_String query) const {
     Result * r = new Result;
-    char * errMsg;
+    LITESQL_Char * errMsg;
     int status;
     //do {
     //    status = ODBCBackend_exec(db, query.c_str(), callback, r, &errMsg);
@@ -169,14 +169,14 @@ Backend::Result* ODBCBackend::execute(string query) const {
     //} while (status != SQLITE_OK); 
     return r;    
 }
-Backend::Cursor* ODBCBackend::cursor(string query) const {
+Backend::Cursor* ODBCBackend::cursor(LITESQL_String query) const {
     while (1) {
 //        HSTMT stmt;
         //int status = ODBCBackend_prepare(db, query.c_str(), query.size(), 
         //                             &stmt, NULL);
 //if (status != SQLITE_OK || stmt == NULL) {
-//            string error = ODBCBackend_errmsg(db);
-//            error = toString(status) + "=status code : " + error;
+//            LITESQL_String error = ODBCBackend_errmsg(db);
+//            error = toString(status) +  LITESQL_L("=status code : ") + error;
 //            switch(status) {
 //            case SQLITE_BUSY: 
 //            case SQLITE_LOCKED: 

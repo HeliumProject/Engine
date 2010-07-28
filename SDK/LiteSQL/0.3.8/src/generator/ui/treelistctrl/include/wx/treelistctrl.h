@@ -15,7 +15,7 @@
 #define TREELISTCTRL_H
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "treelistctrl.h"
+    #pragma interface  LiteSQL_L( "treelistctrl.h" )
 #endif
 
 #include <wx/treectrl.h>
@@ -233,7 +233,7 @@ public:
     // returns the number of columns in the ctrl
     int GetColumnCount() const;
 
-    // tells which column is the "main" one, i.e. the "threaded" one
+    // tells which column is the  LiteSQL_L( "main" ) one, i.e. the  LiteSQL_L( "threaded" ) one
     void SetMainColumn (int column);
     int GetMainColumn() const;
 
@@ -368,11 +368,11 @@ public:
     // get the parent of this item (may return NULL if root)
     wxTreeItemId GetItemParent (const wxTreeItemId& item) const;
 
-    // for this enumeration function you must pass in a "cookie" parameter
+    // for this enumeration function you must pass in a  LiteSQL_L( "cookie" ) parameter
     // which is opaque for the application but is necessary for the library
     // to make these functions reentrant (i.e. allow more than one
     // enumeration on one and the same object simultaneously). Of course,
-    // the "cookie" passed to GetFirstChild() and GetNextChild() should be
+    // the  LiteSQL_L( "cookie" ) passed to GetFirstChild() and GetNextChild() should be
     // the same!
 
     // get child of this item
@@ -529,7 +529,7 @@ protected:
     // header window, responsible for column visualization and manipulation
     wxTreeListHeaderWindow* m_header_win;
 
-    // main window, the "true" tree ctrl
+    // main window, the  LiteSQL_L( "true" ) tree ctrl
     wxTreeListMainWindow* m_main_win;
 
     void CalculateAndSetHeaderHeight();
@@ -544,4 +544,3 @@ private:
 };
 
 #endif // TREELISTCTRL_H
-

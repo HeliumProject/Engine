@@ -6,11 +6,11 @@
 
 #ifndef __litesql_operations_hpp
 #define __litesql_operations_hpp
+#include "litesql_char.hpp"
 #include "litesql/datasource.hpp"
 /** \file operations.hpp 
  * select<T>, intersect<T>, union_<T>, except<T> */
 namespace litesql {
-using namespace std;
 /** returns DataSource for accessing objects of type T */
 template <class T>
 litesql::DataSource<T> select(const litesql::Database & db, 
@@ -22,7 +22,7 @@ litesql::DataSource<T> select(const litesql::Database & db,
 template <class T>
 litesql::DataSource<T> intersect(const litesql::DataSource<T>& ds1, 
                                  const litesql::DataSource<T>& ds2) {
-    std::string sel = ds1.idQuery().asString() + " INTERSECT " 
+    LITESQL_String sel = ds1.idQuery().asString() +  LITESQL_L(" INTERSECT ") 
         + ds2.idQuery().asString();
     return litesql::DataSource<T>(ds1.getDatabase(), T::Id.in(sel));
 }
@@ -30,7 +30,7 @@ litesql::DataSource<T> intersect(const litesql::DataSource<T>& ds1,
 template <class T>
 litesql::DataSource<T> union_(const litesql::DataSource<T>& ds1, 
                               const litesql::DataSource<T>& ds2) {
-    std::string sel = ds1.idQuery().asString() + " UNION " 
+    LITESQL_String sel = ds1.idQuery().asString() +  LITESQL_L(" UNION ") 
         + ds2.idQuery().asString();
     return litesql::DataSource<T>(ds1.getDatabase(), T::Id.in(sel));
 }
@@ -39,7 +39,7 @@ litesql::DataSource<T> union_(const litesql::DataSource<T>& ds1,
 template <class T>
 litesql::DataSource<T> except(const litesql::DataSource<T>& ds1, 
                               const litesql::DataSource<T>& ds2) {
-    std::string sel = ds1.idQuery().asString() + " EXCEPT " 
+    LITESQL_String sel = ds1.idQuery().asString() +  LITESQL_L(" EXCEPT ") 
         + ds2.idQuery().asString();
     return litesql::DataSource<T>(ds1.getDatabase(), T::Id.in(sel));
 }

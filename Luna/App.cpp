@@ -269,7 +269,6 @@ int App::OnExit()
     m_TrackerThread.Wait();
 
     // Save preferences
-    ::Luna::GetApplicationPreferences()->SavePreferences();
     SavePreferences();
 
     m_InitializerStack.Cleanup();
@@ -362,7 +361,7 @@ int Main ( int argc, const tchar** argv )
     //success &= processor.AddOption( new FlagOption(  , "pipe", "use pipe for console connection" ), error ); 
     
     bool disableTracker = false;
-    success &= processor.AddOption( new FlagOption( &disableTracker, "disable_tracker", "disable Asset Tracker" ), error );
+    success &= processor.AddOption( new FlagOption( &disableTracker, TXT( "disable_tracker" ), TXT( "disable Asset Tracker" ) ), error );
     //GetAppPreferences()->UseTracker( disableTracker );
 
     //success &= processor.AddOption( new FlagOption(  , WindowSettings::s_Reset, "reset all window positions" ), error );

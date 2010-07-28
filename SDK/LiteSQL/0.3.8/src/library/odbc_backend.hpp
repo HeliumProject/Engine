@@ -13,7 +13,7 @@
 //#include <sql.h>
 //#include <sqlext.h>
 
-
+#include "litesql_char.hpp"
 #include "litesql/except.hpp"
 #include "litesql/types.hpp"
 #include "litesql/string.hpp"
@@ -22,7 +22,6 @@
 #include <string>
 
 namespace litesql {
-using namespace std;
 /** ODBC - backend */
 class ODBCBackend : public Backend {
     mutable bool transaction;
@@ -51,14 +50,14 @@ public:
         virtual Record fetchOne();
         virtual ~Cursor();
     };
-    ODBCBackend(const string& database);
+    ODBCBackend(const LITESQL_String& database);
     virtual bool supportsSequences() const;
-    virtual string getInsertID() const;
+    virtual LITESQL_String getInsertID() const;
     virtual void begin() const;
     virtual void commit() const;
     virtual void rollback() const;
-    Backend::Result* execute(string query) const;
-    Backend::Cursor* cursor(string query) const;
+    Backend::Result* execute(LITESQL_String query) const;
+    Backend::Cursor* cursor(LITESQL_String query) const;
     virtual ~ODBCBackend();
 };
 }

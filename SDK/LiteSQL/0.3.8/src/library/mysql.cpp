@@ -7,12 +7,11 @@
 #include "mysql.hpp"
 #ifdef HAVE_LIBMYSQLCLIENT
 #include <string>
-
+#include "litesql_char.hpp"
 #include "config-win.h"
 #include <mysql.h>
 
 using namespace litesql;
-using namespace std;
 
 
 /** MySQL - result */
@@ -68,29 +67,29 @@ Records MySQL::Result::records() const {
             break;
         recs[i].reserve(fieldnum);
         for (size_t i2 = 0; i2 < fieldnum; i2++) {
-            recs[i].push_back(row[i2] ? row[i2] : "NULL");
+            recs[i].push_back(row[i2] ? row[i2] :  LITESQL_L("NULL"));
         }
     }
     return recs;
 }
 
-MySQL::MySQL(const string& connInfo) {
-    Split params(connInfo,";");
-    host = "localhost";
+MySQL::MySQL(const LITESQL_String& connInfo) {
+    Split params(connInfo, LITESQL_L(";"));
+    host =  LITESQL_L("localhost");
     int port = 0;
     for (size_t i = 0; i < params.size(); i++) {
-        Split param(params[i], "=");
+        Split param(params[i],  LITESQL_L("="));
         if (param.size() == 1)
             continue;
-        if (param[0] == "host")
+        if (param[0] ==  LITESQL_L("host"))
             host = param[1];
-        else if (param[0] == "database")
+        else if (param[0] ==  LITESQL_L("database"))
             database = param[1];
-        else if (param[0] == "password")
+        else if (param[0] ==  LITESQL_L("password"))
             passwd = param[1];
-        else if (param[0] == "user")
+        else if (param[0] ==  LITESQL_L("user"))
             user = param[1];
-        else if (param[0] == "port")
+        else if (param[0] ==  LITESQL_L("port"))
             port = atoi(param[1]);
     }
     conn = new MYSQL;
@@ -109,23 +108,23 @@ MySQL::~MySQL() {
 bool MySQL::supportsSequences() const {
     return false;
 }
-string MySQL::getRowIDType() const {
-    return "INTEGER PRIMARY KEY AUTO_INCREMENT";
+LITESQL_String MySQL::getRowIDType() const {
+    return  LITESQL_L("INTEGER PRIMARY KEY AUTO_INCREMENT");
 }
-string MySQL::getInsertID() const {
+LITESQL_String MySQL::getInsertID() const {
     return toString(mysql_insert_id(conn));
 }
 void MySQL::begin() const {
-  delete execute("BEGIN");
+  delete execute(LITESQL_L("BEGIN"));
 }
 void MySQL::commit() const {
-  delete execute("COMMIT");
+  delete execute(LITESQL_L("COMMIT"));
 }
 void MySQL::rollback() const {
-  delete execute("ROLLBACK");
+  delete execute(LITESQL_L("ROLLBACK"));
 }
 
-Backend::Result* MySQL::execute(const string& query) const {
+Backend::Result* MySQL::execute(const LITESQL_String& query) const {
     if (mysql_real_query(conn, query.c_str(), query.size())) {
         throw SQLError(mysql_error(conn));    
     }
@@ -140,13 +139,13 @@ class MySQL::Cursor : public Backend::Cursor {
         MYSQL_RES * res;
         size_t fieldNum;
     public:
-        Cursor(const MySQL* const backend, string q);
+        Cursor(const MySQL* const backend, LITESQL_String q);
         virtual ~Cursor();
 
         virtual Record fetchOne();
 };
 
-MySQL::Cursor::Cursor(const MySQL * const backend, string q)
+MySQL::Cursor::Cursor(const MySQL * const backend, LITESQL_String q)
      : pBackend(backend),
        res(NULL) 
     {
@@ -167,7 +166,7 @@ Record MySQL::Cursor::fetchOne() {
     }
     Record rec(fieldNum);
     for (size_t i = 0; i < fieldNum; i++)
-        rec.push_back(row[i] ? row[i] : "NULL");
+        rec.push_back(row[i] ? row[i] :  LITESQL_L("NULL"));
     return rec;
 }
 MySQL::Cursor::~Cursor() {
@@ -176,7 +175,7 @@ MySQL::Cursor::~Cursor() {
     mysql_free_result(res);
 }
 
-Backend::Cursor* MySQL::cursor(const string& query) const {
+Backend::Cursor* MySQL::cursor(const LITESQL_String& query) const {
   return new Cursor(this,query);       
 }
 

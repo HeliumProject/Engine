@@ -735,8 +735,24 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\generator\litesql-gen.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\generator\litesql-gen.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\generator\logger.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						GeneratePreprocessedFile="0"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\src\generator\logger.hpp"
@@ -815,7 +831,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\include\litesql_char.h"
+				RelativePath=".\include\litesql_char.cpp"
+				>
+				<FileConfiguration
+					Name="Debug Unicode|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						GeneratePreprocessedFile="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\include\litesql_char.hpp"
 				>
 			</File>
 			<File

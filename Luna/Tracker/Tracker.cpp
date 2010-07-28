@@ -14,7 +14,7 @@ int Tracker::s_InitCount = 0;
 Nocturnal::InitializerStack Tracker::s_InitializerStack;
 
 Tracker::Tracker()
-: m_TrackerDB("sqlite3", "database=trackerDBGenerated.db")
+: m_TrackerDB(TXT("sqlite3"), TXT("database=trackerDBGenerated.db"))
 , m_StopTracking( false )
 , m_InitialIndexingCompleted( false )
 , m_IndexingFailed( false )
@@ -95,7 +95,7 @@ void Tracker::TrackEverything()
         // find all the files in the project
         {
             Profile::Timer timer;
-            m_Directory.GetFiles( assetFiles, "*.*", true );
+            m_Directory.GetFiles( assetFiles, TXT("*.*"), true );
             Log::Print( m_InitialIndexingCompleted ? Log::Levels::Verbose : Log::Levels::Default, TXT("Tracker: File reslover database lookup took %.2fms\n"), timer.Elapsed() );
         }
 
@@ -135,7 +135,7 @@ void Tracker::TrackEverything()
                 }
                 catch( const litesql::NotFound& )
                 {
-                    Log::Debug( "Caught litesql::NotFound excption when selecting file from DB" );
+                    Log::Debug( TXT("Caught litesql::NotFound excption when selecting file from DB" ));
                 }
 
                 if ( assetFilePath.FullExtension() == TXT( "nrb" ) )

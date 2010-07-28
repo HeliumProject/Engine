@@ -1,6 +1,6 @@
 #ifndef litesql_xmlobjects_hpp
 #define litesql_xmlobjects_hpp
-
+#include "litesql_char.hpp"
 #include <string>
 #include <vector>
 #include <stdexcept>
@@ -11,34 +11,33 @@
 #include "litesql/string.hpp"
 
 namespace xml {
-using namespace std;
 using namespace litesql;
-string safe(const char *s);
-string attribute(const string& name, const string& value);
-string endtag(const string& name);
-string makeDBName(const string& s);
+LITESQL_String safe(const LITESQL_Char *s);
+LITESQL_String attribute(const LITESQL_String& name, const LITESQL_String& value);
+LITESQL_String endtag(const LITESQL_String& name);
+LITESQL_String makeDBName(const LITESQL_String& s);
 
 class Value {
 public:
-    static const char* TAG;
+    static const LITESQL_Char* TAG;
 
-    string name, value;
-    Value(const string& n, const string& v) : name(n), value(v) {}
+    LITESQL_String name, value;
+    Value(const LITESQL_String& n, const LITESQL_String& v) : name(n), value(v) {}
 };
 
 class IndexField {
 public:
-    static const char* TAG;
+    static const LITESQL_Char* TAG;
 
-    string name;
-    IndexField(const string& n) : name(n) {}
+    LITESQL_String name;
+    IndexField(const LITESQL_String& n) : name(n) {}
 };
 
 class Index {
 public:
-    static const char* TAG;
+    static const LITESQL_Char* TAG;
 
-    vector<IndexField> fields;
+    std::vector<IndexField> fields;
     AT_index_unique unique;
     Index(AT_index_unique u) : unique(u) {}
 
@@ -49,16 +48,16 @@ public:
 
 class Field {
 public:
-    static const char* TAG;
+    static const LITESQL_Char* TAG;
 
-    string name;
-    string fieldTypeName;
+    LITESQL_String name;
+    LITESQL_String fieldTypeName;
     AT_field_type type;
-    string default_;
+    LITESQL_String default_;
     AT_field_indexed indexed;
     AT_field_unique unique;
-    vector<Value> values;
-    Field(const string& n, AT_field_type t, const string& d, AT_field_indexed i, AT_field_unique u) 
+    std::vector<Value> values;
+    Field(const LITESQL_String& n, AT_field_type t, const LITESQL_String& d, AT_field_indexed i, AT_field_unique u) 
         : name(n), fieldTypeName(capitalize(n)), type(t), default_(d), indexed(i), unique(u) {
     }
     void value(const Value& v) {
@@ -66,7 +65,7 @@ public:
     }
     
     bool isEditable() {
-        return (name!="id") && (name!="type");  
+        return (name!= LITESQL_L("id")) && (name!= LITESQL_L("type"));  
     }
 
     bool isIndexed() const {
@@ -92,69 +91,69 @@ public:
          return true;
        }
     }
-    string getQuotedDefaultValue() const {
+    LITESQL_String getQuotedDefaultValue() const {
         if (hasQuotedValues())
-            return "\"" + default_ + "\"";
+            return  LITESQL_L("\"") + default_ +  LITESQL_L("\"");
         if (default_.size() == 0)
         {
           switch(type) {
             case A_field_type_float: 
             case A_field_type_double: 
-              return "0.0";
+              return  LITESQL_L("0.0");
             case A_field_type_blob: 
-              return "Blob::nil";
+              return  LITESQL_L("Blob::nil");
             default:
-              return "0";
+              return  LITESQL_L("0");
           }
         }
         return default_;
     }
-    string getSQLType() const {
+    LITESQL_String getSQLType() const {
        switch(type) {
-           case A_field_type_integer: return "INTEGER";
-           case A_field_type_string: return "TEXT";
-           case A_field_type_float: return "FLOAT";
-           case A_field_type_double: return "DOUBLE";
-           case A_field_type_boolean: return "INTEGER";
-           case A_field_type_date: return "INTEGER";
-           case A_field_type_time: return "INTEGER";
-           case A_field_type_datetime: return "INTEGER";
-           case A_field_type_blob: return "BLOB";
-           default: return "";
+           case A_field_type_integer: return  LITESQL_L("INTEGER");
+           case A_field_type_string: return  LITESQL_L("TEXT");
+           case A_field_type_float: return  LITESQL_L("FLOAT");
+           case A_field_type_double: return  LITESQL_L("DOUBLE");
+           case A_field_type_boolean: return  LITESQL_L("INTEGER");
+           case A_field_type_date: return  LITESQL_L("INTEGER");
+           case A_field_type_time: return  LITESQL_L("INTEGER");
+           case A_field_type_datetime: return  LITESQL_L("INTEGER");
+           case A_field_type_blob: return  LITESQL_L("BLOB");
+           default: return  LITESQL_L("");
        }
     }
-    string getCPPType() const {
+    LITESQL_String getCPPType() const {
        switch(type) {
-           case A_field_type_integer: return "int";
-           case A_field_type_string: return "std::string";
-           case A_field_type_float: return "float";
-           case A_field_type_double: return "double";
-           case A_field_type_boolean: return "bool";
-           case A_field_type_date: return "litesql::Date";
-           case A_field_type_time: return "litesql::Time";
-           case A_field_type_datetime: return "litesql::DateTime";
-           case A_field_type_blob: return "litesql::Blob";
-           default: return "";
+           case A_field_type_integer: return  LITESQL_L("int");
+           case A_field_type_string: return  LITESQL_L("LITESQL_String");
+           case A_field_type_float: return  LITESQL_L("float");
+           case A_field_type_double: return  LITESQL_L("double");
+           case A_field_type_boolean: return  LITESQL_L("bool");
+           case A_field_type_date: return  LITESQL_L("litesql::Date");
+           case A_field_type_time: return  LITESQL_L("litesql::Time");
+           case A_field_type_datetime: return  LITESQL_L("litesql::DateTime");
+           case A_field_type_blob: return  LITESQL_L("litesql::Blob");
+           default: return  LITESQL_L("");
        }
     }
 };
 
 class Param {
 public:
-    static const char* TAG;
+    static const LITESQL_Char* TAG;
 
-  string name;
+  LITESQL_String name;
     AT_param_type type;
-    Param(const string& n, AT_param_type t) : name(n), type(t) {}
+    Param(const LITESQL_String& n, AT_param_type t) : name(n), type(t) {}
     
 };
 class Method {
 public:
-    static const char* TAG;
+    static const LITESQL_Char* TAG;
 
-    string name, returnType;
-    vector<Param> params;
-    Method(const string& n, const string& rt) 
+    LITESQL_String name, returnType;
+    std::vector<Param> params;
+    Method(const LITESQL_String& n, const LITESQL_String& rt) 
         : name(n), returnType(rt) {}
     void param(const Param& p) {
         params.push_back(p);
@@ -165,31 +164,31 @@ class Relate;
 class Object;
 class RelationHandle {
 public:
-    string name;
+    LITESQL_String name;
     Relation * relation;
     Relate * relate;
     Object * object;
-    vector< pair<Object*,Relate*> > destObjects;
+    std::vector< std::pair<Object*,Relate*> > destObjects;
 
-    RelationHandle(const string& n, Relation * r, Relate * rel, Object * o) 
+    RelationHandle(const LITESQL_String& n, Relation * r, Relate * rel, Object * o) 
         : name(n), relation(r), relate(rel), object(o) {}
 };
 class Relate {
 public:  
-  static const char* TAG;
+  static const LITESQL_Char* TAG;
   
-    string objectName;
-    string fieldTypeName, fieldName;
-    string getMethodName;
+    LITESQL_String objectName;
+    LITESQL_String fieldTypeName, fieldName;
+    LITESQL_String getMethodName;
     size_t paramPos;
     AT_relate_limit limit;
     AT_relate_unique unique;
-    string handle;
-    Relate(const string& on, AT_relate_limit l, AT_relate_unique u, const string& h) 
+    LITESQL_String handle;
+    Relate(const LITESQL_String& on, AT_relate_limit l, AT_relate_unique u, const LITESQL_String& h) 
         : objectName(on), limit(l), unique(u), handle(h) {
-        if (hasLimit() && isUnique())
-            throw logic_error("both limit and unique specified in relate: line " /*+ 
-                              toString(yylineno)*/);
+            if (hasLimit() && isUnique()) {
+                throw std::logic_error("both limit and unique specified in relate: line " /*+ toString(yylineno)*/);
+            }
     }
     bool hasLimit() const {
         return limit == A_relate_limit_one;
@@ -208,22 +207,22 @@ public:
 };
 class Relation {
 public:
-    static const char* TAG;
+    static const LITESQL_Char* TAG;
 
-    string id, name;
-    string table;
+    LITESQL_String id, name;
+    LITESQL_String table;
     AT_relation_unidir unidir;
-    vector<Relate*> related;
-    vector<Field*> fields;
-    vector<Index*> indices;
-    Relation(const string& i, const string& n, AT_relation_unidir ud) 
+    std::vector<Relate*> related;
+    std::vector<Field*> fields;
+    std::vector<Index*> indices;
+    Relation(const LITESQL_String& i, const LITESQL_String& n, AT_relation_unidir ud) 
         : id(i), name(n), unidir(ud) {}
-    string getName() const {
+    LITESQL_String getName() const {
         if (name.size() == 0) {
-            string result;
+            LITESQL_String result;
             for (size_t i = 0; i < related.size(); i++) 
                 result += related[i]->objectName;
-            return result + "Relation" + id;
+            return result +  LITESQL_L("Relation") + id;
         }
         return name;
     }
@@ -231,7 +230,7 @@ public:
         return unidir == A_relation_unidir_true;
     }
     int sameTypes() const {
-        map<string, int> names;
+        std::map<LITESQL_String, int> names;
         int max = 0;
         for (size_t i = 0; i < related.size(); i++) {
             if (names.find(related[i]->objectName) == names.end()) 
@@ -242,50 +241,50 @@ public:
         }
         return max;
     }
-    int countTypes(const string& name) const {
+    int countTypes(const LITESQL_String& name) const {
         int res = 0;
         for (size_t i = 0; i < related.size(); i++)
             if (related[i]->objectName == name)
                 res++;
         return res;
     }
-    string getTable() const {
+    LITESQL_String getTable() const {
         Split res(related.size());
         for (size_t i = 0; i < related.size(); i++)
             res.push_back(related[i]->objectName);
         res.push_back(id);
 
-        return makeDBName(res.join("_"));
+        return makeDBName(res.join(LITESQL_L("_")));
     }
 };
 class Object {
 public:
     static const Object DEFAULT_BASE;
-    static const char* TAG;
+    static const LITESQL_Char* TAG;
 
-    string name, inherits;
-    vector<Field*> fields;
-    vector<Method*> methods;
-    vector<Index*> indices;
-    vector<RelationHandle*> handles;
-    map<Relation*, vector<Relate*> > relations;
+    LITESQL_String name, inherits;
+    std::vector<Field*> fields;
+    std::vector<Method*> methods;
+    std::vector<Index*> indices;
+    std::vector<RelationHandle*> handles;
+    std::map<Relation*, std::vector<Relate*> > relations;
     Object* parentObject;
-    vector<Object*> children;
+    std::vector<Object*> children;
 
-    Object(const string& n, const string& i) : name(n), inherits(i),
+    Object(const LITESQL_String& n, const LITESQL_String& i) : name(n), inherits(i),
         parentObject(NULL) {
         if (i.size() == 0) {
-            inherits = "litesql::Persistent";
-            fields.push_back(new Field("id", A_field_type_integer, "", 
+            inherits =  LITESQL_L("litesql::Persistent");
+            fields.push_back(new Field(LITESQL_L("id"), A_field_type_integer,  LITESQL_L(""), 
                          A_field_indexed_false, A_field_unique_false));
-            fields.push_back(new Field("type", A_field_type_string, "", 
+            fields.push_back(new Field(LITESQL_L("type"), A_field_type_string,  LITESQL_L(""), 
                         A_field_indexed_false, A_field_unique_false));
         }
     }
 
     bool inheritsFromDefault() const
     {
-      return inherits == "litesql::Persistent";
+      return inherits ==  LITESQL_L("litesql::Persistent");
     }
 
     size_t getLastFieldOffset() const {
@@ -293,7 +292,7 @@ public:
             return fields.size();
         else return parentObject->getLastFieldOffset() + fields.size();
     }
-    void getAllFields(vector<Field*>& flds) const {
+    void getAllFields(std::vector<Field*>& flds) const {
         if (parentObject)
             parentObject->getAllFields(flds);
         for (size_t i = 0; i < fields.size(); i++)
@@ -311,75 +310,75 @@ public:
         else
             return parentObject->getBaseObject();
     }
-    string getTable() const {
-        return makeDBName(name + "_");
+    LITESQL_String getTable() const {
+        return makeDBName(name +  LITESQL_L("_"));
     }
-    string getSequence() const {
-        return makeDBName(name + "_seq");
+    LITESQL_String getSequence() const {
+        return makeDBName(name +  LITESQL_L("_seq"));
     }
 };
 class Database {
 public:
-  static const char* TAG;
+  static const LITESQL_Char* TAG;
     class Sequence {
     public:
-        string name, table;
-        string getSQL() {
-            return "CREATE SEQUENCE " + name + " START 1 INCREMENT 1";
+        LITESQL_String name, table;
+        LITESQL_String getSQL() {
+            return  LITESQL_L("CREATE SEQUENCE ") + name +  LITESQL_L(" START 1 INCREMENT 1");
         }
     };
     class DBField {
     public:
-        string name, type, extra;
+        LITESQL_String name, type, extra;
         bool primaryKey;
         Field* field;
-        vector<DBField*> references;
+        std::vector<DBField*> references;
         DBField() : primaryKey(false) {}
-        string getSQL(const string& rowIDType) {
+        LITESQL_String getSQL(const LITESQL_String& rowIDType) {
             if (primaryKey)
                 type = rowIDType;
-            return name + " " + type + extra;
+            return name +  LITESQL_L(" ") + type + extra;
         }
     };
     class DBIndex {
     public:
-        string name, table;
+        LITESQL_String name, table;
         bool unique;
-        vector<DBField*> fields;
+        std::vector<DBField*> fields;
         DBIndex() : unique(false) {}
-        string getSQL() {
+        LITESQL_String getSQL() {
             litesql::Split flds;
             for (size_t i = 0; i < fields.size(); i++)
                 flds.push_back(fields[i]->name);
-            string uniqueS;
+            LITESQL_String uniqueS;
             if (unique)
-                uniqueS = " UNIQUE";
-            return "CREATE" + uniqueS + " INDEX " + name + " ON " + table + " (" + flds.join(",") + ")";
+                uniqueS =  LITESQL_L(" UNIQUE");
+            return  LITESQL_L("CREATE") + uniqueS +  LITESQL_L(" INDEX ") + name +  LITESQL_L(" ON ") + table +  LITESQL_L(" (") + flds.join(LITESQL_L(",")) +  LITESQL_L(")");
         }
     };
     class Table {
     public:
-        string name;
-        vector<DBField*> fields;
-        string getSQL(const string& rowIDType) {
+        LITESQL_String name;
+        std::vector<DBField*> fields;
+        LITESQL_String getSQL(const LITESQL_String& rowIDType) {
             litesql::Split flds;
             for (size_t i = 0; i < fields.size(); i++)
                 flds.push_back(fields[i]->getSQL(rowIDType));
-            return "CREATE TABLE " + name + " (" + flds.join(",") + ")";
+            return  LITESQL_L("CREATE TABLE ") + name +  LITESQL_L(" (") + flds.join(LITESQL_L(",")) +  LITESQL_L(")");
         }
 
     };
-    vector<Sequence*> sequences;
-    vector<DBIndex*> indices;
-    vector<Table*> tables;
-    string name, include, nspace;
+    std::vector<Sequence*> sequences;
+    std::vector<DBIndex*> indices;
+    std::vector<Table*> tables;
+    LITESQL_String name, include, nspace;
 
     bool hasNamespace() const { return !nspace.empty(); }
 };
 
 void init(Database& db, 
-          vector<Object*>& objects,
-          vector<Relation*>& relations);
+          std::vector<Object*>& objects,
+          std::vector<Relation*>& relations);
 
 
 }

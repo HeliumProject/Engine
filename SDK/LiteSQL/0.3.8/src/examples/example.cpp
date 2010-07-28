@@ -4,23 +4,23 @@
 #include "exampledatabase.hpp"
 // provide implementation for Person::sayHello
 void example::Person::sayHello() {
-    std::cout << "Hi! My name is " << name 
-        << " and I am " << age << " years old." << std::endl;
+    std::LiteSQL_cout <<  LiteSQL_L( "Hi! My name is " ) << name 
+        <<  LiteSQL_L( " and I am " ) << age <<  LiteSQL_L( " years old." ) << std::endl;
 }
 
 void example::user::sayHello() {
-    std::cout << "Hi! My name is " << name << std::endl;
+    std::LiteSQL_cout <<  LiteSQL_L( "Hi! My name is " ) << name << std::endl;
 }
 
 // no name collisions expected
 using namespace litesql;
 using namespace example;
 
-int main(int argc, char **argv) {
+int main(int argc, LiteSQL_Char **argv) {
 
     try {
         // using SQLite3 as backend
-        ExampleDatabase db("sqlite3", "database=example.db");
+        ExampleDatabase db( LiteSQL_L( "sqlite3" ),  LiteSQL_L( "database=example.db" ));
         // create tables, sequences and indexes
         db.verbose = true;
         
@@ -33,26 +33,26 @@ int main(int argc, char **argv) {
 
         // create couple of Person-objects
         Person jeff(db);
-        jeff.name = "Jeff";
+        jeff.name =  LiteSQL_L( "Jeff" );
         jeff.sex = Person::Sex::Male;
         jeff.age = 32;
         jeff.aDoubleValue = 0.32;
-        Blob image_jeff("abc",4);
+        Blob image_jeff( LiteSQL_L( "abc" ),4);
         jeff.image = image_jeff;
         // store Jeff to database
         jeff.update();
         Person jill(db);
-        jill.name = "Jill";
+        jill.name =  LiteSQL_L( "Jill" );
         jill.sex = Person::Sex::Female;
         jill.image = Blob::nil;
         jill.age = 33;
         jill.update();
         Person jack(db);
-        jack.name = "Jack";
+        jack.name =  LiteSQL_L( "Jack" );
         jack.sex = Person::Sex::Male;
         jack.update();
         Person jess(db);
-        jess.name = "Jess";
+        jess.name =  LiteSQL_L( "Jess" );
         jess.sex = Person::Sex::Female;
         jess.update();
         // build up relationships between Persons 
@@ -84,14 +84,14 @@ int main(int argc, char **argv) {
         jessRole.school().link(school);
         
         // count Persons
-        cout << "There are " << select<Person>(db).count() 
-             << " persons." << endl;
+        LiteSQL_cout <<  LiteSQL_L( "There are " ) << select<Person>(db).count() 
+             <<  LiteSQL_L( " persons." ) << std::endl;
 	
         // select all Persons and order them by age
-        vector<Person> family = select<Person>(db).orderBy(Person::Age).all();
+        std::vector<Person> family = select<Person>(db).orderBy(Person::Age).all();
         // show results
-        for (vector<Person>::iterator i = family.begin(); i != family.end(); i++)
-            cout << toString(*i) << endl;
+        for (std::vector<Person>::iterator i = family.begin(); i != family.end(); i++)
+            LiteSQL_cout << toString(*i) << std::endl;
              
         // select intersection of Jeff's and Jill's children and
         // iterate results with cursor
@@ -105,14 +105,14 @@ int main(int argc, char **argv) {
         try {
             select<Person>(db, Person::Id == 100).one();
         } catch (NotFound e) {
-            cout << "No Person with id 100" << endl;
+            LiteSQL_cout <<  LiteSQL_L( "No Person with id 100" ) << std::endl;
         }
         // commit transaction
         db.commit();
         // clean up 
 //        db.drop();
     } catch (Except e) {
-        cerr << e << endl;
+        LiteSQL_cerr << e << std::endl;
         return -1;
     }
     return 0;

@@ -1,3 +1,4 @@
+#include "litesql_char.hpp"
 #include <iostream>
 
 #include <string.h>
@@ -6,7 +7,6 @@
 #include "xmlparser.hpp"
 #include "logger.hpp"
 
-using namespace std;
 using namespace litesql;
 using namespace xml;
 
@@ -30,21 +30,21 @@ XmlParser::~XmlParser()
    XML_ParserFree(saxHandler);
 }
 
-bool XmlParser::parseFile(const std::string& filename)
+bool XmlParser::parseFile(const LITESQL_String& filename)
 {
-  saxHandler = XML_ParserCreate("UTF-8");
+  saxHandler = XML_ParserCreate(LITESQL_L("UTF-8"));
   XML_SetUserData(saxHandler,this);
   XML_SetElementHandler(saxHandler,
     XMLParser_xmlSAX2StartElement,
     XMLParser_xmlSAX2EndElement);
 
   const size_t BUFF_SIZE = 255;
-  FILE* docfd = fopen(filename.c_str(),"r");
+  FILE* docfd = _tfopen(filename.c_str(), LITESQL_L("r"));
   
   bool success = (docfd !=NULL);
   if (!success)
   {
-    Logger::error("cant open %s",filename.c_str());
+    Logger::error(LITESQL_L("cant open %s"),filename.c_str());
   }
   else {
     for (;;) {
@@ -77,7 +77,7 @@ bool XmlParser::parseFile(const std::string& filename)
   
   if (!success)
    {
-      cerr << "error parsing " << filename.c_str() << endl;
+      LITESQL_cerr <<  LITESQL_L("error parsing ") << filename.c_str() << std::endl;
    }
   return success;
 }
@@ -88,7 +88,7 @@ const XML_Char* XmlParser::xmlGetAttrValue(const XML_Char** attrs,const XML_Char
    {      
       for (size_t i = 0; attrs[i]!=NULL;i+=2)
       {
-         if (!strcmp(attrs[i],key))
+         if (!_tcscmp(attrs[i],key))
          {
             return attrs[i+1];
          } 

@@ -14,7 +14,7 @@ CModelTreeView::TreeItemData::TreeItemData()
 
 CModelTreeView::TreeItemData::~TreeItemData()
 {
-  for (vector<TreeItemData*>::const_iterator it = children.begin();it !=children.end();it++)
+  for (std::vector<TreeItemData*>::const_iterator it = children.begin();it !=children.end();it++)
     {
       delete(*it);
     }
@@ -27,7 +27,7 @@ public:
   {};
   //		virtual ~ModelTreeItemData();
 
-  virtual LPSTR GetText() {return "field"; };
+  virtual LPSTR GetText() {return  LiteSQL_L( "field" ); };
   //  private:
   Field* m_pField;
 };  //class TreeItemData
@@ -37,13 +37,13 @@ class ObjectTreeItemData : public CModelTreeView::TreeItemData
 public:
   ObjectTreeItemData(Object* object) : m_pObject(object) 
   {
-    for (vector<Field*>::const_iterator fit = object->fields.begin();fit !=object->fields.end();fit++)
+    for (std::vector<Field*>::const_iterator fit = object->fields.begin();fit !=object->fields.end();fit++)
     {
       children.push_back(new FieldTreeItemData(*fit));
     }
   };
   
-  virtual LPSTR GetText() {return "object"; };
+  virtual LPSTR GetText() {return  LiteSQL_L( "object" ); };
   //  private:
   Object* m_pObject;
 };  //class TreeItemData
@@ -53,13 +53,13 @@ class ModelTreeItemData : public CModelTreeView::TreeItemData
 public:
   ModelTreeItemData(ObjectModel* model) : m_pModel(model) 
   {
-    for (vector<Object*>::const_iterator oit = model->objects.begin();oit !=model->objects.end();oit++)
+    for (std::vector<Object*>::const_iterator oit = model->objects.begin();oit !=model->objects.end();oit++)
     {
       children.push_back(new ObjectTreeItemData(*oit));
     }
   };
 
-  virtual LPSTR GetText() {return "model"; };
+  virtual LPSTR GetText() {return  LiteSQL_L( "model" ); };
   //  private:
   ObjectModel* m_pModel;
 };  //class TreeItemData
@@ -68,7 +68,7 @@ class RootItemData : public CModelTreeView::TreeItemData
 {
 public:
   RootItemData():modelItem(NULL) {};
-  virtual LPSTR GetText() {return "root"; };
+  virtual LPSTR GetText() {return  LiteSQL_L( "root" ); };
   
   ModelTreeItemData* modelItem; 
 };  //class TreeItemData
@@ -83,7 +83,7 @@ CLitesqlView::CLitesqlView(LitesqlDocument* pDoc)
 }
 
 // CSimpleMDIChild definitions
-CSimpleMDIChild::CSimpleMDIChild(const char* pszFilename)
+CSimpleMDIChild::CSimpleMDIChild(const LiteSQL_Char* pszFilename)
 : m_Document(pszFilename),m_View(&m_Document)
 {
 
@@ -92,7 +92,7 @@ CSimpleMDIChild::CSimpleMDIChild(const char* pszFilename)
 
 
   // Set the menu for this MDI child
-  SetChildMenu(_T("MdiMenuView"));
+  SetChildMenu(_T( LiteSQL_L( "MdiMenuView" )));
 }
 
 CSimpleMDIChild::~CSimpleMDIChild()
@@ -101,7 +101,7 @@ CSimpleMDIChild::~CSimpleMDIChild()
 
 void CSimpleMDIChild::OnInitialUpdate()
 {
-  std::string title = _T("Litesql Gen Project - ");
+  LiteSQL_String title = _T( LiteSQL_L( "Litesql Gen Project - " ));
   title.append(m_Document.getFilename());
   // Set the window caption
   ::SetWindowText(m_hWnd, title.c_str());
@@ -113,8 +113,8 @@ void CSimpleMDIChild::OnInitialUpdate()
 
 CFilesTab::CFilesTab()
 { 
-  AddTabPage(new CViewText,"Cpp"); 
-  AddTabPage(new CViewText,"hpp");
+  AddTabPage(new CViewText, LiteSQL_L( "Cpp" )); 
+  AddTabPage(new CViewText, LiteSQL_L( "hpp" ));
 };
 
 void CModelTreeView::setObjectModel(ObjectModel* pModel)
@@ -149,8 +149,8 @@ void CModelTreeView::DoContextMenu(CPoint& ptScreen)
   //ScreenToClient(m_hWnd, &m);
   //HMENU hPopupMenu = LoadMenu(GetApp()->GetResourceHandle(),MAKEINTRESOURCE(IDM_MODELTREE_VIEW));
   HMENU hPopup = CreatePopupMenu();
-  AppendMenu(hPopup,MF_STRING,IDM_ADD_OBJECT,_T("Add Object"));
-  AppendMenu(hPopup,MF_STRING,IDM_REMOVE_OBJECT,_T("Remove Object"));
+  AppendMenu(hPopup,MF_STRING,IDM_ADD_OBJECT,_T( LiteSQL_L( "Add Object" )));
+  AppendMenu(hPopup,MF_STRING,IDM_REMOVE_OBJECT,_T( LiteSQL_L( "Remove Object" )));
 
   UINT idCmd = ::TrackPopupMenu(hPopup, TPM_LEFTALIGN | TPM_RETURNCMD | TPM_RIGHTBUTTON ,
 							ptScreen.x, ptScreen.y, 0, m_hWnd, NULL);
@@ -158,7 +158,7 @@ void CModelTreeView::DoContextMenu(CPoint& ptScreen)
   switch (idCmd)
   {
   case IDM_ADD_OBJECT:
-    m_pModel->objects.push_back(new xml::Object("newObject",""));
+    m_pModel->objects.push_back(new xml::Object( LiteSQL_L( "newObject" ), LiteSQL_L( "" )));
     loadTree();
     break;
   case IDM_REMOVE_OBJECT:
@@ -220,7 +220,7 @@ LRESULT CModelTreeView::OnNotifyReflect(WPARAM /*wParam*/, LPARAM lParam)
       }
       else
       {
-        lpdi->item.pszText = "NULL";
+        lpdi->item.pszText =  LiteSQL_L( "NULL" );
         lpdi->item.cChildren = I_CHILDRENCALLBACK;
       }
 

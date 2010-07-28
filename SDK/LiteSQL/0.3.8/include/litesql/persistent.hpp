@@ -6,7 +6,7 @@
 
 #ifndef litesql_persistent_hpp
 #define litesql_persistent_hpp
-
+#include "litesql_char.hpp"
 #include <memory>
 #include <string>
 #include <vector>
@@ -32,25 +32,25 @@ namespace litesql {
  * */
 class Persistent {
 protected:
-    typedef map<string, vector<pair<FieldType, string> > > Updates;
+    typedef std::map<LITESQL_String, std::vector<std::pair<FieldType, LITESQL_String> > > Updates;
     /** executed when object is created into database */    
-    string insert(Record& tables, 
+    LITESQL_String insert(Record& tables, 
                   Records& fieldRecs,
                   Records& values,
-                  const string& sequence);
+                  const LITESQL_String& sequence);
     void update(Updates& updates); 
     template <class T>
     void updateField(litesql::Persistent::Updates& updates, 
-                     const std::string& table, 
+                     const LITESQL_String& table, 
                      litesql::Field<T> fld) {
         if (fld.modified()) {
             updates[table].push_back(make_pair(fld.fieldType(), 
-                       litesql::convert<const T&, std::string>(fld.value())));
+                       litesql::convert<const T&, LITESQL_String>(fld.value())));
             fld.setModified(false);
         }
     }
-    void prepareUpdate(Updates& updates, string table);
-    void deleteFromTable(string table, string id);
+    void prepareUpdate(Updates& updates, LITESQL_String table);
+    void deleteFromTable(LITESQL_String table, LITESQL_String id);
     /** pointer to current Database Persistent is assigned to. 
         It is not a reference because Persistents must be assignable using
         operator= */

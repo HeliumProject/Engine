@@ -1,27 +1,27 @@
 #ifndef litesql_gen_cpp_hpp
 #define litesql_gen_cpp_hpp
-
+#include "litesql_char.hpp"
 #include "generator.hpp"
 
 namespace litesql {
   
   class CppGenerator : public CodeGenerator {
   public:
-    CppGenerator(): CodeGenerator("c++") { };
+    CppGenerator(): CodeGenerator(LITESQL_L("c++")) { };
     bool generateCode(const ObjectModel* model);
     
-    void setOutputSourcesDirectory(const std::string& directory);
-    void setOutputIncludesDirectory(const std::string& directory);
+    void setOutputSourcesDirectory(const LITESQL_String& directory);
+    void setOutputIncludesDirectory(const LITESQL_String& directory);
     
-    const std::string& getOutputSourcesDirectory() const;
-    const std::string& getOutputIncludesDirectory() const;
+    const LITESQL_String& getOutputSourcesDirectory() const;
+    const LITESQL_String& getOutputIncludesDirectory() const;
     
-    std::string getOutputSourcesFilename(const std::string& name) const;
-    std::string getOutputIncludesFilename(const std::string& name) const;
+    LITESQL_String getOutputSourcesFilename(const LITESQL_String& name) const;
+    LITESQL_String getOutputIncludesFilename(const LITESQL_String& name) const;
     
   private:
-    std::string m_sources_directory;
-    std::string m_includes_directory;
+    LITESQL_String m_sources_directory;
+    LITESQL_String m_includes_directory;
     
     void writeCPPClasses(const ObjectModel* model);
     FILE *hpp, *cpp;

@@ -3,7 +3,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(StdStringValidator,wxTextValidator)
 
-StdStringValidator::StdStringValidator(long style, std::string *val)
+StdStringValidator::StdStringValidator(long style, LiteSQL_String *val)
 : pValue(val), 
 value(*val),
 wxTextValidator(style,&value)
@@ -35,4 +35,3 @@ bool StdStringValidator ::TransferFromWindow()
   *pValue = value.ToUTF8(); 
   return result; 
 }
-

@@ -7,7 +7,7 @@
 
 #ifndef litesql_selectquery_hpp
 #define litesql_selectquery_hpp
-
+#include "litesql_char.hpp"
 #include "litesql/utils.hpp"
 #include "litesql/expr.hpp"
 /** \file selectquery.hpp
@@ -20,26 +20,26 @@ class SelectQuery {
     int _limit, _offset;
     Split _results;
     Split _sources;
-    std::string _where; 
+    LITESQL_String _where; 
     Split _groupBy;
-    std::string _having;
+    LITESQL_String _having;
     Split _orderBy;
 public:
-    SelectQuery() : _distinct(false), _limit(0), _offset(0), _where("True") {}
+    SelectQuery() : _distinct(false), _limit(0), _offset(0), _where(LITESQL_L("True")) {}
     SelectQuery & distinct(bool d) ;
     SelectQuery & limit(int value);
     SelectQuery & offset(int value);
-    SelectQuery & result(std::string r);
+    SelectQuery & result(LITESQL_String r);
     SelectQuery & clearResults();
-    SelectQuery & source(std::string s, std::string alias="");
+    SelectQuery & source(LITESQL_String s, LITESQL_String alias= LITESQL_L(""));
     SelectQuery & where(const Expr & w);
-    SelectQuery & where(std::string w);
-    SelectQuery & groupBy(std::string gb);
+    SelectQuery & where(LITESQL_String w);
+    SelectQuery & groupBy(LITESQL_String gb);
     SelectQuery & having(const Expr & h);
-    SelectQuery & having(std::string h);
-    SelectQuery & orderBy(std::string ob, bool ascending=true);
-    operator std::string() const;
-    std::string asString() const { return this->operator std::string(); }
+    SelectQuery & having(LITESQL_String h);
+    SelectQuery & orderBy(LITESQL_String ob, bool ascending=true);
+    operator LITESQL_String() const;
+    LITESQL_String asString() const { return this->operator LITESQL_String(); }
 };
 }
 

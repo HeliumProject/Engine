@@ -1,4 +1,4 @@
-// For compilers that support precompilation, includes "wx/wx.h".
+// For compilers that support precompilation, includes  LiteSQL_L( "wx/wx.h" ).
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -78,20 +78,20 @@ wxMenu* LitesqlView::GetContextMenu()
   if (!m_ctxMenu) 
   {
     m_ctxMenu = new wxMenu;
-    m_ctxMenu->Append(VisualLitesqlApp::ID_ADD_OBJECT,_("Add Object ..."));
-    m_ctxMenu->Append(VisualLitesqlApp::ID_REMOVE_OBJECT,_("Remove Object ..."));
+    m_ctxMenu->Append(VisualLitesqlApp::ID_ADD_OBJECT,_( LiteSQL_L( "Add Object ..." )));
+    m_ctxMenu->Append(VisualLitesqlApp::ID_REMOVE_OBJECT,_( LiteSQL_L( "Remove Object ..." )));
     m_ctxMenu->AppendSeparator();
-    m_ctxMenu->Append(VisualLitesqlApp::ID_ADD_FIELD,_("Add Field..."));
-    m_ctxMenu->Append(VisualLitesqlApp::ID_REMOVE_FIELD,_("Remove Field ..."));
+    m_ctxMenu->Append(VisualLitesqlApp::ID_ADD_FIELD,_( LiteSQL_L( "Add Field..." )));
+    m_ctxMenu->Append(VisualLitesqlApp::ID_REMOVE_FIELD,_( LiteSQL_L( "Remove Field ..." )));
     m_ctxMenu->AppendSeparator();
-    m_ctxMenu->Append(VisualLitesqlApp::ID_ADD_METHOD,_("Add Method ..."));
-    m_ctxMenu->Append(VisualLitesqlApp::ID_REMOVE_METHOD,_("Remove Method..."));
+    m_ctxMenu->Append(VisualLitesqlApp::ID_ADD_METHOD,_( LiteSQL_L( "Add Method ..." )));
+    m_ctxMenu->Append(VisualLitesqlApp::ID_REMOVE_METHOD,_( LiteSQL_L( "Remove Method..." )));
     m_ctxMenu->AppendSeparator();
-    m_ctxMenu->Append(VisualLitesqlApp::ID_ADD_RELATED,_("Add Related..."));
-    m_ctxMenu->Append(VisualLitesqlApp::ID_REMOVE_RELATED,_("Remove Related ..."));
+    m_ctxMenu->Append(VisualLitesqlApp::ID_ADD_RELATED,_( LiteSQL_L( "Add Related..." )));
+    m_ctxMenu->Append(VisualLitesqlApp::ID_REMOVE_RELATED,_( LiteSQL_L( "Remove Related ..." )));
     m_ctxMenu->AppendSeparator();
-    m_ctxMenu->Append(VisualLitesqlApp::ID_ADD_RELATION,_("Add Relation..."));
-    m_ctxMenu->Append(VisualLitesqlApp::ID_REMOVE_RELATION,_("Remove Relation ..."));
+    m_ctxMenu->Append(VisualLitesqlApp::ID_ADD_RELATION,_( LiteSQL_L( "Add Relation..." )));
+    m_ctxMenu->Append(VisualLitesqlApp::ID_REMOVE_RELATION,_( LiteSQL_L( "Remove Relation ..." )));
   }
 
   // \TODO change menu on selected item
@@ -105,38 +105,38 @@ static void FillTree (ObjectModel* pModel,wxTreebook* pTree)
   wxString dbName(pModel->db.name.c_str(),wxConvUTF8);
   pTree->DeleteAllPages();
 
-  pTree->AddPage(new ui::LitesqlDatabasePanel(pTree,&pModel->db),_("database                                      "));
+  pTree->AddPage(new ui::LitesqlDatabasePanel(pTree,&pModel->db),_( LiteSQL_L( "database                                      " )));
   pagePos++;
-  for( vector<Object*>::iterator it = pModel->objects.begin(); it != pModel->objects.end();it++)
+  for( std::vector<Object*>::iterator it = pModel->objects.begin(); it != pModel->objects.end();it++)
   {
     wxString name((*it)->name.c_str(),wxConvUTF8);
-    pTree->AddSubPage(new LitesqlObjectPanel(pTree,pModel->objects,*it),name +_("(Object)"));
+    pTree->AddSubPage(new LitesqlObjectPanel(pTree,pModel->objects,*it),name +_( LiteSQL_L( "(Object)" )));
 
     int subPagePos=pagePos++;
 
-    for (vector<Field*>::iterator field = (*it)->fields.begin();
+    for (std::vector<Field*>::iterator field = (*it)->fields.begin();
       field != (*it)->fields.end();
       field++)
     {
       wxString fname((*field)->name.c_str(),wxConvUTF8);
-      pTree->InsertSubPage(subPagePos,new LitesqlFieldPanel(pTree, *field),fname +_("(Field)"));
+      pTree->InsertSubPage(subPagePos,new LitesqlFieldPanel(pTree, *field),fname +_( LiteSQL_L( "(Field)" )));
       pagePos++;
     }
 
-    for (vector<Method*>::iterator method = (*it)->methods.begin();
+    for (std::vector<Method*>::iterator method = (*it)->methods.begin();
       method != (*it)->methods.end();
       method++)
     {
       wxString fname((*method)->name.c_str(),wxConvUTF8);
-      pTree->InsertSubPage(subPagePos,new LitesqlMethodPanel(pTree, *method) ,fname +_("(Method)"));
+      pTree->InsertSubPage(subPagePos,new LitesqlMethodPanel(pTree, *method) ,fname +_( LiteSQL_L( "(Method)" )));
       pagePos++;
     }
   }
 
-  for (vector<Relation*>::iterator relation = pModel->relations.begin(); relation!= pModel->relations.end();relation++)
+  for (std::vector<Relation*>::iterator relation = pModel->relations.begin(); relation!= pModel->relations.end();relation++)
   {
     wxString name((*relation)->name.c_str(),wxConvUTF8);
-    pTree->AddSubPage(new LitesqlRelationPanel(pTree,*relation),name +_("(relation)"));
+    pTree->AddSubPage(new LitesqlRelationPanel(pTree,*relation),name +_( LiteSQL_L( "(relation)" )));
     pagePos++;
   }
 
@@ -148,7 +148,7 @@ static void FillTree (ObjectModel* pModel,wxTreebook* pTree)
 bool LitesqlView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
 {
   frame = wxGetApp().CreateChildFrame(doc, this);
-  frame->SetTitle(_T("LitesqlView"));
+  frame->SetTitle(_T( LiteSQL_L( "LitesqlView" )));
 
 #ifdef __X__
   // X seems to require a forced resize
@@ -231,9 +231,9 @@ void LitesqlView::OnContextMenu(wxContextMenuEvent& event)
 
 void LitesqlView::OnAddObject(wxCommandEvent& WXUNUSED(event) )
 {
-//  wxMessageBox(_("OnAddObject"));
+//  wxMessageBox(_( LiteSQL_L( "OnAddObject" )));
   ObjectModel* pModel = ((LitesqlDocument*) GetDocument())->GetModel();
-  Object* newObject = new Object("newObject","");
+  Object* newObject = new Object( LiteSQL_L( "newObject" ), LiteSQL_L( "" ));
   pModel->objects.push_back(newObject);
   
   GetDocument()->Modify(true);
@@ -242,7 +242,7 @@ void LitesqlView::OnAddObject(wxCommandEvent& WXUNUSED(event) )
 
 void LitesqlView::OnRemoveObject(wxCommandEvent& WXUNUSED(event) )
 {
-  wxMessageBox(_("OnRemoveObject"));
+  wxMessageBox(_( LiteSQL_L( "OnRemoveObject" )));
   GetDocument()->Modify(true);
   GetDocument()->UpdateAllViews(this,NULL);
 }
@@ -256,10 +256,10 @@ void LitesqlView::OnAddField(wxCommandEvent& WXUNUSED(event) )
   }
   else if (pPage->IsKindOf(CLASSINFO(LitesqlObjectPanel)))
   {
-    xml::Field* newField = new xml::Field("newField",AU_field_type,"",AU_field_indexed,AU_field_unique);
+    xml::Field* newField = new xml::Field( LiteSQL_L( "newField" ),AU_field_type, LiteSQL_L( "" ),AU_field_indexed,AU_field_unique);
     ((LitesqlObjectPanel*)pPage)->GetObject()->fields.push_back(newField);
     m_treebook->InsertSubPage(  m_treebook->GetSelection(),
-                                new LitesqlFieldPanel(m_treebook, newField),_("newField(Field)"),
+                                new LitesqlFieldPanel(m_treebook, newField),_( LiteSQL_L( "newField(Field)" )),
                                 true);
       GetDocument()->Modify(true);
 //      GetDocument()->UpdateAllViews(this,NULL);
@@ -332,4 +332,3 @@ void LitesqlView::OnPageChanging(wxTreebookEvent& WXUNUSED(event))
     pPage->TransferDataFromWindow();
   }
 }
-

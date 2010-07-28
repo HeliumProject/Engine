@@ -19,10 +19,10 @@
 // ---------------------------------------------------------------------------
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-  #pragma implementation "treelistctrl.h"
+  #pragma implementation  LiteSQL_L( "treelistctrl.h" )
 #endif
 
-// For compilers that support precompilation, includes "wx.h".
+// For compilers that support precompilation, includes  LiteSQL_L( "wx.h" ).
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -92,7 +92,7 @@ static const int DRAG_TIMER_TICKS = 250; // minimum drag wait time in ms
 static const int FIND_TIMER_TICKS = 500; // minimum find wait time in ms
 static const int RENAME_TIMER_TICKS = 250; // minimum rename wait time in ms
 
-const wxChar* wxTreeListCtrlNameStr = _T("treelistctrl");
+const wxChar* wxTreeListCtrlNameStr = _T( LiteSQL_L( "treelistctrl" ));
 
 static wxTreeListColumnInfo wxInvalidTreeListColumnInfo;
 
@@ -144,7 +144,7 @@ public:
                             const wxPoint &pos = wxDefaultPosition,
                             const wxSize &size = wxDefaultSize,
                             long style = 0,
-                            const wxString &name = _T("wxtreelistctrlcolumntitles") );
+                            const wxString &name = _T( LiteSQL_L( "wxtreelistctrlcolumntitles" )) );
 
     virtual ~wxTreeListHeaderWindow();
 
@@ -172,54 +172,54 @@ public:
     // column information manipulation
     const wxTreeListColumnInfo& GetColumn (int column) const{
         wxCHECK_MSG ((column >= 0) && (column < GetColumnCount()),
-                     wxInvalidTreeListColumnInfo, _T("Invalid column"));
+                     wxInvalidTreeListColumnInfo, _T( LiteSQL_L( "Invalid column" )));
         return m_columns[column];
     }
     wxTreeListColumnInfo& GetColumn (int column) {
         wxCHECK_MSG ((column >= 0) && (column < GetColumnCount()),
-                     wxInvalidTreeListColumnInfo, _T("Invalid column"));
+                     wxInvalidTreeListColumnInfo, _T( LiteSQL_L( "Invalid column" )));
         return m_columns[column];
     }
     void SetColumn (int column, const wxTreeListColumnInfo& info);
 
     wxString GetColumnText (int column) const {
         wxCHECK_MSG ((column >= 0) && (column < GetColumnCount()),
-                     wxEmptyString, _T("Invalid column"));
+                     wxEmptyString, _T( LiteSQL_L( "Invalid column" )));
         return m_columns[column].GetText();
     }
     void SetColumnText (int column, const wxString& text) {
         wxCHECK_RET ((column >= 0) && (column < GetColumnCount()),
-                     _T("Invalid column"));
+                     _T( LiteSQL_L( "Invalid column" )));
         m_columns[column].SetText (text);
     }
 
     int GetColumnAlignment (int column) const {
         wxCHECK_MSG ((column >= 0) && (column < GetColumnCount()),
-                     wxALIGN_LEFT, _T("Invalid column"));
+                     wxALIGN_LEFT, _T( LiteSQL_L( "Invalid column" )));
         return m_columns[column].GetAlignment();
     }
     void SetColumnAlignment (int column, int flag) {
         wxCHECK_RET ((column >= 0) && (column < GetColumnCount()),
-                     _T("Invalid column"));
+                     _T( LiteSQL_L( "Invalid column" )));
         m_columns[column].SetAlignment (flag);
     }
 
     int GetColumnWidth (int column) const {
         wxCHECK_MSG ((column >= 0) && (column < GetColumnCount()),
-                     -1, _T("Invalid column"));
+                     -1, _T( LiteSQL_L( "Invalid column" )));
         return m_columns[column].GetWidth();
     }
     void SetColumnWidth (int column, int width);
 
     bool IsColumnEditable (int column) const {
         wxCHECK_MSG ((column >= 0) && (column < GetColumnCount()),
-                     false, _T("Invalid column"));
+                     false, _T( LiteSQL_L( "Invalid column" )));
         return m_columns[column].IsEditable();
     }
 
     bool IsColumnShown (int column) const {
         wxCHECK_MSG ((column >= 0) && (column < GetColumnCount()),
-                     true, _T("Invalid column"));
+                     true, _T( LiteSQL_L( "Invalid column" )));
         return m_columns[column].IsShown();
     }
 
@@ -244,7 +244,7 @@ private:
 class wxEditTextCtrl;
 
 
-// this is the "true" control
+// this is the  LiteSQL_L( "true" ) control
 class  wxTreeListMainWindow: public wxScrolledWindow
 {
 public:
@@ -257,7 +257,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_DEFAULT_STYLE,
                const wxValidator &validator = wxDefaultValidator,
-               const wxString& name = _T("wxtreelistmainwindow"))
+               const wxString& name = _T( LiteSQL_L( "wxtreelistmainwindow" )))
     {
         Init();
         Create (parent, id, pos, size, style, validator, name);
@@ -270,7 +270,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_DEFAULT_STYLE,
                 const wxValidator &validator = wxDefaultValidator,
-                const wxString& name = _T("wxtreelistctrl"));
+                const wxString& name = _T( LiteSQL_L( "wxtreelistctrl" )));
 
     // accessors
     // ---------
@@ -422,11 +422,11 @@ public:
     // get the parent of this item (may return NULL if root)
     wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
 
-    // for this enumeration function you must pass in a "cookie" parameter
+    // for this enumeration function you must pass in a  LiteSQL_L( "cookie" ) parameter
     // which is opaque for the application but is necessary for the library
     // to make these functions reentrant (i.e. allow more than one
     // enumeration on one and the same object simultaneously). Of course,
-    // the "cookie" passed to GetFirstChild() and GetNextChild() should be
+    // the  LiteSQL_L( "cookie" ) passed to GetFirstChild() and GetNextChild() should be
     // the same!
 
     // get child of this item
@@ -1055,7 +1055,7 @@ void wxEditTextCtrl::OnKeyUp( wxKeyEvent &event )
     wxPoint myPos = GetPosition();
     wxSize mySize = GetSize();
     int sx, sy;
-    GetTextExtent(GetValue() + _T("M"), &sx, &sy);
+    GetTextExtent(GetValue() + _T( LiteSQL_L( "M" )), &sx, &sy);
     if (myPos.x + sx > parentSize.x) sx = parentSize.x - myPos.x;
     if (mySize.x > sx) sx = mySize.x;
     SetSize(sx, -1);
@@ -1534,7 +1534,7 @@ void wxTreeListHeaderWindow::AddColumn (const wxTreeListColumnInfo& colInfo) {
 }
 
 void wxTreeListHeaderWindow::SetColumnWidth (int column, int width) {
-    wxCHECK_RET ((column >= 0) && (column < GetColumnCount()), _T("Invalid column"));
+    wxCHECK_RET ((column >= 0) && (column < GetColumnCount()), _T( LiteSQL_L( "Invalid column" )));
     m_total_col_width -= m_columns[column].GetWidth();
     m_columns[column].SetWidth(width);
     m_total_col_width += width;
@@ -1543,7 +1543,7 @@ void wxTreeListHeaderWindow::SetColumnWidth (int column, int width) {
 }
 
 void wxTreeListHeaderWindow::InsertColumn (int before, const wxTreeListColumnInfo& colInfo) {
-    wxCHECK_RET ((before >= 0) && (before < GetColumnCount()), _T("Invalid column"));
+    wxCHECK_RET ((before >= 0) && (before < GetColumnCount()), _T( LiteSQL_L( "Invalid column" )));
     m_columns.Insert (colInfo, before);
     m_total_col_width += colInfo.GetWidth();
     m_owner->AdjustMyScrollbars();
@@ -1551,7 +1551,7 @@ void wxTreeListHeaderWindow::InsertColumn (int before, const wxTreeListColumnInf
 }
 
 void wxTreeListHeaderWindow::RemoveColumn (int column) {
-    wxCHECK_RET ((column >= 0) && (column < GetColumnCount()), _T("Invalid column"));
+    wxCHECK_RET ((column >= 0) && (column < GetColumnCount()), _T( LiteSQL_L( "Invalid column" )));
     m_total_col_width -= m_columns[column].GetWidth();
     m_columns.RemoveAt (column);
     m_owner->AdjustMyScrollbars();
@@ -1559,7 +1559,7 @@ void wxTreeListHeaderWindow::RemoveColumn (int column) {
 }
 
 void wxTreeListHeaderWindow::SetColumn (int column, const wxTreeListColumnInfo& info) {
-    wxCHECK_RET ((column >= 0) && (column < GetColumnCount()), _T("Invalid column"));
+    wxCHECK_RET ((column >= 0) && (column < GetColumnCount()), _T( LiteSQL_L( "Invalid column" )));
     int w = m_columns[column].GetWidth();
     m_columns[column] = info;
     if (w != info.GetWidth()) {
@@ -1610,7 +1610,7 @@ wxTreeListItem::~wxTreeListItem() {
     delete m_data;
     if (m_ownsAttr) delete m_attr;
 
-    wxASSERT_MSG( m_children.IsEmpty(), _T("please call DeleteChildren() before destructor"));
+    wxASSERT_MSG( m_children.IsEmpty(), _T( LiteSQL_L( "please call DeleteChildren() before destructor" )));
 }
 
 void wxTreeListItem::DeleteChildren () {
@@ -1921,7 +1921,7 @@ bool wxTreeListMainWindow::Create (wxTreeListCtrl *parent,
     }
 #else
 //?    m_dottedPen = wxPen( *wxGREY_PEN, 1, wxDOT );  // too slow under XFree86
-    m_dottedPen = wxPen( _T("grey"), 0, 0 ); // Bitmap based pen is not supported by GTK!
+    m_dottedPen = wxPen( _T( LiteSQL_L( "grey" )), 0, 0 ); // Bitmap based pen is not supported by GTK!
 #endif
 
     m_owner = parent;
@@ -1970,7 +1970,7 @@ void wxTreeListMainWindow::SetLineSpacing (unsigned int spacing) {
 
 size_t wxTreeListMainWindow::GetChildrenCount (const wxTreeItemId& item,
                                                bool recursively) {
-    wxCHECK_MSG (item.IsOk(), 0u, _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), 0u, _T( LiteSQL_L( "invalid tree item" )));
     return ((wxTreeListItem*)item.m_pItem)->GetChildrenCount (recursively);
 }
 
@@ -1990,41 +1990,41 @@ void wxTreeListMainWindow::SetWindowStyle (const long styles) {
 
 int wxTreeListMainWindow::GetItemImage (const wxTreeItemId& item, int column,
                                         wxTreeItemIcon which) const {
-    wxCHECK_MSG (item.IsOk(), -1, _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), -1, _T( LiteSQL_L( "invalid tree item" )));
     return ((wxTreeListItem*) item.m_pItem)->GetImage (column, which);
 }
 
 wxTreeItemData *wxTreeListMainWindow::GetItemData (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), NULL, _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), NULL, _T( LiteSQL_L( "invalid tree item" )));
     return ((wxTreeListItem*) item.m_pItem)->GetData();
 }
 
 bool wxTreeListMainWindow::GetItemBold (const wxTreeItemId& item) const {
-    wxCHECK_MSG(item.IsOk(), false, _T("invalid tree item"));
+    wxCHECK_MSG(item.IsOk(), false, _T( LiteSQL_L( "invalid tree item" )));
     return ((wxTreeListItem *)item.m_pItem)->IsBold();
 }
 
 wxColour wxTreeListMainWindow::GetItemTextColour (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), wxNullColour, _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxNullColour, _T( LiteSQL_L( "invalid tree item" )));
     wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
     return pItem->Attr().GetTextColour();
 }
 
 wxColour wxTreeListMainWindow::GetItemBackgroundColour (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), wxNullColour, _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxNullColour, _T( LiteSQL_L( "invalid tree item" )));
     wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
     return pItem->Attr().GetBackgroundColour();
 }
 
 wxFont wxTreeListMainWindow::GetItemFont (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), wxNullFont, _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxNullFont, _T( LiteSQL_L( "invalid tree item" )));
     wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
     return pItem->Attr().GetFont();
 }
 
 void wxTreeListMainWindow::SetItemImage (const wxTreeItemId& item, int column,
                                          int image, wxTreeItemIcon which) {
-    wxCHECK_RET (item.IsOk(), _T("invalid tree item"));
+    wxCHECK_RET (item.IsOk(), _T( LiteSQL_L( "invalid tree item" )));
     wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
     pItem->SetImage (column, image, which);
     wxClientDC dc (this);
@@ -2034,20 +2034,20 @@ void wxTreeListMainWindow::SetItemImage (const wxTreeItemId& item, int column,
 
 void wxTreeListMainWindow::SetItemData (const wxTreeItemId& item,
                                         wxTreeItemData *data) {
-    wxCHECK_RET (item.IsOk(), _T("invalid tree item"));
+    wxCHECK_RET (item.IsOk(), _T( LiteSQL_L( "invalid tree item" )));
     ((wxTreeListItem*) item.m_pItem)->SetData(data);
 }
 
 void wxTreeListMainWindow::SetItemHasChildren (const wxTreeItemId& item,
                                                bool has) {
-    wxCHECK_RET (item.IsOk(), _T("invalid tree item"));
+    wxCHECK_RET (item.IsOk(), _T( LiteSQL_L( "invalid tree item" )));
     wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
     pItem->SetHasPlus (has);
     RefreshLine (pItem);
 }
 
 void wxTreeListMainWindow::SetItemBold (const wxTreeItemId& item, bool bold) {
-    wxCHECK_RET (item.IsOk(), _T("invalid tree item"));
+    wxCHECK_RET (item.IsOk(), _T( LiteSQL_L( "invalid tree item" )));
     wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
     if (pItem->IsBold() != bold) { // avoid redrawing if no real change
         pItem->SetBold (bold);
@@ -2057,7 +2057,7 @@ void wxTreeListMainWindow::SetItemBold (const wxTreeItemId& item, bool bold) {
 
 void wxTreeListMainWindow::SetItemTextColour (const wxTreeItemId& item,
                                               const wxColour& colour) {
-    wxCHECK_RET (item.IsOk(), _T("invalid tree item"));
+    wxCHECK_RET (item.IsOk(), _T( LiteSQL_L( "invalid tree item" )));
     wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
     pItem->Attr().SetTextColour (colour);
     RefreshLine (pItem);
@@ -2065,7 +2065,7 @@ void wxTreeListMainWindow::SetItemTextColour (const wxTreeItemId& item,
 
 void wxTreeListMainWindow::SetItemBackgroundColour (const wxTreeItemId& item,
                                                     const wxColour& colour) {
-    wxCHECK_RET (item.IsOk(), _T("invalid tree item"));
+    wxCHECK_RET (item.IsOk(), _T( LiteSQL_L( "invalid tree item" )));
     wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
     pItem->Attr().SetBackgroundColour (colour);
     RefreshLine (pItem);
@@ -2073,7 +2073,7 @@ void wxTreeListMainWindow::SetItemBackgroundColour (const wxTreeItemId& item,
 
 void wxTreeListMainWindow::SetItemFont (const wxTreeItemId& item,
                                         const wxFont& font) {
-    wxCHECK_RET (item.IsOk(), _T("invalid tree item"));
+    wxCHECK_RET (item.IsOk(), _T( LiteSQL_L( "invalid tree item" )));
     wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
     pItem->Attr().SetFont (font);
     RefreshLine (pItem);
@@ -2098,7 +2098,7 @@ bool wxTreeListMainWindow::SetFont (const wxFont &font) {
 // ----------------------------------------------------------------------------
 
 bool wxTreeListMainWindow::IsVisible (const wxTreeItemId& item, bool fullRow) const {
-    wxCHECK_MSG (item.IsOk(), false, _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), false, _T( LiteSQL_L( "invalid tree item" )));
 
     // An item is only visible if it's not a descendant of a collapsed item
     wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
@@ -2120,9 +2120,9 @@ bool wxTreeListMainWindow::IsVisible (const wxTreeItemId& item, bool fullRow) co
 }
 
 bool wxTreeListMainWindow::HasChildren (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), false, _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), false, _T( LiteSQL_L( "invalid tree item" )));
 
-    // consider that the item does have children if it has the "+" button: it
+    // consider that the item does have children if it has the  LiteSQL_L( "+" ) button: it
     // might not have them (if it had never been expanded yet) but then it
     // could have them as well and it's better to err on this side rather than
     // disabling some operations which are restricted to the items with
@@ -2131,17 +2131,17 @@ bool wxTreeListMainWindow::HasChildren (const wxTreeItemId& item) const {
 }
 
 bool wxTreeListMainWindow::IsExpanded (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), false, _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), false, _T( LiteSQL_L( "invalid tree item" )));
     return ((wxTreeListItem*) item.m_pItem)->IsExpanded();
 }
 
 bool wxTreeListMainWindow::IsSelected (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), false, _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), false, _T( LiteSQL_L( "invalid tree item" )));
     return ((wxTreeListItem*) item.m_pItem)->IsSelected();
 }
 
 bool wxTreeListMainWindow::IsBold (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), false, _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), false, _T( LiteSQL_L( "invalid tree item" )));
     return ((wxTreeListItem*) item.m_pItem)->IsBold();
 }
 
@@ -2150,7 +2150,7 @@ bool wxTreeListMainWindow::IsBold (const wxTreeItemId& item) const {
 // ----------------------------------------------------------------------------
 
 wxTreeItemId wxTreeListMainWindow::GetItemParent (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
     return ((wxTreeListItem*) item.m_pItem)->GetItemParent();
 }
 
@@ -2161,7 +2161,7 @@ wxTreeItemId wxTreeListMainWindow::GetFirstChild (const wxTreeItemId& item,
 wxTreeItemId wxTreeListMainWindow::GetFirstChild (const wxTreeItemId& item,
                                                   wxTreeItemIdValue& cookie) const {
 #endif
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
     wxArrayTreeListItems& children = ((wxTreeListItem*) item.m_pItem)->GetChildren();
     cookie = 0;
     return (!children.IsEmpty())? wxTreeItemId(children.Item(0)): wxTreeItemId();
@@ -2174,9 +2174,9 @@ wxTreeItemId wxTreeListMainWindow::GetNextChild (const wxTreeItemId& item,
 wxTreeItemId wxTreeListMainWindow::GetNextChild (const wxTreeItemId& item,
                                                  wxTreeItemIdValue& cookie) const {
 #endif
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
     wxArrayTreeListItems& children = ((wxTreeListItem*) item.m_pItem)->GetChildren();
-    // it's ok to cast cookie to long, we never have indices which overflow "void*"
+    // it's ok to cast cookie to long, we never have indices which overflow  LiteSQL_L( "void*" )
     long *pIndex = ((long*)&cookie);
     return ((*pIndex)+1 < (long)children.Count())? wxTreeItemId(children.Item(++(*pIndex))): wxTreeItemId();
 }
@@ -2188,9 +2188,9 @@ wxTreeItemId wxTreeListMainWindow::GetPrevChild (const wxTreeItemId& item,
 wxTreeItemId wxTreeListMainWindow::GetPrevChild (const wxTreeItemId& item,
                                                  wxTreeItemIdValue& cookie) const {
 #endif
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
     wxArrayTreeListItems& children = ((wxTreeListItem*) item.m_pItem)->GetChildren();
-    // it's ok to cast cookie to long, we never have indices which overflow "void*"
+    // it's ok to cast cookie to long, we never have indices which overflow  LiteSQL_L( "void*" )
     long *pIndex = (long*)&cookie;
     return ((*pIndex)-1 >= 0)? wxTreeItemId(children.Item(--(*pIndex))): wxTreeItemId();
 }
@@ -2202,16 +2202,16 @@ wxTreeItemId wxTreeListMainWindow::GetLastChild (const wxTreeItemId& item,
 wxTreeItemId wxTreeListMainWindow::GetLastChild (const wxTreeItemId& item,
                                                  wxTreeItemIdValue& cookie) const {
 #endif
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
     wxArrayTreeListItems& children = ((wxTreeListItem*) item.m_pItem)->GetChildren();
-    // it's ok to cast cookie to long, we never have indices which overflow "void*"
+    // it's ok to cast cookie to long, we never have indices which overflow  LiteSQL_L( "void*" )
     long *pIndex = ((long*)&cookie);
     (*pIndex) = children.Count();
     return (!children.IsEmpty())? wxTreeItemId(children.Last()): wxTreeItemId();
 }
 
 wxTreeItemId wxTreeListMainWindow::GetNextSibling (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
 
     // get parent
     wxTreeListItem *i = (wxTreeListItem*) item.m_pItem;
@@ -2226,7 +2226,7 @@ wxTreeItemId wxTreeListMainWindow::GetNextSibling (const wxTreeItemId& item) con
 }
 
 wxTreeItemId wxTreeListMainWindow::GetPrevSibling (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
 
     // get parent
     wxTreeListItem *i = (wxTreeListItem*) item.m_pItem;
@@ -2242,7 +2242,7 @@ wxTreeItemId wxTreeListMainWindow::GetPrevSibling (const wxTreeItemId& item) con
 
 // Only for internal use right now, but should probably be public
 wxTreeItemId wxTreeListMainWindow::GetNext (const wxTreeItemId& item, bool fulltree) const {
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
 
     // if there are any children, return first child
     if (fulltree || ((wxTreeListItem*)item.m_pItem)->IsExpanded()) {
@@ -2262,7 +2262,7 @@ wxTreeItemId wxTreeListMainWindow::GetNext (const wxTreeItemId& item, bool fullt
 
 // Only for internal use right now, but should probably be public
 wxTreeItemId wxTreeListMainWindow::GetPrev (const wxTreeItemId& item, bool fulltree) const {
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
 
     // if there are no previous sibling get parent
     wxTreeItemId prev = GetPrevSibling (item);
@@ -2283,12 +2283,12 @@ wxTreeItemId wxTreeListMainWindow::GetFirstExpandedItem() const {
 }
 
 wxTreeItemId wxTreeListMainWindow::GetNextExpanded (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
     return GetNext (item, false);
 }
 
 wxTreeItemId wxTreeListMainWindow::GetPrevExpanded (const wxTreeItemId& item) const {
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
     return GetPrev (item, false);
 }
 
@@ -2297,7 +2297,7 @@ wxTreeItemId wxTreeListMainWindow::GetFirstVisibleItem (bool fullRow) const {
 }
 
 wxTreeItemId wxTreeListMainWindow::GetNextVisible (const wxTreeItemId& item, bool fullRow) const {
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
     wxTreeItemId id = GetNext (item, false);
     while (id.IsOk()) {
         if (IsVisible (id, fullRow)) return id;
@@ -2307,7 +2307,7 @@ wxTreeItemId wxTreeListMainWindow::GetNextVisible (const wxTreeItemId& item, boo
 }
 
 wxTreeItemId wxTreeListMainWindow::GetPrevVisible (const wxTreeItemId& item, bool fullRow) const {
-    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T("invalid tree item"));
+    wxCHECK_MSG (item.IsOk(), wxTreeItemId(), _T( LiteSQL_L( "invalid tree item" )));
     wxTreeItemId id = GetPrev (item, true);
     while (id.IsOk()) {
         if (IsVisible (id, fullRow)) return id;
@@ -2328,7 +2328,7 @@ wxTreeItemId wxTreeListMainWindow::DoInsertItem (const wxTreeItemId& parentId,
                                                  int image, int selImage,
                                                  wxTreeItemData *data) {
     wxTreeListItem *parent = (wxTreeListItem*)parentId.m_pItem;
-    wxCHECK_MSG (parent, wxTreeItemId(), _T("item must have a parent, at least root!") );
+    wxCHECK_MSG (parent, wxTreeItemId(), _T( LiteSQL_L( "item must have a parent, at least root!" )) );
     m_dirty = true; // do this first so stuff below doesn't cause flicker
 
     wxArrayString arr;
@@ -2351,8 +2351,8 @@ wxTreeItemId wxTreeListMainWindow::DoInsertItem (const wxTreeItemId& parentId,
 wxTreeItemId wxTreeListMainWindow::AddRoot (const wxString& text,
                                             int image, int selImage,
                                             wxTreeItemData *data) {
-    wxCHECK_MSG(!m_rootItem, wxTreeItemId(), _T("tree can have only one root"));
-    wxCHECK_MSG(GetColumnCount(), wxTreeItemId(), _T("Add column(s) before adding the root item"));
+    wxCHECK_MSG(!m_rootItem, wxTreeItemId(), _T( LiteSQL_L( "tree can have only one root" )));
+    wxCHECK_MSG(GetColumnCount(), wxTreeItemId(), _T( LiteSQL_L( "Add column(s) before adding the root item" )));
     m_dirty = true; // do this first so stuff below doesn't cause flicker
 
     wxArrayString arr;
@@ -2394,11 +2394,11 @@ wxTreeItemId wxTreeListMainWindow::InsertItem (const wxTreeItemId& parentId,
                                                int image, int selImage,
                                                wxTreeItemData *data) {
     wxTreeListItem *parent = (wxTreeListItem*)parentId.m_pItem;
-    wxCHECK_MSG (parent, wxTreeItemId(), _T("item must have a parent, at least root!") );
+    wxCHECK_MSG (parent, wxTreeItemId(), _T( LiteSQL_L( "item must have a parent, at least root!" )) );
 
     int index = parent->GetChildren().Index((wxTreeListItem*) idPrevious.m_pItem);
     wxASSERT_MSG( index != wxNOT_FOUND,
-                  _T("previous item in wxTreeListMainWindow::InsertItem() is not a sibling") );
+                  _T( LiteSQL_L( "previous item in wxTreeListMainWindow::InsertItem() is not a sibling" )) );
 
     return DoInsertItem (parentId, ++index, text, image, selImage, data);
 }
@@ -2409,7 +2409,7 @@ wxTreeItemId wxTreeListMainWindow::InsertItem (const wxTreeItemId& parentId,
                                                int image, int selImage,
                                                wxTreeItemData *data) {
     wxTreeListItem *parent = (wxTreeListItem*)parentId.m_pItem;
-    wxCHECK_MSG (parent, wxTreeItemId(), _T("item must have a parent, at least root!") );
+    wxCHECK_MSG (parent, wxTreeItemId(), _T( LiteSQL_L( "item must have a parent, at least root!" )) );
 
     return DoInsertItem (parentId, before, text, image, selImage, data);
 }
@@ -2419,7 +2419,7 @@ wxTreeItemId wxTreeListMainWindow::AppendItem (const wxTreeItemId& parentId,
                                                int image, int selImage,
                                                wxTreeItemData *data) {
     wxTreeListItem *parent = (wxTreeListItem*) parentId.m_pItem;
-    wxCHECK_MSG (parent, wxTreeItemId(), _T("item must have a parent, at least root!") );
+    wxCHECK_MSG (parent, wxTreeItemId(), _T( LiteSQL_L( "item must have a parent, at least root!" )) );
 
     return DoInsertItem (parent, parent->GetChildren().Count(), text, image, selImage, data);
 }
@@ -2431,7 +2431,7 @@ void wxTreeListMainWindow::Delete (const wxTreeItemId& itemId) {
     if (! itemId.IsOk()) return;
     wxTreeListItem *item = (wxTreeListItem*) itemId.m_pItem;
     wxTreeListItem *parent = item->GetItemParent();
-    wxCHECK_RET (item != m_rootItem, _T("invalid item, root may not be deleted this way!"));
+    wxCHECK_RET (item != m_rootItem, _T( LiteSQL_L( "invalid item, root may not be deleted this way!" )));
 
     // recursive delete
     DoDeleteItem(item);
@@ -2474,7 +2474,7 @@ void wxTreeListMainWindow::DeleteChildren (const wxTreeItemId& itemId) {
 
 
 void wxTreeListMainWindow::DoDeleteItem(wxTreeListItem *item) {
-    wxCHECK_RET (item, _T("invalid item for delete!"));
+    wxCHECK_RET (item, _T( LiteSQL_L( "invalid item for delete!" )));
 
     m_dirty = true; // do this first so stuff below doesn't cause flicker
 
@@ -2529,7 +2529,7 @@ void wxTreeListMainWindow::DoDeleteItem(wxTreeListItem *item) {
 
 void wxTreeListMainWindow::Expand (const wxTreeItemId& itemId) {
     wxTreeListItem *item = (wxTreeListItem*) itemId.m_pItem;
-    wxCHECK_RET (item, _T("invalid item in wxTreeListMainWindow::Expand") );
+    wxCHECK_RET (item, _T( LiteSQL_L( "invalid item in wxTreeListMainWindow::Expand" )) );
 
     if (!item->HasPlus() || item->IsExpanded()) return;
 
@@ -2547,7 +2547,7 @@ void wxTreeListMainWindow::Expand (const wxTreeItemId& itemId) {
 }
 
 void wxTreeListMainWindow::ExpandAll (const wxTreeItemId& itemId) {
-    wxCHECK_RET (itemId.IsOk(), _T("invalid tree item"));
+    wxCHECK_RET (itemId.IsOk(), _T( LiteSQL_L( "invalid tree item" )));
 
     Expand (itemId);
     if (!IsExpanded (itemId)) return;
@@ -2565,7 +2565,7 @@ void wxTreeListMainWindow::ExpandAll (const wxTreeItemId& itemId) {
 
 void wxTreeListMainWindow::Collapse (const wxTreeItemId& itemId) {
     wxTreeListItem *item = (wxTreeListItem*) itemId.m_pItem;
-    wxCHECK_RET (item, _T("invalid item in wxTreeListMainWindow::Collapse") );
+    wxCHECK_RET (item, _T( LiteSQL_L( "invalid item in wxTreeListMainWindow::Collapse" )) );
 
     if (!item->HasPlus() || !item->IsExpanded()) return;
 
@@ -2583,14 +2583,14 @@ void wxTreeListMainWindow::Collapse (const wxTreeItemId& itemId) {
 }
 
 void wxTreeListMainWindow::CollapseAndReset (const wxTreeItemId& item) {
-    wxCHECK_RET (item.IsOk(), _T("invalid tree item"));
+    wxCHECK_RET (item.IsOk(), _T( LiteSQL_L( "invalid tree item" )));
 
     Collapse (item);
     DeleteChildren (item);
 }
 
 void wxTreeListMainWindow::Toggle (const wxTreeItemId& itemId) {
-    wxCHECK_RET (itemId.IsOk(), _T("invalid tree item"));
+    wxCHECK_RET (itemId.IsOk(), _T( LiteSQL_L( "invalid tree item" )));
 
     if (IsExpanded (itemId)) {
         Collapse (itemId);
@@ -2608,7 +2608,7 @@ void wxTreeListMainWindow::Unselect() {
 }
 
 void wxTreeListMainWindow::UnselectAllChildren (wxTreeListItem *item) {
-    wxCHECK_RET (item, _T("invalid tree item"));
+    wxCHECK_RET (item, _T( LiteSQL_L( "invalid tree item" )));
 
     if (item->IsSelected()) {
         item->SetHilight (false);
@@ -2745,8 +2745,8 @@ bool wxTreeListMainWindow::SelectItem (const wxTreeItemId& itemId,
 
 void wxTreeListMainWindow::SelectAll() {
     wxTreeItemId root = GetRootItem();
-    wxCHECK_RET (HasFlag(wxTR_MULTIPLE), _T("invalid tree style"));
-    wxCHECK_RET (root.IsOk(), _T("no tree"));
+    wxCHECK_RET (HasFlag(wxTR_MULTIPLE), _T( LiteSQL_L( "invalid tree style" )));
+    wxCHECK_RET (root.IsOk(), _T( LiteSQL_L( "no tree" )));
 
     // send event to user code
     wxTreeEvent event (wxEVT_COMMAND_TREE_SEL_CHANGING, 0);
@@ -2852,7 +2852,7 @@ static wxTreeListMainWindow *s_treeBeingSorted = NULL;
 static int LINKAGEMODE tree_ctrl_compare_func(wxTreeListItem **item1,
                                   wxTreeListItem **item2)
 {
-    wxCHECK_MSG (s_treeBeingSorted, 0, _T("bug in wxTreeListMainWindow::SortChildren()") );
+    wxCHECK_MSG (s_treeBeingSorted, 0, _T( LiteSQL_L( "bug in wxTreeListMainWindow::SortChildren()" )) );
 
     return s_treeBeingSorted->OnCompareItems(*item1, *item2);
 }
@@ -2864,12 +2864,12 @@ int wxTreeListMainWindow::OnCompareItems(const wxTreeItemId& item1,
 }
 
 void wxTreeListMainWindow::SortChildren (const wxTreeItemId& itemId) {
-    wxCHECK_RET (itemId.IsOk(), _T("invalid tree item"));
+    wxCHECK_RET (itemId.IsOk(), _T( LiteSQL_L( "invalid tree item" )));
 
     wxTreeListItem *item = (wxTreeListItem*) itemId.m_pItem;
 
     wxCHECK_RET (!s_treeBeingSorted,
-                 _T("wxTreeListMainWindow::SortChildren is not reentrant") );
+                 _T( LiteSQL_L( "wxTreeListMainWindow::SortChildren is not reentrant" )) );
 
     wxArrayTreeListItems& children = item->GetChildren();
     if ( children.Count() > 1 ) {
@@ -3078,7 +3078,7 @@ void wxTreeListMainWindow::PaintItem (wxTreeListItem *item, wxDC& dc) {
     int text_w = 0, text_h = 0;
     dc.GetTextExtent( item->GetText(GetMainColumn()).size() > 0
             ? item->GetText(GetMainColumn())
-            : wxT(" "),  // dummy text to avoid zero height and no highlight width
+            : wxT( LiteSQL_L( " " )),  // dummy text to avoid zero height and no highlight width
         &text_w, &text_h );
 
     // determine background and show it
@@ -3347,7 +3347,7 @@ void wxTreeListMainWindow::PaintLevel (wxTreeListItem *item, wxDC &dc,
                 dc.DrawRectangle (x-m_btnWidth2, y_mid-m_btnHeight2, m_btnWidth, m_btnHeight);
                 dc.SetPen(*wxBLACK_PEN);
                 dc.DrawLine (x-(m_btnWidth2-2), y_mid, x+(m_btnWidth2-1), y_mid);
-                if (!item->IsExpanded()) { // change "-" to "+"
+                if (!item->IsExpanded()) { // change  LiteSQL_L( "-" ) to  LiteSQL_L( "+" )
                     dc.DrawLine (x, y_mid-(m_btnHeight2-2), x, y_mid+(m_btnHeight2-1));
                 }
 #else
@@ -3643,7 +3643,7 @@ void wxTreeListMainWindow::OnChar (wxKeyEvent &event) {
             }
         }break;
 
-        // any char: go to the next matching string
+        // any char: go to the next matching LiteSQL_String
         default:
             if (event.GetKeyCode() >= (int)' ') {
                 if (!m_findTimer->IsRunning()) m_findStr.Clear();
@@ -3708,7 +3708,7 @@ wxTreeItemId wxTreeListMainWindow::HitTest (const wxPoint& point, int& flags, in
 // get the bounding rectangle of the item (or of its label only)
 bool wxTreeListMainWindow::GetBoundingRect (const wxTreeItemId& itemId, wxRect& rect,
                                             bool WXUNUSED(textOnly)) const {
-    wxCHECK_MSG (itemId.IsOk(), false, _T("invalid item in wxTreeListMainWindow::GetBoundingRect") );
+    wxCHECK_MSG (itemId.IsOk(), false, _T( LiteSQL_L( "invalid item in wxTreeListMainWindow::GetBoundingRect" )) );
 
     wxTreeListItem *item = (wxTreeListItem*) itemId.m_pItem;
 
@@ -3816,7 +3816,7 @@ bool bSkip = true;
 
 // ---------- DETERMINE EVENT ----------
 /*
-wxLogMessage("OnMouse: LMR down=<%d, %d, %d> up=<%d, %d, %d> LDblClick=<%d> dragging=<%d>",
+wxLogMessage( LiteSQL_L( "OnMouse: LMR down=<%d, %d, %d> up=<%d, %d, %d> LDblClick=<%d> dragging=<%d>" ),
     event.LeftDown(), event.MiddleDown(), event.RightDown(),
     event.LeftUp(), event.MiddleUp(), event.RightUp(),
     event.LeftDClick(), event.Dragging());
@@ -4064,7 +4064,7 @@ void wxTreeListMainWindow::CalculateSize (wxTreeListItem *item, wxDC &dc) {
     dc.SetFont (GetItemFont (item));
     dc.GetTextExtent (item->GetText(m_main_column).size() > 0
             ? item->GetText (m_main_column)
-            : wxT(" "),  // blank to avoid zero height and no highlight width
+            : wxT( LiteSQL_L( " " )),  // blank to avoid zero height and no highlight width
         &text_w, &text_h);
     // restore normal font
     dc.SetFont (m_normalFont);
@@ -4221,7 +4221,7 @@ bool wxTreeListMainWindow::SetForegroundColour (const wxColour& colour) {
 
 void wxTreeListMainWindow::SetItemText (const wxTreeItemId& itemId, int column,
                                         const wxString& text) {
-    wxCHECK_RET (itemId.IsOk(), _T("invalid tree item"));
+    wxCHECK_RET (itemId.IsOk(), _T( LiteSQL_L( "invalid tree item" )));
 
     wxClientDC dc (this);
     wxTreeListItem *item = (wxTreeListItem*) itemId.m_pItem;
@@ -4232,7 +4232,7 @@ void wxTreeListMainWindow::SetItemText (const wxTreeItemId& itemId, int column,
 
 wxString wxTreeListMainWindow::GetItemText (const wxTreeItemId& itemId,
                                             int column) const {
-    wxCHECK_MSG (itemId.IsOk(), _T(""), _T("invalid tree item") );
+    wxCHECK_MSG (itemId.IsOk(), _T( LiteSQL_L( "" )), _T( LiteSQL_L( "invalid tree item" )) );
 
     if( IsVirtual() )   return m_owner->OnGetItemText(((wxTreeListItem*) itemId.m_pItem)->GetData(),column);
     else                return ((wxTreeListItem*) itemId.m_pItem)->GetText (column);
@@ -4240,7 +4240,7 @@ wxString wxTreeListMainWindow::GetItemText (const wxTreeItemId& itemId,
 
 wxString wxTreeListMainWindow::GetItemText (wxTreeItemData* item,
 int column) const {
-   wxASSERT_MSG( IsVirtual(), _T("can be used only with virtual control") );
+   wxASSERT_MSG( IsVirtual(), _T( LiteSQL_L( "can be used only with virtual control" )) );
    return m_owner->OnGetItemText(item,column);
 }
 
@@ -4397,7 +4397,7 @@ void wxTreeListCtrl::CalculateAndSetHeaderHeight()
 #endif
 #else
         int w, d;
-        m_header_win->GetTextExtent(_T("Hg"), &w, &h, &d);
+        m_header_win->GetTextExtent(_T( LiteSQL_L( "Hg" )), &w, &h, &d);
         h += d + 2 * HEADER_OFFSET_Y + EXTRA_HEIGHT;
 #endif
 
@@ -4848,7 +4848,7 @@ void wxTreeListCtrl::SetColumnEditable(int column, bool shown)
 
 void wxTreeListCtrl::SetColumnShown(int column, bool shown)
 {
-    wxASSERT_MSG (column != GetMainColumn(), _T("The main column may not be hidden") );
+    wxASSERT_MSG (column != GetMainColumn(), _T( LiteSQL_L( "The main column may not be hidden" )) );
     m_header_win->SetColumn (column, GetColumn(column).SetShown(GetMainColumn()==column? true: shown));
     m_header_win->Refresh();
 }
@@ -4893,4 +4893,3 @@ wxString wxTreeListCtrl::OnGetItemText( wxTreeItemData* WXUNUSED(item), long WXU
 {
     return wxEmptyString;
 }
-

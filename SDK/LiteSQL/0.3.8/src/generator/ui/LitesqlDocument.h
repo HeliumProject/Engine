@@ -20,8 +20,8 @@ public:
 protected:
 
 #if wxUSE_STD_IOSTREAM
-  wxSTD ostream& SaveObject(wxSTD ostream& text_stream);
-  wxSTD istream& LoadObject(wxSTD istream& text_stream);
+  wxSTD LiteSQL_oStream& SaveObject(wxSTD LiteSQL_oStream& text_stream);
+  wxSTD LiteSQL_iStream& LoadObject(wxSTD LiteSQL_iStream& text_stream);
 #else
   wxOutputStream& SaveObject(wxOutputStream& stream);
   wxInputStream& LoadObject(wxInputStream& stream);

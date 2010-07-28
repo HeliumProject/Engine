@@ -559,7 +559,19 @@
 			Name="Container"
 			>
 			<File
+				RelativePath=".\Container\Allocator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Container\Array.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Container\BitArray.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Container\Buffer.h"
 				>
 			</File>
 			<File

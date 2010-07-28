@@ -7,7 +7,6 @@
 #include "Platform/Windows/Windows.h"
 
 #include "Foundation/InitializerStack.h"
-#include "Foundation/Version.h"
 #include "Foundation/Log.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/Reflect/Archive.h"
@@ -296,7 +295,6 @@ int RebuildCommand::ProcessFile(const tstring& input, const tstring& output)
     }
 
     version->m_Source = TXT( "rebuild" );
-    version->m_SourceVersion = NOCTURNAL_VERSION_STRING;
 
 
     //

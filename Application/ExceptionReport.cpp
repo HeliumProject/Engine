@@ -2,7 +2,6 @@
 
 #include "ExceptionReport.h"
 
-#include "Foundation/Version.h"
 #include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
@@ -67,59 +66,19 @@ ExceptionReport::ExceptionReport( const Debug::ExceptionArgs& args )
     }
   }
 
-  m_AssetBranch.clear();
-  ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( TXT( "NOC_ASSETS_BRANCH_NAME" ), buf, MAX_PATH );
-  m_AssetBranch = buf;
-  Nocturnal::Path::Normalize( m_AssetBranch );
-
-  m_CodeBranch.clear();
-  ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( TXT( "NOC_CODE_BRANCH_NAME" ), buf, MAX_PATH );
-  m_CodeBranch = buf;
-  Nocturnal::Path::Normalize( m_CodeBranch );
-
-  m_ProjectName.clear();
-  ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( TXT( "NOC_PROJECT_NAME" ), buf, MAX_PATH );
-  m_ProjectName = buf;
-
-  m_IsToolsBuilder = false;
-  ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( TXT( "NOC_TOOLS_BUILDER" ), buf, MAX_PATH );
-  if ( _tcsicmp( buf, TXT( "1" ) ) == 0 )
-  {
-    m_IsToolsBuilder = true;
-  }
-  else
-  {
-    m_IsToolsBuilder = false;
-  }
-
-  m_IsSymbolBuilder = false;
-  ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( TXT( "NOC_SYMBOL_MODE" ), buf, MAX_PATH );
-  if ( _tcsicmp( buf, TXT( "BUILD" ) ) == 0 )
-  {
-    m_IsSymbolBuilder = true;
-  }
-  else
-  {
-    m_IsSymbolBuilder = false;
-  }
-
-  m_ToolsVersion = NOCTURNAL_VERSION_STRING;
-
 #ifdef DEBUG
-  m_ToolsBuildConfig = TXT( "Debug" );
+# ifdef UNICODE
+  m_BuildConfig = TXT( "Debug Unicode" );
+# else
+  m_BuildConfig = TXT( "Debug" );
+# endif
 #else
-  m_ToolsBuildConfig = TXT( "Release" );
+# ifdef UNICODE
+  m_BuildConfig = TXT( "Release Unicode" );
+# else
+  m_BuildConfig = TXT( "Release" );
+# endif
 #endif
-
-  m_ToolsReleaseName.clear();
-  ZeroMemory( buf, MAX_PATH );
-  GetEnvironmentVariable( TXT( "NOC_TOOLS_RELEASE_NAME" ), buf, MAX_PATH );
-  m_ToolsReleaseName = buf;
 
   // Memory
   Profile::MemoryStatus memory;

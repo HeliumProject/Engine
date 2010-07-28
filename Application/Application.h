@@ -46,7 +46,7 @@ namespace Application
   //  * Perform version checking (to validate execution)
   //  * Initialize Console printing system
   //  * Inherit automatic command line args from the environment
-  APPLICATION_API void Startup( int argc = 0, const tchar** argv = NULL, bool checkVersion = true );
+  APPLICATION_API void Startup( int argc = 0, const tchar** argv = NULL );
 
   // Shutdown your application
   //  * Cleans up global initializer stack to release memory so its not reported as memory leaks
@@ -111,7 +111,7 @@ namespace Application
   //  }
   //
 
-  APPLICATION_API int StandardMain( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv, bool checkVersion = true );
+  APPLICATION_API int StandardMain( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv  );
 
   //
   // Main wrappers for windows applications
@@ -133,7 +133,6 @@ namespace Application
                                     HINSTANCE hInstance = ::GetModuleHandle(NULL),
                                     HINSTANCE hPrevInstance = NULL,
                                     LPTSTR lpCmdLine = ::GetCommandLine(),
-                                    int nShowCmd = SW_SHOWNORMAL,
-                                    bool checkVersion = true );
+                                    int nShowCmd = SW_SHOWNORMAL );
 #endif
 }

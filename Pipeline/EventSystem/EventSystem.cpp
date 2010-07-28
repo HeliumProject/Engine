@@ -14,7 +14,7 @@
 #include <set>
 
 #include "Application/Application.h"
-#include "Foundation/Boost/Regex.h" 
+#include "Foundation/Regex.h" 
 #include "Platform/Types.h"
 #include "Foundation/File/Directory.h"
 #include "Foundation/String/Utilities.h"
@@ -325,10 +325,10 @@ void EventSystem::ReadTextEventsFile( const tstring& eventsFile, V_EventPtr& lis
             throw Exception( TXT( "Could not parse text event: %s" ), line.c_str() );
         }
 
-        tuid id = ( tuid ) Nocturnal::BoostMatchResult<tuid>(eventResultAttr, 1); 
-        u64 created = ( u64 ) Nocturnal::BoostMatchResult<u64>(eventResultAttr, 2); 
-        tstring username = Nocturnal::BoostMatchResultAsString(eventResultAttr, 3); 
-        i32 eventLength = ( i32 ) Nocturnal::BoostMatchResult<i32>(eventResultAttr, 4); 
+        tuid id = ( tuid ) Nocturnal::MatchResult<tuid>(eventResultAttr, 1); 
+        u64 created = ( u64 ) Nocturnal::MatchResult<u64>(eventResultAttr, 2); 
+        tstring username = Nocturnal::MatchResultAsString(eventResultAttr, 3); 
+        i32 eventLength = ( i32 ) Nocturnal::MatchResult<i32>(eventResultAttr, 4); 
 
         /////////////////////////////////////////////
         // parse the event data

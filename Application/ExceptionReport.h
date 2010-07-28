@@ -24,14 +24,7 @@ namespace Application
     tstring  m_ApplicationPath;
     tstring  m_ApplicationName;
     tstring  m_CmdLineArgs;
-    tstring  m_AssetBranch;
-    tstring  m_CodeBranch;
-    tstring  m_ProjectName;
-    bool     m_IsToolsBuilder;
-    bool     m_IsSymbolBuilder;
-    tstring  m_ToolsVersion;
-    tstring  m_ToolsBuildConfig;
-    tstring  m_ToolsReleaseName;
+    tstring  m_BuildConfig;
     u64      m_MemTotalReserve;
     u64      m_MemTotalCommit;
     u64      m_MemTotalFree;

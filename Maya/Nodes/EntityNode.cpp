@@ -4,8 +4,6 @@
 #include "EntityAssetNode.h"
 
 #include "Platform/Types.h"
-#include "Foundation/Version.h"
-
 #include "Maya/NodeTypes.h"
 #include "Maya/ErrorHelpers.h"
 

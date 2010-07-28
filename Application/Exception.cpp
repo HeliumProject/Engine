@@ -8,8 +8,7 @@
 #include <sys/stat.h>
 
 #include "Platform/Assert.h"
-#include "Foundation/Version.h"
-
+#include "Platform/String.h"
 #include "Platform/Windows/Windows.h"
 #include "Platform/Windows/Console.h"
 #include "Platform/Windows/Memory.h"

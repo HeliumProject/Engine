@@ -2,7 +2,6 @@
 
 #include "VaultSearchEnvironment.h"
 
-#include "Foundation/Version.h"
 #include "Foundation/File/Path.h"
 #include "Foundation/String/Utilities.h"
 #include "Platform/Windows/Memory.h"

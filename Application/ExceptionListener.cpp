@@ -6,7 +6,6 @@
 #include "ExceptionListener.h"
 #include "ExceptionReport.h"
 
-#include "Foundation/Version.h"
 #include "Foundation/CommandLine/Utilities.h"
 #include "Foundation/Profile.h"
 #include "Foundation/Log.h"
@@ -47,7 +46,6 @@ static void CopyDump( ExceptionReport& report )
 
   tostringstream destination;
   destination << store 
-    << TXT( "\\" ) << report.m_ToolsVersion
     << TXT( "\\" ) << report.m_UserName
     << TXT( "\\" ) << report.m_Computer
     << TXT( "\\" ) << report.m_ApplicationName
@@ -87,14 +85,12 @@ static void SendMail( ExceptionReport& report )
     subject += TXT( "Fatal " );
   }
   subject += Debug::ExceptionTypes::Strings[ report.m_Args.m_Type ];
-  subject += TXT( " Exception: " ) + report.m_ApplicationName + TXT( "(v" ) + report.m_ToolsVersion + TXT( ") " ) + report.m_UserName + TXT( "@" ) + report.m_Computer;
+  subject += TXT( " Exception: " ) + report.m_ApplicationName + TXT( " " ) + report.m_UserName + TXT( "@" ) + report.m_Computer;
 
   tstringstream body;
   body << "Username: " << report.m_UserName << std::endl;
   body << "Computer: " << report.m_Computer << std::endl;
-  body << "Tools Version: " << report.m_ToolsVersion << std::endl;
-  body << "Tools Release: " << report.m_ToolsReleaseName << std::endl;
-  body << "Tools Build Config: " << report.m_ToolsBuildConfig << std::endl;
+  body << "Build Config: " << report.m_BuildConfig << std::endl;
   body << "Command Line: " << Nocturnal::GetCmdLine() << std::endl;
 
   body << std::endl;

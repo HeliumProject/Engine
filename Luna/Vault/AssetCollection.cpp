@@ -4,7 +4,7 @@
 #include "Vault.h"
 
 #include "Application/Preferences.h"
-#include "Foundation/Boost/Regex.h"
+#include "Foundation/Regex.h"
 #include "Foundation/Checksum/MD5.h"
 #include "Foundation/Flags.h"
 #include "Foundation/File/Path.h"

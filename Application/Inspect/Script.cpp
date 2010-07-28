@@ -9,7 +9,7 @@
 #include "Application/Inspect/Controls/Value.h"
 
 #include "Foundation/Log.h"
-#include "Foundation/Boost/Regex.h"
+#include "Foundation/Regex.h"
 
 #include <regex> 
 

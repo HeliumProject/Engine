@@ -21,13 +21,11 @@
 
 #include "Foundation/Log.h"
 #include "Foundation/Profile.h"
-#include "Foundation/Version.h"
 #include "Foundation/CommandLine/Utilities.h"
 
 #include "Exception.h"
 #include "Exceptions.h"
 #include "ExceptionListener.h"
-#include "Version.h"
 
 const tchar* Application::Args::Script = TXT( "script" );
 const tchar* Application::Args::Attach = TXT( "attach" );
@@ -70,7 +68,7 @@ namespace Application
 }
 #endif //_DEBUG
 
-void Application::Startup( int argc, const tchar** argv, bool checkVersion )
+void Application::Startup( int argc, const tchar** argv )
 {
     if ( ++g_InitCount == 1 )
     {
@@ -145,7 +143,6 @@ void Application::Startup( int argc, const tchar** argv, bool checkVersion )
             _tsplitpath( module, NULL, NULL, name, NULL );
 
             Log::Print( TXT( "Running %s\n" ), name );
-            Log::Print( TXT( "Version: " ) NOCTURNAL_VERSION_STRING TXT( "\n" ) );
             Log::Print( TXT( "Current Time: %s" ), _tctime64( &g_StartTime.time ) );
             Log::Print( TXT( "Command Line: %s\n" ), Nocturnal::GetCmdLine() );
         }
@@ -216,16 +213,6 @@ void Application::Startup( int argc, const tchar** argv, bool checkVersion )
             {
                 Profile::Memory::Initialize();
             }
-        }
-
-
-        //
-        // Version check
-        //
-
-        if ( checkVersion )
-        {
-            CheckVersion();
         }
 
 
@@ -588,13 +575,13 @@ static int StandardMainTryCatch( int (*main)(int argc, const tchar** argv), int 
     }
 }
 
-static int StandardMainEntry( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv, bool checkVersion )
+static int StandardMainEntry( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
 {
     int result = 0; 
 
     try
     {
-        Application::Startup(argc, argv, checkVersion);
+        Application::Startup(argc, argv);
     }
     catch ( const Application::CheckVersionException& ex )
     {
@@ -610,11 +597,11 @@ static int StandardMainEntry( int (*main)(int argc, const tchar** argv), int arg
     return Application::Shutdown( result );
 }
 
-int Application::StandardMain( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv, bool checkVersion )
+int Application::StandardMain( int (*main)(int argc, const tchar** argv), int argc, const tchar** argv )
 {
     if (Platform::IsDebuggerPresent())
     {
-        return StandardMainEntry( main, argc, argv, checkVersion );
+        return StandardMainEntry( main, argc, argv );
     }
     else
     {
@@ -624,7 +611,7 @@ int Application::StandardMain( int (*main)(int argc, const tchar** argv), int ar
 
         __try
         {
-            result = StandardMainEntry( main, argc, argv, checkVersion );
+            result = StandardMainEntry( main, argc, argv );
         }
         __except( ( g_ShutdownComplete || Platform::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
         {
@@ -684,7 +671,7 @@ static int StandardWinMainTryCatch( int (*winMain)( HINSTANCE hInstance, HINSTAN
     }
 }
 
-static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd, bool checkVersion )
+static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd )
 {
     int argc = 0;
     const tchar** argv = NULL;
@@ -694,7 +681,7 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
 
     try
     {
-        Application::Startup(argc, argv, checkVersion);
+        Application::Startup(argc, argv);
     }
     catch ( const Application::CheckVersionException& ex )
     {
@@ -715,11 +702,11 @@ static int StandardWinMainEntry( int (*winMain)( HINSTANCE hInstance, HINSTANCE 
     return result;
 }
 
-int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd, bool checkVersion )
+int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd ), HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd )
 {
     if (Platform::IsDebuggerPresent())
     {
-        return StandardWinMainEntry( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd, checkVersion );
+        return StandardWinMainEntry( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
     }
     else
     {
@@ -729,7 +716,7 @@ int Application::StandardWinMain( int (*winMain)( HINSTANCE hInstance, HINSTANCE
 
         __try
         {
-            result = StandardWinMainEntry( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd, checkVersion );
+            result = StandardWinMainEntry( winMain, hInstance, hPrevInstance, lpCmdLine, nShowCmd );
         }
         __except( ( g_ShutdownComplete || Platform::IsDebuggerPresent() ) ? EXCEPTION_CONTINUE_SEARCH : Debug::ProcessException( GetExceptionInformation(), Debug::GetExceptionBehavior(), true, true ) )
         {

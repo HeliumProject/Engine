@@ -5,7 +5,7 @@
 #include "SearchResults.h"
 
 #include "Platform/Exception.h"
-#include "Foundation/Boost/Regex.h"
+#include "Foundation/Regex.h"
 #include "Foundation/Container/Insert.h"
 #include "Foundation/File/Directory.h"
 #include "Foundation/String/Tokenize.h"

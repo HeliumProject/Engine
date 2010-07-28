@@ -559,7 +559,19 @@
 			Name="Container"
 			>
 			<File
+				RelativePath=".\Container\Allocator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Container\Array.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Container\BitArray.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Container\Buffer.h"
 				>
 			</File>
 			<File
@@ -579,11 +591,11 @@
 			Name="Memory"
 			>
 			<File
-				RelativePath=".\Memory\Align.h"
+				RelativePath=".\Memory\ArrayPtr.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Memory\ArrayPtr.h"
+				RelativePath=".\Memory\AutoPtr.h"
 				>
 			</File>
 			<File
@@ -616,14 +628,6 @@
 			</File>
 			<File
 				RelativePath=".\Checksum\MurmurHash2.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Boost"
-			>
-			<File
-				RelativePath=".\Boost\Regex.h"
 				>
 			</File>
 		</Filter>
@@ -1452,6 +1456,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Regex.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Timer.cpp"
 			>
 		</File>
@@ -1465,10 +1473,6 @@
 		</File>
 		<File
 			RelativePath=".\TUID.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Version.h"
 			>
 		</File>
 	</Files>

@@ -24,4 +24,16 @@ namespace Platform
   //
 
   PLATFORM_API tstring GetProcessString();
+
+  //
+  // Get the application path for this process
+  //
+
+  PLATFORM_API tstring GetProcessPath();
+
+  //
+  // Get the executable name for this process
+  //
+
+  PLATFORM_API tstring GetProcessName();
 }

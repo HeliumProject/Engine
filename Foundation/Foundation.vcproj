@@ -1396,14 +1396,6 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Environment.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Environment.h"
-			>
-		</File>
-		<File
 			RelativePath=".\Flags.h"
 			>
 		</File>

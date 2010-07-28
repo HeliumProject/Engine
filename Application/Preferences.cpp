@@ -1,12 +1,12 @@
 #include "Preferences.h"
 
-#include "Foundation/Environment.h"
+#include "Platform/Environment.h"
 
 bool Application::GetPreferencesDirectory( Nocturnal::Path& preferencesDirectory )
 {
     tstring prefDirectory;
 
-    if ( !Nocturnal::GetEnvVar( TXT( "APPDATA" ), prefDirectory ) )
+    if ( !Nocturnal::GetPreferencesDirectory( prefDirectory ) )
     {
         return false;
     }

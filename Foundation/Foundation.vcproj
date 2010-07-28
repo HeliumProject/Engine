@@ -632,14 +632,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Boost"
-			>
-			<File
-				RelativePath=".\Boost\Regex.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Automation"
 			>
 			<File
@@ -1461,6 +1453,10 @@
 		</File>
 		<File
 			RelativePath=".\Profile.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Regex.h"
 			>
 		</File>
 		<File

@@ -1,7 +1,7 @@
 #pragma once 
 
 #include "Utilities.h"
-#include "Foundation/Boost/Regex.h"
+#include "Foundation/Regex.h"
 
 #include <string>
 #include <vector>

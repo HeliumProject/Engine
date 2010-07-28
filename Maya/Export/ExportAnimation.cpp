@@ -2,7 +2,7 @@
 #include "ExportAnimation.h"
 #include "MayaContentCmd.h"
 
-#include "Foundation/Boost/Regex.h"
+#include "Foundation/Regex.h"
 #include "Foundation/Log.h"
 
 using namespace Content;

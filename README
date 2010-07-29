@@ -1,31 +1,23 @@
 ########################################################################
 
-============
-AppFramework
-============
+======
+Helium
+======
 
-Welcome!  AppFramework aims to be an open source game engine toolkit to
+Welcome!  Helium aims to be an open source game engine toolkit to
 help provide foundation technology and GUI tools for building game
 engines (not games per se).
 
-This project was seeded by an open source project at Insomniac Games.
+This project was seeded with code from Nocturnal Initiative, an open
+source project at Insomniac Games.
 
 http://nocturnal.insomniacgames.com
 
-================
-Third-party SDKs
-================
+============
+Dependencies
+============
 
-For boost and wxWidgets you will need to download and build it manually.
-Wherever you put the source to them, make sure to set the 'boost' and
-'wxWidgets' environment variables for our projects to locate them with.
-
-At the current point in time, you might need to pull from wxWidget's svn
-trunk to build the code without errors.
-
-There are some convenience scripts to build the dependent SDKs:
-  build_boost.pl <optional: the path to a specific version>
-  build_wxWidgets.pl <optional: the path to a specific version>
+Make sure to build Dependencies.sln before building Helium.sln.
 
 =======
 Unicode

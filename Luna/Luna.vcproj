@@ -104,7 +104,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="set wxDLL=wxmsw291d_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -192,7 +192,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="set wxDLL=wxmsw291d_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_amd64_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -277,7 +277,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="set wxDLL=wxmsw291_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -362,7 +362,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="set wxDLL=wxmsw291_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_amd64_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -450,7 +450,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="set wxDLL=wxmsw291ud_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -538,7 +538,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="set wxDLL=wxmsw291ud_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_amd64_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -623,7 +623,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="set wxDLL=wxmsw291u_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -708,7 +708,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="set wxDLL=wxmsw291u_vc_custom.dll&#x0D;&#x0A;set wxDLLDir=$(wxWidgets)\lib\vc_amd64_dll&#x0D;&#x0A;if not exist &quot;$(BuiltDir)&quot; mkdir &quot;$(BuiltDir)&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;if exist &quot;$(BuiltDir)\%wxDLL%&quot; del /q &quot;$(BuiltDir)\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;mklink /h &quot;$(BuiltDir)\%wxDLL%&quot; &quot;%wxDLLDir%\%wxDLL%&quot;&#x0D;&#x0A;if %ERRORLEVEL% neq 0 exit /B 1&#x0D;&#x0A;robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
+				CommandLine="robocopy /MIR /MT &quot;$(ProjectDir)Icons&quot; &quot;$(BuiltDir)\Icons&quot;&#x0D;&#x0A;exit /B 0&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

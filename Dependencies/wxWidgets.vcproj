@@ -6,7 +6,6 @@
 	ProjectGUID="{42C56E94-62D5-45EC-9746-F2349992C028}"
 	RootNamespace="wxWidgets"
 	Keyword="MakeFileProj"
-	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform

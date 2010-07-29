@@ -56,7 +56,7 @@ namespace Luna
         void Report( Asset::AssetClass* assetClass );
         bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const std::vector< tstring >& options );
         bool Build( Dependencies::DependencyGraph& depGraph, std::set< Nocturnal::Path >& assets, const AssetBuilder::BuilderOptionsPtr& options );
-        bool RunAsBuildWorker( Dependencies::DependencyGraph& depGraph );
+        bool RunAsBuildWorker( Dependencies::DependencyGraph& depGraph, bool debug = false, bool wait = false );
     };
 
 }

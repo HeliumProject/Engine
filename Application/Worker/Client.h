@@ -14,7 +14,7 @@ namespace Worker
   struct APPLICATION_API Client
   {
     // initialize connection
-    static bool Initialize();
+    static bool Initialize( bool debug = false, bool wait = false );
     static void Cleanup();
 
     // you must delete the object this returns, if non-null

@@ -34,7 +34,7 @@ static void ShutdownListener(const Application::ShutdownArgs& args)
     Process::ReleaseAll();
 }
 
-Process* Process::Create( const tstring& executable )
+Process* Process::Create( const tstring& executable, bool debug, bool wait )
 {
     static bool firstCreate = true;
 
@@ -49,7 +49,7 @@ Process* Process::Create( const tstring& executable )
         Debug::g_Terminating.Add( &TerminateListener );
     }
 
-    return g_Workers.insert( new Process ( executable ) ).first->Ptr();
+    return g_Workers.insert( new Process ( executable, debug, wait ) ).first->Ptr();
 }
 
 void Process::Release( Process*& worker )
@@ -63,11 +63,13 @@ void Process::ReleaseAll()
     g_Workers.clear();
 }
 
-Process::Process(const tstring& executable)
+Process::Process( const tstring& executable, bool debug, bool wait )
 : m_Executable (executable)
 , m_Handle (NULL)
 , m_Connection (NULL)
 , m_Killed (false)
+, m_Debug( debug )
+, m_Wait( wait )
 {
 
 }
@@ -77,7 +79,7 @@ Process::~Process()
     Kill();
 }
 
-bool Process::Start(int timeout)
+bool Process::Start( int timeout )
 {
     tstring str = m_Executable;
     str += TXT( " " );
@@ -85,7 +87,7 @@ bool Process::Start(int timeout)
     str += Worker::Args::Worker;
 
     // make our worker wait forever is we were asked to
-    if (Nocturnal::GetCmdLineFlag( Worker::Args::Wait ))
+    if ( m_Wait )
     {
         str += TXT( " " );
         str += Nocturnal::CmdLineDelimiters[0];
@@ -109,7 +111,7 @@ bool Process::Start(int timeout)
 #endif
 
     // Start the child process.
-    if( !Nocturnal::GetCmdLineFlag( Worker::Args::Debug ) && !::CreateProcess( NULL, (LPTSTR) str.c_str(), NULL, NULL, FALSE, flags, NULL, NULL, &startupInfo, &procInfo ) )
+    if( !m_Debug && !::CreateProcess( NULL, (LPTSTR) str.c_str(), NULL, NULL, FALSE, flags, NULL, NULL, &startupInfo, &procInfo ) )
     {
         throw Nocturnal::Exception( TXT( "Failed to run '%s' (%s)\n" ), str.c_str(), Platform::GetErrorString().c_str() );
     }
@@ -124,7 +126,7 @@ bool Process::Start(int timeout)
         // init pipe connection with background process' process id (hex)
         tostringstream stream;
 
-        if (Nocturnal::GetCmdLineFlag( Worker::Args::Debug ))
+        if ( m_Debug )
         {
             stream << TXT( "worker_debug" );
         }
@@ -237,7 +239,7 @@ bool Process::Running()
     }
     else
     {
-        return Nocturnal::GetCmdLineFlag( Worker::Args::Debug );
+        return m_Debug;
     }
 }
 
@@ -259,7 +261,7 @@ int Process::Finish()
         return (int)code;
     }
 
-    return Nocturnal::GetCmdLineFlag( Worker::Args::Debug ) ? 0 : -1;
+    return m_Debug ? 0 : -1;
 }
 
 void Process::Kill()

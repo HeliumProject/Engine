@@ -21,7 +21,7 @@ if ( !GetOptions( "h"         => \$help,
 
 $result += _Do("git pull", "Git Pull");
 
-$result += _Do("perl.exe " . File::Spec->catfile( dirname( $0 ), "update_wx.pl" ), "Update wxWidgets");
+$result += _Do("perl.exe " . File::Spec->catfile( dirname( $0 ), "build.pl Dependencies.sln" ), "Build Dependencies");
 
 $result += _Do("perl.exe " . File::Spec->catfile( dirname( $0 ), "build.pl Luna.sln" ), "Build Luna");
 

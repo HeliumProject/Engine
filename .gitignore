@@ -1,10 +1,12 @@
 *.suo
 *.ncb
 *.user
-Build/*
-Built/*
-SDK/LiteSQL/0.3.8/build/*
+*.db
 BASE.*
 LOCAL.*
 REMOTE.*
-*.db
+Build/*
+Built/*
+Dependencies/LiteSQL/0.3.8/build/*
+Dependencies/wxWidgets/build/msw/vc_*
+Dependencies/wxWidgets/lib/vc_*

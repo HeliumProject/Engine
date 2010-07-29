@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9.00"
+	Name="wxWidgets"
+	ProjectGUID="{42C56E94-62D5-45EC-9746-F2349992C028}"
+	RootNamespace="wxWidgets"
+	Keyword="MakeFileProj"
+	TargetFrameworkVersion="196613"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			ConfigurationType="0"
+			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(wxWidgetsBuildCommand) BUILD=debug"
+				ReBuildCommandLine=""
+				CleanCommandLine="$(wxWidgetsBuildCommand) BUILD=debug clean"
+				Output=""
+				PreprocessorDefinitions="WIN32;_DEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			ConfigurationType="0"
+			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(wxWidgetsBuildCommand) BUILD=debug TARGET_CPU=AMD64 "
+				ReBuildCommandLine=""
+				CleanCommandLine="$(wxWidgetsBuildCommand) BUILD=debug TARGET_CPU=AMD64 clean"
+				Output=""
+				PreprocessorDefinitions="WIN32;_DEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			ConfigurationType="0"
+			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(wxWidgetsBuildCommand) BUILD=release"
+				ReBuildCommandLine=""
+				CleanCommandLine="$(wxWidgetsBuildCommand) BUILD=release clean"
+				Output=""
+				PreprocessorDefinitions="WIN32;NDEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			ConfigurationType="0"
+			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(wxWidgetsBuildCommand) BUILD=release TARGET_CPU=AMD64"
+				ReBuildCommandLine=""
+				CleanCommandLine="$(wxWidgetsBuildCommand) BUILD=release TARGET_CPU=AMD64 clean"
+				Output=""
+				PreprocessorDefinitions="WIN32;NDEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug Unicode|Win32"
+			ConfigurationType="0"
+			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(wxWidgetsBuildCommand) BUILD=debug UNICODE=1"
+				ReBuildCommandLine=""
+				CleanCommandLine="$(wxWidgetsBuildCommand) BUILD=debug UNICODE=1 clean"
+				Output=""
+				PreprocessorDefinitions="WIN32;_DEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug Unicode|x64"
+			ConfigurationType="0"
+			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(wxWidgetsBuildCommand) BUILD=debug TARGET_CPU=AMD64 UNICODE=1"
+				ReBuildCommandLine=""
+				CleanCommandLine="$(wxWidgetsBuildCommand) BUILD=debug TARGET_CPU=AMD64 UNICODE=1 clean"
+				Output=""
+				PreprocessorDefinitions="WIN32;_DEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release Unicode|Win32"
+			ConfigurationType="0"
+			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(wxWidgetsBuildCommand) BUILD=release UNICODE=1"
+				ReBuildCommandLine=""
+				CleanCommandLine="$(wxWidgetsBuildCommand) BUILD=release UNICODE=1 clean"
+				Output=""
+				PreprocessorDefinitions="WIN32;NDEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release Unicode|x64"
+			ConfigurationType="0"
+			InheritedPropertySheets="$(SolutionDir)Dependencies.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(wxWidgetsBuildCommand) BUILD=release TARGET_CPU=AMD64 UNICODE=1"
+				ReBuildCommandLine=""
+				CleanCommandLine="$(wxWidgetsBuildCommand) BUILD=release TARGET_CPU=AMD64 UNICODE=1 clean"
+				Output=""
+				PreprocessorDefinitions="WIN32;NDEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="Windows"
-	InheritedPropertySheets=".\SDK.vsprops"
+	InheritedPropertySheets=".\Dependencies.vsprops"
 	>
 	<Tool
 		Name="VCCLCompilerTool"

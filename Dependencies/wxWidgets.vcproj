@@ -45,9 +45,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(wxWidgetsBuildCommand) BUILD=debug UNICODE=0 TARGET_CPU=AMD64 "
+				BuildCommandLine="$(wxWidgetsBuildCommand) BUILD=debug TARGET_CPU=AMD64 UNICODE=0"
 				ReBuildCommandLine=""
-				CleanCommandLine="$(wxWidgetsBuildCommand) BUILD=debug UNICODE=0 TARGET_CPU=AMD64 clean"
+				CleanCommandLine="$(wxWidgetsBuildCommand) BUILD=debug TARGET_CPU=AMD64 UNICODE=0 clean"
 				Output=""
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				IncludeSearchPath=""

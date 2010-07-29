@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
+				AdditionalDependencies="zlib.lib nvtt.lib tiff.lib Expat.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib opengl32.lib glu32.lib"
 				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
@@ -149,7 +149,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
+				AdditionalDependencies="zlib.lib nvtt.lib tiff.lib Expat.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib opengl32.lib glu32.lib"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
@@ -227,7 +227,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
+				AdditionalDependencies="zlib.lib nvtt.lib tiff.lib Expat.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib opengl32.lib glu32.lib"
 				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
@@ -305,7 +305,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
+				AdditionalDependencies="zlib.lib nvtt.lib tiff.lib Expat.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib opengl32.lib glu32.lib"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
@@ -385,7 +385,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
+				AdditionalDependencies="zlib.lib nvtt.lib tiff.lib Expat.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib opengl32.lib glu32.lib"
 				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
@@ -465,7 +465,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
+				AdditionalDependencies="zlib.lib nvtt.lib tiff.lib Expat.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib opengl32.lib glu32.lib"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
@@ -543,7 +543,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
+				AdditionalDependencies="zlib.lib nvtt.lib tiff.lib Expat.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib opengl32.lib glu32.lib"
 				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
@@ -621,7 +621,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glu32.lib opengl32.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib"
+				AdditionalDependencies="zlib.lib nvtt.lib tiff.lib Expat.lib Foundation.lib OpenMaya.lib OpenMayaAnim.lib OpenMayaFX.lib OpenMayaRender.lib OpenMayaUI.lib Image.lib opengl32.lib glu32.lib"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Autodesk\Maya2011\lib&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"

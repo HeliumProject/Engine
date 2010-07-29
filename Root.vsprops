@@ -3,9 +3,13 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="Root"
-	OutputDirectory="$(SolutionDir)Build\$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
+	OutputDirectory="$(SolutionDir)Built\$(PlatformName)\$(ConfigurationName)"
 	IntermediateDirectory="$(SolutionDir)Build\$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
 	>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalLibraryDirectories="$(BuiltDir)"
+	/>
 	<UserMacro
 		Name="BuiltDir"
 		Value="$(SolutionDir)Built\$(PlatformName)\$(ConfigurationName)"

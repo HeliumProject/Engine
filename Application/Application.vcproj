@@ -537,14 +537,6 @@
 			ReferencedProjectIdentifier="{424446E0-C562-4BF6-87F6-A1AA9DFFE9BD}"
 			RelativePathToProject=".\Foundation\Foundation.vcproj"
 		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"
-			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{190A611A-399F-47F6-B686-DF40C8B20F84}"
-			RelativePathToProject=".\SDK\SQLite\3.6.23.1\SQLite.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter

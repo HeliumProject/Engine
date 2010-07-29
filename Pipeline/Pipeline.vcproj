@@ -537,22 +537,6 @@
 			ReferencedProjectIdentifier="{4BC148DF-F832-4724-B9B9-2550D848E737}"
 			RelativePathToProject=".\Platform\Platform.vcproj"
 		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{CF9387AB-7C10-4217-A248-575EE8610008}"
-			RelativePathToProject=".\SDK\squish\1.10\squish.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{1A02AC8B-51F6-46CD-A5BB-0B3F09FB2ABF}"
-			RelativePathToProject=".\SDK\nvtt\2.0.7\nvtt.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{BC01F636-4D0F-489D-B082-7538025CE185}"
-			RelativePathToProject=".\SDK\tiff\3.9.2\tiff.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{1EBDB40D-9808-463B-AA43-04D65586485F}"
-			RelativePathToProject=".\SDK\MySQL\6.0.2\MySQL.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter
